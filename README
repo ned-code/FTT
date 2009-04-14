@@ -1,0 +1,17 @@
+= My Uniboard
+
+== Instruction for development installation
+
+Dependencies:
+
+- Ruby
+- RubyGems
+- Rake
+- SQlite3 (on Windows, install sqlite3 and ruby gem for mswin32 from http://rubyforge.org/frs/?group_id=254)
+
+Run in working repository:
+
+  rake myuniboard:dev:bootstrap
+  rake
+
+If all tests pass, you can work on a big new feature ;-)
