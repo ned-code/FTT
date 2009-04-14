@@ -1,0 +1,19 @@
+<h1>Listing accounts</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% @accounts.each do |account| %>
+  <tr>
+    <td><%= account.email  %></td>
+    <td><%= link_to 'Show', account %></td>
+    <td><%= link_to 'Edit', edit_account_path(account) %></td>
+    <td><%= link_to 'Destroy', account, :confirm => I18n.t('alert.destroy_confirmation'), :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New accounts', new_account_path %>

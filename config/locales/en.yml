@@ -6,3 +6,9 @@ en:
     notice:
       login_successfull: "Login successful!"
       logout_successfull: "Logout successful!"
+
+  button:
+    send: "Send"
+
+  alert:
+    destroy_confirmation: "Are you sure?"
