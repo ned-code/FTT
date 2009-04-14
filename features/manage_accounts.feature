@@ -26,3 +26,23 @@ Feature: Manage accounts
       |test1.cucumber@test.com|
       |test2.cucumber@test.com|
       |test4.cucumber@test.com|
+
+  Scenario: Login with activated account
+    Given the following accounts:
+      |email|password|password_confirmation|active|
+      |test.cucumber@test.com|test|test|true|
+    When I go to the login page
+    And I fill in "email" with "test.cucumber@test.com"
+    And I fill in "password" with "test"
+    And I press "Login"
+    Then I go to the accounts page
+
+  Scenario: Login with unactivated account
+    Given the following accounts:
+      |email|password|password_confirmation|
+      |test.cucumber@test.com|test|test|
+    When I go to the login page
+    And I fill in "email" with "test.cucumber@test.com"
+    And I fill in "password" with "test"
+    And I press "Login"
+    Then I should see "Your account is not active"

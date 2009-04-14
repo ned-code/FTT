@@ -6,8 +6,11 @@ module NavigationHelpers
       root_path
     when /the new account page/
       new_account_path
+    when /the accounts page/
+      accounts_path
+    when /the login page/
+      new_session_path
 
-    
     # Add more page name => path mappings here
     
     else

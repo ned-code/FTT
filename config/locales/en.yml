@@ -10,6 +10,7 @@ en:
 
   button:
     send: "Send"
+    login: "Login"
 
   alert:
     destroy_confirmation: "Are you sure?"
