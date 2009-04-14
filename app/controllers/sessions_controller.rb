@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
       if @account_session.save
         format.html do
           flash[:notice] = I18n.t 'flash.notice.login_successfull'
-          redirect_back_or_default account_url
+          redirect_back_or_default accounts_url
         end
         format.xml { head :login_successfull }
       else

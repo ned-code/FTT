@@ -2,13 +2,17 @@ class AccountsController < ApplicationController
 
   def index
     @accounts = Account.all
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => @accounts }
+    end
   end
 
   def show
-    if params[:id]
-      @account = Account.find(params[:id])
-    else
-      @account = current_account
+    @account = Account.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => @account }
     end
   end
 
@@ -18,54 +22,69 @@ class AccountsController < ApplicationController
 
   def create
     @account = Account.new(params[:account])
-    
-    if @account.save
-      flash[:notice] = I18n.t 'flash.notice.account_registred'
-      redirect_to accounts_url
-    else
-      render :action => :new
+
+    respond_to do |format|
+      if @account.save
+        @account.deliver_email_confirmation!
+        
+        format.html do
+          flash[:notice] = I18n.t 'flash.notice.account_registred'
+          redirect_to accounts_url
+        end
+        format.xml  { render :xml => @account, :status => :created, :location => @account }
+      else
+        format.html { render :action => 'new' }
+        format.xml  { render :xml => @account.errors, :status => :unprocessable_entity }
+      end
     end
   end
 
-#  def invitation
-#    @account = Account.find_using_perishable_token(params[:code])
-#
-#    unless @account
-#      flash[:notice] = I18n.t 'flash.not_find_account_by_perishable_token'
-#      redirect_to new_session_url
-#    end
-#
-#    @account.activate!
-#    reset_session
-#    AccountSession.create(@account)
-#  end
+  def confirm
+    @account = Account.find_using_perishable_token(params[:id])
+
+    if @account and @account.activate!
+      reset_session
+      AccountSession.create(@account)
+
+      flash[:notice] = I18n.t 'flash.notice.account_confirmed'
+      redirect_to accounts_url
+    else
+      flash[:notice] = I18n.t 'flash.notice.not_find_account_by_perishable_token'
+      redirect_to new_session_url
+    end
+  end
 
   def edit
-    if params[:id]
-      @account = Account.find(params[:id])
-    else
-      @account = current_account
-    end
+    @account = Account.find(params[:id])
   end
 
   def update
-    if params[:id]
-      @account = Account.find(params[:id])
-    else
-      @account = current_account
-    end
-    
-    if @account.update_attributes(params[:account])
-      flash[:notice] = I18n.t 'flash.notice.account_updated'
+    @account = Account.find(params[:id])
 
-      if params[:id]
-        redirect_to accounts_url
+    respond_to do |format|
+      if @account.update_attributes(params[:account])
+        format.html do
+          flash[:notice] = I18n.t 'flash.notice.account_updated'
+          redirect_to accounts_url
+        end
+        format.xml  { head :ok }
       else
-        redirect_to edit_account_url
+        format.html { render :action => 'edit '}
+        format.xml  { render :xml => @account.errors, :status => :unprocessable_entity }
       end
-    else
-      render :action => :edit
     end
   end
 
+  def destroy
+    @account = Account.find(params[:id])
+    @account.destroy
+
+    respond_to do |format|
+      format.html do
+        flash[:notice] = I18n.t 'flash.notice.account_destroyed'
+        redirect_to accounts_url
+      end
+      format.xml { head :account_destroyed }
+    end
+  end
 end
