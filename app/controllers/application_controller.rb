@@ -2,9 +2,27 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
-  # Scrub sensitive parameters from your log
-  # filter_parameter_logging :password
+  helper :all
+  helper_method :current_account_session, :current_account
+
+  layout 'default'
+
+  filter_parameter_logging :password, :password_confirmation
+
+  private
+
+    def current_account_session
+      @current_account_session ||= AccountSession.find
+    end
+
+    def current_account
+      @current_account ||= current_account_session && current_account_session.account
+    end
+
+    def reset_current_account_session
+      @current_account_session.destroy if @current_account_session
+      @current_account = @current_account_session = nil
+    end
 end
