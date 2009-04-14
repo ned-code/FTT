@@ -1,6 +1,12 @@
 require 'fileutils'
 
 namespace :myuniboard do
+  
+  desc "Bootstrap application"
+  task :bootstrap => :environment do
+    Account.create!(:email => 'admin@test.com', :password => 'test', :password_confirmation => 'test')
+  end
+
   namespace :dev do
     desc "Bootstrap developement environment"
     task :bootstrap do
