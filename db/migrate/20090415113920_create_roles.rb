@@ -1,8 +1,8 @@
 class CreateRoles < ActiveRecord::Migration
 
   def self.up
-    create_table :roles_accounts, :id => false, :force => true  do |t|
-      t.integer :account_id, :role_id
+    create_table :roles_users, :id => false, :force => true  do |t|
+      t.integer :user_id, :role_id
       t.timestamps
     end
 
@@ -15,7 +15,7 @@ class CreateRoles < ActiveRecord::Migration
 
   def self.down
     drop_table :roles
-    drop_table :roles_accounts
+    drop_table :roles_users
   end
 
 end

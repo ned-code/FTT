@@ -4,10 +4,10 @@ module NavigationHelpers
     
     when /the homepage/
       root_path
-    when /the new account page/
-      new_account_path
-    when /the accounts page/
-      accounts_path
+    when /the new user page/
+      new_user_path
+    when /the users page/
+      users_path
     when /the login page/
       new_session_path
 

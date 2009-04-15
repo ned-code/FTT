@@ -1,29 +1,26 @@
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
-
 class ApplicationController < ActionController::Base
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   helper :all
-  helper_method :current_account_session, :current_account
+  helper_method :current_user_session, :current_user
 
   layout 'default'
 
   filter_parameter_logging :password, :password_confirmation
 
-  private
+  protected
 
-    def current_account_session
-      @current_account_session ||= AccountSession.find
+    def current_user_session
+      @current_user_session ||= UserSession.find
     end
 
-    def current_account
-      @current_account ||= current_account_session && current_account_session.account
+    def current_user
+      @current_user ||= current_user_session && current_user_session.user
     end
 
-    def reset_current_account_session
-      @current_account_session.destroy if @current_account_session
-      @current_account = @current_account_session = nil
+    def reset_current_user_session
+      @current_user_session.destroy if @current_user_session
+      @current_user = @current_user_session = nil
     end
     
     def store_location

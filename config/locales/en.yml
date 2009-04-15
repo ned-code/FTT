@@ -6,7 +6,7 @@ en:
     notice:
       login_successfull: "Login successful!"
       logout_successfull: "Logout successful!"
-      account_confirmed: "Your account is confirmed!"
+      user_confirmed: "Your user is confirmed!"
 
   button:
     send: "Send"

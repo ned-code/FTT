@@ -1,7 +1,8 @@
-class CreateAccounts < ActiveRecord::Migration
+class CreateUsers < ActiveRecord::Migration
   def self.up
-    create_table :accounts do |t|
+    create_table :users do |t|
       t.string    :email,               :null => false                # optional, you can use login (or username) instead, or both
+      t.boolean   :active,              :null => false, :default => false
       t.string    :crypted_password,    :null => false                # optional, see below
       t.string    :password_salt,       :null => false                # optional, but highly recommended
       t.string    :persistence_token,   :null => false                # required
@@ -18,6 +19,6 @@ class CreateAccounts < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :accounts
+    drop_table :users
   end
 end

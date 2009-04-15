@@ -9,10 +9,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090415075924) do
+ActiveRecord::Schema.define(:version => 20090415113920) do
 
-  create_table "accounts", :force => true do |t|
+  create_table "roles", :force => true do |t|
+    t.string   "name",              :limit => 40
+    t.string   "authorizable_type", :limit => 40
+    t.integer  "authorizable_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles_users", :id => false, :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "role_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
     t.string   "email",                                  :null => false
+    t.boolean  "active",              :default => false, :null => false
     t.string   "crypted_password",                       :null => false
     t.string   "password_salt",                          :null => false
     t.string   "persistence_token",                      :null => false
@@ -25,22 +41,6 @@ ActiveRecord::Schema.define(:version => 20090415075924) do
     t.datetime "last_login_at"
     t.string   "current_login_ip"
     t.string   "last_login_ip"
-    t.boolean  "active",              :default => false, :null => false
-  end
-
-  create_table "roles", :force => true do |t|
-    t.string   "name",              :limit => 40
-    t.string   "authorizable_type", :limit => 40
-    t.integer  "authorizable_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "roles_accounts", :id => false, :force => true do |t|
-    t.integer  "account_id"
-    t.integer  "role_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
 end

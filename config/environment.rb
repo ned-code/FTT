@@ -3,6 +3,24 @@
 # Specifies gem version of Rails to use when vendor/rails is not present
 RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
 
+# Authorization plugin for role based access control
+# You can override default authorization system constants here.
+
+# Can be 'object roles' or 'hardwired'
+AUTHORIZATION_MIXIN = "object roles"
+
+# NOTE : If you use modular controllers like '/admin/products' be sure
+# to redirect to something like '/sessions' controller (with a leading slash)
+# as shown in the example below or you will not get redirected properly
+#
+# This can be set to a hash or to an explicit path like '/login'
+#
+LOGIN_REQUIRED_REDIRECTION = { :controller => '/sessions', :action => 'new' }
+PERMISSION_DENIED_REDIRECTION = '/'
+
+# The method your auth scheme uses to store the location to redirect back to
+STORE_LOCATION_METHOD = :store_location
+
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 

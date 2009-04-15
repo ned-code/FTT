@@ -4,7 +4,7 @@ namespace :myuniboard do
   
   desc "Bootstrap application"
   task :bootstrap => :environment do
-    Account.create!(:email => 'admin@test.com', :password => 'test', :password_confirmation => 'test')
+    User.create!(:email => 'admin@test.com', :password => 'test', :password_confirmation => 'test')
   end
 
   namespace :dev do
