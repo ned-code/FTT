@@ -11,8 +11,9 @@ Dependencies:
 
 Run in working repository:
 
-  rake myuniboard:dev:bootstrap
+  sudo rake myuniboard:dev:bootstrap
   rake
+  script/server
 
 If all tests pass, you can work on a big new feature ;-)
 
