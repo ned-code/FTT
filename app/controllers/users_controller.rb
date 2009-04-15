@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  permit 'registered', :except => [:new, :create, :confirm]
+  
   def index
     @users = User.all
     respond_to do |format|

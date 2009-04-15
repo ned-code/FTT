@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   acts_as_authorizable
 
   def activate!
+    self.is_registered
     update_attribute('active', true)
   end
 

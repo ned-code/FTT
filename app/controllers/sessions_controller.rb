@@ -20,11 +20,11 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    reset_current_user_session
+    destroy_current_user_session
     respond_to do |format|
       format.html do
         flash[:notice] = I18n.t 'flash.notice.logout_successfull'
-        redirect_back_or_default new_user_session_url
+        redirect_back_or_default new_session_url
       end
       format.xml { head :logout_successfull }
     end

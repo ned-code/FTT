@@ -1,5 +1,7 @@
 <h1>Listing users</h1>
 
+
+<%= current_user.email %>
 <table>
   <tr>
   </tr>
@@ -16,4 +18,4 @@
 
 <br />
 
-<%= link_to 'New users', new_user_path %>
+<%= link_to 'New users', new_user_path %> | <%= link_to 'Logout', session_path, :method => :delete %>

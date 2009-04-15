@@ -18,8 +18,8 @@ class ApplicationController < ActionController::Base
       @current_user ||= current_user_session && current_user_session.user
     end
 
-    def reset_current_user_session
-      @current_user_session.destroy if @current_user_session
+    def destroy_current_user_session
+      current_user_session.destroy if current_user_session
       @current_user = @current_user_session = nil
     end
     
