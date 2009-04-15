@@ -1,7 +1,4 @@
 class UsersController < ApplicationController
-  permit 'owner or administrator', :only => [:show, :edit, :update, :destroy]
-  permit 'administrator', :only => [:index]
-
   def index
     @users = User.all
     respond_to do |format|
