@@ -26,11 +26,20 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        @user.deliver_email_confirmation!
+        if current_user && current_user.is_administrator?
+          @user.activate!
+        else
+          @user.deliver_activation_email!
+        end
         
         format.html do
-          flash[:notice] = I18n.t 'flash.notice.user_registred'
-          redirect_to users_url
+          if current_user && current_user.is_administrator?
+            flash[:notice] = I18n.t 'flash.notice.user_registred'
+            redirect_to users_url
+          else
+            flash[:notice] = I18n.t 'flash.notice.user_registred'
+            redirect_to root_url
+          end
         end
         format.xml  { render :xml => @user, :status => :created, :location => @user }
       else
@@ -66,7 +75,11 @@ class UsersController < ApplicationController
       if @user.update_attributes(params[:user])
         format.html do
           flash[:notice] = I18n.t 'flash.notice.user_updated'
-          redirect_to users_url
+          if current_user.is_administrator?
+            redirect_to users_url
+          else
+            redirect_to edit_user_url(@user)
+          end
         end
         format.xml  { head :ok }
       else

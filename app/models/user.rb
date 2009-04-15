@@ -8,8 +8,8 @@ class User < ActiveRecord::Base
     update_attribute('active', true)
   end
 
-  def deliver_email_confirmation!
+  def deliver_activation_email!
     reset_perishable_token!
-    Notifier.deliver_confirm_user_email!(self)
+    Notifier.deliver_user_activation_email!(self)
   end
 end

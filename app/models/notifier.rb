@@ -1,7 +1,7 @@
 class Notifier < ActionMailer::Base
   default_url_options[:host] = "localhost"
 
-  def confirm_user_email(user)
+  def user_activation_email(user)
     subject    'Confirm your registration'
     recipients user.email
     from       'no-reply@myuniboard.com'
