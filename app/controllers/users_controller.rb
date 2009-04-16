@@ -34,10 +34,10 @@ class UsersController < ApplicationController
         
         format.html do
           if current_user && current_user.is_administrator?
-            flash[:notice] = I18n.t 'flash.notice.user_registred'
+            flash[:notice] = I18n.t 'flash.notice.user_registered'
             redirect_to users_url
           else
-            flash[:notice] = I18n.t 'flash.notice.user_registred'
+            flash[:notice] = I18n.t 'flash.notice.user_registered'
             redirect_to root_url
           end
         end

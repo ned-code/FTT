@@ -4,6 +4,17 @@ Given /^the following users:$/ do |users|
   end
 end
 
+When /^I am logged in with an (\w+) user$/ do |role|
+  user = Factory.create(:user)
+  user.activate!
+  user.send("is_#{role}")
+#  UserSession.create(user)
+  When "I go to the login page"
+  And "I fill in \"email\" with \"#{user.email}\""
+  And "I fill in \"password\" with \"#{user.password}\""
+  And "I press \"Login\""
+end
+
 When /^I delete the (\d+)(?:st|nd|rd|th) user/ do |pos|
   visit users_url
   within("table > tr:nth-child(#{pos.to_i+1})") do

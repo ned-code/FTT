@@ -16,3 +16,8 @@ end
 require 'cucumber/rails/rspec'
 require 'webrat/core/matchers'
 require 'email_spec/cucumber'
+require "authlogic/test_case" 
+
+Before do
+  activate_authlogic
+end
