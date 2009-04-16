@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090415113920) do
+ActiveRecord::Schema.define(:version => 20090416133507) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(:version => 20090415113920) do
   create_table "roles_users", :id => false, :force => true do |t|
     t.integer  "user_id"
     t.integer  "role_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "uniboard_documents", :force => true do |t|
+    t.string   "uuid"
+    t.string   "bucket"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

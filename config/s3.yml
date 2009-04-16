@@ -1,0 +1,15 @@
+development:
+  access_key_id: AKIAJSQQ2RDIXG2UOZ5Q
+  secret_access_key: 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
+  bucket: myuniboard_dev_yann
+
+test:
+  access_key_id: 
+  secret_access_key: 
+  bucket: myuniboard_test
+
+
+production:
+  access_key_id: AKIAJSQQ2RDIXG2UOZ5Q
+  secret_access_key: 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
+  bucket: myuniboard
