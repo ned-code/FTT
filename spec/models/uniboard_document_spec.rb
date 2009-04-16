@@ -23,7 +23,7 @@ describe UniboardDocument do
       document = Factory.build(:uniboard_document)
 
       lambda do
-        document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'test.ubz')
+        document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -53,10 +53,10 @@ describe UniboardDocument do
 
     it 'should send file to s3 on save' do
       document = Factory.build(:uniboard_document)
-      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'test.ubz')
+      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz')
 
       AWS::S3::S3Object.should_not_receive(:delete).and_return(true)
-      AWS::S3::S3Object.should_receive(:store).exactly(12).times
+      AWS::S3::S3Object.should_receive(:store).exactly(11).times
 
       document.save.should be_true
     end

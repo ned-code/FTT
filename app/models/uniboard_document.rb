@@ -26,8 +26,7 @@ class UniboardDocument < ActiveRecord::Base
 
     begin
       Zip::ZipFile.open(file) do |content|
-        raise unless content.get_entry("#{uuid}/").directory?
-        raise unless content.get_entry("#{uuid}/metadata.rdf").file?
+        raise unless content.get_entry('metadata.rdf').file?
       end
     rescue
       raise ArgumentError, 'need ubz file'
@@ -42,18 +41,16 @@ class UniboardDocument < ActiveRecord::Base
     def upload_file_to_s3
       return unless @tempfile
 
-      AWS::S3::Bucket.objects(bucket, :prefix => @name).collect{|object| object.path}.each do |object_path|
-        next if object_path =~ /#{@filename}$/
+      AWS::S3::Bucket.objects(bucket, :prefix => uuid).collect{|object| object.path}.each do |object_path|
+        next if object_path =~ /#{uuid}.ubz$/
 
-        S3Object.delete(object_path, @bucket.name)
+        S3Object.delete(object_path, bucket)
       end
 
       Zip::ZipInputStream::open(@tempfile) do |file|
         while (entry = file.get_next_entry)
-          s3_file_name = entry.name.gsub(/\/$/, '')
+          s3_file_name = entry.name.gsub(/^(.*)\/$/, "#{uuid}/\\1")
           s3_file_access = s3_file_name =~ Regexp.union(/^\w+\/page\d+\.svg$/, /^\w+[^\/]$/) ? :private : :public_read
-
-          next if entry.name !~ /^#{uuid}/
 
           AWS::S3::S3Object.store(s3_file_name, file.read, bucket, :access => s3_file_access)
           # @pages << s3_file_name if s3_file_name =~ /page\d+\.svg$/
