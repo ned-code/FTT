@@ -22,8 +22,14 @@ class UniboardDocument < ActiveRecord::Base
   end
 
   def file=(file)
+    begin
+      Zip::ZipFile.open(file).close
+    rescue
+      raise ArgumentError, 'need ubz file'
+    end
+
     @tempfile = file
-    self.uuid = File.basename(file, '.ubz')
+    self.uuid = File.basename(file, File.extname(file))
   end
 
   private

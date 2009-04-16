@@ -20,9 +20,11 @@ Spec::Runner.configure do |config|
 
   config.before(:all) do
     @s3_config = YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV]
-    
+  end
+
+  config.before(:each) do
     AWS::S3::Base.stub!(:connected?).and_return(true)
-    AWS::S3::Base.stub!(:establish_connection!)
+    AWS::S3::Base.stub!(:establish_connection!).and_return(true)
     AWS::S3::Bucket.stub!(:objects).and_return([])
     AWS::S3::S3Object.stub!(:delete).and_return(true)
     AWS::S3::S3Object.stub!(:store).and_return(true)
