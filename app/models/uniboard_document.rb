@@ -22,14 +22,19 @@ class UniboardDocument < ActiveRecord::Base
   end
 
   def file=(file)
+    uuid = File.basename(file, File.extname(file))
+
     begin
-      Zip::ZipFile.open(file).close
+      Zip::ZipFile.open(file) do |content|
+        raise unless content.get_entry("#{uuid}/").directory?
+        raise unless content.get_entry("#{uuid}/metadata.rdf").file?
+      end
     rescue
       raise ArgumentError, 'need ubz file'
     end
 
     @tempfile = file
-    self.uuid = File.basename(file, File.extname(file))
+    self.uuid = uuid
   end
 
   private

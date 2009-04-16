@@ -19,6 +19,14 @@ describe UniboardDocument do
   end
 
   context '(new)' do
+    it 'should accept ubz file' do
+      document = Factory.build(:uniboard_document)
+
+      lambda do
+        document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'test.ubz')
+      end.should_not raise_error(ArgumentError)
+    end
+
     it 'should not accept text file' do
       document = Factory.build(:uniboard_document)
 
@@ -35,12 +43,12 @@ describe UniboardDocument do
       end.should raise_error(ArgumentError)
     end
 
-    it 'should accept ubz file' do
+    it 'should not accept not valid ubz file' do
       document = Factory.build(:uniboard_document)
 
       lambda do
-        document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'test.ubz')
-      end.should_not raise_error(ArgumentError)
+        document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'no-valid.ubz')
+      end.should raise_error(ArgumentError)
     end
 
     it 'should send file to s3 on save' do
