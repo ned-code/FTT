@@ -154,6 +154,17 @@ describe UniboardDocument do
       document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000valid.ubz')
       document.save.should be_true
     end
+
+    it 'should not be valid if UUID change' do
+      document = Factory.create(:uniboard_document,
+        :file => File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000valid.ubz')
+      )
+
+      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '10000000-0000-0000-0000-0000000valid.ubz')
+      document.should have(1).errors_on(:uuid)
+      document.should have(:no).errors_on(:file)
+      document.should_not be_valid
+    end
   end
 
   it 'should have url' do

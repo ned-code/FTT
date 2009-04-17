@@ -87,5 +87,6 @@ class UniboardDocument < ActiveRecord::Base
 
     def validate
       errors.add('file', "has invalid format") if @error_on_file
+      errors.add('uuid', "have changed") if !uuid_was.blank? and uuid_changed?
     end
 end

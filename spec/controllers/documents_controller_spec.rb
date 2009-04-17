@@ -116,4 +116,20 @@ describe DocumentsController do
       without_tag('error', 'File has invalid format')
     end
   end
+
+  it "should not update document with if uuid changed" do
+    document = Factory.create(:uniboard_document,
+      :file => File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000valid.ubz')
+    )
+    mock_file = mock_uploaded_ubz('10000000-0000-0000-0000-0000000valid.ubz')
+
+    post :update, :id => document.id , :document => { :file => mock_file }
+
+    response.should_not be_success
+    response.should_not render_template 'update.xml.erb'
+    response.should have_tag('errors') do
+      with_tag('error', 'Uuid have changed')
+      without_tag('error', 'File has invalid format')
+    end
+  end
 end
