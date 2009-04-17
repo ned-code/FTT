@@ -55,8 +55,8 @@ describe UniboardDocument do
       document = Factory.build(:uniboard_document)
       document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz')
 
-      AWS::S3::S3Object.should_not_receive(:delete).and_return(true)
-      AWS::S3::S3Object.should_receive(:store).exactly(11).times
+      AWS::S3::S3Object.should_not_receive(:delete)
+      AWS::S3::S3Object.should_receive(:store).exactly(10).times
 
       document.save.should be_true
     end

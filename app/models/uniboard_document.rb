@@ -49,6 +49,7 @@ class UniboardDocument < ActiveRecord::Base
 
       Zip::ZipInputStream::open(@tempfile) do |file|
         while (entry = file.get_next_entry)
+          next if entry.name =~ /\/$/
           s3_file_name = entry.name.gsub(/^(.*)\/$/, "#{uuid}/\\1")
           s3_file_access = s3_file_name =~ Regexp.union(/^\w+\/page\d+\.svg$/, /^\w+[^\/]$/) ? :private : :public_read
 
