@@ -6,7 +6,7 @@ end
 
 When /^I am logged in with an (\w+) user$/ do |role|
   user = Factory.create(:user)
-  user.activate!
+  user.confirm!
   user.send("is_#{role}")
 #  UserSession.create(user)
   When "I go to the login page"

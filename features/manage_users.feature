@@ -28,9 +28,9 @@ Feature: Manage users
       |test2.cucumber@test.com|
       |test4.cucumber@test.com|
 
-  Scenario: Login with activated user
+  Scenario: Login with confirmed user
     Given the following users:
-      |email|password|password_confirmation|active|
+      |email|password|password_confirmation|confirmed|
       |test.cucumber@test.com|test|test|true|
     When I go to the login page
     And I fill in "email" with "test.cucumber@test.com"
@@ -38,7 +38,7 @@ Feature: Manage users
     And I press "Login"
     Then I go to the users page
 
-  Scenario: Login with unactivated user
+  Scenario: Login with unconfirmed user
     Given the following users:
       |email|password|password_confirmation|
       |test.cucumber@test.com|test|test|
@@ -46,4 +46,4 @@ Feature: Manage users
     And I fill in "email" with "test.cucumber@test.com"
     And I fill in "password" with "test"
     And I press "Login"
-    Then I should see "Your account is not active"
+    Then I should see "Your account is not confirmed"

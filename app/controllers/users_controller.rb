@@ -52,7 +52,7 @@ class UsersController < ApplicationController
   def confirm
     @user = User.find_using_perishable_token(params[:id])
 
-    if @user and @user.activate!
+    if @user and @user.confirm!
       reset_session
       UserSession.create(@user)
 

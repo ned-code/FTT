@@ -5,7 +5,7 @@ namespace :myuniboard do
   desc "Bootstrap application"
   task :bootstrap => :environment do
     user = User.create!(:email => 'admin@test.com', :password => 'test', :password_confirmation => 'test')
-    user.activate!
+    user.confirm!
     user.is_administrator
   end
 

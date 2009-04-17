@@ -8,18 +8,18 @@ describe User do
     it 'should not be active' do
       @user = Factory.create(:user)
 
-      @user.should_not be_active
+      @user.should_not be_confirmed
     end
 
-    it 'should be activated' do
+    it 'should be confirmed' do
       @user = Factory.create(:user)
-      @user.activate!.should be_true
-      @user.should be_active
+      @user.confirm!.should be_true
+      @user.should be_confirmed
     end
 
     it 'should be registered after activation' do
       @user = Factory.create(:user)
-      @user.activate!.should be_true
+      @user.confirm!.should be_true
       @user.should have_role('registered')
     end
   end

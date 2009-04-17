@@ -3,9 +3,9 @@ class User < ActiveRecord::Base
   acts_as_authorized_user
   acts_as_authorizable
 
-  def activate!
+  def confirm!
     self.is_registered
-    update_attribute('active', true)
+    update_attribute('confirmed', true)
   end
 
   def deliver_activation_email!
