@@ -22,18 +22,28 @@ class UniboardDocument < ActiveRecord::Base
   end
 
   def file=(file)
-    return if file.nil?
+    @error_on_file = false
+    
+    if file.respond_to?(:path)
+      file = File.expand_path(file.path)
+    elsif file.is_a?(String) and File.file?(file)
+      file = File.expand_path(file)
+    else
+      @error_on_file = true
+      return nil
+    end
 
     begin
       Zip::ZipFile.open(file) do |content|
         raise unless content.get_entry('metadata.rdf').file?
       end
     rescue
-      raise ArgumentError, 'need ubz file'
+      @error_on_file = true
+      return nil
     end
 
-    @tempfile = file
     self.uuid = File.basename(file, File.extname(file))
+    @tempfile = file
   end
 
   private
@@ -61,5 +71,9 @@ class UniboardDocument < ActiveRecord::Base
       AWS::S3::S3Object.store("#{uuid}.ubz", File.open(@tempfile), bucket, :access => :private)
 
       @tempfile = nil
+    end
+
+    def validate
+      errors.add('file', "has invalid format") if @error_on_file
     end
 end

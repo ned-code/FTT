@@ -18,43 +18,68 @@ describe UniboardDocument do
     UniboardDocument.new
   end
 
+  it 'should accept a string value for file' do
+    document = Factory.build(:empty_uniboard_document)
+
+    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz')
+    document.should have(:no).errors_on(:file)
+    document.should be_valid
+  end
+
+  it 'should accept a UploadFile value for file' do
+    document = Factory.build(:empty_uniboard_document)
+
+    document.file = mock_uploaded_ubz('valid.ubz')
+    document.should have(:no).errors_on(:file)
+    document.should be_valid
+  end
+
+  it 'should accept a File value for file' do
+    document = Factory.build(:empty_uniboard_document)
+
+    document.file = File.open(File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz'))
+    document.should have(:no).errors_on(:file)
+    document.should be_valid
+  end
+
   it 'should accept ubz file' do
     document = Factory.build(:empty_uniboard_document)
 
-    lambda do
-      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz')
-    end.should_not raise_error(ArgumentError)
+    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz')
+    document.should have(:no).errors_on(:file)
+    document.should be_valid
   end
 
   it 'should not accept text file' do
     document = Factory.build(:empty_uniboard_document)
 
-    lambda do
-      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'empty.txt')
-    end.should raise_error(ArgumentError)
+    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'empty.txt')
+    document.should have(1).errors_on(:file)
+    document.should_not be_valid
   end
 
   it 'should not accept empty ubz file' do
     document = Factory.build(:empty_uniboard_document)
 
-    lambda do
-      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'empty.ubz')
-    end.should raise_error(ArgumentError)
+    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'empty.ubz')
+    document.should have(1).errors_on(:file)
+    document.should_not be_valid
   end
 
   it 'should not accept not valid ubz file' do
     document = Factory.build(:empty_uniboard_document)
 
-    lambda do
-      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'no-valid.ubz')
-    end.should raise_error(ArgumentError)
+    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'not-valid.ubz')
+    document.should have(1).errors_on(:file)
+    document.should_not be_valid
   end
-
-  it 'should accept nil value for file' do
+  
+  it 'should not accept nil value for file' do
     document = Factory.build(:uniboard_document, :file => nil)
-    lambda do
-      document.file = nil
-    end.should_not raise_error
+
+    document.file = nil
+    document.should have(1).errors_on(:file)
+    document.should_not be_valid
   end
 
   context '(new)' do

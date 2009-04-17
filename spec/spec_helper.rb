@@ -62,3 +62,11 @@ Spec::Runner.configure do |config|
   # 
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
+
+
+def mock_uploaded_ubz(file = 'valid.ubz')
+  file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', file) if file !~ /^\//
+
+  ActionController::TestUploadedFile.new(file)
+end
+
