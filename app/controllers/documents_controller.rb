@@ -27,6 +27,18 @@ class DocumentsController < ApplicationController
     end
   end
 
+  def update
+    @document = UniboardDocument.find(params[:id])
+
+    respond_to do |format|
+      if @document.update_attributes(params[:document])
+        format.xml
+      else
+        format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
   def destroy
     @document = UniboardDocument.find(params[:id])
 
