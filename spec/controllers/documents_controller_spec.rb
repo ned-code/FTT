@@ -67,4 +67,14 @@ describe DocumentsController do
     response.should have_tag('document[id=?][location=?]', doc.id, doc.url)
   end
 
+  it "should delete document" do
+    doc = Factory.create(:uniboard_document)
+
+    delete :destroy, :id => doc.id
+
+    response.should be_success
+    response.should render_template 'destroy.xml.erb'
+    response.should have_tag('document[id=?]', doc.id)
+  end
+
 end

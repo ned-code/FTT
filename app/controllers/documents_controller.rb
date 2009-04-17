@@ -26,4 +26,16 @@ class DocumentsController < ApplicationController
       end
     end
   end
+
+  def destroy
+    @document = UniboardDocument.find(params[:id])
+
+    respond_to do |format|
+      if @document.destroy
+        format.xml { render :action => 'destroy', :status => :ok }
+      else
+        format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
 end

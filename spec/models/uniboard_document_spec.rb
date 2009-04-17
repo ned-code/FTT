@@ -136,8 +136,8 @@ describe UniboardDocument do
       AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => document.uuid).and_return(
         stub('list', :collect => [
           "#{document.uuid}.ubz",
-          "#{document.uuid}/images/file.jpeg",
-          "#{document.uuid}/images/file.jpeg",
+          "#{document.uuid}/images/image_1.jpeg",
+          "#{document.uuid}/images/image_2.jpeg",
           "#{document.uuid}/metadata.rdf",
           "#{document.uuid}/page_001.svg",
           "#{document.uuid}/page_001_preview.svg",
@@ -162,5 +162,28 @@ describe UniboardDocument do
     AWS::S3::S3Object.should_receive(:url_for).with("#{document.uuid}.ubz", document.bucket).and_return('http://amazone')
     
     document.url.should == 'http://amazone'
+  end
+
+  it 'should be destroyed' do
+    document = Factory.create(:uniboard_document)
+
+      AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => document.uuid).and_return(
+        stub('list', :collect => [
+          "#{document.uuid}.ubz",
+          "#{document.uuid}/images/image_1.jpeg",
+          "#{document.uuid}/images/image_2.jpeg",
+          "#{document.uuid}/metadata.rdf",
+          "#{document.uuid}/page_001.svg",
+          "#{document.uuid}/page_001_preview.svg",
+          "#{document.uuid}/page_002.svg",
+          "#{document.uuid}/page_002_preview.svg",
+          "#{document.uuid}/page_003.svg",
+          "#{document.uuid}/page_002_preview.svg"
+        ])
+      )
+
+    AWS::S3::S3Object.should_receive(:delete).exactly(10).times
+
+    document.destroy
   end
 end

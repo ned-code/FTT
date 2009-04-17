@@ -3,6 +3,7 @@ class UniboardDocument < ActiveRecord::Base
   validates_presence_of :bucket
 
   after_save :upload_file_to_s3
+  after_destroy :destroy_file_on_s3
 
   cattr_reader :config
 
@@ -76,6 +77,12 @@ class UniboardDocument < ActiveRecord::Base
       AWS::S3::S3Object.store("#{uuid}.ubz", File.open(@tempfile), bucket, :access => :private)
 
       @tempfile = nil
+    end
+
+    def destroy_file_on_s3
+      AWS::S3::Bucket.objects(bucket, :prefix => uuid).collect{|object| object.path}.each do |object_path|
+        AWS::S3::S3Object.delete(object_path, bucket)
+      end
     end
 
     def validate
