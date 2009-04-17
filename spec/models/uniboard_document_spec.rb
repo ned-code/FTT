@@ -19,7 +19,7 @@ describe UniboardDocument do
   end
 
   it 'should accept ubz file' do
-    document = Factory.build(:uniboard_document)
+    document = Factory.build(:empty_uniboard_document)
 
     lambda do
       document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz')
@@ -27,7 +27,7 @@ describe UniboardDocument do
   end
 
   it 'should not accept text file' do
-    document = Factory.build(:uniboard_document)
+    document = Factory.build(:empty_uniboard_document)
 
     lambda do
       document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'empty.txt')
@@ -35,7 +35,7 @@ describe UniboardDocument do
   end
 
   it 'should not accept empty ubz file' do
-    document = Factory.build(:uniboard_document)
+    document = Factory.build(:empty_uniboard_document)
 
     lambda do
       document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'empty.ubz')
@@ -43,17 +43,23 @@ describe UniboardDocument do
   end
 
   it 'should not accept not valid ubz file' do
-    document = Factory.build(:uniboard_document)
+    document = Factory.build(:empty_uniboard_document)
 
     lambda do
       document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'no-valid.ubz')
     end.should raise_error(ArgumentError)
   end
 
+  it 'should accept nil value for file' do
+    document = Factory.build(:uniboard_document, :file => nil)
+    lambda do
+      document.file = nil
+    end.should_not raise_error
+  end
 
   context '(new)' do
     it 'should send file to s3 on save' do
-      document = Factory.build(:uniboard_document)
+      document = Factory.build(:empty_uniboard_document)
       document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz')
 
       AWS::S3::S3Object.should_not_receive(:delete)
@@ -66,7 +72,6 @@ describe UniboardDocument do
   context '(update)' do
     it 'should send file to s3 on save' do
       document = Factory.create(:uniboard_document)
-      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz')
 
       AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => document.uuid).and_return(
         stub('list', :collect => [
@@ -86,6 +91,7 @@ describe UniboardDocument do
       AWS::S3::S3Object.should_receive(:delete).exactly(9).times
       AWS::S3::S3Object.should_receive(:store).exactly(10).times
 
+      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'valid.ubz')
       document.save.should be_true
     end
   end

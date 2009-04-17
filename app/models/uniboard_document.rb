@@ -22,7 +22,7 @@ class UniboardDocument < ActiveRecord::Base
   end
 
   def file=(file)
-    uuid = File.basename(file, File.extname(file))
+    return if file.nil?
 
     begin
       Zip::ZipFile.open(file) do |content|
@@ -33,7 +33,7 @@ class UniboardDocument < ActiveRecord::Base
     end
 
     @tempfile = file
-    self.uuid = uuid
+    self.uuid = File.basename(file, File.extname(file))
   end
 
   private
