@@ -1,5 +1,6 @@
 class UniboardDocument < ActiveRecord::Base
-  validates_presence_of :uuid, :bucket
+  validates_format_of :uuid, :with => /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/
+  validates_presence_of :bucket
 
   after_save :upload_file_to_s3
 
@@ -29,9 +30,10 @@ class UniboardDocument < ActiveRecord::Base
     elsif file.is_a?(String) and File.file?(file)
       file = File.expand_path(file)
     else
-      @error_on_file = true
-      return nil
+      file = nil
     end
+
+    self.uuid = File.basename(file, File.extname(file)) if file
 
     begin
       Zip::ZipFile.open(file) do |content|
@@ -42,7 +44,6 @@ class UniboardDocument < ActiveRecord::Base
       return nil
     end
 
-    self.uuid = File.basename(file, File.extname(file))
     @tempfile = file
   end
 
