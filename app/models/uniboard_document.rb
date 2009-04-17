@@ -44,7 +44,7 @@ class UniboardDocument < ActiveRecord::Base
       AWS::S3::Bucket.objects(bucket, :prefix => uuid).collect{|object| object.path}.each do |object_path|
         next if object_path =~ /#{uuid}.ubz$/
 
-        S3Object.delete(object_path, bucket)
+        AWS::S3::S3Object.delete(object_path, bucket)
       end
 
       Zip::ZipInputStream::open(@tempfile) do |file|
