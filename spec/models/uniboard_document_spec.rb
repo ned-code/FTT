@@ -155,4 +155,12 @@ describe UniboardDocument do
       document.save.should be_true
     end
   end
+
+  it 'should have url' do
+    document = Factory.create(:uniboard_document)
+
+    AWS::S3::S3Object.should_receive(:url_for).with("#{document.uuid}.ubz", document.bucket).and_return('http://amazone')
+    
+    document.url.should == 'http://amazone'
+  end
 end

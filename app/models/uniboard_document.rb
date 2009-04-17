@@ -47,6 +47,10 @@ class UniboardDocument < ActiveRecord::Base
     @tempfile = file
   end
 
+  def url
+    AWS::S3::S3Object.url_for("#{uuid}.ubz", bucket)
+  end
+
   private
 
     def upload_file_to_s3

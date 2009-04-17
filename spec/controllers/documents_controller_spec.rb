@@ -46,7 +46,7 @@ describe DocumentsController do
     docs << Factory.create(:uniboard_document)
     docs << Factory.create(:uniboard_document)
 
-    post :index
+    get :index
 
     response.should be_success
     response.should render_template 'index.xml.erb'
@@ -55,6 +55,16 @@ describe DocumentsController do
       with_tag('document[id=?][uuid=?][created_at=?][updated_at=?]', docs[1].id, docs[1].uuid, docs[1].created_at, docs[1].updated_at)
       with_tag('document[id=?][uuid=?][created_at=?][updated_at=?]', docs[2].id, docs[2].uuid, docs[2].created_at, docs[2].updated_at)
     end
+  end
+
+  it "should get document" do
+    doc = Factory.create(:uniboard_document)
+
+    get :show, :id => doc.id
+
+    response.should redirect_to(doc.url)
+    response.should render_template 'show.xml.erb'
+    response.should have_tag('document[id=?][location=?]', doc.id, doc.url)
   end
 
 end

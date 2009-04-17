@@ -7,6 +7,14 @@ class DocumentsController < ApplicationController
     end
   end
 
+  def show
+    @document = UniboardDocument.find(params[:id])
+
+    respond_to do |format|
+      format.xml { render :action => 'show', :status => 303, :location => @document.url }
+    end
+  end
+
   def create
     @document = UniboardDocument.new(params[:document])
 
