@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documents>
+  <% @documents.each do |document| -%>
+    <document id="<%= document.id %>" uuid="<%= document.uuid %>" created_at="<%= document.created_at %>" updated_at="<%= document.updated_at %>" />
+  <% end -%>
+</documents>
