@@ -6,6 +6,7 @@ require 'spec/autorun'
 require 'spec/rails'
 require "email_spec/helpers"
 require "email_spec/matchers"
+require 'fileutils'
 
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
@@ -22,6 +23,8 @@ Spec::Runner.configure do |config|
 
   config.before(:all) do
     @s3_config = YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV]
+
+    FileUtils.mkdir_p File.join(RAILS_ROOT, 'spec', 'tmp', 'files')
   end
 
   config.before(:each) do
@@ -31,6 +34,12 @@ Spec::Runner.configure do |config|
     AWS::S3::S3Object.stub!(:delete).and_return(true)
     AWS::S3::S3Object.stub!(:store).and_return(true)
     AWS::S3::S3Object.stub!(:url_for).and_return('http://amazon')
+  end
+
+  config.after(:each) do
+    Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'files', '*')].each do |file|
+      FileUtils.rm file
+    end
   end
 
   # == Fixtures
@@ -62,14 +71,36 @@ Spec::Runner.configure do |config|
   # config.mock_with :rr
   #
   # == Notes
-  # 
+  #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
 
 
-def mock_uploaded_ubz(file = '00000000-0000-0000-0000-0000000valid.ubz')
-  file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', file) if file !~ /^\//
-
-  ActionController::TestUploadedFile.new(file)
+def mock_uploaded_ubz(file, uuid = nil)
+  ActionController::TestUploadedFile.new(fixture_file(file, uuid))
 end
 
+def fixture_file(source, uuid = nil)
+  @uuid_generator ||= UUID.new
+  
+  source = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', source) if source !~ /^\//
+
+  if source =~ /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\.ubz$/
+    uuid ||= @uuid_generator.generate
+    target = File.join(RAILS_ROOT, 'spec', 'tmp', 'files', uuid + File.extname(source))
+
+    FileUtils.cp source, target
+    begin
+      Zip::ZipFile.open(target) do |content|
+        content.rename("#{File.basename(source, File.extname(source))}.ub", "#{uuid}.ub")
+      end
+    rescue
+    end
+  else
+    target = File.join(RAILS_ROOT, 'spec', 'tmp', 'files', File.basename(source))
+
+    FileUtils.cp source, target
+  end
+
+  target
+end

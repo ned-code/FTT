@@ -21,7 +21,7 @@ describe UniboardDocument do
   it 'should be valid with String object as file' do
     document = Factory.build(:empty_uniboard_document)
 
-    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000valid.ubz')
+    document.file = fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
     document.should have(:no).errors_on(:uuid)
     document.should have(:no).errors_on(:file)
     document.should be_valid
@@ -36,19 +36,10 @@ describe UniboardDocument do
     document.should be_valid
   end
 
-  it 'should be valid with default UploadFile object as file' do
-    document = Factory.build(:empty_uniboard_document)
-
-    document.file = mock_uploaded_ubz
-    document.should have(:no).errors_on(:uuid)
-    document.should have(:no).errors_on(:file)
-    document.should be_valid
-  end
-
   it 'should be valid with File object as file' do
     document = Factory.build(:empty_uniboard_document)
 
-    document.file = File.open(File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000valid.ubz'))
+    document.file = File.open(fixture_file('00000000-0000-0000-0000-0000000valid.ubz'))
     document.should have(:no).errors_on(:uuid)
     document.should have(:no).errors_on(:file)
     document.should be_valid
@@ -57,25 +48,16 @@ describe UniboardDocument do
   it 'should be valid with valid ubz file' do
     document = Factory.build(:empty_uniboard_document)
 
-    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000valid.ubz')
+    document.file = fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
     document.should have(:no).errors_on(:uuid)
     document.should have(:no).errors_on(:file)
     document.should be_valid
   end
 
-  it 'should not be valid with empty text file' do
-    document = Factory.build(:empty_uniboard_document)
-
-    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000empty.txt')
-    document.should have(:no).errors_on(:uuid)
-    document.should have(1).errors_on(:file)
-    document.should_not be_valid
-  end
-
   it 'should not be valid with empty ubz file' do
     document = Factory.build(:empty_uniboard_document)
 
-    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000empty.ubz')
+    document.file =fixture_file('00000000-0000-0000-0000-0000000empty.ubz')
     document.should have(:no).errors_on(:uuid)
     document.should have(1).errors_on(:file)
     document.should_not be_valid
@@ -84,7 +66,7 @@ describe UniboardDocument do
   it 'should not be valid with not valid ubz file' do
     document = Factory.build(:empty_uniboard_document)
 
-    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000notvalid.ubz')
+    document.file = fixture_file('00000000-0000-0000-0000-0000notvalid.ubz')
     document.should have(:no).errors_on(:uuid)
     document.should have(1).errors_on(:file)
     document.should_not be_valid
@@ -102,25 +84,16 @@ describe UniboardDocument do
   it 'should not be valid without uuid' do
     document = Factory.build(:uniboard_document, :file => nil)
 
-    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'nouuid-valid.ubz')
+    document.file = fixture_file('nouuid-valid.ubz')
     document.should have(1).errors_on(:uuid)
     document.should have(:no).errors_on(:file)
-    document.should_not be_valid
-  end
-
-  it 'should not be valid without uuid and valid file' do
-    document = Factory.build(:uniboard_document, :file => nil)
-
-    document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'nouuid-notvalid.ubz')
-    document.should have(1).errors_on(:uuid)
-    document.should have(1).errors_on(:file)
     document.should_not be_valid
   end
 
   context '(new)' do
     it 'should send file to s3 on save' do
       document = Factory.build(:empty_uniboard_document)
-      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000valid.ubz')
+      document.file = fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
 
       AWS::S3::S3Object.should_not_receive(:delete)
       AWS::S3::S3Object.should_receive(:store).exactly(10).times
@@ -151,16 +124,16 @@ describe UniboardDocument do
       AWS::S3::S3Object.should_receive(:delete).exactly(9).times
       AWS::S3::S3Object.should_receive(:store).exactly(10).times
 
-      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000valid.ubz')
+      document.file = fixture_file('00000000-0000-0000-0000-0000000valid.ubz', document.uuid)
       document.save.should be_true
     end
 
     it 'should not be valid if UUID change' do
       document = Factory.create(:uniboard_document,
-        :file => File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '00000000-0000-0000-0000-0000000valid.ubz')
+        :file => fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
       )
 
-      document.file = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', '10000000-0000-0000-0000-0000000valid.ubz')
+      document.file = fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
       document.should have(1).errors_on(:uuid)
       document.should have(:no).errors_on(:file)
       document.should_not be_valid

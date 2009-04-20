@@ -1,6 +1,8 @@
 class UniboardDocument < ActiveRecord::Base
   acts_as_authorizable
 
+  has_many :pages, :class_name => 'UniboardPage', :autosave => true
+
   validates_format_of :uuid, :with => /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/
   validates_presence_of :bucket
 
@@ -40,7 +42,7 @@ class UniboardDocument < ActiveRecord::Base
 
     begin
       Zip::ZipFile.open(file) do |content|
-        raise unless content.get_entry('metadata.rdf').file?
+        raise unless content.get_entry("#{uuid}.ub").file?
       end
     rescue
       @error_on_file = true

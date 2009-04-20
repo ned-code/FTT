@@ -94,7 +94,7 @@ describe DocumentsController do
     end
 
     it "should update document with valid ubz" do
-      mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
+      mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document.uuid)
 
       post :update, :id => @document.id , :document => { :file => mock_file }
 
@@ -131,7 +131,7 @@ describe DocumentsController do
     end
 
     it "should not update document with if uuid changed" do
-      mock_file = mock_uploaded_ubz('10000000-0000-0000-0000-0000000valid.ubz')
+      mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
       post :update, :id => @document.id , :document => { :file => mock_file }
 
