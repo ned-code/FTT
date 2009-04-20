@@ -1,4 +1,6 @@
 class UniboardDocument < ActiveRecord::Base
+  acts_as_authorizable
+
   validates_format_of :uuid, :with => /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/
   validates_presence_of :bucket
 

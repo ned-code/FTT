@@ -178,23 +178,35 @@ describe UniboardDocument do
   it 'should be destroyed' do
     document = Factory.create(:uniboard_document)
 
-      AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => document.uuid).and_return(
-        stub('list', :collect => [
-          "#{document.uuid}.ubz",
-          "#{document.uuid}/images/image_1.jpeg",
-          "#{document.uuid}/images/image_2.jpeg",
-          "#{document.uuid}/metadata.rdf",
-          "#{document.uuid}/page_001.svg",
-          "#{document.uuid}/page_001_preview.svg",
-          "#{document.uuid}/page_002.svg",
-          "#{document.uuid}/page_002_preview.svg",
-          "#{document.uuid}/page_003.svg",
-          "#{document.uuid}/page_002_preview.svg"
-        ])
-      )
+    AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => document.uuid).and_return(
+      stub('list', :collect => [
+        "#{document.uuid}.ubz",
+        "#{document.uuid}/images/image_1.jpeg",
+        "#{document.uuid}/images/image_2.jpeg",
+        "#{document.uuid}/metadata.rdf",
+        "#{document.uuid}/page_001.svg",
+        "#{document.uuid}/page_001_preview.svg",
+        "#{document.uuid}/page_002.svg",
+        "#{document.uuid}/page_002_preview.svg",
+        "#{document.uuid}/page_003.svg",
+        "#{document.uuid}/page_002_preview.svg"
+      ])
+    )
 
     AWS::S3::S3Object.should_receive(:delete).exactly(10).times
 
     document.destroy
+  end
+
+  it 'should be listed by owner' do
+    user = Factory.create(:user)
+    
+    document_not_owned = Factory.create(:uniboard_document)
+
+    document = Factory.create(:uniboard_document)
+    document.accepts_role 'owner', user
+
+    user.documents.should include(document)
+    user.documents.should_not include(document_not_owned)
   end
 end

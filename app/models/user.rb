@@ -3,6 +3,10 @@ class User < ActiveRecord::Base
   acts_as_authorized_user
   acts_as_authorizable
 
+  def documents
+    is_owner_of_what(UniboardDocument)
+  end
+
   def confirm!
     self.is_registered
     update_attribute('confirmed', true)

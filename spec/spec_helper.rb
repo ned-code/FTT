@@ -18,6 +18,8 @@ Spec::Runner.configure do |config|
   config.include(EmailSpec::Helpers)
   config.include(EmailSpec::Matchers)
 
+  config.include(Authlogic::TestCase)
+
   config.before(:all) do
     @s3_config = YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV]
   end
