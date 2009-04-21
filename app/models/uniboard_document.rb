@@ -32,6 +32,7 @@ class UniboardDocument < ActiveRecord::Base
 
   def file=(file)
     @error_on_file = false
+    @pages_to_delete = []
 
     if file.respond_to?(:path)
       file = File.expand_path(file.path)
@@ -45,6 +46,7 @@ class UniboardDocument < ActiveRecord::Base
 
     begin
       Zip::ZipFile.open(file) do |content|
+        old_pages = pages.dup
         document_desc = REXML::Document.new(content.get_input_stream("#{uuid}.ub").read)
 
         page_position = 0
@@ -52,10 +54,15 @@ class UniboardDocument < ActiveRecord::Base
           page_uuid = page_element.text.match(UUID_FORMAT_REGEX)[0]
           page_position += 1
 
-          page = pages.to_a.find {|e| e.uuid == page_uuid} || pages.build(:uuid => page_uuid)
+          page = old_pages.delete( old_pages.find {|e| e.uuid == page_uuid} ) || pages.build(:uuid => page_uuid)
 
-          page.updated_at = Time.now if content.find_entry(page_element.text)
+          page.version += 1 if !page.new_record? and content.find_entry("#{page_uuid}.svg")
           page.position = page_position if page.position != page_position
+        end
+
+        old_pages.each do |page|
+          page.mark_for_destruction
+          @pages_to_delete << page.uuid
         end
       end
     rescue
@@ -75,15 +82,14 @@ class UniboardDocument < ActiveRecord::Base
     def upload_document_to_s3
       return unless @tempfile
 
-#      AWS::S3::Bucket.objects(bucket, :prefix => uuid).collect{|object| object.path}.each do |object_path|
-#        next if object_path =~ /#{uuid}.ubz$/
-#
-#        AWS::S3::S3Object.delete(object_path, bucket)
-#      end
+      @pages_to_delete.each do |page_uuid|
+        AWS::S3::S3Object.delete("#{uuid}/#{page_uuid}.svg", bucket)
+        AWS::S3::S3Object.delete("#{uuid}/#{page_uuid}.thumbnail.jpg", bucket)
+      end
 
       Zip::ZipInputStream::open(@tempfile) do |file|
         while (entry = file.get_next_entry)
-          next if entry.name =~ /\/$/
+          next if entry.name =~ /\/$/ or entry.name == "#{uuid}.ub"
           s3_file_name = entry.name.gsub(/^(.*)\/$/, "#{uuid}/\\1")
           s3_file_access = s3_file_name =~ Regexp.union(/^\w+\/#{UUID_FORMAT_REGEX}\.svg$/, /^\w+[^\/]$/) ? :private : :public_read
 

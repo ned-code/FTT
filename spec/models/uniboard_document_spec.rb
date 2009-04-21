@@ -122,36 +122,30 @@ describe UniboardDocument do
       document = Factory.create(:uniboard_document)
 
       AWS::S3::S3Object.should_not_receive(:delete)
-      AWS::S3::S3Object.should_receive(:store).exactly(4).times
+      AWS::S3::S3Object.should_receive(:store).exactly(2).times
 
       document.file = fixture_file('00000000-0000-0000-0000-0update1page.ubz', document.uuid)
       document.save.should be_true
-      document.should have(3).pages
+      document.should have(3).pages(true)
       document.pages[0].version.should == 1
       document.pages[1].version.should == 2
       document.pages[2].version.should == 1
     end
 
-#    it 'should remove deleted pages on s3 on save' do
-#      document = Factory.create(:uniboard_document)
-#
-#      AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => document.uuid).and_return(
-#        stub('list', :collect => [
-#          "#{document.uuid}.ubz",
-#          "#{document.uuid}/#{document.uuid}.ub",
-#          "#{document.uuid}/metadata.rdf",
-#          "#{document.uuid}/page_001.svg",
-#          "#{document.uuid}/page_001_preview.svg",
-#        ])
-#      )
-#
-#      AWS::S3::S3Object.should_receive(:delete).exactly(4).times
-#      AWS::S3::S3Object.should_receive(:store).exactly(5).times
-#
-#      document.file = fixture_file('00000000-0000-0000-0000-000000update.ubz', document.uuid)
-#      document.save.should be_true
-#      document.should have(3).pages
-#    end
+    it 'should remove deleted pages on s3 on save' do
+      document = Factory.create(:uniboard_document)
+
+      AWS::S3::S3Object.should_receive(:delete).exactly(2).times
+      AWS::S3::S3Object.should_not_receive(:store)
+
+      document.file = fixture_file('00000000-0000-0000-0000-000000delete.ubz', document.uuid)
+      document.save.should be_true
+      document.should have(2).pages(true)
+      document.pages[0].version.should == 1
+      document.pages[1].version.should == 1
+      document.pages[0].position.should == 1
+      document.pages[1].position.should == 2
+    end
 
     it 'should not be valid if UUID change' do
       document = Factory.create(:uniboard_document,

@@ -10,12 +10,4 @@ describe UniboardPage do
     page.save.should be_true
     page.version.should == 1
   end
-
-  it "version number is incremented on update" do
-    page = Factory.create(:uniboard_page)
-    page.updated_at = Time.now
-
-    page.save.should be_true
-    page.version.should == 2
-  end
 end
