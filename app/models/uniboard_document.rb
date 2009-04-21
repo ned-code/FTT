@@ -91,7 +91,7 @@ class UniboardDocument < ActiveRecord::Base
         while (entry = file.get_next_entry)
           next if entry.name =~ /\/$/ or entry.name == "#{uuid}.ub"
           s3_file_name = entry.name.gsub(/^(.*)\/$/, "#{uuid}/\\1")
-          s3_file_access = s3_file_name =~ Regexp.union(/^\w+\/#{UUID_FORMAT_REGEX}\.svg$/, /^\w+[^\/]$/) ? :private : :public_read
+          s3_file_access = s3_file_name =~ /^\w+\/#{UUID_FORMAT_REGEX}\.svg$/ ? :private : :public_read
 
           AWS::S3::S3Object.store(s3_file_name, file.read, bucket, :access => s3_file_access)
         end
