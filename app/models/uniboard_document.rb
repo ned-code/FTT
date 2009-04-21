@@ -73,8 +73,18 @@ class UniboardDocument < ActiveRecord::Base
     @tempfile = file
   end
 
-  def url
-    AWS::S3::S3Object.url_for("#{uuid}.ubz", bucket)
+  def to_xml
+    xml = REXML::Document.new
+
+    xml_document = xml.add_element('document', 'version' => version, 'created-at' => created_at.xmlschema, 'updated-at' => updated_at.xmlschema).add_namespace('http://www.mnemis.com/uniboard')
+
+    xml_pages = xml_document.add_element('pages')
+    pages.each do |page|
+      xml_page = xml_pages.add_element('page', 'version' => page.version, 'created-at' => page.created_at.xmlschema, 'updated-at' => page.updated_at.xmlschema)
+      xml_page.text = "#{page.uuid}.svg"
+    end
+
+    xml.to_s
   end
 
   private

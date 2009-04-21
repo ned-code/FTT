@@ -165,14 +165,6 @@ describe UniboardDocument do
     end
   end
 
-  it 'should have url' do
-    document = Factory.create(:uniboard_document)
-
-    AWS::S3::S3Object.should_receive(:url_for).with("#{document.uuid}.ubz", document.bucket).and_return('http://amazone')
-
-    document.url.should == 'http://amazone'
-  end
-
   it 'should be destroyed' do
     document = Factory.create(:uniboard_document)
 
@@ -208,5 +200,13 @@ describe UniboardDocument do
 
     user.documents.should include(document)
     user.documents.should_not include(document_not_owned)
+  end
+
+  it "should have xml format" do
+    document = Factory.create(:uniboard_document)
+    document_xml = REXML::Document.new(document.to_xml)
+
+    puts document.to_xml
+
   end
 end

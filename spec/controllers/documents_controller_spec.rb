@@ -80,9 +80,7 @@ describe DocumentsController do
     it "should get document if current user is owner" do
       get :show, :id => @document.id
 
-      response.should redirect_to(@document.url)
-      response.should render_template 'show.xml.erb'
-      response.should have_tag('document[id=?][location=?]', @document.id, @document.url)
+      response.body.should == @document.to_xml
     end
 
     it "should delete document" do
