@@ -134,6 +134,7 @@ describe UniboardDocument do
 
     it 'should remove deleted pages on s3 on save' do
       document = Factory.create(:uniboard_document)
+      deleted_page = document.pages[1]
 
       AWS::S3::S3Object.should_receive(:delete).exactly(2).times
       AWS::S3::S3Object.should_not_receive(:store)
@@ -145,6 +146,7 @@ describe UniboardDocument do
       document.pages[1].version.should == 1
       document.pages[0].position.should == 1
       document.pages[1].position.should == 2
+      UniboardPage.find_by_id(deleted_page.id).should be_nil
     end
 
     it 'should not be valid if UUID change' do
@@ -176,15 +178,15 @@ describe UniboardDocument do
 
     AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => document.uuid).and_return(
       stub('list', :collect => [
-        "#{document.uuid}/images/00000000-0000-0000-0000-000000000001.jpeg",
-        "#{document.uuid}/images/00000000-0000-0000-0000-000000000002.jpeg",
+        "#{document.uuid}/images/00000000-0000-0000-0000-000000000001.jpg",
+        "#{document.uuid}/images/00000000-0000-0000-0000-000000000002.jpg",
         "#{document.uuid}/metadata.rdf",
         "#{document.uuid}/00000000-0000-0000-0000-000000000001.svg",
-        "#{document.uuid}/00000000-0000-0000-0000-000000000001.thumbnail.svg",
+        "#{document.uuid}/00000000-0000-0000-0000-000000000001.thumbnail.jpg",
         "#{document.uuid}/00000000-0000-0000-0000-000000000002.svg",
-        "#{document.uuid}/00000000-0000-0000-0000-000000000002.thumbnail.svg",
+        "#{document.uuid}/00000000-0000-0000-0000-000000000002.thumbnail.jpg",
         "#{document.uuid}/00000000-0000-0000-0000-000000000003.svg",
-        "#{document.uuid}/00000000-0000-0000-0000-000000000004.thumbnail.svg"
+        "#{document.uuid}/00000000-0000-0000-0000-000000000004.thumbnail.jpg"
       ])
     )
 
