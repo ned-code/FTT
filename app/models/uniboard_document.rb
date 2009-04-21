@@ -9,8 +9,8 @@ class UniboardDocument < ActiveRecord::Base
   validates_presence_of :bucket
 
   before_update :increment_version
-  after_save :upload_file_to_s3
-  after_destroy :destroy_file_on_s3
+  before_save :upload_document_to_s3
+  after_destroy :destroy_document_on_s3
 
   cattr_reader :config
 
@@ -72,7 +72,7 @@ class UniboardDocument < ActiveRecord::Base
 
   private
 
-    def upload_file_to_s3
+    def upload_document_to_s3
       return unless @tempfile
 
 #      AWS::S3::Bucket.objects(bucket, :prefix => uuid).collect{|object| object.path}.each do |object_path|
@@ -94,7 +94,7 @@ class UniboardDocument < ActiveRecord::Base
       @tempfile = nil
     end
 
-    def destroy_file_on_s3
+    def destroy_document_on_s3
       AWS::S3::Bucket.objects(bucket, :prefix => uuid).collect{|object| object.path}.each do |object_path|
         AWS::S3::S3Object.delete(object_path, bucket)
       end

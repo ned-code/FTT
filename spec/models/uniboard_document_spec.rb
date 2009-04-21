@@ -158,10 +158,14 @@ describe UniboardDocument do
         :file => fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
       )
 
+      AWS::S3::S3Object.should_not_receive(:delete)
+      AWS::S3::S3Object.should_not_receive(:store)
+
       document.file = fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
       document.should have(1).errors_on(:uuid)
       document.should have(:no).errors_on(:file)
       document.should_not be_valid
+      document.save.should be_false
     end
   end
 
