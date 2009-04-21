@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090420152838) do
+ActiveRecord::Schema.define(:version => 20090421120422) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -31,12 +31,14 @@ ActiveRecord::Schema.define(:version => 20090420152838) do
     t.string   "bucket"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "version",    :default => 1
   end
 
   create_table "uniboard_pages", :force => true do |t|
     t.string   "uuid"
     t.integer  "position"
-    t.integer  "document_id"
+    t.integer  "version",              :default => 1
+    t.integer  "uniboard_document_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
