@@ -102,7 +102,7 @@ describe UsersController do
         @another_user = Factory.create(:confirmed_user)
         @another_user.is_registered
       end
-      
+
       it "should update" do
         put :update, :id => @another_user.id, :user => {}
 

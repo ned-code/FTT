@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   permit 'registered', :except => [:new, :create, :confirm]
-  
+
   def index
     @users = User.all
     respond_to do |format|
@@ -32,7 +32,7 @@ class UsersController < ApplicationController
         else
           @user.deliver_registration_activation_email!
         end
-        
+
         format.html do
           if current_user && current_user.is_administrator?
             flash[:notice] = I18n.t 'flash.notice.user_registered'

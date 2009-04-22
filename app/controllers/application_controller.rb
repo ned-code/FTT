@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
       current_user_session.destroy if current_user_session
       @current_user = @current_user_session = nil
     end
-    
+
     def store_location
       session[:return_to] = request.request_uri
     end
