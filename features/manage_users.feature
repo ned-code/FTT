@@ -9,9 +9,9 @@ Feature: Manage users
     Then I should see "registered"
     And I should receive an email
     When I open the email
-    Then I should see "confirm" in the email
-    When I follow "confirm" in the email
+    And I follow "confirm" in the email
     Then I should see "confirmed"
+    And I should receive an email
 
   Scenario: Delete user
     Given the following users:

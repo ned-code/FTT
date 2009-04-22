@@ -29,7 +29,7 @@ class UsersController < ApplicationController
         if current_user && current_user.is_administrator?
           @user.activate!
         else
-          @user.deliver_activation_email!
+          @user.deliver_registration_activation_email!
         end
         
         format.html do
@@ -53,6 +53,8 @@ class UsersController < ApplicationController
     @user = User.find_using_perishable_token(params[:id])
 
     if @user and @user.confirm!
+      @user.deliver_registration_confirmation_email!
+
       reset_session
       UserSession.create(@user)
 
