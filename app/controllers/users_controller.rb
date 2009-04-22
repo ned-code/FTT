@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         if current_user && current_user.is_administrator?
-          @user.activate!
+          @user.confirm!
         else
           @user.deliver_registration_activation_email!
         end
@@ -41,7 +41,7 @@ class UsersController < ApplicationController
             redirect_to root_url
           end
         end
-        format.xml  { render :xml => @user, :status => :created, :location => @user }
+        format.xml  { render :xml => @user, :status => :ok, :location => @user }
       else
         format.html { render :action => 'new' }
         format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
@@ -83,7 +83,7 @@ class UsersController < ApplicationController
             redirect_to edit_user_url(@user)
           end
         end
-        format.xml  { head :ok }
+        format.xml  { render :xml => @user, :status => :ok, :location => @user }
       else
         format.html { render :action => 'edit '}
         format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
