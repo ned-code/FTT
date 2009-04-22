@@ -9,15 +9,33 @@ describe UsersController do
 
   context 'anonymous user' do
 
-    it "should register as user" do
+    # TODO: Add anonymous user
+    before(:each) do
+#      @current_user = User.anonymous
+#      UserSession.create(@current_user)
+    end
+
+    it "should register and send activation email" do
       post :create, :user => Factory.attributes_for(:user)
 
-      # TODO: should be a success
-#      response.should be_success
       response.should redirect_to(root_url)
       # TODO: Test if activation mail is send
+      assigns(:user).should_not be_confirmed
       # TODO: Better test expression ?
       assigns(:user).should_not be_is_registered
+    end
+
+    it "should confirm and send confirmation email" do
+      user = Factory.create(:user)
+      user.reset_perishable_token!
+
+      get :confirm, :id => user.perishable_token
+
+      response.should redirect_to(root_url)
+      # TODO: Test if confirmation mail is send
+      assigns(:user).should be_confirmed
+      # TODO: Better test expression ?
+      assigns(:user).should be_is_registered
     end
 
   end
@@ -30,17 +48,34 @@ describe UsersController do
       UserSession.create(@current_user)
     end
 
-    # TODO: not a success
-#    it "should not create user" do
-#      post :create, :user => Factory.attributes_for(:user)
+    it "should be updated" do
+      new_attributes = {}
+
+      put :update, :id => @current_user.id, :user => new_attributes
+
+      response.should redirect_to(edit_user_url(@current_user))
+    end
+
+#    it "email should be updated and activation email should be send" do
+#      new_email = 'another.email@test.com'
 #
-#      response.should_not be_success
-#      response.should be_redirect
+#      put :update, :id => @current_user.id, :user => {:email => new_email}
+#
+#      response.should redirect_to(edit_user_url(@current_user))
+#      # TODO: Test if activation mail is send
+#      @current_user.should_not be_confirmed
 #    end
+
+    it "should be deleted" do
+      delete :destroy, :id => @current_user.id
+
+      response.should redirect_to(root_url)
+      lambda { User.find(@current_user.id) }.should raise_error(ActiveRecord::RecordNotFound)
+    end
 
   end
 
-  context 'administrator user' do
+  context 'administrator' do
 
     before(:each) do
       @current_user = Factory.create(:confirmed_user)
@@ -49,16 +84,48 @@ describe UsersController do
       UserSession.create(@current_user)
     end
 
-    it "should create user" do
+    it "should create user and send confirmation email" do
       post :create, :user => Factory.attributes_for(:user)
 
-      # TODO: should be a success
-#      response.should be_success
       response.should redirect_to(users_url)
-      # TODO: Test if confirmation mail is not send
+      # TODO: Test if activation mail is not send
+      # TODO: Test if confirmation mail is send
+      assigns(:user).should_not == @current_user
+      assigns(:user).should be_confirmed
       # TODO: Better test expression ?
       assigns(:user).should be_is_registered
     end
 
+    context 'on another user' do
+
+      before(:each) do
+        @another_user = Factory.create(:confirmed_user)
+        @another_user.is_registered
+      end
+      
+      it "should update" do
+        put :update, :id => @another_user.id, :user => {}
+
+        response.should redirect_to(edit_user_url(@another_user))
+      end
+
+#      it "should update email and not send activation email" do
+#        new_email = 'another.email@test.com'
+#
+#        put :update, :id => @another_user.id, :user => {:email => new_email}
+#
+#        response.should redirect_to(edit_user_url(@another_user))
+#        @another_user.should be_confirmed
+#        # TODO: Test if activation mail is not send
+#      end
+
+      it "should delete" do
+        delete :destroy, :id => @another_user.id
+
+        response.should redirect_to(users_url)
+        lambda { User.find(@another_user.id) }.should raise_error(ActiveRecord::RecordNotFound)
+      end
+
+    end
   end
 end

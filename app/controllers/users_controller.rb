@@ -28,6 +28,7 @@ class UsersController < ApplicationController
       if @user.save
         if current_user && current_user.is_administrator?
           @user.confirm!
+          @user.deliver_registration_confirmation_email!
         else
           @user.deliver_registration_activation_email!
         end
@@ -59,7 +60,7 @@ class UsersController < ApplicationController
       UserSession.create(@user)
 
       flash[:notice] = I18n.t 'flash.notice.user_confirmed'
-      redirect_to users_url
+      redirect_to root_url
     else
       flash[:notice] = I18n.t 'flash.notice.not_find_user_by_perishable_token'
       redirect_to new_session_url
@@ -77,11 +78,7 @@ class UsersController < ApplicationController
       if @user.update_attributes(params[:user])
         format.html do
           flash[:notice] = I18n.t 'flash.notice.user_updated'
-          if current_user.is_administrator?
-            redirect_to users_url
-          else
-            redirect_to edit_user_url(@user)
-          end
+          redirect_to edit_user_url(@user)
         end
         format.xml  { render :xml => @user, :status => :ok, :location => @user }
       else
@@ -97,10 +94,15 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html do
-        flash[:notice] = I18n.t 'flash.notice.user_destroyed'
-        redirect_to users_url
+        if @user != current_user
+          flash[:notice] = I18n.t 'flash.notice.user_destroyed'
+          redirect_to users_url
+        else
+          flash[:notice] = I18n.t 'flash.notice.user_destroyed'
+          redirect_to root_url
+        end
       end
-      format.xml { head :user_destroyed }
+      format.xml { head :ok }
     end
   end
 end
