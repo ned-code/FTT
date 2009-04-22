@@ -134,8 +134,8 @@ describe DocumentsController do
         with_tag('error', 'Uuid have changed')
         without_tag('error', 'File has invalid format')
       end
-    end
 
+    end
   end
 
   context "not owned by current user" do
@@ -167,5 +167,6 @@ describe DocumentsController do
       response.should_not be_success
       response.should be_redirect
     end
+
   end
 end
