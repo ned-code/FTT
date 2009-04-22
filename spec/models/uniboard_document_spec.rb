@@ -110,6 +110,7 @@ describe UniboardDocument do
       document.file = fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
 
       AWS::S3::S3Object.should_not_receive(:delete)
+      # TODO: Can test argument with regex ?
       AWS::S3::S3Object.should_receive(:store).exactly(9).times
 
       document.save.should be_true
@@ -128,6 +129,7 @@ describe UniboardDocument do
       document = Factory.create(:uniboard_document)
 
       AWS::S3::S3Object.should_not_receive(:delete)
+      # TODO: Can test argument with regex ?
       AWS::S3::S3Object.should_receive(:store).exactly(2).times
 
       document.file = fixture_file('00000000-0000-0000-0000-0update1page.ubz', document.uuid)
@@ -145,6 +147,7 @@ describe UniboardDocument do
       document = Factory.create(:uniboard_document)
       deleted_page = document.pages[1]
 
+      # TODO: Can test argument with regex ?
       AWS::S3::S3Object.should_receive(:delete).exactly(2).times
       AWS::S3::S3Object.should_not_receive(:store)
 
@@ -179,18 +182,19 @@ describe UniboardDocument do
 
     AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => "documents/#{document.uuid}").and_return(
       stub('list', :collect => [
-        "#{document.uuid}/images/00000000-0000-0000-0000-000000000001.jpg",
-        "#{document.uuid}/images/00000000-0000-0000-0000-000000000002.jpg",
-        "#{document.uuid}/metadata.rdf",
-        "#{document.uuid}/00000000-0000-0000-0000-000000000001.svg",
-        "#{document.uuid}/00000000-0000-0000-0000-000000000001.thumbnail.jpg",
-        "#{document.uuid}/00000000-0000-0000-0000-000000000002.svg",
-        "#{document.uuid}/00000000-0000-0000-0000-000000000002.thumbnail.jpg",
-        "#{document.uuid}/00000000-0000-0000-0000-000000000003.svg",
-        "#{document.uuid}/00000000-0000-0000-0000-000000000004.thumbnail.jpg"
+        "documents/#{document.uuid}/images/00000000-0000-0000-0000-000000000001.jpg",
+        "documents/#{document.uuid}/images/00000000-0000-0000-0000-000000000002.jpg",
+        "documents/#{document.uuid}/metadata.rdf",
+        "documents/#{document.uuid}/00000000-0000-0000-0000-000000000001.svg",
+        "documents/#{document.uuid}/00000000-0000-0000-0000-000000000001.thumbnail.jpg",
+        "documents/#{document.uuid}/00000000-0000-0000-0000-000000000002.svg",
+        "documents/#{document.uuid}/00000000-0000-0000-0000-000000000002.thumbnail.jpg",
+        "documents/#{document.uuid}/00000000-0000-0000-0000-000000000003.svg",
+        "documents/#{document.uuid}/00000000-0000-0000-0000-000000000004.thumbnail.jpg"
       ])
     )
 
+    # TODO: Can test argument with regex ?
     AWS::S3::S3Object.should_receive(:delete).exactly(9).times
 
     document.destroy.should be_true
@@ -215,6 +219,7 @@ describe UniboardDocument do
     document = Factory.create(:uniboard_document)
     document_xml = REXML::Document.new(document.to_xml)
 
+    # TODO: Test if xml format is correct
 #    document_xml.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', document.uuid, document.version, document.created_at.xmlschema, document.updated_at.xmlschema) do
 #      document.pages.each do |page|
 #        with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]', page.uuid, page.version, page.created_at.xmlschema, page.updated_at.xmlschema, /^http/)
