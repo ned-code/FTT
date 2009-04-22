@@ -2,6 +2,7 @@ class DocumentsController < ApplicationController
   permit 'registered'
 
   def index
+    @synchronised_at = Time.now
     @documents = current_user.is_owner_of_what(UniboardDocument)
 
     respond_to do |format|
@@ -12,7 +13,7 @@ class DocumentsController < ApplicationController
   def show
     @document = UniboardDocument.find(params[:id])
 
-    permit "owner of document" do
+    permit 'owner of document' do
       respond_to do |format|
         format.xml { render :xml => @document.to_xml }
       end
@@ -25,7 +26,7 @@ class DocumentsController < ApplicationController
     respond_to do |format|
       if @document.save
         @document.accepts_role 'owner', current_user
-        format.xml
+        format.xml { head :ok }
       else
         format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
       end
@@ -35,10 +36,10 @@ class DocumentsController < ApplicationController
   def update
     @document = UniboardDocument.find(params[:id])
 
-    permit "owner of document" do
+    permit 'owner of document' do
       respond_to do |format|
         if @document.update_attributes(params[:document])
-          format.xml
+          format.xml { head :ok }
         else
           format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
         end
@@ -49,10 +50,10 @@ class DocumentsController < ApplicationController
   def destroy
     @document = UniboardDocument.find(params[:id])
 
-    permit "owner of document" do
+    permit 'owner of document' do
       respond_to do |format|
         if @document.destroy
-          format.xml { render :action => 'destroy', :status => :ok }
+          format.xml { head :ok }
         else
           format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
         end

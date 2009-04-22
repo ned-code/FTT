@@ -75,14 +75,13 @@ Spec::Runner.configure do |config|
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
 
-
 def mock_uploaded_ubz(file, uuid = nil)
   ActionController::TestUploadedFile.new(fixture_file(file, uuid))
 end
 
 def fixture_file(source, uuid = nil)
   @uuid_generator ||= UUID.new
-  
+
   source = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', source) if source !~ /^\//
 
   if source =~ /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\.ubz$/

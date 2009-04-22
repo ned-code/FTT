@@ -113,7 +113,13 @@ describe UniboardDocument do
       AWS::S3::S3Object.should_receive(:store).exactly(9).times
 
       document.save.should be_true
-      document.should have(3).pages
+      document.should have(3).pages(true)
+      document.pages[0].version.should == 1
+      document.pages[1].version.should == 1
+      document.pages[2].version.should == 1
+      document.pages[0].position.should == 1
+      document.pages[1].position.should == 2
+      document.pages[2].position.should == 3
     end
   end
 
@@ -130,6 +136,9 @@ describe UniboardDocument do
       document.pages[0].version.should == 1
       document.pages[1].version.should == 2
       document.pages[2].version.should == 1
+      document.pages[0].position.should == 1
+      document.pages[1].position.should == 2
+      document.pages[2].position.should == 3
     end
 
     it 'should remove deleted pages on s3 on save' do
@@ -168,7 +177,7 @@ describe UniboardDocument do
   it 'should be destroyed' do
     document = Factory.create(:uniboard_document)
 
-    AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => document.uuid).and_return(
+    AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => "documents/#{document.uuid}").and_return(
       stub('list', :collect => [
         "#{document.uuid}/images/00000000-0000-0000-0000-000000000001.jpg",
         "#{document.uuid}/images/00000000-0000-0000-0000-000000000002.jpg",
@@ -206,7 +215,10 @@ describe UniboardDocument do
     document = Factory.create(:uniboard_document)
     document_xml = REXML::Document.new(document.to_xml)
 
-    puts document.to_xml
-
+#    document_xml.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', document.uuid, document.version, document.created_at.xmlschema, document.updated_at.xmlschema) do
+#      document.pages.each do |page|
+#        with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]', page.uuid, page.version, page.created_at.xmlschema, page.updated_at.xmlschema, /^http/)
+#      end
+#    end
   end
 end

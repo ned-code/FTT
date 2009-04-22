@@ -1,9 +1,7 @@
-require 'rexml/document'
-
 class UniboardDocument < ActiveRecord::Base
   acts_as_authorizable
 
-  has_many :pages, :class_name => 'UniboardPage', :autosave => true, :dependent => :destroy
+  has_many :pages, :class_name => 'UniboardPage', :order => 'position ASC', :autosave => true, :dependent => :destroy
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
   validates_presence_of :bucket
@@ -73,18 +71,28 @@ class UniboardDocument < ActiveRecord::Base
     @tempfile = file
   end
 
-  def to_xml
-    xml = REXML::Document.new
+  def to_xml(options = {})
+    require 'builder' unless defined?(Builder)
 
-    xml_document = xml.add_element('document', 'version' => version, 'created-at' => created_at.xmlschema, 'updated-at' => updated_at.xmlschema).add_namespace('http://www.mnemis.com/uniboard')
+    options[:indent] ||= 2
+    options.reverse_merge!({:builder => Builder::XmlMarkup.new(:indent => options[:indent])})
+    options[:builder].instruct! unless options.delete(:skip_instruct)
 
-    xml_pages = xml_document.add_element('pages')
-    pages.each do |page|
-      xml_page = xml_pages.add_element('page', 'version' => page.version, 'created-at' => page.created_at.xmlschema, 'updated-at' => page.updated_at.xmlschema)
-      xml_page.text = "#{page.uuid}.svg"
+    options[:builder].document('xmlns' => 'http://www.mnemis.com/uniboard',
+      'uuid' => uuid,
+      'version' => version,
+      'created-at' => created_at.xmlschema,
+      'updated-at' => updated_at.xmlschema) do |xml_document|
+      xml_document.pages do |xml_pages|
+        pages.each do |page|
+          xml_pages.page(AWS::S3::S3Object.url_for("documents/#{uuid}/#{page.uuid}.svg", bucket),
+            'uuid' => page.uuid,
+            'version' => page.version,
+            'created-at' => page.created_at.xmlschema,
+            'updated-at' => page.updated_at.xmlschema)
+        end
+      end
     end
-
-    xml.to_s
   end
 
   private
@@ -93,14 +101,14 @@ class UniboardDocument < ActiveRecord::Base
       return unless @tempfile
 
       @pages_to_delete.each do |page_uuid|
-        AWS::S3::S3Object.delete("#{uuid}/#{page_uuid}.svg", bucket)
-        AWS::S3::S3Object.delete("#{uuid}/#{page_uuid}.thumbnail.jpg", bucket)
+        AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.svg", bucket)
+        AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.thumbnail.jpg", bucket)
       end
 
       Zip::ZipInputStream::open(@tempfile) do |file|
         while (entry = file.get_next_entry)
           next if entry.name =~ /\/$/ or entry.name == "#{uuid}.ub"
-          s3_file_name = entry.name.gsub(/^(.*)\/$/, "#{uuid}/\\1")
+          s3_file_name = entry.name.gsub(/^(.*)\/$/, "documents/#{uuid}/\\1")
           s3_file_access = s3_file_name =~ /^\w+\/#{UUID_FORMAT_REGEX}\.svg$/ ? :private : :public_read
 
           AWS::S3::S3Object.store(s3_file_name, file.read, bucket, :access => s3_file_access)
@@ -111,7 +119,7 @@ class UniboardDocument < ActiveRecord::Base
     end
 
     def destroy_document_on_s3
-      AWS::S3::Bucket.objects(bucket, :prefix => uuid).collect{|object| object.path}.each do |object_path|
+      AWS::S3::Bucket.objects(bucket, :prefix => "documents/#{uuid}").collect{|object| object.path}.each do |object_path|
         AWS::S3::S3Object.delete(object_path, bucket)
       end
     end

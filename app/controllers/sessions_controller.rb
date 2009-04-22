@@ -28,7 +28,7 @@ class SessionsController < ApplicationController
         flash[:notice] = I18n.t 'flash.notice.logout_successfull'
         redirect_back_or_default new_session_url
       end
-      format.xml { head :unprocessable_entity }
+      format.xml { head :ok }
     end
   end
 end

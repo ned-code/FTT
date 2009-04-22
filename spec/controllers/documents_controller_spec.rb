@@ -16,8 +16,6 @@ describe DocumentsController do
     post :create, :document => { :file => mock_file }
 
     response.should be_success
-    response.should render_template 'create.xml.erb'
-    response.should have_tag('document[id=?]', assigns[:document].id)
     response.should_not have_tag('errors')
     assigns[:document].accepts_role?('owner', @current_user).should be_true
   end
@@ -28,7 +26,6 @@ describe DocumentsController do
     post :create, :document => { :file => mock_file }
 
     response.should_not be_success
-    response.should_not render_template 'create.xml.erb'
     response.should have_tag('errors') do
       without_tag('error', 'Uuid is invalid')
       with_tag('error', 'File has invalid format')
@@ -42,7 +39,6 @@ describe DocumentsController do
     post :create, :document => { :file => mock_file }
 
     response.should_not be_success
-    response.should_not render_template 'create.xml.erb'
     response.should have_tag('errors') do
       with_tag('error', 'Uuid is invalid')
       without_tag('error', 'File has invalid format')
@@ -61,12 +57,11 @@ describe DocumentsController do
     get :index
 
     response.should be_success
-    response.should render_template 'index.xml.erb'
-    response.should have_tag('documents') do
-      with_tag('document[id=?][uuid=?][created_at=?][updated_at=?]', documents[0].id, documents[0].uuid, documents[0].created_at, documents[0].updated_at)
-      with_tag('document[id=?][uuid=?][created_at=?][updated_at=?]', documents[1].id, documents[1].uuid, documents[1].created_at, documents[1].updated_at)
-      with_tag('document[id=?][uuid=?][created_at=?][updated_at=?]', documents[2].id, documents[2].uuid, documents[2].created_at, documents[2].updated_at)
-      without_tag('document[id=?][uuid=?][created_at=?][updated_at=?]', documents[3].id, documents[3].uuid, documents[3].created_at, documents[3].updated_at)
+    response.should have_tag('documents[synchronised-at=?]', assigns[:synchronised_at].xmlschema) do
+      with_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', documents[0].uuid, documents[0].version, documents[0].created_at.xmlschema, documents[0].updated_at.xmlschema)
+      with_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', documents[1].uuid, documents[1].version, documents[1].created_at.xmlschema, documents[1].updated_at.xmlschema)
+      with_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', documents[2].uuid, documents[2].version, documents[2].created_at.xmlschema, documents[2].updated_at.xmlschema)
+      without_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', documents[3].uuid, documents[3].version, documents[3].created_at.xmlschema, documents[3].updated_at.xmlschema)
     end
   end
 
@@ -80,15 +75,20 @@ describe DocumentsController do
     it "should get document if current user is owner" do
       get :show, :id => @document.id
 
-      response.body.should == @document.to_xml
+      response.should be_success
+      response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', @document.uuid, @document.version, @document.created_at.xmlschema, @document.updated_at.xmlschema) do
+        @document.pages.each do |page|
+          with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]', page.uuid, page.version, page.created_at.xmlschema, page.updated_at.xmlschema, /^http/)
+        end
+      end
+      response.should_not have_tag('errors')
     end
 
     it "should delete document" do
       delete :destroy, :id => @document.id
 
       response.should be_success
-      response.should render_template 'destroy.xml.erb'
-      response.should have_tag('document[id=?]', @document.id)
+      response.should_not have_tag('errors')
     end
 
     it "should update document with valid ubz" do
@@ -97,8 +97,6 @@ describe DocumentsController do
       post :update, :id => @document.id , :document => { :file => mock_file }
 
       response.should be_success
-      response.should render_template 'update.xml.erb'
-      response.should have_tag('document[id=?]', assigns[:document].id)
       response.should_not have_tag('errors')
     end
 
@@ -108,7 +106,6 @@ describe DocumentsController do
       post :update, :id => @document.id , :document => { :file => mock_file }
 
       response.should_not be_success
-      response.should_not render_template 'update.xml.erb'
       response.should have_tag('errors') do
         without_tag('error', 'Uuid is invalid')
         with_tag('error', 'File has invalid format')
@@ -121,7 +118,6 @@ describe DocumentsController do
       post :update, :id => @document.id , :document => { :file => mock_file }
 
       response.should_not be_success
-      response.should_not render_template 'update.xml.erb'
       response.should have_tag('errors') do
         with_tag('error', 'Uuid is invalid')
         without_tag('error', 'File has invalid format')
@@ -134,7 +130,6 @@ describe DocumentsController do
       post :update, :id => @document.id , :document => { :file => mock_file }
 
       response.should_not be_success
-      response.should_not render_template 'update.xml.erb'
       response.should have_tag('errors') do
         with_tag('error', 'Uuid have changed')
         without_tag('error', 'File has invalid format')
@@ -154,7 +149,6 @@ describe DocumentsController do
       get :show, :id => @document.id
 
       response.should_not be_success
-      response.should_not render_template 'show.xml.erb'
       response.should be_redirect
     end
 
@@ -162,7 +156,6 @@ describe DocumentsController do
       delete :destroy, :id => @document.id
 
       response.should_not be_success
-      response.should_not render_template 'destroy.xml.erb'
       response.should be_redirect
     end
 
@@ -172,7 +165,6 @@ describe DocumentsController do
       post :update, :id => @document.id , :document => { :file => mock_file }
 
       response.should_not be_success
-      response.should_not render_template 'update.xml.erb'
       response.should be_redirect
     end
   end
