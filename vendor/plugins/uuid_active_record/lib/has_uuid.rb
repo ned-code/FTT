@@ -1,5 +1,3 @@
-require 'uuid'
-
 module ActiveRecord #:nodoc:
   module Acts #:nodoc:
     module HasUuid #:nodoc:
