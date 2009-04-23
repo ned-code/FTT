@@ -10,10 +10,10 @@ test:
 
 staging:
   aws_access_key: AKIAJSQQ2RDIXG2UOZ5Q
-  aws_secret_access_key: nYyZvtWLa3uDMmf8oEmSmyZiu7qmf
+  aws_secret_access_key: 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
   bucket_base_name: uniboard-staging
 
 production:
   aws_access_key: AKIAJSQQ2RDIXG2UOZ5Q
-  aws_secret_access_key: nYyZvtWLa3uDMmf8oEmSmyZiu7qmf
+  aws_secret_access_key: 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
   bucket_base_name: uniboard
