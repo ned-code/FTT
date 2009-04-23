@@ -1,9 +1,10 @@
 class UsersController < ApplicationController
-  permit 'administrator', :only => [:index]
   permit 'registered', :except => [:new, :create, :confirm]
+  permit 'administrator', :only => [:index]
 
   def index
     @users = User.all
+
     respond_to do |format|
       format.html
       format.xml { render :xml => @users }
@@ -12,6 +13,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+
     respond_to do |format|
       format.html
       format.xml { render :xml => @user }
@@ -26,7 +28,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
 
     respond_to do |format|
-      if @user.save
+      if @user.save_without_session_maintenance
         if current_user && current_user.is_administrator?
           @user.confirm!
           @user.deliver_registration_confirmation_email!

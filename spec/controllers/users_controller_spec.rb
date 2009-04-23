@@ -12,6 +12,7 @@ describe UsersController do
     it 'should access to registration form' do
       get :new
 
+      UserSession.find.should be_nil
       response.should be_success
     end
 
@@ -23,6 +24,8 @@ describe UsersController do
       assigns(:user).should_not be_confirmed
       # TODO: Better test expression ?
       assigns(:user).should_not be_is_registered
+
+      UserSession.find.should be_nil
     end
 
     it "should confirm and send confirmation email" do
@@ -36,11 +39,26 @@ describe UsersController do
       assigns(:user).should be_confirmed
       # TODO: Better test expression ?
       assigns(:user).should be_is_registered
+
+      UserSession.find.should_not be_nil
     end
 
     it 'should not access to index' do
       get :index
 
+      response.should redirect_to(new_session_url)
+
+      UserSession.find.should be_nil
+    end
+
+    it 'should not show an user' do
+      another_user = Factory.build(:confirmed_user)
+      another_user.save_without_session_maintenance
+      another_user.is_registered
+
+      get :show, :id => another_user.id
+
+      UserSession.find.should be_nil
       response.should redirect_to(new_session_url)
     end
 
@@ -51,7 +69,6 @@ describe UsersController do
     before(:each) do
       @current_user = Factory.create(:confirmed_user)
       @current_user.is_registered
-      UserSession.create(@current_user)
     end
 
     it 'should update current user' do
@@ -77,12 +94,21 @@ describe UsersController do
 
       response.should redirect_to(root_url)
       lambda { User.find(@current_user.id) }.should raise_error(ActiveRecord::RecordNotFound)
+
+      UserSession.find.should be_nil
     end
 
     it 'should not access to index' do
       get :index
 
       response.should redirect_to(root_url)
+    end
+
+    it 'should show current user' do
+      get :show, :id => @current_user.id
+
+      response.should be_success
+      assigns(:user).should == @current_user
     end
 
   end
@@ -93,7 +119,6 @@ describe UsersController do
       @current_user = Factory.create(:confirmed_user)
       @current_user.is_registered
       @current_user.is_administrator
-      UserSession.create(@current_user)
     end
 
     it "should create user and send confirmation email" do
@@ -117,7 +142,8 @@ describe UsersController do
     context 'on another user' do
 
       before(:each) do
-        @another_user = Factory.create(:confirmed_user)
+        @another_user = Factory.build(:confirmed_user)
+        @another_user.save_without_session_maintenance
         @another_user.is_registered
       end
 
@@ -142,6 +168,15 @@ describe UsersController do
 
         response.should redirect_to(users_url)
         lambda { User.find(@another_user.id) }.should raise_error(ActiveRecord::RecordNotFound)
+
+        UserSession.find.should_not be_nil
+      end
+
+      it 'should show' do
+        get :show, :id => @another_user.id
+
+        response.should be_success
+        assigns(:user).should == @another_user
       end
 
     end
