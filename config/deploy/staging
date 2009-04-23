@@ -12,7 +12,7 @@ role :db,       "ec2-79-125-60-241.eu-west-1.compute.amazonaws.com", :primary =>
 # Whatever you set here will be taken set as the default RAILS_ENV value
 # on the server. Your app and your hourly/daily/weekly/monthly scripts
 # will run with RAILS_ENV set to this value.
-set :rails_env, "production"
+set :rails_env, "staging"
 
 # EC2 on Rails config.
 
@@ -26,3 +26,10 @@ ec2onrails_config[:restore_from_bucket] = "uniboard-staging"
 # desired.
 # NOTE: this only applies if you are not using EBS
 ec2onrails_config[:archive_to_bucket] = "uniboard-staging"
+
+# Roles work with ec2onrails tasks with fallowing lines
+roles.keys.clone.each do |name|
+  make_admin_role_for(name)
+  all_non_admin_role_names << name
+  all_admin_role_names << "#{name.to_s}_admin".to_sym
+end

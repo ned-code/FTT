@@ -5,7 +5,6 @@ set :application, "uniboard"
 
 set :stages, %w(production staging)
 set :default_stage, "staging"
-
 require 'capistrano/ext/multistage'
 
 set :scm, :git
@@ -19,7 +18,7 @@ set :ssh_options, { :forward_agent => true }
 # extension ".pub".
 ssh_options[:keys] = ["#{ENV['HOME']}/.ssh/ec2-mnemis"]
 
-# EC2 on Rails config. 
+# EC2 on Rails config. c
 # NOTE: Some of these should be omitted if not needed.
 set :ec2onrails_config, {
   # S3 bucket and "subdir" used by the ec2onrails:db:restore task
