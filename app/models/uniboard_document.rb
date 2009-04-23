@@ -28,7 +28,7 @@ class UniboardDocument < ActiveRecord::Base
     self.bucket = @@config['bucket_base_name']
   end
 
-  def file=(file)
+  def document=(file)
     @error_on_file = false
     @pages_to_delete = []
 

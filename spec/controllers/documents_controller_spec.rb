@@ -13,7 +13,7 @@ describe DocumentsController do
   it "should create document with valid ubz" do
     mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
-    post :create, :document => { :file => mock_file }
+    post :create, :document => { :document => mock_file }
 
     response.should be_success
     response.should_not have_tag('errors')
@@ -23,7 +23,7 @@ describe DocumentsController do
   it "should not create document with not valid ubz" do
     mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz')
 
-    post :create, :document => { :file => mock_file }
+    post :create, :document => { :document => mock_file }
 
     response.should_not be_success
     response.should have_tag('errors') do
@@ -36,7 +36,7 @@ describe DocumentsController do
   it "should not create document with not valid uuid" do
     mock_file = mock_uploaded_ubz('nouuid-valid.ubz')
 
-    post :create, :document => { :file => mock_file }
+    post :create, :document => { :document => mock_file }
 
     response.should_not be_success
     response.should have_tag('errors') do
@@ -94,7 +94,7 @@ describe DocumentsController do
     it "should update document with valid ubz" do
       mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document.uuid)
 
-      post :update, :id => @document.id , :document => { :file => mock_file }
+      post :update, :id => @document.id , :document => { :document => mock_file }
 
       response.should be_success
       response.should_not have_tag('errors')
@@ -103,7 +103,7 @@ describe DocumentsController do
     it "should not update document with not valid ubz" do
       mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz')
 
-      post :update, :id => @document.id , :document => { :file => mock_file }
+      post :update, :id => @document.id , :document => { :document => mock_file }
 
       response.should_not be_success
       response.should have_tag('errors') do
@@ -115,7 +115,7 @@ describe DocumentsController do
     it "should not update document with not valid uuid" do
       mock_file = mock_uploaded_ubz('nouuid-valid.ubz')
 
-      post :update, :id => @document.id , :document => { :file => mock_file }
+      post :update, :id => @document.id , :document => { :document => mock_file }
 
       response.should_not be_success
       response.should have_tag('errors') do
@@ -127,7 +127,7 @@ describe DocumentsController do
     it "should not update document with if uuid changed" do
       mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
-      post :update, :id => @document.id , :document => { :file => mock_file }
+      post :update, :id => @document.id , :document => { :document => mock_file }
 
       response.should_not be_success
       response.should have_tag('errors') do
@@ -162,7 +162,7 @@ describe DocumentsController do
     it "should not update document" do
       mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
-      post :update, :id => @document.id , :document => { :file => mock_file }
+      post :update, :id => @document.id , :document => { :document => mock_file }
 
       response.should_not be_success
       response.should be_redirect
