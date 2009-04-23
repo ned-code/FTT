@@ -97,5 +97,5 @@ set :ec2onrails_config, {
 
 after "deploy:finalize_update" do
   run "ln -nsf #{release_path}/config/database.default.yml #{release_path}/config/database.yml"
-  run "cd #{release_path}; sudo rake gems:install"
+  run "cd #{release_path}; rake gems:install"
 end

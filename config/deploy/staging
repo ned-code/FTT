@@ -26,10 +26,3 @@ ec2onrails_config[:restore_from_bucket] = "uniboard-staging"
 # desired.
 # NOTE: this only applies if you are not using EBS
 ec2onrails_config[:archive_to_bucket] = "uniboard-staging"
-
-# Roles work with ec2onrails tasks with fallowing lines
-roles.keys.clone.each do |name|
-  make_admin_role_for(name)
-  all_non_admin_role_names << name
-  all_admin_role_names << "#{name.to_s}_admin".to_sym
-end

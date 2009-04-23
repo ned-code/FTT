@@ -26,3 +26,5 @@ config.log_level = :debug
 
 # Enable threaded mode
 # config.threadsafe!
+
+config.gem 'mysql'
