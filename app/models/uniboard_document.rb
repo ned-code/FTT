@@ -19,13 +19,13 @@ class UniboardDocument < ActiveRecord::Base
 
     unless AWS::S3::Base.connected?
       AWS::S3::Base.establish_connection!(
-          :access_key_id     => @@config['access_key_id'],
-          :secret_access_key => @@config['secret_access_key'],
+          :access_key_id     => @@config['aws_access_key'],
+          :secret_access_key => @@config['aws_secret_access_key'],
           :use_ssl           => @@config['use_ssl'] || true
         )
     end
 
-    self.bucket = @@config['bucket']
+    self.bucket = @@config['bucket_base_name']
   end
 
   def file=(file)

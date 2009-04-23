@@ -16,7 +16,7 @@ describe UsersController do
       response.should be_success
     end
 
-    it "should register and send activation email" do
+    it 'should register and send activation email' do
       post :create, :user => Factory.attributes_for(:user)
 
       response.should redirect_to(root_url)
@@ -28,7 +28,16 @@ describe UsersController do
       UserSession.find.should be_nil
     end
 
-    it "should confirm and send confirmation email" do
+    it 'should not register without required attributes' do
+      post :create, :user => Factory.attributes_for(:user, :email => nil)
+
+      response.should_not redirect_to(root_url)
+      response.should have_tag('div.errorExplanation')
+      
+      UserSession.find.should be_nil
+    end
+
+    it 'should confirm and send confirmation email' do
       user = Factory.create(:user)
       user.reset_perishable_token!
 

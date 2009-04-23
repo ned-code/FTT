@@ -16,7 +16,11 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
+  adapter: mysql
+  database: uniboard_production
+  host: db_primary
+
+staging:
+  adapter: mysql
+  database: uniboard_staging
+  host: db_primary
