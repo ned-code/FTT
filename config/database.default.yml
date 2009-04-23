@@ -18,13 +18,13 @@ test:
 staging:
   adapter: mysql
   database: uniboard_staging
-  user: uniboard
+  username: uniboard
   password: _ub123
   host: db_primary
 
 production:
   adapter: mysql
   database: uniboard_production
-  user: uniboard
+  username: uniboard
   password: _ub123
   host: db_primary

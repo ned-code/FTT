@@ -44,7 +44,7 @@ set :ec2onrails_config, {
   
   # Any extra Ubuntu packages to install if desired
   # If you don't want to install extra packages then remove this.
-  :packages => ["logwatch"],
+  :packages => ["logwatch", "libmysqlclient15-dev"],
   
   # Any extra RubyGems to install if desired: can be "gemname" or if a 
   # particular version is desired "gemname -v 1.0.1"
@@ -97,5 +97,5 @@ set :ec2onrails_config, {
 
 after "deploy:finalize_update" do
   run "ln -nsf #{release_path}/config/database.default.yml #{release_path}/config/database.yml"
-  run "cd #{release_path}; rake gems:install"
+  run "cd #{release_path}; rake gems:install RAILS_ENV=#{rails_env}"
 end
