@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  permit 'administrator', :only => [:index]
   permit 'registered', :except => [:new, :create, :confirm]
 
   def index

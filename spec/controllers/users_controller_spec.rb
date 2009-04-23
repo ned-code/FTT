@@ -9,10 +9,10 @@ describe UsersController do
 
   context 'anonymous user' do
 
-    # TODO: Add anonymous user
-    before(:each) do
-#      @current_user = User.anonymous
-#      UserSession.create(@current_user)
+    it 'should access to registration form' do
+      get :new
+
+      response.should be_success
     end
 
     it "should register and send activation email" do
@@ -38,6 +38,12 @@ describe UsersController do
       assigns(:user).should be_is_registered
     end
 
+    it 'should not access to index' do
+      get :index
+
+      response.should redirect_to(new_session_url)
+    end
+
   end
 
   context 'registred user' do
@@ -48,7 +54,7 @@ describe UsersController do
       UserSession.create(@current_user)
     end
 
-    it "should be updated" do
+    it 'should update current user' do
       new_attributes = {}
 
       put :update, :id => @current_user.id, :user => new_attributes
@@ -66,11 +72,17 @@ describe UsersController do
 #      @current_user.should_not be_confirmed
 #    end
 
-    it "should be deleted" do
+    it 'should delete current user' do
       delete :destroy, :id => @current_user.id
 
       response.should redirect_to(root_url)
       lambda { User.find(@current_user.id) }.should raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'should not access to index' do
+      get :index
+
+      response.should redirect_to(root_url)
     end
 
   end
@@ -94,6 +106,12 @@ describe UsersController do
       assigns(:user).should be_confirmed
       # TODO: Better test expression ?
       assigns(:user).should be_is_registered
+    end
+
+    it 'should access to index' do
+      get :index
+
+      response.should be_success
     end
 
     context 'on another user' do
