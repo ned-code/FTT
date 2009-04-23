@@ -19,22 +19,6 @@ set :ssh_options, { :forward_agent => true }
 # extension ".pub".
 ssh_options[:keys] = ["#{ENV['HOME']}/.ssh/ec2-mnemis"]
 
-# Your EC2 instances. Use the ec2-xxx....amazonaws.com hostname, not
-# any other name (in case you have your own DNS alias) or it won't
-# be able to resolve to the internal IP address.
-role :web,      "ec2-79-125-60-241.eu-west-1.compute.amazonaws.com"
-role :app,      "ec2-79-125-60-241.eu-west-1.compute.amazonaws.com"
-role :memcache, "ec2-79-125-60-241.eu-west-1.compute.amazonaws.com"
-role :db,       "ec2-79-125-60-241.eu-west-1.compute.amazonaws.com", :primary => true
-# role :db,       "ec2-56-xx-xx-xx.z-1.compute-1.amazonaws.com", :primary => true, :ebs_vol_id => 'vol-12345abc'
-# optinally, you can specify Amazon's EBS volume ID if the database is persisted
-# via Amazon's EBS.  See the main README for more information.
-
-# Whatever you set here will be taken set as the default RAILS_ENV value
-# on the server. Your app and your hourly/daily/weekly/monthly scripts
-# will run with RAILS_ENV set to this value.
-set :rails_env, "production"
-
 # EC2 on Rails config. 
 # NOTE: Some of these should be omitted if not needed.
 set :ec2onrails_config, {
