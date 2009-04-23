@@ -15,6 +15,13 @@ test:
   pool: 5
   timeout: 5000
 
+staging:
+  adapter: mysql
+  database: uniboard_staging
+  user: uniboard
+  password: _ub123
+  host: db_primary
+
 production:
   adapter: mysql
   database: uniboard_production
