@@ -8,12 +8,27 @@ set :default_stage, "staging"
 
 require 'capistrano/ext/multistage'
 
+set :scm, :git
 set :repository, "git@git.assembla.com:myuniboard.git"
+set :git_shallow_clone, 1
+set :short_branch, "master"
+set :ssh_options, { :forward_agent => true }
 
 # NOTE: for some reason Capistrano requires you to have both the public and
 # the private key in the same folder, the public key should have the 
 # extension ".pub".
 ssh_options[:keys] = ["#{ENV['HOME']}/.ssh/ec2-mnemis"]
+
+# Your EC2 instances. Use the ec2-xxx....amazonaws.com hostname, not
+# any other name (in case you have your own DNS alias) or it won't
+# be able to resolve to the internal IP address.
+role :web,      "ec2-79-125-60-241.eu-west-1.compute.amazonaws.com"
+role :app,      "ec2-79-125-60-241.eu-west-1.compute.amazonaws.com"
+role :memcache, "ec2-79-125-60-241.eu-west-1.compute.amazonaws.com"
+role :db,       "ec2-79-125-60-241.eu-west-1.compute.amazonaws.com", :primary => true
+# role :db,       "ec2-56-xx-xx-xx.z-1.compute-1.amazonaws.com", :primary => true, :ebs_vol_id => 'vol-12345abc'
+# optinally, you can specify Amazon's EBS volume ID if the database is persisted
+# via Amazon's EBS.  See the main README for more information.
 
 # Whatever you set here will be taken set as the default RAILS_ENV value
 # on the server. Your app and your hourly/daily/weekly/monthly scripts
@@ -78,7 +93,7 @@ set :ec2onrails_config, {
   # server's filesystem. 
   # If you don't need to deploy customized config files to the server then
   # remove this.
-  :server_config_files_root => "../server_configs",
+  :server_config_files_root => "./config/server_configs",
   
   # If config files are deployed, some services might need to be restarted.
   # If you don't need to deploy customized config files to the server then
@@ -96,3 +111,7 @@ set :ec2onrails_config, {
   # /etc/ssl/private/default.key (see :server_config_files_root).
   :enable_ssl => true
 }
+
+after "deploy:finalize_update" do
+  run "ln -nsf #{release_path}/config/database.yml.server #{release_path}/config/database.yml"
+end
