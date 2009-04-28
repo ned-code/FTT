@@ -127,7 +127,7 @@ class UniboardDocument < ActiveRecord::Base
         AWS::S3::S3Object.delete(object_path, bucket)
       end
     end
-    
+
     def get_content_type_from_mime_types(filename)
       if extension = File.extname(filename)
         mimes = MIME::Types.of(extension)
@@ -136,7 +136,6 @@ class UniboardDocument < ActiveRecord::Base
     end
 
     def establish_connection!
-
       unless AWS::S3::Base.connected?
         AWS::S3::Base.establish_connection!(
             :access_key_id     => @@s3_config['aws_access_key'],
