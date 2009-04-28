@@ -26,6 +26,9 @@ class UniboardDocument < ActiveRecord::Base
     end
 
     self.bucket = @@config['bucket_base_name']
+    unless AWS::S3::Bucket.list.include?(bucket)
+      AWS::S3::Bucket.create(bucket)
+    end
   end
 
   def document=(file_data)
@@ -45,7 +48,7 @@ class UniboardDocument < ActiveRecord::Base
 
     # Create tempfile
     file_data.rewind
-    @tempfile = Tempfile.new("#{SecureRandom.hex(12)}-#{uuid}.ubz")
+    @tempfile = Tempfile.new("#{rand Time.now.to_i}-#{uuid}.ubz")
     @tempfile.binmode
     @tempfile.write file_data.read
     @tempfile.close
