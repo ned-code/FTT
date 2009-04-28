@@ -12,6 +12,13 @@ class UniboardDocument < ActiveRecord::Base
 
   cattr_reader :s3_config
 
+  def initialize(*args)
+    super
+
+    @@s3_config ||= YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV]
+    self.bucket = @@s3_config['bucket_base_name']
+  end
+
   def document=(file_data)
     @error_on_file = false
     @pages_to_delete = []
@@ -129,7 +136,6 @@ class UniboardDocument < ActiveRecord::Base
     end
 
     def establish_connection!
-      @@s3_config ||= YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV]
 
       unless AWS::S3::Base.connected?
         AWS::S3::Base.establish_connection!(
@@ -140,7 +146,6 @@ class UniboardDocument < ActiveRecord::Base
           )
       end
 
-      self.bucket = @@s3_config['bucket_base_name']
       unless AWS::S3::Bucket.list.include?(bucket)
         AWS::S3::Bucket.create(bucket)
       end

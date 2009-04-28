@@ -18,20 +18,6 @@ describe UniboardDocument do
     document.version.should == 2
   end
 
-  it 'should establish connection to s3 if not connected' do
-    AWS::S3::Base.should_receive(:connected?).and_return(false)
-    AWS::S3::Base.should_receive(:establish_connection!)
-
-    UniboardDocument.new
-  end
-
-  it 'should not establish connection to s3 if connected' do
-    AWS::S3::Base.should_receive(:connected?).and_return(true)
-    AWS::S3::Base.should_not_receive(:establish_connection!)
-
-    UniboardDocument.new
-  end
-
   it 'should be valid with valid ubz file' do
     document = Factory.build(:empty_uniboard_document)
 
