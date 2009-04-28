@@ -119,7 +119,7 @@ class UniboardDocument < ActiveRecord::Base
       Zip::ZipInputStream::open(@tempfile.path) do |file|
         while (entry = file.get_next_entry)
           next if entry.name =~ /\/$/ or entry.name == "#{uuid}.ub"
-          s3_file_name = entry.name.gsub(/^(.*)\/$/, "documents/#{uuid}/\\1")
+          s3_file_name = "documents/#{uuid}/#{entry.name}"
           s3_file_access = s3_file_name =~ /^\w+\/#{UUID_FORMAT_REGEX}\.svg$/ ? :private : :public_read
 
           AWS::S3::S3Object.store(s3_file_name, file.read, bucket, :access => s3_file_access)
