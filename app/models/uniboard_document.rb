@@ -21,7 +21,8 @@ class UniboardDocument < ActiveRecord::Base
       AWS::S3::Base.establish_connection!(
           :access_key_id     => @@config['aws_access_key'],
           :secret_access_key => @@config['aws_secret_access_key'],
-          :use_ssl           => @@config['use_ssl'] || true
+          :use_ssl           => @@config['use_ssl'] || true,
+          :persistent        => false
         )
     end
 
