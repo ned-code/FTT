@@ -109,8 +109,8 @@ class UniboardDocument < ActiveRecord::Base
         while (entry = file.get_next_entry)
           next if entry.name =~ /\/$/ or entry.name == "#{uuid}.ub"
           s3_file_name = "documents/#{uuid}/#{entry.name}"
-          s3_file_access = s3_file_name =~ /#{UUID_FORMAT_REGEX}\.svg$/ ? :private : :public_read
           s3_content_type = get_content_type_from_mime_types(s3_file_name)
+          s3_file_access = s3_file_name =~ /#{UUID_FORMAT_REGEX}\.svg$/ ? :private : :public_read
 
           AWS::S3::S3Object.store(s3_file_name, file.read, bucket, :access => s3_file_access, :content_type => s3_content_type)
         end
@@ -129,10 +129,9 @@ class UniboardDocument < ActiveRecord::Base
     end
 
     def get_content_type_from_mime_types(filename)
-      if extension = File.extname(filename)
-        mimes = MIME::Types.of(extension)
-        return mimes.first.content_type rescue nil
-      end
+      MIME::Types.of(File.extname(filename)).first.content_type
+    rescue
+      nil
     end
 
     def establish_connection!
