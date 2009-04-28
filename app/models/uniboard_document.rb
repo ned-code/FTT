@@ -10,12 +10,7 @@ class UniboardDocument < ActiveRecord::Base
   before_save :upload_document_to_s3
   after_destroy :destroy_document_on_s3
 
-  cattr_reader :config
-
-  def initialize(*args)
-    super
-    establish_connection
-  end
+  cattr_reader :s3_config
 
   def document=(file_data)
     @error_on_file = false
@@ -61,8 +56,7 @@ class UniboardDocument < ActiveRecord::Base
           @pages_to_delete << page.uuid
         end
       end
-    rescue => e
-      puts e
+    rescue
       @error_on_file = true
       return nil
     end
@@ -70,6 +64,7 @@ class UniboardDocument < ActiveRecord::Base
 
   def to_xml(options = {})
     require 'builder' unless defined?(Builder)
+    establish_connection!
 
     options[:indent] ||= 2
     options.reverse_merge!({:builder => Builder::XmlMarkup.new(:indent => options[:indent])})
@@ -90,15 +85,13 @@ class UniboardDocument < ActiveRecord::Base
         end
       end
     end
-  rescue AWS::S3::NoConnectionEstablished
-    establish_connection
-    retry
   end
 
   private
 
     def upload_document_to_s3
       return unless @tempfile
+      establish_connection!
 
       @pages_to_delete.each do |page_uuid|
         AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.svg", bucket)
@@ -118,18 +111,14 @@ class UniboardDocument < ActiveRecord::Base
 
       @tempfile.close
       @tempfile = nil
-    rescue AWS::S3::NoConnectionEstablished
-      establish_connection
-      retry
     end
 
     def destroy_document_on_s3
+      establish_connection!
+
       AWS::S3::Bucket.objects(bucket, :prefix => "documents/#{uuid}").collect{|object| object.path}.each do |object_path|
         AWS::S3::S3Object.delete(object_path, bucket)
       end
-    rescue AWS::S3::NoConnectionEstablished
-      establish_connection
-      retry
     end
     
     def get_content_type_from_mime_types(filename)
@@ -139,19 +128,19 @@ class UniboardDocument < ActiveRecord::Base
       end
     end
 
-    def establish_connection
-      @@config ||= YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV]
+    def establish_connection!
+      @@s3_config ||= YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV]
 
       unless AWS::S3::Base.connected?
         AWS::S3::Base.establish_connection!(
-            :access_key_id     => @@config['aws_access_key'],
-            :secret_access_key => @@config['aws_secret_access_key'],
-            :use_ssl           => @@config['use_ssl'] || true,
-            :persistent        => @@config['persistent'] || true
+            :access_key_id     => @@s3_config['aws_access_key'],
+            :secret_access_key => @@s3_config['aws_secret_access_key'],
+            :use_ssl           => @@s3_config['use_ssl'] || true,
+            :persistent        => @@s3_config['persistent'] || true
           )
       end
 
-      self.bucket = @@config['bucket_base_name']
+      self.bucket = @@s3_config['bucket_base_name']
       unless AWS::S3::Bucket.list.include?(bucket)
         AWS::S3::Bucket.create(bucket)
       end
