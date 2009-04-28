@@ -121,9 +121,10 @@ class UniboardDocument < ActiveRecord::Base
         while (entry = file.get_next_entry)
           next if entry.name =~ /\/$/ or entry.name == "#{uuid}.ub"
           s3_file_name = "documents/#{uuid}/#{entry.name}"
-          s3_file_access = s3_file_name =~ /^\w+\/#{UUID_FORMAT_REGEX}\.svg$/ ? :private : :public_read
+          s3_file_access = s3_file_name =~ /#{UUID_FORMAT_REGEX}\.svg$/ ? :private : :public_read
+          s3_content_type = get_content_type_from_exec || get_content_type_from_mime_types
 
-          AWS::S3::S3Object.store(s3_file_name, file.read, bucket, :access => s3_file_access)
+          AWS::S3::S3Object.store(s3_file_name, file.read, bucket, :access => s3_file_access, :content_type => s3_content_type)
         end
       end
 
@@ -134,6 +135,22 @@ class UniboardDocument < ActiveRecord::Base
     def destroy_document_on_s3
       AWS::S3::Bucket.objects(bucket, :prefix => "documents/#{uuid}").collect{|object| object.path}.each do |object_path|
         AWS::S3::S3Object.delete(object_path, bucket)
+      end
+    end
+    
+    # Try to use *nix exec to fetch content type
+    def get_content_type_from_exec
+      if path = @tempfile.path
+        return `file -bi "#{path}"`.chomp.scan(/^[a-z0-9\-_]+\/[a-z0-9\-_]+/).first
+      end
+    rescue
+      nil
+    end
+
+    def get_content_type_from_mime_types
+      if extension = File.extension(@tempfile.path)
+        mimes = MIME::Types.of(extension)
+        return mimes.first.content_type rescue nil
       end
     end
 

@@ -46,6 +46,21 @@ describe DocumentsController do
     assigns[:document].accepts_role?('owner', @current_user).should_not be_true
   end
 
+  it "should show an empty list of document" do
+    documents = []
+    documents << Factory.create(:uniboard_document)
+    documents << Factory.create(:uniboard_document)
+    documents << Factory.create(:uniboard_document)
+    documents << Factory.create(:uniboard_document)
+
+    get :index
+
+    response.should be_success
+    response.should have_tag('documents[synchronised-at=?]', assigns[:synchronised_at].xmlschema) do
+      without_tag('document')
+    end
+  end
+
   it "should list documents owned by current user" do
     documents = []
     documents << Factory.create(:uniboard_document)
