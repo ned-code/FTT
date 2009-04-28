@@ -139,7 +139,7 @@ class UniboardDocument < ActiveRecord::Base
     end
     
     def get_content_type_from_mime_types(filename)
-      if extension = File.extension(filename)
+      if extension = File.extname(filename)
         mimes = MIME::Types.of(extension)
         return mimes.first.content_type rescue nil
       end
