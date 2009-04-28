@@ -3,7 +3,7 @@ class DocumentsController < ApplicationController
 
   def index
     @synchronised_at = Time.now
-    @documents = current_user.is_owner_of_what(UniboardDocument)
+    @documents = current_user ? current_user.is_owner_of_what(UniboardDocument) : []
 
     respond_to do |format|
       format.xml
