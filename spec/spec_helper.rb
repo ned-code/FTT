@@ -34,6 +34,8 @@ Spec::Runner.configure do |config|
     AWS::S3::S3Object.stub!(:delete).and_return(true)
     AWS::S3::S3Object.stub!(:store).and_return(true)
     AWS::S3::S3Object.stub!(:url_for).and_return('http://amazon') # TODO: Dynamic result with realistic path to page
+    AWS::S3::Bucket.stub!(:list).and_return([])
+    AWS::S3::Bucket.stub!(:create).and_return(true)
   end
 
   config.after(:each) do

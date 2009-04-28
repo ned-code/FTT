@@ -11,7 +11,7 @@ class DocumentsController < ApplicationController
   end
 
   def show
-    @document = UniboardDocument.find(params[:id])
+    @document = params[:uuid] ? UniboardDocument.find_by_uuid(params[:uuid]) : UniboardDocument.find(params[:id])
 
     permit 'owner of document' do
       respond_to do |format|
@@ -25,7 +25,7 @@ class DocumentsController < ApplicationController
 
     respond_to do |format|
       if @document.save
-        @document.accepts_role 'owner', current_user
+        @document.accepts_role 'owner', current_user if current_user
         format.xml { head :ok }
       else
         format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
@@ -34,7 +34,7 @@ class DocumentsController < ApplicationController
   end
 
   def update
-    @document = UniboardDocument.find(params[:id])
+    @document = params[:uuid] ? UniboardDocument.find_by_uuid(params[:uuid]) : UniboardDocument.find(params[:id])
 
     permit 'owner of document' do
       respond_to do |format|
@@ -48,7 +48,7 @@ class DocumentsController < ApplicationController
   end
 
   def destroy
-    @document = UniboardDocument.find(params[:id])
+    @document = params[:uuid] ? UniboardDocument.find_by_uuid(params[:uuid]) : UniboardDocument.find(params[:id])
 
     permit 'owner of document' do
       respond_to do |format|
