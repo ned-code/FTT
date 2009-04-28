@@ -28,22 +28,31 @@ class UniboardDocument < ActiveRecord::Base
     self.bucket = @@config['bucket_base_name']
   end
 
-  def document=(file)
+  def document=(file_data)
     @error_on_file = false
     @pages_to_delete = []
 
-    if file.respond_to?(:path)
-      file = File.expand_path(file.path)
-    elsif file.is_a?(String) and File.file?(file)
-      file = File.expand_path(file)
-    else
-      file = nil
+    # Extract UUID from filename
+    if file_data.respond_to?(:original_filename)
+      self.uuid = File.basename(file_data.original_filename, '.ubz')
     end
 
-    self.uuid = File.basename(file, File.extname(file)) if file
+    # Return if file is empty
+    if file_data.blank? || file_data.size == 0
+      @error_on_file = true
+      return nil
+    end
 
+    # Create tempfile
+    file_data.rewind
+    @tempfile = Tempfile.new("#{SecureRandom.hex(12)}-#{uuid}.ubz")
+    @tempfile.binmode
+    @tempfile.write file_data.read
+    @tempfile.close
+
+    # Test document file
     begin
-      Zip::ZipFile.open(file) do |content|
+      Zip::ZipFile.open(@tempfile.path) do |content|
         old_pages = pages.dup
         document_desc = REXML::Document.new(content.get_input_stream("#{uuid}.ub").read)
 
@@ -63,12 +72,11 @@ class UniboardDocument < ActiveRecord::Base
           @pages_to_delete << page.uuid
         end
       end
-    rescue
+    rescue => e
+      puts e
       @error_on_file = true
       return nil
     end
-
-    @tempfile = file
   end
 
   def to_xml(options = {})
@@ -105,7 +113,7 @@ class UniboardDocument < ActiveRecord::Base
         AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.thumbnail.jpg", bucket)
       end
 
-      Zip::ZipInputStream::open(@tempfile) do |file|
+      Zip::ZipInputStream::open(@tempfile.path) do |file|
         while (entry = file.get_next_entry)
           next if entry.name =~ /\/$/ or entry.name == "#{uuid}.ub"
           s3_file_name = entry.name.gsub(/^(.*)\/$/, "documents/#{uuid}/\\1")
@@ -115,6 +123,7 @@ class UniboardDocument < ActiveRecord::Base
         end
       end
 
+      @tempfile.close
       @tempfile = nil
     end
 

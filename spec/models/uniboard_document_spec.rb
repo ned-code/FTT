@@ -32,16 +32,7 @@ describe UniboardDocument do
     UniboardDocument.new
   end
 
-  it 'should be valid with String object as file' do
-    document = Factory.build(:empty_uniboard_document)
-
-    document.document = fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
-    document.should have(:no).errors_on(:uuid)
-    document.should have(:no).errors_on(:file)
-    document.should be_valid
-  end
-
-  it 'should be valid with UploadFile object as file' do
+  it 'should be valid with valid ubz file' do
     document = Factory.build(:empty_uniboard_document)
 
     document.document = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
@@ -50,28 +41,10 @@ describe UniboardDocument do
     document.should be_valid
   end
 
-  it 'should be valid with File object as file' do
-    document = Factory.build(:empty_uniboard_document)
-
-    document.document = File.open(fixture_file('00000000-0000-0000-0000-0000000valid.ubz'))
-    document.should have(:no).errors_on(:uuid)
-    document.should have(:no).errors_on(:file)
-    document.should be_valid
-  end
-
-  it 'should be valid with valid ubz file' do
-    document = Factory.build(:empty_uniboard_document)
-
-    document.document = fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
-    document.should have(:no).errors_on(:uuid)
-    document.should have(:no).errors_on(:file)
-    document.should be_valid
-  end
-
   it 'should not be valid with empty ubz file' do
     document = Factory.build(:empty_uniboard_document)
 
-    document.document =fixture_file('00000000-0000-0000-0000-0000000empty.ubz')
+    document.document = mock_uploaded_ubz('00000000-0000-0000-0000-0000000empty.ubz')
     document.should have(:no).errors_on(:uuid)
     document.should have(1).errors_on(:file)
     document.should_not be_valid
@@ -80,7 +53,7 @@ describe UniboardDocument do
   it 'should not be valid with not valid ubz file' do
     document = Factory.build(:empty_uniboard_document)
 
-    document.document = fixture_file('00000000-0000-0000-0000-0000notvalid.ubz')
+    document.document = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz')
     document.should have(:no).errors_on(:uuid)
     document.should have(1).errors_on(:file)
     document.should_not be_valid
@@ -98,7 +71,7 @@ describe UniboardDocument do
   it 'should not be valid without uuid' do
     document = Factory.build(:uniboard_document, :document => nil)
 
-    document.document = fixture_file('nouuid-valid.ubz')
+    document.document = mock_uploaded_ubz('nouuid-valid.ubz')
     document.should have(1).errors_on(:uuid)
     document.should have(:no).errors_on(:file)
     document.should_not be_valid
@@ -107,7 +80,7 @@ describe UniboardDocument do
   context '(new)' do
     it 'should send file to s3 on save' do
       document = Factory.build(:empty_uniboard_document)
-      document.document = fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
+      document.document = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
       AWS::S3::S3Object.should_not_receive(:delete)
       # TODO: Can test argument with regex ?
@@ -132,7 +105,7 @@ describe UniboardDocument do
       # TODO: Can test argument with regex ?
       AWS::S3::S3Object.should_receive(:store).exactly(2).times
 
-      document.document = fixture_file('00000000-0000-0000-0000-0update1page.ubz', document.uuid)
+      document.document = mock_uploaded_ubz('00000000-0000-0000-0000-0update1page.ubz', document.uuid)
       document.save.should be_true
       document.should have(3).pages(true)
       document.pages[0].version.should == 1
@@ -151,7 +124,7 @@ describe UniboardDocument do
       AWS::S3::S3Object.should_receive(:delete).exactly(2).times
       AWS::S3::S3Object.should_not_receive(:store)
 
-      document.document = fixture_file('00000000-0000-0000-0000-000000delete.ubz', document.uuid)
+      document.document = mock_uploaded_ubz('00000000-0000-0000-0000-000000delete.ubz', document.uuid)
       document.save.should be_true
       document.should have(2).pages(true)
       document.pages[0].version.should == 1
@@ -163,13 +136,13 @@ describe UniboardDocument do
 
     it 'should not be valid if UUID change' do
       document = Factory.create(:uniboard_document,
-        :document => fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
+        :document => mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
       )
 
       AWS::S3::S3Object.should_not_receive(:delete)
       AWS::S3::S3Object.should_not_receive(:store)
 
-      document.document = fixture_file('00000000-0000-0000-0000-0000000valid.ubz')
+      document.document = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
       document.should have(1).errors_on(:uuid)
       document.should have(:no).errors_on(:file)
       document.should_not be_valid
