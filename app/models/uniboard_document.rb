@@ -21,7 +21,7 @@ class UniboardDocument < ActiveRecord::Base
   end
 
   def document=(file_data)
-    @error_on_file = false
+    @error_on_file = @error_on_version = false
     @pages_to_delete_on_s3 = []
 
     # Extract UUID from filename
@@ -48,6 +48,8 @@ class UniboardDocument < ActiveRecord::Base
         old_pages = pages.dup
         document_desc = REXML::Document.new(content.get_input_stream("#{uuid}.ub").read)
 
+        @error_on_version = true if version != document_desc.root.attribute(:version).value.to_i
+        
         page_position = 0
         document_desc.root.each_element('pages/page') do |page_element|
           page_uuid = page_element.text.match(UUID_FORMAT_REGEX)[0]
@@ -168,6 +170,7 @@ class UniboardDocument < ActiveRecord::Base
     end
 
     def validate
+      errors.add('version', "have already changed on server")  if @error_on_version
       errors.add('file', "has invalid format") if @error_on_file
       errors.add('uuid', "have changed") if !uuid_was.blank? and uuid_changed?
     end

@@ -130,6 +130,24 @@ describe UniboardDocument do
 
       document.document = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
       document.should have(1).errors_on(:uuid)
+      document.should have(:no).errors_on(:version)
+      document.should have(:no).errors_on(:file)
+      document.should_not be_valid
+      document.save.should be_false
+    end
+
+    it 'should not be valid if document version have already changed' do
+      document = Factory.create(:uniboard_document,
+        :document => mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
+      )
+      document.update_attribute(:version, document.version + 1)
+
+      AWS::S3::S3Object.should_not_receive(:delete)
+      AWS::S3::S3Object.should_not_receive(:store)
+
+      document.document = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', document.uuid)
+      document.should have(:no).errors_on(:uuid)
+      document.should have(1).errors_on(:version)
       document.should have(:no).errors_on(:file)
       document.should_not be_valid
       document.save.should be_false

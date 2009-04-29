@@ -128,6 +128,18 @@ describe DocumentsController do
       response.should_not have_tag('errors')
     end
 
+    it "should not update document if have changed on server" do
+      mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document.uuid)
+      @document.update_attribute(:version, @document.version + 1)
+
+      post :update, :uuid => @document.uuid, :document => { :document => mock_file }
+
+      response.should_not be_success
+      response.should have_tag('errors') do
+        with_tag('error', 'Version have already changed on server')
+      end
+    end
+
     it "should not update document with not valid ubz" do
       mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz')
 
