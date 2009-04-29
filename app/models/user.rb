@@ -9,7 +9,16 @@ class User < ActiveRecord::Base
 
   def confirm!
     self.is_registered
-    update_attribute('confirmed', true)
+
+    @attributes_cache.delete('confirmed')
+    @attributes['confirmed'] = true
+
+    connection.update(
+      "UPDATE #{self.class.quoted_table_name} " +
+      "SET \"confirmed\" = #{quote_value(true)} " +
+      "WHERE #{connection.quote_column_name(self.class.primary_key)} = #{quote_value(id)}",
+      "#{self.class.name} Updated"
+    )
   end
 
   def deliver_registration_activation_email!
