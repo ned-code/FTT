@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       if @user_session.save
         format.html do
           flash[:notice] = I18n.t 'flash.notice.login_successfull'
-          redirect_back_or_default users_url
+          redirect_back_or_default documents_url
         end
         format.xml { head :ok }
       else
