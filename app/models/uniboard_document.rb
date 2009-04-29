@@ -1,4 +1,5 @@
 class UniboardDocument < ActiveRecord::Base
+  acts_as_paranoid
   acts_as_authorizable
 
   has_many :pages, :class_name => 'UniboardPage', :order => 'position ASC', :autosave => true, :dependent => :destroy

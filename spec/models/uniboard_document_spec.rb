@@ -157,9 +157,17 @@ describe UniboardDocument do
     AWS::S3::S3Object.should_receive(:delete).exactly(9).times
 
     document.destroy.should be_true
+    document.should be_deleted
+
     document.pages.each do |page|
       UniboardPage.find_by_id(page.id).should be_nil
     end
+
+    UniboardDocument.find_by_id(document.id).should be_nil
+
+    document = UniboardDocument.find_by_id(document.id, :with_deleted => true)
+    document.should_not be_nil
+    document.should be_deleted
   end
 
   it 'should be listed by owner' do
