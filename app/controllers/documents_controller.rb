@@ -2,7 +2,7 @@ class DocumentsController < ApplicationController
   #permit 'registered'
 
   def index
-    @synchronised_at = Time.now
+    @synchronised_at = Time.now.utc
     @documents = current_user ? current_user.is_owner_of_what(UniboardDocument) : []
 
     respond_to do |format|
