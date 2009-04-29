@@ -1,9 +1,9 @@
 class DocumentsController < ApplicationController
-  #permit 'registered'
+  permit 'registered'
 
   def index
     @synchronised_at = Time.now.utc
-    @documents = current_user ? current_user.is_owner_of_what(UniboardDocument) : []
+    @documents = current_user.documents
 
     respond_to do |format|
       format.xml
@@ -12,6 +12,7 @@ class DocumentsController < ApplicationController
 
   def show
     @document = params[:uuid] ? UniboardDocument.find_by_uuid(params[:uuid]) : UniboardDocument.find(params[:id])
+    raise ActiveRecord::RecordNotFound unless @document
 
     permit 'owner of document' do
       respond_to do |format|
@@ -25,7 +26,7 @@ class DocumentsController < ApplicationController
 
     respond_to do |format|
       if @document.save
-        @document.accepts_role 'owner', current_user if current_user
+        @document.accepts_role 'owner', current_user
         format.xml { head :ok }
       else
         format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
@@ -35,6 +36,7 @@ class DocumentsController < ApplicationController
 
   def update
     @document = params[:uuid] ? UniboardDocument.find_by_uuid(params[:uuid]) : UniboardDocument.find(params[:id])
+    raise ActiveRecord::RecordNotFound unless @document
 
     permit 'owner of document' do
       respond_to do |format|
@@ -49,6 +51,7 @@ class DocumentsController < ApplicationController
 
   def destroy
     @document = params[:uuid] ? UniboardDocument.find_by_uuid(params[:uuid]) : UniboardDocument.find(params[:id])
+    raise ActiveRecord::RecordNotFound unless @document
 
     permit 'owner of document' do
       respond_to do |format|

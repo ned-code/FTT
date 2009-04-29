@@ -63,19 +63,26 @@ describe DocumentsController do
 
   it "should list documents owned by current user" do
     documents = []
+
     documents << Factory.create(:uniboard_document)
+    documents.last.accepts_role 'owner', @current_user
+
     documents << Factory.create(:uniboard_document)
+    documents.last.accepts_role 'owner', @current_user
+    documents.last.destroy
+
     documents << Factory.create(:uniboard_document)
-    documents.each {|d| d.accepts_role 'owner', @current_user}
+    documents.last.accepts_role 'owner', @current_user
+
     documents << Factory.create(:uniboard_document)
 
     get :index
 
     response.should be_success
     response.should have_tag('documents[synchronised-at=?]', assigns[:synchronised_at].xmlschema) do
-      with_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', documents[0].uuid, documents[0].version, documents[0].created_at.xmlschema, documents[0].updated_at.xmlschema)
-      with_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', documents[1].uuid, documents[1].version, documents[1].created_at.xmlschema, documents[1].updated_at.xmlschema)
-      with_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', documents[2].uuid, documents[2].version, documents[2].created_at.xmlschema, documents[2].updated_at.xmlschema)
+      with_tag('document[uuid=?][version=?][created-at=?][updated-at=?][deleted=?]', documents[0].uuid, documents[0].version, documents[0].created_at.xmlschema, documents[0].updated_at.xmlschema, 'false')
+      with_tag('document[uuid=?][version=?][created-at=?][updated-at=?][deleted=?]', documents[1].uuid, documents[1].version, documents[1].created_at.xmlschema, documents[1].updated_at.xmlschema, 'true')
+      with_tag('document[uuid=?][version=?][created-at=?][updated-at=?][deleted=?]', documents[2].uuid, documents[2].version, documents[2].created_at.xmlschema, documents[2].updated_at.xmlschema, 'false')
       without_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', documents[3].uuid, documents[3].version, documents[3].created_at.xmlschema, documents[3].updated_at.xmlschema)
     end
   end
@@ -97,6 +104,12 @@ describe DocumentsController do
         end
       end
       response.should_not have_tag('errors')
+    end
+
+    it "should not get deleted document" do
+      @document.destroy
+
+      lambda{ get :show, :uuid => @document.uuid }.should raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "should delete document" do

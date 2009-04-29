@@ -4,7 +4,12 @@ class User < ActiveRecord::Base
   acts_as_authorizable
 
   def documents
-    is_owner_of_what(UniboardDocument)
+    UniboardDocument.find_by_sql("
+      SELECT DISTINCT uniboard_documents.* FROM uniboard_documents
+      INNER JOIN roles ON authorizable_type = 'UniboardDocument' AND authorizable_id = uniboard_documents.id
+      INNER JOIN roles_users ON roles.id = role_id
+      INNER JOIN users ON user_id = users.id"
+    )
   end
 
   def confirm!

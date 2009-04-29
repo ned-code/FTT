@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <documents synchronised-at="<%= @synchronised_at.xmlschema %>" xmlns='http://www.mnemis.com/uniboard'>
   <% @documents.each do |document| -%>
-    <document uuid="<%= document.uuid %>" version="<%= document.version %>" created-at="<%= document.created_at.xmlschema %>" updated-at="<%= document.updated_at.xmlschema %>" />
+    <document uuid="<%= document.uuid %>" version="<%= document.version %>" created-at="<%= document.created_at.xmlschema %>" updated-at="<%= document.updated_at.xmlschema %>" deleted="<%= document.deleted? %>" />
   <% end -%>
 </documents>

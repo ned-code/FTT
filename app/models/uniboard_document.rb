@@ -95,6 +95,18 @@ class UniboardDocument < ActiveRecord::Base
     end
   end
 
+  #
+  def destroy_with_keep_owner
+    owners = self.has_owner
+
+    destroy_without_keep_owner
+
+    owners.each do |user|
+      self.accepts_role 'owner', user
+    end
+  end
+  alias_method_chain :destroy, :keep_owner
+
   private
 
     def upload_document_to_s3
@@ -113,7 +125,7 @@ class UniboardDocument < ActiveRecord::Base
           s3_file_name = "documents/#{uuid}/#{entry.name}"
           s3_content_type = get_content_type_from_mime_types(s3_file_name)
           s3_file_access = s3_file_name =~ /#{UUID_FORMAT_REGEX}\.svg$/ ? :private : :public_read
-          
+
           AWS::S3::S3Object.store(s3_file_name, file.read, bucket, :access => s3_file_access, :content_type => s3_content_type)
         end
       end
