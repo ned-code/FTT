@@ -21,7 +21,7 @@ class UniboardDocument < ActiveRecord::Base
 
   def document=(file_data)
     @error_on_file = false
-    @pages_to_delete = []
+    @pages_to_delete_on_s3 = []
 
     # Extract UUID from filename
     if file_data.respond_to?(:original_filename)
@@ -60,7 +60,7 @@ class UniboardDocument < ActiveRecord::Base
 
         old_pages.each do |page|
           page.mark_for_destruction
-          @pages_to_delete << page.uuid
+          @pages_to_delete_on_s3 << page.uuid
         end
       end
     rescue
@@ -100,10 +100,11 @@ class UniboardDocument < ActiveRecord::Base
       return unless @tempfile
       establish_connection!
 
-      @pages_to_delete.each do |page_uuid|
+      @pages_to_delete_on_s3.each do |page_uuid|
         AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.svg", bucket)
         AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.thumbnail.jpg", bucket)
       end
+      @pages_to_delete_on_s3.clear
 
       Zip::ZipInputStream::open(@tempfile.path) do |file|
         while (entry = file.get_next_entry)
