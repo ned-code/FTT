@@ -68,7 +68,7 @@ class DocumentsController < ApplicationController
     current_user.documents.delete_all! unless current_user.documents.empty?
 
     respond_to do |format|
-      format.xml :head => :ok
+      format.html :text => "Boom ;-)"
     end
   end
 end
