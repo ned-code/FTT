@@ -21,11 +21,14 @@ class UniboardDocument < ActiveRecord::Base
     # Extract UUID from filename
     if file_data.respond_to?(:original_filename)
       self.uuid = File.basename(file_data.original_filename, '.ubz')
+    else
+      logger.debug "Error in uploaded uniboard document: IO don't have 'original_filename' method"
     end
 
     # Return if file is empty
     if file_data.blank? || file_data.size == 0
       @error_on_file = true
+      logger.debug "Error in uploaded uniboard document: data is empty"
       return nil
     end
 
@@ -61,7 +64,7 @@ class UniboardDocument < ActiveRecord::Base
         end
       end
     rescue => e
-      logger.debug "Error in uploaded uniboard document", e
+      logger.debug "Error in uploaded uniboard document: " + e
       @error_on_file = true
       return nil
     end
