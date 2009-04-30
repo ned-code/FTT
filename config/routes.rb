@@ -16,5 +16,9 @@ ActionController::Routing::Routes.draw do |map|
     :uuid => UUID_FORMAT_REGEX,
     :conditions => { :method => :delete }
 
+  map.connect 'documents/delete_all',
+    :controller => 'documents', :action => 'destroy_all',
+    :conditions => { :method => :get }
+
   map.root :controller => 'sessions', :action => 'new'
 end

@@ -63,4 +63,12 @@ class DocumentsController < ApplicationController
       end
     end
   end
+
+  def destroy_all
+    current_user.documents.delete_all! unless current_user.documents.empty?
+
+    respond_to do |format|
+      format.xml :head => :ok
+    end
+  end
 end
