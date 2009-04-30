@@ -125,9 +125,7 @@ class UniboardDocument < ActiveRecord::Base
           )
       end
 
-      unless AWS::S3::Bucket.list.include?(bucket)
-        AWS::S3::Bucket.create(bucket)
-      end
+      AWS::S3::Bucket.create(bucket) unless AWS::S3::Bucket.list.find {|b| b.name == bucket}
     end
 
     # Before save
