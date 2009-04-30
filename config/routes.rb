@@ -2,6 +2,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
 
   map.resources :users, :member => {:confirm => :get}
+
+  map.connect 'documents/delete_all',
+    :controller => 'documents', :action => 'destroy_all',
+    :conditions => { :method => :get }
+
   map.resources :documents
   map.connect 'document/:uuid',
     :controller => 'documents', :action => 'show',
@@ -15,10 +20,6 @@ ActionController::Routing::Routes.draw do |map|
     :controller => 'documents', :action => 'destroy',
     :uuid => UUID_FORMAT_REGEX,
     :conditions => { :method => :delete }
-
-  map.connect 'documents/delete_all',
-    :controller => 'documents', :action => 'destroy_all',
-    :conditions => { :method => :get }
 
   map.root :controller => 'sessions', :action => 'new'
 end

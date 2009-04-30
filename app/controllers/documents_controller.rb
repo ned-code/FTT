@@ -65,7 +65,9 @@ class DocumentsController < ApplicationController
   end
 
   def destroy_all
-    current_user.documents.delete_all! unless current_user.documents.empty?
+    current_user.documents.each do |doc|
+      doc.destroy!
+    end
 
     respond_to do |format|
       format.html :text => "Boom ;-)"
