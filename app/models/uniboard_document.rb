@@ -7,18 +7,12 @@ class UniboardDocument < ActiveRecord::Base
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
   validates_presence_of :bucket
 
+  before_validation :set_bucket
   before_update :increment_version
   before_save :upload_document_to_s3
   after_destroy :destroy_document_on_s3
 
-  cattr_reader :s3_config
-
-  def initialize(*args)
-    super
-
-    @@s3_config ||= YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV]
-    self.bucket = @@s3_config['bucket_base_name']
-  end
+  cattr_accessor :s3_config
 
   def document=(file_data)
     @error_on_file = @error_on_version = false
@@ -112,10 +106,32 @@ class UniboardDocument < ActiveRecord::Base
 
   private
 
+    def s3_config
+      self.class.s3_config
+    end
+
+    def establish_connection!
+      logger.debug self.class.s3_config.inspect
+      
+      unless AWS::S3::Base.connected?
+        AWS::S3::Base.establish_connection!(
+            :access_key_id     => s3_config['aws_access_key'],
+            :secret_access_key => s3_config['aws_secret_access_key'],
+            :use_ssl           => s3_config['use_ssl'] || true,
+            :persistent        => s3_config['persistent'] || true
+          )
+      end
+
+      unless AWS::S3::Bucket.list.include?(bucket)
+        AWS::S3::Bucket.create(bucket)
+      end
+    end
+
+    # Before save
     def upload_document_to_s3
       return unless @tempfile
       establish_connection!
-
+      
       @pages_to_delete_on_s3.each do |page_uuid|
         AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.svg", bucket)
         AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.thumbnail.jpg", bucket)
@@ -151,23 +167,13 @@ class UniboardDocument < ActiveRecord::Base
       nil
     end
 
-    def establish_connection!
-      unless AWS::S3::Base.connected?
-        AWS::S3::Base.establish_connection!(
-            :access_key_id     => @@s3_config['aws_access_key'],
-            :secret_access_key => @@s3_config['aws_secret_access_key'],
-            :use_ssl           => @@s3_config['use_ssl'] || true,
-            :persistent        => @@s3_config['persistent'] || true
-          )
-      end
-
-      unless AWS::S3::Bucket.list.include?(bucket)
-        AWS::S3::Bucket.create(bucket)
-      end
-    end
-
     def increment_version
       self.version += 1
+    end
+
+    # Validations
+    def set_bucket
+      self.bucket ||= s3_config['bucket_base_name']
     end
 
     def validate
