@@ -66,7 +66,8 @@ class UniboardDocument < ActiveRecord::Base
           @pages_to_delete_on_s3 << page.uuid
         end
       end
-    rescue
+    rescue => e
+      logger.debug "Error in uploaded uniboard document", e
       @error_on_file = true
       return nil
     end
