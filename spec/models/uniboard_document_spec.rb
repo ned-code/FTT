@@ -154,8 +154,9 @@ describe UniboardDocument do
     end
   end
 
-  it 'should be destroyed' do
+  it 'should be marked destroyed' do
     document = Factory.create(:uniboard_document)
+    document.accepts_role 'owner', Factory.create(:user)
 
     AWS::S3::Bucket.should_receive(:objects).with(document.bucket, :prefix => "documents/#{document.uuid}").and_return(
       stub('list', :collect => [
@@ -186,6 +187,48 @@ describe UniboardDocument do
     document = UniboardDocument.find_by_id(document.id, :with_deleted => true)
     document.should_not be_nil
     document.should be_deleted
+  end
+
+  it 'should be directly destroyed' do
+    document = Factory.create(:uniboard_document)
+    document.accepts_role 'owner', Factory.create(:user)
+
+    document.destroy!.should be_true
+
+    document.pages.each do |page|
+      UniboardPage.find_by_id(page.id).should be_nil
+    end
+
+    UniboardDocument.find_by_id(document.id, :with_deleted => true).should be_nil
+  end
+
+  it 'should be destroyed after marked destroyed' do
+    document = Factory.create(:uniboard_document)
+    document.accepts_role 'owner', Factory.create(:user)
+
+    document.destroy.should be_true
+    document.destroy!.should be_true
+
+    document.pages.each do |page|
+      UniboardPage.find_by_id(page.id).should be_nil
+    end
+
+    UniboardDocument.find_by_id(document.id, :with_deleted => true).should be_nil
+  end
+
+  it 'should be destroyed from owner list' do
+    user = Factory.create(:user)
+
+    document = Factory.create(:uniboard_document)
+    document.accepts_role 'owner', user
+
+    user.documents.first.destroy!.should be_true
+
+    document.pages.each do |page|
+      UniboardPage.find_by_id(page.id).should be_nil
+    end
+
+    UniboardDocument.find_by_id(document.id, :with_deleted => true).should be_nil
   end
 
   it 'should be listed by owner' do
