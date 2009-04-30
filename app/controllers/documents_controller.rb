@@ -70,7 +70,7 @@ class DocumentsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html :text => "Boom ;-)"
+      format.html { render :text => "Boom ;-)" }
     end
   end
 end
