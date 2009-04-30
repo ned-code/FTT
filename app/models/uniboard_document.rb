@@ -48,7 +48,7 @@ class UniboardDocument < ActiveRecord::Base
         old_pages = pages.dup
         document_desc = REXML::Document.new(content.get_input_stream("#{uuid}.ub").read)
 
-        @error_on_version = true if version != document_desc.root.attribute(:version).value.to_i
+        @error_on_version = true if !new_record? && version != document_desc.root.attribute(:version).value.to_i
         
         page_position = 0
         document_desc.root.each_element('pages/page') do |page_element|
