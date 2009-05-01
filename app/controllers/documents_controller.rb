@@ -27,7 +27,7 @@ class DocumentsController < ApplicationController
     respond_to do |format|
       if @document.save
         @document.accepts_role 'owner', current_user
-        format.xml { head :ok }
+        format.xml { render :xml => @document.to_xml }
       else
         format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
       end
@@ -41,7 +41,7 @@ class DocumentsController < ApplicationController
     permit 'owner of document' do
       respond_to do |format|
         if @document.update_attributes(params[:document])
-          format.xml { head :ok }
+        format.xml { render :xml => @document.to_xml }
         else
           format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
         end

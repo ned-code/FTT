@@ -17,6 +17,11 @@ describe DocumentsController do
 
     response.should be_success
     response.should_not have_tag('errors')
+    response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', assigns(:document).uuid, assigns(:document).version, assigns(:document).created_at.xmlschema, assigns(:document).updated_at.xmlschema) do
+      assigns(:document).pages.each do |page|
+        with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]', page.uuid, page.version, page.created_at.xmlschema, page.updated_at.xmlschema, /^http/)
+      end
+    end
     assigns[:document].accepts_role?('owner', @current_user).should be_true
   end
 
@@ -30,6 +35,7 @@ describe DocumentsController do
       without_tag('error', 'Uuid is invalid')
       with_tag('error', 'File has invalid format')
     end
+    response.should_not have_tag('document')
     assigns[:document].accepts_role?('owner', @current_user).should_not be_true
   end
 
@@ -43,10 +49,11 @@ describe DocumentsController do
       with_tag('error', 'Uuid is invalid')
       without_tag('error', 'File has invalid format')
     end
+    response.should_not have_tag('document')
     assigns[:document].accepts_role?('owner', @current_user).should_not be_true
   end
 
-  it "should show an empty list of document" do
+  it "should show empty list of document" do
     documents = []
     documents << Factory.create(:uniboard_document)
     documents << Factory.create(:uniboard_document)
@@ -98,7 +105,7 @@ describe DocumentsController do
       get :show, :id => @document.uuid
 
       response.should be_success
-      response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', @document.uuid, @document.version, @document.created_at.xmlschema, @document.updated_at.xmlschema) do
+      response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', assigns(:document).uuid, assigns(:document).version, assigns(:document).created_at.xmlschema, assigns(:document).updated_at.xmlschema) do
         @document.pages.each do |page|
           with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]', page.uuid, page.version, page.created_at.xmlschema, page.updated_at.xmlschema, /^http/)
         end
@@ -126,6 +133,11 @@ describe DocumentsController do
 
       response.should be_success
       response.should_not have_tag('errors')
+      response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', assigns(:document).uuid, assigns(:document).version, assigns(:document).created_at.xmlschema, assigns(:document).updated_at.xmlschema) do
+        assigns(:document).pages.each do |page|
+          with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]', page.uuid, page.version, page.created_at.xmlschema, page.updated_at.xmlschema, /^http/)
+        end
+      end
     end
 
     it "should not update document if have changed on server" do
@@ -138,6 +150,7 @@ describe DocumentsController do
       response.should have_tag('errors') do
         with_tag('error', 'Version have already changed on server')
       end
+      response.should_not have_tag('document')
     end
 
     it "should not update document with not valid ubz" do
@@ -150,6 +163,7 @@ describe DocumentsController do
         without_tag('error', 'Uuid is invalid')
         with_tag('error', 'File has invalid format')
       end
+      response.should_not have_tag('document')
     end
 
     it "should not update document with not valid uuid" do
@@ -162,6 +176,7 @@ describe DocumentsController do
         with_tag('error', 'Uuid is invalid')
         without_tag('error', 'File has invalid format')
       end
+      response.should_not have_tag('document')
     end
 
     it "should not update document with if uuid changed" do
@@ -174,7 +189,7 @@ describe DocumentsController do
         with_tag('error', 'Uuid have changed')
         without_tag('error', 'File has invalid format')
       end
-
+      response.should_not have_tag('document')
     end
   end
 
