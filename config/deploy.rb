@@ -101,6 +101,12 @@ after "deploy:finalize_update" do
   rails_gems_install
 end
 
+after "deploy:start" do
+  6.times do
+    sudo "sh -c 'sleep 2 && curl -v -H \"Content-Type: text/xml\" -H \"Accept: text/xml\" -d \"<user_session><email></email><password></password></user_session>\" http://localhost/session &> /dev/null'"
+  end
+end
+
 task :rails_gems_install, :roles => :app_admin do
   sudo "sh -c 'cd #{release_path}; rake gems:install RAILS_ENV=#{rails_env}'"
 end
