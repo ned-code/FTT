@@ -1,6 +1,8 @@
 class UniboardDocument < ActiveRecord::Base
-  acts_as_paranoid
   acts_as_authorizable
+
+  # Set this defaults scope in find_every_with_deleted method
+  default_scope :order => "#{table_name}.updated_at ASC", :conditions => {:deleted_at => nil}
 
   has_many :pages, :class_name => 'UniboardPage', :order => 'position ASC', :autosave => true, :dependent => :destroy
 
@@ -13,6 +15,27 @@ class UniboardDocument < ActiveRecord::Base
   after_destroy :destroy_document_on_s3
 
   cattr_accessor :s3_config
+
+  class << self
+
+    # Add find option named with_deleted. This option can be set to true if you want retrive all documents (including deleted)
+    VALID_FIND_OPTIONS << :with_deleted
+
+    # Override default_scope if find with option with_deleted set to true
+    def find_every_with_deleted(options)
+      with = options.delete(:with_deleted)
+
+      if with
+        with_exclusive_scope(:find => { :order => "#{table_name}.updated_at ASC" }) do
+          find_every_without_deleted(options)
+        end
+      else
+        find_every_without_deleted(options)
+      end
+    end
+    alias_method_chain(:find_every, :deleted)
+
+  end
 
   def payload=(payload)
     @error_on_file = @error_on_version = false
@@ -49,7 +72,7 @@ class UniboardDocument < ActiveRecord::Base
         logger.debug "Receive uniboard document - description:\n" + document_desc.to_s
 
         @error_on_version = true if !new_record? && version != document_desc.root.attribute(:version).value.to_i
-        
+
         page_position = 0
         document_desc.root.each_element('pages/page') do |page_element|
           page_uuid = page_element.text.match(UUID_FORMAT_REGEX)[0]
@@ -103,17 +126,37 @@ class UniboardDocument < ActiveRecord::Base
     end
   end
 
-  #
-  def destroy_with_keep_owner
-    owners = self.has_owner
+  # Mark document deleted and destroy pages records and files on s3.
+  def destroy_with_keeping
+    transaction do
+      unless new_record?
+        connection.update(
+          "UPDATE #{self.class.quoted_table_name} " +
+          "SET \"deleted_at\" = #{quote_value(self.deleted_at = Time.now.utc)} " +
+          "WHERE #{connection.quote_column_name(self.class.primary_key)} = #{quote_value(id)}",
+          "#{self.class.name} marke Destroyed"
+        )
+      end
 
-    destroy_without_keep_owner
-
-    owners.each do |user|
-      self.accepts_role 'owner', user
+      pages.each do |page|
+        page.destroy
+      end
+      destroy_document_on_s3
     end
+
+    freeze
   end
-  alias_method_chain :destroy, :keep_owner
+  alias_method_chain(:destroy, :keeping)
+
+  # Realy destroy document
+  def destroy!
+    destroy_without_keeping
+  end
+
+  # Return true if document is marked deleted
+  def deleted?
+    !self.deleted_at.nil?
+  end
 
   private
 
@@ -138,7 +181,7 @@ class UniboardDocument < ActiveRecord::Base
     def upload_document_to_s3
       return unless @tempfile
       establish_connection!
-      
+
       @pages_to_delete_on_s3.each do |page_uuid|
         AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.svg", bucket)
         AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.thumbnail.jpg", bucket)

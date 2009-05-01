@@ -65,10 +65,13 @@ class DocumentsController < ApplicationController
   end
 
   def destroy_all
-    UniboardDocument.delete_all!
-    Role.delete_all
-    RolesUser.delete_all
-    User.all.each {|u| u.is_registered }
+    current_user.documents.each do |document|
+      document.destroy!
+    end
+#    UniboardDocument.delete_all!
+#    Role.delete_all
+#    RolesUser.delete_all
+#    User.all.each {|u| u.is_registered }
 
     respond_to do |format|
       format.html { render :text => "Boom ;-)" }
