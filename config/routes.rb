@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   map.resource :session
+  map.resource :time
 
   map.resources :users, :member => {:confirm => :get}
 
