@@ -102,8 +102,8 @@ after "deploy:finalize_update" do
 end
 
 after "deploy:start" do
-  6.times do
-    sudo "sh -c 'sleep 2 && curl -v -H \"Content-Type: text/xml\" -H \"Accept: text/xml\" -d \"<user_session><email></email><password></password></user_session>\" http://localhost/session &> /dev/null'"
+  7.times do
+    sudo "sh -c 'sleep 2 && curl -H \"Content-Type: text/xml\" -H \"Accept: text/xml\" -d \"<user_session><email></email><password></password></user_session>\" http://localhost/session' &> /dev/null"
   end
 end
 

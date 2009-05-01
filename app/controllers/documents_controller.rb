@@ -11,7 +11,7 @@ class DocumentsController < ApplicationController
   end
 
   def show
-    @document = params[:uuid] ? UniboardDocument.find_by_uuid(params[:uuid]) : UniboardDocument.find(params[:id])
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find(params[:id])
     raise ActiveRecord::RecordNotFound unless @document
 
     permit 'owner of document' do
@@ -35,7 +35,7 @@ class DocumentsController < ApplicationController
   end
 
   def update
-    @document = params[:uuid] ? UniboardDocument.find_by_uuid(params[:uuid]) : UniboardDocument.find(params[:id])
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find(params[:id])
     raise ActiveRecord::RecordNotFound unless @document
 
     permit 'owner of document' do
@@ -50,7 +50,7 @@ class DocumentsController < ApplicationController
   end
 
   def destroy
-    @document = params[:uuid] ? UniboardDocument.find_by_uuid(params[:uuid]) : UniboardDocument.find(params[:id])
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find(params[:id])
     raise ActiveRecord::RecordNotFound unless @document
 
     permit 'owner of document' do

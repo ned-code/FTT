@@ -95,7 +95,7 @@ describe DocumentsController do
     end
 
     it "should get document if current user is owner" do
-      get :show, :uuid => @document.uuid
+      get :show, :id => @document.uuid
 
       response.should be_success
       response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', @document.uuid, @document.version, @document.created_at.xmlschema, @document.updated_at.xmlschema) do
@@ -109,11 +109,11 @@ describe DocumentsController do
     it "should not get deleted document" do
       @document.destroy
 
-      lambda{ get :show, :uuid => @document.uuid }.should raise_error(ActiveRecord::RecordNotFound)
+      lambda{ get :show, :id => @document.uuid }.should raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "should delete document" do
-      delete :destroy, :uuid => @document.uuid
+      delete :destroy, :id => @document.uuid
 
       response.should be_success
       response.should_not have_tag('errors')
@@ -122,7 +122,7 @@ describe DocumentsController do
     it "should update document with valid ubz" do
       mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document.uuid)
 
-      post :update, :uuid => @document.uuid, :document => { :payload => mock_file }
+      post :update, :id => @document.uuid, :document => { :payload => mock_file }
 
       response.should be_success
       response.should_not have_tag('errors')
@@ -132,7 +132,7 @@ describe DocumentsController do
       mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document.uuid)
       @document.update_attribute(:version, @document.version + 1)
 
-      post :update, :uuid => @document.uuid, :document => { :payload => mock_file }
+      post :update, :id => @document.uuid, :document => { :payload => mock_file }
 
       response.should_not be_success
       response.should have_tag('errors') do
@@ -143,7 +143,7 @@ describe DocumentsController do
     it "should not update document with not valid ubz" do
       mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz')
 
-      post :update, :uuid => @document.uuid, :document => { :payload => mock_file }
+      post :update, :id => @document.uuid, :document => { :payload => mock_file }
 
       response.should_not be_success
       response.should have_tag('errors') do
@@ -155,7 +155,7 @@ describe DocumentsController do
     it "should not update document with not valid uuid" do
       mock_file = mock_uploaded_ubz('nouuid-valid.ubz')
 
-      post :update, :uuid => @document.uuid, :document => { :payload => mock_file }
+      post :update, :id => @document.uuid, :document => { :payload => mock_file }
 
       response.should_not be_success
       response.should have_tag('errors') do
@@ -167,7 +167,7 @@ describe DocumentsController do
     it "should not update document with if uuid changed" do
       mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
-      post :update, :uuid => @document.uuid, :document => { :payload => mock_file }
+      post :update, :id => @document.uuid, :document => { :payload => mock_file }
 
       response.should_not be_success
       response.should have_tag('errors') do
@@ -186,14 +186,14 @@ describe DocumentsController do
     end
 
     it "should not get document" do
-      get :show, :id => @document.id
+      get :show, :id => @document.uuid
 
       response.should_not be_success
       response.should be_redirect
     end
 
     it "should not delete document" do
-      delete :destroy, :id => @document.id
+      delete :destroy, :id => @document.uuid
 
       response.should_not be_success
       response.should be_redirect
@@ -202,7 +202,7 @@ describe DocumentsController do
     it "should not update document" do
       mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
-      post :update, :uuid => @document.uuid, :document => { :payload => mock_file }
+      post :update, :id => @document.uuid, :document => { :payload => mock_file }
 
       response.should_not be_success
       response.should be_redirect
