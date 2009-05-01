@@ -16,7 +16,7 @@ class DocumentsController < ApplicationController
 
     permit 'owner of document' do
       respond_to do |format|
-        format.xml { render :xml => @document.to_xml }
+        format.xml { render :xml => @document.to_xml(:page_url => true) }
       end
     end
   end

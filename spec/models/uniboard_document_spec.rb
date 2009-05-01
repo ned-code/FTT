@@ -248,15 +248,61 @@ describe UniboardDocument do
     user.documents.should_not include(document_not_owned)
   end
 
-  it "should have xml format" do
+  it "should have xml format (with page url)" do
+    document = Factory.create(:uniboard_document)
+    document_xml = REXML::Document.new(document.to_xml(:page_url => true))
+
+    document_xml.root.name.should == 'document'
+    document_xml.root.attributes.to_hash.should include(
+      'xmlns' => 'http://www.mnemis.com/uniboard',
+      'uuid' => document.uuid,
+      'version' => document.version.to_s,
+      'created-at' => document.created_at.xmlschema,
+      'updated-at' => document.updated_at.xmlschema
+    )
+
+    document.pages.each do |page|
+      document_xml.root.should have(1).elements
+      document_xml.root.get_elements('pages').first.should have(document.pages.count).elements
+
+      document_xml.root.get_elements('pages').first.each_element_with_attribute('uuid', page.uuid) do |page_element|
+        page_element.name.should == 'page'
+        page_element.attributes.to_hash.should include(
+          'version' => page.version.to_s,
+          'created-at' => page.created_at.xmlschema,
+          'updated-at' => page.updated_at.xmlschema
+        )
+        page_element.text.should_not be_blank
+      end
+    end
+  end
+
+  it "should have xml format (without page url)" do
     document = Factory.create(:uniboard_document)
     document_xml = REXML::Document.new(document.to_xml)
 
-    # TODO: Test if xml format is correct
-#    document_xml.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', document.uuid, document.version, document.created_at.xmlschema, document.updated_at.xmlschema) do
-#      document.pages.each do |page|
-#        with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]', page.uuid, page.version, page.created_at.xmlschema, page.updated_at.xmlschema, /^http/)
-#      end
-#    end
+    document_xml.root.name.should == 'document'
+    document_xml.root.attributes.to_hash.should include(
+      'xmlns' => 'http://www.mnemis.com/uniboard',
+      'uuid' => document.uuid,
+      'version' => document.version.to_s,
+      'created-at' => document.created_at.xmlschema,
+      'updated-at' => document.updated_at.xmlschema
+    )
+
+    document.pages.each do |page|
+      document_xml.root.should have(1).elements
+      document_xml.root.get_elements('pages').first.should have(document.pages.count).elements
+
+      document_xml.root.get_elements('pages').first.each_element_with_attribute('uuid', page.uuid) do |page_element|
+        page_element.name.should == 'page'
+        page_element.attributes.to_hash.should include(
+          'version' => page.version.to_s,
+          'created-at' => page.created_at.xmlschema,
+          'updated-at' => page.updated_at.xmlschema
+        )
+        page_element.text.should be_blank
+      end
+    end
   end
 end

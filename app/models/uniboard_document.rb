@@ -84,6 +84,8 @@ class UniboardDocument < ActiveRecord::Base
     options.reverse_merge!({:builder => Builder::XmlMarkup.new(:indent => options[:indent])})
     options[:builder].instruct! unless options.delete(:skip_instruct)
 
+    options[:page_url] ||= false
+
     options[:builder].document('xmlns' => 'http://www.mnemis.com/uniboard',
       'uuid' => uuid,
       'version' => version,
@@ -91,7 +93,7 @@ class UniboardDocument < ActiveRecord::Base
       'updated-at' => updated_at.xmlschema) do |xml_document|
       xml_document.pages do |xml_pages|
         pages.each do |page|
-          xml_pages.page(AWS::S3::S3Object.url_for("documents/#{uuid}/#{page.uuid}.svg", bucket),
+          xml_pages.page((options[:page_url] ? AWS::S3::S3Object.url_for("documents/#{uuid}/#{page.uuid}.svg", bucket) : ''),
             'uuid' => page.uuid,
             'version' => page.version,
             'created-at' => page.created_at.xmlschema,
