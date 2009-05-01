@@ -122,8 +122,6 @@ class UniboardDocument < ActiveRecord::Base
     end
 
     def establish_connection!
-      logger.debug self.class.s3_config.inspect
-      
       unless AWS::S3::Base.connected?
         AWS::S3::Base.establish_connection!(
             :access_key_id     => s3_config['aws_access_key'],
