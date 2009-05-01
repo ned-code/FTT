@@ -8,15 +8,15 @@ ActionController::Routing::Routes.draw do |map|
     :conditions => { :method => :get }
 
   map.resources :documents
-  map.connect 'document/:uuid',
+  map.connect 'documents/:uuid',
     :controller => 'documents', :action => 'show',
     :uuid => UUID_FORMAT_REGEX,
     :conditions => { :method => :get }
-  map.connect 'document/:uuid',
+  map.connect 'documents/:uuid',
     :controller => 'documents', :action => 'update',
     :uuid => UUID_FORMAT_REGEX,
     :conditions => { :method => :put }
-  map.connect 'document/:uuid',
+  map.connect 'documents/:uuid',
     :controller => 'documents', :action => 'destroy',
     :uuid => UUID_FORMAT_REGEX,
     :conditions => { :method => :delete }
