@@ -14,29 +14,29 @@ class UniboardDocument < ActiveRecord::Base
 
   cattr_accessor :s3_config
 
-  def document=(file_data)
+  def payload=(payload)
     @error_on_file = @error_on_version = false
     @pages_to_delete_on_s3 = []
 
     # Extract UUID from filename
-    if file_data.respond_to?(:original_filename)
-      self.uuid = File.basename(file_data.original_filename, '.ubz')
+    if payload.respond_to?(:original_filename)
+      self.uuid = File.basename(payload.original_filename, '.ubz')
     else
       logger.debug "Error in uploaded uniboard document: IO don't have 'original_filename' method"
     end
 
     # Return if file is empty
-    if file_data.blank? || file_data.size == 0
+    if payload.blank? || payload.size == 0
       @error_on_file = true
       logger.debug "Error in uploaded uniboard document: data is empty"
       return nil
     end
 
     # Create tempfile
-    file_data.rewind
+    payload.rewind
     @tempfile = Tempfile.new("#{rand Time.now.to_i}-#{uuid}.ubz")
     @tempfile.binmode
-    @tempfile.write file_data.read
+    @tempfile.write payload.read
     @tempfile.close
 
     # Test document file
