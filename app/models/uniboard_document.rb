@@ -21,6 +21,7 @@ class UniboardDocument < ActiveRecord::Base
     # Extract UUID from filename
     if payload.respond_to?(:original_filename)
       self.uuid = File.basename(payload.original_filename, '.ubz')
+      logger.debug "Receive uniboard document - UUID: #{uuid}"
     else
       logger.debug "Error in uploaded uniboard document: IO don't have 'original_filename' method"
     end
@@ -45,12 +46,17 @@ class UniboardDocument < ActiveRecord::Base
         old_pages = pages.dup
         document_desc = REXML::Document.new(content.get_input_stream("#{uuid}.ub").read)
 
+        logger.debug "Receive uniboard document - description:\n" + document_desc.to_s
+
         @error_on_version = true if !new_record? && version != document_desc.root.attribute(:version).value.to_i
         
         page_position = 0
         document_desc.root.each_element('pages/page') do |page_element|
           page_uuid = page_element.text.match(UUID_FORMAT_REGEX)[0]
           page_position += 1
+
+          logger.debug "Receive uniboard document - page UUID: #{page_uuid}"
+          logger.debug "Receive uniboard document - page position: #{page_position}"
 
           page = old_pages.delete( old_pages.find {|e| e.uuid == page_uuid} ) || pages.build(:uuid => page_uuid)
 
