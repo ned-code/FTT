@@ -150,6 +150,8 @@ class UniboardDocument < ActiveRecord::Base
 
   # Realy destroy document
   def destroy!
+    self.deleted_at = Time.now.utc unless frozen?
+
     destroy_without_keeping
   end
 
