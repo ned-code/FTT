@@ -3,12 +3,23 @@ class User < ActiveRecord::Base
   acts_as_authorized_user
   acts_as_authorizable
 
-  def documents
+  def documents(*args)
+    options = args.extract_options!
+    UniboardDocument.send(:validate_find_options, options)
+    UniboardDocument.send(:set_readonly_option!, options)
+
+    if(options.delete(:with_deleted))
+      deleted_condition = ''
+    else
+      deleted_condition = "AND uniboard_documents.deleted_at IS NULL"
+    end
+
     UniboardDocument.find_by_sql("
       SELECT DISTINCT uniboard_documents.* FROM uniboard_documents
       INNER JOIN roles ON authorizable_type = 'UniboardDocument' AND authorizable_id = uniboard_documents.id
       INNER JOIN roles_users ON roles.id = role_id
-      INNER JOIN users ON user_id = users.id"
+      INNER JOIN users ON user_id = users.id
+      WHERE 1=1 #{deleted_condition}"
     )
   end
 

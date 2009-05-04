@@ -231,21 +231,32 @@ describe UniboardDocument do
     UniboardDocument.find_by_id(document.id, :with_deleted => true).should be_nil
   end
 
-  it 'should be listed by owner' do
-    user = Factory.create(:user)
+  describe 'owner should retrive document' do
 
-    document = Factory.create(:uniboard_document)
-    document.accepts_role 'owner', user
+    before(:each) do
+      @user = Factory.create(:user)
 
-    document_not_owned = Factory.create(:uniboard_document)
+      @document = Factory.create(:uniboard_document)
+      @document.accepts_role 'owner', @user
 
-    document_deleted = Factory.create(:uniboard_document)
-    document_deleted.accepts_role 'owner', user
-    document_deleted.destroy
+      @document_deleted = Factory.create(:uniboard_document)
+      @document_deleted.accepts_role 'owner', @user
+      @document_deleted.destroy
 
-    user.documents.should include(document)
-    user.documents.should include(document_deleted)
-    user.documents.should_not include(document_not_owned)
+      @document_not_owned = Factory.create(:uniboard_document)
+    end
+
+    it 'owner should retrive document (without deleted)' do
+      @user.documents.should include(@document)
+      @user.documents.should_not include(@document_deleted)
+      @user.documents.should_not include(@document_not_owned)
+    end
+
+    it 'owner should retrive document (with deleted)' do
+      @user.documents(:with_deleted => true).should include(@document)
+      @user.documents(:with_deleted => true).should include(@document_deleted)
+      @user.documents(:with_deleted => true).should_not include(@document_not_owned)
+    end
   end
 
   it "should have xml format (with page url)" do

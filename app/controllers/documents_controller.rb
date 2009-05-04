@@ -3,7 +3,7 @@ class DocumentsController < ApplicationController
 
   def index
     @synchronised_at = Time.now.utc
-    @documents = current_user.documents
+    @documents = current_user.documents(:with_deleted => true)
 
     respond_to do |format|
       format.xml
