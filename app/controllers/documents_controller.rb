@@ -11,12 +11,13 @@ class DocumentsController < ApplicationController
   end
 
   def show
-    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find(params[:id])
-    raise ActiveRecord::RecordNotFound unless @document
-
-    permit 'owner of document' do
-      respond_to do |format|
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find_by_id(params[:id])
+    
+    respond_to do |format|
+      if @document && permit?('owner of document')
         format.xml { render :xml => @document.to_xml(:page_url => true) }
+      else
+        format.xml { head :forbidden }
       end
     end
   end
@@ -35,31 +36,33 @@ class DocumentsController < ApplicationController
   end
 
   def update
-    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find(params[:id])
-    raise ActiveRecord::RecordNotFound unless @document
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find_by_id(params[:id])
 
-    permit 'owner of document' do
-      respond_to do |format|
+    respond_to do |format|
+      if @document && permit?('owner of document')
         if @document.update_attributes(params[:document])
-        format.xml { render :xml => @document.to_xml }
+          format.xml { render :xml => @document.to_xml }
         else
           format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
         end
+      else
+        format.xml { head :forbidden }
       end
     end
   end
 
   def destroy
-    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find(params[:id])
-    raise ActiveRecord::RecordNotFound unless @document
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find_by_id(params[:id])
 
-    permit 'owner of document' do
-      respond_to do |format|
+    respond_to do |format|
+      if @document && permit?('owner of document')
         if @document.destroy
           format.xml { head :ok }
         else
           format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
         end
+      else
+        format.xml { head :forbidden }
       end
     end
   end

@@ -38,6 +38,7 @@ Spec::Runner.configure do |config|
     AWS::S3::Bucket.stub!(:create).and_return(true)
   end
 
+  # Remove temporary fixtures filess
   config.after(:each) do
     Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'files', '*')].each do |file|
       FileUtils.rm file
@@ -77,10 +78,19 @@ Spec::Runner.configure do |config|
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
 
+# Overide 'forbidden?' method to use 'response_code' of TestResponse
+class ActionController::TestResponse
+  def forbidden?
+    response_code == 403
+  end
+end
+
+# Create an Uploaded UBZ file
 def mock_uploaded_ubz(file, uuid = nil)
   ActionController::TestUploadedFile.new(fixture_file(file, uuid))
 end
 
+# Copy file in temporary folder and, if is a UBZ file, genereate an UUID.
 def fixture_file(source, uuid = nil)
   @uuid_generator ||= UUID.new
 
