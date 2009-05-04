@@ -9,7 +9,7 @@ describe UniboardDocument do
     @document = Factory.create(:uniboard_document)
     @document.accepts_role 'owner', @user
   end
-  
+
   context 'creation' do
 
     it 'should be valid with valid payload' do
@@ -65,17 +65,16 @@ describe UniboardDocument do
       document.save.should_not be_true
     end
 
-    context 'with s3 storage' do
+    it 'should create page on save' do
+      document = Factory.build(:uniboard_document)
 
-      it 'should send files to s3 on save' do
-        document = Factory.build(:uniboard_document)
-
-        AWS::S3::S3Object.should_not_receive(:delete)
-        AWS::S3::S3Object.should_receive(:store).exactly(9).times
-
-        document.save.should be_true
+      document.save.should be_true
+      document.should have(3).pages
+      document.pages.each_with_index do |page, index|
+        page.uuid.should == 'page%04d-0000-0000-0000-000000000000' % (index + 1)
+        page.version.should == 1
+        page.position.should == index + 1
       end
-
     end
 
     context 'with s3 storage' do
@@ -117,6 +116,32 @@ describe UniboardDocument do
 
       @document.save.should be_true
       @document.version.should == previous_version + 1
+    end
+
+    it 'should increment updated page version' do
+      @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-0update1page.ubz', @document.uuid)
+
+      @document.save.should be_true
+      @document.reload
+
+      @document.should have(3).pages
+      @document.pages.each_with_index do |page, index|
+        page.version.should == (index == 1 ? 2 : 1) # page 2 has been updated
+        page.position.should == index + 1
+      end
+    end
+
+    it 'should remove deleted page on save' do
+      @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-000000delete.ubz', @document.uuid)
+
+      @document.save.should be_true
+      @document.reload
+
+      @document.should have(2).pages
+      @document.pages.each_with_index do |page, index|
+        page.version.should == 1
+        page.position.should == index + 1
+      end
     end
 
     it 'should not be valid if payload version is not equal to stored version' do
@@ -166,7 +191,10 @@ describe UniboardDocument do
       @document.should be_deleted
       UniboardDocument.find_by_id(@document.id).should be_nil
       UniboardDocument.find_by_id(@document.id, :with_deleted => true).should_not be_nil
-      UniboardPage.find(:all, :conditions => {:uniboard_document_id => @document.id}).should be_empty
+
+      @document.pages.each do |page|
+        UniboardPage.find_by_id(page.id).should be_nil
+      end
     end
 
     it "should be really deleted" do
@@ -266,7 +294,7 @@ describe UniboardDocument do
 
     it 'should be retrived without deleted' do
       collection = UniboardDocument.all
-      
+
       collection.should include(@document)
       collection.should_not include(@document_deleted)
       collection.should include(@document_not_owned)
