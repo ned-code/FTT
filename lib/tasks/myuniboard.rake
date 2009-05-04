@@ -1,5 +1,15 @@
 require 'fileutils'
 
+desc 'Special task for runnig tests on Integrity server'
+task :integrity do
+  cp 'config/database.default.yml', 'config/database.yml'
+  cp 'config/s3.default.yml', 'config/s3.yml'
+
+  Rake::Task['db:migrate:reset'].invoke
+  Rake::Task['spec'].invoke
+  Rake::Task['features'].invoke
+end
+
 namespace :myuniboard do
   
   desc "Bootstrap application"
