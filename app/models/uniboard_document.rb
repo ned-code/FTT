@@ -116,7 +116,7 @@ class UniboardDocument < ActiveRecord::Base
       'updated-at' => updated_at.xmlschema) do |xml_document|
       xml_document.pages do |xml_pages|
         pages.each do |page|
-          xml_pages.page((options[:page_url] ? AWS::S3::S3Object.url_for("documents/#{uuid}/#{page.uuid}.svg", bucket) : ''),
+          xml_pages.page((options[:page_url] ? page.url : ''),
             'uuid' => page.uuid,
             'version' => page.version,
             'created-at' => page.created_at.xmlschema,
