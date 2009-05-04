@@ -2,9 +2,9 @@ class UniboardDocument < ActiveRecord::Base
   acts_as_authorizable
 
   # Set this defaults scope in find_every_with_deleted method
-  default_scope :order => "#{table_name}.updated_at ASC", :conditions => {:deleted_at => nil}
+  default_scope :order => "#{table_name}.updated_at DESC", :conditions => {:deleted_at => nil}, :include => [:pages]
 
-  has_many :pages, :class_name => 'UniboardPage', :order => 'position ASC', :autosave => true, :dependent => :destroy
+  has_many :pages, :class_name => 'UniboardPage', :foreign_key => 'uniboard_document_id', :order => 'position ASC', :autosave => true, :dependent => :destroy
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
   validates_presence_of :bucket
@@ -26,7 +26,7 @@ class UniboardDocument < ActiveRecord::Base
       with = options.delete(:with_deleted)
 
       if with
-        with_exclusive_scope(:find => { :order => "#{table_name}.updated_at ASC" }) do
+        with_exclusive_scope(:find => { :order => "#{table_name}.updated_at ASC", :include => [:pages] }) do
           find_every_without_deleted(options)
         end
       else
