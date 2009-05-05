@@ -10,7 +10,7 @@ describe DocumentsController do
     UserSession.create(@current_user)
   end
 
-  describe 'API' do
+  describe 'XML API' do
 
     before(:each) do
       request.env['HTTP_ACCEPT'] = 'application/xml'
@@ -89,7 +89,7 @@ describe DocumentsController do
           @document_deleted.destroy
 
           @document_not_owned = Factory.create(:uniboard_document)
-          @document.accepts_role 'owner', Factory.create(:user)
+          @document_not_owned.accepts_role 'owner', Factory.create(:user)
         end
 
         it "'GET /documents' should return list of documents owned by current user with deleted documents" do
@@ -122,9 +122,7 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should return 'access denied' id document is deleted" do
-          @document.destroy
-
-          get :show, :id => @document.uuid
+          get :show, :id => @document_deleted.uuid
 
           response.should be_forbidden
         end

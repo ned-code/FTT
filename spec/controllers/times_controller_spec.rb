@@ -10,10 +10,18 @@ describe TimesController do
     UserSession.create(@current_user)
   end
 
-  it 'should get current time server' do
-    get :show
+  describe 'XML API' do
 
-    response.should be_success
-    response.should have_tag('time', assigns(:current_time).xmlschema)
+    before(:each) do
+      request.env['HTTP_ACCEPT'] = 'application/xml'
+    end
+
+    it "'GET /time' should return current time on server" do
+      get :show
+
+      response.should be_success
+      response.should have_tag('time', assigns(:current_time).xmlschema)
+    end
+
   end
 end

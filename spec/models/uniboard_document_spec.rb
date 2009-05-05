@@ -289,7 +289,7 @@ describe UniboardDocument do
       @document_deleted.destroy
 
       @document_not_owned = Factory.create(:uniboard_document)
-      @document_deleted.accepts_role 'owner', Factory.create(:user)
+      @document_not_owned.accepts_role 'owner', Factory.create(:user)
     end
 
     it 'should be retrived without deleted' do
