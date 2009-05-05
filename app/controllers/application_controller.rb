@@ -13,8 +13,9 @@ class ApplicationController < ActionController::Base
     case request.format
     when Mime::XML
       if @current_user && @current_user != :false
-        head :forbidden
+        head :forbidden, :content_type => 'application/xml'
       else
+        headers['CONTENT-TYPE'] = 'application/xml'
         request_http_basic_authentication
       end
 

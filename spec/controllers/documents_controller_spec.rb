@@ -27,12 +27,15 @@ describe DocumentsController do
         post :create, :document => { :payload => mock_file }
 
         response.should be_success
+        response.should respond_with(:content_type => :xml)
+
         response.should_not have_tag('errors')
         response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', assigns(:document).uuid, assigns(:document).version, assigns(:document).created_at.xmlschema, assigns(:document).updated_at.xmlschema) do
           assigns(:document).pages.each do |page|
             with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]', page.uuid, page.version, page.created_at.xmlschema, page.updated_at.xmlschema)
           end
         end
+
         assigns[:document].accepts_role?('owner', @current_user).should be_true
       end
 
@@ -42,10 +45,13 @@ describe DocumentsController do
         post :create, :document => { :payload => mock_file }
 
         response.should_not be_success
+        response.should respond_with(:content_type => :xml)
+
         response.should have_tag('errors') do
           with_tag('error', 'File has invalid format')
         end
         response.should_not have_tag('document')
+
         assigns[:document].accepts_role?('owner', @current_user).should_not be_true
       end
 
@@ -55,10 +61,13 @@ describe DocumentsController do
         post :create, :document => { :payload => mock_file }
 
         response.should_not be_success
+        response.should respond_with(:content_type => :xml)
+
         response.should have_tag('errors') do
           with_tag('error', 'Uuid is invalid')
         end
         response.should_not have_tag('document')
+
         assigns[:document].accepts_role?('owner', @current_user).should_not be_true
       end
 
@@ -74,6 +83,8 @@ describe DocumentsController do
           get :index
 
           response.should be_success
+          response.should respond_with(:content_type => :xml)
+
           response.should have_tag('documents[synchronised-at=?]', assigns[:synchronised_at].xmlschema) do
             without_tag('document')
           end
@@ -99,6 +110,8 @@ describe DocumentsController do
           get :index
 
           response.should be_success
+          response.should respond_with(:content_type => :xml)
+
           response.should have_tag('documents[synchronised-at=?]', assigns[:synchronised_at].xmlschema) do
             with_tag('document[uuid=?][version=?][created-at=?][updated-at=?][deleted=?]', @document.uuid, @document.version, @document.created_at.xmlschema, @document.updated_at.xmlschema, 'false')
             with_tag('document[uuid=?][version=?][created-at=?][updated-at=?][deleted=?]', @document_deleted.uuid, @document_deleted.version, @document_deleted.created_at.xmlschema, @document_deleted.updated_at.xmlschema, 'true')
@@ -110,6 +123,8 @@ describe DocumentsController do
           get :show, :id => @document.uuid
 
           response.should be_success
+          response.should respond_with(:content_type => :xml)
+
           response.should_not have_tag('errors')
           response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', assigns(:document).uuid, assigns(:document).version, assigns(:document).created_at.xmlschema, assigns(:document).updated_at.xmlschema) do
             @document.pages.each do |page|
@@ -122,18 +137,21 @@ describe DocumentsController do
           get :show, :id => @document_not_owned.uuid
 
           response.should be_forbidden
+          response.should respond_with(:content_type => :xml)
         end
 
         it "'GET /documents/:uuid' should return status '403 Forbidden' id document is deleted" do
           get :show, :id => @document_deleted.uuid
 
           response.should be_forbidden
+          response.should respond_with(:content_type => :xml)
         end
 
         it "'GET /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
           get :show, :id => UUID.generate
 
           response.should be_forbidden
+          response.should respond_with(:content_type => :xml)
         end
 
         it "'PUT /documents/:uuid' should update document with valid payload" do
@@ -142,6 +160,8 @@ describe DocumentsController do
           put :update, :id => @document.uuid, :document => { :payload => mock_file }
 
           response.should be_success
+          response.should respond_with(:content_type => :xml)
+
           response.should_not have_tag('errors')
           response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', assigns(:document).uuid, assigns(:document).version, assigns(:document).created_at.xmlschema, assigns(:document).updated_at.xmlschema) do
             assigns(:document).pages.each do |page|
@@ -157,6 +177,8 @@ describe DocumentsController do
           put :update, :id => @document.uuid, :document => { :payload => mock_file }
 
           response.should_not be_success
+          response.should respond_with(:content_type => :xml)
+
           response.should have_tag('errors') do
             with_tag('error', 'Version have already changed on server')
           end
@@ -169,6 +191,8 @@ describe DocumentsController do
           put :update, :id => @document.uuid, :document => { :payload => mock_file }
 
           response.should_not be_success
+          response.should respond_with(:content_type => :xml)
+
           response.should have_tag('errors') do
             with_tag('error', 'File has invalid format')
           end
@@ -181,6 +205,8 @@ describe DocumentsController do
           put :update, :id => @document.uuid, :document => { :payload => mock_file }
 
           response.should_not be_success
+          response.should respond_with(:content_type => :xml)
+
           response.should have_tag('errors') do
             with_tag('error', 'Uuid is invalid')
           end
@@ -193,6 +219,8 @@ describe DocumentsController do
           put :update, :id => @document.uuid, :document => { :payload => mock_file }
 
           response.should_not be_success
+          response.should respond_with(:content_type => :xml)
+
           response.should have_tag('errors') do
             with_tag('error', 'Uuid have changed')
           end
@@ -205,6 +233,7 @@ describe DocumentsController do
           put :update, :id => @document_not_owned.uuid, :document => { :payload => mock_file }
 
           response.should be_forbidden
+          response.should respond_with(:content_type => :xml)
         end
 
         it "'PUT /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
@@ -214,12 +243,15 @@ describe DocumentsController do
           put :update, :id => uuid, :document => { :payload => mock_file }
 
           response.should be_forbidden
+          response.should respond_with(:content_type => :xml)
         end
 
         it "'DELETE /documents/:uuid' should delete document" do
           delete :destroy, :id => @document.uuid
 
           response.should be_success
+          response.should respond_with(:content_type => :xml)
+
           response.should_not have_tag('errors')
 
           UniboardDocument.find_by_id(@document.id).should be_nil
@@ -230,6 +262,7 @@ describe DocumentsController do
           delete :destroy, :id => @document_not_owned.uuid
 
           response.should be_forbidden
+          response.should respond_with(:content_type => :xml)
         end
 
         it "'DELETE /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
@@ -239,6 +272,7 @@ describe DocumentsController do
           delete :destroy, :id => uuid, :document => { :payload => mock_file }
 
           response.should be_forbidden
+          response.should respond_with(:content_type => :xml)
         end
 
       end
@@ -255,30 +289,35 @@ describe DocumentsController do
         get :index
 
         response.should be_unauthorized
+        response.should respond_with(:content_type => :xml)
       end
 
       it "'POST /documents' should return status '401 Unauthorized'" do
         post :create
 
         response.should be_unauthorized
+        response.should respond_with(:content_type => :xml)
       end
 
       it "'GET /documents/:uuid' should return status '401 Unauthorized'" do
         get :show, :id => @document.uuid
 
         response.should be_unauthorized
+        response.should respond_with(:content_type => :xml)
       end
 
       it "'PUT /documents/:uuid' should return status '401 Unauthorized'" do
         put :update, :id => @document.uuid
 
         response.should be_unauthorized
+        response.should respond_with(:content_type => :xml)
       end
 
       it "'DELETE /documents/:uuid' should return status '401 Unauthorized'" do
         delete :destroy, :id => @document.uuid
 
         response.should be_unauthorized
+        response.should respond_with(:content_type => :xml)
       end
 
     end

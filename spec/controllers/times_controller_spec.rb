@@ -20,6 +20,8 @@ describe TimesController do
       get :show
 
       response.should be_success
+      response.should respond_with(:content_type => :xml)
+
       response.should have_tag('time', assigns(:current_time).xmlschema)
     end
 

@@ -35,24 +35,28 @@ describe PagesController do
         get :show, :document_id => @page_not_owned.document.uuid, :id => @page_not_owned.uuid
 
         response.should be_forbidden
+        response.should respond_with(:content_type => :xml)
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' id page is deleted" do
         get :show, :document_id => @page_deleted.document.uuid, :id => @page_deleted.uuid
 
         response.should be_forbidden
+        response.should respond_with(:content_type => :xml)
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' if document does not exist" do
         get :show, :document_id => UUID.generate, :id => UUID.generate
 
         response.should be_forbidden
+        response.should respond_with(:content_type => :xml)
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' if page does not exist" do
         get :show, :document_id => @page.document.uuid, :id => UUID.generate
 
         response.should be_forbidden
+        response.should respond_with(:content_type => :xml)
       end
 
       context 'with s3 storage' do
@@ -61,6 +65,7 @@ describe PagesController do
           get :show, :document_id => @page.document.uuid, :id => @page.uuid
 
           response.should be_redirect
+          response.should respond_with(:content_type => :xml)
         end
 
       end
@@ -77,6 +82,7 @@ describe PagesController do
         get :show, :document_id => @page.document.uuid, :id => @page.uuid
 
         response.should be_unauthorized
+        response.should respond_with(:content_type => :xml)
       end
 
     end
