@@ -17,15 +17,7 @@ describe UniboardDocument do
 
   it { should have_default_scope(:order => "updated_at DESC", :conditions => {:deleted_at => nil}, :include => [:pages]) }
 
-  context 'creation' do
-
-    it 'should be valid with valid payload' do
-      document = Factory.build(:uniboard_document)
-
-      document.should be_valid
-      document.should have(:no).errors
-      document.save.should be_true
-    end
+  context 'newly created' do
 
     it 'should have its version to 1' do
       document = Factory.build(:uniboard_document)
@@ -34,6 +26,18 @@ describe UniboardDocument do
       document.should have(:no).errors
       document.save.should be_true
       document.version.should == 1
+    end
+
+  end
+
+  context 'creation' do
+
+    it 'should be valid with valid payload' do
+      document = Factory.build(:uniboard_document)
+
+      document.should be_valid
+      document.should have(:no).errors
+      document.save.should be_true
     end
 
     it 'should not be valid with empty paylod' do
@@ -108,6 +112,17 @@ describe UniboardDocument do
     end
   end
 
+  context 'recently updated' do
+
+    it 'should have its version incremented' do
+      previous_version = @document.version
+
+      @document.save.should be_true
+      @document.version.should == previous_version + 1
+    end
+
+  end
+
   context 'update' do
 
     it "should be valid with valid payload" do
@@ -116,13 +131,6 @@ describe UniboardDocument do
       @document.should be_valid
       @document.should have(:no).errors
       @document.save.should be_true
-    end
-
-    it 'should have its version incremented' do
-      previous_version = @document.version
-
-      @document.save.should be_true
-      @document.version.should == previous_version + 1
     end
 
     it 'should increment updated page version' do
@@ -192,6 +200,37 @@ describe UniboardDocument do
       @document.save.should_not be_true
     end
 
+    context 'with s3 storage' do
+
+      it 'should send files to s3' do
+        AWS::S3::S3Object.should_not_receive(:delete)
+        AWS::S3::S3Object.should_receive(:store).exactly(2).times
+
+        @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-0update1page.ubz', @document.uuid)
+        @document.save.should be_true
+      end
+
+      it 'should not send files to s3 on update if document is not valid' do
+        AWS::S3::S3Object.should_not_receive(:delete)
+        AWS::S3::S3Object.should_not_receive(:store)
+        @document.stub(:valid?).and_return(false)
+
+        @document.save.should_not be_true
+      end
+
+      it 'should remove deleted files on s3' do
+        AWS::S3::S3Object.should_receive(:delete).exactly(2).times
+        AWS::S3::S3Object.should_not_receive(:store)
+
+        @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-000000delete.ubz', @document.uuid)
+        @document.save.should be_true
+      end
+
+    end
+  end
+
+  context 'existing' do
+
     it "should be deleted" do
       @document.destroy.should be_true
 
@@ -216,52 +255,6 @@ describe UniboardDocument do
       end
     end
 
-    it 'should be really deleted after "marked" deleted' do
-      @document.destroy.should be_true
-      @document = UniboardDocument.find(@document.id, :with_deleted => true)
-
-      @document.destroy!.should be_true
-
-      @document.should be_deleted
-      UniboardDocument.find_by_id(@document.id).should be_nil
-      UniboardDocument.find_by_id(@document.id, :with_deleted => true).should be_nil
-
-      @document.pages.each do |page|
-        UniboardPage.find_by_id(page.id).should be_nil
-      end
-    end
-
-    context 'with s3 storage' do
-
-      it 'should send files to s3' do
-        AWS::S3::S3Object.should_not_receive(:delete)
-        AWS::S3::S3Object.should_receive(:store).exactly(2).times
-
-        @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-0update1page.ubz', @document.uuid)
-        @document.save.should be_true
-      end
-
-      it 'should remove deleted files on s3' do
-        AWS::S3::S3Object.should_receive(:delete).exactly(2).times
-        AWS::S3::S3Object.should_not_receive(:store)
-
-        @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-000000delete.ubz', @document.uuid)
-        @document.save.should be_true
-      end
-
-      it 'should not send files to s3 on update if document is not valid' do
-        AWS::S3::S3Object.should_not_receive(:delete)
-        AWS::S3::S3Object.should_not_receive(:store)
-        @document.stub(:valid?).and_return(false)
-
-        @document.save.should_not be_true
-      end
-
-    end
-  end
-
-  context 'deletion' do
-
     context 'with s3 storage' do
 
       it 'should remove files on s3' do
@@ -285,6 +278,24 @@ describe UniboardDocument do
         @document.destroy.should be_true
       end
 
+    end
+  end
+
+  context 'deleted' do
+
+    it 'should be really deleted after "marked" deleted' do
+      @document.destroy.should be_true
+      @document = UniboardDocument.find(@document.id, :with_deleted => true)
+
+      @document.destroy!.should be_true
+
+      @document.should be_deleted
+      UniboardDocument.find_by_id(@document.id).should be_nil
+      UniboardDocument.find_by_id(@document.id, :with_deleted => true).should be_nil
+
+      @document.pages.each do |page|
+        UniboardPage.find_by_id(page.id).should be_nil
+      end
     end
   end
 

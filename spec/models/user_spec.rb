@@ -6,37 +6,42 @@ describe User do
 
   it { should validate_presence_of(:firstname, :lastname)}
   
-  context 'new user' do
-    it 'should not be active' do
+  context 'newly created' do
+    
+    before(:each) do
       @user = Factory.create(:user)
+    end
 
+    it 'should not have confirmed status' do
       @user.should_not be_confirmed
     end
 
+    it 'should not have registered role' do
+      @user.should_not have_role('registered')
+    end
+
     it 'should be confirmed' do
-      @user = Factory.create(:user)
       @user.confirm!.should be_true
+
       @user.should be_confirmed
-      @user.should_not be_changed
     end
 
-    it 'should be registered after activation' do
-      @user = Factory.create(:user)
+    it 'should have registered role after confirmation' do
       @user.confirm!.should be_true
+
       @user.should have_role('registered')
-      @user.should_not be_changed
     end
 
-    it 'should not save user when is confirmed' do
-      @user = Factory.create(:user)
-      @user.email = 'change@test.com'
+    it 'should not sace changed attributes when confirm' do
+      new_attributes = { :lastname => 'Another' }
 
+      @user.attributes = new_attributes
       @user.confirm!.should be_true
-      @user.confirmed_changed?.should_not be_true
-      @user.email_changed?.should be_true
 
+      @user.should be_changed
       @user.reload
-      @user.should be_confirmed
+      @user.attributes.should_not include(new_attributes)
     end
+    
   end
 end

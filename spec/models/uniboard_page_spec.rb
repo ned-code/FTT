@@ -18,7 +18,7 @@ describe UniboardPage do
 
   end
 
-  context 'creation' do
+  context 'newly created' do
 
     it 'should have its version to 1' do
       page = Factory.build(:uniboard_page)
