@@ -10,6 +10,13 @@ describe UniboardDocument do
     @document.accepts_role 'owner', @user
   end
 
+  it { should validate_format_of(:uuid, '12345678-1234-1234-1234-123456789012') }
+  it { should_not validate_format_of(:uuid, 'another-string') }
+
+  it { should have_many(:pages, :order => 'position ASC', :autosave => true, :dependent => :destroy) }
+
+  it { should have_default_scope(:order => "updated_at DESC", :conditions => {:deleted_at => nil}, :include => [:pages]) }
+
   context 'creation' do
 
     it 'should be valid with valid payload' do

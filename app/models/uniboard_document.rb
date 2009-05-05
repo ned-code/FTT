@@ -2,7 +2,7 @@ class UniboardDocument < ActiveRecord::Base
   acts_as_authorizable
 
   # Set this defaults scope in find_every_with_deleted method
-  default_scope :order => "#{table_name}.updated_at DESC", :conditions => {:deleted_at => nil}, :include => [:pages]
+  default_scope :order => 'updated_at DESC', :conditions => {:deleted_at => nil}, :include => [:pages]
 
   has_many :pages, :class_name => 'UniboardPage', :foreign_key => 'uniboard_document_id', :order => 'position ASC', :autosave => true, :dependent => :destroy
 

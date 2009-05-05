@@ -4,8 +4,8 @@ ENV["RAILS_ENV"] = "test"
 require File.dirname(__FILE__) + "/../config/environment" unless defined?(RAILS_ROOT)
 require 'spec/autorun'
 require 'spec/rails'
-require "email_spec/helpers"
-require "email_spec/matchers"
+require 'email_spec/helpers'
+require 'email_spec/matchers'
 require 'fileutils'
 
 Spec::Runner.configure do |config|
