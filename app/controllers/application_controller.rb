@@ -8,6 +8,23 @@ class ApplicationController < ActionController::Base
 
   filter_parameter_logging :password, :password_confirmation
 
+  # Override from authoriztation plugin to return Forbidden status for XML requests
+  def handle_redirection_with_http_auth
+    case request.format
+    when Mime::XML
+      if @current_user && @current_user != :false
+        head :forbidden
+      else
+        request_http_basic_authentication
+      end
+
+      false  # Want to short-circuit the filters
+    else
+      handle_redirection_without_http_auth
+    end
+  end
+  alias_method_chain :handle_redirection, :http_auth
+
   protected
 
     def current_user_session

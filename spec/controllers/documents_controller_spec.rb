@@ -5,9 +5,6 @@ describe DocumentsController do
 
   before(:each) do
     activate_authlogic
-    @current_user = Factory.create(:confirmed_user)
-    @current_user.is_registered
-    UserSession.create(@current_user)
   end
 
   describe 'XML API' do
@@ -17,6 +14,12 @@ describe DocumentsController do
     end
 
     context 'accessed by a registered user' do
+
+      before(:each) do
+        @current_user = Factory.create(:confirmed_user)
+        @current_user.is_registered
+        UserSession.create(@current_user)
+      end
 
       it "'POST /documents' should create document with valid payload" do
         mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
@@ -115,19 +118,19 @@ describe DocumentsController do
           end
         end
 
-        it "'GET /documents/:uuid' should return 'access denied' if current user is not the owner" do
+        it "'GET /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
           get :show, :id => @document_not_owned.uuid
 
           response.should be_forbidden
         end
 
-        it "'GET /documents/:uuid' should return 'access denied' id document is deleted" do
+        it "'GET /documents/:uuid' should return status '403 Forbidden' id document is deleted" do
           get :show, :id => @document_deleted.uuid
 
           response.should be_forbidden
         end
 
-        it "'GET /documents/:uuid' should return 'access denied' if document does not exist" do
+        it "'GET /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
           get :show, :id => UUID.generate
 
           response.should be_forbidden
@@ -196,7 +199,7 @@ describe DocumentsController do
           response.should_not have_tag('document')
         end
 
-        it "'PUT /documents/:uuid' should return 'access denied' if current user is not the owner" do
+        it "'PUT /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
           mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document_not_owned.uuid)
 
           put :update, :id => @document_not_owned.uuid, :document => { :payload => mock_file }
@@ -204,7 +207,7 @@ describe DocumentsController do
           response.should be_forbidden
         end
 
-        it "'PUT /documents/:uuid' should return 'access denied' if document does not exist" do
+        it "'PUT /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
           uuid = UUID.generate
           mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', uuid)
 
@@ -223,13 +226,13 @@ describe DocumentsController do
           UniboardDocument.find_by_id(@document.id, :with_deleted => true).should_not be_nil
         end
 
-        it "'DELETE /documents/:uuid' should return 'access denied' if current user is not the owner" do
+        it "'DELETE /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
           delete :destroy, :id => @document_not_owned.uuid
 
           response.should be_forbidden
         end
 
-        it "'DELETE /documents/:uuid' should return 'access denied' if document does not exist" do
+        it "'DELETE /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
           uuid = UUID.generate
           mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', uuid)
 
@@ -239,6 +242,45 @@ describe DocumentsController do
         end
 
       end
+    end
+
+    context 'accessed by a anonymous user' do
+
+      before(:each) do
+        @document = Factory.create(:uniboard_document)
+        @document.accepts_role 'owner', Factory.create(:user)
+      end
+
+      it "'GET /documents' should return status '401 Unauthorized'" do
+        get :index
+
+        response.should be_unauthorized
+      end
+
+      it "'POST /documents' should return status '401 Unauthorized'" do
+        post :create
+
+        response.should be_unauthorized
+      end
+
+      it "'GET /documents/:uuid' should return status '401 Unauthorized'" do
+        get :show, :id => @document.uuid
+
+        response.should be_unauthorized
+      end
+
+      it "'PUT /documents/:uuid' should return status '401 Unauthorized'" do
+        put :update, :id => @document.uuid
+
+        response.should be_unauthorized
+      end
+
+      it "'DELETE /documents/:uuid' should return status '401 Unauthorized'" do
+        delete :destroy, :id => @document.uuid
+
+        response.should be_unauthorized
+      end
+
     end
   end
 end

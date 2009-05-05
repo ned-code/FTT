@@ -78,11 +78,18 @@ Spec::Runner.configure do |config|
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
 
-# Overide 'forbidden?' method to use 'response_code' of TestResponse
 class ActionController::TestResponse
+
+  # to test with "should be_forbidden"
   def forbidden?
     response_code == 403
   end
+
+  # to test with "should be_unauthorized"
+  def unauthorized?
+    response_code == 401
+  end
+
 end
 
 # Create an Uploaded UBZ file
