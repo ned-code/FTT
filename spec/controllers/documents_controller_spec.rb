@@ -113,7 +113,7 @@ describe DocumentsController do
           response.should_not have_tag('errors')
           response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]', assigns(:document).uuid, assigns(:document).version, assigns(:document).created_at.xmlschema, assigns(:document).updated_at.xmlschema) do
             @document.pages.each do |page|
-              with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]', page.uuid, page.version, page.created_at.xmlschema, page.updated_at.xmlschema, /^http/)
+              with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]', page.uuid, page.version, page.created_at.xmlschema, page.updated_at.xmlschema)
             end
           end
         end

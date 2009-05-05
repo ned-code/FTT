@@ -15,7 +15,7 @@ class DocumentsController < ApplicationController
     
     respond_to do |format|
       if @document && permit?('owner of document')
-        format.xml { render :xml => @document.to_xml(:page_url => true) }
+        format.xml { render :xml => @document.to_xml }
       else
         format.xml { head :forbidden }
       end

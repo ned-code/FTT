@@ -7,7 +7,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'documents/delete_all',
     :controller => 'documents', :action => 'destroy_all',
     :conditions => { :method => :get }
-  map.resources :documents
+  map.resources :documents do |document|
+    document.resources :pages
+  end
 
   map.root :controller => 'sessions', :action => 'new'
 end
