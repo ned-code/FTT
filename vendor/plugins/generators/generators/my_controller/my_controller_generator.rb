@@ -1,6 +1,6 @@
 require 'rails_generator/generators/components/controller/controller_generator'
 
-class RspecControllerGenerator < ControllerGenerator
+class MyControllerGenerator < ControllerGenerator
 
   def manifest
     record do |m|
@@ -13,6 +13,7 @@ class RspecControllerGenerator < ControllerGenerator
       m.directory File.join('app/views', class_path, file_name)
       m.directory File.join('spec/controllers', class_path)
       m.directory File.join('spec/helpers', class_path)
+      m.directory File.join('spec/routing', class_path)
 
       # Controller spec, class, and helper.
       m.template 'controller_spec.rb',
@@ -20,6 +21,9 @@ class RspecControllerGenerator < ControllerGenerator
 
       m.template 'helper_spec.rb',
         File.join('spec/helpers', class_path, "#{file_name}_helper_spec.rb")
+
+      m.template 'routing_spec.rb',
+        File.join('spec/routing', class_path, "#{file_name}_routing_spec.rb")
 
       m.template 'controller:controller.rb',
         File.join('app/controllers', class_path, "#{file_name}_controller.rb")
