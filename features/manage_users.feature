@@ -5,6 +5,8 @@ Feature: Manage users
     When I fill in "email" with "test.cucumber@test.com"
     And I fill in "password" with "test"
     And I fill in "password confirmation" with "test"
+    And I fill in "firstname" with "John"
+    And I fill in "lastname" with "Doe"
     And I press "Create"
     Then I should see "registered"
     And I should receive an email

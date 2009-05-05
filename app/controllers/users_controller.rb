@@ -7,21 +7,29 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.xml { render :xml => @users }
     end
   end
 
   def show
     @user = User.find(params[:id])
 
-    respond_to do |format|
-      format.html
-      format.xml { render :xml => @user }
+    if @user == current_user || permit?('administrator')
+
+      respond_to do |format|
+          format.html
+      end
+
+    else
+      handle_redirection
     end
   end
 
   def new
     @user = User.new
+
+    respond_to do |format|
+      format.html { render :action => 'new' }
+    end
   end
 
   def create
@@ -45,10 +53,8 @@ class UsersController < ApplicationController
             redirect_to root_url
           end
         end
-        format.xml  { render :xml => @user, :status => :ok, :location => @user }
       else
         format.html { render :action => 'new' }
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -56,56 +62,82 @@ class UsersController < ApplicationController
   def confirm
     @user = User.find_using_perishable_token(params[:id])
 
-    if @user and @user.confirm!
-      @user.deliver_registration_confirmation_email!
+    respond_to do |format|
+      format.html do
+        
+        if @user and @user.confirm!
+          @user.deliver_registration_confirmation_email!
 
-      reset_session
-      UserSession.create(@user)
+          reset_session
+          UserSession.create(@user)
 
-      flash[:notice] = I18n.t 'flash.notice.user_confirmed'
-      redirect_to root_url
-    else
-      flash[:notice] = I18n.t 'flash.notice.not_find_user_by_perishable_token'
-      redirect_to new_session_url
+          flash[:notice] = I18n.t 'flash.notice.user_confirmed'
+          redirect_to root_url
+        else
+          flash[:notice] = I18n.t 'flash.notice.not_find_user_by_perishable_token'
+          redirect_to new_session_url
+        end
+
+      end
     end
   end
 
   def edit
     @user = User.find(params[:id])
+
+    if @user == current_user || permit?('administrator')
+
+      respond_to do |format|
+        format.html { render :action => 'edit' }
+      end
+      
+    else
+      handle_redirection
+    end
   end
 
   def update
     @user = User.find(params[:id])
 
-    respond_to do |format|
-      if @user.update_attributes(params[:user])
-        format.html do
-          flash[:notice] = I18n.t 'flash.notice.user_updated'
-          redirect_to edit_user_url(@user)
+    if @user == current_user || permit?('administrator')
+      respond_to do |format|
+
+        if @user.update_attributes(params[:user])
+          format.html do
+            flash[:notice] = I18n.t 'flash.notice.user_updated'
+            redirect_to edit_user_url(@user)
+          end
+        else
+          format.html { render :action => 'edit '}
         end
-        format.xml  { render :xml => @user, :status => :ok, :location => @user }
-      else
-        format.html { render :action => 'edit '}
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
+
       end
+    else
+      handle_redirection
     end
   end
 
   def destroy
     @user = User.find(params[:id])
-    @user.destroy
 
-    respond_to do |format|
-      format.html do
-        if @user != current_user
-          flash[:notice] = I18n.t 'flash.notice.user_destroyed'
-          redirect_to users_url
-        else
-          flash[:notice] = I18n.t 'flash.notice.user_destroyed'
-          redirect_to root_url
+    if @user == current_user || permit?('administrator')
+      respond_to do |format|
+
+        @user.destroy
+
+        format.html do
+          if current_user.is_administrator?
+            flash[:notice] = I18n.t 'flash.notice.user_destroyed'
+            redirect_to users_url
+          else
+            flash[:notice] = I18n.t 'flash.notice.user_destroyed'
+            redirect_to root_url
+          end
         end
+
       end
-      format.xml { head :ok }
+    else
+      handle_redirection
     end
   end
 end

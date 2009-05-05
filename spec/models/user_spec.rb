@@ -3,6 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe User do
   it { should be_built_by_factory }
   it { should be_created_by_factory }
+
+  it { should validate_presence_of(:firstname, :lastname)}
   
   context 'new user' do
     it 'should not be active' do

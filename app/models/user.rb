@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
   acts_as_authorized_user
   acts_as_authorizable
 
+  validates_presence_of :firstname, :lastname
+
   def documents(*args)
     options = args.extract_options!
     UniboardDocument.send(:validate_find_options, options)

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090429081448) do
+ActiveRecord::Schema.define(:version => 20090505124451) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -59,6 +59,8 @@ ActiveRecord::Schema.define(:version => 20090429081448) do
     t.datetime "last_login_at"
     t.string   "current_login_ip"
     t.string   "last_login_ip"
+    t.string   "firstname"
+    t.string   "lastname"
   end
 
 end
