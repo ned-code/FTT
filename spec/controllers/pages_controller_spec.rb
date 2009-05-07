@@ -80,7 +80,7 @@ describe PagesController do
           get :show, :document_id => @page.document.id, :id => @page.id
 
           response.should have_tag("#page_#{@page.id}") do
-            with_tag('img[src=?]', @page.url)
+            with_tag('iframe[src=?]', @page.url)
           end
         end
 
