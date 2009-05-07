@@ -234,7 +234,9 @@ describe UniboardDocument do
     it "should have pages when find by id" do
       @document = UniboardDocument.find_by_id(@document.id)
 
-      @document.should have_at_most(1).pages
+      puts @document.pages.count
+
+      @document.should have_at_l(1).pages
     end
 
     it "should be deleted" do
