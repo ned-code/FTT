@@ -2,7 +2,7 @@
   <li><%= link_to "top", documents_path %></li>
 </ul>
 
-<ul id="document_<%= @document.id %>">
+<ul id="document_<%= @document.id %>" class="page_list">
   <% @document.pages.each do |page| -%>
     <li id="page_<%= page.id %>"><%= link_to image_tag(page.thumbnail_url), document_page_path(@document, page) %></li>
   <% end -%>

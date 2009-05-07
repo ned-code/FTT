@@ -231,6 +231,12 @@ describe UniboardDocument do
 
   context 'existing' do
 
+    it "should have pages when find by id" do
+      @document = UniboardDocument.find_by_id(@document.id)
+
+      @document.should have_at_most(1).pages
+    end
+
     it "should be deleted" do
       @document.destroy.should be_true
 

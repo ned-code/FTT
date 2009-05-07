@@ -1,4 +1,4 @@
-<ul id="documents">
+<ul id="documents" class="document_list">
   <% @documents.each do |document| -%>
     <li id="document_<%= document.id %>"><%= link_to image_tag(document.pages.first.thumbnail_url), document_path(document) %></li>
   <% end -%>
