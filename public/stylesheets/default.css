@@ -50,11 +50,16 @@ a:hover { color: #fff; background-color:#000; }
 #errorExplanation ul li {
   font-size: 12px;
   list-style: square;
+  margin: 4px;
 }
 
 .navigation li {
   float: left;
   list-style-type: none;
+}
+
+.document_list {
+  float: left;
 }
 
 .document_list li {
