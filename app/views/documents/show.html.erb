@@ -1,0 +1,9 @@
+<ul id="document_navigation">
+  <li><%= link_to "top", documents_path %></li>
+</ul>
+
+<ul id="document_<%= @document.id %>">
+  <% @document.pages do |page| -%>
+    <li id="page_<%= page.id %>"><%= link_to image_tag(page.thumbnail_url), document_page_path(@document, page) %></li>
+  <% end -%>
+</ul>

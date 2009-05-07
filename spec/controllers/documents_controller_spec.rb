@@ -7,6 +7,103 @@ describe DocumentsController do
     activate_authlogic
   end
 
+  describe 'Web access' do
+    before(:each) do
+      request.env['HTTP_ACCEPT'] = '*/*'
+    end
+
+    context 'accessed by a registered user' do
+
+      before(:each) do
+        @current_user = Factory.create(:confirmed_user)
+        @current_user.is_registered
+        UserSession.create(@current_user)
+      end
+
+      context 'without associated document' do
+
+        before(:each) do
+          @document = Factory.create(:uniboard_document)
+          @document.accepts_role 'owner', Factory.create(:user)
+        end
+
+        it "'GET /documents' should render empty list" do
+          get :index
+
+          response.should be_success
+          response.should respond_with(:content_type => :html)
+
+          response.should_not have_tag("#document_#{@document.id}")
+        end
+
+      end
+
+      context 'with associated document' do
+
+        before(:each) do
+          @document = Factory.create(:uniboard_document)
+          @document.accepts_role 'owner', @current_user
+
+          @document_deleted = Factory.create(:uniboard_document)
+          @document_deleted.accepts_role 'owner', @current_user
+          @document_deleted.destroy
+
+          @document_not_owned = Factory.create(:uniboard_document)
+          @document_not_owned.accepts_role 'owner', Factory.create(:user)
+        end
+
+        it "'GET /documents' should render list of documents owned by current user without deleted documents" do
+          get :index
+
+          response.should be_success
+          response.should respond_with(:content_type => :html)
+
+          response.should have_tag("#document_#{@document.id} a[href=?]", document_path(@document)) do
+            with_tag('img[src=?]', @document.pages.first.thumbnail_url)
+          end
+          response.should_not have_tag("#document_#{@document_deleted.id}")
+          response.should_not have_tag("#document_#{@document_not_owned.id}")
+        end
+
+        it "'GET /documents/:uuid' should render list of document pages" do
+          get :show, :id => @document.id
+
+          response.should be_success
+          response.should respond_with(:content_type => :html)
+
+          response.should have_tag("#document_#{@document.id}")
+          @document.pages do |page|
+            response.should have_tag("#page_#{page.id} a[href=?]", document_page_path(page.document, page)) do
+              with_tag('img[src=?][id=12345]', page.thumbnail_url)
+            end
+          end
+        end
+
+        it "'GET /documents/:uuid' should render error 404 if current user is not the owner" do
+          get :show, :id => @document_not_owned.id
+
+          response.should be_not_found
+          response.should respond_with(:content_type => :html)
+        end
+
+        it "'GET /documents/:uuid' should render error 404 id document is deleted" do
+          get :show, :id => @document_deleted.id
+
+          response.should be_not_found
+          response.should respond_with(:content_type => :html)
+        end
+
+        it "'GET /documents/:uuid' should render error 404 if document does not exist" do
+          get :show, :id => 100_000_000_000
+
+          response.should be_not_found
+          response.should respond_with(:content_type => :html)
+        end
+
+      end
+    end
+  end
+
   describe 'XML API' do
 
     before(:each) do

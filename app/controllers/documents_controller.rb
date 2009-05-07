@@ -3,9 +3,10 @@ class DocumentsController < ApplicationController
 
   def index
     @synchronised_at = Time.now.utc
-    @documents = current_user.documents(:with_deleted => true)
+    @documents = current_user.documents(:with_deleted => (request.format == Mime::XML))
 
     respond_to do |format|
+      format.html
       format.xml
     end
   end
@@ -15,8 +16,10 @@ class DocumentsController < ApplicationController
     
     respond_to do |format|
       if @document && permit?('owner of document')
+        format.html
         format.xml { render :xml => @document.to_xml }
       else
+        format.html { render_optional_error_file(:not_found) }
         format.xml { head :forbidden }
       end
     end
@@ -68,13 +71,13 @@ class DocumentsController < ApplicationController
   end
 
   def destroy_all
-    current_user.documents.each do |document|
-      document.destroy!
-    end
-#    UniboardDocument.delete_all!
-#    Role.delete_all
-#    RolesUser.delete_all
-#    User.all.each {|u| u.is_registered }
+#    current_user.documents.each do |document|
+#      document.destroy!
+#    end
+    UniboardDocument.delete_all!
+    Role.delete_all
+    RolesUser.delete_all
+    User.all.each {|u| u.is_registered }
 
     respond_to do |format|
       format.html { render :text => "Boom ;-)" }

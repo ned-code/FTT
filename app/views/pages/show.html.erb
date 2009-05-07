@@ -1,0 +1,13 @@
+<ul id="page_navigation">
+  <% if previous_page = @page.previous -%>
+    <li><%= link_to "previous", document_page_path(@page.document, previous_page) %></li>
+  <% end -%>
+  <li><%= link_to "top", document_path(@page.document) %></li>
+  <% if next_page = @page.next -%>
+    <li><%= link_to "next", document_page_path(@page.document, next_page) %></li>
+  <% end -%>
+</ul>
+
+<div id="page_<%= @page.id %>">
+ <%= image_tag @page.url %>
+</div>

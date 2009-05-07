@@ -7,6 +7,87 @@ describe PagesController do
     activate_authlogic
   end
 
+  describe 'Web access' do
+    before(:each) do
+      request.env['HTTP_ACCEPT'] = '*/*'
+    end
+
+    context 'accessed by a registered user' do
+
+      before(:each) do
+        @current_user = Factory.create(:confirmed_user)
+        @current_user.is_registered
+        UserSession.create(@current_user)
+
+        @page = Factory.create(:uniboard_document).pages.first
+        @page.document.accepts_role 'owner', @current_user
+
+        @page_deleted = Factory.create(:uniboard_document).pages.first
+        @page_deleted.document.accepts_role 'owner', @current_user
+        @page_deleted.destroy
+
+        @page_not_owned = Factory.create(:uniboard_document).pages.first
+        @page_not_owned.document.accepts_role 'owner', Factory.create(:user)
+      end
+
+      it "'GET /documents/:uuid/pages/:uuid' should render" do
+        get :show, :document_id => @page.document.id, :id => @page.id
+
+        response.should be_success
+        response.should respond_with(:content_type => :html)
+      end
+
+      it "'GET /documents/:uuid/pages/:uuid' should render with page navigation" do
+        get :show, :document_id => @page.document.id, :id => @page.id
+
+        response.should have_tag('#page_navigation') do
+          with_tag('a[href=?]', document_path(@page.document))
+          with_tag('a[href=?]', document_page_path(@page.document, @page.next))
+        end
+      end
+
+      it "'GET /documents/:uuid/pages/:uuid' should render error 404 if current user is not the owner" do
+        get :show, :document_id => @page_not_owned.document.id, :id => @page_not_owned.id
+
+        response.should be_not_found
+        response.should respond_with(:content_type => :html)
+      end
+
+      it "'GET /documents/:uuid/pages/:uuid' should render error 404 id page is deleted" do
+        get :show, :document_id => @page_deleted.document.id, :id => @page_deleted.id
+
+        response.should be_not_found
+        response.should respond_with(:content_type => :html)
+      end
+
+      it "'GET /documents/:uuid/pages/:uuid' should render error 404 if document does not exist" do
+        get :show, :document_id => 100_000_000_000, :id => 100_000_000_000
+
+        response.should be_not_found
+        response.should respond_with(:content_type => :html)
+      end
+
+      it "'GET /documents/:uuid/pages/:uuid' should render 404 if page does not exist" do
+        get :show, :document_id => @page.document.id, :id => 100_000_000_000
+
+        response.should be_not_found
+        response.should respond_with(:content_type => :html)
+      end
+
+      context 'with s3 storage' do
+
+        it "'GET /documents/:uuid/pages/:uuid' should render" do
+          get :show, :document_id => @page.document.id, :id => @page.id
+
+          response.should have_tag("#page_#{@page.id}") do
+            with_tag('img[src=?]', @page.url)
+          end
+        end
+
+      end
+    end
+  end
+
   describe 'XML API' do
 
     before(:each) do
