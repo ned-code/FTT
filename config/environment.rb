@@ -39,7 +39,7 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'authlogic'
   config.gem 'uuid'
-  config.gem 'aws-s3', :lib => 'aws/s3'
+  config.gem 'right_aws'
   config.gem 'rubyzip', :lib => 'zip/zip'
   config.gem 'mime-types', :lib => 'mime/types'
 

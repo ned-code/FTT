@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe UniboardPage do
-  it { should be_built_by_factory }
-  it { should be_created_by_factory }
+  it('') { should be_built_by_factory }
+  it('') { should be_created_by_factory }
 
   context 'newly created' do
 

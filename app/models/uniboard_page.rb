@@ -8,16 +8,18 @@ class UniboardPage < ActiveRecord::Base
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
-  def url
-    establish_connection!
+  after_initialize :initialize_storage
 
-    AWS::S3::S3Object.url_for("documents/#{document.uuid}/#{uuid}.svg", bucket)
+  def config
+    UniboardDocument.config
+  end
+
+  def url
+    raise NotImplementedError, 'Must be implemented in the storage module'
   end
 
   def thumbnail_url
-    establish_connection!
-
-    AWS::S3::S3Object.url_for("documents/#{document.uuid}/#{uuid}.thumbnail.jpg", bucket)
+    raise NotImplementedError, 'Must be implemented in the storage module'
   end
 
   def next
@@ -28,27 +30,18 @@ class UniboardPage < ActiveRecord::Base
     UniboardPage.find(:first, :conditions => ['position < ? AND uniboard_document_id = ?', self.position, self.uniboard_document_id], :order => 'position DESC', :include => [:document])
   end
 
-  # return bucket name from document
-  def bucket
-    document.bucket
-  end
-
   private
 
-    def s3_config
-      document.class.s3_config
-    end
-
-    def establish_connection!
-      unless AWS::S3::Base.connected?
-        AWS::S3::Base.establish_connection!(
-            :access_key_id     => s3_config['aws_access_key'],
-            :secret_access_key => s3_config['aws_secret_access_key'],
-            :use_ssl           => s3_config['use_ssl'] || true,
-            :persistent        => s3_config['persistent'] || true
-          )
+    # Storage
+    def initialize_storage
+      case config[:storage]
+      when :s3
+        require 'storage/s3'
+      else
+        require 'storage/filesystem'
       end
 
-      AWS::S3::Bucket.create(bucket) unless AWS::S3::Bucket.list.find {|b| b.name == bucket}
+      @storage_module = Storage.const_get(config[:storage].to_s.capitalize).const_get('UniboardPage')
+      self.extend(@storage_module)
     end
 end

@@ -7,14 +7,11 @@ class UniboardDocument < ActiveRecord::Base
   has_many :pages, :class_name => 'UniboardPage', :foreign_key => 'uniboard_document_id', :order => 'position ASC', :autosave => true, :dependent => :destroy
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
-  validates_presence_of :bucket
 
-  before_validation :set_bucket
+  after_initialize :initialize_storage
   before_update :increment_version
-  before_save :upload_document_to_s3
-  after_destroy :destroy_document_on_s3
-
-  cattr_accessor :s3_config
+  before_save :save_payload
+  after_destroy :destroy_payload
 
   class << self
 
@@ -35,11 +32,22 @@ class UniboardDocument < ActiveRecord::Base
     end
     alias_method_chain(:find_every, :deleted)
 
+    def config
+      @@config ||= {}
+
+      yield @@config if block_given?
+
+      @@config
+    end
+  end
+
+  def config
+    self.class.config
   end
 
   def payload=(payload)
     @error_on_file = @error_on_version = false
-    @pages_to_delete_on_s3 = []
+    @pages_to_delete_on_storage = []
 
     # Extract UUID from filename
     if payload.respond_to?(:original_filename)
@@ -89,7 +97,7 @@ class UniboardDocument < ActiveRecord::Base
 
         old_pages.each do |page|
           page.mark_for_destruction
-          @pages_to_delete_on_s3 << page.uuid
+          @pages_to_delete_on_storage << page.uuid
         end
       end
     rescue => e
@@ -99,9 +107,12 @@ class UniboardDocument < ActiveRecord::Base
     end
   end
 
+  def payload
+    raise NotImplementedError, 'Must be implemented in the storage module'
+  end
+
   def to_xml(options = {})
     require 'builder' unless defined?(Builder)
-    establish_connection!
 
     options[:indent] ||= 2
     options.reverse_merge!({:builder => Builder::XmlMarkup.new(:indent => options[:indent])})
@@ -126,7 +137,7 @@ class UniboardDocument < ActiveRecord::Base
     end
   end
 
-  # Mark document deleted and destroy pages records and files on s3.
+  # Mark document deleted and destroy associated pages and resources and files on storage.
   def destroy_with_keeping
     transaction do
       unless new_record?
@@ -141,77 +152,28 @@ class UniboardDocument < ActiveRecord::Base
       pages.each do |page|
         page.destroy
       end
-      destroy_document_on_s3
+
+      destroy_payload
     end
 
     freeze
   end
   alias_method_chain(:destroy, :keeping)
 
-  # Realy destroy document
+  # Normal ActiveRecord Destroy process (set 'deleted_at' attribute
+  # to compatibility with custom destroy method)
   def destroy!
     self.deleted_at = Time.now.utc unless frozen?
 
     destroy_without_keeping
   end
 
-  # Return true if document is marked deleted
+  # Return true if document is deleted or destroyed
   def deleted?
     !self.deleted_at.nil?
   end
 
   private
-
-    def s3_config
-      self.class.s3_config
-    end
-
-    def establish_connection!
-      unless AWS::S3::Base.connected?
-        AWS::S3::Base.establish_connection!(
-            :access_key_id     => s3_config['aws_access_key'],
-            :secret_access_key => s3_config['aws_secret_access_key'],
-            :use_ssl           => s3_config['use_ssl'] || true,
-            :persistent        => s3_config['persistent'] || true
-          )
-      end
-
-      AWS::S3::Bucket.create(bucket) unless AWS::S3::Bucket.list.find {|b| b.name == bucket}
-    end
-
-    # Before save
-    def upload_document_to_s3
-      return unless @tempfile
-      establish_connection!
-
-      @pages_to_delete_on_s3.each do |page_uuid|
-        AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.svg", bucket)
-        AWS::S3::S3Object.delete("documents/#{uuid}/#{page_uuid}.thumbnail.jpg", bucket)
-      end
-      @pages_to_delete_on_s3.clear
-
-      Zip::ZipInputStream::open(@tempfile.path) do |file|
-        while (entry = file.get_next_entry)
-          next if entry.name =~ /\/$/ or entry.name == "#{uuid}.ub"
-          s3_file_name = "documents/#{uuid}/#{entry.name}"
-          s3_content_type = get_content_type_from_mime_types(s3_file_name)
-          s3_file_access = s3_file_name =~ /#{UUID_FORMAT_REGEX}\.svg$/ ? :private : :public_read
-
-          AWS::S3::S3Object.store(s3_file_name, file.read, bucket, :access => s3_file_access, :content_type => s3_content_type)
-        end
-      end
-
-      @tempfile.close
-      @tempfile = nil
-    end
-
-    def destroy_document_on_s3
-      establish_connection!
-
-      AWS::S3::Bucket.objects(bucket, :prefix => "documents/#{uuid}").collect{|object| object.path}.each do |object_path|
-        AWS::S3::S3Object.delete(object_path, bucket)
-      end
-    end
 
     def get_content_type_from_mime_types(filename)
       MIME::Types.of(File.extname(filename)).first.content_type
@@ -224,13 +186,30 @@ class UniboardDocument < ActiveRecord::Base
     end
 
     # Validations
-    def set_bucket
-      self.bucket ||= s3_config['bucket_base_name']
-    end
-
     def validate
       errors.add('version', "have already changed on server")  if @error_on_version
       errors.add('file', "has invalid format") if @error_on_file
       errors.add('uuid', "have changed") if !uuid_was.blank? and uuid_changed?
+    end
+
+    # Storage
+    def initialize_storage
+      case config[:storage]
+      when :s3
+        require 'storage/s3'
+      else
+        require 'storage/filesystem'
+      end
+
+      @storage_module = Storage.const_get(config[:storage].to_s.capitalize).const_get('UniboardDocument')
+      self.extend(@storage_module)
+    end
+
+    def save_payload
+      raise NotImplementedError, 'Must be implemented in the storage module'
+    end
+
+    def destroy_payload
+      raise NotImplementedError, 'Must be implemented in the storage module'
     end
 end
