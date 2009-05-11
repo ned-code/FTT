@@ -2,7 +2,7 @@ class Notifier < ActionMailer::Base
   default_url_options[:host] = "localhost"
 
   def user_registration_activation_email(user)
-    subject    I18n.t 'email.user_registration_activation_email.subject'
+    subject    I18n.t('email.user_registration_activation_email.subject')
     recipients user.email
     from       'no-reply@myuniboard.com'
     sent_on    Time.now
@@ -11,7 +11,7 @@ class Notifier < ActionMailer::Base
   end
 
   def user_registration_confirmation_email(user)
-    subject    I18n.t 'email.user_registration_confirmation_email.subject'
+    subject    I18n.t('email.user_registration_confirmation_email.subject')
     recipients user.email
     from       'no-reply@myuniboard.com'
     sent_on    Time.now
