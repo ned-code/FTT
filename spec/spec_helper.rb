@@ -2,6 +2,7 @@
 # from the project root directory.
 ENV["RAILS_ENV"] = "test"
 require File.dirname(__FILE__) + "/../config/environment" unless defined?(RAILS_ROOT)
+require 'spec'
 require 'spec/autorun'
 require 'spec/rails'
 require 'email_spec/helpers'
@@ -31,7 +32,8 @@ Spec::Runner.configure do |config|
     end
 
     # Right AWS mocks
-    unless ENV['TEST_S3_CONNECTION']
+    TEST_S3_CONNECTION = (ENV['TEST_S3_CONNECTION'] || false) unless Object.const_defined?('TEST_S3_CONNECTION')
+    unless TEST_S3_CONNECTION
       @mock_s3 = AppMocks::RightAws::S3.new
       RightAws::S3.stub!(:new).and_return(@mock_s3)
     end

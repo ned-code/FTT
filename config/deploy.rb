@@ -10,7 +10,7 @@ require 'capistrano/ext/multistage'
 set :scm, :git
 set :repository, "git@git.assembla.com:myuniboard.git"
 set :git_shallow_clone, 1
-set :short_branch, "master"
+set :short_branch, "right-aws"
 set :ssh_options, { :forward_agent => true }
 
 # NOTE: for some reason Capistrano requires you to have both the public and
