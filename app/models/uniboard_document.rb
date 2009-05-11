@@ -108,7 +108,7 @@ class UniboardDocument < ActiveRecord::Base
   end
 
   def payload
-    raise NotImplementedError, 'Must be implemented in the storage module'
+    raise NotImplementedError, "Must be implemented in the '#{config[:storage].to_s}' storage module"
   end
 
   def to_xml(options = {})
@@ -138,7 +138,8 @@ class UniboardDocument < ActiveRecord::Base
   end
 
   # Mark document deleted and destroy associated pages and resources and files on storage.
-  def destroy_with_keeping
+  alias_method :destroy_without_mark_deleted, :destroy
+  def destroy
     transaction do
       unless new_record?
         connection.update(
@@ -158,14 +159,13 @@ class UniboardDocument < ActiveRecord::Base
 
     freeze
   end
-  alias_method_chain(:destroy, :keeping)
 
   # Normal ActiveRecord Destroy process (set 'deleted_at' attribute
   # to compatibility with custom destroy method)
   def destroy!
     self.deleted_at = Time.now.utc unless frozen?
 
-    destroy_without_keeping
+    destroy_without_mark_deleted
   end
 
   # Return true if document is deleted or destroyed
@@ -206,10 +206,10 @@ class UniboardDocument < ActiveRecord::Base
     end
 
     def save_payload
-      raise NotImplementedError, 'Must be implemented in the storage module'
+      raise NotImplementedError, "Must be implemented in the '#{config[:storage].to_s}' storage module"
     end
 
     def destroy_payload
-      raise NotImplementedError, 'Must be implemented in the storage module'
+      raise NotImplementedError, "Must be implemented in the '#{config[:storage].to_s}' storage module"
     end
 end
