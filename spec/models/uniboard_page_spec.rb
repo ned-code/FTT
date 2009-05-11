@@ -4,20 +4,38 @@ describe UniboardPage do
   it('') { should be_built_by_factory }
   it('') { should be_created_by_factory }
 
-  context 'newly created' do
+  shared_examples_for 'page with s3 storage' do
 
-    it 'should have its version to 1' do
-      page = Factory.build(:uniboard_page)
-
-      page.should be_valid
-      page.should have(:no).errors
-      page.save.should be_true
-      page.version.should == 1
+    before(:each) do
+      UniboardDocument.config[:storage] = :s3
     end
 
   end
 
-  context 'exists' do
+  context 'recently created' do
+
+    shared_examples_for 'page recently created' do
+
+      it 'should have its version to 1' do
+        page = Factory.build(:uniboard_page)
+
+        page.should be_valid
+        page.should have(:no).errors
+        page.save.should be_true
+        page.version.should == 1
+      end
+
+    end
+
+    context 'with s3 storage' do
+      it_should_behave_like 'page with s3 storage'
+      it_should_behave_like 'page recently created'
+
+    end
+
+  end
+
+  context 'existing' do
     
     before(:each) do
       @user = Factory.create(:user)
@@ -25,7 +43,7 @@ describe UniboardPage do
       @page.document.accepts_role 'owner', @user
     end
 
-    context 'with s3 storage' do
+    shared_examples_for 'page existing' do
 
       it 'should have url' do
         @page.url.should =~ URI_FORMAT_REGEX
@@ -34,6 +52,12 @@ describe UniboardPage do
       it 'should have thumnail url' do
         @page.thumbnail_url.should =~ URI_FORMAT_REGEX
       end
+
+    end
+
+    context 'with s3 storage' do
+      it_should_behave_like 'page with s3 storage'
+      it_should_behave_like 'page existing'
 
     end
   end
