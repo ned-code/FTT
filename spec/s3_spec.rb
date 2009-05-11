@@ -1,7 +1,7 @@
 TEST_S3_CONNECTION = (ENV['TEST_S3_CONNECTION'] || true) unless Object.const_defined?('TEST_S3_CONNECTION')
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-NB_TEST_S3_CONNECTION = ENV['NB_TEST_S3_CONNECTION'] || 10
+NB_TEST_S3_CONNECTION = ENV['NB_TEST_S3_CONNECTION'].to_i || 10
 
 describe 'Documents' do
 
