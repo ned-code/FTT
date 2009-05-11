@@ -8,10 +8,9 @@ require 'email_spec/helpers'
 require 'email_spec/matchers'
 require 'fileutils'
 
+require 'spec/mocks/right_aws'
+
 Spec::Runner.configure do |config|
-  # If you're not using ActiveRecord you should remove these
-  # lines, delete config/database.yml and disable :active_record
-  # in your config/boot.rb
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
@@ -22,62 +21,31 @@ Spec::Runner.configure do |config|
   config.include(Authlogic::TestCase)
 
   config.before(:all) do
-    @s3_config = YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV]
-
     FileUtils.mkdir_p File.join(RAILS_ROOT, 'spec', 'tmp', 'files')
   end
 
   config.before(:each) do
-#    AWS::S3::Base.stub!(:connected?).and_return(true)
-#    AWS::S3::Base.stub!(:establish_connection!).and_return(true)
-#    AWS::S3::Bucket.stub!(:objects).and_return([])
-#    AWS::S3::S3Object.stub!(:delete).and_return(true)
-#    AWS::S3::S3Object.stub!(:store).and_return(true)
-#    AWS::S3::S3Object.stub!(:url_for).and_return('http://s3.amazonaws.com/') # TODO: Dynamic result with realistic path to page
-#    AWS::S3::Bucket.stub!(:list).and_return([])
-#    AWS::S3::Bucket.stub!(:create).and_return(true)
+    # Reset s3 config to force to load
+    Storage::S3::Configuration.class_eval do
+      @@config = nil
+    end
+
+    # Right AWS mocks
+    unless ENV['TEST_S3_CONNECTION']
+      @mock_s3 = AppMocks::RightAws::S3.new
+      RightAws::S3.stub!(:new).and_return(@mock_s3)
+    end
   end
 
-  # Remove temporary fixtures filess
   config.after(:each) do
+    # Remove temporary fixtures filess
     Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'files', '*')].each do |file|
       FileUtils.rm file
     end
   end
-
-  # == Fixtures
-  #
-  # You can declare fixtures for each example_group like this:
-  #   describe "...." do
-  #     fixtures :table_a, :table_b
-  #
-  # Alternatively, if you prefer to declare them only once, you can
-  # do so right here. Just uncomment the next line and replace the fixture
-  # names with your fixtures.
-  #
-  # config.global_fixtures = :table_a, :table_b
-  #
-  # If you declare global fixtures, be aware that they will be declared
-  # for all of your examples, even those that don't use them.
-  #
-  # You can also declare which fixtures to use (for example fixtures for test/fixtures):
-  #
-  # config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
-  #
-  # == Mock Framework
-  #
-  # RSpec uses it's own mocking framework by default. If you prefer to
-  # use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
-  #
-  # == Notes
-  #
-  # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
 
+# HTTP Response helper for rspec matchers
 class ActionController::TestResponse
 
   # to test with "should be_unauthorized"
