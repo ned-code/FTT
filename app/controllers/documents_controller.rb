@@ -71,12 +71,10 @@ class DocumentsController < ApplicationController
   end
 
   def destroy_all
-#    current_user.documents.each do |document|
-#      document.destroy!
-#    end
     UniboardDocument.delete_all
     Role.delete_all
     RolesUser.delete_all
+    Storage::S3::Configuration.config.bucket.clear
     User.all.each {|u| u.is_registered }
 
     respond_to do |format|
