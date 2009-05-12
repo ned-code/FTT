@@ -23,11 +23,6 @@ Spec::Runner.configure do |config|
 
   config.before(:all) do
     FileUtils.mkdir_p File.join(RAILS_ROOT, 'spec', 'tmp', 'files')
-    
-    # Remove temporary fixtures filess
-    Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'files', '*')].each do |file|
-      FileUtils.rm_rf file
-    end
   end
 
   config.before(:each) do
@@ -42,7 +37,7 @@ Spec::Runner.configure do |config|
   config.after(:each) do
     # Remove temporary fixtures files
     Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'files', '*')].each do |file|
-      FileUtils.rm file
+      FileUtils.rm_rf file
     end
   end
 
