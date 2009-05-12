@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:uniboard="http://www.mnemis.com/aboutuniboard/rss/" version="2.0">
+    <channel>
+        <title>MNEMIS uniboard news channel</title>
+        <description>The latest information on Uniboard</description>
+        <link>http://www.mnemis.com</link>
+        <language>en-us</language>
+        <lastBuildDate>Mon, 11 May 2009 13:00:00 GMT</lastBuildDate>
+        <pubDate>Mon, 11 May 2009 16:00:00 GMT</pubDate>
+        <item>
+            <!--<category>version</category>-->
+            <title>A new uniboard version is available !</title>
+            <description>Download the new uniboard 4.2</description>
+            <link>http://www.mnemis.com</link>
+            <uniboard:version>4.2.r.1.1969:2009M</uniboard:version>
+            <pubDate>Mon, 11 May 2009 16:00:00 GMT</pubDate>
+        </item>
+    </channel>
+</rss>
