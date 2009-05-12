@@ -9,6 +9,10 @@ module Storage
         @secret_access_key = config['secret_access_key']  || raise(ArgumentError, 'S3 secret_access_key is not present in config Hash')
         @bucket_name       = config['bucket']             || raise(ArgumentError, 'S3 bucket is not present in config Hash')
         @options           = config['options']            || {}
+
+        @options.reverse_merge!({
+            :logger => RAILS_DEFAULT_LOGGER
+          })
       end
 
       def self.config(config = {})
@@ -27,7 +31,7 @@ module Storage
     module Base
 
       def s3_config
-        @s3_config ||= Storage::S3::Configuration.config(config[:s3])
+        Storage::S3::Configuration.config(config[:s3])
       end
 
       def s3
