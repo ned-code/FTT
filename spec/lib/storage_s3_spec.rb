@@ -17,6 +17,13 @@ describe 'Uniboard Document storage with S3' do
     }
   end
 
+  after(:each) do
+    # Reset s3 config
+    Storage::S3::Configuration.class_eval do
+      class_variable_set(:@@config, nil)
+    end
+  end
+
   it 'Configuration should not raise error with valid configuration Hash' do
     @test_storage.should_receive(:config).and_return({:s3 => @valid_s3_config})
 

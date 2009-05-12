@@ -31,11 +31,6 @@ Spec::Runner.configure do |config|
   end
 
   config.before(:each) do
-    # Reset s3 config to force to load
-    Storage::S3::Configuration.class_eval do
-      @@config = nil
-    end
-
     # Right AWS mocks
     TEST_S3_CONNECTION = (ENV['TEST_S3_CONNECTION'] ? true : false) unless Object.const_defined?('TEST_S3_CONNECTION')
     unless TEST_S3_CONNECTION
@@ -54,7 +49,7 @@ Spec::Runner.configure do |config|
   config.after(:all) do
     # Remove all keys on S3 test bucket
     if TEST_S3_CONNECTION
-      s3_config = YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV] if File.exists?(File.join(RAILS_ROOT, 'config', 's3.yml'))
+      s3_config = YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV]
       Storage::S3::Configuration.config(s3_config).bucket.clear
     end
   end
