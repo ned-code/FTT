@@ -49,6 +49,11 @@ Spec::Runner.configure do |config|
     Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'files', '*')].each do |file|
       FileUtils.rm file
     end
+
+    # Remove all keys on S3 test bucket
+    if TEST_S3_CONNECTION
+      Storage::S3::Configuration.config.bucket.clear
+    end
   end
 end
 
