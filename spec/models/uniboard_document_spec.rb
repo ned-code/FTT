@@ -94,15 +94,13 @@ describe UniboardDocument do
       it 'should send files to s3 if document if document is valid' do
         document = Factory.build(:uniboard_document)
 
-        unless TEST_S3_CONNECTION
-          mock_bucket = document.s3_config.bucket
+        mock_bucket = document.s3_config.bucket
 
-          mock_bucket.should_not_receive(:keys)
-          mock_bucket.should_receive(:key).exactly(9).times.and_return do
-            mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
-            mock_key.should_receive(:put)
-            mock_key
-          end
+        mock_bucket.should_not_receive(:keys)
+        mock_bucket.should_receive(:key).exactly(9).times.and_return do
+          mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
+          mock_key.should_receive(:put)
+          mock_key
         end
 
         document.save.should be_true
@@ -111,12 +109,10 @@ describe UniboardDocument do
       it 'should not send files to s3 if document is not valid' do
         document = Factory.build(:not_valid_uniboard_document)
 
-        unless TEST_S3_CONNECTION
-          mock_bucket = document.s3_config.bucket
+        mock_bucket = document.s3_config.bucket
 
-          mock_bucket.should_not_receive(:keys)
-          mock_bucket.should_not_receive(:key)
-        end
+        mock_bucket.should_not_receive(:keys)
+        mock_bucket.should_not_receive(:key)
 
         document.save.should_not be_true
       end
@@ -292,15 +288,13 @@ describe UniboardDocument do
       it_should_behave_like 'document update'
 
       it 'should send files to s3 if document if document is valid' do
-        unless TEST_S3_CONNECTION
-          mock_bucket = @document.s3_config.bucket
+        mock_bucket = @document.s3_config.bucket
 
-          mock_bucket.should_not_receive(:keys)
-          mock_bucket.should_receive(:key).exactly(2).times.and_return do
-            mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
-            mock_key.should_receive(:put)
-            mock_key
-          end
+        mock_bucket.should_not_receive(:keys)
+        mock_bucket.should_receive(:key).exactly(2).times.and_return do
+          mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
+          mock_key.should_receive(:put)
+          mock_key
         end
 
         @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-0update1page.ubz', @document.uuid)
@@ -308,29 +302,25 @@ describe UniboardDocument do
       end
 
       it 'should not send files to s3 if document is not valid' do
-        unless TEST_S3_CONNECTION
-          mock_bucket = @document.s3_config.bucket
+        mock_bucket = @document.s3_config.bucket
 
-          mock_bucket.should_not_receive(:keys)
-          mock_bucket.should_not_receive(:key)
-        end
+        mock_bucket.should_not_receive(:keys)
+        mock_bucket.should_not_receive(:key)
 
         @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz', @document.uuid)
         @document.save.should_not be_true
       end
 
       it 'should remove deleted files on s3' do
-        unless TEST_S3_CONNECTION
-          mock_bucket = @document.s3_config.bucket
-          deleted_page_uuid = @document.pages[1].uuid
+        mock_bucket = @document.s3_config.bucket
+        deleted_page_uuid = @document.pages[1].uuid
 
-          mock_bucket.should_receive(:keys).with(:prefix => "documents/#{@document.uuid}/#{deleted_page_uuid}").and_return do
-            mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
-            mock_key.should_receive(:delete)
-            [mock_key]
-          end
-          mock_bucket.should_not_receive(:key)
+        mock_bucket.should_receive(:keys).with(:prefix => "documents/#{@document.uuid}/#{deleted_page_uuid}").and_return do
+          mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
+          mock_key.should_receive(:delete)
+          [mock_key]
         end
+        mock_bucket.should_not_receive(:key)
 
         @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-000000delete.ubz', @document.uuid)
         @document.save.should be_true
@@ -395,16 +385,14 @@ describe UniboardDocument do
       it_should_behave_like 'document delete'
 
       it 'should remove files on s3' do
-        unless TEST_S3_CONNECTION
-          mock_bucket = @document.s3_config.bucket
+        mock_bucket = @document.s3_config.bucket
 
-          mock_bucket.should_receive(:keys).with(:prefix => "documents/#{@document.uuid}").and_return do
-            mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
-            mock_key.should_receive(:delete)
-            [mock_key]
-          end
-          mock_bucket.should_not_receive(:key)
+        mock_bucket.should_receive(:keys).with(:prefix => "documents/#{@document.uuid}").and_return do
+          mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
+          mock_key.should_receive(:delete)
+          [mock_key]
         end
+        mock_bucket.should_not_receive(:key)
 
         @document.destroy.should be_true
       end

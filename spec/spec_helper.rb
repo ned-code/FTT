@@ -23,6 +23,11 @@ Spec::Runner.configure do |config|
 
   config.before(:all) do
     FileUtils.mkdir_p File.join(RAILS_ROOT, 'spec', 'tmp', 'files')
+    
+    # Remove temporary fixtures filess
+    Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'files', '*')].each do |file|
+      FileUtils.rm_rf file
+    end
   end
 
   config.before(:each) do
@@ -32,7 +37,7 @@ Spec::Runner.configure do |config|
     end
 
     # Right AWS mocks
-    TEST_S3_CONNECTION = (ENV['TEST_S3_CONNECTION'] || false) unless Object.const_defined?('TEST_S3_CONNECTION')
+    TEST_S3_CONNECTION = (ENV['TEST_S3_CONNECTION'] ? true : false) unless Object.const_defined?('TEST_S3_CONNECTION')
     unless TEST_S3_CONNECTION
       @mock_s3 = AppMocks::RightAws::S3.new
       RightAws::S3.stub!(:new).and_return(@mock_s3)
@@ -40,7 +45,7 @@ Spec::Runner.configure do |config|
   end
 
   config.after(:each) do
-    # Remove temporary fixtures filess
+    # Remove temporary fixtures files
     Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'files', '*')].each do |file|
       FileUtils.rm file
     end
