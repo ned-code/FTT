@@ -1,2 +1,2 @@
-module Storage    
+module Storage
 end
