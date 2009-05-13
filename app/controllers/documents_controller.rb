@@ -13,7 +13,7 @@ class DocumentsController < ApplicationController
 
   def show
     @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find_by_id(params[:id])
-    
+
     respond_to do |format|
       if @document && permit?('owner of document')
         format.html

@@ -46,7 +46,8 @@ describe PagesController do
         end
       end
 
-      it "'GET /documents/:uuid/pages/:uuid' should render error 404 if current user is not the owner" do
+      it "'GET /documents/:uuid/pages/:uuid' should render error 404 if current user
+          is not the owner" do
         get :show, :document_id => @page_not_owned.document.id, :id => @page_not_owned.id
 
         response.should be_not_found
@@ -60,7 +61,8 @@ describe PagesController do
         response.should respond_with(:content_type => :html)
       end
 
-      it "'GET /documents/:uuid/pages/:uuid' should render error 404 if document does not exist" do
+      it "'GET /documents/:uuid/pages/:uuid' should render error 404 if document
+          does not exist" do
         get :show, :document_id => 100_000_000_000, :id => 100_000_000_000
 
         response.should be_not_found
@@ -112,28 +114,32 @@ describe PagesController do
         @page_not_owned.document.accepts_role 'owner', Factory.create(:user)
       end
 
-      it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' if current user is not the owner" do
+      it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden'
+          if current user is not the owner" do
         get :show, :document_id => @page_not_owned.document.uuid, :id => @page_not_owned.uuid
 
         response.should be_forbidden
         response.should respond_with(:content_type => :xml)
       end
 
-      it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' id page is deleted" do
+      it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden'
+          id page is deleted" do
         get :show, :document_id => @page_deleted.document.uuid, :id => @page_deleted.uuid
 
         response.should be_forbidden
         response.should respond_with(:content_type => :xml)
       end
 
-      it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' if document does not exist" do
+      it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden'
+          if document does not exist" do
         get :show, :document_id => UUID.generate, :id => UUID.generate
 
         response.should be_forbidden
         response.should respond_with(:content_type => :xml)
       end
 
-      it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' if page does not exist" do
+      it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden'
+          if page does not exist" do
         get :show, :document_id => @page.document.uuid, :id => UUID.generate
 
         response.should be_forbidden

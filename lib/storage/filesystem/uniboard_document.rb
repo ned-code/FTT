@@ -4,7 +4,7 @@ module Storage
 
       def self.extended(base)
       end
-      
+
     end
   end
 end

@@ -5,9 +5,9 @@ describe User do
   it('') { should be_created_by_factory }
 
   it('') { should validate_presence_of(:firstname, :lastname)}
-  
+
   context 'newly created' do
-    
+
     before(:each) do
       @user = Factory.create(:user)
     end
@@ -42,6 +42,6 @@ describe User do
       @user.reload
       @user.attributes.should_not include(new_attributes)
     end
-    
+
   end
 end

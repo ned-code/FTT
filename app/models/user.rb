@@ -18,7 +18,8 @@ class User < ActiveRecord::Base
 
     UniboardDocument.find_by_sql("
       SELECT DISTINCT uniboard_documents.* FROM uniboard_documents
-      INNER JOIN roles ON authorizable_type = 'UniboardDocument' AND authorizable_id = uniboard_documents.id
+      INNER JOIN roles ON authorizable_type = 'UniboardDocument'
+        AND authorizable_id = uniboard_documents.id
       INNER JOIN roles_users ON roles.id = role_id
       INNER JOIN users ON user_id = users.id
       WHERE users.id = #{self.id} #{deleted_condition}"
@@ -33,8 +34,8 @@ class User < ActiveRecord::Base
 
     connection.update(
       "UPDATE #{self.class.quoted_table_name} " +
-      "SET \"confirmed\" = #{quote_value(true)} " +
-      "WHERE #{connection.quote_column_name(self.class.primary_key)} = #{quote_value(id)}",
+        "SET \"confirmed\" = #{quote_value(true)} " +
+        "WHERE #{connection.quote_column_name(self.class.primary_key)} = #{quote_value(id)}",
       "#{self.class.name} Updated"
     )
   end

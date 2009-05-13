@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     if @user == current_user || permit?('administrator')
 
       respond_to do |format|
-          format.html
+        format.html
       end
 
     else
@@ -64,7 +64,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html do
-        
+
         if @user and @user.confirm!
           @user.deliver_registration_confirmation_email!
 
@@ -90,7 +90,7 @@ class UsersController < ApplicationController
       respond_to do |format|
         format.html { render :action => 'edit' }
       end
-      
+
     else
       handle_redirection
     end

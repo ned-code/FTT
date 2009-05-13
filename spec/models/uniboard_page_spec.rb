@@ -36,7 +36,7 @@ describe UniboardPage do
   end
 
   context 'existing' do
-    
+
     before(:each) do
       @user = Factory.create(:user)
       @page = Factory.create(:uniboard_page)
@@ -73,7 +73,7 @@ describe UniboardPage do
       @not_owned_document = Factory.create(:uniboard_document)
       @not_owned_document.accepts_role 'owner', Factory.create(:user)
     end
-    
+
     it 'should return page after the first' do
       @document.pages[0].next.should == @document.pages[1]
     end
