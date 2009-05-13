@@ -34,8 +34,7 @@ class UniboardDocument < ActiveRecord::Base
 
     def config
       @@config ||= Struct.new('UniboardDocumentConfiguration', :storage, :storage_config).new(
-        :storage => :filesystem,
-        :storage_config => {}
+        :storage => :filesystem
       )
 
       yield @@config if block_given?

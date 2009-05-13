@@ -15,8 +15,12 @@ module Storage
           })
       end
 
-      def self.config(config = {})
-        @@config ||= Storage::S3::Configuration.new(config)
+      def self.config
+        begin
+          @@config ||= Storage::S3::Configuration.new(YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV])
+        rescue
+          raise StandardError, "Configuration file '#{File.join(RAILS_ROOT, 'config', 's3.yml')}' for S3 storage doesn't exist or have information about Rails '#{RAILS_ENV}' environement."
+        end
       end
 
       def s3
@@ -31,7 +35,7 @@ module Storage
     module Base
 
       def s3_config
-        Storage::S3::Configuration.config(config.storage_config)
+        Storage::S3::Configuration.config
       end
 
       def s3
