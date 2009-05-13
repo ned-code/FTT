@@ -145,7 +145,7 @@ describe DocumentsController do
         response.should respond_with(:content_type => :xml)
 
         response.should have_tag('errors') do
-          with_tag('error', 'File has invalid format')
+          with_tag('error', 'Payload has invalid format')
         end
         response.should_not have_tag('document')
 
@@ -291,7 +291,7 @@ describe DocumentsController do
           response.should respond_with(:content_type => :xml)
 
           response.should have_tag('errors') do
-            with_tag('error', 'File has invalid format')
+            with_tag('error', 'Payload has invalid format')
           end
           response.should_not have_tag('document')
         end

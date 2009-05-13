@@ -48,7 +48,7 @@ class UniboardDocument < ActiveRecord::Base
   end
 
   def payload=(payload)
-    @error_on_file = @error_on_version = false
+    @error_on_payload = @error_on_version = false
     @pages_to_delete_on_storage = []
 
     # Extract UUID from filename
@@ -61,7 +61,7 @@ class UniboardDocument < ActiveRecord::Base
 
     # Return if file is empty
     if payload.blank? || payload.size == 0
-      @error_on_file = true
+      @error_on_payload = true
       logger.debug "Error in uploaded uniboard document: data is empty"
       return nil
     end
@@ -104,7 +104,7 @@ class UniboardDocument < ActiveRecord::Base
       end
     rescue => e
       logger.debug "Error in uploaded uniboard document: " + e
-      @error_on_file = true
+      @error_on_payload = true
       return nil
     end
   end
@@ -190,7 +190,7 @@ class UniboardDocument < ActiveRecord::Base
     # Validations
     def validate
       errors.add('version', "have already changed on server")  if @error_on_version
-      errors.add('file', "has invalid format") if @error_on_file
+      errors.add('payload', "has invalid format") if @error_on_payload
       errors.add('uuid', "have changed") if !uuid_was.blank? and uuid_changed?
     end
 

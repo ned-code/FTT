@@ -42,7 +42,7 @@ describe UniboardDocument do
 
         document.should_not be_valid
         document.should have(:no).errors_on(:uuid)
-        document.should have(1).errors_on(:file)
+        document.should have(1).errors_on(:payload)
         document.save.should_not be_true
       end
 
@@ -51,7 +51,7 @@ describe UniboardDocument do
 
         document.should_not be_valid
         document.should have(:no).errors_on(:uuid)
-        document.should have(1).errors_on(:file)
+        document.should have(1).errors_on(:payload)
         document.save.should_not be_true
       end
 
@@ -60,7 +60,7 @@ describe UniboardDocument do
 
         document.should_not be_valid
         document.should have(1).errors_on(:uuid)
-        document.should have(1).errors_on(:file)
+        document.should have(1).errors_on(:payload)
         document.save.should_not be_true
       end
 
@@ -69,7 +69,7 @@ describe UniboardDocument do
 
         document.should_not be_valid
         document.should have(1).errors_on(:uuid)
-        document.should have(:no).errors_on(:file)
+        document.should have(:no).errors_on(:payload)
         document.save.should_not be_true
       end
 
@@ -247,7 +247,7 @@ describe UniboardDocument do
         @document.should_not be_valid
         @document.should have(:no).errors_on(:uuid)
         @document.should have(1).error_on(:version)
-        @document.should have(:no).errors_on(:file)
+        @document.should have(:no).errors_on(:payload)
         @document.save.should_not be_true
       end
 
@@ -257,7 +257,7 @@ describe UniboardDocument do
         @document.should_not be_valid
         @document.should have(:no).errors_on(:uuid)
         @document.should have(:no).error_on(:version)
-        @document.should have(1).errors_on(:file)
+        @document.should have(1).errors_on(:payload)
         @document.save.should_not be_true
       end
 
@@ -267,7 +267,7 @@ describe UniboardDocument do
         @document.should_not be_valid
         @document.should have(2).errors_on(:uuid)
         @document.should have(:no).error_on(:version)
-        @document.should have(:no).errors_on(:file)
+        @document.should have(:no).errors_on(:payload)
         @document.save.should_not be_true
       end
 
@@ -277,7 +277,7 @@ describe UniboardDocument do
         @document.should_not be_valid
         @document.should have(1).errors_on(:uuid)
         @document.should have(:no).error_on(:version)
-        @document.should have(:no).errors_on(:file)
+        @document.should have(:no).errors_on(:payload)
         @document.save.should_not be_true
       end
 
