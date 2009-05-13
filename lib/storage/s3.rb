@@ -31,7 +31,7 @@ module Storage
     module Base
 
       def s3_config
-        Storage::S3::Configuration.config(config[:s3])
+        Storage::S3::Configuration.config(config.storage_config)
       end
 
       def s3

@@ -22,12 +22,9 @@ Spec::Runner.configure do |config|
   config.include(Authlogic::TestCase)
 
   config.before(:all) do
-    FileUtils.mkdir_p File.join(RAILS_ROOT, 'spec', 'tmp', 'files')
-    
-    # Remove temporary fixtures filess
-    Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'files', '*')].each do |file|
-      FileUtils.rm_rf file
-    end
+    FileUtils.mkdir_p File.join(RAILS_ROOT, 'spec', 'tmp', 'fixtures')
+
+    ENV['TMPDIR'] = File.join(RAILS_ROOT, 'spec', 'tmp')
   end
 
   config.before(:each) do
@@ -41,8 +38,8 @@ Spec::Runner.configure do |config|
 
   config.after(:each) do
     # Remove temporary fixtures files
-    Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'files', '*')].each do |file|
-      FileUtils.rm file
+    Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'fixtures', '*')].each do |file|
+      FileUtils.rm_rf file
     end
   end
 
@@ -88,7 +85,7 @@ def fixture_file(source, uuid = nil)
 
   if source =~ /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\.ubz$/
     uuid ||= @uuid_generator.generate
-    target = File.join(RAILS_ROOT, 'spec', 'tmp', 'files', uuid + File.extname(source))
+    target = File.join(RAILS_ROOT, 'spec', 'tmp', 'fixtures', uuid + File.extname(source))
 
     FileUtils.cp source, target
     begin
@@ -98,7 +95,7 @@ def fixture_file(source, uuid = nil)
     rescue
     end
   else
-    target = File.join(RAILS_ROOT, 'spec', 'tmp', 'files', File.basename(source))
+    target = File.join(RAILS_ROOT, 'spec', 'tmp', 'fixtures', File.basename(source))
 
     FileUtils.cp source, target
   end

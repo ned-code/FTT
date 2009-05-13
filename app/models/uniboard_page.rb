@@ -15,11 +15,11 @@ class UniboardPage < ActiveRecord::Base
   end
 
   def url
-    raise NotImplementedError, 'Must be implemented in the storage module'
+    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 
   def thumbnail_url
-    raise NotImplementedError, 'Must be implemented in the storage module'
+    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 
   def next
@@ -34,14 +34,14 @@ class UniboardPage < ActiveRecord::Base
 
     # Storage
     def initialize_storage
-      case config[:storage]
-      when :s3
-        require 'storage/s3'
-      else
+      begin
+        require "storage/#{config.storage}"
+      rescue
+        logger.error "Storage '#{config.storage}' can't be loaded, fallback to 'filesystem' storage"
         require 'storage/filesystem'
       end
 
-      @storage_module = Storage.const_get(config[:storage].to_s.capitalize).const_get('UniboardPage')
+      @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UniboardPage')
       self.extend(@storage_module)
     end
 end

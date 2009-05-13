@@ -33,7 +33,10 @@ class UniboardDocument < ActiveRecord::Base
     alias_method_chain(:find_every, :deleted)
 
     def config
-      @@config ||= {}
+      @@config ||= Struct.new('UniboardDocumentConfiguration', :storage, :storage_config).new(
+        :storage => :filesystem,
+        :storage_config => {}
+      )
 
       yield @@config if block_given?
 
@@ -108,7 +111,7 @@ class UniboardDocument < ActiveRecord::Base
   end
 
   def payload
-    raise NotImplementedError, "Must be implemented in the '#{config[:storage].to_s}' storage module"
+    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 
   def to_xml(options = {})
@@ -194,22 +197,22 @@ class UniboardDocument < ActiveRecord::Base
 
     # Storage
     def initialize_storage
-      case config[:storage]
-      when :s3
-        require 'storage/s3'
-      else
+      begin
+        require "storage/#{config.storage}"
+      rescue
+        logger.error "Storage '#{config.storage}' can't be loaded, fallback to 'filesystem' storage"
         require 'storage/filesystem'
       end
 
-      @storage_module = Storage.const_get(config[:storage].to_s.capitalize).const_get('UniboardDocument')
+      @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UniboardDocument')
       self.extend(@storage_module)
     end
 
     def save_payload
-      raise NotImplementedError, "Must be implemented in the '#{config[:storage].to_s}' storage module"
+      raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
     end
 
     def destroy_payload
-      raise NotImplementedError, "Must be implemented in the '#{config[:storage].to_s}' storage module"
+      raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
     end
 end
