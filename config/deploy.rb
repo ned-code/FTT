@@ -110,3 +110,4 @@ end
 task :rails_gems_install, :roles => :app_admin do
   sudo "sh -c 'cd #{release_path}; rake gems:install RAILS_ENV=#{rails_env}'"
 end
+
