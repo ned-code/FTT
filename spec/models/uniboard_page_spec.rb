@@ -4,6 +4,14 @@ describe UniboardPage do
   it('') { should be_built_by_factory }
   it('') { should be_created_by_factory }
 
+  shared_examples_for 'page with filesystem storage' do
+
+    before(:each) do
+      UniboardDocument.config[:storage] = :filesystem
+    end
+
+  end
+
   shared_examples_for 'page with s3 storage' do
 
     before(:each) do
@@ -24,6 +32,12 @@ describe UniboardPage do
         page.save.should be_true
         page.version.should == 1
       end
+
+    end
+
+    context 'with filesystem storage' do
+      it_should_behave_like 'page with filesystem storage'
+      it_should_behave_like 'page recently created'
 
     end
 
@@ -52,6 +66,12 @@ describe UniboardPage do
       it 'should have thumnail url' do
         @page.thumbnail_url.should =~ URI_FORMAT_REGEX
       end
+
+    end
+
+    context 'with filesystem storage' do
+      it_should_behave_like 'page with filesystem storage'
+      it_should_behave_like 'page existing'
 
     end
 

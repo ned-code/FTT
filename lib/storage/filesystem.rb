@@ -1,5 +1,10 @@
 module Storage
   module Filesystem
+
+    module Base
+
+    end
+    
   end
 end
 

@@ -17,6 +17,14 @@ describe UniboardDocument do
 
   it('') { should have_default_scope(:order => "updated_at DESC", :conditions => {:deleted_at => nil}, :include => [:pages]) }
 
+  shared_examples_for 'document with filesystem storage' do
+
+    before(:each) do
+      UniboardDocument.config[:storage] = :filesystem
+    end
+
+  end
+
   shared_examples_for 'document with s3 storage' do
 
     before(:each) do
@@ -87,6 +95,12 @@ describe UniboardDocument do
 
     end
 
+    context 'with filesystem storage' do
+      it_should_behave_like 'document with filesystem storage'
+      it_should_behave_like 'document create'
+
+    end
+
     context 'with s3 storage' do
       it_should_behave_like 'document with s3 storage'
       it_should_behave_like 'document create'
@@ -132,6 +146,12 @@ describe UniboardDocument do
         document.save.should be_true
         document.version.should == 1
       end
+
+    end
+
+    context 'with filesystem storage' do
+      it_should_behave_like 'document with filesystem storage'
+      it_should_behave_like 'document recently created'
 
     end
 
@@ -283,6 +303,12 @@ describe UniboardDocument do
 
     end
 
+    context 'with filesystem storage' do
+      it_should_behave_like 'document with filesystem storage'
+      it_should_behave_like 'document update'
+
+    end
+
     context 'with s3 storage' do
       it_should_behave_like 'document with s3 storage'
       it_should_behave_like 'document update'
@@ -342,6 +368,12 @@ describe UniboardDocument do
 
     end
 
+    context 'with filesystem storage' do
+      it_should_behave_like 'document with filesystem storage'
+      it_should_behave_like 'document recently updated'
+
+    end
+
     context 'with s3 storage' do
       it_should_behave_like 'document with s3 storage'
       it_should_behave_like 'document recently updated'
@@ -377,6 +409,12 @@ describe UniboardDocument do
           UniboardPage.find_by_id(page.id).should be_nil
         end
       end
+
+    end
+
+    context 'with filesystem storage' do
+      it_should_behave_like 'document with filesystem storage'
+      it_should_behave_like 'document delete'
 
     end
 
@@ -418,6 +456,12 @@ describe UniboardDocument do
           UniboardPage.find_by_id(page.id).should be_nil
         end
       end
+
+    end
+
+    context 'with filesystem storage' do
+      it_should_behave_like 'document with filesystem storage'
+      it_should_behave_like 'document recently deleted'
 
     end
 
