@@ -13,9 +13,17 @@ describe UniboardDocument do
   it('') { should validate_format_of(:uuid, '12345678-1234-1234-1234-123456789012') }
   it('') { should_not validate_format_of(:uuid, 'another-string') }
 
-  it('') { should have_many(:pages, :order => 'position ASC', :autosave => true, :dependent => :destroy) }
+  it('') { should have_many(:pages,
+      :order => 'position ASC',
+      :autosave => true,
+      :dependent => :destroy)
+  }
 
-  it('') { should have_default_scope(:order => "updated_at DESC", :conditions => {:deleted_at => nil}, :include => [:pages]) }
+  it('') { should have_default_scope(
+      :order => "updated_at DESC",
+      :conditions => {:deleted_at => nil},
+      :include => [:pages])
+  }
 
   shared_examples_for 'document with filesystem storage' do
 
@@ -50,7 +58,7 @@ describe UniboardDocument do
 
         document.should_not be_valid
         document.should have(:no).errors_on(:uuid)
-        document.should have(1).errors_on(:file)
+        document.should have(1).errors_on(:payload)
         document.save.should_not be_true
       end
 
@@ -59,7 +67,7 @@ describe UniboardDocument do
 
         document.should_not be_valid
         document.should have(:no).errors_on(:uuid)
-        document.should have(1).errors_on(:file)
+        document.should have(1).errors_on(:payload)
         document.save.should_not be_true
       end
 
@@ -68,7 +76,7 @@ describe UniboardDocument do
 
         document.should_not be_valid
         document.should have(1).errors_on(:uuid)
-        document.should have(1).errors_on(:file)
+        document.should have(1).errors_on(:payload)
         document.save.should_not be_true
       end
 
@@ -77,7 +85,7 @@ describe UniboardDocument do
 
         document.should_not be_valid
         document.should have(1).errors_on(:uuid)
-        document.should have(:no).errors_on(:file)
+        document.should have(:no).errors_on(:payload)
         document.save.should_not be_true
       end
 
@@ -267,7 +275,7 @@ describe UniboardDocument do
         @document.should_not be_valid
         @document.should have(:no).errors_on(:uuid)
         @document.should have(1).error_on(:version)
-        @document.should have(:no).errors_on(:file)
+        @document.should have(:no).errors_on(:payload)
         @document.save.should_not be_true
       end
 
@@ -277,7 +285,7 @@ describe UniboardDocument do
         @document.should_not be_valid
         @document.should have(:no).errors_on(:uuid)
         @document.should have(:no).error_on(:version)
-        @document.should have(1).errors_on(:file)
+        @document.should have(1).errors_on(:payload)
         @document.save.should_not be_true
       end
 
@@ -287,7 +295,7 @@ describe UniboardDocument do
         @document.should_not be_valid
         @document.should have(2).errors_on(:uuid)
         @document.should have(:no).error_on(:version)
-        @document.should have(:no).errors_on(:file)
+        @document.should have(:no).errors_on(:payload)
         @document.save.should_not be_true
       end
 
@@ -297,7 +305,7 @@ describe UniboardDocument do
         @document.should_not be_valid
         @document.should have(1).errors_on(:uuid)
         @document.should have(:no).error_on(:version)
-        @document.should have(:no).errors_on(:file)
+        @document.should have(:no).errors_on(:payload)
         @document.save.should_not be_true
       end
 
@@ -341,7 +349,9 @@ describe UniboardDocument do
         mock_bucket = @document.s3_config.bucket
         deleted_page_uuid = @document.pages[1].uuid
 
-        mock_bucket.should_receive(:keys).with(:prefix => "documents/#{@document.uuid}/#{deleted_page_uuid}").and_return do
+        mock_bucket.should_receive(:keys).with(
+          :prefix => "documents/#{@document.uuid}/#{deleted_page_uuid}"
+        ).and_return do
           mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
           mock_key.should_receive(:delete)
           [mock_key]

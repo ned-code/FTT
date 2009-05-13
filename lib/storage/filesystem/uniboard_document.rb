@@ -11,7 +11,7 @@ module Storage
 
       def destroy_payload
       end
-      
+
     end
   end
 end

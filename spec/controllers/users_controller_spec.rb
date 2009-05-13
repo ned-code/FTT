@@ -68,7 +68,8 @@ describe UsersController do
       assigns(:user).should_not be_is_registered
     end
 
-    it "'POST /users' should not create the user and send activation email without valid parameters" do
+    it "'POST /users' should not create the user and send activation email without
+        valid parameters" do
       post :create, :user => Factory.attributes_for(:user, :email => nil)
 
       response.should_not redirect_to(root_url)
@@ -89,7 +90,8 @@ describe UsersController do
         @user.reset_perishable_token!
       end
 
-      it "'GET /users/:token/confirm' should confirm the user and send confirmation email" do
+      it "'GET /users/:token/confirm' should confirm the user and send confirmation
+          email" do
         get :confirm, :id => @user.perishable_token
 
         response.should redirect_to(root_url)
@@ -131,7 +133,8 @@ describe UsersController do
       response.should respond_with(:content_type => :html)
     end
 
-    it "'GET /users/:id' on another user should be redirect to root page (access denied)" do
+    it "'GET /users/:id' on another user should be redirect to root page (access
+        denied)" do
       get :show, :id => @another_user.id
 
       response.should redirect_to(root_url)
@@ -145,7 +148,8 @@ describe UsersController do
       response.should respond_with(:content_type => :html)
     end
 
-    it "'GET /users/:id/edit' on another user should be redirect to root page (access denied)" do
+    it "'GET /users/:id/edit' on another user should be redirect to root page (access
+        denied)" do
       get :edit, :id => @another_user.id
 
       response.should redirect_to(root_url)
@@ -164,7 +168,8 @@ describe UsersController do
       @current_user.attributes.should include(new_attributes)
     end
 
-    it "'PUT /users/:id' on another user should be redirect to root page (access denied)" do
+    it "'PUT /users/:id' on another user should be redirect to root page (access
+        denied)" do
       new_attributes = {'firstname' => 'New', 'lastname' => 'Another'}
 
       put :update, :id => @another_user.id, :user => new_attributes
@@ -187,7 +192,8 @@ describe UsersController do
       lambda { User.find(@current_user.id) }.should raise_error(ActiveRecord::RecordNotFound)
     end
 
-    it "'DELETE /users/:id' on another user should be redirect to root page (access denied)" do
+    it "'DELETE /users/:id' on another user should be redirect to root page (access
+        denied)" do
       delete :destroy, :id => @another_user.id
 
       response.should redirect_to(root_url)
@@ -257,7 +263,8 @@ describe UsersController do
       @another_user.attributes.should include(new_attributes)
     end
 
-    it "'DELETE /users/:id' on another should delete the user and redirect to users page" do
+    it "'DELETE /users/:id' on another should delete the user and redirect to users
+        page" do
       delete :destroy, :id => @another_user.id
 
       response.should redirect_to(users_url)

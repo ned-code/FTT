@@ -1,8 +1,16 @@
 class UniboardPage < ActiveRecord::Base
   default_scope :order => "position ASC", :include => [:document]
 
-  named_scope :next, lambda { |*p| {:conditions => ['position > ? AND uniboard_document_id = ?', p.position, p.uniboard_document_id], :limit => 1, :order => 'position ASC'} }
-  named_scope :previous, lambda { |*p| {:conditions => ['position < ? AND uniboard_document_id = ?', p.position, p.uniboard_document_id], :limit => 1, :order => 'position DESC'} }
+  named_scope :next, lambda { |*p| {
+      :conditions => ['position > ? AND uniboard_document_id = ?', p.position, p.uniboard_document_id],
+      :limit => 1,
+      :order => 'position ASC'
+    }}
+  named_scope :previous, lambda { |*p| {
+      :conditions => ['position < ? AND uniboard_document_id = ?', p.position, p.uniboard_document_id],
+      :limit => 1,
+      :order => 'position DESC'
+    }}
 
   belongs_to :document, :class_name => 'UniboardDocument', :foreign_key => 'uniboard_document_id'
 
@@ -23,25 +31,40 @@ class UniboardPage < ActiveRecord::Base
   end
 
   def next
-    UniboardPage.find(:first, :conditions => ['position > ? AND uniboard_document_id = ?', self.position, self.uniboard_document_id], :order => 'position ASC', :include => [:document])
+    UniboardPage.find(:first,
+      :conditions => [
+        'position > ? AND uniboard_document_id = ?',
+        self.position,
+        self.uniboard_document_id
+      ],
+      :order => 'position ASC',
+      :include => [:document]
+    )
   end
 
   def previous
-    UniboardPage.find(:first, :conditions => ['position < ? AND uniboard_document_id = ?', self.position, self.uniboard_document_id], :order => 'position DESC', :include => [:document])
+    UniboardPage.find(:first,
+      :conditions => [
+        'position < ? AND uniboard_document_id = ?',
+        self.position,
+        self.uniboard_document_id],
+      :order => 'position DESC',
+      :include => [:document]
+    )
   end
 
   private
 
-    # Storage
-    def initialize_storage
-      begin
-        require "storage/#{config.storage}"
-      rescue
-        logger.error "Storage '#{config.storage}' can't be loaded, fallback to 'filesystem' storage"
-        require 'storage/filesystem'
-      end
-
-      @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UniboardPage')
-      self.extend(@storage_module)
+  # Storage
+  def initialize_storage
+    begin
+      require "storage/#{config.storage}"
+    rescue
+      logger.error "Storage '#{config.storage}' can't be loaded, fallback to 'filesystem' storage"
+      require 'storage/filesystem'
     end
+
+    @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UniboardPage')
+    self.extend(@storage_module)
+  end
 end

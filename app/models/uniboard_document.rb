@@ -2,9 +2,11 @@ class UniboardDocument < ActiveRecord::Base
   acts_as_authorizable
 
   # Set this defaults scope in find_every_with_deleted method
-  default_scope :order => 'updated_at DESC', :conditions => {:deleted_at => nil}, :include => [:pages]
+  default_scope :order => 'updated_at DESC', :conditions => {:deleted_at => nil},
+    :include => [:pages]
 
-  has_many :pages, :class_name => 'UniboardPage', :foreign_key => 'uniboard_document_id', :order => 'position ASC', :autosave => true, :dependent => :destroy
+  has_many :pages, :class_name => 'UniboardPage', :foreign_key => 'uniboard_document_id',
+    :order => 'position ASC', :autosave => true, :dependent => :destroy
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
@@ -15,7 +17,8 @@ class UniboardDocument < ActiveRecord::Base
 
   class << self
 
-    # Add find option named with_deleted. This option can be set to true if you want retrive all documents (including deleted)
+    # Add find option named with_deleted. This option can be set to true if you
+    # want retrive all documents (including deleted)
     VALID_FIND_OPTIONS << :with_deleted
 
     # Override default_scope if find with option with_deleted set to true
@@ -23,7 +26,10 @@ class UniboardDocument < ActiveRecord::Base
       with = options.delete(:with_deleted)
 
       if with
-        with_exclusive_scope(:find => { :order => "#{table_name}.updated_at ASC", :include => [:pages] }) do
+        with_exclusive_scope(:find => {
+            :order => "#{table_name}.updated_at ASC",
+            :include => [:pages]
+          }) do
           find_every_without_deleted(options)
         end
       else
@@ -48,7 +54,7 @@ class UniboardDocument < ActiveRecord::Base
   end
 
   def payload=(payload)
-    @error_on_file = @error_on_version = false
+    @error_on_payload = @error_on_version = false
     @pages_to_delete_on_storage = []
 
     # Extract UUID from filename
@@ -61,7 +67,7 @@ class UniboardDocument < ActiveRecord::Base
 
     # Return if file is empty
     if payload.blank? || payload.size == 0
-      @error_on_file = true
+      @error_on_payload = true
       logger.debug "Error in uploaded uniboard document: data is empty"
       return nil
     end
@@ -104,7 +110,7 @@ class UniboardDocument < ActiveRecord::Base
       end
     rescue => e
       logger.debug "Error in uploaded uniboard document: " + e
-      @error_on_file = true
+      @error_on_payload = true
       return nil
     end
   end
@@ -146,8 +152,8 @@ class UniboardDocument < ActiveRecord::Base
       unless new_record?
         connection.update(
           "UPDATE #{self.class.quoted_table_name} " +
-          "SET \"deleted_at\" = #{quote_value(self.deleted_at = Time.now.utc)} " +
-          "WHERE #{connection.quote_column_name(self.class.primary_key)} = #{quote_value(id)}",
+            "SET \"deleted_at\" = #{quote_value(self.deleted_at = Time.now.utc)} " +
+            "WHERE #{connection.quote_column_name(self.class.primary_key)} = #{quote_value(id)}",
           "#{self.class.name} marke Destroyed"
         )
       end
@@ -177,41 +183,41 @@ class UniboardDocument < ActiveRecord::Base
 
   private
 
-    def get_content_type_from_mime_types(filename)
-      MIME::Types.of(File.extname(filename)).first.content_type
+  def get_content_type_from_mime_types(filename)
+    MIME::Types.of(File.extname(filename)).first.content_type
+  rescue
+    nil
+  end
+
+  def increment_version
+    self.version += 1
+  end
+
+  # Validations
+  def validate
+    errors.add('version', "have already changed on server")  if @error_on_version
+    errors.add('payload', "has invalid format") if @error_on_payload
+    errors.add('uuid', "have changed") if !uuid_was.blank? and uuid_changed?
+  end
+
+  # Storage
+  def initialize_storage
+    begin
+      require "storage/#{config.storage}"
     rescue
-      nil
+      logger.error "Storage '#{config.storage}' can't be loaded, fallback to 'filesystem' storage"
+      require 'storage/filesystem'
     end
 
-    def increment_version
-      self.version += 1
-    end
+    @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UniboardDocument')
+    self.extend(@storage_module)
+  end
 
-    # Validations
-    def validate
-      errors.add('version', "have already changed on server")  if @error_on_version
-      errors.add('file', "has invalid format") if @error_on_file
-      errors.add('uuid', "have changed") if !uuid_was.blank? and uuid_changed?
-    end
+  def save_payload
+    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
+  end
 
-    # Storage
-    def initialize_storage
-      begin
-        require "storage/#{config.storage}"
-      rescue
-        logger.error "Storage '#{config.storage}' can't be loaded, fallback to 'filesystem' storage"
-        require 'storage/filesystem'
-      end
-
-      @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UniboardDocument')
-      self.extend(@storage_module)
-    end
-
-    def save_payload
-      raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
-    end
-
-    def destroy_payload
-      raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
-    end
+  def destroy_payload
+    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
+  end
 end
