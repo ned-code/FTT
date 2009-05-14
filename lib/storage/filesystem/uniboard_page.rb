@@ -7,9 +7,11 @@ module Storage
       end
 
       def url
+        'http://uniboard.com'
       end
 
       def thumbnail_url
+        'http://uniboard.com'
       end
 
     end

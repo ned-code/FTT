@@ -2,7 +2,7 @@ module Storage
   module S3
     class Configuration
 
-      attr_reader :bucket_name
+      attr_accessor :bucket_name, :access_key_id, :secret_access_key
 
       def initialize(config = {})
         @access_key_id     = config['access_key_id']      || raise(ArgumentError, 'S3 access_key_id is not present in config Hash')
@@ -23,12 +23,14 @@ module Storage
         end
       end
 
-      def s3
-        @s3 ||= RightAws::S3.new(@access_key_id, @secret_access_key, @options)
-      end
-
       def bucket
         @bucket ||= s3.bucket(bucket_name, true)
+      end
+      
+      private
+
+      def s3
+        @s3 ||= RightAws::S3.new(@access_key_id, @secret_access_key, @options)
       end
     end
 

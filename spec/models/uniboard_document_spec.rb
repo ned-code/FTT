@@ -107,13 +107,34 @@ describe UniboardDocument do
       it_should_behave_like 'document with filesystem storage'
       it_should_behave_like 'document create'
 
+      it 'should save files on filesystem if document is valid' do
+        document = Factory.build(:uniboard_document)
+
+        document.save.should be_true
+
+        Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, document.uuid)).should be_a_directory
+        document.pages.each do |page|
+          Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, document.uuid, "#{page.uuid}.svg")).should be_a_file
+          Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, document.uuid, "#{page.uuid}.thumbnail.jpg")).should be_a_file
+        end
+        Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, document.uuid, 'images')).should be_a_directory
+      end
+
+      it 'should not save files on filesystem if document is not valid' do
+        document = Factory.build(:not_valid_uniboard_document)
+
+        document.save.should_not be_true
+
+        Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, document.uuid)).should_not be_a_directory
+      end
+
     end
 
     context 'with s3 storage' do
       it_should_behave_like 'document with s3 storage'
       it_should_behave_like 'document create'
 
-      it 'should send files to s3 if document if document is valid' do
+      it 'should send files to s3 if document is valid' do
         document = Factory.build(:uniboard_document)
 
         mock_bucket = document.s3_config.bucket

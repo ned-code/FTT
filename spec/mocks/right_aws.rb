@@ -30,6 +30,10 @@ module AppMocks
           []
         end
 
+        def clear
+          nil
+        end
+
       end
 
       class Key

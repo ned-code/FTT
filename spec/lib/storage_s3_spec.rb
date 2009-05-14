@@ -38,4 +38,20 @@ describe 'Uniboard Document storage with S3' do
     lambda { Storage::S3::Configuration.new(s3_config) }.should raise_error(ArgumentError, /bucket/)
   end
 
+  it 'Configuration should have bucket_name attribute' do
+    Storage::S3::Configuration.config.should respond_to(:bucket_name)
+  end
+
+  it 'Configuration should have access_key_id attribute' do
+    Storage::S3::Configuration.config.should respond_to(:access_key_id)
+  end
+
+  it 'Configuration should have secret_access_key attribute' do
+    Storage::S3::Configuration.config.should respond_to(:secret_access_key)
+  end
+
+  it 'Configuration should have bucket attribute' do
+    Storage::S3::Configuration.config.should respond_to(:bucket)
+  end
+
 end
