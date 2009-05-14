@@ -183,12 +183,6 @@ class UniboardDocument < ActiveRecord::Base
 
   private
 
-  def get_content_type_from_mime_types(filename)
-    MIME::Types.of(File.extname(filename)).first.content_type
-  rescue
-    nil
-  end
-
   def increment_version
     self.version += 1
   end

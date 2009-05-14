@@ -137,7 +137,7 @@ describe UniboardDocument do
       it 'should send files to s3 if document is valid' do
         document = Factory.build(:uniboard_document)
 
-        mock_bucket = document.s3_config.bucket
+        mock_bucket = Storage::S3::Configuration.config.bucket
 
         mock_bucket.should_not_receive(:keys)
         mock_bucket.should_receive(:key).exactly(9).times.and_return do
@@ -152,7 +152,7 @@ describe UniboardDocument do
       it 'should not send files to s3 if document is not valid' do
         document = Factory.build(:not_valid_uniboard_document)
 
-        mock_bucket = document.s3_config.bucket
+        mock_bucket = Storage::S3::Configuration.config.bucket
 
         mock_bucket.should_not_receive(:keys)
         mock_bucket.should_not_receive(:key)
@@ -391,7 +391,7 @@ describe UniboardDocument do
       it_should_behave_like 'document update'
 
       it 'should send files to s3 if document if document is valid' do
-        mock_bucket = @document.s3_config.bucket
+        mock_bucket = Storage::S3::Configuration.config.bucket
 
         mock_bucket.should_not_receive(:keys)
         mock_bucket.should_receive(:key).exactly(2).times.and_return do
@@ -405,7 +405,7 @@ describe UniboardDocument do
       end
 
       it 'should not send files to s3 if document is not valid' do
-        mock_bucket = @document.s3_config.bucket
+        mock_bucket = Storage::S3::Configuration.config.bucket
 
         mock_bucket.should_not_receive(:keys)
         mock_bucket.should_not_receive(:key)
@@ -415,7 +415,7 @@ describe UniboardDocument do
       end
 
       it 'should remove deleted files on s3' do
-        mock_bucket = @document.s3_config.bucket
+        mock_bucket = Storage::S3::Configuration.config.bucket
         deleted_page_uuid = @document.pages[1].uuid
 
         mock_bucket.should_receive(:keys).with(
@@ -508,7 +508,7 @@ describe UniboardDocument do
       it_should_behave_like 'document delete'
 
       it 'should remove files on s3' do
-        mock_bucket = @document.s3_config.bucket
+        mock_bucket = Storage::S3::Configuration.config.bucket
 
         mock_bucket.should_receive(:keys).with(:prefix => "documents/#{@document.uuid}").and_return do
           mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')

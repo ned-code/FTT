@@ -1,3 +1,5 @@
+require 'storage'
+
 module Storage
   module Filesystem
     class Configuration
@@ -14,6 +16,9 @@ module Storage
     end
 
     module Base
+      include Storage::Base
+
+      private
 
       def fs_config
         Storage::Filesystem::Configuration.config

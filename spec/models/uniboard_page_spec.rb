@@ -60,25 +60,46 @@ describe UniboardPage do
     shared_examples_for 'page existing' do
 
       it 'should have url' do
-        @page.url.should =~ URI_FORMAT_REGEX
+        @page.url.should =~ URL_FORMAT_REGEX
       end
 
-      it 'should have thumnail url' do
-        @page.thumbnail_url.should =~ URI_FORMAT_REGEX
+      it 'should have thumbnail url' do
+        @page.thumbnail_url.should =~ URL_FORMAT_REGEX
       end
 
+      it 'should have mime type' do
+        @page.mime_type.should == 'image/svg+xml'
+      end
+
+      it 'should have thumbnail mime type' do
+        @page.thumbnail_mime_type.should == 'image/jpeg'
+      end
     end
 
     context 'with filesystem storage' do
       it_should_behave_like 'page with filesystem storage'
       it_should_behave_like 'page existing'
 
+      it 'should have file url' do
+        @page.url.should =~ FILE_URL_FORMAT_REGEX
+      end
+
+      it 'should have thumnail file url' do
+        @page.thumbnail_url.should =~ FILE_URL_FORMAT_REGEX
+      end
     end
 
     context 'with s3 storage' do
       it_should_behave_like 'page with s3 storage'
       it_should_behave_like 'page existing'
 
+      it 'should have http url' do
+        @page.url.should =~ HTTP_URL_FORMAT_REGEX
+      end
+
+      it 'should have thumnail http url' do
+        @page.thumbnail_url.should =~ HTTP_URL_FORMAT_REGEX
+      end
     end
   end
 

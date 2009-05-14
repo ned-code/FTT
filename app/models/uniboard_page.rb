@@ -26,7 +26,15 @@ class UniboardPage < ActiveRecord::Base
     raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 
+  def mime_type
+    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
+  end
+
   def thumbnail_url
+    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
+  end
+
+  def thumbnail_mime_type
     raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 

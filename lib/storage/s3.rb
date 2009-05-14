@@ -1,3 +1,5 @@
+require 'storage'
+
 module Storage
   module S3
     class Configuration
@@ -26,7 +28,7 @@ module Storage
       def bucket
         @bucket ||= s3.bucket(bucket_name, true)
       end
-      
+
       private
 
       def s3
@@ -35,13 +37,12 @@ module Storage
     end
 
     module Base
+      include Storage::Base
+
+      private
 
       def s3_config
         Storage::S3::Configuration.config
-      end
-
-      def s3
-        s3_config.s3
       end
 
       def s3_bucket

@@ -31,7 +31,7 @@ module AppMocks
         end
 
         def clear
-          nil
+          true
         end
 
       end
@@ -55,7 +55,17 @@ module AppMocks
         end
 
         def delete
-          nil
+          true
+        end
+
+        def headers
+          {
+            'content-type' =>  MIME::Types.of(File.extname(name)).empty? ? nil : MIME::Types.of(File.extname(name)).first.content_type
+          }
+        end
+
+        def refresh
+          headers
         end
 
       end
