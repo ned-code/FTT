@@ -22,7 +22,8 @@ namespace :myuniboard do
   namespace :dev do
     desc "Bootstrap developement environment"
     task :bootstrap do
-      FileUtils.cp File.join(RAILS_ROOT, 'config', 'database.yml.default'),  File.join(RAILS_ROOT, 'config', 'database.yml')
+      FileUtils.cp File.join(RAILS_ROOT, 'config', 'database.default.yml'),  File.join(RAILS_ROOT, 'config', 'database.yml')
+      FileUtils.cp File.join(RAILS_ROOT, 'config', 's3.default.yml'),  File.join(RAILS_ROOT, 'config', 's3.yml')      
       puts `RAILS_ENV="test" rake gems:install`
     end
   end

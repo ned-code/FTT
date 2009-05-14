@@ -34,4 +34,4 @@ config.gem 'thoughtbot-factory_girl', :lib => "factory_girl", :source => "http:/
 config.gem 'yannlugrin-rspec-factory-girl', :lib => "spec/factory_girl", :source => "http://gems.github.com"
 config.gem 'webrat'
 config.gem 'cucumber'
-config.gem 'bmabey-email_spec', :lib => 'email_spec'
+config.gem 'bmabey-email_spec', :lib => 'email_spec', :source => "http://gems.github.com"
