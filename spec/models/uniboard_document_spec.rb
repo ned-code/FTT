@@ -336,6 +336,54 @@ describe UniboardDocument do
       it_should_behave_like 'document with filesystem storage'
       it_should_behave_like 'document update'
 
+      it 'should save files on filesystem if document is valid' do
+        Dir[File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, '*')].each do |file|
+          FileUtils.rm_rf file
+        end
+
+        @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-0update1page.ubz', @document.uuid)
+        @document.save.should be_true
+
+        @document.pages.each_with_index do |page, index|
+          if index == 1 # Updated page index
+            Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, "#{page.uuid}.svg")).should be_a_file
+            Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, "#{page.uuid}.thumbnail.jpg")).should be_a_file
+          else
+            Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, "#{page.uuid}.svg")).should_not be_a_file
+            Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, "#{page.uuid}.thumbnail.jpg")).should_not be_a_file
+          end
+        end
+      end
+
+      it 'should not save files on filesystem if document is not valid' do
+        Dir[File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, '*')].each do |file|
+          FileUtils.rm_rf file
+        end
+
+        @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz', @document.uuid)
+        @document.save.should_not be_true
+
+        @document.pages.each_with_index do |page, index|
+          Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, "#{page.uuid}.svg")).should_not be_a_file
+          Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, "#{page.uuid}.thumbnail.jpg")).should_not be_a_file
+        end
+      end
+
+      it 'should remove deleted files on filesystem' do
+        @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-000000delete.ubz', @document.uuid)
+        @document.save.should be_true
+
+        @document.pages.each_with_index do |page, index|
+          if index == 1 # Deleted page index
+            Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, "#{page.uuid}.svg")).should_not be_a_file
+            Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, "#{page.uuid}.thumbnail.jpg")).should_not be_a_file
+          else
+            Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, "#{page.uuid}.svg")).should be_a_file
+            Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid, "#{page.uuid}.thumbnail.jpg")).should be_a_file
+          end
+        end
+      end
+
     end
 
     context 'with s3 storage' do
@@ -446,6 +494,12 @@ describe UniboardDocument do
     context 'with filesystem storage' do
       it_should_behave_like 'document with filesystem storage'
       it_should_behave_like 'document delete'
+
+      it 'should remove files on filesystem' do
+        @document.destroy.should be_true
+
+        Pathname.new(File.join(Storage::Filesystem::Configuration.config.basedir, @document.uuid)).should_not be_a_directory
+      end
 
     end
 

@@ -16,6 +16,9 @@ module Storage
         return unless @tempfile
 
         @pages_to_delete_on_storage.each do |page_uuid|
+          Dir[File.join(fs_basedir, "#{page_uuid}*")].each do |file|
+            File.delete(file)
+          end
         end
         @pages_to_delete_on_storage.clear
 
@@ -36,6 +39,7 @@ module Storage
       end
 
       def destroy_payload
+        FileUtils.rm_rf(fs_basedir)
       end
 
     end
