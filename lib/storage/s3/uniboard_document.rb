@@ -27,7 +27,6 @@ module Storage
 
             key = s3_bucket.key(s3_file_name)
             key.put(file.read, s3_file_access, 'content-type' => s3_content_type)
-            key.refresh
           end
         end
 

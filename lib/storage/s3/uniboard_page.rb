@@ -7,22 +7,30 @@ module Storage
       end
 
       def url
-        s3_bucket.key(s3_path).public_link
+        s3_key.public_link
       end
 
       def mime_type
-        s3_bucket.key(s3_path).headers['content-type']
+        s3_key.headers['content-type']
       end
 
       def thumbnail_url
-        s3_bucket.key(s3_thumbnail_path).public_link
+        s3_thumbnail_key.public_link
       end
 
       def thumbnail_mime_type
-        s3_bucket.key(s3_thumbnail_path).headers['content-type']
+        s3_thumbnail_key.headers['content-type']
       end
 
       private
+
+      def s3_key
+        @s3_key ||= s3_bucket.key(s3_path, true)
+      end
+
+      def s3_thumbnail_key
+        @s3_thumbnail_key ||= s3_bucket.key(s3_thumbnail_path, true)
+      end
 
       def s3_path
         "documents/#{document.uuid}/#{uuid}.svg"
