@@ -53,8 +53,9 @@ describe UniboardPage do
 
     before(:each) do
       @user = Factory.create(:user)
-      @page = Factory.create(:uniboard_page)
-      @page.document.accepts_role 'owner', @user
+      @document = Factory.create(:uniboard_document)
+      @document.accepts_role 'owner', @user
+      @page = @document.pages.first
     end
 
     shared_examples_for 'page existing' do
