@@ -1,4 +1,5 @@
 nbproject
+spec/spec.opts.netbeans
 .project
 .DS_Store
 log/*.log
