@@ -56,7 +56,7 @@ module HtmlConversion
             # create drawing part
             html_page_builder.div("id" => "ub_page_drawing", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%") {
               # SVG root tag
-              html_page_builder.tag!("svg:svg", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 1000") {
+              html_page_builder.tag!("svg:svg", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 10000") {
 
                 page.polygon.each do |current_polygon|
                   # translate points coordinates because 0 is centered in desktop format and in html 0 is the upper left corner.
@@ -146,7 +146,7 @@ module HtmlConversion
     size_and_position = getConvertedSizeAndPosition(svg_object, page_width, page_height)
     left = size_and_position["left"]
     top = size_and_position["top"]
-    z_index = "1"
+    size_and_position["z-index"].to_i + 10000100
     width = size_and_position["width"]
     height = size_and_position["height"]  
     font_size = svg_object[:attr => "font-size"].to_f
@@ -173,7 +173,7 @@ module HtmlConversion
     size_and_position = getConvertedSizeAndPosition(svg_object, page_width, page_height)
     left = size_and_position["left"]
     top = size_and_position["top"]
-    z_index = "10"
+    size_and_position["z-index"].to_i + 10000100
     width = size_and_position["width"]
     height = size_and_position["height"]  
     page_builder.object("id" => svg_object[:attr => "ub:uuid"],
@@ -187,11 +187,13 @@ module HtmlConversion
     size_and_position = getConvertedSizeAndPosition(svg_object, page_width, page_height)
     left = size_and_position["left"]
     top = size_and_position["top"]
-    z_index = "1"
+    z_index = 0
     width = size_and_position["width"]
     height = size_and_position["height"]                
     if (svg_object[:attr => "ub:background"] == "true")
-      z_index = "0"
+      size_and_position["z-index"].to_i + 20000001
+    elsif
+      size_and_position["z-index"].to_i + 10000100
     end
     # if image is an svg file we must create an object instead of an image in HTML.
     image_src = svg_object[:attr => "xlink:href"]
