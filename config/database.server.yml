@@ -1,0 +1,20 @@
+test:
+  adapter: mysql
+  database: uniboard_test
+  username: uniboard
+  password: _ub123
+  host: db_primary
+
+staging:
+  adapter: mysql
+  database: uniboard_staging
+  username: uniboard
+  password: _ub123
+  host: db_primary
+
+production:
+  adapter: mysql
+  database: uniboard_production
+  username: uniboard
+  password: _ub123
+  host: db_primary

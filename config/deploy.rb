@@ -96,7 +96,7 @@ set :ec2onrails_config, {
 }
 
 after "deploy:finalize_update" do
-  run "ln -nsf #{release_path}/config/database.default.yml #{release_path}/config/database.yml"
+  run "ln -nsf #{release_path}/config/database.server.yml #{release_path}/config/database.yml"
   run "ln -nsf #{release_path}/config/s3.default.yml #{release_path}/config/s3.yml"
   rails_gems_install
 end
