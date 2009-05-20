@@ -190,7 +190,6 @@ module Authorization
 
         def remove_user_roles
           self.accepted_roles.each do |role|
-            role.roles_users.delete_all
             role.destroy
           end
         end
