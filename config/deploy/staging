@@ -1,10 +1,10 @@
 # Your EC2 instances. Use the ec2-xxx....amazonaws.com hostname, not
 # any other name (in case you have your own DNS alias) or it won't
 # be able to resolve to the internal IP address.
-role :web,      "79.125.11.127"
-role :app,      "79.125.11.127"
-role :memcache, "79.125.11.127"
-role :db,       "79.125.11.127", :primary => true
+role :web,      "st-ub.mnemis.com"
+role :app,      "st-ub.mnemis.com"
+role :memcache, "st-ub.mnemis.com"
+role :db,       "st-ub.mnemis.com", :primary => true
 # role :db,       "ec2-56-xx-xx-xx.z-1.compute-1.amazonaws.com", :primary => true, :ebs_vol_id => 'vol-12345abc'
 # optinally, you can specify Amazon's EBS volume ID if the database is persisted
 # via Amazon's EBS.  See the main README for more information.

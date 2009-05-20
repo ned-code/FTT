@@ -1,5 +1,9 @@
 class Notifier < ActionMailer::Base
-  default_url_options[:host] = 'st-ub.mnemis.com'
+  default_url_options[:host] = {
+    'staging' => 'st-ub.mnemis.com',
+    'development' => 'localhost',
+    'test' => 'localhost'
+  }[RAILS_ENV]
 
   def user_registration_activation_email(user)
     subject    I18n.t('email.user_registration_activation_email.subject')
