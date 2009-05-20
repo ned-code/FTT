@@ -150,11 +150,11 @@ class UniboardDocument < ActiveRecord::Base
   def destroy
     transaction do
       unless new_record?
-        connection.update(
-          "UPDATE #{self.class.quoted_table_name} " +
-            "SET \"deleted_at\" = #{quote_value(self.deleted_at = Time.now.utc)} " +
-            "WHERE #{connection.quote_column_name(self.class.primary_key)} = #{quote_value(id)}",
-          "#{self.class.name} marke Destroyed"
+        connection.update("
+          UPDATE #{self.class.quoted_table_name}
+          SET #{connection.quote_column_name('deleted_at')} = #{quote_value(self.deleted_at = Time.now.utc)}
+          WHERE #{connection.quote_column_name(self.class.primary_key)} = #{quote_value(id)}
+          ", "#{self.class.name} marke Destroyed"
         )
       end
 
