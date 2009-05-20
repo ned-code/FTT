@@ -10,7 +10,8 @@ class UniboardDocument < ActiveRecord::Base
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
-  after_initialize :initialize_storage
+#  after_initialize :initialize_storage
+#  after_find :initialize_storage
   before_update :increment_version
   before_save :save_payload
   after_destroy :destroy_payload
@@ -181,21 +182,10 @@ class UniboardDocument < ActiveRecord::Base
     !self.deleted_at.nil?
   end
 
-  private
-
-  def increment_version
-    self.version += 1
-  end
-
-  # Validations
-  def validate
-    errors.add('version', "have already changed on server")  if @error_on_version
-    errors.add('payload', "has invalid format") if @error_on_payload
-    errors.add('uuid', "have changed") if !uuid_was.blank? and uuid_changed?
-  end
+  protected
 
   # Storage
-  def initialize_storage
+  def after_initialize
     begin
       require "storage/#{config.storage}"
     rescue
@@ -213,5 +203,16 @@ class UniboardDocument < ActiveRecord::Base
 
   def destroy_payload
     raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
+  end
+
+  def increment_version
+    self.version += 1
+  end
+
+  # Validations
+  def validate
+    errors.add('version', "have already changed on server")  if @error_on_version
+    errors.add('payload', "has invalid format") if @error_on_payload
+    errors.add('uuid', "have changed") if !uuid_was.blank? and uuid_changed?
   end
 end

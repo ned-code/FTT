@@ -16,7 +16,7 @@ class UniboardPage < ActiveRecord::Base
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
-  after_initialize :initialize_storage
+#  after_initialize :initialize_storage
 
   def config
     UniboardDocument.config
@@ -61,10 +61,10 @@ class UniboardPage < ActiveRecord::Base
     )
   end
 
-  private
+  protected
 
   # Storage
-  def initialize_storage
+  def after_initialize
     begin
       require "storage/#{config.storage}"
     rescue
@@ -75,4 +75,5 @@ class UniboardPage < ActiveRecord::Base
     @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UniboardPage')
     self.extend(@storage_module)
   end
+
 end

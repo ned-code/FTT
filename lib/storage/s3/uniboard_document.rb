@@ -6,7 +6,7 @@ module Storage
       def self.extended(base)
       end
 
-      private
+      protected
 
       def save_payload
         return unless @tempfile
