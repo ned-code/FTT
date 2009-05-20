@@ -16,8 +16,6 @@ class UniboardPage < ActiveRecord::Base
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
-#  after_initialize :initialize_storage
-
   def config
     UniboardDocument.config
   end

@@ -10,8 +10,6 @@ class UniboardDocument < ActiveRecord::Base
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
-#  after_initialize :initialize_storage
-#  after_find :initialize_storage
   before_update :increment_version
   before_save :save_payload
   after_destroy :destroy_payload
