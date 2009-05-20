@@ -22,8 +22,8 @@ class User < ActiveRecord::Base
         AND authorizable_id = uniboard_documents.id
       INNER JOIN roles_users ON roles.id = role_id
       INNER JOIN users ON user_id = users.id
-      WHERE users.id = #{self.id} #{deleted_condition}"
-    )
+      WHERE users.id = #{self.id} #{deleted_condition}
+    ")
   end
 
   def confirm!
@@ -32,11 +32,11 @@ class User < ActiveRecord::Base
     @attributes_cache.delete('confirmed')
     @attributes['confirmed'] = true
 
-    connection.update(
-      "UPDATE #{self.class.quoted_table_name} " +
-        "SET \"confirmed\" = #{quote_value(true)} " +
-        "WHERE #{connection.quote_column_name(self.class.primary_key)} = #{quote_value(id)}",
-      "#{self.class.name} Updated"
+    connection.update("
+      UPDATE #{self.class.quoted_table_name}
+      SET #{connection.quote_column_name('confirmed')} = #{quote_value(true)}
+      WHERE #{connection.quote_column_name(self.class.primary_key)} = #{quote_value(id)}
+      ", "#{self.class.name} Updated"
     )
   end
 
