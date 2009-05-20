@@ -1,5 +1,5 @@
 class Notifier < ActionMailer::Base
-  default_url_options[:host] = "ec2-79-125-63-113.eu-west-1.compute.amazonaws.com"
+  default_url_options[:host] = 'st-ub.mnemis.com'
 
   def user_registration_activation_email(user)
     subject    I18n.t('email.user_registration_activation_email.subject')
