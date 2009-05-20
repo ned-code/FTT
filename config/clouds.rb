@@ -4,7 +4,7 @@ pool :myuniboard do
 
   base_keypair_path "~/.ec2/mnemis"
   keypair "~/.ec2/mnemis/mnemis"
-  availabilty_zone "eu-west-1a"
+  availability_zone "eu-west-1a"
 
   instances 1..1
 
