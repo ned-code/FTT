@@ -53,6 +53,10 @@ module HtmlConversion
           page_height = page.rect.height
           page_background = page.rect.fill
           html_page_builder.div("id" => "ub_board", "style" => "position: absolute; top: 0px; left: 0px; width: " + page_width + "px; height: " + page_height + "px; background-color:" + page_background) {
+            
+            # manage pdf background
+            puts `date`
+            
             # create drawing part
             html_page_builder.div("id" => "ub_page_drawing", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%") {
               # SVG root tag
@@ -146,7 +150,7 @@ module HtmlConversion
     size_and_position = getConvertedSizeAndPosition(svg_object, page_width, page_height)
     left = size_and_position["left"]
     top = size_and_position["top"]
-    size_and_position["z-index"].to_i + 10000100
+    z_index = size_and_position["z-index"].to_i + 10000100
     width = size_and_position["width"]
     height = size_and_position["height"]  
     font_size = svg_object[:attr => "font-size"].to_f
@@ -154,13 +158,12 @@ module HtmlConversion
     if (matrix && matrix[0])
       font_size = font_size * matrix[0].to_f
     end
-    style = "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index
+    style = "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s
     style += "; font-size:" + font_size.to_s + "px"
     style += "; font-family:" + svg_object[:attr => "font-family"]
     style += "; color:" + svg_object[:attr => "fill"]
     
     uuid = svg_object[:attr => "ub:uuid"]
-    puts uuid
     if (!uuid)
       uuid |= UUID.new.generate
     end
@@ -173,14 +176,14 @@ module HtmlConversion
     size_and_position = getConvertedSizeAndPosition(svg_object, page_width, page_height)
     left = size_and_position["left"]
     top = size_and_position["top"]
-    size_and_position["z-index"].to_i + 10000100
+    z_index = size_and_position["z-index"].to_i + 10000100
     width = size_and_position["width"]
     height = size_and_position["height"]  
     page_builder.object("id" => svg_object[:attr => "ub:uuid"],
                              "type" => "text/html",
                              "data" => svg_object["iframe"].src,
                              "ub:background" => svg_object[:attr => "ub:background"],
-                             "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index)
+                             "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
   end
   
   def self.createHtmlImage(page_builder, svg_object, page_width, page_height)
@@ -191,9 +194,9 @@ module HtmlConversion
     width = size_and_position["width"]
     height = size_and_position["height"]                
     if (svg_object[:attr => "ub:background"] == "true")
-      size_and_position["z-index"].to_i + 20000001
+      z_index = size_and_position["z-index"].to_i + 20000001
     elsif
-      size_and_position["z-index"].to_i + 10000100
+      z_index = size_and_position["z-index"].to_i + 10000100
     end
     # if image is an svg file we must create an object instead of an image in HTML.
     image_src = svg_object[:attr => "xlink:href"]
@@ -202,13 +205,13 @@ module HtmlConversion
                                "type" => "image/svg+xml",
                                "data" => image_src,
                                "ub:background" => svg_object[:attr => "ub:background"],
-                               "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index)
+                               "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
     else
       page_builder.img("id" => svg_object[:attr => "ub:uuid"],
                             "src" => image_src,
                             "alt" => "Image",
                             "ub:background" => svg_object[:attr => "ub:background"],
-                            "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index)
+                            "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
     end     
   end
 end
