@@ -10,6 +10,7 @@ require 'capistrano/ext/multistage'
 set :scm, :git
 set :repository, "git@git.assembla.com:myuniboard.git"
 set :git_shallow_clone, 1
+set :git_enable_submodules, 1
 set :short_branch, "master"
 set :ssh_options, { :forward_agent => true }
 
