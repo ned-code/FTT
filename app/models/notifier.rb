@@ -1,7 +1,7 @@
 class Notifier < ActionMailer::Base
   default_url_options[:host] = {
     'staging' => 'st-ub.mnemis.com',
-    'development' => 'localhost',
+    'development' => 'localhost:3000',
     'test' => 'localhost'
   }[RAILS_ENV]
 
@@ -27,7 +27,7 @@ class Notifier < ActionMailer::Base
     from       'no-reply@myuniboard.com'
     sent_on    Time.now
 
-    body      :password_reset_url => edit_password_reset_url(user.perishable_token)
+    body      :change_password_url => change_password_user_url(user.perishable_token)
   end
 
 end

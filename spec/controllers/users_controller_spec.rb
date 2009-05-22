@@ -106,6 +106,36 @@ describe UsersController do
       end
 
     end
+
+    context 'for confirmed user' do
+
+      before(:each) do
+        @user = Factory.create(:confirmed_user)
+        @user.is_registered
+      end
+
+      it "'GET /users/:token/change_password' should be rendered" do
+        @user.reset_perishable_token!
+
+        get :change_password, :id => @user.perishable_token
+
+        response.should be_success
+        response.should respond_with(:content_type => :html)
+      end
+
+      it "'PUT /users/1' from change_password action should update password" do
+        UserSession.create(@user)
+
+        post :update, :id => @user.id, :user => { :password => 'changed', :password_confirmation => 'changed' }
+
+        response.should redirect_to(edit_user_url(@user))
+        response.should respond_with(:content_type => :html)
+
+        @user.reload
+        @user.should be_valid_password('changed')
+      end
+
+    end
   end
 
   context 'accessed by a registered user' do

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  permit 'registered', :except => [:new, :create, :confirm]
+  permit 'registered', :except => [:new, :create, :confirm, :change_password]
   permit 'administrator', :only => [:index]
 
   def index
@@ -93,6 +93,22 @@ class UsersController < ApplicationController
 
     else
       handle_redirection
+    end
+  end
+
+  def change_password
+    @user = User.find_using_perishable_token(params[:id])
+
+    puts @user.inspect
+
+    respond_to do |format|
+      if @user
+        UserSession.create(@user)
+        format.html
+      else
+        flash[:notice] = I18n.t 'flash.notice.not_find_user_by_perishable_token'
+        format.html { redirect_to(new_session_url)}
+      end
     end
   end
 

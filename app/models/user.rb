@@ -48,4 +48,9 @@ class User < ActiveRecord::Base
   def deliver_registration_confirmation_email!
     Notifier.deliver_user_registration_confirmation_email!(self)
   end
+
+  def deliver_password_reset_email!
+    reset_perishable_token!
+    Notifier.deliver_user_password_reset_email!(self)
+  end
 end
