@@ -3,6 +3,10 @@ module AppMocks
 
     class S3
 
+      def interface
+        @interface ||= AppMocks::RightAws::S3Interface.new
+      end
+
       def bucket(name, create=false, perms=nil, headers={})
         Bucket.new(self, name)
       end
@@ -71,5 +75,14 @@ module AppMocks
       end
 
     end
+
+    class S3Interface
+
+      def get_link(bucket, key, expires=nil, headers={})
+        "http://s3.amazone.com/#{bucket}/#{key}?Signature=XXXX"
+      end
+
+    end
+
   end
 end

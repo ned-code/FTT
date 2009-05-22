@@ -96,10 +96,12 @@ describe UniboardPage do
 
       it 'should have http url' do
         @page.url.should =~ HTTP_URL_FORMAT_REGEX
+        @page.url.should =~ /[\?&]signature=/i
       end
 
       it 'should have thumnail http url' do
         @page.thumbnail_url.should =~ HTTP_URL_FORMAT_REGEX
+        @page.thumbnail_url.should_not =~ /[\?&]signature=/i
       end
     end
   end

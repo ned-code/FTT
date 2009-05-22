@@ -17,12 +17,14 @@ describe 'Documents' do
     document = Factory.create(:uniboard_document)
 
     document.pages.first.url.should =~ URL_FORMAT_REGEX
+    document.pages.first.url.should =~ /[\?&]signature=/i
   end
 
   it 'should have thumbnail url' do
     document = Factory.create(:uniboard_document)
 
     document.pages.first.thumbnail_url.should =~ URL_FORMAT_REGEX
+    document.pages.first.thumbnail_url.should_not =~ /[\?&]signature=/i
   end
 
   it 'should have mime type' do

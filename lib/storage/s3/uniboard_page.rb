@@ -7,7 +7,7 @@ module Storage
       end
 
       def url
-        s3_key.public_link
+        s3_bucket.s3.interface.get_link(s3_bucket.name, s3_key_name, DEFAULT_URL_EXPIRE_TIME)
       end
 
       def mime_type
@@ -25,18 +25,18 @@ module Storage
       private
 
       def s3_key
-        @s3_key ||= s3_bucket.key(s3_path, true)
+        @s3_key ||= s3_bucket.key(s3_key_name, true)
       end
 
-      def s3_thumbnail_key
-        @s3_thumbnail_key ||= s3_bucket.key(s3_thumbnail_path, true)
-      end
-
-      def s3_path
+      def s3_key_name
         "documents/#{document.uuid}/#{uuid}.svg"
       end
 
-      def s3_thumbnail_path
+      def s3_thumbnail_key
+        @s3_thumbnail_key ||= s3_bucket.key(s3_thumbnail_key_name, true)
+      end
+
+      def s3_thumbnail_key_name
         "documents/#{document.uuid}/#{uuid}.thumbnail.jpg"
       end
 

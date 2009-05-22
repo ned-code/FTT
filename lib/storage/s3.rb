@@ -36,6 +36,8 @@ module Storage
       end
     end
 
+    DEFAULT_URL_EXPIRE_TIME = 5.minutes
+
     module Base
       include Storage::Base
 
