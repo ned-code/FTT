@@ -11,8 +11,8 @@
             <!--<category>version</category>-->
             <title>A new uniboard version is available !</title>
             <description>Download the new uniboard 4.2</description>
-            <link>http://www.software995.net/bin/pdf995s.exe</link>
-            <uniboard:version>4.2.r.1.1969:2009M</uniboard:version>
+            <link>http://st-ub.mnemis.com/uniboard-macx.dmg</link>
+            <uniboard:version>4.2.a.7.1438</uniboard:version>
             <pubDate>Mon, 11 May 2009 16:00:00 GMT</pubDate>
         </item>
     </channel>
