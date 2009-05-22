@@ -21,4 +21,13 @@ class Notifier < ActionMailer::Base
     sent_on    Time.now
   end
 
+  def user_password_reset_email(user)
+    subject    I18n.t('email.user_reset_password_email.subject')
+    recipients user.email
+    from       'no-reply@myuniboard.com'
+    sent_on    Time.now
+
+    body      :password_reset_url => edit_password_reset_url(user.perishable_token)
+  end
+
 end
