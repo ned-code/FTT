@@ -2,6 +2,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
   map.resource :time
 
+  map.resources :password_resets, :path_prefix => 'users'
   map.resources :users, :member => {:confirm => :get}
 
   map.connect 'documents/delete_all',
@@ -11,5 +12,5 @@ ActionController::Routing::Routes.draw do |map|
     document.resources :pages
   end
 
-  map.root :controller => 'sessions', :action => 'new'
+  map.root :controller => 'documents', :action => 'index'
 end
