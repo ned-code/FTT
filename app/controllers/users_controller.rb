@@ -99,8 +99,6 @@ class UsersController < ApplicationController
   def change_password
     @user = User.find_using_perishable_token(params[:id])
 
-    puts @user.inspect
-
     respond_to do |format|
       if @user
         UserSession.create(@user)
