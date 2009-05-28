@@ -108,7 +108,7 @@ class UniboardDocument < ActiveRecord::Base
         end
       end
     rescue => e
-      logger.debug "Error in uploaded uniboard document: " + e
+      logger.debug "Error in uploaded uniboard document: #{e.message}\n\n#{e.backtrace}"
       @error_on_payload = true
       return nil
     end
