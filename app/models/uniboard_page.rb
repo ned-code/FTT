@@ -20,11 +20,11 @@ class UniboardPage < ActiveRecord::Base
     UniboardDocument.config
   end
 
-  def url
+  def url(format = "svg", request_domain = nil)
     raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 
-  def mime_type
+  def mime_type(format = "svg")
     raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 

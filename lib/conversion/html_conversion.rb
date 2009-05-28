@@ -9,7 +9,8 @@ module HtmlConversion
   #
   # result is the index html content as a String
   def self.create_html_document(uuid, ub_document_file, rdf_document_file)
-    
+    ub_document_file.rewind
+    rdf_document_file.rewind
     ub_document = XMLObject.new(ub_document_file)
     rdf_document = XMLObject.new(rdf_document_file)
     
@@ -26,7 +27,17 @@ module HtmlConversion
         html_document_builder.h1(rdf_document.Description.title, "id" => "ub_doc_title")
         html_document_builder.div("id" => "ub_pages") {
           html_document_builder.ul {
-            ub_document.pages.each do |page|
+            if (ub_document.pages.is_a?(Array))          
+              ub_document.pages.each do |page|
+                html_document_builder.li {
+                  html_page = page.gsub(".svg", ".xhtml")
+                  thumbnail_page = page.gsub(".svg", ".thumbnail.jpg")                
+                  html_document_builder.a(html_page, "class" => "ub_page_link", "href" => html_page)
+                  html_document_builder.img("class" => "ub_page_thumbnail", "src" => thumbnail_page, "alt" => "thumbnail")
+                }
+              end
+            elsif
+              page = ub_document.pages.page
               html_document_builder.li {
                 html_page = page.gsub(".svg", ".xhtml")
                 thumbnail_page = page.gsub(".svg", ".thumbnail.jpg")                
@@ -52,7 +63,7 @@ module HtmlConversion
   # a png file so the pdf file must be accessible on the Hard drive.
   # PDF background is converted to a png file and this png file is placed beside the pdf background file. 
   def self.convert_svg_page_to_html(page_uuid, page_file_stream) 
-  
+    page_file_stream.rewind
     page = XMLObject.new(page_file_stream)
     html_page_builder = Builder::XmlMarkup.new(:indent => 2)
     
@@ -61,9 +72,9 @@ module HtmlConversion
                                "xmlns:svg" => "http://www.w3.org/2000/svg", 
                                "xmlns:ub" => "http://www.mnemis.com/uniboard") {
         html_page_builder.head {
-          html_page_builder.title(page[:attr => "ub:uuid"])
+          html_page_builder.title(page_uuid)
           html_page_builder.meta("http-equiv" => "Content-Type", "content" => "application/xhtml+xml; charset=UTF-8") 
-          html_page_builder.script("type" => "text/javascript", "src" => "../../script/com/mnemis/wb/Viewer.js")        
+          html_page_builder.script("", "type" => "text/javascript", "src" => "../../script/com/mnemis/wb/Viewer.js")
         }
         
         html_page_builder.body {
@@ -257,7 +268,7 @@ module HtmlConversion
       if system(convert_command)      
         left = (page_width.to_f - bg_width) / 2
         top = (page_height.to_f - bg_height) / 2
-        page_builder.img("id" => svg_object[:attr => "ub:uuid"],
+        page_builder.img("id" => svg_object[:attr => "ub:uuid"][1..-2],
                       "src" => pdf_url[0..-5] + format("%05d", pdf_page)  + ".png",
                       "alt" => "Image",
                       "ub:background" => "true",
@@ -273,7 +284,7 @@ module HtmlConversion
       z_index = size_and_position["z-index"].to_i + 10000100
       width = size_and_position["width"]
       height = size_and_position["height"]  
-      page_builder.object("id" => svg_object[:attr => "ub:uuid"],
+      page_builder.object("id" => svg_object[:attr => "ub:uuid"][1..-2],
                                "type" => "text/html",
                                "data" => svg_object["iframe"].src,
                                "ub:background" => svg_object[:attr => "ub:background"],
@@ -302,13 +313,13 @@ module HtmlConversion
     # if image is an svg file we must create an object instead of an image in HTML.
     image_src = svg_object[:attr => "xlink:href"]
     if (image_src[-3,3] == "svg")
-      page_builder.object("id" => svg_object[:attr => "ub:uuid"],
+      page_builder.object("id" => svg_object[:attr => "ub:uuid"][1..-2],
                                "type" => "image/svg+xml",
                                "data" => image_src,
                                "ub:background" => svg_object[:attr => "ub:background"],
                                "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
     else
-      page_builder.img("id" => svg_object[:attr => "ub:uuid"],
+      page_builder.img("id" => svg_object[:attr => "ub:uuid"][1..-2],
                             "src" => image_src,
                             "alt" => "Image",
                             "ub:background" => svg_object[:attr => "ub:background"],

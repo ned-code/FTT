@@ -6,15 +6,15 @@ module Storage
       def self.extended(base)
       end
 
-      def url
-        s3_bucket.s3.interface.get_link(s3_bucket.name, s3_key_name, DEFAULT_URL_EXPIRE_TIME)
+      def url(format = "svg", request_domain = nil)
+        s3_bucket.s3.interface.get_link(s3_bucket.name, s3_key_name(format), DEFAULT_URL_EXPIRE_TIME)
       end
 
       def mime_type
         s3_key.headers['content-type']
       end
 
-      def thumbnail_url
+      def thumbnail_url(request_domain = nil)
         s3_thumbnail_key.public_link
       end
 
@@ -28,8 +28,8 @@ module Storage
         @s3_key ||= s3_bucket.key(s3_key_name, true)
       end
 
-      def s3_key_name
-        "documents/#{document.uuid}/#{uuid}.svg"
+      def s3_key_name(format = "svg")
+        "documents/#{document.uuid}/#{uuid}.#{format}"
       end
 
       def s3_thumbnail_key

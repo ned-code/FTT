@@ -140,7 +140,7 @@ describe UniboardDocument do
         mock_bucket = Storage::S3::Configuration.config.bucket
 
         mock_bucket.should_not_receive(:keys)
-        mock_bucket.should_receive(:key).exactly(9).times.and_return do
+        mock_bucket.should_receive(:key).exactly(13).times.and_return do
           mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
           mock_key.should_receive(:put)
           mock_key
@@ -394,7 +394,7 @@ describe UniboardDocument do
         mock_bucket = Storage::S3::Configuration.config.bucket
 
         mock_bucket.should_not_receive(:keys)
-        mock_bucket.should_receive(:key).exactly(2).times.and_return do
+        mock_bucket.should_receive(:key).exactly(5).times.and_return do
           mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
           mock_key.should_receive(:put)
           mock_key
@@ -425,8 +425,12 @@ describe UniboardDocument do
           mock_key.should_receive(:delete)
           [mock_key]
         end
-        mock_bucket.should_not_receive(:key)
-
+        mock_bucket.should_receive(:key).exactly(2).times.and_return do
+          mock_key = AppMocks::RightAws::S3::Key.new(mock_bucket, 'test.file')
+          mock_key.should_receive(:put)
+          mock_key
+        end
+ 
         @document.payload = mock_uploaded_ubz('00000000-0000-0000-0000-000000delete.ubz', @document.uuid)
         @document.save.should be_true
       end

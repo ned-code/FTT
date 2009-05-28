@@ -1,9 +1,12 @@
 <ul id="document_navigation" class="navigation">
   <li><%= link_to "top", documents_path %></li>
 </ul>
-
 <ul id="document_<%= @document.id %>" class="page_list">
   <% @document.pages.each do |page| -%>
-    <li id="page_<%= page.id %>"><%= link_to image_tag(page.thumbnail_url), document_page_path(@document, page) %></li>
+    <li id="page_<%= page.id %>">
+      <a href="<%= document_page_path(@document, page) %>">
+        <img style="width:266px; height:200px" src="<%= page.thumbnail_url(@domain) %>" alt="<%= document_page_path(@document, page) %>">
+      </a>
+    </li>
   <% end -%>
 </ul>
