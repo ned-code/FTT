@@ -11,6 +11,7 @@ module HtmlConversion
   def self.create_html_document(uuid, ub_document_file, rdf_document_file)
     ub_document_file.rewind
     rdf_document_file.rewind
+
     ub_document = XMLObject.new(ub_document_file)
     rdf_document = XMLObject.new(rdf_document_file)
     
@@ -64,6 +65,7 @@ module HtmlConversion
   # PDF background is converted to a png file and this png file is placed beside the pdf background file. 
   def self.convert_svg_page_to_html(page_uuid, page_file_stream) 
     page_file_stream.rewind
+
     page = XMLObject.new(page_file_stream)
     html_page_builder = Builder::XmlMarkup.new(:indent => 2)
     

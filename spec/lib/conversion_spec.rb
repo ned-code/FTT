@@ -105,6 +105,5 @@ describe "Uniboard document conversion" do
       correct_height.should > 0
       correct_top.should > 0
       correct_left.should > 0
-true
   end
 end
