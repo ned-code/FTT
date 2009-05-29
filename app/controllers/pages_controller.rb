@@ -7,8 +7,11 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       if @document && @page && permit?('owner of document')
-        format.html
-        format.xml { redirect_to @page.url }
+        request_domain = "#{request.protocol}#{request.host_with_port}"
+        format.html { 
+            redirect_to  @page.url("xhtml", request_domain)
+        }
+        format.xml { redirect_to @page.url("svg", request_domain) }
       else
         format.html { render_optional_error_file(:not_found) }
         format.xml { head :forbidden }

@@ -4,7 +4,8 @@ class DocumentsController < ApplicationController
   def index
     @synchronised_at = Time.now.utc
     @documents = current_user.documents(:with_deleted => (request.format == Mime::XML))
-
+    #TODO how to get server url without request object?
+    @domain = "#{request.protocol}#{request.host_with_port}"
     respond_to do |format|
       format.html
       format.xml
@@ -13,7 +14,8 @@ class DocumentsController < ApplicationController
 
   def show
     @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find_by_id(params[:id])
-
+    #TODO how to get server url without request object?
+    @domain = "#{request.protocol}#{request.host_with_port}"
     respond_to do |format|
       if @document && permit?('owner of document')
         format.html

@@ -1,3 +1,5 @@
+require "conversion/html_conversion"
+
 class UniboardDocument < ActiveRecord::Base
   acts_as_authorizable
 
@@ -39,7 +41,7 @@ class UniboardDocument < ActiveRecord::Base
 
     def config
       @@config ||= Struct.new('UniboardDocumentConfiguration', :storage, :storage_config).new(
-        :storage => :filesystem
+        :filesystem
       )
 
       yield @@config if block_given?
@@ -73,45 +75,95 @@ class UniboardDocument < ActiveRecord::Base
 
     # Create tempfile
     payload.rewind
-    @tempfile = Tempfile.new("#{rand Time.now.to_i}-#{uuid}.ubz")
-    @tempfile.binmode
-    @tempfile.write payload.read
-    @tempfile.close
+    tempfile = Tempfile.new("#{rand Time.now.to_i}-#{uuid}.ubz")
+    tempfile.binmode
+    tempfile.write payload.read
+    tempfile.close
 
-    # Test document file
-    begin
-      Zip::ZipFile.open(@tempfile.path) do |content|
-        old_pages = pages.dup
-        document_desc = REXML::Document.new(content.get_input_stream("#{uuid}.ub").read)
+    #extract zip file
+    temp_file_path = tempfile.path
+    if (@document_zip_path)
+      FileUtils.remove_dir(@document_zip_path, true)
+    end
+    @document_zip_path = File.join(RAILS_ROOT, 'tmp', 'uncompressed_documents', File.basename(temp_file_path))
+    logger.debug "document path " + @document_zip_path
+    if (!File.exist?(@document_zip_path))
+      FileUtils.mkdir_p(@document_zip_path)
+    end
+    
+    Zip::ZipFile.foreach(temp_file_path) do |an_entry|
+      #need to create sub folder if needed
+      extracted_entry_path = File.join(@document_zip_path, an_entry.name)     
+      if (!File.exist?(File.dirname(extracted_entry_path)))
+        FileUtils.mkdir_p(File.dirname(extracted_entry_path))
+      end
+      an_entry.extract(File.join(@document_zip_path, an_entry.name))
+    end 
+    
+    
+    # Analyze document, convert it and update document and pages models
+    begin       
+    
+      # First check version of document (optimistic locking).
+      old_pages = pages.dup
+      document_desc = REXML::Document.new(File.open(@document_zip_path + "/#{uuid}.ub").read)
 
-        logger.debug "Receive uniboard document - description:\n" + document_desc.to_s
+      logger.debug "Receive uniboard document - description:\n" + document_desc.to_s
 
-        @error_on_version = true if !new_record? && version != document_desc.root.attribute(:version).value.to_i
+      @error_on_version = true if !new_record? && version != document_desc.root.attribute(:version).value.to_i
 
-        page_position = 0
-        document_desc.root.each_element('pages/page') do |page_element|
-          page_uuid = page_element.text.match(UUID_FORMAT_REGEX)[0]
-          page_position += 1
-
-          logger.debug "Receive uniboard document - page UUID: #{page_uuid}"
-          logger.debug "Receive uniboard document - page position: #{page_position}"
-
-          page = old_pages.delete( old_pages.find {|e| e.uuid == page_uuid} ) || pages.build(:uuid => page_uuid)
-
-          page.version += 1 if !page.new_record? and content.find_entry("#{page_uuid}.svg")
-          page.position = page_position if page.position != page_position
-        end
-
-        old_pages.each do |page|
-          page.mark_for_destruction
-          @pages_to_delete_on_storage << page.uuid
+      if (!@error_on_version)
+        # Create document html index. If there is an error on version we do not create html file because save will fail
+        rdf_stream = File.open(@document_zip_path + "/metadata.rdf")
+        ub_stream = File.open(@document_zip_path + "/#{uuid}.ub")
+      
+        index_html = HtmlConversion::create_html_document(uuid, ub_stream, rdf_stream)
+           
+        File.open(File.join(@document_zip_path, 'index.html'), 'w') do |file|
+          file << index_html
         end
       end
+      
+      # Now treat each pages of the document
+      page_position = 0
+      document_desc.root.each_element('pages/page') do |page_element|
+      
+        # update page model
+        page_uuid = page_element.text.match(UUID_FORMAT_REGEX)[0]
+        page_position += 1
+
+        logger.debug "Receive uniboard document - page UUID: #{page_uuid}"
+        logger.debug "Receive uniboard document - page position: #{page_position}"
+
+        page = old_pages.delete( old_pages.find {|e| e.uuid == page_uuid} ) || pages.build(:uuid => page_uuid)
+
+        page.version += 1 if !page.new_record? and File.exist?(@document_zip_path + "/#{page_uuid}.svg")
+        page.position = page_position if page.position != page_position
+        
+        if (!@error_on_version)
+          # convert page to html if file exist. If file does not exist it is because page has not been updated so we do not convert it  
+          if (File.exist?(@document_zip_path + "/#{page_uuid}.svg"))      
+            svg_stream = File.open(@document_zip_path + "/#{page_uuid}.svg")
+            page_html = HtmlConversion::convert_svg_page_to_html(page_uuid, svg_stream)
+            File.open(File.join(@document_zip_path, "#{page_uuid}.xhtml"), 'w') do |file|
+              file << page_html
+            end
+          end
+        end
+      end
+
+      old_pages.each do |page|
+        page.mark_for_destruction
+        @pages_to_delete_on_storage << page.uuid
+      end
+      
     rescue => e
       logger.debug "Error in uploaded uniboard document: #{e.message}\n\n#{e.backtrace}"
+      logger.debug "Error in uploaded uniboard document: " + e.backtrace.join("\n")
       @error_on_payload = true
       return nil
     end
+        
   end
 
   def payload
@@ -212,5 +264,9 @@ class UniboardDocument < ActiveRecord::Base
     errors.add('version', "have already changed on server")  if @error_on_version
     errors.add('payload', "has invalid format") if @error_on_payload
     errors.add('uuid', "have changed") if !uuid_was.blank? and uuid_changed?
+    if (@document_zip_path && errors.length > 0)
+        FileUtils.remove_dir(@document_zip_path, true)
+        @document_zip_path = nil
+    end
   end
 end

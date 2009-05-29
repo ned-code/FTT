@@ -1,3 +1,5 @@
+require 'find'
+
 module Storage
   module Filesystem
     module UniboardDocument
@@ -5,7 +7,7 @@ module Storage
 
       def self.extended(base)
       end
-
+      
       private
 
       def fs_basedir
@@ -13,7 +15,7 @@ module Storage
       end
 
       def save_payload
-        return unless @tempfile
+        return unless @document_zip_path
 
         @pages_to_delete_on_storage.each do |page_uuid|
           Dir[File.join(fs_basedir, "#{page_uuid}*")].each do |file|
@@ -22,20 +24,24 @@ module Storage
         end
         @pages_to_delete_on_storage.clear
 
-        Zip::ZipInputStream::open(@tempfile.path) do |file|
-          while (entry = file.get_next_entry)
-            next if entry.name =~ /\/$/ or entry.name == "#{uuid}.ub"
-
-            File.makedirs(File.dirname(File.join(fs_basedir, *entry.name.split('/'))))
-
-            File.open(File.join(fs_basedir, *entry.name.split('/')),  'w') do |fs_file|
-              fs_file << file.read
+        # create document folder if needed
+        if (!File.exist?(fs_basedir))
+          FileUtils.mkdir_p(fs_basedir)
+        end
+        Find.find(@document_zip_path) do |path|
+          if (path != @document_zip_path)
+            destination_name = File.basename(path)
+            logger.debug("path" + path)
+            logger.debug("dest name" + destination_name)
+            FileUtils.copy_entry(path, File.join(fs_basedir, destination_name))
+            if (File.directory?(path))                        
+              Find.prune
             end
           end
         end
-
-        @tempfile.close
-        @tempfile = nil
+        FileUtils.remove_dir(@document_zip_path, true)
+        @document_zip_path = nil
+        
       end
 
       def destroy_payload

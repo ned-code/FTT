@@ -9,5 +9,5 @@
 </ul>
 
 <div id="page_<%= @page.id %>">
- <iframe src="<%= @page.url %>" />
+ <object type="image/svg+xml" style="position:absolute; top:50px; left:50px; width:100%; height:100%" type: data="<%= @page.url %>" />
 </div>

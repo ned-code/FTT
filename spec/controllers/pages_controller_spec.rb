@@ -32,18 +32,8 @@ describe PagesController do
 
       it "'GET /documents/:uuid/pages/:uuid' should render" do
         get :show, :document_id => @page.document.id, :id => @page.id
-
-        response.should be_success
+        response.should be_redirect
         response.should respond_with(:content_type => :html)
-      end
-
-      it "'GET /documents/:uuid/pages/:uuid' should render with page navigation" do
-        get :show, :document_id => @page.document.id, :id => @page.id
-
-        response.should have_tag('#page_navigation') do
-          with_tag('a[href=?]', document_path(@page.document))
-          with_tag('a[href=?]', document_page_path(@page.document, @page.next))
-        end
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should render error 404 if current user
@@ -77,14 +67,6 @@ describe PagesController do
       end
 
       context 'with s3 storage' do
-
-        it "'GET /documents/:uuid/pages/:uuid' should render" do
-          get :show, :document_id => @page.document.id, :id => @page.id
-
-          response.should have_tag("#page_#{@page.id}") do
-            with_tag('iframe[src=?]', @page.url)
-          end
-        end
 
       end
     end

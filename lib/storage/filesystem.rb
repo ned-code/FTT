@@ -7,7 +7,7 @@ module Storage
       attr_accessor :basedir
 
       def initialize(config = {})
-        @basedir = config['basedir'] || File.join(RAILS_ROOT, 'files', 'documents')
+        @basedir = config['basedir'] || File.join(RAILS_ROOT, 'public', 'documents')
       end
 
       def self.config
