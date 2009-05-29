@@ -9,4 +9,5 @@ config/s3.yml
 db/*.sqlite3
 coverage
 public/documents
+spec/fixtures/files/ubz/
 spec/output_document

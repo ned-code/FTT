@@ -7,6 +7,7 @@ require 'email_spec/helpers'
 require 'email_spec/matchers'
 
 require 'fileutils'
+require 'zip/zipfilesystem'
 
 # Mocks
 require 'spec/mocks/right_aws'
@@ -14,6 +15,16 @@ require 'spec/mocks/right_aws'
 # Storages
 require 'storage/filesystem'
 require 'storage/s3'
+
+# Load ubz file list
+UBZ_FIXTURES = {}
+USED_UBZ_FIXTURES = []
+Dir[File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', "*")].each do |type_dir|
+  UBZ_FIXTURES[File.basename(type_dir).to_sym] ||= []
+  Dir[File.join(type_dir, "*.ubz")].each do |ubz|
+    UBZ_FIXTURES[File.basename(type_dir).to_sym] << ubz
+  end
+end
 
 Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
@@ -44,6 +55,7 @@ Spec::Runner.configure do |config|
   end
 
   config.before(:each) do
+    USED_UBZ_FIXTURES.clear
   end
 
   config.after(:each) do
@@ -85,32 +97,72 @@ class ActionController::TestResponse
 
 end
 
-# Create an Uploaded UBZ file
-def mock_uploaded_ubz(file, uuid = nil)
-  ActionController::TestUploadedFile.new(fixture_file(file, uuid))
+class ActionController::TestUploadedFile
+  attr_accessor :uuid
 end
 
-# Copy file in temporary folder and, if is a UBZ file, genereate an UUID.
+# Get an uploaded UBZ file
+def mock_uploaded_ubz(file, uuid = nil)
+  file = fixture_file(file, uuid)
+
+  uploaded_file = ActionController::TestUploadedFile.new(file)
+  uploaded_file.uuid = file.match(/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/) ? $1 : nil
+
+  uploaded_file
+end
+
 def fixture_file(source, uuid = nil)
   @uuid_generator ||= UUID.new
 
-  source = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', source) if source !~ /^\//
-
   if source =~ /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\.ubz$/
-    uuid ||= @uuid_generator.generate
-    target = File.join(RAILS_ROOT, 'spec', 'tmp', 'fixtures', uuid + File.extname(source))
+    type = source.match(/[\d\-]+(\w+)\.ubz$/) ? $1 : raise("not found type for this ubz file: #{source}")
 
-    FileUtils.cp source, target
-    begin
-      Zip::ZipFile.open(target) do |content|
-        content.rename("#{File.basename(source, File.extname(source))}.ub", "#{uuid}.ub")
-      end
-    rescue
+    target = generate_ubz(type, uuid)
+  else
+    target = source !~ /^\// ? File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', source) : source
+  end
+
+  target
+end
+
+def generate_ubz(type, uuid = nil)
+  UBZ_FIXTURES[type.to_sym] ||= []
+  source = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz_source', type.to_s)
+
+  if uuid.nil?
+    UBZ_FIXTURES[type.to_sym].each do |target|
+      target_uuid = File.basename(target, '.ubz')
+      next if USED_UBZ_FIXTURES.include?(target_uuid)
+
+      USED_UBZ_FIXTURES << target_uuid
+      return target
     end
   else
-    target = File.join(RAILS_ROOT, 'spec', 'tmp', 'fixtures', File.basename(source))
+    target = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', type.to_s, "#{uuid}.ubz")
 
-    FileUtils.cp source, target
+    if File.exists?(target)
+      USED_UBZ_FIXTURES << uuid
+      return target
+    end
+  end
+
+  USED_UBZ_FIXTURES << uuid ||= UUID.generate
+  UBZ_FIXTURES[type.to_sym] << target = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', type.to_s, "#{uuid}.ubz")
+
+  FileUtils.mkdir_p File.dirname(target)
+
+  Zip::ZipFile.open(target, Zip::ZipFile::CREATE) do |zip|
+    Dir[File.join(source, '**', '**')].sort.each do |filepath|
+      filename = filepath.gsub(File.join(source, ''), '')
+      filename.gsub!(/(.*)\w{8}-\w{4}-\w{4}-\w{4}-\w{12}(\.ub)$/, '\1' + uuid + '\2') if filename =~ /\.ub$/
+
+      if File.directory?(filepath)
+        zip.dir.mkdir(filename)
+      else
+        zip.file.open(filename, "w") {|f| f.puts File.read(filepath) }
+      end
+
+    end
   end
 
   target

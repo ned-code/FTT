@@ -399,10 +399,9 @@ describe DocumentsController do
         end
 
         it "'PUT /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
-          uuid = UUID.generate
-          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', uuid)
+          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
-          put :update, :id => uuid, :document => { :payload => mock_file }
+          put :update, :id => mock_file.uuid, :document => { :payload => mock_file }
 
           response.should be_forbidden
           response.should respond_with(:content_type => :xml)
@@ -430,10 +429,9 @@ describe DocumentsController do
 
         it "'DELETE /documents/:uuid' should return status '403 Forbidden' if document
             does not exist" do
-          uuid = UUID.generate
-          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', uuid)
+          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
-          delete :destroy, :id => uuid, :document => { :payload => mock_file }
+          delete :destroy, :id => mock_file.uuid, :document => { :payload => mock_file }
 
           response.should be_forbidden
           response.should respond_with(:content_type => :xml)
