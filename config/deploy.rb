@@ -45,7 +45,7 @@ set :ec2onrails_config, {
   
   # Any extra Ubuntu packages to install if desired
   # If you don't want to install extra packages then remove this.
-  :packages => ["logwatch", "libmysqlclient15-dev", "libxml-dev", "libxslt1-dev", "libsqlite3-dev"],
+  :packages => ["logwatch", "libmysqlclient15-dev", "libxml-dev", "libxslt1-dev", "libsqlite3-dev", "libgtk2.0-0", "libsm6"],
   
   # Any extra RubyGems to install if desired: can be "gemname" or if a 
   # particular version is desired "gemname -v 1.0.1"
