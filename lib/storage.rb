@@ -1,3 +1,5 @@
+require 'find'
+
 module Storage
   module Base
 

@@ -1,5 +1,3 @@
-require 'find'
-
 module Storage
   module Filesystem
     module UniboardDocument

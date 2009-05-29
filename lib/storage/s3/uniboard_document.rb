@@ -22,7 +22,6 @@ module Storage
         end
         @pages_to_delete_on_storage.clear
 
-
         Find.find(@document_zip_path) do |path|
           if (path != @document_zip_path)
             if (!File.directory?(path))                        
