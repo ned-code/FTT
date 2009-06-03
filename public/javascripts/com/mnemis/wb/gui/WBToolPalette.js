@@ -18,7 +18,7 @@ if (!com.mnemis.wb.gui) { com.mnemis.wb.gui = {}};
 com.mnemis.wb.gui.WBToolPalette = function(type)
 {
 	this.domNode = $(
-				     "<div id='toolPalette' style='position: fixed; top: 50px; left: 10px; width: 60px; height:" + (type == 1? "430":"220")+ "px; z-index: 65000; opacity:0.8; background-color: rgb(170,170,170); -moz-border-radius: 10px; -webkit-border-radius: 10px'>" +
+				     "<div id='toolPalette' style='height:" + (type == 1? "430":"220")+ "px'>" +
      				    (type == 1? this.getButtonHtml(0, "pen", "pen.png") : "") +
      				  	(type == 1?this.getButtonHtml(1, "rubber", "eraser.png") : "") +
      				    this.getButtonHtml(4, "hand", "hand.png") +

@@ -1,4 +1,17 @@
-body { overflow: hidden }
+body {  }
+
+#toolPalette {
+    position: fixed;
+    top: 50px;
+    left: 10px;
+    width: 60px;
+    height: 430px;
+    z-index: 2000000;
+    opacity:0.8;
+    background-color: rgb(170,170,170);
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px
+}
 
 .WBSelected {
 	  	-moz-border-radius: 5px;
