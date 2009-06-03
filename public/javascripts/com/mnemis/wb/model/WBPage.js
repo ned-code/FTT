@@ -31,10 +31,13 @@ com.mnemis.wb.model.WBPage.prototype.findObjectAtPoint = function(point)
 	for (; i < this.objects.length; i++)
 	{
 		var anObject = this.objects[i];
-	if (anObject.coverPoint(point) && $(anObject.domNode).attr("ub:background") == "false")
-	{
-		return anObject;
-	}
+        console.log("ask object");
+        console.log(anObject);
+        console.log(anObject.coverPoint(point));
+        if (anObject.coverPoint(point) && !anObject.isBackground)
+        {
+            return anObject;
+        }
 	}
 	return null;
 }

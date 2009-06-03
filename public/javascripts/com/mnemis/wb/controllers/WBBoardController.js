@@ -58,7 +58,7 @@ com.mnemis.wb.controllers.WBBoardController = function(currentPage, editable)
 						
 						e.data = that;
 						e.x = e.clientX + iFrameWrapper.position().left;
-						e.y = e.clientY + iFrameWrapper.position().top + 40;
+						e.y = e.clientY + iFrameWrapper.position().top;
 						
 						that.mouseDown.call(this, e);
 						
@@ -68,7 +68,7 @@ com.mnemis.wb.controllers.WBBoardController = function(currentPage, editable)
 					{
 						e.data = that;
 						//e.x = e.clientX + iFrameWrapper.position().left;
-						//e.y = e.clientY + iFrameWrapper.position().top + 40;						
+						//e.y = e.clientY + iFrameWrapper.position().top;						
 						that.mouseMove.call(this, e);
 					}, true);			    
 				
@@ -98,8 +98,9 @@ com.mnemis.wb.controllers.WBBoardController.prototype.mapToPageCoordinate = func
 		x = position.clientX;
 		y = position.clientY;
 	}
+
 	var calcX = (x + window.pageXOffset) * (1/this.currentZoom);
-    var calcY = (y - (40 - window.pageYOffset)) * (1/this.currentZoom);
+    var calcY = (y + (window.pageYOffset)) * (1/this.currentZoom);
     return {x: calcX, y: calcY};
 }
 

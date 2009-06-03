@@ -25,6 +25,7 @@ com.mnemis.wb.model.WBItem = function(rootElement)
 		this.size = { width:domWrapper.width(), height:domWrapper.height()};
 	}
 	this.uuid = domWrapper.attr("id");
+    this.isBackground = domWrapper.attr("ub:background") && (domWrapper.attr("ub:background") == "true");
 }
 
 com.mnemis.wb.model.WBItem.prototype.type = function()
