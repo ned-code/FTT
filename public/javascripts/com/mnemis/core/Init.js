@@ -31,7 +31,6 @@ com.mnemis.core.Import = function(moduleName)
                 // search for javascripts in domains
                 if (com.mnemis.core.LoadFromDomain(com.mnemis.core.domains[index], moduleName))
                     {
-                        console.log("script loaded");
                         break;
                     }
             };
@@ -42,14 +41,11 @@ com.mnemis.core.LoadFromDomain = function(domain, moduleName)
 {
     var result = "error"
     $.ajaxSetup({async: false});
-    console.log("search script in domain " + domain);
     var request =$.getScript(domain + moduleName, function(data, status)
         {
-            console.log("result " +status);
            result = status;
         });
     $.ajaxSetup({async: true});
-    console.log("out with status " + request);
     return (request && result == "success")
 }
 

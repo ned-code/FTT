@@ -32,7 +32,7 @@ $(function()
 		var body = $("body").get(0);
         $("<link>").attr({"rel":"stylesheet","type":"text/css","href":"http://localhost:3000/stylesheets/webbyboard.css","media":"screen"}).appendTo(document.getElementsByTagName("head")[0]);
 		var currentPage = new com.mnemis.wb.model.WBPage(body);
-		WB.application.boardController = new WB.controllers.WBBoardController(currentPage);
+		WB.application.boardController = new WB.controllers.WBBoardController(currentPage, false);
         WB.application.boardController.currentTool = 7;
 
 		WB.application.toolpalette = new WB.gui.WBToolPalette(0);

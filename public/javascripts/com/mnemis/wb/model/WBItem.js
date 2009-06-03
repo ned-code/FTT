@@ -42,7 +42,12 @@ com.mnemis.wb.model.WBItem.prototype.type = function()
 com.mnemis.wb.model.WBItem.prototype.select = function()
 {
 	$(this.domNode).addClass("WBSelected");
+    if (!$(this.domNode).attr("ub:zIndex"))
+    {
+        $(this.domNode).attr("ub:zIndex", $(this.domNode).css("zIndex"));
+    }
     $(this.domNode).css("zIndex", 20000);
+    // TODO should not use constant
     this.shift(-15, -15);
     this.size.height += 15;
     this.size.width += 15;
@@ -51,7 +56,7 @@ com.mnemis.wb.model.WBItem.prototype.select = function()
 com.mnemis.wb.model.WBItem.prototype.unSelect = function()
 {
 	$(this.domNode).removeClass("WBSelected");
-    $(this.domNode).css("zIndex", 1);
+    $(this.domNode).css("zIndex", $(this.domNode).attr("ub:zIndex"));
     this.shift(15, 15);
     this.size.height -= 15;
     this.size.width -= 15;

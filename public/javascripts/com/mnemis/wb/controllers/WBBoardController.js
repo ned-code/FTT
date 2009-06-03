@@ -12,8 +12,9 @@ com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js");
 if (!com.mnemis.wb.controllers) { com.mnemis.wb.controllers = {}};
 
 
-com.mnemis.wb.controllers.WBBoardController = function(currentPage)
+com.mnemis.wb.controllers.WBBoardController = function(currentPage, editable)
 {
+    this.editable = editable;
 	this.currentTool = 0;
 	this.moving = false;
 	this.originalMovingPos = null;
@@ -303,15 +304,19 @@ com.mnemis.wb.controllers.WBBoardController.prototype.mouseMove = function(e)
 	var that = e.data;
 	if (that.moving)
 	{
-		switch(that.currentTool)
-    	{
-    		case 0: that.draw(e); break;
-    		case 1: that.erase(e); break;
-    		case 2: that.marker(e); break;
-    		case 3: that.laser(e); break;
-    		case 4: that.hand(e); break;
-    		case 7: that.move(e); break;			        			  
-    	}	
+        if (that.editable || that.currentTool == 4)
+        {
+            switch(that.currentTool)
+                    {
+                        case 0: that.draw(e); break;
+                        case 1: that.erase(e); break;
+                        case 2: that.marker(e); break;
+                        case 3: that.laser(e); break;
+                        case 4: that.hand(e); break;
+                        case 7: that.move(e); break;
+                    }
+        }
+			
 	}
 }
 
