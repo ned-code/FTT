@@ -75,15 +75,19 @@ module HtmlConversion
                                "xmlns:ub" => "http://www.mnemis.com/uniboard") {
         html_page_builder.head {
           html_page_builder.title(page_uuid)
+          # TODO how to get current server name
+          js_location = UniboardDocument.config.javascript_location
           html_page_builder.meta("http-equiv" => "Content-Type", "content" => "application/xhtml+xml; charset=UTF-8") 
-          html_page_builder.script("", "type" => "text/javascript", "src" => "../../script/com/mnemis/wb/Viewer.js")
+          html_page_builder.script("", "type" => "text/javascript", "src" => js_location + "jquery-1.3.2.js")
+          html_page_builder.script("", "type" => "text/javascript", "src" => js_location + "com/mnemis/core/Init.js")
+          html_page_builder.script("", "type" => "text/javascript", "src" => js_location + "com/mnemis/wb/core/WBViewer.js")
         }
         
         html_page_builder.body {
           page_width = page.rect.width
           page_height = page.rect.height
           page_background = page.rect.fill
-          html_page_builder.div("id" => "ub_board", "style" => "position: absolute; top: 0px; left: 0px; width: " + page_width + "px; height: " + page_height + "px; background-color:" + page_background) {                     
+          html_page_builder.div("id" => "ub_board", "style" => "position: absolute; top: 0px; left: 0px; width: " + page_width + "px; height: " + page_height + "px; background-color:" + page_background + "; z-index:-2000000") {
             
             # create drawing part
             html_page_builder.div("id" => "ub_page_drawing", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%") {
@@ -216,7 +220,7 @@ module HtmlConversion
     size_and_position = getConvertedSizeAndPosition(svg_object, page_width, page_height)
     left = size_and_position["left"]
     top = size_and_position["top"]
-    z_index = size_and_position["z-index"].to_i + 10000100
+    z_index = size_and_position["z-index"].to_i
     width = size_and_position["width"]
     height = size_and_position["height"]  
     font_size = svg_object[:attr => "font-size"].to_f
@@ -264,25 +268,27 @@ module HtmlConversion
         convertUtilityPath = File.join(RAILS_ROOT, 'lib', 'conversion', 'linux', 'pdf2image')
       elsif (RUBY_PLATFORM =~ /darwin/)
         convertUtilityPath = File.join(RAILS_ROOT, 'lib', 'conversion', 'macx', 'pdf2image')
-      end  
-      convert_command = convertUtilityPath + " " + File.dirname(page_file_stream.path) + "/" + pdf_url + " " + pdf_page + " " + bg_width.to_s + " " + bg_height.to_s + " "  + File.dirname(File.dirname(page_file_stream.path) + "/" + pdf_url)
-      if system(convert_command)      
+      end
+      image_format = "jpg"
+      convert_command = convertUtilityPath + " " + File.dirname(page_file_stream.path) + "/" + pdf_url + " " + pdf_page + " " + bg_width.to_s + " " + bg_height.to_s + " "  + File.dirname(File.dirname(page_file_stream.path) + "/" + pdf_url) + " " + image_format
+      puts convert_command
+      if system(convert_command)
         left = (page_width.to_f - bg_width) / 2
         top = (page_height.to_f - bg_height) / 2
         page_builder.img("id" => svg_object[:attr => "ub:uuid"][1..-2],
-                      "src" => pdf_url[0..-5] + format("%05d", pdf_page)  + ".png",
+                      "src" => pdf_url[0..-5] + format("%05d", pdf_page)  + "." + image_format,
                       "alt" => "Image",
                       "ub:background" => "true",
-                      "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + bg_width.to_s + "px; height:" + bg_height.to_s + "px; z-index:0")
+                      "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + bg_width.to_s + "px; height:" + bg_height.to_s + "px; z-index:-2000000")
       else
-        puts "Error while generating image background"
+        logger.debug "Error while generating image background"
       end
       
     else
       size_and_position = getConvertedSizeAndPosition(svg_object, page_width, page_height)
       left = size_and_position["left"]
       top = size_and_position["top"]
-      z_index = size_and_position["z-index"].to_i + 10000100
+      z_index = size_and_position["z-index"].to_i
       width = size_and_position["width"]
       height = size_and_position["height"]  
       page_builder.object("id" => svg_object[:attr => "ub:uuid"][1..-2],
@@ -307,9 +313,9 @@ module HtmlConversion
     width = size_and_position["width"]
     height = size_and_position["height"]                
     if (svg_object[:attr => "ub:background"] == "true")
-      z_index = size_and_position["z-index"].to_i + 20000001
+      z_index = size_and_position["z-index"].to_i
     elsif
-      z_index = size_and_position["z-index"].to_i + 10000100
+      z_index = size_and_position["z-index"].to_i
     end
     # if image is an svg file we must create an object instead of an image in HTML.
     image_src = svg_object[:attr => "xlink:href"]

@@ -20,7 +20,7 @@ describe "Uniboard document conversion" do
     @index_html = HtmlConversion::create_html_document("00000000-0000-0000-0000-0000000", ub_stream, rdf_stream)
     svg_stream = File.open(@extracted_document_path + "/page001.svg")
     @page_html = HtmlConversion::convert_svg_page_to_html("00000000-0000-0000-0000-0000001", svg_stream)
-
+ 
   end
     
   after(:all) do
@@ -49,7 +49,7 @@ describe "Uniboard document conversion" do
     correct_height.should > 0
   end
 
-  it "Page conversion should generate page.xhtml with corrersponding background" do
+  it "Page conversion should generate page.xhtml with corresponding background" do
 
       page = Hpricot(@page_html)
       nb_background = 0
@@ -62,18 +62,18 @@ describe "Uniboard document conversion" do
       nb_background.should == 1
   end
 
-  it "Page conversion should generate page.xhtml with corrersponding images" do
+  it "Page conversion should generate page.xhtml with corresponding images" do
 
       page = Hpricot(@page_html)
       images_elem = page.search("img")
       images_elem.should have(3).items
   end
 
-  it "Page conversion should generate page.xhtml with corrersponding text" do
+  it "Page conversion should generate page.xhtml with corresponding text" do
     true
   end
 
-  it "Page conversion should generate page.xhtml with corrersponding widgets" do
+  it "Page conversion should generate page.xhtml with corresponding widgets" do
 
       page = Hpricot(@page_html)
       nb_widget = 0
@@ -86,7 +86,7 @@ describe "Uniboard document conversion" do
       nb_widget.should == 1
   end
  
-  it "Page conversion should generate page.xhtml with corrersponding drawing objects" do
+  it "Page conversion should generate page.xhtml with corresponding drawing objects" do
 
       page = Hpricot(@page_html)
       svg_elem = page.search("svg:polygon")
@@ -97,13 +97,16 @@ describe "Uniboard document conversion" do
   it "Page conversion should generate page.xhtml with correct object position and size" do
 
       page = Hpricot(@page_html)
-      correct_width = page.search("#b1cdc856-1400-4ac3-9c2b-29699b4fd94b")[0]['style'] =~ /width:694.04965px/
-      correct_height = page.search("#b1cdc856-1400-4ac3-9c2b-29699b4fd94b")[0]['style'] =~ /height:981.00127px/
-      correct_top = page.search("#b1cdc856-1400-4ac3-9c2b-29699b4fd94b")[0]['style'] =~ /top:711.499365px/
-      correct_left = page.search("#b1cdc856-1400-4ac3-9c2b-29699b4fd94b")[0]['style'] =~ /left:371.975175px/
-      correct_width.should > 0
-      correct_height.should > 0
-      correct_top.should > 0
-      correct_left.should > 0
+      if (page.search("#b1cdc856-1400-4ac3-9c2b-29699b4fd94b").length > 0)
+        correct_width = page.search("#b1cdc856-1400-4ac3-9c2b-29699b4fd94b")[0]['style'] =~ /width:694.04965px/
+        correct_height = page.search("#b1cdc856-1400-4ac3-9c2b-29699b4fd94b")[0]['style'] =~ /height:981.00127px/
+        correct_top = page.search("#b1cdc856-1400-4ac3-9c2b-29699b4fd94b")[0]['style'] =~ /top:711.499365px/
+        correct_left = page.search("#b1cdc856-1400-4ac3-9c2b-29699b4fd94b")[0]['style'] =~ /left:371.975175px/
+        correct_width.should > 0
+        correct_height.should > 0
+        correct_top.should > 0
+        correct_left.should > 0
+      end
+        false
   end
 end

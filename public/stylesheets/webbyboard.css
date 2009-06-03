@@ -1,0 +1,10 @@
+body { overflow: hidden }
+
+.WBSelected {
+	  	-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border: 5px solid #AAAAAA;
+		padding: 10px;
+  }
+
+

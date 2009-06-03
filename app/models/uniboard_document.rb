@@ -40,8 +40,8 @@ class UniboardDocument < ActiveRecord::Base
     alias_method_chain(:find_every, :deleted)
 
     def config
-      @@config ||= Struct.new('UniboardDocumentConfiguration', :storage, :storage_config).new(
-        :filesystem
+      @@config ||= Struct.new('UniboardDocumentConfiguration', :storage, :storage_config, :javascript_location).new(
+        :filesystem,nil, "http://localhost:3000/javascripts/"
       )
 
       yield @@config if block_given?

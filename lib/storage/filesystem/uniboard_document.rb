@@ -29,8 +29,6 @@ module Storage
         Find.find(@document_zip_path) do |path|
           if (path != @document_zip_path)
             destination_name = File.basename(path)
-            logger.debug("path" + path)
-            logger.debug("dest name" + destination_name)
             FileUtils.copy_entry(path, File.join(fs_basedir, destination_name))
             if (File.directory?(path))                        
               Find.prune
