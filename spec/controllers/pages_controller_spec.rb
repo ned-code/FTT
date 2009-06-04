@@ -32,8 +32,8 @@ describe PagesController do
 
       it "'GET /documents/:uuid/pages/:uuid' should render" do
         get :show, :document_id => @page.document.id, :id => @page.id
-        response.should be_redirect
-        response.should respond_with(:content_type => :html)
+        response.should be_success
+        response.should respond_with(:content_type => "application/xhtml+xml")
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should render error 404 if current user
