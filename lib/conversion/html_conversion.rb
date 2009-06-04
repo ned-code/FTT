@@ -269,7 +269,7 @@ module HtmlConversion
       elsif (RUBY_PLATFORM =~ /darwin/)
         convertUtilityPath = File.join(RAILS_ROOT, 'lib', 'conversion', 'macx', 'pdf2image')
       end
-      image_format = "jpg"
+      image_format = "png"
       convert_command = convertUtilityPath + " " + File.dirname(page_file_stream.path) + "/" + pdf_url + " " + pdf_page + " " + bg_width.to_s + " " + bg_height.to_s + " "  + File.dirname(File.dirname(page_file_stream.path) + "/" + pdf_url) + " " + image_format
       puts convert_command
       if system(convert_command)
