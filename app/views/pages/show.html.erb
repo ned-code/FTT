@@ -1,13 +1,23 @@
-<ul id="page_navigation" class="navigation">
-  <% if previous_page = @page.previous -%>
-    <li><%= link_to "previous", document_page_path(@page.document, previous_page) %></li>
-  <% end -%>
-  <li><%= link_to "top", document_path(@page.document) %></li>
-  <% if next_page = @page.next -%>
-    <li><%= link_to "next", document_page_path(@page.document, next_page) %></li>
-  <% end -%>
-</ul>
-
-<div id="page_<%= @page.id %>">
- <object type="image/svg+xml" style="position:absolute; top:50px; left:50px; width:100%; height:100%" type: data="<%= @page.url %>" />
-</div>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg-flat.dtd">
+<html xmlns:ub="http://www.mnemis.com/uniboard" xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg">
+  <head>
+    <title><%= @page.id %></title>
+    <base href="<%=   File.dirname(@page_url) + "/" %>"></base>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/webbyboard.css" media="screen"/>
+    <meta content="application/xhtml+xml; charset=UTF-8" http-equiv="Content-Type"/>
+    <script type="text/javascript" src="/javascripts/jquery-1.3.2.js"></script>
+    <script type="text/javascript" src="/javascripts/com/mnemis/core/Init.js"></script>
+    <script type="text/javascript" src="/javascripts/com/mnemis/wb/core/WBViewer.js"></script>
+    <script type="text/javascript">
+      $(function()
+        {
+          $("#static_page").remove();
+          var viewer = new com.mnemis.wb.core.WBViewer();
+          WB.application.boardController.setCurrentPage("<%= @page_url  %>");
+        });
+    </script>
+  </head>
+  <body>
+    <a id="static_page" href="<%= @page_url %>">page <%= @page.id %></a>
+  </body>
+</html>

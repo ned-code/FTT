@@ -9,80 +9,60 @@ if (!com.mnemis || !com.mnemis.core)
 
 com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js");
 
+com.mnemis.core.Import("com/mnemis/wb/model/WBPage.js");
+
 if (!com.mnemis.wb.controllers) { com.mnemis.wb.controllers = {}};
 
 
-com.mnemis.wb.controllers.WBBoardController = function(currentPage, editable)
+com.mnemis.wb.controllers.WBBoardController = function(editable)
 {
+	console.log("init board controller");
     this.editable = editable;
 	this.currentTool = 0;
 	this.moving = false;
+    window.scrollTo(0, 0);
 	this.originalMovingPos = null;
 	this.currentZoom = 1;
-	this.currentPage = currentPage;
 	this.selection = [];
+    // default tool is the arrow
+    this.setCurrentTool(7);
+}
 
-	$("#ub_board").bind("mousedown", this, this.mouseDown);
-	$("#ub_board").bind("mousemove", this, this.mouseMove);
-	$("#ub_board").bind("mouseup", this, this.mouseUp);
-	$("#ub_board").bind("mouseout", this, this.mouseOut);
-	console.log("init board controller");
-	var that = this;
-	$(this.currentPage.documentRootNode).find("object").each(function(i)
-		{
-			console.log("add event listener");
-			console.log(this);
-			this.addEventListener("mousedown", 
-				function(i)
-				{
-					console.log("mouse down");
-				}, 
-				true
-			);
-		}
-	);
-	$(this.currentPage.documentRootNode).find("iframe").each(function(i)
-		{
-			if (this.contentWindow)
-			{
-				var iFrameWrapper = $(this);			
-				
-				this.contentWindow.addEventListener("mouseup", function(e)
-					{
-						e.data = that;
-						that.mouseUp.call(this, e);
-					}, true);
-					
-				this.contentWindow.addEventListener("mousedown", function(e)
-					{
-						
-						e.data = that;
-						e.x = e.clientX + iFrameWrapper.position().left;
-						e.y = e.clientY + iFrameWrapper.position().top;
-						
-						that.mouseDown.call(this, e);
-						
-					}, true);
-					
-				this.contentWindow.addEventListener("mousemove", function(e)
-					{
-						e.data = that;
-						//e.x = e.clientX + iFrameWrapper.position().left;
-						//e.y = e.clientY + iFrameWrapper.position().top;						
-						that.mouseMove.call(this, e);
-					}, true);			    
-				
-			}		
-		}
-	);     		        
+
+com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(pageUrl)
+{
+    console.log("page to load " + pageUrl);
+    var that = this;
+
+    $.get(pageUrl, null, function(data, textStatus)
+        {
+            var loadedPage = $(data);
+            var boardElement = loadedPage.find("#ub_board").get(0);
+            that.currentPage = new com.mnemis.wb.model.WBPage(boardElement);
+            $("body").append(boardElement);
+            $("#ub_board").bind("mousedown", that, that.mouseDown);
+            $("#ub_board").bind("mousemove", that, that.mouseMove);
+            $("#ub_board").bind("mouseup", that, that.mouseUp);
+            $("#ub_board").bind("mouseout", that, that.mouseOut);
+
+            // update data attribute of object
+            $("object").each(function()
+                {
+                    var relPath = $(this).attr("data");
+                    $(this).attr("data",relPath);
+                });
+        }, "xml");
+
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentTool = function(toolId)
 {
 	this.currentTool = toolId;
-	console.log("select tool " + toolId);
 	this.unSelectObjects(this.selection);
-    WB.application.toolpalette.refreshGUI();
+    if (WB.application.toolpalette)
+    {
+        WB.application.toolpalette.refreshGUI();
+    }
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.mapToPageCoordinate = function(position)

@@ -12,18 +12,8 @@ com.mnemis.wb.model.WBItem = function(rootElement)
 {
 	this.domNode = rootElement;
 	var domWrapper = $(this.domNode);
-	this.position = domWrapper.position();
-
-	// in ff 3.5 width and height of object are always 0. In this case we take the value from the style directly
-	if (domWrapper.width() == 0)
-	{
-		console.log(domWrapper.css("width"));
-		this.size = { width:domWrapper.css("width").replace("px", ""), height:domWrapper.css("height").replace("px", "")};
-	}
-	else
-	{
-		this.size = { width:domWrapper.width(), height:domWrapper.height()};
-	}
+	this.position = { top:  parseFloat(domWrapper.css("top").replace("px", "")), left: parseFloat(domWrapper.css("left").replace("px", ""))};
+	this.size = { width:parseFloat(domWrapper.css("width").replace("px", "")), height: parseFloat(domWrapper.css("height").replace("px", ""))};
 	this.uuid = domWrapper.attr("id");
     this.isBackground = domWrapper.attr("ub:background") && (domWrapper.attr("ub:background") == "true");
 }

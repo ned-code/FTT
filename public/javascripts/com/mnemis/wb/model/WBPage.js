@@ -27,13 +27,9 @@ com.mnemis.wb.model.WBPage = function(pageBodyElement)
 com.mnemis.wb.model.WBPage.prototype.findObjectAtPoint = function(point)
 {
 	var i = 0;
-	console.log("find object under point " + point.x + ":" + point.y);
 	for (; i < this.objects.length; i++)
 	{
 		var anObject = this.objects[i];
-        console.log("ask object");
-        console.log(anObject);
-        console.log(anObject.coverPoint(point));
         if (anObject.coverPoint(point) && !anObject.isBackground)
         {
             return anObject;
