@@ -12,7 +12,7 @@ if (!com.mnemis.wb.model) { com.mnemis.wb.model = {}};
 
 com.mnemis.wb.model.WBPage = function(pageBodyElement)
 {
-	this.drawing = undefined;
+	this.drawing = { polygon: [], polyline: []};
 	this.objects = [];
 	this.documentRootNode = pageBodyElement;
 	var documentContent = $(this.documentRootNode).find("#ub_page_objects > *");
@@ -22,7 +22,19 @@ com.mnemis.wb.model.WBPage = function(pageBodyElement)
 			that.objects.push(new com.mnemis.wb.model.WBItem(this));
 		}
 	);
+
+    documentDrawing = $(this.documentRootNode).find("#ub_page_drawing").children().children();
+    documentDrawing.each(function()
+        {
+            var polygonObject = {
+                points: $(this).attr("points"),
+                domNode: this
+            };
+            that.drawing.polygon.push(polygonObject);
+        }
+    );
 }
+
 
 com.mnemis.wb.model.WBPage.prototype.findObjectAtPoint = function(point)
 {
@@ -40,5 +52,5 @@ com.mnemis.wb.model.WBPage.prototype.findObjectAtPoint = function(point)
 
 com.mnemis.wb.model.WBPage.prototype.drawingModel = function()
 {
-    return { polylines : []};
+    return this.drawing;
 }

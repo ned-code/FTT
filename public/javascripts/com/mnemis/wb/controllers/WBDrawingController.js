@@ -36,7 +36,7 @@ com.mnemis.wb.controllers.WBDrawingController = function(initialDrawing)
 	if (this.mRenderer)
 	{
 	    this.domNode = this.mRenderer.createSurface(); 
-	    $(this.domNode).css("zIndex", 3000);
+	    $(this.domNode).css("zIndex", 2000000);
 		this.repaintAll();
     }						     
 }
@@ -53,11 +53,11 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.setDrawingModel = functi
 com.mnemis.wb.controllers.WBDrawingController.prototype.repaintAll = function()
 {
   	this.mRenderer.clearSurface(this.domNode);
-    if (this.mDrawingModel.polylines)
+    if (this.mDrawingModel.polyline)
     {
-        for (var i = 0; i < this.mDrawingModel.polylines.length; i++)
+        for (var i = 0; i < this.mDrawingModel.polyline.length; i++)
         {
-            var aDrawObject = this.mDrawingModel.polylines[i];
+            var aDrawObject = this.mDrawingModel.polyline[i];
             var newLine = aDrawObject.domNode;
             if (!newLine)
             {
@@ -71,6 +71,28 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.repaintAll = function()
                 color: "rgb(255,0,0)",
                 width: 5
             })
+            this.repaintObject(aDrawObject);
+            this.domNode.appendChild(newLine);
+        }
+    }
+    if (this.mDrawingModel.polygon)
+    {
+        for (var i = 0; i < this.mDrawingModel.polygon.length; i++)
+        {
+            var aDrawObject = this.mDrawingModel.polygon[i];
+            var newLine = aDrawObject.domNode;
+            if (!newLine)
+            {
+                newLine = this.mRenderer.createPolygon();
+
+                aDrawObject.domNode = newLine;
+                this.mRenderer.updatePolyline(newLine,
+                {
+                    id: aDrawObject.uuid,
+                    color: "rgb(255,0,0)",
+                    width: 5
+                })
+            }
             this.repaintObject(aDrawObject);
             this.domNode.appendChild(newLine);
         }

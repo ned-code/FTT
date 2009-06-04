@@ -10,6 +10,7 @@ if (!com.mnemis || !com.mnemis.core)
 com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js");
 
 com.mnemis.core.Import("com/mnemis/wb/model/WBPage.js");
+com.mnemis.core.Import("com/mnemis/wb/controllers/WBDrawingController.js");
 
 if (!com.mnemis.wb.controllers) { com.mnemis.wb.controllers = {}};
 
@@ -17,10 +18,9 @@ if (!com.mnemis.wb.controllers) { com.mnemis.wb.controllers = {}};
 com.mnemis.wb.controllers.WBBoardController = function(editable)
 {
 	console.log("init board controller");
+    this.drawingController = new WB.controllers.WBDrawingController();
     this.editable = editable;
-	this.currentTool = 0;
-	this.moving = false;
-    window.scrollTo(0, 0);
+    this.moving = false;
 	this.originalMovingPos = null;
 	this.currentZoom = 1;
 	this.selection = [];
@@ -34,6 +34,17 @@ com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(
     console.log("page to load " + pageUrl);
     var that = this;
 
+    // re-init internal working attributes
+    window.scrollTo(0, 0);
+    this.moving = false;
+	this.originalMovingPos = null;
+	this.currentZoom = 1;
+	this.selection = [];
+    
+    // remove previous page
+    $("#ub_board").remove();
+    
+    // load new page
     $.get(pageUrl, null, function(data, textStatus)
         {
             var loadedPage = $(data);
@@ -51,6 +62,10 @@ com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(
                     var relPath = $(this).attr("data");
                     $(this).attr("data",relPath);
                 });
+
+            // replace drawing div with content of drawing controller. Allow to have different kind of renderer (for ie)
+            that.drawingController.setDrawingModel(that.currentPage.drawingModel());
+            $("#ub_page_drawing").children().replaceWith(that.drawingController.domNode);
         }, "xml");
 
 }

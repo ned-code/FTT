@@ -16,12 +16,10 @@ com.mnemis.core.Provide("com/mnemis/wb/core/WBViewer.js");
 
 com.mnemis.core.Import("com/mnemis/wb/gui/WBToolPalette.js");
 com.mnemis.core.Import("com/mnemis/wb/controllers/WBBoardController.js");
-com.mnemis.core.Import("com/mnemis/wb/controllers/WBDrawingController.js");
-
 
 if (!com.mnemis.wb.core) { com.mnemis.wb.core = {}};
 
-// create WB application object.
+// application singleton.
 WB.application = {};
 
 com.mnemis.wb.core.WBViewer = function()
