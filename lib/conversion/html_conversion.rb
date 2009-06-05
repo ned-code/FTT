@@ -72,7 +72,7 @@ module HtmlConversion
     html_page_builder.declare! :DOCTYPE, :html, :PUBLIC, "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN", "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg-flat.dtd"
     html_page_builder.html("xmlns" => "http://www.w3.org/1999/xhtml", 
                                "xmlns:svg" => "http://www.w3.org/2000/svg", 
-                               "xmlns:ub" => "http://www.mnemis.com/uniboard") {
+                               "xmlns:ub" => XML_UNIBOARD_DOCUMENT_NAMESPACE) {
         html_page_builder.head {
           html_page_builder.title(page_uuid)
           # TODO how to get current server name

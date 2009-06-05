@@ -179,7 +179,7 @@ class UniboardDocument < ActiveRecord::Base
 
     options[:page_url] ||= false
 
-    options[:builder].document('xmlns' => 'http://www.mnemis.com/uniboard',
+    options[:builder].document('xmlns' => XML_UNIBOARD_DOCUMENT_NAMESPACE,
       'uuid' => uuid,
       'version' => version,
       'created-at' => created_at.xmlschema,
