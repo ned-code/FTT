@@ -1,12 +1,5 @@
-// check that mnemis FW has bveen loadad
-if (!com.mnemis || !com.mnemis.core)
-{
-	alert("mnemis FW has not been loaded");
-}
 
 com.mnemis.core.Provide("com/mnemis/wb/model/WBItem.js");
-
-if (!com.mnemis.wb.model) { com.mnemis.wb.model = {}};
 
 com.mnemis.wb.model.WBItem = function(rootElement)
 {
@@ -32,12 +25,12 @@ com.mnemis.wb.model.WBItem.prototype.type = function()
 
 com.mnemis.wb.model.WBItem.prototype.select = function()
 {
-	$(this.domNode).addClass("WBSelected");
+	$(this.domNode).addClass("wb-selected-object");
     if (!$(this.domNode).attr("ub:zIndex"))
     {
         $(this.domNode).attr("ub:zIndex", $(this.domNode).css("zIndex"));
     }
-    $(this.domNode).css("zIndex", 20000);
+    $(this.domNode).css("zIndex", 2000000);
     // TODO should not use constant
     this.shift(-15, -15);
     this.size.height += 15;
@@ -46,7 +39,7 @@ com.mnemis.wb.model.WBItem.prototype.select = function()
 
 com.mnemis.wb.model.WBItem.prototype.unSelect = function()
 {
-	$(this.domNode).removeClass("WBSelected");
+	$(this.domNode).removeClass("wb-selected-object");
     $(this.domNode).css("zIndex", $(this.domNode).attr("ub:zIndex"));
     this.shift(15, 15);
     this.size.height -= 15;

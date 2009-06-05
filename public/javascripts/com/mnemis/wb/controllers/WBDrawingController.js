@@ -1,18 +1,10 @@
 /**
  * Uniboard tool bar widget
 **/
-// check that mnemis FW has bveen loadad
-if (!com.mnemis || !com.mnemis.core)
-{
-	alert("mnemis FW has not been loaded");
-}
-
 com.mnemis.core.Provide("com/mnemis/wb/controllers/WBDrawingController.js");
 
 com.mnemis.core.Import("com/mnemis/core/UUID.js")
 com.mnemis.core.Import("com/mnemis/wb/adaptors/WBSvgRenderer.js")
-
-if (!com.mnemis.wb.controllers) { com.mnemis.wb.controllers = {}};
 
 
 com.mnemis.wb.controllers.WBDrawingController = function(initialDrawing)
@@ -36,7 +28,7 @@ com.mnemis.wb.controllers.WBDrawingController = function(initialDrawing)
 	if (this.mRenderer)
 	{
 	    this.domNode = this.mRenderer.createSurface(); 
-	    $(this.domNode).css("zIndex", 2000000);
+	    $(this.domNode).css("zIndex", 1999999);
 		this.repaintAll();
     }						     
 }
