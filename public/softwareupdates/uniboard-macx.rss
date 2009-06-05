@@ -12,7 +12,7 @@
             <title>A new uniboard version is available !</title>
             <description>Download the new uniboard 4.2</description>
             <link>http://uniboard.mnemis.com/softwareupdates/uniboard-macx.dmg</link>
-            <uniboard:version>4.2.a.7.1438</uniboard:version>
+            <ub:version>4.2.a.7.1438</uniboard:version>
             <pubDate>Mon, 11 May 2009 16:00:00 GMT</pubDate>
         </item>
     </channel>
