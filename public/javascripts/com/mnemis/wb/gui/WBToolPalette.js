@@ -132,9 +132,13 @@ com.mnemis.wb.gui.WBToolPalette.prototype.mouseDown = function(e)
  {
  	var that = e.data;
  	that._moving = true;
- 	that._startMousePos = { x:e.screenX, y:e.screenY};
+ 	that._startMousePos = { x:e.clientX, y:e.clientY};
  	that._starPosition = $(that.domNode).position();
-	e.preventDefault();	
+    // as position is fixed we must take care about scroll
+    that._starPosition.top -= window.scrollY;
+    that._starPosition.left -= window.scrollX;
+	e.preventDefault();
+    e.stopPropagation();
  }
  
 com.mnemis.wb.gui.WBToolPalette.prototype.mouseUp = function(e)
@@ -142,13 +146,18 @@ com.mnemis.wb.gui.WBToolPalette.prototype.mouseUp = function(e)
  	var that = e.data;
  	that._moving = false;
  	that._startMousePos = null;
- 	e.preventDefault();	
+ 	e.preventDefault();
+    e.stopPropagation();
  }
  
 com.mnemis.wb.gui.WBToolPalette.prototype.mouseOut = function(e)
  {
-    var that = e.data;
- 	that.mouseUp(e);
+//     if (e.target == e.data.domNode)
+//     {
+//        console.log(e);
+//        var that = e.data;
+//        that.mouseUp(e);
+//     }
  }
  
 com.mnemis.wb.gui.WBToolPalette.prototype.mouseMove = function(e)
@@ -156,8 +165,8 @@ com.mnemis.wb.gui.WBToolPalette.prototype.mouseMove = function(e)
  	var that = e.data;   	
  	if (that._moving)
  	{
- 		var xDiff = e.screenX - that._startMousePos.x;
- 		var yDiff = e.screenY - that._startMousePos.y;
+ 		var xDiff = e.clientX - that._startMousePos.x;
+ 		var yDiff = e.clientY - that._startMousePos.y;
 		if (xDiff > 5 || xDiff < -5 || yDiff > 5 || yDiff < -5)
 		{
      		var newLeft = that._starPosition.left + xDiff;
@@ -169,6 +178,7 @@ com.mnemis.wb.gui.WBToolPalette.prototype.mouseMove = function(e)
      		
      		$(that.domNode).css({ left: newLeft + 'px', top: newTop + 'px'});                 		
 		}
-		e.preventDefault();	                 	
+		e.preventDefault();
+        e.stopPropagation();
  	}	
  }
