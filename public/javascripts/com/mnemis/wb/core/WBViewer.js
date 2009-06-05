@@ -1,23 +1,13 @@
 /**
  * UBEditor is the main function of the application. It define UB namespace.
 **/
-
-// check that mnemis FW has bveen loadad
-if (!com.mnemis || !com.mnemis.core)
-{
-	alert("mnemis FW has not been loaded");
-}
-
-// create WB namespace and import it in WB
-com.mnemis.wb = {};
-var WB = com.mnemis.wb;
-
 com.mnemis.core.Provide("com/mnemis/wb/core/WBViewer.js");
+// import Webbyboard namespace in WB
+var WB = com.mnemis.wb;
 
 com.mnemis.core.Import("com/mnemis/wb/gui/WBToolPalette.js");
 com.mnemis.core.Import("com/mnemis/wb/controllers/WBBoardController.js");
 
-if (!com.mnemis.wb.core) { com.mnemis.wb.core = {}};
 
 // application singleton.
 WB.application = {};

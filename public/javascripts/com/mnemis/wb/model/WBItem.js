@@ -1,12 +1,5 @@
-// check that mnemis FW has bveen loadad
-if (!com.mnemis || !com.mnemis.core)
-{
-	alert("mnemis FW has not been loaded");
-}
 
 com.mnemis.core.Provide("com/mnemis/wb/model/WBItem.js");
-
-if (!com.mnemis.wb.model) { com.mnemis.wb.model = {}};
 
 com.mnemis.wb.model.WBItem = function(rootElement)
 {

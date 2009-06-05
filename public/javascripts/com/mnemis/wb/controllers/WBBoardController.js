@@ -1,18 +1,10 @@
 /**
  * Uniboard board controller
 **/
-// check that mnemis FW has bveen loadad
-if (!com.mnemis || !com.mnemis.core)
-{
-	alert("mnemis FW has not been loaded");
-}
-
 com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js");
 
 com.mnemis.core.Import("com/mnemis/wb/model/WBPage.js");
 com.mnemis.core.Import("com/mnemis/wb/controllers/WBDrawingController.js");
-
-if (!com.mnemis.wb.controllers) { com.mnemis.wb.controllers = {}};
 
 
 com.mnemis.wb.controllers.WBBoardController = function(editable)

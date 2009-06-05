@@ -54,5 +54,18 @@ com.mnemis.core.Provide = function(moduleName)
     if (com.mnemis.core.modules.indexOf(moduleName) == -1)
     {
         com.mnemis.core.modules.push(moduleName);
+
+        // create namespace
+        var pathElements = moduleName.split("/");
+        var lastPathElement = window;
+        for (var index = 0; index < pathElements.length - 1; index++)
+        {
+            var pathElement = pathElements[index];
+            if (!lastPathElement[pathElement])
+            {
+                lastPathElement[pathElement] = {};
+            }
+            lastPathElement = lastPathElement[pathElement];
+        }
     }
 }
