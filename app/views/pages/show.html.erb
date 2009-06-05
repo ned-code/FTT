@@ -13,7 +13,7 @@
         {
           $("#wb-static-page-link").remove();
           var viewer = new com.mnemis.wb.core.WBViewer();
-          WB.application.boardController.setCurrentPage("<%= @page_url  %>");
+          viewer.loadPageId(<%= @document.id %> ,<%= @page.id  %>);
         });
     </script>
   </head>

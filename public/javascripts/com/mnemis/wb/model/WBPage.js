@@ -18,7 +18,7 @@ com.mnemis.wb.model.WBPage = function(pageBodyElement)
 		}
 	);
 
-    documentDrawing = $(this.documentRootNode).find("#ub_page_drawing").children().children();
+    var documentDrawing = $(this.documentRootNode).find("#ub_page_drawing").children().children();
     documentDrawing.each(function()
         {
             var polygonObject = {

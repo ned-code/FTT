@@ -27,9 +27,10 @@ com.mnemis.wb.adaptors.WBSvgRenderer.prototype.createSurface = function(width, h
 
 com.mnemis.wb.adaptors.WBSvgRenderer.prototype.clearSurface = function(surface)
 {
+    console.log(surface);
 	while ( surface.firstChild )
 	{
-		var element =  surface.firstChild();
+		var element =  surface.firstChild;
 		surface.removeChild( element );
 	}
 }

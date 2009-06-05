@@ -16,6 +16,9 @@ class PagesController < ApplicationController
           render :action => "show", :layout => false, :content_type => "application/xhtml+xml"
         }
         format.xml { redirect_to @page.url("svg", request_domain) }
+        format.json { 
+          render :json => "{ 'url' : '#{@page.url("xhtml", @domain)}', 'previousId' : '#{@page.previous ? @page.previous.id : nil}' , 'nextId' : '#{@page.next ? @page.next.id : nil}'}"
+        }
       else
         format.html { render_optional_error_file(:not_found) }
         format.xml { head :forbidden }
