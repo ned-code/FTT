@@ -36,7 +36,7 @@ com.mnemis.wb.controllers.WBDrawingController = function(initialDrawing)
 	if (this.mRenderer)
 	{
 	    this.domNode = this.mRenderer.createSurface(); 
-	    $(this.domNode).css("zIndex", 2000000);
+	    $(this.domNode).css("zIndex", 1999999);
 		this.repaintAll();
     }						     
 }

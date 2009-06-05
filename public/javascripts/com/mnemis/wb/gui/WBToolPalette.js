@@ -18,7 +18,7 @@ if (!com.mnemis.wb.gui) { com.mnemis.wb.gui = {}};
 com.mnemis.wb.gui.WBToolPalette = function(type)
 {
 	this.domNode = $(
-				     "<div id='toolPalette' style='height:" + (type == 1? "430":"220")+ "px'>" +
+				     "<div id='wb-toolpalette' style='height:" + (type == 1? "430":"220")+ "px'>" +
      				    (type == 1? this.getButtonHtml(0, "pen", "pen.png") : "") +
      				  	(type == 1?this.getButtonHtml(1, "rubber", "eraser.png") : "") +
      				    this.getButtonHtml(4, "hand", "hand.png") +
@@ -98,17 +98,17 @@ com.mnemis.wb.gui.WBToolPalette.prototype.selectArrow = function(e)
 
 com.mnemis.wb.gui.WBToolPalette.prototype.getButtonHtml = function(id, name, icon)
 {
-    return "<div id='" + name + "' class='floatingPaletteButton tool-" + id + "' style='margin: 10%; width: 80%'>" +
+    return "<div id='" + name + "' class='wb-toolpalette-button wb-tool-" + id + "' style='margin: 10%; width: 80%'>" +
      		     "<img src='/static/resources/stylusPalette/" + icon + "' alt='" + name + "'/>"+
      		 "</div>" ;
 }
 
 com.mnemis.wb.gui.WBToolPalette.prototype.refreshGUI = function()
 {
-    var oldSelection = $(".floating_palette_button_selected");
+    var oldSelection = $(".wb-tool-button-selected");
     if (oldSelection && oldSelection.length)
     {
-        $(oldSelection[0]).removeClass("floating_palette_button_selected");
+        $(oldSelection[0]).removeClass("wb-tool-button-selected");
         var iconElement = oldSelection[0].childNodes[0];
         var iconPath = iconElement.src;
         if (iconPath.match(/On.png/))
@@ -117,11 +117,11 @@ com.mnemis.wb.gui.WBToolPalette.prototype.refreshGUI = function()
         }
     }
 
-    classForCurrentTool = ".tool-" + WB.application.boardController.currentTool;
+    classForCurrentTool = ".wb-tool-" + WB.application.boardController.currentTool;
     var toolToSelect = $(classForCurrentTool);
     if (toolToSelect && toolToSelect.length)
     {
-        $(toolToSelect[0]).addClass("floating_palette_button_selected");
+        $(toolToSelect[0]).addClass("wb-tool-button-selected");
         iconElement = $(classForCurrentTool)[0].childNodes[0];
         iconPath = iconElement.src;
         iconElement.src = iconPath.substring(0, iconPath.length - 4) + "On.png";

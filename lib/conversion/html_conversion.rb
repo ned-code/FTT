@@ -78,9 +78,6 @@ module HtmlConversion
           # TODO how to get current server name
           js_location = UniboardDocument.config.javascript_location
           html_page_builder.meta("http-equiv" => "Content-Type", "content" => "application/xhtml+xml; charset=UTF-8") 
-          html_page_builder.script("", "type" => "text/javascript", "src" => js_location + "jquery-1.3.2.js")
-          html_page_builder.script("", "type" => "text/javascript", "src" => js_location + "com/mnemis/core/Init.js")
-          html_page_builder.script("", "type" => "text/javascript", "src" => js_location + "com/mnemis/wb/core/WBViewer.js")
         }
         
         html_page_builder.body {

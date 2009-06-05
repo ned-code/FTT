@@ -1,6 +1,6 @@
 body {  }
 
-#toolPalette {
+#wb-toolpalette {
     position: fixed;
     top: 50px;
     left: 10px;
@@ -13,7 +13,7 @@ body {  }
     -webkit-border-radius: 10px
 }
 
-.WBSelected {
+.wb-selected-object {
 	  	-moz-border-radius: 5px;
 		-webkit-border-radius: 5px;
 		border: 5px solid #AAAAAA;
