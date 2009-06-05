@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<rss xmlns:uniboard="http://www.mnemis.com/aboutuniboard/rss/" version="2.0">
+<rss xmlns:ub="http://uniboard.mnemis.com/application" version="2.0">
     <channel>
         <title>MNEMIS uniboard news channel</title>
         <description>The latest information on Uniboard</description>
-        <link>http://www.mnemis.com</link>
+        <link>http://uniboard.mnemis.com</link>
         <language>en-us</language>
         <lastBuildDate>Mon, 11 May 2009 13:00:00 GMT</lastBuildDate>
         <pubDate>Mon, 11 May 2009 16:00:00 GMT</pubDate>
@@ -11,8 +11,8 @@
             <!--<category>version</category>-->
             <title>A new uniboard version is available !</title>
             <description>Download the new uniboard 4.2</description>
-            <link>http://st-ub.mnemis.com/uniboard-win32.exe</link>
-            <uniboard:version>4.2.a.7.1438</uniboard:version>
+            <link>http://uniboard.mnemis.com/softwareupdates/uniboard-macx.dmg</link>
+            <ub:version>4.2.a.7.1438</ub:version>
             <pubDate>Mon, 11 May 2009 16:00:00 GMT</pubDate>
         </item>
     </channel>

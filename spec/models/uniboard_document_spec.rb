@@ -198,7 +198,7 @@ describe UniboardDocument do
 
       document_xml.root.name.should == 'document'
       document_xml.root.attributes.to_hash.should include(
-        'xmlns' => 'http://www.mnemis.com/uniboard',
+        'xmlns' => 'http://uniboard.mnemis.com/document',
         'uuid' => @document.uuid,
         'version' => @document.version.to_s,
         'created-at' => @document.created_at.xmlschema,
@@ -226,7 +226,7 @@ describe UniboardDocument do
 
       document_xml.root.name.should == 'document'
       document_xml.root.attributes.to_hash.should include(
-        'xmlns' => 'http://www.mnemis.com/uniboard',
+        'xmlns' => 'http://uniboard.mnemis.com/document',
         'uuid' => @document.uuid,
         'version' => @document.version.to_s,
         'created-at' => @document.created_at.xmlschema,

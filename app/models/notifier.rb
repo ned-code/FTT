@@ -1,6 +1,7 @@
 class Notifier < ActionMailer::Base
   default_url_options[:host] = {
     'staging' => 'st-ub.mnemis.com',
+    'production' => 'uniboard.mnemis.com',
     'development' => 'localhost:3000',
     'test' => 'localhost'
   }[RAILS_ENV]

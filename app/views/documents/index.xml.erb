@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<documents synchronised-at="<%= @synchronised_at.xmlschema %>" xmlns='http://www.mnemis.com/uniboard'>
+<documents synchronised-at="<%= @synchronised_at.xmlschema %>" xmlns="<%= XML_UNIBOARD_DOCUMENT_NAMESPACE %>">
   <% @documents.each do |document| -%>
     <document uuid="<%= document.uuid %>" version="<%= document.version %>" created-at="<%= document.created_at.xmlschema %>" updated-at="<%= document.updated_at.xmlschema %>" deleted="<%= document.deleted? %>" />
   <% end -%>
