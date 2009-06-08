@@ -21,6 +21,6 @@
     </script>
   </head>
   <body>
-    <a id="wb-static-page-link" href="<%= @page_url %>">page <%= @page.id %></a>
+    <a id="wb-static-page-link" href="<%= @page_url.gsub("&", "&amp;") %>">page <%= @page.id %></a>
   </body>
 </html>

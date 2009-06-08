@@ -7,7 +7,7 @@ module Storage
       end
 
       def url(format = "svg", request_domain = nil)
-        s3_bucket.s3.interface.get_link(s3_bucket.name, s3_key_name(format), DEFAULT_URL_EXPIRE_TIME).gsub("&", "&amp;")
+        s3_bucket.s3.interface.get_link(s3_bucket.name, s3_key_name(format), DEFAULT_URL_EXPIRE_TIME)
       end
 
       def mime_type
@@ -15,7 +15,7 @@ module Storage
       end
 
       def thumbnail_url(request_domain = nil)
-        s3_thumbnail_key.public_link.gsub("&", "&amp;")
+        s3_thumbnail_key.public_link
       end
 
       def thumbnail_mime_type
