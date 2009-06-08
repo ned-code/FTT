@@ -23,6 +23,11 @@ config.log_level = :debug
 
 # Disable delivery errors, bad email addresses will be ignored
 # config.action_mailer.raise_delivery_errors = false
+config.action_mailer.smtp_settings = {
+  :address => 'localhost',
+  :domain => 'st-ub.mnemis.com',
+  :enable_starttls_auto => false
+}
 
 # Enable threaded mode
 # config.threadsafe!
