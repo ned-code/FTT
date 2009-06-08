@@ -16,9 +16,6 @@ if (!console)
 // array of all modules that are already providen
 com.mnemis.core.modules = [];
 
-// TODO need to find how to determine automatically the correct domain
-com.mnemis.core.domains = ["http://localhost:3000/javascripts/", "http://st-ub.mnemis.com/javascripts/"];
-
 /*
  *  Import a module based on the name of the module.
  */
@@ -26,14 +23,7 @@ com.mnemis.core.Import = function(moduleName)
 {
     if (com.mnemis.core.modules.indexOf(moduleName) == -1)
     {
-        for(var index = 0; index < com.mnemis.core.domains.length;index++)
-            {
-                // search for javascripts in domains
-                if (com.mnemis.core.LoadFromDomain(com.mnemis.core.domains[index], moduleName))
-                    {
-                        break;
-                    }
-            };
+        com.mnemis.core.LoadFromDomain(com.mnemis.core.applicationPath, moduleName)
     }
 }
 
@@ -41,7 +31,7 @@ com.mnemis.core.LoadFromDomain = function(domain, moduleName)
 {
     var result = "error"
     $.ajaxSetup({async: false});
-    var request =$.getScript(domain + moduleName, function(data, status)
+    var request =$.getScript(domain + "/javascripts/" + moduleName, function(data, status)
         {
            result = status;
         });

@@ -88,7 +88,7 @@ com.mnemis.wb.gui.WBToolPalette.prototype.selectArrow = function(e)
 com.mnemis.wb.gui.WBToolPalette.prototype.getButtonHtml = function(id, name, icon)
 {
     return "<div id='" + name + "' class='wb-toolpalette-button wb-tool-" + id + "' style='margin: 10%; width: 80%'>" +
-     		     "<img src='/static/resources/stylusPalette/" + icon + "' alt='" + name + "'/>"+
+     		     "<img src='" + com.mnemis.core.applicationPath + "/static/resources/stylusPalette/" + icon + "' alt='" + name + "'/>"+
      		 "</div>" ;
 }
 

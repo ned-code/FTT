@@ -57,7 +57,7 @@ com.mnemis.wb.core.WBViewer.prototype.loadPageId = function(documentId, pageId)
     var that = this;
     this.currentDocument = documentId;
     this.currentPageId = pageId;
-    $.getJSON("/documents/" + documentId + "/pages/" + pageId, null, function(data)
+    $.getJSON(com.mnemis.core.applicationPath + "/documents/" + documentId + "/pages/" + pageId, null, function(data)
     {
         that.previousPageId = data.previousId.length ? data.previousId : null;
         that.nextPageId = data.nextId.length ? data.nextId : null;
@@ -83,7 +83,7 @@ com.mnemis.wb.core.WBViewer.prototype.loadNextPage = function()
 
 com.mnemis.wb.core.WBViewer.prototype.goToDocumentPage = function()
 {
-    window.location = "/documents/" + this.currentDocument;
+    window.location = com.mnemis.core.applicationPath + "documents/" + this.currentDocument;
 }
 
 // load application

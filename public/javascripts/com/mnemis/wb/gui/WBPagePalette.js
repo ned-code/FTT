@@ -31,7 +31,7 @@ com.mnemis.wb.gui.WBPagePalette = function()
 com.mnemis.wb.gui.WBPagePalette.prototype.getButtonHtml = function(id, name, icon)
 {
     return "<div id='" + name + "' class='wb-pagepalette-button wb-tool-" + id + "'>" +
-     		     "<img src='/static/resources/toolbar/" + icon + "' alt='" + name + "' style='vertical-align:middle'/>"+
+     		     "<img src='" + com.mnemis.core.applicationPath + "/static/resources/toolbar/" + icon + "' alt='" + name + "' style='vertical-align:middle'/>"+
      		 "</div>" ;
 }
 

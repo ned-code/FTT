@@ -75,8 +75,6 @@ module HtmlConversion
                                "xmlns:ub" => XML_UNIBOARD_DOCUMENT_NAMESPACE) {
         html_page_builder.head {
           html_page_builder.title(page_uuid)
-          # TODO how to get current server name
-          js_location = UniboardDocument.config.javascript_location
           html_page_builder.meta("http-equiv" => "Content-Type", "content" => "application/xhtml+xml; charset=UTF-8") 
         }
         
