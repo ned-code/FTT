@@ -83,7 +83,7 @@ com.mnemis.wb.core.WBViewer.prototype.loadNextPage = function()
 
 com.mnemis.wb.core.WBViewer.prototype.goToDocumentPage = function()
 {
-    window.location = com.mnemis.core.applicationPath + "documents/" + this.currentDocument;
+    window.location = com.mnemis.core.applicationPath + "/documents/" + this.currentDocument;
 }
 
 // load application
