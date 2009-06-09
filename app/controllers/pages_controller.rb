@@ -13,11 +13,12 @@ class PagesController < ApplicationController
       if @document && @page && permit?('owner of document')
         request_domain = "#{request.protocol}#{request.host_with_port}"
         format.html {
-          render :action => "show", :layout => false, :content_type => "application/xhtml+xml"
+          #render :action => "show", :layout => false, :content_type => "application/xhtml+xml"
+          redirect_to @page_url
         }
         format.xml { redirect_to @page.url("svg", request_domain) }
         format.json { 
-          render :json => "{ 'url' : '#{@page.url("xhtml", @domain)}', 'previousId' : '#{@page.previous ? @page.previous.id : nil}' , 'nextId' : '#{@page.next ? @page.next.id : nil}'}"
+          render :json => "{ 'url' : '#{@page_url}', 'previousId' : '#{@page.previous ? @page.previous.id : nil}' , 'nextId' : '#{@page.next ? @page.next.id : nil}'}"
         }
       else
         format.html { render_optional_error_file(:not_found) }
