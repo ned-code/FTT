@@ -13,8 +13,8 @@ class PagesController < ApplicationController
       if @document && @page && permit?('owner of document')
         request_domain = "#{request.protocol}#{request.host_with_port}"
         format.html {
-          #render :action => "show", :layout => false, :content_type => "application/xhtml+xml"
-          redirect_to @page_url
+          render :action => "show", :layout => false, :content_type => "application/xhtml+xml"
+          #redirect_to @page_url
         }
         format.xml { redirect_to @page.url("svg", request_domain) }
         format.json { 
