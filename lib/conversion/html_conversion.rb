@@ -149,10 +149,12 @@ module HtmlConversion
               # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
               begin
                 if (page.text && page.text.is_a?(Array))
+                  puts "find texts"
                   page.text.each do |a_text|
                     createHtmlText(html_page_builder, a_text, page_width, page_height)           
                   end
                 elsif (page.text)
+                  puts "find text"
                   createHtmlText(html_page_builder, page.text, page_width, page_height)
                 end
               rescue    
@@ -228,9 +230,10 @@ module HtmlConversion
     style += "; font-size:" + font_size.to_s + "px"
     style += "; font-family:" + svg_object[:attr => "font-family"]
     style += "; color:" + svg_object[:attr => "fill"]
-    
+    puts "will generate UUID"
     # SVG text object don't have UUID so we generate one
     uuid |= UUID.new.generate
+    puts "UUID generated"
     page_builder.div(svg_object, "id" => uuid,
                              "ub:background" => svg_object[:attr => "ub:background"],
                              "style" => style)
