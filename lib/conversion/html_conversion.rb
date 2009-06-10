@@ -157,7 +157,8 @@ module HtmlConversion
                   RAILS_DEFAULT_LOGGER.debug("find text")
                   createHtmlText(html_page_builder, page.text, page_width, page_height)
                 end
-              rescue    
+              rescue => e
+                RAILS_DEFAULT_LOGGER.debug(e.backtrace.join("\n"))
               end                 
             }   
           } 
