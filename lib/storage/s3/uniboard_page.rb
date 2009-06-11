@@ -11,7 +11,7 @@ module Storage
           s3_bucket.s3.interface.get_link(s3_bucket.name, s3_key_name(format), DEFAULT_URL_EXPIRE_TIME)
         else
           s3_url = s3_bucket.s3.interface.get_link(s3_bucket.name, s3_key_name(format), DEFAULT_URL_EXPIRE_TIME)
-          s3_url.gsub(/https:\/\/.+\.s3\.amazonaws\.com/,  "#{request_domain}/files")
+          s3_url.gsub(/https:\/\/.+\.s3\.amazonaws\.com.*\//,  "#{request_domain}/files/")
         end
       end
 
