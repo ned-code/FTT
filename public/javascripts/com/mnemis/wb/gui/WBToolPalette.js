@@ -1,16 +1,13 @@
 /**
  * Uniboard tool palette widget
 **/
-/**
- * Uniboard tool bar widget
-**/
 com.mnemis.core.Provide("com/mnemis/wb/gui/WBToolPalette.js");
 
 
 com.mnemis.wb.gui.WBToolPalette = function(type)
 {
 	this.domNode = $(
-				     "<div id='wb-toolpalette' style='height:" + (type == 1? "430":"220")+ "px'>" +
+				     "<div id='wb-toolpalette' class='wb-floatingpalette' style='height:" + (type == 1? "430":"220")+ "px'>" +
      				    (type == 1? this.getButtonHtml(0, "pen", "pen.png") : "") +
      				  	(type == 1?this.getButtonHtml(1, "rubber", "eraser.png") : "") +
      				    this.getButtonHtml(4, "hand", "hand.png") +
@@ -91,7 +88,7 @@ com.mnemis.wb.gui.WBToolPalette.prototype.selectArrow = function(e)
 com.mnemis.wb.gui.WBToolPalette.prototype.getButtonHtml = function(id, name, icon)
 {
     return "<div id='" + name + "' class='wb-toolpalette-button wb-tool-" + id + "' style='margin: 10%; width: 80%'>" +
-     		     "<img src='/static/resources/stylusPalette/" + icon + "' alt='" + name + "'/>"+
+     		     "<img src='" + com.mnemis.core.applicationPath + "/static/resources/stylusPalette/" + icon + "' alt='" + name + "'/>"+
      		 "</div>" ;
 }
 
@@ -109,7 +106,7 @@ com.mnemis.wb.gui.WBToolPalette.prototype.refreshGUI = function()
         }
     }
 
-    classForCurrentTool = ".wb-tool-" + WB.application.boardController.currentTool;
+    var classForCurrentTool = ".wb-tool-" + WB.application.boardController.currentTool;
     var toolToSelect = $(classForCurrentTool);
     if (toolToSelect && toolToSelect.length)
     {

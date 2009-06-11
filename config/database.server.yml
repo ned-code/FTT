@@ -16,7 +16,7 @@ staging:
   database: uniboard_staging
   username: uniboard
   password: uniboard
-  host: ub-db-mysql-staging
+  host: localhost
 
 production:
   adapter: mysql

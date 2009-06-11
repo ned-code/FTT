@@ -1,16 +1,31 @@
-body {  }
+body { overflow: hidden; }
 
-#wb-toolpalette {
+
+.wb-floatingpalette {
     position: fixed;
-    top: 50px;
-    left: 10px;
-    width: 60px;
-    height: 430px;
     z-index: 2000000;
     opacity:0.8;
     background-color: rgb(170,170,170);
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px
+}
+
+#wb-toolpalette {
+    top: 80px;
+    right: 10px;
+    width: 60px;
+    height: 430px;
+}
+
+#wb-pagepalette {
+    top: 10px;
+    right: 10px;
+}
+
+
+.wb-pagepalette-button {
+    float: left;
+    margin: 12px;
 }
 
 .wb-selected-object {

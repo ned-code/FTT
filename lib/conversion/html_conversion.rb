@@ -65,7 +65,7 @@ module HtmlConversion
   # PDF background is converted to a png file and this png file is placed beside the pdf background file. 
   def self.convert_svg_page_to_html(page_uuid, page_file_stream) 
     page_file_stream.rewind
-
+    RAILS_DEFAULT_LOGGER.debug "convert page #{page_uuid}"
     page = XMLObject.new(page_file_stream)
     html_page_builder = Builder::XmlMarkup.new(:indent => 2)
     
@@ -75,8 +75,6 @@ module HtmlConversion
                                "xmlns:ub" => XML_UNIBOARD_DOCUMENT_NAMESPACE) {
         html_page_builder.head {
           html_page_builder.title(page_uuid)
-          # TODO how to get current server name
-          js_location = UniboardDocument.config.javascript_location
           html_page_builder.meta("http-equiv" => "Content-Type", "content" => "application/xhtml+xml; charset=UTF-8") 
         }
         
@@ -157,7 +155,8 @@ module HtmlConversion
                 elsif (page.text)
                   createHtmlText(html_page_builder, page.text, page_width, page_height)
                 end
-              rescue    
+              rescue => e
+                RAILS_DEFAULT_LOGGER.debug(e.message)
               end                 
             }   
           } 
@@ -198,9 +197,9 @@ module HtmlConversion
     # get the transform and modify top, left, width and height according to this transform
     if (matrix)                              
       width = width * matrix[0].to_f
-      height = height * matrix[0].to_f
+      height = height * matrix[3].to_f
       left = (svg_object.x.to_f  * matrix[0].to_f) + page_width.to_i / 2
-      top = (svg_object.y.to_f  * matrix[0].to_f) + page_height.to_i / 2      
+      top = (svg_object.y.to_f  * matrix[3].to_f) + page_height.to_i / 2
       left = left + matrix[4].to_f
       top = top + matrix[5].to_f
     end
@@ -222,6 +221,7 @@ module HtmlConversion
     height = size_and_position["height"]  
     font_size = svg_object[:attr => "font-size"].to_f
     matrix = getTransformMatrix(svg_object)
+    # TODO how to define font size if scale x and y scale are not equal
     if (matrix && matrix[0])
       font_size = font_size * matrix[0].to_f
     end
@@ -229,7 +229,6 @@ module HtmlConversion
     style += "; font-size:" + font_size.to_s + "px"
     style += "; font-family:" + svg_object[:attr => "font-family"]
     style += "; color:" + svg_object[:attr => "fill"]
-    
     # SVG text object don't have UUID so we generate one
     uuid |= UUID.new.generate
     page_builder.div(svg_object, "id" => uuid,
@@ -258,7 +257,7 @@ module HtmlConversion
       matrix = getTransformMatrix(svg_object)
       if (matrix && matrix[0])
         bg_width = bg_width * matrix[0].to_f
-        bg_height = bg_height * matrix[0].to_f  
+        bg_height = bg_height * matrix[3].to_f
       end
       
       if (RUBY_PLATFORM =~ /linux/)
@@ -276,7 +275,7 @@ module HtmlConversion
                       "src" => pdf_url[0..-5] + format("%05d", pdf_page)  + "." + image_format,
                       "alt" => "Image",
                       "ub:background" => "true",
-                      "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + bg_width.to_s + "px; height:" + bg_height.to_s + "px; z-index:-2000000")
+                      "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + bg_width.to_s + "px; height:" + bg_height.to_s + "px; z-index:-20000000")
       else
         logger.debug "Error while generating image background"
       end

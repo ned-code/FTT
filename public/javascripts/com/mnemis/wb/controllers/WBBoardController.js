@@ -21,10 +21,8 @@ com.mnemis.wb.controllers.WBBoardController = function(editable)
 }
 
 
-com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(pageUrl)
+com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(page)
 {
-    console.log("page to load " + pageUrl);
-    var that = this;
 
     // re-init internal working attributes
     window.scrollTo(0, 0);
@@ -32,34 +30,23 @@ com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(
 	this.originalMovingPos = null;
 	this.currentZoom = 1;
 	this.selection = [];
-    
-    // remove previous page
-    $("#ub_board").remove();
-    
-    // load new page
-    $.get(pageUrl, null, function(data, textStatus)
+    this.currentPage = page;
+
+    $("#ub_board").bind("mousedown", this, this.mouseDown);
+    $("#ub_board").bind("mousemove", this, this.mouseMove);
+    $("#ub_board").bind("mouseup", this, this.mouseUp);
+    $("#ub_board").bind("mouseout", this, this.mouseOut);
+
+    // update data attribute of object
+    $("object").each(function()
         {
-            var loadedPage = $(data);
-            var boardElement = loadedPage.find("#ub_board").get(0);
-            that.currentPage = new com.mnemis.wb.model.WBPage(boardElement);
-            $("body").append(boardElement);
-            $("#ub_board").bind("mousedown", that, that.mouseDown);
-            $("#ub_board").bind("mousemove", that, that.mouseMove);
-            $("#ub_board").bind("mouseup", that, that.mouseUp);
-            $("#ub_board").bind("mouseout", that, that.mouseOut);
+            var relPath = $(this).attr("data");
+            $(this).attr("data",relPath);
+        });
 
-            // update data attribute of object
-            $("object").each(function()
-                {
-                    var relPath = $(this).attr("data");
-                    $(this).attr("data",relPath);
-                });
-
-            // replace drawing div with content of drawing controller. Allow to have different kind of renderer (for ie)
-            that.drawingController.setDrawingModel(that.currentPage.drawingModel());
-            $("#ub_page_drawing").children().replaceWith(that.drawingController.domNode);
-        }, "xml");
-
+    // replace drawing div with content of drawing controller. Allow to have different kind of renderer (for ie)
+    this.drawingController.setDrawingModel(this.currentPage.drawingModel());
+    $("#ub_page_drawing").children().replaceWith(this.drawingController.domNode);
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentTool = function(toolId)

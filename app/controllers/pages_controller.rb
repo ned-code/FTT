@@ -14,8 +14,12 @@ class PagesController < ApplicationController
         request_domain = "#{request.protocol}#{request.host_with_port}"
         format.html {
           render :action => "show", :layout => false, :content_type => "application/xhtml+xml"
+          #redirect_to @page_url
         }
         format.xml { redirect_to @page.url("svg", request_domain) }
+        format.json { 
+          render :json => "{ 'url' : '#{@page_url}', 'previousId' : '#{@page.previous ? @page.previous.id : nil}' , 'nextId' : '#{@page.next ? @page.next.id : nil}'}"
+        }
       else
         format.html { render_optional_error_file(:not_found) }
         format.xml { head :forbidden }
