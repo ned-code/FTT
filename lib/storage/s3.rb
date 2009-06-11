@@ -3,13 +3,13 @@ require 'storage'
 module Storage
   module S3
     class Configuration
-
       attr_accessor :bucket_name, :access_key_id, :secret_access_key
 
       def initialize(config = {})
         @access_key_id     = config['access_key_id']      || raise(ArgumentError, 'S3 access_key_id is not present in config Hash')
         @secret_access_key = config['secret_access_key']  || raise(ArgumentError, 'S3 secret_access_key is not present in config Hash')
         @bucket_name       = config['bucket']             || raise(ArgumentError, 'S3 bucket is not present in config Hash')
+        @location          = config['location'] ? config['location'].to_sym : :eu
         @options           = config['options']            || {}
 
         @options.reverse_merge!({
@@ -26,7 +26,7 @@ module Storage
       end
 
       def bucket
-        @bucket ||= s3.bucket(bucket_name, true)
+        @bucket ||= s3.bucket(bucket_name, true, nil, :location => @location)
       end
 
       private
