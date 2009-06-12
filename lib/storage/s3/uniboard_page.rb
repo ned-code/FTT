@@ -20,7 +20,8 @@ module Storage
       end
 
       def thumbnail_url(request_domain = nil)
-        s3_thumbnail_key.public_link
+#        s3_thumbnail_key.public_link
+          "http://#{s3_bucket.name}.s3.amazonaws.com/#{s3_thumbnail_key_name}"
       end
 
       def thumbnail_mime_type
