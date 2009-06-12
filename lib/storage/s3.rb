@@ -26,7 +26,7 @@ module Storage
       end
 
       def bucket
-        @bucket ||= s3.bucket(bucket_name, true, nil, :location => @location)
+        @bucket ||= s3.bucket(bucket_name, true)
       end
 
       private
