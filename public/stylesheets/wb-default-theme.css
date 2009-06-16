@@ -22,8 +22,18 @@ body { overflow: hidden; }
     right: 10px;
 }
 
+#wb-undopalette {
+    top: 10px;
+    left: 10px;
+}
+
 
 .wb-pagepalette-button {
+    float: left;
+    margin: 12px;
+}
+
+.wb-undopalette-button {
     float: left;
     margin: 12px;
 }

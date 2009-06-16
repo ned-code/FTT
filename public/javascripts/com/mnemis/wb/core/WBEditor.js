@@ -9,6 +9,7 @@ com.mnemis.core.Import("com/mnemis/core/UndoManager.js");
 
 com.mnemis.core.Import("com/mnemis/wb/gui/WBToolPalette.js");
 com.mnemis.core.Import("com/mnemis/wb/gui/WBPagePalette.js");
+com.mnemis.core.Import("com/mnemis/wb/gui/WBUndoPalette.js");
 com.mnemis.core.Import("com/mnemis/wb/model/WBPage.js");
 com.mnemis.core.Import("com/mnemis/wb/controllers/WBBoardController.js");
 
@@ -31,6 +32,9 @@ com.mnemis.wb.core.WBEditor = function()
     body.appendChild(WB.application.pagePalette.domNode);
 
     WB.application.undoManager = new com.mnemis.core.UndoManager();
+
+    WB.application.undoPalette = new WB.gui.WBUndoPalette();
+    body.appendChild(WB.application.undoPalette.domNode);
 
     this.currentDocument = null;
     this.currentPageId = null;
