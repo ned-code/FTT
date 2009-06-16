@@ -1,5 +1,5 @@
 #RightAws::RightAWSParser.xml_lib = 'libxml'
 
 UniboardDocument.config do |config|
-  config.storage = :filesystem
+  config.storage = :s3
 end
