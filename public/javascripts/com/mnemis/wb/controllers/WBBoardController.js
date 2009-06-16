@@ -80,7 +80,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype.mapToPageCoordinate = func
 
 com.mnemis.wb.controllers.WBBoardController.prototype.beginDrawing = function(e)
 {
-	WB.application.drawingController.beginDraw(e);
+	this.drawingController.beginDraw(e);
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.beginErase = function(e)
@@ -101,7 +101,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype.beginHand = function(e)
 
 com.mnemis.wb.controllers.WBBoardController.prototype.draw = function(e)
 {
-	WB.application.drawingController.draw(e);
+	this.drawingController.draw(e);
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.erase = function(e)
@@ -151,8 +151,6 @@ com.mnemis.wb.controllers.WBBoardController.prototype.selectObjects = function(o
 			objectToSelect.select();
 			if (objectToSelect.type() == "widget")
 			{
-				console.log("widget");
-				console.log(this);
 				this.moving = false;
 			}
 		}
@@ -306,7 +304,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype.mouseUp = function(e)
 	that.moving = false;
     switch(that.currentTool)
 	{
-		case 0: WB.application.drawingController.endDraw(e); break;        		
+		case 0: that.drawingController.endDraw(e); break;
 	}	
 }
 

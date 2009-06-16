@@ -13,7 +13,7 @@ com.mnemis.wb.model.WBItem = function(rootElement)
 
 com.mnemis.wb.model.WBItem.prototype.type = function()
 {
-	if (this.domNode.tagName == "object")
+	if (this.domNode.tagName == "object" && $(this.domNode).attr("type") == "text/html")
 	{
  		return "widget";
 	}	

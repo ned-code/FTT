@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg-flat.dtd">
+<html xmlns:ub="<%= XML_UNIBOARD_DOCUMENT_NAMESPACE %>" xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg">
+  <head>
+    <title><%= @page.id %></title>
+    <base href="<%=   File.dirname(@page_url) + "/" %>"></base>
+    <link rel="stylesheet" type="text/css" href="<%=@domain %>/stylesheets/wb-default-theme.css" media="screen"/>
+    <meta content="application/xhtml+xml; charset=UTF-8" http-equiv="Content-Type"/>
+    <script type="text/javascript" src="<%=@domain %>/javascripts/jquery-1.3.2.js"></script>
+    <script type="text/javascript" src="<%=@domain %>/javascripts/com/mnemis/core/Init.js"></script>
+    <script type="text/javascript">
+      com.mnemis.core.applicationPath = "<%=@domain %>";
+    </script>
+    <script type="text/javascript" src="<%=@domain %>/javascripts/com/mnemis/wb/core/WBEditor.js"></script>
+    <script type="text/javascript">
+      $(function()
+        {
+          $("#wb-static-page-link").remove();
+          var editor = new com.mnemis.wb.core.WBEditor();
+          editor.loadPageId(<%= @document.id %> ,<%= @page.id  %>);
+        });
+    </script>
+  </head>
+  <body>
+    <a id="wb-static-page-link" href="<%= @page_url.gsub("&", "&amp;") %>">page <%= @page.id %></a>
+  </body>
+</html>

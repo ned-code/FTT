@@ -12,7 +12,7 @@ com.mnemis.wb.controllers.WBDrawingController = function(initialDrawing)
 
 	this.domNode = null;
 	// drawing model
-	this.mDrawingModel = {polylines: []};
+	this.mDrawingModel = {polyline: []};
 	
 	this.mRenderer = undefined;				
     this.currentDrawObject = undefined;
@@ -111,7 +111,7 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.beginDraw= function(e)
     	domNode: newLine,
     	uuid: uuid.toString()
     };	
-    this.mDrawingModel.polylines.push(this.currentDrawObject);     			        			        
+    this.mDrawingModel.polyline.push(this.currentDrawObject);     			        			        
     this.domNode.appendChild(newLine);
     var drawObjectToUndo = this.currentDrawObject;
     var that = this;
@@ -136,8 +136,8 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.draw= function(e)
 
 com.mnemis.wb.controllers.WBDrawingController.prototype._removePolyLine = function(drawObject) {
 	this.domNode.removeChild(drawObject.domNode);
-	var index = this.mDrawingModel.polylines.indexOf(drawObject);
-	this.mDrawingModel.polylines.splice(index,1);
+	var index = this.mDrawingModel.polyline.indexOf(drawObject);
+	this.mDrawingModel.polyline.splice(index,1);
 	that = this;
 	WB.application.undoManager.registerUndo(function() {
 		that._addPolyLine(drawObject);
@@ -146,7 +146,7 @@ com.mnemis.wb.controllers.WBDrawingController.prototype._removePolyLine = functi
 
 com.mnemis.wb.controllers.WBDrawingController.prototype._addPolyLine = function(drawObject) {
 	this.domNode.appendChild(drawObject.domNode);
-    this.mDrawingModel.polylines.push(drawObject);
+    this.mDrawingModel.polyline.push(drawObject);
 	that = this;
 	WB.application.undoManager.registerUndo(function() {
 		that._removePolyLine(drawObject);
