@@ -9,7 +9,33 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090505124451) do
+ActiveRecord::Schema.define(:version => 20090616124636) do
+
+  create_table "conversions", :force => true do |t|
+    t.string   "path"
+    t.string   "type"
+    t.string   "parameters"
+    t.integer  "media_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "medias", :force => true do |t|
+    t.string   "uuid"
+    t.string   "path"
+    t.string   "type"
+    t.integer  "version"
+    t.integer  "page_element_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "page_elements", :force => true do |t|
+    t.integer  "uniboard_page_id"
+    t.integer  "media_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -31,8 +57,11 @@ ActiveRecord::Schema.define(:version => 20090505124451) do
     t.string   "bucket"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "version",    :default => 1
+    t.integer  "version",           :default => 1
     t.datetime "deleted_at"
+    t.string   "title"
+    t.integer  "status"
+    t.integer  "metadata_media_id"
   end
 
   create_table "uniboard_pages", :force => true do |t|
@@ -42,6 +71,7 @@ ActiveRecord::Schema.define(:version => 20090505124451) do
     t.integer  "uniboard_document_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "page_media_id"
   end
 
   create_table "users", :force => true do |t|

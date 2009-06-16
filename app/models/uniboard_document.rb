@@ -1,5 +1,14 @@
 require "conversion/html_conversion"
 
+# Attributes:
+#- uuid: string
+#- title: string
+#- status: string
+#- metadata_media_id: integer
+#- bucket: string
+#- version: integer
+#- deleted_at: datetime
+#
 class UniboardDocument < ActiveRecord::Base
   acts_as_authorizable
 
@@ -9,7 +18,8 @@ class UniboardDocument < ActiveRecord::Base
 
   has_many :pages, :class_name => 'UniboardPage', :foreign_key => 'uniboard_document_id',
     :order => 'position ASC', :autosave => true, :dependent => :destroy
-
+  belongs_to :media, :class_name => 'Media', :foreign_key => 'metadata_media_id', :autosave => true
+  
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
   before_update :increment_version
@@ -169,7 +179,7 @@ class UniboardDocument < ActiveRecord::Base
   def payload
     raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
-
+  
   def to_xml(options = {})
     require 'builder' unless defined?(Builder)
 
