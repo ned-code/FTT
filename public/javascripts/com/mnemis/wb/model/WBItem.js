@@ -30,7 +30,10 @@ com.mnemis.wb.model.WBItem.prototype.select = function()
     {
         $(this.domNode).attr("ub:zIndex", $(this.domNode).css("zIndex"));
     }
-    $(this.domNode).css("zIndex", 2000000);
+    if (this.type() == "widget")
+    {
+        $(this.domNode).css("zIndex", 2000000);
+    }
     // TODO should not use constant
     this.shift(-15, -15);
     this.size.height += 15;
