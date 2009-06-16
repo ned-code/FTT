@@ -64,6 +64,11 @@ class UniboardDocument < ActiveRecord::Base
     self.class.config
   end
 
+  def parse_metadata_rdf_file(file_stream)
+        rdf_document = XMLObject.new(file_stream)
+        self.title = rdf_document.Description.title
+  end
+
   def payload=(payload)
     @error_on_payload = @error_on_version = false
     @pages_to_delete_on_storage = []
@@ -126,7 +131,7 @@ class UniboardDocument < ActiveRecord::Base
         # Create document html index. If there is an error on version we do not create html file because save will fail
         rdf_stream = File.open(@document_zip_path + "/metadata.rdf")
         ub_stream = File.open(@document_zip_path + "/#{uuid}.ub")
-      
+        self.parse_metadata_rdf_file(rdf_stream)
         index_html = HtmlConversion::create_html_document(uuid, ub_stream, rdf_stream)
            
         File.open(File.join(@document_zip_path, 'index.html'), 'w') do |file|
