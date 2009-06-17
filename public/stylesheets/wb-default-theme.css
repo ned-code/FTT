@@ -1,5 +1,6 @@
 body { overflow: hidden; }
 
+object { overflow: hidden; }
 
 .wb-floatingpalette {
     position: fixed;
