@@ -1,6 +1,6 @@
 require "conversion/html_conversion"
 
-# Attributes:
+# UniboardDocument is basically a container of pages. Following attributes are available:
 #- uuid: string
 #- title: string
 #- status: string
@@ -64,6 +64,9 @@ class UniboardDocument < ActiveRecord::Base
     self.class.config
   end
 
+  # Parse the document rdf stream to find all metadata that must be stored in the database.
+  # Currently only document title is extracted.
+  #
   def parse_metadata_rdf_file(file_stream)
         rdf_document = XMLObject.new(file_stream)
         self.title = rdf_document.Description.title
