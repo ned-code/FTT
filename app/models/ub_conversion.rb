@@ -4,7 +4,7 @@
 #- parameters: string
 #- media_id: integer
 #
-class Conversion < ActiveRecord::Base
+class UbConversion < ActiveRecord::Base
 
   belongs_to :media, :class_name => 'UbMedia', :foreign_key => 'media_id'
 
