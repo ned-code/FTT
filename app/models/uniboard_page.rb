@@ -21,7 +21,7 @@ class UniboardPage < ActiveRecord::Base
 
   belongs_to :document, :class_name => 'UniboardDocument', :foreign_key => 'uniboard_document_id'
   belongs_to :media, :class_name => 'Media', :foreign_key => 'page_media_id'
-  has_many :page_elements, :class_name => 'PageElement', :foreign_key => 'uniboard_page_id',
+  has_many :page_elements, :class_name => 'UbPageElement', :foreign_key => 'uniboard_page_id',
     :autosave => true, :dependent => :destroy
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
