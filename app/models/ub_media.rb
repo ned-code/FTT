@@ -5,9 +5,9 @@
 #- version: integer
 #- page_element_id: integer
 #
-class Media < ActiveRecord::Base
+class UbMedia < ActiveRecord::Base
 
-  belongs_to :page_element, :class_name => 'PageElement', :foreign_key => 'page_element_id'
+  belongs_to :page_element, :class_name => 'UbPageElement', :foreign_key => 'page_element_id'
   has_many :conversions, :class_name => 'Conversion', :foreign_key => 'media_id'
   
   def public_url

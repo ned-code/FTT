@@ -18,7 +18,7 @@ class UniboardDocument < ActiveRecord::Base
 
   has_many :pages, :class_name => 'UniboardPage', :foreign_key => 'uniboard_document_id',
     :order => 'position ASC', :autosave => true, :dependent => :destroy
-  belongs_to :media, :class_name => 'Media', :foreign_key => 'metadata_media_id', :autosave => true
+  belongs_to :media, :class_name => 'UbMedia', :foreign_key => 'metadata_media_id', :autosave => true
   
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
