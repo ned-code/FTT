@@ -9,33 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090616124636) do
-
-  create_table "conversions", :force => true do |t|
-    t.string   "path"
-    t.string   "type"
-    t.string   "parameters"
-    t.integer  "media_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "medias", :force => true do |t|
-    t.string   "uuid"
-    t.string   "path"
-    t.string   "type"
-    t.integer  "version"
-    t.integer  "page_element_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "page_elements", :force => true do |t|
-    t.integer  "uniboard_page_id"
-    t.integer  "media_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(:version => 20090617094823) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -48,6 +22,32 @@ ActiveRecord::Schema.define(:version => 20090616124636) do
   create_table "roles_users", :id => false, :force => true do |t|
     t.integer  "user_id"
     t.integer  "role_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "ub_conversions", :force => true do |t|
+    t.string   "path"
+    t.string   "type"
+    t.string   "parameters"
+    t.integer  "media_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "ub_medias", :force => true do |t|
+    t.string   "uuid"
+    t.string   "path"
+    t.string   "type"
+    t.integer  "version"
+    t.integer  "page_element_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "ub_page_elements", :force => true do |t|
+    t.integer  "uniboard_page_id"
+    t.integer  "media_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
