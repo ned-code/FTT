@@ -2,7 +2,7 @@ class PagesController < ApplicationController
   permit 'registered'
 
   def show
-    @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:document_id]) : UniboardDocument.find_by_id(params[:document_id])
+    @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
     @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_id(params[:id]) if @document
     #TODO how to get server url without request object?
     if (@page)
@@ -28,7 +28,7 @@ class PagesController < ApplicationController
   end
 
   def proto
-    @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:document_id]) : UniboardDocument.find_by_id(params[:document_id])
+    @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
     @page = params[:page_id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:page_id]) : @document.pages.find_by_id(params[:page_id]) if @document
     #TODO how to get server url without request object?
     if (@page)

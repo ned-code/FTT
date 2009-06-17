@@ -1,13 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe UniboardPage do
+describe UbPage do
   it('') { should be_built_by_factory }
   it('') { should be_created_by_factory }
 
   shared_examples_for 'page with filesystem storage' do
 
     before(:each) do
-      UniboardDocument.config[:storage] = :filesystem
+      UbDocument.config[:storage] = :filesystem
     end
 
   end
@@ -15,7 +15,7 @@ describe UniboardPage do
   shared_examples_for 'page with s3 storage' do
 
     before(:each) do
-      UniboardDocument.config[:storage] = :s3
+      UbDocument.config[:storage] = :s3
     end
 
   end
@@ -25,7 +25,7 @@ describe UniboardPage do
     shared_examples_for 'page recently created' do
 
       it 'should have its version to 1' do
-        page = Factory.build(:uniboard_page)
+        page = Factory.build(:ub_page)
 
         page.should be_valid
         page.should have(:no).errors
@@ -53,7 +53,7 @@ describe UniboardPage do
 
     before(:each) do
       @user = Factory.create(:user)
-      @document = Factory.create(:uniboard_document)
+      @document = Factory.create(:ub_document)
       @document.accepts_role 'owner', @user
       @page = @document.pages.first
     end
@@ -111,10 +111,10 @@ describe UniboardPage do
     before(:each) do
       @user = Factory.create(:user)
 
-      @document = Factory.create(:uniboard_document)
+      @document = Factory.create(:ub_document)
       @document.accepts_role 'owner', @user
 
-      @not_owned_document = Factory.create(:uniboard_document)
+      @not_owned_document = Factory.create(:ub_document)
       @not_owned_document.accepts_role 'owner', Factory.create(:user)
     end
 

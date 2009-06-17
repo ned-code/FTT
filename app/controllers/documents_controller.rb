@@ -13,7 +13,7 @@ class DocumentsController < ApplicationController
   end
 
   def show
-    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find_by_id(params[:id])
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
     #TODO how to get server url without request object?
     @domain = "#{request.protocol}#{request.host_with_port}"
     respond_to do |format|
@@ -28,7 +28,7 @@ class DocumentsController < ApplicationController
   end
 
   def create
-    @document = UniboardDocument.new(params[:document])
+    @document = UbDocument.new(params[:document])
 
     respond_to do |format|
       if @document.save
@@ -41,7 +41,7 @@ class DocumentsController < ApplicationController
   end
 
   def update
-    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find_by_id(params[:id])
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
 
     respond_to do |format|
       if @document && permit?('owner of document')
@@ -57,7 +57,7 @@ class DocumentsController < ApplicationController
   end
 
   def destroy
-    @document = params[:id] =~ UUID_FORMAT_REGEX ? UniboardDocument.find_by_uuid(params[:id]) : UniboardDocument.find_by_id(params[:id])
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
 
     respond_to do |format|
       if @document && permit?('owner of document')
@@ -73,7 +73,7 @@ class DocumentsController < ApplicationController
   end
 
   def destroy_all
-    UniboardDocument.delete_all
+    UbDocument.delete_all
     Role.delete_all
     RolesUser.delete_all
     Storage::S3::Configuration.config.bucket.clear

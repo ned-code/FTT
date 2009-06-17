@@ -29,5 +29,5 @@ module Storage
   end
 end
 
-require 'storage/filesystem/uniboard_document'
-require 'storage/filesystem/uniboard_page'
+require 'storage/filesystem/ub_document'
+require 'storage/filesystem/ub_page'

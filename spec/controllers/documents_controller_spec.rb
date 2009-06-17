@@ -1,6 +1,6 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-
+#
 describe DocumentsController do
   integrate_views
 
@@ -24,7 +24,7 @@ describe DocumentsController do
       context 'without associated document' do
 
         before(:each) do
-          @document = Factory.create(:uniboard_document)
+          @document = Factory.create(:ub_document)
           @document.accepts_role 'owner', Factory.create(:user)
         end
 
@@ -42,14 +42,14 @@ describe DocumentsController do
       context 'with associated document' do
 
         before(:each) do
-          @document = Factory.create(:uniboard_document)
+          @document = Factory.create(:ub_document)
           @document.accepts_role 'owner', @current_user
 
-          @document_deleted = Factory.create(:uniboard_document)
+          @document_deleted = Factory.create(:ub_document)
           @document_deleted.accepts_role 'owner', @current_user
           @document_deleted.destroy
 
-          @document_not_owned = Factory.create(:uniboard_document)
+          @document_not_owned = Factory.create(:ub_document)
           @document_not_owned.accepts_role 'owner', Factory.create(:user)
         end
 
@@ -188,10 +188,10 @@ describe DocumentsController do
 
         it "'GET /documents' should return an empty list" do
           documents = []
-          documents << Factory.create(:uniboard_document)
-          documents << Factory.create(:uniboard_document)
-          documents << Factory.create(:uniboard_document)
-          documents << Factory.create(:uniboard_document)
+          documents << Factory.create(:ub_document)
+          documents << Factory.create(:ub_document)
+          documents << Factory.create(:ub_document)
+          documents << Factory.create(:ub_document)
 
           get :index
 
@@ -210,14 +210,14 @@ describe DocumentsController do
       context 'with associated document' do
 
         before(:each) do
-          @document = Factory.create(:uniboard_document)
+          @document = Factory.create(:ub_document)
           @document.accepts_role 'owner', @current_user
 
-          @document_deleted = Factory.create(:uniboard_document)
+          @document_deleted = Factory.create(:ub_document)
           @document_deleted.accepts_role 'owner', @current_user
           @document_deleted.destroy
 
-          @document_not_owned = Factory.create(:uniboard_document)
+          @document_not_owned = Factory.create(:ub_document)
           @document_not_owned.accepts_role 'owner', Factory.create(:user)
         end
 
@@ -415,8 +415,8 @@ describe DocumentsController do
 
           response.should_not have_tag('errors')
 
-          UniboardDocument.find_by_id(@document.id).should be_nil
-          UniboardDocument.find_by_id(@document.id, :with_deleted => true).should_not be_nil
+          UbDocument.find_by_id(@document.id).should be_nil
+          UbDocument.find_by_id(@document.id, :with_deleted => true).should_not be_nil
         end
 
         it "'DELETE /documents/:uuid' should return status '403 Forbidden' if current
@@ -443,7 +443,7 @@ describe DocumentsController do
     context 'accessed by a anonymous user' do
 
       before(:each) do
-        @document = Factory.create(:uniboard_document)
+        @document = Factory.create(:ub_document)
         @document.accepts_role 'owner', Factory.create(:user)
       end
 

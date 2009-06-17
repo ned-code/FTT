@@ -1,6 +1,6 @@
 module Storage
   module S3
-    module UniboardPage
+    module UbPage
       include Storage::S3::Base
 
       def self.extended(base)

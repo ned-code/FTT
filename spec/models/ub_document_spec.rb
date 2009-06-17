@@ -1,12 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe UniboardDocument do
+describe UbDocument do
   it('') { should be_built_by_factory }
   it('') { should be_created_by_factory }
 
   before(:each) do
     @user = Factory.create(:user)
-    @document = Factory.create(:uniboard_document)
+    @document = Factory.create(:ub_document)
     @document.accepts_role 'owner', @user
   end
 
@@ -28,7 +28,7 @@ describe UniboardDocument do
   shared_examples_for 'document with filesystem storage' do
 
     before(:each) do
-      UniboardDocument.config[:storage] = :filesystem
+      UbDocument.config[:storage] = :filesystem
     end
 
   end
@@ -36,7 +36,7 @@ describe UniboardDocument do
   shared_examples_for 'document with s3 storage' do
 
     before(:each) do
-      UniboardDocument.config[:storage] = :s3
+      UbDocument.config[:storage] = :s3
     end
 
   end
@@ -46,7 +46,7 @@ describe UniboardDocument do
     shared_examples_for 'document create' do
 
       it 'should be valid with valid payload' do
-        document = Factory.build(:uniboard_document)
+        document = Factory.build(:ub_document)
 
         document.should be_valid
         document.should have(:no).errors
@@ -54,7 +54,7 @@ describe UniboardDocument do
       end
 
       it 'should not be valid with empty paylod' do
-        document = Factory.build(:uniboard_document, :payload => mock_uploaded_ubz('00000000-0000-0000-0000-0000000empty.ubz'))
+        document = Factory.build(:ub_document, :payload => mock_uploaded_ubz('00000000-0000-0000-0000-0000000empty.ubz'))
 
         document.should_not be_valid
         document.should have(:no).errors_on(:uuid)
@@ -63,7 +63,7 @@ describe UniboardDocument do
       end
 
       it 'should not be valid without valid paylod' do
-        document = Factory.build(:uniboard_document, :payload => mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz'))
+        document = Factory.build(:ub_document, :payload => mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz'))
 
         document.should_not be_valid
         document.should have(:no).errors_on(:uuid)
@@ -72,7 +72,7 @@ describe UniboardDocument do
       end
 
       it 'should not be valid without paylod' do
-        document = Factory.build(:uniboard_document, :payload => nil)
+        document = Factory.build(:ub_document, :payload => nil)
 
         document.should_not be_valid
         document.should have(1).errors_on(:uuid)
@@ -81,7 +81,7 @@ describe UniboardDocument do
       end
 
       it 'should not be valid with payload without valid UUID' do
-        document = Factory.build(:uniboard_document, :payload =>  mock_uploaded_ubz('nouuid-valid.ubz'))
+        document = Factory.build(:ub_document, :payload =>  mock_uploaded_ubz('nouuid-valid.ubz'))
 
         document.should_not be_valid
         document.should have(1).errors_on(:uuid)
@@ -90,7 +90,7 @@ describe UniboardDocument do
       end
 
       it 'should create page on save' do
-        document = Factory.build(:uniboard_document)
+        document = Factory.build(:ub_document)
 
         document.save.should be_true
         document.should have(3).pages
@@ -108,7 +108,7 @@ describe UniboardDocument do
       it_should_behave_like 'document create'
 
       it 'should save files on filesystem if document is valid' do
-        document = Factory.build(:uniboard_document)
+        document = Factory.build(:ub_document)
 
         document.save.should be_true
 
@@ -121,7 +121,7 @@ describe UniboardDocument do
       end
 
       it 'should not save files on filesystem if document is not valid' do
-        document = Factory.build(:not_valid_uniboard_document)
+        document = Factory.build(:not_valid_ub_document)
 
         document.save.should_not be_true
 
@@ -135,7 +135,7 @@ describe UniboardDocument do
       it_should_behave_like 'document create'
 
       it 'should send files to s3 if document is valid' do
-        document = Factory.build(:uniboard_document)
+        document = Factory.build(:ub_document)
 
         mock_bucket = Storage::S3::Configuration.config.bucket
 
@@ -150,7 +150,7 @@ describe UniboardDocument do
       end
 
       it 'should not send files to s3 if document is not valid' do
-        document = Factory.build(:not_valid_uniboard_document)
+        document = Factory.build(:not_valid_ub_document)
 
         mock_bucket = Storage::S3::Configuration.config.bucket
 
@@ -168,7 +168,7 @@ describe UniboardDocument do
     shared_examples_for 'document recently created' do
 
       it 'should have its version to 1' do
-        document = Factory.build(:uniboard_document)
+        document = Factory.build(:ub_document)
 
         document.should be_valid
         document.should have(:no).errors
@@ -473,11 +473,11 @@ describe UniboardDocument do
         @document.destroy.should be_true
 
         @document.should be_deleted
-        UniboardDocument.find_by_id(@document.id).should be_nil
-        UniboardDocument.find_by_id(@document.id, :with_deleted => true).should_not be_nil
+        UbDocument.find_by_id(@document.id).should be_nil
+        UbDocument.find_by_id(@document.id, :with_deleted => true).should_not be_nil
 
         @document.pages.each do |page|
-          UniboardPage.find_by_id(page.id).should be_nil
+          UbPage.find_by_id(page.id).should be_nil
         end
       end
 
@@ -485,11 +485,11 @@ describe UniboardDocument do
         @document.destroy!.should be_true
 
         @document.should be_deleted
-        UniboardDocument.find_by_id(@document.id).should be_nil
-        UniboardDocument.find_by_id(@document.id, :with_deleted => true).should be_nil
+        UbDocument.find_by_id(@document.id).should be_nil
+        UbDocument.find_by_id(@document.id, :with_deleted => true).should be_nil
 
         @document.pages.each do |page|
-          UniboardPage.find_by_id(page.id).should be_nil
+          UbPage.find_by_id(page.id).should be_nil
         end
       end
 
@@ -533,16 +533,16 @@ describe UniboardDocument do
 
       it 'should be really deleted after "marked" deleted' do
         @document.destroy.should be_true
-        @document = UniboardDocument.find(@document.id, :with_deleted => true)
+        @document = UbDocument.find(@document.id, :with_deleted => true)
 
         @document.destroy!.should be_true
 
         @document.should be_deleted
-        UniboardDocument.find_by_id(@document.id).should be_nil
-        UniboardDocument.find_by_id(@document.id, :with_deleted => true).should be_nil
+        UbDocument.find_by_id(@document.id).should be_nil
+        UbDocument.find_by_id(@document.id, :with_deleted => true).should be_nil
 
         @document.pages.each do |page|
-          UniboardPage.find_by_id(page.id).should be_nil
+          UbPage.find_by_id(page.id).should be_nil
         end
       end
 
@@ -564,16 +564,16 @@ describe UniboardDocument do
   describe 'collection' do
 
     before(:each) do
-      @document_deleted = Factory.create(:uniboard_document)
+      @document_deleted = Factory.create(:ub_document)
       @document_deleted.accepts_role 'owner', @user
       @document_deleted.destroy
 
-      @document_not_owned = Factory.create(:uniboard_document)
+      @document_not_owned = Factory.create(:ub_document)
       @document_not_owned.accepts_role 'owner', Factory.create(:user)
     end
 
     it 'should be retrived without deleted' do
-      collection = UniboardDocument.all
+      collection = UbDocument.all
 
       collection.should include(@document)
       collection.should_not include(@document_deleted)
@@ -581,7 +581,7 @@ describe UniboardDocument do
     end
 
     it 'should be retrived with deleted' do
-      collection = UniboardDocument.all(:with_deleted => true)
+      collection = UbDocument.all(:with_deleted => true)
 
       collection.should include(@document)
       collection.should include(@document_deleted)

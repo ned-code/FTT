@@ -56,5 +56,5 @@ module Storage
   end
 end
 
-require 'storage/s3/uniboard_document'
-require 'storage/s3/uniboard_page'
+require 'storage/s3/ub_document'
+require 'storage/s3/ub_page'

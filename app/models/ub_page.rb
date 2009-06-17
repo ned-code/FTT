@@ -5,7 +5,7 @@
 #- uniboard_document_id: integer
 #- page_media_id: integer
 #
-class UniboardPage < ActiveRecord::Base
+class UbPage < ActiveRecord::Base
   default_scope :order => "position ASC", :include => [:document]
   
   named_scope :next, lambda { |*p| {
@@ -19,7 +19,7 @@ class UniboardPage < ActiveRecord::Base
       :order => 'position DESC'
     }}
 
-  belongs_to :document, :class_name => 'UniboardDocument', :foreign_key => 'uniboard_document_id'
+  belongs_to :document, :class_name => 'UbDocument', :foreign_key => 'uniboard_document_id'
   belongs_to :media, :class_name => 'UbMedia', :foreign_key => 'page_media_id'
   has_many :page_elements, :class_name => 'UbPageElement', :foreign_key => 'uniboard_page_id',
     :autosave => true, :dependent => :destroy
@@ -27,7 +27,7 @@ class UniboardPage < ActiveRecord::Base
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
   def config
-    UniboardDocument.config
+    UbDocument.config
   end
 
   def url(format = "svg", request_domain = nil)
@@ -47,7 +47,7 @@ class UniboardPage < ActiveRecord::Base
   end
 
   def next
-    UniboardPage.find(:first,
+    UbPage.find(:first,
       :conditions => [
         'position > ? AND uniboard_document_id = ?',
         self.position,
@@ -59,7 +59,7 @@ class UniboardPage < ActiveRecord::Base
   end
 
   def previous
-    UniboardPage.find(:first,
+    UbPage.find(:first,
       :conditions => [
         'position < ? AND uniboard_document_id = ?',
         self.position,
@@ -80,7 +80,7 @@ class UniboardPage < ActiveRecord::Base
       require 'storage/filesystem'
     end
 
-    @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UniboardPage')
+    @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UbPage')
     self.extend(@storage_module)
   end
 

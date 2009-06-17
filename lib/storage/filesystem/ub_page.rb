@@ -1,6 +1,6 @@
 module Storage
   module Filesystem
-    module UniboardPage
+    module UbPage
       include Storage::Filesystem::Base
 
       def self.extended(base)

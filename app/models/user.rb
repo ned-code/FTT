@@ -7,19 +7,19 @@ class User < ActiveRecord::Base
 
   def documents(*args)
     options = args.extract_options!
-    UniboardDocument.send(:validate_find_options, options)
-    UniboardDocument.send(:set_readonly_option!, options)
+    UbDocument.send(:validate_find_options, options)
+    UbDocument.send(:set_readonly_option!, options)
 
     if(options.delete(:with_deleted))
       deleted_condition = ''
     else
-      deleted_condition = "AND uniboard_documents.deleted_at IS NULL"
+      deleted_condition = "AND ub_documents.deleted_at IS NULL"
     end
 
-    UniboardDocument.find_by_sql("
-      SELECT DISTINCT uniboard_documents.* FROM uniboard_documents
-      INNER JOIN roles ON authorizable_type = 'UniboardDocument'
-        AND authorizable_id = uniboard_documents.id
+    UbDocument.find_by_sql("
+      SELECT DISTINCT ub_documents.* FROM ub_documents
+      INNER JOIN roles ON authorizable_type = 'UbDocument'
+        AND authorizable_id = ub_documents.id
       INNER JOIN roles_users ON roles.id = role_id
       INNER JOIN users ON user_id = users.id
       WHERE users.id = #{self.id} #{deleted_condition}

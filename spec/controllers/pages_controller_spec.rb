@@ -19,14 +19,14 @@ describe PagesController do
         @current_user.is_registered
         UserSession.create(@current_user)
 
-        @page = Factory.create(:uniboard_document).pages.first
+        @page = Factory.create(:ub_document).pages.first
         @page.document.accepts_role 'owner', @current_user
 
-        @page_deleted = Factory.create(:uniboard_document).pages.first
+        @page_deleted = Factory.create(:ub_document).pages.first
         @page_deleted.document.accepts_role 'owner', @current_user
         @page_deleted.destroy
 
-        @page_not_owned = Factory.create(:uniboard_document).pages.first
+        @page_not_owned = Factory.create(:ub_document).pages.first
         @page_not_owned.document.accepts_role 'owner', Factory.create(:user)
       end
 
@@ -85,14 +85,14 @@ describe PagesController do
         @current_user.is_registered
         UserSession.create(@current_user)
 
-        @page = Factory.create(:uniboard_page)
+        @page = Factory.create(:ub_page)
         @page.document.accepts_role 'owner', @current_user
 
-        @page_deleted = Factory.create(:uniboard_page)
+        @page_deleted = Factory.create(:ub_page)
         @page_deleted.document.accepts_role 'owner', @current_user
         @page_deleted.destroy
 
-        @page_not_owned = Factory.create(:uniboard_page)
+        @page_not_owned = Factory.create(:ub_page)
         @page_not_owned.document.accepts_role 'owner', Factory.create(:user)
       end
 
@@ -143,7 +143,7 @@ describe PagesController do
     context 'accessed by a anonymous user' do
 
       before(:each) do
-        @page = Factory.create(:uniboard_page)
+        @page = Factory.create(:ub_page)
         @page.document.accepts_role 'owner', Factory.create(:user)
       end
 

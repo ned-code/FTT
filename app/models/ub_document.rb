@@ -9,14 +9,14 @@ require "conversion/html_conversion"
 #- version: integer
 #- deleted_at: datetime
 #
-class UniboardDocument < ActiveRecord::Base
+class UbDocument < ActiveRecord::Base
   acts_as_authorizable
 
   # Set this defaults scope in find_every_with_deleted method
   default_scope :order => 'updated_at DESC', :conditions => {:deleted_at => nil},
     :include => [:pages]
 
-  has_many :pages, :class_name => 'UniboardPage', :foreign_key => 'uniboard_document_id',
+  has_many :pages, :class_name => 'UbPage', :foreign_key => 'uniboard_document_id',
     :order => 'position ASC', :autosave => true, :dependent => :destroy
   belongs_to :media, :class_name => 'UbMedia', :foreign_key => 'metadata_media_id', :autosave => true
   
@@ -261,7 +261,7 @@ class UniboardDocument < ActiveRecord::Base
       require 'storage/filesystem'
     end
 
-    @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UniboardDocument')
+    @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UbDocument')
     self.extend(@storage_module)
   end
 
