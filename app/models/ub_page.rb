@@ -69,6 +69,48 @@ class UbPage < ActiveRecord::Base
     )
   end
 
+  # Parse the svg file that describe the page and create all corresponding page element. This method assume that
+  # medias used by the page exists. If some medias are missing an exception is raised.
+  def parse_svg_page(svg_stream)    
+    # Get the UUID
+    page_dom = REXML::Document.new(svg_stream)
+    self.uuid = page_dom.root.attribute('uuid', 'ub')
+
+    # create a map that map media uuid with corresponding page element. It will be used to optimize
+    # the loop that search page element to update.
+    media_element_map = {}
+    page_elements.each do |a_page_element|
+      if (a_page_element.media)
+        media_element_map[a_page_element.media.uuid] = a_page_element
+      end
+    end
+
+    # this copy of page elements will be used to find page elements that must be deleted
+    original_page_elements = page_elements.dup
+    
+    # Now iterate on page elements to update or create corresponding page element
+    page_dom.each_element("svg/image | svg/foreignObject | svg/video") do |element|
+
+      uuid_attribute = element.attribute('uuid', 'ub').value
+      raise "Invalid svg page format: media #{element.to_s} has no ub:uuid attribute" if uuid_attribute == nil
+      media_uuid = uuid_attribute.match(UUID_FORMAT_REGEX)[0]
+      page_element = media_element_map[media_uuid]
+      if (page_element)
+        original_page_elements.delete(page_element)
+      else
+        media = UbMedia.find_by_uuid(media_uuid)
+        raise "No matching media for element #{element} with uuid #{media_uuid}" if media == nil
+        page_element = page_elements.build(:media => media)
+      end
+      page_element.update_from_svg(element)
+    end
+
+    # Remove all page elements that are no more used
+    original_page_elements.each do|a_page_element|
+      a_page_element.mark_for_destruction
+    end
+  end
+
   protected
 
   # Storage
