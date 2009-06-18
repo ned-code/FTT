@@ -13,8 +13,12 @@ require 'zip/zipfilesystem'
 require 'spec/mocks/right_aws'
 
 # Storages
-require 'storage/filesystem'
-require 'storage/s3'
+# TODO: After refactoring storage ?
+#require 'storage/filesystem'
+#require 'storage/s3'
+
+# Set basedir for filesystem storage to spec tmp directory
+STORAGE_FILESYSTEM_BASEDIR = File.join(RAILS_ROOT, 'spec', 'tmp', 'files', 'documents')
 
 # Load ubz file list
 UBZ_FIXTURES = {}
@@ -43,9 +47,6 @@ Spec::Runner.configure do |config|
     # Create directory for file fixtures created by 'fixture_file' method
     FileUtils.mkdir_p File.join(RAILS_ROOT, 'spec', 'tmp', 'fixtures')
 
-    # Set basedir for filesystem storage to spec tmp directory
-    Storage::Filesystem::Configuration.config.basedir = File.join(RAILS_ROOT, 'spec', 'tmp', 'files', 'documents')
-
     # Mock RightAws::S3 class if TEST_S3_CONNECTION environement variable is not set
     TEST_S3_CONNECTION = (ENV['TEST_S3_CONNECTION'] ? true : false) unless Object.const_defined?('TEST_S3_CONNECTION')
     unless TEST_S3_CONNECTION
@@ -65,10 +66,11 @@ Spec::Runner.configure do |config|
     end
 
     # Remove all keys on S3 test bucket (nothing processed if RightAws::S3 is mucked)
-    Storage::S3::Configuration.config.bucket.clear
+    # TODO: After refactoring storage ?
+#    Storage::S3::Configuration.config.bucket.clear
 
     # Remove files created by filesystem storage system
-    Dir[File.join(Storage::Filesystem::Configuration.config.basedir, '*')].each do |file|
+    Dir[File.join(STORAGE_FILESYSTEM_BASEDIR, '*')].each do |file|
       FileUtils.rm_rf file
     end
   end

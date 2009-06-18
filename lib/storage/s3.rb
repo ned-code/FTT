@@ -1,60 +1,55 @@
 require 'storage'
 
 module Storage
-  module S3
-    class Configuration
-      attr_accessor :bucket_name, :access_key_id, :secret_access_key
-
-      def initialize(config = {})
-        @access_key_id     = config['access_key_id']      || raise(ArgumentError, 'S3 access_key_id is not present in config Hash')
-        @secret_access_key = config['secret_access_key']  || raise(ArgumentError, 'S3 secret_access_key is not present in config Hash')
-        @bucket_name       = config['bucket']             || raise(ArgumentError, 'S3 bucket is not present in config Hash')
-        @location          = config['location'] ? config['location'].to_sym : :eu
-        @options           = config['options']            || {}
-
-        @options.reverse_merge!({
-            :logger => RAILS_DEFAULT_LOGGER
-          })
-      end
-
-      def self.config
-        begin
-          @@config ||= Storage::S3::Configuration.new(YAML::load_file(File.join(RAILS_ROOT, 'config', 's3.yml'))[RAILS_ENV])
-        rescue
-          raise StandardError, "Configuration file '#{File.join(RAILS_ROOT, 'config', 's3.yml')}' for S3 storage doesn't exist or have information about Rails '#{RAILS_ENV}' environement."
-        end
-      end
-
-      def bucket
-        @bucket ||= s3.bucket(bucket_name, true)
-      end
-
-      private
-
-      def s3
-        @s3 ||= RightAws::S3.new(@access_key_id, @secret_access_key, @options)
-      end
-    end
+  class S3 < Storage::Base
 
     DEFAULT_URL_EXPIRE_TIME = 5.minutes
 
-    module Base
-      include Storage::Base
+    def initialize(options)
+      super
 
-      private
+      # Initialize connection
+      connection(options[:connection_config])
+    end
 
-      def s3_config
-        Storage::S3::Configuration.config
+    # Return a connection to s3
+    def self.connection(config = nil)
+      begin
+        config ||= YAML::load_file(File.join(RAILS_ROOT, 'config', 'storage', 's3.yml'))[RAILS_ENV]['connection_config']
+      rescue
+        raise StandardError, "Configuration file '#{File.join(RAILS_ROOT, 'config', 's3.yml')}' for S3 storage doesn't exist or have right information about Rails '#{RAILS_ENV}' environement."
       end
 
-      def s3_bucket
-        s3_config.bucket
+      @@connection ||= {}
+
+      identity_string = Marshal.dump(config)
+      if @@connection.has_key?(identity_string)
+        @@connection[identity_string]
+      else
+        access_key_id     = config['access_key_id']      || raise(ArgumentError, 'S3 access_key_id is not present in config Hash')
+        secret_access_key = config['secret_access_key']  || raise(ArgumentError, 'S3 secret_access_key is not present in config Hash')
+
+        options           = config['options']            || {}
+        options.reverse_merge!({
+          :logger => RAILS_DEFAULT_LOGGER
+        })
+
+        @@connection[identity_string] = RightAws::S3.new(access_key_id, secret_access_key, options)
       end
+    end
+
+    def put(path, data = nil)
 
     end
 
+    private
+
+    def connection(config = nil)
+      @connection ||= self.class.connection(config)
+    end
+    
   end
 end
 
-require 'storage/s3/ub_document'
-require 'storage/s3/ub_page'
+#require 'storage/s3/ub_document'
+#require 'storage/s3/ub_page'

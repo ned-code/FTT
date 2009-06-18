@@ -1,33 +1,74 @@
 require 'storage'
+require 'fileutils'
 
 module Storage
-  module Filesystem
-    class Configuration
+  class Filesystem < Storage::Base
 
-      attr_accessor :basedir
+    attr_reader :basedir
 
-      def initialize(config = {})
-        @basedir = config['basedir'] || File.join(RAILS_ROOT, 'public', 'documents')
+    def initialize(options)
+      super
+
+      @basedir = options[:basedir] || default_config['basedir'] || raise(ArgumentError, 'Filesystem basedir is not present in config Hash')
+    end
+
+    def put(path, data = '')
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+
+      if data.kind_of?(IO) || data.kind_of?(Tempfile)
+        data.rewind
+        data = data.read
       end
 
-      def self.config
-        @@config ||= Storage::Filesystem::Configuration.new
+      FileUtils.mkdir_p(File.dirname(full_path(path)))
+      File.open(full_path(path), 'w') do |file|
+        file << data
       end
     end
 
-    module Base
-      include Storage::Base
+    def get(path, &block)
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
 
-      private
+      return nil unless exist?(path)
 
-      def fs_config
-        Storage::Filesystem::Configuration.config
+      if block_given?
+        Tempfile.open(path) do |tempfile|
+
+          tempfile << File.open(full_path(path)).read
+          tempfile.rewind
+          yield tempfile
+        end
+      else
+        tempfile = Tempfile.new(path)
+        tempfile << File.open(full_path(path)).read
+        tempfile.rewind
+        tempfile
       end
-
     end
-    
+
+    def exist?(path)
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+
+      File.exist?(full_path(path))
+    end
+
+    def public_url(path)
+    end
+
+    def private_url(path)
+    end
+
+    def delete(path)
+    end
+
+    def move(path_from, path_to)
+    end
+
+    private
+
+    def full_path(path)
+      File.join(basedir, path)
+    end
+
   end
 end
-
-require 'storage/filesystem/ub_document'
-require 'storage/filesystem/ub_page'
