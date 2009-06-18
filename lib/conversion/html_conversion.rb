@@ -124,10 +124,10 @@ module HtmlConversion
               begin
                 if (page.foreignObject && page.foreignObject.is_a?(Array))
                   page.foreignObject.each do |a_widget|
-                    createHtmlForeignObject(html_page_builder, a_widget, page_width, page_height, page_file_stream)                 
+                    create_html_foreign_object(html_page_builder, a_widget, page_width, page_height, page_file_stream)
                   end
                 elsif (page.foreignObject)
-                  createHtmlForeignObject(html_page_builder, page.foreignObject, page_width, page_height, page_file_stream)
+                  create_html_foreign_object(html_page_builder, page.foreignObject, page_width, page_height, page_file_stream)
                 end
               rescue                
               end  
@@ -137,10 +137,10 @@ module HtmlConversion
               begin
                 if (page.image && page.image.is_a?(Array))
                   page.image.each do |an_image|
-                    createHtmlImage(html_page_builder, an_image, page_width, page_height)           
+                    create_html_image(html_page_builder, an_image, page_width, page_height)
                   end
                 elsif (page.image)
-                  createHtmlImage(html_page_builder, page.image, page_width, page_height)
+                  create_html_image(html_page_builder, page.image, page_width, page_height)
                 end
               rescue 
               end
@@ -150,10 +150,10 @@ module HtmlConversion
               begin
                 if (page.text && page.text.is_a?(Array))
                   page.text.each do |a_text|
-                    createHtmlText(html_page_builder, a_text, page_width, page_height)           
+                    create_html_text(html_page_builder, a_text, page_width, page_height)
                   end
                 elsif (page.text)
-                  createHtmlText(html_page_builder, page.text, page_width, page_height)
+                  create_html_text(html_page_builder, page.text, page_width, page_height)
                 end
               rescue => e
                 RAILS_DEFAULT_LOGGER.debug(e.message)
@@ -173,7 +173,7 @@ module HtmlConversion
   # svg_object is the XMLObject of the SVG Element
   #
   # return an array with [m11, m12, m21, m22, m31, m32]
-  def self.getTransformMatrix(svg_object)
+  def self.get_transform_matrix(svg_object)
     if (svg_object.transform && svg_object.transform.length > 8)                              
       matrix_string = svg_object.transform                
       matrix = matrix_string[7..-2].split(", ")
@@ -187,13 +187,13 @@ module HtmlConversion
   # page_height is the height of the page  
   # 
   # Return a Hash with { left => ..., top => ..., width => ..., height => ..., z-index => ...}
-  def self.getConvertedSizeAndPosition(svg_object, page_width, page_height)
+  def self.get_converted_size_and_position(svg_object, page_width, page_height)
     left = svg_object.x.to_f + page_width.to_i / 2
     top = svg_object.y.to_f + page_height.to_i / 2
     z_index = svg_object[:attr => "ub:z-value"]
     width = svg_object.width.to_f
     height = svg_object.height.to_f   
-    matrix = getTransformMatrix(svg_object)             
+    matrix = get_transform_matrix(svg_object)
     # get the transform and modify top, left, width and height according to this transform
     if (matrix)                              
       width = width * matrix[0].to_f
@@ -212,15 +212,15 @@ module HtmlConversion
   # svg_object is the XMLObject of the SVG Element
   # page_width is the width of the page
   # page_height is the height of the page 
-  def self.createHtmlText(page_builder, svg_object, page_width, page_height)
-    size_and_position = getConvertedSizeAndPosition(svg_object, page_width, page_height)
+  def self.create_html_text(page_builder, svg_object, page_width, page_height)
+    size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
     left = size_and_position["left"]
     top = size_and_position["top"]
     z_index = size_and_position["z-index"].to_i
     width = size_and_position["width"]
     height = size_and_position["height"]  
     font_size = svg_object[:attr => "font-size"].to_f
-    matrix = getTransformMatrix(svg_object)
+    matrix = get_transform_matrix(svg_object)
     # TODO how to define font size if scale x and y scale are not equal
     if (matrix && matrix[0])
       font_size = font_size * matrix[0].to_f
@@ -243,7 +243,7 @@ module HtmlConversion
   # page_width is the width of the page
   # page_height is the height of the page
   # page_file_stream is the stream on the SVG page file. It is used to find relative pdf background and convert it.
-  def self.createHtmlForeignObject(page_builder, svg_object, page_width, page_height, page_file_stream)
+  def self.create_html_foreign_object(page_builder, svg_object, page_width, page_height, page_file_stream)
   
     # foreign object can be widgets or pdf background
     # if foreign is background, it should be a pdf background
@@ -254,19 +254,19 @@ module HtmlConversion
       bg_width = svg_object[:attr => "width"].to_f
       bg_height = svg_object[:attr => "height"].to_f
       
-      matrix = getTransformMatrix(svg_object)
+      matrix = get_transform_matrix(svg_object)
       if (matrix && matrix[0])
         bg_width = bg_width * matrix[0].to_f
         bg_height = bg_height * matrix[3].to_f
       end
       
       if (RUBY_PLATFORM =~ /linux/)
-        convertUtilityPath = File.join(RAILS_ROOT, 'lib', 'conversion', 'linux', 'pdf2image')
+        convert_utility_path = File.join(RAILS_ROOT, 'lib', 'conversion', 'linux', 'pdf2image')
       elsif (RUBY_PLATFORM =~ /darwin/)
-        convertUtilityPath = File.join(RAILS_ROOT, 'lib', 'conversion', 'macx', 'pdf2image')
+        convert_utility_path = File.join(RAILS_ROOT, 'lib', 'conversion', 'macx', 'pdf2image')
       end
       image_format = "png"
-      convert_command = convertUtilityPath + " " + File.dirname(page_file_stream.path) + "/" + pdf_url + " " + pdf_page + " " + bg_width.to_s + " " + bg_height.to_s + " "  + File.dirname(File.dirname(page_file_stream.path) + "/" + pdf_url) + " " + image_format
+      convert_command = convert_utility_path + " " + File.dirname(page_file_stream.path) + "/" + pdf_url + " " + pdf_page + " " + bg_width.to_s + " " + bg_height.to_s + " "  + File.dirname(File.dirname(page_file_stream.path) + "/" + pdf_url) + " " + image_format
       puts convert_command
       if system(convert_command)
         left = (page_width.to_f - bg_width) / 2
@@ -281,7 +281,7 @@ module HtmlConversion
       end
       
     else
-      size_and_position = getConvertedSizeAndPosition(svg_object, page_width, page_height)
+      size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
       left = size_and_position["left"]
       top = size_and_position["top"]
       z_index = size_and_position["z-index"].to_i
@@ -301,18 +301,15 @@ module HtmlConversion
   # svg_object is the XMLObject of the SVG Element
   # page_width is the width of the page
   # page_height is the height of the page  
-  def self.createHtmlImage(page_builder, svg_object, page_width, page_height)
-    size_and_position = getConvertedSizeAndPosition(svg_object, page_width, page_height)
+  def self.create_html_image(page_builder, svg_object, page_width, page_height)
+    size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
     left = size_and_position["left"]
     top = size_and_position["top"]
     z_index = 0
     width = size_and_position["width"]
     height = size_and_position["height"]                
-    if (svg_object[:attr => "ub:background"] == "true")
-      z_index = size_and_position["z-index"].to_i
-    elsif
-      z_index = size_and_position["z-index"].to_i
-    end
+     z_index = size_and_position["z-index"].to_i
+
     # if image is an svg file we must create an object instead of an image in HTML.
     image_src = svg_object[:attr => "xlink:href"]
     if (image_src[-3,3] == "svg")
