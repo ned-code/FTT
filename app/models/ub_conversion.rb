@@ -8,6 +8,7 @@ class UbConversion < ActiveRecord::Base
 
   belongs_to :media, :class_name => 'UbMedia', :foreign_key => 'media_id'
 
+  
   def public_url
 
   end
