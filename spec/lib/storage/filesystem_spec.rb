@@ -1,9 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../storage_spec')
 require 'storage/filesystem'
 
 
 def mk_storage_fs_file(path, content = '')
-  path = File.join(@storage.basedir, path) if path.to_s !~ /^\/.+/
+  path = File.join(RAILS_ROOT, @storage.basedir, path) if path.to_s !~ /^\/.+/
 
   FileUtils.mkdir_p(File.dirname(path))
   File.open(path, 'w') do |file|
@@ -21,7 +22,7 @@ describe Storage::Filesystem do
     @storage = Storage.storage(:name => :filesystem)
 
     @path = STORAGE_VALID_PATH
-    @full_path = Pathname.new(File.join(@storage.basedir, @path)).to_s
+    @full_path = Pathname.new(File.join(RAILS_ROOT, @storage.basedir, @path)).to_s
   end
 
   it 'should is a Storage::Filesystem' do
@@ -188,8 +189,8 @@ describe Storage::Filesystem do
     it "should not remove basedir if empty after delete file" do
       lambda { @storage.delete(@path) }.should_not raise_error
 
-      File.exist?(@storage.basedir).should be_true   # directory exist
-      Dir.entries(@storage.basedir).size.should == 2 # but is empty
+      File.exist?(File.join(RAILS_ROOT, @storage.basedir)).should be_true   # directory exist
+      Dir.entries(File.join(RAILS_ROOT, @storage.basedir)).size.should == 2 # but is empty
     end
 
   end
@@ -204,7 +205,7 @@ describe Storage::Filesystem do
       mk_storage_fs_file(@full_path, @content)
 
       @path_to = 'another/path/for/file'
-      @full_path_to = File.join(@storage.basedir, @path_to)
+      @full_path_to = File.join(RAILS_ROOT, @storage.basedir, @path_to)
     end
 
     it_should_behave_like 'storage interface for move method'
@@ -255,7 +256,7 @@ describe Storage::Filesystem do
     it "should not remove basedir after moving file" do
       lambda { @storage.move(@path, @path_to) }.should_not raise_error
 
-      File.exist?(@storage.basedir).should be_true   # directory exist
+      File.exist?(File.join(RAILS_ROOT, @storage.basedir)).should be_true   # directory exist
     end
   end
 
