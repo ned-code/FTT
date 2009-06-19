@@ -29,14 +29,14 @@ describe Storage do
     lambda { Storage.storage({}) }.should raise_error(ArgumentError, /missing :name attribute/)
   end
 
-  it "should accept indentity string param (Marshal dump)" do
-    identity_string = Marshal.dump({:name => :fake})
+  it "should accept indentity string param (YAML dump)" do
+    identity_string = YAML.dump({:name => :fake})
 
     lambda { Storage.storage(identity_string) }.should_not raise_error(ArgumentError)
   end
 
   it "should need storage name in indentity string" do
-    identity_string = Marshal.dump({})
+    identity_string = YAML.dump({})
 
     lambda { Storage.storage(identity_string) }.should raise_error(ArgumentError, /missing :name attribute/)
   end
@@ -66,11 +66,11 @@ describe Storage do
     @storage.options.should be_kind_of(Hash)
   end
 
-  it "should have identity string attribute (Marshal dump)" do
+  it "should have identity string attribute (YAML dump)" do
     storage_options = {:name => :fake}
     @storage = Storage.storage(storage_options)
 
-    @storage.identity_string.should == Marshal.dump(storage_options)
+    @storage.identity_string.should == YAML.dump(storage_options)
   end
 
   it "should have identity string has a result of to_s" do

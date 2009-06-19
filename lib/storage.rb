@@ -1,3 +1,5 @@
+require 'yaml'
+
 module Storage
 
   # Can receive Hash with a ':name' of storage and another options for storage
@@ -6,14 +8,14 @@ module Storage
     @@storages ||= {}
 
     begin
-      options = Marshal.load(options) if options.is_a? String
+      options = YAML.load(options) if options.is_a? String
     rescue
-      raise ArgumentError, "options can't be converted from String to Hash (invalid Marshal dump)"
+      raise ArgumentError, "options can't be converted from String to Hash (invalid YAML dump)"
     end
-    raise(ArgumentError, "options must be a Hash or marshalized dump string") unless options.kind_of?(Hash)
+    raise(ArgumentError, "options must be a Hash or yamlized dump string") unless options.kind_of?(Hash)
     raise(ArgumentError, "missing :name attribute in options argument") unless options.has_key?(:name)
 
-    identity_string = Marshal.dump(options)
+    identity_string = YAML.dump(options)
     if @@storages.has_key?(identity_string)
       @@storages[identity_string]
     else
@@ -26,7 +28,7 @@ module Storage
     attr_reader :options, :identity_string
 
     def initialize(options)
-      @identity_string = Marshal.dump(options)
+      @identity_string = YAML.dump(options)
       @options = options
     end
 

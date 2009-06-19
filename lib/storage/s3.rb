@@ -22,7 +22,7 @@ module Storage
 
       @@connection ||= {}
 
-      identity_string = Marshal.dump(config)
+      identity_string = YAML.dump(config)
       if @@connection.has_key?(identity_string)
         @@connection[identity_string]
       else
