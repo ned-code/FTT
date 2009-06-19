@@ -8,18 +8,22 @@ module Storage
     @@storages ||= {}
 
     begin
-      options = YAML.load(options) if options.is_a? String
+      options = YAML.load(options) if options.is_a?(String)
     rescue
-      raise ArgumentError, "options can't be converted from String to Hash (invalid YAML dump)"
+      raise ArgumentError, "'options' can't be converted from YAML to Hash"
     end
-    raise(ArgumentError, "options must be a Hash or yamlized dump string") unless options.kind_of?(Hash)
-    raise(ArgumentError, "missing :name attribute in options argument") unless options.has_key?(:name)
+    raise(ArgumentError, "'options' must be a Hash or YAML dump") unless options.kind_of?(Hash)
+    raise(ArgumentError, "missing 'name' attribute in 'options' argument") unless options.has_key?(:name)
 
     identity_string = YAML.dump(options)
     if @@storages.has_key?(identity_string)
       @@storages[identity_string]
     else
-      storage_class = Storage.const_get(options[:name].to_s.capitalize)
+      begin
+        storage_class = Storage.const_get(options[:name].to_s.capitalize)
+      rescue
+        raise(ArgumentError, "storage '#{options[:name].to_s}' can't be loaded")
+      end
       @@storages[identity_string] = storage_class.new(options)
     end
   end

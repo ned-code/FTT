@@ -26,7 +26,7 @@ describe Storage do
   end
 
   it "should need storage name in options Hash" do
-    lambda { Storage.storage({}) }.should raise_error(ArgumentError, /missing :name attribute/)
+    lambda { Storage.storage({}) }.should raise_error(ArgumentError, /missing 'name' attribute/)
   end
 
   it "should accept indentity string param (YAML dump)" do
@@ -38,7 +38,7 @@ describe Storage do
   it "should need storage name in indentity string" do
     identity_string = YAML.dump({})
 
-    lambda { Storage.storage(identity_string) }.should raise_error(ArgumentError, /missing :name attribute/)
+    lambda { Storage.storage(identity_string) }.should raise_error(ArgumentError, /missing 'name' attribute/)
   end
 
   it "should return same storage if same options is used more one time" do
@@ -52,6 +52,10 @@ describe Storage do
     @storage = Storage.storage(:name => :fake, :test => true)
 
     Storage.storage(:name => :fake, :test => false).should_not === @storage
+  end
+
+  it "should raise ArgumentError if storage can't be loaded" do
+    lambda { Storage.storage(:name => :dont_exist) }.should raise_error(ArgumentError, /storage 'dont_exist' can't be loaded/)
   end
 
   it "should have name attribute" do
