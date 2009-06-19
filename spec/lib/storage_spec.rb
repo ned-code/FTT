@@ -405,8 +405,8 @@ describe Storage do
         @storage.delete(@path).should be_true
       end
 
-      it "should return false if file doesn't exist" do
-        @storage.delete(STORAGE_NOT_EXIST_PATH).should be_false
+      it "should return true if file doesn't exist" do
+        @storage.delete(STORAGE_NOT_EXIST_PATH).should be_true
       end
 
     end

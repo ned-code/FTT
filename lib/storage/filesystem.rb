@@ -65,13 +65,13 @@ module Storage
     def delete(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
 
-      return false unless exist?(path)
+      return true unless exist?(path)
 
       begin
         File.delete(full_path(path))
         rm_empty_directories(path)
       rescue => e
-        logger.debug "Error when deleting file '#{path}' in Storage::Filesystem: #{e.message}\n\n#{e.backtrace}"
+        logger.error "Error when deleting file '#{path}' in Storage::Filesystem: #{e.message}\n\n#{e.backtrace}"
         return false
       end
 
@@ -88,7 +88,7 @@ module Storage
         rm_empty_directories(path_from)
       rescue => e
         rm_empty_directories(path_to)
-        logger.debug "Error when moving file '#{path_from}' to '#{path_to}' in Storage::Filesystem: #{e.message}\n\n#{e.backtrace}"
+        logger.error "Error when moving file '#{path_from}' to '#{path_to}' in Storage::Filesystem: #{e.message}\n\n#{e.backtrace}"
         return false
       end
 
@@ -104,8 +104,9 @@ module Storage
     # Remove all empty diretories in path down to 'basedir's
     def rm_empty_directories(path)
       Pathname.new(full_path(path)).ascend do |e|
-
-        if e.directory? && e.entries.size <= 2 && e.to_s != basedir
+        break if e.to_s == basedir
+        
+        if e.directory? && e.entries.size <= 2
           e.delete
         end
 
