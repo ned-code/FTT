@@ -1,6 +1,37 @@
 
 # Module that convert Uniboard desktop file to Uniboard WEB format.
-module HtmlConversion
+class HtmlConverter
+
+  def supported_source_types
+    ["ub_page/svg", "ub_document/ub"]
+  end
+
+  def supported_destination_type
+    ["application/xhtml+xml"]
+  end
+
+  # convert ub_page and ub_document to html format
+  # options must contain:
+  # * :page_uuid for page conversion
+  # * :document_uuid for document conversion
+  # * :document_rdf_stream for document conversion
+  # * :destination_path a path where to save conversion
+  def convert_file(file, source_type, destination_type, options)
+    if (source_type == "ub_page/svg" && destination_type == supported_destination_type[0])
+      html_content = convert_svg_page_to_html(options[:page_uuid], File.open(file))
+    else if (source_type == "ub_document/ub" && destination_type == supported_destination_type[0])
+        html_content = convert_ub_document_to_html(options[:document_uuid], File.open(file), options[:document_rdf_stream])
+      end
+      File.open(options[:destination_path], 'w') do |html_file|
+        html_file << html_content
+      end
+    end
+  end
+
+  def convert(media, destination_type, options)
+
+  end
+
 
   # Create the index.html file for a uniboard document
   # uuid is the uuid of the document to convert
@@ -8,7 +39,7 @@ module HtmlConversion
   # rdf_document_file is a stream to the rdf file of the document (metadata of the document)
   #
   # result is the index html content as a String
-  def self.create_html_document(uuid, ub_document_file, rdf_document_file)
+  def convert_ub_document_to_html(uuid, ub_document_file, rdf_document_file)
     ub_document_file.rewind
     rdf_document_file.rewind
 
@@ -63,7 +94,7 @@ module HtmlConversion
   # This function assume that related files are accesible relatively from the svg file. Typically a pdf background file will be converted to
   # a png file so the pdf file must be accessible on the Hard drive.
   # PDF background is converted to a png file and this png file is placed beside the pdf background file. 
-  def self.convert_svg_page_to_html(page_uuid, page_file_stream) 
+  def convert_svg_page_to_html(page_uuid, page_file_stream) 
     page_file_stream.rewind
     RAILS_DEFAULT_LOGGER.debug "convert page #{page_uuid}"
     page = XMLObject.new(page_file_stream)
@@ -173,7 +204,7 @@ module HtmlConversion
   # svg_object is the XMLObject of the SVG Element
   #
   # return an array with [m11, m12, m21, m22, m31, m32]
-  def self.get_transform_matrix(svg_object)
+  def get_transform_matrix(svg_object)
     if (svg_object.transform && svg_object.transform.length > 8)                              
       matrix_string = svg_object.transform                
       matrix = matrix_string[7..-2].split(", ")
@@ -187,7 +218,7 @@ module HtmlConversion
   # page_height is the height of the page  
   # 
   # Return a Hash with { left => ..., top => ..., width => ..., height => ..., z-index => ...}
-  def self.get_converted_size_and_position(svg_object, page_width, page_height)
+  def get_converted_size_and_position(svg_object, page_width, page_height)
     left = svg_object.x.to_f + page_width.to_i / 2
     top = svg_object.y.to_f + page_height.to_i / 2
     z_index = svg_object[:attr => "ub:z-value"]
@@ -212,7 +243,7 @@ module HtmlConversion
   # svg_object is the XMLObject of the SVG Element
   # page_width is the width of the page
   # page_height is the height of the page 
-  def self.create_html_text(page_builder, svg_object, page_width, page_height)
+  def create_html_text(page_builder, svg_object, page_width, page_height)
     size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
     left = size_and_position["left"]
     top = size_and_position["top"]
@@ -243,7 +274,7 @@ module HtmlConversion
   # page_width is the width of the page
   # page_height is the height of the page
   # page_file_stream is the stream on the SVG page file. It is used to find relative pdf background and convert it.
-  def self.create_html_foreign_object(page_builder, svg_object, page_width, page_height, page_file_stream)
+  def create_html_foreign_object(page_builder, svg_object, page_width, page_height, page_file_stream)
   
     # foreign object can be widgets or pdf background
     # if foreign is background, it should be a pdf background
@@ -259,27 +290,19 @@ module HtmlConversion
         bg_width = bg_width * matrix[0].to_f
         bg_height = bg_height * matrix[3].to_f
       end
-      
-      if (RUBY_PLATFORM =~ /linux/)
-        convert_utility_path = File.join(RAILS_ROOT, 'lib', 'conversion', 'linux', 'pdf2image')
-      elsif (RUBY_PLATFORM =~ /darwin/)
-        convert_utility_path = File.join(RAILS_ROOT, 'lib', 'conversion', 'macx', 'pdf2image')
-      end
-      image_format = "png"
-      convert_command = convert_utility_path + " " + File.dirname(page_file_stream.path) + "/" + pdf_url + " " + pdf_page + " " + bg_width.to_s + " " + bg_height.to_s + " "  + File.dirname(File.dirname(page_file_stream.path) + "/" + pdf_url) + " " + image_format
-      puts convert_command
-      if system(convert_command)
-        left = (page_width.to_f - bg_width) / 2
-        top = (page_height.to_f - bg_height) / 2
-        page_builder.img("id" => svg_object[:attr => "ub:uuid"][1..-2],
-                      "src" => pdf_url[0..-5] + format("%05d", pdf_page)  + "." + image_format,
-                      "alt" => "Image",
-                      "ub:background" => "true",
-                      "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + bg_width.to_s + "px; height:" + bg_height.to_s + "px; z-index:-20000000")
-      else
-        logger.debug "Error while generating image background"
-      end
-      
+      pdf_media_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
+      pdf_media = UbMedia.find_by_uuid(pdf_media_uuid)
+      raise "Missing pdf media with id #{pdf_media_uuid}" unless pdf_media
+
+      page_background_ressource = pdf_media.get_resource("image/png", {:page => pdf_page, :width => bg_width, :height => bg_height})
+
+      left = (page_width.to_f - bg_width) / 2
+      top = (page_height.to_f - bg_height) / 2
+      page_builder.img("id" => pdf_media_uuid,
+        "src" => page_background_ressource.public_url(),
+        "alt" => "Image",
+        "ub:background" => "true",
+        "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + bg_width.to_s + "px; height:" + bg_height.to_s + "px; z-index:-20000000")
     else
       size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
       left = size_and_position["left"]
@@ -301,7 +324,7 @@ module HtmlConversion
   # svg_object is the XMLObject of the SVG Element
   # page_width is the width of the page
   # page_height is the height of the page  
-  def self.create_html_image(page_builder, svg_object, page_width, page_height)
+  def create_html_image(page_builder, svg_object, page_width, page_height)
     size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
     left = size_and_position["left"]
     top = size_and_position["top"]

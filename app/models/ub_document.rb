@@ -1,4 +1,3 @@
-require "conversion/html_conversion"
 
 # UniboardDocument is basically a container of pages. Following attributes are available:
 #- uuid: string
