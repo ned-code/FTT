@@ -1,8 +1,49 @@
-#require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-#require "conversion/html_converter"
-#
-#describe "Uniboard document conversion" do
-#
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require "conversion/conversion_service"
+
+class ValidFakeConverter < ConversionService::Converter
+
+    def initialize(source, destination)
+      @source = source
+      @destination = destination
+    end
+
+    def convert_file(file, source_type, destination_type, options)
+      file
+    end
+
+    def convert_media(media, destination_type, options)
+      media.path
+    end
+
+    def supported_source_types
+      @source
+    end
+
+    def supported_destination_type
+      @destination
+    end
+end
+
+describe ConversionService do
+
+  it "should allow to register new valid converter" do
+    lambda {ConversionService::register_converter(ValidFakeConverter.new(["src"],["dest"]))}.should_not raise_error
+  end
+
+  it "should find approriate converter" do
+      converter_ab_to_yz = ValidFakeConverter.new(["a", "b"], ["y", "z"])
+      converter_ac_to_xy = ValidFakeConverter.new(["a", "c"], ["x", "y"])
+      ConversionService::register_converter(converter_ab_to_yz)
+      ConversionService::register_converter(converter_ac_to_xy)
+      ConversionService::converter_for("a", "z").should == converter_ab_to_yz
+      ConversionService::converter_for("a", "x").should == converter_ac_to_xy
+      ConversionService::converter_for("b", "y").should == converter_ab_to_yz
+      ConversionService::converter_for("c", "z").should == nil
+  end
+
+end
+
 #  before(:all) do
 #    document_zip_path = fixture_file(File.join('conversion', 'document.ubz'))
 #    @extracted_document_path = File.join(RAILS_ROOT, 'tmp', 'uncompressed_documents', File.basename(document_zip_path))

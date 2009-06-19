@@ -3,6 +3,24 @@
 
 module ConversionService
 
+  class Converter
+    def convert_file(file, source_type, destination_type, options)
+      raise NotImplementedError, "method convert_file is missing"
+    end
+
+    def convert_media(media, destination_type, options)
+      raise NotImplementedError, "method convert_media is missing"
+    end
+
+    def supported_source_types
+      raise NotImplementedError, "method supported_source_types is missing"
+    end
+
+    def supported_destination_type
+      raise NotImplementedError, "method supported_destination_type is missing"
+    end
+  end
+
   # all available converters are stored in this map.
   # Keys are source type and value is a map with keys destination type and value equal to converter object
   @@converters = {}
@@ -27,8 +45,6 @@ module ConversionService
       end
     end
   end
-
-  private
 
   def self.converter_for(source_type, destination_type)
     available_converter = @@converters[source_type]

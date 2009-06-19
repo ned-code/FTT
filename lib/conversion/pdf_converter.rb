@@ -1,4 +1,7 @@
-# Module that convert Uniboard desktop file to Uniboard WEB format.
+require 'conversion_service'
+
+ConversionService::register_converter(PdfConverter.new)
+
 class PdfConverter
 
   def supported_source_types

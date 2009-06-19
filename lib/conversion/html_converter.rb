@@ -1,3 +1,6 @@
+require 'conversion_service'
+
+ConversionService::register_converter(HtmlConverter.new)
 
 # Module that convert Uniboard desktop file to Uniboard WEB format.
 class HtmlConverter
