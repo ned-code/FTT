@@ -4,74 +4,42 @@ describe UbPage do
   it('') { should be_built_by_factory }
   it('') { should be_created_by_factory }
 
-  shared_examples_for 'page with filesystem storage' do
-
-    before(:each) do
-      UbDocument.config[:storage] = :filesystem
-    end
-
-  end
-
-  shared_examples_for 'page with s3 storage' do
-
-    before(:each) do
-      UbDocument.config[:storage] = :s3
-    end
-
-  end
-
   context 'recently created' do
 
-    shared_examples_for 'page recently created' do
+    it 'should have its version to 1' do
+      page = Factory.build(:ub_page)
 
-      it 'should have its version to 1' do
+      page.should be_valid
+      page.should have(:no).errors
+      page.save.should be_true
+      page.version.should == 1
+    end
+
+    it 'should create 3 page elements when parsing default svg_file' do
+
+      ActiveRecord::Base.transaction do
+
         page = Factory.build(:ub_page)
 
-        page.should be_valid
-        page.should have(:no).errors
-        page.save.should be_true
-        page.version.should == 1
+        image_media = Factory.build(:ub_media)
+        image_media.uuid = UUID.new.generate
+        image_media.save!
+
+        svg_image_media = Factory.build(:ub_media)
+        svg_image_media.uuid = UUID.new.generate
+        svg_image_media.save!
+
+        widget_media = Factory.build(:ub_media)
+        widget_media.uuid = UUID.new.generate
+        widget_media.save!
+
+        svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
+        svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
+        svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
+        svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
+        page.parse_svg_page(svg_file)
+        page.should have(3).page_element
       end
-
-      it 'should create 3 page elements when parsing default svg_file' do
-
-        ActiveRecord::Base.transaction do
-
-          page = Factory.build(:ub_page)
-
-          image_media = Factory.build(:ub_media)
-          image_media.uuid = UUID.new.generate
-          image_media.save!
-
-          svg_image_media = Factory.build(:ub_media)
-          svg_image_media.uuid = UUID.new.generate
-          svg_image_media.save!
-
-          widget_media = Factory.build(:ub_media)
-          widget_media.uuid = UUID.new.generate
-          widget_media.save!
-
-          svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
-          svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
-          svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
-          svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
-          page.parse_svg_page(svg_file)
-          page.should have(3).page_element
-        end
-      end
-
-    end
-
-    context 'with filesystem storage' do
-      it_should_behave_like 'page with filesystem storage'
-      it_should_behave_like 'page recently created'
-
-    end
-
-    context 'with s3 storage' do
-      it_should_behave_like 'page with s3 storage'
-      it_should_behave_like 'page recently created'
-
     end
 
   end
@@ -85,136 +53,108 @@ describe UbPage do
       @page = @document.pages.first
     end
 
-    shared_examples_for 'page existing' do
+    it 'should have url' do
+      pending
+      @page.url.should =~ URL_FORMAT_REGEX
+    end
 
-      it 'should have url' do
-        @page.url.should =~ URL_FORMAT_REGEX
-      end
+    it 'should have thumbnail url' do
+      pending
+      @page.thumbnail_url.should =~ URL_FORMAT_REGEX
+    end
 
-      it 'should have thumbnail url' do
-        @page.thumbnail_url.should =~ URL_FORMAT_REGEX
-      end
+    it 'should have mime type' do
+      pending
+      @page.mime_type.should == 'image/svg+xml'
+    end
 
-      it 'should have mime type' do
-        @page.mime_type.should == 'image/svg+xml'
-      end
+    it 'should have thumbnail mime type' do
+      pending
+      @page.thumbnail_mime_type.should == 'image/jpeg'
+    end
 
-      it 'should have thumbnail mime type' do
-        @page.thumbnail_mime_type.should == 'image/jpeg'
-      end
+    it 'should raise media missing exception when parsing svg file that refer missing media' do
+      page = Factory.build(:ub_page)
 
-      it 'should raise media missing exception when parsing svg file that refer missing media' do
+      image_media = Factory.build(:ub_media)
+      image_media.uuid = UUID.new.generate
 
-        page = Factory.build(:ub_page)
+      widget_media = Factory.build(:ub_media)
+      widget_media.uuid = UUID.new.generate
 
-        image_media = Factory.build(:ub_media)
-        image_media.uuid = UUID.new.generate
+      page.page_elements.build(:media => image_media)
+      page.page_elements.build(:media => widget_media)
+      page.save!
 
-        widget_media = Factory.build(:ub_media)
-        widget_media.uuid = UUID.new.generate
+      svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
+      svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
+      svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
 
-        page.page_elements.build(:media => image_media)
-        page.page_elements.build(:media => widget_media)
-        page.save!
+      lambda {page.parse_svg_page(svg_file)}.should raise_error
+    end
 
+    it 'should delete 1 page elements when parsing default svg_file' do
+      page = Factory.build(:ub_page)
+
+      image_media = Factory.build(:ub_media)
+      image_media.uuid = UUID.new.generate
+
+      svg_image_media = Factory.build(:ub_media)
+      svg_image_media.uuid = UUID.new.generate
+
+      svg_image_media_to_delete = Factory.build(:ub_media)
+      svg_image_media_to_delete.uuid = UUID.new.generate
+
+      widget_media = Factory.build(:ub_media)
+      widget_media.uuid = UUID.new.generate
+
+      page.page_elements.build(:media => image_media)
+      page.page_elements.build(:media => svg_image_media)
+      page.page_elements.build(:media => widget_media)
+      page.page_elements.build(:media => svg_image_media_to_delete)
+      page.save!
+
+      svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
+      svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
+      svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
+      svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
+
+      page.parse_svg_page(svg_file)
+      lambda {page.save!}.should change(UbPageElement, :count).by(-1)
+      page.reload
+      page.should have(3).page_element
+    end
+
+    it 'should add 1 page elements when parsing default svg_file' do
+
+      page = Factory.build(:ub_page)
+
+      image_media = Factory.build(:ub_media)
+      image_media.uuid = UUID.new.generate
+
+      widget_media = Factory.build(:ub_media)
+      widget_media.uuid = UUID.new.generate
+
+      page.page_elements.build(:media => image_media)
+      page.page_elements.build(:media => widget_media)
+      page.save!
+
+      ActiveRecord::Base.transaction do
+        svg_image_media = Factory.build(:ub_media)
+        svg_image_media.uuid = UUID.new.generate
+        svg_image_media.save!
         svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
         svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
+        svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
         svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
 
-        lambda {page.parse_svg_page(svg_file)}.should raise_error
-      end
-
-      it 'should delete 1 page elements when parsing default svg_file' do
-
-          page = Factory.build(:ub_page)
-
-          image_media = Factory.build(:ub_media)
-          image_media.uuid = UUID.new.generate
-
-          svg_image_media = Factory.build(:ub_media)
-          svg_image_media.uuid = UUID.new.generate
-
-          svg_image_media_to_delete = Factory.build(:ub_media)
-          svg_image_media_to_delete.uuid = UUID.new.generate
-
-          widget_media = Factory.build(:ub_media)
-          widget_media.uuid = UUID.new.generate
-
-          page.page_elements.build(:media => image_media)
-          page.page_elements.build(:media => svg_image_media)
-          page.page_elements.build(:media => widget_media)
-          page.page_elements.build(:media => svg_image_media_to_delete)
-          page.save!
-          
-          svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
-          svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
-          svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
-          svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
-
         page.parse_svg_page(svg_file)
-        lambda {page.save!}.should change(UbPageElement, :count).by(-1)
+        lambda {page.save!}.should change(UbPageElement, :count).by(1)
         page.reload
         page.should have(3).page_element
       end
-
-      it 'should add 1 page elements when parsing default svg_file' do
-
-          page = Factory.build(:ub_page)
-
-          image_media = Factory.build(:ub_media)
-          image_media.uuid = UUID.new.generate
-
-          widget_media = Factory.build(:ub_media)
-          widget_media.uuid = UUID.new.generate
-
-          page.page_elements.build(:media => image_media)
-          page.page_elements.build(:media => widget_media)
-          page.save!
-
-        ActiveRecord::Base.transaction do
-          svg_image_media = Factory.build(:ub_media)
-          svg_image_media.uuid = UUID.new.generate
-          svg_image_media.save!
-          svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
-          svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
-          svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
-          svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
-
-          page.parse_svg_page(svg_file)
-          lambda {page.save!}.should change(UbPageElement, :count).by(1)
-          page.reload
-          page.should have(3).page_element
-        end
-      end
     end
 
-    context 'with filesystem storage' do
-      it_should_behave_like 'page with filesystem storage'
-      it_should_behave_like 'page existing'
-
-      it 'should have file url' do
-        @page.url.should =~ FILE_URL_FORMAT_REGEX
-      end
-
-      it 'should have thumnail file url' do
-        @page.thumbnail_url.should =~ FILE_URL_FORMAT_REGEX
-      end
-    end
-
-    context 'with s3 storage' do
-      it_should_behave_like 'page with s3 storage'
-      it_should_behave_like 'page existing'
-
-      it 'should have http url' do
-        @page.url.should =~ HTTP_URL_FORMAT_REGEX
-        @page.url.should =~ /[\?&]signature=/i
-      end
-
-      it 'should have thumnail http url' do
-        @page.thumbnail_url.should =~ HTTP_URL_FORMAT_REGEX
-        @page.thumbnail_url.should_not =~ /[\?&]signature=/i
-      end
-    end
   end
 
   context 'collection' do
@@ -230,18 +170,22 @@ describe UbPage do
     end
 
     it 'should return page after the first' do
+      pending
       @document.pages[0].next.should == @document.pages[1]
     end
 
     it 'should return nil before the first' do
+      pending
       @document.pages[0].previous.should be_nil
     end
 
     it 'should return page before the last' do
+      pending
       @document.pages[-1].previous.should == @document.pages[-2]
     end
 
     it 'should return nil after the last' do
+      pending
       @document.pages[-1].next.should be_nil
     end
 

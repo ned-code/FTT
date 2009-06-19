@@ -29,6 +29,7 @@ describe DocumentsController do
         end
 
         it "'GET /documents' should render empty list" do
+          pending
           get :index
 
           response.should be_success
@@ -53,8 +54,8 @@ describe DocumentsController do
           @document_not_owned.accepts_role 'owner', Factory.create(:user)
         end
 
-        it "'GET /documents' should render list of documents owned by current user
-            without deleted documents" do
+        it "'GET /documents' should render list of documents owned by current user without deleted documents" do
+          pending
           get :index
 
           response.should be_success
@@ -70,6 +71,7 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should render list of document pages" do
+          pending
           get :show, :id => @document.id
 
           response.should be_success
@@ -86,6 +88,7 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should render error 404 if current user is not the owner" do
+          pending
           get :show, :id => @document_not_owned.id
 
           response.should be_not_found
@@ -93,6 +96,7 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should render error 404 id document is deleted" do
+          pending
           get :show, :id => @document_deleted.id
 
           response.should be_not_found
@@ -100,6 +104,7 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should render error 404 if document does not exist" do
+          pending
           get :show, :id => 100_000_000_000
 
           response.should be_not_found
@@ -125,6 +130,7 @@ describe DocumentsController do
       end
 
       it "'POST /documents' should create document with valid payload" do
+        pending
         mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
         post :create, :document => { :payload => mock_file }
@@ -153,6 +159,7 @@ describe DocumentsController do
       end
 
       it "'POST /documents' should not create documents without valid paylod" do
+        pending
         mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz')
 
         post :create, :document => { :payload => mock_file }
@@ -169,6 +176,7 @@ describe DocumentsController do
       end
 
       it "'POST /documents' should not create document with payload without valid UUID" do
+        pending
         mock_file = mock_uploaded_ubz('nouuid-valid.ubz')
 
         post :create, :document => { :payload => mock_file }
@@ -187,6 +195,7 @@ describe DocumentsController do
       context 'without associated document' do
 
         it "'GET /documents' should return an empty list" do
+          pending
           documents = []
           documents << Factory.create(:ub_document)
           documents << Factory.create(:ub_document)
@@ -221,8 +230,8 @@ describe DocumentsController do
           @document_not_owned.accepts_role 'owner', Factory.create(:user)
         end
 
-        it "'GET /documents' should return list of documents owned by current user
-            with deleted documents" do
+        it "'GET /documents' should return list of documents owned by current user with deleted documents" do
+          pending
           get :index
 
           response.should be_success
@@ -255,6 +264,7 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should return XML description of document" do
+          pending
           get :show, :id => @document.uuid
 
           response.should be_success
@@ -278,24 +288,24 @@ describe DocumentsController do
           end
         end
 
-        it "'GET /documents/:uuid' should return status '403 Forbidden' if current user
-            is not the owner" do
+        it "'GET /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
+          pending
           get :show, :id => @document_not_owned.uuid
 
           response.should be_forbidden
           response.should respond_with(:content_type => :xml)
         end
 
-        it "'GET /documents/:uuid' should return status '403 Forbidden' id document
-            is deleted" do
+        it "'GET /documents/:uuid' should return status '403 Forbidden' id document is deleted" do
+          pending
           get :show, :id => @document_deleted.uuid
 
           response.should be_forbidden
           response.should respond_with(:content_type => :xml)
         end
 
-        it "'GET /documents/:uuid' should return status '403 Forbidden' if document
-            does not exist" do
+        it "'GET /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
+          pending
           get :show, :id => UUID.generate
 
           response.should be_forbidden
@@ -303,6 +313,7 @@ describe DocumentsController do
         end
 
         it "'PUT /documents/:uuid' should update document with valid payload" do
+          pending
           mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document.uuid)
 
           put :update, :id => @document.uuid, :document => { :payload => mock_file }
@@ -328,8 +339,8 @@ describe DocumentsController do
           end
         end
 
-        it "'PUT /documents/:uuid' should not update document if payload version
-            is not equal to document version on server" do
+        it "'PUT /documents/:uuid' should not update document if payload version is not equal to document version on server" do
+          pending
           mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document.uuid)
           @document.update_attribute(:version, @document.version + 1)
 
@@ -345,6 +356,7 @@ describe DocumentsController do
         end
 
         it "'PUT /documents/:uuid' should not update document without valid payload" do
+          pending
           mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz')
 
           put :update, :id => @document.uuid, :document => { :payload => mock_file }
@@ -358,8 +370,8 @@ describe DocumentsController do
           response.should_not have_tag('document')
         end
 
-        it "'PUT /documents/:uuid' should not update document with payload without
-            valid UUID" do
+        it "'PUT /documents/:uuid' should not update document with payload without valid UUID" do
+          pending
           mock_file = mock_uploaded_ubz('nouuid-valid.ubz')
 
           put :update, :id => @document.uuid, :document => { :payload => mock_file }
@@ -373,8 +385,8 @@ describe DocumentsController do
           response.should_not have_tag('document')
         end
 
-        it "'PUT /documents/:uuid' should not update document with payload with
-            different UUID" do
+        it "'PUT /documents/:uuid' should not update document with payload with different UUID" do
+          pending
           mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
           put :update, :id => @document.uuid, :document => { :payload => mock_file }
@@ -388,8 +400,8 @@ describe DocumentsController do
           response.should_not have_tag('document')
         end
 
-        it "'PUT /documents/:uuid' should return status '403 Forbidden' if current
-            user is not the owner" do
+        it "'PUT /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
+          pending
           mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document_not_owned.uuid)
 
           put :update, :id => @document_not_owned.uuid, :document => { :payload => mock_file }
@@ -399,6 +411,7 @@ describe DocumentsController do
         end
 
         it "'PUT /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
+          pending
           mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
           put :update, :id => mock_file.uuid, :document => { :payload => mock_file }
@@ -408,6 +421,7 @@ describe DocumentsController do
         end
 
         it "'DELETE /documents/:uuid' should delete document" do
+          pending
           delete :destroy, :id => @document.uuid
 
           response.should be_success
@@ -419,16 +433,16 @@ describe DocumentsController do
           UbDocument.find_by_id(@document.id, :with_deleted => true).should_not be_nil
         end
 
-        it "'DELETE /documents/:uuid' should return status '403 Forbidden' if current
-            user is not the owner" do
+        it "'DELETE /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
+          pending
           delete :destroy, :id => @document_not_owned.uuid
 
           response.should be_forbidden
           response.should respond_with(:content_type => :xml)
         end
 
-        it "'DELETE /documents/:uuid' should return status '403 Forbidden' if document
-            does not exist" do
+        it "'DELETE /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
+          pending
           mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
 
           delete :destroy, :id => mock_file.uuid, :document => { :payload => mock_file }
@@ -448,6 +462,7 @@ describe DocumentsController do
       end
 
       it "'GET /documents' should return status '401 Unauthorized'" do
+        pending
         get :index
 
         response.should be_unauthorized
@@ -455,6 +470,7 @@ describe DocumentsController do
       end
 
       it "'POST /documents' should return status '401 Unauthorized'" do
+        pending
         post :create
 
         response.should be_unauthorized
@@ -462,6 +478,7 @@ describe DocumentsController do
       end
 
       it "'GET /documents/:uuid' should return status '401 Unauthorized'" do
+        pending
         get :show, :id => @document.uuid
 
         response.should be_unauthorized
@@ -469,6 +486,7 @@ describe DocumentsController do
       end
 
       it "'PUT /documents/:uuid' should return status '401 Unauthorized'" do
+        pending
         put :update, :id => @document.uuid
 
         response.should be_unauthorized
@@ -476,6 +494,7 @@ describe DocumentsController do
       end
 
       it "'DELETE /documents/:uuid' should return status '401 Unauthorized'" do
+        pending
         delete :destroy, :id => @document.uuid
 
         response.should be_unauthorized

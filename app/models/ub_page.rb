@@ -26,24 +26,20 @@ class UbPage < ActiveRecord::Base
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
-  def config
-    UbDocument.config
-  end
+#  def config
+#    UbDocument.config
+#  end
 
   def url(format = "svg", request_domain = nil)
-    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 
   def mime_type(format = "svg")
-    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 
   def thumbnail_url
-    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 
   def thumbnail_mime_type
-    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
   end
 
   def next
@@ -114,16 +110,16 @@ class UbPage < ActiveRecord::Base
   protected
 
   # Storage
-  def after_initialize
-    begin
-      require "storage/#{config.storage}"
-    rescue
-      logger.error "Storage '#{config.storage}' can't be loaded, fallback to 'filesystem' storage"
-      require 'storage/filesystem'
-    end
-
-    @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UbPage')
-    self.extend(@storage_module)
-  end
+#  def after_initialize
+#    begin
+#      require "storage/#{config.storage}"
+#    rescue
+#      logger.error "Storage '#{config.storage}' can't be loaded, fallback to 'filesystem' storage"
+#      require 'storage/filesystem'
+#    end
+#
+#    @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UbPage')
+#    self.extend(@storage_module)
+#  end
 
 end
