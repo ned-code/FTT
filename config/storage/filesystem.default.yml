@@ -1,0 +1,11 @@
+development:
+  basedir: files/documents
+
+test:
+  basedir: spec/tmp/files/documents
+
+staging:
+  basedir: files/documents
+
+production:
+  basedir: files/documents
