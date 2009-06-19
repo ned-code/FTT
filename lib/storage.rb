@@ -77,9 +77,10 @@ module Storage
 
     def default_config
       config_path = File.join(RAILS_ROOT, 'config', 'storage', "#{name}.yml")
+      config_by_default_path = File.join(RAILS_ROOT, 'config', 'storage', "#{name}.default.yml")
 
       begin
-        @default_config ||= YAML::load_file(config_path)[RAILS_ENV]
+        @default_config ||= YAML::load_file(File.exist?(config_path) ? config_path : config_by_default_path)[RAILS_ENV]
       rescue
         raise StandardError, "Configuration file '#{config_path}' for storage doesn't exist or have right information about Rails '#{RAILS_ENV}' environement."
       end
@@ -89,6 +90,11 @@ module Storage
       path !~ /^\/.+/
     end
 
+    def logger
+      @logger ||= Rails.logger
+    end
+
+    # TODO: remove if not used after refactoring
     def get_content_type_from_mime_types(filename)
       MIME::Types.of(File.extname(filename)).first.content_type
     rescue

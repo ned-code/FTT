@@ -10,6 +10,7 @@ module Storage
       super
 
       @basedir = options[:basedir] || default_config['basedir'] || raise(ArgumentError, 'Filesystem basedir is not present in config Hash')
+      @basedir = File.join(RAILS_ROOT, @basedir) if @basedir !~ /^\//
     end
 
     def put(path, data = '')
@@ -26,20 +27,21 @@ module Storage
       end
     end
 
-    def get(path, &block)
+    def get(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
 
       return nil unless exist?(path)
 
       if block_given?
-        Tempfile.open(path) do |tempfile|
 
+        Tempfile.open(File.basename(path)) do |tempfile|
           tempfile << File.open(full_path(path)).read
           tempfile.rewind
           yield tempfile
         end
+
       else
-        tempfile = Tempfile.new(path)
+        tempfile = Tempfile.new(File.basename(path))
         tempfile << File.open(full_path(path)).read
         tempfile.rewind
         tempfile
@@ -53,21 +55,61 @@ module Storage
     end
 
     def public_url(path)
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
     end
 
     def private_url(path)
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
     end
 
     def delete(path)
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+
+      return false unless exist?(path)
+
+      begin
+        File.delete(full_path(path))
+        rm_empty_directories(path)
+      rescue => e
+        logger.debug "Error when deleting file '#{path}' in Storage::Filesystem: #{e.message}\n\n#{e.backtrace}"
+        return false
+      end
+
+      true
     end
 
     def move(path_from, path_to)
+      raise(ArgumentError, "path '#{path_from}' not be valid") unless valid_path?(path_from)
+      raise(ArgumentError, "path '#{path_to}' not be valid") unless valid_path?(path_to)
+
+      begin
+        FileUtils.mkdir_p(File.dirname(full_path(path_to)))
+        File.rename(full_path(path_from), full_path(path_to))
+        rm_empty_directories(path_from)
+      rescue => e
+        rm_empty_directories(path_to)
+        logger.debug "Error when moving file '#{path_from}' to '#{path_to}' in Storage::Filesystem: #{e.message}\n\n#{e.backtrace}"
+        return false
+      end
+
+      true
     end
 
     private
 
     def full_path(path)
-      File.join(basedir, path)
+      File.join(basedir, path) if path !~ /^\/.+/
+    end
+
+    # Remove all empty diretories in path down to 'basedir's
+    def rm_empty_directories(path)
+      Pathname.new(full_path(path)).ascend do |e|
+
+        if e.directory? && e.entries.size <= 2 && e.to_s != basedir
+          e.delete
+        end
+
+      end
     end
 
   end

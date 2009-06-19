@@ -6,10 +6,14 @@ end
 
 NOT_IMPLEMENTED_ERROR_MESSAGE_REGEX = /Must be implemented in the '.+' storage type/
 
-STORAGE_PUT_PARAMS    = ['path/name/to/file']
-STORAGE_GET_PARAMS    = ['path/name/to/file']
-STORAGE_DELETE_PARAMS = ['path/name/to/file']
-STORAGE_MOVE_PARAMS   = ['path/name/to/file', 'new/path/name/to/file']
+STORAGE_VALID_PATH        = 'valid/path/to/file'    # Have more one directory in path
+STORAGE_NOT_VALID_PATH    = '/not/valid/path'       # This path is not valid
+STORAGE_NOT_EXIST_PATH    = 'file/dont/exist'       # This path to a file never exist but is valid
+
+STORAGE_PUT_PARAMS    = [STORAGE_VALID_PATH]
+STORAGE_GET_PARAMS    = [STORAGE_VALID_PATH]
+STORAGE_DELETE_PARAMS = [STORAGE_VALID_PATH]
+STORAGE_MOVE_PARAMS   = [STORAGE_VALID_PATH, 'new/path/name/to/file']
 
 describe Storage do
 
@@ -153,9 +157,7 @@ describe Storage do
     shared_examples_for "storage implementation for put method" do
 
       it "should raise ArgumentError if path is invalid" do
-        lambda {
-          @storage.put('/invalid/path')
-        }.should raise_error(ArgumentError)
+        lambda { @storage.put(STORAGE_NOT_VALID_PATH) }.should raise_error(ArgumentError, /not be valid/)
       end
 
       it "should return true when created" do
@@ -208,14 +210,18 @@ describe Storage do
 
     shared_examples_for "storage implementation for get method" do
 
-      it "should return data stream with" do
+      it "should raise ArgumentError if path is invalid" do
+        lambda { @storage.get(STORAGE_NOT_VALID_PATH) }.should raise_error(ArgumentError, /not be valid/)
+      end
+
+      it "should return data stream Tempfile" do
         data_stream = @storage.get(@path)
 
         data_stream.should be_kind_of(Tempfile)
         data_stream.read.should == @content
       end
 
-      it "should return data stream in block" do
+      it "should return data stream Tempfile in block" do
         pass_in_block = false
         @storage.get(@path) do |data_stream|
           pass_in_block = true
@@ -228,12 +234,12 @@ describe Storage do
       end
 
       it "should return nil if data doesn't exist" do
-        @storage.get('file/dont/exist').should be_nil
+        @storage.get(STORAGE_NOT_EXIST_PATH).should be_nil
       end
 
       it "should not execute block if data doesn't exist" do
         pass_in_block = false
-        @storage.get('file/dont/exist') do |data_stream|
+        @storage.get(STORAGE_NOT_EXIST_PATH) do |data_stream|
           pass_in_block = true
         end
         pass_in_block.should be_false
@@ -271,12 +277,16 @@ describe Storage do
 
     shared_examples_for "storage implementation for exist? method" do
 
+      it "should raise ArgumentError if path is invalid" do
+        lambda { @storage.exist?(STORAGE_NOT_VALID_PATH) }.should raise_error(ArgumentError, /not be valid/)
+      end
+
       it "should return true if data exist" do
         @storage.exist?(@path).should be_true
       end
 
-      it "should return true if data exist" do
-        @storage.exist?('file/dont/exist').should be_false
+      it "should return false if data don't exist" do
+        @storage.exist?(STORAGE_NOT_EXIST_PATH).should be_false
       end
 
     end
@@ -311,6 +321,10 @@ describe Storage do
 
     shared_examples_for "storage implementation for public_url method" do
 
+      it "should raise ArgumentError if path is invalid" do
+        lambda { @storage.public_url(STORAGE_NOT_VALID_PATH) }.should raise_error(ArgumentError, /not be valid/)
+      end
+
     end
 
     context "'public_url' method" do
@@ -342,6 +356,10 @@ describe Storage do
     end
 
     shared_examples_for "storage implementation for private_url method" do
+
+      it "should raise ArgumentError if path is invalid" do
+        lambda { @storage.private_url(STORAGE_NOT_VALID_PATH) }.should raise_error(ArgumentError, /not be valid/)
+      end
 
     end
 
@@ -375,6 +393,18 @@ describe Storage do
 
     shared_examples_for "storage implementation for delete method" do
 
+      it "should raise ArgumentError if path is invalid" do
+        lambda { @storage.delete(STORAGE_NOT_VALID_PATH) }.should raise_error(ArgumentError, /not be valid/)
+      end
+
+      it "should return true if deleted" do
+        @storage.delete(@path).should be_true
+      end
+
+      it "should return false if file doesn't exist" do
+        @storage.delete(STORAGE_NOT_EXIST_PATH).should be_false
+      end
+
     end
 
     context "'delete' method" do
@@ -406,6 +436,22 @@ describe Storage do
     end
 
     shared_examples_for "storage implementation for move method" do
+
+      it "should raise ArgumentError if 'path_from' is invalid" do
+        lambda { @storage.move(STORAGE_NOT_VALID_PATH, STORAGE_VALID_PATH) }.should raise_error(ArgumentError, /not be valid/)
+      end
+      
+      it "should raise ArgumentError if 'path_to' is invalid" do
+        lambda { @storage.move(STORAGE_VALID_PATH, STORAGE_NOT_VALID_PATH) }.should raise_error(ArgumentError, /not be valid/)
+      end
+
+      it "should return true if moved" do
+        @storage.move(*STORAGE_MOVE_PARAMS).should be_true
+      end
+
+      it "should return true if moved to same path (path_from == path_to)" do
+        @storage.move(STORAGE_VALID_PATH, STORAGE_VALID_PATH).should be_true
+      end
 
     end
 
