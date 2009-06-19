@@ -10,8 +10,8 @@ describe UbDocument do
     @document.accepts_role 'owner', @user
   end
 
-  it('') { should validate_format_of(:uuid, '12345678-1234-1234-1234-123456789012') }
-  it('') { should_not validate_format_of(:uuid, 'another-string') }
+  it('') { should allow_values_for(:uuid, '12345678-1234-1234-1234-123456789012') }
+  it('') { should_not allow_values_for(:uuid, 'another-string') }
 
   it('') { should have_many(:pages,
       :order => 'position ASC',
