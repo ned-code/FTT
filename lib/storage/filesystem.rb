@@ -10,7 +10,6 @@ module Storage
       super
 
       @basedir = options[:basedir] || default_config['basedir'] || raise(ArgumentError, 'Filesystem basedir is not present in config Hash')
-      @basedir = File.join(RAILS_ROOT, @basedir) if @basedir !~ /^\//
     end
 
     def put(path, data = '')
@@ -98,13 +97,15 @@ module Storage
     private
 
     def full_path(path)
-      File.join(basedir, path) if path !~ /^\/.+/
+      path = File.join(basedir, path)  if path !~ /^\/.+/    # Add basedir to path if not absolute
+      path = File.join(RAILS_ROOT, path) if path !~ /^\/.+/  # Add RAILS_ROOT to path if basedir is not absolute
+      path
     end
 
     # Remove all empty diretories in path down to 'basedir's
     def rm_empty_directories(path)
       Pathname.new(full_path(path)).ascend do |e|
-        break if e.to_s == basedir
+        break if e.to_s =~ /#{basedir}$/
         
         if e.directory? && e.entries.size <= 2
           e.delete
