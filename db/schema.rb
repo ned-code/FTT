@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090619121923) do
+ActiveRecord::Schema.define(:version => 20090619134940) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -73,6 +73,27 @@ ActiveRecord::Schema.define(:version => 20090619121923) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "page_media_id"
+  end
+
+  create_table "ub_sync_transaction_items", :force => true do |t|
+    t.integer  "ub_sync_transaction_id", :null => false
+    t.string   "path",                   :null => false
+    t.string   "storage_config",         :null => false
+    t.integer  "part_nb",                :null => false
+    t.integer  "part_total_nb",          :null => false
+    t.string   "part_hash_control",      :null => false
+    t.string   "item_hash_control",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "ub_sync_transactions", :force => true do |t|
+    t.string   "transaction_uuid", :null => false
+    t.string   "ub_client_uuid",   :null => false
+    t.string   "ub_document_uuid", :null => false
+    t.integer  "user_id",          :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", :force => true do |t|
