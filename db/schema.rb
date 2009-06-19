@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090617133133) do
+ActiveRecord::Schema.define(:version => 20090619121923) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20090617133133) do
     t.integer  "page_element_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "storage_config"
   end
 
   create_table "ub_page_elements", :force => true do |t|
