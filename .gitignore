@@ -5,7 +5,8 @@ spec/spec.opts.netbeans
 log/*.log
 tmp/**/*
 config/database.yml
-config/s3.yml
+config/storage/filesystem.yml
+config/storage/s3.yml
 db/*.sqlite3
 coverage
 public/documents
