@@ -15,14 +15,16 @@ module Storage
     def put(path, data = '')
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
 
-      if data.kind_of?(IO) || data.kind_of?(Tempfile)
-        data.rewind
-        data = data.read
-      end
-
       FileUtils.mkdir_p(File.dirname(full_path(path)))
       File.open(full_path(path), 'w') do |file|
-        file << data
+
+        if data.kind_of?(IO) || data.kind_of?(Tempfile)
+          data.rewind
+          file << data.read
+        else
+          file << data
+        end
+
       end
     end
 
@@ -106,7 +108,7 @@ module Storage
     def rm_empty_directories(path)
       Pathname.new(full_path(path)).ascend do |e|
         break if e.to_s =~ /#{basedir}$/
-        
+
         if e.directory? && e.entries.size <= 2
           e.delete
         end
