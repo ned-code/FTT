@@ -145,7 +145,7 @@ describe Storage do
       end
 
       it "should accept IO has 'data' argument" do
-        lambda { @storage.put('path/name', IO.new(2, 'r')) }.should_not raise_error(ArgumentError)
+        lambda { @storage.put('path/name', IO.new(3, 'r')) }.should_not raise_error(ArgumentError)
       end
 
       it "should accept Tempfile has 'data' argument" do
