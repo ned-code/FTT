@@ -14,12 +14,6 @@ module Storage
 
     # Return a connection to s3
     def self.connection(config = nil)
-      begin
-        config ||= YAML::load_file(File.join(RAILS_ROOT, 'config', 'storage', 's3.yml'))[RAILS_ENV]['connection_config']
-      rescue
-        raise StandardError, "Configuration file '#{File.join(RAILS_ROOT, 'config', 's3.yml')}' for S3 storage doesn't exist or have right information about Rails '#{RAILS_ENV}' environement."
-      end
-
       @@connection ||= {}
 
       identity_string = YAML.dump(config)
@@ -45,7 +39,7 @@ module Storage
     private
 
     def connection(config = nil)
-      @connection ||= self.class.connection(config)
+      @connection ||= self.class.connection(config || default_config['connection_config'])
     end
     
   end

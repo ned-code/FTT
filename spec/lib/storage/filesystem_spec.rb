@@ -1,7 +1,5 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../storage_spec')
+require File.expand_path(File.dirname(__FILE__) + '/../storage_spec_helper')
 require 'storage/filesystem'
-
 
 def mk_storage_fs_file(path, content = '')
   path = File.join(RAILS_ROOT, @storage.basedir, path) if path.to_s !~ /^\/.+/
@@ -105,7 +103,7 @@ describe Storage::Filesystem do
 
     it_should_behave_like 'storage interface for get method'
     it_should_behave_like 'storage implementation for get method'
-    
+
   end
 
   #

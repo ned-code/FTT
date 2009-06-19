@@ -1,5 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../storage_spec')
+require File.expand_path(File.dirname(__FILE__) + '/../storage_spec_helper')
 require 'storage/s3'
 
 VALID_S3_CONFIG = {
