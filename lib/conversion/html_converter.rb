@@ -311,7 +311,7 @@ module ConversionService
 
         left = (page_width.to_f - bg_width) / 2
         top = (page_height.to_f - bg_height) / 2
-        page_builder.img("id" => pdf_media_uuid,
+        page_builder.img("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
           "src" => page_background_ressource.public_url(),
           "alt" => "Image",
           "ub:background" => "true",
@@ -323,7 +323,7 @@ module ConversionService
         z_index = size_and_position["z-index"].to_i
         width = size_and_position["width"]
         height = size_and_position["height"]
-        page_builder.object("id" => svg_object[:attr => "ub:uuid"][1..-2],
+        page_builder.object("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
           "type" => "text/html",
           "data" => svg_object["iframe"].src,
           "ub:background" => svg_object[:attr => "ub:background"],
@@ -349,13 +349,13 @@ module ConversionService
       # if image is an svg file we must create an object instead of an image in HTML.
       image_src = svg_object[:attr => "xlink:href"]
       if (image_src[-3,3] == "svg")
-        page_builder.object("id" => svg_object[:attr => "ub:uuid"][1..-2],
+        page_builder.object("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
           "type" => "image/svg+xml",
           "data" => image_src,
           "ub:background" => svg_object[:attr => "ub:background"],
           "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
       else
-        page_builder.img("id" => svg_object[:attr => "ub:uuid"][1..-2],
+        page_builder.img("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
           "src" => image_src,
           "alt" => "Image",
           "ub:background" => svg_object[:attr => "ub:background"],
