@@ -10,6 +10,7 @@ module Storage
       super
 
       @basedir = options[:basedir] || default_config['basedir'] || raise(ArgumentError, 'Filesystem basedir is not present in config Hash')
+      RAILS_DEFAULT_LOGGER.debug "base dir #{@basedir}"
     end
 
     def put(path, data = '')
