@@ -81,7 +81,7 @@ describe ConversionService::HtmlConverter do
       background_elem = page.search("img") do |elem|
         if (elem['ub:background'] == "true")
           nb_background += 1
-          elem['src'].should == "objects/{327ff34c-874b-4d30-adfc-b3b772bcbd72}00001.png"
+          elem['src'].should match /objects\/327ff34c-874b-4d30-adfc-b3b772bcbd7200001.png/
         end
       end
       nb_background.should == 1
