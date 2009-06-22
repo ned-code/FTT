@@ -22,11 +22,11 @@ module ConversionService
       destination_file = nil
       if (source_type == "ub_page/svg" && destination_type == supported_destination_type[0])
         html_content = convert_svg_page_to_html(options[:page_uuid], File.open(file))
-        destination_file = "index.xhtml"
+        page_base_name = File.basename(file, 'svg')
+        destination_file = "#{page_base_name}xhtml"
       elsif (source_type == "ub_document/ub" && destination_type == supported_destination_type[0])
         html_content = convert_ub_document_to_html(options[:document_uuid], File.open(file), options[:document_rdf_stream])
-        page_base_name = File.basename(file, 'svg')
-        destination_file = "#{page_base_name}.xhtml"
+        destination_file = "index.xhtml"
       elsif
         raise "Converter HtmlConverter does not support conversion from #{source_type} to #{destination_type}"
       end
