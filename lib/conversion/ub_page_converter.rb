@@ -134,8 +134,8 @@ module ConversionService
                   create_html_foreign_object(html_page_builder, page.foreignObject, page_width, page_height, page_file_stream)
                 end
               rescue => e
-                 RAILS_DEFAULT_LOGGER.debug "error while creating foreign object #{e.message}"
-                 RAILS_DEFAULT_LOGGER.debug "stack #{e.backtrace.join("\n")}"
+                RAILS_DEFAULT_LOGGER.debug(e.message)
+                RAILS_DEFAULT_LOGGER.debug(e.backtrace.join("\n"))
               end
 
               # add images
@@ -148,7 +148,9 @@ module ConversionService
                 elsif (page.image)
                   create_html_image(html_page_builder, page.image, page_width, page_height)
                 end
-              rescue
+              rescue => e
+                RAILS_DEFAULT_LOGGER.debug(e.message)
+                RAILS_DEFAULT_LOGGER.debug(e.backtrace.join("\n"))
               end
 
               # add text
@@ -163,6 +165,7 @@ module ConversionService
                 end
               rescue => e
                 RAILS_DEFAULT_LOGGER.debug(e.message)
+                RAILS_DEFAULT_LOGGER.debug(e.backtrace.join("\n"))
               end
             }
           }
@@ -288,9 +291,13 @@ module ConversionService
         z_index = size_and_position["z-index"].to_i
         width = size_and_position["width"]
         height = size_and_position["height"]
-        page_builder.object("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
+
+        widget_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
+        widget_media = UbMedia.find_by_uuid(widget_uuid)
+        raise "Media missing for uuid #{widget_uuid}" if widget_media.nil?
+        page_builder.object("id" => widget_uuid,
           "type" => "text/html",
-          "data" => svg_object["iframe"].src,
+          "data" => widget_media.public_url,
           "ub:background" => svg_object[:attr => "ub:background"],
           "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
       end
@@ -311,17 +318,22 @@ module ConversionService
       height = size_and_position["height"]
       z_index = size_and_position["z-index"].to_i
 
+      image_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
+
+      image_media = UbMedia.find_by_uuid(image_uuid)
+      raise "Media missing for uuid #{image_uuid}" if image_media.nil?
+
       # if image is an svg file we must create an object instead of an image in HTML.
       image_src = svg_object[:attr => "xlink:href"]
       if (image_src[-3,3] == "svg")
-        page_builder.object("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
+        page_builder.object("id" => image_uuid,
           "type" => "image/svg+xml",
-          "data" => image_src,
+          "data" => image_media.public_url,
           "ub:background" => svg_object[:attr => "ub:background"],
           "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
       else
-        page_builder.img("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
-          "src" => image_src,
+        page_builder.img("id" => image_uuid,
+          "src" => image_media.public_url,
           "alt" => "Image",
           "ub:background" => svg_object[:attr => "ub:background"],
           "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
