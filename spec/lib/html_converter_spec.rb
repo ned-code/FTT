@@ -7,9 +7,8 @@ require "conversion/pdf_converter"
 
 describe ConversionService::UbPageConverter do
 
-  before(:each) do
+  before(:all) do
     @converted_file_path = File.join(RAILS_ROOT, 'tmp', 'conversions')
-    FileUtils.remove_dir(@converted_file_path, true)
     FileUtils.mkdir_p(@converted_file_path)
     @storage = Storage.storage(:name => :filesystem)
   end
@@ -30,33 +29,44 @@ describe ConversionService::UbPageConverter do
       index_html = File.open(@converted_file).read()
       expected_result = File.open(fixture_file(File.join('conversion', 'index.html'))).read
       index_html.should == expected_result
+      RAILS_DEFAULT_LOGGER.debug "index file #{@converted_file}"
       FileUtils.remove_file(@converted_file, true)
     end
   end
 
   context "page conversion" do
 
-    before(:each) do
-      @page_file = fixture_file('conversion/page001.svg')
+    before(:all) do
       pdf_file = fixture_file('conversion/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf')
-      @storage.put('objects/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf', File.open(pdf_file))
+      @storage.put('0ade677d-8b59-44c7-9cdb-30be681d4667/objects/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf', File.open(pdf_file))
       @pdf_media = UbMedia.new()
       @pdf_media.uuid = '327ff34c-874b-4d30-adfc-b3b772bcbd72'
       @pdf_media.media_type = 'application/pdf'
-      @pdf_media.path = 'objects/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf'
+      @pdf_media.path = '0ade677d-8b59-44c7-9cdb-30be681d4667/objects/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf'
       @pdf_media.storage_config = @storage.to_s
       @pdf_media.save
+
+      @page_file = fixture_file('conversion/page001.svg')
+      @page_media = UbMedia.new()
+      @storage.put('0ade677d-8b59-44c7-9cdb-30be681d4667/page001.svg', File.open(@page_file))
+      @page_media.uuid = '0ade677d-8b59-44c7-9cdb-30be681d4667'
+      @page_media.media_type = 'ub_page/svg'
+      @page_media.path = '0ade677d-8b59-44c7-9cdb-30be681d4667/page001.svg'
+      @page_media.storage_config = @storage.to_s
+      @page_media.save
       
       options = {}
       options[:page_uuid] = "0ade677d-8b59-44c7-9cdb-30be681d4667"
       options[:destination_path] = File.join(@converted_file_path)
-      page_file_name = ConversionService::convert_file(@page_file, "ub_page/svg", "application/xhtml+xml", options)
+      page_file_name = ConversionService::convert_media(@page_media, "application/xhtml+xml", options)
       @converted_file = File.join(options[:destination_path], page_file_name)
       @page_html = File.open(@converted_file).read()
     end
 
-    after(:each) do
+    after(:all) do
       @pdf_media.delete
+      @page_media.delete
+      RAILS_DEFAULT_LOGGER.debug "page file #{@converted_file}"
       FileUtils.remove_file(@converted_file, true)
     end
 
@@ -117,8 +127,8 @@ describe ConversionService::UbPageConverter do
   it "Page conversion should generate page.xhtml with corresponding drawing objects" do
 
       page = Hpricot(@page_html)
-      svg_elem = page.search("svg:polygon")
-      svg_elem.should have(666).items
+      svg_elem = page.search("#ub_page_drawing").search("object").first
+      svg_elem['data'].should match(/0ade677d-8b59-44c7-9cdb-30be681d4667\/0ade677d-8b59-44c7-9cdb-30be681d4667.drawing.svg/)
 
   end
 

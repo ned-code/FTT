@@ -26,7 +26,11 @@ class UbMedia < ActiveRecord::Base
     # Convert if needed
     tmp_dir = File.join(Dir::tmpdir, "#{rand Time.now.to_i}_#{self.uuid}")
     FileUtils.mkdir_p(tmp_dir)
-    options = YAML.load(p_params)
+    if (p_params.nil?)
+      options = {}
+    else
+      options = YAML.load(p_params)
+    end
     options[:destination_path] = tmp_dir
     converted_file = ConversionService::convert_media(self, p_type, options)
     raise "Conversion of media #{self.uuid} to type #{p_type} failed." if converted_file.nil?

@@ -9,7 +9,7 @@ module ConversionService
     end
 
     def supported_destination_type
-      ["application/xhtml+xml"]
+      ["application/xhtml+xml", "ub_drawing/svg"]
     end
 
     # convert ub_page and ub_document to html format
@@ -21,20 +21,64 @@ module ConversionService
     def convert_file(file, source_type, destination_type, options)
       destination_file = nil
       if (source_type == "ub_page/svg" && destination_type == supported_destination_type[0])
-        html_content = convert_svg_page_to_html(options[:page_uuid], File.open(file))
-        page_base_name = File.basename(file, 'svg')
+        file_content = convert_svg_page_to_html(options[:page_uuid], File.open(file))
+        page_base_name = File.basename(file).match(/.*\./)[0]
         destination_file = "#{page_base_name}xhtml"
+      elsif (source_type == "ub_page/svg" && destination_type == supported_destination_type[1])
+        file_content = convert_svg_page_to_svg_drawing(File.open(file))
+        page_base_name = File.basename(file).match(/.*\./)[0]
+        destination_file = "#{page_base_name}drawing.svg"
       else
         raise "Converter UbPageConverter does not support conversion from #{source_type} to #{destination_type}"
       end
       File.open(File.join(options[:destination_path], destination_file), 'w') do |html_file|
-        html_file << html_content
+        html_file << file_content
       end
       raise "No output file has been created" if destination_file.nil?
       return destination_file
     end
 
 
+    def convert_svg_page_to_svg_drawing(page_file_stream)
+      page_file_stream.rewind
+      RAILS_DEFAULT_LOGGER.debug "convert drawing..."
+      page = XMLObject.new(page_file_stream)
+      page_width = page.rect.width
+      page_height = page.rect.height
+      svg_drawing_builder = Builder::XmlMarkup.new(:indent => 2)
+      # SVG root tag
+      svg_drawing_builder.instruct!
+      svg_drawing_builder.tag!("svg", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 10000", "xmlns" => "http://www.w3.org/2000/svg",
+        "xmlns:xlink" => "http://www.w3.org/1999/xlink", "xmlns:ub" => "http://st-ub.mnemis.com/document") {
+
+        # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
+        begin
+          page.polygon.each do |current_polygon|
+            # translate points coordinates because 0 is centered in desktop format and in html 0 is the upper left corner.
+            translated_points = ""
+            points = current_polygon.points.split
+            points.each do |aPoint|
+              coordinates = aPoint.split(',')
+              x_point = coordinates[0].to_f + page_width.to_i / 2
+              translated_points += x_point.to_s
+              translated_points += ","
+              y_point = coordinates[1].to_f + page_height.to_i / 2
+              translated_points += y_point.to_s
+              translated_points += " "
+            end
+            svg_drawing_builder.tag!("polygon", "points" => translated_points,
+              "fill" => current_polygon.fill,
+              "fill-opacity" => current_polygon[:attr => "fill-opacity"],
+              "z-index" => current_polygon[:attr => "ub:z-value"],
+              "ub:fill-on-dark-background" => current_polygon[:attr => "ub:fill-on-dark-background"],
+              "ub:fill-on-light-background" => current_polygon[:attr => "ub:fill-on-light-background"]
+            )
+          end
+        rescue
+        end
+      }
+    end
+    
     # Create a page html file based on the svg file of the page.
     # page_uuid is the uuid of the page to convert
     # page_file_stream if a stream to the page svg file
@@ -67,35 +111,11 @@ module ConversionService
 
             # create drawing part
             html_page_builder.div("id" => "ub_page_drawing", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%") {
-              # SVG root tag
-              html_page_builder.tag!("svg:svg", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 10000") {
-
-                # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
-                begin
-                  page.polygon.each do |current_polygon|
-                    # translate points coordinates because 0 is centered in desktop format and in html 0 is the upper left corner.
-                    translated_points = ""
-                    points = current_polygon.points.split
-                    points.each do |aPoint|
-                      coordinates = aPoint.split(',')
-                      x_point = coordinates[0].to_f + page_width.to_i / 2
-                      translated_points += x_point.to_s
-                      translated_points += ","
-                      y_point = coordinates[1].to_f + page_height.to_i / 2
-                      translated_points += y_point.to_s
-                      translated_points += " "
-                    end
-                    html_page_builder.tag!("svg:polygon", "points" => translated_points,
-                      "fill" => current_polygon.fill,
-                      "fill-opacity" => current_polygon[:attr => "fill-opacity"],
-                      "z-index" => current_polygon[:attr => "ub:z-value"],
-                      "ub:fill-on-dark-background" => current_polygon[:attr => "ub:fill-on-dark-background"],
-                      "ub:fill-on-light-background" => current_polygon[:attr => "ub:fill-on-light-background"]
-                    )
-                  end
-                rescue
-                end
-              }
+              #get drawing object for current page
+              page_media = UbMedia.find_by_uuid(page_uuid)
+              drawing_resource = page_media.get_resource("ub_drawing/svg", {})
+              html_page_builder.object("type" => "image/svg+xml","data" => drawing_resource.public_url,
+                "style" => "position: absolute; top: 0px; left: 0px; width: " + page_width + "px; height: " + page_height + "px")
             }
             # create objects part
             html_page_builder.div("id" => "ub_page_objects", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%") {
