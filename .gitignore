@@ -12,3 +12,4 @@ coverage
 public/documents
 spec/fixtures/files/ubz/
 spec/output_document
+config/s3.yml
