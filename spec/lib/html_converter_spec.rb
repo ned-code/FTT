@@ -95,7 +95,7 @@ describe ConversionService::UbPageConverter do
       @image_3.delete
       @widget_1.delete
       RAILS_DEFAULT_LOGGER.debug "page file #{@converted_file}"
-#      FileUtils.remove_file(@converted_file, true)
+      FileUtils.remove_file(@converted_file, true)
     end
 
   it "Page conversion should generate page.xhtml with correct document size" do

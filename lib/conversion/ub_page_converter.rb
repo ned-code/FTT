@@ -239,7 +239,7 @@ module ConversionService
       style += "; font-family:" + svg_object[:attr => "font-family"]
       style += "; color:" + svg_object[:attr => "fill"]
       # SVG text object don't have UUID so we generate one
-      uuid |= UUID.new.generate
+      uuid = UUID.generate
       page_builder.div(svg_object, "id" => uuid,
         "ub:background" => svg_object[:attr => "ub:background"],
         "style" => style)
