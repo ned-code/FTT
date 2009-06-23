@@ -1,10 +1,11 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require "conversion/html_converter"
+require "conversion/ub_document_converter"
+require "conversion/ub_page_converter"
 require "conversion/pdf_converter"
 
-describe ConversionService::HtmlConverter do
+describe ConversionService::UbPageConverter do
 
   before(:each) do
     @converted_file_path = File.join(RAILS_ROOT, 'tmp', 'conversions')

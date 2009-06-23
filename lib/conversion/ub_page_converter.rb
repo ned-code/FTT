@@ -2,10 +2,10 @@ require 'conversion/conversion_service'
 
 module ConversionService
   # Converter that convert Uniboard desktop file to Uniboard WEB format.
-  class HtmlConverter < ConversionService::Converter
+  class UbPageConverter < ConversionService::Converter
 
     def supported_source_types
-      ["ub_page/svg", "ub_document/ub"]
+      ["ub_page/svg"]
     end
 
     def supported_destination_type
@@ -24,11 +24,8 @@ module ConversionService
         html_content = convert_svg_page_to_html(options[:page_uuid], File.open(file))
         page_base_name = File.basename(file, 'svg')
         destination_file = "#{page_base_name}xhtml"
-      elsif (source_type == "ub_document/ub" && destination_type == supported_destination_type[0])
-        html_content = convert_ub_document_to_html(options[:document_uuid], File.open(file), options[:document_rdf_stream])
-        destination_file = "index.xhtml"
-      elsif
-        raise "Converter HtmlConverter does not support conversion from #{source_type} to #{destination_type}"
+      else
+        raise "Converter UbPageConverter does not support conversion from #{source_type} to #{destination_type}"
       end
       File.open(File.join(options[:destination_path], destination_file), 'w') do |html_file|
         html_file << html_content
@@ -38,58 +35,6 @@ module ConversionService
     end
 
 
-    # Create the index.html file for a uniboard document
-    # uuid is the uuid of the document to convert
-    # ub_document_file is a stream to the .ub file that list all pages of the document
-    # rdf_document_file is a stream to the rdf file of the document (metadata of the document)
-    #
-    # result is the index html content as a String
-    def convert_ub_document_to_html(uuid, ub_document_file, rdf_document_file)
-      ub_document_file.rewind
-      rdf_document_file.rewind
-
-      ub_document = XMLObject.new(ub_document_file)
-      rdf_document = XMLObject.new(rdf_document_file)
-    
-      html_document_builder = Builder::XmlMarkup.new(:indent => 2)
-    
-      html_document_builder.declare! :DOCTYPE, :html, :PUBLIC, "-//W3C//DTD XHTML 1.0 Strict//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-      html_document_builder.html("xmlns" => "http://www.w3.org/1999/xhtml") {
-        html_document_builder.head {
-          html_document_builder.title(rdf_document.Description.title)
-          html_document_builder.meta("http-equiv" => "Content-Type", "content" => "application/xhtml; charset=UTF-8")
-          html_document_builder.meta("name" => "uuid", "content" => uuid)
-        }
-        html_document_builder.body {
-          html_document_builder.h1(rdf_document.Description.title, "id" => "ub_doc_title")
-          html_document_builder.div("id" => "ub_pages") {
-            html_document_builder.ul {
-              if (ub_document.pages.is_a?(Array))
-                ub_document.pages.each do |page|
-                  html_document_builder.li {
-                    html_page = page.gsub(".svg", ".xhtml")
-                    thumbnail_page = page.gsub(".svg", ".thumbnail.jpg")
-                    html_document_builder.a(html_page, "class" => "ub_page_link", "href" => html_page)
-                    html_document_builder.img("class" => "ub_page_thumbnail", "src" => thumbnail_page, "alt" => "thumbnail")
-                  }
-                end
-              elsif
-                page = ub_document.pages.page
-                html_document_builder.li {
-                  html_page = page.gsub(".svg", ".xhtml")
-                  thumbnail_page = page.gsub(".svg", ".thumbnail.jpg")
-                  html_document_builder.a(html_page, "class" => "ub_page_link", "href" => html_page)
-                  html_document_builder.img("class" => "ub_page_thumbnail", "src" => thumbnail_page, "alt" => "thumbnail")
-                }
-              end
-            }
-          }
-        }
-      }
-
-    end
-  
-  
     # Create a page html file based on the svg file of the page.
     # page_uuid is the uuid of the page to convert
     # page_file_stream if a stream to the page svg file
@@ -104,22 +49,22 @@ module ConversionService
       RAILS_DEFAULT_LOGGER.debug "convert page #{page_uuid}"
       page = XMLObject.new(page_file_stream)
       html_page_builder = Builder::XmlMarkup.new(:indent => 2)
-    
+
       html_page_builder.declare! :DOCTYPE, :html, :PUBLIC, "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN", "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg-flat.dtd"
       html_page_builder.html("xmlns" => "http://www.w3.org/1999/xhtml",
         "xmlns:svg" => "http://www.w3.org/2000/svg",
         "xmlns:ub" => XML_UNIBOARD_DOCUMENT_NAMESPACE) {
         html_page_builder.head {
           html_page_builder.title(page_uuid)
-          html_page_builder.meta("http-equiv" => "Content-Type", "content" => "application/xhtml+xml; charset=UTF-8") 
+          html_page_builder.meta("http-equiv" => "Content-Type", "content" => "application/xhtml+xml; charset=UTF-8")
         }
-        
+
         html_page_builder.body {
           page_width = page.rect.width
           page_height = page.rect.height
           page_background = page.rect.fill
           html_page_builder.div("id" => "ub_board", "style" => "position: absolute; top: 0px; left: 0px; width: " + page_width + "px; height: " + page_height + "px; background-color:" + page_background + "; z-index:-2000000") {
-            
+
             # create drawing part
             html_page_builder.div("id" => "ub_page_drawing", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%") {
               # SVG root tag
@@ -140,7 +85,7 @@ module ConversionService
                       translated_points += y_point.to_s
                       translated_points += " "
                     end
-                    html_page_builder.tag!("svg:polygon", "points" => translated_points, 
+                    html_page_builder.tag!("svg:polygon", "points" => translated_points,
                       "fill" => current_polygon.fill,
                       "fill-opacity" => current_polygon[:attr => "fill-opacity"],
                       "z-index" => current_polygon[:attr => "ub:z-value"],
@@ -150,11 +95,11 @@ module ConversionService
                   end
                 rescue
                 end
-              }   
+              }
             }
             # create objects part
             html_page_builder.div("id" => "ub_page_objects", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%") {
-              
+
               # add widgets
               # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
               begin
@@ -171,8 +116,8 @@ module ConversionService
               rescue => e
                  RAILS_DEFAULT_LOGGER.debug "error while creating foreign object #{e.message}"
                  RAILS_DEFAULT_LOGGER.debug "stack #{e.backtrace.join("\n")}"
-              end  
-              
+              end
+
               # add images
               # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
               begin
@@ -183,9 +128,9 @@ module ConversionService
                 elsif (page.image)
                   create_html_image(html_page_builder, page.image, page_width, page_height)
                 end
-              rescue 
+              rescue
               end
-              
+
               # add text
               # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
               begin
@@ -198,18 +143,18 @@ module ConversionService
                 end
               rescue => e
                 RAILS_DEFAULT_LOGGER.debug(e.message)
-              end                 
-            }   
-          } 
+              end
+            }
+          }
         }
       }
-    
+
     end
-  
-  
-  
+
+
+
     private
-  
+
     # Return the transform matrix assicited to an SVG element.
     # svg_object is the XMLObject of the SVG Element
     #
@@ -220,8 +165,8 @@ module ConversionService
         matrix = matrix_string[7..-2].split(", ")
       end
     end
-  
-  
+
+
     # Return all converted position and size for a SVG Element.
     # svg_object is the XMLObject of the SVG Element
     # page_width is the width of the page
@@ -246,8 +191,8 @@ module ConversionService
       end
       return { "left" => left, "top" => top, "width" => width, "height" => height, "z-index" => z_index}
     end
-  
-  
+
+
     # Convert a SVG text Element to an HTML text Element and append it to the HTML page file
     # page_builder is the XmlMarkup Builder of the html page. Used to append converted Element
     # svg_object is the XMLObject of the SVG Element
@@ -276,8 +221,8 @@ module ConversionService
         "ub:background" => svg_object[:attr => "ub:background"],
         "style" => style)
     end
-  
-  
+
+
     # Convert a SVG Foreign object Element to an HTML Element and append it to the HTML page file. Foreign object can be Widgets or PDF background
     # page_builder is the XmlMarkup Builder of the html page. Used to append converted Element
     # svg_object is the XMLObject of the SVG Element
@@ -285,7 +230,7 @@ module ConversionService
     # page_height is the height of the page
     # page_file_stream is the stream on the SVG page file. It is used to find relative pdf background and convert it.
     def create_html_foreign_object(page_builder, svg_object, page_width, page_height, page_file_stream)
-  
+
       # foreign object can be widgets or pdf background
       # if foreign is background, it should be a pdf background
       if (svg_object[:attr => "ub:background"] == "true")
@@ -295,7 +240,7 @@ module ConversionService
         pdf_page = pdf_link[1][5..-1]
         bg_width = svg_object[:attr => "width"].to_f
         bg_height = svg_object[:attr => "height"].to_f
-      
+
         matrix = get_transform_matrix(svg_object)
         if (matrix && matrix[0])
           bg_width = bg_width * matrix[0].to_f
@@ -330,8 +275,8 @@ module ConversionService
           "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
       end
     end
-  
-  
+
+
     # Convert a SVG image Element to an HTML Element and append it to the HTML page file.
     # page_builder is the XmlMarkup Builder of the html page. Used to append converted Element
     # svg_object is the XMLObject of the SVG Element
@@ -365,4 +310,4 @@ module ConversionService
   end
 end
 
-ConversionService::register_converter(ConversionService::HtmlConverter.new)
+ConversionService::register_converter(ConversionService::UbPageConverter.new)
