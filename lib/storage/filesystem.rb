@@ -10,6 +10,9 @@ module Storage
       super
 
       @basedir = options[:basedir] || default_config['basedir'] || raise(ArgumentError, 'Filesystem basedir is not present in config Hash')
+      @public_host_root_url = options[:public_host_root_url] || default_config['public_host_root_url'] || raise(ArgumentError, 'Filesystem public_host_root_url is not present in config Hash')
+      RAILS_DEFAULT_LOGGER.debug "base dir #{@basedir}"
+      RAILS_DEFAULT_LOGGER.debug "public host root URL #{@public_host_root_url}"
     end
 
     def put(path, data = '')
@@ -57,10 +60,12 @@ module Storage
 
     def public_url(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+      return @public_host_root_url + "/" + path
     end
 
     def private_url(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+      return "file://#{full_path(path)}"
     end
 
     def delete(path)

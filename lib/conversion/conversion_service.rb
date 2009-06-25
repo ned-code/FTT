@@ -9,7 +9,17 @@ module ConversionService
     end
 
     def convert_media(media, destination_type, options)
-      raise NotImplementedError, "method convert_media is missing"
+      media_storage = Storage::storage(media.storage_config)
+      tmp_media_file = File.join(options[:destination_path], "#{media.uuid}.tmp")
+      File.open(tmp_media_file, 'w') do |file|
+        media_storage.get(media.path) do |file_content_stream|
+          file << file_content_stream.read()
+        end
+      end
+      converted_file_name = convert_file(tmp_media_file, media.media_type, destination_type, options)
+      RAILS_DEFAULT_LOGGER.debug "remove tmp file #{tmp_media_file}"
+      FileUtils.remove_file(tmp_media_file)
+      return converted_file_name
     end
 
     def supported_source_types
@@ -27,13 +37,13 @@ module ConversionService
 
   def self.convert_file(file, source_type, destination_type, options)
     available_converter = converter_for(source_type, destination_type)
-    raise "No corresponding converter found for source type #{media.type} and destination type #{destination_type}" if available_converter == nil
+    raise "No corresponding converter found for source type #{media.media_type} and destination type #{destination_type}" if available_converter == nil
     available_converter.convert_file(file, source_type, destination_type, options)
   end
 
   def self.convert_media(media, destination_type, options)
-    available_converter = converter_for(media.type, destination_type)
-    raise "No corresponding converter found for source type #{media.type} and destination type #{destination_type}" if available_converter == nil
+    available_converter = converter_for(media.media_type, destination_type)
+    raise "No corresponding converter found for source type #{media.media_type} and destination type #{destination_type}" if available_converter == nil
     available_converter.convert_media(media, destination_type, options)
   end
 

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090619134940) do
+ActiveRecord::Schema.define(:version => 20090622120717) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(:version => 20090619134940) do
 
   create_table "ub_conversions", :force => true do |t|
     t.string   "path"
-    t.string   "type"
+    t.string   "media_type"
     t.string   "parameters"
     t.integer  "media_id"
     t.datetime "created_at"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20090619134940) do
   create_table "ub_medias", :force => true do |t|
     t.string   "uuid"
     t.string   "path"
-    t.string   "type"
+    t.string   "media_type"
     t.integer  "version"
     t.integer  "page_element_id"
     t.datetime "created_at"

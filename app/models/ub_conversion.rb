@@ -10,10 +10,10 @@ class UbConversion < ActiveRecord::Base
 
   
   def public_url
-
+    Storage::storage(self.media.storage_config).public_url(self.path)
   end
 
   def private_url
-
+    Storage::storage(self.media.storage_config).private_url(self.path)
   end
 end
