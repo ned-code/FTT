@@ -40,6 +40,44 @@ class DocumentsController < ApplicationController
     end
   end
 
+  def push
+    transaction_uuid = request.env["HTTP_UB_SYNC_TRANSACTION_UUID"] || UUID.generate
+    client_uuid = request.env["HTTP_UB_CLIENT_UUID"]
+
+    # Load or create transaction for document
+    transaction = UbSyncTransaction.find_or_create_by_ub_document_uuid(params[:id])
+
+    # If transaction is new, continue, or restarted by same client and user, proccess it.
+    if transaction.new_record? || transaction.uuid == transaction_uuid ||
+        (transaction.ub_client_uuid == client_uuid && transaction.user == current_user)
+
+      # Update transaction uuid if new or restart
+      transaction.uuid = transaction_uuid if transaction.uuid != transaction_uuid
+
+      # Set client uuid and user
+      transaction.user ||= current_user
+      transaction.ub_client_uuid ||= client_uuid
+
+      # Create item
+      transaction.items.create(:data => request.raw_post)
+
+      # Return response
+      respond_to do |format|
+        if transaction.save
+          format.xml { render :xml => transaction }
+        else
+          format.xml { render :xml => transaction.errors, :status => :unprocessable_entity }
+        end
+      end
+
+    # If a transaction for this document is already started by another user, reject it.
+    else
+      respond_to do |format|
+        format.xml { head :forbidden } # TODO: Better status responde (not forbidden, just already started by another user)
+      end
+    end
+  end
+
   def update
     @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
 
