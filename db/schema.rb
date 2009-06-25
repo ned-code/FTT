@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(:version => 20090619134940) do
   end
 
   create_table "ub_sync_transactions", :force => true do |t|
-    t.string   "transaction_uuid", :null => false
+    t.string   "uuid",             :null => false
     t.string   "ub_client_uuid",   :null => false
     t.string   "ub_document_uuid", :null => false
     t.integer  "user_id",          :null => false

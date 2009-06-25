@@ -1,7 +1,7 @@
 class CreateUbSyncTransactions < ActiveRecord::Migration
   def self.up
     create_table :ub_sync_transactions do |t|
-      t.string  :transaction_uuid,  :null => false
+      t.string  :uuid,              :null => false
       t.string  :ub_client_uuid,    :null => false
       t.string  :ub_document_uuid,  :null => false
       t.integer :user_id,           :null => false

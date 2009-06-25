@@ -114,6 +114,12 @@ def mock_uploaded_ubz(file, uuid = nil)
   uploaded_file
 end
 
+def mock_uploaded_file(file)
+  file = fixture_file(file)
+
+  ActionController::TestUploadedFile.new(file)
+end
+
 def fixture_file(source, uuid = nil)
   @uuid_generator ||= UUID.new
 

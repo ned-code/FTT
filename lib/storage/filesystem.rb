@@ -18,11 +18,11 @@ module Storage
       FileUtils.mkdir_p(File.dirname(full_path(path)))
       File.open(full_path(path), 'w') do |file|
 
-        if data.kind_of?(IO) || data.kind_of?(Tempfile)
+        if data.is_a? String
+          file << data
+        else
           data.rewind
           file << data.read
-        else
-          file << data
         end
 
       end
