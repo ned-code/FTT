@@ -41,8 +41,8 @@ class DocumentsController < ApplicationController
   end
 
   def push
-    transaction_uuid = request.env["HTTP_UB_SYNC_TRANSACTION_UUID"] || UUID.generate
-    client_uuid = request.env["HTTP_UB_CLIENT_UUID"]
+    transaction_uuid = request.headers["UB_SYNC_TRANSACTION_UUID"] || UUID.generate
+    client_uuid = request.headers["UB_CLIENT_UUID"]
 
     # Load or create transaction for document
     transaction = UbSyncTransaction.find_or_create_by_ub_document_uuid(params[:id])
@@ -59,7 +59,17 @@ class DocumentsController < ApplicationController
       transaction.ub_client_uuid ||= client_uuid
 
       # Create item
-      transaction.items.create(:data => request.raw_post)
+      transaction.items.build(
+        :path => request.headers["UB_SYNC_FILENAME"],
+        :part_nb => request.headers["UB_SYNC_PART_NB"],
+        :part_total_nb => request.headers["UB_SYNC_PART_TOTAL_NB"],
+        :part_check_sum => request.headers["UB_SYNC_PART_CHECK_SUM"],
+        :item_check_sum => request.headers["UB_SYNC_ITEM_CHECK_SUM"],
+
+        :data => request.env['rack.input'],
+
+        :storage_config => nil # Use default config
+      )
 
       # Return response
       respond_to do |format|

@@ -2,7 +2,7 @@
 class UbSyncTransactionError < StandardError; end
 
 class UbSyncTransaction < ActiveRecord::Base
-  has_many :items, :class_name => 'UbSyncTransactionItem', :foreign_key => 'ub_sync_transaction_id'
+  has_many :items, :autosave => true, :class_name => 'UbSyncTransactionItem', :foreign_key => 'ub_sync_transaction_id'
   belongs_to :user
 
   validates_presence_of :uuid, :ub_client_uuid, :ub_document_uuid, :user_id
