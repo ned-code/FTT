@@ -10,8 +10,8 @@ describe UbSyncTransactionItem do
   it { should validate_presence_of(:path) }
   it { should validate_presence_of(:part_nb) }
   it { should validate_presence_of(:part_total_nb) }
-  it { should validate_presence_of(:part_hash_control) }
-  it { should validate_presence_of(:item_hash_control) }
+  it { should validate_presence_of(:part_check_sum) }
+  it { should validate_presence_of(:item_check_sum) }
 
   before(:each) do
     @transaction = Factory.create(:ub_sync_transaction)
@@ -23,7 +23,7 @@ describe UbSyncTransactionItem do
     uploaded_file_digest = Digest::MD5.file(upload_file_path).hexdigest
 
     item = @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
-        :data => uploaded_file, :part_hash_control => uploaded_file_digest)
+        :data => uploaded_file, :part_check_sum => uploaded_file_digest)
     )
     item.should be_valid
 
@@ -37,10 +37,10 @@ describe UbSyncTransactionItem do
     uploaded_file_digest = Digest::MD5.file(upload_file_path).hexdigest
 
     item = @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
-        :data => uploaded_file, :part_hash_control => 'fake')
+        :data => uploaded_file, :part_check_sum => 'fake')
     )
     item.should_not be_valid
-    item.should have(1).error_on(:part_hash_control)
+    item.should have(1).error_on(:part_check_sum)
   end
 
   it "should retrive data" do
@@ -49,7 +49,7 @@ describe UbSyncTransactionItem do
     uploaded_file_digest = Digest::MD5.file(upload_file_path).hexdigest
 
     item = @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
-        :data => uploaded_file, :part_hash_control => uploaded_file_digest)
+        :data => uploaded_file, :part_check_sum => uploaded_file_digest)
     )
 
     item.reload

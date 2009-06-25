@@ -43,8 +43,8 @@ describe UbSyncTransaction do
           :path => @file_with_parts.path,
           :data => tempfile,
           :part_nb => part_count,
-          :part_hash_control => Digest::MD5.file(tempfile.path).hexdigest,
-          :item_hash_control => @file_with_parts.digest
+          :part_check_sum => Digest::MD5.file(tempfile.path).hexdigest,
+          :item_check_sum => @file_with_parts.digest
         }
       end
     end
@@ -141,7 +141,7 @@ describe UbSyncTransaction do
   it "should raise error when commited if multi-part item can't be merged" do
     tempfile = Tempfile.new('fake.part')
     @file_with_parts[1][:data] = tempfile
-    @file_with_parts[1][:part_hash_control] = Digest::MD5.file(tempfile.path).hexdigest
+    @file_with_parts[1][:part_check_sum] = Digest::MD5.file(tempfile.path).hexdigest
 
     @file_with_parts.each do |part|
       @transaction.items.create!(part.merge(:storage_config => {:name => :filesystem}))

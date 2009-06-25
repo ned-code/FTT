@@ -3,7 +3,7 @@ class UbSyncTransactionItem < ActiveRecord::Base
 
   validates_presence_of :ub_sync_transaction_id, :path, :storage_config,
                         :part_nb, :part_total_nb, :part_total_nb,
-                        :part_hash_control, :item_hash_control
+                        :part_check_sum, :item_check_sum
 
   before_validation :set_storage_config
   after_save :save_data_on_storage
@@ -20,7 +20,7 @@ class UbSyncTransactionItem < ActiveRecord::Base
 
   def validate
     if @tempfile
-      errors.add(:part_hash_control, "isn't equal to hash of data") if  Digest::MD5.file(@tempfile.path).hexdigest != part_hash_control
+      errors.add(:part_check_sum, "isn't equal to hash of data") if  Digest::MD5.file(@tempfile.path).hexdigest != part_check_sum
     end
   end
   

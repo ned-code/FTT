@@ -14,8 +14,8 @@ class CreateUbSyncTransactions < ActiveRecord::Migration
       t.string  :storage_config,          :null => false
       t.integer :part_nb,                 :null => false
       t.integer :part_total_nb,           :null => false
-      t.string  :part_hash_control,       :null => false
-      t.string  :item_hash_control,       :null => false
+      t.string  :part_check_sum,          :null => false
+      t.string  :item_check_sum,          :null => false
       t.timestamps
     end
   end

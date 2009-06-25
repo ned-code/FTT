@@ -81,8 +81,8 @@ ActiveRecord::Schema.define(:version => 20090619134940) do
     t.string   "storage_config",         :null => false
     t.integer  "part_nb",                :null => false
     t.integer  "part_total_nb",          :null => false
-    t.string   "part_hash_control",      :null => false
-    t.string   "item_hash_control",      :null => false
+    t.string   "part_check_sum",         :null => false
+    t.string   "item_check_sum",         :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
