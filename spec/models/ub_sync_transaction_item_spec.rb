@@ -6,7 +6,6 @@ describe UbSyncTransactionItem do
 
   it { should belong_to(:transaction) }
 
-  it { should validate_presence_of(:ub_sync_transaction_id) }
   it { should validate_presence_of(:path) }
   it { should validate_presence_of(:part_nb) }
   it { should validate_presence_of(:part_total_nb) }
@@ -54,7 +53,7 @@ describe UbSyncTransactionItem do
 
     item.reload
     uploaded_file.rewind # re-read in following test
-    
+
     item.data.should be_kind_of(Tempfile)
     item.data.read.should == uploaded_file.read
   end

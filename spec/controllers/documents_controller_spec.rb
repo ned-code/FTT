@@ -115,6 +115,7 @@ describe DocumentsController do
 
     before(:each) do
       request.env['HTTP_ACCEPT'] = 'application/xml'
+      request.env['rack.input'] = Tempfile.new('tmp-transaction-file')
     end
 
     context 'accessed by a registered user' do
@@ -123,6 +124,210 @@ describe DocumentsController do
         @current_user = Factory.create(:confirmed_user)
         @current_user.is_registered
         UserSession.create(@current_user)
+
+        @another_user = Factory.create(:confirmed_user)
+        @another_user.is_registered
+
+        @transaction = Factory.create(:ub_sync_transaction, :user => @current_user)
+        @client_uuid = UUID.generate
+      end
+
+      it "'POST /documents/:uuid/push' should create transaction if request don't have transaction UUID" do
+        request.env['UB_CLIENT_UUID'] = @client_uuid
+        post :push, :id => UUID.generate
+
+        response.should be_success
+        response.should respond_with(:content_type => :xml)
+
+        response.should_not have_tag('errors')
+        response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
+          assigns(:transaction).uuid,
+          @client_uuid,
+          assigns(:transaction).created_at.xmlschema,
+          assigns(:transaction).updated_at.xmlschema
+        )
+      end
+
+      it "'POST /documents/:uuid/push' should update transaction if request have transaction UUID" do
+        request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+        post :push, :id => @transaction.ub_document_uuid
+
+        response.should be_success
+        response.should respond_with(:content_type => :xml)
+
+        response.should_not have_tag('errors')
+        response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
+          @transaction.uuid,
+          @transaction.ub_client_uuid,
+          assigns(:transaction).created_at.xmlschema,
+          assigns(:transaction).updated_at.xmlschema
+        )
+      end
+
+      it "'POST /documents/:uuid/push' should return error if request have non-existent transaction UUID" do
+        request.env['UB_SYNC_TRANSACTION_UUID'] = UUID.generate
+        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+        post :push, :id => UUID.generate
+
+        response.should be_not_found
+        response.should respond_with(:content_type => :xml)
+      end
+
+      it "'POST /documents/:uuid/push' should return error if a transaction already exist for document" do
+        @another_transaction = Factory.create(:ub_sync_transaction, :user => @another_user)
+        request.env['UB_CLIENT_UUID'] = UUID.generate
+        post :push, :id => @another_transaction.ub_document_uuid
+
+        response.should_not be_success
+        response.should respond_with(:content_type => :xml)
+
+        response.should have_tag('errors') do
+          with_tag('error', 'Ub document uuid already have open transaction')
+        end
+      end
+
+      it "'POST /documents/:uuid/push' should create transaction with file data in request" do
+        transaction_path = 'sync-transaction-item.txt'
+
+        request.env['UB_CLIENT_UUID'] = @client_uuid
+
+        File.open(fixture_file(transaction_path)) do |file|
+          request.env['rack.input'] << file.read
+        end
+        request.env['UB_SYNC_FILENAME'] = transaction_path
+        request.env["UB_SYNC_PART_NB"] = 1
+        request.env["UB_SYNC_PART_TOTAL_NB"] = 1
+        request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
+        request.env["UB_SYNC_ITEM_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
+        post :push, :id => UUID.generate
+
+        response.should be_success
+        response.should respond_with(:content_type => :xml)
+
+        assigns(:transaction).items.find_by_path(transaction_path).should_not be_nil
+
+        response.should_not have_tag('errors')
+        response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
+          assigns(:transaction).uuid,
+          @client_uuid,
+          assigns(:transaction).created_at.xmlschema,
+          assigns(:transaction).updated_at.xmlschema
+        )
+      end
+
+      it "'POST /documents/:uuid/push' should create transaction with empty file data in request" do
+        transaction_path = 'sync-transaction-item.txt'
+
+        request.env['UB_CLIENT_UUID'] = @client_uuid
+
+        request.env['UB_SYNC_FILENAME'] = transaction_path
+        request.env["UB_SYNC_PART_NB"] = 1
+        request.env["UB_SYNC_PART_TOTAL_NB"] = 1
+        request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
+        request.env["UB_SYNC_ITEM_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
+
+        post :push, :id => UUID.generate
+
+        response.should be_success
+        response.should respond_with(:content_type => :xml)
+
+        assigns(:transaction).items.find_by_path(transaction_path).should_not be_nil
+
+        response.should_not have_tag('errors')
+        response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
+          assigns(:transaction).uuid,
+          @client_uuid,
+          assigns(:transaction).created_at.xmlschema,
+          assigns(:transaction).updated_at.xmlschema
+        )
+      end
+
+      it "'POST /documents/:uuid/push' should continue transaction with file data in request" do
+        transaction_path = 'sync-transaction-item.txt'
+
+        request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+
+        File.open(fixture_file(transaction_path)) do |file|
+          request.env['rack.input'] << file.read
+        end
+        request.env['UB_SYNC_FILENAME'] = transaction_path
+        request.env["UB_SYNC_PART_NB"] = 1
+        request.env["UB_SYNC_PART_TOTAL_NB"] = 1
+        request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
+        request.env["UB_SYNC_ITEM_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
+        post :push, :id => @transaction.ub_document_uuid
+
+        response.should be_success
+        response.should respond_with(:content_type => :xml)
+
+        assigns(:transaction).items.find_by_path(transaction_path).should_not be_nil
+
+        response.should_not have_tag('errors')
+        response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
+          @transaction.uuid,
+          @transaction.ub_client_uuid,
+          assigns(:transaction).created_at.xmlschema,
+          assigns(:transaction).updated_at.xmlschema
+        )
+      end
+
+      it "'POST /documents/:uuid/push' should update transaction with empty file data in request" do
+        transaction_path = 'sync-transaction-item.txt'
+
+        request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+
+        request.env['UB_SYNC_FILENAME'] = transaction_path
+        request.env["UB_SYNC_PART_NB"] = 1
+        request.env["UB_SYNC_PART_TOTAL_NB"] = 1
+        request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
+        request.env["UB_SYNC_ITEM_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
+
+        post :push, :id => @transaction.ub_document_uuid
+
+        response.should be_success
+        response.should respond_with(:content_type => :xml)
+
+        assigns(:transaction).items.find_by_path(transaction_path).should_not be_nil
+
+        response.should_not have_tag('errors')
+        response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
+          @transaction.uuid,
+          @transaction.ub_client_uuid,
+          assigns(:transaction).created_at.xmlschema,
+          assigns(:transaction).updated_at.xmlschema
+        )
+      end
+
+      it "'POST /documents/:uuid/push' should rollback transaction" do
+        request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+
+        request.env['UB_SYNC_ACTION'] = 'rollback'
+
+        post :push, :id => @transaction.ub_document_uuid
+
+        response.should be_success
+        response.should respond_with(:content_type => :xml)
+
+        lambda { UbSyncTransaction.find(@transaction.id) }.should raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "'POST /documents/:uuid/push' should commit complete transaction" do
+        pending
+        @transaction = Factory.create(:ub_sync_transaction_complete, :user => @current_user)
+
+        request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+
+        request.env['UB_SYNC_ACTION'] = 'commit'
+
+        post :push, :id => @transaction.ub_document_uuid
+
+        response.should be_success
+        response.should respond_with(:content_type => :xml)
       end
 
       context 'without associated document' do

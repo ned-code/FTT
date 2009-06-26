@@ -25,7 +25,7 @@ UBZ_FIXTURES = {}
 USED_UBZ_FIXTURES = []
 Dir[File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', "*")].each do |type_dir|
   UBZ_FIXTURES[File.basename(type_dir).to_sym] ||= []
-  Dir[File.join(type_dir, "*.ubz")].each do |ubz|
+  Dir[File.join(type_dir, "*")].each do |ubz|
     UBZ_FIXTURES[File.basename(type_dir).to_sym] << ubz
   end
 end
@@ -105,49 +105,37 @@ class ActionController::TestUploadedFile
 end
 
 # Get an uploaded UBZ file
-def mock_uploaded_ubz(file, uuid = nil)
-  file = fixture_file(file, uuid)
-
-  uploaded_file = ActionController::TestUploadedFile.new(file)
-  uploaded_file.uuid = file.match(/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/) ? $1 : nil
-
-  uploaded_file
-end
+#def mock_uploaded_ubz(file, uuid = nil)
+#  file = fixture_file(file, uuid)
+#
+#  uploaded_file = ActionController::TestUploadedFile.new(file)
+#  uploaded_file.uuid = file.match(/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/) ? $1 : nil
+#
+#  uploaded_file
+#end
 
 def mock_uploaded_file(file)
-  file = fixture_file(file)
-
-  ActionController::TestUploadedFile.new(file)
+  ActionController::TestUploadedFile.new(fixture_file(file))
 end
 
-def fixture_file(source, uuid = nil)
-  @uuid_generator ||= UUID.new
-
-  if source =~ /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\.ubz$/
-    type = source.match(/[\d\-]+(\w+)\.ubz$/) ? $1 : raise("not found type for this ubz file: #{source}")
-
-    target = generate_ubz(type, uuid)
-  else
-    target = source !~ /^\// ? File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', source) : source
-  end
-
-  target
+def fixture_file(source)
+  source !~ /^\// ? File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', source) : source
 end
 
-def generate_ubz(type, uuid = nil)
+def fixture_ubz(type, uuid = nil)
   UBZ_FIXTURES[type.to_sym] ||= []
   source = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz_source', type.to_s)
 
   if uuid.nil?
     UBZ_FIXTURES[type.to_sym].each do |target|
-      target_uuid = File.basename(target, '.ubz')
+      target_uuid = File.basename(target)
       next if USED_UBZ_FIXTURES.include?(target_uuid)
 
       USED_UBZ_FIXTURES << target_uuid
       return target
     end
   else
-    target = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', type.to_s, "#{uuid}.ubz")
+    target = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', type.to_s, uuid)
 
     if File.exists?(target)
       USED_UBZ_FIXTURES << uuid
@@ -156,23 +144,9 @@ def generate_ubz(type, uuid = nil)
   end
 
   USED_UBZ_FIXTURES << uuid ||= UUID.generate
-  UBZ_FIXTURES[type.to_sym] << target = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', type.to_s, "#{uuid}.ubz")
+  UBZ_FIXTURES[type.to_sym] << target = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', type.to_s, uuid)
 
-  FileUtils.mkdir_p File.dirname(target)
+  FileUtils.cp_r source, target
 
-  Zip::ZipFile.open(target, Zip::ZipFile::CREATE) do |zip|
-    Dir[File.join(source, '**', '**')].sort.each do |filepath|
-      filename = filepath.gsub(File.join(source, ''), '')
-      filename.gsub!(/(.*)\w{8}-\w{4}-\w{4}-\w{4}-\w{12}(\.ub)$/, '\1' + uuid + '\2') if filename =~ /\.ub$/
-
-      if File.directory?(filepath)
-        zip.dir.mkdir(filename)
-      else
-        zip.file.open(filename, "w") {|f| f.puts File.read(filepath) }
-      end
-
-    end
-  end
-
-  target
+  Dir[File.join(target, "**")].select{|file| File.file?(file)}
 end
