@@ -43,7 +43,7 @@ class DocumentsController < ApplicationController
   def push
     sync_action = request.headers["UB_SYNC_ACTION"] || 'continue'
 
-    # Load or create transaction for document
+    # Retrive transaction with UUID
     if (request.headers["UB_SYNC_TRANSACTION_UUID"])
       @transaction = UbSyncTransaction.find(:first, :conditions => {
         :uuid => request.headers["UB_SYNC_TRANSACTION_UUID"],
@@ -52,12 +52,14 @@ class DocumentsController < ApplicationController
         :user_id => current_user.id
       })
     else
+      # Retrive existing transaction for document and user
       @transaction = UbSyncTransaction.find(:first, :conditions => {
         :ub_document_uuid => params[:id],
         :ub_client_uuid => request.headers["UB_CLIENT_UUID"],
         :user_id => current_user.id
       })
 
+      # Create new transaction
       unless @transaction
         @transaction = UbSyncTransaction.new(
           :uuid => UUID.generate,

@@ -11,6 +11,8 @@ describe UbSyncTransaction do
   it { should validate_presence_of(:ub_document_uuid) }
   it { should validate_presence_of(:user_id) }
 
+  it { should validate_uniqueness_of(:ub_document_uuid, :message => 'already have open transaction') }
+
   it { should allow_values_for(:uuid, UUID_FORMAT_REGEX)}
 
   before(:each) do
@@ -154,10 +156,6 @@ describe UbSyncTransaction do
     @file_with_parts.each do |part|
       @transaction.items.create!(part.merge(:storage_config => {:name => :filesystem}))
     end
-
-    @transaction.commit
-
-    puts @transaction.errors.full_messages
 
     @transaction.commit.should be_true
   end

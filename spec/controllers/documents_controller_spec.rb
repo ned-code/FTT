@@ -128,6 +128,9 @@ describe DocumentsController do
         @current_user.is_registered
         UserSession.create(@current_user)
 
+        @another_user = Factory.create(:confirmed_user)
+        @another_user.is_registered
+
         @transaction = Factory.create(:ub_sync_transaction, :user => @current_user)
         @client_uuid = UUID.generate
       end
@@ -172,6 +175,19 @@ describe DocumentsController do
 
         response.should be_not_found
         response.should respond_with(:content_type => :xml)
+      end
+
+      it "'POST /push/:uuid' should return error if a transaction already exist for document" do
+        @another_transaction = Factory.create(:ub_sync_transaction, :user => @another_user)
+        request.env['UB_CLIENT_UUID'] = UUID.generate
+        post :push, :id => @another_transaction.ub_document_uuid
+
+        response.should_not be_success
+        response.should respond_with(:content_type => :xml)
+
+        response.should have_tag('errors') do
+          with_tag('error', 'Ub document uuid already have open transaction')
+        end
       end
 
       context 'without associated document' do

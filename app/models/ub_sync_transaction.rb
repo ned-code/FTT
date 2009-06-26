@@ -6,6 +6,7 @@ class UbSyncTransaction < ActiveRecord::Base
   belongs_to :user
 
   validates_presence_of :uuid, :ub_client_uuid, :ub_document_uuid, :user_id
+  validates_uniqueness_of :ub_document_uuid, :message => 'already have open transaction'
 
   def to_xml(options = {})
     require 'builder' unless defined?(Builder)
