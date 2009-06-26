@@ -54,7 +54,7 @@ class UbSyncTransaction < ActiveRecord::Base
     tempfile = nil
     items.find(:all, :order => "path ASC, part_nb ASC").each do |item|
       next if item_processed.include?([item.path, item.part_nb])
-      
+
       if item.part_total_nb > 1
         tempfile = Tempfile.new(item.path) if item.part_nb == 1
         tempfile << item.data.read

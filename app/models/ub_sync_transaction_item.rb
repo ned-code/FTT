@@ -1,7 +1,7 @@
 class UbSyncTransactionItem < ActiveRecord::Base
   belongs_to :transaction, :class_name => 'UbSyncTransaction', :foreign_key => 'ub_sync_transaction_id'
 
-  validates_presence_of :ub_sync_transaction_id, :path, :storage_config,
+  validates_presence_of :path, :storage_config,
                         :part_nb, :part_total_nb, :part_total_nb,
                         :part_check_sum, :item_check_sum
 
@@ -23,7 +23,7 @@ class UbSyncTransactionItem < ActiveRecord::Base
       errors.add(:part_check_sum, "isn't equal to hash of data") if  Digest::MD5.file(@tempfile.path).hexdigest != part_check_sum
     end
   end
-  
+
   private
 
   def set_storage_config

@@ -135,7 +135,7 @@ describe DocumentsController do
         @client_uuid = UUID.generate
       end
 
-      it "'POST /push/:uuid' should create transaction if request don't have transaction UUID" do
+      it "'POST /documents/:uuid/push' should create transaction if request don't have transaction UUID" do
         request.env['UB_CLIENT_UUID'] = @client_uuid
         post :push, :id => UUID.generate
 
@@ -151,7 +151,7 @@ describe DocumentsController do
         )
       end
 
-      it "'POST /push/:uuid' should update transaction if request have transaction UUID" do
+      it "'POST /documents/:uuid/push' should update transaction if request have transaction UUID" do
         request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
         request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
         post :push, :id => @transaction.ub_document_uuid
@@ -168,7 +168,7 @@ describe DocumentsController do
         )
       end
 
-      it "'POST /push/:uuid' should return error if request have non-existent transaction UUID" do
+      it "'POST /documents/:uuid/push' should return error if request have non-existent transaction UUID" do
         request.env['UB_SYNC_TRANSACTION_UUID'] = UUID.generate
         request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
         post :push, :id => UUID.generate
@@ -177,7 +177,7 @@ describe DocumentsController do
         response.should respond_with(:content_type => :xml)
       end
 
-      it "'POST /push/:uuid' should return error if a transaction already exist for document" do
+      it "'POST /documents/:uuid/push' should return error if a transaction already exist for document" do
         @another_transaction = Factory.create(:ub_sync_transaction, :user => @another_user)
         request.env['UB_CLIENT_UUID'] = UUID.generate
         post :push, :id => @another_transaction.ub_document_uuid
@@ -189,6 +189,40 @@ describe DocumentsController do
           with_tag('error', 'Ub document uuid already have open transaction')
         end
       end
+
+      it "'POST /documents/:uuid/push' should create transaction witg data in reuqest" do
+        transaction_path = 'sync-transaction-item.txt'
+        transaction_data = Tempfile.new(transaction_path)
+        File.open(fixture_file(transaction_path)) do |file|
+          transaction_data << file.read
+        end
+
+        request.env['UB_CLIENT_UUID'] = @client_uuid
+
+        request.env['UB_SYNC_FILENAME'] = transaction_path
+        request.env["UB_SYNC_PART_NB"] = 1
+        request.env["UB_SYNC_PART_TOTAL_NB"] = 1
+        request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(fixture_file(transaction_path)).hexdigest
+        request.env["UB_SYNC_ITEM_CHECK_SUM"] = Digest::MD5.file(fixture_file(transaction_path)).hexdigest
+
+        request.env['rack.input'] = transaction_data
+        post :push, :id => UUID.generate
+
+        response.should be_success
+        response.should respond_with(:content_type => :xml)
+
+        item = assigns(:transaction).items.find_by_path(transaction_path)
+        item.should_not be_nil
+
+        response.should_not have_tag('errors')
+        response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
+          assigns(:transaction).uuid,
+          @client_uuid,
+          assigns(:transaction).created_at.xmlschema,
+          assigns(:transaction).updated_at.xmlschema
+        )
+      end
+
 
       context 'without associated document' do
 

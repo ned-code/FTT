@@ -18,7 +18,7 @@ class UbDocument < ActiveRecord::Base
   has_many :pages, :class_name => 'UbPage', :foreign_key => 'uniboard_document_id',
     :order => 'position ASC', :autosave => true, :dependent => :destroy
   belongs_to :media, :class_name => 'UbMedia', :foreign_key => 'metadata_media_id', :autosave => true
-  
+
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
   before_update :increment_version
@@ -186,7 +186,7 @@ class UbDocument < ActiveRecord::Base
 #  def payload
 #    raise NotImplementedError, "Must be implemented in the '#{config.storage}' storage module"
 #  end
-  
+
   def to_xml(options = {})
     require 'builder' unless defined?(Builder)
 

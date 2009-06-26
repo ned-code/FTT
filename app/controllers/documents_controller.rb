@@ -71,21 +71,20 @@ class DocumentsController < ApplicationController
     end
 
     # Transaction action
-    if @transaction 
+    if @transaction
 
       # Create item
       if request.headers["UB_SYNC_FILENAME"] && ['continue', 'commit'].include?(sync_action)
-        @transaction.items.build(
+        @item = @transaction.items.build(
           :path => request.headers["UB_SYNC_FILENAME"],
           :part_nb => request.headers["UB_SYNC_PART_NB"],
           :part_total_nb => request.headers["UB_SYNC_PART_TOTAL_NB"],
           :part_check_sum => request.headers["UB_SYNC_PART_CHECK_SUM"],
           :item_check_sum => request.headers["UB_SYNC_ITEM_CHECK_SUM"],
 
-          :data => request.env['rack.input'],
-
-          :storage_config => nil # Use default config
+          :storage_config => nil # Use default config, TODO: can be configured
         )
+        @item.data = request.env['rack.input'] if request.env['rack.input'].length > 0
       end
 
       # Return response
