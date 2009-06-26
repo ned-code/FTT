@@ -319,6 +319,21 @@ describe DocumentsController do
         lambda { UbSyncTransaction.find(@transaction.id) }.should raise_error(ActiveRecord::RecordNotFound)
       end
 
+      it "'POST /documents/:uuid/push' should commit complete transaction" do
+        pending
+        @transaction = Factory.create(:ub_sync_transaction_complete, :user => @current_user)
+
+        request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+
+        request.env['UB_SYNC_ACTION'] = 'commit'
+
+        post :push, :id => @transaction.ub_document_uuid
+
+        response.should be_success
+        response.should respond_with(:content_type => :xml)
+      end
+
       context 'without associated document' do
 
         it "'GET /documents' should return an empty list" do
