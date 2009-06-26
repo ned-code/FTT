@@ -8,27 +8,23 @@ VALID_S3_CONFIG = {
 
 describe Storage::S3 do
 
+  it_should_behave_like "storage interface"
+
   before(:each) do
     @storage = Storage.storage(:name => :s3)
+
+    @path = STORAGE_VALID_PATH
+    @content = "Hello poilu"
   end
 
-  it 'should is a Storage::Filesystem' do
-    storage = Storage.storage(:name => :s3)
-
-    storage.should be_a(Storage::S3)
+  it 'should is a Storage::S3' do
+    @storage.should be_a(Storage::S3)
   end
 
-  it 'should not need config in options' do
+  it 'should not need basedir in options' do
     lambda { Storage.storage(:name => :s3) }.should_not raise_error(ArgumentError)
   end
 
-  it 'should accept valid config in options' do
-    lambda { Storage.storage(:name => :s3, :connection_config => VALID_S3_CONFIG) }.should_not raise_error(ArgumentError)
-  end
-
-  it 'should not accept empty config in options' do
-    lambda { Storage.storage(:name => :s3, :connection_config => {}) }.should raise_error(ArgumentError)
-  end
 
   context "connection" do
 
@@ -54,28 +50,74 @@ describe Storage::S3 do
       Storage::S3.connection(s3_config.merge(:options => {:test => true})).should_not === Storage::S3.connection(s3_config.merge(:options => {:test => false}))
     end
 
-    it "should raise error with configuration Hash without 'access_key_id'" do
-      s3_config = VALID_S3_CONFIG.dup
-      s3_config.delete('access_key_id')
+  end
 
-      lambda { Storage::S3.connection(s3_config) }.should raise_error(ArgumentError, /access_key_id/)
-    end
-
-    it "should raise error with configuration Hash without 'secret_access_key'" do
-      s3_config = VALID_S3_CONFIG.dup
-      s3_config.delete('secret_access_key')
-
-      lambda { Storage::S3.connection(s3_config) }.should raise_error(ArgumentError, /secret_access_key/)
-    end
+  #
+  # PUT
+  #
+  context "'put' method" do
+    it_should_behave_like 'storage interface for put method'
+    it_should_behave_like 'storage implementation for put method'
 
   end
 
-  context "'put' method" do
-    it_should_behave_like 'storage interface for put method'
+  #
+  # GET
+  #
+  context "'get' method" do
 
-    it "should be implemented" do
-      lambda { @storage.put(*STORAGE_PUT_PARAMS) }.should_not raise_error(NotImplementedError)
-    end
+    it_should_behave_like 'storage interface for get method'
+    it_should_behave_like 'storage implementation for get method'
+
+  end
+
+  #
+  # EXIST?
+  #
+  context "'exist?' method" do
+
+    it_should_behave_like 'storage interface for exist? method'
+    it_should_behave_like 'storage implementation for exist? method'
+
+  end
+
+  #
+  # PUBLIC_URL
+  #
+  context "'public_url' method" do
+
+    it_should_behave_like 'storage interface for public_url method'
+    it_should_behave_like 'storage implementation for public_url method'
+
+  end
+
+  #
+  # PRIVATE_URL
+  #
+  context "'private_url' method" do
+
+    it_should_behave_like 'storage interface for private_url method'
+    it_should_behave_like 'storage implementation for private_url method'
+
+  end
+
+  #
+  # DELETE
+  #
+  context "'delete' method" do
+
+    it_should_behave_like 'storage interface for delete method'
+    it_should_behave_like 'storage implementation for delete method'
+
+  end
+
+  #
+  # MOVE
+  #
+  context "'move' method" do
+
+    it_should_behave_like 'storage interface for move method'
+    it_should_behave_like 'storage implementation for move method'
 
   end
 

@@ -68,8 +68,20 @@ module AppMocks
           }
         end
 
+        def exist?
+          name == 'valid/path/to/file'
+        end
+
+        def data
+          (name == 'valid/path/to/file')?"Hello poilu":nil
+        end
+
         def refresh
           headers
+        end
+
+        def rename(old_path, new_path)
+          old_path == 'valid/path/to/file'
         end
 
       end

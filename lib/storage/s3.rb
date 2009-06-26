@@ -32,14 +32,97 @@ module Storage
       end
     end
 
+   # Store data in 'path' key (if data is nil, the file content will be empty)
     def put(path, data = nil)
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+      if data.kind_of?(IO) || data.kind_of?(Tempfile)
+        data.rewind
+        data = data.read
+      end
+      key = bucket.key(path)
+      key.put(data, 'public-read', 'content-type' => get_content_type_from_mime_types(path))
 
+      true
+    end
+
+    # Return data stream stored in 'path' key
+    def get(path, &block)
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+      key = bucket.key(path)
+      return nil unless key.exist?
+      if block_given?
+        Tempfile.open(File.basename(path)) do |tempfile|
+          tempfile << key.data
+          tempfile.rewind
+          yield tempfile
+        end
+
+      else
+        tempfile = Tempfile.new(File.basename(path))
+        tempfile << key.data
+        tempfile.rewind
+        tempfile
+      end
+    end
+
+    # Return true if data with 'path' key exist in storage
+    def exist?(path)
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+      key = bucket.key(path)
+      key.exist?
+    end
+
+    # Return public url for 'path' key (can be accessed worldwild)
+    def public_url(path)
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+      key = bucket.key(path)
+      key.public_link
+    end
+
+    # Return private url for 'path' key (can be accessed from application network)
+    def private_url(path)
+      public_url(path)
+    end
+
+    # Remove from storage data stored with 'path' key
+    def delete(path)
+      raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+      key = bucket.key(path)
+      return true unless key.exist?
+      begin
+        raise "File #{path} no deleted from s3 for unknown reason" unless key.delete
+      rescue => e
+        logger.error "Error when deleting file '#{path}' in Storage::S3: #{e.message}\n\n#{e.backtrace}"
+        return false
+      end
+
+      true
+    end
+
+    # Move data from 'path' key to another
+    def move(path_from, path_to)
+      raise(ArgumentError, "path '#{path_from}' not be valid") unless valid_path?(path_from)
+      raise(ArgumentError, "path '#{path_to}' not be valid") unless valid_path?(path_to)
+
+      begin
+        key = bucket.key(path_from)
+        key.rename(path_from, path_to)
+      rescue => e
+        logger.error "Error when moving file '#{path_from}' to '#{path_to}' in Storage::S3: #{e.message}\n\n#{e.backtrace}"
+        return false
+      end
+
+      true
     end
 
     private
 
     def connection(config = nil)
       @connection ||= self.class.connection(config || default_config['connection_config'])
+    end
+
+    def bucket
+      connection.bucket(options[:bucket], true)
     end
     
   end

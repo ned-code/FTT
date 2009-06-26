@@ -49,11 +49,11 @@ Spec::Runner.configure do |config|
 
     # Mock RightAws::S3 class if TEST_S3_CONNECTION environement variable is not set
     # TODO: Re-Use for S3 Storage test
-#    TEST_S3_CONNECTION = (ENV['TEST_S3_CONNECTION'] ? true : false) unless Object.const_defined?('TEST_S3_CONNECTION')
-#    unless TEST_S3_CONNECTION
-#      @mock_s3 = AppMocks::RightAws::S3.new
-#      RightAws::S3.stub!(:new).and_return(@mock_s3)
-#    end
+    TEST_S3_CONNECTION = (ENV['TEST_S3_CONNECTION'] ? true : false) unless Object.const_defined?('TEST_S3_CONNECTION')
+    unless TEST_S3_CONNECTION
+      @mock_s3 = AppMocks::RightAws::S3.new
+      RightAws::S3.stub!(:new).and_return(@mock_s3)
+    end
   end
 
   config.before(:each) do
