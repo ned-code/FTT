@@ -82,9 +82,10 @@ class DocumentsController < ApplicationController
           :part_check_sum => request.headers["UB_SYNC_PART_CHECK_SUM"],
           :item_check_sum => request.headers["UB_SYNC_ITEM_CHECK_SUM"],
 
+          :data => request.headers["rack.input"],
+
           :storage_config => nil # Use default config, TODO: can be configured
         )
-        @item.data = request.env['rack.input'] if request.env['rack.input'].length > 0
       end
 
       # Return response
