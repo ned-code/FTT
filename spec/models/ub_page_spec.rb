@@ -48,28 +48,25 @@ describe UbPage do
 
     before(:each) do
       @user = Factory.create(:user)
-      @document = Factory.create(:ub_document)
+      @page = Factory.create(:ub_page)
+      @document = @page.document
       @document.accepts_role 'owner', @user
-      @page = @document.pages.first
     end
 
     it 'should have url' do
-      pending
       @page.url.should =~ URL_FORMAT_REGEX
     end
 
     it 'should have thumbnail url' do
-      pending
+
       @page.thumbnail_url.should =~ URL_FORMAT_REGEX
     end
 
     it 'should have mime type' do
-      pending
       @page.mime_type.should == 'image/svg+xml'
     end
 
     it 'should have thumbnail mime type' do
-      pending
       @page.thumbnail_mime_type.should == 'image/jpeg'
     end
 
@@ -162,7 +159,8 @@ describe UbPage do
     before(:each) do
       @user = Factory.create(:user)
 
-      @document = Factory.create(:ub_document)
+      @page = Factory.create(:ub_page)
+      @document = @page.document
       @document.accepts_role 'owner', @user
 
       @not_owned_document = Factory.create(:ub_document)
@@ -170,22 +168,18 @@ describe UbPage do
     end
 
     it 'should return page after the first' do
-      pending
       @document.pages[0].next.should == @document.pages[1]
     end
 
     it 'should return nil before the first' do
-      pending
       @document.pages[0].previous.should be_nil
     end
 
     it 'should return page before the last' do
-      pending
       @document.pages[-1].previous.should == @document.pages[-2]
     end
 
     it 'should return nil after the last' do
-      pending
       @document.pages[-1].next.should be_nil
     end
 

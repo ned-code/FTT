@@ -125,73 +125,9 @@ describe DocumentsController do
         UserSession.create(@current_user)
       end
 
-      it "'POST /documents' should create document with valid payload" do
-        pending
-        mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
-
-        post :create, :document => { :payload => mock_file }
-
-        response.should be_success
-        response.should respond_with(:content_type => :xml)
-
-        response.should_not have_tag('errors')
-        response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]',
-          assigns(:document).uuid,
-          assigns(:document).version,
-          assigns(:document).created_at.xmlschema,
-          assigns(:document).updated_at.xmlschema
-        ) do
-          assigns(:document).pages.each do |page|
-            with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]',
-              page.uuid,
-              page.version,
-              page.created_at.xmlschema,
-              page.updated_at.xmlschema
-            )
-          end
-        end
-
-        assigns[:document].accepts_role?('owner', @current_user).should be_true
-      end
-
-      it "'POST /documents' should not create documents without valid paylod" do
-        pending
-        mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz')
-
-        post :create, :document => { :payload => mock_file }
-
-        response.should_not be_success
-        response.should respond_with(:content_type => :xml)
-
-        response.should have_tag('errors') do
-          with_tag('error', 'Payload has invalid format')
-        end
-        response.should_not have_tag('document')
-
-        assigns[:document].accepts_role?('owner', @current_user).should_not be_true
-      end
-
-      it "'POST /documents' should not create document with payload without valid UUID" do
-        pending
-        mock_file = mock_uploaded_ubz('nouuid-valid.ubz')
-
-        post :create, :document => { :payload => mock_file }
-
-        response.should_not be_success
-        response.should respond_with(:content_type => :xml)
-
-        response.should have_tag('errors') do
-          with_tag('error', 'Uuid is invalid')
-        end
-        response.should_not have_tag('document')
-
-        assigns[:document].accepts_role?('owner', @current_user).should_not be_true
-      end
-
       context 'without associated document' do
 
         it "'GET /documents' should return an empty list" do
-          pending
           documents = []
           documents << Factory.create(:ub_document)
           documents << Factory.create(:ub_document)
@@ -215,24 +151,21 @@ describe DocumentsController do
       context 'with associated document' do
 
         before(:each) do
-          @document = Factory.create(:ub_document)
+          @page = Factory.create(:ub_page)
+          @document = @page.document
           @document.accepts_role 'owner', @current_user
-
           @document_deleted = Factory.create(:ub_document)
           @document_deleted.accepts_role 'owner', @current_user
           @document_deleted.destroy
-
           @document_not_owned = Factory.create(:ub_document)
           @document_not_owned.accepts_role 'owner', Factory.create(:user)
         end
 
         it "'GET /documents' should return list of documents owned by current user with deleted documents" do
-          pending
           get :index
 
           response.should be_success
           response.should respond_with(:content_type => :xml)
-
           response.should have_tag('documents[synchronised-at=?]',
             assigns[:synchronised_at].xmlschema
           ) do
@@ -260,7 +193,6 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should return XML description of document" do
-          pending
           get :show, :id => @document.uuid
 
           response.should be_success
@@ -285,7 +217,6 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
-          pending
           get :show, :id => @document_not_owned.uuid
 
           response.should be_forbidden
@@ -293,7 +224,6 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should return status '403 Forbidden' id document is deleted" do
-          pending
           get :show, :id => @document_deleted.uuid
 
           response.should be_forbidden
@@ -301,123 +231,13 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
-          pending
           get :show, :id => UUID.generate
 
           response.should be_forbidden
           response.should respond_with(:content_type => :xml)
         end
 
-        it "'PUT /documents/:uuid' should update document with valid payload" do
-          pending
-          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document.uuid)
-
-          put :update, :id => @document.uuid, :document => { :payload => mock_file }
-
-          response.should be_success
-          response.should respond_with(:content_type => :xml)
-
-          response.should_not have_tag('errors')
-          response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]',
-            assigns(:document).uuid,
-            assigns(:document).version,
-            assigns(:document).created_at.xmlschema,
-            assigns(:document).updated_at.xmlschema
-          ) do
-            assigns(:document).pages.each do |page|
-              with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]',
-                page.uuid,
-                page.version,
-                page.created_at.xmlschema,
-                page.updated_at.xmlschema
-              )
-            end
-          end
-        end
-
-        it "'PUT /documents/:uuid' should not update document if payload version is not equal to document version on server" do
-          pending
-          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document.uuid)
-          @document.update_attribute(:version, @document.version + 1)
-
-          put :update, :id => @document.uuid, :document => { :payload => mock_file }
-
-          response.should_not be_success
-          response.should respond_with(:content_type => :xml)
-
-          response.should have_tag('errors') do
-            with_tag('error', 'Version have already changed on server')
-          end
-          response.should_not have_tag('document')
-        end
-
-        it "'PUT /documents/:uuid' should not update document without valid payload" do
-          pending
-          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz')
-
-          put :update, :id => @document.uuid, :document => { :payload => mock_file }
-
-          response.should_not be_success
-          response.should respond_with(:content_type => :xml)
-
-          response.should have_tag('errors') do
-            with_tag('error', 'Payload has invalid format')
-          end
-          response.should_not have_tag('document')
-        end
-
-        it "'PUT /documents/:uuid' should not update document with payload without valid UUID" do
-          pending
-          mock_file = mock_uploaded_ubz('nouuid-valid.ubz')
-
-          put :update, :id => @document.uuid, :document => { :payload => mock_file }
-
-          response.should_not be_success
-          response.should respond_with(:content_type => :xml)
-
-          response.should have_tag('errors') do
-            with_tag('error', 'Uuid is invalid')
-          end
-          response.should_not have_tag('document')
-        end
-
-        it "'PUT /documents/:uuid' should not update document with payload with different UUID" do
-          pending
-          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
-
-          put :update, :id => @document.uuid, :document => { :payload => mock_file }
-
-          response.should_not be_success
-          response.should respond_with(:content_type => :xml)
-
-          response.should have_tag('errors') do
-            with_tag('error', 'Uuid have changed')
-          end
-          response.should_not have_tag('document')
-        end
-
-        it "'PUT /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
-          pending
-          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz', @document_not_owned.uuid)
-
-          put :update, :id => @document_not_owned.uuid, :document => { :payload => mock_file }
-
-          response.should be_forbidden
-          response.should respond_with(:content_type => :xml)
-        end
-
-        it "'PUT /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
-          pending
-          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
-
-          put :update, :id => mock_file.uuid, :document => { :payload => mock_file }
-
-          response.should be_forbidden
-          response.should respond_with(:content_type => :xml)
-        end
-
         it "'DELETE /documents/:uuid' should delete document" do
-          pending
           delete :destroy, :id => @document.uuid
 
           response.should be_success
@@ -430,7 +250,6 @@ describe DocumentsController do
         end
 
         it "'DELETE /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
-          pending
           delete :destroy, :id => @document_not_owned.uuid
 
           response.should be_forbidden
@@ -438,10 +257,7 @@ describe DocumentsController do
         end
 
         it "'DELETE /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
-          pending
-          mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
-
-          delete :destroy, :id => mock_file.uuid, :document => { :payload => mock_file }
+          delete :destroy, :id => UUID.generate
 
           response.should be_forbidden
           response.should respond_with(:content_type => :xml)
@@ -458,39 +274,21 @@ describe DocumentsController do
       end
 
       it "'GET /documents' should return status '401 Unauthorized'" do
-        pending
         get :index
 
         response.should be_unauthorized
         response.should respond_with(:content_type => :xml)
       end
 
-      it "'POST /documents' should return status '401 Unauthorized'" do
-        pending
-        post :create
-
-        response.should be_unauthorized
-        response.should respond_with(:content_type => :xml)
-      end
-
       it "'GET /documents/:uuid' should return status '401 Unauthorized'" do
-        pending
         get :show, :id => @document.uuid
 
         response.should be_unauthorized
         response.should respond_with(:content_type => :xml)
       end
 
-      it "'PUT /documents/:uuid' should return status '401 Unauthorized'" do
-        pending
-        put :update, :id => @document.uuid
-
-        response.should be_unauthorized
-        response.should respond_with(:content_type => :xml)
-      end
 
       it "'DELETE /documents/:uuid' should return status '401 Unauthorized'" do
-        pending
         delete :destroy, :id => @document.uuid
 
         response.should be_unauthorized

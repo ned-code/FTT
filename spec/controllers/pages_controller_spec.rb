@@ -19,26 +19,24 @@ describe PagesController do
         @current_user.is_registered
         UserSession.create(@current_user)
 
-#        @page = Factory.create(:ub_document).pages.first
-#        @page.document.accepts_role 'owner', @current_user
-#
-#        @page_deleted = Factory.create(:ub_document).pages.first
-#        @page_deleted.document.accepts_role 'owner', @current_user
-#        @page_deleted.destroy
-#
-#        @page_not_owned = Factory.create(:ub_document).pages.first
-#        @page_not_owned.document.accepts_role 'owner', Factory.create(:user)
+        @page = Factory.create(:ub_page)
+        @page.document.accepts_role 'owner', @current_user
+
+        @page_deleted = Factory.create(:ub_page)
+        @page_deleted.document.accepts_role 'owner', @current_user
+        @page_deleted.destroy
+
+        @page_not_owned = Factory.create(:ub_page)
+        @page_not_owned.document.accepts_role 'owner', Factory.create(:user)
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should render" do
-        pending
         get :show, :document_id => @page.document.id, :id => @page.id
         response.should be_success
         response.should respond_with(:content_type => "application/xhtml+xml")
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should render error 404 if current user is not the owner" do
-        pending
         get :show, :document_id => @page_not_owned.document.id, :id => @page_not_owned.id
 
         response.should be_not_found
@@ -46,7 +44,6 @@ describe PagesController do
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should render error 404 id page is deleted" do
-        pending
         get :show, :document_id => @page_deleted.document.id, :id => @page_deleted.id
 
         response.should be_not_found
@@ -54,7 +51,6 @@ describe PagesController do
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should render error 404 if document does not exist" do
-        pending
         get :show, :document_id => 100_000_000_000, :id => 100_000_000_000
 
         response.should be_not_found
@@ -62,7 +58,6 @@ describe PagesController do
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should render 404 if page does not exist" do
-        pending
         get :show, :document_id => @page.document.id, :id => 100_000_000_000
 
         response.should be_not_found
@@ -97,7 +92,6 @@ describe PagesController do
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' if current user is not the owner" do
-        pending
         get :show, :document_id => @page_not_owned.document.uuid, :id => @page_not_owned.uuid
 
         response.should be_forbidden
@@ -105,7 +99,6 @@ describe PagesController do
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' id page is deleted" do
-        pending
         get :show, :document_id => @page_deleted.document.uuid, :id => @page_deleted.uuid
 
         response.should be_forbidden
@@ -113,7 +106,6 @@ describe PagesController do
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' if document does not exist" do
-        pending
         get :show, :document_id => UUID.generate, :id => UUID.generate
 
         response.should be_forbidden
@@ -121,7 +113,6 @@ describe PagesController do
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should return status '403 Forbidden' if page does not exist" do
-        pending
         get :show, :document_id => @page.document.uuid, :id => UUID.generate
 
         response.should be_forbidden
@@ -131,7 +122,6 @@ describe PagesController do
       context 'with s3 storage' do
 
         it "'GET /documents/:uuid/pages/:uuid' should be redirect to s3" do
-          pending
           get :show, :document_id => @page.document.uuid, :id => @page.uuid
 
           response.should be_redirect
@@ -149,7 +139,6 @@ describe PagesController do
       end
 
       it "'GET /documents/:uuid/pages/:uuid' should return status '401 Unauthorized'" do
-        pending
         get :show, :document_id => @page.document.uuid, :id => @page.uuid
 
         response.should be_unauthorized

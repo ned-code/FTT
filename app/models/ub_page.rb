@@ -31,12 +31,13 @@ class UbPage < ActiveRecord::Base
 #  end
 
   def url(format = "ub_page/svg")
-    page_resource = media.get_resource(format)
+    page_resource = media.get_resource(format, nil)
     raise "No Media found for page #{self.uuid} in format #{format}" if page_resource == nil
     return page_resource.public_url
   end
 
   def mime_type(format = "svg")
+    'image/svg+xml'
   end
 
   def thumbnail_url
@@ -46,6 +47,7 @@ class UbPage < ActiveRecord::Base
   end
 
   def thumbnail_mime_type
+    'image/jpeg'
   end
 
   def next
