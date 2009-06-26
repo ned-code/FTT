@@ -10,9 +10,10 @@ ActionController::Routing::Routes.draw do |map|
     :controller => 'documents', :action => 'destroy_all',
     :conditions => { :method => :get }
   map.resources :documents, :member => {:push => :post} do |document|
-    document.resources :pages 
+    document.resources :pages, :member => {:proto => :get}
   end
 
-  map.connect 'documents/:document_id/pages/:page_id/proto', :controller => 'pages', :action => 'proto'
+  map.resources :medias
+  
   map.root :controller => 'documents', :action => 'index'
 end

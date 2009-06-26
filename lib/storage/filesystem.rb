@@ -8,9 +8,9 @@ module Storage
 
     def initialize(options)
       super
-
       @basedir = options[:basedir] || default_config['basedir'] || raise(ArgumentError, 'Filesystem basedir is not present in config Hash')
       @public_host_root_url = options[:public_host_root_url] || default_config['public_host_root_url'] || raise(ArgumentError, 'Filesystem public_host_root_url is not present in config Hash')
+
       RAILS_DEFAULT_LOGGER.debug "base dir #{@basedir}"
       RAILS_DEFAULT_LOGGER.debug "public host root URL #{@public_host_root_url}"
     end

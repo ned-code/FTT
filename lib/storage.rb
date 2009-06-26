@@ -8,6 +8,7 @@ module Storage
     @@storages ||= {}
 
     begin
+      options = {:name => :filesystem} if options == nil
       options = YAML.load(options) if options.is_a?(String)
     rescue
       raise ArgumentError, "'options' can't be converted from YAML to Hash"

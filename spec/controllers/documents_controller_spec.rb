@@ -29,7 +29,6 @@ describe DocumentsController do
         end
 
         it "'GET /documents' should render empty list" do
-          pending
           get :index
 
           response.should be_success
@@ -43,7 +42,9 @@ describe DocumentsController do
       context 'with associated document' do
 
         before(:each) do
-          @document = Factory.create(:ub_document)
+
+          @page = Factory.create(:ub_page)
+          @document = @page.document
           @document.accepts_role 'owner', @current_user
 
           @document_deleted = Factory.create(:ub_document)
@@ -55,7 +56,6 @@ describe DocumentsController do
         end
 
         it "'GET /documents' should render list of documents owned by current user without deleted documents" do
-          pending
           get :index
 
           response.should be_success
@@ -71,7 +71,6 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should render list of document pages" do
-          pending
           get :show, :id => @document.id
 
           response.should be_success
@@ -88,7 +87,6 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should render error 404 if current user is not the owner" do
-          pending
           get :show, :id => @document_not_owned.id
 
           response.should be_not_found
@@ -96,7 +94,6 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should render error 404 id document is deleted" do
-          pending
           get :show, :id => @document_deleted.id
 
           response.should be_not_found
@@ -104,7 +101,6 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should render error 404 if document does not exist" do
-          pending
           get :show, :id => 100_000_000_000
 
           response.should be_not_found

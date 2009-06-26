@@ -30,13 +30,19 @@ class UbPage < ActiveRecord::Base
 #    UbDocument.config
 #  end
 
-  def url(format = "svg", request_domain = nil)
+  def url(format = "ub_page/svg")
+    page_resource = media.get_resource(format)
+    raise "No Media found for page #{self.uuid} in format #{format}" if page_resource == nil
+    return page_resource.public_url
   end
 
   def mime_type(format = "svg")
   end
 
   def thumbnail_url
+    page_resource = self.media.get_resource("thumbnail", nil)
+    raise "No Media found for page thumbnail #{self.uuid}" if page_resource == nil
+    return page_resource.public_url
   end
 
   def thumbnail_mime_type
@@ -84,6 +90,7 @@ class UbPage < ActiveRecord::Base
     # this copy of page elements will be used to find page elements that must be deleted
     original_page_elements = page_elements.dup
     
+
     # Now iterate on page elements to update or create corresponding page element
     page_dom.each_element("svg/image | svg/foreignObject | svg/video") do |element|
 
