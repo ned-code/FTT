@@ -41,49 +41,68 @@ class DocumentsController < ApplicationController
   end
 
   def push
-    transaction_uuid = request.headers["UB_SYNC_TRANSACTION_UUID"] || UUID.generate
-    client_uuid = request.headers["UB_CLIENT_UUID"]
+    sync_action = request.headers["UB_SYNC_ACTION"] || 'continue'
 
     # Load or create transaction for document
-    transaction = UbSyncTransaction.find_or_create_by_ub_document_uuid(params[:id])
+    if (request.headers["UB_SYNC_TRANSACTION_UUID"])
+      @transaction = UbSyncTransaction.find(:first, :conditions => {
+        :uuid => request.headers["UB_SYNC_TRANSACTION_UUID"],
+        :ub_document_uuid => params[:id],
+        :ub_client_uuid => request.headers["UB_CLIENT_UUID"],
+        :user_id => current_user.id
+      })
+    else
+      @transaction = UbSyncTransaction.find(:first, :conditions => {
+        :ub_document_uuid => params[:id],
+        :ub_client_uuid => request.headers["UB_CLIENT_UUID"],
+        :user_id => current_user.id
+      })
 
-    # If transaction is new, continue, or restarted by same client and user, proccess it.
-    if transaction.new_record? || transaction.uuid == transaction_uuid ||
-        (transaction.ub_client_uuid == client_uuid && transaction.user == current_user)
+      unless @transaction
+        @transaction = UbSyncTransaction.new(
+          :uuid => UUID.generate,
+          :ub_document_uuid => params[:id],
+          :ub_client_uuid => request.headers["UB_CLIENT_UUID"],
+          :user => current_user
+        )
+      end
+    end
 
-      # Update transaction uuid if new or restart
-      transaction.uuid = transaction_uuid if transaction.uuid != transaction_uuid
-
-      # Set client uuid and user
-      transaction.user ||= current_user
-      transaction.ub_client_uuid ||= client_uuid
+    # Transaction action
+    if @transaction 
 
       # Create item
-      transaction.items.build(
-        :path => request.headers["UB_SYNC_FILENAME"],
-        :part_nb => request.headers["UB_SYNC_PART_NB"],
-        :part_total_nb => request.headers["UB_SYNC_PART_TOTAL_NB"],
-        :part_check_sum => request.headers["UB_SYNC_PART_CHECK_SUM"],
-        :item_check_sum => request.headers["UB_SYNC_ITEM_CHECK_SUM"],
+      if request.headers["UB_SYNC_FILENAME"] && ['continue', 'commit'].include?(sync_action)
+        @transaction.items.build(
+          :path => request.headers["UB_SYNC_FILENAME"],
+          :part_nb => request.headers["UB_SYNC_PART_NB"],
+          :part_total_nb => request.headers["UB_SYNC_PART_TOTAL_NB"],
+          :part_check_sum => request.headers["UB_SYNC_PART_CHECK_SUM"],
+          :item_check_sum => request.headers["UB_SYNC_ITEM_CHECK_SUM"],
 
-        :data => request.env['rack.input'],
+          :data => request.env['rack.input'],
 
-        :storage_config => nil # Use default config
-      )
+          :storage_config => nil # Use default config
+        )
+      end
 
       # Return response
       respond_to do |format|
-        if transaction.save
-          format.xml { render :xml => transaction }
+        if sync_action == 'rollback' && @transaction.destroy
+          format.xml { head :ok }
+        elsif sync_action == 'continue' && @transaction.save
+          format.xml { render :xml => @transaction }
+        elsif sync_action == 'commit' && @transaction.commit
+          format.xml { render :xml => @transaction }
         else
-          format.xml { render :xml => transaction.errors, :status => :unprocessable_entity }
+          format.xml { render :xml => @transaction.errors, :status => :unprocessable_entity }
         end
       end
 
     # If a transaction for this document is already started by another user, reject it.
     else
       respond_to do |format|
-        format.xml { head :forbidden } # TODO: Better status responde (not forbidden, just already started by another user)
+        format.xml { head :not_found }
       end
     end
   end

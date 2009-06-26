@@ -132,13 +132,13 @@ describe UbSyncTransaction do
     lambda { @transaction.commit }.should_not raise_error
   end
 
-  it "should raise error when commited if incomplete" do
+  it "should return false when commited if incomplete" do
     @transaction.should_receive(:complete?).and_return(false)
-    
-    lambda { @transaction.commit }.should raise_error(UbSyncTransactionError, /Transaction isn't complete/)
+
+    @transaction.commit.should be_false
   end
 
-  it "should raise error when commited if multi-part item can't be merged" do
+  it "should return false when commited if multi-part item can't be merged" do
     tempfile = Tempfile.new('fake.part')
     @file_with_parts[1][:data] = tempfile
     @file_with_parts[1][:part_check_sum] = Digest::MD5.file(tempfile.path).hexdigest
@@ -147,23 +147,40 @@ describe UbSyncTransaction do
       @transaction.items.create!(part.merge(:storage_config => {:name => :filesystem}))
     end
 
-    lambda { @transaction.commit }.should raise_error(UbSyncTransactionError, /Item '#{@file_with_parts.path}' parts can't be merged/)
+    @transaction.commit.should be_false
   end
 
-  it "should not raise error when commited if multi-part item can be merged" do
+  it "should return true when commited if multi-part item can be merged" do
     @file_with_parts.each do |part|
       @transaction.items.create!(part.merge(:storage_config => {:name => :filesystem}))
     end
 
-    lambda { @transaction.commit }.should_not raise_error
+    @transaction.commit
+
+    puts @transaction.errors.full_messages
+
+    @transaction.commit.should be_true
   end
 
-  it "should not raise error when commited if multi-part item have one item more one time" do
+  it "should return true when commited if multi-part item have one item more one time" do
     @file_with_parts << @file_with_parts[1]
     @file_with_parts.each do |part|
       @transaction.items.create!(part.merge(:storage_config => {:name => :filesystem}))
     end
 
-    lambda { @transaction.commit }.should_not raise_error
+    @transaction.commit.should be_true
+  end
+
+  it "should have xml format (with page url)" do
+    transaction_xml = REXML::Document.new(@transaction.to_xml)
+
+    transaction_xml.root.name.should == 'transaction'
+    transaction_xml.root.attributes.to_hash.should include(
+      'xmlns' => 'http://uniboard.mnemis.com/document',
+      'uuid' => @transaction.uuid,
+      'client_uuid' => @transaction.ub_client_uuid,
+      'created-at' => @transaction.created_at.xmlschema,
+      'updated-at' => @transaction.updated_at.xmlschema
+    )
   end
 end

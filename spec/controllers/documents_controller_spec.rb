@@ -127,69 +127,51 @@ describe DocumentsController do
         @current_user = Factory.create(:confirmed_user)
         @current_user.is_registered
         UserSession.create(@current_user)
+
+        @transaction = Factory.create(:ub_sync_transaction, :user => @current_user)
+        @client_uuid = UUID.generate
       end
 
-      it "'POST /documents' should create document with valid payload" do
-        pending
-        mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000000valid.ubz')
-
-        post :create, :document => { :payload => mock_file }
+      it "'POST /push/:uuid' should create transaction if request don't have transaction UUID" do
+        request.env['UB_CLIENT_UUID'] = @client_uuid
+        post :push, :id => UUID.generate
 
         response.should be_success
         response.should respond_with(:content_type => :xml)
 
         response.should_not have_tag('errors')
-        response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]',
-          assigns(:document).uuid,
-          assigns(:document).version,
-          assigns(:document).created_at.xmlschema,
-          assigns(:document).updated_at.xmlschema
-        ) do
-          assigns(:document).pages.each do |page|
-            with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]',
-              page.uuid,
-              page.version,
-              page.created_at.xmlschema,
-              page.updated_at.xmlschema
-            )
-          end
-        end
-
-        assigns[:document].accepts_role?('owner', @current_user).should be_true
+        response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
+          assigns(:transaction).uuid,
+          @client_uuid,
+          assigns(:transaction).created_at.xmlschema,
+          assigns(:transaction).updated_at.xmlschema
+        )
       end
 
-      it "'POST /documents' should not create documents without valid paylod" do
-        pending
-        mock_file = mock_uploaded_ubz('00000000-0000-0000-0000-0000notvalid.ubz')
+      it "'POST /push/:uuid' should update transaction if request have transaction UUID" do
+        request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+        post :push, :id => @transaction.ub_document_uuid
 
-        post :create, :document => { :payload => mock_file }
-
-        response.should_not be_success
+        response.should be_success
         response.should respond_with(:content_type => :xml)
 
-        response.should have_tag('errors') do
-          with_tag('error', 'Payload has invalid format')
-        end
-        response.should_not have_tag('document')
-
-        assigns[:document].accepts_role?('owner', @current_user).should_not be_true
+        response.should_not have_tag('errors')
+        response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
+          @transaction.uuid,
+          @transaction.ub_client_uuid,
+          assigns(:transaction).created_at.xmlschema,
+          assigns(:transaction).updated_at.xmlschema
+        )
       end
 
-      it "'POST /documents' should not create document with payload without valid UUID" do
-        pending
-        mock_file = mock_uploaded_ubz('nouuid-valid.ubz')
+      it "'POST /push/:uuid' should return error if request have non-existent transaction UUID" do
+        request.env['UB_SYNC_TRANSACTION_UUID'] = UUID.generate
+        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+        post :push, :id => UUID.generate
 
-        post :create, :document => { :payload => mock_file }
-
-        response.should_not be_success
+        response.should be_not_found
         response.should respond_with(:content_type => :xml)
-
-        response.should have_tag('errors') do
-          with_tag('error', 'Uuid is invalid')
-        end
-        response.should_not have_tag('document')
-
-        assigns[:document].accepts_role?('owner', @current_user).should_not be_true
       end
 
       context 'without associated document' do
