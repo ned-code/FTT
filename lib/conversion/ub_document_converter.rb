@@ -47,40 +47,45 @@ module ConversionService
       ub_document = XMLObject.new(ub_document_file)
       rdf_document = XMLObject.new(rdf_document_file)
 
-      html_document_builder = Builder::XmlMarkup.new(:indent => 2)
+      @html_document_builder = Builder::XmlMarkup.new(:indent => 2)
 
-      html_document_builder.declare! :DOCTYPE, :html, :PUBLIC, "-//W3C//DTD XHTML 1.0 Strict//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-      html_document_builder.html("xmlns" => "http://www.w3.org/1999/xhtml") {
-        html_document_builder.head {
-          html_document_builder.title(rdf_document.Description.title)
-          html_document_builder.meta("http-equiv" => "Content-Type", "content" => "application/xhtml; charset=UTF-8")
-          html_document_builder.meta("name" => "uuid", "content" => uuid)
+      @html_document_builder.declare! :DOCTYPE, :html, :PUBLIC, "-//W3C//DTD XHTML 1.0 Strict//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+      @html_document_builder.html("xmlns" => "http://www.w3.org/1999/xhtml") {
+        @html_document_builder.head {
+          @html_document_builder.title(rdf_document.Description.title)
+          @html_document_builder.meta("http-equiv" => "Content-Type", "content" => "application/xhtml; charset=UTF-8")
+          @html_document_builder.meta("name" => "uuid", "content" => uuid)
         }
-        html_document_builder.body {
-          html_document_builder.h1(rdf_document.Description.title, "id" => "ub_doc_title")
-          html_document_builder.div("id" => "ub_pages") {
-            html_document_builder.ul {
+        @html_document_builder.body {
+          @html_document_builder.h1(rdf_document.Description.title, "id" => "ub_doc_title")
+          @html_document_builder.div("id" => "ub_pages") {
+            @html_document_builder.ul {
               if (ub_document.pages.is_a?(Array))
                 ub_document.pages.each do |page|
-                  html_document_builder.li {
-                    html_page = page.gsub(".svg", ".xhtml")
-                    thumbnail_page = page.gsub(".svg", ".thumbnail.jpg")
-                    html_document_builder.a(html_page, "class" => "ub_page_link", "href" => html_page)
-                    html_document_builder.img("class" => "ub_page_thumbnail", "src" => thumbnail_page, "alt" => "thumbnail")
-                  }
+                  add_page(page)
                 end
-              elsif
+              else
                 page = ub_document.pages.page
-                html_document_builder.li {
-                  html_page = page.gsub(".svg", ".xhtml")
-                  thumbnail_page = page.gsub(".svg", ".thumbnail.jpg")
-                  html_document_builder.a(html_page, "class" => "ub_page_link", "href" => html_page)
-                  html_document_builder.img("class" => "ub_page_thumbnail", "src" => thumbnail_page, "alt" => "thumbnail")
-                }
+                if (page.is_a?(Array))
+                  page.each do |a_page|
+                    add_page(a_page)
+                  end
+                else
+                  add_page(page)
+                end
               end
             }
           }
         }
+      }
+    end
+
+    def add_page(svg_page)
+      @html_document_builder.li {
+        html_page = svg_page.gsub(".svg", ".xhtml")
+        thumbnail_page = svg_page.gsub(".svg", ".thumbnail.jpg")
+        @html_document_builder.a(html_page, "class" => "ub_page_link", "href" => html_page)
+        @html_document_builder.img("class" => "ub_page_thumbnail", "src" => thumbnail_page, "alt" => "thumbnail")
       }
     end
   end
