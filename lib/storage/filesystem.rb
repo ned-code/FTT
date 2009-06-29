@@ -17,15 +17,29 @@ module Storage
 
     def put(path, data = '')
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
+      data ||= '' # nil is equal to empty content
 
       FileUtils.mkdir_p(File.dirname(full_path(path)))
       File.open(full_path(path), 'w') do |file|
 
-        if data.is_a? String
-          file << data
-        else
-          data.rewind
-          file << data.read
+        begin
+          if data.is_a? String
+            file << data
+          elsif data.is_a? Hash
+            data_path = data[:path]
+            data_identity_string = data[:identity_string] || data[:storage_config]
+
+            if identity_string == data_identity_string
+              move(data_path, path)
+            else
+              file << Storage::storage(data_identity_string).get(data_path).read
+            end
+          else
+            data.rewind
+            file << data.read
+          end
+        rescue => e
+          raise ArgumentError, "error on data: " + e.message
         end
 
       end
