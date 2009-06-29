@@ -73,9 +73,16 @@ class UbPage < ActiveRecord::Base
     )
   end
 
+  def update_page_from_media
+    self.version += 1 if !self.new_record?
+    self.parse_svg_page(self.media.data)
+  end
+
+  protected
+
   # Parse the svg file that describe the page and create all corresponding page element. This method assume that
   # medias used by the page exists. If some medias are missing an exception is raised.
-  def parse_svg_page(svg_stream)    
+  def parse_svg_page(svg_stream)
     # Get the UUID
     page_dom = REXML::Document.new(svg_stream)
     self.uuid = page_dom.root.attribute('uuid', 'ub')
@@ -91,7 +98,7 @@ class UbPage < ActiveRecord::Base
 
     # this copy of page elements will be used to find page elements that must be deleted
     original_page_elements = page_elements.dup
-    
+
 
     # Now iterate on page elements to update or create corresponding page element
     page_dom.each_element("svg/image | svg/foreignObject | svg/video") do |element|
@@ -116,7 +123,6 @@ class UbPage < ActiveRecord::Base
     end
   end
 
-  protected
 
   # Storage
 #  def after_initialize

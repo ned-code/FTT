@@ -4,6 +4,13 @@ describe UbPage do
   it('') { should be_built_by_factory }
   it('') { should be_created_by_factory }
 
+  before(:all) do
+    UbPage.send(:public, :parse_svg_page)
+  end
+  after(:all) do
+    UbPage.send(:protected, :parse_svg_page)
+  end
+  
   context 'recently created' do
 
     it 'should have its version to 1' do
