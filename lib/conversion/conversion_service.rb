@@ -9,12 +9,9 @@ module ConversionService
     end
 
     def convert_media(media, destination_type, options)
-      media_storage = Storage::storage(media.storage_config)
       tmp_media_file = File.join(options[:destination_path], "#{media.uuid}.tmp")
       File.open(tmp_media_file, 'w') do |file|
-        media_storage.get(media.path) do |file_content_stream|
-          file << file_content_stream.read()
-        end
+          file << media.data.read()
       end
       converted_file_name = convert_file(tmp_media_file, media.media_type, destination_type, options)
       RAILS_DEFAULT_LOGGER.debug "remove tmp file #{tmp_media_file}"
