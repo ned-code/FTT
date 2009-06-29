@@ -18,7 +18,7 @@ describe UbSyncTransactionItem do
   end
 
   it "should valid if hash control not match with file" do
-    upload_file_path = fixture_file('sync-transaction-item.txt')
+    upload_file_path = fixture_file('synctran-acti-onit-em00-0000000000000.txt')
     uploaded_file = ActionController::TestUploadedFile.new(upload_file_path)
     uploaded_file_digest = Digest::MD5.file(upload_file_path).hexdigest
 
@@ -32,7 +32,7 @@ describe UbSyncTransactionItem do
   end
 
   it "should not valid if hash control not match with file" do
-    upload_file_path = fixture_file('sync-transaction-item.txt')
+    upload_file_path = fixture_file('synctran-acti-onit-em00-0000000000000.txt')
     uploaded_file = ActionController::TestUploadedFile.new(upload_file_path)
     uploaded_file_digest = Digest::MD5.file(upload_file_path).hexdigest
 
@@ -44,7 +44,7 @@ describe UbSyncTransactionItem do
   end
 
   it "should retrive data" do
-    upload_file_path = fixture_file('sync-transaction-item.txt')
+    upload_file_path = fixture_file('synctran-acti-onit-em00-0000000000000.txt')
     uploaded_file = ActionController::TestUploadedFile.new(upload_file_path)
     uploaded_file_digest = Digest::MD5.file(upload_file_path).hexdigest
 

@@ -29,7 +29,7 @@ describe UbSyncTransaction do
       def digest=(degest); @degest = degest; end
     end
 
-    @file_with_parts.path = 'sync-transaction-item.txt'
+    @file_with_parts.path = 'synctran-acti-onit-em00-0000000000000.txt'
     @file_with_parts.content_type = 'text/plain'
     upload_file_path = fixture_file(@file_with_parts.path)
 
@@ -69,7 +69,7 @@ describe UbSyncTransaction do
   end
 
   it "should not be complete with incomplete partial items" do
-    path = "sync-transaction-item.txt"
+    path = "synctran-acti-onit-em00-0000000000000.txt"
     content_type = "text/plain"
 
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
@@ -90,7 +90,7 @@ describe UbSyncTransaction do
   end
 
   it "should be complete with complete partial items" do
-    path = "sync-transaction-item.txt"
+    path = "synctran-acti-onit-em00-0000000000000.txt"
     content_type = "text/plain"
 
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
@@ -116,7 +116,7 @@ describe UbSyncTransaction do
   end
 
   it "should be complete with one part present more one time" do
-    path = "sync-transaction-item.txt"
+    path = "synctran-acti-onit-em00-0000000000000.txt"
     content_type = "text/plain"
 
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,

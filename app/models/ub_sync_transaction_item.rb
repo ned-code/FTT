@@ -39,7 +39,7 @@ class UbSyncTransactionItem < ActiveRecord::Base
   end
 
   def storage
-    Storage::storage(storage_config || {:name => :filesystem})
+    Storage::storage(storage_config)
   end
 
 end

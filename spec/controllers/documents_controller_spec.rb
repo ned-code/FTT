@@ -188,7 +188,7 @@ describe DocumentsController do
       end
 
       it "'POST /documents/:uuid/push' should create transaction with file data in request" do
-        transaction_path = 'sync-transaction-item.txt'
+        transaction_path = 'synctran-acti-onit-em00-0000000000000.txt'
 
         request.env['UB_CLIENT_UUID'] = @client_uuid
 
@@ -225,7 +225,7 @@ describe DocumentsController do
       end
 
       it "'POST /documents/:uuid/push' should create transaction with empty file data in request" do
-        transaction_path = 'sync-transaction-item.txt'
+        transaction_path = 'synctran-acti-onit-em00-0000000000000.txt'
 
         request.env['UB_CLIENT_UUID'] = @client_uuid
 
@@ -260,7 +260,7 @@ describe DocumentsController do
       end
 
       it "'POST /documents/:uuid/push' should continue transaction with file data in request" do
-        transaction_path = 'sync-transaction-item.txt'
+        transaction_path = 'synctran-acti-onit-em00-0000000000000.txt'
 
         request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
         request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
@@ -298,7 +298,7 @@ describe DocumentsController do
       end
 
       it "'POST /documents/:uuid/push' should update transaction with empty file data in request" do
-        transaction_path = 'sync-transaction-item.txt'
+        transaction_path = 'synctran-acti-onit-em00-0000000000000.txt'
 
         request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
         request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
