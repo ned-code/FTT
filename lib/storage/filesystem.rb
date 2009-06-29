@@ -39,10 +39,12 @@ module Storage
             file << data.read
           end
         rescue => e
-          raise ArgumentError, "error on data: " + e.message
+          raise ArgumentError, "invalid data: " + e.message
         end
 
       end
+
+      true
     end
 
     def get(path)

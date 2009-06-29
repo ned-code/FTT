@@ -147,19 +147,13 @@ describe UbSyncTransaction do
     @transaction.should be_complete
   end
 
-  it "should be commited" do
-    @transaction.should_receive(:complete?).and_return(true)
-
-    lambda { @transaction.commit }.should_not raise_error
-  end
-
   it "should return false when commited if incomplete" do
     @transaction.should_receive(:complete?).and_return(false)
 
     @transaction.commit.should be_false
   end
 
-  it "should return false when commited if multi-part item can't be merged" do
+  it "should have error when commited if multi-part item can't be merged" do
     tempfile = Tempfile.new('fake.part')
     @file_with_parts[1][:data] = tempfile
     @file_with_parts[1][:part_check_sum] = Digest::MD5.file(tempfile.path).hexdigest
@@ -168,24 +162,52 @@ describe UbSyncTransaction do
       @transaction.items.create!(part.merge(:storage_config => {:name => :filesystem}))
     end
 
-    @transaction.commit.should be_false
+    @transaction.commit
+    @transaction.errors.on(:items).should =~ /parts can't be merged/
   end
 
-  it "should return true when commited if multi-part item can be merged" do
+  it "should not have error when commited if multi-part item can be merged" do
     @file_with_parts.each do |part|
       @transaction.items.create!(part.merge(:storage_config => {:name => :filesystem}))
     end
 
-    @transaction.commit.should be_true
+    @transaction.commit
+    @transaction.errors.on(:items).should_not =~ /parts can't be merged/
   end
 
-  it "should return true when commited if multi-part item have one item more one time" do
+  it "should not have error when commited if multi-part item have one item more one time" do
     @file_with_parts << @file_with_parts[1]
     @file_with_parts.each do |part|
       @transaction.items.create!(part.merge(:storage_config => {:name => :filesystem}))
     end
 
+    @transaction.commit
+    @transaction.errors.on(:items).should_not =~ /parts can't be merged/
+  end
+
+  it "should have error when Unibaord Document file is not present" do
+    @transaction.should_receive(:complete?).and_return(true)
+
+    @transaction.commit
+    @transaction.errors.on(:items).should =~ /Transaction don't have Uniboard Document descrition file/
+  end
+
+  it "should be commited with valid document transaction" do
+    fixture_ubz(:valid).each do |path|
+      @transaction.items.create!(
+        :path => path.gsub(/.*?#{UUID_FORMAT_REGEX}\//, ''),
+        :content_type => get_content_type_from_filename(path) || "application/octet+stream",
+        :data => File.open(path),
+        :part_nb => 1,
+        :part_total_nb => 1,
+        :part_check_sum => Digest::MD5.file(path).hexdigest,
+        :item_check_sum => Digest::MD5.file(path).hexdigest,
+        :storage_config => {:name => :filesystem}
+      )
+    end
+
     @transaction.commit.should be_true
+    @transaction.should have(:no).error
   end
 
   it "should have xml format (with page url)" do

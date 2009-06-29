@@ -99,17 +99,13 @@ shared_examples_for "storage implementation for put method" do
   end
 
   it "should return true when created" do
-    lambda {
-      @storage.put(@path).should be_true
-    }.should_not raise_error
+    @storage.put(@path).should == true
   end
 
   it "should return true when updated" do
     @storage.put(@path)
 
-    lambda {
-      @storage.put(@path).should be_true
-    }.should_not raise_error
+    @storage.put(@path).should == true
   end
 
 end
