@@ -3,14 +3,25 @@ class UbMediaMissingError < StandardError; end
 # Attributes
 #- uuid: string
 #- path: string
-#- type: string
+#- media_type: string
 #- version: integer
 #- page_element_id: integer
+#- storage_config: string
 #
 class UbMedia < ActiveRecord::Base
 
   belongs_to :page_element, :class_name => 'UbPageElement', :foreign_key => 'page_element_id'
   has_many :conversions, :class_name => 'UbConversion', :foreign_key => 'media_id'
+
+  before_save :save_data_on_storage
+  
+  def data
+    storage.get(path)
+  end
+
+  def data=(data)
+    @tempfile = data
+  end
 
   def get_resource(p_type, p_params)
 
@@ -52,5 +63,15 @@ class UbMedia < ActiveRecord::Base
 
   def private_url
     Storage::storage(self.storage_config).private_url(self.path)
+  end
+
+  private
+
+  def save_data_on_storage
+    storage.put(path, @tempfile) if @tempfile
+  end
+
+  def storage
+    Storage::storage(storage_config || {:name => :filesystem})
   end
 end
