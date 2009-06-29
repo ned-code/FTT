@@ -33,14 +33,29 @@ module Storage
     end
 
    # Store data in 'path' key (if data is nil, the file content will be empty)
-    def put(path, data = nil)
+    def put(path, data = '')
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
-      if data.kind_of?(IO) || data.kind_of?(Tempfile)
-        data.rewind
-        data = data.read
-      end
+      data ||= '' # nil is equal to empty content
+
       key = bucket.key(path)
-      key.put(data, 'public-read', 'content-type' => get_content_type_from_mime_types(path))
+      begin
+        if data.is_a? Hash
+          data_path = data[:path]
+          data_identity_string = data[:identity_string] || data[:storage_config]
+
+          if identity_string == data_identity_string
+            move(data_path, path)
+          else
+            data = Storage::storage(data_identity_string).get(data_path)
+          end
+        elsif !data.is_a?(String)
+          data.rewind
+        end
+        
+        key.put(data, 'public-read', 'content-type' => get_content_type_from_mime_types(path))
+      rescue => e
+        raise ArgumentError, "error on data: " + e.message
+      end
 
       true
     end
@@ -124,7 +139,7 @@ module Storage
     def bucket
       connection.bucket(options[:bucket], true)
     end
-    
+
   end
 end
 
