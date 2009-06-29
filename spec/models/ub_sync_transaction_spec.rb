@@ -23,11 +23,14 @@ describe UbSyncTransaction do
     @file_with_parts.instance_eval do
       def path; @path; end
       def path=(path); @path = path; end
+      def content_type; @content_type; end
+      def content_type=(content_type); @content_type = content_type; end
       def digest; @degest; end
       def digest=(degest); @degest = degest; end
     end
 
     @file_with_parts.path = 'sync-transaction-item.txt'
+    @file_with_parts.content_type = 'text/plain'
     upload_file_path = fixture_file(@file_with_parts.path)
 
     @file_with_parts.digest = Digest::MD5.file(upload_file_path).hexdigest
@@ -43,6 +46,7 @@ describe UbSyncTransaction do
 
         @file_with_parts << {
           :path => @file_with_parts.path,
+          :content_type => @file_with_parts.content_type,
           :data => tempfile,
           :part_nb => part_count,
           :part_check_sum => Digest::MD5.file(tempfile.path).hexdigest,
@@ -66,13 +70,17 @@ describe UbSyncTransaction do
 
   it "should not be complete with incomplete partial items" do
     path = "sync-transaction-item.txt"
+    content_type = "text/plain"
+
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
         :path => path,
+        :content_type => content_type,
         :part_nb => 1,
         :part_total_nb => 3)
     )
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
         :path => path,
+        :content_type => content_type,
         :part_nb => 2,
         :part_total_nb => 3)
     )
@@ -83,18 +91,23 @@ describe UbSyncTransaction do
 
   it "should be complete with complete partial items" do
     path = "sync-transaction-item.txt"
+    content_type = "text/plain"
+
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
         :path => path,
+        :content_type => content_type,
         :part_nb => 1,
         :part_total_nb => 3)
     )
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
         :path => path,
+        :content_type => content_type,
         :part_nb => 2,
         :part_total_nb => 3)
     )
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
         :path => path,
+        :content_type => content_type,
         :part_nb => 3,
         :part_total_nb => 3)
     )
@@ -104,23 +117,29 @@ describe UbSyncTransaction do
 
   it "should be complete with one part present more one time" do
     path = "sync-transaction-item.txt"
+    content_type = "text/plain"
+
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
         :path => path,
+        :content_type => content_type,
         :part_nb => 1,
         :part_total_nb => 3)
     )
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
         :path => path,
+        :content_type => content_type,
         :part_nb => 2,
         :part_total_nb => 3)
     )
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
         :path => path,
+        :content_type => content_type,
         :part_nb => 2,
         :part_total_nb => 3)
     )
     @transaction.items.create(Factory.attributes_for(:ub_sync_transaction_item,
         :path => path,
+        :content_type => content_type,
         :part_nb => 3,
         :part_total_nb => 3)
     )

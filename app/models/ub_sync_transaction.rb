@@ -51,23 +51,23 @@ class UbSyncTransaction < ActiveRecord::Base
 
     item_processed = []
 
-    tempfile = nil
+    data = nil
     items.find(:all, :order => "path ASC, part_nb ASC").each do |item|
       next if item_processed.include?([item.path, item.part_nb])
 
       if item.part_total_nb > 1
-        tempfile = Tempfile.new(item.path) if item.part_nb == 1
-        tempfile << item.data.read
+        data = Tempfile.new(item.path) if item.part_nb == 1
+        data << item.data.read
 
         if item.part_nb == item.part_total_nb
-          tempfile.rewind
-          if Digest::MD5.file(tempfile.path).hexdigest != item.item_check_sum
+          data.rewind
+          if Digest::MD5.file(data.path).hexdigest != item.item_check_sum
             errors.add(:items, "Item '#{item.path}' parts can't be merged")
             return false
           end
         end
       else
-#        tempfile = item.data
+        data = {:path => item.path, :storage_config => item.storage_config}
       end
 
       item_processed << [item.path, item.part_nb]

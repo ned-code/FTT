@@ -1,12 +1,12 @@
 class UbSyncTransactionItem < ActiveRecord::Base
   belongs_to :transaction, :class_name => 'UbSyncTransaction', :foreign_key => 'ub_sync_transaction_id'
 
-  validates_presence_of :path, :storage_config,
+  validates_presence_of :path, :content_type, :storage_config,
                         :part_nb, :part_total_nb, :part_total_nb,
                         :part_check_sum, :item_check_sum
 
   before_validation :set_storage_config
-  after_save :save_data_on_storage
+  before_save :save_data_on_storage
 
   def data
     storage.get(path_with_part)

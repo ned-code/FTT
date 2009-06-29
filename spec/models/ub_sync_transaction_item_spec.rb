@@ -7,6 +7,7 @@ describe UbSyncTransactionItem do
   it { should belong_to(:transaction) }
 
   it { should validate_presence_of(:path) }
+  it { should validate_presence_of(:content_type) }
   it { should validate_presence_of(:part_nb) }
   it { should validate_presence_of(:part_total_nb) }
   it { should validate_presence_of(:part_check_sum) }

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090622120717) do
+ActiveRecord::Schema.define(:version => 20090629121644) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(:version => 20090622120717) do
     t.string   "item_check_sum",         :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "content_type"
   end
 
   create_table "ub_sync_transactions", :force => true do |t|

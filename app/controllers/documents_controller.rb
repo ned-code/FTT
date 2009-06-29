@@ -77,6 +77,7 @@ class DocumentsController < ApplicationController
       if request.headers["UB_SYNC_FILENAME"] && ['continue', 'commit'].include?(sync_action)
         @item = @transaction.items.build(
           :path => request.headers["UB_SYNC_FILENAME"],
+          :content_type => request.headers["UB_SYNC_CONTENT_TYPE"],
           :part_nb => request.headers["UB_SYNC_PART_NB"],
           :part_total_nb => request.headers["UB_SYNC_PART_TOTAL_NB"],
           :part_check_sum => request.headers["UB_SYNC_PART_CHECK_SUM"],

@@ -196,6 +196,7 @@ describe DocumentsController do
           request.env['rack.input'] << file.read
         end
         request.env['UB_SYNC_FILENAME'] = transaction_path
+        request.env['UB_SYNC_CONTENT_TYPE'] = 'text/plain'
         request.env["UB_SYNC_PART_NB"] = 1
         request.env["UB_SYNC_PART_TOTAL_NB"] = 1
         request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
@@ -205,7 +206,14 @@ describe DocumentsController do
         response.should be_success
         response.should respond_with(:content_type => :xml)
 
-        assigns(:transaction).items.find_by_path(transaction_path).should_not be_nil
+        item = assigns(:transaction).items.find_by_path(transaction_path)
+        item.should_not be_nil
+        item.path.should == request.env['UB_SYNC_FILENAME']
+        item.content_type.should == request.env['UB_SYNC_CONTENT_TYPE']
+        item.part_nb.should == request.env['UB_SYNC_PART_NB']
+        item.part_total_nb.should == request.env['UB_SYNC_PART_TOTAL_NB']
+        item.part_check_sum.should == request.env['UB_SYNC_PART_CHECK_SUM']
+        item.item_check_sum.should == request.env['UB_SYNC_ITEM_CHECK_SUM']
 
         response.should_not have_tag('errors')
         response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
@@ -222,6 +230,7 @@ describe DocumentsController do
         request.env['UB_CLIENT_UUID'] = @client_uuid
 
         request.env['UB_SYNC_FILENAME'] = transaction_path
+        request.env['UB_SYNC_CONTENT_TYPE'] = 'text/plain'
         request.env["UB_SYNC_PART_NB"] = 1
         request.env["UB_SYNC_PART_TOTAL_NB"] = 1
         request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
@@ -232,7 +241,14 @@ describe DocumentsController do
         response.should be_success
         response.should respond_with(:content_type => :xml)
 
-        assigns(:transaction).items.find_by_path(transaction_path).should_not be_nil
+        item = assigns(:transaction).items.find_by_path(transaction_path)
+        item.should_not be_nil
+        item.path.should == request.env['UB_SYNC_FILENAME']
+        item.content_type.should == request.env['UB_SYNC_CONTENT_TYPE']
+        item.part_nb.should == request.env['UB_SYNC_PART_NB']
+        item.part_total_nb.should == request.env['UB_SYNC_PART_TOTAL_NB']
+        item.part_check_sum.should == request.env['UB_SYNC_PART_CHECK_SUM']
+        item.item_check_sum.should == request.env['UB_SYNC_ITEM_CHECK_SUM']
 
         response.should_not have_tag('errors')
         response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
@@ -253,6 +269,7 @@ describe DocumentsController do
           request.env['rack.input'] << file.read
         end
         request.env['UB_SYNC_FILENAME'] = transaction_path
+        request.env['UB_SYNC_CONTENT_TYPE'] = 'text/plain'
         request.env["UB_SYNC_PART_NB"] = 1
         request.env["UB_SYNC_PART_TOTAL_NB"] = 1
         request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
@@ -262,7 +279,14 @@ describe DocumentsController do
         response.should be_success
         response.should respond_with(:content_type => :xml)
 
-        assigns(:transaction).items.find_by_path(transaction_path).should_not be_nil
+        item = assigns(:transaction).items.find_by_path(transaction_path)
+        item.should_not be_nil
+        item.path.should == request.env['UB_SYNC_FILENAME']
+        item.content_type.should == request.env['UB_SYNC_CONTENT_TYPE']
+        item.part_nb.should == request.env['UB_SYNC_PART_NB']
+        item.part_total_nb.should == request.env['UB_SYNC_PART_TOTAL_NB']
+        item.part_check_sum.should == request.env['UB_SYNC_PART_CHECK_SUM']
+        item.item_check_sum.should == request.env['UB_SYNC_ITEM_CHECK_SUM']
 
         response.should_not have_tag('errors')
         response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
@@ -280,6 +304,7 @@ describe DocumentsController do
         request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
 
         request.env['UB_SYNC_FILENAME'] = transaction_path
+        request.env['UB_SYNC_CONTENT_TYPE'] = 'text/plain'
         request.env["UB_SYNC_PART_NB"] = 1
         request.env["UB_SYNC_PART_TOTAL_NB"] = 1
         request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
@@ -290,7 +315,14 @@ describe DocumentsController do
         response.should be_success
         response.should respond_with(:content_type => :xml)
 
-        assigns(:transaction).items.find_by_path(transaction_path).should_not be_nil
+        item = assigns(:transaction).items.find_by_path(transaction_path)
+        item.should_not be_nil
+        item.path.should == request.env['UB_SYNC_FILENAME']
+        item.content_type.should == request.env['UB_SYNC_CONTENT_TYPE']
+        item.part_nb.should == request.env['UB_SYNC_PART_NB']
+        item.part_total_nb.should == request.env['UB_SYNC_PART_TOTAL_NB']
+        item.part_check_sum.should == request.env['UB_SYNC_PART_CHECK_SUM']
+        item.item_check_sum.should == request.env['UB_SYNC_ITEM_CHECK_SUM']
 
         response.should_not have_tag('errors')
         response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
