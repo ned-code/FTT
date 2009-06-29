@@ -1,3 +1,5 @@
+
+class UbMediaMissingError < StandardError; end
 # Attributes
 #- uuid: string
 #- path: string
