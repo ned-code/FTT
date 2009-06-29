@@ -1,5 +1,6 @@
 Factory.define :ub_sync_transaction_item do |ub_sync_transaction_item|
-  ub_sync_transaction_item.path                   'sync-transaction-item.txt'
+  ub_sync_transaction_item.path                   'synctran-acti-onit-em00-0000000000000.txt'
+  ub_sync_transaction_item.content_type           'text/plain'
   ub_sync_transaction_item.storage_config         YAML.dump({:name => :filesystem, :basedir => 'spec/tmp/files/transactions/12345'})
   ub_sync_transaction_item.part_nb                1
   ub_sync_transaction_item.part_total_nb          1

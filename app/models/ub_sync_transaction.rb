@@ -49,28 +49,65 @@ class UbSyncTransaction < ActiveRecord::Base
       document = UbDocument.new(:uuid => ub_document_uuid)
     end
 
-    item_processed = []
+    # Open database transaction
+    UbDocument.transaction do
+      item_processed = []
+      item_ub_document = nil
+      media_uuids = []
+      data = nil
 
-    tempfile = nil
-    items.find(:all, :order => "path ASC, part_nb ASC").each do |item|
-      next if item_processed.include?([item.path, item.part_nb])
+      items.find(:all, :order => "path ASC, part_nb ASC").each do |item|
+        next if item_processed.include?([item.path, item.part_nb])
 
-      if item.part_total_nb > 1
-        tempfile = Tempfile.new(item.path) if item.part_nb == 1
-        tempfile << item.data.read
+        # Merge multi-part items
+        if item.part_total_nb > 1
+          data = Tempfile.new(item.path) if item.part_nb == 1
+          data << item.data.read
 
+          if item.part_nb == item.part_total_nb
+            data.rewind
+            if Digest::MD5.file(data.path).hexdigest != item.item_check_sum
+              errors.add(:items, "Item '#{item.path}' parts can't be merged")
+              return false
+            end
+          end
+        else
+          data = {:path => item.path, :storage_config => item.storage_config}
+        end
+
+        # Create media when last item
         if item.part_nb == item.part_total_nb
-          tempfile.rewind
-          if Digest::MD5.file(tempfile.path).hexdigest != item.item_check_sum
-            errors.add(:items, "Item '#{item.path}' parts can't be merged")
-            return false
+          if item.path =~ /\.ub$/
+            item_ub_document = item
+          else
+
+            # Parse UUID, and return error if none
+            begin
+              item_uuid = item.path.match(UUID_FORMAT_REGEX)[0]
+            rescue
+              errors.add(:items, "Item '#{item.path}' don't have UUID in path")
+              return false
+            end
+
+            media = UbMedia.find_or_initialize_by_uuid(item_uuid)
+            media.attributes = {
+              :path => File.join("documents", document.uuid, item.path),
+              :data => data
+            }
+
+            unless media.save
+              errors.add(:items, "Item '#{item.path}' can't be saved has media: #{media.errors}")
+              return false
+            end
+            media_uuids << media.uuid
           end
         end
-      else
-#        tempfile = item.data
+
+        item_processed << [item.path, item.part_nb]
       end
 
-      item_processed << [item.path, item.part_nb]
+#      document.update_from_ub(item_ub_document.data, media_uuids)
+#      document.save
     end
 
     true
