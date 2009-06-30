@@ -120,7 +120,7 @@ class UbSyncTransaction < ActiveRecord::Base
         )
       end
 
-      # Have UbDocument descroptot (.ub file) ?
+      # Have UbDocument desc (.ub file) ?
       if item_ub_document.nil?
         errors.add(:items, "Transaction don't have Uniboard Document descrition file")
         return false

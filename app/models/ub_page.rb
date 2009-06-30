@@ -26,10 +26,6 @@ class UbPage < ActiveRecord::Base
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
-#  def config
-#    UbDocument.config
-#  end
-
   def url(format = "ub_page/svg")
     page_resource = media.get_resource(format, nil)
     raise "No Media found for page #{self.uuid} in format #{format}" if page_resource == nil
@@ -127,19 +123,5 @@ class UbPage < ActiveRecord::Base
       a_page_element.mark_for_destruction
     end
   end
-
-
-  # Storage
-#  def after_initialize
-#    begin
-#      require "storage/#{config.storage}"
-#    rescue
-#      logger.error "Storage '#{config.storage}' can't be loaded, fallback to 'filesystem' storage"
-#      require 'storage/filesystem'
-#    end
-#
-#    @storage_module = Storage.const_get(config.storage.to_s.capitalize).const_get('UbPage')
-#    self.extend(@storage_module)
-#  end
 
 end
