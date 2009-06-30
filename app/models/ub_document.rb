@@ -21,10 +21,6 @@ class UbDocument < ActiveRecord::Base
 
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
-#  before_update :increment_version
-#  before_save :save_payload
-#  after_destroy :destroy_payload
-
   class << self
 
     # Add find option named with_deleted. This option can be set to true if you
@@ -140,9 +136,6 @@ class UbDocument < ActiveRecord::Base
       pages.each do |page|
         page.destroy
       end
-
-      # TODO: New implementaion
-#      destroy_payload
     end
 
     freeze
@@ -173,17 +166,5 @@ class UbDocument < ActiveRecord::Base
 
   def increment_version
     self.version += 1
-  end
-
-  # Validations
-  def validate
-    # TODO: Create similar validation in new implementation
-#    errors.add('version', "have already changed on server")  if @error_on_version
-#    errors.add('payload', "has invalid format") if @error_on_payload
-#    errors.add('uuid', "have changed") if !uuid_was.blank? and uuid_changed?
-#    if (@document_zip_path && errors.length > 0)
-#        FileUtils.remove_dir(@document_zip_path, true)
-#        @document_zip_path = nil
-#    end
   end
 end
