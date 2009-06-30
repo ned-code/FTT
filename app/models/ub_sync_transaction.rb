@@ -72,13 +72,15 @@ class UbSyncTransaction < ActiveRecord::Base
             end
           end
         else
-          data = {:path => item.path, :storage_config => item.storage_config}
+          data = {:path => item.storage_path, :storage_config => item.storage_config}
         end
 
         # Create media when last item
         if item.part_nb == item.part_total_nb
           if item.path =~ /\.ub$/
             item_ub_document = item
+          elsif item.path =~ /\.thumbnail\.\w{3,4}$/
+            # TODO
           else
 
             # Parse UUID, and return error if none
@@ -111,6 +113,7 @@ class UbSyncTransaction < ActiveRecord::Base
         errors.add(:items, "Transaction don't have Uniboard Document descrition file")
         return false
       else
+
         document.update_with_ub(item_ub_document.data, media_uuids)
         document.save
       end

@@ -16,6 +16,10 @@ STORAGE_MOVE_PARAMS   = [STORAGE_VALID_PATH, 'new/path/name/to/file']
 #
 shared_examples_for "storage interface" do
 
+  it "'identity_tring' method should equal to 'options' YAML dump" do
+    @storage.identity_string.should == YAML::dump(@storage.options)
+  end
+
   it "'put' method should be implemented" do
     lambda { @storage.put(*STORAGE_PUT_PARAMS) }.should_not raise_error(NotImplementedError, NOT_IMPLEMENTED_ERROR_MESSAGE_REGEX)
   end

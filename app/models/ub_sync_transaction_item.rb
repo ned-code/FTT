@@ -9,11 +9,15 @@ class UbSyncTransactionItem < ActiveRecord::Base
   before_save :save_data_on_storage
 
   def data
-    storage.get(path_with_part)
+    storage.get(storage_path)
   end
 
   def data=(data)
     @tempfile = data
+  end
+
+  def storage_path
+    File.join('sync', transaction.uuid, path + (part_total_nb > 1 ? ".part#{part_nb}" : ''))
   end
 
   protected
@@ -31,11 +35,7 @@ class UbSyncTransactionItem < ActiveRecord::Base
   end
 
   def save_data_on_storage
-    storage.put(path_with_part, @tempfile) if @tempfile
-  end
-
-  def path_with_part
-    File.join('sync', transaction.uuid, path + (part_total_nb > 1 ? ".part#{part_nb}" : ''))
+    storage.put(storage_path, @tempfile) if @tempfile
   end
 
   def storage

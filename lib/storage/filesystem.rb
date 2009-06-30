@@ -7,9 +7,10 @@ module Storage
     attr_reader :basedir
 
     def initialize(options)
-      super
-      @basedir = options[:basedir] || default_config['basedir'] || raise(ArgumentError, 'Filesystem basedir is not present in config Hash')
-      @public_host_root_url = options[:public_host_root_url] || default_config['public_host_root_url'] || raise(ArgumentError, 'Filesystem public_host_root_url is not present in config Hash')
+      @basedir = options[:basedir] ||= default_config['basedir'] || raise(ArgumentError, 'Filesystem basedir is not present in config Hash')
+      @public_host_root_url = options[:public_host_root_url] ||= default_config['public_host_root_url'] || raise(ArgumentError, 'Filesystem public_host_root_url is not present in config Hash')
+
+      super(options)
 
       RAILS_DEFAULT_LOGGER.debug "base dir #{@basedir}"
       RAILS_DEFAULT_LOGGER.debug "public host root URL #{@public_host_root_url}"
@@ -30,7 +31,7 @@ module Storage
             data_identity_string = data[:identity_string] || data[:storage_config]
 
             if identity_string == data_identity_string
-              move(data_path, path)
+              return move(data_path, path)
             else
               file << Storage::storage(data_identity_string).get(data_path).read
             end
@@ -109,6 +110,7 @@ module Storage
         File.rename(full_path(path_from), full_path(path_to))
         rm_empty_directories(path_from)
       rescue => e
+        puts e.message
         rm_empty_directories(path_to)
         logger.error "Error when moving file '#{path_from}' to '#{path_to}' in Storage::Filesystem: #{e.message}\n\n#{e.backtrace}"
         return false

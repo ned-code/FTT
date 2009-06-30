@@ -30,11 +30,14 @@ module Storage
   end
 
   class Base
-    attr_reader :options, :identity_string
+    attr_reader :options
 
     def initialize(options)
-      @identity_string = YAML.dump(options)
       @options = options
+    end
+
+    def identity_string
+      YAML.dump(options)
     end
 
     # Return identiy string (wshich can be passed as argument to Storage.storage)
