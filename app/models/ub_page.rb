@@ -83,6 +83,11 @@ class UbPage < ActiveRecord::Base
   # Parse the svg file that describe the page and create all corresponding page element. This method assume that
   # medias used by the page exists. If some medias are missing an exception is raised.
   def parse_svg_page(svg_stream)
+    unless svg_stream.is_a? String
+      svg_stream.rewind
+      svg_stream = svg_stream.read
+    end
+
     # Get the UUID
     page_dom = REXML::Document.new(svg_stream)
     self.uuid = page_dom.root.attribute('uuid', 'ub')

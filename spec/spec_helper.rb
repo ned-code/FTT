@@ -132,21 +132,39 @@ def fixture_ubz(type, uuid = nil)
       next if USED_UBZ_FIXTURES.include?(target_uuid)
 
       USED_UBZ_FIXTURES << target_uuid
-      return target
+      return Dir[File.join(target, "**", "**")].select{|file| File.file?(file)}
     end
   else
     target = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', type.to_s, uuid)
 
     if File.exists?(target)
       USED_UBZ_FIXTURES << uuid
-      return target
+      return Dir[File.join(target, "**", "**")].select{|file| File.file?(file)}
     end
   end
 
   USED_UBZ_FIXTURES << uuid ||= UUID.generate
   UBZ_FIXTURES[type.to_sym] << target = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', type.to_s, uuid)
 
-  FileUtils.cp_r source, target
+  Dir[File.join(source, "**", "**")].each do |source_file|
+    next if File.directory?(source_file)
 
-  Dir[File.join(target, "**")].select{|file| File.file?(file)}
+    target_file = source_file.gsub(source, target)
+    FileUtils.mkdir_p File.dirname(target_file)
+
+    if target_file =~ /(\.ub|\.rdf)$/
+      target_file = target_file.gsub(UUID_FORMAT_REGEX, uuid)
+    end
+
+    FileUtils.cp_r source_file, target_file
+  end
+
+  Dir[File.join(target, "**", "**")].select{|file| File.file?(file)}
+end
+
+
+def get_content_type_from_filename(filename)
+  MIME::Types.of(File.extname(filename)).first.content_type
+rescue
+  nil
 end
