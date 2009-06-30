@@ -94,7 +94,7 @@ class UbDocument < ActiveRecord::Base
       page.mark_for_destruction
       @pages_to_delete_on_storage << page.uuid
     end
-    increment_version
+    increment_version if self.changed?
   end
 
   def to_xml(options = {})

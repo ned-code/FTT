@@ -108,7 +108,7 @@ describe UbDocument do
     before(:each) do
       rdf_media = Factory.create(:ub_media)
       rdf_path = "#{@document.uuid}/metadata.rdf"
-      @storage.put(rdf_path, File.open(fixture_file("ub_document/default_rdf.rdf")))
+      Storage::storage(rdf_media.storage_config).put(rdf_path, File.open(fixture_file("ub_document/default_rdf.rdf")))
       rdf_media.uuid = @document.uuid
       rdf_media.path = rdf_path
       rdf_media.storage_config = @storage.to_s
@@ -123,6 +123,17 @@ describe UbDocument do
       @document.update_with_ub(ub_file, [@document.uuid])
       @document.title.should == "Document title"
       @document.version.should == previous_version + 1
+    end
+
+    it 'should not update metadata and increment version if metadata are not modified modified' do
+      @document.pages.build(:uuid => "00000000-0000-0000-0000-000000000001")
+      @document.title = "Original Title"
+      @document.save
+      previous_version = @document.version
+      ub_file = File.open(fixture_file(File.join("ub_document", "default_ub.ub")))
+      @document.update_with_ub(ub_file, [])
+      @document.title.should == "Original Title"
+      @document.version.should == previous_version
     end
   end
 
