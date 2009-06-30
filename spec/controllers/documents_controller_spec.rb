@@ -348,8 +348,19 @@ describe DocumentsController do
       end
 
       it "'POST /documents/:uuid/push' should commit complete transaction" do
-        pending
         @transaction = Factory.create(:ub_sync_transaction_complete, :user => @current_user)
+        fixture_ubz(:valid).each do |path|
+          @transaction.items.create!(
+            :path => path.gsub(/.*?#{UUID_FORMAT_REGEX}\//, ''),
+            :content_type => get_content_type_from_filename(path) || "application/octet+stream",
+            :data => File.open(path),
+            :part_nb => 1,
+            :part_total_nb => 1,
+            :part_check_sum => Digest::MD5.file(path).hexdigest,
+            :item_check_sum => Digest::MD5.file(path).hexdigest,
+            :storage_config => {:name => :filesystem}
+          )
+        end
 
         request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
         request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
