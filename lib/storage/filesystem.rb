@@ -110,7 +110,6 @@ module Storage
         File.rename(full_path(path_from), full_path(path_to))
         rm_empty_directories(path_from)
       rescue => e
-        puts e.message
         rm_empty_directories(path_to)
         logger.error "Error when moving file '#{path_from}' to '#{path_to}' in Storage::Filesystem: #{e.message}\n\n#{e.backtrace}"
         return false

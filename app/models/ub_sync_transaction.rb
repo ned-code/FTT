@@ -54,6 +54,7 @@ class UbSyncTransaction < ActiveRecord::Base
       item_processed = []
       item_ub_document = nil
       media_uuids = []
+      page_thumbnails = []
       data = nil
 
       items.find(:all, :order => "path ASC, part_nb ASC").each do |item|
@@ -80,7 +81,7 @@ class UbSyncTransaction < ActiveRecord::Base
           if item.path =~ /\.ub$/
             item_ub_document = item
           elsif item.path =~ /\.thumbnail\.\w{3,4}$/
-            # TODO
+            page_thumbnails << item
           else
 
             # Parse UUID, and return error if none
@@ -109,13 +110,28 @@ class UbSyncTransaction < ActiveRecord::Base
         item_processed << [item.path, item.part_nb]
       end
 
+      # Create media convertion with desktop thumbnail
+      page_thumbnails.each do |item|
+        page_media = UbMedia.find_by_uuid(item.path.match(UUID_FORMAT_REGEX)[0])
+        page_media.conversions.create(
+          :media_type => 'ub_page/thumbnail+desktop',
+          :path => page_media.path.match(/.*\//)[0] + item.path,
+          :data => {:path => item.storage_path, :storage_config => item.storage_config}
+        )
+      end
+
+      # Have UbDocument descroptot (.ub file) ?
       if item_ub_document.nil?
         errors.add(:items, "Transaction don't have Uniboard Document descrition file")
         return false
       else
 
+        # Update from .ub and save document
         document.update_with_ub(item_ub_document.data, media_uuids)
-        document.save
+        unless document.save
+          errors.add(:items, "Document can't be saved")
+          return false
+        end
       end
     end
 

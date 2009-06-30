@@ -90,7 +90,7 @@ class UbPage < ActiveRecord::Base
 
     # Get the UUID
     page_dom = REXML::Document.new(svg_stream)
-    self.uuid = page_dom.root.attribute('uuid', 'ub')
+    self.uuid ||= page_dom.root.attribute('uuid', 'ub')
 
     # create a map that map media uuid with corresponding page element. It will be used to optimize
     # the loop that search page element to update.
