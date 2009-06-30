@@ -55,8 +55,8 @@ Spec::Runner.configure do |config|
   end
 
   config.after(:each) do
-    # Remove files created by 'fixture_file' method
-    Dir[File.join(RAILS_ROOT, 'spec', 'tmp', 'fixtures', '*')].each do |file|
+    # Remove files in spec tmp
+    Dir[File.join(RAILS_ROOT, 'spec', 'tmp', '*')].each do |file|
       FileUtils.rm_rf file
     end
 
