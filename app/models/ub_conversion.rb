@@ -8,12 +8,31 @@ class UbConversion < ActiveRecord::Base
 
   belongs_to :media, :class_name => 'UbMedia', :foreign_key => 'media_id'
 
+  before_save :save_data_on_storage
+
+  def data
+    storage.get(path)
+  end
+
+  def data=(data)
+    @tempfile = data
+  end
   
   def public_url
-    Storage::storage(self.media.storage_config).public_url(self.path)
+    storage.public_url(self.path)
   end
 
   def private_url
-    Storage::storage(self.media.storage_config).private_url(self.path)
+    storage.private_url(self.path)
+  end
+
+  private
+
+  def save_data_on_storage
+    storage.put(path, @tempfile) if @tempfile
+  end
+
+  def storage
+    Storage::storage(media.storage_config)
   end
 end

@@ -1,3 +1,4 @@
+require 'conversion'
 
 class UbMediaMissingError < StandardError; end
 # Attributes
@@ -24,7 +25,7 @@ class UbMedia < ActiveRecord::Base
     @tempfile = data
   end
 
-  def get_resource(p_type, p_params)
+  def get_resource(p_type, p_params = nil)
 
     if (p_params.is_a?(Hash))
       p_params = p_params.to_yaml
@@ -49,9 +50,14 @@ class UbMedia < ActiveRecord::Base
     converted_file = ConversionService::convert_media(self, p_type, options)
     raise "Conversion of media #{self.uuid} to type #{p_type} failed." if converted_file.nil?
     destination_file_path = self.path.match(/.*\//)[0] + converted_file
-    Storage::storage(self.storage_config).put(destination_file_path, File.open(File.join(options[:destination_path], converted_file)) )
-    resource = conversions.build(:media_type => p_type, :path => destination_file_path, :parameters => p_params)
-    save!
+    
+    resource = conversions.create(
+      :media_type => p_type,
+      :path => destination_file_path,
+      :data => File.open(File.join(options[:destination_path], converted_file)),
+      :parameters => p_params
+    )
+
     RAILS_DEFAULT_LOGGER.debug "remove tmp conversion #{File.join(tmp_dir, converted_file)}"
     FileUtils.remove_file(File.join(tmp_dir, converted_file))
     FileUtils.remove_dir(tmp_dir)

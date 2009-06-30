@@ -27,19 +27,6 @@ class DocumentsController < ApplicationController
     end
   end
 
-  def create
-    @document = UbDocument.new(params[:document])
-
-    respond_to do |format|
-      if @document.save
-        @document.accepts_role 'owner', current_user
-        format.xml { render :xml => @document.to_xml }
-      else
-        format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
   def push
     sync_action = request.headers["UB_SYNC_ACTION"] || 'continue'
 
@@ -106,22 +93,6 @@ class DocumentsController < ApplicationController
     else
       respond_to do |format|
         format.xml { head :not_found }
-      end
-    end
-  end
-
-  def update
-    @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
-
-    respond_to do |format|
-      if @document && permit?('owner of document')
-        if @document.update_attributes(params[:document])
-          format.xml { render :xml => @document.to_xml }
-        else
-          format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
-        end
-      else
-        format.xml { head :forbidden }
       end
     end
   end
