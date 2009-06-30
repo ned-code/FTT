@@ -111,13 +111,31 @@ class UbDocument < ActiveRecord::Base
       'version' => version,
       'created-at' => created_at.xmlschema,
       'updated-at' => updated_at.xmlschema) do |xml_document|
-      xml_document.pages do |xml_pages|
-        pages.each do |page|
-          xml_pages.page((options[:page_url] ? page.url : ''),
-            'uuid' => page.uuid,
-            'version' => page.version,
-            'created-at' => page.created_at.xmlschema,
-            'updated-at' => page.updated_at.xmlschema)
+      
+      #Add metadata rdf
+      xml_document.media((options[:page_url] ? self.media.public_url : ''),
+        'uuid' => self.media.uuid,
+        'version' => self.media.version,
+        'created-at' => self.media.created_at.xmlschema,
+        'updated-at' => self.media.updated_at.xmlschema,
+        'file-name' => self.media.path)
+      self.pages.each do |a_page|
+        # add the page media
+        xml_document.media((options[:page_url] ? a_page.media.public_url : ''),
+          'uuid' => a_page.media.uuid,
+          'version' => a_page.media.version,
+          'created-at' => a_page.media.created_at.xmlschema,
+          'updated-at' => a_page.media.updated_at.xmlschema,
+          'file-name' => a_page.media.path,
+          'page-number' => a_page.position)
+        # add all media used by the page
+        a_page.page_elements.each do |a_page_element|
+          xml_document.media((options[:page_url] ? a_page_element.media.public_url : ''),
+            'uuid' => a_page_element.media.uuid,
+            'version' => a_page_element.media.version,
+            'created-at' => a_page_element.media.created_at.xmlschema,
+            'updated-at' => a_page_element.media.updated_at.xmlschema,
+            'file-name' => a_page_element.media.path)
         end
       end
     end
