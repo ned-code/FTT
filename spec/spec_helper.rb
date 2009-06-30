@@ -116,7 +116,7 @@ def fixture_file(source)
   source !~ /^\// ? File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', source) : source
 end
 
-def fixture_ubz(type, uuid = nil)
+def fixture_ubz(type, uuid = nil, page_uuids = [])
   UBZ_FIXTURES[type.to_sym] ||= []
   source = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz_source', type.to_s)
 
@@ -140,6 +140,7 @@ def fixture_ubz(type, uuid = nil)
   USED_UBZ_FIXTURES << uuid ||= UUID.generate
   UBZ_FIXTURES[type.to_sym] << target = File.join(RAILS_ROOT, 'spec', 'fixtures', 'files', 'ubz', type.to_s, uuid)
 
+  ub_file = nil
   Dir[File.join(source, "**", "**")].each do |source_file|
     next if File.directory?(source_file)
 
@@ -148,9 +149,22 @@ def fixture_ubz(type, uuid = nil)
 
     if target_file =~ /(\.ub|\.rdf)$/
       target_file = target_file.gsub(UUID_FORMAT_REGEX, uuid)
+      ub_file = target_file
+    elsif target_file =~ /page(\d{4})-\d{4}-\d{4}-\d{4}-\d{12}/
+      page_position = $1.to_i - 1
+      page_uuid = page_uuids[page_position] ||= UUID.generate
+      target_file = target_file.gsub(/page\d{4}-\d{4}-\d{4}-\d{4}-\d{12}/, page_uuid)
     end
 
     FileUtils.cp_r source_file, target_file
+  end
+
+  content = File.read(ub_file)
+  page_uuids.size.times do |i|
+    content.gsub!(("page%04d-0000-0000-0000-000000000000" % (i + 1).to_s), page_uuids[i])
+  end
+  File.open(ub_file, 'w') do |file|
+    file << content
   end
 
   Dir[File.join(target, "**", "**")].select{|file| File.file?(file)}
