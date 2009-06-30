@@ -45,16 +45,15 @@ class DocumentsController < ApplicationController
         :ub_client_uuid => request.headers["UB_CLIENT_UUID"],
         :user_id => current_user.id
       })
+      @transaction.destroy if @transaction
 
       # Create new transaction
-      unless @transaction
-        @transaction = UbSyncTransaction.new(
-          :uuid => UUID.generate,
-          :ub_document_uuid => params[:id],
-          :ub_client_uuid => request.headers["UB_CLIENT_UUID"],
-          :user => current_user
-        )
-      end
+      @transaction = UbSyncTransaction.new(
+        :uuid => UUID.generate,
+        :ub_document_uuid => params[:id],
+        :ub_client_uuid => request.headers["UB_CLIENT_UUID"],
+        :user => current_user
+      )
     end
 
     # Transaction action

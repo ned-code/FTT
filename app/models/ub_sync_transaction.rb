@@ -40,8 +40,8 @@ class UbSyncTransaction < ActiveRecord::Base
   end
 
   def commit
-    return false unless complete?
     return false unless save
+    return false unless complete?
 
     if UbDocument.exists?(:uuid => ub_document_uuid)
       document = UbDocument.find(:first, :conditions => {:uuid => ub_document_uuid})

@@ -4,16 +4,22 @@ require 'fileutils'
 module Storage
   class Filesystem < Storage::Base
 
-    attr_reader :basedir
-
     def initialize(options)
-      @basedir = options[:basedir] ||= default_config['basedir'] || raise(ArgumentError, 'Filesystem basedir is not present in config Hash')
-      @public_host_root_url = options[:public_host_root_url] ||= default_config['public_host_root_url'] || raise(ArgumentError, 'Filesystem public_host_root_url is not present in config Hash')
+      options[:basedir] ||= default_config['basedir'] || raise(ArgumentError, 'Filesystem basedir is not present in config Hash')
+      options[:public_host_root_url] ||= default_config['public_host_root_url'] || raise(ArgumentError, 'Filesystem public_host_root_url is not present in config Hash')
 
       super(options)
 
-      RAILS_DEFAULT_LOGGER.debug "base dir #{@basedir}"
-      RAILS_DEFAULT_LOGGER.debug "public host root URL #{@public_host_root_url}"
+      RAILS_DEFAULT_LOGGER.debug "base dir #{basedir}"
+      RAILS_DEFAULT_LOGGER.debug "public host root URL #{public_host_root_url}"
+    end
+
+    def basedir
+      options[:basedir]
+    end
+
+    def public_host_root_url
+      options[:public_host_root_url]
     end
 
     def put(path, data = '')
@@ -77,7 +83,7 @@ module Storage
 
     def public_url(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
-      return @public_host_root_url + "/" + path
+      return public_host_root_url + "/" + path
     end
 
     def private_url(path)
