@@ -11,6 +11,11 @@ class UbMediaMissingError < StandardError; end
 #
 class UbMedia < ActiveRecord::Base
 
+  UB_THUMBNAIL_DESKTOP_TYPE = 'application/vnd.mnemis-uniboard-thumbnail'
+  UB_PAGE_TYPE = 'application/vnd.mnemis-uniboard-page'
+  UB_DRAWING_TYPE = 'application/vnd.mnemis-uniboard-drawing'
+  UB_DOCUMENT_TYPE = 'application/vnd.mnemis-uniboard-document'
+
   belongs_to :page_element, :class_name => 'UbPageElement', :foreign_key => 'page_element_id'
   has_many :conversions, :class_name => 'UbConversion', :foreign_key => 'media_id'
 

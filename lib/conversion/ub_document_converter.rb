@@ -5,7 +5,7 @@ module ConversionService
   class UbDocumentConverter < ConversionService::Converter
 
     def supported_source_types
-      ["ub_document/ub"]
+      ['application/vnd.mnemis-uniboard-document']
     end
 
     def supported_destination_type
@@ -20,7 +20,7 @@ module ConversionService
     # * :destination_path a path where to save conversion
     def convert_file(file, source_type, destination_type, options)
       destination_file = nil
-      if (source_type == "ub_document/ub" && destination_type == supported_destination_type[0])
+      if (source_type == supported_source_types[0] && destination_type == supported_destination_type[0])
         html_content = convert_ub_document_to_html(options[:document_uuid], File.open(file), options[:document_rdf_stream])
         destination_file = "index.xhtml"
       else

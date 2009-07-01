@@ -24,7 +24,7 @@ describe ConversionService::UbPageConverter do
       options[:document_uuid] = "00000000-0000-0000-0000-0000000"
       options[:document_rdf_stream] = File.open(@rdf_file)
       options[:destination_path] = File.join(@converted_file_path)
-      page_file_name = ConversionService::convert_file(@ub_file, "ub_document/ub", "application/xhtml+xml", options)
+      page_file_name = ConversionService::convert_file(@ub_file, UbMedia::UB_DOCUMENT_TYPE, "application/xhtml+xml", options)
       @converted_file = File.join(options[:destination_path], page_file_name)
       index_html = File.open(@converted_file).read()
       expected_result = File.open(fixture_file(File.join('conversion', 'index.html'))).read
@@ -50,7 +50,7 @@ describe ConversionService::UbPageConverter do
       @page_media = UbMedia.new()
       @storage.put('0ade677d-8b59-44c7-9cdb-30be681d4667/page001.svg', File.open(@page_file))
       @page_media.uuid = '0ade677d-8b59-44c7-9cdb-30be681d4667'
-      @page_media.media_type = 'ub_page/svg'
+      @page_media.media_type = UbMedia::UB_PAGE_TYPE
       @page_media.path = '0ade677d-8b59-44c7-9cdb-30be681d4667/page001.svg'
       @page_media.storage_config = @storage.to_s
       @page_media.save

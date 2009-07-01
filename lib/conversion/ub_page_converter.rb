@@ -5,11 +5,11 @@ module ConversionService
   class UbPageConverter < ConversionService::Converter
 
     def supported_source_types
-      ["ub_page/svg"]
+      ['application/vnd.mnemis-uniboard-page']
     end
 
     def supported_destination_type
-      ["application/xhtml+xml", "ub_drawing/svg"]
+      ["application/xhtml+xml", 'application/vnd.mnemis-uniboard-drawing']
     end
 
     # convert ub_page and ub_document to html format
@@ -20,11 +20,11 @@ module ConversionService
     # * :destination_path a path where to save conversion
     def convert_file(file, source_type, destination_type, options)
       destination_file = nil
-      if (source_type == "ub_page/svg" && destination_type == supported_destination_type[0])
+      if (source_type == supported_source_types[0] && destination_type == supported_destination_type[0])
         file_content = convert_svg_page_to_html(options[:page_uuid], File.open(file))
         page_base_name = File.basename(file).match(/.*\./)[0]
         destination_file = "#{page_base_name}xhtml"
-      elsif (source_type == "ub_page/svg" && destination_type == supported_destination_type[1])
+      elsif (source_type == supported_source_types[0] && destination_type == supported_destination_type[1])
         file_content = convert_svg_page_to_svg_drawing(File.open(file))
         page_base_name = File.basename(file).match(/.*\./)[0]
         destination_file = "#{page_base_name}drawing.svg"
@@ -113,7 +113,7 @@ module ConversionService
             html_page_builder.div("id" => "ub_page_drawing", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%") {
               #get drawing object for current page
               page_media = UbMedia.find_by_uuid(page_uuid)
-              drawing_resource = page_media.get_resource("ub_drawing/svg", {})
+              drawing_resource = page_media.get_resource('application/vnd.mnemis-uniboard-drawing', {})
               html_page_builder.object("type" => "image/svg+xml","data" => drawing_resource.public_url,
                 "style" => "position: absolute; top: 0px; left: 0px; width: " + page_width + "px; height: " + page_height + "px")
             }

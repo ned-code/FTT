@@ -212,7 +212,7 @@ describe UbSyncTransaction do
     document  = UbDocument.find_by_uuid(@transaction.ub_document_uuid)
     document.should_not be_nil
     document.should have(3).pages
-    document.pages.first.media.get_resource('ub_page/thumbnail+desktop').should_not be_nil
+    document.pages.first.media.get_resource(UbMedia::UB_THUMBNAIL_DESKTOP_TYPE).should_not be_nil
   end
 
   it "should have xml format (with page url)" do

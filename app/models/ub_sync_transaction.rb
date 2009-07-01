@@ -114,7 +114,7 @@ class UbSyncTransaction < ActiveRecord::Base
       page_thumbnails.each do |item|
         page_media = UbMedia.find_by_uuid(item.path.match(UUID_FORMAT_REGEX)[0])
         page_media.conversions.create(
-          :media_type => 'ub_page/thumbnail+desktop',
+          :media_type =>  UbMedia::UB_THUMBNAIL_DESKTOP_TYPE,  #'ub_page/thumbnail+desktop',
           :path => page_media.path.match(/.*\//)[0] + item.path,
           :data => {:path => item.storage_path, :storage_config => item.storage_config}
         )
