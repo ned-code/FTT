@@ -17,7 +17,7 @@ class UbMedia < ActiveRecord::Base
   UB_DOCUMENT_TYPE = 'application/vnd.mnemis-uniboard-document'
 
   belongs_to :page_element, :class_name => 'UbPageElement', :foreign_key => 'page_element_id'
-  has_many :conversions, :class_name => 'UbConversion', :foreign_key => 'media_id'
+  has_many :conversions, :autosave => true, :class_name => 'UbConversion', :foreign_key => 'media_id'
 
   before_validation :set_storage_config
   before_save :save_data_on_storage
