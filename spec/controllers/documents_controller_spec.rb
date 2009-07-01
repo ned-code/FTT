@@ -43,15 +43,14 @@ describe DocumentsController do
 
         before(:each) do
 
-          @page = Factory.create(:ub_page_with_doc)
-          @document = @page.document
+          @document = full_doc[:document]
           @document.accepts_role 'owner', @current_user
 
-          @document_deleted = Factory.create(:ub_document)
+          @document_deleted = full_doc('11111111-1234-1234-1234-123456789123')[:document]
           @document_deleted.accepts_role 'owner', @current_user
           @document_deleted.destroy
 
-          @document_not_owned = Factory.create(:ub_document)
+          @document_not_owned = full_doc('22222222-1234-1234-1234-123456789123')[:document]
           @document_not_owned.accepts_role 'owner', Factory.create(:user)
         end
 
@@ -399,8 +398,8 @@ describe DocumentsController do
       context 'with associated document' do
 
         before(:each) do
-          @page = Factory.create(:ub_page_with_doc)
-          @document = @page.document
+          @document_full_hash = full_doc
+          @document = @document_full_hash[:document]
           @document.accepts_role 'owner', @current_user
           @document_deleted = Factory.create(:ub_document)
           @document_deleted.accepts_role 'owner', @current_user
@@ -441,8 +440,8 @@ describe DocumentsController do
         end
 
         it "'GET /documents/:uuid' should return XML description of document" do
-          get :show, :id => @document.uuid
 
+          get :show, :id => @document.uuid
           response.should be_success
           response.should respond_with(:content_type => :xml)
 
@@ -454,11 +453,11 @@ describe DocumentsController do
             assigns(:document).updated_at.xmlschema
           ) do
             @document.pages.each do |page|
-              with_tag('page[uuid=?][version=?][created-at=?][updated-at=?]',
-                page.uuid,
-                page.version,
-                page.created_at.xmlschema,
-                page.updated_at.xmlschema
+              with_tag('media[uuid=?][version=?][created-at=?][updated-at=?]',
+                page.media.uuid,
+                page.media.version,
+                page.media.created_at.xmlschema,
+                page.media.updated_at.xmlschema
               )
             end
           end

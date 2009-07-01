@@ -7,8 +7,12 @@ describe UbDocument do
   before(:each) do
     @storage = Storage.storage(:name => :filesystem)
     @user = Factory.create(:user)
-    @document = Factory.create(:ub_document)
+    @document_full_hash = full_doc
+#    @document = Factory.create(:ub_document)
+    @document = @document_full_hash[:document]
     @document.accepts_role 'owner', @user
+
+
   end
 
   it('') { should allow_values_for(:uuid, '12345678-1234-1234-1234-123456789012') }
@@ -57,18 +61,17 @@ describe UbDocument do
         'updated-at' => @document.updated_at.xmlschema
       )
 
+      document_xml.root.should have(4).elements
       @document.pages.each do |page|
-        document_xml.root.should have(1).elements
-        document_xml.root.get_elements('pages').first.should have(@document.pages.count).elements
 
-        document_xml.root.get_elements('pages').first.each_element_with_attribute('uuid', page.uuid) do |page_element|
-          page_element.name.should == 'page'
-          page_element.attributes.to_hash.should include(
-            'version' => page.version.to_s,
-            'created-at' => page.created_at.xmlschema,
-            'updated-at' => page.updated_at.xmlschema
+        document_xml.root.each_element_with_attribute('uuid', page.uuid) do |media_element|
+          media_element.name.should == 'media'
+          media_element.attributes.to_hash.should include(
+            'version' => page.media.version.to_s,
+            'created-at' => page.media.created_at.xmlschema,
+            'updated-at' => page.media.updated_at.xmlschema
           )
-          page_element.text.should_not be_blank
+          media_element.text.should_not be_blank
         end
       end
     end
@@ -85,18 +88,17 @@ describe UbDocument do
         'updated-at' => @document.updated_at.xmlschema
       )
 
+      document_xml.root.should have(4).elements
       @document.pages.each do |page|
-        document_xml.root.should have(1).elements
-        document_xml.root.get_elements('pages').first.should have(@document.pages.count).elements
 
-        document_xml.root.get_elements('pages').first.each_element_with_attribute('uuid', page.uuid) do |page_element|
-          page_element.name.should == 'page'
-          page_element.attributes.to_hash.should include(
-            'version' => page.version.to_s,
-            'created-at' => page.created_at.xmlschema,
-            'updated-at' => page.updated_at.xmlschema
+        document_xml.root.each_element_with_attribute('uuid', page.uuid) do |media_element|
+          media_element.name.should == 'media'
+          media_element.attributes.to_hash.should include(
+            'version' => page.media.version.to_s,
+            'created-at' => page.media.created_at.xmlschema,
+            'updated-at' => page.media.updated_at.xmlschema
           )
-          page_element.text.should be_blank
+          media_element.text.should be_blank
         end
       end
     end
@@ -106,34 +108,25 @@ describe UbDocument do
   context 'update' do
 
     before(:each) do
-      rdf_media = Factory.create(:ub_media)
-      rdf_path = "#{@document.uuid}/metadata.rdf"
-      Storage::storage(rdf_media.storage_config).put(rdf_path, File.open(fixture_file("ub_document/default_rdf.rdf")))
-      rdf_media.uuid = @document.uuid
-      rdf_media.path = rdf_path
-      rdf_media.storage_config = @storage.to_s
-      rdf_media.save
+      @default_ub = @document_full_hash[:ub_file]
     end
 
     it 'should update metadata and increment version if metadata are modified' do
-      @document.pages.build(:uuid => "00000000-0000-0000-0000-000000000001")
-      @document.save
       previous_version = @document.version
-      ub_file = File.open(fixture_file(File.join("ub_document", "default_ub.ub")))
+      new_metadata = fixture_file('ub_document/default_rdf.rdf')
+      @document.media.data = File.open(new_metadata)
+      @document.media.save
+      ub_file = File.open(@default_ub)
       @document.update_with_ub(ub_file, [@document.uuid])
       @document.title.should == "Document title"
       @document.version.should == previous_version + 1
     end
 
     it 'should not update metadata and increment version if metadata are not modified modified' do
-      @document.pages.build(:uuid => "00000000-0000-0000-0000-000000000001")
-      @document.title = "Original Title"
-      @document.save
       previous_version = @document.version
-      ub_file = File.open(fixture_file(File.join("ub_document", "default_ub.ub")))
-      @document.update_with_ub(ub_file, [])
-      @document.title.should == "Original Title"
-      @document.version.should == previous_version
+      ub_file = File.open(@default_ub)
+      @document.update_with_ub(ub_file, [@document.uuid])
+      @document.version.should == previous_version + 1
     end
   end
 

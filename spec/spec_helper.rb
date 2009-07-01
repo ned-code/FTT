@@ -62,7 +62,7 @@ Spec::Runner.configure do |config|
 
     # Remove all keys on S3 test bucket (nothing processed if RightAws::S3 is mucked)
     # TODO: Make a method to clear all S3 storage
-#    Storage::S3::Configuration.config.bucket.clear
+    #    Storage::S3::Configuration.config.bucket.clear
 
     # Remove files created by filesystem storage system
     Dir[File.join(STORAGE_FILESYSTEM_BASEDIR, '*')].each do |file|
@@ -170,6 +170,49 @@ def fixture_ubz(type, uuid = nil, page_uuids = [])
   Dir[File.join(target, "**", "**")].select{|file| File.file?(file)}
 end
 
+def full_doc(doc_uuid = nil)
+  doc_uuid ||= '12345678-1324-1234-1234-123456789123'
+  page_1_uuid = UUID.generate
+  page_2_uuid = UUID.generate
+  page_3_uuid = UUID.generate
+  document_files = fixture_ubz(:valid, doc_uuid, [page_1_uuid, page_2_uuid, page_3_uuid])
+  document = Factory.create(:ub_document, :uuid => doc_uuid)
+  storage = Storage::storage({:name => :filesystem})
+  ub_file = nil
+  page_position = 1
+  thumbnails = []
+  document_files.each do |a_file|
+
+    if (File.basename(a_file) =~ /.*\.ub/)
+      ub_file = a_file
+    else
+      file_path = "#{doc_uuid}/#{File.basename(a_file)}"
+      if (File.basename(a_file) =~ /.*\.rdf/)
+        media = Factory.create(:ub_media, :media_type => UbMedia::UB_DOCUMENT_TYPE, :uuid => File.basename(a_file, 'rdf')[0..-2], :path => file_path, :storage_config => storage.to_s)
+        document.media = media
+      elsif (File.basename(a_file) =~ /.*\.svg/)
+        media = Factory.create(:ub_media, :media_type => UbMedia::UB_PAGE_TYPE, :uuid => File.basename(a_file, 'svg')[0..-2], :path => file_path, :storage_config => storage.to_s)
+        page = Factory.create(:ub_page, :uuid => File.basename(a_file, 'svg')[0..-2], :position => page_position)
+        page.media = media
+        document.pages << page
+        page_position += 1
+      elsif (File.basename(a_file) =~ /.*\.thumbnail.*/)
+        thumbnails << a_file
+      end
+      storage.put(file_path, File.open(a_file))
+    end
+    document.save
+  end
+  thumbnails.each do |thumbnail_file|
+    file_path = "#{doc_uuid}/#{File.basename(thumbnail_file)}"
+    conversion = Factory.create(:ub_conversion, :media_type => UbMedia::UB_THUMBNAIL_DESKTOP_TYPE, :path => file_path)
+    page_media = UbMedia.find_by_uuid(File.basename(thumbnail_file).match(UUID_FORMAT_REGEX)[0])
+    page_media.conversions << conversion
+    page_media.save
+  end
+  document = UbDocument.find_by_uuid(doc_uuid)
+  return {:ub_file => ub_file, :document => document}
+end
 
 def get_content_type_from_filename(filename)
   MIME::Types.of(File.extname(filename)).first.content_type
