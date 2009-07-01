@@ -49,6 +49,7 @@ class UbDocument < ActiveRecord::Base
 
   def update_with_ub(ub_stream, modified_medias)
 
+    @pages_to_delete_on_storage = []
     document_desc = REXML::Document.new(ub_stream)
     # First check version of document (optimistic locking).
     @error_on_version = true if !new_record? && version != document_desc.root.attribute(:version).value.to_i
@@ -67,7 +68,7 @@ class UbDocument < ActiveRecord::Base
     old_pages = pages.dup
     page_position = 0
     document_desc.root.each_element('pages/page') do |page_element|
-
+      
       page_uuid = page_element.text.match(UUID_FORMAT_REGEX)[0]
       page_position += 1
 
@@ -90,7 +91,7 @@ class UbDocument < ActiveRecord::Base
       page.mark_for_destruction
       @pages_to_delete_on_storage << page.uuid
     end
-    increment_version if self.changed?
+    increment_version if self.changed? || @pages_to_delete_on_storage.length || modified_medias.length
   end
 
   def to_xml(options = {})
