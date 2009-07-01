@@ -215,6 +215,32 @@ describe UbSyncTransaction do
     document.pages.first.media.get_resource(UbMedia::UB_THUMBNAIL_DESKTOP_TYPE).should_not be_nil
   end
 
+    it "should be commited with valid document transaction for existing document" do
+
+    full_doc(@transaction.ub_document_uuid )
+    fixture_ubz(:valid, @transaction.ub_document_uuid).each do |path|
+      @transaction.items.create!(
+        :path => path.gsub(/.*?#{UUID_FORMAT_REGEX}\//, ''),
+        :content_type => get_content_type_from_filename(path) || "application/octet+stream",
+        :data => File.open(path),
+        :part_nb => 1,
+        :part_total_nb => 1,
+        :part_check_sum => Digest::MD5.file(path).hexdigest,
+        :item_check_sum => Digest::MD5.file(path).hexdigest,
+        :storage_config => {:name => :filesystem}
+      )
+    end
+
+    @transaction.commit.should be_true
+    @transaction.should have(:no).error
+
+    document  = UbDocument.find_by_uuid(@transaction.ub_document_uuid)
+    document.should_not be_nil
+    document.should have(3).pages
+    document.pages.first.media.conversions.length.should == 1
+    document.pages.first.media.get_resource(UbMedia::UB_THUMBNAIL_DESKTOP_TYPE).should_not be_nil
+  end
+
   it "should have xml format (with page url)" do
     transaction_xml = REXML::Document.new(@transaction.to_xml)
 
