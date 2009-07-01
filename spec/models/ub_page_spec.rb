@@ -14,7 +14,7 @@ describe UbPage do
   context 'recently created' do
 
     it 'should have its version to 1' do
-      page = Factory.build(:ub_page)
+      page = Factory.build(:ub_page_with_doc)
 
       page.should be_valid
       page.should have(:no).errors
@@ -26,7 +26,7 @@ describe UbPage do
 
       ActiveRecord::Base.transaction do
 
-        page = Factory.build(:ub_page)
+        page = Factory.build(:ub_page_with_doc)
 
         image_media = Factory.build(:ub_media)
         image_media.uuid = UUID.new.generate
@@ -55,7 +55,7 @@ describe UbPage do
 
     before(:each) do
       @user = Factory.create(:user)
-      @page = Factory.create(:ub_page)
+      @page = Factory.create(:ub_page_with_doc)
       @document = @page.document
       @document.accepts_role 'owner', @user
     end
@@ -78,7 +78,7 @@ describe UbPage do
     end
 
     it 'should raise media missing exception when parsing svg file that refer missing media' do
-      page = Factory.build(:ub_page)
+      page = Factory.build(:ub_page_with_doc)
 
       image_media = Factory.build(:ub_media)
       image_media.uuid = UUID.new.generate
@@ -98,7 +98,7 @@ describe UbPage do
     end
 
     it 'should delete 1 page elements when parsing default svg_file' do
-      page = Factory.build(:ub_page)
+      page = Factory.build(:ub_page_with_doc)
 
       image_media = Factory.build(:ub_media)
       image_media.uuid = UUID.new.generate
@@ -131,7 +131,7 @@ describe UbPage do
 
     it 'should add 1 page elements when parsing default svg_file' do
 
-      page = Factory.build(:ub_page)
+      page = Factory.build(:ub_page_with_doc)
 
       image_media = Factory.build(:ub_media)
       image_media.uuid = UUID.new.generate
@@ -166,7 +166,7 @@ describe UbPage do
     before(:each) do
       @user = Factory.create(:user)
 
-      @page = Factory.create(:ub_page)
+      @page = Factory.create(:ub_page_with_doc)
       @document = @page.document
       @document.accepts_role 'owner', @user
 

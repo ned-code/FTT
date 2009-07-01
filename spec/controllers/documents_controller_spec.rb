@@ -43,7 +43,7 @@ describe DocumentsController do
 
         before(:each) do
 
-          @page = Factory.create(:ub_page)
+          @page = Factory.create(:ub_page_with_doc)
           @document = @page.document
           @document.accepts_role 'owner', @current_user
 
@@ -399,7 +399,7 @@ describe DocumentsController do
       context 'with associated document' do
 
         before(:each) do
-          @page = Factory.create(:ub_page)
+          @page = Factory.create(:ub_page_with_doc)
           @document = @page.document
           @document.accepts_role 'owner', @current_user
           @document_deleted = Factory.create(:ub_document)
