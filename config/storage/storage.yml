@@ -1,5 +1,5 @@
 development:
-  default: s3
+  default: filesystem
 
 test:
   default: filesystem
