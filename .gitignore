@@ -10,6 +10,7 @@ config/storage/s3.yml
 db/*.sqlite3
 coverage
 public/documents
+public/sync
 spec/fixtures/files/ubz/
 spec/output_document
 spec/tmp
