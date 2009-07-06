@@ -16,22 +16,26 @@ class DocumentsController < ApplicationController
     @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
     #TODO how to get server url without request object?
 #    @domain = "#{request.protocol}#{request.host_with_port}"
-    respond_to do |format|
-      if @document && permit?('owner of document')
-        format.html
-        format.xml { render :xml => @document.to_xml }
+respond_to do |format|
+      if @document
+        if permit?('owner of document')
+          format.html
+          format.xml { render :xml => @document.to_xml }
+        else
+          format.html { render_optional_error_file(:not_found) }
+          format.xml { head :forbidden }
+        end
       else
-        format.html { render_optional_error_file(:not_found) }
-        format.xml { head :forbidden }
+          format.html { render_optional_error_file(:not_found) }
+          format.xml { head :not_found }
       end
     end
   end
 
   def push
     sync_action = request.headers["UB_SYNC_ACTION"] || 'continue'
-
     # Retrive transaction with UUID
-    if (request.headers["UB_SYNC_TRANSACTION_UUID"])
+    if (request.headers["UB_SYNC_TRANSACTION_UUID"] && request.headers["UB_SYNC_TRANSACTION_UUID"] != '')
       @transaction = UbSyncTransaction.find(:first, :conditions => {
         :uuid => request.headers["UB_SYNC_TRANSACTION_UUID"],
         :ub_document_uuid => params[:id],
@@ -61,9 +65,18 @@ class DocumentsController < ApplicationController
 
       # Create item
       if request.headers["UB_SYNC_FILENAME"] && ['continue', 'commit'].include?(sync_action)
+        file_name = request.headers["UB_SYNC_FILENAME"]
+        content_type = 'application/unknown'
+        if (request.headers["UB_SYNC_CONTENT_TYPE"].nil? || request.headers["UB_SYNC_CONTENT_TYPE"] == '')
+          if (!MIME::Types.of(file_name).nil? && !MIME::Types.of(file_name).empty?)
+            content_type = MIME::Types.of(file_name).first.content_type
+          end
+        else
+          content_type = request.headers["UB_SYNC_CONTENT_TYPE"]
+        end
         @item = @transaction.items.build(
-          :path => request.headers["UB_SYNC_FILENAME"],
-          :content_type => request.headers["UB_SYNC_CONTENT_TYPE"],
+          :path => file_name,
+          :content_type => content_type,
           :part_nb => request.headers["UB_SYNC_PART_NB"],
           :part_total_nb => request.headers["UB_SYNC_PART_TOTAL_NB"],
           :part_check_sum => request.headers["UB_SYNC_PART_CHECK_SUM"],
@@ -82,7 +95,8 @@ class DocumentsController < ApplicationController
         elsif sync_action == 'continue' && @transaction.save
           format.xml { render :xml => @transaction }
         elsif sync_action == 'commit' && @transaction.commit
-          format.xml { render :xml => @transaction }
+          document = UbDocument.find_by_uuid(params[:id])
+          format.xml { render :xml => document.to_xml }
         else
           format.xml { render :xml => @transaction.errors, :status => :unprocessable_entity }
         end
@@ -116,7 +130,6 @@ class DocumentsController < ApplicationController
     UbDocument.delete_all
     Role.delete_all
     RolesUser.delete_all
-    Storage::S3::Configuration.config.bucket.clear
     User.all.each {|u| u.is_registered }
 
     respond_to do |format|

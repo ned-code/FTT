@@ -10,6 +10,8 @@ module Storage
 
       # Initialize connection
       connection(options[:connection_config])
+      # get default bucket if not defined
+      @options[:bucket] ||= default_config['bucket']
     end
 
     # Return a connection to s3
@@ -45,6 +47,7 @@ module Storage
 
           if identity_string == data_identity_string
             move(data_path, path)
+            return true
           else
             data = Storage::storage(data_identity_string).get(data_path)
           end
@@ -52,7 +55,7 @@ module Storage
           data.rewind
         end
         
-        key.put(data, 'public-read', 'content-type' => get_content_type_from_mime_types(path))
+        key.put(data, nil, 'content-type' => get_content_type_from_mime_types(path))
       rescue => e
         raise ArgumentError, "error on data: " + e.message
       end
@@ -64,7 +67,7 @@ module Storage
     def get(path, &block)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
       key = bucket.key(path)
-      return nil unless key.exist?
+      return nil unless key.exists?
       if block_given?
         Tempfile.open(File.basename(path)) do |tempfile|
           tempfile << key.data
@@ -84,7 +87,7 @@ module Storage
     def exist?(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
       key = bucket.key(path)
-      key.exist?
+      key.exists?
     end
 
     # Return public url for 'path' key (can be accessed worldwild)
@@ -103,7 +106,7 @@ module Storage
     def delete(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
       key = bucket.key(path)
-      return true unless key.exist?
+      return true unless key.exists?
       begin
         raise "File #{path} no deleted from s3 for unknown reason" unless key.delete
       rescue => e
@@ -121,7 +124,7 @@ module Storage
 
       begin
         key = bucket.key(path_from)
-        key.rename(path_from, path_to)
+        key.rename(path_to)
       rescue => e
         logger.error "Error when moving file '#{path_from}' to '#{path_to}' in Storage::S3: #{e.message}\n\n#{e.backtrace}"
         return false

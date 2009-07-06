@@ -18,16 +18,16 @@ com.mnemis.wb.model.WBPage = function(pageBodyElement)
 		}
 	);
 
-    var documentDrawing = $(this.documentRootNode).find("#ub_page_drawing").children().children();
-    documentDrawing.each(function()
-        {
-            var polygonObject = {
-                points: $(this).attr("points"),
-                domNode: this
-            };
-            that.drawing.polygon.push(polygonObject);
-        }
-    );
+//    var documentDrawing = $(this.documentRootNode).find("#ub_page_drawing").children().children();
+//    documentDrawing.each(function()
+//        {
+//            var polygonObject = {
+//                points: $(this).attr("points"),
+//                domNode: this
+//            };
+//            that.drawing.polygon.push(polygonObject);
+//        }
+//    );
 }
 
 

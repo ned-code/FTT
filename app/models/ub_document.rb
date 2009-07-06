@@ -52,7 +52,7 @@ class UbDocument < ActiveRecord::Base
     @pages_to_delete_on_storage = []
     document_desc = REXML::Document.new(ub_stream)
     # First check version of document (optimistic locking).
-    @error_on_version = true if !new_record? && version != document_desc.root.attribute(:version).value.to_i
+    @error_on_version = true if !new_record? && version != 1 && version > document_desc.root.attribute(:version).value.to_i
     # update metadata
     if (!@error_on_version)
       # if metadata of document are changed, we parse the rdf to update metadata

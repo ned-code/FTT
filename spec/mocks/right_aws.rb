@@ -68,7 +68,7 @@ module AppMocks
           }
         end
 
-        def exist?
+        def exists?
           name == 'valid/path/to/file'
         end
 
@@ -80,8 +80,8 @@ module AppMocks
           headers
         end
 
-        def rename(old_path, new_path)
-          old_path == 'valid/path/to/file'
+        def rename(new_path)
+          true
         end
 
       end

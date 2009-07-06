@@ -348,7 +348,7 @@ describe DocumentsController do
 
       it "'POST /documents/:uuid/push' should commit complete transaction" do
         @transaction = Factory.create(:ub_sync_transaction_complete, :user => @current_user)
-        fixture_ubz(:valid).each do |path|
+        fixture_ubz(:valid, @transaction.ub_document_uuid).each do |path|
           @transaction.items.create!(
             :path => path.gsub(/.*?#{UUID_FORMAT_REGEX}\//, ''),
             :content_type => get_content_type_from_filename(path) || "application/octet+stream",
@@ -470,17 +470,17 @@ describe DocumentsController do
           response.should respond_with(:content_type => :xml)
         end
 
-        it "'GET /documents/:uuid' should return status '403 Forbidden' id document is deleted" do
+        it "'GET /documents/:uuid' should return status '404 Not found' id document is deleted" do
           get :show, :id => @document_deleted.uuid
 
-          response.should be_forbidden
+          response.should be_not_found
           response.should respond_with(:content_type => :xml)
         end
 
-        it "'GET /documents/:uuid' should return status '403 Forbidden' if document does not exist" do
+        it "'GET /documents/:uuid' should return status '404 Not found' if document does not exist" do
           get :show, :id => UUID.generate
 
-          response.should be_forbidden
+          response.should be_not_found
           response.should respond_with(:content_type => :xml)
         end
 

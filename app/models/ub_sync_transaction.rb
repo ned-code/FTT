@@ -43,14 +43,16 @@ class UbSyncTransaction < ActiveRecord::Base
     return false unless save
     return false unless complete?
 
-    if UbDocument.exists?(:uuid => ub_document_uuid)
-      document = UbDocument.find(:first, :conditions => {:uuid => ub_document_uuid})
-    else
-      document = UbDocument.new(:uuid => ub_document_uuid)
-    end
-
     # Open database transaction
     UbDocument.transaction do
+      if UbDocument.exists?(:uuid => ub_document_uuid)
+        document = UbDocument.find(:first, :conditions => {:uuid => ub_document_uuid})
+      else
+        document = UbDocument.new(:uuid => ub_document_uuid)
+        document.accepts_role 'owner', user
+      end
+
+
       item_processed = []
       item_ub_document = nil
       media_uuids = []

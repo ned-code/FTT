@@ -10,7 +10,11 @@ com.mnemis.core.Import("com/mnemis/wb/controllers/WBDrawingController.js");
 com.mnemis.wb.controllers.WBBoardController = function(editable)
 {
 	console.log("init board controller");
-    this.drawingController = new WB.controllers.WBDrawingController();
+
+    if (editable)
+    {
+        this.drawingController = new WB.controllers.WBDrawingController();
+    }
     this.editable = editable;
     this.moving = false;
 	this.originalMovingPos = null;
@@ -44,9 +48,12 @@ com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(
             $(this).attr("data",relPath);
         });
 
-    // replace drawing div with content of drawing controller. Allow to have different kind of renderer (for ie)
-    this.drawingController.setDrawingModel(this.currentPage.drawingModel());
-    $("#ub_page_drawing").children().replaceWith(this.drawingController.domNode);
+    if (this.drawingController)
+    {
+        // replace drawing div with content of drawing controller. Allow to have different kind of renderer (for ie)
+        this.drawingController.setDrawingModel(this.currentPage.drawingModel());
+        $("#ub_page_drawing").children().replaceWith(this.drawingController.domNode);
+    }
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentTool = function(toolId)

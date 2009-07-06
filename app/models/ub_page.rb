@@ -104,7 +104,17 @@ class UbPage < ActiveRecord::Base
     # Now iterate on page elements to update or create corresponding page element
     page_dom.each_element("svg/image | svg/foreignObject | svg/video") do |element|
 
-      uuid_attribute = element.attribute('uuid', 'ub').value
+      uuid_attribute = element.attribute('uuid', 'ub')
+      unless (uuid_attribute.nil?)
+        uuid_attribute = uuid_attribute.value
+      end
+      if (element.name == "foreignObject" && !element.attribute('type', 'ub').nil? && element.attribute('type', 'ub').value == 'text')
+        next
+      end
+      if (element.name == "foreignObject" && element.attribute('background', 'ub').value == "true")
+        uuid_attribute = element.attribute("href", "xlink").value.match(UUID_FORMAT_REGEX)[0]
+      end
+      
       raise "Invalid svg page format: media #{element.to_s} has no ub:uuid attribute" if uuid_attribute == nil
       media_uuid = uuid_attribute.match(UUID_FORMAT_REGEX)[0]
       page_element = media_element_map[media_uuid]

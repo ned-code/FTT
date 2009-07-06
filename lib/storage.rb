@@ -2,15 +2,35 @@ require 'yaml'
 
 module Storage
 
+  @@defaultStorage = nil;
+  
+  def self.set_default_storage(default)
+    @@default_storage = default;
+  end
+
+  def self.default_storage
+    @@default_storage ||= nil
+    if @@default_storage.nil?
+      config_path = File.join(RAILS_ROOT, 'config', 'storage', "storage.yml")
+      begin
+        default_storage ||= YAML::load_file(config_path)[RAILS_ENV]
+        @@default_storage = default_storage["default"]
+      rescue
+        raise StandardError, "Configuration file '#{config_path}' for storage doesn't exist or have right information about Rails '#{RAILS_ENV}' environement."
+      end
+    end
+    return @@default_storage
+  end
+  
   # Can receive Hash with a ':name' of storage and another options for storage
   # initialization, or identity string (Marsahl dump format, be returned by Storage#to_s)
   def self.storage(options)
     @@storages ||= {}
 
     begin
-      options = {:name => :filesystem} if options == nil
+      options = {:name => Storage::default_storage.to_sym} if options == nil
       options = YAML.load(options) if options.is_a?(String)
-    rescue
+    rescue => e
       raise ArgumentError, "'options' can't be converted from YAML to Hash"
     end
     raise(ArgumentError, "'options' must be a Hash or YAML dump") unless options.kind_of?(Hash)

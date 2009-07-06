@@ -38,6 +38,17 @@ module ConversionService
       return destination_file
     end
 
+     def convert_media(media, destination_type, options)
+      tmp_media_file = File.join(options[:destination_path], "#{media.uuid}.tmp")
+      File.open(tmp_media_file, 'w') do |file|
+          file << media.data.read()
+      end
+      options[:page_uuid] = media.uuid
+      converted_file_name = convert_file(tmp_media_file, media.media_type, destination_type, options)
+      RAILS_DEFAULT_LOGGER.debug "remove tmp file #{tmp_media_file}"
+      FileUtils.remove_file(tmp_media_file)
+      return converted_file_name
+    end
 
     def convert_svg_page_to_svg_drawing(page_file_stream)
       page_file_stream.rewind

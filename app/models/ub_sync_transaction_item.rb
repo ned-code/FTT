@@ -24,7 +24,13 @@ class UbSyncTransactionItem < ActiveRecord::Base
 
   def validate
     if @tempfile
-      errors.add(:part_check_sum, "isn't equal to hash of data") if  Digest::MD5.file(@tempfile.path).hexdigest != part_check_sum
+      digest = nil
+      if (@tempfile.is_a?(StringIO))
+        digest = Digest::MD5.hexdigest(@tempfile.string)
+      else
+        digest = Digest::MD5.file(@tempfile.path).hexdigest
+      end
+      errors.add(:part_check_sum, "isn't equal to hash of data") if  digest != part_check_sum
     end
   end
 

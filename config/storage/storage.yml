@@ -1,0 +1,11 @@
+development:
+  default: s3
+
+test:
+  default: filesystem
+  
+staging:
+  default: s3
+
+production:
+  default: s3
