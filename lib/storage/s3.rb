@@ -54,8 +54,9 @@ module Storage
         elsif !data.is_a?(String)
           data.rewind
         end
-        
-        key.put(data, nil, 'content-type' => get_content_type_from_mime_types(path))
+        s3_content_type = get_content_type_from_mime_types(path)
+        s3_file_access =  'public-read'
+        key.put(data, s3_file_access, 'content-type' => s3_content_type)
       rescue => e
         raise ArgumentError, "error on data: " + e.message
       end
