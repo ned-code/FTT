@@ -1,15 +1,15 @@
 development:
-  basedir: files/documents
-  public_host_root_url: http://localhost
+  basedir: public
+  public_host_root_url: http://localhost:3000
 
 test:
   basedir: spec/tmp/files/documents
-  public_host_root_url: http://localhost
+  public_host_root_url: http://localhost:3000
 
 staging:
-  basedir: files/documents
-  public_host_root_url: http://localhost
+  basedir: public
+  public_host_root_url: http://localhost:3000
 
 production:
-  basedir: files/documents
-  public_host_root_url: http://localhost
+  basedir: public
+  public_host_root_url: http://localhost:3000
