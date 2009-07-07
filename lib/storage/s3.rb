@@ -94,8 +94,9 @@ module Storage
     # Return public url for 'path' key (can be accessed worldwild)
     def public_url(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
-      key = bucket.key(path)
-      key.public_link
+#      key = bucket.key(path)
+#      key.public_link
+        "/files/#{self.path}"
     end
 
     # Return private url for 'path' key (can be accessed from application network)
