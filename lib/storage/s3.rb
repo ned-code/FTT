@@ -96,7 +96,7 @@ module Storage
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
 #      key = bucket.key(path)
 #      key.public_link
-        "/files/#{self.path}"
+        "/files/#{path}"
     end
 
     # Return private url for 'path' key (can be accessed from application network)
