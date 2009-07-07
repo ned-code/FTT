@@ -36,7 +36,7 @@ module Storage
       end
 
       FileUtils.mkdir_p(File.dirname(full_path(path)))
-      File.open(full_path(path), 'w') do |file|
+      File.open(full_path(path), 'wb') do |file|
 
         begin
           if data.is_a? String
