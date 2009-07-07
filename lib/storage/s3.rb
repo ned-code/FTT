@@ -142,7 +142,8 @@ module Storage
     end
 
     def bucket
-      @bucket ||= connection.bucket(options[:bucket], true)
+      s3_file_access =  'public-read'
+      @bucket ||= connection.bucket(options[:bucket], false, s3_file_access)
     end
 
   end
