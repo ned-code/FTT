@@ -20,12 +20,15 @@ module ConversionService
     # * :destination_path a path where to save conversion
     def convert_file(file, source_type, destination_type, options)
       destination_file = nil
+      opened_file = File.open(file)
       if (source_type == supported_source_types[0] && destination_type == supported_destination_type[0])
-        html_content = convert_ub_document_to_html(options[:document_uuid], File.open(file), options[:document_rdf_stream])
+        html_content = convert_ub_document_to_html(options[:document_uuid], opened_file, options[:document_rdf_stream])
         destination_file = "index.xhtml"
       else
+        opened_file.close()
         raise "Converter UbDocumentConverter does not support conversion from #{source_type} to #{destination_type}"
       end
+      opened_file.close()
       File.open(File.join(options[:destination_path], destination_file), 'w') do |html_file|
         html_file << html_content
       end

@@ -20,17 +20,20 @@ module ConversionService
     # * :destination_path a path where to save conversion
     def convert_file(file, source_type, destination_type, options)
       destination_file = nil
+      opened_file = File.open(file)
       if (source_type == supported_source_types[0] && destination_type == supported_destination_type[0])
-        file_content = convert_svg_page_to_html(options[:page_uuid], File.open(file))
+        file_content = convert_svg_page_to_html(options[:page_uuid], opened_file)
         page_base_name = File.basename(file).match(/.*\./)[0]
         destination_file = "#{page_base_name}xhtml"
       elsif (source_type == supported_source_types[0] && destination_type == supported_destination_type[1])
-        file_content = convert_svg_page_to_svg_drawing(File.open(file))
+        file_content = convert_svg_page_to_svg_drawing(opened_file)
         page_base_name = File.basename(file).match(/.*\./)[0]
         destination_file = "#{page_base_name}drawing.svg"
       else
+        opened_file.close()
         raise "Converter UbPageConverter does not support conversion from #{source_type} to #{destination_type}"
       end
+      opened_file.close()
       File.open(File.join(options[:destination_path], destination_file), 'w') do |html_file|
         html_file << file_content
       end

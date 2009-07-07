@@ -26,6 +26,15 @@ module Storage
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
       data ||= '' # nil is equal to empty content
 
+      if data.is_a? Hash
+        data_path = data[:path]
+        data_identity_string = data[:identity_string] || data[:storage_config]
+
+        if identity_string == data_identity_string
+          return move(data_path, path)
+        end
+      end
+
       FileUtils.mkdir_p(File.dirname(full_path(path)))
       File.open(full_path(path), 'w') do |file|
 
@@ -36,11 +45,7 @@ module Storage
             data_path = data[:path]
             data_identity_string = data[:identity_string] || data[:storage_config]
 
-            if identity_string == data_identity_string
-              return move(data_path, path)
-            else
-              file << Storage::storage(data_identity_string).get(data_path).read
-            end
+            file << Storage::storage(data_identity_string).get(data_path).read
           else
             data.rewind
             file << data.read
