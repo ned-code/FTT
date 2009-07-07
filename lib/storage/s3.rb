@@ -126,7 +126,8 @@ module Storage
 
       begin
         key = bucket.key(path_from)
-        key.move(path_to)
+        key.rename(path_to)
+        grantee1 = RightAws::S3::Grantee.new(key, 'http://acs.amazonaws.com/groups/global/AllUsers', 'READ', :apply)
       rescue => e
         logger.error "Error when moving file '#{path_from}' to '#{path_to}' in Storage::S3: #{e.message}\n\n#{e.backtrace}"
         return false
