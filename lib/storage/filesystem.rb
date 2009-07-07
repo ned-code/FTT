@@ -47,6 +47,9 @@ module Storage
 
             file << Storage::storage(data_identity_string).get(data_path).read
           else
+            if (data.closed?)
+              data = File.open(data.path)
+            end
             data.rewind
             file << data.read
           end

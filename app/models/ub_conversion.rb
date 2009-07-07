@@ -31,7 +31,9 @@ class UbConversion < ActiveRecord::Base
   def save_data_on_storage
     if @tempfile
       storage.put(path, @tempfile)
-      @tempfile.close
+      if (@tempfile.is_a?(IO) && !@tempfile.closed?)
+        @tempfile.close
+      end
     end
   end
 
