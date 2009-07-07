@@ -74,6 +74,11 @@ respond_to do |format|
         else
           content_type = request.headers["UB_SYNC_CONTENT_TYPE"]
         end
+        body_content = Tempfile.new("http_body")
+        body_content << request.raw_post
+        body_content.rewind
+        body_content.flush
+        
         @item = @transaction.items.build(
           :path => file_name,
           :content_type => content_type,
@@ -82,7 +87,7 @@ respond_to do |format|
           :part_check_sum => request.headers["UB_SYNC_PART_CHECK_SUM"],
           :item_check_sum => request.headers["UB_SYNC_ITEM_CHECK_SUM"],
 
-          :data => request.headers["rack.input"],
+          :data => body_content,
 
           :storage_config => nil # Use default config, TODO: can be configured
         )
