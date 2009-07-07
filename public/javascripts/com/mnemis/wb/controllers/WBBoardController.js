@@ -11,7 +11,7 @@ com.mnemis.wb.controllers.WBBoardController = function(editable)
 {
 	console.log("init board controller");
 
-    if (editable)
+    if (editable || jQuery.browser.msie)
     {
         this.drawingController = new WB.controllers.WBDrawingController();
     }

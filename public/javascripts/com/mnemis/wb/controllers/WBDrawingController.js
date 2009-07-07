@@ -21,25 +21,32 @@ com.mnemis.wb.controllers.WBDrawingController = function(initialDrawing)
 	{
 		this.mRenderer = new com.mnemis.wb.adaptors.WBSvgRenderer();
 	}
+    else if(jQuery.browser.msie)
+    {
+ 		this.mRenderer = new com.mnemis.wb.adaptors.WBVmlRenderer();
+    }
+
 	if (initialDrawing)
 	{
 		this.mDrawingModel = initialDrawing;
 	}
-	if (this.mRenderer)
-	{
-	    this.domNode = this.mRenderer.createSurface(); 
-	    $(this.domNode).css("zIndex", 1999999);
-		this.repaintAll();
-    }						     
 }
 
 
 com.mnemis.wb.controllers.WBDrawingController.prototype.setDrawingModel = function(pDrawingModel)
 {
-    console.log("set drawing model")
-	this.mDrawingModel = pDrawingModel;
-    console.log(this)
-	this.repaintAll();	
+    this.mDrawingModel = pDrawingModel;
+    if (this.mRenderer)
+    {
+        var boardElement = $("#ub_board");
+        var height = boardElement.height();
+        var width = boardElement.width();
+        this.domNode = this.mRenderer.createSurface(width, height);
+        $(this.domNode).css("zIndex", 1999999);
+        var drawingElement = $("#ub_page_drawing");
+        drawingElement.css("zIndex", 1999999);
+    }
+    this.repaintAll();
 }
                                                      
 com.mnemis.wb.controllers.WBDrawingController.prototype.repaintAll = function()
@@ -73,18 +80,14 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.repaintAll = function()
         {
             var aDrawObject = this.mDrawingModel.polygon[i];
             var newLine = aDrawObject.domNode;
-            if (!newLine)
+            aDrawObject.domNode = newLine;
+            this.mRenderer.updatePolygon(newLine,
             {
-                newLine = this.mRenderer.createPolygon();
-
-                aDrawObject.domNode = newLine;
-                this.mRenderer.updatePolyline(newLine,
-                {
-                    id: aDrawObject.uuid,
-                    color: "rgb(255,0,0)",
-                    width: 5
-                })
-            }
+                id: aDrawObject.uuid,
+                color: aDrawObject.color,
+                opacity: aDrawObject.opacity,
+                width: 5
+            })
             this.repaintObject(aDrawObject);
             this.domNode.appendChild(newLine);
         }

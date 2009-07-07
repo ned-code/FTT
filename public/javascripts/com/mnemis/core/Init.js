@@ -21,7 +21,7 @@ com.mnemis.core.modules = [];
  */
 com.mnemis.core.Import = function(moduleName)
 {
-    if (com.mnemis.core.modules.indexOf(moduleName) == -1)
+    if (jQuery.inArray(moduleName, com.mnemis.core.modules) == -1) 
     {
         com.mnemis.core.LoadFromDomain(com.mnemis.core.applicationPath, moduleName)
     }
@@ -41,7 +41,7 @@ com.mnemis.core.LoadFromDomain = function(domain, moduleName)
 
 com.mnemis.core.Provide = function(moduleName)
 {
-    if (com.mnemis.core.modules.indexOf(moduleName) == -1)
+    if (jQuery.inArray(moduleName, com.mnemis.core.modules) == -1) 
     {
         com.mnemis.core.modules.push(moduleName);
 

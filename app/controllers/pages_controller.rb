@@ -12,7 +12,13 @@ class PagesController < ApplicationController
     respond_to do |format|
       if @document && @page && permit?('owner of document')
         format.html {
-          render :action => "show", :layout => false, :content_type => "application/xhtml+xml"
+          user_agent = request.env['HTTP_USER_AGENT'].downcase
+          if user_agent =~ /msie/i
+           render :action => "show", :layout => false, :content_type => "text/html"
+          else
+            render :action => "show", :layout => false, :content_type => "application/xhtml+xml"
+          end
+
           #redirect_to @page_url
         }
         format.xml { redirect_to @page.url }
