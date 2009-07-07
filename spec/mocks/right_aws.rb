@@ -84,6 +84,10 @@ module AppMocks
           true
         end
 
+        def move(new_path)
+          nil
+        end
+
       end
 
     end

@@ -126,7 +126,7 @@ module Storage
 
       begin
         key = bucket.key(path_from)
-        key.rename(path_to)
+        key.move(path_to)
       rescue => e
         logger.error "Error when moving file '#{path_from}' to '#{path_to}' in Storage::S3: #{e.message}\n\n#{e.backtrace}"
         return false
