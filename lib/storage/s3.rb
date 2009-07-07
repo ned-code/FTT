@@ -141,7 +141,7 @@ module Storage
     end
 
     def bucket
-      connection.bucket(options[:bucket], true)
+      @bucket ||= connection.bucket(options[:bucket], true)
     end
 
   end
