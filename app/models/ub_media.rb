@@ -84,7 +84,10 @@ class UbMedia < ActiveRecord::Base
   end
 
   def save_data_on_storage
-    storage.put(path, @tempfile) if @tempfile
+    if @tempfile
+      storage.put(path, @tempfile)
+      @tempfile.close
+    end
   end
 
   def storage
