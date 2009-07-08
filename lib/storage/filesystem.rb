@@ -105,7 +105,7 @@ module Storage
       return true unless exist?(path)
 
       begin
-        File.delete(full_path(path))
+        FileUtils.remove_entry(full_path(path))
         rm_empty_directories(path)
       rescue => e
         logger.error "Error when deleting file '#{path}' in Storage::Filesystem: #{e.message}\n\n#{e.backtrace}"

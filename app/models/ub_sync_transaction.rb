@@ -2,8 +2,11 @@
 class UbSyncTransactionError < StandardError; end
 
 class UbSyncTransaction < ActiveRecord::Base
-  has_many :items, :autosave => true, :class_name => 'UbSyncTransactionItem', :foreign_key => 'ub_sync_transaction_id'
+  has_many :items, :dependent => :destroy, :autosave => true, :class_name => 'UbSyncTransactionItem', :foreign_key => 'ub_sync_transaction_id'
   belongs_to :user
+
+  before_destroy :delete_transaction_files
+
 
   validates_presence_of :uuid, :ub_client_uuid, :ub_document_uuid, :user_id
   validates_uniqueness_of :ub_document_uuid, :message => 'already have open transaction'
@@ -145,5 +148,11 @@ class UbSyncTransaction < ActiveRecord::Base
     end
 
     true
+  end
+
+  private
+
+  def delete_transaction_files
+     Storage::storage(nil).delete(File.join('sync', uuid))
   end
 end

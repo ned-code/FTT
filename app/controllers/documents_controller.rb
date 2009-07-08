@@ -74,6 +74,10 @@ respond_to do |format|
         else
           content_type = request.headers["UB_SYNC_CONTENT_TYPE"]
         end
+        post_data = Tempfile.new('post_data')
+        post_data << request.raw_post
+        post_data.flush
+        
         @item = @transaction.items.build(
           :path => file_name,
           :content_type => content_type,
@@ -82,7 +86,7 @@ respond_to do |format|
           :part_check_sum => request.headers["UB_SYNC_PART_CHECK_SUM"],
           :item_check_sum => request.headers["UB_SYNC_ITEM_CHECK_SUM"],
 
-          :data => request.headers['rack.input'],
+          :data => post_data,
 
           :storage_config => nil # Use default config, TODO: can be configured
         )
@@ -95,6 +99,7 @@ respond_to do |format|
         elsif sync_action == 'continue' && @transaction.save
           format.xml { render :xml => @transaction }
         elsif sync_action == 'commit' && @transaction.commit
+          @transaction.destroy
           document = UbDocument.find_by_uuid(params[:id])
           format.xml { render :xml => document.to_xml }
         else

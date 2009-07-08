@@ -11,6 +11,13 @@ module AppMocks
         Bucket.new(self, name)
       end
 
+      class Grantee
+        
+        def initialize(thing, id, perms=[], action=:refresh, name=nil)
+          return true
+        end
+      end
+
       class Bucket
         attr_reader :s3, :name, :mock_keys
 
@@ -38,6 +45,9 @@ module AppMocks
           true
         end
 
+        def delete_folder(path, separator = '/')
+          return true
+        end
       end
 
       class Key
@@ -84,6 +94,10 @@ module AppMocks
           true
         end
 
+        def move(new_path)
+          nil
+        end
+
       end
 
     end
@@ -94,6 +108,17 @@ module AppMocks
         "http://s3.amazone.com/#{bucket}/#{key}?Signature=XXXX"
       end
 
+      def get_acl_parse(bucket, key='', headers={})
+        result = {}
+        result[:owner]    = {}
+        result[:grantees] = {}
+
+        return result
+      end
+
+     def put_acl(bucket, key, acl_xml_doc, headers={})
+       true
+     end
     end
 
   end

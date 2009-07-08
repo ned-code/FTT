@@ -94,8 +94,9 @@ module Storage
     # Return public url for 'path' key (can be accessed worldwild)
     def public_url(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
-      key = bucket.key(path)
-      key.public_link
+#      key = bucket.key(path)
+#      key.public_link
+        "/files/#{path}"
     end
 
     # Return private url for 'path' key (can be accessed from application network)
@@ -107,8 +108,11 @@ module Storage
     def delete(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
       key = bucket.key(path)
-      return true unless key.exists?
       begin
+        if (!key.exists?)
+          bucket.delete_folder(path)
+          return true
+        end
         raise "File #{path} no deleted from s3 for unknown reason" unless key.delete
       rescue => e
         logger.error "Error when deleting file '#{path}' in Storage::S3: #{e.message}\n\n#{e.backtrace}"
@@ -126,6 +130,7 @@ module Storage
       begin
         key = bucket.key(path_from)
         key.rename(path_to)
+        grantee1 = RightAws::S3::Grantee.new(key, 'http://acs.amazonaws.com/groups/global/AllUsers', 'READ', :apply)
       rescue => e
         logger.error "Error when moving file '#{path_from}' to '#{path_to}' in Storage::S3: #{e.message}\n\n#{e.backtrace}"
         return false
@@ -141,7 +146,8 @@ module Storage
     end
 
     def bucket
-      connection.bucket(options[:bucket], true)
+      s3_file_access =  'public-read'
+      @bucket ||= connection.bucket(options[:bucket], false, s3_file_access)
     end
 
   end

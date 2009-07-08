@@ -101,12 +101,15 @@ describe UbPage do
       page = Factory.build(:ub_page_with_doc)
 
       image_media = Factory.build(:ub_media)
+      image_media.path = "images/image1.png"
       image_media.uuid = UUID.new.generate
 
       svg_image_media = Factory.build(:ub_media)
+      svg_image_media.path = "images/image2.png"
       svg_image_media.uuid = UUID.new.generate
 
       svg_image_media_to_delete = Factory.build(:ub_media)
+      svg_image_media_to_delete.path = "images/image3.png"
       svg_image_media_to_delete.uuid = UUID.new.generate
 
       widget_media = Factory.build(:ub_media)

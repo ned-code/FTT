@@ -7,6 +7,8 @@ class UbSyncTransactionItem < ActiveRecord::Base
 
   before_validation :set_storage_config
   before_save :save_data_on_storage
+  before_destroy :delete_data_on_storage
+
 
   def data
     storage.get(storage_path)
@@ -47,6 +49,10 @@ class UbSyncTransactionItem < ActiveRecord::Base
         @tempfile.close
       end
     end
+  end
+  
+  def delete_data_on_storage
+     storage.delete(storage_path)
   end
 
   def storage
