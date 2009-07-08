@@ -17,10 +17,11 @@ class UbMedia < ActiveRecord::Base
   UB_DOCUMENT_TYPE = 'application/vnd.mnemis-uniboard-document'
 
   belongs_to :page_element, :class_name => 'UbPageElement', :foreign_key => 'page_element_id'
-  has_many :conversions, :autosave => true, :class_name => 'UbConversion', :foreign_key => 'media_id'
+  has_many :conversions, :dependent => :destroy, :autosave => true, :class_name => 'UbConversion', :foreign_key => 'media_id'
 
   before_validation :set_storage_config
   before_save :save_data_on_storage
+  before_destroy :delete_data_on_storage
   
   def data
     storage.get(path)
@@ -28,6 +29,7 @@ class UbMedia < ActiveRecord::Base
 
   def data=(data)
     @tempfile = data
+    UbConversion.destroy_all(["media_id = ? AND media_type != ?", id, UbMedia::UB_THUMBNAIL_DESKTOP_TYPE])
   end
 
   def get_resource(p_type, p_params = nil)
@@ -90,6 +92,10 @@ class UbMedia < ActiveRecord::Base
         @tempfile.close
       end
     end
+  end
+
+  def delete_data_on_storage
+     storage.delete(path)
   end
 
   def storage

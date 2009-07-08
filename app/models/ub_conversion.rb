@@ -9,7 +9,8 @@ class UbConversion < ActiveRecord::Base
   belongs_to :media, :class_name => 'UbMedia', :foreign_key => 'media_id'
 
   before_save :save_data_on_storage
-
+  before_destroy :delete_data_on_storage
+  
   def data
     storage.get(path)
   end
@@ -37,6 +38,10 @@ class UbConversion < ActiveRecord::Base
     end
   end
 
+  def delete_data_on_storage
+     storage.delete(path)
+  end
+  
   def storage
     Storage::storage(media.storage_config)
   end

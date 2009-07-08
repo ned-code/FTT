@@ -108,8 +108,11 @@ module Storage
     def delete(path)
       raise(ArgumentError, "path '#{path}' not be valid") unless valid_path?(path)
       key = bucket.key(path)
-      return true unless key.exists?
       begin
+        if (!key.exists?)
+          bucket.delete_folder(path)
+          return true
+        end
         raise "File #{path} no deleted from s3 for unknown reason" unless key.delete
       rescue => e
         logger.error "Error when deleting file '#{path}' in Storage::S3: #{e.message}\n\n#{e.backtrace}"

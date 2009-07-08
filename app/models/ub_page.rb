@@ -20,7 +20,7 @@ class UbPage < ActiveRecord::Base
     }}
 
   belongs_to :document, :class_name => 'UbDocument', :foreign_key => 'uniboard_document_id'
-  belongs_to :media, :autosave => true, :class_name => 'UbMedia', :foreign_key => 'page_media_id'
+  belongs_to :media, :dependent => :destroy, :autosave => true, :class_name => 'UbMedia', :foreign_key => 'page_media_id'
   has_many :page_elements, :class_name => 'UbPageElement', :foreign_key => 'uniboard_page_id',
     :autosave => true, :dependent => :destroy
 

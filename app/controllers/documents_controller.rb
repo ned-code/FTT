@@ -99,6 +99,7 @@ respond_to do |format|
         elsif sync_action == 'continue' && @transaction.save
           format.xml { render :xml => @transaction }
         elsif sync_action == 'commit' && @transaction.commit
+          @transaction.destroy
           document = UbDocument.find_by_uuid(params[:id])
           format.xml { render :xml => document.to_xml }
         else
