@@ -5,6 +5,7 @@ com.mnemis.core.Provide("com/mnemis/wb/controllers/WBDrawingController.js");
 
 com.mnemis.core.Import("com/mnemis/core/UUID.js")
 com.mnemis.core.Import("com/mnemis/wb/adaptors/WBSvgRenderer.js")
+com.mnemis.core.Import("com/mnemis/wb/adaptors/WBVmlRenderer.js")
 
 
 com.mnemis.wb.controllers.WBDrawingController = function(initialDrawing)
@@ -48,18 +49,14 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.setDrawingModel = functi
     }
     this.repaintAll();
 }
-                                                     
-com.mnemis.wb.controllers.WBDrawingController.prototype.repaintAll = function()
-{
-  	this.mRenderer.clearSurface(this.domNode);
-    if (this.mDrawingModel.polyline)
-    {
-        for (var i = 0; i < this.mDrawingModel.polyline.length; i++)
-        {
+
+com.mnemis.wb.controllers.WBDrawingController.prototype.repaintAll = function() {
+    this.mRenderer.clearSurface(this.domNode);
+    if (this.mDrawingModel.polyline) {
+        for (var i = 0; i < this.mDrawingModel.polyline.length; i++) {
             var aDrawObject = this.mDrawingModel.polyline[i];
             var newLine = aDrawObject.domNode;
-            if (!newLine)
-            {
+            if (!newLine) {
                 newLine = this.mRenderer.createPolyline();
 
                 aDrawObject.domNode = newLine;
@@ -74,12 +71,10 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.repaintAll = function()
             this.domNode.appendChild(newLine);
         }
     }
-    if (this.mDrawingModel.polygon)
-    {
-        for (var i = 0; i < this.mDrawingModel.polygon.length; i++)
-        {
+    if (this.mDrawingModel.polygon) {
+        for (var i = 0; i < this.mDrawingModel.polygon.length; i++) {
             var aDrawObject = this.mDrawingModel.polygon[i];
-            var newLine = aDrawObject.domNode;
+            var newLine = this.mRenderer.createPolygon();
             aDrawObject.domNode = newLine;
             this.mRenderer.updatePolygon(newLine,
             {
@@ -89,6 +84,7 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.repaintAll = function()
                 width: 5
             })
             this.repaintObject(aDrawObject);
+
             this.domNode.appendChild(newLine);
         }
     }

@@ -25,16 +25,17 @@ com.mnemis.wb.controllers.WBBoardController = function(editable)
 }
 
 
-com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(page)
-{
+com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(page) {
 
     // re-init internal working attributes
     window.scrollTo(0, 0);
     this.moving = false;
-	this.originalMovingPos = null;
-	this.currentZoom = 1;
-	this.selection = [];
+    this.originalMovingPos = null;
+    this.currentZoom = 1;
+    this.selection = [];
     this.currentPage = page;
+    this.initialHeight = $("#ub_board").height();
+    this.initialWidth = $("#ub_board").width();
 
     $("#ub_board").bind("mousedown", this, this.mouseDown);
     $("#ub_board").bind("mousemove", this, this.mouseMove);
@@ -42,17 +43,19 @@ com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(
     $("#ub_board").bind("mouseout", this, this.mouseOut);
 
     // update data attribute of object
-    $("object").each(function()
-        {
-            var relPath = $(this).attr("data");
-            $(this).attr("data",relPath);
-        });
+    $("object").each(function() {
+        var relPath = $(this).attr("data");
+        $(this).attr("data", relPath);
+    });
 
-    if (this.drawingController)
-    {
+    this.updateDrawing();
+}
+
+com.mnemis.wb.controllers.WBBoardController.prototype.updateDrawing = function() {
+    if (this.drawingController && this.currentPage) {
         // replace drawing div with content of drawing controller. Allow to have different kind of renderer (for ie)
         this.drawingController.setDrawingModel(this.currentPage.drawingModel());
-        $("#ub_page_drawing").children().replaceWith(this.drawingController.domNode);
+        $("#ub_page_drawing").append(this.drawingController.domNode);
     }
 }
 
@@ -235,6 +238,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype.move = function(e)
    
 com.mnemis.wb.controllers.WBBoardController.prototype.zoom = function(factor)
 {
+    var previousZoom = this.currentZoom;
 	this.currentZoom = this.currentZoom * factor;
     var boardElement = $("#ub_board");
     var coords = boardElement.position();
@@ -258,7 +262,15 @@ com.mnemis.wb.controllers.WBBoardController.prototype.zoom = function(factor)
     	boardElement.css("WebkitTransformOrigin", "0px 0px");
     	boardElement.css("WebkitTransform", "scaleX("+ this.currentZoom + ") scaleY(" + this.currentZoom + ")");		    		
 	}
-	
+	else if (jQuery.browser.msie) 
+	{
+	    console.log("apply ie transform " + this.currentZoom + " " + this.initialWidth * this.currentZoom + " " + this.initialHeight * this.currentZoom);
+	    if ((previousZoom >= 1 && factor > 1) || (this.currentZoom >= 1 && factor < 1)) {
+	        boardElement.css("width", this.initialWidth * this.currentZoom);
+	        boardElement.css("height", this.initialHeight * this.currentZoom);
+	    }
+	    boardElement.css("filter", "progid:DXImageTransform.Microsoft.Matrix(M11='" + this.currentZoom + "',M21='0', M12='0', M22='" + this.currentZoom + "', sizingmethod='autoexpand')");
+	}
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.mouseDown = function(e)

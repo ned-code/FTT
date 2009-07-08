@@ -25,7 +25,7 @@ com.mnemis.wb.adaptors.WBVmlRenderer.prototype.createSurface = function(width, h
     if (!height) {
         height = "100%";
     }
-    var coordSize = width*1000 + "," + height*1000;
+    var coordSize = width * 1000 + "," + height * 1000;
 
     //    surface.setAttribute("style", "position: absolute; top:0x; left:0px; width:" + width + "; height:" + height);
     var obj = $(surface);
@@ -64,24 +64,26 @@ com.mnemis.wb.adaptors.WBVmlRenderer.prototype.createPolyline = function(id)
 	return result;	 	        	
 }
 
-com.mnemis.wb.adaptors.WBVmlRenderer.prototype.updatePolyline = function(line, properties)
-{
-	if (properties.points)
-	{
-		line.setAttribute("points", properties.points);
-	}
-	if (properties.id)
-	{
-    	line.setAttribute("id", properties.id);
-	}	
-	if (properties.color)
-	{
-		// TODO change width
-	}
-	if (properties.width)
-	{
-		// TODO change width
-	}
+com.mnemis.wb.adaptors.WBVmlRenderer.prototype.updatePolyline = function(line, properties) {
+    if (properties.points) {
+        var reg = new RegExp("[ ,]+", "g");
+        var values = properties.points.split(reg);
+        var points = "";
+        for (var i = 0; i < values.length; i++) 
+        {
+            points += values[i] * 1000 + ",";
+        }
+        line.setAttribute("points", points);
+    }
+    if (properties.id) {
+        line.setAttribute("id", properties.id);
+    }
+    if (properties.color) {
+        // TODO change width
+    }
+    if (properties.width) {
+        // TODO change width
+    }
 }
 
 com.mnemis.wb.adaptors.WBVmlRenderer.prototype.createPolygon = function(id) {

@@ -41,10 +41,10 @@ module ConversionService
       return destination_file
     end
 
-     def convert_media(media, destination_type, options)
+    def convert_media(media, destination_type, options)
       tmp_media_file = File.join(options[:destination_path], "#{media.uuid}.tmp")
       File.open(tmp_media_file, 'w') do |file|
-          file << media.data.read()
+        file << media.data.read()
       end
       options[:page_uuid] = media.uuid
       converted_file_name = convert_file(tmp_media_file, media.media_type, destination_type, options)
@@ -306,14 +306,26 @@ module ConversionService
         width = size_and_position["width"]
         height = size_and_position["height"]
 
-        widget_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
-        widget_media = UbMedia.find_by_uuid(widget_uuid)
-        raise "Media missing for uuid #{widget_uuid}" if widget_media.nil?
-        page_builder.object("id" => widget_uuid,
-          "type" => "text/html",
-          "data" => widget_media.public_url,
-          "ub:background" => svg_object[:attr => "ub:background"],
-          "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
+        begin
+          if (svg_object[:attr => "ub:type"] == "text")
+            font_object = svg_object.body.div.font
+            font_xml = font_object.raw_xml().to_s.gsub("xhtml:","")
+            page_builder.div("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
+              "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s){
+
+              |x| x << font_xml
+            }
+          end
+        rescue => e
+          widget_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
+          widget_media = UbMedia.find_by_uuid(widget_uuid)
+          raise "Media missing for uuid #{widget_uuid}" if widget_media.nil?
+          page_builder.object("id" => widget_uuid,
+            "type" => "text/html",
+            "data" => widget_media.public_url,
+            "ub:background" => svg_object[:attr => "ub:background"],
+            "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
+        end
       end
     end
 

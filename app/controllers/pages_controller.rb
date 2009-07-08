@@ -16,7 +16,7 @@ class PagesController < ApplicationController
           if user_agent =~ /msie/i
            render :action => "show", :layout => false, :content_type => "text/html"
           else
-            render :action => "show", :layout => false, :content_type => "application/xhtml+xml"
+           render :action => "show", :layout => false, :content_type => "application/xhtml+xml"
           end
 
           #redirect_to @page_url
