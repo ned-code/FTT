@@ -46,6 +46,8 @@ module Storage
             data_identity_string = data[:identity_string] || data[:storage_config]
 
             file << Storage::storage(data_identity_string).get(data_path).read
+          elsif data.is_a? Zip::ZipInputStream
+            file << data.read
           else
             if (data.closed?)
               data = File.open(data.path)

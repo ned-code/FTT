@@ -87,13 +87,35 @@ class UbMedia < ActiveRecord::Base
 
   def save_data_on_storage
     if @tempfile
-      storage.put(path, @tempfile)
-      if (@tempfile.is_a?(IO) && !@tempfile.closed?)
-        @tempfile.close
+      if (path.end_with?('.wgt'))
+        save_widget
+      else
+        storage.put(path, @tempfile)
+        if (@tempfile.is_a?(IO) && !@tempfile.closed?)
+          @tempfile.close
+        end
       end
+
     end
   end
 
+  def save_widget
+
+    tmp_file = @tempfile
+    #  @tempfile is often a Hash that contains the storage and path where the file is. In this case get file locally
+    if (@tempfile.is_a? Hash)
+      data_path = @tempfile[:path]
+      data_identity_string = @tempfile[:identity_string] || @tempfile[:storage_config]
+      storage = Storage::storage(data_identity_string)
+      tmp_file = storage.get(data_path)
+    end
+
+   Zip::ZipFile.foreach(tmp_file.path) do |an_entry|
+     storage.put(File.join(path, an_entry.name), an_entry.get_input_stream)
+    end
+    tmp_file.close unless tmp_file.closed?
+  end
+  
   def delete_data_on_storage
      storage.delete(path)
   end
