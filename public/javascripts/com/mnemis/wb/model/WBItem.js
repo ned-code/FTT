@@ -67,9 +67,28 @@ com.mnemis.wb.model.WBItem.prototype.shift = function(x, y)
 
 com.mnemis.wb.model.WBItem.prototype.coverPoint = function(point)
 {
-	if (this.position.left < point.x && this.position.left + this.size.width > point.x)
+        var pointMatrix = $M([[point.x - this.position.left], [point.y - this.position.top],[1]]);
+        var mat_str =  $(this.domNode).css("-moz-transform");
+        var matrixPointsString = mat_str.substr(mat_str.indexOf("(")+1, mat_str.length-(mat_str.indexOf("(")+2));
+        var matrixPoints = matrixPointsString.split(", ");
+        var matrix = $M([[matrixPoints[0], matrixPoints[2], matrixPoints[4].replace("px", "")],
+                                 [matrixPoints[1], matrixPoints[3], matrixPoints[5].replace("px", "")],
+                                 [0, 0, 1]]);
+        console.log("*********************************");
+        console.log("orig posisition " + this.position.left + ", " + this.position.top + " " + this.size.width + ", " +  this.size.height);
+        console.log(matrix.inspect());
+        console.log(matrix.inv().inspect());
+        console.log(pointMatrix.inspect());
+        var convertedPointMatrix = matrix.inv().x(pointMatrix);
+        console.log(convertedPointMatrix.inspect());
+        console.log("*********************************");
+        var converted_point = {};
+        converted_point.x = convertedPointMatrix.elements[0][0] + this.position.left;
+        converted_point.y = convertedPointMatrix.elements[1][0] + this.position.top;
+
+	if (this.position.left < converted_point.x && this.position.left + this.size.width > converted_point.x)
 	{
-		if (this.position.top < point.y && this.position.top + this.size.height > point.y)
+		if (this.position.top < converted_point.y && this.position.top + this.size.height > converted_point.y)
 		{
 			return true;
 		}

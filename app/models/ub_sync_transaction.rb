@@ -153,6 +153,7 @@ class UbSyncTransaction < ActiveRecord::Base
   private
 
   def delete_transaction_files
+    RAILS_DEFAULT_LOGGER.debug "delete transaction files #{File.join('sync', uuid)}"
      Storage::storage(nil).delete(File.join('sync', uuid))
   end
 end

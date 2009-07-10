@@ -1,1 +1,2 @@
-Redirect 301 /software/installer/ http://uniboard-software.s3.amazonaws.com/installer/
+Redirect 307 /software/installer/ http://uniboard-software.s3.amazonaws.com/installer/
+Redirect 307 /software/library/ http://uniboard-software.s3.amazonaws.com/library/

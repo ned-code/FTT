@@ -136,7 +136,7 @@ describe ConversionService::UbPageConverter do
   it "Page conversion should generate page.xhtml with corresponding text" do
       page = Hpricot(@page_html)
       images_elem = page.search("div")
-      images_elem.should have(5).items
+      images_elem.should have(6).items
   end
 
   it "Page conversion should generate page.xhtml with corresponding widgets" do
