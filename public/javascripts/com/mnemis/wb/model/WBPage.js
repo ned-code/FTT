@@ -13,9 +13,7 @@ com.mnemis.wb.model.WBPage = function(pageBodyElement) {
     var that = this;
     documentContent.each(function(i) {
         that.objects.push(new com.mnemis.wb.model.WBItem(this));
-    }
-	);
-
+    });
 
     if (jQuery.browser.msie) {
         var documentDrawing = $(this.documentRootNode).find("#ub_page_drawing").children().get(0);

@@ -62,7 +62,7 @@ module ConversionService
       svg_drawing_builder = Builder::XmlMarkup.new(:indent => 2)
       # SVG root tag
       svg_drawing_builder.instruct!
-      svg_drawing_builder.tag!("svg", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 10000", "xmlns" => "http://www.w3.org/2000/svg",
+      svg_drawing_builder.tag!("svg", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%", "xmlns" => "http://www.w3.org/2000/svg",
         "xmlns:xlink" => "http://www.w3.org/1999/xlink", "xmlns:ub" => "http://st-ub.mnemis.com/document") {
 
         # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
@@ -129,7 +129,10 @@ module ConversionService
               page_media = UbMedia.find_by_uuid(page_uuid)
               drawing_resource = page_media.get_resource('application/vnd.mnemis-uniboard-drawing', {})
               html_page_builder.object("type" => "image/svg+xml","data" => drawing_resource.public_url,
-                "style" => "position: absolute; top: 0px; left: 0px; width: " + page_width + "px; height: " + page_height + "px")
+                "style" => "position: absolute; top: 0px; left: 0px; width: " + page_width + "px; height: " + page_height + "px; z-index: 1999999")
+              # put another element at same index to catch mouse events. Otherwise SVG object catch them and does not propagate them
+              html_page_builder.div(
+                "style" => "position: absolute; top: 0px; left: 0px; width: " + page_width + "px; height: " + page_height + "px; z-index: 1999999")
             }
             # create objects part
             html_page_builder.div("id" => "ub_page_objects", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%") {
@@ -149,7 +152,6 @@ module ConversionService
                 end
               rescue => e
                 RAILS_DEFAULT_LOGGER.debug(e.message)
-                RAILS_DEFAULT_LOGGER.debug(e.backtrace.join("\n"))
               end
 
               # add images
@@ -218,17 +220,35 @@ module ConversionService
       height = svg_object.height.to_f
       matrix = get_transform_matrix(svg_object)
       # get the transform and modify top, left, width and height according to this transform
-      if (matrix)
-        width = width * matrix[0].to_f
-        height = height * matrix[3].to_f
-        left = (svg_object.x.to_f  * matrix[0].to_f) + page_width.to_i / 2
-        top = (svg_object.y.to_f  * matrix[3].to_f) + page_height.to_i / 2
-        left = left + matrix[4].to_f
-        top = top + matrix[5].to_f
-      end
-      return { "left" => left, "top" => top, "width" => width, "height" => height, "z-index" => z_index}
+#      if (matrix)
+#        width = width * matrix[0].to_f
+#        height = height * matrix[3].to_f
+#        left = (svg_object.x.to_f  * matrix[0].to_f) + page_width.to_i / 2
+#        top = (svg_object.y.to_f  * matrix[3].to_f) + page_height.to_i / 2
+#        left = left + matrix[4].to_f
+#        top = top + matrix[5].to_f
+#      end
+      return { "left" => left, "top" => top, "width" => width, "height" => height, "z-index" => z_index, "matrix" => string_matrix(matrix)}
     end
 
+    def string_matrix(matrix)
+      result = "-moz-transform: matrix(#{matrix[0]}, #{matrix[1]}, #{matrix[2]}, #{matrix[3]}, #{matrix[4]}px, #{matrix[5]}px)"
+      result += "; -moz-transform-origin: 0 0"
+      result += "; -webkit-transform: matrix(#{matrix[0]}, #{matrix[1]}, #{matrix[2]}, #{matrix[3]}, #{matrix[4]}, #{matrix[5]})"
+      result += "; -webkit-transform-origin: 0 0"
+      result += "; filter: 'progid:DXImageTransform.Microsoft.Matrix(M11 = #{matrix[0]}, M12 = #{matrix[1]}, M21 = #{matrix[2]}, M22 = #{matrix[3]}, Dx = #{matrix[4]}, Dy = #{matrix[5]})'"
+    end
+
+    def style_position(svg_object, page_width, page_height)
+      size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
+      left = size_and_position["left"]
+      top = size_and_position["top"]
+      z_index = size_and_position["z-index"].to_i
+      width = size_and_position["width"]
+      height = size_and_position["height"]
+      result ="position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:"
+      result += z_index.to_s + "; " + size_and_position["matrix"]
+    end
 
     # Convert a SVG text Element to an HTML text Element and append it to the HTML page file
     # page_builder is the XmlMarkup Builder of the html page. Used to append converted Element
@@ -236,19 +256,13 @@ module ConversionService
     # page_width is the width of the page
     # page_height is the height of the page
     def create_html_text(page_builder, svg_object, page_width, page_height)
-      size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
-      left = size_and_position["left"]
-      top = size_and_position["top"]
-      z_index = size_and_position["z-index"].to_i
-      width = size_and_position["width"]
-      height = size_and_position["height"]
       font_size = svg_object[:attr => "font-size"].to_f
       matrix = get_transform_matrix(svg_object)
       # TODO how to define font size if scale x and y scale are not equal
       if (matrix && matrix[0])
         font_size = font_size * matrix[0].to_f
       end
-      style = "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s
+      style = style_position(svg_object, page_width, page_height)
       style += "; font-size:" + font_size.to_s + "px"
       style += "; font-family:" + svg_object[:attr => "font-family"]
       style += "; color:" + svg_object[:attr => "fill"]
@@ -299,19 +313,13 @@ module ConversionService
           "ub:background" => "true",
           "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + bg_width.to_s + "px; height:" + bg_height.to_s + "px; z-index:-20000000")
       else
-        size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
-        left = size_and_position["left"]
-        top = size_and_position["top"]
-        z_index = size_and_position["z-index"].to_i
-        width = size_and_position["width"]
-        height = size_and_position["height"]
 
         begin
           if (svg_object[:attr => "ub:type"] == "text")
             font_object = svg_object.body.div.font
             font_xml = font_object.raw_xml().to_s.gsub("xhtml:","")
             page_builder.div("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
-              "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s){
+              "style" => style_position(svg_object, page_width, page_height)){
 
               |x| x << font_xml
             }
@@ -320,11 +328,12 @@ module ConversionService
           widget_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
           widget_media = UbMedia.find_by_uuid(widget_uuid)
           raise "Media missing for uuid #{widget_uuid}" if widget_media.nil?
+          widget_page_file = svg_object["iframe"].src.gsub(svg_object[:attr => "ub:src"], "")
           page_builder.object("id" => widget_uuid,
             "type" => "text/html",
-            "data" => widget_media.public_url,
+            "data" => File.join(widget_media.public_url, widget_page_file),
             "ub:background" => svg_object[:attr => "ub:background"],
-            "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
+            "style" => style_position(svg_object, page_width, page_height))
         end
       end
     end
@@ -336,13 +345,6 @@ module ConversionService
     # page_width is the width of the page
     # page_height is the height of the page
     def create_html_image(page_builder, svg_object, page_width, page_height)
-      size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
-      left = size_and_position["left"]
-      top = size_and_position["top"]
-      z_index = 0
-      width = size_and_position["width"]
-      height = size_and_position["height"]
-      z_index = size_and_position["z-index"].to_i
 
       image_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
 
@@ -356,13 +358,13 @@ module ConversionService
           "type" => "image/svg+xml",
           "data" => image_media.public_url,
           "ub:background" => svg_object[:attr => "ub:background"],
-          "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
+          "style" => style_position(svg_object, page_width, page_height))
       else
         page_builder.img("id" => image_uuid,
           "src" => image_media.public_url,
           "alt" => "Image",
           "ub:background" => svg_object[:attr => "ub:background"],
-          "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + width.to_s + "px; height:" + height.to_s + "px; z-index:" + z_index.to_s)
+          "style" => style_position(svg_object, page_width, page_height))
       end
     end
   end
