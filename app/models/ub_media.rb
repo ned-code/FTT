@@ -109,9 +109,10 @@ class UbMedia < ActiveRecord::Base
       storage = Storage::storage(data_identity_string)
       tmp_file = storage.get(data_path)
     end
-
-   Zip::ZipFile.foreach(tmp_file.path) do |an_entry|
-     storage.put(File.join(path, an_entry.name), an_entry.get_input_stream)
+    Zip::ZipFile.foreach(tmp_file.path) do |an_entry|
+      temp_file = Tempfile.new("zip_entry")
+      temp_file << an_entry.get_input_stream.read
+      storage.put(File.join(path, an_entry.name), temp_file)
     end
     tmp_file.close unless tmp_file.closed?
   end
