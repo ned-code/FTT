@@ -74,9 +74,9 @@ respond_to do |format|
         else
           content_type = request.headers["UB_SYNC_CONTENT_TYPE"]
         end
-        post_data = Tempfile.new('post_data')
+        post_data = File.open(File.join(Dir::tmpdir, "post_data#{UUID.generate}"), 'wb')
         post_data << request.raw_post
-        post_data.flush
+        post_data.close
         
         @item = @transaction.items.build(
           :path => file_name,
