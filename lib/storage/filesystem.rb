@@ -52,6 +52,7 @@ module Storage
             end
             data.rewind
             file << data.read
+            data.close
           end
         rescue => e
           raise ArgumentError, "invalid data: " + e.message
