@@ -50,7 +50,7 @@ module Storage
             file << data.read
           else
             if (data.closed?)
-              data = File.open(data.path)
+              data = File.open(data.path, 'rb')
             end
             data.rewind
             file << data.read
