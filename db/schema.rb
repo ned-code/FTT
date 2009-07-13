@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090629121644) do
+ActiveRecord::Schema.define(:version => 20090713084251) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -35,6 +35,8 @@ ActiveRecord::Schema.define(:version => 20090629121644) do
     t.datetime "updated_at"
   end
 
+  add_index "ub_conversions", ["media_id"], :name => "media_fk"
+
   create_table "ub_documents", :force => true do |t|
     t.string   "uuid"
     t.string   "bucket"
@@ -47,6 +49,8 @@ ActiveRecord::Schema.define(:version => 20090629121644) do
     t.integer  "metadata_media_id"
   end
 
+  add_index "ub_documents", ["uuid"], :name => "document_uuid_index", :unique => true
+
   create_table "ub_medias", :force => true do |t|
     t.string   "uuid"
     t.string   "path"
@@ -58,12 +62,17 @@ ActiveRecord::Schema.define(:version => 20090629121644) do
     t.string   "storage_config"
   end
 
+  add_index "ub_medias", ["page_element_id"], :name => "page_element_fk"
+  add_index "ub_medias", ["uuid"], :name => "media_uuid_index", :unique => true
+
   create_table "ub_page_elements", :force => true do |t|
     t.integer  "uniboard_page_id"
     t.integer  "media_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "ub_page_elements", ["uniboard_page_id"], :name => "page_fk"
 
   create_table "ub_pages", :force => true do |t|
     t.string   "uuid"
@@ -74,6 +83,9 @@ ActiveRecord::Schema.define(:version => 20090629121644) do
     t.datetime "updated_at"
     t.integer  "page_media_id"
   end
+
+  add_index "ub_pages", ["uniboard_document_id"], :name => "doument_fk"
+  add_index "ub_pages", ["uuid"], :name => "page_uuid_index", :unique => true
 
   create_table "ub_sync_transaction_items", :force => true do |t|
     t.integer  "ub_sync_transaction_id", :null => false
@@ -88,6 +100,8 @@ ActiveRecord::Schema.define(:version => 20090629121644) do
     t.string   "content_type"
   end
 
+  add_index "ub_sync_transaction_items", ["ub_sync_transaction_id"], :name => "transaction_fk"
+
   create_table "ub_sync_transactions", :force => true do |t|
     t.string   "uuid",             :null => false
     t.string   "ub_client_uuid",   :null => false
@@ -96,6 +110,8 @@ ActiveRecord::Schema.define(:version => 20090629121644) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "ub_sync_transactions", ["uuid"], :name => "transaction_uuid_index", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "email",                                  :null => false
