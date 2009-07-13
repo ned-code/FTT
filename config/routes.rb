@@ -10,7 +10,7 @@ ActionController::Routing::Routes.draw do |map|
     :controller => 'documents', :action => 'destroy_all',
     :conditions => { :method => :get }
   map.resources :documents, :member => {:push => :post} do |document|
-    document.resources :pages, :member => {:proto => :get}
+    document.resources :pages, :member => {:proto => :get, :info => :get}
   end
 
   map.resources :medias
