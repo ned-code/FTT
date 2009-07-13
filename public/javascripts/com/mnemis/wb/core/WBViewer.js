@@ -70,7 +70,7 @@ com.mnemis.wb.core.WBViewer.prototype.loadPage = function(pageUrl)
     $("body").append(loading);
     // load new page
     
-    if(jQuery.browser.msie)
+    if(jQuery.browser.msie || jQuery.browser.safari)
     {
         this.getPageHtml(pageUrl, loading);
     }
