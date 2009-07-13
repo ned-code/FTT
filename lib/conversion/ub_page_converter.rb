@@ -236,7 +236,7 @@ module ConversionService
       result += "; -moz-transform-origin: 0 0"
       result += "; -webkit-transform: matrix(#{matrix[0]}, #{matrix[1]}, #{matrix[2]}, #{matrix[3]}, #{matrix[4]}, #{matrix[5]})"
       result += "; -webkit-transform-origin: 0 0"
-      result += "; filter: 'progid:DXImageTransform.Microsoft.Matrix(M11 = #{matrix[0]}, M12 = #{matrix[1]}, M21 = #{matrix[2]}, M22 = #{matrix[3]}, Dx = #{matrix[4]}, Dy = #{matrix[5]})'"
+      result += "; filter: progid:DXImageTransform.Microsoft.Matrix(M11 = '#{matrix[0]}', M12 = '#{matrix[1]}', M21 = '#{matrix[2]}', M22 = '#{matrix[3]}', Dx = '#{matrix[4]}', Dy = '#{matrix[5]}', SizingMethod = 'auto expand')"
     end
 
     def style_position(svg_object, page_width, page_height)
