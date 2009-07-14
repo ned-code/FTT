@@ -50,6 +50,7 @@ class UbSyncTransactionItem < ActiveRecord::Base
           @tempfile.close
         end
         File.delete @tempfile.path
+        @tempfile = nil
       end
     end
   end

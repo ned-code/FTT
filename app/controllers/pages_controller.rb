@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  #permit 'registered'
+  permit 'registered'
 
   def show
     @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
@@ -21,7 +21,10 @@ class PagesController < ApplicationController
 
           #redirect_to @page_url
         }
-        format.xml { redirect_to @page.url }
+        format.xml { 
+          permit 'registered'
+          redirect_to @page.url
+        }
         format.json { 
           render :json => "{ 'url' : '#{@page_url}', 'previousId' : '#{@page.previous ? @page.previous.id : nil}' , 'nextId' : '#{@page.next ? @page.next.id : nil}'}"
         }

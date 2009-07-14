@@ -88,7 +88,7 @@ describe DocumentsController do
         it "'GET /documents/:uuid' should render error 404 if current user is not the owner" do
           get :show, :id => @document_not_owned.id
 
-          response.should be_not_found
+          response.should be_forbidden
           response.should respond_with(:content_type => :html)
         end
 

@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       if @user_session.save
         format.html do
           flash[:notice] = I18n.t 'flash.notice.login_successfull'
-          redirect_back_or_default documents_url
+          redirect_back_or_default new_session_url
         end
         format.xml { head :ok }
       else
@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
     respond_to do |format|
       format.html do
         flash[:notice] = I18n.t 'flash.notice.logout_successfull'
-        redirect_back_or_default documents_url
+        redirect_back_or_default new_session_url
       end
       format.xml { head :ok }
     end

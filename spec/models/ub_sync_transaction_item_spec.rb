@@ -53,9 +53,10 @@ describe UbSyncTransactionItem do
     )
 
     item.reload
-    uploaded_file.rewind # re-read in following test
+    original_file = File.open(upload_file_path, 'rb')
 
     item.data.should be_kind_of(Tempfile)
-    item.data.read.should == uploaded_file.read
+    item.data.read.should == original_file.read
+    original_file.close
   end
 end

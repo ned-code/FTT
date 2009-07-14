@@ -1,5 +1,5 @@
 class DocumentsController < ApplicationController
-  #permit 'registered'
+  permit 'registered'
 
   def index
     @synchronised_at = Time.now.utc
@@ -17,8 +17,10 @@ class DocumentsController < ApplicationController
         end
       end
       format.xml do
-        permit 'registered'
+          permit 'registered'
+          if (current_user)
             @documents = current_user.documents(:with_deleted => true)
+          end
       end
     end
   end
