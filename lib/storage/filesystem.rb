@@ -74,7 +74,9 @@ module Storage
 
         Tempfile.open(File.basename(path)) do |tempfile|
           tempfile.binmode
-          tempfile << File.open(full_path(path), 'rb').read
+          opened_file = File.open(full_path(path), 'rb')
+          tempfile << opened_file.read
+          opened_file.close
           tempfile.rewind
           yield tempfile
         end
@@ -82,7 +84,9 @@ module Storage
       else
         tempfile = Tempfile.new(File.basename(path))
         tempfile.binmode
-        tempfile << File.open(full_path(path), 'rb').read
+        opened_file = File.open(full_path(path), 'rb')
+        tempfile << opened_file.read
+        opened_file.close
         tempfile.rewind
         tempfile
       end

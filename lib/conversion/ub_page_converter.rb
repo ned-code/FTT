@@ -218,8 +218,8 @@ module ConversionService
       z_index = svg_object[:attr => "ub:z-value"]
       width = svg_object.width.to_f
       height = svg_object.height.to_f
-      matrix = get_transform_matrix(svg_object)
-      # get the transform and modify top, left, width and height according to this transform
+      matrix = get_transform_matrix(svg_object)      
+#      get the transform and modify top, left, width and height according to this transform
 #      if (matrix)
 #        width = width * matrix[0].to_f
 #        height = height * matrix[3].to_f
