@@ -114,9 +114,9 @@ describe UbDocument do
     it 'should update metadata and increment version if metadata are modified' do
       previous_version = @document.version
       new_metadata = fixture_file('ub_document/default_rdf.rdf')
-      @document.media.data = File.open(new_metadata)
+      @document.media.data = File.open(new_metadata,'rb')
       @document.media.save
-      ub_file = File.open(@default_ub)
+      ub_file = File.open(@default_ub,'rb')
       @document.update_with_ub(ub_file, [@document.uuid])
       @document.title.should == "Document title"
       @document.version.should == previous_version + 1
@@ -124,7 +124,7 @@ describe UbDocument do
 
     it 'should not update metadata and increment version if metadata are not modified modified' do
       previous_version = @document.version
-      ub_file = File.open(@default_ub)
+      ub_file = File.open(@default_ub,'rb')
       @document.update_with_ub(ub_file, [@document.uuid])
       @document.version.should == previous_version + 1
     end

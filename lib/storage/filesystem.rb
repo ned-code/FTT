@@ -73,14 +73,16 @@ module Storage
       if block_given?
 
         Tempfile.open(File.basename(path)) do |tempfile|
-          tempfile << File.open(full_path(path)).read
+          tempfile.binmode
+          tempfile << File.open(full_path(path), 'rb').read
           tempfile.rewind
           yield tempfile
         end
 
       else
         tempfile = Tempfile.new(File.basename(path))
-        tempfile << File.open(full_path(path)).read
+        tempfile.binmode
+        tempfile << File.open(full_path(path), 'rb').read
         tempfile.rewind
         tempfile
       end

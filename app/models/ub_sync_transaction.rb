@@ -67,7 +67,10 @@ class UbSyncTransaction < ActiveRecord::Base
 
         # Merge multi-part items
         if item.part_total_nb > 1
-          data = Tempfile.new(item.path) if item.part_nb == 1
+          if item.part_nb == 1
+            data = Tempfile.new(item.path)
+            data.binmode
+          end
           data << item.data.read
 
           if item.part_nb == item.part_total_nb

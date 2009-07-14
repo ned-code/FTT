@@ -75,7 +75,9 @@ shared_examples_for "storage interface for put method" do
   end
 
   it "should accept Tempfile has 'data' argument" do
-    lambda { @storage.put('path/name', Tempfile.new('test.txt')) }.should_not raise_error(ArgumentError)
+    temp = Tempfile.new('test.txt')
+    temp.binmode
+    lambda { @storage.put('path/name', temp) }.should_not raise_error(ArgumentError)
   end
 
   it "should accept storage Hash {:path => String, :storage_config => Hash} has 'data' argument" do
