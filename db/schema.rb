@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090713084251) do
+ActiveRecord::Schema.define(:version => 20090713102337) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20090713084251) do
     t.string   "title"
     t.integer  "status"
     t.integer  "metadata_media_id"
+    t.boolean  "is_public"
   end
 
   add_index "ub_documents", ["uuid"], :name => "document_uuid_index", :unique => true

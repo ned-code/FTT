@@ -42,7 +42,7 @@ class UbSyncTransaction < ActiveRecord::Base
     errors.empty? ? true : false
   end
 
-  def commit
+  def commit(public_flag = false)
     return false unless save
     return false unless complete?
 
@@ -55,7 +55,7 @@ class UbSyncTransaction < ActiveRecord::Base
         document.accepts_role 'owner', user
       end
 
-
+      document.is_public = public_flag
       item_processed = []
       item_ub_document = nil
       media_uuids = []

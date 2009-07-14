@@ -1,18 +1,18 @@
 class PagesController < ApplicationController
-  permit 'registered'
+  #permit 'registered'
 
   def show
     @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
     @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_id(params[:id]) if @document
-    #TODO how to get server url without request object?
+    
     if (@page)
-#      @domain = "#{request.protocol}#{request.host_with_port}"
       @page_url =  @page.url("application/xhtml+xml")
     end
     respond_to do |format|
-      if @document && @page && permit?('owner of document')
+      if @document && @page && (@document.is_public || permit?('owner of document'))
         format.html {
           user_agent = request.env['HTTP_USER_AGENT'].downcase
+          # ie does not support xhtml. So we render html
           if user_agent =~ /msie/i
            render :action => "show", :layout => false, :content_type => "text/html"
           else

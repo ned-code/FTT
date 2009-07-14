@@ -1,28 +1,38 @@
 class DocumentsController < ApplicationController
-  permit 'registered'
+  #permit 'registered'
 
   def index
     @synchronised_at = Time.now.utc
-    @documents = current_user.documents(:with_deleted => (request.format == Mime::XML))
+    @documents = []
     #TODO how to get server url without request object?
 #    @domain = "#{request.protocol}#{request.host_with_port}"
     respond_to do |format|
-      format.html
-      format.xml
+      format.html do
+        if (!current_user)
+          @documents = UbDocument.find_all_by_is_public(true)
+          render :action => 'index_public'
+        else
+          @documents = current_user.documents(:with_deleted => false)
+          render :action => 'index'
+        end
+      end
+      format.xml do
+        permit 'registered'
+            @documents = current_user.documents(:with_deleted => true)
+      end
     end
   end
 
   def show
     @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
-    #TODO how to get server url without request object?
-#    @domain = "#{request.protocol}#{request.host_with_port}"
+
 respond_to do |format|
       if @document
-        if permit?('owner of document')
+        if @document.is_public || permit?('owner of document')
           format.html
           format.xml { render :xml => @document.to_xml }
         else
-          format.html { render_optional_error_file(:not_found) }
+          format.html { render_optional_error_file(:forbidden) }
           format.xml { head :forbidden }
         end
       else
@@ -98,10 +108,17 @@ respond_to do |format|
           format.xml { head :ok }
         elsif sync_action == 'continue' && @transaction.save
           format.xml { render :xml => @transaction }
-        elsif sync_action == 'commit' && @transaction.commit
-          @transaction.destroy
-          document = UbDocument.find_by_uuid(params[:id])
-          format.xml { render :xml => document.to_xml }
+        elsif (sync_action == 'commit')
+          public_flag = request.headers["UB_PUBLIC_DOCUMENT"] || "FALSE"
+          public_flag = public_flag.upcase == "TRUE" || public_flag == "1"
+          if (@transaction.commit(public_flag))
+            @transaction.destroy
+            document = UbDocument.find_by_uuid(params[:id])
+            format.xml { render :xml => document.to_xml }
+          else
+            format.xml { render :xml => @transaction.errors, :status => :unprocessable_entity }
+            @transaction.destroy
+          end
         else
           format.xml { render :xml => @transaction.errors, :status => :unprocessable_entity }
         end
@@ -132,6 +149,7 @@ respond_to do |format|
   end
 
   def destroy_all
+    permit 'registered'
     UbDocument.delete_all
     Role.delete_all
     RolesUser.delete_all
