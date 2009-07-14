@@ -106,6 +106,7 @@ class UbDocument < ActiveRecord::Base
     options[:builder].document('xmlns' => XML_UNIBOARD_DOCUMENT_NAMESPACE,
       'uuid' => uuid,
       'version' => version,
+      'public' => is_public,
       'created-at' => created_at.xmlschema,
       'updated-at' => updated_at.xmlschema) do |xml_document|
       
