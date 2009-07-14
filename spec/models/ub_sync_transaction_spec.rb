@@ -40,7 +40,7 @@ describe UbSyncTransaction do
       while(data = file.read(5)) do
         part_count += 1
 
-        tempfile = Tempfile.new(@file_with_parts.path + ".part#{part_count}",'rb')
+        tempfile = Tempfile.new(@file_with_parts.path + ".part#{part_count}")
         tempfile.binmode
         tempfile << data
         tempfile.rewind
@@ -155,7 +155,7 @@ describe UbSyncTransaction do
   end
 
   it "should have error when commited if multi-part item can't be merged" do
-    tempfile = Tempfile.new('fake.part','rb')
+    tempfile = Tempfile.new('fake.part')
     tempfile.binmode
     @file_with_parts[1][:data] = tempfile
     @file_with_parts[1][:part_check_sum] = Digest::MD5.file(tempfile.path).hexdigest
