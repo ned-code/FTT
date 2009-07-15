@@ -49,6 +49,20 @@ com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(
     });
 
     this.updateDrawing();
+
+    //update zoom to fit browser page
+    heightFactor = (window.innerHeight - this.initialHeight)/this.initialHeight;
+    console.log(heightFactor);
+    widthFactor = (window.innerWidth - this.initialWidth)/this.initialWidth;
+    console.log(widthFactor);
+    if (heightFactor < widthFactor)
+    {
+        this.zoom(1 + heightFactor);
+    }
+    else
+    {
+        this.zoom(1 + widthFactor);
+    }
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.updateDrawing = function() {
