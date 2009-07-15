@@ -121,6 +121,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype.beginLaser = function(e)
 
 com.mnemis.wb.controllers.WBBoardController.prototype.beginHand = function(e)
 {
+    	e.preventDefault();
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.draw = function(e)
