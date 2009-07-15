@@ -163,7 +163,7 @@ def fixture_ubz(type, uuid = nil, page_uuids = [])
   page_uuids.size.times do |i|
     content.gsub!(("page%04d-0000-0000-0000-000000000000" % (i + 1).to_s), page_uuids[i])
   end
-  File.open(ub_file, 'w') do |file|
+  File.open(ub_file, 'wb') do |file|
     file << content
   end
 
@@ -199,7 +199,7 @@ def full_doc(doc_uuid = nil)
       elsif (File.basename(a_file) =~ /.*\.thumbnail.*/)
         thumbnails << a_file
       end
-      storage.put(file_path, File.open(a_file))
+      storage.put(file_path, File.open(a_file,'rb'))
     end
     document.save
   end

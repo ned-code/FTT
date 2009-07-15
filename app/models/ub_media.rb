@@ -61,7 +61,7 @@ class UbMedia < ActiveRecord::Base
     resource = conversions.create(
       :media_type => p_type,
       :path => destination_file_path,
-      :data => File.open(File.join(options[:destination_path], converted_file)),
+      :data => File.open(File.join(options[:destination_path], converted_file),'rb'),
       :parameters => p_params
     )
 
@@ -111,6 +111,7 @@ class UbMedia < ActiveRecord::Base
     end
     Zip::ZipFile.foreach(tmp_file.path) do |an_entry|
       temp_file = Tempfile.new("zip_entry")
+      temp_file.binmode
       temp_file << an_entry.get_input_stream.read
       storage.put(File.join(path, an_entry.name), temp_file)
     end

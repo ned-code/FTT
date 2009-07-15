@@ -40,7 +40,7 @@ describe UbPage do
         widget_media.uuid = UUID.new.generate
         widget_media.save!
 
-        svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
+        svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg')),'rb').read()
         svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
         svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
         svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
@@ -90,7 +90,7 @@ describe UbPage do
       page.page_elements.build(:media => widget_media)
       page.save!
 
-      svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
+      svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg')),'rb').read()
       svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
       svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
 
@@ -121,7 +121,7 @@ describe UbPage do
       page.page_elements.build(:media => svg_image_media_to_delete)
       page.save!
 
-      svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
+      svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg')),'rb').read()
       svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
       svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
       svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
@@ -150,7 +150,7 @@ describe UbPage do
         svg_image_media = Factory.build(:ub_media)
         svg_image_media.uuid = UUID.new.generate
         svg_image_media.save!
-        svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg'))).read()
+        svg_file = File.open(fixture_file(File.join('ub_page', 'default_svg_page.svg')),'rb').read()
         svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
         svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
         svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)

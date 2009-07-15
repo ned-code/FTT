@@ -22,12 +22,12 @@ describe ConversionService::UbPageConverter do
     it "should convert ub document to HTML index file" do
       options = {}
       options[:document_uuid] = "00000000-0000-0000-0000-0000000"
-      options[:document_rdf_stream] = File.open(@rdf_file)
+      options[:document_rdf_stream] = File.open(@rdf_file,'rb')
       options[:destination_path] = File.join(@converted_file_path)
       page_file_name = ConversionService::convert_file(@ub_file, UbMedia::UB_DOCUMENT_TYPE, "application/xhtml+xml", options)
       @converted_file = File.join(options[:destination_path], page_file_name)
-      index_html = File.open(@converted_file).read()
-      expected_result = File.open(fixture_file(File.join('conversion', 'index.html'))).read
+      index_html = File.open(@converted_file,'rb').read()
+      expected_result = File.open(fixture_file(File.join('conversion', 'index.html')),'rb').read
       index_html.should == expected_result
       RAILS_DEFAULT_LOGGER.debug "index file #{@converted_file}"
       FileUtils.remove_file(@converted_file, true)
@@ -38,7 +38,7 @@ describe ConversionService::UbPageConverter do
 
     before(:all) do
       pdf_file = fixture_file('conversion/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf')
-      @storage.put('0ade677d-8b59-44c7-9cdb-30be681d4667/objects/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf', File.open(pdf_file))
+      @storage.put('0ade677d-8b59-44c7-9cdb-30be681d4667/objects/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf', File.open(pdf_file,'rb'))
       @pdf_media = UbMedia.new()
       @pdf_media.uuid = '327ff34c-874b-4d30-adfc-b3b772bcbd72'
       @pdf_media.media_type = 'application/pdf'
@@ -48,7 +48,7 @@ describe ConversionService::UbPageConverter do
 
       @page_file = fixture_file('conversion/page001.svg')
       @page_media = UbMedia.new()
-      @storage.put('0ade677d-8b59-44c7-9cdb-30be681d4667/page001.svg', File.open(@page_file))
+      @storage.put('0ade677d-8b59-44c7-9cdb-30be681d4667/page001.svg', File.open(@page_file,'rb'))
       @page_media.uuid = '0ade677d-8b59-44c7-9cdb-30be681d4667'
       @page_media.media_type = UbMedia::UB_PAGE_TYPE
       @page_media.path = '0ade677d-8b59-44c7-9cdb-30be681d4667/page001.svg'
@@ -84,7 +84,7 @@ describe ConversionService::UbPageConverter do
       options[:destination_path] = File.join(@converted_file_path)
       page_file_name = ConversionService::convert_media(@page_media, "application/xhtml+xml", options)
       @converted_file = File.join(options[:destination_path], page_file_name)
-      @page_html = File.open(@converted_file).read()
+      @page_html = File.open(@converted_file,'rb').read()
     end
 
     after(:all) do
@@ -104,7 +104,7 @@ describe ConversionService::UbPageConverter do
      # uncomment to generate output on disk under spec/output_docuement
 #     FileUtils.remove_dir(File.join(RAILS_ROOT, 'spec', 'output_document'), true)
 #     FileUtils.mv(@extracted_document_path, File.join(RAILS_ROOT, 'spec', 'output_document'))
-#     File.open(File.join(RAILS_ROOT, 'spec', 'output_document', 'page001.xhtml'), 'w') do |file|
+#     File.open(File.join(RAILS_ROOT, 'spec', 'output_document', 'page001.xhtml'), 'wb') do |file|
 #       file << @page_html
 #     end
     correct_width = page.search("#ub_board")[0]['style'] =~ /width: 1124px/

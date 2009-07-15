@@ -50,7 +50,7 @@ module Storage
             file << data.read
           else
             if (data.closed?)
-              data = File.open(data.path)
+              data = File.open(data.path, 'rb')
             end
             data.rewind
             file << data.read
@@ -73,14 +73,20 @@ module Storage
       if block_given?
 
         Tempfile.open(File.basename(path)) do |tempfile|
-          tempfile << File.open(full_path(path)).read
+          tempfile.binmode
+          opened_file = File.open(full_path(path), 'rb')
+          tempfile << opened_file.read
+          opened_file.close
           tempfile.rewind
           yield tempfile
         end
 
       else
         tempfile = Tempfile.new(File.basename(path))
-        tempfile << File.open(full_path(path)).read
+        tempfile.binmode
+        opened_file = File.open(full_path(path), 'rb')
+        tempfile << opened_file.read
+        opened_file.close
         tempfile.rewind
         tempfile
       end

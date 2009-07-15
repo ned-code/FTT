@@ -84,7 +84,7 @@ com.mnemis.wb.core.WBViewer.prototype.loadPageId = function(documentId, pageId) 
     var that = this;
     this.currentDocument = documentId;
     this.currentPageId = pageId;
-    $.getJSON(com.mnemis.core.applicationPath + "/documents/" + documentId + "/pages/" + pageId, null, function(data) {
+    $.getJSON(com.mnemis.core.applicationPath + "/documents/" + documentId + "/pages/" + pageId + "/info", null, function(data) {
         that.previousPageId = data.previousId.length ? data.previousId : null;
         that.nextPageId = data.nextId.length ? data.nextId : null;
         that.loadPage(data.url);

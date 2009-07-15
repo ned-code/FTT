@@ -20,7 +20,7 @@ module ConversionService
     # * :destination_path a path where to save conversion
     def convert_file(file, source_type, destination_type, options)
       destination_file = nil
-      opened_file = File.open(file)
+      opened_file = File.open(file,'rb')
       if (source_type == supported_source_types[0] && destination_type == supported_destination_type[0])
         file_content = convert_svg_page_to_html(options[:page_uuid], opened_file)
         page_base_name = File.basename(file).match(/.*\./)[0]
@@ -34,7 +34,7 @@ module ConversionService
         raise "Converter UbPageConverter does not support conversion from #{source_type} to #{destination_type}"
       end
       opened_file.close()
-      File.open(File.join(options[:destination_path], destination_file), 'w') do |html_file|
+      File.open(File.join(options[:destination_path], destination_file), 'wb') do |html_file|
         html_file << file_content
       end
       raise "No output file has been created" if destination_file.nil?
@@ -43,7 +43,7 @@ module ConversionService
 
     def convert_media(media, destination_type, options)
       tmp_media_file = File.join(options[:destination_path], "#{media.uuid}.tmp")
-      File.open(tmp_media_file, 'w') do |file|
+      File.open(tmp_media_file, 'wb') do |file|
         file << media.data.read()
       end
       options[:page_uuid] = media.uuid
@@ -218,8 +218,8 @@ module ConversionService
       z_index = svg_object[:attr => "ub:z-value"]
       width = svg_object.width.to_f
       height = svg_object.height.to_f
-      matrix = get_transform_matrix(svg_object)
-      # get the transform and modify top, left, width and height according to this transform
+      matrix = get_transform_matrix(svg_object)      
+#      get the transform and modify top, left, width and height according to this transform
 #      if (matrix)
 #        width = width * matrix[0].to_f
 #        height = height * matrix[3].to_f
@@ -236,7 +236,7 @@ module ConversionService
       result += "; -moz-transform-origin: 0 0"
       result += "; -webkit-transform: matrix(#{matrix[0]}, #{matrix[1]}, #{matrix[2]}, #{matrix[3]}, #{matrix[4]}, #{matrix[5]})"
       result += "; -webkit-transform-origin: 0 0"
-      result += "; filter: 'progid:DXImageTransform.Microsoft.Matrix(M11 = #{matrix[0]}, M12 = #{matrix[1]}, M21 = #{matrix[2]}, M22 = #{matrix[3]}, Dx = #{matrix[4]}, Dy = #{matrix[5]})'"
+      result += "; filter: progid:DXImageTransform.Microsoft.Matrix(M11 = '#{matrix[0]}', M12 = '#{matrix[1]}', M21 = '#{matrix[2]}', M22 = '#{matrix[3]}', Dx = '#{matrix[4]}', Dy = '#{matrix[5]}', SizingMethod = 'auto expand')"
     end
 
     def style_position(svg_object, page_width, page_height)

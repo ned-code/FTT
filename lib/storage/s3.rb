@@ -71,6 +71,7 @@ module Storage
       return nil unless key.exists?
       if block_given?
         Tempfile.open(File.basename(path)) do |tempfile|
+          tempfile.binmode
           tempfile << key.data
           tempfile.rewind
           yield tempfile
@@ -78,6 +79,7 @@ module Storage
 
       else
         tempfile = Tempfile.new(File.basename(path))
+        tempfile.binmode
         tempfile << key.data
         tempfile.rewind
         tempfile

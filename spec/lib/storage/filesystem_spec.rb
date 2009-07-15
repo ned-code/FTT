@@ -5,7 +5,7 @@ def mk_storage_fs_file(path, content = '')
   path = File.join(RAILS_ROOT, @storage.basedir, path) if path.to_s !~ /^\/.+/
 
   FileUtils.mkdir_p(File.dirname(path))
-  File.open(path, 'w') do |file|
+  File.open(path, 'wb') do |file|
     file << content
   end
 
@@ -68,6 +68,7 @@ describe Storage::Filesystem do
     it "should create file with data stream" do
       content = 'test content'
       content_stream = Tempfile.new('test-storage-fs.txt')
+      content_stream.binmode
       content_stream << content
 
       lambda { @storage.put(@path, content_stream) }.should_not raise_error

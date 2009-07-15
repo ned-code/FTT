@@ -114,7 +114,9 @@ describe DocumentsController do
 
     before(:each) do
       request.env['HTTP_ACCEPT'] = 'application/xml'
-      request.env['rack.input'] = Tempfile.new('tmp-transaction-file')
+      temp = Tempfile.new('tmp-transaction-file')
+      temp.binmode
+      request.env['rack.input'] = temp
     end
 
     context 'accessed by a registered user' do
@@ -191,7 +193,7 @@ describe DocumentsController do
 
         request.env['UB_CLIENT_UUID'] = @client_uuid
 
-        File.open(fixture_file(transaction_path)) do |file|
+        File.open(fixture_file(transaction_path),'rb') do |file|
           request.env['rack.input'] << file.read
         end
         request.env['UB_SYNC_FILENAME'] = transaction_path
@@ -264,7 +266,7 @@ describe DocumentsController do
         request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
         request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
 
-        File.open(fixture_file(transaction_path)) do |file|
+        File.open(fixture_file(transaction_path),'rb') do |file|
           request.env['rack.input'] << file.read
         end
         request.env['UB_SYNC_FILENAME'] = transaction_path
@@ -352,7 +354,7 @@ describe DocumentsController do
           @transaction.items.create!(
             :path => path.gsub(/.*?#{UUID_FORMAT_REGEX}\//, ''),
             :content_type => get_content_type_from_filename(path) || "application/octet+stream",
-            :data => File.open(path),
+            :data => File.open(path,'rb'),
             :part_nb => 1,
             :part_total_nb => 1,
             :part_check_sum => Digest::MD5.file(path).hexdigest,

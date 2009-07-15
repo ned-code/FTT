@@ -45,13 +45,10 @@ class UbSyncTransactionItem < ActiveRecord::Base
   def save_data_on_storage
     if @tempfile
       storage.put(storage_path, @tempfile)
-      if (@tempfile.is_a?(IO))
-        if (!@tempfile.closed?)
-          @tempfile.close
-        end
-        File.delete @tempfile.path
-        @tempfile = nil
+      if (@tempfile.is_a?(IO) && !@tempfile.closed?)
+        @tempfile.close
       end
+      @tempfile = nil
     end
   end
   
