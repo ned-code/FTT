@@ -6,7 +6,7 @@ Your document has been successfully published.
 else
   "This document is privite. Only you can acces it with the following URL"
 end %>
-<%= @document.public_url %>
+<%= url_for :controller => :documents, :action => :show, :id => @document.id, :only_path => false %>
 
 Best Regards,
 

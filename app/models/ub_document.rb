@@ -160,10 +160,6 @@ class UbDocument < ActiveRecord::Base
     freeze
   end
 
-  def public_url
-    Storage::storage(self.media.storage_config).public_url("documents/#{self.uuid}")
-  end
-
   # Normal ActiveRecord Destroy process (set 'deleted_at' attribute
   # to compatibility with custom destroy method)
   def destroy!
