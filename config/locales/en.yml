@@ -14,3 +14,16 @@ en:
 
   alert:
     destroy_confirmation: "Are you sure?"
+
+  email:
+    user_registration_activation_email:
+      subject: "MyUniboard activation message"
+
+    user_registration_confirmation_email:
+      subject: "MyUniboard confirmation message"
+
+    user_reset_password_email:
+      subject: "MyUniboard reset password message"
+
+    user_publish_document_success_email:
+      subject: "Your document {{document_name}} has been published"

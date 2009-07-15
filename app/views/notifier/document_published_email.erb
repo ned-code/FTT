@@ -1,0 +1,13 @@
+Congratulation!
+
+Your document has been successfully published.
+<%= if (@document.is_public)
+  "Invite people to see this document by sending them the following URL"
+else
+  "This document is privite. Only you can acces it with the following URL"
+end %>
+<%= @document.public_url %>
+
+Best Regards,
+
+MyUniboard team

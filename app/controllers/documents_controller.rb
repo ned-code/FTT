@@ -118,6 +118,7 @@ respond_to do |format|
             @transaction.destroy
             document = UbDocument.find_by_uuid(params[:id])
             format.xml { render :xml => document.to_xml }
+            Notifier.deliver_document_published_email!(current_user, document)
           else
             format.xml { render :xml => @transaction.errors, :status => :unprocessable_entity }
             @transaction.destroy
