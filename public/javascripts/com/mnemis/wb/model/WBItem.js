@@ -35,7 +35,9 @@ com.mnemis.wb.model.WBItem.prototype.select = function()
         $(this.domNode).css("zIndex", 2000000);
         if ($(this.domNode).attr("type") == "application/x-shockwave-flash")
             {
-                var player = document.getElementById(this.domNode.id);
+                console.log(this.domNode.id);
+                player = document.getElementById(this.domNode.id);
+                console.log(player);
                 player.sendEvent('PLAY');
             }
     }

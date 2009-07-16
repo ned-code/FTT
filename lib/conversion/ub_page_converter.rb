@@ -288,6 +288,7 @@ module ConversionService
 
       page_builder.object(
         "id" => video_uuid,
+        "name" => video_uuid,
         "data" => "/player/player-viral.swf",
         "type" => "application/x-shockwave-flash",
         "style" => "position: absolute; top: #{top}px; left: #{left}px; width: #{width}px; height: #{height}px; z-index: #{z_index}") {

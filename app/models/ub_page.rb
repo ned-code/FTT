@@ -122,10 +122,12 @@ class UbPage < ActiveRecord::Base
         original_page_elements.delete(page_element)
       else
         media = UbMedia.find_by_uuid(media_uuid)
-        raise "No matching media for element #{element} with uuid #{media_uuid}" if media == nil
-        page_element = page_elements.build(:media => media)
+#        raise "No matching media for element #{element} with uuid #{media_uuid}" if media == nil
+        if (media != nil)
+          page_element = page_elements.build(:media => media)
+        end
       end
-      page_element.update_from_svg(element)
+      page_element.update_from_svg(element) if !page_element.nil?
     end
 
     # Remove all page elements that are no more used
