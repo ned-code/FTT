@@ -82,6 +82,7 @@ module ConversionService
             end
             svg_drawing_builder.tag!("polygon", "points" => translated_points,
               "fill" => current_polygon.fill,
+              "fill-rule" => "evenodd",
               "fill-opacity" => current_polygon[:attr => "fill-opacity"],
               "z-index" => current_polygon[:attr => "ub:z-value"],
               "ub:fill-on-dark-background" => current_polygon[:attr => "ub:fill-on-dark-background"],
@@ -166,7 +167,6 @@ module ConversionService
                 end
               rescue => e
                 RAILS_DEFAULT_LOGGER.debug(e.message)
-                RAILS_DEFAULT_LOGGER.debug(e.backtrace.join("\n"))
               end
 
               # add text
@@ -181,7 +181,20 @@ module ConversionService
                 end
               rescue => e
                 RAILS_DEFAULT_LOGGER.debug(e.message)
-                RAILS_DEFAULT_LOGGER.debug(e.backtrace.join("\n"))
+              end
+
+              # add video
+              # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
+              begin
+                if (page.video && page.video.is_a?(Array))
+                  page.video.each do |a_video|
+                    create_html_video(html_page_builder, a_video, page_width, page_height)
+                  end
+                elsif (page.video)
+                  create_html_video(html_page_builder, page.video, page_width, page_height)
+                end
+              rescue => e
+                RAILS_DEFAULT_LOGGER.debug(e.message)
               end
             }
           }
@@ -219,15 +232,15 @@ module ConversionService
       width = svg_object.width.to_f
       height = svg_object.height.to_f
       matrix = get_transform_matrix(svg_object)      
-#      get the transform and modify top, left, width and height according to this transform
-#      if (matrix)
-#        width = width * matrix[0].to_f
-#        height = height * matrix[3].to_f
-#        left = (svg_object.x.to_f  * matrix[0].to_f) + page_width.to_i / 2
-#        top = (svg_object.y.to_f  * matrix[3].to_f) + page_height.to_i / 2
-#        left = left + matrix[4].to_f
-#        top = top + matrix[5].to_f
-#      end
+      #      get the transform and modify top, left, width and height according to this transform
+      #      if (matrix)
+      #        width = width * matrix[0].to_f
+      #        height = height * matrix[3].to_f
+      #        left = (svg_object.x.to_f  * matrix[0].to_f) + page_width.to_i / 2
+      #        top = (svg_object.y.to_f  * matrix[3].to_f) + page_height.to_i / 2
+      #        left = left + matrix[4].to_f
+      #        top = top + matrix[5].to_f
+      #      end
       return { "left" => left, "top" => top, "width" => width, "height" => height, "z-index" => z_index, "matrix" => string_matrix(matrix)}
     end
 
@@ -250,6 +263,43 @@ module ConversionService
       result += z_index.to_s + "; " + size_and_position["matrix"]
     end
 
+
+    def create_html_video(page_builder, svg_object, page_width, page_height)
+      video_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
+      video_media = UbMedia.find_by_uuid(video_uuid)
+      raise "Media missing for uuid #{video_uuid}" if video_media.nil?
+
+      size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
+      left = size_and_position["left"]
+      top = size_and_position["top"]
+      z_index = size_and_position["z-index"].to_i
+      width = size_and_position["width"]
+      height = size_and_position["height"]
+      matrix = get_transform_matrix(svg_object)
+#    get the transform and modify top, left, width and height according to this transform
+      if (matrix)
+        width = width * matrix[0].to_f
+        height = height * matrix[3].to_f
+        left = (svg_object.x.to_f  * matrix[0].to_f) + page_width.to_i / 2
+        top = (svg_object.y.to_f  * matrix[3].to_f) + page_height.to_i / 2
+        left = left + matrix[4].to_f
+        top = top + matrix[5].to_f
+      end
+
+      page_builder.object(
+        "id" => video_uuid,
+        "data" => "/player/player-viral.swf",
+        "type" => "application/x-shockwave-flash",
+        "style" => "position: absolute; top: #{top}px; left: #{left}px; width: #{width}px; height: #{height}px; z-index: #{z_index}") {
+        page_builder.param( "value" => "/player/player-viral.swf", "name" => "movie")
+        page_builder.param( "value" => "true", "name" => "allowfullscreen")
+        page_builder.param( "value" => "always", "name" => "allowscriptaccess")
+        page_builder.param( "value" => "file=#{video_media.public_url}", "name" => "flashvars")
+      }
+
+    end
+
+    
     # Convert a SVG text Element to an HTML text Element and append it to the HTML page file
     # page_builder is the XmlMarkup Builder of the html page. Used to append converted Element
     # svg_object is the XMLObject of the SVG Element
