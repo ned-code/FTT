@@ -16,4 +16,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :medias
   
   map.root :controller => 'documents', :action => 'index'
+
+  map.connect 'orbit/show', :controller => 'test_orbit', :action => 'show'
+  map.connect 'orbit/send_data', :controller => 'test_orbit', :action => 'send_data'
 end

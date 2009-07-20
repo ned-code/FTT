@@ -49,4 +49,17 @@ class ApplicationController < ActionController::Base
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
   end
+
+  def orbited_javascript
+    [
+    "<script src=\"http://#{APP_SETTINGS[:orbited_host]}:#{APP_SETTINGS[:orbited_port]}/static/Orbited.js\"></script>",
+    '<script>',
+    '  document.domain = document.domain;',
+    "  Orbited.settings.port = #{APP_SETTINGS[:orbited_port]};",
+    "  Orbited.settings.hostname = '#{APP_SETTINGS[:orbited_host]}';",
+    '  TCPSocket = Orbited.TCPSocket;',
+    '</script>',
+    "<script src=\"http://#{APP_SETTINGS[:orbited_host]}:#{APP_SETTINGS[:orbited_port]}/static/protocols/stomp/stomp.js\"></script>"
+    ].join("\n")
+  end
 end

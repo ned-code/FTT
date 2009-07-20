@@ -1,5 +1,10 @@
 # Settings specified here will take precedence over those in config/environment.rb
 
+APP_SETTINGS = Hash.new
+APP_SETTINGS[:orbited_host] = 'st-ub.mnemis.com'
+APP_SETTINGS[:orbited_port] = '8500'
+APP_SETTINGS[:site_address] = 'st-ub.mnemis.com:80'
+
 # The production environment is meant for finished, "live" apps.
 # Code is not reloaded between requests
 config.cache_classes = true
