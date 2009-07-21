@@ -5,11 +5,11 @@ com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js");
 
 com.mnemis.core.Import("com/mnemis/wb/model/WBPage.js");
 com.mnemis.core.Import("com/mnemis/wb/controllers/WBDrawingController.js");
-
+com.mnemis.core.Import("com/mnemis/wb/controllers/WBCollaborationController.js");
 
 com.mnemis.wb.controllers.WBBoardController = function(editable)
 {
-	console.log("init board controller");
+    console.log("init board controller");
 
     if (editable || jQuery.browser.msie)
     {
@@ -48,6 +48,11 @@ com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(
         $(this).attr("data", relPath);
     });
 
+    if (this.collaborationController)
+    {
+        this.collaborationController.disconnect();
+    }
+    this.collaborationController = new WB.controllers.WBCollaborationController(page);
     this.updateDrawing();
 
     //update zoom to fit browser page
@@ -225,6 +230,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype._moveItem = function(item,
 
 com.mnemis.wb.controllers.WBBoardController.prototype.move = function(e)
 {
+    this.haMoved = true;
 	if (this.originalMovingPos.firstMove && this.selection.length)
 	{
 		var selectionToUndo = this.selection[0];
@@ -250,7 +256,15 @@ com.mnemis.wb.controllers.WBBoardController.prototype.move = function(e)
 	e.preventDefault();
 }
 
-   
+com.mnemis.wb.controllers.WBBoardController.prototype.endMove = function(e)
+{
+    if (this.selection[0] && this.haMoved)
+    {
+        this.selection[0].endOfMove();
+    }
+    this.haMoved = false;
+}
+
 com.mnemis.wb.controllers.WBBoardController.prototype.zoom = function(factor)
 {
     var previousZoom = this.currentZoom;
@@ -339,6 +353,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype.mouseUp = function(e)
     switch(that.currentTool)
 	{
 		case 0: that.drawingController.endDraw(e); break;
+                case 7: that.endMove(e); break;
 	}	
 }
 

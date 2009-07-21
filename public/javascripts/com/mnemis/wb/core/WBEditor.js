@@ -41,6 +41,7 @@ com.mnemis.wb.core.WBEditor = function()
     this.previousPageId = undefined;
     this.nextPageId = undefined;
 
+    this.applicationUuid = new com.mnemis.core.UUID().id;
     WB.application.viewer = this;
 }
 

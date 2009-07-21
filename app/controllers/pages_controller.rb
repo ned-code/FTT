@@ -1,3 +1,4 @@
+require 'stomp'
 class PagesController < ApplicationController
   permit 'registered'
 
@@ -51,6 +52,13 @@ class PagesController < ApplicationController
     end
   end
 
+  def update
+    s = Stomp::Client.new
+    s.send(params[:ubChannel],params[:ubData])
+    s.close
+    render :nothing => true
+  end
+  
   def proto
     @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
     @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_id(params[:id]) if @document
@@ -58,9 +66,11 @@ class PagesController < ApplicationController
     if (@page)
       @page_url =  @page.url("application/xhtml+xml")
     end
+    @domain = request.protocol + request.host_with_port
     respond_to do |format|
       if @document && @page && permit?('owner of document')
         format.html {
+          @orbited_js = orbited_javascript
           render :action => "showproto", :layout => false, :content_type => "application/xhtml+xml"
           #redirect_to @page_url
         }

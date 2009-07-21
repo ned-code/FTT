@@ -11,6 +11,16 @@ com.mnemis.wb.model.WBItem = function(rootElement)
     this.isBackground = domWrapper.attr("ub:background") && (domWrapper.attr("ub:background") == "true");
 }
 
+com.mnemis.wb.model.WBItem.prototype.data = function()
+{
+    var result = {};
+    result.position = this.position;
+    result.size = this.size;
+    result.uuid = this.uuid;
+    result.type = this.type();
+    return result;
+}
+
 com.mnemis.wb.model.WBItem.prototype.type = function()
 {
 	if (this.domNode.tagName == "object" && ($(this.domNode).attr("type") == "text/html" || $(this.domNode).attr("type") == "application/x-shockwave-flash"))
@@ -60,8 +70,16 @@ com.mnemis.wb.model.WBItem.prototype.moveTo = function(newPosition)
 {
 	this.position.left = newPosition.left;
 	this.position.top = newPosition.top;
-	$(this.domNode).css("left", this.position.left);
-	$(this.domNode).css("top", this.position.top);
+	$(this.domNode).animate({"left" : this.position.left, "top" : this.position.top});
+}
+
+com.mnemis.wb.model.WBItem.prototype.endOfMove = function()
+{
+    if (WB.application.boardController.collaborationController)
+    {
+        console.log("WBItem delegate to collaboration controller");
+        WB.application.boardController.collaborationController.moveItem(this);
+    }
 }
 
 com.mnemis.wb.model.WBItem.prototype.shift = function(x, y)

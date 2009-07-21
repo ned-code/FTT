@@ -39,20 +39,37 @@ com.mnemis.wb.model.WBPage = function(pageBodyElement) {
         }, "html");
     }
 }
+com.mnemis.wb.model.WBPage.prototype.uuid = function()
+{
+    return "page1";
+}
 
+com.mnemis.wb.model.WBPage.prototype.findObjectWithUuid = function(pUuid)
+{
+        var i = 0;
+        for (; i < this.objects.length; i++)
+        {
+            var anObject = this.objects[i];
+            if (anObject.uuid == pUuid)
+            {
+                return anObject;
+            }
+        }
+        return null;
+}
 
 com.mnemis.wb.model.WBPage.prototype.findObjectAtPoint = function(point)
 {
-	var i = 0;
-	for (; i < this.objects.length; i++)
-	{
-		var anObject = this.objects[i];
-        if (anObject.coverPoint(point) && !anObject.isBackground)
+        var i = 0;
+        for (; i < this.objects.length; i++)
         {
-            return anObject;
+            var anObject = this.objects[i];
+            if (anObject.coverPoint(point) && !anObject.isBackground)
+            {
+                return anObject;
+            }
         }
-	}
-	return null;
+        return null;
 }
 
 com.mnemis.wb.model.WBPage.prototype.drawingModel = function()

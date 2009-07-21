@@ -58,6 +58,8 @@ class ApplicationController < ActionController::Base
     "  Orbited.settings.port = #{APP_SETTINGS[:orbited_port]};",
     "  Orbited.settings.hostname = '#{APP_SETTINGS[:orbited_host]}';",
     '  TCPSocket = Orbited.TCPSocket;',
+    "  var AUTH_TOKEN = \"#{protect_against_forgery? ? form_authenticity_token : ''}\";",
+    "$.ajaxSetup({data:{authenticity_token : AUTH_TOKEN}});",
     '</script>',
     "<script src=\"http://#{APP_SETTINGS[:orbited_host]}:#{APP_SETTINGS[:orbited_port]}/static/protocols/stomp/stomp.js\"></script>"
     ].join("\n")
