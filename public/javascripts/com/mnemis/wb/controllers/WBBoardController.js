@@ -230,7 +230,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype._moveItem = function(item,
 
 com.mnemis.wb.controllers.WBBoardController.prototype.move = function(e)
 {
-    this.haMoved = true;
+    this.hasMoved = true;
 	if (this.originalMovingPos.firstMove && this.selection.length)
 	{
 		var selectionToUndo = this.selection[0];
@@ -258,11 +258,11 @@ com.mnemis.wb.controllers.WBBoardController.prototype.move = function(e)
 
 com.mnemis.wb.controllers.WBBoardController.prototype.endMove = function(e)
 {
-    if (this.selection[0] && this.haMoved)
+    if (this.selection[0] && this.hasMoved)
     {
         this.selection[0].endOfMove();
     }
-    this.haMoved = false;
+    this.hasMoved = false;
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.zoom = function(factor)

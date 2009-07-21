@@ -103,13 +103,12 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.beginDraw= function(e)
 {
     var uuid = new com.mnemis.core.UUID();
     var mappedPoint = WB.application.boardController.mapToPageCoordinate(e);
-    var newLine = this.mRenderer.createPolyline(uuid.toString); 
+    var newLine = this.mRenderer.createPolyline(uuid.id);
 
-    this.currentDrawObject = { 
-    	points: mappedPoint.x + "," + mappedPoint.y,
-    	domNode: newLine,
-    	uuid: uuid.toString()
-    };	
+    this.currentDrawObject = new WB.model.WBItem(newLine);
+    console.log(this.currentDrawObject);
+    this.currentDrawObject.points = mappedPoint.x + "," + mappedPoint.y;
+
     this.mDrawingModel.polyline.push(this.currentDrawObject);     			        			        
     this.domNode.appendChild(newLine);
     var drawObjectToUndo = this.currentDrawObject;
@@ -122,8 +121,11 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.beginDraw= function(e)
 
 com.mnemis.wb.controllers.WBDrawingController.prototype.endDraw= function(e)
 {
-
-	// Nothing to do
+    if (WB.application.boardController.collaborationController)
+    {
+        WB.application.boardController.collaborationController.moveItem(this.currentDrawObject);
+    }
+// Nothing to do
 }
 
 com.mnemis.wb.controllers.WBDrawingController.prototype.draw= function(e)

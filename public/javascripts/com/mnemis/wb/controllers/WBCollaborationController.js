@@ -25,13 +25,11 @@ com.mnemis.wb.controllers.WBCollaborationController.prototype.disconnect = funct
     this.stomp.disconnect();
 }
 
-
 com.mnemis.wb.controllers.WBCollaborationController.prototype.moveItem = function(item)
 {
     console.log("send move to server");
     var data = item.data();
     data.ubApplicationId = WB.application.viewer.applicationUuid;
-    data.ubAction = "MOVE";
     $.ajax({
         url: com.mnemis.core.applicationPath + "/documents/" + WB.application.viewer.currentDocument + "/pages/" + WB.application.viewer.currentPageId + "/update",
         global: false,
@@ -78,6 +76,10 @@ com.mnemis.wb.controllers.WBCollaborationController.prototype.moveItem = functio
            if (item)
            {
                 item.moveTo(message.position);
+           }
+           else
+           {
+                WB.application.boardController.collaborationController.page.createItem(message);
            }
        }
  };

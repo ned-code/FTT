@@ -5,10 +5,23 @@ com.mnemis.wb.model.WBItem = function(rootElement)
 {
 	this.domNode = rootElement;
 	var domWrapper = $(this.domNode);
-	this.position = { top:  parseFloat(domWrapper.css("top").replace("px", "")), left: parseFloat(domWrapper.css("left").replace("px", ""))};
-	this.size = { width:parseFloat(domWrapper.css("width").replace("px", "")), height: parseFloat(domWrapper.css("height").replace("px", ""))};
+        if (this.type != "drawing")
+        {
+            this.position = {
+                top:  parseFloat(domWrapper.css("top").replace("px", "")),
+                left: parseFloat(domWrapper.css("left").replace("px", ""))
+            };
+            this.size = {
+                width:parseFloat(domWrapper.css("width").replace("px", "")),
+                height: parseFloat(domWrapper.css("height").replace("px", ""))
+            };
+        }
+        else
+        {
+            this.points = "";
+        }
 	this.uuid = domWrapper.attr("id");
-    this.isBackground = domWrapper.attr("ub:background") && (domWrapper.attr("ub:background") == "true");
+        this.isBackground = domWrapper.attr("ub:background") && (domWrapper.attr("ub:background") == "true");
 }
 
 com.mnemis.wb.model.WBItem.prototype.data = function()
@@ -18,6 +31,7 @@ com.mnemis.wb.model.WBItem.prototype.data = function()
     result.size = this.size;
     result.uuid = this.uuid;
     result.type = this.type();
+    result.points = this.points;
     return result;
 }
 
@@ -26,7 +40,11 @@ com.mnemis.wb.model.WBItem.prototype.type = function()
 	if (this.domNode.tagName == "object" && ($(this.domNode).attr("type") == "text/html" || $(this.domNode).attr("type") == "application/x-shockwave-flash"))
 	{
  		return "widget";
-	}	
+	}
+        else if (this.domNode.tagName == "polyline")
+        {
+                return "drawing";
+        }
 	else
 	{
 		return "objet";
@@ -46,8 +64,7 @@ com.mnemis.wb.model.WBItem.prototype.select = function()
         if ($(this.domNode).attr("type") == "application/x-shockwave-flash")
             {
                 console.log(this.domNode.id);
-                player = document.getElementById(this.domNode.id);
-                console.log(player);
+                var player = document.getElementById(this.domNode.id);
                 player.sendEvent('PLAY');
             }
     }
