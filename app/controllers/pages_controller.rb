@@ -68,7 +68,7 @@ class PagesController < ApplicationController
     end
     @domain = request.protocol + request.host_with_port
     respond_to do |format|
-      if @document && @page && permit?('owner of document')
+      if @document && @page && (@document.is_public || permit?('owner of document'))
         format.html {
           @orbited_js = orbited_javascript
           render :action => "showproto", :layout => false, :content_type => "application/xhtml+xml"
