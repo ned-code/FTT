@@ -46,9 +46,8 @@ com.mnemis.wb.model.WBPage.prototype.uuid = function()
 
 com.mnemis.wb.model.WBPage.prototype.createItem = function(itemData)
 {
-    console.log("Create item");
     var newLine = WB.application.boardController.drawingController.mRenderer.createPolyline(itemData.uuid);
-    console.log("Create model item");
+    $(newLine).css("opacity", 0);
     var newObject = new WB.model.WBItem(newLine);
     console.log("set points");
     newObject.points = itemData.points;
@@ -58,6 +57,7 @@ com.mnemis.wb.model.WBPage.prototype.createItem = function(itemData)
     console.log(WB.application.boardController.drawingController.domNode);
     WB.application.boardController.drawingController.mDrawingModel.polyline.push(newObject);
     WB.application.boardController.drawingController.domNode.appendChild(newLine);
+     $(newLine).animate({opacity : 1});
 }
 com.mnemis.wb.model.WBPage.prototype.findObjectWithUuid = function(pUuid)
 {
