@@ -16,3 +16,6 @@ spec/output_document
 spec/tmp
 config/s3.yml
 *.suo
+debug.log
+error.log
+info.log
