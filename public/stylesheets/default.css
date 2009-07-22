@@ -86,3 +86,7 @@ a:hover { color: #fff; background-color:#000; }
 #home {
     float: left;
 }
+
+#flash {
+    text-align: center ;
+}

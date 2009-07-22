@@ -31,6 +31,7 @@ class DocumentsController < ApplicationController
 
 respond_to do |format|
       if @document
+        @page_page = true
         if @document.is_public || permit?('owner of document')
           format.html
           format.xml { render :xml => @document.to_xml }

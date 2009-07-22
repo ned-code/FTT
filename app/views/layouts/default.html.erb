@@ -9,13 +9,13 @@
 </head>
 <body>
   <div id="ub-bar">
-    <% if !@document_page %>
-    <div id="home"><%= link_to "Documents", documents_path %></div>
-    <% else %>
-    <div id="home"><b>Documents</b></div>
+    <% if @document_page %>
+        <div id="home"><b>Documents</b></div>
+    <% elsif @page_page %>
+        <div id="home"><%= link_to "Documents", documents_path %></div>
     <% end %>
     <div id="ub-login-logout"><%= current_user ? current_user.email : '' %> <%= current_user ? link_to("logout", session_path, :method => :delete) :  link_to("login", new_session_url) %> </div>
-    <p style="color: green"><%= flash[:notice] %></p>    
+    <div id="flash"><p style="color: green"><%= flash[:notice] %></p></div>
   </div>
 
 
