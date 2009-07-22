@@ -1,6 +1,4 @@
-<ul id="document_navigation" class="navigation">
-  <li><%= link_to "top", documents_path %></li>
-</ul>
+<h2><%= @document.title %></h2>
 <ul id="document_<%= @document.id %>" class="page_list">
   <% @document.pages.each do |page| -%>
     <li id="page_<%= page.id %>">

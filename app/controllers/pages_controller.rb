@@ -4,7 +4,6 @@ class PagesController < ApplicationController
   def show
     @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
     @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_id(params[:id]) if @document
-    
     if (@page)
       @page_url =  @page.url("application/xhtml+xml")
     end
