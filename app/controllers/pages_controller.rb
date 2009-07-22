@@ -1,6 +1,5 @@
 require 'stomp'
 class PagesController < ApplicationController
-  permit 'registered'
 
   def show
     @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])

@@ -1,5 +1,4 @@
 class DocumentsController < ApplicationController
-  permit 'registered'
 
   def index
     @synchronised_at = Time.now.utc
