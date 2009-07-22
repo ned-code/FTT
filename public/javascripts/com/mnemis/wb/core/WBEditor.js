@@ -45,18 +45,19 @@ com.mnemis.wb.core.WBEditor = function()
     WB.application.viewer = this;
 }
 
-com.mnemis.wb.core.WBEditor.prototype.loadPage = function(pageUrl)
+com.mnemis.wb.core.WBEditor.prototype.loadPage = function(pageUrl, pageId)
 {
     // remove previous page
     $("#ub_board").remove();
     var loading = $("<h1>Loading...</h1>");
     $("body").append(loading);
     // load new page
+    var localPageId = pageId;
     $.get(pageUrl, null, function(data, textStatus)
         {
             var loadedPageData = $(data);
             var boardElement = loadedPageData.find("#ub_board").get(0);
-            var loadedPage = new com.mnemis.wb.model.WBPage(boardElement);
+            var loadedPage = new com.mnemis.wb.model.WBPage(boardElement, localPageId);
             loading.remove();
             $("body").append(boardElement);
             WB.application.boardController.setCurrentPage(loadedPage);
@@ -72,7 +73,7 @@ com.mnemis.wb.core.WBEditor.prototype.loadPageId = function(documentId, pageId)
     {
         that.previousPageId = data.previousId.length ? data.previousId : null;
         that.nextPageId = data.nextId.length ? data.nextId : null;
-        that.loadPage(data.url);
+        that.loadPage(data.url, pageId);
     });
 }
 

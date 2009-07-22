@@ -48,11 +48,21 @@ com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(
         $(this).attr("data", relPath);
     });
 
-    if (this.collaborationController)
+    if (this.editable)
     {
-        this.collaborationController.disconnect();
+        if (this.collaborationController)
+        {
+            try
+            {
+                this.collaborationController.disconnect();
+            }
+            catch (exeption)
+            {
+                console.log(exeption);
+            }
+        }
+        this.collaborationController = new WB.controllers.WBCollaborationController(page);
     }
-    this.collaborationController = new WB.controllers.WBCollaborationController(page);
     this.updateDrawing();
 
     //update zoom to fit browser page
@@ -126,7 +136,6 @@ com.mnemis.wb.controllers.WBBoardController.prototype.beginLaser = function(e)
 
 com.mnemis.wb.controllers.WBBoardController.prototype.beginHand = function(e)
 {
-    	e.preventDefault();
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.draw = function(e)
@@ -156,7 +165,6 @@ com.mnemis.wb.controllers.WBBoardController.prototype.hand = function(e)
 	window.scrollBy(xMove, yMove);
 	this.originalMovingPos = { x: e.screenX, y: e.screenY};
 	e.stopPropagation();
-	e.preventDefault();
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.zoomIn = function(e)
@@ -213,7 +221,6 @@ com.mnemis.wb.controllers.WBBoardController.prototype.select = function(e)
 	 {
 	 	this.selectObjects([objectToSelect])
 	 }
-	 e.preventDefault();
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype._moveItem = function(item, newPosition)
@@ -253,7 +260,6 @@ com.mnemis.wb.controllers.WBBoardController.prototype.move = function(e)
 
 	}
 	this.originalMovingPos = { x: e.screenX, y: e.screenY};
-	e.preventDefault();
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.endMove = function(e)
@@ -305,6 +311,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype.zoom = function(factor)
 com.mnemis.wb.controllers.WBBoardController.prototype.mouseDown = function(e)
 {
 	var that = e.data;
+        e.preventDefault();
 	that.moving = true;
 	switch(that.currentTool)
 	{
@@ -322,39 +329,39 @@ com.mnemis.wb.controllers.WBBoardController.prototype.mouseDown = function(e)
 
 com.mnemis.wb.controllers.WBBoardController.prototype.mouseMove = function(e)
 {	        	
-	var that = e.data;
-	if (that.moving)
-	{
+    var that = e.data;
+    e.preventDefault();
+    if (that.moving)
+    {
         if (that.editable || that.currentTool == 4)
         {
             switch(that.currentTool)
-                    {
-                        case 0: that.draw(e); break;
-                        case 1: that.erase(e); break;
-                        case 2: that.marker(e); break;
-                        case 3: that.laser(e); break;
-                        case 4: that.hand(e); break;
-                        case 7: that.move(e); break;
-                    }
-        }
-			
-	}
+            {
+                case 0: that.draw(e); break;
+                case 1: that.erase(e); break;
+                case 2: that.marker(e); break;
+                case 3: that.laser(e); break;
+                case 4: that.hand(e); break;
+                case 7: that.move(e); break;
+            }
+        }			
+    }
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.mouseOut = function(e)
 {
-	//this.mouseUp(e);
 }
 
 com.mnemis.wb.controllers.WBBoardController.prototype.mouseUp = function(e)
 {
-	var that = e.data;
-	that.moving = false;
+    var that = e.data;
+    e.preventDefault();
+    that.moving = false;
     switch(that.currentTool)
-	{
-		case 0: that.drawingController.endDraw(e); break;
-                case 7: that.endMove(e); break;
-	}	
+    {
+        case 0: that.drawingController.endDraw(e); break;
+        case 7: that.endMove(e); break;
+    }
 }
 
 

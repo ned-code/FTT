@@ -5,7 +5,8 @@ com.mnemis.core.Import("com/mnemis/wb/model/WBItem.js")
 
 if (!com.mnemis.wb.model) { com.mnemis.wb.model = {}};
 
-com.mnemis.wb.model.WBPage = function(pageBodyElement) {
+com.mnemis.wb.model.WBPage = function(pageBodyElement, pageId) {
+    this.pageId = pageId;
     this.drawing = { polygon: [], polyline: [] };
     this.objects = [];
     this.documentRootNode = pageBodyElement;
@@ -41,7 +42,7 @@ com.mnemis.wb.model.WBPage = function(pageBodyElement) {
 }
 com.mnemis.wb.model.WBPage.prototype.uuid = function()
 {
-    return "page1";
+    return this.pageId;
 }
 
 com.mnemis.wb.model.WBPage.prototype.createItem = function(itemData)
