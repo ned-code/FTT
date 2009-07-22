@@ -65,11 +65,13 @@ a:hover { color: #fff; background-color:#000; }
 .document_list li {
   float: left;
   list-style-type: none;
+  margin: 10px;
 }
 
 .page_list li {
   float: left;
   list-style-type: none;
+  margin: 10px;
 }
 
 #ub-bar {
@@ -78,5 +80,9 @@ a:hover { color: #fff; background-color:#000; }
 }
 
 #ub-login-logout {
-    float: right
+    float: right;
+}
+
+#home {
+    float: left;
 }

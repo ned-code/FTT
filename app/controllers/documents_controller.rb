@@ -8,6 +8,7 @@ class DocumentsController < ApplicationController
 #    @domain = "#{request.protocol}#{request.host_with_port}"
     respond_to do |format|
       format.html do
+        @document_page = true
         if (!current_user)
           @documents = UbDocument.find_all_by_is_public(true)
           render :action => 'index_public'
@@ -142,11 +143,14 @@ respond_to do |format|
     respond_to do |format|
       if @document && permit?('owner of document')
         if @document.destroy
+          format.html { redirect_back_or_default documents_url }
           format.xml { head :ok }
         else
+          format.html {render_optional_error_file(:not_found)}
           format.xml { render :xml => @document.errors, :status => :unprocessable_entity }
         end
       else
+        format.html { render_optional_error_file(:forbidden)}
         format.xml { head :forbidden }
       end
     end

@@ -48,13 +48,12 @@ class UbSyncTransaction < ActiveRecord::Base
 
     # Open database transaction
     UbDocument.transaction do
-      if UbDocument.exists?(:uuid => ub_document_uuid)
-        document = UbDocument.find(:first, :conditions => {:uuid => ub_document_uuid})
-      else
+      document = UbDocument.find(:first, :conditions => {:uuid => ub_document_uuid}, :with_deleted => true)
+      if (document.nil?)
         document = UbDocument.new(:uuid => ub_document_uuid)
         document.accepts_role 'owner', user
       end
-
+      document.deleted_at = nil
       document.is_public = public_flag
       item_processed = []
       item_ub_document = nil
