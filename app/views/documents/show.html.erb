@@ -4,7 +4,7 @@
 <ul id="document_<%= @document.id %>" class="page_list">
   <% @document.pages.each do |page| -%>
     <li id="page_<%= page.id %>">
-      <a href="<%= document_page_path(@document, page) %>">
+      <a href="<%= url_for :controller => 'pages',  :action => 'proto', :id => page.id, :document_id => @document.id %>">
         <img style="width:266px; height:200px" src="<%= page.thumbnail_url %>" alt="<%= document_page_path(@document, page) %>">
       </a>
     </li>
