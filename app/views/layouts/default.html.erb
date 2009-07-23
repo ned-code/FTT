@@ -11,7 +11,7 @@
   <div id="ub-bar">
     <% if @document_page %>
         <div id="home"><b>Documents</b></div>
-    <% elsif @page_page %>
+    <% else %>
         <div id="home"><%= link_to "Documents", documents_path %></div>
     <% end %>
     <div id="ub-login-logout"><%= current_user ? current_user.email : '' %> <%= current_user ? link_to("logout", session_path, :method => :delete) :  link_to("login", new_session_url) %> </div>

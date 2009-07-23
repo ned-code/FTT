@@ -3,7 +3,7 @@
   <% @document.pages.each do |page| -%>
     <li id="page_<%= page.id %>">
       <a href="<%= document_page_path(@document, page) %>">
-        <img style="width:266px; height:200px" src="<%= page.thumbnail_url %>" alt="<%= document_page_path(@document, page) %>">
+        <img style="width:200px; height:150px" src="<%= page.thumbnail_url %>" alt="<%= document_page_path(@document, page) %>">
       </a>
     </li>
   <% end -%>

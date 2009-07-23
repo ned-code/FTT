@@ -6,6 +6,7 @@ body, p, ol, ul, td {
   line-height: 18px;
 }
 
+
 pre {
   background-color: #eee;
   padding: 10px;
@@ -59,13 +60,15 @@ a:hover { color: #fff; background-color:#000; }
 }
 
 .document_list {
-  float: left;
+    float: left;
+    width:100%;
 }
 
 .document_list li {
   float: left;
   list-style-type: none;
   margin: 10px;
+  text-align: right;
 }
 
 .page_list li {
@@ -89,4 +92,11 @@ a:hover { color: #fff; background-color:#000; }
 
 #flash {
     text-align: center ;
+}
+
+.ub-document-title {
+    text-align: center ;
+    font-weight: bold; 
+    font-size:   14px;
+    padding: 5px;
 }
