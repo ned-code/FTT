@@ -1,9 +1,5 @@
 class ApplicationController < ActionController::Base
 
-  USER_NAME, PASSWORD = "mnemis", "_mcuniboard08"
-
-  #before_filter :authenticate
-
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   helper :all
@@ -68,19 +64,6 @@ class ApplicationController < ActionController::Base
     '</script>',
     "<script src=\"http://#{APP_SETTINGS[:orbited_host]}:#{APP_SETTINGS[:orbited_port]}/static/protocols/stomp/stomp.js\"></script>"
     ].join("\n")
-  end
-
-
-  private
-
-  def authenticate
-
-    authenticate_or_request_with_http_basic do |user_name, password|
-
-      user_name == USER_NAME && password == PASSWORD
-
-    end
-
   end
 
 end
