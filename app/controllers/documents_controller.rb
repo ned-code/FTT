@@ -1,4 +1,5 @@
 class DocumentsController < ApplicationController
+  permit "registered"
 
   def index
     @synchronised_at = Time.now.utc
@@ -13,6 +14,10 @@ class DocumentsController < ApplicationController
           render :action => 'index_public'
         else
           @documents = current_user.documents(:with_deleted => false)
+          @public_documents = UbDocument.find_all_by_is_public(true).select do |an_object|
+            !(@documents.include? an_object)
+          end
+
           render :action => 'index'
         end
       end
