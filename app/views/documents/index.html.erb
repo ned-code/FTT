@@ -5,7 +5,7 @@
 <ul id="documents" class="document_list">
   <% @documents.each do |document| -%>
     <li id="document_<%= document.id %>"><div class="ub-document-title"><%= document.title%></div><center><%= link_to image_tag(document.pages.first.thumbnail_url(), :size => '200x150'), document_path(document) %></center>
-      <%= button_to 'Remove', document_path(document), :method => :delete, :confirm => 'Document will be removed from WEB access. Are you sure?' %>
+      <%= button_to 'Remove', document_path(document), :method => :delete, :confirm => 'Document will be removed. Are you sure?' %>
     </li>
   <% end -%>
 </ul>
