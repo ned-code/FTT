@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
 
   USER_NAME, PASSWORD = "mnemis", "_mcuniboard08"
 
-  before_filter :authenticate
+  #before_filter :authenticate
 
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
