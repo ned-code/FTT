@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090713102337) do
+ActiveRecord::Schema.define(:version => 20090724123648) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -66,11 +66,22 @@ ActiveRecord::Schema.define(:version => 20090713102337) do
   add_index "ub_medias", ["page_element_id"], :name => "page_element_fk"
   add_index "ub_medias", ["uuid"], :name => "media_uuid_index", :unique => true
 
+  create_table "ub_page_element_states", :force => true do |t|
+    t.string   "data",            :null => false
+    t.integer  "page_element_id", :null => false
+    t.boolean  "deleted"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "ub_page_element_states", ["page_element_id"], :name => "state_page_element_fk"
+
   create_table "ub_page_elements", :force => true do |t|
     t.integer  "uniboard_page_id"
     t.integer  "media_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "data"
   end
 
   add_index "ub_page_elements", ["uniboard_page_id"], :name => "page_fk"
