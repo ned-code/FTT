@@ -106,7 +106,7 @@ module ConversionService
     def convert_svg_page_to_html(page_uuid, page_file_stream)
       page_file_stream.rewind
       RAILS_DEFAULT_LOGGER.debug "convert page #{page_uuid}"
-      page = XMLObject.new(page_file_stream)
+      page_dom = REXML::Document.new(page_file_stream)
       html_page_builder = Builder::XmlMarkup.new(:indent => 2)
 
       html_page_builder.declare! :DOCTYPE, :html, :PUBLIC, "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN", "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg-flat.dtd"
@@ -119,9 +119,10 @@ module ConversionService
         }
 
         html_page_builder.body {
-          page_width = page.rect.width
-          page_height = page.rect.height
-          page_background = page.rect.fill
+          rect_element = page_dom.root.elements['rect']
+          page_width = rect_element.attribute('width').value
+          page_height = rect_element.attribute('height').value
+          page_background = rect_element.attribute('fill').value
           html_page_builder.div("id" => "ub_board", "style" => "position: absolute; top: 0px; left: 0px; width: " + page_width + "px; height: " + page_height + "px; background-color:" + page_background + "; z-index:-2000000") {
 
             # create drawing part
@@ -139,62 +140,17 @@ module ConversionService
             html_page_builder.div("id" => "ub_page_objects", "style" => "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%") {
 
               # add widgets
-              # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
-              begin
-                RAILS_DEFAULT_LOGGER.debug "find foreign objects"
-                if (page.foreignObject && page.foreignObject.is_a?(Array))
-                  RAILS_DEFAULT_LOGGER.debug "multiple foreign objects"
-                  page.foreignObject.each do |a_widget|
-                    create_html_foreign_object(html_page_builder, a_widget, page_width, page_height, page_file_stream)
-                  end
-                elsif (page.foreignObject)
-                  RAILS_DEFAULT_LOGGER.debug "1 foreign objects"
-                  create_html_foreign_object(html_page_builder, page.foreignObject, page_width, page_height, page_file_stream)
-                end
-              rescue => e
-                RAILS_DEFAULT_LOGGER.debug(e.message)
+              RAILS_DEFAULT_LOGGER.debug "find foreign objects"
+              page_dom.each_element('svg/foreignObject') do |a_foreign_object|
+                create_html_foreign_object(html_page_builder, a_foreign_object, page_width, page_height, page_file_stream)
               end
 
-              # add images
-              # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
-              begin
-                if (page.image && page.image.is_a?(Array))
-                  page.image.each do |an_image|
-                    create_html_image(html_page_builder, an_image, page_width, page_height)
-                  end
-                elsif (page.image)
-                  create_html_image(html_page_builder, page.image, page_width, page_height)
-                end
-              rescue => e
-                RAILS_DEFAULT_LOGGER.debug(e.message)
+              page_dom.each_element('svg/image') do |an_image|
+                create_html_image(html_page_builder, an_image, page_width, page_height)
               end
 
-              # add text
-              # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
-              begin
-                if (page.text && page.text.is_a?(Array))
-                  page.text.each do |a_text|
-                    create_html_text(html_page_builder, a_text, page_width, page_height)
-                  end
-                elsif (page.text)
-                  create_html_text(html_page_builder, page.text, page_width, page_height)
-                end
-              rescue => e
-                RAILS_DEFAULT_LOGGER.debug(e.message)
-              end
-
-              # add video
-              # TODO: need to find out how to hande page without element of a certain type. Currently catch exception. But it also cathc other exception
-              begin
-                if (page.video && page.video.is_a?(Array))
-                  page.video.each do |a_video|
-                    create_html_video(html_page_builder, a_video, page_width, page_height)
-                  end
-                elsif (page.video)
-                  create_html_video(html_page_builder, page.video, page_width, page_height)
-                end
-              rescue => e
-                RAILS_DEFAULT_LOGGER.debug(e.message)
+              page_dom.each_element('svg/video') do |a_video|
+                create_html_video(html_page_builder, a_video, page_width, page_height)
               end
             }
           }
@@ -211,9 +167,9 @@ module ConversionService
     # svg_object is the XMLObject of the SVG Element
     #
     # return an array with [m11, m12, m21, m22, m31, m32]
-    def get_transform_matrix(svg_object)
-      if (svg_object.transform && svg_object.transform.length > 8)
-        matrix_string = svg_object.transform
+    def get_transform_matrix(svg_element)
+      if (!svg_element.attribute('transform').nil?)
+        matrix_string = svg_element.attribute('transform').value
         matrix = matrix_string[7..-2].split(", ")
       end
     end
@@ -225,13 +181,13 @@ module ConversionService
     # page_height is the height of the page
     #
     # Return a Hash with { left => ..., top => ..., width => ..., height => ..., z-index => ...}
-    def get_converted_size_and_position(svg_object, page_width, page_height)
-      left = svg_object.x.to_f + page_width.to_i / 2
-      top = svg_object.y.to_f + page_height.to_i / 2
-      z_index = svg_object[:attr => "ub:z-value"]
-      width = svg_object.width.to_f
-      height = svg_object.height.to_f
-      matrix = get_transform_matrix(svg_object)      
+    def get_converted_size_and_position(svg_element, page_width, page_height)
+      left = svg_element.attribute('x').value.to_f + page_width.to_i / 2
+      top = svg_element.attribute('y').value.to_f + page_height.to_i / 2
+      z_index = svg_element.attribute("z-value", "ub").value
+      width = svg_element.attribute('width').value.to_f
+      height = svg_element.attribute('height').value.to_f
+      matrix = get_transform_matrix(svg_element)
       #      get the transform and modify top, left, width and height according to this transform
       #      if (matrix)
       #        width = width * matrix[0].to_f
@@ -252,8 +208,8 @@ module ConversionService
       result += "; filter: progid:DXImageTransform.Microsoft.Matrix(M11 = '#{matrix[0]}', M12 = '#{matrix[1]}', M21 = '#{matrix[2]}', M22 = '#{matrix[3]}', Dx = '#{matrix[4]}', Dy = '#{matrix[5]}', SizingMethod = 'auto expand')"
     end
 
-    def style_position(svg_object, page_width, page_height)
-      size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
+    def style_position(svg_element, page_width, page_height)
+      size_and_position = get_converted_size_and_position(svg_element, page_width, page_height)
       left = size_and_position["left"]
       top = size_and_position["top"]
       z_index = size_and_position["z-index"].to_i
@@ -264,8 +220,8 @@ module ConversionService
     end
 
 
-    def create_html_video(page_builder, svg_object, page_width, page_height)
-      video_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
+    def create_html_video(page_builder, svg_element, page_width, page_height)
+      video_uuid = svg_element.attribute("uuid", "ub").value.match(UUID_FORMAT_REGEX)[0]
       video_media = UbMedia.find_by_uuid(video_uuid)
       raise "Media missing for uuid #{video_uuid}" if video_media.nil?
 
@@ -280,8 +236,8 @@ module ConversionService
       if (matrix)
         width = width * matrix[0].to_f
         height = height * matrix[3].to_f
-        left = (svg_object.x.to_f  * matrix[0].to_f) + page_width.to_i / 2
-        top = (svg_object.y.to_f  * matrix[3].to_f) + page_height.to_i / 2
+        left = (svg_element.attribute('x').value.to_f  * matrix[0].to_f) + page_width.to_i / 2
+        top = (svg_element.attribute('y').value.to_f  * matrix[3].to_f) + page_height.to_i / 2
         left = left + matrix[4].to_f
         top = top + matrix[5].to_f
       end
@@ -300,30 +256,6 @@ module ConversionService
 
     end
 
-    
-    # Convert a SVG text Element to an HTML text Element and append it to the HTML page file
-    # page_builder is the XmlMarkup Builder of the html page. Used to append converted Element
-    # svg_object is the XMLObject of the SVG Element
-    # page_width is the width of the page
-    # page_height is the height of the page
-    def create_html_text(page_builder, svg_object, page_width, page_height)
-      font_size = svg_object[:attr => "font-size"].to_f
-      matrix = get_transform_matrix(svg_object)
-      # TODO how to define font size if scale x and y scale are not equal
-      if (matrix && matrix[0])
-        font_size = font_size * matrix[0].to_f
-      end
-      style = style_position(svg_object, page_width, page_height)
-      style += "; font-size:" + font_size.to_s + "px"
-      style += "; font-family:" + svg_object[:attr => "font-family"]
-      style += "; color:" + svg_object[:attr => "fill"]
-      # SVG text object don't have UUID so we generate one
-      uuid = UUID.generate
-      page_builder.div(svg_object, "id" => uuid,
-        "ub:background" => svg_object[:attr => "ub:background"],
-        "style" => style)
-    end
-
 
     # Convert a SVG Foreign object Element to an HTML Element and append it to the HTML page file. Foreign object can be Widgets or PDF background
     # page_builder is the XmlMarkup Builder of the html page. Used to append converted Element
@@ -331,24 +263,24 @@ module ConversionService
     # page_width is the width of the page
     # page_height is the height of the page
     # page_file_stream is the stream on the SVG page file. It is used to find relative pdf background and convert it.
-    def create_html_foreign_object(page_builder, svg_object, page_width, page_height, page_file_stream)
-
+    def create_html_foreign_object(page_builder, svg_element, page_width, page_height, page_file_stream)
+    puts svg_element.inspect
       # foreign object can be widgets or pdf background
       # if foreign is background, it should be a pdf background
-      if (svg_object[:attr => "ub:background"] == "true")
+      if (!svg_element.attribute("background", "ub").nil? && svg_element.attribute("background", "ub").value == "true")
         RAILS_DEFAULT_LOGGER.debug "find background foreign objects"
-        pdf_link = svg_object[:attr => "xlink:href"].split("#")
+        pdf_link = svg_element.attribute("href","xlink").value.split("#")
         pdf_url = pdf_link[0]
         pdf_page = pdf_link[1][5..-1]
-        bg_width = svg_object[:attr => "width"].to_f
-        bg_height = svg_object[:attr => "height"].to_f
+        bg_width = svg_element.attribute("width").value.to_f
+        bg_height = svg_element.attribute("height").value.to_f
 
-        matrix = get_transform_matrix(svg_object)
+        matrix = get_transform_matrix(svg_element)
         if (matrix && matrix[0])
           bg_width = bg_width * matrix[0].to_f
           bg_height = bg_height * matrix[3].to_f
         end
-        pdf_media_uuid = svg_object[:attr => "xlink:href"].match(UUID_FORMAT_REGEX)[0]
+        pdf_media_uuid = svg_element.attribute("href", "xlink").value.match(UUID_FORMAT_REGEX)[0]
         RAILS_DEFAULT_LOGGER.debug "search for uuid #{pdf_media_uuid}"
         pdf_media = UbMedia.find_by_uuid(pdf_media_uuid)
         RAILS_DEFAULT_LOGGER.debug "found media #{pdf_media}"
@@ -358,34 +290,29 @@ module ConversionService
 
         left = (page_width.to_f - bg_width) / 2
         top = (page_height.to_f - bg_height) / 2
-        page_builder.img("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
+        page_builder.img("id" => svg_element.attribute("uuid", "ub").value.match(UUID_FORMAT_REGEX)[0],
           "src" => page_background_ressource.public_url(),
           "alt" => "Image",
           "ub:background" => "true",
           "style" => "position: absolute; left:" + left.to_s + "px; top:" + top.to_s + "px; width:" + bg_width.to_s + "px; height:" + bg_height.to_s + "px; z-index:-20000000")
+      elsif (!svg_element.attribute("type", "ub").nil? && svg_element.attribute("type", "ub").value == "text")
+        font_object = svg_element.elements['xhtml:body'].elements['xhtml:div'].elements['xhtml:font']
+        font_xml = font_object.to_s.to_s.gsub("xhtml:","")
+        page_builder.div("id" => svg_element.attribute("uuid", "ub").value.match(UUID_FORMAT_REGEX)[0],
+          "style" => style_position(svg_element, page_width, page_height)){
+
+          |x| x << font_xml
+        }
       else
-
-        begin
-          if (svg_object[:attr => "ub:type"] == "text")
-            font_object = svg_object.body.div.font
-            font_xml = font_object.raw_xml().to_s.gsub("xhtml:","")
-            page_builder.div("id" => svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0],
-              "style" => style_position(svg_object, page_width, page_height)){
-
-              |x| x << font_xml
-            }
-          end
-        rescue => e
-          widget_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
-          widget_media = UbMedia.find_by_uuid(widget_uuid)
-          raise "Media missing for uuid #{widget_uuid}" if widget_media.nil?
-          widget_page_file = svg_object["iframe"].src.gsub(svg_object[:attr => "ub:src"], "")
-          page_builder.object("id" => widget_uuid,
-            "type" => "text/html",
-            "data" => File.join(widget_media.public_url, widget_page_file),
-            "ub:background" => svg_object[:attr => "ub:background"],
-            "style" => style_position(svg_object, page_width, page_height))
-        end
+        widget_uuid = svg_element.attribute("uuid", "ub").value.match(UUID_FORMAT_REGEX)[0]
+        widget_media = UbMedia.find_by_uuid(widget_uuid)
+        raise "Media missing for uuid #{widget_uuid}" if widget_media.nil?
+        widget_page_file = svg_element.elements["xhtml:iframe"].attribute('src').value.gsub(svg_element.attribute("src", "ub").value, "")
+        page_builder.object("id" => widget_uuid,
+          "type" => "text/html",
+          "data" => File.join(widget_media.public_url, widget_page_file),
+          "ub:background" => svg_element.attribute("background", "ub").value,
+          "style" => style_position(svg_element, page_width, page_height))
       end
     end
 
@@ -395,27 +322,27 @@ module ConversionService
     # svg_object is the XMLObject of the SVG Element
     # page_width is the width of the page
     # page_height is the height of the page
-    def create_html_image(page_builder, svg_object, page_width, page_height)
+    def create_html_image(page_builder, svg_element, page_width, page_height)
 
-      image_uuid = svg_object[:attr => "ub:uuid"].match(UUID_FORMAT_REGEX)[0]
+      image_uuid = svg_element.attribute("uuid", "ub").value.match(UUID_FORMAT_REGEX)[0]
 
       image_media = UbMedia.find_by_uuid(image_uuid)
       raise "Media missing for uuid #{image_uuid}" if image_media.nil?
 
       # if image is an svg file we must create an object instead of an image in HTML.
-      image_src = svg_object[:attr => "xlink:href"]
+      image_src = svg_element.attribute("href", "xlink").value
       if (image_src[-3,3] == "svg")
         page_builder.object("id" => image_uuid,
           "type" => "image/svg+xml",
           "data" => image_media.public_url,
-          "ub:background" => svg_object[:attr => "ub:background"],
-          "style" => style_position(svg_object, page_width, page_height))
+          "ub:background" => svg_element.attribute("background", "ub").value,
+          "style" => style_position(svg_element, page_width, page_height))
       else
         page_builder.img("id" => image_uuid,
           "src" => image_media.public_url,
           "alt" => "Image",
-          "ub:background" => svg_object[:attr => "ub:background"],
-          "style" => style_position(svg_object, page_width, page_height))
+          "ub:background" => svg_element.attribute("background", "ub").value,
+          "style" => style_position(svg_element, page_width, page_height))
       end
     end
   end
