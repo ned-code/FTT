@@ -1,3 +1,4 @@
+
 # Attributes:
 #- uuid: string
 #- position integer
@@ -74,6 +75,17 @@ class UbPage < ActiveRecord::Base
     self.parse_svg_page(self.media.data)
   end
 
+  def json_content
+    result = { 'uuid' => uuid, 'data' => data}
+    page_objects = []
+    page_elements.each do |a_page_element|
+      page_objects << a_page_element.data
+    end
+    result['page_objects'] = page_objects
+
+    result.to_json
+  end
+
   protected
 
   # Parse the svg file that describe the page and create all corresponding page element. This method assume that
@@ -88,12 +100,20 @@ class UbPage < ActiveRecord::Base
     page_dom = REXML::Document.new(svg_stream)
     self.uuid ||= page_dom.root.attribute('uuid', 'ub')
 
+    rect_element = page_dom.root.elements['rect']
+    page_width = rect_element.attribute('width').value
+    page_height = rect_element.attribute('height').value
+    page_background = rect_element.attribute('fill').value
+    data_hash = {}
+    data_hash['css'] = {:width => page_width, :height => page_height, :backgroundColor => page_background}
+    self.data = data_hash.to_json
+    
     # create a map that map media uuid with corresponding page element. It will be used to optimize
     # the loop that search page element to update.
-    media_element_map = {}
+    uuid_element_map = {}
     page_elements.each do |a_page_element|
       if (a_page_element.media)
-        media_element_map[a_page_element.media.uuid] = a_page_element
+        uuid_element_map[a_page_element.uuid] = a_page_element
       end
     end
 
@@ -104,31 +124,56 @@ class UbPage < ActiveRecord::Base
     # Now iterate on page elements to update or create corresponding page element
     page_dom.each_element("svg/image | svg/foreignObject | svg/video") do |element|
 
-      uuid_attribute = element.attribute('uuid', 'ub')
-      unless (uuid_attribute.nil?)
-        uuid_attribute = uuid_attribute.value
+      element_uuid = element.attribute('uuid', 'ub')
+      media_uuid = nil
+      if (element_uuid.nil?)
+        element_uuid = UUID.generate
+      else
+        element_uuid = element_uuid.value
       end
       if (element.name == "foreignObject" && !element.attribute('type', 'ub').nil? && element.attribute('type', 'ub').value == 'text')
-        next
+        media_uuid = nil
+      elsif (element.name == "foreignObject" && element.attribute('background', 'ub').value == "true")
+        media_uuid = element.attribute("href", "xlink").value.match(UUID_FORMAT_REGEX)[0].match(UUID_FORMAT_REGEX)[0]
+      else
+        media_uuid = element_uuid.match(UUID_FORMAT_REGEX)[0]
       end
-      if (element.name == "foreignObject" && element.attribute('background', 'ub').value == "true")
-        uuid_attribute = element.attribute("href", "xlink").value.match(UUID_FORMAT_REGEX)[0]
-      end
-      
-      raise "Invalid svg page format: media #{element.to_s} has no ub:uuid attribute" if uuid_attribute == nil
-      media_uuid = uuid_attribute.match(UUID_FORMAT_REGEX)[0]
-      page_element = media_element_map[media_uuid]
+
+      element_uuid = element_uuid.match(UUID_FORMAT_REGEX)[0]
+      page_element = uuid_element_map[element_uuid]
       if (page_element)
         original_page_elements.delete(page_element)
       else
-        media = UbMedia.find_by_uuid(media_uuid)
-#        raise "No matching media for element #{element} with uuid #{media_uuid}" if media == nil
-        if (media != nil)
-          page_element = page_elements.build(:media => media)
+        if (!media_uuid.nil?)
+          media = UbMedia.find_by_uuid(media_uuid)
+          #        raise "No matching media for element #{element} with uuid #{media_uuid}" if media == nil
+          if (media != nil)
+            page_element = page_elements.build(:media => media)
+            page_element.uuid = element_uuid
+          end
         end
       end
-      page_element.update_from_svg(element) if !page_element.nil?
+      page_element.update_from_svg(element, page_width, page_height) if !page_element.nil?
     end
+
+    #add svg drawing
+    drawing_resource = media.get_resource('application/vnd.mnemis-uniboard-drawing', {})
+    page_element = uuid_element_map[uuid]
+    if (page_element)
+      original_page_elements.delete(page_element)
+    else
+      media = UbMedia.find_by_uuid(uuid)
+      page_element = page_elements.build(:media => media)
+      page_element.uuid = uuid
+    end
+    drawing_hash = {}
+    drawing_hash[:uuid] = uuid
+    drawing_hash[:tag] = 'object'
+    drawing_hash[:tag] = 'object'
+    drawing_hash[:type] = "image/svg+xml"
+    drawing_hash[:data] = drawing_resource.public_url
+    drawing_hash[:css] = { :width => page_width, :height => page_height}
+    page_element.data = drawing_hash.to_json
 
     # Remove all page elements that are no more used
     original_page_elements.each do|a_page_element|
