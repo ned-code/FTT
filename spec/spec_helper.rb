@@ -215,6 +215,9 @@ def full_doc(doc_uuid = nil)
 end
 
 def get_content_type_from_filename(filename)
+  if (filename.include?(".svg"))
+    return 'application/vnd.mnemis-uniboard-page'
+  end
   MIME::Types.of(File.extname(filename)).first.content_type
 rescue
   nil

@@ -22,7 +22,9 @@ class UbMedia < ActiveRecord::Base
   before_validation :set_storage_config
   before_save :save_data_on_storage
   before_destroy :delete_data_on_storage
-  
+
+  validates_presence_of :path
+
   def data
     storage.get(path)
   end
@@ -95,7 +97,7 @@ class UbMedia < ActiveRecord::Base
           @tempfile.close
         end
       end
-
+      @tempfile = nil
     end
   end
 
