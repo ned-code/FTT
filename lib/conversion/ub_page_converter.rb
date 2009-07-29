@@ -315,7 +315,7 @@ module ConversionService
 
       json_hash = {}
       json_hash[:uuid] = svg_element.attribute("uuid", "ub").value.match(UUID_FORMAT_REGEX)[0]
-      json_hash[:css] = {:top => top, :left => left, :width => bg_width, :height => bg_height, :zIndex => "-20000000"}
+      json_hash[:css] = {:top => "#{top.to_s}px", :left => "#{left.to_s}px", :width => "#{bg_width.to_s}px", :height => "#{bg_height.to_s}px", :zIndex => "-20000000"}
       json_hash[:src] = page_background_ressource.public_url()
       json_hash[:alt] = "Image"
       json_hash[:tag] = "img"
