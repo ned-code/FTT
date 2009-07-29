@@ -57,7 +57,7 @@ com.mnemis.wb.model.WBItem = function(rootElement)
 com.mnemis.wb.model.WBItem.prototype.setPoints = function(points)
 {
     this.data.points = points;
-    WB.application.boardController.drawingController.mRenderer.updatePolyline(this.domNode,{
+    WB.application.boardController.drawingController.mRenderer.updatePolyline(this.domNode.get(0),{
         points : points
     });
 }

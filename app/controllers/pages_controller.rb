@@ -55,8 +55,22 @@ class PagesController < ApplicationController
   end
 
   def update
+    current_page = UbPage.find_by_id(params[:id])
+    data = JSON.parse(params[:ubData])
+    #update model
+    existing_page_element = current_page.page_elements.find_by_uuid(data['uuid'])
+    if (existing_page_element.nil?)
+      existing_page_element = current_page.page_elements.create(:data => data.to_json, :uuid => data['uui']);
+    else
+      existing_page_element.data = data.to_json
+      existing_page_element.save
+    end
+
+    message = {}
+    message[:ubApplicationId] = params[:ubApplicationId]
+    message[:ubData] = data
     s = Stomp::Client.new
-    s.send(params[:ubChannel],params[:ubData])
+    s.send(params[:ubChannel], message.to_json)
     s.close
     render :nothing => true
   end

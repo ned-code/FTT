@@ -11,32 +11,29 @@ com.mnemis.core.Import("com/mnemis/wb/adaptors/WBVmlRenderer.js")
 com.mnemis.wb.controllers.WBDrawingController = function(initialDrawing)
 {
 
-	this.domNode = null;
-	// drawing model
-	this.mDrawingModel = {polyline: []};
+    this.domNode = null;
+    // drawing model
+    this.mDrawingModel = {
+        polyline: []
+    };
 	
-	this.mRenderer = undefined;				
+    this.mRenderer = undefined;
     this.currentDrawObject = undefined;
 
-	if (jQuery.browser.mozilla || jQuery.browser.safari)
-	{
-		this.mRenderer = new com.mnemis.wb.adaptors.WBSvgRenderer();
-	}
+    if (jQuery.browser.mozilla || jQuery.browser.safari)
+    {
+        this.mRenderer = new com.mnemis.wb.adaptors.WBSvgRenderer();
+    }
     else if(jQuery.browser.msie)
     {
- 		this.mRenderer = new com.mnemis.wb.adaptors.WBVmlRenderer();
+        this.mRenderer = new com.mnemis.wb.adaptors.WBVmlRenderer();
     }
 
-	if (initialDrawing)
-	{
-		this.mDrawingModel = initialDrawing;
-	}
-}
-
-
-com.mnemis.wb.controllers.WBDrawingController.prototype.setDrawingModel = function(pDrawingModel)
-{
-    this.mDrawingModel = pDrawingModel;
+    if (initialDrawing)
+    {
+        this.mDrawingModel = initialDrawing;
+    }
+    
     if (this.mRenderer)
     {
         var boardElement = $("#ub_board");
@@ -47,6 +44,12 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.setDrawingModel = functi
         var drawingElement = $("#ub_page_drawing");
         drawingElement.css("zIndex", 1999999);
     }
+}
+
+
+com.mnemis.wb.controllers.WBDrawingController.prototype.setDrawingModel = function(pDrawingModel)
+{
+    this.mDrawingModel = pDrawingModel;
     this.repaintAll();
 }
 
@@ -92,11 +95,11 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.repaintAll = function() 
 
 com.mnemis.wb.controllers.WBDrawingController.prototype.repaintObject= function(objectToRepaint)
 {
-	this.mRenderer.updatePolyline(objectToRepaint.domNode.get(0),
-		{
-			points: objectToRepaint.data.points
-		}
-	); 
+    this.mRenderer.updatePolyline(objectToRepaint.domNode.get(0),
+    {
+        points: objectToRepaint.data.points
+    }
+    );
 }
 
 com.mnemis.wb.controllers.WBDrawingController.prototype.beginDraw= function(e)
@@ -111,10 +114,10 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.beginDraw= function(e)
     this.domNode.appendChild(newLine);
     var drawObjectToUndo = this.currentDrawObject;
     var that = this;
-	WB.application.undoManager.registerUndo( function() 
-	{						
-		that._removePolyLine(drawObjectToUndo);			
-	});				        			        
+    WB.application.undoManager.registerUndo( function()
+    {
+        that._removePolyLine(drawObjectToUndo);
+    });
 }
 
 com.mnemis.wb.controllers.WBDrawingController.prototype.endDraw= function(e)
@@ -129,25 +132,25 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.endDraw= function(e)
 com.mnemis.wb.controllers.WBDrawingController.prototype.draw= function(e)
 {
     var mappedPoint = WB.application.boardController.mapToPageCoordinate(e);
-	this.currentDrawObject.data.points += " " + mappedPoint.x + "," + mappedPoint.y;
-	this.repaintObject(this.currentDrawObject);   
+    this.currentDrawObject.data.points += " " + mappedPoint.x + "," + mappedPoint.y;
+    this.repaintObject(this.currentDrawObject);
 }
 
 com.mnemis.wb.controllers.WBDrawingController.prototype._removePolyLine = function(drawObject) {
-	this.domNode.removeChild(drawObject.domNode.get(0));
-	var index = this.mDrawingModel.polyline.indexOf(drawObject);
-	this.mDrawingModel.polyline.splice(index,1);
-	that = this;
-	WB.application.undoManager.registerUndo(function() {
-		that._addPolyLine(drawObject);
-	});	
+    this.domNode.removeChild(drawObject.domNode.get(0));
+    var index = this.mDrawingModel.polyline.indexOf(drawObject);
+    this.mDrawingModel.polyline.splice(index,1);
+    that = this;
+    WB.application.undoManager.registerUndo(function() {
+        that._addPolyLine(drawObject);
+    });
 }   
 
 com.mnemis.wb.controllers.WBDrawingController.prototype._addPolyLine = function(drawObject) {
-	this.domNode.appendChild(drawObject.domNode.get(0));
+    this.domNode.appendChild(drawObject.domNode.get(0));
     this.mDrawingModel.polyline.push(drawObject);
-	that = this;
-	WB.application.undoManager.registerUndo(function() {
-		that._removePolyLine(drawObject);
-	});
+    that = this;
+    WB.application.undoManager.registerUndo(function() {
+        that._removePolyLine(drawObject);
+    });
 }           
