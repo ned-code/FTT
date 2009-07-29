@@ -82,7 +82,7 @@ com.mnemis.wb.model.WBPage.prototype.removeItem = function(itemData)
     if (itemData.tag == 'polyline' || itemData.tag == 'polygon')
     {
         var drawingObject = this.findDrawingWithUuid(itemData.uuid);
-        drawingObject.domNode.animate({ opacity : 0}, 'slow', null, function() { WB.application.boardController.drawingController.domNode.removeChild(this)});
+        drawingObject.domNode.animate({ opacity : 0}, 'fast', null, function() { WB.application.boardController.drawingController.domNode.removeChild(this)});
         var index =this.drawing.polyline.indexOf(drawingObject);
         this.drawing.polyline.splice(index,1);
     }
@@ -104,7 +104,7 @@ com.mnemis.wb.model.WBPage.prototype.createOrUpdateItem = function(itemData)
         WB.application.boardController.drawingController.domNode.appendChild(newLine);
         $(newLine).animate({
             opacity : 1
-        }, 'slow');
+        }, 'fast');
     }
     else
     {

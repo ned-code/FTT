@@ -142,7 +142,7 @@ com.mnemis.wb.model.WBItem.prototype.moveTo = function(newPosition)
     this.position.top = newPosition.top;
     this.data.css.left = this.position.left + "px";
     this.data.css.top = this.position.top + "px";
-    this.domNode.animate(this.data.css);
+    this.domNode.animate(this.data.css, 'fast');
 }
 
 com.mnemis.wb.model.WBItem.prototype.endOfMove = function()
