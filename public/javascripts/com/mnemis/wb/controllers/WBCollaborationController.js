@@ -17,7 +17,6 @@ com.mnemis.wb.controllers.WBCollaborationController = function(page)
     this.stomp.onconnectedframe = this.onconnectedframe;
     this.stomp.onmessageframe = this.onmessageframe;
     this.stomp.connect(document.domain, 61613, 'UNIQUE_ID_PER_CLIENT', '');
-    setTimeout("WB.application.boardController.collaborationController.stomp.subscribe('"+ page.uuid() + "', {exchange:''})",5000);
 }
 
 com.mnemis.wb.controllers.WBCollaborationController.prototype.disconnect = function()
@@ -98,6 +97,7 @@ com.mnemis.wb.controllers.WBCollaborationController.prototype.moveItem = functio
  };
  com.mnemis.wb.controllers.WBCollaborationController.prototype.onconnectedframe = function() {
   console.log("Connected to collaboration server");
+  WB.application.boardController.collaborationController.stomp.subscribe(WB.application.boardController.collaborationController.page.uuid() , {exchange:''});
  };
  com.mnemis.wb.controllers.WBCollaborationController.prototype.onmessageframe = function(frame) {
    console.log("recieve message" + frame.body);
