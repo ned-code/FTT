@@ -37,14 +37,15 @@ class PagesController < ApplicationController
   def info
     @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
     @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_id(params[:id]) if @document
-    #TODO how to get server url without request object?
-    if (@page)
-      @page_url =  @page.url("application/xhtml+xml")
-    end
+#    #TODO how to get server url without request object?
+#    if (@page)
+#      @page_url =  @page.url("application/xhtml+xml")
+#    end
     respond_to do |format|
       if @document && @page && (@document.is_public || permit?('owner of document'))
         format.json {
-          render :json => "{ 'url' : '#{@page_url}', 'previousId' : '#{@page.previous ? @page.previous.id : nil}' , 'nextId' : '#{@page.next ? @page.next.id : nil}'}"
+          render :json => "{ 'url' : '#{url_for :controller => 'pages',  :action => 'content', :id => @page.id, :document_id => @document.id }', 'previousId' : '#{@page.previous ? @page.previous.id : nil}' , 'nextId' : '#{@page.next ? @page.next.id : nil}'}"
+#        render :json => "{ 'url' : '#{@page.media.get_resource('application/xhtml+xml').public_url }', 'previousId' : '#{@page.previous ? @page.previous.id : nil}' , 'nextId' : '#{@page.next ? @page.next.id : nil}'}"
         }
       else
         format.html { render_optional_error_file(:not_found) }

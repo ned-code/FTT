@@ -128,12 +128,14 @@ class UbDocument < ActiveRecord::Base
           'page-number' => a_page.position)
         # add all media used by the page
         a_page.page_elements.each do |a_page_element|
-          xml_document.media((options[:page_url] ? a_page_element.media.public_url : ''),
-            'uuid' => a_page_element.media.uuid,
-            'version' => a_page_element.media.version,
-            'created-at' => a_page_element.media.created_at.xmlschema,
-            'updated-at' => a_page_element.media.updated_at.xmlschema,
-            'file-name' => a_page_element.media.path)
+          unless (a_page_element.media.nil?)
+            xml_document.media((options[:page_url] ? a_page_element.media.public_url : ''),
+              'uuid' => a_page_element.media.uuid,
+              'version' => a_page_element.media.version,
+              'created-at' => a_page_element.media.created_at.xmlschema,
+              'updated-at' => a_page_element.media.updated_at.xmlschema,
+              'file-name' => a_page_element.media.path)
+          end
         end
       end
     end

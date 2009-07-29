@@ -164,11 +164,11 @@ module ConversionService
     def get_json_for_element(svg_element, page_width, page_height)
       if (svg_element.name == 'video')
         return get_json_video(svg_element, page_width, page_height)
-      elsif (svg_element.name == 'foreignobject' && !svg_element.attribute("background", "ub").nil? && svg_element.attribute("background", "ub").value == "true")
+      elsif (svg_element.name == 'foreignObject' && !svg_element.attribute("background", "ub").nil? && svg_element.attribute("background", "ub").value == "true")
         return get_json_pdf_background(svg_element, page_width, page_height)
-      elsif (svg_element.name == 'foreignobject' && !svg_element.attribute("type", "ub").nil? && svg_element.attribute("type", "ub").value == "text")
+      elsif (svg_element.name == 'foreignObject' && !svg_element.attribute("type", "ub").nil? && svg_element.attribute("type", "ub").value == "text")
         return get_json_text(svg_element, page_width, page_height)
-      elsif (svg_element.name == 'foreignobject')
+      elsif (svg_element.name == 'foreignObject')
         return get_json_widget(svg_element, page_width, page_height)
       elsif (svg_element.name == 'image')
         return get_json_image(svg_element, page_width, page_height)
@@ -222,7 +222,7 @@ module ConversionService
       z_index = size_and_position["z-index"].to_i
       width = size_and_position["width"]
       height = size_and_position["height"]
-      result = { :left => left, :top => top, :width => width, :height => height, :zIndex => z_index, "-MozTransform" => size_and_position["-MozTransform"], "-MozTransformOrigin" => size_and_position["-MozTransformOrigin"]}
+      result = { :left => "#{left.to_s}px", :top => "#{top.to_s}px", :width => "#{width.to_s}px", :height => "#{height.to_s}px", :zIndex => z_index, "-MozTransform" => size_and_position["-MozTransform"], "-MozTransformOrigin" => size_and_position["-MozTransformOrigin"]}
     end
 
     def style_position(svg_element, page_width, page_height)
@@ -260,7 +260,7 @@ module ConversionService
       end
       json_hash = {}
       json_hash[:uuid] = video_uuid
-      json_hash[:css] = {:top => top, :left => left, :width => width, :height => height, :zIndex => z_index}
+      json_hash[:css] = {:top => "#{top.to_s}px", :left => "#{left.to_s}px", :width => "#{width.to_s}px", :height => "#{height.to_s}px", :zIndex => z_index}
       json_hash[:data] = "/player/player-viral.swf"
       json_hash[:type] = "application/x-shockwave-flash"
       json_hash[:tag] = "object"
@@ -331,6 +331,8 @@ module ConversionService
       json_hash[:css] = get_json_css(svg_element, page_width, page_height)
       json_hash[:tag] = "div"
       json_hash[:innerHtml] = font_xml
+
+      json_hash
     end
 
     def get_json_widget( svg_element, page_width, page_height)
@@ -397,7 +399,7 @@ module ConversionService
       if (image_src[-3,3] == "svg")
         json_hash[:tag] = 'object'
         json_hash[:type] = "image/svg+xml"
-        json_hash[:data] = "image/svg+xml"
+        json_hash[:data] = image_media.public_url
       else
         json_hash[:tag] = 'img'
         json_hash[:src] = image_media.public_url

@@ -76,10 +76,10 @@ class UbPage < ActiveRecord::Base
   end
 
   def json_content
-    result = { 'uuid' => uuid, 'data' => data}
+    result = { 'uuid' => uuid, 'data' => JSON.parse(data)}
     page_objects = []
     page_elements.each do |a_page_element|
-      page_objects << a_page_element.data
+      page_objects << JSON.parse(a_page_element.data)
     end
     result['page_objects'] = page_objects
 
@@ -105,7 +105,7 @@ class UbPage < ActiveRecord::Base
     page_height = rect_element.attribute('height').value
     page_background = rect_element.attribute('fill').value
     data_hash = {}
-    data_hash['css'] = {:width => page_width, :height => page_height, :backgroundColor => page_background}
+    data_hash['css'] = {:width => "#{page_width}px", :height => "#{page_height}px", :backgroundColor => page_background}
     self.data = data_hash.to_json
     
     # create a map that map media uuid with corresponding page element. It will be used to optimize
@@ -151,6 +151,9 @@ class UbPage < ActiveRecord::Base
             page_element = page_elements.build(:media => media)
             page_element.uuid = element_uuid
           end
+        else
+            page_element = page_elements.build()
+            page_element.uuid = element_uuid
         end
       end
       page_element.update_from_svg(element, page_width, page_height) if !page_element.nil?
@@ -167,12 +170,13 @@ class UbPage < ActiveRecord::Base
       page_element.uuid = uuid
     end
     drawing_hash = {}
+    drawing_hash[:ubItemType] = UbMedia::UB_DRAWING_TYPE
     drawing_hash[:uuid] = uuid
     drawing_hash[:tag] = 'object'
     drawing_hash[:tag] = 'object'
     drawing_hash[:type] = "image/svg+xml"
     drawing_hash[:data] = drawing_resource.public_url
-    drawing_hash[:css] = { :width => page_width, :height => page_height}
+    drawing_hash[:css] = { :top => "0px", :left => "0px",:width => "#{page_width.to_s}px", :height => "#{page_height.to_s}px"}
     page_element.data = drawing_hash.to_json
 
     # Remove all page elements that are no more used

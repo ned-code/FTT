@@ -28,7 +28,7 @@ com.mnemis.wb.controllers.WBCollaborationController.prototype.disconnect = funct
 com.mnemis.wb.controllers.WBCollaborationController.prototype.moveItem = function(item)
 {
     console.log("send move to server");
-    var data = item.data();
+    var data = item.getData();
     data.ubApplicationId = WB.application.viewer.applicationUuid;
     $.ajax({
         url: com.mnemis.core.applicationPath + "/documents/" + WB.application.viewer.currentDocument + "/pages/" + WB.application.viewer.currentPageId + "/update",
@@ -71,15 +71,7 @@ com.mnemis.wb.controllers.WBCollaborationController.prototype.moveItem = functio
    var message = $.evalJSON(frame.body);
    if (message.ubApplicationId != WB.application.viewer.applicationUuid)
        {
-           console.log("must update item" + message.uuid);
-           var item = WB.application.boardController.collaborationController.page.findObjectWithUuid(message.uuid);
-           if (item)
-           {
-                item.moveTo(message.position);
-           }
-           else
-           {
-                WB.application.boardController.collaborationController.page.createItem(message);
-           }
+           console.log("must update item" + message.uuid);;
+           WB.application.boardController.collaborationController.page.createOrUpdateItem(message);
        }
  };
