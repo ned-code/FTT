@@ -124,7 +124,7 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.endDraw= function(e)
 {
     if (WB.application.boardController.collaborationController)
     {
-        WB.application.boardController.collaborationController.moveItem(this.currentDrawObject);
+        WB.application.boardController.collaborationController.addItem(this.currentDrawObject);
     }
 // Nothing to do
 }
@@ -144,6 +144,10 @@ com.mnemis.wb.controllers.WBDrawingController.prototype._removePolyLine = functi
     WB.application.undoManager.registerUndo(function() {
         that._addPolyLine(drawObject);
     });
+    if (WB.application.boardController.collaborationController)
+    {
+        WB.application.boardController.collaborationController.removeItem(drawObject);
+    }
 }   
 
 com.mnemis.wb.controllers.WBDrawingController.prototype._addPolyLine = function(drawObject) {
@@ -153,4 +157,8 @@ com.mnemis.wb.controllers.WBDrawingController.prototype._addPolyLine = function(
     WB.application.undoManager.registerUndo(function() {
         that._removePolyLine(drawObject);
     });
+    if (WB.application.boardController.collaborationController)
+    {
+        WB.application.boardController.collaborationController.addItem(drawObject);
+    }
 }           

@@ -77,6 +77,21 @@ com.mnemis.wb.model.WBPage.prototype.uuid = function()
     return this.pageId;
 }
 
+com.mnemis.wb.model.WBPage.prototype.removeItem = function(itemData)
+{
+    if (itemData.tag == 'polyline' || itemData.tag == 'polygon')
+    {
+        var drawingObject = this.findDrawingWithUuid(itemData.uuid);
+        drawingObject.domNode.animate({ opacity : 0}, 'slow', null, function() { WB.application.boardController.drawingController.domNode.removeChild(this)});
+        var index =this.drawing.polyline.indexOf(drawingObject);
+        this.drawing.polyline.splice(index,1);
+    }
+    else
+    {
+        console.log("need implementation");
+    }
+}
+
 com.mnemis.wb.model.WBPage.prototype.createOrUpdateItem = function(itemData)
 {
     if (itemData.tag == 'polyline' || itemData.tag == 'polygon')
@@ -89,7 +104,7 @@ com.mnemis.wb.model.WBPage.prototype.createOrUpdateItem = function(itemData)
         WB.application.boardController.drawingController.domNode.appendChild(newLine);
         $(newLine).animate({
             opacity : 1
-        });
+        }, 'slow');
     }
     else
     {
@@ -119,6 +134,28 @@ com.mnemis.wb.model.WBPage.prototype.findObjectWithUuid = function(pUuid)
     {
         var anObject = this.objects[i];
         if (anObject.uuid == pUuid)
+        {
+            return anObject;
+        }
+    }
+    return null;
+}
+
+com.mnemis.wb.model.WBPage.prototype.findDrawingWithUuid = function(pUuid)
+{
+    var i = 0;
+    for (; i < this.drawing.polyline.length; i++)
+    {
+        var anObject = this.drawing.polyline[i];
+        if (anObject.data.uuid == pUuid)
+        {
+            return anObject;
+        }
+    }
+    for (; i < this.drawing.polygon.length; i++)
+    {
+        var anObject = this.drawing.polyline[i];
+        if (anObject.data.uuid == pUuid)
         {
             return anObject;
         }
