@@ -77,6 +77,25 @@ com.mnemis.wb.model.WBPage.prototype.uuid = function()
     return this.pageId;
 }
 
+com.mnemis.wb.model.WBPage.prototype.clear = function()
+{
+    this._clear();
+    if (WB.application.boardController.collaborationController)
+    {
+        WB.application.boardController.collaborationController.clear(this);
+    }
+}
+
+com.mnemis.wb.model.WBPage.prototype._clear = function()
+{
+    var i = this.drawing.polyline.length -1;
+    for (; i >= 0; i--)
+    {
+        var anObject = this.drawing.polyline[i];
+        this.removeItem(anObject.data);
+    }
+}
+
 com.mnemis.wb.model.WBPage.prototype.removeItem = function(itemData)
 {
     if (itemData.tag == 'polyline' || itemData.tag == 'polygon')

@@ -59,18 +59,22 @@ class PagesController < ApplicationController
     action = params[:ubAction]
     data = JSON.parse(params[:ubData])
     message = {}
-    existing_page_element = current_page.page_elements.find_by_uuid(data['uuid'])
-    if (action == 'overwrite')
-      #update model
-      if (existing_page_element.nil?)
-        existing_page_element = current_page.page_elements.create(:data => data.to_json, :uuid => data['uuid']);
-      else
-        existing_page_element.data = data.to_json
-        existing_page_element.save
-      end
-    elsif (action == 'remove')
-      unless (existing_page_element.nil?)
-        existing_page_element.destroy
+    if (action == 'clear')
+      current_page.page_elements.find_all_by_element_type('polyline').each { |a_page_element| a_page_element.destroy()}
+    else
+      existing_page_element = current_page.page_elements.find_by_uuid(data['uuid'])
+      if (action == 'overwrite')
+        #update model
+        if (existing_page_element.nil?)
+          existing_page_element = current_page.page_elements.create(:data => data.to_json, :uuid => data['uuid'], :element_type => data['tag']);
+        else
+          existing_page_element.data = data.to_json
+          existing_page_element.save
+        end
+      elsif (action == 'remove')
+        unless (existing_page_element.nil?)
+          existing_page_element.destroy
+        end
       end
     end
     message[:ubData] = data

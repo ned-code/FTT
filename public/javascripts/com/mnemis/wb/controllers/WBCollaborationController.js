@@ -24,6 +24,15 @@ com.mnemis.wb.controllers.WBCollaborationController.prototype.disconnect = funct
     this.stomp.disconnect();
 }
 
+com.mnemis.wb.controllers.WBCollaborationController.prototype.clear = function(page)
+{
+    console.log("send clear to server");
+    var data = {
+        uuid : page.uuid()
+    };
+    this.sendRequest(data, 'clear');
+}
+
 com.mnemis.wb.controllers.WBCollaborationController.prototype.addItem = function(item)
 {
     console.log("send add to server");
@@ -34,32 +43,22 @@ com.mnemis.wb.controllers.WBCollaborationController.prototype.removeItem = funct
 {
     console.log("send remove to server");
     var itemData = item.getData();
-   var data = { uuid : itemData.uuid, tag : itemData.tag };
-    $.ajax({
-        url: com.mnemis.core.applicationPath + "/documents/" + WB.application.viewer.currentDocument + "/pages/" + WB.application.viewer.currentPageId + "/update",
-        global: false,
-        type: "POST",
-        data: ({
-            ubChannel : this.page.uuid(),
-            ubData : $.toJSON(data),
-            ubAction : 'remove',
-            ubApplicationId : WB.application.viewer.applicationUuid
-        }),
-        dataType: "html",
-        success: function(msg){
-            console.log("success " +msg);
-        },
-        error: function(msg)
-        {
-            console.log("error " +msg);
-        }
-    })
+    var data = {
+        uuid : itemData.uuid,
+        tag : itemData.tag
+    };
+    this.sendRequest(data, 'remove');
 }
 
 com.mnemis.wb.controllers.WBCollaborationController.prototype.moveItem = function(item)
 {
     console.log("send move to server");
     var data = item.getData();
+    this.sendRequest(data, 'overwrite');
+}
+
+com.mnemis.wb.controllers.WBCollaborationController.prototype.sendRequest = function(data, action)
+{
     $.ajax({
         url: com.mnemis.core.applicationPath + "/documents/" + WB.application.viewer.currentDocument + "/pages/" + WB.application.viewer.currentPageId + "/update",
         global: false,
@@ -67,7 +66,7 @@ com.mnemis.wb.controllers.WBCollaborationController.prototype.moveItem = functio
         data: ({
             ubChannel : this.page.uuid(),
             ubData : $.toJSON(data),
-            ubAction : 'overwrite',
+            ubAction : action,
             ubApplicationId : WB.application.viewer.applicationUuid
         }),
         dataType: "html",
@@ -78,7 +77,7 @@ com.mnemis.wb.controllers.WBCollaborationController.prototype.moveItem = functio
         {
             console.log("error " +msg);
         }
-    })
+    });
 }
 
  com.mnemis.wb.controllers.WBCollaborationController.prototype.onopen = function() {
@@ -99,18 +98,23 @@ com.mnemis.wb.controllers.WBCollaborationController.prototype.moveItem = functio
   console.log("Connected to collaboration server");
   WB.application.boardController.collaborationController.stomp.subscribe(WB.application.boardController.collaborationController.page.uuid() , {exchange:''});
  };
- com.mnemis.wb.controllers.WBCollaborationController.prototype.onmessageframe = function(frame) {
-   console.log("recieve message" + frame.body);
-   var message = $.evalJSON(frame.body);
-   if (message.ubApplicationId != WB.application.viewer.applicationUuid)
-       {
-           if (message.action == 'overwrite')
-           {
-                WB.application.boardController.collaborationController.page.createOrUpdateItem(message.ubData);
-           }
-           else if (message.action == 'remove')
-          {
-                WB.application.boardController.collaborationController.page.removeItem(message.ubData);
-          }
-       }
- };
+
+com.mnemis.wb.controllers.WBCollaborationController.prototype.onmessageframe = function(frame) {
+    console.log("recieve message" + frame.body);
+    var message = $.evalJSON(frame.body);
+    if (message.ubApplicationId != WB.application.viewer.applicationUuid)
+    {
+        if (message.action == 'overwrite')
+        {
+            WB.application.boardController.collaborationController.page.createOrUpdateItem(message.ubData);
+        }
+        else if (message.action == 'remove')
+        {
+            WB.application.boardController.collaborationController.page.removeItem(message.ubData);
+        }
+        else if (message.action == 'clear')
+        {
+            WB.application.boardController.collaborationController.page._clear();
+        }
+    }
+};

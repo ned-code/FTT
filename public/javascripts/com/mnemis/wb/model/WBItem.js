@@ -76,6 +76,7 @@ com.mnemis.wb.model.WBItem.prototype.recomputeInternalSizeAndPosition = function
 
 com.mnemis.wb.model.WBItem.prototype.update = function(itemData)
 {
+    console.log("update item");
     this.data = itemData;
     this.recomputeInternalSizeAndPosition();
     this.domNode.animate(itemData.css);
@@ -111,9 +112,10 @@ com.mnemis.wb.model.WBItem.prototype.select = function()
     {
         this.domNode.attr("ub:zIndex", this.domNode.css("zIndex"));
     }
+    console.log("type " + this.type());
     if (this.type() == "widget")
     {
-        this.domNode.css("zIndex", 2000000);
+        this.domNode.css({zIndex : 2000000});
         if (this.domNode.attr("type") == "application/x-shockwave-flash")
         {
             console.log(this.domNode.id);
@@ -130,6 +132,7 @@ com.mnemis.wb.model.WBItem.prototype.select = function()
 com.mnemis.wb.model.WBItem.prototype.unSelect = function()
 {
     this.domNode.removeClass("wb-selected-object");
+    console.log("reset zindex");
     this.domNode.css("zIndex", this.domNode.attr("ub:zIndex"));
     this.shift(15, 15);
     this.size.height -= 15;
@@ -156,11 +159,15 @@ com.mnemis.wb.model.WBItem.prototype.endOfMove = function()
 
 com.mnemis.wb.model.WBItem.prototype.shift = function(x, y)
 {
-    this.position.left = this.position.left + x;
-    this.position.top = this.position.top + y;
-    this.data.css.left = this.position.left + "px";
-    this.data.css.top = this.position.top + "px";
-    this.domNode.css(this.data.css);
+    if (this.type() != "widget")
+    {
+        this.position.left = this.position.left + x;
+        this.position.top = this.position.top + y;
+        this.data.css.left = this.position.left + "px";
+        this.data.css.top = this.position.top + "px";
+        console.log("shift");
+        this.domNode.css(this.data.css);
+    }
 }
 
 com.mnemis.wb.model.WBItem.prototype.coverPoint = function(point)

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090729112508) do
+ActiveRecord::Schema.define(:version => 20090730085048) do
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20090729112508) do
     t.datetime "updated_at"
     t.text     "data",             :limit => 65537
     t.string   "uuid"
+    t.string   "element_type",                      :default => "object"
   end
 
   add_index "ub_page_elements", ["uniboard_page_id"], :name => "page_fk"
