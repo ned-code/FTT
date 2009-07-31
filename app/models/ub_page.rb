@@ -176,7 +176,7 @@ class UbPage < ActiveRecord::Base
     drawing_hash[:tag] = 'object'
     drawing_hash[:type] = "image/svg+xml"
     drawing_hash[:data] = drawing_resource.public_url
-    drawing_hash[:css] = { :top => "0px", :left => "0px",:width => "#{page_width.to_s}px", :height => "#{page_height.to_s}px"}
+    drawing_hash[:css] = { :top => "0px", :left => "0px",:width => "#{page_width.to_s}px", :height => "#{page_height.to_s}px", :zIndex => "1999999"}
     page_element.data = drawing_hash.to_json
 
     # Remove all page elements that are no more used
