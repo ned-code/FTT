@@ -1,3 +1,11 @@
+  <% javascript_tag  do -%>
+      $(function() {
+        if (!window.google || !google.gears) {
+          Boxy.alert('<h1>Google Gears is not installed</h1><p> Click the following link to install it</p><a href="http://gears.google.com/?action=install&message=Google Gears will allow you to work offline with Uniboard&return=st-ub.mnemis.com">Install Google Gears.</a>' +
+          '<p>You can use uniboard online without Google Gears but it will not work offline.</p>');
+        }
+      });
+  <% end -%>
 <h1>Login</h1>
 
 <% form_for @user_session, :url => session_path do |f| %>

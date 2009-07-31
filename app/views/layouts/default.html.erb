@@ -6,6 +6,11 @@
   <meta http-equiv="content-type" content="application/xhtml+xml;charset=UTF-8" />
     <title>MyUniboard</title>
   <%= stylesheet_link_tag 'default' %>
+  <%= javascript_include_tag 'jquery-1.3.2' %>
+  <%= javascript_include_tag 'jquery.boxy' %>
+  <%= javascript_include_tag 'gears_init' %>
+  <%= javascript_include_tag 'com/mnemis/core/Init' %>
+  <%= stylesheet_link_tag 'boxy' %>
 </head>
 <body>
   <div id="ub-bar">
@@ -14,7 +19,14 @@
     <% else %>
         <div id="home"><%= link_to "Documents", documents_path %></div>
     <% end %>
-    <div id="ub-login-logout"><%= current_user ? current_user.email : '' %> <%= current_user ? link_to("logout", session_path, :method => :delete) :  link_to("login", new_session_url) %> </div>
+    <div id="ub-login-logout">
+      <div>
+        
+      </div>
+      <div>
+        <%= current_user ? current_user.email : '' %> <%= current_user ? link_to("logout", session_path, :method => :delete) :  link_to("login", new_session_url) %>
+      </div>
+    </div>
     <div id="flash"><p style="color: green"><%= flash[:notice] %></p></div>
   </div>
 

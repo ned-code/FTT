@@ -16,6 +16,59 @@ if (!console)
 // array of all modules that are already providen
 com.mnemis.core.modules = [];
 
+// create gears local server if gears is installed
+if (window.google && google.gears)
+{
+    try {
+        com.mnemis.core.localServer =
+        google.gears.factory.create('beta.localserver');
+    } catch (ex) {
+        console.log('Could not create local server: ' + ex.message);
+    }
+    com.mnemis.core.documentStore = com.mnemis.core.localServer.openStore("Documents");
+    if (!com.mnemis.core.documentStore)
+    {
+        com.mnemis.core.documentStore = com.mnemis.core.localServer.createStore("Documents");
+        // by default store is disable and we enabled it only if connection is broken
+        com.mnemis.core.documentStore.enabled = true;
+    }
+    
+    com.mnemis.core.store = com.mnemis.core.localServer.createManagedStore("Uniboard5");
+    com.mnemis.core.store.manifestUrl = "/gears_manifest.json";
+    com.mnemis.core.store.checkForUpdate();
+
+    var timerId = window.setInterval(function() {
+    // When the currentVersion property has a value, all of the resources
+    // listed in the manifest file for that version are captured. There is
+    // an open bug to surface this state change as an event.
+      if (com.mnemis.core.store.currentVersion)
+      {
+        window.clearInterval(timerId);
+        console.log("file are available offline");
+        console.log(com.mnemis.core.store.lastErrorMessage);
+      }
+      else if (com.mnemis.core.store.updateStatus == 3)
+      {
+        console.log("Error: " + com.mnemis.core.store.lastErrorMessage);
+      }
+    }, 500);
+}
+
+com.mnemis.core.capture = function(urls)
+{
+  var store = com.mnemis.core.localServer.openStore("Documents");
+  if (!store) {
+    console.log('Please create a store for the captured resources');
+    return;
+  }
+  // Capture this page and the js library we need to run offline.
+  store.capture(urls, com.mnemis.core.captureCallback);
+}
+
+com.mnemis.core.captureCallback = function(url, success, captureId) {
+  console.log(url + ' captured ' + (success ? 'succeeded' : 'failed'));
+}
+
 /*
  *  Import a module based on the name of the module.
  */

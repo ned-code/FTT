@@ -53,8 +53,8 @@ class ApplicationController < ActionController::Base
 
   def orbited_javascript
     [
-    "<script src=\"http://#{APP_SETTINGS[:orbited_host]}:#{APP_SETTINGS[:orbited_port]}/static/Orbited.js\"></script>",
-    '<script>',
+    "<script type=\"text/javascript\" src=\"http://#{APP_SETTINGS[:orbited_host]}:#{APP_SETTINGS[:orbited_port]}/static/Orbited.js\"></script>",
+    '<script type="text/javascript">',
     '  document.domain = document.domain;',
     "  Orbited.settings.port = #{APP_SETTINGS[:orbited_port]};",
     "  Orbited.settings.hostname = '#{APP_SETTINGS[:orbited_host]}';",

@@ -1,3 +1,15 @@
+ <% javascript_tag  do -%>
+      $(function() {
+        document_page_urls = [location.href];
+        <% @documents.each do |document| -%>
+            document_page_urls.push('<%=  document_path(document) %>');
+            <% document.pages.each do |page| -%>
+              document_page_urls.push('<%=  page.thumbnail_url%>');
+            <% end -%>
+        <% end -%>
+        com.mnemis.core.capture(document_page_urls);
+      });
+  <% end -%>
 <h1>Personal</h1>
 <% if (@documents.nil? || @documents.empty?)  -%>
 <div class="ub-empty-document-list">Empty list</div>
