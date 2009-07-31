@@ -14,9 +14,9 @@ com.mnemis.wb.model.WBPage = function(pageBodyElement, pageId) {
            this.pageId = pageBodyElement.uuid;
            this.domNode = $('<div id="ub_board" style="position: absolute; top: 0px; left: 0px;z-index:-2000000">' +
                                     '  <div id="ub_page_drawing" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%">' +
-                                    '     <div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 1999999"/>' +
                                     '  </div>' +
-                                    '  <div id="ub_page_objects" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%">' +
+                                    '  <div id="ub_page_objects" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"/>' +
+                                    '  <div id="ub_event_catcher" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 1999999"/>' +
                                     '</div>');
           this.domNode.css(pageBodyElement.data.css);
           this.drawing = {
