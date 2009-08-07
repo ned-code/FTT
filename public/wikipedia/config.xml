@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" 
+        identifier="http://www.mnemis.com/uniboard/ubText" 
+        version="1.0 Beta"
+        width="550"
+        height="115" >        
+  <name>ubwidget</name>
+  <content src="wikibot.html"/> 
+</widget>
