@@ -1,4 +1,4 @@
-	<%= javascript_include_tag 'jquery' %>
+	<%= javascript_include_tag 'jquery-1.3.2' %>
 	<%= javascript_include_tag 'jrails' %>
 	
 	<%= stylesheet_link_tag 'monobook/monobook' , 'monobook/main' , 'common/shared' , :media => 'all' %>
@@ -38,11 +38,24 @@
 		
 						var mainUrl = "<%="#{request.protocol}#{request.host_with_port}" %>" + '/wikibot/search'
 						var reqUrl = mainUrl + '?input='+escape(prepUrl) + '&lang=' + lan + '&mode=' + mode;
-			
+						var checkTitle = $(this).attr('title');
+						if(checkTitle.match('w:') === null){
+						//alert(checkTitle);
+						}
 						var linker = "javascript:parent.wikiReq('" + $(this).attr('title') +"')";			
 						$(this).attr('href',linker);
 		
-						}}else if( $(this).attr('class') == 'image' ){
+						}else if (mode === 'wiktionary'){
+						
+						//alert($(this).attr('href'));
+						var getLink = $(this).attr('href');
+						var pick = getLink.split('#');
+						var secondPick = pick[0].split('/');
+						
+						var prep = "javascript:parent.wikiReq('" + secondPick[secondPick.length-1] +"')";
+						$(this).attr('href',prep);
+						}}else 
+					if( $(this).attr('class') == 'image' ){
 						
 				
 						
@@ -71,6 +84,7 @@
 		$('.gallerybox').css({width:'auto'});
 		$('.thumb').css({width:'auto',padding:'0px'});
 		
+		$('.translations').remove();
 		$('.navbox').remove();
 		$('#f-poweredbyico').remove();
 		$('#f-copyrightico').remove();

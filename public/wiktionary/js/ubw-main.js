@@ -1,4 +1,4 @@
-	var mode = 'wiki';
+	var mode = 'wiktionary';
 	var lang = 'en';
 	var winwidth = window.innerWidth;
 	var winheight = window.innerHeight;	
@@ -237,7 +237,8 @@
 		var loadingBox = $("<div id='loading' style='background-image:url(images/back80p.png);padding:40px;position:absolute;width:403px;height:530px;z-index:4'><img style='margin-top:260px;margin-left:170px'src='images/23.gif'></div>");
 	
 var textBoxInput = kword.replace(/ /g,'_');	 
-    			textBoxInput = remacc(textBoxInput);	
+    			textBoxInput = remacc(textBoxInput);
+    		
     			if(mode=='wiki'){
     			
    					textBoxInput = textBoxInput.replace(textBoxInput.charAt(0),textBoxInput.charAt(0).toUpperCase());
@@ -245,12 +246,12 @@ var textBoxInput = kword.replace(/ /g,'_');
    				}else if (mode=='wiktionary') {
    	
    	   				textBoxInput = textBoxInput.replace(textBoxInput.charAt(0),textBoxInput.charAt(0).toLowerCase());
-
+					
    
    				}
 
-		$('iframe').attr('src',"http://localhost:8888/wikibot/search?input=" + textBoxInput + "&lang="+ lang + '&mode=' + mode) ; 
-	
+		///$('iframe').attr('src',"http://uniboard.mnemis.com/widgets/wikibot/search?input=" + textBoxInput + "&lang="+ lang + '&mode=' + mode) ; 
+		$('iframe').attr('src',"http://uniboard.mnemis.com/widgets/wikibot/search?input=" + textBoxInput + "&lang="+ lang + '&mode=' + mode) ;
 			loadingBox.width($('.ubw-container').width()-80);
 			loadingBox.height($('.ubw-container').height()-75);
 			$("#ubwidget").append(loadingBox);
