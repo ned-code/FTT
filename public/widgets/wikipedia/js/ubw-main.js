@@ -249,7 +249,7 @@ var textBoxInput = kword.replace(/ /g,'_');
    
    				}
 
-		$('iframe').attr('src',"/wikibot/search?input=" + textBoxInput + "&lang="+ lang + '&mode=' + mode) ; 
+		$('iframe').attr('src',"/widgets/wikibot/search?input=" + textBoxInput + "&lang="+ lang + '&mode=' + mode) ; 
 	
 			loadingBox.width($('.ubw-container').width()-80);
 			loadingBox.height($('.ubw-container').height()-75);
