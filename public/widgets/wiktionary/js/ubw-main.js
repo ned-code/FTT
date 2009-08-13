@@ -1,14 +1,19 @@
 	var mode = 'wiktionary';
 	var lang = 'en';
 	var winwidth = window.innerWidth;
-	var winheight = window.innerHeight;	
-		
+	var winheight = window.innerHeight;
+	var currentSearchId=-1;	
+	var inc = 0;
+	var browsing = false;
+	var picked;
+	var historic = new Array() ;   	
       	
 	function init(){
 	
 
-	var frame = $("<iframe name='wikiScreen' onload='pop()' width='99%' height = '560px' style='margin-top:10px;margin-left:4px;position:absolute;top:36px;border-width:0;overflow-x:hidden;' src=''></iframe>");
-	
+	var frame = $("<iframe name='wikiScreen' onload='pop()' width='99%' height = '560px' style='z-index:0;margin-top:20px;margin-left:4px;position:absolute;top:46px;-moz-border-radius:12px;-webkit-border-radius: 12px;border-width:5px;overflow-x:hidden;' src=''></iframe>");
+	frame.hide();
+
 	var ubwidget = $("#ubwidget").ubwidget({
 		width:505,
 		height:36
@@ -30,7 +35,9 @@
 		
 	var chronoMode = $("<div><img src='images/button_toggle.png'></div>").ubwbutton({w:40, h:40}).ubwtoggle(1);
 		chronoMode.find(".ubw-button-body").unbind("toggle").unbind("click");
-		chronoMode.find(".ubw-button-body").click(function(){
+		chronoMode.find(".ubw-button-body")
+			.click(
+				function(){
 					chronoMode.find(".ubw-button-body").find("img").css({visibility:"visible"});
 					clockMode.find(".ubw-button-body").find("img").css({visibility:"hidden"});
 					mode = 'wiki';
@@ -51,8 +58,6 @@
 		.append("<br></br>")
 		.append(clockMode)		
 		.append("&nbsp;&nbsp;Wiktionary")
-
-	
 		
 	var inspectorButton = $("<div><img src='images/inspector.png'></div>")
 		.css({
@@ -67,38 +72,12 @@
 			fontStyle:"italic",
 		})
 	
-	
-	var cKeySize = {w:50, h:35};
-	
-	var searchbut = $("<div id ='search' ><img src='images/magnifyer.png'></div>").ubwbutton({w:cKeySize.w, h:cKeySize.h})
-	.css({marginTop:-4, marginLeft:-5});
-	var langbut = $("<div  id ='language' style='font-size:21px'><img src='images/en.png'></div>").ubwbutton({w:cKeySize.w, h:cKeySize.h},{top:1,right:0,bottom:1,left:0})
-		.css({marginTop:-4})
+		
+	var searchbut = $("<div style='margin-top:-5px; margin-left:17px' id ='search' ><img src='images/magnifyer.png'></div>")
+		.ubwbutton({w:10, h:20})
 
-	
-
-	var inputBox = $("<input type='text' ></input>").css ({
-	height:'35px',
-	width:'345px',
-	verticalAlign:'center',
-	float:'left',
-	color:'#555555',
-	fontSize:'20px',
-	borderLeft:'2px solid rgb(231, 231, 233)',
-	borderRight:'2px solid rgb(231, 231, 233)',
-	borderBottom:'2px solid rgb(221, 221, 223)',
-	borderTop:'2px solid rgb(241, 241, 244)'
-	
-	
-	
-	});
-	
-	//ubwidget.ubwidget.inspector({x:160, y:70}, inspectorContent, inspectorButton);
-
-  					
-	var loadingBox = $("<div id='loading' style='background-image:url(images/back80p.png);padding:40px;position:absolute;width:403px;height:530px;z-index:4'><img style='margin-top:260px;margin-left:170px'src='images/23.gif'></div>");
-	var myDropdownButton = $("<div style='font-size:15px;margin-top:-4px'>English</div>")
-		.ubwdropdown({w:85, h:35}, [
+		var myDropdownButton = $("<div id='dd' style='font-size:12px; color:#bbbbbb; margin-top:-4px'>En</div>")
+		.ubwdropdown({w:20, h:20}, [
 			"Deutsch", 
 			"English", 
 			"Español", 
@@ -111,53 +90,110 @@
 			"日本語"],
 			languagesHandler	
 		);
+		
+	var logo = $("<div><img src='images/logo.png'></div>")
 	
+		.css({
+			float:"left",
+			marginTop:-12,
+			marginRight:3
+		});	
+		
+	var bckbt = $("<div><img src='images/bckbt.png'></div>")
+		.click(function(){
+			if($("#loading").length > 0){
+				return 0;
+			};
+			currentSearchId = currentSearchId === 0 ? currentSearchId = 0 : currentSearchId -= 1;
+			browsing = true;
+			wikiReq(historic[currentSearchId]);
+		})
+		.css({
+			float:"left",
+			marginTop:5
+		});
+		
+	var fwdbt = $("<div><img src='images/fwdbt.png'></div>")
+		.click(function(){
+			if($("#loading").length > 0){
+				return 0;
+			};
+			currentSearchId = currentSearchId == historic.length-1 ? currentSearchId = historic.length-1 : currentSearchId += 1;
+			browsing = true;
+			wikiReq(historic[currentSearchId]);
+		})
+		.css({
+			float:"left",
+			marginTop:5,
+			marginLeft:6
+		});
+
+	var inputBox = $("<input type='text' ></input>").css ({
+		height:'20px',
+		width:'230px',
+		marginLeft:25,
+		verticalAlign:'center',
+		float:'left',
+		color:'#555555',
+		fontStyle:"none",
+		fontSize:'15px',
+		border:"none",
+		backgroundColor:"transparent"
+	});
 	
-	
-	ubwidget.append(frame);
-	//ubwidget.append(inspectorButton);
-	ubwidget.append(inputBox);
+	var searchbox = $("<div></div>")
+		.css ({
+			backgroundImage:"url(images/back.png)",
+			height:45,
+			width:380,
+			paddingTop:17,
+			paddingLeft:12,
+			zIndex:100
+			
+		})
+		//.append(logo)
+		.append(bckbt)
+		.append(fwdbt)
+		.append(inputBox)
+		.append(myDropdownButton)
+		.append(searchbut);
+  					
+	var loadingBox = $("<div id='loading' style='background-image:url(images/back80p.png);padding:40px;position:absolute;width:403px;height:530px;z-index:4'><img style='margin-top:260px;margin-left:170px'src='images/23.gif'></div>");
+		ubwidget.append(frame);
+
+	ubwidget.append(searchbox);
+
 	inputBox.focus();
-	ubwidget.append(searchbut);
-	ubwidget.append(myDropdownButton);
-
-
 		
 	inputBox.keypress(function (e){
-	
 	 	if(e.which == 13){
-
-		$("#search").trigger('click');
-
-						 }
-	 
+			$("#search").trigger('click');
+		};
 	 });
 
-	frame.hide();
+	$().mousedown(function(){
+		if(myDropdownButton.find(".ubw-button-body").data("open") &&
+		myDropdownButton.find(".ubw-button-body").data("locked") == false){
+			myDropdownButton.find(".ubw-button-body").trigger("click");
+		};
+	});
 
-	 $(document).ready(function() 
-	 {  
-		    $("#search").click( function (){
+	$(document).ready(function() {  
+		$("#search").click( function (){
     		
     		if ($('.ubw-container').height() < 350){
-    			window.resizeTo($('.ubw-container').width()+25,630);
+    			window.resizeTo($('.ubw-container').width()+25,650);
     			$('iframe').height(559);
     			$('.ubw-container').css({
-				height:610	
+					height:630	
 				});	
-    		
-    		
     		}
-			
+    		
+    		browsing  = false;
 			wikiReq($('input').val());
 			$("#ubw-catcher").trigger("mousedown");
-		    
-
-	
-     })
+     	})
 	 });
-	 
-
 				
 	function languagesHandler(language){
 		switch(language){
@@ -193,75 +229,60 @@
 			break;
 		}
 	};
-		
-	
-
-	
 }
 
 	 function pop(){
-	 	
 		$('#loading').remove();
-
-		$('iframe').show();
-		
-		//inputBox.focus();
-
+	 };
 	 
-	 
-	 }	
-	 
-	 window.onresize = function()
-      {
-      
-	
+	 window.onresize = function(){
 		  winwidth = window.innerWidth;
 		  winheight = window.innerHeight;
 		  	
-		  	if(winwidth <= 510)
-		  	{
-		  		window.resizeTo(510,winheight);
-		  	}
+		  if(winwidth <= 510){
+		  	window.resizeTo(510,winheight);
+		  }
 		  	
-      			$('.ubw-container').width(winwidth-17) ;
-      			$('.ubw-container').height(winheight-18);
-      			$('iframe').width(winwidth-25);
-      			$('iframe').height(winheight-60);
-      			
-      			//$('.ubw-container').height(winheight-10) ; 
+      		$('.ubw-container').width(winwidth-17) ;
+      		$('.ubw-container').height(winheight-40);
+      		$('iframe').width(winwidth-25);
+      		$('iframe').height(winheight-80);	
       }
 
 	 
 	 function wikiReq(kword)
 	{
+		oldInc =inc; 
 		var loadingBox = $("<div id='loading' style='background-image:url(images/back80p.png);padding:40px;position:absolute;width:403px;height:530px;z-index:4'><img style='margin-top:260px;margin-left:170px'src='images/23.gif'></div>");
 	
-var textBoxInput = kword.replace(/ /g,'_');	 
-    			textBoxInput = remacc(textBoxInput);
+		var textBoxInput = kword.replace(/ /g,'_');	 
+    	textBoxInput = remacc(textBoxInput);
     		
-    			if(mode=='wiki'){
-    			
-   					textBoxInput = textBoxInput.replace(textBoxInput.charAt(0),textBoxInput.charAt(0).toUpperCase());
-   	
-   				}else if (mode=='wiktionary') {
-   	
-   	   				textBoxInput = textBoxInput.replace(textBoxInput.charAt(0),textBoxInput.charAt(0).toLowerCase());
-					
-   
-   				}
+    	if(mode=='wiki'){
+    		textBoxInput = textBoxInput.replace(textBoxInput.charAt(0),textBoxInput.charAt(0).toUpperCase());
+   		}else if (mode=='wiktionary') {
+   	   		textBoxInput = textBoxInput.replace(textBoxInput.charAt(0),textBoxInput.charAt(0).toLowerCase());
+		}
 
-		///$('iframe').attr('src',"http://uniboard.mnemis.com/widgets/wikibot/search?input=" + textBoxInput + "&lang="+ lang + '&mode=' + mode) ; 
-		$('iframe').attr('src',"/widgets/wikibot/search?input=" + textBoxInput + "&lang="+ lang + '&mode=' + mode) ;
-			loadingBox.width($('.ubw-container').width()-80);
-			loadingBox.height($('.ubw-container').height()-75);
-			$("#ubwidget").append(loadingBox);
-			loadingBox.find('img').css({
+		$('iframe').attr('src',"/wikibot/search?input=" + textBoxInput + "&lang="+ lang + '&mode=' + mode) ; 
+			
+		loadingBox.width($('.ubw-container').width()-70);
+		loadingBox.height($('.ubw-container').height()-125);
+		$("#ubwidget").append(loadingBox);
+			
+		loadingBox.find('img').css({
 			marginLeft: ($('.ubw-container').width()/2)-45,
 			marginTop:($('.ubw-container').height()/2)-45
+		}) 
 			
-			}) 
-    		$('input').val(kword);
+    	$('input').val(kword);
+		$('iframe').show();
 			
+		if (!browsing){
+			currentSearchId = inc;
+			historic[inc] = kword;
+			inc +=1;
+		}
 	}
 	 
 	

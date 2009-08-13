@@ -10,7 +10,11 @@
 		$(window)
 			.bind("blur", function(event){ 
   				$("#ubw-catcher").trigger("mousedown");
-  				//$("#ibutton").hide();
+  				if($("#dd").find(".ubw-button-body").data("open")){
+  					$("#dd").find(".ubw-button-body").trigger("click");
+  				};
+  			})
+  			.bind("focus", function(event){
   			})
   			.trigger("focus");
 		
@@ -88,13 +92,7 @@
 				if(arrows.left)buttonCanvas.find(".ubw-button-arrowLeft").children("img").css({visibility:"visible"});
 								
 				var buttonBody = buttonCanvas.find(".ubw-button-body")											
-					.addClass("ubw-button-out")
-					.addClass("ubw-button-corners")
 					.append(buttonContent)
-					.bind("mouseenter", buttonOverHandler)
-					.bind("mouseleave", buttonOutHandler)
-					.bind("mousedown", buttonDownHandler)
-					.bind("mouseup", buttonUpHandler)
 					.css({
 						width:size.w,
 						height:size.h
@@ -108,65 +106,15 @@
 			});	
 	
 			function buttonOverHandler(e) {			
-				var buttonbody = button.find(".ubw-button-body");
-				var sizeover = {w:size.w*1.15, h:size.h*1.15};
-				
-				button.find(".ubw-button-body").ubwshadows({
-					w:sizeover.w+12, 
-					h:sizeover.h+12, 
-					l:-2, 
-					t:1
-				});
-												
-				button.css({zIndex:1})
-					.children(".ubw-button-canvas")
-						.css({
-							marginLeft:(buttonbody.width()-sizeover.w)/2,
-							marginTop:(buttonbody.height()-sizeover.h)/2
-						});
-				buttonbody.removeClass("ubw-button-out")
-					.addClass("ubw-button-over")
-					.css({
-						fontSize:"115%",
-						width:sizeover.w,
-						height:sizeover.h
-					});	
-								
-				button.find(".ubw-button-canvas").find(".ubw-button-arrowTop").children("img").attr("src", "images/arrows_over/top.png");
-				button.find(".ubw-button-canvas").find(".ubw-button-arrowBottom").children("img").attr("src", "images/arrows_over/bottom.png");
 			};
 	
 			function buttonOutHandler(e){
-				var buttonbody = button.find(".ubw-button-body");
-				
-				button.find(".ubw-shadow").remove();
-				button.css({zIndex:0});
-				buttonbody.removeClass("ubw-button-over")
-					.addClass("ubw-button-out")					
-					.css({
-						fontSize:"100%",
-						width:size.w,
-						height:size.h
-					});
-				button.children(".ubw-button-canvas")
-					.css({
-						marginLeft:0,
-						marginTop:0
-					});
-					
-				button.find(".ubw-button-canvas").find(".ubw-button-arrowTop").children("img").attr("src", "images/arrows_out/top.png");
-				button.find(".ubw-button-canvas").find(".ubw-button-arrowBottom").children("img").attr("src", "images/arrows_out/bottom.png");			};	
+			};	
 			
 			function buttonDownHandler(e){
-				var buttonbody = button.find(".ubw-button-body");
-				
-				buttonbody.css({fontSize:"125%"});
 			};
 			
 			function buttonUpHandler(e){
-				var buttonbody = button.find(".ubw-button-body");
-				
-				buttonbody.css({fontSize:"115%"});
 			};
 	};
 		
@@ -202,7 +150,13 @@
 						
 			var dropdownList = $("<ul></ul>")
 				.addClass("ubw-dropdown")
-				.hide();
+				.hide()
+				.mouseenter(function(){
+					button.find(".ubw-button-body").data("locked", true);
+				})
+				.mouseleave(function(){
+					button.find(".ubw-button-body").data("locked", false);
+				});
        	
        		for(var i=0; i<list.length; i++){       		
        			var newLine = $("<li>"+list[i]+"</li>")
@@ -215,10 +169,9 @@
        						func(list[e.data.i]);
        						button.find(".ubw-button-content")
        							.empty()
-       							.append(list[e.data.i]);
+       							.append(list[e.data.i].substr(0, 2));
        						button.find(".ubw-button-body")
        							.trigger("click");
-       							//.bind("mouseenter", jQuery.fn.ubwbutton.buttonOverHandler);
        					}();
        				});
         		dropdownList.append(newLine);
@@ -230,33 +183,17 @@
         		}
         	}
         	
-        	$(this).ubwbutton(size, {top:0, bottom:1, left:0, right:0})
+        	$(this).ubwbutton(size, {top:0, bottom:0, left:0, right:1})
         		.find(".ubw-button-body")
-        			.mouseenter(function(){
-        				$(this).css({
-							backgroundImage:"url(images/button_out_dark.png)",
-							color:"#eeeeee",
-							border:"none"
-        				})
-        			})
-        			.mouseleave(function(){
-        				$(this).css({
-							backgroundImage:"url(images/button_out.gif)",
-							color:"#555555",
-							borderLeft:"2px solid rgb(231, 231, 233)",
-							borderRight:"2px solid rgb(231, 231, 233)",
-							borderBottom:"2px solid rgb(221, 221, 223)",
-							borderTop:"2px solid rgb(241, 241, 244)"
-        				});
-        			})
-        			.toggle(
+           			.toggle(
         				function(){
         					dropdownList.show();
+        					$(this).data("open", true);
         					$(this).trigger("mouseleave");
-        					//$(this).unbind("mouseenter");
         				},
         				function(){
         					dropdownList.hide();
+        					$(this).data("open", false);
         				}
         			);
         	button.find(".ubw-button-canvas").append(dropdownList);

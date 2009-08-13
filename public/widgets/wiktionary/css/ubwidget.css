@@ -6,13 +6,20 @@
 body{
 	margin:0px;
 }
-
+iframe{
+	
+	padding-right: 3px;
+	
+	border-color: #e7e7e7;
+	
+	border-style: solid;
+	
+}
 .ubw-container{
 	position:absolute;
 	left:0px;
 	top:0px;
-	border:	8px solid rgb(235, 235, 239);
-	background-color:rgb(245, 245, 247);
+	
 }
 
 .ubw-body{
@@ -72,13 +79,14 @@ table{
 }
 
 .ubw-dropdown{
+	z-index: 0;
 	margin: 0;
 	padding: 0;
 	font-size: 15px;
 	width:100px;
 	list-style: none;
 	cursor:pointer;
-	float:left;
+	float: left;
 	/*margin-left:-25px;*/
 }
 	

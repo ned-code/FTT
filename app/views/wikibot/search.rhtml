@@ -16,7 +16,19 @@
 		var mode = $('#ghost2').text(); 
  		
  	
- 		
+ 		$('table').css({clear:'none',float:'none',fontSize:'10px',margin:'0px'});
+		$('.gallerybox').css({width:'auto'});
+		$('.thumb').css({width:'auto',padding:'0px'});
+		//$('.translations').remove();
+		$('.navbox').remove();
+		$('#f-poweredbyico').remove();
+		$('#f-copyrightico').remove();
+		
+		$('.sisterproject').remove();
+		$('#ogg_player_4').remove();
+		$('#ogg_player_3').remove();
+		$('#ogg_player_2').remove();
+		$('#ogg_player_1').remove();
  		
 		$('a').each(function (){
 		
@@ -34,20 +46,26 @@
 						prepUrl = prepUrl.split('/');
 						prepUrl  = prepUrl[prepUrl.length-1];
 				
-		//MainURL should be something like 'http:www.mnemis.com/widgets/backend/prototype/wikibot'
 		
 						var mainUrl = "<%="#{request.protocol}#{request.host_with_port}" %>" + '/wikibot/search'
 						var reqUrl = mainUrl + '?input='+escape(prepUrl) + '&lang=' + lan + '&mode=' + mode;
 						var checkTitle = $(this).attr('title');
 						if(checkTitle.match('w:') === null){
-						//alert(checkTitle);
 						}
-						var linker = "javascript:parent.wikiReq('" + $(this).attr('title') +"')";			
+						var linker = 'javascript:parent.wikiReq("' + $(this).attr('title') +'")';			
+						
+						if(checkTitle === 'Special:Search'){
+						linker = 'javascript:parent.wikiReq("' + $('.searchdidyoumean').find('a').text() +'")';
+						
+						}
+						if($(this).attr('class') === 'external text'){
+						linker = '';
+						
+						}
 						$(this).attr('href',linker);
 		
 						}else if (mode === 'wiktionary'){
 						
-						//alert($(this).attr('href'));
 						var getLink = $(this).attr('href');
 						var pick = getLink.split('#');
 						var secondPick = pick[0].split('/');
@@ -56,7 +74,6 @@
 						$(this).attr('href',prep);
 						}}else 
 					if( $(this).attr('class') == 'image' ){
-						
 				
 						
 			var thumbUrl = String($(this).find('img').attr('src'));
@@ -70,7 +87,6 @@
 			var finalUrl = 'javascript:parent.window.uniboard.addObject("' + correctUrl + '",200,200,0,0)'
 			$(this).attr('href',finalUrl);
 		
-						
 						}  
 						
 
@@ -80,18 +96,7 @@
 
 		
 		
-		$('table').css({clear:'none',float:'none',fontSize:'10px',margin:'0px'});
-		$('.gallerybox').css({width:'auto'});
-		$('.thumb').css({width:'auto',padding:'0px'});
-		
-		$('.translations').remove();
-		$('.navbox').remove();
-		$('#f-poweredbyico').remove();
-		$('#f-copyrightico').remove();
-		
-		$('.sisterproject').remove();
-		$('#ogg_player_2').remove();
-		$('#ogg_player').remove()
+	
 
 
 		//$('.external').remove();
