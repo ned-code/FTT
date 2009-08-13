@@ -264,7 +264,7 @@
    	   		textBoxInput = textBoxInput.replace(textBoxInput.charAt(0),textBoxInput.charAt(0).toLowerCase());
 		}
 
-		$('iframe').attr('src',"/wikibot/search?input=" + textBoxInput + "&lang="+ lang + '&mode=' + mode) ; 
+		$('iframe').attr('src',"/widgets/wikibot/search?input=" + textBoxInput + "&lang="+ lang + '&mode=' + mode) ; 
 			
 		loadingBox.width($('.ubw-container').width()-70);
 		loadingBox.height($('.ubw-container').height()-125);
