@@ -1,7 +1,7 @@
  <% javascript_tag  do -%>
       $(function() {
       var offline = false;
-        var document_page_urls = [location.href];
+        var document_page_urls = ['/documents', '/'];
         <% @documents.each do |document| -%>
             document_page_urls.push('<%=  document_path(document) %>');
             if (!offline) {
