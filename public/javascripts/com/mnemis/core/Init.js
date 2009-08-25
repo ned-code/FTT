@@ -57,13 +57,20 @@ if (window.google && google.gears)
 
 com.mnemis.core.capture = function(urls)
 {
+  Boxy.alert('<p id="capture"> <b>capturing (0%)</b> </p>');
   var store = com.mnemis.core.localServer.openStore("Documents");
   if (!store) {
     console.log('Please create a store for the captured resources');
     return;
   }
+  var nbCaptured = 0;
+  var totalFilesTocapture = urls.length;
   // Capture this page and the js library we need to run offline.
-  store.capture(urls, com.mnemis.core.captureCallback);
+  store.capture(urls, function(url, success, captureId) {
+    nbCaptured += 1;
+    $('#capture').html('<p id="capture"> <b>capturing (' + (nbCaptured/totalFilesTocapture) * 100 + '%)</b> </p>');
+    console.log('file ' + url + " captured (" + (nbCaptured/totalFilesTocapture) * 100 + "%)");
+  });
 }
 
 com.mnemis.core.captureCallback = function(url, success, captureId) {
