@@ -1,21 +1,25 @@
  <% javascript_tag  do -%>
       $(function() {
+      var offline = false;
         var document_page_urls = [location.href];
         <% @documents.each do |document| -%>
             document_page_urls.push('<%=  document_path(document) %>');
-            $.ajaxSetup({async: false});
-            $.ajax({
-                  type: "GET",
-                  url: "<%=  document_path(document) %>" + "/resources",
-                  dataType: "json",
-                  success: function(data) {
-                    var resources = data.mediasUrl;
-                    jQuery.each(resources, function(i, value) {
-                    document_page_urls.push(value);
-                    });
-                  }
-            });
-            $.ajaxSetup({async: true});
+            if (!offline) {
+              $.ajax({
+                    timeout: 2000,
+                    async: false,
+                    type: "GET",
+                    url: "<%=  document_path(document) %>" + "/resources",
+                    dataType: "json",
+                    success: function(data) {
+                      var resources = data.mediasUrl;
+                      jQuery.each(resources, function(i, value) {
+                      document_page_urls.push(value);
+                      });
+                    },
+                    error: function() { offline = true;}
+              });
+            }
             <% document.pages.each do |page| -%>
               document_page_urls.push('<%=  page.thumbnail_url%>');
               document_page_urls.push('<%=  url_for :controller => 'pages',  :action => 'proto', :id => page.id, :document_id => document.id%>');
