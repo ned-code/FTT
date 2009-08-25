@@ -4,14 +4,17 @@
         <% @documents.each do |document| -%>
             document_page_urls.push('<%=  document_path(document) %>');
             $.ajaxSetup({async: false});
-            $.getJSON("<%=  document_path(document) %>" + "/resources",
-              function(data) {
-                var resources = data.mediasUrl;
-                jQuery.each(resources, function(i, value) {
-                  document_page_urls.push(value);
-                })
-
-              });
+            $.ajax({
+                  type: "GET",
+                  url: "<%=  document_path(document) %>" + "/resources",
+                  dataType: "json",
+                  success: function(data) {
+                    var resources = data.mediasUrl;
+                    jQuery.each(resources, function(i, value) {
+                    document_page_urls.push(value);
+                    });
+                  }
+            });
             $.ajaxSetup({async: true});
             <% document.pages.each do |page| -%>
               document_page_urls.push('<%=  page.thumbnail_url%>');
