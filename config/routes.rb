@@ -9,7 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'documents/delete_all',
     :controller => 'documents', :action => 'destroy_all',
     :conditions => { :method => :get }
-  map.resources :documents, :member => {:push => :post} do |document|
+  map.resources :documents, :member => {:push => :post, :resources => :get} do |document|
     document.resources :pages, :member => {:proto => :get, :info => :get, :update => :post, :content => :get}
   end
 

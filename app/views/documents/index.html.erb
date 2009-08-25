@@ -1,10 +1,16 @@
  <% javascript_tag  do -%>
       $(function() {
-        document_page_urls = [location.href];
+        var document_page_urls = [location.href];
         <% @documents.each do |document| -%>
             document_page_urls.push('<%=  document_path(document) %>');
+            $.getJSON("<%=  document_path(document) %>" + "/resources",
+              function(data) {
+               var resources = data.mediasUrl;
+               com.mnemis.core.capture(resources);
+              });
             <% document.pages.each do |page| -%>
               document_page_urls.push('<%=  page.thumbnail_url%>');
+              document_page_urls.push('<%=  url_for :controller => 'pages',  :action => 'proto', :id => page.id, :document_id => document.id%>');
             <% end -%>
         <% end -%>
         com.mnemis.core.capture(document_page_urls);

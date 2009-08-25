@@ -15,10 +15,11 @@ if (!console)
 
 // array of all modules that are already providen
 com.mnemis.core.modules = [];
-
+console.log("init Mnemis FW");
 // create gears local server if gears is installed
 if (window.google && google.gears)
 {
+    console.log("google is defined!");
     try {
         com.mnemis.core.localServer =
         google.gears.factory.create('beta.localserver');

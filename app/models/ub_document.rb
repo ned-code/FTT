@@ -94,6 +94,22 @@ class UbDocument < ActiveRecord::Base
     increment_version if self.changed? || @pages_to_delete_on_storage.length || modified_medias.length
   end
 
+  def resources_json
+      result_hash = {}
+      medias_list = []
+      self.pages.each do |a_page|
+        # add all media used by the page
+        a_page.page_elements.each do |a_page_element|
+          unless (a_page_element.media.nil?)
+            medias_list << a_page_element.media.public_url
+          end
+        end
+        medias_list << a_page.media.get_resource(UbMedia::UB_DRAWING_TYPE).public_url
+      end
+      result_hash['mediasUrl'] = medias_list
+      return result_hash.to_json
+  end
+  
   def to_xml(options = {})
     require 'builder' unless defined?(Builder)
 

@@ -6,6 +6,7 @@ com.mnemis.core.Provide("com/mnemis/wb/core/WBEditor.js");
 var WB = com.mnemis.wb;
 
 com.mnemis.core.Import("com/mnemis/core/UndoManager.js");
+com.mnemis.core.Import("com/mnemis/core/ServerManager.js");
 
 com.mnemis.core.Import("com/mnemis/wb/gui/WBToolPalette.js");
 com.mnemis.core.Import("com/mnemis/wb/gui/WBPagePalette.js");
@@ -16,6 +17,8 @@ com.mnemis.core.Import("com/mnemis/wb/controllers/WBBoardController.js");
 
 // application singleton.
 WB.application = {};
+
+WB.serverManager = new com.mnemis.core.ServerManager();
 
 com.mnemis.wb.core.WBEditor = function()
 {
@@ -47,14 +50,14 @@ com.mnemis.wb.core.WBEditor = function()
 
 com.mnemis.wb.core.WBEditor.prototype.loadPageId = function(documentId, pageId)
 {
-        // remove previous page
+    // remove previous page
     $("#ub_board").remove();
     var loading = $('<h1 id="ub-loading">Loading...</h1>');
     $("body").append(loading);
     var that = this;
     this.currentDocument = documentId;
     this.currentPageId = pageId;
-    $.getJSON(com.mnemis.core.applicationPath + "/documents/" + documentId + "/pages/" + pageId + "/info", null, function(data)
+    WB.serverManager.getJson(com.mnemis.core.applicationPath + "/documents/" + documentId + "/pages/" + pageId + "/info", function(data)
     {
         that.previousPageId = data.previousId.length ? data.previousId : null;
         that.nextPageId = data.nextId.length ? data.nextId : null;
@@ -65,7 +68,7 @@ com.mnemis.wb.core.WBEditor.prototype.loadPageId = function(documentId, pageId)
 com.mnemis.wb.core.WBEditor.prototype.loadPage = function(pageUrl)
 {
     var that = this;
-    $.getJSON(pageUrl, null, function(data)
+    WB.serverManager.getJson(pageUrl, function(data)
     {
         console.log("recieve page json");
         var loadedPage = new com.mnemis.wb.model.WBPage(data);

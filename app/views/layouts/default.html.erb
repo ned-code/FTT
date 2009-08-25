@@ -14,7 +14,7 @@
 </head>
 <body>
   <div id="ub-bar">
-    <% if @document_page %>
+    <% if @is_document_page %>
         <div id="home"><b>Documents</b></div>
     <% else %>
         <div id="home"><%= link_to "Documents", documents_path %></div>
