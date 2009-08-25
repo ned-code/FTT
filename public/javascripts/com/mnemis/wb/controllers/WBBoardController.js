@@ -7,6 +7,8 @@ com.mnemis.core.Import("com/mnemis/wb/model/WBPage.js");
 com.mnemis.core.Import("com/mnemis/wb/controllers/WBDrawingController.js");
 com.mnemis.core.Import("com/mnemis/wb/controllers/WBCollaborationController.js");
 
+var Orbited;
+
 com.mnemis.wb.controllers.WBBoardController = function(editable)
 {
     console.log("init board controller");
@@ -47,8 +49,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(
         var relPath = $(this).attr("data");
         $(this).attr("data", relPath);
     });
-
-    if (this.editable)
+    if (this.editable && Orbited)
     {
         if (this.collaborationController)
         {
