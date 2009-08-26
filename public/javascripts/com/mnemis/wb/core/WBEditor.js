@@ -68,10 +68,10 @@ com.mnemis.wb.core.WBEditor.prototype.loadPageId = function(documentId, pageId)
 com.mnemis.wb.core.WBEditor.prototype.loadPage = function(pageUrl)
 {
     var that = this;
-    WB.serverManager.getJson(pageUrl, function(data)
+    WB.serverManager.getPage(pageUrl, function(data)
     {
         console.log("recieve page json");
-        var loadedPage = new com.mnemis.wb.model.WBPage(data);
+        var loadedPage = new com.mnemis.wb.model.WBPage(data.json, null, data);
         $("#ub-loading").remove();
         $("body").append(loadedPage.domNode);
         WB.application.boardController.setCurrentPage(loadedPage);

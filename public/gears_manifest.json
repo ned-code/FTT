@@ -1,6 +1,6 @@
 {
   "betaManifestVersion": 1,
-  "version": "uniboard5.0.25",
+  "version": "uniboard5.0.40",
   "entries": [
     { "url": "/offline.html", "ignoreQuery": true},
     { "url": "/stylesheets/boxy.css", "ignoreQuery": true},
@@ -35,6 +35,7 @@
     { "url": "/javascripts/com/mnemis/wb/gui/WBUndoPalette.js", "ignoreQuery": true},
     { "url": "/javascripts/com/mnemis/wb/model/WBItem.js", "ignoreQuery": true},
     { "url": "/javascripts/com/mnemis/wb/model/WBPage.js", "ignoreQuery": true},
+    { "url": "/javascripts/com/mnemis/wb/model/WBPageRecord.js", "ignoreQuery": true},
     { "url": "/static/resources/stylusPalette/arrow.png", "ignoreQuery": true},
     { "url": "/static/resources/stylusPalette/arrowOn.png", "ignoreQuery": true},
     { "url": "/static/resources/stylusPalette/eraser.png", "ignoreQuery": true},

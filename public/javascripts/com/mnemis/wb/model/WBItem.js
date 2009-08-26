@@ -26,6 +26,9 @@ com.mnemis.wb.model.WBItem = function(rootElement)
         // internal size and position are top, left width and height as float. Because in the css those values are string with px unit
         // and we need float values to marix transform.
         this.recomputeInternalSizeAndPosition();
+        if (WB.application.boardController.currentPage && WB.application.boardController.currentPage.pageRecord)     {
+            WB.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.getData());
+        }
     }
     // create item from existing DOM node
     else
@@ -60,6 +63,9 @@ com.mnemis.wb.model.WBItem.prototype.setPoints = function(points)
     WB.application.boardController.drawingController.mRenderer.updatePolyline(this.domNode.get(0),{
         points : points
     });
+    if (WB.application.boardController.currentPage && WB.application.boardController.currentPage.pageRecord)     {
+        WB.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.getData());
+    }
 }
 
 com.mnemis.wb.model.WBItem.prototype.recomputeInternalSizeAndPosition = function()
@@ -80,6 +86,9 @@ com.mnemis.wb.model.WBItem.prototype.update = function(itemData)
     this.data = itemData;
     this.recomputeInternalSizeAndPosition();
     this.domNode.animate(itemData.css);
+    if (WB.application.boardController.currentPage && WB.application.boardController.currentPage.pageRecord)     {
+        WB.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.getData());
+    }
 }
 
 com.mnemis.wb.model.WBItem.prototype.getData = function()
@@ -115,7 +124,9 @@ com.mnemis.wb.model.WBItem.prototype.select = function()
     console.log("type " + this.type());
     if (this.type() == "widget")
     {
-        this.domNode.css({zIndex : 2000000});
+        this.domNode.css({
+            zIndex : 2000000
+        });
         if (this.domNode.attr("type") == "application/x-shockwave-flash")
         {
             console.log(this.domNode.id);
@@ -146,6 +157,9 @@ com.mnemis.wb.model.WBItem.prototype.moveTo = function(newPosition)
     this.data.css.left = this.position.left + "px";
     this.data.css.top = this.position.top + "px";
     this.domNode.animate(this.data.css, 'fast');
+    if (WB.application.boardController.currentPage && WB.application.boardController.currentPage.pageRecord)     {
+        WB.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.getData());
+    }
 }
 
 com.mnemis.wb.model.WBItem.prototype.endOfMove = function()
@@ -154,6 +168,10 @@ com.mnemis.wb.model.WBItem.prototype.endOfMove = function()
     {
         console.log("WBItem delegate to collaboration controller");
         WB.application.boardController.collaborationController.moveItem(this);
+    }
+    if (WB.application.boardController.currentPage && WB.application.boardController.currentPage.pageRecord)
+    {
+        WB.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.getData());
     }
 }
 

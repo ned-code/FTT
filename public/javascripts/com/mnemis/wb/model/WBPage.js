@@ -5,12 +5,13 @@ com.mnemis.core.Import("com/mnemis/wb/model/WBItem.js")
 
 if (!com.mnemis.wb.model) { com.mnemis.wb.model = {}};
 
-com.mnemis.wb.model.WBPage = function(pageBodyElement, pageId) {
+com.mnemis.wb.model.WBPage = function(pageBodyElement, pageId, pageRecord) {
 
     // Page can be created from json. In this case pageBodyElement is an Object.
     // Or it can be created from an existing DOM node and in this case pageBodyElement is a DOMElement.
     if (pageBodyElement.constructor == Object)
     {
+           this.pageRecord = pageRecord;
            this.pageId = pageBodyElement.uuid;
            this.domNode = $('<div id="ub_board" style="position: absolute; top: 0px; left: 0px;z-index:-2000000">' +
                                     '  <div id="ub_page_drawing" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%">' +

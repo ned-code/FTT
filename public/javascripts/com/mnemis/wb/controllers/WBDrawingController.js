@@ -126,7 +126,9 @@ com.mnemis.wb.controllers.WBDrawingController.prototype.endDraw= function(e)
     {
         WB.application.boardController.collaborationController.addItem(this.currentDrawObject);
     }
-// Nothing to do
+    if (WB.application.boardController.currentPage && WB.application.boardController.currentPage.pageRecord)     {
+        WB.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.currentDrawObject.getData());
+    }
 }
 
 com.mnemis.wb.controllers.WBDrawingController.prototype.draw= function(e)

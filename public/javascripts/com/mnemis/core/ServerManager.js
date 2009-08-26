@@ -3,6 +3,9 @@
 **/
 com.mnemis.core.Provide("com/mnemis/core/ServerManager.js");
 
+com.mnemis.core.Import("com/mnemis/wb/model/WBPageRecord.js");
+
+
 com.mnemis.core.ServerManager = function()
 {
     this.status = 1;
@@ -12,9 +15,30 @@ com.mnemis.core.ServerManager = function()
     this.db.open('uniboard');
     this.db.execute('create table if not exists json_content' +
            ' (url text, json text)');
-
 };
 
+com.mnemis.core.ServerManager.prototype.getPage = function(url, callback)
+{
+   console.log("server manager get page " + url);
+   var that = this;
+   $.ajax({
+       type: "GET",
+       url: url,
+       dataType: "json",
+       success: function(data) {
+           console.log("we are online");
+           that.status = 1;
+           var page = new com.mnemis.wb.model.WBPageRecord(url, data);
+           callback.call(that, page);
+       },
+       error: function(XMLHttpRequest, textStatus, errorThrown) {
+           that.status = 0;
+           console.log("we are offline");
+           var page = new com.mnemis.wb.model.WBPageRecord(url, null);
+           callback.call(that, page);
+       }
+   });
+}
 
 com.mnemis.core.ServerManager.prototype.getJson = function(url, callback)
 {
