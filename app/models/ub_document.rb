@@ -100,7 +100,7 @@ class UbDocument < ActiveRecord::Base
       self.pages.each do |a_page|
         # add all media used by the page
         a_page.page_elements.each do |a_page_element|
-          unless (a_page_element.media.nil?)
+          if (!a_page_element.media.nil? && a_page_element.media.path.match(/.*\.wgt/).nil?)
             medias_list << a_page_element.media.public_url
           end
         end

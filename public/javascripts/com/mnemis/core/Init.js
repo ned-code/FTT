@@ -55,7 +55,7 @@ if (window.google && google.gears)
     }, 500);
 }
 
-com.mnemis.core.capture = function(urls)
+com.mnemis.core.capture = function(urls, force)
 {
     var store = com.mnemis.core.localServer.openStore("Documents");
     if (!store) {
@@ -64,7 +64,7 @@ com.mnemis.core.capture = function(urls)
     }
     for (var i = urls.length -1 ; i >= 0; i--) {
         var url = urls[i];
-        if (com.mnemis.core.localServer.canServeLocally(url) || url.indexOf(".wgt") >= 0)
+        if (!force && com.mnemis.core.localServer.canServeLocally(url))
         {
             urls.splice(i, 1);
         }
@@ -74,8 +74,10 @@ com.mnemis.core.capture = function(urls)
     // Capture this page and the js library we need to run offline.
     if (totalFilesTocapture > 0)
     {
-
-        Boxy.alert('<p id="capture"> <b>capturing (0%)</b> </p>');
+        if (!force)
+        {
+            Boxy.alert('<p id="capture"> <b>capturing (0%)</b> </p>');
+        }
         store.capture(urls, function(url, success, captureId) {
             nbCaptured += 1;
             $('#capture').html('<p id="capture"> <b>capturing (' + (nbCaptured/totalFilesTocapture) * 100 + '%)</b> </p>');

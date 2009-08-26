@@ -1,7 +1,8 @@
  <% javascript_tag  do -%>
       $(function() {
       var offline = false;
-        var document_page_urls = ['/documents', '/'];
+       com.mnemis.core.capture(['/documents', '/'], true);
+        var document_page_urls = [];
         <% @documents.each do |document| -%>
             document_page_urls.push('<%=  document_path(document) %>');
             if (!offline) {
@@ -25,7 +26,7 @@
               document_page_urls.push('<%=  url_for :controller => 'pages',  :action => 'proto', :id => page.id, :document_id => document.id%>');
             <% end -%>
         <% end -%>
-        com.mnemis.core.capture(document_page_urls);
+        com.mnemis.core.capture(document_page_urls, false);
       });
   <% end -%>
 <h1>Personal</h1>

@@ -1,6 +1,6 @@
 {
   "betaManifestVersion": 1,
-  "version": "uniboard5.0.24",
+  "version": "uniboard5.0.25",
   "entries": [
     { "url": "/offline.html", "ignoreQuery": true},
     { "url": "/stylesheets/boxy.css", "ignoreQuery": true},
