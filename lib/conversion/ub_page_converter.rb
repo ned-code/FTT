@@ -204,7 +204,10 @@ module ConversionService
       matrix = get_transform_matrix(svg_element)
  
       return { "left" => left, "top" => top, "width" => width, "height" => height, "z-index" => z_index, "matrix" => string_matrix(matrix),
-        "-MozTransform" =>"matrix(#{matrix[0]}, #{matrix[1]}, #{matrix[2]}, #{matrix[3]}, #{matrix[4]}px, #{matrix[5]}px)", "-MozTransformOrigin" => "0 0"}
+        "-MozTransform" =>"matrix(#{matrix[0]}, #{matrix[1]}, #{matrix[2]}, #{matrix[3]}, #{matrix[4]}px, #{matrix[5]}px)", "-MozTransformOrigin" => "0 0",
+        "-WebkitTransform" => "matrix(#{matrix[0]}, #{matrix[1]}, #{matrix[2]}, #{matrix[3]}, #{matrix[4]}, #{matrix[5]})",
+        "-WebkitTransformOrigin" => "0 0"
+        }
     end
 
     def string_matrix(matrix)
@@ -222,7 +225,9 @@ module ConversionService
       z_index = size_and_position["z-index"].to_i
       width = size_and_position["width"]
       height = size_and_position["height"]
-      result = { :left => "#{left.to_s}px", :top => "#{top.to_s}px", :width => "#{width.to_s}px", :height => "#{height.to_s}px", :zIndex => z_index, "-MozTransform" => size_and_position["-MozTransform"], "-MozTransformOrigin" => size_and_position["-MozTransformOrigin"]}
+      result = { :left => "#{left.to_s}px", :top => "#{top.to_s}px", :width => "#{width.to_s}px", :height => "#{height.to_s}px", :zIndex => z_index, "-MozTransform" => size_and_position["-MozTransform"], "-MozTransformOrigin" => size_and_position["-MozTransformOrigin"],
+        "-WebkitTransform" => size_and_position["-WebkitTransform"], "-WebkitTransformOrigin" => size_and_position["-WebkitTransformOrigin"]
+      }
     end
 
     def style_position(svg_element, page_width, page_height)
