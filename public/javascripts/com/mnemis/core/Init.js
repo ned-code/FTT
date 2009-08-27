@@ -7,7 +7,7 @@ if (!com.mnemis.core) { com.mnemis.core = {};}
 
 // create a console object if it doesn't exist
 var console;
-if (jQuery.browser.msie && !console)
+if (!console)
 {
 	console = {};
 	console.log = function(){};
