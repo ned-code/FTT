@@ -9,11 +9,14 @@ com.mnemis.core.Import("com/mnemis/wb/model/WBPageRecord.js");
 com.mnemis.core.ServerManager = function()
 {
     console.log("will create DB");
+    if (window.google)
+        {
     this.db = google.gears.factory.create('beta.database');
     console.log("DB created");
     this.db.open('uniboard');
     this.db.execute('create table if not exists json_content' +
            ' (url text, json text)');
+        }
 };
 
 com.mnemis.core.ServerManager.prototype.getPage = function(url, callback)

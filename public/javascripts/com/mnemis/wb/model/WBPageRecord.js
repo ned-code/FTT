@@ -7,6 +7,8 @@ if (!com.mnemis.wb.model) { com.mnemis.wb.model = {}};
 com.mnemis.wb.model.WBPageRecord = function(url, json)
 {
     console.log("create page record");
+    if (window.google)
+        {
     this.db = google.gears.factory.create('beta.database');
     console.log("DB created");
     this.db.open('uniboard');
@@ -14,6 +16,7 @@ com.mnemis.wb.model.WBPageRecord = function(url, json)
            ' (url text, uuid, data text)');
     this.db.execute('create table if not exists items' +
            ' (url text, uuid text, data text)');
+        }
     this.url = url;
     this.json = json;
     if (this.json)
@@ -28,6 +31,8 @@ com.mnemis.wb.model.WBPageRecord = function(url, json)
 
 com.mnemis.wb.model.WBPageRecord.prototype.updateDatabase = function()
 {
+    if (window.google)
+        {
     this.db.execute('delete  from items where url = "' + this.url + '"');
     var rs = this.db.execute('select * from pages where url = "' + this.url + '"');
     if (rs.isValidRow())
@@ -45,10 +50,13 @@ com.mnemis.wb.model.WBPageRecord.prototype.updateDatabase = function()
         anObject = this.json.page_objects[i];
         this.createOrUpdateItem(anObject);
     }
+        }
 }
 
 com.mnemis.wb.model.WBPageRecord.prototype.refreshFromDatabase = function()
 {
+        if (window.google)
+        {
     this.json = {};
     var rs = this.db.execute('select * from pages where url = "' + this.url + '"');
     if (rs.isValidRow()) {
@@ -64,6 +72,7 @@ com.mnemis.wb.model.WBPageRecord.prototype.refreshFromDatabase = function()
         rs.next();
     }
     rs.close();
+        }
 }
 
 com.mnemis.wb.model.WBPageRecord.prototype.json = function()
@@ -73,6 +82,8 @@ com.mnemis.wb.model.WBPageRecord.prototype.json = function()
 
 com.mnemis.wb.model.WBPageRecord.prototype.createOrUpdateItem = function(itemData)
 {
+        if (window.google)
+        {
     console.log("update item " + itemData.uuid);
     rs = this.db.execute('select * from items where uuid = "' + itemData.uuid + '"');
     if (rs.isValidRow())
@@ -83,4 +94,5 @@ com.mnemis.wb.model.WBPageRecord.prototype.createOrUpdateItem = function(itemDat
     {
         this.db.execute('insert into items values (?, ?, ?)', [this.url, itemData.uuid, $.toJSON(itemData)]);
     }
+        }
 }

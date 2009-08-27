@@ -7,7 +7,7 @@ if (!com.mnemis.core) { com.mnemis.core = {};}
 
 // create a console object if it doesn't exist
 var console;
-if (!console)
+if (jQuery.browser.msie && !console)
 {
 	console = {};
 	console.log = function(){};
@@ -24,8 +24,11 @@ if (window.google && google.gears)
         com.mnemis.core.localServer =
         google.gears.factory.create('beta.localserver');
     } catch (ex) {
-        console.log('Could not create local server: ' + ex.message);
+        console.log('Could not create local server (will disable google): ' + ex.message);
+        window.google = null;
     }
+    if (window.google)
+        {
     com.mnemis.core.documentStore = com.mnemis.core.localServer.openStore("Documents");
     if (!com.mnemis.core.documentStore)
     {
@@ -62,6 +65,7 @@ if (window.google && google.gears)
         console.log("Error: " + com.mnemis.core.store.lastErrorMessage);
       }
     }, 500);
+        }
 }
 
 com.mnemis.core.capture = function(urls, force)
