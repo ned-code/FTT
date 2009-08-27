@@ -31,9 +31,18 @@ if (window.google && google.gears)
     {
         com.mnemis.core.documentStore = com.mnemis.core.localServer.createStore("Documents");
         // by default store is disable and we enabled it only if connection is broken
-        com.mnemis.core.documentStore.enabled = true;
+        com.mnemis.core.documentStore.enabled = false;
     }
-    
+    $(function() {
+        document.body.addEventListener("offline", function () {
+        console.log("we go offline");
+        com.mnemis.core.documentStore.enabled = true;
+        }, false);
+        document.body.addEventListener("online", function () {
+        console.log("we go online");
+        com.mnemis.core.documentStore.enabled = false;
+        }, false);
+    });
     com.mnemis.core.store = com.mnemis.core.localServer.createManagedStore("Uniboard5");
     com.mnemis.core.store.manifestUrl = "/gears_manifest.json";
     com.mnemis.core.store.checkForUpdate();
@@ -64,7 +73,7 @@ com.mnemis.core.capture = function(urls, force)
     }
     for (var i = urls.length -1 ; i >= 0; i--) {
         var url = urls[i];
-        if (!force && com.mnemis.core.localServer.canServeLocally(url))
+        if (!force && store.isCaptured(url))
         {
             urls.splice(i, 1);
         }
