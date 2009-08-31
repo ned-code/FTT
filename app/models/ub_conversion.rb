@@ -35,6 +35,7 @@ class UbConversion < ActiveRecord::Base
       if (@tempfile.is_a?(IO) && !@tempfile.closed?)
         @tempfile.close
       end
+      @tempfile = nil
     end
   end
 

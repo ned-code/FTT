@@ -94,6 +94,22 @@ class UbDocument < ActiveRecord::Base
     increment_version if self.changed? || @pages_to_delete_on_storage.length || modified_medias.length
   end
 
+  def resources_json
+      result_hash = {}
+      medias_list = []
+      self.pages.each do |a_page|
+        # add all media used by the page
+        a_page.page_elements.each do |a_page_element|
+          if (!a_page_element.media.nil? && a_page_element.media.path.match(/.*\.wgt/).nil?)
+            medias_list << a_page_element.media.public_url
+          end
+        end
+        medias_list << a_page.media.get_resource(UbMedia::UB_DRAWING_TYPE).public_url
+      end
+      result_hash['mediasUrl'] = medias_list
+      return result_hash.to_json
+  end
+  
   def to_xml(options = {})
     require 'builder' unless defined?(Builder)
 
@@ -128,12 +144,14 @@ class UbDocument < ActiveRecord::Base
           'page-number' => a_page.position)
         # add all media used by the page
         a_page.page_elements.each do |a_page_element|
-          xml_document.media((options[:page_url] ? a_page_element.media.public_url : ''),
-            'uuid' => a_page_element.media.uuid,
-            'version' => a_page_element.media.version,
-            'created-at' => a_page_element.media.created_at.xmlschema,
-            'updated-at' => a_page_element.media.updated_at.xmlschema,
-            'file-name' => a_page_element.media.path)
+          unless (a_page_element.media.nil?)
+            xml_document.media((options[:page_url] ? a_page_element.media.public_url : ''),
+              'uuid' => a_page_element.media.uuid,
+              'version' => a_page_element.media.version,
+              'created-at' => a_page_element.media.created_at.xmlschema,
+              'updated-at' => a_page_element.media.updated_at.xmlschema,
+              'file-name' => a_page_element.media.path)
+          end
         end
       end
     end

@@ -7,7 +7,14 @@
     <foreignObject ub:src="widgets/{bbc2a299-fce1-4221-b9ee-540e8adf426d}.wdgt" x="244.187" y="-59.6055" width="354" height="138" transform="matrix(1, 0, 0, 1, -732.771, 245.823)" ub:z-value="-9999991.000000" ub:background="false" ub:uuid="{bbc2a299-fce1-4221-b9ee-540e8adf426d}">
         <xhtml:iframe style="border: none" width="354" height="138" src="widgets/{bbc2a299-fce1-4221-b9ee-540e8adf426d}.wdgt/ubGraph01.html"/>
     </foreignObject>
-    <text x="-494.437" y="74.9908" width="39.6562" height="21" transform="matrix(1, 0, 0, 1, 70.4587, -16.4404)" ub:z-value="-9999990.000000" ub:background="false" font-family="Helvetica" font-size="12" fill="#0000ff">Text 2</text>
+    <foreignObject ub:type="text" x="0" y="0" width="529.419" height="103.731" transform="matrix(1, 0, 0, 1, -301.407, -439.388)" ub:z-value="-9999999.000000" ub:background="false" ub:uuid="6cabb7c8-77fd-4987-97a0-db7abc5a6b97" ub:fill-on-dark-background="#ffffff" ub:fill-on-light-background="#000000">
+        <xhtml:body>
+            <xhtml:div>
+                <xhtml:font face="Arial" style="font-size: 64px; font-weight: normal; font-style: normal;" color="#ffffff">What is Uniboard<xhtml:br/>
+                </xhtml:font>
+            </xhtml:div>
+        </xhtml:body>
+    </foreignObject>
     <image xlink:href="images/{0d7fa9b6-d611-4318-85af-5493fe2e65d4}.png" x="-64.0979" y="-354.544" width="65" height="65" transform="matrix(1, 0, 0, 1, 0, 0)" ub:z-value="-9999989.000000" ub:background="false" ub:uuid="{0d7fa9b6-d611-4318-85af-5493fe2e65d4}"/>
     <image xlink:href="images/{fc287439-7f6d-404a-82ca-19b14f20a56c}.png" x="163.804" y="-345.847" width="58" height="58" transform="matrix(1, 0, 0, 1, 0, 0)" ub:z-value="-9999988.000000" ub:background="false" ub:uuid="{fc287439-7f6d-404a-82ca-19b14f20a56c}"/>
     <polygon points="-458.37,-333.682 -458.22,-333.532 -458.37,-333.382 -458.52,-333.532 -458.37,-333.682 " fill="#ff0000" fill-opacity="1" ub:z-value="1" ub:fill-on-dark-background="#ff3400" ub:fill-on-light-background="#ff0000"/>

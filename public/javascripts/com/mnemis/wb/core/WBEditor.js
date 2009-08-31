@@ -6,6 +6,7 @@ com.mnemis.core.Provide("com/mnemis/wb/core/WBEditor.js");
 var WB = com.mnemis.wb;
 
 com.mnemis.core.Import("com/mnemis/core/UndoManager.js");
+com.mnemis.core.Import("com/mnemis/core/ServerManager.js");
 
 com.mnemis.core.Import("com/mnemis/wb/gui/WBToolPalette.js");
 com.mnemis.core.Import("com/mnemis/wb/gui/WBPagePalette.js");
@@ -16,6 +17,8 @@ com.mnemis.core.Import("com/mnemis/wb/controllers/WBBoardController.js");
 
 // application singleton.
 WB.application = {};
+
+WB.serverManager = new com.mnemis.core.ServerManager();
 
 com.mnemis.wb.core.WBEditor = function()
 {
@@ -41,37 +44,37 @@ com.mnemis.wb.core.WBEditor = function()
     this.previousPageId = undefined;
     this.nextPageId = undefined;
 
+    this.applicationUuid = new com.mnemis.core.UUID().id;
     WB.application.viewer = this;
-}
-
-com.mnemis.wb.core.WBEditor.prototype.loadPage = function(pageUrl)
-{
-    // remove previous page
-    $("#ub_board").remove();
-    var loading = $("<h1>Loading...</h1>");
-    $("body").append(loading);
-    // load new page
-    $.get(pageUrl, null, function(data, textStatus)
-        {
-            var loadedPageData = $(data);
-            var boardElement = loadedPageData.find("#ub_board").get(0);
-            var loadedPage = new com.mnemis.wb.model.WBPage(boardElement);
-            loading.remove();
-            $("body").append(boardElement);
-            WB.application.boardController.setCurrentPage(loadedPage);
-        }, "xml");
 }
 
 com.mnemis.wb.core.WBEditor.prototype.loadPageId = function(documentId, pageId)
 {
+    // remove previous page
+    $("#ub_board").remove();
+    var loading = $('<h1 id="ub-loading">Loading...</h1>');
+    $("body").append(loading);
     var that = this;
     this.currentDocument = documentId;
     this.currentPageId = pageId;
-    $.getJSON(com.mnemis.core.applicationPath + "/documents/" + documentId + "/pages/" + pageId + "/info", null, function(data) 
+    WB.serverManager.getJson(com.mnemis.core.applicationPath + "/documents/" + documentId + "/pages/" + pageId + "/info", function(data)
     {
         that.previousPageId = data.previousId.length ? data.previousId : null;
         that.nextPageId = data.nextId.length ? data.nextId : null;
         that.loadPage(data.url);
+    });
+}
+
+com.mnemis.wb.core.WBEditor.prototype.loadPage = function(pageUrl)
+{
+    var that = this;
+    WB.serverManager.getPage(pageUrl, function(data)
+    {
+        console.log("recieve page json");
+        var loadedPage = new com.mnemis.wb.model.WBPage(data.json, null, data);
+        $("#ub-loading").remove();
+        $("body").append(loadedPage.domNode);
+        WB.application.boardController.setCurrentPage(loadedPage);
     });
 }
 
@@ -98,7 +101,7 @@ com.mnemis.wb.core.WBEditor.prototype.goToDocumentPage = function()
 
 // load application
 $(function()
-	{
-        console.log("viewer document ready");
-	}
+    {
+    console.log("Editor started.");
+    }
 );

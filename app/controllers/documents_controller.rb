@@ -1,5 +1,5 @@
 class DocumentsController < ApplicationController
-  permit 'registered'
+  permit "registered"
 
   def index
     @synchronised_at = Time.now.utc
@@ -8,7 +8,7 @@ class DocumentsController < ApplicationController
 #    @domain = "#{request.protocol}#{request.host_with_port}"
     respond_to do |format|
       format.html do
-        @document_page = true
+        @is_document_page = true
         if (!current_user)
           @documents = UbDocument.find_all_by_is_public(true)
           render :action => 'index_public'
@@ -34,7 +34,6 @@ class DocumentsController < ApplicationController
 
 respond_to do |format|
       if @document
-        @page_page = true
         if @document.is_public || permit?('owner of document')
           format.html
           format.xml { render :xml => @document.to_xml }
@@ -138,6 +137,19 @@ respond_to do |format|
       respond_to do |format|
         format.xml { head :not_found }
       end
+    end
+  end
+
+  def resources
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
+    if @document
+        if @document.is_public || permit?('owner of document')
+          render :json => @document.resources_json
+        else
+          render :nothing => true
+        end
+    else
+          render :nothing => true
     end
   end
 

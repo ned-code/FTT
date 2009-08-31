@@ -102,8 +102,6 @@ describe ConversionService::UbPageConverter do
 
      page = Hpricot(@page_html)
      # uncomment to generate output on disk under spec/output_docuement
-#     FileUtils.remove_dir(File.join(RAILS_ROOT, 'spec', 'output_document'), true)
-#     FileUtils.mv(@extracted_document_path, File.join(RAILS_ROOT, 'spec', 'output_document'))
 #     File.open(File.join(RAILS_ROOT, 'spec', 'output_document', 'page001.xhtml'), 'wb') do |file|
 #       file << @page_html
 #     end
@@ -136,7 +134,7 @@ describe ConversionService::UbPageConverter do
   it "Page conversion should generate page.xhtml with corresponding text" do
       page = Hpricot(@page_html)
       images_elem = page.search("div")
-      images_elem.should have(6).items
+      images_elem.should have(5).items
   end
 
   it "Page conversion should generate page.xhtml with corresponding widgets" do

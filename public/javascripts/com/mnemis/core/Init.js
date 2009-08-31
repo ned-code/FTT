@@ -15,6 +15,7 @@ if (!console)
 
 // array of all modules that are already providen
 com.mnemis.core.modules = [];
+console.log("init Mnemis FW");
 
 /*
  *  Import a module based on the name of the module.

@@ -9,8 +9,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'documents/delete_all',
     :controller => 'documents', :action => 'destroy_all',
     :conditions => { :method => :get }
-  map.resources :documents, :member => {:push => :post} do |document|
-    document.resources :pages, :member => {:proto => :get, :info => :get}
+  map.resources :documents, :member => {:push => :post, :resources => :get} do |document|
+    document.resources :pages, :member => {:proto => :get, :info => :get, :update => :post, :content => :get}
   end
 
   map.resources :medias
@@ -18,4 +18,8 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'documents', :action => 'index'
 
   map.connect 'widgets/wikibot/search', :controller => 'wikibot', :action => 'search', :conditions => { :method => :get }
+
+  map.connect 'orbit/show', :controller => 'test_orbit', :action => 'show'
+  map.connect 'orbit/send_data', :controller => 'test_orbit', :action => 'send_data'
+
 end

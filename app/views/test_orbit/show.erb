@@ -1,0 +1,57 @@
+<html>
+<head>
+     <script type="text/javascript" src="<%=@domain %>/javascripts/jquery-1.3.2.js"></script>
+     <script type="text/javascript" src="<%=@domain %>/javascripts/jquery.form.js"></script>
+ <%= @orbited_js %>
+ <script>
+ onload = function() {
+
+ // make form submit asynch.
+ $('form').ajaxForm();
+
+// set up stomp client.
+ stomp = new STOMPClient();
+ stomp.onopen = function() {
+ };
+
+ stomp.onclose = function(code) {
+  $('#chat_data').text("Closed");
+ };
+ stomp.onerror = function(error) {
+  alert("onerror: " + error);
+ };
+ stomp.onerrorframe = function(frame) {
+  alert("onerrorframe: " + frame.body);
+ };
+ stomp.onconnectedframe = function() {
+  $('#chat_data').text("Connected to chat room");
+ };
+ stomp.onmessageframe = function(frame) {
+ //eval(frame.body);
+   $('#chat_data').html(frame.body + "<br/>" + $('#chat_data').html());
+ //output.insert({"top" : frame.body});
+ };
+ stomp.connect(document.domain, 61613, 'UNIQUE_ID_PER_CLIENT', '');
+ setTimeout("stomp.subscribe('CHANNEL_1', {exchange:''})",5000);
+ };
+
+ </script>
+
+</head>
+<body>
+ <%#= form_remote_tag(
+ :url => { :controller => 'test_orbit', :action => :send_data } ) %>
+ <%#= hidden_field_tag('channel','CHANNEL_1')%>
+ <%#= text_field_tag( 'chat_input', '', { :size => 70, :id => 'chat_input'} ) %>
+ <%#= submit_tag("Say")  %>
+ <%#= ('<a href="/login">Login</a> to chat.')%>
+<!-- </form> -->
+<%= form_tag(:controller => 'test_orbit', :action => :send_data ) %>
+ <%= hidden_field_tag('channel','CHANNEL_1') %>
+ <%= text_field_tag( 'chat_input', '', { :size => 70, :id => 'chat_input'} ) %>
+ <%= submit_tag("Say")  %>
+</form>
+ <div id="chat_data" style="height:300px;border:1px solid black;overflow:scroll;"></div>
+
+</body>
+</html>
