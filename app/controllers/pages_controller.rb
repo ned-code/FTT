@@ -1,4 +1,3 @@
-require 'stomp'
 require 'json'
 
 class PagesController < ApplicationController
@@ -77,12 +76,6 @@ class PagesController < ApplicationController
         end
       end
     end
-    message[:ubData] = data
-    message[:action] = action
-    message[:ubApplicationId] = params[:ubApplicationId]
-    s = Stomp::Client.new
-    s.send(params[:ubChannel], message.to_json)
-    s.close
     render :nothing => true
   end
 

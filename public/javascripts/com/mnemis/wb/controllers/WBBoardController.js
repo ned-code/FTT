@@ -49,7 +49,7 @@ com.mnemis.wb.controllers.WBBoardController.prototype.setCurrentPage = function(
         var relPath = $(this).attr("data");
         $(this).attr("data", relPath);
     });
-    if (this.editable && Orbited)
+    if (this.editable)
     {
         if (this.collaborationController)
         {

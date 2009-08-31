@@ -8,20 +8,26 @@ com.mnemis.core.Provide("com/mnemis/wb/controllers/WBCollaborationController.js"
 com.mnemis.wb.controllers.WBCollaborationController = function(page)
 {
     this.page = page;
-    // init Stomp
-    this.stomp = new STOMPClient();
-    this.stomp.onopen = this.onopen;
-    this.stomp.onclose = this.onclose;
-    this.stomp.onerror = this.onerror;
-    this.stomp.onerrorframe = this.onerrorframe;
-    this.stomp.onconnectedframe = this.onconnectedframe;
-    this.stomp.onmessageframe = this.onmessageframe;
-    this.stomp.connect(document.domain, 61613, 'UNIQUE_ID_PER_CLIENT', '');
+    if (Orbited)
+    {
+        // init Stomp
+        this.stomp = new STOMPClient();
+        this.stomp.onopen = this.onopen;
+        this.stomp.onclose = this.onclose;
+        this.stomp.onerror = this.onerror;
+        this.stomp.onerrorframe = this.onerrorframe;
+        this.stomp.onconnectedframe = this.onconnectedframe;
+        this.stomp.onmessageframe = this.onmessageframe;
+        this.stomp.connect(document.domain, 61613, 'UNIQUE_ID_PER_CLIENT', '');
+    }
 }
 
 com.mnemis.wb.controllers.WBCollaborationController.prototype.disconnect = function()
 {
-    this.stomp.disconnect();
+    if (Orbited)
+    {
+        this.stomp.disconnect();
+    }
 }
 
 com.mnemis.wb.controllers.WBCollaborationController.prototype.clear = function(page)
