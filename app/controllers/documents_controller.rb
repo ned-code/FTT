@@ -1,6 +1,23 @@
 class DocumentsController < ApplicationController
   permit "registered"
 
+  def create
+     uuid =params[:uuid]
+     uuid ||= UUID.generate()
+     created_at =params[:created_at]
+     title =params[:title]
+     document = UbDocument.create({:uuid => uuid, :title => title, :created_at => created_at})
+     document.accepts_role 'owner', current_user
+     render :json => document.to_json
+  end
+
+  def update
+    @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
+    RAILS_DEFAULT_LOGGER.debug "update document with new title #{params[:title]}"
+    @document.update_attributes( :title =>params[:title]);
+    render :json => @document.to_json
+  end
+
   def index
     @synchronised_at = Time.now.utc
     @documents = []
@@ -25,6 +42,10 @@ class DocumentsController < ApplicationController
           if (current_user)
             @documents = current_user.documents(:with_deleted => true)
           end
+      end
+      format.json do
+        @documents = current_user.documents(:with_deleted => false)
+        render :json => @documents.to_json
       end
     end
   end
@@ -161,6 +182,7 @@ respond_to do |format|
         if @document.destroy
           format.html { redirect_back_or_default documents_url }
           format.xml { head :ok }
+          format.json { render :json => {} }
         else
           format.html {render_optional_error_file(:not_found)}
           format.xml { render :xml => @document.errors, :status => :unprocessable_entity }

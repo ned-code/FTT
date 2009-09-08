@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
         AND authorizable_id = ub_documents.id
       INNER JOIN roles_users ON roles.id = role_id
       INNER JOIN users ON user_id = users.id
-      WHERE users.id = #{self.id} #{deleted_condition}
+      WHERE users.id = #{self.id} #{deleted_condition} order by ub_documents.created_at DESC
     ")
   end
 

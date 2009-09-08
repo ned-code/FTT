@@ -4,26 +4,22 @@
   <meta http-equiv="content-type" content="application/xhtml+xml;charset=UTF-8" />
     <title>MyUniboard</title>
     <%= stylesheet_link_tag 'default' %>
+    <%= stylesheet_link_tag 'jquery-ui-1.7.2.custom' %>
+    <%= javascript_include_tag 'date' %>
     <%= stylesheet_link_tag 'boxy' %>
     <%= stylesheet_link_tag 'wb-default-theme.css' %>
     <%= javascript_include_tag 'jquery-1.3.2' %>
     <%= javascript_include_tag 'jquery.boxy' %>
-    <%= javascript_include_tag 'jquery.json-1.3.min.js' %>
+    <%= javascript_include_tag 'jquery.json-1.3.min' %>
+    <%= javascript_include_tag 'jquery.inherit-1.0.9' %>
+    <%= javascript_include_tag 'jquery-ui-1.7.2.custom.min' %>
     <%= javascript_include_tag '../player/swfobject.js' %>
     <%= javascript_include_tag 'sylvester.src.js' %>
     <%= javascript_include_tag 'com/mnemis/core/Init' %>
 </head>
 <body>
   <div id="ub-bar">
-    <% if @is_document_page %>
-        <div id="home"><b>Documents</b></div>
-    <% else %>
-        <div id="home"><%= link_to "Documents", documents_path %></div>
-    <% end %>
     <div id="ub-login-logout">
-      <div>
-        
-      </div>
       <div>
         <%= current_user ? current_user.email : '' %> <%= current_user ? link_to("logout", session_path, :method => :delete) :  link_to("login", new_session_url) %>
       </div>

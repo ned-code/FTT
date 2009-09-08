@@ -247,7 +247,7 @@ module ConversionService
       video_media = UbMedia.find_by_uuid(video_uuid)
       raise "Media missing for uuid #{video_uuid}" if video_media.nil?
 
-      size_and_position = get_converted_size_and_position(svg_object, page_width, page_height)
+      size_and_position = get_converted_size_and_position(svg_element, page_width, page_height)
       left = size_and_position["left"]
       top = size_and_position["top"]
       z_index = size_and_position["z-index"].to_i

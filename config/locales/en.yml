@@ -11,7 +11,16 @@ en:
   button:
     send: "Send"
     login: "Login"
+    new_document: "New document"
 
+  label:
+    documents: "Documents"
+    all_items: "All items"
+    by_date: "By date"
+    create_new_document: "Create a new document"
+    edit_document: "Edit document"
+    name: "Name"
+    creationDate: "Creation date"
   alert:
     destroy_confirmation: "Are you sure?"
 

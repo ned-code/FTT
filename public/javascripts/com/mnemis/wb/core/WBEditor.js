@@ -19,15 +19,21 @@ if (com.mnemis.core.Provide("com/mnemis/wb/core/WBEditor.js"))
     // application singleton.
     WB.application = {};
 
-    WB.serverManager = new com.mnemis.core.ServerManager();
-
     com.mnemis.wb.core.WBEditor = $.inherit({
+
+        currentDocument: null,
+        currentPageId: null,
+        previousPageId: undefined,
+        nextPageId: undefined,
+        applicationUuid: undefined,
         __constructor: function()
         {
             console.log("load WB application");
             var body = $("body").get(0);
 
+            WB.serverManager = new com.mnemis.core.ServerManager();
             WB.application.boardController = new WB.controllers.WBBoardController(true);
+            WB.application.undoManager = new com.mnemis.core.UndoManager();
 
             WB.application.toolpalette = new WB.gui.WBToolPalette(1);
             body.appendChild(WB.application.toolpalette.domNode);
@@ -36,15 +42,9 @@ if (com.mnemis.core.Provide("com/mnemis/wb/core/WBEditor.js"))
             WB.application.pagePalette = new WB.gui.WBPagePalette();
             body.appendChild(WB.application.pagePalette.domNode);
 
-            WB.application.undoManager = new com.mnemis.core.UndoManager();
-
             WB.application.undoPalette = new WB.gui.WBUndoPalette();
             body.appendChild(WB.application.undoPalette.domNode);
 
-            this.currentDocument = null;
-            this.currentPageId = null;
-            this.previousPageId = undefined;
-            this.nextPageId = undefined;
 
             this.applicationUuid = new com.mnemis.core.UUID().id;
             WB.application.viewer = this;
@@ -70,10 +70,11 @@ if (com.mnemis.core.Provide("com/mnemis/wb/core/WBEditor.js"))
         loadPage : function(pageUrl)
         {
             var that = this;
-            WB.serverManager.getJson(pageUrl, function(data)
+            WB.serverManager.getObjects(pageUrl, com.mnemis.wb.model.WBPage, function(data)
             {
                 console.log("recieve page json");
-                var loadedPage = new com.mnemis.wb.model.WBPage(data, null);
+                console.log(data);
+                var loadedPage = data[0];
                 $("#ub-loading").remove();
                 $("body").append(loadedPage.domNode);
                 WB.application.boardController.setCurrentPage(loadedPage);

@@ -1,4 +1,4 @@
-body { overflow: hidden; }
+body { overflow: always; }
 
 object { overflow: hidden; }
 
