@@ -19,3 +19,4 @@ config/s3.yml
 debug.log
 error.log
 info.log
+.loadpath
