@@ -99,7 +99,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/core/WBEditor.js"))
 
         goToDocumentPage : function()
         {
-            window.location = "/documents/" + this.currentDocument;
+            window.location = "/documents";
         }
     });
 }

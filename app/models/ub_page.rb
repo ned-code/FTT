@@ -28,9 +28,12 @@ class UbPage < ActiveRecord::Base
   validates_format_of :uuid, :with => UUID_FORMAT_REGEX
 
   def url(format = UbMedia::UB_PAGE_TYPE)
-    page_resource = media.get_resource(format, nil)
-    raise "No Media found for page #{self.uuid} in format #{format}" if page_resource == nil
-    return page_resource.public_url
+    if (media)
+      page_resource = media.get_resource(format, nil)
+      raise "No Media found for page #{self.uuid} in format #{format}" if page_resource == nil
+      return page_resource.public_url
+    end
+    return ""
   end
 
   def mime_type(format = "svg")
@@ -38,6 +41,9 @@ class UbPage < ActiveRecord::Base
   end
 
   def thumbnail_url
+    if (!self.media)
+      return "/images/noThumb.jpg"
+    end
     page_resource = self.media.get_resource(UbMedia::UB_THUMBNAIL_DESKTOP_TYPE, nil)
     raise "No Media found for page thumbnail #{self.uuid}" if page_resource == nil
     return page_resource.public_url

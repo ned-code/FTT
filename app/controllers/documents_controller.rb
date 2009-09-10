@@ -8,6 +8,10 @@ class DocumentsController < ApplicationController
      title =params[:title]
      document = UbDocument.create({:uuid => uuid, :title => title, :created_at => created_at})
      document.accepts_role 'owner', current_user
+     data_hash = {}
+     data_hash['css'] = {:width => "1280px", :height => "720px", :backgroundColor => "black"}
+     default_page = document.pages.build(:uuid => UUID.generate(), :data => data_hash.to_json)
+     document.save
      render :json => document.to_json
   end
 
@@ -52,21 +56,41 @@ class DocumentsController < ApplicationController
 
   def show
     @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
-
-respond_to do |format|
-      if @document
-        if @document.is_public || permit?('owner of document')
-          format.html
-          format.xml { render :xml => @document.to_xml }
-        else
-          format.html { render_optional_error_file(:forbidden) }
-          format.xml { head :forbidden }
-        end
+    @page = @document.pages[0]
+    #TODO how to get server url without request object?
+    if (@page)
+      @page_url =  @page.url("application/xhtml+xml")
+    end
+    @domain = request.protocol + request.host_with_port
+    respond_to do |format|
+      if @document && @page && (@document.is_public || permit?('owner of document'))
+        format.html {
+          @orbited_js = orbited_javascript
+          render :action => "showproto", :layout => false, :content_type => "application/xhtml+xml"
+          #redirect_to @page_url
+        }
       else
-          format.html { render_optional_error_file(:not_found) }
-          format.xml { head :not_found }
+        format.html { render_optional_error_file(:not_found) }
+        format.xml { head :forbidden }
       end
     end
+#
+#    @document = params[:id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:id]) : UbDocument.find_by_id(params[:id])
+#
+#respond_to do |format|
+#      if @document
+#        if @document.is_public || permit?('owner of document')
+#          format.html
+#          format.xml { render :xml => @document.to_xml }
+#        else
+#          format.html { render_optional_error_file(:forbidden) }
+#          format.xml { head :forbidden }
+#        end
+#      else
+#          format.html { render_optional_error_file(:not_found) }
+#          format.xml { head :not_found }
+#      end
+#    end
   end
 
   def push
