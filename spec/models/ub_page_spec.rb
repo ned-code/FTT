@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: ub_pages
+#
+#  id                   :integer         not null, primary key
+#  uuid                 :string(255)
+#  position             :integer
+#  version              :integer         default(1)
+#  uniboard_document_id :integer
+#  created_at           :datetime
+#  updated_at           :datetime
+#  page_media_id        :integer
+#  data                 :text(65537)
+#
+
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe UbPage do

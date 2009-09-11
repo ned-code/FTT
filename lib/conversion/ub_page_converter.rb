@@ -34,7 +34,7 @@ module ConversionService
         raise "Converter UbPageConverter does not support conversion from #{source_type} to #{destination_type}"
       end
       opened_file.close()
-      puts "create conversion at #{File.join(options[:destination_path], destination_file)}"
+      # puts "create conversion at #{File.join(options[:destination_path], destination_file)}"
       File.open(File.join(options[:destination_path], destination_file), 'wb') do |html_file|
         html_file << file_content
       end

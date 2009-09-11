@@ -1,13 +1,20 @@
-
-# UniboardDocument is basically a container of pages. Following attributes are available:
-#- uuid: string
-#- title: string
-#- status: string
-#- metadata_media_id: integer
-#- bucket: string
-#- version: integer
-#- deleted_at: datetime
+# == Schema Information
 #
+# Table name: ub_documents
+#
+#  id                :integer         not null, primary key
+#  uuid              :string(255)
+#  bucket            :string(255)
+#  created_at        :datetime
+#  updated_at        :datetime
+#  version           :integer         default(1)
+#  deleted_at        :datetime
+#  title             :string(255)
+#  status            :integer
+#  metadata_media_id :integer
+#  is_public         :boolean
+#
+
 class UbDocument < ActiveRecord::Base
   acts_as_authorizable
 

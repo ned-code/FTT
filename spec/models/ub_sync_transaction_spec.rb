@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: ub_sync_transactions
+#
+#  id               :integer         not null, primary key
+#  uuid             :string(255)     not null
+#  ub_client_uuid   :string(255)     not null
+#  ub_document_uuid :string(255)     not null
+#  user_id          :integer         not null
+#  created_at       :datetime
+#  updated_at       :datetime
+#
+
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe UbSyncTransaction do

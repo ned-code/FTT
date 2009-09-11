@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: ub_documents
+#
+#  id                :integer         not null, primary key
+#  uuid              :string(255)
+#  bucket            :string(255)
+#  created_at        :datetime
+#  updated_at        :datetime
+#  version           :integer         default(1)
+#  deleted_at        :datetime
+#  title             :string(255)
+#  status            :integer
+#  metadata_media_id :integer
+#  is_public         :boolean
+#
+
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 # one:

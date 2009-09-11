@@ -1,3 +1,20 @@
+ # == Schema Information
+#
+# Table name: ub_sync_transaction_items
+#
+#  id                     :integer         not null, primary key
+#  ub_sync_transaction_id :integer         not null
+#  path                   :string(255)     not null
+#  storage_config         :string(255)     not null
+#  part_nb                :integer         not null
+#  part_total_nb          :integer         not null
+#  part_check_sum         :string(255)     not null
+#  item_check_sum         :string(255)     not null
+#  created_at             :datetime
+#  updated_at             :datetime
+#  content_type           :string(255)
+#
+
 class UbSyncTransactionItem < ActiveRecord::Base
   belongs_to :transaction, :class_name => 'UbSyncTransaction', :foreign_key => 'ub_sync_transaction_id'
 
