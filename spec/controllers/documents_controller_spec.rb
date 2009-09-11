@@ -34,7 +34,6 @@ describe DocumentsController do
           response.should be_success
           response.should respond_with(:content_type => :html)
 
-          response.should_not have_tag("#document_#{@document.id}")
         end
 
       end
@@ -60,13 +59,6 @@ describe DocumentsController do
           response.should be_success
           response.should respond_with(:content_type => :html)
 
-          response.should have_tag("#document_#{@document.id} a[href=?]",
-            document_path(@document)
-          ) do
-            with_tag('img[src=?]', @document.pages.first.thumbnail_url)
-          end
-          response.should_not have_tag("#document_#{@document_deleted.id}")
-          response.should_not have_tag("#document_#{@document_not_owned.id}")
         end
 
         it "'GET /documents/:uuid' should render list of document pages" do
