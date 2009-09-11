@@ -61,43 +61,6 @@ describe DocumentsController do
 
         end
 
-        it "'GET /documents/:uuid' should render list of document pages" do
-          get :show, :id => @document.id
-
-          response.should be_success
-          response.should respond_with(:content_type => :html)
-
-          response.should have_tag("#document_#{@document.id}")
-          @document.pages do |page|
-            response.should have_tag("#page_#{page.id} a[href=?]",
-              document_page_path(page.document, page)
-            ) do
-              with_tag('img[src=?][id=12345]', page.thumbnail_url)
-            end
-          end
-        end
-
-        it "'GET /documents/:uuid' should render error 404 if current user is not the owner" do
-          get :show, :id => @document_not_owned.id
-
-          response.should be_forbidden
-          response.should respond_with(:content_type => :html)
-        end
-
-        it "'GET /documents/:uuid' should render error 404 id document is deleted" do
-          get :show, :id => @document_deleted.id
-
-          response.should be_not_found
-          response.should respond_with(:content_type => :html)
-        end
-
-        it "'GET /documents/:uuid' should render error 404 if document does not exist" do
-          get :show, :id => 100_000_000_000
-
-          response.should be_not_found
-          response.should respond_with(:content_type => :html)
-        end
-
       end
     end
   end
@@ -431,51 +394,6 @@ describe DocumentsController do
               @document_not_owned.updated_at.xmlschema
             )
           end
-        end
-
-        it "'GET /documents/:uuid' should return XML description of document" do
-
-          get :show, :id => @document.uuid
-          response.should be_success
-          response.should respond_with(:content_type => :xml)
-
-          response.should_not have_tag('errors')
-          response.should have_tag('document[uuid=?][version=?][created-at=?][updated-at=?]',
-            assigns(:document).uuid,
-            assigns(:document).version,
-            assigns(:document).created_at.xmlschema,
-            assigns(:document).updated_at.xmlschema
-          ) do
-            @document.pages.each do |page|
-              with_tag('media[uuid=?][version=?][created-at=?][updated-at=?]',
-                page.media.uuid,
-                page.media.version,
-                page.media.created_at.xmlschema,
-                page.media.updated_at.xmlschema
-              )
-            end
-          end
-        end
-
-        it "'GET /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
-          get :show, :id => @document_not_owned.uuid
-
-          response.should be_forbidden
-          response.should respond_with(:content_type => :xml)
-        end
-
-        it "'GET /documents/:uuid' should return status '404 Not found' id document is deleted" do
-          get :show, :id => @document_deleted.uuid
-
-          response.should be_not_found
-          response.should respond_with(:content_type => :xml)
-        end
-
-        it "'GET /documents/:uuid' should return status '404 Not found' if document does not exist" do
-          get :show, :id => UUID.generate
-
-          response.should be_not_found
-          response.should respond_with(:content_type => :xml)
         end
 
         it "'DELETE /documents/:uuid' should delete document" do
