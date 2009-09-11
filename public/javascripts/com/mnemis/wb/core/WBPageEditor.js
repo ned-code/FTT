@@ -11,30 +11,30 @@ if (com.mnemis.core.Provide("com/mnemis/wb/core/WBPageEditor.js"))
     com.mnemis.core.Import("com/mnemis/core/UndoManager.js");
     com.mnemis.core.Import("com/mnemis/core/ServerManager.js");
     com.mnemis.core.Import("com/mnemis/core/UUID.js");
-	com.mnemis.core.Import("com/mnemis/wb/controllers/WBBoardController.js")
+  com.mnemis.core.Import("com/mnemis/wb/controllers/WBBoardController.js")
     
     // application singleton.
     WB.application = {};
     
     com.mnemis.wb.core.WBPageEditor = $.inherit(
     {
-		currentDocument: null,
+    currentDocument: null,
         currentPageId: null,
         previousPageId: undefined,
         nextPageId: undefined,
-		applicationUuid: undefined,
+    applicationUuid: undefined,
         __constructor: function()
         {
             this.applicationUuid = new com.mnemis.core.UUID().id;
             WB.application.pageEditor = this;
-		    WB.application.boardController = new WB.controllers.WBBoardController(true);
+        WB.application.boardController = new WB.controllers.WBBoardController(true);
             WB.application.serverManager = new com.mnemis.core.ServerManager();
             WB.application.undoManager = new com.mnemis.core.UndoManager();
         },
-		
-		load : function(documentId)
+    
+    load : function(documentId)
         {
-			this.loadPageId(documentId, window.location.hash.replace("#", ""));
+      this.loadPageId(documentId, window.location.hash.replace("#", ""));
         },
 
         loadPageId : function(documentId, pageId)
@@ -46,66 +46,66 @@ if (com.mnemis.core.Provide("com/mnemis/wb/core/WBPageEditor.js"))
             var that = this;
             this.currentDocument = documentId;
             this.currentPageId = pageId;
-			var that = this;
+      var that = this;
             WB.application.serverManager.getObjects("/documents/" + documentId + "/pages/" + pageId + "/content", com.mnemis.wb.model.WBPage, function(data)
             {
                 console.log("recieve page object");                
                 var loadedPage = data[0];
-				console.log(loadedPage);
-				that.previousPageId = loadedPage.previousPageId();
+        console.log(loadedPage);
+        that.previousPageId = loadedPage.previousPageId();
                 that.nextPageId = loadedPage.nextPageId();
                 $("#ub-loading").remove();
                 $("#boardContainer").append(loadedPage.domNode);
                 WB.application.boardController.setCurrentPage(loadedPage);
             });
         },
-		
-		previousPage: function()
-		{
+    
+    previousPage: function()
+    {
             if (this.previousPageId)
             {
                 this.loadPageId(this.currentDocument, this.previousPageId);
             }
-		},
-		
-		nextPage: function()
-		{
+    },
+    
+    nextPage: function()
+    {
             if (this.nextPageId)
             {
                 this.loadPageId(this.currentDocument, this.nextPageId);
             }
-		},
-		
-		newPage: function()
-		{
-		},
-		
-		duplicatePage: function()
-		{
-		},
-		
-		deletePage: function()
-		{
-		},
-		
-		undo: function()
-		{
-		},
-		
-		redo: function()
-		{
-		},
-		
-		zoomIn: function()
-		{
-		},
-		
-		zoomOut: function()
-		{
-		},
-		
-		close: function()
-		{
-		}
+    },
+    
+    newPage: function()
+    {
+    },
+    
+    duplicatePage: function()
+    {
+    },
+    
+    deletePage: function()
+    {
+    },
+    
+    undo: function()
+    {
+    },
+    
+    redo: function()
+    {
+    },
+    
+    zoomIn: function()
+    {
+    },
+    
+    zoomOut: function()
+    {
+    },
+    
+    close: function()
+    {
+    }
     });
 }
