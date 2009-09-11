@@ -10,7 +10,7 @@ class DocumentsController < ApplicationController
      document.accepts_role 'owner', current_user
      data_hash = {}
      data_hash['css'] = {:width => "1280px", :height => "720px", :backgroundColor => "black"}
-     default_page = document.pages.build(:uuid => UUID.generate(), :data => data_hash.to_json)
+     default_page = document.pages.build(:uuid => UUID.generate(), :data => data_hash.to_json, :position => 1)
      document.save
      render :json => document.to_json
   end
@@ -65,7 +65,6 @@ class DocumentsController < ApplicationController
     respond_to do |format|
       if @document && @page && (@document.is_public || permit?('owner of document'))
         format.html {
-          @orbited_js = orbited_javascript
           render :action => "showproto", :layout => false, :content_type => "application/xhtml+xml"
           #redirect_to @page_url
         }

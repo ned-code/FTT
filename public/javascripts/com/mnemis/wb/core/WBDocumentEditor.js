@@ -93,7 +93,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/core/WBDocumentEditor.js"))
         editDocument: function()
         {
             var documentToEdit = $(this).parent().attr("id");
-            window.open("/documents/" + documentToEdit);
+            window.open("/documents/" + documentToEdit + "#1");
         },
         
         createDocument: function()

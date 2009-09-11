@@ -87,6 +87,14 @@ if (com.mnemis.core.Provide("com/mnemis/core/ServerManager.js"))
             });
         },
 
+		/*
+		 * Make a new object persitant
+		 * @param url the url to call for persisting a new object
+		 * @param object the new object to persist
+		 * @param callBack function that called when object is persisted
+		 *  callBack(AjaxRequest, createdObject). created object is an object of the same class but can be a different one
+		 *  (some value can be created on the server side)
+		 */
         newObject: function(url, object, callBack)
         {
             $.post(url, object.data, function(data, textstatus)

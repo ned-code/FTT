@@ -11,6 +11,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js"))
 
     com.mnemis.wb.controllers.WBBoardController = $.inherit(
     {
+		drawingController: null,
         __constructor: function(editable)
         {
             console.log("init board controller");

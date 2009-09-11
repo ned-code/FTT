@@ -81,7 +81,7 @@ class PagesController < ApplicationController
 
   def content
     @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
-    @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_id(params[:id]) if @document
+    @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_position(params[:id]) if @document
 
     respond_to do |format|
       if @document && @page && (@document.is_public || permit?('owner of document'))
