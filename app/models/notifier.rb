@@ -28,7 +28,7 @@ class Notifier < ActionMailer::Base
     from       'no-reply@myuniboard.com'
     sent_on    Time.now
 
-    body      :change_password_url => change_password_user_url(user.perishable_token)
+    body       :change_password_url => change_password_user_url(user.perishable_token)
   end
 
   def document_published_email(user, document)
@@ -37,7 +37,7 @@ class Notifier < ActionMailer::Base
     from       'no-reply@myuniboard.com'
     sent_on    Time.now
 
-    body      :document => document
+    body       :document => document
 
   end
 

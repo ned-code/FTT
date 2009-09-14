@@ -4,6 +4,7 @@
 en:
   flash:
     notice:
+      user_registered: "registered"
       login_successfull: "Login successful!"
       logout_successfull: "Logout successful!"
       user_confirmed: "Your user is confirmed!"

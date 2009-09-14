@@ -4,12 +4,16 @@ Given /^the following users:$/ do |users|
   end
 end
 
+Given /^I am a confirmed user$/ do
+  user = Factory.create(:confirmed_user, :email => "test.cucumber@test.com")
+  user.confirm!
+end
+
 When /^I am logged in with an (\w+) user$/ do |role|
   user = Factory.create(:user)
   user.confirm!
   user.send("is_#{role}")
-#  UserSession.create(user)
-  When "I go to the login page"
+  When "I go to login page"
   And "I fill in \"email\" with \"#{user.email}\""
   And "I fill in \"password\" with \"#{user.password}\""
   And "I press \"Login\""
