@@ -53,7 +53,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/core/WBEditor.js"))
         loadPageId : function(documentId, pageId)
         {
             // remove previous page
-            $("#ub_board").remove();
+            $("#board").remove();
             var loading = $('<h1 id="ub-loading">Loading...</h1>');
             $("body").append(loading);
             var that = this;

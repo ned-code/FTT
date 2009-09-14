@@ -12,11 +12,11 @@ if (com.mnemis.core.Provide("com/mnemis/wb/model/WBPage.js"))
             if (pageBodyElement.constructor == Object) 
             {
                 this.pageId = pageBodyElement.uuid;
-                this.domNode = $('<div id="ub_board" style="position: absolute; top: 0px; left: 0px;z-index:-2000000">' +
-                '  <div id="ub_page_drawing" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%">' +
+                this.domNode = $('<div id="board" style="position: absolute; top: 0px; left: 0px;z-index:-2000000">' +
+                '  <div id="page_drawing" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%">' +
                 '  </div>' +
-                '  <div id="ub_page_objects" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"/>' +
-                '  <div id="ub_event_catcher" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 1999999"/>' +
+                '  <div id="page_objects" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"/>' +
+                '  <div id="event_catcher" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 1999999"/>' +
                 '</div>');
                 this.domNode.css(pageBodyElement.data.css);
                 this.drawing = 
@@ -42,7 +42,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/model/WBPage.js"))
                 };
                 this.objects = [];
                 this.domNode = $(pageBodyElement);
-                var documentContent = this.domNode.find("#ub_page_objects > *");
+                var documentContent = this.domNode.find("#page_objects > *");
                 var that = this;
                 documentContent.each(function(i)
                 {
@@ -51,7 +51,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/model/WBPage.js"))
                 
                 if (jQuery.browser.msie) 
                 {
-                    var documentDrawing = this.domNode.find("#ub_page_drawing").children().get(0);
+                    var documentDrawing = this.domNode.find("#page_drawing").children().get(0);
                     var pageUrl = documentDrawing.getAttribute("data");
                     $(documentDrawing).remove();
                     $.get(pageUrl, null, function(data, textStatus)
@@ -167,7 +167,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/model/WBPage.js"))
         {
             var newItem = new com.mnemis.wb.model.WBItem(itemData);
             this.objects.push(newItem);
-            this.domNode.find("#ub_page_objects").append(newItem.domNode);
+            this.domNode.find("#page_objects").append(newItem.domNode);
         },
         
         findObjectWithUuid: function(pUuid)

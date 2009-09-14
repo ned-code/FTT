@@ -4,6 +4,7 @@
 #
 #  id                  :integer         not null, primary key
 #  email               :string(255)     not null
+#  name                :string(255)     not null
 #  confirmed           :boolean         not null
 #  crypted_password    :string(255)     not null
 #  password_salt       :string(255)     not null
@@ -17,8 +18,6 @@
 #  last_login_at       :datetime
 #  current_login_ip    :string(255)
 #  last_login_ip       :string(255)
-#  firstname           :string(255)
-#  lastname            :string(255)
 #
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')

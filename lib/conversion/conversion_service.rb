@@ -17,7 +17,7 @@ module ConversionService
           file << media.data.read()
       end
       converted_file_name = convert_file(tmp_media_file, media.media_type, destination_type, options)
-      RAILS_DEFAULT_LOGGER.debug "remove tmp file #{tmp_media_file}"
+      logger.debug "remove tmp file #{tmp_media_file}"
       FileUtils.remove_file(tmp_media_file)
       return converted_file_name
     end

@@ -37,13 +37,13 @@ if (com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js"))
             this.currentZoom = 1;
             this.selection = [];
             this.currentPage = page;
-            this.initialHeight = $("#ub_board").height();
-            this.initialWidth = $("#ub_board").width();
+            this.initialHeight = $("#board").height();
+            this.initialWidth = $("#board").width();
 
-            $("#ub_board").bind("mousedown", this, this.mouseDown);
-            $("#ub_board").bind("mousemove", this, this.mouseMove);
-            $("#ub_board").bind("mouseup", this, this.mouseUp);
-            $("#ub_board").bind("mouseout", this, this.mouseOut);
+            $("#board").bind("mousedown", this, this.mouseDown);
+            $("#board").bind("mousemove", this, this.mouseMove);
+            $("#board").bind("mouseup", this, this.mouseUp);
+            $("#board").bind("mouseout", this, this.mouseOut);
 
             // update data attribute of object
             $("object").each(function() {
@@ -86,7 +86,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js"))
             if (this.drawingController && this.currentPage) {
                 // replace drawing div with content of drawing controller. Allow to have different kind of renderer (for ie)
                 this.drawingController.setDrawingModel(this.currentPage.drawingModel());
-                $("#ub_page_drawing").append(this.drawingController.domNode);
+                $("#page_drawing").append(this.drawingController.domNode);
             }
         },
 
@@ -287,7 +287,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js"))
         {
             var previousZoom = this.currentZoom;
             this.currentZoom = this.currentZoom * factor;
-            var boardElement = $("#ub_board");
+            var boardElement = $("#board");
             var coords = boardElement.position();
             var previousHeight = boardElement.height();
             var previousWidth = boardElement.width();

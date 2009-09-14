@@ -27,7 +27,7 @@ module Storage
 
         options           = config['options']            || {}
         options.reverse_merge!({
-          :logger => RAILS_DEFAULT_LOGGER
+          :logger => logger
         })
 
         @@connection[identity_string] = RightAws::S3.new(access_key_id, secret_access_key, options)
@@ -155,5 +155,5 @@ module Storage
   end
 end
 
-#require 'storage/s3/ub_document'
-#require 'storage/s3/ub_page'
+#require 'storage/s3/document'
+#require 'storage/s3/page'

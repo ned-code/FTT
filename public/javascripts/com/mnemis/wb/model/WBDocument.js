@@ -21,7 +21,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/model/WBDocument.js"))
 
         refresh: function(json)
         {
-            this.data = json.ub_document;
+            this.data = json.document;
         },
 
         title: function()

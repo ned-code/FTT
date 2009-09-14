@@ -4,6 +4,7 @@
 #
 #  id                  :integer         not null, primary key
 #  email               :string(255)     not null
+#  name                :string(255)     not null
 #  confirmed           :boolean         not null
 #  crypted_password    :string(255)     not null
 #  password_salt       :string(255)     not null
@@ -17,8 +18,6 @@
 #  last_login_at       :datetime
 #  current_login_ip    :string(255)
 #  last_login_ip       :string(255)
-#  firstname           :string(255)
-#  lastname            :string(255)
 #
 
 class User < ActiveRecord::Base
@@ -30,22 +29,22 @@ class User < ActiveRecord::Base
 
   def documents(*args)
     options = args.extract_options!
-    UbDocument.send(:validate_find_options, options)
-    UbDocument.send(:set_readonly_option!, options)
+    Document.send(:validate_find_options, options)
+    Document.send(:set_readonly_option!, options)
 
     if(options.delete(:with_deleted))
       deleted_condition = ''
     else
-      deleted_condition = "AND ub_documents.deleted_at IS NULL"
+      deleted_condition = "AND documents.deleted_at IS NULL"
     end
 
-    UbDocument.find_by_sql("
-      SELECT DISTINCT ub_documents.* FROM ub_documents
-      INNER JOIN roles ON authorizable_type = 'UbDocument'
-        AND authorizable_id = ub_documents.id
+    Document.find_by_sql("
+      SELECT DISTINCT documents.* FROM documents
+      INNER JOIN roles ON authorizable_type = 'Document'
+        AND authorizable_id = documents.id
       INNER JOIN roles_users ON roles.id = role_id
       INNER JOIN users ON user_id = users.id
-      WHERE users.id = #{self.id} #{deleted_condition} order by ub_documents.created_at DESC
+      WHERE users.id = #{self.id} #{deleted_condition} order by documents.created_at DESC
     ")
   end
 

@@ -24,7 +24,7 @@ describe DocumentsController do
       context 'without associated document' do
 
         before(:each) do
-          @document = Factory.create(:ub_document)
+          @document = Factory.create(:document)
           @document.accepts_role 'owner', Factory.create(:user)
         end
 
@@ -84,7 +84,7 @@ describe DocumentsController do
         @another_user = Factory.create(:confirmed_user)
         @another_user.is_registered
 
-        @transaction = Factory.create(:ub_sync_transaction, :user => @current_user)
+        @transaction = Factory.create(:sync_transaction, :user => @current_user)
         @client_uuid = UUID.generate
       end
 
@@ -106,8 +106,8 @@ describe DocumentsController do
 
       it "'POST /documents/:uuid/push' should update transaction if request have transaction UUID" do
         request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
-        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
-        post :push, :id => @transaction.ub_document_uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.client_uuid
+        post :push, :id => @transaction.document_uuid
 
         response.should be_success
         response.should respond_with(:content_type => :xml)
@@ -115,7 +115,7 @@ describe DocumentsController do
         response.should_not have_tag('errors')
         response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
           @transaction.uuid,
-          @transaction.ub_client_uuid,
+          @transaction.client_uuid,
           assigns(:transaction).created_at.xmlschema,
           assigns(:transaction).updated_at.xmlschema
         )
@@ -123,7 +123,7 @@ describe DocumentsController do
 
       it "'POST /documents/:uuid/push' should return error if request have non-existent transaction UUID" do
         request.env['UB_SYNC_TRANSACTION_UUID'] = UUID.generate
-        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.client_uuid
         post :push, :id => UUID.generate
 
         response.should be_not_found
@@ -131,15 +131,15 @@ describe DocumentsController do
       end
 
       it "'POST /documents/:uuid/push' should return error if a transaction already exist for document" do
-        @another_transaction = Factory.create(:ub_sync_transaction, :user => @another_user)
+        @another_transaction = Factory.create(:sync_transaction, :user => @another_user)
         request.env['UB_CLIENT_UUID'] = UUID.generate
-        post :push, :id => @another_transaction.ub_document_uuid
+        post :push, :id => @another_transaction.document_uuid
 
         response.should_not be_success
         response.should respond_with(:content_type => :xml)
 
         response.should have_tag('errors') do
-          with_tag('error', 'Ub document uuid already have open transaction')
+          with_tag('error', ' document uuid already have open transaction')
         end
       end
 
@@ -219,7 +219,7 @@ describe DocumentsController do
         transaction_path = 'synctran-acti-onit-em00-0000000000000.txt'
 
         request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
-        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.client_uuid
 
         File.open(fixture_file(transaction_path),'rb') do |file|
           request.env['rack.input'] << file.read
@@ -230,7 +230,7 @@ describe DocumentsController do
         request.env["UB_SYNC_PART_TOTAL_NB"] = 1
         request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
         request.env["UB_SYNC_ITEM_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
-        post :push, :id => @transaction.ub_document_uuid
+        post :push, :id => @transaction.document_uuid
 
         response.should be_success
         response.should respond_with(:content_type => :xml)
@@ -247,7 +247,7 @@ describe DocumentsController do
         response.should_not have_tag('errors')
         response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
           @transaction.uuid,
-          @transaction.ub_client_uuid,
+          @transaction.client_uuid,
           assigns(:transaction).created_at.xmlschema,
           assigns(:transaction).updated_at.xmlschema
         )
@@ -257,7 +257,7 @@ describe DocumentsController do
         transaction_path = 'synctran-acti-onit-em00-0000000000000.txt'
 
         request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
-        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.client_uuid
 
         request.env['UB_SYNC_FILENAME'] = transaction_path
         request.env['UB_SYNC_CONTENT_TYPE'] = 'text/plain'
@@ -266,7 +266,7 @@ describe DocumentsController do
         request.env["UB_SYNC_PART_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
         request.env["UB_SYNC_ITEM_CHECK_SUM"] = Digest::MD5.file(request.env['rack.input'].path).hexdigest
 
-        post :push, :id => @transaction.ub_document_uuid
+        post :push, :id => @transaction.document_uuid
 
         response.should be_success
         response.should respond_with(:content_type => :xml)
@@ -283,7 +283,7 @@ describe DocumentsController do
         response.should_not have_tag('errors')
         response.should have_tag('transaction[uuid=?][client_uuid=?][created-at=?][updated-at=?]',
           @transaction.uuid,
-          @transaction.ub_client_uuid,
+          @transaction.client_uuid,
           assigns(:transaction).created_at.xmlschema,
           assigns(:transaction).updated_at.xmlschema
         )
@@ -291,21 +291,21 @@ describe DocumentsController do
 
       it "'POST /documents/:uuid/push' should rollback transaction" do
         request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
-        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.client_uuid
 
         request.env['UB_SYNC_ACTION'] = 'rollback'
 
-        post :push, :id => @transaction.ub_document_uuid
+        post :push, :id => @transaction.document_uuid
 
         response.should be_success
         response.should respond_with(:content_type => :xml)
 
-        lambda { UbSyncTransaction.find(@transaction.id) }.should raise_error(ActiveRecord::RecordNotFound)
+        lambda { SyncTransaction.find(@transaction.id) }.should raise_error(ActiveRecord::RecordNotFound)
       end
 
       it "'POST /documents/:uuid/push' should commit complete transaction" do
-        @transaction = Factory.create(:ub_sync_transaction_complete, :user => @current_user)
-        fixture_ubz(:valid, @transaction.ub_document_uuid).each do |path|
+        @transaction = Factory.create(:sync_transaction_complete, :user => @current_user)
+        fixture_ubz(:valid, @transaction.document_uuid).each do |path|
           @transaction.items.create!(
             :path => path.gsub(/.*?#{UUID_FORMAT_REGEX}\//, ''),
             :content_type => get_content_type_from_filename(path) || "application/octet+stream",
@@ -319,11 +319,11 @@ describe DocumentsController do
         end
 
         request.env['UB_SYNC_TRANSACTION_UUID'] = @transaction.uuid
-        request.env['UB_CLIENT_UUID'] = @transaction.ub_client_uuid
+        request.env['UB_CLIENT_UUID'] = @transaction.client_uuid
 
         request.env['UB_SYNC_ACTION'] = 'commit'
 
-        post :push, :id => @transaction.ub_document_uuid
+        post :push, :id => @transaction.document_uuid
 
         response.should be_success
         response.should respond_with(:content_type => :xml)
@@ -333,10 +333,10 @@ describe DocumentsController do
 
         it "'GET /documents' should return an empty list" do
           documents = []
-          documents << Factory.create(:ub_document)
-          documents << Factory.create(:ub_document)
-          documents << Factory.create(:ub_document)
-          documents << Factory.create(:ub_document)
+          documents << Factory.create(:document)
+          documents << Factory.create(:document)
+          documents << Factory.create(:document)
+          documents << Factory.create(:document)
 
           get :index
 
@@ -358,10 +358,10 @@ describe DocumentsController do
           @document_full_hash = full_doc
           @document = @document_full_hash[:document]
           @document.accepts_role 'owner', @current_user
-          @document_deleted = Factory.create(:ub_document)
+          @document_deleted = Factory.create(:document)
           @document_deleted.accepts_role 'owner', @current_user
           @document_deleted.destroy
-          @document_not_owned = Factory.create(:ub_document)
+          @document_not_owned = Factory.create(:document)
           @document_not_owned.accepts_role 'owner', Factory.create(:user)
         end
 
@@ -404,8 +404,8 @@ describe DocumentsController do
 
           response.should_not have_tag('errors')
 
-          UbDocument.find_by_id(@document.id).should be_nil
-          UbDocument.find_by_id(@document.id, :with_deleted => true).should_not be_nil
+          Document.find_by_id(@document.id).should be_nil
+          Document.find_by_id(@document.id, :with_deleted => true).should_not be_nil
         end
 
         it "'DELETE /documents/:uuid' should return status '403 Forbidden' if current user is not the owner" do
@@ -428,7 +428,7 @@ describe DocumentsController do
     context 'accessed by a anonymous user' do
 
       before(:each) do
-        @document = Factory.create(:ub_document)
+        @document = Factory.create(:document)
         @document.accepts_role 'owner', Factory.create(:user)
       end
 

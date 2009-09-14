@@ -10,8 +10,8 @@ module Storage
 
       super(options)
 
-      RAILS_DEFAULT_LOGGER.debug "base dir #{basedir}"
-      RAILS_DEFAULT_LOGGER.debug "public host root URL #{public_host_root_url}"
+      logger.debug "base dir #{basedir}"
+      logger.debug "public host root URL #{public_host_root_url}"
     end
 
     def basedir

@@ -54,7 +54,7 @@ com.mnemis.wb.core.WBViewer.prototype.getPageXml = function(pageUrl, loading)
     $.get(pageUrl, null, function(data, textStatus)
         {
             var loadedPageData = $(data);
-            var boardElement = loadedPageData.find("#ub_board").get(0);
+            var boardElement = loadedPageData.find("#board").get(0);
             var loadedPage = new com.mnemis.wb.model.WBPage(boardElement);
             loading.remove();
             $("body").append(boardElement);
@@ -65,7 +65,7 @@ com.mnemis.wb.core.WBViewer.prototype.getPageXml = function(pageUrl, loading)
 com.mnemis.wb.core.WBViewer.prototype.loadPage = function(pageUrl)
 {
     // remove previous page
-    $("#ub_board").remove();
+    $("#board").remove();
     var loading = $("<h1>Loading...</h1>");
     $("body").append(loading);
     // load new page

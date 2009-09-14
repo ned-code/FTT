@@ -1,11 +1,11 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require "conversion/ub_document_converter"
-require "conversion/ub_page_converter"
+require "conversion/document_converter"
+require "conversion/page_converter"
 require "conversion/pdf_converter"
 
-describe ConversionService::UbPageConverter do
+describe ConversionService::PageConverter do
 
   before(:all) do
     @converted_file_path = File.join(RAILS_ROOT, 'tmp', 'conversions')
@@ -15,7 +15,7 @@ describe ConversionService::UbPageConverter do
 
   context "document conversion" do
     before(:each) do
-      @ub_file = fixture_file('conversion/00000000-0000-0000-0000-0000000.ub')
+      @file = fixture_file('conversion/00000000-0000-0000-0000-0000000.ub')
       @rdf_file = fixture_file('conversion/metadata.rdf')
     end
 
@@ -24,12 +24,12 @@ describe ConversionService::UbPageConverter do
       options[:document_uuid] = "00000000-0000-0000-0000-0000000"
       options[:document_rdf_stream] = File.open(@rdf_file,'rb')
       options[:destination_path] = File.join(@converted_file_path)
-      page_file_name = ConversionService::convert_file(@ub_file, UbMedia::UB_DOCUMENT_TYPE, "application/xhtml+xml", options)
+      page_file_name = ConversionService::convert_file(@file, Media::UB_DOCUMENT_TYPE, "application/xhtml+xml", options)
       @converted_file = File.join(options[:destination_path], page_file_name)
       index_html = File.open(@converted_file,'rb').read()
       expected_result = File.open(fixture_file(File.join('conversion', 'index.html')),'rb').read
       index_html.should == expected_result
-      RAILS_DEFAULT_LOGGER.debug "index file #{@converted_file}"
+      logger.debug "index file #{@converted_file}"
       FileUtils.remove_file(@converted_file, true)
     end
   end
@@ -39,7 +39,7 @@ describe ConversionService::UbPageConverter do
 #     before(:all) do
 #       pdf_file = fixture_file('conversion/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf')
 #       @storage.put('0ade677d-8b59-44c7-9cdb-30be681d4667/objects/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf', File.open(pdf_file,'rb'))
-#       @pdf_media = UbMedia.new()
+#       @pdf_media = Media.new()
 #       @pdf_media.uuid = '327ff34c-874b-4d30-adfc-b3b772bcbd72'
 #       @pdf_media.media_type = 'application/pdf'
 #       @pdf_media.path = '0ade677d-8b59-44c7-9cdb-30be681d4667/objects/327ff34c-874b-4d30-adfc-b3b772bcbd72.pdf'
@@ -47,33 +47,33 @@ describe ConversionService::UbPageConverter do
 #       @pdf_media.save
 # 
 #       @page_file = fixture_file('conversion/page001.svg')
-#       @page_media = UbMedia.new()
+#       @page_media = Media.new()
 #       @storage.put('0ade677d-8b59-44c7-9cdb-30be681d4667/page001.svg', File.open(@page_file,'rb'))
 #       @page_media.uuid = '0ade677d-8b59-44c7-9cdb-30be681d4667'
-#       @page_media.media_type = UbMedia::UB_PAGE_TYPE
+#       @page_media.media_type = Media::UB_PAGE_TYPE
 #       @page_media.path = '0ade677d-8b59-44c7-9cdb-30be681d4667/page001.svg'
 #       @page_media.storage_config = @storage.to_s
 #       @page_media.save
 # 
-#       @image_1 = UbMedia.new()
+#       @image_1 = Media.new()
 #       @image_1.uuid = '5e99b60d-385e-477a-9050-c5f2338d8ce1'
 #       @image_1.path = '0ade677d-8b59-44c7-9cdb-30be681d4667/images/5e99b60d-385e-477a-9050-c5f2338d8ce1.png'
 #       @image_1.storage_config = @storage.to_s
 #       @image_1.save!
 # 
-#       @image_2 = UbMedia.new()
+#       @image_2 = Media.new()
 #       @image_2.uuid = '0d7fa9b6-d611-4318-85af-5493fe2e65d4'
 #       @image_2.path = '0ade677d-8b59-44c7-9cdb-30be681d4667/images/0d7fa9b6-d611-4318-85af-5493fe2e65d4.svg'
 #       @image_2.storage_config = @storage.to_s
 #       @image_2.save!
 # 
-#       @image_3 = UbMedia.new()
+#       @image_3 = Media.new()
 #       @image_3.uuid = 'fc287439-7f6d-404a-82ca-19b14f20a56c'
 #       @image_3.path = '0ade677d-8b59-44c7-9cdb-30be681d4667/images/fc287439-7f6d-404a-82ca-19b14f20a56c.svg'
 #       @image_3.storage_config = @storage.to_s
 #       @image_3.save!
 # 
-#       @widget_1 = UbMedia.new()
+#       @widget_1 = Media.new()
 #       @widget_1.uuid = 'bbc2a299-fce1-4221-b9ee-540e8adf426d'
 #       @widget_1.path = '0ade677d-8b59-44c7-9cdb-30be681d4667/widgets/bbc2a299-fce1-4221-b9ee-540e8adf426d.wdgt/ubGraph01.html'
 #       @widget_1.storage_config = @storage.to_s
@@ -94,7 +94,7 @@ describe ConversionService::UbPageConverter do
 #       @image_2.delete
 #       @image_3.delete
 #       @widget_1.delete
-#       RAILS_DEFAULT_LOGGER.debug "page file #{@converted_file}"
+#       logger.debug "page file #{@converted_file}"
 #       FileUtils.remove_file(@converted_file, true)
 #     end
 # 
@@ -105,8 +105,8 @@ describe ConversionService::UbPageConverter do
 # #     File.open(File.join(RAILS_ROOT, 'spec', 'output_document', 'page001.xhtml'), 'wb') do |file|
 # #       file << @page_html
 # #     end
-#     correct_width = page.search("#ub_board")[0]['style'] =~ /width: 1124px/
-#     correct_height = page.search("#ub_board")[0]['style'] =~ /height: 868px/
+#     correct_width = page.search("#board")[0]['style'] =~ /width: 1124px/
+#     correct_height = page.search("#board")[0]['style'] =~ /height: 868px/
 #     correct_width.should > 0
 #     correct_height.should > 0
 #   end
@@ -153,7 +153,7 @@ describe ConversionService::UbPageConverter do
 #   it "Page conversion should generate page.xhtml with corresponding drawing objects" do
 # 
 #       page = Hpricot(@page_html)
-#       svg_elem = page.search("#ub_page_drawing").search("object").first
+#       svg_elem = page.search("#page_drawing").search("object").first
 #       svg_elem['data'].should match(/0ade677d-8b59-44c7-9cdb-30be681d4667\/0ade677d-8b59-44c7-9cdb-30be681d4667.drawing.svg/)
 # 
 #   end

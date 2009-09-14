@@ -5,8 +5,6 @@ class ApplicationController < ActionController::Base
   helper :all
   helper_method :current_user_session, :current_user
 
-  layout 'default'
-
   filter_parameter_logging :password, :password_confirmation
 
   # Override from authoriztation plugin to return Forbidden status for XML requests

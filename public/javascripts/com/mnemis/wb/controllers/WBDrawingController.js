@@ -39,12 +39,12 @@ if (com.mnemis.core.Provide("com/mnemis/wb/controllers/WBDrawingController.js"))
     
             if (this.mRenderer)
             {
-                var boardElement = $("#ub_board");
+                var boardElement = $("#board");
                 var height = boardElement.height();
                 var width = boardElement.width();
                 this.domNode = this.mRenderer.createSurface(width, height);
                 $(this.domNode).css("zIndex", 1999999);
-                var drawingElement = $("#ub_page_drawing");
+                var drawingElement = $("#page_drawing");
                 drawingElement.css("zIndex", 1999999);
             }
         },

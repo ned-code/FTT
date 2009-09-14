@@ -4,14 +4,14 @@ class PagesController < ApplicationController
   permit "registered"
   
   def show
-    @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
-    @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_id(params[:id]) if @document
-    if (@page)
-      @page_url =  @page.url("application/xhtml+xml")
-    end
+    @document = find_by_id_or_uuid!!(params[:document_id])
+    @page =  @document.pages.find_by_id_or_uuid!(params[:id])
+    # if @page
+    #   @page_url =  @page.url("application/xhtml+xml")
+    # end
     respond_to do |format|
       if @document && @page && (@document.is_public || permit?('owner of document'))
-        format.html {
+        format.html do
           user_agent = request.env['HTTP_USER_AGENT'].downcase
           # ie does not support xhtml. So we render html
           if user_agent =~ /msie/i
@@ -21,11 +21,11 @@ class PagesController < ApplicationController
           end
 
           #redirect_to @page_url
-        }
-        format.xml {
+        end
+        format.xml do
           permit 'registered'
           redirect_to @page.url
-        }
+        end
       else
         format.html { render_optional_error_file(:not_found) }
         format.xml { head :forbidden }
@@ -34,18 +34,18 @@ class PagesController < ApplicationController
   end
 
   def info
-    @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
-    @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_id(params[:id]) if @document
+    @document = find_by_id_or_uuid!(params[:document_id])
+    @page =  @document.pages.find_by_id_or_uuid!(params[:id])
 #    #TODO how to get server url without request object?
 #    if (@page)
 #      @page_url =  @page.url("application/xhtml+xml")
 #    end
     respond_to do |format|
       if @document && @page && (@document.is_public || permit?('owner of document'))
-        format.json {
+        format.json do
           render :json => "{ 'url' : '#{url_for :controller => 'pages',  :action => 'content', :id => @page.id, :document_id => @document.id }', 'previousId' : '#{@page.previous ? @page.previous.id : nil}' , 'nextId' : '#{@page.next ? @page.next.id : nil}'}"
 #        render :json => "{ 'url' : '#{@page.media.get_resource('application/xhtml+xml').public_url }', 'previousId' : '#{@page.previous ? @page.previous.id : nil}' , 'nextId' : '#{@page.next ? @page.next.id : nil}'}"
-        }
+      end
       else
         format.html { render_optional_error_file(:not_found) }
         format.xml { head :forbidden }
@@ -54,25 +54,25 @@ class PagesController < ApplicationController
   end
 
   def update
-    current_page = UbPage.find_by_id(params[:id])
+    current_page = Page.find_by_id(params[:id])
     action = params[:ubAction]
     data = JSON.parse(params[:ubData])
     message = {}
-    if (action == 'clear')
-      current_page.page_elements.find_all_by_element_type('polyline').each { |a_page_element| a_page_element.destroy()}
+    if action == 'clear'
+      current_page.items.find_all_by_element_type('polyline').each { |a_item| a_item.destroy()}
     else
-      existing_page_element = current_page.page_elements.find_by_uuid(data['uuid'])
-      if (action == 'overwrite')
+      existing_item = current_page.items.find_by_uuid(data['uuid'])
+      if action == 'overwrite'
         #update model
-        if (existing_page_element.nil?)
-          existing_page_element = current_page.page_elements.create(:data => data.to_json, :uuid => data['uuid'], :element_type => data['tag']);
+        if (existing_item.nil?)
+          existing_item = current_page.items.create(:data => data.to_json, :uuid => data['uuid'], :element_type => data['tag']);
         else
-          existing_page_element.data = data.to_json
-          existing_page_element.save
+          existing_item.data = data.to_json
+          existing_item.save
         end
       elsif (action == 'remove')
-        unless (existing_page_element.nil?)
-          existing_page_element.destroy
+        unless (existing_item.nil?)
+          existing_item.destroy
         end
       end
     end
@@ -80,13 +80,13 @@ class PagesController < ApplicationController
   end
 
   def content
-    @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
-    @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_position(params[:id]) if @document
+    @document = find_by_id_or_uuid!(params[:document_id])
+    @page = @document.pages.find_by_id_or_uuid!(params[:id])
 
     respond_to do |format|
       if @document && @page && (@document.is_public || permit?('owner of document'))
         format.json {
-          render :json => @page.json_content
+          render :json => @page.to_json(:only => [:uuid, :data], :include => { :items => { :only => :data } })
         }
       else
         format.json {
@@ -97,8 +97,8 @@ class PagesController < ApplicationController
   end
 
   def proto
-    @document = params[:document_id] =~ UUID_FORMAT_REGEX ? UbDocument.find_by_uuid(params[:document_id]) : UbDocument.find_by_id(params[:document_id])
-    @page = params[:id] =~ UUID_FORMAT_REGEX ? @document.pages.find_by_uuid(params[:id]) : @document.pages.find_by_id(params[:id]) if @document
+    @document = find_by_id_or_uuid!(params[:document_id])
+    @page = @document.pages.find_by_id_or_uuid!(params[:id])
     #TODO how to get server url without request object?
     if (@page)
       @page_url =  @page.url("application/xhtml+xml")

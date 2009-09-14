@@ -1,11 +1,12 @@
 class CreateMedias < ActiveRecord::Migration
   def self.up
     create_table :medias do |t|
-      t.string :uuid,  :nil => false
-      t.string :path,  :nil => false
-      t.string :type,  :nil => false
-      t.integer :version,  :nil => false
-      t.integer :page_element_id, :nil => true
+      t.string :uuid,  :null => false
+      t.string :path,  :null => false
+      t.string :mime_type,  :null => false
+      t.integer :version,  :null => false
+      t.string :storage_config
+      
       t.timestamps
     end
   end
