@@ -28,13 +28,13 @@ class UsersController < ApplicationController
     @user = User.new
 
     respond_to do |format|
-      format.html { render :action => 'new' }
+      format.html { render :new }
     end
   end
 
   def create
     @user = User.new(params[:user])
-
+    
     respond_to do |format|
       if @user.save_without_session_maintenance
         if current_user && current_user.is_administrator?
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
         else
           @user.deliver_registration_activation_email!
         end
-
+        
         format.html do
           if current_user && current_user.is_administrator?
             flash[:notice] = I18n.t 'flash.notice.user_registered'

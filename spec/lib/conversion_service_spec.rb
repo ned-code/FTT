@@ -56,8 +56,8 @@ end
 #      an_entry.extract(File.join(@extracted_document_path, an_entry.name))
 #    end
 #    rdf_stream = File.open(@extracted_document_path + "/metadata.rdf",'rb')
-#    ub_stream = File.open(@extracted_document_path + "/00000000-0000-0000-0000-0000000.ub",'rb')
-#    @index_html = HtmlConvertion::create_html_document("00000000-0000-0000-0000-0000000", ub_stream, rdf_stream)
+#    stream = File.open(@extracted_document_path + "/00000000-0000-0000-0000-0000000.ub",'rb')
+#    @index_html = HtmlConvertion::create_html_document("00000000-0000-0000-0000-0000000", stream, rdf_stream)
 #    svg_stream = File.open(@extracted_document_path + "/page001.svg",'rb')
 #    @page_html = HtmlConvertion::convert_svg_page_to_html("00000000-0000-0000-0000-0000001", svg_stream)
 #
@@ -83,8 +83,8 @@ end
 ##     File.open(File.join(RAILS_ROOT, 'spec', 'output_document', 'page001.xhtml'), 'wb') do |file|
 ##       file << @page_html
 ##     end
-#    correct_width = page.search("#ub_board")[0]['style'] =~ /width: 1124px/
-#    correct_height = page.search("#ub_board")[0]['style'] =~ /height: 868px/
+#    correct_width = page.search("#board")[0]['style'] =~ /width: 1124px/
+#    correct_height = page.search("#board")[0]['style'] =~ /height: 868px/
 #    correct_width.should > 0
 #    correct_height.should > 0
 #  end

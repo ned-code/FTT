@@ -1,23 +1,42 @@
-# Sets up the Rails environment for Cucumber
-ENV["RAILS_ENV"] ||= "test"
-require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
-require 'cucumber/rails/world'
-require 'cucumber/formatter/unicode' # Comment out this line if you don't want Cucumber Unicode support
-Cucumber::Rails.use_transactional_fixtures
-Cucumber::Rails.bypass_rescue # Comment out this line if you want Rails own error handling 
-                              # (e.g. rescue_action_in_public / rescue_responses / rescue_from)
+require 'rubygems'
+require 'spork'
 
-require 'webrat'
-
-Webrat.configure do |config|
-  config.mode = :rails
+Spork.prefork do
+  # Sets up the Rails environment for Cucumber
+  ENV["RAILS_ENV"] ||= "test"
+  require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
+  
+  require 'webrat'
+  require 'cucumber/webrat/element_locator' # Lets you do table.diff!(element_at('#my_table_or_dl_or_ul_or_ol').to_table)
+  
+  Webrat.configure do |config|
+    config.mode = :rails
+  end
+  
+  require 'cucumber/formatter/unicode' # Comment out the next line if you don't want Cucumber Unicode support
+  require 'cucumber/rails/rspec'
+  require 'webrat/core/matchers'
+  
+  require 'spec/rails'
+  require 'email_spec'
+  require 'factory_girl'
 end
 
-require 'cucumber/rails/rspec'
-require 'webrat/core/matchers'
-require 'email_spec/cucumber'
-require "authlogic/test_case" 
-
-Before do
-  activate_authlogic
+Spork.each_run do
+  # This code will be run each time you run your specs.
+  
+  require 'cucumber/rails/world'
+  require 'email_spec/cucumber'
+  require "authlogic/test_case" 
+  
+  # Comment out the next line if you don't want transactions to
+  # open/roll back around each scenario
+  Cucumber::Rails.use_transactional_fixtures
+  
+  # Comment out the next line if you want Rails' own error handling
+  # (e.g. rescue_action_in_public / rescue_responses / rescue_from)
+  Cucumber::Rails.bypass_rescue
+  
+  # Require factories file
+  Dir[File.join(File.dirname(__FILE__), "..", "..", "spec", "factories", '*.rb')].each { |file| require file }
 end

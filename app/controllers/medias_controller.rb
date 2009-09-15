@@ -2,7 +2,7 @@ class MediasController < ApplicationController
   permit 'registered'
     
   def show
-    @media = params[:id] =~ UUID_FORMAT_REGEX ? UbMedia.find_by_uuid(params[:id]) : UbMedia.find_by_id(params[:id])
+    @media = params[:id] =~ UUID_FORMAT_REGEX ? Media.find_by_uuid(params[:id]) : Media.find_by_id(params[:id])
     respond_to do |format|
       if @media && permit?('owner of media')
         redirect_to @media.public_url

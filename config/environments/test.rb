@@ -26,13 +26,18 @@ config.action_mailer.delivery_method = :test
 # This is necessary if your schema can't be completely dumped by the schema dumper,
 # like if you have constraints or database-specific column types
 # config.active_record.schema_format = :sql
-config.gem 'sqlite3-ruby', :lib => "sqlite3"
+
+# config.gem 'sqlite3-ruby', :lib => "sqlite3"
 config.gem 'rspec', :lib => false
 config.gem 'rspec-rails', :lib => false
-config.gem 'remarkable_rails'
-config.gem 'thoughtbot-factory_girl', :lib => "factory_girl", :source => "http://gems.github.com"
-config.gem 'yannlugrin-rspec-factory-girl', :lib => "spec/factory_girl", :source => "http://gems.github.com"
-config.gem 'webrat'
-config.gem 'cucumber'
-config.gem 'bmabey-email_spec', :lib => 'email_spec', :source => "http://gems.github.com"
-config.gem 'ruby-debug'
+config.gem 'remarkable_rails', :lib => false
+
+config.gem 'thoughtbot-factory_girl', :lib => false, :source => "http://gems.github.com"
+config.gem 'yannlugrin-rspec-factory-girl', :lib => false, :source => "http://gems.github.com"
+
+config.gem 'webrat', :lib => false
+config.gem 'cucumber', :lib => false
+config.gem 'bmabey-email_spec', :lib => false, :source => "http://gems.github.com", :lib => false
+# config.gem 'bmabey-email_spec', :lib => 'email_spec', :source => "http://gems.github.com", :lib => false
+
+# config.gem 'ruby-debug'

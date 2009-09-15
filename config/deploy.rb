@@ -43,7 +43,7 @@ set :ec2onrails_config, {
   # If you don't care about setting the mysql root password then remove this.
   :mysql_root_password => "_ub123",
   
-  # Any extra Ubuntu packages to install if desired
+  # Any extra untu packages to install if desired
   # If you don't want to install extra packages then remove this.
   :packages => ["logwatch", "libmysqlclient15-dev", "libxml-dev", "libxslt1-dev", "libsqlite3-dev", "libgtk2.0-0", "libsm6"],
   

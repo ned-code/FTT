@@ -9,7 +9,56 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090730085048) do
+ActiveRecord::Schema.define(:version => 20090616124636) do
+
+  create_table "conversions", :force => true do |t|
+    t.string   "path",       :null => false
+    t.string   "mime_type",  :null => false
+    t.string   "parameters"
+    t.integer  "media_id",   :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "documents", :force => true do |t|
+    t.string   "uuid",                             :null => false
+    t.integer  "metadata_media_id"
+    t.string   "title"
+    t.integer  "version",           :default => 1, :null => false
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "items", :force => true do |t|
+    t.string   "uuid",                                              :null => false
+    t.integer  "page_id",                                           :null => false
+    t.integer  "media_id",                                          :null => false
+    t.text     "data",       :limit => 65537
+    t.string   "item_type",                   :default => "object", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "medias", :force => true do |t|
+    t.string   "uuid",           :null => false
+    t.string   "path",           :null => false
+    t.string   "mime_type",      :null => false
+    t.integer  "version",        :null => false
+    t.string   "storage_config"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pages", :force => true do |t|
+    t.string   "uuid",                                        :null => false
+    t.integer  "position",                                    :null => false
+    t.integer  "version",                      :default => 1, :null => false
+    t.integer  "document_id",                                 :null => false
+    t.text     "data",        :limit => 65537
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -26,110 +75,9 @@ ActiveRecord::Schema.define(:version => 20090730085048) do
     t.datetime "updated_at"
   end
 
-  create_table "ub_conversions", :force => true do |t|
-    t.string   "path"
-    t.string   "media_type"
-    t.string   "parameters"
-    t.integer  "media_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "ub_conversions", ["media_id"], :name => "media_fk"
-
-  create_table "ub_documents", :force => true do |t|
-    t.string   "uuid"
-    t.string   "bucket"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "version",           :default => 1
-    t.datetime "deleted_at"
-    t.string   "title"
-    t.integer  "status"
-    t.integer  "metadata_media_id"
-    t.boolean  "is_public"
-  end
-
-  add_index "ub_documents", ["uuid"], :name => "document_uuid_index", :unique => true
-
-  create_table "ub_medias", :force => true do |t|
-    t.string   "uuid"
-    t.string   "path"
-    t.string   "media_type"
-    t.integer  "version"
-    t.integer  "page_element_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "storage_config"
-  end
-
-  add_index "ub_medias", ["page_element_id"], :name => "page_element_fk"
-  add_index "ub_medias", ["uuid"], :name => "media_uuid_index", :unique => true
-
-  create_table "ub_page_element_states", :force => true do |t|
-    t.string   "data",            :null => false
-    t.integer  "page_element_id", :null => false
-    t.boolean  "deleted"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "ub_page_element_states", ["page_element_id"], :name => "state_page_element_fk"
-
-  create_table "ub_page_elements", :force => true do |t|
-    t.integer  "uniboard_page_id"
-    t.integer  "media_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "data",             :limit => 65537
-    t.string   "uuid"
-    t.string   "element_type",                      :default => "object"
-  end
-
-  add_index "ub_page_elements", ["uniboard_page_id"], :name => "page_fk"
-
-  create_table "ub_pages", :force => true do |t|
-    t.string   "uuid"
-    t.integer  "position"
-    t.integer  "version",                               :default => 1
-    t.integer  "uniboard_document_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "page_media_id"
-    t.text     "data",                 :limit => 65537
-  end
-
-  add_index "ub_pages", ["uniboard_document_id"], :name => "doument_fk"
-  add_index "ub_pages", ["uuid"], :name => "page_uuid_index", :unique => true
-
-  create_table "ub_sync_transaction_items", :force => true do |t|
-    t.integer  "ub_sync_transaction_id", :null => false
-    t.string   "path",                   :null => false
-    t.string   "storage_config",         :null => false
-    t.integer  "part_nb",                :null => false
-    t.integer  "part_total_nb",          :null => false
-    t.string   "part_check_sum",         :null => false
-    t.string   "item_check_sum",         :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "content_type"
-  end
-
-  add_index "ub_sync_transaction_items", ["ub_sync_transaction_id"], :name => "transaction_fk"
-
-  create_table "ub_sync_transactions", :force => true do |t|
-    t.string   "uuid",             :null => false
-    t.string   "ub_client_uuid",   :null => false
-    t.string   "ub_document_uuid", :null => false
-    t.integer  "user_id",          :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "ub_sync_transactions", ["uuid"], :name => "transaction_uuid_index", :unique => true
-
   create_table "users", :force => true do |t|
     t.string   "email",                                  :null => false
+    t.string   "name",                                   :null => false
     t.boolean  "confirmed",           :default => false, :null => false
     t.string   "crypted_password",                       :null => false
     t.string   "password_salt",                          :null => false
@@ -143,8 +91,6 @@ ActiveRecord::Schema.define(:version => 20090730085048) do
     t.datetime "last_login_at"
     t.string   "current_login_ip"
     t.string   "last_login_ip"
-    t.string   "firstname"
-    t.string   "lastname"
   end
 
 end

@@ -4,11 +4,13 @@ module NavigationHelpers
     
     when /the homepage/
       root_path
-    when /the new user page/
+    when /new user page/
       new_user_path
-    when /the users page/
+    when /users page/
       users_path
-    when /the login page/
+    when /documents page/
+      documents_path
+    when /login page/
       new_session_path
 
     # Add more page name => path mappings here
