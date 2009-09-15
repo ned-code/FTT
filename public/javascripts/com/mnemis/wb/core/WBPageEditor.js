@@ -90,18 +90,22 @@ if (com.mnemis.core.Provide("com/mnemis/wb/core/WBPageEditor.js"))
 		
 		undo: function()
 		{
+            WB.application.undoManager.undo();
 		},
 		
 		redo: function()
 		{
+            WB.application.undoManager.redo();
 		},
 		
 		zoomIn: function()
 		{
+			WB.application.boardController.zoom(1.5);
 		},
 		
 		zoomOut: function()
 		{
+			WB.application.boardController.zoom(1/1.5);
 		},
 		
 		close: function()
