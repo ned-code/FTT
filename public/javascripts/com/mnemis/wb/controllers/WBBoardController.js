@@ -7,15 +7,11 @@ if (com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js"))
     com.mnemis.core.Import("com/mnemis/wb/controllers/WBDrawingController.js");
     com.mnemis.core.Import("com/mnemis/wb/controllers/WBCollaborationController.js");
 
-    var Orbited;
-
     com.mnemis.wb.controllers.WBBoardController = $.inherit(
     {
 		drawingController: null,
         __constructor: function(editable)
         {
-            console.log("init board controller");
-
             if (editable || jQuery.browser.msie)
             {
                 this.drawingController = new WB.controllers.WBDrawingController();
@@ -28,6 +24,7 @@ if (com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js"))
             // default tool is the arrow
             this.setCurrentTool(7);
         },
+		
         setCurrentPage : function(page) {
 
             // re-init internal working attributes
@@ -50,21 +47,6 @@ if (com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js"))
                 var relPath = $(this).attr("data");
                 $(this).attr("data", relPath);
             });
-            if (this.editable)
-            {
-                if (this.collaborationController)
-                {
-                    try
-                    {
-                        this.collaborationController.disconnect();
-                    }
-                    catch (exeption)
-                    {
-                        console.log(exeption);
-                    }
-                }
-                this.collaborationController = new WB.controllers.WBCollaborationController(page);
-            }
             this.updateDrawing();
 
             //update zoom to fit browser page
@@ -381,4 +363,3 @@ if (com.mnemis.core.Provide("com/mnemis/wb/controllers/WBBoardController.js"))
         }
     });
 }
-

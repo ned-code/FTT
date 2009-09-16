@@ -20,3 +20,5 @@ debug.log
 error.log
 info.log
 .loadpath
+*~
+.settings/
