@@ -1,19 +1,19 @@
 ActionController::Routing::Routes.draw do |map|
   
   map.root :controller => 'documents', :action => 'index'
+  map.resources :documents, :has_many => { :pages => :items }
   
-  map.resource :session do |session|
-    session.resource :password_reset
-  end
-  map.resource :time
-
-  map.resources :users, :member => {:confirm => :get, :change_password => :get}
-
-  map.resources :documents, :member => { :push => :post, :resources => :get } do |document|
-    document.resources :pages, :member => {:proto => :get, :info => :get, :update => :post, :content => :get}
+  map.resources :users, :except => :new
+  map.with_options :controller => 'users', :conditions => { :method => :get } do |m|
+    m.signup 'signup', :action => 'new'
   end
 
-  map.resources :medias
+  map.resource :user_sessions, :only => :create
+  map.with_options :controller => 'user_sessions', :conditions => { :method => :get } do |m|
+    m.login  '/login',  :action => 'new' # login_path
+    m.logout '/logout', :action => 'destroy' # logout_path
+  end
+
 
   map.connect 'widgets/wikibot/search', :controller => 'wikibot', :action => 'search', :conditions => { :method => :get }
 end

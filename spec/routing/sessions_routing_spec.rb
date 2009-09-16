@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe SessionsController do
+describe UserSessionsController do
 
-  it('') { should route( :get,     '/session/new', :controller => :sessions, :action => :new     )}
-  it('') { should route( :post,    '/session',     :controller => :sessions, :action => :create  )}
-  it('') { should route( :delete,  '/session',     :controller => :sessions, :action => :destroy )}
+  should_route :get,    '/login',         :action => :new
+  should_route :post,   '/user_sessions', :action => :create
+  should_route :get,    '/logout',        :action => :destroy
 
 end

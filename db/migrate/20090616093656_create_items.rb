@@ -1,11 +1,12 @@
 class CreateItems < ActiveRecord::Migration
   def self.up
-    create_table :items do |t|
-      t.string  :uuid, :null => false
-      t.integer :page_id, :null => false
-      t.integer :media_id, :null => false
-      t.text :data, :limit => 64.kilobytes + 1
-      t.string :item_type, :null => false, :default => 'object'
+    create_table :items, :id => false  do |t|
+      t.string  :uuid,     :limit => 36,                 :primary => true
+      t.string  :page_id,  :limit => 36, :null => false
+      t.string  :media_id, :limit => 36, :null => false
+      
+      t.string  :item_type,              :null => false, :default => 'object'
+      t.text    :data,     :limit => 64.kilobytes + 1
       
       t.timestamps
     end

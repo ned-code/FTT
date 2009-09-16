@@ -1,7 +1,0 @@
-<h1>Public</h1>
-<ul id="documents" class="document_list">
-  <% @documents.each do |document| -%>
-    <li id="document_<%= document.id %>"><h2><%= document.title%></h2><%= link_to image_tag(document.pages.first.thumbnail_url()), document_path(document) %>
-    </li>
-  <% end -%>
-</ul>

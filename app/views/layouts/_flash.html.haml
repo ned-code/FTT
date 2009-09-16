@@ -1,0 +1,6 @@
+- if flash.present?
+  - flash.each do |key,value|
+    #flash{ :class => "alert #{key}" }
+      %p= value
+- else
+  #flash{ :class => "alert", :style => "display:none" }

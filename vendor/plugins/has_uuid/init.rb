@@ -1,0 +1,1 @@
+ActiveRecord::Base.send :extend, ActiveRecord::HasUuid::ClassMethods

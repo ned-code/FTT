@@ -2,226 +2,62 @@
 #
 # Table name: pages
 #
-#  id                   :integer         not null, primary key
-#  uuid                 :string(255)
-#  position             :integer
-#  version              :integer         default(1)
-#  uniboard_document_id :integer
-#  created_at           :datetime
-#  updated_at           :datetime
-#  page_media_id        :integer
-#  data                 :text(65537)
+#  uuid         :string(36)      primary key
+#  document_id  :string(36)      not null
+#  thumbnail_id :string(36)
+#  position     :integer         default(0), not null
+#  version      :integer         default(1), not null
+#  data         :text(65537)
+#  created_at   :datetime
+#  updated_at   :datetime
 #
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Page do
-  it('') { should be_built_by_factory }
-  it('') { should be_created_by_factory }
+  should_be_built_by_factory
+  should_be_created_by_factory
 
-  before(:all) do
-    Page.send(:public, :parse_svg_page)
-  end
-  after(:all) do
-    Page.send(:protected, :parse_svg_page)
+  should_have_many :items, :dependent => :destroy
+  should_belong_to :document
+  should_belong_to :thumbnail, :class_name => "Media"
+  
+  describe "position" do
+    
+    it "should be 0 when created from new document" do
+      document = Factory(:document)
+      page = document.pages.create
+      page.position.should == 0
+    end
+    
+    it "should be 1 when created from a document with already a page" do
+      document = Factory(:document)
+      document.pages.create
+      page = document.pages.create
+      page.position.should == 1
+    end
+    
   end
   
-  context 'recently created' do
-
-    it 'should have its version to 1' do
-      page = Factory.build(:page_with_doc)
-
-      page.should be_valid
-      page.should have(:no).errors
-      page.save.should be_true
-      page.version.should == 1
+  describe "new" do
+    subject { Factory.build(:page) }
+    
+    it "should have default css data" do
+      subject.data.should == { :css => { :width => "1280px", :height => "720px", :backgroundColor => "black" } }
     end
-
-    it 'should create 3 page elements when parsing default svg_file' do
-
-      ActiveRecord::Base.transaction do
-
-        page = Factory.build(:page_with_doc)
-
-        image_media = Factory.build(:media)
-        image_media.uuid = UUID.new.generate
-        image_media.path = 'test/test'
-        image_media.save!
-
-        svg_image_media = Factory.build(:media)
-        svg_image_media.uuid = UUID.new.generate
-        svg_image_media.path = 'test/test'
-        svg_image_media.save!
-
-        widget_media = Factory.build(:media)
-        widget_media.uuid = UUID.new.generate
-        widget_media.path = 'test/test'
-        widget_media.save!
-
-        svg_file = File.open(fixture_file(File.join('page', 'default_svg_page.svg')),'rb').read()
-        svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
-        svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
-        svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
-        page.parse_svg_page(svg_file)
-        # 3 items and drawing => 4
-        page.should have(4).item
-      end
-    end
-
+    
   end
 
-  context 'existing' do
-
+  describe 'collection nagivation' do
     before(:each) do
-      @user = Factory.create(:user)
-      @page = Factory.create(:page_with_doc)
-      @document = @page.document
-      @document.accepts_role 'owner', @user
+      @document = Factory(:document)
+      @page0 = @document.pages.create
+      @page1 = @document.pages.create
     end
-
-    it 'should have url' do
-      @page.url.should =~ URL_FORMAT_REGEX
-    end
-
-    it 'should have thumbnail url' do
-
-      @page.thumbnail_url.should =~ URL_FORMAT_REGEX
-    end
-
-    it 'should have mime type' do
-      @page.mime_type.should == 'image/svg+xml'
-    end
-
-    it 'should have thumbnail mime type' do
-      @page.thumbnail_mime_type.should == 'image/jpeg'
-    end
-
-    it 'should raise media missing exception when parsing svg file that refer missing media' do
-      page = Factory.build(:page_with_doc)
-
-      image_media = Factory.build(:media)
-      image_media.uuid = UUID.new.generate
-
-      widget_media = Factory.build(:media)
-      widget_media.uuid = UUID.new.generate
-
-      page.items.build(:media => image_media)
-      page.items.build(:media => widget_media)
-      page.save!
-
-      svg_file = File.open(fixture_file(File.join('page', 'default_svg_page.svg')),'rb').read()
-      svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
-      svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
-
-      lambda {page.parse_svg_page(svg_file)}.should raise_error
-    end
-
-    it 'should delete 1 page elements when parsing default svg_file' do
-      page = Factory.build(:page_with_doc)
-
-      drawing_media = Factory.build(:media)
-      drawing_media.path = "test/page.drawing.svg"
-      drawing_media.uuid = page.uuid
-
-      image_media = Factory.build(:media)
-      image_media.path = "images/image1.png"
-      image_media.uuid = UUID.new.generate
-
-      svg_image_media = Factory.build(:media)
-      svg_image_media.path = "images/image2.png"
-      svg_image_media.uuid = UUID.new.generate
-
-      svg_image_media_to_delete = Factory.build(:media)
-      svg_image_media_to_delete.path = "images/image3.png"
-      svg_image_media_to_delete.uuid = UUID.new.generate
-
-      widget_media = Factory.build(:media)
-      widget_media.uuid = UUID.new.generate
-
-      page.items.build(:media => image_media)
-      page.items.build(:media => drawing_media)
-      page.items.build(:media => svg_image_media)
-      page.items.build(:media => widget_media)
-      page.items.build(:media => svg_image_media_to_delete)
-      page.save!
-
-      svg_file = File.open(fixture_file(File.join('page', 'default_svg_page.svg')),'rb').read()
-      svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
-      svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
-      svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
-
-      page.parse_svg_page(svg_file)
-      lambda {page.save!}.should change(PageElement, :count).by(-1)
-      page.reload
-      page.should have(4).item
-    end
-
-    it 'should add 1 page elements when parsing default svg_file' do
-
-      page = Factory.build(:page_with_doc)
-
-      drawing_media = Factory.build(:media)
-      drawing_media.path = "test/page.drawing.svg"
-      drawing_media.uuid = page.uuid
-
-      image_media = Factory.build(:media)
-      image_media.uuid = UUID.new.generate
-
-      widget_media = Factory.build(:media)
-      widget_media.uuid = UUID.new.generate
-
-      page.items.build(:media => image_media)
-      page.items.build(:media => drawing_media)
-      page.items.build(:media => widget_media)
-      page.save!
-
-      ActiveRecord::Base.transaction do
-        svg_image_media = Factory.build(:media)
-        svg_image_media.uuid = UUID.new.generate
-        svg_image_media.path = 'test/test'
-        svg_image_media.save!
-        svg_file = File.open(fixture_file(File.join('page', 'default_svg_page.svg')),'rb').read()
-        svg_file.gsub!(/\{image_uuid\}/, image_media.uuid)
-        svg_file.gsub!(/\{image_svg_uuid\}/, svg_image_media.uuid)
-        svg_file.gsub!(/\{widget_uuid\}/, widget_media.uuid)
-
-        page.parse_svg_page(svg_file)
-        lambda {page.save!}.should change(PageElement, :count).by(1)
-        page.reload
-        page.should have(4).item
-      end
-    end
-
+    it { @page0.previous.should be_nil }
+    it { @page1.previous.should == @page0 }
+    it { @page0.next.should == @page1 }
+    it { @page1.next.should be_nil }  
   end
-
-  context 'collection' do
-
-    before(:each) do
-      @user = Factory.create(:user)
-
-      @page = Factory.create(:page_with_doc)
-      @document = @page.document
-      @document.accepts_role 'owner', @user
-
-      @not_owned_document = Factory.create(:document)
-      @not_owned_document.accepts_role 'owner', Factory.create(:user)
-    end
-
-    it 'should return page after the first' do
-      @document.pages[0].next.should == @document.pages[1]
-    end
-
-    it 'should return nil before the first' do
-      @document.pages[0].previous.should be_nil
-    end
-
-    it 'should return page before the last' do
-      @document.pages[-1].previous.should == @document.pages[-2]
-    end
-
-    it 'should return nil after the last' do
-      @document.pages[-1].next.should be_nil
-    end
-
-  end
+  
 end

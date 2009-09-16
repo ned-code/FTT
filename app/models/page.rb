@@ -2,60 +2,69 @@
 #
 # Table name: pages
 #
-#  id          :integer         not null, primary key
-#  uuid        :string(255)     not null
-#  position    :integer         not null
-#  version     :integer         default(1), not null
-#  document_id :integer         not null
-#  data        :text(65537)
-#  created_at  :datetime
-#  updated_at  :datetime
+#  uuid         :string(36)      primary key
+#  document_id  :string(36)      not null
+#  thumbnail_id :string(36)
+#  position     :integer         default(0), not null
+#  version      :integer         default(1), not null
+#  data         :text(65537)
+#  created_at   :datetime
+#  updated_at   :datetime
 #
 
 class Page < ActiveRecord::Base
+  has_uuid
+  
   default_scope :order => "position ASC"
   serialize :data
   
-  # ===============
-  # = Validations =
-  # ===============
-
-  validates_format_of :uuid, :with => UUID_FORMAT_REGEX
+  def after_initialize
+    self.data ||= { :css => { :width => "1280px", :height => "720px", :backgroundColor => "black" } }
+  end
 
   # ================
   # = Associations =
   # ================
   
+  has_many :items, :dependent => :destroy
   belongs_to :document
   belongs_to :thumbnail, :class_name => "Media"
-  has_many :items, :dependent => :destroy
   
-  # =================
-  # = Class Methods =
-  # =================
-      
-  def self.find_by_id_or_uuid!(id)
-    id =~ UUID_FORMAT_REGEX ? find_by_uuid!(id) : find(id)
-  end
+  # ===============
+  # = Validations =
+  # ===============
   
+  # =============
+  # = Callbacks =
+  # =============
+  
+  before_validation_on_create :set_position
+
   # ====================
   # = Instance Methods =
   # ====================
   
   def next
-    find(:first,
-         :conditions => ['position > ? AND document_id = ?', position, document_id],
-         :order => 'position ASC')
+    Page.find(:first,
+              :conditions => ['position > ? AND document_id = ?', position, document_id],
+              :order => 'position ASC')
   end
   
   def previous
-    find(:first,
-         :conditions => ['position < ? AND document_id = ?', position, document_id],
-         :order => 'position DESC')
+    Page.find(:first,
+              :conditions => ['position < ? AND document_id = ?', position, document_id],
+              :order => 'position DESC')
   end
   
   def thumbnail_url
-    thumbnail.try(:url) || "/images/noThumb.jpg"
+    thumbnail.try(:url) || "/images/no_thumb.jpg"
+  end
+  
+private
+
+  # before_validation_on_create
+  def set_position
+    self.position = document.new_record? ? 0 : document.pages.count
   end
 
 end

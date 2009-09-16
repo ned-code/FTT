@@ -11,7 +11,7 @@ module NavigationHelpers
     when /documents page/
       documents_path
     when /login page/
-      new_session_path
+      login_path
 
     # Add more page name => path mappings here
     

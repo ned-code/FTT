@@ -1,9 +1,8 @@
+require 'net/http'
+
 class WikibotController < ActionController::Base
 
   def search 
-
-    require 'net/http'
-
     @input = params[:input]
     @lang = params[:lang]
     @mode = params[:mode]
@@ -14,8 +13,8 @@ class WikibotController < ActionController::Base
       @surl = "http://" + @lang +".wikipedia.org/wiki/Special:Search/" + @input
       page = RedirectFollower.new(@surl).resolve
 
-      puts @surl
-      puts page.body;
+      # puts @surl
+      # puts page.body;
 
       @reqUrl = '<a href="http://' + @lang + '.wikipedia.org/wiki/Special:Search'
 
@@ -39,7 +38,7 @@ class WikibotController < ActionController::Base
 
 
 
-      puts page.body;
+      # puts page.body;
 
       @reqUrl = '<a href="http://' + @lang + '.wiktionary.org/wiki/Special:Search'
 

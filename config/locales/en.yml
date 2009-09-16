@@ -2,16 +2,39 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  back: "back"
+  show: "show"
+  edit: "edit"
+  destroy: "destroy"
+  
   flash:
     notice:
       user_registered: "registered"
       login_successfull: "Login successful!"
       logout_successfull: "Logout successful!"
       user_confirmed: "Your user is confirmed!"
-
+      
+  user_sessions:
+    new:
+      title: "Login"
+      button: "Login"
+      signup_link: "create new user"
+      
+  users:
+    index:
+      title: "Listing users"
+      new_user_link: "create new user"
+    
+    new:
+      title: "Sign up"
+      button: "Sign up"
+    
+    edit:
+      title: "Editing user"
+      button: "Update"
+  
   button:
     send: "Send"
-    login: "Login"
     new_document: "New document"
 
   label:

@@ -27,7 +27,7 @@ module Storage
 
         options           = config['options']            || {}
         options.reverse_merge!({
-          :logger => logger
+          :logger => RAILS_DEFAULT_LOGGER
         })
 
         @@connection[identity_string] = RightAws::S3.new(access_key_id, secret_access_key, options)

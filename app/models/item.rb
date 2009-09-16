@@ -2,18 +2,22 @@
 #
 # Table name: items
 #
-#  id         :integer         not null, primary key
-#  uuid       :string(255)     not null
-#  page_id    :integer         not null
-#  media_id   :integer         not null
-#  data       :text(65537)
+#  uuid       :string(36)      primary key
+#  page_id    :string(36)      not null
+#  media_id   :string(36)      not null
 #  item_type  :string(255)     default("object"), not null
+#  data       :text(65537)
 #  created_at :datetime
 #  updated_at :datetime
 #
 
 class Item < ActiveRecord::Base
+  has_uuid  
   serialize :data
+
+  # ================
+  # = Associations =
+  # ================
 
   belongs_to :page
   belongs_to :media

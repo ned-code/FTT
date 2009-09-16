@@ -38,5 +38,5 @@ Spork.each_run do
   Cucumber::Rails.bypass_rescue
   
   # Require factories file
-  Dir[File.join(File.dirname(__FILE__), "..", "..", "spec", "factories", '*.rb')].each { |file| require file }
+  require File.dirname(__FILE__) + "/../../spec/factories"
 end

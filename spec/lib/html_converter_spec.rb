@@ -29,7 +29,7 @@ describe ConversionService::PageConverter do
       index_html = File.open(@converted_file,'rb').read()
       expected_result = File.open(fixture_file(File.join('conversion', 'index.html')),'rb').read
       index_html.should == expected_result
-      logger.debug "index file #{@converted_file}"
+      RAILS_DEFAULT_LOGGER.debug "index file #{@converted_file}"
       FileUtils.remove_file(@converted_file, true)
     end
   end

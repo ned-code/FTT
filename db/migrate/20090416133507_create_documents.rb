@@ -1,9 +1,9 @@
 class CreateDocuments < ActiveRecord::Migration
   def self.up
-    create_table :documents do |t|
-      t.string :uuid,   :null => false
+    create_table :documents, :id => false  do |t|
+      t.string :uuid, :limit => 36, :primary => true
       
-      t.integer :metadata_media_id
+      t.string :metadata_media_id, :limit => 36
       t.string :title
       t.datetime :deleted_at
       t.timestamps

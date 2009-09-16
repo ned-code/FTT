@@ -25,7 +25,7 @@ Spork.each_run do
   # This code will be run each time you run your specs.
   
   # Require factories file
-  Dir[File.join(File.dirname(__FILE__), "factories", '*.rb')].each { |file| require file }
+  require File.dirname(__FILE__) + "/factories"
   # Spec Helpers
   Dir[File.join(File.dirname(__FILE__), "spec_helpers", '*.rb')].each { |file| require file }
   

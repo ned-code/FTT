@@ -2,8 +2,7 @@
 #
 # Table name: medias
 #
-#  id             :integer         not null, primary key
-#  uuid           :string(255)     not null
+#  uuid           :string(36)      primary key
 #  path           :string(255)     not null
 #  mime_type      :string(255)     not null
 #  version        :integer         not null
@@ -16,20 +15,37 @@
 
 class MediaMissingError < StandardError; end
 class Media < ActiveRecord::Base
+  has_uuid
 
   UB_THUMBNAIL_DESKTOP_TYPE = 'application/vnd.mnemis-uniboard-thumbnail'
   UB_PAGE_TYPE = 'application/vnd.mnemis-uniboard-page'
   UB_DRAWING_TYPE = 'application/vnd.mnemis-uniboard-drawing'
   UB_DOCUMENT_TYPE = 'application/vnd.mnemis-uniboard-document'
 
+  # ================
+  # = Associations =
+  # ================
+
   belongs_to :item, :class_name => 'PageElement', :foreign_key => 'item_id'
   has_many :conversions, :dependent => :destroy, :autosave => true, :class_name => 'Conversion', :foreign_key => 'media_id'
+  
+  # ===============
+  # = Validations =
+  # ===============
+
+  validates_presence_of :path
+
+  # =============
+  # = Callbacks =
+  # =============
 
   before_validation :set_storage_config
   before_save :save_data_on_storage
   before_destroy :delete_data_on_storage
 
-  validates_presence_of :path
+  # ====================
+  # = Instance Methods =
+  # ====================
 
   def data
     storage.get(path)
@@ -41,7 +57,6 @@ class Media < ActiveRecord::Base
   end
 
   def get_resource(p_type, p_params = nil)
-
     if (p_params.is_a?(Hash))
       p_params = p_params.to_yaml
     end
@@ -87,7 +102,7 @@ class Media < ActiveRecord::Base
     Storage::storage(self.storage_config).private_url(self.path)
   end
 
-  private
+private
 
   def set_storage_config
     self.storage_config = storage.identity_string
@@ -108,7 +123,6 @@ class Media < ActiveRecord::Base
   end
 
   def save_widget
-
     tmp_file = @tempfile
     #  @tempfile is often a Hash that contains the storage and path where the file is. In this case get file locally
     if (@tempfile.is_a? Hash)

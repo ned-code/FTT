@@ -6,18 +6,30 @@
 #  path       :string(255)     not null
 #  mime_type  :string(255)     not null
 #  parameters :string(255)
-#  media_id   :integer         not null
+#  media_id   :string(36)      not null
 #  created_at :datetime
 #  updated_at :datetime
 #
 
 class Conversion < ActiveRecord::Base
 
-  belongs_to :media, :class_name => 'Media', :foreign_key => 'media_id'
+  # ================
+  # = Associations =
+  # ================
+
+  belongs_to :media
+
+  # =============
+  # = Callbacks =
+  # =============
 
   before_save :save_data_on_storage
   before_destroy :delete_data_on_storage
   
+  # ====================
+  # = Instance Methods =
+  # ====================
+
   def data
     storage.get(path)
   end
@@ -34,7 +46,7 @@ class Conversion < ActiveRecord::Base
     storage.private_url(self.path)
   end
 
-  private
+private
 
   def save_data_on_storage
     if @tempfile
