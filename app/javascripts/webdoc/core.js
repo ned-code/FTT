@@ -1,0 +1,5 @@
+//= require "core/WBDocumentDateFilter"
+//= require "core/WBDocumentEditor"
+//= require "core/WBEditor"
+//= require "core/WBPageEditor"
+//= require "core/WBViewer"
