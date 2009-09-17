@@ -20,13 +20,4 @@ Factory.define :item do |f|
 end
 
 Factory.define :media do |f|
-  f.path 'test/test'
-  f.mime_type "image/jpeg"
-  f.version 0
-end
-
-Factory.define :conversion do |f|
-  f.path 'test/test'
-  f.mime_type "image/jpeg"
-  f.media { |f| f.association(:media)}
 end

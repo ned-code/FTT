@@ -41,6 +41,7 @@ Rails::Initializer.run do |config|
   config.gem 'authlogic'
   config.gem "semanticart-is_paranoid", :lib => 'is_paranoid'
   config.gem 'uuid'
+  config.gem "thoughtbot-paperclip", :lib => "paperclip", :source => "http://gems.github.com"
 
   config.gem 'right_aws'
   config.gem 'rubyzip', :lib => 'zip/zip'

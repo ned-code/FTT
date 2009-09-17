@@ -1,6 +1,7 @@
 # TODO
 class OrbitedController < ApplicationController
-  
+  before_filter :login_required
+    
   def orbited_javascript
     [
       "<script type=\"text/javascript\" src=\"http://#{APP_SETTINGS[:orbited_host]}:#{APP_SETTINGS[:orbited_port]}/static/Orbited.js\"></script>",

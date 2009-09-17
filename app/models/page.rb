@@ -5,7 +5,7 @@
 #  uuid         :string(36)      primary key
 #  document_id  :string(36)      not null
 #  thumbnail_id :string(36)
-#  position     :integer         default(0), not null
+#  position     :integer         not null
 #  version      :integer         default(1), not null
 #  data         :text(65537)
 #  created_at   :datetime
@@ -28,7 +28,7 @@ class Page < ActiveRecord::Base
   
   has_many :items, :dependent => :destroy
   belongs_to :document
-  belongs_to :thumbnail, :class_name => "Media"
+  belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
   
   # ===============
   # = Validations =

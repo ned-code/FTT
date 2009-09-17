@@ -25,7 +25,7 @@ class UserSessionsController < ApplicationController
   
   # GET /logout
   def destroy
-    destroy_current_user_session
+    logout
 
     respond_to do |format|
       format.html do

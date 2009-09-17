@@ -2,13 +2,14 @@
 #
 # Table name: medias
 #
-#  uuid           :string(36)      primary key
-#  path           :string(255)     not null
-#  mime_type      :string(255)     not null
-#  version        :integer         not null
-#  storage_config :string(255)
-#  created_at     :datetime
-#  updated_at     :datetime
+#  uuid              :string(36)      primary key
+#  type              :string(255)
+#  file_file_name    :string(255)
+#  file_content_type :string(255)
+#  file_file_size    :integer
+#  file_updated_at   :datetime
+#  created_at        :datetime
+#  updated_at        :datetime
 #
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')

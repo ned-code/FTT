@@ -9,20 +9,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090616124636) do
-
-  create_table "conversions", :force => true do |t|
-    t.string   "path",                     :null => false
-    t.string   "mime_type",                :null => false
-    t.string   "parameters"
-    t.string   "media_id",   :limit => 36, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(:version => 20090616123816) do
 
   create_table "documents", :id => false, :force => true do |t|
-    t.string   "uuid",              :limit => 36
-    t.string   "metadata_media_id", :limit => 36
+    t.string   "uuid",       :limit => 36
     t.string   "title"
     t.datetime "deleted_at"
     t.datetime "created_at"
@@ -31,20 +21,21 @@ ActiveRecord::Schema.define(:version => 20090616124636) do
 
   create_table "items", :id => false, :force => true do |t|
     t.string   "uuid",       :limit => 36
-    t.string   "page_id",    :limit => 36,                          :null => false
-    t.string   "media_id",   :limit => 36,                          :null => false
-    t.string   "item_type",                   :default => "object", :null => false
+    t.string   "page_id",    :limit => 36,    :null => false
+    t.string   "media_id",   :limit => 36
+    t.string   "media_type"
     t.text     "data",       :limit => 65537
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "medias", :id => false, :force => true do |t|
-    t.string   "uuid",           :limit => 36
-    t.string   "path",                         :null => false
-    t.string   "mime_type",                    :null => false
-    t.integer  "version",                      :null => false
-    t.string   "storage_config"
+    t.string   "uuid",              :limit => 36
+    t.string   "type"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

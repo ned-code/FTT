@@ -5,7 +5,7 @@
 #  uuid         :string(36)      primary key
 #  document_id  :string(36)      not null
 #  thumbnail_id :string(36)
-#  position     :integer         default(0), not null
+#  position     :integer         not null
 #  version      :integer         default(1), not null
 #  data         :text(65537)
 #  created_at   :datetime
@@ -20,7 +20,7 @@ describe Page do
 
   should_have_many :items, :dependent => :destroy
   should_belong_to :document
-  should_belong_to :thumbnail, :class_name => "Media"
+  should_belong_to :thumbnail, :class_name => "Medias::Thumbnail"
   
   describe "position" do
     

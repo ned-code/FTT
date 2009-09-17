@@ -1,0 +1,11 @@
+%h1 Media Listing
+
+%ul
+  - @medias.each do |media|
+    %li
+      = "#{media.file_file_name} (#{media.type})"
+      |
+      = link_to 'delete', media_path(media), :confirm => I18n.t('alert.destroy_confirmation'), :method => :delete
+
+
+= link_to "upload new media", new_media_path
