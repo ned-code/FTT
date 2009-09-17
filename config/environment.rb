@@ -40,7 +40,7 @@ Rails::Initializer.run do |config|
   config.gem 'haml'
   config.gem 'sprockets'
   config.gem 'authlogic'
-  config.gem "semanticart-is_paranoid", :lib => 'is_paranoid'
+  config.gem "semanticart-is_paranoid", :lib => 'is_paranoid', :source => "http://gems.github.com"
   config.gem 'uuid'
 
   config.gem 'right_aws'
