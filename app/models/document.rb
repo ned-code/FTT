@@ -12,7 +12,7 @@
 
 class Document < ActiveRecord::Base
   has_uuid
-  is_paranoid
+#  is_paranoid
   
   # ================
   # = Associations =
