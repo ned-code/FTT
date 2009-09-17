@@ -1,11 +1,9 @@
 /**
  * UndoManager stack
 **/
-com.mnemis.core.Provide("com/mnemis/core/UndoManager.js");
-
-com.mnemis.core.UndoManager = $.inherit(
+MTools.UndoManager = $.klass(
 {
-    __constructor: function()
+    initialize: function()
     {
         this.undoStack = [];
         this.redoStack = [];

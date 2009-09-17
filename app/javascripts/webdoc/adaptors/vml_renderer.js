@@ -1,10 +1,8 @@
 /**
  * Uniboard board controller
 **/
-com.mnemis.core.Provide("com/mnemis/wb/adaptors/WBVmlRenderer.js");
 
-
-com.mnemis.wb.adaptors.WBVmlRenderer = function(initialDrawing)
+WebDoc.VmlRenderer = function(initialDrawing)
 {        	
     // TODO set this as class attribute
     this.vmlNS = "VML"; //could be "urn:schemas-microsoft-com:vml"
@@ -14,7 +12,7 @@ com.mnemis.wb.adaptors.WBVmlRenderer = function(initialDrawing)
     
 }
 
-com.mnemis.wb.adaptors.WBVmlRenderer.prototype.createSurface = function(width, height) {
+WebDoc.VmlRenderer.prototype.createSurface = function(width, height) {
 
     var surface = document.createElement("vml:group");
 
@@ -40,7 +38,7 @@ com.mnemis.wb.adaptors.WBVmlRenderer.prototype.createSurface = function(width, h
     return surface;
 }
 
-com.mnemis.wb.adaptors.WBVmlRenderer.prototype.clearSurface = function(surface)
+WebDoc.VmlRenderer.prototype.clearSurface = function(surface)
  {
     var test = 0;
 
@@ -50,7 +48,7 @@ com.mnemis.wb.adaptors.WBVmlRenderer.prototype.clearSurface = function(surface)
     }
 }
 
-com.mnemis.wb.adaptors.WBVmlRenderer.prototype.createPolyline = function(id)
+WebDoc.VmlRenderer.prototype.createPolyline = function(id)
 {
 	var result = document.createElementNS(this.vmlNS, "polyline");
 	result.setAttribute("style", "z-index:2000");
@@ -64,7 +62,7 @@ com.mnemis.wb.adaptors.WBVmlRenderer.prototype.createPolyline = function(id)
 	return result;	 	        	
 }
 
-com.mnemis.wb.adaptors.WBVmlRenderer.prototype.updatePolyline = function(line, properties) {
+WebDoc.VmlRenderer.prototype.updatePolyline = function(line, properties) {
     if (properties.points) {
         var reg = new RegExp("[ ,]+", "g");
         var values = properties.points.split(reg);
@@ -86,7 +84,7 @@ com.mnemis.wb.adaptors.WBVmlRenderer.prototype.updatePolyline = function(line, p
     }
 }
 
-com.mnemis.wb.adaptors.WBVmlRenderer.prototype.createPolygon = function(id) {
+WebDoc.VmlRenderer.prototype.createPolygon = function(id) {
     var result = document.createElement("vml:polyline");
     result.setAttribute("style", "z-index:2000");
     result.setAttribute("fillcolor", "red");
@@ -98,7 +96,7 @@ com.mnemis.wb.adaptors.WBVmlRenderer.prototype.createPolygon = function(id) {
     return result;
 }
 
-com.mnemis.wb.adaptors.WBVmlRenderer.prototype.updatePolygon = function(line, properties) {
+WebDoc.VmlRenderer.prototype.updatePolygon = function(line, properties) {
     if (properties.points) {
         line.setAttribute("points", properties.points);
     }

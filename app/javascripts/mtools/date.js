@@ -1,99 +1,6 @@
-DEBUG = true;
-
-
-// create mnemis namespace
-var com;
-
-if (!com) { 
-    com = {};
-}
-if (!com.mnemis) { 
-    com.mnemis = {};
-}
-if (!com.mnemis.core) { 
-    com.mnemis.core = {};
-}
-
-// create a console object if it doesn't exist
-var console;
-if (!console)
-{
-    console = {};
-    console.log = function(){};
-}
-
-// array of all modules that are already providen
-MTools.modules = [];
-console.log("init Mnemis FW");
-console.log("Debug: " + DEBUG);
-/*
- *  Import a module based on the name of the module.
+/**
+ * @author julien
  */
-MTools.Import = function(moduleName)
-{
-    if (jQuery.inArray(moduleName, MTools.modules) == -1) 
-    {
-        var domain = "";
-        if (MTools.applicationPath)
-        {
-            domain = MTools.applicationPath;
-        }
-        MTools.LoadFromDomain(domain, moduleName)
-    }
-}
-
-MTools.LoadFromDomain = function(domain, moduleName)
-{
-    var result = "error"
-    $.ajaxSetup({
-        async: false
-    });
-    var request =$.getScript(domain + "/javascripts/" + moduleName, function(data, status)
-    {
-        result = status;
-    });
-    $.ajaxSetup({
-        async: true
-    });
-    // in DEBUG mode we want to have script available in firebug so script must be in the html.
-    // scripts will be downloaded twice but it is just for debug.
-    if (DEBUG)
-    {
-        var head= document.getElementsByTagName('head')[0];
-        var script= document.createElement('script');
-        script.type= 'text/javascript';
-        script.src= "/javascripts/" + moduleName;
-        head.appendChild(script);
-    }
-    return (request && result == "success")
-}
-
-MTools.Provide = function(moduleName)
-{
-    // module are loaded only one time.
-    if (jQuery.inArray(moduleName, MTools.modules) == -1) 
-    {
-        MTools.modules.push(moduleName);
-
-        // create namespace
-        var pathElements = moduleName.split("/");
-        var lastPathElement = window;
-        for (var index = 0; index < pathElements.length - 1; index++)
-        {
-            var pathElement = pathElements[index];
-            if (!lastPathElement[pathElement])
-            {
-                lastPathElement[pathElement] = {};
-            }
-            lastPathElement = lastPathElement[pathElement];
-        }
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
 
 Date.prototype.setISO8601 = function (string) {
     var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" +
@@ -167,4 +74,3 @@ Date.prototype.toISO8601String = function (format, offset) {
     if (format > 3) { str += offset; }
     return str;
 }
-

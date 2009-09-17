@@ -3,6 +3,7 @@ var MTools = {};
 //= require <jquery>
 //= require <lowpro-jquery>
 
-//= require "mtools/ServerManager"
-//= require "mtools/UndoManager"
-//= require "mtools/UUID"
+//= require "mtools/server_manager"
+//= require "mtools/undo_manager"
+//= require "mtools/uuid"
+//= require "mtools/date"
