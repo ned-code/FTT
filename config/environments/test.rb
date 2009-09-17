@@ -38,6 +38,5 @@ config.gem 'yannlugrin-rspec-factory-girl', :lib => false, :source => "http://ge
 config.gem 'webrat', :lib => false
 config.gem 'cucumber', :lib => false
 config.gem 'bmabey-email_spec', :lib => false, :source => "http://gems.github.com", :lib => false
-# config.gem 'bmabey-email_spec', :lib => 'email_spec', :source => "http://gems.github.com", :lib => false
 
-# config.gem 'ruby-debug'
+config.gem 'spork'

@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+  SprocketsApplication.routes(map)
   
   map.root :controller => 'documents', :action => 'index'
   map.resources :documents, :has_many => { :pages => :items }
@@ -14,7 +15,6 @@ ActionController::Routing::Routes.draw do |map|
     m.logout '/logout', :action => 'destroy' # logout_path
   end
 
-  
   map.connect 'widgets/wikibot/search', :controller => 'wikibot', :action => 'search', :conditions => { :method => :get }
   
   # dev controller

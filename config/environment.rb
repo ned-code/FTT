@@ -38,8 +38,9 @@ Rails::Initializer.run do |config|
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'haml'
+  config.gem 'sprockets'
   config.gem 'authlogic'
-  config.gem "semanticart-is_paranoid", :lib => 'is_paranoid'
+  config.gem "semanticart-is_paranoid", :lib => 'is_paranoid', :source => "http://gems.github.com"
   config.gem 'uuid'
   config.gem "thoughtbot-paperclip", :lib => "paperclip", :source => "http://gems.github.com"
 

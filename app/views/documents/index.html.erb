@@ -1,10 +1,9 @@
-<%= javascript_include_tag 'com/mnemis/wb/core/WBDocumentEditor' %>
 <script type="text/javascript">
   $(function()
     {
       var AUTH_TOKEN = "<%=  protect_against_forgery? ? form_authenticity_token : '' %>";
       $.ajaxSetup({data:{authenticity_token : AUTH_TOKEN}});
-      var editor = new com.mnemis.wb.core.WBDocumentEditor();
+      var editor = new WebDoc.DocumentEditor();
       editor.start();
     });
 </script>

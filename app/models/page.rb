@@ -38,7 +38,7 @@ class Page < ActiveRecord::Base
   # = Callbacks =
   # =============
   
-  before_validation_on_create :set_position
+  before_create :set_position
 
   # ====================
   # = Instance Methods =
@@ -62,7 +62,7 @@ class Page < ActiveRecord::Base
   
 private
 
-  # before_validation_on_create
+  # before_create
   def set_position
     self.position = document.new_record? ? 0 : document.pages.count
   end
