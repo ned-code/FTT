@@ -1,4 +1,5 @@
 class DocumentsController < ApplicationController
+  before_filter :login_required
   
   # GET /documents
   def index
@@ -37,7 +38,7 @@ class DocumentsController < ApplicationController
     render :json => @document
   end
 
-  # DELETE /document
+  # DELETE /document/:id
   def destroy
     @document = Document.find(params[:id])
     @document.destroy

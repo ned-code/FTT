@@ -1,0 +1,12 @@
+%h1 Upload new file
+
+- form_tag medias_path, :multipart => true do
+  
+  %div
+    = select_tag :type, options_for_select([["Image", "Medias::Image"], ["Widget", "Medias::Widget"]]) 
+    = file_field_tag :file
+  
+  %div
+    = submit_tag "Upload"
+
+= link_to t('back'), :back

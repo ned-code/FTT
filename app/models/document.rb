@@ -2,12 +2,11 @@
 #
 # Table name: documents
 #
-#  uuid              :string(36)      primary key
-#  metadata_media_id :string(36)
-#  title             :string(255)
-#  deleted_at        :datetime
-#  created_at        :datetime
-#  updated_at        :datetime
+#  uuid       :string(36)      primary key
+#  title      :string(255)
+#  deleted_at :datetime
+#  created_at :datetime
+#  updated_at :datetime
 #
 
 class Document < ActiveRecord::Base

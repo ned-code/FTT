@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  before_filter :login_required
   before_filter :instantiate_document_and_page
   
   # POST /documents/:document_id/pages/:page_id/items

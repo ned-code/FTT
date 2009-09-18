@@ -25,6 +25,6 @@ describe User do
   it { should be_built_by_factory }
   it { should be_created_by_factory }
 
-  should_validate_presence_of(:name)
+  should_validate_presence_of :name
 
 end

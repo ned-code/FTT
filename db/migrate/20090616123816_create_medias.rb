@@ -1,11 +1,14 @@
 class CreateMedias < ActiveRecord::Migration
   def self.up
     create_table :medias, :id => false  do |t|
-      t.string  :uuid,       :limit => 36, :primary => true
-      t.string  :path,       :null => false
-      t.string  :mime_type,  :null => false
-      t.integer :version,    :null => false
-      t.string  :storage_config
+      t.string   :uuid,       :limit => 36, :primary => true
+      t.string   :type
+      
+      # paperclip fields
+      t.string   :file_file_name
+      t.string   :file_content_type
+      t.integer  :file_file_size
+      t.datetime :file_updated_at
       
       t.timestamps
     end

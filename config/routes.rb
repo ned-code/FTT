@@ -16,4 +16,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.connect 'widgets/wikibot/search', :controller => 'wikibot', :action => 'search', :conditions => { :method => :get }
+  
+  # dev controller
+  map.resources :medias
 end
