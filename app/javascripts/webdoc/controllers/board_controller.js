@@ -30,6 +30,7 @@ WebDoc.BoardController = $.klass(
     
         // re-init internal working attributes
         window.scrollTo(0, 0);
+		this.offset = $("#board-container").offset();
         this.moving = false;
         this.originalMovingPos = null;
         this.currentZoom = 1;
@@ -52,7 +53,7 @@ WebDoc.BoardController = $.klass(
         this.updateDrawing();
         
         //update zoom to fit browser page
-        heightFactor = (window.innerHeight - this.initialHeight) / this.initialHeight;
+        heightFactor = (window.innerHeight - this.offset.top - this.initialHeight) / this.initialHeight;
         console.log(heightFactor);
         widthFactor = (window.innerWidth - this.initialWidth) / this.initialWidth;
         console.log(widthFactor);
@@ -80,10 +81,6 @@ WebDoc.BoardController = $.klass(
     {
         this.currentTool = toolId;
         this.unSelectObjects(this.selection);
-        if (WebDoc.application.toolpalette) 
-        {
-            WebDoc.application.toolpalette.refreshGUI();
-        }
     },
     
     mapToPageCoordinate: function(position)
@@ -92,12 +89,12 @@ WebDoc.BoardController = $.klass(
         if (position.x) 
         {
             x = position.x;
-            y = position.y
+            y = position.y - this.offset.top;
         }
         else 
         {
             x = position.clientX;
-            y = position.clientY;
+            y = position.clientY - this.offset.top;
         }
         
         var calcX = (x + window.pageXOffset) * (1 / this.currentZoom);

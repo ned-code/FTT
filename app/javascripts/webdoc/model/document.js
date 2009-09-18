@@ -1,27 +1,23 @@
 
+//= require <mtools/record>
 
-WebDoc.Document = $.klass(
+WebDoc.Document = $.klass(MTools.Record,
 {
-    data: {},
-    initialize: function(json)
+    initialize: function($super, json)
     {
-        if (!json) 
-        {			
-            this.data = {};
+		$super(json);
+		if (!json)
+		{
             this.data.created_at = new Date().toISO8601String();
             this.data.uuid = new MTools.UUID().toString();
-        }
-        else 
-        {
-            this.refresh(json);
-        }
+        }        
     },
     
-    refresh: function(json)
-    {
-        this.data = json.document;
-    },
-    
+	className: function()
+	{
+		return "document";
+	},
+	
     title: function()
     {
         return this.data.title;
@@ -42,17 +38,7 @@ WebDoc.Document = $.klass(
     uuid: function()
     {
         return this.data.uuid;
-    },
-	
-	to_json: function()
-	{
-		var result = {};
-            for (var key in this.data) 
-			{
-				result['document[' + key + ']'] = this.data[key];
-			}
-		return result;
-	}	
+    }
 
 });
 

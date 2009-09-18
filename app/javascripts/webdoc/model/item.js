@@ -1,73 +1,52 @@
 
-WebDoc.Item = $.klass(
+//= require <mtools/record>
+
+WebDoc.Item = $.klass(MTools.Record, 
 {
-    initialize: function(rootElement)
+    initialize: function($super, json)
     {
-        // Item can ve created from json data or from an existing DOM node.
-        // when created from json rootElement is an Object when created from DOM node rootElement is a DOMElement
-        if (rootElement.constructor == Object) 
+        $super(json);
+        if (json) 
         {
-            this.data = rootElement;
-            this.domNode = $("<" + rootElement.tag + "/>");
+            this.domNode = $("<" + this.data.tag + "/>");
             this.domNode.css(
             {
                 position: "absolute"
             })
-            for (var key in rootElement) 
+            for (var key in this.data) 
             {
                 if (key == 'css') 
-                    this.domNode.css(rootElement.css);
+                    this.domNode.css(this.data.css);
                 else 
                     if (key == 'uuid') 
-                        this.uuid = rootElement.uuid;
+                        // just ignore uuid
+                        ;
                     else 
                         if (key == 'ubItemType') 
-                            this.itemType = rootElement[key];
+                            this.itemType = this.data[key];
                         else 
                             if (key == 'innerHtml') 
-                                this.domNode.html(rootElement[key]);
+                                this.domNode.html(this.data[key]);
                             else 
                                 if (key != 'tag') 
                                 {
-                                    this.domNode.attr(key, rootElement[key]);
+                                    this.domNode.attr(key, this.data[key]);
                                 }
             }
             // internal size and position are top, left width and height as float. Because in the css those values are string with px unit
             // and we need float values to marix transform.
             this.recomputeInternalSizeAndPosition();
-            if (WebDoc.application.boardController.currentPage && WebDoc.application.boardController.currentPage.pageRecord) 
-            {
-                WebDoc.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.getData());
-            }
-        }
-        // create item from existing DOM node
-        else 
-        {
-            this.domNode = $(rootElement);
-            this.data = {};
-            this.data.uuid = this.domNode.attr("id");
-            this.data.tag = this.domNode.get(0).tagName;
-            
-            // drawing objects don't have size and position'
-            if (this.type != "drawing") 
-            {
-                this.position = 
-                {
-                    top: parseFloat(this.domNode.css("top").replace("px", "")),
-                    left: parseFloat(this.domNode.css("left").replace("px", ""))
-                };
-                this.size = 
-                {
-                    width: parseFloat(this.domNode.css("width").replace("px", "")),
-                    height: parseFloat(this.domNode.css("height").replace("px", ""))
-                };
-            }
-            else 
-            {
-                this.data.points = this.domNode.attr("points");
-            }
         }
     },
+    
+    refresh: function($super, json)
+    {
+		$super(json);
+        console.log("update item");
+        this.recomputeInternalSizeAndPosition();
+        this.domNode.animate(this.data.css); 
+    },
+    
     setPoints: function(points)
     {
         this.data.points = points;
@@ -93,23 +72,6 @@ WebDoc.Item = $.klass(
             width: parseFloat(this.data.css.width.replace("px", "")),
             height: parseFloat(this.data.css.height.replace("px", ""))
         };
-    },
-    
-    update: function(itemData)
-    {
-        console.log("update item");
-        this.data = itemData;
-        this.recomputeInternalSizeAndPosition();
-        this.domNode.animate(itemData.css);
-        if (WebDoc.application.boardController.currentPage && WebDoc.application.boardController.currentPage.pageRecord) 
-        {
-            WebDoc.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.getData());
-        }
-    },
-    
-    getData: function()
-    {
-        return this.data;
     },
     
     type: function()

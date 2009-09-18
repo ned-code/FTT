@@ -43,9 +43,9 @@ WebDoc.DrawingController = $.klass(
             var height = boardElement.height();
             var width = boardElement.width();
             this.domNode = this.mRenderer.createSurface(width, height);
-            $(this.domNode).css("zIndex", 1999999);
+            $(this.domNode).css("zIndex", 999999);
             var drawingElement = $("#page_drawing");
-            drawingElement.css("zIndex", 1999999);
+            drawingElement.css("zIndex", 999999);
         }
     },
     setDrawingModel: function(pDrawingModel)

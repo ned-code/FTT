@@ -3,7 +3,6 @@
  * @author julien
  * PageEditor is the main application for page viewing and editing.
  **/
-
 //= require <MTools/undo_manager>
 //= require <MTools/server_manager>
 //= require <MTools/uuid>
@@ -16,6 +15,7 @@ WebDoc.application = {};
 WebDoc.PageEditor = $.klass(
 {
     currentDocument: null,
+    currentPage: null,
     currentPageId: null,
     previousPageId: undefined,
     nextPageId: undefined,
@@ -25,64 +25,96 @@ WebDoc.PageEditor = $.klass(
         this.applicationUuid = new MTools.UUID().id;
         WebDoc.application.pageEditor = this;
         WebDoc.application.boardController = new WebDoc.BoardController(true);
-        WebDoc.application.serverManager = new MTools.ServerManager();
         WebDoc.application.undoManager = new MTools.UndoManager();
+        
+        $("#close-page").bind("click", this.close);
+        $("#add-page").bind("click", this.add);
+		$("#remove-page").bind("click", this.remove);
+        $("#previous-page").bind("click", this.previous);
+		$("#next-page").bind("click", this.next);		
+        $("#zoom-in").bind("click", this.zoomIn);
+        $("#zoom-out").bind("click", this.zoomOut);
+        $("#undo").bind("click", this.undo);
+        $("#redo").bind("click", this.redo);
     },
     
     load: function(documentId)
     {
-        this.loadPageId(documentId, window.location.hash.replace("#", ""));
+        MTools.ServerManager.getObjects("/documents/" + documentId, WebDoc.Document, function(data)
+        {
+            var editor = WebDoc.application.pageEditor;
+            editor.currentDocument = data[0];
+            editor.loadPageId(documentId, window.location.hash.replace("#", ""));
+        });
+        
     },
     
     loadPageId: function(documentId, pageId)
     {
+		window.location.hash = "#" + pageId;
         // remove previous page
         $("#board-container").empty();
         var loading = $('<div id="ub-loading">Loading...</div>');
         $("board-container").append(loading);
         var that = this;
-        this.currentDocument = documentId;
         this.currentPageId = pageId;
         var that = this;
-        WebDoc.application.serverManager.getObjects("/documents/" + documentId + "/pages/" + pageId, WebDoc.Page, function(data)
+        MTools.ServerManager.getObjects("/documents/" + documentId + "/pages/" + pageId, WebDoc.Page, function(data)
         {
+            var editor = WebDoc.application.pageEditor;
             console.log("recieve page object");
-            var loadedPage = data[0];
-            console.log(loadedPage);
-            that.previousPageId = loadedPage.previousPageId();
-            that.nextPageId = loadedPage.nextPageId();
+            editor.currentPage = data[0];
+            that.previousPageId = editor.currentPage.previousPageId();
+            that.nextPageId = editor.currentPage.nextPageId();
             $("#ub-loading").remove();
-            $("#board-container").append(loadedPage.domNode);
-            WebDoc.application.boardController.setCurrentPage(loadedPage);
+            $("#board-container").append(editor.currentPage.domNode);
+            WebDoc.application.boardController.setCurrentPage(editor.currentPage);
         });
     },
     
-    previousPage: function()
+    previous: function()
     {
-        if (this.previousPageId) 
-        {
-            this.loadPageId(this.currentDocument, this.previousPageId);
-        }
+        var editor = WebDoc.application.pageEditor;
+		if (editor.currentPage.data.position > 0) 
+		{
+			editor.loadPageId(editor.currentDocument.uuid(), editor.currentPage.data.position);
+		}
     },
     
-    nextPage: function()
+    next: function()
     {
-        if (this.nextPageId) 
-        {
-            this.loadPageId(this.currentDocument, this.nextPageId);
-        }
+        var editor = WebDoc.application.pageEditor;
+        editor.loadPageId(editor.currentDocument.uuid(), editor.currentPage.data.position + 2);
     },
     
-    newPage: function()
+    add: function()
     {
+        var editor = WebDoc.application.pageEditor;
+        
+        var newPage = new WebDoc.Page();
+        console.log(editor);
+        newPage.data.document_id = editor.currentDocument.uuid();
+        newPage.data.position = ++editor.currentPage.data.position;
+        newPage.save(function(status)
+        {
+            editor.loadPageId(editor.currentDocument.uuid(), this.data.position + 1);
+        });
     },
     
     duplicatePage: function()
     {
     },
     
-    deletePage: function()
+    remove: function()
     {
+        var editor = WebDoc.application.pageEditor;
+		if (editor.currentPage.data.position > 0) 
+		{
+			editor.currentPage.destroy(function(objet)
+			{
+				editor.loadPageId(editor.currentDocument.uuid(), this.data.position);
+			});
+		}
     },
     
     undo: function()
@@ -107,6 +139,7 @@ WebDoc.PageEditor = $.klass(
     
     close: function()
     {
+        window.close();
     }
 });
 

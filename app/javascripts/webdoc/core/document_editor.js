@@ -1,7 +1,6 @@
 /**
  * WBEditor is the main function of the application. It define UB namespace.
  **/
-
 //= require <MTools/undo_manager>
 //= require <MTools/server_manager>
 //= require <MTools/uuid>
@@ -22,7 +21,6 @@ WebDoc.DocumentEditor = $.klass(
     initialize: function()
     {
         WebDoc.application.documentEditor = this;
-        WebDoc.application.serverManager = new MTools.ServerManager();
         WebDoc.application.undoManager = new MTools.UndoManager();
     },
     
@@ -54,10 +52,13 @@ WebDoc.DocumentEditor = $.klass(
                     $(this).dialog('close');
                     var newDoc = new WebDoc.Document();
                     newDoc.setTitle($("#wb-new-document-name").val());
-                    WebDoc.application.serverManager.newObject("/documents", newDoc, function(persitedDoc)
+                    newDoc.save(function(status)
                     {
-                        that.documents.push(persitedDoc);
-                        that.filter.addDocument(persitedDoc);
+						if (status == "OK") 
+						{
+							that.documents.push(this);
+							that.filter.addDocument(this);
+						}
                     });
                 },
                 Cancel: function()
@@ -81,10 +82,10 @@ WebDoc.DocumentEditor = $.klass(
                     console.log("edit doc with title " + $("#wb-edit-document-name").val());
                     $(this).dialog('close');
                     that.editedDocument.setTitle($("#wb-edit-document-name").val());
-                    WebDoc.application.serverManager.updateObject("/documents/" + that.editedDocument.uuid(), that.editedDocument, function(persitedDoc)
+					that.editedDocument.save(function(persitedDoc)
                     {
-                        that.filter.refreshDocument(that.editedDocument);
-                    });
+                        that.filter.refreshDocument(this);
+                    });                    
                 },
                 Cancel: function()
                 {
@@ -123,15 +124,15 @@ WebDoc.DocumentEditor = $.klass(
         var that = WebDoc.application.documentEditor;
         var documentIdToDelete = $(this).parent().attr("id");
         that.editedDocument = that.documentWithId(documentIdToDelete);
-        WebDoc.application.serverManager.deleteObject("/documents/" + that.editedDocument.uuid(), that.editedDocument, function(persitedDoc)
+		that.editedDocument.destroy(function(persitedDoc)
         {
             that.filter.removeDocument(that.editedDocument);
-        }, "json");
+        });
     },
     
     loadDocuments: function()
     {
-        WebDoc.application.serverManager.getObjects("/documents", WebDoc.Document, function(data)
+        MTools.ServerManager.getObjects("/documents", WebDoc.Document, function(data)
         {
             this.documents = data;
             this.refreshDocumentList();

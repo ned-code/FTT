@@ -1,47 +1,67 @@
 
+//= require <mtools/record>
+//= require <webdoc/model/item>
 
-//= require <WebDoc/model/item>
-
-WebDoc.Page = $.klass(
+WebDoc.Page = $.klass(MTools.Record, 
 {
-    initialize: function(json)
+    initialize: function($super, json)
     {
-        this.domNode = $('<div>').attr( {id:"board", style:"position: absolute; top: 0px; left: 0px;z-index:-2000000"});
-		this.domNode.append($('<div>').attr({id:"page_drawing", style:"position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"}));
-		this.domNode.append($('<div>').attr({id:"items", style:"position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"}));
-		this.domNode.append($('<div>').attr({id:"event-catcher", style:"position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 999999"}));				
-		this.drawing = { polylines: [] };
+        this.domNode = $('<div>').attr(
+        {
+            id: "board",
+            style: "position: absolute; top: 0px; left: 0px;z-index:-2000000"
+        });
+        this.domNode.append($('<div>').attr(
+        {
+            id: "page_drawing",
+            style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
+        }));
+        this.domNode.append($('<div>').attr(
+        {
+            id: "items",
+            style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
+        }));
+        this.domNode.append($('<div>').attr(
+        {
+            id: "event-catcher",
+            style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 999999"
+        }));
+        this.drawing = 
+        {
+            polylines: []
+        };
+        $super(json);
         if (!json) 
-        {			
-            this.data = {};
+        {
             this.data.created_at = new Date().toISO8601String();
             this.data.uuid = new MTools.UUID().toString();
         }
-        else 
-        {
-            this.refresh(json);
-        }
     },
-	
-	data: function()
-	{
-		return this.data;
-	},
-	
-	refresh: function(json)
+    
+    className: function()
     {
-        this.data = json.page;
-		this.domNode.css(this.data.data.css);
-		var that = this;
-        $.each(json.page.items, function(data)
-        {
-            that.createOrUpdateItem(this.data());
-        });		
+        return "page";
     },
-	
-    uuid: function()
+    
+    rootUrl: function()
     {
-        return this.data.uuid;
+        return "/documents/" + this.data.document_id;
+    },
+    
+    refresh: function($super, json)
+    {
+        console.log("refresh page");
+        $super(json);
+		console.log("update dom");
+        this.domNode.css(this.data.data.css);
+        var that = this;
+		if (this.data.items && $.isArray(this.data.items)) 
+		{
+			$.each(this.data.items, function()
+			{
+				that.createOrUpdateItem(this.data());
+			});
+		}
     },
     
     previousPageId: function()

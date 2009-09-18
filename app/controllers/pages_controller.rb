@@ -29,7 +29,7 @@ class PagesController < ApplicationController
   def destroy
     @page = @document.pages.find(params[:id])
     @page.destroy
-    # render :json => {}
+    render :json => {}
   end
   
 private
