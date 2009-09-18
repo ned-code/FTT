@@ -63,7 +63,7 @@ namespace DocumentConverterClient
         public static string    DeleteUrl { get { return m_ConverterAddress + "/DeletePdf.aspx"; } }
         public static string    StatusUrl { get { return m_ConverterAddress + "/Status.aspx"; } }
         private string m_appRootUrl;
-        private static string m_ConverterAddress = "http://localhost:57244";
+        private static string m_ConverterAddress = "http://localhost/DocumentConverter";
         private const string m_defaultSourceUrl = "http://www.diaporamas-a-la-con.com/PPS/Fonctionnaires/08-Le%20planning%20d%27un%20administratif.pps";
 
     }
