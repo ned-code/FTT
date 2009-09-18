@@ -22,3 +22,7 @@ info.log
 .loadpath
 *~
 .settings/
+ThirdParty/*/input
+ThirdParty/*/output
+ThirdParty/*/bin
+ThirdParty/*/obj
