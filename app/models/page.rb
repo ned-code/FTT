@@ -40,6 +40,18 @@ class Page < ActiveRecord::Base
   
   before_create :set_position
 
+  # =================
+  # = Class Methods =
+  # =================
+  
+  def self.find_by_id_or_position(attr)
+    if attr =~ /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/
+      find(attr)
+    else
+      find_by_position(attr.to_i - 1)
+    end
+  end
+  
   # ====================
   # = Instance Methods =
   # ====================
@@ -59,6 +71,7 @@ class Page < ActiveRecord::Base
   def thumbnail_url
     thumbnail.try(:url) || "/images/no_thumb.jpg"
   end
+  
   
 private
 

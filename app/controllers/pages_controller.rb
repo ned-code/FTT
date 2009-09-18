@@ -8,7 +8,7 @@ class PagesController < ApplicationController
   
   # GET /documents/:document_id/pages/:id
   def show
-    @page = @document.pages.find(params[:id])
+    @page = @document.pages.find_by_id_or_position(params[:id])
     render :json => @page.to_json(:include => :items)
   end
     
@@ -36,5 +36,6 @@ private
   def instantiate_document
     @document = Document.find(params[:document_id])
   end
+  
 
 end

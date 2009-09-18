@@ -37,9 +37,9 @@ WebDoc.PageEditor = $.klass(
     loadPageId: function(documentId, pageId)
     {
         // remove previous page
-        $("#boardContainer").empty();
+        $("#board-container").empty();
         var loading = $('<div id="ub-loading">Loading...</div>');
-        $("boardContainer").append(loading);
+        $("board-container").append(loading);
         var that = this;
         this.currentDocument = documentId;
         this.currentPageId = pageId;
@@ -52,7 +52,7 @@ WebDoc.PageEditor = $.klass(
             that.previousPageId = loadedPage.previousPageId();
             that.nextPageId = loadedPage.nextPageId();
             $("#ub-loading").remove();
-            $("#boardContainer").append(loadedPage.domNode);
+            $("#board-container").append(loadedPage.domNode);
             WebDoc.application.boardController.setCurrentPage(loadedPage);
         });
     },
