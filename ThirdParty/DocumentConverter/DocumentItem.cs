@@ -17,7 +17,19 @@ namespace DocumentConverter
         {
             m_sourceUrl   = context.Request.Params["source"];
             m_clientUrl = context.Request.Params["clientUrl"];
-            m_appRootUrl = "http://" + context.Request.Url.Authority + context.Request.ApplicationPath;
+            IPAddress[] adds = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+
+            string IPAdd = "";
+            foreach (IPAddress add in adds)
+            {
+                if (add.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    IPAdd = add.ToString();
+                    break;
+                }
+            }
+
+            m_appRootUrl = "http://" + IPAdd + context.Request.ApplicationPath;
             try { m_shortLivingSource = Convert.ToBoolean(context.Request.Params["shortLiving"]); }
             catch (FormatException) { m_shortLivingSource = false; }
 
