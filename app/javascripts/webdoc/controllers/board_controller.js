@@ -22,7 +22,7 @@ WebDoc.BoardController = $.klass(
         this.currentZoom = 1;
         this.selection = [];
         // default tool is the arrow
-        this.setCurrentTool(7);
+        this.setCurrentTool(0);
     },
     
     setCurrentPage: function(page)
@@ -53,9 +53,9 @@ WebDoc.BoardController = $.klass(
         this.updateDrawing();
         
         //update zoom to fit browser page
-        heightFactor = (window.innerHeight - this.offset.top - this.initialHeight) / this.initialHeight;
+        heightFactor = ($("#board-container").height() - this.initialHeight) / this.initialHeight;
         console.log(heightFactor);
-        widthFactor = (window.innerWidth - this.initialWidth) / this.initialWidth;
+        widthFactor = ($("#board-container").width() - this.initialWidth) / this.initialWidth;
         console.log(widthFactor);
         if (heightFactor < widthFactor) 
         {
@@ -88,12 +88,12 @@ WebDoc.BoardController = $.klass(
         var x, y;
         if (position.x) 
         {
-            x = position.x;
+            x = position.x - this.offset.left;
             y = position.y - this.offset.top;
         }
         else 
         {
-            x = position.clientX;
+            x = position.clientX - this.offset.left;
             y = position.clientY - this.offset.top;
         }
         

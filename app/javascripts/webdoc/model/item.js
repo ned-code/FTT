@@ -38,6 +38,11 @@ WebDoc.Item = $.klass(MTools.Record,
             this.recomputeInternalSizeAndPosition();
         }
     },
+	
+	className: function()
+	{
+		return "item";
+	},
     
     refresh: function($super, json)
     {

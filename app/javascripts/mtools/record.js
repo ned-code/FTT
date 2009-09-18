@@ -49,7 +49,12 @@ MTools.Record = $.klass(
         var result = {};
         for (var key in this.data) 
         {
-            result[this.className() + '[' + key + ']'] = this.data[key];
+			var value = this.data[key];
+			if (typeof value == 'object') 
+			{
+				value = $.toJSON(value);
+			}
+            result[this.className() + '[' + key + ']'] = value;
         }
         return result;
     },
@@ -60,14 +65,14 @@ MTools.Record = $.klass(
         {
             MTools.ServerManager.newObject(this.rootUrl() + "/" + this.className() + "s", this, function(persitedDoc)
             {
-                callBack.call(persitedDoc, "OK");
+                callBack ? callBack.call(persitedDoc, "OK"): '';
             });
         }
         else 
         {
             MTools.ServerManager.updateObject(this.rootUrl() + "/" + this.className() + "s/" + this.uuid(), this, function(persitedDoc)
             {
-                callBack.call(persitedDoc, "OK");
+                callBack ? callBack.call(persitedDoc, "OK"): '';
             });
         }
     },
@@ -76,8 +81,8 @@ MTools.Record = $.klass(
 	{
         MTools.ServerManager.deleteObject(this.rootUrl() + "/" + this.className() + "s/" + this.uuid(), this, function(persitedDoc)
         {
-            callBack.call(persitedDoc, "OK");
-        }, "json");
+            callBack ? callBack.call(persitedDoc, "OK"): '';
+        });
 	}
 });
 

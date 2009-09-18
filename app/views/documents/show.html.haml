@@ -1,6 +1,5 @@
 - title @document.title
 #tool-bar{:style => "position:fixed; top: 0px; left: 0px; height:40px; width: 100%; z-index: 999999"}
-  #page-number ?
   %button#close-page Close  
   %button#add-page Add
   %button#remove-page Remove
@@ -8,7 +7,7 @@
   %button#next-page Next
   %button#undo Undo
   %button#redo Redo
-  %button#changeBkg ChangeBkg
+  %button#change-bkg ChangeBkg
   %button#zoom-in ZoomIn
   %button#zoom-out ZoomOut
   %button#tool-hand ToolHand
@@ -16,7 +15,7 @@
   %button#tool-text ToolText
   %button#tool-pen ToolPen  
     
-#board-container{:style => "position:absolute; top:40px; left: 0px; width:100%"}
+#board-container{:style => "position:absolute; top:40px; left: 0px; width:800px; height: 500px; overflow: hidden"}
 :javascript
   $(function()
   {

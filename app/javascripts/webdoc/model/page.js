@@ -9,7 +9,7 @@ WebDoc.Page = $.klass(MTools.Record,
         this.domNode = $('<div>').attr(
         {
             id: "board",
-            style: "position: absolute; top: 0px; left: 0px;z-index:-2000000"
+            style: "position: absolute; top: 0px; left: 0px;z-index:0"
         });
         this.domNode.append($('<div>').attr(
         {
@@ -52,16 +52,16 @@ WebDoc.Page = $.klass(MTools.Record,
     {
         console.log("refresh page");
         $super(json);
-		console.log("update dom");
+        console.log("update dom");
         this.domNode.css(this.data.data.css);
         var that = this;
-		if (this.data.items && $.isArray(this.data.items)) 
-		{
-			$.each(this.data.items, function()
-			{
-				that.createOrUpdateItem(this.data());
-			});
-		}
+        if (this.data.items && $.isArray(this.data.items)) 
+        {
+            $.each(this.data.items, function()
+            {
+                that.createOrUpdateItem(this.data());
+            });
+        }
     },
     
     previousPageId: function()
@@ -144,6 +144,13 @@ WebDoc.Page = $.klass(MTools.Record,
         }
     },
     
+	to_json: function($super)
+	{
+		var result = $super();
+		delete result['page[items]'];
+		return result;
+	},
+	
     createItem: function(itemData)
     {
         var newItem = new WebDoc.Item(itemData);
@@ -204,5 +211,21 @@ WebDoc.Page = $.klass(MTools.Record,
     drawingModel: function()
     {
         return this.drawing;
-    }
+    },
+    
+    toggleBkg: function()
+    {
+        console.log("toggle");
+        var previousColor = this.data.data.css.backgroundColor;
+		var newColor = "white";
+        if (previousColor == "white") 
+        {			
+			newColor = "black";           
+        }
+		this.data.data.css.backgroundColor = newColor;
+		this.domNode.animate(
+            {
+                backgroundColor: newColor
+            }, 'fast');
+    },
 });

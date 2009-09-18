@@ -32,6 +32,7 @@ WebDoc.PageEditor = $.klass(
 		$("#remove-page").bind("click", this.remove);
         $("#previous-page").bind("click", this.previous);
 		$("#next-page").bind("click", this.next);		
+		$("#change-bkg").bind("click", this.changeBkg);
         $("#zoom-in").bind("click", this.zoomIn);
         $("#zoom-out").bind("click", this.zoomOut);
         $("#undo").bind("click", this.undo);
@@ -136,6 +137,13 @@ WebDoc.PageEditor = $.klass(
     {
         WebDoc.application.boardController.zoom(1 / 1.5);
     },
+	
+	changeBkg: function()
+	{
+        var editor = WebDoc.application.pageEditor;
+		editor.currentPage.toggleBkg();
+		editor.currentPage.save();
+	},
     
     close: function()
     {

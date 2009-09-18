@@ -1,7 +1,6 @@
 /**
  * Drawing Controller
  **/
-
 //= require <MTools/uuid>
 //= require <WebDoc/adaptors/svg_renderer>
 //= require <WebDoc/adaptors/vml_renderer>
@@ -9,14 +8,14 @@
 
 WebDoc.DrawingController = $.klass(
 {
-    initialize: function(initialDrawing)    
+    initialize: function(initialDrawing)
     {
     
         this.domNode = null;
         // drawing model
         this.mDrawingModel = 
         {
-            polyline: []
+            polylines: []
         };
         
         this.mRenderer = undefined;
@@ -57,11 +56,11 @@ WebDoc.DrawingController = $.klass(
     repaintAll: function()
     {
         this.mRenderer.clearSurface(this.domNode);
-        if (this.mDrawingModel.polyline) 
+        if (this.mDrawingModel.polylines) 
         {
-            for (var i = 0; i < this.mDrawingModel.polyline.length; i++) 
+            for (var i = 0; i < this.mDrawingModel.polylines.length; i++) 
             {
-                var aDrawObject = this.mDrawingModel.polyline[i];
+                var aDrawObject = this.mDrawingModel.polylines[i];
                 var newLine = aDrawObject.domNode.get(0);
                 if (!newLine) 
                 {
@@ -112,11 +111,14 @@ WebDoc.DrawingController = $.klass(
     {
         var uuid = new MTools.UUID();
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-        var newLine = this.mRenderer.createPolyline(uuid.id);
-        this.currentDrawObject = new WebDoc.Item(newLine);
+        console.log("begin draw at point " + mappedPoint.x + ":" + mappedPoint.y);
+        
+        this.currentDrawObject = new WebDoc.Item();
+        var newLine = this.mRenderer.createPolyline(this.currentDrawObject);
+        
         
         this.currentDrawObject.data.points = mappedPoint.x + "," + mappedPoint.y;
-        this.mDrawingModel.polyline.push(this.currentDrawObject);
+        this.mDrawingModel.polylines.push(this.currentDrawObject);
         this.domNode.appendChild(newLine);
         var drawObjectToUndo = this.currentDrawObject;
         var that = this;
@@ -148,8 +150,8 @@ WebDoc.DrawingController = $.klass(
     _removePolyLine: function(drawObject)
     {
         this.domNode.removeChild(drawObject.domNode.get(0));
-        var index = this.mDrawingModel.polyline.indexOf(drawObject);
-        this.mDrawingModel.polyline.splice(index, 1);
+        var index = this.mDrawingModel.polylines.indexOf(drawObject);
+        this.mDrawingModel.polylines.splice(index, 1);
         that = this;
         WebDoc.application.undoManager.registerUndo(function()
         {
@@ -164,7 +166,7 @@ WebDoc.DrawingController = $.klass(
     _addPolyLine: function(drawObject)
     {
         this.domNode.appendChild(drawObject.domNode.get(0));
-        this.mDrawingModel.polyline.push(drawObject);
+        this.mDrawingModel.polylines.push(drawObject);
         that = this;
         WebDoc.application.undoManager.registerUndo(function()
         {

@@ -21,6 +21,8 @@ class PagesController < ApplicationController
   # PUT /documents/:document_id/pages/:id
   def update
     @page = @document.pages.find(params[:id])
+    #TODO how to manage hash in hash (page.data.css.height = 12)
+    params[:page][:data] = JSON.parse(params[:page][:data])
     @page.update_attributes(params[:page])
     render :json => @page
   end
