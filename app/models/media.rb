@@ -15,6 +15,7 @@
 class Media < ActiveRecord::Base
   has_uuid
 
+  # no more used
   UB_THUMBNAIL_DESKTOP_TYPE = 'application/vnd.mnemis-uniboard-thumbnail'
   UB_PAGE_TYPE = 'application/vnd.mnemis-uniboard-page'
   UB_DRAWING_TYPE = 'application/vnd.mnemis-uniboard-drawing'

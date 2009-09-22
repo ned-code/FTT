@@ -3,7 +3,7 @@
 - form_tag medias_path, :multipart => true do
   
   %div
-    = select_tag :type, options_for_select([["Image", "Medias::Image"], ["Widget", "Medias::Widget"]]) 
+    = select_tag :type, options_for_select([["Widget", "Medias::Widget"], ["Image", "Medias::Image"], ["Video", "Medias::Video"], ["Thumbnail", "Medias::Thumbnail"] ]) 
     = file_field_tag :file
   
   %div
