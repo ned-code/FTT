@@ -1,7 +1,6 @@
 /**
  * Uniboard board controller
  **/
-
 //= require <WebDoc/model/page>
 //= require <WebDoc/model/item>
 //= require <WebDoc/controllers/drawing_controller> 
@@ -12,27 +11,17 @@ WebDoc.BoardController = $.klass(
     drawingController: null,
     initialize: function(editable)
     {
-        if (editable || jQuery.browser.msie) 
-        {
-            this.drawingController = new WebDoc.DrawingController();
-        }
-        this.editable = editable;
-        this.moving = false;
-        this.originalMovingPos = null;
         this.currentZoom = 1;
         this.selection = [];
-        // default tool is the arrow
-        this.setCurrentTool(0);
+		this.drawingController = new WebDoc.DrawingController();
     },
     
     setCurrentPage: function(page)
-    {
-    
+    {    
         // re-init internal working attributes
-        window.scrollTo(0, 0);
-		this.offset = $("#board-container").offset();
-        this.moving = false;
-        this.originalMovingPos = null;
+        $("#board-container").get(0).scrollTop = 0;
+		$("#board-container").get(0).scrollLeft = 0;
+        this.offset = $("#board-container").offset();
         this.currentZoom = 1;
         this.selection = [];
         this.currentPage = page;
@@ -51,7 +40,6 @@ WebDoc.BoardController = $.klass(
             $(this).attr("data", relPath);
         });
         this.updateDrawing();
-        
         //update zoom to fit browser page
         heightFactor = ($("#board-container").height() - this.initialHeight) / this.initialHeight;
         console.log(heightFactor);
@@ -69,17 +57,19 @@ WebDoc.BoardController = $.klass(
     
     updateDrawing: function()
     {
-        if (this.drawingController && this.currentPage) 
+        if (this.currentPage) 
         {
             // replace drawing div with content of drawing controller. Allow to have different kind of renderer (for ie)
             this.drawingController.setDrawingModel(this.currentPage.drawingModel());
             $("#page_drawing").append(this.drawingController.domNode);
         }
     },
-    
-    setCurrentTool: function(toolId)
+	
+    setCurrentTool: function(tool)
     {
-        this.currentTool = toolId;
+		console.log(tool);
+        this.currentTool = tool;
+		this.currentTool.selectTool();
         this.unSelectObjects(this.selection);
     },
     
@@ -97,67 +87,15 @@ WebDoc.BoardController = $.klass(
             y = position.clientY - this.offset.top;
         }
         
-        var calcX = (x + window.pageXOffset) * (1 / this.currentZoom);
-        var calcY = (y + (window.pageYOffset)) * (1 / this.currentZoom);
+        var calcX = (x + $("#board-container").get(0).scrollLeft) * (1 / this.currentZoom);
+        var calcY = (y + ($("#board-container").get(0).scrollTop)) * (1 / this.currentZoom);
+		console.log("mapped point " + calcX + ":" + calcY);
         return {
             x: calcX,
             y: calcY
         };
     },
     
-    beginDrawing: function(e)
-    {
-        this.drawingController.beginDraw(e);
-    },
-    
-    beginErase: function(e)
-    {
-    },
-    
-    beginMarker: function(e)
-    {
-    },
-    
-    beginLaser: function(e)
-    {
-    },
-    
-    beginHand: function(e)
-    {
-    },
-    
-    draw: function(e)
-    {
-        this.drawingController.draw(e);
-    },
-    
-    erase: function(e)
-    {
-    
-    },
-    
-    marker: function(e)
-    {
-    
-    },
-    
-    laser: function(e)
-    {
-    
-    },
-    
-    hand: function(e)
-    {
-        var xMove = this.originalMovingPos.x - e.screenX;
-        var yMove = this.originalMovingPos.y - e.screenY;
-        window.scrollBy(xMove, yMove);
-        this.originalMovingPos = 
-        {
-            x: e.screenX,
-            y: e.screenY
-        };
-        e.stopPropagation();
-    },
     
     zoomIn: function(e)
     {
@@ -179,10 +117,6 @@ WebDoc.BoardController = $.klass(
             {
                 this.selection.push(objectToSelect);
                 objectToSelect.select();
-                if (objectToSelect.type() == "widget") 
-                {
-                    this.moving = false;
-                }
             }
         }
     },
@@ -205,83 +139,12 @@ WebDoc.BoardController = $.klass(
         }
     },
     
-    select: function(e)
-    {
-        var objectToSelect = this.currentPage.findObjectAtPoint(this.mapToPageCoordinate(e));
-        this.unSelectObjects(this.selection);
-        if (objectToSelect) 
-        {
-            this.selectObjects([objectToSelect])
-        }
-    },
-    
-    _moveItem: function(item, newPosition)
-    {
-        var previousPosition = 
-        {
-            left: item.position.left,
-            top: item.position.top
-        };
-        var that = this;
-        if (newPosition) 
-        {
-            item.moveTo(newPosition);
-            item.save();
-        }
-        WebDoc.application.undoManager.registerUndo(function()
-        {
-            that._moveItem.call(that, item, previousPosition);
-        });
-    },
-    
-    move: function(e)
-    {
-        this.hasMoved = true;
-        if (this.originalMovingPos.firstMove && this.selection.length) 
-        {
-            var selectionToUndo = this.selection[0];
-            this._moveItem(selectionToUndo)
-        }
-        this.originalMovingPos.firstMove = false;
-        var xDiff = (e.screenX - this.originalMovingPos.x) * (1 / this.currentZoom);
-        var yDiff = (e.screenY - this.originalMovingPos.y) * (1 / this.currentZoom);
-        var i = 0;
-        for (; i < this.selection.length; i++) 
-        {
-            var objectToMove = this.selection[i];
-            objectToMove.shift(xDiff, yDiff);
-            
-        }
-        this.originalMovingPos = 
-        {
-            x: e.screenX,
-            y: e.screenY
-        };
-    },
-    
-    endMove: function(e)
-    {
-        if (this.selection[0] && this.hasMoved) 
-        {
-            this.selection[0].save();
-        }
-        this.hasMoved = false;
-    },
-    
     zoom: function(factor)
     {
         var previousZoom = this.currentZoom;
         this.currentZoom = this.currentZoom * factor;
         var boardElement = $("#board");
-        var coords = boardElement.position();
-        var previousHeight = boardElement.height();
-        var previousWidth = boardElement.width();
-        var heightDiff = (previousHeight * factor) - window.innerHeight;
-        var widthDiff = (previousWidth * factor) - window.innerWidth;
-        if (!heightDiff) 
-        {
-            window.scrollTo(0, 0);
-        }
+
         
         if (jQuery.browser.mozilla) 
         {
@@ -312,92 +175,28 @@ WebDoc.BoardController = $.klass(
     {
         var that = e.data;
         e.preventDefault();
-        that.moving = true;
-        switch (that.currentTool)
-        {
-            case 0:
-                that.beginDrawing(e);
-                break;
-            case 1:
-                that.beginErase(e);
-                break;
-            case 2:
-                that.beginMarker(e);
-                break;
-            case 3:
-                that.beginLaser(e);
-                break;
-            case 4:
-                that.beginHand(e);
-                break;
-            case 5:
-                that.zoomIn(e);
-                break;
-            case 6:
-                that.zoomOut(e);
-                break;
-            case 7:
-                that.select(e);
-                break;
-        }
-        that.originalMovingPos = 
-        {
-            x: e.screenX,
-            y: e.screenY,
-            firstMove: true
-        };
+        that.currentTool.mouseDown(e);
     },
     
     mouseMove: function(e)
     {
         var that = e.data;
         e.preventDefault();
-        if (that.moving) 
-        {
-            if (that.editable || that.currentTool == 4) 
-            {
-                switch (that.currentTool)
-                {
-                    case 0:
-                        that.draw(e);
-                        break;
-                    case 1:
-                        that.erase(e);
-                        break;
-                    case 2:
-                        that.marker(e);
-                        break;
-                    case 3:
-                        that.laser(e);
-                        break;
-                    case 4:
-                        that.hand(e);
-                        break;
-                    case 7:
-                        that.move(e);
-                        break;
-                }
-            }
-        }
+        that.currentTool.mouseMove(e);
     },
     
     mouseOut: function(e)
     {
+        var that = e.data;
+        e.preventDefault();
+		that.currentTool.mouseOut(e);
     },
     
     mouseUp: function(e)
     {
         var that = e.data;
         e.preventDefault();
-        that.moving = false;
-        switch (that.currentTool)
-        {
-            case 0:
-                that.drawingController.endDraw(e);
-                break;
-            case 7:
-                that.endMove(e);
-                break;
-        }
+		that.currentTool.mouseUp(e);
+
     }
 });
