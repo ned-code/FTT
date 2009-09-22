@@ -47,7 +47,7 @@ WebDoc.PageEditor = $.klass(
 		$("#tool-hand").bind("click", this.handTool);
 		$("#tool-arrow").bind("click", this.arrowTool);
 		$("#tool-pen").bind("click", this.penTool);
-		
+		$("#default-image").bind("click", this.insertImage);
     },
     
     load: function(documentId)
@@ -177,6 +177,11 @@ WebDoc.PageEditor = $.klass(
 	{
 		WebDoc.application.boardController.setCurrentTool(WebDoc.application.handTool);
 
+	},
+	
+	insertImage: function()
+	{
+		console.log("insert image");
 	}
 });
 
