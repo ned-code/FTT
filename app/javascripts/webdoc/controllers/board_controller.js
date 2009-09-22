@@ -22,7 +22,7 @@ WebDoc.BoardController = $.klass(
         this.currentZoom = 1;
         this.selection = [];
         // default tool is the arrow
-        this.setCurrentTool(7);
+        this.setCurrentTool(0);
     },
     
     setCurrentPage: function(page)
@@ -30,6 +30,7 @@ WebDoc.BoardController = $.klass(
     
         // re-init internal working attributes
         window.scrollTo(0, 0);
+		this.offset = $("#board-container").offset();
         this.moving = false;
         this.originalMovingPos = null;
         this.currentZoom = 1;
@@ -52,9 +53,9 @@ WebDoc.BoardController = $.klass(
         this.updateDrawing();
         
         //update zoom to fit browser page
-        heightFactor = (window.innerHeight - this.initialHeight) / this.initialHeight;
+        heightFactor = ($("#board-container").height() - this.initialHeight) / this.initialHeight;
         console.log(heightFactor);
-        widthFactor = (window.innerWidth - this.initialWidth) / this.initialWidth;
+        widthFactor = ($("#board-container").width() - this.initialWidth) / this.initialWidth;
         console.log(widthFactor);
         if (heightFactor < widthFactor) 
         {
@@ -80,10 +81,6 @@ WebDoc.BoardController = $.klass(
     {
         this.currentTool = toolId;
         this.unSelectObjects(this.selection);
-        if (WebDoc.application.toolpalette) 
-        {
-            WebDoc.application.toolpalette.refreshGUI();
-        }
     },
     
     mapToPageCoordinate: function(position)
@@ -91,13 +88,13 @@ WebDoc.BoardController = $.klass(
         var x, y;
         if (position.x) 
         {
-            x = position.x;
-            y = position.y
+            x = position.x - this.offset.left;
+            y = position.y - this.offset.top;
         }
         else 
         {
-            x = position.clientX;
-            y = position.clientY;
+            x = position.clientX - this.offset.left;
+            y = position.clientY - this.offset.top;
         }
         
         var calcX = (x + window.pageXOffset) * (1 / this.currentZoom);
@@ -229,7 +226,7 @@ WebDoc.BoardController = $.klass(
         if (newPosition) 
         {
             item.moveTo(newPosition);
-            item.endOfMove();
+            item.save();
         }
         WebDoc.application.undoManager.registerUndo(function()
         {
@@ -266,7 +263,7 @@ WebDoc.BoardController = $.klass(
     {
         if (this.selection[0] && this.hasMoved) 
         {
-            this.selection[0].endOfMove();
+            this.selection[0].save();
         }
         this.hasMoved = false;
     },

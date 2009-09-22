@@ -14,6 +14,10 @@ class DocumentsController < ApplicationController
   # GET /documents/:id
   def show
     @document = Document.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json { render :json => @document }
+    end
   end
   
   # GET /documents/:id/edit

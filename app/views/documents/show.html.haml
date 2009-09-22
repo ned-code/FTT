@@ -1,1 +1,26 @@
-%h2= @document.title
+- title @document.title
+#tool-bar{:style => "position:fixed; top: 0px; left: 0px; height:40px; width: 100%; z-index: 999999"}
+  %button#close-page Close  
+  %button#add-page Add
+  %button#remove-page Remove
+  %button#previous-page Previous
+  %button#next-page Next
+  %button#undo Undo
+  %button#redo Redo
+  %button#change-bkg ChangeBkg
+  %button#zoom-in ZoomIn
+  %button#zoom-out ZoomOut
+  %button#tool-hand ToolHand
+  %button#tool-arrow ToolArrow
+  %button#tool-text ToolText
+  %button#tool-pen ToolPen  
+    
+#board-container{:style => "position:absolute; top:40px; left: 0px; width:800px; height: 500px; overflow: hidden"}
+:javascript
+  $(function()
+  {
+    var AUTH_TOKEN = "#{protect_against_forgery? ? form_authenticity_token : ''}";
+    $.ajaxSetup({data:{authenticity_token : AUTH_TOKEN}});
+    var editor = new WebDoc.PageEditor();
+    editor.load("#{@document.uuid}");
+  }); 

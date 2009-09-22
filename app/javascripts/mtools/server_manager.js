@@ -6,49 +6,13 @@ MTools.ServerManager = $.klass(
     initialize: function()
     {
         console.log("Init server manager");
-    },
-    
-    getJson: function(url, callback, context, objectClass)
-    {
-        console.log("server manager get url " + url);
-        if (!context) 
-        {
-            context = this;
-        }
-        $.ajax(
-        {
-            type: "GET",
-            url: url,
-            dataType: "json",
-            success: function(data)
-            {
-                console.log("we are online");
-                if (objectClass) 
-                {
-                    var result = [];
-                    for (var i = 0; i < data.length; i++) 
-                    {
-                        var aJson = data[i];
-                        result.push(new objectClass(aJson));
-                    }
-                    callback.call(context, result);
-                }
-                else 
-                {
-                    callback.call(context, data);
-                }
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                console.log("we are offline");
-                callback.call(context, {});
-            }
-        });
-    },
-    
+    }
+});
+
+$.extend(MTools.ServerManager, 
+{
     getObjects: function(url, objectClass, callback, context)
     {
-        console.log("server manager get url " + url);
         if (!context) 
         {
             context = this;
@@ -60,7 +24,6 @@ MTools.ServerManager = $.klass(
             dataType: "json",
             success: function(data)
             {
-                console.log("we are online");
                 if (objectClass) 
                 {
                     var result = [];
@@ -85,7 +48,7 @@ MTools.ServerManager = $.klass(
             },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
-                console.log("we are offline");
+                console.log("error " + textStatus);
                 callback.call(context, {});
             }
         });
@@ -103,8 +66,8 @@ MTools.ServerManager = $.klass(
     {
         $.post(url, object.to_json(), function(data, textstatus)
         {
-            var createdObject = new object.constructor(data);
-            callBack.apply(this, [createdObject]);
+            object.refresh(data);
+            callBack.apply(this, [object]);
         }, "json");
     },
     
@@ -129,7 +92,6 @@ MTools.ServerManager = $.klass(
         {
             _method: "DELETE"
         };
-        //$.extend(param, object.to_json());
         $.post(url, param, function(data, textstatus)
         {
             callBack.apply(this, [object]);

@@ -1,7 +1,6 @@
 /**
  * Drawing Controller
  **/
-
 //= require <MTools/uuid>
 //= require <WebDoc/adaptors/svg_renderer>
 //= require <WebDoc/adaptors/vml_renderer>
@@ -9,14 +8,14 @@
 
 WebDoc.DrawingController = $.klass(
 {
-    initialize: function(initialDrawing)    
+    initialize: function(initialDrawing)
     {
     
         this.domNode = null;
         // drawing model
         this.mDrawingModel = 
         {
-            polyline: []
+            polylines: []
         };
         
         this.mRenderer = undefined;
@@ -43,9 +42,9 @@ WebDoc.DrawingController = $.klass(
             var height = boardElement.height();
             var width = boardElement.width();
             this.domNode = this.mRenderer.createSurface(width, height);
-            $(this.domNode).css("zIndex", 1999999);
+            $(this.domNode).css("zIndex", 999999);
             var drawingElement = $("#page_drawing");
-            drawingElement.css("zIndex", 1999999);
+            drawingElement.css("zIndex", 999999);
         }
     },
     setDrawingModel: function(pDrawingModel)
@@ -57,11 +56,11 @@ WebDoc.DrawingController = $.klass(
     repaintAll: function()
     {
         this.mRenderer.clearSurface(this.domNode);
-        if (this.mDrawingModel.polyline) 
+        if (this.mDrawingModel.polylines) 
         {
-            for (var i = 0; i < this.mDrawingModel.polyline.length; i++) 
+            for (var i = 0; i < this.mDrawingModel.polylines.length; i++) 
             {
-                var aDrawObject = this.mDrawingModel.polyline[i];
+                var aDrawObject = this.mDrawingModel.polylines[i];
                 var newLine = aDrawObject.domNode.get(0);
                 if (!newLine) 
                 {
@@ -104,7 +103,7 @@ WebDoc.DrawingController = $.klass(
     {
         this.mRenderer.updatePolyline(objectToRepaint.domNode.get(0), 
         {
-            points: objectToRepaint.data.points
+            points: objectToRepaint.data.data.points
         });
     },
     
@@ -112,11 +111,17 @@ WebDoc.DrawingController = $.klass(
     {
         var uuid = new MTools.UUID();
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-        var newLine = this.mRenderer.createPolyline(uuid.id);
-        this.currentDrawObject = new WebDoc.Item(newLine);
+        console.log("begin draw at point " + mappedPoint.x + ":" + mappedPoint.y);
         
-        this.currentDrawObject.data.points = mappedPoint.x + "," + mappedPoint.y;
-        this.mDrawingModel.polyline.push(this.currentDrawObject);
+        this.currentDrawObject = new WebDoc.Item();
+	    this.currentDrawObject.data.data.css = { zIndex: 2000};
+		this.currentDrawObject.data.data.stroke = "red";
+		this.currentDrawObject.data.data.strokeWidth = 5;
+        var newLine = this.mRenderer.createPolyline(this.currentDrawObject);
+        
+        this.currentDrawObject.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
+        this.currentDrawObject.data.data.points = mappedPoint.x + "," + mappedPoint.y;
+        this.mDrawingModel.polylines.push(this.currentDrawObject);
         this.domNode.appendChild(newLine);
         var drawObjectToUndo = this.currentDrawObject;
         var that = this;
@@ -128,51 +133,39 @@ WebDoc.DrawingController = $.klass(
     
     endDraw: function(e)
     {
-        if (WebDoc.application.boardController.collaborationController) 
-        {
-            WebDoc.application.boardController.collaborationController.addItem(this.currentDrawObject);
-        }
-        if (WebDoc.application.boardController.currentPage && WebDoc.application.boardController.currentPage.pageRecord) 
-        {
-            WebDoc.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.currentDrawObject.getData());
-        }
+		this.currentDrawObject.save();
     },
     
     draw: function(e)
     {
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-        this.currentDrawObject.data.points += " " + mappedPoint.x + "," + mappedPoint.y;
+        this.currentDrawObject.data.data.points += " " + mappedPoint.x + "," + mappedPoint.y;
         this.repaintObject(this.currentDrawObject);
     },
     
     _removePolyLine: function(drawObject)
     {
         this.domNode.removeChild(drawObject.domNode.get(0));
-        var index = this.mDrawingModel.polyline.indexOf(drawObject);
-        this.mDrawingModel.polyline.splice(index, 1);
+        var index = this.mDrawingModel.polylines.indexOf(drawObject);
+        this.mDrawingModel.polylines.splice(index, 1);
         that = this;
         WebDoc.application.undoManager.registerUndo(function()
         {
             that._addPolyLine(drawObject);
         });
-        if (WebDoc.application.boardController.collaborationController) 
-        {
-            WebDoc.application.boardController.collaborationController.removeItem(drawObject);
-        }
+		drawObject.destroy();
     },
     
     _addPolyLine: function(drawObject)
     {
         this.domNode.appendChild(drawObject.domNode.get(0));
-        this.mDrawingModel.polyline.push(drawObject);
+		drawObject.isNew = true;
+        this.mDrawingModel.polylines.push(drawObject);
         that = this;
         WebDoc.application.undoManager.registerUndo(function()
         {
             that._removePolyLine(drawObject);
         });
-        if (WebDoc.application.boardController.collaborationController) 
-        {
-            WebDoc.application.boardController.collaborationController.addItem(drawObject);
-        }
+		drawObject.save();
     }
 });
