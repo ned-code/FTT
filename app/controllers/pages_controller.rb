@@ -12,21 +12,29 @@ class PagesController < ApplicationController
     @page = @document.pages.find_by_id_or_position(params[:id])
     render :json => @page.to_json(:include => :items)
   end
-    
+  
   # POST /documents/:document_id/pages
   def create
+    #TODO how to manage hash in hash (page.data.css.height = 12)
+    if (params[:page][:data])
+      params[:page][:data] = JSON.parse(params[:page][:data])  
+    end
+    
     render :json => @document.pages.create(params[:page])
   end
-
+  
   # PUT /documents/:document_id/pages/:id
   def update
     @page = @document.pages.find(params[:id])
     #TODO how to manage hash in hash (page.data.css.height = 12)
-    params[:page][:data] = JSON.parse(params[:page][:data])
+    if (params[:page][:data])
+      params[:page][:data] = JSON.parse(params[:page][:data])  
+    end
+    
     @page.update_attributes(params[:page])
     render :json => @page
   end
-
+  
   # DELETE /documents/:document_id/pages/:id
   def destroy
     @page = @document.pages.find(params[:id])
@@ -34,11 +42,11 @@ class PagesController < ApplicationController
     render :json => {}
   end
   
-private
+  private
   
   def instantiate_document
     @document = Document.find(params[:document_id])
   end
   
-
+  
 end

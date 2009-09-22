@@ -4,21 +4,27 @@ class ItemsController < ApplicationController
   
   # POST /documents/:document_id/pages/:page_id/items
   def create
+    if (params[:item][:data])
+      params[:item][:data] = JSON.parse(params[:item][:data])  
+    end    
     render :json => @page.items.create(params[:item])
   end
 
   # PUT /documents/:document_id/pages/:page_id/items/:id
   def update
     @item = @pages.items.find(params[:id])
+    if (params[:item][:data])
+      params[:item][:data] = JSON.parse(params[:item][:data])  
+    end   
     @item.update_attributes(params[:item])
     render :json => @item
   end
 
   # DELETE /documents/:document_id/pages/:page_id/items/:id
   def destroy
-    @item = @pages.items.find(params[:id])
+    @item = @page.items.find(params[:id])
     @item.destroy
-    # render :json => {}
+    render :json => {}
   end
   
 private
