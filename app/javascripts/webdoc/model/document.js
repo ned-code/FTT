@@ -21,18 +21,6 @@ WebDoc.Document = $.klass(MTools.Record,
     setTitle: function(title)
     {
         this.data.title = title;
-    },
-    
-    creationDate: function()
-    {
-        var result = new Date();
-        result.setISO8601(this.data.created_at);
-        return result;
-    },
-    
-    uuid: function()
-    {
-        return this.data.uuid;
     }
 
 });

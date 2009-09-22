@@ -52,26 +52,28 @@ WebDoc.PageEditor = $.klass(
     
     loadPageId: function(documentId, pageId)
     {
-		window.location.hash = "#" + pageId;
-        // remove previous page
-        $("#board-container").empty();
-        var loading = $('<div id="ub-loading">Loading...</div>');
-        $("board-container").append(loading);
-        var that = this;
         this.currentPageId = pageId;
-        var that = this;
         MTools.ServerManager.getObjects("/documents/" + documentId + "/pages/" + pageId, WebDoc.Page, function(data)
         {
             var editor = WebDoc.application.pageEditor;
-            console.log("recieve page object");
-            editor.currentPage = data[0];
-            that.previousPageId = editor.currentPage.previousPageId();
-            that.nextPageId = editor.currentPage.nextPageId();
-            $("#ub-loading").remove();
-            $("#board-container").append(editor.currentPage.domNode);
-            WebDoc.application.boardController.setCurrentPage(editor.currentPage);
+			editor.loadPage(data[0]);
         });
     },
+	
+	loadPage: function(page)
+	{
+			WebDoc.application.undoManager.clear();
+            var editor = WebDoc.application.pageEditor;
+			window.location.hash = "#" + (page.data.position + 1);
+            editor.currentPage = page;
+            editor.previousPageId = editor.currentPage.previousPageId();
+            editor.nextPageId = editor.currentPage.nextPageId();
+        	// remove previous page
+        	$("#board-container").empty();
+			// add the new one
+            $("#board-container").append(editor.currentPage.domNode);
+            WebDoc.application.boardController.setCurrentPage(editor.currentPage);
+	},
     
     previous: function()
     {
@@ -93,12 +95,11 @@ WebDoc.PageEditor = $.klass(
         var editor = WebDoc.application.pageEditor;
         
         var newPage = new WebDoc.Page();
-        console.log(editor);
         newPage.data.document_id = editor.currentDocument.uuid();
         newPage.data.position = ++editor.currentPage.data.position;
         newPage.save(function(status)
         {
-            editor.loadPageId(editor.currentDocument.uuid(), this.data.position + 1);
+            editor.loadPage(this);
         });
     },
     
