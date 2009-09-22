@@ -10,6 +10,8 @@ MTools.Record = $.klass(
         {
 			this.isNew = true;
             this.data = {};
+            this.data.created_at = new Date().toISO8601String();
+            this.data.uuid = new MTools.UUID().toString();
         }
         else 
         {

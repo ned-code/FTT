@@ -8,94 +8,94 @@ WebDoc.Item = $.klass(MTools.Record,
         $super(json);
         if (json) 
         {
-            this.domNode = $("<" + this.data.tag + "/>");
+            this.domNode = $("<" + this.data.data.tag + "/>");
             this.domNode.css(
             {
                 position: "absolute"
             })
-            for (var key in this.data) 
+            for (var key in this.data.data) 
             {
                 if (key == 'css') 
-                    this.domNode.css(this.data.css);
+                    this.domNode.css(this.data.data.css);
                 else 
                     if (key == 'uuid') 
                         // just ignore uuid
                         ;
                     else 
                         if (key == 'ubItemType') 
-                            this.itemType = this.data[key];
+                            this.itemType = this.data.data[key];
                         else 
                             if (key == 'innerHtml') 
-                                this.domNode.html(this.data[key]);
+                                this.domNode.html(this.data.data[key]);
                             else 
                                 if (key != 'tag') 
                                 {
-                                    this.domNode.attr(key, this.data[key]);
+                                    this.domNode.attr(key, this.data.data[key]);
                                 }
             }
             // internal size and position are top, left width and height as float. Because in the css those values are string with px unit
             // and we need float values to marix transform.
             this.recomputeInternalSizeAndPosition();
         }
+        else 
+        {
+            this.data.data = {};
+        }
     },
-	
-	className: function()
-	{
-		return "item";
-	},
+    
+    className: function()
+    {
+        return "item";
+    },
+    
+    rootUrl: function()
+    {
+        return "/documents/" + WebDoc.application.pageEditor.currentDocument.uuid() + "/pages/" + this.data.page_id;
+    },
     
     refresh: function($super, json)
     {
-		$super(json);
+        $super(json);
         console.log("update item");
+		console.log(json);
         this.recomputeInternalSizeAndPosition();
-        this.domNode.animate(this.data.css); 
+		if (this.domNode) 
+		{
+			this.domNode.animate(this.data.data.css);
+		}
     },
     
     setPoints: function(points)
     {
-        this.data.points = points;
+        this.data.data.points = points;
         WebDoc.application.boardController.drawingController.mRenderer.updatePolyline(this.domNode.get(0), 
         {
             points: points
         });
-        if (WebDoc.application.boardController.currentPage && WebDoc.application.boardController.currentPage.pageRecord) 
-        {
-            WebDoc.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.getData());
-        }
     },
     
     recomputeInternalSizeAndPosition: function()
     {
-        this.position = 
+        if (this.data.data.css.top) 
         {
-            top: parseFloat(this.data.css.top.replace("px", "")),
-            left: parseFloat(this.data.css.left.replace("px", ""))
-        };
-        this.size = 
-        {
-            width: parseFloat(this.data.css.width.replace("px", "")),
-            height: parseFloat(this.data.css.height.replace("px", ""))
-        };
+            this.position = 
+            {
+                top: parseFloat(this.data.data.css.top.replace("px", "")),
+                left: parseFloat(this.data.data.css.left.replace("px", ""))
+            };
+            this.size = 
+            {
+                width: parseFloat(this.data.data.css.width.replace("px", "")),
+                height: parseFloat(this.data.data.css.height.replace("px", ""))
+            };
+        }
     },
     
     type: function()
     {
-        if (this.data.ubItemType) 
-            return this.data.ubItemType;
-        if (this.domNode.get(0).tagName == "object" && (this.domNode.attr("type") == "text/html" || this.domNode.attr("type") == "application/x-shockwave-flash")) 
-        {
-            return "widget";
-        }
-        else 
-            if (this.domNode.get(0).tagName == "polyline" || this.domNode.get(0).tagName == "polygon") 
-            {
-                return "drawing";
-            }
-            else 
-            {
-                return "objet";
-            }
+        if (this.data.media_type) 
+            return this.data.media_type;
+		return "object";
     },
     
     select: function()
@@ -139,26 +139,9 @@ WebDoc.Item = $.klass(MTools.Record,
     {
         this.position.left = newPosition.left;
         this.position.top = newPosition.top;
-        this.data.css.left = this.position.left + "px";
-        this.data.css.top = this.position.top + "px";
-        this.domNode.animate(this.data.css, 'fast');
-        if (WebDoc.application.boardController.currentPage && WebDoc.application.boardController.currentPage.pageRecord) 
-        {
-            WebDoc.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.getData());
-        }
-    },
-    
-    endOfMove: function()
-    {
-        if (WebDoc.application.boardController.collaborationController) 
-        {
-            console.log("Item delegate to collaboration controller");
-            WebDoc.application.boardController.collaborationController.moveItem(this);
-        }
-        if (WebDoc.application.boardController.currentPage && WebDoc.application.boardController.currentPage.pageRecord) 
-        {
-            WebDoc.application.boardController.currentPage.pageRecord.createOrUpdateItem(this.getData());
-        }
+        this.data.data.css.left = this.position.left + "px";
+        this.data.data.css.top = this.position.top + "px";
+        this.domNode.animate(this.data.data.css, 'fast');
     },
     
     shift: function(x, y)
@@ -167,9 +150,9 @@ WebDoc.Item = $.klass(MTools.Record,
         {
             this.position.left = this.position.left + x;
             this.position.top = this.position.top + y;
-            this.data.css.left = this.position.left + "px";
-            this.data.css.top = this.position.top + "px";
-            this.domNode.css(this.data.css);
+            this.data.data.css.left = this.position.left + "px";
+            this.data.data.css.top = this.position.top + "px";
+            this.domNode.css(this.data.data.css);
         }
     },
     

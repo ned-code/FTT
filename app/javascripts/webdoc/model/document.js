@@ -5,12 +5,7 @@ WebDoc.Document = $.klass(MTools.Record,
 {
     initialize: function($super, json)
     {
-		$super(json);
-		if (!json)
-		{
-            this.data.created_at = new Date().toISO8601String();
-            this.data.uuid = new MTools.UUID().toString();
-        }        
+		$super(json);   
     },
     
 	className: function()

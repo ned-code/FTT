@@ -37,16 +37,13 @@ WebDoc.SvgRenderer = $.klass(
     createPolyline: function(item)
     {
         var result = document.createElementNS(this.svgNS, "polyline");
-		item.data.tag = "polyline";
+		item.data.data.tag = "polyline";
 		
 		result.setAttribute("id", item.uuid());
-        result.setAttribute("style", "z-index:2000");
-		item.data.css = { zIndex: 2000};
+        $(result).css(item.data.data.css);
         result.setAttribute("fill", "none");
-		item.data.stroke = "red";
-        result.setAttribute("stroke", "red");
-		item.data.strokeWidth = 5;
-        result.setAttribute("stroke-width", 5);
+        result.setAttribute("stroke", item.data.data.stroke);
+        result.setAttribute("stroke-width", item.data.data.strokeWidth);
         item.domNode = $(result);
         return result;
     },

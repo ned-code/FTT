@@ -30,12 +30,8 @@ WebDoc.Page = $.klass(MTools.Record,
         {
             polylines: []
         };
+		this.objects = [];
         $super(json);
-        if (!json) 
-        {
-            this.data.created_at = new Date().toISO8601String();
-            this.data.uuid = new MTools.UUID().toString();
-        }
     },
     
     className: function()
@@ -51,15 +47,17 @@ WebDoc.Page = $.klass(MTools.Record,
     refresh: function($super, json)
     {
         console.log("refresh page");
-        $super(json);
-        console.log("update dom");
+		console.log(json);
+        $super(json);        
         this.domNode.css(this.data.data.css);
         var that = this;
         if (this.data.items && $.isArray(this.data.items)) 
         {
             $.each(this.data.items, function()
             {
-                that.createOrUpdateItem(this.data());
+                that.createOrUpdateItem({
+					item: this
+				});
             });
         }
     },
@@ -117,13 +115,15 @@ WebDoc.Page = $.klass(MTools.Record,
     
     createOrUpdateItem: function(itemData)
     {
-        if (itemData.tag == 'polyline' || itemData.tag == 'polygon') 
+		console.log(itemData.item.data.tag);
+        if (itemData.item.data.tag == 'polyline' || itemData.item.data.tag == 'polygon') 
         {
-            var newLine = WebDoc.application.boardController.drawingController.mRenderer.createPolyline(itemData.uuid);
+			console.log("add polyline");
+			var newItem = new WebDoc.Item(itemData)
+            var newLine = WebDoc.application.boardController.drawingController.mRenderer.createPolyline(newItem);
             $(newLine).css("opacity", 0);
-            var newObject = new WebDoc.Item(newLine);
-            newObject.setPoints(itemData.points);
-            this.drawing.polylines.push(newObject);
+
+            this.drawing.polylines.push(newItem);
             WebDoc.application.boardController.drawingController.domNode.appendChild(newLine);
             $(newLine).animate(
             {

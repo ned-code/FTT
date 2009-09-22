@@ -226,7 +226,7 @@ WebDoc.BoardController = $.klass(
         if (newPosition) 
         {
             item.moveTo(newPosition);
-            item.endOfMove();
+            item.save();
         }
         WebDoc.application.undoManager.registerUndo(function()
         {
@@ -263,7 +263,7 @@ WebDoc.BoardController = $.klass(
     {
         if (this.selection[0] && this.hasMoved) 
         {
-            this.selection[0].endOfMove();
+            this.selection[0].save();
         }
         this.hasMoved = false;
     },
