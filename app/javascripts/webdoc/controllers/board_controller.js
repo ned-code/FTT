@@ -89,7 +89,6 @@ WebDoc.BoardController = $.klass(
         
         var calcX = (x + $("#board-container").get(0).scrollLeft) * (1 / this.currentZoom);
         var calcY = (y + ($("#board-container").get(0).scrollTop)) * (1 / this.currentZoom);
-		console.log("mapped point " + calcX + ":" + calcY);
         return {
             x: calcX,
             y: calcY
