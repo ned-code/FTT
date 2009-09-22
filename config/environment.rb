@@ -36,15 +36,16 @@ Rails::Initializer.run do |config|
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
-  # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'haml'
   config.gem 'sprockets'
   config.gem 'authlogic'
   config.gem "semanticart-is_paranoid", :lib => 'is_paranoid', :source => "http://gems.github.com"
   config.gem 'uuid'
+  
+  config.gem "aws-s3", :lib => "aws/s3"
   config.gem "thoughtbot-paperclip", :lib => "paperclip", :source => "http://gems.github.com"
 
-  config.gem 'right_aws'
+  config.gem 'right_aws' # no more used
   config.gem 'rubyzip', :lib => 'zip/zip'
   config.gem 'mime-types', :lib => 'mime/types'
   config.gem 'xml-object'
