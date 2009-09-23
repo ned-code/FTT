@@ -3,28 +3,33 @@
  **/
 //= require <WebDoc/model/page>
 //= require <WebDoc/model/item>
-//= require <WebDoc/controllers/drawing_controller> 
+//= require <WebDoc/gui/page_view>
+//= require <WebDoc/gui/item_view>
 //= require <WebDoc/controllers/collaboration_controller>  
 
 WebDoc.BoardController = $.klass(
 {
-    drawingController: null,
     initialize: function(editable)
     {
         this.currentZoom = 1;
         this.selection = [];
-		this.drawingController = new WebDoc.DrawingController();
     },
     
     setCurrentPage: function(page)
-    {    
+    {
+        // remove previous page
+        $("#board-container").empty();
+        // add the new one
+        this.pageView = new WebDoc.PageView(page);        
+        $("#board-container").append(this.pageView.domNode);
+		
         // re-init internal working attributes
         $("#board-container").get(0).scrollTop = 0;
-		$("#board-container").get(0).scrollLeft = 0;
-        this.offset = $("#board-container").offset();
+        $("#board-container").get(0).scrollLeft = 0;
         this.currentZoom = 1;
         this.selection = [];
         this.currentPage = page;
+
         this.initialHeight = $("#board").height();
         this.initialWidth = $("#board").width();
         
@@ -39,13 +44,13 @@ WebDoc.BoardController = $.klass(
             var relPath = $(this).attr("data");
             $(this).attr("data", relPath);
         });
-        this.updateDrawing();
+
         //update zoom to fit browser page
+		
         heightFactor = ($("#board-container").height() - this.initialHeight) / this.initialHeight;
-        console.log(heightFactor);
         widthFactor = ($("#board-container").width() - this.initialWidth) / this.initialWidth;
-        console.log(widthFactor);
-        if (heightFactor < widthFactor) 
+        
+		if (heightFactor < widthFactor) 
         {
             this.zoom(1 + heightFactor);
         }
@@ -54,17 +59,8 @@ WebDoc.BoardController = $.klass(
             this.zoom(1 + widthFactor);
         }
     },
+   
     
-    updateDrawing: function()
-    {
-        if (this.currentPage) 
-        {
-            // replace drawing div with content of drawing controller. Allow to have different kind of renderer (for ie)
-            this.drawingController.setDrawingModel(this.currentPage.drawingModel());
-            $("#page_drawing").append(this.drawingController.domNode);
-        }
-    },
-	
     setCurrentTool: function(tool)
     {
       console.log(tool)
@@ -78,18 +74,17 @@ WebDoc.BoardController = $.klass(
         var x, y;
         if (position.x) 
         {
-            x = position.x - this.offset.left;
-            y = position.y - this.offset.top;
+            x = position.x - $("#board-container").offset().left;
+            y = position.y - $("#board-container").offset().top;
         }
         else 
         {
-            x = position.clientX - this.offset.left;
-            y = position.clientY - this.offset.top;
+			x = position.pageX - $("#board-container").offset().left;
+            y = position.pageY - $("#board-container").offset().top;
         }
         
         var calcX = (x + $("#board-container").get(0).scrollLeft) * (1 / this.currentZoom);
         var calcY = (y + ($("#board-container").get(0).scrollTop)) * (1 / this.currentZoom);
-		console.log("mapped point " + calcX + ":" + calcY);
         return {
             x: calcX,
             y: calcY
@@ -143,8 +138,9 @@ WebDoc.BoardController = $.klass(
     {
         var previousZoom = this.currentZoom;
         this.currentZoom = this.currentZoom * factor;
+		console.log("set zoom factor: " + this.currentZoom);
         var boardElement = $("#board");
-
+        
         
         if (jQuery.browser.mozilla) 
         {
@@ -189,14 +185,14 @@ WebDoc.BoardController = $.klass(
     {
         var that = e.data;
         e.preventDefault();
-		that.currentTool.mouseOut(e);
+        that.currentTool.mouseOut(e);
     },
     
     mouseUp: function(e)
     {
         var that = e.data;
         e.preventDefault();
-		that.currentTool.mouseUp(e);
-
+        that.currentTool.mouseUp(e);
+        
     }
 });
