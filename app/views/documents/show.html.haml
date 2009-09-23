@@ -1,5 +1,5 @@
 - title @document.title
-#tool-bar{:style => "position:fixed; top: 0px; left: 0px; height:40px; width: 100%; z-index: 999999"}
+#toolbar
   %button#close-page Close  
   %button#add-page Add
   %button#remove-page Remove
@@ -12,10 +12,48 @@
   %button#zoom-out ZoomOut
   %button#tool-hand ToolHand
   %button#tool-arrow ToolArrow
-  %button#tool-text ToolText
-  %button#tool-pen ToolPen  
+  %button#tool-pen ToolPen
+  .wrap_tool_text
+    %button#tool-text ToolText
+    #text_palette.palette_wrap
+      %ul.palette.disabled{ :style => "display:block" }
+        %li
+          %a.bold{ :href => "" }
+            %span= "Bold"
+        %li
+          %a.italic{ :href => "" }
+            %span= "Italic"
+        %li
+          %a.underline{ :href => "" }
+            %span= "Underlined"
+        %li
+          %a.justifyLeft{ :href => "" }
+            %span= "Left"
+        %li
+          %a.justifyCenter{ :href => "" }
+            %span= "Center"
+        %li
+          %a.justifyRight{ :href => "" }
+            %span= "Right"
+        %li
+          %a.justifyFull{ :href => "" }
+            %span= "Justify"
+        %li
+          %a.insertUnorderedList{ :href => "" }
+            %span= "Bullet List"
+        %li
+          %a.insertOrderedList{ :href => "" }
+            %span= "Numbered List"
+        %li
+          %a.indent{ :href => "" }
+            %span= "Indent"
+        %li
+          %a.outdent{ :href => "" }
+            %span= "Outdent"
+      .palette_overlay
     
-#board-container{:style => "position:absolute; top:40px; left: 60px; width:800px; height: 500px; overflow: auto"}
+  
+#board-container
 :javascript
   $(function()
   {

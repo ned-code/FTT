@@ -1,0 +1,196 @@
+/* ============================ */
+/* = Resetting browsers' mess = */
+/* ============================ */
+/* source:http://www.sjhwebdesigns.com/resources/csstutorial/bordermarginandpadding */
+
+* { margin:0; padding:0;}
+h1, h2, h3, h4, h5, h6 {padding:5px 0;}
+/*p { margin:1em 0; }*/
+li { padding:10px 0;}
+ul { margin:0 40px;}
+ol { margin:0 50px;}
+p {padding-bottom:28px;}
+
+/* =========== */
+/* = General = */
+/* =========== */
+
+body {
+  font-family:Helvetica, Arial, sans-serif;
+  font-size:13px;
+}
+
+a { color: #000; }
+a:visited { color: #666; }
+a:hover { color: #fff; background-color:#000; }
+
+#wrap {
+  padding:10px;
+  /*width:900px;*/
+  /*margin:0 auto;*/
+  position:relative;
+}
+
+/* =========== */
+/* = Palette = */
+/* =========== */
+.palette {
+  overflow:hidden;
+  padding:0;
+  margin:0 0 40px 0;
+  font-size:12px;
+  width:394px;
+  background:#ddd;
+  padding:5px;
+}
+.palette_overlay {
+  width:500px;
+  height:50px;
+  position:absolute;
+  top:0;
+  left:0;
+}
+.palette a {
+  color:#555;
+  text-decoration:none;
+}
+.palette.disabled a {
+  color:#bbb;
+}
+.palette li {
+  float:left;
+  list-style:none outside;
+  margin:0;
+  margin-right:20px;
+  padding:2px;
+}
+/* ============= */
+/* = Text Tool = */
+/* ============= */
+.palette_wrap {
+ position:relative; 
+}
+.toupee_iframe {
+  clear:left;
+  border:solid 2px #aaa;
+  width:400px;
+  height:200px;
+  /*  overflow:hidden;*/
+}
+.text_box {
+  clear:left;
+  border:solid 2px #eee;
+  width:400px;
+  height:200px;
+  cursor:default;
+  overflow:hidden;
+}
+.text_box.selected {
+  border-color:#aaa;
+}
+
+/* ========== */
+/* = WebDoc = */
+/* ========== */
+
+#board-container {
+  position:relative;
+  width:800px;
+  height:500px;
+  overflow:auto;
+}
+
+.navigation li {
+  float: left;
+  list-style-type: none;
+}
+
+.document_list {
+  float: left;
+  width:100%;
+}
+
+.document_list li {
+  float: left;
+  list-style-type: none;
+  margin: 10px;
+  text-align: right;
+}
+
+.page_list li {
+  float: left;
+  list-style-type: none;
+  margin: 10px;
+}
+
+#ub-bar {
+  width: 100%;
+  height: 15px;
+}
+
+#ub-login-logout {
+  float: right;
+}
+
+#home {
+  float: left;
+}
+
+#flash {
+  text-align: center ;
+}
+
+.ub-document-title {
+  text-align: center ;
+  font-weight: bold; 
+  font-size: 14px;
+  padding: 5px;
+}
+
+
+/* ================= */
+/* = Rails default = */
+/* ================= */
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+  margin: 4px;
+}

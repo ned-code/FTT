@@ -3,35 +3,26 @@
   %head
     %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
     %title= "MyUniboard (#{I18n.locale}) - #{yield(:title)}"
-    = stylesheet_link_tag 'default'
+    = stylesheet_link_tag 'style'
     = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
     -#= javascript_include_tag 'date'
-    -#= stylesheet_link_tag 'boxy'
     = sprockets_include_tag
-    -#= stylesheet_link_tag 'wb-default-theme.css'
-    -#= javascript_include_tag 'jquery-1.3.2'
-    -#= javascript_include_tag 'jquery.boxy'
-    -#= javascript_include_tag 'jquery.json-1.3.min'
-    -#= javascript_include_tag 'jquery.inherit-1.0.9'
-    -#= javascript_include_tag 'jquery-ui-1.7.2.custom.min'
-    -#= javascript_include_tag '../player/swfobject.js'
-    -#= javascript_include_tag 'sylvester.src.js'
-    -#= javascript_include_tag 'com/mnemis/core/Init'
 
   %body
-    #ub-bar
-      #ub-login-logout
-        %div
-          - if current_user
-            = current_user.name + ' - ' + current_user.email
-            |
-            = link_to "edit", edit_user_path(current_user)
-            |
-            = link_to "logout", logout_path
-          - else
-            = link_to "login", login_path
-            |
-            = link_to "signup", signup_path
-      = render :partial => "layouts/flash", :object => flash
-
-    = yield
+    #wrap
+      #ub-bar
+        #ub-login-logout
+          %div
+            - if current_user
+              = current_user.name + ' - ' + current_user.email
+              |
+              = link_to "edit", edit_user_path(current_user)
+              |
+              = link_to "logout", logout_path
+            - else
+              = link_to "login", login_path
+              |
+              = link_to "signup", signup_path
+        = render :partial => "layouts/flash", :object => flash
+        
+      = yield
