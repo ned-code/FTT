@@ -2,23 +2,34 @@
 //= require <mtools/record>
 //= require <webdoc/model/item>
 
-WebDoc.ItemView = $.klass({
+WebDoc.ItemView = $.klass(
+{
   item: null,
-  initialize: function(item) {
+  pageView: null,
+  initialize: function(item, pageView) {
+  
+    if (pageView) {
+      this.pageView = pageView;
+    }
+    else {
+      this.pageView = WebDoc.application.boardController.pageView;
+    }
     this.item = item;
     console.log("create item view with item");
     console.log(item);
     if (this.item.data.media_type == "drawing") {
       var newLine = WebDoc.application.svgRenderer.createPolyline(item);
       this.domNode = $(newLine);
+      this.pageView.drawingDomNode.append(newLine);
     }
     else {
       this.domNode = $("<" + item.data.data.tag + "/>");
-      this.domNode.css({
+      this.domNode.css(
+      {
         position: "absolute"
       })
       for (var key in item.data.data) {
-        if (key == 'css')  {
+        if (key == 'css') {
           this.domNode.css(item.data.data.css);
         }
         else {
@@ -37,22 +48,21 @@ WebDoc.ItemView = $.klass({
           }
         }
       }
+      this.pageView.itemDomNode.append(this.domNode.get(0));
     }
-    this.domNode.css("opacity", 0);
     item.addListener(this);
   },
-
+  
   objectChanged: function(item) {
     this.domNode.animate(item.data.data.css, 'fast');
-    if (item.data.media_type == "drawing") 
-    {
+    if (item.data.media_type == "drawing") {
       WebDoc.application.svgRenderer.updatePolyline(this.domNode.get(0), 
       {
         points: item.data.data.points
       });
     }
   },
-
+  
   select: function() {
     this.domNode.addClass("wb-selected-object");
     if (!this.domNode.attr("ub:zIndex")) {
@@ -60,7 +70,8 @@ WebDoc.ItemView = $.klass({
     }
     console.log("type " + this.type());
     if (this.type() == "widget") {
-      this.domNode.css({
+      this.domNode.css(
+      {
         zIndex: 2000000
       });
       if (this.domNode.attr("type") == "application/x-shockwave-flash") {
@@ -70,11 +81,11 @@ WebDoc.ItemView = $.klass({
       }
     }
   },
-
+  
   unSelect: function() {
     this.domNode.removeClass("wb-selected-object");
     console.log("reset zindex");
     this.domNode.css("zIndex", this.domNode.attr("ub:zIndex"));
   }
-
+  
 });

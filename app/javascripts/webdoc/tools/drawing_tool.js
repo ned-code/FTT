@@ -43,10 +43,6 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     this.currentDrawObject.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     this.currentDrawObject.data.data.points = mappedPoint.x + "," + mappedPoint.y;
     var newItemView = new WebDoc.ItemView(this.currentDrawObject);
-    var newLine = newItemView.domNode;
-
-    WebDoc.application.boardController.pageView.drawingDomNode.appendChild(newLine.get(0));
-    newLine.animate({ opacity: 1 }, 'fast');
 
     var drawObjectToUndo = this.currentDrawObject;
     var that = this;
@@ -65,7 +61,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   },
 
   _removePolyLine: function(drawObject) {
-    WebDoc.application.boardController.pageView.drawingDomNode.removeChild(drawObject.domNode.get(0));
+    drawObject.domNode.remove();
     that = this;
     WebDoc.application.undoManager.registerUndo(function() {
       that._addPolyLine(drawObject);
@@ -74,7 +70,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   },
 
   _addPolyLine: function(drawObject) {
-    WebDoc.application.boardController.pageView.drawingDomNode.appendChild(drawObject.domNode.get(0));
+    WebDoc.application.boardController.pageView.drawingDomNode.append(drawObject.domNode.get(0));
     drawObject.isNew = true;
     that = this;
     WebDoc.application.undoManager.registerUndo(function() {
