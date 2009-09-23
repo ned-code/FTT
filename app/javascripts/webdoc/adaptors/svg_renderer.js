@@ -1,7 +1,6 @@
 /**
  * Uniboard board controller
  **/
-
 WebDoc.SvgRenderer = $.klass(
 {
     initialize: function(initialDrawing)
@@ -35,17 +34,17 @@ WebDoc.SvgRenderer = $.klass(
         }
     },
     
-    createPolyline: function(id)
+    createPolyline: function(item)
     {
         var result = document.createElementNS(this.svgNS, "polyline");
-        result.setAttribute("style", "z-index:2000");
+		item.data.data.tag = "polyline";
+		
+		result.setAttribute("id", item.uuid());
+        $(result).css(item.data.data.css);
         result.setAttribute("fill", "none");
-        result.setAttribute("stroke", "red");
-        result.setAttribute("stroke-width", 5);
-        if (id) 
-        {
-            result.setAttribute("id", id);
-        }
+        result.setAttribute("stroke", item.data.data.stroke);
+        result.setAttribute("stroke-width", item.data.data.strokeWidth);
+        item.domNode = $(result);
         return result;
     },
     

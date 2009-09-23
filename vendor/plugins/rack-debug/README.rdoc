@@ -1,0 +1,41 @@
+Rails Plugin
+
+ # install
+ $ script/plugin install git://github.com/ddollar/rack-debug.git
+
+ # config/environments/development.rb
+ config.middleware.use "Rack::Debug"
+
+Gem
+
+ # install
+ $ gem source add http://gems.github.com
+ $ gem install ddollar-rack-debug
+
+ # add a use line to your builder
+ require 'rack/debug'
+ Rack::Builder.new do
+   use Rack::Debug
+   run MyApp.new
+ end
+
+Add breakpoints to your code
+
+ @user = User.find(params[:id])
+ debugger
+ render :show
+
+Debugging:
+
+ # run the rake task,
+ $ rake debug
+ Connected.
+
+ # refresh a page in your browser, your app will break at debugger statements
+ (rdb:1) p @user
+ #<User id: 1, name: "David Dollar", email: "ddollar@gmail.com", created_at: "...", updated_at: "...">
+
+Thanks to:
+
+  Rack::Bug for a good example of Rack middleware in Rails
+  Ben Scofield for making me want to build some Rack middleware

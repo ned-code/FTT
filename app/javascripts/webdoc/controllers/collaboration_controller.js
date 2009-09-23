@@ -134,7 +134,7 @@ WebDoc.CollaborationController = $.klass(
             else 
                 if (message.action == 'remove') 
                 {
-                    WebDoc.application.boardController.collaborationController.page.removeItem(message.ubData);
+                    WebDoc.application.boardController.collaborationController.page._removeItem(message.ubData);
                 }
                 else 
                     if (message.action == 'clear') 

@@ -2,7 +2,7 @@
 %html( xmlns:ub="#{XML_UNIBOARD_DOCUMENT_NAMESPACE}" xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg" )
   %head
     %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
-    %title= "MyUniboard (#{I18n.locale})"
+    %title= "MyUniboard (#{I18n.locale}) - #{yield(:title)}"
     = stylesheet_link_tag 'default'
     = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
     -#= javascript_include_tag 'date'
@@ -34,4 +34,4 @@
             = link_to "signup", signup_path
       = render :partial => "layouts/flash", :object => flash
 
-  = yield
+    = yield

@@ -8,6 +8,7 @@ MTools.UndoManager = $.klass(
         this.undoStack = [];
         this.redoStack = [];
         this.isUndoing= false;
+		this.isRedoing = false;
     },
     registerUndo: function(undoCommand)
     {
@@ -17,12 +18,17 @@ MTools.UndoManager = $.klass(
         }
         else
         {
+			if (!this.isRedoing) 
+			{
+				this.redoStack = [];
+			}
             this.undoStack.push(undoCommand);
         }
     },
 
     clear : function(){
-    //TODO empty undo and redo stack
+		this.undoStack = [];
+		this.redoStack = [];
     },
 
     group : function(name)
@@ -59,7 +65,9 @@ MTools.UndoManager = $.klass(
     {
         if (this.redoStack.length)
         {
+			this.isRedoing = true;
             this.redoStack.pop().call(this);
+			this.isRedoing = false;
         }
     }
 });
