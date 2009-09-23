@@ -14,6 +14,7 @@ WebDoc.ItemView = $.klass(
     else {
       this.pageView = WebDoc.application.boardController.pageView;
     }
+	this.pageView.itemViews.push(this);
     this.item = item;
     
     if (this.item.data.media_type == "drawing") {

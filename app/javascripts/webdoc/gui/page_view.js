@@ -26,6 +26,7 @@ WebDoc.PageView = $.klass(
     
     
     var that = this;
+	this.itemViews = [];
     if (page.items && $.isArray(page.items)) {
       $.each(page.items, function() {
         var itemView = new WebDoc.ItemView(this, that);
@@ -40,10 +41,10 @@ WebDoc.PageView = $.klass(
   
   findObjectAtPoint: function(point) {
     var i = 0;
-    for (; i < this.page.items.length; i++) {
-      var anObject = this.page.items[i];
-      if (anObject.coverPoint(point) && !anObject.isBackground) {
-        return anObject;
+    for (; i < this.itemViews.length; i++) {
+      var anItemView = this.itemViews[i];
+      if (anItemView.coverPoint(point) && !anItemView.isBackground) {
+        return anItemView;
       }
     }
     return null;

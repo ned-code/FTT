@@ -1,2 +1,6 @@
 - localize views.
 - use js FW to use rails localization on client side (http://github.com/fnando/i18n-js/tree/master)
+- find how to send hash in hash to rails in record.js
+- add sylvester.js 
+- finish select method in arrow tool
+- implement move and resize
