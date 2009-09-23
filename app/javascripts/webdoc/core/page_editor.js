@@ -27,29 +27,28 @@ WebDoc.PageEditor = $.klass(
     applicationUuid: undefined,
     initialize: function()
     {
-        this.applicationUuid = new MTools.UUID().id;
-        WebDoc.application.pageEditor = this;
-        WebDoc.application.boardController = new WebDoc.BoardController(true);
-		WebDoc.application.drawingTool = new WebDoc.DrawingTool();
-		WebDoc.application.arrowTool = new WebDoc.ArrowTool();
-		WebDoc.application.handTool = new WebDoc.HandTool();
-		WebDoc.application.boardController.setCurrentTool(WebDoc.application.drawingTool);
-        WebDoc.application.undoManager = new MTools.UndoManager();
+      this.applicationUuid = new MTools.UUID().id;
+      WebDoc.application.pageEditor = this;
+      WebDoc.application.boardController = new WebDoc.BoardController(true);
+      
+      WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool-pen");
+      WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool-arrow");
+      WebDoc.application.handTool = new WebDoc.HandTool("#tool-hand");
+      WebDoc.application.textTool = new WebDoc.TextTool("#tool-text");
+      
+      WebDoc.application.boardController.setCurrentTool(WebDoc.application.drawingTool);
+      WebDoc.application.undoManager = new MTools.UndoManager();
         
-        $("#close-page").bind("click", this.close);
-        $("#add-page").bind("click", this.add);
-		$("#remove-page").bind("click", this.remove);
-        $("#previous-page").bind("click", this.previous);
-		$("#next-page").bind("click", this.next);		
-		$("#change-bkg").bind("click", this.changeBkg);
-        $("#zoom-in").bind("click", this.zoomIn);
-        $("#zoom-out").bind("click", this.zoomOut);
-        $("#undo").bind("click", this.undo);
-        $("#redo").bind("click", this.redo);
-		$("#tool-hand").bind("click", this.handTool);
-		$("#tool-arrow").bind("click", this.arrowTool);
-		$("#tool-pen").bind("click", this.penTool);
-		
+      $("#close-page").bind("click", this.close);
+      $("#add-page").bind("click", this.add);
+      $("#remove-page").bind("click", this.remove);
+      $("#previous-page").bind("click", this.previous);
+      $("#next-page").bind("click", this.next);		
+      $("#change-bkg").bind("click", this.changeBkg);
+      $("#zoom-in").bind("click", this.zoomIn);
+      $("#zoom-out").bind("click", this.zoomOut);
+      $("#undo").bind("click", this.undo);
+      $("#redo").bind("click", this.redo);
     },
     
     load: function(documentId)
@@ -162,23 +161,6 @@ WebDoc.PageEditor = $.klass(
     close: function()
     {
         window.close();
-    },
-	
-	penTool: function()
-	{
-		WebDoc.application.boardController.setCurrentTool(WebDoc.application.drawingTool);
-	},
-	
-	arrowTool: function()
-	{
-		WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-
-	},
-	
-	handTool: function()
-	{
-		WebDoc.application.boardController.setCurrentTool(WebDoc.application.handTool);
-
-	}
+    }
 });
 

@@ -6,7 +6,14 @@
 
 WebDoc.TextTool = $.klass(WebDoc.Tool, 
 {
-    initialize: function() {
+    initialize: function($super, toolId) {
+      $super(toolId);
+    },
+    selectTool: function() {
+      //create empty Text Box
+      var textBox = $('<div class="text_box">Some Text</div>');
+      $('#items').append(textBox);
+      textBox.toupee({});
     }
 });
 
@@ -241,7 +248,6 @@ var $$ = function(param) {
   };
 })(jQuery);
 
-function ddd() { console.log.apply(console, arguments);}
-
 //= require "text_tool/html"
 //= require "text_tool/selection"
+//= require "text_tool/browser"

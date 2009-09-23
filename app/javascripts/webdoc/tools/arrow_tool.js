@@ -9,10 +9,10 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
     moving: false,
     hasMoved: false,
     originalMovingPos: null,
-    initialize: function()
-    {
-    },
     
+    initialize: function($super, toolId) {
+      $super(toolId);
+    },
     select: function(e)
     {
         var objectToSelect = WebDoc.application.boardController.currentPage.findObjectAtPoint(WebDoc.application.boardController.mapToPageCoordinate(e));

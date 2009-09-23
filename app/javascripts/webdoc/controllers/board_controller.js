@@ -67,10 +67,10 @@ WebDoc.BoardController = $.klass(
 	
     setCurrentTool: function(tool)
     {
-		console.log(tool);
-        this.currentTool = tool;
-		this.currentTool.selectTool();
-        this.unSelectObjects(this.selection);
+      console.log(tool)
+      this.currentTool = tool;
+      this.currentTool.selectTool();
+      this.unSelectObjects(this.selection);
     },
     
     mapToPageCoordinate: function(position)
