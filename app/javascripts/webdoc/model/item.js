@@ -8,31 +8,6 @@ WebDoc.Item = $.klass(MTools.Record,
         $super(json);
         if (json) 
         {
-            this.domNode = $("<" + this.data.data.tag + "/>");
-            this.domNode.css(
-            {
-                position: "absolute"
-            })
-            for (var key in this.data.data) 
-            {
-                if (key == 'css') 
-                    this.domNode.css(this.data.data.css);
-                else 
-                    if (key == 'uuid') 
-                        // just ignore uuid
-                        ;
-                    else 
-                        if (key == 'ubItemType') 
-                            this.itemType = this.data.data[key];
-                        else 
-                            if (key == 'innerHtml') 
-                                this.domNode.html(this.data.data[key]);
-                            else 
-                                if (key != 'tag') 
-                                {
-                                    this.domNode.attr(key, this.data.data[key]);
-                                }
-            }
             // internal size and position are top, left width and height as float. Because in the css those values are string with px unit
             // and we need float values to marix transform.
             this.recomputeInternalSizeAndPosition();
@@ -56,22 +31,13 @@ WebDoc.Item = $.klass(MTools.Record,
     refresh: function($super, json)
     {
         $super(json);
-        console.log("update item");
-		console.log(json);
         this.recomputeInternalSizeAndPosition();
-		if (this.domNode) 
-		{
-			this.domNode.animate(this.data.data.css);
-		}
     },
     
     setPoints: function(points)
     {
         this.data.data.points = points;
-        WebDoc.application.boardController.drawingController.mRenderer.updatePolyline(this.domNode.get(0), 
-        {
-            points: points
-        });
+		this.fireObjectChanged();
     },
     
     recomputeInternalSizeAndPosition: function()
@@ -98,50 +64,13 @@ WebDoc.Item = $.klass(MTools.Record,
 		return "object";
     },
     
-    select: function()
-    {
-        this.domNode.addClass("wb-selected-object");
-        if (!this.domNode.attr("ub:zIndex")) 
-        {
-            this.domNode.attr("ub:zIndex", this.domNode.css("zIndex"));
-        }
-        console.log("type " + this.type());
-        if (this.type() == "widget") 
-        {
-            this.domNode.css(
-            {
-                zIndex: 2000000
-            });
-            if (this.domNode.attr("type") == "application/x-shockwave-flash") 
-            {
-                console.log(this.domNode.id);
-                var player = document.getElementById(this.domNode.id);
-                player.sendEvent('PLAY');
-            }
-        }
-        // TODO should not use constant
-        this.shift(-15, -15);
-        this.size.height += 15;
-        this.size.width += 15;
-    },
-    
-    unSelect: function()
-    {
-        this.domNode.removeClass("wb-selected-object");
-        console.log("reset zindex");
-        this.domNode.css("zIndex", this.domNode.attr("ub:zIndex"));
-        this.shift(15, 15);
-        this.size.height -= 15;
-        this.size.width -= 15;
-    },
-    
     moveTo: function(newPosition)
     {
         this.position.left = newPosition.left;
         this.position.top = newPosition.top;
         this.data.data.css.left = this.position.left + "px";
         this.data.data.css.top = this.position.top + "px";
-        this.domNode.animate(this.data.data.css, 'fast');
+        this.fireObjectChanged();
     },
     
     shift: function(x, y)
@@ -152,7 +81,7 @@ WebDoc.Item = $.klass(MTools.Record,
             this.position.top = this.position.top + y;
             this.data.data.css.left = this.position.left + "px";
             this.data.data.css.top = this.position.top + "px";
-            this.domNode.css(this.data.data.css);
+            this.fireObjectChanged();
         }
     },
     

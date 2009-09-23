@@ -28,26 +28,26 @@ WebDoc.PageEditor = $.klass(
         this.applicationUuid = new MTools.UUID().id;
         WebDoc.application.pageEditor = this;
         WebDoc.application.boardController = new WebDoc.BoardController(true);
-		WebDoc.application.drawingTool = new WebDoc.DrawingTool();
-		WebDoc.application.arrowTool = new WebDoc.ArrowTool();
-		WebDoc.application.handTool = new WebDoc.HandTool();
-		WebDoc.application.boardController.setCurrentTool(WebDoc.application.drawingTool);
+        WebDoc.application.drawingTool = new WebDoc.DrawingTool();
+        WebDoc.application.arrowTool = new WebDoc.ArrowTool();
+        WebDoc.application.handTool = new WebDoc.HandTool();
+        WebDoc.application.boardController.setCurrentTool(WebDoc.application.drawingTool);
         WebDoc.application.undoManager = new MTools.UndoManager();
         
         $("#close-page").bind("click", this.close);
         $("#add-page").bind("click", this.add);
-		$("#remove-page").bind("click", this.remove);
+        $("#remove-page").bind("click", this.remove);
         $("#previous-page").bind("click", this.previous);
-		$("#next-page").bind("click", this.next);		
-		$("#change-bkg").bind("click", this.changeBkg);
+        $("#next-page").bind("click", this.next);
+        $("#change-bkg").bind("click", this.changeBkg);
         $("#zoom-in").bind("click", this.zoomIn);
         $("#zoom-out").bind("click", this.zoomOut);
         $("#undo").bind("click", this.undo);
         $("#redo").bind("click", this.redo);
-		$("#tool-hand").bind("click", this.handTool);
-		$("#tool-arrow").bind("click", this.arrowTool);
-		$("#tool-pen").bind("click", this.penTool);
-		$("#default-image").bind("click", this.insertImage);
+        $("#tool-hand").bind("click", this.handTool);
+        $("#tool-arrow").bind("click", this.arrowTool);
+        $("#tool-pen").bind("click", this.penTool);
+        $("#default-image").bind("click", this.insertImage);
     },
     
     load: function(documentId)
@@ -67,32 +67,29 @@ WebDoc.PageEditor = $.klass(
         MTools.ServerManager.getObjects("/documents/" + documentId + "/pages/" + pageId, WebDoc.Page, function(data)
         {
             var editor = WebDoc.application.pageEditor;
-			editor.loadPage(data[0]);
+            editor.loadPage(data[0]);
         });
     },
-	
-	loadPage: function(page)
-	{
-			WebDoc.application.undoManager.clear();
-            var editor = WebDoc.application.pageEditor;
-			window.location.hash = "#" + (page.data.position + 1);
-            editor.currentPage = page;
-            editor.previousPageId = editor.currentPage.previousPageId();
-            editor.nextPageId = editor.currentPage.nextPageId();
-        	// remove previous page
-        	$("#board-container").empty();
-			// add the new one
-            $("#board-container").append(editor.currentPage.domNode);
-            WebDoc.application.boardController.setCurrentPage(editor.currentPage);
-	},
+    
+    loadPage: function(page)
+    {
+        WebDoc.application.undoManager.clear();
+        var editor = WebDoc.application.pageEditor;
+        window.location.hash = "#" + (page.data.position + 1);
+        editor.currentPage = page;
+        editor.previousPageId = editor.currentPage.previousPageId();
+        editor.nextPageId = editor.currentPage.nextPageId();
+
+        WebDoc.application.boardController.setCurrentPage(editor.currentPage);
+    },
     
     previous: function()
     {
         var editor = WebDoc.application.pageEditor;
-		if (editor.currentPage.data.position > 0) 
-		{
-			editor.loadPageId(editor.currentDocument.uuid(), editor.currentPage.data.position);
-		}
+        if (editor.currentPage.data.position > 0) 
+        {
+            editor.loadPageId(editor.currentDocument.uuid(), editor.currentPage.data.position);
+        }
     },
     
     next: function()
@@ -121,13 +118,13 @@ WebDoc.PageEditor = $.klass(
     remove: function()
     {
         var editor = WebDoc.application.pageEditor;
-		if (editor.currentPage.data.position > 0) 
-		{
-			editor.currentPage.destroy(function(objet)
-			{
-				editor.loadPageId(editor.currentDocument.uuid(), this.data.position);
-			});
-		}
+        if (editor.currentPage.data.position > 0) 
+        {
+            editor.currentPage.destroy(function(objet)
+            {
+                editor.loadPageId(editor.currentDocument.uuid(), this.data.position);
+            });
+        }
     },
     
     undo: function()
@@ -149,39 +146,39 @@ WebDoc.PageEditor = $.klass(
     {
         WebDoc.application.boardController.zoom(1 / 1.5);
     },
-	
-	changeBkg: function()
-	{
+    
+    changeBkg: function()
+    {
         var editor = WebDoc.application.pageEditor;
-		editor.currentPage.toggleBkg();
-		editor.currentPage.save();
-	},
+        editor.currentPage.toggleBkg();
+        editor.currentPage.save();
+    },
     
     close: function()
     {
         window.close();
     },
-	
-	penTool: function()
-	{
-		WebDoc.application.boardController.setCurrentTool(WebDoc.application.drawingTool);
-	},
-	
-	arrowTool: function()
-	{
-		WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-
-	},
-	
-	handTool: function()
-	{
-		WebDoc.application.boardController.setCurrentTool(WebDoc.application.handTool);
-
-	},
-	
-	insertImage: function()
-	{
-		console.log("insert image");
-	}
+    
+    penTool: function()
+    {
+        WebDoc.application.boardController.setCurrentTool(WebDoc.application.drawingTool);
+    },
+    
+    arrowTool: function()
+    {
+        WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+        
+    },
+    
+    handTool: function()
+    {
+        WebDoc.application.boardController.setCurrentTool(WebDoc.application.handTool);
+        
+    },
+    
+    insertImage: function()
+    {
+        console.log("insert image");
+    }
 });
 

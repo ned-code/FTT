@@ -114,6 +114,7 @@ WebDoc.DrawingController = $.klass(
         console.log("begin draw at point " + mappedPoint.x + ":" + mappedPoint.y);
         
         this.currentDrawObject = new WebDoc.Item();
+		this.currentDrawObject.data.media_type = "drawing";
 	    this.currentDrawObject.data.data.css = { zIndex: 2000};
 		this.currentDrawObject.data.data.stroke = "red";
 		this.currentDrawObject.data.data.strokeWidth = 5;

@@ -3,6 +3,8 @@
  **/
 //= require <WebDoc/model/page>
 //= require <WebDoc/model/item>
+//= require <WebDoc/gui/page_view>
+//= require <WebDoc/gui/item_view>
 //= require <WebDoc/controllers/drawing_controller> 
 //= require <WebDoc/controllers/collaboration_controller>  
 
@@ -13,18 +15,25 @@ WebDoc.BoardController = $.klass(
     {
         this.currentZoom = 1;
         this.selection = [];
-		this.drawingController = new WebDoc.DrawingController();
+        this.drawingController = new WebDoc.DrawingController();
     },
     
     setCurrentPage: function(page)
-    {    
+    {
+        // remove previous page
+        $("#board-container").empty();
+        // add the new one
+        this.pageView = new WebDoc.PageView(page);        
+        $("#board-container").append(this.pageView.domNode);
+		
         // re-init internal working attributes
         $("#board-container").get(0).scrollTop = 0;
-		$("#board-container").get(0).scrollLeft = 0;
+        $("#board-container").get(0).scrollLeft = 0;
         this.offset = $("#board-container").offset();
         this.currentZoom = 1;
         this.selection = [];
         this.currentPage = page;
+
         this.initialHeight = $("#board").height();
         this.initialWidth = $("#board").width();
         
@@ -40,12 +49,13 @@ WebDoc.BoardController = $.klass(
             $(this).attr("data", relPath);
         });
         this.updateDrawing();
+
         //update zoom to fit browser page
+		
         heightFactor = ($("#board-container").height() - this.initialHeight) / this.initialHeight;
-        console.log(heightFactor);
         widthFactor = ($("#board-container").width() - this.initialWidth) / this.initialWidth;
-        console.log(widthFactor);
-        if (heightFactor < widthFactor) 
+        
+		if (heightFactor < widthFactor) 
         {
             this.zoom(1 + heightFactor);
         }
@@ -64,12 +74,12 @@ WebDoc.BoardController = $.klass(
             $("#page_drawing").append(this.drawingController.domNode);
         }
     },
-	
+    
     setCurrentTool: function(tool)
     {
-		console.log(tool);
+        console.log(tool);
         this.currentTool = tool;
-		this.currentTool.selectTool();
+        this.currentTool.selectTool();
         this.unSelectObjects(this.selection);
     },
     
@@ -142,8 +152,9 @@ WebDoc.BoardController = $.klass(
     {
         var previousZoom = this.currentZoom;
         this.currentZoom = this.currentZoom * factor;
+		console.log("set zoom factor: " + this.currentZoom);
         var boardElement = $("#board");
-
+        
         
         if (jQuery.browser.mozilla) 
         {
@@ -188,14 +199,14 @@ WebDoc.BoardController = $.klass(
     {
         var that = e.data;
         e.preventDefault();
-		that.currentTool.mouseOut(e);
+        that.currentTool.mouseOut(e);
     },
     
     mouseUp: function(e)
     {
         var that = e.data;
         e.preventDefault();
-		that.currentTool.mouseUp(e);
-
+        that.currentTool.mouseUp(e);
+        
     }
 });
