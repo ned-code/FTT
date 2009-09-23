@@ -14,46 +14,44 @@
   %button#tool-arrow ToolArrow
   %button#tool-pen ToolPen
   %button#default-image InsertDefaultImage 
-  .wrap_tool_text
-    %button#tool-text ToolText
-    #text_palette.palette_wrap
-      %ul.palette.disabled{ :style => "display:block" }
-        %li
-          %a.bold{ :href => "" }
-            %span= "Bold"
-        %li
-          %a.italic{ :href => "" }
-            %span= "Italic"
-        %li
-          %a.underline{ :href => "" }
-            %span= "Underlined"
-        %li
-          %a.justifyLeft{ :href => "" }
-            %span= "Left"
-        %li
-          %a.justifyCenter{ :href => "" }
-            %span= "Center"
-        %li
-          %a.justifyRight{ :href => "" }
-            %span= "Right"
-        %li
-          %a.justifyFull{ :href => "" }
-            %span= "Justify"
-        %li
-          %a.insertUnorderedList{ :href => "" }
-            %span= "Bullet List"
-        %li
-          %a.insertOrderedList{ :href => "" }
-            %span= "Numbered List"
-        %li
-          %a.indent{ :href => "" }
-            %span= "Indent"
-        %li
-          %a.outdent{ :href => "" }
-            %span= "Outdent"
-      .palette_overlay
-    
-  
+  %button#tool-text ToolText
+  #text_palette.palette_wrap
+    %ul.palette.disabled{ :style => "display:block" }
+      %li
+        %a.bold{ :href => "" }
+          %span= "Bold"
+      %li
+        %a.italic{ :href => "" }
+          %span= "Italic"
+      %li
+        %a.underline{ :href => "" }
+          %span= "Underlined"
+      %li
+        %a.justifyLeft{ :href => "" }
+          %span= "Left"
+      %li
+        %a.justifyCenter{ :href => "" }
+          %span= "Center"
+      %li
+        %a.justifyRight{ :href => "" }
+          %span= "Right"
+      %li
+        %a.justifyFull{ :href => "" }
+          %span= "Justify"
+      %li
+        %a.insertUnorderedList{ :href => "" }
+          %span= "Bullet List"
+      %li
+        %a.insertOrderedList{ :href => "" }
+          %span= "Numbered List"
+      %li
+        %a.indent{ :href => "" }
+          %span= "Indent"
+      %li
+        %a.outdent{ :href => "" }
+          %span= "Outdent"
+    .palette_overlay
+
 #board-container
 :javascript
   $(function()

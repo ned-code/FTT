@@ -1,34 +1,37 @@
 
 /**
- * @author julien
- */
+* @author julien
+*/
 //= require "tool"
 
-WebDoc.DrawingTool = $.klass(WebDoc.Tool, 
-{
+WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   drawing: false,
+
+  initialize: function($super, toolId) {
+    $super(toolId);
+  },
+
   mouseDown: function(e) {
     this.drawing = true;
     this.beginDraw(e);
   },
-  
+
   mouseMove: function(e) {
     if (this.drawing) {
       this.draw(e);
     }
   },
-  
+
   mouseUp: function(e) {
     this.drawing = false;
     this.endDraw(e);
   },
-  
-  
+
   beginDraw: function(e) {
     var uuid = new MTools.UUID();
     var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
     console.log("begin draw at point " + mappedPoint.x + ":" + mappedPoint.y);
-    
+
     this.currentDrawObject = new WebDoc.Item();
     this.currentDrawObject.data.media_type = "drawing";
     this.currentDrawObject.data.data.css = 
@@ -41,29 +44,26 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool,
     this.currentDrawObject.data.data.points = mappedPoint.x + "," + mappedPoint.y;
     var newItemView = new WebDoc.ItemView(this.currentDrawObject);
     var newLine = newItemView.domNode;
-    
+
     WebDoc.application.boardController.pageView.drawingDomNode.appendChild(newLine.get(0));
-    newLine.animate(
-    {
-      opacity: 1
-    }, 'fast');
-	
+    newLine.animate({ opacity: 1 }, 'fast');
+
     var drawObjectToUndo = this.currentDrawObject;
     var that = this;
     WebDoc.application.undoManager.registerUndo(function() {
       that._removePolyLine(drawObjectToUndo);
     });
   },
-  
+
   endDraw: function(e) {
     this.currentDrawObject.save();
   },
-  
+
   draw: function(e) {
     var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
     this.currentDrawObject.setPoints(this.currentDrawObject.data.data.points += " " + mappedPoint.x + "," + mappedPoint.y);
   },
-  
+
   _removePolyLine: function(drawObject) {
     WebDoc.application.boardController.pageView.drawingDomNode.removeChild(drawObject.domNode.get(0));
     that = this;
@@ -72,7 +72,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool,
     });
     drawObject.destroy();
   },
-  
+
   _addPolyLine: function(drawObject) {
     WebDoc.application.boardController.pageView.drawingDomNode.appendChild(drawObject.domNode.get(0));
     drawObject.isNew = true;
@@ -82,5 +82,4 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool,
     });
     drawObject.save();
   }
-  
 });
