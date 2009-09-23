@@ -5,17 +5,14 @@
 //= require <WebDoc/model/item>
 //= require <WebDoc/gui/page_view>
 //= require <WebDoc/gui/item_view>
-//= require <WebDoc/controllers/drawing_controller> 
 //= require <WebDoc/controllers/collaboration_controller>  
 
 WebDoc.BoardController = $.klass(
 {
-    drawingController: null,
     initialize: function(editable)
     {
         this.currentZoom = 1;
         this.selection = [];
-        this.drawingController = new WebDoc.DrawingController();
     },
     
     setCurrentPage: function(page)
@@ -29,7 +26,6 @@ WebDoc.BoardController = $.klass(
         // re-init internal working attributes
         $("#board-container").get(0).scrollTop = 0;
         $("#board-container").get(0).scrollLeft = 0;
-        this.offset = $("#board-container").offset();
         this.currentZoom = 1;
         this.selection = [];
         this.currentPage = page;
@@ -48,7 +44,6 @@ WebDoc.BoardController = $.klass(
             var relPath = $(this).attr("data");
             $(this).attr("data", relPath);
         });
-        this.updateDrawing();
 
         //update zoom to fit browser page
 		
@@ -64,16 +59,7 @@ WebDoc.BoardController = $.klass(
             this.zoom(1 + widthFactor);
         }
     },
-    
-    updateDrawing: function()
-    {
-        if (this.currentPage) 
-        {
-            // replace drawing div with content of drawing controller. Allow to have different kind of renderer (for ie)
-            this.drawingController.setDrawingModel(this.currentPage.drawingModel());
-            $("#page_drawing").append(this.drawingController.domNode);
-        }
-    },
+   
     
     setCurrentTool: function(tool)
     {
@@ -88,13 +74,13 @@ WebDoc.BoardController = $.klass(
         var x, y;
         if (position.x) 
         {
-            x = position.x - this.offset.left;
-            y = position.y - this.offset.top;
+            x = position.x - $("#board-container").offset().left;
+            y = position.y - $("#board-container").offset().top;
         }
         else 
         {
-            x = position.clientX - this.offset.left;
-            y = position.clientY - this.offset.top;
+			x = position.pageX - $("#board-container").offset().left;
+            y = position.pageY - $("#board-container").offset().top;
         }
         
         var calcX = (x + $("#board-container").get(0).scrollLeft) * (1 / this.currentZoom);

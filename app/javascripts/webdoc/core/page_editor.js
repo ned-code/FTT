@@ -7,6 +7,7 @@
 //= require <MTools/server_manager>
 //= require <MTools/uuid>
 
+//= require <WebDoc/adaptors/svg_renderer>
 //= require <WebDoc/controllers/board_controller>
 
 //= require <WebDoc/tools/arrow_tool>
@@ -28,6 +29,7 @@ WebDoc.PageEditor = $.klass(
     initialize: function()
     {
         this.applicationUuid = new MTools.UUID().id;
+		WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
         WebDoc.application.pageEditor = this;
         WebDoc.application.boardController = new WebDoc.BoardController(true);
         WebDoc.application.drawingTool = new WebDoc.DrawingTool();

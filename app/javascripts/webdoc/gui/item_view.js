@@ -12,7 +12,7 @@ WebDoc.ItemView = $.klass(
 		console.log(item);
         if (this.item.data.media_type == "drawing") 
         {
-            var newLine = WebDoc.application.boardController.drawingController.mRenderer.createPolyline(item);
+            var newLine = WebDoc.application.svgRenderer.createPolyline(item);
             this.domNode = $(newLine);
         }
         else 
@@ -45,14 +45,14 @@ WebDoc.ItemView = $.klass(
         item.addListener(this);
     },
     
-    itemChanged: function(item)
+    objectChanged: function(item)
     {
-        this.domNode.animate(this.item.data.data.css, 'fast');
-        if (this.item.media_type == "drawing") 
+        this.domNode.animate(item.data.data.css, 'fast');
+        if (item.data.media_type == "drawing") 
         {
-            WebDoc.application.boardController.drawingController.mRenderer.updatePolyline(this.domNode.get(0), 
+			WebDoc.application.svgRenderer.updatePolyline(this.domNode.get(0), 
             {
-                points: this.item.points
+                points: item.data.data.points
             });
         }
     },

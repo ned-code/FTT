@@ -16,7 +16,7 @@ WebDoc.PageView = $.klass(
         {
             id: "page_drawing",
             style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
-        }));
+        }).css({ zIndex: 999999}));
         this.domNode.append($('<div>').attr(
         {
             id: "items",
@@ -27,7 +27,11 @@ WebDoc.PageView = $.klass(
             id: "event-catcher",
             style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 999999"
         }));
-        var that = this;
+        this.drawingDomNode = WebDoc.application.svgRenderer.createSurface();
+		this.domNode.find("#page_drawing").append(this.drawingDomNode);
+		$(this.drawingDomNode).css("zIndex", 999999);
+        
+		var that = this;
         if (page.items && $.isArray(page.items)) 
         {
             $.each(page.items, function()
@@ -36,10 +40,10 @@ WebDoc.PageView = $.klass(
                 if (this.data.media_type == "drawing") 
                 {
                     console.log("drawing node");
-					console.log(WebDoc.application.boardController.drawingController.domNode);
+					console.log(that.drawingDomNode);
 					console.log("item node");
                     console.log(itemView.domNode);
-                    WebDoc.application.boardController.drawingController.domNode.appendChild(itemView.domNode.get(0));
+                    that.drawingDomNode.appendChild(itemView.domNode.get(0));
                 }
                 else 
                 {
@@ -50,7 +54,7 @@ WebDoc.PageView = $.klass(
                     opacity: 1
                 }, 'fast');
             });
-        }
+        }		
         page.addListener(this);
     },
     
