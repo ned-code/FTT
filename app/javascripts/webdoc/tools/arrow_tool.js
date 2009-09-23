@@ -15,7 +15,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
     },
     select: function(e)
     {
-        var objectToSelect = WebDoc.application.boardController.currentPage.findObjectAtPoint(WebDoc.application.boardController.mapToPageCoordinate(e));
+        var objectToSelect = WebDoc.application.boardController.pageView.findObjectAtPoint(WebDoc.application.boardController.mapToPageCoordinate(e));
         WebDoc.application.boardController.unSelectObjects(WebDoc.application.boardController.selection);
         if (objectToSelect) 
         {
