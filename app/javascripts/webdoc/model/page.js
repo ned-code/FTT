@@ -85,8 +85,15 @@ WebDoc.Page = $.klass(MTools.Record,
     return null;
   },
   
-  drawingModel: function() {
-    return this.drawing;
+  findObjectAtPoint: function(point) {
+    var i = 0;
+    for (; i < this.items.length; i++) {
+      var anObject = this.objects[i];
+      if (anObject.coverPoint(point) && !anObject.isBackground) {
+        return anObject;
+      }
+    }
+    return null;
   },
   
   toggleBkg: function() {
