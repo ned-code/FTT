@@ -27,3 +27,4 @@ ThirdParty/*/input
 ThirdParty/*/output
 ThirdParty/*/bin
 ThirdParty/*/obj
+*.csproj.user
