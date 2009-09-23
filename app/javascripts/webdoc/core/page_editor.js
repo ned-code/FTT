@@ -8,9 +8,11 @@
 //= require <MTools/uuid>
 
 //= require <WebDoc/controllers/board_controller>
-//= require <WebDoc/controllers/arrow_tool>
-//= require <WebDoc/controllers/drawing_tool>
-//= require <WebDoc/controllers/hand_tool>
+
+//= require <WebDoc/tools/arrow_tool>
+//= require <WebDoc/tools/drawing_tool>
+//= require <WebDoc/tools/hand_tool>
+//= require <WebDoc/tools/text_tool>
 
 // application singleton.
 WebDoc.application = {};

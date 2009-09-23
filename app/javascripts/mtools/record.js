@@ -13,8 +13,8 @@ MTools.Record = $.klass(
     {
         if (!json) 
         {
-			this.isNew = true;
-            this.data = {};
+			this.isNew = true;  
+          this.data = {};
             this.data.created_at = new Date().toISO8601String();
             this.data.uuid = new MTools.UUID().toString();
         }
@@ -92,7 +92,7 @@ MTools.Record = $.klass(
 	 * @param {Object} callBack a callback method that is called when object has been saved.
 	 */
     save: function(callBack)
-    {
+    {       
         if (this.isNew) 
         {
             MTools.ServerManager.newObject(this.rootUrl() + "/" + this.className() + "s", this, function(persitedDoc)
