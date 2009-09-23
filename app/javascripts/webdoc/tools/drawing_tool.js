@@ -51,7 +51,6 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool,
     var drawObjectToUndo = this.currentDrawObject;
     var that = this;
     WebDoc.application.undoManager.registerUndo(function() {
-        console.log("undo");
       that._removePolyLine(drawObjectToUndo);
     });
   },
