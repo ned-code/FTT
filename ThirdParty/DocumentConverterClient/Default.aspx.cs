@@ -13,7 +13,20 @@ namespace DocumentConverterClient
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            m_appRootUrl = "http://" + Context.Request.Url.Authority;
+            IPAddress[] adds = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+
+            string IPAdd = "";
+            foreach (IPAddress add in adds)
+            {
+                if (add.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    IPAdd = add.ToString();
+                    break;
+                }
+            }
+
+            m_appRootUrl = "http://" + IPAdd + Context.Request.ApplicationPath;
+
 
             if ((Page as _Default).SourceUrlTextBox.Text == "")
                 SourceUrlTextBox.Text = m_defaultSourceUrl;
