@@ -12,6 +12,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     $super(toolId);
     this.paletteId = paletteId;
 
+    this.textBox = null; //div containing the cleaned HTML
+
     this.EVENTS = ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mousemove', 'mouseout', 'keypress', 'keydown', 'keyup'];
     this.COMMANDS = ['bold', 'italic', 'underline', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'insertUnorderedList', 'insertOrderedList', 'indent', 'outdent'];
 
@@ -23,19 +25,39 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
 
   selectTool: function() {
-    this.cleanedBox = $('<div class="text_box">Some Text</div>');
-    $('#items').append(this.cleanedBox);
-    // $('#wrap').append(this.cleanedBox);
+    this.newTextBox();
     this.enterEditMode();
+  },
+  
+  newTextBox: function() {
+    // this.textBox = $('<div class="text_box">Some Text</div>');
+    // $('#items').append(this.textBox);
+    // $('#wrap').append(this.textBox);
+    var newItem = new WebDoc.Item();
+    newItem.data.media_type = "text";
+    newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
+    newItem.data.data.tag = "div";
+    newItem.data.data.css = {
+      top: "10px",
+      left: "10px", 
+      border:"solid 2px #eee",
+      width:"400px",
+      height:"200px",
+      cursor:"default",
+      overflow:"hidden"
+    };
+    
+    var newItemView = new WebDoc.ItemView(newItem);
+    this.textBox = newItemView.domNode;
   },
   
   enterEditMode: function() { // build markup and setup vars
     // Create iframe element
-    $(this.cleanedBox).wrap('<div class="textbox_wrap"></div>');
-    this.textboxEditor = $(this.cleanedBox).closest('div.textbox_wrap')[0];
-    $(this.cleanedBox).hide().before('<iframe class="rte_iframe" />');
-    // $(this.cleanedBox).hide().before('<iframe class="rte_iframe" scrolling="no" />'); //iframe with no scrolling
-    this.editableFrame = $(this.cleanedBox).prev('iframe')[0];
+    $(this.textBox).wrap('<div class="textbox_wrap"></div>');
+    this.textboxEditor = $(this.textBox).closest('div.textbox_wrap')[0];
+    $(this.textBox).hide().before('<iframe class="rte_iframe" />');
+    // $(this.textBox).hide().before('<iframe class="rte_iframe" scrolling="no" />'); //iframe with no scrolling
+    this.editableFrame = $(this.textBox).prev('iframe')[0];
     
     // Activate palette
     this.bindPalette();
@@ -72,8 +94,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
 
     // this.bindEvents();
 
-    // $(this.doc).find('body').html(dirty($(this.cleanedBox).text())); //.html() is better 'cause it works for non textareas
-    $(this.doc).find('body').html(this.dirtify($(this.cleanedBox).html()));
+    // $(this.doc).find('body').html(dirty($(this.textBox).text())); //.html() is better 'cause it works for non textareas
+    $(this.doc).find('body').html(this.dirtify($(this.textBox).html()));
     // $(this.textboxEditor).trigger('ready.rte');
     
   },
@@ -84,8 +106,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     // this.unbindEvents();
     this.unbindPalette();
 
-    $(this.cleanedBox).removeClass("selected");
-    $(this.cleanedBox).show();
+    $(this.textBox).removeClass("selected");
+    $(this.textBox).show();
     $(this.editableFrame).remove();
 
     this.editMode = false;
@@ -106,7 +128,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   //         // ==========
   // 
   //         // This may be a performance issue
-  //         $(this.cleanedBox).html(htmlContent());
+  //         $(this.textBox).html(htmlContent());
   // 
   //         previousContent = this.editor.htmlContent();
   //       }

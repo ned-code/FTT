@@ -94,7 +94,6 @@ WebDoc.ItemView = $.klass(
     }
   },
   
-  
   objectChanged: function(item) {
     this.recomputeInternalSizeAndPosition();
     this.domNode.animate(item.data.data.css, 'fast');

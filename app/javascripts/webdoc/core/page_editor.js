@@ -53,19 +53,16 @@ WebDoc.PageEditor = $.klass({
     $("#default-image").bind("click", this.insertImage);
   },
 
-  load: function(documentId)
-  {
+  load: function(documentId) {
     MTools.ServerManager.getObjects("/documents/" + documentId, WebDoc.Document, function(data)
     {
       var editor = WebDoc.application.pageEditor;
       editor.currentDocument = data[0];
       editor.loadPageId(documentId, window.location.hash.replace("#", ""));
     });
-
   },
 
-  loadPageId: function(documentId, pageId)
-  {
+  loadPageId: function(documentId, pageId) {
     this.currentPageId = pageId;
     MTools.ServerManager.getObjects("/documents/" + documentId + "/pages/" + pageId, WebDoc.Page, function(data)
     {
@@ -152,14 +149,15 @@ WebDoc.PageEditor = $.klass({
 
   insertImage: function() {
     console.log("insert image");
-	var newItem = new WebDoc.Item();
-	newItem.data.media_type = "image";
-	newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
-	newItem.data.data.tag = "img";
-	newItem.data.data.src = "/system/files/11d69920-8a86-012c-72df-002500a8be1c/original/Picture_1.png?1253720740";
-	newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};
-	var newItemView = new WebDoc.ItemView(newItem);
-	newItem.save();
+    var newItem = new WebDoc.Item();
+    newItem.data.media_type = "image";
+    newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
+    newItem.data.data.tag = "img";
+    // newItem.data.data.src = "/system/files/11d69920-8a86-012c-72df-002500a8be1c/original/Picture_1.png?1253720740";
+    newItem.data.data.src = "/system/files/aa41d180-8b2f-012c-6b63-002332c9c2d4/original/AutomatorApplet.png";
+    newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};
+    var newItemView = new WebDoc.ItemView(newItem);
+    newItem.save();
   }
 });
 

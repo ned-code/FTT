@@ -13,7 +13,7 @@ WebDoc.PageView = $.klass(
     
     this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
     this.drawingDomNode.css("zIndex", 999999);
-    // this.domNode.append(this.drawingDomNode.get(0)); //TODO re-enable this!!!
+    this.domNode.append(this.drawingDomNode.get(0)); //TODO re-enable this!!!
     
     this.itemDomNode = $('<div>').attr({
       id: "items",

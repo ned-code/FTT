@@ -16,14 +16,14 @@ WebDoc.BoardController = $.klass(
   
   setCurrentPage: function(page) {
     // remove previous page
-    $("#board-container").empty();
+    $("#board_container").empty();
     // add the new one
     this.pageView = new WebDoc.PageView(page);
-    $("#board-container").append(this.pageView.domNode);
+    $("#board_container").append(this.pageView.domNode);
     
     // re-init internal working attributes
-    $("#board-container").get(0).scrollTop = 0;
-    $("#board-container").get(0).scrollLeft = 0;
+    $("#board_container").get(0).scrollTop = 0;
+    $("#board_container").get(0).scrollLeft = 0;
     this.currentZoom = 1;
     this.selection = [];
     this.currentPage = page;
@@ -44,8 +44,8 @@ WebDoc.BoardController = $.klass(
     
     //update zoom to fit browser page
     
-    heightFactor = ($("#board-container").height() - this.initialHeight) / this.initialHeight;
-    widthFactor = ($("#board-container").width() - this.initialWidth) / this.initialWidth;
+    heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
+    widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;
     
     if (heightFactor < widthFactor) {
       this.zoom(1 + heightFactor);
@@ -66,16 +66,16 @@ WebDoc.BoardController = $.klass(
   mapToPageCoordinate: function(position) {
     var x, y;
     if (position.x) {
-      x = position.x - $("#board-container").offset().left;
-      y = position.y - $("#board-container").offset().top;
+      x = position.x - $("#board_container").offset().left;
+      y = position.y - $("#board_container").offset().top;
     }
     else {
-      x = position.pageX - $("#board-container").offset().left;
-      y = position.pageY - $("#board-container").offset().top;
+      x = position.pageX - $("#board_container").offset().left;
+      y = position.pageY - $("#board_container").offset().top;
     }
     
-    var calcX = (x + $("#board-container").get(0).scrollLeft) * (1 / this.currentZoom);
-    var calcY = (y + ($("#board-container").get(0).scrollTop)) * (1 / this.currentZoom);
+    var calcX = (x + $("#board_container").get(0).scrollLeft) * (1 / this.currentZoom);
+    var calcY = (y + ($("#board_container").get(0).scrollTop)) * (1 / this.currentZoom);
     return {
       x: calcX,
       y: calcY
