@@ -49,13 +49,6 @@ WebDoc.Page = $.klass(MTools.Record,
     return null;
   },
   
-  clear: function() {
-    this._clear();
-    if (WebDoc.application.boardController.collaborationController) {
-      WebDoc.application.boardController.collaborationController.clear(this);
-    }
-  },
-  
   createOrUpdateItem: function(itemData) {
     var item = this.findItemWithUuid(itemData.uuid);
     if (!item) {
@@ -79,17 +72,6 @@ WebDoc.Page = $.klass(MTools.Record,
     for (; i < this.items.length; i++) {
       var anObject = this.items[i];
       if (anObject.uuid == pUuid) {
-        return anObject;
-      }
-    }
-    return null;
-  },
-  
-  findObjectAtPoint: function(point) {
-    var i = 0;
-    for (; i < this.items.length; i++) {
-      var anObject = this.objects[i];
-      if (anObject.coverPoint(point) && !anObject.isBackground) {
         return anObject;
       }
     }
