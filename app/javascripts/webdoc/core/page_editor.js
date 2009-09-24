@@ -32,10 +32,10 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.pageEditor = this;
     WebDoc.application.boardController = new WebDoc.BoardController(true);
 
-    WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool-pen");
-    WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool-arrow");
-    WebDoc.application.handTool = new WebDoc.HandTool("#tool-hand");
-    WebDoc.application.textTool = new WebDoc.TextTool("#tool-text");
+    WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool_pen");
+    WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool_arrow");
+    WebDoc.application.handTool = new WebDoc.HandTool("#tool_hand");
+    WebDoc.application.textTool = new WebDoc.TextTool("#tool_text", "#palette_text");
 
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.drawingTool);
     WebDoc.application.undoManager = new MTools.UndoManager();

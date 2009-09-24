@@ -3,7 +3,7 @@
 */
 WebDoc.Tool = $.klass({  
   initialize: function(toolId) {
-    $(toolId).bind("click", this.toolbarButtonClick.bindAsEventListener(this));
+    $(toolId).bind("click", this.toolbarButtonClick.pBindAsEventListener(this));
   },
   toolbarButtonClick: function(e) {
     e.preventDefault();

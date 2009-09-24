@@ -89,7 +89,7 @@
   **/
   var clean = function(dirtyHTML) {
     var text = tidyXHTML(dirtyHTML);
-    if ($.fn.toupee.browser.webkit) {
+    if (MTools.Browser.WebKit) {
       // Extra divs expand to line breaks
       text = text.replace(/(<div>)+/g, "\n");
       text = text.replace(/(<\/div>)+/g, "");
@@ -100,7 +100,7 @@
       // Convert line break tags into real line breaks
       text = text.replace(/<br \/>(\n)*/g, "\n");
     }
-    else if ($.fn.toupee.browser.gecko) {
+    else if (MTools.Browser.Gecko) {
       // Convert any strangling paragraphs into line breaks
       text = text.replace(/<p>/g, "");
       text = text.replace(/<\/p>(\n)?/g, "\n");
@@ -108,7 +108,7 @@
       // Convert line break tags into real line breaks
       text = text.replace(/<br \/>(\n)*/g, "\n");
     }
-    else if ($.fn.toupee.browser.ie || $.fn.toupee.browser.opera) {
+    else if (MTools.Browser.IE || MTools.Browser.Opera) {
       // Treat lines with one space as returns
       text = text.replace(/<p>(&nbsp;|&#160;|\s)<\/p>/g, "<p></p>");
 
@@ -162,7 +162,7 @@
     var element = $('<div></div>');
     element.html(text);
 
-    if ($.fn.toupee.browser.webkit || $.fn.toupee.browser.gecko) {
+    if (MTools.Browser.WebKit || MTools.Browser.Gecko) {
       var replaced;
       do {
         replaced = false;
@@ -244,7 +244,7 @@
     var element = $('<div></div>');
     element.html(text);
 
-    if ($.fn.toupee.browser.webkit || $.fn.toupee.browser.gecko) {
+    if (MTools.Browser.WebKit || MTools.Browser.Gecko) {
       // Convert style spans back
       $(element).find('strong').each(function(index) {
         $(this).replaceWith('<span style="font-weight: bold;">' + this.innerHTML + '</span>');
@@ -259,7 +259,7 @@
 
     // TODO: Test if WebKit has issues editing spans without
     // "Apple-style-span". If not, remove this.
-    if ($.fn.toupee.browser.webkit) {
+    if (MTools.Browser.WebKit) {
       element.find('span').each(function(index) {
         var span = $(this);
         if (span.css('fontWeight') == 'bold')
@@ -286,18 +286,18 @@
     text = text.replace(/^<p>/g, '');
     text = text.replace(/<\/p>$/g, '');
 
-    if ($.fn.toupee.browser.gecko) {
+    if (MTools.Browser.Gecko) {
       // Replace returns with line break tags
       text = text.replace(/\n/g, "<br>");
       text = text + '<br>';
     }
-    else if ($.fn.toupee.browser.webkit) {
+    else if (MTools.Browser.WebKit) {
       // Wrap lines in div tags
       text = text.replace(/\n/g, "</div><div>");
       text = '<div>' + text + '</div>';
       text = text.replace(/<div><\/div>/g, "<div><br></div>");
     }
-    else if ($.fn.toupee.browser.ie || $.fn.toupee.browser.opera) {
+    else if (MTools.Browser.IE || MTools.Browser.Opera) {
       text = text.replace(/\n/g, "</p>\n<p>");
       text = '<p>' + text + '</p>';
       text = text.replace(/<p><\/p>/g, "<p>&nbsp;</p>");
@@ -307,10 +307,11 @@
     return text;
   }
 
-  $.fn.toupee.html = {
+  $.fn.webdocHTML = { //TODO: improve this namespace
     tidyXHTML: tidyXHTML,
     clean: clean,
     dirty: dirty,
     gsub: gsub
   };
 })(jQuery);
+

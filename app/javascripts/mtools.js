@@ -10,3 +10,4 @@ var MTools = {};
 //= require "mtools/uuid"
 //= require "mtools/date"
 //= require "mtools/record"
+//= require "mtools/browser"

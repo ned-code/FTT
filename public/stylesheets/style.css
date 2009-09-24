@@ -70,7 +70,7 @@ a:hover { color: #fff; background-color:#000; }
 /* ============= */
 /* = Text Tool = */
 /* ============= */
-.toupee_iframe {
+.rte_iframe {
   clear:left;
   border:solid 2px #aaa;
   width:400px;
