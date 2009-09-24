@@ -1,6 +1,10 @@
 
 //= require <mtools/record>
 
+WebDoc.ITEM_TYPE_TEXT = "text";
+WebDoc.ITEM_TYPE_IMAGE = "image";
+WebDoc.ITEM_TYPE_DRAWING = "drawing";
+
 WebDoc.Item = $.klass(MTools.Record, 
 {
   initialize: function($super, json) {
@@ -26,7 +30,6 @@ WebDoc.Item = $.klass(MTools.Record,
     this.data.data.points = points;
     this.fireObjectChanged();
   },
-  
   
   type: function() {
     if (this.data.media_type) 

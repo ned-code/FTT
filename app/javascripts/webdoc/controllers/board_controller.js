@@ -55,12 +55,11 @@ WebDoc.BoardController = $.klass(
     }
   },
   
-  
   setCurrentTool: function(tool) {
     console.log(tool)
     this.currentTool = tool;
     this.currentTool.selectTool();
-    this.unselectObjects(this.selection);
+    // this.unselectItemViews(this.selection);
   },
   
   mapToPageCoordinate: function(position) {
@@ -91,26 +90,37 @@ WebDoc.BoardController = $.klass(
     this.zoom(1 / 1.5);
   },
   
-  selectObjects: function(objects) {
-    if (this.selection[0] != objects[0]) {
-      this.unselectAll();
-      var i = 0;
-      for (; i < objects.length; i++) {
-        var objectToSelect = objects[i];
-        if (objectToSelect) {
-          this.selection.push(objectToSelect);
-          objectToSelect.select();
-        }
-      }
-    }
+  selectItemViews: function(itemViews) {
+    //deselect un-needed items
+    $.each(this.selection, function(index, itemToDeselect) {
+      if (jQuery.inArray(itemToDeselect, itemViews) === -1) { this.unselectItemViews([itemToDeselect]); }
+    }.pBind(this))
+    
+    //select wanted items
+    $.each(itemViews, function(index, itemToSelect) {
+      this.selection.push(itemToSelect);
+      itemToSelect.select();
+    }.pBind(this))
+    
+    // if (this.selection[0] != itemViews[0]) {
+    //   this.unselectAll();
+    //   var i = 0;
+    //   for (; i < itemViews.length; i++) {
+    //     var objectToSelect = itemViews[i];
+    //     if (objectToSelect) {
+    //       this.selection.push(objectToSelect);
+    //       objectToSelect.select();
+    //     }
+    //   }
+    // }
   },
   
   unselectAll: function() {
     console.log("unselect all");
-    this.unselectObjects(this.selection);
+    this.unselectItemViews(this.selection);
   },
   
-  unselectObjects: function(objects) {
+  unselectItemViews: function(objects) {
     var i = 0;
     for (; i < objects.length; i++) {
       var objectToUnSelect = objects[i];

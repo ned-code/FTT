@@ -17,7 +17,14 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.EVENTS = ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mousemove', 'mouseout', 'keypress', 'keydown', 'keyup'];
     this.COMMANDS = ['bold', 'italic', 'underline', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'insertUnorderedList', 'insertOrderedList', 'indent', 'outdent'];
 
-    this.iframeCssPath = "/stylesheets/textbox.css"
+    this.iframeCssPath = "/stylesheets/textbox.css";
+    this.defaultTextBoxCss = { // style used on both the textBox div & iframe
+      border:"solid 2px #eee",
+      width:"400px",
+      height:"200px",
+      top: "10px",
+      left: "10px" 
+    };
     
     this.editMode = false;
     this.cleanify = $.fn.webdocHTML.clean;
@@ -25,43 +32,46 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
 
   selectTool: function() {
-    this.newTextBox();
+    this.newSelectedTextBox();
     this.enterEditMode();
   },
   
-  newTextBox: function() {
-    // this.textBox = $('<div class="text_box">Some Text</div>');
-    // $('#items').append(this.textBox);
-    // $('#wrap').append(this.textBox);
+  newSelectedTextBox: function() {
+    //Create model
     var newItem = new WebDoc.Item();
-    newItem.data.media_type = "text";
+    newItem.data.media_type = WebDoc.ITEM_TYPE_TEXT;
     newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "div";
-    newItem.data.data.css = {
-      top: "10px",
-      left: "10px", 
-      border:"solid 2px #eee",
-      width:"400px",
-      height:"200px",
+    newItem.data.data.innerHTML = "Some Text";
+    newItem.data.data.css = jQuery.extend(this.defaultTextBoxCss, {
       cursor:"default",
       overflow:"hidden"
-    };
+    });
     
-    var newItemView = new WebDoc.ItemView(newItem);
+    //Create view
+    var newItemView = new WebDoc.TextView(newItem);
+    // Select view
+    WebDoc.application.boardController.selectItemViews([newItemView]);
+    
+    // newItem.save();
     this.textBox = newItemView.domNode;
   },
   
   enterEditMode: function() { // build markup and setup vars
+    ddd("Text tool: entering edit mode");
+
     // Create iframe element
     $(this.textBox).wrap('<div class="textbox_wrap"></div>');
     this.textboxEditor = $(this.textBox).closest('div.textbox_wrap')[0];
-    $(this.textBox).hide().before('<iframe class="rte_iframe" />');
+    var iframe = $('<iframe class="rte_iframe" />');
+    iframe.css(this.defaultTextBoxCss);
+    $(this.textBox).hide().before(iframe);
     // $(this.textBox).hide().before('<iframe class="rte_iframe" scrolling="no" />'); //iframe with no scrolling
-    this.editableFrame = $(this.textBox).prev('iframe')[0];
+    this.editableFrame = $(this.textBox).prev('iframe')[0]
     
     // Activate palette
     this.bindPalette();
-
+    
     // Setup iFrame for edition
     $(this.editableFrame).one('load', function() { // complete initialization once the iframe loads
       this.setupEditableFrame(); 
@@ -74,7 +84,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
   
   setupEditableFrame: function() {
-    ddd("setup iFrame for edition")
+    //ddd("setup iFrame for edition")
     this.editMode = true;
 
     this.doc = this.editableFrame.contentDocument || this.editableFrame.contentWindow.document;
@@ -97,21 +107,17 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     // $(this.doc).find('body').html(dirty($(this.textBox).text())); //.html() is better 'cause it works for non textareas
     $(this.doc).find('body').html(this.dirtify($(this.textBox).html()));
     // $(this.textboxEditor).trigger('ready.rte');
-    
   },
 
   exitEditMode: function() {
-    // ddd("exiting edit mode")
-
     // this.unbindEvents();
     this.unbindPalette();
 
-    $(this.textBox).removeClass("selected");
-    $(this.textBox).show();
     $(this.editableFrame).remove();
+    $(this.textBox).unwrap();
+    $(this.textBox).show();
 
     this.editMode = false;
-
   },
 
   // bindEvents: function() {

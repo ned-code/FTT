@@ -18,10 +18,10 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
     var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
     console.log("must select item at point " + mappedPoint.x + ":" + mappedPoint.y);
     var objectToSelect = WebDoc.application.boardController.pageView.findObjectAtPoint(mappedPoint);
-    console.log("founded object");
+    console.log("found object");
     console.log(objectToSelect);
     if (objectToSelect) {
-      WebDoc.application.boardController.selectObjects([objectToSelect]);
+      WebDoc.application.boardController.selectItemViews([objectToSelect]);
     }
     else {
       WebDoc.application.boardController.unselectAll();

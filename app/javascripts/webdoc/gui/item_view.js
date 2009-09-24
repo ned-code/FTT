@@ -125,10 +125,12 @@ WebDoc.ItemView = $.klass(
       left: this.item.data.data.css.left
     });
   },
+  isSelected: function() {
+    return this.selectionNode.parent().length > 0;
+  },
   
   select: function() {
-    if (this.selectionNode.parent().length == 0) {
-    
+    if (!this.isSelected()) {
       console.log("select item " + this.item.uuid());
       this.domNode.addClass("item_selected");
       this.selectionNode.css(
@@ -150,11 +152,6 @@ WebDoc.ItemView = $.klass(
             left: mappedPoint.x,
             top: mappedPoint.y
           });
-          that.selectionNode.css(
-          {
-            left: mappedPoint.x,
-            top: mappedPoint.y
-          });
         }
       });
     }
@@ -168,4 +165,21 @@ WebDoc.ItemView = $.klass(
   createSelectedFrame: function() {
   }
   
+});
+
+
+WebDoc.TextView = $.klass(WebDoc.ItemView, {
+  select: function($super) {
+    if (!this.isSelected()) {
+      $super(); //select
+    }
+    else {
+      ddd("must enter edit mode")
+      WebDoc.application.textTool.enterEditMode();
+    }
+  },
+  unSelect: function($super) {
+    WebDoc.application.textTool.exitEditMode();
+    $super();
+  }
 });

@@ -33,7 +33,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     console.log("begin draw at point " + mappedPoint.x + ":" + mappedPoint.y);
 
     this.currentDrawObject = new WebDoc.Item();
-    this.currentDrawObject.data.media_type = "drawing";
+    this.currentDrawObject.data.media_type = WebDoc.ITEM_TYPE_DRAWING;
     this.currentDrawObject.data.data.css = 
     {
       zIndex: 2000
