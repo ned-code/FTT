@@ -14,7 +14,7 @@ WebDoc.ItemView = $.klass(
     else {
       this.pageView = WebDoc.application.boardController.pageView;
     }
-	this.pageView.itemViews.push(this);
+    this.pageView.itemViews.push(this);
     this.item = item;
     
     if (this.item.data.media_type == "drawing") {
@@ -23,27 +23,23 @@ WebDoc.ItemView = $.klass(
       this.pageView.drawingDomNode.append(newLine);
     }
     else {
-      this.domNode = $("<" + item.data.data.tag + "/>");
-      this.domNode.css(
+      this.domNode = $("<" + item.data.data.tag + "/>").css(
       {
         position: "absolute"
-      })
+      });
+      this.selectionNode = $("<div/>").addClass("drag_handle");
+      this.domNode.attr("id", this.item.uuid());
       for (var key in item.data.data) {
         if (key == 'css') {
           this.domNode.css(item.data.data.css);
         }
         else {
-          if (key == 'uuid' || key == 'ubItemType') {
-            // just ignore uuid
+          if (key == 'innerHtml') {
+            this.domNode.html(item.data.data[key]);
           }
           else {
-            if (key == 'innerHtml') {
-              this.domNode.html(item.data.data[key]);
-            }
-            else {
-              if (key != 'tag') {
-                this.domNode.attr(key, item.data.data[key]);
-              }
+            if (key != 'tag') {
+              this.domNode.attr(key, item.data.data[key]);
             }
           }
         }
@@ -111,36 +107,66 @@ WebDoc.ItemView = $.klass(
   },
   
   shift: function(x, y) {
-    this.position.left = this.position.left + x;
-    this.position.top = this.position.top + y;
+    var newPosition = 
+    {
+      left: this.position.left + x,
+      top: this.position.top + y
+    };
+    this.moveTo(newPosition);
+  },
+  
+  moveTo: function(position) {
+    this.position.left = position.left;
+    this.position.top = position.top;
     this.item.data.data.css.left = this.position.left + "px";
     this.item.data.data.css.top = this.position.top + "px";
-	this.domNode.css({ top: this.item.data.data.css.top, left: this.item.data.data.css.left});
+    this.domNode.css(
+    {
+      top: this.item.data.data.css.top,
+      left: this.item.data.data.css.left
+    });
   },
   
   select: function() {
-    this.domNode.addClass("wb-selected-object");
-    if (!this.domNode.attr("ub:zIndex")) {
-      this.domNode.attr("ub:zIndex", this.domNode.css("zIndex"));
-    }
-    console.log("type " + this.type());
-    if (this.type() == "widget") {
-      this.domNode.css(
+    if (this.selectionNode.parent().length == 0) {
+    
+      console.log("select item " + this.item.uuid());
+      this.domNode.addClass("item_selected");
+      this.selectionNode.css(
       {
-        zIndex: 2000000
+        top: this.domNode.position().top,
+        left: this.domNode.position().left
       });
-      if (this.domNode.attr("type") == "application/x-shockwave-flash") {
-        console.log(this.domNode.id);
-        var player = document.getElementById(this.domNode.id);
-        player.sendEvent('PLAY');
-      }
+      this.pageView.itemDomNode.append(this.selectionNode.get(0));
+      var that = this;
+      this.selectionNode.draggable(
+      {
+        cursor: 'crosshair',
+        containment: 'parent',
+        drag: function(e, ui) {
+          var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
+          ddd(ui.position.left + ":" + ui.position.top);
+          that.moveTo(
+          {
+            left: mappedPoint.x,
+            top: mappedPoint.y
+          });
+          that.selectionNode.css(
+          {
+            left: mappedPoint.x,
+            top: mappedPoint.y
+          });
+        }
+      });
     }
   },
   
   unSelect: function() {
-    this.domNode.removeClass("wb-selected-object");
-    console.log("reset zindex");
-    this.domNode.css("zIndex", this.domNode.attr("ub:zIndex"));
+    this.domNode.removeClass("item_selected");
+    this.selectionNode.remove();
+  },
+  
+  createSelectedFrame: function() {
   }
   
 });

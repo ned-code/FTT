@@ -89,6 +89,17 @@ a:hover { color: #fff; background-color:#000; }
   border-color:#aaa;
 }
 
+/* ============= */
+/* = Item view = */
+/* ============= */
+
+.drag_handle {
+	position:absolute;
+	z-index:1000000;
+	width:20px;
+	height:20px;
+	background:transparent url(/images/drag.png) repeat scroll 0 0
+}
 /* ========== */
 /* = WebDoc = */
 /* ========== */

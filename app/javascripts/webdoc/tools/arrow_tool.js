@@ -17,12 +17,14 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
   select: function(e) {
     var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
     console.log("must select item at point " + mappedPoint.x + ":" + mappedPoint.y);
-    var objectToSelect = WebDoc.application.boardController.pageView.findObjectAtPoint();
+    var objectToSelect = WebDoc.application.boardController.pageView.findObjectAtPoint(mappedPoint);
     console.log("founded object");
     console.log(objectToSelect);
-    WebDoc.application.boardController.unSelectObjects(WebDoc.application.boardController.selection);
     if (objectToSelect) {
-      WebDoc.application.boardController.selectObjects([objectToSelect])
+      WebDoc.application.boardController.selectObjects([objectToSelect]);
+    }
+    else {
+      WebDoc.application.boardController.unselectAll();
     }
   },
   
