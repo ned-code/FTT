@@ -157,6 +157,7 @@ WebDoc.PageEditor = $.klass({
 	newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
 	newItem.data.data.tag = "img";
 	newItem.data.data.src = "/system/files/11d69920-8a86-012c-72df-002500a8be1c/original/Picture_1.png?1253720740";
+
 	newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};
 	var newItemView = new WebDoc.ItemView(newItem);
 	newItem.save();

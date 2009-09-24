@@ -23,10 +23,14 @@ WebDoc.ItemView = $.klass(
       this.pageView.drawingDomNode.append(newLine);
     }
     else {
-      this.domNode = $("<" + item.data.data.tag + "/>").css(
+      this.itemNode = $('<' + item.data.data.tag + ' width="100%" height="100%"/>');
+      this.domNode = $("<div/>").css(
       {
         position: "absolute"
       });
+      
+      this.domNode.append(this.itemNode.get(0));
+      //this.selectionNodeView = $("<div/>").addClass("drag_handle_view");
       this.selectionNode = $("<div/>").addClass("drag_handle");
       this.domNode.attr("id", this.item.uuid());
       for (var key in item.data.data) {
@@ -35,11 +39,11 @@ WebDoc.ItemView = $.klass(
         }
         else {
           if (key == 'innerHtml') {
-            this.domNode.html(item.data.data[key]);
+            this.itemNode.html(item.data.data[key]);
           }
           else {
             if (key != 'tag') {
-              this.domNode.attr(key, item.data.data[key]);
+              this.itemNode.attr(key, item.data.data[key]);
             }
           }
         }
@@ -132,31 +136,28 @@ WebDoc.ItemView = $.klass(
     
       console.log("select item " + this.item.uuid());
       this.domNode.addClass("item_selected");
-      this.selectionNode.css(
-      {
-        top: this.domNode.position().top,
-        left: this.domNode.position().left
-      });
-      this.pageView.itemDomNode.append(this.selectionNode.get(0));
+      WebDoc.application.boardController.pageView.itemDomNode.append(this.selectionNode.get(0));
+      //this.domNode.append(this.selectionNodeView.get(0));
       var that = this;
+	  this.selectionNode.css({ top: this.item.data.data.css.top, left: this.item.data.data.css.left });
       this.selectionNode.draggable(
       {
+        containment: "parent",
         cursor: 'crosshair',
-        containment: 'parent',
         drag: function(e, ui) {
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-          ddd(ui.position.left + ":" + ui.position.top);
+          ui.position.left = mappedPoint.x;
+		  ui.position.top = mappedPoint.y;
           that.moveTo(
           {
             left: mappedPoint.x,
             top: mappedPoint.y
           });
-          that.selectionNode.css(
-          {
-            left: mappedPoint.x,
-            top: mappedPoint.y
-          });
-        }
+        },
+		
+		stop: function(e, ui) {
+            that.item.save();
+	    }        
       });
     }
   },
@@ -164,6 +165,7 @@ WebDoc.ItemView = $.klass(
   unSelect: function() {
     this.domNode.removeClass("item_selected");
     this.selectionNode.remove();
+    //this.selectionNodeView.remove();
   },
   
   createSelectedFrame: function() {

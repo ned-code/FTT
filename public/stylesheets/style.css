@@ -94,12 +94,15 @@ a:hover { color: #fff; background-color:#000; }
 /* ============= */
 
 .drag_handle {
-	position:absolute;
-	z-index:1000000;
+    position:absolute;
+    top:0px;
+    left:0px;
+	z-index:1000001;
 	width:20px;
 	height:20px;
-	background:transparent url(/images/drag.png) repeat scroll 0 0
+    background:transparent url(/images/drag.png) repeat scroll 0 0  	
 }
+
 /* ========== */
 /* = WebDoc = */
 /* ========== */
