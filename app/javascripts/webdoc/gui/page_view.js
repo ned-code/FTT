@@ -12,24 +12,20 @@ WebDoc.PageView = $.klass(
             style: "position: absolute; top: 0px; left: 0px;z-index:0"
         });
 		this.domNode.css(page.data.data.css);
-        this.domNode.append($('<div>').attr(
-        {
+        this.domNode.append($('<div>').attr({
             id: "page_drawing",
             style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
         }).css({ zIndex: 999999}));
-        this.domNode.append($('<div>').attr(
-        {
+        
+        this.domNode.append($('<div>').attr({
             id: "items",
             style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
         }));
-        this.domNode.append($('<div>').attr(
-        {
-            id: "event-catcher",
-            style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 999999"
-        }));
+        
         this.drawingDomNode = WebDoc.application.svgRenderer.createSurface();
-		this.domNode.find("#page_drawing").append(this.drawingDomNode);
-		$(this.drawingDomNode).css("zIndex", 999999);
+
+        this.domNode.find("#page_drawing").append(this.drawingDomNode);
+        $(this.drawingDomNode).css("zIndex", 999999);
         
 		var that = this;
         if (page.items && $.isArray(page.items)) 
