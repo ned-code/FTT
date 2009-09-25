@@ -2,8 +2,7 @@
 //= require <mtools/record>
 //= require <webdoc/model/item>
 
-WebDoc.ItemView = $.klass(
-{
+WebDoc.ItemView = $.klass({
   item: null,
   pageView: null,
   initialize: function(item, pageView) {
@@ -17,43 +16,36 @@ WebDoc.ItemView = $.klass(
     this.pageView.itemViews.push(this);
     this.item = item;
     
-    if (this.item.data.media_type == "drawing") {
-      var newLine = WebDoc.application.svgRenderer.createPolyline(item);
-      this.domNode = $(newLine);
-      this.pageView.drawingDomNode.append(newLine);
-    }
-    else {
-      this.itemNode = $('<' + item.data.data.tag + ' width="100%" height="100%"/>');
-      this.domNode = $("<div/>").css(
-      {
-        position: "absolute"
-      });
-      
-      this.domNode.append(this.itemNode.get(0));
-      //this.selectionNodeView = $("<div/>").addClass("drag_handle_view");
-      this.selectionNode = $("<div/>").addClass("drag_handle");
-      this.domNode.attr("id", this.item.uuid());
-      for (var key in item.data.data) {
-        if (key == 'css') {
-          this.domNode.css(item.data.data.css);
-        }
-        else {
-          if (key == 'innerHtml') {
-            this.itemNode.html(item.data.data[key]);
-          }
-          else {
-            if (key != 'tag') {
-              this.itemNode.attr(key, item.data.data[key]);
-            }
-          }
-        }
-      }
-      this.pageView.itemDomNode.append(this.domNode.get(0));
-    }
+    this.domNode = this.createDomNode();
     // internal size and position are top, left width and height as float. Because in the css those values are string with px unit
     // and we need float values to marix transform.
     this.recomputeInternalSizeAndPosition();
     item.addListener(this);
+  },
+  
+  createDomNode: function() {
+
+      var itemNode = $('<' + item.data.data.tag + '/>');
+
+      this.selectionNode = $("<div/>").addClass("drag_handle");
+      itemNode.attr("id", this.item.uuid());
+      for (var key in item.data.data) {
+        if (key == 'css') {
+          itemNode.css(item.data.data.css);
+        }
+        else {
+          if (key == 'innerHtml') {
+            itemNode.html(item.data.data[key]);
+          }
+          else {
+            if (key != 'tag') {
+              itemNode.attr(key, item.data.data[key]);
+            }
+          }
+        }
+      }
+      this.pageView.itemDomNode.append(itemNode.get(0));
+      return itemNode;
   },
   
   coverPoint: function(point) {
@@ -85,13 +77,11 @@ WebDoc.ItemView = $.klass(
   
   recomputeInternalSizeAndPosition: function() {
     if (this.item.data.data.css.top) {
-      this.position = 
-      {
+      this.position = {
         top: parseFloat(this.item.data.data.css.top.replace("px", "")),
         left: parseFloat(this.item.data.data.css.left.replace("px", ""))
       };
-      this.size = 
-      {
+      this.size = {
         width: parseFloat(this.item.data.data.css.width.replace("px", "")),
         height: parseFloat(this.item.data.data.css.height.replace("px", ""))
       };
@@ -102,16 +92,14 @@ WebDoc.ItemView = $.klass(
     this.recomputeInternalSizeAndPosition();
     this.domNode.animate(item.data.data.css, 'fast');
     if (item.data.media_type == "drawing") {
-      WebDoc.application.svgRenderer.updatePolyline(this.domNode.get(0), 
-      {
+      WebDoc.application.svgRenderer.updatePolyline(this.domNode.get(0), {
         points: item.data.data.points
       });
     }
   },
   
   shift: function(x, y) {
-    var newPosition = 
-    {
+    var newPosition = {
       left: this.position.left + x,
       top: this.position.top + y
     };
@@ -123,8 +111,7 @@ WebDoc.ItemView = $.klass(
     this.position.top = position.top;
     this.item.data.data.css.left = this.position.left + "px";
     this.item.data.data.css.top = this.position.top + "px";
-    this.domNode.css(
-    {
+    this.domNode.css({
       top: this.item.data.data.css.top,
       left: this.item.data.data.css.left
     });
@@ -132,7 +119,7 @@ WebDoc.ItemView = $.klass(
   isSelected: function() {
     return this.selectionNode.parent().length > 0;
   },
-
+  
   select: function() {
     if (!this.isSelected()) {
       console.log("select item " + this.item.uuid());
@@ -140,7 +127,12 @@ WebDoc.ItemView = $.klass(
       WebDoc.application.boardController.pageView.itemDomNode.append(this.selectionNode.get(0));
       //this.domNode.append(this.selectionNodeView.get(0));
       var that = this;
-      this.selectionNode.css({ top: this.item.data.data.css.top, left: this.item.data.data.css.left });
+      this.selectionNode.css({
+        top: this.item.data.data.css.top,
+        left: this.item.data.data.css.left,
+        width: this.item.data.data.css.width,
+        height: this.item.data.data.css.height
+      });
       this.selectionNode.draggable({
         containment: "parent",
         cursor: 'crosshair',
@@ -155,7 +147,7 @@ WebDoc.ItemView = $.klass(
         },
         stop: function(e, ui) {
           that.item.save();
-        }        
+        }
       });
     }
   },
@@ -185,5 +177,47 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   unSelect: function($super) {
     WebDoc.application.textTool.exitEditMode();
     $super();
+  }
+});
+
+
+
+
+WebDoc.DrawingView = $klass(WebDoc.ItemView, {
+  createDomNode: function($super) {
+    var newLine = WebDoc.application.svgRenderer.createPolyline(item);
+    this.pageView.drawingDomNode.append(newLine);
+    return $(newLine);
+  }
+});
+
+
+WebDoc.ImageView = $klass(WebDoc.ItemView, {
+  createDomNode: function($super) {
+    var imageNode = $('<' + item.data.data.tag + ' width="100%" height="100%"/>');
+    var itemNode = $("<div/>").css({
+      position: "absolute"
+    });
+    
+    itemNode.append(imageNode.get(0));
+    this.selectionNode = $("<div/>").addClass("drag_handle");
+    itemNode.attr("id", this.item.uuid());
+    for (var key in item.data.data) {
+      if (key == 'css') {
+        itemNode.css(item.data.data.css);
+      }
+      else {
+        if (key == 'innerHtml') {
+          imageNode.html(item.data.data[key]);
+        }
+        else {
+          if (key != 'tag') {
+            this.imageNode.attr(key, item.data.data[key]);
+          }
+        }
+      }
+    }
+    this.pageView.itemDomNode.append(itemNode.get(0));   
+    return itemNode;
   }
 });
