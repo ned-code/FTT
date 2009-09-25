@@ -25,21 +25,21 @@ WebDoc.ItemView = $.klass({
   
   createDomNode: function() {
 
-      var itemNode = $('<' + item.data.data.tag + '/>');
+      var itemNode = $('<' + this.item.data.data.tag + '/>');
 
       this.selectionNode = $("<div/>").addClass("drag_handle");
       itemNode.attr("id", this.item.uuid());
-      for (var key in item.data.data) {
+      for (var key in this.item.data.data) {
         if (key == 'css') {
-          itemNode.css(item.data.data.css);
+          itemNode.css(this.item.data.data.css);
         }
         else {
           if (key == 'innerHtml') {
-            itemNode.html(item.data.data[key]);
+            itemNode.html(this.item.data.data[key]);
           }
           else {
             if (key != 'tag') {
-              itemNode.attr(key, item.data.data[key]);
+              itemNode.attr(key, this.item.data.data[key]);
             }
           }
         }
@@ -185,19 +185,18 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
 
 
 
-
-WebDoc.DrawingView = $klass(WebDoc.ItemView, {
+WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
   createDomNode: function($super) {
-    var newLine = WebDoc.application.svgRenderer.createPolyline(item);
+    var newLine = WebDoc.application.svgRenderer.createPolyline(this.item);
     this.pageView.drawingDomNode.append(newLine);
     return $(newLine);
   }
 });
 
 
-WebDoc.ImageView = $klass(WebDoc.ItemView, {
+WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   createDomNode: function($super) {
-    var imageNode = $('<' + item.data.data.tag + ' width="100%" height="100%"/>');
+    var imageNode = $('<' + this.item.data.data.tag + ' width="100%" height="100%"/>');
     var itemNode = $("<div/>").css({
       position: "absolute"
     });
@@ -205,17 +204,17 @@ WebDoc.ImageView = $klass(WebDoc.ItemView, {
     itemNode.append(imageNode.get(0));
     this.selectionNode = $("<div/>").addClass("drag_handle");
     itemNode.attr("id", this.item.uuid());
-    for (var key in item.data.data) {
+    for (var key in this.item.data.data) {
       if (key == 'css') {
-        itemNode.css(item.data.data.css);
+        itemNode.css(this.item.data.data.css);
       }
       else {
         if (key == 'innerHtml') {
-          imageNode.html(item.data.data[key]);
+          imageNode.html(this.item.data.data[key]);
         }
         else {
           if (key != 'tag') {
-            this.imageNode.attr(key, item.data.data[key]);
+            imageNode.attr(key, this.item.data.data[key]);
           }
         }
       }
