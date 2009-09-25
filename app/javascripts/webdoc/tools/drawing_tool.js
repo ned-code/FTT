@@ -56,6 +56,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   },
 
   draw: function(e) {
+    console.log("draw");
     var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
     this.currentDrawObject.setPoints(this.currentDrawObject.data.data.points += " " + mappedPoint.x + "," + mappedPoint.y);
   },

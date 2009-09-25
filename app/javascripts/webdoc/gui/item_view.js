@@ -7,6 +7,7 @@ WebDoc.ItemView = $.klass({
   pageView: null,
   initialize: function(item, pageView) {
   
+    ddd("create item view");
     if (pageView) {
       this.pageView = pageView;
     }
@@ -17,7 +18,6 @@ WebDoc.ItemView = $.klass({
     this.item = item;
     
     this.domNode = this.createDomNode();
-    this.domNode.addClass("item")
     // internal size and position are top, left width and height as float. Because in the css those values are string with px unit
     // and we need float values to marix transform.
     this.recomputeInternalSizeAndPosition();
@@ -47,6 +47,7 @@ WebDoc.ItemView = $.klass({
       }
     }
     this.pageView.itemDomNode.append(itemNode.get(0));
+    itemNode.addClass("item");
     return itemNode;
   },
   
@@ -117,7 +118,6 @@ WebDoc.ItemView = $.klass({
       top: this.item.data.data.css.top,
       left: this.item.data.data.css.left
     });
-    ddd("should resize resize hanlde");
     this.resizeNode.css({
       top: this.item.data.data.css.top,
       left: this.item.data.data.css.left
@@ -155,12 +155,12 @@ WebDoc.ItemView = $.klass({
         width: this.item.data.data.css.width,
         height: this.item.data.data.css.height
       };
-      this.selectionNode.css(handleCss);      
+      this.selectionNode.css(handleCss);
       this.selectionNode.draggable({
         containment: "parent",
         cursor: 'crosshair',
         start: function(e, ui) {
-          var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);          
+          var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           var currentPosition = {};
           $.extend(currentPosition, this.position);
           this.dragOffsetLeft = mappedPoint.x - this.position.left;
@@ -169,13 +169,13 @@ WebDoc.ItemView = $.klass({
           WebDoc.application.undoManager.registerUndo(function() {
             this._restorePosition(currentPosition);
           }.pBind(this));
-        }.pBind(this),
+        }.pBind(this)        ,
         drag: function(e, ui) {
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           ui.position.left = mappedPoint.x - this.dragOffsetLeft;
           ui.position.top = mappedPoint.y - this.dragOffsetTop;
           this.moveTo(ui.position);
-        }.pBind(this),
+        }.pBind(this)        ,
         stop: function(e, ui) {
           this.item.save();
         }.pBind(this)
@@ -187,15 +187,21 @@ WebDoc.ItemView = $.klass({
         handles: 's, e, se',
         start: function(e, ui) {
           this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
-        }.pBind(this),
+          var currentSize = {};
+          $.extend(currentSize, this.size);
+          ddd("start resize from size" + currentSize.height + ":" + currentSize.width);
+          WebDoc.application.undoManager.registerUndo(function() {
+            this._restoreSize(currentSize);
+          }.pBind(this));
+        }.pBind(this)        ,
         resize: function(e, ui) {
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           var newWidth = ui.originalSize.width + (mappedPoint.x - this.resizeOrigin.x);
-          var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y); 
+          var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y);
           ui.size.width = newWidth;
           ui.size.height = newHeight;
-          this.resizeTo(ui.size);          
-        }.pBind(this),
+          this.resizeTo(ui.size);
+        }.pBind(this)        ,
         stop: function(e, ui) {
           this.item.save();
         }.pBind(this)
@@ -226,8 +232,20 @@ WebDoc.ItemView = $.klass({
       this._restorePosition(previousPosition);
     }.pBind(this));
     this.item.save();
-  }
+  },
   
+  _restoreSize: function(size) {
+    ddd("restore size" + size.height + ":" + size.width);
+    var previousSize = {};
+    $.extend(previousSize, this.size);
+    this.resizeTo(size);
+    this.resizeNode.css(size);
+    WebDoc.application.undoManager.registerUndo(function() {
+      this._restoreSize(previousSize);
+    }
+.pBind(this));
+    this.item.save();
+  }
 });
 
 
@@ -280,6 +298,7 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
       }
     }
     this.pageView.itemDomNode.append(itemNode.get(0));
+    itemNode.addClass("item");
     return itemNode;
   }
 });
