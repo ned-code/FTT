@@ -166,13 +166,16 @@ WebDoc.ItemView = $.klass({
 
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
   select: function($super) {
-    if (!this.isSelected()) {
-      $super(); //select
+    if (this.isSelected()) {
+      ddd("Text box already selected => Must enter edit mode...")
+      WebDoc.application.textTool.enterEditMode(this.domNode); //will also "unselect" the item and switch to the text tool
     }
     else {
-      ddd("must enter edit mode")
-      WebDoc.application.textTool.enterEditMode();
+      $super(); //select it
     }
+  },
+  isEditing: function() {
+    return this.domNode.closest("."+WebDoc.TEXTBOX_WRAP_CLASS).length > 0;
   },
   unSelect: function($super) {
     WebDoc.application.textTool.exitEditMode();

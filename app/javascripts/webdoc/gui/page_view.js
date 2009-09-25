@@ -25,7 +25,15 @@ WebDoc.PageView = $.klass(
     this.itemViews = [];
     if (page.items && $.isArray(page.items)) {
       $.each(page.items, function() {
-        var itemView = new WebDoc.ItemView(this, that);
+        var itemView;
+        switch (this.data.media_type) {
+          case "text":
+            itemView = new WebDoc.TextView(this, that);
+            break;
+          default: 
+            itemView = new WebDoc.ItemView(this, that);
+            break;
+        }
       });
     }
     page.addListener(this);

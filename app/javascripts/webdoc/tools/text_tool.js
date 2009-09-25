@@ -6,6 +6,7 @@
 //= require "text_tool/html"
 //= require "text_tool/selection"
 
+WebDoc.TEXTBOX_WRAP_CLASS = "textbox_wrap";
 
 WebDoc.TextTool = $.klass(WebDoc.Tool, {
   initialize: function($super, toolId, paletteId) {
@@ -33,7 +34,6 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
 
   selectTool: function() {
     this.newSelectedTextBox();
-    this.enterEditMode();
   },
   
   newSelectedTextBox: function() {
@@ -54,15 +54,25 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     WebDoc.application.boardController.selectItemViews([newItemView]);
     
     // newItem.save();
-    this.textBox = newItemView.domNode;
+    // this.textBox = newItemView.domNode;
   },
   
-  enterEditMode: function() { // build markup and setup vars
+  enterEditMode: function(textView) { //can be called on existing (selected) textView
+    this.textBox = textView.domNode;
+
+    // Be sure we switch to text tool
+    WebDoc.application.boardController.setCurrentTool(this);
+
+    
     ddd("Text tool: entering edit mode");
+    
+    //TODO: look if another text box is in edit mode and un... it?
+    
+    
 
     // Create iframe element
-    $(this.textBox).wrap('<div class="textbox_wrap"></div>');
-    this.textboxEditor = $(this.textBox).closest('div.textbox_wrap')[0];
+    $(this.textBox).wrap('<div class="'+WebDoc.TEXTBOX_WRAP_CLASS+'"></div>');
+    this.textboxEditor = $(this.textBox).closest('div.'+WebDoc.TEXTBOX_WRAP_CLASS)[0];
     var iframe = $('<iframe class="rte_iframe" />');
     iframe.css(this.defaultTextBoxCss);
     $(this.textBox).hide().before(iframe);
@@ -114,7 +124,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.unbindPalette();
 
     $(this.editableFrame).remove();
-    $(this.textBox).unwrap();
+    $(this.textBox).unwrap(".textbox_wrap"); //TODO
     $(this.textBox).show();
 
     this.editMode = false;
