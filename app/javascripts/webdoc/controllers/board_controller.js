@@ -120,10 +120,10 @@ WebDoc.BoardController = $.klass(
     this.unselectItemViews(this.selection);
   },
   
-  unselectItemViews: function(objects) {
+  unselectItemViews: function(itemViews) {
     var i = 0;
-    for (; i < objects.length; i++) {
-      var objectToUnSelect = objects[i];
+    for (; i < itemViews.length; i++) {
+      var objectToUnSelect = itemViews[i];
       if (objectToUnSelect) {
         objectToUnSelect.unSelect();
         var index = this.selection.indexOf(objectToUnSelect);
