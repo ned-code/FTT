@@ -3,8 +3,8 @@
   %head
     %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
     %title= "MyUniboard (#{I18n.locale}) - #{yield(:title)}"
-    = stylesheet_link_tag 'style'
     = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
+    = stylesheet_link_tag 'style'
     -#= javascript_include_tag 'date'
     = sprockets_include_tag
 
