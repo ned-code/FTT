@@ -78,7 +78,7 @@ WebDoc.PageEditor = $.klass({
     editor.currentPage = page;
     editor.previousPageId = editor.currentPage.previousPageId();
     editor.nextPageId = editor.currentPage.nextPageId();
-
+    
     WebDoc.application.boardController.setCurrentPage(editor.currentPage);
   },
 

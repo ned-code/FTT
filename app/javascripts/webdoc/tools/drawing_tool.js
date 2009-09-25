@@ -34,8 +34,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
 
     this.currentDrawObject = new WebDoc.Item();
     this.currentDrawObject.data.media_type = WebDoc.ITEM_TYPE_DRAWING;
-    this.currentDrawObject.data.data.css = 
-    {
+    this.currentDrawObject.data.data.css = {
       zIndex: 2000
     };
     this.currentDrawObject.data.data.stroke = "red";

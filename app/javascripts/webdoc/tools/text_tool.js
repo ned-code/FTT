@@ -19,13 +19,19 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.COMMANDS = ['bold', 'italic', 'underline', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'insertUnorderedList', 'insertOrderedList', 'indent', 'outdent'];
 
     this.iframeCssPath = "/stylesheets/textbox.css";
-    this.defaultTextBoxCss = { // style used on both the textBox div & iframe
+   
+    this.defaultTextboxCss = { // style used on both the textBox div & iframe
       border:"solid 2px #eee",
       width:"400px",
       height:"200px",
-      top: "10px",
-      left: "10px" 
     };
+    jQuery.extend(this.textboxCss = {}, this.defaultTextboxCss, {
+      cursor:"default",
+      overflow:"hidden"
+    }); 
+    jQuery.extend(this.iframeCss = {}, this.defaultTextboxCss, {
+      borderColor:"magenta"
+    });
     
     this.editMode = false;
     this.cleanify = $.fn.webdocHTML.clean;
@@ -33,8 +39,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
 
   selectTool: function() {
-    
-    // this.newSelectedTextBox();
+    this.newSelectedTextBox();
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
   },
   
   newSelectedTextBox: function() {
@@ -44,10 +50,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "div";
     newItem.data.data.innerHTML = "Some Text";
-    newItem.data.data.css = jQuery.extend(this.defaultTextBoxCss, {
-      cursor:"default",
-      overflow:"hidden"
-    });
+    newItem.data.data.css = this.textboxCss;
     
     //Create view
     var newItemView = new WebDoc.TextView(newItem);
@@ -62,21 +65,25 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     // ddd("Text tool: entering edit mode");
     this.textBox = textView.domNode;
     
-    // Be sure we switch to text tool
-    WebDoc.application.boardController.setCurrentTool(this);
     // Unselect existing selected text box (if necessary)
     WebDoc.application.boardController.unselectItemViews([textView]);
     
-    
     //TODO: look if another text box is in edit mode and un... it?
+    // Be sure we switch to text tool
+    // WebDoc.application.boardController.setCurrentTool(this);
     
-    
-
-    // Create iframe element
+    // Create iframe element and wrap both the textBox and iframe in a div
     $(this.textBox).wrap('<div class="'+WebDoc.TEXTBOX_WRAP_CLASS+'"></div>');
     this.textboxEditor = $(this.textBox).closest('div.'+WebDoc.TEXTBOX_WRAP_CLASS)[0];
+    $(this.textboxEditor).css({
+      position: "absolute",
+      top: this.textBox.css("top"),
+      left: this.textBox.css("left"),
+      zIndex:1000000
+    })
+    
     var iframe = $('<iframe class="rte_iframe" />');
-    iframe.css(this.defaultTextBoxCss);
+    iframe.css(this.iframeCss);
     $(this.textBox).hide().before(iframe);
     // $(this.textBox).hide().before('<iframe class="rte_iframe" scrolling="no" />'); //iframe with no scrolling
     this.editableFrame = $(this.textBox).prev('iframe')[0]
@@ -89,9 +96,9 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       this.setupEditableFrame(); 
     }.pBind(this));
     if (MTools.Browser.WebKit) { // iframe onload never fires in webkit; this is a fallback
-      setTimeout(function() { 
+      setTimeout(function() {
         if (!this.editMode) { this.setupEditableFrame(); }
-      }.pBind(this), 100); 
+      }.pBind(this), 100);
     }
   },
   
