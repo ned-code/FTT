@@ -29,5 +29,9 @@ WebDoc.Tool = $.klass({
   },
 
   mouseUp: function(e) {
+  },
+
+  mouseClick: function(e) {
   }
+
 });

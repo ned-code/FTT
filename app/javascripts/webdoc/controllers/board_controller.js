@@ -35,6 +35,7 @@ WebDoc.BoardController = $.klass(
     $("#board").bind("mousemove", this, this.mouseMove);
     $("#board").bind("mouseup", this, this.mouseUp);
     $("#board").bind("mouseout", this, this.mouseOut);
+    $("#board").bind("click", this, this.mouseClick);
     
     // update data attribute of object
     $("object").each(function() {
@@ -184,6 +185,12 @@ WebDoc.BoardController = $.klass(
     var that = e.data;
     e.preventDefault();
     that.currentTool.mouseUp(e);
-    
+  },
+  
+  mouseClick: function(e) {
+    var that = e.data;
+    e.preventDefault();
+    that.currentTool.mouseClick(e);
   }
+  
 });

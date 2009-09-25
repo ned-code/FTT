@@ -26,6 +26,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
     else {
       WebDoc.application.boardController.unselectAll();
     }
+    this.lastSelectedObject = objectToSelect;
   },
   
   move: function(e) {
@@ -95,6 +96,12 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
   mouseUp: function(e) {
     this.moving = false;
     this.endMove();
+  },
+  
+  mouseClick: function(e) {
+    if (this.lastSelectedObject) {
+      this.lastSelectedObject.edit(); //if object (itemView) supports edit mode...
+    }
   }
   
 });

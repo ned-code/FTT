@@ -17,6 +17,7 @@ WebDoc.ItemView = $.klass({
     this.item = item;
     
     this.domNode = this.createDomNode();
+    this.domNode.addClass("item")
     // internal size and position are top, left width and height as float. Because in the css those values are string with px unit
     // and we need float values to marix transform.
     this.recomputeInternalSizeAndPosition();
@@ -158,6 +159,10 @@ WebDoc.ItemView = $.klass({
     //this.selectionNodeView.remove();
   },
   
+  edit: function() {
+    //by default item views are not editable (if your item is editable override this method in the subclass)
+  },
+  
   createSelectedFrame: function() {
   }
   
@@ -165,31 +170,19 @@ WebDoc.ItemView = $.klass({
 
 
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
-  select: function($super) {
-    if (this.isSelected()) {
-      ddd("Text box already selected => Must enter edit mode...")
-      WebDoc.application.textTool.enterEditMode(this); //will also "unselect" the item and switch to the text tool
-    }
-    else {
-      $super(); //select it
-    }
+  edit: function() {
+    ddd("Text box already selected => Must enter edit mode...")
+    WebDoc.application.textTool.enterEditMode(this); //will also "unselect" the item and switch to the text tool
   },
+  
   isEditing: function() {
     return this.domNode.closest("."+WebDoc.TEXTBOX_WRAP_CLASS).length > 0;
+  },
+  unSelect: function($super) {
+    // WebDoc.application.textTool.exitEditMode();
+    $super();
   }
-  // unSelect: function($super) {
-  //   // WebDoc.application.textTool.exitEditMode();
-  //   $super();
-  // }
 });
-
-WebDoc.ImageView = $.klass(WebDoc.ItemView, {
-});
-
-WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
-});
-
-
 
 WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
   createDomNode: function($super) {

@@ -82,6 +82,10 @@ a:hover { color: #fff; background-color:#000; }
   background:transparent url(/images/drag.png) repeat scroll 0 0  	
 }
 
+.item {
+  position:absolute;
+}
+
 /* ========== */
 /* = WebDoc = */
 /* ========== */

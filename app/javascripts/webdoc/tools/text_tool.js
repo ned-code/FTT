@@ -33,7 +33,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
 
   selectTool: function() {
-    this.newSelectedTextBox();
+    
+    // this.newSelectedTextBox();
   },
   
   newSelectedTextBox: function() {
@@ -56,7 +57,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     // newItem.save();
     // this.textBox = newItemView.domNode;
   },
-  
+    
   enterEditMode: function(textView) { //can be called on existing (selected) textView
     // ddd("Text tool: entering edit mode");
     this.textBox = textView.domNode;
