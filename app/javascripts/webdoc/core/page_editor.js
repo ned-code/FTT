@@ -37,7 +37,7 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.handTool = new WebDoc.HandTool("#tool_hand");
     WebDoc.application.textTool = new WebDoc.TextTool("#tool_text", "#palette_text");
 
-    WebDoc.application.boardController.setCurrentTool(WebDoc.application.drawingTool);
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.undoManager = new MTools.UndoManager();
 
     $("#close-page").bind("click", this.close);
