@@ -24,28 +24,28 @@ WebDoc.ItemView = $.klass({
   },
   
   createDomNode: function() {
-
-      var itemNode = $('<' + this.item.data.data.tag + '/>');
-
-      this.selectionNode = $("<div/>").addClass("drag_handle");
-      itemNode.attr("id", this.item.uuid());
-      for (var key in this.item.data.data) {
-        if (key == 'css') {
-          itemNode.css(this.item.data.data.css);
+  
+    var itemNode = $('<' + this.item.data.data.tag + '/>');
+    
+    this.selectionNode = $("<div/>").addClass("drag_handle");
+    itemNode.attr("id", this.item.uuid());
+    for (var key in this.item.data.data) {
+      if (key == 'css') {
+        itemNode.css(this.item.data.data.css);
+      }
+      else {
+        if (key == 'innerHtml') {
+          itemNode.html(this.item.data.data[key]);
         }
         else {
-          if (key == 'innerHtml') {
-            itemNode.html(this.item.data.data[key]);
-          }
-          else {
-            if (key != 'tag') {
-              itemNode.attr(key, this.item.data.data[key]);
-            }
+          if (key != 'tag') {
+            itemNode.attr(key, this.item.data.data[key]);
           }
         }
       }
-      this.pageView.itemDomNode.append(itemNode.get(0));
-      return itemNode;
+    }
+    this.pageView.itemDomNode.append(itemNode.get(0));
+    return itemNode;
   },
   
   coverPoint: function(point) {
@@ -116,6 +116,7 @@ WebDoc.ItemView = $.klass({
       left: this.item.data.data.css.left
     });
   },
+  
   isSelected: function() {
     return this.selectionNode.parent().length > 0;
   },
@@ -136,6 +137,12 @@ WebDoc.ItemView = $.klass({
       this.selectionNode.draggable({
         containment: "parent",
         cursor: 'crosshair',
+        start: function(e, ui) {
+          var currentPosition = this.position;
+          WebDoc.application.undoManager.registerUndo(function() {
+            this._restorePosition(currentPosition);
+          }.pBind(this));
+        }.pBind(this),
         drag: function(e, ui) {
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           ui.position.left = mappedPoint.x;
@@ -159,6 +166,15 @@ WebDoc.ItemView = $.klass({
   },
   
   createSelectedFrame: function() {
+  },
+  
+  _restorePosition: function(position) {
+    var previousPosition = this.position;
+    this.moveTo(position);
+    WebDoc.application.undoManager.registerUndo(function() {
+      this._restorePosition(previousPosition);
+    }.pBind(this));
+    this.item.save();
   }
   
 });
@@ -175,7 +191,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
     }
   },
   isEditing: function() {
-    return this.domNode.closest("."+WebDoc.TEXTBOX_WRAP_CLASS).length > 0;
+    return this.domNode.closest("." + WebDoc.TEXTBOX_WRAP_CLASS).length > 0;
   },
   unSelect: function($super) {
     WebDoc.application.textTool.exitEditMode();
@@ -197,9 +213,7 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
 WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   createDomNode: function($super) {
     var imageNode = $('<' + this.item.data.data.tag + ' width="100%" height="100%"/>');
-    var itemNode = $("<div/>").css({
-      position: "absolute"
-    });
+    var itemNode = $("<div/>");
     
     itemNode.append(imageNode.get(0));
     this.selectionNode = $("<div/>").addClass("drag_handle");
@@ -219,7 +233,7 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
         }
       }
     }
-    this.pageView.itemDomNode.append(itemNode.get(0));   
+    this.pageView.itemDomNode.append(itemNode.get(0));
     return itemNode;
   }
 });
