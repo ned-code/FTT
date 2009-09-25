@@ -42,7 +42,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     this.currentDrawObject.data.data.strokeWidth = 5;
     this.currentDrawObject.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     this.currentDrawObject.data.data.points = mappedPoint.x + "," + mappedPoint.y;
-    var newItemView = new WebDoc.ItemView(this.currentDrawObject);
+    var newItemView = new WebDoc.DrawingView(this.currentDrawObject);
 
     var drawObjectToUndo = this.currentDrawObject;
     var that = this;
