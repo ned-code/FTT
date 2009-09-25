@@ -33,57 +33,9 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
 
   },
   
-  move: function(e) {
-    if (this.moving) {
-      this.hasMoved = true;
-      if (this.originalMovingPos.firstMove && WebDoc.application.boardController.selection.length) {
-        var selectionToUndo = WebDoc.application.boardController.selection[0];
-        this._moveItem(selectionToUndo)
-      }
-      this.originalMovingPos.firstMove = false;
-      var xDiff = (e.screenX - this.originalMovingPos.x) * (1 / this.currentZoom);
-      var yDiff = (e.screenY - this.originalMovingPos.y) * (1 / this.currentZoom);
-      var i = 0;
-      for (; i < WebDoc.application.boardController.selection.length; i++) {
-        var objectToMove = WebDoc.application.boardController.selection[i];
-        objectToMove.shift(xDiff, yDiff);
-        
-      }
-      this.originalMovingPos = 
-      {
-        x: e.screenX,
-        y: e.screenY
-      };
-    }
-  },
-  
-  endMove: function(e) {
-    var i = 0;
-    if (this.hasMoved) {
-      for (; i < WebDoc.application.boardController.selection.length; i++) {
-        WebDoc.application.boardController.selection[i].save();
-      }
-      this.hasMoved = false;
-    }
-  },
-  
-  _moveItem: function(item, newPosition) {
-    var previousPosition = 
-    {
-      left: item.position.left,
-      top: item.position.top
-    };
-    var that = this;
-    if (newPosition) {
-      item.moveTo(newPosition);
-      item.save();
-    }
-    WebDoc.application.undoManager.registerUndo(function() {
-      that._moveItem.call(that, item, previousPosition);
-    });
-  },
-  
   mouseDown: function(e) {
+    var target = $(e.target); 
+    if (!target || target.length == 0 || !target.hasClass("ui-resizable-handle")) {
     this.select(e);
     this.originalMovingPos = 
     {
@@ -91,15 +43,13 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
       y: e.screenY,
       firstMove: true
     };
+    }
   },
   
   mouseMove: function(e) {
-    this.move(e);
   },
   
   mouseUp: function(e) {
-    this.moving = false;
-    this.endMove();
   },
   
   mouseClick: function(e) {
