@@ -22,6 +22,11 @@ WebDoc.Page = $.klass(MTools.Record,
     return "/documents/" + this.data.document_id;
   },
   
+  applyCss: function(newCss) {    
+    this.data.data.css = newCss;
+    this.fireObjectChanged();
+  },
+  
   refresh: function($super, json) {
     $super(json);
     var that = this;
