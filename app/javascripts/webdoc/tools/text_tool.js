@@ -33,7 +33,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
 
   selectTool: function() {
-    this.newSelectedTextBox();
+    
+    // this.newSelectedTextBox();
   },
   
   newSelectedTextBox: function() {
@@ -56,15 +57,16 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     // newItem.save();
     // this.textBox = newItemView.domNode;
   },
-  
+    
   enterEditMode: function(textView) { //can be called on existing (selected) textView
+    // ddd("Text tool: entering edit mode");
     this.textBox = textView.domNode;
-
+    
     // Be sure we switch to text tool
     WebDoc.application.boardController.setCurrentTool(this);
-
+    // Unselect existing selected text box (if necessary)
+    WebDoc.application.boardController.unselectItemViews([textView]);
     
-    ddd("Text tool: entering edit mode");
     
     //TODO: look if another text box is in edit mode and un... it?
     
