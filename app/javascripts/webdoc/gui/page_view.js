@@ -27,8 +27,14 @@ WebDoc.PageView = $.klass(
       $.each(page.items, function() {
         var itemView;
         switch (this.data.media_type) {
-          case "text":
+          case WebDoc.ITEM_TYPE_TEXT:
             itemView = new WebDoc.TextView(this, that);
+            break;
+          case  WebDoc.ITEM_TYPE_IMAGE:
+            itemView = new WebDoc.ImageView(this, that);
+            break;
+          case  WebDoc.ITEM_TYPE_DRAWING:
+            itemView = new WebDoc.DrawingView(this, that);
             break;
           default: 
             itemView = new WebDoc.ItemView(this, that);
