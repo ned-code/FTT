@@ -127,7 +127,6 @@ WebDoc.ItemView = $.klass({
       console.log("select item " + this.item.uuid());
       this.domNode.addClass("item_selected");
       WebDoc.application.boardController.pageView.itemDomNode.append(this.selectionNode.get(0));
-      //this.domNode.append(this.selectionNodeView.get(0));
       var that = this;
       this.selectionNode.css({
         top: this.item.data.data.css.top,
@@ -139,7 +138,9 @@ WebDoc.ItemView = $.klass({
         containment: "parent",
         cursor: 'crosshair',
         start: function(e, ui) {
-          var currentPosition = this.position;
+          var currentPosition = {};
+          $.extend(currentPosition, this.position);
+          ddd("start move from point" + currentPosition.left + ":" + currentPosition.top);
           WebDoc.application.undoManager.registerUndo(function() {
             this._restorePosition(currentPosition);
           }.pBind(this));
@@ -157,6 +158,7 @@ WebDoc.ItemView = $.klass({
           that.item.save();
         }
       });
+      this.selectionNode.trigger(WebDoc.application.arrowTool.lastSelectedObject.event);
     }
   },
   
@@ -174,8 +176,11 @@ WebDoc.ItemView = $.klass({
   },
   
   _restorePosition: function(position) {
-    var previousPosition = this.position;
+    ddd("restore position" + position.left + ":" + position.top);
+    var previousPosition = {};
+    $.extend(previousPosition, this.position);
     this.moveTo(position);
+    this.selectionNode.css(position);
     WebDoc.application.undoManager.registerUndo(function() {
       this._restorePosition(previousPosition);
     }.pBind(this));
