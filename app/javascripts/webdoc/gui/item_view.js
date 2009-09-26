@@ -273,6 +273,13 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
 });
 
 
+WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
+  edit: function() {
+    ddd("TEdit widget.")
+    this.domNode.css({ zIndex: "1000005"});
+  },
+});
+
 WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   createDomNode: function($super) {
     var imageNode = $('<' + this.item.data.data.tag + ' width="100%" height="100%"/>');

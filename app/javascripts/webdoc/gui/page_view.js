@@ -36,6 +36,9 @@ WebDoc.PageView = $.klass(
           case  WebDoc.ITEM_TYPE_DRAWING:
             itemView = new WebDoc.DrawingView(this, that);
             break;
+          case  WebDoc.ITEM_TYPE_WIDGET:
+            itemView = new WebDoc.WidgetView(this, that);
+            break;            
           default: 
             itemView = new WebDoc.ItemView(this, that);
             break;
