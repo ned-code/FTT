@@ -147,17 +147,11 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       this.doc.execCommand('undo', false, null);
     }
     
-    //TODO TRY TO FOCUS THE FUCKING IFRAME GRRRRRRRRRRRRRRR
+    //focusing iframe
+    setTimeout(function(){
+      $("iframe")[0].focus();
+    },100);
     // this.doc.focus();
-    
-    // setTimeout(function() {
-    //   $(this.editableFrame).trigger("mousedown");
-    // }.pBind(this), 1000);
-
-    // setTimeout(function() {
-    //   $(this.textboxEditor).trigger("mousedown");
-    // }.pBind(this), 1000);
-  
   },
 
   exitEditMode: function() {
@@ -175,7 +169,6 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       $(this.textBox).html(cleanedHtml);
       this.textView.item.data.data.innerHTML = cleanedHtml;
       this.textView.item.data.data['class'] = "textbox"; //removing "empty" class
-      
     }
     this.textView.item.save();
     
