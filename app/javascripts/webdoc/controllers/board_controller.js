@@ -12,6 +12,17 @@ WebDoc.BoardController = $.klass(
   initialize: function(editable) {
     this.currentZoom = 1;
     this.selection = [];
+    this.selectionListeners = [];
+  },
+  
+  addSelectionListener: function(listener) {
+    this.selectionListeners.push(listener);
+  },
+  
+  fireSelectionChanged: function() {
+    $.each(this.selectionListeners, function() {      
+      this.selectionChanged();
+    });
   },
   
   setCurrentPage: function(page) {
@@ -26,6 +37,7 @@ WebDoc.BoardController = $.klass(
     $("#board_container").get(0).scrollLeft = 0;
     this.currentZoom = 1;
     this.selection = [];
+    this.fireSelectionChanged();
     this.currentPage = page;
     
     this.initialHeight = $("#board").height();
@@ -102,23 +114,13 @@ WebDoc.BoardController = $.klass(
       this.selection.push(itemToSelect);
       itemToSelect.select();
     }.pBind(this))
-    
-    // if (this.selection[0] != itemViews[0]) {
-    //   this.unselectAll();
-    //   var i = 0;
-    //   for (; i < itemViews.length; i++) {
-    //     var objectToSelect = itemViews[i];
-    //     if (objectToSelect) {
-    //       this.selection.push(objectToSelect);
-    //       objectToSelect.select();
-    //     }
-    //   }
-    // }
+    this.fireSelectionChanged();
   },
   
   unselectAll: function() {
     console.log("unselect all");
     this.unselectItemViews(this.selection);
+    this.fireSelectionChanged();
   },
   
   unselectItemViews: function(itemViews) {

@@ -51,6 +51,8 @@ WebDoc.PageEditor = $.klass({
     $("#undo").bind("click", this.undo);
     $("#redo").bind("click", this.redo);
     $("#default-image").bind("click", this.insertImage);
+    $("#page_css_editor").bind("blur", this.applyPageCss);
+    WebDoc.application.boardController.addSelectionListener(this);
   },
 
   load: function(documentId) {
@@ -80,6 +82,7 @@ WebDoc.PageEditor = $.klass({
     editor.nextPageId = editor.currentPage.nextPageId();
     
     WebDoc.application.boardController.setCurrentPage(editor.currentPage);
+    $("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
   },
 
   previous: function() {
@@ -156,8 +159,26 @@ WebDoc.PageEditor = $.klass({
     // newItem.data.data.src = "/system/files/11d69920-8a86-012c-72df-002500a8be1c/original/Picture_1.png?1253720740";
     newItem.data.data.src = "/images/image_view_test.png";
     newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};
+    newItem.data.data.innerHTML = "Hello Juju";
     var newItemView = new WebDoc.ImageView(newItem);
     newItem.save();
+  },
+  
+  applyPageCss: function() {
+    eval("var newCss=" + $("#page_css_editor").get(0).value);    
+    WebDoc.application.pageEditor.currentPage.applyCss(newCss);
+    WebDoc.application.pageEditor.currentPage.save();
+  },
+  
+  selectionChanged: function() {
+    ddd("selected item ");
+    ddd( WebDoc.application.boardController.selection);
+    if (WebDoc.application.boardController.selection.length > 0) {
+      $("#selected_item_html_editor").get(0).value = WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
+    }
+    else {
+      $("#selected_item_html_editor").get(0).value = "";
+    }
   }
 });
 
