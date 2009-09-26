@@ -160,7 +160,7 @@ WebDoc.ItemView = $.klass({
       this.selectionNode.css(handleCss);
       this.selectionNode.draggable({
         containment: "parent",
-        cursor: 'crosshair',
+        cursor: 'move',
         start: function(e, ui) {
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           var currentPosition = {};
@@ -182,7 +182,9 @@ WebDoc.ItemView = $.klass({
           this.item.save();
         }.pBind(this)
       });
-      this.selectionNode.trigger(WebDoc.application.arrowTool.lastSelectedObject.event);
+      
+      var lastSelectedObjectMouseDownEvent = WebDoc.application.arrowTool.lastSelectedObject.event;
+      if (lastSelectedObjectMouseDownEvent) this.selectionNode.trigger(lastSelectedObjectMouseDownEvent);
       
       this.resizeNode.css(handleCss);
       this.resizeNode.resizable({

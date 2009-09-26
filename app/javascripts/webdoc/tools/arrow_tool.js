@@ -12,6 +12,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
   
   initialize: function($super, toolId) {
     $super(toolId);
+    this.lastSelectedObject = {};
   },
   
   select: function(e) {
@@ -30,7 +31,6 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
     else {
       WebDoc.application.boardController.unselectAll();
     }
-
   },
   
   mouseDown: function(e) {

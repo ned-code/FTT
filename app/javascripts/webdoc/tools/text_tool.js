@@ -7,6 +7,7 @@
 //= require "text_tool/selection"
 
 WebDoc.TEXTBOX_WRAP_CLASS = "textbox_wrap";
+WebDoc.NEW_TEXTBOX_CONTENT = "Double-click to edit";
 
 WebDoc.TextTool = $.klass(WebDoc.Tool, {
   initialize: function($super, toolId, paletteId) {
@@ -21,48 +22,53 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.iframeCssPath = "/stylesheets/textbox.css";
    
     this.defaultTextboxCss = { // style used on both the textBox div & iframe
-      border:"solid 2px #eee",
+      borderStyle:"solid",
+      borderWidth:"2px",
+      // borderColor:"transparent",
       width:"400px",
       height:"200px",
+      overflow:"hidden"
     };
     jQuery.extend(this.textboxCss = {}, this.defaultTextboxCss, {
-      cursor:"default",
-      overflow:"hidden"
+      cursor:"default"
     }); 
     jQuery.extend(this.iframeCss = {}, this.defaultTextboxCss, {
-      borderColor:"magenta"
+      // borderColor:"red",
+      width:"100%",
+      height:"100%"
     });
     
     this.editMode = false;
-    this.cleanify = $.fn.webdocHTML.clean;
-    this.dirtify = $.fn.webdocHTML.dirty;
+    this.cleanHTML = $.fn.webdocHTML.clean;
+    this.dirtifyHTML = $.fn.webdocHTML.dirty;
   },
 
   selectTool: function() {
-    this.newSelectedTextBox();
+    this.newTextBox();
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
   },
   
-  newSelectedTextBox: function() {
+  newTextBox: function() {
     //Create model
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_TEXT;
     newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "div";
-    newItem.data.data.innerHTML = "Some Text";
+    newItem.data.data['class'] = "textbox empty";
+    newItem.data.data.innerHTML = WebDoc.NEW_TEXTBOX_CONTENT;
     newItem.data.data.css = this.textboxCss;
     
     //Create view
     var newItemView = new WebDoc.TextView(newItem);
     // Select view
-    WebDoc.application.boardController.selectItemViews([newItemView]);
+    // WebDoc.application.boardController.selectItemViews([newItemView]);
     
     // newItem.save();
-    // this.textBox = newItemView.domNode;
   },
     
   enterEditMode: function(textView) { //can be called on existing (selected) textView
     // ddd("Text tool: entering edit mode");
+    this.textView = textView;
     this.textBox = textView.domNode;
     
     // Unselect existing selected text box (if necessary)
@@ -75,17 +81,18 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     // Create iframe element and wrap both the textBox and iframe in a div
     $(this.textBox).wrap('<div class="'+WebDoc.TEXTBOX_WRAP_CLASS+'"></div>');
     this.textboxEditor = $(this.textBox).closest('div.'+WebDoc.TEXTBOX_WRAP_CLASS)[0];
-    $(this.textboxEditor).css({
+    $(this.textboxEditor).css({ //adjust textBox wrapper position and size to match those of the textBox
       position: "absolute",
       top: this.textBox.css("top"),
       left: this.textBox.css("left"),
+      width: this.textBox.css("width"),
+      height: this.textBox.css("height"),
       zIndex:1000000
     })
     
-    var iframe = $('<iframe class="rte_iframe" />');
+    var iframe = $('<iframe class="textbox_iframe" scrolling="no" />');
     iframe.css(this.iframeCss);
     $(this.textBox).hide().before(iframe);
-    // $(this.textBox).hide().before('<iframe class="rte_iframe" scrolling="no" />'); //iframe with no scrolling
     this.editableFrame = $(this.textBox).prev('iframe')[0]
     
     // Activate palette
@@ -93,7 +100,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     
     // Setup iFrame for edition
     $(this.editableFrame).one('load', function() { // complete initialization once the iframe loads
-      this.setupEditableFrame(); 
+      this.setupEditableFrame();
+      
     }.pBind(this));
     if (MTools.Browser.WebKit) { // iframe onload never fires in webkit; this is a fallback
       setTimeout(function() {
@@ -106,6 +114,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     //ddd("setup iFrame for edition")
     this.editMode = true;
 
+    //this.doc is the iframe's document object
     this.doc = this.editableFrame.contentDocument || this.editableFrame.contentWindow.document;
     if (this.editableFrame.contentDocument) {
       this.win = this.editableFrame.contentDocument.defaultView;
@@ -122,22 +131,67 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     $(this.doc).find('head').append(ss)
 
     // this.bindEvents();
+    
+    var iframeContent;
+    if ($(this.textBox).hasClass("empty")) {
+      iframeContent = "";
+      $(this.textBox).removeClass("empty");
+    }
+    else {
+      iframeContent = this.dirtifyHTML($(this.textBox).html());
+    }
+    $(this.doc.body).html(iframeContent);
+    
+    // Firefox starts "locked", so insert a character bogus character and undo
+    if (MTools.Browser.Gecko) {
+      this.doc.execCommand('undo', false, null);
+    }
+    
+    //TODO TRY TO FOCUS THE FUCKING IFRAME GRRRRRRRRRRRRRRR
+    // this.doc.focus();
+    
+    // setTimeout(function() {
+    //   $(this.editableFrame).trigger("mousedown");
+    // }.pBind(this), 1000);
 
-    // $(this.doc).find('body').html(dirty($(this.textBox).text())); //.html() is better 'cause it works for non textareas
-    $(this.doc).find('body').html(this.dirtify($(this.textBox).html()));
-    // $(this.textboxEditor).trigger('ready.rte');
+    // setTimeout(function() {
+    //   $(this.textboxEditor).trigger("mousedown");
+    // }.pBind(this), 1000);
+  
   },
 
   exitEditMode: function() {
     // this.unbindEvents();
     this.unbindPalette();
 
+    if (this.isHtmlBlank(this.doc.body.innerHTML)) {
+      $(this.textBox).html(WebDoc.NEW_TEXTBOX_CONTENT);
+      $(this.textBox).addClass("empty");
+      this.textView.item.data.data.innerHTML = WebDoc.NEW_TEXTBOX_CONTENT;
+    }
+    else {
+      // copy cleaned HTML to textBox and save updated item
+      var cleanedHtml = this.cleanHTML(this.doc.body.innerHTML);
+      $(this.textBox).html(cleanedHtml);
+      this.textView.item.data.data.innerHTML = cleanedHtml;
+      this.textView.item.data.data['class'] = "textbox"; //removing "empty" class
+      
+    }
+    this.textView.item.save();
+    
+    
     $(this.editableFrame).remove();
-    $(this.textBox).unwrap(".textbox_wrap"); //TODO
+    $(this.textBox).unwrap(".textbox_wrap");
     $(this.textBox).show();
-
+    
     this.editMode = false;
   },
+  
+  isHtmlBlank: function(html) {
+    // return $.string(html).strip().stripTags().gsub(/\&nbsp;/,'').gsub(/\s/,'').str === "";
+    return $.string(html).strip().stripTags().gsub(/\&nbsp;/,'').blank();
+  },
+  
 
   // bindEvents: function() {
   //   var previousContent;
