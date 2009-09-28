@@ -46,6 +46,8 @@ WebDoc.ItemView = $.klass({
         }
       }
     }
+    ddd("add new node");
+    ddd(itemNode);
     this.pageView.itemDomNode.append(itemNode.get(0));
     itemNode.addClass("item");
     return itemNode;
@@ -79,16 +81,18 @@ WebDoc.ItemView = $.klass({
   },
   
   recomputeInternalSizeAndPosition: function() {
-    if (this.item.data.data.css.top) {
-      this.position = {
-        top: parseFloat(this.item.data.data.css.top.replace("px", "")),
-        left: parseFloat(this.item.data.data.css.left.replace("px", ""))
-      };
-      this.size = {
-        width: parseFloat(this.item.data.data.css.width.replace("px", "")),
-        height: parseFloat(this.item.data.data.css.height.replace("px", ""))
-      };
-    }
+    var t = this.item.data.data.css.top || "0px",
+        l = this.item.data.data.css.left || "0px",
+        w = this.item.data.data.css.width || "100px",
+        h = this.item.data.data.css.height || "100px";
+    this.position = {
+      top: parseFloat(t.replace("px", "")),
+      left: parseFloat(l.replace("px", ""))
+    };
+    this.size = {
+      width: parseFloat(w.replace("px", "")),
+      height: parseFloat(h.replace("px", ""))
+    };
   },
   
   objectChanged: function(item) {
@@ -158,7 +162,7 @@ WebDoc.ItemView = $.klass({
       this.selectionNode.css(handleCss);
       this.selectionNode.draggable({
         containment: "parent",
-        cursor: 'crosshair',
+        cursor: 'move',
         start: function(e, ui) {
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           var currentPosition = {};
@@ -180,7 +184,9 @@ WebDoc.ItemView = $.klass({
           this.item.save();
         }.pBind(this)
       });
-      this.selectionNode.trigger(WebDoc.application.arrowTool.lastSelectedObject.event);
+      
+      var lastSelectedObjectMouseDownEvent = WebDoc.application.arrowTool.lastSelectedObject.event;
+      if (lastSelectedObjectMouseDownEvent) this.selectionNode.trigger(lastSelectedObjectMouseDownEvent);
       
       this.resizeNode.css(handleCss);
       this.resizeNode.resizable({
@@ -250,16 +256,18 @@ WebDoc.ItemView = $.klass({
 
 
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
-  edit: function() {
-    ddd("Text box already selected => Must enter edit mode...")
-    WebDoc.application.textTool.enterEditMode(this); //will also "unselect" the item and switch to the text tool
+  edit: function() { //called if we clicked on an already selected textbox
+    WebDoc.application.textTool.enterEditMode(this);
   },
   
   isEditing: function() {
     return this.domNode.closest("." + WebDoc.TEXTBOX_WRAP_CLASS).length > 0;
   },
+  
   unSelect: function($super) {
-    // WebDoc.application.textTool.exitEditMode();
+    if (this.isEditing()) {
+      WebDoc.application.textTool.exitEditMode();
+    }
     $super();
   }
 });
@@ -275,9 +283,12 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
 
 WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   edit: function() {
-    ddd("TEdit widget.")
     this.domNode.css({ zIndex: "1000005"});
   },
+  unSelect: function($super) {
+    this.domNode.css({ zIndex: "1"});
+    $super();
+  }
 });
 
 WebDoc.ImageView = $.klass(WebDoc.ItemView, {

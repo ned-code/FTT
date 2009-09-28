@@ -36,7 +36,6 @@ $.extend(Function.prototype, {
 });
 
 
-
 /**!
  * unwrap - v0.1 - 7/18/2009
  * http://benalman.com/projects/jquery-unwrap-plugin/
