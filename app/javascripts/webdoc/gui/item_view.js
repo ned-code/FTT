@@ -155,8 +155,8 @@ WebDoc.ItemView = $.klass({
       var handleCss = {
         top: this.item.data.data.css.top,
         left: this.item.data.data.css.left,
-        width: this.item.data.data.css.width,
-        height: this.item.data.data.css.height
+        width: (this.size.width - 7) + "px",
+        height: (this.size.height - 7) + "px"
       };
       this.selectionNode.css(handleCss);
       this.selectionNode.draggable({
