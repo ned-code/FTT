@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -13,10 +14,26 @@ namespace DocumentConverterClient
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            m_appRootUrl = "http://" + Context.Request.Url.Authority;
+
+            IPAddress[] adds = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+            string IPAdd = "";
+            foreach (IPAddress add in adds)
+            {
+                if (add.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    IPAdd = add.ToString();
+                    break;
+                }
+            }
+
+            if ((Page as _Default).ClientIPAddress.Text == "")
+                m_appRootUrl = "http://" + IPAdd + Context.Request.ApplicationPath;
+            else
+                m_appRootUrl = "http://" + ClientIPAddress.Text + Context.Request.ApplicationPath;
 
             if ((Page as _Default).SourceUrlTextBox.Text == "")
                 SourceUrlTextBox.Text = m_defaultSourceUrl;
+
             if ((Page as _Default).ConverterUrlTextBox.Text == "")
                 ConverterUrlTextBox.Text = m_ConverterAddress;
             else m_ConverterAddress = ConverterUrlTextBox.Text;
@@ -27,7 +44,7 @@ namespace DocumentConverterClient
             PdfIdLabel.Text = "";
             string requestUrl = ConverterUrl + "?source=" + SourceUrlTextBox.Text;
             requestUrl += "&shortLiving=" + ShortLivingCheckBox.Checked.ToString();
-            requestUrl += "&clientUrl=" + m_appRootUrl + "/PdfReady.aspx";
+            requestUrl += "&clientUrl=" + Path.Combine(m_appRootUrl, "PdfReady.aspx");
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestUrl);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             PdfIdLabel.Text = response.Headers["pdfId"];
@@ -59,8 +76,9 @@ namespace DocumentConverterClient
             if (response != null) response.Close();
         }
 
+        public static string ConverterRoot { get { return m_ConverterAddress; } }
         public static string ConverterUrl { get { return m_ConverterAddress + "/PdfConverter.aspx"; } }
-        public static string    DeleteUrl { get { return m_ConverterAddress + "/DeletePdf.aspx"; } }
+        public static string DeleteUrl { get { return m_ConverterAddress + "/DeletePdf.aspx"; } }
         public static string    StatusUrl { get { return m_ConverterAddress + "/Status.aspx"; } }
         private string m_appRootUrl;
         private static string m_ConverterAddress = "http://localhost/DocumentConverter";

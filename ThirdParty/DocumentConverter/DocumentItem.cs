@@ -173,7 +173,7 @@ namespace DocumentConverter
             HttpWebResponse response = null;
             try
             {
-                string pdfUrl = Path.Combine(m_appRootUrl + "/output/", PdfFileName);
+                string pdfUrl = Path.Combine("output/", PdfFileName);
                 string requestUrl = m_clientUrl + "?id=" + Id + "&pdfUrl=" + pdfUrl;
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestUrl);
 

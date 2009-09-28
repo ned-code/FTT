@@ -17,7 +17,7 @@ namespace DocumentConverterClient
             m_pdfId = Context.Request.Params["id"];
             m_pdfUrl = Context.Request.Params["pdfUrl"];
             m_applicationPath = Context.Request.PhysicalApplicationPath; 
-            string requestUrl = m_pdfUrl;
+            string requestUrl = Path.Combine(_Default.ConverterRoot, m_pdfUrl);
 
             HttpWebResponse response = null;
             BinaryReader readStream = null;

@@ -42,6 +42,15 @@
                 </td>
             </tr>
             <tr>
+                <td class="style3">
+                    <asp:TextBox ID="ClientIPAddress" runat="server" Width="502px"></asp:TextBox>
+                    <asp:Label ID="Label4" runat="server" 
+                        Text="Use this IP address for Document Converter Client"></asp:Label>
+                </td>
+                <td class="style4">
+                    &nbsp;</td>
+            </tr>
+            <tr>
                 <td class="style2">
                     &nbsp;</td>
                 <td class="style1">
