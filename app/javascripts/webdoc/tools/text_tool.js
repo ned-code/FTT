@@ -67,12 +67,15 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
     
   enterEditMode: function(textView) { //can be called on existing (selected) textView
-    // ddd("Text tool: entering edit mode");
+    //ddd("Text tool: entering edit mode");
+    // Unselect existing selected text box (if necessary)
+    if (this.textView && textView != this.textView)
+      WebDoc.application.boardController.unselectItemViews([this.textView]);
+    
     this.textView = textView;
     this.textBox = textView.domNode;
     
-    // Unselect existing selected text box (if necessary)
-    WebDoc.application.boardController.unselectItemViews([textView]);
+
     
     //TODO: look if another text box is in edit mode and un... it?
     // Be sure we switch to text tool
@@ -87,7 +90,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       left: this.textBox.css("left"),
       width: this.textBox.css("width"),
       height: this.textBox.css("height"),
-      zIndex:1000000
+      zIndex:1000010
     });
     
     var iframe = $('<iframe class="textbox_iframe" scrolling="no" />');

@@ -13,8 +13,8 @@ WebDoc.PageView = $.klass(
     
     this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
     this.drawingDomNode.css("zIndex", 999999);
-    this.domNode.append(this.drawingDomNode.get(0)); //TODO re-enable this!!!
-    
+    this.domNode.append(this.drawingDomNode.get(0));
+    this.domNode.append($("<div/>").css({zIndex: 999999, position: "absolute", width: "100%", height: "100%"}));
     this.itemDomNode = $('<div>').attr({
       id: "items",
       style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
@@ -36,6 +36,9 @@ WebDoc.PageView = $.klass(
           case  WebDoc.ITEM_TYPE_DRAWING:
             itemView = new WebDoc.DrawingView(this, that);
             break;
+          case  WebDoc.ITEM_TYPE_WIDGET:
+            itemView = new WebDoc.WidgetView(this, that);
+            break;            
           default: 
             itemView = new WebDoc.ItemView(this, that);
             break;
@@ -43,6 +46,17 @@ WebDoc.PageView = $.klass(
       });
     }
     page.addListener(this);
+    
+    /*
+    setTimeout(function(){
+      $.each(this.itemViews, function() {
+        ddd("init widget");
+        if (this.item.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
+          this.initWidget();
+        }
+      });
+    }.pBind(this), 1000);
+    */
   },
   
   objectChanged: function(page) {

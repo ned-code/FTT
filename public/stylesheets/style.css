@@ -99,18 +99,43 @@ a:hover { color: #fff; background-color:#000; }
 .drag_handle {
   position:absolute;
   z-index:1000001;
-  background:transparent url(/images/drag.png) repeat scroll 0 0  	
+/*  background:transparent url(/images/drag.png) repeat scroll 0 0*/  	
 }
 
 .resize_handle {
   position:absolute;
-  z-index:1000000;  
+  z-index:1000000;   
 }
 
 .item {
   position:absolute;
+  overflow:hidden;
 }
 
+.ui-resizable-e {
+  cursor:e-resize;
+  height:100%;
+  right:-7px;
+  top:0;
+  width:14px;
+}
+
+.ui-resizable-s {
+  border:medium none #FFFFFF;
+  bottom:-7px;
+  cursor:s-resize;
+  height:14px;
+  left:0;
+  width:100%;
+}
+
+.ui-resizable-se {
+  bottom:-7px;
+  cursor:se-resize;
+  height:14px;
+  right:-7px;
+  width:14px;
+}
 .ui-resizable-handle {
   z-index:1000002;  
 }
@@ -138,12 +163,13 @@ a:hover { color: #fff; background-color:#000; }
   position:relative;
   width:800px;
   height:500px;
-  overflow:auto;
+  overflow:scroll;
   border:1px solid #ddd;
 }
 
 #board {
   font-size:30px;
+  border:2px solid #000;
 }
 
 .navigation li {

@@ -40,12 +40,13 @@ WebDoc.ItemView = $.klass({
           itemNode.html(this.item.data.data[key]);
         }
         else {
-          if (key != 'tag') {
+          if (key != 'tag' && key != 'preference') {
             itemNode.attr(key, this.item.data.data[key]);
           }
         }
       }
     }
+    ddd(itemNode);
     this.pageView.itemDomNode.append(itemNode.get(0));
     itemNode.addClass("item");
     return itemNode;
@@ -147,15 +148,15 @@ WebDoc.ItemView = $.klass({
   
   select: function() {
     if (!this.isSelected()) {
-      console.log("select item " + this.item.uuid());
+      console.log("ItemView: select item " + this.item.uuid());
       this.domNode.addClass("item_selected");
       WebDoc.application.boardController.pageView.itemDomNode.append(this.selectionNode.get(0));
       WebDoc.application.boardController.pageView.itemDomNode.append(this.resizeNode.get(0));
       var handleCss = {
         top: this.item.data.data.css.top,
         left: this.item.data.data.css.left,
-        width: this.item.data.data.css.width,
-        height: this.item.data.data.css.height
+        width: (this.size.width - 7) + "px",
+        height: (this.size.height - 7) + "px"
       };
       this.selectionNode.css(handleCss);
       this.selectionNode.draggable({
@@ -184,7 +185,11 @@ WebDoc.ItemView = $.klass({
       });
       
       var lastSelectedObjectMouseDownEvent = WebDoc.application.arrowTool.lastSelectedObject.event;
-      if (lastSelectedObjectMouseDownEvent) this.selectionNode.trigger(lastSelectedObjectMouseDownEvent);
+      if (lastSelectedObjectMouseDownEvent) {
+        // board must ignore this event. It is just for draggable elemnt
+        lastSelectedObjectMouseDownEvent.boardIgnore = true;
+        this.selectionNode.trigger(lastSelectedObjectMouseDownEvent);
+      }
       
       this.resizeNode.css(handleCss);
       this.resizeNode.resizable({
@@ -279,15 +284,48 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
 });
 
 
+WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
+  
+  createDomNode: function($super) {
+    var widgetNode = $super();
+    /* 
+    setTimeout(function(){
+      ddd(widgetNode.get(0).contentDocument.body);
+      widgetNode.get(0).contentDocument.body.addEventListener("mousedown", WebDoc.application.boardController.mouseDown.pBind(WebDoc.application.boardController), true);
+      widgetNode.get(0).contentDocument.body.addEventListener("mousemove", WebDoc.application.boardController.mouseMove.pBind(WebDoc.application.boardController), true);
+      widgetNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
+    }, 2000);
+    */
+    setTimeout(function(){
+      this.initWidget();
+    }.pBind(this), 2000);
+    
+    return widgetNode;
+  },
+  
+  edit: function() {
+    this.domNode.css({ zIndex: "1000005"});
+  },
+  unSelect: function($super) {
+    this.domNode.css({ zIndex: "0"});
+    $super();
+  },
+  
+  initWidget: function() {
+    this.domNode.get(0).contentWindow.uniboard = this.item; 
+    this.domNode.get(0).contentWindow.initialize();
+  }
+});
+
 WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   createDomNode: function($super) {
     var imageNode = $('<' + this.item.data.data.tag + ' width="100%" height="100%"/>');
     var itemNode = $("<div/>");
-    
     itemNode.append(imageNode.get(0));
     this.selectionNode = $("<div/>").addClass("drag_handle");
     this.resizeNode = $("<div/>").addClass("resize_handle");
     itemNode.attr("id", this.item.uuid());
+
     for (var key in this.item.data.data) {
       if (key == 'css') {
         itemNode.css(this.item.data.data.css);
