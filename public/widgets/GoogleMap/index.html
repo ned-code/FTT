@@ -22,57 +22,61 @@
 
 	function initialize() 
 	{
-		var map = null;
-		var mapType = G_PHYSICAL_MAP;
-	    var lat = 30;
-	    var lng = 0;
-	    var zoom = 2;
-		var latlng = new google.maps.LatLng(lat, lng);
-
-		if (window.uniboard)
-		{
-		    lat = parseFloat(window.uniboard.preference('latitude', lat));
-		    lng = parseFloat(window.uniboard.preference('longitude', lng));
-		    zoom = parseFloat(window.uniboard.preference('zoom', zoom));  
-		    //mapType = window.uniboard.preference('mapType', mapType);  
-
-			latlng = new google.maps.LatLng(lat, lng);
-		};
-		
-		if (GBrowserIsCompatible()) {
-			
-			map = new GMap2(document.getElementById("map_canvas"));
-			map.setCenter(latlng);
-			map.setUIToDefault();
-			map.setMapType(mapType);
-			map.setZoom(zoom);
-			map.addControl(new google.elements.LocalSearch(), 
-				new GControlPosition(G_ANCHOR_BOTTOM_RIGHT, new GSize(5,30)));	
-			
-			// Add persistence
-			if (window.uniboard)
-			{				
-				GEvent.addListener(map,'zoomend',function()
-				{ 
-		           	window.uniboard.setPreference('zoom', map.getZoom());
-				});
-
-				GEvent.addListener(map,'moveend',function()
-				{ 
-		         	window.uniboard.setPreference('latitude', map.getCenter().lat());
-		         	window.uniboard.setPreference('longitude', map.getCenter().lng());
-				});
-
-				/*GEvent.addListener(map,'maptypechanged',function()
-				{ 
-		         	window.uniboard.setPreference('mapType', map.getCurrentMapType());
-				});*/
-			};
-		}
+    try {
+      console.log("Init Map");
+      var map = null;
+      var mapType = G_PHYSICAL_MAP;
+      var lat = 30;
+      var lng = 0;
+      var zoom = 2;
+      var latlng = new google.maps.LatLng(lat, lng);
+      
+      if (window.uniboard) {
+        lat = parseFloat(window.uniboard.preference('latitude', lat));
+        lng = parseFloat(window.uniboard.preference('longitude', lng));
+        zoom = parseFloat(window.uniboard.preference('zoom', zoom));
+        //mapType = window.uniboard.preference('mapType', mapType);  
+        
+        latlng = new google.maps.LatLng(lat, lng);
+      };
+      
+      if (GBrowserIsCompatible()) {
+      
+        map = new GMap2(document.getElementById("map_canvas"));
+        map.setCenter(latlng);
+        map.setUIToDefault();
+        map.setMapType(mapType);
+        map.setZoom(zoom);
+        map.addControl(new google.elements.LocalSearch(), new GControlPosition(G_ANCHOR_BOTTOM_RIGHT, new GSize(5, 30)));
+        
+        // Add persistence
+        if (window.uniboard) {
+          GEvent.addListener(map, 'zoomend', function() {
+            window.uniboard.setPreference('zoom', map.getZoom());
+          });
+          
+          GEvent.addListener(map, 'moveend', function() {
+            window.uniboard.setPreference('latitude', map.getCenter().lat());
+            window.uniboard.setPreference('longitude', map.getCenter().lng());
+          });
+          
+        /*GEvent.addListener(map,'maptypechanged',function()
+       {
+       window.uniboard.setPreference('mapType', map.getCurrentMapType());
+       });*/
+        };
+              }
+    }
+    catch(ex) {
+      console.log("error");
+    }
+    window.onresize();
+    console.log("end init map");
 	};
 
 	window.onresize = function()
 	{
+    console.log("map resize");
 		document.getElementById('map_canvas').style.width = window.innerWidth + 'px';
 	    document.getElementById('map_canvas').style.height = window.innerHeight + 'px';      
 	};
