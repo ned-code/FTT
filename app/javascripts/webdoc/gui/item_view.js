@@ -46,7 +46,6 @@ WebDoc.ItemView = $.klass({
         }
       }
     }
-    ddd("add new node");
     ddd(itemNode);
     this.pageView.itemDomNode.append(itemNode.get(0));
     itemNode.addClass("item");
@@ -149,7 +148,7 @@ WebDoc.ItemView = $.klass({
   
   select: function() {
     if (!this.isSelected()) {
-      console.log("select item " + this.item.uuid());
+      console.log("ItemView: select item " + this.item.uuid());
       this.domNode.addClass("item_selected");
       WebDoc.application.boardController.pageView.itemDomNode.append(this.selectionNode.get(0));
       WebDoc.application.boardController.pageView.itemDomNode.append(this.resizeNode.get(0));
@@ -186,7 +185,11 @@ WebDoc.ItemView = $.klass({
       });
       
       var lastSelectedObjectMouseDownEvent = WebDoc.application.arrowTool.lastSelectedObject.event;
-      if (lastSelectedObjectMouseDownEvent) this.selectionNode.trigger(lastSelectedObjectMouseDownEvent);
+      if (lastSelectedObjectMouseDownEvent) {
+        // board must ignore this event. It is just for draggable elemnt
+        lastSelectedObjectMouseDownEvent.boardIgnore = true;
+        this.selectionNode.trigger(lastSelectedObjectMouseDownEvent);
+      }
       
       this.resizeNode.css(handleCss);
       this.resizeNode.resizable({
@@ -282,11 +285,25 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
 
 
 WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
+  
+  createDomNode: function($super) {
+    var widgetNode = $super();
+    /* 
+    setTimeout(function(){
+      ddd(widgetNode.get(0).contentDocument.body);
+      widgetNode.get(0).contentDocument.body.addEventListener("mousedown", WebDoc.application.boardController.mouseDown.pBind(WebDoc.application.boardController), true);
+      widgetNode.get(0).contentDocument.body.addEventListener("mousemove", WebDoc.application.boardController.mouseMove.pBind(WebDoc.application.boardController), true);
+      widgetNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
+    }, 2000);
+    */
+    return widgetNode;
+  },
+  
   edit: function() {
     this.domNode.css({ zIndex: "1000005"});
   },
   unSelect: function($super) {
-    this.domNode.css({ zIndex: "1"});
+    this.domNode.css({ zIndex: "0"});
     $super();
   }
 });
@@ -295,11 +312,11 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   createDomNode: function($super) {
     var imageNode = $('<' + this.item.data.data.tag + ' width="100%" height="100%"/>');
     var itemNode = $("<div/>");
-    
     itemNode.append(imageNode.get(0));
     this.selectionNode = $("<div/>").addClass("drag_handle");
     this.resizeNode = $("<div/>").addClass("resize_handle");
     itemNode.attr("id", this.item.uuid());
+
     for (var key in this.item.data.data) {
       if (key == 'css') {
         itemNode.css(this.item.data.data.css);

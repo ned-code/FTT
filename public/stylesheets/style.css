@@ -105,10 +105,12 @@ a:hover { color: #fff; background-color:#000; }
 .resize_handle {
   position:absolute;
   z-index:1000000;  
+  border:2px solid #ddd; 
 }
 
 .item {
   position:absolute;
+  overflow:hidden;
 }
 
 .ui-resizable-handle {
@@ -138,12 +140,13 @@ a:hover { color: #fff; background-color:#000; }
   position:relative;
   width:800px;
   height:500px;
-  overflow:auto;
+  overflow:scroll;
   border:1px solid #ddd;
 }
 
 #board {
   font-size:30px;
+  border:2px solid #000;
 }
 
 .navigation li {

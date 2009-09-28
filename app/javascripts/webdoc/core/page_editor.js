@@ -160,7 +160,6 @@ WebDoc.PageEditor = $.klass({
     // newItem.data.data.src = "/system/files/11d69920-8a86-012c-72df-002500a8be1c/original/Picture_1.png?1253720740";
     newItem.data.data.src = "/images/image_view_test.png";
     newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};
-    newItem.data.data.innerHTML = "Hello Juju";
     var newItemView = new WebDoc.ImageView(newItem);
     newItem.save();
   },
@@ -170,8 +169,8 @@ WebDoc.PageEditor = $.klass({
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
     newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
-    newItem.data.data.tag = "object";
-    newItem.data.data.data = "/widgets/GoogleMap/index.html";
+    newItem.data.data.tag = "iframe";
+    newItem.data.data.src = "/widgets/GoogleMap/index.html";
     newItem.data.data.css = { top: "100px", left: "100px", width: "800px", height: "600px"};
     var newItemView = new WebDoc.WidgetView(newItem);
     newItem.save();    

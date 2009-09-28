@@ -7,8 +7,7 @@
 //= require <WebDoc/gui/item_view>
 //= require <WebDoc/controllers/collaboration_controller>  
 
-WebDoc.BoardController = $.klass(
-{
+WebDoc.BoardController = $.klass({
   initialize: function(editable) {
     this.currentZoom = 1;
     this.selection = [];
@@ -20,7 +19,7 @@ WebDoc.BoardController = $.klass(
   },
   
   fireSelectionChanged: function() {
-    $.each(this.selectionListeners, function() {      
+    $.each(this.selectionListeners, function() {
       this.selectionChanged();
     });
   },
@@ -43,11 +42,11 @@ WebDoc.BoardController = $.klass(
     this.initialHeight = $("#board").height();
     this.initialWidth = $("#board").width();
     
-    $("#board").bind("mousedown", this, this.mouseDown);
-    $("#board").bind("mousemove", this, this.mouseMove);
-    $("#board").bind("mouseup", this, this.mouseUp);
-    $("#board").bind("mouseout", this, this.mouseOut);
-    $("#board").bind("click", this, this.mouseClick);
+    $("#board").bind("mousedown", this, this.mouseDown.pBind(this));
+    $("#board").bind("mousemove", this, this.mouseMove.pBind(this));
+    $("#board").bind("mouseup", this, this.mouseUp.pBind(this));
+    $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
+    $("#board").bind("click", this, this.mouseClick.pBind(this));
     
     // update data attribute of object
     $("object").each(function() {
@@ -60,12 +59,12 @@ WebDoc.BoardController = $.klass(
     heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
     widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;
     
-     if (heightFactor < widthFactor) {
-       this.zoom(1 + heightFactor);
-     }
-     else {
-       this.zoom(1 + widthFactor);
-     }
+    if (heightFactor < widthFactor) {
+      this.zoom(1 + heightFactor);
+    }
+    else {
+      this.zoom(1 + widthFactor);
+    }
   },
   
   setCurrentTool: function(tool) {
@@ -105,25 +104,34 @@ WebDoc.BoardController = $.klass(
   
   selectItemViews: function(itemViews) {
     //deselect un-needed items
+    ddd("select item in view");
     $.each(this.selection, function(index, itemToDeselect) {
-      if (jQuery.inArray(itemToDeselect, itemViews) === -1) { this.unselectItemViews([itemToDeselect]); }
-    }.pBind(this))
+      if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
+        this.unselectItemViews([itemToDeselect]);
+      }
+    }
+.pBind(this))
     
     //select wanted items
     $.each(itemViews, function(index, itemToSelect) {
-      this.selection.push(itemToSelect);
+      if (jQuery.inArray(itemToSelect, this.selection) == -1) {
+        ddd("add item to selection");
+        this.selection.push(itemToSelect);
+      }
       itemToSelect.select();
-    }.pBind(this))
+    }
+.pBind(this))
     this.fireSelectionChanged();
   },
   
   unselectAll: function() {
-    console.log("unselect all");
+    console.log("unselect all. selection size " + this.selection.length);
     this.unselectItemViews(this.selection);
     this.fireSelectionChanged();
   },
   
   unselectItemViews: function(itemViews) {
+    ddd("unselect item views");
     var i = 0;
     for (; i < itemViews.length; i++) {
       var objectToUnSelect = itemViews[i];
@@ -131,6 +139,7 @@ WebDoc.BoardController = $.klass(
         objectToUnSelect.unSelect();
         var index = this.selection.indexOf(objectToUnSelect);
         if (index > -1) {
+          ddd("remove item from selection");
           this.selection.splice(index, 1);
         }
       }
@@ -151,6 +160,24 @@ WebDoc.BoardController = $.klass(
     else 
       if (jQuery.browser.safari) {
         console.log("apply webkit transform");
+        if (!this.initialSize) {
+          this.initialSize = {
+            width: parseFloat(boardElement.css("width").replace("px", "")) + 2,
+            height: parseFloat(boardElement.css("height").replace("px", "")) + 2
+          }
+        }
+        if (this.currentZoom > 1) {
+          boardElement.css({
+            width: this.initialSize.width * this.currentZoom,
+            height: this.initialSize.height * this.currentZoom
+          });
+        }
+        else {
+          boardElement.css({
+            width: this.initialSize.width,
+            height: this.initialSize.height
+          });          
+        }
         boardElement.css("WebkitTransformOrigin", "0px 0px");
         boardElement.css("WebkitTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
       }
@@ -166,33 +193,30 @@ WebDoc.BoardController = $.klass(
   },
   
   mouseDown: function(e) {
-    var that = e.data;
     e.preventDefault();
-    that.currentTool.mouseDown(e);
+    if (!e.boardIgnore) {
+      this.currentTool.mouseDown(e);
+    }
   },
   
   mouseMove: function(e) {
-    var that = e.data;
     e.preventDefault();
-    that.currentTool.mouseMove(e);
+    this.currentTool.mouseMove(e);
   },
   
   mouseOut: function(e) {
-    var that = e.data;
     e.preventDefault();
-    that.currentTool.mouseOut(e);
+    this.currentTool.mouseOut(e);
   },
   
   mouseUp: function(e) {
-    var that = e.data;
     e.preventDefault();
-    that.currentTool.mouseUp(e);
+    this.currentTool.mouseUp(e);
   },
   
   mouseClick: function(e) {
-    var that = e.data;
     e.preventDefault();
-    that.currentTool.mouseClick(e);
+    this.currentTool.mouseClick(e);
   }
   
 });
