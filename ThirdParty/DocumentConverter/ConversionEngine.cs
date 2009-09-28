@@ -65,17 +65,24 @@ namespace DocumentConverter
                 {
                     if (CanDeletePdf(id))//Do not delete files while conversion process is ongoing...
                     {
-                        File.Delete(m_documentTable[id].OutputPath);
+                        Trace.Write("deleting : " + m_documentTable[id].OutputPath);
+                        using (new Impersonation())//for delete permissions
+                        {
+                            File.Delete(m_documentTable[id].OutputPath);
+                        }
                         m_documentTable.Remove(id);
                         return true;
                     }
                     else
+                    {
+                        Trace.TraceWarning("pdf deletion forbidden");
                         return false;
+                    }
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Failed to delete pdf document : " + e.Message);
+                Trace.TraceWarning("Failed to delete pdf document : " + e.Message);
                 return false;
             }
         }
@@ -115,7 +122,13 @@ namespace DocumentConverter
                 DocumentItem.State status = GetDocumentStatus(id);
                 if (oldness.TotalHours > minOldness && (status == DocumentItem.State.Unknown || status == DocumentItem.State.Processed || status == DocumentItem.State.Failed))
                 {
-                    try { file.Delete(); }
+                    try
+                    {
+                        using (new Impersonation())//for delete permissions
+                        {
+                            file.Delete();
+                        }
+                    }
                     catch (Exception e)
                     {
                         Debug.WriteLine("Failed to delete document " + file.FullName + " : " + e.Message);

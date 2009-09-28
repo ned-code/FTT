@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,6 +15,7 @@ namespace DocumentConverter
             string pdfId  = Context.Request.Params["pdfId"];
             if (pdfId == null)
             {
+                Trace.Write("Pdf Purge Requested");
                 bool purgeAllDocuments = false;
                 int minOldness = 24;
                 try 
@@ -32,6 +34,7 @@ namespace DocumentConverter
             }
             else
             {
+                Trace.Write("Pdf Deletion Requested : " + pdfId);
                 if (!ConversionEngine.Instance.DeletePdf(pdfId))
                     Response.StatusCode = 403; //HTTP_STATUS_FORBIDDEN
             }
