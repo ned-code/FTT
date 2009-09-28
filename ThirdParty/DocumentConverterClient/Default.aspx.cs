@@ -14,8 +14,8 @@ namespace DocumentConverterClient
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
             IPAddress[] adds = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+
             string IPAdd = "";
             foreach (IPAddress add in adds)
             {

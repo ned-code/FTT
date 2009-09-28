@@ -4,228 +4,93 @@
 
 WebDoc.Page = $.klass(MTools.Record, 
 {
-    initialize: function($super, json)
+  initialize: function($super, json) {
+    this.drawing = 
     {
-        this.domNode = $('<div>').attr(
+      polylines: []
+    };
+    this.objects = [];
+    this.items = [];
+    $super(json);
+  },
+  
+  className: function() {
+    return "page";
+  },
+  
+  rootUrl: function() {
+    return "/documents/" + this.data.document_id;
+  },
+  
+  applyCss: function(newCss) {    
+    this.data.data.css = newCss;
+    this.fireObjectChanged();
+  },
+  
+  refresh: function($super, json) {
+    $super(json);
+    var that = this;
+    if (this.data.items && $.isArray(this.data.items)) {
+      $.each(this.data.items, function() {
+        that.createOrUpdateItem(
         {
-            id: "board",
-            style: "position: absolute; top: 0px; left: 0px;z-index:0"
+          item: this
         });
-        this.domNode.append($('<div>').attr(
-        {
-            id: "page_drawing",
-            style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
-        }));
-        this.domNode.append($('<div>').attr(
-        {
-            id: "items",
-            style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
-        }));
-        this.domNode.append($('<div>').attr(
-        {
-            id: "event-catcher",
-            style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 999999"
-        }));
-        this.drawing = 
-        {
-            polylines: []
-        };
-		this.objects = [];
-        $super(json);
-    },
-    
-    className: function()
-    {
-        return "page";
-    },
-    
-    rootUrl: function()
-    {
-        return "/documents/" + this.data.document_id;
-    },
-    
-    refresh: function($super, json)
-    {
-        console.log("refresh page");
-		console.log(json);
-        $super(json);        
-        this.domNode.css(this.data.data.css);
-        var that = this;
-        if (this.data.items && $.isArray(this.data.items)) 
-        {
-            $.each(this.data.items, function()
-            {
-                that.createOrUpdateItem({
-					item: this
-				});
-            });
-        }
-    },
-    
-    previousPageId: function()
-    {
-        return null;
-    },
-    
-    nextPageId: function()
-    {
-        return null;
-    },
-    
-    
-    clear: function()
-    {
-        this._clear();
-        if (WebDoc.application.boardController.collaborationController) 
-        {
-            WebDoc.application.boardController.collaborationController.clear(this);
-        }
-    },
-    
-    _clear: function()
-    {
-        var i = this.drawing.polylines.length - 1;
-        for (; i >= 0; i--) 
-        {
-            var anObject = this.drawing.polylines[i];
-            this._removeItem(anObject.data);
-        }
-    },
-    
-    _removeItem: function(itemData)
-    {
-        if (itemData.tag == 'polyline' || itemData.tag == 'polygon') 
-        {
-            var drawingObject = this.findDrawingWithUuid(itemData.uuid());
-            drawingObject.domNode.animate(
-            {
-                opacity: 0
-            }, 'fast', null, function()
-            {
-                WebDoc.application.boardController.drawingController.domNode.removeChild(this)
-            });
-            var index = this.drawing.polylines.indexOf(drawingObject);
-            this.drawing.polylines.splice(index, 1);
-        }
-        else 
-        {
-            console.log("need implementation");
-        }
-    },
-    
-    createOrUpdateItem: function(itemData)
-    {
-		console.log(itemData.item.data.tag);
-        if (itemData.item.data.tag == 'polyline' || itemData.item.data.tag == 'polygon') 
-        {
-			console.log("add polyline");
-			var newItem = new WebDoc.Item(itemData)
-            var newLine = WebDoc.application.boardController.drawingController.mRenderer.createPolyline(newItem);
-            $(newLine).css("opacity", 0);
-
-            this.drawing.polylines.push(newItem);
-            WebDoc.application.boardController.drawingController.domNode.appendChild(newLine);
-            $(newLine).animate(
-            {
-                opacity: 1
-            }, 'fast');
-        }
-        else 
-        {
-            var item = this.findObjectWithUuid(itemData.uuid);
-            if (!item) 
-            {
-                this.createItem(itemData);
-            }
-            else 
-            {
-                item.update(itemData);
-            }
-        }
-    },
-    
-	to_json: function($super)
-	{
-		var result = $super();
-		delete result['page[items]'];
-		return result;
-	},
-	
-    createItem: function(itemData)
-    {
-        var newItem = new WebDoc.Item(itemData);
-        this.objects.push(newItem);
-        this.domNode.find("#page_objects").append(newItem.domNode);
-    },
-    
-    findObjectWithUuid: function(pUuid)
-    {
-        var i = 0;
-        for (; i < this.objects.length; i++) 
-        {
-            var anObject = this.objects[i];
-            if (anObject.uuid == pUuid) 
-            {
-                return anObject;
-            }
-        }
-        return null;
-    },
-    
-    findDrawingWithUuid: function(pUuid)
-    {
-        var i = 0;
-        for (; i < this.drawing.polylines.length; i++) 
-        {
-            var anObject = this.drawing.polylines[i];
-            if (anObject.data.uuid == pUuid) 
-            {
-                return anObject;
-            }
-        }
-        for (; i < this.drawing.polygon.length; i++) 
-        {
-            var anObject = this.drawing.polylines[i];
-            if (anObject.data.uuid == pUuid) 
-            {
-                return anObject;
-            }
-        }
-        return null;
-    },
-    
-    findObjectAtPoint: function(point)
-    {
-        var i = 0;
-        for (; i < this.objects.length; i++) 
-        {
-            var anObject = this.objects[i];
-            if (anObject.coverPoint(point) && !anObject.isBackground) 
-            {
-                return anObject;
-            }
-        }
-        return null;
-    },
-    
-    drawingModel: function()
-    {
-        return this.drawing;
-    },
-    
-    toggleBkg: function()
-    {
-        console.log("toggle");
-        var previousColor = this.data.data.css.backgroundColor;
-		var newColor = "white";
-        if (previousColor == "white") 
-        {			
-			newColor = "black";           
-        }
-		this.data.data.css.backgroundColor = newColor;
-		this.domNode.animate(
-            {
-                backgroundColor: newColor
-            }, 'fast');
-    },
+      });
+    }
+  },
+  
+  to_json: function($super) {
+    var result = $super();
+    delete result['page[items]'];
+    return result;
+  },
+  
+  previousPageId: function() {
+    return null;
+  },
+  
+  nextPageId: function() {
+    return null;
+  },
+  
+  createOrUpdateItem: function(itemData) {
+    var item = this.findItemWithUuid(itemData.uuid);
+    if (!item) {
+      this.createItem(itemData);
+    }
+    else {
+      item.update(itemData);
+    }
+  },
+  
+  createItem: function(itemData) {
+    var newItem = new WebDoc.Item(itemData);
+    this.items.push(newItem);
+    if (newItem.data.data.tag == 'polyline') {
+      this.drawing.polylines.push(newItem);
+    }
+  },
+  
+  findItemWithUuid: function(pUuid) {
+    var i = 0;
+    for (; i < this.items.length; i++) {
+      var anObject = this.items[i];
+      if (anObject.uuid == pUuid) {
+        return anObject;
+      }
+    }
+    return null;
+  },
+  
+  toggleBkg: function() {
+    console.log("toggle");
+    var previousColor = this.data.data.css.backgroundColor;
+    var newColor = "white";
+    if (previousColor == "white") {
+      newColor = "black";
+    }
+    this.data.data.css.backgroundColor = newColor;
+    this.fireObjectChanged();
+  },
 });

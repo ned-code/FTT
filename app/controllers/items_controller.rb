@@ -12,7 +12,7 @@ class ItemsController < ApplicationController
 
   # PUT /documents/:document_id/pages/:page_id/items/:id
   def update
-    @item = @pages.items.find(params[:id])
+    @item = @page.items.find(params[:id])
     if (params[:item][:data])
       params[:item][:data] = JSON.parse(params[:item][:data])  
     end   

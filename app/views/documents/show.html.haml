@@ -10,50 +10,53 @@
   %button#change-bkg ChangeBkg
   %button#zoom-in ZoomIn
   %button#zoom-out ZoomOut
-  %button#tool-hand ToolHand
-  %button#tool-arrow ToolArrow
-  %button#tool-pen ToolPen
-  .wrap_tool_text
-    %button#tool-text ToolText
-    #text_palette.palette_wrap
-      %ul.palette.disabled{ :style => "display:block" }
-        %li
-          %a.bold{ :href => "" }
-            %span= "Bold"
-        %li
-          %a.italic{ :href => "" }
-            %span= "Italic"
-        %li
-          %a.underline{ :href => "" }
-            %span= "Underlined"
-        %li
-          %a.justifyLeft{ :href => "" }
-            %span= "Left"
-        %li
-          %a.justifyCenter{ :href => "" }
-            %span= "Center"
-        %li
-          %a.justifyRight{ :href => "" }
-            %span= "Right"
-        %li
-          %a.justifyFull{ :href => "" }
-            %span= "Justify"
-        %li
-          %a.insertUnorderedList{ :href => "" }
-            %span= "Bullet List"
-        %li
-          %a.insertOrderedList{ :href => "" }
-            %span= "Numbered List"
-        %li
-          %a.indent{ :href => "" }
-            %span= "Indent"
-        %li
-          %a.outdent{ :href => "" }
-            %span= "Outdent"
-      .palette_overlay
-    
-  
-#board-container
+  %button#tool_hand ToolHand
+  %button#tool_arrow ToolArrow
+  %button#tool_pen ToolPen
+  %button#default-image InsertDefaultImage 
+  %button#default_widget InsertDefaultWidget
+  %button#tool_text Add TextBox
+  #palette_text.palette_wrap
+    %ul.palette.disabled{ :style => "display:block" }
+      %li
+        %a.bold{ :href => "" }
+          %span= "Bold"
+      %li
+        %a.italic{ :href => "" }
+          %span= "Italic"
+      %li
+        %a.underline{ :href => "" }
+          %span= "Underlined"
+      %li
+        %a.justifyLeft{ :href => "" }
+          %span= "Left"
+      %li
+        %a.justifyCenter{ :href => "" }
+          %span= "Center"
+      %li
+        %a.justifyRight{ :href => "" }
+          %span= "Right"
+      %li
+        %a.justifyFull{ :href => "" }
+          %span= "Justify"
+      %li
+        %a.insertUnorderedList{ :href => "" }
+          %span= "Bullet List"
+      %li
+        %a.insertOrderedList{ :href => "" }
+          %span= "Numbered List"
+      %li
+        %a.indent{ :href => "" }
+          %span= "Indent"
+      %li
+        %a.outdent{ :href => "" }
+          %span= "Outdent"
+    .palette_overlay
+  #page_css_editor_wrap
+    %textarea#page_css_editor
+  #selected_item_html_wrap
+    %textarea#selected_item_html_editor      
+#board_container
 :javascript
   $(function()
   {

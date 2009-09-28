@@ -1,0 +1,12 @@
+* { margin:0; padding:0;}
+h1, h2, h3, h4, h5, h6 {padding:5px 0;}
+li { padding:10px 0;}
+ul { margin:0 40px;}
+ol { margin:0 50px;}
+p {padding-bottom:28px;}
+
+body {
+  font-family:Helvetica, Arial, sans-serif;
+  font-size:30px;
+  overflow:"hidden";
+}
