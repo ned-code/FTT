@@ -69,7 +69,7 @@ WebDoc.BoardController = $.klass(
   },
   
   setCurrentTool: function(tool) {
-    console.log(tool)
+    console.log(tool);
     this.currentTool = tool;
     this.currentTool.selectTool();
     // this.unselectItemViews(this.selection);
@@ -107,13 +107,13 @@ WebDoc.BoardController = $.klass(
     //deselect un-needed items
     $.each(this.selection, function(index, itemToDeselect) {
       if (jQuery.inArray(itemToDeselect, itemViews) === -1) { this.unselectItemViews([itemToDeselect]); }
-    }.pBind(this))
+    }.pBind(this));
     
     //select wanted items
     $.each(itemViews, function(index, itemToSelect) {
       this.selection.push(itemToSelect);
       itemToSelect.select();
-    }.pBind(this))
+    }.pBind(this));
     this.fireSelectionChanged();
   },
   
