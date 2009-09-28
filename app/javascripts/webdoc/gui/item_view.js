@@ -40,7 +40,7 @@ WebDoc.ItemView = $.klass({
           itemNode.html(this.item.data.data[key]);
         }
         else {
-          if (key != 'tag') {
+          if (key != 'tag' && key != 'preference') {
             itemNode.attr(key, this.item.data.data[key]);
           }
         }
@@ -296,6 +296,10 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       widgetNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
     }, 2000);
     */
+    setTimeout(function(){
+      this.initWidget();
+    }.pBind(this), 2000);
+    
     return widgetNode;
   },
   
@@ -305,6 +309,11 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   unSelect: function($super) {
     this.domNode.css({ zIndex: "0"});
     $super();
+  },
+  
+  initWidget: function() {
+    this.domNode.get(0).contentWindow.uniboard = this.item; 
+    this.domNode.get(0).contentWindow.initialize();
   }
 });
 

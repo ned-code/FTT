@@ -46,16 +46,17 @@ WebDoc.PageView = $.klass(
       });
     }
     page.addListener(this);
-
+    
+    /*
     setTimeout(function(){
       $.each(this.itemViews, function() {
         ddd("init widget");
-        if (this.domNode.get(0).contentWindow) {
-          this.domNode.get(0).contentWindow.initialize();
+        if (this.item.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
+          this.initWidget();
         }
       });
     }.pBind(this), 1000);
-
+    */
   },
   
   objectChanged: function(page) {

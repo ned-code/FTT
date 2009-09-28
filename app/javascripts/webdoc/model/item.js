@@ -11,7 +11,7 @@ WebDoc.Item = $.klass(MTools.Record,
   initialize: function($super, json) {
     $super(json);
     if (!json) {
-      this.data.data = {};
+      this.data.data = { preference: {}};
     }
   },
   
@@ -42,5 +42,19 @@ WebDoc.Item = $.klass(MTools.Record,
     this.data.data.css.left = this.position.left + "px";
     this.data.data.css.top = this.position.top + "px";
     this.fireObjectChanged();
+  },
+  
+  preference: function(key, value) {
+    var result = this.data.data.preference[key];
+    if (result) return result;
+    return value;
+  },
+  
+  setPreference: function(key, value) {
+    var previous = this.data.data.preference[key];
+    if (previous != value) {
+      this.data.data.preference[key] = value;
+      this.save();
+    }
   }
 });
