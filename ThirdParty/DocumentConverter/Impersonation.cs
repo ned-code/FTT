@@ -42,7 +42,7 @@ namespace DocumentConverter
         private string m_domain;
 
         private static string     DefaultUser = "DocumentConverter";
-        private static string DefaultPassword = "DocumentConverter";
+        private static string DefaultPassword = "_acuniboard08";
         private static string   DefaultDomain = "";
 
         private WindowsImpersonationContext m_impContext;
