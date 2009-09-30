@@ -44,6 +44,27 @@ WebDoc.Item = $.klass(MTools.Record,
     this.fireObjectChanged();
   },
   
+  setInnerHtml: function(html) {
+    this.data.data.innerHTML = html;
+    this.fireInnerHtmlChanged();
+  },
+  
+  fireInnerHtmlChanged: function() {
+    if (this.listener) {
+      this.listener.innerHtmlChanged();
+    }
+  },
+  
+  /*
+   * uniboard API for widget
+   */
+  
+  resizeContainer: function(width, height) {
+    this.data.data.css.width = width + "px";
+    this.data.data.css.height = height + "px";
+    this.fireObjectChanged();
+  },
+  
   preference: function(key, value) {
     var result = this.data.data.preference[key];
     if (result) return result;
@@ -54,7 +75,8 @@ WebDoc.Item = $.klass(MTools.Record,
     var previous = this.data.data.preference[key];
     if (previous != value) {
       this.data.data.preference[key] = value;
+      ddd("save widget pref");
       this.save();
     }
-  }
+  },
 });

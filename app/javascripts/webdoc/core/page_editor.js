@@ -53,6 +53,9 @@ WebDoc.PageEditor = $.klass({
     $("#default-image").bind("click", this.insertImage);
     $("#default_widget").bind("click", this.insertWidget);
     $("#page_css_editor").bind("blur", this.applyPageCss);
+    $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);
+    
+    $("#html_snipplet").bind("click", this.inserthtmlSnipplet);
     WebDoc.application.boardController.addSelectionListener(this);
   },
 
@@ -170,16 +173,37 @@ WebDoc.PageEditor = $.klass({
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
     newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "iframe";
-    newItem.data.data.src = "/widgets/GoogleMap/index.html";
-    newItem.data.data.css = { top: "100px", left: "100px", width: "800px", height: "600px"};
+    newItem.data.data.src = "/widgets/VideoPicker.wgt/index.html";
+    newItem.data.data.css = { top: "100px", left: "100px", width: "426px", height: "630px"};
     var newItemView = new WebDoc.WidgetView(newItem);
     newItem.save();    
+  },
+  
+  inserthtmlSnipplet: function() {
+    console.log("insert snipplet");
+    var newItem = new WebDoc.Item();
+    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
+    newItem.data.data.tag = "div";
+    newItem.data.data.innerHTML = "HTML Snipplet";
+    newItem.data.data.css = { top: "100px", left: "100px", width: "100px", height: "100px", border: "2px solid #ddd"};
+    var newItemView = new WebDoc.WidgetView(newItem);
+    newItem.save();
   },
   
   applyPageCss: function() {
     eval("var newCss=" + $("#page_css_editor").get(0).value);    
     WebDoc.application.pageEditor.currentPage.applyCss(newCss);
     WebDoc.application.pageEditor.currentPage.save();
+  },
+  
+  applyInnerHtml: function() {
+    console.log("apply HTML");
+    var html = $("#selected_item_html_editor").get(0).value
+    if (WebDoc.application.boardController.selection.length > 0) {
+      WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
+      WebDoc.application.boardController.selection[0].item.save();
+    }
   },
   
   selectionChanged: function() {

@@ -47,16 +47,6 @@ WebDoc.PageView = $.klass(
     }
     page.addListener(this);
     
-    /*
-    setTimeout(function(){
-      $.each(this.itemViews, function() {
-        ddd("init widget");
-        if (this.item.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
-          this.initWidget();
-        }
-      });
-    }.pBind(this), 1000);
-    */
   },
   
   objectChanged: function(page) {

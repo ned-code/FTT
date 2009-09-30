@@ -23,7 +23,7 @@
 	function initialize() 
 	{
     try {
-      console.log("Init Map");
+
       var map = null;
       var mapType = G_PHYSICAL_MAP;
       var lat = 30;
@@ -68,15 +68,12 @@
               }
     }
     catch(ex) {
-      console.log("error");
     }
     window.onresize();
-    console.log("end init map");
 	};
 
 	window.onresize = function()
 	{
-    console.log("map resize");
 		document.getElementById('map_canvas').style.width = window.innerWidth + 'px';
 	    document.getElementById('map_canvas').style.height = window.innerHeight + 'px';      
 	};

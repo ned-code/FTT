@@ -104,6 +104,12 @@ WebDoc.ItemView = $.klass({
     }
   },
   
+  innerHtmlChanged: function() {
+    if (this.item.data.data.innerHTML) {
+      this.domNode.html(this.item.data.data.innerHTML);
+    }    
+  },
+  
   shift: function(x, y) {
     var newPosition = {
       left: this.position.left + x,
@@ -140,6 +146,10 @@ WebDoc.ItemView = $.klass({
       width: this.item.data.data.css.width,
       height: this.item.data.data.css.height
     });
+    this.resizeNode.css({
+      width: this.item.data.data.css.width,
+      height: this.item.data.data.css.height
+    });
   },
   
   isSelected: function() {
@@ -168,7 +178,6 @@ WebDoc.ItemView = $.klass({
           $.extend(currentPosition, this.position);
           this.dragOffsetLeft = mappedPoint.x - this.position.left;
           this.dragOffsetTop = mappedPoint.y - this.position.top;
-          ddd("start move from point" + currentPosition.left + ":" + currentPosition.top);
           WebDoc.application.undoManager.registerUndo(function() {
             this._restorePosition(currentPosition);
           }.pBind(this));
@@ -198,7 +207,6 @@ WebDoc.ItemView = $.klass({
           this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
           var currentSize = {};
           $.extend(currentSize, this.size);
-          ddd("start resize from size" + currentSize.height + ":" + currentSize.width);
           WebDoc.application.undoManager.registerUndo(function() {
             this._restoreSize(currentSize);
           }.pBind(this));
@@ -296,24 +304,46 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       widgetNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
     }, 2000);
     */
-    setTimeout(function(){
-      this.initWidget();
-    }.pBind(this), 2000);
-    
+   widgetNode.one('load', function() {
+     ddd("widget loaded");
+     this.initWidget();
+   }.pBind(this));
+
     return widgetNode;
   },
   
+  innerHtmlChanged: function($super) {
+    $super();
+    // resize if inner html is iframe
+    var innerIframe = this.domNode.find("iframe");
+    if (innerIframe) {
+      this.resizeTo({
+        width: innerIframe.css("width").replace("px", ""),
+        height: innerIframe.css("height").replace("px", "")
+      });
+    }
+  },
+      
   edit: function() {
     this.domNode.css({ zIndex: "1000005"});
   },
+  
   unSelect: function($super) {
     this.domNode.css({ zIndex: "0"});
     $super();
   },
   
   initWidget: function() {
-    this.domNode.get(0).contentWindow.uniboard = this.item; 
-    this.domNode.get(0).contentWindow.initialize();
+    if (this.domNode.get(0).contentWindow) {
+      this.domNode.get(0).contentWindow.uniboard = this.item;
+      this.domNode.get(0).contentWindow.initialize();
+      /* if SVG layer don't catch event we need to catch events in the capture phase of the widget */
+      /*
+      this.domNode.get(0).contentDocument.body.addEventListener("mousedown", WebDoc.application.boardController.mouseDown.pBind(WebDoc.application.boardController), true);
+      this.domNode.get(0).contentDocument.body.addEventListener("mousemove", WebDoc.application.boardController.mouseMove.pBind(WebDoc.application.boardController), true);
+      this.domNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
+      */
+    }
   }
 });
 

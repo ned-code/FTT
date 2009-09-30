@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" 
+        id="http://uniboard.mnemis.com/widgets/VideoPicker" 
+        version="1.0"
+        width="426"
+        height="630" 
+		ub:resizable="true">        
+  <name>Video Picker</name>
+  <content src="index.html"/> 
+</widget>

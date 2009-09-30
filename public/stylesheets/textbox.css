@@ -6,7 +6,5 @@ ol { margin:0 50px;}
 p {padding-bottom:28px;}
 
 body {
-  font-family:Helvetica, Arial, sans-serif;
-  font-size:30px;
-  overflow:"hidden";
+  overflow:hidden;
 }

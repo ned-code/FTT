@@ -161,13 +161,14 @@ a:hover { color: #fff; background-color:#000; }
 
 #board_container {
   position:relative;
-  width:800px;
-  height:500px;
-  overflow:scroll;
+  width:1280px;
+  height:720px;
+  overflow:hidden;
   border:1px solid #ddd;
 }
 
 #board {
+  font-family:Helvetica, Arial, sans-serif;
   font-size:30px;
   border:2px solid #000;
 }

@@ -80,8 +80,7 @@ $.extend(MTools.ServerManager,
         $.extend(param, object.to_json());
         $.post(url, param, function(data, textstatus)
         {
-            console.log(data);
-            object.refresh(data);
+            //object.refresh(data);
             callBack.apply(this, [object]);
         }, "json");
     },
