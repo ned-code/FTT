@@ -91,13 +91,13 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       width: this.textBox.css("width"),
       height: this.textBox.css("height"),
       zIndex:1000010
-    })
+    });
     
     var iframe = $('<iframe class="textbox_iframe" scrolling="no" />');
     iframe.css(this.iframeCss);
     iframe.get(0).showcaret = true;
     $(this.textBox).hide().before(iframe);
-    this.editableFrame = $(this.textBox).prev('iframe')[0]
+    this.editableFrame = $(this.textBox).prev('iframe')[0];
     
     // Activate palette
     this.bindPalette();
@@ -132,7 +132,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
 
     //inject global stylesheet into iframe's head
     var ss = $('<link rel="stylesheet" href="'+this.iframeCssPath+'" type="text/css" media="screen" />');
-    $(this.doc).find('head').append(ss)
+    $(this.doc).find('head').append(ss);
 
     // this.bindEvents();
     
@@ -251,7 +251,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       $(this.textboxEditor).bind(command+'.click.rte', function(event) {
         this.editorExec(command);
       }.pBind(this));
-    }.pBind(this))
+    }.pBind(this));
   },
 
   unbindPalette: function() { 
