@@ -66,7 +66,10 @@ $.extend(MTools.ServerManager,
     {
         $.post(url, object.to_json(), function(data, textstatus)
         {
+            // refresh is needed because some values are generaed on server side
+            // i.e. page size and background.
             object.refresh(data);
+            object.isNew = false;
             callBack.apply(this, [object]);
         }, "json");
     },

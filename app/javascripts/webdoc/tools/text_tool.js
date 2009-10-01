@@ -52,14 +52,13 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     //Create model
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_TEXT;
-    newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "div";
     newItem.data.data['class'] = "textbox empty";
     newItem.data.data.innerHTML = WebDoc.NEW_TEXTBOX_CONTENT;
     newItem.data.data.css = this.textboxCss;
     
     //Create view
-    var newItemView = new WebDoc.TextView(newItem);
+    WebDoc.application.boardController.insertItems([newItem]);    
     // Select view
     // WebDoc.application.boardController.selectItemViews([newItemView]);
     

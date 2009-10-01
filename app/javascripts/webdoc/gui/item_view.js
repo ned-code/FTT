@@ -12,15 +12,13 @@ WebDoc.ItemView = $.klass({
       this.pageView = pageView;
     }
     else {
-      this.pageView = WebDoc.application.boardController.pageView;
+      throw "cannot create item view without a parent page view";
     }
-    this.pageView.itemViews.push(this);
+
     this.item = item;
     
     this.domNode = this.createDomNode();
-    // internal size and position are top, left width and height as float. Because in the css those values are string with px unit
-    // and we need float values to marix transform.
-    this.recomputeInternalSizeAndPosition();
+
     item.addListener(this);
   },
   
@@ -46,16 +44,23 @@ WebDoc.ItemView = $.klass({
         }
       }
     }
-    ddd(itemNode);
     this.pageView.itemDomNode.append(itemNode.get(0));
     itemNode.addClass("item");
     return itemNode;
   },
   
+  remove: function() {
+    if (this.isSelected()) {
+      this.selectionNode.remove();
+      this.resizeNode.remove();
+    }
+    this.domNode.remove();
+  },
+  
   coverPoint: function(point) {
   
     if (this.item.type() != "drawing") {
-      var pointMatrix = $M([[point.x - this.position.left], [point.y - this.position.top], [1]]);
+      var pointMatrix = $M([[point.x - this.item.position.left], [point.y - this.item.position.top], [1]]);
       var mat_str = this.domNode.css("-moz-transform");
       var converted_point = {};
       converted_point.x = point.x;
@@ -67,36 +72,22 @@ WebDoc.ItemView = $.klass({
         
         var convertedPointMatrix = matrix.inv().x(pointMatrix);
         
-        converted_point.x = convertedPointMatrix.elements[0][0] + this.position.left;
-        converted_point.y = convertedPointMatrix.elements[1][0] + this.position.top;
+        converted_point.x = convertedPointMatrix.elements[0][0] + this.item.position.left;
+        converted_point.y = convertedPointMatrix.elements[1][0] + this.item.position.top;
       }
-      if (this.position.left < converted_point.x && this.position.left + this.size.width > converted_point.x) {
-        if (this.position.top < converted_point.y && this.position.top + this.size.height > converted_point.y) {
+      if (this.item.position.left < converted_point.x && this.item.position.left + this.item.size.width > converted_point.x) {
+        if (this.item.position.top < converted_point.y && this.item.position.top + this.item.size.height > converted_point.y) {
           return true;
         }
       }
     }
     return false;
   },
-  
-  recomputeInternalSizeAndPosition: function() {
-    var t = this.item.data.data.css.top || "0px",
-        l = this.item.data.data.css.left || "0px",
-        w = this.item.data.data.css.width || "100px",
-        h = this.item.data.data.css.height || "100px";
-    this.position = {
-      top: parseFloat(t.replace("px", "")),
-      left: parseFloat(l.replace("px", ""))
-    };
-    this.size = {
-      width: parseFloat(w.replace("px", "")),
-      height: parseFloat(h.replace("px", ""))
-    };
-  },
+ 
   
   objectChanged: function(item) {
-    this.recomputeInternalSizeAndPosition();
     this.domNode.animate(item.data.data.css, 'fast');
+    this.resetHandles();   
     if (item.data.media_type == "drawing") {
       WebDoc.application.svgRenderer.updatePolyline(this.domNode.get(0), {
         points: item.data.data.points
@@ -104,52 +95,46 @@ WebDoc.ItemView = $.klass({
     }
   },
   
+  resetHandles: function() {
+    var handleCss = {
+      top: this.item.data.data.css.top,
+      left: this.item.data.data.css.left,
+      width: (this.item.size.width - 7) + "px",
+      height: (this.item.size.height - 7) + "px"
+    };
+    this.selectionNode.css(handleCss); 
+    this.resizeNode.css(handleCss);   
+  },
+  
   innerHtmlChanged: function() {
     if (this.item.data.data.innerHTML) {
       this.domNode.html(this.item.data.data.innerHTML);
     }    
   },
-  
-  shift: function(x, y) {
-    var newPosition = {
-      left: this.position.left + x,
-      top: this.position.top + y
-    };
-    this.moveTo(newPosition);
-  },
+ 
   
   moveTo: function(position) {
-    this.position.left = position.left;
-    this.position.top = position.top;
-    this.item.data.data.css.left = this.position.left + "px";
-    this.item.data.data.css.top = this.position.top + "px";
+    this.item.position.left = position.left;
+    this.item.position.top = position.top;
+    this.item.data.data.css.left = this.item.position.left + "px";
+    this.item.data.data.css.top = this.item.position.top + "px";
     this.domNode.css({
       top: this.item.data.data.css.top,
       left: this.item.data.data.css.left
     });
-    this.resizeNode.css({
-      top: this.item.data.data.css.top,
-      left: this.item.data.data.css.left
-    });
+    this.resetHandles();
   },
   
   resizeTo: function(size) {
-    this.size.width = size.width;
-    this.size.height = size.height;
-    this.item.data.data.css.width = this.size.width + "px";
-    this.item.data.data.css.height = this.size.height + "px";
+    this.item.size.width = size.width;
+    this.item.size.height = size.height;
+    this.item.data.data.css.width = this.item.size.width + "px";
+    this.item.data.data.css.height = this.item.size.height + "px";
     this.domNode.css({
       width: this.item.data.data.css.width,
       height: this.item.data.data.css.height
     });
-    this.selectionNode.css({
-      width: this.item.data.data.css.width,
-      height: this.item.data.data.css.height
-    });
-    this.resizeNode.css({
-      width: this.item.data.data.css.width,
-      height: this.item.data.data.css.height
-    });
+    this.resetHandles();
   },
   
   isSelected: function() {
@@ -162,24 +147,20 @@ WebDoc.ItemView = $.klass({
       this.domNode.addClass("item_selected");
       WebDoc.application.boardController.pageView.itemDomNode.append(this.selectionNode.get(0));
       WebDoc.application.boardController.pageView.itemDomNode.append(this.resizeNode.get(0));
-      var handleCss = {
-        top: this.item.data.data.css.top,
-        left: this.item.data.data.css.left,
-        width: (this.size.width - 7) + "px",
-        height: (this.size.height - 7) + "px"
-      };
-      this.selectionNode.css(handleCss);
+ 
+      this.resetHandles();
+
       this.selectionNode.draggable({
         containment: "parent",
         cursor: 'move',
         start: function(e, ui) {
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           var currentPosition = {};
-          $.extend(currentPosition, this.position);
-          this.dragOffsetLeft = mappedPoint.x - this.position.left;
-          this.dragOffsetTop = mappedPoint.y - this.position.top;
+          $.extend(currentPosition, this.item.position);
+          this.dragOffsetLeft = mappedPoint.x - this.item.position.left;
+          this.dragOffsetTop = mappedPoint.y - this.item.position.top;
           WebDoc.application.undoManager.registerUndo(function() {
-            this._restorePosition(currentPosition);
+            WebDoc.ItemView._restorePosition(this.item, currentPosition);
           }.pBind(this));
         }.pBind(this)        ,
         drag: function(e, ui) {
@@ -200,15 +181,14 @@ WebDoc.ItemView = $.klass({
         this.selectionNode.trigger(lastSelectedObjectMouseDownEvent);
       }
       
-      this.resizeNode.css(handleCss);
       this.resizeNode.resizable({
         handles: 's, e, se',
         start: function(e, ui) {
           this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
           var currentSize = {};
-          $.extend(currentSize, this.size);
+          $.extend(currentSize, this.item.size);
           WebDoc.application.undoManager.registerUndo(function() {
-            this._restoreSize(currentSize);
+            WebDoc.ItemView._restoreSize(currentSize);
           }.pBind(this));
         }.pBind(this)        ,
         resize: function(e, ui) {
@@ -237,31 +217,32 @@ WebDoc.ItemView = $.klass({
   },
   
   createSelectedFrame: function() {
-  },
-  
-  _restorePosition: function(position) {
+  }
+});
+
+$.extend(WebDoc.ItemView, {
+    _restorePosition: function(item, position) {
     ddd("restore position" + position.left + ":" + position.top);
     var previousPosition = {};
-    $.extend(previousPosition, this.position);
-    this.moveTo(position);
-    this.selectionNode.css(position);
+    $.extend(previousPosition, item.position);
+    ddd(item);
+    ddd("store previous pos "+ previousPosition.left + ":" + previousPosition.top)
+    item.moveTo(position);
     WebDoc.application.undoManager.registerUndo(function() {
-      this._restorePosition(previousPosition);
+      WebDoc.ItemView._restorePosition(item, previousPosition);
     }.pBind(this));
-    this.item.save();
+    item.save();
   },
   
-  _restoreSize: function(size) {
+  _restoreSize: function(item, size) {
     ddd("restore size" + size.height + ":" + size.width);
     var previousSize = {};
-    $.extend(previousSize, this.size);
-    this.resizeTo(size);
-    this.resizeNode.css(size);
+    $.extend(previousSize, item.size);
+    item.resizeTo(size);
     WebDoc.application.undoManager.registerUndo(function() {
-      this._restoreSize(previousSize);
-    }
-.pBind(this));
-    this.item.save();
+      WebDoc.ItemView._restoreSize(item, previousSize);
+    }.pBind(this));
+    item.save();
   }
 });
 

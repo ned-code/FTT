@@ -144,6 +144,16 @@ WebDoc.BoardController = $.klass({
     }
   },
   
+  deleteSelection: function() {
+    var deletedItems = [];
+    $.each(this.selection, function(index, itemView){
+      deletedItems.push(itemView.item);
+    }.pBind(this));
+    this.removeItems(deletedItems);
+    this.selection = [];
+    this.fireSelectionChanged();
+  },
+  
   zoom: function(factor) {
     var previousZoom = this.currentZoom;
     this.currentZoom = this.currentZoom * factor;
@@ -215,6 +225,29 @@ WebDoc.BoardController = $.klass({
   mouseClick: function(e) {
     e.preventDefault();
     this.currentTool.mouseClick(e);
+  },
+  
+  insertItems: function(items) {
+    $.each(items, function(index, item) {
+      this.currentPage.addItem(item);
+      item.isNew = true;
+      item.save();
+    }.pBind(this));
+
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.removeItems(items);
+    }.pBind(this));    
+  },
+  
+  removeItems: function(items) {
+    $.each(items, function(index, item) {
+      this.currentPage.removeItem(item);
+      item.destroy();
+    }.pBind(this));
+      
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.insertItems(items);
+    }.pBind(this));
   }
   
 });

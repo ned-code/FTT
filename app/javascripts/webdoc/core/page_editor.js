@@ -54,6 +54,7 @@ WebDoc.PageEditor = $.klass({
     $("#default_widget").bind("click", this.insertWidget);
     $("#page_css_editor").bind("blur", this.applyPageCss);
     $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);
+    $("#remove_selection").bind("click", this.deleteItem);
     
     $("#html_snipplet").bind("click", this.inserthtmlSnipplet);
     WebDoc.application.boardController.addSelectionListener(this);
@@ -110,6 +111,8 @@ WebDoc.PageEditor = $.klass({
     newPage.data.position = ++editor.currentPage.data.position;
     newPage.save(function(status)
     {
+      ddd("load");
+      ddd(this);
       editor.loadPage(this);
     });
   },
@@ -154,41 +157,39 @@ WebDoc.PageEditor = $.klass({
     window.close();
   },
 
+  deleteItem: function() {
+      ddd("delete selection actrion");
+      WebDoc.application.boardController.deleteSelection();
+  },
+  
   insertImage: function() {
     console.log("insert image");
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
-    newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "img";
-    // newItem.data.data.src = "/system/files/11d69920-8a86-012c-72df-002500a8be1c/original/Picture_1.png?1253720740";
     newItem.data.data.src = "/images/image_view_test.png";
-    newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};
-    var newItemView = new WebDoc.ImageView(newItem);
-    newItem.save();
+    newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};   
+    WebDoc.application.boardController.insertItems([newItem]);
   },
   
   insertWidget: function() {
     console.log("insert widget");
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-    newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "iframe";
     newItem.data.data.src = "/widgets/VideoPicker.wgt/index.html";
     newItem.data.data.css = { top: "100px", left: "100px", width: "426px", height: "630px"};
-    var newItemView = new WebDoc.WidgetView(newItem);
-    newItem.save();    
+    WebDoc.application.boardController.insertItems([newItem]);   
   },
   
   inserthtmlSnipplet: function() {
     console.log("insert snipplet");
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-    newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "div";
     newItem.data.data.innerHTML = "HTML Snipplet";
     newItem.data.data.css = { top: "100px", left: "100px", width: "100px", height: "100px", border: "2px solid #ddd"};
-    var newItemView = new WebDoc.WidgetView(newItem);
-    newItem.save();
+    WebDoc.application.boardController.insertItems([newItem]);
   },
   
   applyPageCss: function() {
@@ -200,9 +201,11 @@ WebDoc.PageEditor = $.klass({
   applyInnerHtml: function() {
     console.log("apply HTML");
     var html = $("#selected_item_html_editor").get(0).value
-    if (WebDoc.application.boardController.selection.length > 0) {
-      WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
-      WebDoc.application.boardController.selection[0].item.save();
+    if (html) {
+      if (WebDoc.application.boardController.selection.length > 0) {
+        WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
+        WebDoc.application.boardController.selection[0].item.save();
+      }
     }
   },
   
@@ -210,7 +213,13 @@ WebDoc.PageEditor = $.klass({
     ddd("selected item ");
     ddd( WebDoc.application.boardController.selection);
     if (WebDoc.application.boardController.selection.length > 0) {
-      $("#selected_item_html_editor").get(0).value = WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
+      var html =  WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
+      if (html) {
+        $("#selected_item_html_editor").get(0).value =html;
+      }
+      else {
+        $("#selected_item_html_editor").get(0).value = "";
+      }
     }
     else {
       $("#selected_item_html_editor").get(0).value = "";
