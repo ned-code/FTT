@@ -65,7 +65,7 @@ namespace DocumentConverter
                 {
                     if (CanDeletePdf(id))//Do not delete files while conversion process is ongoing...
                     {
-                        Trace.Write("deleting : " + m_documentTable[id].OutputPath);
+                        Trace.WriteLine("deleting : " + m_documentTable[id].OutputPath);
                         using (new Impersonation())//for delete permissions
                         {
                             File.Delete(m_documentTable[id].OutputPath);
@@ -97,7 +97,7 @@ namespace DocumentConverter
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Failed to purge documents : " + e.Message);
+                Trace.TraceWarning("Failed to purge documents : " + e.Message);
                 success = false;
             }
 
@@ -131,7 +131,7 @@ namespace DocumentConverter
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLine("Failed to delete document " + file.FullName + " : " + e.Message);
+                        Trace.TraceWarning("Failed to delete document " + file.FullName + " : " + e.Message);
                         return false;
                     }
                 }

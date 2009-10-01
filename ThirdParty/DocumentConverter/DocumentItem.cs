@@ -47,29 +47,32 @@ namespace DocumentConverter
         {
             try
             {
-                Debug.WriteLine("getting " + m_sourceUrl + " ...");
+                Trace.WriteLine("getting " + m_sourceUrl + " ...");
                 if(Status == State.Queued)
                     DownloadDocument();
                 ConvertToPdf();
-                AdviseClient();
-                File.Delete(InputPath);
             }
             catch (ArgumentNullException)
             {
                 Status = State.Failed;
-                Debug.WriteLine("DocumentItem Error : No source document provided!"); 
+                Trace.TraceWarning("DocumentItem Error : No source document provided!"); 
             }
             catch (UriFormatException e) 
             {
                 Status = State.Failed;
-                Debug.WriteLine("DocumentItem Error : Invalid source document - exception = " + e.Message); 
+                Trace.TraceWarning("DocumentItem Error : Invalid source document - exception = " + e.Message); 
             }
             catch (Exception e) 
             {
                 Status = State.Failed;
-                Debug.WriteLine("DocumentItem Exception occured : " + e.Message); 
+                Trace.TraceWarning("DocumentItem Exception occured : " + e.Message); 
             }
-            finally { }
+            finally 
+            {
+                AdviseClient();
+                try { File.Delete(InputPath); }
+                catch { Trace.TraceWarning("Failed to delete " + InputPath); }
+            }
         }
         #endregion
 
@@ -119,7 +122,7 @@ namespace DocumentConverter
                 Stream receiveStream = response.GetResponseStream();
                 readStream = new BinaryReader(receiveStream);
 
-                Debug.WriteLine("downloading src document to " + InputPath + "...");
+                Trace.WriteLine("downloading src document to " + InputPath + "...");
 
                 if (!Directory.Exists(ConversionEngine.InputDir))
                     Directory.CreateDirectory(ConversionEngine.InputDir);
@@ -146,7 +149,7 @@ namespace DocumentConverter
         }
         protected virtual void ConvertToPdf()
         {
-            Debug.WriteLine("Generating pdf file : " + OutputPath + "...");
+            Trace.WriteLine("Generating pdf file : " + OutputPath + "...");
 
             Status = State.Converting;
             Microsoft.Office.Interop.PowerPoint.Application app = null;
@@ -181,7 +184,7 @@ namespace DocumentConverter
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Failed to advise client : " + e.Message);
+                Trace.TraceWarning("Failed to advise client : " + e.Message);
             }
             finally
             {

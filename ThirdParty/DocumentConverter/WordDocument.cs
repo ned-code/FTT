@@ -24,7 +24,7 @@ namespace DocumentConverter
         #region Helpers
         protected override void ConvertToPdf()
         {
-            Debug.WriteLine("Generating pdf file : " + OutputPath + "...");
+            Trace.WriteLine("Generating pdf file : " + OutputPath + "...");
 
             Status = State.Converting;
             Documents docSet = null;
@@ -94,7 +94,7 @@ namespace DocumentConverter
             foreach (Process p in processes)
             {
                 try { p.Kill(); }
-                catch (Exception e) { Debug.WriteLine("Failed to kill Word process : " + e.Message); }
+                catch (Exception e) { Trace.TraceWarning("Failed to kill Word process : " + e.Message); }
             }
         }
 

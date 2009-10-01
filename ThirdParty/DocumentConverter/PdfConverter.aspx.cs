@@ -30,7 +30,7 @@ namespace DocumentConverter
             }
             catch (Exception ex)//unabled to download short living resource
             {
-                Debug.WriteLine("Failed to create Document : " + ex.Message);
+                Trace.Warn("Failed to create Document : " + ex.Message);
                 Response.StatusCode = 403; //HTTP_STATUS_FORBIDDEN
             }
         }

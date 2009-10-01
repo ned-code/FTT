@@ -33,7 +33,7 @@ namespace DocumentConverterClient
                     Directory.CreateDirectory(outDir);
                 string outPath = Path.Combine(outDir, m_pdfId + ".pdf");
 
-                Debug.WriteLine("downloading pdf document to " + outPath + "...");
+                Trace.Write("downloading pdf document to " + outPath + "...");
 
                 using (BinaryWriter bw = new BinaryWriter(File.Open(outPath, FileMode.Create)))
                 {
@@ -49,7 +49,7 @@ namespace DocumentConverterClient
             }
             catch(Exception ex)
             {
-                Debug.WriteLine("Failed to download pdf document : " + ex.Message);
+                Trace.Warn("Failed to download pdf document : " + ex.Message);
                 return;
             }
             finally
@@ -59,7 +59,7 @@ namespace DocumentConverterClient
             }
 
             //delete pdf file
-            Debug.WriteLine("Request deletion of " + m_pdfUrl + "...");
+            Trace.Write("Request deletion of " + m_pdfUrl + "...");
             string requestUrl2 = _Default.DeleteUrl + "?pdfId=" + m_pdfId;
             HttpWebRequest request2 = (HttpWebRequest)WebRequest.Create(requestUrl2);
             HttpWebResponse response2 = (HttpWebResponse)request2.GetResponse();
