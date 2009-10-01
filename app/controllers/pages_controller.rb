@@ -19,8 +19,10 @@ class PagesController < ApplicationController
     if (params[:page][:data])
       params[:page][:data] = JSON.parse(params[:page][:data])  
     end
-    
-    render :json => @document.pages.create(params[:page])
+    @page = @document.pages.new(params[:page])
+    @page.uuid = params[:page][:uuid];
+    @page.save;
+    render :json => @page
   end
   
   # PUT /documents/:document_id/pages/:id
