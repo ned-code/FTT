@@ -77,7 +77,9 @@ WebDoc.ItemView = $.klass({
       }
       if (this.item.position.left < converted_point.x && this.item.position.left + this.item.size.width > converted_point.x) {
         if (this.item.position.top < converted_point.y && this.item.position.top + this.item.size.height > converted_point.y) {
+
           return true;
+          
         }
       }
     }
@@ -87,11 +89,14 @@ WebDoc.ItemView = $.klass({
   
   objectChanged: function(item) {
     this.domNode.animate(item.data.data.css, 'fast');
-    this.resetHandles();   
+  
     if (item.data.media_type == "drawing") {
       WebDoc.application.svgRenderer.updatePolyline(this.domNode.get(0), {
         points: item.data.data.points
       });
+    }
+    else {
+      this.resetHandles(); 
     }
   },
   
@@ -225,7 +230,7 @@ $.extend(WebDoc.ItemView, {
     ddd("restore position" + position.left + ":" + position.top);
     var previousPosition = {};
     $.extend(previousPosition, item.position);
-    ddd(item);
+
     ddd("store previous pos "+ previousPosition.left + ":" + previousPosition.top)
     item.moveTo(position);
     WebDoc.application.undoManager.registerUndo(function() {
@@ -299,8 +304,8 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     var innerIframe = this.domNode.find("iframe");
     if (innerIframe) {
       this.resizeTo({
-        width: innerIframe.css("width").replace("px", ""),
-        height: innerIframe.css("height").replace("px", "")
+        width: parseFloat(innerIframe.css("width").replace("px", "")),
+        height: parseFloat(innerIframe.css("height").replace("px", ""))
       });
     }
   },
