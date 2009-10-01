@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 
@@ -26,7 +27,10 @@ namespace DocumentConverter
         {
             IntPtr handle = new IntPtr(0);
             if (!LogonUser(m_userId, m_domain, m_password, 3, 0, out handle))
+            {
+                Trace.TraceWarning("authentication Error");
                 throw new Exception("authentication Error");
+            }
             m_impContext = new WindowsIdentity(handle).Impersonate();
             CloseHandle(handle);
         }

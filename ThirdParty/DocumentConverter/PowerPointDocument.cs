@@ -25,7 +25,7 @@ namespace DocumentConverter
         #region Helpers
         protected override void ConvertToPdf()
         {
-            Debug.WriteLine("Generating pdf file : " + OutputPath + "...");
+            Trace.WriteLine("Generating pdf file : " + OutputPath + "...");
 
             Status = State.Converting;
             Microsoft.Office.Interop.PowerPoint.Presentation doc = null;
@@ -85,7 +85,7 @@ namespace DocumentConverter
             foreach (Process p in processes)
             {
                 try { p.Kill(); }
-                catch (Exception e) { Debug.WriteLine("Failed to kill PowerPoint process : " + e.Message); }
+                catch (Exception e) { Trace.TraceWarning("Failed to kill PowerPoint process : " + e.Message); }
             }
         }
         private static Microsoft.Office.Interop.PowerPoint.Application PowerPointApp = null;
