@@ -77,7 +77,9 @@ private
 
   # before_create
   def set_position
-    self.position = document.new_record? ? 0 : document.pages.count
+    self.position ||= document.new_record? ? 0 : document.pages.count
+    #update following pages
+    Page.update_all("position = position + 1", "position > #{self.position.to_i - 1}")
   end
 
 end
