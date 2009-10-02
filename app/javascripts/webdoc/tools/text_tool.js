@@ -22,8 +22,6 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.iframeCssPath = "/stylesheets/textbox.css";
    
     this.defaultTextboxCss = { // style used on both the textBox div & iframe
-      borderStyle:"solid",
-      borderWidth:"2px",
       // borderColor:"transparent",
       width:"400px",
       height:"200px",
@@ -56,9 +54,9 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     newItem.data.data['class'] = "textbox empty";
     newItem.data.data.innerHTML = WebDoc.NEW_TEXTBOX_CONTENT;
     newItem.data.data.css = this.textboxCss;
-    
+    newItem.recomputeInternalSizeAndPosition(); 
     //Create view
-    WebDoc.application.boardController.insertItems([newItem]);    
+    WebDoc.application.boardController.insertItems([newItem]);   
     // Select view
     // WebDoc.application.boardController.selectItemViews([newItemView]);
     

@@ -183,7 +183,7 @@ WebDoc.ItemView = $.klass({
       if (lastSelectedObjectMouseDownEvent) {
         // board must ignore this event. It is just for draggable elemnt
         lastSelectedObjectMouseDownEvent.boardIgnore = true;
-        this.selectionNode.trigger(lastSelectedObjectMouseDownEvent);
+        this.selectionNode.trigger(lastSelectedObjectMouseDownEvent);        
       }
       
       this.resizeNode.resizable({
@@ -255,6 +255,7 @@ $.extend(WebDoc.ItemView, {
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
   edit: function() { //called if we clicked on an already selected textbox
     WebDoc.application.textTool.enterEditMode(this);
+    this.domNode.addClass("item_edited");
   },
   
   isEditing: function() {
@@ -265,6 +266,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
     if (this.isEditing()) {
       WebDoc.application.textTool.exitEditMode();
     }
+    this.domNode.removeClass("item_edited");
     $super();
   }
 });
@@ -315,10 +317,12 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   },
       
   edit: function() {
+    this.domNode.addClass("item_edited");
     this.domNode.css({ zIndex: "1000005"});
   },
   
   unSelect: function($super) {
+    this.domNode.removeClass("item_edited");
     this.domNode.css({ zIndex: "0"});
     $super();
   },

@@ -171,6 +171,7 @@ WebDoc.PageEditor = $.klass({
     newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};   
     newItem.recomputeInternalSizeAndPosition();
     WebDoc.application.boardController.insertItems([newItem]);
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
   },
   
   insertWidget: function() {
@@ -182,6 +183,7 @@ WebDoc.PageEditor = $.klass({
     newItem.data.data.css = { top: "100px", left: "100px", width: "426px", height: "630px"};
     newItem.recomputeInternalSizeAndPosition();
     WebDoc.application.boardController.insertItems([newItem]);   
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
   },
   
   inserthtmlSnipplet: function() {
@@ -190,9 +192,10 @@ WebDoc.PageEditor = $.klass({
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
     newItem.data.data.tag = "div";
     newItem.data.data.innerHTML = "HTML Snipplet";
-    newItem.data.data.css = { top: "100px", left: "100px", width: "100px", height: "100px", border: "2px solid #ddd"};
+    newItem.data.data.css = { top: "100px", left: "100px", width: "100px", height: "100px"};
     newItem.recomputeInternalSizeAndPosition();
     WebDoc.application.boardController.insertItems([newItem]);
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
   },
   
   applyPageCss: function() {

@@ -31,6 +31,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
     else {
       WebDoc.application.boardController.unselectAll();
     }
+    this.lastSelectedObject.event = null;
   },
   
   mouseDown: function(e) {
