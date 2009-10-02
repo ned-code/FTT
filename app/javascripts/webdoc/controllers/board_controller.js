@@ -223,7 +223,7 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseClick: function(e) {
-    e.preventDefault();
+    //e.preventDefault();
     this.currentTool.mouseClick(e);
   },
   
@@ -234,6 +234,11 @@ WebDoc.BoardController = $.klass({
       item.save();
     }.pBind(this));
 
+    if (items.length > 0) {
+      var itemViewToSelect = this.pageView.itemViews[items[0].uuid()];
+      this.selectItemViews([itemViewToSelect]);
+    }
+    
     WebDoc.application.undoManager.registerUndo(function() {
       this.removeItems(items);
     }.pBind(this));    

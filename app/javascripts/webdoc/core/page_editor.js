@@ -169,6 +169,7 @@ WebDoc.PageEditor = $.klass({
     newItem.data.data.tag = "img";
     newItem.data.data.src = "/images/image_view_test.png";
     newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};   
+    newItem.recomputeInternalSizeAndPosition();
     WebDoc.application.boardController.insertItems([newItem]);
   },
   
@@ -179,6 +180,7 @@ WebDoc.PageEditor = $.klass({
     newItem.data.data.tag = "iframe";
     newItem.data.data.src = "/widgets/VideoPicker.wgt/index.html";
     newItem.data.data.css = { top: "100px", left: "100px", width: "426px", height: "630px"};
+    newItem.recomputeInternalSizeAndPosition();
     WebDoc.application.boardController.insertItems([newItem]);   
   },
   
@@ -189,6 +191,7 @@ WebDoc.PageEditor = $.klass({
     newItem.data.data.tag = "div";
     newItem.data.data.innerHTML = "HTML Snipplet";
     newItem.data.data.css = { top: "100px", left: "100px", width: "100px", height: "100px", border: "2px solid #ddd"};
+    newItem.recomputeInternalSizeAndPosition();
     WebDoc.application.boardController.insertItems([newItem]);
   },
   
