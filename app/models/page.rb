@@ -39,6 +39,8 @@ class Page < ActiveRecord::Base
   # =============
   
   before_create :set_position
+  
+  after_destroy :update_next_page_position
 
   # =================
   # = Class Methods =
@@ -79,7 +81,11 @@ private
   def set_position
     self.position ||= document.new_record? ? 0 : document.pages.count
     #update following pages
-    Page.update_all("position = position + 1", "position > #{self.position.to_i - 1}")
+    Page.update_all("position = position + 1", "position >= #{self.position.to_i} and uuid <> '#{self.uuid}'")
+  end
+  
+  def update_next_page_position
+    Page.update_all("position = position - 1", "position > #{self.position.to_i} and uuid <> '#{self.uuid}'")
   end
 
 end
