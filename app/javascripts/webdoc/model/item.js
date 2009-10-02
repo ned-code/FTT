@@ -88,6 +88,7 @@ WebDoc.Item = $.klass(MTools.Record,
   resizeContainer: function(width, height) {
     this.data.data.css.width = width + "px";
     this.data.data.css.height = height + "px";
+    ddd("resize container to " + this.data.data.css.width + ":"  + this.data.data.css.height);
     this.fireObjectChanged();
   },
   

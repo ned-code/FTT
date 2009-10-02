@@ -290,11 +290,15 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       widgetNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
     }, 2000);
     */
-   widgetNode.one('load', function() {
+   widgetNode.bind('load', function() {
      ddd("widget loaded");
      this.initWidget();
    }.pBind(this));
 
+   widgetNode.bind('resize', function() {
+     ddd("widget resize");
+   }.pBind(this));
+   
     return widgetNode;
   },
   
