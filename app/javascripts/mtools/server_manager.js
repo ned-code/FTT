@@ -31,13 +31,15 @@ $.extend(MTools.ServerManager,
                     {
                         for (var i = 0; i < data.length; i++) 
                         {
-                            var aJson = data[i];
-                            result.push(new objectClass(aJson));
+                          var aJson = data[i];
+                          result.push(new objectClass(aJson));
                         }
                     }
                     else 
                     {
+                      if (data) {
                         result.push(new objectClass(data));
+                      }
                     }
                     callback.call(context, result);
                 }

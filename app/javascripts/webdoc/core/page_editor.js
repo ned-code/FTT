@@ -74,7 +74,10 @@ WebDoc.PageEditor = $.klass({
     MTools.ServerManager.getObjects("/documents/" + documentId + "/pages/" + pageId, WebDoc.Page, function(data)
     {
       var editor = WebDoc.application.pageEditor;
-      editor.loadPage(data[0]);
+      if (data.length > 0) {
+        ddd(data[0]);
+        editor.loadPage(data[0]);
+      }
     });
   },
 
