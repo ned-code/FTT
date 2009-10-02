@@ -47,6 +47,8 @@ WebDoc.BoardController = $.klass({
     $("#board").bind("mouseup", this, this.mouseUp.pBind(this));
     $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
     $("#board").bind("click", this, this.mouseClick.pBind(this));
+    $(window.body).bind("keypress", this, this.keyDown.pBind(this));
+
     
     // update data attribute of object
     $("object").each(function() {
@@ -225,6 +227,31 @@ WebDoc.BoardController = $.klass({
   mouseClick: function(e) {
     //e.preventDefault();
     this.currentTool.mouseClick(e);
+  },
+  
+  keyDown: function(e) {
+    ddd(e);
+    switch(e.which) {
+      case 8: 
+      case 46: 
+        this.deleteSelection();
+        break;
+      case 122:
+        this.zoomIn();
+        break;
+      case 117:
+        this.zoomOut();
+        break;
+      case 116:
+        this.setCurrentTool(WebDoc.application.textTool);
+        break;
+      case 112:
+        this.setCurrentTool(WebDoc.application.drawingTool);
+        break;
+      case 97:
+        this.setCurrentTool(WebDoc.application.arrowTool);
+        break;        
+    }
   },
   
   insertItems: function(items) {
