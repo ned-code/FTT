@@ -25,11 +25,13 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
     };
     console.log("found object");
     console.log(objectToSelect);
-    if (objectToSelect) {
-      WebDoc.application.boardController.selectItemViews([objectToSelect],e);
-    }
-    else {
-      WebDoc.application.boardController.unselectAll();
+    if (!(objectToSelect && WebDoc.application.boardController.editingItem == objectToSelect)) {
+      if (objectToSelect) {
+        WebDoc.application.boardController.selectItemViews([objectToSelect], e);
+      }
+      else {
+        WebDoc.application.boardController.unselectAll();
+      }
     }
     this.lastSelectedObject.event = null;
   },
@@ -54,7 +56,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
   },
   
   mouseClick: function(e) {
-    if (this.lastSelectedObject.itemView) {
+    if (this.lastSelectedObject.itemView) { 
       this.lastSelectedObject.itemView.edit(); //if object (itemView) supports edit mode...
     }
   }

@@ -74,10 +74,10 @@ WebDoc.Page = $.klass(MTools.Record,
     var index = $.inArray(item, this.items);
     ddd("item index " + index);
     ddd(item);
-    ddd(this.items);
+    ddd("tot number of items:"+this.items.length);
     if (index != -1) {
-      this.items.slice(index, 1);
-      ddd(this.items);
+      this.items.splice(index, 1);
+      //ddd(this.items);
       this.fireItemRemoved(item);
     }
   },

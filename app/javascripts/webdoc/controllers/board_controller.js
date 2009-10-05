@@ -11,6 +11,7 @@ WebDoc.BoardController = $.klass({
   initialize: function(editable) {
     this.currentZoom = 1;
     this.selection = [];
+    this.editingItem = null;
     this.selectionListeners = [];
   },
   
@@ -25,6 +26,9 @@ WebDoc.BoardController = $.klass({
   },
   
   setCurrentPage: function(page) {
+    $("#board").unbind();
+    $(document).unbind("keydown");
+    
     // remove previous page
     $("#board_container").empty();
     // add the new one
@@ -47,7 +51,8 @@ WebDoc.BoardController = $.klass({
     $("#board").bind("mouseup", this, this.mouseUp.pBind(this));
     $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
     $("#board").bind("click", this, this.mouseClick.pBind(this));
-    $(window.body).bind("keypress", this, this.keyDown.pBind(this));
+    ddd("listen keyboard");
+    $(document).bind("keydown", this, this.keyDown.pBind(this));
 
     
     // update data attribute of object
@@ -104,7 +109,10 @@ WebDoc.BoardController = $.klass({
     this.zoom(1 / 1.5);
   },
   
-  selectItemViews: function(itemViews) {
+  selectItemViews: function(itemViews) {    
+    // exit edit mode for current editing item
+    if (this.editingItem) this.editingItem.stopEditing();
+    this.editingItem = null;
     //deselect un-needed items
     ddd("select item in view");
     $.each(this.selection, function(index, itemToDeselect) {
@@ -126,8 +134,7 @@ WebDoc.BoardController = $.klass({
   
   unselectAll: function() {
     console.log("unselect all. selection size " + this.selection.length);
-    this.unselectItemViews(this.selection);
-    this.fireSelectionChanged();
+    this.selectItemViews([]);   
   },
   
   unselectItemViews: function(itemViews) {
@@ -146,7 +153,7 @@ WebDoc.BoardController = $.klass({
     }
   },
   
-  deleteSelection: function() {
+  deleteSelection: function(e) {
     var deletedItems = [];
     $.each(this.selection, function(index, itemView){
       deletedItems.push(itemView.item);
@@ -154,6 +161,7 @@ WebDoc.BoardController = $.klass({
     this.removeItems(deletedItems);
     this.selection = [];
     this.fireSelectionChanged();
+    if (e && deletedItems.length > 0) e.preventDefault(); //stop keydown event
   },
   
   zoom: function(factor) {
@@ -203,19 +211,19 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseDown: function(e) {
-    e.preventDefault();
+    //e.preventDefault();
     if (!e.boardIgnore) {
       this.currentTool.mouseDown(e);
     }
   },
   
   mouseMove: function(e) {
-    e.preventDefault();
+    //e.preventDefault();
     this.currentTool.mouseMove(e);
   },
   
   mouseOut: function(e) {
-    e.preventDefault();
+    //e.preventDefault();
     this.currentTool.mouseOut(e);
   },
   
@@ -231,24 +239,26 @@ WebDoc.BoardController = $.klass({
   
   keyDown: function(e) {
     ddd(e);
+    var el = $(e.target);
+    if (el.is('input') || el.is('textarea')) return;
     switch(e.which) {
       case 8: 
       case 46: 
-        this.deleteSelection();
+        this.deleteSelection(e);
         break;
-      case 122:
+      case 90:
         this.zoomIn();
         break;
-      case 117:
+      case 85:
         this.zoomOut();
         break;
-      case 116:
+      case 84:
         this.setCurrentTool(WebDoc.application.textTool);
         break;
-      case 112:
+      case 80:
         this.setCurrentTool(WebDoc.application.drawingTool);
         break;
-      case 97:
+      case 65:
         this.setCurrentTool(WebDoc.application.arrowTool);
         break;        
     }

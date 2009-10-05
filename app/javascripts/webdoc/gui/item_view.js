@@ -112,9 +112,7 @@ WebDoc.ItemView = $.klass({
   },
   
   innerHtmlChanged: function() {
-    if (this.item.data.data.innerHTML) {
-      this.domNode.html(this.item.data.data.innerHTML);
-    }    
+     this.domNode.html(this.item.data.data.innerHTML);    
   },
  
   
@@ -147,6 +145,10 @@ WebDoc.ItemView = $.klass({
   },
   
   select: function() {
+    var lastSelectedObjectMouseDownEvent = WebDoc.application.arrowTool.lastSelectedObject.event;
+    if (lastSelectedObjectMouseDownEvent) {
+      lastSelectedObjectMouseDownEvent.preventDefault();
+     }
     if (!this.isSelected()) {
       console.log("ItemView: select item " + this.item.uuid());
       this.domNode.addClass("item_selected");
@@ -179,7 +181,6 @@ WebDoc.ItemView = $.klass({
         }.pBind(this)
       });
       
-      var lastSelectedObjectMouseDownEvent = WebDoc.application.arrowTool.lastSelectedObject.event;
       if (lastSelectedObjectMouseDownEvent) {
         // board must ignore this event. It is just for draggable elemnt
         lastSelectedObjectMouseDownEvent.boardIgnore = true;
@@ -218,7 +219,7 @@ WebDoc.ItemView = $.klass({
   },
   
   edit: function() {
-    //by default item views are not editable (if your item is editable override this method in the subclass)
+    //by default item views are not editable (if your item is editable override this method in the subclass)    
   },
   
   createSelectedFrame: function() {
@@ -253,7 +254,18 @@ $.extend(WebDoc.ItemView, {
 
 
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
-  edit: function() { //called if we clicked on an already selected textbox
+  createDomNode: function($super) {
+    var result = $super();
+    if (result.hasClass("empty")) {
+      result.html(WebDoc.NEW_TEXTBOX_CONTENT);
+    }  
+    return result;
+  },
+ 
+  edit: function($super) { //called if we clicked on an already selected textbox
+    $super();
+    WebDoc.application.boardController.unselectItemViews([this]);
+    WebDoc.application.boardController.editingItem = this;
     WebDoc.application.textTool.enterEditMode(this);
     this.domNode.addClass("item_edited");
   },
@@ -262,12 +274,18 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
     return this.domNode.closest("." + WebDoc.TEXTBOX_WRAP_CLASS).length > 0;
   },
   
-  unSelect: function($super) {
-    if (this.isEditing()) {
+  stopEditing: function() {
+      this.domNode.removeClass("item_edited");
       WebDoc.application.textTool.exitEditMode();
+  },
+  
+  innerHtmlChanged: function() {
+    if ($.string(this.item.data.data.innerHTML).blank()) {
+      this.domNode.html(WebDoc.NEW_TEXTBOX_CONTENT); 
     }
-    this.domNode.removeClass("item_edited");
-    $super();
+    else {
+      this.domNode.html(this.item.data.data.innerHTML);
+    }
   }
 });
 
@@ -316,15 +334,18 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     }
   },
       
-  edit: function() {
+  edit: function($super) {
+    $super();
+    WebDoc.application.boardController.unselectItemViews([this]);
+    WebDoc.application.boardController.editingItem = this;
     this.domNode.addClass("item_edited");
     this.domNode.css({ zIndex: "1000005"});
   },
   
-  unSelect: function($super) {
+  stopEditing: function() {
+      this.domNode.removeClass("item_edited");
     this.domNode.removeClass("item_edited");
     this.domNode.css({ zIndex: "0"});
-    $super();
   },
   
   initWidget: function() {

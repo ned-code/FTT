@@ -16,17 +16,21 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   },
   
   mouseDown: function(e) {
+    e.preventDefault();
     this.drawing = true;
     this.beginDraw(e);
   },
 
   mouseMove: function(e) {
+    e.preventDefault();
     if (this.drawing) {
       this.draw(e);
     }
   },
 
-  mouseUp: function(e) {
+  mouseUp: function(e) 
+  {
+    e.preventDefault();
     this.drawing = false;
     this.endDraw(e);
   },

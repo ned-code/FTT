@@ -52,7 +52,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     newItem.data.media_type = WebDoc.ITEM_TYPE_TEXT;
     newItem.data.data.tag = "div";
     newItem.data.data['class'] = "textbox empty";
-    newItem.data.data.innerHTML = WebDoc.NEW_TEXTBOX_CONTENT;
+    newItem.data.data.innerHTML = "";
     newItem.data.data.css = this.textboxCss;
     newItem.recomputeInternalSizeAndPosition(); 
     //Create view
@@ -64,16 +64,14 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
     
   enterEditMode: function(textView) { //can be called on existing (selected) textView
-    //ddd("Text tool: entering edit mode");
+    ddd("Text tool: entering edit mode");
     // Unselect existing selected text box (if necessary)
     if (this.textView && textView != this.textView)
       WebDoc.application.boardController.unselectItemViews([this.textView]);
     
     this.textView = textView;
     this.textBox = textView.domNode;
-    
-
-    
+   
     //TODO: look if another text box is in edit mode and un... it?
     // Be sure we switch to text tool
     // WebDoc.application.boardController.setCurrentTool(this);
@@ -90,7 +88,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       zIndex:1000010
     });
     
-    var iframe = $('<iframe class="textbox_iframe" scrolling="no" />');
+    var iframe = $('<iframe class="textbox_iframe item_edited" scrolling="no" />');
     iframe.css(this.iframeCss);
     iframe.get(0).showcaret = true;
     $(this.textBox).hide().before(iframe);
@@ -117,14 +115,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
 
     //this.doc is the iframe's document object
     this.doc = this.editableFrame.contentDocument || this.editableFrame.contentWindow.document;
-    if (this.editableFrame.contentDocument) {
-      this.win = this.editableFrame.contentDocument.defaultView;
-    }
-    else if (this.editableFrame.contentWindow.document) {
-      this.win = this.editableFrame.contentWindow;
-    }
     this.doc.designMode = 'on';
-
+    
     this.doc.execCommand("styleWithCSS", '', false);
 
     //inject global stylesheet into iframe's head
@@ -155,41 +147,46 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       this.doc.execCommand('undo', false, null);
     }
     
-    var that = this;
     //focusing iframe
-    
     setTimeout(function(){
-      ddd(that.editableFrame);  
-      that.editableFrame.focus();
-    }, 100);
-    
-    // this.doc.focus();
+      this.editableFrame.contentWindow.focus();
+    }.pBind(this), 100);
   },
 
   exitEditMode: function() {
+    ddd("exit edit");
     // this.unbindEvents();
     this.unbindPalette();
-
+    var content;
     if (this.isHtmlBlank(this.doc.body.innerHTML)) {
       $(this.textBox).html(WebDoc.NEW_TEXTBOX_CONTENT);
       $(this.textBox).addClass("empty");
-      this.textView.item.data.data.innerHTML = WebDoc.NEW_TEXTBOX_CONTENT;
+      content = "";
     }
     else {
       // copy cleaned HTML to textBox and save updated item
-      var cleanedHtml = this.cleanHTML(this.doc.body.innerHTML);
-      $(this.textBox).html(cleanedHtml);
-      this.textView.item.data.data.innerHTML = cleanedHtml;
-      this.textView.item.data.data['class'] = "textbox"; //removing "empty" class
+      content = this.cleanHTML(this.doc.body.innerHTML);
+      $(this.textBox).html(content);
     }
-    this.textView.item.save();
-    
+    this._applyTextContent(content, $(this.textBox).attr("class")); // save and register undo
     
     $(this.editableFrame).remove();
     $(this.textBox).unwrap(".textbox_wrap");
     $(this.textBox).show();
     
     this.editMode = false;
+  },
+  
+  _applyTextContent: function(content, classValue) {
+    var previousContent = this.textView.item.data.data.innerHTML;
+    var previousClass = this.textView.item.data.data['class'];
+    this.textView.item.data.data.innerHTML = content;
+    this.textView.item.data.data['class'] = classValue;
+    this.textView.item.fireInnerHtmlChanged();
+    this.textView.item.save();
+    WebDoc.application.undoManager.registerUndo(function(){
+      this._applyTextContent(previousContent, previousClass);
+    }.pBind(this));
   },
   
   isHtmlBlank: function(html) {
