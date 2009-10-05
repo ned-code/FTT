@@ -388,6 +388,12 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     }
     this.pageView.itemDomNode.append(itemNode.get(0));
     itemNode.addClass("item");
+    if (!this.item.data.data.css.width) {
+      this.item.data.data.css.width = itemNode.width() + "px";
+      this.item.data.data.css.height = itemNode.height() + "px";
+      ddd(this.item.data.data.css.width);
+      this.item.recomputeInternalSizeAndPosition();
+    }
     return itemNode;
   }
 });

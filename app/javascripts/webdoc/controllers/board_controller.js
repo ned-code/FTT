@@ -51,6 +51,9 @@ WebDoc.BoardController = $.klass({
     $("#board").bind("mouseup", this, this.mouseUp.pBind(this));
     $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
     $("#board").bind("click", this, this.mouseClick.pBind(this));
+    $("#board").bind("dragenter", this, this.dragEnter.pBind(this));
+    $("#board").bind("dragover", this, this.dragOver.pBind(this)); 
+    $("#board").bind("drop", this, this.drop.pBind(this));
     ddd("listen keyboard");
     $(document).bind("keydown", this, this.keyDown.pBind(this));
 
@@ -261,6 +264,41 @@ WebDoc.BoardController = $.klass({
       case 65:
         this.setCurrentTool(WebDoc.application.arrowTool);
         break;        
+    }
+  },
+  
+  dragEnter: function(evt,p2,p3) {
+    ddd("drag enter");
+    ddd(evt);
+    //ddd(evt.originalEvent.dataTransfer.getData('text/uri-list'));
+    evt.preventDefault();  
+  },
+  
+  dragOver: function(evt) {
+    evt.preventDefault();
+  },
+  
+  drop: function(evt) {
+    ddd("drop");
+    ddd(evt.originalEvent.dataTransfer.types);
+    var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
+    if (imageUrl) {
+      evt.preventDefault();
+      var newItem = new WebDoc.Item();
+      ddd("event x " + evt.pageX);
+      var pos = this.mapToPageCoordinate(evt);
+      ddd("mapped x " + pos.x);
+      newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
+      newItem.data.data.tag = "img";
+      newItem.data.data.src = imageUrl;
+      newItem.data.data.css = {
+        top: pos.y + "px",
+        left: pos.x + "px",
+      };
+      newItem.recomputeInternalSizeAndPosition();
+      this.insertItems([newItem]);
+      
+      this.setCurrentTool(WebDoc.application.arrowTool);
     }
   },
   
