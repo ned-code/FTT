@@ -13,14 +13,11 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   initialize: function($super, toolId, paletteId) {
     $super(toolId);
     this.paletteId = paletteId;
-
+    
     this.textBox = null; //div containing the cleaned HTML
-
-    this.EVENTS = ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mousemove', 'mouseout', 'keypress', 'keydown', 'keyup'];
     this.COMMANDS = ['bold', 'italic', 'underline', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'insertUnorderedList', 'insertOrderedList', 'indent', 'outdent'];
-
     this.iframeCssPath = "/stylesheets/textbox.css";
-   
+    
     this.defaultTextboxCss = { // style used on both the textBox div & iframe
       // borderColor:"transparent",
       width:"400px",
@@ -123,8 +120,6 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     var ss = $('<link rel="stylesheet" href="'+this.iframeCssPath+'" type="text/css" media="screen" />');
     $(this.doc).find('head').append(ss);
 
-    // this.bindEvents();
-    
     var iframeContent;
     if ($(this.textBox).hasClass("empty")) {
       iframeContent = "";
@@ -135,11 +130,11 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     }
     $(this.doc.body).html(iframeContent);
 
-    $(this.doc.body).css( {
+    $(this.doc.body).css({
       fontSize: $(this.textBox).css("fontSize"),
       fontFamily: $(this.textBox).css("fontFamily"),
-      fontStyle: $(this.textBox).css("fontStyle"),      
-      color: $(this.textBox).css("color"),
+      fontStyle: $(this.textBox).css("fontStyle"),
+      color: $(this.textBox).css("color")
     });
     //$(this.doc.body).css();
     // Firefox starts "locked", so insert a character bogus character and undo
@@ -155,8 +150,9 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
 
   exitEditMode: function() {
     ddd("exit edit");
-    // this.unbindEvents();
+    
     this.unbindPalette();
+    
     var content;
     if (this.isHtmlBlank(this.doc.body.innerHTML)) {
       $(this.textBox).html(WebDoc.NEW_TEXTBOX_CONTENT);
@@ -193,42 +189,13 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     // return $.string(html).strip().stripTags().gsub(/\&nbsp;/,'').gsub(/\s/,'').str === "";
     return $.string(html).strip().stripTags().gsub(/\&nbsp;/,'').blank();
   },
-  
 
-  // bindEvents: function() {
-  //   var previousContent;
-  // 
-  //   $.each(this.EVENTS, function(index, eventName) {
-  //     $(this.doc).bind(eventName, function(event) {
-  //       if (this.editorHtmlContent() != previousContent) {
-  //         $(this.textboxEditor).trigger('change.rte', [this.editor]);
-  // 
-  //         // ==========
-  //         // auto-adjust height
-  //         // $("iframe")[0].style.height = $("iframe")[0].contentWindow.document.body.offsetHeight + 'px';
-  //         // ==========
-  // 
-  //         // This may be a performance issue
-  //         $(this.textBox).html(htmlContent());
-  // 
-  //         previousContent = this.editor.htmlContent();
-  //       }
-  //     });
-  //   });
-  // },
-  // 
-  // unbindEvents: function() {
-  //   $.each(this.EVENTS, function(index, eventName) {
-  //     $(this.doc).unbind(eventName); //all bound events of type "eventName" are removed
-  //   });
-  // },
-      
   bindPalette: function() { 
     this.paletteEl = $(this.paletteId);
     this.paletteOverlayEl = this.paletteEl.find(".palette_overlay");
 
     // events handler for palette clicks
-    this.paletteEl.click(function(event) {
+    this.paletteEl.bind("click", function(event) {
       var link = $(event.target).closest('a')[0];
       if (link) {
         event.preventDefault();
@@ -251,6 +218,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   unbindPalette: function() { 
     this.paletteOverlayEl.show(); 
     this.paletteEl.addClass("disabled");
+    this.paletteEl.unbind();
 
     // Unbinding palette buttons
     $.each(this.COMMANDS, function(index, command) {
