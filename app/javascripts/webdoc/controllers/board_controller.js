@@ -6,6 +6,7 @@
 //= require <WebDoc/gui/page_view>
 //= require <WebDoc/gui/item_view>
 //= require <WebDoc/controllers/collaboration_controller>  
+//= require <WebDoc/controllers/drag_and_drop_controller>
 
 WebDoc.BoardController = $.klass({
   initialize: function(editable) {
@@ -51,9 +52,9 @@ WebDoc.BoardController = $.klass({
     $("#board").bind("mouseup", this, this.mouseUp.pBind(this));
     $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
     $("#board").bind("click", this, this.mouseClick.pBind(this));
-    $("#board").bind("dragenter", this, this.dragEnter.pBind(this));
-    $("#board").bind("dragover", this, this.dragOver.pBind(this)); 
-    $("#board").bind("drop", this, this.drop.pBind(this));
+    $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
+    $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver); 
+    $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);
     ddd("listen keyboard");
     $(document).bind("keydown", this, this.keyDown.pBind(this));
 
@@ -214,14 +215,14 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseDown: function(e) {
-    //e.preventDefault();
+    e.preventDefault();
     if (!e.boardIgnore) {
       this.currentTool.mouseDown(e);
     }
   },
   
   mouseMove: function(e) {
-    //e.preventDefault();
+    e.preventDefault();
     this.currentTool.mouseMove(e);
   },
   
@@ -241,7 +242,6 @@ WebDoc.BoardController = $.klass({
   },
   
   keyDown: function(e) {
-    ddd(e);
     var el = $(e.target);
     if (el.is('input') || el.is('textarea')) return;
     switch(e.which) {
@@ -264,62 +264,6 @@ WebDoc.BoardController = $.klass({
       case 65:
         this.setCurrentTool(WebDoc.application.arrowTool);
         break;        
-    }
-  },
-  
-  dragEnter: function(evt,p2,p3) {
-    ddd("drag enter");
-    ddd(evt);
-    evt.preventDefault();  
-  },
-  
-  dragOver: function(evt) {
-    evt.preventDefault();
-  },
-  
-  drop: function(evt) {
-    ddd("drop");
-    /*
-    var i = 0;
-    for(; i < evt.originalEvent.dataTransfer.types.length; i++) {
-      ddd("-----------");
-      ddd("type " + evt.originalEvent.dataTransfer.types[i] );
-      ddd("value " + evt.originalEvent.dataTransfer.getData(evt.originalEvent.dataTransfer.types[i]));
-      ddd("-----------");
-    }
-    ddd("==================");
-    */
-    evt.preventDefault();
-    var html = evt.originalEvent.dataTransfer.getData('text/html');
-    var pos = this.mapToPageCoordinate(evt);
-    if (html) {
-      var newItem = new WebDoc.Item();
-      newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-      newItem.data.data.tag = "div";
-      newItem.data.data.innerHTML = html;
-      newItem.data.data.css = {
-        top: pos.y + "px",
-        left: pos.x + "px",
-        width: "0px",
-        height: "0px"
-      };
-      WebDoc.application.boardController.insertItems([newItem]);
-    }
-    else {
-      var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
-      if (imageUrl) {
-        var newItem = new WebDoc.Item();
-        newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
-        newItem.data.data.tag = "img";
-        newItem.data.data.src = imageUrl;
-        newItem.data.data.css = {
-          top: pos.y + "px",
-          left: pos.x + "px",
-        };
-        this.insertItems([newItem]);
-        
-        this.setCurrentTool(WebDoc.application.arrowTool);
-      }
     }
   },
   
