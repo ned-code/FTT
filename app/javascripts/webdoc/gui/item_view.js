@@ -310,6 +310,26 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       widgetNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
     }, 2000);
     */
+   // try to resize to the correct size
+   if (this.item.data.data.css.width == "0px") {
+     var innerWidth = widgetNode.find(":first").width();
+     var innerHeight = widgetNode.find(":first").height();
+     ddd("inner size");
+     ddd(innerWidth + " - " + innerHeight);
+     ddd("--------------------");
+     if (innerWidth && innerHeight) {
+       this.item.resizeTo({
+         width: innerWidth,
+         height: innerHeight
+       });
+     }
+     else {
+       this.item.resizeTo({
+         width: 150,
+         height: 150
+       });       
+     }
+   }
    widgetNode.bind('load', function() {
      ddd("widget loaded");
      this.initWidget();
@@ -389,10 +409,7 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     this.pageView.itemDomNode.append(itemNode.get(0));
     itemNode.addClass("item");
     if (!this.item.data.data.css.width) {
-      this.item.data.data.css.width = itemNode.width() + "px";
-      this.item.data.data.css.height = itemNode.height() + "px";
-      ddd(this.item.data.data.css.width);
-      this.item.recomputeInternalSizeAndPosition();
+      this.item.resizeTo({ width: itemNode.width(), height: itemNode.height()});
     }
     return itemNode;
   }

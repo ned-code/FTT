@@ -60,8 +60,8 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   resizeTo: function(newSize) {
-    this.data.data.css.left = newSize.left + "px";
-    this.data.data.css.top = newSize.top + "px";
+    this.data.data.css.width = newSize.width + "px";
+    this.data.data.css.height = newSize.height + "px";
     this.fireObjectChanged();    
   },
   

@@ -270,7 +270,6 @@ WebDoc.BoardController = $.klass({
   dragEnter: function(evt,p2,p3) {
     ddd("drag enter");
     ddd(evt);
-    //ddd(evt.originalEvent.dataTransfer.getData('text/uri-list'));
     evt.preventDefault();  
   },
   
@@ -280,25 +279,47 @@ WebDoc.BoardController = $.klass({
   
   drop: function(evt) {
     ddd("drop");
-    ddd(evt.originalEvent.dataTransfer.types);
-    var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
-    if (imageUrl) {
-      evt.preventDefault();
+    /*
+    var i = 0;
+    for(; i < evt.originalEvent.dataTransfer.types.length; i++) {
+      ddd("-----------");
+      ddd("type " + evt.originalEvent.dataTransfer.types[i] );
+      ddd("value " + evt.originalEvent.dataTransfer.getData(evt.originalEvent.dataTransfer.types[i]));
+      ddd("-----------");
+    }
+    ddd("==================");
+    */
+    evt.preventDefault();
+    var html = evt.originalEvent.dataTransfer.getData('text/html');
+    var pos = this.mapToPageCoordinate(evt);
+    if (html) {
       var newItem = new WebDoc.Item();
-      ddd("event x " + evt.pageX);
-      var pos = this.mapToPageCoordinate(evt);
-      ddd("mapped x " + pos.x);
-      newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
-      newItem.data.data.tag = "img";
-      newItem.data.data.src = imageUrl;
+      newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+      newItem.data.data.tag = "div";
+      newItem.data.data.innerHTML = html;
       newItem.data.data.css = {
         top: pos.y + "px",
         left: pos.x + "px",
+        width: "0px",
+        height: "0px"
       };
-      newItem.recomputeInternalSizeAndPosition();
-      this.insertItems([newItem]);
-      
-      this.setCurrentTool(WebDoc.application.arrowTool);
+      WebDoc.application.boardController.insertItems([newItem]);
+    }
+    else {
+      var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
+      if (imageUrl) {
+        var newItem = new WebDoc.Item();
+        newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
+        newItem.data.data.tag = "img";
+        newItem.data.data.src = imageUrl;
+        newItem.data.data.css = {
+          top: pos.y + "px",
+          left: pos.x + "px",
+        };
+        this.insertItems([newItem]);
+        
+        this.setCurrentTool(WebDoc.application.arrowTool);
+      }
     }
   },
   
