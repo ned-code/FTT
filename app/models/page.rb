@@ -19,7 +19,7 @@ class Page < ActiveRecord::Base
   serialize :data
   
   def after_initialize
-    self.data ||= { :css => { :width => "1280px", :height => "720px", :backgroundColor => "black" } }
+    self.data ||= { :css => { :width => "1280px", :height => "720px", :backgroundColor => "#999999" } }
   end
 
   # ================
