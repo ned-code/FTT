@@ -160,6 +160,7 @@ WebDoc.ItemView = $.klass({
       this.selectionNode.draggable({
         containment: "parent",
         cursor: 'move',
+        distance: 5,
         start: function(e, ui) {
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           var currentPosition = {};
