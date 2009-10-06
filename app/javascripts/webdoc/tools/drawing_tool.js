@@ -45,8 +45,8 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     this.currentDrawObject.data.data.css = {
       zIndex: 2000
     };
-    this.currentDrawObject.data.data.stroke = "red";
-    this.currentDrawObject.data.data.strokeWidth = 5;
+    this.currentDrawObject.data.data.stroke = "#ff1010";
+    this.currentDrawObject.data.data.strokeWidth = 3;
     this.currentDrawObject.data.data.points = mappedPoint.x + "," + mappedPoint.y;
     WebDoc.application.pageEditor.currentPage.addItem(this.currentDrawObject);
 
