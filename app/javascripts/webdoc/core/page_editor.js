@@ -9,6 +9,7 @@
 
 //= require <WebDoc/adaptors/svg_renderer>
 //= require <WebDoc/controllers/board_controller>
+//= require <WebDoc/controllers/image_library_controller>
 
 //= require <WebDoc/tools/arrow_tool>
 //= require <WebDoc/tools/drawing_tool>
@@ -31,7 +32,7 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.pageEditor = this;
     WebDoc.application.boardController = new WebDoc.BoardController(true);
-
+    WebDoc.application.imageLibraryController = new WebDoc.ImageLibraryController();
     WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool_pen");
     WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool_arrow");
     WebDoc.application.handTool = new WebDoc.HandTool("#tool_hand");
