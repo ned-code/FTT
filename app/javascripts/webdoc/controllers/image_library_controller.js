@@ -25,6 +25,10 @@ WebDoc.ImageLibraryController = $.klass({
       var imageListItem = $("<li/>").append(imageItem);
       this.domNode.find("ul").append(imageListItem);
     }
+  },
+  
+  toggle: function() {
+    this.domNode.slideToggle("slow");
   }
   
 });

@@ -18,6 +18,8 @@
   %button#default_widget InsertDefaultWidget
   %button#html_snipplet InsertHtmlSnipplet
   %button#tool_text Add TextBox
+  %button#image_lib Image Lib
+  %button#widget_lib Widget Lib
   #palette_text.palette_wrap
     %ul.palette.disabled{ :style => "display:block" }
       %li
@@ -61,6 +63,8 @@
 #center_layout
   #image_library_wrap
     %ul#image_list  
+  #widget_library_wrap
+    %ul#widget_list      
   #board_container
 :javascript
   $(function()

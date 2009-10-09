@@ -29,10 +29,25 @@ $.extend(WebDoc.DrageAndDropController,{
     */
     evt.preventDefault();
     var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
+    var widget = evt.originalEvent.dataTransfer.getData('application/ub-widget');    
     var html = evt.originalEvent.dataTransfer.getData('text/html');        
     var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
     
-    if (imageUrl) {
+    if (widget) {
+      var newItem = new WebDoc.Item();
+      newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+      newItem.data.data.tag = "iframe";
+      newItem.data.data.src = widget;
+      newItem.data.data.css = {
+        top: pos.y + "px",
+        left: pos.x + "px",
+        width: "200px",
+        height: "200px"
+      };
+      newItem.recomputeInternalSizeAndPosition();
+      WebDoc.application.boardController.insertItems([newItem]);   
+    }
+    else if (imageUrl) {
       var newItem = new WebDoc.Item();
       newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
       newItem.data.data.tag = "img";

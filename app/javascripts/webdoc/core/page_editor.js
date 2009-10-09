@@ -10,6 +10,7 @@
 //= require <WebDoc/adaptors/svg_renderer>
 //= require <WebDoc/controllers/board_controller>
 //= require <WebDoc/controllers/image_library_controller>
+//= require <WebDoc/controllers/widget_library_controller>
 
 //= require <WebDoc/tools/arrow_tool>
 //= require <WebDoc/tools/drawing_tool>
@@ -33,6 +34,7 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.pageEditor = this;
     WebDoc.application.boardController = new WebDoc.BoardController(true);
     WebDoc.application.imageLibraryController = new WebDoc.ImageLibraryController();
+    WebDoc.application.widgetLibraryController = new WebDoc.WidgetLibraryController();    
     WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool_pen");
     WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool_arrow");
     WebDoc.application.handTool = new WebDoc.HandTool("#tool_hand");
@@ -56,6 +58,8 @@ WebDoc.PageEditor = $.klass({
     $("#page_css_editor").bind("blur", this.applyPageCss);
     $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);
     $("#remove_selection").bind("click", this.deleteItem);
+    $("#image_lib").bind("click", this.toggleImageLib);
+    $("#widget_lib").bind("click", this.toggleWidgetLib);
     
     $("#html_snipplet").bind("click", this.inserthtmlSnipplet);
     WebDoc.application.boardController.addSelectionListener(this);
@@ -144,11 +148,11 @@ WebDoc.PageEditor = $.klass({
   },
 
   zoomIn: function() {
-    WebDoc.application.boardController.zoom(1.5);
+    WebDoc.application.boardController.zoomIn();
   },
 
   zoomOut: function() {
-    WebDoc.application.boardController.zoom(1 / 1.5);
+    WebDoc.application.boardController.zoomOut();
   },
 
   changeBkg: function() {
@@ -184,6 +188,7 @@ WebDoc.PageEditor = $.klass({
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
     newItem.data.data.tag = "iframe";
     newItem.data.data.src = "/widgets/VideoPicker.wgt/index.html";
+    //newItem.data.data.src = "/widgets/Anyembed/index.html";
     newItem.data.data.css = { top: "100px", left: "100px", width: "426px", height: "630px"};
     newItem.recomputeInternalSizeAndPosition();
     WebDoc.application.boardController.insertItems([newItem]);   
@@ -200,6 +205,14 @@ WebDoc.PageEditor = $.klass({
     newItem.recomputeInternalSizeAndPosition();
     WebDoc.application.boardController.insertItems([newItem]);
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
+  },
+  
+  toggleImageLib: function() {
+    WebDoc.application.imageLibraryController.toggle();
+  },
+  
+  toggleWidgetLib: function() {
+    WebDoc.application.widgetLibraryController.toggle();
   },
   
   applyPageCss: function() {
