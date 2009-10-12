@@ -63,6 +63,16 @@ WebDoc.PageEditor = $.klass({
     
     $("#html_snipplet").bind("click", this.inserthtmlSnipplet);
     WebDoc.application.boardController.addSelectionListener(this);
+    
+    var height = window.innerHeight - $("#board_container").offset().top;
+    $("#board_container").height(height -10);
+    $("#inspector").height(height -10);
+    $(window).bind("resize", function() {
+      var height = window.innerHeight - $("#board_container").offset().top;
+      $("#board_container").height(height -10);
+      $("#inspector").height(height -10);
+    }.pBind(this));
+    
   },
 
   load: function(documentId) {

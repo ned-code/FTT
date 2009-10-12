@@ -8,7 +8,7 @@ WebDoc.PageView = $.klass(
     this.page = page;
     this.domNode = $('<div>').attr({
       id: "board",
-      style: "position: absolute; top: 0px; left: 0px;z-index:0"
+      style: "top: 0px; left: 0px;z-index:0"
     }).css(page.data.data.css);
     
     this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());

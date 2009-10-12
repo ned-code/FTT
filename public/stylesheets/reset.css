@@ -1,9 +1,4 @@
 
-body {
-  overflow:hidden;
-}
-
-
 /* =reset
 ----------------------------------------------- */
 
@@ -16,31 +11,27 @@ small, strike, sub, sup, tt, var,
 dd, dl, dt, li, ol, ul,
 fieldset, form, label, legend, input,
 table, caption, tbody, tfoot, thead, tr, th, td {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-family:Helvetica, Arial, sans-serif;
-  font-size:30px;  
-  font-weight: inherit;
-  font-style: inherit;
-  line-height: 1;
-  vertical-align: baseline;
-}
-
-ul, ol {
-  padding:40px;  
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	line-height: 1;
+	font-family: inherit;
+	vertical-align: baseline;
 }
 
 a img, :link img, :visited img {
-  border: 0;
+	border: 0;
 }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 q:before, q:after, 
 blockquote:before, blockquote:after {
-  content: "";
+	content: "";
 }
