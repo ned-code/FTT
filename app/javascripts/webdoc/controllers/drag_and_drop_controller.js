@@ -32,6 +32,7 @@ $.extend(WebDoc.DrageAndDropController,{
     var widget = evt.originalEvent.dataTransfer.getData('application/ub-widget');    
     var html = evt.originalEvent.dataTransfer.getData('text/html');        
     var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
+    var ubImage = evt.originalEvent.dataTransfer.getData('application/ub-image');    
     
     if (widget) {
       var newItem = new WebDoc.Item();
@@ -47,11 +48,12 @@ $.extend(WebDoc.DrageAndDropController,{
       newItem.recomputeInternalSizeAndPosition();
       WebDoc.application.boardController.insertItems([newItem]);   
     }
-    else if (imageUrl) {
+    else if (imageUrl || ubImage) {
+      var url = ubImage? ubImage : imageUrl;
       var newItem = new WebDoc.Item();
       newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
       newItem.data.data.tag = "img";
-      newItem.data.data.src = imageUrl;
+      newItem.data.data.src = url;
       newItem.data.data.css = {
         top: pos.y + "px",
         left: pos.x + "px",
