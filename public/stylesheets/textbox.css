@@ -1,10 +1,46 @@
-* { margin:0; padding:0;}
-h1, h2, h3, h4, h5, h6 {padding:5px 0;}
-li { padding:10px 0;}
-ul { margin:0 40px;}
-ol { margin:0 50px;}
-p {padding-bottom:28px;}
 
 body {
   overflow:hidden;
+}
+
+
+/* =reset
+----------------------------------------------- */
+
+html, body, div, span,
+applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, sub, sup, tt, var,
+dd, dl, dt, li, ol, ul,
+fieldset, form, label, legend, input,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family:Helvetica, Arial, sans-serif;
+  font-size:30px;  
+  font-weight: inherit;
+  font-style: inherit;
+  line-height: 1;
+  vertical-align: baseline;
+}
+
+ul, ol {
+  padding:40px;  
+}
+
+a img, :link img, :visited img {
+  border: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+q:before, q:after, 
+blockquote:before, blockquote:after {
+  content: "";
 }

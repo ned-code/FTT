@@ -31,13 +31,15 @@ $.extend(MTools.ServerManager,
                     {
                         for (var i = 0; i < data.length; i++) 
                         {
-                            var aJson = data[i];
-                            result.push(new objectClass(aJson));
+                          var aJson = data[i];
+                          result.push(new objectClass(aJson));
                         }
                     }
                     else 
                     {
+                      if (data) {
                         result.push(new objectClass(data));
+                      }
                     }
                     callback.call(context, result);
                 }
@@ -66,7 +68,10 @@ $.extend(MTools.ServerManager,
     {
         $.post(url, object.to_json(), function(data, textstatus)
         {
+            // refresh is needed because some values are generaed on server side
+            // i.e. page size and background.
             object.refresh(data);
+            object.isNew = false;
             callBack.apply(this, [object]);
         }, "json");
     },

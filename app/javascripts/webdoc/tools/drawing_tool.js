@@ -11,18 +11,26 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     $super(toolId);
   },
 
+  selectTool: function() {
+      WebDoc.application.boardController.unselectAll();
+  },
+  
   mouseDown: function(e) {
+    e.preventDefault();
     this.drawing = true;
     this.beginDraw(e);
   },
 
   mouseMove: function(e) {
+    e.preventDefault();
     if (this.drawing) {
       this.draw(e);
     }
   },
 
-  mouseUp: function(e) {
+  mouseUp: function(e) 
+  {
+    e.preventDefault();
     this.drawing = false;
     this.endDraw(e);
   },
@@ -37,11 +45,10 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     this.currentDrawObject.data.data.css = {
       zIndex: 2000
     };
-    this.currentDrawObject.data.data.stroke = "red";
-    this.currentDrawObject.data.data.strokeWidth = 5;
-    this.currentDrawObject.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
+    this.currentDrawObject.data.data.stroke = "#ff1010";
+    this.currentDrawObject.data.data.strokeWidth = 3;
     this.currentDrawObject.data.data.points = mappedPoint.x + "," + mappedPoint.y;
-    var newItemView = new WebDoc.DrawingView(this.currentDrawObject);
+    WebDoc.application.pageEditor.currentPage.addItem(this.currentDrawObject);
 
     var drawObjectToUndo = this.currentDrawObject;
     var that = this;

@@ -9,6 +9,8 @@
 
 //= require <WebDoc/adaptors/svg_renderer>
 //= require <WebDoc/controllers/board_controller>
+//= require <WebDoc/controllers/image_library_controller>
+//= require <WebDoc/controllers/widget_library_controller>
 
 //= require <WebDoc/tools/arrow_tool>
 //= require <WebDoc/tools/drawing_tool>
@@ -31,7 +33,8 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.pageEditor = this;
     WebDoc.application.boardController = new WebDoc.BoardController(true);
-
+    WebDoc.application.imageLibraryController = new WebDoc.ImageLibraryController();
+    WebDoc.application.widgetLibraryController = new WebDoc.WidgetLibraryController();    
     WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool_pen");
     WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool_arrow");
     WebDoc.application.handTool = new WebDoc.HandTool("#tool_hand");
@@ -54,9 +57,22 @@ WebDoc.PageEditor = $.klass({
     $("#default_widget").bind("click", this.insertWidget);
     $("#page_css_editor").bind("blur", this.applyPageCss);
     $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);
+    $("#remove_selection").bind("click", this.deleteItem);
+    $("#image_lib").bind("click", this.toggleImageLib);
+    $("#widget_lib").bind("click", this.toggleWidgetLib);
     
     $("#html_snipplet").bind("click", this.inserthtmlSnipplet);
     WebDoc.application.boardController.addSelectionListener(this);
+    
+    var height = window.innerHeight - $("#board_container").offset().top;
+    $("#board_container").height(height -10);
+    $("#inspector").height(height -10);
+    $(window).bind("resize", function() {
+      var height = window.innerHeight - $("#board_container").offset().top;
+      $("#board_container").height(height -10);
+      $("#inspector").height(height -10);
+    }.pBind(this));
+    
   },
 
   load: function(documentId) {
@@ -73,7 +89,10 @@ WebDoc.PageEditor = $.klass({
     MTools.ServerManager.getObjects("/documents/" + documentId + "/pages/" + pageId, WebDoc.Page, function(data)
     {
       var editor = WebDoc.application.pageEditor;
-      editor.loadPage(data[0]);
+      if (data.length > 0) {
+        ddd(data[0]);
+        editor.loadPage(data[0]);
+      }
     });
   },
 
@@ -110,6 +129,8 @@ WebDoc.PageEditor = $.klass({
     newPage.data.position = ++editor.currentPage.data.position;
     newPage.save(function(status)
     {
+      ddd("load");
+      ddd(this);
       editor.loadPage(this);
     });
   },
@@ -137,11 +158,11 @@ WebDoc.PageEditor = $.klass({
   },
 
   zoomIn: function() {
-    WebDoc.application.boardController.zoom(1.5);
+    WebDoc.application.boardController.zoomIn();
   },
 
   zoomOut: function() {
-    WebDoc.application.boardController.zoom(1 / 1.5);
+    WebDoc.application.boardController.zoomOut();
   },
 
   changeBkg: function() {
@@ -154,41 +175,54 @@ WebDoc.PageEditor = $.klass({
     window.close();
   },
 
+  deleteItem: function() {
+      ddd("delete selection actrion");
+      WebDoc.application.boardController.deleteSelection();
+  },
+  
   insertImage: function() {
     console.log("insert image");
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
-    newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "img";
-    // newItem.data.data.src = "/system/files/11d69920-8a86-012c-72df-002500a8be1c/original/Picture_1.png?1253720740";
     newItem.data.data.src = "/images/image_view_test.png";
-    newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};
-    var newItemView = new WebDoc.ImageView(newItem);
-    newItem.save();
+    newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};   
+    newItem.recomputeInternalSizeAndPosition();
+    WebDoc.application.boardController.insertItems([newItem]);
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
   },
   
   insertWidget: function() {
     console.log("insert widget");
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-    newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "iframe";
     newItem.data.data.src = "/widgets/VideoPicker.wgt/index.html";
+    //newItem.data.data.src = "/widgets/Anyembed/index.html";
     newItem.data.data.css = { top: "100px", left: "100px", width: "426px", height: "630px"};
-    var newItemView = new WebDoc.WidgetView(newItem);
-    newItem.save();    
+    newItem.recomputeInternalSizeAndPosition();
+    WebDoc.application.boardController.insertItems([newItem]);   
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
   },
   
   inserthtmlSnipplet: function() {
     console.log("insert snipplet");
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-    newItem.data.page_id = WebDoc.application.pageEditor.currentPage.uuid();
     newItem.data.data.tag = "div";
     newItem.data.data.innerHTML = "HTML Snipplet";
-    newItem.data.data.css = { top: "100px", left: "100px", width: "100px", height: "100px", border: "2px solid #ddd"};
-    var newItemView = new WebDoc.WidgetView(newItem);
-    newItem.save();
+    newItem.data.data.css = { top: "100px", left: "100px", width: "100px", height: "100px"};
+    newItem.recomputeInternalSizeAndPosition();
+    WebDoc.application.boardController.insertItems([newItem]);
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
+  },
+  
+  toggleImageLib: function() {
+    WebDoc.application.imageLibraryController.toggle();
+  },
+  
+  toggleWidgetLib: function() {
+    WebDoc.application.widgetLibraryController.toggle();
   },
   
   applyPageCss: function() {
@@ -200,9 +234,11 @@ WebDoc.PageEditor = $.klass({
   applyInnerHtml: function() {
     console.log("apply HTML");
     var html = $("#selected_item_html_editor").get(0).value
-    if (WebDoc.application.boardController.selection.length > 0) {
-      WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
-      WebDoc.application.boardController.selection[0].item.save();
+    if (html) {
+      if (WebDoc.application.boardController.selection.length > 0) {
+        WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
+        WebDoc.application.boardController.selection[0].item.save();
+      }
     }
   },
   
@@ -210,7 +246,13 @@ WebDoc.PageEditor = $.klass({
     ddd("selected item ");
     ddd( WebDoc.application.boardController.selection);
     if (WebDoc.application.boardController.selection.length > 0) {
-      $("#selected_item_html_editor").get(0).value = WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
+      var html =  WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
+      if (html) {
+        $("#selected_item_html_editor").get(0).value =html;
+      }
+      else {
+        $("#selected_item_html_editor").get(0).value = "";
+      }
     }
     else {
       $("#selected_item_html_editor").get(0).value = "";

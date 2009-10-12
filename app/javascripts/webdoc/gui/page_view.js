@@ -8,7 +8,7 @@ WebDoc.PageView = $.klass(
     this.page = page;
     this.domNode = $('<div>').attr({
       id: "board",
-      style: "position: absolute; top: 0px; left: 0px;z-index:0"
+      style: "top: 0px; left: 0px;z-index:0"
     }).css(page.data.data.css);
     
     this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
@@ -22,27 +22,10 @@ WebDoc.PageView = $.klass(
     this.domNode.append(this.itemDomNode.get(0));
     
     var that = this;
-    this.itemViews = [];
+    this.itemViews = {};
     if (page.items && $.isArray(page.items)) {
       $.each(page.items, function() {
-        var itemView;
-        switch (this.data.media_type) {
-          case WebDoc.ITEM_TYPE_TEXT:
-            itemView = new WebDoc.TextView(this, that);
-            break;
-          case  WebDoc.ITEM_TYPE_IMAGE:
-            itemView = new WebDoc.ImageView(this, that);
-            break;
-          case  WebDoc.ITEM_TYPE_DRAWING:
-            itemView = new WebDoc.DrawingView(this, that);
-            break;
-          case  WebDoc.ITEM_TYPE_WIDGET:
-            itemView = new WebDoc.WidgetView(this, that);
-            break;            
-          default: 
-            itemView = new WebDoc.ItemView(this, that);
-            break;
-        }
+       that.createItemView(this);
       });
     }
     page.addListener(this);
@@ -53,14 +36,50 @@ WebDoc.PageView = $.klass(
     this.domNode.animate(page.data.data.css, 'fast');
   },
   
+  itemAdded: function(addedItem) {
+    this.createItemView(addedItem);
+  },
+  
+  itemRemoved: function(removedItem) {
+    var relatedItemView = this.itemViews[removedItem.uuid()];
+    if (relatedItemView) {
+      relatedItemView.remove();
+      delete this.itemViews[removedItem.uuid()];
+    }
+  },
+  
   findObjectAtPoint: function(point) {
     var i = 0;
-    for (; i < this.itemViews.length; i++) {
-      var anItemView = this.itemViews[i];
+    for (var itemId in this.itemViews) {
+      var anItemView = this.itemViews[itemId];
       if (anItemView.coverPoint(point) && !anItemView.isBackground) {
         return anItemView;
       }
     }
     return null;
+  },
+  
+  
+  createItemView: function(item) {
+    var itemView;
+    switch (item.data.media_type) {
+      case WebDoc.ITEM_TYPE_TEXT:
+        itemView = new WebDoc.TextView(item, this);
+        break;
+      case  WebDoc.ITEM_TYPE_IMAGE:
+        itemView = new WebDoc.ImageView(item, this);
+        break;
+      case  WebDoc.ITEM_TYPE_DRAWING:
+        itemView = new WebDoc.DrawingView(item, this);
+        break;
+      case  WebDoc.ITEM_TYPE_WIDGET:
+        itemView = new WebDoc.WidgetView(item, this);
+        break;            
+      default: 
+        itemView = new WebDoc.ItemView(item, this);
+        break;
+    }
+    this.itemViews[item.uuid()] = itemView;
+    return itemView
   }
 });

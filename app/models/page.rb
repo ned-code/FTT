@@ -19,7 +19,7 @@ class Page < ActiveRecord::Base
   serialize :data
   
   def after_initialize
-    self.data ||= { :css => { :width => "1280px", :height => "720px", :backgroundColor => "black" } }
+    self.data ||= { :css => { :width => "1280px", :height => "720px", :backgroundColor => "#999999" } }
   end
 
   # ================
@@ -39,6 +39,8 @@ class Page < ActiveRecord::Base
   # =============
   
   before_create :set_position
+  
+  after_destroy :update_next_page_position
 
   # =================
   # = Class Methods =
@@ -77,7 +79,13 @@ private
 
   # before_create
   def set_position
-    self.position = document.new_record? ? 0 : document.pages.count
+    self.position ||= document.new_record? ? 0 : document.pages.count
+    #update following pages
+    Page.update_all("position = position + 1", "position >= #{self.position.to_i} and uuid <> '#{self.uuid}'")
+  end
+  
+  def update_next_page_position
+    Page.update_all("position = position - 1", "position > #{self.position.to_i} and uuid <> '#{self.uuid}'")
   end
 
 end

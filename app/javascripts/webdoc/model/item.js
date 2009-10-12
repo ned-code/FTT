@@ -38,15 +38,41 @@ WebDoc.Item = $.klass(MTools.Record,
     return "object";
   },
   
+  recomputeInternalSizeAndPosition: function() {
+    var t = this.data.data.css.top || "0px",
+        l = this.data.data.css.left || "0px",
+        w = this.data.data.css.width || "100px",
+        h = this.data.data.css.height || "100px";
+    this.position = {
+      top: parseFloat(t.replace("px", "")),
+      left: parseFloat(l.replace("px", ""))
+    };
+    this.size = {
+      width: parseFloat(w.replace("px", "")),
+      height: parseFloat(h.replace("px", ""))
+    };
+  },
+  
   moveTo: function(newPosition) {
-    this.data.data.css.left = this.position.left + "px";
-    this.data.data.css.top = this.position.top + "px";
+    this.data.data.css.left = newPosition.left + "px";
+    this.data.data.css.top = newPosition.top + "px";
     this.fireObjectChanged();
+  },
+  
+  resizeTo: function(newSize) {
+    this.data.data.css.width = newSize.width + "px";
+    this.data.data.css.height = newSize.height + "px";
+    this.fireObjectChanged();    
   },
   
   setInnerHtml: function(html) {
     this.data.data.innerHTML = html;
     this.fireInnerHtmlChanged();
+  },
+  
+  fireObjectChanged: function($super) {
+    this.recomputeInternalSizeAndPosition();
+    $super();
   },
   
   fireInnerHtmlChanged: function() {
@@ -62,6 +88,7 @@ WebDoc.Item = $.klass(MTools.Record,
   resizeContainer: function(width, height) {
     this.data.data.css.width = width + "px";
     this.data.data.css.height = height + "px";
+    ddd("resize container to " + this.data.data.css.width + ":"  + this.data.data.css.height);
     this.fireObjectChanged();
   },
   

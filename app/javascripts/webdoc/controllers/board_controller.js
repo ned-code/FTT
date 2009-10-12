@@ -6,11 +6,13 @@
 //= require <WebDoc/gui/page_view>
 //= require <WebDoc/gui/item_view>
 //= require <WebDoc/controllers/collaboration_controller>  
+//= require <WebDoc/controllers/drag_and_drop_controller>
 
 WebDoc.BoardController = $.klass({
   initialize: function(editable) {
     this.currentZoom = 1;
     this.selection = [];
+    this.editingItem = null;
     this.selectionListeners = [];
   },
   
@@ -25,6 +27,9 @@ WebDoc.BoardController = $.klass({
   },
   
   setCurrentPage: function(page) {
+    $("#board").unbind();
+    $(document).unbind("keydown");
+    
     // remove previous page
     $("#board_container").empty();
     // add the new one
@@ -43,10 +48,14 @@ WebDoc.BoardController = $.klass({
     this.initialWidth = $("#board").width();
     
     $("#board").bind("mousedown", this, this.mouseDown.pBind(this));
-    $("#board").bind("mousemove", this, this.mouseMove.pBind(this));
-    $("#board").bind("mouseup", this, this.mouseUp.pBind(this));
     $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
     $("#board").bind("click", this, this.mouseClick.pBind(this));
+    $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
+    $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver); 
+    $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);
+    ddd("listen keyboard");
+    $(document).bind("keydown", this, this.keyDown.pBind(this));
+
     
     // update data attribute of object
     $("object").each(function() {
@@ -55,7 +64,8 @@ WebDoc.BoardController = $.klass({
     });
     
     //update zoom to fit browser page
-    
+    this.zoom(1);
+    /*
     heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
     widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;
     
@@ -65,6 +75,7 @@ WebDoc.BoardController = $.klass({
     else {
       this.zoom(1 + widthFactor);
     }
+    */
   },
   
   setCurrentTool: function(tool) {
@@ -100,9 +111,14 @@ WebDoc.BoardController = $.klass({
   
   zoomOut: function(e) {
     this.zoom(1 / 1.5);
+    $("#board_container").get(0).scrollTop = 0;
+    $("#board_container").get(0).scrollLeft = 0;
   },
   
-  selectItemViews: function(itemViews) {
+  selectItemViews: function(itemViews) {    
+    // exit edit mode for current editing item
+    if (this.editingItem) this.editingItem.stopEditing();
+    this.editingItem = null;
     //deselect un-needed items
     ddd("select item in view");
     $.each(this.selection, function(index, itemToDeselect) {
@@ -124,8 +140,7 @@ WebDoc.BoardController = $.klass({
   
   unselectAll: function() {
     console.log("unselect all. selection size " + this.selection.length);
-    this.unselectItemViews(this.selection);
-    this.fireSelectionChanged();
+    this.selectItemViews([]);   
   },
   
   unselectItemViews: function(itemViews) {
@@ -142,6 +157,17 @@ WebDoc.BoardController = $.klass({
         }
       }
     }
+  },
+  
+  deleteSelection: function(e) {
+    var deletedItems = [];
+    $.each(this.selection, function(index, itemView){
+      deletedItems.push(itemView.item);
+    }.pBind(this));
+    this.removeItems(deletedItems);
+    this.selection = [];
+    this.fireSelectionChanged();
+    if (e && deletedItems.length > 0) e.preventDefault(); //stop keydown event
   },
   
   zoom: function(factor) {
@@ -191,8 +217,11 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseDown: function(e) {
+    $(document).unbind("mousemove");      
     e.preventDefault();
     if (!e.boardIgnore) {
+      $(document).bind("mousemove", this, this.mouseMove.pBind(this));   
+      $(document).bind("mouseup", this, this.mouseUp.pBind(this));
       this.currentTool.mouseDown(e);
     }
   },
@@ -203,18 +232,74 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseOut: function(e) {
-    e.preventDefault();
+    //e.preventDefault();
     this.currentTool.mouseOut(e);
   },
   
   mouseUp: function(e) {
+    $(document).unbind("mousemove");      
+    $(document).unbind("mouseup");          
     e.preventDefault();
     this.currentTool.mouseUp(e);
   },
   
   mouseClick: function(e) {
-    e.preventDefault();
+    //e.preventDefault();
     this.currentTool.mouseClick(e);
+  },
+  
+  keyDown: function(e) {
+    var el = $(e.target);
+    if (el.is('input') || el.is('textarea')) return;
+    switch(e.which) {
+      case 8: 
+      case 46: 
+        this.deleteSelection(e);
+        break;
+      case 90:
+        this.zoomIn();
+        break;
+      case 85:
+        this.zoomOut();
+        break;
+      case 84:
+        this.setCurrentTool(WebDoc.application.textTool);
+        break;
+      case 80:
+        this.setCurrentTool(WebDoc.application.drawingTool);
+        break;
+      case 65:
+        this.setCurrentTool(WebDoc.application.arrowTool);
+        break;        
+    }
+  },
+  
+  insertItems: function(items) {
+    $.each(items, function(index, item) {
+      this.currentPage.addItem(item);
+      item.isNew = true;
+      item.save();
+    }.pBind(this));
+
+    if (items.length > 0) {
+      var itemViewToSelect = this.pageView.itemViews[items[0].uuid()];
+      this.selectItemViews([itemViewToSelect]);
+    }
+    
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.removeItems(items);
+    }.pBind(this));    
+  },
+  
+  removeItems: function(items) {
+    $.each(items, function(index, item) {
+      this.currentPage.removeItem(item);
+      item.destroy();
+    }.pBind(this));
+      
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.insertItems(items);
+    }.pBind(this));
   }
   
 });

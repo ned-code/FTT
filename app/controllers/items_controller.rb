@@ -7,7 +7,10 @@ class ItemsController < ApplicationController
     if (params[:item][:data])
       params[:item][:data] = JSON.parse(params[:item][:data])  
     end    
-    render :json => @page.items.create(params[:item])
+    @item = @page.items.new(params[:item])
+    @item.uuid = params[:item][:uuid]
+    @item.save
+    render :json => @item
   end
 
   # PUT /documents/:document_id/pages/:page_id/items/:id

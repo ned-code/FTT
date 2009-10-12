@@ -5,11 +5,6 @@
 WebDoc.Page = $.klass(MTools.Record, 
 {
   initialize: function($super, json) {
-    this.drawing = 
-    {
-      polylines: []
-    };
-    this.objects = [];
     this.items = [];
     $super(json);
   },
@@ -37,7 +32,7 @@ WebDoc.Page = $.klass(MTools.Record,
           item: this
         });
       });
-    }
+    }    
   },
   
   to_json: function($super) {
@@ -60,15 +55,30 @@ WebDoc.Page = $.klass(MTools.Record,
       this.createItem(itemData);
     }
     else {
-      item.update(itemData);
+      item.refresh(itemData);
     }
   },
   
   createItem: function(itemData) {
     var newItem = new WebDoc.Item(itemData);
-    this.items.push(newItem);
-    if (newItem.data.data.tag == 'polyline') {
-      this.drawing.polylines.push(newItem);
+    this.addItem(newItem);
+  },
+  
+  addItem: function(item) {
+    item.data.page_id = this.uuid();
+    this.items.push(item);
+    this.fireItemAdded(item);    
+  },
+  
+  removeItem: function(item) {    
+    var index = $.inArray(item, this.items);
+    ddd("item index " + index);
+    ddd(item);
+    ddd("tot number of items:"+this.items.length);
+    if (index != -1) {
+      this.items.splice(index, 1);
+      //ddd(this.items);
+      this.fireItemRemoved(item);
     }
   },
   
@@ -93,4 +103,17 @@ WebDoc.Page = $.klass(MTools.Record,
     this.data.data.css.backgroundColor = newColor;
     this.fireObjectChanged();
   },
+  
+  fireItemAdded: function(addedItem) {
+    if (this.listener) {
+      this.listener.itemAdded(addedItem);
+    }
+  },
+  
+  fireItemRemoved: function(addedItem) {
+    if (this.listener) {
+      this.listener.itemRemoved(addedItem);
+    }
+  },
+  
 });

@@ -28,6 +28,7 @@ class DocumentsController < ApplicationController
   # POST /documents
   def create
     @document = Document.new(params[:document])
+    @document.uuid = params[:document][:uuid]
     @document.pages.build # add default page
     @document.save
 
