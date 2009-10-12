@@ -73,6 +73,10 @@ WebDoc.PageEditor = $.klass({
       $("#inspector").height(height -10);
     }.pBind(this));
     
+    if (MTools.Browser.WebKit) {
+       $("#board_container").css("marginRight", "0px");       
+    }
+    
   },
 
   load: function(documentId) {
@@ -99,6 +103,7 @@ WebDoc.PageEditor = $.klass({
   loadPage: function(page) {
     WebDoc.application.undoManager.clear();
     var editor = WebDoc.application.pageEditor;
+    console.log("set hash to current page position");
     window.location.hash = "#" + (page.data.position + 1);
     editor.currentPage = page;
     editor.previousPageId = editor.currentPage.previousPageId();
