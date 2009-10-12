@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" 
-        identifier="http://uniboard.mnemis.com/widgets/ColorPicker" 
-        version="1.0"
-        width="356"
-        height="176" >        
-  <name>Color Picker</name>
-  <content src="index.html"/> 
-</widget>
