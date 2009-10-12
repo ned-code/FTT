@@ -48,7 +48,6 @@ WebDoc.BoardController = $.klass({
     this.initialWidth = $("#board").width();
     
     $("#board").bind("mousedown", this, this.mouseDown.pBind(this));
-    $("#board").bind("mouseup", this, this.mouseUp.pBind(this));
     $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
     $("#board").bind("click", this, this.mouseClick.pBind(this));
     $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
@@ -65,7 +64,8 @@ WebDoc.BoardController = $.klass({
     });
     
     //update zoom to fit browser page
-    
+    this.zoom(1);
+    /*
     heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
     widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;
     
@@ -75,6 +75,7 @@ WebDoc.BoardController = $.klass({
     else {
       this.zoom(1 + widthFactor);
     }
+    */
   },
   
   setCurrentTool: function(tool) {
@@ -219,7 +220,8 @@ WebDoc.BoardController = $.klass({
     $(document).unbind("mousemove");      
     e.preventDefault();
     if (!e.boardIgnore) {
-      $(document).bind("mousemove", this, this.mouseMove.pBind(this));      
+      $(document).bind("mousemove", this, this.mouseMove.pBind(this));   
+      $(document).bind("mouseup", this, this.mouseUp.pBind(this));
       this.currentTool.mouseDown(e);
     }
   },
@@ -236,6 +238,7 @@ WebDoc.BoardController = $.klass({
   
   mouseUp: function(e) {
     $(document).unbind("mousemove");      
+    $(document).unbind("mouseup");          
     e.preventDefault();
     this.currentTool.mouseUp(e);
   },
