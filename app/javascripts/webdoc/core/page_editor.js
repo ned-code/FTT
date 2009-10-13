@@ -113,7 +113,8 @@ WebDoc.PageEditor = $.klass({
     $("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
   },
 
-  previous: function() {
+  previous: function(e) {
+    e.preventDefault();
     var editor = WebDoc.application.pageEditor;
     if (editor.currentPage.data.position > 0) 
     {
@@ -121,12 +122,14 @@ WebDoc.PageEditor = $.klass({
     }
   },
 
-  next: function() {
+  next: function(e) {
+    e.preventDefault();    
     var editor = WebDoc.application.pageEditor;
     editor.loadPageId(editor.currentDocument.uuid(), editor.currentPage.data.position + 2);
   },
 
-  add: function() {
+  add: function(e) {
+    e.preventDefault();
     var editor = WebDoc.application.pageEditor;
 
     var newPage = new WebDoc.Page();
@@ -140,10 +143,12 @@ WebDoc.PageEditor = $.klass({
     });
   },
 
-  duplicatePage: function() {
+  duplicatePage: function(e) {
+    e.preventDefault();
   },
 
-  remove: function() {
+  remove: function(e) {
+    e.preventDefault();
     var editor = WebDoc.application.pageEditor;
     if (editor.currentPage.data.position > 0) 
     {
@@ -154,35 +159,34 @@ WebDoc.PageEditor = $.klass({
     }
   },
 
-  undo: function() {
+  undo: function(e) {
+    e.preventDefault();
     WebDoc.application.undoManager.undo();
   },
 
-  redo: function() {
+  redo: function(e) {
+    e.preventDefault();
     WebDoc.application.undoManager.redo();
   },
 
-  zoomIn: function() {
+  zoomIn: function(e) {
+    e.preventDefault();
     WebDoc.application.boardController.zoomIn();
   },
 
-  zoomOut: function() {
+  zoomOut: function(e) {
+    e.preventDefault();
     WebDoc.application.boardController.zoomOut();
-  },
-
-  changeBkg: function() {
-    var editor = WebDoc.application.pageEditor;
-    editor.currentPage.toggleBkg();
-    editor.currentPage.save();
   },
 
   close: function() {
     window.close();
   },
 
-  deleteItem: function() {
-      ddd("delete selection actrion");
-      WebDoc.application.boardController.deleteSelection();
+  deleteItem: function(e) {
+    e.preventDefault();
+    ddd("delete selection actrion");
+    WebDoc.application.boardController.deleteSelection();
   },
   
   insertImage: function() {
@@ -210,7 +214,8 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
   },
   
-  inserthtmlSnipplet: function() {
+  inserthtmlSnipplet: function(e) {
+    e.preventDefault();
     console.log("insert snipplet");
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
@@ -230,13 +235,15 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.widgetLibraryController.toggle();
   },
   
-  applyPageCss: function() {
+  applyPageCss: function(e) {
+    e.preventDefault();
     eval("var newCss=" + $("#page_css_editor").get(0).value);    
     WebDoc.application.pageEditor.currentPage.applyCss(newCss);
     WebDoc.application.pageEditor.currentPage.save();
   },
   
-  applyInnerHtml: function() {
+  applyInnerHtml: function(e) {
+    e.preventDefault();
     console.log("apply HTML");
     var html = $("#selected_item_html_editor").get(0).value
     if (html) {

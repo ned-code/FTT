@@ -223,7 +223,9 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseDown: function(e) {
-    $(document).unbind("mousemove");      
+    $(document).unbind("mousemove");    
+    $(document).unbind("mouseup");
+    if (window.document.activeElement) window.document.activeElement.blur();      
     e.preventDefault();
     if (!e.boardIgnore) {
       $(document).bind("mousemove", this, this.mouseMove.pBind(this));   
@@ -251,6 +253,7 @@ WebDoc.BoardController = $.klass({
   
   mouseClick: function(e) {
     //e.preventDefault();
+    ddd("click on board");
     this.currentTool.mouseClick(e);
   },
   
