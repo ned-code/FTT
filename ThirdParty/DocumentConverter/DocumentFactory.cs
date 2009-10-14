@@ -22,6 +22,7 @@ namespace DocumentConverter
                 case ".pot":
                 case ".potx":
                 case ".potm":
+                case ".odp":
                     doc = new PowerPointDocument(context);
                     break;
                 case ".doc":
@@ -34,7 +35,23 @@ namespace DocumentConverter
                 case ".htm":
                 case ".txt":
                 case ".rtf":
+                case ".odt":
                     doc = new WordDocument(context);
+                    break;
+                case ".xls":
+                case ".xlsx":
+                case ".xlsm":
+                case ".xlsb":
+                case ".xlam":
+                case ".xltx":
+                case ".xltm":
+                case ".xml":
+                case ".xla":
+                case ".xlm":
+                case ".xlw":
+                case ".odc":
+                case ".ods":
+                    doc = new ExcelDocument(context);
                     break;
                 default:
                     doc = new DocumentItem(context);
