@@ -19,6 +19,7 @@ p {padding-bottom:28px;}
 body {
   font-family:Helvetica, Arial, sans-serif;
   font-size:13px;
+  overflow:hidden;
 }
 
 a { color: #000; }
@@ -158,15 +159,83 @@ a:hover { color: #fff; background-color:#000; }
 #board ul, #board ol {
   padding:40px;
 }
+
+#inspector_tabs {
+  width:285px;
+}
+
+#empty_inspector {
+  position:relative;
+  background-color:#CCCCCC;
+  margin:10px 0;
+  height:120px;  
+}
+
+#pen_inspector {
+  position:relative;
+  background-color:#CCCCCC;
+  margin:10px 0;
+  height:120px;  
+}
+
+#colors {
+  position:relative;
+  width:100%;
+  height:30px;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;  
+}
+
+#sizes {
+  position:relative;
+  width:100%;
+  height:30px;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;  
+}
+
+#colors li {
+  float:left;
+}
+
+#sizes li {
+  float:left;
+}
+
+#colors li a div {
+  width:20px;
+  height:20px;
+  margin:5px;
+}
+
+#sizes li a img {
+  width:18px;
+  height:18px;
+  margin:5px;
+  border:1px solid #000;
+}
+.ui-widget-content {
+  border:0px;
+}
+.ui-tabs {
+  padding:0px;  
+}
+
+.ui-tabs .ui-tabs-panel {
+  padding:0px;  
+}
+
 /* ================= */
 /* = Image library = */
 /* ================= */
 #image_library_wrap {
   overflow:auto;
   width: 285px;
-  height: 100px; 
-   margin:10px 0;  
-  background-color:#555;
+  height: 120px; 
+  margin:10px 0;  
+  background-color:#ccc;
 }
 
 #image_library_wrap ul {
@@ -182,14 +251,15 @@ a:hover { color: #fff; background-color:#000; }
 .image_item {
   width:100px;
   height:70px;
+  padding:5px;
 }
 
 #widget_library_wrap {
   overflow:auto;
   width: 285px;
-  height: 100px; 
-   margin:10px 0;  
-  background-color:#555;
+  height: 120px; 
+  margin:10px 0;  
+  background-color:#ccc;
 }
 
 #widget_library_wrap ul {
@@ -209,16 +279,15 @@ a:hover { color: #fff; background-color:#000; }
 /* =========== */
 /* = Palette = */
 /* =========== */
-
 .palette_wrap {
   position:relative;
   width:285px;
-  height:100px;
+  height:120px;
   margin:10px 0;
 }
 .palette {
   font-size:12px;
-  background:#ddd;
+  background:#ccc;
   margin:0;
   width:100%;
   height:100%;
@@ -263,7 +332,7 @@ a:hover { color: #fff; background-color:#000; }
 #selected_item_html_wrap {
   position:relative;
   width: 285px;
-  height: 100px; 
+  height: 120px; 
    margin:10px 0;  
 }
 

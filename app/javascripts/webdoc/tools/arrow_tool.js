@@ -17,8 +17,12 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
   
   select: function(e) {
     var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-    console.log("must select item at point " + mappedPoint.x + ":" + mappedPoint.y);
+    console.log("must select item at point " + mappedPoint.x + ":" + mappedPoint.y);    
     var objectToSelect = WebDoc.application.boardController.pageView.findObjectAtPoint(mappedPoint);
+    ddd(e.target.id);
+    if (e.target.nodeName == "polyline") {
+      objectToSelect = WebDoc.application.boardController.pageView.findItemView(e.target.id);
+    }
     this.lastSelectedObject = {
       itemView: objectToSelect,
       event: e
@@ -38,7 +42,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
   
   mouseDown: function(e) {
     var target = $(e.target); 
-    if (!target || target.length == 0 || !target.hasClass("ui-resizable-handle")) {
+    if (!target || target.length == 0 || (!target.hasClass("ui-resizable-handle") && !target.hasClass("drag_handle"))) {
     this.select(e);
     this.originalMovingPos = 
     {

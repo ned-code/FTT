@@ -86,7 +86,7 @@ WebDoc.Page = $.klass(MTools.Record,
     var i = 0;
     for (; i < this.items.length; i++) {
       var anObject = this.items[i];
-      if (anObject.uuid == pUuid) {
+      if (anObject.uuid() == pUuid) {
         return anObject;
       }
     }

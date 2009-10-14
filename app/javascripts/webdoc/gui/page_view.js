@@ -13,8 +13,8 @@ WebDoc.PageView = $.klass(
     
     this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
     this.drawingDomNode.css("zIndex", 999999);
-    this.domNode.append(this.drawingDomNode.get(0));
     this.domNode.append($("<div/>").css({zIndex: 999999, position: "absolute", width: "100%", height: "100%"}));
+    this.domNode.append(this.drawingDomNode.get(0));
     this.itemDomNode = $('<div>').attr({
       id: "items",
       style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
@@ -46,6 +46,10 @@ WebDoc.PageView = $.klass(
       relatedItemView.remove();
       delete this.itemViews[removedItem.uuid()];
     }
+  },
+  
+  findItemView: function(uuid) {
+   return this.itemViews[uuid];
   },
   
   findObjectAtPoint: function(point) {

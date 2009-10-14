@@ -6,7 +6,7 @@
         %img{ :src => "/images/icons/add_page.png", :alt =>"Add a page"}
     %li#remove-page
       %a{ :href => "#" , :title => "Removecurrent page"}
-        %img{ :src => "/images/icons/trash.png", :alt =>"Remove current page"}        
+        %img{ :src => "/images/icons/page_remove.png", :alt =>"Remove current page"}        
     %li#full_sreen
       %a{ :href => "#" , :title => "Enter full screen mode"}
         %img{ :src => "/images/icons/fullscreen.png", :alt =>"Enter full screen mode"}
@@ -65,46 +65,79 @@
         %img{ :src => "/images/icons/arrow_right.png", :alt =>"Arrow Right"}      
 #content
   #inspector
-    #palette_text.palette_wrap
-      %ul.palette{ :style => "display:block" }
-        %li
-          %a.bold{ :href => "" }
-            %span= "Bold"
-        %li
-          %a.italic{ :href => "" }
-            %span= "Italic"
-        %li
-          %a.underline{ :href => "" }
-            %span= "Underlined"
-        %li
-          %a.justifyLeft{ :href => "" }
-            %span= "Left"
-        %li
-          %a.justifyCenter{ :href => "" }
-            %span= "Center"
-        %li
-          %a.justifyRight{ :href => "" }
-            %span= "Right"
-        %li
-          %a.justifyFull{ :href => "" }
-            %span= "Justify"
-        %li
-          %a.insertUnorderedList{ :href => "" }
-            %span= "Bullet List"
-        %li
-          %a.insertOrderedList{ :href => "" }
-            %span= "Numbered List"
-        %li
-          %a.indent{ :href => "" }
-            %span= "Indent"
-        %li
-          %a.outdent{ :href => "" }
-            %span= "Outdent"
-      .palette_overlay
     #page_css_editor_wrap
-      %textarea#page_css_editor
-    #selected_item_html_wrap
-      %textarea#selected_item_html_editor  
+      %textarea#page_css_editor 
+    #inspector_tabs    
+      %ul
+        %li
+          %a{:href => "#item_inspector"}Inspector
+        %li
+          %a{:href => "#selected_item_html_wrap"}Code
+      #item_inspector
+        #palette_text.palette_wrap
+          %ul.palette{ :style => "display:block" }
+            %li
+              %a.bold{ :href => "" }
+                %span= "Bold"
+            %li
+              %a.italic{ :href => "" }
+                %span= "Italic"
+            %li
+              %a.underline{ :href => "" }
+                %span= "Underlined"
+            %li
+              %a.justifyLeft{ :href => "" }
+                %span= "Left"
+            %li
+              %a.justifyCenter{ :href => "" }
+                %span= "Center"
+            %li
+              %a.justifyRight{ :href => "" }
+                %span= "Right"
+            %li
+              %a.justifyFull{ :href => "" }
+                %img{ :src => "/images/icons/text_list.png", :alt =>"Justify"}
+            %li
+              %a.insertUnorderedList{ :href => "" }              
+                %img{ :src => "/images/icons/text_unord_list.png", :alt =>"Bullet"}
+            %li
+              %a.insertOrderedList{ :href => "" }
+                %img{ :src => "/images/icons/text_ord_list.png", :alt =>"Numbered"}
+            %li
+              %a.indent{ :href => "" }
+                %img{ :src => "/images/icons/tex_indent.png", :alt =>"Indent"}                   
+            %li
+              %a.outdent{ :href => "" }
+                %img{ :src => "/images/icons/text_outdent.png", :alt =>"Outdent"}
+          .palette_overlay
+        #pen_inspector
+          %ul#colors{ :style => "display:block" }
+            %li
+              %a{ :href => "" }
+                %div{ :style => "background-color:black" }                            
+            %li
+              %a{ :href => "" }
+                %div{ :style => "background-color:red" }
+            %li
+              %a{ :href => "" }
+                %div{ :style => "background-color:green" }                                
+            %li
+              %a{ :href => "" }
+                %div{ :style => "background-color:blue" }              
+          %ul#sizes{ :style => "display:block" }
+            %li
+              %a{ :href => "1" }
+                %img{ :src => "/images/icons/smallPen.png", :alt =>"Small"}                                
+            %li
+              %a{ :href => "5" }
+                %img{ :src => "/images/icons/mediumPen.png", :alt =>"Medium"}              
+            %li
+              %a{ :href => "10" }
+                %img{ :src => "/images/icons/largePen.png", :alt =>"Large"}                         
+        #empty_inspector
+          %center Empty
+      #selected_item_html_wrap
+        %textarea#selected_item_html_editor  
     #image_library_wrap
       %ul
     #widget_library_wrap

@@ -6,13 +6,31 @@
 
 WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   drawing: false,
-
+  penColor: "black",
+  penSize: "1",
   initialize: function($super, toolId) {
     $super(toolId);
+    $("#colors").bind("click", function(event) {
+      var link = $(event.target).closest('div')[0];
+      if (link) {
+        event.preventDefault();
+        this.penColor = $(link).css("backgroundColor");
+      }
+    }.pBind(this));
+    $("#sizes").bind("click", function(event) {
+      var link = $(event.target).closest('a')[0];
+      if (link) {
+        event.preventDefault();
+        this.penSize = $(link).attr("href");
+      }
+    }.pBind(this));    
   },
 
   selectTool: function() {
       WebDoc.application.boardController.unselectAll();
+      $("#inspector_tabs").tabs("enable", 0);      
+      $("#inspector_tabs").tabs("select", 0);
+      WebDoc.application.inspectorController.selectInspector(2);      
   },
   
   mouseDown: function(e) {
@@ -45,8 +63,8 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     this.currentDrawObject.data.data.css = {
       zIndex: 2000
     };
-    this.currentDrawObject.data.data.stroke = "#ff1010";
-    this.currentDrawObject.data.data.strokeWidth = 3;
+    this.currentDrawObject.data.data.stroke = this.penColor;
+    this.currentDrawObject.data.data.strokeWidth = this.penSize;
     this.currentDrawObject.data.data.points = mappedPoint.x + "," + mappedPoint.y;
     WebDoc.application.pageEditor.currentPage.addItem(this.currentDrawObject);
 

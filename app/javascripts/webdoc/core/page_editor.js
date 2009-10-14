@@ -11,6 +11,7 @@
 //= require <WebDoc/controllers/board_controller>
 //= require <WebDoc/controllers/image_library_controller>
 //= require <WebDoc/controllers/widget_library_controller>
+//= require <WebDoc/controllers/inspector_controller>
 
 //= require <WebDoc/tools/arrow_tool>
 //= require <WebDoc/tools/drawing_tool>
@@ -34,7 +35,8 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.pageEditor = this;
     WebDoc.application.boardController = new WebDoc.BoardController(true);
     WebDoc.application.imageLibraryController = new WebDoc.ImageLibraryController();
-    WebDoc.application.widgetLibraryController = new WebDoc.WidgetLibraryController();    
+    WebDoc.application.widgetLibraryController = new WebDoc.WidgetLibraryController();  
+    WebDoc.application.inspectorController = new WebDoc.InspectorController();      
     WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool_pen");
     WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool_arrow");
     WebDoc.application.handTool = new WebDoc.HandTool("#tool_hand");
@@ -76,6 +78,8 @@ WebDoc.PageEditor = $.klass({
     if (MTools.Browser.WebKit) {
        $("#board_container").css("marginRight", "0px");       
     }
+    
+    $("#inspector_tabs").tabs();
     
   },
 
@@ -258,6 +262,8 @@ WebDoc.PageEditor = $.klass({
     ddd("selected item ");
     ddd( WebDoc.application.boardController.selection);
     if (WebDoc.application.boardController.selection.length > 0) {
+      $("#inspector_tabs").tabs("enable", 0);
+      $("#inspector_tabs").tabs("enable", 1);
       var html =  WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
       if (html) {
         $("#selected_item_html_editor").get(0).value =html;
@@ -265,9 +271,13 @@ WebDoc.PageEditor = $.klass({
       else {
         $("#selected_item_html_editor").get(0).value = "";
       }
+      WebDoc.application.inspectorController.selectInspector(WebDoc.application.boardController.selection[0].inspectorId())
     }
     else {
+      WebDoc.application.inspectorController.selectInspector(0)      
       $("#selected_item_html_editor").get(0).value = "";
+      $("#inspector_tabs").tabs("disable", 0);
+      $("#inspector_tabs").tabs("disable", 1);
     }
   }
 });

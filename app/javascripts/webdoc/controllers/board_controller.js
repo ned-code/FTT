@@ -63,9 +63,7 @@ WebDoc.BoardController = $.klass({
       $(this).attr("data", relPath);
     });
     
-    //update zoom to fit browser page
-    this.zoom(1);
-    /*
+    //update zoom to fit browser page    
     heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
     widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;
     
@@ -75,7 +73,7 @@ WebDoc.BoardController = $.klass({
     else {
       this.zoom(1 + widthFactor);
     }
-    */
+    
   },
   
   setCurrentTool: function(tool) {

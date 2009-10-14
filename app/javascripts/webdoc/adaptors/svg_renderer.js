@@ -16,6 +16,27 @@ WebDoc.SvgRenderer = $.klass(
       height = "100%";
     }
     surface.setAttribute("style", "position: absolute; top:0x; left:0px; width:" + width + "; height:" + height);
+    var defs = document.createElementNS(this.svgNS, "defs");
+    var marker = document.createElementNS(this.svgNS, "marker");
+    marker.setAttribute("id", "myMarker");
+    marker.setAttribute("viewBox", "0 0 10 10");
+    marker.setAttribute("refX", "5");
+    marker.setAttribute("refY", "5");
+    marker.setAttribute("markerUnits", "userSpaceOnUse");
+    marker.setAttribute("orient", "0");
+    marker.setAttribute("markerWidth", "10");
+    marker.setAttribute("markerHeight", "10");
+    
+    
+    var rect = document.createElementNS(this.svgNS, "rect");
+    rect.setAttribute("x", "0");
+    rect.setAttribute("y", "0");
+    rect.setAttribute("width", "10");
+    rect.setAttribute("height", "10");
+    rect.setAttribute("fill", "red");
+    $(defs).append(marker);
+    $(marker).append(rect);
+    $(surface).append(defs);
     return surface;
   },
   
@@ -36,6 +57,7 @@ WebDoc.SvgRenderer = $.klass(
     result.setAttribute("fill", "none");
     result.setAttribute("stroke", item.data.data.stroke);
     result.setAttribute("stroke-width", item.data.data.strokeWidth);
+    result.setAttribute("transform", item.data.data.transform);
     if (item.data.data.points) {
       result.setAttribute("points", item.data.data.points);
     }
