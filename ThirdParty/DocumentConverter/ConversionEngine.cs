@@ -144,6 +144,8 @@ namespace DocumentConverter
         private void ConversionProc()
         {
             WaitHandle[] events = { m_addEvent };
+            //Needed for Excel : http://support.microsoft.com/kb/320369
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             while (true)
             {
                 int eventIndex = WaitHandle.WaitAny(events);
