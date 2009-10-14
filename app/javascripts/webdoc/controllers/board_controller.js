@@ -171,53 +171,61 @@ WebDoc.BoardController = $.klass({
   },
   
   zoom: function(factor) {
-    var previousZoom = this.currentZoom;
-    this.currentZoom = this.currentZoom * factor;
-    console.log("set zoom factor: " + this.currentZoom);
-    var boardElement = $("#board");
-    
-    
-    if (jQuery.browser.mozilla) {
-      boardElement.css("MozTransformOrigin", "0px 0px");
-      boardElement.css("MozTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
+    if (MTools.Browser.WebKit) {
+      $("#board").css("WebkitTransformOrigin", "");
+      $("#board").css("WebkitTransform", "");
     }
-    else 
-      if (jQuery.browser.safari) {
-        console.log("apply webkit transform");
-        if (!this.initialSize) {
-          this.initialSize = {
-            width: parseFloat(boardElement.css("width").replace("px", "")) + 2,
-            height: parseFloat(boardElement.css("height").replace("px", "")) + 2
-          }
-        }
-        if (this.currentZoom > 1) {
-          boardElement.css({
-            width: this.initialSize.width * this.currentZoom,
-            height: this.initialSize.height * this.currentZoom
-          });
-        }
-        else {
-          boardElement.css({
-            width: this.initialSize.width,
-            height: this.initialSize.height
-          });          
-        }
-        boardElement.css("WebkitTransformOrigin", "0px 0px");
-        boardElement.css("WebkitTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
+    else {
+      var previousZoom = this.currentZoom;
+      this.currentZoom = this.currentZoom * factor;
+      console.log("set zoom factor: " + this.currentZoom);
+      var boardElement = $("#board");
+      
+      
+      if (jQuery.browser.mozilla) {
+        boardElement.css("MozTransformOrigin", "0px 0px");
+        boardElement.css("MozTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
       }
       else 
-        if (jQuery.browser.msie) {
-          console.log("apply ie transform " + this.currentZoom + " " + this.initialWidth * this.currentZoom + " " + this.initialHeight * this.currentZoom);
-          if ((previousZoom >= 1 && factor > 1) || (this.currentZoom >= 1 && factor < 1)) {
-            boardElement.css("width", this.initialWidth * this.currentZoom);
-            boardElement.css("height", this.initialHeight * this.currentZoom);
+        if (jQuery.browser.safari) {
+          console.log("apply webkit transform");
+          if (!this.initialSize) {
+            this.initialSize = {
+              width: parseFloat(boardElement.css("width").replace("px", "")) + 2,
+              height: parseFloat(boardElement.css("height").replace("px", "")) + 2
+            }
           }
-          boardElement.css("filter", "progid:DXImageTransform.Microsoft.Matrix(M11='" + this.currentZoom + "',M21='0', M12='0', M22='" + this.currentZoom + "', sizingmethod='autoexpand')");
+          if (this.currentZoom > 1) {
+            boardElement.css({
+              width: this.initialSize.width * this.currentZoom,
+              height: this.initialSize.height * this.currentZoom
+            });
+          }
+          else {
+            boardElement.css({
+              width: this.initialSize.width,
+              height: this.initialSize.height
+            });
+          }
+          boardElement.css("WebkitTransformOrigin", "0px 0px");
+          boardElement.css("WebkitTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
         }
+        else 
+          if (jQuery.browser.msie) {
+            console.log("apply ie transform " + this.currentZoom + " " + this.initialWidth * this.currentZoom + " " + this.initialHeight * this.currentZoom);
+            if ((previousZoom >= 1 && factor > 1) || (this.currentZoom >= 1 && factor < 1)) {
+              boardElement.css("width", this.initialWidth * this.currentZoom);
+              boardElement.css("height", this.initialHeight * this.currentZoom);
+            }
+            boardElement.css("filter", "progid:DXImageTransform.Microsoft.Matrix(M11='" + this.currentZoom + "',M21='0', M12='0', M22='" + this.currentZoom + "', sizingmethod='autoexpand')");
+          }
+    }
   },
   
   mouseDown: function(e) {
-    $(document).unbind("mousemove");      
+    $(document).unbind("mousemove");    
+    $(document).unbind("mouseup");
+    if (window.document.activeElement) window.document.activeElement.blur();      
     e.preventDefault();
     if (!e.boardIgnore) {
       $(document).bind("mousemove", this, this.mouseMove.pBind(this));   
@@ -245,6 +253,7 @@ WebDoc.BoardController = $.klass({
   
   mouseClick: function(e) {
     //e.preventDefault();
+    ddd("click on board");
     this.currentTool.mouseClick(e);
   },
   

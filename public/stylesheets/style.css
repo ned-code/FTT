@@ -169,9 +169,19 @@ a:hover { color: #fff; background-color:#000; }
   background-color:#555;
 }
 
+#image_library_wrap ul {
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+}
+
+#image_library_wrap ul li{
+   float:left; 
+}
+
 .image_item {
-  width:150px;
-  height:120px;
+  width:100px;
+  height:70px;
 }
 
 #widget_library_wrap {
@@ -180,6 +190,12 @@ a:hover { color: #fff; background-color:#000; }
   height: 100px; 
    margin:10px 0;  
   background-color:#555;
+}
+
+#widget_library_wrap ul {
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
 }
 
 #widget_library_wrap ul li{
