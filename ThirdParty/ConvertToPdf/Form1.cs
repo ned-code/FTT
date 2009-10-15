@@ -10,8 +10,8 @@ using System.Net;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
-using AmazonWebServices;
 using com.amazon.s3;
+using Affirma.ThreeSharp.Wrapper;
 
 namespace ConvertToPdf
 {
@@ -58,15 +58,16 @@ namespace ConvertToPdf
             m_ConverterAddress = textBoxServerUrl.Text;
         }
 
-        private string PutFileOnS3(AWSAuthConnection conn)
+        private string PutFileOnS3(ThreeSharpWrapper wrapper)
         {
-            conn.createBucket(bucketName, null);
+            wrapper.AddBucket(bucketName);
             string filePath = textBoxUrl.Text;
             m_fileName = Path.GetFileName(filePath);
-            byte[] obj = readByteArrayFromFile(filePath);
             string s3Name = Guid.NewGuid() + Path.GetExtension(m_fileName);
 
-            conn.put(bucketName, s3Name, obj, null, null);
+            wrapper.AddFileObject(bucketName, s3Name, filePath);
+
+            AWSAuthConnection conn = new AWSAuthConnection(awsAccessKeyId, awsSecretAccessKey);
 
             AccessControlPolicy policy = conn.getACL(bucketName, s3Name);
 
@@ -84,26 +85,7 @@ namespace ConvertToPdf
             grants[i].Grantee = groupGrant;
             grants[i].Permission = Permission.READ;
             conn.putACL(bucketName, s3Name, grants);
-
             return s3Name;
-        }
-        private byte[] readByteArrayFromFile(string fileName)
-        {
-            byte[] buff = null;
-
-            try
-            {
-                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                BinaryReader br = new BinaryReader(fs);
-                long numBytes = new FileInfo(fileName).Length;
-                buff = br.ReadBytes((int)numBytes);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-
-            return buff;
         }
         private void ProcessDocument(string publicUrl)
         {
@@ -117,14 +99,15 @@ namespace ConvertToPdf
 
         private void DoConvert(Object stateInfo)
         {
-            AWSAuthConnection conn = null;
+            ThreeSharpWrapper wrapper = null;
             string s3Name = "";
             try
             {
                 UpdateText(labelStatus, "Uploading to S3");
-                conn = new AWSAuthConnection(awsAccessKeyId, awsSecretAccessKey);
-                s3Name = PutFileOnS3(conn);
-                string publicUrl = "http://s3.amazonaws.com/" + bucketName + "/" + s3Name;
+                wrapper = new ThreeSharpWrapper(awsAccessKeyId, awsSecretAccessKey);
+
+                s3Name = PutFileOnS3(wrapper);
+                string publicUrl = wrapper.GetUrl(bucketName, s3Name);
                 ProcessDocument(publicUrl);
 
                 string status;
@@ -150,8 +133,8 @@ namespace ConvertToPdf
             }
             finally
             {
-                if(s3Name.Length != 0 && conn != null)
-                    conn.delete(bucketName, s3Name);
+                if(s3Name.Length != 0 && wrapper != null)
+                    wrapper.DeleteObject(bucketName, s3Name);
 
                 EnableCallback enable = new EnableCallback(EnableButton);
                 Invoke(enable, buttonConvert, true);
@@ -263,7 +246,7 @@ namespace ConvertToPdf
         public string ConverterUrl { get { return m_ConverterAddress + "/PdfConverter.aspx"; } }
         public string DeleteUrl { get { return m_ConverterAddress + "/DeletePdf.aspx"; } }
         public string StatusUrl { get { return m_ConverterAddress + "/Status.aspx"; } }
-        private string DefaultConverterAddress = "http://ec2-79-125-61-107.eu-west-1.compute.amazonaws.com/DocumentConverter";
+        private string DefaultConverterAddress = "http://ec2-79-125-60-191.eu-west-1.compute.amazonaws.com/DocumentConverter";
         private const string m_defaultClientIPAddress = "85.218.33.126";
 
         //S3
