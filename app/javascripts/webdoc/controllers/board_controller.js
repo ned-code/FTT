@@ -71,13 +71,15 @@ WebDoc.BoardController = $.klass({
     heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
     widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;
     
+    this.zoom(1);
+    /*
     if (heightFactor < widthFactor) {
       this.zoom(1 + heightFactor);
     }
     else {
       this.zoom(1 + widthFactor);
     }
-    
+    */
   },
   
   setCurrentTool: function(tool) {

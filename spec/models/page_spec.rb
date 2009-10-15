@@ -43,7 +43,7 @@ describe Page do
     subject { Factory.build(:page) }
     
     it "should have default css data" do
-      subject.data.should == { :css => { :width => "1280px", :height => "720px", :backgroundColor => "black" } }
+      subject.data.should == { :css => { :width => "1280px", :height => "720px", :backgroundColor => "#999999" } }
     end
     
   end
