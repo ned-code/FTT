@@ -5,6 +5,10 @@
 //= require <WebDoc/model/item>
 //= require <WebDoc/gui/page_view>
 //= require <WebDoc/gui/item_view>
+//= require <webdoc/gui/drawing_view>
+//= require <webdoc/gui/image_view>
+//= require <webdoc/gui/text_view>
+//= require <webdoc/gui/widget_view>
 //= require <WebDoc/controllers/collaboration_controller>  
 //= require <WebDoc/controllers/drag_and_drop_controller>
 
