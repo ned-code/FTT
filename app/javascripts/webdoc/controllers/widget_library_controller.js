@@ -2,7 +2,7 @@
  * @author julien
  */
 
-//= require <WebDoc/model/widget>
+//= require <webdoc/model/widget>
 WebDoc.WidgetLibraryController = $.klass({
   initialize: function() {
     this.domNode = $("#widget_library_wrap");

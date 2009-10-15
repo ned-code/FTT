@@ -1,13 +1,13 @@
 /**
  * WBEditor is the main function of the application. It define UB namespace.
  **/
-//= require <MTools/undo_manager>
-//= require <MTools/server_manager>
-//= require <MTools/uuid>
+//= require <mtools/undo_manager>
+//= require <mtools/server_manager>
+//= require <mtools/uuid>
 
-//= require <WebDoc/model/document>
-//= require <WebDoc/utils/document_date_filter>
-//= require <WebDoc/gui/document_list>
+//= require <webdoc/model/document>
+//= require <webdoc/utils/document_date_filter>
+//= require <webdoc/gui/document_list>
 
 
 // application singleton.

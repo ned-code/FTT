@@ -3,20 +3,20 @@
 * @author julien
 * PageEditor is the main application for page viewing and editing.
 **/
-//= require <MTools/undo_manager>
-//= require <MTools/server_manager>
-//= require <MTools/uuid>
+//= require <mtools/undo_manager>
+//= require <mtools/server_manager>
+//= require <mtools/uuid>
 
-//= require <WebDoc/adaptors/svg_renderer>
-//= require <WebDoc/controllers/board_controller>
-//= require <WebDoc/controllers/image_library_controller>
-//= require <WebDoc/controllers/widget_library_controller>
-//= require <WebDoc/controllers/inspector_controller>
+//= require <webdoc/adaptors/svg_renderer>
+//= require <webdoc/controllers/board_controller>
+//= require <webdoc/controllers/image_library_controller>
+//= require <webdoc/controllers/widget_library_controller>
+//= require <webdoc/controllers/inspector_controller>
 
-//= require <WebDoc/tools/arrow_tool>
-//= require <WebDoc/tools/drawing_tool>
-//= require <WebDoc/tools/hand_tool>
-//= require <WebDoc/tools/text_tool>
+//= require <webdoc/tools/arrow_tool>
+//= require <webdoc/tools/drawing_tool>
+//= require <webdoc/tools/hand_tool>
+//= require <webdoc/tools/text_tool>
 
 // application singleton.
 WebDoc.application = {};

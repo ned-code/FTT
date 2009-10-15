@@ -3,8 +3,8 @@
  * and open the template in the editor.
  */
 
-//= require <WebDoc/model/page>
-//= require <WebDoc/model/item>
+//= require <webdoc/model/page>
+//= require <webdoc/model/item>
 
 WebDoc.CollaborationController = $.klass(
 {

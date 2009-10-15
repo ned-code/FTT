@@ -2,7 +2,7 @@
  * @author julien
  */
 
-//= require <WebDoc/model/image>
+//= require <webdoc/model/image>
 WebDoc.ImageLibraryController = $.klass({
   initialize: function() {
     this.domNode = $("#image_library_wrap");

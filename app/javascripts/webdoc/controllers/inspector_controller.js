@@ -1,7 +1,7 @@
 /**
  * @author julien
  */
-//= require <WebDoc/model/image>
+//= require <webdoc/model/image>
 WebDoc.InspectorController = $.klass({
   initialize: function() {
     this.domNode = $("#item_inspector");

@@ -1,16 +1,16 @@
 /**
  * Uniboard board controller
  **/
-//= require <WebDoc/model/page>
-//= require <WebDoc/model/item>
-//= require <WebDoc/gui/page_view>
-//= require <WebDoc/gui/item_view>
+//= require <webdoc/model/page>
+//= require <webdoc/model/item>
+//= require <webdoc/gui/page_view>
+//= require <webdoc/gui/item_view>
 //= require <webdoc/gui/drawing_view>
 //= require <webdoc/gui/image_view>
 //= require <webdoc/gui/text_view>
 //= require <webdoc/gui/widget_view>
-//= require <WebDoc/controllers/collaboration_controller>  
-//= require <WebDoc/controllers/drag_and_drop_controller>
+//= require <webdoc/controllers/collaboration_controller>  
+//= require <webdoc/controllers/drag_and_drop_controller>
 
 WebDoc.BoardController = $.klass({
   initialize: function(editable) {
