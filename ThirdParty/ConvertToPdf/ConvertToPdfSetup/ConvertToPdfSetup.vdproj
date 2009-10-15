@@ -43,6 +43,27 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
+                    {
+                    "Name" = "8:.NET Framework 3.5 SP1"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -147,6 +168,17 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_A2958E88670E44A7AE8B7808D4623DE0"
+                    {
+                    "Name" = "8:Mnemis"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_3D49C855A6754E01AEE28C1ABA46F910"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
         }
@@ -166,7 +198,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Convert To Pdf"
         "ProductCode" = "8:{2F428784-3E87-434C-9604-4D45BB2015A4}"
-        "PackageCode" = "8:{3EC78473-F765-465C-A931-0A77958CAD18}"
+        "PackageCode" = "8:{53D9FC2E-4F91-4EB6-B626-8FD7A050A465}"
         "UpgradeCode" = "8:{6AFF9A4B-A6B5-4C6A-B5F0-DB3711B4F0F7}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -308,7 +340,7 @@
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_195F4747FCE244BDB824490610FBD870"
-            "Folder" = "8:_7D66454B000F4DC797F5BDEC5C1B503C"
+            "Folder" = "8:_A2958E88670E44A7AE8B7808D4623DE0"
             "WorkingFolder" = "8:_0A97C1854FE541EA81441E91FF91DF53"
             "Icon" = "8:"
             "Feature" = "8:"
@@ -714,7 +746,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_195F4747FCE244BDB824490610FBD870"
             {
-            "SourcePath" = "8:..\\obj\\Release\\ConvertToPdf.exe"
+            "SourcePath" = "8:..\\obj\\Debug\\ConvertToPdf.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0A97C1854FE541EA81441E91FF91DF53"
