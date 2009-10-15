@@ -42,6 +42,7 @@ namespace DocumentConverter
                         ExcelApp = new Application();
                         ExcelApp.DisplayAlerts = false;
                     }
+                    
                     docSet = ExcelApp.Workbooks;
                     doc = docSet.Open(InputPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                                       Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
