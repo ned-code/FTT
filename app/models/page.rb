@@ -81,11 +81,11 @@ private
   def set_position
     self.position ||= document.new_record? ? 0 : document.pages.count
     #update following pages
-    Page.update_all("position = position + 1", "position >= #{self.position.to_i} and uuid <> '#{self.uuid}'")
+    Page.update_all("position = position + 1", "position >= #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")
   end
   
   def update_next_page_position
-    Page.update_all("position = position - 1", "position > #{self.position.to_i} and uuid <> '#{self.uuid}'")
+    Page.update_all("position = position - 1", "position > #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")
   end
 
 end
