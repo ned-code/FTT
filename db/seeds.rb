@@ -4,6 +4,7 @@ User.create(pass_hash.merge(:name => "Julien", :email => "julien.bachmann@mnemis
 User.create(pass_hash.merge(:name => "Yann", :email => "yann.ringgenberg@mnemis.com"))
 User.create(pass_hash.merge(:name => "Stelio", :email => "stelio.tzonis@mnemis.com"))
 User.create(pass_hash.merge(:name => "Zeno", :email => "zeno@jilion.com"))
+User.create(pass_hash.merge(:name => "Guest", :email => "guest@mnemis.com"))
 
 media = Media.new({:file_file_name => "GoogleMap.wgt.zip", :file_content_type => "application/wgt"})
 media[:uuid] = "2f499bf0-9574-012c-72fc-002500a8be1c"
