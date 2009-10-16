@@ -17,9 +17,12 @@ WebDoc.Page = $.klass(MTools.Record,
     return "/documents/" + this.data.document_id;
   },
   
-  applyCss: function(newCss) {    
-    this.data.data.css = newCss;
-    this.fireObjectChanged();
+  applyCss: function(newCss) {   
+    if (newCss != this.data.data.css) {
+      this.data.data.css = newCss;
+      this.fireObjectChanged();
+      this.save();
+    }
   },
   
   refresh: function($super, json) {

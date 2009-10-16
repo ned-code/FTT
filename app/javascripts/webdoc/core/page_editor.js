@@ -241,19 +241,18 @@ WebDoc.PageEditor = $.klass({
   
   applyPageCss: function(e) {
     e.preventDefault();
-    eval("var newCss=" + $("#page_css_editor").get(0).value);    
-    WebDoc.application.pageEditor.currentPage.applyCss(newCss);
-    WebDoc.application.pageEditor.currentPage.save();
+    if ($.toJSON(editor.currentPage.data.data.css) != $("#page_css_editor").get(0).value) {
+      eval("var newCss=" + $("#page_css_editor").get(0).value);
+      WebDoc.application.pageEditor.currentPage.applyCss(newCss);
+    }
   },
   
   applyInnerHtml: function(e) {
     e.preventDefault();
-    console.log("apply HTML");
     var html = $("#selected_item_html_editor").get(0).value
     if (html) {
       if (WebDoc.application.boardController.selection.length > 0) {
         WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
-        WebDoc.application.boardController.selection[0].item.save();
       }
     }
   },

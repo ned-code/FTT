@@ -47,6 +47,13 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     return widgetNode;
   },
   
+  domNodeChangedChanged: function() {
+    this.unSelect();
+    this.domNode.remove();
+    this.domNode = this.createDomNode();
+    this.select();  
+  },
+  
   innerHtmlChanged: function($super) {
     $super();
     // resize if inner html is iframe
@@ -80,7 +87,17 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   initWidget: function() {
     if (this.domNode.get(0).contentWindow) {
       this.domNode.get(0).contentWindow.uniboard = this.item;
-      this.domNode.get(0).contentWindow.initialize();
+      if (this.domNode.get(0).contentWindow.initialize) {
+        this.domNode.get(0).contentWindow.initialize();
+      }
+      // inject innerHTML if exist
+      if (this.item.data.data.innerHTML) {
+        var doc = this.domNode.get(0).contentDocument;
+        doc.open();
+        doc.write(this.item.data.data.innerHTML);
+        doc.close();  
+        //$(doc).find("body").append($()[0]);
+      }
       /* if SVG layer don't catch event we need to catch events in the capture phase of the widget */
       /*
        this.domNode.get(0).contentDocument.body.addEventListener("mousedown", WebDoc.application.boardController.mouseDown.pBind(WebDoc.application.boardController), true);

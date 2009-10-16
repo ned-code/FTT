@@ -66,8 +66,19 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   setInnerHtml: function(html) {
-    this.data.data.innerHTML = html;
-    this.fireInnerHtmlChanged();
+    if (html != this.data.data.innerHTML) {
+      this.data.data.innerHTML = html;
+      if (html.indexOf("<script") != -1) {
+        ddd("replace tag");
+        this.data.data.tag = "iframe";
+        //this.data.data.src = this.rootUrl() + "/items/" + this.uuid();
+        this.fireDomNodeChanged();
+      }
+      else {
+        this.fireInnerHtmlChanged();
+      }
+      this.save();
+    }
   },
   
   fireObjectChanged: function($super) {
@@ -78,6 +89,12 @@ WebDoc.Item = $.klass(MTools.Record,
   fireInnerHtmlChanged: function() {
     if (this.listener) {
       this.listener.innerHtmlChanged();
+    }
+  },
+  
+  fireDomNodeChanged: function() {
+    if (this.listener) {
+      this.listener.domNodeChangedChanged();
     }
   },
   
