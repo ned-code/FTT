@@ -241,6 +241,7 @@ WebDoc.PageEditor = $.klass({
   
   applyPageCss: function(e) {
     e.preventDefault();
+    var editor = WebDoc.application.pageEditor;
     if ($.toJSON(editor.currentPage.data.data.css) != $("#page_css_editor").get(0).value) {
       eval("var newCss=" + $("#page_css_editor").get(0).value);
       WebDoc.application.pageEditor.currentPage.applyCss(newCss);
