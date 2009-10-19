@@ -98,7 +98,6 @@ WebDoc.PageEditor = $.klass({
     {
       var editor = WebDoc.application.pageEditor;
       if (data.length > 0) {
-        ddd(data[0]);
         editor.loadPage(data[0]);
       }
     });
@@ -107,8 +106,8 @@ WebDoc.PageEditor = $.klass({
   loadPage: function(page) {
     WebDoc.application.undoManager.clear();
     var editor = WebDoc.application.pageEditor;
-    console.log("set hash to current page position");
-    window.location.hash = "#" + (page.data.position + 1);
+    ddd("set hash to current page position");
+    window.location.hash = "#" + (page.uuid());
     editor.currentPage = page;
     editor.previousPageId = editor.currentPage.previousPageId();
     editor.nextPageId = editor.currentPage.nextPageId();
@@ -243,8 +242,18 @@ WebDoc.PageEditor = $.klass({
     e.preventDefault();
     var editor = WebDoc.application.pageEditor;
     if ($.toJSON(editor.currentPage.data.data.css) != $("#page_css_editor").get(0).value) {
-      eval("var newCss=" + $("#page_css_editor").get(0).value);
-      WebDoc.application.pageEditor.currentPage.applyCss(newCss);
+      var newCss = null;
+      try {
+        eval("newCss=" + $("#page_css_editor").get(0).value);
+      }
+      catch(ex) {
+        ddd("Invalid css");
+        $("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
+      }
+      if (newCss) {
+        WebDoc.application.pageEditor.currentPage.applyCss(newCss);
+        WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
+      }
     }
   },
   

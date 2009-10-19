@@ -227,6 +227,13 @@ a:hover { color: #fff; background-color:#000; }
   padding:0px;  
 }
 
+#chat {
+  overflow:auto;
+  width: 285px;
+  height: 600px; 
+  margin:10px 0;  
+  background-color:#ccc;  
+}
 /* ================= */
 /* = Image library = */
 /* ================= */
@@ -349,6 +356,12 @@ a:hover { color: #fff; background-color:#000; }
   position:absolute;
   z-index:1000001;
 /*  background:transparent url(/images/drag.png) repeat scroll 0 0*/  	
+}
+
+.drawing_handle {
+  position:absolute;
+  z-index:1000001;
+/*  background:transparent url(/images/drag.png) repeat scroll 0 0*/    
 }
 
 .resize_handle {

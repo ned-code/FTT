@@ -3,7 +3,7 @@
  */
 WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
   createDomNode: function($super) {
-    this.selectionNode = $("<div/>").addClass("drag_handle");
+    this.selectionNode = $("<div/>").addClass("drawing_handle");
     var newLine = WebDoc.application.svgRenderer.createPolyline(this.item);
     this.pageView.drawingDomNode.append(newLine);
     return $(newLine);
@@ -39,7 +39,6 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
   },
   
   select: function() {
-    ddd("select drawing");
     var lastSelectedObjectMouseDownEvent = WebDoc.application.arrowTool.lastSelectedObject.event;
     if (lastSelectedObjectMouseDownEvent) {
       lastSelectedObjectMouseDownEvent.preventDefault();
@@ -59,12 +58,18 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
         $.extend(currentPosition, this.item.position);
         // TODO change the way we get current x and y translate: Currently we assume that transform attribute always contains "translate(x,y)"
         if (this.item.data.data.transform) {
-          this.originalXTransform = this.item.data.data.transform.substring(10, this.item.data.data.transform.indexOf(",", 10) - 1);
-          this.originalYTransform = this.item.data.data.transform.substring(this.item.data.data.transform.indexOf(",", 10) + 1, this.item.data.data.transform.indexOf(")", 10) - 1);
+          this.originalXTransform = parseFloat(this.item.data.data.transform.substring(10, this.item.data.data.transform.indexOf(",", 10)));
+          this.originalYTransform = parseFloat(this.item.data.data.transform.substring(this.item.data.data.transform.indexOf(",", 10) + 1, this.item.data.data.transform.indexOf(")", 10)));
+          if (isNaN(this.originalXTransform)) {
+            this.originalXTransform = 0;
+          }
+          if (isNaN(this.originalYTransform)) {
+            this.originalYTransform = 0;
+          }
         }
         else {
-          this.originalXTransform = "0";
-          this.originalYTransform = "0";
+          this.originalXTransform = 0;
+          this.originalYTransform = 0;
         }
         this.startLeft = mappedPoint.x;
         this.startTop = mappedPoint.y;
@@ -74,8 +79,8 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
       }.pBind(this),
       drag: function(e, ui) {
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-        ui.position.left = mappedPoint.x - this.startLeft + parseFloat(this.originalXTransform);
-        ui.position.top = mappedPoint.y - this.startTop + parseFloat(this.originalYTransform);
+        ui.position.left = mappedPoint.x - this.startLeft + this.originalXTransform;
+        ui.position.top = mappedPoint.y - this.startTop + this.originalYTransform;
         this.item.data.data.transform = "translate("+ ui.position.left + "," + ui.position.top + ")";
         this.item.fireObjectChanged();
       }.pBind(this),

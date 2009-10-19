@@ -39,6 +39,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
 
   selectTool: function() {
+    WebDoc.application.boardController.unselectAll();  
     this.newTextBox();
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
   },

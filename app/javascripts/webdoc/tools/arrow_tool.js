@@ -42,7 +42,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
   
   mouseDown: function(e) {
     var target = $(e.target); 
-    if (!target || target.length == 0 || (!target.hasClass("ui-resizable-handle") && !target.hasClass("drag_handle"))) {
+    if (!target || target.length == 0 || (!target.hasClass("ui-resizable-handle") && !target.hasClass("drawing_handle"))) {
     this.select(e);
     this.originalMovingPos = 
     {

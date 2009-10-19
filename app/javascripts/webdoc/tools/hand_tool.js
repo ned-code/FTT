@@ -11,6 +11,10 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
       $super(toolId);
     },
     
+    selectTool: function() {
+      WebDoc.application.boardController.unselectAll();      
+    },
+    
     mouseDown: function(e)
     {
         this.moving = true;

@@ -158,6 +158,7 @@ WebDoc.ItemView = $.klass({
         cursor: 'move',
         distance: 5,
         start: function(e, ui) {
+          ddd("start drag");
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           var currentPosition = {};
           $.extend(currentPosition, this.item.position);

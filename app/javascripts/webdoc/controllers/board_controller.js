@@ -175,7 +175,7 @@ WebDoc.BoardController = $.klass({
   },
   
   zoom: function(factor) {
-    if (MTools.Browser.WebKit) {
+    if (false && MTools.Browser.WebKit) {
       $("#board").css("WebkitTransformOrigin", "");
       $("#board").css("WebkitTransform", "");
     }
@@ -227,6 +227,7 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseDown: function(e) {
+    ddd("mouse down on board");
     $(document).unbind("mousemove");    
     $(document).unbind("mouseup");
     if (window.document.activeElement) window.document.activeElement.blur();      
