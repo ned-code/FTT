@@ -1,8 +1,5 @@
 var MTools = {};
 
-//= require <jquery>
-//= require <lowpro-jquery>
-
 //= require "mtools/console"
 //= require "mtools/extensions"
 //= require "mtools/server_manager"
