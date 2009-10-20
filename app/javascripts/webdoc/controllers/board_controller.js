@@ -83,6 +83,7 @@ WebDoc.BoardController = $.klass({
   
   centerBoard: function() {
     ddd("center board");
+    /*
     var containerHeight = $("#board_container").height();
     var containerWidth = $("#board_container").width();
     var boardHeight = $("#board").height() * this.currentZoom;
@@ -102,6 +103,7 @@ WebDoc.BoardController = $.klass({
     else {
       $("#board").css("top", 0);
     }
+    */
   },
   
   setCurrentTool: function(tool) {
