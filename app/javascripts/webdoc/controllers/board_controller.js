@@ -82,8 +82,6 @@ WebDoc.BoardController = $.klass({
   },
   
   centerBoard: function() {
-    ddd("center board");
-    /*
     var containerHeight = $("#board_container").height();
     var containerWidth = $("#board_container").width();
     var boardHeight = $("#board").height() * this.currentZoom;
@@ -103,7 +101,6 @@ WebDoc.BoardController = $.klass({
     else {
       $("#board").css("top", 0);
     }
-    */
   },
   
   setCurrentTool: function(tool) {
@@ -122,10 +119,11 @@ WebDoc.BoardController = $.klass({
     else {
       x = position.pageX - $("#board_container").offset().left;
       y = position.pageY - $("#board_container").offset().top;
-    }
-    
-    var calcX = (x + $("#board_container").get(0).scrollLeft) * (1 / this.currentZoom);
-    var calcY = (y + ($("#board_container").get(0).scrollTop)) * (1 / this.currentZoom);
+    }   
+    var top = parseFloat($("#board").css("top"));
+    var left = parseFloat($("#board").css("left"));
+    var calcX = (x - left + $("#board_container").get(0).scrollLeft) * (1 / this.currentZoom);
+    var calcY = (y - top + $("#board_container").get(0).scrollTop) * (1 / this.currentZoom);
     return {
       x: calcX,
       y: calcY
