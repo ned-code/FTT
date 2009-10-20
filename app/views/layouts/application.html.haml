@@ -18,20 +18,5 @@
     = sprockets_include_tag
 
   %body
-    #wrap
-      #header
-        #ub-login-logout
-          %div
-            - if current_user
-              = current_user.name + ' - ' + current_user.email
-              |
-              = link_to "edit", edit_user_path(current_user)
-              |
-              = link_to "logout", logout_path
-            - else
-              = link_to "login", login_path
-              |
-              = link_to "signup", signup_path
-        = render :partial => "layouts/flash", :object => flash
-        
+    #wrap              
       = yield

@@ -39,7 +39,6 @@ WebDoc.BoardController = $.klass({
     // add the new one
     this.pageView = new WebDoc.PageView(page);
     $("#board_container").append(this.pageView.domNode);
-    
     // re-init internal working attributes
     $("#board_container").get(0).scrollTop = 0;
     $("#board_container").get(0).scrollLeft = 0;
@@ -55,11 +54,10 @@ WebDoc.BoardController = $.klass({
     $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
     $("#board").bind("click", this, this.mouseClick.pBind(this));
     $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
-    $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver); 
+    $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver);
     $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);
-    ddd("listen keyboard");
     $(document).bind("keydown", this, this.keyDown.pBind(this));
-
+    
     
     // update data attribute of object
     $("object").each(function() {
@@ -72,14 +70,38 @@ WebDoc.BoardController = $.klass({
     widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;
     
     this.zoom(1);
+    this.centerBoard();
     /*
-    if (heightFactor < widthFactor) {
-      this.zoom(1 + heightFactor);
+     if (heightFactor < widthFactor) {
+     this.zoom(1 + heightFactor);
+     }
+     else {
+     this.zoom(1 + widthFactor);
+     }
+     */
+  },
+  
+  centerBoard: function() {
+    ddd("center board");
+    var containerHeight = $("#board_container").height();
+    var containerWidth = $("#board_container").width();
+    var boardHeight = $("#board").height() * this.currentZoom;
+    var boardWidth = $("#board").width() * this.currentZoom;
+    // center horizontally
+    if (boardWidth < containerWidth) {
+      $("#board").css("left", (containerWidth - boardWidth) / 2);
     }
     else {
-      this.zoom(1 + widthFactor);
+      $("#board").css("left", 0);
     }
-    */
+    
+    // center vertically
+    if (boardHeight < containerHeight) {
+      $("#board").css("top", (containerHeight - boardHeight) / 2);
+    }
+    else {
+      $("#board").css("top", 0);
+    }
   },
   
   setCurrentTool: function(tool) {
@@ -119,9 +141,10 @@ WebDoc.BoardController = $.klass({
     $("#board_container").get(0).scrollLeft = 0;
   },
   
-  selectItemViews: function(itemViews) {    
+  selectItemViews: function(itemViews) {
     // exit edit mode for current editing item
-    if (this.editingItem) this.editingItem.stopEditing();
+    if (this.editingItem) 
+      this.editingItem.stopEditing();
     this.editingItem = null;
     //deselect un-needed items
     ddd("select item in view");
@@ -144,7 +167,7 @@ WebDoc.BoardController = $.klass({
   
   unselectAll: function() {
     console.log("unselect all. selection size " + this.selection.length);
-    this.selectItemViews([]);   
+    this.selectItemViews([]);
   },
   
   unselectItemViews: function(itemViews) {
@@ -165,75 +188,78 @@ WebDoc.BoardController = $.klass({
   
   deleteSelection: function(e) {
     var deletedItems = [];
-    $.each(this.selection, function(index, itemView){
+    $.each(this.selection, function(index, itemView) {
       deletedItems.push(itemView.item);
     }.pBind(this));
     this.removeItems(deletedItems);
     this.selection = [];
     this.fireSelectionChanged();
-    if (e && deletedItems.length > 0) e.preventDefault(); //stop keydown event
+    if (e && deletedItems.length > 0) 
+      e.preventDefault(); //stop keydown event
   },
   
   zoom: function(factor) {
-    if (false && MTools.Browser.WebKit) {
-      $("#board").css("WebkitTransformOrigin", "");
-      $("#board").css("WebkitTransform", "");
+  
+    var previousZoom = this.currentZoom;
+    this.currentZoom = this.currentZoom * factor;
+    console.log("set zoom factor: " + this.currentZoom);
+    var boardElement = $("#board");
+    
+    if (jQuery.browser.mozilla) {
+      boardElement.css("MozTransformOrigin", "0px 0px");
+      boardElement.css("MozTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
     }
-    else {
-      var previousZoom = this.currentZoom;
-      this.currentZoom = this.currentZoom * factor;
-      console.log("set zoom factor: " + this.currentZoom);
-      var boardElement = $("#board");
-      
-      
-      if (jQuery.browser.mozilla) {
-        boardElement.css("MozTransformOrigin", "0px 0px");
-        boardElement.css("MozTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
-      }
-      else 
-        if (jQuery.browser.safari) {
-          console.log("apply webkit transform");
-          if (!this.initialSize) {
-            this.initialSize = {
-              width: parseFloat(boardElement.css("width").replace("px", "")) + 2,
-              height: parseFloat(boardElement.css("height").replace("px", "")) + 2
-            }
+    else 
+      if (jQuery.browser.safari) {
+        console.log("apply webkit transform");
+        if (!this.initialSize) {
+          this.initialSize = {
+            width: parseFloat(boardElement.css("width").replace("px", "")) + 2,
+            height: parseFloat(boardElement.css("height").replace("px", "")) + 2
           }
-          if (this.currentZoom > 1) {
-            boardElement.css({
-              width: this.initialSize.width * this.currentZoom,
-              height: this.initialSize.height * this.currentZoom
-            });
-          }
-          else {
-            boardElement.css({
-              width: this.initialSize.width,
-              height: this.initialSize.height
-            });
-          }
-          boardElement.css("WebkitTransformOrigin", "0px 0px");
+        }
+        if (this.currentZoom > 1) {
+          boardElement.css({
+            width: this.initialSize.width * this.currentZoom,
+            height: this.initialSize.height * this.currentZoom
+          });
+        }
+        else {
+          boardElement.css({
+            width: this.initialSize.width,
+            height: this.initialSize.height
+          });
+        }
+        boardElement.css("WebkitTransformOrigin", "0px 0px");
+        if (this.currentZoom == 1) {
+          boardElement.css("WebkitTransform", "");
+        }
+        else {
           boardElement.css("WebkitTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
         }
-        else 
-          if (jQuery.browser.msie) {
-            console.log("apply ie transform " + this.currentZoom + " " + this.initialWidth * this.currentZoom + " " + this.initialHeight * this.currentZoom);
-            if ((previousZoom >= 1 && factor > 1) || (this.currentZoom >= 1 && factor < 1)) {
-              boardElement.css("width", this.initialWidth * this.currentZoom);
-              boardElement.css("height", this.initialHeight * this.currentZoom);
-            }
-            boardElement.css("filter", "progid:DXImageTransform.Microsoft.Matrix(M11='" + this.currentZoom + "',M21='0', M12='0', M22='" + this.currentZoom + "', sizingmethod='autoexpand')");
+      }
+      else 
+        if (jQuery.browser.msie) {
+          console.log("apply ie transform " + this.currentZoom + " " + this.initialWidth * this.currentZoom + " " + this.initialHeight * this.currentZoom);
+          if ((previousZoom >= 1 && factor > 1) || (this.currentZoom >= 1 && factor < 1)) {
+            boardElement.css("width", this.initialWidth * this.currentZoom);
+            boardElement.css("height", this.initialHeight * this.currentZoom);
           }
-    }
+          boardElement.css("filter", "progid:DXImageTransform.Microsoft.Matrix(M11='" + this.currentZoom + "',M21='0', M12='0', M22='" + this.currentZoom + "', sizingmethod='autoexpand')");
+        }
+    
+    this.centerBoard();
   },
   
   mouseDown: function(e) {
     ddd("mouse down on board");
-    $(document).unbind("mousemove");    
+    $(document).unbind("mousemove");
     $(document).unbind("mouseup");
-    if (window.document.activeElement) window.document.activeElement.blur();      
+    if (window.document.activeElement) 
+      window.document.activeElement.blur();
     e.preventDefault();
     if (!e.boardIgnore) {
-      $(document).bind("mousemove", this, this.mouseMove.pBind(this));   
+      $(document).bind("mousemove", this, this.mouseMove.pBind(this));
       $(document).bind("mouseup", this, this.mouseUp.pBind(this));
       this.currentTool.mouseDown(e);
     }
@@ -250,8 +276,8 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseUp: function(e) {
-    $(document).unbind("mousemove");      
-    $(document).unbind("mouseup");          
+    $(document).unbind("mousemove");
+    $(document).unbind("mouseup");
     e.preventDefault();
     this.currentTool.mouseUp(e);
   },
@@ -264,10 +290,11 @@ WebDoc.BoardController = $.klass({
   
   keyDown: function(e) {
     var el = $(e.target);
-    if (el.is('input') || el.is('textarea')) return;
-    switch(e.which) {
-      case 8: 
-      case 46: 
+    if (el.is('input') || el.is('textarea')) 
+      return;
+    switch (e.which) {
+      case 8:
+      case 46:
         this.deleteSelection(e);
         break;
       case 90:
@@ -284,7 +311,7 @@ WebDoc.BoardController = $.klass({
         break;
       case 65:
         this.setCurrentTool(WebDoc.application.arrowTool);
-        break;        
+        break;
     }
   },
   
@@ -293,8 +320,9 @@ WebDoc.BoardController = $.klass({
       this.currentPage.addItem(item);
       item.isNew = true;
       item.save();
-    }.pBind(this));
-
+    }
+.pBind(this));
+    
     if (items.length > 0) {
       var itemViewToSelect = this.pageView.itemViews[items[0].uuid()];
       this.selectItemViews([itemViewToSelect]);
@@ -302,18 +330,21 @@ WebDoc.BoardController = $.klass({
     
     WebDoc.application.undoManager.registerUndo(function() {
       this.removeItems(items);
-    }.pBind(this));    
+    }
+.pBind(this));
   },
   
   removeItems: function(items) {
     $.each(items, function(index, item) {
       this.currentPage.removeItem(item);
       item.destroy();
-    }.pBind(this));
-      
+    }
+.pBind(this));
+    
     WebDoc.application.undoManager.registerUndo(function() {
       this.insertItems(items);
-    }.pBind(this));
+    }
+.pBind(this));
   }
   
 });

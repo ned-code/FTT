@@ -73,6 +73,7 @@ WebDoc.PageEditor = $.klass({
       var height = window.innerHeight - $("#board_container").offset().top;
       $("#board_container").height(height -10);
       $("#inspector").height(height -10);
+      WebDoc.application.boardController.centerBoard();
     }.pBind(this));
     
     if (MTools.Browser.WebKit) {
