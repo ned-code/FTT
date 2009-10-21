@@ -102,6 +102,10 @@ WebDoc.Item = $.klass(MTools.Record,
    * uniboard API for widget
    */
   
+  resize: function(width, height) {
+      this.resizeContainer(width, height);
+  },
+  
   resizeContainer: function(width, height) {
     this.data.data.css.width = width + "px";
     this.data.data.css.height = height + "px";

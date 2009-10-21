@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090616123816) do
+ActiveRecord::Schema.define(:version => 20091021065518) do
 
   create_table "documents", :id => false, :force => true do |t|
     t.string   "uuid",       :limit => 36
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20090616123816) do
     t.datetime "file_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "properties",        :limit => 65537
   end
 
   create_table "pages", :id => false, :force => true do |t|

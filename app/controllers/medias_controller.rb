@@ -9,10 +9,6 @@ class MediasController < ApplicationController
       format.json {
         @medias = Media.find_all_by_type(params[:type])
         @medias.each do |media|
-          if (params[:type] == 'Medias::Widget')
-            media[:index] = media.index_url
-            media[:icon] = media.icon_url
-          end
           media[:thumb_url] = media.file.url(:thumb)
           media[:url] = media.file.url
         end

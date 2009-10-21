@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" 
-        id="http://uniboard.mnemis.com/widgets/Countdown" 
-        version="1.0"
-        width="262"
-        height="97" >        
-  <name>Countdown</name>
-  <content src="index.html"/> 
-</widget>

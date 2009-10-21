@@ -4,17 +4,28 @@ class Medias::Widget < Media
   
   #after_post_process :keep_zip_file_for_write
   after_save :send_zip_file
+  before_save :parse_config
   #after_destroy :delete_widget_folder
   
-  def index_url
-    File.join(File.dirname(file.url), "index.html");
-  end
-  
-  def icon_url
-    File.join(File.dirname(file.url), "icon.png");
-  end
-  
 protected
+  
+  def parse_config
+      Zip::ZipFile.open(file.queued_for_write[:original].path) { |zip_file|
+        entry = zip_file.find_entry("config.xml")
+        config_dom = REXML::Document.new(entry.get_input_stream)
+        index_url = config_dom.root.elements['content'].attribute("src").to_s
+        if (!index_url.match(/http:\/\/.*/))
+          index_url = File.join(File.dirname(file.url), config_dom.root.elements['content'].attribute("src").to_s)
+        end
+        self.properties = {}        
+        self.properties[:content] = config_dom.root.elements['content'].attribute("src").to_s
+        self.properties[:width] = config_dom.root.attribute("width").to_s
+        self.properties[:height] = config_dom.root.attribute("height").to_s      
+        self.properties[:index_url] = index_url
+        self.properties[:icon_url] = File.join(File.dirname(file.url), "icon.png")
+
+      }
+  end
   
   def keep_zip_file_for_write
     @zip_file = file.queued_for_write[:original]

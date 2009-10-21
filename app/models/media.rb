@@ -10,11 +10,13 @@
 #  file_updated_at   :datetime
 #  created_at        :datetime
 #  updated_at        :datetime
+#  properties        :text
 #
 
 class Media < ActiveRecord::Base
   has_uuid
-
+  serialize :properties
+  
   # no more used
   UB_THUMBNAIL_DESKTOP_TYPE = 'application/vnd.mnemis-uniboard-thumbnail'
   UB_PAGE_TYPE = 'application/vnd.mnemis-uniboard-page'

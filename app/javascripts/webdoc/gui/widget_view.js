@@ -78,7 +78,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   stopEditing: function() {
     this.domNode.removeClass("item_edited");
-    this.domNode.removeClass("item_edited");
     this.domNode.css({
       zIndex: "0"
     });

@@ -28,7 +28,7 @@ WebDoc.WidgetLibraryController = $.klass({
       ddd(widget);
       var widgetItem = $("<img/>").attr({
         id: widget.uuid(),
-        src: widget.data.icon,
+        src: widget.data.properties.icon_url,
       }).addClass("widget_item");
       var widgetListItem = $("<li/>").append(widgetItem);
       this.domNode.find("ul").append(widgetListItem);
@@ -43,7 +43,7 @@ WebDoc.WidgetLibraryController = $.klass({
     ddd("start drag");
     ddd($(e.target));
     ddd(this.widgets[$(e.target).attr("id")]);
-    e.originalEvent.dataTransfer.setData('application/ub-widget', this.widgets[e.target.id].data.index);
+    e.originalEvent.dataTransfer.setData('application/ub-widget', $.toJSON(this.widgets[e.target.id].data));
   }
 });
 

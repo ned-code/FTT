@@ -35,15 +35,21 @@ $.extend(WebDoc.DrageAndDropController,{
     var ubImage = evt.originalEvent.dataTransfer.getData('application/ub-image');    
     
     if (widget) {
+      var widgetData = $.evalJSON(widget);
       var newItem = new WebDoc.Item();
+      var width = 200, height = 200;
+      if (widgetData.properties.width) {
+        width = widgetData.properties.width;
+        height = widgetData.properties.height;
+      }
       newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
       newItem.data.data.tag = "iframe";
-      newItem.data.data.src = widget;
+      newItem.data.data.src = widgetData.properties.index_url;
       newItem.data.data.css = {
         top: pos.y + "px",
         left: pos.x + "px",
-        width: "200px",
-        height: "200px"
+        width: width + "px",
+        height: height + "px"
       };
       newItem.recomputeInternalSizeAndPosition();
       WebDoc.application.boardController.insertItems([newItem]);   
