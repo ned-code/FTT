@@ -127,4 +127,8 @@ WebDoc.Item = $.klass(MTools.Record,
       this.save();
     }
   },
+  
+  setPenColor: function(color) {
+    WebDoc.application.drawingTool.penColor = color;   
+  }
 });
