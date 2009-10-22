@@ -93,7 +93,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       if (this.item.data.data.innerHTML) {
         var doc = this.domNode.get(0).contentDocument;
         doc.open();
-        doc.write(this.item.data.data.innerHTML);
+        doc.write("<html><head>" + this.item.data.data.innerHTML) + "</head><body></body></html>";
         doc.close();  
         //$(doc).find("body").append($()[0]);
       }
