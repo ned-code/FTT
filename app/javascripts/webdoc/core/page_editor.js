@@ -193,31 +193,6 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController.deleteSelection();
   },
   
-  insertImage: function() {
-    console.log("insert image");
-    var newItem = new WebDoc.Item();
-    newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
-    newItem.data.data.tag = "img";
-    newItem.data.data.src = "/images/image_view_test.png";
-    newItem.data.data.css = { top: "225px", left: "600px", width: "150px", height: "150px"};   
-    newItem.recomputeInternalSizeAndPosition();
-    WebDoc.application.boardController.insertItems([newItem]);
-    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-  },
-  
-  insertWidget: function() {
-    console.log("insert widget");
-    var newItem = new WebDoc.Item();
-    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-    newItem.data.data.tag = "iframe";
-    newItem.data.data.src = "/widgets/VideoPicker.wgt/index.html";
-    //newItem.data.data.src = "/widgets/Anyembed/index.html";
-    newItem.data.data.css = { top: "100px", left: "100px", width: "426px", height: "630px"};
-    newItem.recomputeInternalSizeAndPosition();
-    WebDoc.application.boardController.insertItems([newItem]);   
-    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
-  },
-  
   inserthtmlSnipplet: function(e) {
     e.preventDefault();
     console.log("insert snipplet");
@@ -229,14 +204,6 @@ WebDoc.PageEditor = $.klass({
     newItem.recomputeInternalSizeAndPosition();
     WebDoc.application.boardController.insertItems([newItem]);
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
-  },
-  
-  toggleImageLib: function() {
-    WebDoc.application.imageLibraryController.toggle();
-  },
-  
-  toggleWidgetLib: function() {
-    WebDoc.application.widgetLibraryController.toggle();
   },
   
   applyPageCss: function(e) {
