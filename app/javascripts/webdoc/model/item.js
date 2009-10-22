@@ -68,16 +68,17 @@ WebDoc.Item = $.klass(MTools.Record,
   setInnerHtml: function(html) {
     if (html != this.data.data.innerHTML) {
       this.data.data.innerHTML = html;
+      this.save();
       if (html.indexOf("<script") != -1) {
         ddd("replace tag");
         this.data.data.tag = "iframe";
-        //this.data.data.src = this.rootUrl() + "/items/" + this.uuid();
+        this.data.data.src = this.rootUrl() + "/items/" + this.uuid() + "?fullHTML=true";
         this.fireDomNodeChanged();
       }
       else {
         this.fireInnerHtmlChanged();
       }
-      this.save();
+
     }
   },
   

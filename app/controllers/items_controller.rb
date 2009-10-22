@@ -2,6 +2,15 @@ class ItemsController < ApplicationController
   before_filter :login_required
   before_filter :instantiate_document_and_page
   
+  def show
+    @item = @page.items.find(params[:id])
+    if (params[:fullHTML])
+      render :text => "<html><head></head><body>#{@item[:data][:innerHTML]}</body>"
+    else
+      render :text => @item[:data][:innerHTML]
+    end
+  end
+  
   # POST /documents/:document_id/pages/:page_id/items
   def create
     if (params[:item][:data])
