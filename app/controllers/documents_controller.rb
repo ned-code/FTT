@@ -1,13 +1,17 @@
 class DocumentsController < ApplicationController
   before_filter :login_required
   
+  def index_page
+    @documents = Document.all
+    render :action => "index"
+  end
+  
   # GET /documents
   def index
     @documents = Document.all
     
     respond_to do |format|
-      format.html
-      format.json { render :json => @documents }
+      format.json { render :json => @documents }      
     end
   end
   

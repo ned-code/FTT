@@ -1,7 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
   SprocketsApplication.routes(map)
+  map.connect 'documents/index_page', :controller => 'documents', :action => 'index_page', :conditions => { :method => :get }
+  map.root :controller => 'documents', :action => 'index_page'
   
-  map.root :controller => 'documents', :action => 'index'
   map.resources :documents, :has_many => { :pages => :items }
   
   map.resources :users, :except => :new
