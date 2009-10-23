@@ -320,18 +320,18 @@ WebDoc.BoardController = $.klass({
       this.currentPage.addItem(item);
       item.isNew = true;
       item.save();
-    }
-.pBind(this));
+    }.pBind(this));
     
+    /*
     if (items.length > 0) {
       var itemViewToSelect = this.pageView.itemViews[items[0].uuid()];
       this.selectItemViews([itemViewToSelect]);
     }
+    */
     
     WebDoc.application.undoManager.registerUndo(function() {
       this.removeItems(items);
-    }
-.pBind(this));
+    }.pBind(this));
   },
   
   removeItems: function(items) {

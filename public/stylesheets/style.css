@@ -129,6 +129,10 @@ a:hover { color: #000; background-color:#fff; }
     margin-right: 3px;
 }
 
+#toolbar_2 #lib_view {
+    float: right;
+    margin-right: 0px;
+}
 #content{
     min-width: 600px;
     margin-top: 10px;
@@ -213,7 +217,7 @@ a:hover { color: #000; background-color:#fff; }
 #image_library_wrap {
   overflow:auto;
   width: 285px;
-  height: 120px; 
+  height: 50%; 
   margin:10px 0;  
   background-color:#ebebeb;
 }
@@ -237,7 +241,7 @@ a:hover { color: #000; background-color:#fff; }
 #widget_library_wrap {
   overflow:auto;
   width: 285px;
-  height: 120px; 
+  height: 50%; 
   margin:10px 0;  
   background-color:#ebebeb;
 }

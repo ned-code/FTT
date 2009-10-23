@@ -38,41 +38,45 @@
         %img{ :src => "/images/icons/delete.png", :alt =>"Remove"}     
   %ul
     %li#zoom-in
-      %a{ :href => "#" , :title => "Zoom In"}
+      %a{ :href => "" , :title => "Zoom In"}
         %img{ :src => "/images/icons/zoom_in.png", :alt =>"Zoom in"}
     %li#zoom-out
-      %a{ :href => "#" , :title => "Zoom Out"}
+      %a{ :href => "" , :title => "Zoom Out"}
         %img{ :src => "/images/icons/zoom_out.png", :alt =>"Zoom Out"}
     %li#tool_hand
-      %a{ :href => "#" , :title => "Pan"}
+      %a{ :href => "" , :title => "Pan"}
         %img{ :src => "/images/icons/pan.png", :alt =>"Pan"}
   %ul        
     %li#undo
-      %a{ :href => "#" , :title => "Enter full screen mode"}
+      %a{ :href => "" , :title => "Enter full screen mode"}
         %img{ :src => "/images/icons/undo.png", :alt =>"Undo"}
     %li#redo
-      %a{ :href => "#" , :title => "#"}
+      %a{ :href => "" , :title => "#"}
         %img{ :src => "/images/icons/redo.png", :alt =>"Redo"}      
   %ul
     %li#previous-page
-      %a{ :href => "#" , :title => "Arrow Left"}
+      %a{ :href => "" , :title => "Arrow Left"}
         %img{ :src => "/images/icons/arrow_left.png", :alt =>"Arrow Left"}
     %li
-      %a{ :href => "#" , :title => "Browse"}
+      %a{ :href => "" , :title => "Browse"}
         %img{ :src => "/images/icons/browse.png", :alt =>"Browse"}
     %li#next-page
-      %a{ :href => "#" , :title => "Arrow Right"}
-        %img{ :src => "/images/icons/arrow_right.png", :alt =>"Arrow Right"}      
+      %a{ :href => "" , :title => "Arrow Right"}
+        %img{ :src => "/images/icons/arrow_right.png", :alt =>"Arrow Right"}     
+  %ul#lib_view
+    %li
+      %a{ :href => ""}
+        %img{ :src => "/images/icons/library.png", :alt => "Show Library"}         
 #content
   #right_bar
     #inspector      
       %h3
-        %a{ :href => "#" } Page inspector
+        %a{ :href => "" } Page inspector
       //%iframe#chat{:src => "http://o.aolcdn.com/aim/gromit/aim_express/gm/090918.2.3893.en-us/WidgetMain.html"}
       #page_inspector
         %textarea#page_css_editor 
       %h3
-        %a{ :href => "#" } Palette
+        %a{ :href => "" } Palette
       #palette_inspector
         #palette_text
           %ul{ :style => "display:block" }
@@ -137,7 +141,7 @@
         #palette_empty
           %center Empty             
       %h3
-        %a{ :href => "#" } Properties
+        %a{ :href => "" } Properties
       #properties_inspector
         #default_properties
           %div.top
@@ -159,10 +163,11 @@
       #html_inspector
         %textarea#selected_item_html_editor  
 
-    #image_library_wrap{ :style => "display: none" }
-      %ul
-    #widget_library_wrap{ :style => "display: none" }
-      %ul          
+    #libraries{ :style => "display: none" }
+      #image_library_wrap
+        %ul
+      #widget_library_wrap
+        %ul          
   #board_container
 :javascript
   $(function()

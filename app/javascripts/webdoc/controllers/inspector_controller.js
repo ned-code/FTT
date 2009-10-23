@@ -27,25 +27,33 @@ WebDoc.InspectorController = $.klass({
     this.currentInspectorId = 0;
     WebDoc.application.boardController.addSelectionListener(this);
     $("#inspector").accordion({
-      clearStyle: true,
       change: function(event, ui) {
         if (this.currentInspectorId > 0) {
           this.lastInspectorId = this.currentInspectorId;
         }
         this.currentInspectorId = $.inArray(ui.newContent.parent()[0], this.inspectors);
-      }
-.pBind(this)
+      }.pBind(this)
     });
   },
   
   selectInspector: function(inspectorId) {
-    ddd("select inspector " + inspectorId);
-    $("#inspector").accordion("activate", inspectorId);
+    if ($("#inspector").css("display") == "none") {
+      $("#libraries").slideToggle("fast");
+      $("#inspector").slideToggle("fast", function() {
+        ddd("select inspector " + inspectorId);
+        $("#inspector").accordion("activate", inspectorId);        
+      });
+    }
+    else {
+      ddd("select inspector " + inspectorId);
+      $("#inspector").accordion("activate", inspectorId);
+    }
+
   },
   
   selectPalette: function(paletteId) {
-    this.updatePalette(paletteId);
-    this.selectInspector(1);
+      this.updatePalette(paletteId);
+      this.selectInspector(1);
   },
   
   updatePalette: function(paletteId) {
@@ -60,8 +68,18 @@ WebDoc.InspectorController = $.klass({
     ddd("selected item ");
     ddd(WebDoc.application.boardController.selection);
     if (WebDoc.application.boardController.selection.length > 0) {
-      if (this.currentInspectorId < 1) {
-        this.selectInspector(this.lastInspectorId);
+      if ($("#inspector").css("display") == "none") {
+        $("#libraries").slideToggle("fast");
+        $("#inspector").slideToggle("fast", function() {
+          if (this.currentInspectorId < 1) {
+            this.selectInspector(this.lastInspectorId);
+          }      
+        }.pBind(this));        
+      }
+      else {
+        if (this.currentInspectorId < 1) {
+          this.selectInspector(this.lastInspectorId);
+        }
       }
       var html = WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
       if (html) {

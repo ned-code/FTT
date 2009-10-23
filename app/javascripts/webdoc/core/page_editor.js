@@ -60,8 +60,7 @@ WebDoc.PageEditor = $.klass({
     $("#page_css_editor").bind("blur", this.applyPageCss);
     $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);
     $("#remove_selection").bind("click", this.deleteItem);
-    $("#image_lib").bind("click", this.toggleImageLib);
-    $("#widget_lib").bind("click", this.toggleWidgetLib);
+    $("#lib_view").bind("click", this.toggleLib);
     
     $("#html_snipplet").bind("click", this.inserthtmlSnipplet);
     
@@ -230,5 +229,11 @@ WebDoc.PageEditor = $.klass({
       }
     }
   },
+  
+  toggleLib: function(e) {
+    e.preventDefault();
+    $("#inspector").slideToggle("fast");
+    $("#libraries").slideToggle("fast");
+  }
 });
 
