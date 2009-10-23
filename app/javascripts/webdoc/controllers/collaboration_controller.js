@@ -35,7 +35,7 @@ WebDoc.CollaborationController = $.klass(
     
     clear: function(page)
     {
-        console.log("send clear to server");
+        ddd("send clear to server");
         var data = 
         {
             uuid: page.uuid()
@@ -45,13 +45,13 @@ WebDoc.CollaborationController = $.klass(
     
     addItem: function(item)
     {
-        console.log("send add to server");
+        ddd("send add to server");
         this.moveItem(item);
     },
     
     removeItem: function(item)
     {
-        console.log("send remove to server");
+        ddd("send remove to server");
         var itemData = item.getData();
         var data = 
         {
@@ -63,7 +63,7 @@ WebDoc.CollaborationController = $.klass(
     
     moveItem: function(item)
     {
-        console.log("send move to server");
+        ddd("send move to server");
         var data = item.getData();
         this.sendRequest(data, 'overwrite');
     },
@@ -85,11 +85,11 @@ WebDoc.CollaborationController = $.klass(
             dataType: "html",
             success: function(msg)
             {
-                console.log("success " + msg);
+                ddd("success " + msg);
             },
             error: function(msg)
             {
-                console.log("error " + msg);
+                ddd("error " + msg);
             }
         });
     },
@@ -100,21 +100,21 @@ WebDoc.CollaborationController = $.klass(
     
     onclose: function(code)
     {
-        console.log("connection closed: " + code);
+        ddd("connection closed: " + code);
     },
     
     onerror: function(error)
     {
-        console.log("connection error: " + error);
+        ddd("connection error: " + error);
     },
     
     onerrorframe: function(frame)
     {
-        console.log("onerrorframe: " + frame.body);
+        ddd("onerrorframe: " + frame.body);
     },
     onconnectedframe: function()
     {
-        console.log("Connected to collaboration server");
+        ddd("Connected to collaboration server");
         WebDoc.application.boardController.collaborationController.stomp.subscribe(WebDoc.application.boardController.collaborationController.page.uuid(), 
         {
             exchange: ''
@@ -123,7 +123,7 @@ WebDoc.CollaborationController = $.klass(
     
     onmessageframe: function(frame)
     {
-        console.log("recieve message" + frame.body);
+        ddd("recieve message" + frame.body);
         var message = $.evalJSON(frame.body);
         if (message.ubApplicationId != WebDoc.application.viewer.applicationUuid) 
         {

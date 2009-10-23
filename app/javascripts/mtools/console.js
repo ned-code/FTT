@@ -3,13 +3,11 @@
  */
 var console;
 
-if (!console) {
-  console = {
-    log: function(message) {;}
-  };
-}
-
 function ddd() {
-  console.log.apply(console, arguments);
+  
+  if (console && console.log) {
+    console.log.apply(console, arguments);
+  }
+  
 }
 

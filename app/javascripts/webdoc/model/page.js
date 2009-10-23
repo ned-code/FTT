@@ -97,7 +97,7 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   toggleBkg: function() {
-    console.log("toggle");
+    ddd("toggle");
     var previousColor = this.data.data.css.backgroundColor;
     var newColor = "white";
     if (previousColor == "white") {

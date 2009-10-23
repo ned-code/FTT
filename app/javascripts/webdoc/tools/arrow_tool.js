@@ -17,7 +17,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
   
   select: function(e) {
     var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-    console.log("must select item at point " + mappedPoint.x + ":" + mappedPoint.y);    
+    ddd("must select item at point " + mappedPoint.x + ":" + mappedPoint.y);    
     var objectToSelect = WebDoc.application.boardController.pageView.findObjectAtPoint(mappedPoint);
     ddd(e.target.id);
     if (e.target.nodeName == "polyline") {
@@ -27,8 +27,8 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool,
       itemView: objectToSelect,
       event: e
     };
-    console.log("found object");
-    console.log(objectToSelect);
+    ddd("found object");
+    ddd(objectToSelect);
     if (!(objectToSelect && WebDoc.application.boardController.editingItem == objectToSelect)) {
       if (objectToSelect) {
         WebDoc.application.boardController.selectItemViews([objectToSelect], e);

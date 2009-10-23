@@ -15,18 +15,18 @@ WebDoc.application = {};
 
 WebDoc.DocumentEditor = $.klass(
 {
-    documents: [],
-    documentList: null,
-    filter: undefined,
     initialize: function()
     {
+        this.documents = [];
+        this.documentList = null;
+        this.filter = undefined;
         WebDoc.application.documentEditor = this;
         WebDoc.application.undoManager = new MTools.UndoManager();
     },
     
     start: function()
     {
-        console.log("Start Document editor");
+        ddd("Start Document editor");
         var that = this;
         $("#wb-create-document-button").bind("click", this.createDocument);
         $(".wb-document-edit").live("click", this.editDocument);
@@ -79,7 +79,7 @@ WebDoc.DocumentEditor = $.klass(
             {
                 Save: function()
                 {
-                    console.log("edit doc with title " + $("#wb-edit-document-name").val());
+                    ddd("edit doc with title " + $("#wb-edit-document-name").val());
                     $(this).dialog('close');
                     that.editedDocument.setTitle($("#wb-edit-document-name").val());
 					that.editedDocument.save(function(persitedDoc)

@@ -12,6 +12,7 @@ MTools.UndoManager = $.klass(
     },
     registerUndo: function(undoCommand)
     {
+      ddd("register undo");
         if (this.isUndoing)
         {
             this.redoStack.push(undoCommand);

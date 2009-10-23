@@ -41,7 +41,7 @@ WebDoc.SvgRenderer = $.klass(
   },
   
   clearSurface: function(surface) {
-    console.log(surface);
+    ddd(surface);
     while (surface.firstChild) {
       var element = surface.firstChild;
       surface.removeChild(element);

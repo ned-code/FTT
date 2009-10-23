@@ -5,7 +5,7 @@ MTools.ServerManager = $.klass(
 {
     initialize: function()
     {
-        console.log("Init server manager");
+        ddd("Init server manager");
     }
 });
 
@@ -50,7 +50,8 @@ $.extend(MTools.ServerManager,
             },
             error: function(XMLHttpRequest, textStatus, errorThrown)
             {
-                console.log("error " + textStatus);
+                ddd("error " + textStatus + " " + errorThrown);
+                ddd(XMLHttpRequest);
                 callback.call(context, {});
             }
         });

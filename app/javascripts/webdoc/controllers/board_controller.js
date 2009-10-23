@@ -104,7 +104,7 @@ WebDoc.BoardController = $.klass({
   },
   
   setCurrentTool: function(tool) {
-    console.log(tool);
+    ddd(tool);
     this.currentTool = tool;
     this.currentTool.selectTool();
     // this.unselectItemViews(this.selection);
@@ -166,7 +166,7 @@ WebDoc.BoardController = $.klass({
   },
   
   unselectAll: function() {
-    console.log("unselect all. selection size " + this.selection.length);
+    ddd("unselect all. selection size " + this.selection.length);
     this.selectItemViews([]);
   },
   
@@ -202,7 +202,7 @@ WebDoc.BoardController = $.klass({
   
     var previousZoom = this.currentZoom;
     this.currentZoom = this.currentZoom * factor;
-    console.log("set zoom factor: " + this.currentZoom);
+    ddd("set zoom factor: " + this.currentZoom);
     var boardElement = $("#board");
     
     if (jQuery.browser.mozilla) {
@@ -211,7 +211,7 @@ WebDoc.BoardController = $.klass({
     }
     else 
       if (jQuery.browser.safari) {
-        console.log("apply webkit transform");
+        ddd("apply webkit transform");
         if (!this.initialSize) {
           this.initialSize = {
             width: parseFloat(boardElement.css("width").replace("px", "")) + 2,
@@ -240,7 +240,7 @@ WebDoc.BoardController = $.klass({
       }
       else 
         if (jQuery.browser.msie) {
-          console.log("apply ie transform " + this.currentZoom + " " + this.initialWidth * this.currentZoom + " " + this.initialHeight * this.currentZoom);
+          ddd("apply ie transform " + this.currentZoom + " " + this.initialWidth * this.currentZoom + " " + this.initialHeight * this.currentZoom);
           if ((previousZoom >= 1 && factor > 1) || (this.currentZoom >= 1 && factor < 1)) {
             boardElement.css("width", this.initialWidth * this.currentZoom);
             boardElement.css("height", this.initialHeight * this.currentZoom);
