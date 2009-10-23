@@ -51,6 +51,7 @@ WebDoc.Item = $.klass(MTools.Record,
       width: parseFloat(w.replace("px", "")),
       height: parseFloat(h.replace("px", ""))
     };
+    WebDoc.application.inspectorController.refreshProperties();    
   },
   
   moveTo: function(newPosition) {

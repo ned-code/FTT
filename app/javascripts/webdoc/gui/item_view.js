@@ -111,31 +111,6 @@ WebDoc.ItemView = $.klass({
     this.domNode.html(this.item.data.data.innerHTML);
   },
   
-  
-  moveTo: function(position) {
-    this.item.position.left = position.left;
-    this.item.position.top = position.top;
-    this.item.data.data.css.left = this.item.position.left + "px";
-    this.item.data.data.css.top = this.item.position.top + "px";
-    this.domNode.css({
-      top: this.item.data.data.css.top,
-      left: this.item.data.data.css.left
-    });
-    this.resetHandles();
-  },
-  
-  resizeTo: function(size) {
-    this.item.size.width = size.width;
-    this.item.size.height = size.height;
-    this.item.data.data.css.width = this.item.size.width + "px";
-    this.item.data.data.css.height = this.item.size.height + "px";
-    this.domNode.css({
-      width: this.item.data.data.css.width,
-      height: this.item.data.data.css.height
-    });
-    this.resetHandles();
-  },
-  
   isSelected: function() {
     return this.selectionNode.parent().length > 0;
   },
@@ -146,7 +121,7 @@ WebDoc.ItemView = $.klass({
       lastSelectedObjectMouseDownEvent.preventDefault();
     }
     if (!this.isSelected()) {
-      console.log("ItemView: select item " + this.item.uuid());
+      ddd("ItemView: select item " + this.item.uuid());
       this.domNode.addClass("item_selected");
       WebDoc.application.boardController.pageView.itemDomNode.append(this.selectionNode.get(0));
       WebDoc.application.boardController.pageView.itemDomNode.append(this.resizeNode.get(0));
@@ -172,7 +147,7 @@ WebDoc.ItemView = $.klass({
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           ui.position.left = mappedPoint.x - this.dragOffsetLeft;
           ui.position.top = mappedPoint.y - this.dragOffsetTop;
-          this.moveTo(ui.position);
+          this._moveTo(ui.position);
         }.pBind(this)        ,
         stop: function(e, ui) {
           this.item.save();
@@ -191,8 +166,9 @@ WebDoc.ItemView = $.klass({
           this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
           var currentSize = {};
           $.extend(currentSize, this.item.size);
+          ddd("current size" + currentSize.width);
           WebDoc.application.undoManager.registerUndo(function() {
-            WebDoc.ItemView._restoreSize(currentSize);
+            WebDoc.ItemView._restoreSize(this.item, currentSize);
           }.pBind(this));
         }.pBind(this)        ,
         resize: function(e, ui) {
@@ -201,7 +177,7 @@ WebDoc.ItemView = $.klass({
           var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y);
           ui.size.width = newWidth;
           ui.size.height = newHeight;
-          this.resizeTo(ui.size);
+          this._resizeTo(ui.size);
         }.pBind(this)        ,
         stop: function(e, ui) {
           this.item.save();
@@ -221,7 +197,33 @@ WebDoc.ItemView = $.klass({
   },
   
   createSelectedFrame: function() {
-  }
+  },
+  
+  _moveTo: function(position) {
+    this.item.position.left = position.left;
+    this.item.position.top = position.top;
+    this.item.data.data.css.left = this.item.position.left + "px";
+    this.item.data.data.css.top = this.item.position.top + "px";
+    this.domNode.css({
+      top: this.item.data.data.css.top,
+      left: this.item.data.data.css.left
+    });
+    this.resetHandles();
+    WebDoc.application.inspectorController.refreshProperties();
+  },
+  
+  _resizeTo: function(size) {
+    this.item.size.width = size.width;
+    this.item.size.height = size.height;
+    this.item.data.data.css.width = this.item.size.width + "px";
+    this.item.data.data.css.height = this.item.size.height + "px";
+    this.domNode.css({
+      width: this.item.data.data.css.width,
+      height: this.item.data.data.css.height
+    });
+    this.resetHandles();
+    WebDoc.application.inspectorController.refreshProperties();
+  },  
 });
 
 $.extend(WebDoc.ItemView, {

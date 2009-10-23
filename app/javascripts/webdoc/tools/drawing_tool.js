@@ -28,9 +28,8 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
 
   selectTool: function() {
       WebDoc.application.boardController.unselectAll();
-      $("#inspector_tabs").tabs("enable", 0);      
-      $("#inspector_tabs").tabs("select", 0);
-      WebDoc.application.inspectorController.selectInspector(2);      
+      WebDoc.application.inspectorController.selectPalette(2);
+      //window.setTimeout("WebDoc.application.inspectorController.selectPalette(2);", 400);            
   },
   
   mouseDown: function(e) {
@@ -56,7 +55,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   beginDraw: function(e) {
     var uuid = new MTools.UUID();
     var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-    console.log("begin draw at point " + mappedPoint.x + ":" + mappedPoint.y);
+    ddd("begin draw at point " + mappedPoint.x + ":" + mappedPoint.y);
 
     this.currentDrawObject = new WebDoc.Item();
     this.currentDrawObject.data.media_type = WebDoc.ITEM_TYPE_DRAWING;

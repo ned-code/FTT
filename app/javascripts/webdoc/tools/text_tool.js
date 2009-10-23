@@ -42,6 +42,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     WebDoc.application.boardController.unselectAll();  
     this.newTextBox();
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+    $("#inspector").accordion( 'activate',1);
   },
   
   newTextBox: function() {
@@ -192,8 +193,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
 
   bindPalette: function() { 
-    this.paletteEl = $(this.paletteId);
-    this.paletteOverlayEl = this.paletteEl.find(".palette_overlay");
+    this.paletteEl = $(this.Id);
+    this.paletteOverlayEl = this.paletteEl.find("#palette_overlay");
 
     // events handler for palette clicks
     this.paletteEl.bind("click", function(event) {

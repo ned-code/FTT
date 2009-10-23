@@ -64,24 +64,20 @@ WebDoc.PageEditor = $.klass({
     $("#widget_lib").bind("click", this.toggleWidgetLib);
     
     $("#html_snipplet").bind("click", this.inserthtmlSnipplet);
-    WebDoc.application.boardController.addSelectionListener(this);
     
     var height = window.innerHeight - $("#board_container").offset().top;
     $("#board_container").height(height -10);
-    $("#inspector").height(height -10);
+    $("#right_bar").height(height -10);
     $(window).bind("resize", function() {
       var height = window.innerHeight - $("#board_container").offset().top;
       $("#board_container").height(height -10);
-      $("#inspector").height(height -10);
+      $("#right_bar").height(height -10);      
       WebDoc.application.boardController.centerBoard();
     }.pBind(this));
     
     if (MTools.Browser.WebKit) {
        $("#board_container").css("marginRight", "0px");       
-    }
-    
-    $("#inspector_tabs").tabs();
-    
+    }    
   },
 
   load: function(documentId) {
@@ -195,7 +191,7 @@ WebDoc.PageEditor = $.klass({
   
   inserthtmlSnipplet: function(e) {
     e.preventDefault();
-    console.log("insert snipplet");
+    ddd("insert snipplet");
     var newItem = new WebDoc.Item();
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
     newItem.data.data.tag = "div";
@@ -234,28 +230,5 @@ WebDoc.PageEditor = $.klass({
       }
     }
   },
-  
-  selectionChanged: function() {
-    ddd("selected item ");
-    ddd( WebDoc.application.boardController.selection);
-    if (WebDoc.application.boardController.selection.length > 0) {
-      $("#inspector_tabs").tabs("enable", 0);
-      $("#inspector_tabs").tabs("enable", 1);
-      var html =  WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
-      if (html) {
-        $("#selected_item_html_editor").get(0).value =html;
-      }
-      else {
-        $("#selected_item_html_editor").get(0).value = "";
-      }
-      WebDoc.application.inspectorController.selectInspector(WebDoc.application.boardController.selection[0].inspectorId())
-    }
-    else {
-      WebDoc.application.inspectorController.selectInspector(0)      
-      $("#selected_item_html_editor").get(0).value = "";
-      $("#inspector_tabs").tabs("disable", 0);
-      $("#inspector_tabs").tabs("disable", 1);
-    }
-  }
 });
 

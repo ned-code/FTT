@@ -23,7 +23,7 @@ body {
 
 a { color: #000; }
 a:visited { color: #666; }
-a:hover { color: #fff; background-color:#000; }
+a:hover { color: #000; background-color:#fff; }
 
 .navigation li {
   float: left;
@@ -95,6 +95,7 @@ a:hover { color: #fff; background-color:#000; }
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border: 2px solid #dfdfdf;
+    background-color: #ebebeb;    
 }
 
 .toolbar ol, .toolbar ul {
@@ -110,16 +111,14 @@ a:hover { color: #fff; background-color:#000; }
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
 }
+
 #toolbar_1{
-    background-color: #ebebeb;
     margin-bottom:5px;
 }
 #toolbar_1 #settings {
     float: right;
 }
-#toolbar_2{
-    background-color: #ebebeb;
-}
+
 #toolbar_2 ul{
     float: left;
     margin-right: 80px;
@@ -129,17 +128,17 @@ a:hover { color: #fff; background-color:#000; }
     float: left;
     margin-right: 3px;
 }
+
 #content{
     min-width: 600px;
     margin-top: 10px;
 }
 
-#inspector{
+#right_bar{
     overflow:auto;
     float: right;
     width: 300px;
-    border: 2px solid #dfdfdf;
-    padding-left: 5px;
+    background-color: #ebebeb;
 }
 
 #board_container {
@@ -159,23 +158,6 @@ a:hover { color: #fff; background-color:#000; }
   padding:40px;
 }
 
-#inspector_tabs {
-  width:285px;
-}
-
-#empty_inspector {
-  position:relative;
-  background-color:#ebebeb;
-  margin:10px 0;
-  height:120px;  
-}
-
-#pen_inspector {
-  position:relative;
-  background-color:#ebebeb;
-  margin:10px 0;
-  height:120px;  
-}
 
 #colors {
   position:relative;
@@ -215,16 +197,6 @@ a:hover { color: #fff; background-color:#000; }
   margin:5px;
   border:1px solid #000;
 }
-.ui-widget-content {
-  border:0px;
-}
-.ui-tabs {
-  padding:0px;  
-}
-
-.ui-tabs .ui-tabs-panel {
-  padding:0px;  
-}
 
 #chat {
   overflow:auto;
@@ -233,6 +205,8 @@ a:hover { color: #fff; background-color:#000; }
   margin:10px 0;  
   background-color:#ebebeb;  
 }
+
+
 /* ================= */
 /* = Image library = */
 /* ================= */
@@ -282,69 +256,113 @@ a:hover { color: #fff; background-color:#000; }
   width:50px;
   height:50px;
 }
-/* =========== */
-/* = Palette = */
-/* =========== */
-.palette_wrap {
-  position:relative;
-  width:285px;
-  height:120px;
-  margin:10px 0;
+
+/* ====================== */
+/* css and html inspector */
+/* ====================== */
+
+.ui-accordion .ui-accordion-content {
+  padding:0px;
 }
-.palette {
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus {
+  background-color:  #fff;
+}
+
+.ui-state-hover a, .ui-state-hover a:hover {
+  background-color:  #fff;
+}
+
+#inspector {
+  position:relative;
+  overflow:hidden; 
+  background-color:#ebebeb;  
+}
+
+#page_inspector {
+  position:relative;
+  overflow:hidden;
+  padding:1px;  
+}
+
+#page_css_editor {
+  width:100%;
+  height:300px;
+  padding:0px;
+  border:none;
+}
+
+#palette_inspector {
+  position:relative;  
+}
+
+#palette_empty {
+  position:relative;
+  background-color:#ebebeb;
+  height:160px;
+  padding-top:140px;  
+}
+
+#palette_pen {
+  position:relative;
+  background-color:#ebebeb;
+  width:100%;
+  height:300px;  
+}
+
+#html_inspector {
+  position:relative;
+  overflow:hidden;
+  padding:1px;    
+}
+
+#selected_item_html_editor {
+  position:relative;
+  width:100%;
+  height:300px;
+  padding:0px;  
+  border:none;
+}
+
+#palette_text {
   font-size:12px;
-  background:#ccc;
+  background:#ebebeb;
   margin:0;
   width:100%;
-  height:100%;
+  height:300px;
 }
-.palette_overlay {
+#palette_overlay {
   position:absolute;
   top:0;
   left:0;
   width:100%;
-  height:100%;
+  height:300px;
 }
-.palette a {
-  color:#555;
-  text-decoration:none;
+#palette_text ul li a:hover {
+  display: block;
+  background-color: #fff;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
-.palette.disabled a {
-  color:#bbb;
-}
-.palette li {
+
+#palette_text li {
   float:left;
   list-style:none outside;
   margin:5px 20px 0 0;
   padding:2px;
 }
 
-/* ====================== */
-/* css and html inspector */
-/* ====================== */
-
-#page_css_editor_wrap {
-  position:relative;
-  width:285px;
-  height:100px; 
-  margin:10px 0;  
+#properties_inspector {
+  background:#000;
+  background-color: #ebebeb;
+  padding:10px;
+  padding-left:20px;
+  height:300px;
 }
 
-#page_css_editor {
-  width:285px;
-  height:100%;
-}
-
-#selected_item_html_wrap {
-  position:relative;
-  width: 285px;
-  height: 120px; 
-   margin:10px 0;  
-}
-
-#selected_item_html_editor {
+#properties_inspector div {
+  padding-bottom:5px;
   width:100%;
-  height:100%;
 }
 
 /* ============= */
