@@ -37,7 +37,6 @@ a:hover { color: #000; background-color:#fff; }
 }
 
 #wrap {
-  padding:10px;
   /*width:900px;*/
   /*margin:0 auto;*/
   position:relative;
@@ -87,42 +86,53 @@ a:hover { color: #000; background-color:#fff; }
 /* =============== */
 /* = Page editor = */
 /* =============== */
-
-.toolbar {
+#toolbar_1, #toolbar_2{
     min-width: 700px;
-    height: 35px;
-    padding-left: 10px;    
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 2px solid #dfdfdf;
-    background-color: #ebebeb;    
+    padding-left: 10px;
 }
-
-.toolbar ol, .toolbar ul {
-  list-style: none;
+#toolbar_1 ul li,#toolbar_2 ul li{
+    list-style: none;
 }
-.toolbar ul li{
-    float: left;
-    padding-right: 20px;
-}
-.toolbar ul li a:hover{
-    display: block;
-    background-color: #fff;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-}
-
 #toolbar_1{
+    height: 25px;
     margin-bottom:5px;
 }
 #toolbar_1 #settings {
     float: right;
 }
+#toolbar_2{
+    min-width: 700px;
+    height: 45px;
+    background-color: #efefef;
 
+}
 #toolbar_2 ul{
     float: left;
-    margin-right: 80px;
+    margin:3px 25px 3px 0px;
+    padding: 0 25px 0 0;
     overflow:hidden;
+    border-right: 1px solid #AFAFAF;
+}
+#toolbar_2 #lib_view{
+    border-right: none;
+}
+#toolbar_2 ul li{
+    float: left;
+    padding-right: 20px;
+}
+#toolbar_2 ul li:last-child{
+    padding-right: 0;
+}
+#toolbar_2 ul li a{
+    display: block;
+    border: 1px solid #efefef;
+}
+#toolbar_2 ul li a:hover{
+    display: block;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #e6e6e6;
+    background-color: #fff;
 }
 #toolbar_2 #page_browser a{
     float: left;
@@ -134,6 +144,7 @@ a:hover { color: #000; background-color:#fff; }
     margin-right: 0px;
 }
 #content{
+    padding: 0 10px;
     min-width: 600px;
     margin-top: 10px;
 }

@@ -1,41 +1,29 @@
 - title @document.title
-#toolbar_1.toolbar
-  %ul
-    %li#add-page
-      %a{ :href => "#" , :title => "Add a page"}
-        %img{ :src => "/images/icons/add_page.png", :alt =>"Add a page"}
-    %li#remove-page
-      %a{ :href => "#" , :title => "Removecurrent page"}
-        %img{ :src => "/images/icons/page_remove.png", :alt =>"Remove current page"}        
-    %li#full_sreen
-      %a{ :href => "#" , :title => "Enter full screen mode"}
-        %img{ :src => "/images/icons/fullscreen.png", :alt =>"Enter full screen mode"}
-    %li#invite
-      %a{ :href => "#" , :title => "#"}
-        %img{ :src => "/images/icons/collaborate.png", :alt =>"Invite collaborator"}        
+#toolbar_1
+  %img{ :src => "/images/logo.png", :alt =>"Add a page"}
 
   %ul#settings
     %li
       %a{ :href => "#"}
         %img{ :src => "/images/icons/settings.png", :alt => "Document settings"}
 
-#toolbar_2.toolbar
+#toolbar_2
   %ul.container
-    %li#tool_arrow
-      %a{ :href => "#" , :title => "Selection tool"}
-        %img{ :src => "/images/icons/cursor.png", :alt =>"Selection tool"}
-    %li#tool_text
-      %a{ :href => "#" , :title => "Text tool"}
-        %img{ :src => "/images/icons/text.png", :alt =>"Text tool"}
-    %li#tool_pen
-      %a{ :href => "#" , :title => "Pen tool"}
-        %img{ :src => "/images/icons/pen.png", :alt =>"Pen tool"}
-    %li#html_snipplet
-      %a{ :href => "#" , :title => "HTML"}
-        %img{ :src => "/images/icons/code.png", :alt =>"HTML"}   
-    %li#remove_selection
-      %a{ :href => "#" , :title => "Remove"}
-        %img{ :src => "/images/icons/delete.png", :alt =>"Remove"}     
+    %li#add-page
+      %a{ :href => "#" , :title => "Add a page"}
+        %img{ :src => "/images/icons/add_page.png", :alt =>"Add a page"}
+    %li#remove-page
+      %a{ :href => "#" , :title => "Removecurrent page"}
+        %img{ :src => "/images/icons/page_remove.png", :alt =>"Remove current page"}
+    %li#previous-page
+      %a{ :href => "" , :title => "Arrow Left"}
+        %img{ :src => "/images/icons/arrow_left.png", :alt =>"Arrow Left"}
+    %li#next-page
+      %a{ :href => "" , :title => "Arrow Right"}
+        %img{ :src => "/images/icons/arrow_right.png", :alt =>"Arrow Right"}
+    %li
+      %a{ :href => "" , :title => "Browse"}
+        %img{ :src => "/images/icons/browse.png", :alt =>"Browse"}
   %ul
     %li#zoom-in
       %a{ :href => "" , :title => "Zoom In"}
@@ -46,23 +34,29 @@
     %li#tool_hand
       %a{ :href => "" , :title => "Pan"}
         %img{ :src => "/images/icons/pan.png", :alt =>"Pan"}
-  %ul        
+  %ul
+    %li#remove_selection
+      %a{ :href => "#" , :title => "Remove"}
+        %img{ :src => "/images/icons/delete.png", :alt =>"Remove"}
     %li#undo
       %a{ :href => "" , :title => "Enter full screen mode"}
         %img{ :src => "/images/icons/undo.png", :alt =>"Undo"}
     %li#redo
       %a{ :href => "" , :title => "#"}
-        %img{ :src => "/images/icons/redo.png", :alt =>"Redo"}      
+        %img{ :src => "/images/icons/redo.png", :alt =>"Redo"}
   %ul
-    %li#previous-page
-      %a{ :href => "" , :title => "Arrow Left"}
-        %img{ :src => "/images/icons/arrow_left.png", :alt =>"Arrow Left"}
-    %li
-      %a{ :href => "" , :title => "Browse"}
-        %img{ :src => "/images/icons/browse.png", :alt =>"Browse"}
-    %li#next-page
-      %a{ :href => "" , :title => "Arrow Right"}
-        %img{ :src => "/images/icons/arrow_right.png", :alt =>"Arrow Right"}     
+    %li#tool_arrow
+      %a{ :href => "#" , :title => "Selection tool"}
+        %img{ :src => "/images/icons/cursor.png", :alt =>"Selection tool"}
+    %li#html_snipplet
+      %a{ :href => "#" , :title => "HTML"}
+        %img{ :src => "/images/icons/code.png", :alt =>"HTML"}
+    %li#tool_text
+      %a{ :href => "#" , :title => "Text tool"}
+        %img{ :src => "/images/icons/text.png", :alt =>"Text tool"}
+    %li#tool_pen
+      %a{ :href => "#" , :title => "Pen tool"}
+        %img{ :src => "/images/icons/pen.png", :alt =>"Pen tool"}
   %ul#lib_view
     %li
       %a{ :href => ""}
