@@ -88,21 +88,36 @@ a:hover { color: #000; background-color:#fff; }
 /* =============== */
 #toolbar_1, #toolbar_2{
     min-width: 700px;
-    padding-left: 10px;
+    padding:0 10px;
 }
 #toolbar_1 ul li,#toolbar_2 ul li{
     list-style: none;
 }
 #toolbar_1{
     height: 25px;
-    margin-bottom:5px;
+    background:url(../images/deco/tb_small_bg.png) 0 0 repeat-x;
+    margin-bottom: 1px;
 }
 #toolbar_1 #settings {
     float: right;
 }
+#toolbar_1 #settings a{
+    display: block;
+    margin-top: 4px;
+    width: 30px;
+    height: 16px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    background: #fff;
+    border: 1px solid #afafaf;
+}
+#toolbar_1 #settings a img{
+    width:16px;
+    height:16px;
+}
 #toolbar_2{
     min-width: 700px;
-    height: 45px;
+    height: 37px;
     background-color: #efefef;
 
 }
@@ -113,12 +128,9 @@ a:hover { color: #000; background-color:#fff; }
     overflow:hidden;
     border-right: 1px solid #AFAFAF;
 }
-#toolbar_2 #lib_view{
-    border-right: none;
-}
 #toolbar_2 ul li{
     float: left;
-    padding-right: 20px;
+    padding-right:5px;
 }
 #toolbar_2 ul li:last-child{
     padding-right: 0;
@@ -126,6 +138,10 @@ a:hover { color: #000; background-color:#fff; }
 #toolbar_2 ul li a{
     display: block;
     border: 1px solid #efefef;
+}
+#toolbar_2 ul li a img{
+    width:25px;
+    height:25px;
 }
 #toolbar_2 ul li a:hover{
     display: block;
@@ -142,6 +158,8 @@ a:hover { color: #000; background-color:#fff; }
 #toolbar_2 #lib_view {
     float: right;
     margin-right: 0px;
+    padding: 0;
+    border-right: none;
 }
 #content{
     padding: 0 10px;
