@@ -6,8 +6,8 @@
   %ul#tb_1_utilities
     %li#tb_1_utilities_preview
       %a{ :href => "#"}
-        %img{ :src => "/images/icons/hand_pointer.png", :alt =>"Enter use mode"}
-        use mode
+        %img{ :src => "/images/icons/hand_pointer.png", :alt =>"Enter interactive mode"}
+        interactive mode
     %li#tb_1_utilities_docname
       %h2=@document.title
       %span#current_page 3
@@ -18,7 +18,7 @@
         %img{ :src => "/images/icons/settings.png", :alt => "Document settings"}
       %ul#tb_1_utilities_settings_dropdown
         %li
-          %a{ :href => "#"} Save (automatically saved 1 min ago)
+          %a{ :href => "#"} Save
         %li
           %a{ :href => "#"} Presentation mode
         %li
@@ -40,16 +40,16 @@
       %a{ :href => "#" , :title => "Add a page"}
         %img{ :src => "/images/icons/add_page.png", :alt =>"Add a page"}
     %li#remove-page
-      %a{ :href => "#" , :title => "Removecurrent page"}
+      %a{ :href => "#" , :title => "Remove this page"}
         %img{ :src => "/images/icons/page_remove.png", :alt =>"Remove current page"}
     %li#previous-page
-      %a{ :href => "" , :title => "Arrow Left"}
+      %a{ :href => "" , :title => "Previous page"}
         %img{ :src => "/images/icons/arrow_left.png", :alt =>"Arrow Left"}
     %li#next-page
-      %a{ :href => "" , :title => "Arrow Right"}
+      %a{ :href => "" , :title => "Next Page"}
         %img{ :src => "/images/icons/arrow_right.png", :alt =>"Arrow Right"}
     %li
-      %a{ :href => "" , :title => "Browse"}
+      %a{ :href => "" , :title => "Browse pages"}
         %img{ :src => "/images/icons/browse.png", :alt =>"Browse"}
   %ul
     %li#zoom-in
@@ -66,27 +66,27 @@
       %a{ :href => "#" , :title => "Remove"}
         %img{ :src => "/images/icons/delete.png", :alt =>"Remove"}
     %li#undo
-      %a{ :href => "" , :title => "Enter full screen mode"}
+      %a{ :href => "" , :title => "Undo"}
         %img{ :src => "/images/icons/undo.png", :alt =>"Undo"}
     %li#redo
-      %a{ :href => "" , :title => "#"}
+      %a{ :href => "" , :title => "Redo"}
         %img{ :src => "/images/icons/redo.png", :alt =>"Redo"}
   %ul
     %li#tool_arrow
-      %a{ :href => "#" , :title => "Selection tool"}
+      %a{ :href => "#" , :title => "Select"}
         %img{ :src => "/images/icons/cursor.png", :alt =>"Selection tool"}
     %li#html_snipplet
-      %a{ :href => "#" , :title => "HTML"}
-        %img{ :src => "/images/icons/code.png", :alt =>"HTML"}
+      %a{ :href => "#" , :title => "Insert an HTML snippet"}
+        %img{ :src => "/images/icons/code.png", :alt =>"HTML code"}
     %li#tool_text
-      %a{ :href => "#" , :title => "Text tool"}
+      %a{ :href => "#" , :title => "Insert a Text box"}
         %img{ :src => "/images/icons/text.png", :alt =>"Text tool"}
     %li#tool_pen
-      %a{ :href => "#" , :title => "Pen tool"}
+      %a{ :href => "#" , :title => "Draw"}
         %img{ :src => "/images/icons/pen.png", :alt =>"Pen tool"}
   %ul#lib_view
     %li
-      %a{ :href => ""}
+      %a{ :href => "", :title => "Show Library"}
         %img{ :src => "/images/icons/library.png", :alt => "Show Library"}         
 #content
   #right_bar
