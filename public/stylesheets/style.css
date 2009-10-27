@@ -133,6 +133,10 @@ a:hover { color: #000; background-color:#fff; }
 #tb_1_utilities_docname{
     padding-top: 5px;
 }
+#tb_1_utilities_docname span{
+    color: #8F8F8F;
+    margin-left: -2px;
+}
 #tb_1_utilities_docname #current_page{
     font-weight: bold;
 }
@@ -142,7 +146,7 @@ a:hover { color: #000; background-color:#fff; }
 #tb_1_utilities_docname #current_page{
     margin-left: 5px;
 }
-#tb_1_utilities_settings a{
+#tb_1_utilities_settings_trigger{
     display: block;
     height: 18px;
     padding: 0 5px;
@@ -150,6 +154,16 @@ a:hover { color: #000; background-color:#fff; }
     -webkit-border-radius: 5px;
     background: #4D4D4D;
     border: 1px solid #afafaf;
+}
+#tb_1_utilities_settings_dropdown{
+    position: absolute;
+    top: 1px;
+    right: 22px;
+    background:#999;
+    border: 1px solid #4D4D4D;
+}
+#tb_1_utilities_settings_dropdown li{
+    float: none;
 }
 #tb_1_utilities_settings a img{
     vertical-align: bottom;
