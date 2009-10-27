@@ -31,8 +31,9 @@ WebDoc.PageEditor = $.klass({
   applicationUuid: undefined,
   initialize: function() {
     this.applicationUuid = new MTools.UUID().id;
-    WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.pageEditor = this;
+    
+    WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(true);
     WebDoc.application.imageLibraryController = new WebDoc.ImageLibraryController();
     WebDoc.application.widgetLibraryController = new WebDoc.WidgetLibraryController();  
@@ -80,6 +81,7 @@ WebDoc.PageEditor = $.klass({
   },
 
   load: function(documentId) {
+    ddd("load document " + documentId);
     MTools.ServerManager.getObjects("/documents/" + documentId, WebDoc.Document, function(data)
     {
       var editor = WebDoc.application.pageEditor;
@@ -89,14 +91,15 @@ WebDoc.PageEditor = $.klass({
   },
 
   loadPageId: function(documentId, pageId) {
-    this.currentPageId = pageId;
-    MTools.ServerManager.getObjects("/documents/" + documentId + "/pages/" + pageId, WebDoc.Page, function(data)
-    {
-      var editor = WebDoc.application.pageEditor;
-      if (data.length > 0) {
-        editor.loadPage(data[0]);
-      }
-    });
+    var editor = WebDoc.application.pageEditor;
+    ddd("load page id " + pageId);
+    var pageToLoad = editor.currentDocument.findPageWithUuidOrPosition(pageId);
+    ddd("found page");
+    ddd(pageToLoad);
+    if (pageToLoad) {
+      this.currentPageId = pageId;
+      editor.loadPage(pageToLoad);
+    }
   },
 
   loadPage: function(page) {
@@ -105,8 +108,6 @@ WebDoc.PageEditor = $.klass({
     ddd("set hash to current page position");
     window.location.hash = "#" + (page.uuid());
     editor.currentPage = page;
-    editor.previousPageId = editor.currentPage.previousPageId();
-    editor.nextPageId = editor.currentPage.nextPageId();
     
     WebDoc.application.boardController.setCurrentPage(editor.currentPage);
     $("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
@@ -115,16 +116,19 @@ WebDoc.PageEditor = $.klass({
   previous: function(e) {
     e.preventDefault();
     var editor = WebDoc.application.pageEditor;
-    if (editor.currentPage.data.position > 0) 
-    {
-      editor.loadPageId(editor.currentDocument.uuid(), editor.currentPage.data.position);
+    var previousPage = editor.currentDocument.previousPage(editor.currentPage);
+    if (previousPage) {
+      editor.loadPage(previousPage);
     }
   },
 
   next: function(e) {
     e.preventDefault();    
     var editor = WebDoc.application.pageEditor;
-    editor.loadPageId(editor.currentDocument.uuid(), editor.currentPage.data.position + 2);
+    var nextPage = editor.currentDocument.nextPage(editor.currentPage);
+    if (nextPage) {
+      editor.loadPage(nextPage);
+    }
   },
 
   add: function(e) {
@@ -133,11 +137,10 @@ WebDoc.PageEditor = $.klass({
 
     var newPage = new WebDoc.Page();
     newPage.data.document_id = editor.currentDocument.uuid();
-    newPage.data.position = ++editor.currentPage.data.position;
+    newPage.data.position = editor.currentPage.data.position + 1;
     newPage.save(function(status)
     {
-      ddd("load");
-      ddd(this);
+      editor.currentDocument.addPage(newPage, true);
       editor.loadPage(this);
     });
   },
@@ -149,11 +152,17 @@ WebDoc.PageEditor = $.klass({
   remove: function(e) {
     e.preventDefault();
     var editor = WebDoc.application.pageEditor;
-    if (editor.currentPage.data.position > 0) 
+    var pageToDelete = editor.currentPage;
+    if (editor.currentDocument.pages.length > 1) 
     {
       editor.currentPage.destroy(function(objet)
       {
-        editor.loadPageId(editor.currentDocument.uuid(), this.data.position);
+        var newPagePosition = 0;
+        if (pageToDelete.data.position > 0) {
+          newPagePosition = pageToDelete.data.position - 1;
+        }
+        editor.currentDocument.removePage(pageToDelete, true);
+        editor.loadPage(editor.currentDocument.pages[newPagePosition]);
       });
     }
   },

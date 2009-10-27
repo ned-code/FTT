@@ -92,5 +92,11 @@ $.extend(MTools.UUID,
     rand: function(max)
     {
         return Math.floor(Math.random() * (max + 1));
+    },
+    
+    uuidPattern: /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/,
+    
+    isUUID: function(value) {
+      return value.match(MTools.UUID.uuidPattern);
     }
 });

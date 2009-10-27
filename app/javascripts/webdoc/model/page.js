@@ -5,7 +5,6 @@
 WebDoc.Page = $.klass(MTools.Record, 
 {
   initialize: function($super, json) {
-    this.items = [];
     $super(json);
   },
   
@@ -28,12 +27,10 @@ WebDoc.Page = $.klass(MTools.Record,
   refresh: function($super, json) {
     $super(json);
     var that = this;
+    this.items = [];    
     if (this.data.items && $.isArray(this.data.items)) {
       $.each(this.data.items, function() {
-        that.createOrUpdateItem(
-        {
-          item: this
-        });
+        that.createOrUpdateItem({ item: this });
       });
     }    
   },
@@ -75,9 +72,6 @@ WebDoc.Page = $.klass(MTools.Record,
   
   removeItem: function(item) {    
     var index = $.inArray(item, this.items);
-    ddd("item index " + index);
-    ddd(item);
-    ddd("tot number of items:"+this.items.length);
     if (index != -1) {
       this.items.splice(index, 1);
       //ddd(this.items);

@@ -25,7 +25,6 @@ WebDoc.ImageLibraryController = $.klass({
   refreshImageList: function() {    
     for (imageId in this.images) {
       var image = this.images[imageId];
-      ddd(image);
       var imageItem = $("<img/>").attr({
         id: image.uuid(),
         src: image.data.thumb_url,

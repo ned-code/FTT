@@ -25,7 +25,6 @@ WebDoc.WidgetLibraryController = $.klass({
   refreshWidgetList: function() {    
     for (widgetId in this.widgets) {
       var widget = this.widgets[widgetId];
-      ddd(widget);
       var widgetItem = $("<img/>").attr({
         id: widget.uuid(),
         src: widget.data.properties.icon_url,

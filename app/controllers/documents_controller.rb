@@ -1,6 +1,9 @@
 class DocumentsController < ApplicationController
   before_filter :login_required
   
+  # return the html index of documents.
+  # it is not the same action as index because ie does not support to have multiple result type.
+  # GET /douments/index_page
   def index_page
     @documents = Document.all
     render :action => "index"
@@ -11,7 +14,7 @@ class DocumentsController < ApplicationController
     @documents = Document.all
     
     respond_to do |format|
-      format.json { render :json => @documents }      
+      format.json { render :json => @documents}      
     end
   end
   
@@ -20,7 +23,7 @@ class DocumentsController < ApplicationController
     @document = Document.find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render :json => @document }
+      format.json { render :json => @document.to_json(:include => { :pages => { :include => :items} }) }
     end
   end
   

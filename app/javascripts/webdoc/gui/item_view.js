@@ -8,7 +8,6 @@ WebDoc.ItemView = $.klass({
   pageView: null,
   initialize: function(item, pageView) {
   
-    ddd("create item view");
     if (pageView) {
       this.pageView = pageView;
     }
