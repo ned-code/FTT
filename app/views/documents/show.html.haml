@@ -57,7 +57,7 @@
     %li#previous-page
       %a{ :href => "" , :title => "Arrow Left"}
         %img{ :src => "/images/icons/arrow_left.png", :alt =>"Arrow Left"}
-    %li
+    %li#page_browser
       %a{ :href => "" , :title => "Browse"}
         %img{ :src => "/images/icons/browse.png", :alt =>"Browse"}
     %li#next-page
@@ -68,6 +68,9 @@
       %a{ :href => ""}
         %img{ :src => "/images/icons/library.png", :alt => "Show Library"}         
 #content
+  #left_bar
+    #page_browser 
+      %ul 
   #right_bar
     #inspector      
       %h3
