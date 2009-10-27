@@ -133,9 +133,17 @@ a:hover { color: #000; background-color:#fff; }
     float: right;
     margin-right: 0px;
 }
+
+#left_bar {
+    overflow:auto;
+    float: left;
+    width: 0px;
+    background-color: #ebebeb;  
+}
+
 #content{
     min-width: 600px;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 #right_bar{
@@ -147,7 +155,7 @@ a:hover { color: #000; background-color:#fff; }
 
 #board_container {
     height: 100%;
-    margin-right: 320px;
+    margin-right: 305px;
     border: 2px solid #dfdfdf;  
     overflow:hidden;
     background-color: #ebebeb;
@@ -433,7 +441,25 @@ a:hover { color: #000; background-color:#fff; }
 }
 
 
+/* ================= */
+/* = page browser = */
+/* ================= */
 
+.page_thumb {
+  background-color:#FFFFFF;
+  height:100px;
+  margin-bottom:5px;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:5px;
+  width:180px;  
+}
+
+#page_browser ul li {
+  width:200px;
+  height:120px;
+  
+}
 /* ================= */
 /* = Rails default = */
 /* ================= */
