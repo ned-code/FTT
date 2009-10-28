@@ -22,7 +22,7 @@ body {
 }
 
 a { color: #3B9EEF; }
-a:hover { color: #0069BF; background-color:#fff; }
+a:hover { color: #0069BF;}
 
 .sec-action { color: #606060;}
 .sec-action:hover { color: #000; }
@@ -54,8 +54,51 @@ a:hover { color: #0069BF; background-color:#fff; }
 }
 
 #flash {
-  text-align: center ;
+    position: relative;
+    margin: 0 auto;
+    padding: 2px;
+    text-align: center ;
+    width: 300px;
+    background: #8CEF86;
 }
+/* ================= */
+/* = Login page = */
+/* ================= */
+#login_page {
+    position: relative;
+    width:350px;
+    margin: 50px auto 0 auto;
+}
+#login_box {
+    position: relative;
+    width: 350px;
+    margin: 0 auto 0 auto;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 5px solid #9F9F9F;
+    padding: 10px;
+    background: #efefef;
+}
+#login_box h2{
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+#new_user_session div {
+    clear: both;
+    margin-bottom: 15px;
+}
+#new_user_session label {
+    float: left;
+    padding-top:6px;
+}
+#new_user_session input {
+    float: right;
+}
+#remember_me {
+    float: right;
+}
+
 
 /* ================= */
 /* = Document list = */

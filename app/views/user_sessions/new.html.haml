@@ -1,17 +1,21 @@
-%h1=t '.title'
+#login_page
+  %h1
+    %img{ :src => "/images/logo_xl.png", :alt =>"WebDoc logo"}
+  #login_box
+    %h2=t '.title'
 
-= error_messages_for :user_session
-- form_for @user_session do |f|
-  %div
-    = f.label :email
-    = f.text_field :email
-  %div
-    = f.label :password
-    = f.password_field :password
-  %div
-    = f.check_box :remember_me
-    = f.label :remember_me
-  %div
-    = f.submit t('.button')
+    = error_messages_for :user_session
+    - form_for @user_session do |f|
+      %div.clearfix
+        = f.label :email
+        = f.text_field :email
+      %div.clearfix
+        = f.label :password
+        = f.password_field :password
+      %div#remember_me.clearfix
+        = f.check_box :remember_me
+        = f.label :remember_me
+      %div.clearfix
+        = f.submit t('.button')
 
-%p= link_to t('.signup_link'), signup_path
+    %p= link_to t('.signup_link'), signup_path
