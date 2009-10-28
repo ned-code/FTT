@@ -39,8 +39,7 @@ en:
 
   label:
     documents: "Documents"
-    all_items: "All items"
-    by_date: "By date"
+    all_items_by_date: "All items"
     create_new_document: "Create a new document"
     edit_document: "Edit document"
     name: "Name"

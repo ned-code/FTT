@@ -30,13 +30,12 @@ WebDoc.DocumentList = $.klass(
         }
         previousElement.after($("<div id='" + document.uuid() + "' class='wb-document-item'>\
                                                         <div class='wb-document-title'>" +
-        document.title() +
+        '<a class="wb-document-edit" href="" title="Open this document">' + document.title() + '</a>' +
         "</div>\
-                                                        <button class='wb-document-edit ui-button ui-state-default ui-corner-all' href='/documents/" +
-        document.uuid() +
-        "'>edit</button>\
-                                                        <button class='wb-document-rename ui-button ui-state-default ui-corner-all'>rename</button>\
-                                                        <button class='wb-document-delete ui-button ui-state-default ui-corner-all'>delete</button>\
+                                                        <div class='wb-document-actions'>\
+                                                        <a class='wb-document-delete' href='' title='delete'></a>\
+                                                        <a class='wb-document-rename sec-action' href=''>rename</a>\
+                                                        </div>\
                                                       </div>").get(0));
     },
     
@@ -57,11 +56,12 @@ WebDoc.DocumentList = $.klass(
                 var document = this.datasource.document(section, i);
                 this.domNode.append($("<div id='" + document.uuid() + "' class='wb-document-item'>\
                                                         <div class='wb-document-title'>" +
-                document.title() +
+                '<a class="wb-document-edit" href="" title="Open this document">' + document.title() + '</a>' +
                 "</div>\
-                                                        <button class='wb-document-edit ui-button ui-state-default ui-corner-all'>edit</button>\
-                                                        <button class='wb-document-rename ui-button ui-state-default ui-corner-all'>rename</button>\
-                                                        <button class='wb-document-delete ui-button ui-state-default ui-corner-all'>delete</button>\
+                                                        <div class='wb-document-actions'>\
+                                                        <a class='wb-document-delete' href='' title='delete'></a>\
+                                                        <a class='wb-document-rename sec-action' href='' title='rename'>rename</a>\
+                                                        </div>\
                                                       </div>").get(0));
             }
         }

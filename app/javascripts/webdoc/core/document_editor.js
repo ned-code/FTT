@@ -97,7 +97,7 @@ WebDoc.DocumentEditor = $.klass(
     
     editDocument: function()
     {
-        var documentToEdit = $(this).parent().attr("id");
+        var documentToEdit = $(this).parent().parent().attr("id");
         window.open("/documents/" + documentToEdit + "#1");
     },
     
@@ -108,8 +108,9 @@ WebDoc.DocumentEditor = $.klass(
         $("#wb-new-document-dialog").dialog('open');
     },
     
-    renameDocument: function()
+    renameDocument: function(e)
     {
+        e.preventDefault();
         var that = WebDoc.application.documentEditor;
         var documentIdToRename = $(this).parent().attr("id");
         that.editedDocument = that.documentWithId(documentIdToRename);
