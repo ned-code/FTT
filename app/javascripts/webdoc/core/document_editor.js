@@ -95,10 +95,11 @@ WebDoc.DocumentEditor = $.klass(
         });
     },
     
-    editDocument: function()
+    editDocument: function(e)
     {
-        var documentToEdit = $(this).parent().parent().attr("id");
-        window.open("/documents/" + documentToEdit + "#1");
+      e.preventDefault();
+      var documentToEdit = $(this).parent().parent().attr("id");
+      window.open("/documents/" + documentToEdit + "#1");
     },
     
     createDocument: function()
