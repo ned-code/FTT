@@ -16,7 +16,6 @@ WebDoc.ItemView = $.klass({
     }
     
     this.item = item;
-    
     this.domNode = this.createDomNode();
     
     item.addListener(this);
@@ -149,6 +148,7 @@ WebDoc.ItemView = $.klass({
           this._moveTo(ui.position);
         }.pBind(this)        ,
         stop: function(e, ui) {
+          this.item.moveTo(ui.position);
           this.item.save();
         }.pBind(this)
       });
@@ -179,6 +179,7 @@ WebDoc.ItemView = $.klass({
           this._resizeTo(ui.size);
         }.pBind(this)        ,
         stop: function(e, ui) {
+          this.item.resizeTo(ui.size);
           this.item.save();
         }.pBind(this)
       });

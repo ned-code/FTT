@@ -10,6 +10,7 @@ MTools.Record = $.klass(
    * @param {Object} json all the persisted data of the object. if null object is initialized with an UUID and creation date.
    */
   initialize: function(json) {
+    this.listeners = [];
     if (!json) {
       this.isNew = true;
       this.data = {};
@@ -52,12 +53,19 @@ MTools.Record = $.klass(
   },
   
   addListener: function(listener) {
-    this.listener = listener;
+    this.listeners.push(listener);
   },
   
+  removeListener: function(listener) {
+    var index = $.inArray(listener, this.listeners);
+    if (index > -1) {
+      this.listeners.splice(index, 1);
+    }
+  },  
+  
   fireObjectChanged: function() {
-    if (this.listener) {
-      this.listener.objectChanged(this);
+    for (var i = 0; i < this.listeners.length; i++) {
+      this.listeners[i].objectChanged(this);
     }
   },
   

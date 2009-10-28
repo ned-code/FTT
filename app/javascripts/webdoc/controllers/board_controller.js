@@ -18,10 +18,18 @@ WebDoc.BoardController = $.klass({
     this.selection = [];
     this.editingItem = null;
     this.selectionListeners = [];
+    this.currentPageListeners = [];
   },
   
   addSelectionListener: function(listener) {
     this.selectionListeners.push(listener);
+  },
+  
+  removeSelectionListener: function(listener) {
+    var index = $.inArray(listener, this.selectionListeners);
+    if (index > -1) {
+      this.selectionListeners.splice(index, 1);
+    }
   },
   
   fireSelectionChanged: function() {
@@ -29,6 +37,23 @@ WebDoc.BoardController = $.klass({
       this.selectionChanged();
     });
   },
+  
+  addCurrentPageListener: function(listener) {
+    this.currentPageListeners.push(listener);
+  },
+  
+  removeCurrentPageListener: function(listener) {
+    var index = $.inArray(listener, this.currentPageListeners);
+    if (index > -1) {
+      this.currentPageListeners.splice(index, 1);
+    }
+  },
+  
+  fireCurrentPageChanged: function() {
+    $.each(this.currentPageListeners, function() {
+      this.currentPageChanged();
+    });
+  },  
   
   setCurrentPage: function(page) {
     $("#board").unbind();
@@ -71,6 +96,7 @@ WebDoc.BoardController = $.klass({
     
     this.zoom(1);
     this.centerBoard();
+    this.fireCurrentPageChanged();
     /*
      if (heightFactor < widthFactor) {
      this.zoom(1 + heightFactor);

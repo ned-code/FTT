@@ -89,15 +89,15 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   fireInnerHtmlChanged: function() {
-    if (this.listener) {
-      this.listener.innerHtmlChanged();
+    for (var i = 0; i < this.listeners.length; i++) {
+      this.listeners[i].innerHtmlChanged();
     }
   },
   
   fireDomNodeChanged: function() {
-    if (this.listener) {
-      this.listener.domNodeChangedChanged();
-    }
+    for (var i = 0; i < this.listeners.length; i++) {
+      this.listeners[i].domNodeChangedChanged();
+    }    
   },
   
   /*

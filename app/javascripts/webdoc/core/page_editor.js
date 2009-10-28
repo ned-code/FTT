@@ -12,6 +12,7 @@
 //= require <webdoc/controllers/image_library_controller>
 //= require <webdoc/controllers/widget_library_controller>
 //= require <webdoc/controllers/inspector_controller>
+//= require <webdoc/controllers/page_browser_controller>
 
 //= require <webdoc/tools/arrow_tool>
 //= require <webdoc/tools/drawing_tool>
@@ -37,7 +38,8 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController = new WebDoc.BoardController(true);
     WebDoc.application.imageLibraryController = new WebDoc.ImageLibraryController();
     WebDoc.application.widgetLibraryController = new WebDoc.WidgetLibraryController();  
-    WebDoc.application.inspectorController = new WebDoc.InspectorController();      
+    WebDoc.application.inspectorController = new WebDoc.InspectorController();
+    WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool_pen");
     WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool_arrow");
     WebDoc.application.handTool = new WebDoc.HandTool("#tool_hand");
@@ -61,6 +63,7 @@ WebDoc.PageEditor = $.klass({
     $("#page_css_editor").bind("blur", this.applyPageCss);
     $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);
     $("#remove_selection").bind("click", this.deleteItem);
+    $("#page_browser").bind("click", this.toggleBrowser);
     $("#lib_view").bind("click", this.toggleLib);
     
     $("#html_snipplet").bind("click", this.inserthtmlSnipplet);
@@ -68,10 +71,12 @@ WebDoc.PageEditor = $.klass({
     var height = window.innerHeight - $("#board_container").offset().top;
     $("#board_container").height(height -10);
     $("#right_bar").height(height -10);
+    $("#left_bar").height(height -10);
     $(window).bind("resize", function() {
       var height = window.innerHeight - $("#board_container").offset().top;
       $("#board_container").height(height -10);
-      $("#right_bar").height(height -10);      
+      $("#right_bar").height(height -10);
+      $("#left_bar").height(height -10);
       WebDoc.application.boardController.centerBoard();
     }.pBind(this));
     
@@ -86,11 +91,12 @@ WebDoc.PageEditor = $.klass({
     {
       var editor = WebDoc.application.pageEditor;
       editor.currentDocument = data[0];
-      editor.loadPageId(documentId, window.location.hash.replace("#", ""));
+      WebDoc.application.pageBrowserController.setDocument(editor.currentDocument);
+      editor.loadPageId(window.location.hash.replace("#", ""));
     });
   },
 
-  loadPageId: function(documentId, pageId) {
+  loadPageId: function(pageId) {
     var editor = WebDoc.application.pageEditor;
     ddd("load page id " + pageId);
     var pageToLoad = editor.currentDocument.findPageWithUuidOrPosition(pageId);
@@ -123,7 +129,7 @@ WebDoc.PageEditor = $.klass({
   },
 
   next: function(e) {
-    e.preventDefault();    
+    e.preventDefault();  
     var editor = WebDoc.application.pageEditor;
     var nextPage = editor.currentDocument.nextPage(editor.currentPage);
     if (nextPage) {
@@ -243,6 +249,13 @@ WebDoc.PageEditor = $.klass({
     e.preventDefault();
     $("#inspector").slideToggle("fast");
     $("#libraries").slideToggle("fast");
+  },
+  
+  toggleBrowser: function(e) {
+    e.preventDefault();
+    WebDoc.application.pageBrowserController.toggleBrowser(function() {
+      WebDoc.application.boardController.centerBoard();
+    });
   }
 });
 

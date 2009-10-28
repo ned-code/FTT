@@ -84,7 +84,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   },
 
   _removePolyLine: function(drawObject) {
-    drawObject.domNode.remove();
+    WebDoc.application.pageEditor.currentPage.removeItem(drawObject);    
     that = this;
     WebDoc.application.undoManager.registerUndo(function() {
       that._addPolyLine(drawObject);
@@ -93,7 +93,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   },
 
   _addPolyLine: function(drawObject) {
-    WebDoc.application.boardController.pageView.drawingDomNode.append(drawObject.domNode.get(0));
+    WebDoc.application.pageEditor.currentPage.addItem(drawObject);
     drawObject.isNew = true;
     that = this;
     WebDoc.application.undoManager.registerUndo(function() {

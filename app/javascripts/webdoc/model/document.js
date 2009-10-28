@@ -122,15 +122,15 @@ WebDoc.Document = $.klass(MTools.Record, {
   },
   
   firePageAdded: function(addedPage) {
-    if (this.listener) {
-      this.listener.pageAdded(addedPage);
-    }
+    for (var i = 0; i < this.listeners.length; i++) {
+      this.listeners[i].pageAdded(addedPage);
+    }    
   },
   
   firePageRemoved: function(removedPage) {
-    if (this.listener) {
-      this.listener.pageRemoved(removedPage);
-    }
+    for (var i = 0; i < this.listeners.length; i++) {
+      this.listeners[i].pageRemoved(removedPage);
+    }      
   },
     
 });

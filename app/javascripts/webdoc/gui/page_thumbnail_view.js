@@ -1,0 +1,99 @@
+
+//= require <mtools/record>
+//= require <webdoc/model/item>
+//= require <webdoc/gui/item_thumbnail_view>
+
+
+WebDoc.PageThumbnailView = $.klass(
+{
+  initialize: function(page) {
+    this.page = page;
+    this.domNode = $('<div>').attr({
+      id: "thumb_" + page.uuid(),
+    }).addClass("page_thumb");
+        
+    this.pageThumbNode = $('<div>')
+    this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
+    this.drawingDomNode.css("zIndex", 999999);
+    this.pageThumbNode.append(this.drawingDomNode.get(0));
+    
+    this.itemDomNode = $('<div>').attr({
+      id: "thumb_items",
+      style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
+    });
+    this.pageThumbNode.append(this.itemDomNode.get(0));
+    
+    var that = this;
+    this.itemViews = {};
+    if (page.items && $.isArray(page.items)) {
+      $.each(page.items, function() {
+       that.createItemView(this);
+      });
+    }
+    page.addListener(this);      
+    this.updateSize();
+    this.domNode.append(this.pageThumbNode);
+  },
+  
+  updateSize: function() {
+        // define scale factor
+    var pageWidth = parseInt(this.page.data.data.css.width);
+    var pageHeight = parseInt(this.page.data.data.css.height);
+    var horizontalFactor =  180 / pageWidth;
+    var verticalFactor =  100 / pageHeight;
+    
+    if (horizontalFactor < verticalFactor) {
+      this.factor = horizontalFactor;
+    }
+    else {
+      this.factor = verticalFactor;
+    }
+    this.pageThumbNode.css(this.page.data.data.css);
+    this.pageThumbNode.css("MozTransformOrigin", "0px 0px");
+    this.pageThumbNode.css("MozTransform", "scaleX(" + this.factor + ") scaleY(" + this.factor + ")");
+    var height = pageHeight * this.factor;
+    this.domNode.css({ top: (100 - height)/2, width: pageWidth * this.factor, height: height});    
+  },
+  
+  objectChanged: function(page) {
+    this.updateSize();
+  },
+  
+  itemAdded: function(addedItem) {
+    ddd("item add to thumbnail");
+    this.createItemView(addedItem);
+  },
+  
+  itemRemoved: function(removedItem) {
+    var relatedItemView = this.itemViews[removedItem.uuid()];
+    if (relatedItemView) {
+      relatedItemView.remove();
+      delete this.itemViews[removedItem.uuid()];
+    }
+  },
+ 
+  createItemView: function(item) {
+    var itemView;
+    
+    switch (item.data.media_type) {
+      case WebDoc.ITEM_TYPE_TEXT:
+        itemView = new WebDoc.ItemThumbnailView(item, this);
+        break;
+      case  WebDoc.ITEM_TYPE_IMAGE:
+        itemView = new WebDoc.ImageThumbnailView(item, this);
+        break;
+      case  WebDoc.ITEM_TYPE_DRAWING:
+        itemView = new WebDoc.DrawingThumbnailView(item, this);
+        break;
+      case  WebDoc.ITEM_TYPE_WIDGET:
+        itemView = new WebDoc.WidgetThumbnailView(item, this);
+        break;            
+      default: 
+        itemView = new WebDoc.ItemThumbnailView(item, this);
+        break;
+    }
+    this.itemViews[item.uuid()] = itemView;
+    
+    return itemView
+  }
+});

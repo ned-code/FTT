@@ -546,19 +546,31 @@ a:hover { color: #000; background-color:#fff; }
 /* ================= */
 
 .page_thumb {
+  position:relative;
   background-color:#FFFFFF;
-  height:100px;
   margin-bottom:5px;
   margin-left:auto;
   margin-right:auto;
-  margin-top:5px;
-  width:180px;  
+  margin-top:5px; 
+}
+
+.selected_thumb {
+  border: solid 2px #000;
+}
+
+.widget_thumb {
+  background-color: #aaf;
+}
+
+#page_browser ul {
+  overflow:hidden;  
 }
 
 #page_browser ul li {
-  width:200px;
   height:120px;
-  
+  margin:auto;
+  overflow:hidden;
+  width:200px;  
 }
 /* ================= */
 /* = Rails default = */
