@@ -28,10 +28,19 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     this.pageView.itemDomNode.append(itemNode.get(0));
     itemNode.addClass("item");
     if (!this.item.data.data.css.width) {
-      this.item.resizeTo({
-        width: itemNode.width(),
-        height: itemNode.height()
-      });
+      if (imageNode.width() <= 0) {
+          this.item.resizeTo({
+            width: 100,
+            height: 100
+        });
+      }
+      else {
+        this.item.resizeTo({
+          width: imageNode.width(),
+          height: imageNode.height()
+        });
+      }
+      
     }
     return itemNode;
   }
