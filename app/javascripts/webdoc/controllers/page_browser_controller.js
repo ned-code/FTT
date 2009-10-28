@@ -47,7 +47,6 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   changeSelectedPage: function(e) {
-    ddd("click page browser");
       var clickedThumb = $(e.target).closest(".page_thumb");
       if (clickedThumb && clickedThumb.length) {
         var pageId = clickedThumb.attr("id").substring(6);
@@ -62,8 +61,8 @@ WebDoc.PageBrowserController = $.klass({
       var aPage = this.document.pages[i];
       var pageThumb = new WebDoc.PageThumbnailView(aPage).domNode;
       
-      var pageListItem = $("<li/>").append(pageThumb);
-      this.domNode.find("ul").append(pageListItem);
+      var pageListItem = $("<li>").append(pageThumb);
+      this.domNode.find("ul:first").append(pageListItem);
     }
     this.updateSelectedPage();
   },
