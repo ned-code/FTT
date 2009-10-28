@@ -97,7 +97,7 @@ WebDoc.DocumentEditor = $.klass(
     
     editDocument: function()
     {
-        var documentToEdit = $(this).parent().attr("id");
+        var documentToEdit = $(this).parent().parent().attr("id");
         window.open("/documents/" + documentToEdit + "#1");
     },
     
@@ -108,10 +108,11 @@ WebDoc.DocumentEditor = $.klass(
         $("#wb-new-document-dialog").dialog('open');
     },
     
-    renameDocument: function()
+    renameDocument: function(e)
     {
+        e.preventDefault();
         var that = WebDoc.application.documentEditor;
-        var documentIdToRename = $(this).parent().attr("id");
+        var documentIdToRename = $(this).parent().parent().attr("id");
         that.editedDocument = that.documentWithId(documentIdToRename);
         var previousName = that.editedDocument.title();
         $("#wb-edit-document-name").val(previousName);
@@ -122,7 +123,7 @@ WebDoc.DocumentEditor = $.klass(
     deleteDocument: function()
     {
         var that = WebDoc.application.documentEditor;
-        var documentIdToDelete = $(this).parent().attr("id");
+        var documentIdToDelete = $(this).parent().parent().attr("id");
         that.editedDocument = that.documentWithId(documentIdToDelete);
 		that.editedDocument.destroy(function(persitedDoc)
         {
