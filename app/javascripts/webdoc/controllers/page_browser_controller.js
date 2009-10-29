@@ -23,11 +23,14 @@ WebDoc.PageBrowserController = $.klass({
       this.domNode.animate({
         width: "0px"
       }, function() {
-            this.domNode.find("ul").empty(); 
+            this.domNode.find("ul:first").empty();
+            callBack.call(this); 
       }.pBind(this));
-      $("#board_container").animate({
-        marginLeft: "0px"
-      }, callBack);    
+      if (!MTools.Browser.WebKit) {
+        $("#board_container").animate({
+          marginLeft: "0px"
+        });
+      }    
       $("#left_bar").unbind();      
     }
     else {
@@ -36,11 +39,13 @@ WebDoc.PageBrowserController = $.klass({
       this.refreshPages();
       this.domNode.animate({
         width: "215px"
-      });
-      $("#board_container").animate({
-        marginLeft: "220px"
       }, callBack);
-      ddd($("#page_browser"));
+      if (!MTools.Browser.WebKit) {
+        $("#board_container").animate({
+          marginLeft: "220px"
+        });
+      }
+
       $("#left_bar").click(this.changeSelectedPage.pBind(this));
     }
     this.visible = !this.visible;

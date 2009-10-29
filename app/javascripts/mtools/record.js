@@ -122,12 +122,12 @@ MTools.Record = $.klass(
   save: function(callBack) {
     if (this.isNew) {
       MTools.ServerManager.newObject(this.rootUrl() + "/" + this.className() + "s", this, function(persitedDoc) {
-        callBack ? callBack.call(persitedDoc, "OK") : '';
+        callBack ? callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]) : '';
       });
     }
     else {
       MTools.ServerManager.updateObject(this.rootUrl() + "/" + this.className() + "s/" + this.uuid(), this, function(persitedDoc) {
-        callBack ? callBack.call(persitedDoc, "OK") : '';
+        callBack ? callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]) : '';
       });
     }
   },
@@ -138,7 +138,7 @@ MTools.Record = $.klass(
    */
   destroy: function(callBack) {
     MTools.ServerManager.deleteObject(this.rootUrl() + "/" + this.className() + "s/" + this.uuid(), this, function(persitedDoc) {
-      callBack ? callBack.call(persitedDoc, "OK") : '';
+      callBack ? callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]) : '';
     });
   }
 });

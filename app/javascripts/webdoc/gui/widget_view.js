@@ -68,7 +68,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   edit: function($super) {
     $super();
-    WebDoc.application.boardController.unselectItemViews([this]);
+    WebDoc.application.boardController.unselectItemViews([this]);    
     WebDoc.application.boardController.editingItem = this;
     this.domNode.addClass("item_edited");
     this.domNode.css({

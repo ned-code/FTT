@@ -1,7 +1,6 @@
 /**
- * Uniboard board controller
-**/
-
+ * VML implementation of polyline adaptor.
+ **/
 WebDoc.VmlRenderer = function(initialDrawing)
 {        	
     // TODO set this as class attribute

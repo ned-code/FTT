@@ -210,6 +210,7 @@ WebDoc.BoardController = $.klass({
         }
       }
     }
+    this.fireSelectionChanged();    
   },
   
   deleteSelection: function(e) {

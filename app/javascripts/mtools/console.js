@@ -8,8 +8,8 @@ var console;
  * log a debug message
  */
 function ddd(message) { 
-  if (console && console.debug) {
-    console.debug(arguments);
+  if (console && console.log) {
+    console.log.apply(console, arguments);
   }
 }
 

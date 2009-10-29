@@ -11,6 +11,9 @@ WebDoc.InspectorController = $.klass({
     this.palettes = [emptyPalette, textPalette, penPelette];
     this.updatePalette(0);
     
+    $("#page_css_editor").bind("blur", this.applyPageCss);
+    $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);
+    
     $("#default_properties").hide();
     $("#property_top").blur(this.updateProperties.pBind(this));
     $("#property_left").blur(this.updateProperties.pBind(this));
@@ -65,8 +68,7 @@ WebDoc.InspectorController = $.klass({
   },
   
   selectionChanged: function() {
-    ddd("selected item ");
-    ddd(WebDoc.application.boardController.selection);
+    ddd("selected item ", WebDoc.application.boardController.selection);
     if (WebDoc.application.boardController.selection.length > 0) {
       if ($("#inspector").css("display") == "none") {
         $("#libraries").slideToggle("fast");
@@ -81,6 +83,7 @@ WebDoc.InspectorController = $.klass({
           this.selectInspector(this.lastInspectorId);
         }
       }
+      $("#selected_item_html_editor").attr("disabled", "");
       var html = WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
       if (html) {
         $("#selected_item_html_editor").get(0).value = html;
@@ -96,6 +99,7 @@ WebDoc.InspectorController = $.klass({
     else {
       this.updatePalette(0);
       $("#selected_item_html_editor").get(0).value = "";
+      $("#selected_item_html_editor").attr("disabled", "true");
       $("#default_properties").hide();
       $("#empty_properties").show();
     }
@@ -147,7 +151,36 @@ WebDoc.InspectorController = $.klass({
         item.save();
       }
     }
-  }
+  },
+  
+  applyPageCss: function(e) {
+    e.preventDefault();
+    var editor = WebDoc.application.pageEditor;
+    if ($.toJSON(editor.currentPage.data.data.css) != $("#page_css_editor").get(0).value) {
+      var newCss = null;
+      try {
+        eval("newCss=" + $("#page_css_editor").get(0).value);
+      }
+      catch(ex) {
+        ddd("Invalid css");
+        $("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
+      }
+      if (newCss) {
+        WebDoc.application.pageEditor.currentPage.applyCss(newCss);
+        WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
+      }
+    }
+  },
+  
+  applyInnerHtml: function(e) {
+    e.preventDefault();
+    var html = $("#selected_item_html_editor").get(0).value
+    if (html) {
+      if (WebDoc.application.boardController.selection.length > 0) {
+        WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
+      }
+    }
+  },  
 });
 
 $.extend(WebDoc.InspectorController, {});
