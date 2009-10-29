@@ -208,6 +208,8 @@ a:hover { color: #0069BF;}
 /* =============== */
 /* = Page editor = */
 /* =============== */
+
+/* =toolbars */
 #tb_1, #tb_2{
     min-width: 700px;
     padding:0 10px;
@@ -354,7 +356,7 @@ a:hover { color: #0069BF;}
 #tb_2 #lib_view {
     border-right: none;
 }
-
+/* =pageBrowser */
 #left_bar {
     overflow:auto;
     float: left;
@@ -673,11 +675,13 @@ a:hover { color: #0069BF;}
   margin-bottom:5px;
   margin-left:auto;
   margin-right:auto;
-  margin-top:5px; 
+  margin-top:5px;
 }
 
 .selected_thumb {
-  border: solid 2px #000;
+  padding: 2px;
+  border: solid 2px #3B9EEF;
+  
 }
 
 .widget_thumb {
