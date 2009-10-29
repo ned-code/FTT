@@ -1,5 +1,6 @@
 /**
- * @author julien
+ * Implementation of ISO 8601 date format
+ * @author Paul Sowden (http://delete.me.uk/2005/03/iso8601.html)
  */
 
 Date.prototype.setISO8601 = function (string) {

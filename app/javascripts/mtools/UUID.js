@@ -1,4 +1,6 @@
-/*
+// TODO JBA: ATTENTION GPL. need to find another solution
+// http://www.af-design.com/services/javascript/uuid/
+/**
  uuid.js - Version 0.3
  JavaScript Class to create a UUID like identifier
  Copyright (C) 2006-2008, Erik Giberti (AF-Design), All rights reserved.
@@ -26,8 +28,7 @@
  - Research into other versions of UUID show promising possibilities
  (more research needed)
  - Documentation needs improvement
- */
-// TODO JBA: ATTENTION GPL. need to find another solution
+ **/
 MTools.UUID = $.klass(
 {
     initialize: function()

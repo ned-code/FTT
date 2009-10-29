@@ -1,7 +1,10 @@
 /** 
-* Prototype's bind and bindAsEventListener ports
+ * Some js or jquery extension that are missing in js or jquery
 **/
 
+/**
+ * Prototype's bind and bindAsEventListener ports
+**/
 $.extend(MTools, {
   update: function(array, args) {
     var arrayLength = array.length, length = args.length;
