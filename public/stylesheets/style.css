@@ -1,16 +1,3 @@
-/* ============================ */
-/* = Resetting browsers' mess = */
-/* ============================ */
-/* source:http://www.sjhwebdesigns.com/resources/csstutorial/bordermarginandpadding */
-
-/*
-* { margin:0; padding:0;}
-h1, h2, h3, h4, h5, h6 {padding:5px 0;}
-li { padding:10px 0;}
-ul { margin:0 40px;}
-ol { margin:0 50px;}
-p {padding-bottom:28px;}
-*/
 
 /* =========== */
 /* = General = */
@@ -61,6 +48,7 @@ a:hover { color: #0069BF;}
     width: 300px;
     background: #8CEF86;
 }
+
 /* ================= */
 /* = Login page = */
 /* ================= */
@@ -324,28 +312,29 @@ a:hover { color: #0069BF;}
     overflow:hidden;
     border-right: 1px solid #AFAFAF;
 }
-#tb_2 ul li{
+.tb_button {
     float: left;
     padding-right:5px;
 }
-#tb_2 ul li:last-child{
+.tb_button:last-child{
     padding-right: 0;
 }
-#tb_2 ul li a{
+.tb_button a{
     display: block;
     border: 1px solid #efefef;
 }
-#tb_2 ul li a img{
+.tb_button a img{
     width:25px;
     height:25px;
 }
-#tb_2 ul li a:hover{
+.tb_button a:hover{
     display: block;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border: 1px solid #e6e6e6;
     background-color: #fff;
 }
+
 #tb_2 #page_browser a{
     float: left;
     margin-right: 3px;

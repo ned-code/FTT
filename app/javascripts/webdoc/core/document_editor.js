@@ -52,13 +52,13 @@ WebDoc.DocumentEditor = $.klass(
                     $(this).dialog('close');
                     var newDoc = new WebDoc.Document();
                     newDoc.setTitle($("#wb-new-document-name").val());
-                    newDoc.save(function(status)
+                    newDoc.save(function(newObject, status)
                     {
-						if (status == "OK") 
-						{
-							that.documents.push(this);
-							that.filter.addDocument(this);
-						}
+          						if (status == "OK") 
+          						{
+          							that.documents.push(newDoc);
+          							that.filter.addDocument(newDoc);
+          						}
                     });
                 },
                 Cancel: function()
@@ -82,7 +82,7 @@ WebDoc.DocumentEditor = $.klass(
                     ddd("edit doc with title " + $("#wb-edit-document-name").val());
                     $(this).dialog('close');
                     that.editedDocument.setTitle($("#wb-edit-document-name").val());
-					that.editedDocument.save(function(persitedDoc)
+					          that.editedDocument.save(function(persitedDoc)
                     {
                         that.filter.refreshDocument(this);
                     });                    
@@ -121,8 +121,9 @@ WebDoc.DocumentEditor = $.klass(
         $("#wb-edit-document-dialog").dialog('open');
     },
     
-    deleteDocument: function()
+    deleteDocument: function(e)
     {
+        e.preventDefault();
         var that = WebDoc.application.documentEditor;
         var documentIdToDelete = $(this).parent().parent().attr("id");
         that.editedDocument = that.documentWithId(documentIdToDelete);
