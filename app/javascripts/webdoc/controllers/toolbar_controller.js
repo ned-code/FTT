@@ -54,15 +54,20 @@ WebDoc.ToolbarController = $.klass({
   },   
    
   libView: function(e) {
-    $("#inspector").slideToggle("fast");
-    $("#libraries").slideToggle("fast");
+    WebDoc.application.inspectorController.showLib();
   },
   
   pageBrowser: function(e) {
     WebDoc.application.pageBrowserController.toggleBrowser(function() {
       WebDoc.application.boardController.centerBoard();
     });
-  }  
+  },
+  
+  toggle_inspector: function(e) {
+    WebDoc.application.inspectorController.toggleInspector(function() {
+      WebDoc.application.boardController.centerBoard();
+    });
+  }
   
 });
 

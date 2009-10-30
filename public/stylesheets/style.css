@@ -344,7 +344,7 @@ a:hover { color: #0069BF;}
 #tb_2 #lib_view {
     border-right: none;
 }
-#tb_2 #toggle_inspector{
+#tb_2 #toggle_inspector_wrap{
     float: right;
     margin:3px 0px;
     padding: 0;

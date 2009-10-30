@@ -6,6 +6,7 @@
  
 WebDoc.InspectorController = $.klass({
   initialize: function() {
+    this.visible = true;
     this.domNode = $("#item_inspector");
     var emptyPalette = $("#palette_empty").hide();
     var textPalette = $("#palette_text").hide();
@@ -45,10 +46,44 @@ WebDoc.InspectorController = $.klass({
     });
   },
   
+  showLib: function() {
+    if (!this.visible) {
+      this.toggleInspector(this.showLib.pBind(this));
+    }
+    else {
+      $("#inspector").slideUp("fast");
+      $("#libraries").slideDown("fast");
+    }
+  },  
+  
+  toggleInspector: function(callBack) {
+    if (this.visible) {
+      $("#right_bar").animate({
+        width: "0px"
+      }, callBack);
+      if (!MTools.Browser.WebKit) {
+        $("#board_container").animate({
+          marginRight: "0px"
+        });
+      }    
+    }
+    else {
+      $("#right_bar").animate({
+        width: "300px"
+      }, callBack);
+      if (!MTools.Browser.WebKit) {
+        $("#board_container").animate({
+          marginRight: "305px"
+        });
+      }
+    }
+    this.visible = !this.visible;
+  },
+  
   selectInspector: function(inspectorId) {
     if ($("#inspector").css("display") == "none") {
-      $("#libraries").slideToggle("fast");
-      $("#inspector").slideToggle("fast", function() {
+      $("#libraries").slideUp("fast");
+      $("#inspector").slideDown("fast", function() {
         ddd("select inspector " + inspectorId);
         $("#inspector").accordion("activate", inspectorId);        
       });
