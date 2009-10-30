@@ -348,12 +348,18 @@ a:hover { color: #0069BF;}
     border: 1px solid #e6e6e6;
     background-color: #fff;
 }
-#tb_2 #page_browser a{
+#page_browser a{
     float: left;
     margin-right: 3px;
 }
 
 #tb_2 #lib_view {
+    border-right: none;
+}
+#tb_2 #toggle_inspector{
+    float: right;
+    margin:3px 0px;
+    padding: 0;
     border-right: none;
 }
 /* =pageBrowser */
@@ -671,15 +677,16 @@ a:hover { color: #0069BF;}
 
 .page_thumb {
   position:relative;
-  background-color:#FFFFFF;
   margin-bottom:5px;
   margin-left:auto;
   margin-right:auto;
   margin-top:5px;
+  border: solid 2px #ebebeb;
+  padding: 2px;
 }
 
 .selected_thumb {
-  padding: 2px;
+    padding: 2px;
   border: solid 2px #3B9EEF;
   
 }
