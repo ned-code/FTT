@@ -30,7 +30,6 @@ WebDoc.ToolbarController = $.klass({
     }
     catch(ex) {
       ddd("unknown toolbar action: " + clickedButton.attr("id"));
-      ddt();
     }    
   },
   

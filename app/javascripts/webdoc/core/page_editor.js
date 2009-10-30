@@ -105,7 +105,6 @@ WebDoc.PageEditor = $.klass({
     editor.currentPage = page;
     
     WebDoc.application.boardController.setCurrentPage(editor.currentPage);
-    $("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
   },
 
   previousPage: function(e) {

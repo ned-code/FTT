@@ -2,6 +2,8 @@
  * @author julien
  */
 //= require <webdoc/model/image>
+//= require <webdoc/controllers/inspectors/page_inspector_controller>
+ 
 WebDoc.InspectorController = $.klass({
   initialize: function() {
     this.domNode = $("#item_inspector");
@@ -10,8 +12,11 @@ WebDoc.InspectorController = $.klass({
     var penPelette = $("#palette_pen").hide();
     this.palettes = [emptyPalette, textPalette, penPelette];
     this.updatePalette(0);
+    this.subInspectors = [];
+    var pageInspector = new WebDoc.PageInspectorController();
+    this.subInspectors.push(pageInspector);
     
-    $("#page_css_editor").bind("blur", this.applyPageCss);
+    
     $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);
     
     $("#default_properties").hide();
@@ -166,25 +171,6 @@ WebDoc.InspectorController = $.klass({
         }.pBind(this));
         item.resizeTo(newSize);
         item.save();
-      }
-    }
-  },
-  
-  applyPageCss: function(e) {
-    e.preventDefault();
-    var editor = WebDoc.application.pageEditor;
-    if ($.toJSON(editor.currentPage.data.data.css) != $("#page_css_editor").get(0).value) {
-      var newCss = null;
-      try {
-        eval("newCss=" + $("#page_css_editor").get(0).value);
-      }
-      catch(ex) {
-        ddd("Invalid css");
-        $("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
-      }
-      if (newCss) {
-        WebDoc.application.pageEditor.currentPage.applyCss(newCss);
-        WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
       }
     }
   },

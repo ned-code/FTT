@@ -98,7 +98,16 @@
         %a{ :href => "" } Page inspector
       //%iframe#chat{:src => "http://o.aolcdn.com/aim/gromit/aim_express/gm/090918.2.3893.en-us/WidgetMain.html"}
       #page_inspector
-        %textarea#page_css_editor 
+        %label Use external page
+        %input#external_page_checkbox{ :type => "checkbox"}
+        %textarea#page_css_editor
+        #external_page_panel{ :style => "display:none"}
+          %div
+            %label URL
+            %input#external_page_url   
+          %div
+            %label Interact with page
+            %input#interact_page_checkbox{ :type => "checkbox"}                  
       %h3
         %a{ :href => "" } Palette
       #palette_inspector

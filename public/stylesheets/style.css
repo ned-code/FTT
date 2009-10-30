@@ -503,6 +503,7 @@ a:hover { color: #0069BF;}
 }
 
 #page_inspector {
+  background-color:#ebebeb;   
   position:relative;
   overflow:hidden;
   padding:1px;  

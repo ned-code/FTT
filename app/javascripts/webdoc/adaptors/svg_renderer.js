@@ -22,7 +22,7 @@ WebDoc.SvgRenderer = $.klass(
     if (!height) {
       height = "100%";
     }
-    surface.setAttribute("style", "position: relative; top:0x; left:0px; width:" + width + "; height:" + height);
+    surface.setAttribute("style", "position: relative; pointer-events:fill; top:0x; left:0px; width:" + width + "; height:" + height);
     var defs = document.createElementNS(this.svgNS, "defs");
     var marker = document.createElementNS(this.svgNS, "marker");
     marker.setAttribute("id", "myMarker");
