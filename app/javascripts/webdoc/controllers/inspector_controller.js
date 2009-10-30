@@ -19,6 +19,7 @@ WebDoc.InspectorController = $.klass({
     $("#property_left").blur(this.updateProperties.pBind(this));
     $("#property_width").blur(this.updateProperties.pBind(this));
     $("#property_height").blur(this.updateProperties.pBind(this));
+    $("#property_src").blur(this.updateSrc.pBind(this));
     
     var pageInspector = $("#page_inspector");
     var paletteInspector = $("#palette_inspector");
@@ -107,11 +108,27 @@ WebDoc.InspectorController = $.klass({
   
   refreshProperties: function() {
     if (WebDoc.application.boardController.selection.length) {
-      $("#property_top")[0].value = WebDoc.application.boardController.selection[0].item.position.top;
-      $("#property_left")[0].value = WebDoc.application.boardController.selection[0].item.position.left;
-      $("#property_width")[0].value = WebDoc.application.boardController.selection[0].item.size.width;
-      $("#property_height")[0].value = WebDoc.application.boardController.selection[0].item.size.height;
+      var selectedItem = WebDoc.application.boardController.selection[0];
+      $("#property_top")[0].value = selectedItem.item.position.top;
+      $("#property_left")[0].value = selectedItem.item.position.left;
+      $("#property_width")[0].value = selectedItem.item.size.width;
+      $("#property_height")[0].value = selectedItem.item.size.height;
+      if (selectedItem.item.data.media_type == WebDoc.ITEM_TYPE_IMAGE) {
+        $("#image_properties").css("display", "");
+        $("#property_src")[0].value = selectedItem.item.data.data.src;
+      }
+      else {
+        $("#image_properties").css("display", "none");
+      }
     }
+  },
+  
+  updateSrc: function(event) {
+    var item = WebDoc.application.boardController.selection[0].item;
+    item.data.data.src =  $("#property_src")[0].value;       
+    item.save(function() {
+      item.fireDomNodeChanged();
+    });
   },
   
   updateProperties: function(event) {

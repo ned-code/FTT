@@ -561,6 +561,7 @@ a:hover { color: #0069BF;}
   width:100%;
   height:300px;
 }
+
 #palette_text ul li a:hover {
   display: block;
   background-color: #fff;

@@ -109,6 +109,13 @@ WebDoc.ItemView = $.klass({
     this.domNode.html(this.item.data.data.innerHTML);
   },
   
+  domNodeChangedChanged: function() {
+    this.unSelect();
+    this.domNode.remove();
+    this.domNode = this.createDomNode();
+    this.select();  
+  },  
+  
   isSelected: function() {
     return this.selectionNode.parent().length > 0;
   },

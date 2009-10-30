@@ -47,13 +47,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     return widgetNode;
   },
   
-  domNodeChangedChanged: function() {
-    this.unSelect();
-    this.domNode.remove();
-    this.domNode = this.createDomNode();
-    this.select();  
-  },
-  
   innerHtmlChanged: function($super) {
     $super();
     // resize if inner html is iframe
