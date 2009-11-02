@@ -216,7 +216,7 @@ WebDoc.ItemView = $.klass({
       left: this.item.data.data.css.left
     });
     this.resetHandles();
-    WebDoc.application.inspectorController.refreshProperties();
+    WebDoc.application.inspectorController.refreshSubInspectors();
   },
   
   _resizeTo: function(size) {
@@ -229,7 +229,7 @@ WebDoc.ItemView = $.klass({
       height: this.item.data.data.css.height
     });
     this.resetHandles();
-    WebDoc.application.inspectorController.refreshProperties();
+    WebDoc.application.inspectorController.refreshSubInspectors();
   },  
 });
 

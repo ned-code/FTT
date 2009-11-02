@@ -3,6 +3,7 @@
  */
 //= require <webdoc/model/image>
 //= require <webdoc/controllers/inspectors/page_inspector_controller>
+//= require <webdoc/controllers/inspectors/properties_inspector_controller>
  
 WebDoc.InspectorController = $.klass({
   initialize: function() {
@@ -16,16 +17,10 @@ WebDoc.InspectorController = $.klass({
     this.subInspectors = [];
     var pageInspector = new WebDoc.PageInspectorController();
     this.subInspectors.push(pageInspector);
+    var propertiesInspector = new WebDoc.PropertiesInspectorController();
+    this.subInspectors.push(propertiesInspector);    
     
-    
-    $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);
-    
-    $("#default_properties").hide();
-    $("#property_top").blur(this.updateProperties.pBind(this));
-    $("#property_left").blur(this.updateProperties.pBind(this));
-    $("#property_width").blur(this.updateProperties.pBind(this));
-    $("#property_height").blur(this.updateProperties.pBind(this));
-    $("#property_src").blur(this.updateSrc.pBind(this));
+    $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);   
     
     var pageInspector = $("#page_inspector");
     var paletteInspector = $("#palette_inspector");
@@ -133,79 +128,20 @@ WebDoc.InspectorController = $.klass({
         $("#selected_item_html_editor").get(0).value = "";
       }
       this.updatePalette(WebDoc.application.boardController.selection[0].inspectorId());
-      $("#empty_properties").hide();
-      $("#default_properties").show();
-      this.refreshProperties();
     }
     else {
       this.updatePalette(0);
       $("#selected_item_html_editor").get(0).value = "";
       $("#selected_item_html_editor").attr("disabled", "true");
-      $("#default_properties").hide();
-      $("#empty_properties").show();
     }
+    this.refreshSubInspectors();    
   },
-  
-  refreshProperties: function() {
-    if (WebDoc.application.boardController.selection.length) {
-      var selectedItem = WebDoc.application.boardController.selection[0];
-      $("#property_top")[0].value = selectedItem.item.position.top;
-      $("#property_left")[0].value = selectedItem.item.position.left;
-      $("#property_width")[0].value = selectedItem.item.size.width;
-      $("#property_height")[0].value = selectedItem.item.size.height;
-      if (selectedItem.item.data.media_type == WebDoc.ITEM_TYPE_IMAGE) {
-        $("#image_properties").css("display", "");
-        $("#property_src")[0].value = selectedItem.item.data.data.src;
-      }
-      else {
-        $("#image_properties").css("display", "none");
-      }
-    }
-  },
-  
-  updateSrc: function(event) {
-    var item = WebDoc.application.boardController.selection[0].item;
-    item.data.data.src =  $("#property_src")[0].value;       
-    item.save(function() {
-      item.fireDomNodeChanged();
-    });
-  },
-  
-  updateProperties: function(event) {
-    var changedProperty = event.target.id;
-    var item = WebDoc.application.boardController.selection[0].item;
-    if (changedProperty == "property_left" || changedProperty == "property_top") {
-      var previousPosition = {
-        top: item.position.top,
-        left: item.position.left
-      };
-      var newPosition = {
-        top: $("#property_top")[0].value,
-        left: $("#property_left")[0].value
-      };
-      if (newPosition.left != previousPosition.left || newPosition.top != previousPosition.top) {
-        WebDoc.application.undoManager.registerUndo(function() {
-          WebDoc.ItemView._restorePosition(item, previousPosition);
-        }.pBind(this));
-        item.moveTo(newPosition);
-        item.save();
-      }
-    }
-    else {
-      var previousSize = {
-        width: item.size.width,
-        height: item.size.height
-      }; 
-      var newSize = {
-        width: $("#property_width")[0].value,
-        height: $("#property_height")[0].value
-      };
-      if (newSize.width != previousSize.width || newSize.height != previousSize.height) {
-        WebDoc.application.undoManager.registerUndo(function() {
-          WebDoc.ItemView._restoreSize(item, previousSize);
-        }.pBind(this));
-        item.resizeTo(newSize);
-        item.save();
+ 
+  refreshSubInspectors: function() {
+    for (var i=0; i < this.subInspectors.length; i++) {
+      var subInspetor = this.subInspectors[i];
+      if (subInspetor.refresh) {
+        subInspetor.refresh();
       }
     }
   },

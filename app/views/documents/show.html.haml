@@ -108,10 +108,7 @@
         #external_page_panel{ :style => "display:none"}
           %div
             %label URL
-            %input#external_page_url   
-          %div
-            %label Interact with page
-            %input#interact_page_checkbox{ :type => "checkbox"}                  
+            %input#external_page_url                  
       %h3
         %a{ :href => "" } Palette
       #palette_inspector
@@ -193,6 +190,9 @@
           %div.height
             %label.properties_label Height
             %input#property_height.properties_input
+          %div
+            %label.properties_label Show scroll
+            %input#property_scroll{ :type => "checkbox" }
           #image_properties{ :style => "display:none"}
             %label.properties_label Image URL
             %input#property_src.properties_input

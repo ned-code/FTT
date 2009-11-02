@@ -1,12 +1,11 @@
 /**
  * @author julien
  */
-//= require <webdoc/model/image>
+
 WebDoc.PageInspectorController = $.klass({
   initialize: function() {
     $("#page_css_editor").bind("blur", this.applyPageCss);  
     $("#external_page_checkbox").bind("change", this.changeExternalMode.pBind(this));
-    $("#interact_page_checkbox").bind("change", this.changeInteractMode.pBind(this));    
     $("#external_page_url").bind("blur", this.updateExternalPageUrl.pBind(this));
     WebDoc.application.boardController.addCurrentPageListener(this);
   },
@@ -24,15 +23,10 @@ WebDoc.PageInspectorController = $.klass({
     if (page.data.data.externalPage) {
       $("#page_css_editor").css("display", "none");
       $("#external_page_panel").css("display", "");  
-      $("#interact_page_checkbox").attr("checked", ($("#board svg").css("display") == "none"));
     } else {
       $("#page_css_editor").css("display", "");
       $("#external_page_panel").css("display", "none");
     }
-  },
-  
-  changeInteractMode: function() {
-    $("#board svg").css("display", $("#interact_page_checkbox").attr("checked")?"none":"inline");
   },
   
   updateExternalPageUrl: function() {

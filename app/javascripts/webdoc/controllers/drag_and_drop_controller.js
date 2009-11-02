@@ -61,6 +61,7 @@ $.extend(WebDoc.DrageAndDropController,{
       newItem.data.data.tag = "img";
       newItem.data.data.src = url;
       newItem.data.data.css = {
+        overflow: "hidden",
         top: pos.y + "px",
         left: pos.x + "px",
       };

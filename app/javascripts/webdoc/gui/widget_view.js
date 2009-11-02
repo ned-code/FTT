@@ -82,7 +82,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       if (this.domNode.get(0).contentWindow.initialize) {
         this.domNode.get(0).contentWindow.initialize();
       }
-      $(this.domNode.get(0).contentDocument).find("body").css("overflow", "hidden");
+      //$(this.domNode.get(0).contentDocument).find("body").css("overflow", "hidden");
       // inject innerHTML if exist
       /*
       if (this.item.data.data.innerHTML) {
