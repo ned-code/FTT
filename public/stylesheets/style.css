@@ -234,9 +234,12 @@ a:hover { color: #0069BF;}
     float: left;
     margin-left: 15px;
 }
+#tb_1_utilities_preview{
+  margin-top: 1px;
+}
 #tb_1_utilities_preview a{
     display: block;
-    height: 18px;
+    height: 16px;
     padding: 0 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -252,7 +255,7 @@ a:hover { color: #0069BF;}
     color: #4D4D4D;
 }
 #tb_1_utilities_preview a img{
-    vertical-align:bottom;
+    vertical-align:middle;
 }
 #tb_1_utilities_docname{
     padding-top: 5px;
