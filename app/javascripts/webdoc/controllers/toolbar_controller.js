@@ -14,6 +14,7 @@ WebDoc.ToolbarController = $.klass({
     catch (ex) {
       ddt();
     }
+    $("#tb_1_utilities_preview").click(this.toggleInteractionMode.pBind(this));
   },
 
   performAction: function(e) {
@@ -67,6 +68,11 @@ WebDoc.ToolbarController = $.klass({
     WebDoc.application.inspectorController.toggleInspector(function() {
       WebDoc.application.boardController.centerBoard();
     });
+  },
+  
+  toggleInteractionMode: function(e) {
+    e.preventDefault();
+    WebDoc.application.boardController.toggleInteractionMode();
   }
   
 });

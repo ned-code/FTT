@@ -619,9 +619,13 @@ a:hover { color: #0069BF;}
 }
 
 .item {
-  position:absolute;
   overflow:hidden;
+  position:absolute;
   border: solid 1px #888888;
+}
+
+.item_interact {
+  border:none;
 }
 
 .ui-resizable-e {
