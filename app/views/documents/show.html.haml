@@ -6,8 +6,8 @@
   %ul#tb_1_utilities
     %li#tb_1_utilities_preview
       %a{ :href => "#"}
-        %img{ :src => "/images/icons/hand_pointer.png", :alt =>"Enter interactive mode"}
-        interactive mode
+        %img{ :src => "/images/icons/eye.png", :alt =>"Enter quick preview mode"}
+        quick preview
     %li#tb_1_utilities_docname
       %h2=@document.title
       %span#current_page 3
@@ -42,27 +42,33 @@
     %li#removePage.tb_button
       %a{ :href => "#" , :title => "Remove this page"}
         %img{ :src => "/images/icons/page_remove.png", :alt =>"Remove current page"}
+    %li#page_browser.tb_button
+      %a{ :href => "" , :title => "Browse pages"}
+        %img{ :src => "/images/icons/browse.png", :alt =>"Browse"}
     %li#previousPage.tb_button
       %a{ :href => "" , :title => "Previous page"}
         %img{ :src => "/images/icons/arrow_left.png", :alt =>"Arrow Left"}
     %li#nextPage.tb_button
       %a{ :href => "" , :title => "Next Page"}
         %img{ :src => "/images/icons/arrow_right.png", :alt =>"Arrow Right"}
-    %li#pageBrowser.tb_button
-      %a{ :href => "" , :title => "Browse pages"}
-        %img{ :src => "/images/icons/browse.png", :alt =>"Browse"}
+    %li#layout_selector.tb_button
+      %a{ :href => "#" , :title =>"Choose a layout"}
+        %img{ :src => "/images/icons/layout.png", :alt =>"Choose a layout"}
+    %li#theme_selector.tb_button
+      %a{ :href => "#" , :title =>"Change theme"}
+        %img{ :src => "/images/icons/theme.png", :alt =>"Change theme"}
   %ul
-    %li#zoomIn.tb_button
+    %li#zoom_in.tb_button
       %a{ :href => "" , :title => "Zoom In"}
         %img{ :src => "/images/icons/zoom_in.png", :alt =>"Zoom in"}
-    %li#zoomOut.tb_button
+    %li#zoom_out.tb_button
       %a{ :href => "" , :title => "Zoom Out"}
         %img{ :src => "/images/icons/zoom_out.png", :alt =>"Zoom Out"}
     %li#tool_hand.tb_button
       %a{ :href => "" , :title => "Pan"}
         %img{ :src => "/images/icons/pan.png", :alt =>"Pan"}
   %ul
-    %li#deleteItem.tb_button
+    %li#delete_item.tb_button
       %a{ :href => "#" , :title => "Remove"}
         %img{ :src => "/images/icons/delete.png", :alt =>"Remove"}
     %li#undo.tb_button
@@ -85,7 +91,7 @@
       %a{ :href => "#" , :title => "Draw"}
         %img{ :src => "/images/icons/pen.png", :alt =>"Pen tool"}
   %ul
-    %li#libView.tb_button
+    %li#lib_view.tb_button
       %a{ :href => "", :title => "Show Library"}
         %img{ :src => "/images/icons/library.png", :alt => "Show Library"}
   %ul#toggle_inspector_wrap
