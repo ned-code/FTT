@@ -42,23 +42,23 @@ WebDoc.ToolbarController = $.klass({
     WebDoc.application.undoManager.redo();
   },
 
-  zoomIn: function(e) {
+  zoom_in: function(e) {
     WebDoc.application.boardController.zoomIn();
   },
 
-  zoomOut: function(e) {
+  zoom_out: function(e) {
     WebDoc.application.boardController.zoomOut();
   },
 
-  deleteItem: function(e) {
+  delete_item: function(e) {
     WebDoc.application.boardController.deleteSelection();
   },   
    
-  libView: function(e) {
+  lib_view: function(e) {
     WebDoc.application.inspectorController.showLib();
   },
   
-  pageBrowser: function(e) {
+  page_browser: function(e) {
     WebDoc.application.pageBrowserController.toggleBrowser(function() {
       WebDoc.application.boardController.centerBoard();
     });
