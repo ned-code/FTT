@@ -394,6 +394,9 @@ a:hover { color: #0069BF;}
 #board {
   font-family:Helvetica, Arial, sans-serif;
   font-size:30px;
+  -webkit-box-shadow:2px 3px 5px #333333;
+  -moz-box-shadow:2px 3px 5px #333333; 
+  box-shadow:2px 3px 5px #333333;
 }
 
 #board ul, #board ol {
