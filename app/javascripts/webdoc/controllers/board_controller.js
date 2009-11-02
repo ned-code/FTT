@@ -122,6 +122,7 @@ WebDoc.BoardController = $.klass({
     ddd("current ", currentState, "new", this.isInteraction);
     if (this.isInteraction) {
       // go to interaction mode
+      this.unselectAll();
       $(".item").addClass("item_interact");
       this.setCurrentTool(null);
       this.unbindMouseEvent();
