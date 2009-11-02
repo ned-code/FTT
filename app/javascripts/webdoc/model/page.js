@@ -16,6 +16,12 @@ WebDoc.Page = $.klass(MTools.Record,
     return "/documents/" + this.data.document_id;
   },
   
+  setExternalPageMode: function(mode) {
+    ddd("set mode", mode);  
+    this.data.data.externalPage = mode;
+    this.fireObjectChanged();    
+  },
+  
   applyCss: function(newCss) {   
     if (newCss != this.data.data.css) {
       this.data.data.css = newCss;

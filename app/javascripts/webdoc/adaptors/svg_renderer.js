@@ -1,5 +1,6 @@
 /**
- * Uniboard board controller
+ * SVG implementation of polyline adaptor. Polyline adaptor allow to to decouplate the drawing of polylines from the tehnology that display the polylines.
+ * This implementation use SVG to draw the polyline.
  **/
 WebDoc.SvgRenderer = $.klass(
 {
@@ -7,6 +8,12 @@ WebDoc.SvgRenderer = $.klass(
     // TODO set this as class attribute
     this.svgNS = "http://www.w3.org/2000/svg";
   },
+  
+  /**
+   * Return the dom  node in wich polylines will be added
+   * @param {Object} width
+   * @param {Object} height
+   */
   createSurface: function(width, height) {
     var surface = document.createElementNS(this.svgNS, "svg");
     if (!width) {
@@ -15,7 +22,7 @@ WebDoc.SvgRenderer = $.klass(
     if (!height) {
       height = "100%";
     }
-    surface.setAttribute("style", "position: relative; top:0x; left:0px; width:" + width + "; height:" + height);
+    surface.setAttribute("style", "position: relative; pointer-events:fill; top:0x; left:0px; width:" + width + "; height:" + height);
     var defs = document.createElementNS(this.svgNS, "defs");
     var marker = document.createElementNS(this.svgNS, "marker");
     marker.setAttribute("id", "myMarker");
@@ -40,6 +47,10 @@ WebDoc.SvgRenderer = $.klass(
     return surface;
   },
   
+  /**
+   * Clear the drawing surface. All polylines are removed
+   * @param {Object} surface
+   */
   clearSurface: function(surface) {
     ddd(surface);
     while (surface.firstChild) {
@@ -48,6 +59,10 @@ WebDoc.SvgRenderer = $.klass(
     }
   },
   
+  /**
+   * Create the dom element that correspond to item. DOM element is <b>not</b> added to a surface. 
+   * @param {Object} item polyline item
+   */
   createPolyline: function(item) {
     var result = document.createElementNS(this.svgNS, "polyline");
     item.data.data.tag = "polyline";
@@ -65,6 +80,11 @@ WebDoc.SvgRenderer = $.klass(
     return result;
   },
   
+  /**
+   * Update a polyline DOM element with vaue from the polyline item.
+   * @param {Object} line
+   * @param {Object} properties
+   */
   updatePolyline: function(line, properties) {
 
     if (properties.points) {
@@ -74,10 +94,10 @@ WebDoc.SvgRenderer = $.klass(
       line.setAttribute("id", properties.id);
     }
     if (properties.color) {
-      // TODO change color
+      result.setAttribute("stroke", item.data.data.stroke);
     }
     if (properties.width) {
-      // TODO change width
+      result.setAttribute("stroke-width", item.data.data.strokeWidth);
     }
   }
 });

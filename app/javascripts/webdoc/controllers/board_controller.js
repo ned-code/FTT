@@ -75,12 +75,7 @@ WebDoc.BoardController = $.klass({
     this.initialHeight = $("#board").height();
     this.initialWidth = $("#board").width();
     
-    $("#board").bind("mousedown", this, this.mouseDown.pBind(this));
-    $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
-    $("#board").bind("click", this, this.mouseClick.pBind(this));
-    $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
-    $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver);
-    $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);
+    this.bindMouseEvent();
     $(document).bind("keydown", this, this.keyDown.pBind(this));
     
     
@@ -107,6 +102,41 @@ WebDoc.BoardController = $.klass({
      */
   },
   
+  bindMouseEvent: function() {
+    $("#board").bind("mousedown", this, this.mouseDown.pBind(this));
+    $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
+    $("#board").bind("click", this, this.mouseClick.pBind(this));
+    $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
+    $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver);
+    $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);
+  },
+  
+  unbindMouseEvent: function() {
+    $("#board").unbind();
+  },  
+  
+  toggleInteractionMode: function() {
+    var currentState = !($("#board svg").css("display") == "inline"); 
+    
+    this.isInteraction = !currentState;
+    ddd("current ", currentState, "new", this.isInteraction);
+    if (this.isInteraction) {
+      // go to interaction mode
+      this.unselectAll();
+      $(".item").addClass("item_interact");
+      this.setCurrentTool(null);
+      this.unbindMouseEvent();
+    }
+    else {
+      // go to non interaction mode
+      $(".item").removeClass("item_interact");
+      this.setCurrentTool(WebDoc.application.arrowTool);      
+      this.bindMouseEvent();
+    }
+    $("#board svg").css("display", this.isInteraction?"none":"inline");        
+  },
+  
+  
   centerBoard: function() {
     var containerHeight = $("#board_container").height();
     var containerWidth = $("#board_container").width();
@@ -132,7 +162,12 @@ WebDoc.BoardController = $.klass({
   setCurrentTool: function(tool) {
     ddd(tool);
     this.currentTool = tool;
-    this.currentTool.selectTool();
+    if (this.currentTool) {
+      if (this.isInteraction) {
+        this.toggleInteractionMode();
+      }
+      this.currentTool.selectTool();
+    }
     // this.unselectItemViews(this.selection);
   },
   
@@ -210,6 +245,7 @@ WebDoc.BoardController = $.klass({
         }
       }
     }
+    this.fireSelectionChanged();    
   },
   
   deleteSelection: function(e) {
@@ -280,8 +316,9 @@ WebDoc.BoardController = $.klass({
   mouseDown: function(e) {
     $(document).unbind("mousemove");
     $(document).unbind("mouseup");
-    if (window.document.activeElement) 
+    if (window.document.activeElement) {
       window.document.activeElement.blur();
+    }
     e.preventDefault();
     if (!e.boardIgnore) {
       $(document).bind("mousemove", this, this.mouseMove.pBind(this));

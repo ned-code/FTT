@@ -1,16 +1,3 @@
-/* ============================ */
-/* = Resetting browsers' mess = */
-/* ============================ */
-/* source:http://www.sjhwebdesigns.com/resources/csstutorial/bordermarginandpadding */
-
-/*
-* { margin:0; padding:0;}
-h1, h2, h3, h4, h5, h6 {padding:5px 0;}
-li { padding:10px 0;}
-ul { margin:0 40px;}
-ol { margin:0 50px;}
-p {padding-bottom:28px;}
-*/
 
 /* =========== */
 /* = General = */
@@ -61,6 +48,7 @@ a:hover { color: #0069BF;}
     width: 300px;
     background: #8CEF86;
 }
+
 /* ================= */
 /* = Login page = */
 /* ================= */
@@ -329,23 +317,23 @@ a:hover { color: #0069BF;}
     overflow:hidden;
     border-right: 1px solid #AFAFAF;
 }
-#tb_2 ul li{
+.tb_button {
     float: left;
     padding-right:5px;
 }
-#tb_2 ul li:last-child{
+.tb_button:last-child{
     padding-right: 0;
 }
-#tb_2 ul li a{
+.tb_button a{
     display: block;
     border: 1px solid #efefef;
 }
-#tb_2 ul li a img{
+.tb_button a img{
     width:25px;
     height:25px;
 }
-#tb_2 ul li a:hover,
-#tb_2 ul li a.current_tool{
+.tb_button a:hover,
+.tb_button a.current_tool{
     display: block;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -366,7 +354,7 @@ a:hover { color: #0069BF;}
 #tb_2 #lib_tools {
     border-right: none;
 }
-#tb_2 #toggle_inspector{
+#tb_2 #toggle_inspector_wrap{
     float: right;
     margin:3px 0px;
     padding: 0;
@@ -535,6 +523,7 @@ a:hover { color: #0069BF;}
 }
 
 #page_inspector {
+  background-color:#ebebeb;   
   position:relative;
   overflow:hidden;
   padding:1px;  
@@ -593,6 +582,7 @@ a:hover { color: #0069BF;}
   width:100%;
   height:300px;
 }
+
 #palette_text ul li a:hover {
   display: block;
   background-color: #fff;
@@ -642,9 +632,13 @@ a:hover { color: #0069BF;}
 }
 
 .item {
-  position:absolute;
   overflow:hidden;
+  position:absolute;
   border: solid 1px #888888;
+}
+
+.item_interact {
+  border:none;
 }
 
 .ui-resizable-e {

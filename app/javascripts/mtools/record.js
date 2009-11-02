@@ -1,5 +1,21 @@
 /**
  * Base class for all persitent objects.
+ * Record object are object that can be created, read, updated, and deleted (CRUD) by using a REST interface.
+ * Each Record object has a data attribute that correspond the persistent data of the object.
+ * By default each object has two persistent attributes: uuid and created_at. Those two attributes are automatically generated when a new Record is created.
+ * Each subclass of Record must implement the function className. This method return a String that represent the kind of object and it is used to generate the REST URL.
+ * (Typically if className return page, generated URL will be http://host/pages/...). A 's' is added to the classname and pluralize is not supported for the moment.
+ * Record can also define a function rootUrl that allow to add prefix to the generated REST URL.
+ * (Typically is rootUrl resturn '/documents/', generated URL will be http://host/documents/pages/...)
+ * Each Record can be saved with the save function. This function will do an ajax call to create or update the record with the corresponding REST URL.
+ * Destroy function will delete the record by doing an HTTP DELETE. In fact it is a POST with a parameter _method = delete. (it works with rails REST implementation)
+ * Record can be initialized from a json comming from the server. This json must contain an attribute with name className (ie document). This attribute
+ * contains the persistent data as a json object.
+ * {
+ *   person : { uuid: "12456216286", created_at: "12-05-1975T10:23:10", name: "Julien" }
+ * }
+ * 
+ * @author Julien Bachmann
  */
 MTools.Record = $.klass(
 {
@@ -7,7 +23,8 @@ MTools.Record = $.klass(
   data: {},
   /**
    * constructor take a json as parameter to initialize the data of the object
-   * @param {Object} json all the persisted data of the object. if null object is initialized with an UUID and creation date.
+   * @param {Object} json. If object is passed then it initialized the Record with this data and object is considered as an existing object.
+   *                       If null is passed, object is initialized with an UUID and creation date and it is considered as a new object.
    */
   initialize: function(json) {
     this.listeners = [];
@@ -52,6 +69,10 @@ MTools.Record = $.klass(
     return "";
   },
   
+  /**
+   * Add a listener on the objet changed.
+   * @param {Object} listener a listen on the object changed. By default listener must implement objectChanged function.
+   */
   addListener: function(listener) {
     this.listeners.push(listener);
   },
@@ -101,12 +122,12 @@ MTools.Record = $.klass(
   save: function(callBack) {
     if (this.isNew) {
       MTools.ServerManager.newObject(this.rootUrl() + "/" + this.className() + "s", this, function(persitedDoc) {
-        callBack ? callBack.call(persitedDoc, "OK") : '';
+        callBack ? callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]) : '';
       });
     }
     else {
       MTools.ServerManager.updateObject(this.rootUrl() + "/" + this.className() + "s/" + this.uuid(), this, function(persitedDoc) {
-        callBack ? callBack.call(persitedDoc, "OK") : '';
+        callBack ? callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]) : '';
       });
     }
   },
@@ -117,7 +138,7 @@ MTools.Record = $.klass(
    */
   destroy: function(callBack) {
     MTools.ServerManager.deleteObject(this.rootUrl() + "/" + this.className() + "s/" + this.uuid(), this, function(persitedDoc) {
-      callBack ? callBack.call(persitedDoc, "OK") : '';
+      callBack ? callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]) : '';
     });
   }
 });

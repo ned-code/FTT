@@ -1,3 +1,6 @@
+/** 
+ * A global Object that detect the current browser.
+**/
 MTools.Browser = {
   IE:     !!(window.attachEvent && !window.opera), 
   IE7:    (/MSIE\s7/).test(navigator.appVersion), 

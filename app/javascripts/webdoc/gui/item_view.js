@@ -109,6 +109,13 @@ WebDoc.ItemView = $.klass({
     this.domNode.html(this.item.data.data.innerHTML);
   },
   
+  domNodeChangedChanged: function() {
+    this.unSelect();
+    this.domNode.remove();
+    this.domNode = this.createDomNode();
+    this.select();  
+  },  
+  
   isSelected: function() {
     return this.selectionNode.parent().length > 0;
   },
@@ -209,7 +216,7 @@ WebDoc.ItemView = $.klass({
       left: this.item.data.data.css.left
     });
     this.resetHandles();
-    WebDoc.application.inspectorController.refreshProperties();
+    WebDoc.application.inspectorController.refreshSubInspectors();
   },
   
   _resizeTo: function(size) {
@@ -222,7 +229,7 @@ WebDoc.ItemView = $.klass({
       height: this.item.data.data.css.height
     });
     this.resetHandles();
-    WebDoc.application.inspectorController.refreshProperties();
+    WebDoc.application.inspectorController.refreshSubInspectors();
   },  
 });
 

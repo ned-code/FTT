@@ -1,5 +1,7 @@
 /**
  * UndoManager stack
+ * 
+ * @author Julien Bachmann
  **/
 MTools.UndoManager = $.klass({
   initialize: function() {

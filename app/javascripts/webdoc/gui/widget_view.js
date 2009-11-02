@@ -47,13 +47,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     return widgetNode;
   },
   
-  domNodeChangedChanged: function() {
-    this.unSelect();
-    this.domNode.remove();
-    this.domNode = this.createDomNode();
-    this.select();  
-  },
-  
   innerHtmlChanged: function($super) {
     $super();
     // resize if inner html is iframe
@@ -68,7 +61,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   edit: function($super) {
     $super();
-    WebDoc.application.boardController.unselectItemViews([this]);
+    WebDoc.application.boardController.unselectItemViews([this]);    
     WebDoc.application.boardController.editingItem = this;
     this.domNode.addClass("item_edited");
     this.domNode.css({
@@ -89,7 +82,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       if (this.domNode.get(0).contentWindow.initialize) {
         this.domNode.get(0).contentWindow.initialize();
       }
-      $(this.domNode.get(0).contentDocument).find("body").css("overflow", "hidden");
+      //$(this.domNode.get(0).contentDocument).find("body").css("overflow", "hidden");
       // inject innerHTML if exist
       /*
       if (this.item.data.data.innerHTML) {

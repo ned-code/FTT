@@ -16,10 +16,11 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   
   edit: function($super) { //called if we clicked on an already selected textbox
     $super();
-    WebDoc.application.boardController.unselectItemViews([this]);
+    WebDoc.application.boardController.unselectItemViews([this]); 
     WebDoc.application.boardController.editingItem = this;
     WebDoc.application.textTool.enterEditMode(this);
     this.domNode.addClass("item_edited");
+    WebDoc.application.inspectorController.selectPalette(1);
   },
   
   isEditing: function() {

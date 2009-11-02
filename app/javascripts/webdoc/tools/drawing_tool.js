@@ -29,7 +29,6 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   selectTool: function() {
       WebDoc.application.boardController.unselectAll();
       WebDoc.application.inspectorController.selectPalette(2);
-      //window.setTimeout("WebDoc.application.inspectorController.selectPalette(2);", 400);            
   },
   
   mouseDown: function(e) {

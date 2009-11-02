@@ -56,7 +56,7 @@ WebDoc.ItemThumbnailView = $.klass({
   },
   
   innerHtmlChanged: function() {
-    this.domNode.html(this.item.data.data.innerHTML);
+    //this.domNode.html(this.item.data.data.innerHTML);
   },
 });
 
