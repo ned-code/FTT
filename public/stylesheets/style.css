@@ -227,17 +227,26 @@ a:hover { color: #0069BF;}
 }
 #tb_1_utilities_preview a{
     display: block;
-    height: 16px;
-    padding: 0 5px;
+    height: 13px;
+    padding: 4px 5px 0 20px;
+    margin-top: -1px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    background: #fff;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: 2px 0px;
     border: 1px solid #afafaf;
     text-transform: uppercase;
     color: #999999;
     text-decoration: none;
     font-size: 11px;
     font-weight: bold;
+}
+.toggle_preview {
+  background-image: url(../images/icons/eye.png);
+}
+.toggle_edit {
+  background-image: url(../images/icons/edit_16.png);
 }
 #tb_1_utilities_preview a:hover{
     color: #4D4D4D;
