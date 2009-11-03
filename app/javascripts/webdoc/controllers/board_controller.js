@@ -135,6 +135,7 @@ WebDoc.BoardController = $.klass({
       $(".preview_hidden").css("display", "none");
       $(".toggle_preview").addClass("toggle_edit");
       $(".toggle_preview").removeClass("toggle_preview");
+      $("#tb_1_utilities_preview a").text("EDIT MODE");
     }
     else {
       // go to non interaction mode
@@ -148,6 +149,7 @@ WebDoc.BoardController = $.klass({
       $(".preview_hidden").css("display", "");
       $(".toggle_edit").addClass("toggle_preview");
       $(".toggle_edit").removeClass("toggle_edit");
+      $("#tb_1_utilities_preview a").text("QUICK PREVIEW");      
     }
     $("#board svg").css("zIndex", this.isInteraction?"-1":"999999");        
   },
