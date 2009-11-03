@@ -11,12 +11,14 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
       $super(toolId);
     },
     
-    selectTool: function() {
+    selectTool: function($super) {
+      $super();
       WebDoc.application.boardController.unselectAll();      
     },
     
     mouseDown: function(e)
     {
+      e.preventDefault();      
         this.moving = true;
         this.originalMovingPos = 
         {
@@ -33,6 +35,7 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
     
     mouseMove: function(e)
     {
+      e.preventDefault();      
         if (this.moving) 
         {
             var xMove = this.originalMovingPos.x - e.screenX;
@@ -45,6 +48,7 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
     
     mouseUp: function(e)
     {
+      e.preventDefault();      
         this.moving = false;
     }
     

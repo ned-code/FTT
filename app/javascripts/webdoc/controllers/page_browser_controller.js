@@ -31,7 +31,9 @@ WebDoc.PageBrowserController = $.klass({
           marginLeft: "0px"
         });
       }    
-      $("#left_bar").unbind();      
+      $("#left_bar").unbind();  
+      ddd("browser", $("#page_browser"));
+      $("#page_browser a").removeClass("toggle_on_panel");    
     }
     else {
       this.document.addListener(this);
@@ -47,6 +49,7 @@ WebDoc.PageBrowserController = $.klass({
       }
 
       $("#left_bar").click(this.changeSelectedPage.pBind(this));
+      $("#page_browser a").addClass("toggle_on_panel");
     }
     this.visible = !this.visible;
   },

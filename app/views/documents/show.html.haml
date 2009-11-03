@@ -61,7 +61,7 @@
     %li#zoom_out.tb_button
       %a{ :href => "" , :title => "Zoom Out"}
         %img{ :src => "/images/icons/zoom_out.png", :alt =>"Zoom Out"}
-    %li#tool_hand.tb_button
+    %li#tool_hand.tb_button.state_tool
       %a{ :href => "" , :title => "Pan"}
         %img{ :src => "/images/icons/pan.png", :alt =>"Pan"}
   %ul#edit_tools.preview_hidden
@@ -75,7 +75,7 @@
       %a{ :href => "#" , :title => "Remove"}
         %img{ :src => "/images/icons/delete.png", :alt =>"Remove"}
   %ul#misc_tools
-    %li#tool_arrow.tb_button
+    %li#tool_arrow.tb_button.state_tool
       %a{ :href => "#" , :title => "Select"}
         %img{ :src => "/images/icons/cursor.png", :alt =>"Selection tool"}
     %li#html_snipplet.tb_button.preview_hidden
@@ -84,7 +84,7 @@
     %li#tool_text.tb_button.preview_hidden
       %a{ :href => "#" , :title => "Insert a Text box"}
         %img{ :src => "/images/icons/text.png", :alt =>"Text tool"}
-    %li#tool_pen.tb_button.preview_hidden
+    %li#tool_pen.tb_button.preview_hidden.state_tool
       %a{ :href => "#" , :title => "Draw"}
         %img{ :src => "/images/icons/pen.png", :alt =>"Pen tool"}
   %ul#lib_tools.preview_hidden

@@ -3,6 +3,7 @@
 */
 WebDoc.Tool = $.klass({  
   initialize: function(toolId) {
+    this.toolId = toolId;
     $(toolId).bind("click", this.toolbarButtonClick.pBindAsEventListener(this));
   },
   toolbarButtonClick: function(e) {
@@ -14,6 +15,10 @@ WebDoc.Tool = $.klass({
   },
 
   selectTool: function() {
+    if ($(this.toolId).hasClass("state_tool")) {
+      $(".state_tool a").removeClass("current_tool");
+      $(this.toolId + " a").addClass("current_tool");
+    }
   },
 
   unSelectTool: function() {

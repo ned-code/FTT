@@ -26,9 +26,10 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     }.pBind(this));    
   },
 
-  selectTool: function() {
-      WebDoc.application.boardController.unselectAll();
-      WebDoc.application.inspectorController.selectPalette(2);
+  selectTool: function($super) {
+    $super();
+    WebDoc.application.boardController.unselectAll();
+    WebDoc.application.inspectorController.selectPalette(2);
   },
   
   mouseDown: function(e) {
