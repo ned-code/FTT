@@ -126,17 +126,28 @@ WebDoc.BoardController = $.klass({
     if (this.isInteraction) {
       // go to interaction mode
       this.unselectAll();
+      $("#board").unbind("dragenter");
+      $("#board").unbind("dragover");
+      $("#board").unbind("drop");
+
       $(".item").addClass("item_interact");
-      this.setCurrentTool(null);
-      this.unbindMouseEvent();
+      this.setCurrentTool(WebDoc.application.arrowTool);
+      $(".preview_hidden").css("display", "none");
+      $(".toggle_preview").addClass("toggle_edit");
+      $(".toggle_preview").removeClass("toggle_preview");
     }
     else {
       // go to non interaction mode
+      $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
+      $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver);
+      $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);      
       $(".item").removeClass("item_interact");
       if (!this.currentTool) {
         this.setCurrentTool(WebDoc.application.arrowTool);
       }      
-      this.bindMouseEvent();
+      $(".preview_hidden").css("display", "");
+      $(".toggle_edit").addClass("toggle_preview");
+      $(".toggle_edit").removeClass("toggle_edit");
     }
     $("#board svg").css("zIndex", this.isInteraction?"-1":"999999");        
   },
@@ -169,7 +180,12 @@ WebDoc.BoardController = $.klass({
     this.currentTool = tool;
     if (this.currentTool) {
       if (this.isInteraction) {
-        this.toggleInteractionMode();
+        if (this.currentTool == WebDoc.application.arrowTool) {
+          $("#event_catcher").css("display", "none");
+        }
+        else {
+          $("#event_catcher").css("display", "inline");
+        }
       }
       this.currentTool.selectTool();
     }
@@ -324,7 +340,9 @@ WebDoc.BoardController = $.klass({
     if (window.document.activeElement) {
       window.document.activeElement.blur();
     }
-    e.preventDefault();
+    if (!this.isInteraction) {
+      e.preventDefault();
+    }
     if (!e.boardIgnore) {
       $(document).bind("mousemove", this, this.mouseMove.pBind(this));
       $(document).bind("mouseup", this, this.mouseUp.pBind(this));
@@ -333,7 +351,9 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseMove: function(e) {
-    e.preventDefault();
+    if (!this.isInteraction) {
+      e.preventDefault();
+    }
     this.currentTool.mouseMove(e);
   },
   
@@ -345,7 +365,9 @@ WebDoc.BoardController = $.klass({
   mouseUp: function(e) {
     $(document).unbind("mousemove");
     $(document).unbind("mouseup");
-    e.preventDefault();
+    if (!this.isInteraction) {
+      e.preventDefault();
+    }
     this.currentTool.mouseUp(e);
   },
   

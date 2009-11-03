@@ -18,16 +18,16 @@ WebDoc.PageView = $.klass({
     }
     else {
       this.domNode.css(page.data.data.css);
-    }
+    }    
     
-    /*
-     this.domNode.append($("<div/>").css({
+     this.domNode.append($("<div id=\"event_catcher\"/>").css({
      zIndex: 999999,
      position: "absolute",
      width: "100%",
-     height: "100%"
+     height: "100%",
+     display: "none"
      }));
-     */
+     
     this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
     this.drawingDomNode.css("zIndex", 999999);
     this.domNode.append(this.drawingDomNode.get(0));
