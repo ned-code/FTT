@@ -92,6 +92,9 @@ WebDoc.BoardController = $.klass({
     this.zoom(1);
     this.centerBoard();
     this.fireCurrentPageChanged();
+    if (this.isInteraction) {
+      this.toggleInteractionMode();
+    }    
     /*
      if (heightFactor < widthFactor) {
      this.zoom(1 + heightFactor);
@@ -116,7 +119,7 @@ WebDoc.BoardController = $.klass({
   },  
   
   toggleInteractionMode: function() {
-    var currentState = !($("#board svg").css("display") == "inline"); 
+    var currentState = !($("#board svg").css("zIndex") == "999999"); 
     
     this.isInteraction = !currentState;
     ddd("current ", currentState, "new", this.isInteraction);
@@ -130,10 +133,12 @@ WebDoc.BoardController = $.klass({
     else {
       // go to non interaction mode
       $(".item").removeClass("item_interact");
-      this.setCurrentTool(WebDoc.application.arrowTool);      
+      if (!this.currentTool) {
+        this.setCurrentTool(WebDoc.application.arrowTool);
+      }      
       this.bindMouseEvent();
     }
-    $("#board svg").css("display", this.isInteraction?"none":"inline");        
+    $("#board svg").css("zIndex", this.isInteraction?"-1":"999999");        
   },
   
   
