@@ -340,17 +340,32 @@ a:hover { color: #0069BF;}
     border: 1px solid #e6e6e6;
     background-color: #fff;
 }
+
 #tb_2 ul li a.toggle_on_panel{
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   background-color: #6F6F6F;
   background-position: -23px 1px;
 }
+/*Special case to prevent page deletion :-)*/
+#removePage a {
+    height: 28px;
+    width: 25px;
+    background-image: url(../images/icons/page_remove.png);
+    background-repeat: no-repeat;
+    background-position: 1px 1px;
+}
+#removePage a:hover {
+    background-position: -23px 1px;
+}
 #page_browser a{/*Special case with image in CSS for the toggle_on_panel state -> bad, all buttons images should be in CSS*/
     height: 28px;
     width: 25px;
-    background: url(../images/icons/browse.png) no-repeat 1px 1px;
+    background-image: url(../images/icons/browse.png);
+    background-repeat: no-repeat;
+    background-position: 1px 1px;
 }
+
 #tb_2 #lib_tools {
     border-right: none;
 }
