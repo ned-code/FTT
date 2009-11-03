@@ -9,6 +9,7 @@ body {
 }
 
 a { color: #3B9EEF; }
+a{ outline: none;}
 a:hover { color: #0069BF;}
 
 .sec-action { color: #606060;}
@@ -314,7 +315,7 @@ a:hover { color: #0069BF;}
 }
 
 #tb_2{
-    min-width: 800px;
+    min-width: 900px;
     height: 37px;
     background-color: #efefef;
 
