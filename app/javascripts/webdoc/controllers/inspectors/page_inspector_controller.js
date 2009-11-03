@@ -6,7 +6,8 @@ WebDoc.PageInspectorController = $.klass({
   initialize: function() {
     $("#page_css_editor").bind("blur", this.applyPageCss);  
     $("#external_page_checkbox").bind("change", this.changeExternalMode.pBind(this));
-    $("#external_page_url").bind("blur", this.updateExternalPageUrl.pBind(this));
+    $("#allow_annotation_checkbox").bind("change", this.changeAllowAnnotation.pBind(this)); 
+    $("#external_page_url").bind("blur", this.updateExternalPageUrl.pBind(this));    
     WebDoc.application.boardController.addCurrentPageListener(this);
   },
   
@@ -14,6 +15,7 @@ WebDoc.PageInspectorController = $.klass({
     var page = WebDoc.application.pageEditor.currentPage;    
     $("#page_css_editor").get(0).value = $.toJSON(page.data.data.css);   
     $("#external_page_checkbox").attr("checked", page.data.data.externalPage?true:false);
+    $("#allow_annotation_checkbox").attr("checked", page.data.data.allowAnnotation?true:false);    
     $("#external_page_url").get(0).value = page.data.data.externalPageUrl;  
     this.updateExternalMode(page); 
    },
@@ -27,6 +29,15 @@ WebDoc.PageInspectorController = $.klass({
       $("#page_css_editor").css("display", "");
       $("#external_page_panel").css("display", "none");
     }
+  },
+  
+  changeAllowAnnotation: function(e) {
+    e.preventDefault();
+    var page = WebDoc.application.pageEditor.currentPage;
+    page.setAllowAnnotation($("#allow_annotation_checkbox").attr("checked"));
+    page.save(function() {
+      WebDoc.application.pageEditor.loadPage(page);
+    });     
   },
   
   updateExternalPageUrl: function() {

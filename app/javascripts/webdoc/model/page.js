@@ -22,6 +22,16 @@ WebDoc.Page = $.klass(MTools.Record,
     this.fireObjectChanged();    
   },
   
+  setAllowAnnotation: function(mode) {
+    ddd("set allow annotation", mode);
+    this.data.data.allowAnnotation = mode;
+    if (mode) {
+      delete this.data.data.css.width;
+      delete this.data.data.css.height;
+    }
+    this.fireObjectChanged();    
+  },
+  
   applyCss: function(newCss) {   
     if (newCss != this.data.data.css) {
       this.data.data.css = newCss;
