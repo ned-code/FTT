@@ -32,6 +32,10 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     WebDoc.application.inspectorController.selectPalette(2);
   },
   
+  getCursor: function() {
+    return "url(http://localhost:3000/images/icons/cursor_pen.png), crosshair";  
+  },
+      
   mouseDown: function(e) {
     e.preventDefault();
     this.drawing = true;
