@@ -40,10 +40,18 @@ WebDoc.PageView = $.klass({
       var externalPage = $("<iframe/>").css({
         width: "100%",
         height: "100%",
-        overflow: "hidden"
       });
       if (page.data.data.externalPageUrl) {
-        externalPage.attr("src", "http:\/\/" + document.domain + ":" + window.location.port + "/proxy/resolve?url=" + page.data.data.externalPageUrl);
+        if (page.data.data.allowAnnotation) {
+          externalPage.attr("src", "http:\/\/" + document.domain + ":" + window.location.port + "/proxy/resolve?url=" + page.data.data.externalPageUrl);
+          $("#board_container").css("overflow", "auto");
+          externalPage.css("overflow", "hidden");
+        }
+        else {
+          externalPage.attr("src", page.data.data.externalPageUrl);
+          $("#board_container").css("overflow", "hidden");
+          externalPage.css("overflow", "auto");
+        }
         if (page.data.data.css.width) {
            this.domNode.css(page.data.data.css);
         }
@@ -57,7 +65,7 @@ WebDoc.PageView = $.klass({
         }
         this.itemDomNode.append(externalPage[0]);
       }
-      $("#board_container").css("overflow", "auto");
+      
     }
     else {
       $("#board_container").css("overflow", "hidden");
