@@ -135,17 +135,18 @@ WebDoc.PageEditor = $.klass({
 
   removePage: function(e) {
     var pageToDelete = this.currentPage;
-    if (this.currentDocument.pages.length > 1) 
-    {
-      this.currentPage.destroy(function(objet)
-      {
-        var newPagePosition = 0;
-        if (pageToDelete.data.position > 0) {
-          newPagePosition = pageToDelete.data.position - 1;
-        }
-        this.currentDocument.removePage(pageToDelete, true);
-        this.loadPage(this.currentDocument.pages[newPagePosition]);
-      }.pBind(this));
+    if (this.currentDocument.pages.length > 1) {
+      var choice = confirm("Are you sure you want to delete the current page?");
+      if (choice) {
+        this.currentPage.destroy(function(objet) {
+          var newPagePosition = 0;
+          if (pageToDelete.data.position > 0) {
+            newPagePosition = pageToDelete.data.position - 1;
+          }
+          this.currentDocument.removePage(pageToDelete, true);
+          this.loadPage(this.currentDocument.pages[newPagePosition]);
+        }.pBind(this));
+      }
     }
   },
 
