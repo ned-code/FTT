@@ -5,7 +5,13 @@ class ItemsController < ApplicationController
   def show
     @item = @page.items.find(params[:id])
     if (params[:fullHTML])
-      render :text => "<html><head></head><body>#{@item[:data][:innerHTML]}</body>"
+      if ((@item[:data][:innerHTML] =~  /<html>(.|\n)*<\/html>/mi) == 0)
+        render :text => @item[:data][:innerHTML]
+      else
+        render :text => "<html><head></head><body>#{@item[:data][:innerHTML]}</body>"
+      end
+    
+      
     else
       render :text => @item[:data][:innerHTML]
     end

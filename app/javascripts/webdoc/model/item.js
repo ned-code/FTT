@@ -70,7 +70,7 @@ WebDoc.Item = $.klass(MTools.Record,
     if (html != this.data.data.innerHTML) {
       this.data.data.innerHTML = html;
       this.save();
-      if (html.indexOf("<script") != -1) {
+      if (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi)) {
         ddd("replace tag");
         this.data.data.tag = "iframe";
         this.data.data.src = this.rootUrl() + "/items/" + this.uuid() + "?fullHTML=true";
