@@ -26,15 +26,9 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   line-height: 1;
   vertical-align: baseline;
 }
-
-ul, ol {
-  padding:40px;  
-}
-
 a img, :link img, :visited img {
   border: 0;
 }
-
 table {
   border-collapse: collapse;
   border-spacing: 0;

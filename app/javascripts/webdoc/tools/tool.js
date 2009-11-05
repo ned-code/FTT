@@ -16,8 +16,8 @@ WebDoc.Tool = $.klass({
 
   selectTool: function() {
     if ($(this.toolId).hasClass("state_tool")) {
-      $(".state_tool a").removeClass("current_tool");
-      $(this.toolId + " a").addClass("current_tool");
+      $(".state_tool").removeClass("current_tool");
+      $(this.toolId).addClass("current_tool");
       ddd("set cursor", this.getCursor());
       $("#board").css("cursor", this.getCursor());
     }

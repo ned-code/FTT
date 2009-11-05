@@ -31,7 +31,7 @@ WebDoc.InspectorController = $.klass({
     this.selectInspector(0);
     this.currentInspectorId = 0;
     WebDoc.application.boardController.addSelectionListener(this);
-    $("#inspector").accordion({
+    $("#inspectors").accordion({
       change: function(event, ui) {
         if (this.currentInspectorId > 0) {
           this.lastInspectorId = this.currentInspectorId;
@@ -46,7 +46,7 @@ WebDoc.InspectorController = $.klass({
       this.toggleInspector(this.showLib.pBind(this));
     }
     else {
-      $("#inspector").slideUp("fast");
+      $("#inspectors").slideUp("fast");
       $("#libraries").slideDown("fast");
     }
   },  
@@ -76,16 +76,16 @@ WebDoc.InspectorController = $.klass({
   },
   
   selectInspector: function(inspectorId) {
-    if ($("#inspector").css("display") == "none") {
+    if ($("#inspectors").css("display") == "none") {
       $("#libraries").slideUp("fast");
-      $("#inspector").slideDown("fast", function() {
+      $("#inspectors").slideDown("fast", function() {
         ddd("select inspector " + inspectorId);
-        $("#inspector").accordion("activate", inspectorId);        
+        $("#inspectors").accordion("activate", inspectorId);        
       });
     }
     else {
       ddd("select inspector " + inspectorId);
-      $("#inspector").accordion("activate", inspectorId);
+      $("#inspectors").accordion("activate", inspectorId);
     }
 
   },
@@ -106,9 +106,9 @@ WebDoc.InspectorController = $.klass({
   selectionChanged: function() {
     ddd("selected item ", WebDoc.application.boardController.selection);
     if (WebDoc.application.boardController.selection.length > 0) {
-      if ($("#inspector").css("display") == "none") {
+      if ($("#inspectors").css("display") == "none") {
         $("#libraries").slideToggle("fast");
-        $("#inspector").slideToggle("fast", function() {
+        $("#inspectors").slideToggle("fast", function() {
           if (this.currentInspectorId < 1) {
             this.selectInspector(this.lastInspectorId);
           }      

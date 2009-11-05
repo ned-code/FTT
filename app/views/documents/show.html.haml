@@ -1,11 +1,11 @@
 - title @document.title
-#tb_1
+#tb_1.tb
   %h1
     %img{ :src => "/images/logo.png", :alt =>"WebDoc logo"}
     
   %ul#tb_1_utilities
-    %li#tb_1_utilities_preview
-      %a.toggle_preview{ :href => "#"}
+    %li#tb_1_utilities_preview.toggle_preview
+      %a{ :href => "#"}
         quick preview
     %li#tb_1_utilities_docname
       %h2=@document.title
@@ -33,8 +33,8 @@
         %li
           %a{ :href => "#"} Print
 
-#tb_2
-  %ul#pages_tools.container
+#tb_2.tb
+  %ul#pages_tools.left_tb_group
     %li#addPage.tb_button.preview_hidden
       %a{ :href => "#" , :title =>"Add a page"}
         %img{ :src => "/images/icons/add_page.png", :alt =>"Add a page"}
@@ -54,7 +54,7 @@
     %li#theme_selector.tb_button.preview_hidden
       %a{ :href => "#" , :title =>"Change theme"}
         %img{ :src => "/images/icons/theme.png", :alt =>"Change theme"}
-  %ul#view_tools
+  %ul#view_tools.left_tb_group
     %li#zoom_in.tb_button
       %a{ :href => "" , :title => "Zoom In"}
         %img{ :src => "/images/icons/zoom_in.png", :alt =>"Zoom in"}
@@ -64,7 +64,7 @@
     %li#tool_hand.tb_button.state_tool
       %a{ :href => "" , :title => "Pan"}
         %img{ :src => "/images/icons/pan.png", :alt =>"Pan"}
-  %ul#edit_tools.preview_hidden
+  %ul#edit_tools.left_tb_group.preview_hidden
     %li#undo.tb_button
       %a{ :href => "" , :title => "Undo"}
         %img{ :src => "/images/icons/undo.png", :alt =>"Undo"}
@@ -74,7 +74,7 @@
     %li#delete_item.tb_button
       %a{ :href => "#" , :title => "Remove"}
         %img{ :src => "/images/icons/delete.png", :alt =>"Remove"}
-  %ul#misc_tools
+  %ul#misc_tools.left_tb_group.last_tb_group
     %li#tool_arrow.tb_button.state_tool
       %a{ :href => "#" , :title => "Select"}
         %img{ :src => "/images/icons/cursor.png", :alt =>"Selection tool"}
@@ -87,24 +87,25 @@
     %li#tool_pen.tb_button.preview_hidden.state_tool
       %a{ :href => "#" , :title => "Draw"}
         %img{ :src => "/images/icons/pen.png", :alt =>"Pen tool"}
-  %ul#lib_tools.preview_hidden
-    %li#lib_view.tb_button
-      %a{ :href => "", :title => "Show Library"}
-        %img{ :src => "/images/icons/library.png", :alt => "Show Library"}
-  %ul#toggle_inspector_wrap
+
+  %ul#toggle_inspector_wrap.right_tb_group
     %li#toggle_inspector.tb_button
       %a{ :href => "", :title => "Toggle Library"}
         %img{ :src => "/images/icons/inspector.png", :alt => "Toggle Inspector"}
+  %ul#lib_tools.preview_hidden.right_tb_group.last_tb_group
+    %li#lib_view.tb_button
+      %a{ :href => "", :title => "Show Library"}
+        %img{ :src => "/images/icons/library.png", :alt => "Show Library"}        
 #content
   #left_bar
     #page_browser 
       %ul 
   #right_bar
-    #inspector      
+    #inspectors      
       %h3
         %a{ :href => "" } Page inspector
       //%iframe#chat{:src => "http://o.aolcdn.com/aim/gromit/aim_express/gm/090918.2.3893.en-us/WidgetMain.html"}
-      #page_inspector
+      #page_inspector.inspector
         %label Use external page
         %input#external_page_checkbox{ :type => "checkbox"}
         %textarea#page_css_editor
@@ -117,8 +118,8 @@
             %input#external_page_url                  
       %h3
         %a{ :href => "" } Palette
-      #palette_inspector
-        #palette_text
+      #palette_inspector.inspector
+        #palette_text.palette
           %ul{ :style => "display:block" }
             %li
               %a.bold{ :href => "" }
@@ -154,7 +155,7 @@
               %a.outdent{ :href => "" }
                 %img{ :src => "/images/icons/text_outdent.png", :alt =>"Outdent"}
           #palette_overlay
-        #palette_pen
+        #palette_pen.palette
           %ul#colors{ :style => "display:block" }
             %li
               %a{ :href => "" }
@@ -178,35 +179,35 @@
             %li
               %a{ :href => "10" }
                 %img{ :src => "/images/icons/largePen.png", :alt =>"Large"}                         
-        #palette_empty
+        #palette_empty.palette
           %center Empty             
       %h3
         %a{ :href => "" } Properties
-      #properties_inspector
+      #properties_inspector.inspector
         #default_properties
-          %div.top
+          %div.properties_line
             %label.properties_label Top
             %input#property_top.properties_input
-          %div.left
+          %div.properties_line
             %label.properties_label Left
             %input#property_left.properties_input
-          %div.width
+          %div.properties_line
             %label.properties_label Width
             %input#property_width.properties_input
-          %div.height
+          %div.properties_line
             %label.properties_label Height
             %input#property_height.properties_input
-          %div
+          %div.properties_line
             %label.properties_label Show scroll
             %input#property_scroll{ :type => "checkbox" }
-          #image_properties{ :style => "display:none"}
+          #image_properties.properties_line{ :style => "display:none"}
             %label.properties_label Image URL
             %input#property_src.properties_input
-        #empty_properties 
+        #empty_properties
           %center Empty                                   
       %h3
         %a{ :href => "#" }  Inner HTML
-      #html_inspector
+      #html_inspector.inspector
         %textarea#selected_item_html_editor  
 
     #libraries{ :style => "display: none" }
