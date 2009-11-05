@@ -103,6 +103,8 @@ WebDoc.BoardController = $.klass({
      this.zoom(1 + widthFactor);
      }
      */
+    $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this.currentPage));
+    $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
   },
   
   bindMouseEvent: function() {

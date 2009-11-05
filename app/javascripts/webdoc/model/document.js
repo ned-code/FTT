@@ -74,6 +74,14 @@ WebDoc.Document = $.klass(MTools.Record, {
     ddd("page created");
   },
   
+  positionOfPage: function(page) {
+    var index = $.inArray(page, this.pages);
+    if (index > -1) {
+      return index + 1;
+    }
+    return -1;
+  },
+  
   nextPage: function(page) {
     var index = $.inArray(page, this.pages);
     if (index + 1 < this.pages.length) {
