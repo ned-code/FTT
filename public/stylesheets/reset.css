@@ -35,7 +35,3 @@ q:before, q:after,
 blockquote:before, blockquote:after {
 	content: "";
 }
-
-ol, ul {
-  padding-left:30px;
-}

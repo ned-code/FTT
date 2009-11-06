@@ -406,21 +406,17 @@ a:hover { color: #0069BF;}
   border: solid 2px #ebebeb;
   padding: 2px;
 }
-
 .selected_thumb {
-    padding: 2px;
+  padding: 2px;
   border: solid 2px #3B9EEF;
   
 }
-
 .widget_thumb {
   background-color: #aaf;
 }
-
 #page_browser ul {
   overflow:hidden;  
 }
-
 #page_browser ul li {
   height:120px;
   margin:auto;
@@ -448,6 +444,9 @@ a:hover { color: #0069BF;}
   -webkit-box-shadow:2px 3px 5px #333333;
   -moz-box-shadow:2px 3px 5px #333333; 
   box-shadow:2px 3px 5px #333333;
+}
+#board ol, #board ul {
+  padding-left:30px;
 }
 /* == Item view = */
 .drag_handle {
