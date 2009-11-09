@@ -411,6 +411,14 @@ a:hover { color: #0069BF;}
   border: solid 2px #3B9EEF;
   
 }
+.page_thumb_url {
+  color:#000;
+  background-color: #fff;
+  margin-top:50px;
+}
+.page_thumb_external {
+  background-color: #fff;
+}
 .widget_thumb {
   background-color: #aaf;
 }
@@ -418,7 +426,7 @@ a:hover { color: #0069BF;}
   overflow:hidden;  
 }
 #page_browser ul li {
-  height:120px;
+  height:150px;
   margin:auto;
   overflow:hidden;
   width:200px;  

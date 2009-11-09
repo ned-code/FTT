@@ -4,55 +4,75 @@
 //= require <webdoc/gui/item_thumbnail_view>
 
 
-WebDoc.PageThumbnailView = $.klass(
-{
+WebDoc.PageThumbnailView = $.klass({
   initialize: function(page) {
     this.page = page;
     this.domNode = $('<div>').attr({
       id: "thumb_" + page.uuid(),
     }).addClass("page_thumb");
-        
+    
     this.pageThumbNode = $('<div>')
-    this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
-    this.drawingDomNode.css("zIndex", 999999);
-    this.pageThumbNode.append(this.drawingDomNode.get(0));
-    
-    this.itemDomNode = $('<div>').attr({
-      id: "thumb_items",
-      style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
-    });
-    this.pageThumbNode.append(this.itemDomNode.get(0));
-    
-    var that = this;
-    this.itemViews = {};
-    if (page.items && $.isArray(page.items)) {
-      $.each(page.items, function() {
-       that.createItemView(this);
-      });
+    if (this.page.data.data.externalPage) {
+      var url = $("<div/>").addClass("page_thumb_url").css("textAlign", "center").text(this.page.data.data.externalPageUrl);
+      this.pageThumbNode.append(url.get(0));
+      this.domNode.addClass("page_thumb_external");
     }
-    page.addListener(this);      
+    else {
+      this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
+      this.drawingDomNode.css("zIndex", 999999);
+      this.pageThumbNode.append(this.drawingDomNode.get(0));
+      
+      this.itemDomNode = $('<div>').attr({
+        id: "thumb_items",
+        style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
+      });
+      this.pageThumbNode.append(this.itemDomNode.get(0));
+      
+      var that = this;
+      this.itemViews = {};
+      if (page.items && $.isArray(page.items)) {
+        $.each(page.items, function() {
+          that.createItemView(this);
+        });
+      }
+    }
+    page.addListener(this);    
     this.updateSize();
     this.domNode.append(this.pageThumbNode);
   },
   
   updateSize: function() {
-        // define scale factor
+    // define scale factor
     var pageWidth = parseInt(this.page.data.data.css.width);
     var pageHeight = parseInt(this.page.data.data.css.height);
-    var horizontalFactor =  180 / pageWidth;
-    var verticalFactor =  100 / pageHeight;
     
-    if (horizontalFactor < verticalFactor) {
-      this.factor = horizontalFactor;
+    if (this.page.data.data.externalPage) {
+      this.factor = 1;
+      pageWidth = 180;
+      pageHeight = 135;
+      this.pageThumbNode.css({ width: "180px", height:"135px"});
     }
     else {
-      this.factor = verticalFactor;
-    }
-    this.pageThumbNode.css(this.page.data.data.css);
-    this.pageThumbNode.css("MozTransformOrigin", "0px 0px");
-    this.pageThumbNode.css("MozTransform", "scaleX(" + this.factor + ") scaleY(" + this.factor + ")");
+      var horizontalFactor = 180 / pageWidth;
+      var verticalFactor = 135 / pageHeight;
+      if (horizontalFactor < verticalFactor) {
+        this.factor = horizontalFactor;
+      }
+      else {
+        this.factor = verticalFactor;
+      }
+      this.pageThumbNode.css(this.page.data.data.css);
+      this.pageThumbNode.css("MozTransformOrigin", "0px 0px");
+      this.pageThumbNode.css("MozTransform", "scaleX(" + this.factor + ") scaleY(" + this.factor + ")");
+    }        
     var height = pageHeight * this.factor;
-    this.domNode.css({ top: (100 - height)/2, width: pageWidth * this.factor, height: height});    
+    var width = pageWidth * this.factor;
+    
+    this.domNode.css({
+      top: (135 - height) / 2,
+      width: width,
+      height: height
+    });
   },
   
   objectChanged: function(page) {
@@ -65,7 +85,7 @@ WebDoc.PageThumbnailView = $.klass(
   },
   
   domNodeChangedChanged: function() {
-    
+  
   },
   
   itemRemoved: function(removedItem) {
@@ -75,7 +95,7 @@ WebDoc.PageThumbnailView = $.klass(
       delete this.itemViews[removedItem.uuid()];
     }
   },
- 
+  
   createItemView: function(item) {
     var itemView;
     
@@ -83,16 +103,16 @@ WebDoc.PageThumbnailView = $.klass(
       case WebDoc.ITEM_TYPE_TEXT:
         itemView = new WebDoc.ItemThumbnailView(item, this);
         break;
-      case  WebDoc.ITEM_TYPE_IMAGE:
+      case WebDoc.ITEM_TYPE_IMAGE:
         itemView = new WebDoc.ImageThumbnailView(item, this);
         break;
-      case  WebDoc.ITEM_TYPE_DRAWING:
+      case WebDoc.ITEM_TYPE_DRAWING:
         itemView = new WebDoc.DrawingThumbnailView(item, this);
         break;
-      case  WebDoc.ITEM_TYPE_WIDGET:
+      case WebDoc.ITEM_TYPE_WIDGET:
         itemView = new WebDoc.WidgetThumbnailView(item, this);
-        break;            
-      default: 
+        break;
+      default:
         itemView = new WebDoc.ItemThumbnailView(item, this);
         break;
     }
