@@ -68,7 +68,7 @@ WebDoc.Item = $.klass(MTools.Record,
   
   setInnerHtml: function(html) {
     if (html != this.data.data.innerHTML) {
-      this.data.data.innerHTML = html;
+      this.data.data.innerHTML = html;      
       this.save();
       if (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi)) {
         ddd("replace tag");
@@ -90,13 +90,17 @@ WebDoc.Item = $.klass(MTools.Record,
   
   fireInnerHtmlChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
-      this.listeners[i].innerHtmlChanged();
+      if (this.listeners[i].innerHtmlChanged) {
+        this.listeners[i].innerHtmlChanged();
+      }
     }
   },
   
   fireDomNodeChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
-      this.listeners[i].domNodeChangedChanged();
+      if (this.listeners[i].domNodeChangedChanged) {
+        this.listeners[i].domNodeChangedChanged();
+      }
     }    
   },
   
