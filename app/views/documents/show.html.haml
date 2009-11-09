@@ -16,84 +16,86 @@
       %a#tb_1_utilities_settings_trigger{ :href => "#"}
         %img{ :src => "/images/icons/settings.png", :alt => "Document settings"}
       %ul#tb_1_utilities_settings_dropdown
-        %li
+        %li.action_button
           %a{ :href => "#"} Save
-        %li
+        %li.action_button
           %a{ :href => "#"} Presentation mode
-        %li
+        %li.action_button
           %a{ :href => "#"} Invite collaborators
-        %li
+        %li.action_button
           %a{ :href => "#"} Import
-        %li
+        %li.action_button
           %a{ :href => "#"} Publish        
-        %li
+        %li.action_button
           %a{ :href => "#"} Extend Uniboard
-        %li
+        %li.action_button
           %a{ :href => "#"} Export
-        %li
+        %li.action_button
           %a{ :href => "#"} Print
+        %li#disable_html.action_button
+          %a{ :href => "#"} Disable items HTML
 
 #tb_2.tb
   %ul#pages_tools.left_tb_group
-    %li#addPage.tb_button.preview_hidden
+    %li#addPage.tb_button.action_button.preview_hidden
       %a{ :href => "#" , :title =>"Add a page"}
         %img{ :src => "/images/icons/add_page.png", :alt =>"Add a page"}
-    %li#removePage.tb_button.preview_hidden
+    %li#removePage.tb_button.action_button.preview_hidden
       %a{ :href => "#" , :title => "Remove this page"}
-    %li#page_browser.tb_button
+    %li#page_browser.tb_button.action_button
       %a{ :href => "" , :title => "Open page browser"}
-    %li#previousPage.tb_button
+    %li#previousPage.tb_button.action_button
       %a{ :href => "" , :title => "Previous page"}
         %img{ :src => "/images/icons/arrow_left.png", :alt =>"Arrow Left"}
-    %li#nextPage.tb_button
+    %li#nextPage.tb_button.action_button
       %a{ :href => "" , :title => "Next Page"}
         %img{ :src => "/images/icons/arrow_right.png", :alt =>"Arrow Right"}
-    %li#layout_selector.tb_button.preview_hidden
+    %li#layout_selector.tb_button.action_button.preview_hidden
       %a{ :href => "#" , :title =>"Choose a layout"}
         %img{ :src => "/images/icons/layout.png", :alt =>"Choose a layout"}
-    %li#theme_selector.tb_button.preview_hidden
+    %li#theme_selector.tb_button.action_button.preview_hidden
       %a{ :href => "#" , :title =>"Change theme"}
         %img{ :src => "/images/icons/theme.png", :alt =>"Change theme"}
   %ul#view_tools.left_tb_group
-    %li#zoom_in.tb_button
+    %li#zoom_in.tb_button.action_button
       %a{ :href => "" , :title => "Zoom In"}
         %img{ :src => "/images/icons/zoom_in.png", :alt =>"Zoom in"}
-    %li#zoom_out.tb_button
+    %li#zoom_out.tb_button.action_button
       %a{ :href => "" , :title => "Zoom Out"}
         %img{ :src => "/images/icons/zoom_out.png", :alt =>"Zoom Out"}
-    %li#tool_hand.tb_button.state_tool
+    %li#tool_hand.tb_button.action_button.state_tool
       %a{ :href => "" , :title => "Pan"}
         %img{ :src => "/images/icons/pan.png", :alt =>"Pan"}
   %ul#edit_tools.left_tb_group.preview_hidden
-    %li#undo.tb_button
+    %li#undo.tb_button.action_button
       %a{ :href => "" , :title => "Undo"}
         %img{ :src => "/images/icons/undo.png", :alt =>"Undo"}
-    %li#redo.tb_button
+    %li#redo.tb_button.action_button
       %a{ :href => "" , :title => "Redo"}
         %img{ :src => "/images/icons/redo.png", :alt =>"Redo"}
-    %li#delete_item.tb_button
+    %li#delete_item.tb_button.action_button
       %a{ :href => "#" , :title => "Remove"}
         %img{ :src => "/images/icons/delete.png", :alt =>"Remove"}
   %ul#misc_tools.left_tb_group.last_tb_group
-    %li#tool_arrow.tb_button.state_tool
+    %li#tool_arrow.tb_button.action_button.state_tool
       %a{ :href => "#" , :title => "Select"}
         %img{ :src => "/images/icons/cursor.png", :alt =>"Selection tool"}
-    %li#html_snipplet.tb_button.preview_hidden
+    %li#html_snipplet.tb_button.action_button.preview_hidden
       %a{ :href => "#" , :title => "Insert an HTML snippet"}
         %img{ :src => "/images/icons/code.png", :alt =>"HTML code"}
-    %li#tool_text.tb_button.preview_hidden
+    %li#tool_text.tb_button.action_button.preview_hidden
       %a{ :href => "#" , :title => "Insert a Text box"}
         %img{ :src => "/images/icons/text.png", :alt =>"Text tool"}
-    %li#tool_pen.tb_button.preview_hidden.state_tool
+    %li#tool_pen.tb_button.action_button.preview_hidden.state_tool
       %a{ :href => "#" , :title => "Draw"}
         %img{ :src => "/images/icons/pen.png", :alt =>"Pen tool"}
 
   %ul#toggle_inspector_wrap.right_tb_group
-    %li#toggle_inspector.tb_button
+    %li#toggle_inspector.tb_button.action_button
       %a{ :href => "", :title => "Toggle Library"}
         %img{ :src => "/images/icons/inspector.png", :alt => "Toggle Inspector"}
   %ul#lib_tools.preview_hidden.right_tb_group.last_tb_group
-    %li#lib_view.tb_button
+    %li#lib_view.tb_button.action_button
       %a{ :href => "", :title => "Show Library"}
         %img{ :src => "/images/icons/library.png", :alt => "Show Library"}        
 #content

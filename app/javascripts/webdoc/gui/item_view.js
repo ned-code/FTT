@@ -22,27 +22,33 @@ WebDoc.ItemView = $.klass({
   },
   
   createDomNode: function() {
-  
-    var itemNode = $('<' + this.item.data.data.tag + '/>');
-    
-    this.selectionNode = $("<div/>").addClass("drag_handle");
-    this.resizeNode = $("<div/>").addClass("resize_handle");
-    itemNode.attr("id", this.item.uuid());
-    for (var key in this.item.data.data) {
-      if (key == 'css') {
-        itemNode.css(this.item.data.data.css);
-      }
-      else {
-        if (key == 'innerHtml') {
-          itemNode.html(this.item.data.data[key]);
+    var itemNode;
+    if (WebDoc.application.pageEditor.disableHtml) {
+      itemNode = $('<div/>');
+      itemNode.css(this.item.data.data.css);
+    }
+    else {
+      itemNode = $('<' + this.item.data.data.tag + '/>');
+      for (var key in this.item.data.data) {
+        if (key == 'css') {
+          itemNode.css(this.item.data.data.css);
         }
         else {
-          if (key != 'tag' && key != 'preference') {
-            itemNode.attr(key, this.item.data.data[key]);
+          if (key == 'innerHtml') {
+            itemNode.html(this.item.data.data[key]);
+          }
+          else {
+            if (key != 'tag' && key != 'preference') {
+              itemNode.attr(key, this.item.data.data[key]);
+            }
           }
         }
       }
     }
+    this.selectionNode = $("<div/>").addClass("drag_handle");
+    this.resizeNode = $("<div/>").addClass("resize_handle");
+    itemNode.attr("id", this.item.uuid());
+    
     this.pageView.itemDomNode.append(itemNode.get(0));
     itemNode.addClass("item");
     return itemNode;
@@ -106,14 +112,18 @@ WebDoc.ItemView = $.klass({
   },
   
   innerHtmlChanged: function() {
-    this.domNode.html(this.item.data.data.innerHTML);
+    if (!WebDoc.application.pageEditor.disableHtml) {    
+      this.domNode.html(this.item.data.data.innerHTML);
+    }
   },
   
   domNodeChangedChanged: function() {
-    this.unSelect();
-    this.domNode.remove();
-    this.domNode = this.createDomNode();
-    this.select();  
+    if (!WebDoc.application.pageEditor.disableHtml) {
+      this.unSelect();
+      this.domNode.remove();
+      this.domNode = this.createDomNode();
+      this.select();
+    }
   },  
   
   isSelected: function() {

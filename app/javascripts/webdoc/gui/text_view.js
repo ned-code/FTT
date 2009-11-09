@@ -33,11 +33,13 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   },
   
   innerHtmlChanged: function() {
-    if ($.string(this.item.data.data.innerHTML).blank()) {
-      this.domNode.html(WebDoc.NEW_TEXTBOX_CONTENT);
-    }
-    else {
-      this.domNode.html(this.item.data.data.innerHTML);
+    if (!WebDoc.application.pageEditor.disableHtml) {
+      if ($.string(this.item.data.data.innerHTML).blank()) {
+        this.domNode.html(WebDoc.NEW_TEXTBOX_CONTENT);
+      }
+      else {
+        this.domNode.html(this.item.data.data.innerHTML);
+      }
     }
   }
 });

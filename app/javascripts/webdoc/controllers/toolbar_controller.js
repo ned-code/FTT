@@ -15,11 +15,12 @@ WebDoc.ToolbarController = $.klass({
       ddt();
     }
     $("#tb_1_utilities_preview").click(this.toggleInteractionMode.pBind(this));
+    $("#tb_1_utilities_settings_dropdown").click(this.performAction.pBind(this));
   },
 
   performAction: function(e) {
     e.preventDefault();
-    clickedButton = $(e.target).closest(".tb_button");
+    clickedButton = $(e.target).closest(".action_button");
     try {
       // first look if action is defined in the toolbar controller. Otherwise try to delegate the action to the page editor
       if (this[clickedButton.attr("id")]) {
@@ -73,6 +74,11 @@ WebDoc.ToolbarController = $.klass({
   toggleInteractionMode: function(e) {
     e.preventDefault();
     WebDoc.application.boardController.toggleInteractionMode();
+  },
+  
+  disable_html: function(e) {
+    WebDoc.application.pageEditor.disableHtml = !WebDoc.application.pageEditor.disableHtml; 
+    WebDoc.application.pageEditor.loadPageId( WebDoc.application.pageEditor.currentPage.uuid()); 
   }
   
 });
