@@ -271,6 +271,9 @@ a:hover { color: #0069BF;}
     background: #4D4D4D;
 
 }
+#tb_1_utilities_settings_trigger.tb_1_utilities_settings_attention{
+  background:#ee1111;
+}
 #tb_1_utilities_settings:hover > ul{
     display: block;
 }
@@ -291,6 +294,17 @@ a:hover { color: #0069BF;}
     float: none;
     margin: 0;
 }
+
+#tb_1_utilities_settings li:hover > ul{
+  display:block;
+}
+#tb_1_utilities_settings_dropdown li ul{
+  display:none;
+  position:relative;
+  margin-left:10px;
+}
+
+
 #tb_1_utilities_settings_dropdown a{
     display: block;
     padding: 3px;
