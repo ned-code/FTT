@@ -63,6 +63,7 @@ WebDoc.BoardController = $.klass({
     $("#board_container").empty();
     // add the new one
     this.pageView = new WebDoc.PageView(page);
+    this.pageView.domNode.css("display", "none");
     $("#board_container").append(this.pageView.domNode);
     // re-init internal working attributes
     $("#board_container").get(0).scrollTop = 0;
@@ -105,6 +106,7 @@ WebDoc.BoardController = $.klass({
      */
     $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this.currentPage));
     $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
+    this.pageView.domNode.css("display", "");
   },
   
   bindMouseEvent: function() {
