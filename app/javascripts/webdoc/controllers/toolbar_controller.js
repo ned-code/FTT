@@ -32,6 +32,7 @@ WebDoc.ToolbarController = $.klass({
     }
     catch(ex) {
       ddd("unknown toolbar action: " + clickedButton.attr("id"));
+      ddt();
     }    
   },
   
@@ -56,7 +57,7 @@ WebDoc.ToolbarController = $.klass({
   },   
    
   lib_view: function(e) {
-    WebDoc.application.inspectorController.showLib();
+    WebDoc.application.rightBarController.showRightBar(WebDoc.application.rightBarController.showLib.pBind(WebDoc.application.rightBarController));
   },
   
   page_browser: function(e) {
@@ -66,9 +67,7 @@ WebDoc.ToolbarController = $.klass({
   },
   
   toggle_inspector: function(e) {
-    WebDoc.application.inspectorController.toggleInspector(function() {
-      WebDoc.application.boardController.centerBoard();
-    });
+    WebDoc.application.rightBarController.toggleRightBar();
   },
   
   toggleInteractionMode: function(e) {

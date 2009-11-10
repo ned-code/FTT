@@ -126,6 +126,8 @@ WebDoc.BoardController = $.klass({
     this.isInteraction = !currentState;
     ddd("current ", currentState, "new", this.isInteraction);
     if (this.isInteraction) {
+      this.previousRightBarState = WebDoc.application.rightBarController.visible?true:false;
+      ddd("previous state is", this.previousRightBarState);
       // go to interaction mode
       this.unselectAll();
       $("#board").unbind("dragenter");
@@ -138,6 +140,7 @@ WebDoc.BoardController = $.klass({
       $(".toggle_preview").addClass("toggle_edit");
       $(".toggle_preview").removeClass("toggle_preview");
       $("#tb_1_utilities_preview a").text("EDIT MODE");
+      WebDoc.application.rightBarController.hideRightBar();      
     }
     else {
       // go to non interaction mode
@@ -151,7 +154,11 @@ WebDoc.BoardController = $.klass({
       $(".preview_hidden").css("display", "");
       $(".toggle_edit").addClass("toggle_preview");
       $(".toggle_edit").removeClass("toggle_edit");
-      $("#tb_1_utilities_preview a").text("QUICK PREVIEW");      
+      $("#tb_1_utilities_preview a").text("QUICK PREVIEW"); 
+      ddd("previous state is", this.previousRightBarState);
+      if (this.previousRightBarState) {
+        WebDoc.application.rightBarController.showRightBar();
+      }    
     }
     $("#board svg").css("zIndex", this.isInteraction?"-1":"999999");        
   },

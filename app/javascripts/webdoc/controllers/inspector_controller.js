@@ -39,55 +39,13 @@ WebDoc.InspectorController = $.klass({
         this.currentInspectorId = $.inArray(ui.newContent.parent()[0], this.inspectors);
       }.pBind(this)
     });
-  },
-  
-  showLib: function() {
-    if (!this.visible) {
-      this.toggleInspector(this.showLib.pBind(this));
-    }
-    else {
-      $("#inspectors").slideUp("fast");
-      $("#libraries").slideDown("fast");
-    }
-  },  
-  
-  toggleInspector: function(callBack) {
-    if (this.visible) {
-      $("#right_bar").animate({
-        width: "0px"
-      }, callBack);
-      if (!MTools.Browser.WebKit) {
-        $("#board_container").animate({
-          marginRight: "0px"
-        });
-      }    
-    }
-    else {
-      $("#right_bar").animate({
-        width: "300px"
-      }, callBack);
-      if (!MTools.Browser.WebKit) {
-        $("#board_container").animate({
-          marginRight: "305px"
-        });
-      }
-    }
-    this.visible = !this.visible;
-  },
+  }, 
   
   selectInspector: function(inspectorId) {
-    if ($("#inspectors").css("display") == "none") {
-      $("#libraries").slideUp("fast");
-      $("#inspectors").slideDown("fast", function() {
+    WebDoc.application.rightBarController.showInspectors(function() {
         ddd("select inspector " + inspectorId);
         $("#inspectors").accordion("activate", inspectorId);        
       });
-    }
-    else {
-      ddd("select inspector " + inspectorId);
-      $("#inspectors").accordion("activate", inspectorId);
-    }
-
   },
   
   selectPalette: function(paletteId) {
@@ -106,19 +64,14 @@ WebDoc.InspectorController = $.klass({
   selectionChanged: function() {
     ddd("selected item ", WebDoc.application.boardController.selection);
     if (WebDoc.application.boardController.selection.length > 0) {
-      if ($("#inspectors").css("display") == "none") {
-        $("#libraries").slideToggle("fast");
-        $("#inspectors").slideToggle("fast", function() {
-          if (this.currentInspectorId < 1) {
-            this.selectInspector(this.lastInspectorId);
-          }      
-        }.pBind(this));        
-      }
+
+      if (this.currentInspectorId < 1) {
+        this.selectInspector(this.lastInspectorId);
+      }  
       else {
-        if (this.currentInspectorId < 1) {
-          this.selectInspector(this.lastInspectorId);
-        }
+        WebDoc.application.rightBarController.showInspectors();
       }
+          
       $("#selected_item_html_editor").attr("disabled", "");
       var html = WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
       if (html) {

@@ -12,6 +12,7 @@
 //= require <webdoc/controllers/board_controller>
 //= require <webdoc/controllers/image_library_controller>
 //= require <webdoc/controllers/widget_library_controller>
+//= require <webdoc/controllers/right_bar_controller>
 //= require <webdoc/controllers/inspector_controller>
 //= require <webdoc/controllers/page_browser_controller>
 //= require <webdoc/controllers/toolbar_controller>
@@ -42,6 +43,7 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController = new WebDoc.BoardController(true);
     WebDoc.application.imageLibraryController = new WebDoc.ImageLibraryController();
     WebDoc.application.widgetLibraryController = new WebDoc.WidgetLibraryController();  
+    WebDoc.application.rightBarController = new WebDoc.RightBarController();
     WebDoc.application.inspectorController = new WebDoc.InspectorController();
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
