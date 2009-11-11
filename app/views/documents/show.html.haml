@@ -1,5 +1,5 @@
 - title @document.title
-#tb_1.tb
+#tb_1.tb{ :style => "display:#{@is_reader?'none':''}"}
   %h1
     %img{ :src => "/images/logo.png", :alt =>"WebDoc logo"}
     
@@ -101,11 +101,11 @@
     %li#lib_view.tb_button.action_button
       %a{ :href => "", :title => "Show Library"}
         %img{ :src => "/images/icons/library.png", :alt => "Show Library"}        
-#content
+#content{ :style => "display:none"}
   #left_bar
     #page_browser 
       %ul 
-  #right_bar
+  #right_bar{ :style => "display:none"}
     #inspectors      
       %h3
         %a{ :href => "" } Page inspector
@@ -227,6 +227,6 @@
     var AUTH_TOKEN = "#{protect_against_forgery? ? form_authenticity_token : ''}";
     $.ajaxSetup({data:{authenticity_token : AUTH_TOKEN}});
     $("body").css("overflow", "hidden");
-    var editor = new WebDoc.PageEditor();
+    var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
     editor.load("#{@document.uuid}");
   });   

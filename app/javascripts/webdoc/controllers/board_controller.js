@@ -13,7 +13,9 @@
 //= require <webdoc/controllers/drag_and_drop_controller>
 
 WebDoc.BoardController = $.klass({
-  initialize: function(editable) {
+  initialize: function(editable, autoFit) {
+    this.editable = editable;
+    this.autoFit = autoFit;
     this.currentZoom = 1;
     this.selection = [];
     this.editingItem = null;
@@ -91,19 +93,24 @@ WebDoc.BoardController = $.klass({
     widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;
     
     this.zoom(1);
-    this.centerBoard();
-    this.fireCurrentPageChanged();
-    if (this.isInteraction) {
-      this.toggleInteractionMode();
+    if (this.isInteraction || !this.editable) {
+      this.setInterationMode(true);
     }    
-    /*
-     if (heightFactor < widthFactor) {
-     this.zoom(1 + heightFactor);
-     }
-     else {
-     this.zoom(1 + widthFactor);
-     }
-     */
+    else {
+      this.setInterationMode(false);
+    }
+    if (this.autoFit && $("#board").css("height") != "100%") {
+      if (heightFactor < widthFactor) {
+        this.zoom(1 + heightFactor);
+      }
+      else {
+        this.zoom(1 + widthFactor);
+      }
+    }
+    else {
+      this.centerBoard();
+    }
+    this.fireCurrentPageChanged();
     $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this.currentPage));
     $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this.pageView.domNode.css("display", "");
@@ -113,36 +120,28 @@ WebDoc.BoardController = $.klass({
     $("#board").bind("mousedown", this, this.mouseDown.pBind(this));
     $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
     $("#board").bind("click", this, this.mouseClick.pBind(this));
-    $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
-    $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver);
-    $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);
   },
   
   unbindMouseEvent: function() {
     $("#board").unbind();
   },  
   
-  toggleInteractionMode: function() {
-    var currentState = !($("#board svg").css("zIndex") == "999999"); 
-    
-    this.isInteraction = !currentState;
-    ddd("current ", currentState, "new", this.isInteraction);
-    if (this.isInteraction) {
-      this.previousRightBarState = WebDoc.application.rightBarController.visible?true:false;
-      ddd("previous state is", this.previousRightBarState);
+  setInterationMode: function(state) {
+    this.isInteraction =state;
+    if (state) {
       // go to interaction mode
       this.unselectAll();
       $("#board").unbind("dragenter");
       $("#board").unbind("dragover");
       $("#board").unbind("drop");
-
+      
       $(".item").addClass("item_interact");
       this.setCurrentTool(WebDoc.application.arrowTool);
       $(".preview_hidden").css("display", "none");
       $(".toggle_preview").addClass("toggle_edit");
       $(".toggle_preview").removeClass("toggle_preview");
       $("#tb_1_utilities_preview a").text("EDIT MODE");
-      WebDoc.application.rightBarController.hideRightBar();      
+      WebDoc.application.rightBarController.hideRightBar();
     }
     else {
       // go to non interaction mode
@@ -153,16 +152,25 @@ WebDoc.BoardController = $.klass({
       if (!this.currentTool) {
         this.setCurrentTool(WebDoc.application.arrowTool);
       }      
-      $(".preview_hidden").css("display", "");
+      $(".preview_hidden").css("display", "inline");
       $(".toggle_edit").addClass("toggle_preview");
       $(".toggle_edit").removeClass("toggle_edit");
       $("#tb_1_utilities_preview a").text("QUICK PREVIEW"); 
-      ddd("previous state is", this.previousRightBarState);
-      if (this.previousRightBarState) {
-        WebDoc.application.rightBarController.showRightBar();
-      }    
+       
     }
-    $("#board svg").css("zIndex", this.isInteraction?"-1":"999999");        
+    // TODO we can do better with ff 3.6 by using pointer-events css attribute  
+    $("#board svg").css("zIndex", this.isInteraction?"-1":"999999");                
+  },
+  
+  
+  toggleInteractionMode: function() {  
+    if (!this.isInteraction) {
+      this.previousRightBarState = WebDoc.application.rightBarController.visible ? true : false;
+    }
+    this.setInterationMode(!this.isInteraction);
+    if (!this.isInteraction && this.previousRightBarState) {
+      WebDoc.application.rightBarController.showRightBar();
+    }  
   },
   
   

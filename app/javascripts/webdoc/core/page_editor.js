@@ -33,14 +33,14 @@ WebDoc.PageEditor = $.klass({
   currentPageId: null,
   applicationUuid: undefined,
   
-  initialize: function() {
+  initialize: function(editable) {
     this.applicationUuid = new MTools.UUID().id;
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         
     // create all controllers
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
-    WebDoc.application.boardController = new WebDoc.BoardController(true);
+    WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
     WebDoc.application.imageLibraryController = new WebDoc.ImageLibraryController();
     WebDoc.application.widgetLibraryController = new WebDoc.WidgetLibraryController();  
     WebDoc.application.rightBarController = new WebDoc.RightBarController();
@@ -57,6 +57,14 @@ WebDoc.PageEditor = $.klass({
 
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     
+    // It seems that webkit don't need the margin een if content is 100% width
+    if (MTools.Browser.WebKit) {
+       $("#board_container").css("marginRight", "0px");       
+    }
+    if (editable) {
+      WebDoc.application.rightBarController.showRightBar();
+    }    
+    $("#content").css("display", "");
     // resize height of GUI when window is resized. It cannot be done with CSS (or it is very difficult)
     var height = window.innerHeight - $("#board_container").offset().top;
     $("#board_container").height(height -10);
@@ -68,12 +76,7 @@ WebDoc.PageEditor = $.klass({
       $("#right_bar").height(height -10);
       $("#left_bar").height(height -10);
       WebDoc.application.boardController.centerBoard();
-    }.pBind(this));
-    
-    // It seems that webkit don't need the margin een if content is 100% width
-    if (MTools.Browser.WebKit) {
-       $("#board_container").css("marginRight", "0px");       
-    }    
+    }.pBind(this));    
   },
 
   load: function(documentId) {

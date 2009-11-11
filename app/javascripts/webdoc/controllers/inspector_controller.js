@@ -32,6 +32,7 @@ WebDoc.InspectorController = $.klass({
     this.currentInspectorId = 0;
     WebDoc.application.boardController.addSelectionListener(this);
     $("#inspectors").accordion({
+      autoHeight: false,
       change: function(event, ui) {
         if (this.currentInspectorId > 0) {
           this.lastInspectorId = this.currentInspectorId;

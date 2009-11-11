@@ -21,6 +21,7 @@ class DocumentsController < ApplicationController
   # GET /documents/:id
   def show
     @document = Document.find(params[:id])
+    @is_reader = (params[:reader] == "true")
     respond_to do |format|
       format.html
       format.json { render :json => @document.to_json(:include => { :pages => { :include => :items} }) }

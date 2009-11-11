@@ -191,7 +191,7 @@ a:hover { color: #0069BF;}
 /*******************/
 /* = toolbars = */
 .tb{
-    min-width: 700px;
+    min-width: 900px;
     padding:0 10px;
 }
 .tb ul li{
@@ -320,7 +320,7 @@ a:hover { color: #0069BF;}
 }
 
 #tb_2{
-    min-width: 900px;
+    min-width: 300px;
     height: 37px;
     background-color: #efefef;
 
@@ -376,6 +376,9 @@ a:hover { color: #0069BF;}
     padding-left: 0;
 }
 
+.preview_hidden {
+  display:none;
+}
 /*Special case to prevent page deletion :-)*/
 #removePage a {
     height: 28px;
@@ -450,12 +453,11 @@ a:hover { color: #0069BF;}
 /* = board part = */
 #content{
     padding: 0 10px;
-    min-width: 600px;
+    min-width: 300px;
     margin-top: 5px;
 }
 #board_container {
     height: 100%;
-    margin-right: 305px;
     border: 2px solid #dfdfdf;  
     overflow:hidden;
     background-color: #ebebeb;
@@ -545,8 +547,9 @@ a:hover { color: #0069BF;}
 }
 #inspectors {
   position:relative;
-  overflow:hidden; 
-  background-color:#ebebeb;  
+  overflow:auto; 
+  background-color:#ebebeb;
+  height:100%;  
 }
 #inspectors .inspector{
   background:#ebebeb;   

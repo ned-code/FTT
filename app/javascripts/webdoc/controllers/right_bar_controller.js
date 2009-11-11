@@ -5,7 +5,7 @@
  
 WebDoc.RightBarController = $.klass({
   initialize: function() {
-    this.visible = true;
+    this.visible = false;
     this.domNode = $("#right_bar");
   },
   
