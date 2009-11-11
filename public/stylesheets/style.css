@@ -464,14 +464,23 @@ a:hover { color: #0069BF;}
 }
 #board {
   font-family:Helvetica, Arial, sans-serif;
-  font-size:30px;
+  font-size: 2.5em;
   -webkit-box-shadow:2px 3px 5px #333333;
   -moz-box-shadow:2px 3px 5px #333333; 
   box-shadow:2px 3px 5px #333333;
 }
 #board ol, #board ul {
-  padding-left:30px;
+  padding-left:1.5em;
+  margin-bottom: 0.4em;
 }
+#board ol ol, #board ul ul {
+  margin-top: -0.1em;
+  font-size: 0.8em;
+}
+#board ol li, #board ul li {
+  margin-bottom: 0.2em;
+}
+
 /* == Item view = */
 .drag_handle {
   position:absolute;
