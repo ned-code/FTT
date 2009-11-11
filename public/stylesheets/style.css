@@ -566,7 +566,6 @@ a:hover { color: #0069BF;}
   overflow:hidden; 
   padding:10px;
   padding-left:20px;
-  height:300px;    
 }
 /* == page inspector */
 #page_css_editor {
@@ -621,10 +620,18 @@ a:hover { color: #0069BF;}
   margin:5px;
   border:1px solid #000;
 }
+
+#properties_inspector {
+  height:300px;
+}
 /* == inner HTML inspector */
+#html_inspector {
+  padding-left:0px !important;
+  padding-right:0px !important;
+}
 #selected_item_html_editor {
   width:100%;
-  height:300px;
+  height:400px;
 }
 /* == Image and widget library = */
 #image_library_wrap {

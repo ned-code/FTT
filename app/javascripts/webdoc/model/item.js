@@ -38,6 +38,21 @@ WebDoc.Item = $.klass(MTools.Record,
     return "object";
   },
   
+  property: function(key) {
+    if (this.data.data.properties) {
+      return this.data.data.properties[key];
+    }
+    return null;
+  },
+  
+  setProperty: function(key, value) {
+    if (!this.data.data.properties) {
+      this.data.data.properties = {};
+    }
+    this.data.data.properties[key] = value;
+    this.fireObjectChanged();
+  },
+  
   recomputeInternalSizeAndPosition: function() {
     var t = this.data.data.css.top || "0px",
         l = this.data.data.css.left || "0px",
@@ -66,18 +81,27 @@ WebDoc.Item = $.klass(MTools.Record,
     this.fireObjectChanged();    
   },
   
-  setInnerHtml: function(html) {
-    if (html != this.data.data.innerHTML) {
+  setInnerHtml: function(html, force) {
+    if (html != this.data.data.innerHTML || force) {
       this.data.data.innerHTML = html;      
-      this.save();
-      if (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi)) {
+      if (!this.property("noIframe") && (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi))) {
         ddd("replace tag");
         this.data.data.tag = "iframe";
         this.data.data.src = this.rootUrl() + "/items/" + this.uuid() + "?fullHTML=true";
+        this.save();
         this.fireDomNodeChanged();
       }
       else {
-        this.fireInnerHtmlChanged();
+        if (this.data.data.tag == "iframe") {
+          this.data.data.tag = "div";
+          delete this.data.data.src;
+          this.save();
+          this.fireDomNodeChanged();
+        }
+        else {
+          this.save();
+          this.fireInnerHtmlChanged();
+        }
       }
 
     }

@@ -4,6 +4,7 @@
 //= require <webdoc/model/image>
 //= require <webdoc/controllers/inspectors/page_inspector_controller>
 //= require <webdoc/controllers/inspectors/properties_inspector_controller>
+//= require <webdoc/controllers/inspectors/inner_html_controller>
  
 WebDoc.InspectorController = $.klass({
   initialize: function() {
@@ -18,10 +19,10 @@ WebDoc.InspectorController = $.klass({
     var pageInspector = new WebDoc.PageInspectorController();
     this.subInspectors.push(pageInspector);
     var propertiesInspector = new WebDoc.PropertiesInspectorController();
-    this.subInspectors.push(propertiesInspector);    
-    
-    $("#selected_item_html_editor").bind("blur", this.applyInnerHtml);   
-    
+    this.subInspectors.push(propertiesInspector);   
+    var innerHtmlController = new WebDoc.InnerHtmlController();
+    this.subInspectors.push(innerHtmlController);        
+       
     var pageInspector = $("#page_inspector");
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
@@ -33,6 +34,7 @@ WebDoc.InspectorController = $.klass({
     WebDoc.application.boardController.addSelectionListener(this);
     $("#inspectors").accordion({
       autoHeight: false,
+      fillSpace: false,
       change: function(event, ui) {
         if (this.currentInspectorId > 0) {
           this.lastInspectorId = this.currentInspectorId;
@@ -71,22 +73,11 @@ WebDoc.InspectorController = $.klass({
       }  
       else {
         WebDoc.application.rightBarController.showInspectors();
-      }
-          
-      $("#selected_item_html_editor").attr("disabled", "");
-      var html = WebDoc.application.boardController.selection[0].item.data.data.innerHTML;
-      if (html) {
-        $("#selected_item_html_editor").get(0).value = html;
-      }
-      else {
-        $("#selected_item_html_editor").get(0).value = "";
-      }
+      }               
       this.updatePalette(WebDoc.application.boardController.selection[0].inspectorId());
     }
     else {
       this.updatePalette(0);
-      $("#selected_item_html_editor").get(0).value = "";
-      $("#selected_item_html_editor").attr("disabled", "true");
     }
     this.refreshSubInspectors();    
   },
@@ -98,17 +89,7 @@ WebDoc.InspectorController = $.klass({
         subInspetor.refresh();
       }
     }
-  },
-  
-  applyInnerHtml: function(e) {
-    e.preventDefault();
-    var html = $("#selected_item_html_editor").get(0).value
-    if (html) {
-      if (WebDoc.application.boardController.selection.length > 0) {
-        WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
-      }
-    }
-  },  
+  }, 
 });
 
 $.extend(WebDoc.InspectorController, {});

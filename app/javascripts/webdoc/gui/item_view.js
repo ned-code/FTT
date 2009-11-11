@@ -30,18 +30,18 @@ WebDoc.ItemView = $.klass({
     else {
       itemNode = $('<' + this.item.data.data.tag + '/>');
       for (var key in this.item.data.data) {
-        if (key == 'css') {
-          itemNode.css(this.item.data.data.css);
-        }
-        else {
-          if (key == 'innerHtml') {
+        switch(key) {
+          case "css":
+            itemNode.css(this.item.data.data.css);
+            break; 
+          case "innerHtml":
             itemNode.html(this.item.data.data[key]);
-          }
-          else {
-            if (key != 'tag' && key != 'preference') {
-              itemNode.attr(key, this.item.data.data[key]);
-            }
-          }
+            break;
+          case "preference":
+          case "properties":
+            break;
+          default:
+            itemNode.attr(key, this.item.data.data[key]);
         }
       }
     }

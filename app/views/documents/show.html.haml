@@ -213,7 +213,10 @@
       %h3
         %a{ :href => "#" }  Inner HTML
       #html_inspector.inspector
-        %textarea#selected_item_html_editor  
+        %textarea#selected_item_html_editor 
+        %div
+          %label No iframe
+          %input#no_iframe{ :type => "checkbox"} 
 
     #libraries{ :style => "display: none" }
       #image_library_wrap
