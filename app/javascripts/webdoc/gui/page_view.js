@@ -10,7 +10,7 @@ WebDoc.PageView = $.klass({
       style: "position:relative; top: 0px; left: 0px;z-index:0"
     });
     
-    if (page.data.data.externalPage) {
+    if (page.data.data.externalPage && !page.data.data.allowAnnotation) {
       this.domNode.css({
         width: "100%",
         height: "100%"
@@ -36,7 +36,7 @@ WebDoc.PageView = $.klass({
       style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
     });
     
-    if (page.data.data.externalPage) {
+    if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
       var externalPage = $("<iframe/>").css({
         width: "100%",
         height: "100%",
