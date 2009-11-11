@@ -19,8 +19,6 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   margin: 0;
   padding: 0;
   border: 0;
-  font-family:Helvetica, Arial, sans-serif;
-  font-size:30px;  
   font-weight: inherit;
   font-style: inherit;
   line-height: 1;
@@ -39,6 +37,15 @@ blockquote:before, blockquote:after {
   content: "";
 }
 
-ol, ul {
-  padding-left:30px;
+ol,ul {
+  padding-left:1.5em;
+  margin-bottom: 0.4em;
 }
+ol ol,ul ul {
+  margin-top: -0.1em;
+  font-size: 0.8em;
+}
+ol li,ul li {
+  margin-bottom: 0.2em;
+}
+
