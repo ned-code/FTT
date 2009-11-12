@@ -13,7 +13,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
      widgetNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
      }, 2000);
      */
-    if (this.item.data.data.tag == "iframe") {
+    if (this.item.data.data.tag == "iframe" && !WebDoc.application.pageEditor.disableHtml) {
       var wait = $("<div/>").attr("id", "wait_" + this.item.uuid()).css(this.item.data.data.css).addClass("load_item").css("textAlign", "center");
       var imageTop = (parseFloat(this.item.data.data.css.height) / 2) - 16;
       var image = $("<img/>").attr("src", "/images/icons/waiting_wheel.gif").css({
