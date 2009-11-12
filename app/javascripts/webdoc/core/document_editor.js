@@ -135,7 +135,7 @@ WebDoc.DocumentEditor = $.klass(
     
     loadDocuments: function()
     {
-        MTools.ServerManager.getObjects("/documents", WebDoc.Document, function(data)
+        MTools.ServerManager.getObjects("/documents.json", WebDoc.Document, function(data)
         {
             this.documents = data;
             this.refreshDocumentList();

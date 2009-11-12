@@ -27,7 +27,7 @@ WebDoc.ImageLibraryController = $.klass({
       var image = this.images[imageId];
       var imageItem = $("<img/>").attr({
         id: image.uuid(),
-        src: image.data.thumb_url,
+        src: image.data.properties.thumb_url,
       }).addClass("image_item");
       var imageListItem = $("<li/>").append(imageItem);
       this.domNode.find("ul").append(imageListItem);
@@ -42,7 +42,7 @@ WebDoc.ImageLibraryController = $.klass({
     ddd("start drag");
     ddd($(e.target));
     ddd(this.images[$(e.target).attr("id")]);
-    e.originalEvent.dataTransfer.setData('application/ub-image', this.images[e.target.id].data.url);
+    e.originalEvent.dataTransfer.setData('application/ub-image', this.images[e.target.id].data.properties.url);
   }
   
 });

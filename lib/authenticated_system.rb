@@ -21,7 +21,7 @@ private
     session[:return_to] = request.request_uri
   end
   
-  def redirect_back_or_default(default = root_path)
+  def redirect_back_or_default(default = documents_path)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
   end

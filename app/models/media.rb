@@ -43,6 +43,15 @@ class Media < ActiveRecord::Base
 #   before_save :save_data_on_storage
 #   before_destroy :delete_data_on_storage
 # 
+
+  # =================
+  # = Class Methods =
+  # =================
+  
+  def self.complex_find(params)
+    params[:type] ? find_all_by_type(params[:type]) : all
+  end
+
 #   # ====================
 #   # = Instance Methods =
 #   # ====================
