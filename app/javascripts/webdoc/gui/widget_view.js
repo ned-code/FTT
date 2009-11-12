@@ -13,6 +13,17 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
      widgetNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
      }, 2000);
      */
+    if (this.item.data.data.tag == "iframe") {
+      var wait = $("<div/>").attr("id", "wait_" + this.item.uuid()).css(this.item.data.data.css).addClass("load_item").css("textAlign", "center");
+      var imageTop = (parseFloat(this.item.data.data.css.height) / 2) - 16;
+      var image = $("<img/>").attr("src", "/images/icons/waiting_wheel.gif").css({
+        verticalAlign: "middle",
+        position: "relative",
+        top: imageTop + "px"
+      });
+      wait.append(image[0]);
+      this.pageView.itemDomNode.append(wait.get(0));
+    }
     // try to resize to the correct size
     if (this.item.data.data.css.width == "0px") {
       var innerWidth = widgetNode.find(":first").width();
@@ -36,8 +47,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     widgetNode.bind('load', function() {
       ddd("widget loaded");
       this.initWidget();
-    }
-.pBind(this));
+    }.pBind(this));
     
     widgetNode.bind('resize', function() {
       ddd("widget resize");
@@ -77,6 +87,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   },
   
   initWidget: function() {
+    $("#wait_"+this.item.uuid()).remove();
     if (this.domNode.get(0).contentWindow) {
       this.domNode.get(0).contentWindow.uniboard = this.item;
       if (this.domNode.get(0).contentWindow.initialize) {
