@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   SprocketsApplication.routes(map)
   map.connect 'proxy/resolve', :controller => 'proxy', :action => 'resolve', :conditions => { :method => :get }
-#  map.root :controller => 'documents', :action => :index
+  map.root :controller => 'documents', :action => :index
   
   map.resources :documents, :has_many => { :pages => :items }
   
