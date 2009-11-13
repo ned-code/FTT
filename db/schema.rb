@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091021065518) do
+ActiveRecord::Schema.define(:version => 20091113110319) do
 
   create_table "documents", :id => false, :force => true do |t|
     t.string   "uuid",       :limit => 36
@@ -48,6 +48,21 @@ ActiveRecord::Schema.define(:version => 20091021065518) do
     t.integer  "position",                                     :null => false
     t.integer  "version",                       :default => 1, :null => false
     t.text     "data",         :limit => 65537
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles", :force => true do |t|
+    t.string   "name",              :limit => 40
+    t.string   "authorizable_type", :limit => 40
+    t.string   "authorizable_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles_users", :id => false, :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

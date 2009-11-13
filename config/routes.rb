@@ -3,7 +3,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'proxy/resolve', :controller => 'proxy', :action => 'resolve', :conditions => { :method => :get }
   map.root :controller => 'documents', :action => :index
   
-  map.resources :documents, :has_many => { :pages => :items }
+  map.resources :documents, :has_many => { :pages => :items }, :member => { :change_user_access => :put, :user_access => :get}
   
   map.resources :users, :except => :new
   map.with_options :controller => 'users', :conditions => { :method => :get } do |m|

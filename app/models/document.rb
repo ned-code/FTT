@@ -11,6 +11,7 @@
 
 class Document < ActiveRecord::Base
   has_uuid
+  acts_as_authorization_object
 #  is_paranoid
   
   # ================
