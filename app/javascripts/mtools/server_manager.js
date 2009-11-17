@@ -84,7 +84,7 @@ $.extend(MTools.ServerManager,
             // i.e. page size and background.
             object.refresh(data);
             object.isNew = false;
-            callBack.apply(this, [object]);
+            callBack.apply(this, [[object]]);
         }, "json");
     },
     
@@ -105,7 +105,7 @@ $.extend(MTools.ServerManager,
         $.post(url, param, function(data, textstatus)
         {
             //object.refresh(data);
-            callBack.apply(this, [object]);
+            callBack.apply(this, [[object]]);
         }, "json");
     },
     
