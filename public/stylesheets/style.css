@@ -140,7 +140,7 @@ a:hover { color: #0069BF;}
 }
 .wb-document-title{
     float:left;
-    width: 85%;
+    width: 75%;
 }
 .wb-document-title a{
     display: block;
@@ -148,7 +148,7 @@ a:hover { color: #0069BF;}
 }
 .wb-document-actions{
     float:right;
-    width: 15%;
+    width: 25%;
 }
 .wb-document-actions a{
     float: right;

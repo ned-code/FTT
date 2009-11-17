@@ -8,6 +8,7 @@
 //= require <webdoc/model/document>
 //= require <webdoc/utils/document_date_filter>
 //= require <webdoc/gui/document_list>
+//= require <webdoc/controllers/document_access_controller>
 
 
 // application singleton.
@@ -22,6 +23,7 @@ WebDoc.DocumentEditor = $.klass(
         this.filter = undefined;
         WebDoc.application.documentEditor = this;
         WebDoc.application.undoManager = new MTools.UndoManager();
+        WebDoc.application.accessController = new WebDoc.DocumentAccessController();
     },
     
     start: function()
@@ -32,6 +34,7 @@ WebDoc.DocumentEditor = $.klass(
         $(".wb-document-edit").live("click", this.editDocument);
         $(".wb-document-rename").live("click", this.renameDocument);
         $(".wb-document-delete").live("click", this.deleteDocument);
+        $(".wb-document-access").live("click", this.changeDocumentAccess);        
         
         this.filter = new WebDoc.DocumentDateFilter();
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
@@ -84,7 +87,7 @@ WebDoc.DocumentEditor = $.klass(
                     that.editedDocument.setTitle($("#wb-edit-document-name").val());
 					          that.editedDocument.save(function(persitedDoc)
                     {
-                        that.filter.refreshDocument(this);
+                        that.filter.refreshDocument(persitedDoc);
                     });                    
                 },
                 Cancel: function()
@@ -93,6 +96,8 @@ WebDoc.DocumentEditor = $.klass(
                 }
             }
         });
+        
+        
     },
     
     editDocument: function(e)
@@ -119,6 +124,14 @@ WebDoc.DocumentEditor = $.klass(
         $("#wb-edit-document-name").val(previousName);
         $("#wb-edit-document-creationDate").val(that.editedDocument.creationDate());
         $("#wb-edit-document-dialog").dialog('open');
+    },
+    
+    changeDocumentAccess: function(e)
+    {
+      e.preventDefault();
+      ddd("change acess");
+      var documentToEdit = $(this).parent().parent().attr("id");            
+      WebDoc.application.accessController.showAccess(WebDoc.application.documentEditor.documentWithId(documentToEdit));      
     },
     
     deleteDocument: function(e)

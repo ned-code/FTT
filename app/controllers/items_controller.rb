@@ -1,7 +1,13 @@
 class ItemsController < ApplicationController
   before_filter :login_required
   before_filter :instantiate_document_and_page
-  
+  access_control do
+    allow :admin
+    allow logged_in, :to => [:index, :create]
+    allow :owner, :of => :document, :to => [:update, :destroy, :show]
+    allow :editor, :of => :document, :to => [:update, :show]    
+    allow :reader, :of => :document, :to => [:show]    
+  end
   def show
     @item = @page.items.find(params[:id])
     if (params[:fullHTML])

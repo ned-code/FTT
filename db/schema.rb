@@ -21,10 +21,10 @@ ActiveRecord::Schema.define(:version => 20091113110319) do
 
   create_table "items", :id => false, :force => true do |t|
     t.string   "uuid",       :limit => 36
-    t.string   "page_id",    :limit => 36,    :null => false
+    t.string   "page_id",    :limit => 36,       :null => false
     t.string   "media_id",   :limit => 36
     t.string   "media_type"
-    t.text     "data",       :limit => 65537
+    t.text     "data",       :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -38,16 +38,16 @@ ActiveRecord::Schema.define(:version => 20091113110319) do
     t.datetime "file_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "properties",        :limit => 65537
+    t.text     "properties",        :limit => 16777215
   end
 
   create_table "pages", :id => false, :force => true do |t|
     t.string   "uuid",         :limit => 36
-    t.string   "document_id",  :limit => 36,                   :null => false
+    t.string   "document_id",  :limit => 36,                      :null => false
     t.string   "thumbnail_id", :limit => 36
-    t.integer  "position",                                     :null => false
-    t.integer  "version",                       :default => 1, :null => false
-    t.text     "data",         :limit => 65537
+    t.integer  "position",                                        :null => false
+    t.integer  "version",                          :default => 1, :null => false
+    t.text     "data",         :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end

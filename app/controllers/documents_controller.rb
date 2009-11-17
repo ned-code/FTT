@@ -5,7 +5,7 @@ class DocumentsController < ApplicationController
     allow :admin
     allow logged_in, :to => [:index, :create]
     allow :owner, :of => :document, :to => [:update, :destroy, :show, :change_user_access, :user_access]
-    allow :editor, :of => :document, :to => [:update, :show]    
+    allow :editor, :of => :document, :to => [:show]    
     allow :reader, :of => :document, :to => [:show]    
   end    
   
@@ -46,22 +46,32 @@ class DocumentsController < ApplicationController
 
   # PUT /documents/:id/change_user_access
   def change_user_access
-    params[:access].each_key do |user_email|
+    accesses = JSON.parse(params[:access]);
+    accesses.each_key do |user_email|
       user = User.find_by_email(user_email)
-      if (user)
-        new_user_role = params[:access][user_email]
+      new_user_role = accesses[user_email]        
+      if (user && !user.has_role?(new_user_role, @document))
         #replace previous roles on document with new roles
         user.has_no_roles_for!(@document)
         user.has_role!(new_user_role, @document)
       end
     end
-    
+    @document.users.each do |user|
+      unless accesses[user.email]
+        user.has_no_roles_for!(@document)
+      end
+    end
     render :json => user_access_hash
   end
   
   def user_access
-
-    render :json => user_access_hash
+    @access = user_access_hash
+    logger.debug @access
+    respond_to do |format|
+      format.html { render :partial => "document_access"}
+      format.json { render :json => @access }
+    end
+    
   end
   
   # DELETE /document/:id
@@ -80,7 +90,7 @@ protected
     result = { :access => {}}
     all_document_access.each do |role|
       role.users.each do |user|
-        result[:access][user.email] ||= []
+        result[:access][user.email] ||= ""
         result[:access][user.email] << role.name 
       end
     end

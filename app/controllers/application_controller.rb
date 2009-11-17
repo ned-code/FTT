@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
-  rescue_from Acl9::AccessDenied, :with => :deny_access # self defined exception
+  rescue_from Acl9::AccessDenied, :with => :deny_access
 
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 

@@ -33,7 +33,6 @@ Rails::Initializer.run do |config|
   config.gem 'xml-object'
   config.gem 'hpricot'
   config.gem 'json'
-  config.gem "acl9", :source => "http://gemcutter.org", :lib => "acl9"
   
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named

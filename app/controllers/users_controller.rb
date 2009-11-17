@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
-  before_filter :login_required, :except => :new
+  before_filter :login_required
+  access_control do
+    allow :admin
+  end  
   
   # GET /users
   def index
