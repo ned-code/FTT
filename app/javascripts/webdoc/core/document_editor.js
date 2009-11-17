@@ -140,10 +140,13 @@ WebDoc.DocumentEditor = $.klass(
         var that = WebDoc.application.documentEditor;
         var documentIdToDelete = $(this).parent().parent().attr("id");
         that.editedDocument = that.documentWithId(documentIdToDelete);
-		that.editedDocument.destroy(function(persitedDoc)
-        {
-            that.filter.removeDocument(that.editedDocument);
-        });
+        var choice = confirm("Are you sure you want to delete document " + that.editedDocument.title());
+        if (choice) {
+          that.editedDocument.destroy(function(persitedDoc)
+          {
+              that.filter.removeDocument(that.editedDocument);
+          });
+        }
     },
     
     loadDocuments: function()
