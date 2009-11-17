@@ -12,6 +12,9 @@ class DocumentsController < ApplicationController
   # GET /documents
   def index
     @documents = Document.all
+    if (!current_user.has_role?("admin"))
+      @documents = @documents.select { |a_doc| a_doc.accepts_roles_by?(current_user)}
+    end
     respond_to do |format|
       format.html
       format.json { render :json => @documents }      
