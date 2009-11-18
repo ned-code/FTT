@@ -22,10 +22,10 @@ protected
     public_read_document? || public_edit_document?
   end
   def public_read_document?
-    global_user.has_role?("reader")
+    global_user.has_role?("reader",@document)
   end
       
   def public_edit_document?
-    global_user.has_role?("editor")
+    global_user.has_role?("editor",@document)
   end  
 end
