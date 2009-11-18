@@ -15,6 +15,7 @@ WebDoc.DocumentAccessController = $.klass({
         bgiframe: true,
         autoOpen: false,
         height: 300,
+        width: 420,
         modal: true,
         buttons: 
         {
@@ -46,6 +47,7 @@ WebDoc.DocumentAccessController = $.klass({
       dataType: 'json',              
       success: function(data, textStatus) {
         ddd("access", data);
+        $("#wb-change-access-dialog").dialog('option', 'title', 'Change access to document "' + document.title() + '"');
         $("#wb-change-access-dialog").dialog('open');
         this.loadAccess(data);
       }.pBind(this),
@@ -85,8 +87,8 @@ WebDoc.DocumentAccessController = $.klass({
       if (role == aRole) { roleItem.attr("selected", "true")}; 
       rolesPopup.append(roleItem);      
     }
-    accessActions.append(rolesPopup);
-    accessActions.append($('<a href="#"/>').addClass("delete_access").attr("title", "Delete").text("Delete"));
+    accessActions.append($('<a href="#"/>').addClass("delete_access").attr("title", "Delete"));
+    accessActions.append(rolesPopup);    
     result.append(accessActions);    
     return result;
   },
