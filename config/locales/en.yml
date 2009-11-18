@@ -46,6 +46,7 @@ en:
     name: "Name"
     creationDate: "Creation date"
     change_access_document: "Modify document access"
+    everybody: "Everybody"
   alert:
     destroy_confirmation: "Are you sure?"
 

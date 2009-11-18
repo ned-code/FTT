@@ -3,10 +3,12 @@ class PagesController < ApplicationController
   before_filter :instantiate_document
   access_control do
     allow :admin
-    allow logged_in, :to => [:index, :create]
-    allow :owner, :of => :document, :to => [:update, :destroy, :show]
-    allow :editor, :of => :document, :to => [:update, :show]    
+    allow logged_in, :to => [:index]
+    allow :owner, :of => :document 
+    allow :editor, :of => :document
     allow :reader, :of => :document, :to => [:show]    
+    allow logged_in, :to => [:show], :if => :public_document?
+    allow logged_in, :if => :public_edit_document?    
   end
   # GET /documents/:document_id/pages
   def index

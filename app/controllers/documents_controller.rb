@@ -3,17 +3,19 @@ class DocumentsController < ApplicationController
   before_filter :load_document, :only => [:update, :destroy, :show, :change_user_access, :user_access]
   access_control do
     allow :admin
-    allow logged_in, :to => [:index, :create]
-    allow :owner, :of => :document, :to => [:update, :destroy, :show, :change_user_access, :user_access]
+    allow :owner, :of => :document    
     allow :editor, :of => :document, :to => [:show]    
     allow :reader, :of => :document, :to => [:show]    
+    allow logged_in, :to => [:index, :create]
+    allow logged_in, :to => [:show], :if => :public_document?
   end    
-  
+  @@global_user_names = ["all", "everybody", "any", "everyone", "people"]
   # GET /documents
   def index
     @documents = Document.all
     if (!current_user.has_role?("admin"))
-      @documents = @documents.select { |a_doc| a_doc.accepts_roles_by?(current_user)}
+      #TODO need to optimize document filtering by doing it in a single SQL query
+      @documents = @documents.select { |a_doc| a_doc.accepts_roles_by?(current_user) || a_doc.accepts_roles_by?(global_user)}
     end
     respond_to do |format|
       format.html
@@ -50,17 +52,23 @@ class DocumentsController < ApplicationController
   # PUT /documents/:id/change_user_access
   def change_user_access
     accesses = JSON.parse(params[:access]);
+    new_list_has_global_user = false
     accesses.each_key do |user_email|
-      user = User.find_by_email(user_email)
-      new_user_role = accesses[user_email]        
-      if (user && !user.has_role?(new_user_role, @document))
-        #replace previous roles on document with new roles
-        user.has_no_roles_for!(@document)
-        user.has_role!(new_user_role, @document)
+      if @@global_user_names.include? user_email.downcase
+        global_user.has_role!(accesses[user_email], @document)
+        new_list_has_global_user = true
+      else
+        user = User.find_by_email(user_email)
+        new_user_role = accesses[user_email]        
+        if (user && !user.has_role?(new_user_role, @document))
+          #replace previous roles on document with new roles
+          user.has_no_roles_for!(@document)
+          user.has_role!(new_user_role, @document)
+        end
       end
     end
     @document.users.each do |user|
-      unless accesses[user.email]
+      unless accesses[user.email] || (new_list_has_global_user && user == global_user)
         user.has_no_roles_for!(@document)
       end
     end
@@ -93,10 +101,15 @@ protected
     result = { :access => {}}
     all_document_access.each do |role|
       role.users.each do |user|
-        result[:access][user.email] ||= ""
-        result[:access][user.email] << role.name 
+        entry = nil
+        if (user == global_user)
+          result[:access][t("label.everybody")] = role.name
+        else
+          result[:access][user.email] = role.name 
+        end
       end
     end
     result
   end
+  
 end

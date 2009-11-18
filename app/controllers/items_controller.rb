@@ -3,10 +3,12 @@ class ItemsController < ApplicationController
   before_filter :instantiate_document_and_page
   access_control do
     allow :admin
-    allow logged_in, :to => [:index, :create]
-    allow :owner, :of => :document, :to => [:update, :destroy, :show]
-    allow :editor, :of => :document, :to => [:update, :show]    
-    allow :reader, :of => :document, :to => [:show]    
+    allow logged_in, :to => [:index]
+    allow :owner, :of => :document
+    allow :editor, :of => :document
+    allow :reader, :of => :document, :to => [:show]   
+    allow logged_in, :to => [:show], :if => :public_document?
+    allow logged_in, :if => :public_edit_document?     
   end
   def show
     @item = @page.items.find(params[:id])
@@ -16,8 +18,6 @@ class ItemsController < ApplicationController
       else
         render :text => "<html><head></head><body>#{@item[:data][:innerHTML]}</body>"
       end
-    
-      
     else
       render :text => @item[:data][:innerHTML]
     end
