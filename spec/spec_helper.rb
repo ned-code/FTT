@@ -58,6 +58,7 @@ Spork.each_run do
     
     config.before(:each) do
       USED_UBZ_FIXTURES.clear
+      
     end
     
     config.after(:each) do

@@ -2,7 +2,7 @@ Factory.define :user do |f|
   f.sequence(:email) {|n| "email#{n}@test.com" }
   f.password 'test'
   f.password_confirmation 'test'
-  f.name 'bob'
+  f.name 'jba'
 end
 
 Factory.define :document do |f|
