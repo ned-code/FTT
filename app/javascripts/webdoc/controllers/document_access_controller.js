@@ -19,8 +19,8 @@ WebDoc.DocumentAccessController = $.klass({
         modal: true,
         buttons: 
         {
-            Save: this.applayAccess.pBind(this),
-            Cancel: function()
+            Apply: this.applayAccess.pBind(this),
+            Close: function()
             {
                 $(this).dialog('close');
             }
@@ -114,9 +114,9 @@ WebDoc.DocumentAccessController = $.klass({
       type: 'PUT',
       dataType: 'json',
       data: this.getAccess(),    
-      success: function() {
-        $("#wb-change-access-dialog").dialog('close');
-      },    
+      success: function(data) {
+        this.loadAccess(data)
+      }.pBind(this),    
       error: function(MLHttpRequest, textStatus, errorThrown) {
         ddd("error", textStatus);
       }
