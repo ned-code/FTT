@@ -1,5 +1,5 @@
 /**
- * Controller of the right bar. It manage show, hide, toggle the right bar. It also manage if the right bar shows the inspector or the lib.
+ * Controller of the right bar. It manages the show, the hide and the toggle the right bar. It also manages if the right bar shows the inspector or the lib.
  * @author Julien Bachmann
  */
  

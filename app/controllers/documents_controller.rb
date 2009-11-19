@@ -27,7 +27,7 @@ class DocumentsController < ApplicationController
   def show
     @is_reader = (params[:reader] == "true")
     respond_to do |format|
-      format.html
+      format.html { render :layout => "layouts/editor" }
       format.json { render :json => @document.to_json(:include => { :pages => { :include => :items} }) }
     end
   end

@@ -1,43 +1,5 @@
-- title @document.title
-#tb_1.tb{ :style => "display:#{@is_reader?'none':''}"}
-  %h1
-    %img{ :src => "/images/logo.png", :alt =>"WebDoc logo"}
-    
-  %ul#tb_1_utilities
-    %li#tb_1_utilities_preview.toggle_preview
-      %a{ :href => "#"}
-        quick preview
-    %li#tb_1_utilities_docname
-      %h2=@document.title
-      %span#current_page 3
-      %span#separation /
-      %span#total_page 25
-    %li#tb_1_utilities_settings
-      %a#tb_1_utilities_settings_trigger{ :href => "#"}
-        %img{ :src => "/images/icons/settings.png", :alt => "Document settings"}
-      %ul#tb_1_utilities_settings_dropdown
-        %li.action_button
-          %a{ :href => "#"} Save
-        %li.action_button
-          %a{ :href => "#"} Presentation mode
-        %li.action_button
-          %a{ :href => "#"} Invite collaborators
-        %li.action_button
-          %a{ :href => "#"} Import
-        %li.action_button
-          %a{ :href => "#"} Publish        
-        %li.action_button
-          %a{ :href => "#"} Extend Uniboard
-        %li.action_button
-          %a{ :href => "#"} Export
-        %li.action_button
-          %a{ :href => "#"} Print
-        %li#develop_sub_menu 
-          %a{ :href => "#"} Develop
-          %ul
-            %li#disable_html.action_button
-              %a{ :href => "#"} Disable HTML
-
+- document_title @document.title
+= render :partial => "layouts/main_editor_toolbar"
 #tb_2.tb
   %ul#pages_tools.left_tb_group
     %li#addPage.tb_button.action_button.preview_hidden

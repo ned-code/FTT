@@ -13,10 +13,10 @@
     = javascript_include_tag 'jquery-string'
     = javascript_include_tag 'jquery-ui'
     = javascript_include_tag 'lowpro-jquery'
+    = javascript_include_tag 'sylvester'
     = sprockets_include_tag
 
   %body
     #wrap
-      = render :partial => "layouts/main_toolbar"    
       = yield
     = render :partial => "layouts/googleAnalytics"

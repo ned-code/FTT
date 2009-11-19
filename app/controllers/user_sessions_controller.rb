@@ -1,5 +1,5 @@
 class UserSessionsController < ApplicationController
-  
+  layout "layouts/external"
   # GET /login
   def new
     @user_session = UserSession.new
