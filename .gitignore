@@ -28,3 +28,4 @@ ThirdParty/*/output
 ThirdParty/*/bin
 ThirdParty/*/obj
 *.csproj.user
+db/smFunctions.sqlite
