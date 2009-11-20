@@ -9,7 +9,7 @@ WebDoc.VmlRenderer = function(initialDrawing)
     var styleSheet = (document.styleSheets.length > 0) ? document.styleSheets[0] : document.createStyleSheet();
     styleSheet.addRule('vml\\:*', 'behavior:url(#default#VML)');
     
-}
+};
 
 WebDoc.VmlRenderer.prototype.createSurface = function(width, height) {
 
@@ -35,7 +35,7 @@ WebDoc.VmlRenderer.prototype.createSurface = function(width, height) {
     surface.setAttribute("coordorigin", "0,0");
 
     return surface;
-}
+};
 
 WebDoc.VmlRenderer.prototype.clearSurface = function(surface)
  {
@@ -45,7 +45,7 @@ WebDoc.VmlRenderer.prototype.clearSurface = function(surface)
         var element = surface.firstChild;
         surface.removeChild(element);
     }
-}
+};
 
 WebDoc.VmlRenderer.prototype.createPolyline = function(id)
 {
@@ -59,7 +59,7 @@ WebDoc.VmlRenderer.prototype.createPolyline = function(id)
 		result.setAttribute("id", id);
 	}
 	return result;	 	        	
-}
+};
 
 WebDoc.VmlRenderer.prototype.updatePolyline = function(line, properties) {
     if (properties.points) {
@@ -81,7 +81,7 @@ WebDoc.VmlRenderer.prototype.updatePolyline = function(line, properties) {
     if (properties.width) {
         // TODO change width
     }
-}
+};
 
 WebDoc.VmlRenderer.prototype.createPolygon = function(id) {
     var result = document.createElement("vml:polyline");
@@ -93,7 +93,7 @@ WebDoc.VmlRenderer.prototype.createPolygon = function(id) {
         result.setAttribute("id", id);
     }
     return result;
-}
+};
 
 WebDoc.VmlRenderer.prototype.updatePolygon = function(line, properties) {
     if (properties.points) {
@@ -125,12 +125,12 @@ WebDoc.VmlRenderer.prototype.updatePolygon = function(line, properties) {
         }
 
         var stroke = document.createElement("vml:stroke");
-        stroke.setAttribute("opacity", alpha)
+        stroke.setAttribute("opacity", alpha);
         
         var fill = document.createElement("vml:fill");
-        fill.setAttribute("opacity", properties.opacity)
+        fill.setAttribute("opacity", properties.opacity);
         line.appendChild(stroke);
         line.appendChild(fill);
     }
 
-}      
+};     

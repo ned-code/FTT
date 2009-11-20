@@ -33,8 +33,9 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   type: function() {
-    if (this.data.media_type) 
+    if (this.data.media_type) { 
       return this.data.media_type;
+    }
     return "object";
   },
   
@@ -145,7 +146,7 @@ WebDoc.Item = $.klass(MTools.Record,
   
   preference: function(key, value) {
     var result = this.data.data.preference[key];
-    if (result) return result;
+    if (result) {return result;}
     return value;
   },
   

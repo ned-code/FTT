@@ -128,6 +128,6 @@ WebDoc.Page = $.klass(MTools.Record,
     for (var i = 0; i < this.listeners.length; i++) {
       this.listeners[i].itemRemoved(removedItem);
     }     
-  },
+  }
   
 });

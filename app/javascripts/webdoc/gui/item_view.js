@@ -74,7 +74,7 @@ WebDoc.ItemView = $.klass({
       var converted_point = {};
       converted_point.x = point.x;
       converted_point.y = point.y;
-      if (mat_str && mat_str != "" && mat_str.indexOf("matrix") >= 0) {
+      if (mat_str && mat_str !== "" && mat_str.indexOf("matrix") >= 0) {
         var matrixPointsString = mat_str.substr(mat_str.indexOf("(") + 1, mat_str.length - (mat_str.indexOf("(") + 2));
         var matrixPoints = matrixPointsString.split(", ");
         var matrix = $M([[matrixPoints[0], matrixPoints[2], matrixPoints[4].replace("px", "")], [matrixPoints[1], matrixPoints[3], matrixPoints[5].replace("px", "")], [0, 0, 1]]);
@@ -240,7 +240,7 @@ WebDoc.ItemView = $.klass({
     });
     this.resetHandles();
     WebDoc.application.inspectorController.refreshSubInspectors();
-  },  
+  }  
 });
 
 $.extend(WebDoc.ItemView, {
@@ -249,7 +249,7 @@ $.extend(WebDoc.ItemView, {
     var previousPosition = {};
     $.extend(previousPosition, item.position);
     
-    ddd("store previous pos " + previousPosition.left + ":" + previousPosition.top)
+    ddd("store previous pos " + previousPosition.left + ":" + previousPosition.top);
     item.moveTo(position);
     WebDoc.application.undoManager.registerUndo(function() {
       WebDoc.ItemView._restorePosition(item, previousPosition);

@@ -153,7 +153,7 @@ WebDoc.PageEditor = $.klass({
         }.pBind(this));
       }
     }
-  },
+  }
 
 });
 

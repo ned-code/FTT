@@ -19,6 +19,6 @@ WebDoc.HtmlTool = $.klass(WebDoc.Tool, {
     newItem.recomputeInternalSizeAndPosition();
     WebDoc.application.boardController.insertItems([newItem]);
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);        
-  },
+  }
 
 });

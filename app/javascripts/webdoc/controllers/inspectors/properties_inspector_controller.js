@@ -24,7 +24,7 @@ WebDoc.PropertiesInspectorController = $.klass({
       $("#property_left")[0].value = selectedItem.item.position.left;
       $("#property_width")[0].value = selectedItem.item.size.width;
       $("#property_height")[0].value = selectedItem.item.size.height;      
-      $("#property_scroll").attr("checked", selectedItem.domNode.css("overflow") == "auto")
+      $("#property_scroll").attr("checked", selectedItem.domNode.css("overflow") == "auto");
       if (selectedItem.item.data.media_type == WebDoc.ITEM_TYPE_IMAGE) {
         $("#image_properties").css("display", "");
         $("#property_src")[0].value = selectedItem.item.data.data.src;
@@ -95,5 +95,5 @@ WebDoc.PropertiesInspectorController = $.klass({
         item.save();
       }
     }
-  },
+  }
 });

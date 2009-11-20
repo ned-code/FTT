@@ -39,7 +39,7 @@ WebDoc.PageView = $.klass({
     if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
       var externalPage = $("<iframe/>").css({
         width: "100%",
-        height: "100%",
+        height: "100%"
       });
       if (page.data.data.externalPageUrl) {
         if (page.data.data.allowAnnotation) {
@@ -105,7 +105,6 @@ WebDoc.PageView = $.klass({
   },
   
   findObjectAtPoint: function(point) {
-    var i = 0;
     var matchedItems = [];
     for (var itemId in this.itemViews) {
       var anItemView = this.itemViews[itemId];
@@ -113,7 +112,7 @@ WebDoc.PageView = $.klass({
         matchedItems.push(anItemView);
       }
     }
-    if (matchedItems.length == 0) {
+    if (matchedItems.length === 0) {
       return null;
     }
     else {
@@ -167,6 +166,6 @@ WebDoc.PageView = $.klass({
         break;
     }
     this.itemViews[item.uuid()] = itemView;
-    return itemView
+    return itemView;
   }
 });

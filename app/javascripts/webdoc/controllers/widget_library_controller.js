@@ -27,7 +27,7 @@ WebDoc.WidgetLibraryController = $.klass({
       var widget = this.widgets[widgetId];
       var widgetItem = $("<img/>").attr({
         id: widget.uuid(),
-        src: widget.data.properties.icon_url,
+        src: widget.data.properties.icon_url
       }).addClass("widget_item");
       var widgetListItem = $("<li/>").append(widgetItem);
       this.domNode.find("ul").append(widgetListItem);

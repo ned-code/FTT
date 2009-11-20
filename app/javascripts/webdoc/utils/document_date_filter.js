@@ -31,11 +31,12 @@ WebDoc.DocumentDateFilter = $.klass(
         var documentDate = newDocument.creationDate();
         var currentDate = new Date();
         var section = 0;
+        var index;
         if (currentDate.getUTCDate() == documentDate.getUTCDate() &&
         currentDate.getUTCMonth() == documentDate.getUTCMonth() &&
         currentDate.getUTCFullYear() == documentDate.getUTCFullYear()) 
         {
-            var index = previousIndex;
+            index = previousIndex;
             if (!index) 
             {
                 index = 0;
@@ -45,7 +46,7 @@ WebDoc.DocumentDateFilter = $.klass(
         else 
         {
             section = 1;
-            var index = previousIndex;
+            index = previousIndex;
             if (!index) 
             {
                 index = 0;
@@ -73,8 +74,9 @@ WebDoc.DocumentDateFilter = $.klass(
                 this.previousDocuments.splice(index, 1);
             }
         }
-        if (index > -1) 
-            this.view.removeDocument(document.uuid());
+        if (index > -1) { 
+          this.view.removeDocument(document.uuid());
+        }
         
         return index;
     },

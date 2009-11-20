@@ -16,10 +16,10 @@ WebDoc.InspectorController = $.klass({
     this.palettes = [emptyPalette, textPalette, penPelette];
     this.updatePalette(0);
     this.subInspectors = [];
-    var pageInspector = new WebDoc.PageInspectorController();
-    this.subInspectors.push(pageInspector);
-    var propertiesInspector = new WebDoc.PropertiesInspectorController();
-    this.subInspectors.push(propertiesInspector);   
+    var pageInspectorController = new WebDoc.PageInspectorController();
+    this.subInspectors.push(pageInspectorController);
+    var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
+    this.subInspectors.push(propertiesInspectorController);   
     var innerHtmlController = new WebDoc.InnerHtmlController();
     this.subInspectors.push(innerHtmlController);        
        
@@ -57,7 +57,7 @@ WebDoc.InspectorController = $.klass({
   },
   
   updatePalette: function(paletteId) {
-    if (this.currentPaletteId != undefined) {
+    if (this.currentPaletteId) {
       this.palettes[this.currentPaletteId].hide();
     }
     this.palettes[paletteId].show();
@@ -89,7 +89,7 @@ WebDoc.InspectorController = $.klass({
         subInspetor.refresh();
       }
     }
-  }, 
+  } 
 });
 
 $.extend(WebDoc.InspectorController, {});

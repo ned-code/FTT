@@ -70,7 +70,7 @@ $.extend(MTools.UUID,
     getIntegerBits: function(val, start, end)
     {
         var base16 = MTools.UUID.returnBase(val, 16);
-        var quadArray = new Array();
+        var quadArray = [];
         var quadString = '';
         var i = 0;
         for (i = 0; i < base16.length; i++) 
@@ -79,10 +79,12 @@ $.extend(MTools.UUID,
         }
         for (i = Math.floor(start / 4); i <= Math.floor(end / 4); i++) 
         {
-            if (!quadArray[i] || quadArray[i] == '') 
-                quadString += '0';
-            else 
-                quadString += quadArray[i];
+            if (!quadArray[i] || quadArray[i] === '') {
+              quadString += '0';
+            }    
+            else { 
+              quadString += quadArray[i];
+            }
         }
         return quadString;
     },

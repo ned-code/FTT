@@ -57,7 +57,7 @@ WebDoc.ItemThumbnailView = $.klass({
   
   innerHtmlChanged: function() {
     //this.domNode.html(this.item.data.data.innerHTML);
-  },
+  }
 });
 
 WebDoc.ImageThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
@@ -103,7 +103,7 @@ WebDoc.DrawingThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
       points: item.data.data.points
     });
     this.domNode[0].setAttribute("transform", this.item.data.data.transform);
-  },  
+  }  
 });
 
 WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
@@ -116,7 +116,7 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
     this.pageView.itemDomNode.append(itemNode.get(0));
     
     return itemNode;
-  }, 
+  } 
 });
 
 

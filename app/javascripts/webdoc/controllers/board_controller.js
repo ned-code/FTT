@@ -246,8 +246,9 @@ WebDoc.BoardController = $.klass({
   
   selectItemViews: function(itemViews) {
     // exit edit mode for current editing item
-    if (this.editingItem) 
+    if (this.editingItem) {
       this.editingItem.stopEditing();
+    }
     this.editingItem = null;
     //deselect un-needed items
     ddd("select item in view");
@@ -255,7 +256,7 @@ WebDoc.BoardController = $.klass({
       if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
         this.unselectItemViews([itemToDeselect]);
       }
-    }.pBind(this))
+    }.pBind(this));
     
     //select wanted items
     $.each(itemViews, function(index, itemToSelect) {
@@ -298,8 +299,9 @@ WebDoc.BoardController = $.klass({
     this.removeItems(deletedItems);
     this.selection = [];
     this.fireSelectionChanged();
-    if (e && deletedItems.length > 0) 
+    if (e && deletedItems.length > 0) {
       e.preventDefault(); //stop keydown event
+    }
   },
   
   zoom: function(factor) {
@@ -320,7 +322,7 @@ WebDoc.BoardController = $.klass({
           this.initialSize = {
             width: parseFloat(boardElement.css("width").replace("px", "")) + 2,
             height: parseFloat(boardElement.css("height").replace("px", "")) + 2
-          }
+          };
         }
         if (this.currentZoom > 1) {
           boardElement.css({
@@ -399,8 +401,9 @@ WebDoc.BoardController = $.klass({
   
   keyDown: function(e) {
     var el = $(e.target);
-    if (el.is('input') || el.is('textarea')) 
+    if (el.is('input') || el.is('textarea')) { 
       return;
+    }
     switch (e.which) {
       case 8:
       case 46:

@@ -33,10 +33,10 @@ $.extend(WebDoc.DrageAndDropController,{
     var html = evt.originalEvent.dataTransfer.getData('text/html');        
     var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
     var ubImage = evt.originalEvent.dataTransfer.getData('application/ub-image');    
-    
+    var newItem;
     if (widget) {
       var widgetData = $.evalJSON(widget);
-      var newItem = new WebDoc.Item();
+      newItem = new WebDoc.Item();
       var width = 200, height = 200;
       if (widgetData.properties.width) {
         width = widgetData.properties.width;
@@ -56,20 +56,20 @@ $.extend(WebDoc.DrageAndDropController,{
     }
     else if (imageUrl || ubImage) {
       var url = ubImage? ubImage : imageUrl;
-      var newItem = new WebDoc.Item();
+      newItem = new WebDoc.Item();
       newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
       newItem.data.data.tag = "img";
       newItem.data.data.src = url;
       newItem.data.data.css = {
         overflow: "hidden",
         top: pos.y + "px",
-        left: pos.x + "px",
+        left: pos.x + "px"
       };
       WebDoc.application.boardController.insertItems([newItem]);
     } 
     else {      
       if (html) {
-        var newItem = new WebDoc.Item();
+        newItem = new WebDoc.Item();
         newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
         newItem.data.data.tag = "div";
         newItem.data.data.innerHTML = html;
@@ -83,5 +83,5 @@ $.extend(WebDoc.DrageAndDropController,{
       }
     }
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-  },
+  }
 });

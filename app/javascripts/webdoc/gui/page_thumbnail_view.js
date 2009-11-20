@@ -8,10 +8,10 @@ WebDoc.PageThumbnailView = $.klass({
   initialize: function(page) {
     this.page = page;
     this.domNode = $('<div>').attr({
-      id: "thumb_" + page.uuid(),
+      id: "thumb_" + page.uuid()
     }).addClass("page_thumb");
     
-    this.pageThumbNode = $('<div>')
+    this.pageThumbNode = $('<div>');
     if (this.page.data.data.externalPage) {
       var url = $("<div/>").addClass("page_thumb_url").css("textAlign", "center").text(this.page.data.data.externalPageUrl);
       this.pageThumbNode.append(url.get(0));
@@ -43,8 +43,8 @@ WebDoc.PageThumbnailView = $.klass({
   
   updateSize: function() {
     // define scale factor
-    var pageWidth = parseInt(this.page.data.data.css.width);
-    var pageHeight = parseInt(this.page.data.data.css.height);
+    var pageWidth = parseInt(this.page.data.data.css.width,10);
+    var pageHeight = parseInt(this.page.data.data.css.height,10);
     
     if (this.page.data.data.externalPage) {
       this.factor = 1;
@@ -118,6 +118,6 @@ WebDoc.PageThumbnailView = $.klass({
     }
     this.itemViews[item.uuid()] = itemView;
     
-    return itemView
+    return itemView;
   }
 });

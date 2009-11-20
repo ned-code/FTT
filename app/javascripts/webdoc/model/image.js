@@ -8,7 +8,7 @@ WebDoc.Image = $.klass(MTools.Record, {
   
   className: function() {
     return "image";
-  },
+  }
   
 });
 

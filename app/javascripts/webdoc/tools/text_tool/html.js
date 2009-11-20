@@ -6,19 +6,19 @@
     if (jQuery.isFunction(replacement))  {
       return replacement;
     }
-    return function(match) { return replacement };
+    return function(match) { return replacement; };
   };
 
   var blank = function(text) {
-    return /^\s*$/.test(text);
+    return (/^\s*$/).test(text);
   };
 
   var interpret = function(text) {
-    return text == null ? '' : String(text);
+    return !text ? '' : String(text);
   };
 
   var escapeRegExp = function(string) {
-    return String(string).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+    return String(string).replace(/([.*+?\^=!:${}()|\[\]\/\\])/g, '\\$1');
   };
 
   var gsub = function(source, pattern, replacement) {
@@ -35,12 +35,12 @@
     }
 
     while (source.length > 0) {
-      if (match = source.match(pattern)) {
+      if ((match = source.match(pattern))) {
         result += source.slice(0, match.index);
         result += interpret(replacement(match));
         source  = source.slice(match.index + match[0].length);
       } else {
-        result += source, source = '';
+        result += source; source = '';
       }
     }
     return result;

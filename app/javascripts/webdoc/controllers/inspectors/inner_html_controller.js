@@ -46,11 +46,11 @@ WebDoc.InnerHtmlController = $.klass({
   
   applyInnerHtml: function(e) {
     e.preventDefault();
-    var html = $("#selected_item_html_editor").get(0).value
+    var html = $("#selected_item_html_editor").get(0).value;
     if (html) {
       if (WebDoc.application.boardController.selection.length > 0) {
         WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
       }
     }
-  },
+  }
 });

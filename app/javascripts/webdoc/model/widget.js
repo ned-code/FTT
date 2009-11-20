@@ -8,7 +8,7 @@ WebDoc.Widget = $.klass(MTools.Record, {
   
   className: function() {
     return "widget";
-  },
+  }
   
 });
 

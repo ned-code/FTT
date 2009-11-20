@@ -108,7 +108,7 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
   
   inspectorId: function() {
     return 2;
-  },
+  }
 
 });
 
@@ -124,6 +124,6 @@ $.extend(WebDoc.DrawingView, {
       item.save();
     }.pBind(this));
     
-  },
+  }
 });
 

@@ -41,8 +41,8 @@ WebDoc.Document = $.klass(MTools.Record, {
         
     var checkedAttribute = "uuid";
     if (!MTools.UUID.isUUID(pUuid)) {
-      checkedAttribute = "position"
-      var pagePosition = parseInt(pUuid) - 1;
+      checkedAttribute = "position";
+      var pagePosition = (parseInt(pUuid, 10) - 1);
       return this.pages[pagePosition];
     }
     else {
@@ -139,7 +139,7 @@ WebDoc.Document = $.klass(MTools.Record, {
     for (var i = 0; i < this.listeners.length; i++) {
       this.listeners[i].pageRemoved(removedPage);
     }      
-  },
+  }
     
 });
 

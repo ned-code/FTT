@@ -23,10 +23,10 @@ WebDoc.DocumentList = $.klass(
     refreshNewDocument: function(section, index, document)
     {
         var sectionToUpdate = $(this.domNode.find("h3").get(section));
-        var previousElement = sectionToUpdate
+        var previousElement = sectionToUpdate;
         if (index > 0) 
         {
-            previousElement = $(sectionToUpdate.nextAll().get(index - 1))
+            previousElement = $(sectionToUpdate.nextAll().get(index - 1));
         }
         previousElement.after($("<div id='" + document.uuid() + "' class='wb-document-item'>\
                                                         <div class='wb-document-title'>" +

@@ -84,7 +84,7 @@ WebDoc.DocumentAccessController = $.klass({
     for (var i = 0; i < this.roles.length; i++) {
       var aRole = this.roles[i];
       var roleItem = $('<option/>').attr("value", aRole).text(aRole);    
-      if (role == aRole) { roleItem.attr("selected", "true")}; 
+      if (role == aRole) { roleItem.attr("selected", "true"); } 
       rolesPopup.append(roleItem);      
     }
     accessActions.append($('<a href="#"/>').addClass("delete_access").attr("title", "Delete"));
@@ -100,8 +100,8 @@ WebDoc.DocumentAccessController = $.klass({
       var anAccess = $(allAccess[i]);   
       var email = "";
       var emailNode = anAccess.find(".user_email");
-      if (emailNode[0].tagName == "INPUT") { email = emailNode.attr("value")}
-      else { email = emailNode.text()}
+      if (emailNode[0].tagName == "INPUT") { email = emailNode.attr("value");}
+      else { email = emailNode.text();}
       accesses[email] = this.roles[anAccess.find(".user_role")[0].selectedIndex];
     }
     ddd("roles",accesses);
@@ -115,7 +115,7 @@ WebDoc.DocumentAccessController = $.klass({
       dataType: 'json',
       data: this.getAccess(),    
       success: function(data) {
-        this.loadAccess(data)
+        this.loadAccess(data);
       }.pBind(this),    
       error: function(MLHttpRequest, textStatus, errorThrown) {
         ddd("error", textStatus);

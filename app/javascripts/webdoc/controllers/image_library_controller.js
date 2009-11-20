@@ -25,12 +25,14 @@ WebDoc.ImageLibraryController = $.klass({
   refreshImageList: function() {    
     for (imageId in this.images) {
       var image = this.images[imageId];
-      var imageItem = $("<img/>").attr({
-        id: image.uuid(),
-        src: image.data.properties.thumb_url,
-      }).addClass("image_item");
-      var imageListItem = $("<li/>").append(imageItem);
-      this.domNode.find("ul").append(imageListItem);
+      if (image) {
+        var imageItem = $("<img/>").attr({
+          id: image.uuid(),
+          src: image.data.properties.thumb_url
+        }).addClass("image_item");
+        var imageListItem = $("<li/>").append(imageItem);
+        this.domNode.find("ul").append(imageListItem);
+      }
     }
   },
   

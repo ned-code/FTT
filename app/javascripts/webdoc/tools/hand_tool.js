@@ -23,18 +23,18 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
     mouseDown: function(e)
     {
       e.preventDefault();      
-        this.moving = true;
-        this.originalMovingPos = 
-        {
-            x: e.screenX,
-            y: e.screenY,
-            firstMove: true
-        };
-		this.originalPos = 
-		{
-			x: $("#board_container").get(0).scrollLeft,
-			y: $("#board_container").get(0).scrollTop
-		}
+      this.moving = true;
+      this.originalMovingPos = 
+      {
+          x: e.screenX,
+          y: e.screenY,
+          firstMove: true
+      };
+      this.originalPos = 
+      {
+        x: $("#board_container").get(0).scrollLeft,
+        y: $("#board_container").get(0).scrollTop
+      };
     },
     
     mouseMove: function(e)
