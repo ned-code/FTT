@@ -29,3 +29,5 @@ ThirdParty/*/bin
 ThirdParty/*/obj
 *.csproj.user
 db/smFunctions.sqlite
+public/static/test/embed.html
+public/static/test/test_trans.html
