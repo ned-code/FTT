@@ -18,9 +18,6 @@ class MediasController < ApplicationController
   # POST /medias
   def create
     new_media = eval(params[:type]).create(:file => params[:file])
-    #Horrible hack because I dont know why type is wrong when media is created.
-    new_media.type = params[:type]
-    new_media.save
     redirect_to medias_path
   end
 

@@ -90,7 +90,7 @@ module Acl9
           :counter_sql => ("SELECT COUNT(DISTINCT #{subj_table}.id)" + sql_tables + sql_where),
           :readonly => true
 
-        include Acl9::ModelExtensions::Object
+        include Acl9::ModelExtensions::Authorizabe
       end
 
       # Make a class an auth role class.
