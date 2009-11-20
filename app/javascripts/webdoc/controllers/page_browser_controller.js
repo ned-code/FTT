@@ -10,6 +10,7 @@ WebDoc.PageBrowserController = $.klass({
     ddd("init page browser");
     this.domNode = $("#left_bar");
     this.visible = false;
+    this.pageThumbs = [];
   },
   
   setDocument: function(document) {
@@ -33,7 +34,9 @@ WebDoc.PageBrowserController = $.klass({
       }    
       $("#left_bar").unbind();  
       ddd("browser", $("#page_browser"));
-      $("#page_browser").removeClass("toggle_on_panel");    
+      $("#page_browser").removeClass("toggle_on_panel"); 
+      this.deletePageThumbs();
+      this.domNode.find("ul").empty();          
     }
     else {
       this.document.addListener(this);
@@ -67,14 +70,22 @@ WebDoc.PageBrowserController = $.klass({
     this.domNode.find("ul").empty(); 
     for (var i = 0; i < this.document.pages.length; i++) {
       var aPage = this.document.pages[i];
-      var pageThumb = new WebDoc.PageThumbnailView(aPage).domNode;
-      
-      var pageListItem = $("<li>").append(pageThumb);
+      var pageThumb = new WebDoc.PageThumbnailView(aPage);
+      var pageListItem = $("<li>").append(pageThumb.domNode);
       this.domNode.find("ul:first").append(pageListItem);
+      this.pageThumbs.push(pageThumb);
     }
     this.updateSelectedPage();
   },
-    
+  
+  deletePageThumbs: function() {
+    ddd("delete pages thumbs", this.pageThumbs);
+    for (var i = 0; i < this.pageThumbs.length; i++) {
+      this.pageThumbs[i].destroy();
+    }
+    this.pageThumbs = [];
+  },
+   
   updateSelectedPage: function() {
     $(".page_thumb").removeClass("selected_thumb");
     var selectedPage = WebDoc.application.boardController.currentPage; 

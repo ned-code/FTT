@@ -41,6 +41,12 @@ WebDoc.PageThumbnailView = $.klass({
     this.domNode.append(this.pageThumbNode);
   },
   
+  destroy: function() {
+    ddd("destroy page thumb view", this);
+    this.page.removeListener(this);
+    this.domNode.remove();
+  },
+  
   updateSize: function() {
     // define scale factor
     var pageWidth = parseInt(this.page.data.data.css.width,10);
@@ -80,8 +86,9 @@ WebDoc.PageThumbnailView = $.klass({
   },
   
   itemAdded: function(addedItem) {
-    ddd("item add to thumbnail");
-    this.createItemView(addedItem);
+    if (!this.page.data.data.externalPage) {
+      this.createItemView(addedItem);
+    }
   },
   
   domNodeChangedChanged: function() {
@@ -89,10 +96,12 @@ WebDoc.PageThumbnailView = $.klass({
   },
   
   itemRemoved: function(removedItem) {
-    var relatedItemView = this.itemViews[removedItem.uuid()];
-    if (relatedItemView) {
-      relatedItemView.remove();
-      delete this.itemViews[removedItem.uuid()];
+    if (!this.page.data.data.externalPage) {
+      var relatedItemView = this.itemViews[removedItem.uuid()];
+      if (relatedItemView) {
+        relatedItemView.remove();
+        delete this.itemViews[removedItem.uuid()];
+      }
     }
   },
   
