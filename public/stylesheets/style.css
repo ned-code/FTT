@@ -468,6 +468,7 @@ a:hover { color: #0069BF;}
   border: solid 2px #ebebeb;
   padding: 2px;
 }
+
 .selected_thumb {
   padding: 2px;
   border: solid 2px #3B9EEF;
@@ -485,7 +486,10 @@ a:hover { color: #0069BF;}
   background-color: #aaf;
 }
 #page_browser ul {
+  position:relative;
   overflow:hidden;  
+  width:100%;
+  z-index:1000000;
 }
 #page_browser ul li {
   height:150px;

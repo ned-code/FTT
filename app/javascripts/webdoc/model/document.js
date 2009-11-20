@@ -139,6 +139,32 @@ WebDoc.Document = $.klass(MTools.Record, {
     for (var i = 0; i < this.listeners.length; i++) {
       this.listeners[i].pageRemoved(removedPage);
     }      
+  },
+  
+  movePage: function(movedPageUuid, newPosition) {
+    var page = this.findPageWithUuidOrPosition(movedPageUuid);
+    ddd("move page", page, "to position", newPosition);
+    var previousPosition = page.data.position;
+    // ignore wrong new position
+    if (newPosition !== previousPosition && newPosition >= 0 && newPosition < this.pages.length) {
+      var i;
+      // move backward
+      if (newPosition < previousPosition) {
+        for (i = page.data.position -1; i >= newPosition; i--) {
+          this.pages[i].data.position += 1;
+        }
+      }
+      // move forward
+      if (newPosition > previousPosition) {
+        for (i = page.data.position + 1; i <= newPosition; i++) {
+          this.pages[i].data.position -= 1;
+        }        
+      }
+      page.data.position = newPosition;
+      page.save();    
+      this.sortPages();
+      this.firePageAdded(page);       
+    }
   }
     
 });

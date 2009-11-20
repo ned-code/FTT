@@ -11,6 +11,7 @@ WebDoc.PageBrowserController = $.klass({
     this.domNode = $("#left_bar");
     this.visible = false;
     this.pageThumbs = [];
+    this.pageMap = {};    
   },
   
   setDocument: function(document) {
@@ -32,7 +33,7 @@ WebDoc.PageBrowserController = $.klass({
           marginLeft: "0px"
         });
       }    
-      $("#left_bar").unbind();  
+      this.domNode.unbind();  
       ddd("browser", $("#page_browser"));
       $("#page_browser").removeClass("toggle_on_panel"); 
       this.deletePageThumbs();
@@ -41,7 +42,6 @@ WebDoc.PageBrowserController = $.klass({
     else {
       this.document.addListener(this);
       WebDoc.application.boardController.addCurrentPageListener(this);      
-      this.refreshPages();
       this.domNode.animate({
         width: "215px"
       }, callBack);
@@ -50,9 +50,9 @@ WebDoc.PageBrowserController = $.klass({
           marginLeft: "220px"
         });
       }
-
-      $("#left_bar").click(this.changeSelectedPage.pBind(this));
+      this.domNode.click(this.changeSelectedPage.pBind(this));             
       $("#page_browser").addClass("toggle_on_panel");
+      this.refreshPages();      
     }
     this.visible = !this.visible;
   },
@@ -68,22 +68,31 @@ WebDoc.PageBrowserController = $.klass({
   refreshPages: function() {   
     ddd("refresh all pages");
     this.domNode.find("ul").empty(); 
+    this.deletePageThumbs();
     for (var i = 0; i < this.document.pages.length; i++) {
       var aPage = this.document.pages[i];
       var pageThumb = new WebDoc.PageThumbnailView(aPage);
       var pageListItem = $("<li>").append(pageThumb.domNode);
       this.domNode.find("ul:first").append(pageListItem);
       this.pageThumbs.push(pageThumb);
+      this.pageMap[pageThumb.domNode.attr("id")] = pageThumb;
     }
     this.updateSelectedPage();
+    this.domNode.find("ul").bind("mousedown", function(){ddd("down")});    
+    this.domNode.find("ul").bind("dragstart", this.dragStart.pBind(this));    
+    this.domNode.find("ul").bind("dragover", this, this.dragOver.pBind(this));
+    this.domNode.find("ul").bind("drop", this, this.drop.pBind(this));    
   },
   
   deletePageThumbs: function() {
     ddd("delete pages thumbs", this.pageThumbs);
+    this.domNode.find("ul").unbind();
     for (var i = 0; i < this.pageThumbs.length; i++) {
       this.pageThumbs[i].destroy();
     }
     this.pageThumbs = [];
+    delete this.pageMap;
+    this.pageMap = {};
   },
    
   updateSelectedPage: function() {
@@ -110,7 +119,33 @@ WebDoc.PageBrowserController = $.klass({
   currentPageChanged: function() {
     ddd("update selected page in page browser");
     this.updateSelectedPage();
-  }
+  },
+  
+  dragStart: function(e) {
+    ddd("start drag");
+    var dragged_page_thumb = $(e.target).closest(".page_thumb");
+    ddd("dragged page thumb", this.pageMap[dragged_page_thumb.attr("id")]);
+    e.originalEvent.dataTransfer.setData('application/ub-page', $.toJSON(this.pageMap[dragged_page_thumb.attr("id")].page.data));  
+    //e.originalEvent.dataTransfer.setDragImage($("#page_d_d_image")[0],0,0);     
+    //e.originalEvent.dataTransfer.effectAllowed = "move";     
+  },
+
+   dragOver: function(evt) {
+    var isPage = evt.originalEvent.dataTransfer.types.contains("application/ub-page");
+    if (isPage) {
+      evt.preventDefault();
+    }
+   },
+
+   drop: function(evt) {
+     ddd("drop"); 
+     evt.preventDefault();
+     var droppedPageThumb = $(evt.target).closest(".page_thumb"); 
+     var droppedPage = this.pageMap[droppedPageThumb.attr("id")].page;
+     var movedPage = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-page')); 
+     ddd("droppedPage", droppedPage, "movedPage", movedPage);
+     WebDoc.application.pageEditor.currentDocument.movePage(movedPage.uuid, WebDoc.application.pageEditor.currentDocument.positionOfPage(droppedPage)-1);
+   }
 });
 
 $.extend(WebDoc.PageBrowserController, {});

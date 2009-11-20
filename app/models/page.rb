@@ -39,7 +39,7 @@ class Page < ActiveRecord::Base
   # =============
   
   before_create :set_position
-  
+  before_save :update_position_if_moved
   after_destroy :update_next_page_position
 
   # =================
@@ -86,6 +86,17 @@ private
   
   def update_next_page_position
     Page.update_all("position = position - 1", "position > #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")
+  end
+  
+  def update_position_if_moved
+    if (!self.new_record? && self.position_was != self.position)
+      logger.debug("must change page position")
+      if (self.position < self.position_was)
+        Page.update_all("position = position + 1", "position < #{self.position_was.to_i} and position >= #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")        
+      else
+        Page.update_all("position = position - 1", "position > #{self.position_was.to_i} and position <= #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")                
+      end
+    end
   end
 
 end

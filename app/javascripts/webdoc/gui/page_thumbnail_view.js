@@ -27,7 +27,11 @@ WebDoc.PageThumbnailView = $.klass({
         style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
       });
       this.pageThumbNode.append(this.itemDomNode.get(0));
-      
+      this.eventCatcher = $('<div>').attr({
+        class: "thumb_catcher",
+        style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index:999999"
+      }); 
+      this.pageThumbNode.append(this.eventCatcher.get(0));      
       var that = this;
       this.itemViews = {};
       if (page.items && $.isArray(page.items)) {
