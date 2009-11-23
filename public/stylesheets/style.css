@@ -466,18 +466,18 @@ a:hover { color: #0069BF;}
   margin-right:auto;
   margin-top:5px;
   border: solid 2px #ebebeb;
-  padding: 2px;
+  padding: 2px;  
 }
 
 .selected_thumb {
   padding: 2px;
   border: solid 2px #3B9EEF;
-  
+  -webkit-user-drag:element;
 }
 .page_thumb_url {
   color:#000;
   background-color: #fff;
-  margin-top:50px;
+  margin-top:30px;
 }
 .page_thumb_external {
   background-color: #fff;
@@ -492,12 +492,16 @@ a:hover { color: #0069BF;}
   z-index:1000000;
 }
 #page_browser ul li {
-  height:150px;
+  height:110px;
   margin:auto;
   overflow:hidden;
-  width:200px;  
+  width:150px;    
 }
-
+#page_browser .page_insert_line {
+  height:2px;;
+  width:150px;
+  background-color:black;
+}
 /*******************/
 /* = board part = */
 #content{

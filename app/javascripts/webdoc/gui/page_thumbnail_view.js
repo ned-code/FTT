@@ -8,7 +8,8 @@ WebDoc.PageThumbnailView = $.klass({
   initialize: function(page) {
     this.page = page;
     this.domNode = $('<div>').attr({
-      id: "thumb_" + page.uuid()
+      id: "thumb_" + page.uuid(),
+      draggable: "true"
     }).addClass("page_thumb");
     
     this.pageThumbNode = $('<div>');
@@ -26,12 +27,7 @@ WebDoc.PageThumbnailView = $.klass({
         id: "thumb_items",
         style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
       });
-      this.pageThumbNode.append(this.itemDomNode.get(0));
-      this.eventCatcher = $('<div>').attr({
-        class: "thumb_catcher",
-        style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index:999999"
-      }); 
-      this.pageThumbNode.append(this.eventCatcher.get(0));      
+      this.pageThumbNode.append(this.itemDomNode.get(0));   
       var that = this;
       this.itemViews = {};
       if (page.items && $.isArray(page.items)) {
@@ -58,13 +54,13 @@ WebDoc.PageThumbnailView = $.klass({
     
     if (this.page.data.data.externalPage) {
       this.factor = 1;
-      pageWidth = 180;
-      pageHeight = 135;
-      this.pageThumbNode.css({ width: "180px", height:"135px"});
+      pageWidth = 130;
+      pageHeight = 97;
+      this.pageThumbNode.css({ width: "130px", height:"97px"});
     }
     else {
-      var horizontalFactor = 180 / pageWidth;
-      var verticalFactor = 135 / pageHeight;
+      var horizontalFactor = 130 / pageWidth;
+      var verticalFactor = 97 / pageHeight;
       if (horizontalFactor < verticalFactor) {
         this.factor = horizontalFactor;
       }
@@ -74,12 +70,14 @@ WebDoc.PageThumbnailView = $.klass({
       this.pageThumbNode.css(this.page.data.data.css);
       this.pageThumbNode.css("MozTransformOrigin", "0px 0px");
       this.pageThumbNode.css("MozTransform", "scaleX(" + this.factor + ") scaleY(" + this.factor + ")");
+      this.pageThumbNode.css("WebkitTransformOrigin", "0px 0px");
+      this.pageThumbNode.css("WebkitTransform", "scaleX(" + this.factor + ") scaleY(" + this.factor + ")");      
     }        
     var height = pageHeight * this.factor;
     var width = pageWidth * this.factor;
     
     this.domNode.css({
-      top: (135 - height) / 2,
+      top: (97 - height) / 2,
       width: width,
       height: height
     });

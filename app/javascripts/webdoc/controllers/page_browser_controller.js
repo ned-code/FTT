@@ -43,11 +43,11 @@ WebDoc.PageBrowserController = $.klass({
       this.document.addListener(this);
       WebDoc.application.boardController.addCurrentPageListener(this);      
       this.domNode.animate({
-        width: "215px"
+        width: "165px"
       }, callBack);
       if (!MTools.Browser.WebKit) {
         $("#board_container").animate({
-          marginLeft: "220px"
+          marginLeft: "170px"
         });
       }
       this.domNode.click(this.changeSelectedPage.pBind(this));             
@@ -78,9 +78,10 @@ WebDoc.PageBrowserController = $.klass({
       this.pageMap[pageThumb.domNode.attr("id")] = pageThumb;
     }
     this.updateSelectedPage();
-    this.domNode.find("ul").bind("mousedown", function(){ddd("down")});    
     this.domNode.find("ul").bind("dragstart", this.dragStart.pBind(this));    
+    this.domNode.find("ul").bind("dragenter", this, this.dragEnter.pBind(this));    
     this.domNode.find("ul").bind("dragover", this, this.dragOver.pBind(this));
+    this.domNode.find("ul").bind("dragleave", this, this.dragLeave.pBind(this));    
     this.domNode.find("ul").bind("drop", this, this.drop.pBind(this));    
   },
   
@@ -125,16 +126,30 @@ WebDoc.PageBrowserController = $.klass({
     ddd("start drag");
     var dragged_page_thumb = $(e.target).closest(".page_thumb");
     ddd("dragged page thumb", this.pageMap[dragged_page_thumb.attr("id")]);
+    e.originalEvent.dataTransfer.effectAllowed = "all";
     e.originalEvent.dataTransfer.setData('application/ub-page', $.toJSON(this.pageMap[dragged_page_thumb.attr("id")].page.data));  
-    //e.originalEvent.dataTransfer.setDragImage($("#page_d_d_image")[0],0,0);     
-    //e.originalEvent.dataTransfer.effectAllowed = "move";     
+    return true; 
   },
 
    dragOver: function(evt) {
-    var isPage = evt.originalEvent.dataTransfer.types.contains("application/ub-page");
-    if (isPage) {
-      evt.preventDefault();
-    }
+     var isPage = $.inArray("application/ub-page", evt.originalEvent.dataTransfer.types);
+     if (isPage != -1) {
+       evt.preventDefault();
+     }
+   },
+   
+   dragEnter: function(evt) {
+     var isPage = $.inArray("application/ub-page", evt.originalEvent.dataTransfer.types);
+     if (isPage != -1) {
+       var droppedPageThumb = $(evt.target).closest(".page_thumb"); 
+       evt.preventDefault();
+       this.addInsertLine(droppedPageThumb);
+     }
+   },
+      
+   dragLeave: function(evt) {
+     ddd("drag leave");
+     this.removeInsertLine();
    },
 
    drop: function(evt) {
@@ -142,9 +157,20 @@ WebDoc.PageBrowserController = $.klass({
      evt.preventDefault();
      var droppedPageThumb = $(evt.target).closest(".page_thumb"); 
      var droppedPage = this.pageMap[droppedPageThumb.attr("id")].page;
+     var droppedPagePosition = WebDoc.application.pageEditor.currentDocument.positionOfPage(droppedPage)-1
      var movedPage = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-page')); 
      ddd("droppedPage", droppedPage, "movedPage", movedPage);
-     WebDoc.application.pageEditor.currentDocument.movePage(movedPage.uuid, WebDoc.application.pageEditor.currentDocument.positionOfPage(droppedPage)-1);
+     WebDoc.application.pageEditor.currentDocument.movePage(movedPage.uuid, movedPage.position < droppedPagePosition? droppedPagePosition: droppedPagePosition+1);
+   },
+   
+   removeInsertLine: function() {
+     $(".page_insert_line").remove();
+   },
+   
+   addInsertLine: function(droppedPageThumb) {
+     this.removeInsertLine();
+     var insertLine = $("<li>").addClass("page_insert_line");
+     droppedPageThumb.parent().after(insertLine);
    }
 });
 
