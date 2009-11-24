@@ -57,9 +57,11 @@ WebDoc.InspectorController = $.klass({
   },
   
   updatePalette: function(paletteId) {
-    if (this.currentPaletteId) {
+    if (this.currentPaletteId !== undefined) {
+      ddd("hide palette", this.currentPaletteId);
       this.palettes[this.currentPaletteId].hide();
     }
+    ddd("show palette", paletteId, this.palettes[paletteId]);
     this.palettes[paletteId].show();
     this.currentPaletteId = paletteId;
   },
