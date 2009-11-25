@@ -126,15 +126,19 @@ WebDoc.PageBrowserController = $.klass({
     ddd("start drag");
     var dragged_page_thumb = $(e.target).closest(".page_thumb");
     ddd("dragged page thumb", this.pageMap[dragged_page_thumb.attr("id")]);
-    e.originalEvent.dataTransfer.effectAllowed = "all";
+    e.originalEvent.dataTransfer.effectAllowed = "copyMove";
     e.originalEvent.dataTransfer.setData('application/ub-page', $.toJSON({ page: this.pageMap[dragged_page_thumb.attr("id")].page.getData(true)}));  
     return true; 
   },
 
    dragOver: function(evt) {
      var isPage = $.inArray("application/ub-page", evt.originalEvent.dataTransfer.types);
-     if (isPage != -1) {
+     if (isPage != -1) {       
+       evt.originalEvent.dataTransfer.effectAllowed = "copyMove";
        evt.preventDefault();
+     }
+     else {
+       evt.originalEvent.dataTransfer.dropEffect = "none";     
      }
    },
    
@@ -142,8 +146,12 @@ WebDoc.PageBrowserController = $.klass({
      var isPage = $.inArray("application/ub-page", evt.originalEvent.dataTransfer.types);
      if (isPage != -1) {
        var droppedPageThumb = $(evt.target).closest(".page_thumb"); 
+       evt.originalEvent.dataTransfer.effectAllowed = "copyMove";  
        evt.preventDefault();
        this.addInsertLine(droppedPageThumb);
+     }
+     else {
+       evt.originalEvent.dataTransfer.dropEffect = "none";          
      }
    },
       
@@ -161,7 +169,7 @@ WebDoc.PageBrowserController = $.klass({
      var movedPage = new WebDoc.Page(movedPageDescriptor);
      var droppedPagePosition = WebDoc.application.pageEditor.currentDocument.positionOfPage(droppedPage) - 1;
      ddd("drop document", droppedPage.data.document_id, "drag document", movedPage.data.document_id);
-     if (droppedPage.data.document_id != movedPage.data.document_id) {
+     if (droppedPage.data.document_id != movedPage.data.document_id || evt.originalEvent.dataTransfer.dropEffect == 'copy') {
        var copiedPage = movedPage.copy();
        ddd("exit copy", new Date());
        copiedPage.data.document_id = droppedPage.data.document_id;
