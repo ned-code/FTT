@@ -108,14 +108,21 @@ WebDoc.DrawingThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
 
 WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
   createDomNode: function($super) {
-    var itemNode = $('<div/>');
     
-    itemNode.attr("id", "thumb_" + this.item.uuid());
-    itemNode.css(this.item.data.data.css);
-    itemNode.addClass("widget_thumb");
-    this.pageView.itemDomNode.append(itemNode.get(0));
+    if (this.item.data.data.tag == "iframe" || 
+        this.item.data.data.innerHTML.match(/<iframe|<script|<object/)) {
+      var itemNode = $('<div/>');
     
-    return itemNode;
+      itemNode.attr("id", "thumb_" + this.item.uuid());
+      itemNode.css(this.item.data.data.css);
+      itemNode.addClass("widget_thumb");
+      this.pageView.itemDomNode.append(itemNode.get(0));
+    
+      return itemNode;
+    }
+    else {
+      return $super();
+    }
   } 
 });
 
