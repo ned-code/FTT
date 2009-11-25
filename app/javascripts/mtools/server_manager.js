@@ -78,7 +78,7 @@ $.extend(MTools.ServerManager,
      **/
     newObject: function(url, object, callBack)
     {
-        $.post(url, object.to_json(), function(data, textstatus)
+        $.post(url, object.to_json(true), function(data, textstatus)
         {
             // refresh is needed because some values are generaed on server side
             // i.e. page size and background.

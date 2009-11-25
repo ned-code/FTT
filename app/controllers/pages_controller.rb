@@ -27,10 +27,21 @@ class PagesController < ApplicationController
     if (params[:page][:data])
       params[:page][:data] = JSON.parse(params[:page][:data])  
     end
+    if (params[:page][:items])
+      new_items = JSON.parse(params[:page][:items])
+      params[:page].delete(:items)  
+    end    
     @page = @document.pages.new(params[:page])
-    @page.uuid = params[:page][:uuid];
-    @page.save;
-    render :json => @page
+    @page.uuid = params[:page][:uuid]
+    @page.save
+    if new_items
+      new_items.each do |an_item|
+        new_item = @page.items.new(an_item)
+        new_item.uuid = an_item['uuid']
+        new_item.save        
+      end  
+    end    
+    render :json => @page.to_json(:include => :items)
   end
   
   # PUT /documents/:document_id/pages/:id

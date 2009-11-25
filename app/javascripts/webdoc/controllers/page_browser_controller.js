@@ -127,7 +127,7 @@ WebDoc.PageBrowserController = $.klass({
     var dragged_page_thumb = $(e.target).closest(".page_thumb");
     ddd("dragged page thumb", this.pageMap[dragged_page_thumb.attr("id")]);
     e.originalEvent.dataTransfer.effectAllowed = "all";
-    e.originalEvent.dataTransfer.setData('application/ub-page', $.toJSON(this.pageMap[dragged_page_thumb.attr("id")].page.data));  
+    e.originalEvent.dataTransfer.setData('application/ub-page', $.toJSON({ page: this.pageMap[dragged_page_thumb.attr("id")].page.getData(true)}));  
     return true; 
   },
 
@@ -148,7 +148,6 @@ WebDoc.PageBrowserController = $.klass({
    },
       
    dragLeave: function(evt) {
-     ddd("drag leave");
      this.removeInsertLine();
    },
 
@@ -157,10 +156,24 @@ WebDoc.PageBrowserController = $.klass({
      evt.preventDefault();
      var droppedPageThumb = $(evt.target).closest(".page_thumb"); 
      var droppedPage = this.pageMap[droppedPageThumb.attr("id")].page;
-     var droppedPagePosition = WebDoc.application.pageEditor.currentDocument.positionOfPage(droppedPage)-1
-     var movedPage = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-page')); 
-     ddd("droppedPage", droppedPage, "movedPage", movedPage);
-     WebDoc.application.pageEditor.currentDocument.movePage(movedPage.uuid, movedPage.position < droppedPagePosition? droppedPagePosition: droppedPagePosition+1);
+     var movedPageDescriptor = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-page'));   
+     ddd("moved page descriptor", movedPageDescriptor);   
+     var movedPage = new WebDoc.Page(movedPageDescriptor);
+     var droppedPagePosition = WebDoc.application.pageEditor.currentDocument.positionOfPage(droppedPage) - 1;
+     ddd("drop document", droppedPage.data.document_id, "drag document", movedPage.data.document_id);
+     if (droppedPage.data.document_id != movedPage.data.document_id) {
+       var copiedPage = movedPage.copy();
+       ddd("exit copy", new Date());
+       copiedPage.data.document_id = droppedPage.data.document_id;
+       copiedPage.data.position = droppedPagePosition + 1;
+       copiedPage.save(function(newObject, status)
+       {
+         WebDoc.application.pageEditor.currentDocument.addPage(copiedPage, true);
+       });
+     }
+     else {
+       WebDoc.application.pageEditor.currentDocument.movePage(movedPage.uuid(), movedPage.data.position < droppedPagePosition? droppedPagePosition: droppedPagePosition+1);
+     }
    },
    
    removeInsertLine: function() {

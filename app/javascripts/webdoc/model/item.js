@@ -161,5 +161,12 @@ WebDoc.Item = $.klass(MTools.Record,
   
   setPenColor: function(color) {
     WebDoc.application.drawingTool.penColor = color;   
-  }
+  },
+  
+  copy: function($super) {
+    newItem = $super();
+    newItem.data.data = $.evalJSON($.toJSON(this.data.data));
+    newItem.data.media_type = this.data.media_type;
+    return newItem;
+  }  
 });

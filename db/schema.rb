@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091120130458) do
+ActiveRecord::Schema.define(:version => 20091125113037) do
 
   create_table "documents", :id => false, :force => true do |t|
     t.string   "uuid",       :limit => 36
@@ -21,13 +21,15 @@ ActiveRecord::Schema.define(:version => 20091120130458) do
 
   create_table "items", :id => false, :force => true do |t|
     t.string   "uuid",       :limit => 36
-    t.string   "page_id",    :limit => 36,    :null => false
+    t.string   "page_id",    :limit => 36,       :null => false
     t.string   "media_id",   :limit => 36
     t.string   "media_type"
-    t.text     "data",       :limit => 65537
+    t.text     "data",       :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "items", ["page_id"], :name => "index_items_on_page_id"
 
   create_table "medias", :id => false, :force => true do |t|
     t.string   "uuid",              :limit => 36
@@ -38,19 +40,21 @@ ActiveRecord::Schema.define(:version => 20091120130458) do
     t.datetime "file_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "properties",        :limit => 65537
+    t.text     "properties",        :limit => 16777215
   end
 
   create_table "pages", :id => false, :force => true do |t|
     t.string   "uuid",         :limit => 36
-    t.string   "document_id",  :limit => 36,                   :null => false
+    t.string   "document_id",  :limit => 36,                      :null => false
     t.string   "thumbnail_id", :limit => 36
-    t.integer  "position",                                     :null => false
-    t.integer  "version",                       :default => 1, :null => false
-    t.text     "data",         :limit => 65537
+    t.integer  "position",                                        :null => false
+    t.integer  "version",                          :default => 1, :null => false
+    t.text     "data",         :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "pages", ["document_id"], :name => "index_pages_on_document_id"
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40

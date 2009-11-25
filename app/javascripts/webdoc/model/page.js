@@ -3,8 +3,9 @@
 //= require <webdoc/model/item>
 
 WebDoc.Page = $.klass(MTools.Record, 
-{
+{ 
   initialize: function($super, json) {
+    this.items = [];
     $super(json);
   },
   
@@ -51,18 +52,16 @@ WebDoc.Page = $.klass(MTools.Record,
     }    
   },
   
-  to_json: function($super) {
-    var result = $super();
-    delete result['page[items]'];
-    return result;
-  },
-  
-  previousPageId: function() {
-    return null;
-  },
-  
-  nextPageId: function() {
-    return null;
+  getData: function($super, withRelationShips) {
+    var dataObject = $super(withRelationShips);
+    delete dataObject.items;
+    if (withRelationShips && this.items.length) {
+      dataObject.items = [];
+      for (var i = 0; i < this.items.length; i++) {
+        dataObject.items.push(this.items[i].getData());
+      }
+    }
+    return dataObject;
   },
   
   createOrUpdateItem: function(itemData) {
@@ -128,6 +127,23 @@ WebDoc.Page = $.klass(MTools.Record,
     for (var i = 0; i < this.listeners.length; i++) {
       this.listeners[i].itemRemoved(removedItem);
     }     
+  },
+  
+  copy: function($super) {
+    newPage = $super();
+    newPage.data.data = $.evalJSON($.toJSON(this.data.data));
+    newPage.data.items = [];
+    newPage.position = -1;
+    if (this.items && $.isArray(this.items)) {
+      $.each(this.items, function() {
+        var copiedItem = this.copy();
+        copiedItem.data.page_id = newPage.uuid();
+        newPage.items.push(copiedItem);
+        newPage.data.items.push(copiedItem.data);
+      });
+    }        
+    ddd("copied page is ", newPage, new Date());
+    return newPage;
   }
   
 });

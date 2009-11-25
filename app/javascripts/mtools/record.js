@@ -39,7 +39,7 @@ MTools.Record = $.klass(
     }
   },
   
-  getData: function() {
+  getData: function(withRelationShip) {
     return this.data;
   },
   
@@ -103,9 +103,9 @@ MTools.Record = $.klass(
   /**
    * to_json return a rails compatible json object (className[attr1] : value1)
    */
-  to_json: function() {
+  to_json: function(withRelationShips) {
     var result = {};
-    for (var key in this.data) {
+    for (var key in this.getData(withRelationShips)) {
       var value = this.data[key];
       if (typeof value == 'object') {
         value = $.toJSON(value);
@@ -140,6 +140,11 @@ MTools.Record = $.klass(
     MTools.ServerManager.deleteObject(this.rootUrl() + "/" + this.className() + "s/" + this.uuid(), this, function(persitedDoc) {
       if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
     });
+  },
+  
+  copy: function() {
+    var recordCopy = new this.constructor();
+    return recordCopy;
   }
 });
 
