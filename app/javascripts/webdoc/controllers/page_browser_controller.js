@@ -174,6 +174,8 @@ WebDoc.PageBrowserController = $.klass({
        ddd("exit copy", new Date());
        copiedPage.data.document_id = droppedPage.data.document_id;
        copiedPage.data.position = droppedPagePosition + 1;
+       var importingMessage = $("<li>").html("importing...").addClass("page_thumb_importing");       
+       droppedPageThumb.parent().after(importingMessage[0]);
        copiedPage.save(function(newObject, status)
        {
          WebDoc.application.pageEditor.currentDocument.addPage(copiedPage, true);

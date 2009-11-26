@@ -502,6 +502,13 @@ a:hover { color: #0069BF;}
   width:150px;
   background-color:black;
 }
+
+#page_browser .page_thumb_importing {
+  color:green;
+  position:relative;
+  text-align:center;
+  top:50px;
+}
 /*******************/
 /* = board part = */
 #content{
