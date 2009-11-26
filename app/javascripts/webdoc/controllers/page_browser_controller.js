@@ -78,6 +78,7 @@ WebDoc.PageBrowserController = $.klass({
       this.pageMap[pageThumb.domNode.attr("id")] = pageThumb;
     }
     this.updateSelectedPage();
+    this.domNode.find("ul").unbind();    
     this.domNode.find("ul").bind("dragstart", this.dragStart.pBind(this));    
     this.domNode.find("ul").bind("dragenter", this, this.dragEnter.pBind(this));    
     this.domNode.find("ul").bind("dragover", this, this.dragOver.pBind(this));
