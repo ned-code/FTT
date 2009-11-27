@@ -43,6 +43,7 @@ $.extend(WebDoc.DrageAndDropController,{
         height = widgetData.properties.height;
       }
       newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+      newItem.data.media_id = widgetData.uuid;
       newItem.data.data.tag = "iframe";
       newItem.data.data.src = widgetData.properties.index_url;
       newItem.data.data.css = {

@@ -24,11 +24,11 @@ class PagesController < ApplicationController
   # POST /documents/:document_id/pages
   def create
     #TODO how to manage hash in hash (page.data.css.height = 12)
-    if (params[:page][:data])
-      params[:page][:data] = JSON.parse(params[:page][:data])  
-    end
+    # if (params[:page][:data])
+    #   params[:page][:data] = JSON.parse(params[:page][:data])  
+    # end
     if (params[:page][:items])
-      new_items = JSON.parse(params[:page][:items])
+      new_items = JSON.parse params[:page][:items]
       params[:page].delete(:items)  
     end    
     @page = @document.pages.new(params[:page])
@@ -48,9 +48,9 @@ class PagesController < ApplicationController
   def update
     @page = @document.pages.find(params[:id])
     #TODO how to manage hash in hash (page.data.css.height = 12)
-    if (params[:page][:data])
-      params[:page][:data] = JSON.parse(params[:page][:data])  
-    end
+    # if (params[:page][:data])
+    #   params[:page][:data] = JSON.parse(params[:page][:data])  
+    # end
     
     @page.update_attributes(params[:page])
     render :json => @page

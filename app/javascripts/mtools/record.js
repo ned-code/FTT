@@ -105,13 +105,7 @@ MTools.Record = $.klass(
    */
   to_json: function(withRelationShips) {
     var result = {};
-    for (var key in this.getData(withRelationShips)) {
-      var value = this.data[key];
-      if (typeof value == 'object') {
-        value = $.toJSON(value);
-      }
-      result[this.className() + '[' + key + ']'] = value;
-    }
+    MTools.Record.convertToRailsJSon(this.getData(withRelationShips), result, this.className());
     return result;
   },
   
@@ -145,6 +139,26 @@ MTools.Record = $.klass(
   copy: function() {
     var recordCopy = new this.constructor();
     return recordCopy;
+  }
+});
+
+$.extend(MTools.Record, {
+  convertToRailsJSon: function (objectToConvert, destinationObject, prefix) {
+    for (var key in objectToConvert) {
+      var value = objectToConvert[key];
+      // array are serialized in standard json. I assume that all array of data are relationships and currently it is not
+      // possible to passe this to rails in a correct format.
+      // so all relationships must then have a special treatment on the server side.
+      if ($.isArray(value)) {
+        destinationObject[prefix + '[' + key + ']'] = $.toJSON(value);        
+      }
+      else if (typeof value == 'object') {
+        this.convertToRailsJSon(value, destinationObject, prefix + '[' + key + ']');
+      }
+      else {
+        destinationObject[prefix + '[' + key + ']'] = value;
+      }
+    }   
   }
 });
 
