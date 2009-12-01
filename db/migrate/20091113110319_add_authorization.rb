@@ -13,9 +13,15 @@ class AddAuthorization < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
     end
-    User.find_by_email("julien.bachmann@mnemis.com").has_role!("admin")
-    User.find_by_email("yann.ringgenberg@mnemis.com").has_role!("admin")
-    User.find_by_email("stelio.tzonis@mnemis.com").has_role!("admin")    
+    if User.find_by_email("julien.bachmann@mnemis.com")
+      User.find_by_email("julien.bachmann@mnemis.com").has_role!("admin")
+    end
+    if User.find_by_email("yann.ringgenberg@mnemis.com")
+      User.find_by_email("yann.ringgenberg@mnemis.com").has_role!("admin")
+    end
+    if User.find_by_email("stelio.tzonis@mnemis.com")
+      User.find_by_email("stelio.tzonis@mnemis.com").has_role!("admin")
+    end    
     User.create({:password => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd', :password_confirmation => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd', :name => "All", :email => "All@mnemis.com"})
   end
 
