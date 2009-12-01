@@ -6,19 +6,19 @@
     if (jQuery.isFunction(replacement))  {
       return replacement;
     }
-    return function(match) { return replacement; };
+    return function(match) { return replacement };
   };
 
   var blank = function(text) {
-    return (/^\s*$/).test(text);
+    return /^\s*$/.test(text);
   };
 
   var interpret = function(text) {
-    return !text ? '' : String(text);
+    return text == null ? '' : String(text);
   };
 
   var escapeRegExp = function(string) {
-    return String(string).replace(/([.*+?\^=!:${}()|\[\]\/\\])/g, '\\$1');
+    return String(string).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
   };
 
   var gsub = function(source, pattern, replacement) {
@@ -35,12 +35,12 @@
     }
 
     while (source.length > 0) {
-      if ((match = source.match(pattern))) {
+      if (match = source.match(pattern)) {
         result += source.slice(0, match.index);
         result += interpret(replacement(match));
         source  = source.slice(match.index + match[0].length);
       } else {
-        result += source; source = '';
+        result += source, source = '';
       }
     }
     return result;
@@ -195,11 +195,61 @@
             span.html('<u>' + span.html() + '</u>');
             replaced = true;
           }
+		  else if (MTools.Browser.WebKit&&span.css('fontSize')) {
+            var fontSize = span.css('fontSize');
+			span.css('fontSize', '');
+			if(fontSize.indexOf('xxx-large') != -1) fontSize = 7;
+			else if(fontSize.indexOf('xx-large') != -1) fontSize = 6;
+			else if(fontSize.indexOf('x-large') != -1) fontSize = 5;
+			else if(fontSize.indexOf('large') != -1) fontSize = 4;
+			else if(fontSize.indexOf('medium') != -1) fontSize = 3;
+			else if(fontSize.indexOf('x-small') != -1) fontSize = 1;
+			else if(fontSize.indexOf('small') != -1) fontSize = 2;
+			else if(fontSize == '48px') fontSize = 7;
+            if (span.attr('style').length == 0) span.removeAttr('style');
+            span.html('<font size="'+fontSize+'">' + span.html() + '</font>');
+            replaced = true;
+          }
+		  else if (MTools.Browser.WebKit&&span.css('color')) {
+            var color = span.css('color');
+			span.css('color', '');
+			if(color.indexOf('rgb') != -1){
+				color = color.substring(4, (color.length-1));
+				var colors = color.split(', '); 
+    			color = '#'+(((parseInt(colors[0]) & 255) << 16) + ((parseInt(colors[1]) & 255) << 8) + parseInt(colors[2])).toString(16);
+			}
+
+            if (span.attr('style').length == 0)
+            span.removeAttr('style');
+            span.html('<font color="'+color+'">' + span.html() + '</font>');
+            replaced = true;
+          }
+		  else if (MTools.Browser.WebKit&&span.css('fontFamily')) {
+            var fontFamily = span.css('fontFamily');
+			span.css('fontFamily', '');
+            if (span.attr('style').length == 0)
+            span.removeAttr('style');
+            span.html('<font face="'+fontFamily+'">' + span.html() + '</font>');
+            replaced = true;
+          }
           else if (span[0].attributes.length == 0) {
             span.replaceWith(span.html());
             replaced = true;
           }
         });
+		element.find('font').each(function(index) {
+          var font = $(this);
+          if (font.hasClass('Apple-style-span')) {
+            font.removeClass('Apple-style-span');
+            if (font[0].className == '')
+            font.removeAttr('class');
+            replaced = true;
+          }
+		  if (font[0].attributes.length == 0) {
+            font.replaceWith(font.html());
+            replaced = true;
+          }
+		});
       }
       while (replaced);
     }
@@ -240,11 +290,11 @@
   *  Textarea => dirty() => Raw content
   **/
   var dirty = function(text) {
-
+	
     var element = $('<div></div>');
     element.html(text);
-
-    if (MTools.Browser.WebKit || MTools.Browser.Gecko) {
+	
+    if (MTools.Browser.WebKit) {
       // Convert style spans back
       $(element).find('strong').each(function(index) {
         $(this).replaceWith('<span style="font-weight: bold;">' + this.innerHTML + '</span>');
@@ -254,6 +304,15 @@
       });
       $(element).find('u').each(function(index) {
         $(this).replaceWith('<span style="text-decoration: underline;">' + this.innerHTML + '</span>');
+      });
+    }
+	if (MTools.Browser.Gecko) {
+      // Convert style spans back
+      $(element).find('strong').each(function(index) {
+        $(this).replaceWith('<b>' + this.innerHTML + '</b>');
+      });
+      $(element).find('em').each(function(index) {
+        $(this).replaceWith('<i>' + this.innerHTML + '</i>');
       });
     }
 
@@ -289,7 +348,7 @@
     if (MTools.Browser.Gecko) {
       // Replace returns with line break tags
       text = text.replace(/\n/g, "<br>");
-      text = text + '<br>';
+      //text = text + '<br>';
     }
     else if (MTools.Browser.WebKit) {
       // Wrap lines in div tags

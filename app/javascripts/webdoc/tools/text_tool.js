@@ -6,39 +6,20 @@
 //= require "text_tool/html"
 //= require "text_tool/selection"
 
-WebDoc.TEXTBOX_WRAP_CLASS = "textbox_wrap";
-WebDoc.NEW_TEXTBOX_CONTENT = "Double-click to edit";
-
-WebDoc.TextTool = $.klass(WebDoc.Tool, {
-  initialize: function($super, toolId, paletteId) {
-    $super(toolId);
-    this.paletteId = paletteId;
-    
-    this.textBox = null; //div containing the cleaned HTML
-    this.COMMANDS = ['bold', 'italic', 'underline', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'insertUnorderedList', 'insertOrderedList', 'indent', 'outdent'];
-    this.iframeCssPath = "/stylesheets/textbox.css";
-    
-    this.defaultTextboxCss = { // style used on both the textBox div & iframe
-      // borderColor:"transparent",
-      width:"400px",
-      height:"200px",
-      overflow:"hidden"
-    };
-    jQuery.extend(this.textboxCss = {}, this.defaultTextboxCss, {
-      cursor:"default"
-    }); 
-    jQuery.extend(this.iframeCss = {}, this.defaultTextboxCss, {
-      // borderColor:"red",
-      width:"100%",
-      height:"100%"
-    });
-    
-    this.editMode = false;
-    this.cleanHTML = $.fn.webdocHTML.clean;
-    this.dirtifyHTML = $.fn.webdocHTML.dirty;
-  },
-
-  selectTool: function() {
+WebDoc.TextTool= $.klass(WebDoc.Tool, {
+ initialize: function($super, toolId, paletteId) {
+   $super(toolId);
+   this.delegate = new WebDoc.TextToolDelegate(paletteId? paletteId:"#palette_text", "/stylesheets/textbox.css");
+   this.delegate.setEndEditionListener(this);
+   this.textboxCss = {
+     cursor:"default",
+     width:"400px",
+     height:"200px",
+     overflow:"hidden"      
+   };
+ },
+ 
+ selectTool: function() {
     WebDoc.application.boardController.unselectAll();  
     this.newTextBox();
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
@@ -61,52 +42,97 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     
     // newItem.save();
   },
-    
+  
   enterEditMode: function(textView) { //can be called on existing (selected) textView
     ddd("Text tool: entering edit mode");
     // Unselect existing selected text box (if necessary)
     if (this.textView && textView != this.textView) {
       WebDoc.application.boardController.unselectItemViews([this.textView]);
-    }
-    
+    }    
     this.textView = textView;
-    this.textBox = textView.domNode;
+    this.delegate.enterEditMode(textView.domNode);
+  },
+  
+  exitEditMode: function() {
+    this.delegate.exitEditMode();
+  },  
+  
+  _applyTextContent: function(content, classValue) {
+    var previousContent = this.textView.item.data.data.innerHTML;
+    var previousClass = this.textView.item.data.data['class'];
+    this.textView.item.data.data.innerHTML = content;
+    this.textView.item.data.data['class'] = classValue;
+    this.textView.item.fireInnerHtmlChanged();
+    this.textView.item.save();
+    WebDoc.application.undoManager.registerUndo(function(){
+      this._applyTextContent(previousContent, previousClass);
+    }.pBind(this));
+  }
+});
+
+WebDoc.TEXTBOX_WRAP_CLASS = "textbox_wrap";
+WebDoc.NEW_TEXTBOX_CONTENT = "Empty content";
+
+WebDoc.TextToolDelegate = $.klass({
+  initialize: function(paletteId, css) {
+    this.paletteId = paletteId;
+    
+    this.textBox = null; //div containing the cleaned HTML
+    this.COMMANDS = ['bold', 'italic', 'underline', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'insertUnorderedList', 'insertOrderedList', 'indent', 'outdent', 'FontSize', 'ForeColor', 'FontName'];
+    this.iframeCssPath = css;
+    
+    this.editMode = false;
+    this.cleanHTML = $.fn.webdocHTML.clean;
+    this.dirtifyHTML = $.fn.webdocHTML.dirty;
+  },
+  
+  setEndEditionListener: function(listener) {
+    this.listener = listener;
+  },
+    
+  enterEditMode: function(textView) { //can be called on existing (selected) textView
+    ddd("Text tool: entering edit mode");
+
+    this.textBox = textView;
    
     //TODO: look if another text box is in edit mode and un... it?
     // Be sure we switch to text tool
     // WebDoc.application.boardController.setCurrentTool(this);
     
-    // Create iframe element and wrap both the textBox and iframe in a div
-    $(this.textBox).wrap('<div class="'+WebDoc.TEXTBOX_WRAP_CLASS+'"></div>');
-    this.textboxEditor = $(this.textBox).closest('div.'+WebDoc.TEXTBOX_WRAP_CLASS)[0];
-    $(this.textboxEditor).css({ //adjust textBox wrapper position and size to match those of the textBox
-      position: "absolute",
-      top: this.textBox.css("top"),
-      left: this.textBox.css("left"),
-      width: this.textBox.css("width"),
-      height: this.textBox.css("height"),
-      zIndex:1000010
-    });
-    
-    var iframe = $('<iframe class="textbox_iframe item_edited" scrolling="no" />');
-    iframe.css(this.iframeCss);
-    iframe.get(0).showcaret = true;
-    $(this.textBox).hide().before(iframe);
-    this.editableFrame = $(this.textBox).prev('iframe')[0];
-    
-    // Activate palette
-    this.bindPalette();
-    
-    // Setup iFrame for edition
-    $(this.editableFrame).one('load', function() { // complete initialization once the iframe loads
-      this.setupEditableFrame();
-      
-    }.pBind(this));
-    if (MTools.Browser.WebKit) { // iframe onload never fires in webkit; this is a fallback
-      setTimeout(function() {
-        if (!this.editMode) { this.setupEditableFrame(); }
-      }.pBind(this), 100);
-    }
+    // Create iframe element and wrap both the textBox and iframe in a div, if not exist
+	if(!$(this.textBox).closest('div.'+WebDoc.TEXTBOX_WRAP_CLASS)[0]) 
+	{
+		$(this.textBox).wrap('<div class="'+WebDoc.TEXTBOX_WRAP_CLASS+'"></div>');
+		this.textboxEditor = $(this.textBox).closest('div.'+WebDoc.TEXTBOX_WRAP_CLASS)[0];
+		$(this.textboxEditor).css({ //adjust textBox wrapper position and size to match those of the textBox
+		  position: textView.css("position"),
+		  top: this.textBox.css("top"),
+		  left: this.textBox.css("left"),
+		  width: this.textBox.css("width"),
+		  height: this.textBox.css("height"),
+		  zIndex:1000010
+		});
+		
+		var iframe = $('<iframe class="textbox_iframe item_edited" scrolling="auto" />');
+		iframe.css({width:"100%", height:"100%"});
+		iframe.get(0).showcaret = true;
+		$(this.textBox).hide().before(iframe);
+		this.editableFrame = $(this.textBox).prev('iframe')[0];
+		
+		// Activate palette
+		this.bindPalette();
+		
+		// Setup iFrame for edition
+		$(this.editableFrame).one('load', function() { // complete initialization once the iframe loads
+		  this.setupEditableFrame();
+		  
+		}.pBind(this));
+		if (MTools.Browser.WebKit) { // iframe onload never fires in webkit; this is a fallback
+		  setTimeout(function() {
+			if (!this.editMode) { this.setupEditableFrame(); }
+		  }.pBind(this), 100);
+		}
+	}
   },
   
   setupEditableFrame: function() {
@@ -120,13 +146,15 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.doc.execCommand("styleWithCSS", '', false);
 
     //inject global stylesheet into iframe's head
-    var ss = $('<link rel="stylesheet" href="'+this.iframeCssPath+'" type="text/css" media="screen" />');
+    if (this.iframeCssPath) {
+      var ss = $('<link rel="stylesheet" href="' + this.iframeCssPath + '" type="text/css" media="screen" />');
+    }
     $(this.doc).find('head').append(ss);
 
     var iframeContent;
     if ($(this.textBox).hasClass("empty")) {
-      iframeContent = "";
       $(this.textBox).removeClass("empty");
+	  iframeContent = "";
     }
     else {
       iframeContent = this.dirtifyHTML($(this.textBox).html());
@@ -139,6 +167,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       fontStyle: $(this.textBox).css("fontStyle"),
       color: $(this.textBox).css("color")
     });
+
     //$(this.doc.body).css();
     // Firefox starts "locked", so insert a character bogus character and undo
     if (MTools.Browser.Gecko) {
@@ -153,39 +182,40 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
 
   exitEditMode: function() {
     ddd("exit edit");
-    
-    this.unbindPalette();
-    
-    var content;
-    if (this.isHtmlBlank(this.doc.body.innerHTML)) {
-      $(this.textBox).html(WebDoc.NEW_TEXTBOX_CONTENT);
-      $(this.textBox).addClass("empty");
-      content = "";
-    }
-    else {
-      // copy cleaned HTML to textBox and save updated item
-      content = this.cleanHTML(this.doc.body.innerHTML);
-      $(this.textBox).html(content);
-    }
-    this._applyTextContent(content, $(this.textBox).attr("class")); // save and register undo
-    
-    $(this.editableFrame).remove();
-    $(this.textBox).unwrap(".textbox_wrap");
-    $(this.textBox).show();
-    
-    this.editMode = false;
+	
+	var content;
+	
+	if (this.isHtmlBlank(this.doc.body.innerHTML)) {
+	  $(this.textBox).html(WebDoc.NEW_TEXTBOX_CONTENT);
+	  $(this.textBox).addClass("empty");
+	  content = "";
+	}
+	else {
+	  // copy cleaned HTML to textBox and save updated item
+	  content = this.cleanHTML(this.doc.body.innerHTML);
+	  $(this.textBox).html(content);
+	}
+	this._applyTextContent(content, $(this.textBox).attr("class")); // save and register undo
+	
+	// check is edit mode on
+    if($(this.textBox).closest('div.'+WebDoc.TEXTBOX_WRAP_CLASS)[0]) 
+	{
+		this.unbindPalette();
+		
+		$(this.editableFrame).remove();
+		$(this.textBox).unwrap(".textbox_wrap");
+		$(this.textBox).show();
+		
+		this.editMode = false;
+	}
+	return content;
   },
   
   _applyTextContent: function(content, classValue) {
-    var previousContent = this.textView.item.data.data.innerHTML;
-    var previousClass = this.textView.item.data.data['class'];
-    this.textView.item.data.data.innerHTML = content;
-    this.textView.item.data.data['class'] = classValue;
-    this.textView.item.fireInnerHtmlChanged();
-    this.textView.item.save();
-    WebDoc.application.undoManager.registerUndo(function(){
-      this._applyTextContent(previousContent, previousClass);
-    }.pBind(this));
+    ddd("apply content",content, classValue);
+    if (this.listener) {
+      this.listener._applyTextContent(content, classValue);
+    }
   },
   
   isHtmlBlank: function(html) {
@@ -194,7 +224,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
 
   bindPalette: function() { 
-    this.paletteEl = $(this.Id);
+    this.paletteEl = $(this.paletteId);
     this.paletteOverlayEl = this.paletteEl.find("#palette_overlay");
 
     // events handler for palette clicks
@@ -206,6 +236,16 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
         $(this.textboxEditor).trigger(link.className+'.click.rte');
       }
     }.pBind(this));
+	
+	// events handler for palette selects change
+    this.paletteEl.bind("change", function(event) {
+      var select = $(event.target).closest('select')[0];
+      if (select&&($(select).val() != 'default')) {
+        event.preventDefault();
+        $(this.textboxEditor).trigger(select.className+'.click.rte');
+		$(select).find('option:first').attr('selected', 'selected');
+      }
+    }.pBind(this));
 
     this.paletteOverlayEl.hide(); 
     this.paletteEl.removeClass("disabled");
@@ -213,7 +253,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     // Binding palette buttons
     $.each(this.COMMANDS, function(index, command) {
       $(this.textboxEditor).bind(command+'.click.rte', function(event) {
-        this.editorExec(command);
+		optional = ($('.'+command).val())? $('.'+command).val() : null;
+        this.editorExec(command, optional);
       }.pBind(this));
     }.pBind(this));
   },

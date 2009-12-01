@@ -121,6 +121,37 @@
             %li
               %a.outdent{ :href => "" }
                 %img{ :src => "/images/icons/text_outdent.png", :alt =>"Outdent"}
+            %li
+              Font Size 
+              %select.FontSize
+                %option{ :value => "default", :selected => "selected" } Choose font size
+                %option{ :value => "1" } x-small
+                %option{ :value => "2" } small
+                %option{ :value => "3" } medium
+                %option{ :value => "4" } large
+                %option{ :value => "5" } x-large
+                %option{ :value => "6" } xx-large
+                %option{ :value => "7" } xxx-large                                                                                                            
+            %li
+              Font Color 
+              %select.ForeColor
+                %option{ :value => "default", :selected => "selected" } Choose font color
+                %option{ :value => "red" } red
+                %option{ :value => "green" } green
+                %option{ :value => "blue" } blue
+            %li
+              Font Family
+              %select.FontName
+                %option{ :value => "default", :selected => "selected" } Choose font name
+                %option{ :value => "arial" } Arial
+                %option{ :value => "comic sans ms" } Comic Sans
+                %option{ :value => "courier new" } Courier New    
+                %option{ :value => "georgia" } Georgia    
+                %option{ :value => "helvetica" } Helvetica    
+                %option{ :value => "impact" } Impact    
+                %option{ :value => "times new roman" } Times
+                %option{ :value => "trebuchet ms" } Trebuchet
+                %option{ :value => "verdana" } Verdana                                                                                                                
           #palette_overlay
         #palette_pen.palette
           %ul#colors{ :style => "display:block" }
@@ -145,7 +176,7 @@
                 %img{ :src => "/images/icons/mediumPen.png", :alt =>"Medium"}              
             %li
               %a{ :href => "10" }
-                %img{ :src => "/images/icons/largePen.png", :alt =>"Large"}                         
+                %img{ :src => "/images/icons/largePen.png", :alt =>"Large"}                                       
         #palette_empty.palette
           %center Empty             
       %h3
