@@ -9,6 +9,7 @@
 //= require <mtools/uuid>
 
 //= require <webdoc/adaptors/svg_renderer>
+//= require <webdoc/adaptors/collaboration_manager>
 //= require <webdoc/controllers/board_controller>
 //= require <webdoc/controllers/image_library_controller>
 //= require <webdoc/controllers/widget_library_controller>
@@ -56,6 +57,7 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool("#html_snipplet");
 
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+    WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
     
     // It seems that webkit don't need the margin een if content is 100% width
     if (MTools.Browser.WebKit) {
@@ -76,11 +78,15 @@ WebDoc.PageEditor = $.klass({
       $("#right_bar").height(height -10);
       $("#left_bar").height(height -10);
       WebDoc.application.boardController.centerBoard();
-    }.pBind(this));    
+    }.pBind(this)); 
+    $(window).unload(function() {
+      WebDoc.application.collaborationManager.disconnect();
+    });   
   },
 
   load: function(documentId) {
     ddd("load document " + documentId);
+    WebDoc.application.collaborationManager.setDocumentId(documentId);              
     MTools.ServerManager.getObjects("/documents/" + documentId, WebDoc.Document, function(data)
     {
       var editor = WebDoc.application.pageEditor;
