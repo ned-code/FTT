@@ -24,7 +24,14 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   refresh: function($super, json) {
+    var refreshInnerHtml = false;
+    if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
+      refreshInnerHtml = true;
+    }
     $super(json);
+    if (refreshInnerHtml) {
+      this.fireDomNodeChanged();
+    }
   },
   
   setPoints: function(points) {

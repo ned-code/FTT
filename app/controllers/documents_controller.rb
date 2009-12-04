@@ -1,3 +1,6 @@
+require "xmpp4r" 
+require "xmpp4r/pubsub"
+
 class DocumentsController < ApplicationController
   before_filter :login_required
   before_filter :load_document, :only => [:update, :destroy, :show, :change_user_access, :user_access]
@@ -38,7 +41,21 @@ class DocumentsController < ApplicationController
     @document.uuid = params[:document][:uuid]
     @document.pages.build # add default page
     @document.save
-    current_user.has_role!("owner", @document);
+    current_user.has_role!("owner", @document)
+    jid = "server@webdoc"
+    pass = "1234"
+    client = Jabber::Client.new(jid)
+    client.connect "localhost"
+    client.auth(pass)
+    pubsubjid="pubsub.webdoc" 
+    service=Jabber::PubSub::ServiceHelper.new(client,pubsubjid) 
+    service.create_node(@document.uuid,Jabber::PubSub::NodeConfig.new(nil,{ 
+                        "pubsub#title" => @document.uuid, 
+                        "pubsub#node_type" => "leaf", 
+                        "pubsub#send_last_published_item" => "never", 
+                        "pubsub#send_item_subscribe" => "0", 
+                        "pubsub#publish_model" => "open"}))  
+    client.close  
     render :json => @document
   end
 

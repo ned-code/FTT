@@ -65,8 +65,11 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   createOrUpdateItem: function(itemData) {
-    var item = this.findItemWithUuid(itemData.uuid);
-    if (!item) {
+    var item = this.findItemWithUuid(itemData.item.uuid);
+    if (itemData.action == "delete") {
+      this.removeItem(item);
+    }    
+    else if (!item) {
       this.createItem(itemData);
     }
     else {

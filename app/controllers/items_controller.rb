@@ -24,23 +24,21 @@ class ItemsController < ApplicationController
   end
   
   # POST /documents/:document_id/pages/:page_id/items
-  def create
-    # if (params[:item][:data])
-    #   params[:item][:data] = JSON.parse(params[:item][:data])  
-    # end    
+  def create  
     @item = @page.items.new(params[:item])
     @item.uuid = params[:item][:uuid]
     @item.save
+    message = { :source => params[:source], :item =>  params[:item] }
+    xmpp_notify message.to_json    
     render :json => @item
   end
 
   # PUT /documents/:document_id/pages/:page_id/items/:id
   def update
     @item = @page.items.find(params[:id])
-    # if (params[:item][:data])
-    #   params[:item][:data] = JSON.parse(params[:item][:data])  
-    # end   
     @item.update_attributes(params[:item])
+    message = { :source => params[:source], :item =>  params[:item] }
+    xmpp_notify message.to_json    
     render :json => @item
   end
 
@@ -48,6 +46,9 @@ class ItemsController < ApplicationController
   def destroy
     @item = @page.items.find(params[:id])
     @item.destroy
+    message = { :source => params[:source], :item =>  { :page_id => @page.uuid, :uuid => params[:id]  }, :action => "delete" }
+
+    xmpp_notify message.to_json    
     render :json => {}
   end
   

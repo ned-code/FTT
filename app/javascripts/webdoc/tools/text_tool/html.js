@@ -91,14 +91,14 @@
     var text = tidyXHTML(dirtyHTML);
     if (MTools.Browser.WebKit) {
       // Extra divs expand to line breaks
-      text = text.replace(/(<div>)+/g, "\n");
+	  text = text.replace(/(<div><br \/>)+/g, "<br />");
+      text = text.replace(/(<div>)+/g, "<br />");
       text = text.replace(/(<\/div>)+/g, "");
 
       // Trash extra paragraphs
       text = text.replace(/<p>\s*<\/p>/g, "");
-
       // Convert line break tags into real line breaks
-      text = text.replace(/<br \/>(\n)*/g, "\n");
+      //text = text.replace(/<br \/>(\n)*/g, "\n");
     }
     else if (MTools.Browser.Gecko) {
       // Convert any strangling paragraphs into line breaks
@@ -106,7 +106,7 @@
       text = text.replace(/<\/p>(\n)?/g, "\n");
 
       // Convert line break tags into real line breaks
-      text = text.replace(/<br \/>(\n)*/g, "\n");
+      //text = text.replace(/<br \/>(\n)*/g, "\n");
     }
     else if (MTools.Browser.IE || MTools.Browser.Opera) {
       // Treat lines with one space as returns
@@ -146,7 +146,6 @@
     // Convert double returns into paragraphs
     text = text.replace(/\n\n+/g, "</p>\n\n<p>");
 
-
     // Convert a single return into a line break
     text = gsub(text, /(([^\n])(\n))(?=([^\n]))/, function(match) {
       return match[2] + "<br />\n";
@@ -158,7 +157,7 @@
     // Trim whitespace before and after paragraph tags
     text = text.replace(/<p>\s*/g, "<p>");
     text = text.replace(/\s*<\/p>/g, "</p>");
-
+	
     var element = $('<div></div>');
     element.html(text);
 
@@ -353,7 +352,7 @@
     else if (MTools.Browser.WebKit) {
       // Wrap lines in div tags
       text = text.replace(/\n/g, "</div><div>");
-      text = '<div>' + text + '</div>';
+      //text = '<div>' + text + '</div>';
       text = text.replace(/<div><\/div>/g, "<div><br></div>");
     }
     else if (MTools.Browser.IE || MTools.Browser.Opera) {

@@ -36,6 +36,7 @@ WebDoc.PageEditor = $.klass({
   
   initialize: function(editable) {
     this.applicationUuid = new MTools.UUID().id;
+    MTools.ServerManager.sourceId = this.applicationUuid;
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         

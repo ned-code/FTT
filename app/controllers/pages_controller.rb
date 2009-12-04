@@ -23,10 +23,7 @@ class PagesController < ApplicationController
   
   # POST /documents/:document_id/pages
   def create
-    #TODO how to manage hash in hash (page.data.css.height = 12)
-    # if (params[:page][:data])
-    #   params[:page][:data] = JSON.parse(params[:page][:data])  
-    # end
+
     if (params[:page][:items])
       new_items = JSON.parse params[:page][:items]
       params[:page].delete(:items)  
@@ -41,18 +38,20 @@ class PagesController < ApplicationController
         new_item.save        
       end  
     end    
+    message = { :source => params[:source], :page =>  @page.attributes() }
+
+    xmpp_notify message.to_json
     render :json => @page.to_json(:include => :items)
   end
   
   # PUT /documents/:document_id/pages/:id
   def update
     @page = @document.pages.find(params[:id])
-    #TODO how to manage hash in hash (page.data.css.height = 12)
-    # if (params[:page][:data])
-    #   params[:page][:data] = JSON.parse(params[:page][:data])  
-    # end
     
     @page.update_attributes(params[:page])
+    message = { :source => params[:source], :page =>  params[:page] }
+
+    xmpp_notify message.to_json   
     render :json => @page
   end
   
@@ -60,6 +59,9 @@ class PagesController < ApplicationController
   def destroy
     @page = @document.pages.find(params[:id])
     @page.destroy
+    message = { :source => params[:source], :page =>  { :uuid => params[:id] }, :action => "delete" }
+
+    xmpp_notify message.to_json    
     render :json => {}
   end
   
