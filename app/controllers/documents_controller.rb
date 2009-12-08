@@ -12,7 +12,10 @@ class DocumentsController < ApplicationController
     allow logged_in, :to => [:index, :create]
     allow logged_in, :to => [:show], :if => :public_document?
   end    
+  
+  
   @@global_user_names = ["all", "everybody", "any", "everyone", "people"]
+  
   # GET /documents
   def index
     @documents = Document.all
@@ -42,20 +45,27 @@ class DocumentsController < ApplicationController
     @document.pages.build # add default page
     @document.save
     current_user.has_role!("owner", @document)
-    jid = "server@webdoc"
-    pass = "1234"
-    client = Jabber::Client.new(jid)
-    client.connect "localhost"
-    client.auth(pass)
-    pubsubjid="pubsub.webdoc" 
-    service=Jabber::PubSub::ServiceHelper.new(client,pubsubjid) 
-    service.create_node(@document.uuid,Jabber::PubSub::NodeConfig.new(nil,{ 
-                        "pubsub#title" => @document.uuid, 
-                        "pubsub#node_type" => "leaf", 
-                        "pubsub#send_last_published_item" => "never", 
-                        "pubsub#send_item_subscribe" => "0", 
-                        "pubsub#publish_model" => "open"}))  
-    client.close  
+    begin
+      jid = "server@webdoc"
+      pass = "1234"
+      client = Jabber::Client.new(jid)
+      client.connect "localhost"
+      begin
+        client.auth(pass)
+        pubsubjid="pubsub.webdoc" 
+        service=Jabber::PubSub::ServiceHelper.new(client,pubsubjid) 
+        service.create_node(@document.uuid,Jabber::PubSub::NodeConfig.new(nil,{ 
+                            "pubsub#title" => @document.uuid, 
+                            "pubsub#node_type" => "leaf", 
+                            "pubsub#send_last_published_item" => "never", 
+                            "pubsub#send_item_subscribe" => "0", 
+                            "pubsub#publish_model" => "open"}))  
+      ensure
+        client.close  
+      end
+    rescue
+      logger.warn "XMPP server is down. Collabiration is disabled"
+    end
     render :json => @document
   end
 

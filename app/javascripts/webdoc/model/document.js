@@ -176,8 +176,7 @@ WebDoc.Document = $.klass(MTools.Record, {
           this.pages[i].data.position -= 1;
         }        
       }
-      page.data.position = newPosition;
-      page.save();    
+      page.data.position = newPosition;  
       this.sortPages();
       this.firePageAdded(page);       
       return page;

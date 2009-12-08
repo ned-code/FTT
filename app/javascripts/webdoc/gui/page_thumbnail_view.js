@@ -93,10 +93,6 @@ WebDoc.PageThumbnailView = $.klass({
     }
   },
   
-  domNodeChangedChanged: function() {
-  
-  },
-  
   itemRemoved: function(removedItem) {
     if (!this.page.data.data.externalPage) {
       var relatedItemView = this.itemViews[removedItem.uuid()];

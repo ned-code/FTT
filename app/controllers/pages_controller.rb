@@ -39,6 +39,7 @@ class PagesController < ApplicationController
       end  
     end    
     message = { :source => params[:source], :page =>  @page.attributes() }
+    message[:page][:items] = new_items
 
     xmpp_notify message.to_json
     render :json => @page.to_json(:include => :items)
@@ -49,7 +50,7 @@ class PagesController < ApplicationController
     @page = @document.pages.find(params[:id])
     
     @page.update_attributes(params[:page])
-    message = { :source => params[:source], :page =>  params[:page] }
+    message = { :source => params[:source], :page =>  @page.attributes() }
 
     xmpp_notify message.to_json   
     render :json => @page

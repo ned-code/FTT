@@ -30,17 +30,24 @@ protected
   end  
   
   def xmpp_notify(message)
+    begin
     jid = "server@webdoc"
     pass = "1234"
     client = Jabber::Client.new(jid)
     client.connect "localhost"
-    client.auth(pass)
-    pubsubjid="pubsub.webdoc" 
-    service=Jabber::PubSub::ServiceHelper.new(client,pubsubjid)
-    item = Jabber::PubSub::Item.new 
-    message=Jabber::Message.new(nil,message) 
-    item.add(message) 
-    service.publish_item_to(@page.document_id,item)    
-    client.close
+    begin
+      client.auth(pass)
+      pubsubjid="pubsub.webdoc" 
+      service=Jabber::PubSub::ServiceHelper.new(client,pubsubjid)
+      item = Jabber::PubSub::Item.new 
+      message=Jabber::Message.new(nil,message) 
+      item.add(message) 
+      service.publish_item_to(@page.document_id,item)    
+    ensure
+      client.close
+    end
+  rescue Exception => e
+    logger.warn "XMPP server is down. Collaboration is disabled #{e}"
+  end
   end
 end

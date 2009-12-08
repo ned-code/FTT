@@ -42,7 +42,17 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   refresh: function($super, json) {
+    //backup previous items if we need to keep them
+    var previousItems = [];
+    $.each(this.items, function() {
+      previousItems.push(this.getData());
+    });
+    ddd("previous items", previousItems);
     $super(json);
+    if ((this.data.items === null || this.data.items === undefined) && previousItems) {
+      ddd("restore previous tems");
+      this.data.items = previousItems;
+    }
     var that = this;
     this.items = [];    
     if (this.data.items && $.isArray(this.data.items)) {
