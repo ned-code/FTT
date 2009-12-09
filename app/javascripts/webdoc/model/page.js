@@ -52,6 +52,10 @@ WebDoc.Page = $.klass(MTools.Record,
     if ((this.data.items === null || this.data.items === undefined) && previousItems) {
       ddd("restore previous tems");
       this.data.items = previousItems;
+      //clear previous item view
+      for (var itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
+        removeItem(this.items[itemIndex]);
+      }
     }
     var that = this;
     this.items = [];    

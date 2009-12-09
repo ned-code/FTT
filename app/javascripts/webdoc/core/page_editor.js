@@ -92,6 +92,7 @@ WebDoc.PageEditor = $.klass({
     {
       var editor = WebDoc.application.pageEditor;
       editor.currentDocument = data[0];
+      editor.currentDocument.addListener(editor);
       WebDoc.application.pageBrowserController.setDocument(editor.currentDocument);
       editor.loadPageId(window.location.hash.replace("#", ""));
     });
@@ -151,14 +152,19 @@ WebDoc.PageEditor = $.klass({
       var choice = confirm("Are you sure you want to delete the current page?");
       if (choice) {
         this.currentPage.destroy(function(objet) {
-          var newPagePosition = 0;
-          if (pageToDelete.data.position > 0) {
-            newPagePosition = pageToDelete.data.position - 1;
-          }
           this.currentDocument.removePage(pageToDelete, true);
-          this.loadPage(this.currentDocument.pages[newPagePosition]);
         }.pBind(this));
       }
+    }
+  },
+  
+  pageRemoved: function(page) {
+    if (page == this.currentPage) {
+      var newPagePosition = 0;
+      if (page.data.position > 0) {
+        newPagePosition = page.data.position - 1;
+      }      
+      this.loadPage(this.currentDocument.pages[newPagePosition]);
     }
   }
 

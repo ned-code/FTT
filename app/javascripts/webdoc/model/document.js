@@ -147,13 +147,17 @@ WebDoc.Document = $.klass(MTools.Record, {
   
   firePageAdded: function(addedPage) {
     for (var i = 0; i < this.listeners.length; i++) {
-      this.listeners[i].pageAdded(addedPage);
+      if (this.listeners[i].pageAdded) {
+        this.listeners[i].pageAdded(addedPage);
+      }
     }    
   },
   
   firePageRemoved: function(removedPage) {
     for (var i = 0; i < this.listeners.length; i++) {
-      this.listeners[i].pageRemoved(removedPage);
+      if (this.listeners[i].pageRemoved) {
+        this.listeners[i].pageRemoved(removedPage);
+      }
     }      
   },
   

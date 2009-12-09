@@ -86,7 +86,9 @@ MTools.Record = $.klass(
   
   fireObjectChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
-      this.listeners[i].objectChanged(this);
+      if (this.listeners[i].objectChanged) {
+        this.listeners[i].objectChanged(this);
+      }
     }
   },
   
