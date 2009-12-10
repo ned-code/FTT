@@ -46,13 +46,13 @@ class DocumentsController < ApplicationController
     @document.save
     current_user.has_role!("owner", @document)
     begin
-      jid = "server@webdoc"
+      jid = "server@webdoc.com"
       pass = "1234"
       client = Jabber::Client.new(jid)
       client.connect "localhost"
       begin
         client.auth(pass)
-        pubsubjid="pubsub.webdoc" 
+        pubsubjid="pubsub.webdoc.com" 
         service=Jabber::PubSub::ServiceHelper.new(client,pubsubjid) 
         service.create_node(@document.uuid,Jabber::PubSub::NodeConfig.new(nil,{ 
                             "pubsub#title" => @document.uuid, 

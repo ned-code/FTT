@@ -31,13 +31,13 @@ protected
   
   def xmpp_notify(message)
     begin
-    jid = "server@webdoc"
+    jid = "server@webdoc.com"
     pass = "1234"
     client = Jabber::Client.new(jid)
     client.connect "localhost"
     begin
       client.auth(pass)
-      pubsubjid="pubsub.webdoc" 
+      pubsubjid="pubsub.webdoc.com" 
       service=Jabber::PubSub::ServiceHelper.new(client,pubsubjid)
       item = Jabber::PubSub::Item.new 
       message=Jabber::Message.new(nil,message) 

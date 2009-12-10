@@ -7,14 +7,18 @@ WebDoc.CollaborationManager = $.klass(
     
     initialize: function(document)    
     {
-      this.from = "julien.bachmann@webdoc/web_" + WebDoc.application.pageEditor.applicationUuid ;
     },
 
     setDocumentId: function(documentId) {
-      this.disconnect();
-      this.documentId = documentId;
-      this.connection = new Strophe.Connection(this.BOSH_SERVICE);        
-      this.connection.connect(this.from,"cdrcdt", this.onConnect.pBind(this));      
+      $.getJSON("/users/current", function(userData) {
+        this.from = userData.user.name + "@webdoc.com/web_" + WebDoc.application.pageEditor.applicationUuid ;
+        ddd("XMPP user from", this.from, userData);
+        this.disconnect();
+        this.documentId = documentId;
+        this.connection = new Strophe.Connection(this.BOSH_SERVICE);  
+        ddd("will connect");      
+        this.connection.connect(this.from,"cdrcdt", this.onConnect.pBind(this));              
+      }.pBind(this));      
     },
     
     onConnect: function(status)
@@ -51,7 +55,7 @@ WebDoc.CollaborationManager = $.klass(
     },
 
     getDocumentSubscriptions : function(callBack) {
-      var iq = $iq({ from: this.from, to: "pubsub.webdoc", type: "get", id: 'getDocSubs'} );
+      var iq = $iq({ from: this.from, to: "pubsub.webdoc.com", type: "get", id: 'getDocSubs'} );
       var subscriptions = $build("subscriptions", { node: this.documentId, jid: "julien.bachmann@webdoc/web" }).tree();      
       var pubSub = iq.cnode($build("pubsub", { xmlns: "http://jabber.org/protocol/pubsub"}).tree()).cnode(subscriptions);
       if (callBack) {
@@ -61,7 +65,7 @@ WebDoc.CollaborationManager = $.klass(
     },
     
     addDocumentSubscription: function(callBack) {
-      var iq = $iq({ from: this.from, to: "pubsub.webdoc", type: "set", id: "addDocSub"});
+      var iq = $iq({ from: this.from, to: "pubsub.webdoc.com", type: "set", id: "addDocSub"});
       var pubSub = iq.cnode($build("pubsub", { xmlns: "http://jabber.org/protocol/pubsub"}).tree());
       pubSub.cnode($build("subscribe", { node: this.documentId, jid: this.from}).tree());
       if (callBack) {
@@ -71,7 +75,7 @@ WebDoc.CollaborationManager = $.klass(
     },
     
     unSubsribe: function(subid, callBack) {
-      var iq = $iq({ from: this.from, to: "pubsub.webdoc", type: "set", id: "unsubscribe"});
+      var iq = $iq({ from: this.from, to: "pubsub.webdoc.com", type: "set", id: "unsubscribe"});
       var pubSub = iq.cnode($build("pubsub", { xmlns: "http://jabber.org/protocol/pubsub"}).tree());
       pubSub.cnode($build("unsubscribe", { node: this.documentId, jid: this.from, subid:subid }).tree());
       if (callBack) {
@@ -98,7 +102,7 @@ WebDoc.CollaborationManager = $.klass(
         var elems = msg.getElementsByTagName('body');
 
         // we need to clean unused subscriptions. All old subscriptions are sent to the last logged user
-        if (from == "pubsub.webdoc" && to != this.from) {
+        if (from == "pubsub.webdoc.com" && to != this.from) {
           try {
             var messageWrap = $(msg);
             var subId = messageWrap.find("header").text();
@@ -109,7 +113,7 @@ WebDoc.CollaborationManager = $.klass(
               ddd("error while trying to remove old subscriptions", e);
             }            
         }
-        else if (from == "pubsub.webdoc" && to == this.from) {
+        else if (from == "pubsub.webdoc.com" && to == this.from) {
           this.dispathMessage(elems);
         }
       }
