@@ -47,7 +47,8 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     widgetNode.bind('load', function() {
       ddd("widget loaded");
       this.initWidget();
-    }.pBind(this));
+    }
+.pBind(this));
     
     widgetNode.bind('resize', function() {
       ddd("widget resize");
@@ -71,7 +72,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   edit: function($super) {
     $super();
-    WebDoc.application.boardController.unselectItemViews([this]);    
+    WebDoc.application.boardController.unselectItemViews([this]);
     WebDoc.application.boardController.editingItem = this;
     this.domNode.addClass("item_edited");
     this.domNode.css({
@@ -86,8 +87,17 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     });
   },
   
+  widgetChanged: function() {
+    if (this.domNode.get(0).contentWindow) {
+      this.domNode.get(0).contentWindow.uniboard = this.item;
+      if (this.domNode.get(0).contentWindow.initialize) {
+        this.domNode.get(0).contentWindow.initialize();
+      }
+    }
+  },  
+  
   initWidget: function() {
-    $("#wait_"+this.item.uuid()).remove();
+    $("#wait_" + this.item.uuid()).remove();
     if (this.domNode.get(0).contentWindow) {
       this.domNode.get(0).contentWindow.uniboard = this.item;
       if (this.domNode.get(0).contentWindow.initialize) {
@@ -96,13 +106,13 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       //$(this.domNode.get(0).contentDocument).find("body").css("overflow", "hidden");
       // inject innerHTML if exist
       /*
-      if (this.item.data.data.innerHTML) {
-        var doc = this.domNode.get(0).contentDocument;
-        doc.open();
-        doc.write("<html><head>" + this.item.data.data.innerHTML + "</head><body></body></html>");
-        doc.close();  
-      }
-      */
+       if (this.item.data.data.innerHTML) {
+       var doc = this.domNode.get(0).contentDocument;
+       doc.open();
+       doc.write("<html><head>" + this.item.data.data.innerHTML + "</head><body></body></html>");
+       doc.close();
+       }
+       */
       /* if SVG layer don't catch event we need to catch events in the capture phase of the widget */
       /*
        this.domNode.get(0).contentDocument.body.addEventListener("mousedown", WebDoc.application.boardController.mouseDown.pBind(WebDoc.application.boardController), true);
