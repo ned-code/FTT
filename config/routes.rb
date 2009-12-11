@@ -5,12 +5,15 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :documents, :has_many => { :pages => :items }, :member => { :change_user_access => :put, :user_access => :get}
   
+  #map.resource :datastores, :as => 'datastore',  :new => [:set => :get], :path_names => {:set => 'set'}#, :only => [:set],
+  map.resource :datastores, :as => 'datastore',  :member => { :set => :get, :get => :get, :getAllKeys => :get, :remove => :get, :getForCurrentUser => :get }#, :only => [:set],
+  
+  
+  map.resources :users, :except => :new
   map.with_options :controller => 'users', :conditions => { :method => :get } do |m|
     m.signup 'signup', :action => 'new'
-    m.current '/users/current', :action => 'current'
   end
-  map.resources :users, :except => :new
-  
+
   map.resource :user_sessions, :only => :create
   map.with_options :controller => 'user_sessions', :conditions => { :method => :get } do |m|
     m.login  '/login',  :action => 'new' # login_path
