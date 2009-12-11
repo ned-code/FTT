@@ -19,7 +19,7 @@ class DocumentsController < ApplicationController
   # GET /documents
   def index
     @documents = Document.all
-    if (!current_user.has_role?("admin"))
+    if (!current_user.has_role?("superAdmin"))
       #TODO need to optimize document filtering by doing it in a single SQL query
       @documents = @documents.select { |a_doc| a_doc.accepts_roles_by?(current_user) || a_doc.accepts_roles_by?(global_user)}
     end
