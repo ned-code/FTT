@@ -56,12 +56,28 @@ WebDoc.Document = $.klass(MTools.Record, {
     return null;
   },
   
+  createOrUpdateItem: function(itemData) {
+    var page = this.findPageWithUuidOrPosition(itemData.item.page_id);    
+    if (!page) {
+      ddd("Cannot find page");
+    }
+    else {
+      page.createOrUpdateItem(itemData);
+    }
+  },
+  
   createOrUpdatePage: function(pageData) {
     var page = this.findPageWithUuidOrPosition(pageData.page.uuid);
-    if (!page) {
+    if (pageData.action == "delete") {
+      this.removePage(page, true);
+    }
+    else if (!page) {
       this.createPage(pageData);
     }
     else {
+      if (pageData.page.position != page.data.position) {
+        this.movePage(page.uuid(), pageData.page.position);
+      }
       page.refresh(pageData);
     }
   },
@@ -70,7 +86,7 @@ WebDoc.Document = $.klass(MTools.Record, {
     ddd("create page with data");
     ddd(pageData);
     var newPage = new WebDoc.Page(pageData);
-    this.addPage(newPage);
+    this.addPage(newPage, true);
     ddd("page created");
   },
   
@@ -131,13 +147,17 @@ WebDoc.Document = $.klass(MTools.Record, {
   
   firePageAdded: function(addedPage) {
     for (var i = 0; i < this.listeners.length; i++) {
-      this.listeners[i].pageAdded(addedPage);
+      if (this.listeners[i].pageAdded) {
+        this.listeners[i].pageAdded(addedPage);
+      }
     }    
   },
   
   firePageRemoved: function(removedPage) {
     for (var i = 0; i < this.listeners.length; i++) {
-      this.listeners[i].pageRemoved(removedPage);
+      if (this.listeners[i].pageRemoved) {
+        this.listeners[i].pageRemoved(removedPage);
+      }
     }      
   },
   
@@ -160,11 +180,12 @@ WebDoc.Document = $.klass(MTools.Record, {
           this.pages[i].data.position -= 1;
         }        
       }
-      page.data.position = newPosition;
-      page.save();    
+      page.data.position = newPosition;  
       this.sortPages();
       this.firePageAdded(page);       
+      return page;
     }
+    return null;
   }
     
 });

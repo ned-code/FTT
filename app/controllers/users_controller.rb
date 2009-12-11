@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_filter :login_required
   access_control do
     allow :admin
+    allow logged_in, :only => [:current]
   end  
   
   # GET /users
@@ -23,6 +24,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def current
+    render :json => current_user
+  end
+  
   # GET /users/:id/edit
   def edit
     @user = User.find(params[:id])

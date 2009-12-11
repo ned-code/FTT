@@ -9,6 +9,7 @@
 //= require <mtools/uuid>
 
 //= require <webdoc/adaptors/svg_renderer>
+//= require <webdoc/adaptors/collaboration_manager>
 //= require <webdoc/controllers/board_controller>
 //= require <webdoc/controllers/image_library_controller>
 //= require <webdoc/controllers/widget_library_controller>
@@ -35,6 +36,7 @@ WebDoc.PageEditor = $.klass({
   
   initialize: function(editable) {
     this.applicationUuid = new MTools.UUID().id;
+    MTools.ServerManager.sourceId = this.applicationUuid;
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         
@@ -56,6 +58,7 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool("#html_snipplet");
 
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+    WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
     
     // It seems that webkit don't need the margin een if content is 100% width
     if (MTools.Browser.WebKit) {
@@ -76,15 +79,20 @@ WebDoc.PageEditor = $.klass({
       $("#right_bar").height(height -10);
       $("#left_bar").height(height -10);
       WebDoc.application.boardController.centerBoard();
-    }.pBind(this));    
+    }.pBind(this)); 
+    $(window).unload(function() {
+      WebDoc.application.collaborationManager.disconnect();
+    });   
   },
 
   load: function(documentId) {
     ddd("load document " + documentId);
+    WebDoc.application.collaborationManager.setDocumentId(documentId);              
     MTools.ServerManager.getObjects("/documents/" + documentId, WebDoc.Document, function(data)
     {
       var editor = WebDoc.application.pageEditor;
       editor.currentDocument = data[0];
+      editor.currentDocument.addListener(editor);
       WebDoc.application.pageBrowserController.setDocument(editor.currentDocument);
       editor.loadPageId(window.location.hash.replace("#", ""));
     });
@@ -144,14 +152,19 @@ WebDoc.PageEditor = $.klass({
       var choice = confirm("Are you sure you want to delete the current page?");
       if (choice) {
         this.currentPage.destroy(function(objet) {
-          var newPagePosition = 0;
-          if (pageToDelete.data.position > 0) {
-            newPagePosition = pageToDelete.data.position - 1;
-          }
           this.currentDocument.removePage(pageToDelete, true);
-          this.loadPage(this.currentDocument.pages[newPagePosition]);
         }.pBind(this));
       }
+    }
+  },
+  
+  pageRemoved: function(page) {
+    if (page == this.currentPage) {
+      var newPagePosition = 0;
+      if (page.data.position > 0) {
+        newPagePosition = page.data.position - 1;
+      }      
+      this.loadPage(this.currentDocument.pages[newPagePosition]);
     }
   }
 

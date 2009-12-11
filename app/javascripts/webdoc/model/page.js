@@ -42,7 +42,21 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   refresh: function($super, json) {
+    //backup previous items if we need to keep them
+    var previousItems = [];
+    $.each(this.items, function() {
+      previousItems.push(this.getData());
+    });
+    ddd("previous items", previousItems);
     $super(json);
+    if ((this.data.items === null || this.data.items === undefined) && previousItems) {
+      ddd("restore previous tems");
+      this.data.items = previousItems;
+      //clear previous item view
+      for (var itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
+        removeItem(this.items[itemIndex]);
+      }
+    }
     var that = this;
     this.items = [];    
     if (this.data.items && $.isArray(this.data.items)) {
@@ -65,8 +79,11 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   createOrUpdateItem: function(itemData) {
-    var item = this.findItemWithUuid(itemData.uuid);
-    if (!item) {
+    var item = this.findItemWithUuid(itemData.item.uuid);
+    if (itemData.action == "delete") {
+      this.removeItem(item);
+    }    
+    else if (!item) {
       this.createItem(itemData);
     }
     else {

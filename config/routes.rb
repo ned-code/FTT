@@ -8,6 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   #map.resource :datastores, :as => 'datastore',  :new => [:set => :get], :path_names => {:set => 'set'}#, :only => [:set],
   map.resource :datastores, :as => 'datastore',  :member => { :set => :get, :get => :get, :getAllKeys => :get, :remove => :get, :getForCurrentUser => :get }#, :only => [:set],
   
+  
   map.resources :users, :except => :new
   map.with_options :controller => 'users', :conditions => { :method => :get } do |m|
     m.signup 'signup', :action => 'new'

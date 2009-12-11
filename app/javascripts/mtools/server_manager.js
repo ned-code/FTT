@@ -76,17 +76,19 @@ $.extend(MTools.ServerManager,
      *        context for the callback function is the ajax request. created object is an object of the same class but can be a different one
      *        (some value can be created on the server side)
      **/
-    newObject: function(url, object, callBack)
-    {
-        $.post(url, object.to_json(true), function(data, textstatus)
-        {
-            // refresh is needed because some values are generaed on server side
-            // i.e. page size and background.
-            object.refresh(data);
-            object.isNew = false;
-            callBack.apply(this, [[object]]);
-        }, "json");
-    },
+     newObject: function(url, object, callBack)
+     {
+       var message = { source: MTools.ServerManager.sourceId };
+       $.extend(message, object.to_json(true));
+       $.post(url, message, function(data, textstatus)
+       {
+         // refresh is needed because some values are generaed on server side
+         // i.e. page size and background.
+         object.refresh(data);
+         object.isNew = false;
+         callBack.apply(this, [[object]]);
+       }, "json");
+     },
     
     /**
      * Update an existing object with new values
@@ -99,7 +101,8 @@ $.extend(MTools.ServerManager,
     {
         var param = 
         {
-            _method: "PUT"
+          source: MTools.ServerManager.sourceId,
+          _method: "PUT"
         };
         $.extend(param, object.to_json());
         $.post(url, param, function(data, textstatus)
@@ -120,7 +123,8 @@ $.extend(MTools.ServerManager,
     {
         var param = 
         {
-            _method: "DELETE"
+          source: MTools.ServerManager.sourceId,
+          _method: "DELETE"
         };
         $.post(url, param, function(data, textstatus)
         {

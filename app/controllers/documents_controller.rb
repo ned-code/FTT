@@ -1,3 +1,6 @@
+require "xmpp4r" 
+require "xmpp4r/pubsub"
+
 class DocumentsController < ApplicationController
   before_filter :login_required
   before_filter :load_document, :only => [:update, :destroy, :show, :change_user_access, :user_access]
@@ -9,11 +12,14 @@ class DocumentsController < ApplicationController
     allow logged_in, :to => [:index, :create]
     allow logged_in, :to => [:show], :if => :public_document?
   end    
+  
+  
   @@global_user_names = ["all", "everybody", "any", "everyone", "people"]
+  
   # GET /documents
   def index
     @documents = Document.all
-    if (!current_user.has_role?("admin"))
+    if (!current_user.has_role?("superAdmin"))
       #TODO need to optimize document filtering by doing it in a single SQL query
       @documents = @documents.select { |a_doc| a_doc.accepts_roles_by?(current_user) || a_doc.accepts_roles_by?(global_user)}
     end
@@ -38,7 +44,28 @@ class DocumentsController < ApplicationController
     @document.uuid = params[:document][:uuid]
     @document.pages.build # add default page
     @document.save
-    current_user.has_role!("owner", @document);
+    current_user.has_role!("owner", @document)
+    begin
+      jid = "server@webdoc.com"
+      pass = "1234"
+      client = Jabber::Client.new(jid)
+      client.connect "localhost"
+      begin
+        client.auth(pass)
+        pubsubjid="pubsub.webdoc.com" 
+        service=Jabber::PubSub::ServiceHelper.new(client,pubsubjid) 
+        service.create_node(@document.uuid,Jabber::PubSub::NodeConfig.new(nil,{ 
+                            "pubsub#title" => @document.uuid, 
+                            "pubsub#node_type" => "leaf", 
+                            "pubsub#send_last_published_item" => "never", 
+                            "pubsub#send_item_subscribe" => "0", 
+                            "pubsub#publish_model" => "open"}))  
+      ensure
+        client.close  
+      end
+    rescue
+      logger.warn "XMPP server is down. Collabiration is disabled"
+    end
     render :json => @document
   end
 

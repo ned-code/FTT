@@ -56,7 +56,7 @@ WebDoc.ItemThumbnailView = $.klass({
   },
   
   innerHtmlChanged: function() {
-    //this.domNode.html(this.item.data.data.innerHTML);
+    this.domNode.html(this.item.data.data.innerHTML);
   }
 });
 
@@ -123,7 +123,13 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
     else {
       return $super();
     }
-  } 
+  },
+  
+  innerHtmlChanged: function() {
+    if (this.item.data.data.tag != "iframe" || !this.item.data.data.innerHTML.match(/<iframe|<script|<object/)) {
+      this.domNode.html(this.item.data.data.innerHTML);
+    }
+  }   
 });
 
 

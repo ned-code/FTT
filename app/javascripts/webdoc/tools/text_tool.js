@@ -160,14 +160,14 @@ WebDoc.TextToolDelegate = $.klass({
       iframeContent = this.dirtifyHTML($(this.textBox).html());
     }
     $(this.doc.body).html(iframeContent);
-
+	
     $(this.doc.body).css({
       fontSize: $(this.textBox).css("fontSize"),
       fontFamily: $(this.textBox).css("fontFamily"),
       fontStyle: $(this.textBox).css("fontStyle"),
       color: $(this.textBox).css("color")
     });
-
+	
     //$(this.doc.body).css();
     // Firefox starts "locked", so insert a character bogus character and undo
     if (MTools.Browser.Gecko) {

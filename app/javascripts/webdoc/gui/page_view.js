@@ -89,7 +89,14 @@ WebDoc.PageView = $.klass({
   },
   
   itemAdded: function(addedItem) {
-    this.createItemView(addedItem);
+    var relatedItemView = this.itemViews[addedItem.uuid()];
+    // be sure not to add twice the same item
+    if (!relatedItemView) {
+      this.createItemView(addedItem);
+    }
+    else {
+      relatedItemView.objectChanged(addedItem);
+    }    
   },
   
   itemRemoved: function(removedItem) {

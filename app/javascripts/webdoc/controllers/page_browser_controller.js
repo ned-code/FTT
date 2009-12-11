@@ -183,7 +183,10 @@ WebDoc.PageBrowserController = $.klass({
        });
      }
      else {
-       WebDoc.application.pageEditor.currentDocument.movePage(movedPage.uuid(), movedPage.data.position < droppedPagePosition? droppedPagePosition: droppedPagePosition+1);
+       var pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(movedPage.uuid(), movedPage.data.position < droppedPagePosition? droppedPagePosition: droppedPagePosition+1);
+       if (pageToSave) {
+         pageToSave.save();
+       }
      }
    },
    
