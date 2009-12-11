@@ -155,7 +155,7 @@ $.extend(MTools.Record, {
         destinationObject[prefix + '[' + key + ']'] = $.toJSON(value);        
       }
       else if (typeof value == 'object') {
-        if (value.__count__ > 0) {
+        if (value && value.__count__ > 0) {
           this.convertToRailsJSon(value, destinationObject, prefix + '[' + key + ']');
         }
         else {
