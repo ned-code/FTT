@@ -17,7 +17,7 @@ WebDoc.CollaborationManager = $.klass(
         this.documentId = documentId;
         this.connection = new Strophe.Connection(this.BOSH_SERVICE);  
         ddd("will connect");      
-        this.connection.connect(this.from,"cdrcdt", this.onConnect.pBind(this));              
+        this.connection.connect(this.from,"1234", this.onConnect.pBind(this));              
       }.pBind(this));      
     },
     
