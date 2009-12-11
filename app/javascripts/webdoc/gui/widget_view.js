@@ -88,6 +88,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   },
   
   widgetChanged: function() {
+    ddd("update widget state");
     if (this.domNode.get(0).contentWindow) {
       this.domNode.get(0).contentWindow.uniboard = this.item;
       if (this.domNode.get(0).contentWindow.initialize) {

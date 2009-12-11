@@ -32,6 +32,17 @@ WebDoc.Item = $.klass(MTools.Record,
     if (refreshInnerHtml) {
       this.fireDomNodeChanged();
     }
+    if (this.type() == WebDoc.ITEM_TYPE_WIDGET) {
+      this.fireWidgetChanged();
+    }
+  },
+  
+  fireWidgetChanged: function() {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].widgetChanged) {
+        this.listeners[i].widgetChanged();
+      }
+    }     
   },
   
   setPoints: function(points) {
