@@ -87,13 +87,13 @@ describe DocumentsController do
       response.should respond_with(:content_type => :html)             
     end
     
-    it "should get all documents" do
+    it "should get only its owned documents" do
       get :index, :format => "json"
       response.should be_success      
       response.should respond_with(:content_type => :json)     
       json_response = JSON.parse(response.body)
       json_response.should be_an_instance_of(Array)
-      json_response.length.should == 6
+      json_response.length.should == 2
     end
     
     it "should be able to open any document" do
