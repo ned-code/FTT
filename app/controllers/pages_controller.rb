@@ -1,3 +1,4 @@
+
 class PagesController < ApplicationController
   before_filter :login_required
   before_filter :instantiate_document

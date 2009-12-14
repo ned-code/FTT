@@ -1,6 +1,3 @@
-require "xmpp4r" 
-require "xmpp4r/pubsub"
-
 class DocumentsController < ApplicationController
   before_filter :login_required
   before_filter :load_document, :only => [:update, :destroy, :show, :change_user_access, :user_access]
@@ -11,8 +8,7 @@ class DocumentsController < ApplicationController
     allow :reader, :of => :document, :to => [:show]    
     allow logged_in, :to => [:index, :create]
     allow logged_in, :to => [:show], :if => :public_document?
-  end    
-  
+  end  
   
   @@global_user_names = ["all", "everybody", "any", "everyone", "people"]
   
@@ -45,27 +41,7 @@ class DocumentsController < ApplicationController
     @document.pages.build # add default page
     @document.save
     current_user.has_role!("owner", @document)
-    begin
-      jid = "server@webdoc.com"
-      pass = "1234"
-      client = Jabber::Client.new(jid)
-      client.connect "localhost"
-      begin
-        client.auth(pass)
-        pubsubjid="pubsub.webdoc.com" 
-        service=Jabber::PubSub::ServiceHelper.new(client,pubsubjid) 
-        service.create_node(@document.uuid,Jabber::PubSub::NodeConfig.new(nil,{ 
-                            "pubsub#title" => @document.uuid, 
-                            "pubsub#node_type" => "leaf", 
-                            "pubsub#send_last_published_item" => "never", 
-                            "pubsub#send_item_subscribe" => "0", 
-                            "pubsub#publish_model" => "open"}))  
-      ensure
-        client.close  
-      end
-    rescue
-      logger.warn "XMPP server is down. Collabiration is disabled"
-    end
+    xmpp_create_node(@document.uuid)
     render :json => @document
   end
 
