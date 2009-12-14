@@ -57,16 +57,10 @@ $.extend(WebDoc.DrageAndDropController,{
     }
     else if (imageUrl || ubImage) {
       var url = ubImage? ubImage : imageUrl;
-      newItem = new WebDoc.Item();
-      newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
-      newItem.data.data.tag = "img";
-      newItem.data.data.src = url;
-      newItem.data.data.css = {
-        overflow: "hidden",
-        top: pos.y + "px",
-        left: pos.x + "px"
-      };
-      WebDoc.application.boardController.insertItems([newItem]);
+	  
+	  var image=document.createElement('img'); /* Preload image in order to have width and height parameters available */	
+	  $(image).bind("load", pos, WebDoc.DrageAndDropController.createImageItem); /* WebDoc.Item creation will occur after image load*/
+	  image.src=url;
     } 
     else {      
       if (html) {
@@ -84,5 +78,19 @@ $.extend(WebDoc.DrageAndDropController,{
       }
     }
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+  },
+ createImageItem: function(e){
+	var newItem = new WebDoc.Item();
+	newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
+    newItem.data.data.tag = "img";
+    newItem.data.data.src = this.src;
+    newItem.data.data.css = {
+        overflow: "hidden",
+        top: e.data.y + "px",
+        left: e.data.x + "px",
+		width: this.width + "px",
+		height: this.height +"px"
+      };
+    WebDoc.application.boardController.insertItems([newItem]);
   }
 });
