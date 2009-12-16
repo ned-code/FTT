@@ -5,8 +5,9 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :documents, :has_many => { :pages => :items }, :member => { :change_user_access => :put, :user_access => :get}
   
-  #map.resource :datastores, :as => 'datastore',  :new => [:set => :get], :path_names => {:set => 'set'}#, :only => [:set],
-  map.resource :datastores, :as => 'datastore',  :member => { :set => :get, :get => :get, :getAllKeys => :get, :remove => :get, :getForCurrentUser => :get }#, :only => [:set],
+  map.resources :medias do |media|
+      media.resources :datastoreEntries, :except => [:new, :edit]
+  end
   
   map.with_options :controller => 'users', :conditions => { :method => :get } do |m|
     m.signup 'signup', :action => 'new'

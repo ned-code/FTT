@@ -9,7 +9,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091211072724) do
+ActiveRecord::Schema.define(:version => 20091214185745) do
+
+  create_table "datastore_entries", :force => true do |t|
+    t.string   "ds_key",                          :null => false
+    t.text     "ds_value",    :limit => 16777215, :null => false
+    t.string   "widget_uuid", :limit => 36
+    t.string   "user_id",     :limit => 36
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "datastores", :force => true do |t|
     t.string   "ds_key",                          :null => false
