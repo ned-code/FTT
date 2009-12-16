@@ -23,7 +23,8 @@ $.extend(MTools.ServerManager, {
     if (uuid) {
       var cachedRecord = MTools.ServerManager.cache.get(recordClass, uuid);
       if (cachedRecord !== undefined) {
-        return cachedRecord;
+        callBack.call(this, [cachedRecord]);
+        return;
       }
     }
     var url = recordClass.rootUrl(args) + "/" + recordClass.className() + "s";
