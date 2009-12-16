@@ -54,19 +54,27 @@ MTools.Record = $.klass(
   },
   
   /**
-   * All sub class must implement this method and return the class name. ClassName is used to construct REST URL for create, edit and delete object.
-   * Also ClassName is the name of the attribute of json containing the data (Rails convention)
+   * @deprecated. use the className class function instead.
    */
   className: function() {
-    throw ("className function not implemented");
-  },
+    if (this.constructor.className) {
+      return this.constructor.className();
+    }
+    else {
+      ddd("no class name");
+      ddt();
+    }
+  },  
   
   /**
-   * sub class can implement this method to allow having nested resources. For example /documents/:document_id/pages/:uuid. In this case rootUrl is
-   * /document/:document_id
+   * @deprecated. use the rootUrl class function instead.
    */
   rootUrl: function() {
-    return "";
+    return this.constructor.rootUrl(this.rootUrlArgs());
+  },  
+  
+  rootUrlArgs: function() {
+    return null;  
   },
   
   /**
@@ -166,6 +174,22 @@ $.extend(MTools.Record, {
         destinationObject[prefix + '[' + key + ']'] = value;
       }
     }   
-  }
+  },
+  
+  /**
+   * All sub class must implement this method and return the class name. ClassName is used to construct REST URL for create, edit and delete object.
+   * Also ClassName is the name of the attribute of json containing the data (Rails convention)
+   */
+  className: function() {
+    throw ("className function not implemented");
+  },  
+  
+  /**
+   * sub class can implement this method to allow having nested resources. For example /documents/:document_id/pages/:uuid. In this case rootUrl is
+   * /document/:document_id
+   */
+  rootUrl: function(args) {
+    return "";
+  }  
 });
 

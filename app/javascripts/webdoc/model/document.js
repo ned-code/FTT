@@ -6,10 +6,6 @@ WebDoc.Document = $.klass(MTools.Record, {
     $super(json);
   },
   
-  className: function() {
-    return "document";
-  },
-  
   title: function() {
     return this.data.title;
   },
@@ -173,7 +169,7 @@ WebDoc.Document = $.klass(MTools.Record, {
         for (i = page.data.position -1; i >= newPosition; i--) {
           this.pages[i].data.position += 1;
         }
-      }
+      }      
       // move forward
       if (newPosition > previousPosition) {
         for (i = page.data.position + 1; i <= newPosition; i++) {
@@ -190,3 +186,11 @@ WebDoc.Document = $.klass(MTools.Record, {
     
 });
 
+$.extend(WebDoc.Document, {
+  className: function() {
+    return "document";
+  },
+  rootUrl: function(args) {
+    return "";
+  }    
+});

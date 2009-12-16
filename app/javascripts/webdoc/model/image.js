@@ -4,11 +4,17 @@
 WebDoc.Image = $.klass(MTools.Record, {
   initialize: function($super, json) {
     $super(json);
-  },
-  
-  className: function() {
-    return "image";
   }
   
 });
 
+$.extend(WebDoc.Image, {
+  
+  className: function() {
+    return "image";
+  },
+  
+  rootUrl: function(args) {
+    return "";
+  }    
+});

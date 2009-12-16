@@ -1,28 +1,26 @@
 /**
  * @author julien
  */
-
 //= require <webdoc/model/image>
 WebDoc.ImageLibraryController = $.klass({
   initialize: function() {
     this.domNode = $("#image_library_wrap");
     this.loadImages();
-    this.domNode.find("ul").bind("dragstart", this.dragStart.pBind(this));    
+    this.domNode.find("ul").bind("dragstart", this.dragStart.pBind(this));
   },
   
   loadImages: function() {
     this.domNode.find("ul").empty();
-    MTools.ServerManager.getObjects("/medias?type=Medias::Image", WebDoc.Image, function(data)
-        {
-          this.images = {};
-          for (var i = 0; i < data.length; i++) {
-            this.images[data[i].uuid()] = data[i];
-          }  
-          this.refreshImageList();
-        }.pBind(this), this);
+    MTools.ServerManager.getRecords(WebDoc.Image, null, function(data) {
+      this.images = {};
+      for (var i = 0; i < data.length; i++) {
+        this.images[data[i].uuid()] = data[i];
+      }
+      this.refreshImageList();
+    }.pBind(this));
   },
   
-  refreshImageList: function() {    
+  refreshImageList: function() {
     for (imageId in this.images) {
       var image = this.images[imageId];
       if (image) {
@@ -49,5 +47,4 @@ WebDoc.ImageLibraryController = $.klass({
   
 });
 
-$.extend(WebDoc.ImageLibraryController,{
-});
+$.extend(WebDoc.ImageLibraryController, {});

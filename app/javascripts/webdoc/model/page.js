@@ -9,14 +9,6 @@ WebDoc.Page = $.klass(MTools.Record,
     $super(json);
   },
   
-  className: function() {
-    return "page";
-  },
-  
-  rootUrl: function() {
-    return "/documents/" + this.data.document_id;
-  },
-  
   setExternalPageMode: function(mode) {
     ddd("set mode", mode);  
     this.data.data.externalPage = mode;
@@ -161,6 +153,21 @@ WebDoc.Page = $.klass(MTools.Record,
     }        
     ddd("copied page is ", newPage, new Date());
     return newPage;
+  },
+
+  rootUrlArgs: function() {
+    return { 
+      document_id: this.data.document_id 
+      };  
   }
+});
+
+$.extend(WebDoc.Page, {
+  className: function() {
+    return "page";
+  },
   
+  rootUrl: function(args) {
+    return "/documents/" + args.document_id;
+  }
 });

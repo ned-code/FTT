@@ -151,11 +151,11 @@ WebDoc.DocumentEditor = $.klass(
     
     loadDocuments: function()
     {
-        MTools.ServerManager.getObjects("/documents.json", WebDoc.Document, function(data)
+        MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
         {
             this.documents = data;
             this.refreshDocumentList();
-        }, this);
+        }.pBind(this));
     },
     
     refreshDocumentList: function()

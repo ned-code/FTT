@@ -88,14 +88,13 @@ WebDoc.PageEditor = $.klass({
   load: function(documentId) {
     ddd("load document " + documentId);
     WebDoc.application.collaborationManager.setDocumentId(documentId);              
-    MTools.ServerManager.getObjects("/documents/" + documentId, WebDoc.Document, function(data)
+    MTools.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
     {
-      var editor = WebDoc.application.pageEditor;
-      editor.currentDocument = data[0];
-      editor.currentDocument.addListener(editor);
-      WebDoc.application.pageBrowserController.setDocument(editor.currentDocument);
-      editor.loadPageId(window.location.hash.replace("#", ""));
-    });
+      this.currentDocument = data[0];
+      this.currentDocument.addListener(this);
+      WebDoc.application.pageBrowserController.setDocument(this.currentDocument);
+      this.loadPageId(window.location.hash.replace("#", ""));
+    }.pBind(this));
   },
 
   loadPageId: function(pageId) {

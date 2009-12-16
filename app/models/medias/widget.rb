@@ -21,12 +21,22 @@ protected
         unless index_url.match(/http:\/\/.*/)
           index_url = File.join(File.dirname(file.url), config_dom.root.elements['content'].attribute("src").to_s)
         end
+        inspector_url = nil
+        if (config_dom.root.elements['inspector'])
+          inspector_url = config_dom.root.elements['inspector'].attribute('src').to_s
+          unless inspector_url.match(/http:\/\/.*/)
+            inspector_url = File.join(File.dirname(file.url), config_dom.root.elements['inspector'].attribute("src").to_s)
+          end
+        end
         self.properties = {}        
         self.properties[:content] = config_dom.root.elements['content'].attribute("src").to_s
         self.properties[:width] = config_dom.root.attribute("width").to_s
         self.properties[:height] = config_dom.root.attribute("height").to_s      
         self.properties[:index_url] = index_url
         self.properties[:icon_url] = File.join(File.dirname(file.url), "icon.png")
+        if (inspector_url)
+          self.properties[:inspector_url] = inspector_url
+        end
 
       }
   end

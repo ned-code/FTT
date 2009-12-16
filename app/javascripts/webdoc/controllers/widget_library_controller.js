@@ -12,14 +12,14 @@ WebDoc.WidgetLibraryController = $.klass({
   
   loadWidgets: function() {
     this.domNode.find("ul").empty();
-    MTools.ServerManager.getObjects("/medias?type=Medias::Widget", WebDoc.Widget, function(data)
+    MTools.ServerManager.getRecords(WebDoc.Widget, null, function(data)
         {
           this.widgets = {};
           for (var i = 0; i < data.length; i++) {
             this.widgets[data[i].uuid()] = data[i];
           }  
           this.refreshWidgetList();
-        }.pBind(this), this);
+        }.pBind(this));
   },
   
   refreshWidgetList: function() {    

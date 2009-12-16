@@ -11,6 +11,15 @@ class MediasController < ApplicationController
     end
   end
   
+  def show
+    @media = Media.find(params[:id]) 
+    
+    respond_to do |format|
+      format.html { redirect_to @media.file.url }
+      format.json { render :json => @media }
+    end    
+  end
+  
   # GET /medias/new
   def new
   end

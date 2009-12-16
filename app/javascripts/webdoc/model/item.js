@@ -15,14 +15,6 @@ WebDoc.Item = $.klass(MTools.Record,
     }
   },
   
-  className: function() {
-    return "item";
-  },
-  
-  rootUrl: function() {
-    return "/documents/" + WebDoc.application.pageEditor.currentDocument.uuid() + "/pages/" + this.data.page_id;
-  },
-  
   refresh: function($super, json) {
     var refreshInnerHtml = false;
     if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
@@ -186,5 +178,22 @@ WebDoc.Item = $.klass(MTools.Record,
     newItem.data.data = $.evalJSON($.toJSON(this.data.data));
     newItem.data.media_type = this.data.media_type;
     return newItem;
-  }  
+  },
+  
+  rootUrlArgs: function() {
+    return { 
+      document_id: WebDoc.application.pageEditor.currentDocument.uuid(),
+      page_id: this.data.page_id 
+      };  
+  }
+});
+
+$.extend(WebDoc.Item, {
+  className: function() {
+    return "item";
+  },
+  
+  rootUrl: function(args) {
+    return "/documents/" + args.document_id + "/pages/" + args.page_id;
+  }
 });

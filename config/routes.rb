@@ -24,4 +24,8 @@ ActionController::Routing::Routes.draw do |map|
   
   # dev controller
   map.resources :medias
+  map.connect 'images.:format', :controller => 'medias', :action => :index, :type => 'Medias::Image'
+  map.connect 'images/:id.:format', :controller => 'medias', :action => :show, :type => 'Medias::Image'
+  map.connect 'widgets.:format', :controller => 'medias', :action => :index, :type => 'Medias::Widget'
+  map.connect 'widgets/:id.:format', :controller => 'medias', :action => :show, :type => 'Medias::Widget'  
 end
