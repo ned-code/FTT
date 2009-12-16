@@ -13,7 +13,8 @@ WebDoc.InspectorController = $.klass({
     var emptyPalette = $("#palette_empty").hide();
     var textPalette = $("#palette_text").hide();
     var penPelette = $("#palette_pen").hide();
-    this.palettes = [emptyPalette, textPalette, penPelette];
+    var widgetPalette = $("#palette_widget");
+    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette];
     this.updatePalette(0);
     this.subInspectors = [];
     var pageInspectorController = new WebDoc.PageInspectorController();
@@ -26,7 +27,7 @@ WebDoc.InspectorController = $.klass({
     var pageInspector = $("#page_inspector");
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
-    var htmlInspector = $("#html_inspector");
+    var htmlInspector = $("#html_inspector"); 
     this.inspectors = [pageInspector[0], paletteInspector[0], propertiesInspector[0], htmlInspector[0]];
     this.lastInspectorId = 1;
     this.selectInspector(0);
@@ -57,13 +58,22 @@ WebDoc.InspectorController = $.klass({
   },
   
   updatePalette: function(paletteId) {
-    if (this.currentPaletteId !== undefined) {
-      ddd("hide palette", this.currentPaletteId);
-      this.palettes[this.currentPaletteId].hide();
+    if (paletteId != this.currentPaletteId) {
+      if (this.currentPaletteId !== undefined) {
+        ddd("hide palette", this.currentPaletteId);
+        this.palettes[this.currentPaletteId].hide();
+      }
+      ddd("show palette", paletteId, this.palettes[paletteId]);
+      if (typeof paletteId == 'string') {
+        this.palettes[3].attr("src", paletteId);
+        this.palettes[3].show();
+        this.currentPaletteId = 3;
+      }
+      else {
+        this.palettes[paletteId].show();
+        this.currentPaletteId = paletteId;        
+      }
     }
-    ddd("show palette", paletteId, this.palettes[paletteId]);
-    this.palettes[paletteId].show();
-    this.currentPaletteId = paletteId;
   },
   
   selectionChanged: function() {

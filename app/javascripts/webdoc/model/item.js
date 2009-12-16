@@ -17,6 +17,7 @@ WebDoc.Item = $.klass(MTools.Record,
   
   refresh: function($super, json) {
     var refreshInnerHtml = false;
+    this.widget = null;
     if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
       refreshInnerHtml = true;
     }
@@ -25,8 +26,15 @@ WebDoc.Item = $.klass(MTools.Record,
       this.fireDomNodeChanged();
     }
     if (this.type() == WebDoc.ITEM_TYPE_WIDGET) {
+      if (this.data.media_id != null) {
+        MTools.ServerManager.getRecords(WebDoc.Widget, this.data.media_id, function(data) {
+          if (data.length > 0) {
+            this.widget = data[0];
+          }
+        }.pBind(this));
+      }
       this.fireWidgetChanged();
-    }
+    }    
   },
   
   fireWidgetChanged: function() {
@@ -139,6 +147,20 @@ WebDoc.Item = $.klass(MTools.Record,
     }    
   },
   
+  copy: function($super) {
+    newItem = $super();
+    newItem.data.data = $.evalJSON($.toJSON(this.data.data));
+    newItem.data.media_type = this.data.media_type;
+    return newItem;
+  },
+  
+  rootUrlArgs: function() {
+    return { 
+      document_id: WebDoc.application.pageEditor.currentDocument.uuid(),
+      page_id: this.data.page_id 
+      };  
+  },
+  
   /*
    * uniboard API for widget
    */
@@ -171,20 +193,6 @@ WebDoc.Item = $.klass(MTools.Record,
   
   setPenColor: function(color) {
     WebDoc.application.drawingTool.penColor = color;   
-  },
-  
-  copy: function($super) {
-    newItem = $super();
-    newItem.data.data = $.evalJSON($.toJSON(this.data.data));
-    newItem.data.media_type = this.data.media_type;
-    return newItem;
-  },
-  
-  rootUrlArgs: function() {
-    return { 
-      document_id: WebDoc.application.pageEditor.currentDocument.uuid(),
-      page_id: this.data.page_id 
-      };  
   }
 });
 

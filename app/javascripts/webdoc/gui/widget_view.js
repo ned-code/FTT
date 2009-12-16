@@ -5,14 +5,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
   createDomNode: function($super) {
     var widgetNode = $super();
-    /* 
-     setTimeout(function(){
-     ddd(widgetNode.get(0).contentDocument.body);
-     widgetNode.get(0).contentDocument.body.addEventListener("mousedown", WebDoc.application.boardController.mouseDown.pBind(WebDoc.application.boardController), true);
-     widgetNode.get(0).contentDocument.body.addEventListener("mousemove", WebDoc.application.boardController.mouseMove.pBind(WebDoc.application.boardController), true);
-     widgetNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
-     }, 2000);
-     */
+
     if (this.item.data.data.tag == "iframe" && !WebDoc.application.pageEditor.disableHtml) {
       var wait = $("<div/>").attr("id", "wait_" + this.item.uuid()).css(this.item.data.data.css).addClass("load_item").css("textAlign", "center");
       var imageTop = (parseFloat(this.item.data.data.css.height) / 2) - 16;
@@ -47,15 +40,22 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     widgetNode.bind('load', function() {
       ddd("widget loaded");
       this.initWidget();
-    }
-.pBind(this));
+    }.pBind(this));
     
     widgetNode.bind('resize', function() {
       ddd("widget resize");
-    }
-.pBind(this));
-    
+    }.pBind(this));    
     return widgetNode;
+  },
+  
+  inspectorId: function() {
+    if (this.item.widget != null) {
+      ddd("check if widget has an inspector url", this.item);
+      if (this.item.widget.data.properties.inspector_url != null) {
+        return this.item.widget.data.properties.inspector_url;
+      }
+    }
+    return 0;
   },
   
   innerHtmlChanged: function($super) {
@@ -71,13 +71,15 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   },
   
   edit: function($super) {
-    $super();
-    WebDoc.application.boardController.unselectItemViews([this]);
-    WebDoc.application.boardController.editingItem = this;
-    this.domNode.addClass("item_edited");
-    this.domNode.css({
-      zIndex: "1000005"
-    });
+    if (this.item.data.media_id != null) {
+      $super();
+      WebDoc.application.boardController.unselectItemViews([this]);
+      WebDoc.application.boardController.editingItem = this;
+      this.domNode.addClass("item_edited");
+      this.domNode.css({
+        zIndex: "1000005"
+      });
+    }
   },
   
   stopEditing: function() {
