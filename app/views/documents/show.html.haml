@@ -224,6 +224,7 @@
   $(function()
   {
     WebDoc.authToken = "#{protect_against_forgery? ? form_authenticity_token : ''}";
+    WebDoc.userToken = "#{current_user().single_access_token}";
     $.ajaxSetup({data:{authenticity_token : WebDoc.authToken}});
     $("body").css("overflow", "hidden");
     var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
