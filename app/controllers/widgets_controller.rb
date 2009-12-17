@@ -23,7 +23,7 @@ class WidgetsController < ApplicationController
   
   # POST /widgets
   def create
-    @widget = Medias::Widget.build(params[:widget])
+    @widget = Medias::Widget.new(params[:widget])
     
     if @widget.save
       render :json => @widget
