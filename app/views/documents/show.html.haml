@@ -223,8 +223,8 @@
 :javascript
   $(function()
   {
-    var AUTH_TOKEN = "#{protect_against_forgery? ? form_authenticity_token : ''}";
-    $.ajaxSetup({data:{authenticity_token : AUTH_TOKEN}});
+    WebDoc.authToken = "#{protect_against_forgery? ? form_authenticity_token : ''}";
+    $.ajaxSetup({data:{authenticity_token : WebDoc.authToken}});
     $("body").css("overflow", "hidden");
     var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
     editor.load("#{@document.uuid}");
