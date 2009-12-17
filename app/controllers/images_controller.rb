@@ -1,5 +1,6 @@
 class ImagesController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required, :except => :create
+  before_filter :login_from_token, :only => :create
   
   # GET /images
   def index
@@ -39,5 +40,12 @@ class ImagesController < ApplicationController
     
     head :ok
   end
-  
+
+private
+
+  def login_from_token
+    user = User.find_by_single_access_token(params[:token])
+    login(user)
+  end
+
 end

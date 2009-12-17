@@ -11,6 +11,4 @@ User.find_by_email("yann.ringgenberg@mnemis.com").has_role!("admin")
 User.find_by_email("stelio.tzonis@mnemis.com").has_role!("admin")
 User.find_by_email("david.matthey@mnemis.com").has_role!("admin")
 
-unless User.find_by_name("All")
-  User.create({:password => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd', :password_confirmation => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd', :name => "All", :email => "All@mnemis.com"})
-end
+User.create({:password => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd', :password_confirmation => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd', :name => "All", :email => "All@mnemis.com"})
