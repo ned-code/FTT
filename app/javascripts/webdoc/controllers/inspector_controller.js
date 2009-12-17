@@ -5,15 +5,27 @@
 //= require <webdoc/controllers/inspectors/page_inspector_controller>
 //= require <webdoc/controllers/inspectors/properties_inspector_controller>
 //= require <webdoc/controllers/inspectors/inner_html_controller>
- 
+//= require <webdoc/sdk/widget_api>
+
 WebDoc.InspectorController = $.klass({
   initialize: function() {
     this.visible = true;
+    this.widgetInspectorApi = new WebDoc.WidgetApi(null, true);
     this.domNode = $("#item_inspector");
     var emptyPalette = $("#palette_empty").hide();
     var textPalette = $("#palette_text").hide();
     var penPelette = $("#palette_pen").hide();
     var widgetPalette = $("#palette_widget");
+    widgetPalette.bind("load", function() {
+    ddd("must inject uniboard api in inspector");
+    if (widgetPalette[0].contentWindow) {
+      ddd("inject uniboard api in inspector");
+      widgetPalette[0].contentWindow.uniboard = this.widgetInspectorApi;
+      if (widgetPalette[0].contentWindow.initialize) {
+        widgetPalette[0].contentWindow.initialize();
+      }
+    }                      
+  }.pBind(this));
     this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette];
     this.updatePalette(0);
     this.subInspectors = [];
@@ -65,7 +77,8 @@ WebDoc.InspectorController = $.klass({
       }
       ddd("show palette", paletteId, this.palettes[paletteId]);
       if (typeof paletteId == 'string') {
-        this.palettes[3].attr("src", paletteId);
+        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection[0].item);        
+        this.palettes[3].attr("src", paletteId);        
         this.palettes[3].show();
         this.currentPaletteId = 3;
       }
@@ -101,7 +114,15 @@ WebDoc.InspectorController = $.klass({
         subInspetor.refresh();
       }
     }
-  } 
+  },
+  
+  refreshWidgetPalette: function() {    
+    if (this.palettes[3].contentWindow) {
+      if (this.palettes[3].contentWindow.initialize) {
+        this.palettes[3].contentWindow.initialize();
+      }
+    }    
+  }  
 });
 
 $.extend(WebDoc.InspectorController, {});
