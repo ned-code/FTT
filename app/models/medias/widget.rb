@@ -1,9 +1,18 @@
+# == Schema Information
+#
+# Table name: medias
+#
+#  uuid       :string(36)      primary key
+#  type       :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#  properties :text(65537)
+#  user_id    :integer
+#  file       :string(255)
+#
+
 class Medias::Widget < Media
-  has_attached_file :file
-  
-#  :s3_credentials => "#{RAILS_ROOT}/config/s3.yml",
-#  :path => "/widgets/:id/:style.:content_type_extension", # change also in send_zip_file callback
-#  :bucket => "uniboard-test2"
+  mount_uploader :file, FileUploader
   
   #after_post_process :keep_zip_file_for_write
   after_save :send_zip_file
@@ -14,7 +23,7 @@ protected
   
   # before_save
   def parse_config
-      Zip::ZipFile.open(file.queued_for_write[:original].path) { |zip_file|
+      Zip::ZipFile.open(file.path) { |zip_file|
         entry = zip_file.find_entry("config.xml")
         config_dom = REXML::Document.new(entry.get_input_stream)
         index_url = config_dom.root.elements['content'].attribute("src").to_s

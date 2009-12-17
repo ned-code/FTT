@@ -12,6 +12,7 @@ coverage
 public/documents
 public/system
 public/sync
+public/uploads
 spec/fixtures/files/ubz/
 spec/output_document
 spec/tmp

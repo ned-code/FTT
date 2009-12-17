@@ -2,48 +2,48 @@
 #
 # Table name: medias
 #
-#  uuid              :string(36)      primary key
-#  type              :string(255)
-#  file_file_name    :string(255)
-#  file_content_type :string(255)
-#  file_file_size    :integer
-#  file_updated_at   :datetime
-#  created_at        :datetime
-#  updated_at        :datetime
-#  properties        :text
+#  uuid       :string(36)      primary key
+#  type       :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#  properties :text(65537)
+#  user_id    :integer
+#  file       :string(255)
 #
 
 class Media < ActiveRecord::Base
   has_uuid
   serialize :properties
   
+  attr_accessible :file, :properties
+  
   # no more used
   UB_THUMBNAIL_DESKTOP_TYPE = 'application/vnd.mnemis-uniboard-thumbnail'
   UB_PAGE_TYPE = 'application/vnd.mnemis-uniboard-page'
   UB_DRAWING_TYPE = 'application/vnd.mnemis-uniboard-drawing'
   UB_DOCUMENT_TYPE = 'application/vnd.mnemis-uniboard-document'
-# 
-#   # ================
-#   # = Associations =
-#   # ================
-# 
-#   has_many :items
-#   
-#   # ===============
-#   # = Validations =
-#   # ===============
-# 
-#   validates_presence_of :path
-# 
-#   # =============
-#   # = Callbacks =
-#   # =============
-# 
-#   before_validation :set_storage_config
-#   before_save :save_data_on_storage
-#   before_destroy :delete_data_on_storage
-# 
-
+  
+  # ================
+  # = Associations =
+  # ================
+  
+  # has_many :items
+  belongs_to :user
+  
+  # ===============
+  # = Validations =
+  # ===============
+  
+  # validates_presence_of :path
+  
+  # =============
+  # = Callbacks =
+  # =============
+  
+  # before_validation :set_storage_config
+  # before_save :save_data_on_storage
+  # before_destroy :delete_data_on_storage
+  
   # =================
   # = Class Methods =
   # =================
@@ -52,9 +52,15 @@ class Media < ActiveRecord::Base
     params[:type] ? find_all_by_type(params[:type]) : all
   end
 
-#   # ====================
-#   # = Instance Methods =
-#   # ====================
+  # ====================
+  # = Instance Methods =
+  # ====================
+  
+  # overwrite to_json options
+  def to_json(options = {})
+    ActiveSupport::JSON.encode(as_json(options.merge(:except => :file)))
+  end
+
 # 
 #   def data
 #     storage.get(path)
@@ -157,3 +163,4 @@ class Media < ActiveRecord::Base
 #     Storage::storage(storage_config)
 #   end
 end
+

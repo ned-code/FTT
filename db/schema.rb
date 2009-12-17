@@ -9,11 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091214185745) do
+ActiveRecord::Schema.define(:version => 20091217100542) do
 
   create_table "datastore_entries", :force => true do |t|
-    t.string   "ds_key",                          :null => false
-    t.text     "ds_value",    :limit => 16777215, :null => false
+    t.string   "ds_key",                       :null => false
+    t.text     "ds_value",    :limit => 65537, :null => false
     t.string   "widget_uuid", :limit => 36
     t.string   "user_id",     :limit => 36
     t.datetime "created_at"
@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(:version => 20091214185745) do
   end
 
   create_table "datastores", :force => true do |t|
-    t.string   "ds_key",                          :null => false
-    t.text     "ds_value",    :limit => 16777215, :null => false
+    t.string   "ds_key",                       :null => false
+    t.text     "ds_value",    :limit => 65537, :null => false
     t.string   "widget_uuid", :limit => 36
     t.string   "user_id",     :limit => 36
     t.datetime "created_at"
@@ -39,10 +39,10 @@ ActiveRecord::Schema.define(:version => 20091214185745) do
 
   create_table "items", :id => false, :force => true do |t|
     t.string   "uuid",       :limit => 36
-    t.string   "page_id",    :limit => 36,       :null => false
+    t.string   "page_id",    :limit => 36,    :null => false
     t.string   "media_id",   :limit => 36
     t.string   "media_type"
-    t.text     "data",       :limit => 16777215
+    t.text     "data",       :limit => 65537
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -50,24 +50,24 @@ ActiveRecord::Schema.define(:version => 20091214185745) do
   add_index "items", ["page_id"], :name => "index_items_on_page_id"
 
   create_table "medias", :id => false, :force => true do |t|
-    t.string   "uuid",              :limit => 36
+    t.string   "uuid",       :limit => 36
     t.string   "type"
-    t.string   "file_file_name"
-    t.string   "file_content_type"
-    t.integer  "file_file_size"
-    t.datetime "file_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "properties",        :limit => 16777215
+    t.text     "properties", :limit => 65537
+    t.integer  "user_id"
+    t.string   "file"
   end
+
+  add_index "medias", ["user_id"], :name => "index_medias_on_user_id"
 
   create_table "pages", :id => false, :force => true do |t|
     t.string   "uuid",         :limit => 36
-    t.string   "document_id",  :limit => 36,                      :null => false
+    t.string   "document_id",  :limit => 36,                   :null => false
     t.string   "thumbnail_id", :limit => 36
-    t.integer  "position",                                        :null => false
-    t.integer  "version",                          :default => 1, :null => false
-    t.text     "data",         :limit => 16777215
+    t.integer  "position",                                     :null => false
+    t.integer  "version",                       :default => 1, :null => false
+    t.text     "data",         :limit => 65537
     t.datetime "created_at"
     t.datetime "updated_at"
   end

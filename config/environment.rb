@@ -21,19 +21,19 @@ Rails::Initializer.run do |config|
   config.gem 'haml'
   config.gem 'sprockets'
   config.gem 'authlogic'
-  config.gem "semanticart-is_paranoid", :lib => 'is_paranoid', :source => "http://gems.github.com"
+  config.gem "is_paranoid"
   config.gem 'uuid'
-  
-  config.gem "aws-s3", :lib => "aws/s3"
-  config.gem "thoughtbot-paperclip", :lib => "paperclip", :source => "http://gems.github.com"
-  
-  config.gem 'right_aws' # no more used
   config.gem 'rubyzip', :lib => 'zip/zip'
   config.gem 'mime-types', :lib => 'mime/types'
   config.gem 'xml-object'
   config.gem 'hpricot'
   config.gem 'json'
   config.gem 'xmpp4r'
+  
+  config.gem 'carrierwave'
+  config.gem 'mini_magick'
+  config.gem 'right_aws'
+  config.gem 'will_paginate'
   
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named

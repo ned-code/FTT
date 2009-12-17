@@ -29,4 +29,10 @@ class User < ActiveRecord::Base
 
   validates_presence_of :name
   
+  # ================
+  # = Associations =
+  # ================
+  
+  has_many :images, :class_name => 'Medias::Image'
+  
 end
