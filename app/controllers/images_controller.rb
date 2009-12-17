@@ -13,7 +13,7 @@ class ImagesController < ApplicationController
   
   # /images/:id
   def show
-    @image = current_user.images.find(params[:id]) 
+    @image = current_user.images.find(params[:id])
     
     respond_to do |format|
       format.html { redirect_to @image.file.url }
@@ -24,6 +24,7 @@ class ImagesController < ApplicationController
   # POST /images
   def create
     @image = current_user.images.build(params[:image])
+    @image.uuid = params[:image][:uuid]
     
     if @image.save
       render :json => @image
