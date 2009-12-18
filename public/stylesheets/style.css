@@ -616,7 +616,7 @@ a:hover { color: #0069BF;}
 #right_bar{
     overflow:auto;
     float: right;
-    width: 300px;
+/*    width: 300px;*/
     background-color: #ebebeb;
 }
 #inspectors {
@@ -699,24 +699,6 @@ a:hover { color: #0069BF;}
   height:400px;
 }
 /* == Image and widget library = */
-#image_library_wrap {
-  overflow:auto;
-  width: 285px;
-  height: 50%; 
-  margin:10px 0;  
-  background-color:#ebebeb;
-}
-
-#image_library_wrap ul {
-  list-style-image:none;
-  list-style-position:outside;
-  list-style-type:none;
-}
-
-#image_library_wrap ul li{
-   float:left; 
-}
-
 .image_item {
   width:100px;
   height:70px;

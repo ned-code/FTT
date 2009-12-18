@@ -1,0 +1,83 @@
+-##libraries{ :style => "display: none" }
+  -##widget_library_wrap
+  -#  %ul          
+  -##image_library_wrap
+  -#  %ul
+#libraries{ :style => "display: none" }
+  #libraries_manager
+    .toolbar
+      %h1 Library
+    %ul.individual
+      %li
+        %a{ :href => '#images' } Images
+      %li
+        %a{ :href =>'#videos'} Videos
+      %li
+        %a{ :href =>'#apps'} Apps
+      %li
+        %a{ :href =>'#webdocs'} WebDocs
+      %li
+        %a{ :href =>'#files'} Files
+  #images
+    .toolbar
+      %h1 Images
+      %a.button.slideup{ :href =>'#add_images' } Add Images
+      %a.back{ :href =>'#' } Back
+    .tabs
+      %ul.tab_navigation
+        %li
+          %a.my_images{ :href => '' } My Images
+        %li
+          %a.web_images{ :href => '' } Web
+      .tab_content#my_images
+      .tab_content#web_images
+        %form
+          %div
+            %label{ :for => "web_images_search_field" } Search images on the web
+            %input#web_images_search_field{ :type => "text", :name => "web_images_search_field" }
+            %input#web_images_search_submit{ :type => "submit", :name => "web_images_search_submit", :value => "Search" }
+        #flickr_images.thumbnails
+          %h3 Flickr
+          %span.results_number 0
+        .spacer
+        #google_images.thumbnails
+          %h3 Google Images
+          %span.results_number 0
+        .spacer
+    %ul{ :style => "display:none" }
+      %li 
+        %a#show_image_details{ :href =>'#image_details' } Show Image Details
+  #videos
+    .toolbar
+      %h1 Videos
+      %a.back{ :href =>'#' } Back
+  #apps
+    .toolbar
+      %h1 Apps
+      %a.back{ :href =>'#' } Back
+  #webdocs
+    .toolbar
+      %h1 WebDocs
+      %a.back{ :href =>'#' } Back
+  #files
+    .toolbar
+      %h1 Files
+      %a.back{ :href =>'#' } Back
+  #add_images.edit
+    .toolbar
+      %h1 Add Images
+      %a.button.goback{ :href =>'#images' } Back
+    #swfupload_control
+      #upload_images_spinner{ :style => "display:none" }
+      %span.uploading_info
+      .flash_container
+        %input#upload_images_button{ :type => "button",:value => "Choose images" }
+      %input#cancel_images_upload{ :type => "button",:value => "Cancel upload", :style => "display:none" }
+  #image_details
+    .toolbar
+      %h1 Image
+      %a.back{ :href =>'#' } Back
+    %h4.image_title Title
+    .single_image
+      %a{ :href => "", :onclick => "window.open(this.getAttribute('href'), '_blank'); return false;" }
+        %img{ :src => "", :alt => "" }

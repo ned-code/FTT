@@ -11,6 +11,12 @@ WebDoc.RightBarController = $.klass({
   
   showLib: function() {
     ddd("show lib");
+    
+    if (!WebDoc.application.librariesController) { // lazily load the library
+      ddd('LOADIN THE LIB')
+      WebDoc.application.librariesController = new WebDoc.LibrariesController();
+    }
+    
     if (this.visible) {
       ddd("animate lib");
       this.showRightBar(function() {
@@ -35,7 +41,7 @@ WebDoc.RightBarController = $.klass({
     if (!this.visible) {
       this.visible = true;
       $("#right_bar").animate({
-        width: "300px"
+        width: "400px"
       }, function() {
         WebDoc.application.boardController.centerBoard();
         if (callBack) {
