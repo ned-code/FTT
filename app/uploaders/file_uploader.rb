@@ -7,7 +7,7 @@ class FileUploader < CarrierWave::Uploader::Base
   #     include CarrierWave::ImageScience
 
   # Choose what kind of storage to use for this uploader
-  # storage :file
+  storage :file
   # storage :s3
   # storage :right_s3
 
