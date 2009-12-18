@@ -38,11 +38,13 @@ $.extend(MTools.ServerManager, {
       dataType: "json",
       success: function(data) {
         var result = [];
-        if ($.isArray(data) && data.length > 0) {
-          for (var i = 0; i < data.length; i++) {
-            var record = new recordClass(data[i]);
-            MTools.ServerManager.cache.store(record)
-            result.push(record);
+        if ($.isArray(data)) {
+          if (data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+              var record = new recordClass(data[i]);
+              MTools.ServerManager.cache.store(record)
+              result.push(record);
+            }
           }
         }
         else {

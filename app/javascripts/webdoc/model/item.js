@@ -17,9 +17,13 @@ WebDoc.Item = $.klass(MTools.Record,
   
   refresh: function($super, json) {
     var refreshInnerHtml = false;
+    var refreshPreferences = false;
     this.widget = null;
     if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
       refreshInnerHtml = true;
+    }
+    if (this.data.data != null && this.data.data.preference != null && json.item.data.preference != null && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
+      refreshPreferences = true;
     }
     $super(json);
     if (refreshInnerHtml) {

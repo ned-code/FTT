@@ -1,8 +1,16 @@
 /**
  * @author julien
  */
+
+//= require <webdoc/sdk/widget_api>
+
 WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
+  initialize: function($super, item, pageView) {
+    $super(item, pageView);
+    this.api = new WebDoc.WidgetApi(item, false);  
+  },
+  
   createDomNode: function($super) {
     var widgetNode = $super();
 
@@ -102,7 +110,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   initWidget: function() {
     $("#wait_" + this.item.uuid()).remove();
     if (this.domNode.get(0).contentWindow) {
-      this.domNode.get(0).contentWindow.uniboard = this.item;
+      this.domNode.get(0).contentWindow.uniboard = this.api;
       if (this.domNode.get(0).contentWindow.initialize) {
         this.domNode.get(0).contentWindow.initialize();
       }
