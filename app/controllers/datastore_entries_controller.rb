@@ -42,7 +42,7 @@ class DatastoreEntriesController < ApplicationController
       render :text => 'Value is nil.' #print error
       return
     end
-    if(is_unique == 'true')
+    if(is_unique == 'true' || is_unique == true)
       is_unique = true
     else
       is_unique = false
