@@ -35,24 +35,55 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     }
   },
   loadMyImages: function(container) {
-    if (!container.data('loaded')) {
+    var thumbsWrap = container.find(".thumbnails");
+    var myImagesContainer = $("<ul>");
+    thumbsWrap.append(myImagesContainer);
+    
+    if (!thumbsWrap.data('loaded')) {
+      thumbsWrap.append($('<div class="loading">Loading</div>'));
       
+      MTools.ServerManager.getRecords(WebDoc.Image, null, function(data) {
+        this.images = {};
+        for (var i = 0; i < data.length; i++) {
+          var image = data[i];
+          this.images[image.uuid()] = image;
+          $("<img>").attr({
+            id: image.uuid(),
+            src : image.data.properties.thumb_url,
+            alt : ""
+          })
+          .appendTo(myImagesContainer)
+          .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
+        }
+        thumbsWrap.data('loaded', true);
+        thumbsWrap.find('.loading').remove();
+      }.pBind(this));
     }
   },
   loadWebImages: function() {
     // if (!container.data('loaded')) {
     // }
   },
-  prepareDetailsView: function($super, data) {
+  prepareDetailsView: function($super, type, data) { // type: my_image, flickr, google
     $super();
     // View title
-    this.detailsView.find('.toolbar h1').attr({'class':'flickr'});
+    this.detailsView.find('.toolbar h1').attr({'class':type});
     
     // Image title
     this.detailsView.find('.image_title').text(data.title);
     
     // Image link
-    this.detailsView.find('.single_image a').attr({"href":"http://www.flickr.com/photos/"+data.user_id+"/"+data.photo_id});
+    var imageLink = "";
+    switch (type) {
+      case "my_image":
+        break;
+      case "flickr":
+        imageLink = "http://www.flickr.com/photos/"+data.user_id+"/"+data.photo_id;
+        break;
+      case "google":
+        break;
+    }
+    this.detailsView.find('.single_image a').attr({"href":imageLink});
     
     // Image
     var imageContainer = this.detailsView.find('.single_image');

@@ -24,7 +24,8 @@ WebDoc.WebImagesSearch = $.klass({
 
     // Observe thumb clicks (with event delegation) for all current and future thumbnails
     $("#web_images .thumbnails ul li a").live("click", function (event) {
-      this.imagesLibrary.prepareDetailsView($(event.target).data('flickr_data'));
+      var thumbData = $(event.target).data("thumbData");
+      this.imagesLibrary.prepareDetailsView(thumbData.type, thumbData.webImageData);
       this.imagesLibrary.showDetailsView.click();
       event.preventDefault();
     }.pBind(this));
@@ -89,9 +90,13 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
         
         $.each(data.photos.photo, function(i,photo){
           var photoSourceUrl = "http://farm"+photo.farm+".static.flickr.com/"+photo.server+"/"+photo.id+"_"+photo.secret+".jpg";
-          $("<img>").attr("src", photoSourceUrl.replace('.jpg','_s.jpg'))
-          .attr("alt", "")
-          .data("flickr_data", { 'photo_id':photo.id, 'user_id':photo.owner, 'title':photo.title, 'source_url':photoSourceUrl })
+          $("<img>").attr({
+            "src" : photoSourceUrl.replace('.jpg','_s.jpg'), 
+            "alt" : "" })
+          .data("thumbData", {  
+            "type" : "flickr",
+            "webImageData" : { 'photo_id':photo.id, 'user_id':photo.owner, 'title':photo.title, 'source_url':photoSourceUrl }
+          })
           .appendTo(this.imagesContainer)
           .wrap("<li><a href=\"http://www.flickr.com/photos/"+photo.owner+"/"+photo.id+"\" title=\""+ photo.title +"\"></a></li>");
         }.pBind(this));

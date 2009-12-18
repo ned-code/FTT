@@ -52,7 +52,7 @@ WebDoc.Library = $.klass({
   didClickOnTab: function(tab) {
     //common code to be execute for all subclasses
   },
-  prepareDetailsView: function(data) {
+  prepareDetailsView: function(type, data) {
     //common code to be execute for all subclasses
   }
 });
