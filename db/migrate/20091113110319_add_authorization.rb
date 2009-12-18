@@ -22,7 +22,6 @@ class AddAuthorization < ActiveRecord::Migration
     if User.find_by_email("stelio.tzonis@mnemis.com")
       User.find_by_email("stelio.tzonis@mnemis.com").has_role!("admin")
     end    
-    User.create({:password => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd', :password_confirmation => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd', :name => "All", :email => "All@mnemis.com"})
   end
 
   def self.down

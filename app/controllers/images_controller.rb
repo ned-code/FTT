@@ -40,5 +40,5 @@ class ImagesController < ApplicationController
     
     head :ok
   end
-  
+
 end
