@@ -248,8 +248,23 @@ WebDoc.BoardController = $.klass({
     // exit edit mode for current editing item
     if (this.editingItem) {
       this.editingItem.stopEditing();
+      this.editingItem = null;
     }
-    this.editingItem = null;
+    
+    // do nothing if new selection is equal to old selection
+    if(itemViews.length == this.selection.length) {
+      var selectionIsEqual = true;
+      for (var i = 0; i < itemViews.length; i++) {
+        if (itemViews[i] != this.selection[i]) {
+          selectionIsEqual = false;
+          break;
+        }
+      }
+      if (selectionIsEqual) {
+        return;
+      }
+    }
+    
     //deselect un-needed items
     ddd("select item in view");
     $.each(this.selection, function(index, itemToDeselect) {

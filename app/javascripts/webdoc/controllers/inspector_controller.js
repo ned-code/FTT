@@ -116,10 +116,16 @@ WebDoc.InspectorController = $.klass({
     }
   },
   
-  refreshWidgetPalette: function() {    
-    if (this.palettes[3].contentWindow) {
-      if (this.palettes[3].contentWindow.initialize) {
-        this.palettes[3].contentWindow.initialize();
+  refreshWidgetPalette: function() {         
+    ddd("refresh widget palette"); 
+    if (this.palettes[3][0].contentWindow) {
+      ddd("widow found");
+      if (this.palettes[3][0].contentWindow.widget) {
+        this.palettes[3][0].contentWindow.widget._onPreferencesChange();
+      }
+      else if (this.palettes[3][0].contentWindow.initialize) {
+        ddd("call initialize");
+        this.palettes[3][0].contentWindow.initialize();
       }
     }    
   }  
