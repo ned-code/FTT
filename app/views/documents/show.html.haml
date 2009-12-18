@@ -1,4 +1,5 @@
 - document_title @document.title
+- session_key_name = ActionController::Base.session_options[:key]
 = render :partial => "layouts/main_editor_toolbar"
 #tb_2.tb
   %ul#pages_tools.left_tb_group
@@ -223,9 +224,12 @@
 :javascript
   $(function()
   {
-    WebDoc.authToken = "#{protect_against_forgery? ? form_authenticity_token : ''}";
-    WebDoc.userToken = "#{current_user().single_access_token}";
-    $.ajaxSetup({data:{authenticity_token : WebDoc.authToken}});
+    WebDoc.authData = {
+      authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
+      sessionKeyName:"#{session_key_name}",
+      cookiesSessionKeyName:"#{cookies[session_key_name]}"
+    };
+    $.ajaxSetup({data:{authenticity_token : WebDoc.authData.authToken}});
     $("body").css("overflow", "hidden");
     var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
     editor.load("#{@document.uuid}");
