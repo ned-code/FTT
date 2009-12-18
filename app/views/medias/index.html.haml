@@ -3,7 +3,7 @@
 %ul
   - @medias.each do |media|
     %li
-      = "#{media.file_file_name} (#{media.type}) - #{media.id}"
+      = "#{media.file} (#{media.type}) - #{media.id}"
       |
       = link_to 'delete', media_path(media), :confirm => I18n.t('alert.destroy_confirmation'), :method => :delete
 
