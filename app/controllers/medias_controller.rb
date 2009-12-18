@@ -26,8 +26,11 @@ class MediasController < ApplicationController
     
   # POST /medias
   def create
-    @media = eval(params[:type]).create!(:file => params[:file])
-    
+    @media = eval(params[:type]).new(:file => params[:file])
+    if (params[:type] == 'Medias::Image')
+      @media.user = current_user
+    end
+    @media.save
     redirect_to medias_path
   end
 
