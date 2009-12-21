@@ -41,16 +41,16 @@ $.extend(MTools.ServerManager, {
         if ($.isArray(data)) {
           if (data.length > 0) {
             for (var i = 0; i < data.length; i++) {
-              var record = new recordClass(data[i]);
-              MTools.ServerManager.cache.store(record)
-              result.push(record);
+              var currentRecord = new recordClass(data[i]);
+              MTools.ServerManager.cache.store(currentRecord);
+              result.push(currentRecord);
             }
           }
         }
         else {
           if (data) {
             var record = new recordClass(data);
-            MTools.ServerManager.cache.store(record)
+            MTools.ServerManager.cache.store(record);
             result.push(record);
           }
         }

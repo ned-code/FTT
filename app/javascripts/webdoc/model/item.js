@@ -77,19 +77,21 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   recomputeInternalSizeAndPosition: function() {
-    var t = this.data.data.css.top || "0px",
-        l = this.data.data.css.left || "0px",
-        w = this.data.data.css.width || "100px",
-        h = this.data.data.css.height || "100px";
-    this.position = {
-      top: parseFloat(t.replace("px", "")),
-      left: parseFloat(l.replace("px", ""))
-    };
-    this.size = {
-      width: parseFloat(w.replace("px", "")),
-      height: parseFloat(h.replace("px", ""))
-    };
-    WebDoc.application.inspectorController.refreshSubInspectors();    
+    try {
+      var t = this.data.data.css.top || "0px", l = this.data.data.css.left || "0px", w = this.data.data.css.width || "100px", h = this.data.data.css.height || "100px";
+      this.position = {
+        top: parseFloat(t.replace("px", "")),
+        left: parseFloat(l.replace("px", ""))
+      };
+      this.size = {
+        width: parseFloat(w.replace("px", "")),
+        height: parseFloat(h.replace("px", ""))
+      };
+      WebDoc.application.inspectorController.refreshSubInspectors();
+    }
+    catch (e) {
+      ddd("error while loading item", this);
+    }    
   },
   
   moveTo: function(newPosition) {
