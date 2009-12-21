@@ -3,6 +3,7 @@ class ImagesController < ApplicationController
   
   # GET /images
   def index
+    sleep 5 #TODO REMOVE THIS
     @images = current_user.images.paginate(:page => params[:page], :per_page => 20)
     
     respond_to do |format|
@@ -23,6 +24,7 @@ class ImagesController < ApplicationController
   
   # POST /images
   def create
+    sleep 5 #TODO REMOVE THIS
     @image = current_user.images.build(params[:image])
     @image.uuid = params[:image][:uuid]
     

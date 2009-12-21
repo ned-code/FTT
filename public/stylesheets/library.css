@@ -469,5 +469,5 @@ div.tabs > div {
 #upload_images_spinner {
   width:66px;
   height:66px;
-  background:transparent url('../images/upload_spinner.gif') no-repeat;
+  background:transparent url('../images/libraries/upload_spinner.gif') no-repeat;
 }

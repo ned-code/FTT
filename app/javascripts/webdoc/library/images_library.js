@@ -106,6 +106,38 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       }.pBind(this), { ajaxParams: { page:this.myImagesPage }});
     }
   },
+  refreshMyImages: function(newImages) {
+    //if we are in first page, don't reload the whole thing, just add the newly uploaded images to the top of the list 
+    var myImagesList = this.myImagesContainer.find('.thumbnails ul');
+    if (this.myImagesPage === 1 && myImagesList.length > 0) {
+       //TODO create images items from newImages and the run the folowing loop:
+       // $.each(newImages, function(i,image){
+       //    this.images[image.uuid()] = image;
+       //    $("<img>").attr({
+       //      id: image.uuid(),
+       //      src : image.data.properties.thumb_url,
+       //      alt : ""
+       //    })
+       //    .prependTo(myImagesList)
+       //    .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
+       //  }.pBind(this));
+       $.each(newImages, function(i,image){
+          // this.images[image.uuid()] = image;
+          $("<img>").attr({
+            id: image.uuid,
+            src : image.properties.thumb_url,
+            alt : ""
+          })
+          .prependTo(myImagesList)
+          .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
+        }.pBind(this));
+    }
+    else { // If not, load the 1st page
+      this.myImagesContainer.find(".thumbnails").data('loaded', false);
+      this.myImagesPage = 1;
+      this.loadMyImages(0);
+    }
+  },
   loadWebImages: function() {
   },
   prepareDetailsView: function($super, type, data) { // type: my_image, flickr, google

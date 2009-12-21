@@ -6,7 +6,9 @@ WebDoc.ImagesUploader = $.klass({
   initialize: function(uploadControlId, imagesLibrary) {
     this.uploadControl = $('#'+uploadControlId);
     
-    // this.closeUploadViewButton = $("#add_images .goback"); //remove this when I'll implement background uploading
+    // Set callback to the ImageLibrary
+    this.imagesLibrary = imagesLibrary;
+    
     this.spinner = $("#upload_images_spinner");
     this.logInfo = this.uploadControl.find(".uploading_info");
     this.cancelButton = $("#cancel_images_upload").click(function(event){
@@ -15,9 +17,10 @@ WebDoc.ImagesUploader = $.klass({
     }.pBind(this));
     
     this.isUploading = false;
-    this.uploadButtonBackground = $("#upload_images_button_background");
     this.swfuploadContainer = $("#swfupload_container");
-    
+    this.uploadButtonBackground = $("#upload_images_button_background");
+    this.addImagesButton = $("#add_images_button");
+
     // Setting up SWFUpload (but at this point it'll be still "hidden", and it'll get loaded once I'll make it visible)
     this.uploadControl.swfupload({
       upload_url: "/images",
@@ -87,7 +90,8 @@ WebDoc.ImagesUploader = $.klass({
       ddd("Upload success: "+file.name);
       this.successfulUploads += 1;
       
-      ddd(serverData); //json
+      this.imagesLibrary.refreshMyImages([$.evalJSON(serverData).image]);
+      // ddd(serverData); //json string, ex: serverData = '{"image":{"created_at":"2009-12-21T15:53:34Z","uuid":"C42191E9-57C0-0001-E0F9-2A921B2FD820","updated_at":"2009-12-21T15:53:34Z","user_id":4,"properties":{"url":"/uploads/medias/image/file/C42191E9-57C0-0001-E0F9-2A921B2FD820/luca.jpg","thumb_url":"/uploads/medias/image/file/C42191E9-57C0-0001-E0F9-2A921B2FD820/thumb_luca.jpg"}}}'
       
     }.pBind(this))
     
@@ -120,6 +124,7 @@ WebDoc.ImagesUploader = $.klass({
   loadSWFUpload: function() {
     if (!this.isUploading) {
       this.swfuploadContainer.show();
+      this.uploadButtonFlash.css({'visibility':'visible'}); //in case the Add Images view was closed during upload
     }
   },
   unloadSWFUpload: function() {
@@ -145,13 +150,16 @@ WebDoc.ImagesUploader = $.klass({
     this.uploadButtonFlash.css({'visibility':'hidden'}); // do NOT use hide(), or swfupload won't work
     this.uploadButtonBackground.hide();
     this.cancelButton.show();
-    // this.closeUploadViewButton.fadeOut();
+    this.addImagesButton.addClass("uploading");
+    this.addImagesButton.data("originalText", this.addImagesButton.text());
+    this.addImagesButton.text("Uploading...");
   },
   resetUploadingUI: function() {
     this.spinner.hide();
-    this.uploadButtonFlash.css({'visibility':'visible'});
+    if ($("#add_images").is(":visible")) this.uploadButtonFlash.css({'visibility':'visible'});
     this.uploadButtonBackground.show();
     this.cancelButton.hide();
-    // this.closeUploadViewButton.fadeIn();
+    this.addImagesButton.removeClass("uploading");
+    this.addImagesButton.text(this.addImagesButton.data("originalText"));
   }
 });

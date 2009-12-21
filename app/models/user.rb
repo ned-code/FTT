@@ -33,6 +33,6 @@ class User < ActiveRecord::Base
   # = Associations =
   # ================
   
-  has_many :images, :class_name => 'Medias::Image'
+  has_many :images, :class_name => 'Medias::Image', :order => 'created_at DESC'
   
 end
