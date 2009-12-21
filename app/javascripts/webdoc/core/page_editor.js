@@ -98,6 +98,9 @@ WebDoc.PageEditor = $.klass({
   },
 
   loadPageId: function(pageId) {
+    if (!pageId) {
+      pageId = "1";
+    }
     var editor = WebDoc.application.pageEditor;
     ddd("load page id " + pageId);
     var pageToLoad = editor.currentDocument.findPageWithUuidOrPosition(pageId);
