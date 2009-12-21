@@ -1,14 +1,3 @@
-# == Schema Information
-#
-# Table name: documents
-#
-#  uuid       :string(36)      primary key
-#  title      :string(255)
-#  deleted_at :datetime
-#  created_at :datetime
-#  updated_at :datetime
-#
-
 require 'spec_helper'
 
 describe Document do
@@ -17,3 +6,15 @@ describe Document do
   should_have_many :pages, :order => 'position ASC', :dependent => :destroy
     
 end
+
+# == Schema Information
+#
+# Table name: documents
+#
+#  uuid       :string(36)
+#  title      :string(255)
+#  deleted_at :datetime
+#  created_at :datetime
+#  updated_at :datetime
+#
+

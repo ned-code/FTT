@@ -12,6 +12,7 @@
 #
 
 class DatastoreEntry < ActiveRecord::Base  
+  
   # ================
   # = Associations =
   # ================
@@ -21,7 +22,7 @@ class DatastoreEntry < ActiveRecord::Base
   # ===============
   # = Validations =
   # ===============
-
+  
   # =================
   # = Class Methods =
   # =================
@@ -29,5 +30,5 @@ class DatastoreEntry < ActiveRecord::Base
   # ====================
   # = Instance Methods =
   # ====================
+  
 end
-

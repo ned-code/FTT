@@ -12,7 +12,7 @@ class MediasController < ApplicationController
   end
   
   def show
-    @media = Media.find(params[:id]) 
+    @media = Media.find_by_uuid(params[:id])
     
     respond_to do |format|
       format.html { redirect_to @media.file.url }
@@ -27,6 +27,7 @@ class MediasController < ApplicationController
   # POST /medias
   def create
     @media = eval(params[:type]).new(:file => params[:file])
+    
     if (params[:type] == 'Medias::Image')
       @media.user = current_user
     end
@@ -36,7 +37,7 @@ class MediasController < ApplicationController
 
   # DELETE /medias/:id
   def destroy
-    @media = Media.find(params[:id])
+    @media = Media.find_by_uuid(params[:id])
     @media.destroy
     
     redirect_to medias_path
