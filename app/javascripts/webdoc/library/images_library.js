@@ -9,14 +9,28 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   initialize: function($super, libraryId) {
     $super(libraryId);
     
-    // slide animation finished
+    // view transition finished (slide in/out)
     this.element.bind('pageAnimationEnd', function(event, info){
-      var currentTabContainer = this.element.find('div.selected');
-      if (currentTabContainer[0] == this.tabContainers[0]) {
-        this.loadMyImages(0);
+      var currentView = $("#libraries").find("> .view:visible");
+      if (currentView.attr("id") === this.element.attr("id")) { // Images view did appear
+        var currentTabContainer = this.element.find('div.selected');
+        if (currentTabContainer[0] == this.tabContainers[0]) {
+          this.loadMyImages(0);
+        }
+        else {
+          this.loadWebImages();
+        }
       }
-      else {
-        this.loadWebImages();
+      else if (currentView.attr("id") === "add_images") { // Add Images view did appear
+        this.imagesUploader.loadSWFUpload();
+      }
+    }.pBind(this));
+
+    // view transition starts (slide in/out)
+    this.element.bind('pageAnimationStart', function(event, info){
+      var currentView = $("#libraries").find("> .view:visible");
+      if (currentView.attr("id") === "add_images") { // Add Images view will disappear
+        this.imagesUploader.unloadSWFUpload();
       }
     }.pBind(this));
     
@@ -25,7 +39,8 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     // Setup web images
     this.webImagesSearch = new WebDoc.WebImagesSearch('web_images_search_field', this);
     // Setup images uploader
-    this.imagesUploader = new WebDoc.ImagesUploader('swfupload_control', this);
+    this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
+
   },
   setupMyImages: function() {
     this.myImagesPage = 1;
@@ -61,32 +76,37 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     if (pageIncrement !== 0 || !thumbsWrap.data('loaded')) { //load only if we are paginating, or if the images have never been loaded before
       thumbsWrap.html('');
       
-      var myImagesList = $("<ul>");
-      thumbsWrap.append(myImagesList);
-      
       this.showSpinner(thumbsWrap);
       
       MTools.ServerManager.getRecords(WebDoc.Image, null, function(data) {
         this.images = {};
-        for (var i = 0; i < data.length; i++) {
-          var image = data[i];
-          this.images[image.uuid()] = image;
-          $("<img>").attr({
-            id: image.uuid(),
-            src : image.data.properties.thumb_url,
-            alt : ""
-          })
-          .appendTo(myImagesList)
-          .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
+        
+        if (data.length === 0) {
+          var noImages = $("<span>").text('No Images');
+          thumbsWrap.append(noImages);
         }
+        else {
+          var myImagesList = $("<ul>");
+          thumbsWrap.append(myImagesList);
+          
+          $.each(data, function(i,image){
+            this.images[image.uuid()] = image;
+            $("<img>").attr({
+              id: image.uuid(),
+              src : image.data.properties.thumb_url,
+              alt : ""
+            })
+            .appendTo(myImagesList)
+            .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
+          }.pBind(this));
+        }
+        
         thumbsWrap.data('loaded', true);
         this.hideSpinner(thumbsWrap);
       }.pBind(this), { ajaxParams: { page:this.myImagesPage }});
     }
   },
   loadWebImages: function() {
-    // if (!container.data('loaded')) {
-    // }
   },
   prepareDetailsView: function($super, type, data) { // type: my_image, flickr, google
     $super();

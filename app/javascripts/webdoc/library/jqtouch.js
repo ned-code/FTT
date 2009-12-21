@@ -64,7 +64,7 @@
                 touchSelector: 'a, .touch',
                 popSelector: '.pop',
                 preloadImages: false,
-                slideSelector: '#'+mainContainerId+' > * > ul li a', //zeno
+                slideSelector: '#'+mainContainerId+' > .view > ul li a', //zeno
                 slideupSelector: '.slideup',
                 startupScreen: null,
                 submitSelector: '.submit',
@@ -136,7 +136,7 @@
                 // Make sure exactly one child of mainContainer ("jqt body") has "current" class
                 // Update by zeno
                 if ($('#'+mainContainerId+' > .current').length == 0) {
-                    currentPage = $('#'+mainContainerId+' > *:first');
+                    currentPage = $('#'+mainContainerId+' > .view:first');
                 } else {
                     currentPage = $('#'+mainContainerId+' > .current:first');
                     $('#'+mainContainerId+' > .current').removeClass('current');

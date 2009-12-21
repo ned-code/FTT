@@ -20,15 +20,6 @@ ActiveRecord::Schema.define(:version => 20091217100542) do
     t.datetime "updated_at"
   end
 
-  create_table "datastores", :force => true do |t|
-    t.string   "ds_key",                       :null => false
-    t.text     "ds_value",    :limit => 65537, :null => false
-    t.string   "widget_uuid", :limit => 36
-    t.string   "user_id",     :limit => 36
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "documents", :id => false, :force => true do |t|
     t.string   "uuid",       :limit => 36
     t.string   "title"

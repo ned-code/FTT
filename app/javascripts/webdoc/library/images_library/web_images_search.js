@@ -117,7 +117,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
       $super();
       this.query = query;
       this.page = 1;
-      this.perPage = 10;
+      this.perPage = 9;
 
       this.performSearch();
     }

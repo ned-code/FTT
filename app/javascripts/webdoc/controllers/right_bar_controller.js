@@ -13,7 +13,6 @@ WebDoc.RightBarController = $.klass({
     ddd("show lib");
     
     if (!WebDoc.application.librariesController) { // lazily load the library
-      ddd('LOADIN THE LIB')
       WebDoc.application.librariesController = new WebDoc.LibrariesController();
     }
     
