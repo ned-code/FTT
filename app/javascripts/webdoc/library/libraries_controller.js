@@ -8,7 +8,6 @@ var jQT = new $.jQTouch("libraries", { preloadImages: [] });
 
 WebDoc.LibrariesController = $.klass({
   initialize: function() {
-    // this.guiManager = new $.jQTouch({});
     this.imagesLibrary = new WebDoc.ImagesLibrary("images");
     // this.videosLibrary = new WebDoc.VideosLibrary("videos");
     // this.widgetsLibrary = new WebDoc.WidgetsLibrary("widgets");
@@ -32,9 +31,7 @@ WebDoc.Library = $.klass({
       this.didClickOnTab(el.attr('class'));
       event.preventDefault();
     }.pBind(this));
-    // select first tab
-    // ....filter(':first').click();
-    this.setupTabUI($('#'+this.elementId+' div.tabs ul.tab_navigation a:first'));
+    this.setupTabUI($('#'+this.elementId+' div.tabs ul.tab_navigation a:first')); // selecting first tab
     
     // Setup Details view "toggler"
     var detailViewId = libraryId.replace(/s$/,"_details"); //"images" => "image_details"
@@ -49,11 +46,17 @@ WebDoc.Library = $.klass({
     $('#'+this.elementId+' div.tabs ul.tab_navigation li').removeClass('selected');
     el.parent().addClass('selected'); //add the class to the LI element
   },
+  showSpinner: function(container) {
+    container.append($('<div class="loading">Loading</div>'));
+  },
+  hideSpinner: function(container) {
+    container.find('.loading').remove();
+  },
   didClickOnTab: function(tab) {
-    //common code to be execute for all subclasses
+    //common code to be executed for all subclasses
   },
   prepareDetailsView: function(type, data) {
-    //common code to be execute for all subclasses
+    //common code to be executed for all subclasses
   }
 });
 

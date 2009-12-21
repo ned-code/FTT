@@ -3,7 +3,7 @@ class ImagesController < ApplicationController
   
   # GET /images
   def index
-    @images = current_user.images.paginate(:page => params[:page], :per_page => 50)
+    @images = current_user.images.paginate(:page => params[:page], :per_page => 20)
     
     respond_to do |format|
       format.html

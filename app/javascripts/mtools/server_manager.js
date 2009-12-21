@@ -32,9 +32,13 @@ $.extend(MTools.ServerManager, {
       url += "/" + uuid;
     }
     url += ".json";
+    
+    var ajaxParams = args && args.ajaxParams && args.ajaxParams.page ? { page: args.ajaxParams.page } : {};
+    
     $.ajax({
       type: "GET",
       url: url,
+      data: (ajaxParams),
       dataType: "json",
       success: function(data) {
         var result = [];
@@ -42,7 +46,7 @@ $.extend(MTools.ServerManager, {
           if (data.length > 0) {
             for (var i = 0; i < data.length; i++) {
               var record = new recordClass(data[i]);
-              MTools.ServerManager.cache.store(record)
+              MTools.ServerManager.cache.store(record);
               result.push(record);
             }
           }
@@ -50,7 +54,7 @@ $.extend(MTools.ServerManager, {
         else {
           if (data) {
             var record = new recordClass(data);
-            MTools.ServerManager.cache.store(record)
+            MTools.ServerManager.cache.store(record);
             result.push(record);
           }
         }

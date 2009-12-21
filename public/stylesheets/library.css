@@ -9,7 +9,7 @@
 #libraries {
   -webkit-transform-style: preserve-3d; /*important for proper slide in (back) animation on safari!*/
   position: relative;
-  width:400px;
+  width:350px;
   height:600px;
   overflow-x: hidden;
   font-family: Helvetica;

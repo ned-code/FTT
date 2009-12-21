@@ -41,7 +41,7 @@ WebDoc.RightBarController = $.klass({
     if (!this.visible) {
       this.visible = true;
       $("#right_bar").animate({
-        width: "400px"
+        width: "350px"
       }, function() {
         WebDoc.application.boardController.centerBoard();
         if (callBack) {

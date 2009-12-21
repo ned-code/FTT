@@ -13,34 +13,58 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     this.element.bind('pageAnimationEnd', function(event, info){
       var currentTabContainer = this.element.find('div.selected');
       if (currentTabContainer[0] == this.tabContainers[0]) {
-        this.loadMyImages(currentTabContainer);
+        this.loadMyImages(0);
       }
       else {
         this.loadWebImages();
       }
     }.pBind(this));
     
+    // Setup my images
+    this.setupMyImages();
     // Setup web images
     this.webImagesSearch = new WebDoc.WebImagesSearch('web_images_search_field', this);
     // Setup images uploader
     this.imagesUploader = new WebDoc.ImagesUploader('swfupload_control', this);
   },
+  setupMyImages: function() {
+    this.myImagesPage = 1;
+    this.myImagesContainer = $(this.tabContainers[0]);
+    
+    //Next/Previous page links
+    var paginationWrap = $("<div class='pagination'>");
+    $("<a>").attr({ href:"", 'class':"previous_page" }).text("Previous").click(function(event){
+      this.loadMyImages(-1);
+      event.preventDefault();
+    }.pBind(this)).appendTo(paginationWrap);//.hide();
+    $("<a>").attr({ href:"", 'class':"next_page" }).text("Next").click(function(event){
+      this.loadMyImages(+1);
+      event.preventDefault();
+    }.pBind(this)).appendTo(paginationWrap);//.hide();
+    this.myImagesContainer.append(paginationWrap);
+  },
   didClickOnTab: function($super, tab) {
     $super();
     if (tab == this.tabContainers[0].id) { // My Images tab
-      this.loadMyImages($(this.tabContainers[0]));
+      this.loadMyImages(0);
     }
     else if (tab == this.tabContainers[1].id) { // Web Images tab
       this.loadWebImages();
     }
   },
-  loadMyImages: function(container) {
-    var thumbsWrap = container.find(".thumbnails");
-    var myImagesContainer = $("<ul>");
-    thumbsWrap.append(myImagesContainer);
+  loadMyImages: function(pageIncrement) {
+    var thumbsWrap = this.myImagesContainer.find(".thumbnails");
     
-    if (!thumbsWrap.data('loaded')) {
-      thumbsWrap.append($('<div class="loading">Loading</div>'));
+    this.myImagesPage += pageIncrement;
+    if (this.myImagesPage < 1) this.myImagesPage = 1;
+    
+    if (pageIncrement !== 0 || !thumbsWrap.data('loaded')) { //load only if we are paginating, or if the images have never been loaded before
+      thumbsWrap.html('');
+      
+      var myImagesList = $("<ul>");
+      thumbsWrap.append(myImagesList);
+      
+      this.showSpinner(thumbsWrap);
       
       MTools.ServerManager.getRecords(WebDoc.Image, null, function(data) {
         this.images = {};
@@ -52,12 +76,12 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
             src : image.data.properties.thumb_url,
             alt : ""
           })
-          .appendTo(myImagesContainer)
+          .appendTo(myImagesList)
           .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
         }
         thumbsWrap.data('loaded', true);
-        thumbsWrap.find('.loading').remove();
-      }.pBind(this));
+        this.hideSpinner(thumbsWrap);
+      }.pBind(this), { ajaxParams: { page:this.myImagesPage }});
     }
   },
   loadWebImages: function() {
