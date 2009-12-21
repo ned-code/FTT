@@ -5,6 +5,7 @@ module XmppHelper
   
   def xmpp_create_node(node_name)
     begin
+      #TODO get all xmpp connection paramas from config file
       jid = "server@webdoc.com"
       pass = "1234"
       client = Jabber::Client.new(jid)
