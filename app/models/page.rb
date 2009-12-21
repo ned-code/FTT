@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: pages
-#
-#  uuid         :string(36)      primary key
-#  document_id  :string(36)      not null
-#  thumbnail_id :string(36)
-#  position     :integer         not null
-#  version      :integer         default(1), not null
-#  data         :text(65537)
-#  created_at   :datetime
-#  updated_at   :datetime
-#
-
 class Page < ActiveRecord::Base
   has_uuid
   
@@ -21,7 +7,7 @@ class Page < ActiveRecord::Base
   def after_initialize
     self.data ||= { :css => { :width => "800px", :height => "600px", :backgroundColor => "#fff" } }
   end
-
+  
   # ================
   # = Associations =
   # ================
@@ -41,14 +27,14 @@ class Page < ActiveRecord::Base
   before_create :set_position
   before_save :update_position_if_moved
   after_destroy :update_next_page_position
-
+  
   # =================
   # = Class Methods =
   # =================
   
-  def self.find_by_id_or_position(attr)
+  def self.find_by_uuid_or_position(attr)
     if attr =~ /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/
-      find(attr)
+      find_by_uuid(attr)
     else
       find_by_position(attr.to_i - 1)
     end
@@ -74,12 +60,15 @@ class Page < ActiveRecord::Base
     thumbnail.try(:url) || "/images/no_thumb.jpg"
   end
   
+  def to_param
+    uuid
+  end
   
 private
-
+  
   # before_create
   def set_position
-    self.position ||= document.new_record? ? 0 : document.pages.count
+    self.position ||= document.nil? ? 0 : document.pages.count
     #update following pages
     Page.update_all("position = position + 1", "position >= #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")
   end
@@ -100,3 +89,18 @@ private
   end
 
 end
+
+# == Schema Information
+#
+# Table name: pages
+#
+#  uuid         :string(36)
+#  document_id  :string(36)      not null
+#  thumbnail_id :string(36)
+#  position     :integer         not null
+#  version      :integer         default(1), not null
+#  data         :text(65537)
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+

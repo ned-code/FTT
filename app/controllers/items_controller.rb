@@ -10,10 +10,12 @@ class ItemsController < ApplicationController
     allow logged_in, :to => [:show], :if => :public_document?
     allow logged_in, :if => :public_edit_document?     
   end
+  
+  # POST /documents/:document_id/pages/:page_id/items/:id
   def show
-    @item = @page.items.find(params[:id])
-    if (params[:fullHTML])
-      if ((@item[:data][:innerHTML] =~  /<html>(.|\n)*<\/html>/mi) == 0)
+    @item = @page.items.find_by_uuid(params[:id])
+    if params[:fullHTML]
+      if (@item[:data][:innerHTML] =~  /<html>(.|\n)*<\/html>/mi) == 0
         render :text => @item[:data][:innerHTML]
       else
         render :text => "<html><head></head><body>#{@item[:data][:innerHTML]}</body>"
@@ -24,9 +26,8 @@ class ItemsController < ApplicationController
   end
   
   # POST /documents/:document_id/pages/:page_id/items
-  def create  
-    @item = @page.items.new(params[:item])
-    @item.uuid = params[:item][:uuid]
+  def create
+    @item = @page.items.build(params[:item])
     @item.save
     message = { :source => params[:source], :item =>  params[:item] }
     xmpp_notify message.to_json    
@@ -35,7 +36,7 @@ class ItemsController < ApplicationController
 
   # PUT /documents/:document_id/pages/:page_id/items/:id
   def update
-    @item = @page.items.find(params[:id])
+    @item = @page.items.find_by_uuid(params[:id])
     @item.update_attributes(params[:item])
     message = { :source => params[:source], :item =>  params[:item] }
     xmpp_notify message.to_json    
@@ -44,7 +45,7 @@ class ItemsController < ApplicationController
 
   # DELETE /documents/:document_id/pages/:page_id/items/:id
   def destroy
-    @item = @page.items.find(params[:id])
+    @item = @page.items.find_by_uuid(params[:id])
     @item.destroy
     message = { :source => params[:source], :item =>  { :page_id => @page.uuid, :uuid => params[:id]  }, :action => "delete" }
 
@@ -55,8 +56,8 @@ class ItemsController < ApplicationController
 private
   
   def instantiate_document_and_page
-    @document = Document.find(params[:document_id])
-    @page = @document.pages.find(params[:page_id])
+    @document = Document.find_by_uuid(params[:document_id])
+    @page = @document.pages.find_by_uuid(params[:page_id])
   end
   
 end

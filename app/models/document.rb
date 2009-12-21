@@ -1,18 +1,7 @@
-# == Schema Information
-#
-# Table name: documents
-#
-#  uuid       :string(36)      primary key
-#  title      :string(255)
-#  deleted_at :datetime
-#  created_at :datetime
-#  updated_at :datetime
-#
-
 class Document < ActiveRecord::Base
   has_uuid
   acts_as_authorization_object
-#  is_paranoid
+  # is_paranoid
   
   # ================
   # = Associations =
@@ -24,7 +13,7 @@ class Document < ActiveRecord::Base
   # ===============
   # = Validations =
   # ===============
-
+  
   # =================
   # = Class Methods =
   # =================
@@ -32,5 +21,21 @@ class Document < ActiveRecord::Base
   # ====================
   # = Instance Methods =
   # ====================
-
+  
+  def to_param
+    uuid
+  end
+  
 end
+
+# == Schema Information
+#
+# Table name: documents
+#
+#  uuid       :string(36)
+#  title      :string(255)
+#  deleted_at :datetime
+#  created_at :datetime
+#  updated_at :datetime
+#
+

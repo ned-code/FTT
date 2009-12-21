@@ -1,7 +1,7 @@
 class CreateMedias < ActiveRecord::Migration
   def self.up
-    create_table :medias, :id => false  do |t|
-      t.string   :uuid,       :limit => 36, :primary => true
+    create_table :medias do |t|
+      t.string   :uuid,       :limit => 36
       t.string   :type
       
       # paperclip fields
@@ -13,7 +13,7 @@ class CreateMedias < ActiveRecord::Migration
       t.timestamps
     end
   end
-
+  
   def self.down
     drop_table :medias
   end

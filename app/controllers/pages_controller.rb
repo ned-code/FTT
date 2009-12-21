@@ -18,7 +18,7 @@ class PagesController < ApplicationController
   
   # GET /documents/:document_id/pages/:id
   def show
-    @page = @document.pages.find_by_id_or_position(params[:id])
+    @page = @document.pages.find_by_uuid_or_position(params[:id])
     render :json => @page.to_json(:include => :items)
   end
   
@@ -48,7 +48,7 @@ class PagesController < ApplicationController
   
   # PUT /documents/:document_id/pages/:id
   def update
-    @page = @document.pages.find(params[:id])
+    @page = @document.pages.find_by_uuid(params[:id])
     
     @page.update_attributes(params[:page])
     message = { :source => params[:source], :page =>  @page.attributes() }
@@ -59,7 +59,7 @@ class PagesController < ApplicationController
   
   # DELETE /documents/:document_id/pages/:id
   def destroy
-    @page = @document.pages.find(params[:id])
+    @page = @document.pages.find_by_uuid(params[:id])
     @page.destroy
     message = { :source => params[:source], :page =>  { :uuid => params[:id] }, :action => "delete" }
 
@@ -70,7 +70,7 @@ class PagesController < ApplicationController
   private
   
   def instantiate_document
-    @document = Document.find(params[:document_id])
+    @document = Document.find_by_uuid(params[:document_id])
   end
   
   

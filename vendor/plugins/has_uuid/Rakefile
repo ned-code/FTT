@@ -8,7 +8,6 @@ task :default => :test
 desc 'Test the has_uuid plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
-  t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
@@ -16,7 +15,7 @@ end
 desc 'Generate documentation for the has_uuid plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'HasUuid'
+  rdoc.title    = 'has_uuid'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
