@@ -25,7 +25,8 @@ WebDoc.ImagesUploader = $.klass({
     this.swfuploadContainer = $("#swfupload_container");
     this.uploadButtonBackground = $("#upload_images_button_background");
     this.addImagesButton = $("#add_images_button");
-
+    this.addImagesButton.data("originalText", this.addImagesButton.text());
+    
     // Setting up SWFUpload (but at this point it'll be still "hidden", and it'll get loaded once I'll make it visible)
     this.uploadControl.swfupload({
       upload_url: this.uploadUrl,
@@ -150,13 +151,11 @@ WebDoc.ImagesUploader = $.klass({
   },
   setUploadingUI: function() {
     this.isUploading = true;
-    
     this.spinner.show();
     this.uploadButtonFlash.css({'visibility':'hidden'}); // do NOT use hide(), or swfupload won't work
     this.uploadButtonBackground.hide();
     this.cancelButton.show();
     this.addImagesButton.addClass("uploading");
-    this.addImagesButton.data("originalText", this.addImagesButton.text());
     this.addImagesButton.text("Uploading...");
   },
   resetUploadingUI: function() {

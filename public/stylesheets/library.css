@@ -380,13 +380,18 @@ div.tabs > div {
   -moz-border-radius:4px;
 }
 
+#web_images_search_submit:hover {
+  background:#eee url(/images/libraries/search.png) no-repeat 50% 50%;
+  border: 1px solid #666;
+}
+
 #web_images h3 {
   display:block;
   font-size:15px;
   font-weight:bold;
   background:#555;
   color:#fff;
-  padding:4px 5px 2px;
+  padding:5px 7px 2px;
   margin:10px 0;
   line-height:18px;
   position:relative;
@@ -395,8 +400,9 @@ div.tabs > div {
 #web_images h3 span.results_number {
   position:absolute;
   top:4px;
-  right:4px;
+  right:7px;
   font-size:12px;
+  font-weight:normal;
 }
 
 #images .thumbnails ul {

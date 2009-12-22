@@ -18,10 +18,6 @@
           %a{ :href =>'#videos'} Videos
         %li
           %a{ :href =>'#apps'} Apps
-        %li
-          %a{ :href =>'#webdocs'} WebDocs
-        %li
-          %a{ :href =>'#files'} Files
     #images.view
       .toolbar
         %h1 Images
@@ -64,14 +60,6 @@
       .toolbar
         %h1 Apps
         %a.back{ :href =>'#' } Back
-    #webdocs.view
-      .toolbar
-        %h1 WebDocs
-        %a.back{ :href =>'#' } Back
-    #files.view
-      .toolbar
-        %h1 Files
-        %a.back{ :href =>'#' } Back
     #add_images.view
       .toolbar
         %h1 Add Images
@@ -96,10 +84,12 @@
             %a#add_image_to_page_action{ :href => "" } Add to page
           %li
             %a#set_image_as_bg_action{ :href => "" } Set as background
-          %li.dyn.my_image
-            %a#delete_image_action{ :href => "" } Delete image
           %li.dyn.flickr
             %a#show_flickr_page_action{ :href => "" } Show photo page on Flickr
+          %li.dyn.flickr.google
+            %a#delete_from_my_images_action{ :href => "" } Remove from My Images
+          %li.dyn.my_image
+            %a#delete_image_action{ :href => "" } Delete image
           %li.dyn.flickr.google
             %a#add_to_my_images_action{ :href => "" } Add to My Images
         

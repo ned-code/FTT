@@ -79,7 +79,11 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       
       var properties = this.detailsViewImg.data("properties"); //properties of the currenlty displayed image are store in this element
       
-      switch ($(event.target).attr("id")) {
+      var link = $(event.target);
+      var li = link.parent(); 
+      var info = $("<span>").text("...");
+      
+      switch (link.attr("id")) {
         
         case "add_image_to_page_action":
           ddd("add_image_to_page_action");
@@ -89,16 +93,41 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           ddd("set_image_as_bg_action");
           break;
           
-        case "delete_image_action":
-          ddd("delete_image_action");
+        case "delete_image_action": //delete an uploaded image from My Images
+        case "delete_from_my_images_action": //remove a web image from My Images
+          if (confirm ("Are you sure?")) {
+            link.hide();
+            li.append(info);
+            
+            $.ajax({
+              type: "DELETE",
+              url: "/images/"+properties.uuid,
+              success: function(serverData) {
+                info.text("Done!");
+                setTimeout(function(){ info.fadeOut(500); }, 500);
+                this.refreshMyImages();
+              }.pBind(this),
+              complete: function() {
+                var delay = setTimeout(function(){ li.hide(); info.remove(); link.show(); }, 1000);
+                if (link.attr("id") === "delete_image_action") { // Go back
+                  //in this case we need to immediately rehestablish the UI, in case the user will quickly reselects another thumbnail just after deleting this one
+                  clearTimeout(delay); li.hide(); info.remove(); link.show();
+                  this.detailsView.find(".toolbar .back").click();
+                }
+              }.pBind(this)
+            });
+          }
           break;
-          
+        
         case "show_flickr_page_action":
           ddd("show_flickr_page_action");
           window.open(properties.image_link, '_blank');
           break;
           
         case "add_to_my_images_action":
+          link.hide();
+          li.append(info);
+          
           var railsParams = {};
           MTools.Record.convertToRailsJSon({ properties : properties }, railsParams, "image");
           $.ajax({
@@ -107,7 +136,12 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
             data: railsParams,
             dataType: "json",
             success: function(serverData) {
+              info.text("Done!");
+              setTimeout(function(){ info.fadeOut(500); }, 500);
               this.refreshMyImages([serverData.image]);
+            }.pBind(this),
+            complete: function() {
+              setTimeout(function(){ li.hide(); info.remove(); link.show();  }, 1000);
             }.pBind(this)
           });
           break;
@@ -160,7 +194,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   refreshMyImages: function(newImages) {
     //if we are in first page, don't reload the whole thing, just add the newly uploaded images to the top of the list 
     var myImagesList = this.myImagesContainer.find('.thumbnails ul');
-    if (this.myImagesPage === 1 && myImagesList.length > 0) {
+    if (newImages && this.myImagesPage === 1 && myImagesList.length > 0) {
       
        $.each(newImages, function(i,image) {
          
@@ -168,7 +202,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           
         }.pBind(this));
     }
-    else { // If not, load the 1st page
+    else { // If not (or if no newImages are passed) reload the 1st page
       this.myImagesContainer.find(".thumbnails").data('loaded', false);
       this.myImagesPage = 1;
       this.loadMyImages(0);
@@ -176,11 +210,10 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   },
   buildThumbnail: function(uuid, properties, myImagesList) {
     var thumb = $("<img>").attr({
-      id: uuid,
       src : properties.thumb_url,
       alt : ""
     })
-    .data("properties", jQuery.extend({type:"my_image"}, properties));
+    .data("properties", jQuery.extend({type:"my_image", uuid:uuid}, properties));
     
     var liWrap = $("<li>");
     if (properties.type) liWrap.addClass(properties.type);
@@ -229,6 +262,9 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     // If Details view is loaded from the My Images section, we won't need this action...
     if (this.element.find('div.selected')[0] == this.tabContainers[0]) {
       $("#add_to_my_images_action").parent().hide();
+    }
+    else {
+      $("#delete_from_my_images_action").parent().hide();
     }
   },
   preloadImage: function(imageSrc) {
