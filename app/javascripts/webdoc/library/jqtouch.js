@@ -1,26 +1,12 @@
 /*
-
-            _/    _/_/    _/_/_/_/_/                              _/       
-               _/    _/      _/      _/_/    _/    _/    _/_/_/  _/_/_/    
-          _/  _/  _/_/      _/    _/    _/  _/    _/  _/        _/    _/   
-         _/  _/    _/      _/    _/    _/  _/    _/  _/        _/    _/    
-        _/    _/_/  _/    _/      _/_/      _/_/_/    _/_/_/  _/    _/     
-       _/                                                                  
-    _/
-
-    Created by David Kaneda <http://www.davidkaneda.com>
+    Based on jQTouch project <http://www.jqtouch.com/> by David Kaneda <http://www.davidkaneda.com>
     Documentation and issue tracking on Google Code <http://code.google.com/p/jqtouch/>
     
-    Special thanks to Jonathan Stark <http://jonathanstark.com/>
-    and pinch/zoom <http://www.pinchzoom.com/>
+    Adapted by Zeno Crivelli to work on all modern browsers including FireFox (originally jQTouch has
+    been designed for Mobile WebKit only) and to work on a specified DIV (originally jQTouch operates
+    on the entire document <body>)
     
-    (c) 2009 by jQTouch project members.
-    See LICENSE.txt for license.
-    
-    $Revision: 109 $
-    $Date: 2009-10-06 12:23:30 -0400 (Tue, 06 Oct 2009) $
-    $LastChangedBy: davidcolbykaneda $
-
+    jQTouch revision used: 109 ($Date: 2009-10-06 12:23:30 -0400 (Tue, 06 Oct 2009)
 */
 
 (function($) {

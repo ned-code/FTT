@@ -82,11 +82,12 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
         
         $.each(data.photos.photo, function(i,photo){
           var photoSourceUrl = "http://farm"+photo.farm+".static.flickr.com/"+photo.server+"/"+photo.id+"_"+photo.secret+".jpg";
+          var thumbSourceUrl = photoSourceUrl.replace('.jpg','_s.jpg');
           var photoPageLink = "http://www.flickr.com/photos/"+photo.owner+"/"+photo.id;
           $("<img>").attr({
-            "src" : photoSourceUrl.replace('.jpg','_s.jpg'), 
+            "src" : thumbSourceUrl,
             "alt" : "" })
-          .data("properties", { type:"flickr", url:photoSourceUrl, title:photo.title, image_link:photoPageLink })
+          .data("properties", { type:"flickr", url:photoSourceUrl, thumb_url:thumbSourceUrl, name:photo.title, image_link:photoPageLink })
           .appendTo(this.imagesContainer)
           .wrap("<li><a href=\""+photoPageLink+"\" title=\""+ photo.title +"\"></a></li>");
         }.pBind(this));

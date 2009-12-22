@@ -40,7 +40,8 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     this.webImagesSearch = new WebDoc.WebImagesSearch('web_images_search_field', this);
     // Setup images uploader
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
-    
+    // Setup details view
+    this.setupDetailsView();
     
     // Observe thumb clicks (with event delegation) for all current and future thumbnails
     $("#"+libraryId+" .thumbnails ul li a").live("click", function (event) {
@@ -49,7 +50,6 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       this.showDetailsView.click();
       event.preventDefault();
     }.pBind(this));
-    
     
   },
   setupMyImages: function() {
@@ -73,6 +73,51 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       event.preventDefault();
     }.pBind(this)).appendTo(paginationWrap).hide();
     this.myImagesContainer.append(paginationWrap);
+  },
+  setupDetailsView: function() {
+    this.detailsViewImg = this.detailsView.find('.single_image img');
+    
+    // handle possible actions 
+    $("#image_actions").click(function(event){
+      event.preventDefault();
+      
+      var properties = this.detailsViewImg.data("properties"); //properties of the currenlty displayed image are store in this element
+      
+      switch ($(event.target).attr("id")) {
+        
+        case "add_image_to_page_action":
+          ddd("add_image_to_page_action");
+          break;
+          
+        case "set_image_as_bg_action":
+          ddd("set_image_as_bg_action");
+          break;
+          
+        case "delete_image_action":
+          ddd("delete_image_action");
+          break;
+          
+        case "show_flickr_page_action":
+          ddd("show_flickr_page_action");
+          window.open(properties.image_link, '_blank');
+          break;
+          
+        case "add_to_my_images_action":
+          var railsParams = {};
+          MTools.Record.convertToRailsJSon({ properties : properties }, railsParams, "image");
+          $.ajax({
+            type: "POST",
+            url: this.imagesUploader.uploadUrl,
+            data: railsParams,
+            dataType: "json",
+            success: function(data) {
+              ddd(data);
+            }
+          });
+          break;
+      }
+      
+    }.pBind(this));
   },
   dragStart: function(event) {
     var draggingImg = $(event.target).find('img');
@@ -163,34 +208,29 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     // View title
     this.detailsView.find('.toolbar h1').attr({'class':properties.type});
 
-    // Image title
-    var title = "";
-    if (properties.title) title = properties.title;
+    // Image name
+    var name = "";
+    if (properties.name) name = properties.name;
     else if (properties.url.match(/([^\/\\]+)\.([a-z0-9]{3,4})$/i)) { // extract filename
-      title = RegExp.$1 +"."+ RegExp.$2;
+      name = RegExp.$1 +"."+ RegExp.$2;
     }
-    this.detailsView.find('.image_title').text(title);
+    this.detailsView.find('.image_name').text(name);
 
     // Image Link
-    var imageLink = properties.image_link ? properties.image_link : properties.url
+    var imageLink = properties.image_link ? properties.image_link : properties.url;
     this.detailsView.find('.single_image a').attr({"href":imageLink});
 
-    // Image source
+    // Image source (+ store the current properties in the img element)
     var imageContainer = this.detailsView.find('.single_image');
     imageContainer.hide();
     imageContainer.before($('<div class="loading">Loading</div>'));
-    this.detailsView.find('.single_image img').attr({'src':properties.url});
+    this.detailsViewImg.attr({'src':properties.url}).data("properties", properties);
     this.preloadImage(properties.url);
 
-    // Show/Hide right commands
-    var commands = $('#image_commands');
-    commands.find(".dyn").hide();
-    commands.find("."+properties.type).show();
-
-    // Custom commands
-    if (properties.type === "flickr") {
-      commands.find(".flickr a").attr({"href":imageLink});
-    }
+    // Show/Hide right image actions
+    var imageActions = $('#image_actions');
+    imageActions.find(".dyn").hide();
+    imageActions.find("."+properties.type).show();
   },
   preloadImage: function(imageSrc) {
     var oImage = new Image();

@@ -87,17 +87,18 @@
       .single_image
         %a{ :href => "", :onclick => "window.open(this.getAttribute('href'), '_blank'); return false;" }
           %img{ :src => "", :alt => "" }
-      %h4.image_title Title
-      %ul#image_commands
-        %li
-          %a{ :href => "" } Add to page
-        %li
-          %a{ :href => "" } Set as background
-        %li.dyn.my_image
-          %a{ :href => "" } Delete image
-        %li.dyn.flickr
-          %a{ :href => "", :onclick => "window.open(this.getAttribute('href'), '_blank'); return false;" } Show photo page on Flickr
-        %li.dyn.flickr.google
-          %a{ :href => "" } Add to My Images
+      %h4.image_name
+      #image_actions
+        %ul
+          %li
+            %a#add_image_to_page_action{ :href => "" } Add to page
+          %li
+            %a#set_image_as_bg_action{ :href => "" } Set as background
+          %li.dyn.my_image
+            %a#delete_image_action{ :href => "" } Delete image
+          %li.dyn.flickr
+            %a#show_flickr_page_action{ :href => "" } Show photo page on Flickr
+          %li.dyn.flickr.google
+            %a#add_to_my_images_action{ :href => "" } Add to My Images
         
         
