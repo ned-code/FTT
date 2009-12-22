@@ -61,8 +61,9 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     
     // Next/Previous page links
     var paginationWrap = $("<div class='pagination'>");
-    this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page" }).text("Previous");
-    this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page" }).text("Next");
+    this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page" }).html("&larr; Previous");
+    
+    this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page" }).html("Next &rarr;");
     this.previousPageLink.click(function(event){
       this.loadMyImages(-1);
       event.preventDefault();
@@ -107,8 +108,6 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           thumbsWrap.append(myImagesList);
           
           $.each(data.images, function(i,image){
-            var properties
-
             $("<img>").attr({
               id: image.uuid(),
               src : image.data.properties.thumb_url,
@@ -173,23 +172,25 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     this.detailsView.find('.image_title').text(title);
 
     // Image Link
-    this.detailsView.find('.single_image a').attr({"href":properties.image_link});
+    var imageLink = properties.image_link ? properties.image_link : properties.url
+    this.detailsView.find('.single_image a').attr({"href":imageLink});
 
-    // switch (properties.type) {
-    //   case "my_image":
-    //     break;
-    //   case "flickr":
-    //     break;
-    //   case "google":
-    //     break;
-    // }
-    
     // Image source
     var imageContainer = this.detailsView.find('.single_image');
     imageContainer.hide();
     imageContainer.before($('<div class="loading">Loading</div>'));
     this.detailsView.find('.single_image img').attr({'src':properties.url});
     this.preloadImage(properties.url);
+
+    // Show/Hide right commands
+    var commands = $('#image_commands');
+    commands.find(".dyn").hide();
+    commands.find("."+properties.type).show();
+
+    // Custom commands
+    if (properties.type === "flickr") {
+      commands.find(".flickr a").attr({"href":imageLink});
+    }
   },
   preloadImage: function(imageSrc) {
     var oImage = new Image();

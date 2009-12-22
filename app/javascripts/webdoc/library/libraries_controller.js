@@ -48,9 +48,11 @@ WebDoc.Library = $.klass({
   },
   showSpinner: function(container) {
     container.append($('<div class="loading">Loading</div>'));
+    container.parent().find(".pagination").hide();
   },
   hideSpinner: function(container) {
     container.find('.loading').remove();
+    container.parent().find(".pagination").show();
   },
   didClickOnTab: function(tab) {
     //common code to be executed for all subclasses

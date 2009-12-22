@@ -88,3 +88,16 @@
         %a{ :href => "", :onclick => "window.open(this.getAttribute('href'), '_blank'); return false;" }
           %img{ :src => "", :alt => "" }
       %h4.image_title Title
+      %ul#image_commands
+        %li
+          %a{ :href => "" } Add to page
+        %li
+          %a{ :href => "" } Set as background
+        %li.dyn.my_image
+          %a{ :href => "" } Delete image
+        %li.dyn.flickr
+          %a{ :href => "", :onclick => "window.open(this.getAttribute('href'), '_blank'); return false;" } Show photo page on Flickr
+        %li.dyn.flickr.google
+          %a{ :href => "" } Add to My Images
+        
+        
