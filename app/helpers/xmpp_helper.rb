@@ -46,9 +46,9 @@ module XmppHelper
           message=Jabber::Message.new(nil,message) 
           item.add(message)
           begin
-            service.publish_item_to(@page.document_id,item)
+            service.publish_item_to(@document.uuid,item)
           rescue Jabber::ServerError
-            xmpp_create_node(@page.document_id);
+            xmpp_create_node(@document.uuid);
             if (number_of_try < 1)
               continue = true;
             end            
