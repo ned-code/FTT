@@ -115,12 +115,13 @@ describe DocumentsController do
     end
         
     it "should be able to create a new document" do
-      @new_doc = Factory.create(:document, :title => "new")    
+      @new_uuid = UUID.generate      
       
-      post :create, :id => @new_doc.uuid, :format => "json", :document => { :title => "new doc", :uuid => @new_doc.uuid}
+      
+      post :create, :format => "json", :document => { :title => "new doc", :uuid => @new_uuid}
       response.should be_success
       response.should respond_with(:content_type => :json)      
-      @admin_user.has_role?("owner", Document.find_by_uuid(@new_doc.uuid)).should be_true          
+      @admin_user.has_role?("owner", Document.find_by_uuid(@new_uuid)).should be_true          
     end 
   end
   
@@ -198,13 +199,13 @@ describe DocumentsController do
     end
         
     it "should be able to create a new document" do
-      @new_doc = Factory.create(:document, :title => "new")    
+      @new_uuid = UUID.generate  
       
-      post :create, :id => @new_doc.uuid, :format => "json", :document => { :title => "new doc", :uuid => @new_doc.uuid}
+      post :create, :format => "json", :document => { :title => "new doc", :uuid => @new_uuid}
       response.should be_success
       response.should respond_with(:content_type => :json)  
-      
-      @user1.has_role?("owner", Document.find_by_uuid(@new_doc.uuid)).should be_true    
+      created_doc = Document.find_by_uuid(@new_uuid)
+      @user1.has_role?("owner", created_doc).should be_true    
     end 
   end  
 end
