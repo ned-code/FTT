@@ -81,7 +81,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   edit: function($super) {
     if (this.item.data.media_id != null) {
       $super();
-      WebDoc.application.boardController.unselectItemViews([this]);
       WebDoc.application.boardController.editingItem = this;
       this.domNode.addClass("item_edited");
       this.domNode.css({
@@ -100,8 +99,11 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   widgetChanged: function() {
     ddd("update widget state");
     if (this.domNode.get(0).contentWindow) {
-      this.domNode.get(0).contentWindow.uniboard = this.item;
-      if (this.domNode.get(0).contentWindow.initialize) {
+      if (this.domNode.get(0).contentWindow.widget) {
+        this.domNode.get(0).contentWindow.widget._onPreferencesChange();
+      }
+      // 
+      else if (this.domNode.get(0).contentWindow.initialize) {
         this.domNode.get(0).contentWindow.initialize();
       }
     }
@@ -111,9 +113,19 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     $("#wait_" + this.item.uuid()).remove();
     if (this.domNode.get(0).contentWindow) {
       this.domNode.get(0).contentWindow.uniboard = this.api;
-      if (this.domNode.get(0).contentWindow.initialize) {
+      if (this.domNode.get(0).contentWindow.widget) {
+        var widgetObject = this.domNode.get(0).contentWindow.widget;
+        widgetObject.lang = "en";
+        widgetObject.uuid = this.item.uuid();
+        widgetObject.mode = "Edit";
+        widgetObject._onLoad();
+      }
+      
+      // init widget whout SDK
+      else if (this.domNode.get(0).contentWindow.initialize) {
         this.domNode.get(0).contentWindow.initialize();
       }
+      
       //$(this.domNode.get(0).contentDocument).find("body").css("overflow", "hidden");
       // inject innerHTML if exist
       /*
