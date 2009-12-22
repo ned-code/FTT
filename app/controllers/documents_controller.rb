@@ -41,7 +41,7 @@ class DocumentsController < ApplicationController
     @document.save
     current_user.has_role!("owner", @document)
     xmpp_create_node(@document.uuid)
-    render :json => @document
+    render :json => @document      
   end
   
   # PUT /documents/:id
@@ -57,6 +57,7 @@ class DocumentsController < ApplicationController
     new_list_has_global_user = false
     accesses.each_key do |user_email|
       if @@global_user_names.include? user_email.downcase
+        global_user.has_no_role!(accesses[user_email], @document)        
         global_user.has_role!(accesses[user_email], @document)
         new_list_has_global_user = true
       else
