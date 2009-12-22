@@ -40,23 +40,31 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     this.webImagesSearch = new WebDoc.WebImagesSearch('web_images_search_field', this);
     // Setup images uploader
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
-
   },
   setupMyImages: function() {
     this.myImagesPage = 1;
     this.myImagesContainer = $(this.tabContainers[0]);
     
-    //Next/Previous page links
+    // Setup drag n' drop
+    this.myImagesContainer.find(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
+    
+    // Next/Previous page links
     var paginationWrap = $("<div class='pagination'>");
-    $("<a>").attr({ href:"", 'class':"previous_page" }).text("Previous").click(function(event){
+    this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page" }).text("Previous");
+    this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page" }).text("Next");
+    this.previousPageLink.click(function(event){
       this.loadMyImages(-1);
       event.preventDefault();
-    }.pBind(this)).appendTo(paginationWrap);//.hide();
-    $("<a>").attr({ href:"", 'class':"next_page" }).text("Next").click(function(event){
+    }.pBind(this)).appendTo(paginationWrap).hide();
+    this.nextPageLink.click(function(event){
       this.loadMyImages(+1);
       event.preventDefault();
-    }.pBind(this)).appendTo(paginationWrap);//.hide();
+    }.pBind(this)).appendTo(paginationWrap).hide();
     this.myImagesContainer.append(paginationWrap);
+  },
+  dragStart: function(event) {
+    var draggingImg = $(event.target).find('img');
+    event.originalEvent.dataTransfer.setData('application/ub-image', draggingImg.data('properties').url);
   },
   didClickOnTab: function($super, tab) {
     $super();
@@ -79,9 +87,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       this.showSpinner(thumbsWrap);
       
       MTools.ServerManager.getRecords(WebDoc.Image, null, function(data) {
-        this.images = {};
-        
-        if (data.length === 0) {
+        if (data.images.length === 0) {
           var noImages = $("<span>").text('No Images');
           thumbsWrap.append(noImages);
         }
@@ -89,18 +95,18 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           var myImagesList = $("<ul>");
           thumbsWrap.append(myImagesList);
           
-          $.each(data, function(i,image){
-            this.images[image.uuid()] = image;
+          $.each(data.images, function(i,image){
             $("<img>").attr({
               id: image.uuid(),
               src : image.data.properties.thumb_url,
               alt : ""
             })
+            .data('properties', image.data.properties)
             .appendTo(myImagesList)
             .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
           }.pBind(this));
         }
-        
+        this.refreshMyImagesPagination(data.pagination);
         thumbsWrap.data('loaded', true);
         this.hideSpinner(thumbsWrap);
       }.pBind(this), { ajaxParams: { page:this.myImagesPage }});
@@ -110,24 +116,18 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     //if we are in first page, don't reload the whole thing, just add the newly uploaded images to the top of the list 
     var myImagesList = this.myImagesContainer.find('.thumbnails ul');
     if (this.myImagesPage === 1 && myImagesList.length > 0) {
-       //TODO create images items from newImages and the run the folowing loop:
-       // $.each(newImages, function(i,image){
-       //    this.images[image.uuid()] = image;
-       //    $("<img>").attr({
-       //      id: image.uuid(),
-       //      src : image.data.properties.thumb_url,
-       //      alt : ""
-       //    })
-       //    .prependTo(myImagesList)
-       //    .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
-       //  }.pBind(this));
+      
+      
+      //TODO optmize code duplication with loadMyImages!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      
+      
        $.each(newImages, function(i,image){
-          // this.images[image.uuid()] = image;
           $("<img>").attr({
             id: image.uuid,
             src : image.properties.thumb_url,
             alt : ""
           })
+          .data('properties', image.properties)
           .prependTo(myImagesList)
           .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
         }.pBind(this));
@@ -137,6 +137,12 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       this.myImagesPage = 1;
       this.loadMyImages(0);
     }
+  },
+  refreshMyImagesPagination: function(pagination) {
+    if (pagination.previous_page > 0) this.previousPageLink.show();
+    else this.previousPageLink.hide();
+    if (pagination.next_page > 0) this.nextPageLink.show();
+    else this.nextPageLink.hide();
   },
   loadWebImages: function() {
   },

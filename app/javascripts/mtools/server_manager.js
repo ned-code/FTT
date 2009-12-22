@@ -27,7 +27,8 @@ $.extend(MTools.ServerManager, {
         return;
       }
     }
-    var url = recordClass.rootUrl(args) + "/" + recordClass.className() + "s";
+    var pluralizedRecordClassName = recordClass.className() + "s";
+    var url = recordClass.rootUrl(args) + "/" + pluralizedRecordClassName;
     if (uuid) {
       url += "/" + uuid;
     }
@@ -42,7 +43,14 @@ $.extend(MTools.ServerManager, {
       dataType: "json",
       success: function(data) {
         var result = [];
+
+        // ==================================================================================================================
+        // = Discuss with Julien, but we probably should standardize the server response and never return directly an array =
+        // = but always assume there will be some kind of additional data passed like pagination...                         =
+        // ==================================================================================================================
+
         if ($.isArray(data)) {
+          // the server returned a list of records with no other additional info: [{image1}, {image2}, ...]
           if (data.length > 0) {
             for (var i = 0; i < data.length; i++) {
               var record = new recordClass(data[i]);
@@ -50,15 +58,32 @@ $.extend(MTools.ServerManager, {
               result.push(record);
             }
           }
+          callBack.call(this, result);
         }
         else {
-          if (data) {
-            var record = new recordClass(data);
-            MTools.ServerManager.cache.store(record);
-            result.push(record);
+          if (pluralizedRecordClassName in data) { //if data is a dictionary (not an array) this will search among all the keys of the dictionary
+            // the server returned a list of records along with additional information (like pagination data): { images:[{image1},{image2},...], total:432 }
+            var recordsData = data[pluralizedRecordClassName];
+            if (recordsData.length > 0) {
+              for (var i = 0; i < recordsData.length; i++) {
+                var record = new recordClass(recordsData[i]);
+                MTools.ServerManager.cache.store(record);
+                result.push(record);
+              }
+            }
+            data[pluralizedRecordClassName] = result;
+            callBack.call(this, data);
+          }
+          else {
+            // the server returned a single record
+            if (data) {
+              var record = new recordClass(data);
+              MTools.ServerManager.cache.store(record);
+              result.push(record);
+            }
+            callBack.call(this, result);
           }
         }
-        callBack.call(this, result);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         ddd("error " + textStatus + " " + errorThrown);

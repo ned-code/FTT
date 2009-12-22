@@ -3,12 +3,21 @@ class ImagesController < ApplicationController
   
   # GET /images
   def index
-    sleep 5 #TODO REMOVE THIS
-    @images = current_user.images.paginate(:page => params[:page], :per_page => 20)
-    
+    per_page = 12
+    @images = current_user.images.paginate(:page => params[:page], :per_page => per_page)
+
     respond_to do |format|
       format.html
-      format.json { render :json => @images }
+      format.json { render :json => { 
+        :images => @images,
+        :pagination => {
+          :per_page => per_page,
+          :current_page => @images.current_page,
+          :next_page => @images.next_page,
+          :previous_page => @images.previous_page,
+          :total => @images.total_entries }
+        }
+      }
     end
   end
   

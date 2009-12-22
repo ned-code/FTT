@@ -76,10 +76,10 @@
         %h1 Add Images
         %a.button.goback{ :href =>'#images' } Close
       #upload_control
+        %span#upload_images_button_background.button Upload
+        %button#cancel_images_upload.button{ :style => "display:none" } Cancel upload
         #upload_images_spinner{ :style => "display:none" }
-        %span.uploading_info
-        %span#upload_images_button_background
-        %input#cancel_images_upload{ :type => "button",:value => "Cancel upload", :style => "display:none" }
+        %span.uploading_info Choose image(s) to upload 
     #image_details.view
       .toolbar
         %h1 Image

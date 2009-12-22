@@ -1,20 +1,3 @@
-.libraries_wrap {
-  position:relative;
-}
-#swfupload_container {
-  position:absolute;
-  top:40px;
-  left:10px;
-  z-index:1;
-}
-#upload_images_button_background {
-  display:block;
-  width:100px;
-  height:20px;
-  background:#ff00ff;
-}
-
-
 /* ============================================================== */
 /* = jQTouch style = */
 /* ================= */
@@ -458,16 +441,71 @@ div.tabs > div {
   color:#666;
 }
 
+#image_details .single_image {
+  overflow:hidden;
+  text-align:center;
+  width:350px;
+  padding:20px 0;
+}
+
 #image_details .single_image img {
   border:none;
+  max-width:300px;
+  max-height:300px;
 }
 
 /* ========== */
 /* = Upload = */
 /* ========== */
 
+.libraries_wrap {
+  position:relative;
+}
+
+#swfupload_container {
+  position:absolute;
+  top:59px;
+  left:22px;
+  z-index:1;
+}
+
+#upload_control {
+  margin:20px 0 0 20px;
+}
+
+#upload_images_button_background {
+  display:block;
+  position:static;
+  width:51px;
+  text-align:center;
+  float:left;
+  margin:0 10px 0 0;
+}
+
 #upload_images_spinner {
-  width:66px;
-  height:66px;
-  background:transparent url('../images/libraries/upload_spinner.gif') no-repeat;
+  width:24px;
+  height:24px;
+  float:left;
+  background:transparent url(/images/libraries/upload_spinner.gif) no-repeat;
+  margin:0 10px;
+  position:relative;
+  top:-2px;
+}
+
+#cancel_images_upload {
+  float:left;
+  position:static;
+  text-align:center;
+  border:none;
+  padding:2px 4px;
+}
+
+#upload_control .uploading_info {
+  position:relative;
+  top:4px;
+}
+
+object:focus, object:active {
+  border:none;
+  outline:0;
 }

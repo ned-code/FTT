@@ -11,6 +11,7 @@ WebDoc.ImagesUploader = $.klass({
     
     this.spinner = $("#upload_images_spinner");
     this.logInfo = this.uploadControl.find(".uploading_info");
+    this.logInfo.data("originalText", this.logInfo.text());
     this.cancelButton = $("#cancel_images_upload").click(function(event){
       this.stopUpload();
       event.preventDefault();
@@ -30,7 +31,7 @@ WebDoc.ImagesUploader = $.klass({
       file_types_description: "Web Image Files",
       file_upload_limit: "0",
       flash_url: "/swfupload/swfupload.swf",
-      button_image_url: '/images/libraries/upload_button.png',
+      // button_image_url: '/images/libraries/upload_button.png',
       button_width: 61,
       button_height: 22,
       button_placeholder: $('#upload_images_button')[0],
@@ -61,7 +62,7 @@ WebDoc.ImagesUploader = $.klass({
     
     .bind('fileDialogStart', function(event){
       ddd("File dialog start");
-      this.logInfo.text("");
+      this.logInfo.text(this.logInfo.data("originalText"));
     }.pBind(this))
     
     .bind('fileDialogComplete', function(event, numFilesSelected, numFilesQueued){
@@ -106,7 +107,7 @@ WebDoc.ImagesUploader = $.klass({
         this.logInfo.text("Upload successfully completed");
       }
       else {
-        this.logInfo.text("");
+        this.logInfo.text(this.logInfo.data("originalText"));
       }
       if (this.filesRemainingToUpload === 0) {
         this.isUploading = false;
