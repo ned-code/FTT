@@ -36,8 +36,8 @@ WebDoc.ImagesUploader = $.klass({
       file_upload_limit: "0",
       flash_url: "/swfupload/swfupload.swf",
       // button_image_url: '/images/libraries/upload_button.png',
-      button_width: 61,
-      button_height: 22,
+      button_width: 288,
+      button_height: 40,
       button_placeholder: $('#upload_images_button')[0],
       button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
       debug: false
@@ -129,7 +129,7 @@ WebDoc.ImagesUploader = $.klass({
   loadSWFUpload: function() {
     if (!this.isUploading) {
       this.swfuploadContainer.show();
-      this.uploadButtonFlash.css({'visibility':'visible'}); //in case the Add Images view was closed during upload
+      if (this.uploadButtonFlash) this.uploadButtonFlash.css({'visibility':'visible'}); //in case the Add Images view was closed during upload
     }
   },
   unloadSWFUpload: function() {

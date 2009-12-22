@@ -84,12 +84,18 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
           var photoSourceUrl = "http://farm"+photo.farm+".static.flickr.com/"+photo.server+"/"+photo.id+"_"+photo.secret+".jpg";
           var thumbSourceUrl = photoSourceUrl.replace('.jpg','_s.jpg');
           var photoPageLink = "http://www.flickr.com/photos/"+photo.owner+"/"+photo.id;
-          $("<img>").attr({
-            "src" : thumbSourceUrl,
-            "alt" : "" })
-          .data("properties", { type:"flickr", url:photoSourceUrl, thumb_url:thumbSourceUrl, name:photo.title, image_link:photoPageLink })
-          .appendTo(this.imagesContainer)
-          .wrap("<li><a href=\""+photoPageLink+"\" title=\""+ photo.title +"\"></a></li>");
+          
+          var thumb = $("<img>").attr({
+            src : thumbSourceUrl,
+            alt : ""
+          }).data("properties", { type:"flickr", url:photoSourceUrl, thumb_url:thumbSourceUrl, name:photo.title, image_link:photoPageLink });
+          
+          var liWrap = $("<li>").addClass("flickr");
+          var aWrap = $("<a href=\""+photoPageLink+"\" title=\""+photo.title+"\"></a>");
+          aWrap.append(thumb);
+          // aWrap.append($("<span>").addClass("icon_overlay")); //flickr mini icon
+          liWrap.append(aWrap);
+          this.imagesContainer.append(liWrap);
         }.pBind(this));
         
         this.container.find('.loading').remove();

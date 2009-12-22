@@ -46,6 +46,9 @@ WebDoc.Library = $.klass({
     $('#'+this.elementId+' div.tabs ul.tab_navigation li').removeClass('selected');
     el.parent().addClass('selected'); //add the class to the LI element
   },
+  currentViewId: function() {
+    return $("#libraries").find("> .view:visible").attr("id");
+  },
   showSpinner: function(container) {
     container.append($('<div class="loading">Loading</div>'));
     container.parent().find(".pagination").hide();

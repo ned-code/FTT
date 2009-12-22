@@ -42,6 +42,7 @@
               %label{ :for => "web_images_search_field" } Search images on the web
               %input#web_images_search_field{ :type => "text", :name => "web_images_search_field" }
               %input#web_images_search_submit{ :type => "submit", :name => "web_images_search_submit", :value => "Search" }
+          .spacer
           #flickr_images.thumbnails
             %h3
               Flickr
@@ -87,6 +88,7 @@
       .single_image
         %a{ :href => "", :onclick => "window.open(this.getAttribute('href'), '_blank'); return false;" }
           %img{ :src => "", :alt => "" }
+          .icon_overlay
       %h4.image_name
       #image_actions
         %ul

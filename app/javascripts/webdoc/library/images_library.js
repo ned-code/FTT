@@ -11,25 +11,21 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     
     // view transition finished (slide in/out)
     this.element.bind('pageAnimationEnd', function(event, info){
-      var currentView = $("#libraries").find("> .view:visible");
-      if (currentView.attr("id") === this.element.attr("id")) { // Images view did appear
-        var currentTabContainer = this.element.find('div.selected');
-        if (currentTabContainer[0] == this.tabContainers[0]) {
+      var currentViewId = this.currentViewId();
+      if (currentViewId === this.element.attr("id")) { // Images view did appear
+        if (this.element.find('div.selected')[0] == this.tabContainers[0]) {
           this.loadMyImages(0);
         }
-        else {
-          this.loadWebImages();
-        }
       }
-      else if (currentView.attr("id") === "add_images") { // Add Images view did appear
+      else if (currentViewId === "add_images") { // Add Images view did appear
         this.imagesUploader.loadSWFUpload();
       }
     }.pBind(this));
 
     // view transition starts (slide in/out)
     this.element.bind('pageAnimationStart', function(event, info){
-      var currentView = $("#libraries").find("> .view:visible");
-      if (currentView.attr("id") === "add_images") { // Add Images view will disappear
+      var currentViewId = this.currentViewId();
+      if (currentViewId === "add_images") { // Add Images view will disappear
         this.imagesUploader.unloadSWFUpload();
       }
     }.pBind(this));
@@ -61,9 +57,9 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     
     // Next/Previous page links
     var paginationWrap = $("<div class='pagination'>");
-    this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page" }).html("&larr; Previous");
+    this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
     
-    this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page" }).html("Next &rarr;");
+    this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
     this.previousPageLink.click(function(event){
       this.loadMyImages(-1);
       event.preventDefault();
@@ -110,9 +106,9 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
             url: this.imagesUploader.uploadUrl,
             data: railsParams,
             dataType: "json",
-            success: function(data) {
-              ddd(data);
-            }
+            success: function(serverData) {
+              this.refreshMyImages([serverData.image]);
+            }.pBind(this)
           });
           break;
       }
@@ -127,9 +123,6 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     $super();
     if (tab == this.tabContainers[0].id) { // My Images tab
       this.loadMyImages(0);
-    }
-    else if (tab == this.tabContainers[1].id) { // Web Images tab
-      this.loadWebImages();
     }
   },
   loadMyImages: function(pageIncrement) {
@@ -152,15 +145,10 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           var myImagesList = $("<ul>");
           thumbsWrap.append(myImagesList);
           
-          $.each(data.images, function(i,image){
-            $("<img>").attr({
-              id: image.uuid(),
-              src : image.data.properties.thumb_url,
-              alt : ""
-            })
-            .data("properties", jQuery.extend({type:"my_image"}, image.data.properties))
-            .appendTo(myImagesList)
-            .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
+          $.each(data.images, function(i,webDocImage){
+            
+            myImagesList.append(this.buildThumbnail(webDocImage.uuid(), webDocImage.data.properties));
+            
           }.pBind(this));
         }
         this.refreshMyImagesPagination(data.pagination);
@@ -174,19 +162,10 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     var myImagesList = this.myImagesContainer.find('.thumbnails ul');
     if (this.myImagesPage === 1 && myImagesList.length > 0) {
       
-      
-      //TODO optmize code duplication with loadMyImages!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      
-      
-       $.each(newImages, function(i,image){
-          $("<img>").attr({
-            id: image.uuid,
-            src : image.properties.thumb_url,
-            alt : ""
-          })
-          .data("properties", jQuery.extend({type:"my_image"}, image.properties))
-          .prependTo(myImagesList)
-          .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
+       $.each(newImages, function(i,image) {
+         
+         myImagesList.prepend(this.buildThumbnail(image.uuid, image.properties));
+          
         }.pBind(this));
     }
     else { // If not, load the 1st page
@@ -195,18 +174,33 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       this.loadMyImages(0);
     }
   },
+  buildThumbnail: function(uuid, properties, myImagesList) {
+    var thumb = $("<img>").attr({
+      id: uuid,
+      src : properties.thumb_url,
+      alt : ""
+    })
+    .data("properties", jQuery.extend({type:"my_image"}, properties));
+    
+    var liWrap = $("<li>");
+    if (properties.type) liWrap.addClass(properties.type);
+    var aWrap = $("<a href='' title=''></a>");
+    aWrap.append(thumb);
+    aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
+    liWrap.append(aWrap);
+
+    return liWrap;
+  },
   refreshMyImagesPagination: function(pagination) {
     if (pagination.previous_page > 0) this.previousPageLink.show();
     else this.previousPageLink.hide();
     if (pagination.next_page > 0) this.nextPageLink.show();
     else this.nextPageLink.hide();
   },
-  loadWebImages: function() {
-  },
   prepareDetailsView: function($super, properties) { // type: my_image, flickr, google
     $super();
     // View title
-    this.detailsView.find('.toolbar h1').attr({'class':properties.type});
+    this.detailsView.attr({'class':"view "+properties.type});
 
     // Image name
     var name = "";
@@ -231,6 +225,11 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     var imageActions = $('#image_actions');
     imageActions.find(".dyn").hide();
     imageActions.find("."+properties.type).show();
+    
+    // If Details view is loaded from the My Images section, we won't need this action...
+    if (this.element.find('div.selected')[0] == this.tabContainers[0]) {
+      $("#add_to_my_images_action").parent().hide();
+    }
   },
   preloadImage: function(imageSrc) {
     var oImage = new Image();
