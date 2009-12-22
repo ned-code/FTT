@@ -21,14 +21,6 @@ WebDoc.WebImagesSearch = $.klass({
       this.flickrImagesSearch.initialSearch(query);
       
     }.pBind(this));
-
-    // Observe thumb clicks (with event delegation) for all current and future thumbnails
-    $("#web_images .thumbnails ul li a").live("click", function (event) {
-      var thumbData = $(event.target).data("thumbData");
-      this.imagesLibrary.prepareDetailsView(thumbData.type, thumbData.webImageData);
-      this.imagesLibrary.showDetailsView.click();
-      event.preventDefault();
-    }.pBind(this));
   }
 });
 
@@ -85,25 +77,23 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
       function(data){
         // ddd(data);
         this.resultsCount.text(data.photos.total);
-        this.page = parseInt(data.photos.page);
+        this.page = parseInt(data.photos.page,10);
         this.perPage = data.photos.perpage;
         
         $.each(data.photos.photo, function(i,photo){
           var photoSourceUrl = "http://farm"+photo.farm+".static.flickr.com/"+photo.server+"/"+photo.id+"_"+photo.secret+".jpg";
+          var photoPageLink = "http://www.flickr.com/photos/"+photo.owner+"/"+photo.id;
           $("<img>").attr({
             "src" : photoSourceUrl.replace('.jpg','_s.jpg'), 
             "alt" : "" })
-          .data("thumbData", {  
-            "type" : "flickr",
-            "webImageData" : { 'photo_id':photo.id, 'user_id':photo.owner, 'title':photo.title, 'source_url':photoSourceUrl }
-          })
+          .data("properties", { type:"flickr", url:photoSourceUrl, title:photo.title, image_link:photoPageLink })
           .appendTo(this.imagesContainer)
-          .wrap("<li><a href=\"http://www.flickr.com/photos/"+photo.owner+"/"+photo.id+"\" title=\""+ photo.title +"\"></a></li>");
+          .wrap("<li><a href=\""+photoPageLink+"\" title=\""+ photo.title +"\"></a></li>");
         }.pBind(this));
         
         this.container.find('.loading').remove();
         
-        if ( parseInt(data.photos.pages) > this.page ) {
+        if ( parseInt(data.photos.pages,10) > this.page ) {
           this.loadMoreLink.show();
         }
         else {

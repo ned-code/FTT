@@ -55,7 +55,7 @@ WebDoc.Library = $.klass({
   didClickOnTab: function(tab) {
     //common code to be executed for all subclasses
   },
-  prepareDetailsView: function(type, data) {
+  prepareDetailsView: function(properties) {
     //common code to be executed for all subclasses
   }
 });

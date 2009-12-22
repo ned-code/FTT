@@ -40,6 +40,17 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     this.webImagesSearch = new WebDoc.WebImagesSearch('web_images_search_field', this);
     // Setup images uploader
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
+    
+    
+    // Observe thumb clicks (with event delegation) for all current and future thumbnails
+    $("#"+libraryId+" .thumbnails ul li a").live("click", function (event) {
+      var properties = $(event.target).data("properties");
+      this.prepareDetailsView(properties);
+      this.showDetailsView.click();
+      event.preventDefault();
+    }.pBind(this));
+    
+    
   },
   setupMyImages: function() {
     this.myImagesPage = 1;
@@ -64,7 +75,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   },
   dragStart: function(event) {
     var draggingImg = $(event.target).find('img');
-    event.originalEvent.dataTransfer.setData('application/ub-image', draggingImg.data('properties').url);
+    event.originalEvent.dataTransfer.setData('application/ub-image', draggingImg.data("properties").url);
   },
   didClickOnTab: function($super, tab) {
     $super();
@@ -96,12 +107,14 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           thumbsWrap.append(myImagesList);
           
           $.each(data.images, function(i,image){
+            var properties
+
             $("<img>").attr({
               id: image.uuid(),
               src : image.data.properties.thumb_url,
               alt : ""
             })
-            .data('properties', image.data.properties)
+            .data("properties", jQuery.extend({type:"my_image"}, image.data.properties))
             .appendTo(myImagesList)
             .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
           }.pBind(this));
@@ -127,7 +140,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
             src : image.properties.thumb_url,
             alt : ""
           })
-          .data('properties', image.properties)
+          .data("properties", jQuery.extend({type:"my_image"}, image.properties))
           .prependTo(myImagesList)
           .wrap("<li><a href=\"#\" title=\""+ "TODO IMAGEITEM TITLE" +"\"></a></li>");
         }.pBind(this));
@@ -146,33 +159,37 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   },
   loadWebImages: function() {
   },
-  prepareDetailsView: function($super, type, data) { // type: my_image, flickr, google
+  prepareDetailsView: function($super, properties) { // type: my_image, flickr, google
     $super();
     // View title
-    this.detailsView.find('.toolbar h1').attr({'class':type});
-    
+    this.detailsView.find('.toolbar h1').attr({'class':properties.type});
+
     // Image title
-    this.detailsView.find('.image_title').text(data.title);
-    
-    // Image link
-    var imageLink = "";
-    switch (type) {
-      case "my_image":
-        break;
-      case "flickr":
-        imageLink = "http://www.flickr.com/photos/"+data.user_id+"/"+data.photo_id;
-        break;
-      case "google":
-        break;
+    var title = "";
+    if (properties.title) title = properties.title;
+    else if (properties.url.match(/([^\/\\]+)\.([a-z0-9]{3,4})$/i)) { // extract filename
+      title = RegExp.$1 +"."+ RegExp.$2;
     }
-    this.detailsView.find('.single_image a').attr({"href":imageLink});
+    this.detailsView.find('.image_title').text(title);
+
+    // Image Link
+    this.detailsView.find('.single_image a').attr({"href":properties.image_link});
+
+    // switch (properties.type) {
+    //   case "my_image":
+    //     break;
+    //   case "flickr":
+    //     break;
+    //   case "google":
+    //     break;
+    // }
     
-    // Image
+    // Image source
     var imageContainer = this.detailsView.find('.single_image');
     imageContainer.hide();
     imageContainer.before($('<div class="loading">Loading</div>'));
-    this.detailsView.find('.single_image img').attr({'src':data.source_url});
-    this.preloadImage(data.source_url);
+    this.detailsView.find('.single_image img').attr({'src':properties.url});
+    this.preloadImage(properties.url);
   },
   preloadImage: function(imageSrc) {
     var oImage = new Image();
@@ -189,4 +206,3 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     this.detailsView.find('.loading').remove();
   }
 });
-

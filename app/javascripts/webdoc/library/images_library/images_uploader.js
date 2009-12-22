@@ -2,6 +2,8 @@
  * @author Zeno Crivelli
 **/
 
+WebDoc.SupportedImagesExtensions = ["jpg","jpeg","png","gif"];
+
 WebDoc.ImagesUploader = $.klass({
   initialize: function(uploadControlId, imagesLibrary) {
     this.uploadControl = $('#'+uploadControlId);
@@ -27,7 +29,7 @@ WebDoc.ImagesUploader = $.klass({
       upload_url: "/images",
       file_post_name: "image[file]",
       file_size_limit: "10240",
-      file_types: "*.jpg;*.jpeg;*.png;*.gif",
+      file_types: "*."+WebDoc.SupportedImagesExtensions.join(";*."), // "*.jpg;*.jpeg;*.png;*.gif"
       file_types_description: "Web Image Files",
       file_upload_limit: "0",
       flash_url: "/swfupload/swfupload.swf",
