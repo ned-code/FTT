@@ -29,7 +29,7 @@ Rails::Initializer.run do |config|
   config.gem 'hpricot'
   config.gem 'json'
   config.gem 'xmpp4r'
-  
+  config.gem 'acl9'
   config.gem 'carrierwave'
   config.gem 'mini_magick'
   config.gem 'right_aws'
