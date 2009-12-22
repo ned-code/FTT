@@ -8,7 +8,8 @@ WebDoc.ITEM_TYPE_WIDGET = "widget";
 
 WebDoc.Item = $.klass(MTools.Record, 
 {
-  initialize: function($super, json) {
+  initialize: function($super, json, page) {
+    this.page = page
     $super(json);
     if (!json) {
       this.data.data = { preference: {}};
@@ -161,10 +162,17 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   rootUrlArgs: function() {
-    return { 
-      document_id: WebDoc.application.pageEditor.currentDocument.uuid(),
-      page_id: this.data.page_id 
-      };  
+    if (this.page) {
+      return {
+        document_id: WebDoc.application.pageEditor.currentDocument.uuid(),
+        page_id: this.page.uuid()
+      };
+    }
+    else {
+      ddd("item without page !!!!!!!!!!!!!!!!");
+      ddt();
+      return {};
+    }
   },
   
   /*

@@ -137,8 +137,9 @@ WebDoc.PageEditor = $.klass({
   },
 
   addPage: function(e) {
-    var newPage = new WebDoc.Page();
-    newPage.data.document_id = this.currentDocument.uuid();
+    var newPage = new WebDoc.Page(null, this.currentDocument);
+    // we don't need to set foreign keys. It is autoatically done on the server side
+    //newPage.data.document_id = this.currentDocument.data.document_id;
     newPage.data.position = this.currentPage.data.position + 1;
     newPage.save(function(newObject, status)
     {

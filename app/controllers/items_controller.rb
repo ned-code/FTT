@@ -29,7 +29,7 @@ class ItemsController < ApplicationController
   def create
     @item = @page.items.build(params[:item])
     @item.save
-    message = { :source => params[:source], :item =>  params[:item] }
+    message = { :source => params[:source], :item =>  @item.attributes() }
     xmpp_notify message.to_json    
     render :json => @item
   end
@@ -38,7 +38,7 @@ class ItemsController < ApplicationController
   def update
     @item = @page.items.find_by_uuid(params[:id])
     @item.update_attributes(params[:item])
-    message = { :source => params[:source], :item =>  params[:item] }
+    message = { :source => params[:source], :item =>  @item.attributes() }
     xmpp_notify message.to_json    
     render :json => @item
   end
@@ -47,7 +47,7 @@ class ItemsController < ApplicationController
   def destroy
     @item = @page.items.find_by_uuid(params[:id])
     @item.destroy
-    message = { :source => params[:source], :item =>  { :page_id => @page.uuid, :uuid => params[:id]  }, :action => "delete" }
+    message = { :source => params[:source], :item =>  { :page_id => @page.id, :uuid => params[:id]  }, :action => "delete" }
 
     xmpp_notify message.to_json    
     render :json => {}

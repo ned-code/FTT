@@ -4,8 +4,9 @@
 
 WebDoc.Page = $.klass(MTools.Record, 
 { 
-  initialize: function($super, json) {
+  initialize: function($super, json, document) {
     this.items = [];
+    this.document = document;
     $super(json);
   },
   
@@ -84,12 +85,12 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   createItem: function(itemData) {
-    var newItem = new WebDoc.Item(itemData);
+    var newItem = new WebDoc.Item(itemData, this);
     this.addItem(newItem);
   },
   
   addItem: function(item) {
-    item.data.page_id = this.uuid();
+    item.page = this;
     this.items.push(item);
     this.fireItemAdded(item);    
   },
@@ -156,9 +157,16 @@ WebDoc.Page = $.klass(MTools.Record,
   },
 
   rootUrlArgs: function() {
-    return { 
-      document_id: this.data.document_id 
-      };  
+    if (this.document) {
+      return {
+        document_id: this.document.uuid()
+      };
+    }
+    else {
+      ddd("page without document !!!!!!!!!!!!!!!!!!!");
+      ddt();
+      return {};
+    }
   }
 });
 

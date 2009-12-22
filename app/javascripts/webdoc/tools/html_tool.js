@@ -11,7 +11,7 @@ WebDoc.HtmlTool = $.klass(WebDoc.Tool, {
 
   selectTool: function() {
     WebDoc.application.boardController.unselectAll();      
-    var newItem = new WebDoc.Item();
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
     newItem.data.data.tag = "div";
     newItem.data.data.innerHTML = "HTML Snipplet";

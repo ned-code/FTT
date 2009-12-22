@@ -24,6 +24,9 @@ MTools.ServerCache = $.klass(
     store: function(record) {
       var store = this.getStoreForRecordClass(record.constructor);
       store[record.uuid()] = record;
+      if (record.data.id) {
+        store[record.data.id] = record;
+      }
     },
     
     /**

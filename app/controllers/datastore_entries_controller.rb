@@ -194,7 +194,7 @@ class DatastoreEntriesController < ApplicationController
     if w = Item.find_by_uuid(widget_uuid)
       #get page
       if p = w.page
-        return p.document_id
+        return p.document.uuid
       end
     end
  
