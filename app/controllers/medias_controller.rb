@@ -15,7 +15,7 @@ class MediasController < ApplicationController
     @media = Media.find_by_uuid(params[:id])
     #TODO temp check by id if not found by uuid
     if (!@media)
-      @media.find(params[:id])
+      @media = Media.find(params[:id])
     end
     respond_to do |format|
       format.html { redirect_to @media.file.url }
