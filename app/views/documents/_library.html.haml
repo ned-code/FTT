@@ -1,9 +1,3 @@
--##libraries{ :style => "display: none" }
-  -##widget_library_wrap
-  -#  %ul          
-  -##image_library_wrap
-  -#  %ul
-
 .libraries_wrap
   #swfupload_container{ :style => "display:none" }
     %input#upload_images_button{ :type => "button", :value => "Choose images" }
@@ -60,6 +54,8 @@
       .toolbar
         %h1 Apps
         %a.back{ :href =>'#' } Back
+      #apps_library_wrap
+        %ul                 
     #add_images.view
       .toolbar
         %h1 Add Images

@@ -10,7 +10,7 @@ WebDoc.LibrariesController = $.klass({
   initialize: function() {
     this.imagesLibrary = new WebDoc.ImagesLibrary("images");
     // this.videosLibrary = new WebDoc.VideosLibrary("videos");
-    // this.widgetsLibrary = new WebDoc.WidgetsLibrary("widgets");
+    this.appsLibrary = new WebDoc.AppsLibrary("apps");
   }
 });
 
@@ -66,3 +66,5 @@ WebDoc.Library = $.klass({
 });
 
 //= require <webdoc/library/images_library>
+//= require <webdoc/library/apps_library>
+
