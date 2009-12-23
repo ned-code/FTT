@@ -15,9 +15,10 @@ class WidgetsController < ApplicationController
   def show
     @widget = Medias::Widget.find_by_uuid(params[:id])
     #TODO temp check by id if not found by uuid
-    if (@widget)
+    if (!@widget)
       @widget = Medias::Widget.find(params[:id])
-    end    
+    end
+
     respond_to do |format|
       format.html { redirect_to @widget.file.url }
       format.json { render :json => @widget }
