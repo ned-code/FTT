@@ -12,10 +12,10 @@
 ActiveRecord::Schema.define(:version => 20091217100542) do
 
   create_table "datastore_entries", :force => true do |t|
-    t.string   "ds_key",                      :null => false
-    t.text     "ds_value",   :limit => 65537, :null => false
-    t.integer  "widget_id"
-    t.string   "user_id",    :limit => 36
+    t.string   "ds_key",                       :null => false
+    t.text     "ds_value",    :limit => 65537, :null => false
+    t.text     "widget_uuid"
+    t.string   "user_id",     :limit => 36
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -12,11 +12,11 @@
       .toolbar
         %h1 Library
       %ul.individual
-        %li
+        %li.images
           %a{ :href => '#images' } Images
-        %li
+        %li.videos
           %a{ :href =>'#videos'} Videos
-        %li
+        %li.apps
           %a{ :href =>'#apps'} Apps
     #images.view
       .toolbar
@@ -78,12 +78,13 @@
           %img{ :src => "", :alt => "" }
           .icon_overlay
       %h4.image_name
+      %h5.image_size
       #image_actions
         %ul
           %li
-            %a#add_image_to_page_action{ :href => "" } Add to page
+            %a.disabled#add_image_to_page_action{ :href => "" } Add to page
           %li
-            %a#set_image_as_bg_action{ :href => "" } Set as background
+            %a.disabled#set_image_as_bg_action{ :href => "" } Set as background
           %li.dyn.flickr
             %a#show_flickr_page_action{ :href => "" } Show photo page on Flickr
           %li.dyn.flickr.google

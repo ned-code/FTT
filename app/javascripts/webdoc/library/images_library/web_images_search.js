@@ -18,7 +18,7 @@ WebDoc.WebImagesSearch = $.klass({
       event.preventDefault();
       var query = this.searchField.val();
       
-      // this.flickrImagesSearch.initialSearch(query);
+      this.flickrImagesSearch.initialSearch(query);
       this.googleImagesSearch.initialSearch(query);
       
     }.pBind(this));
@@ -40,7 +40,7 @@ WebDoc.ServiceImagesSearch = $.klass({
     this.imagesContainer = $('<ul>');
     this.container.append(this.imagesContainer);
   },
-  initialSearch: function(query) {
+  initialSearch: function() {
     this.resultsCount.text('0');
     this.imagesContainer.empty();
     this.showSpinner();
@@ -52,6 +52,23 @@ WebDoc.ServiceImagesSearch = $.klass({
   showSpinner: function() {
     this.container.find('.load_more').hide();
     this.container.append($('<div class="loading">Loading</div>'));
+  },
+  buildThumbnail: function(type, url, thumbUrl, name, imageLink, size) {
+    var properties = { type:type, url:url, thumb_url:thumbUrl, name:name, image_link:imageLink };
+    if (size) jQuery.extend(properties, { width:size.width, height:size.height });
+    
+    var thumb = $("<img>").attr({
+      src : thumbUrl,
+      alt : ""
+    }).data("properties", properties);
+    
+    var liWrap = $("<li>").addClass(type);
+    var aWrap = $("<a href=\""+imageLink+"\" title=\""+name+"\"></a>");
+    aWrap.append(thumb);
+    // aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
+    liWrap.append(aWrap);
+    
+    return liWrap;
   }
 });
 
@@ -79,7 +96,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     "&content_type=1&api_key=" + this.flickrApiKey + "&format=json&jsoncallback=?";
     $.getJSON(flickrUrl,
       function(data){
-        // ddd(data);
+        //ddd(data);
         this.resultsCount.text(data.photos.total);
         this.page = parseInt(data.photos.page,10);
         this.perPage = data.photos.perpage;
@@ -89,17 +106,8 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
           var thumbSourceUrl = photoSourceUrl.replace('.jpg','_s.jpg');
           var photoPageLink = "http://www.flickr.com/photos/"+photo.owner+"/"+photo.id;
           
-          var thumb = $("<img>").attr({
-            src : thumbSourceUrl,
-            alt : ""
-          }).data("properties", { type:"flickr", url:photoSourceUrl, thumb_url:thumbSourceUrl, name:photo.title, image_link:photoPageLink });
+          this.imagesContainer.append(this.buildThumbnail("flickr", photoSourceUrl, thumbSourceUrl, photo.title, photoPageLink, null));
           
-          var liWrap = $("<li>").addClass("flickr");
-          var aWrap = $("<a href=\""+photoPageLink+"\" title=\""+photo.title+"\"></a>");
-          aWrap.append(thumb);
-          // aWrap.append($("<span>").addClass("icon_overlay")); //flickr mini icon
-          liWrap.append(aWrap);
-          this.imagesContainer.append(liWrap);
         }.pBind(this));
         
         this.container.find('.loading').remove();
@@ -149,55 +157,58 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   },
   performSearch: function() {
     // http://code.google.com/apis/ajaxsearch/documentation/reference.html
-    ddd('ciao')
+
     var googleUrl = this.googleImagesSearchBaseUrl +
     "?q=" + encodeURIComponent(this.query) +
+    "&rsz=large" + //asks for 8 images (max value)
+    "&start=" + this.startParam +
     "&key=" + this.googleApiKey +
     "&v=1.0&callback=?";
-    ddd(googleUrl)
+
     $.getJSON(googleUrl,
       function(data){
         ddd(data);
+        var cursor = data.responseData.cursor;
+        this.resultsCount.text(cursor.estimatedResultCount);
+
+        if (data.responseData.results && data.responseData.results.length > 0) {
+          var results = data.responseData.results;
+          
+          $.each(results, function(i, gImage) {
+            
+            this.imagesContainer.append(this.buildThumbnail("google", gImage.url, gImage.tbUrl, gImage.titleNoFormatting, gImage.url, {width:gImage.width,height:gImage.height}));
+            
+          }.pBind(this));
+        
+          this.container.find('.loading').remove();
+        
+          if ( cursor.pages && cursor.pages.length > 1 ) {
+            var nextPage = cursor.pages[cursor.currentPageIndex + 1];
+            if (nextPage) {
+              this.startParam = nextPage.start;
+              ddd("new start param:"+this.startParam);
+              this.loadMoreLink.show();
+            }
+          }
+          else {
+            this.loadMoreLink.hide();
+          }
+        }
       }.pBind(this)
     );
-    
-    // http://code.google.com/apis/ajaxlibs/
-    // 
-    // $.getJSON("http://ajax.googleapis.com/ajax/services/search/web?q=google&v=1.0&callback=?",
-    // 
-    //     // on search completion, process the results
-    //     function (data) {
-    //       if (data.responseData.results &&
-    //           data.responseData.results.length > 0) {
-    //         var results = data.responseData.results;
-    // 
-    //         for (var i=0; i < results.length; i++) {
-    //           // Display each result however you wish
-    //           alert(results[i].titleNoFormatting);
-    //         }    
-    //       }
-    // 
-    //     });
-    //   });
-    
-    
-    
-    
-    
   },
   initialSearch: function($super, query) {
     if (query.replace(/\s/g,'') !== "") {
       $super();
       this.query = query;
-      this.page = 1;
-      this.perPage = 9;
+      this.startParam = 0;
 
       this.performSearch();
     }
   },
   loadMore: function($super) {
     $super();
-    // this.page += 1; 
-    // this.performSearch();
+    // new start param should have already been updated
+    this.performSearch();
   }
 });

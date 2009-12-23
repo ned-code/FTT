@@ -1,4 +1,5 @@
 /* ============================================================== */
+/* ============================ */
 /* = jQTouch-simplified style = */
 /* ============================ */
 * {
@@ -279,20 +280,24 @@ ul.individual li {
 
 ul.individual li a {
   color: #fff;
-  background: #555;
+  background:#555;
   line-height: 16px;
   width: 75px;
   float: left;
   display: block;
   margin:6px 10px 10px 6px;
-  padding: 13px 10px 14px 10px;
+  padding: 60px 10px 14px 10px;
   text-decoration: none;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
 }
 
+ul.individual li.images a {background:#555 url(/images/libraries/images_icon.png) no-repeat 50% 18px;}
+ul.individual li.videos a {background:#555 url(/images/libraries/videos_icon.png) no-repeat 50% 16px;}
+ul.individual li.apps a {background:#555 url(/images/libraries/apps_icon.png) no-repeat 50% 20px;}
+
 ul.individual li a:hover {
-  background:#333;  
+  background-color:#333;  
 }
 
 /* ======== */
@@ -405,6 +410,13 @@ div.tabs > div {
   font-weight:normal;
 }
 
+#images .thumbnails .no_items {
+  font-size:14px;
+  text-align:center;
+  display:block;
+  padding:30px 10px;
+}
+
 #images .thumbnails ul {
   list-style-type:none;
   padding:0;
@@ -498,12 +510,17 @@ div.tabs > div {
   margin:20px;
 }
 
-#image_details h4 {
+#image_details .image_name {
   font-size:15px;
   font-weight:bold;
   padding:6px;
   text-align:center;
   color:#666;
+}
+
+#image_details .image_size {
+  text-align:center;
+  color:#999;
 }
 
 #image_details .single_image {
@@ -544,6 +561,11 @@ div.tabs > div {
 
 #image_actions li {
   display:inline;
+}
+
+#image_actions li a.disabled, #image_actions li a.disabled:hover {
+  color:#a6caea;
+  text-decoration:underline;
 }
 
 #image_actions li:before {

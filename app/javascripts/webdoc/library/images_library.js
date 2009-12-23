@@ -181,7 +181,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       
       MTools.ServerManager.getRecords(WebDoc.Image, null, function(data) {
         if (data.images.length === 0) {
-          var noImages = $("<span>").text('No Images');
+          var noImages = $("<span>").addClass('no_items').text('No Images');
           thumbsWrap.append(noImages);
         }
         else {
@@ -202,7 +202,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   },
   refreshMyImages: function(newImages) {
     // Note: do not pass the newImages arg to force reloading the whole section
-    ddd("refreshing My Images")
+    
     //if we are in first page, don't reload the whole thing, just add the newly uploaded images to the top of the list 
     var myImagesList = this.myImagesContainer.find('.thumbnails ul');
     if (newImages && this.myImagesPage === 1 && myImagesList.length > 0) {
@@ -260,6 +260,15 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       name = RegExp.$1 +"."+ RegExp.$2;
     }
     this.detailsView.find('.image_name').text(name);
+
+    // Image size
+    var imageSizeEl = this.detailsView.find('.image_size');
+    if (properties.width && properties.height) {
+      imageSizeEl.text(properties.width+" x "+properties.height);
+    }
+    else {
+      imageSizeEl.text('');
+    }
 
     // Image Link
     var imageLink = properties.image_link ? properties.image_link : properties.url;
