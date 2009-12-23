@@ -73,7 +73,7 @@ $.extend(MTools.ServerManager, {
           callBack.call(this, result);
         }
         else {
-          if (typeof data == 'object' && pluralizedRecordClassName in data) { //if data is a dictionary (not an array) this will search among all the keys of the dictionary
+          if (data && typeof data == 'object' && pluralizedRecordClassName in data) { //if data is a dictionary (not an array) this will search among all the keys of the dictionary
             // the server returned a list of records along with additional information (like pagination data): { images:[{image1},{image2},...], total:432 }
             var recordsData = data[pluralizedRecordClassName];
             if (recordsData.length > 0) {
