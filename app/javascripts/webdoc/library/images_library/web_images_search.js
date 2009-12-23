@@ -18,7 +18,8 @@ WebDoc.WebImagesSearch = $.klass({
       event.preventDefault();
       var query = this.searchField.val();
       
-      this.flickrImagesSearch.initialSearch(query);
+      // this.flickrImagesSearch.initialSearch(query);
+      this.googleImagesSearch.initialSearch(query);
       
     }.pBind(this));
     
@@ -132,5 +133,71 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
 WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   initialize: function($super) {
     $super('google_images');
+
+    this.googleApiKey = 'ABQIAAAApQVNSQ3vVhagmaEB0elu7BTPrwtLmcDxRofti2tV-VsxVMfrRRTawoNcxVFL3Hajl6ZPExg6uL8XGg';
+    // This key is good for all URLs in this directory: http://webdoc.com
+    // (Key created with info@jilion.com account)
+    
+    this.googleImagesSearchBaseUrl = "http://ajax.googleapis.com/ajax/services/search/images";
+    
+    //Load More link
+    $("<a>").attr("href","").text("Load more").click(function(event){
+      this.loadMore();
+      event.preventDefault();
+    }.pBind(this)).appendTo(this.container).wrap("<div class='load_more' style='display:none'>");
+    this.loadMoreLink = this.container.find('.load_more');
+  },
+  performSearch: function() {
+    // http://code.google.com/apis/ajaxsearch/documentation/reference.html
+    ddd('ciao')
+    var googleUrl = this.googleImagesSearchBaseUrl +
+    "?q=" + encodeURIComponent(this.query) +
+    "&key=" + this.googleApiKey +
+    "&v=1.0&callback=?";
+    ddd(googleUrl)
+    $.getJSON(googleUrl,
+      function(data){
+        ddd(data);
+      }.pBind(this)
+    );
+    
+    // http://code.google.com/apis/ajaxlibs/
+    // 
+    // $.getJSON("http://ajax.googleapis.com/ajax/services/search/web?q=google&v=1.0&callback=?",
+    // 
+    //     // on search completion, process the results
+    //     function (data) {
+    //       if (data.responseData.results &&
+    //           data.responseData.results.length > 0) {
+    //         var results = data.responseData.results;
+    // 
+    //         for (var i=0; i < results.length; i++) {
+    //           // Display each result however you wish
+    //           alert(results[i].titleNoFormatting);
+    //         }    
+    //       }
+    // 
+    //     });
+    //   });
+    
+    
+    
+    
+    
+  },
+  initialSearch: function($super, query) {
+    if (query.replace(/\s/g,'') !== "") {
+      $super();
+      this.query = query;
+      this.page = 1;
+      this.perPage = 9;
+
+      this.performSearch();
+    }
+  },
+  loadMore: function($super) {
+    $super();
+    // this.page += 1; 
+    // this.performSearch();
   }
 });
