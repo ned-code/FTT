@@ -24,7 +24,7 @@ class ImagesController < ApplicationController
   
   # /images/:id
   def show
-    @image = current_user.images.find(params[:id])
+    @image = current_user.images.find_by_uuid(params[:id])
     
     respond_to do |format|
       format.html { redirect_to @image.file.url }
@@ -48,10 +48,10 @@ class ImagesController < ApplicationController
   
   # DELETE /images/:id
   def destroy
-    @image = current_user.images.find(params[:id])
+    @image = current_user.images.find_by_uuid(params[:id])
     @image.destroy
     
     head :ok
   end
-
+  
 end

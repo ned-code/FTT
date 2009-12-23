@@ -1,8 +1,25 @@
+class Item < ActiveRecord::Base
+  has_uuid
+  serialize :data
+  
+  # ================
+  # = Associations =
+  # ================
+  
+  belongs_to :page
+  belongs_to :media, :polymorphic => true
+  
+  def to_param
+    uuid
+  end
+  
+end
+
 # == Schema Information
 #
 # Table name: items
 #
-#  uuid       :string(36)      primary key
+#  uuid       :string(36)
 #  page_id    :string(36)      not null
 #  media_id   :string(36)
 #  media_type :string(255)
@@ -11,15 +28,3 @@
 #  updated_at :datetime
 #
 
-class Item < ActiveRecord::Base
-  has_uuid  
-  serialize :data
-
-  # ================
-  # = Associations =
-  # ================
-
-  belongs_to :page
-  belongs_to :media, :polymorphic => true
-
-end

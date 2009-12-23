@@ -1,11 +1,11 @@
 users = [
   {:name => 'Julien', :email => "julien.bachmann@mnemis.com", :pass => 'pass'},
-  {:name => 'Yann',   :email => "yann.ringgenber@mnemis.com", :pass => 'pass'},
+  {:name => 'Yann',   :email => "yann.ringgenberg@mnemis.com", :pass => 'pass'},
   {:name => 'Stelio', :email => "stelio.tzonis@mnemis.com",   :pass => 'pass'},
   {:name => 'David',  :email => "david.matthey@mnemis.com",   :pass => 'pass'},
   {:name => 'Zeno',   :email => "zeno@jilion.com",            :pass => 'pass'},
   {:name => 'Guest',  :email => "guest@mnemis.com",           :pass => 'pass'},
-  {:name => 'All',  :email => "All@mnemis.com",               :pass => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd'}
+  {:name => 'All',    :email => "All@mnemis.com",             :pass => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd'}
 ]
 
 users.each do |user|

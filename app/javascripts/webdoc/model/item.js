@@ -8,7 +8,8 @@ WebDoc.ITEM_TYPE_WIDGET = "widget";
 
 WebDoc.Item = $.klass(MTools.Record, 
 {
-  initialize: function($super, json) {
+  initialize: function($super, json, page) {
+    this.page = page
     $super(json);
     if (!json) {
       this.data.data = { preference: {}};
@@ -77,19 +78,21 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   recomputeInternalSizeAndPosition: function() {
-    var t = this.data.data.css.top || "0px",
-        l = this.data.data.css.left || "0px",
-        w = this.data.data.css.width || "100px",
-        h = this.data.data.css.height || "100px";
-    this.position = {
-      top: parseFloat(t.replace("px", "")),
-      left: parseFloat(l.replace("px", ""))
-    };
-    this.size = {
-      width: parseFloat(w.replace("px", "")),
-      height: parseFloat(h.replace("px", ""))
-    };
-    WebDoc.application.inspectorController.refreshSubInspectors();    
+    try {
+      var t = this.data.data.css.top || "0px", l = this.data.data.css.left || "0px", w = this.data.data.css.width || "100px", h = this.data.data.css.height || "100px";
+      this.position = {
+        top: parseFloat(t.replace("px", "")),
+        left: parseFloat(l.replace("px", ""))
+      };
+      this.size = {
+        width: parseFloat(w.replace("px", "")),
+        height: parseFloat(h.replace("px", ""))
+      };
+      WebDoc.application.inspectorController.refreshSubInspectors();
+    }
+    catch (e) {
+      ddd("error while loading item", this);
+    }    
   },
   
   moveTo: function(newPosition) {
@@ -159,10 +162,17 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   rootUrlArgs: function() {
-    return { 
-      document_id: WebDoc.application.pageEditor.currentDocument.uuid(),
-      page_id: this.data.page_id 
-      };  
+    if (this.page) {
+      return {
+        document_id: WebDoc.application.pageEditor.currentDocument.uuid(),
+        page_id: this.page.uuid()
+      };
+    }
+    else {
+      ddd("item without page !!!!!!!!!!!!!!!!");
+      ddt();
+      return {};
+    }
   },
   
   /*

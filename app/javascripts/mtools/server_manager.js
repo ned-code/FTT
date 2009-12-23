@@ -15,9 +15,21 @@ MTools.ServerManager = $.klass({
 });
 
 $.extend(MTools.ServerManager, {
-
+  
+  /**
+  * cache used by the ServerManager singleton 
+  */
   cache: new MTools.ServerCache(),
   
+  /**
+   * Fetch record object from the server
+   * @param {Object} recordClass the record class to fetch
+   * @param {Object} uuid the uuid of the record or null if we want all records
+   * @param {function} callBack function that is called with the fetched records.
+   *                 function callback(MTools.Record[])
+   * @param {Object} args arguments used for the fetch. Arguments depends on the ecord class. It can be arguments needed for nested resources (@see MTools.Record.rootUrl( documentation))
+   *                 In the futur it can be attributes for the fetch (page number, etc...)
+   */
   getRecords: function(recordClass, uuid, callBack, args) {
     // we can check the cache if we search a record by uuid. Otherwise we need to request the database.
     if (uuid) {
@@ -53,9 +65,9 @@ $.extend(MTools.ServerManager, {
           // the server returned a list of records with no other additional info: [{image1}, {image2}, ...]
           if (data.length > 0) {
             for (var i = 0; i < data.length; i++) {
-              var record = new recordClass(data[i]);
-              MTools.ServerManager.cache.store(record);
-              result.push(record);
+              var currentRecord = new recordClass(data[i]);
+              MTools.ServerManager.cache.store(currentRecord);
+              result.push(currentRecord);
             }
           }
           callBack.call(this, result);
@@ -94,7 +106,8 @@ $.extend(MTools.ServerManager, {
   },
   
   /**
-   *
+   * fetch object from the server with a specified URL.
+   * @deprecated. Use getRecords instead
    * @param {Object} url URL to get the object(s) TODO should be changed to support offline
    * @param {Object} objectClass the class of object to fetch. Returned objects will be of this class
    * @param {Object} callback the callback function that will be called when object(s) are fetched.
@@ -136,20 +149,17 @@ $.extend(MTools.ServerManager, {
   },
   
   /**
-   * Make a new object persitant. Do an HTTP POST.
-   * @param url the url to call for persisting a new object. TODO must be changed for offline
+   * Make a new object persitant. Do an HTTP POST. (some value can be created on the server side). object is automatically refresh with the data recieved by the server
    * @param object the new object to persist
    * @param callBack function that called when object is persisted.
    *        callback recieve an array that has the created object.
-   *        context for the callback function is the ajax request. created object is an object of the same class but can be a different one
-   *        (some value can be created on the server side)
    **/
-  newObject: function(url, object, callBack) {
+  newObject: function(object, callBack) {
     var message = {
       source: MTools.ServerManager.sourceId
     };
     $.extend(message, object.to_json(true));
-    $.post(url, message, function(data, textstatus) {
+    $.post(object.rootUrl() + "/" + object.className() + "s", message, function(data, textstatus) {
       // refresh is needed because some values are generaed on server side
       // i.e. page size and background.
       object.refresh(data);
@@ -160,18 +170,17 @@ $.extend(MTools.ServerManager, {
   
   /**
    * Update an existing object with new values
-   * @param {Object} url the url to update the object. TODO change for offline
    * @param {Object} object the modified object
    * @param {Object} callBack function that called when object is updated
    *        callback recieve an array that has the updated object.
    */
-  updateObject: function(url, object, callBack) {
+  updateObject: function(object, callBack) {
     var param = {
       source: MTools.ServerManager.sourceId,
       _method: "PUT"
     };
     $.extend(param, object.to_json());
-    $.post(url, param, function(data, textstatus) {
+    $.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
       //object.refresh(data);
       callBack.apply(this, [[object]]);
     }, "json");
@@ -179,17 +188,16 @@ $.extend(MTools.ServerManager, {
   
   /**
    *
-   * @param {Object} url the url to delete the object. TODO change for offline
    * @param {Object} object the object to delete
    * @param {Object} callBack function that called when object is deleted
    *        callback recieve an array that has the updated object.
    */
-  deleteObject: function(url, object, callBack) {
+  deleteObject: function(object, callBack) {
     var param = {
       source: MTools.ServerManager.sourceId,
       _method: "DELETE"
     };
-    $.post(url, param, function(data, textstatus) {
+    $.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
       callBack.apply(this, [object]);
     }, "json");
   }

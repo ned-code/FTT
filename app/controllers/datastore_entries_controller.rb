@@ -36,11 +36,9 @@ class DatastoreEntriesController < ApplicationController
     #check parameters
     if(key == nil || key == '')
       render :text => 'Key is nil.' #print error
-      return
     end
     if(value == nil || value == '')
       render :text => 'Value is nil.' #print error
-      return
     end
     if(is_unique == 'true' || is_unique == true)
       is_unique = true
@@ -50,9 +48,8 @@ class DatastoreEntriesController < ApplicationController
     
     #check if widget exists
     if(widget_uuid != nil)
-      if(!Item.find(:first, :conditions => {:uuid => widget_uuid}))
+      unless Item.find_by_uuid(widget_uuid)
         render :text => 'Widget doesn\'t exist.' #print error
-        return
       end
     end
     
@@ -75,7 +72,6 @@ class DatastoreEntriesController < ApplicationController
           ds.save
         else
           render :text => 'Cannot update record' #print error
-          return
         end
       else #unique record, doesn't exist
         #create the new key
@@ -195,10 +191,10 @@ class DatastoreEntriesController < ApplicationController
   
   def getDocumentOfWidget(widget_uuid)
     #get widget
-    if(w = Item.find(:first,:conditions => {:uuid => widget_uuid}))
+    if w = Item.find_by_uuid(widget_uuid)
       #get page
-      if(p = Page.find(:first, :conditions => {:uuid => w.page_id}))
-        return p.document_id
+      if p = w.page
+        return p.document.uuid
       end
     end
  
@@ -227,9 +223,9 @@ class DatastoreEntriesController < ApplicationController
     #if(widget_uuid != nil) #has user read right on document containing widget
     #  hasRight = true
     #  #get widget
-    #  if(w = Item.find(:first,:conditions => {:uuid => widget_uuid}))
+    #  if(w = Item.find_by_uuid(widget_uuid))
     #    #get page
-    #    if(p = Page.find(:first, :conditions => {:uuid => w.page_id}))
+    #    if(p = w.page)
     #      #check if has right
     #      if(r = Role.find(:all, :conditions => {}))
     #      else

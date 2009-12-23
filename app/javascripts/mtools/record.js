@@ -19,14 +19,15 @@
  */
 MTools.Record = $.klass(
 {
-  isNew: true,
-  data: {},
+
   /**
    * constructor take a json as parameter to initialize the data of the object
    * @param {Object} json. If object is passed then it initialized the Record with this data and object is considered as an existing object.
    *                       If null is passed, object is initialized with an UUID and creation date and it is considered as a new object.
    */
   initialize: function(json) {
+    this.isNew = true;
+    this.data = {};    
     this.listeners = [];
     if (!json) {
       this.isNew = true;
@@ -39,22 +40,34 @@ MTools.Record = $.klass(
     }
   },
   
+  /**
+   * Return the data object of the record. Data object represent the persistent data of the record.
+   * @param {boolean} withRelationShip if true, then relationship of record are present in the returned object. 
+   */
   getData: function(withRelationShip) {
     return this.data;
   },
   
+  /**
+   * @return {String} the uuid of the record. You should always use this function instead of directly reading the datauuid attribute.
+   */
   uuid: function() {
     return this.data.uuid;
   },
   
+  /**
+   * @return {Date} the creation date of the record.
+   */
   creationDate: function() {
     var result = new Date();
     result.setISO8601(this.data.created_at);
     return result;
   },
+
   
   /**
    * @deprecated. use the className class function instead.
+   * @return the class name of the record. Class name is the class name that is define on the server side.
    */
   className: function() {
     if (this.constructor.className) {
@@ -68,11 +81,16 @@ MTools.Record = $.klass(
   
   /**
    * @deprecated. use the rootUrl class function instead.
+   * @return the root url corresponding to this record.  
    */
   rootUrl: function() {
     return this.constructor.rootUrl(this.rootUrlArgs());
   },  
   
+  /**
+   * @return {object} return an object that contains value needed to construct the root URL. It is typically used for nesed resources accessed with a REST URL.
+   * Returned object must contain keys that are used by the rootUrl class method of the record type.
+   */
   rootUrlArgs: function() {
     return null;  
   },
@@ -85,6 +103,10 @@ MTools.Record = $.klass(
     this.listeners.push(listener);
   },
   
+  /**
+   * Remove record listener
+   * @param {Object} listener to remove
+   */
   removeListener: function(listener) {
     var index = $.inArray(listener, this.listeners);
     if (index > -1) {
@@ -92,6 +114,9 @@ MTools.Record = $.klass(
     }
   },  
   
+  /**
+   * private method used to notify listeners when record has changed.
+   */
   fireObjectChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
       if (this.listeners[i].objectChanged) {
@@ -101,8 +126,8 @@ MTools.Record = $.klass(
   },
   
   /**
-   * refresh method refresh record data from a json object
-   * @param {Object} json
+   *  refresh record data from a json object
+   * @param {Object} object containing record persistant data. This object must contain 1 attribute with name classname.
    */
   refresh: function(json) {
     this.isNew = false;
@@ -112,6 +137,7 @@ MTools.Record = $.klass(
   
   /**
    * to_json return a rails compatible json object (className[attr1] : value1)
+   * @return an object that can be used to post or put to a rails server
    */
   to_json: function(withRelationShips) {
     var result = {};
@@ -125,12 +151,12 @@ MTools.Record = $.klass(
    */
   save: function(callBack) {
     if (this.isNew) {
-      MTools.ServerManager.newObject(this.rootUrl() + "/" + this.className() + "s", this, function(persitedDoc) {
+      MTools.ServerManager.newObject(this, function(persitedDoc) {
         if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
       });
     }
     else {
-      MTools.ServerManager.updateObject(this.rootUrl() + "/" + this.className() + "s/" + this.uuid(), this, function(persitedDoc) {
+      MTools.ServerManager.updateObject(this, function(persitedDoc) {
         if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
       });
     }
@@ -141,18 +167,31 @@ MTools.Record = $.klass(
    * @param {Object} callBack a callback method that is called when object has been deleted
    */
   destroy: function(callBack) {
-    MTools.ServerManager.deleteObject(this.rootUrl() + "/" + this.className() + "s/" + this.uuid(), this, function(persitedDoc) {
+    MTools.ServerManager.deleteObject(this, function(persitedDoc) {
       if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
     });
   },
   
+  /**
+   * Used to copy a record. All sub class must extend this method to copy their attributes
+   * @return a copy of the record
+   */
   copy: function() {
     var recordCopy = new this.constructor();
     return recordCopy;
   }
 });
 
+//**************
+// Class method
+//**************
 $.extend(MTools.Record, {
+  /**
+   * Convert an oject to a rails conpatible json object
+   * @param {Object} objectToConvert the object to convert
+   * @param {Object} destinationObject an object in which the conversion is done. Used because this method is recursive
+   * @param {Object} prefix a prefix for the conversion.
+   */
   convertToRailsJSon: function (objectToConvert, destinationObject, prefix) {
     for (var key in objectToConvert) {
       var value = objectToConvert[key];
@@ -171,8 +210,9 @@ $.extend(MTools.Record, {
         if (!empty) {
           this.convertToRailsJSon(value, destinationObject, prefix + '[' + key + ']');
         }
+        // if we want rails generate an object on the server side we must at least have 1 key. Se we put a dummy key (rails_empty).
         else {
-          destinationObject[prefix + '[' + key + '][rails_empty]'] = "{}";
+          destinationObject[prefix + '[' + key + '][rails_empty]'] = "dummy";
         }
       }
       else {

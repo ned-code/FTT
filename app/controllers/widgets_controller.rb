@@ -13,7 +13,7 @@ class WidgetsController < ApplicationController
   
   # /widgets/:id
   def show
-    @widget = Medias::Widget.find(params[:id])
+    @widget = Medias::Widget.find_by_uuid(params[:id])
     
     respond_to do |format|
       format.html { redirect_to @widget.file.url }
@@ -34,7 +34,7 @@ class WidgetsController < ApplicationController
   
   # DELETE /widgets/:id
   def destroy
-    @widget = Medias::Widget.find(params[:id])
+    @widget = Medias::Widget.find_by_uuid(params[:id])
     @widget.destroy
     
     head :ok

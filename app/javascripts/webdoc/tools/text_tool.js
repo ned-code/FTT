@@ -28,7 +28,7 @@ WebDoc.TextTool= $.klass(WebDoc.Tool, {
   
   newTextBox: function() {
     //Create model
-    var newItem = new WebDoc.Item();
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_TEXT;
     newItem.data.data.tag = "div";
     newItem.data.data['class'] = "textbox empty";

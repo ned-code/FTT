@@ -31,6 +31,16 @@ WebDoc.Document = $.klass(MTools.Record, {
     }    
   },
   
+  findPageWithId: function(id) {
+    for (var i = 0; i < this.pages.length; i++) {
+      var anObject = this.pages[i];
+      if (anObject.data.id == id) {
+        return anObject;
+      }
+    }
+    return null;
+  },
+  
   findPageWithUuidOrPosition: function(pUuid) {
     var i = 0;
     ddd("find page with uuid or position " + pUuid);
@@ -53,7 +63,7 @@ WebDoc.Document = $.klass(MTools.Record, {
   },
   
   createOrUpdateItem: function(itemData) {
-    var page = this.findPageWithUuidOrPosition(itemData.item.page_id);    
+    var page = this.findPageWithId(itemData.item.page_id);    
     if (!page) {
       ddd("Cannot find page");
     }
@@ -81,7 +91,7 @@ WebDoc.Document = $.klass(MTools.Record, {
   createPage: function(pageData) {
     ddd("create page with data");
     ddd(pageData);
-    var newPage = new WebDoc.Page(pageData);
+    var newPage = new WebDoc.Page(pageData, this);
     this.addPage(newPage, true);
     ddd("page created");
   },
@@ -116,7 +126,7 @@ WebDoc.Document = $.klass(MTools.Record, {
         this.pages[i].data.position++; 
       }
     }
-    page.data.document_id = this.uuid();
+    page.document = this;
     this.pages.push(page);
     this.sortPages();
     this.firePageAdded(page);    

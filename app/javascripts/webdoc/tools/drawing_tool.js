@@ -61,7 +61,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
     ddd("begin draw at point " + mappedPoint.x + ":" + mappedPoint.y);
 
-    this.currentDrawObject = new WebDoc.Item();
+    this.currentDrawObject = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     this.currentDrawObject.data.media_type = WebDoc.ITEM_TYPE_DRAWING;
     this.currentDrawObject.data.data.css = {
       zIndex: 2000

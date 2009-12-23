@@ -37,27 +37,27 @@ class DocumentsController < ApplicationController
   # POST /documents
   def create
     @document = Document.new(params[:document])
-    @document.uuid = params[:document][:uuid]
     @document.pages.build # add default page
     @document.save
     current_user.has_role!("owner", @document)
     xmpp_create_node(@document.uuid)
-    render :json => @document
+    render :json => @document      
   end
-
+  
   # PUT /documents/:id
   def update
     @document.update_attributes(params[:document])
     
     render :json => @document
   end
-
+  
   # PUT /documents/:id/change_user_access
   def change_user_access
     accesses = JSON.parse(params[:access]);
     new_list_has_global_user = false
     accesses.each_key do |user_email|
       if @@global_user_names.include? user_email.downcase
+        global_user.has_no_role!(accesses[user_email], @document)        
         global_user.has_role!(accesses[user_email], @document)
         new_list_has_global_user = true
       else
@@ -96,7 +96,7 @@ class DocumentsController < ApplicationController
 
 protected
   def load_document
-    @document = Document.find(params[:id]) 
+    @document = Document.find_by_uuid(params[:id])
   end
   
   def user_access_hash

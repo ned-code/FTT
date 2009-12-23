@@ -167,7 +167,7 @@ WebDoc.PageBrowserController = $.klass({
      var droppedPage = this.pageMap[droppedPageThumb.attr("id")].page;
      var movedPageDescriptor = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-page'));   
      ddd("moved page descriptor", movedPageDescriptor);   
-     var movedPage = new WebDoc.Page(movedPageDescriptor);
+     var movedPage = new WebDoc.Page(movedPageDescriptor, WebDoc.application.pageEditor.currentDocument);
      var droppedPagePosition = WebDoc.application.pageEditor.currentDocument.positionOfPage(droppedPage) - 1;
      ddd("drop document", droppedPage.data.document_id, "drag document", movedPage.data.document_id);
      if (droppedPage.data.document_id != movedPage.data.document_id || evt.originalEvent.dataTransfer.dropEffect == 'copy') {

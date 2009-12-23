@@ -36,14 +36,14 @@ $.extend(WebDoc.DrageAndDropController,{
     var newItem;
     if (widget) {
       var widgetData = $.evalJSON(widget);
-      newItem = new WebDoc.Item();
+      newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
       var width = 200, height = 200;
       if (widgetData.properties.width) {
         width = widgetData.properties.width;
         height = widgetData.properties.height;
       }
       newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-      newItem.data.media_id = widgetData.uuid;
+      newItem.data.media_id = widgetData.id;
       newItem.data.data.tag = "iframe";
       newItem.data.data.src = widgetData.properties.index_url;
       newItem.data.data.css = {
@@ -64,7 +64,7 @@ $.extend(WebDoc.DrageAndDropController,{
     } 
     else {      
       if (html) {
-        newItem = new WebDoc.Item();
+        newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
         newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
         newItem.data.data.tag = "div";
         newItem.data.data.innerHTML = html;
@@ -80,7 +80,7 @@ $.extend(WebDoc.DrageAndDropController,{
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
   },
  createImageItem: function(e){
-	var newItem = new WebDoc.Item();
+	var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
 	newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
     newItem.data.data.tag = "img";
     newItem.data.data.src = this.src;

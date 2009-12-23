@@ -78,6 +78,7 @@ module Acl9
           INNER JOIN #{role_table}_#{subj_table} ON #{subj_col}_id = #{subj_table}.id
           INNER JOIN #{role_table}               ON #{role_table}.id = #{role.underscore}_id
         EOS
+
         sql_where = <<-'EOS'
           WHERE authorizable_type = '#{self.class.base_class.to_s}'
           AND authorizable_id = #{column_for_attribute(self.class.primary_key).text? ? "'#{id}'": id}
@@ -90,7 +91,7 @@ module Acl9
           :counter_sql => ("SELECT COUNT(DISTINCT #{subj_table}.id)" + sql_tables + sql_where),
           :readonly => true
 
-        include Acl9::ModelExtensions::Authorizabe
+        include Acl9::ModelExtensions::Authorizable
       end
 
       # Make a class an auth role class.

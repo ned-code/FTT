@@ -1,17 +1,21 @@
-# == Schema Information
-#
-# Table name: medias
-#
-#  uuid       :string(36)      primary key
-#  type       :string(255)
-#  created_at :datetime
-#  updated_at :datetime
-#  properties :text(65537)
-#  user_id    :integer
-#  file       :string(255)
-#
-
 class Medias::Thumbnail < Media
   mount_uploader :file, ImageUploader
   
 end
+# == Schema Information
+#
+# Table name: medias
+#
+#  uuid              :string(36)
+#  type              :string(255)
+#  file_file_name    :string(255)
+#  file_content_type :string(255)
+#  file_file_size    :integer
+#  file_updated_at   :datetime
+#  created_at        :datetime
+#  updated_at        :datetime
+#  properties        :text(65537)
+#  file              :string(255)
+#  user_id           :integer
+#
+

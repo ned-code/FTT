@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: pages
-#
-#  uuid         :string(36)      primary key
-#  document_id  :string(36)      not null
-#  thumbnail_id :string(36)
-#  position     :integer         not null
-#  version      :integer         default(1), not null
-#  data         :text(65537)
-#  created_at   :datetime
-#  updated_at   :datetime
-#
-
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Page do
@@ -61,3 +47,18 @@ describe Page do
   end
   
 end
+
+# == Schema Information
+#
+# Table name: pages
+#
+#  uuid         :string(36)
+#  document_id  :string(36)      not null
+#  thumbnail_id :string(36)
+#  position     :integer         not null
+#  version      :integer         default(1), not null
+#  data         :text(65537)
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+

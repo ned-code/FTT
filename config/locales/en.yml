@@ -37,7 +37,7 @@ en:
     send: "Send"
     new_document: "New document"
     add_access: "Add user"
-
+  
   label:
     documents: "Documents"
     all_items_by_date: "All items"
