@@ -13,6 +13,7 @@ class ImagesController < ApplicationController
         :pagination => {
           :per_page => per_page,
           :current_page => @images.current_page,
+          :total_pages => @images.total_pages, 
           :next_page => @images.next_page,
           :previous_page => @images.previous_page,
           :total => @images.total_entries }

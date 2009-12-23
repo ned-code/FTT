@@ -50,12 +50,12 @@ WebDoc.Library = $.klass({
     return $("#libraries").find("> .view:visible").attr("id");
   },
   showSpinner: function(container) {
+    //common code to be executed for all subclasses
     container.append($('<div class="loading">Loading</div>'));
-    container.parent().find(".pagination").hide();
   },
   hideSpinner: function(container) {
+    //common code to be executed for all subclasses
     container.find('.loading').remove();
-    container.parent().find(".pagination").show();
   },
   didClickOnTab: function(tab) {
     //common code to be executed for all subclasses

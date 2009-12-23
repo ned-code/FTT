@@ -1,13 +1,13 @@
 /* ============================================================== */
-/* = jQTouch style = */
-/* ================= */
+/* = jQTouch-simplified style = */
+/* ============================ */
 * {
   margin: 0;
   padding: 0;
 }
 
 #libraries {
-  -webkit-transform-style: preserve-3d; /*important for proper slide in (back) animation on safari!*/
+  -webkit-transform-style: preserve-3d; /*important for proper slide in (back) animation on webkit!*/
   position: relative;
   width:350px;
   height:100%;
@@ -17,7 +17,7 @@
 }
 
 #libraries > .view {
-  -webkit-backface-visibility: hidden; /*important for proper slide down animation on safari!*/
+  -webkit-backface-visibility: hidden; /*important for proper slide down animation on webkit!*/
   display:none;
   position:absolute;
   left:0;

@@ -1,12 +1,13 @@
 /*
-    Based on jQTouch project <http://www.jqtouch.com/> by David Kaneda <http://www.davidkaneda.com>
+    Based on jQTouch project <http://www.jqtouch.com> by David Kaneda <http://www.davidkaneda.com>
     Documentation and issue tracking on Google Code <http://code.google.com/p/jqtouch/>
     
     Adapted by Zeno Crivelli to work on all modern browsers including FireFox (originally jQTouch has
-    been designed for Mobile WebKit only) and to work on a specified DIV (originally jQTouch operates
+    been designed for Mobile WebKit only) and to work on a specified DIV (originally jQTouch operated
     on the entire document <body>)
     
     jQTouch revision used: 109 ($Date: 2009-10-06 12:23:30 -0400 (Tue, 06 Oct 2009)
+    -- MIT License
 */
 
 (function($) {

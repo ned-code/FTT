@@ -52,23 +52,22 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     this.myImagesPage = 1;
     this.myImagesContainer = $(this.tabContainers[0]);
     
-    // Setup drag n' drop
+    // Setup thumbnails drag n' drop
     this.myImagesContainer.find(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
     
     // Next/Previous page links
-    var paginationWrap = $("<div class='pagination'>");
+    this.paginationWrap = $("<div class='pagination' style='display:none'>");
     this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
-    
     this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
     this.previousPageLink.click(function(event){
       this.loadMyImages(-1);
       event.preventDefault();
-    }.pBind(this)).appendTo(paginationWrap).hide();
+    }.pBind(this)).appendTo(this.paginationWrap).hide();
     this.nextPageLink.click(function(event){
       this.loadMyImages(+1);
       event.preventDefault();
-    }.pBind(this)).appendTo(paginationWrap).hide();
-    this.myImagesContainer.append(paginationWrap);
+    }.pBind(this)).appendTo(this.paginationWrap).hide();
+    this.myImagesContainer.append(this.paginationWrap);
   },
   setupDetailsView: function() {
     this.detailsViewImg = this.detailsView.find('.single_image img');
@@ -151,10 +150,20 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   },
   dragStart: function(event) {
     var draggingImg = $(event.target).find('img');
+    // ddd(draggingImg)
     event.originalEvent.dataTransfer.setData('application/ub-image', draggingImg.data("properties").url);
   },
+  
+  showSpinner: function($super, container) {
+    $super(container);
+    if (this.hasPagination) this.paginationWrap.hide();
+  },
+  hideSpinner: function($super, container) {
+    $super(container);
+    if (this.hasPagination) this.paginationWrap.show();
+  },
   didClickOnTab: function($super, tab) {
-    $super();
+    $super(tab);
     if (tab == this.tabContainers[0].id) { // My Images tab
       this.loadMyImages(0);
     }
@@ -192,6 +201,8 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     }
   },
   refreshMyImages: function(newImages) {
+    // Note: do not pass the newImages arg to force reloading the whole section
+    ddd("refreshing My Images")
     //if we are in first page, don't reload the whole thing, just add the newly uploaded images to the top of the list 
     var myImagesList = this.myImagesContainer.find('.thumbnails ul');
     if (newImages && this.myImagesPage === 1 && myImagesList.length > 0) {
@@ -225,13 +236,20 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     return liWrap;
   },
   refreshMyImagesPagination: function(pagination) {
-    if (pagination.previous_page > 0) this.previousPageLink.show();
-    else this.previousPageLink.hide();
-    if (pagination.next_page > 0) this.nextPageLink.show();
-    else this.nextPageLink.hide();
+    this.hasPagination = pagination.total_pages > 1 ? true : false;
+    if (this.hasPagination) {
+      this.paginationWrap.show();
+      if (pagination.previous_page > 0) this.previousPageLink.show();
+      else this.previousPageLink.hide();
+      if (pagination.next_page > 0) this.nextPageLink.show();
+      else this.nextPageLink.hide();
+    }
+    else {
+      this.paginationWrap.hide();
+    }
   },
   prepareDetailsView: function($super, properties) { // type: my_image, flickr, google
-    $super();
+    $super(properties);
     // View title
     this.detailsView.attr({'class':"view "+properties.type});
 

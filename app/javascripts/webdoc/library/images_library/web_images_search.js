@@ -21,6 +21,9 @@ WebDoc.WebImagesSearch = $.klass({
       this.flickrImagesSearch.initialSearch(query);
       
     }.pBind(this));
+    
+    // Setup thumbnails drag n' drop
+    $("#web_images .thumbnails").bind("dragstart", this.imagesLibrary.dragStart.pBind(this.imagesLibrary));
   }
 });
 
