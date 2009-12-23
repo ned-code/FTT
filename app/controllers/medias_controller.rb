@@ -13,7 +13,10 @@ class MediasController < ApplicationController
   
   def show
     @media = Media.find_by_uuid(params[:id])
-    
+    #TODO temp check by id if not found by uuid
+    if (!@media)
+      @media.find(params[:id])
+    end
     respond_to do |format|
       format.html { redirect_to @media.file.url }
       format.json { render :json => @media }
