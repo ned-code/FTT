@@ -106,6 +106,13 @@ WebDoc.Item = $.klass(MTools.Record,
     this.data.data.css.height = newSize.height + "px";
     this.fireObjectChanged();    
   },
+
+	setOpacity: function(newOpacity){
+		if(parseFloat(newOpacity)){
+			this.data.data.css.opacity = parseFloat(newOpacity);
+			this.fireObjectChanged();
+		}
+	},
   
   setInnerHtml: function(html, force) {
     if (html != this.data.data.innerHTML || force) {

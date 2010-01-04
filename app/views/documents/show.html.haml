@@ -141,7 +141,7 @@
                 %option{ :value => "red" } red
                 %option{ :value => "green" } green
                 %option{ :value => "blue" } blue
-                %option{ :value => "yellow" } yellow                
+                %option{ :value => "yellow" } yellow   
             %li
               Font Family
               %select.FontName
@@ -154,7 +154,7 @@
                 %option{ :value => "impact" } Impact    
                 %option{ :value => "times new roman" } Times
                 %option{ :value => "trebuchet ms" } Trebuchet
-                %option{ :value => "verdana" } Verdana                                                                                                                
+                %option{ :value => "verdana" } Verdana                                                                                                    
           #palette_overlay
         #palette_pen.palette
           %ul#colors{ :style => "display:block" }
@@ -202,6 +202,9 @@
           %div.properties_line
             %label.properties_label Show scroll
             %input#property_scroll{ :type => "checkbox" }
+          %div.properties_line
+            %label.properties_label Opacity
+            %input#property_opacity.properties_input
           #image_properties.properties_line{ :style => "display:none"}
             %label.properties_label Image URL
             %input#property_src.properties_input

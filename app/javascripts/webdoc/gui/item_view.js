@@ -142,7 +142,7 @@ WebDoc.ItemView = $.klass({
       WebDoc.application.boardController.pageView.itemDomNode.append(this.resizeNode.get(0));
       
       this.resetHandles();
-      
+
       this.selectionNode.draggable({
         containment: "parent",
         cursor: 'move',
@@ -191,8 +191,16 @@ WebDoc.ItemView = $.klass({
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           var newWidth = ui.originalSize.width + (mappedPoint.x - this.resizeOrigin.x);
           var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y);
-          ui.size.width = newWidth;
-          ui.size.height = newHeight;
+					if(e.shiftKey){
+						// Must maintain image ratio on resize
+						var imgRatio=this.item.size.width/this.item.size.height;
+						ui.size.width = imgRatio*newHeight;
+					}
+					else {
+						ui.size.width = newWidth;
+					}
+          ui.size.height =newHeight;
+
           this._resizeTo(ui.size);
         }.pBind(this)        ,
         stop: function(e, ui) {
@@ -240,7 +248,7 @@ WebDoc.ItemView = $.klass({
     });
     this.resetHandles();
     WebDoc.application.inspectorController.refreshSubInspectors();
-  }  
+  }
 });
 
 $.extend(WebDoc.ItemView, {
