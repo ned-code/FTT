@@ -24,6 +24,7 @@ MTools.ServerCache = $.klass(
     store: function(record) {
       var store = this.getStoreForRecordClass(record.constructor);
       store[record.uuid()] = record;
+      // cache map uuid and id because sometimes we only knows the id and not the uuid. Typically when we have a foreign key.
       if (record.data.id) {
         store[record.data.id] = record;
       }

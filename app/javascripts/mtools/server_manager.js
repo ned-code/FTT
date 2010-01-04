@@ -27,14 +27,14 @@ $.extend(MTools.ServerManager, {
    * @param {Object} uuid the uuid of the record or null if we want all records
    * @param {function} callBack function that is called with the fetched records.
    *                 function callback(MTools.Record[])
-   * @param {Object} args arguments used for the fetch. Arguments depends on the ecord class. It can be arguments needed for nested resources (@see MTools.Record.rootUrl( documentation))
+   * @param {Object} args arguments used for the fetch. Arguments depends on the record class. It can be arguments needed for nested resources (@see MTools.Record.rootUrl() documentation)
    *                 In the futur it can be attributes for the fetch (page number, etc...)
    */
   getRecords: function(recordClass, uuid, callBack, args) {
     // we can check the cache if we search a record by uuid. Otherwise we need to request the database.
     if (uuid) {
       var cachedRecord = MTools.ServerManager.cache.get(recordClass, uuid);
-      if (cachedRecord !== undefined) {
+      if (cachedRecord) {
         callBack.call(this, [cachedRecord]);
         return;
       }
