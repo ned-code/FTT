@@ -41,6 +41,9 @@ en:
   label:
     documents: "Documents"
     all_items_by_date: "All items"
+    owned_by_me: "Owned by me"
+    shared_with_me_as_editor: "Shared with me (as editor)"
+    shared_with_me_as_viewer: "Shared with me (as viewer)"
     create_new_document: "Create a new document"
     edit_document: "Edit document"
     name: "Name"

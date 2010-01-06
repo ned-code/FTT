@@ -14,11 +14,8 @@ class DocumentsController < ApplicationController
   
   # GET /documents
   def index
-    @documents = Document.all
-    if (!current_user.has_role?("superAdmin"))
-      #TODO need to optimize document filtering by doing it in a single SQL query
-      @documents = @documents.select { |a_doc| a_doc.accepts_roles_by?(current_user) || a_doc.accepts_roles_by?(global_user)}
-    end
+    @documents = get_documents(params[:document_filter])
+
     respond_to do |format|
       format.html
       format.json { render :json => @documents }      
@@ -115,4 +112,31 @@ protected
     result
   end
   
+  def get_documents(document_filter)
+    documents = []
+    auth_ids = []
+    #TODO need to optimize document filtering by doing it in a single SQL query
+    if document_filter
+       # Filter possibilities: owner, editor, reader
+       roles = current_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => params[:document_filter]})
+       roles.each do |role|
+         auth_ids << role.authorizable_id if role.authorizable_id
+       end
+       documents = Document.find_all_by_id(auth_ids)
+     else
+       if (!current_user.has_role?("superAdmin"))
+         roles = current_user.role_objects.all
+         global_user.role_objects.all.each do |role|
+          auth_ids << role.authorizable_id
+         end
+         roles.each do |user_role|
+           auth_ids << user_role.authorizable_id
+         end
+         documents = Document.find_all_by_id(auth_ids)
+       else
+         documents = Document.all
+       end
+     end
+     return documents
+  end
 end
