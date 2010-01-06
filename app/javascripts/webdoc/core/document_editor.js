@@ -34,7 +34,11 @@ WebDoc.DocumentEditor = $.klass(
         $(".wb-document-edit").live("click", this.editDocument);
         $(".wb-document-rename").live("click", this.renameDocument);
         $(".wb-document-delete").live("click", this.deleteDocument);
-        $(".wb-document-access").live("click", this.changeDocumentAccess);        
+        $(".wb-document-access").live("click", this.changeDocumentAccess);
+				$("#wb-document-filter-date").bind("click", this.loadDocuments.pBind(this));
+      	$("#wb-document-filter-owned-by-me").bind("click", {document_filter: 'owner'}, this.loadDocumentsWithFilter.pBind(this));
+				$("#wb-document-filter-shared-with-me-as-editor").bind("click", {document_filter: 'editor'}, this.loadDocumentsWithFilter.pBind(this));
+				$("#wb-document-filter-shared-with-me-as-viewer").bind("click", {document_filter: 'reader'}, this.loadDocumentsWithFilter.pBind(this));
         
         this.filter = new WebDoc.DocumentDateFilter();
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
@@ -156,6 +160,16 @@ WebDoc.DocumentEditor = $.klass(
             this.documents = data;
             this.refreshDocumentList();
         }.pBind(this));
+    },
+
+		loadDocumentsWithFilter: function(event)
+    {
+				var filter = event.data.document_filter;
+         MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
+	       {
+            this.documents = data;
+            this.refreshDocumentList();
+				 }.pBind(this), { ajaxParams: { document_filter: filter }});
     },
     
     refreshDocumentList: function()
