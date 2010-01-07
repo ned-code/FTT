@@ -54,7 +54,7 @@ class DocumentsController < ApplicationController
     new_list_has_global_user = false
     accesses.each_key do |user_email|
       if @@global_user_names.include? user_email.downcase
-        global_user.has_no_role!(accesses[user_email], @document)        
+        global_user.has_no_roles_for!(@document)        
         global_user.has_role!(accesses[user_email], @document)
         new_list_has_global_user = true
       else
@@ -122,6 +122,14 @@ protected
        roles.each do |role|
          auth_ids << role.authorizable_id if role.authorizable_id
        end
+       global_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => params[:document_filter]}).each do |role|
+         auth_ids << role.authorizable_id
+        end
+       # global_roles = global_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => params[:document_filter]})
+       #        puts 'Global roles'
+       #        global_roles.each do |role|
+       #          puts role.authorizable_id
+       #        end
        documents = Document.find_all_by_id(auth_ids)
      else
        if (!current_user.has_role?("superAdmin"))
