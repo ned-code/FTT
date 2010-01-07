@@ -5,7 +5,7 @@
  * Copyright (c) 2009 Mnemis
  *
  * Date: 2009-07-30
- * Author: Cédric Michelet
+ * Author: Cï¿½dric Michelet
  */
 widget.internationalization = {
 	//*****public methods**********************************************************************
@@ -36,9 +36,17 @@ widget.internationalization = {
 		//dhtmlLoadScript("Locales/en/localizedStrings.js");
 	},
 	_loadLocalization:function(response) {
-		eval(response);
-		if(typeof(localizedStrings) != 'undefined')
-			widget.internationalization.localizedStrings = localizedStrings; //store in a global context
+    // TODO JBA: should we really do eval. It is better to parse the result.
+    if (response) {
+      try {
+        eval(response);
+        if (typeof(localizedStrings) != 'undefined') 
+          widget.internationalization.localizedStrings = localizedStrings; //store in a global context
+      }
+      catch(ex) {
+        // TODO what should we do here
+      }
+    }
 	}
 }
 
