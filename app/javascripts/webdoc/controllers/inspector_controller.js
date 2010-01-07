@@ -17,15 +17,22 @@ WebDoc.InspectorController = $.klass({
     var penPelette = $("#palette_pen").hide();
     var widgetPalette = $("#palette_widget");
     widgetPalette.bind("load", function() {
-    ddd("must inject uniboard api in inspector");
-    if (widgetPalette[0].contentWindow) {
-      ddd("inject uniboard api in inspector");
-      widgetPalette[0].contentWindow.uniboard = this.widgetInspectorApi;
-      if (widgetPalette[0].contentWindow.initialize) {
-        widgetPalette[0].contentWindow.initialize();
-      }
-    }                      
-  }.pBind(this));
+      ddd("must inject uniboard api in inspector");
+      if (widgetPalette[0].contentWindow) {
+        ddd("inject uniboard api in inspector");
+        widgetPalette[0].contentWindow.uniboard = this.widgetInspectorApi;
+        if (widgetPalette[0].contentWindow.widget) {
+          var widgetObject = widgetPalette[0].contentWindow.widget;
+          widgetObject.lang = "en";
+          widgetObject.uuid = WebDoc.application.boardController.selection[0].item.uuid();
+          widgetObject.mode = "Edit";
+          widgetObject._onLoad();
+        }
+        else if (widgetPalette[0].contentWindow.initialize) {
+          widgetPalette[0].contentWindow.initialize();
+        }
+      }                      
+    }.pBind(this));
     this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette];
     this.updatePalette(0);
     this.subInspectors = [];
