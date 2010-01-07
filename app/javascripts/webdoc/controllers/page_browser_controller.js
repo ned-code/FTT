@@ -173,7 +173,7 @@ WebDoc.PageBrowserController = $.klass({
      if (droppedPage.data.document_id != movedPage.data.document_id || evt.originalEvent.dataTransfer.dropEffect == 'copy') {
        var copiedPage = movedPage.copy();
        ddd("exit copy", new Date());
-       copiedPage.data.document_id = droppedPage.data.document_id;
+       copiedPage.setDocument(droppedPage.getDocument());
        copiedPage.data.position = droppedPagePosition + 1;
        var importingMessage = $("<li>").html("importing...").addClass("page_thumb_importing");       
        droppedPageThumb.parent().after(importingMessage[0]);
