@@ -10,6 +10,14 @@ WebDoc.Page = $.klass(MTools.Record,
     $super(json);
   },
   
+  getDocument: function() {
+    return this.document;  
+  },
+  
+  setDocument: function(document) {
+    this.document = document;
+  },
+  
   setExternalPageMode: function(mode) {
     ddd("set mode", mode);  
     this.data.data.externalPage = mode;
