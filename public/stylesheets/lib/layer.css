@@ -1,0 +1,57 @@
+/* CSS Layer classes
+ * 
+ * Create a structure that centers a div or dialog vertically and horizontally
+ *
+ */
+
+.layer {
+    position: absolute;
+    /* We don't want layers to respect padding of their containers */
+    top: 0; right: 0; bottom: 0; left: 0;
+    /* Width and height take precedence over the top/right/bottom/left, but we probably need them for IE7 */
+    /* Only, we definitely dont want them for standard browsers - they'll mess with the scroll-hide construct */
+    /* width: 100%; height: 100%; */
+    overflow: auto;
+}
+.hide-scroll {
+    overflow: hidden;
+}
+.push-scroll {
+    /* These values should be overriden by feature testing with some js */
+    /* They represent the thickness of a scrollbar */
+    padding-right: 16px;
+    padding-bottom: 16px;
+    /* Fix width and height so that padding pushes scrollbars outside of the container */
+    width: 100%;
+    height: 100%;
+}
+.show-scroll {
+    overflow: scroll;
+}
+
+/* TODO: This technique does not work in <IE7. Implement the fix described here:
+/* http://www.jakpsatweb.cz/css/css-vertical-center-solution.html */
+
+.centering {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+.centering>div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+/* Ideally, all elements likely to be put in a centred layer should be listed here */
+.centering>div>div,
+.centering>div>img,
+.centering>div>object,
+.centering>div>embed,
+.centering>div>section,
+.centering>div>table,
+.centering>div>form,
+.centering>div>video,
+.centering>div>progress,
+.centering>div>canvas {
+    margin: 0 auto;
+}
