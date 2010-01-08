@@ -38,6 +38,7 @@ MTools.Record = $.klass(
     else {
       this.refresh(json);
     }
+    MTools.ServerManager.cache.store(this);
   },
   
   /**
@@ -137,6 +138,7 @@ MTools.Record = $.klass(
   
   /**
    * to_json return a rails compatible json object (className[attr1] : value1)
+   * @withRelationShips boolean. define if relationship must be present in the rail json object. 
    * @return an object that can be used to post or put to a rails server
    */
   to_json: function(withRelationShips) {

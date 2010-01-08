@@ -5,6 +5,7 @@
 WebDoc.Page = $.klass(MTools.Record, 
 { 
   initialize: function($super, json, document) {
+    // initialize relationship before super.
     this.items = [];
     this.document = document;
     $super(json);
@@ -73,7 +74,7 @@ WebDoc.Page = $.klass(MTools.Record,
     if (withRelationShips && this.items.length) {
       dataObject.items = [];
       for (var i = 0; i < this.items.length; i++) {
-        dataObject.items.push(this.items[i].getData());
+        dataObject.items.push(this.items[i].getData(withRelationShips));
       }
     }
     return dataObject;

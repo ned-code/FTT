@@ -8,18 +8,27 @@ WebDoc.ITEM_TYPE_WIDGET = "widget";
 
 WebDoc.Item = $.klass(MTools.Record, 
 {
-  initialize: function($super, json, page) {
+  initialize: function($super, json, page, media) {
     this.page = page
+    this.media = media;
     $super(json);
     if (!json) {
       this.data.data = { preference: {}};
     }
   },
   
+  getPage: function() {
+    return this.page;
+  },
+  
+  setPage: function(page) {
+    this.page = page;  
+  },
+  
   refresh: function($super, json) {
     var refreshInnerHtml = false;
     var refreshPreferences = false;
-    this.widget = null;
+
     if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
       refreshInnerHtml = true;
     }
@@ -30,16 +39,20 @@ WebDoc.Item = $.klass(MTools.Record,
     if (refreshInnerHtml) {
       this.fireDomNodeChanged();
     }
-    if (this.type() == WebDoc.ITEM_TYPE_WIDGET) {
-      if (this.data.media_id != null) {
-        MTools.ServerManager.getRecords(WebDoc.Widget, this.data.media_id, function(data) {
-          if (data.length > 0) {
-            this.widget = data[0];
-          }
-        }.pBind(this));
-      }
+    
+    // TODO: can remove this fecth. it ise used only for old item that were created before that inspector url is set in item properties.
+    if (this.data.media_id != null && this.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
+      MTools.ServerManager.getRecords(WebDoc.Widget, this.data.media_id, function(data) {
+        if (data.length > 0) {
+          this.media = data[0];
+        }
+      }.pBind(this));
+    }
+    // END of to do
+    
+    if (refreshPreferences) {
       this.fireWidgetChanged();
-    }    
+    }
   },
   
   fireWidgetChanged: function() {
@@ -180,40 +193,6 @@ WebDoc.Item = $.klass(MTools.Record,
       ddt();
       return {};
     }
-  },
-  
-  /*
-   * uniboard API for widget
-   */
-  
-  resize: function(width, height) {
-      this.resizeContainer(width, height);
-  },
-  
-  resizeContainer: function(width, height) {
-    this.data.data.css.width = width + "px";
-    this.data.data.css.height = height + "px";
-    ddd("resize container to " + this.data.data.css.width + ":"  + this.data.data.css.height);
-    this.fireObjectChanged();
-  },
-  
-  preference: function(key, value) {
-    var result = this.data.data.preference[key];
-    if (result) {return result;}
-    return value;
-  },
-  
-  setPreference: function(key, value) {
-    var previous = this.data.data.preference[key];
-    if (previous != value) {
-      this.data.data.preference[key] = value;
-      ddd("save widget pref");
-      this.save();
-    }
-  },
-  
-  setPenColor: function(color) {
-    WebDoc.application.drawingTool.penColor = color;   
   }
 });
 

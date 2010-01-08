@@ -9,7 +9,6 @@
 //= require <webdoc/gui/image_view>
 //= require <webdoc/gui/text_view>
 //= require <webdoc/gui/widget_view>
-//= require <webdoc/controllers/collaboration_controller>  
 //= require <webdoc/controllers/drag_and_drop_controller>
 
 WebDoc.BoardController = $.klass({

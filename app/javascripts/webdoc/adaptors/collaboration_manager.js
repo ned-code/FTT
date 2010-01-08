@@ -118,7 +118,7 @@ WebDoc.CollaborationManager = $.klass(
         }
       }
       catch(e) {
-        ddd("error while treating message.");
+        ddd("error while treating message.", e);
       }
       // we must return true to keep the handler alive.  
       // returning false would remove it after it finishes.      
@@ -138,8 +138,11 @@ WebDoc.CollaborationManager = $.klass(
         if (messageObject.page) {
           WebDoc.application.pageEditor.currentDocument.createOrUpdatePage(messageObject);
         }
-        if (messageObject.item) {          
-          WebDoc.application.pageEditor.currentDocument.createOrUpdateItem(messageObject);
+        if (messageObject.item) {   
+          var modifiedPage = MTools.ServerManager.cache.get(WebDoc.Item, messageObject.item.page_id);       
+          if (modifiedPage) {
+            modifiedPage.createOrUpdateItem(messageObject);
+          }
         }
       }
     }

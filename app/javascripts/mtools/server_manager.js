@@ -68,7 +68,6 @@ $.extend(MTools.ServerManager, {
           if (data.length > 0) {
             for (var i = 0; i < data.length; i++) {
               var currentRecord = new recordClass(data[i]);
-              MTools.ServerManager.cache.store(currentRecord);
               result.push(currentRecord);
             }
           }
@@ -81,7 +80,6 @@ $.extend(MTools.ServerManager, {
             if (recordsData.length > 0) {
               for (var i = 0; i < recordsData.length; i++) {
                 var record = new recordClass(recordsData[i]);
-                MTools.ServerManager.cache.store(record);
                 result.push(record);
               }
             }
@@ -92,7 +90,6 @@ $.extend(MTools.ServerManager, {
             // the server returned a single record
             if (data) {
               var record = new recordClass(data);
-              MTools.ServerManager.cache.store(record);
               result.push(record);
             }
             callBack.call(this, result);
@@ -166,6 +163,8 @@ $.extend(MTools.ServerManager, {
       // i.e. page size and background.
       object.refresh(data);
       object.isNew = false;
+      // we must update the cache with the id that comes from the server
+      MTools.ServerManager.cache.store(object);
       callBack.apply(this, [[object]]);
     }, "json");
   },
