@@ -15,7 +15,7 @@ WebDoc.BoardController = $.klass({
   initialize: function(editable, autoFit) {
     this.editable = editable;
     this.autoFit = autoFit;
-    this.currentZoom = 1;
+    this.currentZoom = 1; 
     this.selection = [];
     this.editingItem = null;
     this.selectionListeners = [];
@@ -65,7 +65,7 @@ WebDoc.BoardController = $.klass({
     // add the new one
     this.pageView = new WebDoc.PageView(page);
     this.pageView.domNode.css("display", "none");
-    $("#board_container").append(this.pageView.domNode);
+    $("#board_container").html(this.pageView.domNode);
     // re-init internal working attributes
     $("#board_container").get(0).scrollTop = 0;
     $("#board_container").get(0).scrollLeft = 0;
@@ -80,17 +80,6 @@ WebDoc.BoardController = $.klass({
     this.bindMouseEvent();
     $(document).bind("keydown", this, this.keyDown.pBind(this));
     
-    
-    // update data attribute of object
-    $("object").each(function() {
-      var relPath = $(this).attr("data");
-      $(this).attr("data", relPath);
-    });
-    
-    //update zoom to fit browser page    
-    heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
-    widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;
-    
     this.zoom(1);
     if (this.isInteraction || !this.editable) {
       this.setInterationMode(true);
@@ -99,6 +88,9 @@ WebDoc.BoardController = $.klass({
       this.setInterationMode(false);
     }
     if (this.autoFit && $("#board").css("height") != "100%") {
+      //update zoom to fit browser page    
+      var heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
+      var widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;      
       if (heightFactor < widthFactor) {
         this.zoom(1 + heightFactor);
       }

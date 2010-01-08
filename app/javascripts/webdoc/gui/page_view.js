@@ -7,7 +7,7 @@ WebDoc.PageView = $.klass({
     this.page = page;
     this.domNode = $('<div>').attr({
       id: "board",
-      style: "position:relative; top: 0px; left: 0px;z-index:0"
+      style: "top: 0px; left: 0px;z-index:0"
     });
     
     if (page.data.data.externalPage && !page.data.data.allowAnnotation) {
@@ -18,16 +18,8 @@ WebDoc.PageView = $.klass({
     }
     else {
       this.domNode.css(page.data.data.css);
-    }    
+    }
     
-     this.domNode.append($("<div id=\"event_catcher\"/>").css({
-     zIndex: 999999,
-     position: "absolute",
-     width: "100%",
-     height: "100%",
-     display: "none"
-     }));
-     
     this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
     this.drawingDomNode.css("zIndex", 999999);
     this.domNode.append(this.drawingDomNode.get(0));
@@ -53,7 +45,7 @@ WebDoc.PageView = $.klass({
           externalPage.css("overflow", "auto");
         }
         if (page.data.data.css.width) {
-           this.domNode.css(page.data.data.css);
+          this.domNode.css(page.data.data.css);
         }
         else {
           externalPage.bind("load", function() {
@@ -64,15 +56,14 @@ WebDoc.PageView = $.klass({
           }.pBind(this));
         }
         this.itemDomNode.append(externalPage[0]);
-      }
-      
+      }      
     }
     else {
       $("#board_container").css("overflow", "hidden");
     }
     
     this.domNode.append(this.itemDomNode.get(0));
-    
+    this.domNode.append($("<div id=\"event_catcher\"/>"));
     var that = this;
     this.itemViews = {};
     if (page.items && $.isArray(page.items)) {
@@ -96,7 +87,7 @@ WebDoc.PageView = $.klass({
     }
     else {
       relatedItemView.objectChanged(addedItem);
-    }    
+    }
   },
   
   itemRemoved: function(removedItem) {
