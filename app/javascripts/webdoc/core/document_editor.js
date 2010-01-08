@@ -43,7 +43,9 @@ WebDoc.DocumentEditor = $.klass(
         this.filter = new WebDoc.DocumentDateFilter();
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
         $("#wb-document-list-container").append(this.documentList.domNode.get(0));
-        this.loadDocuments();
+        
+        // Default selection, documents owned by me
+        this.loadDocumentsWithFilter({document_filter: 'owner'});
         
         // create new document dialog
         $("#wb-new-document-dialog").dialog(
@@ -153,8 +155,10 @@ WebDoc.DocumentEditor = $.klass(
         }
     },
     
-    loadDocuments: function()
+    loadDocuments: function(event)
     {
+				this.updateCurrentFilterSelection(event);
+	
         MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
         {
             this.documents = data;
@@ -164,7 +168,15 @@ WebDoc.DocumentEditor = $.klass(
 
 		loadDocumentsWithFilter: function(event)
     {
-				var filter = event.data.document_filter;
+			  var filter; 
+			  if(event && event.data){
+			  	filter = event.data.document_filter;
+			  }
+			  else{
+				  filter = event.document_filter;
+			  }
+				this.updateCurrentFilterSelection(event);
+
          MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
 	       {
             this.documents = data;
@@ -189,5 +201,13 @@ WebDoc.DocumentEditor = $.klass(
             }
         }
         return null;
-    }
+    },
+
+		updateCurrentFilterSelection: function(event)
+		{
+			if(event && event.currentTarget){
+				$("#wb-document-navigation ul li a").removeClass('active');
+				$(event.currentTarget).addClass('active');
+			}
+		}
 });
