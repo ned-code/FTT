@@ -20,7 +20,7 @@ staging:
 
 production:
   adapter: mysql
-  database: uniboard_production
-  username: uniboard
-  password: uniboard
-  host: ub-db-mysql-master
+  database: webdoc_production
+  username: webdoc
+  password: webdoc
+  host: webdoc-db-master
