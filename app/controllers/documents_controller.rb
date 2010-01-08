@@ -14,11 +14,8 @@ class DocumentsController < ApplicationController
   
   # GET /documents
   def index
-    @documents = Document.all
-    if (!current_user.has_role?("superAdmin"))
-      #TODO need to optimize document filtering by doing it in a single SQL query
-      @documents = @documents.select { |a_doc| a_doc.accepts_roles_by?(current_user) || a_doc.accepts_roles_by?(global_user)}
-    end
+    @documents = get_documents(params[:document_filter])
+
     respond_to do |format|
       format.html
       format.json { render :json => @documents }      
@@ -57,7 +54,7 @@ class DocumentsController < ApplicationController
     new_list_has_global_user = false
     accesses.each_key do |user_email|
       if @@global_user_names.include? user_email.downcase
-        global_user.has_no_role!(accesses[user_email], @document)        
+        global_user.has_no_roles_for!(@document)        
         global_user.has_role!(accesses[user_email], @document)
         new_list_has_global_user = true
       else
@@ -115,4 +112,42 @@ protected
     result
   end
   
+  def get_documents(document_filter)
+    documents_ids = []
+    #TODO need to optimize document filtering by doing it in a single SQL query
+    if document_filter
+       # Filter possibilities: owner, editor, reader
+       # Retrieve documents for the current user and the global user
+       current_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => document_filter}).each do |role|
+         documents_ids << role.authorizable_id if role.authorizable_id
+       end
+       global_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => document_filter}).each do |role|
+         documents_ids << role.authorizable_id if role.authorizable_id
+       end
+
+       # On shared as editor and shared as viewer filter, must remove owned documents
+       if document_filter != 'owner'
+         owner_ids = []
+         current_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => 'owner'}).each do |role|
+           owner_ids << role.authorizable_id
+         end
+         # Diff of both arrays
+         documents_ids = documents_ids - owner_ids
+       end
+       documents = Document.find_all_by_id(documents_ids)
+     else
+       if (!current_user.has_role?("superAdmin"))
+         global_user.role_objects.all.each do |role|
+          documents_ids << role.authorizable_id
+         end
+         roles = current_user.role_objects.all.each do |role|
+           documents_ids << role.authorizable_id
+         end
+         documents = Document.find_all_by_id(documents_ids)
+       else
+         documents = Document.all
+       end
+     end
+     return documents
+  end
 end

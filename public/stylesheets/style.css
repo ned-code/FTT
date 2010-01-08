@@ -111,6 +111,10 @@ a:hover { color: #0069BF;}
 #wb-document-navigation ul li a{
     display: block;
     padding: 5px;
+}
+#wb-document-navigation ul li a.active{
+	  display: block;
+    padding: 5px;
     -moz-border-radius: 5px 0 0 5px;
     -webkit-border-radius: 5px 0 0 5px;
     background: #4d4d4d;
@@ -119,6 +123,7 @@ a:hover { color: #0069BF;}
 }
 #wb-document-list-container{
     width: 600px;
+		min-height: 150px;
     padding: 15px;
     border: 5px solid #4d4d4d;
     -moz-border-radius: 5px;

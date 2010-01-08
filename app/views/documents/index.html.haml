@@ -7,6 +7,12 @@
     %ul
       %li
         %a#wb-document-filter-date{ :href => "#by_date"}= t('label.all_items_by_date')
+      %li
+        %a#wb-document-filter-owned-by-me.active{ :href => "#owned_by_me"}= t('label.owned_by_me')
+      %li
+        %a#wb-document-filter-shared-with-me-as-editor{ :href => "#shared_as_editor"}= t('label.shared_with_me_as_editor')
+      %li
+        %a#wb-document-filter-shared-with-me-as-viewer{ :href => "#shared_as_viewer"}= t('label.shared_with_me_as_viewer')
   #wb-document-list-container
 
 #wb-new-document-dialog{ :display => "none", :title => t('label.create_new_document') }

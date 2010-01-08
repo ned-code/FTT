@@ -34,12 +34,18 @@ WebDoc.DocumentEditor = $.klass(
         $(".wb-document-edit").live("click", this.editDocument);
         $(".wb-document-rename").live("click", this.renameDocument);
         $(".wb-document-delete").live("click", this.deleteDocument);
-        $(".wb-document-access").live("click", this.changeDocumentAccess);        
+        $(".wb-document-access").live("click", this.changeDocumentAccess);
+				$("#wb-document-filter-date").bind("click", this.loadDocuments.pBind(this));
+      	$("#wb-document-filter-owned-by-me").bind("click", {document_filter: 'owner'}, this.loadDocumentsWithFilter.pBind(this));
+				$("#wb-document-filter-shared-with-me-as-editor").bind("click", {document_filter: 'editor'}, this.loadDocumentsWithFilter.pBind(this));
+				$("#wb-document-filter-shared-with-me-as-viewer").bind("click", {document_filter: 'reader'}, this.loadDocumentsWithFilter.pBind(this));
         
         this.filter = new WebDoc.DocumentDateFilter();
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
         $("#wb-document-list-container").append(this.documentList.domNode.get(0));
-        this.loadDocuments();
+        
+        // Default selection, documents owned by me
+        this.loadDocumentsWithFilter({document_filter: 'owner'});
         
         // create new document dialog
         $("#wb-new-document-dialog").dialog(
@@ -149,13 +155,33 @@ WebDoc.DocumentEditor = $.klass(
         }
     },
     
-    loadDocuments: function()
+    loadDocuments: function(event)
     {
+				this.updateCurrentFilterSelection(event);
+	
         MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
         {
             this.documents = data;
             this.refreshDocumentList();
         }.pBind(this));
+    },
+
+		loadDocumentsWithFilter: function(event)
+    {
+			  var filter; 
+			  if(event && event.data){
+			  	filter = event.data.document_filter;
+			  }
+			  else{
+				  filter = event.document_filter;
+			  }
+				this.updateCurrentFilterSelection(event);
+
+         MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
+	       {
+            this.documents = data;
+            this.refreshDocumentList();
+				 }.pBind(this), { ajaxParams: { document_filter: filter }});
     },
     
     refreshDocumentList: function()
@@ -175,5 +201,13 @@ WebDoc.DocumentEditor = $.klass(
             }
         }
         return null;
-    }
+    },
+
+		updateCurrentFilterSelection: function(event)
+		{
+			if(event && event.currentTarget){
+				$("#wb-document-navigation ul li a").removeClass('active');
+				$(event.currentTarget).addClass('active');
+			}
+		}
 });
