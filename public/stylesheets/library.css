@@ -647,3 +647,8 @@ object:hover, object:focus, object:active {
   outline:0;
   cursor:pointer;
 }
+
+
+#apps_library_wrap {
+    padding: 8px 0 0 8px;
+}

@@ -72,18 +72,19 @@ WebDoc.PageBrowserController = $.klass({
     for (var i = 0; i < this.document.pages.length; i++) {
       var aPage = this.document.pages[i];
       var pageThumb = new WebDoc.PageThumbnailView(aPage);
-      var pageListItem = $("<li>").append(pageThumb.domNode);
+      var pageListItem = $("<li>").html(pageThumb.domNode);
       this.domNode.find("ul:first").append(pageListItem);
       this.pageThumbs.push(pageThumb);
       this.pageMap[pageThumb.domNode.attr("id")] = pageThumb;
     }
     this.updateSelectedPage();
-    this.domNode.find("ul").unbind();    
-    this.domNode.find("ul").bind("dragstart", this.dragStart.pBind(this));    
-    this.domNode.find("ul").bind("dragenter", this, this.dragEnter.pBind(this));    
-    this.domNode.find("ul").bind("dragover", this, this.dragOver.pBind(this));
-    this.domNode.find("ul").bind("dragleave", this, this.dragLeave.pBind(this));    
-    this.domNode.find("ul").bind("drop", this, this.drop.pBind(this));    
+    var pageList = this.domNode.find("ul");
+    pageList.unbind();    
+    pageList.bind("dragstart", this.dragStart.pBind(this));    
+    pageList.bind("dragenter", this, this.dragEnter.pBind(this));    
+    pageList.bind("dragover", this, this.dragOver.pBind(this));
+    pageList.bind("dragleave", this, this.dragLeave.pBind(this));    
+    pageList.bind("drop", this, this.drop.pBind(this));    
   },
   
   deletePageThumbs: function() {

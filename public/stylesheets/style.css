@@ -726,6 +726,7 @@ a:hover { color: #0069BF;}
 .widget_item {
   width:50px;
   height:50px;
+  margin-bottom: 6px;
 }
 
 /* ================= */
