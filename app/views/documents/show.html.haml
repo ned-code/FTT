@@ -3,14 +3,15 @@
 = render :partial => "layouts/main_editor_toolbar"
 #tb_2.tb
   %ul#pages_tools.left_tb_group
-    %li#addPage.tb_button.action_button.preview_hidden
+    -# Whitespace is removed between lis to preserve layout
+    %li#addPage.tb_button.action_button.preview_hidden>
       %a{ :href => "#" , :title =>"Add a page"}
         %img{ :src => "/images/icons/add_page.png", :alt =>"Add a page"}
-    %li#removePage.tb_button.action_button.preview_hidden
+    %li#removePage.tb_button.action_button.preview_hidden>
       %a{ :href => "#" , :title => "Remove this page"}
-    %li#page_browser.tb_button.action_button
+    %li#page_browser.tb_button.action_button>
       %a{ :href => "" , :title => "Open page browser"}
-    %li#previousPage.tb_button.action_button
+    %li#previousPage.tb_button.action_button>
       %a{ :href => "" , :title => "Previous page"}
         %img{ :src => "/images/icons/arrow_left.png", :alt =>"Arrow Left"}
     %li#nextPage.tb_button.action_button

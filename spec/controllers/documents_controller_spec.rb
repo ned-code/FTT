@@ -36,6 +36,55 @@ describe DocumentsController do
     @user1.has_role!("owner", @owner_doc)        
     
     @user2.has_role!("owner", @private_doc)
+    
+    # Object creation for document filter tests
+    @jim = Factory.create(:user, :name => 'Jim')
+    @jack = Factory.create(:user, :name => 'Jack')
+    
+    # Jim's docs
+    @jim_perso_doc = Factory.create(:document, :title => 'jim_perso_doc')
+    @jim.has_role!("owner", @jim_perso_doc)
+    @jim_shared_with_jack_owner = Factory.create(:document, :title => 'jim_shared_with_jack_owner')
+    @jack.has_role!("owner", @jim_shared_with_jack_owner)
+    @jim.has_role!("owner", @jim_shared_with_jack_owner)
+    @jim_shared_with_jack_reader = Factory.create(:document, :title => 'jim_shared_with_jack_reader')
+    @jim.has_role!("owner", @jim_shared_with_jack_reader)
+    @jack.has_role!("reader", @jim_shared_with_jack_reader)
+    @jim_shared_with_jack_editor = Factory.create(:document, :title => 'jim_shared_with_jack_editor')
+    @jim.has_role!("owner", @jim_shared_with_jack_editor)
+    @jack.has_role!("editor", @jim_shared_with_jack_editor)
+    @jim_shared_with_all_owner = Factory.create(:document, :title => 'jim_shared_with_all_owner')
+    @jim.has_role!("owner", @jim_shared_with_all_owner)
+    @global_user.has_role!("owner", @jim_shared_with_all_owner)
+    @jim_shared_with_all_reader = Factory.create(:document, :title => 'jim_shared_with_all_reader')
+    @jim.has_role!("owner", @jim_shared_with_all_reader)
+    @global_user.has_role!("reader", @jim_shared_with_all_reader)
+    @jim_shared_with_all_editor = Factory.create(:document, :title => 'jim_shared_with_all_editor')
+    @jim.has_role!("owner", @jim_shared_with_all_editor)
+    @global_user.has_role!("editor", @jim_shared_with_all_editor)
+    
+    # Jack's docs
+    @jack_perso_doc = Factory.create(:document, :title => 'jack_perso_doc')
+    @jack.has_role!("owner", @jack_perso_doc)
+    @jack_shared_with_jim_owner = Factory.create(:document, :title => 'jack_shared_with_jim_owner')
+    @jack.has_role!("owner", @jack_shared_with_jim_owner)
+    @jim.has_role!("owner", @jack_shared_with_jim_owner)
+    @jack_shared_with_jim_reader = Factory.create(:document, :title => 'jack_shared_with_jim_reader')
+    @jack.has_role!("owner", @jack_shared_with_jim_reader)
+    @jim.has_role!("reader", @jack_shared_with_jim_reader)
+    @jack_shared_with_jim_editor = Factory.create(:document, :title => 'jack_shared_with_jim_editor')
+    @jack.has_role!("owner", @jack_shared_with_jim_editor)
+    @jim.has_role!("editor", @jack_shared_with_jim_editor)
+    @jack_shared_with_all_owner = Factory.create(:document, :title => 'jack_shared_with_all_owner')
+    @jack.has_role!("owner", @jack_shared_with_all_owner)
+    @global_user.has_role!("owner", @jack_shared_with_all_owner)
+    @jack_shared_with_all_reader = Factory.create(:document, :title => 'jack_shared_with_all_reader')
+    @jack.has_role!("owner", @jack_shared_with_all_reader)
+    @global_user.has_role!("reader", @jack_shared_with_all_reader)
+    @jack_shared_with_all_editor = Factory.create(:document, :title => 'jack_shared_with_all_editor')
+    @jack.has_role!("owner", @jack_shared_with_all_editor)
+    @global_user.has_role!("editor", @jack_shared_with_all_editor)
+    
   end
   
   context 'accessed by anonymous user' do
@@ -73,6 +122,7 @@ describe DocumentsController do
       post :create, :id => @new_doc.uuid, :format => "json", :document => { :title => "new doc", :uuid => @new_doc.uuid}
       response.should_not be_success
     end    
+  
   end
   
   context 'accessed by admin user' do
@@ -93,7 +143,7 @@ describe DocumentsController do
       response.should respond_with(:content_type => :json)     
       json_response = JSON.parse(response.body)
       json_response.should be_an_instance_of(Array)
-      json_response.length.should == 2
+      json_response.length.should == 8
     end
     
     it "should be able to open any document" do
@@ -123,6 +173,21 @@ describe DocumentsController do
       response.should respond_with(:content_type => :json)      
       @admin_user.has_role?("owner", Document.find_by_uuid(@new_uuid)).should be_true          
     end 
+    
+    it "should be able to use owner filter on index page of documents" do
+      get :index, :document_filter => 'owner'
+      response.should be_success
+    end
+    
+    it "should be able to use editor filter on index page of documents" do
+      get :index, :document_filter => 'editor'
+      response.should be_success
+    end
+    
+    it "should be able to use reader filter on index page of documents" do
+      get :index, :document_filter => 'reader'
+      response.should be_success
+    end
   end
   
   context 'accessed by logged user' do
@@ -143,7 +208,7 @@ describe DocumentsController do
       response.should respond_with(:content_type => :json)     
       json_response = JSON.parse(response.body)
       json_response.should be_an_instance_of(Array)
-      json_response.length.should == 5
+      json_response.length.should == 11
     end
     
     it "should be able to open documents based of its roles" do
@@ -207,5 +272,91 @@ describe DocumentsController do
       created_doc = Document.find_by_uuid(@new_uuid)
       @user1.has_role?("owner", created_doc).should be_true    
     end 
+  end
+  
+  context 'accessed by logged user - test filters with user jim' do
+
+    before(:each) do          
+      UserSession.create(@jim)
+    end
+
+    it "should get available documents based on its role without filter" do
+      get :index, :format => "json"
+      response.should be_success
+      response.should respond_with(:content_type => :json)
+      json_response = JSON.parse(response.body)
+      json_response.should be_an_instance_of(Array)
+      json_response.length.should == 15              
+    end
+    
+    it "should get available documents based on its role with owner filter" do
+      get :index, :document_filter => 'owner', :format => "json"
+      response.should be_success
+      response.should respond_with(:content_type => :json)
+      json_response = JSON.parse(response.body)
+      json_response.should be_an_instance_of(Array)
+      json_response.length.should == 9              
+    end
+    
+    it "should get available documents based on its role with reader filter" do
+      get :index, :document_filter => 'reader', :format => "json"
+      response.should be_success
+      response.should respond_with(:content_type => :json)
+      json_response = JSON.parse(response.body)
+      json_response.should be_an_instance_of(Array)
+      json_response.length.should == 3              
+    end
+    
+    it "should get available documents based on its role with editor filter" do
+      get :index, :document_filter => 'editor', :format => "json"
+      response.should be_success
+      response.should respond_with(:content_type => :json)
+      json_response = JSON.parse(response.body)
+      json_response.should be_an_instance_of(Array)
+      json_response.length.should == 3              
+    end
+  end  
+  
+  context 'accessed by logged user - test filters with user jack' do
+
+    before(:each) do          
+      UserSession.create(@jack)
+    end
+
+    it "should get available documents based on its role without filter" do
+      get :index, :format => "json"
+      response.should be_success
+      response.should respond_with(:content_type => :json)
+      json_response = JSON.parse(response.body)
+      json_response.should be_an_instance_of(Array)
+      json_response.length.should == 15              
+    end
+    
+    it "should get available documents based on its role with owner filter" do
+      get :index, :document_filter => 'owner', :format => "json"
+      response.should be_success
+      response.should respond_with(:content_type => :json)
+      json_response = JSON.parse(response.body)
+      json_response.should be_an_instance_of(Array)
+      json_response.length.should == 9              
+    end
+    
+    it "should get available documents based on its role with reader filter" do
+      get :index, :document_filter => 'reader', :format => "json"
+      response.should be_success
+      response.should respond_with(:content_type => :json)
+      json_response = JSON.parse(response.body)
+      json_response.should be_an_instance_of(Array)
+      json_response.length.should == 3              
+    end
+    
+    it "should get available documents based on its role with editor filter" do
+      get :index, :document_filter => 'editor', :format => "json"
+      response.should be_success
+      response.should respond_with(:content_type => :json)
+      json_response = JSON.parse(response.body)
+      json_response.should be_an_instance_of(Array)
+      json_response.length.should == 3              
+    end
   end  
 end

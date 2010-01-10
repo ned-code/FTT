@@ -46,19 +46,31 @@ describe Page do
     it { @page1.next.should be_nil }  
   end
   
+  describe "title" do
+
+    it "should have 'undefined' as title" do
+      document = Factory(:document)
+      page = document.pages.create
+      page.title.should == "undefined"
+    end
+  end
+  
 end
+
 
 # == Schema Information
 #
 # Table name: pages
 #
+#  id           :integer         not null, primary key
 #  uuid         :string(36)
-#  document_id  :string(36)      not null
-#  thumbnail_id :string(36)
+#  document_id  :integer         not null
+#  thumbnail_id :integer
 #  position     :integer         not null
 #  version      :integer         default(1), not null
 #  data         :text(65537)
 #  created_at   :datetime
 #  updated_at   :datetime
+#  title        :string(255)     default("undefined")
 #
 

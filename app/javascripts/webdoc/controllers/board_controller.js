@@ -364,8 +364,7 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseDown: function(e) {
-    $(document).unbind("mousemove");
-    $(document).unbind("mouseup");
+    $(document).unbind("mousemove").unbind("mouseup");
     if (window.document.activeElement) {
       window.document.activeElement.blur();
     }

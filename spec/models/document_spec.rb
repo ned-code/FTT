@@ -7,10 +7,12 @@ describe Document do
     
 end
 
+
 # == Schema Information
 #
 # Table name: documents
 #
+#  id         :integer         not null, primary key
 #  uuid       :string(36)
 #  title      :string(255)
 #  deleted_at :datetime
