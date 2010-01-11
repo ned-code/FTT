@@ -2,11 +2,12 @@
  * Controller of the right bar. It manages the show, the hide and the toggle the right bar. It also manages if the right bar shows the inspector or the lib.
  * @author Julien Bachmann
  */
+//= require <webdoc/controllers/page_inspector_controller>
 
 WebDoc.RightBarController = $.klass({
   initialize: function() {
     this.visible = false;
-    this.domNode = $("#right_bar");
+    this.domNode = $("#right_bar");    
   },
   
   showLib: function() {
@@ -16,24 +17,45 @@ WebDoc.RightBarController = $.klass({
       WebDoc.application.librariesController = new WebDoc.LibrariesController();
     }
     
-    if (this.visible) {
-      ddd("animate lib");
-      this.showRightBar(function() {
-        $("#inspectors").slideUp("fast");
-        $("#libraries").slideDown("fast");
-      });
-    }
+    ddd("animate lib");
+    this.showRightBar(function() {
+      $("#item_inspector").hide();
+      $("#page_inspector").hide();      
+      $("#libraries").show();      
+    });
+    $(".current_right_item").removeClass("current_right_item");
+    $("#lib_view").addClass("current_right_item");
   },  
   
-  showInspectors: function(callBack) {
-    if (this.visible) {
-      $("#libraries").slideUp("fast");
-      $("#inspectors").slideDown("fast", function() {
-        if (callBack) {
-          callBack.apply(this);
-        }
-      });
+  showPageInspector: function() {
+    ddd("show page inspector");
+    if (!WebDoc.application.pageInspectorController) { // lazily load the page inspector
+      WebDoc.application.pageInspectorController = new WebDoc.PageInspectorController();
     }
+    
+    this.showRightBar(function() {
+      $("#item_inspector").hide();      
+      $("#libraries").hide();
+      $("#page_inspector").show();      
+    });
+    $(".current_right_item").removeClass("current_right_item");
+    $("#page_inspector_view").addClass("current_right_item");    
+  },
+  
+  showItemInspector: function(callBack) {
+    ddd("show item inspector");
+    
+    this.showRightBar(function() {
+      $("#page_inspector").hide();      
+      $("#libraries").hide();
+      $("#item_inspector").show();      
+    });
+    $(".current_right_item").removeClass("current_right_item");
+    $("#item_inspector_view").addClass("current_right_item"); 
+  },
+    
+  showInspectors: function(callBack) {
+    ddd("old show inspectors");
   },
   
   showRightBar: function(callBack) {

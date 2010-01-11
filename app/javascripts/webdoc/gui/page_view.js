@@ -19,10 +19,6 @@ WebDoc.PageView = $.klass({
     else {
       this.domNode.css(page.data.data.css);
     }
-    
-    this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
-    this.drawingDomNode.css("zIndex", 999999);
-    this.domNode.append(this.drawingDomNode.get(0));
     this.itemDomNode = $('<div>').attr({
       id: "items",
       style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
@@ -38,22 +34,22 @@ WebDoc.PageView = $.klass({
           externalPage.attr("src", "http:\/\/" + document.domain + ":" + window.location.port + "/proxy/resolve?url=" + page.data.data.externalPageUrl);
           $("#board_container").css("overflow", "auto");
           externalPage.css("overflow", "hidden");
+          if (page.data.data.css.width) {
+            this.domNode.css(page.data.data.css);
+          }
+          else {
+            externalPage.bind("load", function() {
+              page.data.data.css.width = externalPage[0].contentDocument.width;
+              page.data.data.css.height = externalPage[0].contentDocument.height;
+              page.save();
+              this.domNode.css(page.data.data.css);
+            }.pBind(this));
+          }          
         }
         else {
           externalPage.attr("src", page.data.data.externalPageUrl);
           $("#board_container").css("overflow", "hidden");
           externalPage.css("overflow", "auto");
-        }
-        if (page.data.data.css.width) {
-          this.domNode.css(page.data.data.css);
-        }
-        else {
-          externalPage.bind("load", function() {
-            page.data.data.css.width = externalPage[0].contentDocument.width;
-            page.data.data.css.height = externalPage[0].contentDocument.height;
-            page.save();
-            this.domNode.css(page.data.data.css);
-          }.pBind(this));
         }
         this.itemDomNode.append(externalPage[0]);
       }      
@@ -64,6 +60,9 @@ WebDoc.PageView = $.klass({
     
     this.domNode.append(this.itemDomNode.get(0));
     this.domNode.append($("<div id=\"event_catcher\"/>"));
+    this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
+    this.drawingDomNode.css("zIndex", 999999);
+    this.domNode.append(this.drawingDomNode.get(0));    
     var that = this;
     this.itemViews = {};
     if (page.items && $.isArray(page.items)) {

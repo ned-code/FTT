@@ -9,6 +9,7 @@ WebDoc.PageInspectorController = $.klass({
     $("#allow_annotation_checkbox").bind("change", this.changeAllowAnnotation.pBind(this)); 
     $("#external_page_url").bind("blur", this.updateExternalPageUrl.pBind(this));    
     WebDoc.application.boardController.addCurrentPageListener(this);
+    this.currentPageChanged();
   },
   
   currentPageChanged: function() {
@@ -43,8 +44,10 @@ WebDoc.PageInspectorController = $.klass({
   updateExternalPageUrl: function() {
     var page = WebDoc.application.pageEditor.currentPage;    
     page.data.data.externalPageUrl = $("#external_page_url").get(0).value;
-    delete page.data.data.css.width;
-    delete page.data.data.css.height;
+    if (page.data.data.allowAnnotation) {
+      delete page.data.data.css.width;
+      delete page.data.data.css.height;
+    }
     page.save(function() {
       WebDoc.application.pageEditor.loadPage(page);
     });

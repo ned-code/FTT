@@ -1,0 +1,13 @@
+#page_inspector{ :style => "display: none" }
+  .toolbar
+    %h1= t("label.page_inspector")
+  %label Use external page
+  %input#external_page_checkbox{ :type => "checkbox"}
+  %textarea#page_css_editor
+  #external_page_panel{ :style => "display:none"}
+    %div
+      %label Allow annotation
+      %input#allow_annotation_checkbox{ :type => "checkbox"}        
+    %div
+      %label URL
+      %input#external_page_url

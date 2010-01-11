@@ -2,7 +2,6 @@
  * @author julien
  */
 //= require <webdoc/model/image>
-//= require <webdoc/controllers/inspectors/page_inspector_controller>
 //= require <webdoc/controllers/inspectors/properties_inspector_controller>
 //= require <webdoc/controllers/inspectors/inner_html_controller>
 //= require <webdoc/sdk/widget_api>
@@ -15,7 +14,7 @@ WebDoc.InspectorController = $.klass({
     var emptyPalette = $("#palette_empty").hide();
     var textPalette = $("#palette_text").hide();
     var penPelette = $("#palette_pen").hide();
-    var widgetPalette = $("#palette_widget");
+    var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
       ddd("must inject uniboard api in inspector");
       if (widgetPalette[0].contentWindow) {
@@ -36,18 +35,15 @@ WebDoc.InspectorController = $.klass({
     this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette];
     this.updatePalette(0);
     this.subInspectors = [];
-    var pageInspectorController = new WebDoc.PageInspectorController();
-    this.subInspectors.push(pageInspectorController);
     var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
     this.subInspectors.push(propertiesInspectorController);   
     var innerHtmlController = new WebDoc.InnerHtmlController();
     this.subInspectors.push(innerHtmlController);        
        
-    var pageInspector = $("#page_inspector");
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
     var htmlInspector = $("#html_inspector"); 
-    this.inspectors = [pageInspector[0], paletteInspector[0], propertiesInspector[0], htmlInspector[0]];
+    this.inspectors = [paletteInspector[0], propertiesInspector[0], htmlInspector[0]];
     this.lastInspectorId = 1;
     this.selectInspector(0);
     this.currentInspectorId = 0;
@@ -116,9 +112,9 @@ WebDoc.InspectorController = $.klass({
  
   refreshSubInspectors: function() {
     for (var i=0; i < this.subInspectors.length; i++) {
-      var subInspetor = this.subInspectors[i];
-      if (subInspetor.refresh) {
-        subInspetor.refresh();
+      var subInspector = this.subInspectors[i];
+      if (subInspector.refresh) {
+        subInspector.refresh();
       }
     }
   },
