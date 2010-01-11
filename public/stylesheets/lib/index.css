@@ -1,0 +1,162 @@
+/* CSS Index class
+ * 
+ * Defines styles for lists of inline-blocks like buttons, thumbs or toolbars,
+ * as well as lists with dividers. Horizontal by default.
+ *
+ * Uses a technique for getting inline-block behaviour in IE, explained well here:
+ * http://blog.mozilla.com/webdev/2009/02/20/cross-browser-inline-block/
+ *
+ */
+
+.index {
+    list-style: none;
+    padding: 0;
+}
+.index li,
+.index dt,
+.index dd {
+    display: inline-block;
+    /* IE does not apply inline-block to block elements, make them inline... */
+    *display: inline;
+    /* ...and trigger hasLayout */
+    zoom: 1;
+    vertical-align: bottom;
+    margin-right: 6px;
+}
+.index li:last-child,
+.index li.last,
+.index dd:last-child,
+.index dd.last {
+    margin-right: 0;
+}
+.index dt, dd {
+    width: 160px;
+    line-height: 1.6em;
+}
+.index dt {
+    vertical-align: text-bottom;
+}
+.index dd {
+    vertical-align: text-top;
+    /* reset the margin that usually indents a dd */
+    margin-left: 0;
+    /* Move it down by one line-height */
+    margin-top: 1.6em;
+    /* Move it left with a negative margin accounting for size, padding and margin of dt */
+    margin-left: -166px;
+    /* Space at the bottom for when the items wrap */
+    margin-bottom: 1.6em;
+}
+       
+/* Vertical */
+
+.vertical li {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 6px;
+}
+.vertical li:last-child,
+.vertical li.last {
+    margin-bottom: 0;
+}
+
+/* Items divided by lines */
+
+.divided li {
+    height: 1em;
+    line-height: 1em;
+    padding-right: 0.6em;
+    margin-right: 0.6em;
+    border-right: 1px solid #666666;
+}
+.divided li:last-child,
+.divided li.last {
+    padding-right: 0;
+    margin-right: 0;
+    border-right: 0;
+}
+.divided.thumbs li {
+    height: auto;
+    display: inline-block;
+}
+
+.vertical.divided li {
+    padding-right: 0;
+    margin-right: 0;
+    border-right: none;
+    padding-bottom: 0.6em;
+    margin-right: 0.6em;
+    border-bottom: 1px solid #666666;
+}
+.vertical.divided li:last-child,
+.vertical.divided li.last {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+}
+.vertical.divided.thumbs li {
+    display: block;
+}
+
+.divided dt {
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid #aaaaaa;
+}
+.divided dd {
+    margin-top: 1.9em;
+    padding-top: 0.2em;
+}
+
+/* Links as thumbs classes */
+
+.thumbs a {
+    display: inline-block;
+    /* stop it creating a gap below the thumb, because by default thumb sits on a baseline. */
+    vertical-align: top;
+    /* padding-top defines the height and pushes any text down out of the box.
+       You can't use -ve text-indent for this as IE7 moves the background, too. */
+    padding-top: 48px;
+    min-width: 48px;
+    height: 1.6em;
+    line-height: 1.2em;
+    /* Constrain box and hide text that is pushed outside. */
+    overflow: hidden;
+    /* Centre text */
+    text-align: center;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+}
+.icons-only a {
+    width: 48px;
+    height: 0;
+}
+.text-only a {
+    background-image: none !important;
+    padding-top: 0;
+    line-height: 1.6em;
+    min-width: 0;
+}
+
+/* Vertical thumbs */
+
+.vertical.thumbs a {
+    padding-top: 0;
+    /* left padding is thumb width plus gap between thumb and text */
+    padding-left: 56px;
+    padding-right: 8px;
+    line-height: 48px;
+    height: 48px;
+    text-align: left;
+    background-position: 0 0;
+}
+.vertical.icons-only a {
+    padding-right: 0;
+    padding-left: 48px;
+    min-width: 0;
+    width: 0;
+}
+.vertical.text-only a {
+    background-image: none !important;
+    min-width: 0;
+    padding-left: 8px;
+}
