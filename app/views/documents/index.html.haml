@@ -15,7 +15,7 @@
         %a#wb-document-filter-shared-with-me-as-viewer{ :href => "#shared_as_viewer"}= t('label.shared_with_me_as_viewer')
   #wb-document-list-container
 
-#wb-new-document-dialog{ :display => "none", :title => t('label.create_new_document') }
+#wb-new-document-dialog{ :style => "display:none", :title => t('label.create_new_document') }
   %form{ :action => ""}
     %fieldset
       %label{ :for => "name" }= t "label.name"
@@ -26,7 +26,7 @@
       %br
       %input#wb-new-document-creationDate.ui-corner-all{ :disabled => "true", :type => "text", :name => "wb-new-document-creationDate", :style => "width:100%"}
 
-#wb-edit-document-dialog{ :display => "none",:title => t('label.edit_document') }
+#wb-edit-document-dialog{ :style => "display:none",:title => t('label.edit_document') }
   %form{ :action => ""}
     %fieldset
       %label{ :for => "name" }= t "label.name"
@@ -37,7 +37,7 @@
       %br
       %input#wb-edit-document-creationDate.ui-corner-all{ :disabled => "true", :type => "text", :name => "wb-edit-document-creationDate", :style => "width:100%"}      
 
-#wb-change-access-dialog{ :display => "none",:title => t('label.change_access_document') }
+#wb-change-access-dialog{ :style => "display:none",:title => t('label.change_access_document') }
   #document_access-header
     %button#add_access.ui-button.ui-state-default.ui-corner-all= t('button.add_access')
   %ul#document_access_list
