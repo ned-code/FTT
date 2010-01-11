@@ -80,7 +80,7 @@ WebDoc.PageEditor = $.klass({
     }.pBind(this)); 
     $(window).unload(function() {
       WebDoc.application.collaborationManager.disconnect();
-    });   
+    });
   },
 
   load: function(documentId) {
@@ -93,6 +93,16 @@ WebDoc.PageEditor = $.klass({
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument);
       this.loadPageId(window.location.hash.replace("#", ""));
     }.pBind(this));
+    
+    // ===========================================================
+    // = TODO REMOVE THIS (ZENO USES THIS TO DEBUG VIDEO LIBRARY)
+    setTimeout(function(){
+      WebDoc.application.rightBarController.showRightBar(WebDoc.application.rightBarController.showLib.pBind(WebDoc.application.rightBarController));
+    },500);
+    setTimeout(function(){
+      $('#videos').click();
+    },600);
+    // ===========================================================
   },
 
   loadPageId: function(pageId) {

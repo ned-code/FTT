@@ -9,7 +9,7 @@ var jQT = new $.jQTouch("libraries", { preloadImages: [] });
 WebDoc.LibrariesController = $.klass({
   initialize: function() {
     this.imagesLibrary = new WebDoc.ImagesLibrary("images");
-    // this.videosLibrary = new WebDoc.VideosLibrary("videos");
+    this.videosLibrary = new WebDoc.VideosLibrary("videos");
     this.appsLibrary = new WebDoc.AppsLibrary("apps");
   }
 });
@@ -66,5 +66,6 @@ WebDoc.Library = $.klass({
 });
 
 //= require <webdoc/library/images_library>
+//= require <webdoc/library/videos_library>
 //= require <webdoc/library/apps_library>
 

@@ -12,12 +12,12 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     // view transition finished (slide in/out)
     this.element.bind('pageAnimationEnd', function(event, info){
       var currentViewId = this.currentViewId();
-      if (currentViewId === this.element.attr("id")) { // Images view did appear
+      if (currentViewId === this.element.attr("id")) { // #images view did appear
         if (this.element.find('div.selected')[0] == this.tabContainers[0]) {
           this.loadMyImages(0);
         }
       }
-      else if (currentViewId === "add_images") { // Add Images view did appear
+      else if (currentViewId === "add_images") { // #add_images view did appear
         this.imagesUploader.loadSWFUpload();
       }
     }.pBind(this));

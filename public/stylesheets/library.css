@@ -349,16 +349,15 @@ div.tabs > div {
   color:#111;
 }
 
-/* ========== */
-/* = Images = */
-/* ========== */
-
-#web_images label {
+/* ============================= */
+/* = Media (Images and Videos) = */
+/* ============================= */
+.web_media label {
   display:block;
   padding:0 0 3px;
 }
 
-#web_images_search_field {
+.web_media_search_field {
   font-size:18px;
   padding:0 2px;
   width:249px;
@@ -366,7 +365,7 @@ div.tabs > div {
   float:left;
 }
 
-#web_images_search_submit {
+.web_media_search_submit {
   width:28px;
   height:28px;
   display:block;
@@ -385,12 +384,12 @@ div.tabs > div {
   -moz-border-radius:4px;
 }
 
-#web_images_search_submit:hover {
+.web_media_search_submit:hover {
   background:#eee url(/images/libraries/search.png) no-repeat 50% 50%;
   border: 1px solid #666;
 }
 
-#web_images h3 {
+.web_media h3 {
   display:block;
   font-size:15px;
   font-weight:bold;
@@ -402,13 +401,17 @@ div.tabs > div {
   position:relative;
 }
 
-#web_images h3 span.results_number {
+.web_media h3 span.results_number {
   position:absolute;
   top:4px;
   right:7px;
   font-size:12px;
   font-weight:normal;
 }
+
+/* ========== */
+/* = Images = */
+/* ========== */
 
 #images .thumbnails .no_items {
   font-size:14px;
@@ -647,3 +650,32 @@ object:hover, object:focus, object:active {
   outline:0;
   cursor:pointer;
 }
+
+
+/* ========== */
+/* = Videos = */
+/* ========== */
+
+#videos .rows .no_items {
+  font-size:14px;
+  text-align:center;
+  display:block;
+  padding:30px 10px;
+}
+
+#videos .rows ul {
+  list-style-type:none;
+  padding:0;
+}
+
+#videos .rows ul li {
+  list-style: none;
+  padding:0 0 18px 0;
+  text-align:left;
+}
+
+#videos .rows ul li a {
+  color:#000;
+  text-decoration:none;
+}
+

@@ -10,7 +10,7 @@ WebDoc.WebImagesSearch = $.klass({
     this.flickrImagesSearch = new WebDoc.FlickrImagesSearch();
     this.googleImagesSearch = new WebDoc.GoogleImagesSearch();
     
-    // Set callback to the ImageLibrary
+    // Set callback to the ImagesLibrary
     this.imagesLibrary = imagesLibrary;
     
     // Observe search submission
@@ -127,7 +127,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
       this.query = query;
       this.page = 1;
       this.perPage = 9;
-
+      
       this.performSearch();
     }
   },
@@ -141,7 +141,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
 WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   initialize: function($super) {
     $super('google_images');
-
+    
     this.googleApiKey = 'ABQIAAAApQVNSQ3vVhagmaEB0elu7BTPrwtLmcDxRofti2tV-VsxVMfrRRTawoNcxVFL3Hajl6ZPExg6uL8XGg';
     // This key is good for all URLs in this directory: http://webdoc.com
     // (Key created with info@jilion.com account)
@@ -157,20 +157,20 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   },
   performSearch: function() {
     // http://code.google.com/apis/ajaxsearch/documentation/reference.html
-
+    
     var googleUrl = this.googleImagesSearchBaseUrl +
     "?q=" + encodeURIComponent(this.query) +
     "&rsz=large" + //asks for 8 images (max value)
     "&start=" + this.startParam +
     "&key=" + this.googleApiKey +
     "&v=1.0&callback=?";
-
+    
     $.getJSON(googleUrl,
       function(data){
-        ddd(data);
+        // ddd(data);
         var cursor = data.responseData.cursor;
         this.resultsCount.text(cursor.estimatedResultCount);
-
+        
         if (data.responseData.results && data.responseData.results.length > 0) {
           var results = data.responseData.results;
           
@@ -179,14 +179,12 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
             this.imagesContainer.append(this.buildThumbnail("google", gImage.url, gImage.tbUrl, gImage.titleNoFormatting, gImage.url, {width:gImage.width,height:gImage.height}));
             
           }.pBind(this));
-        
-          this.container.find('.loading').remove();
-        
+          
           if ( cursor.pages && cursor.pages.length > 1 ) {
             var nextPage = cursor.pages[cursor.currentPageIndex + 1];
             if (nextPage) {
               this.startParam = nextPage.start;
-              ddd("new start param:"+this.startParam);
+              // ddd("new start param:"+this.startParam);
               this.loadMoreLink.show();
             }
           }
@@ -194,6 +192,7 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
             this.loadMoreLink.hide();
           }
         }
+        this.container.find('.loading').remove();
       }.pBind(this)
     );
   },
@@ -202,7 +201,7 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
       $super();
       this.query = query;
       this.startParam = 0;
-
+      
       this.performSearch();
     }
   },
