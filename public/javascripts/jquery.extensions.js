@@ -64,3 +64,15 @@
         test.remove();
     });
 })(jQuery);
+
+
+// Extend jQuery with some helper functions
+
+jQuery.fn.extend({
+    // Get or set id (attribute helper)
+    id: function(id) {
+        return (id === undefined) ? 
+            this.attr("id") :
+            this.attr("id", id) ;
+    }
+});
