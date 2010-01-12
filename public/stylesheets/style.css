@@ -234,12 +234,9 @@ a:hover { color: #0069BF;}
 
 /*******************/
 /* = toolbars = */
-.tb{
+.toolbar{
     min-width: 900px;
     padding:0 10px;
-}
-.tb ul li{
-    list-style: none;
 }
 #tb_1{
     height: 25px;
@@ -363,12 +360,6 @@ a:hover { color: #0069BF;}
     background:#7F7F7F;
 }
 
-#tb_2{
-    min-width: 300px;
-    height: 37px;
-    background-color: #efefef;
-
-}
 .left_tb_group{
     float: left;
     margin:3px 25px 3px 0px;
@@ -383,42 +374,15 @@ a:hover { color: #0069BF;}
     overflow:hidden;
     border-left: 1px solid #AFAFAF;    
 }
-.tb_button a{
-    display: block;
-    border: 1px solid #efefef;
-}
-.tb_button a img{
-    width:25px;
-    height:25px;
-}
-.tb_button a:hover,
-.current_tool a{
-    display: block;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 1px solid #e6e6e6;
-    background-color: #fff;
-}
+
+
 .left_tb_group.last_tb_group {
     border-right: none;
 }
 .right_tb_group.last_tb_group {
     border-left: none;
 }
-.left_tb_group .tb_button {
-    float: left;
-    padding-right:5px;
-}
-.left_tb_group .tb_button:last-child{
-    padding-right: 0;
-}
-.right_tb_group .tb_button {
-    float: right;
-    padding-left:5px;
-}
-.right_tb_group .tb_button:last-child{
-    padding-left: 0;
-}
+
 
 .preview_hidden {
   display:none;
@@ -460,9 +424,6 @@ a:hover { color: #0069BF;}
 /*******************/
 /* =left part = */
 #left_bar {
-    overflow:auto;
-    float: left;
-    width: 0px;
     background-color: #ebebeb;  
 }
 /* == page browser = */

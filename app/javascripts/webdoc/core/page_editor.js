@@ -65,8 +65,6 @@ WebDoc.PageEditor = $.klass({
         WebDoc.application.rightBarController.showRightBar();
     }
     
-    $("#content").show();
-    
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
     });

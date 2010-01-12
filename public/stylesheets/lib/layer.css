@@ -73,13 +73,10 @@ html, body {
 /* panels */
 
 .board-panel {
-    left: 0; right: 0;
+    left: 165px; right: 350px;
     top: 64px;
     bottom: 0;
     min-width: 300px;
-}
-#board_container {
-    left: 165px; right: 350px;
 }
 #board {
     position: relative;

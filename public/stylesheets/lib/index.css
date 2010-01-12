@@ -160,3 +160,21 @@
     min-width: 0;
     padding-left: 8px;
 }
+
+
+/* Toolbars */
+
+.tools a {
+    border: 1px solid #efefef;
+    padding-top: 25px;
+    min-width: 25px;
+}
+
+.tools a:hover,
+.tools .current_tool a{
+    display: block;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #e6e6e6;
+    background-color: #fff;
+}
