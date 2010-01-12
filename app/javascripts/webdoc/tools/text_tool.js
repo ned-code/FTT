@@ -48,7 +48,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   
   selectTool: function() {
     WebDoc.application.boardController.unselectAll();
-    this.newTextBox();
+    this.newTextBox();  
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     $("#inspector").accordion('activate', 1);
   },
@@ -78,6 +78,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     }
     this.textView = textView;
     this.delegate.enterEditMode(textView.domNode);
+    WebDoc.application.rightBarController.showItemInspector();    
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
   },
   
   exitEditMode: function() {

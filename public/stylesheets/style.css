@@ -423,6 +423,14 @@ a:hover { color: #0069BF;}
 .preview_hidden {
   display:none;
 }
+
+.current_right_item a{
+    display: block;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #e6e6e6;
+    background-color: #fff;
+}
 /*Special case to prevent page deletion :-)*/
 #removePage a {
     height: 28px;
@@ -510,6 +518,17 @@ a:hover { color: #0069BF;}
 }
 /*******************/
 /* = board part = */
+
+#document_loading {
+  text-align:center;
+  width:100%;
+  height:100%;
+}
+#document_loading img{
+  position:relative;
+  top:150px;
+}
+
 #board_container {
     background-color: #ebebeb;
 }
@@ -619,7 +638,6 @@ a:hover { color: #0069BF;}
   position:relative;
   overflow:auto; 
   background-color:#ebebeb;
-  height:100%;  
 }
 #inspectors .inspector{
   background:#ebebeb;   
@@ -630,7 +648,8 @@ a:hover { color: #0069BF;}
 }
 /* == page inspector */
 #page_css_editor {
-  width:100%;
+  width:340px;
+  margin:5px;
   height:300px;
 }
 /* == properties inspector */

@@ -34,27 +34,18 @@ WebDoc.PageView = $.klass({
     }
     
     if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
-        // Handle case where page is an external webpage
-        // TODO: change this to use CSS classes
-        
-        ddd('Page is an external document');
-        
-        externalPage = $('<iframe/>').css({
-            width: "100%",
-            height: "100%"
-        });
-        
-        if (page.data.data.externalPageUrl) {
-          if (page.data.data.allowAnnotation) {
-            externalPage.attr("src", "http:\/\/" + document.domain + ":" + window.location.port + "/proxy/resolve?url=" + page.data.data.externalPageUrl);
-            boardContainer.css("overflow", "auto");
-            externalPage.css("overflow", "hidden");
-          }
-          else {
-            externalPage.attr("src", page.data.data.externalPageUrl);
-            boardContainer.css("overflow", "hidden");
-            externalPage.css("overflow", "auto");
-          }
+      // Handle case where page is an external webpage
+      // TODO: change this to use CSS classes
+
+      externalPage = $("<iframe/>").css({
+        width: "100%",
+        height: "100%"
+      });
+      if (page.data.data.externalPageUrl) {
+        if (page.data.data.allowAnnotation) {
+          externalPage.attr("src", "http:\/\/" + document.domain + ":" + window.location.port + "/proxy/resolve?url=" + page.data.data.externalPageUrl);
+          boardContainer.css("overflow", "auto");
+          externalPage.css("overflow", "hidden");
           if (page.data.data.css.width) {
             this.domNode.css(page.data.data.css);
           }
@@ -65,9 +56,15 @@ WebDoc.PageView = $.klass({
               page.save();
               this.domNode.css(page.data.data.css);
             }.pBind(this));
-          }
-          this.itemDomNode.append(externalPage[0]);
-        }      
+          }          
+        }
+        else {
+          externalPage.attr("src", page.data.data.externalPageUrl);
+          boardContainer.css("overflow", "hidden");
+          externalPage.css("overflow", "auto");
+        }
+        this.itemDomNode.append(externalPage[0]);
+      }      
     }
     else {
         // Handle case where page is a webdoc

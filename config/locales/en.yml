@@ -39,6 +39,8 @@ en:
     add_access: "Add user"
   
   label:
+    page_inspector: "Page inspector"
+    item_inspector: "Item inspector"
     documents: "Documents"
     all_items_by_date: "All items"
     owned_by_me: "Owned by me"
