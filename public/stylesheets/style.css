@@ -19,12 +19,6 @@ a:hover { color: #0069BF;}
   list-style-type: none;
 }
 
-#wrap {
-  /*width:900px;*/
-  /*margin:0 auto;*/
-  position:relative;
-}
-
 #ub-login-logout {
   float: right;
   margin-top: 5px;
@@ -516,24 +510,15 @@ a:hover { color: #0069BF;}
 }
 /*******************/
 /* = board part = */
-#content{
-    padding: 0 10px;
-    min-width: 300px;
-    margin-top: 5px;
-}
 #board_container {
-    height: 100%;
-    border: 2px solid #dfdfdf;  
-    overflow:hidden;
     background-color: #ebebeb;
 }
 #board {
-  position:relative;
-  font-family:Helvetica, Arial, sans-serif;
-  font-size: 2.5em;
-  -webkit-box-shadow:2px 3px 5px #333333;
-  -moz-box-shadow:2px 3px 5px #333333; 
-  box-shadow:2px 3px 5px #333333;
+    font-family:Helvetica, Arial, sans-serif;
+    font-size: 2.5em;
+    -webkit-box-shadow:2px 3px 5px #333333;
+    -moz-box-shadow:2px 3px 5px #333333; 
+    box-shadow:2px 3px 5px #333333;
 }
 #board ol, #board ul {
   padding-left:1.5em;
@@ -547,7 +532,7 @@ a:hover { color: #0069BF;}
   margin-bottom: 0.2em;
 }
 
-#event_catcher {
+#event-catcher {
   z-index:999999;
   position:absolute;
   top:0px;
@@ -628,9 +613,6 @@ a:hover { color: #0069BF;}
   background-color:  #fff;
 }
 #right_bar{
-    overflow:auto;
-    float: right;
-/*    width: 300px;*/
     background-color: #ebebeb;
 }
 #inspectors {

@@ -3,10 +3,21 @@
  * @author Julien Bachmann
  */
 
+(function(undefined){
+
+// Default settings
+var panelWidth = 350;
+
 WebDoc.RightBarController = $.klass({
   initialize: function() {
+    var domNode = $("#right_bar");
+    
     this.visible = false;
-    this.domNode = $("#right_bar");
+    this.domNode = domNode;
+    
+    // Store actual size of panel
+    panelWidth = domNode.outerWidth();
+    ddd('Width of right panel: '+panelWidth);
   },
   
   showLib: function() {
@@ -39,20 +50,17 @@ WebDoc.RightBarController = $.klass({
   showRightBar: function(callBack) {
     if (!this.visible) {
       this.visible = true;
-      $("#right_bar").animate({
-        width: "350px"
+      
+      console.log('THIS');
+      
+      $("#right_bar")
+      .animate({
+          marginLeft: '-' + panelWidth + 'px'
       }, function() {
-        WebDoc.application.boardController.centerBoard();
         if (callBack) {
           callBack.apply(this);
         }
       });
-        
-      if (!MTools.Browser.WebKit) {
-        $("#board_container").animate({
-          marginRight: "305px"
-        });
-      }      
     }
     else {
       if (callBack) {
@@ -65,18 +73,12 @@ WebDoc.RightBarController = $.klass({
     if (this.visible) {
       this.visible = false;
       $("#right_bar").animate({
-        width: "0px"
+        marginLeft: 0
       }, function() {
-        WebDoc.application.boardController.centerBoard();
         if (callBack) {
           callBack.apply(this);
         }
       });
-      if (!MTools.Browser.WebKit) {
-        $("#board_container").animate({
-          marginRight: "0px"
-        });
-      }
     }
     else {
       if (callBack) {
@@ -97,3 +99,5 @@ WebDoc.RightBarController = $.klass({
 });
 
 $.extend(WebDoc.InspectorController, {});
+
+}());

@@ -4,12 +4,15 @@
  *
  */
 
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
 .layer {
     position: absolute;
-    /* We don't want layers to respect padding of their containers */
     top: 0; right: 0; bottom: 0; left: 0;
-    /* Width and height take precedence over the top/right/bottom/left, but we probably need them for IE7 */
-    /* Only, we definitely dont want them for standard browsers - they'll mess with the scroll-hide construct */
+    /* Height / width override the top, right, bottom, left declaration. Keep an eye out. */
     /* width: 100%; height: 100%; */
     overflow: auto;
 }
@@ -21,7 +24,6 @@
     /* They represent the thickness of a scrollbar */
     padding-right: 16px;
     padding-bottom: 16px;
-    /* Fix width and height so that padding pushes scrollbars outside of the container */
     width: 100%;
     height: 100%;
 }
@@ -29,22 +31,31 @@
     overflow: scroll;
 }
 
-/* TODO: This technique does not work in <IE7. Implement the fix described here:
+/* Vertical centering technique described here:
 /* http://www.jakpsatweb.cz/css/css-vertical-center-solution.html */
+/* TODO: Fix case in IE7 where centering has to scroll. V difficult. Possibly impossible. */
 
 .centering {
     display: table;
     width: 100%;
     height: 100%;
+    /* IE hacks */
+    position: relative !ie7;
 }
 .centering>div {
     display: table-cell;
     vertical-align: middle;
+    /* IE hacks */
+    position: absolute !ie7;
+    top: 50% !ie7;
 }
 
 /* Ideally, all elements likely to be put in a centred layer should be listed here */
 .centering>div>div,
 .centering>div>img,
+.centering>div>ul,
+.centering>div>dl,
+.centering>div>menu,
 .centering>div>object,
 .centering>div>embed,
 .centering>div>section,
@@ -54,4 +65,35 @@
 .centering>div>progress,
 .centering>div>canvas {
     margin: 0 auto;
+    /* IE hacks */
+    position: relative !ie7;
+    top: -50% !ie7;
+}
+
+/* panels */
+
+.board-panel {
+    left: 0; right: 0;
+    top: 64px;
+    bottom: 0;
+    min-width: 300px;
+}
+#board_container {
+    left: 165px; right: 350px;
+}
+#board {
+    position: relative;
+}
+
+.left-panel {
+    width: 165px;
+    margin-left: 0px;
+    top: 64px;
+}
+
+.right-panel {
+    width: 350px;
+    left: 100%;
+    margin-left: -350px;
+    top: 64px;
 }

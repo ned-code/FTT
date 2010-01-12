@@ -62,7 +62,7 @@ WebDoc.ToolbarController = $.klass({
   
   page_browser: function(e) {
     WebDoc.application.pageBrowserController.toggleBrowser(function() {
-      WebDoc.application.boardController.centerBoard();
+//      WebDoc.application.boardController.centerBoard();
     });
   },
   
