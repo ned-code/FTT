@@ -12,7 +12,6 @@ class DatastoreEntriesController < ApplicationController
       end
     end
     
-   ActiveRecord::Base.include_root_in_json = true
    #if(only_current_user == true)
    #   render :json => DatastoreEntry.find(:all,:select => 'DISTINCT ds_key',:conditions => {:widget_uuid => widget_uuid, :user_id => user_id}).to_json(:only => [:ds_key, :ds_value])    
    #else
@@ -137,11 +136,16 @@ class DatastoreEntriesController < ApplicationController
     #end
     #render :text => output
 
-    ActiveRecord::Base.include_root_in_json = true
+    json_filter = [:ds_key, :ds_value]
+    #if editor of document, add more information to record
+    if(canCurrentUserEditDocument(getDocumentOfWidget(widget_uuid)))
+      json_filter = [:ds_key, :ds_value, :updated_at, :email]
+    end
+    
     if(only_current_user == true)
-      render :json => DatastoreEntry.find(:all,:conditions => {:ds_key => key, :widget_uuid => widget_uuid, :user_id => user_id}).to_json(:only => [:ds_key, :ds_value])
+      render :json => DatastoreEntry.find(:all,:joins=>"JOIN users ON datastore_entries.user_id=users.id",:select=>"datastore_entries.*,users.email",:conditions => {:ds_key => key, :widget_uuid => widget_uuid, :user_id => user_id}).to_json(:only => json_filter)
     else
-      render :json => DatastoreEntry.find(:all,:conditions => {:ds_key => key, :widget_uuid => widget_uuid}).to_json(:only => [:ds_key, :ds_value])
+      render :json => DatastoreEntry.find(:all,:joins=>"JOIN users ON datastore_entries.user_id=users.id",:select=>"datastore_entries.*,users.email",:conditions => {:ds_key => key, :widget_uuid => widget_uuid}).to_json(:only => json_filter)
     end
   end
   
