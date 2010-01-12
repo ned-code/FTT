@@ -360,30 +360,6 @@ a:hover { color: #0069BF;}
     background:#7F7F7F;
 }
 
-.left_tb_group{
-    float: left;
-    margin:3px 25px 3px 0px;
-    padding: 0 25px 0 0;
-    overflow:hidden;
-    border-right: 1px solid #AFAFAF;
-}
-.right_tb_group {
-    float: right;
-    margin:3px 0px 3px 25px;
-    padding: 0 0 0 25px;
-    overflow:hidden;
-    border-left: 1px solid #AFAFAF;    
-}
-
-
-.left_tb_group.last_tb_group {
-    border-right: none;
-}
-.right_tb_group.last_tb_group {
-    border-left: none;
-}
-
-
 .preview_hidden {
   display:none;
 }
@@ -394,31 +370,6 @@ a:hover { color: #0069BF;}
     -webkit-border-radius: 5px;
     border: 1px solid #e6e6e6;
     background-color: #fff;
-}
-/*Special case to prevent page deletion :-)*/
-#removePage a {
-    height: 28px;
-    width: 25px;
-    background-image: url(../images/icons/page_remove.png);
-    background-repeat: no-repeat;
-    background-position: 1px 1px;
-}
-#removePage a:hover {
-    background-position: -23px 1px;
-}
-
-#page_browser a{/*Special case with image in CSS for the toggle_on_panel state -> bad, all buttons images should be in CSS*/
-    height: 28px;
-    width: 25px;
-    background-image: url(../images/icons/browse.png);
-    background-repeat: no-repeat;
-    background-position: 1px 1px;
-}
-#page_browser.toggle_on_panel a{
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  background-color: #6F6F6F;
-  background-position: -23px 1px;
 }
 
 /*******************/

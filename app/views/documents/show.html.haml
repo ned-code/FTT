@@ -2,16 +2,16 @@
 - session_key_name = ActionController::Base.session_options[:key]
 = render :partial => "layouts/main_editor_toolbar"
 #toolbar.toolbar-panel
-  %ul#pages_tools.icons-only.tools.thumbs.index.left_tb_group
+  %ul#pages_tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li#addPage.preview_hidden>
-      %a{ :href => "#", :title => "Add page", :style => "background-position: 0 0; background-image: url('');" }
+      %a{ :href => "#", :title => "Add page", :style => "background-position: 0 0; background-image: url('/images/icons/add_page.png');" }
         Add
     %li#removePage.preview_hidden>
-      %a{ :href => "#" , :title => "Remove this page"}
+      %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
         Delete
     %li#page_browser>
-      %a{ :href => "" , :title => "Open page browser"}
+      %a{ :href => "" , :title => "Open page browser", :style => "background-position: 0 0; background-image: url('/images/icons/browse.png');" }
         Pages
     %li#previousPage>
       %a{ :href => "" , :title => "Previous page", :style => "background-position: 0 0; background-image: url('/images/icons/arrow_left.png');" }
@@ -26,55 +26,60 @@
       %a{ :href => "#" , :title =>"Change theme", :style => "background-position: 0 0; background-image: url('/images/icons/theme.png');" }
         Theme
     
-  %ul#view_tools.left_tb_group
-    %li#zoom_in
+  %ul#view_tools.tools.thumbs.index.icons-only
+    -# Whitespace is removed between lis to preserve layout
+    %li#zoom_in>
       %a{ :href => "" , :title => "Zoom In", :style => "background-position: 0 0; background-image: url('/images/icons/zoom_in.png');" }
         Zoom in
-    %li#zoom_out
+    %li#zoom_out>
       %a{ :href => "" , :title => "Zoom Out", :style => "background-position: 0 0; background-image: url('/images/icons/zoom_out.png');" }
         Zoom out
-    %li#tool_hand.state_tool
+    %li#tool_hand.state_tool>
       %a{ :href => "" , :title => "Move", :style => "background-position: 0 0; background-image: url('/images/icons/pan.png');" }
         Move
   
-  %ul#edit_tools.left_tb_group.preview_hidden
-    %li#undo
+  %ul#edit_tools.tools.thumbs.index.icons-only.preview_hidden
+    -# Whitespace is removed between lis to preserve layout
+    %li#undo>
       %a{ :href => "" , :title => "Undo", :style => "background-position: 0 0; background-image: url('/images/icons/undo.png');" }
         Undo
-    %li#redo
+    %li#redo>
       %a{ :href => "" , :title => "Redo", :style => "background-position: 0 0; background-image: url('/images/icons/redo.png');" }
         Redo
-    %li#delete_item
+    %li#delete_item>
       %a{ :href => "#" , :title => "Delete", :style => "background-position: 0 0; background-image: url('/images/icons/delete.png');" }
         Delete
   
-  %ul#misc_tools.left_tb_group.last_tb_group
-    %li#tool_arrow.state_tool
+  %ul#misc_tools.tools.thumbs.index.icons-only
+    -# Whitespace is removed between lis to preserve layout
+    %li#tool_arrow.state_tool>
       %a{ :href => "#" , :title => "Select", :style => "background-position: 0 0; background-image: url('/images/icons/cursor.png');" }
         Select
-    %li#html_snipplet.preview_hidden
+    %li#html_snipplet.preview_hidden>
       %a{ :href => "#" , :title => "Insert an HTML snippet", :style => "background-position: 0 0; background-image: url('/images/icons/code.png');" }
         HTML
-    %li#tool_text.preview_hidden
+    %li#tool_text.preview_hidden>
       %a{ :href => "#" , :title => "Insert a Text box", :style => "background-position: 0 0; background-image: url('/images/icons/text.png');" }
         Text
-    %li#tool_pen.preview_hidden.state_tool
+    %li#tool_pen.preview_hidden.state_tool>
       %a{ :href => "#" , :title => "Draw", :style => "background-position: 0 0; background-image: url('/images/icons/pen.png');" }
         Draw
 
-  %ul#toggle_inspector_wrap.preview_hidden.right_tb_group
-    %li#toggle_inspector
+  %ul#toggle_inspector_wrap.tools.thumbs.index.icons-only.preview_hidden
+    -# Whitespace is removed between lis to preserve layout
+    %li#toggle_inspector>
       %a{ :href => "", :title => "Toggle Inspector", :style => "background-position: 0 0; background-image: url('/images/icons/inspector.png');" }
         Inspector
   
-  %ul#right_bar_tools.preview_hidden.right_tb_group.last_tb_group
-    %li#lib_view
+  %ul#right_bar_tools.tools.thumbs.index.icons-only.preview_hidden
+    -# Whitespace is removed between lis to preserve layout
+    %li#lib_view>
       %a{ :href => "", :title => "Show Library", :style => "background-position: 0 0; background-image: url('/images/icons/library.png');" }
         Library
-    %li#page_inspector_view
+    %li#page_inspector_view>
       %a{ :href => "", :title => "Show Page inspector", :style => "background-position: 0 0; background-image: url('/images/icons/page.png');" }
         Page
-    %li#item_inspector_view.current_right_item
+    %li#item_inspector_view.current_right_item>
       %a{ :href => "", :title => "Show Item inspector", :style => "background-position: 0 0; background-image: url('/images/icons/info.png');" }                      
         Item
 

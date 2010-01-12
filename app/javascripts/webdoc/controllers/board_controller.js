@@ -147,7 +147,7 @@ WebDoc.BoardController = $.klass({
       
       $(".item").addClass("item_interact");
       this.setCurrentTool(WebDoc.application.arrowTool);
-      $(".preview_hidden").css("display", "none");
+      $(".preview_hidden").hide();
       $(".toggle_preview").addClass("toggle_edit");
       $(".toggle_preview").removeClass("toggle_preview");
       $("#tb_1_utilities_preview a").text("EDIT MODE");
@@ -162,7 +162,7 @@ WebDoc.BoardController = $.klass({
       if (!this.currentTool) {
         this.setCurrentTool(WebDoc.application.arrowTool);
       }      
-      $(".preview_hidden").css("display", "inline");
+      $(".preview_hidden").show();
       $(".toggle_edit").addClass("toggle_preview");
       $(".toggle_edit").removeClass("toggle_edit");
       $("#tb_1_utilities_preview a").text("QUICK PREVIEW"); 

@@ -70,27 +70,7 @@ html, body {
     top: -50% !ie7;
 }
 
-/* panels */
 
-.board-panel {
-    left: 165px; right: 350px;
-    top: 64px;
-    bottom: 0;
-    min-width: 300px;
-}
 #board {
     position: relative;
-}
-
-.left-panel {
-    width: 165px;
-    margin-left: 0px;
-    top: 64px;
-}
-
-.right-panel {
-    width: 350px;
-    left: 100%;
-    margin-left: -350px;
-    top: 64px;
 }
