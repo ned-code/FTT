@@ -1,0 +1,56 @@
+/* CSS Panel classes
+ * 
+ * Panel classes for creating interface areas
+ *
+ */
+
+/* Panel class */
+
+.panel {
+    position: absolute;
+    left: 0; top: 0; right: 0;
+    height: 100%;
+    overflow: auto;
+}
+.panel .options {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+}
+.panel .content {
+    overflow: auto;
+}
+
+/* Interface panels */
+
+.board-panel {
+    left: 165px; right: 350px;
+    top: 64px;
+    bottom: 0;
+    min-width: 300px;
+}
+
+.titlebar-panel {
+    height: 25px;
+    padding: 0 4px;
+    overflow: hidden;
+}
+
+.toolbar-panel {
+    top: 25px;
+    height: 36px;
+    padding: 0 4px;
+}
+
+.left-panel {
+    width: 165px;
+    margin-left: 0px;
+    top: 64px;
+}
+
+.right-panel {
+    width: 350px;
+    left: 100%;
+    margin-left: -350px;
+    top: 64px;
+}

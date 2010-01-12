@@ -234,19 +234,16 @@ a:hover { color: #0069BF;}
 
 /*******************/
 /* = toolbars = */
-.toolbar{
-    min-width: 900px;
-    padding:0 10px;
+
+#titlebar{
+    height: 24px;
+    background: url(../images/deco/tb_small_bg.png) 0 0 repeat-x;
 }
-#tb_1{
-    height: 25px;
-    background:url(../images/deco/tb_small_bg.png) 0 0 repeat-x;
-    margin-bottom: 1px;
-}
-#tb_1 h1{
+#titlebar h1{
     float: left;
-    height: 25px;
+    height: 24px;
 }
+
 #tb_1_utilities {
     float: right;
     padding-top: 3px;
