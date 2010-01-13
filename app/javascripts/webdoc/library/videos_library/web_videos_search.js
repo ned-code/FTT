@@ -2,13 +2,15 @@
  * @author Zeno Crivelli
 **/
 
+//= require "sha1"
+
 WebDoc.WebVideosSearch = $.klass({
   initialize: function(searchFieldId, videosLibrary) {
     this.searchField = $('#'+searchFieldId);
     this.searchForm = this.searchField.parents('form');
     
     this.youtubeSearch = new WebDoc.YoutubeSearch();
-    // this.vimeoSearch = new WebDoc.VimeoSearch();
+    this.vimeoSearch = new WebDoc.VimeoSearch();
     
     // Set callback to the VideosLibrary
     this.videosLibrary = videosLibrary;
@@ -64,9 +66,9 @@ WebDoc.ServiceVideosSearch = $.klass({
     return h+m+s;
   },
   numberWithThousandsSeparator: function(number, separator) {
-    var separator = separator || ",";
+    var sep = separator || ",";
     var regexp = /\d{1,3}(?=(\d{3})+(?!\d))/g;
-    return (""+number).replace(regexp, "$1"+separator);
+    return (""+number).replace(regexp, "$1"+sep);
   },
   buildThumbnail: function(type, url, thumbUrl, name, imageLink, size) {
     // var properties = { type:type, url:url, thumb_url:thumbUrl, name:name, image_link:imageLink };
@@ -124,7 +126,7 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
         var totResults = data.feed.openSearch$totalResults.$t;
         this.resultsCount.text(data.feed.openSearch$totalResults.$t);
         if (data.feed.entry && data.feed.entry.length > 0) {
-          ddd(data.feed.entry)
+          // ddd(data.feed.entry)
           var results = data.feed.entry;
           $.each(results, function(i, video) {
             
@@ -189,3 +191,153 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
     this.performSearch();
   }
 });
+
+WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
+  initialize: function($super) {
+    $super('vimeo_videos');
+    
+    // this.vimeoConsumerKey="cc9ca0fe8447041900d2ea1c9e13164d";
+    // this.vimeoConsumerSecret="8a74a52d90254c5";
+    // This key has been created by me (vimeo user "zeno") on http://www.vimeo.com/api/applications/new
+    // TODO: ask Mnemis to register and create a new application/key
+    
+    // this.vimeoSearchBaseUrl = "http://vimeo.com/api/rest/v2";
+    
+    //Load More link
+    $("<a>").attr("href","").text("Load more").click(function(event){
+      this.loadMore();
+      event.preventDefault();
+    }.pBind(this)).appendTo(this.container).wrap("<div class='load_more' style='display:none'>");
+    this.loadMoreLink = this.container.find('.load_more');
+  },
+  performSearch: function() {
+    // http://vimeo.proxy.app-base.com/api/docs/oauth
+    // http://vimeo.com/api/docs/methods/vimeo.videos.search
+    
+    var baseUrl = "http://vimeo.com/api/rest/v2";
+    var consumerKey = "cc9ca0fe8447041900d2ea1c9e13164d";
+    var consumerSecret = "8a74a52d90254c5";
+    var query = "christmas";
+    var timeStamp = parseInt(new Date().getTime() / 1000, 10); // seconds elapsed since Jan 1, 1970
+    /////
+    console.debug("TIME STAMP: "+timeStamp);
+    /////
+    
+    var requestParameterString = 
+    "method=vimeo.videos.search" + 
+    "&oauth_consumer_key=" + consumerKey + 
+    "&oauth_nonce=" + timeStamp +
+    "&oauth_signature_method=HMAC-SHA1" + 
+    "&oauth_timestamp=" + timeStamp +
+    "&oauth_version=1.0" +
+    "&query=" + query + 
+    "&format=jsonp" +
+    "&callback=?";
+    
+    var baseString = "GET"+ "&" +
+      encodeURIComponent(baseUrl) + "&" +
+      encodeURIComponent(requestParameterString);
+    
+    /////
+    console.debug("BASE STRING: "+baseString);
+    /////
+    
+    var key = consumerSecret + "&";
+    
+    var b64Signature = b64_hmac_sha1(key, baseString); // I use the sha1.js lib from jshash-2.2.zip (http://pajhome.org.uk/crypt/md5/instructions.html)
+    
+    /////
+    console.debug("B64 SIGNATURE: "+b64Signature);
+    /////
+    
+    var signature = encodeURIComponent(b64Signature+"=");
+    
+    /////
+    console.debug("PERCENT-ENCODED SIGNATURE: "+signature);
+    /////
+    
+    var vimeoUrl = baseUrl + "?" +
+    requestParameterString +
+    "&oauth_signature=" + signature;
+    
+    /////
+    console.debug("FINAL URL: "+vimeoUrl);
+    /////
+    
+    $.getJSON(vimeoUrl,
+      function(data){
+        /////
+        console.debug("**RESPONSE**");
+        console.debug(data);
+        /////
+      }
+    );
+
+/*  
+    Logs I got when executing the code above:
+    ========================================
+    
+    TIME STAMP: 1263373275
+    
+    BASE STRING: GET&http%3A%2F%2Fvimeo.com%2Fapi%2Frest%2Fv2&method%3Dvimeo.videos.search%26oauth_consumer_key%3Dcc9ca0fe8447041900d2ea1c9e13164d%26oauth_nonce%3D1263373275%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1263373275%26oauth_version%3D1.0%26query%3Dchristmas%26format%3Djsonp%26callback%3D%3F
+    
+    B64 SIGNATURE: fLtG3Xd+Rs7pO5AMmrLHUfFA22I
+    
+    PERCENT-ENCODED SIGNATURE: fLtG3Xd%2BRs7pO5AMmrLHUfFA22I%3D
+    
+    FINAL URL: http://vimeo.com/api/rest/v2?method=vimeo.videos.search&oauth_consumer_key=cc9ca0fe8447041900d2ea1c9e13164d&oauth_nonce=1263373275&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1263373275&oauth_version=1.0&query=christmas&format=jsonp&callback=?&oauth_signature=fLtG3Xd%2BRs7pO5AMmrLHUfFA22I%3D
+    
+    **RESPONSE**
+    {
+      "generated_in": "0.0116", 
+      "stat": "fail", 
+      "err": {
+        "code": "303",
+        "expl": "The oauth_signature passed was not valid",
+        "msg": "Invalid signature"
+      }
+    }
+*/  
+
+
+    
+    
+// "http://vimeo.com/api/rest/v2?
+// format=json
+// &method=vimeo.videos.search
+// &oauth_consumer_key=c1f5add1d34817a6775d10b3f6821268
+// &oauth_nonce=6cfd2eefe4d94ca8dfde06a08e8f6f87
+// &oauth_signature_method=HMAC-SHA1
+// &oauth_timestamp=1263223349
+// &oauth_version=1.0
+// &query=ocean
+// &oauth_signature=jaaVkrstMuB8V7Q9xoWYgshe%2Fg4%3D"
+// 
+
+
+
+    // $.getJSON(vimeoUrl,
+    //   function(data){
+    //     ddd(data)
+    //  
+    //     this.container.find('.loading').remove();
+    //   }.pBind(this)
+    // );
+  },
+  initialSearch: function($super, query) {
+    if (query.replace(/\s/g,'') !== "") {
+      $super();
+      this.query = query;
+      this.startIndex = 1;
+      this.perPage = 9;
+      
+      this.performSearch();
+    }
+  },
+  loadMore: function($super) {
+    $super();
+    // new startIndex param should have already been updated
+    this.performSearch();
+  }
+});
+
