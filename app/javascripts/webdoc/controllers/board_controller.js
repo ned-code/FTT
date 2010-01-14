@@ -183,27 +183,8 @@ WebDoc.BoardController = $.klass({
     }  
   },
   
-  
   centerBoard: function() {
-//    var containerHeight = $("#board_container").height();
-//    var containerWidth = $("#board_container").width();
-//    var boardHeight = $("#board").height() * this.currentZoom;
-//    var boardWidth = $("#board").width() * this.currentZoom;
-//    // center horizontally
-//    if (boardWidth < containerWidth) {
-//      $("#board").css("left", (containerWidth - boardWidth) / 2);
-//    }
-//    else {
-//      $("#board").css("left", 0);
-//    }
-//    
-//    // center vertically
-//    if (boardHeight < containerHeight) {
-//      $("#board").css("top", (containerHeight - boardHeight) / 2);
-//    }
-//    else {
-//      $("#board").css("top", 0);
-//    }
+
   },
   
   setCurrentTool: function(tool) {

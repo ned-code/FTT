@@ -5,10 +5,24 @@
 //= require <webdoc/model/page>
 //= require <webdoc/gui/page_thumbnail_view>
 
+(function(jQuery, undefined){
+
+// Default settings
+var boardPanel,
+    pagesPanel,
+    pagesPanelWidth = 150;
+
 WebDoc.PageBrowserController = $.klass({
   initialize: function() {
-    ddd("init page browser");
-    this.domNode = $("#left_bar");
+    ddd("init pages panel");
+    
+    boardPanel = $("#board_container");
+    pagesPanel = $("#left_bar");
+    pagesPanelWidth = pagesPanel.outerWidth();
+    
+    ddd("Pages panel width: " + pagesPanelWidth);
+    
+    this.domNode = pagesPanel;
     this.visible = false;
     this.pageThumbs = [];
     this.pageMap = {};    
@@ -22,34 +36,47 @@ WebDoc.PageBrowserController = $.klass({
     if (this.visible) {
       this.document.removeListener(this);
       WebDoc.application.boardController.removeCurrentPageListener(this);
-      this.domNode.animate({
-        width: "0px"
-      }, function() {
-            this.domNode.find("ul:first").empty();
-            callBack.call(this); 
-      }.pBind(this));
-      if (!MTools.Browser.WebKit) {
-        $("#board_container").animate({
-          marginLeft: "0px"
-        });
-      }    
-      this.domNode.unbind();  
-      ddd("browser", $("#page_browser"));
-      $("#page_browser").removeClass("toggle_on_panel"); 
-      this.deletePageThumbs();
-      this.domNode.find("ul").empty();          
+      
+      pagesPanel.animate({
+          marginLeft: -pagesPanelWidth
+      }, {
+          step: function(val){
+              boardPanel.css({
+                  left: pagesPanelWidth + val
+              });
+          },
+          complete: function() {
+                  
+                  callBack.call(this);
+                  
+                  this.deletePageThumbs(); 
+                  
+                  pagesPanel
+                  .unbind()
+                  .find("ul")
+                  .empty();
+                  
+                  ddd("browser", $("#page_browser"));
+                  $("#page_browser").removeClass("toggle_on_panel"); 
+              }.pBind(this)
+      });
     }
+    
     else {
       this.document.addListener(this);
       WebDoc.application.boardController.addCurrentPageListener(this);      
-      this.domNode.animate({
-        width: "165px"
-      }, callBack);
-      if (!MTools.Browser.WebKit) {
-        $("#board_container").animate({
-          marginLeft: "170px"
-        });
-      }
+      
+      pagesPanel.animate({
+          marginLeft: 0
+      }, {
+          step: function(val){
+              boardPanel.css({
+                  left: pagesPanelWidth + val
+              });
+          },
+          complete: callBack
+      });
+
       this.domNode.click(this.changeSelectedPage.pBind(this));             
       $("#page_browser").addClass("toggle_on_panel");
       this.refreshPages();      
@@ -101,7 +128,7 @@ WebDoc.PageBrowserController = $.klass({
   updateSelectedPage: function() {
     $(".page_thumb").removeClass("selected_thumb");
     var selectedPage = WebDoc.application.boardController.currentPage; 
-    ddd("set selecte d page " + "#thumb_" + selectedPage.uuid());
+    ddd("set selected page " + "#thumb_" + selectedPage.uuid());
     $("#thumb_" + selectedPage.uuid()).addClass("selected_thumb");
   },
   
@@ -203,3 +230,5 @@ WebDoc.PageBrowserController = $.klass({
 });
 
 $.extend(WebDoc.PageBrowserController, {});
+
+})(jQuery);

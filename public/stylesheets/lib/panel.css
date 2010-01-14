@@ -10,16 +10,62 @@
     position: absolute;
     left: 0; top: 0; right: 0;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
 }
-.panel .options {
+
+/* An Inspector goes INSIDE a panel. It requires .panel to
+   hide its overflow */
+
+.inspector {
     position: absolute;
-    left: 0; top: 0;
     width: 100%;
+    top: 32px;
+    bottom: 24px;
+    overflow: visible;
 }
-.panel .content {
-    overflow: auto;
+
+.inspector .content,
+.inspector .head,
+.inspector .foot,
+.inspector .head>div,
+.inspector .foot>div,
+.inspector .head>ul,
+.inspector .foot>ul {
+    position: absolute;
+    left: 0; right: 0;
 }
+
+.inspector .content {
+    /* IE8 doesn't display padding bottom. Tant pis. */
+    padding: 8px;
+    top: 0; bottom: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* .head and .foot wrappers used as placemarker references to position of their inner divs 'outside' palette */
+.inspector .head,
+.inspector .foot {
+    height: 0;
+}
+.inspector .head {
+    top: 0;
+}
+.inspector .foot {
+    bottom: 0;
+}
+.inspector .head>div,
+.inspector .head>ul {
+    bottom: 0;
+    min-height: 32px;
+}
+
+.inspector .foot>div,
+.inspector .foot>ul {
+    top: 0;
+    min-height: 24px;
+}
+
 
 /* Interface panels */
 
