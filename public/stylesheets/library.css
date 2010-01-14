@@ -352,12 +352,12 @@ div.tabs > div {
 /* ============================= */
 /* = Media (Images and Videos) = */
 /* ============================= */
-.web_media label {
+#libraries .web_media label {
   display:block;
   padding:0 0 3px;
 }
 
-.web_media_search_field {
+#libraries .web_media_search_field {
   font-size:18px;
   padding:0 2px;
   width:249px;
@@ -365,7 +365,7 @@ div.tabs > div {
   float:left;
 }
 
-.web_media_search_submit {
+#libraries .web_media_search_submit {
   width:28px;
   height:28px;
   display:block;
@@ -384,12 +384,12 @@ div.tabs > div {
   -moz-border-radius:4px;
 }
 
-.web_media_search_submit:hover {
+#libraries .web_media_search_submit:hover {
   background:#eee url(/images/libraries/search.png) no-repeat 50% 50%;
   border: 1px solid #666;
 }
 
-.web_media h3 {
+#libraries .web_media h3 {
   display:block;
   font-size:15px;
   font-weight:bold;
@@ -401,13 +401,48 @@ div.tabs > div {
   position:relative;
 }
 
-.web_media h3 span.results_number {
+#libraries .web_media h3 span.results_number {
   position:absolute;
   top:4px;
   right:7px;
   font-size:12px;
   font-weight:normal;
 }
+
+/* ========================================== */
+/* = Media (Images and Videos) Details View = */
+/* ========================================== */
+
+#libraries .details_view .loading {
+  margin:20px;
+}
+
+
+#libraries .details_view .actions {
+  list-style-type:none;
+  text-align:center;
+  padding:20px 10px;
+  font-size:14px;
+  line-height:22px;
+}
+
+#libraries .details_view .actions li {
+  display:inline;
+}
+
+#libraries .details_view .actions li a.disabled, #libraries .details_view .actions li a.disabled:hover {
+  color:#a6caea;
+  text-decoration:underline;
+}
+
+#libraries .details_view .actions li:before {
+  content:"|";
+}
+
+#libraries .details_view .actions li:first-child:before {
+  content:"";
+}
+
 
 /* ========== */
 /* = Images = */
@@ -509,10 +544,6 @@ div.tabs > div {
 /* = Image Details = */
 /* ================= */
 
-#image_details .loading {
-  margin:20px;
-}
-
 #image_details .image_name {
   font-size:15px;
   font-weight:bold;
@@ -554,30 +585,6 @@ div.tabs > div {
 #image_details.flickr .icon_overlay {background:url(/images/libraries/flickr.png) no-repeat;}
 #image_details.google .icon_overlay {background:url(/images/libraries/google.png) no-repeat;}
 
-#image_actions {
-  list-style-type:none;
-  text-align:center;
-  padding:20px 10px;
-  font-size:14px;
-  line-height:22px;
-}
-
-#image_actions li {
-  display:inline;
-}
-
-#image_actions li a.disabled, #image_actions li a.disabled:hover {
-  color:#a6caea;
-  text-decoration:underline;
-}
-
-#image_actions li:before {
-  content:"|";
-}
-
-#image_actions li:first-child:before {
-  content:"";
-}
 
 /* ========== */
 /* = Upload = */
@@ -677,5 +684,43 @@ object:hover, object:focus, object:active {
 #videos .rows ul li a {
   color:#000;
   text-decoration:none;
+}
+
+/* ================= */
+/* = Video Details = */
+/* ================= */
+
+#video_details .single_video {
+  padding:20px 15px;
+  position:relative;
+}
+
+#video_details .single_video .drag_handle {
+  width:30px;
+  height:30px;
+  background:magenta url(/images/libraries/drag_handle.gif) no-repeat 100% 100%;
+  position:absolute;
+  bottom:0;
+  right:0;
+  cursor:move;
+}
+
+#video_details .video_name {
+  font-size:15px;
+  font-weight:bold;
+  padding:6px 15px;
+  color:#666;
+}
+
+#video_details .view_count {
+  padding: 0 15px;
+  font-size:12px;
+  color:#666;
+}
+
+#video_details .video_description {
+  padding: 8px 15px;
+  font-size:12px;
+  color:#666;
 }
 

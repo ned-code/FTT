@@ -73,7 +73,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     this.detailsViewImg = this.detailsView.find('.single_image img');
     
     // handle possible actions 
-    $("#image_actions").click(function(event){
+    $("#image_details .actions").click(function(event){
       event.preventDefault();
       
       var properties = this.detailsViewImg.data("properties"); //properties of the currenlty displayed image are store in this element
@@ -251,8 +251,8 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   prepareDetailsView: function($super, properties) { // type: my_image, flickr, google
     $super(properties);
     // View title
-    this.detailsView.attr({'class':"view "+properties.type});
-
+    this.detailsView.attr({'class':"view details_view "+properties.type});
+    
     // Image name
     var name = "";
     if (properties.name) name = properties.name;
@@ -260,7 +260,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       name = RegExp.$1 +"."+ RegExp.$2;
     }
     this.detailsView.find('.image_name').text(name);
-
+    
     // Image size
     var imageSizeEl = this.detailsView.find('.image_size');
     if (properties.width && properties.height) {
@@ -269,11 +269,11 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     else {
       imageSizeEl.text('');
     }
-
+    
     // Image Link
     var imageLink = properties.image_link ? properties.image_link : properties.url;
     this.detailsView.find('.single_image a').attr({"href":imageLink});
-
+    
     // Image source (+ store the current properties in the img element)
     var imageContainer = this.detailsView.find('.single_image');
     imageContainer.hide();
@@ -282,7 +282,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     this.preloadImage(properties.url);
 
     // Show/Hide right image actions
-    var imageActions = $('#image_actions');
+    var imageActions = $("#image_details .actions");
     imageActions.find(".dyn").hide();
     imageActions.find("."+properties.type).show();
     

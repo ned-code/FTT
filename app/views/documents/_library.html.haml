@@ -55,7 +55,7 @@
         %button#cancel_images_upload.button{ :style => "display:none" } Cancel upload
         #upload_images_spinner{ :style => "display:none" }
         %span.uploading_info Choose image(s) to upload 
-    #image_details.view
+    #image_details.view.details_view
       .toolbar
         %h1 Image
         %a.back{ :href =>'#' } Back
@@ -65,7 +65,7 @@
           .icon_overlay
       %h4.image_name
       %h5.image_size
-      #image_actions
+      .actions
         %ul
           %li
             %a.disabled#add_image_to_page_action{ :href => "" } Add to page
@@ -118,13 +118,23 @@
         %a.back{ :href =>'#' } Back
       #apps_library_wrap
         %ul
-    #video_details.view
+    #video_details.view.details_view
       .toolbar
         %h1 Video
         %a.back{ :href =>'#' } Back
       .single_video
-        %a{ :href => "", :onclick => "window.open(this.getAttribute('href'), '_blank'); return false;" }
-          %img{ :src => "", :alt => "" }
-          .icon_overlay
+        .drag_handle
       %h4.video_name
-      %h5.video_size
+      %h5.view_count
+        %span
+        = " views"
+      %p.video_description
+      .actions
+        %ul
+          %li.dyn
+            %a#show_video_page_action{ :href => "" } Show on *
+          %li.dyn
+            %a#delete_from_my_videos_action{ :href => "" } Remove from My Videos
+          %li.dyn
+            %a#add_to_my_videos_action{ :href => "" } Add to My Videos
+

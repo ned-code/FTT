@@ -4,6 +4,19 @@
 
 //= require "sha1"
 
+
+var internalDNDType = 'text/x-example'; // set this to something specific to your site
+function dragStartHandler(event) {
+  if (event.target instanceof HTMLLIElement) {
+    // use the element's data-value="" attribute as the value to be moving:
+    event.dataTransfer.setData(internalDNDType, event.target.dataset.value);
+    event.effectAllowed = 'move'; // only allow moves
+  } else {
+    event.preventDefault(); // don't allow selection to be dragged
+  }
+}
+
+
 WebDoc.WebVideosSearch = $.klass({
   initialize: function(searchFieldId, videosLibrary) {
     this.searchField = $('#'+searchFieldId);
@@ -70,22 +83,36 @@ WebDoc.ServiceVideosSearch = $.klass({
     var regexp = /\d{1,3}(?=(\d{3})+(?!\d))/g;
     return (""+number).replace(regexp, "$1"+sep);
   },
-  buildThumbnail: function(type, url, thumbUrl, name, imageLink, size) {
-    // var properties = { type:type, url:url, thumb_url:thumbUrl, name:name, image_link:imageLink };
-    // if (size) jQuery.extend(properties, { width:size.width, height:size.height });
-    // 
-    // var thumb = $("<img>").attr({
-    //   src : thumbUrl,
-    //   alt : ""
-    // }).data("properties", properties);
-    // 
-    // var liWrap = $("<li>").addClass(type);
-    // var aWrap = $("<a href=\""+imageLink+"\" title=\""+name+"\"></a>");
-    // aWrap.append(thumb);
-    // // aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
-    // liWrap.append(aWrap);
-    // 
-    // return liWrap;
+  buildVideoRow: function(type, url, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio) {
+    var properties = { 
+      type: type,
+      url: url,
+      thumb_url: thumbUrl,
+      name: name,
+      duration: duration,
+      view_count: viewCount,
+      description: description,
+      embed_url: embedUrl,
+      embed_type: embedType,
+      aspect_ratio: aspectRatio
+    };
+    
+    var thumb = $("<img>").attr({
+      src : thumbUrl,
+      alt : "",
+      width: "120",
+      height: "72"
+    }).data("properties", properties);
+    
+    var titleEl = $("<h4>").addClass("title").text(name);
+    var viewCountEl = $("<span>").addClass("view_count").text(this.videoUtils.numberWithThousandsSeparator(viewCount,"'")+" views");
+    var durationEl = $("<span>").addClass("duration").text(this.videoUtils.timeFromSeconds(duration));
+    
+    var liWrap = $("<li>").addClass("video_row").addClass(type);
+    var aWrap = $("<a href=\"\"></a>");
+    aWrap.append(thumb).append(titleEl).append(durationEl).append(viewCountEl);
+    liWrap.append(aWrap);
+    return liWrap;
   }
 });
 
@@ -105,6 +132,33 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
       event.preventDefault();
     }.pBind(this)).appendTo(this.container).wrap("<div class='load_more' style='display:none'>");
     this.loadMoreLink = this.container.find('.load_more');
+
+    this.videoUtils = new VideoUtils();
+  },
+  buildEmbeddedVideo: function(properties) {
+    // var src = "http://www.youtube.com/v/PZf8MRYasss&hl=en_US&fs=1&";
+    
+    var url = properties.embed_url + "&fs=1";
+    var width = 320;
+    var height = properties.aspect_ratio === "widescreen" ? 200 : 265;
+    
+    var object = $("<object>").attr({
+      width: width,
+      height: height
+    })
+    .append($("<param>").attr({ name: "movie", value: url }))
+    .append($("<param>").attr({ name: "allowFullScreen", value: "true" }))
+    .append($("<param>").attr({ name: "allowscriptaccess", value: "always" }))
+    .append($("<embed>").attr({ 
+      src: url,
+      type: properties.embed_type,
+      allowscriptaccess: "always",
+      allowfullscreen: "true",
+      width: width,
+      height: height
+    }));
+    
+    return object;
   },
   performSearch: function() {
     // http://code.google.com/apis/youtube/2.0/developers_guide_protocol.html
@@ -126,39 +180,24 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
         var totResults = data.feed.openSearch$totalResults.$t;
         this.resultsCount.text(data.feed.openSearch$totalResults.$t);
         if (data.feed.entry && data.feed.entry.length > 0) {
-          // ddd(data.feed.entry)
+          ddd(data.feed.entry)
           var results = data.feed.entry;
           $.each(results, function(i, video) {
+            var videoMediaGroup = video.media$group;
             
-            var title = video.title.$t;
-            var duration = video.media$group.yt$duration.seconds;
-            var description = video.media$group.media$description.$t;
-            var thumbUrl = video.media$group.media$thumbnail[0].url;
+            var name = video.title.$t;
+            var duration = videoMediaGroup.yt$duration.seconds;
+            var description = videoMediaGroup.media$description.$t;
+            var thumbUrl = videoMediaGroup.media$thumbnail[0].url;
+            var aspectRatio = videoMediaGroup.yt$aspectRatio ? videoMediaGroup.yt$aspectRatio.$t : "normal";
             var viewCount = video.yt$statistics.viewCount;
-           
-            // ---------------------------
-            var type = "youtube";
-            var name = title; 
-            var properties = { type:type, url:"", thumb_url:thumbUrl, name:name, duration:duration };
+            var embedUrl = video.content.src;
+            var embedType = video.content.type;
+            var videoId = videoMediaGroup.yt$videoid.$t;
             
-            var thumb = $("<img>").attr({
-              src : thumbUrl,
-              alt : "",
-              width: "120",
-              height: "72"
-            }).data("properties", properties);
-            
-            var titleEl = $("<h4>").addClass("title").text(name);
-            var viewCountEl = $("<span>").addClass("view_count").text(this.numberWithThousandsSeparator(viewCount,"'")+" views");
-            var durationEl = $("<span>").addClass("duration").text(this.timeFromSeconds(duration));
-            
-            var liWrap = $("<li>").addClass("video_row").addClass(type);
-            var aWrap = $("<a href=\"\" title=\""+name+"\"></a>");
-            aWrap.append(thumb).append(titleEl).append(durationEl).append(viewCountEl);
-            
-            // aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
-            liWrap.append(aWrap);
-            this.videosContainer.append(liWrap);
+            this.videosContainer.append(
+              this.buildVideoRow("youtube", "http://www.youtube.com/watch?v="+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio)
+            );
             
           }.pBind(this));
           
@@ -341,3 +380,23 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
   }
 });
 
+
+VideoUtils = $.klass({
+  initialize: function() {},
+  timeFromSeconds: function(t) {
+    var h = Math.floor(t / 3600);
+    t %= 3600;
+    var m = Math.floor(t / 60);
+    var s = Math.floor(t % 60);
+    
+    h = h>0 ? ( h<10 ? '0'+h : h )+':' : '';
+    m = m>0 ? ( m<10 ? '0'+m : m )+':' : '';
+    s = s>0 ? ( s<10 ? '0'+s : s ) : '';
+    return h+m+s;
+  },
+  numberWithThousandsSeparator: function(number, separator) {
+    var sep = separator || ",";
+    var regexp = /\d{1,3}(?=(\d{3})+(?!\d))/g;
+    return (""+number).replace(regexp, "$1"+sep);
+  }  
+});
