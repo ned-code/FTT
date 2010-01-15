@@ -535,11 +535,11 @@ ul.page_browser_numbered_list li {
 /* == Item view = */
 .drag_handle {
   position:absolute;
-  z-index:1000001;
+  z-index:1000000;
 }
 .drawing_handle {
   position:absolute;
-  z-index:1000001;    
+  z-index:1000000;    
 }
 .resize_handle {
   position:absolute;
@@ -549,7 +549,7 @@ ul.page_browser_numbered_list li {
   overflow:hidden;
 }
 .item_layer {
-  z-index:5000;
+  z-index:1000000;
   background-color:#000000;
   opacity:0;  
 }
@@ -601,7 +601,7 @@ ul.page_browser_numbered_list li {
   width:14px;
 }
 .ui-resizable-handle {
-  z-index:1000002;  
+  z-index:1000000;  
 }
 /*******************/
 /* = right part = */
