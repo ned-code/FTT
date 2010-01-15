@@ -69,7 +69,7 @@
 /* Interface panels */
 
 .board-panel {
-    left: 165px; right: 350px;
+    left: 0; right: 0;
     top: 64px;
     bottom: 0;
     min-width: 300px;
@@ -89,7 +89,7 @@
 
 .left-panel {
     width: 165px;
-    margin-left: 0px;
+    margin-left: -165px;
     top: 64px;
 }
 
