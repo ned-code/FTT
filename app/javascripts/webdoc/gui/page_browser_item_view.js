@@ -103,12 +103,20 @@ WebDoc.PageBrowserItemView = $.klass({
    this.checkUpdateTitle();
   },
 
+  addToBrowser: function() {
+    var currentSelectedItem = $('.page_browser_item.selected').parent();
+    var newBrowserItem = $("<li>").html(this.domNode);
+    currentSelectedItem.after(newBrowserItem);
+
+    // Add item to numbered list as well
+    $('ul.page_browser_numbered_list').append($('<li>').html($('.left > li').length+1));
+  },
+
   // Iterates through the page items and if contains a text item, takes it as page title
 	// Otherwise, returns a default name
   getPageTitle: function(page) {
 	  if(!page.data.title || page.data.title == "undefined") {
 	    for(var itemIndex in page.items) {
-	      ddd("item type:"+page.items[itemIndex].type()+", content:"+page.items[itemIndex].getInnerText());
 	      if(page.items[itemIndex].type() == "text") {
           if(page.items[itemIndex].getInnerText() != "") {
             return { title: this.cropTitleToFit(page.items[itemIndex].getInnerText()), defaultBehavior: true};
