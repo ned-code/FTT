@@ -32,3 +32,7 @@ ThirdParty/*/obj
 db/smFunctions.sqlite
 public/static/test/embed.html
 public/static/test/test_trans.html
+public/images/background/1.jpg
+public/images/background/2.jpg
+public/images/background/3.jpg
+app/javascripts/webdoc/library/images_library/background_image_uploader.js

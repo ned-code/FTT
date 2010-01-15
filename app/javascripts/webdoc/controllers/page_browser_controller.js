@@ -4,6 +4,7 @@
 //= require <webdoc/model/document>
 //= require <webdoc/model/page>
 //= require <webdoc/gui/page_thumbnail_view>
+//= require <webdoc/gui/page_browser_item_view>
 
 (function(jQuery, undefined){
 
@@ -25,14 +26,50 @@ WebDoc.PageBrowserController = $.klass({
     this.domNode = pagesPanel;
     this.visible = false;
     this.pageThumbs = [];
-    this.pageMap = {};    
+    this.pageMap = {}; 
+		try {
+      $("#page_browser_control_bar").click(this.performAction.pBind(this));
+    }
+    catch (ex) {
+      ddt();
+    }   
   },
+
+	performAction: function(e) {
+    e.preventDefault();
+    clickedButton = $(e.target).closest(".action_button");
+    try {
+      // first look if action is defined in the page browser controller. Otherwise try to delegate the action to the page editor
+      if (this[clickedButton.attr("id")]) {
+        this[clickedButton.attr("id")].apply(this, [e]);
+      }
+      else {
+        WebDoc.application.pageEditor[clickedButton.attr("id")].apply(WebDoc.application.pageEditor, [e]);
+      }
+    }
+    catch(ex) {
+      ddd("unknown toolbar action: " + clickedButton.attr("id"));
+      ddt();
+    }    
+  },
+
+	addPage: function(e) {
+		WebDoc.application.pageEditor.addPage(e);
+	},
+	
+	copyPage: function(e) {
+		WebDoc.application.pageEditor.copyPage(e);
+	},
+	
+	removePage: function(e) {
+		WebDoc.application.pageEditor.removePage(e);
+	},
   
   setDocument: function(document) {
     this.document = document;    
   },
   
-  toggleBrowser: function(callBack) {
+  toggleBrowser: function() {
     if (this.visible) {
       this.document.removeListener(this);
       WebDoc.application.boardController.removeCurrentPageListener(this);
@@ -55,12 +92,11 @@ WebDoc.PageBrowserController = $.klass({
                   
                   pagesPanel.unbind().find("ul").empty();
                   
-                  ddd("browser", $("#page_browser"));
-                  $("#page_browser").removeClass("toggle_on_panel"); 
+                  ddd("browser", $("#page_browser_left"));
+                  $("#page_browser_left").removeClass("toggle_on_panel"); 
               }.pBind(this)
       });
     }
-    
     else {
       this.document.addListener(this);
       WebDoc.application.boardController.addCurrentPageListener(this);      
@@ -73,44 +109,47 @@ WebDoc.PageBrowserController = $.klass({
                   left: pagesPanelWidth + val
               });
           },
-          complete: callBack
       });
-
-      this.domNode.click(this.changeSelectedPage.pBind(this));             
-      $("#page_browser").addClass("toggle_on_panel");
+            
+      $("#page_browser_left").addClass("toggle_on_panel");
       this.refreshPages();      
     }
     this.visible = !this.visible;
   },
   
-  changeSelectedPage: function(e) {
-      var clickedThumb = $(e.target).closest(".page_thumb");
-      if (clickedThumb && clickedThumb.length) {
-        var pageId = clickedThumb.attr("id").substring(6);
-        WebDoc.application.pageEditor.loadPageId(pageId);
-      }
-  },
-  
   refreshPages: function() {   
     ddd("refresh all pages");
-    this.domNode.find("ul").empty(); 
+		this.domNode.find("ul.page_browser_numbered_list").empty();
+    this.domNode.find("ul#page_browser_items").empty(); 
     this.deletePageThumbs();
     for (var i = 0; i < this.document.pages.length; i++) {
       var aPage = this.document.pages[i];
-      var pageThumb = new WebDoc.PageThumbnailView(aPage);
+			var pageThumb = new WebDoc.PageBrowserItemView(aPage);
       var pageListItem = $("<li>").html(pageThumb.domNode);
-      this.domNode.find("ul:first").append(pageListItem);
+			var pageListNumber = $("<li>"+(i+1)+"</li>");
+      this.domNode.find("ul#page_browser_items").append(pageListItem);
+			this.domNode.find("ul.page_browser_numbered_list").append(pageListNumber);
       this.pageThumbs.push(pageThumb);
       this.pageMap[pageThumb.domNode.attr("id")] = pageThumb;
     }
     this.updateSelectedPage();
-    var pageList = this.domNode.find("ul");
-    pageList.unbind();    
-    pageList.bind("dragstart", this.dragStart.pBind(this));    
-    pageList.bind("dragenter", this, this.dragEnter.pBind(this));    
-    pageList.bind("dragover", this, this.dragOver.pBind(this));
-    pageList.bind("dragleave", this, this.dragLeave.pBind(this));    
-    pageList.bind("drop", this, this.drop.pBind(this));    
+
+		$("#page_browser_items").sortable({
+			handle: '.page_browser_item_draggable_area',
+			start:  this.dragStart.pBind(this),
+			update: this.dragUpdate.pBind(this),
+			containment: 'div#page_browser_left'
+		});
+		var divToHide = $('.page_browser_item_title_edition');
+		$(divToHide).hide();
+		$('.page_browser_item').bind('click', this.selectCurrentPage.pBind(this));
+		$('.page_browser_item').bind('mouseover', this.changeCurrentHighlightedItem.pBind(this));
+		$('.page_browser_item_information').bind('click', this.showPageInspector);
+		$('.page_browser_item_title').dblclick(this.staticPanelAction.pBind(this));
+		$('.page_browser_item_title_edition').dblclick(this.editPanelAction.pBind(this));
+		$('.page_title_cancelButton').click(this.editPanelAction.pBind(this));
+		$('.page_title_saveButton').click(this.saveButtonAction.pBind(this));
+		$('.page_title_textbox').bind('keydown', this.titleBoxKeyDownAction.pBind(this));
   },
   
   deletePageThumbs: function() {
@@ -125,10 +164,9 @@ WebDoc.PageBrowserController = $.klass({
   },
    
   updateSelectedPage: function() {
-    $(".page_thumb").removeClass("selected_thumb");
-    var selectedPage = WebDoc.application.boardController.currentPage; 
-    ddd("set selected page " + "#thumb_" + selectedPage.uuid());
-    $("#thumb_" + selectedPage.uuid()).addClass("selected_thumb");
+    var selectedPage = WebDoc.application.boardController.currentPage;
+    var target = $("#browser_item_" + selectedPage.uuid());
+    this.selectPageUI(target);
   },
   
   objectChanged: function(page) {
@@ -149,82 +187,98 @@ WebDoc.PageBrowserController = $.klass({
     ddd("update selected page in page browser");
     this.updateSelectedPage();
   },
-  
-  dragStart: function(e) {
-    ddd("start drag");
-    var dragged_page_thumb = $(e.target).closest(".page_thumb");
-    ddd("dragged page thumb", this.pageMap[dragged_page_thumb.attr("id")]);
-    e.originalEvent.dataTransfer.effectAllowed = "copyMove";
-    e.originalEvent.dataTransfer.setData('application/ub-page', $.toJSON({ page: this.pageMap[dragged_page_thumb.attr("id")].page.getData(true)}));  
-    return true; 
-  },
 
-   dragOver: function(evt) {
-     var isPage = $.inArray("application/ub-page", evt.originalEvent.dataTransfer.types);
-     if (isPage != -1) {       
-       evt.originalEvent.dataTransfer.effectAllowed = "copyMove";
-       evt.preventDefault();
-     }
-     else {
-       evt.originalEvent.dataTransfer.dropEffect = "none";     
-     }
-   },
-   
-   dragEnter: function(evt) {
-     var isPage = $.inArray("application/ub-page", evt.originalEvent.dataTransfer.types);
-     if (isPage != -1) {
-       var droppedPageThumb = $(evt.target).closest(".page_thumb"); 
-       evt.originalEvent.dataTransfer.effectAllowed = "copyMove";  
-       evt.preventDefault();
-       this.addInsertLine(droppedPageThumb);
-     }
-     else {
-       evt.originalEvent.dataTransfer.dropEffect = "none";          
-     }
-   },
-      
-   dragLeave: function(evt) {
-     this.removeInsertLine();
+   dragStart: function(event, ui) {
+     ddd('Drag start');	
    },
 
-   drop: function(evt) {
-     ddd("drop"); 
-     evt.preventDefault();
-     var droppedPageThumb = $(evt.target).closest(".page_thumb"); 
-     var droppedPage = this.pageMap[droppedPageThumb.attr("id")].page;
-     var movedPageDescriptor = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-page'));   
-     ddd("moved page descriptor", movedPageDescriptor);   
-     var movedPage = new WebDoc.Page(movedPageDescriptor, WebDoc.application.pageEditor.currentDocument);
-     var droppedPagePosition = WebDoc.application.pageEditor.currentDocument.positionOfPage(droppedPage) - 1;
-     ddd("drop document", droppedPage.data.document_id, "drag document", movedPage.data.document_id);
-     if (droppedPage.data.document_id != movedPage.data.document_id || evt.originalEvent.dataTransfer.dropEffect == 'copy') {
-       var copiedPage = movedPage.copy();
-       ddd("exit copy", new Date());
-       copiedPage.setDocument(droppedPage.getDocument());
-       copiedPage.data.position = droppedPagePosition + 1;
-       var importingMessage = $("<li>").html("importing...").addClass("page_thumb_importing");       
-       droppedPageThumb.parent().after(importingMessage[0]);
-       copiedPage.save(function(newObject, status)
-       {
-         WebDoc.application.pageEditor.currentDocument.addPage(copiedPage, true);
-       });
-     }
-     else {
-       var pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(movedPage.uuid(), movedPage.data.position < droppedPagePosition? droppedPagePosition: droppedPagePosition+1);
-       if (pageToSave) {
-         pageToSave.save();
-       }
+   dragUpdate: function(event, ui) {
+     ddd('Drag update');
+     var droppedPageBrowserItem = $(ui.item).children('.page_browser_item');
+     var droppedPage = this.pageMap[droppedPageBrowserItem.attr("id")].page;
+     var droppedPagePosition = $('#page_browser_items > li').index(ui.item);
+     var pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(droppedPage.uuid(), droppedPagePosition);
+     if (pageToSave) {
+       pageToSave.save();
      }
    },
-   
-   removeInsertLine: function() {
-     $(".page_insert_line").remove();
+
+   selectCurrentPage: function(event) {
+     var targetItem = $(event.target).closest('.page_browser_item');
+     this.selectPage(targetItem);
    },
-   
-   addInsertLine: function(droppedPageThumb) {
-     this.removeInsertLine();
-     var insertLine = $("<li>").addClass("page_insert_line");
-     droppedPageThumb.parent().after(insertLine);
+
+   changeCurrentHighlightedItem: function(event) {
+     if(!$(event.target).hasClass('page_browser_item_highlighted')) {
+       $('.page_browser_item').removeClass('page_browser_item_highlighted');
+       $(event.target).closest('.page_browser_item').addClass('page_browser_item_highlighted');
+     }
+   },
+
+   showPageInspector: function(event) {
+     WebDoc.application.rightBarController.showPageInspector();
+   },
+
+   selectPage: function(target) {
+     // Page browser UI selection
+     this.selectPageUI(target);
+
+     // Page editor selection
+     var droppedPageId = target.attr("id");
+     var droppedPage = this.pageMap[droppedPageId].page;
+     WebDoc.application.pageEditor.loadPage(droppedPage);
+   },
+
+   selectPageUI: function(target) {
+     if(!$(target).hasClass('page_browser_item_selected')) {
+       $('.page_browser_item').removeClass('page_browser_item_selected');
+       $(target).addClass('page_browser_item_selected');
+     }
+   },
+
+   staticPanelAction: function(event) {
+     this.showEditPanel(event.target);
+   },
+
+   editPanelAction: function(event) {
+     this.showStaticPanel(event.target);
+   },
+
+   saveButtonAction: function(event) {
+     this.saveTitle(event.target);
+   },
+
+   saveTitle: function(target) {
+     var newTitle = $(target.parentNode).children('.page_title_textbox').val();
+     var pageBrowserItem = $(target).closest('.page_browser_item');
+     var page = this.pageMap[pageBrowserItem.attr("id")].page;
+     page.setTitle(newTitle);
+     this.showStaticPanel(target);
+   },
+
+   titleBoxKeyDownAction: function(event) {
+     switch(event.which){
+       case 13: // Return key
+         this.saveTitle(event.target);
+         break;
+       case 27: // Escape key
+         this.showStaticPanel(event.target);
+         break;
+     }
+   },
+
+   showEditPanel: function(target) {
+	   var textBox = $(target).next().children()[0];
+     textBox.value = $(target).closest('.page_browser_item_title').text();
+     $(target).closest('.page_browser_item_title').hide();
+     $(target).closest('.page_browser_item_title').next().show();
+     textBox.focus();
+     textBox.select();
+   },
+
+   showStaticPanel: function(target) {
+     $(target).closest('.page_browser_item_title_edition').hide();
+     $(target).closest('.page_browser_item_title_edition').prev().show();
    }
 });
 

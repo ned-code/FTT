@@ -1,6 +1,39 @@
 #page_inspector{ :style => "display: none" }
   .toolbar
     %h1= t("label.page_inspector")
+  %label Name
+  %input#page_title_textbox{ :type => "textbox"}
+  %br
+  %label Height
+  %input#page_height_textbox{ :type => "textbox"}
+  %br
+  %label Width
+  %input#page_width_textbox{ :type => "textbox"}
+  %br
+  %input#page_scroll_checkbox{ :type => "checkbox"} Show scroll
+  %br
+  %label Background
+  %input#page_background_color_textbox{ :type => "textbox"}
+  %br
+  %label Background Image
+  %br
+  %label Choose an image
+  %input#browse_background_image_button{ :type => "button", :value => "Browse"}
+  %br
+  %input#page_background_image_textbox{ :type => "textbox"}
+  %p You can also choose an image from your image library and use the set as background button
+  %label Image position
+  %br
+  %input#page_background_image_fit_page_radio{ :type => "radio", :name => "repeatMode", :value => "none"} Fit to page
+  %br
+  %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-x"} Repeat horizontally
+  %br
+  %input#page_background_image_repeat_vert_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-y"} Repeat vertically
+  %br
+  %input#page_background_image_apply_current_button{ :type => "button", :value => "Apply to this page"}
+  %br
+  %input#page_background_image_apply_all_button{ :type => "button", :value => "Apply to all pages"}
+  %br
   %label Use external page
   %input#external_page_checkbox{ :type => "checkbox"}
   %textarea#page_css_editor
