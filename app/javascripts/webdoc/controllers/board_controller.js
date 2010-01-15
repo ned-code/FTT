@@ -21,7 +21,8 @@ var boardWrapHTML = '<div class="push-scroll layer">'+
                     '<div></div>'+
                 '</div>'+
             '</div>'+
-        '</div>';
+        '</div>',
+    screenLayer = jQuery('<div/>').addClass('screen layer');
 
 // EXTEND
 
@@ -87,7 +88,8 @@ WebDoc.BoardController = $.klass({
     boardContainer
     .empty()
     .append(board)
-    .wrapInner(boardWrapHTML);
+    .wrapInner(boardWrapHTML)
+    .append(screenLayer);
     
     this.initialHeight = board.height();
     this.initialWidth = board.width();

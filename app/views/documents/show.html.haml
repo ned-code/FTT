@@ -83,7 +83,8 @@
       %a{ :href => "", :title => "Show Item inspector", :style => "background-position: 0 0; background-image: url('/images/icons/info.png');" }                      
         Item
 
-#board_container.hide-scroll.board-panel.layer
+#board_container.hide-scroll.board-panel.panel
+  #screen.screen.layer
   #document_loading
     %img{ :src => "/images/icons/waiting_bar.gif"}
 
@@ -108,4 +109,7 @@
     $("body").css("overflow", "hidden");
     var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
     editor.load("#{@document.uuid}");
+    
+    // Set up default panel behaviour (show screen, show footer etc.)
+    jQuery(".panel").panel();
   });   
