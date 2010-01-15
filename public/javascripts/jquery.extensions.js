@@ -83,28 +83,30 @@ jQuery.extend({
     // Event delegation helper. Bind to event, passing in
     // {'selector': fn} pairs as data. Finds closest match
     // (caching the result in the clicked element's data),
-    // and triggers the associated function.  Eg:
+    // and triggers the associated function(s) with the closest
+    // node as scope. Returns the result of the last function.
+    // 
+    // Eg:
     //
     // .bind('click', {'selector': fn}, jQuery.delegate)
-    
     delegate: function(e) {
         var list = e.data,
             target = jQuery(e.target),
             data = target.data("closest") || {},
-            closest, elem;
+            closest, node, result;
         
         for (var selector in list) {
-            elem = data[selector];
+            node = data[selector];
             
-            if ( elem === undefined ) {
+            if ( node === undefined ) {
                 closest = target.closest( selector, this );
-                elem = data[selector] = ( closest.length ) ? closest[0] : false ;
+                node = data[selector] = ( closest.length ) ? closest[0] : false ;
                 target.data("closest", data);
             }
             
-            if (elem) list[selector].call(this, e);
+            if ( node ) result = list[selector].call(node, e);
         }
         
-        return false;
+        return result;
     }
 });

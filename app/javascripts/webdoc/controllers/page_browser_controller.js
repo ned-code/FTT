@@ -46,15 +46,14 @@ WebDoc.PageBrowserController = $.klass({
               });
           },
           complete: function() {
+                  pagesPanel
+                  .find("ul:first").empty();
                   
                   callBack.call(this);
                   
                   this.deletePageThumbs(); 
                   
-                  pagesPanel
-                  .unbind()
-                  .find("ul")
-                  .empty();
+                  pagesPanel.unbind().find("ul").empty();
                   
                   ddd("browser", $("#page_browser"));
                   $("#page_browser").removeClass("toggle_on_panel"); 
