@@ -41,7 +41,9 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     
     // Observe thumb clicks (with event delegation) for all current and future thumbnails
     $("#"+libraryId+" .thumbnails ul li a").live("click", function (event) {
-      var properties = $(event.target).data("properties");
+      var properties = $(event.target).parent().find('img').data("properties"); // I do parent().find("img") in case other elements 
+                                                                                // will be added in addition to the thumbnail 
+                                                                                // image itself (like for "video rows") 
       this.prepareDetailsView(properties);
       this.showDetailsView.click();
       event.preventDefault();
@@ -219,7 +221,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       this.loadMyImages(0);
     }
   },
-  buildThumbnail: function(uuid, properties, myImagesList) {
+  buildThumbnail: function(uuid, properties) {
     var thumb = $("<img>").attr({
       src : properties.thumb_url,
       alt : ""

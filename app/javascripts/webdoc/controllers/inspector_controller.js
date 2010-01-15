@@ -2,6 +2,7 @@
  * @author julien
  */
 //= require <webdoc/model/image>
+//= require <webdoc/model/video>
 //= require <webdoc/controllers/inspectors/page_inspector_controller>
 //= require <webdoc/controllers/inspectors/properties_inspector_controller>
 //= require <webdoc/controllers/inspectors/inner_html_controller>

@@ -190,7 +190,7 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
             var description = videoMediaGroup.media$description.$t;
             var thumbUrl = videoMediaGroup.media$thumbnail[0].url;
             var aspectRatio = videoMediaGroup.yt$aspectRatio ? videoMediaGroup.yt$aspectRatio.$t : "normal";
-            var viewCount = video.yt$statistics.viewCount;
+            var viewCount = video.yt$statistics ? video.yt$statistics.viewCount : "";
             var embedUrl = video.content.src;
             var embedType = video.content.type;
             var videoId = videoMediaGroup.yt$videoid.$t;
@@ -384,6 +384,8 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
 VideoUtils = $.klass({
   initialize: function() {},
   timeFromSeconds: function(t) {
+    if (t==="") return "n/a";
+    
     var h = Math.floor(t / 3600);
     t %= 3600;
     var m = Math.floor(t / 60);

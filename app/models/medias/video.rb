@@ -1,6 +1,21 @@
 class Medias::Video < Media
   mount_uploader :file, FileUploader
   
+  # =============
+  # = Callbacks =
+  # =============
+  
+  after_save :set_properties_if_not_present
+  
+protected
+
+  # after_save
+  def set_properties_if_not_present
+    unless properties.present?
+      update_attribute(:properties, { :thumb_url => file.thumb.url, :url => file.url })
+    end
+  end
+
 end
 
 # == Schema Information

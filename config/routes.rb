@@ -26,5 +26,6 @@ ActionController::Routing::Routes.draw do |map|
   # dev controller
   map.resources :medias
   map.resources :images, :except => [:new, :edit, :update]
+  map.resources :videos, :except => [:new, :edit, :update]
   map.resources :widgets, :except => [:new, :edit, :update]
 end

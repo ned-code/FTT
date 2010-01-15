@@ -17,10 +17,12 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     
     // Observe video-rows clicks (with event delegation) for all current and future video-rows
     $("#"+libraryId+" .rows ul li a").live("click", function (event) {
-      var properties = $(event.target).data("properties");
+      // properties are stored in the img/thumbnail element of the video row
+      var properties = $(event.target).parent().find('img').data("properties");
       this.prepareDetailsView(properties);
       this.showDetailsView.click();
       event.preventDefault();
+      
     }.pBind(this));
     
     // Observe end of page transition
@@ -29,27 +31,33 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
         this.detailsViewDidAppear();
       }
     }.pBind(this));
+    
+    // An option...
+    this.backToMyVideosListAfterRemoval = true;
   },
   setupMyVideos: function() {
-    // this.myImagesPage = 1;
-    // this.myImagesContainer = $(this.tabContainers[0]);
-    // 
+    this.myVideosId = "my_videos";
+    
+    this.myVideosPage = 1;
+    this.myVideosContainer = $('#'+this.myVideosId);
+    this.videoUtils = new VideoUtils();
+    
     // // Setup thumbnails drag n' drop
-    // this.myImagesContainer.find(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
+    // this.myVideosContainer.find(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
     // 
-    // // Next/Previous page links
-    // this.paginationWrap = $("<div class='pagination' style='display:none'>");
-    // this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
-    // this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
-    // this.previousPageLink.click(function(event){
-    //   this.loadMyImages(-1);
-    //   event.preventDefault();
-    // }.pBind(this)).appendTo(this.paginationWrap).hide();
-    // this.nextPageLink.click(function(event){
-    //   this.loadMyImages(+1);
-    //   event.preventDefault();
-    // }.pBind(this)).appendTo(this.paginationWrap).hide();
-    // this.myImagesContainer.append(this.paginationWrap);
+    // Next/Previous page links
+    this.paginationWrap = $("<div class='pagination' style='display:none'>");
+    this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
+    this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
+    this.previousPageLink.click(function(event){
+      this.loadMyVideos(-1);
+      event.preventDefault();
+    }.pBind(this)).appendTo(this.paginationWrap).hide();
+    this.nextPageLink.click(function(event){
+      this.loadMyVideos(+1);
+      event.preventDefault();
+    }.pBind(this)).appendTo(this.paginationWrap).hide();
+    this.myVideosContainer.append(this.paginationWrap);
   },
   setupDetailsView: function() {
     
@@ -57,6 +65,10 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     var dragHandle = this.detailsView.find('.drag_handle');
     dragHandle.attr({ draggable: "true" });
     dragHandle.bind("dragstart", this.dragStart.pBind(this));
+    dragHandle.css({ "-webkit-user-drag":"element" });  // this is the equivalent of the HTML5 "draggable" attribute 
+                                                        // for current version of safari (v4.0.4)) (but future webkit
+                                                        // version will support "draggable" and at that point we'll 
+                                                        // be able to remove this line)
     
     // Handle title of Show video page action
     var showVideoPageEl = $("#show_video_page_action");
@@ -84,23 +96,22 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
           link.hide();
           li.append(info);
           
-          //TODO
-          // var railsParams = {};
-          // MTools.Record.convertToRailsJSon({ properties : properties }, railsParams, "image");
-          // $.ajax({
-          //   type: "POST",
-          //   url: this.imagesUploader.uploadUrl,
-          //   data: railsParams,
-          //   dataType: "json",
-          //   success: function(serverData) {
-          //     info.text("Done!");
-          //     setTimeout(function(){ info.fadeOut(500); }, 500);
-          //     this.refreshMyImages([serverData.image]);
-          //   }.pBind(this),
-          //   complete: function() {
-          //     setTimeout(function(){ li.hide(); info.remove(); link.show();  }, 1000);
-          //   }.pBind(this)
-          // });
+          var railsParams = {};
+          MTools.Record.convertToRailsJSon({ properties : properties }, railsParams, "video");
+          $.ajax({
+            type: "POST",
+            url: "/videos",
+            data: railsParams,
+            dataType: "json",
+            success: function(serverData) {
+              info.text("Done!");
+              setTimeout(function(){ info.fadeOut(500); }, 500);
+              this.refreshMyVideos([serverData.video]);
+            }.pBind(this),
+            complete: function() {
+              setTimeout(function(){ li.hide(); info.remove(); link.show();  }, 1000);
+            }.pBind(this)
+          });
           break;
           
         case "delete_from_my_videos_action":
@@ -108,24 +119,23 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
             link.hide();
             li.append(info);
             
-            //TODO
-            // $.ajax({
-            //   type: "DELETE",
-            //   url: "/images/"+properties.uuid,
-            //   success: function(serverData) {
-            //     info.text("Done!");
-            //     setTimeout(function(){ info.fadeOut(500); }, 500);
-            //     this.refreshMyImages();
-            //   }.pBind(this),
-            //   complete: function() {
-            //     var delay = setTimeout(function(){ li.hide(); info.remove(); link.show(); }, 1000);
-            //     if (link.attr("id") === "delete_image_action") { // Go back
-            //       //in this case we need to immediately rehestablish the UI, in case the user will quickly reselects another thumbnail just after deleting this one
-            //       clearTimeout(delay); li.hide(); info.remove(); link.show();
-            //       this.detailsView.find(".toolbar .back").click();
-            //     }
-            //   }.pBind(this)
-            // });
+            $.ajax({
+              type: "DELETE",
+              url: "/videos/"+properties.uuid,
+              success: function(serverData) {
+                info.text("Done!");
+                setTimeout(function(){ info.fadeOut(500); }, 500);
+                this.refreshMyVideos();
+              }.pBind(this),
+              complete: function() {
+                var delay = setTimeout(function(){ li.hide(); info.remove(); link.show(); }, 1000);
+                if (this.backToMyVideosListAfterRemoval) { // Go back
+                  //in this case we need to immediately rehestablish the UI, in case the user will quickly reselects another thumbnail just after deleting this one
+                  clearTimeout(delay); li.hide(); info.remove(); link.show();
+                  this.detailsView.find(".toolbar .back").click();
+                }
+              }.pBind(this)
+            });
           }
           break; 
       }
@@ -144,101 +154,106 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     // dt.setDragImage( $('#video_details .toolbar .back')[0], 60, 36);
     dt.setDragImage( dragImage, 60, 40 );
   },
-  // 
-  // showSpinner: function($super, container) {
-  //   $super(container);
-  //   if (this.hasPagination) this.paginationWrap.hide();
-  // },
-  // hideSpinner: function($super, container) {
-  //   $super(container);
-  //   if (this.hasPagination) this.paginationWrap.show();
-  // },
-  // didClickOnTab: function($super, tab) {
-  //   $super(tab);
-  //   if (tab == this.tabContainers[0].id) { // My Images tab
-  //     this.loadMyImages(0);
-  //   }
-  // },
-  // loadMyImages: function(pageIncrement) {
-  //   var thumbsWrap = this.myImagesContainer.find(".thumbnails");
-  //   
-  //   this.myImagesPage += pageIncrement;
-  //   if (this.myImagesPage < 1) this.myImagesPage = 1;
-  //   
-  //   if (pageIncrement !== 0 || !thumbsWrap.data('loaded')) { //load only if we are paginating, or if the images have never been loaded before
-  //     thumbsWrap.html('');
-  //     
-  //     this.showSpinner(thumbsWrap);
-  //     
-  //     MTools.ServerManager.getRecords(WebDoc.Image, null, function(data) {
-  //       if (data.images.length === 0) {
-  //         var noImages = $("<span>").addClass('no_items').text('No Images');
-  //         thumbsWrap.append(noImages);
-  //       }
-  //       else {
-  //         var myImagesList = $("<ul>");
-  //         thumbsWrap.append(myImagesList);
-  //         
-  //         $.each(data.images, function(i,webDocImage){
-  //           
-  //           myImagesList.append(this.buildThumbnail(webDocImage.uuid(), webDocImage.data.properties));
-  //           
-  //         }.pBind(this));
-  //       }
-  //       this.refreshMyImagesPagination(data.pagination);
-  //       thumbsWrap.data('loaded', true);
-  //       this.hideSpinner(thumbsWrap);
-  //     }.pBind(this), { ajaxParams: { page:this.myImagesPage }});
-  //   }
-  // },
-  // refreshMyImages: function(newImages) {
-  //   // Note: do not pass the newImages arg to force reloading the whole section
-  //   
-  //   //if we are in first page, don't reload the whole thing, just add the newly uploaded images to the top of the list 
-  //   var myImagesList = this.myImagesContainer.find('.thumbnails ul');
-  //   if (newImages && this.myImagesPage === 1 && myImagesList.length > 0) {
-  //     
-  //      $.each(newImages, function(i,image) {
-  //        
-  //        myImagesList.prepend(this.buildThumbnail(image.uuid, image.properties));
-  //         
-  //       }.pBind(this));
-  //   }
-  //   else { // If not (or if no newImages are passed) reload the 1st page
-  //     this.myImagesContainer.find(".thumbnails").data('loaded', false);
-  //     this.myImagesPage = 1;
-  //     this.loadMyImages(0);
-  //   }
-  // },
-  // buildThumbnail: function(uuid, properties, myImagesList) {
-  //   var thumb = $("<img>").attr({
-  //     src : properties.thumb_url,
-  //     alt : ""
-  //   })
-  //   .data("properties", jQuery.extend({type:"my_image", uuid:uuid}, properties));
-  //   
-  //   var liWrap = $("<li>");
-  //   if (properties.type) liWrap.addClass(properties.type);
-  //   var aWrap = $("<a href='' title=''></a>");
-  //   aWrap.append(thumb);
-  //   aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
-  //   liWrap.append(aWrap);
-  // 
-  //   return liWrap;
-  // },
-  // refreshMyImagesPagination: function(pagination) {
-  //   this.hasPagination = pagination.total_pages > 1 ? true : false;
-  //   if (this.hasPagination) {
-  //     this.paginationWrap.show();
-  //     if (pagination.previous_page > 0) this.previousPageLink.show();
-  //     else this.previousPageLink.hide();
-  //     if (pagination.next_page > 0) this.nextPageLink.show();
-  //     else this.nextPageLink.hide();
-  //   }
-  //   else {
-  //     this.paginationWrap.hide();
-  //   }
-  // },
+  
+  showSpinner: function($super, container) {
+    $super(container);
+    if (this.hasPagination) this.paginationWrap.hide();
+  },
+  hideSpinner: function($super, container) {
+    $super(container);
+    if (this.hasPagination) this.paginationWrap.show();
+  },
+  didClickOnTab: function($super, tab) {
+    $super(tab);
+    if (tab === this.myVideosId) {
+      this.loadMyVideos(0);
+    }
+  },
+  loadMyVideos: function(pageIncrement) {
+    var videoRowsWrap = this.myVideosContainer.find(".rows");
+    
+    this.myVideosPage += pageIncrement;
+    if (this.myVideosPage < 1) this.myVideosPage = 1;
+    
+    if (pageIncrement !== 0 || !videoRowsWrap.data('loaded')) { //load only if we are paginating, or if the videos have never been loaded before
+      videoRowsWrap.html('');
+      
+      this.showSpinner(videoRowsWrap);
+      
+      MTools.ServerManager.getRecords(WebDoc.Video, null, function(data) {
+        if (data.videos.length === 0) {
+          var noVideos = $("<span>").addClass('no_items').text('No Videos');
+          videoRowsWrap.append(noVideos);
+        }
+        else {
+          var myVideosList = $("<ul>");
+          
+          $.each(data.videos, function(i, webDocVideo) {
+            
+            myVideosList.append(this.bbuildVideoRow(webDocVideo.uuid(), webDocVideo.data.properties));
+            
+          }.pBind(this));
+          
+          videoRowsWrap.append(myVideosList);
+        }
+        this.refreshMyVideosPagination(data.pagination);
+        videoRowsWrap.data('loaded', true);
+        this.hideSpinner(videoRowsWrap);
+      }.pBind(this), { ajaxParams: { page:this.myVideosPage }});
+    }
+  },
+  refreshMyVideos: function(newVideos) {
+    // Note: do not pass the newVideos arg to force reloading the whole section
+    
+    //if we are in first page, don't reload the whole thing, just add the newly uploaded images to the top of the list 
+    var myVideosList = this.myVideosContainer.find('.rows ul');
+    if (newVideos && this.myVideosPage === 1 && myVideosList.length > 0) {
+      ddd('**************************REFRESH WITH NO RELOAD')
+       $.each(newVideos, function(i,video) {
+         
+         myVideosList.prepend(this.bbuildVideoRow(video.uuid, video.properties));
+          
+       }.pBind(this));
+    }
+    else { // If not (or if no newVideos are passed) reload the 1st page
+      ddd('**************************REFRESH WITH RELOAD')
+      
+      this.myVideosContainer.find(".rows").data('loaded', false);
+      this.myVideosPage = 1;
+      this.loadMyVideos(0);
+    }
+  },
+  bbuildVideoRow: function(uuid, properties) {
+    var thumb = $("<img>").attr({
+      src : properties.thumb_url,
+      alt : "",
+      width: "120",
+      height: "72"
+    }).data("properties", jQuery.extend({type:"my_video", uuid:uuid}, properties));
+    
+    var titleEl = $("<h4>").addClass("title").text(properties.name);
+    var viewCountEl = $("<span>").addClass("view_count").text(this.videoUtils.numberWithThousandsSeparator(properties.view_count,"'")+" views");
+    var durationEl = $("<span>").addClass("duration").text(this.videoUtils.timeFromSeconds(properties.duration));
+    
+    var liWrap = $("<li>").addClass("video_row").addClass(properties.type);
+    var aWrap = $("<a href=\"\"></a>");
+    aWrap.append(thumb).append(titleEl).append(durationEl).append(viewCountEl);
+    liWrap.append(aWrap);
+    return liWrap;
+  },
+  refreshMyVideosPagination: function(pagination) {
+    this.hasPagination = pagination.total_pages > 1 ? true : false;
+    if (this.hasPagination) {
+      this.paginationWrap.show();
+      if (pagination.previous_page > 0) this.previousPageLink.show();
+      else this.previousPageLink.hide();
+      if (pagination.next_page > 0) this.nextPageLink.show();
+      else this.nextPageLink.hide();
+    }
+    else {
+      this.paginationWrap.hide();
+    }
+  },
   prepareDetailsView: function($super, properties) { // type: youtube, vimeo
     $super(properties);
     
@@ -260,7 +275,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     // View count
     var viewCountEl = this.detailsView.find('.view_count span');
     if (properties.view_count)
-      viewCountEl.text(new VideoUtils().numberWithThousandsSeparator(properties.view_count,"'"));
+      viewCountEl.text(this.videoUtils.numberWithThousandsSeparator(properties.view_count,"'"));
     else
       viewCountEl.text('');
     
@@ -270,11 +285,13 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     descEl.text(desc);
     
     // Actions
-    var showVideoPageEl = $("#show_video_page_action");
     var serviceName = properties.type === "youtube" ? "YouTube" : "Vimeo";
+    var showVideoPageEl = $("#show_video_page_action");
     showVideoPageEl.text(showVideoPageEl.data("originalText").replace("*", serviceName));
+    
     // If Details view is loaded from the My Videos section, we won't need this action...
-    if (this.element.find('div.selected')[0] === this.tabContainers[1]) {
+    $("#video_details .actions li").show();
+    if (this.element.find('div.selected').attr('id') === this.myVideosId) {
       $("#add_to_my_videos_action").parent().hide();
     }
     else {
