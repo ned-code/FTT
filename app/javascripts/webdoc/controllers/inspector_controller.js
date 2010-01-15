@@ -66,7 +66,7 @@ WebDoc.InspectorController = $.klass({
   
   selectPalette: function(paletteId) {
       this.updatePalette(paletteId);
-      this.selectInspector(1);
+      this.selectInspector(0);
   },
   
   updatePalette: function(paletteId) {

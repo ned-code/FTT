@@ -60,7 +60,7 @@ WebDoc.RightBarController = $.klass({
     ddd("show item inspector");
     
     this.showRightBar(function() {
-      //$("#page_inspector").hide();      
+      $("#page_inspector").hide();      
       $("#libraries").hide();
       $("#item_inspector").show();      
     });

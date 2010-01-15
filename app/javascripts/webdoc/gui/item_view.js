@@ -21,6 +21,7 @@ WebDoc.ItemView = $.klass({
 
     this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css("overflow", "hidden");
     this.itemLayerDomNode = $("<div>").addClass("layer").addClass("screen").addClass("item_layer");
+    this.itemLayerDomNode.show();
     this.domNode.append(this.itemDomNode);
     this.domNode.append(this.itemLayerDomNode);
     
@@ -142,6 +143,7 @@ WebDoc.ItemView = $.klass({
           WebDoc.application.undoManager.registerUndo(function() {
             WebDoc.ItemView._restorePosition(this.item, currentPosition);
           }.pBind(this));
+          WebDoc.application.arrowTool.disableHilight();
         }.pBind(this)        ,
         drag: function(e, ui) {
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
@@ -152,6 +154,7 @@ WebDoc.ItemView = $.klass({
         stop: function(e, ui) {
           this.item.moveTo(ui.position);
           this.item.save();
+          WebDoc.application.arrowTool.enableHilight();
         }.pBind(this)
       }).resizable({
         handles: 's, e, se',

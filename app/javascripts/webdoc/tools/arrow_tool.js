@@ -33,16 +33,26 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
     this.lastSelectedObject.event = null;
   },
   
+  disableHilight: function() {
+    this.disableHiLight = true;
+  },
+  
+  enableHilight: function() {
+    this.disableHiLight = false;
+  },
+  
   mouseDown: function(e) {
     if (!WebDoc.application.boardController.isInteraction) {
       var target = $(e.target);
       ddd("mouse down on target", e.target);
-      this.select(e);
-      this.originalMovingPos = {
-        x: e.screenX,
-        y: e.screenY,
-        firstMove: true
-      };
+      if (!target || target.length === 0 || !target.hasClass("drawing_handle")) {
+        this.select(e);
+        this.originalMovingPos = {
+          x: e.screenX,
+          y: e.screenY,
+          firstMove: true
+        };
+      }
     }
   },
   
@@ -64,15 +74,15 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   
   mouseOver: function(e) {
     var target = $(e.target);
-    if (target.hasClass("item_layer")) {
-      target.animate({ opacity: 0.8});
+    if (target.hasClass("item_layer") && !this.disableHiLight) {
+      target.stop().animate({ opacity: 0.8}, { duration: 100});
     }
   },
 
   mouseOut: function(e) {  
     var target = $(e.target);
-    if (target.hasClass("item_layer")) {
-      target.animate({ opacity: 0});
+    if (target.hasClass("item_layer") && !this.disableHiLight) {
+      target.stop().animate({ opacity: 0 }, { duration: 100});
     }
   },
         

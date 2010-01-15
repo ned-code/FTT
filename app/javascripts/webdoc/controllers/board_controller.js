@@ -89,7 +89,7 @@ WebDoc.BoardController = $.klass({
     .empty()
     .append(board)
     .wrapInner(boardWrapHTML)
-    .append(screenLayer);
+    .prepend(screenLayer);
     
     this.initialHeight = board.height();
     this.initialWidth = board.width();
@@ -239,6 +239,7 @@ WebDoc.BoardController = $.klass({
     // exit edit mode for current editing item
     if (this.editingItem) {
       this.editingItem.stopEditing();
+      jQuery('#board_container').trigger('hide-screen');
       this.editingItem = null;
     }
     
@@ -300,7 +301,7 @@ WebDoc.BoardController = $.klass({
   editItemView: function(itemViewToEdit) {
     if (itemViewToEdit.canEdit()) { 
       this.editingItem = itemViewToEdit;  
-          
+      jQuery('#board_container').trigger('show-screen');    
       itemViewToEdit.edit();
     }
   },
