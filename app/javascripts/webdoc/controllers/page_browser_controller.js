@@ -6,10 +6,24 @@
 //= require <webdoc/gui/page_thumbnail_view>
 //= require <webdoc/gui/page_browser_item_view>
 
+(function(jQuery, undefined){
+
+// Default settings
+var boardPanel,
+    pagesPanel,
+    pagesPanelWidth = 150;
+
 WebDoc.PageBrowserController = $.klass({
   initialize: function() {
-    ddd("init page browser");
-    this.domNode = $("#left_bar");
+    ddd("init pages panel");
+    
+    boardPanel = $("#board_container");
+    pagesPanel = $("#left_bar");
+    pagesPanelWidth = pagesPanel.outerWidth();
+    
+    ddd("Pages panel width: " + pagesPanelWidth);
+    
+    this.domNode = pagesPanel;
     this.visible = false;
     this.pageThumbs = [];
     this.pageMap = {}; 
@@ -55,39 +69,48 @@ WebDoc.PageBrowserController = $.klass({
     this.document = document;    
   },
   
-  toggleBrowser: function(callBack) {
+  toggleBrowser: function() {
     if (this.visible) {
       this.document.removeListener(this);
       WebDoc.application.boardController.removeCurrentPageListener(this);
-      this.domNode.animate({
-        width: "0px"
-      }, function() {
-            this.domNode.find("ul:first").empty();
-            callBack.call(this); 
-      }.pBind(this));
-      if (!MTools.Browser.WebKit) {
-        $("#board_container").animate({
-          marginLeft: "0px"
-        });
-      }    
-      this.domNode.unbind();  
-      ddd("browser", $("#page_browser"));
-      $("#page_browser").removeClass("toggle_on_panel"); 
-      this.deletePageThumbs();
-      this.domNode.find("ul").empty();          
+      
+      pagesPanel.animate({
+          marginLeft: -pagesPanelWidth
+      }, {
+          step: function(val){
+              boardPanel.css({
+                  left: pagesPanelWidth + val
+              });
+          },
+          complete: function() {
+                 
+                  this.deletePageThumbs(); 
+                  
+                  pagesPanel
+                  .unbind()
+                  .find("ul")
+                  .empty();
+                  
+                  ddd("browser", $("#page_browser_left"));
+                  $("#page_browser_left").removeClass("toggle_on_panel"); 
+              }.pBind(this)
+      });
     }
     else {
       this.document.addListener(this);
       WebDoc.application.boardController.addCurrentPageListener(this);      
-      this.domNode.animate({
-        width: "165px"
-      }, callBack);
-      if (!MTools.Browser.WebKit) {
-        $("#board_container").animate({
-          marginLeft: "170px"
-        });
-      }            
-      $("#page_browser").addClass("toggle_on_panel");
+      
+      pagesPanel.animate({
+          marginLeft: 0
+      }, {
+          step: function(val){
+              boardPanel.css({
+                  left: pagesPanelWidth + val
+              });
+          },
+      });
+            
+      $("#page_browser_left").addClass("toggle_on_panel");
       this.refreshPages();      
     }
     this.visible = !this.visible;
@@ -114,7 +137,7 @@ WebDoc.PageBrowserController = $.klass({
 			handle: '.page_browser_item_draggable_area',
 			start:  this.dragStart.pBind(this),
 			update: this.dragUpdate.pBind(this),
-			containment: 'div#page_browser'
+			containment: 'div#page_browser_left'
 		});
 		var divToHide = $('.page_browser_item_title_edition');
 		$(divToHide).hide();
@@ -146,7 +169,7 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   objectChanged: function(page) {
-	  ddd('page_browser_controller: objectChanged');
+    
   },
   
   pageAdded: function(page) {
@@ -259,3 +282,5 @@ WebDoc.PageBrowserController = $.klass({
 });
 
 $.extend(WebDoc.PageBrowserController, {});
+
+})(jQuery);

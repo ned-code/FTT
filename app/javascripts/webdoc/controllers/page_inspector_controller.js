@@ -128,6 +128,7 @@ WebDoc.PageInspectorController = $.klass({
     e.preventDefault();
     var page = WebDoc.application.pageEditor.currentPage;
     this.applyBackgroundToPage(page);
+    WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
   },
 
   applyBackgroundToAllPages: function(e) {
@@ -135,12 +136,12 @@ WebDoc.PageInspectorController = $.klass({
       ddd('apply to page:'+WebDoc.application.pageEditor.currentDocument.pages[i].data.title);
       this.applyBackgroundToPage(WebDoc.application.pageEditor.currentDocument.pages[i]);
     }
+    WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
   },
 
   applyBackgroundToPage: function(page) {
     try {
       page.setBackgroundImageAndRepeatMode($("#page_background_image_textbox").val(), this.getBackgroundRepeatMode()); 
-      WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
     }
     catch(exc) {
       $("#page_background_image_textbox").get(0).value = page.data.data.css.backgroundImage;

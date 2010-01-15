@@ -79,9 +79,10 @@ WebDoc.Page = $.klass(MTools.Record,
     }
   },
   
-  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode) {
-    WebDoc.InspectorFieldsValidator.validateBackgroundUrl(backgroundUrl);
-    if(this.setBackgroundImage(backgroundUrl) || this.setBackgroundRepeatMode(repeatMode)) {
+  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode) { 
+    var objectChanged = this.setBackgroundImage(backgroundUrl);
+    objectChanged = this.setBackgroundRepeatMode(repeatMode) || objectChanged;
+    if(objectChanged) {
       this.fireObjectChanged();
       this.save();
     }

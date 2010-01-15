@@ -9,7 +9,7 @@ WebDoc.ToolbarController = $.klass({
   initialize: function() {
     ddd("init toolbar controller");
     try {
-      $("#tb_2").click(this.performAction.pBind(this));
+      $("#toolbar").click(this.performAction.pBind(this));
     }
     catch (ex) {
       ddt();
@@ -20,7 +20,7 @@ WebDoc.ToolbarController = $.klass({
 
   performAction: function(e) {
     e.preventDefault();
-    var clickedButton = $(e.target).closest(".action_button");
+    var clickedButton = $(e.target).closest("li");
     try {
       // first look if action is defined in the toolbar controller. Otherwise try to delegate the action to the page editor
       if (this[clickedButton.attr("id")]) {
@@ -69,9 +69,7 @@ WebDoc.ToolbarController = $.klass({
   },
   
   page_browser: function(e) {
-    WebDoc.application.pageBrowserController.toggleBrowser(function() {
-      WebDoc.application.boardController.centerBoard();
-    });
+    WebDoc.application.pageBrowserController.toggleBrowser();
   },
   
   toggle_inspector: function(e) {

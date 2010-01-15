@@ -1,4 +1,3 @@
-
 /**
  * PageEditor is the main application for page viewing and editing. The root method is load(documentId) that will load the first page of document documentId.
  * 
@@ -58,29 +57,17 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
     
-    // It seems that webkit don't need the margin een if content is 100% width
-    if (MTools.Browser.WebKit) {
-       $("#board_container").css("marginRight", "0px");       
-    }
+    var boardContainer = $("#board_container"),
+        leftBar = $("#left_bar"),
+        rightBar = $("#right_bar");
+    
     if (editable) {
-      WebDoc.application.rightBarController.showRightBar();
-    }    
-    $("#content").css("display", "");
-    // resize height of GUI when window is resized. It cannot be done with CSS (or it is very difficult)
-    var height = window.innerHeight - $("#board_container").offset().top;
-    $("#board_container").height(height -10);
-    $("#right_bar").height(height -10);
-    $("#left_bar").height(height -10);
-    $(window).bind("resize", function() {
-      var height = window.innerHeight - $("#board_container").offset().top;
-      $("#board_container").height(height -10);
-      $("#right_bar").height(height -10);
-      $("#left_bar").height(height -10);
-      WebDoc.application.boardController.centerBoard();
-    }.pBind(this)); 
+        WebDoc.application.rightBarController.showRightBar();
+    }
+    
     $(window).unload(function() {
-      WebDoc.application.collaborationManager.disconnect();
-    });   
+        WebDoc.application.collaborationManager.disconnect();
+    });
   },
 
   load: function(documentId) {

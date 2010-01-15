@@ -47,7 +47,7 @@
     /* Space at the bottom for when the items wrap */
     margin-bottom: 1.6em;
 }
-       
+
 /* Vertical */
 
 .vertical li {
@@ -159,4 +159,80 @@
     background-image: none !important;
     min-width: 0;
     padding-left: 8px;
+}
+
+
+/* Toolbars */
+.tools a {
+    padding-top: 28px;
+    min-width: 28px;
+}
+.icons-only.tools a {
+    border: 1px solid #efefef;
+    border-radius: 6px;
+    width: 28px;
+}
+
+.tools a:hover,
+.tools .current_tool a{
+    display: block;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #e6e6e6;
+    background-color: #fff;
+}
+
+/* Positioning of each index */
+
+.tools {
+    margin: 4px 0;
+    padding: 0 0 0 0;
+}
+
+/* On the left ... */
+#pages_tools,
+#view_tools,
+#edit_tools,
+#misc_tools {
+    float: left;
+}
+#pages_tools,
+#view_tools,
+#edit_tools {
+    margin-right: 32px;
+}
+
+/* On the right ... */
+#toggle_inspector_wrap,
+#right_bar_tools {
+    float: right;
+}
+#toggle_inspector_wrap {
+    margin-left: 32px;
+}
+
+
+
+/* NOT SURE WHAT THIS DOES - something about special rollover states */
+
+/*Special case to prevent page deletion :-)*/
+#removePage a {
+    background-image: url(../images/icons/page_remove.png);
+    background-repeat: no-repeat;
+    background-position: 1px 1px;
+}
+#removePage a:hover {
+    background-position: -23px 1px;
+}
+
+#page_browser a{ /* Special case with image in CSS for the toggle_on_panel state -> bad, all buttons images should be in CSS */
+    background-image: url(../images/icons/browse.png);
+    background-repeat: no-repeat;
+    background-position: 1px 1px;
+}
+#page_browser.toggle_on_panel a{
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background-color: #6F6F6F;
+  background-position: -23px 1px;
 }

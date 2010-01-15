@@ -66,7 +66,7 @@
 })(jQuery);
 
 
-// Extend jQuery with some helper functions
+// Extend jQuery with some helper plugins
 
 jQuery.fn.extend({
     // Get or set id (attribute helper)
@@ -74,5 +74,37 @@ jQuery.fn.extend({
         return (id === undefined) ? 
             this.attr("id") :
             this.attr("id", id) ;
+    }
+});
+
+// Extend jQuery with some helper functions
+
+jQuery.extend({
+    // Event delegation helper. Bind to event, passing in
+    // {'selector': fn} pairs as data. Finds closest match
+    // (caching the result in the clicked element's data),
+    // and triggers the associated function.  Eg:
+    //
+    // .bind('click', {'selector': fn}, jQuery.delegate)
+    
+    delegate: function(e) {
+        var list = e.data,
+            target = jQuery(e.target),
+            data = target.data("closest") || {},
+            closest, elem;
+        
+        for (var selector in list) {
+            elem = data[selector];
+            
+            if ( elem === undefined ) {
+                closest = target.closest( selector, this );
+                elem = data[selector] = ( closest.length ) ? closest[0] : false ;
+                target.data("closest", data);
+            }
+            
+            if (elem) list[selector].call(this, e);
+        }
+        
+        return false;
     }
 });
