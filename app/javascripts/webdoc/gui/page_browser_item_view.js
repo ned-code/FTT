@@ -66,19 +66,22 @@ WebDoc.PageBrowserItemView = $.klass({
     // Find item related to this page
     var targetItem = $("#browser_item_" + page.uuid());
     var panelTitle = $('.page_browser_item_title', targetItem);
-    $(panelTitle).get(0).innerHTML = this.getPageTitle(page).title;
-    if(removeDefaultClass) {
-	    if($(panelTitle).hasClass('page_browser_item_title_default')) {
+    var currentTitle = $(panelTitle).get(0).innerHTML;
+    var newTitle = this.getPageTitle(page).title;
+    if(currentTitle != newTitle) {
+      $(panelTitle).get(0).innerHTML = this.getPageTitle(page).title;
+    }
+		if(removeDefaultClass) {
+      if($(panelTitle).hasClass('page_browser_item_title_default')) {
         $(panelTitle).removeClass('page_browser_item_title_default');
       }
-	  }
+    }
 	},
   
-  objectChanged: function(item) {
-    switch(item.className()) {
+  objectChanged: function(page) {
+    switch(page.className()) {
 	    case "page":
-	      ddd('object changed - page');
-	      this.updateTitle(item, true);
+	      this.updateTitle(page, true);
 	      break;
     }
   },
