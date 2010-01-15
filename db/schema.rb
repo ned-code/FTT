@@ -54,19 +54,11 @@ ActiveRecord::Schema.define(:version => 20100107111130) do
 
   create_table "pages", :force => true do |t|
     t.string   "uuid",         :limit => 36
-<<<<<<< Updated upstream
     t.integer  "document_id",                                     :null => false
     t.integer  "thumbnail_id"
     t.integer  "position",                                        :null => false
     t.integer  "version",                          :default => 1, :null => false
     t.text     "data",         :limit => 16777215
-=======
-    t.integer  "document_id",                                            :null => false
-    t.integer  "thumbnail_id"
-    t.integer  "position",                                               :null => false
-    t.integer  "version",                       :default => 1,           :null => false
-    t.text     "data",         :limit => 65537
->>>>>>> Stashed changes
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "title",                         :default => "undefined"
