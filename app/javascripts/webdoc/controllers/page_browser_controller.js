@@ -181,7 +181,7 @@ WebDoc.PageBrowserController = $.klass({
 
    selectCurrentPage: function(event) {
      var targetItem = $(event.target).closest('.page_browser_item');
-     this.selectPage(targetItem).pBind(this);
+     this.selectPage(targetItem);
    },
 
    changeCurrentHighlightedItem: function(event) {
@@ -229,12 +229,11 @@ WebDoc.PageBrowserController = $.klass({
      var pageBrowserItem = $(target).closest('.page_browser_item');
      var page = this.pageMap[pageBrowserItem.attr("id")].page;
      page.setTitle(newTitle);
-
      this.showStaticPanel(target);
    },
 
    titleBoxKeyDownAction: function(event) {
-     switch(event.keyCode){
+     switch(event.which){
        case 13: // Return key
          this.saveTitle(event.target);
          break;
