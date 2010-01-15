@@ -83,11 +83,6 @@ WebDoc.PageBrowserController = $.klass({
               });
           },
           complete: function() {
-                  pagesPanel
-                  .find("ul:first").empty();
-                  
-                  callBack.call(this);
-                  
                   this.deletePageThumbs(); 
                   
                   pagesPanel.unbind().find("ul").empty();
