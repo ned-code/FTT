@@ -14,37 +14,13 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
     this.lastSelectedObject = {};
   },
   
-  select: function(e) {
-    var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-    ddd("must select item at point " + mappedPoint.x + ":" + mappedPoint.y, e.target);
-    var clickedItemView = null;
-    var target = $(e.target);
-    if (target && target.get(0) && target.get(0).tagName == "polyline") {
-      clickedItemView = target.data("itemView");
-    }
-    else {
-      clickedItemView = target.closest(".item_wrap").data("itemView");
-    }
-    var objectToSelect = null;
-    if (clickedItemView) {
-      objectToSelect = clickedItemView;    
-    }
+  select: function(e) {  
+    var objectToSelect = this._clickedItemView(e);
+
     this.lastSelectedObject = {
       itemView: objectToSelect,
       event: e
     };      
-//    else {
-//      ddd("use old selection method");
-//      objectToSelect= WebDoc.application.boardController.pageView.findObjectAtPoint(mappedPoint);
-//      if (e.target.nodeName == "polyline") {
-//        objectToSelect = WebDoc.application.boardController.pageView.findItemView(e.target.id);
-//      }
-//      this.lastSelectedObject = {
-//        itemView: objectToSelect,
-//        event: e
-//      };
-//    }
-    ddd("found object", objectToSelect);
 
     if (!(objectToSelect && WebDoc.application.boardController.editingItem == objectToSelect)) {
       if (objectToSelect) {
@@ -61,14 +37,12 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
     if (!WebDoc.application.boardController.isInteraction) {
       var target = $(e.target);
       ddd("mouse down on target", e.target);
-      if (!target || target.length === 0 || (!target.hasClass("ui-resizable-handle") && !target.hasClass("drawing_handle") && !target.hasClass("drag_handle"))) {
-        this.select(e);
-        this.originalMovingPos = {
-          x: e.screenX,
-          y: e.screenY,
-          firstMove: true
-        };
-      }
+      this.select(e);
+      this.originalMovingPos = {
+        x: e.screenX,
+        y: e.screenY,
+        firstMove: true
+      };
     }
   },
   
@@ -79,12 +53,38 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   },
   
   mouseClick: function(e) {
-//    if (!WebDoc.application.boardController.isInteraction) {
-//    
-//      if (this.lastSelectedObject.itemView) {
-//        this.lastSelectedObject.itemView.edit(); //if object (itemView) supports edit mode...
-//      }
-//    }
-  }
+    
+  },
   
+  mouseDblClick: function(e) {
+    ddd("dbl click", e.target);
+    var objectToEdit = this._clickedItemView(e);
+    WebDoc.application.boardController.editItemView(objectToEdit);
+  },
+  
+  mouseOver: function(e) {
+    var target = $(e.target);
+    if (target.hasClass("item_layer")) {
+      target.animate({ opacity: 0.8});
+    }
+  },
+
+  mouseOut: function(e) {  
+    var target = $(e.target);
+    if (target.hasClass("item_layer")) {
+      target.animate({ opacity: 0});
+    }
+  },
+        
+  _clickedItemView: function(e) {   
+    var clickedItemView = null;
+    var target = $(e.target);
+    if (target && target.get(0) && target.get(0).tagName == "polyline") {
+      clickedItemView = target.data("itemView");
+    }
+    else {
+      clickedItemView = target.parent().data("itemView");
+    }
+    return clickedItemView;
+  }
 });

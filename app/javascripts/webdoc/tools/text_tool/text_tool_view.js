@@ -40,7 +40,7 @@ WebDoc.TextToolView = $.klass({
         zIndex: 1000010
       });
       
-      var iframe = $('<iframe class="textbox_iframe item_edited" scrolling="auto" />');
+      var iframe = $('<iframe class="textbox_iframe" scrolling="auto" />');
       iframe.css({
         width: "100%",
         height: "100%"

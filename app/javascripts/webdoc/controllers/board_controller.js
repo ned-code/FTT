@@ -130,6 +130,9 @@ WebDoc.BoardController = $.klass({
     $("#board").bind("mousedown", this, this.mouseDown.pBind(this));
     $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
     $("#board").bind("click", this, this.mouseClick.pBind(this));
+    $("#board").bind("dblclick", this, this.mouseDblClick.pBind(this));
+    $("#board").bind("mouseover", this, this.mouseOver.pBind(this));    
+    $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
   },
   
   unbindMouseEvent: function() {
@@ -145,11 +148,12 @@ WebDoc.BoardController = $.klass({
       $("#board").unbind("dragover");
       $("#board").unbind("drop");
       
-      $(".item").addClass("item_interact");
+      $(".item_wrap").addClass("item_interact");
       this.setCurrentTool(WebDoc.application.arrowTool);
       $(".preview_hidden").hide();
       $(".toggle_preview").addClass("toggle_edit");
       $(".toggle_preview").removeClass("toggle_preview");
+      $(".item_layer").hide();
       $("#tb_1_utilities_preview a").text("EDIT MODE");
       WebDoc.application.rightBarController.hideRightBar();
     }
@@ -158,18 +162,20 @@ WebDoc.BoardController = $.klass({
       $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
       $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver);
       $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);      
-      $(".item").removeClass("item_interact");
+      $(".item_wrap").removeClass("item_interact");
       if (!this.currentTool) {
         this.setCurrentTool(WebDoc.application.arrowTool);
       }      
       $(".preview_hidden").show();
       $(".toggle_edit").addClass("toggle_preview");
       $(".toggle_edit").removeClass("toggle_edit");
-      $("#tb_1_utilities_preview a").text("QUICK PREVIEW"); 
-       
+      $(".item_layer").show();
+      $("#tb_1_utilities_preview a").text("QUICK PREVIEW");        
     }
-    // TODO we can do better with ff 3.6 by using pointer-events css attribute  
-    $("#board svg").css("zIndex", this.isInteraction?"-1":"999999");                
+    // TODO for FF .5 we put svg backward because pointer event is not implemented
+    if (MTools.Browser.Gecko && (new Number(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
+      $("#board svg").css("zIndex", this.isInteraction ? "-1" : "999999");
+    }
   },
   
   
@@ -191,31 +197,25 @@ WebDoc.BoardController = $.klass({
     ddd(tool);
     this.currentTool = tool;
     if (this.currentTool) {
-      if (this.currentTool == WebDoc.application.arrowTool) {
-        $("#event-catcher").css("display", "none");
-      }
-      else {
-        $("#event-catcher").css("display", "inline");
-      }
       this.currentTool.selectTool();
     }
     // this.unselectItemViews(this.selection);
   },
   
   mapToPageCoordinate: function(position) {
-    var x, y;
+    var x, y, board = $("#board"), boardContainer = $("#board_container");
+    
     if (position.x) {
-      x = position.x - $("#board_container").offset().left;
-      y = position.y - $("#board_container").offset().top;
+      x = position.x - board.offset().left;
+      y = position.y - board.offset().top;
     }
     else {
-      x = position.pageX - $("#board_container").offset().left;
-      y = position.pageY - $("#board_container").offset().top;
+      x = position.pageX - board.offset().left;
+      y = position.pageY - board.offset().top;
     }   
-    var top = parseFloat($("#board").css("top"));
-    var left = parseFloat($("#board").css("left"));
-    var calcX = (x - left + $("#board_container").get(0).scrollLeft) * (1 / this.currentZoom);
-    var calcY = (y - top + $("#board_container").get(0).scrollTop) * (1 / this.currentZoom);
+
+    var calcX = (x) * (1 / this.currentZoom);
+    var calcY = (y) * (1 / this.currentZoom);
     return {
       x: calcX,
       y: calcY
@@ -293,6 +293,14 @@ WebDoc.BoardController = $.klass({
       }
     }
     this.fireSelectionChanged();    
+  },
+  
+  editItemView: function(itemViewToEdit) {
+    if (itemViewToEdit.canEdit()) { 
+      this.editingItem = itemViewToEdit;  
+          
+      itemViewToEdit.edit();
+    }
   },
   
   deleteSelection: function(e) {
@@ -398,7 +406,6 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseClick: function(e) {
-    //e.preventDefault();
     this.currentTool.mouseClick(e);
   },
   
@@ -429,6 +436,18 @@ WebDoc.BoardController = $.klass({
         break;
     }
   },
+  
+  mouseDblClick: function(e) {
+    this.currentTool.mouseDblClick(e);    
+  },
+  
+  mouseOver: function(e) {
+    this.currentTool.mouseOver(e);    
+  },
+  
+  mouseOut: function(e) {
+    this.currentTool.mouseOut(e);    
+  },  
   
   insertItems: function(items) {
     $.each(items, function(index, item) {

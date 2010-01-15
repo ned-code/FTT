@@ -116,7 +116,7 @@ WebDoc.ItemView = $.klass({
   },  
   
   isSelected: function() {
-    return this.itemLayerDomNode.hasClass("item_selected");
+    return this.domNode.hasClass("item_selected");
   },
   
   select: function() {
@@ -126,7 +126,7 @@ WebDoc.ItemView = $.klass({
     }
     if (!this.isSelected()) {
       ddd("ItemView: select item " + this.item.uuid());
-      this.itemLayerDomNode.addClass("item_selected");
+      this.domNode.addClass("item_selected");
 
       this.domNode.draggable({
         containment: "parent",
@@ -197,9 +197,13 @@ WebDoc.ItemView = $.klass({
   },
   
   unSelect: function() {
-    this.itemLayerDomNode.removeClass("item_selected");
+    this.domNode.removeClass("item_selected");
     this.domNode.draggable( 'destroy' );
     this.domNode.resizable( 'destroy' );
+  },
+  
+  canEdit: function() {
+    return false;
   },
   
   edit: function() {

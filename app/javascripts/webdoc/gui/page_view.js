@@ -9,7 +9,6 @@ WebDoc.PageView = $.klass({
         domNode = $('<div>').id('board'),
         itemDomNode = $('<div/>').id('items'),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
-        eventCatcher = $('<div/>').id('event-catcher'),
         that = this;
     
     // Extend this
@@ -72,7 +71,6 @@ WebDoc.PageView = $.klass({
     }
     
     this.domNode.append( itemDomNode.addClass('layer') );
-    this.domNode.append( eventCatcher.addClass('layer').css("display", "none"));
     
     if (page.items && $.isArray(page.items)) {
         $.each(page.items, function() {

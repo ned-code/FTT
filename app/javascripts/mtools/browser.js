@@ -9,4 +9,5 @@ MTools.Browser = {
   WebKit: (/AppleWebKit/).test(navigator.appVersion),
   KHTML:  (/Konqueror|Safari|KHTML/).test(navigator.userAgent), 
   Gecko:  (/Gecko/).test(navigator.userAgent) && !(/KHTML/).test(navigator.userAgent)
+  
 };

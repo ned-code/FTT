@@ -84,10 +84,13 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     }
   },
   
+  canEdit: function() {
+    return true;
+  },
+    
   edit: function($super) {
     if (this.item.data.media_id != null) {
       $super();
-      WebDoc.application.boardController.editingItem = this;
       this.domNode.addClass("item_edited");
       this.itemDomNode.css({
         zIndex: "1000005"

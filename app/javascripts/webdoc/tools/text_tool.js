@@ -72,12 +72,9 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   
   enterEditMode: function(textView) { //can be called on existing (selected) textView
     ddd("Text tool: entering edit mode");
-    // Unselect existing selected text box (if necessary)
-    if (this.textView && textView != this.textView) {
-      WebDoc.application.boardController.unselectItemViews([this.textView]);
-    }
+
     this.textView = textView;
-    this.delegate.enterEditMode(textView.domNode);
+    this.delegate.enterEditMode(textView.itemDomNode);
     WebDoc.application.rightBarController.showItemInspector();    
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
   },
