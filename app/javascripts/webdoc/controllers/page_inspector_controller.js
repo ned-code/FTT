@@ -14,10 +14,12 @@ WebDoc.PageInspectorController = $.klass({
     $("#page_width_textbox").bind("change", this.changePageWidth.pBind(this));
     $("#page_background_color_textbox").bind("change", this.changePageBackgroundColor.pBind(this));
     $("#browse_background_image_button").bind("click", this.browseForImages);
-    $("#page_background_image_textbox").bind("change", this.changePageBackgroundImage.pBind(this));
-    $("#page_background_image_fit_page_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
-    $("#page_background_image_repeat_hor_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
-    $("#page_background_image_repeat_vert_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
+    // $("#page_background_image_textbox").bind("change", this.changePageBackgroundImage.pBind(this));
+    // $("#page_background_image_fit_page_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
+    // $("#page_background_image_repeat_hor_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
+    // $("#page_background_image_repeat_vert_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
+    $("#page_background_image_apply_current_button").bind("click", this.applyBackgroundToCurrentPage.pBind(this));
+    $("#page_background_image_apply_all_button").bind("click", this.applyBackgroundToAllPages.pBind(this));
     WebDoc.application.boardController.addCurrentPageListener(this);
     WebDoc.application.pageEditor.currentPage.addListener(this); 
     this.currentPageChanged();
@@ -120,7 +122,30 @@ WebDoc.PageInspectorController = $.klass({
     catch(exc) {
       this.setBackgroundRepeatMode(page.data.data.css.background-repeat);
     }
+  },
 
+  applyBackgroundToCurrentPage: function(e) {
+    e.preventDefault();
+    var page = WebDoc.application.pageEditor.currentPage;
+    this.applyBackgroundToPage(page);
+  },
+
+  applyBackgroundToAllPages: function(e) {
+    for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
+      ddd('apply to page:'+WebDoc.application.pageEditor.currentDocument.pages[i].data.title);
+      this.applyBackgroundToPage(WebDoc.application.pageEditor.currentDocument.pages[i]);
+    }
+  },
+
+  applyBackgroundToPage: function(page) {
+    try {
+      page.setBackgroundImageAndRepeatMode($("#page_background_image_textbox").val(), this.getBackgroundRepeatMode()); 
+      WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
+    }
+    catch(exc) {
+      $("#page_background_image_textbox").get(0).value = page.data.data.css.backgroundImage;
+      this.setBackgroundRepeatMode(page.data.data.css.background-repeat);
+    }
   },
 
   changeAllowAnnotation: function(e) {

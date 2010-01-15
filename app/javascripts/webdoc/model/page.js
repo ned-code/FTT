@@ -79,33 +79,30 @@ WebDoc.Page = $.klass(MTools.Record,
     }
   },
   
+  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode) {
+    WebDoc.InspectorFieldsValidator.validateBackgroundUrl(backgroundUrl);
+    if(this.setBackgroundImage(backgroundUrl) || this.setBackgroundRepeatMode(repeatMode)) {
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+
   setBackgroundImage: function(backgroundUrl) {
     WebDoc.InspectorFieldsValidator.validateBackgroundUrl(backgroundUrl);
     if(this.data.data.css.backgroundImage != backgroundUrl) {
       this.data.data.css.backgroundImage = backgroundUrl;
-			// var newCss = null;
-			//       try {
-			//         eval("newCss=" + $.toJSON(this.data.data.css));
-			//       }
-			//       catch(ex) {
-			//         ddd("Invalid css");
-			//         //$("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
-			//       }
-			//       if (newCss) {
-			//       this.applyCss(newCss);
-			//       }
-      this.fireObjectChanged();
-      this.save();
+      return true;
     }
+    return false;
   },
 
   setBackgroundRepeatMode: function(repeatMode) {
     WebDoc.InspectorFieldsValidator.validateBackgroundRepeat(repeatMode);
     if(this.data.data.css.backgroundRepeat != repeatMode) {
       this.data.data.css.backgroundRepeat = repeatMode;
-      this.fireObjectChanged();
-      this.save();
+      return true;
     }
+    return false;
   },
   
   refresh: function($super, json) {
