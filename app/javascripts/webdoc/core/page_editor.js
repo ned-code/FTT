@@ -86,25 +86,23 @@ WebDoc.PageEditor = $.klass({
     if (!pageId) {
       pageId = "1";
     }
-    var editor = WebDoc.application.pageEditor;
     ddd("load page id " + pageId);
-    var pageToLoad = editor.currentDocument.findPageWithUuidOrPosition(pageId);
+    var pageToLoad = this.currentDocument.findPageWithUuidOrPosition(pageId);
     ddd("found page");
     ddd(pageToLoad);
     if (pageToLoad) {
       this.currentPageId = pageId;
-      editor.loadPage(pageToLoad);
+      this.loadPage(pageToLoad);
     }
   },
 
   loadPage: function(page) {
     WebDoc.application.undoManager.clear();
-    var editor = WebDoc.application.pageEditor;
     ddd("set hash to current page position");
     window.location.hash = "#" + (page.uuid());
-    editor.currentPage = page;
+    this.currentPage = page;
     
-    WebDoc.application.boardController.setCurrentPage(editor.currentPage);
+    WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
 
   previousPage: function(e) {

@@ -157,8 +157,8 @@ WebDoc.DocumentEditor = $.klass(
     
     loadDocuments: function(event)
     {
-				this.updateCurrentFilterSelection(event);
-	
+        this.updateCurrentFilterSelection(event);
+
         MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
         {
             this.documents = data;
@@ -166,22 +166,22 @@ WebDoc.DocumentEditor = $.klass(
         }.pBind(this));
     },
 
-		loadDocumentsWithFilter: function(event)
+    loadDocumentsWithFilter: function(event)
     {
-			  var filter; 
-			  if(event && event.data){
-			  	filter = event.data.document_filter;
-			  }
-			  else{
-				  filter = event.document_filter;
-			  }
-				this.updateCurrentFilterSelection(event);
+        var filter; 
+        if(event && event.data){
+           filter = event.data.document_filter;
+        }
+        else{
+           filter = event.document_filter;
+        }
+        this.updateCurrentFilterSelection(event);
 
          MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
-	       {
+         {
             this.documents = data;
             this.refreshDocumentList();
-				 }.pBind(this), { ajaxParams: { document_filter: filter }});
+         }.pBind(this), { ajaxParams: { document_filter: filter }});
     },
     
     refreshDocumentList: function()
@@ -203,11 +203,11 @@ WebDoc.DocumentEditor = $.klass(
         return null;
     },
 
-		updateCurrentFilterSelection: function(event)
-		{
-			if(event && event.currentTarget){
-				$("#wb-document-navigation ul li a").removeClass('active');
-				$(event.currentTarget).addClass('active');
-			}
-		}
+    updateCurrentFilterSelection: function(event)
+    {
+      if(event && event.currentTarget){
+        $("#wb-document-navigation ul li a").removeClass('active');
+        $(event.currentTarget).addClass('active');
+      }
+    }
 });
