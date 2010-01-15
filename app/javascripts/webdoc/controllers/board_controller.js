@@ -11,6 +11,20 @@
 //= require <webdoc/gui/widget_view>
 //= require <webdoc/controllers/drag_and_drop_controller>
 
+(function(undefined){
+
+// VAR
+
+var boardWrapHTML = '<div class="push-scroll layer">'+
+            '<div class="show-scroll layer">'+
+                '<div class="centering layer">'+
+                    '<div></div>'+
+                '</div>'+
+            '</div>'+
+        '</div>';
+
+// EXTEND
+
 WebDoc.BoardController = $.klass({
   initialize: function(editable, autoFit) {
     this.editable = editable;
@@ -57,27 +71,29 @@ WebDoc.BoardController = $.klass({
   },  
   
   setCurrentPage: function(page) {
+    var boardContainer = $("#board_container"),
+        pageView = new WebDoc.PageView(page),
+        board = pageView.domNode;
+    
     $("#board").unbind();
     $(document).unbind("keydown");
     
-    // remove previous page
-    $("#board_container").empty();
-    // add the new one
-    this.pageView = new WebDoc.PageView(page);
-    this.pageView.domNode.css("display", "none");
-    $("#board_container").html(this.pageView.domNode);
-    // re-init internal working attributes
-    $("#board_container").get(0).scrollTop = 0;
-    $("#board_container").get(0).scrollLeft = 0;
+    // Set properties
+    this.pageView = pageView;
     this.currentZoom = 1;
     this.selection = [];
-    this.fireSelectionChanged();
     this.currentPage = page;
     
-    this.initialHeight = $("#board").height();
-    this.initialWidth = $("#board").width();
+    boardContainer
+    .empty()
+    .append(board)
+    .wrapInner(boardWrapHTML);
     
+    this.initialHeight = board.height();
+    this.initialWidth = board.width();
+    this.fireSelectionChanged();
     this.bindMouseEvent();
+    
     $(document).bind("keydown", this, this.keyDown.pBind(this));
     
     this.zoom(1);
@@ -87,7 +103,9 @@ WebDoc.BoardController = $.klass({
     else {
       this.setInterationMode(false);
     }
-    if (this.autoFit && $("#board").css("height") != "100%") {
+    
+    // Autofit
+    if (this.autoFit && board.css("height") != "100%") {
       //update zoom to fit browser page    
       var heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
       var widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;      
@@ -98,9 +116,10 @@ WebDoc.BoardController = $.klass({
         this.zoom(1 + widthFactor);
       }
     }
-    else {
-      this.centerBoard();
-    }
+//    else {
+//      this.centerBoard();
+//    }
+    
     this.fireCurrentPageChanged();
     $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this.currentPage));
     $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
@@ -128,7 +147,7 @@ WebDoc.BoardController = $.klass({
       
       $(".item").addClass("item_interact");
       this.setCurrentTool(WebDoc.application.arrowTool);
-      $(".preview_hidden").css("display", "none");
+      $(".preview_hidden").hide();
       $(".toggle_preview").addClass("toggle_edit");
       $(".toggle_preview").removeClass("toggle_preview");
       $("#tb_1_utilities_preview a").text("EDIT MODE");
@@ -143,7 +162,7 @@ WebDoc.BoardController = $.klass({
       if (!this.currentTool) {
         this.setCurrentTool(WebDoc.application.arrowTool);
       }      
-      $(".preview_hidden").css("display", "inline");
+      $(".preview_hidden").show();
       $(".toggle_edit").addClass("toggle_preview");
       $(".toggle_edit").removeClass("toggle_edit");
       $("#tb_1_utilities_preview a").text("QUICK PREVIEW"); 
@@ -164,27 +183,8 @@ WebDoc.BoardController = $.klass({
     }  
   },
   
-  
   centerBoard: function() {
-    var containerHeight = $("#board_container").height();
-    var containerWidth = $("#board_container").width();
-    var boardHeight = $("#board").height() * this.currentZoom;
-    var boardWidth = $("#board").width() * this.currentZoom;
-    // center horizontally
-    if (boardWidth < containerWidth) {
-      $("#board").css("left", (containerWidth - boardWidth) / 2);
-    }
-    else {
-      $("#board").css("left", 0);
-    }
-    
-    // center vertically
-    if (boardHeight < containerHeight) {
-      $("#board").css("top", (containerHeight - boardHeight) / 2);
-    }
-    else {
-      $("#board").css("top", 0);
-    }
+
   },
   
   setCurrentTool: function(tool) {
@@ -192,10 +192,10 @@ WebDoc.BoardController = $.klass({
     this.currentTool = tool;
     if (this.currentTool) {
       if (this.currentTool == WebDoc.application.arrowTool) {
-        $("#event_catcher").css("display", "none");
+        $("#event-catcher").css("display", "none");
       }
       else {
-        $("#event_catcher").css("display", "inline");
+        $("#event-catcher").css("display", "inline");
       }
       this.currentTool.selectTool();
     }
@@ -358,7 +358,7 @@ WebDoc.BoardController = $.klass({
           boardElement.css("filter", "progid:DXImageTransform.Microsoft.Matrix(M11='" + this.currentZoom + "',M21='0', M12='0', M22='" + this.currentZoom + "', sizingmethod='autoexpand')");
         }
     
-    this.centerBoard();
+//    this.centerBoard();
   },
   
   mouseDown: function(e) {
@@ -463,3 +463,6 @@ WebDoc.BoardController = $.klass({
   }
   
 });
+
+
+})();

@@ -44,8 +44,11 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
         {
             var xMove = this.originalMovingPos.x - e.screenX;
             var yMove = this.originalMovingPos.y - e.screenY;
-            $("#board_container").get(0).scrollTop = this.originalPos.y + yMove;
-			$("#board_container").get(0).scrollLeft = this.originalPos.x + xMove;
+            
+            $("#board_container")
+            .scrollTop( this.originalPos.y + yMove )
+            .scrollLeft( this.originalPos.x + xMove );
+            
             e.stopPropagation();
         }
     },

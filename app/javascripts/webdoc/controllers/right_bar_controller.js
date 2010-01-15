@@ -4,10 +4,24 @@
  */
 //= require <webdoc/controllers/page_inspector_controller>
 
+(function(undefined){
+
+// Default settings
+var boardPanel,
+    rightPanel,
+    rightPanelWidth = 350;
+
 WebDoc.RightBarController = $.klass({
   initialize: function() {
+    boardPanel = $("#board_container");
+    rightPanel = $("#right_bar");
+    
     this.visible = false;
-    this.domNode = $("#right_bar");    
+    this.domNode = rightPanel;
+    
+    // Store actual size of panel
+    panelWidth = rightPanel.outerWidth();
+    ddd('Width of right panel: '+panelWidth);
   },
   
   showLib: function() {
@@ -36,7 +50,7 @@ WebDoc.RightBarController = $.klass({
     this.showRightBar(function() {
       $("#item_inspector").hide();      
       $("#libraries").hide();
-      $("#page_inspector").show();      
+      //$("#page_inspector").show();      
     });
     $(".current_right_item").removeClass("current_right_item");
     $("#page_inspector_view").addClass("current_right_item");    
@@ -46,7 +60,7 @@ WebDoc.RightBarController = $.klass({
     ddd("show item inspector");
     
     this.showRightBar(function() {
-      $("#page_inspector").hide();      
+      //$("#page_inspector").hide();      
       $("#libraries").hide();
       $("#item_inspector").show();      
     });
@@ -61,21 +75,24 @@ WebDoc.RightBarController = $.klass({
   showRightBar: function(callBack) {
     if (!this.visible) {
       this.visible = true;
-      $("#right_bar").animate({
-        width: "350px"
-      }, function() {
-        WebDoc.application.boardController.centerBoard();
-        if (callBack) {
-          callBack.apply(this);
-        }
+      
+      rightPanel
+      .animate({
+          marginLeft: -panelWidth
+      }, {
+          step: function(val){
+              boardPanel.css({
+                  right: -val
+              });
+          },
+          complete: function() {
+              if (callBack) {
+                  callBack.apply(this);
+              }
+          }
       });
-        
-      if (!MTools.Browser.WebKit) {
-        $("#board_container").animate({
-          marginRight: "305px"
-        });
-      }      
     }
+    
     else {
       if (callBack) {
         callBack.apply(this);
@@ -86,19 +103,22 @@ WebDoc.RightBarController = $.klass({
   hideRightBar: function(callBack) {
     if (this.visible) {
       this.visible = false;
-      $("#right_bar").animate({
-        width: "0px"
-      }, function() {
-        WebDoc.application.boardController.centerBoard();
-        if (callBack) {
-          callBack.apply(this);
-        }
+      
+      rightPanel
+      .animate({
+          marginLeft: 0
+      }, {
+          step: function(val){
+              boardPanel.css({
+                  right: -val
+              });
+          },
+          complete: function() {
+              if (callBack) {
+                  callBack.apply(this);
+              }
+          }
       });
-      if (!MTools.Browser.WebKit) {
-        $("#board_container").animate({
-          marginRight: "0px"
-        });
-      }
     }
     else {
       if (callBack) {
@@ -119,3 +139,5 @@ WebDoc.RightBarController = $.klass({
 });
 
 $.extend(WebDoc.InspectorController, {});
+
+}());
