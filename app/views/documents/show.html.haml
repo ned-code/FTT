@@ -83,13 +83,24 @@
       %a{ :href => "", :title => "Show Item inspector", :style => "background-position: 0 0; background-image: url('/images/icons/info.png');" }                      
         Item
 
-#board_container.hide-scroll.board-panel.layer
+#board_container.hide-scroll.board-panel.panel
+  #screen.screen.layer
   #document_loading
     %img{ :src => "/images/icons/waiting_bar.gif"}
 
 #left_bar.left-panel.layer
-  %div.pages.inspector
-    %ul
+  #page_browser_left
+    #page_browser_container
+      %ul.page_browser_numbered_list
+      %ul#page_browser_items
+    #page_browser_control_bar
+      %ol
+        %li#addPage.action_button 
+          %img{ :src => "/images/icons/new.png", :alt => "Add page"}
+        %li#copyPage.action_button
+          %img{ :src => "/images/icons/duplicate.png", :alt => "Duplicate page"}
+        %li#removePage.action_button
+          %img{ :src => "/images/icons/delete_page.png", :alt => "Delete page"}
 
 #right_bar.right-panel.layer
   = render :partial => 'item_inspector'
@@ -108,4 +119,7 @@
     $("body").css("overflow", "hidden");
     var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
     editor.load("#{@document.uuid}");
+    
+    // Set up default panel behaviour (show screen, show footer etc.)
+    jQuery(".panel").panel();
   });   

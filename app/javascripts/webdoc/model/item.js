@@ -152,6 +152,14 @@ WebDoc.Item = $.klass(MTools.Record,
 
     }
   },
+
+  getInnerHtml: function() {
+    return this.data.data.innerHTML;
+  },
+
+  getInnerText: function() {
+    return this.removeHtmlTags(this.data.data.innerHTML);
+  },
   
   fireObjectChanged: function($super) {
     this.recomputeInternalSizeAndPosition();
@@ -193,6 +201,12 @@ WebDoc.Item = $.klass(MTools.Record,
       ddt();
       return {};
     }
+  },
+
+  removeHtmlTags: function(str) {
+    var regExp = /<\/?[^>]+>/gi;
+		str = str.replace(regExp,"");
+    return str;
   }
 });
 

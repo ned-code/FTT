@@ -86,25 +86,23 @@ WebDoc.PageEditor = $.klass({
     if (!pageId) {
       pageId = "1";
     }
-    var editor = WebDoc.application.pageEditor;
     ddd("load page id " + pageId);
-    var pageToLoad = editor.currentDocument.findPageWithUuidOrPosition(pageId);
+    var pageToLoad = this.currentDocument.findPageWithUuidOrPosition(pageId);
     ddd("found page");
     ddd(pageToLoad);
     if (pageToLoad) {
       this.currentPageId = pageId;
-      editor.loadPage(pageToLoad);
+      this.loadPage(pageToLoad);
     }
   },
 
   loadPage: function(page) {
     WebDoc.application.undoManager.clear();
-    var editor = WebDoc.application.pageEditor;
     ddd("set hash to current page position");
     window.location.hash = "#" + (page.uuid());
-    editor.currentPage = page;
+    this.currentPage = page;
     
-    WebDoc.application.boardController.setCurrentPage(editor.currentPage);
+    WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
 
   previousPage: function(e) {
@@ -145,6 +143,19 @@ WebDoc.PageEditor = $.klass({
       }
     }
   },
+
+	copyPage: function(e) {
+		var copiedPage = this.currentPage.copy();
+    copiedPage.setDocument(this.currentPage.getDocument());
+		var copiedPagePosition = this.currentDocument.positionOfPage(this.currentPage) - 1;
+    copiedPage.data.position = copiedPagePosition + 1;
+    //var importingMessage = $("<li>").html("importing...").addClass("page_thumb_importing");       
+    //droppedPageThumb.parent().after(importingMessage[0]);
+    copiedPage.save(function(newObject, status) {
+      this.currentDocument.addPage(copiedPage, true);
+      this.loadPage(copiedPage);
+    }.pBind(this));
+	},
   
   pageRemoved: function(page) {
     if (page == this.currentPage) {

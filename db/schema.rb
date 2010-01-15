@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091217100542) do
+ActiveRecord::Schema.define(:version => 20100107111130) do
 
   create_table "datastore_entries", :force => true do |t|
     t.string   "ds_key",                          :null => false
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(:version => 20091217100542) do
     t.text     "data",         :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "title",                         :default => "undefined"
   end
 
   add_index "pages", ["document_id"], :name => "index_pages_on_document_id"

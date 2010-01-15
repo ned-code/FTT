@@ -50,7 +50,7 @@ WebDoc.RightBarController = $.klass({
     this.showRightBar(function() {
       $("#item_inspector").hide();      
       $("#libraries").hide();
-      //$("#page_inspector").show();      
+      $("#page_inspector").show();      
     });
     $(".current_right_item").removeClass("current_right_item");
     $("#page_inspector_view").addClass("current_right_item");    
