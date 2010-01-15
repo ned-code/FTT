@@ -158,6 +158,19 @@ WebDoc.PageEditor = $.klass({
       }
     }
   },
+
+	copyPage: function(e) {
+		var copiedPage = this.currentPage.copy();
+    copiedPage.setDocument(this.currentPage.getDocument());
+		var copiedPagePosition = this.currentDocument.positionOfPage(this.currentPage) - 1;
+    copiedPage.data.position = copiedPagePosition + 1;
+    //var importingMessage = $("<li>").html("importing...").addClass("page_thumb_importing");       
+    //droppedPageThumb.parent().after(importingMessage[0]);
+    copiedPage.save(function(newObject, status) {
+      this.currentDocument.addPage(copiedPage, true);
+      this.loadPage(copiedPage);
+    }.pBind(this));
+	},
   
   pageRemoved: function(page) {
     if (page == this.currentPage) {

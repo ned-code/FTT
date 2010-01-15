@@ -480,6 +480,7 @@ a:hover { color: #0069BF;}
   margin-top:5px;
   border: solid 2px #ebebeb;
   padding: 2px;  
+  background-color: #fff;
 }
 
 .selected_thumb {
@@ -498,20 +499,92 @@ a:hover { color: #0069BF;}
 .widget_thumb {
   background-color: #aaf;
 }
-#page_browser ul {
+
+.page_browser_numbered_list {
+	float: left;
+}
+
+ul.page_browser_numbered_list {
+	margin: 0px -1px 0px 0px;
+	padding-left: 1px;
+	padding-top: 10px;
+}
+
+ul#page_browser_items {
+	padding-top: 10px;
+	margin-left: 15px;
+}
+
+ul.page_browser_numbered_list li {
+	height: 51px;
+}
+
+.page_browser_item {
+	width: 145px;
+	height: 50px;
+	background-color: #fff;
+	border: 1px solid #999;
+	margin-top: -1px;  
+}
+
+.page_browser_item_draggable_area {
+	width: 15px;
+	height: inherit;
+	background-color: #ddd;
+	float: left;
+}
+
+.page_browser_item_title {
+	width: 80px;
+	float:left;
+	padding: 3px 5px;
+}
+
+.page_browser_item_title_edition {
+	width: 80px;
+	float: left;
+	padding: 3px 5px;
+}
+
+.page_browser_item_information {
+	width: 15px;
+	height: inherit;
+	background: url(../images/icons/logo_info.png) no-repeat;
+	float: right;
+}
+
+.page_browser_item_selected {
+	background-color: #F4D2EB;
+}
+
+.page_browser_item_highlighted {
+	border: 1px solid #F4D2EB;
+}
+
+.page_browser_item_title_default {
+	font-style: italic;
+  color: #555;
+}
+
+/*#page_browser ul {
   position:relative;
   overflow:hidden;  
   width:100%;
   z-index:1000000;
 }
 #page_browser ul li {
-  height:110px;
+	height: 30px; 
   margin:auto;
   overflow:hidden;
-  width:150px;    
+  width:150px;  
+}*/
+
+#page_browser_container ul {
+	list-style-type: none;
 }
+
 #page_browser .page_insert_line {
-  height:2px;;
+  height:2px;
   width:150px;
   background-color:black;
 }
@@ -522,6 +595,19 @@ a:hover { color: #0069BF;}
   text-align:center;
   top:50px;
 }
+
+#page_browser_control_bar {
+	margin-top: 20px;
+	width: 90%;
+	border: 1px solid #999;
+	background-color: #ddd;
+	padding: 3px 5px;
+}
+
+#page_browser_control_bar ol li {
+	display: inline;
+}
+
 /*******************/
 /* = board part = */
 #document_loading {

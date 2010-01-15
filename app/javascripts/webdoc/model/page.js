@@ -1,6 +1,7 @@
 
 //= require <mtools/record>
 //= require <webdoc/model/item>
+//= require <webdoc/utils/inspector_fields_validator>
 
 WebDoc.Page = $.klass(MTools.Record, 
 { 
@@ -38,6 +39,70 @@ WebDoc.Page = $.klass(MTools.Record,
   applyCss: function(newCss) {   
     if (newCss != this.data.data.css) {
       this.data.data.css = newCss;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+
+  setTitle: function(title) {
+    if(this.data.title != title) {
+      this.data.title = title;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+  
+  setHeight: function(height) {
+    WebDoc.InspectorFieldsValidator.validatePixelSize(height);
+    if(this.data.data.css.height != height) {
+      this.data.data.css.height = height;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+  
+  setWidth: function(width) {
+    WebDoc.InspectorFieldsValidator.validatePixelSize(width);
+    if(this.data.data.css.width != width) {
+      this.data.data.css.width = width;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+
+  setBackgroundColor: function(backgroundColor) {
+    WebDoc.InspectorFieldsValidator.validateColor(backgroundColor);
+    if(this.data.data.css.backgroundColor != backgroundColor) {
+      this.data.data.css.backgroundColor = backgroundColor;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+  
+  setBackgroundImage: function(backgroundUrl) {
+    WebDoc.InspectorFieldsValidator.validateBackgroundUrl(backgroundUrl);
+    if(this.data.data.css.backgroundImage != backgroundUrl) {
+      this.data.data.css.backgroundImage = backgroundUrl;
+			// var newCss = null;
+			//       try {
+			//         eval("newCss=" + $.toJSON(this.data.data.css));
+			//       }
+			//       catch(ex) {
+			//         ddd("Invalid css");
+			//         //$("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
+			//       }
+			//       if (newCss) {
+			//       this.applyCss(newCss);
+			//       }
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+
+  setBackgroundRepeatMode: function(repeatMode) {
+    WebDoc.InspectorFieldsValidator.validateBackgroundRepeat(repeatMode);
+    if(this.data.data.css.backgroundRepeat != repeatMode) {
+      this.data.data.css.backgroundRepeat = repeatMode;
       this.fireObjectChanged();
       this.save();
     }
@@ -175,6 +240,24 @@ WebDoc.Page = $.klass(MTools.Record,
       ddd("page without document !!!!!!!!!!!!!!!!!!!");
       ddt();
       return {};
+    }
+  },
+
+  nbTextItems: function() {
+	  var result = 0;
+    for (var i = 0; i < this.items.length; i++) {
+      if(this.items[i].type() == "text") {
+        result++;
+      }
+    }
+    return result;
+  },
+
+  getFirstTextItem: function() {
+    for (var i = 0; i < this.items.length; i++) {
+      if(this.items[i].type() == "text") {
+        return this.items[i];
+      }
     }
   }
 });

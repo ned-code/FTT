@@ -7,8 +7,6 @@
     %li#addPage.tb_button.action_button.preview_hidden>
       %a{ :href => "#" , :title =>"Add a page"}
         %img{ :src => "/images/icons/add_page.png", :alt =>"Add a page"}
-    %li#removePage.tb_button.action_button.preview_hidden>
-      %a{ :href => "#" , :title => "Remove this page"}
     %li#page_browser.tb_button.action_button>
       %a{ :href => "" , :title => "Open page browser"}
     %li#previousPage.tb_button.action_button>
@@ -73,8 +71,18 @@
         %img{ :src => "/images/icons/info.png", :alt => "Show Item inspector"}                        
 #content{ :style => "display:none"}
   #left_bar
-    #page_browser 
-      %ul 
+    #page_browser
+      #page_browser_container
+        %ul.page_browser_numbered_list
+        %ul#page_browser_items
+      #page_browser_control_bar
+        %ol
+          %li#addPage.action_button 
+            %img{ :src => "/images/icons/new.png", :alt => "Add page"}
+          %li#copyPage.action_button
+            %img{ :src => "/images/icons/duplicate.png", :alt => "Duplicate page"}
+          %li#removePage.action_button
+            %img{ :src => "/images/icons/delete_page.png", :alt => "Delete page"}
   #right_bar{ :style => "display:none"}
     = render :partial => 'item_inspector'
     = render :partial => 'library'
