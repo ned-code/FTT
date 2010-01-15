@@ -74,6 +74,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   
   mouseOver: function(e) {
     var target = $(e.target);
+    $(".item_layer").css("opacity", 0);
     if (target.hasClass("item_layer") && !this.disableHiLight) {
       target.stop().animate({ opacity: 0.8}, { duration: 100});
     }
