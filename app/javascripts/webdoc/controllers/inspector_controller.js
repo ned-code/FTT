@@ -61,10 +61,7 @@ WebDoc.InspectorController = $.klass({
   }, 
   
   selectInspector: function(inspectorId) {
-    WebDoc.application.rightBarController.showInspectors(function() {
-        ddd("select inspector " + inspectorId);
-        $("#inspectors").accordion("activate", inspectorId);        
-      });
+    $("#inspectors").accordion("activate", inspectorId);        
   },
   
   selectPalette: function(paletteId) {
@@ -94,14 +91,7 @@ WebDoc.InspectorController = $.klass({
   
   selectionChanged: function() {
     ddd("selected item ", WebDoc.application.boardController.selection);
-    if (WebDoc.application.boardController.selection.length > 0) {
-
-      if (this.currentInspectorId < 1) {
-        this.selectInspector(this.lastInspectorId);
-      }  
-      else {
-        WebDoc.application.rightBarController.showInspectors();
-      }               
+    if (WebDoc.application.boardController.selection.length > 0) {             
       this.updatePalette(WebDoc.application.boardController.selection[0].inspectorId());
     }
     else {

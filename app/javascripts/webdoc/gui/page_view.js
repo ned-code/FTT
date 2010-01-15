@@ -59,7 +59,8 @@ WebDoc.PageView = $.klass({
     }
     
     this.domNode.append(this.itemDomNode.get(0));
-    this.domNode.append($("<div id=\"event_catcher\"/>"));
+    // tmp remove event catcher
+    this.domNode.append($("<div id=\"event_catcher\"/>").css("display", "none"));
     this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
     this.drawingDomNode.css("zIndex", 999999);
     this.domNode.append(this.drawingDomNode.get(0));    

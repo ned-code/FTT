@@ -22,7 +22,7 @@ WebDoc.SvgRenderer = $.klass(
     if (!height) {
       height = "100%";
     }
-    surface.setAttribute("style", "pointer-events:visibleStroke; position: absolute; top:0x; left:0px; width:" + width + "; height:" + height);
+    surface.setAttribute("style", "pointer-events:none; position: absolute; top:0x; left:0px; width:" + width + "; height:" + height);
     var defs = document.createElementNS(this.svgNS, "defs");
     var marker = document.createElementNS(this.svgNS, "marker");
     marker.setAttribute("id", "myMarker");
@@ -73,6 +73,8 @@ WebDoc.SvgRenderer = $.klass(
     result.setAttribute("stroke", item.data.data.stroke);
     result.setAttribute("stroke-width", item.data.data.strokeWidth);
     result.setAttribute("transform", item.data.data.transform);
+    result.setAttribute("style", "pointer-events:stroke");
+    
     if (item.data.data.points) {
       result.setAttribute("points", item.data.data.points);
     }

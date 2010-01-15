@@ -588,9 +588,17 @@ a:hover { color: #0069BF;}
 }
 .item {
   overflow:hidden;
-  position:absolute;
   border: solid 1px #888888;
 }
+.item_layer {
+  z-index:5000;  
+}
+
+.item_wrap {
+  overflow:hidden;
+  position:absolute;
+}
+
 .load_item {
   overflow:hidden;
   position:absolute;

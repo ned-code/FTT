@@ -191,13 +191,11 @@ WebDoc.BoardController = $.klass({
     ddd(tool);
     this.currentTool = tool;
     if (this.currentTool) {
-      if (this.isInteraction) {
-        if (this.currentTool == WebDoc.application.arrowTool) {
-          $("#event_catcher").css("display", "none");
-        }
-        else {
-          $("#event_catcher").css("display", "inline");
-        }
+      if (this.currentTool == WebDoc.application.arrowTool) {
+        $("#event_catcher").css("display", "none");
+      }
+      else {
+        $("#event_catcher").css("display", "inline");
       }
       this.currentTool.selectTool();
     }

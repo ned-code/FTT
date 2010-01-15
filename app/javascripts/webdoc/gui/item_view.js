@@ -16,9 +16,21 @@ WebDoc.ItemView = $.klass({
     }
     
     this.item = item;
-    this.domNode = this.createDomNode();
+    // item wrapper    
+    this.domNode = $("<div/>").addClass("item_wrap"); 
+
+    this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css("overflow", "hidden");
+    this.itemLayerDomNode = $("<div>").addClass("layer").addClass("screen").addClass("item_layer");
+    this.domNode.append(this.itemDomNode);
+    this.domNode.append(this.itemLayerDomNode);
+    
+    this.domNode.id(this.item.uuid());
+    this.domNode.data("itemView", this);
     
     item.addListener(this);
+    
+    this.pageView.itemDomNode.append(this.domNode);
+    this.domNode.css(this.item.data.data.css);
   },
   
   createDomNode: function() {
@@ -31,12 +43,10 @@ WebDoc.ItemView = $.klass({
       itemNode = $('<' + this.item.data.data.tag + '/>');
       for (var key in this.item.data.data) {
         switch(key) {
-          case "css":
-            itemNode.css(this.item.data.data.css);
-            break; 
           case "innerHtml":
             itemNode.html(this.item.data.data[key]);
             break;
+          case "css":            
           case "preference":
           case "properties":
             break;
@@ -45,12 +55,6 @@ WebDoc.ItemView = $.klass({
         }
       }
     }
-    this.selectionNode = $("<div/>").addClass("drag_handle");
-    this.resizeNode = $("<div/>").addClass("resize_handle");
-    itemNode.attr("id", this.item.uuid());
-    
-    this.pageView.itemDomNode.append(itemNode.get(0));
-    itemNode.addClass("item");
     return itemNode;
   },
   
@@ -59,10 +63,6 @@ WebDoc.ItemView = $.klass({
   },
   
   remove: function() {
-    if (this.isSelected()) {
-      this.selectionNode.remove();
-      this.resizeNode.remove();
-    }
     this.domNode.remove();
   },
   
@@ -97,37 +97,26 @@ WebDoc.ItemView = $.klass({
   
   objectChanged: function(item) {
     this.domNode.animate(item.data.data.css, 'fast');
-    this.resetHandles();
   },
-  
-  resetHandles: function() {
-    var handleCss = {
-      top: this.item.data.data.css.top,
-      left: this.item.data.data.css.left,
-      width: (this.item.size.width - 7) + "px",
-      height: (this.item.size.height - 7) + "px"
-    };
-    this.selectionNode.css(handleCss);
-    this.resizeNode.css(handleCss);
-  },
+ 
   
   innerHtmlChanged: function() {
     if (!WebDoc.application.pageEditor.disableHtml) {    
-      this.domNode.html(this.item.data.data.innerHTML);
+      this.itemDomNode.html(this.item.data.data.innerHTML);
     }
   },
   
   domNodeChangedChanged: function() {
     if (!WebDoc.application.pageEditor.disableHtml) {
       this.unSelect();
-      this.domNode.remove();
-      this.domNode = this.createDomNode();
+      this.itemDomNode.remove();
+      this.itemDomNode = this.createDomNode();
       this.select();
     }
   },  
   
   isSelected: function() {
-    return this.selectionNode.parent().length > 0;
+    return this.itemLayerDomNode.hasClass("item_selected");
   },
   
   select: function() {
@@ -137,13 +126,9 @@ WebDoc.ItemView = $.klass({
     }
     if (!this.isSelected()) {
       ddd("ItemView: select item " + this.item.uuid());
-      this.domNode.addClass("item_selected");
-      WebDoc.application.boardController.pageView.itemDomNode.append(this.selectionNode.get(0));
-      WebDoc.application.boardController.pageView.itemDomNode.append(this.resizeNode.get(0));
-      
-      this.resetHandles();
+      this.itemLayerDomNode.addClass("item_selected");
 
-      this.selectionNode.draggable({
+      this.domNode.draggable({
         containment: "parent",
         cursor: 'move',
         distance: 5,
@@ -168,15 +153,7 @@ WebDoc.ItemView = $.klass({
           this.item.moveTo(ui.position);
           this.item.save();
         }.pBind(this)
-      });
-      
-      if (lastSelectedObjectMouseDownEvent) {
-        // board must ignore this event. It is just for draggable elemnt
-        lastSelectedObjectMouseDownEvent.boardIgnore = true;
-        this.selectionNode.trigger(lastSelectedObjectMouseDownEvent);
-      }
-      
-      this.resizeNode.resizable({
+      }).resizable({
         handles: 's, e, se',
         start: function(e, ui) {
           this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
@@ -191,14 +168,14 @@ WebDoc.ItemView = $.klass({
           var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
           var newWidth = ui.originalSize.width + (mappedPoint.x - this.resizeOrigin.x);
           var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y);
-					if(e.shiftKey){
-						// Must maintain image ratio on resize
-						var imgRatio=this.item.size.width/this.item.size.height;
-						ui.size.width = imgRatio*newHeight;
-					}
-					else {
-						ui.size.width = newWidth;
-					}
+          if(e.shiftKey){
+            // Must maintain image ratio on resize
+            var imgRatio=this.item.size.width/this.item.size.height;
+            ui.size.width = imgRatio*newHeight;
+          }
+          else {
+            ui.size.width = newWidth;
+          }
           ui.size.height =newHeight;
 
           this._resizeTo(ui.size);
@@ -208,13 +185,21 @@ WebDoc.ItemView = $.klass({
           this.item.save();
         }.pBind(this)
       });
+      
+      if (lastSelectedObjectMouseDownEvent) {
+        // board must ignore this event. It is just for draggable elemnt
+        lastSelectedObjectMouseDownEvent.boardIgnore = true;
+        this.domNode.trigger(lastSelectedObjectMouseDownEvent);
+      }
+      
+      
     }
   },
   
   unSelect: function() {
-    this.domNode.removeClass("item_selected");
-    this.selectionNode.remove();
-    this.resizeNode.remove();
+    this.itemLayerDomNode.removeClass("item_selected");
+    this.domNode.draggable( 'destroy' );
+    this.domNode.resizable( 'destroy' );
   },
   
   edit: function() {
@@ -233,7 +218,6 @@ WebDoc.ItemView = $.klass({
       top: this.item.data.data.css.top,
       left: this.item.data.data.css.left
     });
-    this.resetHandles();
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
   
@@ -246,7 +230,6 @@ WebDoc.ItemView = $.klass({
       width: this.item.data.data.css.width,
       height: this.item.data.data.css.height
     });
-    this.resetHandles();
     WebDoc.application.inspectorController.refreshSubInspectors();
   }
 });
