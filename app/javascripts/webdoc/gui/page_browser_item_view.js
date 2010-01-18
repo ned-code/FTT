@@ -40,6 +40,7 @@ WebDoc.PageBrowserItemView = $.klass({
 				href: "#",
 				innerHTML: "cancel"
 			}).addClass('page_title_cancelButton'));
+			this.titleEditionNode.hide();
 		
 			this.titleContainerNode.append(this.titleStaticNode);
 			this.titleContainerNode.append(this.titleEditionNode);
@@ -104,12 +105,12 @@ WebDoc.PageBrowserItemView = $.klass({
   },
 
   addToBrowser: function() {
-    var currentSelectedItem = $('.page_browser_item.selected').parent();
+    var currentSelectedItem = $('.page_browser_item.page_browser_item_selected').parent();
     var newBrowserItem = $("<li>").html(this.domNode);
     currentSelectedItem.after(newBrowserItem);
 
     // Add item to numbered list as well
-    $('ul.page_browser_numbered_list').append($('<li>').html($('.left > li').length+1));
+    $('ul.page_browser_numbered_list').append($('<li>').html($('ul.page_browser_numbered_list > li').length+1));
   },
 
   // Iterates through the page items and if contains a text item, takes it as page title

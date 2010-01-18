@@ -89,24 +89,25 @@ jQuery.extend({
     // Eg:
     //
     // .bind('click', {'selector': fn}, jQuery.delegate)
-    delegate: function(e) {
-        var list = e.data,
-            target = jQuery(e.target),
-            data = target.data("closest") || {},
-            closest, node, result;
-        
-        for (var selector in list) {
-            node = data[selector];
+    delegate: function(list){
+        return function(e){
+            var target = jQuery(e.target),
+                data = target.data("closest") || {},
+                closest, node, result;
             
-            if ( node === undefined ) {
-                closest = target.closest( selector, this );
-                node = data[selector] = ( closest.length ) ? closest[0] : false ;
-                target.data("closest", data);
+            for (var selector in list) {
+                node = data[selector];
+                
+                if ( node === undefined ) {
+                    closest = target.closest( selector, this );
+                    node = data[selector] = ( closest.length ) ? closest[0] : false ;
+                    target.data("closest", data);
+                }
+                
+                if ( node ) result = list[selector].call(node, e);
             }
             
-            if ( node ) result = list[selector].call(node, e);
+            return result;
         }
-        
-        return result;
     }
 });

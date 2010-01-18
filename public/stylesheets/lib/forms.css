@@ -28,6 +28,7 @@ input[type=text], input[type=password],
 input.text, input.title,
 textarea, select {
   margin:0.5em 0;
+  background: green;
 }
 
 input.text,
@@ -57,3 +58,71 @@ form.inline p { margin-bottom:0; }
 .notice a   { color: #514721; }
 .success a  { color: #264409; }
 
+
+/* Fieldsets */
+.properties {
+    background: #efefef;
+    padding: 0.5em;
+    border: none;
+    border-bottom: 1px solid #cccccc;
+}
+.properties:last-child {
+    border: none;
+}
+.properties div {
+    clear: both;
+    margin-bottom: 0.2em;
+    min-height: 1.6em;
+    /*font-size: 12px;*/
+    /* form divs also have clearfix applied */
+    padding-left: 50%;
+}
+
+.properties label,
+.properties .label,
+.properties input {
+    float: left;
+    line-height: 1.2em;
+    height: 1.2em;
+    font-size: 12px;
+    padding: 0.1em 0.5em;
+    margin: 0;
+    text-transform: lowercase;
+}
+
+.properties label,
+.properties .label {
+    color: rgba(0, 0, 0, 0.70);
+    text-transform: lowercase;
+    text-align: right;
+    margin-right: 1%;
+    padding-left: 0;
+    padding-right: 0;
+    white-space: nowrap;
+    
+    margin-left: -50%;
+}
+.properties label {
+    min-width: 40%;
+}
+
+.properties input {
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
+    background: white;
+    width: 5em;
+    font-family: Courier, monospace;
+}
+
+.properties input[type=checkbox] {
+    width: auto;
+}
+.properties input[type=radio] {
+    width: auto;
+    margin-right: 1%;
+}
+.properties .label {
+    margin-top: 1px;
+}

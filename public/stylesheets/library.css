@@ -2,10 +2,6 @@
 /* ============================ */
 /* = jQTouch-simplified style = */
 /* ============================ */
-* {
-  margin: 0;
-  padding: 0;
-}
 
 #libraries {
   -webkit-transform-style: preserve-3d; /*important for proper slide in (back) animation on webkit!*/

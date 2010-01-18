@@ -62,10 +62,10 @@ jQuery(function(){
     // test jQuery.support.textareaMarginBottom
     jQuery('#textareaMarginBottom').html(jQuery.support.textareaMarginBottom + 'px');
     // test delegate helper function
-    jQuery("#delegate").bind('click', {
+    jQuery("#delegate").bind('click', jQuery.delegate({
         '.one': function(e){ alert('You clicked one.'); return false; },
         '.two': function(e){ alert('You clicked two.'); return false; }
-    }, jQuery.delegate);
+    }));
 });
 
 </script>

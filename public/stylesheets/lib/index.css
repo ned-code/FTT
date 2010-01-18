@@ -168,17 +168,17 @@
     min-width: 28px;
 }
 .icons-only.tools a {
-    border: 1px solid #efefef;
-    border-radius: 6px;
+    border: 1px solid #bbbbbb;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 4px;
+    border-radius: 5px;
     width: 28px;
 }
 
 .tools a:hover,
 .tools .current_tool a{
     display: block;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 1px solid #e6e6e6;
+    border: 1px solid #e18f00;
     background-color: #fff;
 }
 
@@ -233,6 +233,7 @@
 #page_browser.toggle_on_panel a{
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+  border-radius: 5px;
   background-color: #6F6F6F;
   background-position: -23px 1px;
 }

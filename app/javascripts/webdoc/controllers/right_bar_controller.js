@@ -76,14 +76,11 @@ WebDoc.RightBarController = $.klass({
     if (!this.visible) {
       this.visible = true;
       
-      rightPanel
-      .animate({
+      rightPanel.animate({
           marginLeft: -panelWidth
       }, {
           step: function(val){
-              boardPanel.css({
-                  right: -val
-              });
+              boardPanel.css({ right: -val });
           },
           complete: function() {
               if (callBack) {
@@ -104,14 +101,11 @@ WebDoc.RightBarController = $.klass({
     if (this.visible) {
       this.visible = false;
       
-      rightPanel
-      .animate({
+      rightPanel.animate({
           marginLeft: 0
       }, {
           step: function(val){
-              boardPanel.css({
-                  right: -val
-              });
+              boardPanel.css({ right: -val });
           },
           complete: function() {
               if (callBack) {
