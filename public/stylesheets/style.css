@@ -488,16 +488,9 @@ ul.page_browser_numbered_list li {
   top:50px;
 }
 
-#page_browser_control_bar {
-	margin-top: 20px;
-	width: 90%;
-	border: 1px solid #999;
-	background-color: #ddd;
-	padding: 3px 5px;
-}
-
-#page_browser_control_bar ol li {
-	display: inline;
+#page_browser_control_bar ul {
+    background: #ddd;
+    border-top: 2px solid #7d7d7d;
 }
 
 /*******************/

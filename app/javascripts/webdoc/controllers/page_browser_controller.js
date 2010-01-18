@@ -27,7 +27,8 @@ WebDoc.PageBrowserController = $.klass({
     this.visible = false;
     this.pageThumbs = [];
     this.pageMap = {}; 
-		try {
+
+    try {
       $("#page_browser_control_bar").click(this.performAction.pBind(this));
     }
     catch (ex) {
@@ -35,7 +36,7 @@ WebDoc.PageBrowserController = $.klass({
     }   
   },
 
-	performAction: function(e) {
+  performAction: function(e) {
     e.preventDefault();
     clickedButton = $(e.target).closest(".action_button");
     try {
@@ -53,17 +54,17 @@ WebDoc.PageBrowserController = $.klass({
     }    
   },
 
-	addPage: function(e) {
-		WebDoc.application.pageEditor.addPage(e);
-	},
-	
-	copyPage: function(e) {
-		WebDoc.application.pageEditor.copyPage(e);
-	},
-	
-	removePage: function(e) {
-		WebDoc.application.pageEditor.removePage(e);
-	},
+  addPage: function(e) {
+      WebDoc.application.pageEditor.addPage(e);
+  },
+  
+  copyPage: function(e) {
+      WebDoc.application.pageEditor.copyPage(e);
+  },
+  
+  removePage: function(e) {
+      WebDoc.application.pageEditor.removePage(e);
+  },
   
   setDocument: function(document) {
     this.document = document;    
@@ -127,8 +128,9 @@ WebDoc.PageBrowserController = $.klass({
 
   bindPageBrowserItemsEvents: function() {
     this.unbindPageBrowserItemsEvents();
-    $('.page_browser_item').bind('click', this.selectCurrentPage.pBind(this));
-    $('.page_browser_item').bind('mouseover', this.changeCurrentHighlightedItem.pBind(this));
+    $('.page_browser_item')
+    .bind('click', this.selectCurrentPage.pBind(this))
+    .bind('mouseover', this.changeCurrentHighlightedItem.pBind(this));
     $('.page_browser_item_information').bind('click', this.showPageInspector);
     $('.page_browser_item_title').dblclick(this.staticPanelAction.pBind(this));
     $('.page_browser_item_title_edition').dblclick(this.editPanelAction.pBind(this));
@@ -138,15 +140,15 @@ WebDoc.PageBrowserController = $.klass({
   },
 
   unbindPageBrowserItemsEvents: function() {
-    $('.page_browser_item').unbind('click');
-    $('.page_browser_item').unbind('mouseover');
+    $('.page_browser_item')
+    .unbind('click')
+    .unbind('mouseover');
     $('.page_browser_item_information').unbind('click');
     $('.page_browser_item_title').unbind('dblclick');
     $('.page_browser_item_title_edition').unbind('dblclick');
     $('.page_title_cancelButton').unbind('click');
     $('.page_title_saveButton').unbind('click');
     $('.page_title_textbox').unbind('keydown');
-    
   },
   
   deletePageThumbs: function() {
@@ -282,15 +284,12 @@ WebDoc.PageBrowserController = $.klass({
    showEditPanel: function(target) {
 	   var textBox = $(target).next().children()[0];
      textBox.value = $(target).closest('.page_browser_item_title').text();
-     $(target).closest('.page_browser_item_title').hide();
-     $(target).closest('.page_browser_item_title').next().show();
-     textBox.focus();
-     textBox.select();
+     $(target).closest('.page_browser_item_title').hide().next().show();
+     textBox.focus().select();
    },
 
    showStaticPanel: function(target) {
-     $(target).closest('.page_browser_item_title_edition').hide();
-     $(target).closest('.page_browser_item_title_edition').prev().show();
+     $(target).closest('.page_browser_item_title_edition').hide().prev().show();
    },
 
    removeById: function(arrayName,arrayElementId) {
