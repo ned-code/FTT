@@ -21,16 +21,14 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   edit: function($super) { //called if we clicked on an already selected textbox
     $super();
     WebDoc.application.textTool.enterEditMode(this);
-    this.domNode.addClass("item_edited");
-    WebDoc.application.inspectorController.selectPalette(1);
   },
   
   isEditing: function() {
     return this.domNode.closest("." + WebDoc.TEXTBOX_WRAP_CLASS).length > 0;
   },
   
-  stopEditing: function() {
-    this.domNode.removeClass("item_edited");
+  stopEditing: function($super) {
+    $super();
     WebDoc.application.textTool.exitEditMode();
   },
   

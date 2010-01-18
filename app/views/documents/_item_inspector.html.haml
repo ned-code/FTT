@@ -101,7 +101,11 @@
               %img{ :src => "/images/icons/largePen.png", :alt =>"Large"}                                       
       #palette_empty.palette
         %center Empty   
-      %iframe#palette_widget.palette          
+      %iframe#palette_widget.palette 
+      #palette_image.palette     
+        #image_properties.properties_line
+          %label.properties_label Image URL
+          %input#property_src.properties_input    
     %h3
       %a{ :href => "" } Properties
     #properties_inspector.inspector

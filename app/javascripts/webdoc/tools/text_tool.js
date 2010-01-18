@@ -75,7 +75,6 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
 
     this.textView = textView;
     this.delegate.enterEditMode(textView.itemDomNode);
-    WebDoc.application.rightBarController.showItemInspector();    
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
   },
   

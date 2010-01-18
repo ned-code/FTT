@@ -6,5 +6,9 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     var imageNode = $super();
     imageNode.css({width:"100%", height:"100%"});
     return imageNode;
+  },
+  
+  inspectorId: function() {
+    return 4;
   }
 });

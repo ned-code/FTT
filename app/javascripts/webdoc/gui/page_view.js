@@ -7,8 +7,9 @@ WebDoc.PageView = $.klass({
     var boardContainer = $('#board_container'),
         externalPage,
         domNode = $('<div>').id('board'),
-        itemDomNode = $('<div/>').id('items'),
+        itemDomNode = $('<div/>').id('items').addClass("layer"),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
+        boardScreenNode = $("<div/>").addClass("screen layer"),
         that = this;
     
     // Extend this
@@ -70,8 +71,8 @@ WebDoc.PageView = $.klass({
         ddd('Page is a webdoc page');
     }
     
-    this.domNode.append( itemDomNode.addClass('layer') );
-    
+    this.domNode.append( itemDomNode );
+    this.domNode.append( boardScreenNode );
     if (page.items && $.isArray(page.items)) {
         $.each(page.items, function() {
             that.createItemView(this);
