@@ -239,6 +239,7 @@ WebDoc.BoardController = $.klass({
     // exit edit mode for current editing item
     if (this.editingItem) {
       this.editingItem.stopEditing();
+      WebDoc.application.arrowTool.enableHilight();
       jQuery('#board_container').trigger('hide-screen');
       this.editingItem = null;
     }
@@ -302,6 +303,7 @@ WebDoc.BoardController = $.klass({
     if (itemViewToEdit.canEdit()) { 
       this.editingItem = itemViewToEdit;  
       itemViewToEdit.edit();          
+      WebDoc.application.arrowTool.disableHilight();
       jQuery('#board_container').trigger('show-screen');     
     }
   },
