@@ -87,23 +87,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   canEdit: function() {
     return true;
   },
-    
-  edit: function($super) {
-    if (this.item.data.media_id != null) {
-      $super();
-      this.domNode.addClass("item_edited");
-      this.itemDomNode.css({
-        zIndex: "1000005"
-      });
-    }
-  },
-  
-  stopEditing: function() {
-    this.domNode.removeClass("item_edited");
-    this.itemDomNode.css({
-      zIndex: "0"
-    });
-  },
   
   widgetChanged: function() {
     ddd("update widget state");

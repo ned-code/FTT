@@ -4,6 +4,7 @@
 //= require <webdoc/model/image>
 //= require <webdoc/controllers/inspectors/properties_inspector_controller>
 //= require <webdoc/controllers/inspectors/inner_html_controller>
+//= require <webdoc/controllers/inspectors/image_palette_controller>
 //= require <webdoc/sdk/widget_api>
 
 WebDoc.InspectorController = $.klass({
@@ -14,6 +15,8 @@ WebDoc.InspectorController = $.klass({
     var emptyPalette = $("#palette_empty").hide();
     var textPalette = $("#palette_text").hide();
     var penPelette = $("#palette_pen").hide();
+    var imagePelette = $("#palette_image").hide();
+    this.imagePaletteController = new WebDoc.ImagePaletteController();    
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
       ddd("must inject uniboard api in inspector");
@@ -32,14 +35,15 @@ WebDoc.InspectorController = $.klass({
         }
       }                      
     }.pBind(this));
-    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette];
+    
+    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette, imagePelette];
     this.updatePalette(0);
     this.subInspectors = [];
     var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
     this.subInspectors.push(propertiesInspectorController);   
     var innerHtmlController = new WebDoc.InnerHtmlController();
-    this.subInspectors.push(innerHtmlController);        
-       
+    this.subInspectors.push(innerHtmlController);            
+
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
     var htmlInspector = $("#html_inspector"); 
@@ -86,6 +90,9 @@ WebDoc.InspectorController = $.klass({
         this.palettes[paletteId].show();
         this.currentPaletteId = paletteId;        
       }
+    }
+    if (paletteId == 4) {
+      this.imagePaletteController.refresh();
     }
   },
   

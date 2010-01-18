@@ -301,8 +301,8 @@ WebDoc.BoardController = $.klass({
   editItemView: function(itemViewToEdit) {
     if (itemViewToEdit.canEdit()) { 
       this.editingItem = itemViewToEdit;  
-      jQuery('#board_container').trigger('show-screen');    
-      itemViewToEdit.edit();
+      itemViewToEdit.edit();          
+      jQuery('#board_container').trigger('show-screen');     
     }
   },
   

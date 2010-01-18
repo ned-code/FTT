@@ -128,7 +128,8 @@ WebDoc.TextToolView = $.klass({
       fontSize: $(this.textBox).css("fontSize"),
       fontFamily: $(this.textBox).css("fontFamily"),
       fontStyle: $(this.textBox).css("fontStyle"),
-      color: $(this.textBox).css("color")
+      color: $(this.textBox).css("color"),
+      backgroundColor: $(this.textBox).css("backgroundColor")
     });
     
     //$(this.doc.body).css();

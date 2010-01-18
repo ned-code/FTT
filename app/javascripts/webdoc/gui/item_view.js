@@ -112,6 +112,7 @@ WebDoc.ItemView = $.klass({
       this.unSelect();
       this.itemDomNode.remove();
       this.itemDomNode = this.createDomNode();
+      this.domNode.append(this.itemDomNode);
       this.select();
     }
   },  
@@ -210,9 +211,18 @@ WebDoc.ItemView = $.klass({
   },
   
   edit: function() {
-    //by default item views are not editable (if your item is editable override this method in the subclass)    
+    //by default item views are not editable (if your item is editable override this method in the subclass) 
+    this.domNode.addClass("item-edited");
+    this.itemLayerDomNode.hide();
+    WebDoc.application.rightBarController.showItemInspector();    
+    WebDoc.application.inspectorController.selectPalette(this.inspectorId());
   },
   
+  stopEditing: function() {
+    this.domNode.removeClass("item-edited");
+    this.itemLayerDomNode.show();
+  },
+    
   createSelectedFrame: function() {
   },
   
