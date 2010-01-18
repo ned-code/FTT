@@ -88,8 +88,11 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           ddd("add_image_to_page_action");
           break;
           
-        case "set_image_as_bg_action":
-          ddd("set_image_as_bg_action");
+        case "set_image_as_bg_action": 
+          var page = WebDoc.application.pageEditor.currentPage;
+          var imgUrl = this.detailsView.find('.single_image a img').attr("src");
+          page.setBackgroundImageAndRepeatMode("url("+imgUrl+")", "none");
+          WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
           break;
           
         case "delete_image_action": //delete an uploaded image from My Images

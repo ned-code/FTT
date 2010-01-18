@@ -82,14 +82,6 @@ WebDoc.PageBrowserController = $.klass({
                   left: pagesPanelWidth + val
               });
           },
-          complete: function() {
-                  this.deletePageThumbs(); 
-                  
-                  pagesPanel.unbind().find("ul").empty();
-                  
-                  ddd("browser", $("#page_browser_left"));
-                  $("#page_browser_left").removeClass("toggle_on_panel"); 
-              }.pBind(this)
       });
     }
     else {
@@ -106,45 +98,55 @@ WebDoc.PageBrowserController = $.klass({
           },
       });
             
-      $("#page_browser_left").addClass("toggle_on_panel");
-      this.refreshPages();      
+      $("#page_browser_left").addClass("toggle_on_panel");     
     }
     this.visible = !this.visible;
   },
-  
-  refreshPages: function() {   
-    ddd("refresh all pages");
-		this.domNode.find("ul.page_browser_numbered_list").empty();
-    this.domNode.find("ul#page_browser_items").empty(); 
-    this.deletePageThumbs();
+
+  initializePageBrowser: function() {
     for (var i = 0; i < this.document.pages.length; i++) {
       var aPage = this.document.pages[i];
-			var pageThumb = new WebDoc.PageBrowserItemView(aPage);
+      var pageThumb = new WebDoc.PageBrowserItemView(aPage);
       var pageListItem = $("<li>").html(pageThumb.domNode);
-			var pageListNumber = $("<li>"+(i+1)+"</li>");
+      var pageListNumber = $("<li>"+(i+1)+"</li>");
       this.domNode.find("ul#page_browser_items").append(pageListItem);
-			this.domNode.find("ul.page_browser_numbered_list").append(pageListNumber);
+      this.domNode.find("ul.page_browser_numbered_list").append(pageListNumber);
       this.pageThumbs.push(pageThumb);
       this.pageMap[pageThumb.domNode.attr("id")] = pageThumb;
     }
     this.updateSelectedPage();
 
-		$("#page_browser_items").sortable({
-			handle: '.page_browser_item_draggable_area',
-			start:  this.dragStart.pBind(this),
-			update: this.dragUpdate.pBind(this),
-			containment: 'div#page_browser_left'
-		});
-		var divToHide = $('.page_browser_item_title_edition');
-		$(divToHide).hide();
-		$('.page_browser_item').bind('click', this.selectCurrentPage.pBind(this));
-		$('.page_browser_item').bind('mouseover', this.changeCurrentHighlightedItem.pBind(this));
-		$('.page_browser_item_information').bind('click', this.showPageInspector);
-		$('.page_browser_item_title').dblclick(this.staticPanelAction.pBind(this));
-		$('.page_browser_item_title_edition').dblclick(this.editPanelAction.pBind(this));
-		$('.page_title_cancelButton').click(this.editPanelAction.pBind(this));
-		$('.page_title_saveButton').click(this.saveButtonAction.pBind(this));
-		$('.page_title_textbox').bind('keydown', this.titleBoxKeyDownAction.pBind(this));
+    $("#page_browser_items").sortable({
+      handle: '.page_browser_item_draggable_area',
+      start:  this.dragStart.pBind(this),
+      update: this.dragUpdate.pBind(this),
+      containment: 'div#page_browser_left'
+    });
+    this.bindPageBrowserItemsEvents();
+  },
+
+  bindPageBrowserItemsEvents: function() {
+    this.unbindPageBrowserItemsEvents();
+    $('.page_browser_item').bind('click', this.selectCurrentPage.pBind(this));
+    $('.page_browser_item').bind('mouseover', this.changeCurrentHighlightedItem.pBind(this));
+    $('.page_browser_item_information').bind('click', this.showPageInspector);
+    $('.page_browser_item_title').dblclick(this.staticPanelAction.pBind(this));
+    $('.page_browser_item_title_edition').dblclick(this.editPanelAction.pBind(this));
+    $('.page_title_cancelButton').click(this.editPanelAction.pBind(this));
+    $('.page_title_saveButton').click(this.saveButtonAction.pBind(this));
+    $('.page_title_textbox').bind('keydown', this.titleBoxKeyDownAction.pBind(this));
+  },
+
+  unbindPageBrowserItemsEvents: function() {
+    $('.page_browser_item').unbind('click');
+    $('.page_browser_item').unbind('mouseover');
+    $('.page_browser_item_information').unbind('click');
+    $('.page_browser_item_title').unbind('dblclick');
+    $('.page_browser_item_title_edition').unbind('dblclick');
+    $('.page_title_cancelButton').unbind('click');
+    $('.page_title_saveButton').unbind('click');
+    $('.page_title_textbox').unbind('keydown');
+    
   },
   
   deletePageThumbs: function() {
@@ -169,13 +171,28 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   pageAdded: function(page) {
-    ddd("added page");
-    this.refreshPages();
+     ddd("added page");
+    var pageThumb = new WebDoc.PageBrowserItemView(page);
+    pageThumb.addToBrowser();
+    // Update arrays
+    this.pageThumbs.push(pageThumb);
+    this.pageMap[pageThumb.domNode.attr("id")] = pageThumb;
+
+    this.bindPageBrowserItemsEvents();
   } ,
   
   pageRemoved: function(page) {
-    ddd("removed page");
-    this.refreshPages();
+    // Deleted item in the browser is the one after the current selected
+    var currentListItem = $('.page_browser_item.page_browser_item_selected').parent().next();
+    var currentItemId = "browser_item_" + page.uuid();
+    ddd("removed page: "+currentItemId);
+    currentListItem.remove();
+    // Remove item to numbered list
+    lastItem = $('ul.page_browser_numbered_list > li:last');
+    lastItem.remove();
+    // Update arrays
+    this.pageMap[currentItemId] = [];
+    this.removeById(this.pageThumbs, currentItemId);
   },
   
   currentPageChanged: function() {
@@ -274,6 +291,14 @@ WebDoc.PageBrowserController = $.klass({
    showStaticPanel: function(target) {
      $(target).closest('.page_browser_item_title_edition').hide();
      $(target).closest('.page_browser_item_title_edition').prev().show();
+   },
+
+   removeById: function(arrayName,arrayElementId) {
+     for(var i=0; i<arrayName.length;i++ ) { 
+       if(arrayName[i].domNode.attr("id") == arrayElementId) {
+         arrayName.splice(i,1); 
+       }
+     } 
    }
 });
 
