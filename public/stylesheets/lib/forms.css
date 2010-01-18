@@ -28,7 +28,6 @@ input[type=text], input[type=password],
 input.text, input.title,
 textarea, select {
   margin:0.5em 0;
-  background: green;
 }
 
 input.text,
