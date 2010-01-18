@@ -82,10 +82,10 @@ jQuery.fn[plug] = function(){
     var nodes = this;
     
     return nodes
-    .bind('click', {
-            '.toggle-head': toggleHead,
-            '.toggle-foot': toggleFoot
-        }, jQuery.delegate)
+    .bind('click', jQuery.delegate({
+        '.toggle-head': toggleHead,
+        '.toggle-foot': toggleFoot
+    }))
     .bind('show-head', toggleHead)
     .bind('show-foot', toggleFoot)
     .bind('show-screen', function(){
