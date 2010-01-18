@@ -28,6 +28,7 @@ input[type=text], input[type=password],
 input.text, input.title,
 textarea, select {
   margin:0.5em 0;
+  background: green;
 }
 
 input.text,
@@ -64,7 +65,6 @@ form.inline p { margin-bottom:0; }
     padding: 0.5em;
     border: none;
     border-bottom: 1px solid #cccccc;
-    font-size: 16px;
 }
 .properties:last-child {
     border: none;
@@ -73,8 +73,9 @@ form.inline p { margin-bottom:0; }
     clear: both;
     margin-bottom: 0.2em;
     min-height: 1.6em;
-    font-size: 12px;
+    /*font-size: 12px;*/
     /* form divs also have clearfix applied */
+    padding-left: 50%;
 }
 
 .properties label,
@@ -98,6 +99,8 @@ form.inline p { margin-bottom:0; }
     padding-left: 0;
     padding-right: 0;
     white-space: nowrap;
+    
+    margin-left: -50%;
 }
 .properties label {
     min-width: 40%;

@@ -1,12 +1,14 @@
-
-/* =========== */
-/* = General = */
-/* =========== */
+/* Styles */
 
 body {
-  font-family:Helvetica, Arial, sans-serif;
-  font-size:11px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 75%;
 }
+
+
+
+
+
 a { color: #3B9EEF; }
 a{ outline: none;}
 a:hover { color: #0069BF;}
