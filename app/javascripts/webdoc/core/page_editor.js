@@ -79,6 +79,7 @@ WebDoc.PageEditor = $.klass({
       this.currentDocument.addListener(this);
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument);
       this.loadPageId(window.location.hash.replace("#", ""));
+      WebDoc.application.pageBrowserController.initializePageBrowser();
     }.pBind(this));
   },
 
