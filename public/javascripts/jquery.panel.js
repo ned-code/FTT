@@ -102,7 +102,7 @@ jQuery.fn[plug] = function(){
     })
     .bind('hide-screen', function(){
         var elem = jQuery(this),
-            screen = elem.children('.screen'),
+            screen = elem.children('.screen').add( elem.find('#board>.screen') ),
             options = {
                 duration: 200,
                 complete: function(){
