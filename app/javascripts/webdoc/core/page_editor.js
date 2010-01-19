@@ -1,4 +1,3 @@
-
 /**
  * PageEditor is the main application for page viewing and editing. The root method is load(documentId) that will load the first page of document documentId.
  * 
@@ -58,28 +57,16 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
     
-    // It seems that webkit don't need the margin een if content is 100% width
-    if (MTools.Browser.WebKit) {
-       $("#board_container").css("marginRight", "0px");       
-    }
+    var boardContainer = $("#board_container"),
+        leftBar = $("#left_bar"),
+        rightBar = $("#right_bar");
+    
     if (editable) {
-      WebDoc.application.rightBarController.showRightBar();
-    }    
-    $("#content").css("display", "");
-    // resize height of GUI when window is resized. It cannot be done with CSS (or it is very difficult)
-    var height = window.innerHeight - $("#board_container").offset().top;
-    $("#board_container").height(height -10);
-    $("#right_bar").height(height -10);
-    $("#left_bar").height(height -10);
-    $(window).bind("resize", function() {
-      var height = window.innerHeight - $("#board_container").offset().top;
-      $("#board_container").height(height -10);
-      $("#right_bar").height(height -10);
-      $("#left_bar").height(height -10);
-      WebDoc.application.boardController.centerBoard();
-    }.pBind(this)); 
+        WebDoc.application.rightBarController.showRightBar();
+    }
+    
     $(window).unload(function() {
-      WebDoc.application.collaborationManager.disconnect();
+        WebDoc.application.collaborationManager.disconnect();
     });
   },
 
@@ -92,6 +79,7 @@ WebDoc.PageEditor = $.klass({
       this.currentDocument.addListener(this);
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument);
       this.loadPageId(window.location.hash.replace("#", ""));
+      WebDoc.application.pageBrowserController.initializePageBrowser();
     }.pBind(this));
     
     // ===========================================================
@@ -109,25 +97,23 @@ WebDoc.PageEditor = $.klass({
     if (!pageId) {
       pageId = "1";
     }
-    var editor = WebDoc.application.pageEditor;
     ddd("load page id " + pageId);
-    var pageToLoad = editor.currentDocument.findPageWithUuidOrPosition(pageId);
+    var pageToLoad = this.currentDocument.findPageWithUuidOrPosition(pageId);
     ddd("found page");
     ddd(pageToLoad);
     if (pageToLoad) {
       this.currentPageId = pageId;
-      editor.loadPage(pageToLoad);
+      this.loadPage(pageToLoad);
     }
   },
 
   loadPage: function(page) {
     WebDoc.application.undoManager.clear();
-    var editor = WebDoc.application.pageEditor;
     ddd("set hash to current page position");
     window.location.hash = "#" + (page.uuid());
-    editor.currentPage = page;
+    this.currentPage = page;
     
-    WebDoc.application.boardController.setCurrentPage(editor.currentPage);
+    WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
 
   previousPage: function(e) {
@@ -168,6 +154,19 @@ WebDoc.PageEditor = $.klass({
       }
     }
   },
+
+	copyPage: function(e) {
+		var copiedPage = this.currentPage.copy();
+    copiedPage.setDocument(this.currentPage.getDocument());
+		var copiedPagePosition = this.currentDocument.positionOfPage(this.currentPage) - 1;
+    copiedPage.data.position = copiedPagePosition + 1;
+    //var importingMessage = $("<li>").html("importing...").addClass("page_thumb_importing");       
+    //droppedPageThumb.parent().after(importingMessage[0]);
+    copiedPage.save(function(newObject, status) {
+      this.currentDocument.addPage(copiedPage, true);
+      this.loadPage(copiedPage);
+    }.pBind(this));
+	},
   
   pageRemoved: function(page) {
     if (page == this.currentPage) {

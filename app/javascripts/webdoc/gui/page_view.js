@@ -4,11 +4,28 @@
 
 WebDoc.PageView = $.klass({
   initialize: function(page) {
+    var boardContainer = $('#board_container'),
+        externalPage,
+        domNode = $('<div>').id('board'),
+        itemDomNode = $('<div/>').id('items').addClass("layer"),
+        drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
+        boardScreenNodes = jQuery('<div/>').addClass('screen layer')
+            .add( jQuery('<div/>').addClass('screen layer') )
+            .add( jQuery('<div/>').addClass('screen layer') )
+            .add( jQuery('<div/>').addClass('screen layer') ),
+        that = this;
+    
+    // Extend this
     this.page = page;
-    this.domNode = $('<div>').attr({
-      id: "board",
-      style: "position:relative; top: 0px; left: 0px;z-index:0"
-    });
+    this.domNode = domNode;
+    this.drawingDomNode = drawingDomNode;
+    this.itemDomNode = itemDomNode;
+    this.itemViews = {};
+    this.boardScreenNodes = boardScreenNodes;
+    
+    // Set up page view
+    drawingDomNode.css("zIndex", 999999);
+    domNode.append( drawingDomNode );
     
     if (page.data.data.externalPage && !page.data.data.allowAnnotation) {
       this.domNode.css({
@@ -17,71 +34,55 @@ WebDoc.PageView = $.klass({
       });
     }
     else {
-      this.domNode.css(page.data.data.css);
-    }    
-    
-     this.domNode.append($("<div id=\"event_catcher\"/>").css({
-     zIndex: 999999,
-     position: "absolute",
-     width: "100%",
-     height: "100%",
-     display: "none"
-     }));
-     
-    this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
-    this.drawingDomNode.css("zIndex", 999999);
-    this.domNode.append(this.drawingDomNode.get(0));
-    this.itemDomNode = $('<div>').attr({
-      id: "items",
-      style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
-    });
+        this.domNode.css(page.data.data.css);
+    }
     
     if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
-      var externalPage = $("<iframe/>").css({
+      // Handle case where page is an external webpage
+      // TODO: change this to use CSS classes
+
+      externalPage = $("<iframe/>").css({
         width: "100%",
         height: "100%"
       });
       if (page.data.data.externalPageUrl) {
         if (page.data.data.allowAnnotation) {
           externalPage.attr("src", "http:\/\/" + document.domain + ":" + window.location.port + "/proxy/resolve?url=" + page.data.data.externalPageUrl);
-          $("#board_container").css("overflow", "auto");
+          boardContainer.css("overflow", "auto");
           externalPage.css("overflow", "hidden");
+          if (page.data.data.css.width) {
+            this.domNode.css(page.data.data.css);
+          }
+          else {
+            externalPage.bind("load", function() {
+              page.data.data.css.width = externalPage[0].contentDocument.width;
+              page.data.data.css.height = externalPage[0].contentDocument.height;
+              page.save();
+              this.domNode.css(page.data.data.css);
+            }.pBind(this));
+          }          
         }
         else {
           externalPage.attr("src", page.data.data.externalPageUrl);
-          $("#board_container").css("overflow", "hidden");
+          boardContainer.css("overflow", "hidden");
           externalPage.css("overflow", "auto");
         }
-        if (page.data.data.css.width) {
-           this.domNode.css(page.data.data.css);
-        }
-        else {
-          externalPage.bind("load", function() {
-            page.data.data.css.width = externalPage[0].contentDocument.width;
-            page.data.data.css.height = externalPage[0].contentDocument.height;
-            page.save();
-            this.domNode.css(page.data.data.css);
-          }.pBind(this));
-        }
         this.itemDomNode.append(externalPage[0]);
-      }
-      
+      }      
     }
     else {
-      $("#board_container").css("overflow", "hidden");
+        // Handle case where page is a webdoc
+        ddd('Page is a webdoc page');
     }
     
-    this.domNode.append(this.itemDomNode.get(0));
-    
-    var that = this;
-    this.itemViews = {};
+    this.domNode.append( itemDomNode );
+    this.domNode.append( boardScreenNodes );
     if (page.items && $.isArray(page.items)) {
-      $.each(page.items, function() {
-        that.createItemView(this);
-      });
+        $.each(page.items, function() {
+            that.createItemView(this);
+        });
     }
     page.addListener(this);
-    
   },
   
   objectChanged: function(page) {
@@ -96,7 +97,7 @@ WebDoc.PageView = $.klass({
     }
     else {
       relatedItemView.objectChanged(addedItem);
-    }    
+    }
   },
   
   itemRemoved: function(removedItem) {

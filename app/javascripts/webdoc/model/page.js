@@ -1,10 +1,12 @@
 
 //= require <mtools/record>
 //= require <webdoc/model/item>
+//= require <webdoc/utils/inspector_fields_validator>
 
 WebDoc.Page = $.klass(MTools.Record, 
 { 
   initialize: function($super, json, document) {
+    // initialize relationship before super.
     this.items = [];
     this.document = document;
     $super(json);
@@ -41,6 +43,68 @@ WebDoc.Page = $.klass(MTools.Record,
       this.save();
     }
   },
+
+  setTitle: function(title) {
+    if(this.data.title != title) {
+      this.data.title = title;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+  
+  setHeight: function(height) {
+    WebDoc.InspectorFieldsValidator.validatePixelSize(height);
+    if(this.data.data.css.height != height) {
+      this.data.data.css.height = height;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+  
+  setWidth: function(width) {
+    WebDoc.InspectorFieldsValidator.validatePixelSize(width);
+    if(this.data.data.css.width != width) {
+      this.data.data.css.width = width;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+
+  setBackgroundColor: function(backgroundColor) {
+    WebDoc.InspectorFieldsValidator.validateColor(backgroundColor);
+    if(this.data.data.css.backgroundColor != backgroundColor) {
+      this.data.data.css.backgroundColor = backgroundColor;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+  
+  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode) { 
+    var objectChanged = this.setBackgroundImage(backgroundUrl);
+    objectChanged = this.setBackgroundRepeatMode(repeatMode) || objectChanged;
+    if(objectChanged) {
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
+
+  setBackgroundImage: function(backgroundUrl) {
+    WebDoc.InspectorFieldsValidator.validateBackgroundUrl(backgroundUrl);
+    if(this.data.data.css.backgroundImage != backgroundUrl) {
+      this.data.data.css.backgroundImage = backgroundUrl;
+      return true;
+    }
+    return false;
+  },
+
+  setBackgroundRepeatMode: function(repeatMode) {
+    WebDoc.InspectorFieldsValidator.validateBackgroundRepeat(repeatMode);
+    if(this.data.data.css.backgroundRepeat != repeatMode) {
+      this.data.data.css.backgroundRepeat = repeatMode;
+      return true;
+    }
+    return false;
+  },
   
   refresh: function($super, json) {
     //backup previous items if we need to keep them
@@ -73,7 +137,7 @@ WebDoc.Page = $.klass(MTools.Record,
     if (withRelationShips && this.items.length) {
       dataObject.items = [];
       for (var i = 0; i < this.items.length; i++) {
-        dataObject.items.push(this.items[i].getData());
+        dataObject.items.push(this.items[i].getData(withRelationShips));
       }
     }
     return dataObject;
@@ -136,14 +200,17 @@ WebDoc.Page = $.klass(MTools.Record,
   
   fireItemAdded: function(addedItem) {
     for (var i = 0; i < this.listeners.length; i++) {
-      this.listeners[i].itemAdded(addedItem);
-      
+      if (this.listeners[i].itemAdded) {
+        this.listeners[i].itemAdded(addedItem);
+      }      
     }     
   },
   
   fireItemRemoved: function(removedItem) {
     for (var i = 0; i < this.listeners.length; i++) {
-      this.listeners[i].itemRemoved(removedItem);
+      if (this.listeners[i].itemRemoved) {
+        this.listeners[i].itemRemoved(removedItem);
+      }
     }     
   },
   
@@ -174,6 +241,24 @@ WebDoc.Page = $.klass(MTools.Record,
       ddd("page without document !!!!!!!!!!!!!!!!!!!");
       ddt();
       return {};
+    }
+  },
+
+  nbTextItems: function() {
+	  var result = 0;
+    for (var i = 0; i < this.items.length; i++) {
+      if(this.items[i].type() == "text") {
+        result++;
+      }
+    }
+    return result;
+  },
+
+  getFirstTextItem: function() {
+    for (var i = 0; i < this.items.length; i++) {
+      if(this.items[i].type() == "text") {
+        return this.items[i];
+      }
     }
   }
 });

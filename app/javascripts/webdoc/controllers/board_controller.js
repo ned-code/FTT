@@ -9,14 +9,28 @@
 //= require <webdoc/gui/image_view>
 //= require <webdoc/gui/text_view>
 //= require <webdoc/gui/widget_view>
-//= require <webdoc/controllers/collaboration_controller>  
 //= require <webdoc/controllers/drag_and_drop_controller>
+
+(function(undefined){
+
+// VAR
+
+var boardWrapHTML = '<div class="push-scroll layer">'+
+            '<div class="show-scroll layer">'+
+                '<div class="centering layer">'+
+                    '<div></div>'+
+                '</div>'+
+            '</div>'+
+        '</div>',
+    screen = jQuery('<div/>').addClass('screen layer');
+
+// EXTEND
 
 WebDoc.BoardController = $.klass({
   initialize: function(editable, autoFit) {
     this.editable = editable;
     this.autoFit = autoFit;
-    this.currentZoom = 1;
+    this.currentZoom = 1; 
     this.selection = [];
     this.editingItem = null;
     this.selectionListeners = [];
@@ -58,39 +72,31 @@ WebDoc.BoardController = $.klass({
   },  
   
   setCurrentPage: function(page) {
+    var boardContainer = $("#board_container"),
+        pageView = new WebDoc.PageView(page),
+        board = pageView.domNode;
+    
     $("#board").unbind();
     $(document).unbind("keydown");
     
-    // remove previous page
-    $("#board_container").empty();
-    // add the new one
-    this.pageView = new WebDoc.PageView(page);
-    this.pageView.domNode.css("display", "none");
-    $("#board_container").append(this.pageView.domNode);
-    // re-init internal working attributes
-    $("#board_container").get(0).scrollTop = 0;
-    $("#board_container").get(0).scrollLeft = 0;
+    // Set properties
+    this.pageView = pageView;
     this.currentZoom = 1;
     this.selection = [];
-    this.fireSelectionChanged();
     this.currentPage = page;
     
-    this.initialHeight = $("#board").height();
-    this.initialWidth = $("#board").width();
+    boardContainer
+    .empty()
+    .append( board )
+    .wrapInner( boardWrapHTML )
+    .prepend( screen );
     
+    this.initialHeight = board.height();
+    this.initialWidth = board.width();
+    this.fireSelectionChanged();
     this.bindMouseEvent();
+    
     $(document).bind("keydown", this, this.keyDown.pBind(this));
-    
-    
-    // update data attribute of object
-    $("object").each(function() {
-      var relPath = $(this).attr("data");
-      $(this).attr("data", relPath);
-    });
-    
-    //update zoom to fit browser page    
-    heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
-    widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;
     
     this.zoom(1);
     if (this.isInteraction || !this.editable) {
@@ -99,7 +105,12 @@ WebDoc.BoardController = $.klass({
     else {
       this.setInterationMode(false);
     }
-    if (this.autoFit && $("#board").css("height") != "100%") {
+    
+    // Autofit
+    if (this.autoFit && board.css("height") != "100%") {
+      //update zoom to fit browser page    
+      var heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
+      var widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;      
       if (heightFactor < widthFactor) {
         this.zoom(1 + heightFactor);
       }
@@ -107,9 +118,10 @@ WebDoc.BoardController = $.klass({
         this.zoom(1 + widthFactor);
       }
     }
-    else {
-      this.centerBoard();
-    }
+//    else {
+//      this.centerBoard();
+//    }
+    
     this.fireCurrentPageChanged();
     $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this.currentPage));
     $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
@@ -120,6 +132,9 @@ WebDoc.BoardController = $.klass({
     $("#board").bind("mousedown", this, this.mouseDown.pBind(this));
     $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
     $("#board").bind("click", this, this.mouseClick.pBind(this));
+    $("#board").bind("dblclick", this, this.mouseDblClick.pBind(this));
+    $("#board").bind("mouseover", this, this.mouseOver.pBind(this));    
+    $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
   },
   
   unbindMouseEvent: function() {
@@ -135,11 +150,12 @@ WebDoc.BoardController = $.klass({
       $("#board").unbind("dragover");
       $("#board").unbind("drop");
       
-      $(".item").addClass("item_interact");
+      $(".item_wrap").addClass("item_interact");
       this.setCurrentTool(WebDoc.application.arrowTool);
-      $(".preview_hidden").css("display", "none");
+      $(".preview_hidden").hide();
       $(".toggle_preview").addClass("toggle_edit");
       $(".toggle_preview").removeClass("toggle_preview");
+      $(".item_layer").hide();
       $("#tb_1_utilities_preview a").text("EDIT MODE");
       WebDoc.application.rightBarController.hideRightBar();
     }
@@ -148,18 +164,20 @@ WebDoc.BoardController = $.klass({
       $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
       $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver);
       $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);      
-      $(".item").removeClass("item_interact");
+      $(".item_wrap").removeClass("item_interact");
       if (!this.currentTool) {
         this.setCurrentTool(WebDoc.application.arrowTool);
       }      
-      $(".preview_hidden").css("display", "inline");
+      $(".preview_hidden").show();
       $(".toggle_edit").addClass("toggle_preview");
       $(".toggle_edit").removeClass("toggle_edit");
-      $("#tb_1_utilities_preview a").text("QUICK PREVIEW"); 
-       
+      $(".item_layer").show();
+      $("#tb_1_utilities_preview a").text("QUICK PREVIEW");        
     }
-    // TODO we can do better with ff 3.6 by using pointer-events css attribute  
-    $("#board svg").css("zIndex", this.isInteraction?"-1":"999999");                
+    // TODO for FF .5 we put svg backward because pointer event is not implemented
+    if (MTools.Browser.Gecko && (new Number(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
+      $("#board svg").css("zIndex", this.isInteraction ? "-1" : "999999");
+    }
   },
   
   
@@ -173,60 +191,33 @@ WebDoc.BoardController = $.klass({
     }  
   },
   
-  
   centerBoard: function() {
-    var containerHeight = $("#board_container").height();
-    var containerWidth = $("#board_container").width();
-    var boardHeight = $("#board").height() * this.currentZoom;
-    var boardWidth = $("#board").width() * this.currentZoom;
-    // center horizontally
-    if (boardWidth < containerWidth) {
-      $("#board").css("left", (containerWidth - boardWidth) / 2);
-    }
-    else {
-      $("#board").css("left", 0);
-    }
-    
-    // center vertically
-    if (boardHeight < containerHeight) {
-      $("#board").css("top", (containerHeight - boardHeight) / 2);
-    }
-    else {
-      $("#board").css("top", 0);
-    }
+
   },
   
   setCurrentTool: function(tool) {
     ddd(tool);
     this.currentTool = tool;
     if (this.currentTool) {
-      if (this.isInteraction) {
-        if (this.currentTool == WebDoc.application.arrowTool) {
-          $("#event_catcher").css("display", "none");
-        }
-        else {
-          $("#event_catcher").css("display", "inline");
-        }
-      }
       this.currentTool.selectTool();
     }
     // this.unselectItemViews(this.selection);
   },
   
   mapToPageCoordinate: function(position) {
-    var x, y;
+    var x, y, board = $("#board"), boardContainer = $("#board_container");
+    
     if (position.x) {
-      x = position.x - $("#board_container").offset().left;
-      y = position.y - $("#board_container").offset().top;
+      x = position.x - board.offset().left;
+      y = position.y - board.offset().top;
     }
     else {
-      x = position.pageX - $("#board_container").offset().left;
-      y = position.pageY - $("#board_container").offset().top;
+      x = position.pageX - board.offset().left;
+      y = position.pageY - board.offset().top;
     }   
-    var top = parseFloat($("#board").css("top"));
-    var left = parseFloat($("#board").css("left"));
-    var calcX = (x - left + $("#board_container").get(0).scrollLeft) * (1 / this.currentZoom);
-    var calcY = (y - top + $("#board_container").get(0).scrollTop) * (1 / this.currentZoom);
+
+    var calcX = (x) * (1 / this.currentZoom);
+    var calcY = (y) * (1 / this.currentZoom);
     return {
       x: calcX,
       y: calcY
@@ -248,6 +239,8 @@ WebDoc.BoardController = $.klass({
     // exit edit mode for current editing item
     if (this.editingItem) {
       this.editingItem.stopEditing();
+      WebDoc.application.arrowTool.enableHilight();
+      jQuery('#board_container').trigger('hide-screen');
       this.editingItem = null;
     }
     
@@ -304,6 +297,50 @@ WebDoc.BoardController = $.klass({
       }
     }
     this.fireSelectionChanged();    
+  },
+  
+  editItemView: function(itemViewToEdit) {
+    if (itemViewToEdit.canEdit()) { 
+      var node = itemViewToEdit.domNode,
+          nodePos = node.position(),
+          nodeWidth = node.width(),
+          nodeHeight = node.height(),
+          board = itemViewToEdit.pageView.domNode,
+          boardWidth = board.width(),
+          boardHeight = board.height(),
+          nodeLeft = nodePos.left,
+          nodeTop = nodePos.top,
+          nodeBottom = boardHeight - nodeTop - nodeHeight,
+          screens = itemViewToEdit.pageView.boardScreenNodes,
+          screenTop = screens.eq(0),
+          screenBottom = screens.eq(1),
+          screenLeft = screens.eq(2),
+          screenRight = screens.eq(3);
+      
+      // Adjust the dimensions of the four screens surrounding the edited block
+      screenTop.css({
+          bottom: boardHeight - nodeTop
+      });
+      screenBottom.css({
+          top: nodeTop + nodeHeight
+      });
+      screenLeft.css({
+          right: boardWidth - nodeLeft,
+          top: nodeTop,
+          bottom: nodeBottom
+      });
+      screenRight.css({
+          left: nodeLeft + nodeWidth,
+          top: nodeTop,
+          bottom: nodeBottom
+      });
+      
+      this.editingItem = itemViewToEdit;  
+      itemViewToEdit.edit();
+                
+      WebDoc.application.arrowTool.disableHilight();
+      jQuery('#board').trigger('show-screen');     
+    }
   },
   
   deleteSelection: function(e) {
@@ -369,12 +406,11 @@ WebDoc.BoardController = $.klass({
           boardElement.css("filter", "progid:DXImageTransform.Microsoft.Matrix(M11='" + this.currentZoom + "',M21='0', M12='0', M22='" + this.currentZoom + "', sizingmethod='autoexpand')");
         }
     
-    this.centerBoard();
+//    this.centerBoard();
   },
   
   mouseDown: function(e) {
-    $(document).unbind("mousemove");
-    $(document).unbind("mouseup");
+    $(document).unbind("mousemove").unbind("mouseup");
     if (window.document.activeElement) {
       window.document.activeElement.blur();
     }
@@ -410,7 +446,6 @@ WebDoc.BoardController = $.klass({
   },
   
   mouseClick: function(e) {
-    //e.preventDefault();
     this.currentTool.mouseClick(e);
   },
   
@@ -441,6 +476,18 @@ WebDoc.BoardController = $.klass({
         break;
     }
   },
+  
+  mouseDblClick: function(e) {
+    this.currentTool.mouseDblClick(e);    
+  },
+  
+  mouseOver: function(e) {
+    this.currentTool.mouseOver(e);    
+  },
+  
+  mouseOut: function(e) {
+    this.currentTool.mouseOut(e);    
+  },  
   
   insertItems: function(items) {
     $.each(items, function(index, item) {
@@ -475,3 +522,6 @@ WebDoc.BoardController = $.klass({
   }
   
 });
+
+
+})();

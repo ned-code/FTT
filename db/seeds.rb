@@ -4,7 +4,9 @@ users = [
   {:name => 'Stelio', :email => "stelio.tzonis@mnemis.com",   :pass => 'pass'},
   {:name => 'David',  :email => "david.matthey@mnemis.com",   :pass => 'pass'},
   {:name => 'Zeno',   :email => "zeno@jilion.com",            :pass => 'pass'},
-  {:name => 'Stephen',:email => "stephen.band@mnemis.com",    :pass => 'pass'},
+  {:name => 'Stephen', :email => "stephen.band@mnemis.com",    :pass => 'pass'},
+  {:name => 'Luc', :email => "luc.devallonne@mnemis.com",    :pass => 'pass'},
+  
   {:name => 'Guest',  :email => "guest@mnemis.com",           :pass => 'pass'},
   {:name => 'All',    :email => "All@mnemis.com",             :pass => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd'}
 ]
@@ -21,3 +23,4 @@ User.find_by_email("julien.bachmann@mnemis.com").has_role!("admin")
 User.find_by_email("yann.ringgenberg@mnemis.com").has_role!("admin")
 User.find_by_email("stelio.tzonis@mnemis.com").has_role!("admin")
 User.find_by_email("david.matthey@mnemis.com").has_role!("admin")
+User.find_by_email("luc.devallonne@mnemis.com").has_role!("admin")

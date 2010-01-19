@@ -43,6 +43,17 @@ WebDoc.Tool = $.klass({
   },
 
   mouseClick: function(e) {
-  }
+  },
+  
+  mouseDblClick: function(e) {
+    
+  },
+  
+  mouseOver: function(e) {
+    
+  },
+  mouseOut: function(e) {
+
+  }  
 
 });

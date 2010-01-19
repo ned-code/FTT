@@ -3,9 +3,9 @@
  */
 //= require <webdoc/model/image>
 //= require <webdoc/model/video>
-//= require <webdoc/controllers/inspectors/page_inspector_controller>
 //= require <webdoc/controllers/inspectors/properties_inspector_controller>
 //= require <webdoc/controllers/inspectors/inner_html_controller>
+//= require <webdoc/controllers/inspectors/image_palette_controller>
 //= require <webdoc/sdk/widget_api>
 
 WebDoc.InspectorController = $.klass({
@@ -16,7 +16,9 @@ WebDoc.InspectorController = $.klass({
     var emptyPalette = $("#palette_empty").hide();
     var textPalette = $("#palette_text").hide();
     var penPelette = $("#palette_pen").hide();
-    var widgetPalette = $("#palette_widget");
+    var imagePelette = $("#palette_image").hide();
+    this.imagePaletteController = new WebDoc.ImagePaletteController();    
+    var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
       ddd("must inject uniboard api in inspector");
       if (widgetPalette[0].contentWindow) {
@@ -34,21 +36,19 @@ WebDoc.InspectorController = $.klass({
         }
       }                      
     }.pBind(this));
-    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette];
+    
+    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette, imagePelette];
     this.updatePalette(0);
     this.subInspectors = [];
-    var pageInspectorController = new WebDoc.PageInspectorController();
-    this.subInspectors.push(pageInspectorController);
     var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
     this.subInspectors.push(propertiesInspectorController);   
     var innerHtmlController = new WebDoc.InnerHtmlController();
-    this.subInspectors.push(innerHtmlController);        
-       
-    var pageInspector = $("#page_inspector");
+    this.subInspectors.push(innerHtmlController);            
+
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
     var htmlInspector = $("#html_inspector"); 
-    this.inspectors = [pageInspector[0], paletteInspector[0], propertiesInspector[0], htmlInspector[0]];
+    this.inspectors = [paletteInspector[0], propertiesInspector[0], htmlInspector[0]];
     this.lastInspectorId = 1;
     this.selectInspector(0);
     this.currentInspectorId = 0;
@@ -66,15 +66,12 @@ WebDoc.InspectorController = $.klass({
   }, 
   
   selectInspector: function(inspectorId) {
-    WebDoc.application.rightBarController.showInspectors(function() {
-        ddd("select inspector " + inspectorId);
-        $("#inspectors").accordion("activate", inspectorId);        
-      });
+    $("#inspectors").accordion("activate", inspectorId);        
   },
   
   selectPalette: function(paletteId) {
       this.updatePalette(paletteId);
-      this.selectInspector(1);
+      this.selectInspector(0);
   },
   
   updatePalette: function(paletteId) {
@@ -95,18 +92,14 @@ WebDoc.InspectorController = $.klass({
         this.currentPaletteId = paletteId;        
       }
     }
+    if (paletteId == 4) {
+      this.imagePaletteController.refresh();
+    }
   },
   
   selectionChanged: function() {
     ddd("selected item ", WebDoc.application.boardController.selection);
-    if (WebDoc.application.boardController.selection.length > 0) {
-
-      if (this.currentInspectorId < 1) {
-        this.selectInspector(this.lastInspectorId);
-      }  
-      else {
-        WebDoc.application.rightBarController.showInspectors();
-      }               
+    if (WebDoc.application.boardController.selection.length > 0) {             
       this.updatePalette(WebDoc.application.boardController.selection[0].inspectorId());
     }
     else {
@@ -117,9 +110,9 @@ WebDoc.InspectorController = $.klass({
  
   refreshSubInspectors: function() {
     for (var i=0; i < this.subInspectors.length; i++) {
-      var subInspetor = this.subInspectors[i];
-      if (subInspetor.refresh) {
-        subInspetor.refresh();
+      var subInspector = this.subInspectors[i];
+      if (subInspector.refresh) {
+        subInspector.refresh();
       }
     }
   },

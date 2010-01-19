@@ -33,6 +33,7 @@ $.extend(WebDoc.DrageAndDropController,{
     var html = evt.originalEvent.dataTransfer.getData('text/html');        
     var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
     var ubImage = evt.originalEvent.dataTransfer.getData('application/ub-image');    
+    
     var newItem;
     if (widget) {
       var widgetData = $.evalJSON(widget);
@@ -46,6 +47,9 @@ $.extend(WebDoc.DrageAndDropController,{
       newItem.data.media_id = widgetData.id;
       newItem.data.data.tag = "iframe";
       newItem.data.data.src = widgetData.properties.index_url;
+      newItem.data.data.properties = {
+        inspectorUrl: widgetData.properties.inspector_url
+      };
       newItem.data.data.css = {
         top: pos.y + "px",
         left: pos.x + "px",

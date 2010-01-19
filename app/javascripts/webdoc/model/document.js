@@ -3,6 +3,7 @@
 
 WebDoc.Document = $.klass(MTools.Record, {
   initialize: function($super, json) {
+    this.pages = [];
     $super(json);
   },
   
@@ -12,12 +13,6 @@ WebDoc.Document = $.klass(MTools.Record, {
   
   setTitle: function(title) {
     this.data.title = title;
-  },
-  
-  to_json: function($super) {
-    var result = $super();
-    delete result['document[pages]'];
-    return result;
   },
 
   refresh: function($super, json) {
@@ -31,14 +26,16 @@ WebDoc.Document = $.klass(MTools.Record, {
     }    
   },
   
-  findPageWithId: function(id) {
-    for (var i = 0; i < this.pages.length; i++) {
-      var anObject = this.pages[i];
-      if (anObject.data.id == id) {
-        return anObject;
+  getData: function($super, withRelationShips) {
+    var dataObject = $super(withRelationShips);
+    delete dataObject.pages;
+    if (withRelationShips && this.pages.length) {
+      dataObject.pages = [];
+      for (var i = 0; i < this.pages.length; i++) {
+        dataObject.items.push(this.pages[i].getData(withRelationShips));
       }
     }
-    return null;
+    return dataObject;
   },
   
   findPageWithUuidOrPosition: function(pUuid) {
@@ -60,16 +57,6 @@ WebDoc.Document = $.klass(MTools.Record, {
       }
     }
     return null;
-  },
-  
-  createOrUpdateItem: function(itemData) {
-    var page = this.findPageWithId(itemData.item.page_id);    
-    if (!page) {
-      ddd("Cannot find page");
-    }
-    else {
-      page.createOrUpdateItem(itemData);
-    }
   },
   
   createOrUpdatePage: function(pageData) {
@@ -188,7 +175,7 @@ WebDoc.Document = $.klass(MTools.Record, {
       }
       page.data.position = newPosition;  
       this.sortPages();
-      this.firePageAdded(page);       
+      //this.firePageAdded(page);       
       return page;
     }
     return null;

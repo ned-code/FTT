@@ -12,7 +12,6 @@ WebDoc.PropertiesInspectorController = $.klass({
     $("#property_width").blur(this.updateProperties.pBind(this));
     $("#property_height").blur(this.updateProperties.pBind(this));
     $("#property_scroll").bind("change", this.updateSroll.pBind(this));
-    $("#property_src").blur(this.updateSrc.pBind(this));
 		$("#property_opacity").blur(this.updateProperties.pBind(this));
   },  
   
@@ -27,13 +26,6 @@ WebDoc.PropertiesInspectorController = $.klass({
       $("#property_height")[0].value = selectedItem.item.size.height;      
       $("#property_scroll").attr("checked", selectedItem.domNode.css("overflow") == "auto");
  			$("#property_opacity")[0].value = selectedItem.item.data.data.css.opacity || "1";
-      if (selectedItem.item.data.media_type == WebDoc.ITEM_TYPE_IMAGE) {
-        $("#image_properties").css("display", "");
-        $("#property_src")[0].value = selectedItem.item.data.data.src;
-      }
-      else {
-        $("#image_properties").css("display", "none");
-      }
     }
     else {
       $("#default_properties").hide();
@@ -50,14 +42,6 @@ WebDoc.PropertiesInspectorController = $.klass({
         WebDoc.application.boardController.selection[0].domNode.css(newOverflow);
         item.save();
       }
-  },
-  
-  updateSrc: function(event) {
-    var item = WebDoc.application.boardController.selection[0].item;
-    item.data.data.src =  $("#property_src")[0].value;       
-    item.save(function() {
-      item.fireDomNodeChanged();
-    });
   },
   
   updateProperties: function(event) {

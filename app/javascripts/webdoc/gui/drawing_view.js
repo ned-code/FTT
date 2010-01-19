@@ -2,11 +2,27 @@
  * @author julien
  */
 WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
-  createDomNode: function($super) {
+  
+  initialize: function($super,item, pageView) {
+  
+    if (pageView) {
+      this.pageView = pageView;
+    }
+    else {
+      throw "cannot create item view without a parent page view";
+    }
+    
+    this.item = item;
+    
     this.selectionNode = $("<div/>").addClass("drawing_handle");
-    var newLine = WebDoc.application.svgRenderer.createPolyline(this.item);
-    this.pageView.drawingDomNode.append(newLine);
-    return $(newLine);
+        
+    this.domNode = $(WebDoc.application.svgRenderer.createPolyline(this.item)); 
+    this.domNode.data("itemView", this);
+    this.pageView.drawingDomNode.append(this.domNode);
+    item.addListener(this);
+  },
+  
+  createDomNode: function($super) {
   },
   
   isSelected: function() {

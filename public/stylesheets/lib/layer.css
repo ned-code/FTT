@@ -1,0 +1,89 @@
+/* CSS Layer classes
+ * 
+ * Create a structure that centers a div or dialog vertically and horizontally
+ *
+ */
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+.layer {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    /* Height / width override the top, right, bottom, left declaration. Keep an eye out. */
+    /* width: 100%; height: 100%; */
+    overflow: auto;
+}
+.hide-scroll {
+    overflow: hidden;
+}
+.push-scroll {
+    /* These values should be overriden by feature testing with some js */
+    /* They represent the thickness of a scrollbar */
+    padding-right: 16px;
+    padding-bottom: 16px;
+    width: 100%;
+    height: 100%;
+}
+.show-scroll {
+    overflow: scroll;
+}
+
+/* Vertical centering technique described here:
+/* http://www.jakpsatweb.cz/css/css-vertical-center-solution.html */
+/* TODO: Fix case in IE7 where centering has to scroll. V difficult. Possibly impossible. */
+
+.centering {
+    display: table;
+    width: 100%;
+    height: 100%;
+    /* IE hacks */
+    position: relative !ie7;
+}
+.centering>div {
+    display: table-cell;
+    vertical-align: middle;
+    /* IE hacks */
+    position: absolute !ie7;
+    top: 50% !ie7;
+}
+
+/* Ideally, all elements likely to be put in a centred layer should be listed here */
+.centering>div>div,
+.centering>div>img,
+.centering>div>ul,
+.centering>div>dl,
+.centering>div>menu,
+.centering>div>object,
+.centering>div>embed,
+.centering>div>section,
+.centering>div>table,
+.centering>div>form,
+.centering>div>video,
+.centering>div>progress,
+.centering>div>canvas {
+    margin: 0 auto;
+    /* IE hacks */
+    position: relative !ie7;
+    top: -50% !ie7;
+}
+
+/* Screen */
+
+.screen {
+    background: rgba(80, 80, 80, 0.6);
+    display: none;
+}
+
+
+/* Board items */
+.screen.item_layer {
+    background: rgba(80, 80, 80, 0.6) url('/images/icons/arrow_nav_128.png') no-repeat 50% 50%;
+}
+
+
+#board {
+    position: relative;
+}

@@ -7,20 +7,28 @@
     = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
     = stylesheet_link_tag 'general'
     = stylesheet_link_tag 'style'        
-    = stylesheet_link_tag 'library'        
-    -#= javascript_include_tag 'date'
+    = stylesheet_link_tag 'library'
     = javascript_include_tag 'jquery'
+    = stylesheet_link_tag 'lib/protect'
+    = stylesheet_link_tag 'lib/index'
+    = stylesheet_link_tag 'lib/layer'
+    = stylesheet_link_tag 'lib/panel'
+    = stylesheet_link_tag 'lib/forms'
+    
+  %body
+    #wrap
+      = yield
     = javascript_include_tag 'jquery-json'
     = javascript_include_tag 'jquery-string'
     = javascript_include_tag 'jquery-ui'
+    
+    = javascript_include_tag 'jquery.extensions'
+    = javascript_include_tag 'jquery.panel'
+    
     = javascript_include_tag 'lowpro-jquery'
     = javascript_include_tag '../swfupload/swfupload.js'
     = javascript_include_tag 'jquery-swfupload'
     = javascript_include_tag 'sylvester'
     = javascript_include_tag 'strophe'    
-    = sprockets_include_tag
-
-  %body
-    #wrap
-      = yield
+    = sprockets_include_tag      
     = render :partial => "layouts/googleAnalytics"

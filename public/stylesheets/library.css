@@ -2,10 +2,6 @@
 /* ============================ */
 /* = jQTouch-simplified style = */
 /* ============================ */
-* {
-  margin: 0;
-  padding: 0;
-}
 
 #libraries {
   -webkit-transform-style: preserve-3d; /*important for proper slide in (back) animation on webkit!*/
@@ -742,3 +738,11 @@ object:hover, object:focus, object:active {
   color:#666;
 }
 
+
+/* ======== */
+/* = Apps = */
+/* ======== */
+
+#apps_library_wrap {
+    padding: 8px 0 0 8px;
+}

@@ -1,0 +1,50 @@
+#page_inspector.inspector{ :style => "display: none" }
+  %div.head
+    %div
+      %h1= t("label.page_inspector")
+  %form.content
+    %fieldset.properties
+      %div
+        %label Name
+        %input#page_title_textbox{ :type => "text"}
+      %div
+        %label Height
+        %input#page_height_textbox{ :type => "text"}
+      %div
+        %label Width
+        %input#page_width_textbox{ :type => "text"}
+      %div
+        %label Show scroll
+        %input#page_scroll_checkbox{ :type => "checkbox"}
+      %div
+        %label Background
+        %input#page_background_color_textbox{ :type => "text"}
+      %div
+        %label Background Image
+        %label Choose an image
+        %input#browse_background_image_button{ :type => "button", :value => "Browse"}
+      %div
+        %label Image position
+        %input#page_background_image_textbox{ :type => "text"}
+        %p You can also choose an image from your image library and use the set as background button
+      %div
+        %input#page_background_image_fit_page_radio{ :type => "radio", :name => "repeatMode", :value => "none"} Fit to page
+      %div
+        %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-x"} Repeat horizontally
+      %div
+        %input#page_background_image_repeat_vert_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-y"} Repeat vertically
+      %div
+        %input#page_background_image_apply_current_button{ :type => "button", :value => "Apply to this page"}
+      %div
+        %input#page_background_image_apply_all_button{ :type => "button", :value => "Apply to all pages"}
+      %div
+        %label Use external page
+        %input#external_page_checkbox{ :type => "checkbox"}
+      %textarea#page_css_editor
+      #external_page_panel{ :style => "display:none"}
+        %div
+          %label Allow annotation
+          %input#allow_annotation_checkbox{ :type => "checkbox"}        
+        %div
+          %label URL
+          %input#external_page_url
