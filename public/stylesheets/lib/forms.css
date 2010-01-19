@@ -60,7 +60,7 @@ form.inline p { margin-bottom:0; }
 
 /* Fieldsets */
 .properties {
-    background: #efefef;
+    background: #e4e4e4;
     padding: 0.5em;
     border: none;
     border-bottom: 1px solid #cccccc;
@@ -70,30 +70,35 @@ form.inline p { margin-bottom:0; }
 }
 .properties div {
     clear: both;
-    margin-bottom: 0.2em;
-    min-height: 1.6em;
-    /*font-size: 12px;*/
     /* form divs also have clearfix applied */
     padding-left: 40%;
+    /* Try and preserve vertical spacing */
+    min-height: 1.8em;
 }
 .properties p {
     float: left;
-    line-height: 1.2em;
-    font-size: 0.9em;
+    line-height: 1.5em;
     padding: 0.1em 0.9em;
-    margin-bottom: 1em;
+    margin: 0.2em 0 0.2em 0;
 }
 
 .properties label,
 .properties .label,
 .properties input {
     float: left;
-    line-height: 1.2em;
-    height: 1.2em;
-    font-size: 12px;
-    padding: 0.1em 0.5em;
-    margin: 0;
+    font-size: 1em;
+    padding: 0.16em 0.6em;
+    margin: 0 0 0.2em 0;
     text-transform: lowercase;
+
+    /* For some reason browsers force the 'traditional' box model on inputs
+       in the Page Inspector. It may be because the inputs are not recognised as
+       type "text", but I can't recreate the problem outside of webdoc, so I
+       don't know why. Happily, we can force it back. */
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -ms-box-sizing: content-box;
+    box-sizing: content-box;
 }
 
 .properties label,
@@ -101,37 +106,45 @@ form.inline p { margin-bottom:0; }
     color: rgba(0, 0, 0, 0.70);
     text-transform: lowercase;
     text-align: right;
-    padding-left: 0;
-    padding-right: 0;
+    padding: 0.1em 0 0 0;
     white-space: nowrap;
-    
-    /*margin-left: -50%;*/
 }
 .properties label {
-    min-width: 9em;
-    margin-left: -9.6em;
+    min-width: 10em;
+    margin-left: -10.6em;
     margin-right: 0.6em;
     white-space: nowrap;
+    line-height: 1.2em;
 }
 
-.properties input {
-    border: 1px solid rgba(0, 0, 0, 0.14);
+.properties input[type=text] {
+    border: 2px solid rgba(0, 0, 0, 0.15);
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
     border-radius: 1em;
+    
+    color: rgb(63, 63, 63);
     background: white;
-    width: 5em;
+    width: 8em;
+    
+    /* The combination of Helvetica labels and courier inputs
+       needs to have font-size adjusted to match.  118% is a decent compromise
+       between Webkit and Gecko, 112% makes the courier smaller. */
     font-family: Courier, monospace;
+    /*font-size: 100%;*/
+}
+.properties input:focus {
+    outline: none;
+    border-color: #7b9600;
+    border-width: 2px;
+    background-color: #fafee7;
+    color: #222800;
 }
 
 .properties input[type=checkbox] {
     width: auto;
-    margin-left: 0.5em;
 }
 .properties input[type=radio] {
     width: auto;
     margin-right: 1%;
-}
-.properties .label {
-    margin-top: 1px;
 }

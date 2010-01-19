@@ -47,8 +47,8 @@ WebDoc.PageInspectorController = $.klass({
   },
 
   updatePageRelatedFields: function(page) {
-    $("#page_css_editor").get(0).value = $.toJSON(page.data.data.css); 
-    $("#page_title_textbox").get(0).value = page.data.title == "undefined"? "enter a title":page.data.title; 
+    $("#page_css_editor").val( $.toJSON(page.data.data.css) ); 
+    //$("#page_title_textbox").val( page.data.title == "undefined" ? "enter a title" : page.data.title );
     $("#page_height_textbox").get(0).value = page.data.data.css.height; 
     $("#page_width_textbox").get(0).value = page.data.data.css.width; 
     $("#page_background_color_textbox").get(0).value = page.data.data.css.backgroundColor;

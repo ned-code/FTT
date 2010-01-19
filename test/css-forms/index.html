@@ -11,9 +11,8 @@
 
 <style type="text/css" media="screen, projection">
     
-    @import url('../css-reset/css/yui2-reset.css');
+    @import url('../../public/stylesheets/reset.css');
     @import url('../css/test.css');
-    @import url('../../public/stylesheets/general.css');
     @import url('../../public/stylesheets/lib/forms.css');
     
     h2 {
@@ -36,13 +35,12 @@
 <h1>forms</h1>
 
 <div class="test">
-
   <form id="dummy" action="" method="post">
     <fieldset class="properties">
       <!--legend>Properties</legend-->
       <div>
-        <label for="dummy0">Property</label>
-        <input type="text" name="dummy0" id="dummy0" value="12px">
+        <label>Property</label>
+        <input id="page_height_textbox" type='text' />
       </div>
       
       <div>
@@ -73,7 +71,6 @@
       </div>
     </fieldset>
   </form>
-
 </div>
 
 <div class="test">
@@ -246,6 +243,10 @@
 jQuery(function(){
     
     jQuery('.panel').panel();
+    
+    jQuery('#page_inspector').show();
+    
+    jQuery('#page_height_textbox').val('Give me');
     
 });
 
