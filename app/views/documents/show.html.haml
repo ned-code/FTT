@@ -88,13 +88,13 @@
   #document_loading
     %img{ :src => "/images/icons/waiting_bar.gif"}
 
-#left_bar.left-panel.layer
-  #page_browser_left
-    #page_browser_container
+#left_bar.left-panel.panel
+  #page_browser_left.inspector
+    #page_browser_container.content
       %ul.page_browser_numbered_list
       %ul#page_browser_items
-    #page_browser_control_bar
-      %ol
+    #page_browser_control_bar.foot
+      %ul.thumbs.index.icons-only
         %li#addPage.action_button 
           %img{ :src => "/images/icons/new.png", :alt => "Add page"}
         %li#copyPage.action_button

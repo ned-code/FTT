@@ -28,7 +28,6 @@ input[type=text], input[type=password],
 input.text, input.title,
 textarea, select {
   margin:0.5em 0;
-  background: green;
 }
 
 input.text,
@@ -75,7 +74,14 @@ form.inline p { margin-bottom:0; }
     min-height: 1.6em;
     /*font-size: 12px;*/
     /* form divs also have clearfix applied */
-    padding-left: 50%;
+    padding-left: 40%;
+}
+.properties p {
+    float: left;
+    line-height: 1.2em;
+    font-size: 0.9em;
+    padding: 0.1em 0.9em;
+    margin-bottom: 1em;
 }
 
 .properties label,
@@ -95,15 +101,17 @@ form.inline p { margin-bottom:0; }
     color: rgba(0, 0, 0, 0.70);
     text-transform: lowercase;
     text-align: right;
-    margin-right: 1%;
     padding-left: 0;
     padding-right: 0;
     white-space: nowrap;
     
-    margin-left: -50%;
+    /*margin-left: -50%;*/
 }
 .properties label {
-    min-width: 40%;
+    min-width: 9em;
+    margin-left: -9.6em;
+    margin-right: 0.6em;
+    white-space: nowrap;
 }
 
 .properties input {
@@ -118,6 +126,7 @@ form.inline p { margin-bottom:0; }
 
 .properties input[type=checkbox] {
     width: auto;
+    margin-left: 0.5em;
 }
 .properties input[type=radio] {
     width: auto;

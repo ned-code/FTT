@@ -73,11 +73,15 @@ html, body {
 /* Screen */
 
 .screen {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(80, 80, 80, 0.6);
     display: none;
 }
 
 
+/* Board items */
+.screen.item_layer {
+    background: rgba(80, 80, 80, 0.6) url('/images/icons/arrow_nav_128.png') no-repeat 50% 50%;
+}
 
 
 #board {

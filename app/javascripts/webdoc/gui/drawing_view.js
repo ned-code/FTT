@@ -31,6 +31,7 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
   
   remove: function() {
     this.domNode.remove();
+    this.selectionNode.remove();
   },
   
   objectChanged: function($super, item) {
@@ -69,6 +70,7 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
       cursor: 'move',
       distance: 5,
       start: function(e, ui) {
+        WebDoc.application.arrowTool.disableHilight();
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
         var currentPosition = {};
         $.extend(currentPosition, this.item.position);
@@ -103,6 +105,7 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
       stop: function(e, ui) {
         this.item.save();
         this.resetHandles();
+        WebDoc.application.arrowTool.enableHilight();
       }.pBind(this)
     });
     

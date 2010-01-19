@@ -9,7 +9,10 @@ WebDoc.PageView = $.klass({
         domNode = $('<div>').id('board'),
         itemDomNode = $('<div/>').id('items').addClass("layer"),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
-        boardScreenNode = $("<div/>").addClass("screen layer"),
+        boardScreenNodes = jQuery('<div/>').addClass('screen layer')
+            .add( jQuery('<div/>').addClass('screen layer') )
+            .add( jQuery('<div/>').addClass('screen layer') )
+            .add( jQuery('<div/>').addClass('screen layer') ),
         that = this;
     
     // Extend this
@@ -18,9 +21,10 @@ WebDoc.PageView = $.klass({
     this.drawingDomNode = drawingDomNode;
     this.itemDomNode = itemDomNode;
     this.itemViews = {};
+    this.boardScreenNodes = boardScreenNodes;
     
     // Set up page view
-    drawingDomNode.css("zIndex", 999999);
+    drawingDomNode.css("zIndex", 1000001);
     domNode.append( drawingDomNode );
     
     if (page.data.data.externalPage && !page.data.data.allowAnnotation) {
@@ -72,7 +76,7 @@ WebDoc.PageView = $.klass({
     }
     
     this.domNode.append( itemDomNode );
-    this.domNode.append( boardScreenNode );
+    this.domNode.append( boardScreenNodes );
     if (page.items && $.isArray(page.items)) {
         $.each(page.items, function() {
             that.createItemView(this);

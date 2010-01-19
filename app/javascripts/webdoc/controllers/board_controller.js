@@ -22,7 +22,7 @@ var boardWrapHTML = '<div class="push-scroll layer">'+
                 '</div>'+
             '</div>'+
         '</div>',
-    screenLayer = jQuery('<div/>').addClass('screen layer');
+    screen = jQuery('<div/>').addClass('screen layer');
 
 // EXTEND
 
@@ -87,9 +87,9 @@ WebDoc.BoardController = $.klass({
     
     boardContainer
     .empty()
-    .append(board)
-    .wrapInner(boardWrapHTML)
-    .prepend(screenLayer);
+    .append( board )
+    .wrapInner( boardWrapHTML )
+    .prepend( screen );
     
     this.initialHeight = board.height();
     this.initialWidth = board.width();
@@ -301,10 +301,45 @@ WebDoc.BoardController = $.klass({
   
   editItemView: function(itemViewToEdit) {
     if (itemViewToEdit.canEdit()) { 
+      var node = itemViewToEdit.domNode,
+          nodePos = node.position(),
+          nodeWidth = node.width(),
+          nodeHeight = node.height(),
+          board = itemViewToEdit.pageView.domNode,
+          boardWidth = board.width(),
+          boardHeight = board.height(),
+          nodeLeft = nodePos.left,
+          nodeTop = nodePos.top,
+          nodeBottom = boardHeight - nodeTop - nodeHeight,
+          screens = itemViewToEdit.pageView.boardScreenNodes,
+          screenTop = screens.eq(0),
+          screenBottom = screens.eq(1),
+          screenLeft = screens.eq(2),
+          screenRight = screens.eq(3);
+      
+      // Adjust the dimensions of the four screens surrounding the edited block
+      screenTop.css({
+          bottom: boardHeight - nodeTop
+      });
+      screenBottom.css({
+          top: nodeTop + nodeHeight
+      });
+      screenLeft.css({
+          right: boardWidth - nodeLeft,
+          top: nodeTop,
+          bottom: nodeBottom
+      });
+      screenRight.css({
+          left: nodeLeft + nodeWidth,
+          top: nodeTop,
+          bottom: nodeBottom
+      });
+      
       this.editingItem = itemViewToEdit;  
-      itemViewToEdit.edit();          
+      itemViewToEdit.edit();
+                
       WebDoc.application.arrowTool.disableHilight();
-      jQuery('#board_container').trigger('show-screen');     
+      jQuery('#board').trigger('show-screen');     
     }
   },
   
@@ -331,6 +366,11 @@ WebDoc.BoardController = $.klass({
     if (jQuery.browser.mozilla) {
       boardElement.css("MozTransformOrigin", "0px 0px");
       boardElement.css("MozTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
+      // Directly remove the transform property so that windowed items are displayed
+      if (this.currentZoom == 1) {
+	      boardElement.css("MozTransformOrigin", "");
+	      boardElement.css("MozTransform", "");
+	    }
     }
     else 
       if (jQuery.browser.safari) {
