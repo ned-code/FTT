@@ -24,7 +24,7 @@ WebDoc.PageView = $.klass({
     this.boardScreenNodes = boardScreenNodes;
     
     // Set up page view
-    drawingDomNode.css("zIndex", 999999);
+    drawingDomNode.css("zIndex", 1000001);
     domNode.append( drawingDomNode );
     
     if (page.data.data.externalPage && !page.data.data.allowAnnotation) {
