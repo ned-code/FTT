@@ -190,7 +190,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
           
           $.each(data.videos, function(i, webDocVideo) {
             
-            myVideosList.append(this.bbuildVideoRow(webDocVideo.uuid(), webDocVideo.data.properties));
+            myVideosList.append(this.buildVideoRow(webDocVideo.uuid(), webDocVideo.data.properties));
             
           }.pBind(this));
           
@@ -211,7 +211,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
       ddd('**************************REFRESH WITH NO RELOAD')
        $.each(newVideos, function(i,video) {
          
-         myVideosList.prepend(this.bbuildVideoRow(video.uuid, video.properties));
+         myVideosList.prepend(this.buildVideoRow(video.uuid, video.properties));
           
        }.pBind(this));
     }
@@ -223,7 +223,8 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
       this.loadMyVideos(0);
     }
   },
-  bbuildVideoRow: function(uuid, properties) {
+  buildVideoRow: function(uuid, properties) {
+    
     var thumb = $("<img>").attr({
       src : properties.thumb_url,
       alt : "",
@@ -238,6 +239,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     var liWrap = $("<li>").addClass("video_row").addClass(properties.type);
     var aWrap = $("<a href=\"\"></a>");
     aWrap.append(thumb).append(titleEl).append(durationEl).append(viewCountEl);
+    aWrap.append($("<span>").addClass("icon_overlay")); //youtube/vimeo mini icon
     liWrap.append(aWrap);
     return liWrap;
   },

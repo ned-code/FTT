@@ -494,7 +494,11 @@ div.tabs > div {
 #images .thumbnails ul li.flickr a .icon_overlay {background:url(/images/libraries/flickr_mini.png) no-repeat;}
 #images .thumbnails ul li.google a .icon_overlay {background:url(/images/libraries/google_mini.png) no-repeat;}
 
-.load_more a {
+/* ======================================== */
+/* = Media (Images and Videos) pagination = */
+/* ======================================== */
+
+#libraries .load_more a {
   display:block;
   width:100px;
   height:28px;
@@ -503,7 +507,7 @@ div.tabs > div {
   font-size:14px;
 }
 
-.loading {
+#libraries .loading {
   background:none;
   color:#666;
   border: 1px dashed #999;
@@ -518,25 +522,25 @@ div.tabs > div {
   -moz-border-radius:8px;
 }
 
-.load_more, .loading {
+#libraries .load_more, .loading {
   clear:both;
 }
 
-.pagination {
+#libraries .pagination {
   height:28px;
 }
 
-.pagination a.previous_page {
+#libraries .pagination a.previous_page {
   float:left;
   position:static;
 }
 
-.pagination a.next_page {
+#libraries .pagination a.next_page {
   float:right;
   position:static;
 }
 
-.spacer {
+#libraries .spacer {
   clear:both;
 }
 
@@ -684,14 +688,28 @@ object:hover, object:focus, object:active {
 #videos .rows ul li a {
   color:#000;
   text-decoration:none;
+  position:relative;
 }
+
+#videos .rows ul li a .icon_overlay {
+  display:block;
+  width:16px;
+  height:16px;
+  position:absolute;
+  bottom:8px;
+  right:6px;
+}
+
+#videos .rows ul li.youtube a .icon_overlay {background:url(/images/libraries/flickr_mini.png) no-repeat;}
+#videos .rows ul li.vimeo a .icon_overlay {background:url(/images/libraries/google_mini.png) no-repeat;}
+
 
 /* ================= */
 /* = Video Details = */
 /* ================= */
 
 #video_details .single_video {
-  padding:20px 15px;
+  padding:0 15px 20px 15px;
   position:relative;
 }
 
@@ -708,7 +726,7 @@ object:hover, object:focus, object:active {
 #video_details .video_name {
   font-size:15px;
   font-weight:bold;
-  padding:6px 15px;
+  padding:20px 15px 10px 15px;
   color:#666;
 }
 
