@@ -1,9 +1,5 @@
 # Settings specified here will take precedence over those in config/environment.rb
 
-APP_SETTINGS = Hash.new
-APP_SETTINGS[:orbited_host] = 'julien'
-APP_SETTINGS[:orbited_port] = '8500'
-APP_SETTINGS[:site_address] = 'julien:3000'
 
 # In the development environment your application's code is reloaded on
 # every request.  This slows down response time but is perfect for development
