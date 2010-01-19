@@ -366,6 +366,11 @@ WebDoc.BoardController = $.klass({
     if (jQuery.browser.mozilla) {
       boardElement.css("MozTransformOrigin", "0px 0px");
       boardElement.css("MozTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
+      // Directly remove the transform property so that windowed items are displayed
+      if (this.currentZoom == 1) {
+	      boardElement.css("MozTransformOrigin", "");
+	      boardElement.css("MozTransform", "");
+	    }
     }
     else 
       if (jQuery.browser.safari) {
