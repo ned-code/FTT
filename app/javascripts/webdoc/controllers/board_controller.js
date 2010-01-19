@@ -414,9 +414,9 @@ WebDoc.BoardController = $.klass({
     if (window.document.activeElement) {
       window.document.activeElement.blur();
     }
-    if (!this.isInteraction) {
-      e.preventDefault();
-    }
+//    if (!this.isInteraction) {
+//      e.preventDefault();
+//    }
     if (!e.boardIgnore) {
       $(document).bind("mousemove", this, this.mouseMove.pBind(this));
       $(document).bind("mouseup", this, this.mouseUp.pBind(this));
@@ -439,9 +439,9 @@ WebDoc.BoardController = $.klass({
   mouseUp: function(e) {
     $(document).unbind("mousemove");
     $(document).unbind("mouseup");
-    if (!this.isInteraction) {
-      e.preventDefault();
-    }
+//    if (!this.isInteraction) {
+//      e.preventDefault();
+//    }
     this.currentTool.mouseUp(e);
   },
   

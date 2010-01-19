@@ -24,7 +24,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
 
     if (!(objectToSelect && WebDoc.application.boardController.editingItem == objectToSelect)) {
       if (objectToSelect) {
-        WebDoc.application.boardController.selectItemViews([objectToSelect], e);
+        WebDoc.application.boardController.selectItemViews([objectToSelect]);
       }
       else {
         WebDoc.application.boardController.unselectAll();
@@ -102,7 +102,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
       clickedItemView = target.data("itemView");
     }
     else {
-      clickedItemView = target.parent().data("itemView");
+      clickedItemView = target.closest(".item_wrap").data("itemView");
     }
     return clickedItemView;
   }
