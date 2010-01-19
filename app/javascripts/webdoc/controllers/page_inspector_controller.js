@@ -2,9 +2,20 @@
  * @author julien
  */
 
+(function($, undefined){
+
+var cssEditor,
+    cssEditorFieldset,
+    externalPageControls;
+
 WebDoc.PageInspectorController = $.klass({
   initialize: function() {
-    $("#page_css_editor").bind("blur", this.applyPageCss);  
+    
+    cssEditorFieldset = $("#page_css_editor");
+    cssEditor = cssEditorFieldset.find('textarea.code');
+    externalPageControls = $('#allow_annotation_checkbox, #external_page_url');
+    
+    cssEditor.bind("blur", this.applyPageCss);
     $("#external_page_checkbox").bind("change", this.changeExternalMode.pBind(this));
     $("#allow_annotation_checkbox").bind("change", this.changeAllowAnnotation.pBind(this)); 
     $("#external_page_url").bind("blur", this.updateExternalPageUrl.pBind(this));
@@ -38,16 +49,23 @@ WebDoc.PageInspectorController = $.klass({
   updateExternalMode: function(page) {
     ddd("update external page");
     if (page.data.data.externalPage) {
-      $("#page_css_editor").css("display", "none");
-      $("#external_page_panel").css("display", "");  
+      cssEditorFieldset.hide();
+      externalPageControls
+      .removeAttr('disabled')
+      .siblings('label')
+      .removeClass('disabled');
+      
     } else {
-      $("#page_css_editor").css("display", "");
-      $("#external_page_panel").css("display", "none");
+      cssEditorFieldset.show();
+      externalPageControls
+      .attr('disabled', 'disabled')
+      .siblings('label')
+      .addClass('disabled');
     }
   },
 
   updatePageRelatedFields: function(page) {
-    $("#page_css_editor").val( $.toJSON(page.data.data.css) ); 
+    cssEditor.val( $.toJSON(page.data.data.css) ); 
     //$("#page_title_textbox").val( page.data.title == "undefined" ? "enter a title" : page.data.title );
     $("#page_height_textbox").get(0).value = page.data.data.css.height; 
     $("#page_width_textbox").get(0).value = page.data.data.css.width; 
@@ -173,14 +191,14 @@ WebDoc.PageInspectorController = $.klass({
   applyPageCss: function(e) {
     e.preventDefault();
     var editor = WebDoc.application.pageEditor;
-    if ($.toJSON(editor.currentPage.data.data.css) != $("#page_css_editor").get(0).value) {
+    if ($.toJSON(editor.currentPage.data.data.css) != cssEditor.get(0).value) {
       var newCss = null;
       try {
-        eval("newCss=" + $("#page_css_editor").get(0).value);
+        eval("newCss=" + cssEditor.value() );
       }
       catch(ex) {
         ddd("Invalid css");
-        $("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
+        cssEditor.val( $.toJSON(editor.currentPage.data.data.css) );
       }
       if (newCss) {
         WebDoc.application.pageEditor.currentPage.applyCss(newCss);
@@ -225,3 +243,6 @@ WebDoc.PageInspectorController = $.klass({
     }
   }
 });
+
+
+})(jQuery);
