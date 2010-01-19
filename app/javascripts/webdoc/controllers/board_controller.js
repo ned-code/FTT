@@ -365,7 +365,7 @@ WebDoc.BoardController = $.klass({
     
     if (jQuery.browser.mozilla) {
       boardElement.css("MozTransformOrigin", "0px 0px");
-      boardElement.css("MozTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
+      boardElement.css("MozTransform", "scale(" + this.currentZoom + ")");
       // Directly remove the transform property so that windowed items are displayed
       if (this.currentZoom == 1) {
 	      boardElement.css("MozTransformOrigin", "");
@@ -398,7 +398,7 @@ WebDoc.BoardController = $.klass({
           boardElement.css("WebkitTransform", "");
         }
         else {
-          boardElement.css("WebkitTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
+          boardElement.css("WebkitTransform", "scale(" + this.currentZoom + ")");
         }
       }
       else 
