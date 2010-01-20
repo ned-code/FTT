@@ -36,47 +36,47 @@ WebDoc.ToolbarController = $.klass({
     }    
   },
   
-  undo: function(e) {
+  'undo': function(e) {
     WebDoc.application.undoManager.undo();
   },
 
-  redo: function(e) {
+  'redo': function(e) {
     WebDoc.application.undoManager.redo();
   },
 
-  zoom_in: function(e) {
+  'zoom_in': function(e) {
     WebDoc.application.boardController.zoomIn();
   },
 
-  zoom_out: function(e) {
+  'zoom_out': function(e) {
     WebDoc.application.boardController.zoomOut();
   },
 
-  delete_item: function(e) {
+  'delete_item': function(e) {
     WebDoc.application.boardController.deleteSelection();
   },   
    
-  lib_view: function(e) {
+  'lib_view': function(e) {
     WebDoc.application.rightBarController.showLib();
   },
   
-  page_inspector_view: function(e) {
+  'page_inspector_view': function(e) {
     WebDoc.application.rightBarController.showPageInspector();
   },
   
-  item_inspector_view: function(e) {
+  'item_inspector_view': function(e) {
     WebDoc.application.rightBarController.showItemInspector();
   },
   
-  page_browser: function(e) {
+  'page-browser': function(e) {
     WebDoc.application.pageBrowserController.toggleBrowser();
   },
   
-  toggle_inspector: function(e) {
+  'toggle_inspector': function(e) {
     WebDoc.application.rightBarController.toggleRightBar();
   },
   
-  toggleInteractionMode: function(e) {
+  'toggleInteractionMode': function(e) {
     e.preventDefault();
     WebDoc.application.boardController.toggleInteractionMode();
   },

@@ -237,12 +237,28 @@ a:hover { color: #0069BF;}
 /*******************/
 /* = toolbars = */
 
-#toolbar{
-    z-index: -1;
+#titlebar {
+    overflow: visible;
+}
+#toolbar {
+    
+}
+#inspector {
+    
+}
+#board_container {
+    
+}
+#left_bar {
+    
+}
+#right_bar {
+    
 }
 
+
+
 #titlebar{
-    z-index: 30;
     height: 24px;
     background: url(../images/deco/tb_small_bg.png) 0 0 repeat-x;
 }
@@ -259,6 +275,7 @@ a:hover { color: #0069BF;}
 #tb_1_utilities li {
     float: left;
     margin-left: 15px;
+    line-height: 1em;
 }
 #tb_1_utilities_preview{
   margin-top: 1px;
@@ -329,6 +346,7 @@ a:hover { color: #0069BF;}
 }
 #tb_1_utilities_settings_dropdown{
     display: none;
+    list-style: none;
     z-index: 1000;
     position: absolute;
     top: 18px;
@@ -344,6 +362,7 @@ a:hover { color: #0069BF;}
 
 #tb_1_utilities_settings li:hover > ul{
   display:block;
+  list-style: none;
 }
 #tb_1_utilities_settings_dropdown li ul{
   display:none;
@@ -488,7 +507,7 @@ ul.page_browser_numbered_list li {
   background-color:black;
 }
 
-#page_browser .page_thumb_importing {
+#page-browser .page_thumb_importing {
   color:green;
   position:relative;
   text-align:center;
