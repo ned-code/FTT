@@ -64,7 +64,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
     ddd("check if widget has an inspector url", this.item);
     if (this.item.data.data.properties && this.item.data.data.properties.inspector_url != null) {
-      return this.item.data.properties.inspector_url;
+      return this.item.data.data.properties.inspector_url;
     }      
     else if (this.item.media && this.item.media.data.properties.inspector_url != null) {
       return this.item.media.data.properties.inspector_url;
