@@ -7,6 +7,7 @@
 //= require <mtools/server_manager>
 //= require <mtools/uuid>
 
+//= require <webdoc/core/widget_manager>
 //= require <webdoc/adaptors/svg_renderer>
 //= require <webdoc/adaptors/collaboration_manager>
 //= require <webdoc/controllers/board_controller>
@@ -38,6 +39,7 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         
+    WebDoc.application.widgetManager = new WebDoc.WidgetManager();
     // create all controllers
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
