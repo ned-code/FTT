@@ -5,7 +5,9 @@
   %div
     = select_tag :type, options_for_select([["Widget", "Medias::Widget"], ["Image", "Medias::Image"], ["Video", "Medias::Video"], ["Thumbnail", "Medias::Thumbnail"] ]) 
     = file_field_tag :file
-  
+  %div
+    %label System Name
+    = text_field_tag :system_name
   %div
     = submit_tag "Upload"
 

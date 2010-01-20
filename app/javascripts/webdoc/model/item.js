@@ -129,7 +129,8 @@ WebDoc.Item = $.klass(MTools.Record,
   
   setInnerHtml: function(html, force) {
     if (html != this.data.data.innerHTML || force) {
-      this.data.data.innerHTML = html;      
+	    // Force to wmode transparent if necessary
+      this.data.data.innerHTML = this.checkForceWMode(html);      
       if (!this.property("noIframe") && (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi))) {
         ddd("replace tag");
         this.data.data.tag = "iframe";
@@ -154,7 +155,7 @@ WebDoc.Item = $.klass(MTools.Record,
   },
 
   getInnerHtml: function() {
-    return this.data.data.innerHTML;
+    return this.checkForceWMode(this.data.data.innerHTML);
   },
 
   getInnerText: function() {
@@ -205,8 +206,20 @@ WebDoc.Item = $.klass(MTools.Record,
 
   removeHtmlTags: function(str) {
     var regExp = /<\/?[^>]+>/gi;
-		str = str.replace(regExp,"");
+    str = str.replace(regExp,"");
     return str;
+  },
+
+  // If HTML code contains an embed tag of type Flash, will create or force the wmode property to transparent
+  // so that Flash content will be viewable into WebDoc
+  checkForceWMode: function(html) {
+    var wrapper = $('<div>').append(html);      
+    var embedNode = $('embed', wrapper);
+    if(embedNode.length > 0 && embedNode.attr("type") == "application/x-shockwave-flash") {
+      $('embed', wrapper).attr("wmode", "transparent");
+    }
+    var returnValue = wrapper.html();
+    return returnValue;
   }
 });
 

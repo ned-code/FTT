@@ -2,7 +2,7 @@ class Media < ActiveRecord::Base
   has_uuid
   serialize :properties
   
-  attr_accessible :uuid, :file, :properties
+  attr_accessible :uuid, :file, :properties, :system_name
   
   # no more used
   UB_THUMBNAIL_DESKTOP_TYPE = 'application/vnd.mnemis-uniboard-thumbnail'
