@@ -11,7 +11,7 @@ WebDoc.InnerHtmlController = $.klass({
     if (WebDoc.application.boardController.selection.length) {
       $("#selected_item_html_editor").attr("disabled", "");
       var item = WebDoc.application.boardController.selection[0].item;
-      var html = item.data.data.innerHTML;
+      var html = item.getInnerHtml();
       if (html) {
         $("#selected_item_html_editor").get(0).value = html;
       }
@@ -50,7 +50,8 @@ WebDoc.InnerHtmlController = $.klass({
     if (html) {
       if (WebDoc.application.boardController.selection.length > 0) {
         WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
+        $("#selected_item_html_editor").get(0).value = WebDoc.application.boardController.selection[0].item.getInnerHtml();
       }
     }
-  }
+  },
 });

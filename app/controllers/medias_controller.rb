@@ -29,7 +29,7 @@ class MediasController < ApplicationController
     
   # POST /medias
   def create
-    @media = eval(params[:type]).new(:file => params[:file], :system_name => params[:system_name])
+    @media = eval(params[:type]).new(:file => params[:file])
     
     if (params[:type] == 'Medias::Image')
       @media.user = current_user
