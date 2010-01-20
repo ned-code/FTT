@@ -237,7 +237,12 @@ a:hover { color: #0069BF;}
 /*******************/
 /* = toolbars = */
 
+#toolbar{
+    z-index: -1;
+}
+
 #titlebar{
+    z-index: 30;
     height: 24px;
     background: url(../images/deco/tb_small_bg.png) 0 0 repeat-x;
 }
@@ -249,6 +254,7 @@ a:hover { color: #0069BF;}
 #tb_1_utilities {
     float: right;
     padding-top: 3px;
+    list-style: none;
 }
 #tb_1_utilities li {
     float: left;
@@ -316,6 +322,7 @@ a:hover { color: #0069BF;}
 }
 #tb_1_utilities_settings:hover > ul{
     display: block;
+    z-index: 3000;
 }
 #tb_1_utilities_settings_trigger img{
     vertical-align: bottom;
