@@ -103,3 +103,24 @@
     margin-left: -350px;
     top: 64px;
 }
+
+/* Colors */
+
+.inspector {
+    background: #dddddd;
+}
+#page_inspector.inspector {
+    background: #d5d7ca;
+    bottom: 0;
+}
+.inspector .head>div {
+    background: #999999;
+    border-bottom: 2px solid #999999;
+}
+.inspector .head h2 {
+    color: white;
+    line-height: 32px;
+    font-weight: bold;
+    font-size: 1.6em;
+    text-align: center;
+}

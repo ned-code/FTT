@@ -552,7 +552,7 @@ ul.page_browser_numbered_list li {
 .item_wrap {
   overflow:hidden;
   position:absolute;
-  border: solid 1px #888888;  
+  border: solid 1px #888888;
 }
 .item_wrap.item_selected {
   border: solid 1px #dd0000;
@@ -626,12 +626,7 @@ ul.page_browser_numbered_list li {
   padding:10px;
   padding-left:20px;
 }
-/* == page inspector */
-#page_css_editor {
-  width:340px;
-  margin:5px;
-  height:300px;
-}
+
 /* == properties inspector */
 .properties_line {
   width:100%;
