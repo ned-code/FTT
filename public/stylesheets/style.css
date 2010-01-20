@@ -237,10 +237,6 @@ a:hover { color: #0069BF;}
 /*******************/
 /* = toolbars = */
 
-#toolbar{
-    z-index: -1;
-}
-
 #titlebar{
     z-index: 30;
     height: 24px;
