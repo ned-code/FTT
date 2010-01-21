@@ -440,7 +440,7 @@ VideoUtils = $.klass({
     
     h = h>0 ? ( h<10 ? '0'+h : h )+':' : '';
     m = m>0 ? ( m<10 ? '0'+m : m )+':' : '00:';
-    s = s>0 ? ( s<10 ? '0'+s : s ) : '';
+    s = s>0 ? ( s<10 ? '0'+s : s ) : '00';
     return h+m+s;
   },
   numberWithThousandsSeparator: function(number, separator) {

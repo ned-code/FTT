@@ -174,13 +174,6 @@
     width: 32px;
 }
 
-.tools a:hover,
-.tools .current_tool a{
-    display: block;
-    border/color: #e18f00;
-    background-color: #fff;
-}
-
 /* Positioning of each index */
 
 .tools {
@@ -190,7 +183,7 @@
 
 .tools li {
     margin-right: 0;
-    border-right: 1px solid rgba(120, 130, 140, 0.3);
+    border-right: 1px solid rgba(120, 130, 140, 0.4);
 }
 .tools li:last-child {
     border-right: none;
@@ -220,6 +213,9 @@
 
 .tools a:hover{
     background-color: #dddddd;
+}
+.tools a.current{
+    background-color: #666666;
 }
 
 #pages-tools a {
@@ -265,7 +261,7 @@ a[href="#select"].current           { background-position: 0 -192px; }
 a[href="#draw"]                     { background-position: 0 -256px; }
 a[href="#draw"]:hover               { background-position: 0 -320px; }
 a[href="#draw"]:active              { background-position: 0 -384px; }
-a[href="#draw"]:current             { background-position: 0 -448px; }
+a[href="#draw"].current             { background-position: 0 -448px; }
 
 a[href="#insert-text"]              { background-position: 0 -512px; }
 a[href="#insert-text"]:hover        { background-position: 0 -576px; }
