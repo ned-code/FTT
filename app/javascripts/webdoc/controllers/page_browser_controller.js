@@ -130,7 +130,7 @@ WebDoc.PageBrowserController = $.klass({
     this.unbindPageBrowserItemsEvents();
     $('.page_browser_item')
     .bind('click', this.selectCurrentPage.pBind(this))
-    .bind('mouseover', this.changeCurrentHighlightedItem.pBind(this));
+    //.bind('mouseover', this.changeCurrentHighlightedItem.pBind(this)); // Provisory, maybe will be used later
     $('.page_browser_item_information').bind('click', this.showPageInspector);
     $('.page_browser_item_title').dblclick(this.staticPanelAction.pBind(this));
     $('.page_browser_item_title_edition').dblclick(this.editPanelAction.pBind(this));
@@ -142,7 +142,7 @@ WebDoc.PageBrowserController = $.klass({
   unbindPageBrowserItemsEvents: function() {
     $('.page_browser_item')
     .unbind('click')
-    .unbind('mouseover');
+    //.unbind('mouseover');
     $('.page_browser_item_information').unbind('click');
     $('.page_browser_item_title').unbind('dblclick');
     $('.page_browser_item_title_edition').unbind('dblclick');
