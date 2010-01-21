@@ -40,7 +40,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     
     this.myVideosPage = 1;
     this.myVideosContainer = $('#'+this.myVideosId);
-    this.videoUtils = new VideoUtils();
+    this.libraryUtils = new LibraryUtils();
     
     // Setup video rows drag n' drop
     this.myVideosContainer.find(".rows").bind("dragstart", this.prepareRowDrag.pBind(this));
@@ -260,8 +260,8 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     thumbWrap.append(thumb);
     
     var titleEl = $("<strong>").addClass("title").text(properties.name);
-    var viewCountEl = $("<span>").addClass("view_count").text(this.videoUtils.numberWithThousandsSeparator(properties.view_count,"'")+" views");
-    var durationEl = $("<span>").addClass("duration").text(this.videoUtils.timeFromSeconds(properties.duration));
+    var viewCountEl = $("<span>").addClass("view_count").text(this.libraryUtils.numberWithThousandsSeparator(properties.view_count,"'")+" views");
+    var durationEl = $("<span>").addClass("duration").text(this.libraryUtils.timeFromSeconds(properties.duration));
     
     var liWrap = $("<li>").addClass("video_row").addClass(properties.type);
     var aWrap = $("<a href=\"\"></a>");
@@ -306,7 +306,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     // View count
     var viewCountEl = this.detailsView.find('.view_count span');
     if (properties.view_count)
-      viewCountEl.text(this.videoUtils.numberWithThousandsSeparator(properties.view_count,"'"));
+      viewCountEl.text(this.libraryUtils.numberWithThousandsSeparator(properties.view_count,"'"));
     else
       viewCountEl.text('');
     

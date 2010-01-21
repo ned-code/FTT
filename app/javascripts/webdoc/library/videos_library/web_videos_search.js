@@ -45,7 +45,7 @@ WebDoc.ServiceVideosSearch = $.klass({
     
     this.container.find(".service_bar").bind("click", this.toggleResultsSection.pBind(this));
     
-    this.videoUtils = new VideoUtils();
+    this.libraryUtils = new LibraryUtils();
   },
   toggleResultsSection: function(event) {
     // collapse/expand results section
@@ -66,22 +66,6 @@ WebDoc.ServiceVideosSearch = $.klass({
   showSpinner: function() {
     this.container.find('.load_more').hide();
     this.videosContainerWrapper.append($('<div class="loading">Loading</div>'));
-  },
-  timeFromSeconds: function(t) {
-    var h = Math.floor(t / 3600);
-    t %= 3600;
-    var m = Math.floor(t / 60);
-    var s = Math.floor(t % 60);
-    
-    h = h>0 ? ( h<10 ? '0'+h : h )+':' : '';
-    m = m>0 ? ( m<10 ? '0'+m : m )+':' : '';
-    s = s>0 ? ( s<10 ? '0'+s : s ) : '';
-    return h+m+s;
-  },
-  numberWithThousandsSeparator: function(number, separator) {
-    var sep = separator || ",";
-    var regexp = /\d{1,3}(?=(\d{3})+(?!\d))/g;
-    return (""+number).replace(regexp, "$1"+sep);
   },
   buildVideoRow: function(type, videoId, url, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height) {
     var properties = { 
@@ -111,8 +95,8 @@ WebDoc.ServiceVideosSearch = $.klass({
     thumbWrap.append(thumb);
     
     var titleEl = $("<strong>").addClass("title").text(name);
-    var viewCountEl = $("<span>").addClass("view_count").text(this.videoUtils.numberWithThousandsSeparator(viewCount,"'")+" views");
-    var durationEl = $("<span>").addClass("duration").text(this.videoUtils.timeFromSeconds(duration));
+    var viewCountEl = $("<span>").addClass("view_count").text(this.libraryUtils.numberWithThousandsSeparator(viewCount,"'")+" views");
+    var durationEl = $("<span>").addClass("duration").text(this.libraryUtils.timeFromSeconds(duration));
     var liWrap = $("<li>").addClass("video_row").addClass(type);
     var aWrap = $("<a href=\"\"></a>");
     if (isHd === "1") thumbWrap.append($("<span>").addClass("hd_icon_overlay"));
@@ -182,7 +166,9 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
       function(data){
         // ddd(data)
         var totResults = data.feed.openSearch$totalResults.$t;
-        this.resultsCount.text(totResults);
+        
+        this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(totResults,"'"));
+        
         if (data.feed.entry && data.feed.entry.length > 0) {
           // ddd(data.feed.entry)
           var results = data.feed.entry;
@@ -372,7 +358,9 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
     // ddd(data)
     // this.resultsCount.text('0');
     var totResults = parseInt(data.videos.total,10);
-    this.resultsCount.text(totResults);
+    
+    this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(totResults,"'"));
+    
     if (data.videos.video && data.videos.video.length > 0) {
       
       this.page = parseInt(data.videos.page,10);
@@ -424,28 +412,5 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
   loadMore: function($super) {
     $super();
     this.performSearch();
-  }
-});
-
-
-VideoUtils = $.klass({
-  initialize: function() {},
-  timeFromSeconds: function(t) {
-    if (t==="") return "n/a";
-    
-    var h = Math.floor(t / 3600);
-    t %= 3600;
-    var m = Math.floor(t / 60);
-    var s = Math.floor(t % 60);
-    
-    h = h>0 ? ( h<10 ? '0'+h : h )+':' : '';
-    m = m>0 ? ( m<10 ? '0'+m : m )+':' : '00:';
-    s = s>0 ? ( s<10 ? '0'+s : s ) : '00';
-    return h+m+s;
-  },
-  numberWithThousandsSeparator: function(number, separator) {
-    var sep = separator || ",";
-    var regexp = /\d{1,3}(?=(\d{3})+(?!\d))/g;
-    return (""+number).replace(regexp, "$1"+sep);
   }
 });

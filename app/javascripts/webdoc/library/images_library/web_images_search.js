@@ -43,6 +43,8 @@ WebDoc.ServiceImagesSearch = $.klass({
     this.imagesContainerWrapper = $('<div>'); // contains the ul (list) and load_more link
     this.imagesContainerWrapper.append(this.imagesContainer);
     this.container.append(this.imagesContainerWrapper);
+    
+    this.libraryUtils = new LibraryUtils();
   },
   toggleResultsSection: function(event) {
     // collapse/expand results section
@@ -51,14 +53,6 @@ WebDoc.ServiceImagesSearch = $.klass({
       this.imagesContainerWrapper.toggle();
     }
   },
-  // toggleResultsSection: function(event) {
-  //   // collapse/expand results section
-  //   event.preventDefault();
-  //   if ($(event.target).hasClass('.service_bar')) {
-  //     // This seems to be broken with jQuery 1.3, but will work with 1.4
-  //     this.container.find(".service_bar").nextAll().toggle();
-  //   }
-  // },
   initialSearch: function() {
     this.resultsCount.text('0');
     this.imagesContainer.empty();
@@ -142,7 +136,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     $.getJSON(flickrUrl,
       function(data){
         //ddd(data);
-        this.resultsCount.text(data.photos.total);
+        this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(data.photos.total,"'"));
         this.page = parseInt(data.photos.page,10);
         this.perPage = data.photos.perpage;
         
@@ -214,7 +208,7 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
       function(data){
         // ddd(data);
         var cursor = data.responseData.cursor;
-        this.resultsCount.text(cursor.estimatedResultCount);
+        this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(cursor.estimatedResultCount,"'"));
         
         if (data.responseData.results && data.responseData.results.length > 0) {
           var results = data.responseData.results;
