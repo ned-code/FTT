@@ -91,7 +91,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
         case "set_image_as_bg_action": 
           var page = WebDoc.application.pageEditor.currentPage;
           var imgUrl = this.detailsView.find('.single_image a img').attr("src");
-          page.setBackgroundImageAndRepeatMode("url("+imgUrl+")", "none");
+          page.setBackgroundImageAndRepeatMode("url("+imgUrl+")", "no-repeat", "center center");
           WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
           break;
           
