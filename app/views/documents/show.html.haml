@@ -8,7 +8,7 @@
       %a{ :href => "#pages-browser", :title => "Pages browser" }
         Pages
     %li#add-page.preview_hidden>
-      %a{ :href => "#add-page", :title => "Add page" }
+      %a{ :href => "#new-page", :title => "Add new page" }
         Add
     -#%li#removePage.preview_hidden>
     -#  %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
@@ -19,68 +19,68 @@
     %li#next-page>
       %a{ :href => "#next-page" , :title => "Next Page" }
         Next
-    %li#layout_selector.preview_hidden>
-      %a{ :href => "#" , :title =>"Choose a layout", :style => "background-position: 0 0; background-image: url('/images/icons/layout.png');" }
-        Layout
-    %li#theme_selector.preview_hidden>
-      %a{ :href => "#" , :title =>"Change theme", :style => "background-position: 0 0; background-image: url('/images/icons/theme.png');" }
-        Theme
+    -#%li#layout_selector.preview_hidden>
+    -#  %a{ :href => "#layouts" , :title =>"Choose layout" }
+    -#    Layout
+    -#%li#theme_selector.preview_hidden>
+    -#  %a{ :href => "#themes" , :title =>"Change theme" }
+    -#    Theme
     
-  %ul#view_tools.tools.thumbs.index.icons-only
+  %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li#zoom_in>
-      %a{ :href => "" , :title => "Zoom In", :style => "background-position: 0 0; background-image: url('/images/icons/zoom_in.png');" }
+      %a{ :href => "#zoom-in" , :title => "Zoom In" }
         Zoom in
     %li#zoom_out>
-      %a{ :href => "" , :title => "Zoom Out", :style => "background-position: 0 0; background-image: url('/images/icons/zoom_out.png');" }
+      %a{ :href => "#zoom-out" , :title => "Zoom Out" }
         Zoom out
     %li#tool_hand.state_tool>
-      %a{ :href => "" , :title => "Move", :style => "background-position: 0 0; background-image: url('/images/icons/pan.png');" }
+      %a{ :href => "#move" , :title => "Move" }
         Move
   
-  %ul#edit_tools.tools.thumbs.index.icons-only.preview_hidden
+  %ul#edit_tools.edit-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#undo>
-      %a{ :href => "" , :title => "Undo", :style => "background-position: 0 0; background-image: url('/images/icons/undo.png');" }
+      %a{ :href => "#undo" , :title => "Undo" }
         Undo
     %li#redo>
-      %a{ :href => "" , :title => "Redo", :style => "background-position: 0 0; background-image: url('/images/icons/redo.png');" }
+      %a{ :href => "#redo" , :title => "Redo" }
         Redo
     %li#delete_item>
-      %a{ :href => "#" , :title => "Delete", :style => "background-position: 0 0; background-image: url('/images/icons/delete.png');" }
+      %a{ :href => "#delete" , :title => "Delete" }
         Delete
   
-  %ul#misc_tools.tools.thumbs.index.icons-only
+  %ul#misc_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li#tool_arrow.state_tool>
-      %a{ :href => "#" , :title => "Select", :style => "background-position: 0 0; background-image: url('/images/icons/cursor.png');" }
+      %a{ :href => "#select" , :title => "Select" }
         Select
     %li#html_snipplet.preview_hidden>
-      %a{ :href => "#" , :title => "Insert an HTML snippet", :style => "background-position: 0 0; background-image: url('/images/icons/code.png');" }
+      %a{ :href => "#insert-html" , :title => "Insert an HTML snippet" }
         HTML
     %li#tool_text.preview_hidden>
-      %a{ :href => "#" , :title => "Insert a Text box", :style => "background-position: 0 0; background-image: url('/images/icons/text.png');" }
+      %a{ :href => "#insert-text" , :title => "Insert a Text box" }
         Text
     %li#tool_pen.preview_hidden.state_tool>
-      %a{ :href => "#" , :title => "Draw", :style => "background-position: 0 0; background-image: url('/images/icons/pen.png');" }
+      %a{ :href => "#draw" , :title => "Draw" }
         Draw
 
   %ul#toggle_inspector_wrap.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#toggle_inspector>
-      %a{ :href => "", :title => "Toggle Inspector", :style => "background-position: 0 0; background-image: url('/images/icons/inspector.png');" }
+      %a{ :href => "", :title => "Toggle Inspector" }
         Inspector
   
   %ul#right_bar_tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#lib_view>
-      %a{ :href => "", :title => "Show Library", :style => "background-position: 0 0; background-image: url('/images/icons/library.png');" }
+      %a{ :href => "", :title => "Show Library" }
         Library
     %li#page_inspector_view>
-      %a{ :href => "", :title => "Show Page inspector", :style => "background-position: 0 0; background-image: url('/images/icons/page.png');" }
+      %a{ :href => "", :title => "Show Page inspector" }
         Page
     %li#item_inspector_view.current_right_item>
-      %a{ :href => "", :title => "Show Item inspector", :style => "background-position: 0 0; background-image: url('/images/icons/info.png');" }                      
+      %a{ :href => "", :title => "Show Item inspector" }                      
         Item
 
 #board_container.hide-scroll.board-panel.panel

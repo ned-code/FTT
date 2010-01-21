@@ -71,7 +71,7 @@
 .board-panel,
 .left-panel,
 .right-panel {
-    top: 60px;
+    top: 56px;
 }
 
 .board-panel {
@@ -86,7 +86,7 @@
 }
 
 .toolbar-panel {
-    top: 25px;
+    top: 24px;
     height: 32px;
     padding: 0 4px;
 }

@@ -1,5 +1,5 @@
 /**
- * @author david
+ * @author David Matthey
  */
 WebDoc.InspectorFieldsValidator = $.klass(
 {
