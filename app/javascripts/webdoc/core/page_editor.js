@@ -108,21 +108,21 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
 
-  previousPage: function(e) {
+  'prev-page': function(e) {
     var previousPage = this.currentDocument.previousPage(this.currentPage);
     if (previousPage) {
       this.loadPage(previousPage);
     }
   },
 
-  nextPage: function(e) {
+  'next-page': function(e) {
     var nextPage = this.currentDocument.nextPage(this.currentPage);
     if (nextPage) {
       this.loadPage(nextPage);
     }
   },
 
-  addPage: function(e) {
+  'add-page': function(e) {
     var newPage = new WebDoc.Page(null, this.currentDocument);
     // we don't need to set foreign keys. It is autoatically done on the server side
     //newPage.data.document_id = this.currentDocument.data.document_id;

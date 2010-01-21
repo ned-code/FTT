@@ -164,39 +164,39 @@
 
 /* Toolbars */
 .tools a {
-    padding-top: 28px;
-    min-width: 28px;
+    padding-top: 32px;
+    min-width: 32px;
 }
 .icons-only.tools a {
-    border: 1px solid #bbbbbb;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 4px;
-    border-radius: 5px;
-    width: 28px;
+    /*border: 1px solid #bbbbbb;*/
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    width: 32px;
 }
 
 .tools a:hover,
 .tools .current_tool a{
     display: block;
-    border: 1px solid #e18f00;
+    border/color: #e18f00;
     background-color: #fff;
 }
 
 /* Positioning of each index */
 
 .tools {
-    margin: 4px 0;
+    margin: 0;
     padding: 0 0 0 0;
 }
 
 /* On the left ... */
-#pages_tools,
+#pages-tools,
 #view_tools,
 #edit_tools,
 #misc_tools {
     float: left;
 }
-#pages_tools,
+#pages-tools,
 #view_tools,
 #edit_tools {
     margin-right: 32px;
@@ -210,8 +210,25 @@
 #toggle_inspector_wrap {
     margin-left: 32px;
 }
+#pages-tools a {
+    background-image: url('/images/pages-tools.png');
+}
+#page-browser a             { background-position: 0 0; }
+#page-browser a:focus      { background-position: 0 -128px; }
+#page-browser a:hover       { background-position: 0 -64px; }
+#page-browser.current a     { background-position: 0 -192px; }
 
+#add-page a                 { background-position: 0 -256px; }
+#add-page a:hover           { background-position: 0 -320px; }
+#add-page a:active          { background-position: 0 -384px; }
 
+#prev-page a                { background-position: 0 -448px; }
+#prev-page a:hover          { background-position: 0 -512px; }
+#prev-page a:active         { background-position: 0 -576px; }
+
+#next-page a                { background-position: 0 -640px; }
+#next-page a:hover          { background-position: 0 -704px; }
+#next-page a:active         { background-position: 0 -768px; }
 
 /* NOT SURE WHAT THIS DOES - something about special rollover states */
 
@@ -224,13 +241,7 @@
 #removePage a:hover {
     background-position: -23px 1px;
 }
-
-#page_browser a{ /* Special case with image in CSS for the toggle_on_panel state -> bad, all buttons images should be in CSS */
-    background-image: url(../images/icons/browse.png);
-    background-repeat: no-repeat;
-    background-position: 1px 1px;
-}
-#page_browser.toggle_on_panel a{
+#page-browser.toggle_on_panel a{
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;

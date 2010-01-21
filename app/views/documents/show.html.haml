@@ -2,22 +2,22 @@
 - session_key_name = ActionController::Base.session_options[:key]
 = render :partial => "layouts/main_editor_toolbar"
 #toolbar.toolbar-panel.panel
-  %ul#pages_tools.tools.thumbs.index.icons-only
+  %ul#pages-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li#addPage.preview_hidden>
-      %a{ :href => "#", :title => "Add page", :style => "background-position: 0 0; background-image: url('/images/icons/add_page.png');" }
-        Add
-    %li#removePage.preview_hidden>
-      %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
-        Delete
-    %li#page_browser>
-      %a{ :href => "" , :title => "Open page browser", :style => "background-position: 0 0; background-image: url('/images/icons/browse.png');" }
+    %li#page-browser>
+      %a{ :href => "#pages-browser", :title => "Pages browser" }
         Pages
-    %li#previousPage>
-      %a{ :href => "" , :title => "Previous page", :style => "background-position: 0 0; background-image: url('/images/icons/arrow_left.png');" }
+    %li#add-page.preview_hidden>
+      %a{ :href => "#add-page", :title => "Add page" }
+        Add
+    -#%li#removePage.preview_hidden>
+    -#  %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
+    -#    Delete
+    %li#prev-page>
+      %a{ :href => "#prev-page" , :title => "Previous page" }
         Prev
-    %li#nextPage>
-      %a{ :href => "" , :title => "Next Page", :style => "background-position: 0 0; background-image: url('/images/icons/arrow_right.png');" }
+    %li#next-page>
+      %a{ :href => "#next-page" , :title => "Next Page" }
         Next
     %li#layout_selector.preview_hidden>
       %a{ :href => "#" , :title =>"Choose a layout", :style => "background-position: 0 0; background-image: url('/images/icons/layout.png');" }
