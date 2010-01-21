@@ -177,7 +177,7 @@ WebDoc.BoardController = $.klass({
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     if (MTools.Browser.Gecko && (new Number(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
       ddd("FF 3.5. drawing !");
-      $("#board svg").css("zIndex", this.isInteraction ? "-1" : "1000001");
+      $("#board svg").css("zIndex", this.isInteraction ? "-1" : "1000000");
     }
   },
   

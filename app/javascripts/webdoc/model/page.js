@@ -129,7 +129,7 @@ WebDoc.Page = $.klass(MTools.Record,
       this.data.items = previousItems;
       //clear previous item view
       for (var itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
-        removeItem(this.items[itemIndex]);
+        this.removeItem(this.items[itemIndex]);
       }
     }
     var that = this;
