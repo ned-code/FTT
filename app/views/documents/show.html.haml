@@ -2,14 +2,13 @@
 - session_key_name = ActionController::Base.session_options[:key]
 = render :partial => "layouts/main_editor_toolbar"
 #toolbar.toolbar-panel.panel
-  %ul#pages-tools.tools.thumbs.index.icons-only
+  %ul.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#page-browser>
-      %a{ :href => "#pages-browser", :title => "Pages browser" }
+      %a{ :href => "#left-panel-toggle", :title => "Pages browser" }
         Pages
-    %li#add-page.preview_hidden>
-      %a{ :href => "#new-page", :title => "Add new page" }
-        Add
+
+  %ul#pages-tools.tools.thumbs.index.icons-only
     -#%li#removePage.preview_hidden>
     -#  %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
     -#    Delete
@@ -25,6 +24,9 @@
     -#%li#theme_selector.preview_hidden>
     -#  %a{ :href => "#themes" , :title =>"Change theme" }
     -#    Theme
+    %li#add-page.preview_hidden>
+      %a{ :href => "#new-page", :title => "Add new page" }
+        Add
     
   %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout

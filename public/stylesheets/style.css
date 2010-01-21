@@ -389,14 +389,6 @@ a:hover { color: #0069BF;}
   display:none;
 }
 
-.current_right_item a{
-    display: block;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 1px solid #e6e6e6;
-    background-color: #fff;
-}
-
 /*******************/
 /* =left part = */
 #left_bar {
