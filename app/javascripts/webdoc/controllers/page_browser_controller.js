@@ -71,6 +71,7 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   toggleBrowser: function() {
+    var pageBroaserButton = $("#page-browser").find("a");
     if (this.visible) {
       this.document.removeListener(this);
       WebDoc.application.boardController.removeCurrentPageListener(this);
@@ -82,8 +83,9 @@ WebDoc.PageBrowserController = $.klass({
               boardPanel.css({
                   left: pagesPanelWidth + val
               });
-          },
+          }
       });
+     pageBroaserButton.removeClass("current");
     }
     else {
       this.document.addListener(this);
@@ -96,10 +98,9 @@ WebDoc.PageBrowserController = $.klass({
               boardPanel.css({
                   left: pagesPanelWidth + val
               });
-          },
+          }
       });
-            
-      $("#page_browser_left").addClass("toggle_on_panel");     
+      pageBroaserButton.addClass("current");      
     }
     this.visible = !this.visible;
   },
