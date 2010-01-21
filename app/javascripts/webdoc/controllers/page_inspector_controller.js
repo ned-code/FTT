@@ -191,10 +191,11 @@ WebDoc.PageInspectorController = $.klass({
   applyPageCss: function(e) {
     e.preventDefault();
     var editor = WebDoc.application.pageEditor;
-    if ($.toJSON(editor.currentPage.data.data.css) != cssEditor.get(0).value) {
+    if ($.toJSON(editor.currentPage.data.data.css) != cssEditor.val() ) {
       var newCss = null;
+      
       try {
-        eval("newCss=" + cssEditor.value() );
+        eval("newCss=" + cssEditor.val() );
       }
       catch(ex) {
         ddd("Invalid css");
