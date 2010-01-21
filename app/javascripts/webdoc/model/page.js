@@ -79,9 +79,10 @@ WebDoc.Page = $.klass(MTools.Record,
     }
   },
   
-  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode) { 
+  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode, position) { 
     var objectChanged = this.setBackgroundImage(backgroundUrl);
     objectChanged = this.setBackgroundRepeatMode(repeatMode) || objectChanged;
+    objectChanged = this.setBackgroundPosition(position) || objectChanged;
     if(objectChanged) {
       this.fireObjectChanged();
       this.save();
@@ -101,6 +102,15 @@ WebDoc.Page = $.klass(MTools.Record,
     WebDoc.InspectorFieldsValidator.validateBackgroundRepeat(repeatMode);
     if(this.data.data.css.backgroundRepeat != repeatMode) {
       this.data.data.css.backgroundRepeat = repeatMode;
+      return true;
+    }
+    return false;
+  },
+
+  setBackgroundPosition: function(position) {
+    WebDoc.InspectorFieldsValidator.validateBackgroundPosition(position);
+    if(this.data.data.css.backgroundPosition != position) {
+      this.data.data.css.backgroundPosition = position;
       return true;
     }
     return false;
