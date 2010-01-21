@@ -34,6 +34,13 @@ $.extend(WebDoc.InspectorFieldsValidator, {
     }
   },
 
+  validateBackgroundPosition: function(position) {
+    var re = new RegExp("^((top|center|bottom)\\s(left|center|right))|((left|center|right)\\s(top|center|bottom))$");
+    if(!position.match(re)) {
+      throw("this method needs a combination of the following values: top, center, bottom - left, center, right");
+    }
+  },
+
   // Takes a string of type "url(/images/background/back.png)" and returns only the file path
   getUrlContent: function(url) {
     var re = new RegExp("^url\((?:\"|')?(.*)(?:\"|')?\)$");
