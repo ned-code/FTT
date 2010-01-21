@@ -112,7 +112,7 @@
 .thumbs a {
     display: inline-block;
     /* stop it creating a gap below the thumb, because by default thumb sits on a baseline. */
-    vertical-align: top;
+    vertical-align: bottom;
     /* padding-top defines the height and pushes any text down out of the box.
        You can't use -ve text-indent for this as IE7 moves the background, too. */
     padding-top: 48px;
@@ -168,10 +168,9 @@
     min-width: 32px;
 }
 .icons-only.tools a {
-    /*border: 1px solid #bbbbbb;*/
-    -moz-border-radius: 2px;
+    /*-moz-border-radius: 2px;
     -webkit-border-radius: 2px;
-    border-radius: 2px;
+    border-radius: 2px;*/
     width: 32px;
 }
 
@@ -187,6 +186,14 @@
 .tools {
     margin: 0;
     padding: 0 0 0 0;
+}
+
+.tools li {
+    margin-right: 0;
+    border-right: 1px solid rgba(120, 130, 140, 0.3);
+}
+.tools li:last-child {
+    border-right: none;
 }
 
 /* On the left ... */
@@ -210,25 +217,94 @@
 #toggle_inspector_wrap {
     margin-left: 32px;
 }
+
+.tools a:hover{
+    background-color: #dddddd;
+}
+
 #pages-tools a {
     background-image: url('/images/pages-tools.png');
 }
-#page-browser a             { background-position: 0 0; }
-#page-browser a:focus      { background-position: 0 -128px; }
-#page-browser a:hover       { background-position: 0 -64px; }
-#page-browser.current a     { background-position: 0 -192px; }
 
-#add-page a                 { background-position: 0 -256px; }
-#add-page a:hover           { background-position: 0 -320px; }
-#add-page a:active          { background-position: 0 -384px; }
+a[href="#pages-browser"]            { background-position: 0 0; }
+a[href="#pages-browser"]:hover      { background-position: 0 -64px; }
+a[href="#pages-browser"]:active     { background-position: 0 -128px; }
+a[href="#pages-browser"].current    { background-position: 0 -192px; }
 
-#prev-page a                { background-position: 0 -448px; }
-#prev-page a:hover          { background-position: 0 -512px; }
-#prev-page a:active         { background-position: 0 -576px; }
+a[href="#new-page"]                 { background-position: 0 -256px; }
+a[href="#new-page"]:hover           { background-position: 0 -320px; }
+a[href="#new-page"]:active          { background-position: 0 -384px; }
 
-#next-page a                { background-position: 0 -640px; }
-#next-page a:hover          { background-position: 0 -704px; }
-#next-page a:active         { background-position: 0 -768px; }
+a[href="#prev-page"]                { background-position: 0 -448px; }
+a[href="#prev-page"]:hover          { background-position: 0 -512px; }
+a[href="#prev-page"]:active         { background-position: 0 -576px; }
+
+a[href="#next-page"]                { background-position: 0 -640px; }
+a[href="#next-page"]:hover          { background-position: 0 -704px; }
+a[href="#next-page"]:active         { background-position: 0 -768px; }
+
+a[href="#layouts"]                  { background-position: 0 -832px; }
+a[href="#layouts"]:hover            { background-position: 0 -896px; }
+a[href="#layouts"]:active           { background-position: 0 -960px; }
+a[href="#layouts"].current          { background-position: 0 -1024px; }
+
+a[href="#themes"]                   { background-position: 0 -1088px; }
+a[href="#themes"]:hover             { background-position: 0 -1152px; }
+a[href="#themes"]:active            { background-position: 0 -1216px; }
+a[href="#themes"].current           { background-position: 0 -1280px; }
+
+.edit-tools a {
+    background-image: url('/images/edit-tools.png');
+}
+
+a[href="#select"]                   { background-position: 0 0; }
+a[href="#select"]:hover             { background-position: 0 -64px; }
+a[href="#select"]:active            { background-position: 0 -128px; }
+a[href="#select"].current           { background-position: 0 -192px; }
+
+a[href="#draw"]                     { background-position: 0 -256px; }
+a[href="#draw"]:hover               { background-position: 0 -320px; }
+a[href="#draw"]:active              { background-position: 0 -384px; }
+a[href="#draw"]:current             { background-position: 0 -448px; }
+
+a[href="#insert-text"]              { background-position: 0 -512px; }
+a[href="#insert-text"]:hover        { background-position: 0 -576px; }
+a[href="#insert-text"]:active       { background-position: 0 -640px; }
+a[href="#insert-text"].current      { background-position: 0 -704px; }
+
+a[href="#insert-html"]              { background-position: 0 -768px; }
+a[href="#insert-html"]:hover        { background-position: 0 -832px; }
+a[href="#insert-html"]:active       { background-position: 0 -896px; }
+a[href="#insert-html"]:active       { background-position: 0 -960px; }
+
+a[href="#move"]                     { background-position: 0 -1024px; }
+a[href="#move"]:hover               { background-position: 0 -1088px; }
+a[href="#move"]:active              { background-position: 0 -1152px; }
+a[href="#move"].current             { background-position: 0 -1216px; }
+
+a[href="#zoom-in"]                  { background-position: 0 -1280px; }
+a[href="#zoom-in"]:hover            { background-position: 0 -1344px; }
+a[href="#zoom-in"]:active           { background-position: 0 -1408px; }
+a[href="#zoom-in"].current          { background-position: 0 -1472px; }
+
+a[href="#zoom-out"]                 { background-position: 0 -1536px; }
+a[href="#zoom-out"]:hover           { background-position: 0 -1600px; }
+a[href="#zoom-out"]:active          { background-position: 0 -1664px; }
+a[href="#zoom-out"].current         { background-position: 0 -1728px; }
+
+a[href="#delete"]                   { background-position: 0 -1792px; }
+a[href="#delete"]:hover             { background-position: 0 -1856px; }
+a[href="#delete"]:active            { background-position: 0 -1920px; }
+
+a[href="#undo"]                     { background-position: 0 -1984px; }
+a[href="#undo"]:hover               { background-position: 0 -2048px; }
+a[href="#undo"]:active              { background-position: 0 -2112px; }
+
+a[href="#redo"]                     { background-position: 0 -2176px; }
+a[href="#redo"]:hover               { background-position: 0 -2240px; }
+a[href="#redo"]:active              { background-position: 0 -2304px; }
+
+
 
 /* NOT SURE WHAT THIS DOES - something about special rollover states */
 
