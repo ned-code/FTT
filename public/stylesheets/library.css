@@ -10,6 +10,7 @@
   height:100%;
   overflow-x: hidden;
   font-family: Helvetica;
+  line-height:1;
   background:#eee;
 }
 
@@ -355,7 +356,7 @@ div.tabs > div {
 
 #libraries .web_media_search_field {
   font-size:18px;
-  padding:0 2px;
+  padding:2px;
   width:249px;
   margin:0 0 20px;
   float:left;
@@ -385,7 +386,7 @@ div.tabs > div {
   border: 1px solid #666;
 }
 
-#libraries .web_media h3 {
+#libraries .web_media h3.service_bar {
   display:block;
   font-size:15px;
   font-weight:bold;
@@ -397,12 +398,31 @@ div.tabs > div {
   position:relative;
 }
 
-#libraries .web_media h3 span.results_number {
+#libraries .web_media h3.service_bar span.results_number {
   position:absolute;
   top:4px;
   right:7px;
   font-size:12px;
   font-weight:normal;
+}
+
+#libraries .web_media h3.service_bar .cc_selector {
+  -moz-appearance:none;
+  -webkit-appearance:none;
+  outline:0;
+  border:none;
+  text-indent:-9000px;
+  display:block;
+  width:30px;
+  height:12px;
+  position:absolute;
+  top:1px;
+  left:58px;
+  background:url(/images/libraries/cc.png) no-repeat;
+}
+
+#libraries .web_media h3.service_bar .cc_selector option {
+  padding: 1px 3px;
 }
 
 /* ========================================== */
@@ -538,6 +558,7 @@ div.tabs > div {
 
 #libraries .spacer {
   clear:both;
+  display:block;
 }
 
 /* ================= */
@@ -663,6 +684,10 @@ object:hover, object:focus, object:active {
 /* = Videos = */
 /* ========== */
 
+#videos .load_more {
+  margin-top:10px;
+}
+
 #videos .rows .no_items {
   font-size:14px;
   text-align:center;
@@ -677,27 +702,80 @@ object:hover, object:focus, object:active {
 
 #videos .rows ul li {
   list-style: none;
-  padding:0 0 18px 0;
+  padding:0 0 7px 0;
   text-align:left;
+  clear:both;
 }
 
 #videos .rows ul li a {
   color:#000;
   text-decoration:none;
-  position:relative;
+  background:#fff;
+  display:block;
+  padding:8px;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
 }
 
-#videos .rows ul li a .icon_overlay {
+#videos .rows ul li a span.wrap {
+  display:block;
+  float:left;
+  width:120px;
+  height:72px;
+  position:relative;
+  margin:0 8px 0 0;
+  overflow:hidden;
+  background:#000;
+}
+
+#videos .rows ul li a span.wrap img {
+  position:absolute;
+  top:50%;
+  width:120px;
+  height:90px;
+  margin-top:-45px;
+}
+
+#videos .rows ul li a .title {
+  font-weight:bold;
+  display:block;
+  font-size:12px;
+  line-height:16px;
+  padding:0 0 5px;
+}
+
+#videos .rows ul li a span.duration {
+  display:block;
+  padding:0 0 7px;
+  font-weight:bold;
+  font-size:11px;
+  color:#999;
+}
+
+#videos .rows ul li a span.view_count {
+  font-size:11px;
+  color:#999;
+}
+
+#videos .rows ul li a .icon_overlay, #videos .rows ul li a .hd_icon_overlay {
   display:block;
   width:16px;
   height:16px;
   position:absolute;
   bottom:8px;
-  right:6px;
+  right:8px;
 }
 
-#videos .rows ul li.youtube a .icon_overlay {background:url(/images/libraries/flickr_mini.png) no-repeat;}
-#videos .rows ul li.vimeo a .icon_overlay {background:url(/images/libraries/google_mini.png) no-repeat;}
+#videos .rows ul li a .hd_icon_overlay {
+  background:url(/images/libraries/hd.png) no-repeat;
+  top:8px;
+  bottom:auto;
+  width:26px;
+  height:16px;
+}
+
+#videos .rows ul li.youtube a .icon_overlay {background:url(/images/libraries/youtube_mini.png) no-repeat;}
+#videos .rows ul li.vimeo a .icon_overlay {background:url(/images/libraries/vimeo_mini.png) no-repeat;}
 
 
 /* ================= */
@@ -705,36 +783,46 @@ object:hover, object:focus, object:active {
 /* ================= */
 
 #video_details .single_video {
-  padding:0 15px 20px 15px;
+  padding:0 15px 30px 15px;
+  margin:0 0 15px;
   position:relative;
+  line-height:0;
 }
 
 #video_details .single_video .drag_handle {
-  width:30px;
-  height:30px;
-  background:magenta url(/images/libraries/drag_handle.gif) no-repeat 100% 100%;
-  position:absolute;
-  bottom:0;
-  right:0;
+  width:290px;
+  height:15px;
+  padding:15px 0 0 30px;
+  background:transparent url(/images/libraries/drag_handle.png) 5px 50% no-repeat;
   cursor:move;
+  font-weight:bold;
+  font-size:13px;
+  color:#999;
+  bottom:0;
+  left:15px;
+  -webkit-border-bottom-left-radius:8px;
+  -webkit-border-bottom-right-radius:8px;
+  -moz-border-radius:0 0 8px 8px;
 }
 
 #video_details .video_name {
-  font-size:15px;
+  font-size:17px;
   font-weight:bold;
   padding:20px 15px 10px 15px;
-  color:#666;
+  color:#000;
 }
 
 #video_details .view_count {
-  padding: 0 15px;
-  font-size:12px;
+  padding:0 15px;
+  font-size:14px;
+  font-weight:bold;
   color:#666;
 }
 
 #video_details .video_description {
   padding: 8px 15px;
   font-size:12px;
+  line-height:22px;
   color:#666;
 }
 

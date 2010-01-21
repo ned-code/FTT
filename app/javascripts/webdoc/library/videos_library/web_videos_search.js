@@ -25,8 +25,8 @@ WebDoc.WebVideosSearch = $.klass({
       
     }.pBind(this));
     
-    // Setup thumbnails drag n' drop
-    // $("#web_images .thumbnails").bind("dragstart", this.imagesLibrary.dragStart.pBind(this.imagesLibrary));
+    // Setup video rows drag n' drop
+    $("#web_videos .rows").bind("dragstart", this.videosLibrary.prepareRowDrag.pBind(this.videosLibrary));
   }
 });
 
@@ -39,9 +39,20 @@ WebDoc.ServiceVideosSearch = $.klass({
     this.resultsCount = this.container.find('.results_number');
     
     this.videosContainer = $('<ul>');
-    this.container.append(this.videosContainer);
+    this.videosContainerWrapper = $('<div>'); // contains the ul (list) and load_more link
+    this.videosContainerWrapper.append(this.videosContainer);
+    this.container.append(this.videosContainerWrapper);
+    
+    this.container.find(".service_bar").bind("click", this.toggleResultsSection.pBind(this));
     
     this.videoUtils = new VideoUtils();
+  },
+  toggleResultsSection: function(event) {
+    // collapse/expand results section
+    event.preventDefault();
+    if ($(event.target).hasClass('.service_bar')) { //incase we'll add something clickable inside the service_bar
+      this.videosContainerWrapper.toggle();
+    }
   },
   initialSearch: function() {
     this.resultsCount.text('0');
@@ -54,7 +65,7 @@ WebDoc.ServiceVideosSearch = $.klass({
   },
   showSpinner: function() {
     this.container.find('.load_more').hide();
-    this.container.append($('<div class="loading">Loading</div>'));
+    this.videosContainerWrapper.append($('<div class="loading">Loading</div>'));
   },
   timeFromSeconds: function(t) {
     var h = Math.floor(t / 3600);
@@ -72,9 +83,10 @@ WebDoc.ServiceVideosSearch = $.klass({
     var regexp = /\d{1,3}(?=(\d{3})+(?!\d))/g;
     return (""+number).replace(regexp, "$1"+sep);
   },
-  buildVideoRow: function(type, url, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height) {
+  buildVideoRow: function(type, videoId, url, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height) {
     var properties = { 
       type: type,
+      video_id: videoId,
       url: url,
       thumb_url: thumbUrl,
       name: name,
@@ -91,19 +103,21 @@ WebDoc.ServiceVideosSearch = $.klass({
     
     var thumb = $("<img>").attr({
       src : thumbUrl,
-      alt : "",
-      width: "120",
-      height: type === "youtube" ? "72" : "90"
-      // height: "90"
-    }).data("properties", properties);
+      alt : ""
+    })
+    .data("properties", properties);
     
-    var titleEl = $("<h4>").addClass("title").text(name);
+    var thumbWrap = $("<span>").attr({'class':'wrap'});
+    thumbWrap.append(thumb);
+    
+    var titleEl = $("<strong>").addClass("title").text(name);
     var viewCountEl = $("<span>").addClass("view_count").text(this.videoUtils.numberWithThousandsSeparator(viewCount,"'")+" views");
     var durationEl = $("<span>").addClass("duration").text(this.videoUtils.timeFromSeconds(duration));
-    
     var liWrap = $("<li>").addClass("video_row").addClass(type);
     var aWrap = $("<a href=\"\"></a>");
-    aWrap.append(thumb).append(titleEl).append(durationEl).append(viewCountEl);
+    if (isHd === "1") thumbWrap.append($("<span>").addClass("hd_icon_overlay"));
+    aWrap.append(thumbWrap).append(titleEl).append(durationEl).append(viewCountEl).append($("<span>").attr({'class':'spacer'}));
+    
     liWrap.append(aWrap);
     return liWrap;
   }
@@ -123,13 +137,13 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
     $("<a>").attr("href","").text("Load more").click(function(event){
       this.loadMore();
       event.preventDefault();
-    }.pBind(this)).appendTo(this.container).wrap("<div class='load_more' style='display:none'>");
+    }.pBind(this)).appendTo(this.videosContainerWrapper).wrap("<div class='load_more' style='display:none'>");
     this.loadMoreLink = this.container.find('.load_more');
   },
   buildEmbeddedVideo: function(properties) {
     // var src = "http://www.youtube.com/v/PZf8MRYasss&hl=en_US&fs=1&";
     
-    var url = properties.embed_url + "&fs=1&showinfo=0";
+    var url = properties.embed_url + "&fs=1&hd=1&showinfo=0";
     var width = 320;
     var height = properties.aspect_ratio === "widescreen" ? 200 : 265;
     
@@ -186,14 +200,14 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
             var videoId = videoMediaGroup.yt$videoid.$t;
             
             this.videosContainer.append(
-              this.buildVideoRow("youtube", "http://www.youtube.com/watch?v="+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, "", "", "")
+              this.buildVideoRow("youtube", videoId, "http://www.youtube.com/watch?v="+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, "", "", "")
             );
             
           }.pBind(this));
-          
+
+          // Refresh loadMoreLink
           if ( totResults > this.startIndex + this.perPage ) {
             this.startIndex += this.perPage;
-            // ddd("new start param:"+this.startIndex);
             this.loadMoreLink.show();
           }
           else {
@@ -236,7 +250,7 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
     $("<a>").attr("href","").text("Load more").click(function(event){
       this.loadMore();
       event.preventDefault();
-    }.pBind(this)).appendTo(this.container).wrap("<div class='load_more' style='display:none'>");
+    }.pBind(this)).appendTo(this.videosContainerWrapper).wrap("<div class='load_more' style='display:none'>");
     this.loadMoreLink = this.container.find('.load_more');
   },
   buildEmbeddedVideo: function() {
@@ -377,12 +391,12 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
         var videoId = video.id;
         var embedUrl = "http://vimeo.com/moogaloop.swf?clip_id="+videoId+"&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00adef&amp;fullscreen=1";
         var embedType = "application/x-shockwave-flash";
-        var isHd = video.is_hd === "1" ? true : false;
+        var isHd = video.is_hd;
         var width = parseInt(video.width,10);
         var height = parseInt(video.height,10);
         
         this.videosContainer.append(
-          this.buildVideoRow("vimeo", "http://vimeo.com/"+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height)
+          this.buildVideoRow("vimeo", videoId, "http://vimeo.com/"+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height)
         );
       }.pBind(this));
       
@@ -425,7 +439,7 @@ VideoUtils = $.klass({
     var s = Math.floor(t % 60);
     
     h = h>0 ? ( h<10 ? '0'+h : h )+':' : '';
-    m = m>0 ? ( m<10 ? '0'+m : m )+':' : '';
+    m = m>0 ? ( m<10 ? '0'+m : m )+':' : '00:';
     s = s>0 ? ( s<10 ? '0'+s : s ) : '';
     return h+m+s;
   },
@@ -433,5 +447,5 @@ VideoUtils = $.klass({
     var sep = separator || ",";
     var regexp = /\d{1,3}(?=(\d{3})+(?!\d))/g;
     return (""+number).replace(regexp, "$1"+sep);
-  }  
+  }
 });

@@ -4,7 +4,7 @@ class VideosController < ApplicationController
   
   # GET /videos
   def index
-    per_page = 12
+    per_page = 4
     @videos = current_user.videos.paginate(:page => params[:page], :per_page => per_page)
 
     respond_to do |format|
@@ -35,7 +35,6 @@ class VideosController < ApplicationController
   
   # POST /videos
   def create
-    p "create!!!!!!!!!!!!!!!!!!"
     @video = current_user.videos.build(params[:video])
     @video.uuid = params[:video][:uuid]
     

@@ -17,7 +17,7 @@ WebDoc.InspectorController = $.klass({
     var textPalette = $("#palette_text").hide();
     var penPelette = $("#palette_pen").hide();
     var imagePelette = $("#palette_image").hide();
-    this.imagePaletteController = new WebDoc.ImagePaletteController();    
+    this.imagePaletteController = new WebDoc.ImagePaletteController();
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
       ddd("must inject uniboard api in inspector");

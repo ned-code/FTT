@@ -18,8 +18,8 @@ WebDoc.WebImagesSearch = $.klass({
       event.preventDefault();
       var query = this.searchField.val();
       
-      this.flickrImagesSearch.initialSearch(query);
       this.googleImagesSearch.initialSearch(query);
+      this.flickrImagesSearch.initialSearch(query);
       
     }.pBind(this));
     
@@ -37,9 +37,28 @@ WebDoc.ServiceImagesSearch = $.klass({
     this.container.hide();
     this.resultsCount = this.container.find('.results_number');
     
+    this.container.find(".service_bar").bind("click", this.toggleResultsSection.pBind(this));
+    
     this.imagesContainer = $('<ul>');
-    this.container.append(this.imagesContainer);
+    this.imagesContainerWrapper = $('<div>'); // contains the ul (list) and load_more link
+    this.imagesContainerWrapper.append(this.imagesContainer);
+    this.container.append(this.imagesContainerWrapper);
   },
+  toggleResultsSection: function(event) {
+    // collapse/expand results section
+    event.preventDefault();
+    if ($(event.target).hasClass('.service_bar')) {
+      this.imagesContainerWrapper.toggle();
+    }
+  },
+  // toggleResultsSection: function(event) {
+  //   // collapse/expand results section
+  //   event.preventDefault();
+  //   if ($(event.target).hasClass('.service_bar')) {
+  //     // This seems to be broken with jQuery 1.3, but will work with 1.4
+  //     this.container.find(".service_bar").nextAll().toggle();
+  //   }
+  // },
   initialSearch: function() {
     this.resultsCount.text('0');
     this.imagesContainer.empty();
@@ -51,7 +70,7 @@ WebDoc.ServiceImagesSearch = $.klass({
   },
   showSpinner: function() {
     this.container.find('.load_more').hide();
-    this.container.append($('<div class="loading">Loading</div>'));
+    this.imagesContainerWrapper.append($('<div class="loading">Loading</div>'));
   },
   buildThumbnail: function(type, url, thumbUrl, name, imageLink, size) {
     var properties = { type:type, url:url, thumb_url:thumbUrl, name:name, image_link:imageLink };
@@ -83,14 +102,40 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     $("<a>").attr("href","").text("Load more").click(function(event){
       this.loadMore();
       event.preventDefault();
-    }.pBind(this)).appendTo(this.container).wrap("<div class='load_more' style='display:none'>");
+    }.pBind(this)).appendTo(this.imagesContainerWrapper).wrap("<div class='load_more' style='display:none'>");
     this.loadMoreLink = this.container.find('.load_more');
+    
+    this.setupLicenseSelector();
+  },
+  setupLicenseSelector: function() {
+    var licenses = { 
+      "":  "No filter",                                    
+      "3": "Reuse (non-commercial)",                       //CC-Attribution-NonCommercial-NoDerivs
+      "2": "Reuse (non-commercial) with modification",     //CC-Attribution-NonCommercial
+      "6": "Commercial reuse",                             //CC-Attribution-NoDerivs
+      "4": "Commercial reuse with modification"            //CC-Attribution
+      // "7": "No known copyright restrictions"
+    };
+    this.currentLicense = "";
+    
+    var licenseSelector = $("<select>").addClass("cc_selector");
+    $.each(licenses, function(k,v){
+      licenseSelector.append($("<option>").attr({ value:k }).text(v));
+    }.pBind(this));
+    
+    licenseSelector.bind("change", function(event){
+      this.currentLicense = licenseSelector.val();
+      this.initialSearch(this.query);
+    }.pBind(this));
+    
+    this.resultsCount.before(licenseSelector);
   },
   performSearch: function() {
     // http://www.flickr.com/services/api/flickr.photos.search.html
     // http://www.flickr.com/services/api/misc.urls.html
     var flickrUrl = this.flickrPhotosSearchBaseUrl+
     "&text=" + encodeURIComponent(this.query) +
+    "&license=" + this.currentLicense +
     "&per_page="+ this.perPage +
     "&page=" + this.page +
     "&content_type=1&api_key=" + this.flickrApiKey + "&format=json&jsoncallback=?";
@@ -152,7 +197,7 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     $("<a>").attr("href","").text("Load more").click(function(event){
       this.loadMore();
       event.preventDefault();
-    }.pBind(this)).appendTo(this.container).wrap("<div class='load_more' style='display:none'>");
+    }.pBind(this)).appendTo(this.imagesContainerWrapper).wrap("<div class='load_more' style='display:none'>");
     this.loadMoreLink = this.container.find('.load_more');
   },
   performSearch: function() {

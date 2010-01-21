@@ -92,7 +92,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           
         case "set_image_as_bg_action": 
           var page = WebDoc.application.pageEditor.currentPage;
-          var imgUrl = this.detailsView.find('.single_image a img').attr("src");
+          var imgUrl = this.detailsViewImg.attr("src");
           page.setBackgroundImageAndRepeatMode("url("+imgUrl+")", "none");
           WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
           break;
@@ -155,7 +155,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   },
   dragStart: function(event) {
     var draggingImg = $(event.target).find('img');
-    // ddd(draggingImg)
+    //ddd(draggingImg)
     event.originalEvent.dataTransfer.setData('application/ub-image', draggingImg.data("properties").url);
   },
   

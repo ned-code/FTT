@@ -42,9 +42,9 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     this.myVideosContainer = $('#'+this.myVideosId);
     this.videoUtils = new VideoUtils();
     
-    // // Setup thumbnails drag n' drop
-    // this.myVideosContainer.find(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
-    // 
+    // Setup video rows drag n' drop
+    this.myVideosContainer.find(".rows").bind("dragstart", this.prepareRowDrag.pBind(this));
+    
     // Next/Previous page links
     this.paginationWrap = $("<div class='pagination' style='display:none'>");
     this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
@@ -64,7 +64,8 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     // Setup drag n' drop
     var dragHandle = this.detailsView.find('.drag_handle');
     dragHandle.attr({ draggable: "true" });
-    dragHandle.bind("dragstart", this.dragStart.pBind(this));
+    dragHandle.html("drag and drop to add");
+    dragHandle.bind("dragstart", this.prepareVideoDrag.pBind(this));
     dragHandle.css({ "-webkit-user-drag":"element" });  // this is the equivalent of the HTML5 "draggable" attribute 
                                                         // for current version of safari (v4.0.4)) (but future webkit
                                                         // version will support "draggable" and at that point we'll 
@@ -141,20 +142,42 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
       }
     }.pBind(this));
   },
-  dragStart: function(event) {
-    var target = $(event.target)
-    if (!target.hasClass('drag_handle')) return;
+  prepareRowDrag: function(event) {
+    // Started dragging a video "row" from the web search results or My Videos lists
+    
+    var target = $(event.target);
+    // if ($.isEmptyObject(target.closest('.video_row'))) { av in jQuery v1.4
+    if (target.closest('.video_row').length === 0 || target.find('img').length === 0) {
+      event.preventDefault();
+      return;
+    }
+    
+    var properties = target.find('img').data("properties");
+    this.dragStart(event, properties);
+  },
+  prepareVideoDrag: function(event) {
+    // Started dragging a video from the details view (by grabbing its drag handle)
+    
+    var target = $(event.target);
+    if (!target.hasClass('drag_handle')) {
+      event.preventDefault();
+      return;
+    }
     
     var properties = this.detailsVideoContainer.data("properties");
+    this.dragStart(event, properties);
+  },
+  dragStart: function(event, properties) {
     var dt = event.originalEvent.dataTransfer;
     dt.setData("application/ub-video", properties);
     
+    // ddd(properties.type)
+    // ddd(properties.video_id)
+    
     var dragImage = new Image();
     dragImage.src = properties.thumb_url;
-    // dt.setDragImage( $('#video_details .toolbar .back')[0], 60, 36);
     dt.setDragImage( dragImage, 60, 40 );
   },
-  
   showSpinner: function($super, container) {
     $super(container);
     if (this.hasPagination) this.paginationWrap.hide();
@@ -208,7 +231,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     //if we are in first page, don't reload the whole thing, just add the newly uploaded images to the top of the list 
     var myVideosList = this.myVideosContainer.find('.rows ul');
     if (newVideos && this.myVideosPage === 1 && myVideosList.length > 0) {
-      ddd('**************************REFRESH WITH NO RELOAD')
+      // ddd('**************************REFRESH WITH NO RELOAD')
        $.each(newVideos, function(i,video) {
          
          myVideosList.prepend(this.buildVideoRow(video.uuid, video.properties));
@@ -216,7 +239,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
        }.pBind(this));
     }
     else { // If not (or if no newVideos are passed) reload the 1st page
-      ddd('**************************REFRESH WITH RELOAD')
+      // ddd('**************************REFRESH WITH RELOAD')
       
       this.myVideosContainer.find(".rows").data('loaded', false);
       this.myVideosPage = 1;
@@ -227,19 +250,23 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     
     var thumb = $("<img>").attr({
       src : properties.thumb_url,
-      alt : "",
-      width: "120",
-      height: "72"
-    }).data("properties", jQuery.extend({type:"my_video", uuid:uuid}, properties));
+      alt : ""
+    })
+    .data("properties", jQuery.extend({type:"my_video", uuid:uuid}, properties));
     
-    var titleEl = $("<h4>").addClass("title").text(properties.name);
+    var thumbWrap = $("<span>").attr({'class':'wrap'});
+    thumbWrap.append(thumb);
+    
+    var titleEl = $("<strong>").addClass("title").text(properties.name);
     var viewCountEl = $("<span>").addClass("view_count").text(this.videoUtils.numberWithThousandsSeparator(properties.view_count,"'")+" views");
     var durationEl = $("<span>").addClass("duration").text(this.videoUtils.timeFromSeconds(properties.duration));
     
     var liWrap = $("<li>").addClass("video_row").addClass(properties.type);
     var aWrap = $("<a href=\"\"></a>");
-    aWrap.append(thumb).append(titleEl).append(durationEl).append(viewCountEl);
-    aWrap.append($("<span>").addClass("icon_overlay")); //youtube/vimeo mini icon
+    thumbWrap.append($("<span>").addClass("icon_overlay")); //youtube/vimeo mini icon
+    
+    if (properties.is_hd === "1") thumbWrap.append($("<span>").addClass("hd_icon_overlay"));
+    aWrap.append(thumbWrap).append(titleEl).append(durationEl).append(viewCountEl).append($("<span>").attr({'class':'spacer'}));
     liWrap.append(aWrap);
     return liWrap;
   },
@@ -264,7 +291,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     
     // Embed video
     this.detailsVideoContainer.find('object').remove();
-    this.detailsVideoContainer.append(this.webVideosSearch.youtubeSearch.buildEmbeddedVideo(properties));
+    this.detailsVideoContainer.prepend(this.webVideosSearch.youtubeSearch.buildEmbeddedVideo(properties));
     
     // Store the current properties in detailsVideoContainer
     this.detailsVideoContainer.data("properties", properties);
