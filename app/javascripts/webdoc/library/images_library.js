@@ -74,6 +74,11 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   setupDetailsView: function() {
     this.detailsViewImg = this.detailsView.find('.single_image img');
     
+    // Setup drag n' drop
+    this.detailsView.find('.single_image')
+    .attr({ draggable: "true" })
+    .bind("dragstart", this.dragStart.pBind(this));
+    
     // handle possible actions 
     $("#image_details .actions").click(function(event){
       event.preventDefault();
@@ -155,12 +160,19 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   },
   
   dragStart: function(event) {
-    // we take closest li and then search down the img because safari and firefox have not the same target.
-    // on ff target is the a tag but in safarai target is the img.
-    var draggingImg = $(event.target).closest('li').find('img');
-    ddd("drag target",event.target);
-    ddd("propeties", draggingImg.data("properties"));
-    event.originalEvent.dataTransfer.setData('application/ub-image', draggingImg.data("properties").url);
+    // we take parent and then search down the img because safari and firefox have not the same target.
+    // on firefox target is the a tag but in safarai target is the img.
+    var draggingImg = $(event.target).parent().find('img');
+    var properties = draggingImg.data("properties");
+    // ddd("drag target",event.target);
+    // ddd("propeties", properties);
+    var dt = event.originalEvent.dataTransfer;
+    dt.setData("application/ub-image", properties.url);
+    
+    // Drag "feedback"
+    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
+    $(document.body).append(mediaDragFeedbackEl);
+    dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   },
   
   showSpinner: function($super, container) {

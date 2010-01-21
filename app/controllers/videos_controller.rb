@@ -4,7 +4,7 @@ class VideosController < ApplicationController
   
   # GET /videos
   def index
-    per_page = 4
+    per_page = 5
     @videos = current_user.videos.paginate(:page => params[:page], :per_page => per_page)
 
     respond_to do |format|

@@ -62,6 +62,15 @@ WebDoc.Library = $.klass({
   },
   prepareDetailsView: function(properties) {
     //common code to be executed for all subclasses
+  },
+  buildMediaDragFeedbackElement: function(type, thumbUrl) { //type=image|video
+    $("#media_drag_feedback").remove();
+    var mediaThumb = $("<img>").attr({ src:thumbUrl }), icon = $("<span>");
+    var mediaDragFeedback = $("<div>").attr({ id:"media_drag_feedback", 'class':type })
+    .css({ position:"relative", top:"-500px" }) // because I can't use hide() in this case (or setDragImage won't work)
+    .append(icon).append(mediaThumb);
+    
+    return mediaDragFeedback;
   }
 });
 

@@ -62,14 +62,12 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
   setupDetailsView: function() {
     
     // Setup drag n' drop
-    var dragHandle = this.detailsView.find('.drag_handle');
-    dragHandle.attr({ draggable: "true" });
-    dragHandle.html("drag and drop to add");
-    dragHandle.bind("dragstart", this.prepareVideoDrag.pBind(this));
-    dragHandle.css({ "-webkit-user-drag":"element" });  // this is the equivalent of the HTML5 "draggable" attribute 
-                                                        // for current version of safari (v4.0.4)) (but future webkit
-                                                        // version will support "draggable" and at that point we'll 
-                                                        // be able to remove this line)
+    this.detailsView.find('.drag_handle').attr({ draggable: "true" })
+    .bind("dragstart", this.prepareVideoDrag.pBind(this))
+    .css({ "-webkit-user-drag":"element" });  // this is the equivalent of the HTML5 "draggable" attribute 
+                                              // for current version of safari (v4.0.4)) (but future webkit
+                                              // version will support "draggable" and at that point we'll 
+                                              // be able to remove this line)
     
     // Handle title of Show video page action
     var showVideoPageEl = $("#show_video_page_action");
@@ -170,20 +168,15 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
   dragStart: function(event, properties) {
     var dt = event.originalEvent.dataTransfer;
     dt.setData("application/ub-video", $.toJSON(properties));
-    // ddd(properties.type)
-    // ddd(properties.video_id)
     
+    // Drag "feedback"
+    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("video", properties.thumb_url);
+    $(document.body).append(mediaDragFeedbackEl);
+    dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
+    // old:
     // var dragImage = new Image();
     // dragImage.src = properties.thumb_url;
     // dt.setDragImage( dragImage, 60, 40 );
-    $("#video_drag_feedback").remove();
-    var videoThumb = $("<img>").attr({ src:properties.thumb_url, width:120, height:90 }), videoIcon = $("<span>");
-    var videoDragFeedback = $("<div>").attr({ id:"video_drag_feedback" })
-    .css({ position:"relative", top:"-500px" }) // because I can't use hide() in this case (or setDragImage won't work)
-    .append(videoIcon).append(videoThumb);
-    
-    $(document.body).append(videoDragFeedback);
-    dt.setDragImage( videoDragFeedback[0], 65, 45 );
   },
   showSpinner: function($super, container) {
     $super(container);
