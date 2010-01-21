@@ -79,10 +79,9 @@ $.extend(WebDoc.DrageAndDropController, {
           image.src = url;
           break;
         case 'application/ub-video':                                       
-          var ubVideo = evt.originalEvent.dataTransfer.getData('application/ub-video');
-          var videoData = $.evalJSON(ubVideo);
+          var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-video'));
           var videoWidget;
-          switch (videoData.properties.type) {
+          switch (videoProperties.type) {
             case 'youtube' :
               videoWidget = WebDoc.application.widgetManager.getYoutubeWidget();
               break;
@@ -91,7 +90,7 @@ $.extend(WebDoc.DrageAndDropController, {
               break;
           }
           newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-          if (widgetData.properties.width) {
+          if (videoWidget.data.properties.width) {
             width = videoWidget.data.properties.width;
             height = videoWidget.data.properties.height;
           }
@@ -108,13 +107,13 @@ $.extend(WebDoc.DrageAndDropController, {
             width: width + "px",
             height: height + "px"
           };
-          newItem.data.preferences.url = videoData.properties.video_id;
+          newItem.data.data.preference.url = videoProperties.video_id;
           newItem.recomputeInternalSizeAndPosition();
-          WebDoc.application.boardController.insertItems([newItem]);            
+          WebDoc.application.boardController.insertItems([newItem]);
           break;
         case 'text/html' :
           var html = evt.originalEvent.dataTransfer.getData('text/html');
-
+          
           if (html) {
             newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
             newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
