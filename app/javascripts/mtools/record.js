@@ -213,7 +213,7 @@ $.extend(MTools.Record, {
           this.convertToRailsJSon(value, destinationObject, prefix + '[' + key + ']');
         }
         // if we want rails generate an object on the server side we must at least have 1 key. Se we put a dummy key (rails_empty).
-        else {
+        else if (value) {
           destinationObject[prefix + '[' + key + '][rails_empty]'] = "dummy";
         }
       }
