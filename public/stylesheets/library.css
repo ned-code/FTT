@@ -423,6 +423,7 @@ div.tabs > div {
 
 #libraries .web_media h3.service_bar .cc_selector option {
   padding: 1px 3px;
+  background: #fff;
 }
 
 /* ========================================== */
@@ -688,6 +689,27 @@ object:hover, object:focus, object:active {
   margin-top:10px;
 }
 
+#video_drag_feedback {
+ width:120px;
+ height:90px;
+ padding:6px 8px 10px;
+}
+
+#video_drag_feedback img {
+ -webkit-box-shadow:0 2px 8px #000;
+ -moz-box-shadow:0 2px 8px #000;
+}
+
+#video_drag_feedback span {
+  display:block;
+  width:120px;
+  height:90px;
+  position:absolute;
+  top:6px;
+  left:8px;
+  background:transparent url(/images/libraries/drag_video.png) no-repeat;
+}
+
 #videos .rows .no_items {
   font-size:14px;
   text-align:center;
@@ -803,6 +825,7 @@ object:hover, object:focus, object:active {
   -webkit-border-bottom-left-radius:8px;
   -webkit-border-bottom-right-radius:8px;
   -moz-border-radius:0 0 8px 8px;
+  -webkit-user-select:none;
 }
 
 #video_details .video_name {

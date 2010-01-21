@@ -169,14 +169,21 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
   },
   dragStart: function(event, properties) {
     var dt = event.originalEvent.dataTransfer;
-    dt.setData("application/ub-video", properties);
-    
+    dt.setData("application/ub-video", $.toJSON(properties));
     // ddd(properties.type)
     // ddd(properties.video_id)
     
-    var dragImage = new Image();
-    dragImage.src = properties.thumb_url;
-    dt.setDragImage( dragImage, 60, 40 );
+    // var dragImage = new Image();
+    // dragImage.src = properties.thumb_url;
+    // dt.setDragImage( dragImage, 60, 40 );
+    $("#video_drag_feedback").remove();
+    var videoThumb = $("<img>").attr({ src:properties.thumb_url, width:120, height:90 }), videoIcon = $("<span>");
+    var videoDragFeedback = $("<div>").attr({ id:"video_drag_feedback" })
+    .css({ position:"relative", top:"-500px" }) // because I can't use hide() in this case (or setDragImage won't work)
+    .append(videoIcon).append(videoThumb);
+    
+    $(document.body).append(videoDragFeedback);
+    dt.setDragImage( videoDragFeedback[0], 65, 45 );
   },
   showSpinner: function($super, container) {
     $super(container);
