@@ -40,25 +40,25 @@
         %p You can also choose an image from your image library and use the set as background button:
       %div
         %label horizontal
-        %input#page_background_image_fit_page_radio{ :type => "checkbox", :name => "xTile", :value => "none" }
+        %input#page_background_image_tileX_checkbox{ :type => "checkbox", :name => "xTile", :value => "none" }
         %span.label tile
-        %input#page_background_image_fit_page_radio{ :type => "radio", :name => "xPos", :value => "left" }
+        %input#page_background_image_align_hor_left_radio{ :type => "radio", :name => "xPos", :value => "left" }
         %span.label left
-        %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "xPos", :value => "center" }
+        %input#page_background_image_align_hor_center_radio{ :type => "radio", :name => "xPos", :value => "center" }
         %span.label center
-        %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "xPos", :value => "right" }
+        %input#page_background_image_align_hor_right_radio{ :type => "radio", :name => "xPos", :value => "right" }
         %span.label right
         -#%input#page_background_image_repeat_vert_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-y"}
         -#%span.label Repeat vertically
       %div
         %label vertical
-        %input#page_background_image_fit_page_radio{ :type => "checkbox", :name => "yTile", :value => "none" }
+        %input#page_background_image_tileY_checkbox{ :type => "checkbox", :name => "yTile", :value => "none" }
         %span.label tile
-        %input#page_background_image_fit_page_radio{ :type => "radio", :name => "yPos", :value => "top" }
+        %input#page_background_image_align_vert_top_radio{ :type => "radio", :name => "yPos", :value => "top" }
         %span.label top
-        %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "yPos", :value => "middle" }
+        %input#page_background_image_align_vert_middle_radio{ :type => "radio", :name => "yPos", :value => "center" }
         %span.label middle
-        %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "yPos", :value => "bottom" }
+        %input#page_background_image_align_vert_bottom_radio{ :type => "radio", :name => "yPos", :value => "bottom" }
         %span.label bottom
         -#%input#page_background_image_repeat_vert_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-y"}
         -#%span.label Repeat vertically

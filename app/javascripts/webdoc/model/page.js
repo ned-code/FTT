@@ -79,9 +79,10 @@ WebDoc.Page = $.klass(MTools.Record,
     }
   },
   
-  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode) { 
+  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode, position) { 
     var objectChanged = this.setBackgroundImage(backgroundUrl);
     objectChanged = this.setBackgroundRepeatMode(repeatMode) || objectChanged;
+    objectChanged = this.setBackgroundPosition(position) || objectChanged;
     if(objectChanged) {
       this.fireObjectChanged();
       this.save();
@@ -105,6 +106,15 @@ WebDoc.Page = $.klass(MTools.Record,
     }
     return false;
   },
+
+  setBackgroundPosition: function(position) {
+    WebDoc.InspectorFieldsValidator.validateBackgroundPosition(position);
+    if(this.data.data.css.backgroundPosition != position) {
+      this.data.data.css.backgroundPosition = position;
+      return true;
+    }
+    return false;
+  },
   
   refresh: function($super, json) {
     //backup previous items if we need to keep them
@@ -119,7 +129,7 @@ WebDoc.Page = $.klass(MTools.Record,
       this.data.items = previousItems;
       //clear previous item view
       for (var itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
-        removeItem(this.items[itemIndex]);
+        this.removeItem(this.items[itemIndex]);
       }
     }
     var that = this;
