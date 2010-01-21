@@ -153,9 +153,13 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       
     }.pBind(this));
   },
+  
   dragStart: function(event) {
-    var draggingImg = $(event.target).find('img');
-    //ddd(draggingImg)
+    // we take closest li and then search down the img because safari and firefox have not the same target.
+    // on ff target is the a tag but in safarai target is the img.
+    var draggingImg = $(event.target).closest('li').find('img');
+    ddd("drag target",event.target);
+    ddd("propeties", draggingImg.data("properties"));
     event.originalEvent.dataTransfer.setData('application/ub-image', draggingImg.data("properties").url);
   },
   

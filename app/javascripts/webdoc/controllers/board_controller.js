@@ -176,7 +176,8 @@ WebDoc.BoardController = $.klass({
     }
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     if (MTools.Browser.Gecko && (new Number(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
-      $("#board svg").css("zIndex", this.isInteraction ? "-1" : "999999");
+      ddd("FF 3.5. drawing !");
+      $("#board svg").css("zIndex", this.isInteraction ? "-1" : "1000001");
     }
   },
   
@@ -365,7 +366,12 @@ WebDoc.BoardController = $.klass({
     
     if (jQuery.browser.mozilla) {
       boardElement.css("MozTransformOrigin", "0px 0px");
-      boardElement.css("MozTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
+      boardElement.css("MozTransform", "scale(" + this.currentZoom + ")");
+      // Directly remove the transform property so that windowed items are displayed
+      if (this.currentZoom == 1) {
+	      boardElement.css("MozTransformOrigin", "");
+	      boardElement.css("MozTransform", "");
+	    }
     }
     else 
       if (jQuery.browser.safari) {
@@ -393,7 +399,7 @@ WebDoc.BoardController = $.klass({
           boardElement.css("WebkitTransform", "");
         }
         else {
-          boardElement.css("WebkitTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
+          boardElement.css("WebkitTransform", "scale(" + this.currentZoom + ")");
         }
       }
       else 
@@ -414,9 +420,9 @@ WebDoc.BoardController = $.klass({
     if (window.document.activeElement) {
       window.document.activeElement.blur();
     }
-    if (!this.isInteraction) {
-      e.preventDefault();
-    }
+//    if (!this.isInteraction) {
+//      e.preventDefault();
+//    }
     if (!e.boardIgnore) {
       $(document).bind("mousemove", this, this.mouseMove.pBind(this));
       $(document).bind("mouseup", this, this.mouseUp.pBind(this));
@@ -439,9 +445,9 @@ WebDoc.BoardController = $.klass({
   mouseUp: function(e) {
     $(document).unbind("mousemove");
     $(document).unbind("mouseup");
-    if (!this.isInteraction) {
-      e.preventDefault();
-    }
+//    if (!this.isInteraction) {
+//      e.preventDefault();
+//    }
     this.currentTool.mouseUp(e);
   },
   

@@ -68,9 +68,13 @@
 
 /* Interface panels */
 
+.board-panel,
+.left-panel,
+.right-panel {
+    top: 60px;
+}
+
 .board-panel {
-    left: 0; right: 0;
-    top: 64px;
     bottom: 0;
     min-width: 300px;
 }
@@ -83,14 +87,13 @@
 
 .toolbar-panel {
     top: 25px;
-    height: 36px;
+    height: 32px;
     padding: 0 4px;
 }
 
 .left-panel {
     width: 165px;
     margin-left: -165px;
-    top: 64px;
 }
 /* please could we rename this #pages-browser? */
 #page_browser_left.inspector {
@@ -101,5 +104,25 @@
     width: 350px;
     left: 100%;
     margin-left: -350px;
-    top: 64px;
+}
+
+/* Colors */
+
+.inspector {
+    background: #dddddd;
+}
+#page_inspector.inspector {
+    background: #d5d7ca;
+    bottom: 0;
+}
+.inspector .head>div {
+    background: #999999;
+    border-bottom: 2px solid #999999;
+}
+.inspector .head h2 {
+    color: white;
+    line-height: 32px;
+    font-weight: bold;
+    font-size: 1.6em;
+    text-align: center;
 }

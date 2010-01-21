@@ -24,7 +24,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
 
     if (!(objectToSelect && WebDoc.application.boardController.editingItem == objectToSelect)) {
       if (objectToSelect) {
-        WebDoc.application.boardController.selectItemViews([objectToSelect], e);
+        WebDoc.application.boardController.selectItemViews([objectToSelect]);
       }
       else {
         WebDoc.application.boardController.unselectAll();
@@ -39,7 +39,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   
   enableHilight: function() {       
     this.disableHiLight = false;
-    this.mouseOver({ target: this.lastTarget})
+    this.mouseOver({ target: this.lastTarget});
   },
   
   mouseDown: function(e) {
@@ -70,6 +70,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   mouseDblClick: function(e) {
     ddd("dbl click", e.target);
     var objectToEdit = this._clickedItemView(e);
+    this.mouseOut(e);
     WebDoc.application.boardController.editItemView(objectToEdit);
   },
   
@@ -78,13 +79,17 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
     var target = $(e.target);
     if (target.hasClass("item_layer") && !this.disableHiLight) {
       $(".item_layer").not(target).css("opacity", 0);
-      target.stop().animate({ opacity: 0.8}, { duration: 100});
+      target.stop().animate({
+        opacity: 0.8
+      }, {
+        duration: 100
+      });
     }
   },
 
   mouseOut: function(e) {  
     var target = $(e.target);
-    this.lastTarget = e.target;
+    this.lastTarget = null;
     if (target.hasClass("item_layer") && !this.disableHiLight) {
       target.stop().animate({ opacity: 0 }, { duration: 100});
     }
@@ -97,7 +102,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
       clickedItemView = target.data("itemView");
     }
     else {
-      clickedItemView = target.parent().data("itemView");
+      clickedItemView = target.closest(".item_wrap").data("itemView");
     }
     return clickedItemView;
   }

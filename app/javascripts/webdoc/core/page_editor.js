@@ -7,6 +7,7 @@
 //= require <mtools/server_manager>
 //= require <mtools/uuid>
 
+//= require <webdoc/core/widget_manager>
 //= require <webdoc/adaptors/svg_renderer>
 //= require <webdoc/adaptors/collaboration_manager>
 //= require <webdoc/controllers/board_controller>
@@ -38,6 +39,7 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         
+    WebDoc.application.widgetManager = new WebDoc.WidgetManager();
     // create all controllers
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
@@ -116,21 +118,21 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
 
-  previousPage: function(e) {
+  'prev-page': function(e) {
     var previousPage = this.currentDocument.previousPage(this.currentPage);
     if (previousPage) {
       this.loadPage(previousPage);
     }
   },
 
-  nextPage: function(e) {
+  'next-page': function(e) {
     var nextPage = this.currentDocument.nextPage(this.currentPage);
     if (nextPage) {
       this.loadPage(nextPage);
     }
   },
 
-  addPage: function(e) {
+  'add-page': function(e) {
     var newPage = new WebDoc.Page(null, this.currentDocument);
     // we don't need to set foreign keys. It is autoatically done on the server side
     //newPage.data.document_id = this.currentDocument.data.document_id;
