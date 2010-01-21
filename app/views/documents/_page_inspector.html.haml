@@ -36,14 +36,30 @@
         %label Background Image
         %input#browse_background_image_button{ :type => "button", :value => "Browse" }
       %div
-        %label Image position
         %input#page_background_image_textbox{ :type => "text"}
         %p You can also choose an image from your image library and use the set as background button:
       %div
-        %input#page_background_image_fit_page_radio{ :type => "radio", :name => "repeatMode", :value => "none" }
-        %span.label Fit to page
-        %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-x" }
-        %span.label Tile
+        %label horizontal
+        %input#page_background_image_fit_page_radio{ :type => "checkbox", :name => "xTile", :value => "none" }
+        %span.label tile
+        %input#page_background_image_fit_page_radio{ :type => "radio", :name => "xPos", :value => "left" }
+        %span.label left
+        %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "xPos", :value => "center" }
+        %span.label center
+        %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "xPos", :value => "right" }
+        %span.label right
+        -#%input#page_background_image_repeat_vert_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-y"}
+        -#%span.label Repeat vertically
+      %div
+        %label vertical
+        %input#page_background_image_fit_page_radio{ :type => "checkbox", :name => "yTile", :value => "none" }
+        %span.label tile
+        %input#page_background_image_fit_page_radio{ :type => "radio", :name => "yPos", :value => "top" }
+        %span.label top
+        %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "yPos", :value => "middle" }
+        %span.label middle
+        %input#page_background_image_repeat_hor_radio{ :type => "radio", :name => "yPos", :value => "bottom" }
+        %span.label bottom
         -#%input#page_background_image_repeat_vert_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-y"}
         -#%span.label Repeat vertically
       %div
