@@ -34,8 +34,8 @@
     %li#zoom_out>
       %a{ :href => "#zoom-out" , :title => "Zoom Out" }
         Zoom out
-    %li#tool_hand.state_tool>
-      %a{ :href => "#move" , :title => "Move" }
+    %li#tool_hand>
+      %a.state_tool{ :href => "#move" , :title => "Move" }
         Move
   
   %ul#edit_tools.edit-tools.tools.thumbs.index.icons-only.preview_hidden
@@ -52,8 +52,8 @@
   
   %ul#misc_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li#tool_arrow.state_tool>
-      %a{ :href => "#select" , :title => "Select" }
+    %li#tool_arrow>
+      %a.state_tool{ :href => "#select" , :title => "Select" }
         Select
     %li#html_snipplet.preview_hidden>
       %a{ :href => "#insert-html" , :title => "Insert an HTML snippet" }
@@ -61,8 +61,8 @@
     %li#tool_text.preview_hidden>
       %a{ :href => "#insert-text" , :title => "Insert a Text box" }
         Text
-    %li#tool_pen.preview_hidden.state_tool>
-      %a{ :href => "#draw" , :title => "Draw" }
+    %li#tool_pen.preview_hidden>
+      %a.state_tool{ :href => "#draw" , :title => "Draw" }
         Draw
 
   %ul#toggle_inspector_wrap.panel-tools.tools.thumbs.index.icons-only.preview_hidden
