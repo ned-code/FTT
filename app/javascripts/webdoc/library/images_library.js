@@ -56,6 +56,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     
     // Setup thumbnails drag n' drop
     this.myImagesContainer.find(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
+    $(document.body).append(this.buildMediaDragFeedbackElement("image", "")); // just to preload the icon (so that it'll be immediatley available at the first drag)
     
     // Next/Previous page links
     this.paginationWrap = $("<div class='pagination' style='display:none'>");
