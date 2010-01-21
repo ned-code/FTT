@@ -65,23 +65,23 @@
       %a{ :href => "#draw" , :title => "Draw" }
         Draw
 
-  %ul#toggle_inspector_wrap.tools.thumbs.index.icons-only.preview_hidden
+  %ul#toggle_inspector_wrap.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#toggle_inspector>
-      %a{ :href => "", :title => "Toggle Inspector" }
+      %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" }
         Inspector
   
-  %ul#right_bar_tools.tools.thumbs.index.icons-only.preview_hidden
+  %ul#right_bar_tools.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#lib_view>
-      %a{ :href => "", :title => "Show Library" }
+      %a{ :href => "#library", :title => "Show Library" }
         Library
-    %li#page_inspector_view>
-      %a{ :href => "", :title => "Show Page inspector" }
-        Page
     %li#item_inspector_view.current_right_item>
-      %a{ :href => "", :title => "Show Item inspector" }                      
+      %a{ :href => "#inspector", :title => "Show Inspector" }                      
         Item
+    -#%li#page_inspector_view>
+    -#  %a{ :href => "", :title => "Show Page inspector" }
+    -#    Page
 
 #board_container.hide-scroll.board-panel.panel
   #screen.screen.layer

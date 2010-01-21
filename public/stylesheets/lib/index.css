@@ -300,6 +300,26 @@ a[href="#redo"]                     { background-position: 0 -2176px; }
 a[href="#redo"]:hover               { background-position: 0 -2240px; }
 a[href="#redo"]:active              { background-position: 0 -2304px; }
 
+.panel-tools a {
+    background-image: url('/images/panel-tools.png');
+}
+
+a[href="#right-panel-toggle"]                   { background-position: 0 0; }
+a[href="#right-panel-toggle"]:hover             { background-position: 0 -64px; }
+a[href="#right-panel-toggle"]:active            { background-position: 0 -128px; }
+a[href="#right-panel-toggle"].current           { background-position: 0 -192px; }
+a[href="#right-panel-toggle"].current:hover     { background-position: 0 -256px; }
+a[href="#right-panel-toggle"].current:active    { background-position: 0 -320px; }
+
+a[href="#inspector"]                { background-position: 0 -384px; }
+a[href="#inspector"]:hover          { background-position: 0 -448px; }
+a[href="#inspector"]:active         { background-position: 0 -512px; }
+a[href="#inspector"].current        { background-position: 0 -576px; }
+
+a[href="#library"]                  { background-position: 0 -640px; }
+a[href="#library"]:hover            { background-position: 0 -704px; }
+a[href="#library"]:active           { background-position: 0 -768px; }
+a[href="#library"].current          { background-position: 0 -832px; }
 
 
 /* NOT SURE WHAT THIS DOES - something about special rollover states */
