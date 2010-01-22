@@ -5,10 +5,14 @@
   %ul.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#page-browser>
-      %a{ :href => "#left-panel-toggle", :title => "Pages browser" }
-        Pages
+      %a{ :href => "#left-panel-toggle", :title => "Left Panel" }
+        Left Panel
 
   %ul#pages-tools.tools.thumbs.index.icons-only
+    -# Whitespace is removed between lis to preserve layout
+    %li#page-browser>
+      %a{ :href => "#pages-browser", :title => "Pages browser" }
+        Pages
     -#%li#removePage.preview_hidden>
     -#  %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
     -#    Delete
@@ -97,7 +101,7 @@
       %ul#page_browser_items
     #page_browser_control_bar.foot
       %ul.thumbs.index.icons-only
-        %li#addPage.action_button 
+        %li#add-page.action_button 
           %img{ :src => "/images/icons/new.png", :alt => "Add page"}
         %li#copyPage.action_button
           %img{ :src => "/images/icons/duplicate.png", :alt => "Duplicate page"}

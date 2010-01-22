@@ -22,10 +22,10 @@
         %input#page_title_textbox{ :type => "text" }
       %div
         %label Height
-        %input#page_height_textbox{ :type => "text", :maxlength => "5" }
+        %input#page_height_textbox{ :type => "text", :maxlength => "8" }
       %div
         %label Width
-        %input#page_width_textbox{ :type => "text", :maxlength => "5" }
+        %input#page_width_textbox{ :type => "text", :maxlength => "8" }
       %div
         %label Show scroll
         %input#page_scroll_checkbox{ :type => "checkbox" }
@@ -65,7 +65,20 @@
       %div
         %input#page_background_image_apply_current_button{ :type => "button", :value => "Apply to this page" }
       %div
+        or
+      %div
         %input#page_background_image_apply_all_button{ :type => "button", :value => "Apply to all pages" }
+      %div
+        %p 
+          or 
+          %a#page_background_image_cancel{:href => "#"}
+            cancel
+      %div
+        %a.page-navigation-link{ :href => "prev-page"}
+          Previous
+        |
+        %a.page-navigation-link{ :href => "next-page"}
+          Next
     
     %fieldset#page_css_editor.code-editor
       %legend CSS
