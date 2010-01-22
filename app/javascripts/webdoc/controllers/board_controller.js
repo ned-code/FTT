@@ -216,6 +216,10 @@ WebDoc.BoardController = $.klass({
       x = position.pageX - board.offset().left;
       y = position.pageY - board.offset().top;
     }   
+    if (MTools.Browser.WebKit) { 
+      // Correct mouse vertical position according to the cursor icon height
+      y += this.currentTool.getCursorHeight();
+    }
 
     var calcX = (x) * (1 / this.currentZoom);
     var calcY = (y) * (1 / this.currentZoom);
@@ -301,7 +305,7 @@ WebDoc.BoardController = $.klass({
   },
   
   editItemView: function(itemViewToEdit) {
-    if (itemViewToEdit.canEdit()) { 
+    if (editItemView && itemViewToEdit.canEdit()) { 
       var node = itemViewToEdit.domNode,
           nodePos = node.position(),
           nodeWidth = node.width(),
@@ -496,8 +500,9 @@ WebDoc.BoardController = $.klass({
   },  
   
   insertItems: function(items) {
-    $.each(items, function(index, item) {
+    $.each(items, function(index, item) {      
       this.currentPage.addItem(item);
+      //this.currentPage.moveFront(item);
       item.isNew = true;
       item.save();
     }.pBind(this));

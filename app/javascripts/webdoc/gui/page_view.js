@@ -108,6 +108,19 @@ WebDoc.PageView = $.klass({
     }
   },
   
+  itemMovedAfterItem: function(item, afterItem) {
+    var itemViewToMove = this.findItemView(item.uuid());
+    
+    var afterItemView = afterItem? this.findItemView(afterItem.uuid()):null;
+    ddd("item move", itemViewToMove, afterItemView);
+    if (afterItemView && itemViewToMove != afterItemView) {
+      afterItemView.domNode.after(itemViewToMove.domNode);
+    }
+    else if (!afterItemView) {
+      this.itemDomNode.prepend(itemViewToMove.domNode);
+    }
+  },
+   
   findItemView: function(uuid) {
     return this.itemViews[uuid];
   },

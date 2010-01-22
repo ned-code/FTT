@@ -7,6 +7,8 @@ WebDoc.Page = $.klass(MTools.Record,
 { 
   initialize: function($super, json, document) {
     // initialize relationship before super.
+    this.firstPosition = 0;
+    this.lastPosition = 0;
     this.items = [];
     this.document = document;
     $super(json);
@@ -143,6 +145,9 @@ WebDoc.Page = $.klass(MTools.Record,
     var that = this;
     this.items = [];    
     if (this.data.items && $.isArray(this.data.items)) {
+      this.data.items.sort(function(a,b) {
+        return a.position - b.position;
+      });
       $.each(this.data.items, function() {
         that.createOrUpdateItem({ item: this });
       });
@@ -179,8 +184,40 @@ WebDoc.Page = $.klass(MTools.Record,
     this.addItem(newItem);
   },
   
+  moveFront: function(item) {
+    if (this.items.length > 1) {
+      this.lastPosition += 1;
+      item.setPosition(this.lastPosition);
+      var previousPositionInArray = $.inArray(item, this.items);
+      this.items.sort(function(a, b) {
+        return a.data.position - b.data.position;
+      });
+      var newPositionInArray = $.inArray(item, this.items);
+      this.fireItemPositionChanged(item, this.items[this.items.length - 2]);
+    }
+  },
+  
+  moveBack: function(item) {
+    if (this.items.length > 1) {
+      this.firstPosition -= 1;
+      item.setPosition(this.firstPosition);
+      var previousPositionInArray = $.inArray(item, this.items);
+      this.items.sort(function(a, b) {
+        return a.data.position - b.data.position;
+      });
+      var newPositionInArray = $.inArray(item, this.items);
+      this.fireItemPositionChanged(item, null);
+    }
+  },
+  
   addItem: function(item) {
     item.page = this;
+    if (item.data.position > this.lastPosition) {
+      this.lastPosition = item.data.position;
+    }
+    else if (item.data.position < this.firstPosition) {
+      this.firstPosition = item.data.position;
+    }
     this.items.push(item);
     this.fireItemAdded(item);    
   },
@@ -230,6 +267,14 @@ WebDoc.Page = $.klass(MTools.Record,
         this.listeners[i].itemRemoved(removedItem);
       }
     }     
+  },
+  
+  fireItemPositionChanged: function(item, afterItem) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].itemMovedAfterItem) {
+        this.listeners[i].itemMovedAfterItem(item, afterItem);
+      }
+    }         
   },
   
   copy: function($super) {
