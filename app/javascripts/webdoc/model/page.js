@@ -53,7 +53,7 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   setHeight: function(height) {
-    WebDoc.InspectorFieldsValidator.validatePixelSize(height);
+    WebDoc.InspectorFieldsValidator.validateSize(height);
     if(this.data.data.css.height != height) {
       this.data.data.css.height = height;
       this.fireObjectChanged();
@@ -62,7 +62,7 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   setWidth: function(width) {
-    WebDoc.InspectorFieldsValidator.validatePixelSize(width);
+    WebDoc.InspectorFieldsValidator.validateSize(width);
     if(this.data.data.css.width != width) {
       this.data.data.css.width = width;
       this.fireObjectChanged();

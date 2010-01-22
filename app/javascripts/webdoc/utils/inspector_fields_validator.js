@@ -13,15 +13,15 @@ $.extend(WebDoc.InspectorFieldsValidator, {
     }
   },
 
-  validatePixelSize: function(size) {
-    var re = new RegExp("^\\d+px$"); // Accepts only string of type <integer>px
+  validateSize: function(size) {
+    var re = new RegExp("^\\d+(px|%)$"); // Accepts only string of type <integer>px or <integer>%
     if(!size.match(re)) {
       throw("this method needs a valid pixel value (ex: 200px)");
     }
   },
 
   validateBackgroundUrl: function(url) {
-    var re = new RegExp("^url\((?:\"|')?(.*)(?:\"|')?\)$");
+    var re = new RegExp("^url\((?:\"|')?(.*)(?:\"|')?\)$"); // Accepts string of type url(/images/back.png)
     if(!url.match(re)) {
       throw("this method needs a value of type: url(<url>)");
     }
