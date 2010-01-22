@@ -13,6 +13,25 @@ body.editor     { background: #bbc0c2; }
 .left-panel,
 .right-panel    { background-color: rgba(68, 75, 77, 0.6); }
 
+/* Forms */
+
+.properties,
+.code-editor {
+    /*background: #edefe6;*/
+    border-color: #666666;
+}
+.properties legend,
+.code-editor legend {
+    background: #666666;
+    /*background: #9fa38b;*/
+    color: white;
+    /*color: #faffe5;*/
+}
+.properties input[type=text] {
+    border-color: #bbbbbb;
+    /*border: 2px solid rgba(88, 95, 58, 0.3);*/
+}
+
 /* Items */
 
 .item_wrap      { border-color: rgba(76, 91, 76, 0.6); -webkit-border-radius: 2px;}

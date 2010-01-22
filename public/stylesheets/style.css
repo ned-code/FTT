@@ -417,12 +417,6 @@ a:hover { color: #0069BF;}
 .widget_thumb {
   background-color: #aaf;
 }
-.page_browser_item {
-	height: 50px;
-	background-color: #dee4e6;
-	border: 1px solid #999;
-	margin-top: -1px;  
-}
 
 .page_browser_item_draggable_area {
 	width: 15px;
@@ -443,12 +437,7 @@ a:hover { color: #0069BF;}
 	padding: 3px 5px;
 }
 
-.page_browser_item_information {
-	width: 15px;
-	height: inherit;
-	background: url(../images/icons/logo_info.png) no-repeat;
-	float: right;
-}
+
 
 .page_browser_item_selected {
 	background-color: #f4fbfd;
