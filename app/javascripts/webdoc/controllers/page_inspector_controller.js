@@ -26,19 +26,29 @@ WebDoc.PageInspectorController = $.klass({
     $("#page_height_textbox").bind("change", this.changePageHeight.pBind(this));
     $("#page_width_textbox").bind("change", this.changePageWidth.pBind(this));
     $("#page_background_color_textbox").bind("change", this.changePageBackgroundColor.pBind(this));
-    $("#browse_background_image_button").bind("click", this.browseForImages);
-    // $("#page_background_image_textbox").bind("change", this.changePageBackgroundImage.pBind(this));
-    // $("#page_background_image_tileX_checkbox").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
-    // $("#page_background_image_repeat_hor_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
-    // $("#page_background_image_repeat_vert_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
     $("#page_background_image_apply_current_button").bind("click", this.applyBackgroundToCurrentPage.pBind(this));
     $("#page_background_image_apply_all_button").bind("click", this.applyBackgroundToAllPages.pBind(this));
     $("#page_background_upload_button").bind("click", this.uploadImageAndSetAsBackground.pBind(this));
+    $('#background_image_upload_form').bind('submit', this.uploadImageAndSetAsBackground.pBind(this));
+    $('#page_background_image_cancel').bind('click', this.cancelImageBackground.pBind(this));
+    $('.page-navigation-link').click(this.performAction.pBind(this));
     WebDoc.application.boardController.addCurrentPageListener(this);
     WebDoc.application.pageEditor.currentPage.addListener(this); 
     this.currentPageChanged();
   },
-  
+
+  performAction: function(e) {
+    e.preventDefault();
+    clickedButton = $(e.target);
+    try {
+      WebDoc.application.pageEditor[clickedButton.attr("href")].apply(WebDoc.application.pageEditor, [e]);
+    }
+    catch(ex) {
+      ddd("unknown toolbar action: " + clickedButton.attr("href"));
+      ddt();
+    }    
+  },
+
   currentPageChanged: function() {
     ddd('currentPageChanged');
     var page = WebDoc.application.pageEditor.currentPage;     
@@ -129,11 +139,6 @@ WebDoc.PageInspectorController = $.klass({
     }
   },
 
-  browseForImages: function(e) {
-    e.preventDefault();
-    alert('must open browser');
-  },
-
   changePageBackgroundImage: function(e) {
     e.preventDefault();
     var page = WebDoc.application.pageEditor.currentPage;
@@ -185,23 +190,31 @@ WebDoc.PageInspectorController = $.klass({
   },
 
   uploadImageAndSetAsBackground: function(e) {
+     e.preventDefault();
+     ddd('must send AJAX data');
+    // var imagePath = $("#page_background_file").val();
+    // ddd('must upload file:'+imagePath);
+    // var ajaxParams = { type: "Medias::Image", file: imagePath };
+    // $.ajax({
+    //   type: "POST",
+    //   url: "/medias",
+    //   data: (ajaxParams),
+    //   dataType: "json",
+    //   success: function(data) {
+    //     ddd('Success:'+data);
+    //   },
+    //   error: function(XMLHttpRequest, textStatus, errorThrown) {
+    //     ddd("error " + textStatus + " " + errorThrown);
+    //     ddd(XMLHttpRequest);
+    //   }
+    // });
+  },
+
+  cancelImageBackground: function(e) {
     e.preventDefault();
-    var imagePath = $("#page_background_file").val();
-    ddd('must upload file:'+imagePath);
-    var ajaxParams = { type: "Medias::Image", file: imagePath };
-    $.ajax({
-      type: "POST",
-      url: "/medias",
-      data: (ajaxParams),
-      dataType: "json",
-      success: function(data) {
-        ddd('Success:'+data);
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
-        ddd("error " + textStatus + " " + errorThrown);
-        ddd(XMLHttpRequest);
-      }
-    });
+    var page = WebDoc.application.pageEditor.currentPage;
+    page.removeBackgroundImage();
+    WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
   },
 
   changeAllowAnnotation: function(e) {
