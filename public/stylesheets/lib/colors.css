@@ -11,11 +11,13 @@ body.editor     { background: #bbc0c2; }
                   -moz-box-shadow: 0 0 32px rgba(77, 70, 68, 0.5);
                   box-shadow: 0 0 32px rgba(77, 70, 68, 0.5); }
 .left-panel,
-.right-panel    { background-color: rgba(80, 91, 95, 0.6); }
+.right-panel    { background-color: rgba(68, 75, 77, 0.6); }
 
 /* Items */
 
 .item_wrap      { border-color: rgba(76, 91, 76, 0.6); -webkit-border-radius: 2px;}
 .item_selected  { -webkit-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+                  -moz-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+                  box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   border-color: rgba(176, 227, 0, 0.8);
-   /*               border-color: rgba(197, 255, 0, 0.75);*/ }
+                /*border-color: rgba(197, 255, 0, 0.75);*/ }
