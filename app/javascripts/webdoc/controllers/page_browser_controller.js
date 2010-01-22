@@ -241,7 +241,7 @@ WebDoc.PageBrowserController = $.klass({
    selectCurrentPage: function(event) {
      var targetItem = $(event.target).closest('.page_browser_item');
      var clickedPageId = targetItem.attr("id");
-     var currentPageId = WebDoc.application.pageEditor.currentPageId;     
+     var currentPageId = WebDoc.application.pageEditor.currentPage.uuid();     
      if(clickedPageId.indexOf(currentPageId) == -1) {
        this.selectPage(targetItem);
      }
