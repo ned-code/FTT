@@ -305,7 +305,7 @@ WebDoc.BoardController = $.klass({
   },
   
   editItemView: function(itemViewToEdit) {
-    if (editItemView && itemViewToEdit.canEdit()) { 
+    if (itemViewToEdit && itemViewToEdit.canEdit()) { 
       var node = itemViewToEdit.domNode,
           nodePos = node.position(),
           nodeWidth = node.width(),
