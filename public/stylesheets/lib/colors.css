@@ -4,5 +4,12 @@ body            { background: white; }
 body.login      { background: white; }
 body.editor     { background: #bbc0c2; }
 
+/* Panels */
+
 .left-panel,
 .right-panel    { background-color: rgba(80, 91, 95, 0.6); }
+
+/* Items */
+
+.item_wrap      { border-color: rgba(76, 91, 76, 0.6); -webkit-border-radius: 2px;}
+.item_selected  { border-color: rgba(197, 255, 0, 0.75); }
