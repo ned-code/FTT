@@ -85,13 +85,13 @@ WebDoc.PageEditor = $.klass({
     }.pBind(this));
     
     // ===========================================================
-    // = TODO REMOVE THIS (ZENO USES THIS TO DEBUG VIDEO LIBRARY)
-    setTimeout(function(){
-      WebDoc.application.rightBarController.showRightBar(WebDoc.application.rightBarController.showLib.pBind(WebDoc.application.rightBarController));
-    },500);
-    setTimeout(function(){
-      $('#videos').click();
-    },600);
+    // = TODO REMOVE THIS (ZENO USES THIS TO DEBUG LIBRARY)
+    // setTimeout(function(){
+    //   WebDoc.application.rightBarController.showRightBar(WebDoc.application.rightBarController.showLib.pBind(WebDoc.application.rightBarController));
+    // },500);
+    // setTimeout(function(){
+    //   $('#videos').click();
+    // },600);
     // ===========================================================
   },
 
