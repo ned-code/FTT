@@ -153,6 +153,14 @@ WebDoc.Document = $.klass(MTools.Record, {
       }
     }      
   },
+
+  firePageMoved: function(movedPage, newPosition, previousPosition) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].pageMoved) {
+        this.listeners[i].pageMoved(movedPage, newPosition, previousPosition);
+      }
+    }      
+  },
   
   movePage: function(movedPageUuid, newPosition) {
     var page = this.findPageWithUuidOrPosition(movedPageUuid);
@@ -175,6 +183,7 @@ WebDoc.Document = $.klass(MTools.Record, {
       }
       page.data.position = newPosition;  
       this.sortPages();
+      this.firePageMoved(page, newPosition, previousPosition);
       //this.firePageAdded(page);       
       return page;
     }

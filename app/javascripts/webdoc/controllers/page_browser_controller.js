@@ -198,12 +198,18 @@ WebDoc.PageBrowserController = $.klass({
 
   pageMoved: function(page, newPosition, previousPosition) { 
     if(!changedFromDrag) { // Dragged from another session, must update GUI
-      ddd('PAGE MOVED: page ' + page.uuid() + ' moved from position ' + previousPosition + ' to position ' + newPosition);
-      var itemCopy = $('#page_browser_items > li')[previousPosition].cloneNode(true);
-      var itemDest = $('#page_browser_items > li')[newPosition];
-      var baseItem = $('#page_browser_items > li')[previousPosition];
-      $(itemDest).after(itemCopy);
-      $(baseItem).remove();
+	    var itemsList = $('#page_browser_items > li');
+	    var baseItem = itemsList.eq(previousPosition);
+      var itemCopy = baseItem.clone(true);
+      var itemDest = itemsList.eq(newPosition);
+
+      if(newPosition > previousPosition) {
+        itemDest.after(itemCopy);
+      }
+      else {
+        itemDest.before(itemCopy);
+      }
+      baseItem.remove();
       this.bindPageBrowserItemsEvents();
     }
   },
@@ -235,7 +241,7 @@ WebDoc.PageBrowserController = $.klass({
    selectCurrentPage: function(event) {
      var targetItem = $(event.target).closest('.page_browser_item');
      var clickedPageId = targetItem.attr("id");
-     var currentPageId = WebDoc.application.pageEditor.currentPage.uuid();     
+     var currentPageId = WebDoc.application.pageEditor.currentPageId;     
      if(clickedPageId.indexOf(currentPageId) == -1) {
        this.selectPage(targetItem);
      }

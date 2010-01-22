@@ -144,7 +144,7 @@ WebDoc.PageEditor = $.klass({
       this.loadPage(newPage);
     }.pBind(this));
   },
-
+ 
   removePage: function(e) {
     var pageToDelete = this.currentPage;
     if (this.currentDocument.pages.length > 1) {
@@ -157,10 +157,10 @@ WebDoc.PageEditor = $.klass({
     }
   },
 
-	copyPage: function(e) {
-		var copiedPage = this.currentPage.copy();
+  copyPage: function(e) {
+    var copiedPage = this.currentPage.copy();
     copiedPage.setDocument(this.currentPage.getDocument());
-		var copiedPagePosition = this.currentDocument.positionOfPage(this.currentPage) - 1;
+    var copiedPagePosition = this.currentDocument.positionOfPage(this.currentPage) - 1;
     copiedPage.data.position = copiedPagePosition + 1;
     //var importingMessage = $("<li>").html("importing...").addClass("page_thumb_importing");       
     //droppedPageThumb.parent().after(importingMessage[0]);
@@ -168,7 +168,7 @@ WebDoc.PageEditor = $.klass({
       this.currentDocument.addPage(copiedPage, true);
       this.loadPage(copiedPage);
     }.pBind(this));
-	},
+  },
   
   pageRemoved: function(page) {
     if (page == this.currentPage) {
