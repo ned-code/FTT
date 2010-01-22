@@ -25,6 +25,12 @@ WebDoc.Item = $.klass(MTools.Record,
     this.page = page;  
   },
   
+  setPosition: function(newPosition) {
+    this.data.position = newPosition;
+    // position changed is not notified because it is always changed from the page. And this is that page that notifies
+    // item position changed  
+  },
+  
   refresh: function($super, json) {
     var refreshInnerHtml = false;
     var refreshPreferences = false;
