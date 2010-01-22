@@ -36,6 +36,10 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   getCursor: function() {
     return "url(/images/icons/cursor_pen.png), crosshair";  
   },
+
+  getCursorHeight: function() {
+    return 24; // height of /images/icons/cursor_pen.png
+  },
       
   mouseDown: function(e) {
     e.preventDefault();
