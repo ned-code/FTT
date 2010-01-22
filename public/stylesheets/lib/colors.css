@@ -1,0 +1,8 @@
+/* Color theme */
+
+body            { background: white; }
+body.login      { background: white; }
+body.editor     { background: #bbc0c2; }
+
+.left-panel,
+.right-panel    { background-color: rgba(80, 91, 95, 0.6); }
