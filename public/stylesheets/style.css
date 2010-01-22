@@ -428,11 +428,6 @@ ul.page_browser_numbered_list {
 	padding-top: 10px;
 }
 
-ul#page_browser_items {
-	padding-top: 10px;
-	margin-left: 15px;
-}
-
 ul.page_browser_numbered_list li {
 	height: 51px;
 }
@@ -482,10 +477,6 @@ ul.page_browser_numbered_list li {
 .page_browser_item_title_default {
 	font-style: italic;
   color: #555;
-}
-
-#page_browser_container ul {
-	list-style-type: none;
 }
 
 #page_browser_left .page_insert_line {

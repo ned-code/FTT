@@ -122,6 +122,12 @@
     border-bottom-left-radius: 8px;
 }
 
+/* Inspectors */
+
+.pages-browser {
+    top: 0;
+}
+
 /* Colors */
 
 #page_inspector.inspector {
