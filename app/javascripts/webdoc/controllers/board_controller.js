@@ -216,6 +216,10 @@ WebDoc.BoardController = $.klass({
       x = position.pageX - board.offset().left;
       y = position.pageY - board.offset().top;
     }   
+    if (MTools.Browser.WebKit) { 
+      // Correct mouse vertical position according to the cursor icon height
+      y += this.currentTool.getCursorHeight();
+    }
 
     var calcX = (x) * (1 / this.currentZoom);
     var calcY = (y) * (1 / this.currentZoom);

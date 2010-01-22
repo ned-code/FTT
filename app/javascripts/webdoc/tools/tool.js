@@ -26,6 +26,10 @@ WebDoc.Tool = $.klass({
   getCursor: function() {
     return "default";  
   },
+
+  getCursorHeight: function() {
+    return 0;
+  },
   
   unSelectTool: function() {
   },
