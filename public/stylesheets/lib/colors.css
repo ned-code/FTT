@@ -6,6 +6,8 @@ body.editor     { background: #bbc0c2; }
 
 /* Panels */
 
+.toolbar-panel  { background: #f2f2f2;
+                  -webkit-box-shadow: 0 0 32px rgba(77, 70, 68, 0.5); }
 .left-panel,
 .right-panel    { background-color: rgba(80, 91, 95, 0.6); }
 
