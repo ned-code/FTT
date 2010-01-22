@@ -115,6 +115,14 @@ WebDoc.Page = $.klass(MTools.Record,
     }
     return false;
   },
+
+  removeBackgroundImage: function() {
+    delete this.data.data.css.backgroundImage;
+    delete this.data.data.css.backgroundRepeat;
+    delete this.data.data.css.backgroundPosition;   
+    this.fireObjectChanged();
+    this.save();    
+  },
   
   refresh: function($super, json) {
     //backup previous items if we need to keep them
