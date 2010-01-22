@@ -124,12 +124,10 @@ WebDoc.PageEditor = $.klass({
   },
 
   'next-page': function(e) {
-//    var nextPage = this.currentDocument.nextPage(this.currentPage);
-//    if (nextPage) {
-//      this.loadPage(nextPage);
-//    }
-    this.currentPage.moveFront(WebDoc.application.boardController.selection[0].item);
-    WebDoc.application.boardController.selection[0].item.save();
+    var nextPage = this.currentDocument.nextPage(this.currentPage);
+    if (nextPage) {
+      this.loadPage(nextPage);
+    }
   },
 
   'add-page': function(e) {

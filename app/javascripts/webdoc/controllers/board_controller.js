@@ -301,7 +301,7 @@ WebDoc.BoardController = $.klass({
   },
   
   editItemView: function(itemViewToEdit) {
-    if (itemViewToEdit.canEdit()) { 
+    if (editItemView && itemViewToEdit.canEdit()) { 
       var node = itemViewToEdit.domNode,
           nodePos = node.position(),
           nodeWidth = node.width(),
@@ -498,7 +498,7 @@ WebDoc.BoardController = $.klass({
   insertItems: function(items) {
     $.each(items, function(index, item) {      
       this.currentPage.addItem(item);
-      this.currentPage.moveFront(item);
+      //this.currentPage.moveFront(item);
       item.isNew = true;
       item.save();
     }.pBind(this));

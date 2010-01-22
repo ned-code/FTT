@@ -199,8 +199,8 @@ WebDoc.Page = $.klass(MTools.Record,
   
   moveBack: function(item) {
     if (this.items.length > 1) {
-      this.lastPosition -= 1;
-      item.setPosition(this.lastPosition);
+      this.firstPosition -= 1;
+      item.setPosition(this.firstPosition);
       var previousPositionInArray = $.inArray(item, this.items);
       this.items.sort(function(a, b) {
         return a.data.position - b.data.position;
@@ -219,7 +219,7 @@ WebDoc.Page = $.klass(MTools.Record,
       this.firstPosition = item.data.position;
     }
     this.items.push(item);
-    this.fireItemPositionChanged(item, this.items[this.items.length - 1]);    
+    this.fireItemAdded(item);    
   },
   
   removeItem: function(item) {    
