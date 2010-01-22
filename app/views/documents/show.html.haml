@@ -2,14 +2,13 @@
 - session_key_name = ActionController::Base.session_options[:key]
 = render :partial => "layouts/main_editor_toolbar"
 #toolbar.toolbar-panel.panel
-  %ul#pages-tools.tools.thumbs.index.icons-only
+  %ul.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#page-browser>
-      %a{ :href => "#pages-browser", :title => "Pages browser" }
+      %a{ :href => "#left-panel-toggle", :title => "Pages browser" }
         Pages
-    %li#add-page.preview_hidden>
-      %a{ :href => "#new-page", :title => "Add new page" }
-        Add
+
+  %ul#pages-tools.tools.thumbs.index.icons-only
     -#%li#removePage.preview_hidden>
     -#  %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
     -#    Delete
@@ -25,6 +24,9 @@
     -#%li#theme_selector.preview_hidden>
     -#  %a{ :href => "#themes" , :title =>"Change theme" }
     -#    Theme
+    %li#add-page.preview_hidden>
+      %a{ :href => "#new-page", :title => "Add new page" }
+        Add
     
   %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
@@ -65,23 +67,23 @@
       %a.state_tool{ :href => "#draw" , :title => "Draw" }
         Draw
 
-  %ul#toggle_inspector_wrap.tools.thumbs.index.icons-only.preview_hidden
+  %ul#toggle_inspector_wrap.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#toggle_inspector>
-      %a{ :href => "", :title => "Toggle Inspector" }
+      %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" }
         Inspector
   
-  %ul#right_bar_tools.tools.thumbs.index.icons-only.preview_hidden
+  %ul#right_bar_tools.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#lib_view>
-      %a{ :href => "", :title => "Show Library" }
+      %a{ :href => "#library", :title => "Show Library" }
         Library
-    %li#page_inspector_view>
-      %a{ :href => "", :title => "Show Page inspector" }
-        Page
     %li#item_inspector_view.current_right_item>
-      %a{ :href => "", :title => "Show Item inspector" }                      
+      %a{ :href => "#inspector", :title => "Show Inspector" }                      
         Item
+    -#%li#page_inspector_view>
+    -#  %a{ :href => "", :title => "Show Page inspector" }
+    -#    Page
 
 #board_container.hide-scroll.board-panel.panel
   #screen.screen.layer

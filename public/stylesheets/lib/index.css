@@ -190,15 +190,8 @@
 }
 
 /* On the left ... */
-#pages-tools,
-#view_tools,
-#edit_tools,
-#misc_tools {
+.toolbar-panel .tools {
     float: left;
-}
-#pages-tools,
-#view_tools,
-#edit_tools {
     margin-right: 32px;
 }
 
@@ -206,17 +199,21 @@
 #toggle_inspector_wrap,
 #right_bar_tools {
     float: right;
+    margin-right: 0;
 }
 #toggle_inspector_wrap {
     margin-left: 32px;
 }
 
 .tools a:hover{
-    background-color: #dddddd;
+    background-color: #dedede;
 }
 .tools a.current{
-    background-color: #666666;
+    background-color: #b5cdd5;
 }
+
+
+/* Pages tools */
 
 #pages-tools a {
     background-image: url('/images/pages-tools.png');
@@ -248,6 +245,9 @@ a[href="#themes"]                   { background-position: 0 -1088px; }
 a[href="#themes"]:hover             { background-position: 0 -1152px; }
 a[href="#themes"]:active            { background-position: 0 -1216px; }
 a[href="#themes"].current           { background-position: 0 -1280px; }
+
+
+/* Edit tools */
 
 .edit-tools a {
     background-image: url('/images/edit-tools.png');
@@ -299,6 +299,40 @@ a[href="#undo"]:active              { background-position: 0 -2112px; }
 a[href="#redo"]                     { background-position: 0 -2176px; }
 a[href="#redo"]:hover               { background-position: 0 -2240px; }
 a[href="#redo"]:active              { background-position: 0 -2304px; }
+
+
+/* Panel tools */
+
+.panel-tools a {
+    background-image: url('/images/panel-tools.png');
+}
+
+/* A bit of a special case, the toggle buttons
+   They may even deserve their own list class */
+a[href="#left-panel-toggle"].current,
+a[href="#right-panel-toggle"]                   { background-position: 0 0; background-color: transparent; }
+a[href="#left-panel-toggle"].current:hover,
+a[href="#right-panel-toggle"]:hover             { background-position: 0 -64px; background-color: transparent;}
+a[href="#left-panel-toggle"].current:active,
+a[href="#right-panel-toggle"]:active            { background-position: 0 -128px; background-color: transparent;}
+a[href="#left-panel-toggle"],
+a[href="#right-panel-toggle"].current           { background-position: 0 -192px; background-color: transparent;}
+a[href="#left-panel-toggle"]:hover,
+a[href="#right-panel-toggle"].current:hover     { background-position: 0 -256px; background-color: transparent;}
+a[href="#left-panel-toggle"]:active,
+a[href="#right-panel-toggle"].current:active    { background-position: 0 -320px; background-color: transparent;}
+
+a[href="#inspector"]                { background-position: 0 -384px; }
+a[href="#inspector"]:hover          { background-position: 0 -448px; }
+a[href="#inspector"]:active         { background-position: 0 -512px; }
+a[href="#inspector"].current        { background-position: 0 -576px; }
+
+a[href="#library"]                  { background-position: 0 -640px; }
+a[href="#library"]:hover            { background-position: 0 -704px; }
+a[href="#library"]:active           { background-position: 0 -768px; }
+a[href="#library"].current          { background-position: 0 -832px; }
+
+
 
 
 
