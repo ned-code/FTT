@@ -68,7 +68,9 @@
 
 /* Interface panels */
 
-.board-panel,
+.board-panel {
+    top: 56px;
+}
 .left-panel,
 .right-panel {
     top: 58px;
@@ -89,7 +91,6 @@
     top: 24px;
     height: 32px;
     padding: 0 4px;
-    background: #f2f2f2;
 }
 
 .left-panel {
@@ -121,10 +122,16 @@
     border-bottom-left-radius: 8px;
 }
 
+/* Inspectors */
+
+.pages-browser {
+    top: 0;
+}
+
 /* Colors */
 
 #page_inspector.inspector {
-    background: #d5d7ca;
+    /*background: #d5d7ca;*/
     bottom: 0;
 }
 .inspector .head>div {

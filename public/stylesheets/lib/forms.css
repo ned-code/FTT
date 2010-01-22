@@ -63,10 +63,10 @@ form.inline p { margin-bottom:0; }
 /* Fieldsets */
 .properties,
 .code-editor {
-    background: #edefe6;
+    /*background: #edefe6;*/
     padding: 1em 0.4em 1.4em 0.4em;
     border: none;
-    border-top: 1px solid #9fa38b;
+    border-top: 1px solid;
     margin: 0 0 -0.8em 0;
     position: relative;
     -moz-box-sizing: content-box;
@@ -79,12 +79,10 @@ form.inline p { margin-bottom:0; }
 .code-editor legend {
     height: 1.2em;
     line-height: 1.1em;
-    background: #9fa38b;
     padding: 0.2em 1.2em;
     text-transform: lowercase;
     font-size: 1em;
     font-weight: bold;
-    color: #faffe5;
     margin-left: 1.8%;
     -moz-border-radius: 0.8em;
     -webkit-border-radius: 0.8em;
@@ -144,12 +142,12 @@ form.inline p { margin-bottom:0; }
 }
 
 .properties input[type=text] {
-    border: 2px solid rgba(88, 95, 58, 0.3);
-    -moz-border-radius: 1em;
+    border: 2px solid;
+    /*-moz-border-radius: 1em;
     -webkit-border-radius: 1em;
-    border-radius: 1em;
+    border-radius: 1em;*/
     
-    color: rgb(63, 63, 63);
+    /*color: rgb(63, 63, 63);*/
     background: white;
     width: 8em;
     
@@ -163,8 +161,8 @@ form.inline p { margin-bottom:0; }
     outline: none;
     border-color: #7b9600;
     border-width: 2px;
-    background-color: #fcffee;
-    color: #222800;
+    /*background-color: #fcffee;
+    color: #222800;*/
 }
 .properties input[disabled],
 .properties .disabled {
@@ -185,12 +183,14 @@ form.inline p { margin-bottom:0; }
     max-width: 100%;
     height: auto;
     min-height: 10em;
+    /*
     border: 2px solid rgba(0, 0, 0, 0.18);
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
     border-radius: 1em;
     
     color: rgb(63, 63, 63);
+    */
     background: white;
     
     font-family: Courier, monospace;

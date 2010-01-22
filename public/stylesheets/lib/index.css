@@ -333,8 +333,49 @@ a[href="#library"]:active           { background-position: 0 -768px; }
 a[href="#library"].current          { background-position: 0 -832px; }
 
 
+.pages li {
+    margin-bottom: 2px;
+}
 
+.numbers {
+    position: absolute;
+    overflow: visible;
+    width: 0;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-left: 1px solid #444b4d;
+}
+.numbers li {
+    width: 16px; height: 16px;
+    margin-left: -9px;
+    /* Just to nudge the text into place */
+    padding-left: 1px;
+    margin-bottom: 34px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    color: white;
+    background: #444b4d;
+    font-weight: bold;
+    line-height: 15px;
+    text-align: center;
+}
 
+.page_browser_item {
+    height: 48px;
+    background-color: #dee4e6;
+}
+/* Rename to .current */
+.page_browser_item_selected {
+	background-color: #f4fbfd;
+}
+
+.page_browser_item_information {
+	width: 16px;
+	height: 16px;
+	background: url('/images/icons/buttons_16.png') no-repeat 0 0;
+	float: right;
+}
 
 /* NOT SURE WHAT THIS DOES - something about special rollover states */
 

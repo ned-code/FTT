@@ -1,6 +1,12 @@
 - document_title @document.title
 - session_key_name = ActionController::Base.session_options[:key]
 = render :partial => "layouts/main_editor_toolbar"
+
+#board_container.hide-scroll.board-panel.panel
+  #screen.screen.layer
+  #document_loading
+    %img{ :src => "/images/icons/waiting_bar.gif"}
+
 #toolbar.toolbar-panel.panel
   %ul.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
@@ -95,16 +101,11 @@
     -#  %a{ :href => "", :title => "Show Page inspector" }
     -#    Page
 
-#board_container.hide-scroll.board-panel.panel
-  #screen.screen.layer
-  #document_loading
-    %img{ :src => "/images/icons/waiting_bar.gif"}
-
 #left_bar.left-panel.panel
-  #page_browser_left.inspector
+  #page_browser_left.pages-browser.inspector
     #page_browser_container.content
-      %ul.page_browser_numbered_list
-      %ul#page_browser_items
+      %ul.page_browser_numbered_list.vertical.numbers.index
+      %ul#page_browser_items.vertical.pages.index
     #page_browser_control_bar.foot
       %ul.thumbs.index.icons-only
         %li#add-page.action_button 
