@@ -30,7 +30,6 @@ WebDoc.PageEditor = $.klass({
 
   currentDocument: null,
   currentPage: null,
-  currentPageId: null,
   applicationUuid: undefined,
   
   initialize: function(editable) {
@@ -104,7 +103,6 @@ WebDoc.PageEditor = $.klass({
     ddd("found page");
     ddd(pageToLoad);
     if (pageToLoad) {
-      this.currentPageId = pageId;
       this.loadPage(pageToLoad);
     }
   },
