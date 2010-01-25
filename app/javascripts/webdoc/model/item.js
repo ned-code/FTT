@@ -161,7 +161,7 @@ WebDoc.Item = $.klass(MTools.Record,
   },
 
   getInnerHtml: function() {
-    return this.checkForceWMode(this.data.data.innerHTML);
+    this.data.data.innerHTML;
   },
 
   getInnerText: function() {
