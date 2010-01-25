@@ -238,23 +238,6 @@ a:hover { color: #0069BF;}
 #titlebar {
     overflow: visible;
 }
-#toolbar {
-    
-}
-#inspector {
-    
-}
-#board_container {
-    
-}
-#left_bar {
-    
-}
-#right_bar {
-    
-}
-
-
 
 #titlebar{
     height: 24px;
@@ -281,6 +264,7 @@ a:hover { color: #0069BF;}
 #tb_1_utilities_preview a{
     display: block;
     height: 13px;
+    line-height: 13px;
     padding: 4px 5px 0 20px;
     margin-top: -1px;
     -moz-border-radius: 5px;
@@ -295,12 +279,14 @@ a:hover { color: #0069BF;}
     font-size: 11px;
     font-weight: bold;
 }
-#tb_1_utilities_preview.toggle_preview a{
-  background-image: url(../images/icons/eye.png);
-}
-#tb_1_utilities_preview.toggle_edit a{
+
+#tb_1_utilities_preview a{
   background-image: url(../images/icons/edit_16.png);
 }
+.edit-mode #tb_1_utilities_preview a{
+  background-image: url(../images/icons/eye.png);
+}
+
 #tb_1_utilities_preview a:hover{
     color: #4D4D4D;
 }
@@ -483,14 +469,13 @@ a:hover { color: #0069BF;}
   top:150px;
 }
 
-
 #board {
+    position: relative;
+    overflow: hidden;
     font-family:Helvetica, Arial, sans-serif;
     font-size: 2.5em;
-    -webkit-box-shadow:2px 3px 5px #333333;
-    -moz-box-shadow:2px 3px 5px #333333; 
-    box-shadow:2px 3px 5px #333333;
 }
+
 #board ol, #board ul {
   padding-left:1.5em;
   margin-bottom: 0.4em;
@@ -515,24 +500,22 @@ a:hover { color: #0069BF;}
   position:absolute;
   z-index:1000000;   
 }
+
 .item {
   overflow:hidden;
-}
-.item_layer {
-  z-index:1000000;
-  background-color:#000000;
-  opacity:0;  
 }
 
 .item_wrap {
   overflow:hidden;
   position:absolute;
+}
+.edit-mode .item_wrap {
   border-style: solid;
   border-width: 1px;
   margin-top: -1px;
   margin-left: -1px;
 }
-.item_wrap.item_selected {
+.edit-mode .item_selected {
   border-width: 3px;
   margin-top: -3px;
   margin-left: -3px;
@@ -541,14 +524,13 @@ a:hover { color: #0069BF;}
   border-radius: 3px;
 }
 
+
 .load_item {
   overflow:hidden;
   position:absolute;
   border: solid 1px #888888;
 }
-.item_wrap.item_interact {
-  border:none;
-}
+
 
 .item-edited {
   z-index: 2000000;

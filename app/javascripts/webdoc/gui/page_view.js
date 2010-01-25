@@ -7,7 +7,7 @@ WebDoc.PageView = $.klass({
     var boardContainer = $('#board_container'),
         externalPage,
         domNode = $('<div>').id('board'),
-        itemDomNode = $('<div/>').id('items').addClass("layer"),
+        itemDomNode = $('<div/>').id('items').addClass("hide-scroll layer"),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
         boardScreenNodes = jQuery('<div/>').addClass('screen layer')
             .add( jQuery('<div/>').addClass('screen layer') )

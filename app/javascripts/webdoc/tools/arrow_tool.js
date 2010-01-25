@@ -77,8 +77,8 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   mouseOver: function(e) {
     this.lastTarget = e.target;
     var target = $(e.target);
-    if (target.hasClass("item_layer") && !this.disableHiLight) {
-      $(".item_layer").not(target).css("opacity", 0);
+    if (target.hasClass("item-layer") && !this.disableHiLight) {
+      $(".item-layer").not(target).css("opacity", 0);
       target.stop().animate({
         opacity: 0.8
       }, {
@@ -90,7 +90,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   mouseOut: function(e) {  
     var target = $(e.target);
     this.lastTarget = null;
-    if (target.hasClass("item_layer") && !this.disableHiLight) {
+    if (target.hasClass("item-layer") && !this.disableHiLight) {
       target.stop().animate({ opacity: 0 }, { duration: 100});
     }
   },

@@ -11,7 +11,7 @@
 //= require <webdoc/gui/widget_view>
 //= require <webdoc/controllers/drag_and_drop_controller>
 
-(function(undefined){
+(function(WebDoc, undefined){
 
 // VAR
 
@@ -118,9 +118,6 @@ WebDoc.BoardController = $.klass({
         this.zoom(1 + widthFactor);
       }
     }
-//    else {
-//      this.centerBoard();
-//    }
     
     this.fireCurrentPageChanged();
     $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this.currentPage));
@@ -142,36 +139,38 @@ WebDoc.BoardController = $.klass({
   },  
   
   setInterationMode: function(state) {
-    this.isInteraction =state;
+    this.isInteraction = state;
     if (state) {
       // go to interaction mode
       this.unselectAll();
-      $("#board").unbind("dragenter");
-      $("#board").unbind("dragover");
-      $("#board").unbind("drop");
+      $("#board")
+      .unbind("dragenter")
+      .unbind("dragover")
+      .unbind("drop");
       
-      $(".item_wrap").addClass("item_interact");
       this.setCurrentTool(WebDoc.application.arrowTool);
       $(".preview_hidden").hide();
-      $(".toggle_preview").addClass("toggle_edit");
-      $(".toggle_preview").removeClass("toggle_preview");
-      $(".item_layer").hide();
+      
+      $("body").removeClass("edit-mode");
+      
       $("#tb_1_utilities_preview a").text("EDIT MODE");
       WebDoc.application.rightBarController.hideRightBar();
     }
     else {
       // go to non interaction mode
-      $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
-      $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver);
-      $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);      
-      $(".item_wrap").removeClass("item_interact");
+      $("#board")
+      .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
+      .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
+      .bind("drop", this, WebDoc.DrageAndDropController.drop);      
+      
       if (!this.currentTool) {
         this.setCurrentTool(WebDoc.application.arrowTool);
-      }      
+      }
+      
+      $("body").addClass("edit-mode");
+      
       $(".preview_hidden").show();
-      $(".toggle_edit").addClass("toggle_preview");
-      $(".toggle_edit").removeClass("toggle_edit");
-      $(".item_layer").show();
+      
       $("#tb_1_utilities_preview a").text("QUICK PREVIEW");        
     }
     // TODO for FF .5 we put svg backward because pointer event is not implemented
@@ -537,4 +536,4 @@ WebDoc.BoardController = $.klass({
 });
 
 
-})();
+})(WebDoc);
