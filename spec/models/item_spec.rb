@@ -9,6 +9,7 @@ describe Item do
 end
 
 
+
 # == Schema Information
 #
 # Table name: items
@@ -21,5 +22,6 @@ end
 #  data       :text(65537)
 #  created_at :datetime
 #  updated_at :datetime
+#  position   :integer
 #
 
