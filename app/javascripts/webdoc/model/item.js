@@ -161,7 +161,7 @@ WebDoc.Item = $.klass(MTools.Record,
   },
 
   getInnerHtml: function() {
-    return this.checkForceWMode(this.data.data.innerHTML);
+    return this.data.data.innerHTML;
   },
 
   getInnerText: function() {
@@ -219,13 +219,30 @@ WebDoc.Item = $.klass(MTools.Record,
   // If HTML code contains an embed tag of type Flash, will create or force the wmode property to transparent
   // so that Flash content will be viewable into WebDoc
   checkForceWMode: function(html) {
-    var wrapper = $('<div>').append(html);      
-    var embedNode = $('embed', wrapper);
-    if(embedNode.length > 0 && embedNode.attr("type") == "application/x-shockwave-flash") {
-      $('embed', wrapper).attr("wmode", "transparent");
-    }
-    var returnValue = wrapper.html();
-    return returnValue;
+    var regexp = new RegExp("<embed[^>]*(/>|>(.*?)</embed>)", "g");
+      if(html.match(regexp)) {
+        // Contains embed tag, must force its wmode attrib to transparent
+        var arrMatch = null;
+        while(arrMatch = regexp.exec(html)) {
+          var wrapper = $('<div>').append(arrMatch[0]);
+          var embedNode = $('embed', wrapper);
+          if(embedNode.length > 0 && (embedNode.attr("type") == "application/x-shockwave-flash" || embedNode.attr("src").indexOf('.swf') != -1)) {
+            $('embed', wrapper).attr("wmode", "transparent");
+            replacedValue = wrapper.html();
+            // Since jQuery might remove the closing tag, check if is still present
+            if(!this._endsWith(replacedValue, '</embed>') && !this._endsWith(replacedValue, '/>')) {
+              replacedValue += "</embed>";
+            }
+            html = html.replace(arrMatch[0], replacedValue);
+          }
+        }
+      }
+      return html;
+  },
+
+  _endsWith: function(s, pattern) {
+    var d = s.length - pattern.length;
+    return d >= 0 && s.lastIndexOf(pattern) === d;
   }
 });
 
