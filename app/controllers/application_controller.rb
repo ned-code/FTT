@@ -1,6 +1,9 @@
 require "xmpp_helper"
 
 class ApplicationController < ActionController::Base
+  
+  before_filter :authenticate
+  
   include XmppHelper  
   include AuthenticatedSystem
   rescue_from Acl9::AccessDenied, :with => :deny_access
@@ -32,4 +35,9 @@ protected
     global_user.has_role?("editor",@document)
   end  
   
+  def authenticate
+    authenticate_or_request_with_http_basic do |username, password|
+      username == "alpha1" && password == "_alpha10"
+    end
+  end
 end
