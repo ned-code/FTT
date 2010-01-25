@@ -136,7 +136,7 @@ WebDoc.Item = $.klass(MTools.Record,
   setInnerHtml: function(html, force) {
     if (html != this.data.data.innerHTML || force) {
 	    // Force to wmode transparent if necessary
-      this.data.data.innerHTML = this.checkForceWMode(html);      
+      this.data.data.innerHTML = html; //this.checkForceWMode(html);      
       if (!this.property("noIframe") && (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi))) {
         ddd("replace tag");
         this.data.data.tag = "iframe";
@@ -161,7 +161,8 @@ WebDoc.Item = $.klass(MTools.Record,
   },
 
   getInnerHtml: function() {
-    return this.checkForceWMode(this.data.data.innerHTML);
+    //return this.checkForceWMode(this.data.data.innerHTML);
+    return this.data.data.innerHTML;
   },
 
   getInnerText: function() {
