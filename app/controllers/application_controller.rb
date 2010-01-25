@@ -2,7 +2,7 @@ require "xmpp_helper"
 
 class ApplicationController < ActionController::Base
   
-  before_filter :authenticate
+  #before_filter :authenticate
   
   include XmppHelper  
   include AuthenticatedSystem
