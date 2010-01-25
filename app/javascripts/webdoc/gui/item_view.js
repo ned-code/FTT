@@ -6,7 +6,7 @@
 WebDoc.ItemView = $.klass({
   item: null,
   pageView: null,
-  initialize: function(item, pageView) {
+  initialize: function(item, pageView, afterItem) {
   
     if (pageView) {
       this.pageView = pageView;
@@ -29,8 +29,17 @@ WebDoc.ItemView = $.klass({
     this.domNode.data("itemView", this);
     
     item.addListener(this);
-    
-    this.pageView.itemDomNode.append(this.domNode);
+    if (afterItem) {
+      if (afterItem == "end") {
+        this.pageView.itemDomNode.append(this.domNode);
+      }
+      else {
+        afterItem.domNode.after(this.domNode);
+      }
+    }
+    else {
+      this.pageView.itemDomNode.prepend(this.domNode);
+    }
     this.domNode.css(this.item.data.data.css);
   },
   

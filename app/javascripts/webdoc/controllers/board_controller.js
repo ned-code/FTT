@@ -500,9 +500,11 @@ WebDoc.BoardController = $.klass({
   },  
   
   insertItems: function(items) {
-    $.each(items, function(index, item) {      
+    $.each(items, function(index, item) {           
       this.currentPage.addItem(item);
-      //this.currentPage.moveFront(item);
+      if (!item.data.position) {
+        this.currentPage.moveFront(item);  
+      }
       item.isNew = true;
       item.save();
     }.pBind(this));
