@@ -20,7 +20,7 @@ WebDoc.ItemView = $.klass({
     this.domNode = $("<div/>").addClass("item_wrap"); 
 
     this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css("overflow", "hidden");
-    this.itemLayerDomNode = $("<div>").addClass("layer").addClass("screen").addClass("item_layer");
+    this.itemLayerDomNode = $("<div>").addClass("layer").addClass("screen").addClass("item-layer");
     this.itemLayerDomNode.css("display", "block");
     this.domNode.append(this.itemDomNode);
     this.domNode.append(this.itemLayerDomNode);

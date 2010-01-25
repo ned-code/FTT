@@ -300,6 +300,14 @@ a[href="#redo"]                     { background-position: 0 -2176px; }
 a[href="#redo"]:hover               { background-position: 0 -2240px; }
 a[href="#redo"]:active              { background-position: 0 -2304px; }
 
+a[href="#move-back"]                { background-position: 0 -2368px; }
+a[href="#move-back"]:hover          { background-position: 0 -2432px; }
+a[href="#move-back"]:active         { background-position: 0 -2496px; }
+
+a[href="#move-front"]               { background-position: 0 -2560px; }
+a[href="#move-front"]:hover         { background-position: 0 -2624px; }
+a[href="#move-front"]:active        { background-position: 0 -2688px; }
+
 
 /* Panel tools */
 
@@ -334,7 +342,7 @@ a[href="#library"].current          { background-position: 0 -832px; }
 
 
 .pages li {
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 
 .numbers {
@@ -343,19 +351,18 @@ a[href="#library"].current          { background-position: 0 -832px; }
     width: 0;
     padding-top: 16px;
     padding-bottom: 16px;
-    border-left: 1px solid #444b4d;
+    /*border-left: 1px solid #444b4d;*/
 }
 .numbers li {
     width: 16px; height: 16px;
     margin-left: -9px;
     /* Just to nudge the text into place */
     padding-left: 1px;
-    margin-bottom: 34px;
+    margin-bottom: 33px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
-    color: white;
-    background: #444b4d;
+    
     font-weight: bold;
     line-height: 15px;
     text-align: center;

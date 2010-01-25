@@ -4,6 +4,7 @@ body            { background: white; }
 body.login      { background: white; }
 body.editor     { background: #bbc0c2; }
 
+
 /* Panels */
 
 .toolbar-panel  { background: #f2f2f2;
@@ -12,6 +13,16 @@ body.editor     { background: #bbc0c2; }
                   box-shadow: 0 0 32px rgba(77, 70, 68, 0.5); }
 .left-panel,
 .right-panel    { background-color: rgba(68, 75, 77, 0.6); }
+
+
+/* Layers */
+
+.screen         { background-color: rgba(68, 75, 77, 0.6); }
+
+
+/* Index */
+
+.numbers li     { background-color: #444b4d; color: white; }
 
 /* Forms */
 
@@ -30,6 +41,14 @@ body.editor     { background: #bbc0c2; }
 .properties input[type=text] {
     border-color: #bbbbbb;
     /*border: 2px solid rgba(88, 95, 58, 0.3);*/
+}
+
+/* The board */
+
+#board {
+    -webkit-box-shadow: 0 2px 8px rgb(77, 70, 68);
+    -moz-box-shadow:    0 2px 8px rgb(77, 70, 68); 
+    box-shadow:         0 2px 8px rgb(77, 70, 68);
 }
 
 /* Items */
