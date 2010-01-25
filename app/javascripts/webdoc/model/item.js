@@ -136,7 +136,7 @@ WebDoc.Item = $.klass(MTools.Record,
   setInnerHtml: function(html, force) {
     if (html != this.data.data.innerHTML || force) {
 	    // Force to wmode transparent if necessary
-      this.data.data.innerHTML = html; //this.checkForceWMode(html);      
+      this.data.data.innerHTML = this.checkForceWMode(html);      
       if (!this.property("noIframe") && (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi))) {
         ddd("replace tag");
         this.data.data.tag = "iframe";
@@ -161,8 +161,7 @@ WebDoc.Item = $.klass(MTools.Record,
   },
 
   getInnerHtml: function() {
-    //return this.checkForceWMode(this.data.data.innerHTML);
-    return this.data.data.innerHTML;
+    return this.checkForceWMode(this.data.data.innerHTML);
   },
 
   getInnerText: function() {
@@ -220,13 +219,21 @@ WebDoc.Item = $.klass(MTools.Record,
   // If HTML code contains an embed tag of type Flash, will create or force the wmode property to transparent
   // so that Flash content will be viewable into WebDoc
   checkForceWMode: function(html) {
-    var wrapper = $('<div>').append(html);      
-    var embedNode = $('embed', wrapper);
-    if(embedNode.length > 0 && embedNode.attr("type") == "application/x-shockwave-flash") {
-      $('embed', wrapper).attr("wmode", "transparent");
-    }
-    var returnValue = wrapper.html();
-    return returnValue;
+    var regexp = new RegExp("<embed[^>]*(/>|>(.*?)</embed>)");
+      if(html.match(regexp)) {
+        // Contains embed tag, must force its wmode attrib to transparent
+        var match = regexp.exec(html);
+        //ddd('Match:' + match[0]);
+        var wrapper = $('<div>').append(match[0]);
+        //ddd('Content wrapper:' + wrapper.html());
+        var embedNode = $('embed', wrapper);
+        if(embedNode.length > 0 && (embedNode.attr("type") == "application/x-shockwave-flash" || embedNode.attr("src").indexOf('.swf') != -1)) {
+          $('embed', wrapper).attr("wmode", "transparent");
+          //ddd('Must replace matched value with:' + wrapper.html());
+          return html.replace(regexp, wrapper.html());
+        }
+      }
+      return html;
   }
 });
 
