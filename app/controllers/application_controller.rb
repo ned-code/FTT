@@ -37,7 +37,7 @@ protected
   
   def authenticate
     authenticate_or_request_with_http_basic do |username, password|
-      username == "alpha1" && password == "_alpha10"
+      username == "webdoc" && password == "_wcwebdoc10"
     end
   end
 end
