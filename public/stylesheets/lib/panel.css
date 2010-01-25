@@ -112,7 +112,7 @@
 .right-panel {
     width: 350px;
     left: 100%;
-    margin-left: -350px;
+    margin-left: 0px;
     
     -webkit-border-top-left-radius: 8px;
     -moz-border-top-left-radius: 8px;

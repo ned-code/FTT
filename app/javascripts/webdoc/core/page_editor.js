@@ -62,10 +62,6 @@ WebDoc.PageEditor = $.klass({
         leftBar = $("#left_bar"),
         rightBar = $("#right_bar");
     
-    if (editable) {
-        WebDoc.application.rightBarController.showRightBar();
-    }
-    
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
     });
@@ -81,6 +77,9 @@ WebDoc.PageEditor = $.klass({
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument);
       this.loadPageId(window.location.hash.replace("#", ""));
       WebDoc.application.pageBrowserController.initializePageBrowser();
+      if (WebDoc.application.boardController.editable) {
+        WebDoc.application.rightBarController.showLib();
+      }
     }.pBind(this));
     
     // ===========================================================
