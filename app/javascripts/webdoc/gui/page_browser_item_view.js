@@ -5,51 +5,66 @@
 //= require <webdoc/model/item>
 //= require <webdoc/gui/item_thumbnail_view>
 
-
 WebDoc.PageBrowserItemView = $.klass({
   initialize: function(page) {
     this.page = page;
 
 		try {
-			this.domNode = $('<div>').attr({
+			var pageTitle = this.getPageTitle(this.page),
+				titleStaticNode = $('<div/>').addClass('page_browser_item_title'),
+				titleContainerNode = $('<div/>').addClass('page_browser_item_title_container');
+			
+			this.domNode = $('<div/>').attr({
 				id: "browser_item_" + page.uuid()
 			}).addClass("page_browser_item");
-		
-			this.draggableAreaNode = $('<div>').addClass('page_browser_item_draggable_area');
-			this.titleContainerNode = $('<div>').addClass('page_browser_item_title_container');
-		
-			this.titleStaticNode = $('<div>').addClass('page_browser_item_title');
-			var pageTitle = this.getPageTitle(this.page);
-			$(this.titleStaticNode).get(0).innerHTML = pageTitle.title;
+			
+			this.draggableAreaNode = $('<div/>').addClass('page_browser_item_draggable_area');
+			
+			this.titleStaticNode = titleStaticNode;
+			
+			titleStaticNode.html( pageTitle.title );
+			
 			if(pageTitle.defaultBehavior) {
 				if(this.page.nbTextItems() > 0 ) this.page.getFirstTextItem().addListener(this);
-				$(this.titleStaticNode).addClass('page_browser_item_title_default'); 
-		  }
-		
-			this.titleEditionNode = $('<div>').addClass('page_browser_item_title_edition');
-			this.titleEditionNode.append($('<input>').attr({
-				type: "textbox",
-				size: "12",
-				value: $(this.titleStaticNode).text() != "enter a title"? $(this.titleStaticNode).text() : "this is my title"
+				titleStaticNode.addClass('page_browser_item_title_default');
+			}
+			
+			this.titleEditionNode = $('<div/>').addClass('page_browser_item_title_edition');
+			
+			this.titleEditionNode.append($('<input/>').attr({
+				type: "text",
+				value: titleStaticNode.text() !== "enter a title" ? titleStaticNode.text() : "this is my title"
 			}).addClass('page_title_textbox'));
-			this.titleEditionNode.append($('<input>').attr({
-				type: "button",
-				value: "Save"
-			}).addClass('page_title_saveButton'));
-			this.titleEditionNode.append($('<a>').attr({
-				href: "#",
-				innerHTML: "cancel"
-			}).addClass('page_title_cancelButton'));
+			
+			this.titleEditionNode.append(
+				$('<input/>')
+				.attr({
+					type: "button",
+					value: "Save"
+				})
+				.addClass('page_title_saveButton')
+			);
+			
+			this.titleEditionNode.append(
+				$('<a>')
+				.attr({
+					href: "#",
+					innerHTML: "cancel"
+				})
+				.addClass('page_title_cancelButton')
+			);
+			
 			this.titleEditionNode.hide();
-		
-			this.titleContainerNode.append(this.titleStaticNode);
-			this.titleContainerNode.append(this.titleEditionNode);
-		
+			
+			titleContainerNode.append(this.titleStaticNode);
+			titleContainerNode.append(this.titleEditionNode);
+			
 			this.showInformationInspectorNode = $('<div>').addClass('page_browser_item_information');
-		
+			
 			page.addListener(this);
+			
 			this.domNode.append(this.draggableAreaNode);
-			this.domNode.append(this.titleContainerNode);
+			this.domNode.append(titleContainerNode);
 			this.domNode.append(this.showInformationInspectorNode);
 		}
 		catch(e) {
@@ -63,21 +78,21 @@ WebDoc.PageBrowserItemView = $.klass({
     this.domNode.remove();
   },
 
-	updateTitle: function(page, removeDefaultClass){
+  updateTitle: function(page, removeDefaultClass){
     // Find item related to this page
-    var targetItem = $("#browser_item_" + page.uuid());
-    var panelTitle = $('.page_browser_item_title', targetItem);
-    var currentTitle = $(panelTitle).get(0).innerHTML;
-    var newTitle = this.getPageTitle(page).title;
-    if(currentTitle != newTitle) {
-      $(panelTitle).get(0).innerHTML = this.getPageTitle(page).title;
+    var targetItem = $("#browser_item_" + page.uuid()),
+        panelTitle = $(".page_browser_item_title", targetItem[0]),
+        currentTitle = $(panelTitle).html(),
+        newTitle = this.getPageTitle(page).title;
+    
+    if(currentTitle !== newTitle) {
+        $(panelTitle).html( this.getPageTitle(page).title );
     }
-		if(removeDefaultClass) {
-      if($(panelTitle).hasClass('page_browser_item_title_default')) {
+    
+    if(removeDefaultClass) {
         $(panelTitle).removeClass('page_browser_item_title_default');
-      }
     }
-	},
+  },
   
   objectChanged: function(page) {
     switch(page.className()) {

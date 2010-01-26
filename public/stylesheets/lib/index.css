@@ -300,13 +300,13 @@ a[href="#redo"]                     { background-position: 0 -2176px; }
 a[href="#redo"]:hover               { background-position: 0 -2240px; }
 a[href="#redo"]:active              { background-position: 0 -2304px; }
 
-a[href="#move-back"]                { background-position: 0 -2368px; }
-a[href="#move-back"]:hover          { background-position: 0 -2432px; }
-a[href="#move-back"]:active         { background-position: 0 -2496px; }
+a[href="#to-back"]                { background-position: 0 -2368px; }
+a[href="#to-back"]:hover          { background-position: 0 -2432px; }
+a[href="#to-back"]:active         { background-position: 0 -2496px; }
 
-a[href="#move-front"]               { background-position: 0 -2560px; }
-a[href="#move-front"]:hover         { background-position: 0 -2624px; }
-a[href="#move-front"]:active        { background-position: 0 -2688px; }
+a[href="#to-front"]               { background-position: 0 -2560px; }
+a[href="#to-front"]:hover         { background-position: 0 -2624px; }
+a[href="#to-front"]:active        { background-position: 0 -2688px; }
 
 
 /* Panel tools */

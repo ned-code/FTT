@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+
+<title>js style guide</title>
+
+<link rel="icon" type="image/png" href="images/favicon.png" />
+
+<style type="text/css" media="screen, projection">
+    
+    @import url('../test/css-reset/css/yui2-reset.css');
+    @import url('../test/css/test.css');
+    @import url('../public/stylesheets/lib/index.css');
+    
+    ul li {
+        margin-bottom: 0.4em;
+        list-style: disc;
+    }
+    
+    aside {
+        font-size: 0.6em;
+    }
+</style>
+
+</head>
+
+<body>
+
+<menu class="divided index">
+    <li><a href="index.html">INDEX</a></li><li><a href="css.html">CSS</a></li><li><a href="js.html">JAVASCRIPT</a></li>
+</menu>
+
+<h1>JavaScript</h1>
+
+<h2>Overview</h2>
+<ul>
+<li><code>/app/javascripts/</code></li>
+<li><code>/public/javascripts/</code></li>
+</ul>
+<p>There are two parts to our JavaScript: the part that makes the app work, and the javascript libraries and extensions.</p>
+
+<h2>Tests</h2>
+<ul>
+<li><code>/test/</code></li>
+</ul>
+<p>Tests live in the test folder. Each test has its own directory called <code>js-[name]/</code>, where <code>[name]</code> is the name of the javascript function or jquery extension or plugin being tested.</p>
+
+<h2>Code Style</h2>
+<ul>
+    <li>Object names are in American English, written using camelCase.</li>
+    <li>Code is indented with 2 spaces.</li>
+    <li>Code block brackets are opened on the same line as the statement that declare them, preceded by a space:
+        <code class="block"><span style="color:#881350;">function</span> <span style="color:#003369;">doSomething</span>(x) {<br />
+        &nbsp;&nbsp;<span style="color:#236e25;"><em>// Do something</em></span><br />
+        }</code>
+    </li>
+    <li>Conditionals are always '<em>strongly typed</em>', using the strict operators <code>===</code> and <code>!==</code>.</li>
+    <li><code>else if</code> and <code>else</code> statements start on a new line:
+        <code class="block"><span style="color:#881350;">if</span><span style="color:#003369;"> </span>(x === <span style="color:#881350;">true</span>) {<br />
+            &nbsp;&nbsp;<span style="color:#236e25;"><em>// Do something</em></span><br />
+            }<br />
+            <span style="color:#881350;">else</span> <span style="color:#881350;">if</span><span style="color:#003369;"> </span>(x === <span style="color:#881350;">false</span>) {<br />
+            &nbsp;&nbsp;<span style="color:#236e25;"><em>// Do something else<br />
+            </em></span>}<br />
+            <span style="color:#881350;">else</span> {<br />
+            &nbsp;&nbsp;<span style="color:#236e25;"><em>// Do nothing<br />
+            </em></span>}
+        </code>
+    </li>
+    <li>'Private' methods and properties of klass objects are prefixed with an underscore:
+        <code class="block">{<br />
+            &nbsp;&nbsp;_method: <span style="color:#881350;">function</span>(){}<br />
+            }</code>
+    </li>
+    <li>In a block, variables are declared first, followed functions, properties, methods then run code:
+        <code class="block"><span style="color:#881350;">function</span> <span style="color:#003369;">Layout</span>() {<br />
+            &nbsp;&nbsp;<span style="color:#236e25;"><em>// Var<br />
+            </em></span>&nbsp;&nbsp;<span style="color:#881350;">var</span> one = <span style="color:#0000ff;">1</span>,<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;two = <span style="color:#0000ff;">2</span>,<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;obj = {};<br />
+            &nbsp;&nbsp;<br />
+            &nbsp;&nbsp;<span style="color:#236e25;"><em>// Functions<br />
+            </em></span>&nbsp;&nbsp;<span style="color:#881350;">function</span> <span style="color:#003369;">wail</span>() {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#003369;">alert</span>(<span style="color:#760f15;">'Waaahhh'</span>);<br />
+            &nbsp;&nbsp;}<br />
+            &nbsp;&nbsp;<br />
+            &nbsp;&nbsp;<span style="color:#236e25;"><em>// Properties<br />
+            </em></span>&nbsp;&nbsp;<span style="color:#881350;">this</span>.one = one;<br />
+            &nbsp;&nbsp;<br />
+            &nbsp;&nbsp;<span style="color:#236e25;"><em>// Methods<br />
+            </em></span>&nbsp;&nbsp;<span style="color:#881350;">this</span>.getTwo = <span style="color:#881350;">function</span>(){<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#881350;">return</span> two;<br />
+            &nbsp;&nbsp;}<br />
+            &nbsp;&nbsp;<br />
+            &nbsp;&nbsp;<span style="color:#236e25;"><em>// Run<br />
+            </em></span>&nbsp;&nbsp;obj.result = one + two;<br />
+            };
+        </code>
+    </li>
+    <li>Comment code well.</li>
+</ul>
+<h2>Best practises</h2>
+<ul>
+    <li>When they are used more than once, always cache jQuery collections in a variable. Querying the DOM can be expensive. Do it as little as possible.</li>
+    <li>Avoid setting styles directly on elements in the DOM. Use classes where possible, and style them in CSS, encouraging separation between style and function.</li>
+    <li>Use closures to protect code from the global scope.
+        <code class="block">(<span style="color:#881350;">function</span>($, undefined) {<br />
+        &nbsp;&nbsp;<span style="color:#236e25;"><em>// Code inside closure is not in global scope<br />
+        </em></span>&nbsp;&nbsp;<span style="color:#236e25;"><em>// jQuery can be referenced with the $<br />
+        </em></span>&nbsp;&nbsp;<span style="color:#236e25;"><em>// References to undefined are sped up<br />
+        </em></span>&nbsp;&nbsp;<br />
+        )(jQuery);</code>
+    </li>
+    <li>Speed up object references by declaring properties of other objects (or of parent scopes) in local scope when they are used more than once.
+        <code class="block"><span style="color:#881350;">function</span> <span style="color:#003369;">fn</span>() {<br />
+        &nbsp;&nbsp;<span style="color:#881350;">var</span> panel = WebDoc.app.panels.rightPanel;<br />
+        &nbsp;&nbsp;<br />
+        &nbsp;&nbsp;panel.width = <span style="color:#0000ff;">350</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#236e25;"><em>// This is fast<br />
+        </em></span>&nbsp;&nbsp;WebDoc.app.panels.rightPanel.width = <span style="color:#0000ff;">350</span>; <span style="color:#236e25;"><em>// This is slow<br />
+        </em></span>};
+        </code>
+    </li>
+</ul>
+
+</body>
+</html>

@@ -110,7 +110,7 @@ WebDoc.PageBrowserController = $.klass({
       var pageListItem = $("<li>").html(pageThumb.domNode);
       var pageListNumber = $("<li>"+(i+1)+"</li>");
       this.domNode.find("ul#page_browser_items").append(pageListItem);
-      this.domNode.find("ul.page_browser_numbered_list").append(pageListNumber);
+      this.domNode.find(".page_browser_numbered_list").append(pageListNumber);
       this.pageThumbs.push(pageThumb);
       this.pageMap[pageThumb.domNode.attr("id")] = pageThumb;
     }
