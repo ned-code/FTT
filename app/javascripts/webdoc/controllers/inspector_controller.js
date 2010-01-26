@@ -83,7 +83,9 @@ WebDoc.InspectorController = $.klass({
       ddd("show palette", paletteId, this.palettes[paletteId]);
       if (typeof paletteId == 'string') {
         this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection[0].item);        
-        this.palettes[3].attr("src", paletteId);        
+        if (this.palettes[3].attr("src") != paletteId) {
+          this.palettes[3].attr("src", paletteId);
+        }
         this.palettes[3].show();
         this.currentPaletteId = 3;
       }

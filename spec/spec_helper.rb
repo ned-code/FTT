@@ -58,7 +58,12 @@ Spork.each_run do
     
     config.before(:each) do
       USED_UBZ_FIXTURES.clear
-      
+ 
+      @credentials = ActionController::HttpAuthentication::Basic.encode_credentials("webdoc", "_wcwebdoc10")
+      if (@controller != nil)
+        @controller.request.env['HTTP_AUTHORIZATION'] = @credentials
+      end
+
     end
     
     config.after(:each) do

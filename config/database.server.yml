@@ -23,4 +23,4 @@ production:
   database: webdoc_production
   username: webdoc
   password: webdoc
-  host: webdoc-db-master
+  host: webdoc-production.chnus0k5dbng.us-east-1.rds.amazonaws.com

@@ -9,7 +9,7 @@
 // Default settings
 var boardPanel,
     rightPanel,
-    rightPanelWidth = 350;
+    panelWidth = 350;
 
 WebDoc.RightBarController = $.klass({
   initialize: function() {

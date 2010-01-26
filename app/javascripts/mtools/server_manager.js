@@ -46,9 +46,6 @@ $.extend(MTools.ServerManager, {
     }
     url += ".json";
     
-    //var ajaxParams = args && args.ajaxParams && args.ajaxParams.page ? { page: args.ajaxParams.page } : {};
-//		var ajaxParams = args && args.ajaxParams && args.ajaxParams.document_filter ? { document_filter: args.ajaxParams.document_filter } : {};
-//		if(args && args.ajaxParams && args.ajaxParams.page) {ajaxParams.page = args.ajaxParams.page;}
 		var ajaxParams = args && args.ajaxParams ? args.ajaxParams : {};
     $.ajax({
       type: "GET",
