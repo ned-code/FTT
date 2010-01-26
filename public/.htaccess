@@ -1,3 +1,5 @@
-Redirect 307 /software/installer/ http://uniboard-software.s3.amazonaws.com/installer/
-Redirect 307 /software/library/ http://uniboard-software.s3.amazonaws.com/library/
-Redirect 307 /software/home/ http://www.mnemis.com
+AuthName "Restricted Area" 
+AuthType Basic 
+AuthUserFile /var/www/webdoc/current/config/.htpasswd 
+AuthGroupFile /dev/null 
+require valid-user
