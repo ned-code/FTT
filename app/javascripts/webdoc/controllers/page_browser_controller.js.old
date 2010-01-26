@@ -104,7 +104,7 @@ WebDoc.PageBrowserController = $.klass({
   
   refreshPages: function() {   
     ddd("refresh all pages");
-		this.domNode.find("ol.page_browser_numbered_list").empty();
+		this.domNode.find(".page_browser_numbered_list").empty();
     this.domNode.find("ul#page_browser_items").empty(); 
     this.deletePageThumbs();
     for (var i = 0; i < this.document.pages.length; i++) {
