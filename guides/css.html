@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+
+<title>css .panel</title>
+
+<link rel="icon" type="image/png" href="images/favicon.png" />
+
+<style type="text/css" media="screen, projection">
+    
+    @import url('../test/css-reset/css/yui2-reset.css');
+    @import url('../test/css/test.css');
+    @import url('../public/stylesheets/lib/index.css');
+    
+    code.block {
+        display: block;
+        background: rgba(240, 240, 236, 0.8);
+        padding: 0.5em 1em;
+        overflow: auto;
+        font-size: small;
+        font-family: monospace;
+        margin-bottom: 1em;
+    }
+    
+    ul li {
+        margin-bottom: 0.4em;
+        list-style: disc;
+    }
+    
+    aside {
+        font-size: 0.6em;
+    }
+</style>
+
+</head>
+
+<body>
+
+<menu class="divided index">
+    <li><a href="css.html">INDEX</a></li><li><a href="css.html">CSS</a></li>
+</menu>
+
+<h1>CSS Style</h1>
+
+<h2>Overview</h2>
+<ul>
+<li><code>/public/stylesheets/lib/</code></li>
+<li><code>/public/stylesheets/</code></li>
+</ul>
+<p>There are two parts to our CSS: the CSS library, and CSS that is specific to the application.</p>
+<p>The CSS library is written to a method loosely termed 'Object Oriented CSS'. What this means is that 'base' classes are defined to establish basic styles, and these base classes are then extended with 'sub' classes that create progressively more complex styles.</p>
+<p>The idea is to produce useful, reusable basic styles with plain language class names that can be intuitively added to html to bring it alive, while keeping the codebase small (DRY), scaleable, semantically understandable (KISS), and easily maintainable.</p>
+<p>Application-specific CSS define styles specific to parts of the application. When rules are frequently repeated, consider whether they should be moved to the library as reusable classes.</p>
+
+
+<h2>Tests</h2>
+<ul>
+<li><code>/test/</code></li>
+</ul>
+<p>Effort needs to be made to keep tests up-to-date. They act both as a reference when looking for html constructs for achieving specific styles, and as tests when styles break. When you write an extension to an existing base class, add examples of that extension to the base class's test page (include images in the <code>images/</code> sub-directory when necessary).</p>
+<p>New base classes should have a new directory created for them, named <code>css-[name]/</code>, where <code>[name]</code> is the name of the base class or html tag the test is written for.</p>
+
+<h2>Code Style</h2>
+<ul>
+    <li>Class (and id) names are in American English.</li>
+    <li>Never use an <code>#id</code> in the library. The library is for reusable code.</li>
+    <li>Class names are short and descriptive, using a single word where possible.</li>
+    <li>Multiple word class names are hyphenated: <code>my-class-name</code>.</li>
+    <li>Comment unusual code. CSS, particularly browser-specific CSS, does not always explain itself very well.</li>
+</ul>
+
+<p>Normally, CSS definitions are written one-per-line*:</p>
+
+<code class="block">
+.class {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#88134f;">font-family</span>: <span style="color:#760f15;">'Comic Sans MS'</span>, <span style="color:#9b4400;">sans-serif</span>;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#88134f;">line-height</span>: <span style="color:#0000ff;">1</span>.<span style="color:#0000ff;">5</span>;<br />
+}</code>
+
+<p>But where it makes sense, groups of properties that are related can be placed on a single line:</p>
+
+<code class="block">.class {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#88134f;">position</span>: <span style="color:#9b4400;">absolute</span>;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#88134f;">top</span>: <span style="color:#0000ff;">20px</span>; <span style="color:#88134f;">right</span>: <span style="color:#0000ff;">0</span>; <span style="color:#88134f;">bottom</span>: <span style="color:#0000ff;">20px</span>; <span style="color:#88134f;">left</span>: <span style="color:#0000ff;">0</span>;<br />
+}</code>
+
+<p>Repetitive CSS is written on single lines, with brackets and properties spaced so they align vertically:</p>
+<code class="block">.class-one &nbsp;&nbsp;{ <span style="color:#88134f;">background-color</span>: <span style="color:#9b4400;">black</span>; <span style="color:#88134f;">color</span>: <span style="color:#760f15;">#333333</span>; }<br />
+.class-two &nbsp;&nbsp;{ <span style="color:#88134f;">background-color</span>: <span style="color:#9b4400;">grey</span>; &nbsp;<span style="color:#88134f;">color</span>: <span style="color:#760f15;">#222222</span>; }<br />
+.class-three { <span style="color:#88134f;">background-color</span>: <span style="color:#9b4400;">red</span>; &nbsp;&nbsp;<span style="color:#88134f;">color</span>: <span style="color:#760f15;">#000000</span>; }</code>
+
+<p>Dimensions are written in the order x, y:</p>
+<code class="block">.class {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#88134f;">width</span>: <span style="color:#0000ff;">200px</span>; <span style="color:#88134f;">height</span>: <span style="color:#9b4400;">auto</span>;<br />
+}</code>
+
+<p>While positions are written in clockwise order starting at the top:</p>
+<code class="block">.class {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#88134f;">top</span>: <span style="color:#0000ff;">20px</span>; <span style="color:#88134f;">right</span>: <span style="color:#0000ff;">0</span>; <span style="color:#88134f;">bottom</span>: <span style="color:#0000ff;">20px</span>; <span style="color:#88134f;">left</span>: <span style="color:#0000ff;">0</span>;<br />
+}</code>
+
+<p>Dimensions that are visually dependent on text size should be declared in <code>em</code>. The base font size is 12px, so 1em is equivalent to 12px (unless another font-size has been inherited from a parent):</p>
+<code class="block">.class p {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#88134f;">margin-bottom</span>: <span style="color:#0000ff;">1</span>.<span style="color:#0000ff;">2em</span>;<br />
+}</code>
+
+<p>Because IE7 does not support it, the <code>:last-child</code> pseudo selector should be 'backed up' with the class <code>.last</code>:</p>
+<code class="block">.class:last-child,<br />
+.class.last {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#88134f;">margin-bottom</span>: <span style="color:#0000ff;">0</span>;<br />
+}</code>
+
+<p>IE6 is not supported. Use child <code>&gt;</code> and attribute <code>[attr=value]</code> selectors at will! For support of other selectors check with a browser support matrix such as the one at QuirksMode:</p>
+
+<ul>
+    <li><a href="http://www.quirksmode.org/css/contents.html">www.quirksmode.org/css/contents.html</a></li>
+</ul>
+
+<h2>Tips</h2>
+<ul>
+    <li>Avoid <code>htmltag.class</code> or <code>htmltag#id</code> constructs. In general, defining html tag names as well as classes or ids is unnecessary, and only slows down the browser.</li>
+    <li>Avoid <code>*</code> selectors at the ends of style rules. Selecting everything is expensive, and can slow down the browser. Selection engines work right-to-left.</li>
+</ul>
+
+<aside>* Getting caught using Comic Sans MS is grounds for instant dismissal.</aside>
+
+</body>
+</html>
