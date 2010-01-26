@@ -162,7 +162,7 @@ WebDoc.PageBrowserController = $.klass({
   },
    
   updateSelectedPage: function() {
-    var selectedPage = WebDoc.application.boardController.currentPage;
+    var selectedPage = WebDoc.application.pageEditor.currentPage;
     var target = $("#browser_item_" + selectedPage.uuid());
     this.selectPageUI(target);
   },

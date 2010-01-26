@@ -81,17 +81,17 @@ WebDoc.ToolbarController = $.klass({
     WebDoc.application.boardController.toggleInteractionMode();
   },
   
-//  'move-front': function(e) {
-//    e.preventDefault();
-//    WebDoc.application.pageEditor.currentPage.moveFront(WebDoc.application.boardController.selection[0].item);
-//    WebDoc.application.boardController.selection[0].item.save();
-//  },
-//
-//  'move-back': function(e) {
-//    e.preventDefault();
-//    WebDoc.application.pageEditor.currentPage.moveBack(WebDoc.application.boardController.selection[0].item);
-//    WebDoc.application.boardController.selection[0].item.save();
-//  },
+  'move-front': function(e) {
+    e.preventDefault();
+    WebDoc.application.pageEditor.currentPage.moveFront(WebDoc.application.boardController.selection()[0].item);
+    WebDoc.application.boardController.selection()[0].item.save();
+  },
+
+  'move-back': function(e) {
+    e.preventDefault();
+    WebDoc.application.pageEditor.currentPage.moveBack(WebDoc.application.boardController.selection()[0].item);
+    WebDoc.application.boardController.selection()[0].item.save();
+  },
     
   disable_html: function(e) {
     WebDoc.application.pageEditor.disableHtml = !WebDoc.application.pageEditor.disableHtml; 

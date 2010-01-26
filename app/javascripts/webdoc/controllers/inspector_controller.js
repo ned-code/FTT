@@ -27,7 +27,7 @@ WebDoc.InspectorController = $.klass({
         if (widgetPalette[0].contentWindow.widget) {
           var widgetObject = widgetPalette[0].contentWindow.widget;
           widgetObject.lang = "en";
-          widgetObject.uuid = WebDoc.application.boardController.selection[0].item.uuid();
+          widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
           widgetObject.mode = "Edit";
           widgetObject._onLoad();
         }
@@ -82,7 +82,7 @@ WebDoc.InspectorController = $.klass({
       }
       ddd("show palette", paletteId, this.palettes[paletteId]);
       if (typeof paletteId == 'string') {
-        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection[0].item);        
+        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);        
         if (this.palettes[3].attr("src") != paletteId) {
           this.palettes[3].attr("src", paletteId);
         }
@@ -100,9 +100,9 @@ WebDoc.InspectorController = $.klass({
   },
   
   selectionChanged: function() {
-    ddd("selected item ", WebDoc.application.boardController.selection);
-    if (WebDoc.application.boardController.selection.length > 0) {             
-      this.updatePalette(WebDoc.application.boardController.selection[0].inspectorId());
+    ddd("selected item ", WebDoc.application.boardController.selection());
+    if (WebDoc.application.boardController.selection().length > 0) {             
+      this.updatePalette(WebDoc.application.boardController.selection()[0].inspectorId());
     }
     else {
       this.updatePalette(0);

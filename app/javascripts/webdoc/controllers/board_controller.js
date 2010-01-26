@@ -1,6 +1,4 @@
-/**
- * Uniboard board controller
- **/
+
 //= require <webdoc/model/page>
 //= require <webdoc/model/item>
 //= require <webdoc/gui/page_view>
@@ -11,65 +9,72 @@
 //= require <webdoc/gui/widget_view>
 //= require <webdoc/controllers/drag_and_drop_controller>
 
-(function(WebDoc, undefined){
-
-// VAR
-
-var boardWrapHTML = '<div class="push-scroll layer">'+
-            '<div class="show-scroll layer">'+
-                '<div class="centering layer">'+
-                    '<div></div>'+
-                '</div>'+
-            '</div>'+
-        '</div>',
-    screen = jQuery('<div/>').addClass('screen layer');
-
-// EXTEND
-
+/**
+ * Uniboard board controller.
+ **/
 WebDoc.BoardController = $.klass({
+  
+  // private Class attributes
+  _boardWrapHTML:'<div class="push-scroll layer">'+
+                  '<div class="show-scroll layer">'+
+                    '<div class="centering layer">'+
+                      '<div></div>'+
+                    '</div>'+
+                  '</div>'+
+                '</div>',
+  _screen: jQuery('<div/>').addClass('screen layer'),
+             
+  // Constructor     
   initialize: function(editable, autoFit) {
-    this.editable = editable;
-    this.autoFit = autoFit;
-    this.currentZoom = 1; 
-    this.selection = [];
-    this.editingItem = null;
-    this.selectionListeners = [];
-    this.currentPageListeners = [];
+    this._editable = editable;
+    this._autoFit = autoFit;
+    this._currentZoom = 1; 
+    this._selection = [];
+    this._editingItem = null;
+    this._selectionListeners = [];
+    this._currentPageListeners = [];
+    this._currentPage = null;
+    this._currentPageView = null;
+    this._isInteraction = false;
+    
+    // used to keep trak of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
+    // we resize manually the div and we need to know what was the original size to define the new size.
+    this._initialSize = null;  
+  },
+  
+  selection: function() {
+    return this._selection;  
+  },
+  
+  isEditable: function() {
+    return this._editable;  
+  },
+  
+  editingItem: function() {
+    return this._editingItem;
   },
   
   addSelectionListener: function(listener) {
-    this.selectionListeners.push(listener);
+    this._selectionListeners.push(listener);
   },
   
   removeSelectionListener: function(listener) {
-    var index = $.inArray(listener, this.selectionListeners);
+    var index = $.inArray(listener, this._selectionListeners);
     if (index > -1) {
-      this.selectionListeners.splice(index, 1);
+      this._selectionListeners.splice(index, 1);
     }
-  },
-  
-  fireSelectionChanged: function() {
-    $.each(this.selectionListeners, function() {
-      this.selectionChanged();
-    });
   },
   
   addCurrentPageListener: function(listener) {
-    this.currentPageListeners.push(listener);
+    this._currentPageListeners.push(listener);
   },
   
   removeCurrentPageListener: function(listener) {
-    var index = $.inArray(listener, this.currentPageListeners);
+    var index = $.inArray(listener, this._currentPageListeners);
     if (index > -1) {
-      this.currentPageListeners.splice(index, 1);
+      this._currentPageListeners.splice(index, 1);
     }
   },
-  
-  fireCurrentPageChanged: function() {
-    $.each(this.currentPageListeners, function() {
-      this.currentPageChanged();
-    });
-  },  
   
   setCurrentPage: function(page) {
     var boardContainer = $("#board_container"),
@@ -80,37 +85,32 @@ WebDoc.BoardController = $.klass({
     $(document).unbind("keydown");
     
     // Set properties
-    this.pageView = pageView;
-    this.currentZoom = 1;
-    this.selection = [];
-    this.currentPage = page;
+    this._currentPageView = pageView;
+    this._currentZoom = 1;
+    this._selection = [];
+    this._currentPage = page;
     
     boardContainer
     .empty()
     .append( board )
-    .wrapInner( boardWrapHTML )
-    .prepend( screen );
+    .wrapInner( this._boardWrapHTML )
+    .prepend( this._screen );
     
-    this.initialHeight = board.height();
-    this.initialWidth = board.width();
-    this.fireSelectionChanged();
-    this.bindMouseEvent();
+    this._fireSelectionChanged();
+    this._bindMouseEvent();
     
-    $(document).bind("keydown", this, this.keyDown.pBind(this));
+    $(document).bind("keydown", this, this._keyDown.pBind(this));
     
     this.zoom(1);
-    if (this.isInteraction || !this.editable) {
-      this.setInterationMode(true);
-    }    
-    else {
-      this.setInterationMode(false);
-    }
+    this.setInterationMode(this._isInteraction || !this._editable);
     
     // Autofit
-    if (this.autoFit && board.css("height") != "100%") {
+    if (this._autoFit && board.css("height") != "100%") {
       //update zoom to fit browser page    
-      var heightFactor = ($("#board_container").height() - this.initialHeight) / this.initialHeight;
-      var widthFactor = ($("#board_container").width() - this.initialWidth) / this.initialWidth;      
+      var initialHeight = board.height();
+      var initialWidth = board.width();      
+      var heightFactor = ($("#board_container").height() - initialHeight) / initialHeight;
+      var widthFactor = ($("#board_container").width() - initialWidth) / initialWidth;      
       if (heightFactor < widthFactor) {
         this.zoom(1 + heightFactor);
       }
@@ -119,27 +119,18 @@ WebDoc.BoardController = $.klass({
       }
     }
     
-    this.fireCurrentPageChanged();
-    $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this.currentPage));
+    this._fireCurrentPageChanged();
+    $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this._currentPage));
     $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
-    this.pageView.domNode.css("display", "");
+    this._currentPageView.domNode.css("display", "");
   },
   
-  bindMouseEvent: function() {
-    $("#board").bind("mousedown", this, this.mouseDown.pBind(this));
-    $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
-    $("#board").bind("click", this, this.mouseClick.pBind(this));
-    $("#board").bind("dblclick", this, this.mouseDblClick.pBind(this));
-    $("#board").bind("mouseover", this, this.mouseOver.pBind(this));    
-    $("#board").bind("mouseout", this, this.mouseOut.pBind(this));
+  isInteractionMode: function() {
+    return this._isInteraction;  
   },
-  
-  unbindMouseEvent: function() {
-    $("#board").unbind();
-  },  
   
   setInterationMode: function(state) {
-    this.isInteraction = state;
+    this._isInteraction = state;
     if (state) {
       // go to interaction mode
       this.unselectAll();
@@ -150,7 +141,7 @@ WebDoc.BoardController = $.klass({
       
       this.setCurrentTool(WebDoc.application.arrowTool);
       $(".preview_hidden").hide();
-      
+      $(".item-layer").hide();
       $("body").removeClass("edit-mode");
       
       $("#tb_1_utilities_preview a").text("EDIT MODE");
@@ -168,31 +159,27 @@ WebDoc.BoardController = $.klass({
       }
       
       $("body").addClass("edit-mode");
-      
+      $(".item-layer").show();
       $(".preview_hidden").show();
       
       $("#tb_1_utilities_preview a").text("QUICK PREVIEW");        
     }
     // TODO for FF .5 we put svg backward because pointer event is not implemented
-    if (MTools.Browser.Gecko && (new Number(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
+    if (MTools.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
       ddd("FF 3.5. drawing !");
-      $("#board svg").css("zIndex", this.isInteraction ? "-1" : "1000000");
+      $("#board svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
     }
   },
   
   
   toggleInteractionMode: function() {  
-    if (!this.isInteraction) {
+    if (!this._isInteraction) {
       this.previousRightBarState = WebDoc.application.rightBarController.visible ? true : false;
     }
-    this.setInterationMode(!this.isInteraction);
-    if (!this.isInteraction && this.previousRightBarState) {
+    this.setInterationMode(!this._isInteraction);
+    if (!this._isInteraction && this.previousRightBarState) {
       WebDoc.application.rightBarController.showRightBar();
     }  
-  },
-  
-  centerBoard: function() {
-
   },
   
   setCurrentTool: function(tool) {
@@ -201,7 +188,6 @@ WebDoc.BoardController = $.klass({
     if (this.currentTool) {
       this.currentTool.selectTool();
     }
-    // this.unselectItemViews(this.selection);
   },
   
   mapToPageCoordinate: function(position) {
@@ -220,8 +206,8 @@ WebDoc.BoardController = $.klass({
       y += this.currentTool.getCursorHeight();
     }
 
-    var calcX = (x) * (1 / this.currentZoom);
-    var calcY = (y) * (1 / this.currentZoom);
+    var calcX = (x) * (1 / this._currentZoom);
+    var calcY = (y) * (1 / this._currentZoom);
     return {
       x: calcX,
       y: calcY
@@ -241,18 +227,18 @@ WebDoc.BoardController = $.klass({
   
   selectItemViews: function(itemViews) {
     // exit edit mode for current editing item
-    if (this.editingItem) {
-      this.editingItem.stopEditing();
+    if (this._editingItem) {
+      this._editingItem.stopEditing();
       WebDoc.application.arrowTool.enableHilight();
       jQuery('#board_container').trigger('hide-screen');
-      this.editingItem = null;
+      this._editingItem = null;
     }
     
     // do nothing if new selection is equal to old selection
-    if(itemViews.length == this.selection.length) {
+    if(itemViews.length == this._selection.length) {
       var selectionIsEqual = true;
       for (var i = 0; i < itemViews.length; i++) {
-        if (itemViews[i] != this.selection[i]) {
+        if (itemViews[i] != this._selection[i]) {
           selectionIsEqual = false;
           break;
         }
@@ -264,7 +250,7 @@ WebDoc.BoardController = $.klass({
     
     //deselect un-needed items
     ddd("select item in view");
-    $.each(this.selection, function(index, itemToDeselect) {
+    $.each(this._selection, function(index, itemToDeselect) {
       if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
         this.unselectItemViews([itemToDeselect]);
       }
@@ -272,17 +258,17 @@ WebDoc.BoardController = $.klass({
     
     //select wanted items
     $.each(itemViews, function(index, itemToSelect) {
-      if (jQuery.inArray(itemToSelect, this.selection) == -1) {
+      if (jQuery.inArray(itemToSelect, this._selection) == -1) {
         ddd("add item to selection");
-        this.selection.push(itemToSelect);
+        this._selection.push(itemToSelect);
       }
       itemToSelect.select();
     }.pBind(this));
-    this.fireSelectionChanged();
+    this._fireSelectionChanged();
   },
   
   unselectAll: function() {
-    ddd("unselect all. selection size " + this.selection.length);
+    ddd("unselect all. selection size " + this._selection.length);
     this.selectItemViews([]);
   },
   
@@ -293,14 +279,14 @@ WebDoc.BoardController = $.klass({
       var objectToUnSelect = itemViews[i];
       if (objectToUnSelect) {
         objectToUnSelect.unSelect();
-        var index = this.selection.indexOf(objectToUnSelect);
+        var index = this._selection.indexOf(objectToUnSelect);
         if (index > -1) {
           ddd("remove item from selection");
-          this.selection.splice(index, 1);
+          this._selection.splice(index, 1);
         }
       }
     }
-    this.fireSelectionChanged();    
+    this._fireSelectionChanged();    
   },
   
   editItemView: function(itemViewToEdit) {
@@ -309,13 +295,13 @@ WebDoc.BoardController = $.klass({
           nodePos = node.position(),
           nodeWidth = node.width(),
           nodeHeight = node.height(),
-          board = itemViewToEdit.pageView.domNode,
+          board = this._currentPageView.domNode,
           boardWidth = board.width(),
           boardHeight = board.height(),
           nodeLeft = nodePos.left,
           nodeTop = nodePos.top,
           nodeBottom = boardHeight - nodeTop - nodeHeight,
-          screens = itemViewToEdit.pageView.boardScreenNodes,
+          screens = this._currentPageView.boardScreenNodes,
           screenTop = screens.eq(0),
           screenBottom = screens.eq(1),
           screenLeft = screens.eq(2),
@@ -339,39 +325,68 @@ WebDoc.BoardController = $.klass({
           bottom: nodeBottom
       });
       
-      this.editingItem = itemViewToEdit;  
+      this._editingItem = itemViewToEdit;  
       itemViewToEdit.edit();
                 
       WebDoc.application.arrowTool.disableHilight();
-      jQuery('#board').trigger('show-screen');     
+      jQuery('#board').trigger('show-screen');
+      return true;     
     }
+    return false;
   },
   
+  insertItems: function(items) {
+    $.each(items, function(index, item) {           
+      this._currentPage.addItem(item);
+      if (!item.data.position) {
+        this._currentPage.moveFront(item);  
+      }
+      item.isNew = true;
+      item.save();
+    }.pBind(this));
+    
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.removeItems(items);
+    }.pBind(this));
+  },
+  
+  removeItems: function(items) {
+    $.each(items, function(index, item) {
+      this._currentPage.removeItem(item);
+      item.destroy();
+    }.pBind(this));
+    
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.insertItems(items);
+    }.pBind(this));
+  },
+    
   deleteSelection: function(e) {
     var deletedItems = [];
-    $.each(this.selection, function(index, itemView) {
+    $.each(this._selection, function(index, itemView) {
       deletedItems.push(itemView.item);
     }.pBind(this));
     this.removeItems(deletedItems);
-    this.selection = [];
-    this.fireSelectionChanged();
+    this._selection = [];
+    this._fireSelectionChanged();
     if (e && deletedItems.length > 0) {
       e.preventDefault(); //stop keydown event
     }
   },
   
   zoom: function(factor) {
-  
-    var previousZoom = this.currentZoom;
-    this.currentZoom = this.currentZoom * factor;
-    ddd("set zoom factor: " + this.currentZoom);
+    
     var boardElement = $("#board");
+    var previousZoom = this._currentZoom;
+    
+    this._currentZoom = this._currentZoom * factor;
+    ddd("set zoom factor: " + this._currentZoom);
     
     if (jQuery.browser.mozilla) {
       boardElement.css("MozTransformOrigin", "0px 0px");
-      boardElement.css("MozTransform", "scale(" + this.currentZoom + ")");
+      boardElement.css("MozTransform", "scale(" + this._currentZoom + ")");
       // Directly remove the transform property so that windowed items are displayed
-      if (this.currentZoom == 1) {
+      if (this._currentZoom == 1) {
 	      boardElement.css("MozTransformOrigin", "");
 	      boardElement.css("MozTransform", "");
 	    }
@@ -379,84 +394,66 @@ WebDoc.BoardController = $.klass({
     else 
       if (jQuery.browser.safari) {
         ddd("apply webkit transform");
-        if (!this.initialSize) {
-          this.initialSize = {
+        if (!this._initialSize) {
+          this._initialSize = {
             width: parseFloat(boardElement.css("width").replace("px", "")) + 2,
             height: parseFloat(boardElement.css("height").replace("px", "")) + 2
           };
         }
-        if (this.currentZoom > 1) {
+        if (this._currentZoom > 1) {
           boardElement.css({
-            width: this.initialSize.width * this.currentZoom,
-            height: this.initialSize.height * this.currentZoom
+            width: this._initialSize.width * this._currentZoom,
+            height: this._initialSize.height * this._currentZoom
           });
         }
         else {
           boardElement.css({
-            width: this.initialSize.width,
-            height: this.initialSize.height
+            width: this._initialSize.width,
+            height: this._initialSize.height
           });
         }
         boardElement.css("WebkitTransformOrigin", "0px 0px");
-        if (this.currentZoom == 1) {
+        if (this._currentZoom == 1) {
           boardElement.css("WebkitTransform", "");
         }
         else {
-          boardElement.css("WebkitTransform", "scale(" + this.currentZoom + ")");
+          boardElement.css("WebkitTransform", "scale(" + this._currentZoom + ")");
         }
       }
-      else 
-        if (jQuery.browser.msie) {
-          ddd("apply ie transform " + this.currentZoom + " " + this.initialWidth * this.currentZoom + " " + this.initialHeight * this.currentZoom);
-          if ((previousZoom >= 1 && factor > 1) || (this.currentZoom >= 1 && factor < 1)) {
-            boardElement.css("width", this.initialWidth * this.currentZoom);
-            boardElement.css("height", this.initialHeight * this.currentZoom);
-          }
-          boardElement.css("filter", "progid:DXImageTransform.Microsoft.Matrix(M11='" + this.currentZoom + "',M21='0', M12='0', M22='" + this.currentZoom + "', sizingmethod='autoexpand')");
-        }
   },
   
-  mouseDown: function(e) {
+  // Private methods
+    
+  _mouseDown: function(e) {
     $(document).unbind("mousemove").unbind("mouseup");
     if (window.document.activeElement) {
       window.document.activeElement.blur();
     }
-//    if (!this.isInteraction) {
-//      e.preventDefault();
-//    }
     if (!e.boardIgnore) {
-      $(document).bind("mousemove", this, this.mouseMove.pBind(this));
-      $(document).bind("mouseup", this, this.mouseUp.pBind(this));
+      $(document).bind("mousemove", this, this._mouseMove.pBind(this));
+      $(document).bind("mouseup", this, this._mouseUp.pBind(this));
       this.currentTool.mouseDown(e);
     }
   },
   
-  mouseMove: function(e) {
-    if (!this.isInteraction) {
+  _mouseMove: function(e) {
+    if (!this._isInteraction) {
       e.preventDefault();
     }
     this.currentTool.mouseMove(e);
   },
   
-  mouseOut: function(e) {
-    //e.preventDefault();
-    this.currentTool.mouseOut(e);
-  },
-  
-  mouseUp: function(e) {
+  _mouseUp: function(e) {
     $(document).unbind("mousemove");
     $(document).unbind("mouseup");
-//    if (!this.isInteraction) {
-//      e.preventDefault();
-//    }
     this.currentTool.mouseUp(e);
   },
   
-  mouseClick: function(e) {
+  _mouseClick: function(e) {
     this.currentTool.mouseClick(e);
   },
   
-  keyDown: function(e) {
+  _keyDown: function(e) {
     var el = $(e.target);
     if (el.is('input') || el.is('textarea')) { 
       return;
@@ -484,54 +481,37 @@ WebDoc.BoardController = $.klass({
     }
   },
   
-  mouseDblClick: function(e) {
+  _mouseDblClick: function(e) {
     this.currentTool.mouseDblClick(e);    
   },
   
-  mouseOver: function(e) {
+  _mouseOver: function(e) {
     this.currentTool.mouseOver(e);    
   },
-  
-  mouseOut: function(e) {
+
+  _mouseOut: function(e) {
     this.currentTool.mouseOut(e);    
-  },  
+  },   
   
-  insertItems: function(items) {
-    $.each(items, function(index, item) {           
-      this.currentPage.addItem(item);
-      if (!item.data.position) {
-        this.currentPage.moveFront(item);  
-      }
-      item.isNew = true;
-      item.save();
-    }.pBind(this));
-    
-    /*
-    if (items.length > 0) {
-      var itemViewToSelect = this.pageView.itemViews[items[0].uuid()];
-      this.selectItemViews([itemViewToSelect]);
-    }
-    */
-    
-    WebDoc.application.undoManager.registerUndo(function() {
-      this.removeItems(items);
-    }.pBind(this));
+  _fireSelectionChanged: function() {
+    $.each(this._selectionListeners, function() {
+      this.selectionChanged();
+    });
   },
   
-  removeItems: function(items) {
-    $.each(items, function(index, item) {
-      this.currentPage.removeItem(item);
-      item.destroy();
-    }
-.pBind(this));
-    
-    WebDoc.application.undoManager.registerUndo(function() {
-      this.insertItems(items);
-    }
-.pBind(this));
+  _fireCurrentPageChanged: function() {
+    $.each(this._currentPageListeners, function() {
+      this.currentPageChanged();
+    });
+  },
+  
+  _bindMouseEvent: function() {
+    $("#board").bind("mousedown", this, this._mouseDown.pBind(this));
+    $("#board").bind("click", this, this._mouseClick.pBind(this));
+    $("#board").bind("dblclick", this, this._mouseDblClick.pBind(this));
+    $("#board").bind("mouseover", this, this._mouseOver.pBind(this));    
+    $("#board").bind("mouseout", this, this._mouseOut.pBind(this));
   }
+    
   
 });
-
-
-})(WebDoc);
