@@ -414,8 +414,6 @@ WebDoc.BoardController = $.klass({
           }
           boardElement.css("filter", "progid:DXImageTransform.Microsoft.Matrix(M11='" + this.currentZoom + "',M21='0', M12='0', M22='" + this.currentZoom + "', sizingmethod='autoexpand')");
         }
-    
-//    this.centerBoard();
   },
   
   mouseDown: function(e) {

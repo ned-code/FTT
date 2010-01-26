@@ -121,6 +121,12 @@
   = render :partial => 'page_inspector'
 
 :javascript
+  
+  // Take string of CSS and add to head
+  function createStyle( cssString ){
+    jQuery('head').append('<style type="text/css">'+cssString+'</style>');
+  }
+
   $(function()
   {
     WebDoc.authData = {
@@ -133,6 +139,12 @@
     var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
     editor.load("#{@document.uuid}");
     
+    // Add feature detected styles to head
+    createStyle('.push-scroll {'+
+      'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
+      'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
+    '}');
+    
     // Set up default panel behaviour (show screen, show footer etc.)
     jQuery(".panel").panel();
-  });   
+  });
