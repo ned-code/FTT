@@ -25,6 +25,12 @@ WebDoc.Item = $.klass(MTools.Record,
     this.page = page;  
   },
   
+  setPosition: function(newPosition) {
+    this.data.position = newPosition;
+    // position changed is not notified because it is always changed from the page. And this is that page that notifies
+    // item position changed  
+  },
+  
   refresh: function($super, json) {
     var refreshInnerHtml = false;
     var refreshPreferences = false;
@@ -41,7 +47,7 @@ WebDoc.Item = $.klass(MTools.Record,
     }
     
     // TODO: can remove this fecth. it ise used only for old item that were created before that inspector url is set in item properties.
-    if (this.data.media_id != null && this.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
+    if (this.data.media_id && this.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
       MTools.ServerManager.getRecords(WebDoc.Widget, this.data.media_id, function(data) {
         if (data.length > 0) {
           this.media = data[0];
@@ -129,7 +135,8 @@ WebDoc.Item = $.klass(MTools.Record,
   
   setInnerHtml: function(html, force) {
     if (html != this.data.data.innerHTML || force) {
-      this.data.data.innerHTML = html;      
+	    // Force to wmode transparent if necessary
+      this.data.data.innerHTML = this.checkForceWMode(html);      
       if (!this.property("noIframe") && (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi))) {
         ddd("replace tag");
         this.data.data.tag = "iframe";
@@ -205,8 +212,37 @@ WebDoc.Item = $.klass(MTools.Record,
 
   removeHtmlTags: function(str) {
     var regExp = /<\/?[^>]+>/gi;
-		str = str.replace(regExp,"");
+    str = str.replace(regExp,"");
     return str;
+  },
+
+  // If HTML code contains an embed tag of type Flash, will create or force the wmode property to transparent
+  // so that Flash content will be viewable into WebDoc
+  checkForceWMode: function(html) {
+    var regexp = new RegExp("<embed[^>]*(/>|>(.*?)</embed>)", "g");
+      if(html.match(regexp)) {
+        // Contains embed tag, must force its wmode attrib to transparent
+        var arrMatch = null;
+        while(arrMatch = regexp.exec(html)) {
+          var wrapper = $('<div>').append(arrMatch[0]);
+          var embedNode = $('embed', wrapper);
+          if(embedNode.length > 0 && (embedNode.attr("type") == "application/x-shockwave-flash" || embedNode.attr("src").indexOf('.swf') != -1)) {
+            $('embed', wrapper).attr("wmode", "transparent");
+            replacedValue = wrapper.html();
+            // Since jQuery might remove the closing tag, check if is still present
+            if(!this._endsWith(replacedValue, '</embed>') && !this._endsWith(replacedValue, '/>')) {
+              replacedValue += "</embed>";
+            }
+            html = html.replace(arrMatch[0], replacedValue);
+          }
+        }
+      }
+      return html;
+  },
+
+  _endsWith: function(s, pattern) {
+    var d = s.length - pattern.length;
+    return d >= 0 && s.lastIndexOf(pattern) === d;
   }
 });
 

@@ -7,7 +7,10 @@ WebDoc.Page = $.klass(MTools.Record,
 { 
   initialize: function($super, json, document) {
     // initialize relationship before super.
+    this.firstPosition = 0;
+    this.lastPosition = 0;
     this.items = [];
+    this.nonDrawingItems = [];
     this.document = document;
     $super(json);
   },
@@ -53,7 +56,7 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   setHeight: function(height) {
-    WebDoc.InspectorFieldsValidator.validatePixelSize(height);
+    WebDoc.InspectorFieldsValidator.validateSize(height);
     if(this.data.data.css.height != height) {
       this.data.data.css.height = height;
       this.fireObjectChanged();
@@ -62,7 +65,7 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   setWidth: function(width) {
-    WebDoc.InspectorFieldsValidator.validatePixelSize(width);
+    WebDoc.InspectorFieldsValidator.validateSize(width);
     if(this.data.data.css.width != width) {
       this.data.data.css.width = width;
       this.fireObjectChanged();
@@ -79,9 +82,10 @@ WebDoc.Page = $.klass(MTools.Record,
     }
   },
   
-  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode) { 
+  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode, position) { 
     var objectChanged = this.setBackgroundImage(backgroundUrl);
     objectChanged = this.setBackgroundRepeatMode(repeatMode) || objectChanged;
+    objectChanged = this.setBackgroundPosition(position) || objectChanged;
     if(objectChanged) {
       this.fireObjectChanged();
       this.save();
@@ -105,6 +109,23 @@ WebDoc.Page = $.klass(MTools.Record,
     }
     return false;
   },
+
+  setBackgroundPosition: function(position) {
+    WebDoc.InspectorFieldsValidator.validateBackgroundPosition(position);
+    if(this.data.data.css.backgroundPosition != position) {
+      this.data.data.css.backgroundPosition = position;
+      return true;
+    }
+    return false;
+  },
+
+  removeBackgroundImage: function() {
+    delete this.data.data.css.backgroundImage;
+    delete this.data.data.css.backgroundRepeat;
+    delete this.data.data.css.backgroundPosition;   
+    this.fireObjectChanged();
+    this.save();    
+  },
   
   refresh: function($super, json) {
     //backup previous items if we need to keep them
@@ -119,12 +140,18 @@ WebDoc.Page = $.klass(MTools.Record,
       this.data.items = previousItems;
       //clear previous item view
       for (var itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
-        removeItem(this.items[itemIndex]);
+        this.removeItem(this.items[itemIndex]);
       }
     }
     var that = this;
-    this.items = [];    
+    this.items = [];
+    this.nonDrawingItems = [];    
     if (this.data.items && $.isArray(this.data.items)) {
+      this.data.items.sort(function(a,b) {
+        a.position = a.position?a.position:0;
+        b.position = b.position?b.position:0;
+        return a.position - b.position;
+      });
       $.each(this.data.items, function() {
         that.createOrUpdateItem({ item: this });
       });
@@ -161,16 +188,66 @@ WebDoc.Page = $.klass(MTools.Record,
     this.addItem(newItem);
   },
   
+  moveFront: function(item) {
+    if (this.nonDrawingItems.length > 1) {
+      this.lastPosition += 1;
+      item.setPosition(this.lastPosition);
+      var previousPositionInArray = $.inArray(item, this.nonDrawingItems);
+      this.nonDrawingItems.sort(function(a, b) {
+        return a.data.position - b.data.position;
+      });
+      var newPositionInArray = $.inArray(item, this.nonDrawingItems);
+      this.fireItemPositionChanged(item, this.nonDrawingItems[this.nonDrawingItems.length - 2]);
+    }
+  },
+  
+  moveBack: function(item) {
+    if (this.nonDrawingItems.length > 1) {
+      this.firstPosition -= 1;
+      item.setPosition(this.firstPosition);
+      var previousPositionInArray = $.inArray(item, this.nonDrawingItems);
+      this.nonDrawingItems.sort(function(a, b) {
+        return a.data.position - b.data.position;
+      });
+      var newPositionInArray = $.inArray(item, this.nonDrawingItems);
+      this.fireItemPositionChanged(item, null);
+    }
+  },
+  
   addItem: function(item) {
     item.page = this;
+
     this.items.push(item);
-    this.fireItemAdded(item);    
+    var afterItem = null;
+    if (item.data.media_type != WebDoc.ITEM_TYPE_DRAWING) {
+      this.nonDrawingItems.push(item);
+      this.nonDrawingItems.sort(function(a,b) {
+        return a.data.position - b.data.position;
+      });
+      if (item.data.position > this.lastPosition) {
+        this.lastPosition = item.data.position;
+      }
+      else if (item.data.position < this.firstPosition) {
+        this.firstPosition = item.data.position;
+      }  
+      var afterItemIndex = $.inArray(item, this.nonDrawingItems) - 1;
+      if (afterItemIndex > -1) {
+        afterItem = this.nonDrawingItems[afterItemIndex];
+      }
+    }        
+    this.fireItemAdded(item, afterItem);    
   },
   
   removeItem: function(item) {    
     var index = $.inArray(item, this.items);
     if (index != -1) {
       this.items.splice(index, 1);
+      if (item.data.media_type != WebDoc.ITEM_TYPE_DRAWING) {
+        var nonDrawingIndex = $.inArray(item, this.nonDrawingItems);
+        if (nonDrawingIndex != -1) {
+          this.nonDrawingItems.splice(nonDrawingIndex, 1);    
+        }
+      }
       //ddd(this.items);
       this.fireItemRemoved(item);
     }
@@ -198,10 +275,10 @@ WebDoc.Page = $.klass(MTools.Record,
     this.fireObjectChanged();
   },
   
-  fireItemAdded: function(addedItem) {
+  fireItemAdded: function(addedItem, afterItem) {
     for (var i = 0; i < this.listeners.length; i++) {
       if (this.listeners[i].itemAdded) {
-        this.listeners[i].itemAdded(addedItem);
+        this.listeners[i].itemAdded(addedItem, afterItem);
       }      
     }     
   },
@@ -212,6 +289,14 @@ WebDoc.Page = $.klass(MTools.Record,
         this.listeners[i].itemRemoved(removedItem);
       }
     }     
+  },
+  
+  fireItemPositionChanged: function(item, afterItem) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].itemMovedAfterItem) {
+        this.listeners[i].itemMovedAfterItem(item, afterItem);
+      }
+    }         
   },
   
   copy: function($super) {
@@ -246,8 +331,8 @@ WebDoc.Page = $.klass(MTools.Record,
 
   nbTextItems: function() {
 	  var result = 0;
-    for (var i = 0; i < this.items.length; i++) {
-      if(this.items[i].type() == "text") {
+    for (var i = 0; i < this.nonDrawingItems.length; i++) {
+      if(this.nonDrawingItems[i].type() == "text") {
         result++;
       }
     }
@@ -255,9 +340,9 @@ WebDoc.Page = $.klass(MTools.Record,
   },
 
   getFirstTextItem: function() {
-    for (var i = 0; i < this.items.length; i++) {
-      if(this.items[i].type() == "text") {
-        return this.items[i];
+    for (var i = 0; i < this.nonDrawingItems.length; i++) {
+      if(this.nonDrawingItems[i].type() == "text") {
+        return this.nonDrawingItems[i];
       }
     }
   }

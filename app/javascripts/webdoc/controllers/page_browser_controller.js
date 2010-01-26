@@ -11,7 +11,8 @@
 // Default settings
 var boardPanel,
     pagesPanel,
-    pagesPanelWidth = 150;
+    pagesPanelWidth = 150,
+    changedFromDrag = false;
 
 WebDoc.PageBrowserController = $.klass({
   initialize: function() {
@@ -34,6 +35,8 @@ WebDoc.PageBrowserController = $.klass({
     catch (ex) {
       ddt();
     }   
+
+    WebDoc.application.boardController.addCurrentPageListener(this);
   },
 
   performAction: function(e) {
@@ -67,14 +70,13 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   setDocument: function(document) {
-    this.document = document;    
+    this.document = document;   
+    this.document.addListener(this); 
   },
   
   toggleBrowser: function() {
+    var pageBroaserButton = $("#page-browser").find("a");
     if (this.visible) {
-      this.document.removeListener(this);
-      WebDoc.application.boardController.removeCurrentPageListener(this);
-      
       pagesPanel.animate({
           marginLeft: -pagesPanelWidth
       }, {
@@ -82,13 +84,11 @@ WebDoc.PageBrowserController = $.klass({
               boardPanel.css({
                   left: pagesPanelWidth + val
               });
-          },
+          }
       });
+     pageBroaserButton.removeClass("current");
     }
-    else {
-      this.document.addListener(this);
-      WebDoc.application.boardController.addCurrentPageListener(this);      
-      
+    else {       
       pagesPanel.animate({
           marginLeft: 0
       }, {
@@ -96,10 +96,9 @@ WebDoc.PageBrowserController = $.klass({
               boardPanel.css({
                   left: pagesPanelWidth + val
               });
-          },
+          }
       });
-            
-      $("#page_browser_left").addClass("toggle_on_panel");     
+      pageBroaserButton.addClass("current");      
     }
     this.visible = !this.visible;
   },
@@ -130,7 +129,7 @@ WebDoc.PageBrowserController = $.klass({
     this.unbindPageBrowserItemsEvents();
     $('.page_browser_item')
     .bind('click', this.selectCurrentPage.pBind(this))
-    .bind('mouseover', this.changeCurrentHighlightedItem.pBind(this));
+    //.bind('mouseover', this.changeCurrentHighlightedItem.pBind(this)); // Provisory, maybe will be used later
     $('.page_browser_item_information').bind('click', this.showPageInspector);
     $('.page_browser_item_title').dblclick(this.staticPanelAction.pBind(this));
     $('.page_browser_item_title_edition').dblclick(this.editPanelAction.pBind(this));
@@ -142,7 +141,7 @@ WebDoc.PageBrowserController = $.klass({
   unbindPageBrowserItemsEvents: function() {
     $('.page_browser_item')
     .unbind('click')
-    .unbind('mouseover');
+    //.unbind('mouseover');
     $('.page_browser_item_information').unbind('click');
     $('.page_browser_item_title').unbind('dblclick');
     $('.page_browser_item_title_edition').unbind('dblclick');
@@ -173,7 +172,7 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   pageAdded: function(page) {
-     ddd("added page");
+    ddd("added page");
     var pageThumb = new WebDoc.PageBrowserItemView(page);
     pageThumb.addToBrowser();
     // Update arrays
@@ -196,6 +195,24 @@ WebDoc.PageBrowserController = $.klass({
     this.pageMap[currentItemId] = [];
     this.removeById(this.pageThumbs, currentItemId);
   },
+
+  pageMoved: function(page, newPosition, previousPosition) { 
+    if(!changedFromDrag) { // Dragged from another session, must update GUI
+	    var itemsList = $('#page_browser_items > li');
+	    var baseItem = itemsList.eq(previousPosition);
+      var itemCopy = baseItem.clone(true);
+      var itemDest = itemsList.eq(newPosition);
+
+      if(newPosition > previousPosition) {
+        itemDest.after(itemCopy);
+      }
+      else {
+        itemDest.before(itemCopy);
+      }
+      baseItem.remove();
+      this.bindPageBrowserItemsEvents();
+    }
+  },
   
   currentPageChanged: function() {
     ddd("update selected page in page browser");
@@ -211,15 +228,23 @@ WebDoc.PageBrowserController = $.klass({
      var droppedPageBrowserItem = $(ui.item).children('.page_browser_item');
      var droppedPage = this.pageMap[droppedPageBrowserItem.attr("id")].page;
      var droppedPagePosition = $('#page_browser_items > li').index(ui.item);
+     // Define a flag to avoid rebuilding the page browser when items are dragged
+     // However, if the document is opened in other sessions, updates must be done
+     changedFromDrag = true;
      var pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(droppedPage.uuid(), droppedPagePosition);
      if (pageToSave) {
        pageToSave.save();
      }
+     changedFromDrag = false;
    },
 
    selectCurrentPage: function(event) {
      var targetItem = $(event.target).closest('.page_browser_item');
-     this.selectPage(targetItem);
+     var clickedPageId = targetItem.attr("id");
+     var currentPageId = WebDoc.application.pageEditor.currentPage.uuid();     
+     if(clickedPageId.indexOf(currentPageId) == -1) {
+       this.selectPage(targetItem);
+     }
    },
 
    changeCurrentHighlightedItem: function(event) {

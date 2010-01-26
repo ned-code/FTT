@@ -6,8 +6,8 @@
 
 WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
-  initialize: function($super, item, pageView) {
-    $super(item, pageView);
+  initialize: function($super, item, pageView, afterItem) {
+    $super(item, pageView, afterItem);
     this.itemDomNode.css({ width:"100%", height:"100%"}); 
     this.api = new WebDoc.WidgetApi(item, false);  
   },
@@ -64,7 +64,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
     ddd("check if widget has an inspector url", this.item);
     if (this.item.data.data.properties && this.item.data.data.properties.inspector_url != null) {
-      return this.item.data.properties.inspector_url;
+      return this.item.data.data.properties.inspector_url;
     }      
     else if (this.item.media && this.item.media.data.properties.inspector_url != null) {
       return this.item.media.data.properties.inspector_url;

@@ -14,6 +14,39 @@ var plug = 'panel',
     footSelector = '.foot>div',
     options = {
         duration: 100
+    },
+    regex = {
+        hash:       /^#?$/,             // Single hash or empty string
+        hashRef:    /^#(\S+)/,          // Matches a hash ref, capturing all non-space characters following the hash
+        slashRef:   /^\//,              // Begins with a slash
+        urlRef:     /^[a-z]+:\/\//      // Begins with protocol xxx://
+    },
+    handler = {
+//        'left-panel-toggle': ,
+//        'right-panel-toggle': ,
+//        
+//        'pages-browser': ,
+//        'library': ,
+//        'inspector': ,
+//        
+//        'prev-page': ,
+//        'next-page': ,
+//        'add-page': ,
+//        'remove-page': ,
+//        
+//        'zoom-in': ,
+//        'zoom-out': ,
+//        'move': ,
+//        'select': ,
+//        'draw': ,
+//        'insert-html': ,
+//        'insert-text': ,
+//        'move-back': ,
+//        'move-front': ,
+//        
+//        'undo': ,
+//        'redo': ,
+//        'delete':
     };
 
 function toggleHead(e){
@@ -78,14 +111,32 @@ function toggleFoot(e){
     return false;
 }
 
+function callHandler(e){
+    var //panel = jQuery( e.currentTarget ),
+        //data = panel.data(plug),
+        link = jQuery(this),
+        href = link.attr('href'),
+        match = regex.hashRef.exec(href) ;
+    
+    console.log(match);
+    
+    // If the href contains a hashRef that matches a handler, call it
+    if ( match && handler[match[1]] ) {
+        handler[match[1]](e);
+        return false;
+    }
+}
+
 jQuery.fn[plug] = function(){
     var nodes = this;
     
     return nodes
     .bind('click', jQuery.delegate({
-        '.toggle-head': toggleHead,
-        '.toggle-foot': toggleFoot
-    }))
+            '.toggle-head': toggleHead,
+            '.toggle-foot': toggleFoot,
+            'a': callHandler
+        })
+    )
     .bind('show-head', toggleHead)
     .bind('show-foot', toggleFoot)
     .bind('show-screen', function(){

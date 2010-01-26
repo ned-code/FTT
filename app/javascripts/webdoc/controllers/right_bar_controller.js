@@ -9,7 +9,7 @@
 // Default settings
 var boardPanel,
     rightPanel,
-    rightPanelWidth = 350;
+    panelWidth = 350;
 
 WebDoc.RightBarController = $.klass({
   initialize: function() {
@@ -88,6 +88,7 @@ WebDoc.RightBarController = $.klass({
               }
           }
       });
+      $("#toggle_inspector").find("a").addClass("current");
     }
     
     else {
@@ -113,6 +114,7 @@ WebDoc.RightBarController = $.klass({
               }
           }
       });
+      $("#toggle_inspector").find("a").removeClass("current");
     }
     else {
       if (callBack) {

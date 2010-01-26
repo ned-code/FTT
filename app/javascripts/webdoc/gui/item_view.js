@@ -6,7 +6,7 @@
 WebDoc.ItemView = $.klass({
   item: null,
   pageView: null,
-  initialize: function(item, pageView) {
+  initialize: function(item, pageView, afterItem) {
   
     if (pageView) {
       this.pageView = pageView;
@@ -20,7 +20,7 @@ WebDoc.ItemView = $.klass({
     this.domNode = $("<div/>").addClass("item_wrap"); 
 
     this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css("overflow", "hidden");
-    this.itemLayerDomNode = $("<div>").addClass("layer").addClass("screen").addClass("item_layer");
+    this.itemLayerDomNode = $("<div>").addClass("layer").addClass("screen").addClass("item-layer");
     this.itemLayerDomNode.css("display", "block");
     this.domNode.append(this.itemDomNode);
     this.domNode.append(this.itemLayerDomNode);
@@ -29,8 +29,17 @@ WebDoc.ItemView = $.klass({
     this.domNode.data("itemView", this);
     
     item.addListener(this);
-    
-    this.pageView.itemDomNode.append(this.domNode);
+    if (afterItem) {
+      if (afterItem == "end") {
+        this.pageView.itemDomNode.append(this.domNode);
+      }
+      else {
+        afterItem.domNode.after(this.domNode);
+      }
+    }
+    else {
+      this.pageView.itemDomNode.prepend(this.domNode);
+    }
     this.domNode.css(this.item.data.data.css);
   },
   
@@ -129,67 +138,7 @@ WebDoc.ItemView = $.klass({
     if (!this.isSelected()) {
       ddd("ItemView: select item " + this.item.uuid());
       this.domNode.addClass("item_selected");
-
-      this.domNode.draggable({
-        containment: "parent",
-        cursor: 'move',
-        distance: 5,
-        start: function(e, ui) {
-          ddd("start drag");
-          var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-          var currentPosition = {};
-          $.extend(currentPosition, this.item.position);
-          this.dragOffsetLeft = mappedPoint.x - this.item.position.left;
-          this.dragOffsetTop = mappedPoint.y - this.item.position.top;
-          WebDoc.application.undoManager.registerUndo(function() {
-            WebDoc.ItemView._restorePosition(this.item, currentPosition);
-          }.pBind(this));
-          WebDoc.application.arrowTool.disableHilight();
-        }.pBind(this)        ,
-        drag: function(e, ui) {
-          var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-          ui.position.left = mappedPoint.x - this.dragOffsetLeft;
-          ui.position.top = mappedPoint.y - this.dragOffsetTop;
-          this._moveTo(ui.position);
-        }.pBind(this)        ,
-        stop: function(e, ui) {
-          this.item.moveTo(ui.position);
-          this.item.save();
-          WebDoc.application.arrowTool.enableHilight();
-        }.pBind(this)
-      }).resizable({
-        handles: 's, e, se',
-        start: function(e, ui) {
-          this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
-          var currentSize = {};
-          $.extend(currentSize, this.item.size);
-          ddd("current size" + currentSize.width);
-          WebDoc.application.undoManager.registerUndo(function() {
-            WebDoc.ItemView._restoreSize(this.item, currentSize);
-          }.pBind(this));
-        }.pBind(this)        ,
-        resize: function(e, ui) {
-          var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-          var newWidth = ui.originalSize.width + (mappedPoint.x - this.resizeOrigin.x);
-          var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y);
-          if(e.shiftKey){
-            // Must maintain image ratio on resize
-            var imgRatio=this.item.size.width/this.item.size.height;
-            ui.size.width = imgRatio*newHeight;
-          }
-          else {
-            ui.size.width = newWidth;
-          }
-          ui.size.height =newHeight;
-
-          this._resizeTo(ui.size);
-        }.pBind(this)        ,
-        stop: function(e, ui) {
-          this.item.resizeTo(ui.size);
-          this.item.save();
-        }.pBind(this)
-      });
-      
+      this._initDragAndResize();      
       if (lastSelectedObjectMouseDownEvent) {
         // board must ignore this event. It is just for draggable elemnt
         lastSelectedObjectMouseDownEvent.boardIgnore = true;
@@ -214,13 +163,79 @@ WebDoc.ItemView = $.klass({
     //by default item views are not editable (if your item is editable override this method in the subclass) 
     this.domNode.addClass("item-edited");
     this.itemLayerDomNode.hide();
+    this.domNode.draggable( 'destroy' );
+    this.domNode.resizable( 'destroy' );
     WebDoc.application.rightBarController.showItemInspector();    
     WebDoc.application.inspectorController.selectPalette(this.inspectorId());
   },
   
   stopEditing: function() {
     this.domNode.removeClass("item-edited");
+    this._initDragAndResize();
     this.itemLayerDomNode.show();
+
+  },
+  
+  _initDragAndResize: function() {
+    this.domNode.draggable({
+      containment: "parent",
+      cursor: 'move',
+      distance: 5,
+      start: function(e, ui) {
+        ddd("start drag");
+        var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
+        var currentPosition = {};
+        $.extend(currentPosition, this.item.position);
+        this.dragOffsetLeft = mappedPoint.x - this.item.position.left;
+        this.dragOffsetTop = mappedPoint.y - this.item.position.top;
+        WebDoc.application.undoManager.registerUndo(function() {
+          WebDoc.ItemView._restorePosition(this.item, currentPosition);
+        }.pBind(this));
+        WebDoc.application.arrowTool.disableHilight();
+      }.pBind(this)        ,
+      drag: function(e, ui) {
+        var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
+        ui.position.left = mappedPoint.x - this.dragOffsetLeft;
+        ui.position.top = mappedPoint.y - this.dragOffsetTop;
+        this._moveTo(ui.position);
+      }.pBind(this)        ,
+      stop: function(e, ui) {
+        this.item.moveTo(ui.position);
+        this.item.save();
+        WebDoc.application.arrowTool.enableHilight();
+      }.pBind(this)
+    }).resizable({
+      handles: 's, e, se',
+      start: function(e, ui) {
+        this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
+        var currentSize = {};
+        $.extend(currentSize, this.item.size);
+        ddd("current size" + currentSize.width);
+        WebDoc.application.undoManager.registerUndo(function() {
+          WebDoc.ItemView._restoreSize(this.item, currentSize);
+        }.pBind(this));
+      }.pBind(this)        ,
+      resize: function(e, ui) {
+        var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
+        var newWidth = ui.originalSize.width + (mappedPoint.x - this.resizeOrigin.x);
+        var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y);
+        if(e.shiftKey){
+          // Must maintain image ratio on resize
+          var imgRatio=this.item.size.width/this.item.size.height;
+          ui.size.width = imgRatio*newHeight;
+        }
+        else {
+          ui.size.width = newWidth;
+        }
+        ui.size.height =newHeight;
+
+        this._resizeTo(ui.size);
+      }.pBind(this)        ,
+      stop: function(e, ui) {
+        this.item.resizeTo(ui.size);
+        this.item.save();
+      }.pBind(this)
+    });    
   },
     
   createSelectedFrame: function() {

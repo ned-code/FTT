@@ -12,12 +12,12 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     // view transition finished (slide in/out)
     this.element.bind('pageAnimationEnd', function(event, info){
       var currentViewId = this.currentViewId();
-      if (currentViewId === this.element.attr("id")) { // Images view did appear
+      if (currentViewId === this.element.attr("id")) { // #images view did appear
         if (this.element.find('div.selected')[0] == this.tabContainers[0]) {
           this.loadMyImages(0);
         }
       }
-      else if (currentViewId === "add_images") { // Add Images view did appear
+      else if (currentViewId === "add_images") { // #add_images view did appear
         this.imagesUploader.loadSWFUpload();
       }
     }.pBind(this));
@@ -41,7 +41,9 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     
     // Observe thumb clicks (with event delegation) for all current and future thumbnails
     $("#"+libraryId+" .thumbnails ul li a").live("click", function (event) {
-      var properties = $(event.target).data("properties");
+      var properties = $(event.target).parent().find('img').data("properties"); // I do parent().find("img") in case other elements 
+                                                                                // will be added in addition to the thumbnail 
+                                                                                // image itself (like for "video rows") 
       this.prepareDetailsView(properties);
       this.showDetailsView.click();
       event.preventDefault();
@@ -54,6 +56,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     
     // Setup thumbnails drag n' drop
     this.myImagesContainer.find(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
+    $(document.body).append(this.buildMediaDragFeedbackElement("image", "")); // just to preload the icon (so that it'll be immediatley available at the first drag)
     
     // Next/Previous page links
     this.paginationWrap = $("<div class='pagination' style='display:none'>");
@@ -72,8 +75,13 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   setupDetailsView: function() {
     this.detailsViewImg = this.detailsView.find('.single_image img');
     
+    // Setup drag n' drop
+    this.detailsView.find('.single_image')
+    .attr({ draggable: "true" })
+    .bind("dragstart", this.dragStart.pBind(this));
+    
     // handle possible actions 
-    $("#image_actions").click(function(event){
+    $("#image_details .actions").click(function(event){
       event.preventDefault();
       
       var properties = this.detailsViewImg.data("properties"); //properties of the currenlty displayed image are store in this element
@@ -90,8 +98,8 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           
         case "set_image_as_bg_action": 
           var page = WebDoc.application.pageEditor.currentPage;
-          var imgUrl = this.detailsView.find('.single_image a img').attr("src");
-          page.setBackgroundImageAndRepeatMode("url("+imgUrl+")", "none");
+          var imgUrl = this.detailsViewImg.attr("src");
+          page.setBackgroundImageAndRepeatMode("url("+imgUrl+")", "no-repeat", "center center");
           WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
           break;
           
@@ -151,10 +159,21 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       
     }.pBind(this));
   },
+  
   dragStart: function(event) {
-    var draggingImg = $(event.target).find('img');
-    // ddd(draggingImg)
-    event.originalEvent.dataTransfer.setData('application/ub-image', draggingImg.data("properties").url);
+    // we take parent and then search down the img because safari and firefox have not the same target.
+    // on firefox target is the a tag but in safarai target is the img.
+    var draggingImg = $(event.target).parent().find('img');
+    var properties = draggingImg.data("properties");
+    // ddd("drag target",event.target);
+    // ddd("propeties", properties);
+    var dt = event.originalEvent.dataTransfer;
+    dt.setData("application/ub-image", properties.url);
+    
+    // Drag "feedback"
+    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
+    $(document.body).append(mediaDragFeedbackEl);
+    dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   },
   
   showSpinner: function($super, container) {
@@ -222,7 +241,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       this.loadMyImages(0);
     }
   },
-  buildThumbnail: function(uuid, properties, myImagesList) {
+  buildThumbnail: function(uuid, properties) {
     var thumb = $("<img>").attr({
       src : properties.thumb_url,
       alt : ""
@@ -254,8 +273,8 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   prepareDetailsView: function($super, properties) { // type: my_image, flickr, google
     $super(properties);
     // View title
-    this.detailsView.attr({'class':"view "+properties.type});
-
+    this.detailsView.attr({'class':"view details_view "+properties.type});
+    
     // Image name
     var name = "";
     if (properties.name) name = properties.name;
@@ -263,7 +282,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       name = RegExp.$1 +"."+ RegExp.$2;
     }
     this.detailsView.find('.image_name').text(name);
-
+    
     // Image size
     var imageSizeEl = this.detailsView.find('.image_size');
     if (properties.width && properties.height) {
@@ -272,11 +291,11 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     else {
       imageSizeEl.text('');
     }
-
+    
     // Image Link
     var imageLink = properties.image_link ? properties.image_link : properties.url;
     this.detailsView.find('.single_image a').attr({"href":imageLink});
-
+    
     // Image source (+ store the current properties in the img element)
     var imageContainer = this.detailsView.find('.single_image');
     imageContainer.hide();
@@ -285,7 +304,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     this.preloadImage(properties.url);
 
     // Show/Hide right image actions
-    var imageActions = $('#image_actions');
+    var imageActions = $("#image_details .actions");
     imageActions.find(".dyn").hide();
     imageActions.find("."+properties.type).show();
     

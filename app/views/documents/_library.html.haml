@@ -26,36 +26,26 @@
         .tab_content#my_images
           .thumbnails
           .spacer
-        .tab_content#web_images
+        .tab_content#web_images.web_media
           %form
             %div
               %label{ :for => "web_images_search_field" } Search images on the web
-              %input#web_images_search_field{ :type => "text", :name => "web_images_search_field" }
-              %input#web_images_search_submit{ :type => "submit", :name => "web_images_search_submit", :value => "Search" }
+              %input#web_images_search_field.web_media_search_field{ :type => "text" }
+              %input#web_images_search_submit.web_media_search_submit{ :type => "submit", :value => "Search" }
           .spacer
           #flickr_images.thumbnails
-            %h3
+            %h3.service_bar
               Flickr
               %span.results_number 0
           .spacer
           #google_images.thumbnails
-            %h3
+            %h3.service_bar
               Google Images
               %span.results_number 0
           .spacer
       %ul{ :style => "display:none" }
         %li 
           %a#show_image_details{ :href =>'#image_details' } Show Image Details
-    #videos.view
-      .toolbar
-        %h1 Videos
-        %a.back{ :href =>'#' } Back
-    #apps.view
-      .toolbar
-        %h1 Apps
-        %a.back{ :href =>'#' } Back
-      #apps_library_wrap
-        %ul.index
     #add_images.view
       .toolbar
         %h1 Add Images
@@ -65,7 +55,7 @@
         %button#cancel_images_upload.button{ :style => "display:none" } Cancel upload
         #upload_images_spinner{ :style => "display:none" }
         %span.uploading_info Choose image(s) to upload 
-    #image_details.view
+    #image_details.view.details_view
       .toolbar
         %h1 Image
         %a.back{ :href =>'#' } Back
@@ -75,7 +65,7 @@
           .icon_overlay
       %h4.image_name
       %h5.image_size
-      #image_actions
+      .actions
         %ul
           %li
             %a.disabled#add_image_to_page_action{ :href => "" } Add to page
@@ -89,5 +79,62 @@
             %a#delete_image_action{ :href => "" } Delete image
           %li.dyn.flickr.google
             %a#add_to_my_images_action{ :href => "" } Add to My Images
-        
-        
+    #videos.view
+      .toolbar
+        %h1 Videos
+        %a.back{ :href =>'#' } Back
+      .tabs
+        %ul.tab_navigation
+          %li
+            %a.web_videos{ :href => '' } Web
+          %li
+            %a.my_videos{ :href => '' } My Videos
+        .tab_content#web_videos.web_media
+          %form
+            %div
+              %label{ :for => "web_videos_search_field" } Search videos on the web
+              %input#web_videos_search_field.web_media_search_field{ :type => "text" }
+              %input#web_videos_search_submit.web_media_search_submit{ :type => "submit", :value => "Search" }
+          .spacer
+          #youtube_videos.rows
+            %h3.service_bar
+              YouTube
+              %span.results_number 0
+          .spacer
+          #vimeo_videos.rows
+            %h3.service_bar
+              Vimeo
+              %span.results_number 0
+          .spacer
+        .tab_content#my_videos
+          .rows
+          .spacer
+      %ul{ :style => "display:none" }
+        %li 
+          %a#show_video_details{ :href =>'#video_details' } Show Video Details
+    #apps.view
+      .toolbar
+        %h1 Apps
+        %a.back{ :href =>'#' } Back
+      #apps_library_wrap
+        %ul.thumbs.index.icons-only
+    #video_details.view.details_view
+      .toolbar
+        %h1 Video
+        %a.back{ :href =>'#' } Back
+      %h4.video_name
+      .single_video
+        .drag_handle drag and drop to add
+      %h5.view_count
+        %span
+        = " views"
+      %p.video_description
+      .actions
+        %ul
+          %li
+            %a#show_video_page_action{ :href => "" } Show on *
+          %li
+            %a#delete_from_my_videos_action{ :href => "" } Remove from My Videos
+          %li
+            %a#add_to_my_videos_action{ :href => "" } Add to My Videos
+

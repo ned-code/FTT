@@ -73,17 +73,17 @@ html, body {
 /* Screen */
 
 .screen {
-    background: rgba(80, 80, 80, 0.6);
     display: none;
 }
 
-
 /* Board items */
-.screen.item_layer {
-    background: rgba(80, 80, 80, 0.6) url('/images/icons/arrow_nav_128.png') no-repeat 50% 50%;
+.item-layer {
+    opacity:0;
+    z-index:1000000;
+    background-image: url('/images/icons/arrow_nav_128.png');
+    background-position: center center;
+    background-repeat: no-repeat;
 }
-
-
-#board {
-    position: relative;
+.edit-mode .item-layer {
+    display: block;
 }

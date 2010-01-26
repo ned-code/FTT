@@ -34,5 +34,6 @@ class User < ActiveRecord::Base
   # ================
   
   has_many :images, :class_name => 'Medias::Image', :order => 'created_at DESC'
+  has_many :videos, :class_name => 'Medias::Video', :order => 'created_at DESC'
   
 end

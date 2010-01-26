@@ -15,9 +15,9 @@ WebDoc.Tool = $.klass({
   },
 
   selectTool: function() {
-    if ($(this.toolId).hasClass("state_tool")) {
-      $(".state_tool").removeClass("current_tool");
-      $(this.toolId).addClass("current_tool");
+    if ($(this.toolId).find("a").hasClass("state_tool")) {
+      $(".state_tool").removeClass("current");
+      $(this.toolId).find("a").addClass("current");
       ddd("set cursor", this.getCursor());
       $("#board").css("cursor", this.getCursor());
     }
@@ -25,6 +25,10 @@ WebDoc.Tool = $.klass({
 
   getCursor: function() {
     return "default";  
+  },
+
+  getCursorHeight: function() {
+    return 0;
   },
   
   unSelectTool: function() {

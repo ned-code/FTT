@@ -2,9 +2,22 @@
  * @author julien
  */
 
+(function($, undefined){
+
+var cssEditor,
+    cssEditorFieldset,
+    externalPageControls,
+    backgroundImageControls;
+
 WebDoc.PageInspectorController = $.klass({
   initialize: function() {
-    $("#page_css_editor").bind("blur", this.applyPageCss);  
+    
+    cssEditorFieldset = $("#page_css_editor");
+    cssEditor = cssEditorFieldset.find('textarea.code');
+    externalPageControls = $('#allow_annotation_checkbox, #external_page_url');
+    backgroundImageControls = $('#page_background_image_tileX_checkbox, #page_background_image_align_hor_left_radio, #page_background_image_align_hor_center_radio, #page_background_image_align_hor_right_radio, #page_background_image_tileY_checkbox, #page_background_image_align_vert_top_radio, #page_background_image_align_vert_middle_radio, #page_background_image_align_vert_bottom_radio');
+
+    cssEditor.bind("blur", this.applyPageCss);
     $("#external_page_checkbox").bind("change", this.changeExternalMode.pBind(this));
     $("#allow_annotation_checkbox").bind("change", this.changeAllowAnnotation.pBind(this)); 
     $("#external_page_url").bind("blur", this.updateExternalPageUrl.pBind(this));
@@ -13,18 +26,29 @@ WebDoc.PageInspectorController = $.klass({
     $("#page_height_textbox").bind("change", this.changePageHeight.pBind(this));
     $("#page_width_textbox").bind("change", this.changePageWidth.pBind(this));
     $("#page_background_color_textbox").bind("change", this.changePageBackgroundColor.pBind(this));
-    $("#browse_background_image_button").bind("click", this.browseForImages);
-    // $("#page_background_image_textbox").bind("change", this.changePageBackgroundImage.pBind(this));
-    // $("#page_background_image_fit_page_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
-    // $("#page_background_image_repeat_hor_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
-    // $("#page_background_image_repeat_vert_radio").bind("change", this.changePageBackgroundRepeatMode.pBind(this));
     $("#page_background_image_apply_current_button").bind("click", this.applyBackgroundToCurrentPage.pBind(this));
     $("#page_background_image_apply_all_button").bind("click", this.applyBackgroundToAllPages.pBind(this));
+    $("#page_background_upload_button").bind("click", this.uploadImageAndSetAsBackground.pBind(this));
+    $('#background_image_upload_form').bind('submit', this.uploadImageAndSetAsBackground.pBind(this));
+    $('#page_background_image_cancel').bind('click', this.cancelImageBackground.pBind(this));
+    $('.page-navigation-link').click(this.performAction.pBind(this));
     WebDoc.application.boardController.addCurrentPageListener(this);
     WebDoc.application.pageEditor.currentPage.addListener(this); 
     this.currentPageChanged();
   },
-  
+
+  performAction: function(e) {
+    e.preventDefault();
+    clickedButton = $(e.target);
+    try {
+      WebDoc.application.pageEditor[clickedButton.attr("href")].apply(WebDoc.application.pageEditor, [e]);
+    }
+    catch(ex) {
+      ddd("unknown toolbar action: " + clickedButton.attr("href"));
+      ddt();
+    }    
+  },
+
   currentPageChanged: function() {
     ddd('currentPageChanged');
     var page = WebDoc.application.pageEditor.currentPage;     
@@ -38,22 +62,42 @@ WebDoc.PageInspectorController = $.klass({
   updateExternalMode: function(page) {
     ddd("update external page");
     if (page.data.data.externalPage) {
-      $("#page_css_editor").css("display", "none");
-      $("#external_page_panel").css("display", "");  
+      cssEditorFieldset.hide();
+      externalPageControls
+      .removeAttr('disabled')
+      .siblings('label')
+      .removeClass('disabled');
+      
     } else {
-      $("#page_css_editor").css("display", "");
-      $("#external_page_panel").css("display", "none");
+      cssEditorFieldset.show();
+      externalPageControls
+      .attr('disabled', 'disabled')
+      .siblings('label')
+      .addClass('disabled');
     }
   },
 
   updatePageRelatedFields: function(page) {
-    $("#page_css_editor").get(0).value = $.toJSON(page.data.data.css); 
-    $("#page_title_textbox").get(0).value = page.data.title == "undefined"? "enter a title":page.data.title; 
-    $("#page_height_textbox").get(0).value = page.data.data.css.height; 
-    $("#page_width_textbox").get(0).value = page.data.data.css.width; 
-    $("#page_background_color_textbox").get(0).value = page.data.data.css.backgroundColor;
-    $("#page_background_image_textbox").get(0).value = page.data.data.css.backgroundImage;
-    this.setBackgroundRepeatMode(page.data.data.css.backgroundRepeat);
+    cssEditor.val( $.toJSON(page.data.data.css) ); 
+    //$("#page_title_textbox").val( page.data.title == "undefined" ? "enter a title" : page.data.title );
+    $("#page_height_textbox")[0].value = page.data.data.css.height; 
+    $("#page_width_textbox")[0].value = page.data.data.css.width; 
+    $("#page_background_color_textbox")[0].value = page.data.data.css.backgroundColor;
+    $("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
+    if($("#page_background_image_textbox")[0].value == 'undefined') {
+      backgroundImageControls
+      .attr('disabled', 'disabled')
+      .siblings('label')
+      .addClass('disabled');
+    }
+    else {
+      backgroundImageControls
+      .removeAttr('disabled')
+      .siblings('label')
+      .removeClass('disabled');
+      this.setBackgroundRepeatMode(page.data.data.css.backgroundRepeat);
+      this.setBackroungPosition(page.data.data.css.backgroundPosition);
+    }
   },
   
   changePageTitle: function(e) {
@@ -93,11 +137,6 @@ WebDoc.PageInspectorController = $.klass({
     catch(exc) {
       $("#page_background_color_textbox").get(0).value = page.data.data.css.backgroundColor;
     }
-  },
-
-  browseForImages: function(e) {
-    e.preventDefault();
-    alert('must open browser');
   },
 
   changePageBackgroundImage: function(e) {
@@ -141,12 +180,41 @@ WebDoc.PageInspectorController = $.klass({
 
   applyBackgroundToPage: function(page) {
     try {
-      page.setBackgroundImageAndRepeatMode($("#page_background_image_textbox").val(), this.getBackgroundRepeatMode()); 
+      page.setBackgroundImageAndRepeatMode($("#page_background_image_textbox").val(), this.getBackgroundRepeatMode(), this.getBackgroundPosition()); 
     }
     catch(exc) {
       $("#page_background_image_textbox").get(0).value = page.data.data.css.backgroundImage;
-      this.setBackgroundRepeatMode(page.data.data.css.background-repeat);
+      this.setBackgroundRepeatMode(page.data.data.css.backgroundRepeat);
+      this.setBackroungPosition(page.data.data.css.backgroundPosition);
     }
+  },
+
+  uploadImageAndSetAsBackground: function(e) {
+     e.preventDefault();
+     ddd('must send AJAX data');
+    // var imagePath = $("#page_background_file").val();
+    // ddd('must upload file:'+imagePath);
+    // var ajaxParams = { type: "Medias::Image", file: imagePath };
+    // $.ajax({
+    //   type: "POST",
+    //   url: "/medias",
+    //   data: (ajaxParams),
+    //   dataType: "json",
+    //   success: function(data) {
+    //     ddd('Success:'+data);
+    //   },
+    //   error: function(XMLHttpRequest, textStatus, errorThrown) {
+    //     ddd("error " + textStatus + " " + errorThrown);
+    //     ddd(XMLHttpRequest);
+    //   }
+    // });
+  },
+
+  cancelImageBackground: function(e) {
+    e.preventDefault();
+    var page = WebDoc.application.pageEditor.currentPage;
+    page.removeBackgroundImage();
+    WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
   },
 
   changeAllowAnnotation: function(e) {
@@ -173,14 +241,15 @@ WebDoc.PageInspectorController = $.klass({
   applyPageCss: function(e) {
     e.preventDefault();
     var editor = WebDoc.application.pageEditor;
-    if ($.toJSON(editor.currentPage.data.data.css) != $("#page_css_editor").get(0).value) {
+    if ($.toJSON(editor.currentPage.data.data.css) != cssEditor.val() ) {
       var newCss = null;
+      
       try {
-        eval("newCss=" + $("#page_css_editor").get(0).value);
+        eval("newCss=" + cssEditor.val() );
       }
       catch(ex) {
         ddd("Invalid css");
-        $("#page_css_editor").get(0).value = $.toJSON(editor.currentPage.data.data.css);
+        cssEditor.val( $.toJSON(editor.currentPage.data.data.css) );
       }
       if (newCss) {
         WebDoc.application.pageEditor.currentPage.applyCss(newCss);
@@ -205,23 +274,91 @@ WebDoc.PageInspectorController = $.klass({
   },
 
   getBackgroundRepeatMode: function() {
-    return $("input[name=repeatMode]:checked").val();
+    if($('#page_background_image_tileX_checkbox:checked').val() !== undefined && $('#page_background_image_tileY_checkbox:checked').val() !== undefined) {
+      return "none";
+    }
+    else if($('#page_background_image_tileX_checkbox:checked').val() !== undefined) {
+      return "repeat-x";
+    }
+    else if($('#page_background_image_tileY_checkbox:checked').val() !== undefined) {
+      return "repeat-y";
+    }
+    else {
+      return "no-repeat";
+    }
+  },
+
+  getBackgroundPosition: function() {
+    return this.getBackgroundHorizontalPosition() + " " + this.getBackgroundVerticalPosition();
+  },
+
+  getBackgroundHorizontalPosition: function() {
+    return $('input[name=xPos]:checked').val();
+  },
+
+  getBackgroundVerticalPosition: function() {
+    return $('input[name=yPos]:checked').val();
   },
 
   setBackgroundRepeatMode: function(mode) {
     switch(mode) {
-      case undefined:
       case "none":
-        $('#page_background_image_fit_page_radio').attr('checked', true);
+        $('#page_background_image_tileX_checkbox').attr('checked', true);
+        $('#page_background_image_tileY_checkbox').attr('checked', true);
         break;
       case "repeat-x":
-        $('#page_background_image_repeat_hor_radio').attr('checked', true);
+        $('#page_background_image_tileX_checkbox').attr('checked', true);
+        $('#page_background_image_tileY_checkbox').attr('checked', false);
         break;
       case "repeat-y":
-        $('#page_background_image_repeat_vert_radio').attr('checked', true);
+        $('#page_background_image_tileX_checkbox').attr('checked', false);
+        $('#page_background_image_tileY_checkbox').attr('checked', true);
         break;
+      case "no-repeat":
+        $('#page_background_image_tileX_checkbox').attr('checked', false);
+        $('#page_background_image_tileY_checkbox').attr('checked', false);
+        break;
+      case undefined:
       default:
-        $('#page_background_image_fit_page_radio').attr('checked', true);
+        $('#page_background_image_tileX_checkbox').attr('checked', false);
+        $('#page_background_image_tileY_checkbox').attr('checked', false);
+    }
+  },
+
+  setBackroungPosition: function(position) {
+    // Default, everything centered
+    $('#page_background_image_align_hor_center_radio').attr('checked', true);
+    $('#page_background_image_align_vert_middle_radio').attr('checked', true);
+    if(position !== undefined) {
+	    // Horizontal align
+	    if(position.indexOf('left') >= 0) {
+	      $('#page_background_image_align_hor_left_radio').attr('checked', true);
+	    }
+	    else if(position.indexOf('center') >= 0) {
+	      $('#page_background_image_align_hor_center_radio').attr('checked', true);
+	    }
+	    else if(position.indexOf('right') >= 0) {
+	      $('#page_background_image_align_hor_right_radio').attr('checked', true);
+	    }
+	    else {
+	      $('#page_background_image_align_hor_center_radi').attr('checked', true);
+	    }
+	    // Vertical align
+	    if(position.indexOf('top') >= 0) {
+	      $('#page_background_image_align_vert_top_radio').attr('checked', true);
+	    }
+	    else if(position.indexOf('bottom') >= 0) {
+	      $('#page_background_image_align_vert_bottom_radio').attr('checked', true);
+	    }
+	    else if(position.indexOf('center') >= 0) {
+	      $('#page_background_image_align_vert_middle_radio').attr('checked', true);
+	    }
+	    else {
+	      $('#page_background_image_align_vert_middle_radio').attr('checked', true);
+	    }
     }
   }
 });
+
+
+})(jQuery);

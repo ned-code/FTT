@@ -28,7 +28,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
         }.pBind(this));
   },
   
-  refreshWidgetList: function() {    
+  refreshWidgetList: function() {
     for (widgetId in this.widgets) {
       var widget = this.widgets[widgetId];
       var widgetItem = $("<img/>").attr({

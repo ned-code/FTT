@@ -112,7 +112,7 @@
 .thumbs a {
     display: inline-block;
     /* stop it creating a gap below the thumb, because by default thumb sits on a baseline. */
-    vertical-align: top;
+    vertical-align: bottom;
     /* padding-top defines the height and pushes any text down out of the box.
        You can't use -ve text-indent for this as IE7 moves the background, too. */
     padding-top: 48px;
@@ -164,41 +164,34 @@
 
 /* Toolbars */
 .tools a {
-    padding-top: 28px;
-    min-width: 28px;
+    padding-top: 32px;
+    min-width: 32px;
 }
 .icons-only.tools a {
-    border: 1px solid #bbbbbb;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 4px;
-    border-radius: 5px;
-    width: 28px;
-}
-
-.tools a:hover,
-.tools .current_tool a{
-    display: block;
-    border: 1px solid #e18f00;
-    background-color: #fff;
+    /*-moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;*/
+    width: 32px;
 }
 
 /* Positioning of each index */
 
 .tools {
-    margin: 4px 0;
+    margin: 0;
     padding: 0 0 0 0;
 }
 
-/* On the left ... */
-#pages_tools,
-#view_tools,
-#edit_tools,
-#misc_tools {
-    float: left;
+.tools li {
+    margin-right: 0;
+    border-right: 1px solid rgba(120, 130, 140, 0.4);
 }
-#pages_tools,
-#view_tools,
-#edit_tools {
+.tools li:last-child {
+    border-right: none;
+}
+
+/* On the left ... */
+.toolbar-panel .tools {
+    float: left;
     margin-right: 32px;
 }
 
@@ -206,12 +199,190 @@
 #toggle_inspector_wrap,
 #right_bar_tools {
     float: right;
+    margin-right: 0;
 }
 #toggle_inspector_wrap {
     margin-left: 32px;
 }
 
+.tools a:hover{
+    background-color: #dedede;
+}
+.tools a.current{
+    background-color: #b5cdd5;
+}
 
+
+/* Pages tools */
+
+#pages-tools a {
+    background-image: url('/images/pages-tools.png');
+}
+
+a[href="#pages-browser"]            { background-position: 0 0; }
+a[href="#pages-browser"]:hover      { background-position: 0 -64px; }
+a[href="#pages-browser"]:active     { background-position: 0 -128px; }
+a[href="#pages-browser"].current    { background-position: 0 -192px; }
+
+a[href="#new-page"]                 { background-position: 0 -256px; }
+a[href="#new-page"]:hover           { background-position: 0 -320px; }
+a[href="#new-page"]:active          { background-position: 0 -384px; }
+
+a[href="#prev-page"]                { background-position: 0 -448px; }
+a[href="#prev-page"]:hover          { background-position: 0 -512px; }
+a[href="#prev-page"]:active         { background-position: 0 -576px; }
+
+a[href="#next-page"]                { background-position: 0 -640px; }
+a[href="#next-page"]:hover          { background-position: 0 -704px; }
+a[href="#next-page"]:active         { background-position: 0 -768px; }
+
+a[href="#layouts"]                  { background-position: 0 -832px; }
+a[href="#layouts"]:hover            { background-position: 0 -896px; }
+a[href="#layouts"]:active           { background-position: 0 -960px; }
+a[href="#layouts"].current          { background-position: 0 -1024px; }
+
+a[href="#themes"]                   { background-position: 0 -1088px; }
+a[href="#themes"]:hover             { background-position: 0 -1152px; }
+a[href="#themes"]:active            { background-position: 0 -1216px; }
+a[href="#themes"].current           { background-position: 0 -1280px; }
+
+
+/* Edit tools */
+
+.edit-tools a {
+    background-image: url('/images/edit-tools.png');
+}
+
+a[href="#select"]                   { background-position: 0 0; }
+a[href="#select"]:hover             { background-position: 0 -64px; }
+a[href="#select"]:active            { background-position: 0 -128px; }
+a[href="#select"].current           { background-position: 0 -192px; }
+
+a[href="#draw"]                     { background-position: 0 -256px; }
+a[href="#draw"]:hover               { background-position: 0 -320px; }
+a[href="#draw"]:active              { background-position: 0 -384px; }
+a[href="#draw"].current             { background-position: 0 -448px; }
+
+a[href="#insert-text"]              { background-position: 0 -512px; }
+a[href="#insert-text"]:hover        { background-position: 0 -576px; }
+a[href="#insert-text"]:active       { background-position: 0 -640px; }
+a[href="#insert-text"].current      { background-position: 0 -704px; }
+
+a[href="#insert-html"]              { background-position: 0 -768px; }
+a[href="#insert-html"]:hover        { background-position: 0 -832px; }
+a[href="#insert-html"]:active       { background-position: 0 -896px; }
+a[href="#insert-html"]:active       { background-position: 0 -960px; }
+
+a[href="#move"]                     { background-position: 0 -1024px; }
+a[href="#move"]:hover               { background-position: 0 -1088px; }
+a[href="#move"]:active              { background-position: 0 -1152px; }
+a[href="#move"].current             { background-position: 0 -1216px; }
+
+a[href="#zoom-in"]                  { background-position: 0 -1280px; }
+a[href="#zoom-in"]:hover            { background-position: 0 -1344px; }
+a[href="#zoom-in"]:active           { background-position: 0 -1408px; }
+a[href="#zoom-in"].current          { background-position: 0 -1472px; }
+
+a[href="#zoom-out"]                 { background-position: 0 -1536px; }
+a[href="#zoom-out"]:hover           { background-position: 0 -1600px; }
+a[href="#zoom-out"]:active          { background-position: 0 -1664px; }
+a[href="#zoom-out"].current         { background-position: 0 -1728px; }
+
+a[href="#delete"]                   { background-position: 0 -1792px; }
+a[href="#delete"]:hover             { background-position: 0 -1856px; }
+a[href="#delete"]:active            { background-position: 0 -1920px; }
+
+a[href="#undo"]                     { background-position: 0 -1984px; }
+a[href="#undo"]:hover               { background-position: 0 -2048px; }
+a[href="#undo"]:active              { background-position: 0 -2112px; }
+
+a[href="#redo"]                     { background-position: 0 -2176px; }
+a[href="#redo"]:hover               { background-position: 0 -2240px; }
+a[href="#redo"]:active              { background-position: 0 -2304px; }
+
+a[href="#move-back"]                { background-position: 0 -2368px; }
+a[href="#move-back"]:hover          { background-position: 0 -2432px; }
+a[href="#move-back"]:active         { background-position: 0 -2496px; }
+
+a[href="#move-front"]               { background-position: 0 -2560px; }
+a[href="#move-front"]:hover         { background-position: 0 -2624px; }
+a[href="#move-front"]:active        { background-position: 0 -2688px; }
+
+
+/* Panel tools */
+
+.panel-tools a {
+    background-image: url('/images/panel-tools.png');
+}
+
+/* A bit of a special case, the toggle buttons
+   They may even deserve their own list class */
+a[href="#left-panel-toggle"].current,
+a[href="#right-panel-toggle"]                   { background-position: 0 0; background-color: transparent; }
+a[href="#left-panel-toggle"].current:hover,
+a[href="#right-panel-toggle"]:hover             { background-position: 0 -64px; background-color: transparent;}
+a[href="#left-panel-toggle"].current:active,
+a[href="#right-panel-toggle"]:active            { background-position: 0 -128px; background-color: transparent;}
+a[href="#left-panel-toggle"],
+a[href="#right-panel-toggle"].current           { background-position: 0 -192px; background-color: transparent;}
+a[href="#left-panel-toggle"]:hover,
+a[href="#right-panel-toggle"].current:hover     { background-position: 0 -256px; background-color: transparent;}
+a[href="#left-panel-toggle"]:active,
+a[href="#right-panel-toggle"].current:active    { background-position: 0 -320px; background-color: transparent;}
+
+a[href="#inspector"]                { background-position: 0 -384px; }
+a[href="#inspector"]:hover          { background-position: 0 -448px; }
+a[href="#inspector"]:active         { background-position: 0 -512px; }
+a[href="#inspector"].current        { background-position: 0 -576px; }
+
+a[href="#library"]                  { background-position: 0 -640px; }
+a[href="#library"]:hover            { background-position: 0 -704px; }
+a[href="#library"]:active           { background-position: 0 -768px; }
+a[href="#library"].current          { background-position: 0 -832px; }
+
+
+.pages li {
+    margin-bottom: 1px;
+}
+
+.numbers {
+    position: absolute;
+    overflow: visible;
+    width: 0;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    /*border-left: 1px solid #444b4d;*/
+}
+.numbers li {
+    width: 16px; height: 16px;
+    margin-left: -9px;
+    /* Just to nudge the text into place */
+    padding-left: 1px;
+    margin-bottom: 33px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    
+    font-weight: bold;
+    line-height: 15px;
+    text-align: center;
+}
+
+.page_browser_item {
+    height: 48px;
+    background-color: #dee4e6;
+}
+/* Rename to .current */
+.page_browser_item_selected {
+	background-color: #f4fbfd;
+}
+
+.page_browser_item_information {
+	width: 16px;
+	height: 16px;
+	background: url('/images/icons/buttons_16.png') no-repeat 0 0;
+	float: right;
+}
 
 /* NOT SURE WHAT THIS DOES - something about special rollover states */
 
@@ -224,13 +395,7 @@
 #removePage a:hover {
     background-position: -23px 1px;
 }
-
-#page_browser a{ /* Special case with image in CSS for the toggle_on_panel state -> bad, all buttons images should be in CSS */
-    background-image: url(../images/icons/browse.png);
-    background-repeat: no-repeat;
-    background-position: 1px 1px;
-}
-#page_browser.toggle_on_panel a{
+#page-browser.toggle_on_panel a{
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;

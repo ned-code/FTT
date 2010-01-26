@@ -7,6 +7,7 @@
 //= require <mtools/server_manager>
 //= require <mtools/uuid>
 
+//= require <webdoc/core/widget_manager>
 //= require <webdoc/adaptors/svg_renderer>
 //= require <webdoc/adaptors/collaboration_manager>
 //= require <webdoc/controllers/board_controller>
@@ -29,7 +30,6 @@ WebDoc.PageEditor = $.klass({
 
   currentDocument: null,
   currentPage: null,
-  currentPageId: null,
   applicationUuid: undefined,
   
   initialize: function(editable) {
@@ -38,6 +38,7 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         
+    WebDoc.application.widgetManager = new WebDoc.WidgetManager();
     // create all controllers
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
@@ -61,10 +62,6 @@ WebDoc.PageEditor = $.klass({
         leftBar = $("#left_bar"),
         rightBar = $("#right_bar");
     
-    if (editable) {
-        WebDoc.application.rightBarController.showRightBar();
-    }
-    
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
     });
@@ -80,7 +77,20 @@ WebDoc.PageEditor = $.klass({
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument);
       this.loadPageId(window.location.hash.replace("#", ""));
       WebDoc.application.pageBrowserController.initializePageBrowser();
+      if (WebDoc.application.boardController.editable) {
+        WebDoc.application.rightBarController.showLib();
+      }
     }.pBind(this));
+    
+    // ===========================================================
+    // = TODO REMOVE THIS (ZENO USES THIS TO DEBUG LIBRARY)
+    // setTimeout(function(){
+    //   WebDoc.application.rightBarController.showRightBar(WebDoc.application.rightBarController.showLib.pBind(WebDoc.application.rightBarController));
+    // },500);
+    // setTimeout(function(){
+    //   $('#videos').click();
+    // },600);
+    // ===========================================================
   },
 
   loadPageId: function(pageId) {
@@ -92,7 +102,6 @@ WebDoc.PageEditor = $.klass({
     ddd("found page");
     ddd(pageToLoad);
     if (pageToLoad) {
-      this.currentPageId = pageId;
       this.loadPage(pageToLoad);
     }
   },
@@ -106,21 +115,21 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
 
-  previousPage: function(e) {
+  'prev-page': function(e) {
     var previousPage = this.currentDocument.previousPage(this.currentPage);
     if (previousPage) {
       this.loadPage(previousPage);
     }
   },
 
-  nextPage: function(e) {
+  'next-page': function(e) {
     var nextPage = this.currentDocument.nextPage(this.currentPage);
     if (nextPage) {
       this.loadPage(nextPage);
     }
   },
 
-  addPage: function(e) {
+  'add-page': function(e) {
     var newPage = new WebDoc.Page(null, this.currentDocument);
     // we don't need to set foreign keys. It is autoatically done on the server side
     //newPage.data.document_id = this.currentDocument.data.document_id;
@@ -132,7 +141,7 @@ WebDoc.PageEditor = $.klass({
       this.loadPage(newPage);
     }.pBind(this));
   },
-
+ 
   removePage: function(e) {
     var pageToDelete = this.currentPage;
     if (this.currentDocument.pages.length > 1) {
@@ -145,10 +154,10 @@ WebDoc.PageEditor = $.klass({
     }
   },
 
-	copyPage: function(e) {
-		var copiedPage = this.currentPage.copy();
+  copyPage: function(e) {
+    var copiedPage = this.currentPage.copy();
     copiedPage.setDocument(this.currentPage.getDocument());
-		var copiedPagePosition = this.currentDocument.positionOfPage(this.currentPage) - 1;
+    var copiedPagePosition = this.currentDocument.positionOfPage(this.currentPage) - 1;
     copiedPage.data.position = copiedPagePosition + 1;
     //var importingMessage = $("<li>").html("importing...").addClass("page_thumb_importing");       
     //droppedPageThumb.parent().after(importingMessage[0]);
@@ -156,7 +165,7 @@ WebDoc.PageEditor = $.klass({
       this.currentDocument.addPage(copiedPage, true);
       this.loadPage(copiedPage);
     }.pBind(this));
-	},
+  },
   
   pageRemoved: function(page) {
     if (page == this.currentPage) {

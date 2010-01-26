@@ -7,7 +7,7 @@ WebDoc.PageView = $.klass({
     var boardContainer = $('#board_container'),
         externalPage,
         domNode = $('<div>').id('board'),
-        itemDomNode = $('<div/>').id('items').addClass("layer"),
+        itemDomNode = $('<div/>').id('items').addClass("hide-scroll layer"),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
         boardScreenNodes = jQuery('<div/>').addClass('screen layer')
             .add( jQuery('<div/>').addClass('screen layer') )
@@ -24,7 +24,7 @@ WebDoc.PageView = $.klass({
     this.boardScreenNodes = boardScreenNodes;
     
     // Set up page view
-    drawingDomNode.css("zIndex", 1000001);
+    drawingDomNode.css("zIndex", 1000000);
     domNode.append( drawingDomNode );
     
     if (page.data.data.externalPage && !page.data.data.allowAnnotation) {
@@ -79,7 +79,7 @@ WebDoc.PageView = $.klass({
     this.domNode.append( boardScreenNodes );
     if (page.items && $.isArray(page.items)) {
         $.each(page.items, function() {
-            that.createItemView(this);
+            that.createItemView(this, "end");
         });
     }
     page.addListener(this);
@@ -89,11 +89,12 @@ WebDoc.PageView = $.klass({
     this.domNode.animate(page.data.data.css, 'fast');
   },
   
-  itemAdded: function(addedItem) {
+  itemAdded: function(addedItem, afterItem) {
     var relatedItemView = this.itemViews[addedItem.uuid()];
+    var afterItemView = afterItem? this.itemViews[afterItem.uuid()]: null;
     // be sure not to add twice the same item
     if (!relatedItemView) {
-      this.createItemView(addedItem);
+      this.createItemView(addedItem, afterItemView);
     }
     else {
       relatedItemView.objectChanged(addedItem);
@@ -108,6 +109,19 @@ WebDoc.PageView = $.klass({
     }
   },
   
+  itemMovedAfterItem: function(item, afterItem) {
+    var itemViewToMove = this.findItemView(item.uuid());
+    
+    var afterItemView = afterItem? this.findItemView(afterItem.uuid()):null;
+    ddd("item move", itemViewToMove, afterItemView);
+    if (afterItemView && itemViewToMove != afterItemView) {
+      afterItemView.domNode.after(itemViewToMove.domNode);
+    }
+    else if (!afterItemView) {
+      this.itemDomNode.prepend(itemViewToMove.domNode);
+    }
+  },
+   
   findItemView: function(uuid) {
     return this.itemViews[uuid];
   },
@@ -154,23 +168,23 @@ WebDoc.PageView = $.klass({
   },
   
   
-  createItemView: function(item) {
+  createItemView: function(item, afterItem) {
     var itemView;
     switch (item.data.media_type) {
       case WebDoc.ITEM_TYPE_TEXT:
-        itemView = new WebDoc.TextView(item, this);
+        itemView = new WebDoc.TextView(item, this, afterItem);
         break;
       case WebDoc.ITEM_TYPE_IMAGE:
-        itemView = new WebDoc.ImageView(item, this);
+        itemView = new WebDoc.ImageView(item, this, afterItem);
         break;
       case WebDoc.ITEM_TYPE_DRAWING:
         itemView = new WebDoc.DrawingView(item, this);
         break;
       case WebDoc.ITEM_TYPE_WIDGET:
-        itemView = new WebDoc.WidgetView(item, this);
+        itemView = new WebDoc.WidgetView(item, this, afterItem);
         break;
       default:
-        itemView = new WebDoc.ItemView(item, this);
+        itemView = new WebDoc.ItemView(item, this, afterItem);
         break;
     }
     this.itemViews[item.uuid()] = itemView;

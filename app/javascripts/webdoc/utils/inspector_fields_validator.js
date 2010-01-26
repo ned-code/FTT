@@ -1,5 +1,5 @@
 /**
- * @author david
+ * @author David Matthey
  */
 WebDoc.InspectorFieldsValidator = $.klass(
 {
@@ -13,15 +13,15 @@ $.extend(WebDoc.InspectorFieldsValidator, {
     }
   },
 
-  validatePixelSize: function(size) {
-    var re = new RegExp("^\\d+px$"); // Accepts only string of type <integer>px
+  validateSize: function(size) {
+    var re = new RegExp("^\\d+(px|%)$"); // Accepts only string of type <integer>px or <integer>%
     if(!size.match(re)) {
       throw("this method needs a valid pixel value (ex: 200px)");
     }
   },
 
   validateBackgroundUrl: function(url) {
-    var re = new RegExp("^url\((?:\"|')?(.*)(?:\"|')?\)$");
+    var re = new RegExp("^url\((?:\"|')?(.*)(?:\"|')?\)$"); // Accepts string of type url(/images/back.png)
     if(!url.match(re)) {
       throw("this method needs a value of type: url(<url>)");
     }
@@ -31,6 +31,13 @@ $.extend(WebDoc.InspectorFieldsValidator, {
     var re = new RegExp("^(none|repeat-x|repeat-y|no-repeat)$");
     if(!repeatMode.match(re)) {
       throw("this method needs a value among these: none, repeat-x, repeat-y. no-repeat");
+    }
+  },
+
+  validateBackgroundPosition: function(position) {
+    var re = new RegExp("^((top|center|bottom)\\s(left|center|right))|((left|center|right)\\s(top|center|bottom))$");
+    if(!position.match(re)) {
+      throw("this method needs a combination of the following values: top, center, bottom - left, center, right");
     }
   },
 

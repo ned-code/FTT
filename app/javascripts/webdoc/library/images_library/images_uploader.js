@@ -31,7 +31,7 @@ WebDoc.ImagesUploader = $.klass({
     this.uploadControl.swfupload({
       upload_url: this.uploadUrl,
       file_post_name: "image[file]",
-      file_size_limit: "10240",
+      file_size_limit: "2048",
       file_types: "*."+WebDoc.SupportedImagesExtensions.join(";*."), // "*.jpg;*.jpeg;*.png;*.gif"
       file_types_description: "Web Image Files",
       file_upload_limit: "0",
@@ -61,12 +61,14 @@ WebDoc.ImagesUploader = $.klass({
     }.pBind(this))
     
     .bind('fileQueueError', function(event, file, errorCode, message){
-      // ddd("file queued error: "+message);
+      ddd("file queued error: "+message);
       this.logInfo.text("Sorry an error occurred. "+message);
+      this.errorsInQueue += 1;
     }.pBind(this))
     
     .bind('fileDialogStart', function(event){
       ddd("File dialog start");
+      this.errorsInQueue = 0;
       this.logInfo.text(this.logInfo.data("originalText"));
     }.pBind(this))
     
@@ -109,11 +111,15 @@ WebDoc.ImagesUploader = $.klass({
       // upload has completed, lets try the next one in the queue
       this.uploadControl.swfupload('startUpload');
       this.filesRemainingToUpload -= 1;
-      if (this.successfulUploads == this.filesToUpload) {
+      if (this.successfulUploads === this.filesToUpload) {
         this.logInfo.text("Upload successfully completed");
       }
       else {
         this.logInfo.text(this.logInfo.data("originalText"));
+        if (this.errorsInQueue > 0) {
+          this.logInfo.text("Some files in the queue could not be uploaded. Try individual uploads.");
+          this.filesRemainingToUpload -=1;
+        }
       }
       if (this.filesRemainingToUpload === 0) {
         this.isUploading = false;

@@ -11,7 +11,7 @@
 //= require <webdoc/gui/widget_view>
 //= require <webdoc/controllers/drag_and_drop_controller>
 
-(function(undefined){
+(function(WebDoc, undefined){
 
 // VAR
 
@@ -118,9 +118,6 @@ WebDoc.BoardController = $.klass({
         this.zoom(1 + widthFactor);
       }
     }
-//    else {
-//      this.centerBoard();
-//    }
     
     this.fireCurrentPageChanged();
     $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this.currentPage));
@@ -142,41 +139,44 @@ WebDoc.BoardController = $.klass({
   },  
   
   setInterationMode: function(state) {
-    this.isInteraction =state;
+    this.isInteraction = state;
     if (state) {
       // go to interaction mode
       this.unselectAll();
-      $("#board").unbind("dragenter");
-      $("#board").unbind("dragover");
-      $("#board").unbind("drop");
+      $("#board")
+      .unbind("dragenter")
+      .unbind("dragover")
+      .unbind("drop");
       
-      $(".item_wrap").addClass("item_interact");
       this.setCurrentTool(WebDoc.application.arrowTool);
       $(".preview_hidden").hide();
-      $(".toggle_preview").addClass("toggle_edit");
-      $(".toggle_preview").removeClass("toggle_preview");
-      $(".item_layer").hide();
+      
+      $("body").removeClass("edit-mode");
+      
       $("#tb_1_utilities_preview a").text("EDIT MODE");
       WebDoc.application.rightBarController.hideRightBar();
     }
     else {
       // go to non interaction mode
-      $("#board").bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter);
-      $("#board").bind("dragover", this, WebDoc.DrageAndDropController.dragOver);
-      $("#board").bind("drop", this, WebDoc.DrageAndDropController.drop);      
-      $(".item_wrap").removeClass("item_interact");
+      $("#board")
+      .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
+      .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
+      .bind("drop", this, WebDoc.DrageAndDropController.drop);      
+      
       if (!this.currentTool) {
         this.setCurrentTool(WebDoc.application.arrowTool);
-      }      
+      }
+      
+      $("body").addClass("edit-mode");
+      
       $(".preview_hidden").show();
-      $(".toggle_edit").addClass("toggle_preview");
-      $(".toggle_edit").removeClass("toggle_edit");
-      $(".item_layer").show();
+      
       $("#tb_1_utilities_preview a").text("QUICK PREVIEW");        
     }
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     if (MTools.Browser.Gecko && (new Number(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
-      $("#board svg").css("zIndex", this.isInteraction ? "-1" : "999999");
+      ddd("FF 3.5. drawing !");
+      $("#board svg").css("zIndex", this.isInteraction ? "-1" : "1000000");
     }
   },
   
@@ -215,6 +215,10 @@ WebDoc.BoardController = $.klass({
       x = position.pageX - board.offset().left;
       y = position.pageY - board.offset().top;
     }   
+    if (MTools.Browser.WebKit) { 
+      // Correct mouse vertical position according to the cursor icon height
+      y += this.currentTool.getCursorHeight();
+    }
 
     var calcX = (x) * (1 / this.currentZoom);
     var calcY = (y) * (1 / this.currentZoom);
@@ -300,7 +304,7 @@ WebDoc.BoardController = $.klass({
   },
   
   editItemView: function(itemViewToEdit) {
-    if (itemViewToEdit.canEdit()) { 
+    if (itemViewToEdit && itemViewToEdit.canEdit()) { 
       var node = itemViewToEdit.domNode,
           nodePos = node.position(),
           nodeWidth = node.width(),
@@ -365,7 +369,7 @@ WebDoc.BoardController = $.klass({
     
     if (jQuery.browser.mozilla) {
       boardElement.css("MozTransformOrigin", "0px 0px");
-      boardElement.css("MozTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
+      boardElement.css("MozTransform", "scale(" + this.currentZoom + ")");
       // Directly remove the transform property so that windowed items are displayed
       if (this.currentZoom == 1) {
 	      boardElement.css("MozTransformOrigin", "");
@@ -398,7 +402,7 @@ WebDoc.BoardController = $.klass({
           boardElement.css("WebkitTransform", "");
         }
         else {
-          boardElement.css("WebkitTransform", "scaleX(" + this.currentZoom + ") scaleY(" + this.currentZoom + ")");
+          boardElement.css("WebkitTransform", "scale(" + this.currentZoom + ")");
         }
       }
       else 
@@ -419,9 +423,9 @@ WebDoc.BoardController = $.klass({
     if (window.document.activeElement) {
       window.document.activeElement.blur();
     }
-    if (!this.isInteraction) {
-      e.preventDefault();
-    }
+//    if (!this.isInteraction) {
+//      e.preventDefault();
+//    }
     if (!e.boardIgnore) {
       $(document).bind("mousemove", this, this.mouseMove.pBind(this));
       $(document).bind("mouseup", this, this.mouseUp.pBind(this));
@@ -444,9 +448,9 @@ WebDoc.BoardController = $.klass({
   mouseUp: function(e) {
     $(document).unbind("mousemove");
     $(document).unbind("mouseup");
-    if (!this.isInteraction) {
-      e.preventDefault();
-    }
+//    if (!this.isInteraction) {
+//      e.preventDefault();
+//    }
     this.currentTool.mouseUp(e);
   },
   
@@ -495,8 +499,11 @@ WebDoc.BoardController = $.klass({
   },  
   
   insertItems: function(items) {
-    $.each(items, function(index, item) {
+    $.each(items, function(index, item) {           
       this.currentPage.addItem(item);
+      if (!item.data.position) {
+        this.currentPage.moveFront(item);  
+      }
       item.isNew = true;
       item.save();
     }.pBind(this));
@@ -529,4 +536,4 @@ WebDoc.BoardController = $.klass({
 });
 
 
-})();
+})(WebDoc);

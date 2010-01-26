@@ -57,81 +57,142 @@ form.inline p { margin-bottom:0; }
 .notice a   { color: #514721; }
 .success a  { color: #264409; }
 
+.inspector form.content {
 
-/* Fieldsets */
-.properties {
-    background: #efefef;
-    padding: 0.5em;
-    border: none;
-    border-bottom: 1px solid #cccccc;
 }
-.properties:last-child {
+/* Fieldsets */
+.properties,
+.code-editor {
+    /*background: #edefe6;*/
+    padding: 1em 0.4em 1.4em 0.4em;
     border: none;
+    border-top: 1px solid;
+    margin: 0 0 -0.8em 0;
+    position: relative;
+    -moz-box-sizing: content-box;
+}
+/* Styling legends in FF is not easy. They will only be moved around with margins.
+   Good enough is good enough. The relationship between padding-top, padding-bottom
+   and margin-bottom of the fieldset is tricky, here, and fragile. It produces a bigger
+   space when a legend is present then when it isn't */
+.properties legend,
+.code-editor legend {
+    height: 1.2em;
+    line-height: 1.1em;
+    padding: 0.2em 1.2em;
+    text-transform: lowercase;
+    font-size: 1em;
+    font-weight: bold;
+    margin-left: 1.8%;
+    -moz-border-radius: 0.8em;
+    -webkit-border-radius: 0.8em;
+    border-radius: 0.8em;
 }
 .properties div {
     clear: both;
-    margin-bottom: 0.2em;
-    min-height: 1.6em;
-    /*font-size: 12px;*/
     /* form divs also have clearfix applied */
     padding-left: 40%;
+    /* Try and preserve vertical spacing */
+    min-height: 1.9em;
 }
 .properties p {
     float: left;
-    line-height: 1.2em;
-    font-size: 0.9em;
-    padding: 0.1em 0.9em;
-    margin-bottom: 1em;
+    line-height: 1.5em;
+    padding: 0 0.6em 0 0;
+    margin: 0.2em 0 0.2em 0;
 }
 
 .properties label,
 .properties .label,
 .properties input {
     float: left;
-    line-height: 1.2em;
-    height: 1.2em;
-    font-size: 12px;
-    padding: 0.1em 0.5em;
-    margin: 0;
+    font-size: 1em;
+    padding: 0.16em 0.6em;
+    margin: 0 0 0.2em 0;
     text-transform: lowercase;
+
+    /* For some reason browsers force the 'traditional' box model on inputs
+       in the Page Inspector. It may be because the inputs are not recognised as
+       type "text", but I can't recreate the problem outside of webdoc, so I
+       don't know why. Happily, we can force it back. */
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -ms-box-sizing: content-box;
+    box-sizing: content-box;
 }
 
 .properties label,
 .properties .label {
     color: rgba(0, 0, 0, 0.70);
+    margin-right: 0.6em;
     text-transform: lowercase;
-    text-align: right;
-    padding-left: 0;
-    padding-right: 0;
+    padding: 0.1em 0 0 0;
     white-space: nowrap;
-    
-    /*margin-left: -50%;*/
 }
 .properties label {
-    min-width: 9em;
-    margin-left: -9.6em;
-    margin-right: 0.6em;
+    min-width: 10em;
+    margin-left: -10.6em;
+    text-align: right;
     white-space: nowrap;
+    line-height: 1.2em;
+}
+.properties .label {
+    letter-spacing: -0.096em;
+    margin-right: 0.4em;
 }
 
-.properties input {
-    border: 1px solid rgba(0, 0, 0, 0.14);
-    -moz-border-radius: 1em;
+.properties input[type=text] {
+    border: 2px solid;
+    /*-moz-border-radius: 1em;
     -webkit-border-radius: 1em;
-    border-radius: 1em;
+    border-radius: 1em;*/
+    
+    /*color: rgb(63, 63, 63);*/
     background: white;
-    width: 5em;
+    width: 8em;
+    
+    /* The combination of Helvetica labels and courier inputs
+       needs to have font-size adjusted to match.  118% is a decent compromise
+       between Webkit and Gecko, 112% makes the courier smaller. */
     font-family: Courier, monospace;
 }
-
+.properties input:focus,
+.code-editor textarea:focus {
+    outline: none;
+    border-color: #7b9600;
+    border-width: 2px;
+    /*background-color: #fcffee;
+    color: #222800;*/
+}
+.properties input[disabled],
+.properties .disabled {
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+}
 .properties input[type=checkbox] {
     width: auto;
-    margin-left: 0.5em;
+    margin-right: 0.4em;
 }
 .properties input[type=radio] {
     width: auto;
-    margin-right: 1%;
+    margin-right: 0.4em;
 }
-.properties .label {
-    margin-top: 1px;
+
+.code-editor textarea {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 10em;
+    /*
+    border: 2px solid rgba(0, 0, 0, 0.18);
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
+    
+    color: rgb(63, 63, 63);
+    */
+    background: white;
+    
+    font-family: Courier, monospace;
+    font-size: 1em;
 }
