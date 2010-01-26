@@ -141,7 +141,7 @@ WebDoc.BoardController = $.klass({
       
       this.setCurrentTool(WebDoc.application.arrowTool);
       $(".preview_hidden").hide();
-      
+      $(".item-layer").hide();
       $("body").removeClass("edit-mode");
       
       $("#tb_1_utilities_preview a").text("EDIT MODE");
@@ -159,7 +159,7 @@ WebDoc.BoardController = $.klass({
       }
       
       $("body").addClass("edit-mode");
-      
+      $(".item-layer").show();
       $(".preview_hidden").show();
       
       $("#tb_1_utilities_preview a").text("QUICK PREVIEW");        

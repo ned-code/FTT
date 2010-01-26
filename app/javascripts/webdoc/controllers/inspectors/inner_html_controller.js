@@ -53,5 +53,5 @@ WebDoc.InnerHtmlController = $.klass({
         $("#selected_item_html_editor").get(0).value = WebDoc.application.boardController.selection()[0].item.getInnerHtml();
       }
     }
-  },
+  }
 });
