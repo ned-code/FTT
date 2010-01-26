@@ -147,7 +147,7 @@ WebDoc.PageBrowserItemView = $.klass({
   },
 
   cropTitleToFit: function(title) {
-    var titleMaxLength = 30;
+    var titleMaxLength = 20;
     if(title.length > titleMaxLength) {
       return title.substr(0, titleMaxLength)+"...";
     }
