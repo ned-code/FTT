@@ -63,7 +63,7 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
     this.domNode.attr("marker-mid", "url(#myMarker)");
     this.domNode.attr("marker-start", "url(#myMarker)");
     this.domNode.attr("marker-end", "url(#myMarker)");
-    WebDoc.application.boardController.pageView.domNode.append(this.selectionNode.get(0));    
+    this.pageView.domNode.append(this.selectionNode.get(0));    
     this.resetHandles();
     this.selectionNode.draggable({
       containment: "parent",

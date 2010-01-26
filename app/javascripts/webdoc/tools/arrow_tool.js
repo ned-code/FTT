@@ -21,8 +21,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
       itemView: objectToSelect,
       event: e
     };      
-
-    if (!(objectToSelect && WebDoc.application.boardController.editingItem == objectToSelect)) {
+    if (!(objectToSelect && WebDoc.application.boardController.editingItem() == objectToSelect)) {
       if (objectToSelect) {
         WebDoc.application.boardController.selectItemViews([objectToSelect]);
       }
@@ -43,7 +42,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   },
   
   mouseDown: function(e) {
-    if (!WebDoc.application.boardController.isInteraction) {
+    if (!WebDoc.application.boardController.isInteractionMode()) {
       var target = $(e.target);
       ddd("mouse down on target", e.target);
       if (!target || target.length === 0 || !target.hasClass("drawing_handle")) {
@@ -70,8 +69,9 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   mouseDblClick: function(e) {
     ddd("dbl click", e.target);
     var objectToEdit = this._clickedItemView(e);
-    this.mouseOut(e);
-    WebDoc.application.boardController.editItemView(objectToEdit);
+    if (WebDoc.application.boardController.editItemView(objectToEdit)) {
+      this.mouseOut(e);
+    }
   },
   
   mouseOver: function(e) {

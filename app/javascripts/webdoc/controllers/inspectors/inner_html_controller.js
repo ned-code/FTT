@@ -8,9 +8,9 @@ WebDoc.InnerHtmlController = $.klass({
   },
   
   refresh: function() {
-    if (WebDoc.application.boardController.selection.length) {
+    if (WebDoc.application.boardController.selection().length) {
       $("#selected_item_html_editor").attr("disabled", "");
-      var item = WebDoc.application.boardController.selection[0].item;
+      var item = WebDoc.application.boardController.selection()[0].item;
       var html = item.getInnerHtml();
       if (html) {
         $("#selected_item_html_editor").get(0).value = html;
@@ -35,7 +35,7 @@ WebDoc.InnerHtmlController = $.klass({
   
   updateNoIframe: function(event) {
     ddd("update no iframe");
-    var item = WebDoc.application.boardController.selection[0].item;
+    var item = WebDoc.application.boardController.selection()[0].item;
     if (item) {
       ddd("update item", item);
       item.setProperty("noIframe", $("#no_iframe").attr("checked"));
@@ -48,9 +48,9 @@ WebDoc.InnerHtmlController = $.klass({
     e.preventDefault();
     var html = $("#selected_item_html_editor").get(0).value;
     if (html) {
-      if (WebDoc.application.boardController.selection.length > 0) {
-        WebDoc.application.boardController.selection[0].item.setInnerHtml(html);
-        $("#selected_item_html_editor").get(0).value = WebDoc.application.boardController.selection[0].item.getInnerHtml();
+      if (WebDoc.application.boardController.selection().length > 0) {
+        WebDoc.application.boardController.selection()[0].item.setInnerHtml(html);
+        $("#selected_item_html_editor").get(0).value = WebDoc.application.boardController.selection()[0].item.getInnerHtml();
       }
     }
   },

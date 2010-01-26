@@ -69,7 +69,7 @@ WebDoc.PageEditor = $.klass({
 
   load: function(documentId) {
     ddd("load document " + documentId);
-    WebDoc.application.collaborationManager.setDocumentId(documentId);              
+    WebDoc.application.collaborationManager.listenXMPPNode(documentId);              
     MTools.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
     {
       this.currentDocument = data[0];
@@ -77,7 +77,9 @@ WebDoc.PageEditor = $.klass({
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument);
       this.loadPageId(window.location.hash.replace("#", ""));
       WebDoc.application.pageBrowserController.initializePageBrowser();
-      if (WebDoc.application.boardController.editable) {
+      ddd("check editablity");
+      if (WebDoc.application.boardController.isEditable()) {
+        ddd("Show lib");
         WebDoc.application.rightBarController.showLib();
       }
     }.pBind(this));
