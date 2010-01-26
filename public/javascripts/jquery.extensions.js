@@ -98,13 +98,15 @@ jQuery.extend({
             for (var selector in list) {
                 node = data[selector];
                 
+                console.log('selector: ' + selector);
+                
                 if ( node === undefined ) {
                     closest = target.closest( selector, this );
                     node = data[selector] = ( closest.length ) ? closest[0] : false ;
                     target.data("closest", data);
                 }
                 
-                if ( node ) result = list[selector].call(node, e);
+                if ( node ) { result = list[selector].call(node, e); }
             }
             
             return result;

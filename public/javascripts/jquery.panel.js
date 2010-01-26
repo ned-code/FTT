@@ -21,32 +21,32 @@ var plug = 'panel',
         slashRef:   /^\//,              // Begins with a slash
         urlRef:     /^[a-z]+:\/\//      // Begins with protocol xxx://
     },
-    handler = {
-//        'left-panel-toggle': ,
-//        'right-panel-toggle': ,
-//        
-//        'pages-browser': ,
-//        'library': ,
-//        'inspector': ,
-//        
-//        'prev-page': ,
-//        'next-page': ,
-//        'add-page': ,
-//        'remove-page': ,
-//        
-//        'zoom-in': ,
-//        'zoom-out': ,
-//        'move': ,
-//        'select': ,
-//        'draw': ,
-//        'insert-html': ,
-//        'insert-text': ,
-//        'move-back': ,
-//        'move-front': ,
-//        
-//        'undo': ,
-//        'redo': ,
-//        'delete':
+    handlers = {
+        'left-panel-toggle':    function(e){ WebDoc.application.pageBrowserController.toggleBrowser(); },
+        'right-panel-toggle':   function(e){ WebDoc.application.rightBarController.showLib(); },
+        
+        'pages-browser':        function(e){ WebDoc.application.pageBrowserController.toggleBrowser(); },
+        'library':              function(e){ WebDoc.application.rightBarController.showLib(); },
+        'inspector':            function(e){ WebDoc.application.rightBarController.showPageInspector(); },
+        
+        'prev-page':            function(e){ WebDoc.PageEditor.prevPage(); },
+        'next-page':            function(e){ WebDoc.PageEditor.nextPage(); },
+        'add-page':             function(e){ WebDoc.PageEditor.addPage(); },
+        'remove-page':          function(e){ WebDoc.PageEditor.removePage(); },
+        
+        'zoom-in':              function(e){ WebDoc.application.boardController.zoomIn(); },
+        'zoom-out':             function(e){ WebDoc.application.boardController.zoomOut(); },
+        'move':                 function(e){ WebDoc.application.handTool.toolbarButtonClick(); }
+        //'select':               ,
+        //'draw':                 ,
+        //'insert-html':          ,
+        //'insert-text':          ,
+        //'move-back':            ,
+        //'move-front':           ,
+        
+        //'undo':                 ,
+        //'redo':                 ,
+        //'delete':               
     };
 
 function toggleHead(e){
@@ -116,13 +116,15 @@ function callHandler(e){
         //data = panel.data(plug),
         link = jQuery(this),
         href = link.attr('href'),
-        match = regex.hashRef.exec(href) ;
+        match = regex.hashRef.exec(href),
+        handlers = WebDoc.handlers;
     
-    console.log(match);
+    console.log(this);
+    console.log(href + ' ' + match);
     
     // If the href contains a hashRef that matches a handler, call it
-    if ( match && handler[match[1]] ) {
-        handler[match[1]](e);
+    if ( match && WebDoc.handlers[match[1]] ) {
+        WebDoc.handlers[match[1]](e);
         return false;
     }
 }
@@ -132,6 +134,7 @@ jQuery.fn[plug] = function(){
     
     return nodes
     .bind('click', jQuery.delegate({
+            'body': function(){ console.log('HEY'); console.log(this); },
             '.toggle-head': toggleHead,
             '.toggle-foot': toggleFoot,
             'a': callHandler

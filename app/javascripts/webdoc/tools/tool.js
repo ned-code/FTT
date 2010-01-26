@@ -3,37 +3,41 @@
 */
 WebDoc.Tool = $.klass({  
   initialize: function(toolId) {
-    this.toolId = toolId;
-    $(toolId).bind("click", this.toolbarButtonClick.pBindAsEventListener(this));
+    //this.toolId = toolId;
   },
+  
   toolbarButtonClick: function(e) {
     e.preventDefault();
     WebDoc.application.boardController.setCurrentTool(this);
   },
-
+  
   toolPalette: function() {
   },
-
+  
   selectTool: function() {
-    if ($(this.toolId).find("a").hasClass("state_tool")) {
-      $(".state_tool").removeClass("current");
-      $(this.toolId).find("a").addClass("current");
-      ddd("set cursor", this.getCursor());
-      $("#board").css("cursor", this.getCursor());
-    }
+    //if ($(this.toolId).find("a").hasClass("state_tool")) {
+      // 
+      // $(".state_tool").removeClass("current");
+      // 
+      // $(this.toolId).find("a").addClass("current");
+      // 
+      // ddd("set cursor", this.getCursor());
+      // 
+      // $("#board").css("cursor", this.getCursor());
+    //}
   },
-
+  
   getCursor: function() {
     return "default";  
   },
-
+  
   getCursorHeight: function() {
     return 0;
   },
   
   unSelectTool: function() {
   },
-
+  
   mouseDown: function(e) {
   },
 

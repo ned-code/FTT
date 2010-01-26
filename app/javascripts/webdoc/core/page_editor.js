@@ -51,7 +51,7 @@ WebDoc.PageEditor = $.klass({
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool_pen");
     WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool_arrow");
-    WebDoc.application.handTool = new WebDoc.HandTool("#tool_hand");
+    WebDoc.application.handTool = new WebDoc.HandTool("#hand_tool");
     WebDoc.application.textTool = new WebDoc.TextTool("#tool_text", "#palette_text");
     WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool("#html_snipplet");
 
@@ -115,21 +115,21 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
 
-  'prev-page': function(e) {
+  prevPage: function() {
     var previousPage = this.currentDocument.previousPage(this.currentPage);
     if (previousPage) {
       this.loadPage(previousPage);
     }
   },
 
-  'next-page': function(e) {
+  nextPage: function() {
     var nextPage = this.currentDocument.nextPage(this.currentPage);
     if (nextPage) {
       this.loadPage(nextPage);
     }
   },
 
-  'add-page': function(e) {
+  addPage: function() {
     var newPage = new WebDoc.Page(null, this.currentDocument);
     // we don't need to set foreign keys. It is autoatically done on the server side
     //newPage.data.document_id = this.currentDocument.data.document_id;
