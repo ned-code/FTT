@@ -10,22 +10,22 @@
 #toolbar.toolbar-panel.panel
   %ul.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
-    %li#page-browser>
+    %li>
       %a{ :href => "#left-panel-toggle", :title => "Left Panel" }
         Left Panel
 
   %ul#pages-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li#page-browser>
+    %li>
       %a{ :href => "#pages-browser", :title => "Pages browser" }
         Pages
     -#%li#removePage.preview_hidden>
     -#  %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
     -#    Delete
-    %li#prev-page>
+    %li>
       %a{ :href => "#prev-page" , :title => "Previous page" }
         Prev
-    %li#next-page>
+    %li>
       %a{ :href => "#next-page" , :title => "Next Page" }
         Next
     -#%li#layout_selector.preview_hidden>
@@ -34,7 +34,7 @@
     -#%li#theme_selector.preview_hidden>
     -#  %a{ :href => "#themes" , :title =>"Change theme" }
     -#    Theme
-    %li#add-page.preview_hidden>
+    %li.preview_hidden>
       %a{ :href => "#new-page", :title => "Add new page" }
         Add
     
@@ -121,6 +121,12 @@
   = render :partial => 'page_inspector'
 
 :javascript
+  
+  // Take string of CSS and add to head
+  function createStyle( cssString ){
+    jQuery('head').append('<style type="text/css">'+cssString+'</style>');
+  }
+
   $(function()
   {
     WebDoc.authData = {
@@ -133,6 +139,12 @@
     var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
     editor.load("#{@document.uuid}");
     
+    // Add feature detected styles to head
+    createStyle('.push-scroll {'+
+      'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
+      'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
+    '}');
+    
     // Set up default panel behaviour (show screen, show footer etc.)
     jQuery(".panel").panel();
-  });   
+  });

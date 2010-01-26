@@ -1,10 +1,7 @@
 /** 
- * Some js or jquery extension that are missing in js or jquery
+ * Some js extensions
 **/
 
-/**
- * Prototype's bind and bindAsEventListener ports
-**/
 $.extend(MTools, {
   update: function(array, args) {
     var arrayLength = array.length, length = args.length;
@@ -14,11 +11,12 @@ $.extend(MTools, {
   merge: function(array, args) {
     array = Array.prototype.slice.call(array, 0);
     return MTools.update(array, args);
-  },
-  isUndefined: function(object) {
-    return typeof object === "undefined";
   }
 });
+
+/**
+ * Prototype's bind and bindAsEventListener ports
+**/
 
 $.extend(Function.prototype, {
   pBindAsEventListener: function(context) {
@@ -29,7 +27,7 @@ $.extend(Function.prototype, {
     };
   },
   pBind: function(context) {
-    if (arguments.length < 2 && MTools.isUndefined(arguments[0])) {return this;}
+    if (arguments.length < 2 && typeof arguments[0] === "undefined") {return this;}
     var __method = this, args = Array.prototype.slice.call(arguments, 1);
     return function() {
       var a = MTools.merge(args, arguments);
@@ -37,25 +35,3 @@ $.extend(Function.prototype, {
     };
   }
 });
-
-
-/**!
- * unwrap - v0.1 - 7/18/2009
- * http://benalman.com/projects/jquery-unwrap-plugin/
- * 
- * Copyright (c) 2009 "Cowboy" Ben Alman
- * Licensed under the MIT license
- * http://benalman.com/about/license/
- **/
-
-(function($) {
-  //'$:nomunge'; // Used by YUI compressor.
-  $.fn.unwrap = function() {
-    this.parent(':not(body)')
-      .each(function(){
-        $(this).replaceWith( this.childNodes );
-      });
-    
-    return this;
-  };
-})(jQuery);
