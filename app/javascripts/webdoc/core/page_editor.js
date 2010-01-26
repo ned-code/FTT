@@ -58,10 +58,6 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
     
-    var boardContainer = $("#board_container"),
-        leftBar = $("#left_bar"),
-        rightBar = $("#right_bar");
-    
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
     });
@@ -142,7 +138,7 @@ WebDoc.PageEditor = $.klass({
     }.pBind(this));
   },
  
-  removePage: function(e) {
+  removePage: function() {
     var pageToDelete = this.currentPage;
     if (this.currentDocument.pages.length > 1) {
       var choice = confirm("Are you sure you want to delete the current page?");

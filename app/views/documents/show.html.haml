@@ -35,15 +35,15 @@
     -#  %a{ :href => "#themes" , :title =>"Change theme" }
     -#    Theme
     %li.preview_hidden>
-      %a{ :href => "#new-page", :title => "Add new page" }
+      %a{ :href => "#add-page", :title => "Add new page" }
         Add
     
   %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li#zoom_in>
+    %li>
       %a{ :href => "#zoom-in" , :title => "Zoom In" }
         Zoom in
-    %li#zoom_out>
+    %li>
       %a{ :href => "#zoom-out" , :title => "Zoom Out" }
         Zoom out
     %li#tool_hand>
@@ -58,13 +58,13 @@
     %li#redo>
       %a{ :href => "#redo" , :title => "Redo" }
         Redo
-    %li#move-back>
+    %li>
       %a{ :href => "#to-back" , :title => "Move to back" }
         To back
-    %li#move-front>
+    %li>
       %a{ :href => "#to-front" , :title => "Move to front" }
         To front
-    %li#delete_item>
+    %li>
       %a{ :href => "#delete" , :title => "Delete" }
         Delete
   
@@ -108,12 +108,12 @@
       %ul#page_browser_items.vertical.pages.index
     #page_browser_control_bar.foot
       %ul.thumbs.index.icons-only
-        %li#add-page.action_button 
-          %img{ :src => "/images/icons/new.png", :alt => "Add page"}
-        %li#copyPage.action_button
-          %img{ :src => "/images/icons/duplicate.png", :alt => "Duplicate page"}
-        %li#removePage.action_button
-          %img{ :src => "/images/icons/delete_page.png", :alt => "Delete page"}
+        %li.action_button 
+          %a{ :href => "#add-page", :title => "Add new page" }
+        %li.action_button
+          %a{ :href => "#copy-page", :title => "Copy page" }
+        %li.action_button
+          %a{ :href => "#remove-page", :title => "Copy page" }
 
 #right_bar.right-panel.panel
   = render :partial => 'item_inspector'

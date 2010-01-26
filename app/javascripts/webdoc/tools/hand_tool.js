@@ -60,5 +60,4 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
       e.preventDefault();      
         this.moving = false;
     }
-    
 });
