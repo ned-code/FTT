@@ -14,7 +14,7 @@
       %a{ :href => "#left-panel-toggle", :title => "Left Panel" }
         Left Panel
 
-  %ul#pages-tools.tools.thumbs.index.icons-only
+  %ul.pages-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li>
       %a{ :href => "#pages-browser", :title => "Pages browser" }
@@ -107,13 +107,16 @@
       %ul.page_browser_numbered_list.vertical.numbers.index
       %ul#page_browser_items.vertical.pages.index
     #page_browser_control_bar.foot
-      %ul.thumbs.index.icons-only
-        %li.action_button 
+      %ul.pages-tools.tools.thumbs.index.icons-only
+        %li.action_button
           %a{ :href => "#add-page", :title => "Add new page" }
+            Add
         %li.action_button
           %a{ :href => "#copy-page", :title => "Copy page" }
+            Copy
         %li.action_button
           %a{ :href => "#remove-page", :title => "Copy page" }
+            Remove
 
 #right_bar.right-panel.panel
   = render :partial => 'item_inspector'
@@ -135,7 +138,9 @@
       cookiesSessionKeyName:"#{cookies[session_key_name]}"
     };
     $.ajaxSetup({data:{authenticity_token : WebDoc.authData.authToken}});
-    $("body").css("overflow", "hidden");
+    
+    //$("body").css("overflow", "hidden");
+    
     var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
     editor.load("#{@document.uuid}");
     

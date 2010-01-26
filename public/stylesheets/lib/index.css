@@ -215,7 +215,7 @@
 
 /* Pages tools */
 
-#pages-tools a {
+.pages-tools a {
     background-image: url('/images/pages-tools.png');
 }
 
