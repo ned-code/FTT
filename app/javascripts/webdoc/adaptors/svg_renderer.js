@@ -4,9 +4,10 @@
  **/
 WebDoc.SvgRenderer = $.klass(
 {
+  svgNS:"http://www.w3.org/2000/svg",
+  
   initialize: function(initialDrawing) {
-    // TODO set this as class attribute
-    this.svgNS = "http://www.w3.org/2000/svg";
+ 
   },
   
   /**

@@ -10,22 +10,22 @@
 #toolbar.toolbar-panel.panel
   %ul.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
-    %li#page-browser>
+    %li>
       %a{ :href => "#left-panel-toggle", :title => "Left Panel" }
         Left Panel
 
-  %ul#pages-tools.tools.thumbs.index.icons-only
+  %ul.pages-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li#page-browser>
+    %li>
       %a{ :href => "#pages-browser", :title => "Pages browser" }
         Pages
     -#%li#removePage.preview_hidden>
     -#  %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
     -#    Delete
-    %li#prev-page>
+    %li>
       %a{ :href => "#prev-page" , :title => "Previous page" }
         Prev
-    %li#next-page>
+    %li>
       %a{ :href => "#next-page" , :title => "Next Page" }
         Next
     -#%li#layout_selector.preview_hidden>
@@ -34,19 +34,19 @@
     -#%li#theme_selector.preview_hidden>
     -#  %a{ :href => "#themes" , :title =>"Change theme" }
     -#    Theme
-    %li#add-page.preview_hidden>
-      %a{ :href => "#new-page", :title => "Add new page" }
+    %li.preview_hidden>
+      %a{ :href => "#add-page", :title => "Add new page" }
         Add
     
   %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li#zoom_in>
+    %li>
       %a{ :href => "#zoom-in" , :title => "Zoom In" }
         Zoom in
-    %li#zoom_out>
+    %li>
       %a{ :href => "#zoom-out" , :title => "Zoom Out" }
         Zoom out
-    %li#tool_hand>
+    %li>
       %a.state_tool{ :href => "#move" , :title => "Move" }
         Move
   
@@ -58,28 +58,28 @@
     %li#redo>
       %a{ :href => "#redo" , :title => "Redo" }
         Redo
-    %li#move-back>
+    %li>
       %a{ :href => "#to-back" , :title => "Move to back" }
         To back
-    %li#move-front>
+    %li>
       %a{ :href => "#to-front" , :title => "Move to front" }
         To front
-    %li#delete_item>
+    %li>
       %a{ :href => "#delete" , :title => "Delete" }
         Delete
   
   %ul#misc_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li#tool_arrow>
+    %li>
       %a.state_tool{ :href => "#select" , :title => "Select" }
         Select
-    %li#html_snipplet.preview_hidden>
+    %li.preview_hidden>
       %a{ :href => "#insert-html" , :title => "Insert an HTML snippet" }
         HTML
-    %li#tool_text.preview_hidden>
+    %li.preview_hidden>
       %a{ :href => "#insert-text" , :title => "Insert a Text box" }
         Text
-    %li#tool_pen.preview_hidden>
+    %li.preview_hidden>
       %a.state_tool{ :href => "#draw" , :title => "Draw" }
         Draw
 
@@ -107,13 +107,16 @@
       %ul.page_browser_numbered_list.vertical.numbers.index
       %ul#page_browser_items.vertical.pages.index
     #page_browser_control_bar.foot
-      %ul.thumbs.index.icons-only
-        %li#add-page.action_button 
-          %img{ :src => "/images/icons/new.png", :alt => "Add page"}
-        %li#copyPage.action_button
-          %img{ :src => "/images/icons/duplicate.png", :alt => "Duplicate page"}
-        %li#removePage.action_button
-          %img{ :src => "/images/icons/delete_page.png", :alt => "Delete page"}
+      %ul.pages-tools.tools.thumbs.index.icons-only
+        %li.action_button
+          %a{ :href => "#add-page", :title => "Add new page" }
+            Add
+        %li.action_button
+          %a{ :href => "#copy-page", :title => "Copy page" }
+            Copy
+        %li.action_button
+          %a{ :href => "#remove-page", :title => "Copy page" }
+            Remove
 
 #right_bar.right-panel.panel
   = render :partial => 'item_inspector'
@@ -121,6 +124,12 @@
   = render :partial => 'page_inspector'
 
 :javascript
+  
+  // Take string of CSS and add to head
+  function createStyle( cssString ){
+    jQuery('head').append('<style type="text/css">'+cssString+'</style>');
+  }
+
   $(function()
   {
     WebDoc.authData = {
@@ -129,10 +138,18 @@
       cookiesSessionKeyName:"#{cookies[session_key_name]}"
     };
     $.ajaxSetup({data:{authenticity_token : WebDoc.authData.authToken}});
-    $("body").css("overflow", "hidden");
+    
+    //$("body").css("overflow", "hidden");
+    
     var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
     editor.load("#{@document.uuid}");
     
+    // Add feature detected styles to head
+    createStyle('.push-scroll {'+
+      'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
+      'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
+    '}');
+    
     // Set up default panel behaviour (show screen, show footer etc.)
     jQuery(".panel").panel();
-  });   
+  });

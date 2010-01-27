@@ -33,13 +33,13 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     WebDoc.application.inspectorController.selectPalette(2);
   },
   
-  getCursor: function() {
-    return "url(/images/icons/cursor_pen.png), crosshair";  
-  },
+  //getCursor: function() {
+  //  return "url(/images/icons/cursor_pen.png), crosshair";  
+  //},
 
-  getCursorHeight: function() {
-    return 24; // height of /images/icons/cursor_pen.png
-  },
+  //getCursorHeight: function() {
+  //  return 24; // height of /images/icons/cursor_pen.png
+  //},
       
   mouseDown: function(e) {
     e.preventDefault();

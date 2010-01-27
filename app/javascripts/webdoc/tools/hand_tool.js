@@ -17,9 +17,9 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
       WebDoc.application.boardController.unselectAll();      
     },
     
-    getCursor: function() {
-      return "move";  
-    },
+    //getCursor: function() {
+    //  return "move";  
+    //},
     
     mouseDown: function(e)
     {
@@ -60,5 +60,4 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
       e.preventDefault();      
         this.moving = false;
     }
-    
 });

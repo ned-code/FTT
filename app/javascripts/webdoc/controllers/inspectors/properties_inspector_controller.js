@@ -16,10 +16,10 @@ WebDoc.PropertiesInspectorController = $.klass({
   },  
   
   refresh: function() {
-    if (WebDoc.application.boardController.selection.length) {
+    if (WebDoc.application.boardController.selection().length) {
       $("#empty_properties").hide();
       $("#default_properties").show();      
-      var selectedItem = WebDoc.application.boardController.selection[0];
+      var selectedItem = WebDoc.application.boardController.selection()[0];
       $("#property_top")[0].value = selectedItem.item.position.top;
       $("#property_left")[0].value = selectedItem.item.position.left;
       $("#property_width")[0].value = selectedItem.item.size.width;
@@ -35,18 +35,18 @@ WebDoc.PropertiesInspectorController = $.klass({
   
   updateSroll: function(event) {
     ddd("update scroll");
-     var item = WebDoc.application.boardController.selection[0].item;
+     var item = WebDoc.application.boardController.selection()[0].item;
       if (item) {
         var newOverflow = { overflow: $("#property_scroll").attr("checked")?"auto":"hidden"};
         $.extend(item.data.data.css, newOverflow);
-        WebDoc.application.boardController.selection[0].domNode.css(newOverflow);
+        WebDoc.application.boardController.selection()[0].domNode.css(newOverflow);
         item.save();
       }
   },
   
   updateProperties: function(event) {
     var changedProperty = event.target.id;
-    var item = WebDoc.application.boardController.selection[0].item;
+    var item = WebDoc.application.boardController.selection()[0].item;
     switch(changedProperty){
 			case "property_left":
 			case "property_top":

@@ -66,29 +66,50 @@
 })(jQuery);
 
 
-// Extend jQuery with some helper plugins
+// Extend jQuery plugins with some helper plugins
 
 jQuery.fn.extend({
+    
     // Get or set id (attribute helper)
+    
     id: function(id) {
         return (id === undefined) ? 
             this.attr("id") :
             this.attr("id", id) ;
+    },
+    
+    /**!
+     * unwrap - v0.1 - 7/18/2009
+     * http://benalman.com/projects/jquery-unwrap-plugin/
+     * 
+     * Copyright (c) 2009 "Cowboy" Ben Alman
+     * Licensed under the MIT license
+     * http://benalman.com/about/license/
+     **/
+    
+    unwrap: function() {
+      this.parent(':not(body)')
+        .each(function(){
+          $(this).replaceWith( this.childNodes );
+        });
+      
+      return this;
     }
 });
 
 // Extend jQuery with some helper functions
 
 jQuery.extend({
+    
     // Event delegation helper. Bind to event, passing in
     // {'selector': fn} pairs as data. Finds closest match
     // (caching the result in the clicked element's data),
-    // and triggers the associated function(s) with the closest
+    // and triggers the associated function(s) with the matched
     // node as scope. Returns the result of the last function.
     // 
     // Eg:
-    //
-    // .bind('click', {'selector': fn}, jQuery.delegate)
+    // .bind('click', jQuery.delegate({'selector': fn}))
+    
     delegate: function(list){
         return function(e){
             var target = jQuery(e.target),
@@ -104,10 +125,14 @@ jQuery.extend({
                     target.data("closest", data);
                 }
                 
-                if ( node ) result = list[selector].call(node, e);
+                if ( node ) { 
+                  console.log('[jQuery.delegate] Matched selector: "' + selector + '"');
+                  result = list[selector].call(node, e);
+                }
             }
             
             return result;
         }
     }
+
 });

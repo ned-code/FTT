@@ -215,7 +215,7 @@
 
 /* Pages tools */
 
-#pages-tools a {
+.pages-tools a {
     background-image: url('/images/pages-tools.png');
 }
 
@@ -224,9 +224,9 @@ a[href="#pages-browser"]:hover      { background-position: 0 -64px; }
 a[href="#pages-browser"]:active     { background-position: 0 -128px; }
 a[href="#pages-browser"].current    { background-position: 0 -192px; }
 
-a[href="#new-page"]                 { background-position: 0 -256px; }
-a[href="#new-page"]:hover           { background-position: 0 -320px; }
-a[href="#new-page"]:active          { background-position: 0 -384px; }
+a[href="#add-page"]                 { background-position: 0 -256px; }
+a[href="#add-page"]:hover           { background-position: 0 -320px; }
+a[href="#add-page"]:active          { background-position: 0 -384px; }
 
 a[href="#prev-page"]                { background-position: 0 -448px; }
 a[href="#prev-page"]:hover          { background-position: 0 -512px; }

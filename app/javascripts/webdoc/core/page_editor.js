@@ -49,18 +49,14 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
     
     // create all tools
-    WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool_pen");
-    WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool_arrow");
-    WebDoc.application.handTool = new WebDoc.HandTool("#tool_hand");
-    WebDoc.application.textTool = new WebDoc.TextTool("#tool_text", "#palette_text");
-    WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool("#html_snipplet");
+    WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
+    WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
+    WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
+    WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool");
+    WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
 
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
-    
-    var boardContainer = $("#board_container"),
-        leftBar = $("#left_bar"),
-        rightBar = $("#right_bar");
     
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
@@ -69,7 +65,7 @@ WebDoc.PageEditor = $.klass({
 
   load: function(documentId) {
     ddd("load document " + documentId);
-    WebDoc.application.collaborationManager.setDocumentId(documentId);              
+    WebDoc.application.collaborationManager.listenXMPPNode(documentId);              
     MTools.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
     {
       this.currentDocument = data[0];
@@ -77,7 +73,9 @@ WebDoc.PageEditor = $.klass({
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument);
       this.loadPageId(window.location.hash.replace("#", ""));
       WebDoc.application.pageBrowserController.initializePageBrowser();
-      if (WebDoc.application.boardController.editable) {
+      ddd("check editablity");
+      if (WebDoc.application.boardController.isEditable()) {
+        ddd("Show lib");
         WebDoc.application.rightBarController.showLib();
       }
     }.pBind(this));
@@ -115,21 +113,21 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
 
-  'prev-page': function(e) {
+  prevPage: function() {
     var previousPage = this.currentDocument.previousPage(this.currentPage);
     if (previousPage) {
       this.loadPage(previousPage);
     }
   },
 
-  'next-page': function(e) {
+  nextPage: function() {
     var nextPage = this.currentDocument.nextPage(this.currentPage);
     if (nextPage) {
       this.loadPage(nextPage);
     }
   },
 
-  'add-page': function(e) {
+  addPage: function() {
     var newPage = new WebDoc.Page(null, this.currentDocument);
     // we don't need to set foreign keys. It is autoatically done on the server side
     //newPage.data.document_id = this.currentDocument.data.document_id;
@@ -142,7 +140,7 @@ WebDoc.PageEditor = $.klass({
     }.pBind(this));
   },
  
-  removePage: function(e) {
+  removePage: function() {
     var pageToDelete = this.currentPage;
     if (this.currentDocument.pages.length > 1) {
       var choice = confirm("Are you sure you want to delete the current page?");

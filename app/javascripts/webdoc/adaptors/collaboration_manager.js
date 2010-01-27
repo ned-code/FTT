@@ -5,23 +5,38 @@ WebDoc.CollaborationManager = $.klass(
   {
     BOSH_SERVICE: '/http-bind',
     
-    initialize: function(document)    
+    initialize: function()    
     {
+      // the from attribute that will be used to send xmpp message.
+      this._from = null;
+      //the node name we want to subscribe
+      this._nodeName = null;
+      // the XMPP connection
+      this._connection = null;
     },
 
-    setDocumentId: function(documentId) {
+    listenXMPPNode: function(nodeName) {
       $.getJSON("/users/current", function(userData) {
-        this.from = userData.user.name + "@webdoc.com/web_" + WebDoc.application.pageEditor.applicationUuid ;
-        ddd("XMPP user from", this.from, userData);
+        this._from = userData.user.name + "@webdoc.com/web_" + WebDoc.application.pageEditor.applicationUuid ;
+        ddd("XMPP user from", this._from, userData);
+        // we want to listen only one node. So be sure to remove all previous connection and create a new fresh XMPP connection.
         this.disconnect();
-        this.documentId = documentId;
-        this.connection = new Strophe.Connection(this.BOSH_SERVICE);  
+        this._nodeName = nodeName;
+        this._connection = new Strophe.Connection(this.BOSH_SERVICE);  
         ddd("will connect");      
-        this.connection.connect(this.from,"1234", this.onConnect.pBind(this));              
+        this._connection.connect(this._from,"1234", this._onConnect.pBind(this));              
       }.pBind(this));      
     },
     
-    onConnect: function(status)
+    disconnect: function()
+    {
+      if (this._connection) {
+        //this.unsubscribe();
+        this._connection.disconnect();  
+      }
+    },
+    
+    _onConnect: function(status)
     {
       if (status == Strophe.Status.CONNECTING) {
         ddd('Strophe is connecting.');
@@ -34,12 +49,12 @@ WebDoc.CollaborationManager = $.klass(
         ddd('Strophe is disconnected.');
       } else if (status == Strophe.Status.CONNECTED) {
         ddd('Strophe is connected.');
-        this.connection.addHandler(this.onMessage.pBind(this), null, 'message', null, null,  null); 
-        this.connection.addHandler(this.onIq.pBind(this), null, 'iq', null, null,  null);         
-        this.connection.send($pres().tree());
+        this._connection.addHandler(this._onMessage.pBind(this), null, 'message', null, null,  null); 
+        this._connection.addHandler(this._onIq.pBind(this), null, 'iq', null, null,  null);         
+        this._connection.send($pres().tree());
         ddd("presence is set");
         // register to pusub for document id
-        this.addDocumentSubscription(function(message) {
+        this._addDocumentSubscription(function(message) {
           var messageWrap = $(message);
           var createdSub = messageWrap.find("subscription");
           if (createdSub.length == 1) {
@@ -54,45 +69,37 @@ WebDoc.CollaborationManager = $.klass(
       }
     },
 
-    getDocumentSubscriptions : function(callBack) {
-      var iq = $iq({ from: this.from, to: "pubsub.webdoc.com", type: "get", id: 'getDocSubs'} );
-      var subscriptions = $build("subscriptions", { node: this.documentId, jid: "julien.bachmann@webdoc/web" }).tree();      
+    _getDocumentSubscriptions : function(callBack) {
+      var iq = $iq({ from: this._from, to: "pubsub.webdoc.com", type: "get", id: 'getDocSubs'} );
+      var subscriptions = $build("subscriptions", { node: this._nodeName, jid: "julien.bachmann@webdoc/web" }).tree();      
       var pubSub = iq.cnode($build("pubsub", { xmlns: "http://jabber.org/protocol/pubsub"}).tree()).cnode(subscriptions);
       if (callBack) {
-        this.connection.addHandler(callBack, null, 'iq', 'result', 'getDocSubs', null);      
+        this._connection.addHandler(callBack, null, 'iq', 'result', 'getDocSubs', null);      
       }
-      this.connection.send(iq.tree());    
+      this._connection.send(iq.tree());    
     },
     
-    addDocumentSubscription: function(callBack) {
-      var iq = $iq({ from: this.from, to: "pubsub.webdoc.com", type: "set", id: "addDocSub"});
+    _addDocumentSubscription: function(callBack) {
+      var iq = $iq({ from: this._from, to: "pubsub.webdoc.com", type: "set", id: "addDocSub"});
       var pubSub = iq.cnode($build("pubsub", { xmlns: "http://jabber.org/protocol/pubsub"}).tree());
-      pubSub.cnode($build("subscribe", { node: this.documentId, jid: this.from}).tree());
+      pubSub.cnode($build("subscribe", { node: this._nodeName, jid: this._from}).tree());
       if (callBack) {
-        this.connection.addHandler(callBack, null, 'iq', 'result', 'addDocSub', null);            
+        this._connection.addHandler(callBack, null, 'iq', 'result', 'addDocSub', null);            
       }
-      this.connection.send(iq.tree());      
+      this._connection.send(iq.tree());      
     },
     
-    unSubsribe: function(subid, callBack) {
-      var iq = $iq({ from: this.from, to: "pubsub.webdoc.com", type: "set", id: "unsubscribe"});
+    _unSubsribe: function(subid, callBack) {
+      var iq = $iq({ from: this._from, to: "pubsub.webdoc.com", type: "set", id: "unsubscribe"});
       var pubSub = iq.cnode($build("pubsub", { xmlns: "http://jabber.org/protocol/pubsub"}).tree());
-      pubSub.cnode($build("unsubscribe", { node: this.documentId, jid: this.from, subid:subid }).tree());
+      pubSub.cnode($build("unsubscribe", { node: this._nodeName, jid: this._from, subid:subid }).tree());
       if (callBack) {
-        this.connection.addHandler(callBack, null, 'iq', null, 'unsubscribe', null);                  
+        this._connection.addHandler(callBack, null, 'iq', null, 'unsubscribe', null);                  
       }
-      this.connection.send(iq.tree());    
-    },
-        
-    disconnect: function()
-    {
-      if (this.connection) {
-        //this.unsubscribe();
-        this.connection.disconnect();  
-      }
+      this._connection.send(iq.tree());    
     },
 
-    onMessage: function(msg)
+    _onMessage: function(msg)
     {
       ddd("recieve message", msg);
       try {
@@ -102,19 +109,19 @@ WebDoc.CollaborationManager = $.klass(
         var elems = msg.getElementsByTagName('body');
 
         // we need to clean unused subscriptions. All old subscriptions are sent to the last logged user
-        if (from == "pubsub.webdoc.com" && to != this.from) {
+        if (from == "pubsub.webdoc.com" && to != this._from) {
           try {
             var messageWrap = $(msg);
             var subId = messageWrap.find("header").text();
             ddd("unsubscribe subid", subId);
-            this.unSubsribe(subId);
+            this._unSubsribe(subId);
             }
             catch(e) {
               ddd("error while trying to remove old subscriptions", e);
             }            
         }
-        else if (from == "pubsub.webdoc.com" && to == this.from) {
-          this.dispathMessage(elems);
+        else if (from == "pubsub.webdoc.com" && to == this._from) {
+          this._dispathMessage(elems);
         }
       }
       catch(e) {
@@ -125,12 +132,12 @@ WebDoc.CollaborationManager = $.klass(
       return true;
     },
     
-    onIq: function(iq) {
+    _onIq: function(iq) {
       ddd("recieve iq", iq);
       return true;      
     },
     
-    dispathMessage: function(body) {      
+    _dispathMessage: function(body) {      
       var messageObject = $.evalJSON($(body).text());
       ddd("check message", messageObject);      
       if (messageObject.source != WebDoc.application.pageEditor.applicationUuid) {
