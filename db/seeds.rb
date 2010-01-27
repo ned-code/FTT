@@ -6,6 +6,7 @@ users = [
   {:name => 'Zeno',   :email => "zeno@jilion.com",            :pass => 'pass'},
   {:name => 'Stephen', :email => "stephen.band@mnemis.com",    :pass => 'pass'},
   {:name => 'Luc', :email => "luc.devallonne@mnemis.com",    :pass => 'pass'},
+  {:name => 'Cedric', :email => "cedric.michelet@icare.info",    :pass => 'pass'},
   
   {:name => 'Guest',  :email => "guest@mnemis.com",           :pass => 'pass'},
   {:name => 'All',    :email => "All@mnemis.com",             :pass => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd'}
