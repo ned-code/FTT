@@ -8,8 +8,9 @@
 //= require <mtools/uuid>
 
 //= require <webdoc/core/widget_manager>
+//= require <webdoc/core/webdoc_handlers>
 //= require <webdoc/adaptors/svg_renderer>
-//= require <webdoc/adaptors/collaboration_manager>
+//= require <webdoc/core/collaboration_manager>
 //= require <webdoc/controllers/board_controller>
 //= require <webdoc/library/libraries_controller>
 //= require <webdoc/controllers/right_bar_controller>
@@ -42,7 +43,6 @@ WebDoc.PageEditor = $.klass({
     // create all controllers
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
-    // WebDoc.application.librariesController = new WebDoc.LibrariesController();
     WebDoc.application.rightBarController = new WebDoc.RightBarController();
     WebDoc.application.inspectorController = new WebDoc.InspectorController();
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();

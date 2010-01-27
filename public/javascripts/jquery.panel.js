@@ -96,6 +96,7 @@ function callHandler(e){
     if ( match && handlers[match[1]] ) {
         // Call it with current scope
         handlers[match[1]].call(this, e);
+        e.preventDefault();        
         return false;
     }
 }
