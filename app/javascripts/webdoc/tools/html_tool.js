@@ -5,8 +5,8 @@
 //= require "tool"
 
 WebDoc.HtmlTool = $.klass(WebDoc.Tool, {
-  initialize: function($super, toolId, paletteId) {
-    $super(toolId);
+  initialize: function($super, selector, boardClass) {
+    $super(selector, boardClass);
   },
 
   selectTool: function() {

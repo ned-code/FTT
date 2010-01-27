@@ -228,24 +228,32 @@ a[href="#add-page"]                 { background-position: 0 -256px; }
 a[href="#add-page"]:hover           { background-position: 0 -320px; }
 a[href="#add-page"]:active          { background-position: 0 -384px; }
 
-a[href="#prev-page"]                { background-position: 0 -448px; }
-a[href="#prev-page"]:hover          { background-position: 0 -512px; }
-a[href="#prev-page"]:active         { background-position: 0 -576px; }
+a[href="#add-web-page"]             { background-position: 0 -448px; }
+a[href="#add-web-page"]:hover       { background-position: 0 -512px; }
+a[href="#add-web-page"]:active      { background-position: 0 -576px; }
 
-a[href="#next-page"]                { background-position: 0 -640px; }
-a[href="#next-page"]:hover          { background-position: 0 -704px; }
-a[href="#next-page"]:active         { background-position: 0 -768px; }
+a[href="#copy-page"]                { background-position: 0 -640px; }
+a[href="#copy-page"]:hover          { background-position: 0 -704px; }
+a[href="#copy-page"]:active         { background-position: 0 -768px; }
 
-a[href="#layouts"]                  { background-position: 0 -832px; }
-a[href="#layouts"]:hover            { background-position: 0 -896px; }
-a[href="#layouts"]:active           { background-position: 0 -960px; }
-a[href="#layouts"].current          { background-position: 0 -1024px; }
+a[href="#remove-page"]              { background-position: 0 -832px; }
+a[href="#remove-page"]:hover        { background-position: 0 -896px; }
+a[href="#remove-page"]:active       { background-position: 0 -960px; }
 
-a[href="#themes"]                   { background-position: 0 -1088px; }
-a[href="#themes"]:hover             { background-position: 0 -1152px; }
-a[href="#themes"]:active            { background-position: 0 -1216px; }
-a[href="#themes"].current           { background-position: 0 -1280px; }
+a[href="#prev-page"]                { background-position: 0 -1024px; }
+a[href="#prev-page"]:hover          { background-position: 0 -1088px; }
+a[href="#prev-page"]:active         { background-position: 0 -1152px; }
 
+a[href="#next-page"]                { background-position: 0 -1216px; }
+a[href="#next-page"]:hover          { background-position: 0 -1280px; }
+a[href="#next-page"]:active         { background-position: 0 -1344px; }
+
+a[href="#thumbs-view"]                { background-position: 0 -1408px; }
+a[href="#thumbs-view"]:hover          { background-position: 0 -1472px; }
+a[href="#thumbs-view"]:active         { background-position: 0 -1536px; }
+a[href="#thumbs-view"].current        { background-position: 0 -1600px; }
+a[href="#thumbs-view"].current:hover  { background-position: 0 -1664px; }
+a[href="#thumbs-view"].current:active { background-position: 0 -1728px; }
 
 /* Edit tools */
 
@@ -300,13 +308,13 @@ a[href="#redo"]                     { background-position: 0 -2176px; }
 a[href="#redo"]:hover               { background-position: 0 -2240px; }
 a[href="#redo"]:active              { background-position: 0 -2304px; }
 
-a[href="#to-back"]                { background-position: 0 -2368px; }
-a[href="#to-back"]:hover          { background-position: 0 -2432px; }
-a[href="#to-back"]:active         { background-position: 0 -2496px; }
+a[href="#to-back"]                  { background-position: 0 -2368px; }
+a[href="#to-back"]:hover            { background-position: 0 -2432px; }
+a[href="#to-back"]:active           { background-position: 0 -2496px; }
 
-a[href="#to-front"]               { background-position: 0 -2560px; }
-a[href="#to-front"]:hover         { background-position: 0 -2624px; }
-a[href="#to-front"]:active        { background-position: 0 -2688px; }
+a[href="#to-front"]                 { background-position: 0 -2560px; }
+a[href="#to-front"]:hover           { background-position: 0 -2624px; }
+a[href="#to-front"]:active          { background-position: 0 -2688px; }
 
 
 /* Panel tools */

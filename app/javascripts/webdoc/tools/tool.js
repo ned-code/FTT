@@ -18,25 +18,28 @@ WebDoc.Tool = $.klass({
   selectTool: function() {
     var buttons = $(this.selector);
     
-    if ( buttons.hasClass("state_tool") ) {
-      $(".state_tool").removeClass("current");
+    if ( buttons.hasClass("state-tool") ) {
+      $(".state-tool").removeClass("current");
       
       buttons.addClass("current");
       
-      ddd("set class", this.boardClass);
+      ddd('[WebDoc.Tool] set board class "' + this.boardClass + '"');
       
       // Set class on the board so that style changes
       $("#board").removeClass().addClass(this.boardClass);
     }
   },
   
-  //getCursor: function() {
-  //  return "default";  
-  //},
-  
   getCursorHeight: function() {
-    // Find cursor image
-    var regex = /url\(([-\/\.a-zA-Z0-9]+)\)/,       // matches url(xxx) and captures url
+    console.log('GET');
+    // If cursorHeight doesn't exist yet, go get it
+    return ( typeof this._cursorHeight === 'undefined' ) ? this._storeCursorHeight() : this._cursorHeight;
+  },
+  
+  // Feature detection - sort of
+  // Finds cursor image and measures its height
+  _storeCursorHeight: function() {
+    var regex = /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/,       // matches url(xxx) or url('xxx') and captures xxx
         cursorCss = $("#board").css('cursor'),
         imageUrl = cursorCss ? regex.exec(cursorCss) : false,
         css = {
@@ -44,29 +47,29 @@ WebDoc.Tool = $.klass({
           left: -100,
           top: -100
         },
-        imgNode, imageHeight;
+        imageNode, imageHeight;
+    
+    ddd( '[WebDoc.Tool.getCursorHeight] imageUrl ' + imageUrl + '"' );
     
     if ( imageUrl ) {
-      ddd('[WebDoc.Tool.getCursorHeight] cursor has image ' + imageUrl[1] );
       
-      // Test image for height and return
+      // Test image for height
       imageNode = jQuery('<img>')
       .attr('src', imageUrl[1])
       .css(css);
       
       jQuery('body').append(imageNode);
-      
       height = imageNode.height();
-      
       imageNode.remove();
       
       ddd('[WebDoc.Tool.getCursorHeight] cursor image has height ' + height );
       
+      // Store height
+      this._cursorHeight = height;
       return height;
-      
-      // TODO: cache heights of already tested images
     }
     
+    this._cursorHeight = 0;
     return 0;
   },
   

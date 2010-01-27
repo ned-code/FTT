@@ -79,30 +79,30 @@ WebDoc.ToolbarController = $.klass({
   'toggleInteractionMode': function(e) {
     e.preventDefault();
     WebDoc.application.boardController.toggleInteractionMode();
-  },
-  
-  'move-front': function(e) {
-    e.preventDefault();
-    WebDoc.application.pageEditor.currentPage.moveFront(WebDoc.application.boardController.selection()[0].item);
-    WebDoc.application.boardController.selection()[0].item.save();
-  },
-
-  'move-back': function(e) {
-    e.preventDefault();
-    WebDoc.application.pageEditor.currentPage.moveBack(WebDoc.application.boardController.selection()[0].item);
-    WebDoc.application.boardController.selection()[0].item.save();
-  },
-    
-  disable_html: function(e) {
-    WebDoc.application.pageEditor.disableHtml = !WebDoc.application.pageEditor.disableHtml; 
-    WebDoc.application.pageEditor.loadPageId( WebDoc.application.pageEditor.currentPage.uuid());
-    $("#disable_html a").text(WebDoc.application.pageEditor.disableHtml?"Enable HTML":"Disable HTML");
-    if (WebDoc.application.pageEditor.disableHtml) {
-      $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");
-    }
-    else {
-      $("#tb_1_utilities_settings_trigger").removeClass("tb_1_utilities_settings_attention");
-    }
   }
+  
+//  'move-front': function(e) {
+//    e.preventDefault();
+//    WebDoc.application.pageEditor.currentPage.moveFront(WebDoc.application.boardController.selection()[0].item);
+//    WebDoc.application.boardController.selection()[0].item.save();
+//  },
+//
+//  'move-back': function(e) {
+//    e.preventDefault();
+//    WebDoc.application.pageEditor.currentPage.moveBack(WebDoc.application.boardController.selection()[0].item);
+//    WebDoc.application.boardController.selection()[0].item.save();
+//  },
+//    
+//  disable_html: function(e) {
+//    WebDoc.application.pageEditor.disableHtml = !WebDoc.application.pageEditor.disableHtml; 
+//    WebDoc.application.pageEditor.loadPageId( WebDoc.application.pageEditor.currentPage.uuid());
+//    $("#disable_html a").text(WebDoc.application.pageEditor.disableHtml?"Enable HTML":"Disable HTML");
+//    if (WebDoc.application.pageEditor.disableHtml) {
+//      $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");
+//    }
+//    else {
+//      $("#tb_1_utilities_settings_trigger").removeClass("tb_1_utilities_settings_attention");
+//    }
+//  }
 });
 

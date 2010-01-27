@@ -126,12 +126,22 @@ jQuery.extend({
                 }
                 
                 if ( node ) { 
+                  ddd('[jQuery.delegate] Matched selector: "' + selector + '"');
                   result = list[selector].call(node, e);
                 }
             }
             
             return result;
         }
+    },
+    
+    // Some helpful regex for parsing hrefs and css urls etc.
+    
+    regex: {
+      // matches url(xxx), url('xxx') or url("xxx") and captures xxx
+      cssUrl: /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/
     }
+    
+    
 
 });
