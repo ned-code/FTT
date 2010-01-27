@@ -69,7 +69,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     else if (this.item.media && this.item.media.data.properties.inspector_url != null) {
       return this.item.media.data.properties.inspector_url;
     }
-    return 0;
+    return 5;
   },
   
   innerHtmlChanged: function($super) {

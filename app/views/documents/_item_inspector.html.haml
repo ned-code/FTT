@@ -105,7 +105,13 @@
       #palette_image.palette     
         #image_properties.properties_line
           %label.properties_label Image URL
-          %input#property_src.properties_input    
+          %input#property_src.properties_input  
+      #html_inspector.palette
+        %div.properties_line
+          %textarea#selected_item_html_editor.properties_input 
+        %div.properties_line
+          %label.properties_label No iframe
+          %input#no_iframe.properties_input{ :type => "checkbox"}             
     %h3
       %a{ :href => "" } Properties
     #properties_inspector.inspector
@@ -133,10 +139,3 @@
           %input#property_src.properties_input
       #empty_properties
         %center Empty                                   
-    %h3
-      %a{ :href => "#" }  Inner HTML
-    #html_inspector.inspector
-      %textarea#selected_item_html_editor 
-      %div
-        %label No iframe
-        %input#no_iframe{ :type => "checkbox"} 

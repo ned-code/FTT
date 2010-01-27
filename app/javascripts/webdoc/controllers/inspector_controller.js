@@ -17,6 +17,7 @@ WebDoc.InspectorController = $.klass({
     var textPalette = $("#palette_text").hide();
     var penPelette = $("#palette_pen").hide();
     var imagePelette = $("#palette_image").hide();
+    var htmlSnippetPalette = $("#html_inspector").hide();
     this.imagePaletteController = new WebDoc.ImagePaletteController();
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
@@ -37,7 +38,7 @@ WebDoc.InspectorController = $.klass({
       }                      
     }.pBind(this));
     
-    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette, imagePelette];
+    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette, imagePelette, htmlSnippetPalette];
     this.updatePalette(0);
     this.subInspectors = [];
     var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
