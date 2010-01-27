@@ -190,6 +190,24 @@ WebDoc.BoardController = $.klass({
     }
   },
   
+  moveSelectionToBack: function() {
+    var item = this.selection()[0].item;
+    
+    this._currentPage.moveBack(item);
+    item.save();
+    
+    return false;    
+  },
+  
+  moveSelectionToFront: function() {
+    var item = this.selection()[0].item;
+    
+    this._currentPage.moveFront(item);
+    item.save();
+    
+    return false;    
+  },
+  
   mapToPageCoordinate: function(position) {
     var x, y, board = $("#board"), boardContainer = $("#board_container");
     

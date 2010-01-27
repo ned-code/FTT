@@ -12,7 +12,7 @@ WebDoc.handlers = {
   
   'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggleBrowser(); },
   'library':              function(e) { WebDoc.application.rightBarController.showLib(); },
-  'inspector':            function(e) { WebDoc.application.rightBarController.showPageInspector(); },
+  'inspector':            function(e) { WebDoc.application.rightBarController.showItemInspector(); },
   
   'prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },
   'next-page':            function(e) { WebDoc.application.pageEditor.nextPage(); },
@@ -28,37 +28,13 @@ WebDoc.handlers = {
   'insert-html':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.htmlSnipplet ); },
   'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
   
-  'to-back':            function(e) {
-                            var item = WebDoc.application.boardController.selection()[0].item;
-                            
-                            WebDoc.application.pageEditor.currentPage.moveBack(item);
-                            item.save();
-                            
-                            return false;
-                          },
-  'to-front':           function(e) {
-                            var item = WebDoc.application.boardController.selection()[0].item;
-                            
-                            WebDoc.application.pageEditor.currentPage.moveFront( item );
-                            item.save();
-                            
-                            return false;
-                          },
+  'to-back':              function(e) { WebDoc.application.boardController.moveSelectionToBack(); },
+  'to-front':             function(e) { WebDoc.application.boardController.moveSelectionToFront(); },
   
   'undo':                 function(e) { WebDoc.application.undoManager.undo(); },
   'redo':                 function(e) { WebDoc.application.undoManager.redo(); },
   'delete':               function(e) { WebDoc.application.boardController.deleteSelection(); },
   
   'mode-toggle':          function(e) { WebDoc.application.boardController.toggleInteractionMode(); },
-  'disable-html':         function(e) {
-                            WebDoc.application.pageEditor.disableHtml = !WebDoc.application.pageEditor.disableHtml; 
-                            WebDoc.application.pageEditor.loadPageId( WebDoc.application.pageEditor.currentPage.uuid());
-                            $("#disable_html a").text(WebDoc.application.pageEditor.disableHtml?"Enable HTML":"Disable HTML");
-                            if (WebDoc.application.pageEditor.disableHtml) {
-                                $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");
-                            }
-                            else {
-                                $("#tb_1_utilities_settings_trigger").removeClass("tb_1_utilities_settings_attention");
-                            }
-                          }
+  'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); }
 };

@@ -168,6 +168,18 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     }.pBind(this));
   },
   
+  toggleDebugMode: function() {
+    this.disableHtml = !this.disableHtml; 
+    this.loadPageId( this.currentPage.uuid());
+    $("#debug-button").text(this.disableHtml?"Enable HTML":"Disable HTML");
+    if (this.disableHtml) {
+        $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");
+    }
+    else {
+        $("#tb_1_utilities_settings_trigger").removeClass("tb_1_utilities_settings_attention");
+    }
+  },
+  
   pageRemoved: function(page) {
     if (page == this.currentPage) {
       var newPagePosition = 0;

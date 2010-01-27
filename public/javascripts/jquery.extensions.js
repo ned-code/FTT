@@ -126,7 +126,6 @@ jQuery.extend({
                 }
                 
                 if ( node ) { 
-                  console.log('[jQuery.delegate] Matched selector: "' + selector + '"');
                   result = list[selector].call(node, e);
                 }
             }
