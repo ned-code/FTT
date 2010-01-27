@@ -40,21 +40,21 @@ WebDoc.PageBrowserController = $.klass({
   },
 
   performAction: function(e) {
-    e.preventDefault();
-    clickedButton = $(e.target).closest(".action_button");
-    try {
-      // first look if action is defined in the page browser controller. Otherwise try to delegate the action to the page editor
-      if (this[clickedButton.attr("id")]) {
-        this[clickedButton.attr("id")].apply(this, [e]);
-      }
-      else {
-        WebDoc.application.pageEditor[clickedButton.attr("id")].apply(WebDoc.application.pageEditor, [e]);
-      }
-    }
-    catch(ex) {
-      ddd("unknown toolbar action: " + clickedButton.attr("id"));
-      ddt();
-    }    
+    //e.preventDefault();
+    //clickedButton = $(e.target).closest(".action_button");
+    //try {
+    //  // first look if action is defined in the page browser controller. Otherwise try to delegate the action to the page editor
+    //  if (this[clickedButton.attr("id")]) {
+    //    this[clickedButton.attr("id")].apply(this, [e]);
+    //  }
+    //  else {
+    //    WebDoc.application.pageEditor[clickedButton.attr("id")].apply(WebDoc.application.pageEditor, [e]);
+    //  }
+    //}
+    //catch(ex) {
+    //  ddd("unknown toolbar action: " + clickedButton.attr("id"));
+    //  ddt();
+    //}    
   },
 
   addPage: function(e) {
