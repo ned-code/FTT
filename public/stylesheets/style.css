@@ -1,11 +1,16 @@
 /* Styles */
 
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 75%;
+  
+  overflow: hidden;
 }
-
-
 
 a { color: #3B9EEF; }
 a{ outline: none;}
