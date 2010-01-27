@@ -8,7 +8,6 @@
     = stylesheet_link_tag 'general'
     = stylesheet_link_tag 'style'        
     = stylesheet_link_tag 'library'
-    = javascript_include_tag 'jquery'
     = stylesheet_link_tag 'lib/protect'
     = stylesheet_link_tag 'lib/index'
     = stylesheet_link_tag 'lib/layer'
@@ -19,6 +18,7 @@
   %body.editor.edit-mode
     #wrap
       = yield
+    = javascript_include_tag 'jquery'      
     = javascript_include_tag 'jquery-json'
     = javascript_include_tag 'jquery-string'
     = javascript_include_tag 'jquery-ui'
@@ -33,7 +33,11 @@
     = javascript_include_tag 'strophe'
     
     = sprockets_include_tag
-    
-    = javascript_include_tag 'webdoc.handlers'
+    :javascript
+      
+      $(function()
+      {
+        WebDoc.run();
+      });    
     
     = render :partial => "layouts/googleAnalytics"

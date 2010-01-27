@@ -1,7 +1,6 @@
 - document_title @document.title
 - session_key_name = ActionController::Base.session_options[:key]
 
-
 #board_container.hide-scroll.board-panel.panel
   #screen.screen.layer
   #document_loading
@@ -124,34 +123,18 @@
   = render :partial => 'item_inspector'
   = render :partial => 'library'
   = render :partial => 'page_inspector'
-
 :javascript
   
-  // Take string of CSS and add to head
-  function createStyle( cssString ){
-    jQuery('head').append('<style type="text/css">'+cssString+'</style>');
-  }
-
-  $(function()
-  {
+    var WebDoc;
+    if (!WebDoc) {
+      WebDoc = {};
+    }
     WebDoc.authData = {
       authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
       sessionKeyName:"#{session_key_name}",
       cookiesSessionKeyName:"#{cookies[session_key_name]}"
     };
-    $.ajaxSetup({data:{authenticity_token : WebDoc.authData.authToken}});
-    
-    //$("body").css("overflow", "hidden");
-    
-    var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
-    editor.load("#{@document.uuid}");
-    
-    // Add feature detected styles to head
-    createStyle('.push-scroll {'+
-      'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
-      'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
-    '}');
-    
-    // Set up default panel behaviour (show screen, show footer etc.)
-    jQuery(".panel").panel();
-  });
+    WebDoc.run = function() {
+      var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
+      editor.load("#{@document.uuid}");
+    } 

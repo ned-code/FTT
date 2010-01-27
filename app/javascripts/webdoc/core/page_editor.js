@@ -3,6 +3,7 @@
  * 
  * @author Julien Bachmann
 **/
+//= require <mtools/application>
 //= require <mtools/undo_manager>
 //= require <mtools/server_manager>
 //= require <mtools/uuid>
@@ -27,13 +28,15 @@
 // application singleton.
 WebDoc.application = {};
 
-WebDoc.PageEditor = $.klass({
+WebDoc.PageEditor = $.klass(MTools.Application,{
 
   currentDocument: null,
   currentPage: null,
   applicationUuid: undefined,
   
-  initialize: function(editable) {
+  initialize: function($super, editable) {
+    $super();
+    
     this.applicationUuid = new MTools.UUID().id;
     MTools.ServerManager.sourceId = this.applicationUuid;
     WebDoc.application.pageEditor = this;
