@@ -27,7 +27,7 @@ WebDoc.PageInspectorController = $.klass({
     $("#page_height_textbox").bind("change", this._changePageHeight);
     $("#page_width_textbox").bind("change", this._changePageWidth);
     $("#page_background_color_textbox").bind("change", this._changePageBackgroundColor);
-    $("#page_background_image_textbox").bind("change", this._checkValidBackgroundImage);
+    $("#page_background_image_textbox").bind("change", this._checkValidBackgroundImage.pBind(this));
     $("#page_background_image_tileX_checkbox").bind("change", this._changePageBackgroundRepeatMode.pBind(this));
     $("#page_background_image_tileY_checkbox").bind("change", this._changePageBackgroundRepeatMode.pBind(this));
     $("#page_background_image_align_hor_left_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
@@ -198,6 +198,7 @@ WebDoc.PageInspectorController = $.klass({
       WebDoc.InspectorFieldsValidator.validateBackgroundUrl(e.target.value);
       this._changePageBackgroundImage();
       this._changePageBackgroundRepeatMode(e);
+      this._changePageBackgroundPosition(e);
       this._setBackgroundControlsMode(true);
     }
     catch(exc) {
@@ -220,15 +221,15 @@ WebDoc.PageInspectorController = $.klass({
   },
 
   _applyBackgroundToPage: function(targetPage) {
-    try {
-      targetPage.setBackgroundImage($("#page_background_image_textbox").val());
+    targetPage.setBackgroundColor($("#page_background_color_textbox").val()); 
+    var imageFieldValue = $("#page_background_image_textbox").val();     
+    if(imageFieldValue == "" || imageFieldValue == "undefined") {
+      targetPage.removeBackgroundImage();
+    }
+    else {
+      targetPage.setBackgroundImage(imageFieldValue);
       targetPage.setBackgroundRepeatMode(this._getBackgroundRepeatMode());
       targetPage.setBackgroundPosition(this._getBackgroundPosition());
-    }
-    catch(exc) {
-      $("#page_background_image_textbox")[0].value = targetPage.data.data.css.backgroundImage;
-      this._setBackgroundRepeatMode(page.data.data.css.backgroundRepeat);
-      this._setBackroundPosition(page.data.data.css.backgroundPosition);
     }
   },
 
