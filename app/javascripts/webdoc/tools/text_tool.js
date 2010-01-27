@@ -7,8 +7,8 @@
 //= require "text_tool/text_tool_view"
 
 WebDoc.TextTool = $.klass(WebDoc.Tool, {
-  initialize: function($super, toolId, paletteId) {
-    $super(toolId);
+  initialize: function($super, selector, boardClass, paletteId ) {
+    $super( selector, boardClass );
     this.delegate = new WebDoc.TextToolView("/stylesheets/textbox.css");
     this.delegate.setEndEditionListener(this);
     this.textboxCss = {
@@ -18,7 +18,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       overflow: "hidden"
     };
     
-    this.paletteEl = $(paletteId ? paletteId : "#palette_text");
+    this.paletteEl = $( paletteId ? paletteId : "#palette_text");
     this.paletteOverlayEl = this.paletteEl.find("#palette_overlay");
     
     // events handler for palette clicks

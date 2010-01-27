@@ -9,8 +9,8 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   hasMoved: false,
   originalMovingPos: null,
   
-  initialize: function($super, toolId) {
-    $super(toolId);
+  initialize: function($super, selector, boardClass) {
+    $super( selector, boardClass );
     this.lastSelectedObject = {};
   },
   
