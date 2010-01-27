@@ -3,6 +3,7 @@
  * 
  * @author Julien Bachmann
 **/
+//= require <mtools/application>
 //= require <mtools/undo_manager>
 //= require <mtools/server_manager>
 //= require <mtools/uuid>
@@ -27,13 +28,15 @@
 // application singleton.
 WebDoc.application = {};
 
-WebDoc.PageEditor = $.klass({
+WebDoc.PageEditor = $.klass(MTools.Application,{
 
   currentDocument: null,
   currentPage: null,
   applicationUuid: undefined,
   
-  initialize: function(editable) {
+  initialize: function($super, editable) {
+    $super();
+    
     this.applicationUuid = new MTools.UUID().id;
     MTools.ServerManager.sourceId = this.applicationUuid;
     WebDoc.application.pageEditor = this;
@@ -163,6 +166,18 @@ WebDoc.PageEditor = $.klass({
       this.currentDocument.addPage(copiedPage, true);
       this.loadPage(copiedPage);
     }.pBind(this));
+  },
+  
+  toggleDebugMode: function() {
+    this.disableHtml = !this.disableHtml; 
+    this.loadPageId( this.currentPage.uuid());
+    $("#debug-button").text(this.disableHtml?"Enable HTML":"Disable HTML");
+    if (this.disableHtml) {
+        $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");
+    }
+    else {
+        $("#tb_1_utilities_settings_trigger").removeClass("tb_1_utilities_settings_attention");
+    }
   },
   
   pageRemoved: function(page) {

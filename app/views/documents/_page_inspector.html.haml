@@ -37,7 +37,7 @@
         %input#browse_background_image_button{ :type => "button", :value => "Browse" }
       %div
         %input#page_background_image_textbox{ :type => "text"}
-        %p You can also choose an image from your image library and use the set as background button:
+        %p You can also choose an image from your image library and use the set as background button.
       %div
         %label horizontal
         %input#page_background_image_tileX_checkbox{ :type => "checkbox", :name => "xTile", :value => "none" }
@@ -62,22 +62,22 @@
         %span.label bottom
         -#%input#page_background_image_repeat_vert_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-y"}
         -#%span.label Repeat vertically
+      -#%div
+        -#%input#page_background_image_apply_current_button{ :type => "button", :value => "Apply to this page" }
+      -#%div
+        -#or
       %div
-        %input#page_background_image_apply_current_button{ :type => "button", :value => "Apply to this page" }
+        %input#page_background_image_apply_all_button{ :type => "button", :value => "Apply background to all pages" }
       %div
-        or
+        -#%p 
+          -#or 
+          -#%a#page_background_image_cancel{:href => "#"}
+            -#cancel
       %div
-        %input#page_background_image_apply_all_button{ :type => "button", :value => "Apply to all pages" }
-      %div
-        %p 
-          or 
-          %a#page_background_image_cancel{:href => "#"}
-            cancel
-      %div
-        %a.page-navigation-link{ :href => "prev-page"}
+        %a.page-navigation-link{ :href => "#prev-page"}
           Previous
         |
-        %a.page-navigation-link{ :href => "next-page"}
+        %a.page-navigation-link{ :href => "#next-page"}
           Next
     
     %fieldset#page_css_editor.code-editor

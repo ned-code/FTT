@@ -1,6 +1,7 @@
 /**
  * WBEditor is the main function of the application. It define UB namespace.
  **/
+//= require <mtools/application>
 //= require <mtools/undo_manager>
 //= require <mtools/server_manager>
 //= require <mtools/uuid>
@@ -14,10 +15,11 @@
 // application singleton.
 WebDoc.application = {};
 
-WebDoc.DocumentEditor = $.klass(
+WebDoc.DocumentEditor = $.klass(MTools.Application,
 {
-    initialize: function()
+    initialize: function($super)
     {
+        $super();
         this.documents = [];
         this.documentList = null;
         this.filter = undefined;
