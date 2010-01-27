@@ -6,7 +6,6 @@
 //= require <webdoc/gui/page_thumbnail_view>
 
 WebDoc.handlers = {
-  // Keys are unhashed hrefs from <a> tags
   
   'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggleBrowser(); },
   'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggleRightBar(); },
@@ -23,11 +22,11 @@ WebDoc.handlers = {
   
   'zoom-in':              function(e) { WebDoc.application.boardController.zoomIn(); },
   'zoom-out':             function(e) { WebDoc.application.boardController.zoomOut(); },
-  //'move':                 function(e) { WebDoc.application.handTool.toolbarButtonClick(); }
-  //'select':               ,
-  //'draw':                 ,
-  //'insert-html':          ,
-  //'insert-text':          ,
+  'move':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.HandTool ); },
+  'select':               function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.ArrowTool ); },
+  'draw':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.DrawingTool ); },
+  'insert-html':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.HtmlTool ); },
+  'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.TextTool ); },
   
   'move-back':            function(e) {
                             var item = WebDoc.application.boardController.selection[0].item;
@@ -40,7 +39,7 @@ WebDoc.handlers = {
   'move-front':           function(e) {
                             var item = WebDoc.application.boardController.selection[0].item;
                             
-                            WebDoc.application.pageEditor.currentPage.moveFront(item);
+                            WebDoc.application.pageEditor.currentPage.moveFront( item );
                             item.save();
                             
                             return false;
@@ -50,7 +49,7 @@ WebDoc.handlers = {
   'redo':                 function(e) { WebDoc.application.undoManager.redo(); },
   'delete':               function(e) { WebDoc.application.boardController.deleteSelection(); },
   
-  'toggle-mode':          function(e) { WebDoc.application.boardController.toggleInteractionMode(); },
+  'mode-toggle':          function(e) { WebDoc.application.boardController.toggleInteractionMode(); },
   'disable-html':         function(e) {
                             WebDoc.application.pageEditor.disableHtml = !WebDoc.application.pageEditor.disableHtml; 
                             WebDoc.application.pageEditor.loadPageId( WebDoc.application.pageEditor.currentPage.uuid());

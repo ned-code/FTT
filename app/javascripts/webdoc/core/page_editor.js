@@ -49,11 +49,11 @@ WebDoc.PageEditor = $.klass({
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
     
     // create all tools
-    WebDoc.application.drawingTool = new WebDoc.DrawingTool("#tool_pen");
-    WebDoc.application.arrowTool = new WebDoc.ArrowTool("#tool_arrow");
-    WebDoc.application.handTool = new WebDoc.HandTool("#hand_tool");
-    WebDoc.application.textTool = new WebDoc.TextTool("#tool_text", "#palette_text");
-    WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool("#html_snipplet");
+    WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
+    WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
+    WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
+    WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool");
+    WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
 
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();

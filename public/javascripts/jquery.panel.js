@@ -17,7 +17,7 @@ var plug = 'panel',
     },
     regex = {
         hash:       /^#?$/,             // Single hash or empty string
-        hashRef:    /^#(\S+)/,          // Matches a hash ref, capturing all non-space characters following the hash
+        hashRef:    /^#(\S+)/,          // Matches a hash ref, captures all non-space characters following the hash
         slashRef:   /^\//,              // Begins with a slash
         urlRef:     /^[a-z]+:\/\//      // Begins with protocol xxx://
     };
@@ -92,9 +92,10 @@ function callHandler(e){
     
     ddd( '[jQuery.panel] Ref: "' + match[1] + '"' );
     
-    // If the href contains a hashRef that matches a handler, call it
+    // If the href contains a hashRef that matches a handler
     if ( match && handlers[match[1]] ) {
-        handlers[match[1]](e);
+        // Call it with current scope
+        handlers[match[1]].call(this, e);
         return false;
     }
 }
