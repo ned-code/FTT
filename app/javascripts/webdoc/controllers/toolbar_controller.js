@@ -14,8 +14,8 @@ WebDoc.ToolbarController = $.klass({
     //catch (ex) {
     //  ddt();
     //}
-    $("#tb_1_utilities_preview").click(this.toggleInteractionMode.pBind(this));
-    $("#tb_1_utilities_settings_dropdown").click(this.performAction.pBind(this));
+    //$("#tb_1_utilities_preview").click(this.toggleInteractionMode.pBind(this));
+    //$("#tb_1_utilities_settings_dropdown").click(this.performAction.pBind(this));
   },
 
   performAction: function(e) {

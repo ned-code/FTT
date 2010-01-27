@@ -14,30 +14,30 @@ WebDoc.handlers = {
   'library':              function(e) { WebDoc.application.rightBarController.showLib(); },
   'inspector':            function(e) { WebDoc.application.rightBarController.showPageInspector(); },
   
-  'prev-page':            function(e) { WebDoc.PageEditor.prevPage(); },
-  'next-page':            function(e) { WebDoc.PageEditor.nextPage(); },
-  'add-page':             function(e) { WebDoc.PageEditor.addPage(); },
+  'prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },
+  'next-page':            function(e) { WebDoc.application.pageEditor.nextPage(); },
+  'add-page':             function(e) { WebDoc.application.pageEditor.addPage(); },
   'copy-page':            function(e) { WebDoc.application.pageEditor.copyPage(); },
-  'remove-page':          function(e) { WebDoc.PageEditor.removePage(); },
+  'remove-page':          function(e) { WebDoc.application.pageEditor.removePage(); },
   
   'zoom-in':              function(e) { WebDoc.application.boardController.zoomIn(); },
   'zoom-out':             function(e) { WebDoc.application.boardController.zoomOut(); },
-  'move':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.HandTool ); },
-  'select':               function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.ArrowTool ); },
-  'draw':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.DrawingTool ); },
-  'insert-html':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.HtmlTool ); },
-  'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.TextTool ); },
+  'move':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.handTool ); },
+  'select':               function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.arrowTool ); },
+  'draw':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.drawingTool ); },
+  'insert-html':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.htmlSnipplet ); },
+  'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
   
-  'move-back':            function(e) {
-                            var item = WebDoc.application.boardController.selection[0].item;
+  'to-back':            function(e) {
+                            var item = WebDoc.application.boardController.selection()[0].item;
                             
                             WebDoc.application.pageEditor.currentPage.moveBack(item);
                             item.save();
                             
                             return false;
                           },
-  'move-front':           function(e) {
-                            var item = WebDoc.application.boardController.selection[0].item;
+  'to-front':           function(e) {
+                            var item = WebDoc.application.boardController.selection()[0].item;
                             
                             WebDoc.application.pageEditor.currentPage.moveFront( item );
                             item.save();

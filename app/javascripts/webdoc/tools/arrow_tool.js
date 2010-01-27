@@ -67,10 +67,12 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   },
   
   mouseDblClick: function(e) {
-    ddd("dbl click", e.target);
-    var objectToEdit = this._clickedItemView(e);
-    if (WebDoc.application.boardController.editItemView(objectToEdit)) {
-      this.mouseOut(e);
+    if (!WebDoc.application.boardController.isInteractionMode()) {
+      ddd("dbl click", e.target);
+      var objectToEdit = this._clickedItemView(e);
+      if (WebDoc.application.boardController.editItemView(objectToEdit)) {
+        this.mouseOut(e);
+      }
     }
   },
   

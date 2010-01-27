@@ -1,11 +1,13 @@
 - document_title @document.title
 - session_key_name = ActionController::Base.session_options[:key]
-= render :partial => "layouts/main_editor_toolbar"
+
 
 #board_container.hide-scroll.board-panel.panel
   #screen.screen.layer
   #document_loading
     %img{ :src => "/images/icons/waiting_bar.gif"}
+    
+= render :partial => "layouts/main_editor_toolbar"
 
 #toolbar.toolbar-panel.panel
   %ul.panel-tools.tools.thumbs.index.icons-only.preview_hidden
