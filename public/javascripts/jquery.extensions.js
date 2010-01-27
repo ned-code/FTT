@@ -86,6 +86,7 @@ jQuery.fn.extend({
      * Licensed under the MIT license
      * http://benalman.com/about/license/
      **/
+    // TODO: We no longer need this when we've got jQuery 1.4 !
     
     unwrap: function() {
       this.parent(':not(body)')
@@ -140,8 +141,8 @@ jQuery.extend({
     regex: {
       // matches url(xxx), url('xxx') or url("xxx") and captures xxx
       cssUrl: /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/
+      
     }
-    
-    
-
 });
+
+jQuery.event.special.dblClickFocus

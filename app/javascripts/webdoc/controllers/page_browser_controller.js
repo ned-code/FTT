@@ -27,18 +27,18 @@ WebDoc.PageBrowserController = $.klass({
     this.domNode = pagesPanel;
     this.visible = false;
     this.pageThumbs = [];
-    this.pageMap = {}; 
-
+    this.pageMap = {};
+    
     try {
       $("#page_browser_control_bar").click(this.performAction.pBind(this));
     }
     catch (ex) {
       ddt();
     }   
-
+    
     WebDoc.application.boardController.addCurrentPageListener(this);
   },
-
+  
   performAction: function(e) {
     //e.preventDefault();
     //clickedButton = $(e.target).closest(".action_button");

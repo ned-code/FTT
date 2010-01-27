@@ -31,7 +31,6 @@ WebDoc.Tool = $.klass({
   },
   
   getCursorHeight: function() {
-    console.log('GET');
     // If cursorHeight doesn't exist yet, go get it
     return ( typeof this._cursorHeight === 'undefined' ) ? this._storeCursorHeight() : this._cursorHeight;
   },
@@ -59,14 +58,14 @@ WebDoc.Tool = $.klass({
       .css(css);
       
       jQuery('body').append(imageNode);
-      height = imageNode.height();
+      imageHeight = imageNode.height();
       imageNode.remove();
       
-      ddd('[WebDoc.Tool.getCursorHeight] cursor image has height ' + height );
+      ddd('[WebDoc.Tool.getCursorHeight] cursor image has height ' + imageHeight );
       
       // Store height
-      this._cursorHeight = height;
-      return height;
+      this._cursorHeight = imageHeight;
+      return imageHeight;
     }
     
     this._cursorHeight = 0;
