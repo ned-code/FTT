@@ -176,6 +176,10 @@ WebDoc.ItemView = $.klass({
 
   },
   
+  destroy: function() {
+    this.item.removeListener();
+  },
+  
   _initDragAndResize: function() {
     this.domNode.draggable({
       containment: "parent",

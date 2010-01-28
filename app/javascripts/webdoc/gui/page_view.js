@@ -189,5 +189,13 @@ WebDoc.PageView = $.klass({
     }
     this.itemViews[item.uuid()] = itemView;
     return itemView;
+  },
+  
+  destroy: function() {
+    this.page.removeListener(this);
+    for (var itemId in this.itemViews) {
+      var anItemView = this.itemViews[itemId];
+      anItemView.destroy();
+    }
   }
 });

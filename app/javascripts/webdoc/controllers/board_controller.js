@@ -85,6 +85,9 @@ WebDoc.BoardController = $.klass({
     $(document).unbind("keydown");
     
     // Set properties
+    if (this._currentPageView) {
+      this._currentPageView.destroy();
+    }
     this._currentPageView = pageView;
     this._currentZoom = 1;
     this._selection = [];
