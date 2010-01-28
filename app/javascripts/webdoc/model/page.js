@@ -293,7 +293,8 @@ WebDoc.Page = $.klass(MTools.Record,
     newPage = $super();
     newPage.data.data = $.evalJSON($.toJSON(this.data.data));
     newPage.data.items = [];
-    newPage.position = -1;
+    newPage.data.position = -1;
+    newPage.data.title = this.data.title;
     if (this.items && $.isArray(this.items)) {
       $.each(this.items, function() {
         var copiedItem = this.copy();
