@@ -193,6 +193,8 @@ WebDoc.Item = $.klass(MTools.Record,
     newItem = $super();
     newItem.data.data = $.evalJSON($.toJSON(this.data.data));
     newItem.data.media_type = this.data.media_type;
+    newItem.data.media_id = this.data.media_id;
+    newItem.media = this.media;
     return newItem;
   },
   

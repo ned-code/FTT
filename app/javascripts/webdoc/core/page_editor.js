@@ -10,6 +10,7 @@
 
 //= require <webdoc/core/widget_manager>
 //= require <webdoc/core/webdoc_handlers>
+//= require <webdoc/core/pasteboard_manager>
 //= require <webdoc/adaptors/svg_renderer>
 //= require <webdoc/core/collaboration_manager>
 //= require <webdoc/controllers/board_controller>
@@ -43,6 +44,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.undoManager = new MTools.UndoManager();
         
     WebDoc.application.widgetManager = new WebDoc.WidgetManager();
+    WebDoc.application.pasteBoardManager = new WebDoc.PasteboardManager();    
     // create all controllers
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
