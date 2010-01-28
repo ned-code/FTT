@@ -142,33 +142,44 @@ class DatastoreEntriesController < ApplicationController
   end
   
   #DELETE /datastores/:widget_item_id/datastoreEntries/:id
+  #DELETE /datastores/:widget_item_id/datastoreEntries/ALL?ALL=true => remove all keys
   def destroy
      key = params[:id]
+     delete_all = params[:ALL] == 'true' ? true : false
      widget_uuid = params[:datastore_id]
      user_id = get_current_user_id
-
-     #check parameters
-     if(key == nil || key == '')
-       render :text => 'Key is nil' #print error
-       return
-     end
 
      #can current user edit document containing the widget
      isDocumentEditor = false
      if(widget_uuid != nil)
        isDocumentEditor = DatastoreEntry.can_user_edit_document(DatastoreEntry.get_document_of_widget(widget_uuid),get_current_user_id)
      end
-
-    DatastoreEntry.find(:all,:conditions => {:ds_key => key, :widget_uuid => widget_uuid}).each do |record|
-      #is editor of document, or owner of record = can delete key
-      if(isDocumentEditor || record.user_id == user_id)
-        record.delete
-      else
-        render :text => 'Cannot remove key.' #print error
-        return
-      end
-    end
-    
+      
+     if(delete_all) #delete all keys
+       DatastoreEntry.find(:all,:conditions => {:widget_uuid => widget_uuid}).each do |record|
+         #is editor of document, or owner of record = can delete key
+         if(isDocumentEditor || record.user_id == user_id)
+           record.delete
+         end
+       end
+     else #delete 1 key
+       #check parameters
+        if(key == nil || key == '')
+          render :text => 'Key is nil' #print error
+          return
+        end
+        
+        DatastoreEntry.find(:all,:conditions => {:ds_key => key, :widget_uuid => widget_uuid}).each do |record|
+          #is editor of document, or owner of record = can delete key
+          if(isDocumentEditor || record.user_id == user_id)
+            record.delete
+          else
+            render :text => 'Cannot remove key.' #print error
+            return
+          end
+        end     
+     end
+         
     render :text => '' #ok, no error
   end
   
