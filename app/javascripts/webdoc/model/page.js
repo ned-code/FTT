@@ -178,29 +178,25 @@ WebDoc.Page = $.klass(MTools.Record,
     this.addItem(newItem);
   },
   
+  _itemMoved: function(item) {
+    this.nonDrawingItems.sort(function(a, b) {
+      return a.data.position - b.data.position;
+    });
+    var afterItemIndex = $.inArray(item, this.nonDrawingItems);
+    this.fireItemPositionChanged(item, afterItemIndex > 0 ? this.nonDrawingItems[afterItemIndex - 1] : null);
+  },
+  
   moveFront: function(item) {
     if (this.nonDrawingItems.length > 1) {
       this.lastPosition += 1;
-      item.setPosition(this.lastPosition);
-      var previousPositionInArray = $.inArray(item, this.nonDrawingItems);
-      this.nonDrawingItems.sort(function(a, b) {
-        return a.data.position - b.data.position;
-      });
-      var newPositionInArray = $.inArray(item, this.nonDrawingItems);
-      this.fireItemPositionChanged(item, this.nonDrawingItems[this.nonDrawingItems.length - 2]);
+      item.setPositionZ(this.lastPosition);
     }
   },
   
   moveBack: function(item) {
     if (this.nonDrawingItems.length > 1) {
       this.firstPosition -= 1;
-      item.setPosition(this.firstPosition);
-      var previousPositionInArray = $.inArray(item, this.nonDrawingItems);
-      this.nonDrawingItems.sort(function(a, b) {
-        return a.data.position - b.data.position;
-      });
-      var newPositionInArray = $.inArray(item, this.nonDrawingItems);
-      this.fireItemPositionChanged(item, null);
+      item.setPositionZ(this.firstPosition);
     }
   },
   

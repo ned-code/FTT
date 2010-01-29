@@ -196,18 +196,26 @@ WebDoc.BoardController = $.klass({
   moveSelectionToBack: function() {
     var selectionLength = this.selection().length;    
     for (var i = 0; i < selectionLength; i++) {
-      var anItem = this.selection()[i].item;      
+      var anItem = this.selection()[i].item; 
+      var previousPosition = anItem.positionZ();     
       this._currentPage.moveBack(anItem);
       anItem.save();
+      WebDoc.application.undoManager.registerUndo(function() {
+        this._setItemPositionZ(anItem, previousPosition);
+      }.pBind(this));
     }
   },
   
   moveSelectionToFront: function() {
     var selectionLength = this.selection().length;
     for (var i = 0; i < selectionLength; i++) {
-      var anItem = this.selection()[i].item;      
+      var anItem = this.selection()[i].item; 
+      var previousPosition = anItem.positionZ();     
       this._currentPage.moveFront(anItem);
       anItem.save();
+      WebDoc.application.undoManager.registerUndo(function() {
+        this._setItemPositionZ(anItem, previousPosition);
+      }.pBind(this));      
     }    
   },
   
@@ -575,6 +583,16 @@ WebDoc.BoardController = $.klass({
     $("#board").bind("dblclick", this, this._mouseDblClick.pBind(this));
     $("#board").bind("mouseover", this, this._mouseOver.pBind(this));    
     $("#board").bind("mouseout", this, this._mouseOut.pBind(this));
+  },
+  
+  _setItemPositionZ: function(item, position) {
+    ddd("set item pos", item, position);
+    var previousPosition = item.positionZ();
+    item.setPositionZ(position);
+    item.save();
+    WebDoc.application.undoManager.registerUndo(function() {
+      this._setItemPositionZ(item, previousPosition);
+    }.pBind(this));    
   }
     
   
