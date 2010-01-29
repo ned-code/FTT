@@ -200,7 +200,7 @@
   color: #333;
 }
 
-.button, .back, .cancel, .add {
+.button, .back, /*.cancel,*/ .add {
   background:#555;
   position: absolute;
   overflow: hidden;

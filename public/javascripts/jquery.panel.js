@@ -12,6 +12,11 @@ var plug = 'panel',
     contentSelector = '.content',
     headSelector = '.head>div',
     footSelector = '.foot>div',
+    screenClass = 'screen',
+    activeClass = 'active',
+    cancelClass = 'cancel',
+    screenSelector = ".screen",
+    cancelSelector = "a[href='#cancel']",
     options = {
         duration: 100
     },
@@ -90,7 +95,7 @@ function callHandler(e){
         match = regex.hashRef.exec(href),
         handlers = WebDoc.handlers;
     
-    ddd( '[jQuery.panel] Ref: "' + match[1] + '"' );
+    ddd( '[jQuery.panel] Ref: "' + match + '"' );
     
     // If the href contains a hashRef that matches a handler
     if ( match && handlers[match[1]] ) {
@@ -101,6 +106,63 @@ function callHandler(e){
     }
 }
 
+function controlPop(e) {
+  var target = jQuery( e.target ),
+      pop = jQuery( e.delegateTarget || e.currentTarget );
+  
+  if ( target.closest(screenSelector).length ) {
+    pop
+    .addClass(activeClass)
+    .bind('submit', submitPop)
+    .bind('click', cancelPop)
+    .animate({
+      height: 64
+    }, {
+      duration: 160
+    })
+    .find('input:eq(0)')
+    // blur doesn't delegate (we need jQuery 1.4!!) so hack around it, for now
+    // TODO: The popup closes even if you click on it outside the input...
+    .bind('blur', blurPop)
+    .focus()
+    .select();
+  }
+}
+
+function submitPop(e) {
+  var pop = jQuery( e.currentTarget );
+  
+  deactivatePop(pop);
+}
+
+function cancelPop(e) {
+  var target = jQuery( e.target ),
+      pop = jQuery( e.currentTarget );
+  
+  if ( target.closest(cancelSelector).length ) {
+    deactivatePop(pop);
+  }
+}
+
+function blurPop(e) {
+  var input = jQuery( e.currentTarget ),
+      pop = input.closest('.pop');
+
+  deactivatePop(pop);
+}
+
+function deactivatePop(pop) {
+  pop
+  .removeClass(activeClass)
+  .unbind('submit', submitPop)
+  .unbind('click', cancelPop)
+  .animate({
+    height: 28
+  }, {
+    duration: 160
+  });
+}
+
 jQuery.fn[plug] = function(){
     var nodes = this;
     
@@ -108,7 +170,12 @@ jQuery.fn[plug] = function(){
     .bind('click', jQuery.delegate({
             '.toggle-head': toggleHead,
             '.toggle-foot': toggleFoot,
-            'a': callHandler
+            'a': callHandler//,
+            //'.pop': controlPop
+        })
+    )
+    .bind('dblclick', jQuery.delegate({
+            '.pop': controlPop
         })
     )
     .bind('show-head', toggleHead)
@@ -150,6 +217,87 @@ jQuery.fn[plug] = function(){
             foot: parseInt( inspector.css('bottom') ) !== 0
         });
     });
+};
+
+})(jQuery);
+
+
+// jquery.popup.js
+// 
+// Handles behaviour of panels
+// Requires jQuery.delegate
+
+(function(jQuery, undefined){
+
+var plug = 'popup',
+    screenClass = 'screen',
+    activeClass = 'active',
+    cancelClass = 'cancel',
+    screenSelector = ".screen",
+    cancelSelector = "a[href='#cancel']",
+    options = {
+        duration: 100
+    };
+
+function controlPop(e) {
+  var target = jQuery( e.target ),
+      pop = jQuery( e.delegateTarget || e.currentTarget );
+  
+  if ( target.closest(screenSelector).length ) {
+    pop
+    .addClass(activeClass)
+    .bind('submit', submitPop)
+    .bind('click', cancelPop)
+    .animate({
+      height: 64
+    }, {
+      duration: 160
+    })
+    .find('input:eq(0)')
+    // blur doesn't delegate (we need jQuery 1.4!!) so hack around it, for now
+    // TODO: The popup closes even if you click on it outside the input...
+    .bind('blur', blurPop)
+    .focus()
+    .select();
+  }
+}
+
+function submitPop(e) {
+  var pop = jQuery( e.currentTarget );
+  
+  deactivatePop(pop);
+}
+
+function cancelPop(e) {
+  var target = jQuery( e.target ),
+      pop = jQuery( e.currentTarget );
+  
+  if ( target.closest(cancelSelector).length ) {
+    deactivatePop(pop);
+  }
+}
+
+function blurPop(e) {
+  var input = jQuery( e.currentTarget ),
+      pop = input.closest('.pop');
+
+  deactivatePop(pop);
+}
+
+function deactivatePop(pop) {
+  pop
+  .removeClass(activeClass)
+  .unbind('submit', submitPop)
+  .unbind('click', cancelPop)
+  .animate({
+    height: 28
+  }, {
+    duration: 160
+  });
+}
+
+jQuery.fn[plug] = function(){
+
 };
 
 })(jQuery);

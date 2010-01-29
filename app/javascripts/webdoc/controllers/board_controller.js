@@ -119,7 +119,10 @@ WebDoc.BoardController = $.klass({
       }
     }
     
-    this._fireCurrentPageChanged();
+    //if (WebDoc.application.) {
+      this._fireCurrentPageChanged();
+    //}
+    
     $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this._currentPage));
     $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");

@@ -12,7 +12,20 @@
 var boardPanel,
     pagesPanel,
     pagesPanelWidth = 150,
-    changedFromDrag = false;
+    changedFromDrag = false,
+    pageBrowserItemsSelector = ".page_browser_items",
+    pageBrowserNumbersSelector = ".page_browser_numbered_list",
+    currentClass = "current";
+
+function preventDefault(e) {
+  // If this input is already selected, don't do nothing to it
+  if ( $( e.delegateTarget ).attr('selected') ) {
+    // Let it pass
+  }
+  else {
+    e.preventDefault();
+  }
+}
 
 WebDoc.PageBrowserController = $.klass({
   initialize: function() {
@@ -26,7 +39,7 @@ WebDoc.PageBrowserController = $.klass({
     
     this.domNode = pagesPanel;
     this.visible = false;
-    this.pageThumbs = [];
+    this.pageItems = [];
     this.pageMap = {};
     
     try {
@@ -36,7 +49,6 @@ WebDoc.PageBrowserController = $.klass({
       ddt();
     }   
     
-    WebDoc.application.boardController.addCurrentPageListener(this);
   },
   
   performAction: function(e) {
@@ -57,17 +69,17 @@ WebDoc.PageBrowserController = $.klass({
     //}    
   },
 
-  addPage: function(e) {
-      WebDoc.application.pageEditor.addPage(e);
-  },
-  
-  copyPage: function(e) {
-      WebDoc.application.pageEditor.copyPage(e);
-  },
-  
-  removePage: function(e) {
-      WebDoc.application.pageEditor.removePage(e);
-  },
+  //addPage: function(e) {
+  //    WebDoc.application.pageEditor.addPage(e);
+  //},
+  //
+  //copyPage: function(e) {
+  //    WebDoc.application.pageEditor.copyPage(e);
+  //},
+  //
+  //removePage: function(e) {
+  //    WebDoc.application.pageEditor.removePage(e);
+  //},
   
   setDocument: function(document) {
     this.document = document;   
@@ -104,67 +116,90 @@ WebDoc.PageBrowserController = $.klass({
   },
 
   initializePageBrowser: function() {
-    for (var i = 0; i < this.document.pages.length; i++) {
-      var aPage = this.document.pages[i];
-      var pageThumb = new WebDoc.PageBrowserItemView(aPage);
-      var pageListItem = $("<li>").html(pageThumb.domNode);
-      var pageListNumber = $("<li>"+(i+1)+"</li>");
-      this.domNode.find("ul#page_browser_items").append(pageListItem);
-      this.domNode.find(".page_browser_numbered_list").append(pageListNumber);
-      this.pageThumbs.push(pageThumb);
-      this.pageMap[pageThumb.domNode.attr("id")] = pageThumb;
+    ddd('[WebDoc.pageBrowserController] Initialising Page Browser');
+    
+    var pageBrowserItems = this.domNode.find( pageBrowserItemsSelector ),
+        pageBrowserNumbers = this.domNode.find( pageBrowserNumbersSelector ),
+        l = this.document.pages.length,
+        page, pageItem, pageItemNode, pageListNumber;
+    
+    this.domNodeBrowserItems = pageBrowserItems;
+    this.domNodeBrowserNumbers = pageBrowserNumbers;
+    
+    while (l--) {
+      page = this.document.pages[l];
+      pageItem = new WebDoc.PageBrowserItemView(page);
+      pageItemNode = pageItem.domNode;
+      pageListNumber = $("<li/>").text(l+1);
+      
+      pageBrowserItems.prepend(pageItemNode);
+      pageBrowserNumbers.prepend(pageListNumber);
+      
+      // Why are we maintaining two lists?
+      this.pageItems.push(pageItem);
+      this.pageMap[ page.uuid() ] = pageItem;
+      
+      pageItemNode.data('webdoc', {
+        page: page
+      });
     }
+    
     this.updateSelectedPage();
-
-    $("#page_browser_items").sortable({
-      handle: '.page_browser_item_draggable_area',
+    
+    console.log(pageBrowserItems);
+    
+    pageBrowserItems.sortable({
+      axis: 'y',
+      distance: 8,
+      opacity: 0.8,
       start:  this.dragStart.pBind(this),
       update: this.dragUpdate.pBind(this),
-      containment: 'div#page_browser_left'
+      containment: '.content'
     });
-    this.bindPageBrowserItemsEvents();
+    
+    this.bindPageBrowserEvents();
+    WebDoc.application.boardController.addCurrentPageListener(this);
   },
 
-  bindPageBrowserItemsEvents: function() {
-    this.unbindPageBrowserItemsEvents();
-    $('.page_browser_item')
-    .bind('click', this.selectCurrentPage.pBind(this))
-    //.bind('mouseover', this.changeCurrentHighlightedItem.pBind(this)); // Provisory, maybe will be used later
-    $('.page_browser_item_information').bind('click', this.showPageInspector);
-    $('.page_browser_item_title').dblclick(this.staticPanelAction.pBind(this));
-    $('.page_browser_item_title_edition').dblclick(this.editPanelAction.pBind(this));
-    $('.page_title_cancelButton').click(this.editPanelAction.pBind(this));
-    $('.page_title_saveButton').click(this.saveButtonAction.pBind(this));
-    $('.page_title_textbox').bind('keydown', this.titleBoxKeyDownAction.pBind(this));
-  },
-
-  unbindPageBrowserItemsEvents: function() {
-    $('.page_browser_item')
-    .unbind('click')
-    //.unbind('mouseover');
-    $('.page_browser_item_information').unbind('click');
-    $('.page_browser_item_title').unbind('dblclick');
-    $('.page_browser_item_title_edition').unbind('dblclick');
-    $('.page_title_cancelButton').unbind('click');
-    $('.page_title_saveButton').unbind('click');
-    $('.page_title_textbox').unbind('keydown');
+  bindPageBrowserEvents: function() {
+    // You can bind to any parent of this - .inspector might be a better choice
+    var pageBrowserItems = this.domNodeBrowserItems;
+    
+    pageBrowserItems
+    .bind('mousedown', jQuery.delegate({
+        'input[type=text]':   preventDefault
+      })
+    )
+    .bind('click', jQuery.delegate({
+        'input[type=text]':   this.editTitle.pBind(this),
+        '.cancel':            this.cancelEditTitle.pBind(this),
+        'li':                 this.selectCurrentPage.pBind(this)
+      })
+    )
+    .bind('keydown', jQuery.delegate({
+        'input[type=text]':   this.keydownEditTitle.pBind(this)
+      })
+    )
+    .bind('submit', jQuery.delegate({
+        'form':               this.submitEditTitle.pBind(this) 
+      })
+    );
   },
   
-  deletePageThumbs: function() {
-    ddd("delete pages thumbs", this.pageThumbs);
+  deletePageItems: function() {
+    ddd("delete pages thumbs", this.pageItems);
     this.domNode.find("ul").unbind();
-    for (var i = 0; i < this.pageThumbs.length; i++) {
-      this.pageThumbs[i].destroy();
+    for (var i = 0; i < this.pageItems.length; i++) {
+      this.pageItems[i].destroy();
     }
-    this.pageThumbs = [];
+    this.pageItems = [];
     delete this.pageMap;
     this.pageMap = {};
   },
-   
+  
   updateSelectedPage: function() {
-    var selectedPage = WebDoc.application.pageEditor.currentPage;
-    var target = $("#browser_item_" + selectedPage.uuid());
-    this.selectPageUI(target);
+    var page = WebDoc.application.pageEditor.currentPage;
+    this.selectPageUI( page );
   },
   
   objectChanged: function(page) {
@@ -176,15 +211,13 @@ WebDoc.PageBrowserController = $.klass({
     var pageThumb = new WebDoc.PageBrowserItemView(page);
     pageThumb.addToBrowser();
     // Update arrays
-    this.pageThumbs.push(pageThumb);
-    this.pageMap[pageThumb.domNode.attr("id")] = pageThumb;
-
-    this.bindPageBrowserItemsEvents();
+    this.pageItems.push(pageThumb);
+    this.pageMap[ page.uuid() ] = pageThumb;
   } ,
   
   pageRemoved: function(page) {
     // Deleted item in the browser is the one after the current selected
-    var currentListItem = $('.page_browser_item.page_browser_item_selected').parent().next();
+    var currentListItem = $('.page_browser_item.'+currentClass).parent().next();
     var currentItemId = "browser_item_" + page.uuid();
     ddd("removed page: "+currentItemId);
     currentListItem.remove();
@@ -192,14 +225,14 @@ WebDoc.PageBrowserController = $.klass({
     lastItem = $('ul.page_browser_numbered_list > li:last');
     lastItem.remove();
     // Update arrays
-    this.pageMap[currentItemId] = [];
-    this.removeById(this.pageThumbs, currentItemId);
+    this.pageMap[page.uuid()] = null;
+    this.removeById(this.pageItems, currentItemId);
   },
 
   pageMoved: function(page, newPosition, previousPosition) { 
     if(!changedFromDrag) { // Dragged from another session, must update GUI
-	    var itemsList = $('#page_browser_items > li');
-	    var baseItem = itemsList.eq(previousPosition);
+      var itemsList = $('#page_browser_items > li');
+      var baseItem = itemsList.eq(previousPosition);
       var itemCopy = baseItem.clone(true);
       var itemDest = itemsList.eq(newPosition);
 
@@ -210,7 +243,6 @@ WebDoc.PageBrowserController = $.klass({
         itemDest.before(itemCopy);
       }
       baseItem.remove();
-      this.bindPageBrowserItemsEvents();
     }
   },
   
@@ -219,11 +251,11 @@ WebDoc.PageBrowserController = $.klass({
     this.updateSelectedPage();
   },
 
-   dragStart: function(event, ui) {
-     ddd('Drag start');	
-   },
+  dragStart: function(event, ui) {
+    ddd('Drag start');	
+  },
 
-   dragUpdate: function(event, ui) {
+  dragUpdate: function(event, ui) {
      ddd('Drag update');
      var droppedPageBrowserItem = $(ui.item).children('.page_browser_item');
      var droppedPage = this.pageMap[droppedPageBrowserItem.attr("id")].page;
@@ -236,87 +268,100 @@ WebDoc.PageBrowserController = $.klass({
        pageToSave.save();
      }
      changedFromDrag = false;
-   },
+  },
 
-   selectCurrentPage: function(event) {
-     var targetItem = $(event.target).closest('.page_browser_item');
-     var clickedPageId = targetItem.attr("id");
-     var currentPageId = WebDoc.application.pageEditor.currentPage.uuid();     
-     if(clickedPageId.indexOf(currentPageId) == -1) {
-       this.selectPage(targetItem);
-     }
-   },
+  selectCurrentPage: function(e) {
+    var pageItem = $( e.delegateTarget || e.target ),
+        data = pageItem.data('webdoc'),
+        currentId = WebDoc.application.pageEditor.currentPage.uuid(),
+        page = data && data.page,
+        clickedId = page && page.uuid();
+    
+    //var clickedPageId = targetItem.attr("id");
+    //var currentPageId = WebDoc.application.pageEditor.currentPage.uuid();
+    
+    // If not current page, then change it
+    if( clickedId && clickedId !== currentId ) {
+      this.selectPage( page );
+    }
+  },
 
-   changeCurrentHighlightedItem: function(event) {
-     if(!$(event.target).hasClass('page_browser_item_highlighted')) {
-       $('.page_browser_item').removeClass('page_browser_item_highlighted');
-       $(event.target).closest('.page_browser_item').addClass('page_browser_item_highlighted');
-     }
-   },
+   //changeCurrentHighlightedItem: function(event) {
+   //  if(!$(event.target).hasClass('page_browser_item_highlighted')) {
+   //    $('.page_browser_item').removeClass('page_browser_item_highlighted');
+   //    $(event.target).closest('.page_browser_item').addClass('page_browser_item_highlighted');
+   //  }
+   //},
 
    showPageInspector: function(event) {
      WebDoc.application.rightBarController.showPageInspector();
    },
 
-   selectPage: function(target) {
-     // Page browser UI selection
-     this.selectPageUI(target);
+  selectPage: function( page ) {
+    // Page browser UI selection
+    this.selectPageUI( page );
+    WebDoc.application.pageEditor.loadPage( page );
+  },
 
-     // Page editor selection
-     var droppedPageId = target.attr("id");
-     var droppedPage = this.pageMap[droppedPageId].page;
-     WebDoc.application.pageEditor.loadPage(droppedPage);
-   },
+  selectPageUI: function( page ) {
+    var currentPageId = WebDoc.application.pageEditor.currentPage.uuid(),
+        newPageId = page.uuid(),
+        pageBrowserItem = this.pageMap[ page.uuid() ];
+    
+//    if ( currentPageId !== newPageId ) {
+      this.domNodeBrowserItems.find('.'+currentClass).removeClass(currentClass);
+      pageBrowserItem.domNode.addClass(currentClass);
+//    }
+  },
+  
+  editTitle: function(e) {
+    var input = $( e.target ),
+        form = input.closest('form');
+    
+    this.makeEditable(form);
+  },
+  
+  keydownEditTitle: function(e) {
+    if (event.which === 27) {
+      // Escape key
+      this.cancelEditTitle(e);
+    }
+  },
+  
+  cancelEditTitle: function(e) {
+    ddd('[WebDoc.pageBrowserController] cancelEditTitle');
+    
+    var input = $( e.target ),
+        form = input.closest('form');
+    
+    this.unmakeEditable(form);
+    return false;
+  },
+  
+  submitEditTitle: function(e) {
+    ddd('[WebDoc.pageBrowserController] submitEditTitle');
+    
+    var form = $( e.delegateTarget ),
+        input = form.find( 'input:eq(0)' ),
+        newTitle = input.val(),
+        pageItem = form.closest('li'),
+        data = pageItem.data('webdoc'),
+        page = data && data.page;
+    
+    page.setTitle(newTitle);
+    this.unmakeEditable(form);
+    return false;
+  },
+  
+  makeEditable: function(form) {
+    // Why is blur not really working properly?
+    //.blur(this.cancelEditTitle.pBind(this));
+  },
+  
+  unmakeEditable: function(form) {
 
-   selectPageUI: function(target) {
-     if(!$(target).hasClass('page_browser_item_selected')) {
-       $('.page_browser_item').removeClass('page_browser_item_selected');
-       $(target).addClass('page_browser_item_selected');
-     }
-   },
-
-   staticPanelAction: function(event) {
-     this.showEditPanel(event.target);
-   },
-
-   editPanelAction: function(event) {
-     this.showStaticPanel(event.target);
-   },
-
-   saveButtonAction: function(event) {
-     this.saveTitle(event.target);
-   },
-
-   saveTitle: function(target) {
-     var newTitle = $(target.parentNode).children('.page_title_textbox').val();
-     var pageBrowserItem = $(target).closest('.page_browser_item');
-     var page = this.pageMap[pageBrowserItem.attr("id")].page;
-     page.setTitle(newTitle);
-     this.showStaticPanel(target);
-   },
-
-   titleBoxKeyDownAction: function(event) {
-     switch(event.which){
-       case 13: // Return key
-         this.saveTitle(event.target);
-         break;
-       case 27: // Escape key
-         this.showStaticPanel(event.target);
-         break;
-     }
-   },
-
-   showEditPanel: function(target) {
-	   var textBox = $(target).next().children()[0];
-     textBox.value = $(target).closest('.page_browser_item_title').text();
-     $(target).closest('.page_browser_item_title').hide().next().show();
-     textBox.focus().select();
-   },
-
-   showStaticPanel: function(target) {
-     $(target).closest('.page_browser_item_title_edition').hide().prev().show();
-   },
-
+  },
+  
    removeById: function(arrayName,arrayElementId) {
      for(var i=0; i<arrayName.length;i++ ) { 
        if(arrayName[i].domNode.attr("id") == arrayElementId) {
@@ -325,7 +370,5 @@ WebDoc.PageBrowserController = $.klass({
      } 
    }
 });
-
-$.extend(WebDoc.PageBrowserController, {});
 
 })(jQuery);

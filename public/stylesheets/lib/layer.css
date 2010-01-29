@@ -71,6 +71,17 @@
     display: none;
 }
 
+.pop {
+    position: relative;
+}
+
+.pop .screen {
+    display: block;
+}
+.pop.active .screen {
+    display: none;
+}
+
 /* Board items */
 .item-layer {
     opacity:0;

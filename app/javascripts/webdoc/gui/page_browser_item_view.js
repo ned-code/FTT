@@ -5,71 +5,59 @@
 //= require <webdoc/model/item>
 //= require <webdoc/gui/item_thumbnail_view>
 
+(function(){
+
+var defaultTitle = 'enter a title',
+    defaultClass = 'default',
+    screenClass = 'screen layer',
+    popClass = 'pop';
+
 WebDoc.PageBrowserItemView = $.klass({
   initialize: function(page) {
     this.page = page;
-
-		try {
-			var pageTitle = this.getPageTitle(this.page),
-				titleStaticNode = $('<div/>').addClass('page_browser_item_title'),
-				titleContainerNode = $('<div/>').addClass('page_browser_item_title_container');
-			
-			this.domNode = $('<div/>').attr({
-				id: "browser_item_" + page.uuid()
-			}).addClass("page_browser_item");
-			
-			this.draggableAreaNode = $('<div/>').addClass('page_browser_item_draggable_area');
-			
-			this.titleStaticNode = titleStaticNode;
-			
-			titleStaticNode.html( pageTitle.title );
-			
-			if(pageTitle.defaultBehavior) {
-				if(this.page.nbTextItems() > 0 ) this.page.getFirstTextItem().addListener(this);
-				titleStaticNode.addClass('page_browser_item_title_default');
-			}
-			
-			this.titleEditionNode = $('<div/>').addClass('page_browser_item_title_edition');
-			
-			this.titleEditionNode.append($('<input/>').attr({
-				type: "text",
-				value: titleStaticNode.text() !== "enter a title" ? titleStaticNode.text() : "this is my title"
-			}).addClass('page_title_textbox'));
-			
-			this.titleEditionNode.append(
-				$('<input/>')
-				.attr({
-					type: "button",
-					value: "Save"
-				})
-				.addClass('page_title_saveButton')
-			);
-			
-			this.titleEditionNode.append(
-				$('<a>')
-				.attr({
-					href: "#",
-					innerHTML: "cancel"
-				})
-				.addClass('page_title_cancelButton')
-			);
-			
-			this.titleEditionNode.hide();
-			
-			titleContainerNode.append(this.titleStaticNode);
-			titleContainerNode.append(this.titleEditionNode);
-			
-			this.showInformationInspectorNode = $('<div>').addClass('page_browser_item_information');
-			
-			page.addListener(this);
-			
-			this.domNode.append(this.draggableAreaNode);
-			this.domNode.append(titleContainerNode);
-			this.domNode.append(this.showInformationInspectorNode);
-		}
-		catch(e) {
-			ddd("PageBrowserItemView: initialize: error: "+e);
-		}
+    try {
+      var titleObj = this.getPageTitle(this.page),
+          pageItem = $('<li/>').height(80),
+          pageForm = $('<form/>').attr({ method: 'post', class: popClass }),
+          pageTitle = $('<input/>').attr({ type: 'text' }),
+          pageSubmit = $('<input/>').attr({ type: 'submit' }),
+          pageCancel = $('<a/>').attr({ href: '#cancel', class: 'cancel' }),
+          pageFormScreen = $('<div/>').attr({ class: screenClass }),
+          pageItemHead = $('<div/>'),
+          pageItemThumb = $('<div/>');
+      
+      this.domNode = pageItem;
+      
+      // If the title is default
+      if(titleObj.defaultBehavior) {
+        if( this.page.nbTextItems() > 0 ) {
+          this.page.getFirstTextItem().addListener(this);
+        }
+        pageTitle.addClass( defaultClass );
+      }
+      
+      // Construct DOM tree
+      pageItem.append(
+        pageItemHead.append(
+          pageForm.append(
+            pageTitle.val( titleObj.title )
+          ).append(
+            pageSubmit.val( 'Save' )
+          ).append(
+            pageCancel.text( 'Cancel' )
+          ).append(
+            pageFormScreen
+          )
+        )
+      ).append(
+        pageItemThumb
+      );
+      
+      page.addListener(this);
+    }
+    catch(e) {
+      ddd("PageBrowserItemView: initialize: error: "+e);
+    }
   },
   
   destroy: function() {
@@ -138,11 +126,11 @@ WebDoc.PageBrowserItemView = $.klass({
             return { title: this.cropTitleToFit(page.items[itemIndex].getInnerText()), defaultBehavior: true};
           }
           else {
-            return { title: "enter a title", defaultBehavior: true};
+            return { title: defaultTitle, defaultBehavior: true};
           }
 	      }
 	    }
-	    return { title: "enter a title", defaultBehavior: true};
+	    return { title: defaultTitle, defaultBehavior: true};
     }
     else {
       return  { title: this.cropTitleToFit(page.data.title), defaultBehavior: false};
@@ -171,3 +159,5 @@ WebDoc.PageBrowserItemView = $.klass({
     }
   }
 });
+
+})();

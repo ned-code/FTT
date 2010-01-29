@@ -22,7 +22,7 @@ form div {display:inline-block;}
 
 
 
-.hide {
+/*.hide {
 	display: none;
 }
 
@@ -36,14 +36,4 @@ form div {display:inline-block;}
 
 .clear {
 	clear: both;
-}
-
-.clear-left {
-	clear: left;
-}
-
-.clear-right {
-	clear: right;
-}
-
-
+}*/

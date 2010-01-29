@@ -128,6 +128,7 @@ jQuery.extend({
                 
                 if ( node ) { 
                   ddd('[jQuery.delegate] Matched selector: "' + selector + '"');
+                  e.delegateTarget = node;
                   result = list[selector].call(node, e);
                 }
             }
@@ -144,5 +145,3 @@ jQuery.extend({
       
     }
 });
-
-jQuery.event.special.dblClickFocus

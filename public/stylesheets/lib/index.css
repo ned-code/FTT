@@ -380,10 +380,6 @@ a[href="#library"].current          { background-position: 0 -832px; }
     height: 48px;
     background-color: #dee4e6;
 }
-/* Rename to .current */
-.page_browser_item_selected {
-	background-color: #f4fbfd;
-}
 
 .page_browser_item_information {
 	width: 16px;

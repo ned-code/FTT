@@ -51,11 +51,14 @@ body.editor     { background: #bbc0c2; }
     box-shadow:         0 2px 8px rgb(77, 70, 68);
 }
 
-/* Items */
-
 .item_wrap      { border-color: rgba(76, 91, 76, 0.6); -webkit-border-radius: 2px;}
 .item_selected  { -webkit-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   -moz-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   border-color: rgba(176, 227, 0, 0.8);
                 /*border-color: rgba(197, 255, 0, 0.75);*/ }
+
+
+/* The page browser */
+
+.current        { background-color: #f4fbfd; }
