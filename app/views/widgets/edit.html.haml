@@ -1,0 +1,43 @@
+%h1 Widget edition
+
+
+= error_messages_for :widget
+- form_for @widget, :url => { :controller => "widgets", :action => "update" } do |f|
+  
+  %div
+    = f.label :title
+    %br
+    = f.text_field :title
+  %div
+    = f.label :description
+    %br
+    = f.text_area :description, :cols => 26, :rows => 10
+  %div
+    = f.label :version
+    %br
+    = f.text_field :version, :disabled => true
+  %div
+    = f.label :icon_url
+    %br
+    = f.text_field :icon_url, :disabled => true
+  %div
+    = f.label :index_url
+    %br
+    = f.text_field :index_url, :disabled => true
+  %div
+    = f.label :inspector_url
+    %br
+    = f.text_field :inspector_url, :disabled => true
+  %div
+    = f.label :width
+    %br
+    = f.text_field :width, :disabled => true
+  %div
+    = f.label :height
+    %br
+    = f.text_field :height, :disabled => true
+
+  %div
+    = f.submit 'Apply changes'
+
+= link_to t('back'), :controller => "widgets", :action => "listing"

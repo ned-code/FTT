@@ -1,21 +1,75 @@
 class Medias::Widget < Media
-  mount_uploader :file, FileUploader
   
-  #after_post_process :keep_zip_file_for_write
-  after_save :set_properties_and_send_zip_file
-  #after_destroy :delete_widget_folder
+  #before_save :set_properties_and_store_file # How bypass the save on update???
   
-protected
+  after_destroy :delete_widget_folder
   
-  # after_save
-  def set_properties_and_send_zip_file
-    unless properties.present? # workaround because after_create callback give the tmp carrierwave path
-      update_attribute(:properties, properties_from_config_xml)
-      extract_files_from_zip
+  def title
+    properties[:title]
+  end
+  
+  def description
+    properties[:description]
+  end
+  
+  def icon_url
+    properties[:icon_url]
+  end
+  
+  def index_url
+    properties[:index_url]
+  end
+  
+  def inspector_url
+    properties[:inspector_url]
+  end
+  
+  def width
+    properties[:width]
+  end
+  
+  def height
+    properties[:height]
+  end
+  
+  def version
+    properties[:version]
+  end
+  
+  def set_properties_from_config_dom(config_dom)
+    update_attribute(:properties, properties_from_config_dom(config_dom))
+  end
+  
+  def set_properties_and_store_file
+    file_type = file.content_type # Must be application/zip
+    if file_type == "application/zip"
+      config_dom = config_file_dom(file.path)
+      # Retrieve version number from config.xml file, so that the destination path can be built
+      version = config_dom.root.attribute("version").to_s
+         
+      update_attribute_without_save(:properties, properties_from_config_dom(config_dom, widget_linking_path(version)))
+      extract_files_from_zip_file(file.path, storage_destination_path(version))
     end
   end
-    
+  
+  def update_action(zip_file)
+    file_type = zip_file.content_type # Must be application/zip
+    if file_type == "application/zip"
+      config_dom = config_file_dom(zip_file.path)
+      version = config_dom.root.attribute("version").to_s
+      #puts "Current version: #{self.version} , new version: #{version}"
+      if self.version.nil? || version > self.version
+        update_attribute(:properties, properties_from_config_dom(config_dom, widget_linking_path(version)))
+
+        extract_files_from_zip_file(zip_file.path, storage_destination_path(version))
+      end
+    end
+  end
+  
   def delete_widget_folder
+    path = Pathname.new("public/uploads/medias/widget/#{uuid}/#{version}")
+    parent_path = path.parent # Gives the app path
+    FileUtils.rm_rf parent_path
     # TODO, request all object keys in path and delete all
     # path = "/widgets/#{id}/"
     # logger.debug "Removing zip files."
@@ -30,51 +84,69 @@ private
       file_name.include?(".DS_Store"))
   end
   
-  def properties_from_config_xml
-    properties = {}
-    Zip::ZipFile.open(file.path) do |zip_file|
+  def update_attribute_without_save(name, value)
+    send(name.to_s + '=', value)
+  end
+  
+  def storage_destination_path(version)
+    "public/uploads/#{self.class.to_s.underscore}/#{uuid}/#{version}"
+  end
+  
+  def widget_linking_path(version)
+    "/uploads/#{self.class.to_s.underscore}/#{uuid}/#{version}"
+  end
+  
+  def config_file_dom(zip_file_path)
+    config_file_dom = nil
+    Zip::ZipFile.open(zip_file_path) do |zip_file|
       entry = zip_file.find_entry("config.xml")
-      config_dom = REXML::Document.new(entry.get_input_stream)
-      index_url = config_dom.root.elements['content'].attribute("src").to_s
-      unless index_url.match(/http:\/\/.*/)
-        index_url = File.join(File.dirname(file.url), config_dom.root.elements['content'].attribute("src").to_s)
-      end
-      inspector_url = nil
-      if (config_dom.root.elements['inspector'])
-        inspector_url = config_dom.root.elements['inspector'].attribute('src').to_s
-        unless inspector_url.match(/http:\/\/.*/)
-          inspector_url = File.join(File.dirname(file.url), config_dom.root.elements['inspector'].attribute("src").to_s)
-        end
-      end
-      properties[:content] = config_dom.root.elements['content'].attribute("src").to_s
-      properties[:width] = config_dom.root.attribute("width").to_s
-      properties[:height] = config_dom.root.attribute("height").to_s
-      properties[:index_url] = index_url
-      properties[:icon_url] = File.join(File.dirname(file.url), "icon.png")
-      properties[:inspector_url] = inspector_url if (inspector_url)
+      config_file_dom = REXML::Document.new(entry.get_input_stream)
     end
+    config_file_dom
+  end
+  
+  def properties_from_config_dom(config_dom, destination_path)
+    properties = {}
+    index_url = config_dom.root.elements['content'].attribute("src").to_s
+    unless index_url.match(/http:\/\/.*/)
+      index_url = File.join(destination_path, config_dom.root.elements['content'].attribute("src").to_s)
+    end
+    inspector_url = nil
+    if (config_dom.root.elements['inspector'])
+      inspector_url = config_dom.root.elements['inspector'].attribute('src').to_s
+      unless inspector_url.match(/http:\/\/.*/)
+        inspector_url = File.join(destination_path, config_dom.root.elements['inspector'].attribute("src").to_s)
+      end
+    end
+    properties[:title] = config_dom.root.elements['name'].text
+    properties[:description] = config_dom.root.elements['description'].text
+    properties[:version] = config_dom.root.attribute("version").to_s
+    properties[:content] = config_dom.root.elements['content'].attribute("src").to_s
+    properties[:width] = config_dom.root.attribute("width").to_s
+    properties[:height] = config_dom.root.attribute("height").to_s
+    properties[:index_url] = index_url
+    properties[:icon_url] = File.join(destination_path, "icon.png")
+    properties[:inspector_url] = inspector_url if (inspector_url)
     properties
   end
   
   # Not working with S3 yet
-  def extract_files_from_zip
-    #    path = "/widgets/#{id}/"
+  def extract_files_from_zip_file(file_path, destination_path)
+    #path = "/widgets/#{id}/"
     #    logger.debug "Saving zip files."
     #    Zip::ZipFile.foreach(@zip_file.path) do |zip_file|
-    #      if is_valid_widget_file(zip_file.name)
-    #        logger.debug "Saving #{path + zip_file.name}"
-    #        AWS::S3::S3Object.store(path + zip_file.name,
-    #                                zip_file.get_input_stream.read,
-    #                                file.options[:bucket],
-    #                                :access => :public_read)
-    #      end
-    #    end
-    dest_path = File.dirname(file.path)
-    logger.debug "Saving zip files."
-    Zip::ZipFile.foreach(file.path) do |zip_file|
+    #    if is_valid_widget_file(zip_file.name)
+    #      logger.debug "Saving #{path + zip_file.name}"
+    #      AWS::S3::S3Object.store(path + zip_file.name,
+    #                           zip_file.get_input_stream.read,
+    #                           file.options[:bucket],
+    #                          :access => :public_read)
+    #     end
+    #   end
+    Zip::ZipFile.foreach(file_path) do |zip_file|
       if (!zip_file.directory?)
-        logger.debug "Saving #{dest_path + "\/"+ zip_file.name}"
-        filePath = dest_path + "\/" + zip_file.name
+        logger.debug "Saving #{destination_path + "\/"+ zip_file.name}"
+        filePath = destination_path + "\/" + zip_file.name
         if (is_valid_widget_file(filePath))
           FileUtils.mkdir_p(File.dirname(filePath))
           if(!File.directory?(filePath))
@@ -86,7 +158,6 @@ private
       end
     end
   end
-  
 end
 
 
