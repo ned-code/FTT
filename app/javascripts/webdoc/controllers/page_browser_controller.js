@@ -119,21 +119,21 @@ WebDoc.PageBrowserController = $.klass({
     ddd('[WebDoc.pageBrowserController] Initialising Page Browser');
     
     var pageBrowserItems = this.domNode.find( pageBrowserItemsSelector ),
-        pageBrowserNumbers = this.domNode.find( pageBrowserNumbersSelector ),
+        //pageBrowserNumbers = this.domNode.find( pageBrowserNumbersSelector ),
         l = this.document.pages.length,
         page, pageItem, pageItemNode, pageListNumber;
     
     this.domNodeBrowserItems = pageBrowserItems;
-    this.domNodeBrowserNumbers = pageBrowserNumbers;
+    //this.domNodeBrowserNumbers = pageBrowserNumbers;
     
     while (l--) {
       page = this.document.pages[l];
       pageItem = new WebDoc.PageBrowserItemView(page);
       pageItemNode = pageItem.domNode;
-      pageListNumber = $("<li/>").text(l+1);
+      //pageListNumber = $("<li/>").text(l+1);
       
       pageBrowserItems.prepend(pageItemNode);
-      pageBrowserNumbers.prepend(pageListNumber);
+      //pageBrowserNumbers.prepend(pageListNumber);
       
       // Why are we maintaining two lists?
       this.pageItems.push(pageItem);
@@ -150,9 +150,19 @@ WebDoc.PageBrowserController = $.klass({
       axis: 'y',
       distance: 8,
       opacity: 0.8,
+      containment: '.content',
       start:  this.dragStart.pBind(this),
       update: this.dragUpdate.pBind(this),
-      containment: '.content'
+      change: function(e, ui){
+        var list = jQuery( e.target );
+            items = list.children().not( ui.item[0] );
+        
+        items
+        .each(function(i){
+          var number = ( this === ui.placeholder[0] ) ? ui.item.find('.number') : jQuery('.number', this) ;
+          number.html(i+1);
+        });
+      }
     });
     
     this.bindPageBrowserEvents();
@@ -165,7 +175,6 @@ WebDoc.PageBrowserController = $.klass({
     
     pageBrowserItems
     .bind('click', jQuery.delegate({
-        //'input[type=text]':   this.editTitle.pBind(this),
         '.cancel':            this.cancelEditTitle.pBind(this),
         'li':                 this.selectCurrentPage.pBind(this)
       })

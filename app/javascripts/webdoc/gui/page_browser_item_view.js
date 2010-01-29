@@ -10,6 +10,7 @@
 var defaultTitle = 'enter a title',
     defaultClass = 'default',
     screenClass = 'screen layer',
+    numberClass = 'number',
     popClass = 'pop';
 
 WebDoc.PageBrowserItemView = $.klass({
@@ -23,6 +24,7 @@ WebDoc.PageBrowserItemView = $.klass({
           pageSubmit = $('<input/>').attr({ type: 'submit' }),
           pageCancel = $('<a/>').attr({ href: '#cancel', class: 'cancel' }),
           pageFormScreen = $('<div/>').attr({ class: screenClass }),
+          pageItemNumber = $('<span/>').attr({ class: numberClass }),
           pageItemHead = $('<div/>'),
           pageItemThumb = $('<div/>');
       
@@ -51,6 +53,8 @@ WebDoc.PageBrowserItemView = $.klass({
         )
       ).append(
         pageItemThumb
+      ).append(
+        pageItemNumber
       );
       
       page.addListener(this);
