@@ -4,7 +4,7 @@
     
   %ul#tb_1_utilities
     %li#tb_1_utilities_preview.toggle_preview
-      %a{ :href => "#"}
+      %a{ :href => "#mode-toggle"}
         quick preview
     %li#tb_1_utilities_docname
       %h2=@document.title
@@ -34,5 +34,5 @@
         %li#develop_sub_menu 
           %a{ :href => "#"} Develop
           %ul
-            %li#disable_html.action_button
-              %a{ :href => "#"} Disable HTML
+            %li.action_button
+              %a#debug-button{ :href => "#disable-html"} Disable HTML

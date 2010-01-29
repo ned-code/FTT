@@ -25,22 +25,30 @@ WebDoc.Item = $.klass(MTools.Record,
     this.page = page;  
   },
   
-  setPosition: function(newPosition) {
+  positionZ: function() {
+    return this.data.position;  
+  },
+  
+  setPositionZ: function(newPosition) {
     this.data.position = newPosition;
-    // position changed is not notified because it is always changed from the page. And this is that page that notifies
-    // item position changed  
+    this.page._itemMoved(this);
   },
   
   refresh: function($super, json) {
     var refreshInnerHtml = false;
     var refreshPreferences = false;
+    var refreshPositionZ = false;
 
+    if (this.data && this.data.position && json.item.position != this.data.position) {
+      refreshPositionZ = true;
+    }
     if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
       refreshInnerHtml = true;
     }
     if (this.data.data != null && this.data.data.preference != null && json.item.data.preference != null && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
       refreshPreferences = true;
     }
+    
     $super(json);
     if (refreshInnerHtml) {
       this.fireDomNodeChanged();
@@ -58,6 +66,9 @@ WebDoc.Item = $.klass(MTools.Record,
     
     if (refreshPreferences) {
       this.fireWidgetChanged();
+    }
+    if (refreshPositionZ) {
+      this.page._itemMoved(this);      
     }
   },
   
@@ -193,6 +204,8 @@ WebDoc.Item = $.klass(MTools.Record,
     newItem = $super();
     newItem.data.data = $.evalJSON($.toJSON(this.data.data));
     newItem.data.media_type = this.data.media_type;
+    newItem.data.media_id = this.data.media_id;
+    newItem.media = this.media;
     return newItem;
   },
   

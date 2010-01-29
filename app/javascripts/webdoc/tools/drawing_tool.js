@@ -8,8 +8,10 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   drawing: false,
   penColor: "black",
   penSize: "1",
-  initialize: function($super, toolId) {
-    $super(toolId);
+  initialize: function($super, selector, boardClass) {
+    
+    $super( selector, boardClass );
+    
     $("#colors").bind("click", function(event) {
       var link = $(event.target).closest('div')[0];
       if (link) {
@@ -33,14 +35,6 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     WebDoc.application.inspectorController.selectPalette(2);
   },
   
-  //getCursor: function() {
-  //  return "url(/images/icons/cursor_pen.png), crosshair";  
-  //},
-
-  //getCursorHeight: function() {
-  //  return 24; // height of /images/icons/cursor_pen.png
-  //},
-      
   mouseDown: function(e) {
     e.preventDefault();
     this.drawing = true;

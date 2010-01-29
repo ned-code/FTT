@@ -3,13 +3,16 @@
  * 
  * @author Julien Bachmann
 **/
+//= require <mtools/application>
 //= require <mtools/undo_manager>
 //= require <mtools/server_manager>
 //= require <mtools/uuid>
 
 //= require <webdoc/core/widget_manager>
+//= require <webdoc/core/webdoc_handlers>
+//= require <webdoc/core/pasteboard_manager>
 //= require <webdoc/adaptors/svg_renderer>
-//= require <webdoc/adaptors/collaboration_manager>
+//= require <webdoc/core/collaboration_manager>
 //= require <webdoc/controllers/board_controller>
 //= require <webdoc/library/libraries_controller>
 //= require <webdoc/controllers/right_bar_controller>
@@ -26,33 +29,43 @@
 // application singleton.
 WebDoc.application = {};
 
-WebDoc.PageEditor = $.klass({
+WebDoc.PageEditor = $.klass(MTools.Application,{
 
   currentDocument: null,
   currentPage: null,
   applicationUuid: undefined,
   
-  initialize: function(editable) {
+  initialize: function($super, editable) {
+    $super();
+    
+    // Add feature detected styles to head
+    MTools.Application.createStyle('.push-scroll {'+
+      'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
+      'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
+    '}');
+    // Set up default panel behaviour (show screen, show footer etc.)
+    jQuery(".panel").panel();
+        
     this.applicationUuid = new MTools.UUID().id;
     MTools.ServerManager.sourceId = this.applicationUuid;
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         
     WebDoc.application.widgetManager = new WebDoc.WidgetManager();
+    WebDoc.application.pasteBoardManager = new WebDoc.PasteboardManager();    
     // create all controllers
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
-    // WebDoc.application.librariesController = new WebDoc.LibrariesController();
     WebDoc.application.rightBarController = new WebDoc.RightBarController();
     WebDoc.application.inspectorController = new WebDoc.InspectorController();
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
-    
+
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
     WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
     WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
-    WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool");
+    WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
     WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
 
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
@@ -163,6 +176,18 @@ WebDoc.PageEditor = $.klass({
       this.currentDocument.addPage(copiedPage, true);
       this.loadPage(copiedPage);
     }.pBind(this));
+  },
+  
+  toggleDebugMode: function() {
+    this.disableHtml = !this.disableHtml; 
+    this.loadPageId( this.currentPage.uuid());
+    $("#debug-button").text(this.disableHtml?"Enable HTML":"Disable HTML");
+    if (this.disableHtml) {
+        $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");
+    }
+    else {
+        $("#tb_1_utilities_settings_trigger").removeClass("tb_1_utilities_settings_attention");
+    }
   },
   
   pageRemoved: function(page) {

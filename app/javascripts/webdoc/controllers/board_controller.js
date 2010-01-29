@@ -85,6 +85,9 @@ WebDoc.BoardController = $.klass({
     $(document).unbind("keydown");
     
     // Set properties
+    if (this._currentPageView) {
+      this._currentPageView.destroy();
+    }
     this._currentPageView = pageView;
     this._currentZoom = 1;
     this._selection = [];
@@ -119,7 +122,10 @@ WebDoc.BoardController = $.klass({
       }
     }
     
-    this._fireCurrentPageChanged();
+    //if (WebDoc.application.) {
+      this._fireCurrentPageChanged();
+    //}
+    
     $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this._currentPage));
     $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
@@ -187,6 +193,60 @@ WebDoc.BoardController = $.klass({
     this.currentTool = tool;
     if (this.currentTool) {
       this.currentTool.selectTool();
+    }
+  },
+  
+  moveSelectionToBack: function() {
+    var selectionLength = this.selection().length;    
+    for (var i = 0; i < selectionLength; i++) {
+      var anItem = this.selection()[i].item; 
+      var previousPosition = anItem.positionZ();     
+      this._currentPage.moveBack(anItem);
+      anItem.save();
+      WebDoc.application.undoManager.registerUndo(function() {
+        this._setItemPositionZ(anItem, previousPosition);
+      }.pBind(this));
+    }
+  },
+  
+  moveSelectionToFront: function() {
+    var selectionLength = this.selection().length;
+    for (var i = 0; i < selectionLength; i++) {
+      var anItem = this.selection()[i].item; 
+      var previousPosition = anItem.positionZ();     
+      this._currentPage.moveFront(anItem);
+      anItem.save();
+      WebDoc.application.undoManager.registerUndo(function() {
+        this._setItemPositionZ(anItem, previousPosition);
+      }.pBind(this));      
+    }    
+  },
+  
+  copySelection: function() {
+    var selectionLength = this.selection().length;
+    var itemsDataArray = [];    
+    for (var i=0; i < selectionLength; i++) {
+      var anItem = this.selection()[i].item;
+      itemsDataArray.push(anItem.getData());
+    }    
+    WebDoc.application.pasteBoardManager.putIntoPasboard("application/ub-item", $.toJSON(itemsDataArray));
+  },
+  
+  paste: function() {
+    if (!WebDoc.application.pasteBoardManager.isEmpty()) {
+      var itemsString = WebDoc.application.pasteBoardManager.getFromPasteBoard("application/ub-item");
+      var newItems = [];
+      if (itemsString) {
+        var items = $.evalJSON(itemsString);
+        for (var i = 0; i < items.length; i++) {
+          var anItem = new WebDoc.Item({
+            item: items[i]
+          });
+          var newItem = anItem.copy();
+          newItems.push(newItem);
+        }
+        this.insertItems(newItems);
+      }
     }
   },
   
@@ -338,7 +398,7 @@ WebDoc.BoardController = $.klass({
   insertItems: function(items) {
     $.each(items, function(index, item) {           
       this._currentPage.addItem(item);
-      if (!item.data.position) {
+      if (!item.data.position && item.data.media_type !== WebDoc.ITEM_TYPE_DRAWING) {
         this._currentPage.moveFront(item);  
       }
       item.isNew = true;
@@ -458,26 +518,41 @@ WebDoc.BoardController = $.klass({
     if (el.is('input') || el.is('textarea')) { 
       return;
     }
-    switch (e.which) {
-      case 8:
-      case 46:
-        this.deleteSelection(e);
-        break;
-      case 90:
-        this.zoomIn();
-        break;
-      case 85:
-        this.zoomOut();
-        break;
-      case 84:
-        this.setCurrentTool(WebDoc.application.textTool);
-        break;
-      case 80:
-        this.setCurrentTool(WebDoc.application.drawingTool);
-        break;
-      case 65:
-        this.setCurrentTool(WebDoc.application.arrowTool);
-        break;
+    if (!e.ctrlKey && !e.metaKey) {
+      switch (e.which) {
+        case 8:
+        case 46:
+          this.deleteSelection(e);
+          break;
+        case 90:
+          this.zoomIn();
+          break;
+        case 85:
+          this.zoomOut();
+          break;
+        case 84:
+          this.setCurrentTool(WebDoc.application.textTool);
+          break;
+        case 80:
+          this.setCurrentTool(WebDoc.application.drawingTool);
+          break;
+        case 65:
+          this.setCurrentTool(WebDoc.application.arrowTool);
+          break;
+      }
+    }
+    else {
+      switch (e.which) {
+        case 67:
+            this.copySelection();
+            e.preventDefault();
+            e.stopPropagation();
+          break;
+        case 86:
+            this.paste();
+            e.preventDefault();
+          break;
+      }
     }
   },
   
@@ -511,6 +586,16 @@ WebDoc.BoardController = $.klass({
     $("#board").bind("dblclick", this, this._mouseDblClick.pBind(this));
     $("#board").bind("mouseover", this, this._mouseOver.pBind(this));    
     $("#board").bind("mouseout", this, this._mouseOut.pBind(this));
+  },
+  
+  _setItemPositionZ: function(item, position) {
+    ddd("set item pos", item, position);
+    var previousPosition = item.positionZ();
+    item.setPositionZ(position);
+    item.save();
+    WebDoc.application.undoManager.registerUndo(function() {
+      this._setItemPositionZ(item, previousPosition);
+    }.pBind(this));    
   }
     
   

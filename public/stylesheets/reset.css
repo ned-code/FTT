@@ -1,6 +1,6 @@
 /* --------------------------------------------------------------
 
-   reset.css
+   reset.css from Blueprint
    * Resets default browser CSS.
 
 -------------------------------------------------------------- */
@@ -29,7 +29,7 @@ hgroup, nav, section {
 }
 
 body {
-  line-height: 1.5;
+  line-height: 1.333;
 }
 
 /* Tables still need 'cellspacing="0"' in the markup. */

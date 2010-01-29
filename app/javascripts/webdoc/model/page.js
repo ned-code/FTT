@@ -81,42 +81,32 @@ WebDoc.Page = $.klass(MTools.Record,
       this.save();
     }
   },
-  
-  setBackgroundImageAndRepeatMode: function(backgroundUrl, repeatMode, position) { 
-    var objectChanged = this.setBackgroundImage(backgroundUrl);
-    objectChanged = this.setBackgroundRepeatMode(repeatMode) || objectChanged;
-    objectChanged = this.setBackgroundPosition(position) || objectChanged;
-    if(objectChanged) {
-      this.fireObjectChanged();
-      this.save();
-    }
-  },
 
   setBackgroundImage: function(backgroundUrl) {
     WebDoc.InspectorFieldsValidator.validateBackgroundUrl(backgroundUrl);
     if(this.data.data.css.backgroundImage != backgroundUrl) {
       this.data.data.css.backgroundImage = backgroundUrl;
-      return true;
+      this.fireObjectChanged();
+      this.save();
     }
-    return false;
   },
 
   setBackgroundRepeatMode: function(repeatMode) {
     WebDoc.InspectorFieldsValidator.validateBackgroundRepeat(repeatMode);
     if(this.data.data.css.backgroundRepeat != repeatMode) {
       this.data.data.css.backgroundRepeat = repeatMode;
-      return true;
+      this.fireObjectChanged();
+      this.save();
     }
-    return false;
   },
 
   setBackgroundPosition: function(position) {
     WebDoc.InspectorFieldsValidator.validateBackgroundPosition(position);
     if(this.data.data.css.backgroundPosition != position) {
       this.data.data.css.backgroundPosition = position;
-      return true;
+      this.fireObjectChanged();
+      this.save();
     }
-    return false;
   },
 
   removeBackgroundImage: function() {
@@ -188,29 +178,25 @@ WebDoc.Page = $.klass(MTools.Record,
     this.addItem(newItem);
   },
   
+  _itemMoved: function(item) {
+    this.nonDrawingItems.sort(function(a, b) {
+      return a.data.position - b.data.position;
+    });
+    var afterItemIndex = $.inArray(item, this.nonDrawingItems);
+    this.fireItemPositionChanged(item, afterItemIndex > 0 ? this.nonDrawingItems[afterItemIndex - 1] : null);
+  },
+  
   moveFront: function(item) {
     if (this.nonDrawingItems.length > 1) {
       this.lastPosition += 1;
-      item.setPosition(this.lastPosition);
-      var previousPositionInArray = $.inArray(item, this.nonDrawingItems);
-      this.nonDrawingItems.sort(function(a, b) {
-        return a.data.position - b.data.position;
-      });
-      var newPositionInArray = $.inArray(item, this.nonDrawingItems);
-      this.fireItemPositionChanged(item, this.nonDrawingItems[this.nonDrawingItems.length - 2]);
+      item.setPositionZ(this.lastPosition);
     }
   },
   
   moveBack: function(item) {
     if (this.nonDrawingItems.length > 1) {
       this.firstPosition -= 1;
-      item.setPosition(this.firstPosition);
-      var previousPositionInArray = $.inArray(item, this.nonDrawingItems);
-      this.nonDrawingItems.sort(function(a, b) {
-        return a.data.position - b.data.position;
-      });
-      var newPositionInArray = $.inArray(item, this.nonDrawingItems);
-      this.fireItemPositionChanged(item, null);
+      item.setPositionZ(this.firstPosition);
     }
   },
   
@@ -303,7 +289,8 @@ WebDoc.Page = $.klass(MTools.Record,
     newPage = $super();
     newPage.data.data = $.evalJSON($.toJSON(this.data.data));
     newPage.data.items = [];
-    newPage.position = -1;
+    newPage.data.position = -1;
+    newPage.data.title = this.data.title;
     if (this.items && $.isArray(this.items)) {
       $.each(this.items, function() {
         var copiedItem = this.copy();

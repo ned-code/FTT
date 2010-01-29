@@ -9,8 +9,8 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   hasMoved: false,
   originalMovingPos: null,
   
-  initialize: function($super, toolId) {
-    $super(toolId);
+  initialize: function($super, selector, boardClass) {
+    $super( selector, boardClass );
     this.lastSelectedObject = {};
   },
   
@@ -67,10 +67,13 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   },
   
   mouseDblClick: function(e) {
-    ddd("dbl click", e.target);
-    var objectToEdit = this._clickedItemView(e);
-    if (WebDoc.application.boardController.editItemView(objectToEdit)) {
-      this.mouseOut(e);
+    if (!WebDoc.application.boardController.isInteractionMode()) {
+      ddd("dbl click", e.target);
+      var objectToEdit = this._clickedItemView(e);
+      if (WebDoc.application.boardController.editItemView(objectToEdit)) {
+        $(e.target).closest(".item-layer").css("opacity",0);
+        this.mouseOut(e);
+      }
     }
   },
   

@@ -1,11 +1,12 @@
 - document_title @document.title
 - session_key_name = ActionController::Base.session_options[:key]
-= render :partial => "layouts/main_editor_toolbar"
 
 #board_container.hide-scroll.board-panel.panel
   #screen.screen.layer
   #document_loading
     %img{ :src => "/images/icons/waiting_bar.gif"}
+    
+= render :partial => "layouts/main_editor_toolbar"
 
 #toolbar.toolbar-panel.panel
   %ul.panel-tools.tools.thumbs.index.icons-only.preview_hidden
@@ -47,7 +48,7 @@
       %a{ :href => "#zoom-out" , :title => "Zoom Out" }
         Zoom out
     %li>
-      %a.state_tool{ :href => "#move" , :title => "Move" }
+      %a.state-tool{ :href => "#move" , :title => "Move" }
         Move
   
   %ul#edit_tools.edit-tools.tools.thumbs.index.icons-only.preview_hidden
@@ -71,7 +72,7 @@
   %ul#misc_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li>
-      %a.state_tool{ :href => "#select" , :title => "Select" }
+      %a.state-tool{ :href => "#select" , :title => "Select" }
         Select
     %li.preview_hidden>
       %a{ :href => "#insert-html" , :title => "Insert an HTML snippet" }
@@ -80,7 +81,7 @@
       %a{ :href => "#insert-text" , :title => "Insert a Text box" }
         Text
     %li.preview_hidden>
-      %a.state_tool{ :href => "#draw" , :title => "Draw" }
+      %a.state-tool{ :href => "#draw" , :title => "Draw" }
         Draw
 
   %ul#toggle_inspector_wrap.panel-tools.tools.thumbs.index.icons-only.preview_hidden
@@ -105,51 +106,41 @@
   #page_browser_left.pages-browser.inspector
     #page_browser_container.content
       %ul.page_browser_numbered_list.vertical.numbers.index
-      %ul#page_browser_items.vertical.pages.index
+      %ul.page_browser_items.vertical.pages.index
     #page_browser_control_bar.foot
       %ul.pages-tools.tools.thumbs.index.icons-only
-        %li.action_button
-          %a{ :href => "#add-page", :title => "Add new page" }
+        %li.action_button>
+          %a{ :href => "#add-page", :title => "Add page" }
             Add
-        %li.action_button
+        %li.action_button>
+          %a{ :href => "#add-web-page", :title => "Add web page" }
+            Add Web
+        %li.action_button>
           %a{ :href => "#copy-page", :title => "Copy page" }
             Copy
-        %li.action_button
+        %li.action_button>
           %a{ :href => "#remove-page", :title => "Copy page" }
             Remove
+        %li.action_button>
+          %a{ :href => "#thumbs-view", :title => "thumbs-view" }
+            Add
 
 #right_bar.right-panel.panel
   = render :partial => 'item_inspector'
   = render :partial => 'library'
   = render :partial => 'page_inspector'
-
 :javascript
   
-  // Take string of CSS and add to head
-  function createStyle( cssString ){
-    jQuery('head').append('<style type="text/css">'+cssString+'</style>');
-  }
-
-  $(function()
-  {
+    var WebDoc;
+    if (!WebDoc) {
+      WebDoc = {};
+    }
     WebDoc.authData = {
       authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
       sessionKeyName:"#{session_key_name}",
       cookiesSessionKeyName:"#{cookies[session_key_name]}"
     };
-    $.ajaxSetup({data:{authenticity_token : WebDoc.authData.authToken}});
-    
-    //$("body").css("overflow", "hidden");
-    
-    var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
-    editor.load("#{@document.uuid}");
-    
-    // Add feature detected styles to head
-    createStyle('.push-scroll {'+
-      'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
-      'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
-    '}');
-    
-    // Set up default panel behaviour (show screen, show footer etc.)
-    jQuery(".panel").panel();
-  });
+    WebDoc.run = function() {
+      var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
+      editor.load("#{@document.uuid}");
+    } 

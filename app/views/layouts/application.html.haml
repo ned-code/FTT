@@ -5,17 +5,24 @@
     %title= "MyUniboard (#{I18n.locale}) - #{yield(:title)}"
     = stylesheet_link_tag 'reset'
     = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
-    = stylesheet_link_tag 'general'
-    = stylesheet_link_tag 'style'        
-    = javascript_include_tag 'jquery'
+    = stylesheet_link_tag 'style'
+    = stylesheet_link_tag 'style.application'
 
   %body
     #wrap
       = render :partial => "layouts/main_toolbar"    
       = yield
+    = javascript_include_tag 'jquery'      
     = javascript_include_tag 'jquery-json'
     = javascript_include_tag 'jquery-string'
     = javascript_include_tag 'jquery-ui'
+    = javascript_include_tag 'jquery.extensions'
+    =# javascript_include_tag 'jquery.panel'    
     = javascript_include_tag 'klass'
     = sprockets_include_tag      
+    :javascript      
+      $(function()
+      {
+        WebDoc.run();
+      });        
     = render :partial => "layouts/googleAnalytics"

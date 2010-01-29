@@ -44,7 +44,7 @@
 
 // Stores gap at bottom of textarea as jQuery.support.textareaMarginBottom
 // Textareas have a gap at the bottom that is not controllable by CSS, and it's different
-// in every browser. This plugin tests for that 'margin'.
+// in every browser. This plugin tests for that pseudo-margin.
 
 (function(jQuery){
     var test = jQuery("<div><textarea style='margin:0; padding:0; border: none; height: 20px;'></textarea></div>").appendTo('body'),
@@ -86,6 +86,7 @@ jQuery.fn.extend({
      * Licensed under the MIT license
      * http://benalman.com/about/license/
      **/
+    // TODO: We no longer need this when we've got jQuery 1.4 !
     
     unwrap: function() {
       this.parent(':not(body)')
@@ -126,13 +127,21 @@ jQuery.extend({
                 }
                 
                 if ( node ) { 
-                  console.log('[jQuery.delegate] Matched selector: "' + selector + '"');
+                  ddd('[jQuery.delegate] Matched selector: "' + selector + '"');
+                  e.delegateTarget = node;
                   result = list[selector].call(node, e);
                 }
             }
             
             return result;
         }
+    },
+    
+    // Some helpful regex for parsing hrefs and css urls etc.
+    
+    regex: {
+      // matches url(xxx), url('xxx') or url("xxx") and captures xxx
+      cssUrl: /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/
+      
     }
-
 });

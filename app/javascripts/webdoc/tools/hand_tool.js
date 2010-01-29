@@ -7,8 +7,8 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
 {
     moving: false,
     originalMovingPos: null,
-    initialize: function($super, toolId) {
-      $super(toolId);
+    initialize: function($super, selector, boardClass) {
+      $super(selector, boardClass);
       this.boardContainer = $("#board_container");
     },
     
