@@ -166,12 +166,8 @@ WebDoc.PageBrowserController = $.klass({
     var pageBrowserItems = this.domNodeBrowserItems;
     
     pageBrowserItems
-    .bind('mousedown', jQuery.delegate({
-        'input[type=text]':   preventDefault
-      })
-    )
     .bind('click', jQuery.delegate({
-        'input[type=text]':   this.editTitle.pBind(this),
+        //'input[type=text]':   this.editTitle.pBind(this),
         '.cancel':            this.cancelEditTitle.pBind(this),
         'li':                 this.selectCurrentPage.pBind(this)
       })
@@ -257,16 +253,22 @@ WebDoc.PageBrowserController = $.klass({
 
   dragUpdate: function(event, ui) {
      ddd('Drag update');
-     var droppedPageBrowserItem = $(ui.item).children('.page_browser_item');
-     var droppedPage = this.pageMap[droppedPageBrowserItem.attr("id")].page;
-     var droppedPagePosition = $('#page_browser_items > li').index(ui.item);
+     var dropItem = $(ui.item),
+         dropData = dropItem.data('webdoc'),
+         dropPage = dropData && dropData.page,
+         dropPageIndex = this.domNodeBrowserItems.children('li').index(ui.item),
+         pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(dropPage.uuid(), dropPageIndex);
+     
+     console.log('UPDATE');
+     
      // Define a flag to avoid rebuilding the page browser when items are dragged
      // However, if the document is opened in other sessions, updates must be done
      changedFromDrag = true;
-     var pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(droppedPage.uuid(), droppedPagePosition);
+     
      if (pageToSave) {
        pageToSave.save();
      }
+     
      changedFromDrag = false;
   },
 
@@ -314,12 +316,12 @@ WebDoc.PageBrowserController = $.klass({
 //    }
   },
   
-  editTitle: function(e) {
-    var input = $( e.target ),
-        form = input.closest('form');
-    
-    this.makeEditable(form);
-  },
+  //editTitle: function(e) {
+  //  var input = $( e.target ),
+  //      form = input.closest('form');
+  //  
+  //  this.makeEditable(form);
+  //},
   
   keydownEditTitle: function(e) {
     if (event.which === 27) {
@@ -349,7 +351,7 @@ WebDoc.PageBrowserController = $.klass({
         page = data && data.page;
     
     page.setTitle(newTitle);
-    this.unmakeEditable(form);
+    //this.unmakeEditable(form);
     return false;
   },
   
