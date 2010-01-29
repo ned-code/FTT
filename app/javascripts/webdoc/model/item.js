@@ -107,34 +107,18 @@ WebDoc.Item = $.klass(MTools.Record,
     this.fireObjectChanged();
   },
   
-  recomputeInternalSizeAndPosition: function() {
-    try {
-      var t = this.data.data.css.top || "0px", l = this.data.data.css.left || "0px", w = this.data.data.css.width || "100px", h = this.data.data.css.height || "100px";
-      this.position = {
-        top: parseFloat(t.replace("px", "")),
-        left: parseFloat(l.replace("px", ""))
-      };
-      this.size = {
-        width: parseFloat(w.replace("px", "")),
-        height: parseFloat(h.replace("px", ""))
-      };
-      WebDoc.application.inspectorController.refreshSubInspectors();
-    }
-    catch (e) {
-      ddd("error while loading item", this);
-    }    
-  },
-  
   moveTo: function(newPosition) {
-    this.data.data.css.left = newPosition.left + "px";
-    this.data.data.css.top = newPosition.top + "px";
+    this.data.data.css.left = newPosition.left;
+    this.data.data.css.top = newPosition.top;
     this.fireObjectChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();    
   },
   
   resizeTo: function(newSize) {
-    this.data.data.css.width = newSize.width + "px";
-    this.data.data.css.height = newSize.height + "px";
-    this.fireObjectChanged();    
+    this.data.data.css.width = newSize.width;
+    this.data.data.css.height = newSize.height;
+    this.fireObjectChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();
   },
 
 	setOpacity: function(newOpacity){
@@ -180,7 +164,6 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   fireObjectChanged: function($super) {
-    this.recomputeInternalSizeAndPosition();
     $super();
   },
   

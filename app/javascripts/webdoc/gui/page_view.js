@@ -125,48 +125,6 @@ WebDoc.PageView = $.klass({
     return this.itemViews[uuid];
   },
   
-  findObjectAtPoint: function(point) {
-    var matchedItems = [];
-    for (var itemId in this.itemViews) {
-      var anItemView = this.itemViews[itemId];
-      if (anItemView.coverPoint(point) && !anItemView.isBackground) {
-        matchedItems.push(anItemView);
-      }
-    }
-    if (matchedItems.length === 0) {
-      return null;
-    }
-    else {
-      var topElement = matchedItems[0];
-      var topElementZIndex = parseFloat(topElement.domNode.css("zIndex"));
-      if (isNaN(topElementZIndex)) {
-        topElementZIndex = 0;
-      }
-      for (var i = 1; i < matchedItems.length; i++) {
-        var nextElement = matchedItems[i];
-        var nextElementZIndex = nextElement.domNode.css("zIndex");
-        if (isNaN(nextElementZIndex)) {
-          nextElementZIndex = 0;
-        }
-        if (nextElementZIndex > topElementZIndex) {
-          topElement = nextElement;
-          topElementZIndex = nextElementZIndex;
-        }
-        else 
-          if (nextElementZIndex == topElementZIndex) {
-            var allChildren = this.itemDomNode.children();
-            var nextIndex = allChildren.index(nextElement.domNode);
-            var topIndex = allChildren.index(topElement.domNode);
-            if (nextIndex > topIndex) {
-              topElement = nextElement;
-            }
-          }
-      }
-      return topElement;
-    }
-  },
-  
-  
   createItemView: function(item, afterItem) {
     var itemView;
     switch (item.data.media_type) {

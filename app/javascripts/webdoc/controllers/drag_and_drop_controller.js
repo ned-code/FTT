@@ -69,7 +69,6 @@ $.extend(WebDoc.DrageAndDropController, {
               width: width + "px",
               height: height + "px"
             };
-            newItem.recomputeInternalSizeAndPosition();
             WebDoc.application.boardController.insertItems([newItem]);
           }
           break;
@@ -117,7 +116,6 @@ $.extend(WebDoc.DrageAndDropController, {
             height: height + "px"
           };
           newItem.data.data.preference.url = videoProperties.video_id;
-          newItem.recomputeInternalSizeAndPosition();
           WebDoc.application.boardController.insertItems([newItem]);
           break;
         case 'text/html' :
