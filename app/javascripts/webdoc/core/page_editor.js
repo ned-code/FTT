@@ -38,6 +38,14 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   initialize: function($super, editable) {
     $super();
     
+    // Add feature detected styles to head
+    MTools.Application.createStyle('.push-scroll {'+
+      'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
+      'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
+    '}');
+    // Set up default panel behaviour (show screen, show footer etc.)
+    jQuery(".panel").panel();
+        
     this.applicationUuid = new MTools.UUID().id;
     MTools.ServerManager.sourceId = this.applicationUuid;
     WebDoc.application.pageEditor = this;
