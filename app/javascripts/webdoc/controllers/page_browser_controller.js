@@ -146,8 +146,6 @@ WebDoc.PageBrowserController = $.klass({
     
     this.updateSelectedPage();
     
-    console.log(pageBrowserItems);
-    
     pageBrowserItems.sortable({
       axis: 'y',
       distance: 8,
@@ -258,8 +256,6 @@ WebDoc.PageBrowserController = $.klass({
          dropPage = dropData && dropData.page,
          dropPageIndex = this.domNodeBrowserItems.children('li').index(ui.item),
          pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(dropPage.uuid(), dropPageIndex);
-     
-     console.log('UPDATE');
      
      // Define a flag to avoid rebuilding the page browser when items are dragged
      // However, if the document is opened in other sessions, updates must be done
