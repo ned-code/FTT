@@ -37,13 +37,18 @@ WebDoc.Item = $.klass(MTools.Record,
   refresh: function($super, json) {
     var refreshInnerHtml = false;
     var refreshPreferences = false;
+    var refreshPositionZ = false;
 
+    if (this.data && this.data.position && json.item.position != this.data.position) {
+      refreshPositionZ = true;
+    }
     if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
       refreshInnerHtml = true;
     }
     if (this.data.data != null && this.data.data.preference != null && json.item.data.preference != null && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
       refreshPreferences = true;
     }
+    
     $super(json);
     if (refreshInnerHtml) {
       this.fireDomNodeChanged();
@@ -61,6 +66,9 @@ WebDoc.Item = $.klass(MTools.Record,
     
     if (refreshPreferences) {
       this.fireWidgetChanged();
+    }
+    if (refreshPositionZ) {
+      this.page._itemMoved(this);      
     }
   },
   
