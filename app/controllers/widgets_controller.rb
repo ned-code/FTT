@@ -80,12 +80,16 @@ class WidgetsController < ApplicationController
   
   # GET /widgets/:id/edit
   def edit
-    @widget = Medias::Widget.find_by_id(params[:id])
+    if current_user.has_role?("admin")
+      @widget = Medias::Widget.find_by_id(params[:id])
+    end
   end
   
   # GET /widgets/:id/do_update
   def do_update
-    @widget = Medias::Widget.find(params[:id])
+    if current_user.has_role?("admin")
+      @widget = Medias::Widget.find(params[:id])
+    end
   end
   
   # PUT /widgets/:id
@@ -105,10 +109,6 @@ class WidgetsController < ApplicationController
   
   # PUT /widgets/:id
   def update_action
-    # Must check the current version and only update the widget if version > current
-    # Check before upload CarrierWave so that the file isn't pushed on S3
-    # Use the request body to access the zip file and extract the version from the config.xml file
-    # if version > current, update model attributes and save, then put files on S3
     @widget = Medias::Widget.find(params[:id])
     @widget.update_action(params[:medias_widget][:widget])
     
