@@ -14,6 +14,11 @@ body.editor     { background: #bbc0c2; }
 .left-panel,
 .right-panel    { background-color: rgba(68, 75, 77, 0.6); }
 
+/* Inspectors */
+
+/* Foot contents */
+.inspector .foot > ul,
+.inspector .foot > div { background-color: rgba(220, 220, 220, 0.9); }
 
 /* Layers */
 
@@ -22,7 +27,7 @@ body.editor     { background: #bbc0c2; }
 
 /* Index */
 
-.numbers li     { background-color: #444b4d; color: white; }
+.index .number     { background-color: #444b4d; color: white; }
 
 /* Forms */
 
