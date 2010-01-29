@@ -44,7 +44,7 @@
 
 // Stores gap at bottom of textarea as jQuery.support.textareaMarginBottom
 // Textareas have a gap at the bottom that is not controllable by CSS, and it's different
-// in every browser. This plugin tests for that 'margin'.
+// in every browser. This plugin tests for that pseudo-margin.
 
 (function(jQuery){
     var test = jQuery("<div><textarea style='margin:0; padding:0; border: none; height: 20px;'></textarea></div>").appendTo('body'),

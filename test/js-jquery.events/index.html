@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+
+<title>jQuery.event.focusondblclick</title>
+
+<link rel="icon" type="image/png" href="images/favicon.png" />
+
+<style type="text/css" media="screen, projection">
+    
+    @import url('../css-reset/css/yui2-reset.css');
+    @import url('../css/test.css');
+    
+    .test {
+        margin: 0 auto 1em;
+        padding: 16px;
+        border: 1px dotted #666666;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    input:focus {
+        border: 3px solid #990033;
+        margin-top: -2px;
+        background: #ff0099;
+        outline: none;
+    }
+    
+</style>
+
+</head>
+
+<body>
+
+<h2>jquery.event.clickfocus</h2>
+
+<p>Normally, an input receives focus immediately on mousedown. By binding a <code>clickfocus</code> event, this input only receives focus after a click.</p>
+
+<form class="test">
+
+    <input id="clickfocus" type="text" />
+
+</form>
+
+<h2>jquery.event.dblclickfocus</h2>
+
+<p>By binding a <code>dblclickfocus</code> event, this input only receives focus after a double click.</p>
+
+<form class="test">
+
+    <input id="dblclickfocus" type="text" />
+
+</form>
+
+<script type="text/javascript" src="../js/jquery-1.4.1.js"></script>
+<script type="text/javascript" src="../../public/javascripts/jquery.events.js"></script>
+<script type="text/javascript">
+
+jQuery(function(){
+    jQuery('#clickfocus')
+    .bind('clickfocus', function(e){
+        if (window.console && window.console.log) { console.log('clickfocus'); }
+    });
+    
+    jQuery('#dblclickfocus')
+    .bind('dblclickfocus', function(e){
+        if (window.console && window.console.log) { console.log('dblclickfocus'); }
+    });
+});
+
+</script>
+
+</body>
+</html>

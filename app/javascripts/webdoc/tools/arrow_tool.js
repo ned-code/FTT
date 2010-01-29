@@ -71,6 +71,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
       ddd("dbl click", e.target);
       var objectToEdit = this._clickedItemView(e);
       if (WebDoc.application.boardController.editItemView(objectToEdit)) {
+        $(e.target).closest(".item-layer").css("opacity",0);
         this.mouseOut(e);
       }
     }

@@ -87,7 +87,7 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   toggleBrowser: function() {
-    var pageBroaserButton = $("#page-browser").find("a");
+    var pageBroaserButton = $("a[href='#left-panel-toggle']");
     if (this.visible) {
       pagesPanel.animate({
           marginLeft: -pagesPanelWidth

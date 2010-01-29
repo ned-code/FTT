@@ -10,6 +10,7 @@
 
 //= require <webdoc/core/widget_manager>
 //= require <webdoc/core/webdoc_handlers>
+//= require <webdoc/core/pasteboard_manager>
 //= require <webdoc/adaptors/svg_renderer>
 //= require <webdoc/core/collaboration_manager>
 //= require <webdoc/controllers/board_controller>
@@ -37,12 +38,21 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   initialize: function($super, editable) {
     $super();
     
+    // Add feature detected styles to head
+    MTools.Application.createStyle('.push-scroll {'+
+      'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
+      'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
+    '}');
+    // Set up default panel behaviour (show screen, show footer etc.)
+    jQuery(".panel").panel();
+        
     this.applicationUuid = new MTools.UUID().id;
     MTools.ServerManager.sourceId = this.applicationUuid;
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         
     WebDoc.application.widgetManager = new WebDoc.WidgetManager();
+    WebDoc.application.pasteBoardManager = new WebDoc.PasteboardManager();    
     // create all controllers
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);

@@ -84,13 +84,14 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   
   applyTextContent: function(content, classValue) {
     var previousContent = this.textView.item.data.data.innerHTML;
+    ddd("previous text content", previousContent);
     var previousClass = this.textView.item.data.data['class'];
     this.textView.item.data.data.innerHTML = content;
     this.textView.item.data.data['class'] = classValue;
     this.textView.item.fireInnerHtmlChanged();
     this.textView.item.save();
     WebDoc.application.undoManager.registerUndo(function() {
-      this._applyTextContent(previousContent, previousClass);
+      this.applyTextContent(previousContent, previousClass);
     }
 .pBind(this));
   }
