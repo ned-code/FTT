@@ -432,6 +432,7 @@ div.tabs > div {
 
 #media_drag_feedback.video { width:120px; height:90px; }
 #media_drag_feedback.image { width:120px; height:120px; }
+#media_drag_feedback.app { width:120px; height:120px; }
 
 #media_drag_feedback img {
  -webkit-box-shadow:0 2px 8px #000;
@@ -440,6 +441,7 @@ div.tabs > div {
 
 #media_drag_feedback.video img { width:120px; height:90px; }
 #media_drag_feedback.image img { width:120px; height:120px; }
+#media_drag_feedback.app img { width:120px; height:120px; }
 
 #media_drag_feedback span {
   display:block;
@@ -457,6 +459,12 @@ div.tabs > div {
   width:120px;
   height:120px;
   background:transparent url(/images/libraries/drag_image.png) no-repeat;
+}
+
+#media_drag_feedback.app span {
+  width:120px;
+  height:120px;
+  background:transparent url(/images/libraries/drag_image.png) no-repeat; /* TODO, change url path here when app image done */
 }
 
 
@@ -812,6 +820,77 @@ object:hover, object:focus, object:active {
 #videos .rows ul li.youtube a .icon_overlay {background:url(/images/libraries/youtube_mini.png) no-repeat;}
 #videos .rows ul li.vimeo a .icon_overlay {background:url(/images/libraries/vimeo_mini.png) no-repeat;}
 
+/* ========== */
+/* = Apps = */
+/* ========== */
+
+
+#apps .rows .no_items {
+  font-size:14px;
+  text-align:center;
+  display:block;
+  padding:30px 10px;
+}
+
+#apps .rows ul {
+  list-style-type:none;
+  padding:0;
+}
+
+#apps .rows ul li {
+  list-style: none;
+  padding:0 0 7px 0;
+  text-align:left;
+  clear:both;
+}
+
+#apps .rows ul li a {
+  color:#000;
+  text-decoration:none;
+  background:#fff;
+  display:block;
+  padding:8px;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+}
+
+#apps .rows ul li a span.wrap {
+  display:block;
+  float:left;
+  width:75px;
+  height:75px;
+  position:relative;
+  margin:0 8px 0 0;
+  overflow:hidden;
+}
+
+#apps .rows ul li a span.wrap img {
+  position:absolute;
+  top:50%;
+  width:75px;
+  height:75px;
+  margin-top:-38px;
+}
+
+#apps .rows ul li a .title {
+  font-weight:bold;
+  display:block;
+  font-size:12px;
+  line-height:16px;
+  padding:0 0 5px;
+}
+
+#apps .rows ul li a p.description {
+  font-size:11px;
+  color:#999;
+}
+
+#apps .rows ul li a span.version {
+  font-size:11px;
+  color:#999;
+  font-style: italic;
+}
+
 
 /* ================= */
 /* = Video Details = */
@@ -856,6 +935,55 @@ object:hover, object:focus, object:active {
 }
 
 #video_details .video_description {
+  padding: 8px 15px;
+  font-size:12px;
+  line-height:22px;
+  color:#666;
+}
+
+/* ================= */
+/* = App Details = */
+/* ================= */
+
+#app_details .single_app {
+  padding:0 15px 5px 15px;
+  margin:0 0 15px;
+  position:relative;
+  line-height:0;
+}
+
+#app_details .single_app .drag_handle {
+  width:290px;
+  height:15px;
+  padding:15px 0 0 30px;
+  background:transparent url(/images/libraries/drag_handle.png) 5px 50% no-repeat;
+  cursor:move;
+  font-weight:bold;
+  font-size:13px;
+  color:#999;
+  bottom:0;
+  left:15px;
+  -webkit-border-bottom-left-radius:8px;
+  -webkit-border-bottom-right-radius:8px;
+  -moz-border-radius:0 0 8px 8px;
+  -webkit-user-select:none;
+}
+
+#app_details .app_title {
+  font-size:17px;
+  font-weight:bold;
+  padding:20px 15px 10px 15px;
+  color:#000;
+}
+
+#app_details .app_version {
+  padding:0 15px;
+  font-size:14px;
+  font-weight:bold;
+  color:#666;
+}
+
+#app_details .app_description {
   padding: 8px 15px;
   font-size:12px;
   line-height:22px;
