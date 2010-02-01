@@ -157,13 +157,15 @@ function blurPop(e) {
 
 function deactivatePop(pop) {
   pop
-  .removeClass(activeClass)
   .unbind('submit', submitPop)
   .unbind('click', cancelPop)
   .animate({
-    height: 28
+    height: 26
   }, {
-    duration: 160
+    duration: 160,
+    complete: function(){
+      pop.removeClass(activeClass);
+    }
   });
 }
 

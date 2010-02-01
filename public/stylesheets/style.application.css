@@ -238,6 +238,52 @@ a:hover { color: #0069BF;}
     background: #fff url(../images/icons/delete_16.png) no-repeat -16px -2px ;
 }
 
+/* ======================= */
+/* = Apps administration = */
+/* ======================= */
+
+ul#widget-list {
+	list-style: none;
+}
+
+ul#widget-list li {
+	min-height: 90px;
+}
+
+.widget-container {
+	width: 300px;
+	margin-bottom: 10px;
+}
+
+.widget-title-container {
+	background: #ccc;
+	border: 1px solid #333;
+	-moz-border-radius: 5px;
+}
+
+.widget-icon {
+	width: 75px;
+	height: 75px;
+	float: left;
+	margin-right: 5px;
+	margin-top: 3px;
+}
+
+.widget-title {
+	font-style: italic;
+	font-weight: bold;
+}
+
+.widget-version {
+	margin-top: 5px;
+	font-style: italic;
+	color: #666;
+}
+
+.widget-controls {
+  color: #666;
+}
+
 /*******************/
 /* = toolbars = */
 

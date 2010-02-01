@@ -348,9 +348,23 @@ a[href="#library"]:hover            { background-position: 0 -704px; }
 a[href="#library"]:active           { background-position: 0 -768px; }
 a[href="#library"].current          { background-position: 0 -832px; }
 
-
-.pages li {
-    margin-bottom: 1px;
+.index .number {
+    position: absolute;
+    top: 8px; left: 0;
+    
+    width: 16px; height: 16px;
+    margin-left: -8px;
+    /* Just to nudge the text into place */
+    padding-left: 1px;
+    margin-bottom: 33px;
+    
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    
+    font-weight: bold;
+    line-height: 15px;
+    text-align: center;
 }
 
 .numbers {

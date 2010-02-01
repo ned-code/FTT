@@ -5,12 +5,15 @@
 
 
 WebDoc.PageThumbnailView = $.klass({
-  initialize: function(page) {
+  initialize: function(page, width, height) {
     this.page = page;
+    this.width = width;
+    this.height = height;
     this.domNode = $('<div>').attr({
       id: "thumb_" + page.uuid(),
-      draggable: "true"
-    }).addClass("page_thumb");
+      draggable: "true",
+      class: "page-thumb"
+    });
     
     this.pageThumbNode = $('<div>');
     if (this.page.data.data.externalPage) {
@@ -54,13 +57,11 @@ WebDoc.PageThumbnailView = $.klass({
     
     if (this.page.data.data.externalPage) {
       this.factor = 1;
-      pageWidth = 130;
-      pageHeight = 97;
-      this.pageThumbNode.css({ width: "130px", height:"97px"});
+      this.pageThumbNode.css({ width: this.width+"px", height: this.height+"px"});
     }
     else {
-      var horizontalFactor = 130 / pageWidth;
-      var verticalFactor = 97 / pageHeight;
+      var horizontalFactor = this.width / pageWidth;
+      var verticalFactor = this.height / pageHeight;
       if (horizontalFactor < verticalFactor) {
         this.factor = horizontalFactor;
       }
@@ -77,7 +78,7 @@ WebDoc.PageThumbnailView = $.klass({
     var width = pageWidth * this.factor;
     
     this.domNode.css({
-      top: (97 - height) / 2,
+      //top: (this.height - height) / 2,
       width: width,
       height: height
     });
