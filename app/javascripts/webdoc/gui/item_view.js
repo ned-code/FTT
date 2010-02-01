@@ -48,7 +48,15 @@ WebDoc.ItemView = $.klass({
       height: this.item.data.data.css.height
     };
     this.domNode.css(position);
-    this.objectChanged(this.item);
+
+    var itemCss = {};
+    $.extend(itemCss, this.item.data.data.css);
+    delete itemCss.top;
+    delete itemCss.left;
+    delete itemCss.width;
+    delete itemCss.height;
+    this.itemDomNode.css(itemCss);
+
   },
   
   createDomNode: function() {
@@ -93,13 +101,15 @@ WebDoc.ItemView = $.klass({
       height: this.item.data.data.css.height
     };
     this.domNode.animate(position, 'fast');
-    var itemCss = {};
-    $.extend(itemCss,this.item.data.data.css);
-    delete itemCss.top;
-    delete itemCss.left;
-    delete itemCss.width;
-    delete itemCss.height;
-    this.itemDomNode.css(itemCss);
+    if (this.itemDomNode) {
+      var itemCss = {};
+      $.extend(itemCss, this.item.data.data.css);
+      delete itemCss.top;
+      delete itemCss.left;
+      delete itemCss.width;
+      delete itemCss.height;
+      this.itemDomNode.css(itemCss);
+    }
   },
  
   
