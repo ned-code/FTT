@@ -9,7 +9,7 @@ WebDoc.ITEM_TYPE_WIDGET = "widget";
 WebDoc.Item = $.klass(MTools.Record, 
 {
   initialize: function($super, json, page, media) {
-    this.page = page
+    this.page = page;
     this.media = media;
     $super(json);
     if (!json) {
@@ -45,7 +45,7 @@ WebDoc.Item = $.klass(MTools.Record,
     if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
       refreshInnerHtml = true;
     }
-    if (this.data.data != null && this.data.data.preference != null && json.item.data.preference != null && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
+    if (this.data.data && this.data.data.preference && json.item.data.preference && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
       refreshPreferences = true;
     }
     
@@ -218,8 +218,8 @@ WebDoc.Item = $.klass(MTools.Record,
     var regexp = new RegExp("<embed[^>]*(/>|>(.*?)</embed>)", "g");
       if(html.match(regexp)) {
         // Contains embed tag, must force its wmode attrib to transparent
-        var arrMatch = null;
-        while(arrMatch = regexp.exec(html)) {
+        var arrMatch = regexp.exec(html);
+        while(arrMatch) {
           var wrapper = $('<div>').append(arrMatch[0]);
           var embedNode = $('embed', wrapper);
           if(embedNode.length > 0 && (embedNode.attr("type") == "application/x-shockwave-flash" || embedNode.attr("src").indexOf('.swf') != -1)) {
@@ -231,6 +231,7 @@ WebDoc.Item = $.klass(MTools.Record,
             }
             html = html.replace(arrMatch[0], replacedValue);
           }
+          arrMatch = regexp.exec(html);
         }
       }
       return html;
