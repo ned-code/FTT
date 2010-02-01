@@ -388,6 +388,10 @@ a:hover { color: #0069BF;}
 .page-thumb {
   margin: 0 auto;
 }
+.pop input.default {
+  font-style: italic;
+  font-weight: normal;
+}
 
 .selected_thumb {
   padding: 2px;
@@ -436,6 +440,9 @@ a:hover { color: #0069BF;}
 }
 .page_browser_items li .title {
   height: 32px;
+}
+.hide-thumbs .page-thumb {
+  display: none !important;
 }
 .pop {
   height: 26px;

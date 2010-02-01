@@ -3,6 +3,10 @@
 //= require <webdoc/model/item>
 //= require <webdoc/gui/item_thumbnail_view>
 
+(function(jQuery, undefined){
+
+var pageThumbClass = "page-thumb",
+    pageThumbSelector = ".page-thumb";
 
 WebDoc.PageThumbnailView = $.klass({
   initialize: function(page, width, height) {
@@ -11,15 +15,14 @@ WebDoc.PageThumbnailView = $.klass({
     this.height = height;
     this.domNode = $('<div>').attr({
       id: "thumb_" + page.uuid(),
-      draggable: "true",
-      class: "page-thumb"
-    });
+      draggable: "true"
+    }).addClass( pageThumbClass );
     
-    this.pageThumbNode = $('<div>');
+    this.pageThumbNode = $('<div/>');
     if (this.page.data.data.externalPage) {
       var url = $("<div/>").addClass("page_thumb_url").css("textAlign", "center").text(this.page.data.data.externalPageUrl);
       this.pageThumbNode.append(url.get(0));
-      this.domNode.addClass("page_thumb_external");
+      this.domNode.addClass("page-thumb-external");
     }
     else {
       this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
@@ -129,3 +132,5 @@ WebDoc.PageThumbnailView = $.klass({
     return itemView;
   }
 });
+
+})(jQuery);
