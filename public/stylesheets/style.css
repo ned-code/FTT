@@ -29,3 +29,8 @@ form div {display:inline-block;}
 
 * html .clearfix,
 * html form div {height:1%;}*/
+
+
+/* Typography */
+
+em { font-style: italic; }

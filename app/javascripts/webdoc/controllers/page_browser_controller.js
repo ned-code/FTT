@@ -13,9 +13,14 @@ var boardPanel,
     pagesPanel,
     pagesPanelWidth = 150,
     changedFromDrag = false,
+    defaultThumbState = false,
     pageBrowserItemsSelector = ".page_browser_items",
     pageBrowserNumbersSelector = ".page_browser_numbered_list",
-    currentClass = "current";
+    currentClass = "current",
+    pageThumbClass = "page-thumb",
+    pageThumbSelector = ".page-thumb",
+    hideThumbsClass = "hide-thumbs",
+    thumbStateButtonSelector = "a[href='#toggle-thumbs']";
 
 function preventDefault(e) {
   // If this input is already selected, don't do nothing to it
@@ -33,13 +38,14 @@ WebDoc.PageBrowserController = $.klass({
     
     boardPanel = $("#board_container");
     pagesPanel = $("#left_bar");
+    
+    // defined in CSS
     pagesPanelWidth = pagesPanel.outerWidth();
     
     ddd("Pages panel width: " + pagesPanelWidth);
     
     this.domNode = pagesPanel;
     this.visible = false;
-    this.pageItems = [];
     this.pageMap = {};
     
     try {
@@ -98,7 +104,7 @@ WebDoc.PageBrowserController = $.klass({
               });
           }
       });
-     pageBroaserButton.removeClass("current");
+     pageBroaserButton.removeClass(currentClass);
     }
     else {       
       pagesPanel.animate({
@@ -110,7 +116,7 @@ WebDoc.PageBrowserController = $.klass({
               });
           }
       });
-      pageBroaserButton.addClass("current");      
+      pageBroaserButton.addClass(currentClass);      
     }
     this.visible = !this.visible;
   },
@@ -119,24 +125,18 @@ WebDoc.PageBrowserController = $.klass({
     ddd('[WebDoc.pageBrowserController] Initialising Page Browser');
     
     var pageBrowserItems = this.domNode.find( pageBrowserItemsSelector ),
-        //pageBrowserNumbers = this.domNode.find( pageBrowserNumbersSelector ),
         l = this.document.pages.length,
         page, pageItem, pageItemNode, pageListNumber;
     
     this.domNodeBrowserItems = pageBrowserItems;
-    //this.domNodeBrowserNumbers = pageBrowserNumbers;
     
     while (l--) {
       page = this.document.pages[l];
       pageItem = new WebDoc.PageBrowserItemView(page);
       pageItemNode = pageItem.domNode;
-      //pageListNumber = $("<li/>").text(l+1);
       
       pageBrowserItems.prepend(pageItemNode);
-      //pageBrowserNumbers.prepend(pageListNumber);
       
-      // Why are we maintaining two lists?
-      this.pageItems.push(pageItem);
       this.pageMap[ page.uuid() ] = pageItem;
       
       pageItemNode.data('webdoc', {
@@ -191,13 +191,13 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   deletePageItems: function() {
-    ddd("delete pages thumbs", this.pageItems);
+    ddd("delete pages thumbs", this.pageMap);
     this.domNode.find("ul").unbind();
-    for (var i = 0; i < this.pageItems.length; i++) {
-      this.pageItems[i].destroy();
+    
+    for (var key in this.pageMap) {
+      this.pageMap[key].destroy();
     }
-    this.pageItems = [];
-    delete this.pageMap;
+    
     this.pageMap = {};
   },
   
@@ -211,26 +211,33 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   pageAdded: function(page) {
-    ddd("added page");
-    var pageThumb = new WebDoc.PageBrowserItemView(page);
-    pageThumb.addToBrowser();
-    // Update arrays
-    this.pageItems.push(pageThumb);
-    this.pageMap[ page.uuid() ] = pageThumb;
-  } ,
+    ddd("[pageBrowserController] pageAdded");
+    var currentPageId = WebDoc.application.pageEditor.currentPage.uuid(),
+        currentPageItem = this.pageMap[ currentPageId ],
+        pageItem = new WebDoc.PageBrowserItemView(page);
+    
+    this.pageMap[ page.uuid() ] = pageItem;
+    
+    if ( !this._stateThumbs ) {
+      pageItem.thumbNode.css({
+        height: 0
+      });
+    }
+    
+    // Then put it in the DOM
+    currentPageItem.domNode.after( pageItem.domNode );
+    this._updateIndexNumbers();
+    pageItem.editTitle();
+  },
   
   pageRemoved: function(page) {
-    // Deleted item in the browser is the one after the current selected
-    var currentListItem = $('.page_browser_item.'+currentClass).parent().next();
-    var currentItemId = "browser_item_" + page.uuid();
-    ddd("removed page: "+currentItemId);
-    currentListItem.remove();
-    // Remove item to numbered list
-    lastItem = $('ul.page_browser_numbered_list > li:last');
-    lastItem.remove();
-    // Update arrays
-    this.pageMap[page.uuid()] = null;
-    this.removeById(this.pageItems, currentItemId);
+    var id = page.uuid(),
+        pageBrowserItem = this.pageMap[ page.uuid() ];
+    
+    ddd('[pageBrowserController] pageRemoved: '+id);
+    
+    pageBrowserItem.domNode.remove();
+    this.pageMap[ page.uuid() ] = null;
   },
 
   pageMoved: function(page, newPosition, previousPosition) { 
@@ -293,21 +300,11 @@ WebDoc.PageBrowserController = $.klass({
         page = data && data.page,
         clickedId = page && page.uuid();
     
-    //var clickedPageId = targetItem.attr("id");
-    //var currentPageId = WebDoc.application.pageEditor.currentPage.uuid();
-    
     // If not current page, then change it
     if( clickedId && clickedId !== currentId ) {
       this.selectPage( page );
     }
   },
-
-   //changeCurrentHighlightedItem: function(event) {
-   //  if(!$(event.target).hasClass('page_browser_item_highlighted')) {
-   //    $('.page_browser_item').removeClass('page_browser_item_highlighted');
-   //    $(event.target).closest('.page_browser_item').addClass('page_browser_item_highlighted');
-   //  }
-   //},
 
    showPageInspector: function(event) {
      WebDoc.application.rightBarController.showPageInspector();
@@ -325,21 +322,15 @@ WebDoc.PageBrowserController = $.klass({
         pageBrowserItem = this.pageMap[ page.uuid() ];
     
 //    if ( currentPageId !== newPageId ) {
-      this.domNodeBrowserItems.find('.'+currentClass).removeClass(currentClass);
+      this.domNodeBrowserItems.children().removeClass(currentClass);
       pageBrowserItem.domNode.addClass(currentClass);
 //    }
   },
   
-  //editTitle: function(e) {
-  //  var input = $( e.target ),
-  //      form = input.closest('form');
-  //  
-  //  this.makeEditable(form);
-  //},
+  // Title handlers --------------------------------------------------
   
   keydownEditTitle: function(e) {
-    if (event.which === 27) {
-      // Escape key
+    if (event.which === 27) { // Escape key
       this.cancelEditTitle(e);
     }
   },
@@ -350,7 +341,6 @@ WebDoc.PageBrowserController = $.klass({
     var input = $( e.target ),
         form = input.closest('form');
     
-    //this.unmakeEditable(form);
     return false;
   },
   
@@ -365,28 +355,22 @@ WebDoc.PageBrowserController = $.klass({
         page = data && data.page;
     
     page.setTitle(newTitle);
-    //this.unmakeEditable(form);
     return false;
   },
   
-  makeEditable: function(form) {
-    // Why is blur not really working properly?
-    //.blur(this.cancelEditTitle.pBind(this));
-  },
+  // Thumbnails -----------------------------------------------------
   
-  unmakeEditable: function(form) {
-
-  },
+  _stateThumbs: defaultThumbState,
   
-  _stateThumbs: true,
+  // Methods return current state of thumbs
   
   toggleThumbs: function() {
     return this._stateThumbs ? this.hideThumbs() : this.showThumbs() ;
   },
   
   hideThumbs: function() {
-    this._stateThumbs = false;
-    var thumbs = this.domNodeBrowserItems.find('.page-thumb');
+    var browserNode = this.domNodeBrowserItems,
+        thumbs = browserNode.find( pageThumbSelector );
     
     thumbs
     .animate({
@@ -394,31 +378,33 @@ WebDoc.PageBrowserController = $.klass({
     }, {
       duration: 200,
       complete: function(){
-        thumbs.hide();
+        browserNode.addClass( hideThumbsClass );
       }
     });
+    
+    $( thumbStateButtonSelector ).removeClass( currentClass );
+    
+    this._stateThumbs = false;
+    return this._stateThumbs;
   },
   
   showThumbs: function() {
-    this._stateThumbs = true;
-    var thumbs = this.domNodeBrowserItems.find('.page-thumb');
+    var browserNode = this.domNodeBrowserItems,
+        thumbs = browserNode.find( pageThumbSelector );
     
+    browserNode.removeClass( hideThumbsClass );    
     thumbs
-    .show()
     .animate({
       height: 75
     }, {
       duration: 200
     });
-  },
-  
-   removeById: function(arrayName,arrayElementId) {
-     for(var i=0; i<arrayName.length;i++ ) { 
-       if(arrayName[i].domNode.attr("id") == arrayElementId) {
-         arrayName.splice(i,1); 
-       }
-     } 
-   }
+    
+    $( thumbStateButtonSelector ).addClass( currentClass );
+    
+    this._stateThumbs = true;
+    return this._stateThumbs;
+  }
 });
 
 })(jQuery);
