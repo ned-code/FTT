@@ -12,12 +12,14 @@
           %a{ :href =>'#videos'} Videos
         %li.apps
           %a{ :href =>'#apps'} Apps
+        %li.web-browser
+          %a{ :href =>'#web-browser'} Web          
     #images.view
       .toolbar
         %h1 Images
         %a#add_images_button.button.slideup{ :href =>'#add_images' } Add Images
         %a.back{ :href =>'#' } Back
-      .tabs
+      .tabs.view_content
         %ul.tab_navigation
           %li
             %a.my_images{ :href => '' } My Images
@@ -59,31 +61,33 @@
       .toolbar
         %h1 Image
         %a.back{ :href =>'#' } Back
-      .single_image
-        %a{ :href => "", :onclick => "window.open(this.getAttribute('href'), '_blank'); return false;" }
-          %img{ :src => "", :alt => "" }
-          .icon_overlay
-      %h4.image_name
-      %h5.image_size
-      .actions
-        %ul
-          %li
-            %a.disabled#add_image_to_page_action{ :href => "" } Add to page
-          %li
-            %a#set_image_as_bg_action{ :href => "" } Set as background
-          %li.dyn.flickr
-            %a#show_flickr_page_action{ :href => "" } Show photo page on Flickr
-          %li.dyn.flickr.google
-            %a#delete_from_my_images_action{ :href => "" } Remove from My Images
-          %li.dyn.my_image
-            %a#delete_image_action{ :href => "" } Delete image
-          %li.dyn.flickr.google
-            %a#add_to_my_images_action{ :href => "" } Add to My Images
+      
+      .view_content
+        .single_image
+          %a{ :href => "", :onclick => "window.open(this.getAttribute('href'), '_blank'); return false;" }
+            %img{ :src => "", :alt => "" }
+            .icon_overlay
+        %h4.image_name
+        %h5.image_size
+        .actions
+          %ul
+            %li
+              %a.disabled#add_image_to_page_action{ :href => "" } Add to page
+            %li
+              %a#set_image_as_bg_action{ :href => "" } Set as background
+            %li.dyn.flickr
+              %a#show_flickr_page_action{ :href => "" } Show photo page on Flickr
+            %li.dyn.flickr.google
+              %a#delete_from_my_images_action{ :href => "" } Remove from My Images
+            %li.dyn.my_image
+              %a#delete_image_action{ :href => "" } Delete image
+            %li.dyn.flickr.google
+              %a#add_to_my_images_action{ :href => "" } Add to My Images
     #videos.view
       .toolbar
         %h1 Videos
         %a.back{ :href =>'#' } Back
-      .tabs
+      .tabs.view_content
         %ul.tab_navigation
           %li
             %a.web_videos{ :href => '' } Web
@@ -116,25 +120,45 @@
       .toolbar
         %h1 Apps
         %a.back{ :href =>'#' } Back
-      #apps_library_wrap
+      #apps_library_wrap.view_content
         %ul.thumbs.index.icons-only
     #video_details.view.details_view
       .toolbar
         %h1 Video
         %a.back{ :href =>'#' } Back
-      %h4.video_name
-      .single_video
-        .drag_handle drag and drop to add
-      %h5.view_count
-        %span
-        = " views"
-      %p.video_description
-      .actions
-        %ul
-          %li
-            %a#show_video_page_action{ :href => "" } Show on *
-          %li
-            %a#delete_from_my_videos_action{ :href => "" } Remove from My Videos
-          %li
-            %a#add_to_my_videos_action{ :href => "" } Add to My Videos
+      .view_content
+        %h4.video_name
+        .single_video
+          .drag_handle drag and drop to add
+        %h5.view_count
+          %span
+          = " views"
+        %p.video_description
+        .actions
+          %ul
+            %li
+              %a#show_video_page_action{ :href => "" } Show on *
+            %li
+              %a#delete_from_my_videos_action{ :href => "" } Remove from My Videos
+            %li
+              %a#add_to_my_videos_action{ :href => "" } Add to My Videos
+    #web-browser.view
+      .toolbar
+        %h1 Web browser
+        %a.back{ :href =>'#' } Back
+      #web-browser-ui.panel.view_content
+        .inspector
+          %ul.index.head
+            %li>
+              %a#go_backward{ :href => "" } Back
+            %li>
+              %a#go_forward{ :href => "" } Forward
+            %li>
+              %a#favorites{ :href => "" } Favorites
+            %li>
+              %a#refresh{ :href => "" } Refresh
+            %li>
+              %input
+          .content
+            %iframe{ :src => "http://m.flickr.com", :style => "width:100%; height:100%"}           
 
