@@ -248,12 +248,12 @@ a[href="#next-page"]                { background-position: 0 -1216px; }
 a[href="#next-page"]:hover          { background-position: 0 -1280px; }
 a[href="#next-page"]:active         { background-position: 0 -1344px; }
 
-a[href="#thumbs-view"]                { background-position: 0 -1408px; }
-a[href="#thumbs-view"]:hover          { background-position: 0 -1472px; }
-a[href="#thumbs-view"]:active         { background-position: 0 -1536px; }
-a[href="#thumbs-view"].current        { background-position: 0 -1600px; }
-a[href="#thumbs-view"].current:hover  { background-position: 0 -1664px; }
-a[href="#thumbs-view"].current:active { background-position: 0 -1728px; }
+a[href="#toggle-thumbs"]                { background-position: 0 -1408px; }
+a[href="#toggle-thumbs"]:hover          { background-position: 0 -1472px; }
+a[href="#toggle-thumbs"]:active         { background-position: 0 -1536px; }
+a[href="#toggle-thumbs"].current        { background-position: 0 -1600px; }
+a[href="#toggle-thumbs"].current:hover  { background-position: 0 -1664px; }
+a[href="#toggle-thumbs"].current:active { background-position: 0 -1728px; }
 
 /* Edit tools */
 

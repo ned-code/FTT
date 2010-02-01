@@ -110,26 +110,31 @@ function callHandler(e){
     }
 }
 
+function openPop(e) {
+  var pop = jQuery( e.delegateTarget || e.currentTarget );
+  
+  pop
+  .addClass(activeClass)
+  .bind('submit', submitPop)
+  .bind('click', cancelPop)
+  .animate({
+    height: 64
+  }, {
+    duration: 160
+  })
+  .find('input:eq(0)')
+  // blur doesn't delegate (we need jQuery 1.4!!) so hack around it, for now
+  // TODO: The popup closes even if you click on it outside the input...
+  .bind('blur', blurPop)
+  .focus()
+  .select();
+}
+
 function controlPop(e) {
-  var target = jQuery( e.target ),
-      pop = jQuery( e.delegateTarget || e.currentTarget );
+  var target = jQuery( e.target );
   
   if ( target.closest(screenSelector).length ) {
-    pop
-    .addClass(activeClass)
-    .bind('submit', submitPop)
-    .bind('click', cancelPop)
-    .animate({
-      height: 64
-    }, {
-      duration: 160
-    })
-    .find('input:eq(0)')
-    // blur doesn't delegate (we need jQuery 1.4!!) so hack around it, for now
-    // TODO: The popup closes even if you click on it outside the input...
-    .bind('blur', blurPop)
-    .focus()
-    .select();
+    openPop(e);
   }
 }
 
@@ -180,8 +185,12 @@ jQuery.fn[plug] = function(){
             //'.pop': controlPop
         })
     )
+    .bind('open', jQuery.delegate({
+            '.pop': openPop
+        })
+    )
     .bind('dblclick', jQuery.delegate({
-            '.pop': controlPop
+            '.pop': openPop
         })
     )
     .bind('show-head', toggleHead)
