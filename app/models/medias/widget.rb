@@ -41,8 +41,8 @@ class Medias::Widget < Media
   end
   
   def set_properties_and_store_file
-    file_type = file.content_type # Must be application/zip
-    if file_type == "application/zip"
+    file_type = file.content_type # Must be application/zip or application/octet-stream
+    if file_type == "application/zip" || file_type == "application/octet-stream"
       config_dom = config_file_dom(file.path)
       # Retrieve version number from config.xml file, so that the destination path can be built
       version = config_dom.root.attribute("version").to_s
@@ -53,8 +53,8 @@ class Medias::Widget < Media
   end
   
   def update_action(zip_file)
-    file_type = zip_file.content_type # Must be application/zip
-    if file_type == "application/zip"
+    file_type = zip_file.content_type # Must be application/zip or application/octet-stream
+    if file_type == "application/zip" || file_type == "application/octet-stream"
       config_dom = config_file_dom(zip_file.path)
       version = config_dom.root.attribute("version").to_s
       #puts "Current version: #{self.version} , new version: #{version}"

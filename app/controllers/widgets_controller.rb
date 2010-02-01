@@ -82,6 +82,8 @@ class WidgetsController < ApplicationController
   def edit
     if current_user.has_role?("admin")
       @widget = Medias::Widget.find_by_id(params[:id])
+    else
+      redirect_back_or_default
     end
   end
   
@@ -89,6 +91,8 @@ class WidgetsController < ApplicationController
   def do_update
     if current_user.has_role?("admin")
       @widget = Medias::Widget.find(params[:id])
+    else
+      redirect_back_or_default
     end
   end
   
