@@ -145,6 +145,7 @@ WebDoc.PageBrowserController = $.klass({
     }
     
     this.updateSelectedPage();
+    this._updateIndexNumbers();
     
     pageBrowserItems.sortable({
       axis: 'y',
@@ -249,6 +250,14 @@ WebDoc.PageBrowserController = $.klass({
     }
   },
   
+  _updateIndexNumbers: function(){
+    this.domNodeBrowserItems.children()
+    .each(function(i){
+      var number = jQuery('.number', this) ;
+      number.html(i+1);
+    });
+  },
+  
   currentPageChanged: function() {
     ddd("update selected page in page browser");
     this.updateSelectedPage();
@@ -341,7 +350,7 @@ WebDoc.PageBrowserController = $.klass({
     var input = $( e.target ),
         form = input.closest('form');
     
-    this.unmakeEditable(form);
+    //this.unmakeEditable(form);
     return false;
   },
   
@@ -367,6 +376,40 @@ WebDoc.PageBrowserController = $.klass({
   
   unmakeEditable: function(form) {
 
+  },
+  
+  _stateThumbs: true,
+  
+  toggleThumbs: function() {
+    return this._stateThumbs ? this.hideThumbs() : this.showThumbs() ;
+  },
+  
+  hideThumbs: function() {
+    this._stateThumbs = false;
+    var thumbs = this.domNodeBrowserItems.find('.page-thumb');
+    
+    thumbs
+    .animate({
+      height: 0
+    }, {
+      duration: 200,
+      complete: function(){
+        thumbs.hide();
+      }
+    });
+  },
+  
+  showThumbs: function() {
+    this._stateThumbs = true;
+    var thumbs = this.domNodeBrowserItems.find('.page-thumb');
+    
+    thumbs
+    .show()
+    .animate({
+      height: 75
+    }, {
+      duration: 200
+    });
   },
   
    removeById: function(arrayName,arrayElementId) {

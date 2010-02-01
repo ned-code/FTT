@@ -36,5 +36,7 @@ WebDoc.handlers = {
   'delete':               function(e) { WebDoc.application.boardController.deleteSelection(); },
   
   'mode-toggle':          function(e) { WebDoc.application.boardController.toggleInteractionMode(); },
-  'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); }
+  'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); },
+  
+  'toggle-thumbs':        function(e) { WebDoc.application.pageBrowserController.toggleThumbs(); }
 };
