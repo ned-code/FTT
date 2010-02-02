@@ -137,6 +137,7 @@ WebDoc.PageBrowserController = $.klass({
     
     this.updateSelectedPage();
     this._updateIndexNumbers();
+    this._updateThumbs();
     
     pageBrowserItems.sortable({
       axis: 'y',
@@ -333,7 +334,7 @@ WebDoc.PageBrowserController = $.klass({
 //    }
   },
   
-  // Title handlers --------------------------------------------------
+  // Titles ---------------------------------------------------------
   
   keydownEditTitle: function(e) {
     if (event.which === 27) { // Escape key
@@ -368,7 +369,20 @@ WebDoc.PageBrowserController = $.klass({
   
   _stateThumbs: defaultThumbState,
   
-  // Methods return current boolean state of thumbs
+  _updateThumbs: function(){
+    var browserNode = this.domNodeBrowserItems;
+    
+    if (this._stateThumbs) {
+      browserNode.removeClass( hideThumbsClass );
+      $( thumbStateButtonSelector ).addClass( activeClass );
+    }
+    else {
+      browserNode.addClass( hideThumbsClass );
+      $( thumbStateButtonSelector ).removeClass( activeClass );
+    }
+  },
+  
+  // Methods return current (boolean) state of thumbs
   
   toggleThumbs: function() {
     return this._stateThumbs ? this.hideThumbs() : this.showThumbs() ;
