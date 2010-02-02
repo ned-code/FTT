@@ -17,20 +17,11 @@ var boardPanel,
     pageBrowserItemsSelector = ".page_browser_items",
     pageBrowserNumbersSelector = ".page_browser_numbered_list",
     currentClass = "current",
+    activeClass = "active",
     pageThumbClass = "page-thumb",
     pageThumbSelector = ".page-thumb",
     hideThumbsClass = "hide-thumbs",
     thumbStateButtonSelector = "a[href='#toggle-thumbs']";
-
-function preventDefault(e) {
-  // If this input is already selected, don't do nothing to it
-  if ( $( e.delegateTarget ).attr('selected') ) {
-    // Let it pass
-  }
-  else {
-    e.preventDefault();
-  }
-}
 
 WebDoc.PageBrowserController = $.klass({
   initialize: function() {
@@ -166,27 +157,27 @@ WebDoc.PageBrowserController = $.klass({
       }
     });
     
-    this.bindPageBrowserEvents();
+    this.bindEventHandlers();
     WebDoc.application.boardController.addCurrentPageListener(this);
   },
-
-  bindPageBrowserEvents: function() {
+  
+  bindEventHandlers: function() {
     // You can bind to any parent of this - .inspector might be a better choice
     var pageBrowserItems = this.domNodeBrowserItems;
     
     pageBrowserItems
     .bind('click', jQuery.delegate({
-        '.cancel':            this.cancelEditTitle.pBind(this),
-        'li':                 this.selectCurrentPage.pBind(this)
-      })
+        '.cancel':          this.cancelEditTitle,
+        'li':               this.selectCurrentPage
+      }, this)
     )
     .bind('keydown', jQuery.delegate({
-        'input[type=text]':   this.keydownEditTitle.pBind(this)
-      })
+        'input[type=text]': this.keydownEditTitle
+      }, this)
     )
     .bind('submit', jQuery.delegate({
-        'form':               this.submitEditTitle.pBind(this) 
-      })
+        'form':             this.submitEditTitle 
+      }, this)
     );
   },
   
@@ -210,11 +201,14 @@ WebDoc.PageBrowserController = $.klass({
     
   },
   
+  // Called when you or someone else has edited a new page
+  
   pageAdded: function(page) {
     ddd("[pageBrowserController] pageAdded");
     var currentPageId = WebDoc.application.pageEditor.currentPage.uuid(),
         currentPageItem = this.pageMap[ currentPageId ],
-        pageItem = new WebDoc.PageBrowserItemView(page);
+        pageItem = new WebDoc.PageBrowserItemView(page),
+        pos = page.data.position;
     
     this.pageMap[ page.uuid() ] = pageItem;
     
@@ -225,9 +219,14 @@ WebDoc.PageBrowserController = $.klass({
     }
     
     // Then put it in the DOM
-    currentPageItem.domNode.after( pageItem.domNode );
+    if (pos) {
+      this.domNodeBrowserItems.children().eq(pos-1).after( pageItem.domNode );
+    }
+    else {
+      this.domNodeBrowserItems.prepend( pageItem.domNode );
+    }
+    
     this._updateIndexNumbers();
-    pageItem.editTitle();
   },
   
   pageRemoved: function(page) {
@@ -309,7 +308,14 @@ WebDoc.PageBrowserController = $.klass({
    showPageInspector: function(event) {
      WebDoc.application.rightBarController.showPageInspector();
    },
-
+  
+  editPageTitle: function(page){
+    ddd('[pageBrowserController] editPageTitle');
+    var currentPageItem = this.pageMap[ page.uuid() ];
+    
+    currentPageItem.editTitle();
+  },
+  
   selectPage: function( page ) {
     // Page browser UI selection
     this.selectPageUI( page );
@@ -362,7 +368,7 @@ WebDoc.PageBrowserController = $.klass({
   
   _stateThumbs: defaultThumbState,
   
-  // Methods return current state of thumbs
+  // Methods return current boolean state of thumbs
   
   toggleThumbs: function() {
     return this._stateThumbs ? this.hideThumbs() : this.showThumbs() ;
@@ -382,7 +388,7 @@ WebDoc.PageBrowserController = $.klass({
       }
     });
     
-    $( thumbStateButtonSelector ).removeClass( currentClass );
+    $( thumbStateButtonSelector ).removeClass( activeClass );
     
     this._stateThumbs = false;
     return this._stateThumbs;
@@ -400,7 +406,7 @@ WebDoc.PageBrowserController = $.klass({
       duration: 200
     });
     
-    $( thumbStateButtonSelector ).addClass( currentClass );
+    $( thumbStateButtonSelector ).addClass( activeClass );
     
     this._stateThumbs = true;
     return this._stateThumbs;
