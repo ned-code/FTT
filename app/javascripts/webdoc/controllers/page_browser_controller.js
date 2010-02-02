@@ -337,7 +337,7 @@ WebDoc.PageBrowserController = $.klass({
   // Titles ---------------------------------------------------------
   
   keydownEditTitle: function(e) {
-    if (event.which === 27) { // Escape key
+    if (e.which === 27) { // Escape key
       this.cancelEditTitle(e);
     }
   },
