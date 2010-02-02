@@ -19,7 +19,11 @@ WebDoc.ItemView = $.klass({
     // item wrapper    
     this.domNode = $("<div/>").addClass("item_wrap"); 
 
-    this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css("overflow", "hidden");
+    this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
+        overflow: "hidden",
+        width: "100%",
+        height: "100%"
+      });
     this.itemLayerDomNode = $("<div>").addClass("layer").addClass("screen").addClass("item-layer");
     this.itemLayerDomNode.css("display", "block");
     this.domNode.append(this.itemDomNode);
@@ -123,7 +127,11 @@ WebDoc.ItemView = $.klass({
     if (!WebDoc.application.pageEditor.disableHtml) {
       this.unSelect();
       this.itemDomNode.remove();
-      this.itemDomNode = this.createDomNode();
+      this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
+        overflow: "hidden",
+        width: "100%",
+        height: "100%"
+      });
       this.domNode.append(this.itemDomNode);
       this.select();
     }

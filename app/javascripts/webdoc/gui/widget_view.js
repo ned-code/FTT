@@ -36,26 +36,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       }.pBind(this));
       
     }
-    // try to resize to the correct size
-    if (this.item.data.data.css.width == "0px") {
-      var innerWidth = widgetNode.find(":first").width();
-      var innerHeight = widgetNode.find(":first").height();
-      ddd("inner size");
-      ddd(innerWidth + " - " + innerHeight);
-      ddd("--------------------");
-      if (innerWidth && innerHeight) {
-        this.item.resizeTo({
-          width: innerWidth,
-          height: innerHeight
-        });
-      }
-      else {
-        this.item.resizeTo({
-          width: 150,
-          height: 150
-        });
-      }
-    }
   
     return widgetNode;
   },
