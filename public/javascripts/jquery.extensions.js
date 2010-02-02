@@ -111,8 +111,16 @@ jQuery.extend({
     // Eg:
     // .bind('click', jQuery.delegate({'selector': fn}))
     
-    delegate: function(list){
+    delegate: function(list, context){
+        console.log('CONTEXT');
+        console.log(context);
+        
+        console.log(this);
+        
         return function(e){
+            console.log('CONTEXT');
+            console.log(context);
+            
             var target = jQuery(e.target),
                 data = target.data("closest") || {},
                 closest, node, result;
@@ -129,7 +137,7 @@ jQuery.extend({
                 if ( node ) { 
                   ddd('[jQuery.delegate] Matched selector: "' + selector + '"');
                   e.delegateTarget = node;
-                  result = list[selector].call(node, e);
+                  result = list[selector].call( context || node, e );
                 }
             }
             

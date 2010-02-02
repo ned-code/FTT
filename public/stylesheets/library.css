@@ -474,7 +474,7 @@ div.tabs > div {
 #media_drag_feedback.app span {
   width:120px;
   height:120px;
-  background:transparent url(/images/libraries/drag_image.png) no-repeat; /* TODO, change url path here when app image done */
+  background:transparent url(/images/libraries/drag_app.png) no-repeat;
 }
 
 
