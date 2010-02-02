@@ -83,9 +83,8 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     {
       this.currentDocument = data[0];
       this.currentDocument.addListener(this);
-      WebDoc.application.pageBrowserController.setDocument(this.currentDocument);
       this.loadPageId(window.location.hash.replace("#", ""));
-      WebDoc.application.pageBrowserController.initializePageBrowser();
+      WebDoc.application.pageBrowserController.setDocument(this.currentDocument);      
       ddd("check editablity");
       if (WebDoc.application.boardController.isEditable()) {
         ddd("Show lib");

@@ -6,125 +6,73 @@
 //= require <webdoc/gui/page_thumbnail_view>
 //= require <webdoc/gui/page_browser_item_view>
 
-(function(jQuery, undefined){
-
-// Default settings
-var boardPanel,
-    pagesPanel,
-    pagesPanelWidth = 150,
-    changedFromDrag = false,
-    defaultThumbState = false,
-    pageBrowserItemsSelector = ".page_browser_items",
-    pageBrowserNumbersSelector = ".page_browser_numbered_list",
-    currentClass = "current",
-    pageThumbClass = "page-thumb",
-    pageThumbSelector = ".page-thumb",
-    hideThumbsClass = "hide-thumbs",
-    thumbStateButtonSelector = "a[href='#toggle-thumbs']";
-
-function preventDefault(e) {
-  // If this input is already selected, don't do nothing to it
-  if ( $( e.delegateTarget ).attr('selected') ) {
-    // Let it pass
-  }
-  else {
-    e.preventDefault();
-  }
-}
-
 WebDoc.PageBrowserController = $.klass({
-  initialize: function() {
-    ddd("init pages panel");
+  
+  PAGE_BROWSER_ITEM_SELECTOR: ".page_browser_items",
+  PAGE_BROWSER_NUMBER_SELECTOR: ".page_browser_numbered_list",
+  CURRENT_CLASS: "current",
+  PAGE_THUMB_CLASS: "page-thumb",
+  PAGE_THUMB_SELECTOR: ".page-thumb",
+  HIDE_THUMB_CLASS: "hide-thumbs",
+  THUMB_STATE_BUTTON_SELECTOR: "a[href='#toggle-thumbs']",
+  LEFT_BAR_BUTTON_SELECTOR: "a[href='#left-panel-toggle']",
     
-    boardPanel = $("#board_container");
-    pagesPanel = $("#left_bar");
+  initialize: function() {
+    ddd("[PageBrowserController] init");
+    
+    this.domNode = $("#left_bar");
+    this._changedFromDrag = false;
+    this._stateThumbs = false;
     
     // defined in CSS
-    pagesPanelWidth = pagesPanel.outerWidth();
+    this._pagesPanelWidth = this.domNode.outerWidth();
     
-    ddd("Pages panel width: " + pagesPanelWidth);
+    ddd("[PageBrowserController] Pages panel width: " + this._pagesPanelWidth);
     
-    this.domNode = pagesPanel;
     this.visible = false;
-    this.pageMap = {};
-    
-    try {
-      $("#page_browser_control_bar").click(this.performAction.pBind(this));
-    }
-    catch (ex) {
-      ddt();
-    }   
-    
+    this.pageMap = {};  
   },
-  
-  performAction: function(e) {
-    //e.preventDefault();
-    //clickedButton = $(e.target).closest(".action_button");
-    //try {
-    //  // first look if action is defined in the page browser controller. Otherwise try to delegate the action to the page editor
-    //  if (this[clickedButton.attr("id")]) {
-    //    this[clickedButton.attr("id")].apply(this, [e]);
-    //  }
-    //  else {
-    //    WebDoc.application.pageEditor[clickedButton.attr("id")].apply(WebDoc.application.pageEditor, [e]);
-    //  }
-    //}
-    //catch(ex) {
-    //  ddd("unknown toolbar action: " + clickedButton.attr("id"));
-    //  ddt();
-    //}    
-  },
-
-  //addPage: function(e) {
-  //    WebDoc.application.pageEditor.addPage(e);
-  //},
-  //
-  //copyPage: function(e) {
-  //    WebDoc.application.pageEditor.copyPage(e);
-  //},
-  //
-  //removePage: function(e) {
-  //    WebDoc.application.pageEditor.removePage(e);
-  //},
   
   setDocument: function(document) {
     this.document = document;   
-    this.document.addListener(this); 
+    this.document.addListener(this);
+    this._initializePageBrowser(); 
   },
   
   toggleBrowser: function() {
-    var pageBroaserButton = $("a[href='#left-panel-toggle']");
+    ddd("toggle browser");
+    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
     if (this.visible) {
-      pagesPanel.animate({
-          marginLeft: -pagesPanelWidth
+      this.domNode.animate({
+          marginLeft: - this._pagesPanelWidth
       }, {
           step: function(val){
-              boardPanel.css({
-                  left: pagesPanelWidth + val
+              WebDoc.application.boardController.boardContainerNode.css({
+                  left: this._pagesPanelWidth + val
               });
-          }
+          }.pBind(this)
       });
-     pageBroaserButton.removeClass(currentClass);
+     pageBrowserButton.removeClass(this.CURRENT_CLASS);
     }
     else {       
-      pagesPanel.animate({
+      this.domNode.animate({
           marginLeft: 0
       }, {
           step: function(val){
-              boardPanel.css({
-                  left: pagesPanelWidth + val
+              WebDoc.application.boardController.boardContainerNode.css({
+                  left: this._pagesPanelWidth + val
               });
-          }
+          }.pBind(this)
       });
-      pageBroaserButton.addClass(currentClass);      
+      pageBrowserButton.addClass(this.CURRENT_CLASS);      
     }
     this.visible = !this.visible;
   },
 
-  initializePageBrowser: function() {
-    ddd('[WebDoc.pageBrowserController] Initialising Page Browser');
+  _initializePageBrowser: function() {
+    ddd('[PageBrowserController] Initialising Page Browser');
     
-    var pageBrowserItems = this.domNode.find( pageBrowserItemsSelector ),
+    var pageBrowserItems = this.domNode.find( this.PAGE_BROWSER_ITEM_SELECTOR ),
         l = this.document.pages.length,
         page, pageItem, pageItemNode, pageListNumber;
     
@@ -203,7 +151,7 @@ WebDoc.PageBrowserController = $.klass({
   
   updateSelectedPage: function() {
     var page = WebDoc.application.pageEditor.currentPage;
-    this.selectPageUI( page );
+    this._selectPageUI( page );
   },
   
   objectChanged: function(page) {
@@ -224,10 +172,12 @@ WebDoc.PageBrowserController = $.klass({
       });
     }
     
+    pageItem.domNode.data('webdoc', {
+      page: page
+    });    
     // Then put it in the DOM
     currentPageItem.domNode.after( pageItem.domNode );
     this._updateIndexNumbers();
-    pageItem.editTitle();
   },
   
   pageRemoved: function(page) {
@@ -241,7 +191,7 @@ WebDoc.PageBrowserController = $.klass({
   },
 
   pageMoved: function(page, newPosition, previousPosition) { 
-    if(!changedFromDrag) { // Dragged from another session, must update GUI
+    if(!this._changedFromDrag) { // Dragged from another session, must update GUI
       var itemsList = $('#page_browser_items > li');
       var baseItem = itemsList.eq(previousPosition);
       var itemCopy = baseItem.clone(true);
@@ -284,13 +234,13 @@ WebDoc.PageBrowserController = $.klass({
      
      // Define a flag to avoid rebuilding the page browser when items are dragged
      // However, if the document is opened in other sessions, updates must be done
-     changedFromDrag = true;
+     this._changedFromDrag = true;
      
      if (pageToSave) {
        pageToSave.save();
      }
      
-     changedFromDrag = false;
+     this._changedFromDrag = false;
   },
 
   selectCurrentPage: function(e) {
@@ -311,20 +261,14 @@ WebDoc.PageBrowserController = $.klass({
    },
 
   selectPage: function( page ) {
-    // Page browser UI selection
-    this.selectPageUI( page );
     WebDoc.application.pageEditor.loadPage( page );
   },
 
-  selectPageUI: function( page ) {
-    var currentPageId = WebDoc.application.pageEditor.currentPage.uuid(),
-        newPageId = page.uuid(),
-        pageBrowserItem = this.pageMap[ page.uuid() ];
+  _selectPageUI: function( page ) {
+    var pageBrowserItem = this.pageMap[ page.uuid() ];
     
-//    if ( currentPageId !== newPageId ) {
-      this.domNodeBrowserItems.children().removeClass(currentClass);
-      pageBrowserItem.domNode.addClass(currentClass);
-//    }
+    this.domNodeBrowserItems.children().removeClass(this.CURRENT_CLASS);
+    pageBrowserItem.domNode.addClass(this.CURRENT_CLASS);
   },
   
   // Title handlers --------------------------------------------------
@@ -357,10 +301,7 @@ WebDoc.PageBrowserController = $.klass({
     page.setTitle(newTitle);
     return false;
   },
-  
-  // Thumbnails -----------------------------------------------------
-  
-  _stateThumbs: defaultThumbState,
+
   
   // Methods return current state of thumbs
   
@@ -370,7 +311,7 @@ WebDoc.PageBrowserController = $.klass({
   
   hideThumbs: function() {
     var browserNode = this.domNodeBrowserItems,
-        thumbs = browserNode.find( pageThumbSelector );
+        thumbs = browserNode.find( this.PAGE_THUMB_SELECTOR );
     
     thumbs
     .animate({
@@ -378,11 +319,11 @@ WebDoc.PageBrowserController = $.klass({
     }, {
       duration: 200,
       complete: function(){
-        browserNode.addClass( hideThumbsClass );
+        browserNode.addClass( this.HIDE_THUMB_CLASS );
       }
     });
     
-    $( thumbStateButtonSelector ).removeClass( currentClass );
+    $( this.THUMB_STATE_BUTTON_SELECTOR ).removeClass( this.CURRENT_CLASS );
     
     this._stateThumbs = false;
     return this._stateThumbs;
@@ -390,9 +331,9 @@ WebDoc.PageBrowserController = $.klass({
   
   showThumbs: function() {
     var browserNode = this.domNodeBrowserItems,
-        thumbs = browserNode.find( pageThumbSelector );
+        thumbs = browserNode.find( this.PAGE_THUMB_SELECTOR );
     
-    browserNode.removeClass( hideThumbsClass );    
+    browserNode.removeClass( this.HIDE_THUMB_CLASS );    
     thumbs
     .animate({
       height: 75
@@ -400,11 +341,9 @@ WebDoc.PageBrowserController = $.klass({
       duration: 200
     });
     
-    $( thumbStateButtonSelector ).addClass( currentClass );
+    $( this.THUMB_STATE_BUTTON_SELECTOR ).addClass( this.CURRENT_CLASS );
     
     this._stateThumbs = true;
     return this._stateThumbs;
   }
 });
-
-})(jQuery);
