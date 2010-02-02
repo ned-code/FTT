@@ -116,7 +116,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       this.loadPage(pageToLoad);
     }
   },
-
+  
   loadPage: function(page) {
     WebDoc.application.undoManager.clear();
     ddd("set hash to current page position");
@@ -125,34 +125,36 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     
     WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
-
+  
   prevPage: function() {
     var previousPage = this.currentDocument.previousPage(this.currentPage);
     if (previousPage) {
       this.loadPage(previousPage);
     }
   },
-
+  
   nextPage: function() {
     var nextPage = this.currentDocument.nextPage(this.currentPage);
     if (nextPage) {
       this.loadPage(nextPage);
     }
   },
-
+  
   addPage: function() {
     var newPage = new WebDoc.Page(null, this.currentDocument);
-    // we don't need to set foreign keys. It is autoatically done on the server side
-    //newPage.data.document_id = this.currentDocument.data.document_id;
+    // we don't need to set foreign keys. It is automagically done on the server side
+    // newPage.data.document_id = this.currentDocument.data.document_id;
     newPage.data.position = this.currentPage.data.position + 1;
-    newPage.save(function(newObject, status)
-    {
+    newPage.save( function(newObject, status) {
       ddd("new page ", newPage, newObject);
       this.currentDocument.addPage(newPage, true);      
       this.loadPage(newPage);
+      
+      WebDoc.application.pageBrowserController.editPageTitle(newPage);
+      
     }.pBind(this));
   },
- 
+  
   removePage: function() {
     var pageToDelete = this.currentPage;
     if (this.currentDocument.pages.length > 1) {
