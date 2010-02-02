@@ -338,15 +338,20 @@ a[href="#right-panel-toggle"].current:hover     { background-position: 0 -256px;
 a[href="#left-panel-toggle"]:active,
 a[href="#right-panel-toggle"].current:active    { background-position: 0 -320px; background-color: transparent;}
 
-a[href="#inspector"]                { background-position: 0 -384px; }
-a[href="#inspector"]:hover          { background-position: 0 -448px; }
-a[href="#inspector"]:active         { background-position: 0 -512px; }
-a[href="#inspector"].current        { background-position: 0 -576px; }
+a[href="#item-inspector"]           { background-position: 0 -384px; }
+a[href="#item-inspector"]:hover     { background-position: 0 -448px; }
+a[href="#item-inspector"]:active    { background-position: 0 -512px; }
+a[href="#item-inspector"].current   { background-position: 0 -576px; }
 
 a[href="#library"]                  { background-position: 0 -640px; }
 a[href="#library"]:hover            { background-position: 0 -704px; }
 a[href="#library"]:active           { background-position: 0 -768px; }
 a[href="#library"].current          { background-position: 0 -832px; }
+
+a[href="#page-inspector"]           { background-position: 0 -1152px; }
+a[href="#page-inspector"]:hover     { background-position: 0 -1216px; }
+a[href="#page-inspector"]:active    { background-position: 0 -1280px; }
+a[href="#page-inspector"].current   { background-position: 0 -1344px; }
 
 .numbers {
     position: absolute;

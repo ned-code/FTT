@@ -16,6 +16,11 @@ var defaultTitle = 'enter a title',
     popClass = 'pop';
 
 WebDoc.PageBrowserItemView = $.klass({
+  
+  LOADING_ICON_CLASS: 'loading-icon',
+  SHOW_ON_ACTIVE_CLASS: 'active-show',
+  THUMB_CLASS: 'thumb',
+  
   initialize: function(page) {
     this.page = page;
     try {
@@ -23,13 +28,14 @@ WebDoc.PageBrowserItemView = $.klass({
           pageItem = $('<li/>'),
           pageForm = $('<form/>').attr({ method: 'post' }).addClass(popClass),
           pageTitle = $('<input/>').attr({ type: 'text' }),
-          pageSubmit = $('<input/>').attr({ type: 'submit' }),
-          pageCancel = $('<a/>').attr({ href: '#cancel' }).addClass(cancelClass),
+          pageSubmit = $('<input/>').attr({ type: 'submit' }).addClass( this.SHOW_ON_ACTIVE_CLASS ),
+          pageCancel = $('<a/>').attr({ href: '#cancel' }).addClass(cancelClass + ' ' + this.SHOW_ON_ACTIVE_CLASS ),
           pageFormScreen = $('<div/>').addClass(screenClass),
           pageItemNumber = $('<span/>').addClass(numberClass),
-          pageItemLoading = $('<span/>').addClass(numberClass),
+          pageItemLoading = $('<span/>').addClass( this.LOADING_ICON_CLASS ),
           pageItemHead = $('<div/>').addClass(titleClass),
-          pageItemThumb = new WebDoc.PageThumbnailView(page, 100, 75).domNode;
+          pageItemThumb = $('<div/>').addClass( this.THUMB_CLASS ),
+          pageItemThumbView = new WebDoc.PageThumbnailView(page, 120, 90).domNode;
       
       this.domNode = pageItem;
       this.thumbNode = pageItemThumb;
@@ -58,9 +64,13 @@ WebDoc.PageBrowserItemView = $.klass({
           )
         )
       ).append(
-        pageItemThumb
+        pageItemThumb.append(
+          pageItemThumbView
+        )
       ).append(
         pageItemNumber
+      ).append(
+        pageItemLoading
       );
       
       page.addListener(this);
@@ -71,7 +81,6 @@ WebDoc.PageBrowserItemView = $.klass({
   },
   
   editTitle: function( str ) {
-    //console.log('EDIT');
     if ( typeof str === 'undefined' ) {
       this._popNode.trigger('open');
     }

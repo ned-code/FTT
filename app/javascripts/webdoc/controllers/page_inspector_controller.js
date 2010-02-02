@@ -40,6 +40,7 @@ WebDoc.PageInspectorController = $.klass({
     $('.page-navigation-link').click(this.performAction.pBind(this));
     WebDoc.application.boardController.addCurrentPageListener(this);
     WebDoc.application.pageEditor.currentPage.addListener(this); 
+    
     this.currentPageChanged();
   },
 

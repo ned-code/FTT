@@ -24,6 +24,9 @@ var boardPanel,
     thumbStateButtonSelector = "a[href='#toggle-thumbs']";
 
 WebDoc.PageBrowserController = $.klass({
+  
+  THUMB_SELECTOR: '.thumb',
+  
   initialize: function() {
     ddd("init pages panel");
     
@@ -390,11 +393,13 @@ WebDoc.PageBrowserController = $.klass({
   
   hideThumbs: function() {
     var browserNode = this.domNodeBrowserItems,
-        thumbs = browserNode.find( pageThumbSelector );
+        thumbs = browserNode.find( this.THUMB_SELECTOR );
     
     thumbs
     .animate({
-      height: 0
+      height: 0,
+      marginBottom: 0,
+      borderBottomWidth: 0
     }, {
       duration: 200,
       complete: function(){
@@ -410,12 +415,14 @@ WebDoc.PageBrowserController = $.klass({
   
   showThumbs: function() {
     var browserNode = this.domNodeBrowserItems,
-        thumbs = browserNode.find( pageThumbSelector );
+        thumbs = browserNode.find( this.THUMB_SELECTOR );
     
     browserNode.removeClass( hideThumbsClass );    
     thumbs
     .animate({
-      height: 75
+      height: 75,
+      marginBottom: 14,
+      borderBottomWidth: 6
     }, {
       duration: 200
     });

@@ -12,7 +12,7 @@ WebDoc.handlers = {
   
   'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggleBrowser(); },
   'library':              function(e) { WebDoc.application.rightBarController.showLib(); },
-  'inspector':            function(e) { WebDoc.application.rightBarController.showItemInspector(); },
+  'item-inspector':       function(e) { WebDoc.application.rightBarController.showItemInspector(); },
   'page-inspector':       function(e) { WebDoc.application.rightBarController.showPageInspector(); },
   
   'prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },

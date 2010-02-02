@@ -122,7 +122,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     ddd("set hash to current page position");
     window.location.hash = "#" + (page.uuid());
     this.currentPage = page;
-    
     WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
   
