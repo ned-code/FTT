@@ -13,6 +13,13 @@ WebDoc.CollaborationManager = $.klass(
       this._nodeName = null;
       // the XMPP connection
       this._connection = null;
+      $(document).bind("keypress", function(e) {
+        ddd("[CollaborationManager] key down", e);
+        if (e.keyCode === 27) {
+          e.preventDefault();
+        }
+        return false;
+      });
     },
 
     listenXMPPNode: function(nodeName) {
