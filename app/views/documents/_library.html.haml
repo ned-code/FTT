@@ -130,17 +130,16 @@
       %ul{ :style => "display:none" }
         %li
           %a#show_app_details{ :href => '#app_details' } Show App Details
-      #apps_library_wrap.view_content
-        %ul.thumbs.index.icons-only
     #app_details.view.details_view
       .toolbar
         %h1 App
         %a.back{ :href =>'#' } Back
-      %h4.app_title
-      .single_app
-        %img{ :src => "", :alt => "" }
-      %h5.app_version
-      %p.app_description
+      .view_content  
+        %h4.app_title
+        .single_app
+          %img{ :src => "", :alt => "" }
+        %h5.app_version
+        %p.app_description
     #video_details.view.details_view
       .toolbar
         %h1 Video
@@ -179,5 +178,5 @@
             %li>
               %input
           .content
-            %iframe{ :src => "http://m.flickr.com", :style => "width:100%; height:100%"}           
+            %iframe           
 
