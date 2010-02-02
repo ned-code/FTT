@@ -119,7 +119,7 @@ private
       end
     end
     properties[:title] = config_dom.root.elements['name'].text
-    properties[:description] = config_dom.root.elements['description'].text
+    properties[:description] = config_dom.root.elements['description'].text if config_dom.root.elements['description']
     properties[:version] = config_dom.root.attribute("version").to_s
     properties[:content] = config_dom.root.elements['content'].attribute("src").to_s
     properties[:width] = config_dom.root.attribute("width").to_s
