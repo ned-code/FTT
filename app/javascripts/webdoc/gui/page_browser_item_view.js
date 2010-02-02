@@ -28,6 +28,7 @@ WebDoc.PageBrowserItemView = $.klass({
           pageCancel = $('<a/>').attr({ href: '#cancel' }).addClass(cancelClass),
           pageFormScreen = $('<div/>').addClass(screenClass),
           pageItemNumber = $('<span/>').addClass(numberClass),
+          pageItemLoading = $('<span/>').addClass(numberClass),
           pageItemHead = $('<div/>').addClass(titleClass),
           pageItemThumb = new WebDoc.PageThumbnailView(page, 100, 75).domNode;
       

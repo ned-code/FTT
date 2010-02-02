@@ -112,9 +112,7 @@ jQuery.extend({
     // .bind('click', jQuery.delegate({'selector': fn}))
     
     delegate: function(list, context){
-
         return function(e){
-            
             var target = jQuery(e.target),
                 data = target.data("closest") || {},
                 closest, node, result;
