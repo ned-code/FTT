@@ -10,88 +10,83 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     $super(libraryId);
 
     // Setup my apps
-    this.setupMyApps();
+    this._setupMyApps();
     // Setup details view
-    this.setupDetailsView();
+    this._setupDetailsView();
 
-    // Observe app-rows clicks (with event delegation) for all current and future app-rows
+    // Observe app-rows clicks (with event delegation) for all current and future app rows
     $("#"+libraryId+" .rows ul li a").live("click", function (event) {
-      // properties are stored in the img/thumbnail element of the video row
-      var properties = $(event.target).parent().find('img').data("properties");
-      this.prepareDetailsView(properties);
+      // widget data are stored in the img element of the app row
+      var widgetData = $(event.target).parent().find('img').data("data");
+      this.prepareDetailsView(widgetData);
       this.showDetailsView.click();
       event.preventDefault();
-      
     }.pBind(this));
 
     // view transition finished (slide in/out)
     this.element.bind('pageAnimationEnd', function(event, info){
-      this.loadMyApps(0);
+      var currentViewId = this.currentViewId();
+      if (currentViewId === this.element.attr("id")) { // #apps view did appear
+        this._loadMyApps(0);
+      }
     }.pBind(this));
-
-    this.widgets = {};
   },
-  setupMyApps: function() {
+  didClickOnTab: function($super, tab) {
+    $super(tab);
+    // No more necessary since apps are loaded on startup
+    // if (tab === this.myAppsId) {
+    //   this._loadMyApps(0);
+    // }
+  },
+  _setupMyApps: function() {
     this.myAppsId = "my_apps";
     
     this.myAppsPage = 1;
     this.myAppsContainer = $('#'+this.myAppsId);
-    this.libraryUtils = new LibraryUtils();
     
     // Setup app rows drag n' drop
-    this.myAppsContainer.find(".rows").bind("dragstart", this.prepareRowDrag.pBind(this));
+    this.myAppsContainer.find(".rows").bind("dragstart", this._prepareRowDrag.pBind(this));
     
     // Next/Previous page links
     this.paginationWrap = $("<div class='pagination' style='display:none'>");
     this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
     this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
     this.previousPageLink.click(function(event){
-      this.loadMyApps(-1);
+      this._loadMyApps(-1);
       event.preventDefault();
     }.pBind(this)).appendTo(this.paginationWrap).hide();
     this.nextPageLink.click(function(event){
-      this.loadMyApps(+1);
+      this._loadMyApps(+1);
       event.preventDefault();
     }.pBind(this)).appendTo(this.paginationWrap).hide();
     this.myAppsContainer.append(this.paginationWrap);
   },
-  setupDetailsView: function() {
-    
+  _setupDetailsView: function() {
     this.detailsViewImg = this.detailsView.find('.single_app img');
     
     // Setup drag n' drop
     this.detailsView.find('.single_app')
     .attr({ draggable: "true" })
-    .bind("dragstart", this.prepareAppDrag.pBind(this));
+    .bind("dragstart", this._prepareAppDrag.pBind(this));
 
     // Handle title of Show app page action
     var showAppPageEl = $("#show_app_page_action");
     showAppPageEl.data("originalText", showAppPageEl.text());
     
     this.detailsAppContainer = this.detailsView.find('.single_app');
-    
-    // handle possible actions 
-    $("#app_details .actions").click(function(event){
-      event.preventDefault();
-      
-      var properties = this.detailsAppContainer.data("properties"); //properties of the currenlty displayed video are store in this element
-      
-      var link = $(event.target);
-      var li = link.parent(); 
-      var info = $("<span>").text("...");
-    }.pBind(this));
   },
-	prepareDetailsView: function($super, properties) { // type: youtube, vimeo
-    $super(properties);
+  prepareDetailsView: function($super, widgetData) {
+    $super(widgetData.properties);
     
+    var properties = widgetData.properties;
     // View title
     this.detailsView.attr({'class':"view details_view "+properties.type});
     
-    // Store the current properties in detailsVideoContainer
-    this.detailsAppContainer.data("properties", properties);
+    // Store the current properties in detailsAppContainer
+    this.detailsAppContainer.data("data", widgetData);
     
-    // Image source (+ store the current properties in the img element)
-    this.detailsViewImg.attr({'src':properties.icon_url}).data("properties", properties);
+    // Image source (+ store the current data in the img element)
+    this.detailsViewImg.attr({'src':widgetData.properties.icon_url}).data("data", widgetData);
 
     // Title
     var title = "";
@@ -101,7 +96,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     // Version
     var versionEl = this.detailsView.find('.app_version');
     if (properties.version)
-      versionEl.text(this.getVersionText(properties.version));
+      versionEl.text(this._getVersionText(properties.version));
     else
       versionEl.text('');
     
@@ -109,74 +104,66 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     var desc = properties.description || "";
     var descEl = this.detailsView.find('.app_description');
     descEl.text(desc);
-
-    $("#app_details .actions li").show();
   },
-  prepareRowDrag: function(event) {
+  _prepareRowDrag: function(event) {
     var target = $(event.target);
     if (target.closest('.app_row').length === 0 || target.find('img').length === 0) {
       event.preventDefault();
       return;
     }
     
-    var properties = target.find('img').data("properties");
-    this.dragStart(event, properties);
+    var widgetData = target.find('img').data("data");
+    this._dragStart(event, widgetData);
   },
-
-  prepareAppDrag: function(event) {
-    var properties = this.detailsAppContainer.data("properties");
-    this.dragStart(event, properties);
+  _prepareAppDrag: function(event) {
+    var widgetData = this.detailsAppContainer.data("data");
+    this._dragStart(event, widgetData);
   },
-  didClickOnTab: function($super, tab) {
-    $super(tab);
-    if (tab === this.myAppsId) {
-      this.loadMyApps(0);
-    }
-  },
-  loadMyApps: function(pageIncrement) {
+  _loadMyApps: function(pageIncrement) {
     var appsRowsWrap = this.myAppsContainer.find(".rows");
     
     this.myAppsPage += pageIncrement;
     if (this.myAppsPage < 1) this.myAppsPage = 1;
     
-    if (pageIncrement !== 0 || !appsRowsWrap.data('loaded')) { //load only if we are paginating, or if the videos have never been loaded before
+    if (pageIncrement !== 0 || !appsRowsWrap.data('loaded')) { //load only if we are paginating, or if the apps have never been loaded before
       appsRowsWrap.html('');
       
       this.showSpinner(appsRowsWrap);
       
       MTools.ServerManager.getRecords(WebDoc.Widget, null, function(data) {
-        if (data.length === 0) {
+        if (data.widgets.length === 0) {
           var noApps = $("<span>").addClass('no_items').text('No Apps');
           appsRowsWrap.append(appsRowsWrap);
         }
         else {   
           var myAppsList = $("<ul>");
-          for (var i = 0; i < data.length; i++) {
-            myAppsList.append(this.buildAppRow(data[i].uuid(), data[i].data.properties));
-            this.widgets[data[i].uuid()] = data[i];
+          for (var i = 0; i < data.widgets.length; i++) {
+            myAppsList.append(this._buildAppRow(data.widgets[i]));
           }
           
           appsRowsWrap.append(myAppsList);
         }
+        this._refreshMyAppsPagination(data.pagination);
         appsRowsWrap.data('loaded', true);
         this.hideSpinner(appsRowsWrap);
       }.pBind(this), { ajaxParams: { page:this.myAppsPage }});
     }
   },
-  buildAppRow: function(uuid, properties) {
-
+  _buildAppRow: function(widget) {
+    var uuid = widget.uuid();
+    var properties = widget.data.properties;
     var icon = $("<img>").attr({
-      //id: widget.uuid(),
       src : properties.icon_url,
       alt : ""
     })
-    .data("properties", jQuery.extend({type:"my_app", uuid:uuid}, properties));
+
+    .data("data", widget.getData());
     
     var iconWrap = $("<span>").attr({'class':'wrap'});
     iconWrap.append(icon);
     
     var titleEl = $("<strong>").addClass("title").text(properties.title);
-    var versionEl = $("<span>").addClass("version").text(this.getVersionText(properties.version));
+    var versionEl = $("<span>").addClass("version").text(this._getVersionText(properties.version));
     var descriptionEl = $("<p>").addClass("description").text(properties.description);
     
     var liWrap = $("<li>").addClass("app_row");
@@ -185,21 +172,31 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     aWrap.append(iconWrap).append(titleEl).append(versionEl).append(descriptionEl).append($("<span>").attr({'class':'spacer'}));
     liWrap.append(aWrap);
     return liWrap;
+  }, 
+  _refreshMyAppsPagination: function(pagination) {
+    this.hasPagination = pagination.total_pages > 1 ? true : false;
+    if (this.hasPagination) {
+      this.paginationWrap.show();
+      if (pagination.previous_page > 0) this.previousPageLink.show();
+      else this.previousPageLink.hide();
+      if (pagination.next_page > 0) this.nextPageLink.show();
+      else this.nextPageLink.hide();
+    }
+    else {
+      this.paginationWrap.hide();
+    }
   },
-  toggle: function() {
-    this.domNode.slideToggle("slow");
-  },
-  
-  dragStart: function(event, properties) {
+  _dragStart: function(event, widgetData) {
     var dt = event.originalEvent.dataTransfer;
-    dt.setData('application/ub-widget', $.toJSON(this.widgets[properties.uuid].getData()));
+    dt.setData('application/ub-widget', $.toJSON(widgetData));
     
     // Drag "feedback"
+    var properties = widgetData.properties;
     var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("app", properties.icon_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   },
-  getVersionText: function(version) {
+  _getVersionText: function(version) {
     return version != undefined? "Version: "+version : ""
   }
 });
