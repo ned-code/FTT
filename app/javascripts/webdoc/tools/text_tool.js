@@ -15,7 +15,9 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       cursor: "default",
       width: "400px",
       height: "200px",
-      overflow: "hidden"
+      overflow: "hidden",
+      top: "20px",
+      left: "20px"
     };
     
     this.paletteEl = $( paletteId ? paletteId : "#palette_text");
@@ -61,7 +63,6 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     newItem.data.data['class'] = "textbox empty";
     newItem.data.data.innerHTML = "";
     newItem.data.data.css = this.textboxCss;
-    newItem.recomputeInternalSizeAndPosition();
     //Create view
     WebDoc.application.boardController.insertItems([newItem]);
     // Select view

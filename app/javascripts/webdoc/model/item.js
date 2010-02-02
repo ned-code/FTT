@@ -9,7 +9,7 @@ WebDoc.ITEM_TYPE_WIDGET = "widget";
 WebDoc.Item = $.klass(MTools.Record, 
 {
   initialize: function($super, json, page, media) {
-    this.page = page
+    this.page = page;
     this.media = media;
     $super(json);
     if (!json) {
@@ -45,7 +45,7 @@ WebDoc.Item = $.klass(MTools.Record,
     if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
       refreshInnerHtml = true;
     }
-    if (this.data.data != null && this.data.data.preference != null && json.item.data.preference != null && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
+    if (this.data.data && this.data.data.preference && json.item.data.preference && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
       refreshPreferences = true;
     }
     
@@ -107,34 +107,18 @@ WebDoc.Item = $.klass(MTools.Record,
     this.fireObjectChanged();
   },
   
-  recomputeInternalSizeAndPosition: function() {
-    try {
-      var t = this.data.data.css.top || "0px", l = this.data.data.css.left || "0px", w = this.data.data.css.width || "100px", h = this.data.data.css.height || "100px";
-      this.position = {
-        top: parseFloat(t.replace("px", "")),
-        left: parseFloat(l.replace("px", ""))
-      };
-      this.size = {
-        width: parseFloat(w.replace("px", "")),
-        height: parseFloat(h.replace("px", ""))
-      };
-      WebDoc.application.inspectorController.refreshSubInspectors();
-    }
-    catch (e) {
-      ddd("error while loading item", this);
-    }    
-  },
-  
   moveTo: function(newPosition) {
-    this.data.data.css.left = newPosition.left + "px";
-    this.data.data.css.top = newPosition.top + "px";
+    this.data.data.css.left = newPosition.left;
+    this.data.data.css.top = newPosition.top;
     this.fireObjectChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();    
   },
   
   resizeTo: function(newSize) {
-    this.data.data.css.width = newSize.width + "px";
-    this.data.data.css.height = newSize.height + "px";
-    this.fireObjectChanged();    
+    this.data.data.css.width = newSize.width;
+    this.data.data.css.height = newSize.height;
+    this.fireObjectChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();
   },
 
 	setOpacity: function(newOpacity){
@@ -180,7 +164,6 @@ WebDoc.Item = $.klass(MTools.Record,
   },
   
   fireObjectChanged: function($super) {
-    this.recomputeInternalSizeAndPosition();
     $super();
   },
   
@@ -235,8 +218,8 @@ WebDoc.Item = $.klass(MTools.Record,
     var regexp = new RegExp("<embed[^>]*(/>|>(.*?)</embed>)", "g");
       if(html.match(regexp)) {
         // Contains embed tag, must force its wmode attrib to transparent
-        var arrMatch = null;
-        while(arrMatch = regexp.exec(html)) {
+        var arrMatch = regexp.exec(html);
+        while(arrMatch) {
           var wrapper = $('<div>').append(arrMatch[0]);
           var embedNode = $('embed', wrapper);
           if(embedNode.length > 0 && (embedNode.attr("type") == "application/x-shockwave-flash" || embedNode.attr("src").indexOf('.swf') != -1)) {
@@ -248,6 +231,7 @@ WebDoc.Item = $.klass(MTools.Record,
             }
             html = html.replace(arrMatch[0], replacedValue);
           }
+          arrMatch = regexp.exec(html);
         }
       }
       return html;

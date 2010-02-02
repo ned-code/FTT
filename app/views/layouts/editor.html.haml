@@ -15,7 +15,10 @@
     = stylesheet_link_tag 'style.editor'
     = stylesheet_link_tag 'style.editor.colors'
     
-  %body.editor.edit-mode
+    -if (@is_reader)  
+      %body.editor.embed-mode
+    -else
+      %body.editor.edit-mode
     #wrap
       = yield
     = javascript_include_tag 'jquery'      

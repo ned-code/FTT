@@ -26,6 +26,7 @@ WebDoc.BoardController = $.klass({
              
   // Constructor     
   initialize: function(editable, autoFit) {
+    this.boardContainerNode = $("#board_container");
     this._editable = editable;
     this._autoFit = autoFit;
     this._currentZoom = 1; 
@@ -77,8 +78,7 @@ WebDoc.BoardController = $.klass({
   },
   
   setCurrentPage: function(page) {
-    var boardContainer = $("#board_container"),
-        pageView = new WebDoc.PageView(page),
+    var pageView = new WebDoc.PageView(page),
         board = pageView.domNode;
     
     $("#board").unbind();
@@ -93,7 +93,7 @@ WebDoc.BoardController = $.klass({
     this._selection = [];
     this._currentPage = page;
     
-    boardContainer
+    this.boardContainerNode
     .empty()
     .append( board )
     .wrapInner( this._boardWrapHTML )
@@ -251,7 +251,7 @@ WebDoc.BoardController = $.klass({
   },
   
   mapToPageCoordinate: function(position) {
-    var x, y, board = $("#board"), boardContainer = $("#board_container");
+    var x, y, board = $("#board");
     
     if (position.x) {
       x = position.x - board.offset().left;

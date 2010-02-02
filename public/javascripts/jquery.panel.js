@@ -100,9 +100,13 @@ function callHandler(e){
     // If the href contains a hashRef that matches a handler
     if ( match && handlers[match[1]] ) {
         // Call it with current scope
-        handlers[match[1]].call(this, e);
-        e.preventDefault();        
-        return false;
+        try {
+          handlers[match[1]].call(this, e);
+        }
+        finally {
+          e.preventDefault();
+          return false;
+        }
     }
 }
 

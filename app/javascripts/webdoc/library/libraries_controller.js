@@ -11,6 +11,7 @@ WebDoc.LibrariesController = $.klass({
     this.imagesLibrary = new WebDoc.ImagesLibrary("images");
     this.videosLibrary = new WebDoc.VideosLibrary("videos");
     this.appsLibrary = new WebDoc.AppsLibrary("apps");
+    this.webBrowser = new WebDoc.WebBrowser("browser");    
   }
 });
 
@@ -112,4 +113,5 @@ LibraryUtils = $.klass({
 //= require <webdoc/library/images_library>
 //= require <webdoc/library/videos_library>
 //= require <webdoc/library/apps_library>
+//= require <webdoc/library/web_browser>
 
