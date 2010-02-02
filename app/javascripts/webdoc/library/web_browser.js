@@ -7,8 +7,7 @@ WebDoc.WebBrowser = $.klass(WebDoc.Library, {
   initialize: function($super, libraryId) {
     $super(libraryId);    
     this.browserFrame = $("#web-browser-ui iframe");  
-    this.browserFrame.bind("load", this.locationChanged.pBind(this));
-    this.browserFrame[0].contentWindow.location.href = "http://m.google.com/m";    
+    this.browserFrame.bind("load", this.locationChanged.pBind(this));    
   },
   
   locationChanged: function(e) {

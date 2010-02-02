@@ -164,9 +164,9 @@
       .toolbar
         %h1 Web browser
         %a.back{ :href =>'#' } Back
-      #web-browser-ui.panel.view_content
-        .inspector
-          %ul.index.head
+      #web-browser-ui.inspector.view_content        
+        .head
+          %ul.index
             %li>
               %a#go_backward{ :href => "" } Back
             %li>
@@ -177,6 +177,6 @@
               %a#refresh{ :href => "" } Refresh
             %li>
               %input
-          .content
-            %iframe           
+        .content
+          %iframe{ :src => "http://m.wikipedia.org", :style => "width:100%; height:100%" }           
 
