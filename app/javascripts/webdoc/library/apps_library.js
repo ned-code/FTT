@@ -25,7 +25,10 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
 
     // view transition finished (slide in/out)
     this.element.bind('pageAnimationEnd', function(event, info){
-      this._loadMyApps(0);
+      var currentViewId = this.currentViewId();
+      if (currentViewId === this.element.attr("id")) { // #apps view did appear
+        this._loadMyApps(0);
+      }
     }.pBind(this));
   },
   didClickOnTab: function($super, tab) {
@@ -128,18 +131,19 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
       this.showSpinner(appsRowsWrap);
       
       MTools.ServerManager.getRecords(WebDoc.Widget, null, function(data) {
-        if (data.length === 0) {
+        if (data.widgets.length === 0) {
           var noApps = $("<span>").addClass('no_items').text('No Apps');
           appsRowsWrap.append(appsRowsWrap);
         }
         else {   
           var myAppsList = $("<ul>");
-          for (var i = 0; i < data.length; i++) {
-            myAppsList.append(this._buildAppRow(data[i]));
+          for (var i = 0; i < data.widgets.length; i++) {
+            myAppsList.append(this._buildAppRow(data.widgets[i]));
           }
           
           appsRowsWrap.append(myAppsList);
         }
+        this._refreshMyAppsPagination(data.pagination);
         appsRowsWrap.data('loaded', true);
         this.hideSpinner(appsRowsWrap);
       }.pBind(this), { ajaxParams: { page:this.myAppsPage }});
@@ -152,6 +156,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
       src : properties.icon_url,
       alt : ""
     })
+
     .data("data", widget.getData());
     
     var iconWrap = $("<span>").attr({'class':'wrap'});
@@ -167,6 +172,19 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     aWrap.append(iconWrap).append(titleEl).append(versionEl).append(descriptionEl).append($("<span>").attr({'class':'spacer'}));
     liWrap.append(aWrap);
     return liWrap;
+  }, 
+  _refreshMyAppsPagination: function(pagination) {
+    this.hasPagination = pagination.total_pages > 1 ? true : false;
+    if (this.hasPagination) {
+      this.paginationWrap.show();
+      if (pagination.previous_page > 0) this.previousPageLink.show();
+      else this.previousPageLink.hide();
+      if (pagination.next_page > 0) this.nextPageLink.show();
+      else this.nextPageLink.hide();
+    }
+    else {
+      this.paginationWrap.hide();
+    }
   },
   _dragStart: function(event, widgetData) {
     var dt = event.originalEvent.dataTransfer;

@@ -3,16 +3,27 @@ class WidgetsController < ApplicationController
   
   # GET /widgets
   def index
+    per_page = 7
     if (params[:system_widget_name])
       @widgets = Medias::Widget.find_by_system_name(params[:system_widget_name])
     else
-      # index retunr only widget that are not system widget.
-      @widgets = Medias::Widget.paginate(:page => params[:page], :per_page => 50)
+      # index return only widget that are not system widget.
+      @widgets = Medias::Widget.paginate(:page => params[:page], :per_page => per_page)
     end
     
     
     respond_to do |format|
-      format.json { render :json => @widgets }
+      format.json { render :json => { 
+        :widgets => @widgets,
+        :pagination => {
+          :per_page => per_page,
+          :current_page => @widgets.current_page,
+          :total_pages => @widgets.total_pages, 
+          :next_page => @widgets.next_page,
+          :previous_page => @widgets.previous_page,
+          :total => @widgets.total_entries }
+        }
+      }  
     end
   end
   
