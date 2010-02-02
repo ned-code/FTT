@@ -76,6 +76,14 @@
     top: 58px;
 }
 
+.embed-mode .board-panel {
+    top: 32px;
+}
+.embed-mode .left-panel,
+.embed-mode .right-panel {
+    top: 34px;
+}
+
 .board-panel {
     bottom: 0;
     min-width: 300px;
@@ -92,7 +100,9 @@
     height: 32px;
     padding: 0 4px;
 }
-
+.embed-mode .toolbar-panel {
+    top: 0px;
+}
 .left-panel {
     width: 164px;
     margin-left: -164px;
