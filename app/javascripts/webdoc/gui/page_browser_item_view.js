@@ -16,6 +16,7 @@ var defaultTitle = 'enter a title',
     popClass = 'pop';
 
 WebDoc.PageBrowserItemView = $.klass({
+  DEFAULT_CLASS: 'default',
   initialize: function(page) {
     this.page = page;
     try {
@@ -85,26 +86,22 @@ WebDoc.PageBrowserItemView = $.klass({
     this.domNode.remove();
   },
 
-  updateTitle: function(page, removeDefaultClass){
+  updateTitle: function(page){
+    ddd("[PageBrowserController] Update title");
     // Find item related to this page
-    var targetItem = $("#browser_item_" + page.uuid()),
-        panelTitle = $(".page_browser_item_title", targetItem[0]),
-        currentTitle = $(panelTitle).html(),
-        newTitle = this.getPageTitle(page).title;
+    var newTitle = this.getPageTitle(page).title;
     
-    if(currentTitle !== newTitle) {
-        $(panelTitle).html( this.getPageTitle(page).title );
+    if(newTitle) {
+        this._titleNode.val( newTitle ).removeClass(this.DEFAULT_CLASS);
     }
-    
-    if(removeDefaultClass) {
-        $(panelTitle).removeClass('page_browser_item_title_default');
-    }
+
   },
   
   objectChanged: function(page) {
+    ddd("[PageBrowserItemView] objectChanged", page);
     switch(page.className()) {
       case "page":
-        this.updateTitle(page, true);
+        this.updateTitle(page);
         break;
     }
   },

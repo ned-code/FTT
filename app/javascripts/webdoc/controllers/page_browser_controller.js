@@ -16,6 +16,8 @@ WebDoc.PageBrowserController = $.klass({
   HIDE_THUMB_CLASS: "hide-thumbs",
   THUMB_STATE_BUTTON_SELECTOR: "a[href='#toggle-thumbs']",
   LEFT_BAR_BUTTON_SELECTOR: "a[href='#left-panel-toggle']",
+  ACTIVE_CLASS: "active", 
+  NUMBER_SELECTOR: '.number',
     
   initialize: function() {
     ddd("[PageBrowserController] init");
@@ -23,6 +25,7 @@ WebDoc.PageBrowserController = $.klass({
     this.domNode = $("#left_bar");
     this._changedFromDrag = false;
     this._stateThumbs = false;
+    this._document = null;
     
     // defined in CSS
     this._pagesPanelWidth = this.domNode.outerWidth();
@@ -34,8 +37,8 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   setDocument: function(document) {
-    this.document = document;   
-    this.document.addListener(this);
+    this._document = document;   
+    this._document.addListener(this);
     this._initializePageBrowser(); 
   },
   
@@ -73,13 +76,13 @@ WebDoc.PageBrowserController = $.klass({
     ddd('[PageBrowserController] Initialising Page Browser');
     
     var pageBrowserItems = this.domNode.find( this.PAGE_BROWSER_ITEM_SELECTOR ),
-        l = this.document.pages.length,
+        l = this._document.pages.length,
         page, pageItem, pageItemNode, pageListNumber;
     
     this.domNodeBrowserItems = pageBrowserItems;
     
     while (l--) {
-      page = this.document.pages[l];
+      page = this._document.pages[l];
       pageItem = new WebDoc.PageBrowserItemView(page);
       pageItemNode = pageItem.domNode;
       
@@ -95,7 +98,7 @@ WebDoc.PageBrowserController = $.klass({
     this.updateSelectedPage();
     this._updateIndexNumbers();
     this._updateThumbs();
-    
+
     pageBrowserItems.sortable({
       axis: 'y',
       distance: 8,
@@ -104,17 +107,16 @@ WebDoc.PageBrowserController = $.klass({
       start:  this.dragStart.pBind(this),
       update: this.dragUpdate.pBind(this),
       change: function(e, ui){
-        var list = jQuery( e.target );
-            items = list.children().not( ui.item[0] );
-        
+        var list = jQuery( e.target ),
+            items = list.children().not( ui.item[0] ),
+            numberSelector = this.NUMBER_SELECTOR;
         items
         .each(function(i){
-          var number = ( this === ui.placeholder[0] ) ? ui.item.find('.number') : jQuery('.number', this) ;
+          var number = ( this === ui.placeholder[0] ) ? ui.item.find(numberSelector) : jQuery(numberSelector, this) ;
           number.html(i+1);
         });
-      }
+      }.pBind(this)
     });
-    
     this.bindEventHandlers();
     WebDoc.application.boardController.addCurrentPageListener(this);
   },
@@ -137,19 +139,8 @@ WebDoc.PageBrowserController = $.klass({
         'form':             this.submitEditTitle 
       }, this)
     );
-  },
-  
-  deletePageItems: function() {
-    ddd("delete pages thumbs", this.pageMap);
-    this.domNode.find("ul").unbind();
-    
-    for (var key in this.pageMap) {
-      this.pageMap[key].destroy();
-    }
-    
-    this.pageMap = {};
-  },
-  
+  },  
+
   updateSelectedPage: function() {
     var page = WebDoc.application.pageEditor.currentPage;
     this._selectPageUI( page );
@@ -163,13 +154,12 @@ WebDoc.PageBrowserController = $.klass({
   
   pageAdded: function(page) {
     ddd("[pageBrowserController] pageAdded");
-    var currentPageId = WebDoc.application.pageEditor.currentPage.uuid(),
-        currentPageItem = this.pageMap[ currentPageId ],
-        pageItem = new WebDoc.PageBrowserItemView(page),
+    var pageItem = new WebDoc.PageBrowserItemView(page),
         pos = page.data.position;
     
     this.pageMap[ page.uuid() ] = pageItem;
-    
+
+    // TODO investigate    
     if ( !this._stateThumbs ) {
       pageItem.thumbNode.css({
         height: 0
@@ -195,14 +185,15 @@ WebDoc.PageBrowserController = $.klass({
         pageBrowserItem = this.pageMap[ page.uuid() ];
     
     ddd('[pageBrowserController] pageRemoved: '+id);
+    pageBrowserItem.destroy();
+    delete this.pageMap[ page.uuid() ];
+    this._updateIndexNumbers();
     
-    pageBrowserItem.domNode.remove();
-    this.pageMap[ page.uuid() ] = null;
   },
 
   pageMoved: function(page, newPosition, previousPosition) { 
     if(!this._changedFromDrag) { // Dragged from another session, must update GUI
-      var itemsList = $('#page_browser_items > li');
+      var itemsList = this.domNodeBrowserItems.children();
       var baseItem = itemsList.eq(previousPosition);
       var itemCopy = baseItem.clone(true);
       var itemDest = itemsList.eq(newPosition);
@@ -214,13 +205,15 @@ WebDoc.PageBrowserController = $.klass({
         itemDest.before(itemCopy);
       }
       baseItem.remove();
+      this._updateIndexNumbers();      
     }
   },
   
   _updateIndexNumbers: function(){
+    var numberSelector = this.NUMBER_SELECTOR;
     this.domNodeBrowserItems.children()
     .each(function(i){
-      var number = jQuery('.number', this) ;
+      var number = jQuery(numberSelector, this) ;
       number.html(i+1);
     });
   },
@@ -240,11 +233,11 @@ WebDoc.PageBrowserController = $.klass({
          dropData = dropItem.data('webdoc'),
          dropPage = dropData && dropData.page,
          dropPageIndex = this.domNodeBrowserItems.children('li').index(ui.item),
-         pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(dropPage.uuid(), dropPageIndex);
-     
+         pageToSave = null;
      // Define a flag to avoid rebuilding the page browser when items are dragged
      // However, if the document is opened in other sessions, updates must be done
-     this._changedFromDrag = true;
+     this._changedFromDrag = true;     
+     pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(dropPage.uuid(), dropPageIndex);
      
      if (pageToSave) {
        pageToSave.save();
@@ -290,25 +283,25 @@ WebDoc.PageBrowserController = $.klass({
   
   // Titles ---------------------------------------------------------
   
-  keydownEditTitle: function(e) {
+  keydownEditTitle: function(event) {
     if (event.which === 27) { // Escape key
-      this.cancelEditTitle(e);
+      this.cancelEditTitle(event);
     }
   },
   
-  cancelEditTitle: function(e) {
+  cancelEditTitle: function(event) {
     ddd('[WebDoc.pageBrowserController] cancelEditTitle');
     
-    var input = $( e.target ),
+    var input = $( event.target ),
         form = input.closest('form');
     
     return false;
   },
   
-  submitEditTitle: function(e) {
+  submitEditTitle: function(event) {
     ddd('[WebDoc.pageBrowserController] submitEditTitle');
     
-    var form = $( e.delegateTarget ),
+    var form = $( event.delegateTarget ),
         input = form.find( 'input:eq(0)' ),
         newTitle = input.val(),
         pageItem = form.closest('li'),
@@ -324,14 +317,13 @@ WebDoc.PageBrowserController = $.klass({
   
   _updateThumbs: function(){
     var browserNode = this.domNodeBrowserItems;
-    
     if (this._stateThumbs) {
-      browserNode.removeClass( hideThumbsClass );
-      $( thumbStateButtonSelector ).addClass( activeClass );
+      browserNode.removeClass( this.HIDE_THUMB_CLASS );
+      $( this.THUMB_STATE_BUTTON_SELECTOR ).addClass( this.ACTIVE_CLASS );
     }
     else {
-      browserNode.addClass( hideThumbsClass );
-      $( thumbStateButtonSelector ).removeClass( activeClass );
+      browserNode.addClass( this.HIDE_THUMB_CLASS );      
+      $( this.THUMB_STATE_BUTTON_SELECTOR ).removeClass( this.ACTIVE_CLASS );      
     }
   },
   
@@ -355,7 +347,7 @@ WebDoc.PageBrowserController = $.klass({
       }
     });
     
-    $( thumbStateButtonSelector ).removeClass( activeClass );
+    $( this.THUMB_STATE_BUTTON_SELECTOR ).removeClass( this.ACTIVE_CLASS );
     
     this._stateThumbs = false;
     return this._stateThumbs;
@@ -373,7 +365,7 @@ WebDoc.PageBrowserController = $.klass({
       duration: 200
     });
     
-    $( thumbStateButtonSelector ).addClass( activeClass );
+    $( this.THUMB_STATE_BUTTON_SELECTOR ).addClass( this.ACTIVE_CLASS );
     
     this._stateThumbs = true;
     return this._stateThumbs;

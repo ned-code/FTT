@@ -387,6 +387,7 @@ a:hover { color: #0069BF;}
 /* == page browser = */
 .page-thumb {
   margin: 0 auto;
+  overflow:hidden;
 }
 .pop input.default {
   font-style: italic;
