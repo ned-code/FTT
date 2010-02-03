@@ -10,13 +10,14 @@ WebDoc.PageBrowserController = $.klass({
   
   PAGE_BROWSER_ITEM_SELECTOR: ".page_browser_items",
   PAGE_BROWSER_NUMBER_SELECTOR: ".page_browser_numbered_list",
+  ACTIVE_CLASS: "active",
   CURRENT_CLASS: "current",
+  LOADING_CLASS: "loading",
   PAGE_THUMB_CLASS: "page-thumb",
   PAGE_THUMB_SELECTOR: ".page-thumb",
   HIDE_THUMB_CLASS: "hide-thumbs",
   THUMB_STATE_BUTTON_SELECTOR: "a[href='#toggle-thumbs']",
   LEFT_BAR_BUTTON_SELECTOR: "a[href='#left-panel-toggle']",
-  ACTIVE_CLASS: "active", 
   NUMBER_SELECTOR: '.number',
   THUMB_SELECTOR: '.thumb',
   
@@ -156,27 +157,22 @@ WebDoc.PageBrowserController = $.klass({
   pageAdded: function(page) {
     ddd("[pageBrowserController] pageAdded");
     var pageItem = new WebDoc.PageBrowserItemView(page),
+        pageNode = pageItem.domNode,
         pos = page.data.position;
     
     this.pageMap[ page.uuid() ] = pageItem;
-
-    // TODO investigate    
-    if ( !this._stateThumbs ) {
-      pageItem.thumbNode.css({
-        height: 0
-      });
-    }
     
-    pageItem.domNode.data('webdoc', {
-      page: page
-    });    
     // Then put it in the DOM
     if (pos) {
-      this.domNodeBrowserItems.children().eq(pos-1).after( pageItem.domNode );
+      this.domNodeBrowserItems.children().eq(pos-1).after( pageNode );
     }
     else {
-      this.domNodeBrowserItems.prepend( pageItem.domNode );
+      this.domNodeBrowserItems.prepend( pageNode );
     }
+    
+    pageNode.data('webdoc', {
+      page: page
+    });
     
     this._updateIndexNumbers();
   },
@@ -247,11 +243,13 @@ WebDoc.PageBrowserController = $.klass({
   },
 
   selectCurrentPage: function(e) {
-    var pageItem = $( e.delegateTarget || e.target ),
-        data = pageItem.data('webdoc'),
+    var pageNode = $( e.delegateTarget || e.target ),
+        data = pageNode.data('webdoc'),
         currentId = WebDoc.application.pageEditor.currentPage.uuid(),
         page = data && data.page,
         clickedId = page && page.uuid();
+    
+    pageNode.addClass( this.LOADING_CLASS );
     
     // If not current page, then change it
     if( clickedId && clickedId !== currentId ) {
@@ -277,8 +275,13 @@ WebDoc.PageBrowserController = $.klass({
   _selectPageUI: function( page ) {
     var pageBrowserItem = this.pageMap[ page.uuid() ];
     
-    this.domNodeBrowserItems.children().removeClass(this.CURRENT_CLASS);
-    pageBrowserItem.domNode.addClass(this.CURRENT_CLASS);
+    this.domNodeBrowserItems
+    .children()
+    .removeClass(this.CURRENT_CLASS);
+    
+    pageBrowserItem.domNode
+    .removeClass(this.LOADING_CLASS)
+    .addClass(this.CURRENT_CLASS);
   },
   
   // Titles ---------------------------------------------------------
