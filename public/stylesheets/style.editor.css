@@ -575,7 +575,7 @@ a:hover { color: #0069BF;}
 }
 
 #board.move-tool        { cursor: move; }
-#board.draw-tool        { cursor: url('/images/icons/cursor_pen.png'), crosshair; }
+#board.draw-tool        { cursor: /*url('/images/icons/cursor_pen.png'),*/ crosshair; }
 #board.select-tool      { cursor: default; }
 #board.insert-html-tool {}
 #board.insert-text-tool {}
