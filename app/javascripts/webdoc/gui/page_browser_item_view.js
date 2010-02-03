@@ -1,5 +1,5 @@
 /**
- * @author david
+ * @author David / Stephen
  */
 //= require <mtools/record>
 //= require <webdoc/model/item>
@@ -123,7 +123,6 @@ WebDoc.PageBrowserItemView = $.klass({
   itemAdded: function(addedItem) {
    // If page contains a single text item, it will be used to define the page title, so add a listener to this item so it will notifiy its changes to the related browser node
    if(this.page.nbTextItems()===1 && addedItem.type() === "text") {
-     //console.log('itemAdded = text');
      addedItem.addListener(this);
    }
    this.checkUpdateTitle();

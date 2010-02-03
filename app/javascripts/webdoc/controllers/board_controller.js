@@ -177,7 +177,6 @@ WebDoc.BoardController = $.klass({
     }
   },
   
-  
   toggleInteractionMode: function() {  
     if (!this._isInteraction) {
       this.previousRightBarState = WebDoc.application.rightBarController.visible ? true : false;

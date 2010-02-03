@@ -393,7 +393,7 @@ WebDoc.PageBrowserController = $.klass({
       height: 0
     })
     .animate({
-      height: 83
+      height: 104
     }, {
       duration: 200
     });

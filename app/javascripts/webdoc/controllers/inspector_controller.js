@@ -13,6 +13,7 @@ WebDoc.InspectorController = $.klass({
     this.visible = true;
     this.widgetInspectorApi = new WebDoc.WidgetApi(null, true);
     this.domNode = $("#item_inspector");
+    
     var emptyPalette = $("#palette_empty").hide();
     var textPalette = $("#palette_text").hide();
     var penPelette = $("#palette_pen").hide();
@@ -45,7 +46,7 @@ WebDoc.InspectorController = $.klass({
     this.subInspectors.push(propertiesInspectorController);   
     var innerHtmlController = new WebDoc.InnerHtmlController();
     this.subInspectors.push(innerHtmlController);            
-
+    
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
     var htmlInspector = $("#html_inspector"); 

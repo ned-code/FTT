@@ -57,7 +57,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
     WebDoc.application.rightBarController = new WebDoc.RightBarController();
-    WebDoc.application.inspectorController = new WebDoc.InspectorController();
+    //WebDoc.application.inspectorController = new WebDoc.InspectorController();
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
 

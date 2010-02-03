@@ -532,7 +532,7 @@ a:hover { color: #0069BF;}
 
 .pages li .thumb {
   position: relative;
-  width: 136px; height: 83px;
+  width: 136px; height: 104px; /* height is height+14, to account for shadow */
   margin: 0 auto;
   overflow: hidden;
   padding: 0;
@@ -542,7 +542,7 @@ a:hover { color: #0069BF;}
 }
 .pages li .thumb .page-thumb {
   position: absolute;
-  bottom: 14px;
+  bottom: 14px;               /* 14px to account for shadow */
   left: 50%;
   margin-left: -60px;
   
