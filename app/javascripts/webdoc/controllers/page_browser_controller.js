@@ -249,10 +249,9 @@ WebDoc.PageBrowserController = $.klass({
         page = data && data.page,
         clickedId = page && page.uuid();
     
-    pageNode.addClass( this.LOADING_CLASS );
-    
     // If not current page, then change it
     if( clickedId && clickedId !== currentId ) {
+      pageNode.addClass( this.LOADING_CLASS );
       this.selectPage( page );
     }
   },
@@ -322,6 +321,12 @@ WebDoc.PageBrowserController = $.klass({
     var browserNode = this.domNodeBrowserItems;
     if (this._stateThumbs) {
       browserNode.removeClass( this.HIDE_THUMB_CLASS );
+      
+      // This could be improved - really we want the browserNode to be
+      // the entire .inspector inside the pane.  And then we can search 
+      // thumb state button inside this inspector only...
+      // requires a bit of refactoring...
+      
       $( this.THUMB_STATE_BUTTON_SELECTOR ).addClass( this.ACTIVE_CLASS );
     }
     else {
