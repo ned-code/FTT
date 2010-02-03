@@ -459,7 +459,6 @@ a:hover { color: #0069BF;}
   background-color: hsl(194, 12%, 24%);
   color: white;
 }
-
 .pages li .loading-icon {
     right: 0.6em;
 }
@@ -477,7 +476,18 @@ a:hover { color: #0069BF;}
 .page_browser_items li.current {
   background: none;
 }
+
+/* I have two styles of thumbs for your delectation.
+ * 
+ * To change style you need to edit the corresponding animations
+ * in page_browser_controller.js. (That could be improved!)
+ */
+ 
+/* 1. With border, looks like an extension of the title block */
+
+/*
 .pages li .thumb {
+  position: relative;
   width: 120px; height: 75px;
   margin: 0 auto;
   overflow: hidden;
@@ -506,14 +516,41 @@ a:hover { color: #0069BF;}
 .pages li.current .thumb {
   border-color: hsl(194, 3%, 88%);
 }
+.hide-thumbs li .thumb {
+  height: 0;
+  margin-bottom: 0;
+  border-bottom-width: 0;
+}
 .pages li .thumb .page-thumb {
   position: absolute;
-  top: 50%;
+  left: 0; bottom: 50%;
   margin-top: -45px;
+}*/
+
+/* 2. As a sheet, looks like it appears from a slot in the title block */
+
+.pages li .thumb {
+  position: relative;
+  width: 136px; height: 83px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 0;
+  top: -2px;
+  border: none;
+  border-top: 1px solid hsl(194, 15%, 40%);
 }
-.hide-thumbs .thumb {
-  /* Needs important else jQuery's inline styling for animating overrides it */
-  display: none !important;
+.pages li .thumb .page-thumb {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  margin-left: -60px;
+  
+  -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
+  -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
+  box-shadow:         0 6px 8px hsl(14, 6%, 30%);
+}
+.hide-thumbs li .thumb {
+  height: 0;
   border: none;
 }
 

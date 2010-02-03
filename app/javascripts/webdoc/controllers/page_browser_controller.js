@@ -189,7 +189,6 @@ WebDoc.PageBrowserController = $.klass({
     pageBrowserItem.destroy();
     delete this.pageMap[ page.uuid() ];
     this._updateIndexNumbers();
-    
   },
 
   pageMoved: function(page, newPosition, previousPosition) { 
@@ -336,17 +335,27 @@ WebDoc.PageBrowserController = $.klass({
   
   hideThumbs: function() {
     var browserNode = this.domNodeBrowserItems,
-        thumbs = browserNode.find( this.THUMB_SELECTOR );
+        thumbs = browserNode.find( this.THUMB_SELECTOR ),
+        hideThumbClass = this.HIDE_THUMB_CLASS,
+        hideThumbFlag = true;
     
     thumbs
+    //.animate({
+    //  height: 0,
+    //  marginBottom: 0,
+    //  borderBottomWidth: 0
+    //}, {
     .animate({
-      height: 0,
-      marginBottom: 0,
-      borderBottomWidth: 0
+      height: 0
     }, {
       duration: 200,
       complete: function(){
-        browserNode.addClass( this.HIDE_THUMB_CLASS );
+        // complete fires for every item in the list
+        // We only want to set this class once
+        if ( hideThumbFlag ) {
+          browserNode.addClass( hideThumbClass );
+        }
+        hideThumbFlag = false;
       }
     });
     
@@ -362,10 +371,21 @@ WebDoc.PageBrowserController = $.klass({
     
     browserNode.removeClass( this.HIDE_THUMB_CLASS );    
     thumbs
+    //.css({
+    //  height: 0,
+    //  marginBottom: 0,
+    //  borderBottomWidth: 0
+    //})
+    //.animate({
+    //  height: 75,
+    //  marginBottom: 14,
+    //  borderBottomWidth: 6
+    //}, {
+    .css({
+      height: 0
+    })
     .animate({
-      height: 75,
-      marginBottom: 14,
-      borderBottomWidth: 6
+      height: 83
     }, {
       duration: 200
     });
