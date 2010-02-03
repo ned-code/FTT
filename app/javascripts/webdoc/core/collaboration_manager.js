@@ -24,7 +24,7 @@ WebDoc.CollaborationManager = $.klass(
 
     listenXMPPNode: function(nodeName) {
       $.getJSON("/users/current", function(userData) {
-        this._from = userData.user.name + "@webdoc.com/web_" + WebDoc.application.pageEditor.applicationUuid ;
+        this._from = userData.user.name.toLowerCase() + "@webdoc.com/web_" + WebDoc.application.pageEditor.applicationUuid ;
         ddd("XMPP user from", this._from, userData);
         // we want to listen only one node. So be sure to remove all previous connection and create a new fresh XMPP connection.
         this.disconnect();
