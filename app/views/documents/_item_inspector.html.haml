@@ -1,12 +1,12 @@
 #item_inspector{ :style => "display: none" }
-  .toolbar
-    %h1= t("label.item_inspector") 
   #inspectors 
-    %h3
-      %a{ :href => "" } Palette
+    -#%h3
+    -#  %a{ :href => "" } Palette
     #palette_inspector.inspector
+      %div.head
+        %h2 Text Inspector
       #palette_text.palette
-        %ul{ :style => "display:block" }
+        %ul
           %li
             %a.bold{ :href => "" }
               %span= "Bold"
@@ -67,6 +67,7 @@
               %option{ :value => "default", :selected => "selected" } Choose font name
               %option{ :value => "arial" } Arial
               %option{ :value => "comic sans ms" } Comic Sans
+              %option{ :value => "courier" } Courier
               %option{ :value => "courier new" } Courier New    
               %option{ :value => "georgia" } Georgia    
               %option{ :value => "helvetica" } Helvetica    
@@ -75,6 +76,10 @@
               %option{ :value => "trebuchet ms" } Trebuchet
               %option{ :value => "verdana" } Verdana                                                                                                    
         #palette_overlay
+      %div.foot
+        %h2 Foot
+      
+      
       #palette_pen.palette
         %ul#colors{ :style => "display:block" }
           %li

@@ -667,9 +667,6 @@ a:hover { color: #0069BF;}
   padding-top:140px;  
 }
 /* === pen palette */
-#palette_text {
-  font-size:12px;
-}
 #palette_overlay {
   position:absolute;
   top:0;
