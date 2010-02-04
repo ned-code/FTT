@@ -369,7 +369,8 @@ WebDoc.TextToolView = $.klass({
       this.iframe = document.createElement('iframe');
       this.iframe.setAttribute("width",'100%');
       this.iframe.setAttribute("height",'100%');
-      this.iframe.setAttribute("frameborder",0);  
+      this.iframe.setAttribute("frameborder",0);
+  
           divElement.appendChild(this.iframe);
         this.edWin = this.iframe.contentWindow;
       this.edDoc = this.edWin.document;
@@ -378,7 +379,7 @@ WebDoc.TextToolView = $.klass({
       content.open("text/html", "replace");
       this.frameStyles = '';  
       for(i=0;i<this.mainPageStyles.length;i++){ this.frameStyles += "<link rel='stylesheet' href='"+this.mainPageStyles[i]+"' type='text/css' />"; }
-      content.write("<html><head>"+this.frameStyles+"<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; height:100%; margin:0px; background-color:#ffffff;} </style></head><body contenteditable='true'></body></html>");  
+      content.write("<html><head>"+this.frameStyles+"<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; height:100%; margin:0px; background:none;} </style></head><body contenteditable='true'></body></html>");  
         content.close();  
         this.edDoc.designMode='On';
         this.packHTMLtoEditor = function(HTML){ 
@@ -388,7 +389,7 @@ WebDoc.TextToolView = $.klass({
           this.edDoc.body.firstChild.style.padding = '0px';
           this.edDoc.body.firstChild.style.border = 'none';
           this.edDoc.body.firstChild.style.position = 'relative';
-              this.edDoc.body.firstChild.style.background = 'rgba(255,255,255,0)';
+          this.edDoc.body.firstChild.style.background = 'none';
         }
         if(storedContent){this.packHTMLtoEditor(storedContent)};
       this.iframe.focus();
