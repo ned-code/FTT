@@ -417,15 +417,9 @@ a:hover { color: #0069BF;}
     cursor: move;
 }
 .pages li .title {
-  height: 1.5em;
-  background: hsl(194, 9%, 71%);
-  padding: 0.6em 0.6em 0.6em 2.5em;
-}
-.pages li:hover .title {
-  background: hsl(194, 6%, 56%);
-}
-.pages li.current .title {
-  background: hsl(194, 3%, 88%);
+    height: 1.5em;
+    background: hsl(194, 9%, 71%);
+    padding: 0.6em 0.6em 0.6em 2.5em;
 }
 .pages li .number,
 .pages li .loading-icon {
@@ -439,40 +433,17 @@ a:hover { color: #0069BF;}
 }
 .pages li .number {
     left: 0.6em;
-    
     /* Just to nudge the text into place */
     /*text-indent: 1px;*/
     font-weight: bold;
     line-height: 1.5;
     text-align: center;
 }
-.pages li .number {
-  background-color: hsl(194, 10%, 40%);
-  color: white;
-}
-.pages li:hover .number {
-  background-color: hsl(194, 12%, 24%);
-  color: white;
-}
-.pages li.current .number {
-  background-color: hsl(194, 12%, 24%);
-  color: white;
-}
 .pages li .loading-icon {
     right: 0.6em;
 }
-.loading-icon {
-    display: none;
-    background-position: 50% 50%;
-    background-image: url('/images/loading-icon-16.gif');
-    background-color: #dedede;
-}
-.loading .loading-icon {
-    display: block;
-}
-
 .page_browser_items li.current {
-  background: none;
+    background: none;
 }
 
 /* I have two styles of thumbs for your delectation.
@@ -684,9 +655,7 @@ a:hover { color: #0069BF;}
 .ui-state-hover a, .ui-state-hover a:hover {
   background-color:  #fff;
 }
-#right_bar{
-    background-color: #ebebeb;
-}
+
 #inspectors {
   position:relative;
   overflow:auto; 
