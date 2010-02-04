@@ -104,16 +104,19 @@
     <li>Comment unusual code. CSS, particularly browser-specific CSS, does not always explain itself very well.</li>
 </ul>
 
-<p>IE6 is not supported so you can freely use child <code>&gt;</code> and attribute <code>[attr=value]</code> selectors. For support of other selectors check with a browser support matrix such as the one at QuirksMode:</p>
+<p>IE6 is not supported so you can freely use child <code>&gt;</code> and attribute <code>[attr='value']</code> selectors. For support of other selectors check with a browser support matrix such as the one at QuirksMode:</p>
 
 <p><a href="http://www.quirksmode.org/css/contents.html">www.quirksmode.org/css/contents.html</a></p>
 
 <h2>Best practises</h2>
 <ul>
-    <li>Avoid <code>htmltag.class</code> or <code>htmltag#id</code> constructs. In general, defining html tag names as well as classes or ids is unnecessary, and only slows down the browser.</li>
+    <li>Avoid <code>tag.class</code> or <code>tag#id</code> constructs. In general, defining html tag names as well as classes or ids is unnecessary, and only slows down the browser.</li>
     <li>Avoid <code>*</code> selectors at the ends of style rules. Selecting everything is expensive, and can slow down the browser. Selection engines work right-to-left.</li>
 </ul>
-
+<h2>Voodoo</h2>
+<ul>
+  <li>If FF is not styling .class:hover declarations, its an indication that your doctype has gone missing. Voodoo.</li>
+</ul>
 <aside>* Note: getting caught using Comic Sans MS is grounds for instant dismissal.</aside>
 
 </body>
