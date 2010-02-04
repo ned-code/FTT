@@ -10,9 +10,12 @@
 
 WebDoc.InspectorController = $.klass({
   initialize: function() {
+    
+    // Get DOM tree
+    this.domNode = $("#item_inspector");
+    
     this.visible = true;
     this.widgetInspectorApi = new WebDoc.WidgetApi(null, true);
-    this.domNode = $("#item_inspector");
     
     var emptyPalette = $("#palette_empty").hide();
     var textPalette = $("#palette_text").hide();
@@ -20,6 +23,7 @@ WebDoc.InspectorController = $.klass({
     var imagePelette = $("#palette_image").hide();
     var htmlSnippetPalette = $("#html_inspector").hide();
     this.imagePaletteController = new WebDoc.ImagePaletteController();
+    
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
       ddd("must inject uniboard api in inspector");
@@ -40,6 +44,7 @@ WebDoc.InspectorController = $.klass({
     }.pBind(this));
     
     this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette, imagePelette, htmlSnippetPalette];
+
     this.updatePalette(0);
     this.subInspectors = [];
     var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
@@ -55,6 +60,7 @@ WebDoc.InspectorController = $.klass({
     this.selectInspector(0);
     this.currentInspectorId = 0;
     WebDoc.application.boardController.addSelectionListener(this);
+    
     $("#inspectors").accordion({
       autoHeight: false,
       fillSpace: false,
@@ -77,7 +83,7 @@ WebDoc.InspectorController = $.klass({
   },
   
   updatePalette: function(paletteId) {
-    if (paletteId != this.currentPaletteId) {
+    if (paletteId !== this.currentPaletteId) {
       if (this.currentPaletteId !== undefined) {
         ddd("hide palette", this.currentPaletteId);
         this.palettes[this.currentPaletteId].hide();
@@ -96,7 +102,7 @@ WebDoc.InspectorController = $.klass({
         this.currentPaletteId = paletteId;        
       }
     }
-    if (paletteId == 4) {
+    if (paletteId === 4) {
       this.imagePaletteController.refresh();
     }
   },
@@ -111,7 +117,7 @@ WebDoc.InspectorController = $.klass({
     }
     this.refreshSubInspectors();    
   },
- 
+  
   refreshSubInspectors: function() {
     for (var i=0; i < this.subInspectors.length; i++) {
       var subInspector = this.subInspectors[i];
@@ -135,5 +141,3 @@ WebDoc.InspectorController = $.klass({
     }    
   }  
 });
-
-$.extend(WebDoc.InspectorController, {});
