@@ -412,7 +412,7 @@ a:hover { color: #0069BF;}
 }
 
 .pages li {
-    margin-bottom: 2px;
+    margin-bottom: 1px;
     position: relative;
     cursor: move;
     cursor: row-resize;
