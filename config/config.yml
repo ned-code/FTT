@@ -1,18 +1,14 @@
 development:
   synch_openfire_users: false
-  openfire_user_service_url: http://174.129.27.25:9090/plugins/userService/
-  openfire_user_service_secret: pt2AFc2B
 
 test:
   synch_openfire_users: false
 
 staging:
   synch_openfire_users: false
-  openfire_user_service_url: http://localhost:9090/plugins/userService/
-  openfire_user_service_secret: ????
 
 production:
-  synch_openfire_users: false
+  synch_openfire_users: true
   openfire_user_service_url: http://localhost:9090/plugins/userService/
   openfire_user_service_secret: pt2AFc2B
   
