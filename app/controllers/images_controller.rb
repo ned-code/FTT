@@ -52,4 +52,8 @@ class ImagesController < ApplicationController
     head :ok
   end
   
+  #no authentication for images as SWFUpload does not like it so much
+  def authenticate
+  end
+  
 end

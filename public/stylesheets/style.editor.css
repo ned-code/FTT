@@ -518,8 +518,6 @@ a:hover { color: #0069BF;}
 #board {
     position: relative;
     overflow: hidden;
-    font-family:Helvetica, Arial, sans-serif;
-    font-size: 2.5em;
 }
 
 #board.move-tool        { cursor: move; }
@@ -528,18 +526,22 @@ a:hover { color: #0069BF;}
 #board.insert-html-tool {}
 #board.insert-text-tool {}
 
-#board ol, #board ul {
+.board-style {
+  font-family:Helvetica, Arial, sans-serif;
+  font-size: 2.5em;
+}
+
+.board-style ol, .board-style ul {
   padding-left:1.5em;
   margin-bottom: 0.4em;
 }
-#board ol ol, #board ul ul {
+.board-style ol ol, .board-style ul ul {
   margin-top: -0.1em;
   font-size: 0.8em;
 }
-#board ol li, #board ul li {
+.board-style ol li, .board-style ul li {
   margin-bottom: 0.2em;
 }
-
 
 /* == Item view = */
 .drag_handle {

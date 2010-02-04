@@ -21,8 +21,6 @@ ActionController::Routing::Routes.draw do |map|
     m.logout '/logout', :action => 'destroy' # logout_path
   end
 
-  map.connect 'widgets/wikibot/search', :controller => 'wikibot', :action => 'search', :conditions => { :method => :get }
-  
   # dev controller
   map.resources :medias
   map.resources :images, :except => [:new, :edit, :update]
