@@ -2,7 +2,7 @@ require "xmpp_helper"
 
 class ApplicationController < ActionController::Base
   
-  #before_filter :authenticate
+  before_filter :authenticate
   
   include XmppHelper  
   include AuthenticatedSystem
@@ -25,7 +25,7 @@ protected
   end
   
   def public_document?
-    public_read_document? || public_edit_document?
+    public_read_document? || public_edit_document?appl  
   end
   def public_read_document?
     global_user.has_role?("reader",@document)
@@ -36,8 +36,10 @@ protected
   end  
   
   def authenticate
-    authenticate_or_request_with_http_basic do |username, password|
-      username == "webdoc" && password == "_wcwebdoc10"
+    if Rails.env == 'production'
+      authenticate_or_request_with_http_basic do |username, password|
+        username == "wduser" && password == "wdalpha001"
+      end
     end
   end
 end
