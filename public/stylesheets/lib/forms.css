@@ -18,7 +18,7 @@ label {
 }
 input[type=text], input[type=password],
 input.text {
-  text-indent: -1px;  /* Positions text in the same place it is in labels */
+  text-indent: -1px;  /* Positions text in the same place it is in labels in WebKit / Mozilla */
   border: none;
 }
 
@@ -74,7 +74,7 @@ form.inline p { margin-bottom:0; }
 .success a  { color: #264409; }
 
 .inspector form.content {
-
+    padding-top: 0.8em;
 }
 /* Fieldsets */
 .properties,
@@ -158,10 +158,10 @@ form.inline p { margin-bottom:0; }
 }
 
 .properties input[type=text] {
-    border: 2px solid;
-    /*-moz-border-radius: 1em;
+    /*border: 2px solid;*/
+    -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
-    border-radius: 1em;*/
+    border-radius: 1em;
     
     /*color: rgb(63, 63, 63);*/
     background: white;
@@ -242,9 +242,6 @@ form.inline p { margin-bottom:0; }
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   
-  background-color: transparent;
-  color: black;
-  
   height: 1.5em;
   margin: 0 0 0.8em 0;
   padding: 0.1659em 0.5em 0;
@@ -258,22 +255,11 @@ form.inline p { margin-bottom:0; }
 }
 .pop.active {
   border: 3px solid hsla(194, 20%, 20%, 0.8);
-  background: hsla(194, 20%, 20%, 0.92);
   margin: -3px;
   z-index: 999;
-  
-  -webkit-box-shadow: 0 0 12px rgba(77, 70, 68, 1);
-  -moz-box-shadow:    0 0 12px rgba(77, 70, 68, 1);
-  box-shadow:         0 0 12px rgba(77, 70, 68, 1);
 }
 .pop input[type='text']:focus {
   outline: none;
-  color: black;
-  background-color: hsl(194, 0.4%, 99%);
-}
-.pop:hover input[type='text'],
-.pop.active input[type='text'] {
-  background-color: hsl(194, 1%, 96%);
 }
 
 .active-show {

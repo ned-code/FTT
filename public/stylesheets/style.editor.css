@@ -382,34 +382,11 @@ a:hover { color: #0069BF;}
   display:none;
 }
 
-/*******************/
-
-/* == page browser = */
-
-.selected_thumb {
-  padding: 2px;
-  border: solid 2px #3B9EEF;
-  -webkit-user-drag:element;
-}
-.page_thumb_url {
-  color:#000;
-  background-color: #fff;
-  margin-top:30px;
-}
-.page_thumb_external {
-  background-color: #fff;
-}
 .widget_thumb {
   background-color: #aaf;
 }
 
-
-
-/* Page Browser */
-
-#page_browser_left .content {
-  padding: 0;
-}
+/* Pages Browser */
 
 .pages li {
     margin-bottom: 1px;

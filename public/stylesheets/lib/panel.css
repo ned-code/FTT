@@ -36,7 +36,7 @@
 
 .inspector .content {
     /* IE8 doesn't display padding bottom. Tant pis. */
-    padding: 8px;
+    padding: 0;
     top: 0; bottom: 0;
     overflow-x: hidden;
     overflow-y: auto;

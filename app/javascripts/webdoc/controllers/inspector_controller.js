@@ -60,17 +60,6 @@ WebDoc.InspectorController = $.klass({
     this.selectInspector(0);
     this.currentInspectorId = 0;
     WebDoc.application.boardController.addSelectionListener(this);
-    
-    $("#inspectors").accordion({
-      autoHeight: false,
-      fillSpace: false,
-      change: function(event, ui) {
-        if (this.currentInspectorId > 0) {
-          this.lastInspectorId = this.currentInspectorId;
-        }
-        this.currentInspectorId = $.inArray(ui.newContent.parent()[0], this.inspectors);
-      }.pBind(this)
-    });
   }, 
   
   selectInspector: function(inspectorId) {

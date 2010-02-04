@@ -1,0 +1,21 @@
+/* states.css
+ * 
+ * Takes care of the state classes:
+ *   .loading
+ *   .active
+ *   .current
+ *   .state-xxx
+ * 
+ * State classes must NOT have default style applied, they are there to indicate state only.
+ * Children of state classes (or nodes that happen to have state as well) can be styled.
+ */
+
+.loading-icon {
+    display: none;
+    background-position: 50% 50%;
+    background-image: url('/images/loading-icon-16.gif');
+    background-color: #dedede;
+}
+.loading .loading-icon {
+    display: block;
+}
