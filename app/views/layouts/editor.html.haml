@@ -15,30 +15,33 @@
     = stylesheet_link_tag 'style.editor'
     = stylesheet_link_tag 'style.editor.colors'
     
-  %body.editor.edit-mode
-    #wrap
-      = yield
-    = javascript_include_tag 'jquery'      
-    = javascript_include_tag 'jquery-json'
-    = javascript_include_tag 'jquery-string'
-    = javascript_include_tag 'jquery-ui'
-    
-    = javascript_include_tag 'jquery.extensions'
-    = javascript_include_tag 'jquery.events'
-    = javascript_include_tag 'jquery.panel'
-    
-    = javascript_include_tag 'klass'
-    = javascript_include_tag '../swfupload/swfupload.js'
-    = javascript_include_tag 'jquery-swfupload'
-    = javascript_include_tag 'sylvester'
-    = javascript_include_tag 'strophe'
-    
-    = sprockets_include_tag
-    :javascript
+  -if (@is_reader)  
+    %body.editor.embed-mode
+  -else
+    %body.editor.edit-mode
+      #wrap
+        = yield
+      = javascript_include_tag 'jquery'      
+      = javascript_include_tag 'jquery-json'
+      = javascript_include_tag 'jquery-string'
+      = javascript_include_tag 'jquery-ui'
       
-      $(function()
-      {
-        WebDoc.run();
-      });    
-    
-    = render :partial => "layouts/googleAnalytics"
+      = javascript_include_tag 'jquery.extensions'
+      = javascript_include_tag 'jquery.events'
+      = javascript_include_tag 'jquery.panel'
+      
+      = javascript_include_tag 'klass'
+      = javascript_include_tag '../swfupload/swfupload.js'
+      = javascript_include_tag 'jquery-swfupload'
+      = javascript_include_tag 'sylvester'
+      = javascript_include_tag 'strophe'
+      
+      = sprockets_include_tag
+      :javascript
+        
+        $(function()
+        {
+          WebDoc.run();
+        });    
+      
+      = render :partial => "layouts/googleAnalytics"

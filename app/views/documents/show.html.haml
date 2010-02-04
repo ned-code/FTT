@@ -92,14 +92,14 @@
   
   %ul#right_bar_tools.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
-    %li#lib_view>
-      %a{ :href => "#library", :title => "Show Library" }
+    %li>
+      %a.state-right-panel{ :href => "#library", :title => "Show Library" }
         Library
-    %li#item_inspector_view.current_right_item>
-      %a{ :href => "#inspector", :title => "Show Inspector" }                      
+    %li>
+      %a.state-right-panel{ :href => "#item-inspector", :title => "Show Inspector" }                      
         Item
-    %li#page_inspector_view>
-      %a{ :href => "#page-inspector", :title => "Show Page inspector" }
+    %li>
+      %a.state-right-panel.current{ :href => "#page-inspector", :title => "Show Page inspector" }
         Page
 
 #left_bar.left-panel.panel

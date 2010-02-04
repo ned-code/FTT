@@ -385,13 +385,6 @@ a:hover { color: #0069BF;}
 /*******************/
 
 /* == page browser = */
-.page-thumb {
-  margin: 0 auto;
-}
-.pop input.default {
-  font-style: italic;
-  font-weight: normal;
-}
 
 .selected_thumb {
   padding: 2px;
@@ -414,75 +407,153 @@ a:hover { color: #0069BF;}
 
 /* Page Browser */
 
+#page_browser_left .content {
+  padding: 0;
+}
+
 .pages li {
     margin-bottom: 2px;
     position: relative;
+    cursor: move;
+    cursor: row-resize;
 }
 .pages li .title {
-    height: 32px;
-    background: red;
-    padding-left: 32px;
+  height: 1.5em;
+  background: hsl(194, 9%, 71%);
+  padding: 0.6em 0.6em 0.6em 2.5em;
 }
-.pages li .number {
-    position: absolute;
-    top: 8px; left: 8px;
-    width: 16px; height: 16px;
-    
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
-    
-    /* Just to nudge the text into place */
-    text-indent: 0.4px;
-    text-align: center;
-    font-weight: bold;
-    line-height: 16px;
-    text-align: center;
+.pages li:hover .title {
+  background: hsl(194, 6%, 56%);
 }
-
+.pages li.current .title {
+  background: hsl(194, 3%, 88%);
+}
+.pages li .number,
 .pages li .loading-icon {
     position: absolute;
-    top: 8px; right: 8px;
-    width: 16px; height: 16px;
+    top: 0.6em;
+    width: 1.5em; height: 1.5em;
     
-    background-color: black;
+    -webkit-border-radius:  0.75em;
+    -moz-border-radius:     0.75em;
+    border-radius:          0.75em;
+}
+.pages li .number {
+    left: 0.6em;
     
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
+    /* Just to nudge the text into place */
+    text-indent: 1px;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1.5;
+    text-align: center;
+}
+.pages li .number {
+  background-color: hsl(194, 10%, 40%);
+  color: white;
+}
+.pages li:hover .number {
+  background-color: hsl(194, 12%, 24%);
+  color: white;
+}
+.pages li.current .number {
+  background-color: hsl(194, 12%, 24%);
+  color: white;
+}
+.pages li .loading-icon {
+    right: 0.6em;
 }
 
+.loading-icon {
+    display: none;
+    background-position: 50% 50%;
+    background-image: url('/images/loading-icon-16.gif');
+    background-color: #dedede;
+}
 .loading .loading-icon {
     display: block;
 }
 
-
-.page_browser_items li {
-  -webkit-border-radius: 16px;
-  -moz-border-radius:    16px;
-  border-radius:         16px;
-
-  position: relative;
-}
 .page_browser_items li.current {
   background: none;
 }
-.page_browser_items li:hover .pop{
-  background: #bec4c6;
-}
-.page_browser_items li.current .pop{
-  background: #c6cdcf;
-}
-.page_browser_items li.current .pop.active{
-  background: #222627;
-}
-.page_browser_items li .title {
-  height: 32px;
-}
-.hide-thumbs .page-thumb {
-  display: none !important;
-}
 
+/* I have two styles of thumbs for your delectation.
+ * 
+ * To change style you need to edit the corresponding animations
+ * in page_browser_controller.js. (That could be improved!)
+ */
+ 
+/* 1. With border, looks like an extension of the title block */
+
+/*
+.pages li .thumb {
+  position: relative;
+  width: 120px; height: 75px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  top: 0px;
+  padding: 0;
+  margin-bottom: 6px;
+  
+  border: 6px solid hsl(194, 9%, 71%);
+  border-top: 0;
+  
+  -webkit-border-bottom-left-radius:  3px;
+  -moz-border-radius-bottomleft:      3px;
+  border-bottom-left-radius:          3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-bottomright:     3px;
+  border-bottom-right-radius:         3px;
+  
+  -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
+  -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
+  box-shadow:         0 6px 8px hsl(14, 6%, 30%);
+}
+.pages li:hover .thumb {
+  border-color: hsl(194, 6%, 56%);
+}
+.pages li.current .thumb {
+  border-color: hsl(194, 3%, 88%);
+}
+.hide-thumbs li .thumb {
+  height: 0;
+  margin-bottom: 0;
+  border-bottom-width: 0;
+}
+.pages li .thumb .page-thumb {
+  position: absolute;
+  left: 0; bottom: 50%;
+  margin-top: -45px;
+}*/
+
+/* 2. As a sheet, looks like it appears from a slot in the title block */
+
+.pages li .thumb {
+  position: relative;
+  width: 136px; height: 104px; /* height is height+14, to account for shadow */
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 0;
+  top: -2px;
+  border: none;
+  border-top: 1px solid hsl(194, 15%, 40%);
+}
+.pages li .thumb .page-thumb {
+  position: absolute;
+  bottom: 14px;               /* 14px to account for shadow */
+  left: 50%;
+  margin-left: -60px;
+  
+  -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
+  -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
+  box-shadow:         0 6px 8px hsl(14, 6%, 30%);
+}
+.hide-thumbs li .thumb {
+  height: 0;
+  border: none;
+}
 
 /*******************/
 /* = board part = */
@@ -505,7 +576,7 @@ a:hover { color: #0069BF;}
 }
 
 #board.move-tool        { cursor: move; }
-#board.draw-tool        { cursor: url('/images/icons/cursor_pen.png'), crosshair; }
+#board.draw-tool        { cursor: /*url('/images/icons/cursor_pen.png'),*/ crosshair; }
 #board.select-tool      { cursor: default; }
 #board.insert-html-tool {}
 #board.insert-text-tool {}

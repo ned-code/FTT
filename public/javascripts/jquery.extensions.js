@@ -70,12 +70,14 @@
 
 jQuery.fn.extend({
     
-    // Get or set id (attribute helper)
+    // Attribute helpers
     
     id: function(id) {
-        return (id === undefined) ? 
-            this.attr("id") :
-            this.attr("id", id) ;
+        return this.attr("id", id) ;
+    },
+    
+    href: function(href) {
+        return this.attr("href", href) ;
     },
     
     /**!

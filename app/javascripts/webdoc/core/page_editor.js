@@ -57,7 +57,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
     WebDoc.application.rightBarController = new WebDoc.RightBarController();
-    WebDoc.application.inspectorController = new WebDoc.InspectorController();
+    //WebDoc.application.inspectorController = new WebDoc.InspectorController();
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
 
@@ -83,9 +83,8 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     {
       this.currentDocument = data[0];
       this.currentDocument.addListener(this);
-      WebDoc.application.pageBrowserController.setDocument(this.currentDocument);
       this.loadPageId(window.location.hash.replace("#", ""));
-      WebDoc.application.pageBrowserController.initializePageBrowser();
+      WebDoc.application.pageBrowserController.setDocument(this.currentDocument);      
       ddd("check editablity");
       if (WebDoc.application.boardController.isEditable()) {
         ddd("Show lib");
@@ -122,7 +121,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     ddd("set hash to current page position");
     window.location.hash = "#" + (page.uuid());
     this.currentPage = page;
-    
     WebDoc.application.boardController.setCurrentPage(this.currentPage);
   },
   

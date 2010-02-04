@@ -20,10 +20,10 @@ WebDoc.PropertiesInspectorController = $.klass({
       $("#empty_properties").hide();
       $("#default_properties").show();      
       var selectedItem = WebDoc.application.boardController.selection()[0];
-      $("#property_top")[0].value = selectedItem.item.position.top;
-      $("#property_left")[0].value = selectedItem.item.position.left;
-      $("#property_width")[0].value = selectedItem.item.size.width;
-      $("#property_height")[0].value = selectedItem.item.size.height;      
+      $("#property_top")[0].value = selectedItem.item.data.data.css.top;
+      $("#property_left")[0].value = selectedItem.item.data.data.css.left;
+      $("#property_width")[0].value = selectedItem.item.data.data.css.width;
+      $("#property_height")[0].value = selectedItem.item.data.data.css.height;      
       $("#property_scroll").attr("checked", selectedItem.domNode.css("overflow") == "auto");
  			$("#property_opacity")[0].value = selectedItem.item.data.data.css.opacity || "1";
     }
@@ -51,8 +51,8 @@ WebDoc.PropertiesInspectorController = $.klass({
 			case "property_left":
 			case "property_top":
 				var previousPosition = {
-	        top: item.position.top,
-	        left: item.position.left
+	        top: item.data.data.css.top,
+	        left: item.data.data.css.left
 	      };
 	      var newPosition = {
 	        top: $("#property_top")[0].value,
@@ -69,8 +69,8 @@ WebDoc.PropertiesInspectorController = $.klass({
 			case "property_width":
 			case "property_height":
 				var previousSize = {
-	        width: item.size.width,
-	        height: item.size.height
+	        width: item.data.data.css.width,
+	        height: item.data.data.css.height
 	      }; 
 	      var newSize = {
 	        width: $("#property_width")[0].value,

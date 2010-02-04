@@ -289,7 +289,7 @@
                     toPage.removeClass('in reverse ' + animation.name);
                     fromPage.removeClass('current out reverse ' + animation.name);
                     fromPage.hide(); // zeno: necessary for slideup reverse animation withouth webkit transitions
-                    $("#"+mainContainerId).css({'overflow-y':'visible'}); // zeno: rehestablish vertical scrollbar
+                    //$("#"+mainContainerId).css({'overflow-y':'visible'}); // zeno: rehestablish vertical scrollbar
                 }
                 else
                 {
@@ -346,7 +346,7 @@
                   case "slideup":
                     tapReady = false;
                     toPage.show();
-                    $("#"+mainContainerId).css({'overflow-y':'hidden'}); // zeno: disable vertical scrollbar during slideup animation 
+                    //$("#"+mainContainerId).css({'overflow-y':'hidden'}); // zeno: disable vertical scrollbar during slideup animation 
                     var maxTop = toPage.height()+'px'; //"100%"
                     if (backwards) { //slide vertically reverse
                       fromPage.animate({top:maxTop}, { duration:defaultDuration, complete:callback });

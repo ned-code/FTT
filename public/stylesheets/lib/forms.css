@@ -1,14 +1,31 @@
-/* Forms
+/* Forms.css
  * 
- * Based on Blueprint by Joshua Clayton. Sets up some default styling for forms
- * and gives classes to enhance your forms.
+ * Stephen Band
+ *
+ * Extends Blueprint by Joshua Clayton. Sets up some default styling for forms
+ * and gives classes to enhance them.
+ *
+ * For just now, I'm only interested in Webkit and Mozilla.  IE can go jump.
  *
  */
 
-label       { font-weight: bold; }
 fieldset    { padding:1.4em; margin: 0 0 1.5em 0; border: 1px solid #ccc; }
 legend      { font-weight: bold; font-size:1.2em; }
 
+label {
+  font-weight: bold; 
+  line-height: 1.077;  /* A magic number that equalises FF's label baseline to its default input baseline. */
+}
+input[type=text], input[type=password],
+input.text {
+  text-indent: -1px;  /* Positions text in the same place it is in labels */
+  border: none;
+}
+
+input.default {
+  font-style: italic;
+  font-weight: normal;
+}
 
 /* Form fields */
 
@@ -16,7 +33,6 @@ input[type=text], input[type=password],
 input.text, input.title,
 textarea, select {
   background-color:#fff;
-  border:1px solid #bbb;
 }
 input[type=text]:focus, input[type=password]:focus,
 input.text:focus, input.title:focus,
@@ -200,27 +216,14 @@ form.inline p { margin-bottom:0; }
 /* Pop-ups */
 
 .pop {
-  height: 26px;
+  height: 1.5em;
   overflow: hidden;
-  border: 3px solid transparent;
-  background: #93999b;
   
-  -webkit-border-radius: 16px;
-  -moz-border-radius:    16px;
-  border-radius:         16px;
-}
-.pop:hover {
-  background: #bec4c6;
-  border: 3px solid #222627;
-}
-.pop.active {
-  z-index: 999;
-  border: 3px solid #222627;
-  background: #222627;
+  -webkit-border-radius: 1em;
+  -moz-border-radius:    1em;
+  border-radius:         1em;
   
-  -webkit-box-shadow: 0 0 12px rgba(77, 70, 68, 1);
-  -moz-box-shadow:    0 0 12px rgba(77, 70, 68, 1);
-  box-shadow:         0 0 12px rgba(77, 70, 68, 1);
+  cursor: text;
 }
 .pop {
     position: relative;
@@ -233,26 +236,51 @@ form.inline p { margin-bottom:0; }
 .pop.active .screen {
     display: none;
 }
+.pop label,
 .pop input[type='text'] {
-  background: none;
-  border: none;
-  width: 100%;
-  padding-left: 1em;
-  height: 26px;
-  line-height: 24px;
-  font-weight: bold;
-  color: white;
-  margin: 0 0 6px 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  
+  background-color: transparent;
+  color: black;
+  
+  height: 1.5em;
+  margin: 0;
+  padding: 0.1659em 0.5em 0;
+  font-family: 'Helvetica', sans-serif;
   font-size: 1em;
-
-  -webkit-border-radius: 13px;
-  -moz-border-radius:    13px;
-  border-radius:         13px;
+  width: 100%;
+  
+  -webkit-border-radius: 0.75em;
+  -moz-border-radius:    0.75em;
+  border-radius:         0.75em;
+}
+.pop.active {
+  border: 3px solid hsla(194, 20%, 20%, 0.8);
+  background: hsla(194, 20%, 20%, 0.92);
+  margin: -3px;
+  z-index: 999;
+  
+  -webkit-box-shadow: 0 0 12px rgba(77, 70, 68, 1);
+  -moz-box-shadow:    0 0 12px rgba(77, 70, 68, 1);
+  box-shadow:         0 0 12px rgba(77, 70, 68, 1);
+}
+.pop input[type='text'] {
+  margin-bottom: 0.8em;
+}
+.pop:hover input[type='text'],
+.pop.active input[type='text'] {
+  background: hsl(194, 1%, 96%);
 }
 .pop input[type='text']:focus {
   outline: none;
   color: black;
 }
-.pop.active input[type='text'] {
-  background: #eeeeee;
+
+.active-show {
+  display: none;
+}
+.active .active-show{
+  display: inline-block;
 }

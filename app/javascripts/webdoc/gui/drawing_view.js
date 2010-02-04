@@ -35,7 +35,6 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
   },
   
   objectChanged: function($super, item) {
-    $super(item);
     WebDoc.application.svgRenderer.updatePolyline(this.domNode.get(0), {
       points: item.data.data.points
     });
