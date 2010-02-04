@@ -415,7 +415,6 @@ a:hover { color: #0069BF;}
     margin-bottom: 1px;
     position: relative;
     cursor: move;
-    cursor: row-resize;
 }
 .pages li .title {
   height: 1.5em;
@@ -442,8 +441,7 @@ a:hover { color: #0069BF;}
     left: 0.6em;
     
     /* Just to nudge the text into place */
-    text-indent: 1px;
-    text-align: center;
+    /*text-indent: 1px;*/
     font-weight: bold;
     line-height: 1.5;
     text-align: center;
@@ -463,7 +461,6 @@ a:hover { color: #0069BF;}
 .pages li .loading-icon {
     right: 0.6em;
 }
-
 .loading-icon {
     display: none;
     background-position: 50% 50%;
@@ -480,8 +477,8 @@ a:hover { color: #0069BF;}
 
 /* I have two styles of thumbs for your delectation.
  * 
- * To change style you need to edit the corresponding animations
- * in page_browser_controller.js. (That could be improved!)
+ * To change style you also need to edit the corresponding animations
+ * in page_browser_controller.js. (That could be improved - we could auto-detect.)
  */
  
 /* 1. With border, looks like an extension of the title block */
@@ -524,15 +521,17 @@ a:hover { color: #0069BF;}
 }
 .pages li .thumb .page-thumb {
   position: absolute;
-  left: 0; bottom: 50%;
+  left: 0; top: 50%;
   margin-top: -45px;
-}*/
+}
+*/
 
 /* 2. As a sheet, looks like it appears from a slot in the title block */
 
+/* Thumb height is height+14, to account for shadow */
 .pages li .thumb {
   position: relative;
-  width: 136px; height: 104px; /* height is height+14, to account for shadow */
+  width: 136px; height: 104px; 
   margin: 0 auto;
   overflow: hidden;
   padding: 0;
@@ -542,7 +541,7 @@ a:hover { color: #0069BF;}
 }
 .pages li .thumb .page-thumb {
   position: absolute;
-  bottom: 14px;               /* 14px to account for shadow */
+  bottom: 14px;               
   left: 50%;
   margin-left: -60px;
   
