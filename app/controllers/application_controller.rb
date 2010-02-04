@@ -25,7 +25,7 @@ protected
   end
   
   def public_document?
-    public_read_document? || public_edit_document?appl  
+    public_read_document? || public_edit_document?
   end
   def public_read_document?
     global_user.has_role?("reader",@document)
