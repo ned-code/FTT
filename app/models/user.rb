@@ -19,10 +19,15 @@
 #  last_login_ip       :string(255)
 #
 
+require 'storage'
+require 'xmpp_user_synch'
+
 class User < ActiveRecord::Base
   acts_as_authentic
   acts_as_authorization_subject
-
+  
+  after_create :create_xmpp_user
+  
   # ===============
   # = Validations =
   # ===============
@@ -35,5 +40,9 @@ class User < ActiveRecord::Base
   
   has_many :images, :class_name => 'Medias::Image', :order => 'created_at DESC'
   has_many :videos, :class_name => 'Medias::Video', :order => 'created_at DESC'
-  
+
+  def create_xmpp_user
+    XmppUserSynch.create_xmpp_user(self)
+  end
+
 end
