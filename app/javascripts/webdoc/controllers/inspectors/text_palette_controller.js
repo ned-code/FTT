@@ -11,8 +11,8 @@ WebDoc.TextPaletteController = $.klass({
     var toolbarContent = 
     '<div id="toolbar_panel">'+
         '<div id="toolbar_panel_cover"></div>'+
-        '<div id="colorpickerHolder1" style="position:absolute;z-index: 150000;top:50px;"></div>'+
-          '<div id="colorpickerHolder2" style="position:absolute;z-index: 150000;top:50px;"></div>'+
+        '<div id="colorpickerHolder1" style="position:absolute;z-index: 150000;top:50px;left:0px"></div>'+
+          '<div id="colorpickerHolder2" style="position:absolute;z-index: 150000;top:50px;left:0px"></div>'+
         '<select id="toolbar_panel_button_format" onchange="WebDoc.application.textTool.delegate.editorExec(\'format\',this.value);">'+
           '<option value="p">Normal</option>'+
           '<option value="h1">Heading 1</option>'+
@@ -137,7 +137,7 @@ WebDoc.TextPaletteController = $.klass({
         e.stopPropagation();
             e.cancelBubble = true; 
         var pos = $("#toolbar_panel_button_foreColor").position();  
-        $('#colorpickerHolder2').css('left',pos.left);
+        $('#colorpickerHolder2').css('left',0);
         $('#colorpickerHolder2').css('top',pos.top+28);
         $('#colorpickerHolder2').stop().animate({height:173}, 500);
         $('#colorpickerHolder1').stop().animate({height:0}, 500);
@@ -146,7 +146,7 @@ WebDoc.TextPaletteController = $.klass({
         e.stopPropagation();
             e.cancelBubble = true; 
         var pos = $("#toolbar_panel_button_hiliteColor").position();  
-        $('#colorpickerHolder1').css('left',pos.left);
+        $('#colorpickerHolder1').css('left',0);
         $('#colorpickerHolder1').css('top',pos.top+28);
         $('#colorpickerHolder1').stop().animate({height:173}, 500);
         $('#colorpickerHolder2').stop().animate({height:0}, 500);
