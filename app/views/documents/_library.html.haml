@@ -13,7 +13,7 @@
         %li.apps
           %a{ :href =>'#apps'} Apps
         %li.web-browser
-          %a{ :href =>'#web-browser'} Web          
+          %a{ :href =>'#web-browser-favorites'} Web          
     #images.view
       .toolbar
         %h1 Images
@@ -160,23 +160,29 @@
               %a#delete_from_my_videos_action{ :href => "" } Remove from My Videos
             %li
               %a#add_to_my_videos_action{ :href => "" } Add to My Videos
+    #web-browser-favorites.view
+      .toolbar
+        %h1 Web browser
+        %a.back{ :href =>'#' } Back
+        
+      %ul{ :style => "display:none" }
+        %li
+          %a#show_web-browser{ :href => '#web-browser' } Show Browser
+      #favorites-links
+        %ul      
+          %li
+            %a#google{ :href => '#http://www.google.com/m' } Google
+          %li
+            %a#flickr{ :href => '#http://m.flickr.com' } Flickr
+          %li
+            %a#facebook{ :href => '#http://m.facebook.com' } Facebook
+          %li
+            %a#wikipedia{ :href => '#http://m.wikipedia.org' } Wikipedia                              
     #web-browser.view
       .toolbar
         %h1 Web browser
         %a.back{ :href =>'#' } Back
-      #web-browser-ui.inspector.view_content        
-        .head
-          %ul.index
-            %li>
-              %a#go_backward{ :href => "" } Back
-            %li>
-              %a#go_forward{ :href => "" } Forward
-            %li>
-              %a#favorites{ :href => "" } Favorites
-            %li>
-              %a#refresh{ :href => "" } Refresh
-            %li>
-              %input
+      #web-browser-ui.inspector        
         .content
           %iframe{ :src => "http://m.wikipedia.org", :style => "width:100%; height:100%" }           
 
