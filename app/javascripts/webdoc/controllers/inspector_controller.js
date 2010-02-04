@@ -6,6 +6,7 @@
 //= require <webdoc/controllers/inspectors/properties_inspector_controller>
 //= require <webdoc/controllers/inspectors/inner_html_controller>
 //= require <webdoc/controllers/inspectors/image_palette_controller>
+//= require <webdoc/controllers/inspectors/text_palette_controller>
 //= require <webdoc/sdk/widget_api>
 
 WebDoc.InspectorController = $.klass({
@@ -23,6 +24,7 @@ WebDoc.InspectorController = $.klass({
     var imagePelette = $("#palette_image").hide();
     var htmlSnippetPalette = $("#html_inspector").hide();
     this.imagePaletteController = new WebDoc.ImagePaletteController();
+    this.textPaletteController = new WebDoc.TextPaletteController();
     
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {

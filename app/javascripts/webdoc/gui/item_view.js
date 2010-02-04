@@ -19,7 +19,7 @@ WebDoc.ItemView = $.klass({
     // item wrapper    
     this.domNode = $("<div/>").addClass("item_wrap"); 
 
-    this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
+    this.itemDomNode = this.createDomNode().addClass("item").addClass("layer board-style").css({
         overflow: "hidden",
         width: "100%",
         height: "100%"
