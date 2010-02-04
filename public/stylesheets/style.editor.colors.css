@@ -14,25 +14,24 @@ body.editor     { background: #bbc0c2; }
 .left-panel,
 .right-panel    { background-color: rgba(68, 75, 77, 0.6); }
 
-/* Inspectors */
+/* Inspectors ------------------------ */
 
 /* Foot contents */
 .inspector .foot > ul,
 .inspector .foot > div { background-color: rgba(220, 220, 220, 0.9); }
 
-/* Layers */
-
-.screen         { background-color: rgba(68, 75, 77, 0.6); }
-
-
-/* Index */
-
+/* Page browser */
+.pages li:hover .title        { background: hsl(194, 6%, 56%); }
+.pages li.current .title      { background: hsl(194, 3%, 88%); }
+.pages li .number             { background-color: hsl(194, 10%, 40%); color: white; }
+.pages li:hover .number       { background-color: hsl(194, 12%, 24%); color: white; }
+.pages li.current .number     { background-color: hsl(194, 12%, 24%); color: white; }
 
 /* Forms */
 
 .properties,
 .code-editor {
-    /*background: #edefe6;*/
+    background-color: hsl();
     border-color: #666666;
 }
 .properties legend,
@@ -46,6 +45,14 @@ body.editor     { background: #bbc0c2; }
     border-color: #bbbbbb;
     /*border: 2px solid rgba(88, 95, 58, 0.3);*/
 }
+
+/* Layers */
+
+.screen         { background-color: rgba(68, 75, 77, 0.6); }
+
+
+/* Index */
+
 
 /* The board */
 

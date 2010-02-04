@@ -8,7 +8,7 @@ var jQT = new $.jQTouch("libraries", { preloadImages: [] });
 
 WebDoc.LibrariesController = $.klass({
   
-  LIBRARIES_SELECTOR: "#libraries",
+  LIBRARIES_SELECTOR: ".libraries_wrap",
   
   initialize: function() {
     this.imagesLibrary = new WebDoc.ImagesLibrary("images");
