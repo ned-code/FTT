@@ -42,6 +42,7 @@ WebDoc.PageInspectorController = $.klass({
     WebDoc.application.pageEditor.currentPage.addListener(this); 
     
     this.currentPageChanged();
+    this.domNode = $('#page_inspector');
   },
 
   performAction: function(e) {

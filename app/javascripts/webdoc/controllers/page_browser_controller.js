@@ -10,13 +10,14 @@ WebDoc.PageBrowserController = $.klass({
   
   PAGE_BROWSER_ITEM_SELECTOR: ".page_browser_items",
   PAGE_BROWSER_NUMBER_SELECTOR: ".page_browser_numbered_list",
+  ACTIVE_CLASS: "active",
   CURRENT_CLASS: "current",
+  LOADING_CLASS: "loading",
   PAGE_THUMB_CLASS: "page-thumb",
   PAGE_THUMB_SELECTOR: ".page-thumb",
   HIDE_THUMB_CLASS: "hide-thumbs",
   THUMB_STATE_BUTTON_SELECTOR: "a[href='#toggle-thumbs']",
   LEFT_BAR_BUTTON_SELECTOR: "a[href='#left-panel-toggle']",
-  ACTIVE_CLASS: "active", 
   NUMBER_SELECTOR: '.number',
   THUMB_SELECTOR: '.thumb',
   
@@ -156,27 +157,22 @@ WebDoc.PageBrowserController = $.klass({
   pageAdded: function(page) {
     ddd("[pageBrowserController] pageAdded");
     var pageItem = new WebDoc.PageBrowserItemView(page),
+        pageNode = pageItem.domNode,
         pos = page.data.position;
     
     this.pageMap[ page.uuid() ] = pageItem;
-
-    // TODO investigate    
-    if ( !this._stateThumbs ) {
-      pageItem.thumbNode.css({
-        height: 0
-      });
-    }
     
-    pageItem.domNode.data('webdoc', {
-      page: page
-    });    
     // Then put it in the DOM
     if (pos) {
-      this.domNodeBrowserItems.children().eq(pos-1).after( pageItem.domNode );
+      this.domNodeBrowserItems.children().eq(pos-1).after( pageNode );
     }
     else {
-      this.domNodeBrowserItems.prepend( pageItem.domNode );
+      this.domNodeBrowserItems.prepend( pageNode );
     }
+    
+    pageNode.data('webdoc', {
+      page: page
+    });
     
     this._updateIndexNumbers();
   },
@@ -189,7 +185,6 @@ WebDoc.PageBrowserController = $.klass({
     pageBrowserItem.destroy();
     delete this.pageMap[ page.uuid() ];
     this._updateIndexNumbers();
-    
   },
 
   pageMoved: function(page, newPosition, previousPosition) { 
@@ -248,14 +243,15 @@ WebDoc.PageBrowserController = $.klass({
   },
 
   selectCurrentPage: function(e) {
-    var pageItem = $( e.delegateTarget || e.target ),
-        data = pageItem.data('webdoc'),
+    var pageNode = $( e.delegateTarget || e.target ),
+        data = pageNode.data('webdoc'),
         currentId = WebDoc.application.pageEditor.currentPage.uuid(),
         page = data && data.page,
         clickedId = page && page.uuid();
     
     // If not current page, then change it
     if( clickedId && clickedId !== currentId ) {
+      pageNode.addClass( this.LOADING_CLASS );
       this.selectPage( page );
     }
   },
@@ -278,8 +274,13 @@ WebDoc.PageBrowserController = $.klass({
   _selectPageUI: function( page ) {
     var pageBrowserItem = this.pageMap[ page.uuid() ];
     
-    this.domNodeBrowserItems.children().removeClass(this.CURRENT_CLASS);
-    pageBrowserItem.domNode.addClass(this.CURRENT_CLASS);
+    this.domNodeBrowserItems
+    .children()
+    .removeClass(this.CURRENT_CLASS);
+    
+    pageBrowserItem.domNode
+    .removeClass(this.LOADING_CLASS)
+    .addClass(this.CURRENT_CLASS);
   },
   
   // Titles ---------------------------------------------------------
@@ -320,6 +321,12 @@ WebDoc.PageBrowserController = $.klass({
     var browserNode = this.domNodeBrowserItems;
     if (this._stateThumbs) {
       browserNode.removeClass( this.HIDE_THUMB_CLASS );
+      
+      // This could be improved - really we want the browserNode to be
+      // the entire .inspector inside the pane.  And then we can search 
+      // thumb state button inside this inspector only...
+      // requires a bit of refactoring...
+      
       $( this.THUMB_STATE_BUTTON_SELECTOR ).addClass( this.ACTIVE_CLASS );
     }
     else {
@@ -336,17 +343,27 @@ WebDoc.PageBrowserController = $.klass({
   
   hideThumbs: function() {
     var browserNode = this.domNodeBrowserItems,
-        thumbs = browserNode.find( this.THUMB_SELECTOR );
+        thumbs = browserNode.find( this.THUMB_SELECTOR ),
+        hideThumbClass = this.HIDE_THUMB_CLASS,
+        hideThumbFlag = true;
     
     thumbs
+    //.animate({
+    //  height: 0,
+    //  marginBottom: 0,
+    //  borderBottomWidth: 0
+    //}, {
     .animate({
-      height: 0,
-      marginBottom: 0,
-      borderBottomWidth: 0
+      height: 0
     }, {
       duration: 200,
       complete: function(){
-        browserNode.addClass( this.HIDE_THUMB_CLASS );
+        // complete fires for every item in the list
+        // We only want to set this class once
+        if ( hideThumbFlag ) {
+          browserNode.addClass( hideThumbClass );
+        }
+        hideThumbFlag = false;
       }
     });
     
@@ -362,10 +379,21 @@ WebDoc.PageBrowserController = $.klass({
     
     browserNode.removeClass( this.HIDE_THUMB_CLASS );    
     thumbs
+    //.css({
+    //  height: 0,
+    //  marginBottom: 0,
+    //  borderBottomWidth: 0
+    //})
+    //.animate({
+    //  height: 75,
+    //  marginBottom: 14,
+    //  borderBottomWidth: 6
+    //}, {
+    .css({
+      height: 0
+    })
     .animate({
-      height: 75,
-      marginBottom: 14,
-      borderBottomWidth: 6
+      height: 104
     }, {
       duration: 200
     });

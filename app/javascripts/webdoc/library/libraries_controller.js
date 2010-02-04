@@ -7,11 +7,16 @@
 var jQT = new $.jQTouch("libraries", { preloadImages: [] });
 
 WebDoc.LibrariesController = $.klass({
+  
+  LIBRARIES_SELECTOR: "#libraries",
+  
   initialize: function() {
     this.imagesLibrary = new WebDoc.ImagesLibrary("images");
     this.videosLibrary = new WebDoc.VideosLibrary("videos");
     this.appsLibrary = new WebDoc.AppsLibrary("apps");
-    this.webBrowser = new WebDoc.WebBrowser("browser");    
+    this.webBrowser = new WebDoc.WebBrowser("browser");
+    
+    this.domNode = $(this.LIBRARIES_SELECTOR)
   }
 });
 

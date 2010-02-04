@@ -11,9 +11,9 @@ WebDoc.handlers = {
   'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggleRightBar(); },
   
   'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggleBrowser(); },
-  'library':              function(e) { WebDoc.application.rightBarController.showLib(); },
-  'item-inspector':       function(e) { WebDoc.application.rightBarController.showItemInspector(); },
-  'page-inspector':       function(e) { WebDoc.application.rightBarController.showPageInspector(); },
+  'library':              function(e) { WebDoc.application.rightBarController.showLib(e); },
+  'item-inspector':       function(e) { WebDoc.application.rightBarController.showItemInspector(e); },
+  'page-inspector':       function(e) { WebDoc.application.rightBarController.showPageInspector(e); },
   
   'prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },
   'next-page':            function(e) { WebDoc.application.pageEditor.nextPage(); },

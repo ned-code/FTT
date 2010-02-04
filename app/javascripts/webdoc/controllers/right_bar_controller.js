@@ -4,123 +4,150 @@
  */
 //= require <webdoc/controllers/page_inspector_controller>
 
-(function(undefined){
-
-// Default settings
-var boardPanel,
-    rightPanel,
-    panelWidth = 350;
-
 WebDoc.RightBarController = $.klass({
+  
+  CURRENT_CLASS: "current",
+  ACTIVE_CLASS: "active",
+  
+  LIBRARY_BUTTON_SELECTOR: "a[href='#library']",
+  PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
+  ITEM_INSPECTOR_BUTTON_SELECTOR: "a[href='#item-inspector']",
+  
+  STATE_BUTTON_SELECTOR: ".state-right-panel",
+  PANEL_SELECTOR: "#right_bar",
+  PANEL_TOGGLE_SELECTOR: "a[href='#right-panel-toggle']",
+  
   initialize: function() {
-    boardPanel = $("#board_container");
-    rightPanel = $("#right_bar");
+    panel = $( this.PANEL_SELECTOR );
     
     this.visible = false;
-    this.domNode = rightPanel;
+    this.domNode = panel;
+    this.contentMap = {};
+    this.panelWidth = panel.outerWidth();
     
-    // Store actual size of panel
-    panelWidth = rightPanel.outerWidth();
-    ddd('Width of right panel: '+panelWidth);
+    ddd('[RightBarController] Width of right panel: '+this.panelWidth);
   },
   
-  showLib: function() {
-    ddd("show lib");
+  _changePanelContent: function(inspector) {
+    ddd('[RightBarController._changePanelContent()] ' + inspector);
+    var inspectors = this.contentMap;
     
-    if (!WebDoc.application.librariesController) { // lazily load the library
-      WebDoc.application.librariesController = new WebDoc.LibrariesController();
-    }
-    
-    ddd("animate lib");
-    this.showRightBar(function() {
-      $("#item_inspector").hide();
-      $("#page_inspector").hide();      
-      $("#libraries").show();      
-    });
-    $(".current_right_item").removeClass("current_right_item");
-    $("#lib_view").addClass("current_right_item");
-  },  
-  
-  showPageInspector: function() {
-    ddd("show page inspector");
-    if (!WebDoc.application.pageInspectorController) { // lazily load the page inspector
-      WebDoc.application.pageInspectorController = new WebDoc.PageInspectorController();
-    }
-    
-    this.showRightBar(function() {
-      $("#item_inspector").hide();      
-      $("#libraries").hide();
-      $("#page_inspector").show();      
-    });
-    $(".current_right_item").removeClass("current_right_item");
-    $("#page_inspector_view").addClass("current_right_item");    
-  },
-  
-  showItemInspector: function(callBack) {
-    ddd("show item inspector");
-    
-    this.showRightBar(function() {
-      $("#page_inspector").hide();      
-      $("#libraries").hide();
-      $("#item_inspector").show();      
-    });
-    $(".current_right_item").removeClass("current_right_item");
-    $("#item_inspector_view").addClass("current_right_item"); 
-  },
-    
-  showInspectors: function(callBack) {
-    ddd("old show inspectors");
-  },
-  
-  showRightBar: function(callBack) {
-    if (!this.visible) {
-      this.visible = true;
-      
-      rightPanel.animate({
-          marginLeft: -panelWidth
-      }, {
-          step: function(val){
-              boardPanel.css({ right: -val });
-          },
-          complete: function() {
-              if (callBack) {
-                  callBack.apply(this);
-              }
-          }
-      });
-      $("#toggle_inspector").find("a").addClass("current");
-    }
-    
-    else {
-      if (callBack) {
-        callBack.apply(this);
+    for (var key in inspectors) {
+      if ( inspectors[key] === inspector ) {
+        inspectors[key].domNode.show();
+      }
+      else {
+        inspectors[key].domNode.hide();
       }
     }
   },
   
-  hideRightBar: function(callBack) {
+  _changeButtonState: function(inspector) {
+    ddd('[RightBarController._changeButtonState()]');
+    
+    var stateButtons = $( this.STATE_BUTTON_SELECTOR ),
+        currentClass = this.CURRENT_CLASS,
+        buttonSelector = inspector.buttonSelector;
+    
+    stateButtons.removeClass( currentClass );
+    $( buttonSelector ).addClass( currentClass );
+  },
+
+  showLib: function() {
+    ddd("[RightBarController] showLib");
+    var inspector = this.contentMap.libraries;
+    
+    if (!inspector) { // lazily load the library
+      ddd('[RightBarController] LOAD LIBRARY');
+      inspector = WebDoc.application.libraryController = new WebDoc.LibrariesController();
+      inspector.buttonSelector = this.LIBRARY_BUTTON_SELECTOR;
+      
+      this.contentMap.library = inspector;
+    }
+    
+    this._changePanelContent(inspector);
+    this._changeButtonState(inspector);
+    this.showRightBar();
+  },
+  
+  showPageInspector: function() {
+    ddd("[RightBarController] showPageInspector");
+    var inspector = this.contentMap.pageInspector;
+    
+    if (!inspector) { // lazily load the page inspector
+      ddd('[RightBarController] LOAD PAGE INSPECTOR');
+      inspector = WebDoc.application.pageInspectorController = new WebDoc.PageInspectorController();
+      inspector.buttonSelector = this.PAGE_INSPECTOR_BUTTON_SELECTOR;
+    
+      this.contentMap.pageInspector = inspector;
+    }
+    
+    this._changePanelContent(inspector);
+    this._changeButtonState(inspector);
+    this.showRightBar();
+  },
+  
+  showItemInspector: function() {
+    ddd("[RightBarController] showItemInspector");
+    var inspector = this.contentMap.itemInspector;
+    
+    if (!inspector) { // lazily load the item inspector
+      ddd('[RightBarController] LOAD ITEM INSPECTOR');
+      inspector = WebDoc.application.inspectorController = new WebDoc.InspectorController();
+      inspector.buttonSelector = this.ITEM_INSPECTOR_BUTTON_SELECTOR;
+      
+      this.contentMap.itemInspector = inspector;
+    }
+    
+    this._changePanelContent(inspector);
+    this._changeButtonState(inspector);
+    this.showRightBar();
+  },
+  
+  showRightBar: function() {
+    var panel = this.domNode,
+        boardPanel = WebDoc.application.boardController.boardContainerNode,
+        self = this;
+    
+    if (!this.visible) {
+      this.visible = true;
+      
+      panel.animate({
+        marginLeft: -this.panelWidth
+      }, {
+        step: function(val){
+          boardPanel.css({ right: -val });
+        },
+        complete: function() {
+          
+        }
+      });
+    }
+    
+    $( this.PANEL_TOGGLE_SELECTOR ).addClass( this.CURRENT_CLASS );
+  },
+  
+  hideRightBar: function() {
+    var panel = this.domNode,
+        boardPanel = WebDoc.application.boardController.boardContainerNode,
+        self = this;
+    
     if (this.visible) {
       this.visible = false;
       
-      rightPanel.animate({
+      panel.animate({
           marginLeft: 0
       }, {
           step: function(val){
               boardPanel.css({ right: -val });
           },
           complete: function() {
-              if (callBack) {
-                  callBack.apply(this);
-              }
+              //self._changeButtonState();
           }
       });
-      $("#toggle_inspector").find("a").removeClass("current");
     }
-    else {
-      if (callBack) {
-        callBack.apply(this);
-      }
-    }
+    
+    $( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.CURRENT_CLASS );
   },
   
   toggleRightBar: function() {
@@ -133,7 +160,3 @@ WebDoc.RightBarController = $.klass({
   }
   
 });
-
-$.extend(WebDoc.InspectorController, {});
-
-}());
