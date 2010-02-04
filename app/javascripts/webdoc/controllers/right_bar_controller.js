@@ -29,7 +29,7 @@ WebDoc.RightBarController = $.klass({
   },
   
   _changePanelContent: function(inspector) {
-    ddd('[RightBarController._changePanelContent()] ' + inspector);
+    ddd('[RightBarController] _changePanelContent(inspector)' + inspector);
     var inspectors = this.contentMap;
     
     for (var key in inspectors) {
@@ -43,7 +43,7 @@ WebDoc.RightBarController = $.klass({
   },
   
   _changeButtonState: function(inspector) {
-    ddd('[RightBarController._changeButtonState()]');
+    ddd('[RightBarController] _changeButtonState(inspector)');
     
     var stateButtons = $( this.STATE_BUTTON_SELECTOR ),
         currentClass = this.CURRENT_CLASS,
@@ -55,6 +55,7 @@ WebDoc.RightBarController = $.klass({
 
   showLib: function() {
     ddd("[RightBarController] showLib");
+    
     var inspector = this.contentMap.libraries;
     
     if (!inspector) { // lazily load the library
