@@ -6,7 +6,11 @@ WebDoc.TextToolView = $.klass({
     initialize: function(){ 
        thobj = this;       
        this.currentEditingBlock = null;   
-       
+        thobj.currentEl = null;
+      this.getCurrentElement = function(){
+          return thobj.currentEl;
+      }   
+         
        this.addEvent = function(obj, type, fn){
                if (obj.addEventListener){
                       obj.addEventListener( type, fn, false );
@@ -15,9 +19,8 @@ WebDoc.TextToolView = $.klass({
                       obj[type+fn] = function() { obj["e"+type+fn]( window.event ); }
                       obj.attachEvent( "on"+type, obj[type+fn] );
               }
-      
       }
-      
+
       this.removeEvent = function(obj, type, fn){
           if (obj.removeEventListener){
             obj.removeEventListener( type, fn, false );
@@ -26,6 +29,14 @@ WebDoc.TextToolView = $.klass({
             obj[type+fn] = null;
             obj["e"+type+fn] = null;
           }
+       }
+       
+       this.isContainText = function(obj){ 
+        for(var i=0;i<obj.childNodes.length;i++){
+          var curr_obj = obj.childNodes[i];
+          if(curr_obj.textContent) return true;
+          this.isContainText(curr_obj);
+        }
        }
        
        this.mainPageStyles = []; 
@@ -38,17 +49,13 @@ WebDoc.TextToolView = $.klass({
        }
        
        this.getElementStyleData = function(el){
-        var el = (this.getSelectionBounds().root)?this.getSelectionBounds().root : el;
-        if(!el) return;
+
+        var el = (el?el:this.getSelectionBounds().start);
+        if(!el) return 
+
         try {    
           if(this.edWin.getComputedStyle){
-            /*
-            var ptblock = document.createElement('div');
-            document.body.appendChild(ptblock);
-            ptblock.style.height = '1pt';
-            var ptComputedHeight = window.getComputedStyle(ptblock, null).getPropertyValue('height');
-            this.desctopPxPerInch = (100/ptComputedHeight.split('px')[0]);  
-            */
+ 
             var st = this.edWin.getComputedStyle(el, null); 
             this.style =  { fontStyle : st.getPropertyValue("font-style"),
               fontSize  : st.getPropertyValue("font-size"),
@@ -57,8 +64,11 @@ WebDoc.TextToolView = $.klass({
               fontFamily  : st.getPropertyValue("font-family"),
               textAlign : st.getPropertyValue("text-align"),
               fontColor : st.getPropertyValue("color"),
-              bgColor     : st.getPropertyValue("background-color")
-            };
+              bgColor     : st.getPropertyValue("background-color"),
+              valign      : st.getPropertyValue("vertical-align")
+            };  
+            
+        
             if(window._KHTMLrv){/*if Safari*/
               this.style.fontStyle = st.getPropertyValue("font-style");
               this.style.vAlign = st.getPropertyValue("vertical-align");
@@ -85,8 +95,7 @@ WebDoc.TextToolView = $.klass({
           this.setStyleProperty(el,"h6");
           this.setStyleProperty(el,"blockquote");
           this.setStyleProperty(el,"ul");
-          this.setStyleProperty(el,"ol");
-            
+          this.setStyleProperty(el,"ol"); 
           if(!window._KHTMLrv){
             this.setStyleProperty(el,"del");
             this.setStyleProperty(el,"sub");
@@ -125,8 +134,14 @@ WebDoc.TextToolView = $.klass({
                toolbarHash.subScript  = (styleHash.sub) ? true : false;
                toolbarHash.insertUnorderedList  = (styleHash.ul) ? true : false;
                toolbarHash.insertOrderedList  = (styleHash.ol) ? true : false;
+               
+               toolbarHash.valignTop  = (styleHash.valign == 'top' || styleHash.valign == 'baseline') ? true : false;
+               toolbarHash.valignMiddle = (styleHash.valign == 'middle') ? true : false;
+               toolbarHash.valignBottom = (styleHash.valign == 'bottom') ? true : false;
          return toolbarHash;     
       }
+      
+      
       
       this.getParentByTag = function(node,tag_name){
         tag_name=tag_name.toLowerCase();
@@ -210,13 +225,80 @@ WebDoc.TextToolView = $.klass({
          while(p = p.parentNode)
          return node
       }
+      
+      //TODO: unuseble
+      this.increasefontsize = function(inc){      
+      this.edDoc.execCommand("Strikethrough", false, '');
+        var nodes=this.get_selected_tags('span'); 
+        for(var i=0;i<nodes.length;i++){ 
+          if(nodes[i].style.fontSize){
+            nodes[i].style.fontSize = (nodes[i].style.fontSize.split('pt')[0]*1+inc) + 'pt'
+          }
+        }   
+      
+      }     
+      this.format_inline = function(command,styleAttr,value){
+      
+        this.edDoc.execCommand(command,null,value)
+          var fontnodes=this.get_selected_tags('font');    
+           
+          if(fontnodes.length){  
+          
+          for(var i=0;i<fontnodes.length;i++){
+              if(fontnodes[i].parentNode && fontnodes[i].parentNode.firstChild==fontnodes[i]&&  fontnodes[i].parentNode.tagName.toLowerCase() == 'li'){ 
+                try{fontnodes[i].parentNode.style[styleAttr] = value;}catch(e){}      
+              }   
+                 var spans = fontnodes[i].getElementsByTagName('span');
+                 
+                 for(s=0;s<spans.length;s++){
+                  if(spans[s].style[styleAttr]){
+                    spans[s].style[styleAttr] = value;
+
+                }  
+               }
+               
+                   if(fontnodes[i].firstChild.nodeName != '#text' && fontnodes[i].firstChild.tagName.toLowerCase()=='span' && fontnodes[i].firstChild.style[styleAttr] && fontnodes[i].firstChild.style.length==1 && fontnodes[i].firstChild.style[styleAttr]==value){
+                        fontnodes[i].parentNode.replaceChild( fontnodes[i].firstChild, fontnodes[i]) 
+               } else {
+                 new_node = this.edDoc.createElement('span');
+                     new_node.style[styleAttr] = value;
+                     new_node.innerHTML = fontnodes[i].innerHTML
+                     fontnodes[i].parentNode.replaceChild(new_node, fontnodes[i]) 
+               } 
+             }
+        } else if(styleAttr!='color'){ 
+            var nodes=this.get_selected_tags('span');  
+              for(var i=0;i<nodes.length;i++){
+                if(nodes[i].style[styleAttr]){
+                nodes[i].style[styleAttr] = value;  
+                
+            }
+          nodes[i].removeAttribute('class'); 
+          } 
+        }
+      }
+
+      this.format_vertical = function(value){
+        if(this.edDoc.body.firstChild.nodeName == '#text' || (this.edDoc.body.firstChild.tagName.toLowerCase !='div' && this.edDoc.body.firstChild.style.display != 'table-cell')){
+          var verticalContainer = this.edDoc.createElement('div');
+          verticalContainer.innerHTML = this.edDoc.body.innerHTML;
+          this.edDoc.body.innerHTML = '';
+          this.edDoc.body.appendChild(verticalContainer);
+        } else {
+            var verticalContainer =  this.edDoc.body.firstChild;
+        }
+        verticalContainer.style.display = 'table-cell';
+        verticalContainer.style.verticalAlign = value;
+        var st = this.edWin.getComputedStyle(this.currentEditingBlock, null); 
+        verticalContainer.style.height = st.getPropertyValue("height");   
+      }
 
       this.getSelectionBounds = function(){
           var range, root, start, end;
         if(this.edWin.getSelection){ 
               var selection = this.edWin.getSelection();
               range = selection.getRangeAt(selection.rangeCount-1);
-              start = range.startContainer;
+          start = range.startContainer;
               end = range.endContainer;
           root = range.commonAncestorContainer;
               if(start.nodeName == "#text") root = root.parentNode; 
@@ -278,49 +360,52 @@ WebDoc.TextToolView = $.klass({
       
       if(this.currentEditingBlock) this.exitEditMode();
       this.currentEditingBlock = divElement;
-      //this.currentEditingBlockWidth = $(this.currentEditingBlock).width();
-      //this.currentEditingBlockHeight = $(this.currentEditingBlock).height();
       this.currentEditingBlockClass = this.currentEditingBlock.className;
         var storedContent  = divElement.innerHTML;
         divElement.innerHTML='';    
       this.iframe = document.createElement('iframe');
       this.iframe.setAttribute("width",'100%');
       this.iframe.setAttribute("height",'100%');
-      this.iframe.setAttribute("frameborder",0);
+      this.iframe.setAttribute("frameborder",0);  
           divElement.appendChild(this.iframe);
         this.edWin = this.iframe.contentWindow;
       this.edDoc = this.edWin.document;
+      this.edDoc.designMode='On';
       var content = this.edDoc;
       content.open("text/html", "replace");
       this.frameStyles = '';  
       for(i=0;i<this.mainPageStyles.length;i++){ this.frameStyles += "<link rel='stylesheet' href='"+this.mainPageStyles[i]+"' type='text/css' />"; }
-      content.write("<html><head>"+this.frameStyles+"<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; height:100%; margin:0px;} </style></head><body contenteditable='true'></body></html>");  
+      content.write("<html><head>"+this.frameStyles+"<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; height:100%; margin:0px; background-color:#ffffff;} </style></head><body contenteditable='true'></body></html>");  
         content.close();  
-        this.edDoc.designMode='On'; 
-        this.edDoc.body.innerHTML = "<div>"+storedContent+"</div>";
-        this.iframe.focus();
-//        $(this.currentEditingBlock).width(this.currentEditingBlockWidth);
-//      $(this.currentEditingBlock).height(this.currentEditingBlockHeight+1);
-      this.edDoc.body.firstChild.className = this.currentEditingBlockClass;
-      this.edDoc.body.firstChild.style.margin = '0px';
-      this.edDoc.body.firstChild.style.padding = '0px';
-      this.edDoc.body.firstChild.style.border = 'none';
-      this.edDoc.body.firstChild.style.position = 'relative';
-      this.edDoc.body.style.background = 'rgba(255,255,255,0)';
+        this.edDoc.body.innerHTML = storedContent;
         
+        $(this.currentEditingBlock).width(this.currentEditingBlockWidth);
+      $(this.currentEditingBlock).height(this.currentEditingBlockHeight+1);
+      this.edDoc.body.className = this.currentEditingBlockClass;
+      this.edDoc.body.style.margin = '0px';
+      this.edDoc.body.style.padding = '0px';
+      this.edDoc.body.border = 'none';
+      this.edDoc.body.style.position = 'relative';
+          this.edDoc.body.style.background = 'rgba(255,255,255,0)';
+        
+           
       this.addEvent(this.edDoc, "click", function(e){
         var ev = e||window.event;
         var el = ev.target||ev.srcElement;
         thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(el)));      
-      });
+      }); 
       
+
       this.addEvent(this.edDoc, "keyup", function(e){
         var ev = e||window.event;
-        var key = ev.keyCode;
+        var key = ev.keyCode; 
         var el = ev.target||ev.srcElement;
-        if((key==37)||(key==38)||(key==39)||(key==40)||(key==13))
+        if((key==37)||(key==38)||(key==39)||(key==40)||(key==13))       
         thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(el))); 
+        return true;
       });
+      
+      this.iframe.focus();
     },
     
     /**
@@ -329,9 +414,17 @@ WebDoc.TextToolView = $.klass({
      * @return String. return html corresponding to the edited div.
      */
     exitEditMode: function() {
-      var htmlToStore = this.edDoc.body.firstChild.innerHTML;
+      var className = 'empty'; 
+      var htmlToStore = '';
+      
+      if(this.isContainText(this.edDoc.body)){
+         var htmlToStore = this.edDoc.body.innerHTML;  
+         className='';
+      }
+
       this.currentEditingBlock.innerHTML = htmlToStore; 
-      this.endEditionListener.applyTextContent(htmlToStore)
+      this.endEditionListener.applyTextContent(htmlToStore,className);
+      this.currentEditingBlock = null;
     },
     
     /**
@@ -362,7 +455,9 @@ WebDoc.TextToolView = $.klass({
      ---* - subScript: make selected text subscript
      ---* - removeFormat: remove all formatting on selected text
      */
-    editorExec: function(command, optional) { 
+    editorExec: function(command, optional) {
+
+      ddd("exec command", command);
       switch (command){ 
         case 'bold'         :           
         case 'italic'       :           
@@ -377,24 +472,26 @@ WebDoc.TextToolView = $.klass({
         case 'subScript'          :
         case 'indent'       :   
         case 'outdent'        :                     
-        case 'fontName'       :           
-        case 'foreColor'      :         
-        case 'hiliteColor'      : 
-        case 'removeformat'     :             
-        case 'outdent'        :   this.edDoc.execCommand(command,null,optional?optional:'');break;
+        case 'fontName'       :             
+        case 'removeformat'     :
+        case 'increasefontsize'   :
+        case 'decreasefontsize'   :         
+        case 'outdent'        :   this.edDoc.execCommand(command,null,optional?optional:'');        
         case 'format'               :   this.edDoc.execCommand('formatblock', false,  '<' +optional + '>');break; 
-        case 'fontSize'       : {  
-          //this.edDoc.execCommand('fontSize', false,'1');
-          this.selTags = this.get_selected_tags();
-          for(var s in this.selTags){
-            if(this.selTags[s].tagName){
-              this.selTags[s].style.fontSize = optional;
-            } 
-          }
-        } 
-        break;                                         
+        case 'hiliteColor'      :   this.format_inline(command,'backgroundColor',optional);  break;   
+        case 'fontSize'       :   this.format_inline(command,'fontSize',optional);  break;  
+        case 'foreColor'      :   this.format_inline(command,'color',optional);  break;
+        
+        case 'verticalAlign'    :   this.format_vertical(optional);  break;
+                                                 
         default : {alert('Command '+command+' is not defined');}
-      }  
+      } 
+
+      if(this.getSelectionBounds().end.nodeName != '#text'){
+        thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(this.getSelectionBounds().end)));   
+      } else {  
+          thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(this.edDoc.body)));   
+      }   
     },
     toolBarHandler: function(toolbarHash) {       
       this.setSelectBoxValue = function(selectBox,val){

@@ -1,4 +1,4 @@
-#toolbar_panel {background:#E5E5E5 url(/images/toolbar_background.png) repeat-x scroll 0 -192px;height:27px;clear:both;}
+#toolbar_panel {background:#E5E5E5 url(../images/toolbar_background.png) repeat-x scroll 0 -192px;height:27px;clear:both;}
 #toolbar_panel select {display:block;float:left;margin:0px 5px;border:solid 1px #cccccc}
 #toolbar_panel a div{display:block;color: transparent;margin:2px}
 #toolbar_panel a 	{display:block;float:left;border:solid 1px transparent;height:18px;width:20px;margin: 0px 1px;outline: none;text-decoration:none;}                                         
@@ -9,28 +9,34 @@
 #toolbar_panel a#toolbar_panel_button_hiliteColor{background-color: #ffffff;margin:0px 0px;}
 #toolbar_panel_button_foreColor>div{background-color: #000000;}
 #toolbar_panel a#toolbar_panel_button_foreColor_arrow{margin:0px 0px;padding:0px;width:11px;overflow: hidden;}
-#toolbar_panel a#toolbar_panel_button_hiliteColor_arrow{margin:0px 0px;padding:0px;width:11px;overflow: hidden;}
-.icon_bold{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -32px}
-.icon_italic{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -48px}
-.icon_underline{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -64px}
-.icon_foreColor{background:url(/images/toolbar.png) no-repeat -80px;width:16px;height:16px}
-.icon_foreColor_arrow{background:url(/images/toolbar.png) no-repeat -388px;width:16px;height:16px;margin:0px;}
-.icon_hiliteColor_arrow{background:url(/images/toolbar.png) no-repeat -388px;width:16px;height:16px;margin:0px;}
-.icon_backColor{background:url(/images/toolbar.png) no-repeat -96px;width:16px;height:16px}
-.icon_indent{background:url(/images/toolbar.png) no-repeat -416px;width:16px;height:16px} 
-.icon_outdent{background:url(/images/toolbar.png) no-repeat -400px;width:16px;height:16px}
-.icon_insertUnorderedList{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -160px}
-.icon_insertOrderedList{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -176px}
-.icon_justifyLeft{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -192px}
-.icon_justifyCenter{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -208px}
-.icon_justifyRight{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -224px}
-.icon_justifyFull{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -320px}
-.icon_blockquote{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -240px}
-.icon_removeFormat{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -256px}
-.icon_spell{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -272px}
-.icon_subScript{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -608px}
-.icon_superScript{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -640px}
-.icon_removeFormat{width:16px;height:16px;background:url(/images/toolbar.png) no-repeat -256px}
-.icon_foreColor{height:12px;width:16px;background:url(/images/toolbar.png) no-repeat -80px}
-.icon_hiliteColor{height:12px;width:16px;background:url(/images/toolbar.png) no-repeat -96px}
+#toolbar_panel a#toolbar_panel_button_hiliteColor_arrow{margin:0px 0px;padding:0px;width:11px;overflow: hidden;} 
+.icon_increasefontsize{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -1042px;}
+.icon_decreasefontsize{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -1026px;}
+.icon_bold{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -32px}
+.icon_italic{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -48px}
+.icon_underline{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -64px}
+.icon_foreColor{background:url(../images/toolbar.png) no-repeat -80px;width:16px;height:16px}
+.icon_foreColor_arrow{background:url(../images/toolbar.png) no-repeat -388px;width:16px;height:16px;margin:0px;}
+.icon_hiliteColor_arrow{background:url(../images/toolbar.png) no-repeat -388px;width:16px;height:16px;margin:0px;}
+.icon_backColor{background:url(../images/toolbar.png) no-repeat -96px;width:16px;height:16px}
+.icon_indent{background:url(../images/toolbar.png) no-repeat -416px;width:16px;height:16px} 
+.icon_outdent{background:url(../images/toolbar.png) no-repeat -400px;width:16px;height:16px}
+.icon_insertUnorderedList{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -160px}
+.icon_insertOrderedList{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -176px}
+.icon_justifyLeft{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -192px}
+.icon_justifyCenter{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -208px}
+.icon_justifyRight{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -224px}
+.icon_justifyFull{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -320px}
+.icon_blockquote{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -240px}
+.icon_removeFormat{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -256px}
+.icon_spell{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -272px}
+.icon_subScript{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -608px}
+.icon_superScript{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -640px}
+.icon_removeFormat{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -256px}
+.icon_foreColor{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -80px}
+.icon_hiliteColor{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -96px}
+
+.icon_verticalTop{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -977px}
+.icon_verticalMiddle{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -993px}
+.icon_verticalBottom{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -1009px}
 
