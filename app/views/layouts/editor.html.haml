@@ -14,6 +14,8 @@
     = stylesheet_link_tag 'style'
     = stylesheet_link_tag 'style.editor'
     = stylesheet_link_tag 'style.editor.colors'
+    = stylesheet_link_tag 'colorpicker'    
+    = stylesheet_link_tag 'toolbar'        
     
     -if (@is_reader)  
       %body.editor.embed-mode
@@ -25,6 +27,7 @@
     = javascript_include_tag 'jquery-json'
     = javascript_include_tag 'jquery-string'
     = javascript_include_tag 'jquery-ui'
+    = javascript_include_tag 'colorpicker'    
     
     = javascript_include_tag 'jquery.extensions'
     = javascript_include_tag 'jquery.events'
