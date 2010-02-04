@@ -16,10 +16,13 @@ label {
   font-weight: bold; 
   line-height: 1.077;  /* A magic number that equalises FF's label baseline to its default input baseline. */
 }
-input[type=text], input[type=password],
+input[type='text'], input[type='password'],
 input.text {
   text-indent: -1px;  /* Positions text in the same place it is in labels in WebKit / Mozilla */
   border: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
 }
 
 input.default {

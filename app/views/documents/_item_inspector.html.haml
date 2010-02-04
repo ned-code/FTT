@@ -1,70 +1,123 @@
 #item_inspector{ :style => "display: none" }
-  #inspectors 
-    -#%h3
-    -#  %a{ :href => "" } Palette
-    #palette_inspector.inspector
-      #palette_text.palette        
-      #palette_pen.palette
-        %ul#colors{ :style => "display:block" }
-          %li
-            %a{ :href => "" }
-              %div{ :style => "background-color:black" }                            
-          %li
-            %a{ :href => "" }
-              %div{ :style => "background-color:red" }
-          %li
-            %a{ :href => "" }
-              %div{ :style => "background-color:green" }                                
-          %li
-            %a{ :href => "" }
-              %div{ :style => "background-color:blue" }              
-        %ul#sizes{ :style => "display:block" }
-          %li
-            %a{ :href => "1" }
-              %img{ :src => "/images/icons/smallPen.png", :alt =>"Small"}                                
-          %li
-            %a{ :href => "5" }
-              %img{ :src => "/images/icons/mediumPen.png", :alt =>"Medium"}              
-          %li
-            %a{ :href => "10" }
-              %img{ :src => "/images/icons/largePen.png", :alt =>"Large"}                                       
-      #palette_empty.palette
-        %center Empty   
-      %iframe#palette_widget.palette 
-      #palette_image.palette     
-        #image_properties.properties_line
+  -#%h3
+  -#  %a{ :href => "" } Palette
+  #palette_inspector.layer
+    #palette_text.palette        
+    #palette_pen.inspector
+      %div.head
+        %div
+          %h2 Draw Tool
+      %div.content
+        %ul#colors.spaceless.icons-only.thumbs.index
+          -# Safari or SVG or something doesn't like rgba or hsla colors
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: black;", :title => "Jet" }
+              Jet
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #92b322;", :title => "Dirty lime" }
+              Dirty lime
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #ccf245;", :title => "Bright Lime" }
+              Bright Lime
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #b39322;", :title => "Dirty Orange" }
+              Dirty Orange
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #ffd200;", :title => "Bright Orange" }
+              Bright Orange
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #ff5400;", :title => "Starsky and Hutch Red" }
+              Starsky and Hutch Red
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #c33200;", :title => "Twin Peaks Red" }
+              Twin Peaks Red
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #f20951;", :title => "Lipstick" }
+              Lipstick
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #b32248;", :title => "Dark Lipstick"  }
+              Dark Lipstick
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #22a4b3;", :title => "Dirty Marine" }
+              Dirty Marine
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #00dce4;", :title => "Clean Marine" }
+              Clean Marine
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #009982;", :title => "Beach Lagoon" }
+              Beach Lagoon
+          %li>
+            %a{ :href => "#draw-color", :style => "background-color: #43e4cb;", :title => "Turquoise" }
+              Turquoise                                    
+        
+        %div
+          %input#size.size-slider-value{ :type => "text", :value => "1" }
+          %div.size-slider-port
+            %div.size-slider-thumb
+          %div.size-slider
+    
+    #palette_empty.inspector
+      %div.head
+        %div
+          %h2 Inspector
+      %div.content
+        %div
+          Nothing selected
+    
+    %iframe#palette_widget.inspector
+    
+    #palette_image.inspector
+      %div.head
+        %div
+          %h2 Image Inspector
+      %div.content
+        %div#image_properties.properties_line
           %label.properties_label Image URL
-          %input#property_src.properties_input  
-      #html_inspector.palette
+          %input#property_src.properties_input
+      %div.foot
+        %div
+          %h2 Style
+          %code
+    
+    #html_inspector.inspector
+      %div.head
+        %div
+          %h2 HTML Inspector
+      %div.content
         %div.properties_line
           %textarea#selected-item-html-editor.properties_input 
         %div.properties_line
           %label.properties_label No iframe
           %input#no_iframe.properties_input{ :type => "checkbox"}             
-    %h3
-      %a{ :href => "" } Properties
-    #properties_inspector.inspector
-      #default_properties
-        %div.properties_line
-          %label.properties_label Top
-          %input#property_top.properties_input
-        %div.properties_line
-          %label.properties_label Left
-          %input#property_left.properties_input
-        %div.properties_line
-          %label.properties_label Width
-          %input#property_width.properties_input
-        %div.properties_line
-          %label.properties_label Height
-          %input#property_height.properties_input
-        %div.properties_line
-          %label.properties_label Show scroll
-          %input#property_scroll{ :type => "checkbox" }
-        %div.properties_line
-          %label.properties_label Opacity
-          %input#property_opacity.properties_input
-        #image_properties.properties_line{ :style => "display:none"}
-          %label.properties_label Image URL
-          %input#property_src.properties_input
-      #empty_properties
-        %center Empty                                   
+      %div.foot
+        %div
+          %h2 HTML
+          %code
+  
+  -#%h3
+  -#  %a{ :href => "" } Properties
+  -##properties_inspector.inspector
+  -#  #default_properties
+  -#    %div.properties_line
+  -#      %label.properties_label Top
+  -#      %input#property_top.properties_input
+  -#    %div.properties_line
+  -#      %label.properties_label Left
+  -#      %input#property_left.properties_input
+  -#    %div.properties_line
+  -#      %label.properties_label Width
+  -#      %input#property_width.properties_input
+  -#    %div.properties_line
+  -#      %label.properties_label Height
+  -#      %input#property_height.properties_input
+  -#    %div.properties_line
+  -#      %label.properties_label Show scroll
+  -#      %input#property_scroll{ :type => "checkbox" }
+  -#    %div.properties_line
+  -#      %label.properties_label Opacity
+  -#      %input#property_opacity.properties_input
+  -#    #image_properties.properties_line{ :style => "display:none"}
+  -#      %label.properties_label Image URL
+  -#      %input#property_src.properties_input
+  -#  #empty_properties
+  -#    %center Empty                                   

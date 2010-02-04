@@ -57,6 +57,7 @@ WebDoc.InspectorController = $.klass({
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
     var htmlInspector = $("#html_inspector"); 
+    
     this.inspectors = [paletteInspector[0], propertiesInspector[0], htmlInspector[0]];
     this.lastInspectorId = 1;
     this.selectInspector(0);
@@ -65,7 +66,7 @@ WebDoc.InspectorController = $.klass({
   }, 
   
   selectInspector: function(inspectorId) {
-    $("#inspectors").accordion("activate", inspectorId);        
+    //$("#inspectors").accordion("activate", inspectorId);        
   },
   
   selectPalette: function(paletteId) {

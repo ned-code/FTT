@@ -20,25 +20,59 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .left-panel,
 .right-panel                  { background-color: hsla(194, 12%, 30%, 0.6); }
 
+.draw-size                    { background-color: black; }
+.draw-color                   { border-color: black; }
+
 /* Pops ------------------------------ */
 
 .pop label,
 .pop input[type='text']       { background-color: transparent; color: black; }
 .pop.active                   { background-color: hsla(194, 20%, 20%, 0.92); border-color: hsla(194, 20%, 20%, 0.8);
-                                -webkit-box-shadow: 0 0 12px hsl(14, 24%, 35%);
-                                -moz-box-shadow:    0 0 12px hsl(14, 24%, 35%);
-                                box-shadow:         0 0 12px hsl(14, 24%, 35%); }
+                                -webkit-box-shadow: 0 4px 12px hsl(14, 20%, 30%);
+                                -moz-box-shadow:    0 4px 12px hsl(14, 20%, 30%);
+                                box-shadow:         0 4px 12px hsl(14, 20%, 30%); }
 .pop input[type='text']:focus { background-color: hsl(194, 0.4%, 99%); color: black; outline: none; }
 .pop:hover input[type='text'],
 .pop.active input[type='text'] {background-color: hsl(194, 1%, 96%); }
 
 /* Inspectors ------------------------ */
 
-/* Foot contents */
+.inspector .head>div          { background-color: hsla(194, 12%, 30%, 0.8); color: white; }
 .inspector .foot > ul,
 .inspector .foot > div        { background-color: hsl(194, 2%, 92%); }
 .inspector form.content       { background-color: hsl(194, 3%, 88%); }
 
+/* ui elements */
+.inspector .size-slider-value { background: none;
+                                border-color: transparent;
+                                color: white; }
+
+.inspector .size-slider {       background: hsl(194, 6%, 56%) url('/images/ui/slider_size_bg.png') no-repeat 100% 0;
+                                
+                                -webkit-background-size:  100%;
+                                -moz-background-size:     100%;
+                                background-size:          100%;
+                                
+                                -webkit-border-radius:    12px;
+                                -moz-border-radius:       12px;
+                                border-radius:            12px;
+}
+.inspector .size-slider .ui-corner-all {
+                                background: hsla(194, 20%, 20%, 0.92);
+                                border-color: hsla(194, 20%, 20%, 0.8);
+                                -webkit-box-shadow: 0 2px 6px hsl(14, 20%, 30%);
+                                -moz-box-shadow:    0 2px 6px hsl(14, 20%, 30%);
+                                box-shadow:         0 2px 6px hsl(14, 20%, 30%);
+}
+.inspector .size-slider .draw-port       { background-color: hsl(194, 3%, 88%); }
+.inspector .size-slider:hover .draw-port { background: hsl(194, 0.4%, 99%); }
+
+.inspector .size-slider input[type='text']:hover,
+.inspector .size-slider input[type='text']:focus { background-color: white; color: black;
+    -webkit-border-radius: 1em;
+    -moz-border-radius:    1em;
+    border-radius:         1em;
+}
 
 /* Page browser */
 .pages li .title              { background-color: hsl(194, 9%, 71%); }

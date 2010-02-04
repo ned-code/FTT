@@ -65,6 +65,78 @@
     min-height: 24px;
 }
 
+/* ui elements */
+
+.inspector .index {
+    margin-bottom: 32px;
+}
+
+.inspector .size-slider-value {
+    font-family: 'Tahoma', Courier, 'Andale Mono', Monaco; /* Don't add monospace - Safari reduces the size when you do */
+    font-weight: bold;
+    font-size: 0.72em;
+    text-align: center;
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 28px;
+    margin: 0;
+}
+
+.inspector .ui-slider { position: relative; text-align: left; border: none;}
+.inspector .ui-slider .ui-slider-handle { position: absolute; z-index: 2; cursor: move; }
+.inspector .ui-slider .ui-slider-range { position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; }
+
+.inspector .ui-slider-horizontal { height: 24px; }
+.inspector .ui-slider-horizontal .ui-slider-handle { top: -5px; margin-left: -17px; }
+.inspector .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
+.inspector .ui-slider-horizontal .ui-slider-range-min { left: 0; }
+.inspector .ui-slider-horizontal .ui-slider-range-max { right: 0; }
+
+.inspector .ui-slider-horizontal {
+    margin: 0 24px 20px 24px;
+}
+.inspector .size-slider .ui-slider-handle {
+    width: 28px; height: 28px;
+}
+.inspector .size-slider .ui-corner-all {
+    border: 3px solid;
+    
+    -webkit-border-radius:     17px;
+    -moz-border-radius:         17px;
+    border-radius:             17px;
+}
+.inspector .size-slider input[type='text'] {
+  display: none;
+}
+.inspector .size-slider .ui-slider-handle:hover {
+    width: 28px; height: 45px;
+}
+.inspector .size-slider .ui-corner-all:hover { 
+    -webkit-border-bottom-left-radius:  6px;
+    -moz-border-radius-bottomleft:      6px;
+    border-bottom-left-radius:          6px;
+    -webkit-border-bottom-right-radius: 6px;
+    -moz-border-radius-bottomright:     6px;
+    border-bottom-right-radius:         6px;
+}
+.inspector .size-slider .ui-slider-handle:hover input[type='text'] {
+  display: block;
+}
+.inspector .size-slider .draw-port {
+    position: absolute;
+    top: 0; left: 0;
+    -webkit-border-radius: 14px;
+    -moz-border-radius:    14px;
+    border-radius:         14px;
+}
+.draw-port {
+    position: relative;
+    width: 28px; height: 28px;
+}
+.draw-size {
+    position: absolute;
+    top: 50%; left: 50%;
+}
 
 /* Interface panels */
 
@@ -142,10 +214,6 @@
 #page_inspector.inspector {
     /*background: #d5d7ca;*/
     bottom: 0;
-}
-.inspector .head>div {
-    background: #999999;
-    border-bottom: 2px solid #999999;
 }
 .inspector .head h2 {
     color: white;

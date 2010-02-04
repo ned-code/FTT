@@ -107,6 +107,14 @@
     padding-top: 0.2em;
 }
 
+.spaceless li {
+    margin: 0;
+    width: 50px;
+}
+.spaceless li a {
+    width: 50px; padding-top: 50px;
+}
+
 /* Links as thumbs classes */
 
 .thumbs a {
@@ -271,6 +279,22 @@ a[href="#draw"]:hover               { background-position: 0 -320px; }
 a[href="#draw"]:active              { background-position: 0 -384px; }
 a[href="#draw"].current             { background-position: 0 -448px; }
 
+a[href='#draw'].current {
+    width: 64px;
+}
+a[href='#draw'] {
+    position: relative;
+}
+a[href='#draw'] .draw-port {
+    display: none;
+    position: absolute;
+    top: 0; right: 0;
+    width: 32px; height: 32px;
+}
+a[href='#draw'].current .draw-port {
+    display: block;
+}
+
 a[href="#insert-text"]              { background-position: 0 -512px; }
 a[href="#insert-text"]:hover        { background-position: 0 -576px; }
 a[href="#insert-text"]:active       { background-position: 0 -640px; }
@@ -315,7 +339,6 @@ a[href="#to-back"]:active           { background-position: 0 -2496px; }
 a[href="#to-front"]                 { background-position: 0 -2560px; }
 a[href="#to-front"]:hover           { background-position: 0 -2624px; }
 a[href="#to-front"]:active          { background-position: 0 -2688px; }
-
 
 /* Panel tools */
 
