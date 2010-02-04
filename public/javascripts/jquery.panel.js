@@ -169,7 +169,13 @@ function deactivatePop(pop) {
   }, {
     duration: 160,
     complete: function(){
-      pop.removeClass(activeClass);
+      pop
+      .removeClass(activeClass)
+      .find('input')
+      // Remove once we delegate blur (we need jQuery 1.4!!)
+      // See hack above.
+      .unbind('blur')
+      .trigger('blur');
     }
   });
 }

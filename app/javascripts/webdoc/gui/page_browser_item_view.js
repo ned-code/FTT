@@ -26,8 +26,8 @@ WebDoc.PageBrowserItemView = $.klass({
     try {
       var titleObj = this.getPageTitle(page),
           pageItem = $('<li/>'),
-          pageForm = $('<form/>').attr({ method: 'post' }).addClass(popClass),
-          pageTitle = $('<input/>').attr({ type: 'text' }),
+          pageForm = $('<form/>').attr({ method: 'post', title: 'Double click to edit' }).addClass(popClass),
+          pageTitle = $('<input/>').attr({ type: 'text', title: 'Page title' }),
           pageSubmit = $('<input/>').attr({ type: 'submit' }).addClass( this.SHOW_ON_ACTIVE_CLASS ),
           pageCancel = $('<a/>').attr({ href: '#cancel' }).addClass(cancelClass + ' ' + this.SHOW_ON_ACTIVE_CLASS ),
           pageFormScreen = $('<div/>').addClass(screenClass),
