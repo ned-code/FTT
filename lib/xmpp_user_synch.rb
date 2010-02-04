@@ -34,9 +34,9 @@ module XmppUserSynch
       secret = APP_CONFIG['openfire_user_service_secret'];
     
       url = base + 'userService/userservice?type=' + op + '&secret=' + secret + '&username=' + user.name + '&password=1234&name=' + user.name + '&email=' + user.email
-      uri = URI.escape(url, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+      # uri = URI.escape(url, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
 
-      Net::HTTP.get_print uri
+      result = Net::HTTP.get URI.parse(url)
   
   end
   
