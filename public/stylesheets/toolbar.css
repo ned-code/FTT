@@ -10,6 +10,11 @@
 #toolbar_panel_button_foreColor>div{background-color: #000000;}
 #toolbar_panel a#toolbar_panel_button_foreColor_arrow{margin:0px 0px;padding:0px;width:11px;overflow: hidden;}
 #toolbar_panel a#toolbar_panel_button_hiliteColor_arrow{margin:0px 0px;padding:0px;width:11px;overflow: hidden;} 
+
+#toolbar_panel_valign_block{position:absolute;border:1px solid #cccccc;display:none;overflow: hidden;padding: 2px 1px;}   
+.icon_valign_arrow{background:url(../images/toolbar.png) no-repeat -388px;width:8px;height:16px;margin:0px;float:left}
+#toolbar_panel_button_valign{width:33px !important}
+
 .icon_increasefontsize{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -1042px;}
 .icon_decreasefontsize{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -1026px;}
 .icon_bold{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -32px}
@@ -36,7 +41,7 @@
 .icon_foreColor{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -80px}
 .icon_hiliteColor{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -96px}
 
-.icon_verticalTop{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -977px}
-.icon_verticalMiddle{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -993px}
-.icon_verticalBottom{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -1009px}
+.icon_valignTop{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -977px;float:left;}
+.icon_valignMiddle{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -993px;float:left;}
+.icon_valignBottom{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -1009px;float:left;}
 
