@@ -1,19 +1,45 @@
 /* CSS Panel classes
  * 
- * Panel classes for creating interface areas
+ * Panel classes for creating interface areas that 'stick' to screen position
  *
  */
 
 /* Panel class */
 
 .panel {
-    position: absolute;
+    position: fixed;
     left: 0; top: 0; right: 0; bottom: 0;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
-/* An Inspector goes INSIDE a panel. It requires .panel to
-   hide its overflow */
+.right-panel .panel-tools,
+.left-panel .panel-tools {
+    position: absolute;
+    top: 48px;
+    width: 32px;
+    background-color: inherit;
+}
+
+.right-panel .panel-tools {
+    left: -32px;
+    -webkit-border-top-left-radius:     12px 12px;
+    -moz-border-radius-topleft:         12px 12px;
+    border-top-left-radius:             12px 12px;
+    -webkit-border-bottom-left-radius:  12px 12px;
+    -moz-border-radius-bottomleft:      12px 12px;
+    border-bottom-left-radius:          12px 12px;
+}
+.left-panel .panel-tools {
+    right: -32px;
+    -webkit-border-top-right-radius:    12px 12px;
+    -moz-border-radius-topright:        12px 12px;
+    border-top-right-radius:            12px 12px;
+    -webkit-border-bottom-right-radius: 12px 12px;
+    -moz-border-radius-bottomright:     12px 12px;
+    border-bottom-right-radius:         12px 12px;
+}
+
+/* An Inspector goes INSIDE a panel. */
 
 .inspector {
     position: absolute;

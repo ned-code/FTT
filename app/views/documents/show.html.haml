@@ -9,12 +9,6 @@
 = render :partial => "layouts/main_editor_toolbar"
 
 #toolbar.toolbar-panel.panel
-  %ul.panel-tools.tools.thumbs.index.icons-only.preview_hidden
-    -# Whitespace is removed between lis to preserve layout
-    %li>
-      %a{ :href => "#left-panel-toggle", :title => "Left Panel" }
-        Left Panel
-
   %ul.pages-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li>
@@ -85,12 +79,6 @@
         Draw
         %div.draw-port
           %div.draw-size.draw-color
-
-  %ul#toggle_inspector_wrap.panel-tools.tools.thumbs.index.icons-only.preview_hidden
-    -# Whitespace is removed between lis to preserve layout
-    %li#toggle_inspector>
-      %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" }
-        Inspector
   
   %ul#right_bar_tools.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
@@ -105,6 +93,10 @@
         Page
 
 #left_bar.left-panel.panel
+  %ul.panel-tools.vertical.divided.icons-only.thumbs.index
+    %li>
+      %a{ :href => "#left-panel-toggle", :title => "Left Panel" } Left Panel
+  
   #page_browser_left.pages-browser.inspector
     #page_browser_container.content
       -#%ul.page_browser_numbered_list.vertical.numbers.index
@@ -124,13 +116,16 @@
           %a{ :href => "#remove-page", :title => "Copy page" }
             Remove
         %li>
-          %a{ :href => "#toggle-thumbs", :title => "Thumbnails" }
-            Add
 
 #right_bar.right-panel.panel
+  %ul.panel-tools.vertical.divided.icons-only.thumbs.index
+    %li#toggle_inspector>
+      %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" } Inspector
+      
   = render :partial => 'item_inspector'
   = render :partial => 'library'
   = render :partial => 'page_inspector'
+  
 :javascript
   
     var WebDoc;

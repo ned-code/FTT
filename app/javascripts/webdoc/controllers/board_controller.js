@@ -23,7 +23,11 @@ WebDoc.BoardController = $.klass({
                   '</div>'+
                 '</div>',
   _screen: jQuery('<div/>').addClass('screen layer'),
-             
+  
+  
+  //marginManagerNode = $('<div/>').id("margin-manager"),
+  
+  
   // Constructor     
   initialize: function(editable, autoFit) {
     this.boardContainerNode = $("#board_container");

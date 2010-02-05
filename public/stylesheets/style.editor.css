@@ -16,6 +16,14 @@ body {
   overflow: hidden;
 }
 
+
+#board_container {
+    z-index: 1;
+}
+.panel {
+    z-index: 2;
+}
+
 a { color: #3B9EEF; }
 a{ outline: none;}
 a:hover { color: #0069BF;}
@@ -518,6 +526,10 @@ a:hover { color: #0069BF;}
 #board {
     position: relative;
     overflow: hidden;
+}
+#board .screen {
+  /* SVG layer is at 1000000 */
+  z-index: 1000001;
 }
 
 #board.move-tool        { cursor: move; }

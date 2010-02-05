@@ -23,8 +23,7 @@
       %body.editor.embed-mode
     -else
       %body.editor.edit-mode
-    #wrap
-      = yield
+    = yield
     = javascript_include_tag 'jquery'      
     = javascript_include_tag 'jquery-json'
     = javascript_include_tag 'jquery-string'

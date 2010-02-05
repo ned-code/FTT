@@ -57,7 +57,7 @@ WebDoc.PageBrowserController = $.klass({
               });
           }.pBind(this)
       });
-     pageBrowserButton.removeClass(this.CURRENT_CLASS);
+      pageBrowserButton.removeClass(this.CURRENT_CLASS);
     }
     else {       
       this.domNode.animate({

@@ -155,7 +155,8 @@
     line-height: 48px;
     height: 48px;
     text-align: left;
-    background-position: 0 0;
+    /* TODO: This actually interferes with sprite positioning, because it overides */
+    background-position-x: 0;
 }
 .vertical.icons-only a {
     padding-right: 0;
@@ -348,6 +349,7 @@ a[href="#to-front"]:active          { background-position: 0 -2688px; }
 
 /* A bit of a special case, the toggle buttons
    They may even deserve their own list class */
+
 a[href="#left-panel-toggle"].current,
 a[href="#right-panel-toggle"]                   { background-position: 0 0; background-color: transparent; }
 a[href="#left-panel-toggle"].current:hover,
