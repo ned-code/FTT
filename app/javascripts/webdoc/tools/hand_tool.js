@@ -9,7 +9,7 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
     originalMovingPos: null,
     initialize: function($super, selector, boardClass) {
       $super(selector, boardClass);
-      this.boardContainer = $("#board_container");
+      this.boardScroller = WebDoc.application.boardController.scrollNode;
     },
     
     selectTool: function($super) {
@@ -34,8 +34,8 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
      
       this.originalPos = 
       {
-        x: this.boardContainer.find(".show-scroll").scrollLeft(),
-        y: this.boardContainer.find(".show-scroll").scrollTop()
+        x: this.boardScroller.scrollLeft(),
+        y: this.boardScroller.scrollTop()
       };
     },
     
@@ -47,7 +47,7 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
             var xMove = this.originalMovingPos.x - e.screenX;
             var yMove = this.originalMovingPos.y - e.screenY;
             
-            this.boardContainer.find(".show-scroll")
+            this.boardScroller
             .scrollTop( this.originalPos.y + yMove )
             .scrollLeft( this.originalPos.x + xMove );
             

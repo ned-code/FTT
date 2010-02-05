@@ -14,23 +14,21 @@
  **/
 WebDoc.BoardController = $.klass({
   
-  // private Class attributes
-  _boardWrapHTML:'<div class="push-scroll layer">'+
-                  '<div class="show-scroll layer">'+
-                    '<div class="centering layer">'+
-                      '<div></div>'+
-                    '</div>'+
-                  '</div>'+
-                '</div>',
-  _screen: jQuery('<div/>').addClass('screen layer'),
-  
-  
-  //marginManagerNode = $('<div/>').id("margin-manager"),
-  
-  
   // Constructor     
   initialize: function(editable, autoFit) {
+    
     this.boardContainerNode = $("#board_container");
+    this._screenNode = $('<div/>').addClass('screen layer');
+    
+    this._scrollPushNode = $('<div/>').addClass('push-scroll layer');
+    this.scrollNode = $('<div/>').addClass('show-scroll layer');
+    this.marginManagerNode = $('<div/>').addClass('margin-manager').css({
+      position: 'relative',
+      height: '100%'
+    });
+    this._centerNode = $('<div/>').addClass('centering layer');
+    this._centerSubNode = $('<div/>');
+    
     this._editable = editable;
     this._autoFit = autoFit;
     this._currentZoom = 1; 
@@ -97,11 +95,36 @@ WebDoc.BoardController = $.klass({
     this._selection = [];
     this._currentPage = page;
     
+    // Construct DOM tree
     this.boardContainerNode
     .empty()
-    .append( board )
-    .wrapInner( this._boardWrapHTML )
-    .prepend( this._screen );
+    .append(
+      this._screenNode
+    )
+    .append(
+      this._scrollPushNode
+      .empty()
+      .append(
+        this.scrollNode
+        .empty()
+        .append(
+          this.marginManagerNode
+          .empty()
+          .append(
+            this._centerNode
+            .empty()
+            .append(
+              this._centerSubNode
+              .empty()
+              .append(
+                board
+              )
+            )
+          )
+        )
+      )
+    );
+    
     
     this._fireSelectionChanged();
     this._bindMouseEvent();

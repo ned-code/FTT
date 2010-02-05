@@ -52,8 +52,8 @@ WebDoc.PageBrowserController = $.klass({
           marginLeft: - this._pagesPanelWidth
       }, {
           step: function(val){
-              WebDoc.application.boardController.boardContainerNode.css({
-                  left: this._pagesPanelWidth + val
+              WebDoc.application.boardController.marginManagerNode.css({
+                  marginLeft: this._pagesPanelWidth + val
               });
           }.pBind(this)
       });
@@ -64,8 +64,8 @@ WebDoc.PageBrowserController = $.klass({
           marginLeft: 0
       }, {
           step: function(val){
-              WebDoc.application.boardController.boardContainerNode.css({
-                  left: this._pagesPanelWidth + val
+              WebDoc.application.boardController.marginManagerNode.css({
+                  marginLeft: this._pagesPanelWidth + val
               });
           }.pBind(this)
       });

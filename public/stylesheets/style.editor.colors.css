@@ -18,7 +18,7 @@ body                          { background-color: hsl(194, 8%, 60%); }
                                 -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
                                 box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
 .left-panel,
-.right-panel                  { background-color: hsla(194, 12%, 30%, 0.6); }
+.right-panel                  { background-color: hsla(194, 7%, 41%, 0.92); }
 
 .draw-size                    { background-color: black; }
 .draw-color                   { border-color: black; }

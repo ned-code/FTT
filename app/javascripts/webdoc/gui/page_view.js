@@ -4,7 +4,7 @@
 
 WebDoc.PageView = $.klass({
   initialize: function(page) {
-    var boardContainer = $('#board_container'),
+    var boardContainer = WebDoc.application.boardController.boardContainerNode,
         externalPage,
         domNode = $('<div>').id('board'),
         itemDomNode = $('<div/>').id('items').addClass("hide-scroll layer"),
@@ -48,7 +48,7 @@ WebDoc.PageView = $.klass({
       if (page.data.data.externalPageUrl) {
         if (page.data.data.allowAnnotation) {
           externalPage.attr("src", "http:\/\/" + document.domain + ":" + window.location.port + "/proxy/resolve?url=" + page.data.data.externalPageUrl);
-          boardContainer.css("overflow", "auto");
+          //boardContainer.css("overflow", "auto");
           externalPage.css("overflow", "hidden");
           if (page.data.data.css.width) {
             this.domNode.css(page.data.data.css);
@@ -64,7 +64,7 @@ WebDoc.PageView = $.klass({
         }
         else {
           externalPage.attr("src", page.data.data.externalPageUrl);
-          boardContainer.css("overflow", "hidden");
+          //boardContainer.css("overflow", "hidden");
           externalPage.css("overflow", "auto");
         }
         this.itemDomNode.append(externalPage[0]);
