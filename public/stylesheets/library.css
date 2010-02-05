@@ -1008,3 +1008,12 @@ object:hover, object:focus, object:active {
 #apps_library_wrap {
     padding: 8px 0 0 8px;
 }
+
+/* =============== */
+/* = Web browser = */
+/* =============== */
+
+
+#web-browser-ui {
+  background:#ffffff;
+}
