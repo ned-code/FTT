@@ -17,11 +17,22 @@ body                          { background-color: hsl(194, 8%, 60%); }
                                 -webkit-box-shadow: 0 0 32px hsla(14, 24%, 35%, 0.6);
                                 -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
                                 box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
+
+
 .left-panel,
 .right-panel                  { background-color: hsla(194, 7%, 41%, 0.92); }
+.panel-tools                  { background-color: inherit; border-color: hsla(194, 12%, 30%, 0.8); }
+.vertical.panel-tools li      { border-color: hsla(194, 12%, 30%, 0.8); }
+.panel-tools a.current        { background-color: hsla(194, 12%, 30%, 0.8); }
+
+
+
+/* Tools */
 
 .draw-size                    { background-color: black; }
 .draw-color                   { border-color: black; }
+
+
 
 /* Pops ------------------------------ */
 
@@ -106,4 +117,147 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 /* The page browser */
 
-.current        { background-color: #f4fbfd; }
+.toolbar-panel .current        { background-color: #f4fbfd; }
+
+
+/* Pages tools */
+
+.pages-tools a {
+    background-image: url('/images/pages-tools.png');
+}
+
+a[href="#pages-browser"]            { background-position: 0 0; }
+a[href="#pages-browser"]:hover      { background-position: 0 -64px; }
+a[href="#pages-browser"]:active     { background-position: 0 -128px; }
+a[href="#pages-browser"].current    { background-position: 0 -192px; }
+
+a[href="#add-page"]                 { background-position: 0 -256px; }
+a[href="#add-page"]:hover           { background-position: 0 -320px; }
+a[href="#add-page"]:active          { background-position: 0 -384px; }
+
+a[href="#add-web-page"]             { background-position: 0 -448px; }
+a[href="#add-web-page"]:hover       { background-position: 0 -512px; }
+a[href="#add-web-page"]:active      { background-position: 0 -576px; }
+
+a[href="#copy-page"]                { background-position: 0 -640px; }
+a[href="#copy-page"]:hover          { background-position: 0 -704px; }
+a[href="#copy-page"]:active         { background-position: 0 -768px; }
+
+a[href="#remove-page"]              { background-position: 0 -832px; }
+a[href="#remove-page"]:hover        { background-position: 0 -896px; }
+a[href="#remove-page"]:active       { background-position: 0 -960px; }
+
+a[href="#prev-page"]                { background-position: 0 -1024px; }
+a[href="#prev-page"]:hover          { background-position: 0 -1088px; }
+a[href="#prev-page"]:active         { background-position: 0 -1152px; }
+
+a[href="#next-page"]                { background-position: 0 -1216px; }
+a[href="#next-page"]:hover          { background-position: 0 -1280px; }
+a[href="#next-page"]:active         { background-position: 0 -1344px; }
+
+a[href="#toggle-thumbs"].active        { background-position: 0 -1408px; }
+a[href="#toggle-thumbs"].active:hover  { background-position: 0 -1472px; }
+a[href="#toggle-thumbs"].active:active { background-position: 0 -1536px; }
+a[href="#toggle-thumbs"]            { background-position: 0 -1600px; }
+a[href="#toggle-thumbs"]:hover      { background-position: 0 -1664px; }
+a[href="#toggle-thumbs"]:active     { background-position: 0 -1728px; }
+
+/* Edit tools */
+
+.edit-tools a {
+    background-image: url('/images/edit-tools.png');
+}
+
+a[href="#select"]                   { background-position: 0 0; }
+a[href="#select"]:hover             { background-position: 0 -64px; }
+a[href="#select"]:active            { background-position: 0 -128px; }
+a[href="#select"].current           { background-position: 0 -192px; }
+
+a[href="#draw"]                     { background-position: 0 -256px; }
+a[href="#draw"]:hover               { background-position: 0 -320px; }
+a[href="#draw"]:active              { background-position: 0 -384px; }
+a[href="#draw"].current             { background-position: 0 -448px; }
+
+a[href="#insert-text"]              { background-position: 0 -512px; }
+a[href="#insert-text"]:hover        { background-position: 0 -576px; }
+a[href="#insert-text"]:active       { background-position: 0 -640px; }
+a[href="#insert-text"].current      { background-position: 0 -704px; }
+
+a[href="#insert-html"]              { background-position: 0 -768px; }
+a[href="#insert-html"]:hover        { background-position: 0 -832px; }
+a[href="#insert-html"]:active       { background-position: 0 -896px; }
+a[href="#insert-html"]:active       { background-position: 0 -960px; }
+
+a[href="#move"]                     { background-position: 0 -1024px; }
+a[href="#move"]:hover               { background-position: 0 -1088px; }
+a[href="#move"]:active              { background-position: 0 -1152px; }
+a[href="#move"].current             { background-position: 0 -1216px; }
+
+a[href="#zoom-in"]                  { background-position: 0 -1280px; }
+a[href="#zoom-in"]:hover            { background-position: 0 -1344px; }
+a[href="#zoom-in"]:active           { background-position: 0 -1408px; }
+a[href="#zoom-in"].current          { background-position: 0 -1472px; }
+
+a[href="#zoom-out"]                 { background-position: 0 -1536px; }
+a[href="#zoom-out"]:hover           { background-position: 0 -1600px; }
+a[href="#zoom-out"]:active          { background-position: 0 -1664px; }
+a[href="#zoom-out"].current         { background-position: 0 -1728px; }
+
+a[href="#delete"]                   { background-position: 0 -1792px; }
+a[href="#delete"]:hover             { background-position: 0 -1856px; }
+a[href="#delete"]:active            { background-position: 0 -1920px; }
+
+a[href="#undo"]                     { background-position: 0 -1984px; }
+a[href="#undo"]:hover               { background-position: 0 -2048px; }
+a[href="#undo"]:active              { background-position: 0 -2112px; }
+
+a[href="#redo"]                     { background-position: 0 -2176px; }
+a[href="#redo"]:hover               { background-position: 0 -2240px; }
+a[href="#redo"]:active              { background-position: 0 -2304px; }
+
+a[href="#to-back"]                  { background-position: 0 -2368px; }
+a[href="#to-back"]:hover            { background-position: 0 -2432px; }
+a[href="#to-back"]:active           { background-position: 0 -2496px; }
+
+a[href="#to-front"]                 { background-position: 0 -2560px; }
+a[href="#to-front"]:hover           { background-position: 0 -2624px; }
+a[href="#to-front"]:active          { background-position: 0 -2688px; }
+
+
+.panel-tools a                      { background-image: url('/images/panel-tools.png'); }
+
+/* A bit of a special case, the toggle buttons
+   They may even deserve their own list class */
+
+a[href="#left-panel-toggle"].active
+a[href="#right-panel-toggle"]                   { background-position: 0 0; background-color: transparent; }
+a[href="#left-panel-toggle"].active:hover,
+a[href="#right-panel-toggle"]:hover             { background-position: 0 -64px; background-color: transparent;}
+a[href="#left-panel-toggle"].active:active,
+a[href="#right-panel-toggle"]:active            { background-position: 0 -128px; background-color: transparent;}
+a[href="#left-panel-toggle"],
+a[href="#right-panel-toggle"].active           { background-position: 0 -192px; background-color: transparent;}
+a[href="#left-panel-toggle"]:hover,
+a[href="#right-panel-toggle"].active:hover     { background-position: 0 -256px; background-color: transparent;}
+a[href="#left-panel-toggle"]:active,
+a[href="#right-panel-toggle"].active:active    { background-position: 0 -320px; background-color: transparent;}
+
+a[href="#item-inspector"]           { background-position: 0 -384px; }
+a[href="#item-inspector"]:hover     { background-position: 0 -448px; }
+a[href="#item-inspector"]:active    { background-position: 0 -512px; }
+a[href="#item-inspector"].current   { background-position: 0 -576px; }
+
+a[href="#library"]                  { background-position: 0 -640px; }
+a[href="#library"]:hover            { background-position: 0 -704px; }
+a[href="#library"]:active           { background-position: 0 -768px; }
+a[href="#library"].current          { background-position: 0 -832px; }
+
+a[href="#pages-browser"]            { background-position: 0 -896px; }
+a[href="#pages-browser"]:hover      { background-position: 0 -960px; }
+a[href="#pages-browser"]:active     { background-position: 0 -1024px; }
+a[href="#pages-browser"].current    { background-position: 0 -1088px; }
+
+a[href="#page-inspector"]           { background-position: 0 -1152px; }
+a[href="#page-inspector"]:hover     { background-position: 0 -1216px; }
+a[href="#page-inspector"]:active    { background-position: 0 -1280px; }
+a[href="#page-inspector"].current   { background-position: 0 -1344px; }

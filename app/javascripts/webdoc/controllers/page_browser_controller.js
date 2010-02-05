@@ -57,7 +57,7 @@ WebDoc.PageBrowserController = $.klass({
               });
           }.pBind(this)
       });
-      pageBrowserButton.removeClass(this.CURRENT_CLASS);
+      pageBrowserButton.removeClass(this.ACTIVE_CLASS);
     }
     else {       
       this.domNode.animate({
@@ -69,7 +69,7 @@ WebDoc.PageBrowserController = $.klass({
               });
           }.pBind(this)
       });
-      pageBrowserButton.addClass(this.CURRENT_CLASS);      
+      pageBrowserButton.addClass(this.ACTIVE_CLASS);      
     }
     this.visible = !this.visible;
   },

@@ -11,9 +11,8 @@
 #toolbar.toolbar-panel.panel
   %ul.pages-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li>
-      %a{ :href => "#pages-browser", :title => "Pages browser" }
-        Pages
+    -#%li>
+    -#  %a{ :href => "#pages-browser", :title => "Pages browser" } Pages
     -#%li#removePage.preview_hidden>
     -#  %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
     -#    Delete
@@ -82,25 +81,24 @@
   
   %ul#right_bar_tools.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
-    %li>
-      %a.state-right-panel{ :href => "#library", :title => "Show Library" }
-        Library
-    %li>
-      %a.state-right-panel{ :href => "#item-inspector", :title => "Show Inspector" }                      
-        Item
-    %li>
-      %a.state-right-panel.current{ :href => "#page-inspector", :title => "Show Page inspector" }
-        Page
+
 
 #left_bar.left-panel.panel
   %ul.panel-tools.vertical.divided.icons-only.thumbs.index
     %li>
       %a{ :href => "#left-panel-toggle", :title => "Left Panel" } Left Panel
-  
+    %li>
+      %a{ :href => "#pages-browser", :title => "Pages browser" } Pages
+
   #page_browser_left.pages-browser.inspector
+    %div.head
+      %div
+        %h2 Pages
+    
     #page_browser_container.content
       -#%ul.page_browser_numbered_list.vertical.numbers.index
       %ul.page_browser_items.vertical.pages.index
+    
     #page_browser_control_bar.foot
       %ul.pages-tools.tools.thumbs.index.icons-only
         %li>
@@ -121,7 +119,13 @@
   %ul.panel-tools.vertical.divided.icons-only.thumbs.index
     %li#toggle_inspector>
       %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" } Inspector
-      
+    %li>
+      %a.state-right-panel{ :href => "#library", :title => "Show Library" } Library
+    %li>
+      %a.state-right-panel{ :href => "#item-inspector", :title => "Show Inspector" } Item
+    %li>
+      %a.state-right-panel.current{ :href => "#page-inspector", :title => "Show Page inspector" } Page
+        
   = render :partial => 'item_inspector'
   = render :partial => 'library'
   = render :partial => 'page_inspector'

@@ -59,7 +59,7 @@ WebDoc.RightBarController = $.klass({
     ddd('[RightBarController] _changeButtonState(inspector)');
     
     var stateButtons = $( this.STATE_BUTTON_SELECTOR ),
-        currentClass = this.CURRENT_CLASS,
+        currentClass = this.ACTIVE_CLASS,
         buttonSelector = inspector.buttonSelector;
     
     stateButtons.removeClass( currentClass );
@@ -138,7 +138,7 @@ WebDoc.RightBarController = $.klass({
       });
     }
     
-    $( this.PANEL_TOGGLE_SELECTOR ).addClass( this.CURRENT_CLASS );
+    $( this.PANEL_TOGGLE_SELECTOR ).addClass( this.ACTIVE_CLASS );
   },
   
   hideRightBar: function() {
@@ -161,7 +161,7 @@ WebDoc.RightBarController = $.klass({
       });
     }
     
-    $( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.CURRENT_CLASS );
+    $( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.ACTIVE_CLASS );
   },
   
   toggleRightBar: function() {

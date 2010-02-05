@@ -21,22 +21,24 @@
 }
 
 .right-panel .panel-tools {
-    left: -32px;
+    left: -35px;
     -webkit-border-top-left-radius:     12px 12px;
     -moz-border-radius-topleft:         12px 12px;
     border-top-left-radius:             12px 12px;
     -webkit-border-bottom-left-radius:  12px 12px;
     -moz-border-radius-bottomleft:      12px 12px;
     border-bottom-left-radius:          12px 12px;
+    border-right: none;
 }
 .left-panel .panel-tools {
-    right: -32px;
+    right: -35px;
     -webkit-border-top-right-radius:    12px 12px;
     -moz-border-radius-topright:        12px 12px;
     border-top-right-radius:            12px 12px;
     -webkit-border-bottom-right-radius: 12px 12px;
     -moz-border-radius-bottomright:     12px 12px;
     border-bottom-right-radius:         12px 12px;
+    border-left: none;
 }
 
 /* An Inspector goes INSIDE a panel. */
@@ -212,9 +214,6 @@
     /*-moz-border-bottom-right-radius: 8px;   */
     /*border-bottom-right-radius: 8px;        */
 }
-.pages-browser.inspector {
-    top: 0;
-}
 
 .right-panel {
     width: 350px;
@@ -229,22 +228,16 @@
     /*border-bottom-left-radius: 8px;         */
 }
 
-/* Inspectors */
-
-.pages-browser {
-    top: 0;
-}
-
 /* Colors */
 
 #page_inspector.inspector {
-    /*background: #d5d7ca;*/
     bottom: 0;
 }
 .inspector .head h2 {
     color: white;
+    font-family: 'AaarghNormal', Helvetica;
     line-height: 32px;
     font-weight: bold;
-    font-size: 1.6em;
+    font-size: 1.4em;
     text-align: center;
 }

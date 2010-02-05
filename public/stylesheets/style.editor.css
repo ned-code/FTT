@@ -24,6 +24,30 @@ body {
     z-index: 2;
 }
 
+/* Fonts - just a few to test for now */
+
+@import url('/fonts/Aaargh-fontfacekit/stylesheet.css');
+@import url('/fonts/Adler-fontfacekit/stylesheet.css');
+@import url('/fonts/CalligraphyFLF-fontfacekit/stylesheet.css');
+@import url('/fonts/Colaborate-fontfacekit/stylesheet.css');
+@import url('/fonts/Creampuff-fontfacekit/stylesheet.css');
+@import url('/fonts/Droid-Sans-fontfacekit/stylesheet.css');
+@import url('/fonts/ElliotSix-fontfacekit/stylesheet.css');
+@import url('/fonts/GoodDog-fontfacekit/stylesheet.css');
+@import url('/fonts/Impact-Label-fontfacekit/stylesheet.css');
+@import url('/fonts/Inconsolata-fontfacekit/stylesheet.css');
+@import url('/fonts/JungleFever-fontfacekit/stylesheet.css');
+@import url('/fonts/Komika-Title-fontfacekit/stylesheet.css');
+@import url('/fonts/League-Gothic-fontfacekit/stylesheet.css');
+@import url('/fonts/MicroFLF-fontfacekit/stylesheet.css');
+@import url('/fonts/Mirisch-fontfacekit/stylesheet.css');
+@import url('/fonts/MomsTypewriter-fontfacekit/stylesheet.css');
+@import url('/fonts/MonospaceTypewriter-fontfacekit/stylesheet.css');
+@import url('/fonts/Playtime-With-Hot-Toddies-fontfacekit/stylesheet.css');
+@import url('/fonts/SF-Cartoonist-Hand-fontfacekit/stylesheet.css');
+@import url('/fonts/Shardee-fontfacekit/stylesheet.css');
+@import url('/fonts/Underwood-Champion-fontfacekit/stylesheet.css');
+
 a { color: #3B9EEF; }
 a{ outline: none;}
 a:hover { color: #0069BF;}

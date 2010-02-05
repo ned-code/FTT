@@ -1,13 +1,16 @@
 /* states.css
  * 
  * Takes care of the state classes:
- *   .loading
- *   .active
- *   .current
- *   .state-xxx
+ *
+ *   .loading     - State of items requested from a server
+ *   .active      - Implies polar (on/off) state
+ *   .state-xxx   - Inmplies multipolar (0/1/2/...) state
+ *   .current     - Current implies that one out of a number of items is the current one
  * 
  * State classes must NOT have default style applied, they are there to indicate state only.
- * Children of state classes (or nodes that happen to have state as well) can be styled.
+ * You can style specific nodes that happen to have state, or children of state nodes (for
+ * instance, showing / hiding a .loading-icon when its parent has .loading), but the state
+ * class itself must not have global style applied.
  */
 
 .loading-icon {
