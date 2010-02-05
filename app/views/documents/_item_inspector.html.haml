@@ -5,76 +5,7 @@
     %h3
       %a{ :href => "" } Palette
     #palette_inspector.inspector
-      #palette_text.palette
-        %ul{ :style => "display:block" }
-          %li
-            %a.bold{ :href => "" }
-              %span= "Bold"
-          %li
-            %a.italic{ :href => "" }
-              %span= "Italic"
-          %li
-            %a.underline{ :href => "" }
-              %span= "Underlined"
-          %li
-            %a.justifyLeft{ :href => "" }
-              %span= "Left"
-          %li
-            %a.justifyCenter{ :href => "" }
-              %span= "Center"
-          %li
-            %a.justifyRight{ :href => "" }
-              %span= "Right"
-          %li
-            %a.justifyFull{ :href => "" }
-              %img{ :src => "/images/icons/text_list.png", :alt =>"Justify"}
-          %li
-            %a.insertUnorderedList{ :href => "" }              
-              %img{ :src => "/images/icons/text_unord_list.png", :alt =>"Bullet"}
-          %li
-            %a.insertOrderedList{ :href => "" }
-              %img{ :src => "/images/icons/text_ord_list.png", :alt =>"Numbered"}
-          %li
-            %a.indent{ :href => "" }
-              %img{ :src => "/images/icons/tex_indent.png", :alt =>"Indent"}                   
-          %li
-            %a.outdent{ :href => "" }
-              %img{ :src => "/images/icons/text_outdent.png", :alt =>"Outdent"}
-          %li
-            Font Size 
-            %select.FontSize
-              %option{ :value => "default", :selected => "selected" } Choose font size
-              %option{ :value => "1" } x-small
-              %option{ :value => "2" } small
-              %option{ :value => "3" } medium
-              %option{ :value => "4" } large
-              %option{ :value => "5" } x-large
-              %option{ :value => "6" } xx-large
-              %option{ :value => "7" } xxx-large                                                                                                            
-          %li
-            Font Color 
-            %select.ForeColor
-              %option{ :value => "default", :selected => "selected" } Choose font color
-              %option{ :value => "black" } black                
-              %option{ :value => "white" } white                                               
-              %option{ :value => "red" } red
-              %option{ :value => "green" } green
-              %option{ :value => "blue" } blue
-              %option{ :value => "yellow" } yellow   
-          %li
-            Font Family
-            %select.FontName
-              %option{ :value => "default", :selected => "selected" } Choose font name
-              %option{ :value => "arial" } Arial
-              %option{ :value => "comic sans ms" } Comic Sans
-              %option{ :value => "courier new" } Courier New    
-              %option{ :value => "georgia" } Georgia    
-              %option{ :value => "helvetica" } Helvetica    
-              %option{ :value => "impact" } Impact    
-              %option{ :value => "times new roman" } Times
-              %option{ :value => "trebuchet ms" } Trebuchet
-              %option{ :value => "verdana" } Verdana                                                                                                    
-        #palette_overlay
+      #palette_text.palette        
       #palette_pen.palette
         %ul#colors{ :style => "display:block" }
           %li

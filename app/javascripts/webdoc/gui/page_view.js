@@ -74,7 +74,13 @@ WebDoc.PageView = $.klass({
         // Handle case where page is a webdoc
         ddd('Page is a webdoc page');
     }
-    
+    if (this.domNode.css("width").indexOf("%") !== -1 || this.domNode.css("height").indexOf("%") !== -1) {
+      this.domNode.css({
+        position: "absolute",
+        top: "0px",
+        left: "0px"
+      });
+    }
     this.domNode.append( itemDomNode );
     this.domNode.append( boardScreenNodes );
     if (page.items && $.isArray(page.items)) {
@@ -87,6 +93,20 @@ WebDoc.PageView = $.klass({
   
   objectChanged: function(page) {
     this.domNode.animate(page.data.data.css, 'fast');
+    if (this.domNode.css("width").indexOf("%") !== -1 || this.domNode.css("height").indexOf("%") !== -1) {
+      this.domNode.css({
+        position: "absolute",
+        top: "0px",
+        left: "0px"
+      });
+    }
+    else {
+      this.domNode.css({
+        position: "",
+        top: "",
+        left: ""
+      });      
+    }    
   },
   
   itemAdded: function(addedItem, afterItem) {

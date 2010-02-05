@@ -19,7 +19,7 @@ WebDoc.ItemView = $.klass({
     // item wrapper    
     this.domNode = $("<div/>").addClass("item_wrap"); 
 
-    this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
+    this.itemDomNode = this.createDomNode().addClass("item").addClass("layer board-style").css({
         overflow: "hidden",
         width: "100%",
         height: "100%"
@@ -253,23 +253,33 @@ WebDoc.ItemView = $.klass({
   },
   
   _moveTo: function(position) {
+    var inspectorController = WebDoc.application.inspectorController;
+    
     this.item.data.data.css.left = position.left + "px";
     this.item.data.data.css.top = position.top + "px";
     this.domNode.css({
       top: this.item.data.data.css.top,
       left: this.item.data.data.css.left
     });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    
+    if (inspectorController) {
+      inspectorController.refreshSubInspectors();
+    }
   },
   
   _resizeTo: function(size) {
+    var inspectorController = WebDoc.application.inspectorController;
+    
     this.item.data.data.css.width = size.width + "px";
     this.item.data.data.css.height = size.height + "px";
     this.domNode.css({
       width: this.item.data.data.css.width,
       height: this.item.data.data.css.height
     });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    
+    if (inspectorController) {
+      inspectorController.refreshSubInspectors();
+    }
   }
 });
 

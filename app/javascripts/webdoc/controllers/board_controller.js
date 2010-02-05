@@ -262,6 +262,8 @@ WebDoc.BoardController = $.klass({
     }   
     if (MTools.Browser.WebKit) { 
       // Correct mouse vertical position according to the cursor icon height
+      // This doesn't work with a pen, as you can't change the registration point
+      // of the cursor.
       y += this.currentTool.getCursorHeight();
     }
 
@@ -352,14 +354,13 @@ WebDoc.BoardController = $.klass({
     if (itemViewToEdit && itemViewToEdit.canEdit()) { 
       var node = itemViewToEdit.domNode,
           nodePos = node.position(),
+          nodeLeft = nodePos.left,
+          nodeTop = nodePos.top,
           nodeWidth = node.width(),
           nodeHeight = node.height(),
           board = this._currentPageView.domNode,
           boardWidth = board.width(),
           boardHeight = board.height(),
-          nodeLeft = nodePos.left,
-          nodeTop = nodePos.top,
-          nodeBottom = boardHeight - nodeTop - nodeHeight,
           screens = this._currentPageView.boardScreenNodes,
           screenTop = screens.eq(0),
           screenBottom = screens.eq(1),
@@ -368,20 +369,22 @@ WebDoc.BoardController = $.klass({
       
       // Adjust the dimensions of the four screens surrounding the edited block
       screenTop.css({
-          bottom: boardHeight - nodeTop
+          height: nodeTop
       });
       screenBottom.css({
-          top: nodeTop + nodeHeight
+          top: nodeTop + nodeHeight,
+          height: boardHeight - nodeTop - nodeHeight
       });
       screenLeft.css({
-          right: boardWidth - nodeLeft,
+          width: nodeLeft,
           top: nodeTop,
-          bottom: nodeBottom
+          height: nodeHeight
       });
       screenRight.css({
           left: nodeLeft + nodeWidth,
+          width: boardWidth - nodeLeft - nodeWidth,
           top: nodeTop,
-          bottom: nodeBottom
+          height: nodeHeight
       });
       
       this._editingItem = itemViewToEdit;  

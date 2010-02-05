@@ -20,12 +20,25 @@ WebDoc.RightBarController = $.klass({
   initialize: function() {
     panel = $( this.PANEL_SELECTOR );
     
+    // Some of these are lazy loaded, and some are not -
+    // pageInspector does not work if you try loading it now.
+    
+    var library = WebDoc.application.libraryController = new WebDoc.LibrariesController(),
+        itemInspector = WebDoc.application.inspectorController = new WebDoc.InspectorController();
+        //pageInspector = WebDoc.application.pageInspectorController = new WebDoc.PageInspectorController();
+    
+    library.buttonSelector = this.LIBRARY_BUTTON_SELECTOR;
+    itemInspector.buttonSelector = this.ITEM_INSPECTOR_BUTTON_SELECTOR;
+    //pageInspector.buttonSelector = this.PAGE_INSPECTOR_BUTTON_SELECTOR;
+    
     this.visible = false;
     this.domNode = panel;
-    this.contentMap = {};
     this.panelWidth = panel.outerWidth();
-    
-    ddd('[RightBarController] Width of right panel: '+this.panelWidth);
+    this.contentMap = {
+      library: library,
+      itemInspector: itemInspector
+      //pageInspector: pageInspector
+    };
   },
   
   _changePanelContent: function(inspector) {
@@ -56,10 +69,10 @@ WebDoc.RightBarController = $.klass({
   showLib: function() {
     ddd("[RightBarController] showLib");
     
-    var inspector = this.contentMap.libraries;
+    var inspector = this.contentMap.library;
     
     if (!inspector) { // lazily load the library
-      ddd('[RightBarController] LOAD LIBRARY');
+      ddd('[RightBarController] Load Library');
       inspector = WebDoc.application.libraryController = new WebDoc.LibrariesController();
       inspector.buttonSelector = this.LIBRARY_BUTTON_SELECTOR;
       
@@ -76,7 +89,7 @@ WebDoc.RightBarController = $.klass({
     var inspector = this.contentMap.pageInspector;
     
     if (!inspector) { // lazily load the page inspector
-      ddd('[RightBarController] LOAD PAGE INSPECTOR');
+      ddd('[RightBarController] Load Page Inspector');
       inspector = WebDoc.application.pageInspectorController = new WebDoc.PageInspectorController();
       inspector.buttonSelector = this.PAGE_INSPECTOR_BUTTON_SELECTOR;
     
@@ -93,7 +106,7 @@ WebDoc.RightBarController = $.klass({
     var inspector = this.contentMap.itemInspector;
     
     if (!inspector) { // lazily load the item inspector
-      ddd('[RightBarController] LOAD ITEM INSPECTOR');
+      ddd('[RightBarController] Load Item Inspector');
       inspector = WebDoc.application.inspectorController = new WebDoc.InspectorController();
       inspector.buttonSelector = this.ITEM_INSPECTOR_BUTTON_SELECTOR;
       

@@ -415,18 +415,11 @@ a:hover { color: #0069BF;}
     margin-bottom: 1px;
     position: relative;
     cursor: move;
-    cursor: row-resize;
 }
 .pages li .title {
-  height: 1.5em;
-  background: hsl(194, 9%, 71%);
-  padding: 0.6em 0.6em 0.6em 2.5em;
-}
-.pages li:hover .title {
-  background: hsl(194, 6%, 56%);
-}
-.pages li.current .title {
-  background: hsl(194, 3%, 88%);
+    height: 1.5em;
+    background: hsl(194, 9%, 71%);
+    padding: 0.6em 0.6em 0.6em 2.5em;
 }
 .pages li .number,
 .pages li .loading-icon {
@@ -440,48 +433,23 @@ a:hover { color: #0069BF;}
 }
 .pages li .number {
     left: 0.6em;
-    
     /* Just to nudge the text into place */
-    text-indent: 1px;
-    text-align: center;
+    /*text-indent: 1px;*/
     font-weight: bold;
     line-height: 1.5;
     text-align: center;
 }
-.pages li .number {
-  background-color: hsl(194, 10%, 40%);
-  color: white;
-}
-.pages li:hover .number {
-  background-color: hsl(194, 12%, 24%);
-  color: white;
-}
-.pages li.current .number {
-  background-color: hsl(194, 12%, 24%);
-  color: white;
-}
 .pages li .loading-icon {
     right: 0.6em;
 }
-
-.loading-icon {
-    display: none;
-    background-position: 50% 50%;
-    background-image: url('/images/loading-icon-16.gif');
-    background-color: #dedede;
-}
-.loading .loading-icon {
-    display: block;
-}
-
 .page_browser_items li.current {
-  background: none;
+    background: none;
 }
 
 /* I have two styles of thumbs for your delectation.
  * 
- * To change style you need to edit the corresponding animations
- * in page_browser_controller.js. (That could be improved!)
+ * To change style you also need to edit the corresponding animations
+ * in page_browser_controller.js. (That could be improved - we could auto-detect.)
  */
  
 /* 1. With border, looks like an extension of the title block */
@@ -524,15 +492,17 @@ a:hover { color: #0069BF;}
 }
 .pages li .thumb .page-thumb {
   position: absolute;
-  left: 0; bottom: 50%;
+  left: 0; top: 50%;
   margin-top: -45px;
-}*/
+}
+*/
 
 /* 2. As a sheet, looks like it appears from a slot in the title block */
 
+/* Thumb height is height+14, to account for shadow */
 .pages li .thumb {
   position: relative;
-  width: 136px; height: 104px; /* height is height+14, to account for shadow */
+  width: 136px; height: 104px; 
   margin: 0 auto;
   overflow: hidden;
   padding: 0;
@@ -542,7 +512,7 @@ a:hover { color: #0069BF;}
 }
 .pages li .thumb .page-thumb {
   position: absolute;
-  bottom: 14px;               /* 14px to account for shadow */
+  bottom: 14px;               
   left: 50%;
   margin-left: -60px;
   
@@ -571,8 +541,6 @@ a:hover { color: #0069BF;}
 #board {
     position: relative;
     overflow: hidden;
-    font-family:Helvetica, Arial, sans-serif;
-    font-size: 2.5em;
 }
 
 #board.move-tool        { cursor: move; }
@@ -581,18 +549,22 @@ a:hover { color: #0069BF;}
 #board.insert-html-tool {}
 #board.insert-text-tool {}
 
-#board ol, #board ul {
+.board-style {
+  font-family:Helvetica, Arial, sans-serif;
+  font-size: 2.5em;
+}
+
+.board-style ol, .board-style ul {
   padding-left:1.5em;
   margin-bottom: 0.4em;
 }
-#board ol ol, #board ul ul {
+.board-style ol ol, .board-style ul ul {
   margin-top: -0.1em;
   font-size: 0.8em;
 }
-#board ol li, #board ul li {
+.board-style ol li, .board-style ul li {
   margin-bottom: 0.2em;
 }
-
 
 /* == Item view = */
 .drag_handle {
@@ -683,9 +655,7 @@ a:hover { color: #0069BF;}
 .ui-state-hover a, .ui-state-hover a:hover {
   background-color:  #fff;
 }
-#right_bar{
-    background-color: #ebebeb;
-}
+
 #inspectors {
   position:relative;
   overflow:auto; 
@@ -707,7 +677,7 @@ a:hover { color: #0069BF;}
 /* == palette inspector */
 .palette {
   background:#ebebeb;
-  width:100%;
+  width:90%;
   height:300px;  
   margin:0;  
 }
