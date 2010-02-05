@@ -67,9 +67,9 @@ class Medias::Widget < Media
   end
   
   def delete_widget_folder
-    path = Pathname.new("public/uploads/medias/widget/#{uuid}/#{version}")
-    parent_path = path.parent # Gives the app path
-    FileUtils.rm_rf parent_path
+#    path = Pathname.new("public/uploads/medias/widget/#{uuid}/#{version}")
+#    parent_path = path.parent # Gives the app path
+#    FileUtils.rm_rf parent_path
     # TODO, request all object keys in path and delete all
     # path = "/widgets/#{id}/"
     # logger.debug "Removing zip files."
