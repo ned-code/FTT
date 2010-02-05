@@ -59,7 +59,7 @@ WebDoc.RightBarController = $.klass({
     ddd('[RightBarController] _changeButtonState(inspector)');
     
     var stateButtons = $( this.STATE_BUTTON_SELECTOR ),
-        currentClass = this.ACTIVE_CLASS,
+        currentClass = this.CURRENT_CLASS,
         buttonSelector = inspector.buttonSelector;
     
     stateButtons.removeClass( currentClass );

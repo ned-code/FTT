@@ -15,7 +15,7 @@
 .right-panel .panel-tools,
 .left-panel .panel-tools {
     position: absolute;
-    top: 48px;
+    top: 56px;
     width: 32px;
     background-color: inherit;
 }
@@ -235,7 +235,6 @@
 }
 .inspector .head h2 {
     color: white;
-    font-family: 'AaarghNormal', Helvetica;
     line-height: 32px;
     font-weight: bold;
     font-size: 1.4em;
