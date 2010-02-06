@@ -690,7 +690,7 @@ a:hover { color: #0069BF;}
 /* == palette inspector */
 .palette {
   background:#ebebeb;
-  width:100%;
+  width:90%;
   height:300px;  
   margin:0;  
 }
