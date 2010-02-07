@@ -27,8 +27,8 @@
     overflow: hidden;
 }
 .push-scroll {
-    /* These values should be overriden by feature testing with some js */
-    /* They represent the thickness of a scrollbar */
+    /* These values, representing the thickness of a scrollbar,
+       should be overriden by feature testing with some js */
     padding-right: 16px;
     padding-bottom: 16px;
     width: 100%;
@@ -36,61 +36,82 @@
     
     /* When .layer changes the box model, we need to change it back */
     -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
+    -moz-box-sizing:    content-box;
+    box-sizing:         content-box;
 }
 .show-scroll {
     overflow: scroll;
 }
 
-/* Vertical centering technique described here:
-/* http://www.jakpsatweb.cz/css/css-vertical-center-solution.html */
-/* TODO: Fix case in IE7 where centering has to scroll. V difficult. Possibly impossible. */
+/* Vertical centering builds on the technique described here:
+   http://www.jakpsatweb.cz/css/css-vertical-center-solution.html
+   TODO: Fix case in IE7 where centering has to scroll. V difficult. Possibly impossible. */
 
-.centering {
+.center {
     display: table;
     width: 100%;
     height: 100%;
     
     /* When .layer changes the box model, we need to change it back */
     -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
+    -moz-box-sizing:    content-box;
+    box-sizing:         content-box;
     
     /* IE hacks */
     position: relative !ie7;
 }
-.centering>div {
+
+.center-cell {
     display: table-cell;
     vertical-align: middle;
+    
+    /* Must have height, or you can't expect FF to know
+       how high to make its children */
+    height: 100%;
+    
+    /* In WebKit and FF iframes cause scrollbars because they
+       have a 'system' margin-bottom. In any case, it's useful
+       to be able to position stuff outside the cell */
+    overflow: visible;
     
     /* IE hacks */
     position: absolute !ie7;
     top: 50% !ie7;
 }
 
-/* Ideally, all elements likely to be put in a centred layer should be listed here */
-.centering>div>div,
-.centering>div>img,
-.centering>div>ul,
-.centering>div>dl,
-.centering>div>menu,
-.centering>div>object,
-.centering>div>embed,
-.centering>div>section,
-.centering>div>table,
-.centering>div>form,
-.centering>div>video,
-.centering>div>progress,
-.centering>div>canvas {
+.center-box {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: visible;
     margin: 0 auto;
+    
+    /* Acts as position parent for its content */
+    position: relative;
+
     /* IE hacks */
     position: relative !ie7;
     top: -50% !ie7;
 }
+.center-box>iframe {
+    width: 100%;
+    height: 100%;
+}
+
+/* Ideally, all elements likely to be put in a centred layer should be listed here */
+.center-box>div,
+.center-box>form,
+.center-box>img,
+.center-box>object,
+.center-box>embed,
+.center-box>video,
+.center-box>progress,
+.center-box>canvas,
+.center-box>.content {
+    height: 100%;
+}
 
 /* Screen */
-
 .screen {
     display: none;
 }
