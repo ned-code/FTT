@@ -52,17 +52,17 @@
     width: 100%;
     height: 100%;
     
-    /* When .layer changes the box model, we need to change it back */
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing:    content-box;
-    box-sizing:         content-box;
+    /* Stops a mysterious gap at the bottom appearing when content
+       is too tall (except Opera, where there is still a small one) */
+    overflow: hidden;
     
     /* IE hacks */
     position: relative !ie7;
 }
-
-.center-cell {
+.center>div {
     display: table-cell;
+}
+.center-cell {
     vertical-align: middle;
     
     /* Must have height, or you can't expect FF to know
