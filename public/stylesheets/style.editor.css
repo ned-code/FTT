@@ -710,12 +710,6 @@ a:hover { color: #0069BF;}
   top:0;
   left:0;
 }
-#palette_text ul li a:hover {
-  display: block;
-  background-color: #fff;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-}
 /* === pen palette */
 #colors li a div {
   width:20px;

@@ -8,8 +8,9 @@ WebDoc.TextPaletteController = $.klass({
   
   initGUI: function(container){
     var containerObj = document.getElementById(container);
-    var toolbarContent = 
-    '<div id="toolbar_panel">'+
+    var toolbarContent =
+    '<div class="head"><div><h2>Text Tool</h2></div></div>'+
+    '<div id="toolbar_panel" class="content">'+
         '<div id="toolbar_panel_cover"></div>'+
         '<div id="colorpickerHolder1" style="position:absolute;z-index: 150000;top:50px;"></div>'+
           '<div id="colorpickerHolder2" style="position:absolute;z-index: 150000;top:50px;"></div>'+
