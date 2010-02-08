@@ -115,6 +115,14 @@
     width: 50px; padding-top: 50px;
 }
 
+.scroll {
+    overflow: auto;
+}
+.vertical.scroll {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 /* Links as thumbs classes */
 
 .thumbs a {

@@ -58,6 +58,12 @@ body                          { background-color: hsl(194, 8%, 60%); }
                                 border-color: transparent;
                                 color: white; }
 
+.text-thumb,
+.scroller-window              { background-color: hsl(194, 6%, 56%);
+                                -webkit-border-radius:    12px;
+                                -moz-border-radius:       12px;
+                                border-radius:            12px; }
+
 .inspector .size-slider {       background: hsl(194, 6%, 56%) url('/images/ui/slider_size_bg.png') no-repeat 100% 0;
                                 
                                 -webkit-background-size:  100%;

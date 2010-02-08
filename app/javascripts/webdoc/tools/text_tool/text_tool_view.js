@@ -523,6 +523,6 @@ WebDoc.TextToolView = $.klass({
         }
     },
     activateToolbar: function(bool) {       
-      $('#toolbar_panel_cover').css('display',bool?'none':'block'); 
+      //$('#toolbar_panel_cover').css('display',bool?'none':'block'); 
     }
   });

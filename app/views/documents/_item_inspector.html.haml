@@ -3,121 +3,214 @@
   -#  %a{ :href => "" } Palette
   #palette_inspector.layer
     #palette_text.inspector
-        
-    -#%div.head
+      %div.head
         %div
           %h2 Text Tool
-    
-    -#%div#toolbar_panel.content
-    -#  %div#toolbar_panel_cover
-    -#    %div#colorpickerHolder1{ :style => "position:absolute;z-index: 150000;top:50px;" }
-    -#      %div#colorpickerHolder2{ :style => "position:absolute;z-index: 150000;top:50px;" }
-    -#    %select#toolbar_panel_button_format{ :onchange => "TextToolView.editorExec(\'format\',this.value);" }
-    -#      %option{ :value => 'p ' } Normal
-    -#      %option{ :value => 'h1' } Heading 1
-    -#      %option{ :value => 'h2' } Heading 2
-    -#      %option{ :value => 'h3' } Heading 3
-    -#      %option{ :value => 'h4' } Heading 4
-    -#      %option{ :value => 'h5' } Heading 5
-    -#      %option{ :value => 'h6' } Heading 6
-    
-    -#    %select#toolbar_panel_button_fontName{ :onchange => "WebDoc.application.textTool.delegate.editorExec(\'fontName\',this.value);" }
-    -#      %option{ :value => 'Times New Roman' } Times New Roman
-    -#      %option{ :value => 'Arial' } Arial
-    -#      %option{ :value => 'Tahoma' } Tahoma
-    -#      %option{ :value => 'Comic Sans MS' } Comic Sans MS
-    -#      %option{ :value => 'Courier New' } Courier New
-    -#      %option{ :value => 'Trebuchet MS' } Trebuchet MS
-    -#      %option{ :value => 'Verdana' } Verdana
-    -#      %option{ :value => 'serif' } Serif
-
-    -#    %select#toolbar_panel_button_fontSize{ :onchange => "WebDoc.application.textTool.delegate.editorExec(\'fontSize\',this.value);" }
-    -#      %option{ :value => '3pt' } 3 pt
-    -#      %option{ :value => '4pt' } 4 pt
-    -#      %option{ :value => '5pt' } 5 pt
-    -#      %option{ :value => '6pt' } 6 pt
-    -#      %option{ :value => '7pt' } 7 pt
-    -#      %option{ :value => '8pt' } 8 pt
-    -#      %option{ :value => '9pt' } 9 pt
-    -#      %option{ :value => '10pt' } 10 pt
-    -#      %option{ :value => '11pt' } 11 pt
-    -#      %option{ :value => '12pt' } 12 pt
-    -#      %option{ :value => '13pt' } 13 pt
-    -#      %option{ :value => '14pt' } 14 pt
-    -#      %option{ :value => '15pt' } 15 pt
-    -#      %option{ :value => '16pt' } 16 pt
-    -#      %option{ :value => '17pt' } 17 pt
-    -#      %option{ :value => '18pt' } 18 pt
-    -#      %option{ :value => '19pt' } 19 pt
-    -#      %option{ :value => '20pt' } 20 pt
-    -#      %option{ :value => '22pt' } 22 pt
-    -#      %option{ :value => '24pt' } 24 pt
-    -#      %option{ :value => '26pt' } 26 pt
-    -#      %option{ :value => '28pt' } 28 pt
-    -#      %option{ :value => '30pt' } 30 pt
-    -#      %option{ :value => '32pt' } 32 pt
-    -#      %option{ :value => '34pt' } 34 pt
-    -#      %option{ :value => '36pt' } 36 pt
-    -#      %option{ :value => '38pt' } 38 pt
-    -#      %option{ :value => '40pt' } 40 pt          
-    -#      %option{ :value => '42pt' } 42 pt
-    -#      %option{ :value => '45pt' } 45 pt
-    -#      %option{ :value => '48pt' } 48 pt
+      
+      %div#toolbar_panel.content
+        %div#colorpickerHolder1{ :style => "position:absolute;z-index: 150000;top:50px;" }
+          %div#colorpickerHolder2{ :style => "position:absolute;z-index: 150000;top:50px;" }
+        %select#toolbar_panel_button_format{ :onchange => "TextToolView.editorExec(\'format\',this.value);" }
+          %option{ :value => 'p ' } Normal
+          %option{ :value => 'h1' } Heading 1
+          %option{ :value => 'h2' } Heading 2
+          %option{ :value => 'h3' } Heading 3
+          %option{ :value => 'h4' } Heading 4
+          %option{ :value => 'h5' } Heading 5
+          %option{ :value => 'h6' } Heading 6
+      
+        %select#toolbar_panel_button_fontName{ :onchange => "WebDoc.application.textTool.delegate.editorExec(\'fontName\',this.value);" }
+          %option{ :value => 'Times New Roman' } Times New Roman
+          %option{ :value => 'Arial' } Arial
+          %option{ :value => 'Tahoma' } Tahoma
+          %option{ :value => 'Comic Sans MS' } Comic Sans MS
+          %option{ :value => 'Courier New' } Courier New
+          %option{ :value => 'Trebuchet MS' } Trebuchet MS
+          %option{ :value => 'Verdana' } Verdana
+          %option{ :value => 'serif' } Serif
+      
+        %select#toolbar_panel_button_fontSize{ :onchange => "WebDoc.application.textTool.delegate.editorExec(\'fontSize\',this.value);" }
+          %option{ :value => '3pt' } 3 pt
+          %option{ :value => '4pt' } 4 pt
+          %option{ :value => '5pt' } 5 pt
+          %option{ :value => '6pt' } 6 pt
+          %option{ :value => '7pt' } 7 pt
+          %option{ :value => '8pt' } 8 pt
+          %option{ :value => '9pt' } 9 pt
+          %option{ :value => '10pt' } 10 pt
+          %option{ :value => '11pt' } 11 pt
+          %option{ :value => '12pt' } 12 pt
+          %option{ :value => '13pt' } 13 pt
+          %option{ :value => '14pt' } 14 pt
+          %option{ :value => '15pt' } 15 pt
+          %option{ :value => '16pt' } 16 pt
+          %option{ :value => '17pt' } 17 pt
+          %option{ :value => '18pt' } 18 pt
+          %option{ :value => '19pt' } 19 pt
+          %option{ :value => '20pt' } 20 pt
+          %option{ :value => '22pt' } 22 pt
+          %option{ :value => '24pt' } 24 pt
+          %option{ :value => '26pt' } 26 pt
+          %option{ :value => '28pt' } 28 pt
+          %option{ :value => '30pt' } 30 pt
+          %option{ :value => '32pt' } 32 pt
+          %option{ :value => '34pt' } 34 pt
+          %option{ :value => '36pt' } 36 pt
+          %option{ :value => '38pt' } 38 pt
+          %option{ :value => '40pt' } 40 pt          
+          %option{ :value => '42pt' } 42 pt
+          %option{ :value => '45pt' } 45 pt
+          %option{ :value => '48pt' } 48 pt
             
-    -#    %a#toolbar_panel_button_decreasefontsize{ href => 'javascript:void(0);', :title => "Decrease font size", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'decreasefontsize\');" }         
-            %div.icon_decreasefontsize
-    -#    %a#toolbar_panel_button_increasefontsize{ href => 'javascript:void(0);', :title => "Increase font size", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'increasefontsize\');" }         
-            %div.icon_increasefontsize
-
-    -#    %a#toolbar_panel_button_bold{ href => 'javascript:void(0);', :title => "Bold", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'bold\');" }         
-            %div.icon_bold
-    -#    %a#toolbar_panel_button_italic{ href => 'javascript:void(0);', :title => "Italic", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'italic\');" }       
-            %div.icon_italic
-    -#    %a#toolbar_panel_button_underline{ href => 'javascript:void(0);', :title => "Underline", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'underline\');" }      
-            %div.icon_underline      
-    -#    
-    -#    %a#toolbar_panel_button_foreColor{ href => 'javascript:void(0);', :title => "Foreground font color", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'foreColor\',this.firstChild.style.backgroundColor);" >
-            %div.icon_foreColor
-    -#    %a#toolbar_panel_button_foreColor_arrow{ href => 'javascript:void(0);' }
-            %div.icon_foreColor_arrow
-    -#    %a#toolbar_panel_button_hiliteColor{ href => 'javascript:void(0);', :title => "Background font color", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'hiliteColor\',this.style.backgroundColor);">
-            %div.icon_hiliteColor 
-    -#    %a#toolbar_panel_button_hiliteColor_arrow{ href => 'javascript:void(0);' }
-            %div.icon_hiliteColor_arrow
-    -#    
-    -#    %a{ href => 'javascript:void(0);', :title => "Insert Ordered List" #toolbar_panel_button_insertOrderedList"   , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertOrderedList\');" }  
-            %div.icon_insertOrderedList
-    -#    %a{ href => 'javascript:void(0);', :title => "Insert Unordered List" #toolbar_panel_button_insertUnorderedList"   , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertUnorderedList\');" }  
-            %div.icon_insertUnorderedList      
-    -#    %a{ href => 'javascript:void(0);', :title => "Indent" #toolbar_panel_button_indent"         , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'indent\');" }       
-            %div.icon_indent
-    -#    %a{ href => 'javascript:void(0);', :title => "Unindent" #toolbar_panel_button_outdent"        , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'outdent\');" }        
-            %div.icon_outdent      
-    -#    %a{ href => 'javascript:void(0);', :title => "Align Left" #toolbar_panel_button_justifyLeft"      , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'justifyLeft\');" }      
-            %div.icon_justifyLeft
-    -#    %a{ href => 'javascript:void(0);', :title => "Align Center" #toolbar_panel_button_justifyCenter"      , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'justifyCenter\');" }    
-            %div.icon_justifyCenter
-    -#    %a{ href => 'javascript:void(0);', :title => "Align Right" #toolbar_panel_button_justifyRight"      , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'justifyRight\');" }     
-            %div.icon_justifyRight
-    -#    %a{ href => 'javascript:void(0);', :title => "Align Full" #toolbar_panel_button_justifyFull"      , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'justifyFull\');" }      
-            %div.icon_justifyFull
-    -#    %a{ href => 'javascript:void(0);', :title => "Superscript" #toolbar_panel_button_superScript"     , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'superScript\');" }      
-            %div.icon_superScript
-    -#    %a{ href => 'javascript:void(0);', :title => "Subscript" #toolbar_panel_button_subScript"       , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'subScript\');" }      
-            %div.icon_subScript
-    -#    %a{ href => 'javascript:void(0);', :title => "Remove Format" #toolbar_panel_button_removeFormat"      , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'removeformat\');" }
-            %div.icon_removeFormat
-    -#    %a{ href => 'javascript:void(0);', :title => "Vertical align" #toolbar_panel_button_valign">
-            %div.icon_valignTop"></div>
-            %div.icon_valign_arrow
-    -#    %div#toolbar_panel_valign_block"', :
-    -#    %a{ href => 'javascript:void(0);', :title => "Vertical align Top" #toolbar_panel_button_valignTop"          , :onclick => "WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'top\');" }      
-            %div.icon_valignTop
-    -#    %a{ href => 'javascript:void(0);', :title => "Vertical align Middle" #toolbar_panel_button_valignMiddle, :onclick => "WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'middle\');" }     
-            %div.icon_valignMiddle
-    -#    %a{ href => 'javascript:void(0);', :title => "Vertical align Bottom" #toolbar_panel_button_valignBottom, :onclick => "WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'bottom\');" }     
-            %div.icon_valignBottom
+        %a#toolbar_panel_button_decreasefontsize{ :href => 'javascript:void(0);', :title => "Decrease font size", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'decreasefontsize\');" }         
+          %div.icon_decreasefontsize
+        %a#toolbar_panel_button_increasefontsize{ :href => 'javascript:void(0);', :title => "Increase font size", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'increasefontsize\');" }         
+          %div.icon_increasefontsize
+      
+        %a#toolbar_panel_button_bold{ :href => 'javascript:void(0);', :title => "Bold", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'bold\');" }         
+          %div.icon_bold
+        %a#toolbar_panel_button_italic{ :href => 'javascript:void(0);', :title => "Italic", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'italic\');" }       
+          %div.icon_italic
+        %a#toolbar_panel_button_underline{ :href => 'javascript:void(0);', :title => "Underline", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'underline\');" }      
+          %div.icon_underline      
         
+        %a#toolbar_panel_button_foreColor{ :href => 'javascript:void(0);', :title => "Foreground font color", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'foreColor\',this.firstChild.style.backgroundColor);" }
+          %div.icon_foreColor
+        %a#toolbar_panel_button_foreColor_arrow{ :href => 'javascript:void(0);' }
+          %div.icon_foreColor_arrow
+        %a#toolbar_panel_button_hiliteColor{ :href => 'javascript:void(0);', :title => "Background font color", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'hiliteColor\',this.style.backgroundColor);" }
+          %div.icon_hiliteColor 
+        %a#toolbar_panel_button_hiliteColor_arrow{ :href => 'javascript:void(0);' }
+          %div.icon_hiliteColor_arrow
+        
+        %a#toolbar_panel_button_insertOrderedList{ :href => 'javascript:void(0);', :title => "Insert Ordered List", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertOrderedList\');" }  
+          %div.icon_insertOrderedList
+        %a#toolbar_panel_button_insertUnorderedList{ :href => 'javascript:void(0);', :title => "Insert Unordered List", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertUnorderedList\');" }  
+          %div.icon_insertUnorderedList      
+        %a#toolbar_panel_button_indent{ :href => 'javascript:void(0);', :title => "Indent", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'indent\');" }       
+          %div.icon_indent
+        %a#toolbar_panel_button_outdent{ :href => 'javascript:void(0);', :title => "Unindent", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'outdent\');" }        
+          %div.icon_outdent      
+        %a#toolbar_panel_button_justifyLeft{ :href => 'javascript:void(0);', :title => "Align Left", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'justifyLeft\');" }      
+          %div.icon_justifyLeft
+        %a#toolbar_panel_button_justifyCenter{ :href => 'javascript:void(0);', :title => "Align Center", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'justifyCenter\');" }    
+          %div.icon_justifyCenter
+        %a#toolbar_panel_button_justifyRight{ :href => 'javascript:void(0);', :title => "Align Right", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'justifyRight\');" }     
+          %div.icon_justifyRight
+        %a#toolbar_panel_button_justifyFull{ :href => 'javascript:void(0);', :title => "Align Full", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'justifyFull\');" }      
+          %div.icon_justifyFull
+        %a#toolbar_panel_button_superScript{ :href => 'javascript:void(0);', :title => "Superscript", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'superScript\');" }      
+          %div.icon_superScript
+        %a#toolbar_panel_button_subScript{ :href => 'javascript:void(0);', :title => "Subscript", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'subScript\');" }      
+          %div.icon_subScript
+        %a#toolbar_panel_button_removeFormat{ :href => 'javascript:void(0);', :title => "Remove Format", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'removeformat\');" }
+          %div.icon_removeFormat
+        %a#toolbar_panel_button_valign{ :href => 'javascript:void(0);', :title => "Vertical align" }
+          %div.icon_valignTop
+          %div.icon_valign_arrow
+        %div#toolbar_panel_valign_block
+        %a#toolbar_panel_button_valignTop{ :href => 'javascript:void(0);', :title => "Vertical align Top", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'top\');" }      
+          %div.icon_valignTop
+        %a#toolbar_panel_button_valignMiddle{ :href => 'javascript:void(0);', :title => "Vertical align Middle", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'middle\');" }     
+          %div.icon_valignMiddle
+        %a#toolbar_panel_button_valignBottom{ :href => 'javascript:void(0);', :title => "Vertical align Bottom", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'bottom\');" }     
+          %div.icon_valignBottom
+        
+        %div.text-thumb
+          %a.text-style-toggle{ :href => "#text-style-toggle" }
+            %span WebDoc
+          %a.text-underline-toggle{ :href => "#text-underline-toggle" }
+            %span WebDoc
+        
+        %div.scroller
+          %div.scroller-window
+            %ul.vertical.scroll.index.push-scroll
+              %li
+                %a.font-Helvetica-Arial Helvetica, Arial
+              %li
+                %a.font-Aaargh Aaargh
+              %li
+                %a.font-Colaborate-Thin Colaborate Thin
+              %li
+                %a.font-Colaborate-Light Colaborate Light
+              %li
+                %a.font-Colaborate-Regular Colaborate Regular
+              %li
+                %a.font-Colaborate-Medium Colaborate Medium
+              %li
+                %a.font-Colaborate-Bold Colaborate Bold
+              %li
+                %a.font-Droid-Sans-Regular Droid Sans
+              %li
+                %a.font-Droid-Sans-Bold Droid Sans Bold
+              %li
+                %a.font-League-Gothic League Gothic
+            
+              %li
+                %a.font-Georgia Georgia
+              %li
+                %a.font-TimesNewRoman Times New Roman
+              %li
+                %a.font-Inconsolata Inconsolata
+            
+              %li
+                %a.font-CalligraphyFLF CalligraphyFLF
+              %li
+                %a.font-ElliotSix ElliotSix
+              %li
+                %a.font-GoodDog GoodDog
+              %li
+                %a.font-KomikaTitle-Regular Komika Title
+              %li
+                %a.font-KomikaTitle-KapsRegular Komika Title Kaps
+              %li
+                %a.font-KomikaTitle-AxisRegular Komika Title Axis
+              %li
+                %a.font-KomikaTitle-PaintRegular Komika Title Paint
+              %li
+                %a.font-KomikaTitle-WideRegular Komika Title Wide
+              %li
+                %a.font-PWHTRegular Playtime With Hot Toddies
+              %li
+                %a.font-PWHTOblique Playtime With Hot Toddies Oblique
+              %li
+                %a.font-PWHT3D Playtime With Hot Toddies 3D
+              %li
+                %a.font-SFCartoonistHandRegular SF Cartoonist Hand
+              %li
+                %a.font-SFCartoonistHandItalic SF Cartoonist Hand
+              %li
+                %a.font-SFCartoonistHandBold SF Cartoonist Hand
+              %li
+                %a.font-SFCartoonistHandBoldItalic SF Cartoonist Hand
+              %li
+                %a.font-Shardee Shardee
+            
+              %li
+                %a.font-Adler Adler
+              %li
+                %a.font-Creampuff Creampuff
+              %li
+                %a.font-Impact-Label Impact Label
+              %li
+                %a.font-Impact-Label-Reversed Impact Label
+              %li
+                %a.font-JungleFever Jungle Fever
+              %li
+                %a.font-Mirisch Mirisch
+              %li
+                %a.font-MomsTypewriter Moms Typewriter
+              %li
+                %a.font-Underwood-Champion Underwood Champion
+            
+              %li
+                %a.font-AndaleMono Andale Mono
+              %li
+                %a.font-Courier Courier
+              %li
+                %a.font-CourierNew Courier New
+              %li
+                %a.font-MonospaceTypewriter Monospace Typewriter
         
     #palette_pen.inspector
       %div.head

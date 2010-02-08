@@ -25,8 +25,9 @@ body {
 }
 
 /* Fonts - just a few to test for now */
+/* Hey! @import doesn't work for @font-face ... what gives?  Use link tags in editor.haml */
 
-@import url('/fonts/Aaargh-fontfacekit/stylesheet.css');
+/*@import url('/fonts/Aaargh-fontfacekit/stylesheet.css');
 @import url('/fonts/Adler-fontfacekit/stylesheet.css');
 @import url('/fonts/CalligraphyFLF-fontfacekit/stylesheet.css');
 @import url('/fonts/Colaborate-fontfacekit/stylesheet.css');
@@ -46,11 +47,54 @@ body {
 @import url('/fonts/Playtime-With-Hot-Toddies-fontfacekit/stylesheet.css');
 @import url('/fonts/SF-Cartoonist-Hand-fontfacekit/stylesheet.css');
 @import url('/fonts/Shardee-fontfacekit/stylesheet.css');
-@import url('/fonts/Underwood-Champion-fontfacekit/stylesheet.css');
+@import url('/fonts/Underwood-Champion-fontfacekit/stylesheet.css');*/
 
-a { color: #3B9EEF; }
+.font-Helvetica-Arial           { font-family: Helvetica, Arial, sans-serif; }
+.font-Georgia                   { font-family: Georgia, serif; }
+.font-TimesNewRoman             { font-family: 'Times New Roman', serif; }
+.font-AndaleMono                { font-family: 'Andale Mono'; }
+.font-Courier                   { font-family: 'Courier'; }
+.font-CourierNew                { font-family: 'Courier New'; }
+.font-Aaargh                    { font-family: 'AaarghNormal'; }
+.font-Adler                     { font-family: 'AdlerRegular'; }
+.font-CalligraphyFLF            { font-family: 'CalligraphyFLFRegular'; }
+.font-Colaborate-Thin           { font-family: 'Colaborate-ThinRegular'; }
+.font-Colaborate-Light          { font-family: 'ColaborateLightRegular'; }
+.font-Colaborate-Regular        { font-family: 'Colaborate-RegularRegular'; }
+.font-Colaborate-Medium         { font-family: 'Colaborate-MediumRegular'; }
+.font-Colaborate-Bold           { font-family: 'Colaborate-BoldRegular'; }
+.font-Creampuff                 { font-family: 'CreampuffRegular'; }
+.font-Droid-Sans-Regular        { font-family: 'DroidSansRegular'; }
+.font-Droid-Sans-Bold           { font-family: 'DroidSansBold'; }
+.font-ElliotSix                 { font-family: 'ElliotSixRegular'; }
+.font-GoodDog                   { font-family: 'GoodDogRegular'; }
+.font-Impact-Label              { font-family: 'ImpactLabelRegular'; }
+.font-Impact-Label-Reversed     { font-family: 'ImpactLabelReversedRegular'; }
+.font-Inconsolata               { font-family: 'InconsolataMedium'; }
+.font-JungleFever               { font-family: 'JungleFeverRegular'; }
+.font-KomikaTitle-Regular       { font-family: 'KomikaTitleRegular'; }
+.font-KomikaTitle-PaintRegular  { font-family: 'KomikaTitle-PaintRegular'; }
+.font-KomikaTitle-WideRegular   { font-family: 'KomikaTitle-WideRegular'; }
+.font-KomikaTitle-AxisRegular   { font-family: 'KomikaTitle-AxisRegular'; }
+.font-KomikaTitle-KapsRegular   { font-family: 'KomikaTitle-KapsRegular'; }
+.font-League-Gothic             { font-family: 'LeagueGothicRegular'; }
+.font-Mirisch                   { font-family: 'MirischNormal'; }
+.font-MomsTypewriter            { font-family: 'MomRegular'; }
+.font-MonospaceTypewriter       { font-family: 'MonospaceTypewriterRegular'; }
+.font-PWHTRegular               { font-family: 'PlaytimeWithHotToddiesRegular', Helvetica, Arial, sans-serif;}
+.font-PWHTOblique               { font-family: 'PlaytimeWithHotToddiesObliqueRe', Helvetica, Arial, sans-serif;}
+.font-PWHT3D                    { font-family: 'PlaytimeWithHotToddies3DRegular', Helvetica, Arial, sans-serif;}
+.font-SFCartoonistHandRegular   { font-family: 'SFCartoonistHandRegular', Helvetica, Arial, sans-serif;}
+.font-SFCartoonistHandItalic    { font-family: 'SFCartoonistHandItalic', Helvetica, Arial, sans-serif;}
+.font-SFCartoonistHandBold      { font-family: 'SFCartoonistHandBold', Helvetica, Arial, sans-serif;}
+.font-SFCartoonistHandBoldItalic{ font-family: 'SFCartoonistHandBoldItalic', Helvetica, Arial, sans-serif;}
+.font-Shardee                   { font-family: 'ShardeeRegular'; }
+.font-Underwood-Champion        { font-family: 'UnderwoodChampionRegular'; }
+
+
+/*a { color: #3B9EEF; }
 a{ outline: none;}
-a:hover { color: #0069BF;}
+a:hover { color: #0069BF;}*/
 
 .sec-action { color: #606060;}
 .sec-action:hover { color: #000; }
@@ -655,6 +699,7 @@ a:hover { color: #0069BF;}
 .ui-resizable-handle {
   z-index:1000000;  
 }
+
 /*******************/
 /* = right part = */
 .ui-accordion .ui-accordion-content {
@@ -681,6 +726,153 @@ a:hover { color: #0069BF;}
   overflow:hidden; 
   padding:10px;
   padding-left:20px;
+}
+
+/* ui elements */
+
+.inspector .index {
+    margin-bottom: 32px;
+}
+
+.inspector .size-slider-value {
+    font-family: 'Tahoma', Courier, 'Andale Mono', Monaco; /* Don't add monospace - Safari reduces the size when you do */
+    font-weight: bold;
+    font-size: 0.72em;
+    text-align: center;
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 28px;
+    margin: 0;
+}
+
+.inspector .ui-slider { position: relative; text-align: left; border: none;}
+.inspector .ui-slider .ui-slider-handle { position: absolute; z-index: 2; cursor: move; }
+.inspector .ui-slider .ui-slider-range { position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; }
+
+.inspector .ui-slider-horizontal { height: 24px; }
+.inspector .ui-slider-horizontal .ui-slider-handle { top: -5px; margin-left: -17px; }
+.inspector .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
+.inspector .ui-slider-horizontal .ui-slider-range-min { left: 0; }
+.inspector .ui-slider-horizontal .ui-slider-range-max { right: 0; }
+
+.inspector .ui-slider-horizontal {
+    margin: 0 24px 20px 24px;
+}
+.inspector .size-slider .ui-slider-handle {
+    width: 28px; height: 28px;
+}
+.inspector .size-slider .ui-corner-all {
+    border: 3px solid;
+    
+    -webkit-border-radius:     17px;
+    -moz-border-radius:         17px;
+    border-radius:             17px;
+}
+.inspector .size-slider input[type='text'] {
+  display: none;
+}
+.inspector .size-slider .ui-slider-handle:hover {
+    width: 28px; height: 45px;
+}
+.inspector .size-slider .ui-corner-all:hover { 
+    -webkit-border-bottom-left-radius:  6px;
+    -moz-border-radius-bottomleft:      6px;
+    border-bottom-left-radius:          6px;
+    -webkit-border-bottom-right-radius: 6px;
+    -moz-border-radius-bottomright:     6px;
+    border-bottom-right-radius:         6px;
+}
+.inspector .size-slider .ui-slider-handle:hover input[type='text'] {
+  display: block;
+}
+.inspector .size-slider .draw-port {
+    position: absolute;
+    top: 0; left: 0;
+    -webkit-border-radius: 14px;
+    -moz-border-radius:    14px;
+    border-radius:         14px;
+}
+.draw-port {
+    position: relative;
+    width: 28px; height: 28px;
+}
+.draw-size {
+    position: absolute;
+    top: 50%; left: 50%;
+}
+
+.scroller {
+    margin: 0 24px 20px 24px;
+    height: 300px;
+}
+.scroller-handle {
+    
+}
+.scroller-window {
+    overflow: hidden;
+    height: 100%;
+}
+.scroller-list {
+    
+}
+
+.text-thumb,
+.inspector .ui-element {
+    margin: 0 24px 20px 24px;
+}
+
+.vertical.scroll.index {
+  clear: both;
+  list-style: none;
+  
+  overflow-x: hidden;
+  overflow-y: auto;
+  
+  padding: 12px 15px 150px 0;
+}
+.vertical.scroll.index li {
+  margin-right: -15px;
+}
+.vertical.scroll.index a:hover {
+  background-color: white;
+  border: none;
+}
+.vertical.scroll.index a {
+  display: block;
+  padding: 0.4em 1em;
+  font-size: 16px;
+  height: 1em;
+  line-height: 1;
+}
+.text-thumb {
+    font-size: 5em;
+    height: 100px;
+    font-family: Helvetica;
+}
+.text-style-toggle,
+.text-underline-toggle {
+    position: relative;
+    height: 0.88em;
+    line-height: 1em;
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    text-align: center;
+}
+.text-underline-toggle {
+    height: 0.12em;
+}
+.text-style-toggle span {
+    color: white;
+}
+.text-underline-toggle span {
+    color: white;
+    position: relative;
+    top: -0.88em;
+}
+.text-underline-toggle:hover span {
+    color: hsl(194, 8%, 34%);
+    text-decoration: underline !important;
 }
 
 /* == properties inspector */
