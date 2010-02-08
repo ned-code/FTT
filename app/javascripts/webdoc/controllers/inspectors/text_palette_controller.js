@@ -14,7 +14,7 @@ WebDoc.TextPaletteController = $.klass({
         '<div id="toolbar_panel_cover"></div>'+
         '<div id="colorpickerHolder1" style="position:absolute;z-index: 150000;top:50px;"></div>'+
           '<div id="colorpickerHolder2" style="position:absolute;z-index: 150000;top:50px;"></div>'+
-        '<select id="toolbar_panel_button_format" onchange="TextToolView.editorExec(\'format\',this.value);">'+
+        '<select id="toolbar_panel_button_format" onchange="WebDoc.application.textTool.delegate.editorExec(\'format\',this.value);">'+
           '<option value="p">Normal</option>'+
           '<option value="h1">Heading 1</option>'+
           '<option value="h2">Heading 2</option>'+

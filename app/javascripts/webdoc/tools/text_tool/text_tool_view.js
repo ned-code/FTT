@@ -436,6 +436,7 @@ WebDoc.TextToolView = $.klass({
 
       this.currentEditingBlock.innerHTML = htmlToStore; 
       this.endEditionListener.applyTextContent(htmlToStore,className)
+      this.currentEditingBlock = null;
     },
     
     /**

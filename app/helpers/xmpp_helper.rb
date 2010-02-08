@@ -23,8 +23,8 @@ module XmppHelper
       ensure
         client.close  
       end
-    rescue
-      logger.warn "Node not created because XMPP server is down. Collabiration is disabled"
+    rescue => e
+      logger.warn "Node not created because XMPP server is down. Collabiration is disabled. " + e
     end  
   end
   
