@@ -803,10 +803,28 @@ a:hover { color: #0069BF;}*/
 
 .scroller {
     margin: 0 24px 20px 24px;
-    height: 300px;
+    height: 320px;
+    position: relative;
 }
 .scroller-handle {
+    position: absolute;
+    width: 100%;
+    padding: 0 14px;
+    margin-left: -14px;
+    left: 0;
+    top: 50%;
+    height: 56px;
+    margin-top: -28px;
+    background: hsla(194, 30%, 90%, 0.3);
     
+    -webkit-pointer-events: none;
+    -moz-pointer-events: none;
+    pointer-events: none;
+}
+.scroller-thumb {
+    -webkit-pointer-events: none;
+    -moz-pointer-events: none;
+    pointer-events: none;
 }
 .scroller-window {
     overflow: hidden;
@@ -822,27 +840,32 @@ a:hover { color: #0069BF;}*/
 }
 
 .vertical.scroll.index {
-  clear: both;
-  list-style: none;
+    clear: both;
+    list-style: none;
   
-  overflow-x: hidden;
-  overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
   
-  padding: 12px 15px 150px 0;
+    padding: 160px 15px 150px 0;
 }
 .vertical.scroll.index li {
-  margin-right: -15px;
+    margin-right: -15px;
+}
+.scroller .current a {
+    background: white;
+    /*height: 3em !important;*/
+    visibility: hidden;
 }
 .vertical.scroll.index a:hover {
-  background-color: white;
-  border: none;
+    /*background-color: white;*/
+    border: none;
 }
 .vertical.scroll.index a {
-  display: block;
-  padding: 0.4em 1em;
-  font-size: 16px;
-  height: 1em;
-  line-height: 1;
+    display: block;
+    padding: 0.4em 1em;
+    font-size: 16px;
+    height: 1em;
+    line-height: 1;
 }
 .text-thumb {
     font-size: 5em;

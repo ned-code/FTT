@@ -363,3 +363,39 @@ jQuery.fn[plug] = function(){
     });
 
 })(jQuery);
+
+(function(jQuery, undefined){
+
+jQuery().ready(function(){
+
+
+    var scroller = jQuery(".scroller"),
+        height = scroller.outerHeight(),
+        scrollList = scroller.find('li'),
+        first,
+        last,
+        diff,
+        unit;
+    
+    var thumb = scroller.find('.scroller-thumb');
+    
+    scroller.find('ul').bind('scroll', function(){
+        var height = scroller.height();
+        
+        first = first || scroller.find('li:first').position().top;
+        last = last || scroller.find('li:last').position().top;
+        diff = diff || last - first;
+        unit = diff/scrollList.length;
+        
+        var pos = -( scroller.find('li:first').position().top - height/2 + unit/2 );
+        var index = Math.floor( pos/unit );
+        var current = scrollList.eq( index > -1 ? index < scrollList.length ? index : scrollList.length-1 : 0 );
+        
+        scrollList.removeClass('current');
+        current.addClass('current');
+        
+        thumb.html(current.html());
+    });
+});
+
+})(jQuery);
