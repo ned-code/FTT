@@ -37,7 +37,9 @@ WebDoc.PageInspectorController = $.klass({
     $("#page_background_image_align_vert_middle_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
     $("#page_background_image_align_vert_bottom_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
     $("#page_background_image_apply_all_button").bind("click", this._applyBackgroundToAllPages.pBind(this));
+    $('#image_send_form').submit(this._uploadBackgroundImage.pBind(this));
     $('.page-navigation-link').click(this.performAction.pBind(this));
+    $('.page-remove-background-image').click(this._removeBackgroundImage.pBind(this));
     WebDoc.application.boardController.addCurrentPageListener(this);
     WebDoc.application.pageEditor.currentPage.addListener(this); 
     
@@ -93,8 +95,15 @@ WebDoc.PageInspectorController = $.klass({
     $("#page_width_textbox")[0].value = page.data.data.css.width; 
     $("#page_background_color_textbox")[0].value = page.data.data.css.backgroundColor;
     $("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
-    this._setBackgroundRepeatMode(page.data.data.css.backgroundRepeat);
-	  this._setBackroundPosition(page.data.data.css.backgroundPosition);
+    this._setBackgroundRepeatMode(page.data.data.css.backgroundRepeat); 
+    this._setBackroundPosition(page.data.data.css.backgroundPosition);
+    if(page.hasBackgroundImage()) {
+      $('#background_image').attr('src', page.getBackgroundImagePath()).css("width", "100px").css("height", "100px");
+      $('#background_image_preview').show();
+    }
+    else {
+       $('#background_image_preview').hide();
+    }
   },
 
   _checkEnableBackgroundControls: function() {
@@ -113,12 +122,14 @@ WebDoc.PageInspectorController = $.klass({
       .attr('disabled', 'disabled')
       .siblings('label')
       .addClass('disabled');
+      $('#background_image').hide();
     }
     else {
       backgroundImageControls
       .removeAttr('disabled')
       .siblings('label')
       .removeClass('disabled');
+      $('#background_image').show();
     }
   },
   
@@ -167,8 +178,14 @@ WebDoc.PageInspectorController = $.klass({
     } 
   },
 
+  _changePageBackgroundImageFromThumb: function() {
+    var backGroundImageSrc = $('#background_image').data('url');
+    page.setBackgroundImage('url(' + backGroundImageSrc + ')'); 
+    WebDoc.application.pageEditor.loadPage(page);
+  },
+
   _changePageBackgroundRepeatMode: function(e) {
-    e.preventDefault();
+    if(e) { e.preventDefault(); }
     try {
       page.setBackgroundRepeatMode(this._getBackgroundRepeatMode());
       WebDoc.application.pageEditor.loadPage(page); 
@@ -179,7 +196,7 @@ WebDoc.PageInspectorController = $.klass({
   },
 
   _changePageBackgroundPosition: function(e) {
-    e.preventDefault();
+    if(e) {e.preventDefault(); }
     try {
       page.setBackgroundPosition(this._getBackgroundPosition());
       WebDoc.application.pageEditor.loadPage(page); 
@@ -188,14 +205,19 @@ WebDoc.PageInspectorController = $.klass({
       this._setBackroundPosition(page.data.data.css.backgroundPosition);
     } 
   },
-
+  
+  _removeBackgroundImage: function(e) {
+    e.preventDefault();
+    this._cancelImageBackground();
+  },
+  
   _cancelImageBackground: function() {
     page.removeBackgroundImage();
     WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
   },
 
   _checkValidBackgroundImage: function(e) {
-    e.preventDefault();
+    if(e) { e.preventDefault(); }
     try {
       WebDoc.InspectorFieldsValidator.validateBackgroundUrl(e.target.value);
       this._changePageBackgroundImage();
@@ -212,6 +234,35 @@ WebDoc.PageInspectorController = $.klass({
         e.target.value = page.data.data.css.backgroundImage;
       }
     }
+  },
+
+  _uploadBackgroundImage: function(e) {
+    var options = {  
+      success:       this._displayBackgroundImage.pBind(this), 
+      type:          "POST",
+      dataType:      "json"
+    };
+    try{
+      // submit the form
+      $(e.target).ajaxSubmit(options);
+    }
+    catch(exc) {
+      ddd('_uploadBackgroundImage: encountered exception: name: '+exc.name + ' , message: '+exc.message);
+    } 
+    // return false to prevent normal browser submit and page navigation 
+    e.preventDefault();
+    return false;
+  },
+
+  _displayBackgroundImage: function(responseText, statusText) {
+    // Put thumbnail url in the page data so that it can be re-used later
+    var thumbUrl = responseText.image.properties.thumb_url;
+    //page.data.backgroundImageThumbUrl = thumbUrl;
+    $('#background_image').attr('src', thumbUrl).data('url', responseText.image.properties.url);
+    this._changePageBackgroundImageFromThumb();
+    this._changePageBackgroundRepeatMode();
+    this._changePageBackgroundPosition();
+    this._setBackgroundControlsMode(true);
   },
 
   _applyBackgroundToAllPages: function(e) {

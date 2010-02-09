@@ -21,9 +21,16 @@ ActionController::Routing::Routes.draw do |map|
     m.logout '/logout', :action => 'destroy' # logout_path
   end
 
+  map.connect 'widgets/wikibot/search', :controller => 'wikibot', :action => 'search', :conditions => { :method => :get }
+  
+  map.namespace :admin do |admin|
+    admin.resources :widgets, :as => 'apps', :except => :show
+  end
+  
   # dev controller
-  map.resources :medias
+  map.resources :medias # Remove it later, when background upload will work
   map.resources :images, :except => [:new, :edit, :update]
   map.resources :videos, :except => [:new, :edit, :update]
-  map.resources :widgets, :collection => { :listing => :get }, :member => { :do_update => :get , :update_action => :put }
+  map.resources :widgets
+  map.resources :bgimages, :except => [:new, :edit, :show, :update, :destroy]
 end
