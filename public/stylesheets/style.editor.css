@@ -730,6 +730,10 @@ a:hover { color: #0069BF;}*/
 
 /* ui elements */
 
+#palette_text .content {
+    padding-top: 24px;
+}
+
 .inspector .index {
     margin-bottom: 32px;
 }
@@ -761,12 +765,9 @@ a:hover { color: #0069BF;}*/
 .inspector .size-slider .ui-slider-handle {
     width: 28px; height: 28px;
 }
+.scroller-handle,
 .inspector .size-slider .ui-corner-all {
     border: 3px solid;
-    
-    -webkit-border-radius:     17px;
-    -moz-border-radius:         17px;
-    border-radius:             17px;
 }
 .inspector .size-slider input[type='text'] {
   display: none;
@@ -788,9 +789,6 @@ a:hover { color: #0069BF;}*/
 .inspector .size-slider .draw-port {
     position: absolute;
     top: 0; left: 0;
-    -webkit-border-radius: 14px;
-    -moz-border-radius:    14px;
-    border-radius:         14px;
 }
 .draw-port {
     position: relative;
@@ -803,18 +801,18 @@ a:hover { color: #0069BF;}*/
 
 .scroller {
     margin: 0 24px 20px 24px;
-    height: 320px;
+    height: 240px;
     position: relative;
 }
 .scroller-handle {
     position: absolute;
     width: 100%;
     padding: 0 14px;
-    margin-left: -14px;
+    margin-left: -17px;
     left: 0;
     top: 50%;
-    height: 56px;
-    margin-top: -28px;
+    height: 36px;
+    margin-top: -21px;
     background: hsla(194, 30%, 90%, 0.3);
     
     -webkit-pointer-events: none;
@@ -825,7 +823,55 @@ a:hover { color: #0069BF;}*/
     -webkit-pointer-events: none;
     -moz-pointer-events: none;
     pointer-events: none;
+    
+    position: absolute;
+    width: 100%;
+    margin-left: -14px;
+    padding: 0 28px;
+    font-size: 1.6em;
+    
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    
+    height: 36px;
+    line-height: 36px;
+    white-space: nowrap;
 }
+.scroller-thumb-buttons {
+    position: absolute;
+    right: 9px;
+    top: 9px;
+}
+.scroller-thumb-buttons li {
+    margin-right: 2px;
+}
+.scroller-thumb-buttons.icons-only a {
+    background-color: hsl(194, 4%, 70%);
+    width: 18px;
+    min-width: 18px;
+    padding-top: 18px;
+
+    -webkit-border-radius: 9px;
+    -moz-border-radius:    9px;
+    border-radius:         9px;
+    
+    pointer-events: visible;
+}
+.scroller-thumb-buttons.icons-only a {
+    background-color: hsl(194, 4%, 70%);
+
+    -webkit-border-radius: 9px;
+    -moz-border-radius:    9px;
+    border-radius:         9px;
+    
+    background-image: url('/images/text-styles.png');
+}
+.scroller-thumb-buttons a[href="#text-italic"]      { background-position: 0 0; }
+.scroller-thumb-buttons a[href="#text-bold"]        { background-position: 0 -36px; }
+.scroller-thumb-buttons a[href="#text-underline"]   { background-position: 0 -72px; }
+
+
 .scroller-window {
     overflow: hidden;
     height: 100%;

@@ -54,6 +54,7 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .inspector form.content       { background-color: hsl(194, 3%, 88%); }
 
 /* ui elements */
+.scroller-thumb,
 .inspector .size-slider-value { background: none;
                                 border-color: transparent;
                                 color: white; }
@@ -74,6 +75,8 @@ body                          { background-color: hsl(194, 8%, 60%); }
                                 -moz-border-radius:       12px;
                                 border-radius:            12px;
 }
+.scroller-window a            { color: rgb(68, 75, 77); }
+.scroller-handle,
 .inspector .size-slider .ui-corner-all {
                                 background: hsla(194, 20%, 20%, 0.92);
                                 border-color: hsla(194, 20%, 20%, 0.8);
@@ -81,7 +84,23 @@ body                          { background-color: hsl(194, 8%, 60%); }
                                 -moz-box-shadow:    0 2px 6px hsl(14, 20%, 30%);
                                 box-shadow:         0 2px 6px hsl(14, 20%, 30%);
 }
-.inspector .size-slider .draw-port       { background-color: hsl(194, 3%, 88%); }
+.scroller-handle              { -webkit-border-radius:    21px;
+                                -moz-border-radius:       21px;
+                                border-radius:            21px; }
+.size-slider .ui-corner-all {   -webkit-border-radius:    17px;
+                                -moz-border-radius:       17px;
+                                border-radius:            17px; }
+.scroller-thumb               { color: black;
+                                background-color: hsl(194, 3%, 88%);
+                                -webkit-border-radius:    18px;
+                                -moz-border-radius:       18px;
+                                border-radius:            18px; }
+.inspector .size-slider .draw-port { 
+                                background-color: hsl(194, 3%, 88%);
+                                -webkit-border-radius:    14px;
+                                -moz-border-radius:       14px;
+                                border-radius:            14px; }
+.scroller:hover .scroller-thumb,
 .inspector .size-slider:hover .draw-port { background: hsl(194, 0.4%, 99%); }
 
 .inspector .size-slider input[type='text']:hover,

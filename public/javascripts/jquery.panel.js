@@ -368,30 +368,26 @@ jQuery.fn[plug] = function(){
 
 jQuery().ready(function(){
 
-
     var scroller = jQuery(".scroller"),
         height = scroller.outerHeight(),
-        scrollList = scroller.find('li'),
-        first,
-        last,
-        diff,
-        unit;
+        thumb = scroller.find('.scroller-thumb'),
+        window = scroller.find('.scroller-window'),
+        list = window.find('li'),
+        first, last, diff, unit;
     
-    var thumb = scroller.find('.scroller-thumb');
-    
-    scroller.find('ul').bind('scroll', function(){
+    window.find('ul').bind('scroll', function(){
         var height = scroller.height();
         
-        first = first || scroller.find('li:first').position().top;
-        last = last || scroller.find('li:last').position().top;
+        first = first || window.find('li:first').position().top;
+        last = last || window.find('li:last').position().top;
         diff = diff || last - first;
-        unit = diff/scrollList.length;
+        unit = diff / list.length;
         
-        var pos = -( scroller.find('li:first').position().top - height/2 + unit/2 );
+        var pos = -( window.find('li:first').position().top - height/2 + unit/2 );
         var index = Math.floor( pos/unit );
-        var current = scrollList.eq( index > -1 ? index < scrollList.length ? index : scrollList.length-1 : 0 );
+        var current = list.eq( index > -1 ? index < list.length ? index : list.length-1 : 0 );
         
-        scrollList.removeClass('current');
+        list.removeClass('current');
         current.addClass('current');
         
         thumb.html(current.html());
