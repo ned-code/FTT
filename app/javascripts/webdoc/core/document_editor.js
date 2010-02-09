@@ -54,7 +54,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         {
             bgiframe: true,
             autoOpen: false,
-            height: 300,
+            height: 320,
             modal: true,
             buttons: 
             {
@@ -63,13 +63,16 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                     $(this).dialog('close');
                     var newDoc = new WebDoc.Document();
                     newDoc.setTitle($("#wb-new-document-name").val());
+                    newDoc.setDescription($("#wb-new-document-description").val());
+                    newDoc.setKeywords($("#wb-new-document-keywords").val());
                     newDoc.save(function(newObject, status)
                     {
-          						if (status == "OK") 
-          						{
-          							that.documents.push(newDoc);
-          							that.filter.addDocument(newDoc);
-          						}
+                      if (status == "OK") 
+                      {
+                        that.documents.push(newDoc);
+                        that.filter.addDocument(newDoc);
+                        window.open("/documents/" + newDoc.uuid() + "#1");
+                      }
                     });
                 },
                 Cancel: function()
@@ -84,7 +87,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         {
             bgiframe: true,
             autoOpen: false,
-            height: 300,
+            height: 320,
             modal: true,
             buttons: 
             {
@@ -93,7 +96,9 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                     ddd("edit doc with title " + $("#wb-edit-document-name").val());
                     $(this).dialog('close');
                     that.editedDocument.setTitle($("#wb-edit-document-name").val());
-					          that.editedDocument.save(function(persitedDoc)
+                    that.editedDocument.setDescription($("#wb-edit-document-description").val());
+                    that.editedDocument.setKeywords($("#wb-edit-document-keywords").val());
+                    that.editedDocument.save(function(persitedDoc)
                     {
                         that.filter.refreshDocument(persitedDoc);
                     });                    
@@ -130,6 +135,8 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         that.editedDocument = that.documentWithId(documentIdToRename);
         var previousName = that.editedDocument.title();
         $("#wb-edit-document-name").val(previousName);
+        $("#wb-edit-document-description").val(that.editedDocument.description());
+        $("#wb-edit-document-keywords").val(that.editedDocument.keywords());
         $("#wb-edit-document-creationDate").val(that.editedDocument.creationDate());
         $("#wb-edit-document-dialog").dialog('open');
     },

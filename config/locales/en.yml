@@ -16,6 +16,7 @@ en:
       user_confirmed: "Your user is confirmed!"
       widget_destroyed_successful: "Widget successfully deleted"
       widget_updated_successful: "Widget successfully updated"
+      widget_updated_failed: "An error occured when attempting to update the widget"
       
   user_sessions:
     new:
@@ -52,6 +53,8 @@ en:
     create_new_document: "Create a new document"
     edit_document: "Edit document"
     name: "Name"
+    description: "Description"
+    keywords: "Any keywords (separated by comma)"
     creationDate: "Creation date"
     change_access_document: "Modify document access"
     everybody: "Everybody"

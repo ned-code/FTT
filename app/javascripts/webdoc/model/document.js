@@ -11,8 +11,24 @@ WebDoc.Document = $.klass(MTools.Record, {
     return this.data.title;
   },
   
+  description: function() {
+    return this.data.description;
+  },
+  
+  keywords: function() {
+    return this.data.keywords;
+  },
+  
   setTitle: function(title) {
     this.data.title = title;
+  },
+  
+  setDescription: function(description) {
+    this.data.description = description;
+  },
+  
+  setKeywords: function(keywords) {
+    this.data.keywords = keywords;
   },
 
   refresh: function($super, json) {
