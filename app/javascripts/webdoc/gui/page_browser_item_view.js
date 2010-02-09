@@ -21,6 +21,7 @@ WebDoc.PageBrowserItemView = $.klass({
   SHOW_ON_ACTIVE_CLASS: 'active-show',
   THUMB_CLASS: 'thumb',
   DEFAULT_CLASS: 'default',
+  
   initialize: function(page) {
     this.page = page;
     try {

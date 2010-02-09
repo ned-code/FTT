@@ -17,25 +17,8 @@ WebDoc.BoardController = $.klass({
   // Constructor     
   initialize: function(editable, autoFit) {
 
-    this.boardContainerNode = $("#board_container");
+    this.boardContainerNode = $("#board-container");
     this._screenNode = $('<div/>').addClass('screen layer');
-    
-    //this._scrollPushNode = $('<div/>').addClass('push-scroll layer');
-    //this.scrollNode = $('<div/>').addClass('show-scroll layer');
-    //this.marginManagerNode = $('<div/>').addClass('margin-manager').css({
-    //  position: 'relative',
-    //  height: '100%'
-    //});
-    //this._centerNode = $('<div/>').addClass('centering layer');
-    //this._centerSubNode = $('<div/>');
-    
-    this.leftPanelGhostWrap = $('<div/>').addClass('left-panel-ghost');
-    this.leftPanelGhost = $('<div/>').addClass('panel-ghost left-panel-ghost');
-    this.rightPanelGhost = $('<div/>').addClass('right-panel-ghost');
-    this.rightPanelGhost = $('<div/>').addClass('panel-ghost right-panel-ghost');
-    this.centerCell = $('<div/>').addClass('center-cell');
-    this.centerBox = $('<div/>').addClass('center-box');
-    
     
     this._editable = editable;
     this._autoFit = autoFit;
@@ -48,7 +31,7 @@ WebDoc.BoardController = $.klass({
     this._currentPageView = null;
     this._isInteraction = false;
     
-    // used to keep trak of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
+    // used to keep track of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
     // we resize manually the div and we need to know what was the original size to define the new size.
     this._initialSize = null;  
   },
@@ -106,33 +89,6 @@ WebDoc.BoardController = $.klass({
     // Construct DOM tree
     this.boardContainerNode
     .empty()
-    //.append(
-    //  this._screenNode
-    //)
-    //.append(
-    //  this._scrollPushNode
-    //  .empty()
-    //  .append(
-    //    this.scrollNode
-    //    .empty()
-    //    .append(
-    //      this.marginManagerNode
-    //      .empty()
-    //      .append(
-    //        this._centerNode
-    //        .empty()
-    //        .append(
-    //          this._centerSubNode
-    //          .empty()
-    //          .append(
-    //            board
-    //          )
-    //        )
-    //      )
-    //    )
-    //  )
-    //);
-    
     .append(board);
     
     this._fireSelectionChanged();
@@ -148,8 +104,8 @@ WebDoc.BoardController = $.klass({
     //  //update zoom to fit browser page    
     //  var initialHeight = board.height();
     //  var initialWidth = board.width();      
-    //  var heightFactor = ($("#board_container").height() - initialHeight) / initialHeight;
-    //  var widthFactor = ($("#board_container").width() - initialWidth) / initialWidth;      
+    //  var heightFactor = ($("#board-container").height() - initialHeight) / initialHeight;
+    //  var widthFactor = ($("#board-container").width() - initialWidth) / initialWidth;      
     //  if (heightFactor < widthFactor) {
     //    this.zoom(1 + heightFactor);
     //  }
@@ -326,7 +282,7 @@ WebDoc.BoardController = $.klass({
     if (this._editingItem) {
       this._editingItem.stopEditing();
       WebDoc.application.arrowTool.enableHilight();
-      jQuery('#board_container').trigger('hide-screen');
+      jQuery('#board-container').trigger('hide-screen');
       this._editingItem = null;
     }
     
@@ -473,52 +429,59 @@ WebDoc.BoardController = $.klass({
   
   zoom: function(factor) {
     
-    var boardElement = $("#board");
+    var boardNode = $("#board");
     var previousZoom = this._currentZoom;
+    var boardContainerCss = {},
+        boardCss = {};
     
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
     
     if (jQuery.browser.mozilla) {
-      boardElement.css("MozTransformOrigin", "0px 0px");
-      boardElement.css("MozTransform", "scale(" + this._currentZoom + ")");
+      
+      boardCss.MozTransformOrigin = "0px 0px";
+      boardCss.MozTransform = "scale(" + this._currentZoom + ")";
+      boardNode.css( boardCss );
+      
       // Directly remove the transform property so that windowed items are displayed
       if (this._currentZoom == 1) {
-	      boardElement.css("MozTransformOrigin", "");
-	      boardElement.css("MozTransform", "");
-	    }
+        boardCss.MozTransformOrigin = "";
+        boardCss.MozTransform = "";
+        boardNode.css( boardCss );
+      }
     }
-    else 
-      if (jQuery.browser.safari) {
-        ddd("apply webkit transform");
-        if (!this._initialSize) {
-          this._initialSize = {
-            //width: parseFloat(  boardElement.css("width").replace("px", "")) + 2,
-            //height: parseFloat(boardElement.css("height").replace("px", "")) + 2
-            width: parseFloat( this.boardContainerNode.css("width").replace("px", "")) + 2,
-            height: parseFloat(this.boardContainerNode.css("height").replace("px", "")) + 2
-          };
-        }
-        if (this._currentZoom > 1) {
-          boardElement.css({
-            width: this._initialSize.width * this._currentZoom,
-            height: this._initialSize.height * this._currentZoom
-          });
-        }
-        else {
-          boardElement.css({
-            width: this._initialSize.width,
-            height: this._initialSize.height
-          });
-        }
-        boardElement.css("WebkitTransformOrigin", "0px 0px");
-        if (this._currentZoom == 1) {
-          boardElement.css("WebkitTransform", "");
-        }
-        else {
-          boardElement.css("WebkitTransform", "scale(" + this._currentZoom + ")");
+    else if (jQuery.browser.safari) {
+      ddd("apply webkit transform");
+      
+      if (!this._initialSize) {
+        this._initialSize = {
+          width: parseFloat(this.boardContainerNode.css("width").replace("px", "")),
+          height: parseFloat(this.boardContainerNode.css("height").replace("px", ""))
+        };
+      }
+      
+      if (this._currentZoom > 1) {
+        boardContainerCss = {
+          width: this._initialSize.width * this._currentZoom,
+          height: this._initialSize.height * this._currentZoom
         }
       }
+      else {
+        boardContainerCss = {
+          width: this._initialSize.width,
+          height: this._initialSize.height
+        };
+      }
+      
+      boardCss.WebkitTransformOrigin = "0px 0px";
+      boardCss.WebkitTransform = this._currentZoom == 1 ? "" : "scale(" + this._currentZoom + ")" ;
+      
+      console.log(boardCss);
+      console.log(boardContainerCss);
+      
+      this.boardContainerNode.css( boardContainerCss );
+      boardNode.css( boardCss );
+    }
   },
   
   // Private methods
@@ -620,11 +583,12 @@ WebDoc.BoardController = $.klass({
   },
   
   _bindMouseEvent: function() {
-    $("#board").bind("mousedown", this, this._mouseDown.pBind(this));
-    $("#board").bind("click", this, this._mouseClick.pBind(this));
-    $("#board").bind("dblclick", this, this._mouseDblClick.pBind(this));
-    $("#board").bind("mouseover", this, this._mouseOver.pBind(this));    
-    $("#board").bind("mouseout", this, this._mouseOut.pBind(this));
+    $("#board")
+    .bind("mousedown", this, this._mouseDown.pBind(this))
+    .bind("click", this, this._mouseClick.pBind(this))
+    .bind("dblclick", this, this._mouseDblClick.pBind(this))
+    .bind("mouseover", this, this._mouseOver.pBind(this))
+    .bind("mouseout", this, this._mouseOut.pBind(this));
   },
   
   _setItemPositionZ: function(item, position) {

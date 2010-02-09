@@ -1,15 +1,20 @@
 - document_title @document.title
 - session_key_name = ActionController::Base.session_options[:key]
 
-%div.center
-  %div.left-panel-ghost
-    %div.left-panel-ghost.panel-ghost
-  %div.center-cell
-    %div#board_container.center-box
-      %div#document_loading
-        %img{ :src => "/images/icons/waiting_bar.gif"}
-  %div.right-panel-ghost
-    %div.right-panel-ghost.panel-ghost
+%div#ribcage.scroll.layer
+  %div.center
+    %div.left-panel-ghost
+      %div.left-panel-ghost.panel-ghost
+    %div.center-cell
+      %div#board-container.center-box
+        %div#document_loading
+          %img{ :src => "/images/icons/waiting_bar.gif"}
+      %div.screen.layer
+      %div.screen.layer
+      %div.screen.layer
+      %div.screen.layer
+    %div.right-panel-ghost
+      %div.right-panel-ghost.panel-ghost
 
 #screen.screen.layer
 

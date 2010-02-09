@@ -7,7 +7,7 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 /* The board */
 
-#board                        { -webkit-box-shadow: 0 2px 8px hsl(14, 24%, 35%);
+#board-container              { -webkit-box-shadow: 0 2px 8px hsl(14, 24%, 35%);
                                 -moz-box-shadow:    0 2px 8px hsl(14, 24%, 35%); 
                                 box-shadow:         0 2px 8px hsl(14, 24%, 35%); }
 

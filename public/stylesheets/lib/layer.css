@@ -23,6 +23,7 @@
     box-sizing:         border-box;
 }
 
+.scroll-free,
 .hide-scroll {
     overflow: hidden;
 }
@@ -39,6 +40,7 @@
     -moz-box-sizing:    content-box;
     box-sizing:         content-box;
 }
+.scroll,
 .show-scroll {
     overflow: scroll;
 }
