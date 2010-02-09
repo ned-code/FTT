@@ -41,7 +41,8 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     this.myAppsContainer = $('#'+this.myAppsId);
     
     // Setup app thumbnails drag n' drop
-    this.myAppsContainer.find(".thumbnails").bind("dragstart", this._prepareRowDrag.pBind(this));
+    this.myAppsContainer.find(".thumbnails").bind("dragstart", this._prepareThumbDrag.pBind(this));
+    $(document.body).append(this.buildMediaDragFeedbackElement("apps", "")); // just to preload the icon (so that it'll be immediatley available at the first drag)
     
     // Next/Previous page links
     this.paginationWrap = $("<div class='pagination' style='display:none'>");
@@ -101,14 +102,11 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     var descEl = this.detailsView.find('.app_description');
     descEl.text(desc);
   },
-  _prepareRowDrag: function(event) {
-    var target = $(event.target);
-    if (target.closest('li').length === 0 || target.find('img').length === 0) {
-      event.preventDefault();
-      return;
-    }
-    
-    var widgetData = target.find('img').data("data");
+  _prepareThumbDrag: function(event) {
+    // we take parent and then search down the img because safari and firefox have not the same target.
+    // on firefox target is the a tag but in safari target is the img.
+    var draggingItem = $(event.target).parent().find('img');
+    var widgetData = draggingItem.data("data");
     this._dragStart(event, widgetData);
   },
   _prepareAppDrag: function(event) {
@@ -116,20 +114,20 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     this._dragStart(event, widgetData);
   },
   _loadMyApps: function(pageIncrement) {
-    var appsRowsWrap = this.myAppsContainer.find(".thumbnails");
+    var appsThumbWrap = this.myAppsContainer.find(".thumbnails");
     
     this.myAppsPage += pageIncrement;
     if (this.myAppsPage < 1) this.myAppsPage = 1;
     
-    if (pageIncrement !== 0 || !appsRowsWrap.data('loaded')) { //load only if we are paginating, or if the apps have never been loaded before
-      appsRowsWrap.html('');
+    if (pageIncrement !== 0 || !appsThumbWrap.data('loaded')) { //load only if we are paginating, or if the apps have never been loaded before
+      appsThumbWrap.html('');
       
-      this.showSpinner(appsRowsWrap);
+      this.showSpinner(appsThumbWrap);
       
       MTools.ServerManager.getRecords(WebDoc.Widget, null, function(data) {
         if (data.widgets.length === 0) {
           var noApps = $("<span>").addClass('no_items').text('No Apps');
-          appsRowsWrap.append(appsRowsWrap);
+          appsThumbWrap.append(appsThumbWrap);
         }
         else {   
           var myAppsList = $("<ul>");
@@ -137,11 +135,11 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
             myAppsList.append(this._buildThumbnail(data.widgets[i]));
           }
           
-          appsRowsWrap.append(myAppsList);
+          appsThumbWrap.append(myAppsList);
         }
         this._refreshMyAppsPagination(data.pagination);
-        appsRowsWrap.data('loaded', true);
-        this.hideSpinner(appsRowsWrap);
+        appsThumbWrap.data('loaded', true);
+        this.hideSpinner(appsThumbWrap);
       }.pBind(this), { ajaxParams: { page:this.myAppsPage }});
     }
   },
