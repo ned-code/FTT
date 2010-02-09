@@ -30,10 +30,6 @@
       %label{ :for => "keywords" }= t "label.keywords"
       %br
       %input#wb-new-document-keywords.ui-corner-all{ :type => "text", :name => "wb-new-document-keywords", :style => "width:100%"}
-      %br
-      %label{ :for => "creationDate" }= t "label.creationDate"
-      %br
-      %input#wb-new-document-creationDate.ui-corner-all{ :disabled => "true", :type => "text", :name => "wb-new-document-creationDate", :style => "width:100%"}
 
 #wb-edit-document-dialog{ :style => "display:none",:title => t('label.edit_document') }
   %form{ :action => ""}
@@ -48,11 +44,7 @@
       %br
       %label{ :for => "keywords" }= t "label.keywords"
       %br
-      %input#wb-edit-document-keywords.ui-corner-all{ :type => "text", :name => "wb-edit-document-keywords", :style => "width:100%"}
-      %br
-      %label{ :for => "creationDate" }= t "label.creationDate"
-      %br
-      %input#wb-edit-document-creationDate.ui-corner-all{ :disabled => "true", :type => "text", :name => "wb-edit-document-creationDate", :style => "width:100%"}      
+      %input#wb-edit-document-keywords.ui-corner-all{ :type => "text", :name => "wb-edit-document-keywords", :style => "width:100%"}    
 
 #wb-change-access-dialog{ :style => "display:none",:title => t('label.change_access_document') }
   #document_access-header

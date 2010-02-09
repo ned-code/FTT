@@ -54,7 +54,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         {
             bgiframe: true,
             autoOpen: false,
-            height: 320,
+            height: 300,
             modal: true,
             buttons: 
             {
@@ -87,7 +87,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         {
             bgiframe: true,
             autoOpen: false,
-            height: 320,
+            height: 300,
             modal: true,
             buttons: 
             {
@@ -123,7 +123,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     createDocument: function()
     {
         $("#wb-new-document-name").val(new Date().toLocaleDateString());
-        $("#wb-new-document-creationDate").val(new Date());
         $("#wb-new-document-dialog").dialog('open');
     },
     
@@ -137,7 +136,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $("#wb-edit-document-name").val(previousName);
         $("#wb-edit-document-description").val(that.editedDocument.description());
         $("#wb-edit-document-keywords").val(that.editedDocument.keywords());
-        $("#wb-edit-document-creationDate").val(that.editedDocument.creationDate());
         $("#wb-edit-document-dialog").dialog('open');
     },
     
