@@ -16,18 +16,26 @@ WebDoc.BoardController = $.klass({
   
   // Constructor     
   initialize: function(editable, autoFit) {
-    
+
     this.boardContainerNode = $("#board_container");
     this._screenNode = $('<div/>').addClass('screen layer');
     
-    this._scrollPushNode = $('<div/>').addClass('push-scroll layer');
-    this.scrollNode = $('<div/>').addClass('show-scroll layer');
-    this.marginManagerNode = $('<div/>').addClass('margin-manager').css({
-      position: 'relative',
-      height: '100%'
-    });
-    this._centerNode = $('<div/>').addClass('centering layer');
-    this._centerSubNode = $('<div/>');
+    //this._scrollPushNode = $('<div/>').addClass('push-scroll layer');
+    //this.scrollNode = $('<div/>').addClass('show-scroll layer');
+    //this.marginManagerNode = $('<div/>').addClass('margin-manager').css({
+    //  position: 'relative',
+    //  height: '100%'
+    //});
+    //this._centerNode = $('<div/>').addClass('centering layer');
+    //this._centerSubNode = $('<div/>');
+    
+    this.leftPanelGhostWrap = $('<div/>').addClass('left-panel-ghost');
+    this.leftPanelGhost = $('<div/>').addClass('panel-ghost left-panel-ghost');
+    this.rightPanelGhost = $('<div/>').addClass('right-panel-ghost');
+    this.rightPanelGhost = $('<div/>').addClass('panel-ghost right-panel-ghost');
+    this.centerCell = $('<div/>').addClass('center-cell');
+    this.centerBox = $('<div/>').addClass('center-box');
+    
     
     this._editable = editable;
     this._autoFit = autoFit;
@@ -98,33 +106,34 @@ WebDoc.BoardController = $.klass({
     // Construct DOM tree
     this.boardContainerNode
     .empty()
-    .append(
-      this._screenNode
-    )
-    .append(
-      this._scrollPushNode
-      .empty()
-      .append(
-        this.scrollNode
-        .empty()
-        .append(
-          this.marginManagerNode
-          .empty()
-          .append(
-            this._centerNode
-            .empty()
-            .append(
-              this._centerSubNode
-              .empty()
-              .append(
-                board
-              )
-            )
-          )
-        )
-      )
-    );
+    //.append(
+    //  this._screenNode
+    //)
+    //.append(
+    //  this._scrollPushNode
+    //  .empty()
+    //  .append(
+    //    this.scrollNode
+    //    .empty()
+    //    .append(
+    //      this.marginManagerNode
+    //      .empty()
+    //      .append(
+    //        this._centerNode
+    //        .empty()
+    //        .append(
+    //          this._centerSubNode
+    //          .empty()
+    //          .append(
+    //            board
+    //          )
+    //        )
+    //      )
+    //    )
+    //  )
+    //);
     
+    .append(board);
     
     this._fireSelectionChanged();
     this._bindMouseEvent();
@@ -135,23 +144,22 @@ WebDoc.BoardController = $.klass({
     this.setInterationMode(this._isInteraction || !this._editable);
     
     // Autofit
-    if (this._autoFit && board.css("height") != "100%") {
-      //update zoom to fit browser page    
-      var initialHeight = board.height();
-      var initialWidth = board.width();      
-      var heightFactor = ($("#board_container").height() - initialHeight) / initialHeight;
-      var widthFactor = ($("#board_container").width() - initialWidth) / initialWidth;      
-      if (heightFactor < widthFactor) {
-        this.zoom(1 + heightFactor);
-      }
-      else {
-        this.zoom(1 + widthFactor);
-      }
-    }
-    
-    //if (WebDoc.application.) {
-      this._fireCurrentPageChanged();
+    //if (this._autoFit && board.css("height") != "100%") {
+    //  //update zoom to fit browser page    
+    //  var initialHeight = board.height();
+    //  var initialWidth = board.width();      
+    //  var heightFactor = ($("#board_container").height() - initialHeight) / initialHeight;
+    //  var widthFactor = ($("#board_container").width() - initialWidth) / initialWidth;      
+    //  if (heightFactor < widthFactor) {
+    //    this.zoom(1 + heightFactor);
+    //  }
+    //  else {
+    //    this.zoom(1 + widthFactor);
+    //  }
     //}
+    
+    
+    this._fireCurrentPageChanged();
     
     $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this._currentPage));
     $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
@@ -309,8 +317,8 @@ WebDoc.BoardController = $.klass({
   
   zoomOut: function(e) {
     this.zoom(1 / 1.5);
-    $("#board_container").get(0).scrollTop = 0;
-    $("#board_container").get(0).scrollLeft = 0;
+    $("body").get(0).scrollTop = 0;
+    $("body").get(0).scrollLeft = 0;
   },
   
   selectItemViews: function(itemViews) {
@@ -485,8 +493,10 @@ WebDoc.BoardController = $.klass({
         ddd("apply webkit transform");
         if (!this._initialSize) {
           this._initialSize = {
-            width: parseFloat(boardElement.css("width").replace("px", "")) + 2,
-            height: parseFloat(boardElement.css("height").replace("px", "")) + 2
+            //width: parseFloat(  boardElement.css("width").replace("px", "")) + 2,
+            //height: parseFloat(boardElement.css("height").replace("px", "")) + 2
+            width: parseFloat( this.boardContainerNode.css("width").replace("px", "")) + 2,
+            height: parseFloat(this.boardContainerNode.css("height").replace("px", "")) + 2
           };
         }
         if (this._currentZoom > 1) {

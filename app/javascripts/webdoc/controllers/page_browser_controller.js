@@ -47,15 +47,28 @@ WebDoc.PageBrowserController = $.klass({
   toggleBrowser: function() {
     ddd("toggle browser");
     var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
+    
+    var ghost = $('.left-panel-ghost').show();
+    
     if (this.visible) {
       this.domNode.animate({
           marginLeft: - this._pagesPanelWidth
       }, {
           step: function(val){
-              WebDoc.application.boardController.marginManagerNode.css({
-                  marginLeft: this._pagesPanelWidth + val
-              });
-          }.pBind(this)
+              ////WebDoc.application.boardController.marginManagerNode.css({
+              ////    marginLeft: this._pagesPanelWidth + val
+              ////});
+              
+              ghost.css({
+                width: 164+val
+              })
+              
+          }.pBind(this),
+          complete: function(){
+              
+              ghost.filter('.panel-ghost').hide();
+              
+          }
       });
       pageBrowserButton.removeClass(this.ACTIVE_CLASS);
     }
@@ -64,9 +77,14 @@ WebDoc.PageBrowserController = $.klass({
           marginLeft: 0
       }, {
           step: function(val){
-              WebDoc.application.boardController.marginManagerNode.css({
-                  marginLeft: this._pagesPanelWidth + val
-              });
+              //WebDoc.application.boardController.marginManagerNode.css({
+              //    marginLeft: this._pagesPanelWidth + val
+              //});
+              
+              ghost.css({
+                width: 164+val
+              })
+              
           }.pBind(this)
       });
       pageBrowserButton.addClass(this.ACTIVE_CLASS);      

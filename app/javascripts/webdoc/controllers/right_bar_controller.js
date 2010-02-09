@@ -120,8 +120,10 @@ WebDoc.RightBarController = $.klass({
   
   showRightBar: function() {
     var panel = this.domNode,
-        boardManager = WebDoc.application.boardController.marginManagerNode,
+        //boardManager = WebDoc.application.boardController.marginManagerNode,
         self = this;
+    
+    var ghost = $('.right-panel-ghost').show();
     
     if (!this.visible) {
       this.visible = true;
@@ -130,7 +132,10 @@ WebDoc.RightBarController = $.klass({
         marginLeft: -this.panelWidth
       }, {
         step: function(val){
-          boardManager.css({ marginRight: -val });
+          //.css({ marginRight: -val });
+          ghost.css({
+            width: -val
+          })
         },
         complete: function() {
           
@@ -143,8 +148,10 @@ WebDoc.RightBarController = $.klass({
   
   hideRightBar: function() {
     var panel = this.domNode,
-        boardManager = WebDoc.application.boardController.marginManagerNode,
+        //boardManager = WebDoc.application.boardController.marginManagerNode,
         self = this;
+    
+    var ghost = $('.right-panel-ghost');
     
     if (this.visible) {
       this.visible = false;
@@ -153,10 +160,14 @@ WebDoc.RightBarController = $.klass({
           marginLeft: 0
       }, {
           step: function(val){
-              boardManager.css({ marginRight: -val });
+              //boardManager.css({ marginRight: -val });
+              ghost.css({
+                width: -val
+              })
           },
           complete: function() {
               //self._changeButtonState();
+              ghost.filter('.panel-ghost').hide();
           }
       });
     }

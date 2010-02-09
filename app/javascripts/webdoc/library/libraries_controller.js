@@ -73,7 +73,7 @@ WebDoc.Library = $.klass({
     $("#media_drag_feedback").remove();
     var mediaThumb = $("<img>").attr({ src:thumbUrl }), icon = $("<span>");
     var mediaDragFeedback = $("<div>").attr({ id:"media_drag_feedback", 'class':type })
-    .css({ position:"relative", top:"-500px" }) // because I can't use hide() in this case (or setDragImage won't work)
+    .css({ position:"absolute", top:"-500px" }) // because I can't use hide() in this case (or setDragImage won't work)
     .append(icon).append(mediaThumb);
     
     return mediaDragFeedback;

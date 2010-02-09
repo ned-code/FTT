@@ -28,37 +28,49 @@ WebDoc.PageView = $.klass({
     domNode.append( drawingDomNode );
     
     if (page.data.data.externalPage && !page.data.data.allowAnnotation) {
-      this.domNode.css({
-        width: "100%",
-        height: "100%"
-      });
+    //  this.domNode.css({
+    //    width: "100%",
+    //    height: "100%"
+    //  });
     }
     else {
-        this.domNode.css(page.data.data.css);
+        boardContainer
+        .css(page.data.data.css);
+        //this.domNode.css(page.data.data.css);
     }
     
     if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
       // Handle case where page is an external webpage
       // TODO: change this to use CSS classes
 
-      externalPage = $("<iframe/>").css({
-        width: "100%",
-        height: "100%"
-      });
+      externalPage = $("<iframe/>")
+      //.css({
+      //  width: "100%",
+      //  height: "100%"
+      //});
       if (page.data.data.externalPageUrl) {
         if (page.data.data.allowAnnotation) {
           externalPage.attr("src", "http:\/\/" + document.domain + ":" + window.location.port + "/proxy/resolve?url=" + page.data.data.externalPageUrl);
           //boardContainer.css("overflow", "auto");
           externalPage.css("overflow", "hidden");
           if (page.data.data.css.width) {
-            this.domNode.css(page.data.data.css);
+            
+            //this.domNode.css(page.data.data.css);
+            
+            WebDoc.application.boardController.boardContainerNode
+            .css(page.data.data.css);
+          
           }
           else {
             externalPage.bind("load", function() {
               page.data.data.css.width = externalPage[0].contentDocument.width;
               page.data.data.css.height = externalPage[0].contentDocument.height;
               page.save();
-              this.domNode.css(page.data.data.css);
+              //this.domNode.css(page.data.data.css);
+              
+              WebDoc.application.boardController.boardContainerNode
+              .css(page.data.data.css);
+            
             }.pBind(this));
           }          
         }
@@ -74,13 +86,13 @@ WebDoc.PageView = $.klass({
         // Handle case where page is a webdoc
         ddd('Page is a webdoc page');
     }
-    if (this.domNode.css("width").indexOf("%") !== -1 || this.domNode.css("height").indexOf("%") !== -1) {
-      this.domNode.css({
-        position: "absolute",
-        top: "0px",
-        left: "0px"
-      });
-    }
+    //if (this.domNode.css("width").indexOf("%") !== -1 || this.domNode.css("height").indexOf("%") !== -1) {
+    //  this.domNode.css({
+    //    position: "absolute",
+    //    top: "0px",
+    //    left: "0px"
+    //  });
+    //}
     this.domNode.append( itemDomNode );
     this.domNode.append( boardScreenNodes );
     if (page.items && $.isArray(page.items)) {
@@ -92,21 +104,25 @@ WebDoc.PageView = $.klass({
   },
   
   objectChanged: function(page) {
-    this.domNode.animate(page.data.data.css, 'fast');
-    if (this.domNode.css("width").indexOf("%") !== -1 || this.domNode.css("height").indexOf("%") !== -1) {
-      this.domNode.css({
-        position: "absolute",
-        top: "0px",
-        left: "0px"
-      });
-    }
-    else {
-      this.domNode.css({
-        position: "",
-        top: "",
-        left: ""
-      });      
-    }    
+    //this.domNode.animate(page.data.data.css, 'fast');
+    
+    WebDoc.application.boardController.boardContainerNode
+    .animate(page.data.data.css, 'fast');
+    
+    //if (this.domNode.css("width").indexOf("%") !== -1 || this.domNode.css("height").indexOf("%") !== -1) {
+    //  this.domNode.css({
+    //    position: "absolute",
+    //    top: "0px",
+    //    left: "0px"
+    //  });
+    //}
+    //else {
+    //  this.domNode.css({
+    //    position: "",
+    //    top: "",
+    //    left: ""
+    //  });      
+    //}    
   },
   
   itemAdded: function(addedItem, afterItem) {
