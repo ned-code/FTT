@@ -93,69 +93,6 @@
     min-height: 24px;
 }
 
-
-/* Interface panels */
-
-.board-panel {
-    top: 56px;
-}
-.left-panel,
-.right-panel {
-    top: 58px;
-}
-
-.embed-mode .board-panel {
-    top: 32px;
-}
-.embed-mode .left-panel,
-.embed-mode .right-panel {
-    top: 34px;
-}
-
-.board-panel {
-    bottom: 0;
-    min-width: 300px;
-}
-
-.titlebar-panel {
-    height: 25px;
-    padding: 0 4px;
-    overflow: hidden;
-}
-
-.toolbar-panel {
-    top: 24px;
-    height: 32px;
-    padding: 0 4px;
-}
-.embed-mode .toolbar-panel {
-    top: 0px;
-}
-.left-panel {
-    width: 164px;
-    margin-left: -164px;
-    
-    /*-webkit-border-top-right-radius: 8px;   */
-    /*-moz-border-top-right-radius: 8px;      */
-    /*border-top-right-radius: 8px;           */
-    /*-webkit-border-bottom-right-radius: 8px;*/
-    /*-moz-border-bottom-right-radius: 8px;   */
-    /*border-bottom-right-radius: 8px;        */
-}
-
-.right-panel {
-    width: 350px;
-    left: 100%;
-    margin-left: 0px;
-    
-    /*-webkit-border-top-left-radius: 8px;    */
-    /*-moz-border-top-left-radius: 8px;       */
-    /*border-top-left-radius: 8px;            */
-    /*-webkit-border-bottom-left-radius: 8px; */
-    /*-moz-border-bottom-left-radius: 8px;    */
-    /*border-bottom-left-radius: 8px;         */
-}
-
 /* Colors */
 
 #page_inspector.inspector {

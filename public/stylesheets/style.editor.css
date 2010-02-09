@@ -17,28 +17,23 @@ body {
     padding: 0 15px 15px 0;
     margin: 0;
 }
-#ribcage {
-    /* Use padding-top/bottom to compensate for toolbar panels */
-    padding-top: 56px;
-    /*padding-bottom: 20px;*/
-}
+
 .panel-ghost {
     /* WebKit gives cells a 3px cellpadding when they have content.
        Set to display: none to get round it */
     display: none;
     overflow: hidden;
-    /* Use a dash of padding to make the board clear the panel a little.
-       If it's a % it will animate nicely */
-    padding: 0 2%;
     width: 0;
 }
-.left-panel-ghost {
+#left-panel-ghost,
+#right-panel-ghost {
     /* Width is animated with panel */
     width: 0;
+    display: none;
 }
-.right-panel-ghost {
-    /* Use width to compensate for right panel */
-    width: 0;
+.edit-mode #left-panel-ghost,
+.edit-mode #right-panel-ghost {
+    display: table-cell;
 }
 
 #board-container {
@@ -47,6 +42,48 @@ body {
 .panel {
     z-index: 2;
 }
+/* Interface panels */
+
+/* Compensate for height of toolbars */
+#ribcage {
+    padding-top: 56px;
+}
+.embed-mode #ribcage {
+    padding-top: 32px;
+}
+
+.left-panel,
+.right-panel {
+    top: 58px;
+}
+.embed-mode .left-panel,
+.embed-mode .right-panel {
+    top: 34px;
+}
+.titlebar-panel {
+    height: 25px;
+    padding: 0 4px;
+    overflow: hidden;
+}
+
+.toolbar-panel {
+    top: 24px;
+    height: 32px;
+    padding: 0 4px;
+}
+.embed-mode .toolbar-panel {
+    top: 0px;
+}
+.left-panel {
+    width: 164px;
+    margin-left: -164px;
+}
+.right-panel {
+    width: 350px;
+    left: 100%;
+    margin-left: 0px;
+}
+
 
 /* Fonts - just a few to test for now */
 /* Hey! @import doesn't work for @font-face ... what gives?  Use link tags in editor.haml */

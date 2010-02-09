@@ -15,6 +15,7 @@ WebDoc.RightBarController = $.klass({
   
   STATE_BUTTON_SELECTOR: ".state-right-panel",
   PANEL_SELECTOR: "#right_bar",
+  PANEL_GHOST_SELECTOR: "#right-panel-ghost",
   PANEL_TOGGLE_SELECTOR: "a[href='#right-panel-toggle']",
   
   initialize: function() {
@@ -32,7 +33,11 @@ WebDoc.RightBarController = $.klass({
     //pageInspector.buttonSelector = this.PAGE_INSPECTOR_BUTTON_SELECTOR;
     
     this.visible = false;
+    
     this.domNode = panel;
+    this.panelGhostNode = $( this.PANEL_GHOST_SELECTOR );
+    this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
+    
     this.panelWidth = panel.outerWidth();
     this.contentMap = {
       library: library,
@@ -120,10 +125,12 @@ WebDoc.RightBarController = $.klass({
   
   showRightBar: function() {
     var panel = this.domNode,
-        //boardManager = WebDoc.application.boardController.marginManagerNode,
-        self = this;
+        self = this,
+        outerGhost = this.panelGhostNode,
+        innerGhost = this.innerGhostNode,
+        bothGhosts = outerGhost.add(innerGhost);
     
-    var ghost = $('.right-panel-ghost').show();
+    innerGhost.show();
     
     if (!this.visible) {
       this.visible = true;
@@ -132,13 +139,9 @@ WebDoc.RightBarController = $.klass({
         marginLeft: -this.panelWidth
       }, {
         step: function(val){
-          //.css({ marginRight: -val });
-          ghost.css({
+          bothGhosts.css({
             width: -val
           })
-        },
-        complete: function() {
-          
         }
       });
     }
@@ -148,10 +151,10 @@ WebDoc.RightBarController = $.klass({
   
   hideRightBar: function() {
     var panel = this.domNode,
-        //boardManager = WebDoc.application.boardController.marginManagerNode,
-        self = this;
-    
-    var ghost = $('.right-panel-ghost');
+        self = this,
+        outerGhost = this.panelGhostNode,
+        innerGhost = this.innerGhostNode,
+        bothGhosts = outerGhost.add(innerGhost);
     
     if (this.visible) {
       this.visible = false;
@@ -160,14 +163,12 @@ WebDoc.RightBarController = $.klass({
           marginLeft: 0
       }, {
           step: function(val){
-              //boardManager.css({ marginRight: -val });
-              ghost.css({
+              bothGhosts.css({
                 width: -val
               })
           },
           complete: function() {
-              //self._changeButtonState();
-              ghost.filter('.panel-ghost').hide();
+              innerGhost.hide();
           }
       });
     }

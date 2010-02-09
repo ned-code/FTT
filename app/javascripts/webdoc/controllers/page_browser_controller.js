@@ -20,11 +20,15 @@ WebDoc.PageBrowserController = $.klass({
   LEFT_BAR_BUTTON_SELECTOR: "a[href='#left-panel-toggle']",
   NUMBER_SELECTOR: '.number',
   THUMB_SELECTOR: '.thumb',
+  PANEL_GHOST_SELECTOR: '#left-panel-ghost',
   
   initialize: function() {
     ddd("[PageBrowserController] init");
     
     this.domNode = $("#left_bar");
+    this.panelGhostNode = $( this.PANEL_GHOST_SELECTOR );
+    this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
+    
     this._changedFromDrag = false;
     this._stateThumbs = false;
     this._document = null;
@@ -46,21 +50,25 @@ WebDoc.PageBrowserController = $.klass({
   
   toggleBrowser: function() {
     ddd("toggle browser");
-    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
-    var panelWidth = this._pagesPanelWidth;
-    var ghost = $('.left-panel-ghost').show();
+    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
+        panelWidth = this._pagesPanelWidth,
+        outerGhost = this.panelGhostNode,
+        innerGhost = this.innerGhostNode,
+        bothGhosts = outerGhost.add(innerGhost);
+    
+    innerGhost.show();
     
     if (this.visible) {
       this.domNode.animate({
           marginLeft: - this._pagesPanelWidth
       }, {
           step: function(val){
-              ghost.css({
+              bothGhosts.css({
                 width: panelWidth + val
               })
           }.pBind(this),
           complete: function(){
-              ghost.filter('.panel-ghost').hide();
+              innerGhost.hide();
           }
       });
       pageBrowserButton.removeClass(this.ACTIVE_CLASS);
@@ -70,7 +78,7 @@ WebDoc.PageBrowserController = $.klass({
           marginLeft: 0
       }, {
           step: function(val){
-              ghost.css({
+              bothGhosts.css({
                 width: panelWidth + val
               })
           }.pBind(this)
