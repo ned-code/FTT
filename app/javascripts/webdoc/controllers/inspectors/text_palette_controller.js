@@ -13,7 +13,7 @@ WebDoc.TextPaletteController = $.klass({
         '<div id="toolbar_panel_cover"></div>'+
         '<div id="colorpickerHolder1" style="position:absolute;z-index: 150000;top:50px;"></div>'+
           '<div id="colorpickerHolder2" style="position:absolute;z-index: 150000;top:50px;"></div>'+
-        '<select id="toolbar_panel_button_format" onchange="WebDoc.application.textTool.delegate.editorExec(\'format\',this.value);">'+
+        '<select id="toolbar_panel_button_format" onchange="TextToolView.editorExec(\'format\',this.value);">'+
           '<option value="p">Normal</option>'+
           '<option value="h1">Heading 1</option>'+
           '<option value="h2">Heading 2</option>'+
@@ -89,13 +89,29 @@ WebDoc.TextPaletteController = $.klass({
         '<a href="javascript:void(0);"  title="Align Full" id="toolbar_panel_button_justifyFull"      onclick="WebDoc.application.textTool.delegate.editorExec(\'justifyFull\');">      <div class="icon_justifyFull"></div></a>'+
         '<a href="javascript:void(0);"  title="Superscript" id="toolbar_panel_button_superScript"     onclick="WebDoc.application.textTool.delegate.editorExec(\'superScript\');">      <div class="icon_superScript"></div></a>'+
         '<a href="javascript:void(0);"  title="Subscript" id="toolbar_panel_button_subScript"       onclick="WebDoc.application.textTool.delegate.editorExec(\'subScript\');">      <div class="icon_subScript"></div></a>'+
-        '<a href="javascript:void(0);"  title="Remove Format" id="toolbar_panel_button_removeFormat"      onclick="WebDoc.application.textTool.delegate.editorExec(\'removeformat\');">     <div class="icon_removeFormat"></div></a>'+
-        '<a href="javascript:void(0);"  title="Vertical align Top" id="toolbar_panel_button_valignTop"      onclick="WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'top\');">      <div class="icon_verticalTop"></div></a>'+
-        '<a href="javascript:void(0);"  title="Vertical align Middle" id="toolbar_panel_button_valignMiddle"    onclick="WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'middle\');">     <div class="icon_verticalMiddle"></div></a>'+
-        '<a href="javascript:void(0);"  title="Vertical align Bottom" id="toolbar_panel_button_valignBottom"    onclick="WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'bottom\');">     <div class="icon_verticalBottom"></div></a>'+
+        '<a href="javascript:void(0);"  title="Remove Format" id="toolbar_panel_button_removeFormat"      onclick="WebDoc.application.textTool.delegate.editorExec(\'removeformat\');"><div class="icon_removeFormat"></div></a>'+
+        '<a href="javascript:void(0);"  title="Vertical align" id="toolbar_panel_button_valign"><div class="icon_valignTop"></div><div class="icon_valign_arrow"></div></a>'+
+        '<div id="toolbar_panel_valign_block" >'+
+        '<a href="javascript:void(0);"  title="Vertical align Top" id="toolbar_panel_button_valignTop"          onclick="WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'top\');">      <div class="icon_valignTop"></div></a>'+
+        '<a href="javascript:void(0);"  title="Vertical align Middle" id="toolbar_panel_button_valignMiddle"    onclick="WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'middle\');">     <div class="icon_valignMiddle"></div></a>'+
+        '<a href="javascript:void(0);"  title="Vertical align Bottom" id="toolbar_panel_button_valignBottom"    onclick="WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'bottom\');">     <div class="icon_valignBottom"></div></a>'+
+        '</div>'+
         '<div style="clear: both;"></div>'+
     '</div>';
     containerObj.innerHTML = toolbarContent;
+    
+    $('#toolbar_panel_button_valign').bind('click', function(e){
+      var pos = $("#toolbar_panel_button_valign").position();  
+        $('#toolbar_panel_valign_block').stop().animate({height: 20}, 500);
+        $('#toolbar_panel_valign_block').css('left',pos.left);
+      $('#toolbar_panel_valign_block').css('top',pos.top+28);
+    });
+    
+    $('#toolbar_panel_button_valignBottom').bind('click',   function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignBottom");$('#toolbar_panel_valign_block').hide()});
+    $('#toolbar_panel_button_valignMiddle').bind('click',   function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignMiddle");$('#toolbar_panel_valign_block').hide()});
+    $('#toolbar_panel_button_valignTop').bind('click',    function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignTop");$('#toolbar_panel_valign_block').hide()});
+    
+    
     $('#colorpickerHolder2').ColorPicker({
         flat: true,
         color: '#000000',
@@ -137,7 +153,7 @@ WebDoc.TextPaletteController = $.klass({
         e.stopPropagation();
             e.cancelBubble = true; 
         var pos = $("#toolbar_panel_button_foreColor").position();  
-        $('#colorpickerHolder2').css('left',pos.left);
+        $('#colorpickerHolder2').css('left',0);
         $('#colorpickerHolder2').css('top',pos.top+28);
         $('#colorpickerHolder2').stop().animate({height:173}, 500);
         $('#colorpickerHolder1').stop().animate({height:0}, 500);
@@ -146,11 +162,11 @@ WebDoc.TextPaletteController = $.klass({
         e.stopPropagation();
             e.cancelBubble = true; 
         var pos = $("#toolbar_panel_button_hiliteColor").position();  
-        $('#colorpickerHolder1').css('left',pos.left);
+        $('#colorpickerHolder1').css('left',0);
         $('#colorpickerHolder1').css('top',pos.top+28);
         $('#colorpickerHolder1').stop().animate({height:173}, 500);
         $('#colorpickerHolder2').stop().animate({height:0}, 500);
-      });     
+      });   
   },
   
   refresh: function() {

@@ -117,6 +117,10 @@ WebDoc.Page = $.klass(MTools.Record,
     this.save();    
   },
   
+  hasBackgroundImage: function() {
+    return this.data.data.css.backgroundImage && this.data.data.css.backgroundImage;
+  },
+  
   refresh: function($super, json) {
     //backup previous items if we need to keep them
     var previousItems = [];
@@ -146,6 +150,12 @@ WebDoc.Page = $.klass(MTools.Record,
         that.createOrUpdateItem({ item: this });
       });
     }    
+  },
+  
+  // Returns backgroundImage CSS data without the url() container
+  getBackgroundImagePath: function() {
+    WebDoc.InspectorFieldsValidator.validateBackgroundUrl(this.data.data.css.backgroundImage);
+    return this.data.data.css.backgroundImage.substring(4, this.data.data.css.backgroundImage.length-1);
   },
   
   getData: function($super, withRelationShips) {

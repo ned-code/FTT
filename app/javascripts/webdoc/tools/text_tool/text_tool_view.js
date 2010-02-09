@@ -4,22 +4,22 @@ WebDoc.TextToolView = $.klass({
      * Constructor.  Create a TextiewTool object that can make a div element editable.
      */
     initialize: function(){ 
-       thobj = this;       
+       var thobj = this;       
        this.currentEditingBlock = null;   
         thobj.currentEl = null;
       this.getCurrentElement = function(){
           return thobj.currentEl;
-      }   
+      };    
          
        this.addEvent = function(obj, type, fn){
                if (obj.addEventListener){
                       obj.addEventListener( type, fn, false );
               } else {
                       obj["e"+type+fn] = fn;
-                      obj[type+fn] = function() { obj["e"+type+fn]( window.event ); }
+                      obj[type+fn] = function() {obj["e"+type+fn]( window.event );};
                       obj.attachEvent( "on"+type, obj[type+fn] );
               }
-      }
+      };
 
       this.removeEvent = function(obj, type, fn){
           if (obj.removeEventListener){
@@ -29,12 +29,17 @@ WebDoc.TextToolView = $.klass({
             obj[type+fn] = null;
             obj["e"+type+fn] = null;
           }
-       }
+       };
        
        this.isContainText = function(obj){ 
+        if(!obj){
+          return false;
+        };       
+        if(obj.textContent){
+          return true;
+        };
         for(var i=0;i<obj.childNodes.length;i++){
-          var curr_obj = obj.childNodes[i];
-          if(curr_obj.textContent) return true;
+        var curr_obj = obj.childNodes[i];
           this.isContainText(curr_obj);
         }
        }
@@ -48,14 +53,13 @@ WebDoc.TextToolView = $.klass({
         }
        }
        
-       this.getElementStyleData = function(el){
+       this.getElementStyleData = function(elem){
 
-        var el = (el?el:this.getSelectionBounds().start);
-        if(!el) return 
+        var el = (elem?elem:this.getSelectionBounds().start);
+        if(!el) return false; 
 
         try {    
           if(this.edWin.getComputedStyle){
- 
             var st = this.edWin.getComputedStyle(el, null); 
             this.style =  { fontStyle : st.getPropertyValue("font-style"),
               fontSize  : st.getPropertyValue("font-size"),
@@ -103,8 +107,7 @@ WebDoc.TextToolView = $.klass({
             this.setStyleProperty(el,"u");
           }
           return (this.style);
-        }
-        catch(e){
+        } catch(e) {
           return null
         }     
       }
@@ -279,13 +282,13 @@ WebDoc.TextToolView = $.klass({
       }
 
       this.format_vertical = function(value){
-        if(this.edDoc.body.firstChild.nodeName == '#text' || (this.edDoc.body.firstChild.tagName.toLowerCase !='div' && this.edDoc.body.firstChild.style.display != 'table-cell')){
+        if(!this.edDoc.body.firstChild.firstChild || this.edDoc.body.firstChild.firstChild.nodeName == '#text' || !this.edDoc.body.firstChild.firstChild.style.verticalAlign){
           var verticalContainer = this.edDoc.createElement('div');
-          verticalContainer.innerHTML = this.edDoc.body.innerHTML;
-          this.edDoc.body.innerHTML = '';
-          this.edDoc.body.appendChild(verticalContainer);
-        } else {
-            var verticalContainer =  this.edDoc.body.firstChild;
+          verticalContainer.innerHTML = this.edDoc.body.firstChild.innerHTML;
+          this.edDoc.body.firstChild.innerHTML = '';
+          this.edDoc.body.firstChild.appendChild(verticalContainer);
+        } else {   
+            var verticalContainer =  this.edDoc.body.firstChild.firstChild;
         }
         verticalContainer.style.display = 'table-cell';
         verticalContainer.style.verticalAlign = value;
@@ -357,7 +360,7 @@ WebDoc.TextToolView = $.klass({
      * @param divElement the DOM element that you want to make editable.
      */
     enterEditMode: function(divElement){ 
-      
+      var thobj = this;
       if(this.currentEditingBlock) this.exitEditMode();
       this.currentEditingBlock = divElement;
       this.currentEditingBlockClass = this.currentEditingBlock.className;
@@ -366,7 +369,8 @@ WebDoc.TextToolView = $.klass({
       this.iframe = document.createElement('iframe');
       this.iframe.setAttribute("width",'100%');
       this.iframe.setAttribute("height",'100%');
-      this.iframe.setAttribute("frameborder",0);  
+      this.iframe.setAttribute("frameborder",0);
+  
           divElement.appendChild(this.iframe);
         this.edWin = this.iframe.contentWindow;
       this.edDoc = this.edWin.document;
@@ -375,34 +379,41 @@ WebDoc.TextToolView = $.klass({
       content.open("text/html", "replace");
       this.frameStyles = '';  
       for(i=0;i<this.mainPageStyles.length;i++){ this.frameStyles += "<link rel='stylesheet' href='"+this.mainPageStyles[i]+"' type='text/css' />"; }
-      content.write("<html><head>"+this.frameStyles+"<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; height:100%; margin:0px; background-color:#ffffff;} </style></head><body contenteditable='true'></body></html>");  
+      content.write("<html><head>"+this.frameStyles+"<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; height:100%; margin:0px; background:none;} </style></head><body contenteditable='true'></body></html>");  
         content.close();  
-        this.edDoc.body.innerHTML = storedContent;
+        this.edDoc.designMode='On';
+        this.packHTMLtoEditor = function(HTML){ 
+            this.edDoc.body.innerHTML = "<div>"+HTML+"</div>";
+          this.edDoc.body.firstChild.className = this.currentEditingBlockClass;
+          this.edDoc.body.firstChild.style.margin = '0px';
+          this.edDoc.body.firstChild.style.padding = '0px';
+          this.edDoc.body.firstChild.style.border = 'none';
+          this.edDoc.body.firstChild.style.position = 'relative';
+          this.edDoc.body.firstChild.style.background = 'none';
+        }
+        if(storedContent){this.packHTMLtoEditor(storedContent)};
+      this.iframe.focus();
         
-        $(this.currentEditingBlock).width(this.currentEditingBlockWidth);
-      $(this.currentEditingBlock).height(this.currentEditingBlockHeight+1);
-      this.edDoc.body.className = this.currentEditingBlockClass;
-      this.edDoc.body.style.margin = '0px';
-      this.edDoc.body.style.padding = '0px';
-      this.edDoc.body.border = 'none';
-      this.edDoc.body.style.position = 'relative';
-          this.edDoc.body.style.background = 'rgba(255,255,255,0)';
-        
-           
       this.addEvent(this.edDoc, "click", function(e){
         var ev = e||window.event;
         var el = ev.target||ev.srcElement;
-        thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(el)));      
-      }); 
-      
+        thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(el))); 
+      });   
 
       this.addEvent(this.edDoc, "keyup", function(e){
+        if(!thobj.edDoc.body.firstChild ||  thobj.edDoc.body.firstChild.nodeName == '#text' ||  thobj.edDoc.body.firstChild.tagName.toLowerCase() !='div'){
+          thobj.packHTMLtoEditor((thobj.edDoc.body.firstChild.innerHTML) ? (thobj.edDoc.body.firstChild.innerHTML) : (thobj.edDoc.body.firstChild.nodeValue || '<span></span>'));
+          var range = thobj.edDoc.createRange();
+          range.selectNode(thobj.edDoc.body.firstChild.firstChild);
+          thobj.edWin.getSelection().addRange(range);
+          thobj.edWin.getSelection().collapseToEnd();
+        } 
         var ev = e||window.event;
         var key = ev.keyCode; 
         var el = ev.target||ev.srcElement;
         if((key==37)||(key==38)||(key==39)||(key==40)||(key==13))       
         thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(el))); 
-        return true;
+        return true;          
       });
       
       this.iframe.focus();
@@ -414,17 +425,17 @@ WebDoc.TextToolView = $.klass({
      * @return String. return html corresponding to the edited div.
      */
     exitEditMode: function() {
+      var thobj = this;
       var className = 'empty'; 
       var htmlToStore = '';
       
-      if(this.isContainText(this.edDoc.body)){
-         var htmlToStore = this.edDoc.body.innerHTML;  
-         className='';
+      if(this.isContainText(this.edDoc.body.firstChild)){
+        var htmlToStore = ( this.edDoc.body.firstChild.innerHTML)?(this.edDoc.body.firstChild.innerHTML):(this.edDoc.body.firstChild.nodeValue);  
+          className='';
       }
 
       this.currentEditingBlock.innerHTML = htmlToStore; 
-      this.endEditionListener.applyTextContent(htmlToStore,className);
-      this.currentEditingBlock = null;
+      this.endEditionListener.applyTextContent(htmlToStore,className)
     },
     
     /**
@@ -456,8 +467,7 @@ WebDoc.TextToolView = $.klass({
      ---* - removeFormat: remove all formatting on selected text
      */
     editorExec: function(command, optional) {
-
-      ddd("exec command", command);
+      var thobj = this;
       switch (command){ 
         case 'bold'         :           
         case 'italic'       :           
@@ -481,12 +491,9 @@ WebDoc.TextToolView = $.klass({
         case 'hiliteColor'      :   this.format_inline(command,'backgroundColor',optional);  break;   
         case 'fontSize'       :   this.format_inline(command,'fontSize',optional);  break;  
         case 'foreColor'      :   this.format_inline(command,'color',optional);  break;
-        
-        case 'verticalAlign'    :   this.format_vertical(optional);  break;
-                                                 
+        case 'verticalAlign'    :   this.format_vertical(optional);  break;                                              
         default : {alert('Command '+command+' is not defined');}
       } 
-
       if(this.getSelectionBounds().end.nodeName != '#text'){
         thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(this.getSelectionBounds().end)));   
       } else {  
@@ -501,10 +508,13 @@ WebDoc.TextToolView = $.klass({
           }
         }
       }
-        
-        for(stp in toolbarHash){  
+        for(stp in toolbarHash){ 
           try{ 
-          if(toolbarHash[stp]===true)       document.getElementById('toolbar_panel_button_'+stp).className = 'active_button';
+          if(toolbarHash[stp]===true){      
+            
+            if(stp.indexOf('valign') != -1){document.getElementById('toolbar_panel_button_valign').firstChild.className = 'icon_'+stp}
+            else{document.getElementById('toolbar_panel_button_'+stp).className = 'active_button';}
+          }
             else if (toolbarHash[stp]===false)    document.getElementById('toolbar_panel_button_'+stp).className = '';
             else if (document.getElementById('toolbar_panel_button_'+stp).tagName == 'SELECT'){this.setSelectBoxValue(document.getElementById('toolbar_panel_button_'+stp),toolbarHash[stp])}
           }
