@@ -14,9 +14,9 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     // Setup details view
     this._setupDetailsView();
 
-    // Observe app-rows clicks (with event delegation) for all current and future app rows
-    $("#"+libraryId+" .rows ul li a").live("click", function (event) {
-      // widget data are stored in the img element of the app row
+    // Observe thumbnails clicks (with event delegation) for all current and future app thumbnails
+    $("#"+libraryId+" .thumbnails ul li a").live("click", function (event) {
+      // widget data are stored in the img element of the app thumbnail
       var widgetData = $(event.target).parent().find('img').data("data");
       this.prepareDetailsView(widgetData);
       this.showDetailsView.click();
@@ -33,10 +33,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   },
   didClickOnTab: function($super, tab) {
     $super(tab);
-    // No more necessary since apps are loaded on startup
-    // if (tab === this.myAppsId) {
-    //   this._loadMyApps(0);
-    // }
   },
   _setupMyApps: function() {
     this.myAppsId = "my_apps";
@@ -44,8 +40,8 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     this.myAppsPage = 1;
     this.myAppsContainer = $('#'+this.myAppsId);
     
-    // Setup app rows drag n' drop
-    this.myAppsContainer.find(".rows").bind("dragstart", this._prepareRowDrag.pBind(this));
+    // Setup app thumbnails drag n' drop
+    this.myAppsContainer.find(".thumbnails").bind("dragstart", this._prepareRowDrag.pBind(this));
     
     // Next/Previous page links
     this.paginationWrap = $("<div class='pagination' style='display:none'>");
@@ -90,7 +86,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
 
     // Title
     var title = "";
-    if (properties.title) title = properties.title;
+    if (properties.title) title = widgetData.title;
     this.detailsView.find('.app_title').text(title);
     
     // Version
@@ -101,13 +97,13 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
       versionEl.text('');
     
     // Description
-    var desc = properties.description || "";
+    var desc = widgetData.description || "";
     var descEl = this.detailsView.find('.app_description');
     descEl.text(desc);
   },
   _prepareRowDrag: function(event) {
     var target = $(event.target);
-    if (target.closest('.app_row').length === 0 || target.find('img').length === 0) {
+    if (target.closest('li').length === 0 || target.find('img').length === 0) {
       event.preventDefault();
       return;
     }
@@ -120,7 +116,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     this._dragStart(event, widgetData);
   },
   _loadMyApps: function(pageIncrement) {
-    var appsRowsWrap = this.myAppsContainer.find(".rows");
+    var appsRowsWrap = this.myAppsContainer.find(".thumbnails");
     
     this.myAppsPage += pageIncrement;
     if (this.myAppsPage < 1) this.myAppsPage = 1;
@@ -138,7 +134,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
         else {   
           var myAppsList = $("<ul>");
           for (var i = 0; i < data.widgets.length; i++) {
-            myAppsList.append(this._buildAppRow(data.widgets[i]));
+            myAppsList.append(this._buildThumbnail(data.widgets[i]));
           }
           
           appsRowsWrap.append(myAppsList);
@@ -149,30 +145,30 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
       }.pBind(this), { ajaxParams: { page:this.myAppsPage }});
     }
   },
-  _buildAppRow: function(widget) {
+  _buildThumbnail: function(widget) {
     var uuid = widget.uuid();
     var properties = widget.data.properties;
-    var icon = $("<img>").attr({
+    var thumb = $("<img>").attr({
       src : properties.icon_url,
       alt : ""
     })
-
     .data("data", widget.getData());
     
-    var iconWrap = $("<span>").attr({'class':'wrap'});
-    iconWrap.append(icon);
+    var titleEl = $("<strong>").addClass("title").text(widget.data.title);
+    var versionEl = $("<p>").addClass("version").text(this._getVersionText(properties.version));
     
-    var titleEl = $("<strong>").addClass("title").text(properties.title);
-    var versionEl = $("<span>").addClass("version").text(this._getVersionText(properties.version));
-    var descriptionEl = $("<p>").addClass("description").text(properties.description);
+    var divWrap = $("<div>");
+    var liWrap = $("<li>");
+    var aWrap = $("<a href='' title=''></a>");
+    divWrap.append(thumb);
+    divWrap.append(titleEl);
+    divWrap.append(versionEl);
     
-    var liWrap = $("<li>").addClass("app_row");
-    var aWrap = $("<a href=\"\"></a>");
-    
-    aWrap.append(iconWrap).append(titleEl).append(versionEl).append(descriptionEl).append($("<span>").attr({'class':'spacer'}));
+    aWrap.append(divWrap);
     liWrap.append(aWrap);
+
     return liWrap;
-  }, 
+  },
   _refreshMyAppsPagination: function(pagination) {
     this.hasPagination = pagination.total_pages > 1 ? true : false;
     if (this.hasPagination) {
