@@ -1,16 +1,15 @@
 # encoding: utf-8
 
 class FileUploader < CarrierWave::Uploader::Base
-
+  
   # Include RMagick or ImageScience support
   #     include CarrierWave::RMagick
   #     include CarrierWave::ImageScience
- 
+  
   # Choose what kind of storage to use for this uploader
-  storage :file
-  # storage :s3
-  # storage :right_s3
-
+  storage   CarrierWave.yml_storage(:assets)
+  s3_bucket CarrierWave.yml_s3_bucket(:assets)
+  
   # Override the directory where uploaded files will be stored
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
@@ -36,9 +35,9 @@ class FileUploader < CarrierWave::Uploader::Base
 
   # Add a white list of extensions which are allowed to be uploaded,
   # for images you might use something like this:
-  #     def extension_white_list
-  #       %w(jpg jpeg gif png)
-  #     end
+  # def extension_white_list
+  #     %w(jpg jpeg gif png)
+  #   end
 
   # Override the filename of the uploaded files
   #     def filename

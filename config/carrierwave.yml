@@ -1,0 +1,38 @@
+development:
+  s3_access_key_id: 'AKIAJSQQ2RDIXG2UOZ5Q'
+  s3_secret_access_key: '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'
+  #storage: right_s3
+  assets:
+    #s3_bucket: 'wd-david-test'
+    #storage: right_s3
+    storage: file
+  widgets:
+    #s3_bucket: 'wd-david-test'
+    storage: file
+test:
+  s3_access_key_id: 'AKIAJSQQ2RDIXG2UOZ5Q'
+  s3_secret_access_key: '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'
+  #storage: right_s3
+  assets:
+    s3_bucket: 'wd-david-test'
+    storage: right_s3
+  widgets:
+    #s3_bucket: 'wd-david-test'
+    storage: file #right_s3
+staging:
+  s3_access_key_id: 'AKIAJSQQ2RDIXG2UOZ5Q'
+  s3_secret_access_key: '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'
+  assets:
+    s3_bucket: "uniboard-staging"
+    storage: right_s3
+  widgets:
+    storage: file
+production:
+  s3_access_key_id: 'AKIAJSQQ2RDIXG2UOZ5Q'
+  s3_secret_access_key: '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'
+  storage: right_s3
+  assets:
+    s3_bucket: "assets.webdoc.com"
+  widgets:
+    s3_bucket: "apps.webdoc.com"
+  
