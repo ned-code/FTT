@@ -36,12 +36,18 @@ body {
     display: table-cell;
 }
 
-#board-container {
-    z-index: 1;
-}
-.panel {
-    z-index: 2;
-}
+/* Manage layering */
+
+#ribcage    { z-index: 1; }
+.panel      { z-index: 2; }
+
+#ribcage .center    { z-index: 2; }
+#left-panel-ghost,
+#right-panel-ghost  { z-index: 1; }
+
+#ribcage .board-screen    { z-index: 1000000; }  /* svg layer has 999999 */
+
+
 /* Interface panels */
 
 /* Compensate for height of toolbars */
@@ -655,10 +661,7 @@ a:hover { color: #0069BF;}*/
 #board {
     overflow: visible;
 }
-#board .screen {
-  /* SVG layer is at 1000000 */
-  z-index: 1000001;
-}
+
 
 #board.move-tool        { cursor: move; }
 #board.draw-tool        { cursor: /*url('/images/icons/cursor_pen.png'),*/ crosshair; }

@@ -201,32 +201,32 @@ jQuery.fn[plug] = function(){
     )
     .bind('show-head', toggleHead)
     .bind('show-foot', toggleFoot)
-    .bind('show-screen', function(){
-        var elem = jQuery(this),
-            screen = elem.children('.screen').add( elem.find('#board>.screen') ),
-            options = {
-                duration: 200
-            };
-        
-        elem.addClass("screened");
-        screen.animate({ opacity: 'show' }, options);
-        
-        return false;
-    })
-    .bind('hide-screen', function(){
-        var elem = jQuery(this),
-            screen = elem.children('.screen').add( elem.find('#board>.screen') ),
-            options = {
-                duration: 200,
-                complete: function(){
-                    elem.removeClass("screened");
-                }
-            };
-        
-        screen.animate({ opacity: 'hide' }, options);
-        
-        return false;
-    })
+//    .bind('show-screen', function(){
+//        var elem = jQuery(this),
+//            screen = elem.children('.screen').add( elem.find('#board>.screen') ),
+//            options = {
+//                duration: 200
+//            };
+//        
+//        elem.addClass("screened");
+//        screen.animate({ opacity: 'show' }, options);
+//        
+//        return false;
+//    })
+//    .bind('hide-screen', function(){
+//        var elem = jQuery(this),
+//            screen = elem.children('.screen').add( elem.find('#board>.screen') ),
+//            options = {
+//                duration: 200,
+//                complete: function(){
+//                    elem.removeClass("screened");
+//                }
+//            };
+//        
+//        screen.animate({ opacity: 'hide' }, options);
+//        
+//        return false;
+//    })
     .each(function(){
         var node = jQuery(this),
             inspector = jQuery(inspectorSelector, this);

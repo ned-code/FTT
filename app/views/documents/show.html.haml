@@ -9,14 +9,12 @@
       %div#board-container.center-box
         %div#document_loading
           %img{ :src => "/images/icons/waiting_bar.gif"}
-      %div.screen.layer
-      %div.screen.layer
-      %div.screen.layer
-      %div.screen.layer
+        %div.board-screen.screen.layer
+        %div.board-screen.screen.layer
+        %div.board-screen.screen.layer
+        %div.board-screen.screen.layer
     %div#right-panel-ghost
       %div.panel-ghost
-
-#screen.screen.layer
 
 = render :partial => "layouts/main_editor_toolbar"
 
@@ -142,7 +140,9 @@
   = render :partial => 'item_inspector'
   = render :partial => 'library'
   = render :partial => 'page_inspector'
-  
+
+#screen.screen.layer
+
 :javascript
   
     var WebDoc;

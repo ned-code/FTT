@@ -16,9 +16,11 @@ WebDoc.BoardController = $.klass({
   
   // Constructor     
   initialize: function(editable, autoFit) {
-
+    
+    this.boardCageNode = $("#ribcage");
     this.boardContainerNode = $("#board-container");
-    this._screenNode = $('<div/>').addClass('screen layer');
+    this.screenUnderlayNode = $("#underlay");
+    this.screenNodes = this.boardCageNode.find('.board-screen');
     
     this._editable = editable;
     this._autoFit = autoFit;
@@ -33,7 +35,12 @@ WebDoc.BoardController = $.klass({
     
     // used to keep track of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
     // we resize manually the div and we need to know what was the original size to define the new size.
-    this._initialSize = null;  
+    this._initialSize = null;
+    
+    this.screenNodes.bind('click', function(e){ console.log('HEY'); } );
+    
+    
+    //this._mouseClick.pBind(this) );
   },
   
   selection: function() {
@@ -89,7 +96,8 @@ WebDoc.BoardController = $.klass({
     // Construct DOM tree
     this.boardContainerNode
     .empty()
-    .append(board);
+    .append(board)
+    .append(this.screenNodes);
     
     this._fireSelectionChanged();
     this._bindMouseEvent();
@@ -282,7 +290,7 @@ WebDoc.BoardController = $.klass({
     if (this._editingItem) {
       this._editingItem.stopEditing();
       WebDoc.application.arrowTool.enableHilight();
-      jQuery('#board-container').trigger('hide-screen');
+      this.screenNodes.animate({ opacity: 'hide' }, { duration: 200 });
       this._editingItem = null;
     }
     
@@ -347,12 +355,12 @@ WebDoc.BoardController = $.klass({
           nodePos = node.position(),
           nodeLeft = nodePos.left,
           nodeTop = nodePos.top,
-          nodeWidth = node.width(),
-          nodeHeight = node.height(),
-          board = this._currentPageView.domNode,
-          boardWidth = board.width(),
-          boardHeight = board.height(),
-          screens = this._currentPageView.boardScreenNodes,
+          nodeWidth = node.width(),// * this._currentZoom,
+          nodeHeight = node.height(),// * this._currentZoom,
+          board = this.boardContainerNode,
+          boardWidth = board.width(),// * this._currentZoom,
+          boardHeight = board.height(),// * this._currentZoom,
+          screens = this.screenNodes,
           screenTop = screens.eq(0),
           screenBottom = screens.eq(1),
           screenLeft = screens.eq(2),
@@ -382,7 +390,7 @@ WebDoc.BoardController = $.klass({
       itemViewToEdit.edit();
                 
       WebDoc.application.arrowTool.disableHilight();
-      jQuery('#board').trigger('show-screen');
+      screens.animate({ opacity: 'show' }, { duration: 200 });
       return true;     
     }
     return false;
@@ -429,59 +437,42 @@ WebDoc.BoardController = $.klass({
   
   zoom: function(factor) {
     
-    var boardNode = $("#board");
-    var previousZoom = this._currentZoom;
-    var boardContainerCss = {},
-        boardCss = {};
+    var boardNode = $("#board"),
+        previousZoom = this._currentZoom,
+        boardContainerCss = {},
+        boardCss = {},
+        svgCss = {};
     
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
     
-    if (jQuery.browser.mozilla) {
-      
-      boardCss.MozTransformOrigin = "0px 0px";
-      boardCss.MozTransform = "scale(" + this._currentZoom + ")";
-      boardNode.css( boardCss );
-      
-      // Directly remove the transform property so that windowed items are displayed
-      if (this._currentZoom == 1) {
-        boardCss.MozTransformOrigin = "";
-        boardCss.MozTransform = "";
-        boardNode.css( boardCss );
-      }
+    ddd("apply webkit transform");
+    
+    boardCss.WebkitTransformOrigin = "0px 0px"; //[ this._initialSize.width/2, 'px', ' ', this._initialSize.height/2, 'px' ].join('');
+    boardCss.WebkitTransform = this._currentZoom === 1 ? "" : "scale(" + this._currentZoom + ")" ;
+    boardCss.MozTransformOrigin = this._currentZoom === 1 ? "" : "0px 0px" ;
+    boardCss.MozTransform = boardCss.WebkitTransform;
+    
+    if (!this._initialSize) {
+      this._initialSize = {
+        width: parseFloat(this.boardContainerNode.css("width").replace("px", "")),
+        height: parseFloat(this.boardContainerNode.css("height").replace("px", ""))
+      };
     }
-    else if (jQuery.browser.safari) {
-      ddd("apply webkit transform");
-      
-      if (!this._initialSize) {
-        this._initialSize = {
-          width: parseFloat(this.boardContainerNode.css("width").replace("px", "")),
-          height: parseFloat(this.boardContainerNode.css("height").replace("px", ""))
-        };
-      }
-      
-      if (this._currentZoom > 1) {
-        boardContainerCss = {
-          width: this._initialSize.width * this._currentZoom,
-          height: this._initialSize.height * this._currentZoom
-        }
-      }
-      else {
-        boardContainerCss = {
-          width: this._initialSize.width,
-          height: this._initialSize.height
-        };
-      }
-      
-      boardCss.WebkitTransformOrigin = "0px 0px";
-      boardCss.WebkitTransform = this._currentZoom == 1 ? "" : "scale(" + this._currentZoom + ")" ;
-      
-      console.log(boardCss);
-      console.log(boardContainerCss);
-      
-      this.boardContainerNode.css( boardContainerCss );
-      boardNode.css( boardCss );
+    
+    boardContainerCss = {
+      width: this._initialSize.width * this._currentZoom,
+      height: this._initialSize.height * this._currentZoom
     }
+    
+    svgCss = {
+      width: 100/this._currentZoom + '%',
+      height: 100/this._currentZoom + '%'
+    }      
+
+    boardNode.css( boardCss );
+    this.boardContainerNode.css( boardContainerCss );
+    this.boardContainerNode.find( 'svg' ).css( svgCss );
   },
   
   // Private methods

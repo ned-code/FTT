@@ -9,11 +9,6 @@ WebDoc.PageView = $.klass({
         domNode = $('<div>').id('board'),
         itemDomNode = $('<div/>').id('items').addClass("layer").css({overflow: 'visible'}),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
-        //boardScreenNodes = jQuery('<div/>').addClass('screen layer')
-        //    .add( jQuery('<div/>').addClass('screen layer') )
-        //    .add( jQuery('<div/>').addClass('screen layer') )
-        //    .add( jQuery('<div/>').addClass('screen layer') ),
-        boardScreenNodes = boardContainer.children('.screen'),
         that = this;
     
     // Extend this
@@ -22,33 +17,28 @@ WebDoc.PageView = $.klass({
     this.drawingDomNode = drawingDomNode;
     this.itemDomNode = itemDomNode;
     this.itemViews = {};
-    this.boardScreenNodes = boardScreenNodes;
     
     // Set up page view
     drawingDomNode.css("zIndex", 1000000);
     domNode.append( drawingDomNode );
     
     if (page.data.data.externalPage && !page.data.data.allowAnnotation) {
-    //  this.domNode.css({
-    //    width: "100%",
-    //    height: "100%"
-    //  });
+      boardContainer.css({
+        width: "100%",
+        height: "100%"
+      });
     }
     else {
         boardContainer
-        .css(page.data.data.css);
-        //this.domNode.css(page.data.data.css);
+        .css( page.data.data.css );
     }
     
     if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
       // Handle case where page is an external webpage
       // TODO: change this to use CSS classes
 
-      externalPage = $("<iframe/>")
-      //.css({
-      //  width: "100%",
-      //  height: "100%"
-      //});
+      externalPage = $("<iframe/>");
+      
       if (page.data.data.externalPageUrl) {
         if (page.data.data.allowAnnotation) {
           externalPage.attr("src", "http:\/\/" + document.domain + ":" + window.location.port + "/proxy/resolve?url=" + page.data.data.externalPageUrl);
@@ -95,7 +85,6 @@ WebDoc.PageView = $.klass({
     //  });
     //}
     this.domNode.append( itemDomNode );
-    //this.domNode.append( boardScreenNodes );
     if (page.items && $.isArray(page.items)) {
         $.each(page.items, function() {
             that.createItemView(this, "end");
