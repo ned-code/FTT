@@ -22,7 +22,7 @@ private
   
   def self.yml
     config_path = File.join(Rails.root, 'config', 'carrierwave.yml')
-    @default_storage = YAML::load_file(config_path)[Rails.env]
+    @default_storage ||= YAML::load_file(config_path)[Rails.env]
     @default_storage.to_options
   rescue
     raise StandardError, "CarrierWave config file '#{config_path}' doesn't exist or have right information about Rails '#{Rails.env}' environement."
