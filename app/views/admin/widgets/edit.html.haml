@@ -1,0 +1,38 @@
+%h1 Widget edition
+
+- semantic_form_for @widget, :url => admin_widget_path do |f|
+  - f.inputs do
+    = f.input :title
+    = f.input :description, :input_html => { :cols => 40, :rows => 5 }
+    = f.input :system_name
+    %p
+      Width: 
+      = @widget.properties[:width]
+    %p
+      Height:
+      = @widget.properties[:height]
+    %p
+      Version:
+      = @widget.properties[:version]
+    %p
+      Icon URL:
+      = @widget.properties[:icon_url]
+    %p
+      Index URL:
+      = @widget.properties[:index_url]
+    %p
+      Inspector URL:
+      = @widget.properties[:inspector_url]
+
+  - f.buttons do
+    = f.commit_button t('apply')
+    
+%h2 Update widget with new zip 
+- semantic_form_for @widget, :url => admin_widget_path, :html => { :enctype => 'multipart/form-data' } do |f|
+  - f.inputs do
+    = f.input :file, :as => :file
+
+  - f.buttons do
+    = f.commit_button t('update')
+    
+= link_to t('back'), admin_widgets_path

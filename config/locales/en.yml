@@ -7,6 +7,8 @@ en:
   edit: "edit"
   destroy: "destroy"
   update: "update"
+  apply: "apply"
+  upload: "upload"
   
   flash:
     notice:
@@ -17,6 +19,7 @@ en:
       widget_destroyed_successful: "Widget successfully deleted"
       widget_updated_successful: "Widget successfully updated"
       widget_updated_failed: "An error occured when attempting to update the widget"
+      widget_already_up_to_date: "Already up to date, no update needed"
       
   user_sessions:
     new:
