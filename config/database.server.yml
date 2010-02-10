@@ -6,16 +6,16 @@ development:
 
 test:
   adapter: mysql
-  database: uniboard_test
-  username: uniboard
-  password: uniboard
-  host: ub-db-mysql-staging
+  database: webdoc_test
+  username: webdoc
+  password: webdoc
+  host: localhost
 
 staging:
   adapter: mysql
-  database: uniboard_staging
-  username: uniboard
-  password: uniboard
+  database: webdoc_staging
+  username: webdoc
+  password: webdoc
   host: localhost
 
 production:
