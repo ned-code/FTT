@@ -87,7 +87,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
 
     // Title
     var title = "";
-    if (properties.title) title = widgetData.title;
+    if (widgetData.title) title = widgetData.title;
     this.detailsView.find('.app_title').text(title);
     
     // Version
