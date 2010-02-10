@@ -16,7 +16,6 @@ WebDoc.BoardController = $.klass({
   
   // Constructor     
   initialize: function(editable, autoFit) {
-    
     this.boardCageNode = $("#ribcage");
     this.boardContainerNode = $("#board-container");
     this.screenUnderlayNode = $("#underlay");
@@ -36,11 +35,6 @@ WebDoc.BoardController = $.klass({
     // used to keep track of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
     // we resize manually the div and we need to know what was the original size to define the new size.
     this._initialSize = null;
-    
-    this.screenNodes.bind('click', function(e){ console.log('HEY'); } );
-    
-    
-    //this._mouseClick.pBind(this) );
   },
   
   selection: function() {
@@ -121,7 +115,6 @@ WebDoc.BoardController = $.klass({
     //    this.zoom(1 + widthFactor);
     //  }
     //}
-    
     
     this._fireCurrentPageChanged();
     
@@ -261,7 +254,7 @@ WebDoc.BoardController = $.klass({
     }   
     if (MTools.Browser.WebKit) { 
       // Correct mouse vertical position according to the cursor icon height
-      // This doesn't work with a pen, as you can't change the registration point
+      // This doesn't work with a pen tablet, as you can't change the registration point
       // of the cursor.
       y += this.currentTool.getCursorHeight();
     }
@@ -294,37 +287,39 @@ WebDoc.BoardController = $.klass({
       this._editingItem = null;
     }
     
-    // do nothing if new selection is equal to old selection
-    if(itemViews.length == this._selection.length) {
-      var selectionIsEqual = true;
-      for (var i = 0; i < itemViews.length; i++) {
-        if (itemViews[i] != this._selection[i]) {
-          selectionIsEqual = false;
-          break;
+    if (itemViews) {
+      // do nothing if new selection is equal to old selection
+      if(itemViews.length === this._selection.length) {
+        var selectionIsEqual = true;
+        for (var i = 0; i < itemViews.length; i++) {
+          if (itemViews[i] != this._selection[i]) {
+            selectionIsEqual = false;
+            break;
+          }
+        }
+        if (selectionIsEqual) {
+          return;
         }
       }
-      if (selectionIsEqual) {
-        return;
-      }
+      
+      //deselect un-needed items
+      ddd("select item in view");
+      $.each(this._selection, function(index, itemToDeselect) {
+        if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
+          this.unselectItemViews([itemToDeselect]);
+        }
+      }.pBind(this));
+      
+      //select wanted items
+      $.each(itemViews, function(index, itemToSelect) {
+        if (jQuery.inArray(itemToSelect, this._selection) == -1) {
+          ddd("add item to selection");
+          this._selection.push(itemToSelect);
+        }
+        itemToSelect.select();
+      }.pBind(this));
+      this._fireSelectionChanged();
     }
-    
-    //deselect un-needed items
-    ddd("select item in view");
-    $.each(this._selection, function(index, itemToDeselect) {
-      if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
-        this.unselectItemViews([itemToDeselect]);
-      }
-    }.pBind(this));
-    
-    //select wanted items
-    $.each(itemViews, function(index, itemToSelect) {
-      if (jQuery.inArray(itemToSelect, this._selection) == -1) {
-        ddd("add item to selection");
-        this._selection.push(itemToSelect);
-      }
-      itemToSelect.select();
-    }.pBind(this));
-    this._fireSelectionChanged();
   },
   
   unselectAll: function() {
@@ -445,8 +440,6 @@ WebDoc.BoardController = $.klass({
     
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
-    
-    ddd("apply webkit transform");
     
     boardCss.WebkitTransformOrigin = "0px 0px"; //[ this._initialSize.width/2, 'px', ' ', this._initialSize.height/2, 'px' ].join('');
     boardCss.WebkitTransform = this._currentZoom === 1 ? "" : "scale(" + this._currentZoom + ")" ;
@@ -580,6 +573,9 @@ WebDoc.BoardController = $.klass({
     .bind("dblclick", this, this._mouseDblClick.pBind(this))
     .bind("mouseover", this, this._mouseOver.pBind(this))
     .bind("mouseout", this, this._mouseOut.pBind(this));
+
+    this.screenNodes
+    .bind('click', this.selectItemViews.pBind(this) );
   },
   
   _setItemPositionZ: function(item, position) {

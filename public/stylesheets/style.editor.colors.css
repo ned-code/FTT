@@ -52,6 +52,15 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .inspector .foot > ul,
 .inspector .foot > div        { background-color: hsl(194, 2%, 92%); }
 .inspector form.content       { background-color: hsl(194, 3%, 88%); }
+.inspector .box               { background-color: hsl(194, 6%, 56%);
+
+                                -webkit-background-size:  100%;
+                                -moz-background-size:     100%;
+                                background-size:          100%;
+
+                                -webkit-border-radius:    12px;
+                                -moz-border-radius:       12px;
+                                border-radius:            12px; }
 
 /* ui elements */
 .scroller-thumb,
@@ -65,16 +74,7 @@ body                          { background-color: hsl(194, 8%, 60%); }
                                 -moz-border-radius:       12px;
                                 border-radius:            12px; }
 
-.inspector .size-slider {       background: hsl(194, 6%, 56%) url('/images/ui/slider_size_bg.png') no-repeat 100% 0;
-                                
-                                -webkit-background-size:  100%;
-                                -moz-background-size:     100%;
-                                background-size:          100%;
-                                
-                                -webkit-border-radius:    12px;
-                                -moz-border-radius:       12px;
-                                border-radius:            12px;
-}
+.inspector .size-slider       { background: hsl(194, 6%, 56%) url('/images/ui/slider_size_bg.png') no-repeat 100% 0; }
 .scroller-window a            { color: rgb(68, 75, 77); }
 .scroller-handle,
 .inspector .size-slider .ui-corner-all {

@@ -43,6 +43,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
       'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
     '}');
+    
     // Set up default panel behaviour (show screen, show footer etc.)
     jQuery(".panel").panel();
         
