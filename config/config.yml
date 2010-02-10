@@ -7,7 +7,7 @@ test:
 staging:
   synch_openfire_users: true
   openfire_user_service_url: http://localhost:9090/plugins/userService/
-  openfire_user_service_secret: pt2AFc2B
+  openfire_user_service_secret: rt8BTv4C
 
 production:
   synch_openfire_users: true
