@@ -62,9 +62,9 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                 {
                     $(this).dialog('close');
                     var newDoc = new WebDoc.Document();
-                    newDoc.setTitle($("#wb-new-document-name").val());
-                    newDoc.setDescription($("#wb-new-document-description").val());
-                    newDoc.setKeywords($("#wb-new-document-keywords").val());
+                    newDoc.setTitle($("#wb-new-document-name").val(), true);
+                    newDoc.setDescription($("#wb-new-document-description").val(), true);
+                    newDoc.setKeywords($("#wb-new-document-keywords").val(), true);
                     newDoc.save(function(newObject, status)
                     {
                       if (status == "OK") 
@@ -95,9 +95,9 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                 {
                     ddd("edit doc with title " + $("#wb-edit-document-name").val());
                     $(this).dialog('close');
-                    that.editedDocument.setTitle($("#wb-edit-document-name").val());
-                    that.editedDocument.setDescription($("#wb-edit-document-description").val());
-                    that.editedDocument.setKeywords($("#wb-edit-document-keywords").val());
+                    that.editedDocument.setTitle($("#wb-edit-document-name").val(), true);
+                    that.editedDocument.setDescription($("#wb-edit-document-description").val(), true);
+                    that.editedDocument.setKeywords($("#wb-edit-document-keywords").val(), true);
                     that.editedDocument.save(function(persitedDoc)
                     {
                         that.filter.refreshDocument(persitedDoc);

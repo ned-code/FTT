@@ -14,6 +14,7 @@ WebDoc.handlers = {
   'library':              function(e) { WebDoc.application.rightBarController.showLib(e); },
   'item-inspector':       function(e) { WebDoc.application.rightBarController.showItemInspector(e); },
   'page-inspector':       function(e) { WebDoc.application.rightBarController.showPageInspector(e); },
+  'document-inspector':   function(e) { WebDoc.application.rightBarController.showDocumentInspector(e); },
   
   'prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },
   'next-page':            function(e) { WebDoc.application.pageEditor.nextPage(); },

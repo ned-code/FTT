@@ -3,6 +3,7 @@
  * @author Julien Bachmann
  */
 //= require <webdoc/controllers/page_inspector_controller>
+//= require <webdoc/controllers/document_inspector_controller>
 
 WebDoc.RightBarController = $.klass({
   
@@ -12,6 +13,7 @@ WebDoc.RightBarController = $.klass({
   LIBRARY_BUTTON_SELECTOR: "a[href='#library']",
   PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
   ITEM_INSPECTOR_BUTTON_SELECTOR: "a[href='#item-inspector']",
+  DOCUMENT_INSPECTOR_BUTTON_SELECTOR: "a[href='#document-inspector']",
   
   STATE_BUTTON_SELECTOR: ".state-right-panel",
   PANEL_SELECTOR: "#right_bar",
@@ -111,6 +113,23 @@ WebDoc.RightBarController = $.klass({
       inspector.buttonSelector = this.ITEM_INSPECTOR_BUTTON_SELECTOR;
       
       this.contentMap.itemInspector = inspector;
+    }
+    
+    this._changePanelContent(inspector);
+    this._changeButtonState(inspector);
+    this.showRightBar();
+  },
+  
+  showDocumentInspector: function() {
+    ddd("[RightBarController] showDocumentInspector");
+    var inspector = this.contentMap.documentInspector;
+    
+    if (!inspector) { // lazily load the page inspector
+      ddd('[RightBarController] Load Document Inspector');
+      inspector = WebDoc.application.documentInspectorController = new WebDoc.DocumentInspectorController();
+      inspector.buttonSelector = this.DOCUMENT_INSPECTOR_BUTTON_SELECTOR;
+    
+      this.contentMap.documentInspector = inspector;
     }
     
     this._changePanelContent(inspector);

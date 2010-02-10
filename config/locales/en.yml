@@ -45,6 +45,7 @@ en:
   label:
     page_inspector: "Page inspector"
     item_inspector: "Item inspector"
+    document_inspector: "Document properties"
     documents: "Documents"
     all_items_by_date: "All items"
     owned_by_me: "Owned by me"
@@ -54,10 +55,13 @@ en:
     edit_document: "Edit document"
     name: "Name"
     description: "Description"
-    keywords: "Any keywords (separated by comma)"
+    keywords: "Some keywords (separated by comma)"
     creationDate: "Creation date"
     change_access_document: "Modify document access"
     everybody: "Everybody"
+    choose_title: "Choose a title"
+    new_webdoc: "a new webdoc"
+    add_description: "Add a description"
   alert:
     destroy_confirmation: "Are you sure?"
 
