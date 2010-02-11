@@ -7,6 +7,8 @@ en:
   edit: "edit"
   destroy: "destroy"
   update: "update"
+  apply: "apply"
+  upload: "upload"
   
   flash:
     notice:
@@ -16,6 +18,8 @@ en:
       user_confirmed: "Your user is confirmed!"
       widget_destroyed_successful: "Widget successfully deleted"
       widget_updated_successful: "Widget successfully updated"
+      widget_updated_failed: "An error occured when attempting to update the widget"
+      widget_already_up_to_date: "Already up to date, no update needed"
       
   user_sessions:
     new:
@@ -44,6 +48,7 @@ en:
   label:
     page_inspector: "Page inspector"
     item_inspector: "Item inspector"
+    document_inspector: "Document properties"
     documents: "Documents"
     all_items_by_date: "All items"
     owned_by_me: "Owned by me"
@@ -52,9 +57,14 @@ en:
     create_new_document: "Create a new document"
     edit_document: "Edit document"
     name: "Name"
+    description: "Description"
+    keywords: "Some keywords (separated by comma)"
     creationDate: "Creation date"
     change_access_document: "Modify document access"
     everybody: "Everybody"
+    choose_title: "Choose a title"
+    new_webdoc: "a new webdoc"
+    add_description: "Add a description"
   alert:
     destroy_confirmation: "Are you sure?"
 

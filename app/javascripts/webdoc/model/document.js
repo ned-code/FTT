@@ -11,8 +11,36 @@ WebDoc.Document = $.klass(MTools.Record, {
     return this.data.title;
   },
   
-  setTitle: function(title) {
+  description: function() {
+    return this.data.description;
+  },
+  
+  keywords: function() {
+    return this.data.keywords;
+  },
+  
+  setTitle: function(title, skipSave) {
     this.data.title = title;
+    if(!skipSave && !skipSave == true) {
+      this.firePropertiesChanged();
+      this.save();
+    }
+  },
+  
+  setDescription: function(description, skipSave) {
+    this.data.description = description;
+    if(!skipSave && !skipSave == true) {
+      this.firePropertiesChanged();
+      this.save();
+    }
+  },
+  
+  setKeywords: function(keywords, skipSave) {
+    this.data.keywords = keywords;
+    if(!(skipSave && skipSave == true)) {
+      this.firePropertiesChanged();
+      this.save();
+    }
   },
 
   refresh: function($super, json) {
@@ -160,6 +188,14 @@ WebDoc.Document = $.klass(MTools.Record, {
         this.listeners[i].pageMoved(movedPage, newPosition, previousPosition);
       }
     }      
+  },
+  
+  firePropertiesChanged: function() {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if(this.listeners[i].documentPropertiesChanged) {
+        this.listeners[i].documentPropertiesChanged();
+      }
+    }
   },
   
   movePage: function(movedPageUuid, newPosition) {

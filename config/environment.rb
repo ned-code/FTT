@@ -33,6 +33,7 @@ Rails::Initializer.run do |config|
   config.gem 'mini_magick'
   config.gem 'right_aws'
   config.gem 'will_paginate'
+  config.gem 'formtastic'
   
   config.gem 'uuidtools' # for has_uuid plugin
   

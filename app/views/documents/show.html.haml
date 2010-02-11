@@ -136,13 +136,13 @@
       %a.state-right-panel{ :href => "#item-inspector", :title => "Show Inspector" } Item
     %li>
       %a.state-right-panel.current{ :href => "#page-inspector", :title => "Show Page inspector" } Page
+    %li>
+      %a.state-right-panel{ :href => "#document-inspector", :title => "Show Document inspector" } Document
         
   = render :partial => 'item_inspector'
   = render :partial => 'library'
   = render :partial => 'page_inspector'
-
-#screen.screen.layer
-
+  = render :partial => 'document_inspector'
 :javascript
   
     var WebDoc;

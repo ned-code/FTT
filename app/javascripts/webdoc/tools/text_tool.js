@@ -52,9 +52,6 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     ddd("Text tool: entering edit mode");
 
     this.textView = textView;
-    if (this.textView.itemDomNode.hasClass("empty")) {
-      this.textView.itemDomNode.html("");
-    }
     this.delegate.enterEditMode(textView.itemDomNode[0]);
     this.delegate.activateToolbar(true);
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
@@ -67,20 +64,10 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   
   applyTextContent: function(content, classValue) {
     var previousContent = this.textView.item.data.data.innerHTML;
-    var isEmpty = this.textView.item.data.data['class'].indexOf("empty") !== -1;
-    ddd("previous text content", previousContent, isEmpty);    
-    var previousClass = isEmpty? "empty": null;
+    ddd("previous text content", previousContent);
+    var previousClass = this.textView.item.data.data['class'];
     this.textView.item.data.data.innerHTML = content;
-    if (classValue === "empty" && !isEmpty) {
-      ddd("add empty class");
-      this.textView.item.data.data['class'] += " empty";
-      this.textView.itemDomNode.addClass("empty");  
-    }
-    else if (!classValue && isEmpty) {
-      ddd("remove empty class");
-      this.textView.item.data.data['class'] = this.textView.item.data.data['class'].replace("empty", "");
-      this.textView.itemDomNode.removeClass("empty");
-    }    
+    this.textView.item.data.data['class'] = classValue;
     this.textView.item.fireInnerHtmlChanged();
     this.textView.item.save();
     WebDoc.application.undoManager.registerUndo(function() {
