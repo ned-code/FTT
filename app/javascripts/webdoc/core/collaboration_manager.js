@@ -153,7 +153,7 @@ WebDoc.CollaborationManager = $.klass(
           WebDoc.application.pageEditor.currentDocument.createOrUpdatePage(messageObject);
         }
         if (messageObject.item) {   
-          var modifiedPage = MTools.ServerManager.cache.get(WebDoc.Item, messageObject.item.page_id);       
+          var modifiedPage = MTools.ServerManager.cache.get(WebDoc.Page, messageObject.item.page_id);       
           if (modifiedPage) {
             modifiedPage.createOrUpdateItem(messageObject);
           }
