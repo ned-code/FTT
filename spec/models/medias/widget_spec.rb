@@ -100,3 +100,21 @@ describe Medias::Widget do
    
   end
 end
+
+# == Schema Information
+#
+# Table name: medias
+#
+#  id          :integer         not null, primary key
+#  uuid        :string(36)
+#  type        :string(255)
+#  created_at  :datetime
+#  updated_at  :datetime
+#  properties  :text(65537)
+#  user_id     :integer
+#  file        :string(255)
+#  system_name :string(255)
+#  title       :string(255)
+#  description :text
+#
+
