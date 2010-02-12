@@ -3,10 +3,17 @@
  *  Global, base styles
  */
 
-body{
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 75%;
+
+/* Typography */
+
+html {
+    font-size:100.01%;
 }
+body{
+    font-size: 75%;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
 
 
 
@@ -32,8 +39,3 @@ form div {display:inline-block;}
 
 * html .clearfix,
 * html form div {height:1%;}*/
-
-
-/* Typography */
-
-em { font-style: italic; }

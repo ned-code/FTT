@@ -136,8 +136,7 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .item_selected  { -webkit-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   -moz-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   box-shadow: 0 0 8px rgba(176, 227, 0, 1);
-                  border-color: rgba(176, 227, 0, 0.8);
-                /*border-color: rgba(197, 255, 0, 0.75);*/ }
+                  border-color: rgba(176, 227, 0, 0.8); }
 
 
 /* The page browser */
@@ -286,3 +285,8 @@ a[href="#page-inspector"]           { background-position: 0 -1152px; }
 a[href="#page-inspector"]:hover     { background-position: 0 -1216px; }
 a[href="#page-inspector"]:active    { background-position: 0 -1280px; }
 a[href="#page-inspector"].current   { background-position: 0 -1344px; }
+
+a[href="#document-inspector"]         { background-position: 0 -1408px; }
+a[href="#document-inspector"]:hover   { background-position: 0 -1472px; }
+a[href="#document-inspector"]:active  { background-position: 0 -1536px; }
+a[href="#document-inspector"].current { background-position: 0 -1600px; }

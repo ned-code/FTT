@@ -4,14 +4,7 @@
  *
  */
 
-html, body {
-
-}
-
-body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 75%;
-}
+body {}
 
 a { color: #3B9EEF; }
 a{ outline: none;}

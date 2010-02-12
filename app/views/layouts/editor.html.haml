@@ -41,6 +41,9 @@
     = stylesheet_link_tag 'colorpicker'
     = stylesheet_link_tag 'toolbar'
     
+    %link{ :rel => "stylesheet", :href => "/themes/#{THEME}/css/typography.css", :type => "text/css", :charset => "utf-8" }
+    %script{ :src => "/themes/#{THEME}/js/script.js", :type => "text/javascript" }
+    
     -if (@is_reader)  
       %body.editor.embed-mode
     -else

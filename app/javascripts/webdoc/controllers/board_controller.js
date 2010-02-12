@@ -16,7 +16,7 @@ WebDoc.BoardController = $.klass({
   
   // Constructor     
   initialize: function(editable, autoFit) {
-    this.boardCageNode = $("#ribcage");
+    this.boardCageNode = $("#webdoc");
     this.boardContainerNode = $("#board-container");
     this.screenUnderlayNode = $("#underlay");
     this.screenNodes = this.boardCageNode.find('.board-screen');

@@ -51,6 +51,9 @@
             %a#toolbar_panel_button_insertOrderedList{ :href => 'javascript:void(0);', :title => "Insert Ordered List", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertOrderedList\');" }
               %ol
                 %li ol Numbered List
+          %li
+            %a{ :href => "#", :title => "Insert Quotation", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertQuotation\');" }
+              %blockquote blockquote Quotation
 
         -#%select#toolbar_panel_button_fontName{ :onchange => "WebDoc.application.textTool.delegate.editorExec(\'fontName\',this.value);" }
         -#  %option{ :value => 'Times New Roman' } Times New Roman
@@ -267,7 +270,7 @@
         %div
           %h2 Draw Tool
       %div.content
-        %ul#colors.spaceless.icons-only.thumbs.index
+        %ul#colors.ui-block.spaceless.icons-only.thumbs.index
           -# Safari or SVG or something doesn't like rgba or hsla colors
           %li>
             %a{ :href => "#draw-color", :style => "background-color: black;", :title => "Jet" }

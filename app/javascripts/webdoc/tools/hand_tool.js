@@ -9,7 +9,7 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
     originalMovingPos: null,
     initialize: function($super, selector, boardClass) {
       $super(selector, boardClass);
-      this.scrollNode = $('#ribcage');
+      this.scrollNode = $('#webdoc');
     },
     
     selectTool: function($super) {

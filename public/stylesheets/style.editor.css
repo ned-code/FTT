@@ -13,11 +13,18 @@ body {
     overflow: hidden;
     position: absolute;
     
+/*  Prevent people overriding the body font size,
+    which could wreak havoc with the interface.   */
+    font-size: 100% !important;
+    
     /* push the scrollbars outside the window */
     padding: 0 15px 15px 0;
     margin: 0;
 }
-
+.panel {
+    /* Set interface font-size to 12px */
+    font-size: 75%;
+}
 .panel-ghost {
     /* WebKit gives cells a 3px cellpadding when they have content.
        Set to display: none to get round it */
@@ -38,23 +45,23 @@ body {
 
 /* Manage layering */
 
-#ribcage    { z-index: 1; }
+#webdoc     { z-index: 1; }
 .panel      { z-index: 2; }
 
-#ribcage .center    { z-index: 2; }
+#webdoc .center     { z-index: 2; }
 #left-panel-ghost,
 #right-panel-ghost  { z-index: 1; }
 
-#ribcage .board-screen    { z-index: 1000000; }  /* svg layer has 999999 */
+#webdoc .board-screen   { z-index: 1000000; }  /* svg layer has 999999 */
 
 
 /* Interface panels */
 
 /* Compensate for height of toolbars */
-#ribcage {
+#webdoc {
     padding-top: 56px;
 }
-.embed-mode #ribcage {
+.embed-mode #webdoc {
     padding-top: 32px;
 }
 
@@ -669,7 +676,7 @@ a:hover { color: #0069BF;}*/
 #board.insert-html-tool {}
 #board.insert-text-tool {}
 
-.board-style {
+/*.board-style {
   font-family:Helvetica, Arial, sans-serif;
   font-size: 2.5em;
 }
@@ -684,7 +691,7 @@ a:hover { color: #0069BF;}*/
 }
 .board-style ol li, .board-style ul li {
   margin-bottom: 0.2em;
-}
+}*/
 
 /* == Item view = */
 .drag_handle {
@@ -798,6 +805,10 @@ a:hover { color: #0069BF;}*/
 }
 
 .inspector .index {
+}
+
+.ui-block {
+    margin-bottom: 32px;
 }
 
 .inspector .size-slider-value {
