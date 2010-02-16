@@ -184,10 +184,10 @@ private
               File.open(local_path, 'wb') do |file|
                 file << zip_file.get_input_stream.read
               end 
-              puts "File saved to path:" + local_path
+              #puts "File saved to path:" + local_path
             end
           else
-            puts "File saved on S3: " + filePath
+            #puts "File saved on S3: " + filePath
             @s3.put(s3_bucket, filePath, zip_file.get_input_stream.read, s3_headers)
           end
         end
@@ -196,6 +196,7 @@ private
   end  
   
 end
+
 
 
 
@@ -213,5 +214,7 @@ end
 #  user_id     :integer
 #  file        :string(255)
 #  system_name :string(255)
+#  title       :string(255)
+#  description :text
 #
 
