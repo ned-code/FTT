@@ -136,9 +136,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                     $(this).dialog('close');
                 }
             }
-        });
-        
-        
+        });    
     },
     
     editDocument: function(e)
@@ -153,6 +151,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         newDocNameField.val(new Date().toLocaleDateString());
         newDocDescriptionField.val("");
         newDocKeywordsField.val("");
+        $("#wb-new-document-size-classic")[0].checked = true;
         $("#wb-new-document-dialog").dialog('open');
     },
     

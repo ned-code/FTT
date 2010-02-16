@@ -33,19 +33,19 @@
       %br
       %label{ :for => "document_size" }= t "label.document_size_title"
       %br
+      %input#wb-new-document-size-custom{ :type => "radio", :name => "wb-new-document-size", :value => "custom" }
       = t('label.document_size.custom')
-      %input{ :type => "radio", :name => "wb-new-document-size", :value => "custom" }
       = t('label.document_size.width')
       %input#wb-new-document-size-custom-width{ :type => "text" , :size => 6}
       = t('label.document_size.height')
       %input#wb-new-document-size-custom-height{ :type => "text" , :size => 6}
       %br
+      %input#wb-new-document-size-iPhone{ :type => "radio", :name => "wb-new-document-size", :value => "iPhone" }
       = t('label.document_size.iPhone')
-      %input{ :type => "radio", :name => "wb-new-document-size", :value => "iPhone" }
+      %input#wb-new-document-size-classic{ :type => "radio", :name => "wb-new-document-size", :value => "classic" }
       = t('label.document_size.classic')
-      %input{ :type => "radio", :name => "wb-new-document-size", :value => "classic" }
+      %input#wb-new-document-size-iPad{ :type => "radio", :name => "wb-new-document-size", :value => "iPad" }
       = t('label.document_size.iPad')
-      %input{ :type => "radio", :name => "wb-new-document-size", :value => "iPad" }
 
 #wb-edit-document-dialog{ :style => "display:none",:title => t('label.edit_document') }
   %form#wb-edit-form{ :action => ""}
@@ -64,19 +64,19 @@
       %br
       %label{ :for => "document_size" }= t "label.document_size_title"
       %br
-      = t('label.document_size.custom')
       %input#wb-edit-document-size-custom{ :type => "radio", :name => "wb-edit-document-size", :value => "custom" }
+      = t('label.document_size.custom')
       = t('label.document_size.width')
       %input#wb-edit-document-size-custom-width{ :type => "text",  :size => 6}
       = t('label.document_size.height')
       %input#wb-edit-document-size-custom-height{ :type => "text", :size => 6}
       %br
-      = t('label.document_size.iPhone')
       %input#wb-edit-document-size-iPhone{ :type => "radio", :name => "wb-edit-document-size", :value => "iPhone" }
-      = t('label.document_size.classic')
+      = t('label.document_size.iPhone')
       %input#wb-edit-document-size-classic{ :type => "radio", :name => "wb-edit-document-size", :value => "classic" }
-      = t('label.document_size.iPad')
+      = t('label.document_size.classic')
       %input#wb-edit-document-size-iPad{ :type => "radio", :name => "wb-edit-document-size", :value => "iPad" }
+      = t('label.document_size.iPad')
          
 
 #wb-change-access-dialog{ :style => "display:none",:title => t('label.change_access_document') }
