@@ -21,3 +21,8 @@ end
 
 Factory.define :media do |f|
 end
+
+Factory.define :widget, :class => Medias::Widget do |f|
+  f.file { File.open(Rails.root.join('spec','fixtures','widget.zip')) }
+  f.system_name "widget"
+end
