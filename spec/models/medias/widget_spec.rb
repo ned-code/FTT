@@ -79,10 +79,10 @@ describe Medias::Widget do
    
   describe 'with valid widget and update file' do
     before(:all) do
-      @widget = Medias::Widget.new(:file => File.open(fixture_path + '/widget.zip'), :system_name => 'poll')
-      @widget.save
+      Medias::Widget.create(:file => File.open(fixture_path + '/widget.zip'), :system_name => 'poll')
+      @widget = Medias::Widget.last
       
-      @widget.update_with_file(File.open(fixture_path + '/widget_updated.zip'))
+      @widget.update_attributes(:file => File.open(fixture_path + '/widget_updated.zip'))
       #@widget.save # Will trigger before_save and after_save, in which actions are done
     end
    

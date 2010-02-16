@@ -16,10 +16,11 @@ en:
       login_successfull: "Login successful!"
       logout_successfull: "Logout successful!"
       user_confirmed: "Your user is confirmed!"
-      widget_destroyed_successful: "Widget successfully deleted"
-      widget_updated_successful: "Widget successfully updated"
-      widget_updated_failed: "An error occured when attempting to update the widget"
-      widget_already_up_to_date: "Already up to date, no update needed"
+      widget:
+        destroyed_successful: "Widget successfully deleted"
+        updated_successful: "Widget successfully updated"
+        updated_failed: "An error occured when attempting to update the widget"
+        already_up_to_date: "Already up to date, no update needed"
       
   user_sessions:
     new:
