@@ -141,7 +141,6 @@ private
               #puts "File saved to path:" + local_path
             end
           else
-            #puts "File saved on S3: " + filePath
             @s3 ||= RightAws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
             @s3.put(file.s3_bucket, filePath, zip_file.get_input_stream.read, 'x-amz-acl' => 'public-read')
           end
