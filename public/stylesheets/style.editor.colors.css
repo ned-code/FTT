@@ -13,7 +13,11 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 /* Panels */
 
-.toolbar-panel                { background-color: hsl(194, 2%, 92%);
+.toolbar-panel                { background-color: hsla(194, 7%, 41%, 0.92);
+                                background-image: url('/images/bg.png');
+                                background-position: 0 0;
+                                background-repeat: repeat-x;
+                                border-color: hsla(194, 12%, 30%, 0.8);
                                 -webkit-box-shadow: 0 0 32px hsla(14, 24%, 35%, 0.6);
                                 -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
                                 box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
@@ -25,7 +29,9 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .vertical.panel-tools li      { border-color: hsla(194, 12%, 30%, 0.8); }
 .panel-tools a.current        { background-color: hsla(194, 12%, 30%, 0.8); }
 
+/*  */
 
+.logo                         { background-image: url('/images/logo.png'); }
 
 /* Tools */
 

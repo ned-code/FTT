@@ -59,33 +59,17 @@ body {
 
 /* Compensate for height of toolbars */
 #webdoc {
-    padding-top: 56px;
-}
-.embed-mode #webdoc {
     padding-top: 32px;
 }
-
 .left-panel,
 .right-panel {
-    top: 58px;
+    top: 38px;
 }
-.embed-mode .left-panel,
-.embed-mode .right-panel {
-    top: 34px;
-}
-.titlebar-panel {
-    height: 25px;
-    padding: 0 4px;
-    overflow: hidden;
-}
-
 .toolbar-panel {
-    top: 24px;
-    height: 32px;
-    padding: 0 4px;
-}
-.embed-mode .toolbar-panel {
-    top: 0px;
+    top: 0;
+    height: 36px;
+    padding: 0 6px;
+    border-bottom: 2px solid;
 }
 .left-panel {
     width: 164px;
@@ -96,7 +80,14 @@ body {
     left: 100%;
     margin-left: 0px;
 }
-
+.toolbar-panel .tools {
+    margin-top: 2px;
+}
+.logo {
+    float: left;
+    margin: 6px 12px 0 12px;
+    width: 120px; height: 25px;
+}
 
 /* Fonts - just a few to test for now */
 /* Hey! @import doesn't work for @font-face ... what gives?  Use link tags in editor.haml */

@@ -16,9 +16,47 @@
     %div#right-panel-ghost
       %div.panel-ghost
 
-= render :partial => "layouts/main_editor_toolbar"
+-#= render :partial => "layouts/main_editor_toolbar"
 
 #toolbar.toolbar-panel.panel
+  
+  %h1.logo
+  
+  %ul#tb_1_utilities
+    %li#tb_1_utilities_preview.toggle_preview
+      %a{ :href => "#mode-toggle"}
+        quick preview
+    %li#tb_1_utilities_docname
+      %h2#tb_1_document_title=@document.title
+      %span#current_page 3
+      %span#separation /
+      %span#total_page 25
+    %li#tb_1_utilities_settings
+      %a#tb_1_utilities_settings_trigger{ :href => "#"}
+        %img{ :src => "/images/icons/settings.png", :alt => "Document settings"}
+      %ul#tb_1_utilities_settings_dropdown
+        %li.action_button
+          %a{ :href => "#"} Save
+        %li.action_button
+          %a{ :href => "#"} Presentation mode
+        %li.action_button
+          %a{ :href => "#"} Invite collaborators
+        %li.action_button
+          %a{ :href => "#"} Import
+        %li.action_button
+          %a{ :href => "#"} Publish        
+        %li.action_button
+          %a{ :href => "#"} Extend Uniboard
+        %li.action_button
+          %a{ :href => "#"} Export
+        %li.action_button
+          %a{ :href => "#"} Print
+        %li#develop_sub_menu 
+          %a{ :href => "#"} Develop
+          %ul
+            %li.action_button
+              %a#debug-button{ :href => "#disable-html"} Disable HTML
+
   %ul.pages-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     -#%li>
@@ -106,7 +144,7 @@
         %h2 Pages
         %ul.inspector-views.views.thumbs.index.icons-only
           %li>
-            %a{ :class => "state-pages-thumbs", :href => "#hide-thumbs", :title => "Toggle thumbs" }
+            %a{ :class => "state-pages-thumbs current", :href => "#hide-thumbs", :title => "Toggle thumbs" }
           %li>
             %a{ :class => "state-pages-thumbs", :href => "#show-thumbs", :title => "Toggle thumbs" }
     
