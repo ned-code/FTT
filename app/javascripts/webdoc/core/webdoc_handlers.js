@@ -40,5 +40,7 @@ WebDoc.handlers = {
   'mode-toggle':          function(e) { WebDoc.application.boardController.toggleInteractionMode(); },
   'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); },
   
+  'show-thumbs':          function(e) { WebDoc.application.pageBrowserController.showThumbs(e); },
+  'hide-thumbs':          function(e) { WebDoc.application.pageBrowserController.hideThumbs(e); },
   'toggle-thumbs':        function(e) { WebDoc.application.pageBrowserController.toggleThumbs(e); }
 };

@@ -581,7 +581,6 @@ a:hover { color: #0069BF;}*/
  
 /* 1. With border, looks like an extension of the title block */
 
-/*
 .pages li .thumb {
   position: relative;
   width: 120px; height: 75px;
@@ -622,12 +621,11 @@ a:hover { color: #0069BF;}*/
   left: 0; top: 50%;
   margin-top: -45px;
 }
-*/
 
 /* 2. As a sheet, looks like it appears from a slot in the title block */
 
 /* Thumb height is height+14, to account for shadow */
-.pages li .thumb {
+/*.pages li .thumb {
   position: relative;
   width: 136px; height: 104px; 
   margin: 0 auto;
@@ -650,7 +648,7 @@ a:hover { color: #0069BF;}*/
 .hide-thumbs li .thumb {
   height: 0;
   border: none;
-}
+}*/
 
 /*******************/
 /* = board part = */

@@ -247,18 +247,19 @@ a[href="#to-front"]                 { background-position: 0 -2560px; }
 a[href="#to-front"]:hover           { background-position: 0 -2624px; }
 a[href="#to-front"]:active          { background-position: 0 -2688px; }
 
-
+.inspector-views a,
 .panel-tools a                      { background-image: url('/images/panel-tools.png'); }
 
-/* A bit of a special case, the toggle buttons
+/* A bit of a special case, the toggle buttons.
    They may even deserve their own list class */
 
-a[href="#left-panel-toggle"].active
+a[href="#left-panel-toggle"].active,
 a[href="#right-panel-toggle"]                   { background-position: 0 0; background-color: transparent; }
 a[href="#left-panel-toggle"].active:hover,
 a[href="#right-panel-toggle"]:hover             { background-position: 0 -64px; background-color: transparent;}
 a[href="#left-panel-toggle"].active:active,
 a[href="#right-panel-toggle"]:active            { background-position: 0 -128px; background-color: transparent;}
+
 a[href="#left-panel-toggle"],
 a[href="#right-panel-toggle"].active           { background-position: 0 -192px; background-color: transparent;}
 a[href="#left-panel-toggle"]:hover,
@@ -290,3 +291,11 @@ a[href="#document-inspector"]         { background-position: 0 -1408px; }
 a[href="#document-inspector"]:hover   { background-position: 0 -1472px; }
 a[href="#document-inspector"]:active  { background-position: 0 -1536px; }
 a[href="#document-inspector"].current { background-position: 0 -1600px; }
+
+a[href="#hide-thumbs"]              { background-position: -4px -1668px; }
+a[href="#hide-thumbs"]:hover        { background-position: -4px -1732px; }
+a[href="#hide-thumbs"].current      { background-position: -4px -1796px; }
+
+a[href="#show-thumbs"]              { background-position: -4px -1860px; }
+a[href="#show-thumbs"]:hover        { background-position: -4px -1924px; }
+a[href="#show-thumbs"].current      { background-position: -4px -1988px; }

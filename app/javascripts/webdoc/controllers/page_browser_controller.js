@@ -16,7 +16,10 @@ WebDoc.PageBrowserController = $.klass({
   PAGE_THUMB_CLASS: "page-thumb",
   PAGE_THUMB_SELECTOR: ".page-thumb",
   HIDE_THUMB_CLASS: "hide-thumbs",
-  THUMB_STATE_BUTTON_SELECTOR: "a[href='#toggle-thumbs']",
+  THUMB_STATE_BUTTONS_SELECTOR: '.state-pages-thumbs',
+  THUMB_STATE_TOGGLE_SELECTOR: "a[href='#toggle-thumbs']",
+  THUMB_STATE_SHOW_SELECTOR: "a[href='#show-thumbs']",
+  THUMB_STATE_HIDE_SELECTOR: "a[href='#hide-thumbs']",
   LEFT_BAR_BUTTON_SELECTOR: "a[href='#left-panel-toggle']",
   NUMBER_SELECTOR: '.number',
   THUMB_SELECTOR: '.thumb',
@@ -349,27 +352,58 @@ WebDoc.PageBrowserController = $.klass({
     }
   },
   
-  // Methods return current (boolean) state of thumbs
-  
-  toggleThumbs: function() {
-    return this._stateThumbs ? this.hideThumbs() : this.showThumbs() ;
+  _showThumbs: function() {
+    var browserNode = this.domNodeBrowserItems,
+        thumbs = browserNode.find( this.THUMB_SELECTOR ),
+        thumbToggles = $( this.THUMB_STATE_BUTTONS_SELECTOR );
+    
+    browserNode.removeClass( this.HIDE_THUMB_CLASS );    
+    thumbs
+    .css({
+      height: 0,
+      marginBottom: 0,
+      borderBottomWidth: 0
+    })
+    .animate({
+      height: 75,
+      marginBottom: 14,
+      borderBottomWidth: 6
+    }, {
+    //.css({
+    //  height: 0
+    //})
+    //.animate({
+    //  height: 104
+    //}, {
+      duration: 200
+    });
+    
+    thumbToggles
+    .removeClass( this.CURRENT_CLASS )
+    .filter( this.THUMB_STATE_SHOW_SELECTOR )
+    .addClass( this.CURRENT_CLASS );
+    
+    this._stateThumbs = true;
+    
+    return this._stateThumbs;
   },
   
-  hideThumbs: function() {
+  _hideThumbs: function() {
     var browserNode = this.domNodeBrowserItems,
         thumbs = browserNode.find( this.THUMB_SELECTOR ),
         hideThumbClass = this.HIDE_THUMB_CLASS,
-        hideThumbFlag = true;
+        hideThumbFlag = true,
+        thumbToggles = $( this.THUMB_STATE_BUTTONS_SELECTOR );
     
     thumbs
-    //.animate({
-    //  height: 0,
-    //  marginBottom: 0,
-    //  borderBottomWidth: 0
-    //}, {
     .animate({
-      height: 0
+      height: 0,
+      marginBottom: 0,
+      borderBottomWidth: 0
     }, {
+    //.animate({
+    //  height: 0
+    //}, {
       duration: 200,
       complete: function(){
         // complete fires for every item in the list
@@ -381,40 +415,28 @@ WebDoc.PageBrowserController = $.klass({
       }
     });
     
-    $( this.THUMB_STATE_BUTTON_SELECTOR ).removeClass( this.ACTIVE_CLASS );
+    thumbToggles
+    .removeClass( this.CURRENT_CLASS )
+    .filter( this.THUMB_STATE_HIDE_SELECTOR )
+    .addClass( this.CURRENT_CLASS );
     
     this._stateThumbs = false;
+    
     return this._stateThumbs;
   },
   
+  // Exposed methods return current (boolean) state of thumbs
+  
   showThumbs: function() {
-    var browserNode = this.domNodeBrowserItems,
-        thumbs = browserNode.find( this.THUMB_SELECTOR );
-    
-    browserNode.removeClass( this.HIDE_THUMB_CLASS );    
-    thumbs
-    //.css({
-    //  height: 0,
-    //  marginBottom: 0,
-    //  borderBottomWidth: 0
-    //})
-    //.animate({
-    //  height: 75,
-    //  marginBottom: 14,
-    //  borderBottomWidth: 6
-    //}, {
-    .css({
-      height: 0
-    })
-    .animate({
-      height: 104
-    }, {
-      duration: 200
-    });
-    
-    $( this.THUMB_STATE_BUTTON_SELECTOR ).addClass( this.ACTIVE_CLASS );
-    
-    this._stateThumbs = true;
-    return this._stateThumbs;
+    return ( !this._stateThumbs ) ? this._showThumbs() : this._stateThumbs ;
+  },
+
+  hideThumbs: function() {
+    return ( this._stateThumbs ) ? this._hideThumbs() : this._stateThumbs ;
+  },
+  
+  toggleThumbs: function() {
+    return this._stateThumbs ? this._hideThumbs() : this._showThumbs() ;
   }
+
 });

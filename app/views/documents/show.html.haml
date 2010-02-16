@@ -104,12 +104,17 @@
     %div.head
       %div
         %h2 Pages
+        %ul.inspector-views.views.thumbs.index.icons-only
+          %li>
+            %a{ :class => "state-pages-thumbs", :href => "#hide-thumbs", :title => "Toggle thumbs" }
+          %li>
+            %a{ :class => "state-pages-thumbs", :href => "#show-thumbs", :title => "Toggle thumbs" }
     
     #page_browser_container.content
       -#%ul.page_browser_numbered_list.vertical.numbers.index
       %ul.page_browser_items.vertical.pages.index
     
-    #page_browser_control_bar.foot
+    %div.foot
       %ul.pages-tools.tools.thumbs.index.icons-only
         %li>
           %a{ :href => "#add-page", :title => "Add page" }
@@ -123,8 +128,6 @@
         %li>
           %a{ :href => "#remove-page", :title => "Copy page" }
             Remove
-        %li>
-          %a{ :href => "#toggle-thumbs", :title => "Toggle thumbs" }
 
 #right_bar.right-panel.panel
   %ul.panel-tools.vertical.divided.icons-only.thumbs.index
