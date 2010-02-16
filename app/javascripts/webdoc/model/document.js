@@ -19,6 +19,10 @@ WebDoc.Document = $.klass(MTools.Record, {
     return this.data.keywords;
   },
   
+  size: function() {
+    return this.data.size;
+  },
+  
   setTitle: function(title, skipSave) {
     this.data.title = title;
     if(!skipSave && !skipSave == true) {
@@ -39,6 +43,13 @@ WebDoc.Document = $.klass(MTools.Record, {
     this.data.keywords = keywords;
     if(!(skipSave && skipSave == true)) {
       this.firePropertiesChanged();
+      this.save();
+    }
+  },
+  
+  setSize: function(size, skipSave) {
+    this.data.size = size;
+    if(!(skipSave && skipSave == true)) {
       this.save();
     }
   },
@@ -234,5 +245,8 @@ $.extend(WebDoc.Document, {
   },
   rootUrl: function(args) {
     return "";
-  }    
+  },
+  classNameHttpPost: function() {
+    return this.className() + "s";
+  } 
 });

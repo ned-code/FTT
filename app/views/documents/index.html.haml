@@ -17,7 +17,7 @@
   #wb-document-list-container
 
 #wb-new-document-dialog{ :style => "display:none", :title => t('label.create_new_document') }
-  %form{ :action => ""}
+  %form#wb-new-form{ :action => ""}
     %fieldset
       %label{ :for => "name" }= t "label.name"
       %br
@@ -30,9 +30,25 @@
       %label{ :for => "keywords" }= t "label.keywords"
       %br
       %input#wb-new-document-keywords.ui-corner-all{ :type => "text", :name => "wb-new-document-keywords", :style => "width:100%"}
+      %br
+      %label{ :for => "document_size" }= t "label.document_size_title"
+      %br
+      = t('label.document_size.custom')
+      %input{ :type => "radio", :name => "wb-new-document-size", :value => "custom" }
+      = t('label.document_size.width')
+      %input#wb-new-document-size-custom-width{ :type => "text" , :size => 6}
+      = t('label.document_size.height')
+      %input#wb-new-document-size-custom-height{ :type => "text" , :size => 6}
+      %br
+      = t('label.document_size.iPhone')
+      %input{ :type => "radio", :name => "wb-new-document-size", :value => "iPhone" }
+      = t('label.document_size.classic')
+      %input{ :type => "radio", :name => "wb-new-document-size", :value => "classic" }
+      = t('label.document_size.iPad')
+      %input{ :type => "radio", :name => "wb-new-document-size", :value => "iPad" }
 
 #wb-edit-document-dialog{ :style => "display:none",:title => t('label.edit_document') }
-  %form{ :action => ""}
+  %form#wb-edit-form{ :action => ""}
     %fieldset
       %label{ :for => "name" }= t "label.name"
       %br
@@ -44,7 +60,24 @@
       %br
       %label{ :for => "keywords" }= t "label.keywords"
       %br
-      %input#wb-edit-document-keywords.ui-corner-all{ :type => "text", :name => "wb-edit-document-keywords", :style => "width:100%"}    
+      %input#wb-edit-document-keywords.ui-corner-all{ :type => "text", :name => "wb-edit-document-keywords", :style => "width:100%"} 
+      %br
+      %label{ :for => "document_size" }= t "label.document_size_title"
+      %br
+      = t('label.document_size.custom')
+      %input#wb-edit-document-size-custom{ :type => "radio", :name => "wb-edit-document-size", :value => "custom" }
+      = t('label.document_size.width')
+      %input#wb-edit-document-size-custom-width{ :type => "text",  :size => 6}
+      = t('label.document_size.height')
+      %input#wb-edit-document-size-custom-height{ :type => "text", :size => 6}
+      %br
+      = t('label.document_size.iPhone')
+      %input#wb-edit-document-size-iPhone{ :type => "radio", :name => "wb-edit-document-size", :value => "iPhone" }
+      = t('label.document_size.classic')
+      %input#wb-edit-document-size-classic{ :type => "radio", :name => "wb-edit-document-size", :value => "classic" }
+      = t('label.document_size.iPad')
+      %input#wb-edit-document-size-iPad{ :type => "radio", :name => "wb-edit-document-size", :value => "iPad" }
+         
 
 #wb-change-access-dialog{ :style => "display:none",:title => t('label.change_access_document') }
   #document_access-header

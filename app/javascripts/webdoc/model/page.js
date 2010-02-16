@@ -352,5 +352,8 @@ $.extend(WebDoc.Page, {
   
   rootUrl: function(args) {
     return "/documents/" + args.document_id;
-  }
+  },
+  classNameHttpPost: function() {
+    return this.className() + "s";
+  }  
 });

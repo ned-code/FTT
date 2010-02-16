@@ -34,8 +34,8 @@ class DocumentsController < ApplicationController
   # POST /documents
   def create
     @document = Document.new(params[:document])
-    @document.pages.build # add default page
     @document.save
+    @document.pages.create
     current_user.has_role!("owner", @document)
     xmpp_create_node(@document.uuid)
     render :json => @document      
@@ -150,4 +150,5 @@ protected
      end
      return documents
   end
+  
 end

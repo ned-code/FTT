@@ -4,8 +4,10 @@ class Page < ActiveRecord::Base
   default_scope :order => "position ASC"
   serialize :data
   
-  def after_initialize
-    self.data ||= { :css => { :width => "800px", :height => "600px", :backgroundColor => "#fff" } }
+  before_save :set_page_data 
+  
+  def set_page_data
+    self.data ||= { :css => { :width => (document.size)? document.size[:width] + "px" : "800px", :height => (document.size)? document.size[:height] + "px" : "600px", :backgroundColor => "#fff" } }
   end
   
   # ================

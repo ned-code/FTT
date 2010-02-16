@@ -59,12 +59,20 @@ en:
     name: "Name"
     description: "Description"
     keywords: "Some keywords (separated by comma)"
+    document_size_title: "Document size"
     creationDate: "Creation date"
     change_access_document: "Modify document access"
     everybody: "Everybody"
     choose_title: "Choose a title"
     new_webdoc: "a new webdoc"
     add_description: "Add a description"
+    document_size:
+      custom: "Custom"
+      iPhone: "iPhone (620x480)"
+      classic: "Classic (800x600)"
+      iPad: "iPad (1024x768)"
+      width: "Width"
+      height: "Height"
   alert:
     destroy_confirmation: "Are you sure?"
 

@@ -68,11 +68,25 @@ MTools.Record = $.klass(
   
   /**
    * @deprecated. use the className class function instead.
-   * @return the class name of the record. Class name is the class name that is define on the server side.
+   * @return the class name of the record. Class name is the class name that is defined on the server side.
    */
   className: function() {
     if (this.constructor.className) {
       return this.constructor.className();
+    }
+    else {
+      ddd("no class name");
+      ddt();
+    }
+  }, 
+   
+  /**
+   * @deprecated. use the classNameHttpPost class function instead.
+   * @return the class name of the record that will match the right route on the server.
+   */
+  classNameHttpPost: function() {
+    if (this.constructor.classNameHttpPost) {
+      return this.constructor.classNameHttpPost();
     }
     else {
       ddd("no class name");
@@ -86,7 +100,7 @@ MTools.Record = $.klass(
    */
   rootUrl: function() {
     return this.constructor.rootUrl(this.rootUrlArgs());
-  },  
+  }, 
   
   /**
    * @return {object} return an object that contains value needed to construct the root URL. It is typically used for nesed resources accessed with a REST URL.

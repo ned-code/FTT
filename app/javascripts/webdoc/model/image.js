@@ -15,5 +15,8 @@ $.extend(WebDoc.Image, {
   
   rootUrl: function(args) {
     return "";
+  },
+  classNameHttpPost: function() {
+    return this.className() + "s";
   }    
 });

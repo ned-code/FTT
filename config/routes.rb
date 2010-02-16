@@ -28,8 +28,8 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   # dev controller
-  map.resources :images, :except => [:new, :edit, :update]
-  map.resources :videos, :except => [:new, :edit, :update]
-  map.resources :widgets, :except => [:new, :edit, :update, :destroy]
-  map.resources :bgimages, :except => [:new, :edit, :show, :update, :destroy]
+  map.resources :images,    :except => [:new, :edit, :update]
+  map.resources :videos,    :except => [:new, :edit, :update]
+  map.resources :widgets,   :except => [:new, :edit, :update, :destroy]
+  map.resources :bgimages,  :except => [:new, :edit, :show, :update, :destroy]
 end
