@@ -4,16 +4,17 @@
 
 Dependencies:
 
-- Ruby
+- Ruby 1.8.6
 - RubyGems
+- Rails 2.3.5
 - Rake
 - SQlite3 (on Windows, install sqlite3 and ruby gem for mswin32 from http://rubyforge.org/frs/?group_id=254)
 
 Run in working repository:
 
-  sudo rake myuniboard:dev:bootstrap
-  rake
-  script/server
+ sudo gem install uuidtools
+ sudo gem install sprockets
+ sudo rake gems:install
 
 If all tests pass, you can work on a big new feature ;-)
 
