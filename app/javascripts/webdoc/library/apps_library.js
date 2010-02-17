@@ -42,7 +42,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     
     // Setup app thumbnails drag n' drop
     this.myAppsContainer.find(".thumbnails").bind("dragstart", this._prepareThumbDrag.pBind(this));
-    $(document.body).append(this.buildMediaDragFeedbackElement("apps", "")); // just to preload the icon (so that it'll be immediatley available at the first drag)
+    $(document.body).append(this.buildMediaDragFeedbackElement("apps", "")); // just to preload the icon (so that it'll be immediately available at the first drag)
     
     // Next/Previous page links
     this.paginationWrap = $("<div class='pagination' style='display:none'>");
@@ -71,6 +71,24 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     showAppPageEl.data("originalText", showAppPageEl.text());
     
     this.detailsAppContainer = this.detailsView.find('.single_app');
+    
+    // handle possible actions 
+    $("#app_details .actions").click(function(event){
+      event.preventDefault();
+      
+      var properties = this.detailsAppContainer.data("properties"); //properties of the currenlty displayed video are store in this element
+      
+      var link = $(event.target);
+      
+      switch (link.attr("id")) {
+        case "add_app_to_page_action":
+          ddd("add_app_to_page_action");
+          var widgetData = this.detailsAppContainer.data("data");
+          WebDoc.application.boardController.insertWidget(widgetData);
+          break;
+      }
+    }.pBind(this));
+    
   },
   prepareDetailsView: function($super, widgetData) {
     $super(widgetData.properties);

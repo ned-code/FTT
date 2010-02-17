@@ -72,7 +72,7 @@
         .actions
           %ul
             %li
-              %a.disabled#add_image_to_page_action{ :href => "" } Add to page
+              %a#add_image_to_page_action{ :href => "" } Add to page
             %li
               %a#set_image_as_bg_action{ :href => "" } Set as background
             %li.dyn.flickr
@@ -140,6 +140,11 @@
           %img{ :src => "", :alt => "" }
       %h5.app_version
       %p.app_description
+      .actions
+        %ul
+          %li
+            %a#add_app_to_page_action{ :href => "" } Add to page
+      
     #video_details.view.details_view
       .toolbar
         %h1 Video
@@ -154,6 +159,8 @@
         %p.video_description
         .actions
           %ul
+            %li
+              %a#add_video_to_page_action{ :href => "" } Add to page
             %li
               %a#show_video_page_action{ :href => "" } Show on *
             %li

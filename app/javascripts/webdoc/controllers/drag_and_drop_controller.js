@@ -46,30 +46,7 @@ $.extend(WebDoc.DrageAndDropController, {
           if (widget) 
           {
             var widgetData = $.evalJSON(widget);
-            newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-
-            if (widgetData.properties.width) {
-              width = widgetData.properties.width;
-              height = widgetData.properties.height;
-            }
-            newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-            newItem.data.media_id = widgetData.id;
-            newItem.data.data.tag = "iframe";
-            newItem.data.data.src = widgetData.properties.index_url;
-            newItem.data.data.properties = {
-              inspector_url: widgetData.properties.inspector_url
-            };
-            x = pos.x - (width / 2);
-            y = pos.y - (height / 2);
-            if (x < 0) { x = 0;}
-            if (y < 0) { y = 0;}            
-            newItem.data.data.css = {
-              top: y + "px",
-              left: x + "px",
-              width: width + "px",
-              height: height + "px"
-            };
-            WebDoc.application.boardController.insertItems([newItem]);
+            WebDoc.application.boardController.insertWidget(widgetData, pos);
           }
           break;
         case 'application/x-moz-file-promise-url' :
@@ -78,45 +55,11 @@ $.extend(WebDoc.DrageAndDropController, {
           var ubImage = evt.originalEvent.dataTransfer.getData('application/ub-image');
           var url = ubImage ? ubImage : imageUrl;
           
-          var image = document.createElement('img'); /* Preload image in order to have width and height parameters available */
-          $(image).bind("load", pos, WebDoc.DrageAndDropController.createImageItem); /* WebDoc.Item creation will occur after image load*/
-          image.src = url;
+          WebDoc.application.boardController.insertImage(url, pos);
           break;
         case 'application/ub-video':                                       
           var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-video'));
-          var videoWidget;
-          switch (videoProperties.type) {
-            case 'youtube' :
-              videoWidget = WebDoc.application.widgetManager.getYoutubeWidget();
-              break;
-            case 'vimeo' :
-              videoWidget = WebDoc.application.widgetManager.getVimeoWidget();
-              break;
-          }
-          newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-          if (videoWidget.data.properties.width) {
-            width = parseFloat(videoWidget.data.properties.width);
-            height = parseFloat(videoWidget.data.properties.height);
-          }
-          x = pos.x - (width / 2);
-          y = pos.y - (height / 2);
-          if (x < 0) { x = 0;}
-          if (y < 0) { y = 0;}
-          newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-          newItem.data.media_id = videoWidget.data.id;
-          newItem.data.data.tag = "iframe";
-          newItem.data.data.src = videoWidget.data.properties.index_url;
-          newItem.data.data.properties = {
-            inspector_url: videoWidget.data.properties.inspector_url
-          };
-          newItem.data.data.css = {
-            top: y + "px",
-            left: x + "px",
-            width: width + "px",
-            height: height + "px"
-          };
-          newItem.data.data.preference.url = videoProperties.video_id;
-          WebDoc.application.boardController.insertItems([newItem]);
+          WebDoc.application.boardController.insertVideo(videoProperties, pos);
           break;
         case 'text/html' :
           var html = evt.originalEvent.dataTransfer.getData('text/html');
@@ -138,23 +81,4 @@ $.extend(WebDoc.DrageAndDropController, {
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     }
   },
-  
-  createImageItem: function(e) {
-    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-    newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
-    var x = e.data.x - (this.width / 2);
-    var y = e.data.y - (this.height / 2);
-    if (x < 0) { x = 0;}
-    if (y < 0) { y = 0;}
-    newItem.data.data.tag = "img";
-    newItem.data.data.src = this.src;
-    newItem.data.data.css = {
-      overflow: "hidden",
-      top: y + "px",
-      left: x + "px",
-      width: this.width + "px",
-      height: this.height + "px"
-    };
-    WebDoc.application.boardController.insertItems([newItem]);
-  }
 });
