@@ -21,8 +21,3 @@ If all tests pass, you can work on a big new feature ;-)
 
 == Plugins
 
-Authorization plugin (vendor/plugin/rails-authorization-plugin):
-
-- homepage: http://github.com/DocSavage/rails-authorization-plugin/tree/master
-- repository: git://github.com/DocSavage/rails-authorization-plugin.git
-- last update: 15.04.2009
