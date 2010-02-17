@@ -33,7 +33,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
 
   currentDocument: null,
   currentPage: null,
-  applicationUuid: undefined,
   
   initialize: function($super, editable) {
     $super();
@@ -46,8 +45,8 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     // Set up default panel behaviour (show screen, show footer etc.)
     jQuery(".panel").panel();
         
-    this.applicationUuid = new MTools.UUID().id;
-    MTools.ServerManager.sourceId = this.applicationUuid;
+    MTools.ServerManager.xmppClientId = new MTools.UUID().id;
+    
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         

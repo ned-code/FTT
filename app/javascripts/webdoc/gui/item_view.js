@@ -127,7 +127,7 @@ WebDoc.ItemView = $.klass({
     if (!WebDoc.application.pageEditor.disableHtml) {
       this.unSelect();
       this.itemDomNode.remove();
-      this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
+      this.itemDomNode = this.createDomNode().addClass("item").addClass("layer board-style").css({
         overflow: "hidden",
         width: "100%",
         height: "100%"
