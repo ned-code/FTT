@@ -45,8 +45,9 @@ body {
 
 /* Manage layering */
 
-#webdoc     { z-index: 1; }
-.panel      { z-index: 2; }
+#webdoc         { z-index: 1; }
+.panel          { z-index: 2; }
+.toolbar-panel  { z-index: 3; }    
 
 #webdoc .center     { z-index: 2; }
 #left-panel-ghost,
