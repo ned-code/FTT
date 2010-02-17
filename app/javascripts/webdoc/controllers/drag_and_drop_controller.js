@@ -40,9 +40,7 @@ $.extend(WebDoc.DrageAndDropController, {
       var newItem;
       switch (availableType) {
         case 'application/ub-widget':
-
           var widget = evt.originalEvent.dataTransfer.getData('application/ub-widget');
-
           if (widget) 
           {
             var widgetData = $.evalJSON(widget);
@@ -63,19 +61,8 @@ $.extend(WebDoc.DrageAndDropController, {
           break;
         case 'text/html' :
           var html = evt.originalEvent.dataTransfer.getData('text/html');
-          
           if (html) {
-            newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-            newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-            newItem.data.data.tag = "div";
-            newItem.data.data.innerHTML = html;
-            newItem.data.data.css = {
-              top: pos.y + "px",
-              left: pos.x + "px",
-              width: "0px",
-              height: "0px"
-            };
-            WebDoc.application.boardController.insertItems([newItem]);
+            WebDoc.application.boardController.insertHtml(html, pos);
           }
       }
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);

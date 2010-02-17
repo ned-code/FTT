@@ -482,6 +482,20 @@ WebDoc.BoardController = $.klass({
     this.insertItems([newItem]);
   },
   
+  insertHtml: function(html, position) {
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.data.tag = "div";
+    newItem.data.data.innerHTML = html;
+    newItem.data.data.css = {
+      top: position.y + "px",
+      left: position.x + "px",
+      width: "0px",
+      height: "0px"
+    };
+    this.insertItems([newItem]);
+  },
+  
   insertItems: function(items) {
     $.each(items, function(index, item) {           
       this._currentPage.addItem(item);
