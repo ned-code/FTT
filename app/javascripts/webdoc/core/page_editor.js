@@ -26,6 +26,8 @@
 //= require <webdoc/tools/text_tool>
 //= require <webdoc/tools/html_tool>
 
+//= require <webdoc/utils/field_validator>
+
 // application singleton.
 WebDoc.application = {};
 
@@ -151,6 +153,30 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       WebDoc.application.pageBrowserController.editPageTitle(newPage);
       
     }.pBind(this));
+  },
+  
+  addWebPage: function() {
+    var externalPageUrl = null;
+    do {
+      externalPageUrl = prompt("Web page URL: ", "http://");
+    }while(externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl))
+
+    if(externalPageUrl != null) {
+      var newPage = new WebDoc.Page(null, this.currentDocument);
+      // we don't need to set foreign keys. It is automagically done on the server side
+      // newPage.data.document_id = this.currentDocument.data.document_id;
+      newPage.data.position = this.currentPage.data.position + 1;
+      newPage.save( function(newObject, status) {
+        newPage.setExternalPageMode(true);
+        newPage.data.data.externalPageUrl = externalPageUrl;
+        newPage.save();
+        this.currentDocument.addPage(newPage, true);      
+        this.loadPage(newPage);
+  
+        //WebDoc.application.pageBrowserController.editPageTitle(newPage);
+  
+      }.pBind(this));
+    }
   },
   
   removePage: function() {
