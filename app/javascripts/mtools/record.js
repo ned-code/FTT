@@ -215,7 +215,10 @@ $.extend(MTools.Record, {
       // possible to passe this to rails in a correct format.
       // so all relationships must then have a special treatment on the server side.
       if ($.isArray(value)) {
-        destinationObject[prefix + '[' + key + ']'] = $.toJSON(value);        
+        for (var i = 0; i < value.length; i++) {
+          var arrayItem = value[i];
+          this.convertToRailsJSon(arrayItem, destinationObject, prefix + '[' + key + '_attributes][' + i +']');
+        }               
       }
       else if (typeof value == 'object') {
         var empty = true;

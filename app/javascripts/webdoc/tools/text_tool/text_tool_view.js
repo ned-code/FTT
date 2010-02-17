@@ -379,7 +379,7 @@ WebDoc.TextToolView = $.klass({
       content.open("text/html", "replace");
       this.frameStyles = '';  
       for(i=0;i<this.mainPageStyles.length;i++){ this.frameStyles += "<link rel='stylesheet' href='"+this.mainPageStyles[i]+"' type='text/css' />"; }
-      content.write("<html><head>"+this.frameStyles+"<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; height:100%; margin:0px; background:none;} </style></head><body contenteditable='true'></body></html>");  
+      content.write("<html><head>"+this.frameStyles+"<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: auto;} html,body { padding:0px; height:100%; margin:0px; background:none;} </style></head><body contenteditable='true'></body></html>");  
         content.close();  
         this.edDoc.designMode='On';
         this.packHTMLtoEditor = function(HTML){ 
@@ -435,7 +435,8 @@ WebDoc.TextToolView = $.klass({
       }
 
       this.currentEditingBlock.innerHTML = htmlToStore; 
-      this.endEditionListener.applyTextContent(htmlToStore,className)
+      this.endEditionListener.applyTextContent(htmlToStore,className);
+      this.currentEditingBlock = null;
     },
     
     /**

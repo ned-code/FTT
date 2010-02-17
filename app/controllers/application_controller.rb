@@ -1,10 +1,8 @@
-require "xmpp_helper"
-
 class ApplicationController < ActionController::Base
   
   before_filter :authenticate
+  before_filter :set_xmpp_client_id_in_thread
   
-  include XmppHelper  
   include AuthenticatedSystem
   rescue_from Acl9::AccessDenied, :with => :deny_access
 
@@ -27,6 +25,7 @@ protected
   def public_document?
     public_read_document? || public_edit_document?
   end
+  
   def public_read_document?
     global_user.has_role?("reader",@document)
   end
@@ -42,4 +41,9 @@ protected
       end
     end
   end
+  
+  def set_xmpp_client_id_in_thread
+    Thread.current[:xmpp_client_id] = params[:xmpp_client_id]  
+  end
+    
 end

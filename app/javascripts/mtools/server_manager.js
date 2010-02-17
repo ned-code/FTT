@@ -152,7 +152,7 @@ $.extend(MTools.ServerManager, {
    **/
   newObject: function(object, callBack) {
     var message = {
-      source: MTools.ServerManager.sourceId
+      xmpp_client_id: MTools.ServerManager.xmppClientId
     };
     $.extend(message, object.to_json(true));
     $.post(object.rootUrl() + "/" + object.classNameHttpPost(), message, function(data, textstatus) {
@@ -174,7 +174,7 @@ $.extend(MTools.ServerManager, {
    */
   updateObject: function(object, callBack) {
     var param = {
-      source: MTools.ServerManager.sourceId,
+      xmpp_client_id: MTools.ServerManager.xmppClientId,
       _method: "PUT"
     };
     $.extend(param, object.to_json());
@@ -192,7 +192,7 @@ $.extend(MTools.ServerManager, {
    */
   deleteObject: function(object, callBack) {
     var param = {
-      source: MTools.ServerManager.sourceId,
+      xmpp_client_id: MTools.ServerManager.xmppClientId,
       _method: "DELETE"
     };
     $.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {

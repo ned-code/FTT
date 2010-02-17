@@ -25,35 +25,18 @@ class PagesController < ApplicationController
   # POST /documents/:document_id/pages
   def create
 
-    if (params[:page][:items])
-      new_items = JSON.parse params[:page][:items]
-      params[:page].delete(:items)  
-    end    
     @page = @document.pages.new(params[:page])
     @page.uuid = params[:page][:uuid]
-    @page.save
-    if new_items
-      new_items.each do |an_item|
-        new_item = @page.items.new(an_item)
-        new_item.uuid = an_item['uuid']
-        new_item.save        
-      end  
-    end    
-    message = { :source => params[:source], :page =>  @page.attributes() }
-    message[:page][:items] = new_items
-
-    xmpp_notify message.to_json
+    @page.save    
+    
     render :json => @page.to_json(:include => :items)
   end
   
   # PUT /documents/:document_id/pages/:id
   def update
     @page = @document.pages.find_by_uuid(params[:id])
-    
     @page.update_attributes(params[:page])
-    message = { :source => params[:source], :page =>  @page.attributes() }
 
-    xmpp_notify message.to_json   
     render :json => @page
   end
   
@@ -61,9 +44,6 @@ class PagesController < ApplicationController
   def destroy
     @page = @document.pages.find_by_uuid(params[:id])
     @page.destroy
-    message = { :source => params[:source], :page =>  { :uuid => params[:id] }, :action => "delete" }
-
-    xmpp_notify message.to_json    
     render :json => {}
   end
   
@@ -72,6 +52,5 @@ class PagesController < ApplicationController
   def instantiate_document
     @document = Document.find_by_uuid(params[:document_id])
   end
-  
   
 end

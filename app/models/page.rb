@@ -1,3 +1,5 @@
+require "xmpp_notification"
+
 class Page < ActiveRecord::Base
   has_uuid
   
@@ -14,7 +16,8 @@ class Page < ActiveRecord::Base
   # = Associations =
   # ================
   
-  has_many :items, :dependent => :destroy
+  has_many :items, :dependent => :delete_all
+  accepts_nested_attributes_for :items  
   belongs_to :document
   belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
   
