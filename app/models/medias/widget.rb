@@ -74,6 +74,7 @@ private
     if file_changed?
       new_version = config_dom.root.attribute("version").to_s
       if version.nil? || new_version > version
+        self.properties[:version] = new_version
         self.properties = properties_from_config_dom(config_dom, file.store_url)
         self.title = config_dom.root.elements['name'].text
         self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
