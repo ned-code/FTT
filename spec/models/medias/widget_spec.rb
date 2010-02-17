@@ -2,102 +2,64 @@ require 'spec_helper'
 
 describe Medias::Widget do
   
+  before(:each) do
+    @s3 = mock("s3")
+    RightAws::S3Interface.stub(:new).and_return(@s3)
+    @s3.stub(:put) # stub here to be able to use should_receive
+  end
+  
   it "should be valid" do
     widget = Medias::Widget.new
     widget.should be_valid
   end
   
   it "should not be valid with image file" do
-    widget = Medias::Widget.new(:file => File.open(fixture_path + '/image.jpg'))
+    widget = Factory.build(:widget, :file => File.open(fixture_path + '/image.jpg'))
     widget.should_not be_valid
   end
   
   it "should be valid with zip file" do
-    widget = Medias::Widget.new(:file => File.open(fixture_path + '/widget.zip'))
+    widget = Factory.build(:widget)
     widget.should be_valid
   end
   
+  it "should upload zip files to s3" do
+    @s3.should_receive(:put).exactly(28)
+    Factory(:widget)
+  end
+  
   describe 'with valid widget file' do
-     before(:all) do
-       @widget = Medias::Widget.new(:file => File.open(fixture_path + '/widget.zip'), :system_name => 'widget')
-       @widget.save # Will trigger before_save and after_save, in which actions are done
-     end
-
-     it "should have a properties hash as attribute" do
-       @widget.properties.should be_kind_of(Hash)
-     end
+     subject { Factory(:widget) }
      
-     it "should have a version present in the properties" do
-       @widget.properties[:version].should be_kind_of(String)
-     end
+     its(:uuid)        { should be_present }
+     its(:system_name) { should be_present }
+     its(:title)       { should be_present }
+     its(:title)       { should be_kind_of(String) }
+     its(:description) { should be_present }
+     its(:description) { should be_kind_of(String) }
+     its(:properties)  { should be_kind_of(Hash) }
      
-     it "should have a title" do
-       @widget.title.should_not == nil
-     end
-     
-     it "should have a title as a string" do
-       @widget.title.should be_kind_of(String)
-     end
-     
-     it "should have a description" do
-       @widget.description.should_not == nil
-     end
-     
-     it "should have a description as a string" do
-       @widget.description.should be_kind_of(String)
-     end
-     
-     it "should have the width set in the properties" do
-       @widget.properties[:width].should_not == nil
-     end
-     
-     it "should have the height set in the properties" do
-       @widget.properties[:height].should_not == nil
-     end
-     
-     it "should have the index_url set in the properties" do
-       @widget.properties[:index_url].should_not == nil
-     end
-     
-     it "should have the icon_url set in the properties" do
-       @widget.properties[:icon_url].should_not == nil
-     end
-     
-     it "should have the inspector_url set in the properties" do
-       @widget.properties[:inspector_url].should_not == nil
-     end
-     
-     it "should have an uuid set" do
-       @widget.uuid.should_not == nil
-     end
-     
-     it "should have a system name set" do
-       @widget.system_name.should_not == nil
-     end
+     it { subject.properties[:version].should be_kind_of(String) }
+     it { subject.properties[:width].should be_present }
+     it { subject.properties[:height].should be_present }
+     it { subject.properties[:index_url].should be_present }
+     it { subject.properties[:icon_url].should be_present }
+     it { subject.properties[:inspector_url].should be_present }
      
    end
    
   describe 'with valid widget and update file' do
-    before(:all) do
-      @widget = Medias::Widget.new(:file => File.open(fixture_path + '/widget.zip'), :system_name => 'poll')
-      @widget.save
-      
-      @widget.update_with_file(File.open(fixture_path + '/widget_updated.zip'))
-      #@widget.save # Will trigger before_save and after_save, in which actions are done
-    end
-   
-    it "should have have a new version number" do
-      @widget.version.should == "0.5"
+    subject do
+      Factory(:widget, :system_name => 'poll')
+      media = Medias::Widget.last
+      media.update_attributes(:file => File.open(fixture_path + '/widget_updated.zip'))
+      media
     end
     
-    it "should have have a new title" do
-      @widget.title.should == "Poll - new version"
-    end
+    its(:version)     { should == "0.5" }
+    its(:title)       { should == "Poll - new version" }
+    its(:description) { should == "Widget de polling updated" }
     
-    it "should have have a new description" do
-      @widget.description.should == "Widget de polling updated"
-    end
-   
   end
 end
 

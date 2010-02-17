@@ -15,5 +15,8 @@ $.extend(WebDoc.Video, {
   
   rootUrl: function(args) {
     return "";
-  }    
+  },
+  classNameHttpPost: function() {
+    return this.className() + "s";
+  } 
 });

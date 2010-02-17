@@ -36,8 +36,8 @@ class DocumentsController < ApplicationController
   # POST /documents
   def create
     @document = Document.new(params[:document])
-    @document.pages.build # add default page
     @document.save
+    @document.pages.create
     current_user.has_role!("owner", @document)
     render :json => @document      
   end
@@ -151,4 +151,5 @@ protected
      end
      return documents
   end
+  
 end

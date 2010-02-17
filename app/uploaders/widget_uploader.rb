@@ -16,7 +16,15 @@ class WidgetUploader < CarrierWave::Uploader::Base
     store_prefix = CarrierWave.yml_storage(:widgets).to_s == 'file' ? 'uploads/' : ''
     "#{store_prefix}#{model.class.to_s.underscore}/#{model.uuid}/#{model.version}/"
   end
-
+  
+  def store_url
+    if s3_bucket == nil
+      "/#{store_dir}"
+    else
+      "http://#{s3_bucket}.s3.amazonaws.com/#{model.class.to_s.underscore}/#{model.uuid}/#{model.version}/"
+    end
+  end
+  
   # Provide a default URL as a default if there hasn't been a file uploaded
   #     def default_url
   #       "/images/fallback/" + [version_name, "default.png"].compact.join('_')

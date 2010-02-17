@@ -46,7 +46,7 @@ $.extend(MTools.ServerManager, {
     }
     url += ".json";
     
-		var ajaxParams = args && args.ajaxParams ? args.ajaxParams : {};
+    var ajaxParams = args && args.ajaxParams ? args.ajaxParams : {};
     $.ajax({
       type: "GET",
       url: url,
@@ -155,8 +155,8 @@ $.extend(MTools.ServerManager, {
       xmpp_client_id: MTools.ServerManager.xmppClientId
     };
     $.extend(message, object.to_json(true));
-    $.post(object.rootUrl() + "/" + object.className() + "s", message, function(data, textstatus) {
-      // refresh is needed because some values are generaed on server side
+    $.post(object.rootUrl() + "/" + object.classNameHttpPost(), message, function(data, textstatus) {
+      // refresh is needed because some values are generated on server side
       // i.e. page size and background.
       object.refresh(data);
       object.isNew = false;

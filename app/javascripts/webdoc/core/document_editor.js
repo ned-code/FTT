@@ -15,6 +15,16 @@
 // application singleton.
 WebDoc.application = {};
 
+(function($, undefined){
+
+var newDocNameField,
+    newDocDescriptionField,
+    newDocKeywordsField,
+    newDocCustomSizeWidthField,
+    newDocCustomSizeHeightField,
+    editDocCustomSizeWidthField,
+    editDocCustomSizeHeightField;
+
 WebDoc.DocumentEditor = $.klass(MTools.Application,
 {
     initialize: function($super)
@@ -26,6 +36,13 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         WebDoc.application.documentEditor = this;
         WebDoc.application.undoManager = new MTools.UndoManager();
         WebDoc.application.accessController = new WebDoc.DocumentAccessController();
+        newDocNameField = $("#wb-new-document-name");
+        newDocDescriptionField = $("#wb-new-document-description");
+        newDocKeywordsField = $("#wb-new-document-keywords");
+        newDocCustomSizeWidthField = $("#wb-new-document-size-custom-width");
+        newDocCustomSizeHeightField = $("#wb-new-document-size-custom-height");
+        editDocCustomSizeWidthField = $("#wb-edit-document-size-custom-width");
+        editDocCustomSizeHeightField = $("#wb-edit-document-size-custom-height");
     },
     
     start: function()
@@ -37,10 +54,14 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $(".wb-document-rename").live("click", this.renameDocument);
         $(".wb-document-delete").live("click", this.deleteDocument);
         $(".wb-document-access").live("click", this.changeDocumentAccess);
-				$("#wb-document-filter-date").bind("click", this.loadDocuments.pBind(this));
-      	$("#wb-document-filter-owned-by-me").bind("click", {document_filter: 'owner'}, this.loadDocumentsWithFilter.pBind(this));
-				$("#wb-document-filter-shared-with-me-as-editor").bind("click", {document_filter: 'editor'}, this.loadDocumentsWithFilter.pBind(this));
-				$("#wb-document-filter-shared-with-me-as-viewer").bind("click", {document_filter: 'reader'}, this.loadDocumentsWithFilter.pBind(this));
+        $("#wb-document-filter-date").bind("click", this.loadDocuments.pBind(this));
+        $("#wb-document-filter-owned-by-me").bind("click", {document_filter: 'owner'}, this.loadDocumentsWithFilter.pBind(this));
+        $("#wb-document-filter-shared-with-me-as-editor").bind("click", {document_filter: 'editor'}, this.loadDocumentsWithFilter.pBind(this));
+        $("#wb-document-filter-shared-with-me-as-viewer").bind("click", {document_filter: 'reader'}, this.loadDocumentsWithFilter.pBind(this));
+        newDocCustomSizeWidthField.bind("keypress", this.validateInteger);
+        newDocCustomSizeHeightField.bind("keypress", this.validateInteger);
+        $("#wb-edit-document-size-custom-width").bind("keypress", this.validateInteger);
+        $("#wb-edit-document-size-custom-height").bind("keypress", this.validateInteger);
         
         this.filter = new WebDoc.DocumentDateFilter();
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
@@ -54,17 +75,21 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         {
             bgiframe: true,
             autoOpen: false,
-            height: 300,
+            width: 450,
+            height: 350,
             modal: true,
             buttons: 
             {
                 Save: function()
                 {
                     $(this).dialog('close');
+                    
                     var newDoc = new WebDoc.Document();
-                    newDoc.setTitle($("#wb-new-document-name").val(), true);
-                    newDoc.setDescription($("#wb-new-document-description").val(), true);
-                    newDoc.setKeywords($("#wb-new-document-keywords").val(), true);
+                    newDoc.setTitle(newDocNameField.val(), true);
+                    newDoc.setDescription(newDocDescriptionField.val(), true);
+                    newDoc.setKeywords(newDocKeywordsField.val(), true);
+                    var documentSizeChoice = $("input[@name='wb-new-document-size']:checked", $('#wb-new-form')).val();
+                    newDoc.setSize(that.getSizeFromChoice(documentSizeChoice), true);
                     newDoc.save(function(newObject, status)
                     {
                       if (status == "OK") 
@@ -87,7 +112,8 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         {
             bgiframe: true,
             autoOpen: false,
-            height: 300,
+            width: 450,
+            height: 350,
             modal: true,
             buttons: 
             {
@@ -98,6 +124,8 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                     that.editedDocument.setTitle($("#wb-edit-document-name").val(), true);
                     that.editedDocument.setDescription($("#wb-edit-document-description").val(), true);
                     that.editedDocument.setKeywords($("#wb-edit-document-keywords").val(), true);
+                    var documentSizeChoice = $("input[@name='wb-edit-document-size']:checked", $('#wb-edit-form')).val();
+                    that.editedDocument.setSize(that.getNewSizeFromChoice(documentSizeChoice), true);
                     that.editedDocument.save(function(persitedDoc)
                     {
                         that.filter.refreshDocument(persitedDoc);
@@ -108,9 +136,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                     $(this).dialog('close');
                 }
             }
-        });
-        
-        
+        });    
     },
     
     editDocument: function(e)
@@ -122,7 +148,10 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     
     createDocument: function()
     {
-        $("#wb-new-document-name").val(new Date().toLocaleDateString());
+        newDocNameField.val(new Date().toLocaleDateString());
+        newDocDescriptionField.val("");
+        newDocKeywordsField.val("");
+        $("#wb-new-document-size-classic")[0].checked = true;
         $("#wb-new-document-dialog").dialog('open');
     },
     
@@ -136,6 +165,32 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $("#wb-edit-document-name").val(previousName);
         $("#wb-edit-document-description").val(that.editedDocument.description());
         $("#wb-edit-document-keywords").val(that.editedDocument.keywords());
+        editDocCustomSizeWidthField.val("");
+        editDocCustomSizeHeightField.val("");
+        if(that.editedDocument.data.size) {
+          if(that.editedDocument.data.size.width === "620" && that.editedDocument.data.size.height === "480") {
+            // iPhone
+            $("#wb-edit-document-size-iPhone")[0].checked = true;
+          }
+          else if(that.editedDocument.data.size.width === "800" && that.editedDocument.data.size.height === "600") {
+            // Classic
+            $("#wb-edit-document-size-classic")[0].checked = true;
+          }
+          else if(that.editedDocument.data.size.width === "1024" && that.editedDocument.data.size.height === "768") {
+            // iPad
+            $("#wb-edit-document-size-iPad")[0].checked = true;
+          }
+          else {
+            // custom
+            $("#wb-edit-document-size-custom")[0].checked = true;
+            editDocCustomSizeWidthField.val(that.editedDocument.data.size.width);
+            editDocCustomSizeHeightField.val(that.editedDocument.data.size.height);
+          }
+        }
+        else {
+          // Classic
+          $("#wb-edit-document-size-classic")[0].checked = true;
+        }
         $("#wb-edit-document-dialog").dialog('open');
     },
     
@@ -216,5 +271,48 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $("#wb-document-navigation ul li a").removeClass('active');
         $(event.currentTarget).addClass('active');
       }
+    },
+    
+    validateInteger: function(evt) {
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        evt.preventDefault();
+        return false;
+      }
+      return true;
+    },
+    
+    getSizeFromChoice: function(choice) {
+      switch(choice){
+        case "custom":
+          var custom_width = newDocCustomSizeWidthField.val();
+          var custom_height = newDocCustomSizeHeightField.val();
+          return { width: custom_width, height: custom_height};
+        case "iPhone":
+          return { width: 620, height: 480};
+        case "iPad":
+          return { width: 1024, height: 768};
+        case "classic":
+        default:
+          return { width: 800, height: 600};
+      }
+    },
+    
+    getNewSizeFromChoice: function(choice) {
+      switch(choice){
+        case "custom":
+          var custom_width = editDocCustomSizeWidthField.val();
+          var custom_height = editDocCustomSizeHeightField.val();
+          return { width: custom_width, height: custom_height};
+        case "iPhone":
+          return { width: 620, height: 480};
+        case "iPad":
+          return { width: 1024, height: 768};
+        case "classic":
+        default:
+          return { width: 800, height: 600};
+      }
     }
 });
+
+})(jQuery);
