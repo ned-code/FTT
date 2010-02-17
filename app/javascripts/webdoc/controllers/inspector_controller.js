@@ -25,6 +25,7 @@ WebDoc.InspectorController = $.klass({
     var htmlSnippetPalette = $("#html_inspector").hide();
     this.imagePaletteController = new WebDoc.ImagePaletteController();
     this.textPaletteController = new WebDoc.TextPaletteController();
+    this.innerHtmlController = new WebDoc.InnerHtmlController();
     
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
@@ -50,9 +51,7 @@ WebDoc.InspectorController = $.klass({
     this.updatePalette(0);
     this.subInspectors = [];
     var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
-    this.subInspectors.push(propertiesInspectorController);   
-    var innerHtmlController = new WebDoc.InnerHtmlController();
-    this.subInspectors.push(innerHtmlController);            
+    this.subInspectors.push(propertiesInspectorController);               
     
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
@@ -92,10 +91,6 @@ WebDoc.InspectorController = $.klass({
       }
       ddd("show palette", paletteId, this.palettes[paletteId]);
       if (typeof paletteId == 'string') {
-        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);        
-        if (this.palettes[3].attr("src") != paletteId) {
-          this.palettes[3].attr("src", paletteId);
-        }
         this.palettes[3].show();
         this.currentPaletteId = 3;
       }
@@ -103,9 +98,6 @@ WebDoc.InspectorController = $.klass({
         this.palettes[paletteId].show();
         this.currentPaletteId = paletteId;        
       }
-    }
-    if (paletteId === 4) {
-      this.imagePaletteController.refresh();
     }
   },
   
@@ -121,11 +113,36 @@ WebDoc.InspectorController = $.klass({
   },
   
   refreshSubInspectors: function() {
+    // refresh su inspector
     for (var i=0; i < this.subInspectors.length; i++) {
       var subInspector = this.subInspectors[i];
       if (subInspector.refresh) {
         subInspector.refresh();
       }
+    }
+    
+    switch (this.currentPaletteId) {
+      case 3:
+        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);        
+        if (this.palettes[3].attr("src") != WebDoc.application.boardController.selection()[0].inspectorId()) {
+          this.palettes[3].attr("src", WebDoc.application.boardController.selection()[0].inspectorId());
+        }      
+        else {
+          if (this.palettes[3][0].contentWindow && this.palettes[3][0].contentWindow.widget) {
+            var widgetObject = this.palettes[3][0].contentWindow.widget;
+            widgetObject.lang = "en";
+            widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
+            widgetObject.mode = "Edit";
+            widgetObject._onLoad();
+          }
+        }
+        break;
+      case 4:
+        this.imagePaletteController.refresh();
+        break;
+      case 5:
+        this.innerHtmlController.refresh();
+        break;
     }
   },
   
