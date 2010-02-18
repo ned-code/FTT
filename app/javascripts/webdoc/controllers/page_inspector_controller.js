@@ -7,16 +7,19 @@
 var cssEditor,
     cssEditorFieldset,
     externalPageControls,
+    backgroundControls,
     backgroundImageControls,
     backgroundImageControlsEnabled,
     page;
 
 WebDoc.PageInspectorController = $.klass({
+  
   initialize: function() {
     
     cssEditorFieldset = $("#page_css_editor");
     cssEditor = cssEditorFieldset.find('textarea.code');
     externalPageControls = $('#allow_annotation_checkbox, #external_page_url');
+    backgroundControls = $()
     backgroundImageControls = $('#page_background_image_tileX_checkbox, #page_background_image_align_hor_left_radio, #page_background_image_align_hor_center_radio, #page_background_image_align_hor_right_radio, #page_background_image_tileY_checkbox, #page_background_image_align_vert_top_radio, #page_background_image_align_vert_middle_radio, #page_background_image_align_vert_bottom_radio');
 
     cssEditor.bind("blur", this._applyPageCss);
@@ -93,16 +96,22 @@ WebDoc.PageInspectorController = $.klass({
     $("#page_title_textbox").val( page.data.title == "undefined" ? "enter a title" : page.data.title );
     $("#page_height_textbox")[0].value = page.data.data.css.height; 
     $("#page_width_textbox")[0].value = page.data.data.css.width; 
-    $("#page_background_color_textbox")[0].value = page.data.data.css.backgroundColor;
-    $("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
-    this._setBackgroundRepeatMode(page.data.data.css.backgroundRepeat); 
-    this._setBackroundPosition(page.data.data.css.backgroundPosition);
-    if(page.hasBackgroundImage()) {
-      $('#background_image').attr('src', page.getBackgroundImagePath()).css("width", "100px").css("height", "100px");
-      $('#background_image_preview').show();
+    if(page.data.data.externalPageUrl) {
+      this._setBackgroundControlsMode(false);
     }
-    else {
-       $('#background_image_preview').hide();
+    else { 
+      this._setBackgroundControlsMode(true);
+      $("#page_background_color_textbox")[0].value = page.data.data.css.backgroundColor;
+      $("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
+      this._setBackgroundRepeatMode(page.data.data.css.backgroundRepeat); 
+      this._setBackroundPosition(page.data.data.css.backgroundPosition);
+      if(page.hasBackgroundImage()) {
+        $('#background_image').attr('src', page.getBackgroundImagePath()).css("width", "100px").css("height", "100px");
+        $('#background_image_preview').show();
+      }
+      else {
+         $('#background_image_preview').hide();
+      }
     }
   },
 
@@ -257,7 +266,6 @@ WebDoc.PageInspectorController = $.klass({
   _displayBackgroundImage: function(responseText, statusText) {
     // Put thumbnail url in the page data so that it can be re-used later
     var thumbUrl = responseText.image.properties.thumb_url;
-    //page.data.backgroundImageThumbUrl = thumbUrl;
     $('#background_image').attr('src', thumbUrl).data('url', responseText.image.properties.url);
     this._changePageBackgroundImageFromThumb();
     this._changePageBackgroundRepeatMode();
@@ -295,14 +303,13 @@ WebDoc.PageInspectorController = $.klass({
   },
   
   _updateExternalPageUrl: function() {  
-    page.data.data.externalPageUrl = $("#external_page_url")[0].value;
-    if (page.data.data.allowAnnotation) {
-      delete page.data.data.css.width;
-      delete page.data.data.css.height;
-    }
-    page.save(function() {
+    try {
+      page.setExternalPageUrl($("#external_page_url")[0].value);
       WebDoc.application.pageEditor.loadPage(page);
-    });
+    }
+    catch(exc) {
+      $("#external_page_url")[0].value = page.data.data.externalPageUrl;
+    }
   },
   
   _applyPageCss: function(e) {

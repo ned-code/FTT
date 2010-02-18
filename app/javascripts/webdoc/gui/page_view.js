@@ -66,6 +66,17 @@ WebDoc.PageView = $.klass({
           externalPage.attr("src", page.data.data.externalPageUrl);
           boardContainer.css("overflow", "hidden");
           externalPage.css("overflow", "auto");
+          if (page.data.data.css.width) {
+            this.domNode.css(page.data.data.css);
+          }
+          else {
+            externalPage.bind("load", function() {
+              page.data.data.css.width = externalPage[0].contentDocument.width;
+              page.data.data.css.height = externalPage[0].contentDocument.height;
+              page.save();
+              this.domNode.css(page.data.data.css);
+            }.pBind(this));
+          }
         }
         this.itemDomNode.append(externalPage[0]);
       }      
