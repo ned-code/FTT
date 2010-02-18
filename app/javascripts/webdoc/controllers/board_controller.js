@@ -249,6 +249,17 @@ WebDoc.BoardController = $.klass({
     }
   },
   
+  activateEventCatcher: function(active) {
+    if (this._currentPageView) {
+      if (active) {
+        this._currentPageView.eventCatcherNode.show();
+      }
+      else {
+        this._currentPageView.eventCatcherNode.hide();
+      }
+    }
+  },
+  
   mapToPageCoordinate: function(position) {
     var x, y, board = $("#board");
     

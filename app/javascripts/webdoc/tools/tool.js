@@ -28,6 +28,7 @@ WebDoc.Tool = $.klass({
       // Set class on the board so that style changes
       $("#board").removeClass().addClass(this.boardClass);
     }
+    WebDoc.application.boardController.activateEventCatcher(true);
   },
   
   getCursorHeight: function() {

@@ -13,6 +13,7 @@ WebDoc.PageView = $.klass({
             .add( jQuery('<div/>').addClass('screen layer') )
             .add( jQuery('<div/>').addClass('screen layer') )
             .add( jQuery('<div/>').addClass('screen layer') ),
+        eventCatcherNode = jQuery('<div/>').id("event-catcher").addClass('screnn layer').hide(),
         that = this;
     
     // Extend this
@@ -20,6 +21,7 @@ WebDoc.PageView = $.klass({
     this.domNode = domNode;
     this.drawingDomNode = drawingDomNode;
     this.itemDomNode = itemDomNode;
+    this.eventCatcherNode = eventCatcherNode;
     this.itemViews = {};
     this.boardScreenNodes = boardScreenNodes;
     
@@ -93,6 +95,7 @@ WebDoc.PageView = $.klass({
       });
     }
     this.domNode.append( itemDomNode );
+    this.domNode.append( eventCatcherNode );
     this.domNode.append( boardScreenNodes );
     if (page.items && $.isArray(page.items)) {
         $.each(page.items, function() {
