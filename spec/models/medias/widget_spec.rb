@@ -23,9 +23,11 @@ describe Medias::Widget do
     widget.should be_valid
   end
   
-  it "should upload zip files to s3" do
-    @s3.should_receive(:put).exactly(28)
-    Factory(:widget)
+  if CarrierWave.yml_storage(:widgets).to_s == "right_s3"
+    it "should upload zip files to s3" do
+      @s3.should_receive(:put).exactly(28)
+      Factory(:widget)
+    end
   end
   
   describe 'with valid widget file' do
