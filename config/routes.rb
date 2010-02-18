@@ -25,6 +25,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.namespace :admin do |admin|
     admin.resources :widgets, :as => 'apps', :except => :show
+    admin.resources :categories, :except => :show
   end
   
   # dev controller

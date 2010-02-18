@@ -9,6 +9,7 @@ en:
   update: "update"
   apply: "apply"
   upload: "upload"
+  add: "add"
   
   flash:
     notice:
@@ -21,6 +22,8 @@ en:
         updated_successful: "Widget successfully updated"
         updated_failed: "An error occured when attempting to update the widget"
         already_up_to_date: "Already up to date, no update needed"
+      category:
+        destroyed_successful: "Category successfully deleted"
       
   user_sessions:
     new:
