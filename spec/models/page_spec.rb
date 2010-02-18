@@ -4,7 +4,7 @@ describe Page do
   should_be_built_by_factory
   should_be_created_by_factory
 
-  should_have_many :items, :dependent => :destroy
+  should_have_many :items, :dependent => :delete_all
   should_belong_to :document
   should_belong_to :thumbnail, :class_name => "Medias::Thumbnail"
   
