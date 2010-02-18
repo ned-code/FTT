@@ -18,23 +18,29 @@ Rails::Initializer.run do |config|
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
-  config.gem 'haml'
-  config.gem 'sprockets'
-  config.gem 'authlogic'
-  config.gem "is_paranoid"
-  config.gem 'uuid'
-  config.gem 'rubyzip', :lib => 'zip/zip'
-  config.gem 'mime-types', :lib => 'mime/types'
-  config.gem 'xml-object'
-  config.gem 'hpricot'
-  config.gem 'json'
-  config.gem 'xmpp4r'
-  config.gem 'carrierwave'
+  # 
+  # config.gem 'haml'
+  # config.gem 'sprockets'
+  # config.gem "is_paranoid"
+  # config.gem 'uuid'
+  # config.gem 'rubyzip', :lib => 'zip/zip'
+  # config.gem 'mime-types', :lib => 'mime/types'
+  # config.gem 'xml-object'
+  # config.gem 'hpricot'
+  # config.gem 'json'
+  # config.gem 'xmpp4r'
   config.gem 'mini_magick'
-  config.gem 'right_aws'
-  config.gem 'will_paginate'
-  
-  config.gem 'uuidtools' # for has_uuid plugin
+  # config.gem 'right_aws'
+  # config.gem 'will_paginate'
+  # config.gem 'warden'
+  config.gem 'devise'
+  # config.gem 'sprockets-rails'
+
+  # config.gem 'i18n'
+  # config.gem 'formtastic'
+  # config.gem "validation_reflection"
+  # 
+  # config.gem 'uuidtools' # for has_uuid plugin
   
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named

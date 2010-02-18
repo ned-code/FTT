@@ -21,6 +21,7 @@ config.action_controller.allow_forgery_protection    = false
 # The :test delivery method accumulates sent emails in the
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
+config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
 # Use SQL instead of Active Record's schema dumper when creating the test database.
 # This is necessary if your schema can't be completely dumped by the schema dumper,
@@ -28,15 +29,16 @@ config.action_mailer.delivery_method = :test
 # config.active_record.schema_format = :sql
 
 # config.gem 'sqlite3-ruby', :lib => "sqlite3"
-config.gem 'rspec', :lib => false
-config.gem 'rspec-rails', :lib => false
-config.gem 'remarkable_rails', :lib => false
 
-config.gem 'factory_girl', :lib => false
-config.gem 'yannlugrin-rspec-factory-girl', :lib => false, :source => "http://gems.github.com"
-
-config.gem 'webrat', :lib => false
-config.gem 'cucumber', :lib => false
-config.gem 'email_spec', :lib => false
-
-config.gem 'spork'
+# config.gem 'rspec', :lib => false
+# config.gem 'rspec-rails', :lib => false
+# config.gem 'remarkable_rails', :lib => false
+# 
+# config.gem 'factory_girl', :lib => false
+# config.gem 'yannlugrin-rspec-factory-girl', :lib => false, :source => "http://gems.github.com"
+# 
+# config.gem 'webrat', :lib => false
+# config.gem 'cucumber', :lib => false
+# config.gem 'email_spec', :lib => false
+# 
+# config.gem 'spork'

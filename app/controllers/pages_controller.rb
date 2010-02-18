@@ -1,6 +1,5 @@
-
 class PagesController < ApplicationController
-  before_filter :login_required
+  before_filter :authenticate_user!
   before_filter :instantiate_document
   access_control do
     allow :admin
@@ -11,6 +10,7 @@ class PagesController < ApplicationController
     allow logged_in, :to => [:show], :if => :public_document?
     allow logged_in, :if => :public_edit_document?    
   end
+  
   # GET /documents/:document_id/pages
   def index
     render :json => @document.pages
@@ -24,7 +24,6 @@ class PagesController < ApplicationController
   
   # POST /documents/:document_id/pages
   def create
-
     if (params[:page][:items])
       new_items = JSON.parse params[:page][:items]
       params[:page].delete(:items)  
@@ -41,7 +40,7 @@ class PagesController < ApplicationController
     end    
     message = { :source => params[:source], :page =>  @page.attributes() }
     message[:page][:items] = new_items
-
+    
     xmpp_notify message.to_json
     render :json => @page.to_json(:include => :items)
   end
@@ -52,8 +51,8 @@ class PagesController < ApplicationController
     
     @page.update_attributes(params[:page])
     message = { :source => params[:source], :page =>  @page.attributes() }
-
-    xmpp_notify message.to_json   
+    
+    xmpp_notify message.to_json
     render :json => @page
   end
   
@@ -62,8 +61,8 @@ class PagesController < ApplicationController
     @page = @document.pages.find_by_uuid(params[:id])
     @page.destroy
     message = { :source => params[:source], :page =>  { :uuid => params[:id] }, :action => "delete" }
-
-    xmpp_notify message.to_json    
+    
+    xmpp_notify message.to_json
     render :json => {}
   end
   
@@ -72,6 +71,5 @@ class PagesController < ApplicationController
   def instantiate_document
     @document = Document.find_by_uuid(params[:document_id])
   end
-  
   
 end

@@ -19,6 +19,10 @@ Spork.prefork do
   
   # Mocks
   require 'spec/mocks/right_aws'
+  
+  # Integration
+  require 'webrat'
+  require 'webrat/integrations/rspec-rails'
 end
 
 Spork.each_run do
@@ -39,7 +43,6 @@ Spork.each_run do
     
     config.include(EmailSpec::Helpers)
     config.include(EmailSpec::Matchers)
-    config.include(Authlogic::TestCase)
     
     config.before(:all) do
       # Set system tmp directory to spec tmp directory
@@ -85,4 +88,11 @@ Spork.each_run do
     config.after(:all) do
     end
   end
+  
+  # Integration
+  Webrat.configure do |config|
+    config.mode = :rails
+    config.open_error_files = false
+  end
+  
 end

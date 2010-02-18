@@ -1,8 +1,10 @@
 Factory.define :user do |f|
-  f.sequence(:email) {|n| "email#{n}@test.com" }
-  f.password 'test'
-  f.password_confirmation 'test'
-  f.name 'jba'
+  f.sequence(:email)  {|n| "email#{n}@test.com" }
+  f.password          '123456'
+  f.username          'johndoe'
+  f.first_name        'John'
+  f.last_name         'Doe'
+  f.terms_of_service  "1"
 end
 
 Factory.define :document do |f|

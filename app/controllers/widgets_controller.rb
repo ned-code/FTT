@@ -1,5 +1,5 @@
 class WidgetsController < ApplicationController
-  before_filter :login_required
+  before_filter :authenticate_user!
   
   # GET /widgets
   def index

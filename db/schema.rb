@@ -9,11 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100122120713) do
+ActiveRecord::Schema.define(:version => 20100212072706) do
 
   create_table "datastore_entries", :force => true do |t|
-    t.string   "ds_key",                          :null => false
-    t.text     "ds_value",    :limit => 16777215, :null => false
+    t.string   "ds_key",                       :null => false
+    t.text     "ds_value",    :limit => 65537, :null => false
     t.text     "widget_uuid"
     t.string   "user_id",     :limit => 36
     t.datetime "created_at"
@@ -30,10 +30,10 @@ ActiveRecord::Schema.define(:version => 20100122120713) do
 
   create_table "items", :force => true do |t|
     t.string   "uuid",       :limit => 36
-    t.integer  "page_id",                        :null => false
+    t.integer  "page_id",                     :null => false
     t.integer  "media_id"
     t.string   "media_type"
-    t.text     "data",       :limit => 16777215
+    t.text     "data",       :limit => 65537
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position"
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(:version => 20100122120713) do
     t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "properties",  :limit => 16777215
+    t.text     "properties",  :limit => 65537
     t.integer  "user_id"
     t.string   "file"
     t.string   "system_name"
@@ -57,14 +57,14 @@ ActiveRecord::Schema.define(:version => 20100122120713) do
 
   create_table "pages", :force => true do |t|
     t.string   "uuid",         :limit => 36
-    t.integer  "document_id",                                               :null => false
+    t.integer  "document_id",                                            :null => false
     t.integer  "thumbnail_id"
-    t.integer  "position",                                                  :null => false
-    t.integer  "version",                          :default => 1,           :null => false
-    t.text     "data",         :limit => 16777215
+    t.integer  "position",                                               :null => false
+    t.integer  "version",                       :default => 1,           :null => false
+    t.text     "data",         :limit => 65537
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",                            :default => "undefined"
+    t.string   "title",                         :default => "undefined"
   end
 
   add_index "pages", ["document_id"], :name => "index_pages_on_document_id"
@@ -94,20 +94,38 @@ ActiveRecord::Schema.define(:version => 20100122120713) do
   add_index "roles_users", ["user_id"], :name => "index_roles_users_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                              :null => false
-    t.string   "name",                               :null => false
-    t.string   "crypted_password",                   :null => false
-    t.string   "password_salt",                      :null => false
-    t.string   "persistence_token",                  :null => false
-    t.string   "single_access_token",                :null => false
-    t.string   "perishable_token",                   :null => false
-    t.integer  "login_count",         :default => 0, :null => false
-    t.integer  "failed_login_count",  :default => 0, :null => false
-    t.datetime "last_request_at"
-    t.datetime "current_login_at"
-    t.datetime "last_login_at"
-    t.string   "current_login_ip"
-    t.string   "last_login_ip"
+    t.string   "email",                                             :null => false
+    t.string   "username",                                          :null => false
+    t.string   "encrypted_password",                                :null => false
+    t.string   "password_salt",                                     :null => false
+    t.string   "confirmation_token",   :limit => 20
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "reset_password_token", :limit => 20
+    t.string   "remember_token",       :limit => 20
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count"
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.integer  "failed_attempts",                    :default => 0
+    t.string   "unlock_token",         :limit => 20
+    t.datetime "locked_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "avatar"
+    t.text     "bio"
+    t.string   "gender"
+    t.string   "website"
   end
+
+  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  add_index "users", ["unlock_token"], :name => "index_users_on_unlock_token", :unique => true
+  add_index "users", ["username"], :name => "index_users_on_username"
 
 end

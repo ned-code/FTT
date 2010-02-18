@@ -1,12 +1,11 @@
 class VideosController < ApplicationController
-
-  before_filter :login_required
+  before_filter :authenticate_user!
   
   # GET /videos
   def index
     per_page = 5
     @videos = current_user.videos.paginate(:page => params[:page], :per_page => per_page)
-
+    
     respond_to do |format|
       format.html
       format.json { render :json => { 
@@ -52,6 +51,5 @@ class VideosController < ApplicationController
     
     head :ok
   end
-
-
+  
 end

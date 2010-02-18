@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_filter :login_required
+  before_filter :authenticate_user!
   before_filter :instantiate_document_and_page
   access_control do
     allow :admin

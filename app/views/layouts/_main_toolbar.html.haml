@@ -3,14 +3,10 @@
     %img{ :src => "/images/logo.png", :alt =>"WebDoc logo"}
   #ub-login-logout
     %div
-      - if current_user
+      - if user_signed_in?
         = current_user.name + ' - ' + current_user.email
         |
         = link_to "edit", edit_user_path(current_user)
         |
-        = link_to "logout", logout_path
-      - else
-        = link_to "login", login_path
-        |
-        = link_to "signup", signup_path
-  = render :partial => "layouts/flash", :object => flash
+        = link_to "logout", destroy_user_session_path
+  = render "layouts/flash", :object => flash

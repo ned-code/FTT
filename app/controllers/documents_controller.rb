@@ -1,14 +1,14 @@
 class DocumentsController < ApplicationController
-  before_filter :login_required
+  before_filter :authenticate_user!
   before_filter :load_document, :only => [:update, :destroy, :show, :change_user_access, :user_access]
   access_control do
     allow :admin
-    allow :owner, :of => :document    
-    allow :editor, :of => :document, :to => [:show]    
-    allow :reader, :of => :document, :to => [:show]    
+    allow :owner, :of => :document
+    allow :editor, :of => :document, :to => [:show]
+    allow :reader, :of => :document, :to => [:show]
     allow logged_in, :to => [:index, :create]
     allow logged_in, :to => [:show], :if => :public_document?
-  end  
+  end
   
   @@global_user_names = ["all", "everybody", "any", "everyone", "people"]
   
@@ -138,7 +138,7 @@ protected
      else
        if (!current_user.has_role?("superAdmin"))
          global_user.role_objects.all.each do |role|
-          documents_ids << role.authorizable_id
+           documents_ids << role.authorizable_id
          end
          roles = current_user.role_objects.all.each do |role|
            documents_ids << role.authorizable_id

@@ -1,0 +1,28 @@
+%html( xmlns:ub="#{XML_UNIBOARD_DOCUMENT_NAMESPACE}" xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg" )
+  %head
+    %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
+    %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
+    %title= "MyUniboard (#{I18n.locale}) - #{yield(:title)}"
+    = stylesheet_link_tag 'reset'
+    = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
+    = stylesheet_link_tag 'style'
+    = stylesheet_link_tag 'style.application'
+
+  %body
+    #wrap
+      = render :partial => "layouts/main_toolbar"    
+      = yield
+    = javascript_include_tag 'jquery'      
+    = javascript_include_tag 'jquery-json'
+    = javascript_include_tag 'jquery-string'
+    = javascript_include_tag 'jquery-ui-1.7'
+    = javascript_include_tag 'jquery.extensions'
+    =# javascript_include_tag 'jquery.panel'    
+    = javascript_include_tag 'klass'
+    = sprockets_include_tag      
+    :javascript      
+      $(function()
+      {
+        WebDoc.run();
+      });        
+    = render :partial => "layouts/googleAnalytics"

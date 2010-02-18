@@ -1,6 +1,6 @@
 # TODO
 class OrbitedController < ApplicationController
-  before_filter :login_required
+  before_filter :authenticate_user!
     
   def orbited_javascript
     [

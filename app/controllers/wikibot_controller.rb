@@ -1,7 +1,7 @@
 require 'net/http'
 
 class WikibotController < ActionController::Base
-  before_filter :login_required
+  before_filter :authenticate_user!
 
   def search 
     @input = params[:input]

@@ -12,6 +12,7 @@
     #login_page
       %h1
         %img{ :src => "/images/logo_xl.png", :alt =>"WebDoc logo"}
+      = render "layouts/flash", :object => flash
       #login_box
         %h2= yield(:external_box_title)
         = yield

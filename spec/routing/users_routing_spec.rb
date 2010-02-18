@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe UsersController do
   
   should_route :get,     '/users',        :action => :index
-  should_route :get,     '/signup',       :action => :new
+  should_route :get,     '/users/new',       :action => :new
   should_route :get,     '/users/1',      :action => :show,    :id => 1
   should_route :get,     '/users/1/edit', :action => :edit,    :id => 1
   should_route :post,    '/users',        :action => :create

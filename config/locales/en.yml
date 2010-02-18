@@ -7,6 +7,22 @@ en:
   edit: "edit"
   destroy: "destroy"
   update: "update"
+  confirm: "Are you sure?"
+  
+  formtastic:
+    actions:
+      login: Login
+      user:
+        create: Sign up
+    labels:
+      user:
+        private: "Private account"
+    hints:
+      user:
+        private: "(I do not want be listed in the members section)"
+        edit:
+          password: "leave blank if you don't want to change it"
+          current_password: "we need your current password to confirm your changes"
   
   flash:
     notice:
@@ -17,21 +33,23 @@ en:
       widget_destroyed_successful: "Widget successfully deleted"
       widget_updated_successful: "Widget successfully updated"
       
-  user_sessions:
+  registrations:
     new:
-      title: "Login"
-      button: "Login"
-      signup_link: "create new user"
-      
+      title: "Sign up"
+      terms_of_service: "I agree to {{link}}"
+      terms_of_service_link: "terms of service"
+    edit:
+      title: "Edit account"
+      cancel:
+        title: Cancel my account
+        text: Unhappy?
+        link: Cancel my account
   users:
     index:
       title: "Listing users"
       new_user_link: "create new user"
     
-    new:
-      title: "Sign up"
-      button: "Sign up"
-    
+      
     edit:
       title: "Editing user"
       button: "Update"
