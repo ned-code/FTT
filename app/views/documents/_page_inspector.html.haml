@@ -3,14 +3,8 @@
     %div
       %h2= t("label.page_inspector")
   %form.content
-    %fieldset.properties
-      %legend Page
-      %div
-        %label Use external page
-        %input#external_page_checkbox{ :type => "checkbox" }
-      %div
-        %label Allow annotation
-        %input#allow_annotation_checkbox{ :type => "checkbox" }        
+    %fieldset.properties.externalPage-related
+      %legend Page    
       %div
         %label URL
         %input#external_page_url{ :type => "text", :value => "http://" }
@@ -29,16 +23,16 @@
       %div
         %label Show scroll
         %input#page_scroll_checkbox{ :type => "checkbox" }
-      %div
+      %div.background-related
         %label Background
         %input#page_background_color_textbox{ :type => "text" }
-      %div
+      %div.background-related
         %label Background Image
         %input#page_background_image_textbox{ :type => "text"}
         %p You can also choose an image from your image library and use the set as background button.
       - form_tag '/images', :multipart => true, :name => "form_image", :id => "form_image" do
         %span
-      %div
+      %div.background-related
         %label horizontal
         %input#page_background_image_tileX_checkbox{ :type => "checkbox", :name => "xTile", :value => "none" }
         %span.label tile
@@ -50,7 +44,7 @@
         %span.label right
         -#%input#page_background_image_repeat_vert_radio{ :type => "radio", :name => "repeatMode", :value => "repeat-y"}
         -#%span.label Repeat vertically
-      %div
+      %div.background-related
         %label vertical
         %input#page_background_image_tileY_checkbox{ :type => "checkbox", :name => "yTile", :value => "none" }
         %span.label tile
@@ -66,18 +60,18 @@
         -#%input#page_background_image_apply_current_button{ :type => "button", :value => "Apply to this page" }
       -#%div
         -#or
-      - form_tag '/bgimages', :multipart => true, :name => "image_send_form", :id => "image_send_form" do
+      - form_tag '/bgimages', :multipart => true, :name => "image_send_form", :id => "image_send_form", :class => "background-related" do
         %div
           %label background image
           = file_field_tag :image
         %div
           = submit_tag "Upload"
-      %div#background_image_preview
+      %div#background_image_preview.background-related
         %img#background_image
         %p  
           %a.page-remove-background-image{ :href => "#remove_background"}
             Remove image
-      %div
+      %div.background-related
         %input#page_background_image_apply_all_button{ :type => "button", :value => "Apply background to all pages" }
       %div
         %a.page-navigation-link{ :href => "#prev-page"}

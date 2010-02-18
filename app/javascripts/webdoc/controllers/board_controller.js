@@ -536,7 +536,6 @@ WebDoc.BoardController = $.klass({
   },
   
   zoom: function(factor) {
-    
     var boardElement = $("#board");
     var previousZoom = this._currentZoom;
     
@@ -719,6 +718,4 @@ WebDoc.BoardController = $.klass({
     };
     WebDoc.application.boardController.insertItems([newItem]);
   }
-    
-  
 });

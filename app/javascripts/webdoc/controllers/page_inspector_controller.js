@@ -18,13 +18,11 @@ WebDoc.PageInspectorController = $.klass({
     
     cssEditorFieldset = $("#page_css_editor");
     cssEditor = cssEditorFieldset.find('textarea.code');
-    externalPageControls = $('#allow_annotation_checkbox, #external_page_url');
-    backgroundControls = $()
+    externalPageControls = $('.externalPage-related');
+    backgroundControls = $('.background-related');
     backgroundImageControls = $('#page_background_image_tileX_checkbox, #page_background_image_align_hor_left_radio, #page_background_image_align_hor_center_radio, #page_background_image_align_hor_right_radio, #page_background_image_tileY_checkbox, #page_background_image_align_vert_top_radio, #page_background_image_align_vert_middle_radio, #page_background_image_align_vert_bottom_radio');
 
     cssEditor.bind("blur", this._applyPageCss);
-    $("#external_page_checkbox").bind("change", this._changeExternalMode.pBind(this));
-    $("#allow_annotation_checkbox").bind("change", this._changeAllowAnnotation.pBind(this)); 
     $("#external_page_url").bind("blur", this._updateExternalPageUrl.pBind(this));
     $("#page_title_textbox").bind("change", this._changePageTitle);
     $("#page_height_textbox").bind("change", this._changePageHeight);
@@ -64,32 +62,11 @@ WebDoc.PageInspectorController = $.klass({
 
   currentPageChanged: function() {
     ddd('currentPageChanged');   
-    page = WebDoc.application.pageEditor.currentPage; 
-    $("#external_page_checkbox").attr("checked", page.data.data.externalPage?true:false);
-    $("#allow_annotation_checkbox").attr("checked", page.data.data.allowAnnotation?true:false);    
+    page = WebDoc.application.pageEditor.currentPage;  
     $("#external_page_url")[0].value = page.data.data.externalPageUrl; 
     this._updatePageRelatedFields();
-    this._updateExternalMode(); 
     this._checkEnableBackgroundControls();
    },
-  
-  _updateExternalMode: function() {
-    ddd("update external page");
-    if (page.data.data.externalPage) {
-      cssEditorFieldset.hide();
-      externalPageControls
-      .removeAttr('disabled')
-      .siblings('label')
-      .removeClass('disabled');
-      
-    } else {
-      cssEditorFieldset.show();
-      externalPageControls
-      .attr('disabled', 'disabled')
-      .siblings('label')
-      .addClass('disabled');
-    }
-  },
 
   _updatePageRelatedFields: function() {
     cssEditor.val( $.toJSON(page.data.data.css) ); 
@@ -97,10 +74,14 @@ WebDoc.PageInspectorController = $.klass({
     $("#page_height_textbox")[0].value = page.data.data.css.height; 
     $("#page_width_textbox")[0].value = page.data.data.css.width; 
     if(page.data.data.externalPageUrl) {
-      this._setBackgroundControlsMode(false);
+      cssEditorFieldset.hide();
+      externalPageControls.show();
+      backgroundControls.hide();
     }
     else { 
-      this._setBackgroundControlsMode(true);
+      cssEditorFieldset.show();
+      externalPageControls.hide();
+      backgroundControls.show();
       $("#page_background_color_textbox")[0].value = page.data.data.css.backgroundColor;
       $("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
       this._setBackgroundRepeatMode(page.data.data.css.backgroundRepeat); 
@@ -293,18 +274,10 @@ WebDoc.PageInspectorController = $.klass({
       targetPage.setBackgroundPosition(this._getBackgroundPosition());
     }
   },
-
-  _changeAllowAnnotation: function(e) {
-    e.preventDefault();
-    page.setAllowAnnotation($("#allow_annotation_checkbox").attr("checked"));
-    page.save(function() {
-      WebDoc.application.pageEditor.loadPage(page);
-    });     
-  },
   
   _updateExternalPageUrl: function() {  
     try {
-      page.setExternalPageUrl($("#external_page_url")[0].value);
+      page.setExternalPageUrl($("#external_page_url").val());
       WebDoc.application.pageEditor.loadPage(page);
     }
     catch(exc) {
@@ -330,14 +303,6 @@ WebDoc.PageInspectorController = $.klass({
         WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
       }
     }
-  },
-  
-  _changeExternalMode: function(e) {
-    e.preventDefault();
-    page.setExternalPageMode($("#external_page_checkbox").attr("checked"));
-    page.save(function() {
-      this._updateExternalMode();  
-    }.pBind(this));     
   },
 
   objectChanged: function(page) {

@@ -162,8 +162,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
 
     if(externalPageUrl != null) {
       var newPage = new WebDoc.Page(null, this.currentDocument);
-      // we don't need to set foreign keys. It is automagically done on the server side
-      // newPage.data.document_id = this.currentDocument.data.document_id;
       newPage.data.position = this.currentPage.data.position + 1;
       newPage.save( function(newObject, status) {
         newPage.setExternalPageMode(true);
@@ -171,8 +169,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
         newPage.save();
         this.currentDocument.addPage(newPage, true);      
         this.loadPage(newPage);
-  
-        //WebDoc.application.pageBrowserController.editPageTitle(newPage);
   
       }.pBind(this));
     }
