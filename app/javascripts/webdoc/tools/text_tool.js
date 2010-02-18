@@ -6,10 +6,14 @@
 //= require "text_tool/selection"
 //= require "text_tool/text_tool_view"
 
+WebDoc.TEXTBOX_WRAP_CLASS = "textbox_wrap";
+WebDoc.NEW_TEXTBOX_CONTENT = "Empty content";
+
+
 WebDoc.TextTool = $.klass(WebDoc.Tool, {
   initialize: function($super, selector, boardClass, paletteId ) {
     $super( selector, boardClass );
-    this.delegate = new WebDoc.TextToolView("/stylesheets/textbox.css");
+    this.delegate = new WebDoc.TextToolView();
     this.delegate.setEndEditionListener(this);
     this.textboxCss = {
       cursor: "default",
@@ -19,33 +23,6 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
       top: "20px",
       left: "20px"
     };
-    
-    this.paletteEl = $( paletteId ? paletteId : "#palette_text");
-    this.paletteOverlayEl = this.paletteEl.find("#palette_overlay");
-    
-    // events handler for palette clicks
-    this.paletteEl.bind("click", function(event) {
-      var link = $(event.target).closest('a')[0];
-      if (link) {
-        event.preventDefault();
-        optional = ($('.' + link.className).val()) ? $('.' + link.className).val() : null;
-        this.delegate.editorExec(link.className, optional);
-      }
-    }.pBind(this));
-    
-    // events handler for palette selects change
-    this.paletteEl.bind("change", function(event) {
-      var select = $(event.target).closest('select')[0];
-      if (select && ($(select).val() != 'default')) {
-        event.preventDefault();
-        optional = ($('.' + select.className).val()) ? $('.' + select.className).val() : null;
-        this.delegate.editorExec(select.className, optional);
-        $(select).find('option:first').attr('selected', 'selected');
-      }
-    }.pBind(this));
-    
-    this.paletteOverlayEl.hide();
-    this.paletteEl.removeClass("disabled");
   },
   
   selectTool: function() {
@@ -75,12 +52,14 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     ddd("Text tool: entering edit mode");
 
     this.textView = textView;
-    this.delegate.enterEditMode(textView.itemDomNode);
+    this.delegate.enterEditMode(textView.itemDomNode[0]);
+    this.delegate.activateToolbar(true);
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
   },
   
   exitEditMode: function() {
     this.delegate.exitEditMode();
+    this.delegate.activateToolbar(false); 
   },
   
   applyTextContent: function(content, classValue) {

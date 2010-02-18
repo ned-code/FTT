@@ -1,3 +1,5 @@
+require "xmpp_notification"
+
 class DocumentsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :load_document, :only => [:update, :destroy, :show, :change_user_access, :user_access]
@@ -34,10 +36,9 @@ class DocumentsController < ApplicationController
   # POST /documents
   def create
     @document = Document.new(params[:document])
-    @document.pages.build # add default page
     @document.save
+    @document.pages.create
     current_user.has_role!("owner", @document)
-    xmpp_create_node(@document.uuid)
     render :json => @document      
   end
   
@@ -150,4 +151,5 @@ protected
      end
      return documents
   end
+  
 end

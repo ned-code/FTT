@@ -22,7 +22,7 @@ MTools.ServerCache = $.klass(
      * @param {Object} record
      */
     store: function(record) {
-      var store = this.getStoreForRecordClass(record.constructor);
+      var store = this.getStoreForRecordClass(record.className());
       store[record.uuid()] = record;
       // cache map uuid and id because sometimes we only knows the id and not the uuid. Typically when we have a foreign key.
       // As cache is done by class we never have collision of ids in map cache. 
@@ -36,7 +36,7 @@ MTools.ServerCache = $.klass(
      * @param {Object} record
      */
     invalidate: function(record) {
-      var store = this.getStoreForRecordClass(record.constructor);
+      var store = this.getStoreForRecordClass(record.className());
       delete store[record.uuid()];      
     },
     
@@ -47,7 +47,7 @@ MTools.ServerCache = $.klass(
      * @return {Object} cached record or undefined if record with uuid is not in the cache
      */
     get: function(recordClass, uuid) {
-      var store = this.getStoreForRecordClass(recordClass);
+      var store = this.getStoreForRecordClass(recordClass.className());
       var cachedRecord = store[uuid];
       return cachedRecord;      
     },
@@ -64,11 +64,11 @@ MTools.ServerCache = $.klass(
      * return  the cache used for a specified record class
      * @param {Object} recordClass the recordClass we want the cache
      */
-    getStoreForRecordClass: function(recordClass) {
-      var store = this.stores[recordClass]; 
+    getStoreForRecordClass: function(recordClassName) {
+      var store = this.stores[recordClassName]; 
       if (store === undefined) {
         store = {};
-        this.stores[recordClass] = store;
+        this.stores[recordClassName] = store;
       }
       return store;
     }

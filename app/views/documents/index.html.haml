@@ -17,26 +17,67 @@
   #wb-document-list-container
 
 #wb-new-document-dialog{ :style => "display:none", :title => t('label.create_new_document') }
-  %form{ :action => ""}
+  %form#wb-new-form{ :action => ""}
     %fieldset
       %label{ :for => "name" }= t "label.name"
       %br
       %input#wb-new-document-name.ui-corner-all{ :type => "text", :name => "wb-new-document-name", :style => "width:100%"}
       %br
-      %label{ :for => "creationDate" }= t "label.creationDate"
+      %label{ :for => "description" }= t "label.description"
       %br
-      %input#wb-new-document-creationDate.ui-corner-all{ :disabled => "true", :type => "text", :name => "wb-new-document-creationDate", :style => "width:100%"}
+      %textarea#wb-new-document-description.ui-corner-all{ :rows => "3", :name => "wb-new-document-description", :style => "width:100%"}
+      %br
+      %label{ :for => "category" }= t "label.category"
+      %br
+      %select#wb-new-document-category
+      %br
+      %label{ :for => "document_size" }= t "label.document_size_title"
+      %br
+      %input#wb-new-document-size-custom{ :type => "radio", :name => "wb-new-document-size", :value => "custom" }
+      = t('label.document_size.custom')
+      = t('label.document_size.width')
+      %input#wb-new-document-size-custom-width{ :type => "text" , :size => 6}
+      = t('label.document_size.height')
+      %input#wb-new-document-size-custom-height{ :type => "text" , :size => 6}
+      %br
+      %input#wb-new-document-size-iPhone{ :type => "radio", :name => "wb-new-document-size", :value => "iPhone" }
+      = t('label.document_size.iPhone')
+      %input#wb-new-document-size-classic{ :type => "radio", :name => "wb-new-document-size", :value => "classic" }
+      = t('label.document_size.classic')
+      %input#wb-new-document-size-iPad{ :type => "radio", :name => "wb-new-document-size", :value => "iPad" }
+      = t('label.document_size.iPad')
 
 #wb-edit-document-dialog{ :style => "display:none",:title => t('label.edit_document') }
-  %form{ :action => ""}
+  %form#wb-edit-form{ :action => ""}
     %fieldset
       %label{ :for => "name" }= t "label.name"
       %br
       %input#wb-edit-document-name.ui-corner-all{ :type => "text", :name => "wb-edit-document-name", :style => "width:100%"}
       %br
-      %label{ :for => "creationDate" }= t "label.creationDate"
+      %label{ :for => "description" }= t "label.description"
       %br
-      %input#wb-edit-document-creationDate.ui-corner-all{ :disabled => "true", :type => "text", :name => "wb-edit-document-creationDate", :style => "width:100%"}      
+      %textarea#wb-edit-document-description.ui-corner-all{ :rows => "3", :name => "wb-edit-document-description", :style => "width:100%"}
+      %br
+      %label{ :for => "category" }= t "label.category"
+      %br
+      %select#wb-edit-document-category
+      %br
+      %label{ :for => "document_size" }= t "label.document_size_title"
+      %br
+      %input#wb-edit-document-size-custom{ :type => "radio", :name => "wb-edit-document-size", :value => "custom" }
+      = t('label.document_size.custom')
+      = t('label.document_size.width')
+      %input#wb-edit-document-size-custom-width{ :type => "text",  :size => 6}
+      = t('label.document_size.height')
+      %input#wb-edit-document-size-custom-height{ :type => "text", :size => 6}
+      %br
+      %input#wb-edit-document-size-iPhone{ :type => "radio", :name => "wb-edit-document-size", :value => "iPhone" }
+      = t('label.document_size.iPhone')
+      %input#wb-edit-document-size-classic{ :type => "radio", :name => "wb-edit-document-size", :value => "classic" }
+      = t('label.document_size.classic')
+      %input#wb-edit-document-size-iPad{ :type => "radio", :name => "wb-edit-document-size", :value => "iPad" }
+      = t('label.document_size.iPad')
+         
 
 #wb-change-access-dialog{ :style => "display:none",:title => t('label.change_access_document') }
   #document_access-header

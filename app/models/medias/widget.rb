@@ -1,82 +1,93 @@
 class Medias::Widget < Media
+  mount_uploader :file, WidgetUploader, :validate_integrity => true # Upload the zip file
   
-  #before_save :set_properties_and_store_file # How bypass the save on update???
+  attr_accessor :status
   
-  after_destroy :delete_widget_folder
-  
-  def title
-    properties[:title]
-  end
-  
-  def description
-    properties[:description]
-  end
-  
-  def icon_url
-    properties[:icon_url]
-  end
-  
-  def index_url
-    properties[:index_url]
-  end
-  
-  def inspector_url
-    properties[:inspector_url]
-  end
-  
-  def width
-    properties[:width]
-  end
-  
-  def height
-    properties[:height]
-  end
+  before_save :set_attributes_if_not_present
+  before_save :update_new_file
+  #after_destroy :delete_widget_folder # Will be done later, we currently need that all files keep unchanged so that existing documents still work
   
   def version
     properties[:version]
   end
   
-  def set_properties_from_config_dom(config_dom)
-    update_attribute(:properties, properties_from_config_dom(config_dom))
-  end
-  
-  def set_properties_and_store_file
-    file_type = file.content_type # Must be application/zip or application/octet-stream
-    if file_type == "application/zip" || file_type == "application/octet-stream"
-      config_dom = config_file_dom(file.path)
-      # Retrieve version number from config.xml file, so that the destination path can be built
-      version = config_dom.root.attribute("version").to_s
-         
-      update_attribute_without_save(:properties, properties_from_config_dom(config_dom, widget_linking_path(version)))
-      extract_files_from_zip_file(file.path, storage_destination_path(version))
+  %[icon_url index_url inspector_url width height].each do |property|
+    define_method property do
+      properties[property.to_sym]
     end
   end
   
-  def update_action(zip_file)
-    file_type = zip_file.content_type # Must be application/zip or application/octet-stream
-    if file_type == "application/zip" || file_type == "application/octet-stream"
-      config_dom = config_file_dom(zip_file.path)
-      version = config_dom.root.attribute("version").to_s
-      #puts "Current version: #{self.version} , new version: #{version}"
-      if self.version.nil? || version > self.version
-        update_attribute(:properties, properties_from_config_dom(config_dom, widget_linking_path(version)))
-
-        extract_files_from_zip_file(zip_file.path, storage_destination_path(version))
-      end
-    end
-  end
-  
-  def delete_widget_folder
-    path = Pathname.new("public/uploads/medias/widget/#{uuid}/#{version}")
-    parent_path = path.parent # Gives the app path
-    FileUtils.rm_rf parent_path
-    # TODO, request all object keys in path and delete all
-    # path = "/widgets/#{id}/"
-    # logger.debug "Removing zip files."
-    # AWS::S3::S3Object.delete(path, file.options[:bucket])
-  end
+  # # Not yet modified
+  # def delete_widget_folder
+  #   path = get_storage_path(@working_version)
+  #   if file.s3_bucket == nil
+  #     #parent_path = path.parent # Gives the app path
+  #     #FileUtils.rm_rf parent_path
+  #     FileUtils.rm_rf path
+  #   else
+  #     check_init_s3_parameters
+  #     s3_bucket = CarrierWave.yml_s3_bucket(:widgets)
+  #     # Delete file
+  #     @s3.delete(path, bucket) # Doesn't work apparently, must try foreach contained file
+  #   end
+  # end
   
 private
+  
+  # before_save
+  def set_attributes_if_not_present
+    unless properties.present?
+      assign_uuid
+      
+      # Attributes
+      self.title = config_dom.root.elements['name'].text
+      self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
+      
+      # Properties
+      self.properties = {}
+      self.properties[:version] = config_dom.root.attribute("version").to_s
+      
+      index_url = config_dom.root.elements['content'].attribute("src").to_s
+      unless index_url.match(/http:\/\/.*/)
+        index_url = File.join(file.store_url, config_dom.root.elements['content'].attribute("src").to_s)
+      end
+      inspector_url = nil
+      if (config_dom.root.elements['inspector'])
+        inspector_url = config_dom.root.elements['inspector'].attribute('src').to_s
+        unless inspector_url.match(/http:\/\/.*/)
+          inspector_url = File.join(file.store_url, config_dom.root.elements['inspector'].attribute("src").to_s)
+        end
+      end
+      self.properties[:width] = config_dom.root.attribute("width").to_s
+      self.properties[:height] = config_dom.root.attribute("height").to_s
+      self.properties[:index_url] = index_url
+      self.properties[:icon_url] = File.join(file.store_url, "icon.png")
+      self.properties[:inspector_url] = inspector_url if (inspector_url)
+      
+      # Extract files to right destination
+      extract_files_from_zip_file(file.current_path, file.store_dir)
+    end
+  end
+  
+  # before_save
+  def update_new_file
+    if file_changed?
+      new_version = config_dom.root.attribute("version").to_s
+      if version.nil? || new_version > version
+        self.properties[:version] = new_version
+        self.properties = properties_from_config_dom(config_dom, file.store_url)
+        self.title = config_dom.root.elements['name'].text
+        self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
+        
+        extract_files_from_zip_file(file.current_path, file.store_dir)
+      else
+        @status = "already_up_to_date"
+      end
+      @status = "updated_successful"
+    end
+  rescue
+    @status = "updated_failed"
+  end
   
   def is_valid_widget_file(file_name)
     !(file_name.include?("__MACOSX") ||
@@ -84,25 +95,11 @@ private
       file_name.include?(".DS_Store"))
   end
   
-  def update_attribute_without_save(name, value)
-    send(name.to_s + '=', value)
-  end
-  
-  def storage_destination_path(version)
-    "public/uploads/#{self.class.to_s.underscore}/#{uuid}/#{version}"
-  end
-  
-  def widget_linking_path(version)
-    "/uploads/#{self.class.to_s.underscore}/#{uuid}/#{version}"
-  end
-  
-  def config_file_dom(zip_file_path)
-    config_file_dom = nil
-    Zip::ZipFile.open(zip_file_path) do |zip_file|
+  def config_dom
+    @config_file_dom ||= Zip::ZipFile.open(file.current_path) do |zip_file|
       entry = zip_file.find_entry("config.xml")
       config_file_dom = REXML::Document.new(entry.get_input_stream)
     end
-    config_file_dom
   end
   
   def properties_from_config_dom(config_dom, destination_path)
@@ -118,10 +115,8 @@ private
         inspector_url = File.join(destination_path, config_dom.root.elements['inspector'].attribute("src").to_s)
       end
     end
-    properties[:title] = config_dom.root.elements['name'].text
-    properties[:description] = config_dom.root.elements['description'].text if config_dom.root.elements['description']
+    
     properties[:version] = config_dom.root.attribute("version").to_s
-    properties[:content] = config_dom.root.elements['content'].attribute("src").to_s
     properties[:width] = config_dom.root.attribute("width").to_s
     properties[:height] = config_dom.root.attribute("height").to_s
     properties[:index_url] = index_url
@@ -130,36 +125,32 @@ private
     properties
   end
   
-  # Not working with S3 yet
   def extract_files_from_zip_file(file_path, destination_path)
-    #path = "/widgets/#{id}/"
-    #    logger.debug "Saving zip files."
-    #    Zip::ZipFile.foreach(@zip_file.path) do |zip_file|
-    #    if is_valid_widget_file(zip_file.name)
-    #      logger.debug "Saving #{path + zip_file.name}"
-    #      AWS::S3::S3Object.store(path + zip_file.name,
-    #                           zip_file.get_input_stream.read,
-    #                           file.options[:bucket],
-    #                          :access => :public_read)
-    #     end
-    #   end
     Zip::ZipFile.foreach(file_path) do |zip_file|
       if (!zip_file.directory?)
-        logger.debug "Saving #{destination_path + "\/"+ zip_file.name}"
-        filePath = destination_path + "\/" + zip_file.name
+        filePath = File.join(destination_path, zip_file.name)
+        
         if (is_valid_widget_file(filePath))
-          FileUtils.mkdir_p(File.dirname(filePath))
-          if(!File.directory?(filePath))
-            File.open(filePath, 'wb') do |file|
-              file << zip_file.get_input_stream.read
-            end 
+          # Check storage mode
+          if file.s3_bucket == nil
+            local_path = File.join(Rails.root, 'public', filePath)
+            FileUtils.mkdir_p(File.dirname(local_path))
+            if(!File.directory?(local_path))
+              File.open(local_path, 'wb') do |file|
+                file << zip_file.get_input_stream.read
+              end 
+              #puts "File saved to path:" + local_path
+            end
+          else
+            @s3 ||= RightAws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
+            @s3.put(file.s3_bucket, filePath, zip_file.get_input_stream.read, 'x-amz-acl' => 'public-read')
           end
         end
       end
     end
   end
+  
 end
-
 
 # == Schema Information
 #
@@ -174,5 +165,7 @@ end
 #  user_id     :integer
 #  file        :string(255)
 #  system_name :string(255)
+#  title       :string(255)
+#  description :text
 #
 

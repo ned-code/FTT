@@ -11,8 +11,47 @@ WebDoc.Document = $.klass(MTools.Record, {
     return this.data.title;
   },
   
-  setTitle: function(title) {
+  description: function() {
+    return this.data.description;
+  },
+  
+  category: function() {
+    return this.data.category_id;
+  },
+  
+  size: function() {
+    return this.data.size;
+  },
+  
+  setTitle: function(title, skipSave) {
     this.data.title = title;
+    if(!skipSave && !skipSave == true) {
+      this.firePropertiesChanged();
+      this.save();
+    }
+  },
+  
+  setDescription: function(description, skipSave) {
+    this.data.description = description;
+    if(!skipSave && !skipSave == true) {
+      this.firePropertiesChanged();
+      this.save();
+    }
+  },
+  
+  setCategory: function(category_id, skipSave) {
+    this.data.category_id = category_id;
+    if(!(skipSave && skipSave == true)) {
+      this.firePropertiesChanged();
+      this.save();
+    }
+  },
+  
+  setSize: function(size, skipSave) {
+    this.data.size = size;
+    if(!(skipSave && skipSave == true)) {
+      this.save();
+    }
   },
 
   refresh: function($super, json) {
@@ -162,6 +201,14 @@ WebDoc.Document = $.klass(MTools.Record, {
     }      
   },
   
+  firePropertiesChanged: function() {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if(this.listeners[i].documentPropertiesChanged) {
+        this.listeners[i].documentPropertiesChanged();
+      }
+    }
+  },
+  
   movePage: function(movedPageUuid, newPosition) {
     var page = this.findPageWithUuidOrPosition(movedPageUuid);
     ddd("move page", page, "to position", newPosition);
@@ -198,5 +245,8 @@ $.extend(WebDoc.Document, {
   },
   rootUrl: function(args) {
     return "";
-  }    
+  },
+  pluralizedClassName: function() {
+    return this.className() + "s";
+  } 
 });

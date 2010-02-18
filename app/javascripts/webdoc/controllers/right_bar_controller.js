@@ -3,6 +3,7 @@
  * @author Julien Bachmann
  */
 //= require <webdoc/controllers/page_inspector_controller>
+//= require <webdoc/controllers/document_inspector_controller>
 
 WebDoc.RightBarController = $.klass({
   
@@ -12,6 +13,7 @@ WebDoc.RightBarController = $.klass({
   LIBRARY_BUTTON_SELECTOR: "a[href='#library']",
   PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
   ITEM_INSPECTOR_BUTTON_SELECTOR: "a[href='#item-inspector']",
+  DOCUMENT_INSPECTOR_BUTTON_SELECTOR: "a[href='#document-inspector']",
   
   STATE_BUTTON_SELECTOR: ".state-right-panel",
   PANEL_SELECTOR: "#right_bar",
@@ -20,16 +22,29 @@ WebDoc.RightBarController = $.klass({
   initialize: function() {
     panel = $( this.PANEL_SELECTOR );
     
+    // Some of these are lazy loaded, and some are not -
+    // pageInspector does not work if you try loading it now.
+    
+    var library = WebDoc.application.libraryController = new WebDoc.LibrariesController(),
+        itemInspector = WebDoc.application.inspectorController = new WebDoc.InspectorController();
+        //pageInspector = WebDoc.application.pageInspectorController = new WebDoc.PageInspectorController();
+    
+    library.buttonSelector = this.LIBRARY_BUTTON_SELECTOR;
+    itemInspector.buttonSelector = this.ITEM_INSPECTOR_BUTTON_SELECTOR;
+    //pageInspector.buttonSelector = this.PAGE_INSPECTOR_BUTTON_SELECTOR;
+    
     this.visible = false;
     this.domNode = panel;
-    this.contentMap = {};
     this.panelWidth = panel.outerWidth();
-    
-    ddd('[RightBarController] Width of right panel: '+this.panelWidth);
+    this.contentMap = {
+      library: library,
+      itemInspector: itemInspector
+      //pageInspector: pageInspector
+    };
   },
   
   _changePanelContent: function(inspector) {
-    ddd('[RightBarController._changePanelContent()] ' + inspector);
+    ddd('[RightBarController] _changePanelContent(inspector)' + inspector);
     var inspectors = this.contentMap;
     
     for (var key in inspectors) {
@@ -43,7 +58,7 @@ WebDoc.RightBarController = $.klass({
   },
   
   _changeButtonState: function(inspector) {
-    ddd('[RightBarController._changeButtonState()]');
+    ddd('[RightBarController] _changeButtonState(inspector)');
     
     var stateButtons = $( this.STATE_BUTTON_SELECTOR ),
         currentClass = this.CURRENT_CLASS,
@@ -55,10 +70,11 @@ WebDoc.RightBarController = $.klass({
 
   showLib: function() {
     ddd("[RightBarController] showLib");
-    var inspector = this.contentMap.libraries;
+    
+    var inspector = this.contentMap.library;
     
     if (!inspector) { // lazily load the library
-      ddd('[RightBarController] LOAD LIBRARY');
+      ddd('[RightBarController] Load Library');
       inspector = WebDoc.application.libraryController = new WebDoc.LibrariesController();
       inspector.buttonSelector = this.LIBRARY_BUTTON_SELECTOR;
       
@@ -75,7 +91,7 @@ WebDoc.RightBarController = $.klass({
     var inspector = this.contentMap.pageInspector;
     
     if (!inspector) { // lazily load the page inspector
-      ddd('[RightBarController] LOAD PAGE INSPECTOR');
+      ddd('[RightBarController] Load Page Inspector');
       inspector = WebDoc.application.pageInspectorController = new WebDoc.PageInspectorController();
       inspector.buttonSelector = this.PAGE_INSPECTOR_BUTTON_SELECTOR;
     
@@ -92,11 +108,28 @@ WebDoc.RightBarController = $.klass({
     var inspector = this.contentMap.itemInspector;
     
     if (!inspector) { // lazily load the item inspector
-      ddd('[RightBarController] LOAD ITEM INSPECTOR');
+      ddd('[RightBarController] Load Item Inspector');
       inspector = WebDoc.application.inspectorController = new WebDoc.InspectorController();
       inspector.buttonSelector = this.ITEM_INSPECTOR_BUTTON_SELECTOR;
       
       this.contentMap.itemInspector = inspector;
+    }
+    
+    this._changePanelContent(inspector);
+    this._changeButtonState(inspector);
+    this.showRightBar();
+  },
+  
+  showDocumentInspector: function() {
+    ddd("[RightBarController] showDocumentInspector");
+    var inspector = this.contentMap.documentInspector;
+    
+    if (!inspector) { // lazily load the page inspector
+      ddd('[RightBarController] Load Document Inspector');
+      inspector = WebDoc.application.documentInspectorController = new WebDoc.DocumentInspectorController();
+      inspector.buttonSelector = this.DOCUMENT_INSPECTOR_BUTTON_SELECTOR;
+    
+      this.contentMap.documentInspector = inspector;
     }
     
     this._changePanelContent(inspector);

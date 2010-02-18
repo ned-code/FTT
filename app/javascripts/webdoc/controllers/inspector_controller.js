@@ -6,13 +6,17 @@
 //= require <webdoc/controllers/inspectors/properties_inspector_controller>
 //= require <webdoc/controllers/inspectors/inner_html_controller>
 //= require <webdoc/controllers/inspectors/image_palette_controller>
+//= require <webdoc/controllers/inspectors/text_palette_controller>
 //= require <webdoc/sdk/widget_api>
 
 WebDoc.InspectorController = $.klass({
   initialize: function() {
+    
+    // Get DOM tree
+    this.domNode = $("#item_inspector");
+    
     this.visible = true;
     this.widgetInspectorApi = new WebDoc.WidgetApi(null, true);
-    this.domNode = $("#item_inspector");
     
     var emptyPalette = $("#palette_empty").hide();
     var textPalette = $("#palette_text").hide();
@@ -20,6 +24,9 @@ WebDoc.InspectorController = $.klass({
     var imagePelette = $("#palette_image").hide();
     var htmlSnippetPalette = $("#html_inspector").hide();
     this.imagePaletteController = new WebDoc.ImagePaletteController();
+    this.textPaletteController = new WebDoc.TextPaletteController();
+    this.innerHtmlController = new WebDoc.InnerHtmlController();
+    
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
       ddd("must inject uniboard api in inspector");
@@ -40,12 +47,11 @@ WebDoc.InspectorController = $.klass({
     }.pBind(this));
     
     this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette, imagePelette, htmlSnippetPalette];
+
     this.updatePalette(0);
     this.subInspectors = [];
     var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
-    this.subInspectors.push(propertiesInspectorController);   
-    var innerHtmlController = new WebDoc.InnerHtmlController();
-    this.subInspectors.push(innerHtmlController);            
+    this.subInspectors.push(propertiesInspectorController);               
     
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
@@ -55,6 +61,7 @@ WebDoc.InspectorController = $.klass({
     this.selectInspector(0);
     this.currentInspectorId = 0;
     WebDoc.application.boardController.addSelectionListener(this);
+    
     $("#inspectors").accordion({
       autoHeight: false,
       fillSpace: false,
@@ -77,17 +84,13 @@ WebDoc.InspectorController = $.klass({
   },
   
   updatePalette: function(paletteId) {
-    if (paletteId != this.currentPaletteId) {
+    if (paletteId !== this.currentPaletteId) {
       if (this.currentPaletteId !== undefined) {
         ddd("hide palette", this.currentPaletteId);
         this.palettes[this.currentPaletteId].hide();
       }
       ddd("show palette", paletteId, this.palettes[paletteId]);
       if (typeof paletteId == 'string') {
-        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);        
-        if (this.palettes[3].attr("src") != paletteId) {
-          this.palettes[3].attr("src", paletteId);
-        }
         this.palettes[3].show();
         this.currentPaletteId = 3;
       }
@@ -95,9 +98,6 @@ WebDoc.InspectorController = $.klass({
         this.palettes[paletteId].show();
         this.currentPaletteId = paletteId;        
       }
-    }
-    if (paletteId == 4) {
-      this.imagePaletteController.refresh();
     }
   },
   
@@ -111,13 +111,38 @@ WebDoc.InspectorController = $.klass({
     }
     this.refreshSubInspectors();    
   },
- 
+  
   refreshSubInspectors: function() {
+    // refresh su inspector
     for (var i=0; i < this.subInspectors.length; i++) {
       var subInspector = this.subInspectors[i];
       if (subInspector.refresh) {
         subInspector.refresh();
       }
+    }
+    
+    switch (this.currentPaletteId) {
+      case 3:
+        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);        
+        if (this.palettes[3].attr("src") != WebDoc.application.boardController.selection()[0].inspectorId()) {
+          this.palettes[3].attr("src", WebDoc.application.boardController.selection()[0].inspectorId());
+        }      
+        else {
+          if (this.palettes[3][0].contentWindow && this.palettes[3][0].contentWindow.widget) {
+            var widgetObject = this.palettes[3][0].contentWindow.widget;
+            widgetObject.lang = "en";
+            widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
+            widgetObject.mode = "Edit";
+            widgetObject._onLoad();
+          }
+        }
+        break;
+      case 4:
+        this.imagePaletteController.refresh();
+        break;
+      case 5:
+        this.innerHtmlController.refresh();
+        break;
     }
   },
   
@@ -135,5 +160,3 @@ WebDoc.InspectorController = $.klass({
     }    
   }  
 });
-
-$.extend(WebDoc.InspectorController, {});

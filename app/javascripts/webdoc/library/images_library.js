@@ -56,7 +56,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     
     // Setup thumbnails drag n' drop
     this.myImagesContainer.find(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
-    $(document.body).append(this.buildMediaDragFeedbackElement("image", "")); // just to preload the icon (so that it'll be immediatley available at the first drag)
+    $(document.body).append(this.buildMediaDragFeedbackElement("image", "")); // just to preload the icon (so that it'll be immediately available at the first drag)
     
     // Next/Previous page links
     this.paginationWrap = $("<div class='pagination' style='display:none'>");
@@ -94,6 +94,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
         
         case "add_image_to_page_action":
           ddd("add_image_to_page_action");
+          WebDoc.application.boardController.insertImage(properties.url);
           break;
           
         case "set_image_as_bg_action": 
@@ -331,5 +332,5 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   },
   preloadImageError: function() {
     this.detailsView.find('.loading').remove();
-  }
+  },
 });

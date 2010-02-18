@@ -26,6 +26,8 @@
 //= require <webdoc/tools/text_tool>
 //= require <webdoc/tools/html_tool>
 
+//= require <webdoc/utils/field_validator>
+
 // application singleton.
 WebDoc.application = {};
 
@@ -33,7 +35,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
 
   currentDocument: null,
   currentPage: null,
-  applicationUuid: undefined,
   
   initialize: function($super, editable) {
     $super();
@@ -46,8 +47,8 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     // Set up default panel behaviour (show screen, show footer etc.)
     jQuery(".panel").panel();
         
-    this.applicationUuid = new MTools.UUID().id;
-    MTools.ServerManager.sourceId = this.applicationUuid;
+    MTools.ServerManager.xmppClientId = new MTools.UUID().id;
+    
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         
@@ -77,7 +78,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   },
 
   load: function(documentId) {
-    ddd("load document " + documentId);
+    ddd("[PageEditor] load " + documentId);
     WebDoc.application.collaborationManager.listenXMPPNode(documentId);              
     MTools.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
     {
@@ -87,7 +88,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument);      
       ddd("check editablity");
       if (WebDoc.application.boardController.isEditable()) {
-        ddd("Show lib");
+        ddd("[PageEditor] call rightBarController.showLib");
         WebDoc.application.rightBarController.showLib();
       }
     }.pBind(this));
@@ -151,6 +152,26 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       WebDoc.application.pageBrowserController.editPageTitle(newPage);
       
     }.pBind(this));
+  },
+  
+  addWebPage: function() {
+    var externalPageUrl = null;
+    do {
+      externalPageUrl = prompt("Web page URL: ", "http://");
+    }while(externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl))
+
+    if(externalPageUrl != null) {
+      var newPage = new WebDoc.Page(null, this.currentDocument);
+      newPage.data.position = this.currentPage.data.position + 1;
+      newPage.save( function(newObject, status) {
+        newPage.setExternalPageMode(true);
+        newPage.data.data.externalPageUrl = externalPageUrl;
+        newPage.save();
+        this.currentDocument.addPage(newPage, true);      
+        this.loadPage(newPage);
+  
+      }.pBind(this));
+    }
   },
   
   removePage: function() {

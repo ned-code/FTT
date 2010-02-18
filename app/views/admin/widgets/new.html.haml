@@ -1,0 +1,11 @@
+%h1 Add new widget
+
+- semantic_form_for @widget, :url => admin_widgets_path, :html => { :enctype => 'multipart/form-data' } do |f|
+  - f.inputs do
+    = f.input :file, :as => :file
+    = f.input :system_name
+
+  - f.buttons do
+    = f.commit_button t('upload')
+
+= link_to t('back'), admin_widgets_path

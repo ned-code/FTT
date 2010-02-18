@@ -246,7 +246,7 @@ form.inline p { margin-bottom:0; }
   color: black;
   
   height: 1.5em;
-  margin: 0;
+  margin: 0 0 0.8em 0;
   padding: 0.1659em 0.5em 0;
   font-family: 'Helvetica', sans-serif;
   font-size: 1em;
@@ -266,16 +266,14 @@ form.inline p { margin-bottom:0; }
   -moz-box-shadow:    0 0 12px rgba(77, 70, 68, 1);
   box-shadow:         0 0 12px rgba(77, 70, 68, 1);
 }
-.pop input[type='text'] {
-  margin-bottom: 0.8em;
-}
-.pop:hover input[type='text'],
-.pop.active input[type='text'] {
-  background: hsl(194, 1%, 96%);
-}
 .pop input[type='text']:focus {
   outline: none;
   color: black;
+  background-color: hsl(194, 0.4%, 99%);
+}
+.pop:hover input[type='text'],
+.pop.active input[type='text'] {
+  background-color: hsl(194, 1%, 96%);
 }
 
 .active-show {

@@ -7,6 +7,9 @@ en:
   edit: "edit"
   destroy: "destroy"
   update: "update"
+  apply: "apply"
+  upload: "upload"
+  add: "add"
   confirm: "Are you sure?"
   
   formtastic:
@@ -30,8 +33,13 @@ en:
       login_successfull: "Login successful!"
       logout_successfull: "Logout successful!"
       user_confirmed: "Your user is confirmed!"
-      widget_destroyed_successful: "Widget successfully deleted"
-      widget_updated_successful: "Widget successfully updated"
+      widget:
+        destroyed_successful: "Widget successfully deleted"
+        updated_successful: "Widget successfully updated"
+        updated_failed: "An error occured when attempting to update the widget"
+        already_up_to_date: "Already up to date, no update needed"
+      category:
+        destroyed_successful: "Category successfully deleted"
       
   registrations:
     new:
@@ -62,6 +70,7 @@ en:
   label:
     page_inspector: "Page inspector"
     item_inspector: "Item inspector"
+    document_inspector: "Document properties"
     documents: "Documents"
     all_items_by_date: "All items"
     owned_by_me: "Owned by me"
@@ -70,9 +79,22 @@ en:
     create_new_document: "Create a new document"
     edit_document: "Edit document"
     name: "Name"
+    description: "Description"
+    category: "Category"
+    document_size_title: "Document size"
     creationDate: "Creation date"
     change_access_document: "Modify document access"
     everybody: "Everybody"
+    choose_title: "Choose a title"
+    new_webdoc: "a new webdoc"
+    add_description: "Add a description"
+    document_size:
+      custom: "Custom"
+      iPhone: "iPhone (620x480)"
+      classic: "Classic (800x600)"
+      iPad: "iPad (1024x768)"
+      width: "Width"
+      height: "Height"
   alert:
     destroy_confirmation: "Are you sure?"
 

@@ -108,6 +108,15 @@ WebDoc.Page = $.klass(MTools.Record,
       this.save();
     }
   },
+  
+  setExternalPageUrl: function(url) {
+    WebDoc.InspectorFieldsValidator.validateUrl(url);
+    if(this.data.data.externalPageUrl != url) {
+      this.data.data.externalPageUrl = url;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
 
   removeBackgroundImage: function() {
     delete this.data.data.css.backgroundImage;
@@ -115,6 +124,10 @@ WebDoc.Page = $.klass(MTools.Record,
     delete this.data.data.css.backgroundPosition;   
     this.fireObjectChanged();
     this.save();    
+  },
+  
+  hasBackgroundImage: function() {
+    return this.data.data.css.backgroundImage && this.data.data.css.backgroundImage;
   },
   
   refresh: function($super, json) {
@@ -146,6 +159,12 @@ WebDoc.Page = $.klass(MTools.Record,
         that.createOrUpdateItem({ item: this });
       });
     }    
+  },
+  
+  // Returns backgroundImage CSS data without the url() container
+  getBackgroundImagePath: function() {
+    WebDoc.InspectorFieldsValidator.validateBackgroundUrl(this.data.data.css.backgroundImage);
+    return this.data.data.css.backgroundImage.substring(4, this.data.data.css.backgroundImage.length-1);
   },
   
   getData: function($super, withRelationShips) {
@@ -342,5 +361,8 @@ $.extend(WebDoc.Page, {
   
   rootUrl: function(args) {
     return "/documents/" + args.document_id;
-  }
+  },
+  pluralizedClassName: function() {
+    return this.className() + "s";
+  }  
 });

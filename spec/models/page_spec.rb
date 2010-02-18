@@ -4,7 +4,7 @@ describe Page do
   should_be_built_by_factory
   should_be_created_by_factory
 
-  should_have_many :items, :dependent => :destroy
+  should_have_many :items, :dependent => :delete_all
   should_belong_to :document
   should_belong_to :thumbnail, :class_name => "Medias::Thumbnail"
   
@@ -26,7 +26,7 @@ describe Page do
   end
   
   describe "new" do
-    subject { Factory.build(:page) }
+    subject { Factory.create(:page) }
     
     it "should have default css data" do
       subject.data.should == { :css => { :width => "800px", :height => "600px", :backgroundColor => "#fff" } }
@@ -54,6 +54,16 @@ describe Page do
       page.title.should == "undefined"
     end
   end
+  
+  describe "size" do
+      it "should have width and height values used when creating a page" do
+        document = Factory(:document)
+        document.size = { :width => "100", :height => "200" }
+        document.save
+        page = document.pages.create
+        page.data.should == { :css => { :width => document.size[:width]+"px", :height => document.size[:height]+"px", :backgroundColor => "#fff" } }
+      end
+    end
   
 end
 

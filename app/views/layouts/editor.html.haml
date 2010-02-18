@@ -1,8 +1,9 @@
+!!! 5
 %html( xmlns:ub="#{XML_UNIBOARD_DOCUMENT_NAMESPACE}" xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg" )
   %head
     %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
     %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
-    %title= "MyUniboard (#{I18n.locale}) - #{yield(:title)}"
+    %title= "webdoc - alpha - #{yield(:title)}"
     = stylesheet_link_tag 'reset'
     = stylesheet_link_tag 'jquery-ui-1.7.2.custom'       
     = stylesheet_link_tag 'library'
@@ -14,34 +15,38 @@
     = stylesheet_link_tag 'style'
     = stylesheet_link_tag 'style.editor'
     = stylesheet_link_tag 'style.editor.colors'
+    = stylesheet_link_tag 'colorpicker'    
+    = stylesheet_link_tag 'toolbar'        
     
-  -if (@is_reader)  
-    %body.editor.embed-mode
-  -else
-    %body.editor.edit-mode
-      #wrap
-        = yield
-      = javascript_include_tag 'jquery'      
-      = javascript_include_tag 'jquery-json'
-      = javascript_include_tag 'jquery-string'
-      = javascript_include_tag 'jquery-ui'
+    -if (@is_reader)  
+      %body.editor.embed-mode
+    -else
+      %body.editor.edit-mode
+    #wrap
+      = yield
+    = javascript_include_tag 'jquery'      
+    = javascript_include_tag 'jquery-json'
+    = javascript_include_tag 'jquery-string'
+    = javascript_include_tag 'jquery-ui'
+    = javascript_include_tag 'colorpicker'    
+    
+    = javascript_include_tag 'jquery.extensions'
+    = javascript_include_tag 'jquery.events'
+    = javascript_include_tag 'jquery.panel'
+    
+    = javascript_include_tag 'klass'
+    = javascript_include_tag '../swfupload/swfupload.js'
+    = javascript_include_tag 'jquery-swfupload'
+    = javascript_include_tag 'sylvester'
+    = javascript_include_tag 'strophe'
+    = javascript_include_tag 'jquery.form'
+    
+    = sprockets_include_tag
+    :javascript
       
-      = javascript_include_tag 'jquery.extensions'
-      = javascript_include_tag 'jquery.events'
-      = javascript_include_tag 'jquery.panel'
-      
-      = javascript_include_tag 'klass'
-      = javascript_include_tag '../swfupload/swfupload.js'
-      = javascript_include_tag 'jquery-swfupload'
-      = javascript_include_tag 'sylvester'
-      = javascript_include_tag 'strophe'
-      
-      = sprockets_include_tag
-      :javascript
-        
-        $(function()
-        {
-          WebDoc.run();
-        });    
-      
-      = render :partial => "layouts/googleAnalytics"
+      $(function()
+      {
+        WebDoc.run();
+      });    
+    
+    = render :partial => "layouts/googleAnalytics"

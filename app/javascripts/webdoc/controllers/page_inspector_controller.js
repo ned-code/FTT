@@ -7,21 +7,22 @@
 var cssEditor,
     cssEditorFieldset,
     externalPageControls,
+    backgroundControls,
     backgroundImageControls,
     backgroundImageControlsEnabled,
     page;
 
 WebDoc.PageInspectorController = $.klass({
+  
   initialize: function() {
     
     cssEditorFieldset = $("#page_css_editor");
     cssEditor = cssEditorFieldset.find('textarea.code');
-    externalPageControls = $('#allow_annotation_checkbox, #external_page_url');
+    externalPageControls = $('.externalPage-related');
+    backgroundControls = $('.background-related');
     backgroundImageControls = $('#page_background_image_tileX_checkbox, #page_background_image_align_hor_left_radio, #page_background_image_align_hor_center_radio, #page_background_image_align_hor_right_radio, #page_background_image_tileY_checkbox, #page_background_image_align_vert_top_radio, #page_background_image_align_vert_middle_radio, #page_background_image_align_vert_bottom_radio');
 
     cssEditor.bind("blur", this._applyPageCss);
-    $("#external_page_checkbox").bind("change", this._changeExternalMode.pBind(this));
-    $("#allow_annotation_checkbox").bind("change", this._changeAllowAnnotation.pBind(this)); 
     $("#external_page_url").bind("blur", this._updateExternalPageUrl.pBind(this));
     $("#page_title_textbox").bind("change", this._changePageTitle);
     $("#page_height_textbox").bind("change", this._changePageHeight);
@@ -37,7 +38,9 @@ WebDoc.PageInspectorController = $.klass({
     $("#page_background_image_align_vert_middle_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
     $("#page_background_image_align_vert_bottom_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
     $("#page_background_image_apply_all_button").bind("click", this._applyBackgroundToAllPages.pBind(this));
+    $('#image_send_form').submit(this._uploadBackgroundImage.pBind(this));
     $('.page-navigation-link').click(this.performAction.pBind(this));
+    $('.page-remove-background-image').click(this._removeBackgroundImage.pBind(this));
     WebDoc.application.boardController.addCurrentPageListener(this);
     WebDoc.application.pageEditor.currentPage.addListener(this); 
     
@@ -59,42 +62,38 @@ WebDoc.PageInspectorController = $.klass({
 
   currentPageChanged: function() {
     ddd('currentPageChanged');   
-    page = WebDoc.application.pageEditor.currentPage; 
-    $("#external_page_checkbox").attr("checked", page.data.data.externalPage?true:false);
-    $("#allow_annotation_checkbox").attr("checked", page.data.data.allowAnnotation?true:false);    
+    page = WebDoc.application.pageEditor.currentPage;  
     $("#external_page_url")[0].value = page.data.data.externalPageUrl; 
     this._updatePageRelatedFields();
-    this._updateExternalMode(); 
     this._checkEnableBackgroundControls();
    },
-  
-  _updateExternalMode: function() {
-    ddd("update external page");
-    if (page.data.data.externalPage) {
-      cssEditorFieldset.hide();
-      externalPageControls
-      .removeAttr('disabled')
-      .siblings('label')
-      .removeClass('disabled');
-      
-    } else {
-      cssEditorFieldset.show();
-      externalPageControls
-      .attr('disabled', 'disabled')
-      .siblings('label')
-      .addClass('disabled');
-    }
-  },
 
   _updatePageRelatedFields: function() {
     cssEditor.val( $.toJSON(page.data.data.css) ); 
     $("#page_title_textbox").val( page.data.title == "undefined" ? "enter a title" : page.data.title );
     $("#page_height_textbox")[0].value = page.data.data.css.height; 
     $("#page_width_textbox")[0].value = page.data.data.css.width; 
-    $("#page_background_color_textbox")[0].value = page.data.data.css.backgroundColor;
-    $("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
-    this._setBackgroundRepeatMode(page.data.data.css.backgroundRepeat);
-	  this._setBackroundPosition(page.data.data.css.backgroundPosition);
+    if(page.data.data.externalPageUrl) {
+      cssEditorFieldset.hide();
+      externalPageControls.show();
+      backgroundControls.hide();
+    }
+    else { 
+      cssEditorFieldset.show();
+      externalPageControls.hide();
+      backgroundControls.show();
+      $("#page_background_color_textbox")[0].value = page.data.data.css.backgroundColor;
+      $("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
+      this._setBackgroundRepeatMode(page.data.data.css.backgroundRepeat); 
+      this._setBackroundPosition(page.data.data.css.backgroundPosition);
+      if(page.hasBackgroundImage()) {
+        $('#background_image').attr('src', page.getBackgroundImagePath()).css("width", "100px").css("height", "100px");
+        $('#background_image_preview').show();
+      }
+      else {
+         $('#background_image_preview').hide();
+      }
+    }
   },
 
   _checkEnableBackgroundControls: function() {
@@ -113,12 +112,14 @@ WebDoc.PageInspectorController = $.klass({
       .attr('disabled', 'disabled')
       .siblings('label')
       .addClass('disabled');
+      $('#background_image').hide();
     }
     else {
       backgroundImageControls
       .removeAttr('disabled')
       .siblings('label')
       .removeClass('disabled');
+      $('#background_image').show();
     }
   },
   
@@ -167,8 +168,14 @@ WebDoc.PageInspectorController = $.klass({
     } 
   },
 
+  _changePageBackgroundImageFromThumb: function() {
+    var backGroundImageSrc = $('#background_image').data('url');
+    page.setBackgroundImage('url(' + backGroundImageSrc + ')'); 
+    WebDoc.application.pageEditor.loadPage(page);
+  },
+
   _changePageBackgroundRepeatMode: function(e) {
-    e.preventDefault();
+    if(e) { e.preventDefault(); }
     try {
       page.setBackgroundRepeatMode(this._getBackgroundRepeatMode());
       WebDoc.application.pageEditor.loadPage(page); 
@@ -179,7 +186,7 @@ WebDoc.PageInspectorController = $.klass({
   },
 
   _changePageBackgroundPosition: function(e) {
-    e.preventDefault();
+    if(e) {e.preventDefault(); }
     try {
       page.setBackgroundPosition(this._getBackgroundPosition());
       WebDoc.application.pageEditor.loadPage(page); 
@@ -188,14 +195,19 @@ WebDoc.PageInspectorController = $.klass({
       this._setBackroundPosition(page.data.data.css.backgroundPosition);
     } 
   },
-
+  
+  _removeBackgroundImage: function(e) {
+    e.preventDefault();
+    this._cancelImageBackground();
+  },
+  
   _cancelImageBackground: function() {
     page.removeBackgroundImage();
     WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
   },
 
   _checkValidBackgroundImage: function(e) {
-    e.preventDefault();
+    if(e) { e.preventDefault(); }
     try {
       WebDoc.InspectorFieldsValidator.validateBackgroundUrl(e.target.value);
       this._changePageBackgroundImage();
@@ -212,6 +224,34 @@ WebDoc.PageInspectorController = $.klass({
         e.target.value = page.data.data.css.backgroundImage;
       }
     }
+  },
+
+  _uploadBackgroundImage: function(e) {
+    var options = {  
+      success:       this._displayBackgroundImage.pBind(this), 
+      type:          "POST",
+      dataType:      "json"
+    };
+    try{
+      // submit the form
+      $(e.target).ajaxSubmit(options);
+    }
+    catch(exc) {
+      ddd('_uploadBackgroundImage: encountered exception: name: '+exc.name + ' , message: '+exc.message);
+    } 
+    // return false to prevent normal browser submit and page navigation 
+    e.preventDefault();
+    return false;
+  },
+
+  _displayBackgroundImage: function(responseText, statusText) {
+    // Put thumbnail url in the page data so that it can be re-used later
+    var thumbUrl = responseText.image.properties.thumb_url;
+    $('#background_image').attr('src', thumbUrl).data('url', responseText.image.properties.url);
+    this._changePageBackgroundImageFromThumb();
+    this._changePageBackgroundRepeatMode();
+    this._changePageBackgroundPosition();
+    this._setBackgroundControlsMode(true);
   },
 
   _applyBackgroundToAllPages: function(e) {
@@ -234,24 +274,15 @@ WebDoc.PageInspectorController = $.klass({
       targetPage.setBackgroundPosition(this._getBackgroundPosition());
     }
   },
-
-  _changeAllowAnnotation: function(e) {
-    e.preventDefault();
-    page.setAllowAnnotation($("#allow_annotation_checkbox").attr("checked"));
-    page.save(function() {
-      WebDoc.application.pageEditor.loadPage(page);
-    });     
-  },
   
   _updateExternalPageUrl: function() {  
-    page.data.data.externalPageUrl = $("#external_page_url")[0].value;
-    if (page.data.data.allowAnnotation) {
-      delete page.data.data.css.width;
-      delete page.data.data.css.height;
-    }
-    page.save(function() {
+    try {
+      page.setExternalPageUrl($("#external_page_url").val());
       WebDoc.application.pageEditor.loadPage(page);
-    });
+    }
+    catch(exc) {
+      $("#external_page_url")[0].value = page.data.data.externalPageUrl;
+    }
   },
   
   _applyPageCss: function(e) {
@@ -272,14 +303,6 @@ WebDoc.PageInspectorController = $.klass({
         WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
       }
     }
-  },
-  
-  _changeExternalMode: function(e) {
-    e.preventDefault();
-    page.setExternalPageMode($("#external_page_checkbox").attr("checked"));
-    page.save(function() {
-      this._updateExternalMode();  
-    }.pBind(this));     
   },
 
   objectChanged: function(page) {

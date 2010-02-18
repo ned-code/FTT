@@ -101,6 +101,9 @@
     %li>
       %a.state-right-panel.current{ :href => "#page-inspector", :title => "Show Page inspector" }
         Page
+    %li>
+      %a.state-right-panel.current{ :href => "#document-inspector", :title => "Show Document inspector" }
+        Document
 
 #left_bar.left-panel.panel
   #page_browser_left.pages-browser.inspector
@@ -119,7 +122,7 @@
           %a{ :href => "#copy-page", :title => "Copy page" }
             Copy
         %li>
-          %a{ :href => "#remove-page", :title => "Copy page" }
+          %a{ :href => "#remove-page", :title => "Delete page" }
             Remove
         %li>
           %a{ :href => "#toggle-thumbs", :title => "Thumbnails" }
@@ -129,6 +132,7 @@
   = render :partial => 'item_inspector'
   = render :partial => 'library'
   = render :partial => 'page_inspector'
+  = render :partial => 'document_inspector'
 :javascript
   
     var WebDoc;

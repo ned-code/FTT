@@ -367,7 +367,7 @@ div.tabs > div {
 #libraries .web_media_search_field {
   font-size:18px;
   padding:2px;
-  width:249px;
+  width:245px;
   margin:0 0 20px;
   float:left;
 }
@@ -834,6 +834,32 @@ object:hover, object:focus, object:active {
 /* = Apps = */
 /* ========== */
 
+#apps .thumbnails ul {
+  list-style-type:none;
+  padding:0;
+}
+
+#apps .thumbnails ul li {
+  list-style: none;
+  width:33%;
+  padding:0 0 18px 0;
+  float:left;
+  text-align:left;
+}
+
+#apps .thumbnails ul li:nth-child(3n+2) {text-align:center;}
+#apps .thumbnails ul li:nth-child(3n+3) {text-align:right;}
+
+#apps .thumbnails ul li a {
+  text-decoration:none;
+  position:relative;
+}
+
+#apps .thumbnails ul li img {
+  width:75px;
+  height:75px;
+}
+
 
 #apps .rows .no_items {
   font-size:14px;
@@ -1007,4 +1033,13 @@ object:hover, object:focus, object:active {
 
 #apps_library_wrap {
     padding: 8px 0 0 8px;
+}
+
+/* =============== */
+/* = Web browser = */
+/* =============== */
+
+
+#web-browser-ui {
+  background:#ffffff;
 }

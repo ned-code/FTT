@@ -226,7 +226,7 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
     $super('vimeo_videos');
     
     this.baseUrl = "http://vimeo.com/api/rest/v2";
-    this.callbackName = "WebDoc.application.librariesController.videosLibrary.webVideosSearch.vimeoSearch.jsonpCallback";
+    this.callbackName = "WebDoc.application.libraryController.videosLibrary.webVideosSearch.vimeoSearch.jsonpCallback";
     this.consumerKey = "cc9ca0fe8447041900d2ea1c9e13164d";
     this.consumerSecret = "8a74a52d90254c5";
     // This key has been created by me (vimeo user "zeno") on http://www.vimeo.com/api/applications/new

@@ -23,6 +23,7 @@ config.action_mailer.raise_delivery_errors = false
 config.action_mailer.default_url_options = { :host => 'webdoc.local' }
 
 # http://github.com/ddollar/rack-debug
+
 # config.gem 'ruby-debug'
 # config.gem 'rack-debug'
 # config.middleware.use 'Rack::Debug'

@@ -26,8 +26,8 @@ WebDoc.PageBrowserItemView = $.klass({
     try {
       var titleObj = this.getPageTitle(page),
           pageItem = $('<li/>'),
-          pageForm = $('<form/>').attr({ method: 'post' }).addClass(popClass),
-          pageTitle = $('<input/>').attr({ type: 'text' }),
+          pageForm = $('<form/>').attr({ method: 'post', title: 'Double click to edit' }).addClass(popClass),
+          pageTitle = $('<input/>').attr({ type: 'text', title: 'Page title' }),
           pageSubmit = $('<input/>').attr({ type: 'submit' }).addClass( this.SHOW_ON_ACTIVE_CLASS ),
           pageCancel = $('<a/>').attr({ href: '#cancel' }).addClass(cancelClass + ' ' + this.SHOW_ON_ACTIVE_CLASS ),
           pageFormScreen = $('<div/>').addClass(screenClass),
@@ -134,21 +134,26 @@ WebDoc.PageBrowserItemView = $.klass({
   },
 
   // Iterates through the page items and if contains a text item, takes it as page title
-	// Otherwise, returns a default name
+  // Otherwise, returns a default name
   getPageTitle: function(page) {
-	  if(!page.data.title || page.data.title === "undefined") {
-	    for(var itemIndex in page.items) {
-	      if(page.items[itemIndex].type() == "text") {
-          if(page.items[itemIndex].getInnerText() != "") {
-            //console.log('getPageTitle - pageItem exists');
-            return { title: this.cropTitleToFit(page.items[itemIndex].getInnerText()), defaultBehavior: true};
+    if(!page.data.title || page.data.title === "undefined") {
+      if(page.data.data && page.data.data.externalPage) {
+        return { title: this.cropTitleToFit(page.data.data.externalPageUrl), defaultBehavior: true} ;
+      }
+      else {
+        for(var itemIndex in page.items) {
+          if(page.items[itemIndex].type() == "text") {
+            if(page.items[itemIndex].getInnerText() != "") {
+              //console.log('getPageTitle - pageItem exists');
+              return { title: this.cropTitleToFit(page.items[itemIndex].getInnerText()), defaultBehavior: true};
+            }
+            else {
+              return { title: defaultTitle, defaultBehavior: true};
+            }
           }
-          else {
-            return { title: defaultTitle, defaultBehavior: true};
-          }
-	      }
-	    }
-	    return { title: defaultTitle, defaultBehavior: true};
+        }
+        return { title: defaultTitle, defaultBehavior: true};
+      }
     }
     else {
       return  { title: this.cropTitleToFit(page.data.title), defaultBehavior: false };

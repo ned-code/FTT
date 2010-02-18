@@ -13,6 +13,7 @@ WebDoc.PageView = $.klass({
             .add( jQuery('<div/>').addClass('screen layer') )
             .add( jQuery('<div/>').addClass('screen layer') )
             .add( jQuery('<div/>').addClass('screen layer') ),
+        eventCatcherNode = jQuery('<div/>').id("event-catcher").addClass('screnn layer').hide(),
         that = this;
     
     // Extend this
@@ -20,6 +21,7 @@ WebDoc.PageView = $.klass({
     this.domNode = domNode;
     this.drawingDomNode = drawingDomNode;
     this.itemDomNode = itemDomNode;
+    this.eventCatcherNode = eventCatcherNode;
     this.itemViews = {};
     this.boardScreenNodes = boardScreenNodes;
     
@@ -66,6 +68,17 @@ WebDoc.PageView = $.klass({
           externalPage.attr("src", page.data.data.externalPageUrl);
           boardContainer.css("overflow", "hidden");
           externalPage.css("overflow", "auto");
+          if (page.data.data.css.width) {
+            this.domNode.css(page.data.data.css);
+          }
+          else {
+            externalPage.bind("load", function() {
+              page.data.data.css.width = externalPage[0].contentDocument.width;
+              page.data.data.css.height = externalPage[0].contentDocument.height;
+              page.save();
+              this.domNode.css(page.data.data.css);
+            }.pBind(this));
+          }
         }
         this.itemDomNode.append(externalPage[0]);
       }      
@@ -74,8 +87,15 @@ WebDoc.PageView = $.klass({
         // Handle case where page is a webdoc
         ddd('Page is a webdoc page');
     }
-    
+    if (this.domNode.css("width").indexOf("%") !== -1 || this.domNode.css("height").indexOf("%") !== -1) {
+      this.domNode.css({
+        position: "absolute",
+        top: "0px",
+        left: "0px"
+      });
+    }
     this.domNode.append( itemDomNode );
+    this.domNode.append( eventCatcherNode );
     this.domNode.append( boardScreenNodes );
     if (page.items && $.isArray(page.items)) {
         $.each(page.items, function() {
@@ -87,6 +107,20 @@ WebDoc.PageView = $.klass({
   
   objectChanged: function(page) {
     this.domNode.animate(page.data.data.css, 'fast');
+    if (this.domNode.css("width").indexOf("%") !== -1 || this.domNode.css("height").indexOf("%") !== -1) {
+      this.domNode.css({
+        position: "absolute",
+        top: "0px",
+        left: "0px"
+      });
+    }
+    else {
+      this.domNode.css({
+        position: "",
+        top: "",
+        left: ""
+      });      
+    }    
   },
   
   itemAdded: function(addedItem, afterItem) {

@@ -34,7 +34,7 @@ WebDoc.DocumentList = $.klass(
         "</div>\
                                                         <div class='wb-document-actions'>\
                                                         <a class='wb-document-delete' href='' title='delete'></a>\
-                                                        <a class='wb-document-rename sec-action' href='' title='rename'>rename</a>\
+                                                        <a class='wb-document-rename sec-action' href='' title='edit'>edit</a>\
                                                         <a class='wb-document-access sec-action' href='' title='share'>share</a>\                                                           
                                                         </div>\
                                                       </div>").get(0));
@@ -61,7 +61,7 @@ WebDoc.DocumentList = $.klass(
                 "</div>\
                                                         <div class='wb-document-actions'>\
                                                         <a class='wb-document-delete' href='' title='delete'></a>\
-                                                        <a class='wb-document-rename sec-action' href='' title='rename'>rename</a>\
+                                                        <a class='wb-document-rename sec-action' href='' title='edit'>edit</a>\
                                                         <a class='wb-document-access sec-action' href='' title='share'>share</a>\                                                        
                                                         </div>\
                                                       </div>").get(0));
