@@ -39,7 +39,7 @@ $.extend(MTools.ServerManager, {
         return;
       }
     }
-    var pluralizedRecordClassName = recordClass.className() + "s";
+    var pluralizedRecordClassName = recordClass.pluralizedClassName();
     var url = recordClass.rootUrl(args) + "/" + pluralizedRecordClassName;
     if (uuid) {
       url += "/" + uuid;
@@ -155,7 +155,7 @@ $.extend(MTools.ServerManager, {
       xmpp_client_id: MTools.ServerManager.xmppClientId
     };
     $.extend(message, object.to_json(true));
-    $.post(object.rootUrl() + "/" + object.classNameHttpPost(), message, function(data, textstatus) {
+    $.post(object.rootUrl() + "/" + object.pluralizedClassName(), message, function(data, textstatus) {
       // refresh is needed because some values are generated on server side
       // i.e. page size and background.
       object.refresh(data);

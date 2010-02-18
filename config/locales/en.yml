@@ -59,7 +59,7 @@ en:
     edit_document: "Edit document"
     name: "Name"
     description: "Description"
-    keywords: "Some keywords (separated by comma)"
+    category: "Category"
     document_size_title: "Document size"
     creationDate: "Creation date"
     change_access_document: "Modify document access"

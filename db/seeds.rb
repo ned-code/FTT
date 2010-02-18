@@ -26,3 +26,10 @@ User.find_by_email("stelio.tzonis@mnemis.com").has_role!("admin")
 User.find_by_email("david.matthey@mnemis.com").has_role!("admin")
 User.find_by_email("luc.devallonne@mnemis.com").has_role!("admin")
 User.find_by_email("cedric.michelet@icare.info").has_role!("admin")
+
+# Default categories creation
+["Activism & Non Profits", "Art", "Books", "Business", "Education", "Entertainment", "Everyday life", "Health & Medicine", "History", "Movies", "News", 
+"Travel", "Products", "Photos", "Politics", "Spiritual", "Sports", "Technology", "Travel"].each do |category_name|
+  Category.create(:name => category_name)
+  puts "Created category: #{category_name}"
+end
