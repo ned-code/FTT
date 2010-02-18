@@ -123,6 +123,7 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .pages li .number             { background-color: hsl(194, 10%, 40%); color: white; }
 .pages li:hover .number       { background-color: hsl(194, 12%, 24%); color: white; }
 .pages li.current .number     { background-color: hsl(194, 12%, 24%); color: white; }
+.pages-info .number           { background-color: hsla(194, 12%, 30%, 0.8); color: white; }
 
 /* Forms */
 .properties,
@@ -147,14 +148,11 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 /* The page browser */
 
-.toolbar-panel .current        { background-color: #f4fbfd; }
-
+.toolbar-panel .current             { background-color: #f4fbfd; }
 
 /* Pages tools */
 
-.pages-tools a {
-    background-image: url('/images/pages-tools.png');
-}
+.pages-tools a                      { background-image: url('/images/pages-tools.png'); }
 
 a[href="#pages-browser"]            { background-position: 0 0; }
 a[href="#pages-browser"]:hover      { background-position: 0 -64px; }
@@ -305,3 +303,9 @@ a[href="#hide-thumbs"].current      { background-position: -4px -1796px; }
 a[href="#show-thumbs"]              { background-position: -4px -1860px; }
 a[href="#show-thumbs"]:hover        { background-position: -4px -1924px; }
 a[href="#show-thumbs"].current      { background-position: -4px -1988px; }
+
+a[href="#prev-page"]                { background-position: 0 -2051px; }
+a[href="#prev-page"]:hover          { background-position: 0 -2115px; }
+
+a[href="#next-page"]                { background-position: 0 -2173px; }
+a[href="#next-page"]:hover          { background-position: 0 -2237px; }

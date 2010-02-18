@@ -60,17 +60,17 @@ body {
 
 /* Compensate for height of toolbars */
 #webdoc {
-    padding-top: 32px;
+    padding-top: 36px;
 }
 .left-panel,
 .right-panel {
-    top: 38px;
+    top: 39px;
 }
 .toolbar-panel {
     top: 0;
     height: 36px;
     padding: 0 6px;
-    border-bottom: 2px solid;
+    border-bottom: 3px solid;
 }
 .left-panel {
     width: 164px;
@@ -88,6 +88,29 @@ body {
     float: left;
     margin: 6px 12px 0 12px;
     width: 120px; height: 25px;
+}
+
+.left-panel .panel-tools li {
+    border-bottom: none;
+}
+.panel-tools li.pages-info {
+    border-bottom: none;
+    position: relative;
+    height: 0;
+}
+
+.panel-tools li.pages-info a {
+    overflow: visible;
+    position: absolute;
+    top: 0;
+    height: 0;
+}
+
+.pages-info .number {
+    position: absolute;
+    top: -0.75em;
+    left: 50%;
+    margin-left: -0.75em;
 }
 
 /* Fonts - just a few to test for now */
@@ -540,7 +563,7 @@ a:hover { color: #0069BF;}*/
     background: hsl(194, 9%, 71%);
     padding: 0.6em 0.6em 0.6em 2.5em;
 }
-.pages li .number,
+.number,
 .pages li .loading-icon {
     position: absolute;
     top: 0.6em;
@@ -550,7 +573,7 @@ a:hover { color: #0069BF;}*/
     -moz-border-radius:     0.75em;
     border-radius:          0.75em;
 }
-.pages li .number {
+.number {
     left: 0.6em;
     /* Just to nudge the text into place */
     /*text-indent: 1px;*/

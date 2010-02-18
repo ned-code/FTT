@@ -125,6 +125,11 @@
 
 /* Links as thumbs classes */
 
+.thumbs a:hover,
+.thumbs a:focus {
+    text-decoration: none;
+}
+
 .thumbs a {
     display: inline-block;
     /* stop it creating a gap below the thumb, because by default thumb sits on a baseline. */
@@ -139,6 +144,7 @@
     overflow: hidden;
     /* Centre text */
     text-align: center;
+    text-decoration: none;
     background-repeat: no-repeat;
     background-position: 50% 0;
 }
@@ -200,7 +206,8 @@
 
 .tools li {
     margin-right: 0;
-    border-right: 1px solid rgba(120, 130, 140, 0.4);
+    border-right: none;
+    /*border-right: 1px solid rgba(120, 130, 140, 0.4);*/
 }
 .tools li:last-child {
     border-right: none;
@@ -223,10 +230,16 @@
 }
 
 .tools a:hover{
-    background-color: #dedede;
+    background-color: hsla( 194, 8%, 60%, 0.4 );
+    -webkit-border-radius: 6px;
+    -moz-border-radius:    6px;
+    border-radius:         6px;
 }
 .tools a.current{
-    background-color: #b5cdd5;
+    background-color: hsla( 194, 8%, 60%, 0.4 );
+    -webkit-border-radius: 6px;
+    -moz-border-radius:    6px;
+    border-radius:         6px;
 }
 
 /* Inspector view controls */
@@ -319,21 +332,3 @@ a[href='#draw'].current .draw-port {
 	float: right;
 }
 
-/* NOT SURE WHAT THIS DOES - something about special rollover states */
-
-/*Special case to prevent page deletion :-)*/
-#removePage a {
-    background-image: url(../images/icons/page_remove.png);
-    background-repeat: no-repeat;
-    background-position: 1px 1px;
-}
-#removePage a:hover {
-    background-position: -23px 1px;
-}
-#page-browser.toggle_on_panel a{
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  background-color: #6F6F6F;
-  background-position: -23px 1px;
-}

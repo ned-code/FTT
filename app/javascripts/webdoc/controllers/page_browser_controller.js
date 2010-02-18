@@ -10,6 +10,7 @@ WebDoc.PageBrowserController = $.klass({
   
   PAGE_BROWSER_ITEM_SELECTOR: ".page_browser_items",
   PAGE_BROWSER_NUMBER_SELECTOR: ".page_browser_numbered_list",
+  PAGE_NUMBER_SELECTOR: ".page-number",
   ACTIVE_CLASS: "active",
   CURRENT_CLASS: "current",
   LOADING_CLASS: "loading",
@@ -117,7 +118,7 @@ WebDoc.PageBrowserController = $.klass({
     this.updateSelectedPage();
     this._updateIndexNumbers();
     this._updateThumbs();
-
+    
     pageBrowserItems.sortable({
       axis: 'y',
       distance: 8,
@@ -128,11 +129,21 @@ WebDoc.PageBrowserController = $.klass({
       change: function(e, ui){
         var list = jQuery( e.target ),
             items = list.children().not( ui.item[0] ),
-            numberSelector = this.NUMBER_SELECTOR;
+            numberSelector = this.NUMBER_SELECTOR,
+            self = this;
+        
         items
         .each(function(i){
           var number = ( this === ui.placeholder[0] ) ? ui.item.find(numberSelector) : jQuery(numberSelector, this) ;
-          number.html(i+1);
+          
+          number.html( i+1 );
+          
+          // Update current page number
+          // TODO: There must be a way of doing this without querying the DOM
+          if ( $(this).hasClass( self.CURRENT_CLASS ) ) {
+            $( self.PAGE_NUMBER_SELECTOR ).html( i+1 );
+          }
+          
         });
       }.pBind(this)
     });
@@ -289,15 +300,18 @@ WebDoc.PageBrowserController = $.klass({
   },
 
   _selectPageUI: function( page ) {
-    var pageBrowserItem = this.pageMap[ page.uuid() ];
+    var pageBrowserItem = this.pageMap[ page.uuid() ],
+        items = this.domNodeBrowserItems.children();
     
-    this.domNodeBrowserItems
-    .children()
+    items
     .removeClass(this.CURRENT_CLASS);
     
     pageBrowserItem.domNode
     .removeClass(this.LOADING_CLASS)
     .addClass(this.CURRENT_CLASS);
+    
+    // Update current page number
+    $( this.PAGE_NUMBER_SELECTOR ).html( items.index( pageBrowserItem.domNode[0] ) + 1 );
   },
   
   // Titles ---------------------------------------------------------
