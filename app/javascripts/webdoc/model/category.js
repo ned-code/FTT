@@ -1,21 +1,22 @@
 
 //= require <mtools/record>
 
-WebDoc.Widget = $.klass(MTools.Record, {
+WebDoc.Category = $.klass(MTools.Record, {
   initialize: function($super, json) {
     $super(json);
-  }  
+  }
 });
 
-$.extend(WebDoc.Widget, {
+$.extend(WebDoc.Category, {
+  
   className: function() {
-    return "widget";
+    return "category";
   },
   
   rootUrl: function(args) {
     return "";
-  },   
+  },
   pluralizedClassName: function() {
-    return this.className() + "s";
-  } 
+    return "categories";
+  }
 });

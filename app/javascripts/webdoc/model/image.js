@@ -16,7 +16,7 @@ $.extend(WebDoc.Image, {
   rootUrl: function(args) {
     return "";
   },
-  classNameHttpPost: function() {
+  pluralizedClassName: function() {
     return this.className() + "s";
   }    
 });

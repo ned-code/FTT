@@ -15,8 +15,8 @@ WebDoc.Document = $.klass(MTools.Record, {
     return this.data.description;
   },
   
-  keywords: function() {
-    return this.data.keywords;
+  category: function() {
+    return this.data.category_id;
   },
   
   size: function() {
@@ -39,8 +39,8 @@ WebDoc.Document = $.klass(MTools.Record, {
     }
   },
   
-  setKeywords: function(keywords, skipSave) {
-    this.data.keywords = keywords;
+  setCategory: function(category_id, skipSave) {
+    this.data.category_id = category_id;
     if(!(skipSave && skipSave == true)) {
       this.firePropertiesChanged();
       this.save();
@@ -246,7 +246,7 @@ $.extend(WebDoc.Document, {
   rootUrl: function(args) {
     return "";
   },
-  classNameHttpPost: function() {
+  pluralizedClassName: function() {
     return this.className() + "s";
   } 
 });

@@ -362,7 +362,7 @@ $.extend(WebDoc.Page, {
   rootUrl: function(args) {
     return "/documents/" + args.document_id;
   },
-  classNameHttpPost: function() {
+  pluralizedClassName: function() {
     return this.className() + "s";
   }  
 });

@@ -7,10 +7,10 @@
 //= require <mtools/uuid>
 
 //= require <webdoc/model/document>
+//= require <webdoc/model/category>
 //= require <webdoc/utils/document_date_filter>
 //= require <webdoc/gui/document_list>
 //= require <webdoc/controllers/document_access_controller>
-
 
 // application singleton.
 WebDoc.application = {};
@@ -19,11 +19,12 @@ WebDoc.application = {};
 
 var newDocNameField,
     newDocDescriptionField,
-    newDocKeywordsField,
+    newDocCategoryField,
     newDocCustomSizeWidthField,
     newDocCustomSizeHeightField,
     editDocCustomSizeWidthField,
-    editDocCustomSizeHeightField;
+    editDocCustomSizeHeightField,
+    editDocCategoryField;
 
 WebDoc.DocumentEditor = $.klass(MTools.Application,
 {
@@ -38,11 +39,12 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         WebDoc.application.accessController = new WebDoc.DocumentAccessController();
         newDocNameField = $("#wb-new-document-name");
         newDocDescriptionField = $("#wb-new-document-description");
-        newDocKeywordsField = $("#wb-new-document-keywords");
+        newDocCategoryField = $("#wb-new-document-category");
         newDocCustomSizeWidthField = $("#wb-new-document-size-custom-width");
         newDocCustomSizeHeightField = $("#wb-new-document-size-custom-height");
         editDocCustomSizeWidthField = $("#wb-edit-document-size-custom-width");
         editDocCustomSizeHeightField = $("#wb-edit-document-size-custom-height");
+        editDocCategoryField = $("#wb-edit-document-category");
     },
     
     start: function()
@@ -67,6 +69,8 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
         $("#wb-document-list-container").append(this.documentList.domNode.get(0));
         
+        this.loadDocumentCategories();
+        
         // Default selection, documents owned by me
         this.loadDocumentsWithFilter({document_filter: 'owner'});
         
@@ -87,9 +91,9 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                     var newDoc = new WebDoc.Document();
                     newDoc.setTitle(newDocNameField.val(), true);
                     newDoc.setDescription(newDocDescriptionField.val(), true);
-                    newDoc.setKeywords(newDocKeywordsField.val(), true);
+                    newDoc.setCategory(newDocCategoryField.val(), true)
                     var documentSizeChoice = $("input[@name='wb-new-document-size']:checked", $('#wb-new-form')).val();
-                    newDoc.setSize(that.getSizeFromChoice(documentSizeChoice), true);
+                    newDoc.setSize(that.getSizeFromChoice(documentSizeChoice, newDocCustomSizeWidthField.val(), newDocCustomSizeHeightField.val()), true);
                     newDoc.save(function(newObject, status)
                     {
                       if (status == "OK") 
@@ -123,9 +127,9 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                     $(this).dialog('close');
                     that.editedDocument.setTitle($("#wb-edit-document-name").val(), true);
                     that.editedDocument.setDescription($("#wb-edit-document-description").val(), true);
-                    that.editedDocument.setKeywords($("#wb-edit-document-keywords").val(), true);
+                    that.editedDocument.setCategory(editDocCategoryField.val(), true);
                     var documentSizeChoice = $("input[@name='wb-edit-document-size']:checked", $('#wb-edit-form')).val();
-                    that.editedDocument.setSize(that.getNewSizeFromChoice(documentSizeChoice), true);
+                    that.editedDocument.setSize(that.getSizeFromChoice(documentSizeChoice, editDocCustomSizeWidthField.val(), editDocCustomSizeHeightField.val()), true);
                     that.editedDocument.save(function(persitedDoc)
                     {
                         that.filter.refreshDocument(persitedDoc);
@@ -150,7 +154,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     {
         newDocNameField.val(new Date().toLocaleDateString());
         newDocDescriptionField.val("");
-        newDocKeywordsField.val("");
         $("#wb-new-document-size-classic")[0].checked = true;
         $("#wb-new-document-dialog").dialog('open');
     },
@@ -164,7 +167,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         var previousName = that.editedDocument.title();
         $("#wb-edit-document-name").val(previousName);
         $("#wb-edit-document-description").val(that.editedDocument.description());
-        $("#wb-edit-document-keywords").val(that.editedDocument.keywords());
+        editDocCategoryField.val(that.editedDocument.category());
         editDocCustomSizeWidthField.val("");
         editDocCustomSizeHeightField.val("");
         if(that.editedDocument.data.size) {
@@ -246,6 +249,18 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
          }.pBind(this), { ajaxParams: { document_filter: filter }});
     },
     
+    loadDocumentCategories: function() {
+      MTools.ServerManager.getRecords(WebDoc.Category, null, function(data)
+      {
+        if (data.length !== 0) {
+          $.each(data, function(i, webDocCategory) {
+            newDocCategoryField.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+            editDocCategoryField.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+          }.pBind(this));
+        }
+      }.pBind(this));
+    },
+    
     refreshDocumentList: function()
     {
         this.filter.setDocuments(this.documents);
@@ -282,35 +297,17 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
       return true;
     },
     
-    getSizeFromChoice: function(choice) {
+    getSizeFromChoice: function(choice, customFieldWidth, customFieldHeight) {
       switch(choice){
         case "custom":
-          var custom_width = newDocCustomSizeWidthField.val();
-          var custom_height = newDocCustomSizeHeightField.val();
-          return { width: custom_width, height: custom_height};
+          return { width: customFieldWidth, height: customFieldHeight};
         case "iPhone":
-          return { width: 620, height: 480};
+          return { width: "620", height: "480"};
         case "iPad":
-          return { width: 1024, height: 768};
+          return { width: "1024", height: "768"};
         case "classic":
         default:
-          return { width: 800, height: 600};
-      }
-    },
-    
-    getNewSizeFromChoice: function(choice) {
-      switch(choice){
-        case "custom":
-          var custom_width = editDocCustomSizeWidthField.val();
-          var custom_height = editDocCustomSizeHeightField.val();
-          return { width: custom_width, height: custom_height};
-        case "iPhone":
-          return { width: 620, height: 480};
-        case "iPad":
-          return { width: 1024, height: 768};
-        case "classic":
-        default:
-          return { width: 800, height: 600};
+          return { width: "800", height: "600"};
       }
     }
 });

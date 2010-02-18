@@ -81,12 +81,12 @@ MTools.Record = $.klass(
   }, 
    
   /**
-   * @deprecated. use the classNameHttpPost class function instead.
+   * @deprecated. use the pluralizedClassName class function instead.
    * @return the class name of the record that will match the right route on the server.
    */
-  classNameHttpPost: function() {
-    if (this.constructor.classNameHttpPost) {
-      return this.constructor.classNameHttpPost();
+  pluralizedClassName: function() {
+    if (this.constructor.pluralizedClassName) {
+      return this.constructor.pluralizedClassName();
     }
     else {
       ddd("no class name");
