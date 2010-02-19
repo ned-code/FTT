@@ -19,6 +19,7 @@
 //= require <webdoc/controllers/inspector_controller>
 //= require <webdoc/controllers/page_browser_controller>
 //= require <webdoc/controllers/toolbar_controller>
+//= require <webdoc/controllers/document_categories_controller>
 
 //= require <webdoc/tools/arrow_tool>
 //= require <webdoc/tools/drawing_tool>
@@ -61,6 +62,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     //WebDoc.application.inspectorController = new WebDoc.InspectorController();
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
+    WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
 
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );

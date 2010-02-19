@@ -11,6 +11,7 @@
 //= require <webdoc/utils/document_date_filter>
 //= require <webdoc/gui/document_list>
 //= require <webdoc/controllers/document_access_controller>
+//= require <webdoc/controllers/document_categories_controller>
 
 // application singleton.
 WebDoc.application = {};
@@ -37,6 +38,8 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         WebDoc.application.documentEditor = this;
         WebDoc.application.undoManager = new MTools.UndoManager();
         WebDoc.application.accessController = new WebDoc.DocumentAccessController();
+        WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
+        WebDoc.application.categoriesController.addListener(this);
         newDocNameField = $("#wb-new-document-name");
         newDocDescriptionField = $("#wb-new-document-description");
         newDocCategoryField = $("#wb-new-document-category");
@@ -68,8 +71,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.filter = new WebDoc.DocumentDateFilter();
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
         $("#wb-document-list-container").append(this.documentList.domNode.get(0));
-        
-        this.loadDocumentCategories();
         
         // Default selection, documents owned by me
         this.loadDocumentsWithFilter({document_filter: 'owner'});
@@ -167,6 +168,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         var previousName = that.editedDocument.title();
         $("#wb-edit-document-name").val(previousName);
         $("#wb-edit-document-description").val(that.editedDocument.description());
+        
         editDocCategoryField.val(that.editedDocument.category());
         editDocCustomSizeWidthField.val("");
         editDocCustomSizeHeightField.val("");
@@ -249,18 +251,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
          }.pBind(this), { ajaxParams: { document_filter: filter }});
     },
     
-    loadDocumentCategories: function() {
-      MTools.ServerManager.getRecords(WebDoc.Category, null, function(data)
-      {
-        if (data.length !== 0) {
-          $.each(data, function(i, webDocCategory) {
-            newDocCategoryField.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
-            editDocCategoryField.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
-          }.pBind(this));
-        }
-      }.pBind(this));
-    },
-    
     refreshDocumentList: function()
     {
         this.filter.setDocuments(this.documents);
@@ -286,6 +276,16 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $("#wb-document-navigation ul li a").removeClass('active');
         $(event.currentTarget).addClass('active');
       }
+    },
+    
+    // Will be notified by the categories controller once its content is loaded
+    categoriesLoaded: function()
+    {
+      var categories = WebDoc.application.categoriesController.documentCategories;
+      $.each(categories, function(i, webDocCategory) {
+        newDocCategoryField.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+        editDocCategoryField.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+      });
     },
     
     validateInteger: function(evt) {
