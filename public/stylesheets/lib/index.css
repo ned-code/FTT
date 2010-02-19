@@ -205,7 +205,7 @@
 }
 
 .tools li {
-    margin-right: 0;
+    margin-right: 2px;
     border-right: none;
     /*border-right: 1px solid rgba(120, 130, 140, 0.4);*/
 }

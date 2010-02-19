@@ -150,6 +150,15 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 .toolbar-panel .current             { background-color: #f4fbfd; }
 
+#colors li a.current {
+    -webkit-box-shadow: 0 0 16px black;
+    -moz-box-shadow:    0 0 16px black;
+    box-shadow:         0 0 16px black;
+    
+    position: relative;
+    z-index: 2;
+}
+
 /* Pages tools */
 
 .pages-tools a                      { background-image: url('/images/pages-tools.png'); }
