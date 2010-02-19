@@ -1,348 +1,743 @@
-
 WebDoc.TextToolView = $.klass({
     /**
      * Constructor.  Create a TextiewTool object that can make a div element editable.
      */
-    initialize: function(){ 
-       var thobj = this;       
-       this.currentEditingBlock = null;   
-        thobj.currentEl = null;
-      this.getCurrentElement = function(){
-          return thobj.currentEl;
-      };    
-         
-       this.addEvent = function(obj, type, fn){
-               if (obj.addEventListener){
-                      obj.addEventListener( type, fn, false );
-              } else {
-                      obj["e"+type+fn] = fn;
-                      obj[type+fn] = function() {obj["e"+type+fn]( window.event );};
-                      obj.attachEvent( "on"+type, obj[type+fn] );
-              }
-      };
-
-      this.removeEvent = function(obj, type, fn){
-          if (obj.removeEventListener){
-            obj.removeEventListener( type, fn, false );
-          } else {
-            obj.detachEvent( "on"+type, obj[type+fn] );
-            obj[type+fn] = null;
-            obj["e"+type+fn] = null;
-          }
-       };
-       
-       this.isContainText = function(obj){ 
-        if(!obj){
-          return false;
-        };       
-        if(obj.textContent){
-          return true;
+    initialize: function(){
+        //config
+        this.fontSizeIncrementParams = {
+            step: 1,
+            minValue: 3,
+            maxValue: 48
         };
-        for(var i=0;i<obj.childNodes.length;i++){
-        var curr_obj = obj.childNodes[i];
-          this.isContainText(curr_obj);
-        }
-       }
-       
-       this.mainPageStyles = []; 
-       var mainPageStylesTags = document.getElementsByTagName('link');
-       for(i=0;i<mainPageStylesTags.length;i++){
-        if(mainPageStylesTags[i].getAttribute('type')=='text/css')
-        {
-          this.mainPageStyles[i] = mainPageStylesTags[i].getAttribute('href');
-        }
-       }
-       
-       this.getElementStyleData = function(elem){
-
-        var el = (elem?elem:this.getSelectionBounds().start);
-        if(!el) return false; 
-
-        try {    
-          if(this.edWin.getComputedStyle){
-            var st = this.edWin.getComputedStyle(el, null); 
-            this.style =  { fontStyle : st.getPropertyValue("font-style"),
-              fontSize  : st.getPropertyValue("font-size"),
-              textDecoration  : st.getPropertyValue("text-decoration"),
-              fontWeight  : st.getPropertyValue("font-weight"),
-              fontFamily  : st.getPropertyValue("font-family"),
-              textAlign : st.getPropertyValue("text-align"),
-              fontColor : st.getPropertyValue("color"),
-              bgColor     : st.getPropertyValue("background-color"),
-              valign      : st.getPropertyValue("vertical-align")
-            };  
-            
-        
-            if(window._KHTMLrv){/*if Safari*/
-              this.style.fontStyle = st.getPropertyValue("font-style");
-              this.style.vAlign = st.getPropertyValue("vertical-align");
-              this.style.del = this.isStyleProperty(el,"span","textDecoration","line-through");
-              this.style.u = this.isStyleProperty(el,"span","textDecoration","underline");
+        var thobj = this;
+        this.ua = navigator.userAgent.toLowerCase();
+        this.currentEditingBlock = null;
+        this.mainPageStyles = [];
+        thobj.currentEl = null;
+        var mainPageStylesTags = document.getElementsByTagName('link');
+        for (i = 0; i < mainPageStylesTags.length; i++) {
+            if (mainPageStylesTags[i].getAttribute('type') == 'text/css') {
+                this.mainPageStyles[i] = mainPageStylesTags[i].getAttribute('href');
             }
-          } else {
-            var st = el.currentStyle;
-            this.style =  { 
-              fontStyle   : st.fontStyle,
-              fontSize    : st.fontSize,
-              textDecoration  : st.textDecoration,
-              fontWeight    : st.fontWeight,
-              fontFamily    : st.fontFamily,
-              textAlign   : st.textAlign
-            };
-          }
-  
-          this.setStyleProperty(el,"h1");
-          this.setStyleProperty(el,"h2");
-          this.setStyleProperty(el,"h3");
-          this.setStyleProperty(el,"h4");
-          this.setStyleProperty(el,"h5");
-          this.setStyleProperty(el,"h6");
-          this.setStyleProperty(el,"blockquote");
-          this.setStyleProperty(el,"ul");
-          this.setStyleProperty(el,"ol"); 
-          if(!window._KHTMLrv){
-            this.setStyleProperty(el,"del");
-            this.setStyleProperty(el,"sub");
-            this.setStyleProperty(el,"sup");
-            this.setStyleProperty(el,"u");
-          }
-          return (this.style);
-        } catch(e) {
-          return null
-        }     
-      }
-      
-      this.formatElementStyleData = function(styleHash){
-         toolbarHash = {};
-         toolbarHash.bold   = (styleHash.fontWeight == 'bold') ? true : false;
-         toolbarHash.italic   = (styleHash.fontStyle == 'italic') ? true : false;
-         toolbarHash.underline= (styleHash.textDecoration == 'underline') ? true : false;
-         if   (styleHash.h1) toolbarHash.format = 'h1';
-         else if  (styleHash.h2) toolbarHash.format = 'h2';
-         else if  (styleHash.h3) toolbarHash.format = 'h3';
-         else if  (styleHash.h4) toolbarHash.format = 'h4';
-         else if  (styleHash.h5) toolbarHash.format = 'h5';
-         else if  (styleHash.h6) toolbarHash.format = 'h6';
-         else            toolbarHash.format = 'p';
-               toolbarHash.fontSize   = Math.round((styleHash.fontSize.split('px')[0])*75/*this.desctopPxPerInch*//100)+'pt';
-               
-               toolbarHash.fontName   = (styleHash.fontFamily.toLowerCase().split(' ms')[0]);  //alert(toolbarHash.fontName);
-               toolbarHash.foreColor  = (styleHash.fontColor);
-               toolbarHash.hiliteColor  = (styleHash.bgColor);
-               toolbarHash.justifyLeft  = (styleHash.textAlign=='left' || styleHash.textAlign=='start' || styleHash.textAlign=='auto') ? true : false;
-               toolbarHash.justifyRight = (styleHash.textAlign=='right') ? true : false;
-               toolbarHash.justifyCenter= (styleHash.textAlign=='center') ? true : false;
-               toolbarHash.justifyFull  = (styleHash.textAlign=='justify') ? true : false;
-               toolbarHash.superScript  = (styleHash.sup) ? true : false;
-               toolbarHash.subScript  = (styleHash.sub) ? true : false;
-               toolbarHash.insertUnorderedList  = (styleHash.ul) ? true : false;
-               toolbarHash.insertOrderedList  = (styleHash.ol) ? true : false;
-               
-               toolbarHash.valignTop  = (styleHash.valign == 'top' || styleHash.valign == 'baseline') ? true : false;
-               toolbarHash.valignMiddle = (styleHash.valign == 'middle') ? true : false;
-               toolbarHash.valignBottom = (styleHash.valign == 'bottom') ? true : false;
-         return toolbarHash;     
-      }
-      
-      
-      
-      this.getParentByTag = function(node,tag_name){
-        tag_name=tag_name.toLowerCase();
-        var p=node;
-        do{
-          if(tag_name==''||p.nodeName.toLowerCase()==tag_name)
-          return p
         }
-        while(p=p.parentNode)
-        return node
-      };  
-          
-      this.isStyleProperty = function(node,tag_name,name,value){
-        tag_name = tag_name.toLowerCase();
-        var n = node;
-        do{
-          if((n.nodeName.toLowerCase() == tag_name)&&(n.style[name] == value))
-          return true
-        }
-        while(n=n.parentNode)
-        return false
-      };
         
-      this.setStyleProperty = function(el,Nq){
-        this.style[Nq] = false;
-        var n = this.getParentByTag(el,Nq);
-        if(n&&(n.tagName.toLowerCase() == Nq))this.style[Nq]=true;
-        if(Nq == "del")
-        if( this.getParentByTag(el,"strike") && (this.getParentByTag(el,"strike").tagName.toLowerCase() == "strike") )
-        this.style.del = true
-      }
-      
-      var global_stage; 
-      
-      this.find_tags_in_subtree = function (bounds, tag_name, stage, second){
-          var root = bounds['root']
-          var start = bounds['start']
-          var end = bounds['end']
-          if(start == end) return [start]
-          if(!second) global_stage=stage      
-          if(global_stage == 2) return []
-          if(!global_stage) global_stage = 0      
-          tag_name = tag_name.toLowerCase()     
-          var nodes=[]
-          for(var node = root.firstChild; node; node = node.nextSibling){
-          if(node==start && global_stage==0){
-               global_stage = 1
-              }
-              if(node.nodeName.toLowerCase() == tag_name && node.nodeName != '#text' || tag_name == ''){
-                if(global_stage == 1){
-                    nodes.push(node)
+        this.getCurrentElement = function(){
+            return thobj.currentEl;
+        };
+        
+        this.shortcut = function(shortcut, callback, opt){
+            var default_options = {
+                'type': 'keydown',
+                'propagate': false,
+                'target': this.edDoc
+            };
+            if (!opt) {
+                opt = default_options;
+            } else {
+                for (var dfo in default_options) {
+                    if (typeof opt[dfo] == 'undefined') {
+                        opt[dfo] = default_options[dfo];
+                    }
                 }
-              }
-              if(node==end && global_stage==1){
-                global_stage = 2
-              }
-              nodes=nodes.concat(this.find_tags_in_subtree({root:node, start:start, end:end}, tag_name, global_stage, true))
-          }
-          return nodes
+            }
+            var ele = opt.target;
+            if (typeof opt.target == 'string') {
+                ele = document.getElementById(opt.target);
+            }
+            var ths = this;
+            //The function to be called at keypress
+            var func = function(e){
+                e = e || window.event;
+                if (e.keyCode) {
+                    code = e.keyCode;
+                } else if (e.which) {
+                    code = e.which;
+                }
+                var character = String.fromCharCode(code).toLowerCase();
+                var keys = shortcut.toLowerCase().split("+");
+                var kp = 0;
+                var shift_nums = {
+                    "`": "~",
+                    "1": "!",
+                    "2": "@",
+                    "3": "#",
+                    "4": "$",
+                    "5": "%",
+                    "6": "^",
+                    "7": "&",
+                    "8": "*",
+                    "9": "(",
+                    "-": "_",
+                    "=": "+",
+                    ";": ":",
+                    "'": "\"",
+                    ",": "<",
+                    ".": ">",
+                    "/": "?",
+                    "\\": "|"
+                };
+                var special_keys = {
+                    'esc': 27,
+                    'escape': 27,
+                    'tab': 9,
+                    'space': 32,
+                    'return': 13,
+                    'enter': 13,
+                    'backspace': 8,
+                    'scrolllock': 145,
+                    'scroll_lock': 145,
+                    'scroll': 145,
+                    'capslock': 20,
+                    'caps_lock': 20,
+                    'caps': 20,
+                    'numlock': 144,
+                    'num_lock': 144,
+                    'num': 144,
+                    'pause': 19,
+                    'break': 19,
+                    'insert': 45,
+                    'home': 36,
+                    'delete': 46,
+                    'end': 35,
+                    'pageup': 33,
+                    'page_up': 33,
+                    'pu': 33,
+                    'pagedown': 34,
+                    'page_down': 34,
+                    'pd': 34,
+                    'left': 37,
+                    'up': 38,
+                    'right': 39,
+                    'down': 40,
+                    'f1': 112,
+                    'f2': 113,
+                    'f3': 114,
+                    'f4': 115,
+                    'f5': 116,
+                    'f6': 117,
+                    'f7': 118,
+                    'f8': 119,
+                    'f9': 120,
+                    'f10': 121,
+                    'f11': 122,
+                    'f12': 123
+                };
+                for (var i = 0; i < keys.length; i++) {
+                    k = keys[i];
+                    if (k == 'ctrl' || k == 'control') {
+                        if (e.ctrlKey) {
+                            kp++;
+                        }
+                    } else if (k == 'shift') {
+                        if (e.shiftKey) {
+                            kp++;
+                        }
+                    } else if (k == 'alt') {
+                        if (e.altKey) {
+                            kp++;
+                        }
+                    } else if (k.length > 1) {
+                        if (special_keys[k] == code) {
+                            kp++;
+                        }
+                    } else {
+                        if (character == k) {
+                            kp++;
+                        } else {
+                            if (shift_nums[character] && e.shiftKey) {
+                                character = shift_nums[character];
+                                if (character == k) {
+                                    kp++;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (kp == keys.length) {
+                    callback(e);
+                    if (!opt.propagate) {
+                        e.cancelBubble = true;
+                        e.returnValue = false;
+                        if (e.stopPropagation) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                        }
+                        return false;
+                    }
+                }
+            };
+            if (ele.addEventListener) {
+                ele.addEventListener(opt.type, func, false);
+            } else if (ele.attachEvent) {
+                ele.attachEvent('on' + opt.type, func);
+            } else {
+                ele['on' + opt.type] = func;
+            }
+        };
+        
+        this.addEvent = function(obj, type, fn){
+            if (obj.addEventListener) {
+                obj.addEventListener(type, fn, false);
+            } else {
+                obj["e" + type + fn] = fn;
+                obj[type + fn] = function(){
+                    obj["e" + type + fn](window.event);
+                };
+                obj.attachEvent("on" + type, obj[type + fn]);
+            }
+        };
+        
+        this.removeEvent = function(obj, type, fn){
+            if (obj.removeEventListener) {
+                obj.removeEventListener(type, fn, false);
+            } else {
+                obj.detachEvent("on" + type, obj[type + fn]);
+                obj[type + fn] = null;
+                obj["e" + type + fn] = null;
+            }
+        };
+        
+        this.isContainText = function(obj){
+            if (!obj) {
+                return false;
+            }
+            if (obj.textContent && this.trimL(obj.textContent) && this.trimL(obj.textContent) != '&nbsp;') {
+                return true;
+            }
+            for (var i = 0; i < obj.childNodes.length; i++) {
+                var curr_obj = obj.childNodes[i];
+                this.isContainText(curr_obj);
+            }
+        };
+        
+        
+        this.repeatedStylePropertiesNodesRemover = function(container, tag, styleAttr){
+            var nodes = container.getElementsByTagName(tag);
+            var k = 0;
+            var nodesToKill = [];
+            for (var i = 0; i < nodes.length; i++) {
+                nodes[i].removeAttribute('class');
+                if (nodes[i].style[styleAttr] && nodes[i].style.length === 1) {
+                    if (nodes[i].tagName.toLowerCase() == tag && nodes[i].parentNode.childNodes.length == 1 && nodes[i].parentNode.style[styleAttr] && nodes[i].parentNode.style.length === 1) {
+                        nodesToKill[k] = nodes[i];
+                        k++;
+                    }
+                }
+            }
+            for (var a = 0; a < nodesToKill.length; a++) {
+                nodesToKill[a].parentNode.parentNode.replaceChild(nodesToKill[a], nodesToKill[a].parentNode);
+            }
+        };
+        
+        this.outputFilter = function(html){
+            html = html.replace(/<font/ig, '<span').replace(/font>/ig, 'span>');
+            var outputFilterContainer = document.createElement('div');
+            outputFilterContainer.innerHTML = html;
+            this.repeatedStylePropertiesNodesRemover(outputFilterContainer, 'span', 'fontSize');
+            this.repeatedStylePropertiesNodesRemover(outputFilterContainer, 'span', 'color');
+            this.repeatedStylePropertiesNodesRemover(outputFilterContainer, 'span', 'backgroundColor');
+            this.convertAttributesToStyleAttrs(outputFilterContainer,'span','face','font-family');
+            return outputFilterContainer.innerHTML;
+        };
+        
+        this.trimL = function(str){
+            return str.replace(/^\s+/, '');
+        };
+        
+        this.selectCustomNode = function(node){
+            var range = thobj.edDoc.createRange();
+            range.selectNode(node);
+            thobj.edWin.getSelection().addRange(range);
+            return range;
+        };
+        
+        this.selectCustomNodeContent = function(node){
+            var range = thobj.edDoc.createRange();
+            range.selectNodeContents(node);
+            thobj.edWin.getSelection().addRange(range);
+            return range;
+        };
+        
+        this.getElementStyleData = function(elem){
+            var el = (elem ? elem : this.getSelectionBounds().start);
+            if (!el) {
+                return false;
+            }
+            
+            if (this.edWin.getComputedStyle) {
+                var st = this.edWin.getComputedStyle(el, null);
+                this.style = {
+                    fontStyle: st.getPropertyValue("font-style"),
+                    fontSize: st.getPropertyValue("font-size"),
+                    textDecoration: st.getPropertyValue("text-decoration"),
+                    fontWeight: st.getPropertyValue("font-weight"),
+                    fontFamily: st.getPropertyValue("font-family"),
+                    textAlign: st.getPropertyValue("text-align"),
+                    fontColor: st.getPropertyValue("color"),
+                    bgColor: st.getPropertyValue("background-color"),
+                    valign: st.getPropertyValue("vertical-align")
+                };
+            }
+            this.setStyleProperty(el, "h1");
+            this.setStyleProperty(el, "h2");
+            this.setStyleProperty(el, "h3");
+            this.setStyleProperty(el, "h4");
+            this.setStyleProperty(el, "h5");
+            this.setStyleProperty(el, "h6");
+            this.setStyleProperty(el, "blockquote");
+            this.setStyleProperty(el, "ul");
+            this.setStyleProperty(el, "ol");
+            this.setStyleProperty(el, "del");
+            this.setStyleProperty(el, "sub");
+            this.setStyleProperty(el, "sup");
+            this.setStyleProperty(el, "u");
+            return (this.style);
+        };
+        
+        this.formatElementStyleData = function(styleHash){
+            toolbarHash = {};
+            toolbarHash.bold = (styleHash.fontWeight == 'bold') ? true : false;
+            toolbarHash.italic = (styleHash.fontStyle == 'italic') ? true : false;
+            toolbarHash.underline = (styleHash.textDecoration == 'underline') ? true : false;
+            if (styleHash.h1) {
+                toolbarHash.format = 'h1';
+            } else if (styleHash.h2) {
+                toolbarHash.format = 'h2';
+            } else if (styleHash.h3) {
+                toolbarHash.format = 'h3';
+            } else if (styleHash.h4) {
+                toolbarHash.format = 'h4';
+            } else if (styleHash.h5) {
+                toolbarHash.format = 'h5';
+            } else if (styleHash.h6) {
+                toolbarHash.format = 'h6';
+            } else {
+                toolbarHash.format = 'p';
+            }
+            toolbarHash.fontSize = Math.round((styleHash.fontSize.split('px')[0]) * 75 / 100) + 'pt';
+            toolbarHash.fontName = (styleHash.fontFamily.toLowerCase().split(' ')[0].replace('\'', ''));
+            toolbarHash.foreColor = (styleHash.fontColor);
+            toolbarHash.hiliteColor = (styleHash.bgColor);
+            toolbarHash.justifyLeft = (styleHash.textAlign == 'left' || styleHash.textAlign == 'start' || styleHash.textAlign == 'auto') ? true : false;
+            toolbarHash.justifyRight = (styleHash.textAlign == 'right') ? true : false;
+            toolbarHash.justifyCenter = (styleHash.textAlign == 'center') ? true : false;
+            toolbarHash.justifyFull = (styleHash.textAlign == 'justify') ? true : false;
+            toolbarHash.superScript = (styleHash.sup) ? true : false;
+            toolbarHash.subScript = (styleHash.sub) ? true : false;
+            toolbarHash.insertUnorderedList = (styleHash.ul) ? true : false;
+            toolbarHash.insertOrderedList = (styleHash.ol) ? true : false;
+            toolbarHash.valignTop = (styleHash.valign == 'top' || styleHash.valign == 'baseline') ? true : false;
+            toolbarHash.valignMiddle = (styleHash.valign == 'middle') ? true : false;
+            toolbarHash.valignBottom = (styleHash.valign == 'bottom') ? true : false;
+            return toolbarHash;
+        };
+        
+        this.getParentByTag = function(node, tag_name){
+            tag_name = tag_name.toLowerCase();
+            var p = node;
+            do {
+                if (tag_name === "" || p.nodeName.toLowerCase() == tag_name) {
+                    return p;
+                }
+        p = p.parentNode;
+            }
+            while (p.parentNode);
+        };
+        
+        this.isStyleProperty = function(node, tag_name, name, value){
+            tag_name = tag_name.toLowerCase();
+            var n = node;
+            do {
+                if ((n.nodeName.toLowerCase() == tag_name) && (n.style[name] == value)) {
+          return true;
+        }
+        n = n.parentNode;
+            }
+            while (n.parentNode);
+            return false;
+        };
+        
+        this.setStyleProperty = function(el, Nq){
+            this.style[Nq] = false;
+            var n = this.getParentByTag(el, Nq);
+            if (n && (n.tagName.toLowerCase() == Nq)) {
+        this.style[Nq] = true;
       }
-
-      this.get_selected_tags = function(tag_name){
-        if(tag_name){
-              tag_name = tag_name.toLowerCase()
-           } else {
-              tag_name = ''
-           }
-          var bounds = this.getSelectionBounds(this.edWin)
-        if(!bounds) return null
-        bounds['start'] = this.closest_parent_by_tag_name(bounds['start'], tag_name)
-        bounds['end'] = this.closest_parent_by_tag_name(bounds['end'], tag_name)
-        return this.find_tags_in_subtree(bounds, tag_name);
+            if (Nq == "del") {
+        if (this.getParentByTag(el, "strike") && (this.getParentByTag(el, "strike").tagName.toLowerCase() == "strike")) {
+          this.style.del = true;
+        }
       }
-      
-      this.closest_parent_by_tag_name = function(node, tag_name){
-         tag_name = tag_name.toLowerCase()
-         var p = node
-         do {
-            if(tag_name == '' || p.nodeName.toLowerCase() == tag_name) return p
-         }
-         while(p = p.parentNode)
-         return node
+        };
+        
+        this.getLastestChild = function(node){
+          if(node.lastChild){
+        return  this.getLastestChild(node.lastChild);
+      } else {
+        return node;
       }
-      
-      //TODO: unuseble
-      this.increasefontsize = function(inc){      
-      this.edDoc.execCommand("Strikethrough", false, '');
-        var nodes=this.get_selected_tags('span'); 
-        for(var i=0;i<nodes.length;i++){ 
-          if(nodes[i].style.fontSize){
-            nodes[i].style.fontSize = (nodes[i].style.fontSize.split('pt')[0]*1+inc) + 'pt'
-          }
-        }   
-      
-      }     
-      this.format_inline = function(command,styleAttr,value){
-      
-        this.edDoc.execCommand(command,null,value)
-          var fontnodes=this.get_selected_tags('font');    
-           
-          if(fontnodes.length){  
-          
-          for(var i=0;i<fontnodes.length;i++){
-              if(fontnodes[i].parentNode && fontnodes[i].parentNode.firstChild==fontnodes[i]&&  fontnodes[i].parentNode.tagName.toLowerCase() == 'li'){ 
-                try{fontnodes[i].parentNode.style[styleAttr] = value;}catch(e){}      
-              }   
-                 var spans = fontnodes[i].getElementsByTagName('span');
-                 
-                 for(s=0;s<spans.length;s++){
-                  if(spans[s].style[styleAttr]){
-                    spans[s].style[styleAttr] = value;
-
-                }  
-               }
-               
-                   if(fontnodes[i].firstChild.nodeName != '#text' && fontnodes[i].firstChild.tagName.toLowerCase()=='span' && fontnodes[i].firstChild.style[styleAttr] && fontnodes[i].firstChild.style.length==1 && fontnodes[i].firstChild.style[styleAttr]==value){
-                        fontnodes[i].parentNode.replaceChild( fontnodes[i].firstChild, fontnodes[i]) 
-               } else {
-                 new_node = this.edDoc.createElement('span');
-                     new_node.style[styleAttr] = value;
-                     new_node.innerHTML = fontnodes[i].innerHTML
-                     fontnodes[i].parentNode.replaceChild(new_node, fontnodes[i]) 
-               } 
-             }
-        } else if(styleAttr!='color'){ 
-            var nodes=this.get_selected_tags('span');  
-              for(var i=0;i<nodes.length;i++){
-                if(nodes[i].style[styleAttr]){
-                nodes[i].style[styleAttr] = value;  
+    }
+    
+    this.getFirstestChild = function(node){
+          if(node.firstChild){
+        return  this.getFirstestChild(node.firstChild);
+      } else {
+        return node;
+      }
+    }
+        
+        
+        this.getSelectionBounds = function(){
+            var range, root, start, end;
+            if (this.edWin.getSelection) {
+                var selection = this.edWin.getSelection();
+                range = selection.getRangeAt(selection.rangeCount - 1);
+                start = range.startContainer;
+                end = range.endContainer;
+                root = range.commonAncestorContainer;
+                if (start.nodeName == "#text"){ 
+                    root = root.parentNode;
+        }
+                if (start.nodeName == "#text"){
+          start = start.parentNode;
+        }
+                if (start.nodeName.toLowerCase() == "body"){
+          start = start.firstChild;
+        }
+                if (end.nodeName == "#text") {
+          end = end.parentNode;
+        }
+                if (end.nodeName.toLowerCase() == "body"){
+          end = end.lastChild;
+        }
+                if (start == end){
+          root = start;
+        }
+                if(start==root){
+          start=this.getFirstestChild(root);
+        }
+        if(end==root){
+          end = this.getLastestChild(root);
+        }
+        
+                return {
+                    root: root,
+                    start: start,
+                    end: end
+                };
+            } else if (this.edWin.document.selection) {
+                range = this.edDoc.selection.createRange();
+                if (!range.duplicate) {
+          return null;
+        }
+                root = range.parentElement();
+                var r1 = range.duplicate();
+                var r2 = range.duplicate();
+                r1.collapse(true);
+                r2.moveToElementText(r1.parentElement());
+                r2.setEndPoint("EndToStart", r1);
+                start = r1.parentElement();
+                r1 = range.duplicate();
+                r2 = range.duplicate();
+                r2.collapse(false);
+                r1.moveToElementText(r2.parentElement());
+                r1.setEndPoint("StartToEnd", r2);
+                end = r2.parentElement();
+                if (start.nodeName.toLowerCase() == "body") {
+          start = start.firstChild;
+        }
+                if (end.nodeName.toLowerCase() == "body") {
+          end = end.lastChild;
+        }
+                
+                if (start == end) {
+          root = start;
+        }
+                return {
+                    root: root,
+                    start: start,
+                    end: end
+                };
+            }
+            return null;
+        };
+        
+        var global_stage;
+        
+        this.findTagsInSubtree = function(bounds, tag_name, stage, second){
+            var root = bounds.root;
+            var start = bounds.start; 
+            var end = bounds.end; 
+            //if (start == end && end.tagName.toLowerCase() == tag_name) {
+      //  return [start];
+      //}
+            if (!second) {
+        global_stage = stage;
+      }
+            if (global_stage == 2) {
+        return [];
+      }
+            if (!global_stage) {
+        global_stage = 0;
+      }
+            tag_name = tag_name.toLowerCase();
+            var nodes = [];
+            for (var node = root.firstChild; node; node = node.nextSibling) {
+                if (node == start && global_stage === 0) {
+                    global_stage = 1;
+                }
+                if (node.nodeName.toLowerCase() == tag_name && node.nodeName != '#text' || tag_name === '') {
+                    if (global_stage == 1) {
+                        nodes.push(node);
+                    }
+                }
+                if (node == end && global_stage == 1) {
+                    global_stage = 2;
+                }
+                nodes = nodes.concat(this.findTagsInSubtree({
+                    root: node,
+                    start: start,
+                    end: end
+                }, tag_name, global_stage, true));
                 
             }
-          nodes[i].removeAttribute('class'); 
-          } 
+            return nodes;
+        };
+        
+        this.getSelectedTags = function(tag_name){
+            if (tag_name) {
+                tag_name = tag_name.toLowerCase();
+            } else {
+                tag_name = '';
+            }
+            var bounds = this.getSelectionBounds(this.edWin);
+            if (!bounds) {
+                return null;
+            }
+            bounds.start = this.closest_parent_by_tag_name(bounds.start, tag_name);
+            bounds.end = this.closest_parent_by_tag_name(bounds.end, tag_name);
+            return this.findTagsInSubtree(bounds, tag_name);
+        };
+        
+        this.closest_parent_by_tag_name = function(node, tag_name){
+            tag_name = tag_name.toLowerCase();
+            var p = node;
+            do {
+                if (tag_name === '' || p.nodeName.toLowerCase() == tag_name) {
+          return p;
         }
-      }
-
-      this.format_vertical = function(value){
-        if(!this.edDoc.body.firstChild.firstChild || this.edDoc.body.firstChild.firstChild.nodeName == '#text' || !this.edDoc.body.firstChild.firstChild.style.verticalAlign){
-          var verticalContainer = this.edDoc.createElement('div');
-          verticalContainer.innerHTML = this.edDoc.body.firstChild.innerHTML;
-          this.edDoc.body.firstChild.innerHTML = '';
-          this.edDoc.body.firstChild.appendChild(verticalContainer);
-        } else {   
-            var verticalContainer =  this.edDoc.body.firstChild.firstChild;
+      p = p.parentNode;
+            }
+            while (p.parentNode);
+            return node;
+        };
+        
+        this.increaseFontSize = function(inc, minPoint, maxPoint, uc){
+            this.allTags = this.edDoc.body.getElementsByTagName("*");
+            for (var i = 0; i < this.allTags.length; i++) {
+                if (this.allTags[i].style.color) {
+          this.allTags[i].c = this.allTags[i].style.color;
         }
-        verticalContainer.style.display = 'table-cell';
-        verticalContainer.style.verticalAlign = value;
-        var st = this.edWin.getComputedStyle(this.currentEditingBlock, null); 
-        verticalContainer.style.height = st.getPropertyValue("height");   
-      }
+                this.allTags[i].style.color = '';
+                this.allTags[i].setAttribute('size',"");
+            }
+            this.formatInline('foreColor', 'color', 'color', uc);
+            this.allTags = this.edDoc.body.getElementsByTagName("*");
+            for (var i = 0; i < this.allTags.length; i++) {   
+                if (this.allTags[i].style.color == uc) {
+                    var oldSize = Math.round((this.edWin.getComputedStyle(this.allTags[i], null).getPropertyValue("font-size").split('px')[0]) * 75 / 100);
+                    if ((oldSize < maxPoint && inc > 0) || (oldSize > minPoint && inc < 0)) {
+                        this.allTags[i].s = (oldSize * 1 + inc) + 'pt';  
+                    }                         
+          var innerNodes = this.allTags[i].getElementsByTagName('*');
+                        for (var s = 0; s < innerNodes.length; s++) {
+                            if (innerNodes[s].style.color != uc) {
+                                var oldInnerSize = Math.round((this.edWin.getComputedStyle(innerNodes[s], null).getPropertyValue("font-size").split('px')[0]) * 75 / 100);
+                                if ((oldInnerSize < maxPoint && inc > 0) || (oldInnerSize > minPoint && inc < 0)) {
+                  innerNodes[s].s = (oldInnerSize * 1 + inc) + 'pt';
+                }
+                            }
+            }
+                    
+                }  
+        this.allTags[i].style.color = '';
+            }
+            this.allTags = this.edDoc.body.getElementsByTagName("*");
+            for (var i = 0; i < this.allTags.length; i++) {
+                if (this.allTags[i].c) {
+                    this.allTags[i].style.color = this.allTags[i].c;
+                }
+                if (this.allTags[i].s) {
+                    this.allTags[i].style.fontSize = this.allTags[i].s;
+                }
+                this.allTags[i].c = null;
+                this.allTags[i].s = null;
+                this.allTags[i].removeAttribute('size');
+            }
+        };
+        
 
-      this.getSelectionBounds = function(){
-          var range, root, start, end;
-        if(this.edWin.getSelection){ 
-              var selection = this.edWin.getSelection();
-              range = selection.getRangeAt(selection.rangeCount-1);
-          start = range.startContainer;
-              end = range.endContainer;
-          root = range.commonAncestorContainer;
-              if(start.nodeName == "#text") root = root.parentNode; 
-            if(start.nodeName == "#text") start = start.parentNode;
-          if (start.nodeName.toLowerCase() == "body") start = start.firstChild;
-              if(end.nodeName == "#text") end = end.parentNode;
-          if (end.nodeName.toLowerCase() == "body") end = end.lastChild;
-          if(start == end) root = start;  
-          return {
-                root: root,
-                start: start,
-                end: end
+        this.getFirstLiParent = function(node){
+            var parents = this.getAllNodeParents(node);
+            for (var i = 0; i < parents.length; i++) {
+                if (parents[i].tagName && parents[i].tagName.toLowerCase() == 'li') { 
+                    var firstChilds = this.getAllFirstChilds(parents[i]);
+                    for (var f = 0; f < firstChilds.length; f++) {
+            if(firstChilds[f]==node) return parents[i];
+          }
+                }
+            }
+            return false;
+            
+        };
+        this.updateChildsStyleAttr = function(node, childsTag, styleAttr, value){
+            var innerNodes = node.getElementsByTagName(childsTag);
+            for (var s = 0; s < innerNodes.length; s++) {
+                if (innerNodes[s].style[styleAttr]) {
+                    innerNodes[s].style[styleAttr] = value;
+                }
+            }
+            return innerNodes.length;
+        };
+        
+        this.setChildsStyleAttr = function(node, childsTag, styleAttr, value){
+            var innerNodes = node.getElementsByTagName(childsTag);
+            for (var s = 0; s < innerNodes.length; s++) {
+                    innerNodes[s].style[styleAttr] = value;
+            }
+            return innerNodes.length;
+        };
+        
+        this.convertAttributesToStyleAttrs = function(root, childsTag, attr, styleAttr){
+            var allNodes = root.getElementsByTagName(childsTag);
+            for (var i = 0; i < allNodes.length; i++) {
+                if (allNodes[i].getAttribute(attr)) {
+                    allNodes[i].style[styleAttr] = allNodes[i].getAttribute(attr);
+                    allNodes[i].removeAttribute(attr);
+                }
+                
+            }
+        };
+        
+        this.formatInline = function(command, attr, styleAttr, value){        
+            this.edDoc.execCommand(command, null, value);
+            if (this.edWin.getSelection().toString()) {
+                var selNodes = this.getSelectedTags('font');
+                for (var i = 0; i < selNodes.length; i++) {
+                    if (selNodes[i].nodeName != '#text' && (selNodes[i].getAttribute(attr) || selNodes[i].style[styleAttr])) {
+                        this.updateChildsStyleAttr(selNodes[i], 'font', styleAttr, (selNodes[i].getAttribute(attr)) ? (selNodes[i].getAttribute(attr)) : selNodes[i].style[styleAttr]);
+                        this.updateChildsStyleAttr(selNodes[i], 'span', styleAttr, (selNodes[i].getAttribute(attr)) ? (selNodes[i].getAttribute(attr)) : selNodes[i].style[styleAttr]);
+                        this.updateChildsStyleAttr(selNodes[i], 'div', styleAttr, (selNodes[i].getAttribute(attr)) ? (selNodes[i].getAttribute(attr)) : selNodes[i].style[styleAttr]);
+                    }
+                }
+                this.convertAttributesToStyleAttrs(this.rootDiv, '*', attr, styleAttr);
+                if (!selNodes || this.ua.indexOf("webkit") != -1) {
+                    var nodes = this.getSelectedTags('span'); 
+                    for (i = 0; i < nodes.length; i++) {
+                        if (nodes[i].style[styleAttr]) {
+                            nodes[i].style[styleAttr] = value;
+                        }
+                        nodes[i].removeAttribute('class');
+                    }
+                }
+                if (command == 'foreColor') {
+                    coloredNodes = this.verticalCell.getElementsByTagName('*');
+                    for (i = 0; i < coloredNodes.length; i++) {
+                        if (this.getFirstLiParent(coloredNodes[i])) {
+                            if (coloredNodes[i].style.color && coloredNodes[i].style.color != 'rgb(1, 1, 1)') {
+                this.getFirstLiParent(coloredNodes[i]).style.color = coloredNodes[i].style.color;
               }
-        } else if (this.edWin.document.selection) { 
-          range = this.edDoc.selection.createRange()
-              if(!range.duplicate) return null;
-          root = range.parentElement();
-              var r1 = range.duplicate();
-              var r2 = range.duplicate();
-              r1.collapse(true);
-              r2.moveToElementText(r1.parentElement());
-              r2.setEndPoint("EndToStart",r1);
-              start = r1.parentElement();
-              r1 = range.duplicate();
-              r2 = range.duplicate();
-              r2.collapse(false);
-              r1.moveToElementText(r2.parentElement());
-              r1.setEndPoint("StartToEnd", r2);
-              end = r2.parentElement();
-            if (start.nodeName.toLowerCase() == "body") start = start.firstChild;
-          if (end.nodeName.toLowerCase() == "body") end = end.lastChild;
-          
-              if(start == end) root = start;
-            return {
-                root: root,
-                start: start,
-                end: end
-          }
-          }
-          return null 
-      }
+                        }
+                    }
+                }
+            } else {
+                this.createNewEditionPoint();
+                this.formatInline(command, attr, styleAttr, value);
+                
+            }
+        };
+        
+        
+        this.isHasUnderlineParent = function(node){
+         if(node.parentNode){
+         if(node.parentNode.style && node.parentNode.style.textDecoration=='underline'){
+          return node.parentNode;
+         } else {
+            return this.isHasUnderlineParent(node.parentNode);
+         }
+       } else {
+        return false;
+       }
+    }
+        this.aplyUnderlineForColoredChilds = function(){
+    
+    }
+        
+        this.formatStyle = function(command,styleAttr,value){
+            if (!this.edWin.getSelection().toString()) {
+                this.createNewEditionPoint();
+            }
+            this.edDoc.execCommand(command, null, value);
+      /*if(styleAttr){ 
+        var allNodes = this.getSelectedTags(); 
+        for(var i=0;i<allNodes.length;i++){ 
+          if(allNodes[i].style && this.isHasUnderlineParent(allNodes[i]) ){
+                        allNodes[i].style.textDecoration = 'underline';
+          } 
+        } 
+      }  */             
+        };
+        
+        this.createNewEditionPoint = function(){
+            var newEditionPoint = this.edDoc.createElement('span');
+            newEditionPoint.style.display='inline';
+            var range = thobj.edDoc.createRange();
+            range.setStart(this.edWin.getSelection().anchorNode,this.edWin.getSelection().anchorOffset);
+            range.setEnd(this.edWin.getSelection().anchorNode,this.edWin.getSelection().anchorOffset);
+            range.surroundContents(newEditionPoint);
+            range.selectNodeContents(newEditionPoint);
+            thobj.edWin.getSelection().addRange(range);
+            newEditionPoint.innerHTML = '&nbsp;';
+            thobj.edWin.getSelection().selectAllChildren(newEditionPoint);
+            
+            
+        };
+        
+        this.formatVertical = function(value){
+            if (!this.edDoc.body.firstChild.firstChild || this.edDoc.body.firstChild.firstChild.style.display != 'table') {
+                this.verticalContainer = this.edDoc.createElement('div');
+                this.verticalCell = this.edDoc.createElement('div');
+                this.verticalContainer.appendChild(this.verticalCell);
+                this.verticalCell.innerHTML = this.edDoc.body.firstChild.innerHTML;
+                this.edDoc.body.firstChild.innerHTML = '';
+                this.edDoc.body.firstChild.appendChild(this.verticalContainer);
+                this.verticalCell.style.verticalAlign = 'top';
+            } else {
+                this.verticalContainer = this.edDoc.body.firstChild.firstChild;
+                this.verticalCell = this.edDoc.body.firstChild.firstChild.firstChild;
+                if (typeof(value) != 'undefined') {
+          this.verticalCell.style.verticalAlign = value;
+        }
+            }
+            this.verticalContainer.style.display = 'table';
+            this.verticalCell.style.display = 'table-cell';
+            this.verticalContainer.style.height = '100%';
+            this.verticalContainer.style.width = '100%';
+            
+        };
+        
+        this.formatHorisontal = function(command){
+            this.edDoc.execCommand(command, false, false);
+        };
+        
+        this.applyStyleAttrToSelected = function(tag, styleAttr, value){
+            var nodes = this.getSelectedTags(tag);
+            for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i] != this.edDoc.body.firstChild) {
+                    nodes[i].style[styleAttr] = value;
+                }
+            }
+        };
     },
     
     /**
@@ -352,91 +747,199 @@ WebDoc.TextToolView = $.klass({
      * classValue is all classes of the div. TextViewTool add a class "empty" if the div is empty
      */
     setEndEditionListener: function(listener){
-      this.endEditionListener = listener;
-    },       
-    
+        this.endEditionListener = listener;
+    },
     /**
      * make divElement editable. Once a div element is editable, a caret appear and user can edit text with keyboard.
      * @param divElement the DOM element that you want to make editable.
      */
-    enterEditMode: function(divElement){ 
-      var thobj = this;
-      if(this.currentEditingBlock) this.exitEditMode();
-      this.currentEditingBlock = divElement;
-      this.currentEditingBlockClass = this.currentEditingBlock.className;
-        var storedContent  = divElement.innerHTML;
-        divElement.innerHTML='';    
-      this.iframe = document.createElement('iframe');
-      this.iframe.setAttribute("width",'100%');
-      this.iframe.setAttribute("height",'100%');
-      this.iframe.setAttribute("frameborder",0);
-  
-          divElement.appendChild(this.iframe);
+    enterEditMode: function(divElement){
+        var thobj = this;
+        if (this.currentEditingBlock) {
+      this.exitEditMode();
+    }
+        this.currentEditingBlock = divElement;
+        this.currentEditingBlockClass = this.currentEditingBlock.className;
+        var storedContent = divElement.innerHTML;
+        divElement.innerHTML = '';
+        this.iframe = document.createElement('iframe');
+        this.iframe.setAttribute("width", '100%');
+        this.iframe.setAttribute("height", '100%');
+        this.iframe.setAttribute("frameborder", 0);
+        divElement.appendChild(this.iframe);
         this.edWin = this.iframe.contentWindow;
-      this.edDoc = this.edWin.document;
-      this.edDoc.designMode='On';
-      var content = this.edDoc;
-      content.open("text/html", "replace");
-      this.frameStyles = '';  
-      for(i=0;i<this.mainPageStyles.length;i++){ this.frameStyles += "<link rel='stylesheet' href='"+this.mainPageStyles[i]+"' type='text/css' />"; }
-      content.write("<html><head>"+this.frameStyles+"<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: auto;} html,body { padding:0px; height:100%; margin:0px; background:none;} </style></head><body contenteditable='true'></body></html>");  
-        content.close();  
-        this.edDoc.designMode='On';
-        this.packHTMLtoEditor = function(HTML){ 
-            this.edDoc.body.innerHTML = "<div>"+HTML+"</div>";
-          this.edDoc.body.firstChild.className = this.currentEditingBlockClass;
-          this.edDoc.body.firstChild.style.margin = '0px';
-          this.edDoc.body.firstChild.style.padding = '0px';
-          this.edDoc.body.firstChild.style.border = 'none';
-          this.edDoc.body.firstChild.style.position = 'relative';
-          this.edDoc.body.firstChild.style.background = 'none';
+        this.edDoc = this.edWin.document;
+        this.edDoc.designMode = 'On';
+        var content = this.edDoc;
+        content.open("text/html", "replace");
+        this.frameStyles = '';
+        for (i = 0; i < this.mainPageStyles.length; i++) {
+            this.frameStyles += "<link rel='stylesheet' href='" + this.mainPageStyles[i] + "' type='text/css' />";
         }
-        if(storedContent){this.packHTMLtoEditor(storedContent)};
-      this.iframe.focus();
+        content.write("<html><head>" + this.frameStyles + "<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; height:100%; margin:0px; background-color:#ffffff;} </style></head><body contenteditable='true'></body></html>");
+        content.close();
+        this.edDoc.designMode = 'On';
         
-      this.addEvent(this.edDoc, "click", function(e){
-        var ev = e||window.event;
-        var el = ev.target||ev.srcElement;
-        thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(el))); 
-      });   
+        this.setCursorInInnerPosition = function(){
+            var range = thobj.edDoc.createRange();
+            range.setStart(this.verticalCell.firstChild, 0);
+            range.setEnd(this.verticalCell.firstChild, 0);
+            this.edWin.getSelection().addRange(range);
+            this.edWin.getSelection().collapseToEnd();
+            this.edWin.focus();
+        };
+        
+        this.getAllFirstChilds = function(node){
+            var firstChilds = [];
+      var cnode = node;
+            for (var i = 0; true; i++) {
+                if (cnode.firstChild && cnode.firstChild.nodeName!="#text") {
+                    firstChilds[i] = cnode.firstChild;
+                    cnode = cnode.firstChild;
+                } else {
+                    break;
+                }
+            }
+            return firstChilds;
+        };
+        
+        this.getAllNodeParents = function(node){
+            var parents = [];
+      var cnode = node;
+            for (var i = 0; true; i++) {
+                if (cnode.parentNode) {
+                    parents[i] = cnode.parentNode;
+                    cnode = cnode.parentNode;
+                } else {
+                    break;
+                }
+            }
+            return parents;
+        };
+        
+        
+        this.isNodeInVerticalCell = function(node){
+            var parents = this.getAllNodeParents(node);
+            for (var i = 0; i < parents.length; i++) {
+                if (parents[i] == this.verticalCell) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        
+        this.isCursorInInnerPosition = function(cursorAnchorNode, cursorFocusNode){
+            if (!this.isNodeInVerticalCell(cursorAnchorNode) && !this.isNodeInVerticalCell(cursorFocusNode)) {
+                return false;
+            }
+            return true;
+        };
+        
+        this.searchForInnerCursorPosition = function(){
+            if (!thobj.isCursorInInnerPosition(thobj.edWin.getSelection().anchorNode, (thobj.edWin.getSelection().focusNode))) {
+                thobj.setCursorInInnerPosition();
+            }
+        };
+        
+        this.createRootContainer = function(){
+            this.edDoc.body.innerHTML = "<div></div>";
+            this.rootDiv = this.edDoc.body.firstChild;
+            this.rootDiv.className = this.currentEditingBlockClass;
+            this.rootDiv.style.margin = '0px';
+            this.rootDiv.style.padding = '0px';
+            this.rootDiv.style.border = 'none';
+            this.rootDiv.style.position = 'relative';
+            this.rootDiv.style.background = 'rgba(255,255,255,0)';
+            
+        };
+        this.firstEditionHandler = function(){
+            this.createRootContainer();
+            this.formatVertical();
+            this.verticalCell.innerHTML = '<span>&nbsp;</span>';
+            this.setCursorInInnerPosition();
+        };
+        
+        this.secondtEditionHandler = function(){
+            this.createRootContainer();
+            this.edDoc.body.firstChild.innerHTML = storedContent;
+            this.formatVertical();
+            this.setCursorInInnerPosition();
+        };
+        
+        this.storeRootStructure = function(){ 
+            if (!thobj.edDoc.body.firstChild || !thobj.edDoc.body.firstChild.firstChild || !thobj.edDoc.body.firstChild.firstChild.firstChild) {
+        thobj.firstEditionHandler();
+            }   
+        };
+        
+        this.selectNode = function(node){
+            var range = thobj.edDoc.createRange();
+            range.selectNode(node);
+            thobj.edWin.getSelection().addRange(range);
+        };  
+          
+        this.onSelectAll = function(){
+            var range = thobj.edDoc.createRange();
+            range.selectNodeContents(thobj.verticalCell);
+            thobj.edWin.getSelection().removeAllRanges();
+            thobj.edWin.getSelection().addRange(range);
+        };        
+        this.addEvent(this.edDoc, "click", function(e){
+            var ev = e || window.event;
+            var el = ev.target || ev.srcElement;
+            thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(el/*thobj.edWin.getSelection().anchorNode.parentNode*/)));
+      WebDoc.application.paletteController.delegate.hideColorPickers();
+    });
+        
+        this.addEvent(this.edDoc, "mouseup", function(e){
+            //thobj.searchForInnerCursorPosition();
+            if (thobj.edWin.getSelection().focusNode == thobj.rootDiv) {
+                thobj.edWin.getSelection().extend(thobj.verticalCell, 0);
+            }
+    }); 
+        
+        this.addEvent(this.edDoc, "keyup", function(e){
+            //thobj.searchForInnerCursorPosition();   
+            thobj.storeRootStructure();
+  
+      var ev = e || window.event;
+            var key = ev.keyCode;
+            var el = ev.target || ev.srcElement;
+            //if ((key == 37) || (key == 38) || (key == 39) || (key == 40) || (key == 13)) {
+        thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.edWin.getSelection().anchorNode.parentNode)));
+      //}
+            return true;
+        });        
+        
+        if (!storedContent) {
+            this.firstEditionHandler();
+        } else {
+            this.secondtEditionHandler(storedContent);
+        }
+        
 
-      this.addEvent(this.edDoc, "keyup", function(e){
-        if(!thobj.edDoc.body.firstChild ||  thobj.edDoc.body.firstChild.nodeName == '#text' ||  thobj.edDoc.body.firstChild.tagName.toLowerCase() !='div'){
-          thobj.packHTMLtoEditor((thobj.edDoc.body.firstChild.innerHTML) ? (thobj.edDoc.body.firstChild.innerHTML) : (thobj.edDoc.body.firstChild.nodeValue || '<span></span>'));
-          var range = thobj.edDoc.createRange();
-          range.selectNode(thobj.edDoc.body.firstChild.firstChild);
-          thobj.edWin.getSelection().addRange(range);
-          thobj.edWin.getSelection().collapseToEnd();
-        } 
-        var ev = e||window.event;
-        var key = ev.keyCode; 
-        var el = ev.target||ev.srcElement;
-        if((key==37)||(key==38)||(key==39)||(key==40)||(key==13))       
-        thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(el))); 
-        return true;          
-      });
-      
-      this.iframe.focus();
+        
+        this.shortcut('Ctrl+A', this.onSelectAll);    
     },
     
     /**
-     * stop the edition of the current editable element and notify the listener. When the div element is no more editable the caret should disappear and user can no more edit text with keyboard. 
+     * stop the edition of the current editable element and notify the listener. When the div element is no more editable the caret should disappear and user can no more edit text with keyboard.
      * If no element is in edition mode this method does nothing.
      * @return String. return html corresponding to the edited div.
      */
-    exitEditMode: function() {
-      var thobj = this;
-      var className = 'empty'; 
-      var htmlToStore = '';
-      
-      if(this.isContainText(this.edDoc.body.firstChild)){
-        var htmlToStore = ( this.edDoc.body.firstChild.innerHTML)?(this.edDoc.body.firstChild.innerHTML):(this.edDoc.body.firstChild.nodeValue);  
-          className='';
-      }
-
-      this.currentEditingBlock.innerHTML = htmlToStore; 
-      this.endEditionListener.applyTextContent(htmlToStore,className);
-      this.currentEditingBlock = null;
+    exitEditMode: function(){
+        var thobj = this;
+        var className = 'empty';
+        var htmlToStore = '';
+        
+        if (this.isContainText(this.edDoc.body.firstChild)) {
+            htmlToStore = this.outputFilter(this.edDoc.body.firstChild.innerHTML);
+            className = '';
+        }
+        
+        this.currentEditingBlock.innerHTML = htmlToStore;
+        this.endEditionListener.applyTextContent(htmlToStore, className);
+        this.currentEditingBlock = null;
     },
     
     /**
@@ -467,62 +970,88 @@ WebDoc.TextToolView = $.klass({
      ---* - subScript: make selected text subscript
      ---* - removeFormat: remove all formatting on selected text
      */
-    editorExec: function(command, optional) {
-      var thobj = this;
-      switch (command){ 
-        case 'bold'         :           
-        case 'italic'       :           
-        case 'underline'      :         
-        case 'justifyLeft'      :       
-        case 'justifyRight'     :       
-        case 'justifyCenter'    :       
-        case 'justifyFull'      :       
-        case 'insertUnorderedList'  :   
-        case 'insertOrderedList'  : 
-        case 'superScript'          :
-        case 'subScript'          :
-        case 'indent'       :   
-        case 'outdent'        :                     
-        case 'fontName'       :             
-        case 'removeformat'     :
-        case 'increasefontsize'   :
-        case 'decreasefontsize'   :         
-        case 'outdent'        :   this.edDoc.execCommand(command,null,optional?optional:'');        
-        case 'format'               :   this.edDoc.execCommand('formatblock', false,  '<' +optional + '>');break; 
-        case 'hiliteColor'      :   this.format_inline(command,'backgroundColor',optional);  break;   
-        case 'fontSize'       :   this.format_inline(command,'fontSize',optional);  break;  
-        case 'foreColor'      :   this.format_inline(command,'color',optional);  break;
-        case 'verticalAlign'    :   this.format_vertical(optional);  break;                                              
-        default : {alert('Command '+command+' is not defined');}
-      } 
-      if(this.getSelectionBounds().end.nodeName != '#text'){
-        thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(this.getSelectionBounds().end)));   
-      } else {  
-          thobj.toolBarHandler(thobj.formatElementStyleData(thobj.getElementStyleData(this.edDoc.body)));   
-      }   
-    },
-    toolBarHandler: function(toolbarHash) {       
-      this.setSelectBoxValue = function(selectBox,val){
-        for(i=0;i<selectBox.length;i++){
-          if(selectBox.options[i].value.toLowerCase()==val){
-            selectBox.selectedIndex=i
-          }
+    editorExec: function(command, optional){
+        var thobj = this;
+        switch (command) {
+        
+        
+            case 'insertUnorderedList':
+            case 'insertOrderedList':
+            case 'indent':
+            case 'outdent':
+            case 'removeformat':
+            case 'outdent':
+                this.edDoc.execCommand(command, null, optional ? optional : '');
+                break;
+                
+            case 'format':
+                this.edDoc.execCommand('formatblock', false, '<' + optional + '>');
+                break;
+                
+            case 'hiliteColor':
+                this.formatInline(command, '', 'backgroundColor', optional);
+                break;
+            case 'fontSize':
+                this.formatInline(command, 'size', 'fontSize', optional);
+                break;
+            case 'foreColor':
+                this.formatInline(command, 'color', 'color', optional);
+                break;
+                
+            case 'fontName':this.formatStyle(command,false,optional);break;
+            case 'bold':this.formatStyle(command,false,null);  break;
+            case 'italic':this.formatStyle(command,false,null); break;
+            case 'underline':this.formatStyle(command,'textDecoration',null);  break;
+            case 'superScript':this.formatStyle(command,false,null);break;
+            case 'subScript':this.formatStyle(command,false,null); break;
+
+                
+            case 'verticalAlign':
+                this.formatVertical(optional);
+                break;
+                
+            case 'justifyLeft':
+            case 'justifyRight':
+            case 'justifyCenter':
+            case 'justifyFull':
+                this.formatHorisontal(command);
+                break;
+                
+            case 'increasefontsize':
+                this.increaseFontSize(+this.fontSizeIncrementParams.step, this.fontSizeIncrementParams.minValue, this.fontSizeIncrementParams.maxValue, 'rgb(1, 1, 1)');
+                break;
+            case 'decreasefontsize':
+                this.increaseFontSize(-this.fontSizeIncrementParams.step, this.fontSizeIncrementParams.minValue, this.fontSizeIncrementParams.maxValue, 'rgb(1, 1, 1)');
+                break;
+                
+            default:alert('Command ' + command + ' is not defined');
+                
         }
-      }
-        for(stp in toolbarHash){ 
-          try{ 
-          if(toolbarHash[stp]===true){      
-            
-            if(stp.indexOf('valign') != -1){document.getElementById('toolbar_panel_button_valign').firstChild.className = 'icon_'+stp}
-            else{document.getElementById('toolbar_panel_button_'+stp).className = 'active_button';}
-          }
-            else if (toolbarHash[stp]===false)    document.getElementById('toolbar_panel_button_'+stp).className = '';
-            else if (document.getElementById('toolbar_panel_button_'+stp).tagName == 'SELECT'){this.setSelectBoxValue(document.getElementById('toolbar_panel_button_'+stp),toolbarHash[stp])}
-          }
-          catch(e){}
+        // firefox bags correcting
+        if (this.rootDiv.style.textAlign) {
+            this.verticalCell.style.textAlign = this.rootDiv.style.textAlign;
         }
+        if (this.rootDiv.style.textDecoration) {
+            this.verticalCell.style.textDecoration = this.rootDiv.style.textDecoration;
+        }
+        if (this.rootDiv.style.fontWeight) {
+            this.verticalCell.style.fontWeight = this.rootDiv.style.fontWeight;
+        }
+        if (this.rootDiv.style.color) {
+            this.verticalCell.style.color = this.rootDiv.style.color;
+        }
+        if (this.rootDiv.style.marginLeft) {
+            this.verticalContainer.style.marginLeft = this.rootDiv.style.marginLeft;
+            this.rootDiv.style.marginLeft = null;
+        } else if (this.verticalCell.style.marginLeft) {
+            this.verticalContainer.style.marginLeft = this.verticalCell.style.marginLeft;
+        }
+        var currentSelected = thobj.edWin.getSelection().focusNode;
+        if(currentSelected.nodeName=='#text') currentSelected = currentSelected.parentNode;
+        thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(currentSelected)));
+        this.edWin.focus();
     },
-    activateToolbar: function(bool) {       
-      $('#toolbar_panel_cover').css('display',bool?'none':'block'); 
+    refreshPalette: function(toolbarHash){
+      WebDoc.application.paletteController.delegate.refresh(toolbarHash);
     }
-  });
+});
