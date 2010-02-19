@@ -9,7 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100212072706) do
+ActiveRecord::Schema.define(:version => 20100218092413) do
+
+  create_table "categories", :force => true do |t|
+    t.string "name", :null => false
+  end
 
   create_table "datastore_entries", :force => true do |t|
     t.string   "ds_key",                       :null => false
@@ -21,11 +25,14 @@ ActiveRecord::Schema.define(:version => 20100212072706) do
   end
 
   create_table "documents", :force => true do |t|
-    t.string   "uuid",       :limit => 36
+    t.string   "uuid",        :limit => 36
     t.string   "title"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "description"
+    t.text     "size"
+    t.integer  "category_id"
   end
 
   create_table "items", :force => true do |t|
@@ -50,6 +57,8 @@ ActiveRecord::Schema.define(:version => 20100212072706) do
     t.integer  "user_id"
     t.string   "file"
     t.string   "system_name"
+    t.string   "title"
+    t.text     "description"
   end
 
   add_index "medias", ["system_name"], :name => "index_medias_on_system_name"

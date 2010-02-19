@@ -3,7 +3,6 @@ class ApplicationController < ActionController::Base
   before_filter :http_authenticate
   before_filter :set_xmpp_client_id_in_thread
   
-  include AuthenticatedSystem
   rescue_from Acl9::AccessDenied, :with => :deny_access
   
   protect_from_forgery # See ActionController::RequestForgeryProtection for details

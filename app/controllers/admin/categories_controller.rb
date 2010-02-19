@@ -58,9 +58,9 @@ class Admin::CategoriesController < ApplicationController
   
   
 protected
-
+  
   def admin_required
-    (current_user.present? && current_user.has_role?("admin")) || access_denied
+    redirect_to root_path unless user_signed_in? && current_user.has_role?("admin")
   end
   
 end

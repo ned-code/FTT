@@ -27,7 +27,7 @@ WebDoc.WidgetApi = $.klass(
   
   preference: function(key, value) {
     var result = this.widgetItem.data.data.preference[key];
-    if (result) {return result;}
+	if (typeof(result)!='undefined') {return result;}
     return value;
   },
   
