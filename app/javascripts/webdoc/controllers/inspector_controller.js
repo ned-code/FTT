@@ -112,6 +112,12 @@ WebDoc.InspectorController = $.klass({
     this.refreshSubInspectors();    
   },
   
+  refreshProperties: function() {
+    this.subInspectors[0];
+    subInspector.refresh();
+  },
+  
+  
   refreshSubInspectors: function() {
     // refresh su inspector
     for (var i=0; i < this.subInspectors.length; i++) {
