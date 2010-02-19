@@ -3,7 +3,11 @@ MTools.Application = $.klass({
   initialize: function() {
     
     $.ajaxSetup({data:{authenticity_token : WebDoc.authData.authToken}});
- 
+    // change domain to be able to synch with apps
+    var allDomainsParts = document.domain.split(".");
+    if (allDomainsParts.length > 2) {
+      document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
+    }
   }
 });
 
