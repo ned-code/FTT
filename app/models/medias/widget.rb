@@ -48,7 +48,6 @@ private
       self.properties[:version] = config_dom.root.attribute("version").to_s
       
       mapped_path = get_mapped_path
-      
       index_url = config_dom.root.elements['content'].attribute("src").to_s
       unless index_url.match(/http:\/\/.*/)
         index_url = File.join(mapped_path, config_dom.root.elements['content'].attribute("src").to_s)
@@ -75,7 +74,8 @@ private
     if file.s3_bucket == nil
       file.store_url
     else
-      "http://#{CarrierWave.yml_s3_bucket(:widgets).to_s}/#{file.store_path}"
+      path = Pathname.new(file.store_path)
+      "http://#{CarrierWave.yml_s3_bucket(:widgets).to_s}/#{path.dirname}"
     end
   end
   
