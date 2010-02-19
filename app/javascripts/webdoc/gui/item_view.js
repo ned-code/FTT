@@ -263,7 +263,7 @@ WebDoc.ItemView = $.klass({
     });
     
     if (inspectorController) {
-      inspectorController.refreshSubInspectors();
+      inspectorController.refreshProperties();
     }
   },
   
@@ -278,7 +278,7 @@ WebDoc.ItemView = $.klass({
     });
     
     if (inspectorController) {
-      inspectorController.refreshSubInspectors();
+      inspectorController.refreshProperties();
     }
   }
 });
