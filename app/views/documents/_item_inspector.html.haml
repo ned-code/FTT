@@ -1,7 +1,7 @@
 #item_inspector{ :style => "display: none" }
   -#%h3
   -#  %a{ :href => "" } Palette
-  #palette_inspector.layer
+  #palette_inspector.scroll-free.layer
     #palette_text.inspector
       %div.head
         %div
@@ -10,6 +10,20 @@
       %div.foot
         %div
           %h3 Properties
+          %form
+            %fieldset.properties
+              %div
+                %label width
+                %input{ :type => "text", :value => "px" }
+              %div
+                %label height
+                %input{ :type => "text", :value => "px" }        
+              %div
+                %label left
+                %input{ :type => "text", :value => "px" }
+              %div
+                %label top
+                %input{ :type => "text", :value => "px" }
       
       %div.content
         -#%select#toolbar_panel_button_format{ :onchange => "TextToolView.editorExec(\'format\',this.value);" }
@@ -21,39 +35,59 @@
         -#  %option{ :value => 'h5' } Heading 5
         -#  %option{ :value => 'h6' } Heading 6
         
-        %ul.semantic-index.box.text-only.vertical.thumbs.index
+        %ul.semantic-index.vertical.pages.index
           %li
-            %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h1');" }
-              %h1 h1 Document Title
+            %span.number h1
+            %div.title
+              %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h1');" }
+                %h1 Document Title
           %li
-            %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h2');" }
-              %h2 h2 Page Title
+            %span.number h2
+            %div.title
+              %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h2');" }
+                %h2 Page Title
           %li
-            %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h3');" }
-              %h3 h3 Subject Title
+            %span.number h3
+            %div.title
+              %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h3');" }
+                %h3 Subject Title
           %li
-            %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h4');" }
-              %h4 h4 Heading
+            %span.number h4
+            %div.title
+              %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h4');" }
+                %h4 Heading
           %li
-            %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h5');" }
-              %h5 h5 Sub-heading
+            %span.number h5
+            %div.title
+              %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h5');" }
+                %h5 Sub-heading
           %li
-            %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h6');" }
-              %h6 h6 Sub-sub-heading
+            %span.number h6
+            %div.title
+              %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'h6');" }
+                %h6 Sub-sub-heading
           %li
-            %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'p');" }
-              %p p Paragraph
+            %span.number p
+            %div.title
+              %a{ :href => "#", :onclick => "TextToolView.editorExec(\'format\', 'p');" }
+                %p Paragraph
           %li
-            %a#toolbar_panel_button_insertUnorderedList{ :href => 'javascript:void(0);', :title => "Insert Unordered List", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertUnorderedList\');" }
-              %ul
-                %li ul List
+            %span.number ul
+            %div.title
+              %a#toolbar_panel_button_insertUnorderedList{ :href => 'javascript:void(0);', :title => "Insert Unordered List", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertUnorderedList\');" }
+                %ul
+                  %li List
           %li
-            %a#toolbar_panel_button_insertOrderedList{ :href => 'javascript:void(0);', :title => "Insert Ordered List", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertOrderedList\');" }
-              %ol
-                %li ol Numbered List
+            %span.number ol
+            %div.title
+              %a#toolbar_panel_button_insertOrderedList{ :href => 'javascript:void(0);', :title => "Insert Ordered List", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertOrderedList\');" }
+                %ol
+                  %li Numbered List
           %li
-            %a{ :href => "#", :title => "Insert Quotation", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertQuotation\');" }
-              %blockquote blockquote Quotation
+            %span.number "
+            %div.title
+              %a{ :href => "#", :title => "Insert Quotation", :onclick => "WebDoc.application.textTool.delegate.editorExec(\'insertQuotation\');" }
+                %blockquote Quotation
 
         -#%select#toolbar_panel_button_fontName{ :onchange => "WebDoc.application.textTool.delegate.editorExec(\'fontName\',this.value);" }
         -#  %option{ :value => 'Times New Roman' } Times New Roman

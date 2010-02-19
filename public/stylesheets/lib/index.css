@@ -299,7 +299,8 @@ a[href='#draw'].current .draw-port {
 
 /* Panel tools indexes */
 
-.panel-tools {
+.panel-tools,
+.border {
     border: 3px solid;
 }
 .vertical.panel-tools {
