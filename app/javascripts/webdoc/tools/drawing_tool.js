@@ -19,7 +19,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
                 
                 ddd('[DrawingTool] Selected colour '+color);
                 
-                $(".state-draw-color").find("a").removeClass('current').css({
+                $(".state-draw-color").removeClass('current').css({
                     WebkitBoxShadow: 'none',
                     MozBoxShadow:    'none',
                     BoxShadow:       'none'
