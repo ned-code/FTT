@@ -9,21 +9,19 @@
       
       %div.foot
         %div
-          %h3 Properties
-          %form
-            %fieldset.properties
-              %div
-                %label width
-                %input{ :type => "text", :value => "px" }
-              %div
-                %label height
-                %input{ :type => "text", :value => "px" }        
-              %div
-                %label left
-                %input{ :type => "text", :value => "px" }
-              %div
-                %label top
-                %input{ :type => "text", :value => "px" }
+          %form.properties
+            %div
+              %label width
+              %input{ :type => "text", :value => "px" }
+            %div
+              %label height
+              %input{ :type => "text", :value => "px" }        
+            %div
+              %label left
+              %input{ :type => "text", :value => "px" }
+            %div
+              %label top
+              %input{ :type => "text", :value => "px" }
       
       %div.content
         -#%select#toolbar_panel_button_format{ :onchange => "TextToolView.editorExec(\'format\',this.value);" }

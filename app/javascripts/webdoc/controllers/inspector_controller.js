@@ -75,6 +75,8 @@ WebDoc.InspectorController = $.klass({
   },
   
   updatePalette: function(paletteId) {
+    var footHeight;
+    
     if (paletteId !== this.currentPaletteId) {
       if (this.currentPaletteId !== undefined) {
         ddd("hide palette", this.currentPaletteId);
@@ -91,7 +93,17 @@ WebDoc.InspectorController = $.klass({
       }
       else {
         this.palettes[paletteId].show();
-        this.currentPaletteId = paletteId;        
+        
+        footHeight = this.palettes[paletteId].find('.foot>div').height();
+        
+        this.palettes[paletteId].css({
+            bottom: footHeight
+        });
+        
+        this.currentPaletteId = paletteId;
+        
+        
+        console.log('HEY');
       }
     }
     if (paletteId === 4) {
