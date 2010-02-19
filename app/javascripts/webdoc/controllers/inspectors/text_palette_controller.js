@@ -4,16 +4,16 @@
 WebDoc.TextPaletteController = $.klass({
   initialize: function() {
     this.initGUI("palette_text");
+    WebDoc.application.paletteController = {delegate: this};
   },
-  
   initGUI: function(container){
+    var thobj = this;
     var containerObj = document.getElementById(container);
     var toolbarContent = 
     '<div id="toolbar_panel">'+
-        '<div id="toolbar_panel_cover"></div>'+
         '<div id="colorpickerHolder1" style="position:absolute;z-index: 150000;top:50px;"></div>'+
           '<div id="colorpickerHolder2" style="position:absolute;z-index: 150000;top:50px;"></div>'+
-        '<select id="toolbar_panel_button_format" onchange="TextToolView.editorExec(\'format\',this.value);">'+
+        '<select id="toolbar_panel_button_format" onchange="WebDoc.application.textTool.delegate.editorExec(\'format\',this.value);">'+
           '<option value="p">Normal</option>'+
           '<option value="h1">Heading 1</option>'+
           '<option value="h2">Heading 2</option>'+
@@ -75,9 +75,9 @@ WebDoc.TextPaletteController = $.klass({
         '<a href="javascript:void(0);"  title="Underline" id="toolbar_panel_button_underline"       onclick="WebDoc.application.textTool.delegate.editorExec(\'underline\');">      <div class="icon_underline"></div></a>'+      
         
         '<a href="javascript:void(0);"  title="Foreground font color" id="toolbar_panel_button_foreColor"       onclick="WebDoc.application.textTool.delegate.editorExec(\'foreColor\',this.firstChild.style.backgroundColor);" ><div class="icon_foreColor"></div></a>'+
-        '<a href="javascript:void(0);"  id="toolbar_panel_button_foreColor_arrow"                                         ><div class="icon_foreColor_arrow"></div></a>'+
+        '<a href="javascript:void(0);"  id="toolbar_panel_button_foreColor_arrow"                                         ><div class="icon_color_arrow"></div></a>'+
         '<a href="javascript:void(0);"  title="Background font color" id="toolbar_panel_button_hiliteColor"     onclick="WebDoc.application.textTool.delegate.editorExec(\'hiliteColor\',this.style.backgroundColor);"><div class="icon_hiliteColor"></div></a>'+ 
-        '<a href="javascript:void(0);"  title="" id="toolbar_panel_button_hiliteColor_arrow"                                          ><div class="icon_hiliteColor_arrow"></div></a>'+
+        '<a href="javascript:void(0);"  title="" id="toolbar_panel_button_hiliteColor_arrow"                                          ><div class="icon_color_arrow"></div></a>'+
         
         '<a href="javascript:void(0);"  title="Insert Ordered List" id="toolbar_panel_button_insertOrderedList"   onclick="WebDoc.application.textTool.delegate.editorExec(\'insertOrderedList\');">  <div class="icon_insertOrderedList"></div></a>'+
         '<a href="javascript:void(0);"  title="Insert Unordered List" id="toolbar_panel_button_insertUnorderedList"   onclick="WebDoc.application.textTool.delegate.editorExec(\'insertUnorderedList\');">  <div class="icon_insertUnorderedList"></div></a>'+      
@@ -107,24 +107,51 @@ WebDoc.TextPaletteController = $.klass({
       $('#toolbar_panel_valign_block').css('top',pos.top+28);
     });
     
-    $('#toolbar_panel_button_valignBottom').bind('click',   function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignBottom");$('#toolbar_panel_valign_block').hide()});
-    $('#toolbar_panel_button_valignMiddle').bind('click',   function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignMiddle");$('#toolbar_panel_valign_block').hide()});
-    $('#toolbar_panel_button_valignTop').bind('click',    function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignTop");$('#toolbar_panel_valign_block').hide()});
+    $('#toolbar_panel_button_valignBottom').bind('click',   function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignBottom");$('#toolbar_panel_valign_block').hide();});
+    $('#toolbar_panel_button_valignMiddle').bind('click',   function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignMiddle");$('#toolbar_panel_valign_block').hide();});
+    $('#toolbar_panel_button_valignTop').bind('click',    function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignTop");$('#toolbar_panel_valign_block').hide();});
     
+    this.isHasParent = function(target,parentObj){
+      if(target.parentNode && target.parentNode==parentObj){
+      return true;
+    } else {
+      if(!target.parentNode){
+        return false;
+      } else {
+          return this.isHasParent(target.parentNode,parentObj);
+      }
+      
+    }
+  }
+
+    $(document).bind('click', function(e) {
+        e.stopPropagation();
+        e.cancelBubble = true;
+        var foc = (e.target.parentNode && e.target.parentNode.parentNode)?e.target.parentNode.parentNode.getAttribute('class'):'';
+    if($('#colorpickerHolder2').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder2')) || foc=='colorpicker_color'){
+      $('#colorpickerHolder2').stop().animate({height: 0}, 500);
+      $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
+    }
+    if($('#colorpickerHolder1').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder1')) || foc=='colorpicker_color'){
+      $('#colorpickerHolder1').stop().animate({height: 0}, 500);
+      $('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+    }
+      });   
     
     $('#colorpickerHolder2').ColorPicker({
         flat: true,
         color: '#000000',
         onSubmit: function(hsb, hex, rgb) {
           $('#colorpickerHolder2').stop().animate({height: 0}, 500);
-          $('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#' + hex);
+          $('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#' + hex);   
+      $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
           WebDoc.application.textTool.delegate.editorExec('foreColor','#' + hex);
           
         },
         onHide: function (colpkr) {
           $(colpkr).fadeOut(500);
           return false;
-        },
+        },                                    
         onChange: function (hsb, hex, rgb) {
           $('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#' + hex);
         }
@@ -135,12 +162,16 @@ WebDoc.TextPaletteController = $.klass({
         onSubmit: function(hsb, hex, rgb) {     
           $('#colorpickerHolder1').stop().animate({height: 0}, 500);
           $('#toolbar_panel_button_hiliteColor').css('backgroundColor', '#' + hex);
+          $('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
           WebDoc.application.textTool.delegate.editorExec('hiliteColor','#' + hex); 
           
         },
         onHide: function (colpkr) {
           $(colpkr).fadeOut(500);
           return false;
+        },
+        downSelector: function (colpkr) {
+          alert('dfg');
         },
         onChange: function (hsb, hex, rgb) {
           $('#toolbar_panel_button_hiliteColor').css('backgroundColor', '#' + hex);
@@ -151,26 +182,69 @@ WebDoc.TextPaletteController = $.klass({
   
       $('#toolbar_panel_button_foreColor_arrow').bind('click', function(e) {
         e.stopPropagation();
-            e.cancelBubble = true; 
-        var pos = $("#toolbar_panel_button_foreColor").position();  
-        $('#colorpickerHolder2').css('left',0);
-        $('#colorpickerHolder2').css('top',pos.top+28);
-        $('#colorpickerHolder2').stop().animate({height:173}, 500);
-        $('#colorpickerHolder1').stop().animate({height:0}, 500);
+        e.cancelBubble = true; 
+        if($('#toolbar_panel_button_foreColor_arrow>div').attr('class')!='icon_color_arrow_top'){ 
+      $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow_top');
+          var pos = $("#toolbar_panel_button_foreColor").position();  
+          $('#colorpickerHolder2').css('left',0);//pos.left
+          $('#colorpickerHolder2').css('top',pos.top+28);
+          $('#colorpickerHolder2').stop().animate({height:173}, 500);
+          $('#colorpickerHolder1').stop().animate({height:0}, 500);
+      } else {
+        $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
+        $('#colorpickerHolder2').stop().animate({height: 0}, 500);
+    }
       });
       $('#toolbar_panel_button_hiliteColor_arrow').bind('click', function(e) {
         e.stopPropagation();
-            e.cancelBubble = true; 
-        var pos = $("#toolbar_panel_button_hiliteColor").position();  
-        $('#colorpickerHolder1').css('left',0);
-        $('#colorpickerHolder1').css('top',pos.top+28);
-        $('#colorpickerHolder1').stop().animate({height:173}, 500);
-        $('#colorpickerHolder2').stop().animate({height:0}, 500);
+        e.cancelBubble = true; 
+        if($('#toolbar_panel_button_hiliteColor_arrow>div').attr('class')!='icon_color_arrow_top'){ 
+      $('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow_top');
+          var pos = $("#toolbar_panel_button_hiliteColor").position();  
+          $('#colorpickerHolder1').css('left',0);//pos.left
+          $('#colorpickerHolder1').css('top',pos.top+28);
+          $('#colorpickerHolder1').stop().animate({height:173}, 500);
+          $('#colorpickerHolder2').stop().animate({height:0}, 500);
+      } else {
+        $('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+        $('#colorpickerHolder1').stop().animate({height: 0}, 500);
+    }
       });   
   },
   
-  refresh: function() {
-
+  refresh: function(toolbarHash) {
+      this.setSelectBoxValue = function(selectBox, val){
+            for (i = 0; i < selectBox.length; i++) {
+                if (selectBox.options[i].value.toLowerCase().indexOf(val) === 0) {
+                    selectBox.selectedIndex = i;
+                }
+            }
+        };
+        for (stp in toolbarHash) {
+            if (toolbarHash[stp] === true) {
+            
+                if (stp.indexOf('valign') != -1) {
+                    document.getElementById('toolbar_panel_button_valign').firstChild.className = 'icon_' + stp;
+                } else {
+                    document.getElementById('toolbar_panel_button_' + stp).className = 'active_button';
+                }
+            } else if (toolbarHash[stp] === false) {
+        document.getElementById('toolbar_panel_button_' + stp).className = '';
+      } else if (document.getElementById('toolbar_panel_button_' + stp).tagName.toLowerCase() == 'select') {
+        this.setSelectBoxValue(document.getElementById('toolbar_panel_button_' + stp), toolbarHash[stp]);
+      }
+        }
+  },
+  
+  hideColorPickers: function() {
+    if($('#colorpickerHolder1').height()){
+      $('#colorpickerHolder1').stop().animate({height: 0}, 500);
+    $('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+  }
+    if($('#colorpickerHolder2').height()){
+    $('#colorpickerHolder2').stop().animate({height: 0}, 500);
+    $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow'); 
+  }
   }
 
 });
