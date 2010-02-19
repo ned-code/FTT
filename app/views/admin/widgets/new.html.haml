@@ -1,4 +1,4 @@
-%h1 Add new widget
+%h1= t('.title')
 
 - semantic_form_for @widget, :url => admin_widgets_path, :html => { :enctype => 'multipart/form-data' } do |f|
   - f.inputs do

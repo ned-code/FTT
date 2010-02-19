@@ -2,20 +2,237 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  back: "back"
-  show: "show"
-  edit: "edit"
-  destroy: "destroy"
-  update: "update"
-  apply: "apply"
-  upload: "upload"
-  add: "add"
+  back: "Back"
+  show: "Show"
+  edit: "Edit"
+  destroy: "Destroy"
+  update: "Update"
+  upload: "Upload"
+  apply: "Apply"
+  add: "Add"
   
+  admin:
+    categories:
+      index:
+        title: "Categories Listing"
+        add: "Add a category"
+        destroy_confirmation: "Are you sure?"
+    
+      new:
+        title:  "Add new category"
+      
+      edit:
+        title: "Category edition"
+        
+    widgets:
+      index:
+        title: "Widgets listing"
+        add: "Upload new widget"
+        destroy_confirmation: "Are you sure?"
+      
+      new:
+        title:  "Add new widget"
+        
+      edit:
+        title: "Widget edition"
+        width: "Width:"
+        height: "Height:"
+        version: "Version:"
+        icon_url: "Icon URL:"
+        index_url: "Index URL:"
+        inspector_url: "Inspector URL:"
+  
+  documents:
+    index:
+      title: "Documents"
+      all_items_by_date: "All items"
+      owned_by_me: "Owned by me"
+      shared_with_me_as_editor: "Shared with me (as editor)"
+      shared_with_me_as_viewer: "Shared with me (as viewer)" 
+      create_new_document: "Create a new document"
+      edit_document: "Edit document"
+      document_forms:
+        name: "Name"
+        description: "Description"
+        category: "Category"
+        document_size_title: "Document size"
+        creationDate: "Creation date"
+        change_access_document: "Modify document access"
+        everybody: "Everybody"
+        choose_title: "Choose a title"
+        new_webdoc: "a new webdoc"
+        add_description: "Add a description"
+        document_size:
+          custom: "Custom"
+          iPhone: "iPhone (620x480)"
+          classic: "Classic (800x600)"
+          iPad: "iPad (1024x768)"
+          width: "Width"
+          height: "Height"
+        buttons:
+          add_access: "Add user"
+      buttons:
+        new_document: "New document"
+        
+    show:
+      toolbar:
+        left_panel: "Left Panel"
+        pages: "Pages browser"
+        previous_page: "Previous page"
+        next_page: "Next page"
+        add_page: "Add new page"
+        zoom_in: "Zoom In"
+        zoom_out: "Zoom Out"
+        move: "Move"
+        undo: "Undo"
+        redo: "Redo"
+        send_to_back: "Send to back"
+        bring_to_front: "Bring to front"
+        delete: "Delete"
+        select: "Select"
+        html_tool: "Insert an HTML snippet"
+        text_tool: "Insert a Text box"
+        drawing_tool: "Draw"
+        toggle_inspector: "Toggle Inspector"
+        library: "Show Library"
+        item_inspector: "Show Inspector"
+        page_inspector: "Show Page inspector"
+        document_inspector: "Show Document inspector"
+      pages_browser:
+        add_page: "Add page"
+        add_web_page: "Add web page"
+        copy_page: "Copy page"
+        delete_page: "Delete page"
+        show_thumbnails: "Show thumbnails"
+        
+    document_inspector:
+      title: "Document properties"
+      name: "Name"
+      default_name: "choose a title"
+      description: "Description"
+      category: "Category"
+      
+    page_inspector:
+      title: "Page inspector"
+      page: 
+        title: "Page"
+        url: "URL"
+      properties: 
+        title: "Properties"
+        name: "Name"
+        width: "Width"
+        height: "Height"
+        show_scroll: "Show scroll"
+        background: "Background"
+        background_image: "Background Image"
+        background_image_comment: "You can also choose an image from your image library and use the set as background button."
+        remove_image: "Remove image"
+        background_image_position:
+          horizontal: "Horizontal"
+          vertical : "oblique"
+          tile: "Tile"
+          left: "Left"
+          right: "Right"
+          center: "Center"
+          top: "Top"
+          middle: "Middle"
+          bottom: "Bottom"
+        buttons:
+          upload: "Upload"
+          apply_background_all_pages: "Apply background to all pages"
+      css: "CSS"
+      
+    item_inspector:
+      title: "Item inspector"
+      empty: "Empty"
+      image_url: "Image URL"
+      palette: 
+        title: "Palette"
+        no_iframe: "No iframe"
+      properties:
+        title: "Properties"
+        top: "Top"
+        left: "Left"
+        width: "Width"
+        height: "Height"
+        show_scroll: "Show scroll"
+        opacity: "Opacity"
+      
+    library:
+      title: "Library"
+      images: 
+        title: "Images"
+        add_image: "Add Images"
+        my_images: "My images"
+        web: "Web"
+        web_detail: "Search images on the web"
+        show_details: "Show image details"
+        services:
+          flickr: "Flickr"
+          google: "Google Images"
+        add_images_view:
+          title: "Add Images"
+          choose_upload_image: "Choose image(s) to upload"
+        detail_view:
+          title: "Image"
+          add_to_page: "Add to page"
+          set_as_background: "Set as background"
+          show_on_flickr: "Show photo page on Flickr"
+          remove_from_my_images: "Remove from My Images"
+          delete: "Delete image"
+          add_to_my_images: "Add to My Images"
+      videos: 
+        title: "Videos"
+        my_videos: "My videos"
+        web: "Web"
+        web_detail: "Search videos on the web"
+        show_details: "Show video details"
+        services:
+          youtube: "Youtube"
+          vimeo: "Vimeo"
+        detail_view:
+          title: "Video"
+          drag_handle: "drag and drop to add"
+          show_on: "Show photo page on *"
+          remove_from_my_videos: "Remove from My Videos"
+          delete: "Delete video"
+          add_to_my_videos: "Add to My Videos"
+        
+      apps:
+        title: "Apps"
+        my_apps: "My apps"
+        show_details: "Show app details"
+        detail_view:
+          title: "App"
+          add_to_page: "Add to page"
+      web:
+        title: "Web"
+        web_browser: "Web browser"
+        show_browser: "Show Browser"
+        links:
+          google: "Google"
+          flickr: "Flickr"
+          facebook: "Facebook"
+          wikipedia: "Wikipedia"
+        detail_view:
+          title: "Web browser"
+        
+      buttons:
+        back: "Back"
+        search: "Search"
+        close: "Close"
+        upload: "Upload"
+        cancel_uplad: "Cancel upload"
+  
+  datastore:
+    index:
+      no_rights: 'User has no right on the document' 
+         
   flash:
     notice:
       user_registered: "registered"
-      login_successfull: "Login successful!"
-      logout_successfull: "Logout successful!"
+      login_successful: "Login successful!"
+      logout_successful: "Logout successful!"
       user_confirmed: "Your user is confirmed!"
       widget:
         destroyed_successful: "Widget successfully deleted"
@@ -24,7 +241,22 @@ en:
         already_up_to_date: "Already up to date, no update needed"
       category:
         destroyed_successful: "Category successfully deleted"
+  
       
+  layouts:
+    main_editor_toolbar:
+      quick preview: "Quick preview"
+      save: "Save"
+      presentation_mode: "Presentation mode"
+      invite_collaborators: "Invite collaborators"
+      import: "Import"
+      publish: "Publish" 
+      extend_uniboard: "Extend Uniboard" 
+      export: "Export"
+      print: "Print"
+      develop: "Develop"
+      disable_HTML: "Disable HTML"
+  
   user_sessions:
     new:
       title: "Login"
@@ -35,7 +267,7 @@ en:
     index:
       title: "Listing users"
       new_user_link: "create new user"
-    
+
     new:
       title: "Sign up"
       button: "Sign up"
@@ -44,39 +276,9 @@ en:
       title: "Editing user"
       button: "Update"
   
-  button:
-    send: "Send"
-    new_document: "New document"
-    add_access: "Add user"
-  
   label:
-    page_inspector: "Page inspector"
-    item_inspector: "Item inspector"
-    document_inspector: "Document properties"
-    documents: "Documents"
-    all_items_by_date: "All items"
-    owned_by_me: "Owned by me"
-    shared_with_me_as_editor: "Shared with me (as editor)"
-    shared_with_me_as_viewer: "Shared with me (as viewer)"
-    create_new_document: "Create a new document"
-    edit_document: "Edit document"
-    name: "Name"
-    description: "Description"
-    category: "Category"
-    document_size_title: "Document size"
-    creationDate: "Creation date"
-    change_access_document: "Modify document access"
     everybody: "Everybody"
-    choose_title: "Choose a title"
-    new_webdoc: "a new webdoc"
-    add_description: "Add a description"
-    document_size:
-      custom: "Custom"
-      iPhone: "iPhone (620x480)"
-      classic: "Classic (800x600)"
-      iPad: "iPad (1024x768)"
-      width: "Width"
-      height: "Height"
+
   alert:
     destroy_confirmation: "Are you sure?"
 

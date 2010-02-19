@@ -1,87 +1,87 @@
 - session_key_name = ActionController::Base.session_options[:key]
 #wb-document-main.ui-widget
   #wb-document-header
-    %button#wb-create-document-button.ui-button.ui-state-default.ui-corner-all= t('button.new_document')
+    %button#wb-create-document-button.ui-button.ui-state-default.ui-corner-all= t('.buttons.new_document')
 
   #wb-document-navigation.wb-navigation
-    %h2#wb-document-navigation-title.wb-navigation-title= t('label.documents')
+    %h2#wb-document-navigation-title.wb-navigation-title= t('.title')
     %ul
       %li
-        %a#wb-document-filter-date{ :href => "#by_date"}= t('label.all_items_by_date')
+        %a#wb-document-filter-date{ :href => "#by_date"}= t('.all_items_by_date')
       %li
-        %a#wb-document-filter-owned-by-me.active{ :href => "#owned_by_me"}= t('label.owned_by_me')
+        %a#wb-document-filter-owned-by-me.active{ :href => "#owned_by_me"}= t('.owned_by_me')
       %li
-        %a#wb-document-filter-shared-with-me-as-editor{ :href => "#shared_as_editor"}= t('label.shared_with_me_as_editor')
+        %a#wb-document-filter-shared-with-me-as-editor{ :href => "#shared_as_editor"}= t('.shared_with_me_as_editor')
       %li
-        %a#wb-document-filter-shared-with-me-as-viewer{ :href => "#shared_as_viewer"}= t('label.shared_with_me_as_viewer')
+        %a#wb-document-filter-shared-with-me-as-viewer{ :href => "#shared_as_viewer"}= t('.shared_with_me_as_viewer')
   #wb-document-list-container
 
-#wb-new-document-dialog{ :style => "display:none", :title => t('label.create_new_document') }
+#wb-new-document-dialog{ :style => "display:none", :title => t('.create_new_document') }
   %form#wb-new-form{ :action => ""}
     %fieldset
-      %label{ :for => "name" }= t "label.name"
+      %label{ :for => "name" }= t ".document_forms.name"
       %br
       %input#wb-new-document-name.ui-corner-all{ :type => "text", :name => "wb-new-document-name", :style => "width:100%"}
       %br
-      %label{ :for => "description" }= t "label.description"
+      %label{ :for => "description" }= t ".document_forms.description"
       %br
       %textarea#wb-new-document-description.ui-corner-all{ :rows => "3", :name => "wb-new-document-description", :style => "width:100%"}
       %br
-      %label{ :for => "category" }= t "label.category"
+      %label{ :for => "category" }= t ".document_forms.category"
       %br
       %select#wb-new-document-category
       %br
-      %label{ :for => "document_size" }= t "label.document_size_title"
+      %label{ :for => "document_size" }= t ".document_forms.document_size_title"
       %br
       %input#wb-new-document-size-custom{ :type => "radio", :name => "wb-new-document-size", :value => "custom" }
-      = t('label.document_size.custom')
-      = t('label.document_size.width')
+      = t('.document_forms.document_size.custom')
+      = t('.document_forms.document_size.width')
       %input#wb-new-document-size-custom-width{ :type => "text" , :size => 6}
-      = t('label.document_size.height')
+      = t('.document_forms.document_size.height')
       %input#wb-new-document-size-custom-height{ :type => "text" , :size => 6}
       %br
       %input#wb-new-document-size-iPhone{ :type => "radio", :name => "wb-new-document-size", :value => "iPhone" }
-      = t('label.document_size.iPhone')
+      = t('.document_forms.document_size.iPhone')
       %input#wb-new-document-size-classic{ :type => "radio", :name => "wb-new-document-size", :value => "classic" }
-      = t('label.document_size.classic')
+      = t('.document_forms.document_size.classic')
       %input#wb-new-document-size-iPad{ :type => "radio", :name => "wb-new-document-size", :value => "iPad" }
-      = t('label.document_size.iPad')
+      = t('.document_forms.document_size.iPad')
 
-#wb-edit-document-dialog{ :style => "display:none",:title => t('label.edit_document') }
+#wb-edit-document-dialog{ :style => "display:none",:title => t('.edit_document') }
   %form#wb-edit-form{ :action => ""}
     %fieldset
-      %label{ :for => "name" }= t "label.name"
+      %label{ :for => "name" }= t ".document_forms.name"
       %br
       %input#wb-edit-document-name.ui-corner-all{ :type => "text", :name => "wb-edit-document-name", :style => "width:100%"}
       %br
-      %label{ :for => "description" }= t "label.description"
+      %label{ :for => "description" }= t ".document_forms.description"
       %br
       %textarea#wb-edit-document-description.ui-corner-all{ :rows => "3", :name => "wb-edit-document-description", :style => "width:100%"}
       %br
-      %label{ :for => "category" }= t "label.category"
+      %label{ :for => "category" }= t ".document_forms.category"
       %br
       %select#wb-edit-document-category
       %br
-      %label{ :for => "document_size" }= t "label.document_size_title"
+      %label{ :for => "document_size" }= t ".document_forms.document_size_title"
       %br
       %input#wb-edit-document-size-custom{ :type => "radio", :name => "wb-edit-document-size", :value => "custom" }
-      = t('label.document_size.custom')
-      = t('label.document_size.width')
+      = t('.document_forms.document_size.custom')
+      = t('.document_forms.document_size.width')
       %input#wb-edit-document-size-custom-width{ :type => "text",  :size => 6}
-      = t('label.document_size.height')
+      = t('.document_forms.document_size.height')
       %input#wb-edit-document-size-custom-height{ :type => "text", :size => 6}
       %br
       %input#wb-edit-document-size-iPhone{ :type => "radio", :name => "wb-edit-document-size", :value => "iPhone" }
-      = t('label.document_size.iPhone')
+      = t('.document_forms.document_size.iPhone')
       %input#wb-edit-document-size-classic{ :type => "radio", :name => "wb-edit-document-size", :value => "classic" }
-      = t('label.document_size.classic')
+      = t('.document_forms.document_size.classic')
       %input#wb-edit-document-size-iPad{ :type => "radio", :name => "wb-edit-document-size", :value => "iPad" }
-      = t('label.document_size.iPad')
+      = t('.document_forms.document_size.iPad')
          
 
-#wb-change-access-dialog{ :style => "display:none",:title => t('label.change_access_document') }
+#wb-change-access-dialog{ :style => "display:none",:title => t('.document_forms.change_access_document') }
   #document_access-header
-    %button#add_access.ui-button.ui-state-default.ui-corner-all= t('button.add_access')
+    %button#add_access.ui-button.ui-state-default.ui-corner-all= t('.document_forms.buttons.add_access')
   %ul#document_access_list
 
 :javascript

@@ -1,9 +1,9 @@
 #item_inspector{ :style => "display: none" }
   .toolbar
-    %h1= t("label.item_inspector") 
+    %h1= t(".title") 
   #inspectors 
     %h3
-      %a{ :href => "" } Palette
+      %a{ :href => "" }= t('.palette.title')
     #palette_inspector.inspector
       #palette_text.palette        
       #palette_pen.palette
@@ -31,42 +31,42 @@
             %a{ :href => "10" }
               %img{ :src => "/images/icons/largePen.png", :alt =>"Large"}                                       
       #palette_empty.palette
-        %center Empty   
+        %center= t('.empty')  
       %iframe#palette_widget.palette 
       #palette_image.palette     
         #image_properties.properties_line
-          %label.properties_label Image URL
+          %label.properties_label= t('.image_url')
           %input#property_src.properties_input  
       #html_inspector.palette
         %div.properties_line
           %textarea#selected-item-html-editor.properties_input 
         %div.properties_line
-          %label.properties_label No iframe
+          %label.properties_label= t('.palette.no_iframe')
           %input#no_iframe.properties_input{ :type => "checkbox"}             
     %h3
-      %a{ :href => "" } Properties
+      %a{ :href => "" }= t('.properties.title')
     #properties_inspector.inspector
       #default_properties
         %div.properties_line
-          %label.properties_label Top
+          %label.properties_label= t('.properties.top')
           %input#property_top.properties_input
         %div.properties_line
-          %label.properties_label Left
+          %label.properties_label= t('.properties.left')
           %input#property_left.properties_input
         %div.properties_line
-          %label.properties_label Width
+          %label.properties_label= t('.properties.width')
           %input#property_width.properties_input
         %div.properties_line
-          %label.properties_label Height
+          %label.properties_label= t('.properties.height')
           %input#property_height.properties_input
         %div.properties_line
-          %label.properties_label Show scroll
+          %label.properties_label= t('.properties.show_scroll')
           %input#property_scroll{ :type => "checkbox" }
         %div.properties_line
-          %label.properties_label Opacity
+          %label.properties_label= t('.properties.opacity')
           %input#property_opacity.properties_input
         #image_properties.properties_line{ :style => "display:none"}
-          %label.properties_label Image URL
+          %label.properties_label= t('.image_url')
           %input#property_src.properties_input
       #empty_properties
-        %center Empty                                   
+        %center= t('.empty')                                 
