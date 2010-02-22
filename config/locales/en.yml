@@ -192,6 +192,7 @@ en:
           vimeo: "Vimeo"
         detail_view:
           title: "Video"
+          add_to_page: "Add to page"
           drag_handle: "drag and drop to add"
           show_on: "Show photo page on *"
           remove_from_my_videos: "Remove from My Videos"
