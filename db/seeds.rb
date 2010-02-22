@@ -1,6 +1,7 @@
 users = [
   {:name => 'Admin', :email => "admin@mnemis.com", :pass => 'pass'},
   {:name => 'Guest',   :email => "guest@mnemis.com", :pass => 'pass'},
+  {:name => 'All',    :email => "All@mnemis.com",             :pass => 'ycfeIDHUFvSzxXowiKZj6GBmlSUgwqYVqaCXJf0EfmZXLZUCvd'}  
 ]
 
 users.each do |user|
