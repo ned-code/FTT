@@ -437,30 +437,11 @@ body {
 #board {
     overflow: visible;
 }
-
-
 #board.move-tool        { cursor: move; }
 #board.draw-tool        { cursor: /*url('/images/icons/cursor_pen.png'),*/ crosshair; }
 #board.select-tool      { cursor: default; }
 #board.insert-html-tool {}
 #board.insert-text-tool {}
-
-/*.board-style {
-  font-family:Helvetica, Arial, sans-serif;
-  font-size: 2.5em;
-}
-
-.board-style ol, .board-style ul {
-  padding-left:1.5em;
-  margin-bottom: 0.4em;
-}
-.board-style ol ol, .board-style ul ul {
-  margin-top: -0.1em;
-  font-size: 0.8em;
-}
-.board-style ol li, .board-style ul li {
-  margin-bottom: 0.2em;
-}*/
 
 /* == Item view = */
 .drag_handle {
@@ -541,9 +522,6 @@ body {
 
 /*******************/
 /* = right part = */
-.ui-accordion .ui-accordion-content {
-  padding:0px;
-}
 
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus {
   background-color:  #fff;

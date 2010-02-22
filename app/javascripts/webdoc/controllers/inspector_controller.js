@@ -96,9 +96,6 @@ WebDoc.InspectorController = $.klass({
         });
         
         this.currentPaletteId = paletteId;
-        
-        
-        console.log('HEY');
       }
     }
   },
