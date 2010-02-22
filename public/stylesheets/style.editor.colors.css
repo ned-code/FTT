@@ -147,10 +147,13 @@ body                          { background-color: hsl(194, 8%, 60%); }
                   box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   border-color: rgba(176, 227, 0, 0.8); }
 
-
 /* The page browser */
 
-.toolbar-panel .current             { background-color: #f4fbfd; }
+.toolbar-panel .current             { background-color: #f4fbfd; 
+                                      -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); 
+                                      -webkit-transition: width 0.18s ease-out; }
 
 #colors li a.current {
     -webkit-box-shadow: 0 0 16px black;

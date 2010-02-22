@@ -1,9 +1,4 @@
-/* --------------------------------------------------------------
-
-   reset.css from Blueprint
-   * Resets default browser CSS.
-
--------------------------------------------------------------- */
+/* reset.css from Blueprint */
 
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -41,6 +36,8 @@ blockquote, q { quotes: "" ""; }
 /* Remove annoying border on linked images. */
 a img { border: none; }
 
+/* Get rid of default focus outlines in FF */
+a:focus { outline: none; }
 
 /*
 Copyright (c) 2009, Yahoo! Inc. All rights reserved.
