@@ -241,6 +241,17 @@ WebDoc.BoardController = $.klass({
     }
   },
   
+  activateEventCatcher: function(active) {
+    if (this._currentPageView) {
+      if (active) {
+        this._currentPageView.eventCatcherNode.show();
+      }
+      else {
+        this._currentPageView.eventCatcherNode.hide();
+      }
+    }
+  },
+  
   mapToPageCoordinate: function(position) {
     var x, y, board = $("#board");
     
@@ -267,6 +278,20 @@ WebDoc.BoardController = $.klass({
     };
   },
   
+  getBoardCenterPoint: function() {
+    var x, y, board = $("#board");
+    
+    x = board.width() / 2;
+    y = board.height() / 2;
+    
+    var calcX = (x) * (1 / this._currentZoom);
+    var calcY = (y) * (1 / this._currentZoom);
+    
+    return {
+      x: calcX,
+      y: calcY
+    };
+  },
   
   zoomIn: function(e) {
     this.zoom(1.5);
@@ -389,6 +414,91 @@ WebDoc.BoardController = $.klass({
       return true;     
     }
     return false;
+  },
+  
+  insertImage: function(imageUrl, position) {
+    var image = document.createElement('img'); /* Preload image in order to have width and height parameters available */
+    $(image).bind("load", position, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
+    image.src = imageUrl;
+  },
+  
+  insertWidget: function(widgetData, position) {
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+
+    if (widgetData.properties.width) {
+      width = widgetData.properties.width;
+      height = widgetData.properties.height;
+    }
+    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.media_id = widgetData.id;
+    newItem.data.data.tag = "iframe";
+    newItem.data.data.src = widgetData.properties.index_url;
+    newItem.data.data.properties = {
+      inspector_url: widgetData.properties.inspector_url
+    };
+    if(!position) { position = this.getBoardCenterPoint();}
+    x = position.x - (width / 2);
+    y = position.y - (height / 2);
+    if (x < 0) { x = 0;}
+    if (y < 0) { y = 0;}            
+    newItem.data.data.css = {
+      top: y + "px",
+      left: x + "px",
+      width: width + "px",
+      height: height + "px"
+    };
+    this.insertItems([newItem]);
+  },
+  
+  insertVideo: function(videoProperties, position) {
+    var videoWidget;
+    switch (videoProperties.type) {
+      case 'youtube' :
+        videoWidget = WebDoc.application.widgetManager.getYoutubeWidget();
+        break;
+      case 'vimeo' :
+        videoWidget = WebDoc.application.widgetManager.getVimeoWidget();
+        break;
+      }
+    newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+    if (videoWidget.data.properties.width) {
+      width = parseFloat(videoWidget.data.properties.width);
+      height = parseFloat(videoWidget.data.properties.height);
+    }
+    if(!position) { position = this.getBoardCenterPoint();}
+    x = position.x - (width / 2);
+    y = position.y - (height / 2);
+    if (x < 0) { x = 0;}
+    if (y < 0) { y = 0;}
+    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.media_id = videoWidget.data.id;
+    newItem.data.data.tag = "iframe";
+    newItem.data.data.src = videoWidget.data.properties.index_url;
+    newItem.data.data.properties = {
+      inspector_url: videoWidget.data.properties.inspector_url
+    };
+    newItem.data.data.css = {
+      top: y + "px",
+      left: x + "px",
+      width: width + "px",
+      height: height + "px"
+    };
+    newItem.data.data.preference.url = videoProperties.video_id;
+    this.insertItems([newItem]);
+  },
+  
+  insertHtml: function(html, position) {
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.data.tag = "div";
+    newItem.data.data.innerHTML = html;
+    newItem.data.data.css = {
+      top: position.y + "px",
+      left: position.x + "px",
+      width: "0px",
+      height: "0px"
+    };
+    this.insertItems([newItem]);
   },
   
   insertItems: function(items) {
@@ -525,6 +635,16 @@ WebDoc.BoardController = $.klass({
         case 65:
           this.setCurrentTool(WebDoc.application.arrowTool);
           break;
+        case 37:
+          if (this._isInteraction) {
+           WebDoc.application.pageEditor.prevPage(); 
+          }
+          break;
+        case 39:
+          if (this._isInteraction) {
+           WebDoc.application.pageEditor.nextPage(); 
+          }        
+          break;
       }
     }
     else {
@@ -586,7 +706,26 @@ WebDoc.BoardController = $.klass({
     WebDoc.application.undoManager.registerUndo(function() {
       this._setItemPositionZ(item, previousPosition);
     }.pBind(this));    
-  }
-    
+  },
   
+  _createImageItemAfterLoad: function(e) {
+    var position = e.data;
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+    newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
+    if(!position) { position = WebDoc.application.boardController.getBoardCenterPoint();}
+    var x = position.x - (this.width / 2);
+    var y = position.y - (this.height / 2);
+    if (x < 0) { x = 0;}
+    if (y < 0) { y = 0;}
+    newItem.data.data.tag = "img";
+    newItem.data.data.src = this.src;
+    newItem.data.data.css = {
+      overflow: "hidden",
+      top: y + "px",
+      left: x + "px",
+      width: this.width + "px",
+      height: this.height + "px"
+    };
+    WebDoc.application.boardController.insertItems([newItem]);
+  }
 });

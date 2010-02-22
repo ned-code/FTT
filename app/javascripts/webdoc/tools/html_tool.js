@@ -14,7 +14,7 @@ WebDoc.HtmlTool = $.klass(WebDoc.Tool, {
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
     newItem.data.data.tag = "div";
-    newItem.data.data.innerHTML = "HTML Snipplet";
+    newItem.data.data.innerHTML = "HTML Snippet";
     newItem.data.data.css = { top: "100px", left: "100px", width: "100px", height: "100px"};
     WebDoc.application.boardController.insertItems([newItem]);
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);        

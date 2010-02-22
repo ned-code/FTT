@@ -1,0 +1,13 @@
+%h1= t('.title')
+
+= render :partial => 'layouts/flash'
+
+%ul
+  - @categories.each do |category|
+    %li
+      = "#{category.name}"
+      |
+      = link_to t('edit'), edit_admin_category_path(category)
+      = link_to t('destroy'), admin_category_path(category), :confirm => I18n.t('destroy_confirmation'), :method => :delete
+
+= link_to t('.add'), new_admin_category_path

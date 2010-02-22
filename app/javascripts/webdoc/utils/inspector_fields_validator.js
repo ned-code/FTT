@@ -40,6 +40,13 @@ $.extend(WebDoc.InspectorFieldsValidator, {
       throw("this method needs a combination of the following values: top, center, bottom - left, center, right");
     }
   },
+  
+  validateUrl: function(url) {
+    var re = new RegExp("^http\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?"); 
+    if(!url.match(re)) {
+      throw("this method requires a valid url");
+    }
+  },
 
   // Takes a string of type "url(/images/background/back.png)" and returns only the file path
   getUrlContent: function(url) {

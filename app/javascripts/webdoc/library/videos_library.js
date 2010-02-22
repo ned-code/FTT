@@ -68,7 +68,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
                                               // for current version of safari (v4.0.4)) (but future webkit
                                               // version will support "draggable" and at that point we'll 
                                               // be able to remove this line)
-    $(document.body).append(this.buildMediaDragFeedbackElement("video", "")); // just to preload the icon (so that it'll be immediatley available at the first drag)
+    $(document.body).append(this.buildMediaDragFeedbackElement("video", "")); // just to preload the icon (so that it'll be immediately available at the first drag)
     
     
     // Handle title of Show video page action
@@ -88,6 +88,12 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
       var info = $("<span>").text("...");
       
       switch (link.attr("id")) {
+        case "add_video_to_page_action":
+          ddd("add_video_to_page_action");
+          var properties = this.detailsVideoContainer.data("properties");
+          WebDoc.application.boardController.insertVideo(properties);
+          break;
+          
         case "show_video_page_action":
           ddd("show_video_page_action");
           window.open(properties.url, '_blank');

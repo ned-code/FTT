@@ -21,3 +21,5 @@ config.gem 'sqlite3-ruby', :lib => "sqlite3"
 
 # http://github.com/ddollar/rack-debug
 #config.middleware.use "Rack::Debug"
+
+#config.gem 'ruby-debug'

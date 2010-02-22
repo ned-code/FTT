@@ -19,12 +19,15 @@
 //= require <webdoc/controllers/inspector_controller>
 //= require <webdoc/controllers/page_browser_controller>
 //= require <webdoc/controllers/toolbar_controller>
+//= require <webdoc/controllers/document_categories_controller>
 
 //= require <webdoc/tools/arrow_tool>
 //= require <webdoc/tools/drawing_tool>
 //= require <webdoc/tools/hand_tool>
 //= require <webdoc/tools/text_tool>
 //= require <webdoc/tools/html_tool>
+
+//= require <webdoc/utils/field_validator>
 
 // application singleton.
 WebDoc.application = {};
@@ -33,7 +36,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
 
   currentDocument: null,
   currentPage: null,
-  applicationUuid: undefined,
   
   initialize: function($super, editable) {
     $super();
@@ -47,8 +49,8 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     // Set up default panel behaviour (show screen, show footer etc.)
     jQuery(".panel").panel();
         
-    this.applicationUuid = new MTools.UUID().id;
-    MTools.ServerManager.sourceId = this.applicationUuid;
+    MTools.ServerManager.xmppClientId = new MTools.UUID().id;
+    
     WebDoc.application.pageEditor = this;
     WebDoc.application.undoManager = new MTools.UndoManager();
         
@@ -61,6 +63,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     //WebDoc.application.inspectorController = new WebDoc.InspectorController();
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
+    WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
 
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
@@ -75,7 +78,10 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
     });
+    
+    $(window).bind("hashchange", this._urlHashChanged.pBind(this));
   },
+  
 
   load: function(documentId) {
     ddd("[PageEditor] load " + documentId);
@@ -155,6 +161,26 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     }.pBind(this));
   },
   
+  addWebPage: function() {
+    var externalPageUrl = null;
+    do {
+      externalPageUrl = prompt("Web page URL: ", "http://");
+    }while(externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl))
+
+    if(externalPageUrl != null) {
+      var newPage = new WebDoc.Page(null, this.currentDocument);
+      newPage.data.position = this.currentPage.data.position + 1;
+      newPage.save( function(newObject, status) {
+        newPage.setExternalPageMode(true);
+        newPage.data.data.externalPageUrl = externalPageUrl;
+        newPage.save();
+        this.currentDocument.addPage(newPage, true);      
+        this.loadPage(newPage);
+  
+      }.pBind(this));
+    }
+  },
+  
   removePage: function() {
     var pageToDelete = this.currentPage;
     if (this.currentDocument.pages.length > 1) {
@@ -200,7 +226,12 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       }      
       this.loadPage(this.currentDocument.pages[newPagePosition]);
     }
-  }
+  },
 
+  // Monitorizes hash modifications and update loaded page accordingly
+  // Enables links within documents
+  _urlHashChanged: function(e) {
+    this.loadPageId(location.hash.substring(1));
+  }
 });
 

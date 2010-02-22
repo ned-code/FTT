@@ -26,7 +26,7 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .left-panel,
 .right-panel                  { background-color: hsla(194, 7%, 41%, 0.92); }
 .panel-tools,
-.border                       { background-color: inherit; border-color: hsla(194, 12%, 30%, 0.8); }
+.border                       { background-color: inherit; border-color: /*hsla(194, 12%, 30%, 0.8)*/ transparent; }
 .vertical.panel-tools li      { border-color: hsla(194, 12%, 30%, 0.8); }
 .panel-tools a.current        { background-color: hsla(194, 12%, 30%, 0.8); }
 
@@ -282,41 +282,41 @@ a[href="#right-panel-toggle"].active:hover     { background-position: 0 -256px; 
 a[href="#left-panel-toggle"]:active,
 a[href="#right-panel-toggle"].active:active    { background-position: 0 -320px; background-color: transparent;}
 
-a[href="#item-inspector"]           { background-position: 0 -384px; }
-a[href="#item-inspector"]:hover     { background-position: 0 -448px; }
-a[href="#item-inspector"]:active    { background-position: 0 -512px; }
-a[href="#item-inspector"].current   { background-position: 0 -576px; }
+a[href="#item-inspector"]             { background-position: 0 -384px; }
+a[href="#item-inspector"]:hover       { background-position: 0 -448px; }
+a[href="#item-inspector"]:active      { background-position: 0 -512px; }
+a[href="#item-inspector"].current     { background-position: 0 -576px; }
 
-a[href="#library"]                  { background-position: 0 -640px; }
-a[href="#library"]:hover            { background-position: 0 -704px; }
-a[href="#library"]:active           { background-position: 0 -768px; }
-a[href="#library"].current          { background-position: 0 -832px; }
+a[href="#library"]                    { background-position: 0 -640px; }
+a[href="#library"]:hover              { background-position: 0 -704px; }
+a[href="#library"]:active             { background-position: 0 -768px; }
+a[href="#library"].current            { background-position: 0 -832px; }
 
-a[href="#pages-browser"]            { background-position: 0 -896px; }
-a[href="#pages-browser"]:hover      { background-position: 0 -960px; }
-a[href="#pages-browser"]:active     { background-position: 0 -1024px; }
-a[href="#pages-browser"].current    { background-position: 0 -1088px; }
+a[href="#pages-browser"]              { background-position: 0 -896px; }
+a[href="#pages-browser"]:hover        { background-position: 0 -960px; }
+a[href="#pages-browser"]:active       { background-position: 0 -1024px; }
+a[href="#pages-browser"].current      { background-position: 0 -1088px; }
 
-a[href="#page-inspector"]           { background-position: 0 -1152px; }
-a[href="#page-inspector"]:hover     { background-position: 0 -1216px; }
-a[href="#page-inspector"]:active    { background-position: 0 -1280px; }
-a[href="#page-inspector"].current   { background-position: 0 -1344px; }
+a[href="#page-inspector"]             { background-position: 0 -1152px; }
+a[href="#page-inspector"]:hover       { background-position: 0 -1216px; }
+a[href="#page-inspector"]:active      { background-position: 0 -1280px; }
+a[href="#page-inspector"].current     { background-position: 0 -1344px; }
 
 a[href="#document-inspector"]         { background-position: 0 -1408px; }
 a[href="#document-inspector"]:hover   { background-position: 0 -1472px; }
 a[href="#document-inspector"]:active  { background-position: 0 -1536px; }
 a[href="#document-inspector"].current { background-position: 0 -1600px; }
 
-a[href="#hide-thumbs"]              { background-position: -4px -1668px; }
-a[href="#hide-thumbs"]:hover        { background-position: -4px -1732px; }
-a[href="#hide-thumbs"].current      { background-position: -4px -1796px; }
+a[href="#hide-thumbs"]                { background-position: -4px -1668px; }
+a[href="#hide-thumbs"]:hover          { background-position: -4px -1732px; }
+a[href="#hide-thumbs"].current        { background-position: -4px -1796px; }
 
-a[href="#show-thumbs"]              { background-position: -4px -1860px; }
-a[href="#show-thumbs"]:hover        { background-position: -4px -1924px; }
-a[href="#show-thumbs"].current      { background-position: -4px -1988px; }
+a[href="#show-thumbs"]                { background-position: -4px -1860px; }
+a[href="#show-thumbs"]:hover          { background-position: -4px -1924px; }
+a[href="#show-thumbs"].current        { background-position: -4px -1988px; }
 
-a[href="#prev-page"]                { background-position: 0 -2051px; }
-a[href="#prev-page"]:hover          { background-position: 0 -2115px; }
+a[href="#prev-page"]                  { background-position: 0 -2051px; }
+a[href="#prev-page"]:hover            { background-position: 0 -2115px; }
 
-a[href="#next-page"]                { background-position: 0 -2173px; }
-a[href="#next-page"]:hover          { background-position: 0 -2237px; }
+a[href="#next-page"]                  { background-position: 0 -2173px; }
+a[href="#next-page"]:hover            { background-position: 0 -2237px; }

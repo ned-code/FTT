@@ -53,13 +53,11 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
 
     this.textView = textView;
     this.delegate.enterEditMode(textView.itemDomNode[0]);
-    this.delegate.activateToolbar(true);
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
   },
   
   exitEditMode: function() {
     this.delegate.exitEditMode();
-    this.delegate.activateToolbar(false); 
   },
   
   applyTextContent: function(content, classValue) {

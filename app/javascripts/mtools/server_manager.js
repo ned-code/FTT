@@ -39,14 +39,14 @@ $.extend(MTools.ServerManager, {
         return;
       }
     }
-    var pluralizedRecordClassName = recordClass.className() + "s";
+    var pluralizedRecordClassName = recordClass.pluralizedClassName();
     var url = recordClass.rootUrl(args) + "/" + pluralizedRecordClassName;
     if (uuid) {
       url += "/" + uuid;
     }
     url += ".json";
     
-		var ajaxParams = args && args.ajaxParams ? args.ajaxParams : {};
+    var ajaxParams = args && args.ajaxParams ? args.ajaxParams : {};
     $.ajax({
       type: "GET",
       url: url,
@@ -152,11 +152,11 @@ $.extend(MTools.ServerManager, {
    **/
   newObject: function(object, callBack) {
     var message = {
-      source: MTools.ServerManager.sourceId
+      xmpp_client_id: MTools.ServerManager.xmppClientId
     };
     $.extend(message, object.to_json(true));
-    $.post(object.rootUrl() + "/" + object.className() + "s", message, function(data, textstatus) {
-      // refresh is needed because some values are generaed on server side
+    $.post(object.rootUrl() + "/" + object.pluralizedClassName(), message, function(data, textstatus) {
+      // refresh is needed because some values are generated on server side
       // i.e. page size and background.
       object.refresh(data);
       object.isNew = false;
@@ -174,7 +174,7 @@ $.extend(MTools.ServerManager, {
    */
   updateObject: function(object, callBack) {
     var param = {
-      source: MTools.ServerManager.sourceId,
+      xmpp_client_id: MTools.ServerManager.xmppClientId,
       _method: "PUT"
     };
     $.extend(param, object.to_json());
@@ -192,7 +192,7 @@ $.extend(MTools.ServerManager, {
    */
   deleteObject: function(object, callBack) {
     var param = {
-      source: MTools.ServerManager.sourceId,
+      xmpp_client_id: MTools.ServerManager.xmppClientId,
       _method: "DELETE"
     };
     $.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {

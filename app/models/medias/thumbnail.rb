@@ -4,6 +4,7 @@ class Medias::Thumbnail < Media
 end
 
 
+
 # == Schema Information
 #
 # Table name: medias
@@ -17,5 +18,7 @@ end
 #  user_id     :integer
 #  file        :string(255)
 #  system_name :string(255)
+#  title       :string(255)
+#  description :text
 #
 

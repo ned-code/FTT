@@ -2,18 +2,18 @@
   .inspector
     %div.head
       %div
-        %h2= t('label.document_inspector')
+        %h2= t('.title')
       
     %div.content
       %div
-        %label= t('label.choose_title')
+        %label= t('.name')
         %br
-        %input#document-title{ :type => "text", :value => t('label.new_webdoc') }
+        %input#document-title{ :type => "text", :value => t('.default_name') }
       %div
-        %label= t('label.add_description') 
+        %label= t('.description') 
         %br
         %textarea#document-description{ :rows => "5"}
-      %div 
-        %label= t('label.keywords')
+      %div
+        %label= t('.category')
         %br
-        %input#document-keywords{ :type => "text" }
+        %select#document-category

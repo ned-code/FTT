@@ -12,7 +12,7 @@ class UserSessionsController < ApplicationController
     respond_to do |format|
       if @user_session.save
         format.html do
-          flash[:notice] = I18n.t 'flash.notice.login_successfull'
+          flash[:notice] = I18n.t 'flash.notice.login_successful'
           redirect_back_or_default
         end
         format.xml { head :ok }
@@ -29,7 +29,7 @@ class UserSessionsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        flash[:notice] = I18n.t 'flash.notice.logout_successfull'
+        flash[:notice] = I18n.t 'flash.notice.logout_successful'
         redirect_back_or_default login_url
       end
       format.xml { head :ok }

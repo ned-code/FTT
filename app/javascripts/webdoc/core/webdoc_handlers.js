@@ -19,6 +19,7 @@ WebDoc.handlers = {
   'prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },
   'next-page':            function(e) { WebDoc.application.pageEditor.nextPage(); },
   'add-page':             function(e) { WebDoc.application.pageEditor.addPage(); },
+  'add-web-page':         function(e) { WebDoc.application.pageEditor.addWebPage();},
   'copy-page':            function(e) { WebDoc.application.pageEditor.copyPage(); },
   'remove-page':          function(e) { WebDoc.application.pageEditor.removePage(); },
   
