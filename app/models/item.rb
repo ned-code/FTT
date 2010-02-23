@@ -22,6 +22,21 @@ class Item < ActiveRecord::Base
     self.must_notify = false
   end
 
+  def to_html
+    result = "<#{self.data[:tag]} "
+    data.each_pair do |key, value| 
+    logger.debug key
+    logger.debug /innerHTML/.match(key)
+      if (!/innerHTML|css|tag|properties|preference/.match(key))
+        result += "#{key}=\" #{value}\""
+      end
+    end
+    result += ">"
+    if (data[:innerHTML])
+      result += data[:innerHTML]
+    end
+    result += "</#{self.data[:tag]}>"
+  end  
 end
 
 

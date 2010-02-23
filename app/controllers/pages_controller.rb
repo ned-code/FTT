@@ -19,7 +19,17 @@ class PagesController < ApplicationController
   # GET /documents/:document_id/pages/:id
   def show
     @page = @document.pages.find_by_uuid_or_position(params[:id])
-    render :json => @page.to_json(:include => :items)
+    respond_to do |format|
+      format.html do
+        logger.debug "user agent #{request.user_agent}"
+        if (!/(.*)Google.*/.match(request.user_agent))
+          redirect_to "/documents/#{@document.uuid}##{@page.uuid}"
+        else
+          render :layout => "layouts/static_page"
+        end
+      end
+      format.json { render :json => @page.to_json(:include => :items) }      
+    end        
   end
   
   # POST /documents/:document_id/pages
