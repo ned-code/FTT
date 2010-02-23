@@ -17,7 +17,7 @@ class DocumentsController < ApplicationController
   # GET /documents
   def index
     @documents = get_documents(params[:document_filter])
-
+    
     respond_to do |format|
       format.html
       format.json { render :json => @documents }      
@@ -125,7 +125,7 @@ protected
        global_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => document_filter}).each do |role|
          documents_ids << role.authorizable_id if role.authorizable_id
        end
-
+       
        # On shared as editor and shared as viewer filter, must remove owned documents
        if document_filter != 'owner'
          owner_ids = []

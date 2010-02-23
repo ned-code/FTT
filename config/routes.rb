@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   map.devise_for :users
-  map.resources :users
+  map.resources :users, :except => [:new, :create, :destroy]
   map.connect 'user', :controller => 'sessions', :action => 'show', :conditions => { :method => :get }
   
   map.connect 'widgets/wikibot/search', :controller => 'wikibot', :action => 'search', :conditions => { :method => :get }

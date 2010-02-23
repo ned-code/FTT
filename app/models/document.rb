@@ -33,6 +33,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: documents
@@ -44,6 +45,7 @@ end
 #  created_at  :datetime
 #  updated_at  :datetime
 #  description :text
-#  keywords    :string(255)
+#  size        :text
+#  category_id :integer
 #
 

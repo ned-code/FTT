@@ -1,10 +1,24 @@
 Factory.define :user do |f|
-  f.sequence(:email)  {|n| "email#{n}@test.com" }
+  f.sequence(:email)  { |n| "email#{n}@test.com" }
   f.password          '123456'
-  f.username          'johndoe'
+  f.username          { |n| "johndow#{n}" }
   f.first_name        'John'
   f.last_name         'Doe'
   f.terms_of_service  "1"
+end
+
+Factory.define :admin, :class => User do |f|
+  f.sequence(:email)  { |n| "admin#{n}@test.com" }
+  f.password          '123456'
+  f.username          { |n| "admin#{n}" }
+  f.first_name        'admin'
+  f.last_name         'admin'
+  f.terms_of_service  "1"
+  f.after_build       { |user| user.has_role!("admin") }
+end
+
+Factory.define :admin_role, :class => Role do |f|
+  f.name    "admin"
 end
 
 Factory.define :document do |f|

@@ -3,9 +3,24 @@ require 'spec_helper'
 describe User do
   it { should be_built_by_factory }
   it { should be_created_by_factory }
-
+  
   should_validate_presence_of :username
-
+  
+  describe "admin" do
+    subject { Factory(:admin) }
+    
+    it { subject.has_role?("admin").should be_true }
+  end
+  
+  describe "admin" do
+    subject { Factory(:user) }
+    
+    it "should be able to add an avatar image" do
+      subject.avatar = File.open(fixture_path + 'image.jpg')
+      subject.save.should be_true
+    end
+  end
+  
 end
 
 
