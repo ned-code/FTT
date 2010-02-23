@@ -226,9 +226,6 @@
 .mode-tools li {
     margin-right: 0;
 }
-.mode-tools li a {
-    background: green;
-}
 
 /* On the right ... */
 #toggle_inspector_wrap,
@@ -238,19 +235,6 @@
 }
 #toggle_inspector_wrap {
     margin-left: 32px;
-}
-
-.tools a:hover{
-    background-color: hsla( 194, 8%, 60%, 0.4 );
-    -webkit-border-radius: 6px;
-    -moz-border-radius:    6px;
-    border-radius:         6px;
-}
-.tools a.current{
-    background-color: hsla( 194, 8%, 60%, 0.4 );
-    -webkit-border-radius: 6px;
-    -moz-border-radius:    6px;
-    border-radius:         6px;
 }
 
 /* Inspector view controls */

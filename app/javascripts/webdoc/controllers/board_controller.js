@@ -123,11 +123,13 @@ WebDoc.BoardController = $.klass({
     
     $("body").addClass("edit-mode");
     $(".item-layer").show();
-    $(".preview_hidden").show();
     
-    if (this.previousRightBarState) {
-      WebDoc.application.rightBarController.showRightBar();
-    }
+    $(".state-mode")
+    .removeClass("current")
+    .filter("[href='#mode-edit']")
+    .addClass("current");
+    
+    WebDoc.application.rightBarController.revealRightBar();
     
     this._isInteraction = false;
     return this._isInteraction;
@@ -141,12 +143,15 @@ WebDoc.BoardController = $.klass({
     .unbind("drop");
     
     this.setCurrentTool(WebDoc.application.arrowTool);
-    $(".preview_hidden").hide();
     $(".item-layer").hide();
     $("body").removeClass("edit-mode");
     
-    this.previousRightBarState = WebDoc.application.rightBarController.visible ? true : false;
-    WebDoc.application.rightBarController.hideRightBar();
+    $(".state-mode")
+    .removeClass("current")
+    .filter("[href='#mode-preview']")
+    .addClass("current");
+    
+    WebDoc.application.rightBarController.concealRightBar();
     
     this._isInteraction = true;
     return this._isInteraction;

@@ -27,13 +27,9 @@ body {
 }
 #left-panel-ghost,
 #right-panel-ghost {
-    display: none;
+    display: table-cell;
     /* Width is animated with panel */
     width: 0;
-}
-.edit-mode #left-panel-ghost,
-.edit-mode #right-panel-ghost {
-    display: table-cell;
 }
 .panel-ghost {
     /* WebKit gives cells a mysterious 3px cellpadding when
