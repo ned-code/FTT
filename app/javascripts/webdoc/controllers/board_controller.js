@@ -37,6 +37,7 @@ WebDoc.BoardController = $.klass({
     this._currentPage = null;
     this._currentPageView = null;
     this._isInteraction = false;
+    this._isMovingSelection = false;
     
     // used to keep trak of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
     // we resize manually the div and we need to know what was the original size to define the new size.
@@ -102,7 +103,9 @@ WebDoc.BoardController = $.klass({
     this._fireSelectionChanged();
     this._bindMouseEvent();
     
+    $(document).bind("keypress", this, this._keyPress.pBind(this));
     $(document).bind("keydown", this, this._keyDown.pBind(this));
+    $(document).bind("keyup", this, this._keyUp.pBind(this));    
     
     this.zoom(1);
     this.setInterationMode(this._isInteraction || !this._editable);
@@ -351,6 +354,37 @@ WebDoc.BoardController = $.klass({
       itemToSelect.select();
     }.pBind(this));
     this._fireSelectionChanged();
+  },
+  
+  moveSelection: function(direction, scale) {
+    var max = this._selection.length;
+    var offsetSize = scale == "big"? 15 : 1;
+    for (var i = 0; i < max; i++) {
+      var item = this._selection[i].item;
+      var offset = { top: 0, left: 0};
+      switch (direction) {
+        case "left":
+          offset.left -= offsetSize;
+          break;
+        case "right":
+          offset.left += offsetSize;
+          break;
+        case "up":
+          offset.top -= offsetSize;
+          break;
+        case "down":
+          offset.top += offsetSize;
+          break;                              
+      }
+      if (!this._isMovingSelection) {
+        var currentPosition = {top: item.data.data.css.top, left: item.data.data.css.left};
+        WebDoc.application.undoManager.registerUndo(function() {
+          WebDoc.ItemView._restorePosition(item, currentPosition);
+        });
+      }      
+      item.shiftBy(offset);      
+    }
+    this._isMovingSelection = true;
   },
   
   unselectAll: function() {
@@ -623,6 +657,60 @@ WebDoc.BoardController = $.klass({
   _mouseClick: function(e) {
     this.currentTool.mouseClick(e);
   },
+ 
+  
+  _keyUp: function(e) {
+   var el = $(e.target);
+    if (el.is('input') || el.is('textarea')) { 
+      return;
+    }
+    switch (e.keyCode) {
+      case 37:
+      case 38:       
+      case 39:
+      case 40:
+        this._isMovingSelection = false;
+        for (var i = 0; i < this._selection.length; i++) {
+          this._selection[i].item.save();
+        }
+        break;
+    }        
+  },
+  
+  
+  _keyPress: function(e) {
+    var el = $(e.target);
+    if (el.is('input') || el.is('textarea')) { 
+      return;
+    }
+    ddd("key press", e);
+    switch (e.keyCode) {
+      case 37:
+        if (!this._isInteraction) {
+          this.moveSelection("left", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;
+      case 38:
+        if (!this._isInteraction) {
+          this.moveSelection("up", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;          
+      case 39:
+        if (!this._isInteraction) {
+          this.moveSelection("right", e.shiftKey?"big" : "small");            
+        }        
+        e.preventDefault();           
+        break;
+      case 40:
+        if (!this._isInteraction) {
+          this.moveSelection("down", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;          
+    }    
+  },
   
   _keyDown: function(e) {
     var el = $(e.target);
@@ -649,18 +737,38 @@ WebDoc.BoardController = $.klass({
           break;
         case 65:
           this.setCurrentTool(WebDoc.application.arrowTool);
-          break;
-        case 37:
-          if (this._isInteraction) {
-           WebDoc.application.pageEditor.prevPage(); 
-          }
-          break;
-        case 39:
-          if (this._isInteraction) {
-           WebDoc.application.pageEditor.nextPage(); 
-          }        
-          break;
-      }
+          break;  
+     case 37:
+        if (this._isInteraction) {
+          WebDoc.application.pageEditor.prevPage(); 
+        }
+        else {
+          this.moveSelection("left", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;
+      case 38:
+        if (!this._isInteraction) {
+          this.moveSelection("up", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;          
+      case 39:
+        if (this._isInteraction) {
+          WebDoc.application.pageEditor.nextPage();
+        }
+        else {
+          this.moveSelection("right", e.shiftKey?"big" : "small");            
+        }        
+        e.preventDefault();           
+        break;
+      case 40:
+        if (!this._isInteraction) {
+          this.moveSelection("down", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;                       
+      }      
     }
     else {
       switch (e.which) {
