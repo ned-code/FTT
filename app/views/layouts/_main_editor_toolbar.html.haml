@@ -5,7 +5,7 @@
   %ul#tb_1_utilities
     %li#tb_1_utilities_preview.toggle_preview
       %a{ :href => "#mode-toggle"}
-        quick preview
+        = t('.quick_preview')
     %li#tb_1_utilities_docname
       %h2#tb_1_document_title=@document.title
       %span#current_page 3
@@ -16,23 +16,23 @@
         %img{ :src => "/images/icons/settings.png", :alt => "Document settings"}
       %ul#tb_1_utilities_settings_dropdown
         %li.action_button
-          %a{ :href => "#"} Save
+          %a{ :href => "#"}= t('.save')
         %li.action_button
-          %a{ :href => "#"} Presentation mode
+          %a{ :href => "#"}= t('.presentation_mode')
         %li.action_button
-          %a{ :href => "#"} Invite collaborators
+          %a{ :href => "#"}= t('.invite_collaborators')
         %li.action_button
-          %a{ :href => "#"} Import
+          %a{ :href => "#"}= t('.import')
         %li.action_button
-          %a{ :href => "#"} Publish        
+          %a{ :href => "#"}= t('.publish')       
         %li.action_button
-          %a{ :href => "#"} Extend Uniboard
+          %a{ :href => "#"}= t('.extend_uniboard')
         %li.action_button
-          %a{ :href => "#"} Export
+          %a{ :href => "#"}= t('.export')
         %li.action_button
-          %a{ :href => "#"} Print
+          %a{ :href => "#"}= t('.print')
         %li#develop_sub_menu 
-          %a{ :href => "#"} Develop
+          %a{ :href => "#"}= t('.develop')
           %ul
             %li.action_button
-              %a#debug-button{ :href => "#disable-html"} Disable HTML
+              %a#debug-button{ :href => "#disable-html"}= t('.disable_HTML')

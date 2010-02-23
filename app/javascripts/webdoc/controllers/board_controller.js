@@ -650,6 +650,16 @@ WebDoc.BoardController = $.klass({
         case 65:
           this.setCurrentTool(WebDoc.application.arrowTool);
           break;
+        case 37:
+          if (this._isInteraction) {
+           WebDoc.application.pageEditor.prevPage(); 
+          }
+          break;
+        case 39:
+          if (this._isInteraction) {
+           WebDoc.application.pageEditor.nextPage(); 
+          }        
+          break;
       }
     }
     else {

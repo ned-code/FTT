@@ -47,25 +47,35 @@ private
       self.properties = {}
       self.properties[:version] = config_dom.root.attribute("version").to_s
       
+      mapped_path = get_mapped_path
       index_url = config_dom.root.elements['content'].attribute("src").to_s
       unless index_url.match(/http:\/\/.*/)
-        index_url = File.join(file.store_url, config_dom.root.elements['content'].attribute("src").to_s)
+        index_url = File.join(mapped_path, config_dom.root.elements['content'].attribute("src").to_s)
       end
       inspector_url = nil
       if (config_dom.root.elements['inspector'])
         inspector_url = config_dom.root.elements['inspector'].attribute('src').to_s
         unless inspector_url.match(/http:\/\/.*/)
-          inspector_url = File.join(file.store_url, config_dom.root.elements['inspector'].attribute("src").to_s)
+          inspector_url = File.join(mapped_path, config_dom.root.elements['inspector'].attribute("src").to_s)
         end
       end
       self.properties[:width] = config_dom.root.attribute("width").to_s
       self.properties[:height] = config_dom.root.attribute("height").to_s
       self.properties[:index_url] = index_url
-      self.properties[:icon_url] = File.join(file.store_url, "icon.png")
+      self.properties[:icon_url] = File.join(mapped_path, "icon.png")
       self.properties[:inspector_url] = inspector_url if (inspector_url)
       
       # Extract files to right destination
       extract_files_from_zip_file(file.current_path, file.store_dir)
+    end
+  end
+  
+  def get_mapped_path 
+    if file.s3_bucket == nil
+      file.store_url
+    else
+      path = Pathname.new(file.store_path)
+      "http://#{CarrierWave.yml_s3_bucket(:widgets).to_s}/#{path.dirname}"
     end
   end
   
@@ -75,7 +85,7 @@ private
       new_version = config_dom.root.attribute("version").to_s
       if version.nil? || new_version > version
         self.properties[:version] = new_version
-        self.properties = properties_from_config_dom(config_dom, file.store_url)
+        self.properties = properties_from_config_dom(config_dom, get_mapped_path)
         self.title = config_dom.root.elements['name'].text
         self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
         

@@ -162,9 +162,10 @@
 				var current = {
 					cal: $(this).parent(),
 					pos: $(this).offset()
-				};
-				current.preview = current.cal.data('colorpicker').livePreview;
+				}; 
+				current.preview = current.cal.data('colorpicker').livePreview;  
 				$(document).bind('mouseup', current, upSelector);
+				$(document).bind('mouseup', current, moveSelector);
 				$(document).bind('mousemove', current, moveSelector);
 			},
 			moveSelector = function (ev) {
@@ -178,7 +179,8 @@
 						.val(parseInt(100*(Math.max(0,Math.min(150,(ev.pageX - ev.data.pos.left))))/150, 10))
 						.get(0),
 					[ev.data.preview]
-				);
+				);       
+				$(document).unbind('mouseup',  moveSelector);
 				return false;
 			},
 			upSelector = function (ev) {
@@ -405,6 +407,8 @@
 							.find('span').bind('mousedown', downIncrement).end()
 							.find('>div.colorpicker_current_color').bind('click', restoreOriginal);
 						options.selector = cal.find('div.colorpicker_color').bind('mousedown', downSelector);
+					//	options.selector = cal.find('div.colorpicker_color').unbind('mouseup', moveSelector);
+					//	options.selector = cal.find('div.colorpicker_color').bind('click', function(){$(document).unbind('mouseup', moveSelector);});
 						options.selectorIndic = options.selector.find('div div');
 						options.el = this;
 						options.hue = cal.find('div.colorpicker_hue div');

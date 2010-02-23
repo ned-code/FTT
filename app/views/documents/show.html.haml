@@ -12,23 +12,23 @@
   %ul.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li>
-      %a{ :href => "#left-panel-toggle", :title => "Left Panel" }
-        Left Panel
+      %a{ :href => "#left-panel-toggle", :title => t('.toolbar.left_panel') }
+        = t('.toolbar.left_panel')
 
   %ul.pages-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li>
-      %a{ :href => "#pages-browser", :title => "Pages browser" }
-        Pages
+      %a{ :href => "#pages-browser", :title => t('.toolbar.pages') }
+        = t('.toolbar.pages')
     -#%li#removePage.preview_hidden>
     -#  %a{ :href => "#" , :title => "Remove this page", :style => "background-position: 0 0; background-image: url('/images/icons/page_remove.png');" }
     -#    Delete
     %li>
-      %a{ :href => "#prev-page" , :title => "Previous page" }
-        Prev
+      %a{ :href => "#prev-page" , :title => t('.toolbar.previous_page') }
+        = t('.toolbar.previous_page')
     %li>
-      %a{ :href => "#next-page" , :title => "Next Page" }
-        Next
+      %a{ :href => "#next-page" , :title => t('.toolbar.next_page') }
+        = t('.toolbar.next_page')
     -#%li#layout_selector.preview_hidden>
     -#  %a{ :href => "#layouts" , :title =>"Choose layout" }
     -#    Layout
@@ -36,74 +36,74 @@
     -#  %a{ :href => "#themes" , :title =>"Change theme" }
     -#    Theme
     %li.preview_hidden>
-      %a{ :href => "#add-page", :title => "Add new page" }
-        Add
+      %a{ :href => "#add-page", :title => t('.toolbar.add_page') }
+        = t('.toolbar.add_page')
     
   %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li>
-      %a{ :href => "#zoom-in" , :title => "Zoom In" }
-        Zoom in
+      %a{ :href => "#zoom-in" , :title => t('.toolbar.zoom_in') }
+        = t('.toolbar.zoom_in')
     %li>
-      %a{ :href => "#zoom-out" , :title => "Zoom Out" }
-        Zoom out
+      %a{ :href => "#zoom-out" , :title => t('.toolbar.zoom_out') }
+        = t('.toolbar.zoom_out')
     %li>
-      %a.state-tool{ :href => "#move" , :title => "Move" }
-        Move
+      %a.state-tool{ :href => "#move" , :title => t('.toolbar.move') }
+        = t('.toolbar.move')
   
   %ul#edit_tools.edit-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#undo>
-      %a{ :href => "#undo" , :title => "Undo" }
-        Undo
+      %a{ :href => "#undo" , :title => t('.toolbar.undo') }
+        = t('.toolbar.undo')
     %li#redo>
-      %a{ :href => "#redo" , :title => "Redo" }
-        Redo
+      %a{ :href => "#redo" , :title => t('.toolbar.redo') }
+        = t('.toolbar.redo')
     %li>
-      %a{ :href => "#to-back" , :title => "Move to back" }
-        To back
+      %a{ :href => "#to-back" , :title => t('.toolbar.send_to_back') }
+        = t('.toolbar.send_to_back')
     %li>
-      %a{ :href => "#to-front" , :title => "Move to front" }
-        To front
+      %a{ :href => "#to-front" , :title => t('.toolbar.bring_to_front') }
+        = t('.toolbar.bring_to_front')
     %li>
-      %a{ :href => "#delete" , :title => "Delete" }
-        Delete
+      %a{ :href => "#delete" , :title => t('.toolbar.delete') }
+        = t('.toolbar.delete')
   
   %ul#misc_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li>
-      %a.state-tool{ :href => "#select" , :title => "Select" }
-        Select
+      %a.state-tool{ :href => "#select" , :title => t('.toolbar.select') }
+        = t('.toolbar.select')
     %li.preview_hidden>
-      %a{ :href => "#insert-html" , :title => "Insert an HTML snippet" }
-        HTML
+      %a{ :href => "#insert-html" , :title => t('.toolbar.html_tool') }
+        = t('.toolbar.html_tool')
     %li.preview_hidden>
-      %a{ :href => "#insert-text" , :title => "Insert a Text box" }
-        Text
+      %a{ :href => "#insert-text" , :title => t('.toolbar.text_tool') }
+        = t('.toolbar.text_tool')
     %li.preview_hidden>
-      %a.state-tool{ :href => "#draw" , :title => "Draw" }
-        Draw
+      %a.state-tool{ :href => "#draw" , :title => t('.toolbar.drawing_tool') }
+        = t('.toolbar.drawing_tool')
 
   %ul#toggle_inspector_wrap.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li#toggle_inspector>
-      %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" }
-        Inspector
+      %a{ :href => "#right-panel-toggle", :title => t('.toolbar.toggle_inspector') }
+        = t('.toolbar.toggle_inspector')
   
   %ul#right_bar_tools.panel-tools.tools.thumbs.index.icons-only.preview_hidden
     -# Whitespace is removed between lis to preserve layout
     %li>
-      %a.state-right-panel{ :href => "#library", :title => "Show Library" }
-        Library
+      %a.state-right-panel{ :href => "#library", :title => t('.toolbar.library') }
+        = t('.toolbar.library')
     %li>
-      %a.state-right-panel{ :href => "#item-inspector", :title => "Show Inspector" }                      
-        Item
+      %a.state-right-panel{ :href => "#item-inspector", :title => t('.toolbar.item_inspector') }                      
+        = t('.toolbar.item_inspector')
     %li>
-      %a.state-right-panel.current{ :href => "#page-inspector", :title => "Show Page inspector" }
-        Page
+      %a.state-right-panel.current{ :href => "#page-inspector", :title => t('.toolbar.page_inspector') }
+        = t('.toolbar.page_inspector')
     %li>
-      %a.state-right-panel.current{ :href => "#document-inspector", :title => "Show Document inspector" }
-        Document
+      %a.state-right-panel.current{ :href => "#document-inspector", :title => t('.toolbar.document_inspector') }
+        = t('.toolbar.document_inspector')
 
 #left_bar.left-panel.panel
   #page_browser_left.pages-browser.inspector
@@ -113,20 +113,20 @@
     #page_browser_control_bar.foot
       %ul.pages-tools.tools.thumbs.index.icons-only
         %li>
-          %a{ :href => "#add-page", :title => "Add page" }
-            Add
+          %a{ :href => "#add-page", :title => t('.pages_browser.add_page') }
+            = t('.pages_browser.add_page')
         %li>
-          %a{ :href => "#add-web-page", :title => "Add web page" }
-            Add Web
+          %a{ :href => "#add-web-page", :title => t('.pages_browser.add_web_page') }
+            = t('.pages_browser.add_web_page')
         %li>
-          %a{ :href => "#copy-page", :title => "Copy page" }
-            Copy
+          %a{ :href => "#copy-page", :title => t('.pages_browser.copy_page') }
+            = t('.pages_browser.copy_page')
         %li>
-          %a{ :href => "#remove-page", :title => "Delete page" }
-            Remove
+          %a{ :href => "#remove-page", :title => t('.pages_browser.delete_page') }
+            = t('.pages_browser.delete_page')
         %li>
-          %a{ :href => "#toggle-thumbs", :title => "Thumbnails" }
-            Add
+          %a{ :href => "#toggle-thumbs", :title => t('.pages_browser.show_thumbnails') }
+            = t('.pages_browser.show_thumbnails')
 
 #right_bar.right-panel.panel
   = render :partial => 'item_inspector'
