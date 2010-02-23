@@ -245,18 +245,20 @@ en:
   
       
   layouts:
-    main_editor_toolbar:
-      quick preview: "Quick preview"
-      save: "Save"
-      presentation_mode: "Presentation mode"
-      invite_collaborators: "Invite collaborators"
-      import: "Import"
-      publish: "Publish" 
-      extend_uniboard: "Extend Uniboard" 
-      export: "Export"
-      print: "Print"
-      develop: "Develop"
-      disable_HTML: "Disable HTML"
+    panels:
+      toolbar_panel:
+        of: "of"
+        quick_preview: "Preview"
+        save: "Save"
+        presentation_mode: "Presentation mode"
+        invite_collaborators: "Invite collaborators"
+        import: "Import"
+        publish: "Publish" 
+        extend_uniboard: "Extend Uniboard" 
+        export: "Export"
+        print: "Print"
+        develop: "Develop"
+        disable_HTML: "Disable HTML"
   
   user_sessions:
     new:

@@ -78,6 +78,19 @@ body {
     margin: 6px 12px 0 12px;
     width: 120px; height: 25px;
 }
+.toolbar-panel .document-title,
+.toolbar-panel .page-details {
+    float: right;
+    height: 100%;
+    line-height: 36px;
+    margin-left: 32px;
+}
+.toolbar-panel .document-title {
+    font-weight: bold;
+}
+.toolbar-panel .page-details {
+    margin-left: 1.6em;
+}
 
 .left-panel,
 .right-panel {
@@ -178,6 +191,7 @@ body {
 }*/
 
 
+
 #tb_1_utilities {
     float: right;
     padding-top: 3px;
@@ -188,27 +202,6 @@ body {
     margin-left: 15px;
     line-height: 1em;
 }
-#tb_1_utilities_preview{
-  margin-top: 1px;
-}
-#tb_1_utilities_preview a{
-    display: block;
-    height: 13px;
-    line-height: 13px;
-    padding: 4px 5px 0 20px;
-    margin-top: -1px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    background-color: #fff;
-    background-repeat: no-repeat;
-    background-position: 2px 0px;
-    border: 1px solid #afafaf;
-    text-transform: uppercase;
-    color: #999999;
-    text-decoration: none;
-    font-size: 11px;
-    font-weight: bold;
-}
 
 #tb_1_utilities_preview a{
   background-image: url(../images/icons/edit_16.png);
@@ -217,28 +210,16 @@ body {
   background-image: url(../images/icons/eye.png);
 }
 
+
+
+
 #tb_1_utilities_preview a:hover{
     color: #4D4D4D;
 }
 #tb_1_utilities_preview a img{
     vertical-align:middle;
 }
-#tb_1_utilities_docname{
-    padding-top: 5px;
-}
-#tb_1_utilities_docname span{
-    color: #8F8F8F;
-    margin-left: -2px;
-}
-#tb_1_utilities_docname #current_page{
-    font-weight: bold;
-}
-#tb_1_utilities_docname h2{
-    float: left;
-}
-#tb_1_utilities_docname #current_page{
-    margin-left: 5px;
-}
+
 #tb_1_utilities_settings_trigger{
     display: block;
     height: 18px;
@@ -319,24 +300,34 @@ body {
     background: hsl(194, 9%, 71%);
     padding: 0.6em 0.6em 0.6em 2.5em;
 }
-.number,
-.pages li .loading-icon {
-    position: absolute;
-    top: 0.6em;
-    width: 1.5em; height: 1.5em;
-    
-    -webkit-border-radius:  0.75em;
-    -moz-border-radius:     0.75em;
-    border-radius:          0.75em;
-}
+
 .number {
-    left: 0.6em;
+    display: inline-block;
+    width: 1.5em; height: 1.5em;
+    margin: 0;
+    
     /* Just to nudge the text into place */
     /*text-indent: 1px;*/
     font-weight: bold;
     line-height: 1.5;
     text-align: center;
+    
+    -webkit-border-radius:  0.75em;
+    -moz-border-radius:     0.75em;
+    border-radius:          0.75em;
 }
+.pages-info .number {
+    position: absolute;
+    top: -0.75em;
+    left: 50%;
+    margin-left: -0.75em;
+}
+.pages li .number,
+.pages li .loading-icon {
+    position: absolute;
+    left: 0.6em; top: 0.6em;
+}
+
 .pages li .loading-icon {
     right: 0.6em;
 }

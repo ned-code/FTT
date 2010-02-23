@@ -99,27 +99,11 @@ WebDoc.BoardController = $.klass({
     $(document).bind("keydown", this, this._keyDown.pBind(this));
     
     this.zoom(1);
-    this.setInterationMode(this._isInteraction || !this._editable);
-    
-    // Autofit
-    //if (this._autoFit && board.css("height") != "100%") {
-    //  //update zoom to fit browser page    
-    //  var initialHeight = board.height();
-    //  var initialWidth = board.width();      
-    //  var heightFactor = ($("#board-container").height() - initialHeight) / initialHeight;
-    //  var widthFactor = ($("#board-container").width() - initialWidth) / initialWidth;      
-    //  if (heightFactor < widthFactor) {
-    //    this.zoom(1 + heightFactor);
-    //  }
-    //  else {
-    //    this.zoom(1 + widthFactor);
-    //  }
-    //}
+    this.setMode(this._isInteraction || !this._editable);
     
     this._fireCurrentPageChanged();
     
-    //$("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this._currentPage));
-    $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
+    $(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
   },
   
@@ -127,41 +111,55 @@ WebDoc.BoardController = $.klass({
     return this._isInteraction;  
   },
   
-  setInterationMode: function(state) {
-    this._isInteraction = state;
-    if (state) {
-      // go to interaction mode
-      this.unselectAll();
-      $("#board")
-      .unbind("dragenter")
-      .unbind("dragover")
-      .unbind("drop");
-      
+  _setModeEdit: function() {
+    $("#board")
+    .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
+    .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
+    .bind("drop", this, WebDoc.DrageAndDropController.drop);      
+    
+    if (!this.currentTool) {
       this.setCurrentTool(WebDoc.application.arrowTool);
-      $(".preview_hidden").hide();
-      $(".item-layer").hide();
-      $("body").removeClass("edit-mode");
-      
-      $("#tb_1_utilities_preview a").text("EDIT MODE");
-      WebDoc.application.rightBarController.hideRightBar();
+    }
+    
+    $("body").addClass("edit-mode");
+    $(".item-layer").show();
+    $(".preview_hidden").show();
+    
+    if (this.previousRightBarState) {
+      WebDoc.application.rightBarController.showRightBar();
+    }
+    
+    this._isInteraction = false;
+    return this._isInteraction;
+  },
+  
+  _setModePreview: function() {
+    this.unselectAll();
+    $("#board")
+    .unbind("dragenter")
+    .unbind("dragover")
+    .unbind("drop");
+    
+    this.setCurrentTool(WebDoc.application.arrowTool);
+    $(".preview_hidden").hide();
+    $(".item-layer").hide();
+    $("body").removeClass("edit-mode");
+    
+    this.previousRightBarState = WebDoc.application.rightBarController.visible ? true : false;
+    WebDoc.application.rightBarController.hideRightBar();
+    
+    this._isInteraction = true;
+    return this._isInteraction;
+  },
+  
+  setMode: function(state) {
+    if (state) {
+      this._setModePreview();
     }
     else {
-      // go to non interaction mode
-      $("#board")
-      .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
-      .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
-      .bind("drop", this, WebDoc.DrageAndDropController.drop);      
-      
-      if (!this.currentTool) {
-        this.setCurrentTool(WebDoc.application.arrowTool);
-      }
-      
-      $("body").addClass("edit-mode");
-      $(".item-layer").show();
-      $(".preview_hidden").show();
-      
-      $("#tb_1_utilities_preview a").text("QUICK PREVIEW");        
+      this._setModeEdit();
     }
+    
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     if (MTools.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
       ddd("FF 3.5. drawing !");
@@ -169,14 +167,8 @@ WebDoc.BoardController = $.klass({
     }
   },
   
-  toggleInteractionMode: function() {  
-    if (!this._isInteraction) {
-      this.previousRightBarState = WebDoc.application.rightBarController.visible ? true : false;
-    }
-    this.setInterationMode(!this._isInteraction);
-    if (!this._isInteraction && this.previousRightBarState) {
-      WebDoc.application.rightBarController.showRightBar();
-    }  
+  toggleMode: function() {
+    return this.setMode(!this._isInteraction);
   },
   
   setCurrentTool: function(tool) {
@@ -695,7 +687,10 @@ WebDoc.BoardController = $.klass({
     .bind("mouseout", this, this._mouseOut.pBind(this));
 
     this.screenNodes
-    .bind('click', this.selectItemViews.pBind(this) );
+    .bind('mousedown', this._mouseDown.pBind(this) )
+    .bind('mouseout', function(e){
+      ddd(e);
+    });
   },
   
   _setItemPositionZ: function(item, position) {

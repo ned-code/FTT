@@ -50,8 +50,8 @@ WebDoc.InspectorController = $.klass({
 
     this.updatePalette(0);
     this.subInspectors = [];
-    var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
-    this.subInspectors.push(propertiesInspectorController);               
+    //var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
+    //this.subInspectors.push(propertiesInspectorController);               
     
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
@@ -112,8 +112,8 @@ WebDoc.InspectorController = $.klass({
   },
   
   refreshProperties: function() {
-    this.subInspectors[0];
-    subInspector.refresh();
+    //this.subInspectors[0];
+    //subInspector.refresh();
   },
   
   

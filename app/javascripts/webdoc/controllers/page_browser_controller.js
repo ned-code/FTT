@@ -10,7 +10,7 @@ WebDoc.PageBrowserController = $.klass({
   
   PAGE_BROWSER_ITEM_SELECTOR: ".page_browser_items",
   PAGE_BROWSER_NUMBER_SELECTOR: ".page_browser_numbered_list",
-  PAGE_NUMBER_SELECTOR: ".page-number",
+  PAGE_NUMBER_SELECTOR: ".webdoc-page-number",
   ACTIVE_CLASS: "active",
   CURRENT_CLASS: "current",
   LOADING_CLASS: "loading",

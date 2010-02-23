@@ -19,19 +19,21 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
                 
                 ddd('[DrawingTool] Selected colour '+color);
                 
-                $(".state-draw-color").removeClass('current').css({
-                    WebkitBoxShadow: 'none',
-                    MozBoxShadow:    'none',
-                    BoxShadow:       'none'
-                });
+                $(".state-draw-color")
+                .removeClass('current');
+                //.css({
+                //    WebkitBoxShadow: 'none',
+                //    MozBoxShadow:    'none',
+                //    BoxShadow:       'none'
+                //});
                 
                 link
                 .addClass('current')
-                .css({
-                    WebkitBoxShadow: '0 0 16px '+color,
-                    MozBoxShadow:    '0 0 16px '+color,
-                    BoxShadow:       '0 0 16px '+color
-                });
+                //.css({
+                //    WebkitBoxShadow: '0 0 16px '+color,
+                //    MozBoxShadow:    '0 0 16px '+color,
+                //    BoxShadow:       '0 0 16px '+color
+                //});
                 
                 this.penColor = color;
                 $(".draw-color").css({ backgroundColor: color });

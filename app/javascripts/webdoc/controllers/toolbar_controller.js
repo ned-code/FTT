@@ -76,10 +76,10 @@ WebDoc.ToolbarController = $.klass({
 //    WebDoc.application.rightBarController.toggleRightBar();
 //  },
   
-  'toggleInteractionMode': function(e) {
-    e.preventDefault();
-    WebDoc.application.boardController.toggleInteractionMode();
-  }
+//  'toggleInteractionMode': function(e) {
+//    e.preventDefault();
+//    WebDoc.application.boardController.toggleInteractionMode();
+//  }
   
 //  'move-front': function(e) {
 //    e.preventDefault();

@@ -38,10 +38,13 @@ WebDoc.handlers = {
   'redo':                 function(e) { WebDoc.application.undoManager.redo(); },
   'delete':               function(e) { WebDoc.application.boardController.deleteSelection(); },
   
-  'mode-toggle':          function(e) { WebDoc.application.boardController.toggleInteractionMode(); },
   'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); },
   
   'show-thumbs':          function(e) { WebDoc.application.pageBrowserController.showThumbs(e); },
   'hide-thumbs':          function(e) { WebDoc.application.pageBrowserController.hideThumbs(e); },
-  'toggle-thumbs':        function(e) { WebDoc.application.pageBrowserController.toggleThumbs(e); }
+  'toggle-thumbs':        function(e) { WebDoc.application.pageBrowserController.toggleThumbs(e); },
+  
+  'mode-toggle':          function(e) { WebDoc.application.boardController.toggleMode(); },
+  'mode-edit':            function(e) { WebDoc.application.boardController.setMode(false); },
+  'mode-preview':         function(e) { WebDoc.application.boardController.setMode(true); }
 };

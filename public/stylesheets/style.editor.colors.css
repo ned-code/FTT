@@ -13,15 +13,18 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 /* Panels */
 
-.toolbar-panel                { background-color: hsla(194, 7%, 41%, 0.92);
+.toolbar-panel                { color: hsl(198, 7%, 41%);
+                                background-color: hsla(194, 7%, 41%, 0.92);
                                 background-image: url('/images/bg.png');
                                 background-position: 0 0;
+                                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(198, 4%, 97%) ), to( hsl(198, 8%, 79%) ));
+                                background-image: -moz-linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+                                background-image:      linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
                                 background-repeat: repeat-x;
                                 border-color: hsla(194, 12%, 30%, 0.8);
                                 -webkit-box-shadow: 0 0 32px hsla(14, 24%, 35%, 0.6);
                                 -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
                                 box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
-
 
 .left-panel,
 .right-panel                  { background-color: hsla(194, 7%, 41%, 0.92); }
@@ -38,8 +41,6 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 .draw-size                    { background-color: black; }
 .draw-color                   { border-color: black; }
-
-
 
 /* Pops ------------------------------ */
 
@@ -62,7 +63,7 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .inspector .box               { background-color: hsl(194, 6%, 56%);
 
                                 -webkit-background-size:  100%;
-                                -moz-background-size:     100%;
+                                -moz-background-size:     100% 100%;
                                 background-size:          100%;
 
                                 -webkit-border-radius:    12px;
@@ -122,10 +123,12 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .pages li .title              { background-color: hsl(194, 9%, 71%); }
 .pages li:hover .title        { background-color: hsl(194, 6%, 56%); }
 .pages li.current .title      { background-color: hsl(194, 3%, 88%); }
+
+.number                       { background-color: hsla(194, 12%, 30%, 0.8); color: white; }
 .pages li .number             { background-color: hsl(194, 10%, 40%); color: white; }
 .pages li:hover .number       { background-color: hsl(194, 12%, 24%); color: white; }
 .pages li.current .number     { background-color: hsl(194, 12%, 24%); color: white; }
-.pages-info .number           { background-color: hsla(194, 12%, 30%, 0.8); color: white; }
+
 
 /* Forms */
 .properties,
@@ -149,20 +152,21 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 /* The page browser */
 
-.toolbar-panel .current             { background-color: #f4fbfd; 
-                                      -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+.toolbar-panel a:active             { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
-                                      box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); 
+                                      box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
+.toolbar-panel .current             { background-color: #f4fbfd; 
+                                      -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -webkit-transition: width 0.18s ease-out; }
 
-#colors li a.current {
-    -webkit-box-shadow: 0 0 16px black;
-    -moz-box-shadow:    0 0 16px black;
-    box-shadow:         0 0 16px black;
-    
-    position: relative;
-    z-index: 2;
-}
+#colors li a:active                 { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
+#colors li a.current                { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1); }
 
 /* Pages tools */
 
