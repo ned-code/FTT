@@ -107,6 +107,12 @@ WebDoc.Item = $.klass(MTools.Record,
     this.fireObjectChanged();
   },
   
+  shiftBy: function(offsetPosition) {
+    var newTop = (parseFloat(this.data.data.css.top) + offsetPosition.top) + "px";
+    var newLeft = (parseFloat(this.data.data.css.left) + offsetPosition.left) + "px";
+    this.moveTo({ top: newTop, left: newLeft});
+  },
+  
   moveTo: function(newPosition) {
     this.data.data.css.left = newPosition.left;
     this.data.data.css.top = newPosition.top;
