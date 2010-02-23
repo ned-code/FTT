@@ -1,0 +1,94 @@
+#toolbar.toolbar-panel.panel
+  %h1.logo
+  
+  %ul.pages-tools.tools.thumbs.index.icons-only
+    %li.preview_hidden>
+      %a{ :href => "#add-page", :title => t('.toolbar.add_page') }
+        = t('.toolbar.add_page')
+    
+  %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
+    -# Whitespace is removed between lis to preserve layout
+    %li>
+      %a{ :href => "#zoom-in" , :title => t('.toolbar.zoom_in') }
+        = t('.toolbar.zoom_in')
+    %li>
+      %a{ :href => "#zoom-out" , :title => t('.toolbar.zoom_out') }
+        = t('.toolbar.zoom_out')
+    %li>
+      %a.state-tool{ :href => "#move" , :title => t('.toolbar.move') }
+        = t('.toolbar.move')
+  
+  %ul#edit_tools.edit-tools.tools.thumbs.index.icons-only.preview_hidden
+    -# Whitespace is removed between lis to preserve layout
+    %li#undo>
+      %a{ :href => "#undo" , :title => t('.toolbar.undo') }
+        = t('.toolbar.undo')
+    %li#redo>
+      %a{ :href => "#redo" , :title => t('.toolbar.redo') }
+        = t('.toolbar.redo')
+    %li>
+      %a{ :href => "#to-back" , :title => t('.toolbar.send_to_back') }
+        = t('.toolbar.send_to_back')
+    %li>
+      %a{ :href => "#to-front" , :title => t('.toolbar.bring_to_front') }
+        = t('.toolbar.bring_to_front')
+    %li>
+      %a{ :href => "#delete" , :title => t('.toolbar.delete') }
+        = t('.toolbar.delete')
+  
+  %ul#misc_tools.edit-tools.tools.thumbs.index.icons-only
+    -# Whitespace is removed between lis to preserve layout
+    %li>
+      %a.state-tool{ :href => "#select" , :title => t('.toolbar.select') }
+        = t('.toolbar.select')
+    %li.preview_hidden>
+      %a{ :href => "#insert-html" , :title => t('.toolbar.html_tool') }
+        = t('.toolbar.html_tool')
+    %li.preview_hidden>
+      %a{ :href => "#insert-text" , :title => t('.toolbar.text_tool') }
+        = t('.toolbar.text_tool')
+    %li.preview_hidden>
+      %a.state-tool{ :href => "#draw" , :title => t('.toolbar.drawing_tool') }
+        = t('.toolbar.drawing_tool')
+        %div.draw-port
+          %div.draw-size.draw-color
+  
+  %ul#tb_1_utilities
+    %li#tb_1_utilities_settings
+      %a#tb_1_utilities_settings_trigger{ :href => "#"}
+        %img{ :src => "/images/icons/settings.png", :alt => "Document settings"}
+      %ul#tb_1_utilities_settings_dropdown
+        %li.action_button
+          %a{ :href => "#"}= t('.save')
+        %li.action_button
+          %a{ :href => "#"}= t('.presentation_mode')
+        %li.action_button
+          %a{ :href => "#"}= t('.invite_collaborators')
+        %li.action_button
+          %a{ :href => "#"}= t('.import')
+        %li.action_button
+          %a{ :href => "#"}= t('.publish')       
+        %li.action_button
+          %a{ :href => "#"}= t('.extend_uniboard')
+        %li.action_button
+          %a{ :href => "#"}= t('.export')
+        %li.action_button
+          %a{ :href => "#"}= t('.print')
+        %li#develop_sub_menu 
+          %a{ :href => "#"}= t('.develop')
+          %ul
+            %li.action_button
+              %a#debug-button{ :href => "#disable-html"}= t('.disable_HTML')
+  
+  %ul.mode-tools.tools.thumbs.index.icons-only
+    %li>
+      %a.state-mode{ :href => "#mode-edit"}= t('.edit_mode')
+    %li>
+      %a.state-mode{ :href => "#mode-preview"}= t('.preview_mode')
+  
+  %div.page-details
+    %span.webdoc-page-number.number 0
+    %span.webdoc-separator= t('.of')
+    %span.webdoc-page-total 0
+  
+  %h2.document-title=@document.title
