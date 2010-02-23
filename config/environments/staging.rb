@@ -33,7 +33,7 @@ config.action_mailer.smtp_settings = {
   :domain => 'st-ub.mnemis.com',
   :enable_starttls_auto => false
 }
-
+config.action_mailer.default_url_options = { :host => 'st-wd.webdoc.com' }
 # Enable threaded mode
 # config.threadsafe!
 
