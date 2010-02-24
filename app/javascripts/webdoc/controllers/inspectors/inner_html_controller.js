@@ -13,7 +13,7 @@ WebDoc.InnerHtmlController = $.klass({
     var editor = new CodeMirror( domNode.find('.content')[0] , {
         path: '/javascripts/codemirror/',
         parserfile: ['parsexml.js', 'parsecss.js', 'tokenizejavascript.js', 'parsejavascript.js', 'parsehtmlmixed.js'],
-        stylesheet: ['/stylesheets/codemirror/xmlcolors.css', '/stylesheets/codemirror/jscolors.css', '/stylesheets/codemirror/csscolors.css'],
+        stylesheet: '/stylesheets/style.codemirror.css',
         lineNumbers: true,
         indentUnit: 4,
         height: '100%',
