@@ -83,7 +83,9 @@ WebDoc.BoardController = $.klass({
         board = pageView.domNode;
     
     $("#board").unbind();
-    $(document).unbind("keydown");
+    $(document).unbind("keydown", this._keyDown);
+    $(document).unbind("keypress", this._keyPress);
+    $(document).unbind("keyup", this._keyUp);
     
     // Set properties
     if (this._currentPageView) {
@@ -103,9 +105,9 @@ WebDoc.BoardController = $.klass({
     this._fireSelectionChanged();
     this._bindMouseEvent();
     
-    $(document).bind("keypress", this, this._keyPress.pBind(this));
-    $(document).bind("keydown", this, this._keyDown.pBind(this));
-    $(document).bind("keyup", this, this._keyUp.pBind(this));    
+    $(document).bind("keypress", this, jQuery.proxy(this, "_keyPress"));
+    $(document).bind("keydown", this, jQuery.proxy(this, "_keyDown"));
+    $(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));    
     
     this.zoom(1);
     this.setInterationMode(this._isInteraction || !this._editable);
@@ -630,15 +632,15 @@ WebDoc.BoardController = $.klass({
   // Private methods
     
   _mouseDown: function(e) {
-    $(document).unbind("mousemove").unbind("mouseup");
+    $(document).unbind("mousemove", this._mouseMove).unbind("mouseup", this._mouseUp);
     if (window.document.activeElement) {
       window.document.activeElement.blur();
     }
-    if (!e.boardIgnore) {
-      $(document).bind("mousemove", this, this._mouseMove.pBind(this));
-      $(document).bind("mouseup", this, this._mouseUp.pBind(this));
-      this.currentTool.mouseDown(e);
-    }
+
+    $(document).bind("mousemove", this, jQuery.proxy(this, "_mouseMove"));
+    $(document).bind("mouseup", this, jQuery.proxy(this, "_mouseUp"));
+    this.currentTool.mouseDown(e);
+
   },
   
   _mouseMove: function(e) {
@@ -649,8 +651,7 @@ WebDoc.BoardController = $.klass({
   },
   
   _mouseUp: function(e) {
-    $(document).unbind("mousemove");
-    $(document).unbind("mouseup");
+    $(document).unbind("mousemove", this._mouseMove).unbind("mouseup", this._mouseUp);
     this.currentTool.mouseUp(e);
   },
   
