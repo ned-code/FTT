@@ -6,9 +6,9 @@ class PagesController < ApplicationController
     allow logged_in, :to => [:index]
     allow :owner, :of => :document 
     allow :editor, :of => :document
-    allow :reader, :of => :document, :to => [:show]    
+    allow :reader, :of => :document, :to => [:show]
     allow logged_in, :to => [:show], :if => :public_document?
-    allow logged_in, :if => :public_edit_document?    
+    allow logged_in, :if => :public_edit_document?
   end
   
   # GET /documents/:document_id/pages
@@ -55,12 +55,6 @@ class PagesController < ApplicationController
     @page.destroy
     
     render :json => {}
-  end
-  
-  private
-  
-  def instantiate_document
-    @document = Document.find_by_uuid(params[:document_id])
   end
   
 end

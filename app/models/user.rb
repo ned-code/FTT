@@ -43,6 +43,20 @@ class User < ActiveRecord::Base
     XmppUserSynch.create_xmpp_user(self)
   end
   
+  def add_editor_role(document)
+    if !self.has_role?("editor", document)
+      self.has_no_roles_for!(document)
+      self.has_role!("editor", document)
+    end
+  end
+  
+  def add_reader_role(document)
+    if !self.has_role?("reader", document)
+      self.has_no_roles_for!(document)
+      self.has_role!("reader", document)
+    end
+  end
+  
 end
 # == Schema Information
 #
