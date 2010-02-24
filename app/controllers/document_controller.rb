@@ -1,4 +1,4 @@
-class DocumentController < ActionController::Base
+class DocumentController < ApplicationController
   before_filter :instantiate_document
   
 private
