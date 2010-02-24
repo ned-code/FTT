@@ -126,6 +126,6 @@
     background-position: center center;
     background-repeat: no-repeat;
 }
-.edit-mode .item-layer {
+.mode-edit .item-layer {
     display: block;
 }

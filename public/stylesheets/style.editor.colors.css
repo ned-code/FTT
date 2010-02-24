@@ -232,13 +232,13 @@ a[href="#remove-page"]              { background-position: 0 -832px; }
 a[href="#remove-page"]:hover        { background-position: 0 -896px; }
 a[href="#remove-page"]:active       { background-position: 0 -960px; }
 
-a[href="#prev-page"]                { background-position: 0 -1024px; }
-a[href="#prev-page"]:hover          { background-position: 0 -1088px; }
-a[href="#prev-page"]:active         { background-position: 0 -1152px; }
+.toolbar-panel a[href="#prev-page"]        { background-position: 0 -1024px; }
+.toolbar-panel a[href="#prev-page"]:hover  { background-position: 0 -1088px; }
+.toolbar-panel a[href="#prev-page"]:active { background-position: 0 -1152px; }
 
-a[href="#next-page"]                { background-position: 0 -1216px; }
-a[href="#next-page"]:hover          { background-position: 0 -1280px; }
-a[href="#next-page"]:active         { background-position: 0 -1344px; }
+.toolbar-panel a[href="#next-page"]        { background-position: 0 -1216px; }
+.toolbar-panel a[href="#next-page"]:hover  { background-position: 0 -1280px; }
+.toolbar-panel a[href="#next-page"]:active { background-position: 0 -1344px; }
 
 a[href="#toggle-thumbs"].active        { background-position: 0 -1408px; }
 a[href="#toggle-thumbs"].active:hover  { background-position: 0 -1472px; }
@@ -315,11 +315,11 @@ a[href="#to-front"]:active          { background-position: 0 -2688px; }
    They may even deserve their own list class */
 
 a[href="#left-panel-toggle"].active,
-a[href="#right-panel-toggle"]                   { background-position: 0 0; background-color: transparent; }
+a[href="#right-panel-toggle"]                  { background-position: 0 0; background-color: transparent; }
 a[href="#left-panel-toggle"].active:hover,
-a[href="#right-panel-toggle"]:hover             { background-position: 0 -64px; background-color: transparent;}
+a[href="#right-panel-toggle"]:hover            { background-position: 0 -64px; background-color: transparent;}
 a[href="#left-panel-toggle"].active:active,
-a[href="#right-panel-toggle"]:active            { background-position: 0 -128px; background-color: transparent;}
+a[href="#right-panel-toggle"]:active           { background-position: 0 -128px; background-color: transparent;}
 
 a[href="#left-panel-toggle"],
 a[href="#right-panel-toggle"].active           { background-position: 0 -192px; background-color: transparent;}
@@ -363,9 +363,11 @@ a[href="#show-thumbs"].current        { background-position: -4px -1988px; }
 
 a[href="#prev-page"]                  { background-position: 0 -2051px; }
 a[href="#prev-page"]:hover            { background-position: 0 -2115px; }
+a[href="#prev-page"]:active           { background-position: 0 -2179px; }
 
-a[href="#next-page"]                  { background-position: 0 -2173px; }
-a[href="#next-page"]:hover            { background-position: 0 -2237px; }
+a[href="#next-page"]                  { background-position: 0 -2237px; }
+a[href="#next-page"]:hover            { background-position: 0 -2301px; }
+a[href="#next-page"]:active           { background-position: 0 -2365px; }
 
 
 .mode-tools a { background-image: url('/images/mode-tools.png'); }

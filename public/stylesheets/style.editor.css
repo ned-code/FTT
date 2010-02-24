@@ -52,6 +52,20 @@ body {
 
 #webdoc .board-screen   { z-index: 1000000; }  /* svg layer has 999999 */
 
+/* Manage modes. There are three modes:
+ * 
+ * mode-edit
+ * mode-preview
+ * mode-embed
+ *
+ */
+
+.mode-preview .mode-edit-show,
+.mode-embed .mode-edit-show { display: none; }
+
+.mode-edit .mode-preview-show,
+.mode-embed .mode-preview-show { display: none; }
+
 /* Webdoc */
 
 #webdoc {
@@ -199,22 +213,6 @@ body {
     line-height: 1em;
 }
 
-#tb_1_utilities_preview a{
-  background-image: url(../images/icons/edit_16.png);
-}
-.edit-mode #tb_1_utilities_preview a{
-  background-image: url(../images/icons/eye.png);
-}
-
-
-
-
-#tb_1_utilities_preview a:hover{
-    color: #4D4D4D;
-}
-#tb_1_utilities_preview a img{
-    vertical-align:middle;
-}
 
 #tb_1_utilities_settings_trigger{
     display: block;
@@ -274,10 +272,6 @@ body {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     background:#7F7F7F;
-}
-
-.preview_hidden {
-  display:none;
 }
 
 .widget_thumb {
@@ -452,13 +446,13 @@ body {
   overflow:hidden;
   position:absolute;
 }
-.edit-mode .item_wrap {
+.mode-edit .item_wrap {
   border-style: solid;
   border-width: 1px;
   margin-top: -1px;
   margin-left: -1px;
 }
-.edit-mode .item_selected {
+.mode-edit .item_selected {
   border-width: 3px;
   margin-top: -3px;
   margin-left: -3px;

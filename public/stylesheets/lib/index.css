@@ -285,7 +285,7 @@ a[href='#draw'] {
 a[href='#draw'] .draw-port {
     display: none;
     position: absolute;
-    top: 0; right: 0;
+    top: 0; left: 32px;
     width: 32px; height: 32px;
 }
 a[href='#draw'].current .draw-port {

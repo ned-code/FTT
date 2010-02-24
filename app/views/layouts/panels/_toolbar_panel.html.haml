@@ -2,54 +2,60 @@
   %h1.logo
   
   %ul.pages-tools.tools.thumbs.index.icons-only
-    %li.preview_hidden>
-      %a{ :href => "#add-page", :title => t('.toolbar.add_page') }
-        = t('.toolbar.add_page')
+    %li.mode-preview-show>
+      %a{ :href => "#prev-page", :title => t('.prev') }
+        = t('.prev')
+    %li.mode-preview-show>
+      %a{ :href => "#next-page", :title => t('.next') }
+        = t('.next')
+    %li.mode-edit-show>
+      %a{ :href => "#add-page", :title => t('.add_page') }
+        = t('.add_page')
     
   %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li>
-      %a{ :href => "#zoom-in" , :title => t('.toolbar.zoom_in') }
-        = t('.toolbar.zoom_in')
+      %a{ :href => "#zoom-in" , :title => t('.zoom_in') }
+        = t('.zoom_in')
     %li>
-      %a{ :href => "#zoom-out" , :title => t('.toolbar.zoom_out') }
-        = t('.toolbar.zoom_out')
+      %a{ :href => "#zoom-out" , :title => t('.zoom_out') }
+        = t('.zoom_out')
     %li>
-      %a.state-tool{ :href => "#move" , :title => t('.toolbar.move') }
-        = t('.toolbar.move')
+      %a.state-tool{ :href => "#move" , :title => t('.move') }
+        = t('.move')
   
-  %ul#edit_tools.edit-tools.tools.thumbs.index.icons-only.preview_hidden
+  %ul#edit_tools.edit-tools.tools.thumbs.index.icons-only.mode-edit-show
     -# Whitespace is removed between lis to preserve layout
-    %li#undo>
-      %a{ :href => "#undo" , :title => t('.toolbar.undo') }
-        = t('.toolbar.undo')
-    %li#redo>
-      %a{ :href => "#redo" , :title => t('.toolbar.redo') }
-        = t('.toolbar.redo')
     %li>
-      %a{ :href => "#to-back" , :title => t('.toolbar.send_to_back') }
-        = t('.toolbar.send_to_back')
+      %a{ :href => "#undo" , :title => t('.undo') }
+        = t('.undo')
     %li>
-      %a{ :href => "#to-front" , :title => t('.toolbar.bring_to_front') }
-        = t('.toolbar.bring_to_front')
+      %a{ :href => "#redo" , :title => t('.redo') }
+        = t('.redo')
     %li>
-      %a{ :href => "#delete" , :title => t('.toolbar.delete') }
-        = t('.toolbar.delete')
+      %a{ :href => "#to-back" , :title => t('.send_to_back') }
+        = t('.send_to_back')
+    %li>
+      %a{ :href => "#to-front" , :title => t('.bring_to_front') }
+        = t('.bring_to_front')
+    %li>
+      %a{ :href => "#delete" , :title => t('.delete') }
+        = t('.delete')
   
   %ul#misc_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li>
-      %a.state-tool{ :href => "#select" , :title => t('.toolbar.select') }
-        = t('.toolbar.select')
-    %li.preview_hidden>
-      %a{ :href => "#insert-html" , :title => t('.toolbar.html_tool') }
-        = t('.toolbar.html_tool')
-    %li.preview_hidden>
-      %a{ :href => "#insert-text" , :title => t('.toolbar.text_tool') }
-        = t('.toolbar.text_tool')
-    %li.preview_hidden>
-      %a.state-tool{ :href => "#draw" , :title => t('.toolbar.drawing_tool') }
-        = t('.toolbar.drawing_tool')
+      %a.state-tool{ :href => "#select" , :title => t('.select') }
+        = t('.select')
+    %li.mode-edit-show>
+      %a{ :href => "#insert-html" , :title => t('.html_tool') }
+        = t('.html_tool')
+    %li.mode-edit-show>
+      %a{ :href => "#insert-text" , :title => t('.text_tool') }
+        = t('.text_tool')
+    %li.mode-edit-show>
+      %a.state-tool{ :href => "#draw" , :title => t('.drawing_tool') }
+        = t('.drawing_tool')
         %div.draw-port
           %div.draw-size.draw-color
   
@@ -82,9 +88,9 @@
   
   %ul.mode-tools.tools.thumbs.index.icons-only
     %li>
-      %a.state-mode{ :href => "#mode-edit"}= t('.edit_mode')
+      %a.state-mode{ :href => "#mode-edit"}= t('.mode_edit')
     %li>
-      %a.state-mode{ :href => "#mode-preview"}= t('.preview_mode')
+      %a.state-mode{ :href => "#mode-preview"}= t('.mode_preview')
   
   %div.page-details
     %span.webdoc-page-number.number 0

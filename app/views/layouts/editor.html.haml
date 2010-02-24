@@ -45,9 +45,9 @@
     %script{ :src => "/themes/#{THEME}/js/script.js", :type => "text/javascript" }
     
   -if (@is_reader)  
-    %body.editor.embed-mode
+    %body.editor.mode-embed
   -else
-    %body.editor.edit-mode
+    %body.editor.mode-edit
   = yield
   = javascript_include_tag 'jquery'
   = javascript_include_tag 'jquery-json'
