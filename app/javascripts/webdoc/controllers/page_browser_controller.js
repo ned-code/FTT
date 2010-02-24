@@ -51,46 +51,6 @@ WebDoc.PageBrowserController = $.klass({
     this._document.addListener(this);
     this._initializePageBrowser(); 
   },
-  
-  toggleBrowser: function() {
-    ddd("toggle browser");
-    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
-        panelWidth = this._pagesPanelWidth,
-        outerGhost = this.panelGhostNode,
-        innerGhost = this.innerGhostNode,
-        bothGhosts = outerGhost.add(innerGhost);
-    
-    innerGhost.show();
-    
-    if (this.visible) {
-      this.domNode.animate({
-          marginLeft: - this._pagesPanelWidth
-      }, {
-          step: function(val){
-              bothGhosts.css({
-                width: panelWidth + val
-              })
-          }.pBind(this),
-          complete: function(){
-              innerGhost.hide();
-          }
-      });
-      pageBrowserButton.removeClass(this.ACTIVE_CLASS);
-    }
-    else {       
-      this.domNode.animate({
-          marginLeft: 0
-      }, {
-          step: function(val){
-              bothGhosts.css({
-                width: panelWidth + val
-              })
-          }.pBind(this)
-      });
-      pageBrowserButton.addClass(this.ACTIVE_CLASS);      
-    }
-    this.visible = !this.visible;
-  },
 
   _initializePageBrowser: function() {
     ddd('[PageBrowserController] Initialising Page Browser');
@@ -344,7 +304,77 @@ WebDoc.PageBrowserController = $.klass({
     page.setTitle(newTitle);
     return false;
   },
-
+  
+  // Show / hide browser --------------------------------------------
+  
+  _show: function(){
+    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
+        panelWidth = this._pagesPanelWidth,
+        outerGhost = this.panelGhostNode,
+        innerGhost = this.innerGhostNode,
+        bothGhosts = outerGhost.add(innerGhost);
+    
+    innerGhost.show();
+    
+    this.domNode.animate({
+        marginLeft: 0
+    }, {
+        step: function(val){
+            bothGhosts.css({
+              width: panelWidth + val
+            })
+        }.pBind(this)
+    });
+    
+    pageBrowserButton.addClass(this.ACTIVE_CLASS);
+    
+    return true;
+  },
+  
+  _hide: function( margin ){
+    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
+        panelWidth = this._pagesPanelWidth,
+        outerGhost = this.panelGhostNode,
+        innerGhost = this.innerGhostNode,
+        bothGhosts = outerGhost.add(innerGhost);
+    
+    this.domNode.animate({
+        marginLeft: - this._pagesPanelWidth - ( margin || 0 )
+    }, {
+        step: function(val){
+            bothGhosts.css({
+              width: panelWidth + val
+            })
+        }.pBind(this),
+        complete: function(){
+            innerGhost.hide();
+        }
+    });
+    
+    pageBrowserButton.removeClass(this.ACTIVE_CLASS);
+    
+    return false;
+  },
+  
+  showBrowser: function() {
+    this.visible = (this.visible) ? this.visible : this._show() ;
+  },
+  
+  hideBrowser: function() {
+    this.visible = (this.visible) ? this._hide() : this.visible ;
+  },
+  
+  toggleBrowser: function() {
+    this.visible = (this.visible) ? this._hide() : this._show() ;
+  },
+  
+  concealBrowser: function() {
+    return this._hide( 36 );
+  },
+  
+  revealBrowser: function() {
+    return (this.visible) ? this._show() : this._hide() ;
+  },
   
   // Thumbnails -----------------------------------------------------
   
