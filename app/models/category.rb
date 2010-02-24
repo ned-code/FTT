@@ -1,15 +1,13 @@
-
 class Category < ActiveRecord::Base
   # ===============
   # = Validations =
   # ===============
-
+  
   # ================
   # = Associations =
   # ================
-
+  
 end
-
 
 
 # == Schema Information
@@ -19,4 +17,3 @@ end
 #  id   :integer         not null, primary key
 #  name :string(255)     not null
 #
-

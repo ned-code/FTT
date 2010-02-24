@@ -23,6 +23,8 @@ end
 
 Factory.define :document do |f|
   f.title "Test Document"
+  
+  f.creator  { |f| f.association(:user)}
 end
 
 Factory.define :page do |f|

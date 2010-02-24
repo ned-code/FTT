@@ -4,7 +4,17 @@ describe Document do
   should_be_built_by_factory
   should_be_created_by_factory
   should_have_many :pages, :order => 'position ASC', :dependent => :destroy
+  
+  describe "default" do
+    subject { Factory(:document) }
     
+    its(:pages) { should be_present }
+    
+    it "should have creator as owner on create" do
+      subject.creator.has_role?("owner").should be_true
+    end
+  end
+  
 end
 
 

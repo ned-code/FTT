@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :username, :first_name, :last_name, :terms_of_service,
                   :avatar, :avatar_cache, :remove_avatar, :bio, :website, :gender
-
+  
   after_create :create_xmpp_user
   
   # ===============
@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   
   has_many :images, :class_name => 'Medias::Image', :order => 'created_at DESC'
   has_many :videos, :class_name => 'Medias::Video', :order => 'created_at DESC'
+  has_many :documents, :foreign_key => :creator_id
   
   # ===================
   # = Instance Method =

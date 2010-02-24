@@ -1,15 +1,12 @@
-require "xmpp_notification"
-
 class DocumentsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :load_document, :only => [:update, :destroy, :show, :change_user_access, :user_access]
   access_control do
     allow :admin
-    allow :owner, :of => :document
-    allow :editor, :of => :document, :to => [:show]
-    allow :reader, :of => :document, :to => [:show]
+    allow :editor, :of => :document, :to => :show
+    allow :reader, :of => :document, :to => :show
     allow logged_in, :to => [:index, :create]
-    allow logged_in, :to => [:show], :if => :public_document?
+    allow logged_in, :to => :show, :if => :public_document?
   end
   
   @@global_user_names = ["all", "everybody", "any", "everyone", "people"]
@@ -35,11 +32,9 @@ class DocumentsController < ApplicationController
   
   # POST /documents
   def create
-    @document = Document.new(params[:document])
-    @document.save
-    @document.pages.create
-    current_user.has_role!("owner", @document)
-    render :json => @document      
+    @document = current_user.documents.create(params[:document])
+    
+    render :json => @document
   end
   
   # PUT /documents/:id

@@ -19,7 +19,13 @@ describe User do
       subject.avatar = File.open(fixture_path + 'image.jpg')
       subject.save.should be_true
     end
+    
+    it "should be creator of document his create" do
+      document = subject.documents.create
+      document.creator.should == subject
+    end
   end
+  
   
 end
 
