@@ -68,11 +68,25 @@ MTools.Record = $.klass(
   
   /**
    * @deprecated. use the className class function instead.
-   * @return the class name of the record. Class name is the class name that is define on the server side.
+   * @return the class name of the record. Class name is the class name that is defined on the server side.
    */
   className: function() {
     if (this.constructor.className) {
       return this.constructor.className();
+    }
+    else {
+      ddd("no class name");
+      ddt();
+    }
+  }, 
+   
+  /**
+   * @deprecated. use the pluralizedClassName class function instead.
+   * @return the class name of the record that will match the right route on the server.
+   */
+  pluralizedClassName: function() {
+    if (this.constructor.pluralizedClassName) {
+      return this.constructor.pluralizedClassName();
     }
     else {
       ddd("no class name");
@@ -86,7 +100,7 @@ MTools.Record = $.klass(
    */
   rootUrl: function() {
     return this.constructor.rootUrl(this.rootUrlArgs());
-  },  
+  }, 
   
   /**
    * @return {object} return an object that contains value needed to construct the root URL. It is typically used for nesed resources accessed with a REST URL.
@@ -201,7 +215,10 @@ $.extend(MTools.Record, {
       // possible to passe this to rails in a correct format.
       // so all relationships must then have a special treatment on the server side.
       if ($.isArray(value)) {
-        destinationObject[prefix + '[' + key + ']'] = $.toJSON(value);        
+        for (var i = 0; i < value.length; i++) {
+          var arrayItem = value[i];
+          this.convertToRailsJSon(arrayItem, destinationObject, prefix + '[' + key + '_attributes][' + i +']');
+        }               
       }
       else if (typeof value == 'object') {
         var empty = true;

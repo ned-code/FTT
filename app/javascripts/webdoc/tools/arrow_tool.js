@@ -14,6 +14,11 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
     this.lastSelectedObject = {};
   },
   
+  selectTool: function($super) {
+    $super();
+    WebDoc.application.boardController.activateEventCatcher(false);
+  },
+    
   select: function(e) {  
     var objectToSelect = this._clickedItemView(e);
 

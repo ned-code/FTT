@@ -108,6 +108,15 @@ WebDoc.Page = $.klass(MTools.Record,
       this.save();
     }
   },
+  
+  setExternalPageUrl: function(url) {
+    WebDoc.InspectorFieldsValidator.validateUrl(url);
+    if(this.data.data.externalPageUrl != url) {
+      this.data.data.externalPageUrl = url;
+      this.fireObjectChanged();
+      this.save();
+    }
+  },
 
   removeBackgroundImage: function() {
     delete this.data.data.css.backgroundImage;
@@ -352,5 +361,8 @@ $.extend(WebDoc.Page, {
   
   rootUrl: function(args) {
     return "/documents/" + args.document_id;
-  }
+  },
+  pluralizedClassName: function() {
+    return this.className() + "s";
+  }  
 });

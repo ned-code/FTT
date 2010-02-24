@@ -218,6 +218,14 @@
     float: left;
     margin-right: 32px;
 }
+.toolbar-panel .mode-tools {
+    float: right;
+    margin-right: 0;
+    margin-left: 32px;
+}
+.mode-tools li {
+    margin-right: 0;
+}
 
 /* On the right ... */
 #toggle_inspector_wrap,
@@ -227,19 +235,6 @@
 }
 #toggle_inspector_wrap {
     margin-left: 32px;
-}
-
-.tools a:hover{
-    background-color: hsla( 194, 8%, 60%, 0.4 );
-    -webkit-border-radius: 6px;
-    -moz-border-radius:    6px;
-    border-radius:         6px;
-}
-.tools a.current{
-    background-color: hsla( 194, 8%, 60%, 0.4 );
-    -webkit-border-radius: 6px;
-    -moz-border-radius:    6px;
-    border-radius:         6px;
 }
 
 /* Inspector view controls */
@@ -290,7 +285,7 @@ a[href='#draw'] {
 a[href='#draw'] .draw-port {
     display: none;
     position: absolute;
-    top: 0; right: 0;
+    top: 0; left: 32px;
     width: 32px; height: 32px;
 }
 a[href='#draw'].current .draw-port {
@@ -298,28 +293,6 @@ a[href='#draw'].current .draw-port {
 }
 
 /* Panel tools indexes */
-
-.panel-tools,
-.border {
-    border: 3px solid;
-}
-.vertical.panel-tools {
-    padding: 0 0 8px 0;
-}
-.vertical.panel-tools li:first-child {
-    border-bottom: none;
-    margin-bottom: 16px;
-}
-.vertical.panel-tools li {
-    padding-bottom: 0;
-    margin-bottom: 0;
-    margin-right: 0;
-}
-.vertical.panel-tools a {
-    height: 32px;
-    padding-left: 32px;
-}
-
 
 .page_browser_item {
     height: 48px;

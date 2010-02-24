@@ -318,15 +318,26 @@ function deactivatePop(pop) {
 
 jQuery.fn[plug] = function(){
 
+    
+    
+    
+    
+
 };
 
 })(jQuery);
 
 
-// jquery.popup.js
-// 
-// Handles behaviour of panels
-// Requires jQuery.delegate
+
+
+
+
+
+
+
+
+
+// text style chooser
 
 (function(jQuery, undefined){
 

@@ -14,5 +14,8 @@ $.extend(WebDoc.Widget, {
   
   rootUrl: function(args) {
     return "";
-  }    
+  },   
+  pluralizedClassName: function() {
+    return this.className() + "s";
+  } 
 });

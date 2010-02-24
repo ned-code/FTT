@@ -1,18 +1,23 @@
+require "xmpp_notification"
+
 class Page < ActiveRecord::Base
   has_uuid
   
   default_scope :order => "position ASC"
   serialize :data
   
-  def after_initialize
-    self.data ||= { :css => { :width => "800px", :height => "600px", :backgroundColor => "#fff" } }
+  before_save :set_page_data 
+  
+  def set_page_data
+    self.data ||= { :css => { :width => (document.size)? document.size[:width] + "px" : "800px", :height => (document.size)? document.size[:height] + "px" : "600px", :backgroundColor => "#fff" } }
   end
   
   # ================
   # = Associations =
   # ================
   
-  has_many :items, :dependent => :destroy
+  has_many :items, :dependent => :delete_all
+  accepts_nested_attributes_for :items  
   belongs_to :document
   belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
   

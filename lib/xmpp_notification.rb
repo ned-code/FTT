@@ -1,9 +1,9 @@
 require "xmpp4r" 
 require "xmpp4r/pubsub"
 
-module XmppHelper
-  
-  def xmpp_create_node(node_name)
+module XmppNotification
+    
+  def self.xmpp_create_node(node_name)
     begin
       #TODO get all xmpp connection paramas from config file
       jid = "server@webdoc.com"
@@ -14,7 +14,7 @@ module XmppHelper
         client.auth(pass)
         pubsubjid="pubsub.webdoc.com" 
         service=Jabber::PubSub::ServiceHelper.new(client,pubsubjid) 
-        service.create_node(@document.uuid,Jabber::PubSub::NodeConfig.new(nil,{ 
+        service.create_node(node_name, Jabber::PubSub::NodeConfig.new(nil,{ 
                             "pubsub#title" => node_name, 
                             "pubsub#node_type" => "leaf", 
                             "pubsub#send_last_published_item" => "never", 
@@ -23,15 +23,16 @@ module XmppHelper
       ensure
         client.close  
       end
-    rescue
-      logger.warn "Node not created because XMPP server is down. Collaboration is disabled"
+    rescue => e
+      Rails.logger.warn "Node not created because XMPP server is down. Collaboration is disabled #{e}"
     end  
   end
   
-  def xmpp_notify(message)
+  def self.xmpp_notify(message, node)
     continue = true
-    number_of_try = 0;
+    number_of_try = 0
     while continue do
+      
       continue = false
       begin
         jid = "server@webdoc.com"
@@ -46,9 +47,9 @@ module XmppHelper
           message=Jabber::Message.new(nil,message) 
           item.add(message)
           begin
-            service.publish_item_to(@document.uuid,item)
-          rescue Jabber::ServerError
-            xmpp_create_node(@document.uuid);
+            service.publish_item_to(node,item)
+          rescue Jabber::ServerError => error
+            xmpp_create_node(node)
             if (number_of_try < 1)
               continue = true;
             end            
@@ -57,7 +58,7 @@ module XmppHelper
           client.close
         end
       rescue Exception => e
-        logger.warn "XMPP server is down. Collaboration is disabled #{e}"
+        Rails.logger.warn "XMPP server is down. Collaboration is disabled #{e}"
       end
       number_of_try += 1
     end

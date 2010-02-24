@@ -1,4 +1,4 @@
-%h1 Widgets Listing
+%h1= t('.title')
 
 = render :partial => 'layouts/flash'
 
@@ -20,4 +20,4 @@
           = link_to t('edit'), edit_admin_widget_path(widget)
           = link_to t('destroy'), admin_widget_path(widget), :confirm => I18n.t('alert.destroy_confirmation'), :method => :delete
 
-= link_to "upload new widget", new_admin_widget_path
+= link_to t('.add'), new_admin_widget_path

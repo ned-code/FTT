@@ -16,174 +16,22 @@
     %div#right-panel-ghost
       %div.panel-ghost
 
--#= render :partial => "layouts/main_editor_toolbar"
+= render :partial => "documents/panels/toolbar_panel"
+= render :partial => "documents/panels/left_panel"
+= render :partial => "documents/panels/right_panel"
 
-#toolbar.toolbar-panel.panel
-  %h1.logo
-  
-  %ul#tb_1_utilities
-    %li#tb_1_utilities_preview.toggle_preview
-      %a{ :href => "#mode-toggle"}
-        quick preview
-    %li#tb_1_utilities_docname
-      %h2#tb_1_document_title=@document.title
-      %span.page-number 1
-      %span#separation /
-      %span#total_page 
-    %li#tb_1_utilities_settings
-      %a#tb_1_utilities_settings_trigger{ :href => "#"}
-        %img{ :src => "/images/icons/settings.png", :alt => "Document settings"}
-      %ul#tb_1_utilities_settings_dropdown
-        %li.action_button
-          %a{ :href => "#"} Save
-        %li.action_button
-          %a{ :href => "#"} Presentation mode
-        %li.action_button
-          %a{ :href => "#"} Invite collaborators
-        %li.action_button
-          %a{ :href => "#"} Import
-        %li.action_button
-          %a{ :href => "#"} Publish        
-        %li.action_button
-          %a{ :href => "#"} Extend WebDoc
-        %li.action_button
-          %a{ :href => "#"} Export
-        %li.action_button
-          %a{ :href => "#"} Print
-        %li#develop_sub_menu 
-          %a{ :href => "#"} Develop
-          %ul
-            %li.action_button
-              %a#debug-button{ :href => "#disable-html"} Disable HTML
-  
-  %ul.pages-tools.tools.thumbs.index.icons-only
-    %li.preview_hidden>
-      %a{ :href => "#add-page", :title => "Add new page" } Add
-  
-  %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
-    -# Whitespace is removed between lis to preserve layout
-    %li>
-      %a{ :href => "#zoom-in" , :title => "Zoom In" }
-        Zoom in
-    %li>
-      %a{ :href => "#zoom-out" , :title => "Zoom Out" }
-        Zoom out
-    %li>
-      %a.state-tool{ :href => "#move" , :title => "Move" }
-        Move
-  
-  %ul#edit_tools.edit-tools.tools.thumbs.index.icons-only.preview_hidden
-    -# Whitespace is removed between lis to preserve layout
-    %li#undo>
-      %a{ :href => "#undo" , :title => "Undo" }
-        Undo
-    %li#redo>
-      %a{ :href => "#redo" , :title => "Redo" }
-        Redo
-    %li>
-      %a{ :href => "#to-back" , :title => "Move to back" }
-        To back
-    %li>
-      %a{ :href => "#to-front" , :title => "Move to front" }
-        To front
-    %li>
-      %a{ :href => "#delete" , :title => "Delete" }
-        Delete
-  
-  %ul#misc_tools.edit-tools.tools.thumbs.index.icons-only
-    -# Whitespace is removed between lis to preserve layout
-    %li>
-      %a.state-tool{ :href => "#select" , :title => "Select" }
-        Select
-    %li.preview_hidden>
-      %a{ :href => "#insert-html" , :title => "Insert an HTML snippet" }
-        HTML
-    %li.preview_hidden>
-      %a{ :href => "#insert-text" , :title => "Insert a Text box" }
-        Text
-    %li.preview_hidden>
-      %a.state-tool{ :href => "#draw" , :title => "Draw" }
-        Draw
-        %div.draw-port
-          %div.draw-size.draw-color
-
-#left_bar.left-panel.panel
-  %ul.panel-tools.vertical.divided.icons-only.thumbs.index
-    %li>
-      %a{ :href => "#left-panel-toggle", :title => "Pages" } Pages
-    %li>
-      %a{ :href => "#prev-page" , :title => "Previous page" } Prev
-    %li.pages-info>
-      %a{ :href => "#pages-browser", :title => "Pages browser" }
-        %span.page-number.number
-          1
-    %li>
-      %a{ :href => "#next-page" , :title => "Next Page" } Next
-
-  %div.upper.border
-  -#%div.lower.border
-
-  #page_browser_left.pages-browser.inspector
-    %div.head
-      %div
-        %h2 Pages
-        %ul.inspector-views.views.thumbs.index.icons-only
-          %li>
-            %a{ :class => "state-pages-thumbs current", :href => "#hide-thumbs", :title => "Toggle thumbs" }
-          %li>
-            %a{ :class => "state-pages-thumbs", :href => "#show-thumbs", :title => "Toggle thumbs" }
-    
-    #page_browser_container.content
-      -#%ul.page_browser_numbered_list.vertical.numbers.index
-      %ul.page_browser_items.vertical.pages.index
-    
-    %div.foot
-      %ul.pages-tools.tools.thumbs.index.icons-only
-        %li>
-          %a{ :href => "#add-page", :title => "Add page" }
-            Add
-        %li>
-          %a{ :href => "#add-web-page", :title => "Add web page" }
-            Add Web
-        %li>
-          %a{ :href => "#copy-page", :title => "Copy page" }
-            Copy
-        %li>
-          %a{ :href => "#remove-page", :title => "Copy page" }
-            Remove
-
-#right_bar.right-panel.panel
-  %ul.panel-tools.vertical.divided.icons-only.thumbs.index
-    %li#toggle_inspector>
-      %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" } Inspector
-    %li>
-      %a.state-right-panel{ :href => "#library", :title => "Show Library" } Library
-    %li>
-      %a.state-right-panel{ :href => "#item-inspector", :title => "Show Inspector" } Item
-    %li>
-      %a.state-right-panel.current{ :href => "#page-inspector", :title => "Show Page inspector" } Page
-    %li>
-      %a.state-right-panel{ :href => "#document-inspector", :title => "Show Document inspector" } Document
-    
-  %div.upper.border
-  -#%div.lower.border
-    
-  = render :partial => 'item_inspector'
-  = render :partial => 'library'
-  = render :partial => 'page_inspector'
-  = render :partial => 'document_inspector'
 :javascript
   
-    var WebDoc;
-    if (!WebDoc) {
-      WebDoc = {};
-    }
-    WebDoc.authData = {
-      authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
-      sessionKeyName:"#{session_key_name}",
-      cookiesSessionKeyName:"#{cookies[session_key_name]}"
-    };
-    WebDoc.run = function() {
-      var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
-      editor.load("#{@document.uuid}");
-    } 
+  var WebDoc;
+  if (!WebDoc) {
+    WebDoc = {};
+  }
+  WebDoc.authData = {
+    authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
+    sessionKeyName:"#{session_key_name}",
+    cookiesSessionKeyName:"#{cookies[session_key_name]}"
+  };
+  WebDoc.run = function() {
+    var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
+    editor.load("#{@document.uuid}");
+  }

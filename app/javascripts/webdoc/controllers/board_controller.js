@@ -72,6 +72,7 @@ WebDoc.BoardController = $.klass({
   },
   
   setCurrentPage: function(page) {
+    ddd('[board_controller] SetCurrentPage')
     var pageView = new WebDoc.PageView(page),
         board = pageView.domNode;
     
@@ -99,27 +100,11 @@ WebDoc.BoardController = $.klass({
     $(document).bind("keydown", this, this._keyDown.pBind(this));
     
     this.zoom(1);
-    this.setInterationMode(this._isInteraction || !this._editable);
-    
-    // Autofit
-    //if (this._autoFit && board.css("height") != "100%") {
-    //  //update zoom to fit browser page    
-    //  var initialHeight = board.height();
-    //  var initialWidth = board.width();      
-    //  var heightFactor = ($("#board-container").height() - initialHeight) / initialHeight;
-    //  var widthFactor = ($("#board-container").width() - initialWidth) / initialWidth;      
-    //  if (heightFactor < widthFactor) {
-    //    this.zoom(1 + heightFactor);
-    //  }
-    //  else {
-    //    this.zoom(1 + widthFactor);
-    //  }
-    //}
+    this.setMode(this._isInteraction || !this._editable);
     
     this._fireCurrentPageChanged();
     
-    //$("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this._currentPage));
-    $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
+    $(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
   },
   
@@ -127,41 +112,68 @@ WebDoc.BoardController = $.klass({
     return this._isInteraction;  
   },
   
-  setInterationMode: function(state) {
-    this._isInteraction = state;
-    if (state) {
-      // go to interaction mode
-      this.unselectAll();
-      $("#board")
-      .unbind("dragenter")
-      .unbind("dragover")
-      .unbind("drop");
-      
+  _setModeEdit: function() {
+    $("#board")
+    .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
+    .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
+    .bind("drop", this, WebDoc.DrageAndDropController.drop);      
+    
+    if (!this.currentTool) {
       this.setCurrentTool(WebDoc.application.arrowTool);
-      $(".preview_hidden").hide();
-      $(".item-layer").hide();
-      $("body").removeClass("edit-mode");
-      
-      $("#tb_1_utilities_preview a").text("EDIT MODE");
-      WebDoc.application.rightBarController.hideRightBar();
+    }
+    
+    $("body")
+    .removeClass('mode-preview')
+    .addClass("mode-edit");
+    
+    $(".item-layer").show();
+    
+    $(".state-mode")
+    .removeClass("current")
+    .filter("[href='#mode-edit']")
+    .addClass("current");
+    
+    WebDoc.application.pageBrowserController.reveal();
+    WebDoc.application.rightBarController.revealRightBar();
+    
+    this._isInteraction = false;
+    return this._isInteraction;
+  },
+  
+  _setModePreview: function() {
+    this.unselectAll();
+    $("#board")
+    .unbind("dragenter")
+    .unbind("dragover")
+    .unbind("drop");
+    
+    this.setCurrentTool(WebDoc.application.arrowTool);
+    $(".item-layer").hide();
+    
+    $("body")
+    .removeClass("mode-edit")
+    .addClass("mode-preview");
+    
+    $(".state-mode")
+    .removeClass("current")
+    .filter("[href='#mode-preview']")
+    .addClass("current");
+    
+    WebDoc.application.pageBrowserController.conceal();
+    WebDoc.application.rightBarController.concealRightBar();
+    
+    this._isInteraction = true;
+    return this._isInteraction;
+  },
+  
+  setMode: function(state) {
+    if (state) {
+      this._setModePreview();
     }
     else {
-      // go to non interaction mode
-      $("#board")
-      .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
-      .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
-      .bind("drop", this, WebDoc.DrageAndDropController.drop);      
-      
-      if (!this.currentTool) {
-        this.setCurrentTool(WebDoc.application.arrowTool);
-      }
-      
-      $("body").addClass("edit-mode");
-      $(".item-layer").show();
-      $(".preview_hidden").show();
-      
-      $("#tb_1_utilities_preview a").text("QUICK PREVIEW");        
+      this._setModeEdit();
     }
+    
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     if (MTools.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
       ddd("FF 3.5. drawing !");
@@ -169,14 +181,8 @@ WebDoc.BoardController = $.klass({
     }
   },
   
-  toggleInteractionMode: function() {  
-    if (!this._isInteraction) {
-      this.previousRightBarState = WebDoc.application.rightBarController.visible ? true : false;
-    }
-    this.setInterationMode(!this._isInteraction);
-    if (!this._isInteraction && this.previousRightBarState) {
-      WebDoc.application.rightBarController.showRightBar();
-    }  
+  toggleMode: function() {
+    return this.setMode(!this._isInteraction);
   },
   
   setCurrentTool: function(tool) {
@@ -241,6 +247,17 @@ WebDoc.BoardController = $.klass({
     }
   },
   
+  activateEventCatcher: function(active) {
+    if (this._currentPageView) {
+      if (active) {
+        this._currentPageView.eventCatcherNode.show();
+      }
+      else {
+        this._currentPageView.eventCatcherNode.hide();
+      }
+    }
+  },
+  
   mapToPageCoordinate: function(position) {
     var x, y, board = $("#board");
     
@@ -267,6 +284,20 @@ WebDoc.BoardController = $.klass({
     };
   },
   
+  getBoardCenterPoint: function() {
+    var x, y, board = $("#board");
+    
+    x = board.width() / 2;
+    y = board.height() / 2;
+    
+    var calcX = (x) * (1 / this._currentZoom);
+    var calcY = (y) * (1 / this._currentZoom);
+    
+    return {
+      x: calcX,
+      y: calcY
+    };
+  },
   
   zoomIn: function(e) {
     this.zoom(1.5);
@@ -389,6 +420,91 @@ WebDoc.BoardController = $.klass({
       return true;     
     }
     return false;
+  },
+  
+  insertImage: function(imageUrl, position) {
+    var image = document.createElement('img'); /* Preload image in order to have width and height parameters available */
+    $(image).bind("load", position, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
+    image.src = imageUrl;
+  },
+  
+  insertWidget: function(widgetData, position) {
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+
+    if (widgetData.properties.width) {
+      width = widgetData.properties.width;
+      height = widgetData.properties.height;
+    }
+    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.media_id = widgetData.id;
+    newItem.data.data.tag = "iframe";
+    newItem.data.data.src = widgetData.properties.index_url;
+    newItem.data.data.properties = {
+      inspector_url: widgetData.properties.inspector_url
+    };
+    if(!position) { position = this.getBoardCenterPoint();}
+    x = position.x - (width / 2);
+    y = position.y - (height / 2);
+    if (x < 0) { x = 0;}
+    if (y < 0) { y = 0;}            
+    newItem.data.data.css = {
+      top: y + "px",
+      left: x + "px",
+      width: width + "px",
+      height: height + "px"
+    };
+    this.insertItems([newItem]);
+  },
+  
+  insertVideo: function(videoProperties, position) {
+    var videoWidget;
+    switch (videoProperties.type) {
+      case 'youtube' :
+        videoWidget = WebDoc.application.widgetManager.getYoutubeWidget();
+        break;
+      case 'vimeo' :
+        videoWidget = WebDoc.application.widgetManager.getVimeoWidget();
+        break;
+      }
+    newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+    if (videoWidget.data.properties.width) {
+      width = parseFloat(videoWidget.data.properties.width);
+      height = parseFloat(videoWidget.data.properties.height);
+    }
+    if(!position) { position = this.getBoardCenterPoint();}
+    x = position.x - (width / 2);
+    y = position.y - (height / 2);
+    if (x < 0) { x = 0;}
+    if (y < 0) { y = 0;}
+    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.media_id = videoWidget.data.id;
+    newItem.data.data.tag = "iframe";
+    newItem.data.data.src = videoWidget.data.properties.index_url;
+    newItem.data.data.properties = {
+      inspector_url: videoWidget.data.properties.inspector_url
+    };
+    newItem.data.data.css = {
+      top: y + "px",
+      left: x + "px",
+      width: width + "px",
+      height: height + "px"
+    };
+    newItem.data.data.preference.url = videoProperties.video_id;
+    this.insertItems([newItem]);
+  },
+  
+  insertHtml: function(html, position) {
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.data.tag = "div";
+    newItem.data.data.innerHTML = html;
+    newItem.data.data.css = {
+      top: position.y + "px",
+      left: position.x + "px",
+      width: "0px",
+      height: "0px"
+    };
+    this.insertItems([newItem]);
   },
   
   insertItems: function(items) {
@@ -525,6 +641,16 @@ WebDoc.BoardController = $.klass({
         case 65:
           this.setCurrentTool(WebDoc.application.arrowTool);
           break;
+        case 37:
+          if (this._isInteraction) {
+           WebDoc.application.pageEditor.prevPage(); 
+          }
+          break;
+        case 39:
+          if (this._isInteraction) {
+           WebDoc.application.pageEditor.nextPage(); 
+          }        
+          break;
       }
     }
     else {
@@ -575,7 +701,10 @@ WebDoc.BoardController = $.klass({
     .bind("mouseout", this, this._mouseOut.pBind(this));
 
     this.screenNodes
-    .bind('click', this.selectItemViews.pBind(this) );
+    .bind('mousedown', this._mouseDown.pBind(this) )
+    .bind('mouseout', function(e){
+      ddd(e);
+    });
   },
   
   _setItemPositionZ: function(item, position) {
@@ -586,7 +715,26 @@ WebDoc.BoardController = $.klass({
     WebDoc.application.undoManager.registerUndo(function() {
       this._setItemPositionZ(item, previousPosition);
     }.pBind(this));    
-  }
-    
+  },
   
+  _createImageItemAfterLoad: function(e) {
+    var position = e.data;
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+    newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
+    if(!position) { position = WebDoc.application.boardController.getBoardCenterPoint();}
+    var x = position.x - (this.width / 2);
+    var y = position.y - (this.height / 2);
+    if (x < 0) { x = 0;}
+    if (y < 0) { y = 0;}
+    newItem.data.data.tag = "img";
+    newItem.data.data.src = this.src;
+    newItem.data.data.css = {
+      overflow: "hidden",
+      top: y + "px",
+      left: x + "px",
+      width: this.width + "px",
+      height: this.height + "px"
+    };
+    WebDoc.application.boardController.insertItems([newItem]);
+  }
 });

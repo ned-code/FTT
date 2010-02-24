@@ -142,7 +142,7 @@ WebDoc.RightBarController = $.klass({
     this.showRightBar();
   },
   
-  showRightBar: function() {
+  _show: function() {
     var panel = this.domNode,
         self = this,
         outerGhost = this.panelGhostNode,
@@ -151,57 +151,64 @@ WebDoc.RightBarController = $.klass({
     
     innerGhost.show();
     
-    if (!this.visible) {
-      this.visible = true;
-      
-      panel.animate({
-        marginLeft: -this.panelWidth
-      }, {
-        step: function(val){
-          bothGhosts.css({
-            width: -val
-          })
-        }
-      });
-    }
+    panel.animate({
+      marginLeft: -this.panelWidth
+    }, {
+      step: function(val){
+        bothGhosts.css({
+          width: -val
+        })
+      }
+    });
     
     $( this.PANEL_TOGGLE_SELECTOR ).addClass( this.ACTIVE_CLASS );
+    
+    return true;
   },
   
-  hideRightBar: function() {
+  _hide: function( margin ){
     var panel = this.domNode,
         self = this,
         outerGhost = this.panelGhostNode,
         innerGhost = this.innerGhostNode,
         bothGhosts = outerGhost.add(innerGhost);
     
-    if (this.visible) {
-      this.visible = false;
-      
-      panel.animate({
-          marginLeft: 0
-      }, {
-          step: function(val){
-              bothGhosts.css({
-                width: -val
-              })
-          },
-          complete: function() {
-              innerGhost.hide();
-          }
-      });
-    }
+    panel.animate({
+      marginLeft: margin || 0
+    }, {
+      step: function(val){
+        bothGhosts.css({
+          width: -val
+        })
+      },
+      complete: function() {
+        innerGhost.hide();
+      }
+    });
     
     $( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.ACTIVE_CLASS );
+    
+    return false;
+  },
+  
+  showRightBar: function() {
+    this.visible = (this.visible) ? this.visible : this._show() ;
+  },
+  
+  hideRightBar: function() {
+    this.visible = (this.visible) ? this._hide() : this.visible ;
   },
   
   toggleRightBar: function() {
-    if (this.visible) {
-      this.hideRightBar();
-    }
-    else {
-      this.showRightBar();
-    }
+    this.visible = (this.visible) ? this._hide() : this._show() ;
+  },
+  
+  concealRightBar: function() {
+    return this._hide( 36 );
+  },
+  
+  revealRightBar: function() {
+    return (this.visible) ? this._show() : this._hide() ;
   }
   
 });

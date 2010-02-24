@@ -4,7 +4,8 @@
  *
  *   .loading     - State of items requested from a server
  *   .active      - Implies polar (on/off) state
- *   .state-xxx   - Inmplies multipolar (0/1/2/...) state
+ *   .state-xxx   - Implies multipolar (0/1/2/...) state
+ *   .mode-xxx    - Implies multipolar (0/1/2/...) state
  *   .current     - Current implies that one out of a number of items is the current one
  * 
  * State classes must NOT have default style applied, they are there to indicate state only.

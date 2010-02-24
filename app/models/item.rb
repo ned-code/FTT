@@ -1,6 +1,11 @@
+require "xmpp_notification.rb"
+
 class Item < ActiveRecord::Base
   has_uuid
   serialize :data
+  
+  # see XmppItemObserver
+  attr_accessor_with_default :must_notify, false
   
   # ================
   # = Associations =
@@ -12,7 +17,11 @@ class Item < ActiveRecord::Base
   def to_param
     uuid
   end
-  
+
+  def after_initialize
+    self.must_notify = false
+  end
+
 end
 
 

@@ -44,34 +44,35 @@
     %link{ :rel => "stylesheet", :href => "/themes/#{THEME}/css/typography.css", :type => "text/css", :charset => "utf-8" }
     %script{ :src => "/themes/#{THEME}/js/script.js", :type => "text/javascript" }
     
-    -if (@is_reader)  
-      %body.editor.embed-mode
-    -else
-      %body.editor.edit-mode
-    = yield
-    = javascript_include_tag 'jquery'      
-    = javascript_include_tag 'jquery-json'
-    = javascript_include_tag 'jquery-string'
-    = javascript_include_tag 'jquery-ui'
-    = javascript_include_tag 'colorpicker'    
+  -if (@is_reader)  
+    %body.editor.mode-embed
+  -else
+    %body.editor.mode-edit
+  = yield
+  = javascript_include_tag 'jquery'
+  = javascript_include_tag 'jquery-json'
+  = javascript_include_tag 'jquery-string'
+  = javascript_include_tag 'jquery-ui'
+  = javascript_include_tag 'colorpicker'
+  
+  = javascript_include_tag 'jquery.extensions'
+  = javascript_include_tag 'jquery.events'
+  = javascript_include_tag 'jquery.panel'
+  
+  = javascript_include_tag 'klass'
+  = javascript_include_tag '../swfupload/swfupload.js'
+  = javascript_include_tag 'jquery-swfupload'
+  = javascript_include_tag 'sylvester'
+  = javascript_include_tag 'strophe'
+  = javascript_include_tag 'jquery.form'
+  = javascript_include_tag 'jquery.hashchange'
+  
+  = sprockets_include_tag
+  :javascript
     
-    = javascript_include_tag 'jquery.extensions'
-    = javascript_include_tag 'jquery.events'
-    = javascript_include_tag 'jquery.panel'
-    
-    = javascript_include_tag 'klass'
-    = javascript_include_tag '../swfupload/swfupload.js'
-    = javascript_include_tag 'jquery-swfupload'
-    = javascript_include_tag 'sylvester'
-    = javascript_include_tag 'strophe'
-    = javascript_include_tag 'jquery.form'
-    
-    = sprockets_include_tag
-    :javascript
-      
-      $(function()
-      {
-        WebDoc.run();
-      });    
-    
-    = render :partial => "layouts/googleAnalytics"
+    $(function()
+    {
+      WebDoc.run();
+    });    
+  
+  = render :partial => "layouts/googleAnalytics"

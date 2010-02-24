@@ -7,7 +7,7 @@ class DatastoreEntriesController < ApplicationController
     #can current user read document containing the widget
     if(widget_uuid != nil)
       if(!DatastoreEntry.can_user_read_document(DatastoreEntry.get_document_of_widget(widget_uuid), get_current_user_id))
-          render :text => 'User has no right on the document' #print error
+          render :text => t('datastore.no_rights') #print error
           return
       end
     end

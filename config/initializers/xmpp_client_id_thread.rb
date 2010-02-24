@@ -1,0 +1,1 @@
+require "xmpp_client_id_thread"

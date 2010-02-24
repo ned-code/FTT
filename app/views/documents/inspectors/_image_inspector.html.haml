@@ -1,0 +1,31 @@
+%div#image-inspector.inspector
+  %div.head
+    %div
+      %h2 Image Inspector
+  
+  %div.foot
+    %div
+      %form.properties
+        %div
+          %label{ :for => "text-property-width" } width
+          %input#text-property-width.property-width{ :type => "text", :value => "px" }
+        %div
+          %label{ :for => "text-property-height" } height
+          %input#text-property-height.property-height{ :type => "text", :value => "px" }        
+        %div
+          %label{ :for => "text-property-left" } left
+          %input#text-property-left.property-left{ :type => "text", :value => "px" }
+        %div
+          %label{ :for => "text-property-top" } top
+          %input#text-property-top.property-top{ :type => "text", :value => "px" }
+        %div
+          %label{ :for => "text-property-scroll" } Show Scroll
+          %input#text-property-scroll.property-scroll{ :type => "checkbox", :checked => "checked" }
+        %div
+          %label{ :for => "text-property-opacity" } Opacity
+          %input#text-property-opacity.property-opacity{ :type => "text", :value => "" }
+  
+  %div.content
+    %div.properties_line
+      %label.properties_label Image URL
+      %input#property_src.properties_input

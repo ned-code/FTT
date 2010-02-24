@@ -1,0 +1,32 @@
+%div#html-inspector.inspector
+  %div.head
+    %div
+      %h2 HTML
+  
+  %div.foot
+    %div
+      %form.properties
+        %div
+          %label{ :for => "text-property-iframe" } iframe
+          %input#html-property-iframe.property_iframe{ :type => "checkbox", :checked => "checked" }
+        %div
+          %label{ :for => "text-property-width" } width
+          %input#text-property-width.property-width{ :type => "text", :value => "px" }
+        %div
+          %label{ :for => "text-property-height" } height
+          %input#text-property-height.property-height{ :type => "text", :value => "px" }        
+        %div
+          %label{ :for => "text-property-left" } left
+          %input#text-property-left.property-left{ :type => "text", :value => "px" }
+        %div
+          %label{ :for => "text-property-top" } top
+          %input#text-property-top.property-top{ :type => "text", :value => "px" }
+        %div
+          %label{ :for => "text-property-scroll" } Show Scroll
+          %input#text-property-scroll.property-scroll{ :type => "checkbox", :checked => "checked" }
+        %div
+          %label{ :for => "text-property-opacity" } Opacity
+          %input#text-property-opacity.property-opacity{ :type => "text", :value => "" }
+  
+  %div.content
+    %code.layer Hello! I'm a Youth Hosteller! My motto is: a stranger is just a friend you haven't met yet.

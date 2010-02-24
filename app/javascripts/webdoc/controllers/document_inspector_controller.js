@@ -6,34 +6,43 @@
 
  var documentTitleField,
      documentDescriptionField,
-     documentKeywordsField,
+     documentCategoryField,
      currentDocument;
      
 WebDoc.DocumentInspectorController = $.klass({
   initialize: function() {
-    
-    documentTitleField = $("#document-title");
-    documentDescriptionField = $("#document-description");
-    documentKeywordsField = $("#document-keywords");
+    this.domNode = $('#document-inspector');
+    documentTitleField = $("#document-title", this.domNode);
+    documentDescriptionField = $("#document-description", this.domNode);
+    documentCategoryField = $("#document-category", this.domNode)
     currentDocument = WebDoc.application.pageEditor.currentDocument;
     
     documentTitleField.bind("change", this._changeDocumentTitle);
     documentDescriptionField.bind("change", this._changeDocumentDescription);
-    documentKeywordsField.bind("change", this._changeDocumentKeywords);
+    documentCategoryField.bind("change", this._changeDocumentCategory);
     
     currentDocument.addListener(this);
     
+    this._loadDocumentCategories();
     this._updateFields();
-    this.domNode = $('#document-inspector');
   },
   
   _updateFields: function() {
     documentTitleField.val(currentDocument.title());
     documentDescriptionField.val(currentDocument.description());
-    documentKeywordsField.val(currentDocument.keywords());
+    documentCategoryField.val(currentDocument.category());
     
     // Also update toolbar title field
-    $("#tb_1_document_title").text(currentDocument.title());
+    $(".document-title").text(currentDocument.title());
+  },
+  
+  _loadDocumentCategories: function() {
+    if(WebDoc.application.categoriesController.documentCategories) {
+      var categories = WebDoc.application.categoriesController.documentCategories;
+      $.each(categories, function(i, webDocCategory) {
+        documentCategoryField.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+      });
+    }
   },
   
   _changeDocumentTitle: function() {
@@ -44,14 +53,13 @@ WebDoc.DocumentInspectorController = $.klass({
     currentDocument.setDescription(documentDescriptionField.val());
   },
   
-  _changeDocumentKeywords: function() {
-    currentDocument.setKeywords(documentKeywordsField.val());
+  _changeDocumentCategory: function() {
+    currentDocument.setCategory(documentCategoryField.val());
   },
   
   documentPropertiesChanged: function() {
     this._updateFields();
   }
-  
 });
 
 })(jQuery);

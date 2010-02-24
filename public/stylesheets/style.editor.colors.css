@@ -13,20 +13,23 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 /* Panels */
 
-.toolbar-panel                { background-color: hsla(194, 7%, 41%, 0.92);
+.toolbar-panel                { color: hsl(198, 7%, 41%);
+                                background-color: hsla(194, 7%, 41%, 0.92);
                                 background-image: url('/images/bg.png');
                                 background-position: 0 0;
+                                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(198, 4%, 97%) ), to( hsl(198, 8%, 79%) ));
+                                background-image: -moz-linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+                                background-image:      linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
                                 background-repeat: repeat-x;
                                 border-color: hsla(194, 12%, 30%, 0.8);
                                 -webkit-box-shadow: 0 0 32px hsla(14, 24%, 35%, 0.6);
                                 -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
                                 box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
 
-
 .left-panel,
 .right-panel                  { background-color: hsla(194, 7%, 41%, 0.92); }
 .panel-tools,
-.border                       { background-color: inherit; border-color: hsla(194, 12%, 30%, 0.8); }
+.border                       { background-color: inherit; border-color: /*hsla(194, 12%, 30%, 0.8)*/ transparent; }
 .vertical.panel-tools li      { border-color: hsla(194, 12%, 30%, 0.8); }
 .panel-tools a.current        { background-color: hsla(194, 12%, 30%, 0.8); }
 
@@ -38,8 +41,6 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 .draw-size                    { background-color: black; }
 .draw-color                   { border-color: black; }
-
-
 
 /* Pops ------------------------------ */
 
@@ -62,7 +63,7 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .inspector .box               { background-color: hsl(194, 6%, 56%);
 
                                 -webkit-background-size:  100%;
-                                -moz-background-size:     100%;
+                                -moz-background-size:     100% 100%;
                                 background-size:          100%;
 
                                 -webkit-border-radius:    12px;
@@ -122,10 +123,12 @@ body                          { background-color: hsl(194, 8%, 60%); }
 .pages li .title              { background-color: hsl(194, 9%, 71%); }
 .pages li:hover .title        { background-color: hsl(194, 6%, 56%); }
 .pages li.current .title      { background-color: hsl(194, 3%, 88%); }
+
+.number                       { background-color: hsla(194, 12%, 30%, 0.8); color: white; }
 .pages li .number             { background-color: hsl(194, 10%, 40%); color: white; }
 .pages li:hover .number       { background-color: hsl(194, 12%, 24%); color: white; }
 .pages li.current .number     { background-color: hsl(194, 12%, 24%); color: white; }
-.pages-info .number           { background-color: hsla(194, 12%, 30%, 0.8); color: white; }
+
 
 /* Forms */
 .properties,
@@ -147,18 +150,61 @@ body                          { background-color: hsl(194, 8%, 60%); }
                   box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   border-color: rgba(176, 227, 0, 0.8); }
 
-
 /* The page browser */
 
-.toolbar-panel .current             { background-color: #f4fbfd; }
+.toolbar-panel a,
+.toolbar-panel .mode-tools a        { -webkit-transition: width 0.18s ease-out; }
+.toolbar-panel a:active,
+.toolbar-panel .mode-tools a:active { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
+.toolbar-panel .current,
+.toolbar-panel .mode-tools .current { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      -webkit-transition: width 0.18s ease-out; }
+.toolbar-panel .mode-tools a        { -webkit-box-shadow: inset 0 0 2px -1px hsl(18, 16%, 12%);
+                                      -moz-box-shadow:    inset 0 0 2px -1px hsl(18, 16%, 12%);
+                                      box-shadow:         inset 0 0 2px -1px hsl(18, 16%, 12%); }
 
-#colors li a.current {
-    -webkit-box-shadow: 0 0 16px black;
-    -moz-box-shadow:    0 0 16px black;
-    box-shadow:         0 0 16px black;
-    
-    position: relative;
-    z-index: 2;
+#colors li a:active                 { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
+#colors li a.current                { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1); }
+
+.tools a{
+    -webkit-border-radius: 6px;
+    -moz-border-radius:    6px;
+    border-radius:         6px;
+}
+.tools a:hover,
+.tools a.current{
+    background-color: hsla( 194, 8%, 60%, 0.4 );
+}
+
+.mode-tools li a {
+    -webkit-border-radius: 0;
+    -moz-border-radius:    0;
+    border-radius:         0;
+}
+
+.mode-tools li:first-child a {
+    -webkit-border-top-left-radius:     6px;
+    -moz-border-radius-topleft:         6px;
+    border-top-left-radius:             6px;
+    -webkit-border-bottom-left-radius:  6px;
+    -moz-border-radius-bottomleft:      6px;
+    border-bottom-left-radius:          6px;
+}
+.mode-tools li:last-child a {
+    -webkit-border-top-right-radius:    6px;
+    -moz-border-radius-topright:        6px;
+    border-top-right-radius:            6px;
+    -webkit-border-bottom-right-radius: 6px;
+    -moz-border-radius-bottomright:     6px;
+    border-bottom-right-radius:         6px;
 }
 
 /* Pages tools */
@@ -186,13 +232,13 @@ a[href="#remove-page"]              { background-position: 0 -832px; }
 a[href="#remove-page"]:hover        { background-position: 0 -896px; }
 a[href="#remove-page"]:active       { background-position: 0 -960px; }
 
-a[href="#prev-page"]                { background-position: 0 -1024px; }
-a[href="#prev-page"]:hover          { background-position: 0 -1088px; }
-a[href="#prev-page"]:active         { background-position: 0 -1152px; }
+.toolbar-panel a[href="#prev-page"]        { background-position: 0 -1024px; }
+.toolbar-panel a[href="#prev-page"]:hover  { background-position: 0 -1088px; }
+.toolbar-panel a[href="#prev-page"]:active { background-position: 0 -1152px; }
 
-a[href="#next-page"]                { background-position: 0 -1216px; }
-a[href="#next-page"]:hover          { background-position: 0 -1280px; }
-a[href="#next-page"]:active         { background-position: 0 -1344px; }
+.toolbar-panel a[href="#next-page"]        { background-position: 0 -1216px; }
+.toolbar-panel a[href="#next-page"]:hover  { background-position: 0 -1280px; }
+.toolbar-panel a[href="#next-page"]:active { background-position: 0 -1344px; }
 
 a[href="#toggle-thumbs"].active        { background-position: 0 -1408px; }
 a[href="#toggle-thumbs"].active:hover  { background-position: 0 -1472px; }
@@ -269,11 +315,11 @@ a[href="#to-front"]:active          { background-position: 0 -2688px; }
    They may even deserve their own list class */
 
 a[href="#left-panel-toggle"].active,
-a[href="#right-panel-toggle"]                   { background-position: 0 0; background-color: transparent; }
+a[href="#right-panel-toggle"]                  { background-position: 0 0; background-color: transparent; }
 a[href="#left-panel-toggle"].active:hover,
-a[href="#right-panel-toggle"]:hover             { background-position: 0 -64px; background-color: transparent;}
+a[href="#right-panel-toggle"]:hover            { background-position: 0 -64px; background-color: transparent;}
 a[href="#left-panel-toggle"].active:active,
-a[href="#right-panel-toggle"]:active            { background-position: 0 -128px; background-color: transparent;}
+a[href="#right-panel-toggle"]:active           { background-position: 0 -128px; background-color: transparent;}
 
 a[href="#left-panel-toggle"],
 a[href="#right-panel-toggle"].active           { background-position: 0 -192px; background-color: transparent;}
@@ -282,41 +328,56 @@ a[href="#right-panel-toggle"].active:hover     { background-position: 0 -256px; 
 a[href="#left-panel-toggle"]:active,
 a[href="#right-panel-toggle"].active:active    { background-position: 0 -320px; background-color: transparent;}
 
-a[href="#item-inspector"]           { background-position: 0 -384px; }
-a[href="#item-inspector"]:hover     { background-position: 0 -448px; }
-a[href="#item-inspector"]:active    { background-position: 0 -512px; }
-a[href="#item-inspector"].current   { background-position: 0 -576px; }
+a[href="#item-inspector"]             { background-position: 0 -384px; }
+a[href="#item-inspector"]:hover       { background-position: 0 -448px; }
+a[href="#item-inspector"]:active      { background-position: 0 -512px; }
+a[href="#item-inspector"].current     { background-position: 0 -576px; }
 
-a[href="#library"]                  { background-position: 0 -640px; }
-a[href="#library"]:hover            { background-position: 0 -704px; }
-a[href="#library"]:active           { background-position: 0 -768px; }
-a[href="#library"].current          { background-position: 0 -832px; }
+a[href="#library"]                    { background-position: 0 -640px; }
+a[href="#library"]:hover              { background-position: 0 -704px; }
+a[href="#library"]:active             { background-position: 0 -768px; }
+a[href="#library"].current            { background-position: 0 -832px; }
 
-a[href="#pages-browser"]            { background-position: 0 -896px; }
-a[href="#pages-browser"]:hover      { background-position: 0 -960px; }
-a[href="#pages-browser"]:active     { background-position: 0 -1024px; }
-a[href="#pages-browser"].current    { background-position: 0 -1088px; }
+a[href="#pages-browser"]              { background-position: 0 -896px; }
+a[href="#pages-browser"]:hover        { background-position: 0 -960px; }
+a[href="#pages-browser"]:active       { background-position: 0 -1024px; }
+a[href="#pages-browser"].current      { background-position: 0 -1088px; }
 
-a[href="#page-inspector"]           { background-position: 0 -1152px; }
-a[href="#page-inspector"]:hover     { background-position: 0 -1216px; }
-a[href="#page-inspector"]:active    { background-position: 0 -1280px; }
-a[href="#page-inspector"].current   { background-position: 0 -1344px; }
+a[href="#page-inspector"]             { background-position: 0 -1152px; }
+a[href="#page-inspector"]:hover       { background-position: 0 -1216px; }
+a[href="#page-inspector"]:active      { background-position: 0 -1280px; }
+a[href="#page-inspector"].current     { background-position: 0 -1344px; }
 
 a[href="#document-inspector"]         { background-position: 0 -1408px; }
 a[href="#document-inspector"]:hover   { background-position: 0 -1472px; }
 a[href="#document-inspector"]:active  { background-position: 0 -1536px; }
 a[href="#document-inspector"].current { background-position: 0 -1600px; }
 
-a[href="#hide-thumbs"]              { background-position: -4px -1668px; }
-a[href="#hide-thumbs"]:hover        { background-position: -4px -1732px; }
-a[href="#hide-thumbs"].current      { background-position: -4px -1796px; }
+a[href="#hide-thumbs"]                { background-position: -4px -1668px; }
+a[href="#hide-thumbs"]:hover          { background-position: -4px -1732px; }
+a[href="#hide-thumbs"].current        { background-position: -4px -1796px; }
 
-a[href="#show-thumbs"]              { background-position: -4px -1860px; }
-a[href="#show-thumbs"]:hover        { background-position: -4px -1924px; }
-a[href="#show-thumbs"].current      { background-position: -4px -1988px; }
+a[href="#show-thumbs"]                { background-position: -4px -1860px; }
+a[href="#show-thumbs"]:hover          { background-position: -4px -1924px; }
+a[href="#show-thumbs"].current        { background-position: -4px -1988px; }
 
-a[href="#prev-page"]                { background-position: 0 -2051px; }
-a[href="#prev-page"]:hover          { background-position: 0 -2115px; }
+a[href="#prev-page"]                  { background-position: 0 -2051px; }
+a[href="#prev-page"]:hover            { background-position: 0 -2115px; }
+a[href="#prev-page"]:active           { background-position: 0 -2179px; }
 
-a[href="#next-page"]                { background-position: 0 -2173px; }
-a[href="#next-page"]:hover          { background-position: 0 -2237px; }
+a[href="#next-page"]                  { background-position: 0 -2237px; }
+a[href="#next-page"]:hover            { background-position: 0 -2301px; }
+a[href="#next-page"]:active           { background-position: 0 -2365px; }
+
+
+.mode-tools a { background-image: url('/images/mode-tools.png'); }
+
+a[href="#mode-preview"]               { background-position: 0 0px; }
+a[href="#mode-preview"]:hover         { background-position: 0 -64px; }
+a[href="#mode-preview"]:active        { background-position: 0 -128px; }
+a[href="#mode-preview"].current       { background-position: 0 -192px; }
+
+a[href="#mode-edit"]                  { background-position: 0 -256px; }
+a[href="#mode-edit"]:hover            { background-position: 0 -320px; }
+a[href="#mode-edit"]:active           { background-position: 0 -384px; }
+a[href="#mode-edit"].current          { background-position: 0 -448px; }
