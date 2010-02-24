@@ -12,8 +12,8 @@ class AddPlubicBooleanToDocuments < ActiveRecord::Migration
       end
     end
     global_user = User.find_by_username("all")
-    global_user.has_no_roles!
-    global_user.destroy
+    global_user.has_no_roles! if global_user
+    global_user.destroy if global_user
   end
   
   def self.down

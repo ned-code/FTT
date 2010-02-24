@@ -684,7 +684,6 @@ WebDoc.BoardController = $.klass({
     if (el.is('input') || el.is('textarea')) { 
       return;
     }
-    ddd("key press", e);
     switch (e.keyCode) {
       case 37:
         if (!this._isInteraction) {

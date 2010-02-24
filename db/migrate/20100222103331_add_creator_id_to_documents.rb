@@ -5,11 +5,12 @@ class AddCreatorIdToDocuments < ActiveRecord::Migration
     Document.all.each do |document|
       begin
         if role = document.accepted_roles.first(:conditions => { :name => 'owner' })
-          document.creator = role.users.first(:order => :created_at)
+          # JBA do not add condition to sort by createion date because it fails on ysql
+          document.creator = role.users.first
           document.save
         end
-      rescue
-        puts "Error adding creator to document #{document.id} - #{document.title}"
+      rescue => e
+        puts "Error adding creator to document #{document.id} - #{document.title} - #{e}"
       end
     end
   end
