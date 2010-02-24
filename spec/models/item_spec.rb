@@ -6,8 +6,13 @@ describe Item do
   
   should_belong_to :page
   should_belong_to :media
+  
+  describe "default" do
+    subject { Factory(:item) }
+    
+    its(:must_notify) { should be_false }
+  end
 end
-
 
 
 # == Schema Information

@@ -4,10 +4,12 @@ ActionController::Routing::Routes.draw do |map|
   
   map.root :controller => 'home', :action => :show
   
-  map.resources :documents, :has_many => { :pages => :items }, :member => { :change_user_access => :put, :user_access => :get}
+  map.resources :documents, :has_many => { :pages => :items }, :member => { :change_user_access => :put, :user_access => :get} do |m|
+    m.resource :accesses, :only => [:show, :create, :update]
+  end
   
   map.resources :datastores, :only => [:show] do |datastore|
-      datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
+    datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
   end
   
   map.devise_for :users

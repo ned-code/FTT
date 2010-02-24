@@ -12,13 +12,12 @@ describe Page do
     
     it "should be 0 when created from new document" do
       document = Factory(:document)
-      page = document.pages.create
+      page = document.pages.first
       page.position.should == 0
     end
     
     it "should be 1 when created from a document with already a page" do
       document = Factory(:document)
-      document.pages.create
       page = document.pages.create
       page.position.should == 1
     end
@@ -37,7 +36,7 @@ describe Page do
   describe 'collection nagivation' do
     before(:each) do
       @document = Factory(:document)
-      @page0 = @document.pages.create
+      @page0 = @document.pages.first
       @page1 = @document.pages.create
     end
     it { @page0.previous.should be_nil }

@@ -9,25 +9,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100218092413) do
+ActiveRecord::Schema.define(:version => 20100224095638) do
 
   create_table "categories", :force => true do |t|
     t.string "name", :null => false
   end
 
   create_table "datastore_entries", :force => true do |t|
-    t.string   "ds_key",                          :null => false
-    t.text     "ds_value",    :limit => 16777215, :null => false
-    t.string   "widget_uuid", :limit => 36
-    t.string   "user_id",     :limit => 36
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "datastores", :force => true do |t|
-    t.string   "ds_key",                          :null => false
-    t.text     "ds_value",    :limit => 16777215, :null => false
-    t.string   "widget_uuid", :limit => 36
+    t.string   "ds_key",                       :null => false
+    t.text     "ds_value",    :limit => 65537, :null => false
+    t.text     "widget_uuid"
     t.string   "user_id",     :limit => 36
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -42,14 +33,16 @@ ActiveRecord::Schema.define(:version => 20100218092413) do
     t.text     "description"
     t.text     "size"
     t.integer  "category_id"
+    t.integer  "creator_id"
+    t.boolean  "public",                    :default => false
   end
 
   create_table "items", :force => true do |t|
     t.string   "uuid",       :limit => 36
-    t.integer  "page_id"
+    t.integer  "page_id",                     :null => false
     t.integer  "media_id"
     t.string   "media_type"
-    t.text     "data",       :limit => 16777215
+    t.text     "data",       :limit => 65537
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position"
@@ -62,7 +55,7 @@ ActiveRecord::Schema.define(:version => 20100218092413) do
     t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "properties",  :limit => 16777215
+    t.text     "properties",  :limit => 65537
     t.integer  "user_id"
     t.string   "file"
     t.string   "system_name"
@@ -75,14 +68,14 @@ ActiveRecord::Schema.define(:version => 20100218092413) do
 
   create_table "pages", :force => true do |t|
     t.string   "uuid",         :limit => 36
-    t.integer  "document_id"
+    t.integer  "document_id",                                            :null => false
     t.integer  "thumbnail_id"
-    t.integer  "position",                                                  :null => false
-    t.integer  "version",                          :default => 1,           :null => false
-    t.text     "data",         :limit => 16777215
+    t.integer  "position",                                               :null => false
+    t.integer  "version",                       :default => 1,           :null => false
+    t.text     "data",         :limit => 65537
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",                            :default => "undefined"
+    t.string   "title",                         :default => "undefined"
   end
 
   add_index "pages", ["document_id"], :name => "index_pages_on_document_id"

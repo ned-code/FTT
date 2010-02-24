@@ -81,8 +81,33 @@
 
 #wb-change-access-dialog{ :style => "display:none",:title => t('.document_forms.change_access_document') }
   #document_access-header
-    %button#add_access.ui-button.ui-state-default.ui-corner-all= t('.document_forms.buttons.add_access')
-  %ul#document_access_list
+    -#%button#add_access.ui-button.ui-state-default.ui-corner-all= t('.document_forms.buttons.add_access')
+  #wb-document-access-tabs
+    %ul
+      %li
+        %a{ :href => "#wb-invitation-tab"}
+          Invite people
+      %li
+        %a{ :href => "#wb-access-list"}
+          Who has access
+    #wb-invitation-tab
+      %label Add editors
+      %br
+      %textarea#wb-invitation-add-editors{ :rows => 3, :cols => 20}
+      %br
+      %label Your message
+      %br
+      %textarea#wb-invitation-add-editors-message{ :rows => 3, :cols => 20}
+      %hr
+      %label Add viewers
+      %br
+      %textarea#wb-invitation-add-viewers{ :rows => 3, :cols => 20}
+      %br
+      %label Your message
+      %br
+      %textarea#wb-invitation-add-viewers-message{ :rows => 3, :cols => 20}
+    #wb-access-list
+      %ul#document_access_list
 
 :javascript
     var WebDoc;
