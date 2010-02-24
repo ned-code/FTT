@@ -152,11 +152,8 @@ WebDoc.ItemView = $.klass({
       this.domNode.addClass("item_selected");
       this._initDragAndResize();      
       if (lastSelectedObjectMouseDownEvent) {
-        // board must ignore this event. It is just for draggable elemnt
-        lastSelectedObjectMouseDownEvent.boardIgnore = true;
         this.domNode.trigger(lastSelectedObjectMouseDownEvent);
-      }
-      
+      }      
       
     }
   },

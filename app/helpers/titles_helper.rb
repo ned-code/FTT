@@ -7,5 +7,5 @@ module TitlesHelper
   end
   def external_box_title(str)
     content_for :external_box_title, str
-  end  
+  end
 end
