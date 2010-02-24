@@ -17,9 +17,13 @@ config.action_controller.perform_caching             = false
 # Don't care if the mailer can't send
 config.action_mailer.raise_delivery_errors = false
 
-config.gem 'sqlite3-ruby', :lib => "sqlite3"
+# config.gem 'sqlite3-ruby', :lib => "sqlite3"
+
+# Devise
+config.action_mailer.default_url_options = { :host => 'webdoc.local' }
 
 # http://github.com/ddollar/rack-debug
-#config.middleware.use "Rack::Debug"
 
-#config.gem 'ruby-debug'
+# config.gem 'ruby-debug'
+# config.gem 'rack-debug'
+# config.middleware.use 'Rack::Debug'

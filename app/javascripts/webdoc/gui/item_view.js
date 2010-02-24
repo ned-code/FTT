@@ -104,6 +104,7 @@ WebDoc.ItemView = $.klass({
       width: this.item.data.data.css.width,
       height: this.item.data.data.css.height
     };
+    this.domNode.stop();
     this.domNode.animate(position, 'fast');
     if (this.itemDomNode) {
       var itemCss = {};
@@ -151,11 +152,8 @@ WebDoc.ItemView = $.klass({
       this.domNode.addClass("item_selected");
       this._initDragAndResize();      
       if (lastSelectedObjectMouseDownEvent) {
-        // board must ignore this event. It is just for draggable elemnt
-        lastSelectedObjectMouseDownEvent.boardIgnore = true;
         this.domNode.trigger(lastSelectedObjectMouseDownEvent);
-      }
-      
+      }      
       
     }
   },

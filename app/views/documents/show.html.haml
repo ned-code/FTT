@@ -22,16 +22,16 @@
 
 :javascript
   
-  var WebDoc;
-  if (!WebDoc) {
-    WebDoc = {};
-  }
-  WebDoc.authData = {
-    authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
-    sessionKeyName:"#{session_key_name}",
-    cookiesSessionKeyName:"#{cookies[session_key_name]}"
-  };
-  WebDoc.run = function() {
-    var editor = new WebDoc.PageEditor(#{@is_reader?'false':'true'});
-    editor.load("#{@document.uuid}");
-  }
+    var WebDoc;
+    if (!WebDoc) {
+      WebDoc = {};
+    }
+    WebDoc.authData = {
+      authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
+      sessionKeyName:"#{session_key_name}",
+      cookiesSessionKeyName:"#{cookies[session_key_name]}"
+    };
+    WebDoc.run = function() {
+      var editor = new WebDoc.PageEditor(#{params[:reader]?'false':'true'});
+      editor.load("#{@document.uuid}");
+    } 

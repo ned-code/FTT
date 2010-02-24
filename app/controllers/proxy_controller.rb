@@ -1,5 +1,5 @@
 class ProxyController < ApplicationController
-  before_filter :login_required
+  before_filter :authenticate_user!
   
   # GET proxy/resolve
   def resolve

@@ -1,13 +1,24 @@
 %h1=t '.title'
 
-= error_messages_for :user
-- form_for @user do |f|
-  
-  = render :partial => 'form', :locals => { :f => f }
+- semantic_form_for @user, :html => { :multipart => true} do |f|
+  - f.inputs do
+    %p
+      = f.label :avatar
+      = image_tag(@user.avatar.url(:thumb)) if @user.avatar? && !@user.errors.on(:avatar)
+      = f.input :avatar, :as => :file, :label => false
+      = f.hidden_field :avatar_cache
+      = f.input :remove_avatar, :as => :boolean, :label => "remove avatar"
+    = f.input :first_name
+    = f.input :last_name
+    = f.input :username
+    = f.input :bio
+    = f.input :website
+    = f.input :gender, :as => :select, :collection => [["N/A",nil],["Female",'female'],["Male",'male']], :include_blank => false
+    
+  - f.buttons do
+    = f.commit_button
 
-  %div
-    = f.submit t('.button')
-
-= link_to t('show'), @user 
-|
-= link_to t('back'), :back
+%ul
+  %li= link_to "edit email & password", edit_registration_path(:user)
+  %li= link_to t('show'), @user 
+  %li= link_to t('back'), :back

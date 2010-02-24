@@ -5,7 +5,7 @@
     %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
     %title= "webdoc - alpha - #{yield(:title)}"
     = stylesheet_link_tag 'reset'
-    = stylesheet_link_tag 'jquery-ui-1.7.2.custom'       
+    = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
     = stylesheet_link_tag 'library'
     = stylesheet_link_tag 'lib/protect'
     = stylesheet_link_tag 'lib/states'
@@ -41,18 +41,16 @@
     = stylesheet_link_tag 'colorpicker'
     = stylesheet_link_tag 'toolbar'
     
-    %link{ :rel => "stylesheet", :href => "/themes/#{THEME}/css/typography.css", :type => "text/css", :charset => "utf-8" }
-    %script{ :src => "/themes/#{THEME}/js/script.js", :type => "text/javascript" }
-    
-  -if (@is_reader)  
-    %body.editor.mode-embed
+  -if params[:reader]
+    %body.editor.embed-mode
   -else
-    %body.editor.mode-edit
-  = yield
-  = javascript_include_tag 'jquery'
+    %body.editor.edit-mode
+  #wrap
+    = yield
+  = javascript_include_tag 'jquery-1.4.2'
   = javascript_include_tag 'jquery-json'
   = javascript_include_tag 'jquery-string'
-  = javascript_include_tag 'jquery-ui'
+  = javascript_include_tag 'jquery-ui-1.8'
   = javascript_include_tag 'colorpicker'
   
   = javascript_include_tag 'jquery.extensions'
@@ -73,6 +71,6 @@
     $(function()
     {
       WebDoc.run();
-    });    
+    });
   
   = render :partial => "layouts/googleAnalytics"

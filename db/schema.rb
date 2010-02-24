@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100218092413) do
+ActiveRecord::Schema.define(:version => 20100224095638) do
 
   create_table "categories", :force => true do |t|
     t.string "name", :null => false
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(:version => 20100218092413) do
     t.text     "description"
     t.text     "size"
     t.integer  "category_id"
+    t.integer  "creator_id"
+    t.boolean  "public",                    :default => false
   end
 
   create_table "items", :force => true do |t|
@@ -103,20 +105,38 @@ ActiveRecord::Schema.define(:version => 20100218092413) do
   add_index "roles_users", ["user_id"], :name => "index_roles_users_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                              :null => false
-    t.string   "name",                               :null => false
-    t.string   "crypted_password",                   :null => false
-    t.string   "password_salt",                      :null => false
-    t.string   "persistence_token",                  :null => false
-    t.string   "single_access_token",                :null => false
-    t.string   "perishable_token",                   :null => false
-    t.integer  "login_count",         :default => 0, :null => false
-    t.integer  "failed_login_count",  :default => 0, :null => false
-    t.datetime "last_request_at"
-    t.datetime "current_login_at"
-    t.datetime "last_login_at"
-    t.string   "current_login_ip"
-    t.string   "last_login_ip"
+    t.string   "email",                                             :null => false
+    t.string   "username",                                          :null => false
+    t.string   "encrypted_password",                                :null => false
+    t.string   "password_salt",                                     :null => false
+    t.string   "confirmation_token",   :limit => 20
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "reset_password_token", :limit => 20
+    t.string   "remember_token",       :limit => 20
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count"
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.integer  "failed_attempts",                    :default => 0
+    t.string   "unlock_token",         :limit => 20
+    t.datetime "locked_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "avatar"
+    t.text     "bio"
+    t.string   "gender"
+    t.string   "website"
   end
+
+  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  add_index "users", ["unlock_token"], :name => "index_users_on_unlock_token", :unique => true
+  add_index "users", ["username"], :name => "index_users_on_username"
 
 end

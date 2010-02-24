@@ -1,5 +1,4 @@
-class Admin::CategoriesController < ApplicationController
-  before_filter :admin_required
+class Admin::CategoriesController < Admin::AdminController
   
   # GET /admin/categories
   def index
@@ -54,13 +53,6 @@ class Admin::CategoriesController < ApplicationController
     
     flash[:notice] = t('flash.notice.category.destroyed_successful')
     redirect_to admin_categories_path
-  end
-  
-  
-protected
-
-  def admin_required
-    (current_user.present? && current_user.has_role?("admin")) || access_denied
   end
   
 end

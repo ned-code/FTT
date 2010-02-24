@@ -31,6 +31,7 @@ WebDoc.BoardController = $.klass({
     this._currentPage = null;
     this._currentPageView = null;
     this._isInteraction = false;
+    this._isMovingSelection = false;
     
     // used to keep track of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
     // we resize manually the div and we need to know what was the original size to define the new size.
@@ -77,7 +78,9 @@ WebDoc.BoardController = $.klass({
         board = pageView.domNode;
     
     $("#board").unbind();
-    $(document).unbind("keydown");
+    $(document).unbind("keydown", this._keyDown);
+    $(document).unbind("keypress", this._keyPress);
+    $(document).unbind("keyup", this._keyUp);
     
     // Set properties
     if (this._currentPageView) {
@@ -97,7 +100,9 @@ WebDoc.BoardController = $.klass({
     this._fireSelectionChanged();
     this._bindMouseEvent();
     
-    $(document).bind("keydown", this, this._keyDown.pBind(this));
+    $(document).bind("keypress", this, jQuery.proxy(this, "_keyPress"));
+    $(document).bind("keydown", this, jQuery.proxy(this, "_keyDown"));
+    $(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));    
     
     this.zoom(1);
     this.setMode(this._isInteraction || !this._editable);
@@ -353,6 +358,37 @@ WebDoc.BoardController = $.klass({
     }
   },
   
+  moveSelection: function(direction, scale) {
+    var max = this._selection.length;
+    var offsetSize = scale == "big"? 15 : 1;
+    for (var i = 0; i < max; i++) {
+      var item = this._selection[i].item;
+      var offset = { top: 0, left: 0};
+      switch (direction) {
+        case "left":
+          offset.left -= offsetSize;
+          break;
+        case "right":
+          offset.left += offsetSize;
+          break;
+        case "up":
+          offset.top -= offsetSize;
+          break;
+        case "down":
+          offset.top += offsetSize;
+          break;                              
+      }
+      if (!this._isMovingSelection) {
+        var currentPosition = {top: item.data.data.css.top, left: item.data.data.css.left};
+        WebDoc.application.undoManager.registerUndo(function() {
+          WebDoc.ItemView._restorePosition(item, currentPosition);
+        });
+      }      
+      item.shiftBy(offset);      
+    }
+    this._isMovingSelection = true;
+  },
+  
   unselectAll: function() {
     ddd("unselect all. selection size " + this._selection.length);
     this.selectItemViews([]);
@@ -587,15 +623,15 @@ WebDoc.BoardController = $.klass({
   // Private methods
     
   _mouseDown: function(e) {
-    $(document).unbind("mousemove").unbind("mouseup");
+    $(document).unbind("mousemove", this._mouseMove).unbind("mouseup", this._mouseUp);
     if (window.document.activeElement) {
       window.document.activeElement.blur();
     }
-    if (!e.boardIgnore) {
-      $(document).bind("mousemove", this, this._mouseMove.pBind(this));
-      $(document).bind("mouseup", this, this._mouseUp.pBind(this));
-      this.currentTool.mouseDown(e);
-    }
+
+    $(document).bind("mousemove", this, jQuery.proxy(this, "_mouseMove"));
+    $(document).bind("mouseup", this, jQuery.proxy(this, "_mouseUp"));
+    this.currentTool.mouseDown(e);
+
   },
   
   _mouseMove: function(e) {
@@ -606,13 +642,66 @@ WebDoc.BoardController = $.klass({
   },
   
   _mouseUp: function(e) {
-    $(document).unbind("mousemove");
-    $(document).unbind("mouseup");
+    $(document).unbind("mousemove", this._mouseMove).unbind("mouseup", this._mouseUp);
     this.currentTool.mouseUp(e);
   },
   
   _mouseClick: function(e) {
     this.currentTool.mouseClick(e);
+  },
+ 
+  
+  _keyUp: function(e) {
+   var el = $(e.target);
+    if (el.is('input') || el.is('textarea')) { 
+      return;
+    }
+    switch (e.keyCode) {
+      case 37:
+      case 38:       
+      case 39:
+      case 40:
+        this._isMovingSelection = false;
+        for (var i = 0; i < this._selection.length; i++) {
+          this._selection[i].item.save();
+        }
+        break;
+    }        
+  },
+  
+  
+  _keyPress: function(e) {
+    var el = $(e.target);
+    if (el.is('input') || el.is('textarea')) { 
+      return;
+    }
+    ddd("key press", e);
+    switch (e.keyCode) {
+      case 37:
+        if (!this._isInteraction) {
+          this.moveSelection("left", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;
+      case 38:
+        if (!this._isInteraction) {
+          this.moveSelection("up", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;          
+      case 39:
+        if (!this._isInteraction) {
+          this.moveSelection("right", e.shiftKey?"big" : "small");            
+        }        
+        e.preventDefault();           
+        break;
+      case 40:
+        if (!this._isInteraction) {
+          this.moveSelection("down", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;          
+    }    
   },
   
   _keyDown: function(e) {
@@ -640,18 +729,38 @@ WebDoc.BoardController = $.klass({
           break;
         case 65:
           this.setCurrentTool(WebDoc.application.arrowTool);
-          break;
-        case 37:
-          if (this._isInteraction) {
-           WebDoc.application.pageEditor.prevPage(); 
-          }
-          break;
-        case 39:
-          if (this._isInteraction) {
-           WebDoc.application.pageEditor.nextPage(); 
-          }        
-          break;
-      }
+          break;  
+     case 37:
+        if (this._isInteraction) {
+          WebDoc.application.pageEditor.prevPage(); 
+        }
+        else {
+          this.moveSelection("left", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;
+      case 38:
+        if (!this._isInteraction) {
+          this.moveSelection("up", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;          
+      case 39:
+        if (this._isInteraction) {
+          WebDoc.application.pageEditor.nextPage();
+        }
+        else {
+          this.moveSelection("right", e.shiftKey?"big" : "small");            
+        }        
+        e.preventDefault();           
+        break;
+      case 40:
+        if (!this._isInteraction) {
+          this.moveSelection("down", e.shiftKey?"big" : "small");
+        }
+        e.preventDefault();          
+        break;                       
+      }      
     }
     else {
       switch (e.which) {

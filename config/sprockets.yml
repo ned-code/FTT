@@ -3,5 +3,7 @@
   - app/javascripts
   - vendor/sprockets/*/src
   - vendor/plugins/*/javascripts
+  - vendor/plugins/*/app/javascripts
 :source_files:
-  - app/javascripts/webdoc.js
+  - app/javascripts/application.js
+  - app/javascripts/**/*.js

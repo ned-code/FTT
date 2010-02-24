@@ -1,6 +1,5 @@
-class Admin::WidgetsController < ApplicationController
-  before_filter :admin_required
-  
+class Admin::WidgetsController < Admin::AdminController
+
   # GET /admin/apps
   def index
     @widgets = Medias::Widget.all
@@ -57,10 +56,5 @@ class Admin::WidgetsController < ApplicationController
     flash[:notice] = t('flash.notice.widget.destroyed_successful')
     redirect_to admin_widgets_path
   end
-  
-protected
-  
-  def admin_required
-    (current_user.present? && current_user.has_role?("admin")) || access_denied
-  end
+
 end

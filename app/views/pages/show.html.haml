@@ -1,0 +1,8 @@
+- document_title @document.title
+- page_title @page.title
+#board_container
+  #board
+    - @page.items.each do |item|
+      - if item.media_type != "drawing"
+        = item.to_html
+    

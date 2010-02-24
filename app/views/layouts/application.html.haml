@@ -7,23 +7,25 @@
     = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
     = stylesheet_link_tag 'style'
     = stylesheet_link_tag 'style.application'
-
+    = stylesheet_link_tag "formtastic"
+    = stylesheet_link_tag "formtastic_changes"
+    
   %body
     #wrap
       = render :partial => "layouts/main_toolbar"    
       = yield
-    = javascript_include_tag 'jquery'      
-    = javascript_include_tag 'jquery-json'
-    = javascript_include_tag 'jquery-string'
-    = javascript_include_tag 'jquery-ui-1.7'
-    = javascript_include_tag 'jquery.extensions'
-    =# javascript_include_tag 'jquery.panel'    
-    = javascript_include_tag 'klass'
-    = javascript_include_tag 'jquery.form'
-    = sprockets_include_tag      
-    :javascript      
-      $(function()
-      {
-        WebDoc.run();
-      });        
+    -#= javascript_include_tag 'jquery'      
+    -#= javascript_include_tag 'jquery-json'
+    -#= javascript_include_tag 'jquery-string'
+    -#= javascript_include_tag 'jquery-ui-1.7'
+    -#= javascript_include_tag 'jquery.extensions'
+    -#=# javascript_include_tag 'jquery.panel'    
+    -#= javascript_include_tag 'klass'
+    -#= javascript_include_tag 'jquery.form'
+    -#= sprockets_include_tag      
+    -#:javascript      
+    -#  $(function()
+    -#  {
+    -#    WebDoc.run();
+    -#  });        
     = render :partial => "layouts/googleAnalytics"

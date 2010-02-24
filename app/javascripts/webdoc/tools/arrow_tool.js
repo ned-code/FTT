@@ -5,9 +5,6 @@
 //= require "tool"
 
 WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
-  moving: false,
-  hasMoved: false,
-  originalMovingPos: null,
   
   initialize: function($super, selector, boardClass) {
     $super( selector, boardClass );
@@ -23,7 +20,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
     var objectToSelect = this._clickedItemView(e);
 
     this.lastSelectedObject = {
-      itemView: objectToSelect,
+      itemView: objectToSelect, // JBA: no more USED
       event: e
     };      
     if (!(objectToSelect && WebDoc.application.boardController.editingItem() == objectToSelect)) {
@@ -52,11 +49,6 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
       ddd("mouse down on target", e.target);
       if (!target || target.length === 0 || !target.hasClass("drawing_handle")) {
         this.select(e);
-        this.originalMovingPos = {
-          x: e.screenX,
-          y: e.screenY,
-          firstMove: true
-        };
       }
     }
   },
