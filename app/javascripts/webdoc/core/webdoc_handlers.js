@@ -10,7 +10,7 @@ WebDoc.handlers = {
   'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggle(); },
   'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggleRightBar(); },
   
-  'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggleBrowser(); },
+  'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggle(); },
   'library':              function(e) { WebDoc.application.rightBarController.showLib(e); },
   'item-inspector':       function(e) { WebDoc.application.rightBarController.showItemInspector(e); },
   'page-inspector':       function(e) { WebDoc.application.rightBarController.showPageInspector(e); },

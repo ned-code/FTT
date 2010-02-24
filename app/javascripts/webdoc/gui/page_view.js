@@ -37,73 +37,41 @@ WebDoc.PageView = $.klass({
     
     if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
       // Handle case where page is an external webpage
-      // TODO: change this to use CSS classes
-
-      externalPage = $("<iframe/>");
+      
+      externalPage = $("<iframe/>").addClass('layer');
       
       if (page.data.data.externalPageUrl) {
-        if (page.data.data.allowAnnotation) {
-          externalPage.attr("src", "http:\/\/" + document.domain + ":" + window.location.port + "/proxy/resolve?url=" + page.data.data.externalPageUrl);
-          //boardContainer.css("overflow", "auto");
-          externalPage.css("overflow", "hidden");
-          if (page.data.data.css.width) {
-            
-            //this.domNode.css(page.data.data.css);
-            
-            WebDoc.application.boardController.boardContainerNode
-            .css(page.data.data.css);
-          
-          }
-          else {
-            externalPage.bind("load", function() {
-              page.data.data.css.width = externalPage[0].contentDocument.width;
-              page.data.data.css.height = externalPage[0].contentDocument.height;
-              page.save();
-              //this.domNode.css(page.data.data.css);
-              
-              WebDoc.application.boardController.boardContainerNode
-              .css(page.data.data.css);
-            
-            }.pBind(this));
-          }          
+        externalPage.attr("src", page.data.data.externalPageUrl);
+        
+        if (page.data.data.css.width) {
+          boardContainer.css(page.data.data.css);
         }
         else {
-          externalPage.attr("src", page.data.data.externalPageUrl);
-          //boardContainer.css("overflow", "hidden");
-          externalPage.css("overflow", "auto");
-          //if (page.data.data.css.width) {
-          //  this.domNode.css(page.data.data.css);
-          //}
-          //else {
-          //  externalPage.bind("load", function() {
-          //    page.data.data.css.width = externalPage[0].contentDocument.width;
-          //    page.data.data.css.height = externalPage[0].contentDocument.height;
-          //    page.save();
-          //    this.domNode.css(page.data.data.css);
-          //  }.pBind(this));
-          //}
+          externalPage.bind("load", function() {
+            page.data.data.css.width = externalPage[0].contentDocument.width;
+            page.data.data.css.height = externalPage[0].contentDocument.height;
+            page.save();
+            boardContainer.css(page.data.data.css);
+          }.pBind(this));
         }
+        
         this.itemDomNode.append(externalPage[0]);
-      }      
+      }
     }
     else {
         // Handle case where page is a webdoc
         ddd('Page is a webdoc page');
     }
-    //if (this.domNode.css("width").indexOf("%") !== -1 || this.domNode.css("height").indexOf("%") !== -1) {
-    //  this.domNode.css({
-    //    position: "absolute",
-    //    top: "0px",
-    //    left: "0px"
-    //  });
-    //}
+    
     this.domNode.append( itemDomNode );
     this.domNode.append( eventCatcherNode );
+    
     if (page.items && $.isArray(page.items)) {
         $.each(page.items, function() {
             that.createItemView(this, "end");
         });
     }
+    
     page.addListener(this);
   },
   

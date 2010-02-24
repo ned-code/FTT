@@ -64,14 +64,14 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
     WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
-
+    
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
     WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
     WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
     WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
     WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
-
+    
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
     
@@ -81,7 +81,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     
     $(window).bind("hashchange", this._urlHashChanged.pBind(this));
   },
-  
 
   load: function(documentId) {
     ddd("[PageEditor] load " + documentId);
