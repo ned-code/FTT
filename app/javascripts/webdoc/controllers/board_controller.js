@@ -132,6 +132,7 @@ WebDoc.BoardController = $.klass({
     .filter("[href='#mode-edit']")
     .addClass("current");
     
+    WebDoc.application.pageBrowserController.reveal();
     WebDoc.application.rightBarController.revealRightBar();
     
     this._isInteraction = false;
@@ -157,6 +158,7 @@ WebDoc.BoardController = $.klass({
     .filter("[href='#mode-preview']")
     .addClass("current");
     
+    WebDoc.application.pageBrowserController.conceal();
     WebDoc.application.rightBarController.concealRightBar();
     
     this._isInteraction = true;

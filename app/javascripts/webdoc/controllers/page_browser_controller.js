@@ -356,23 +356,23 @@ WebDoc.PageBrowserController = $.klass({
     return false;
   },
   
-  showBrowser: function() {
+  show: function() {
     this.visible = (this.visible) ? this.visible : this._show() ;
   },
   
-  hideBrowser: function() {
+  hide: function() {
     this.visible = (this.visible) ? this._hide() : this.visible ;
   },
   
-  toggleBrowser: function() {
+  toggle: function() {
     this.visible = (this.visible) ? this._hide() : this._show() ;
   },
   
-  concealBrowser: function() {
+  conceal: function() {
     return this._hide( 36 );
   },
   
-  revealBrowser: function() {
+  reveal: function() {
     return (this.visible) ? this._show() : this._hide() ;
   },
   

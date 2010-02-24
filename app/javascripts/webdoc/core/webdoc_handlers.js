@@ -7,7 +7,7 @@
 
 WebDoc.handlers = {
   
-  'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggleBrowser(); },
+  'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggle(); },
   'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggleRightBar(); },
   
   'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggleBrowser(); },
