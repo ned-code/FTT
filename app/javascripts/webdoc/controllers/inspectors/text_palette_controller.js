@@ -98,7 +98,7 @@ WebDoc.TextPaletteController = $.klass({
         '</div>'+
         '<div style="clear: both;"></div>'+
     '</div>';
-    containerObj.innerHTML = toolbarContent;
+    //containerObj.innerHTML = toolbarContent;
     
     $('#toolbar_panel_button_valign').bind('click', function(e){
       var pos = $("#toolbar_panel_button_valign").position();  

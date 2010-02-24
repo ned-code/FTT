@@ -669,11 +669,7 @@ ul#widget-list li {
   height:300px;
 }
 /* == inner HTML inspector */
-#html_inspector {
-  padding-left:0px !important;
-  padding-right:0px !important;
-  height:500px;
-}
+
 #selected-item-html-editor {
   width:90%;
   height:400px;

@@ -1,4 +1,3 @@
-
 //= require <mtools/record>
 //= require <webdoc/model/item>
 
@@ -33,6 +32,9 @@ WebDoc.PageView = $.klass({
     else {
         boardContainer
         .css( page.data.data.css );
+        
+        ddd( 'HEEEEEEEYYYYYYYY!!!!!!!!!' );
+        ddd( page.data.data.css );
     }
     
     if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
@@ -59,8 +61,8 @@ WebDoc.PageView = $.klass({
       }
     }
     else {
-        // Handle case where page is a webdoc
-        ddd('Page is a webdoc page');
+      // Handle case where page is a webdoc
+      ddd('Page is a webdoc page');
     }
     
     this.domNode.append( itemDomNode );

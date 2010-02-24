@@ -1,0 +1,18 @@
+%div.inspector
+  %div.head
+    %div
+      %h2= t('.title')
+    
+  %div.content
+    %div
+      %label= t('.name')
+      %br
+      %input#document-title{ :type => "text", :value => t('.default_name') }
+    %div
+      %label= t('.description') 
+      %br
+      %textarea#document-description{ :rows => "5"}
+    %div
+      %label= t('.category')
+      %br
+      %select#document-category

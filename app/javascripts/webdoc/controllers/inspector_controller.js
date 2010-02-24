@@ -20,9 +20,11 @@ WebDoc.InspectorController = $.klass({
     
     var emptyPalette = $("#palette_empty").hide();
     var textPalette = $("#palette_text").hide();
-    var penPelette = $("#palette_pen").hide();
-    var imagePelette = $("#palette_image").hide();
-    var htmlSnippetPalette = $("#html_inspector").hide();
+    var penPelette = $("#draw-inspector").hide();
+    var imagePelette = $("#image-inspector").hide();
+    var htmlSnippetPalette;
+    var htmlInspector = htmlSnippetPalette = $("#html-inspector").hide();
+    
     this.imagePaletteController = new WebDoc.ImagePaletteController();
     this.textPaletteController = new WebDoc.TextPaletteController();
     this.innerHtmlController = new WebDoc.InnerHtmlController();
@@ -55,7 +57,6 @@ WebDoc.InspectorController = $.klass({
     
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
-    var htmlInspector = $("#html_inspector"); 
     
     this.inspectors = [paletteInspector[0], propertiesInspector[0], htmlInspector[0]];
     this.lastInspectorId = 1;

@@ -72,6 +72,7 @@ WebDoc.BoardController = $.klass({
   },
   
   setCurrentPage: function(page) {
+    ddd('[board_controller] SetCurrentPage')
     var pageView = new WebDoc.PageView(page),
         board = pageView.domNode;
     

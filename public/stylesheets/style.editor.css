@@ -52,11 +52,11 @@ body {
 
 #webdoc .board-screen   { z-index: 1000000; }  /* svg layer has 999999 */
 
-/* Manage modes. There are three modes:
+/* Manage modes. There are three modes, they are applied to the <body>:
  * 
- * mode-edit
- * mode-preview
- * mode-embed
+ * .mode-edit
+ * .mode-preview
+ * .mode-embed
  *
  */
 
@@ -65,6 +65,9 @@ body {
 
 .mode-edit .mode-preview-show,
 .mode-embed .mode-preview-show { display: none; }
+
+.mode-edit .mode-embed-show,
+.mode-preview .mode-embed-show { display: none; }
 
 /* Webdoc */
 
@@ -798,11 +801,7 @@ body {
   height:300px;
 }
 /* == inner HTML inspector */
-#html_inspector {
-  padding-left:0px !important;
-  padding-right:0px !important;
-  height:500px;
-}
+
 #selected-item-html-editor {
   width:90%;
   height:400px;

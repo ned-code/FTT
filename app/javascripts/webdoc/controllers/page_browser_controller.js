@@ -256,6 +256,7 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   selectPage: function( page ) {
+    ddd('[pageBrowserController] selectPage');
     WebDoc.application.pageEditor.loadPage( page );
   },
 

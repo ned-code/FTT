@@ -111,19 +111,25 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   },
 
   loadPageId: function(pageId) {
+    ddd('[PageEditor] loadPageId');
     if (!pageId) {
       pageId = "1";
     }
+    
     ddd("load page id " + pageId);
+    
     var pageToLoad = this.currentDocument.findPageWithUuidOrPosition(pageId);
     ddd("found page");
     ddd(pageToLoad);
-    if (pageToLoad) {
+    
+    // Check if this page is already loaded
+    if ( pageToLoad && pageToLoad.uuid() !== pageId ) {
       this.loadPage(pageToLoad);
     }
   },
   
   loadPage: function(page) {
+    ddd('[page_editor] loadPage');
     WebDoc.application.undoManager.clear();
     ddd("set hash to current page position");
     window.location.hash = "#" + (page.uuid());

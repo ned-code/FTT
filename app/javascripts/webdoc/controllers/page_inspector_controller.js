@@ -159,6 +159,7 @@ WebDoc.PageInspectorController = $.klass({
   },
 
   _changePageBackgroundImage: function() {
+    ddd('[pageInspectorController] _changePageBackgroundImage');
     try {
       page.setBackgroundImage($("#page_background_image_textbox").val()); 
       WebDoc.application.pageEditor.loadPage(page);
