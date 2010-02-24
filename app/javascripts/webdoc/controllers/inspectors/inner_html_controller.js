@@ -1,30 +1,36 @@
 /**
- * @author Julien Bachmann
+ * @author Julien Bachmann / Stephen Band
  */
+
 WebDoc.InnerHtmlController = $.klass({
   initialize: function( selector ) {
-    var domNode = $(selector);
-    
-    //this._htmlEditor.bind("blur", this.applyInnerHtml.pBind(this));
-    this._noIframeBox = $("#no_iframe");
-    this._noIframeBox.bind("change", this.updateNoIframe.pBind(this));
-    
-    // CodeMirror must be visible while it is being set up
-    var editor = new CodeMirror( domNode.find('.content')[0] , {
-        path: '/javascripts/codemirror/',
-        parserfile: ['parsexml.js', 'parsecss.js', 'tokenizejavascript.js', 'parsejavascript.js', 'parsehtmlmixed.js'],
-        stylesheet: '/stylesheets/style.codemirror.css',
-        lineNumbers: true,
-        indentUnit: 4,
-        height: '100%',
-        initCallback: function( editor ) {
-            // Hide it once this thread has finished
-            setTimeout( function(){ domNode.hide(); }, 0 );
-        }
-    });
-    
+    var domNode = $(selector),
+        self = this,
+        
+        // Initialise CodeMirror. CodeMirror must be visible
+        // while it is being set up.
+        editor = new CodeMirror( domNode.find('.content')[0] , {
+          path: '/javascripts/codemirror/',
+          parserfile: ['parsexml.js', 'parsecss.js', 'tokenizejavascript.js', 'parsejavascript.js', 'parsehtmlmixed.js'],
+          stylesheet: '/stylesheets/style.codemirror.css',
+          lineNumbers: true,
+          indentUnit: 4,
+          height: '100%',
+          initCallback: function( editor ) {
+            // Hide inspector once this thread has finished
+            setTimeout( function(){ domNode.hide();
+            }, 0 );
+          },
+          // Use one of these to react to key input. onChange is slower
+          // but less taxing on the computer.
+          onChange: this.applyInnerHtml.pBind(this)
+          // cursorActivity: this.applyInnerHtml.pBind(this)
+        });
+
     this.domNode = domNode;
     this._editor = editor;
+    this._noIframeBox = $("#no_iframe");
+    this._noIframeBox.bind("change", this.updateNoIframe.pBind(this));
   },
   
   refresh: function() {
@@ -34,6 +40,7 @@ WebDoc.InnerHtmlController = $.klass({
       var html = item.getInnerHtml();
       
       this._editor.setCode( html || '' );
+      this._editor.reindent();
       
       var noIframe = false;
       if (item.data.data.properties) {
@@ -61,13 +68,11 @@ WebDoc.InnerHtmlController = $.klass({
     }
   },
   
-  applyInnerHtml: function(e) {
-    e.preventDefault();
+  applyInnerHtml: function() {
     var html = this._editor.getCode();
     if (html) {
       if (WebDoc.application.boardController.selection().length > 0) {
         WebDoc.application.boardController.selection()[0].item.setInnerHtml(html);
-        this._editor.setCode( WebDoc.application.boardController.selection()[0].item.getInnerHtml() );
       }
     }
   }
