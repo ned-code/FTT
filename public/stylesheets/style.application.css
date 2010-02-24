@@ -667,10 +667,6 @@ ul#widget-list li {
 }
 /* == inner HTML inspector */
 
-#selected-item-html-editor {
-  width:90%;
-  height:400px;
-}
 /* == Image and widget library = */
 .image_item {
   width:100px;

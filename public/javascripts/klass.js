@@ -4,7 +4,7 @@
 // Based on Alex Arnell's inheritance implementation.
 //
 // Original code from prototype.js at the bottom, for reference, because we got
-// this second-hand, from the awful, invalid, unfinished low-pro 'library'.
+// this second-hand, from the invalid, unfinished low-pro 'library'.
 //
 // ******* TODO: There is no reason to make this a jQuery extension - it has nothing to
 // do with the DOM. Perhaps we could make it a part of WebDoc object, or even its
