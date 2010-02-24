@@ -138,136 +138,138 @@ en:
         item_inspector: "Show Inspector"
         page_inspector: "Show Page inspector"
         document_inspector: "Show Document inspector"
+      
       pages_browser:
         add_page: "Add page"
         add_web_page: "Add web page"
         copy_page: "Copy page"
         delete_page: "Delete page"
         show_thumbnails: "Show thumbnails"
-        
-    document_inspector:
-      title: "Document properties"
-      name: "Name"
-      default_name: "choose a title"
-      description: "Description"
-      category: "Category"
-      
-    page_inspector:
-      title: "Page inspector"
-      page: 
-        title: "Page"
-        url: "URL"
-      properties: 
-        title: "Properties"
+    
+    inspectors:
+      document_inspector:
+        title: "Document properties"
         name: "Name"
-        width: "Width"
-        height: "Height"
-        show_scroll: "Show scroll"
-        background: "Background"
-        background_image: "Background Image"
-        background_image_comment: "You can also choose an image from your image library and use the set as background button."
-        remove_image: "Remove image"
-        background_image_position:
-          horizontal: "Horizontal"
-          vertical : "oblique"
-          tile: "Tile"
-          left: "Left"
-          right: "Right"
-          center: "Center"
+        default_name: "choose a title"
+        description: "Description"
+        category: "Category"
+        
+      page_inspector:
+        title: "Page inspector"
+        page: 
+          title: "Page"
+          url: "URL"
+        properties: 
+          title: "Properties"
+          name: "Name"
+          width: "Width"
+          height: "Height"
+          show_scroll: "Show scroll"
+          background: "Background"
+          background_image: "Background Image"
+          background_image_comment: "You can also choose an image from your image library and use the set as background button."
+          remove_image: "Remove image"
+          background_image_position:
+            horizontal: "Horizontal"
+            vertical : "oblique"
+            tile: "Tile"
+            left: "Left"
+            right: "Right"
+            center: "Center"
+            top: "Top"
+            middle: "Middle"
+            bottom: "Bottom"
+          buttons:
+            upload: "Upload"
+            apply_background_all_pages: "Apply background to all pages"
+        css: "CSS"
+        
+      item_inspector:
+        title: "Item inspector"
+        empty: "Empty"
+        image_url: "Image URL"
+        palette: 
+          title: "Palette"
+          no_iframe: "No iframe"
+        properties:
+          title: "Properties"
           top: "Top"
-          middle: "Middle"
-          bottom: "Bottom"
+          left: "Left"
+          width: "Width"
+          height: "Height"
+          show_scroll: "Show scroll"
+          opacity: "Opacity"
+        
+      library:
+        title: "Library"
+        images: 
+          title: "Images"
+          add_image: "Add Images"
+          my_images: "My images"
+          web: "Web"
+          web_detail: "Search images on the web"
+          show_details: "Show image details"
+          services:
+            flickr: "Flickr"
+            google: "Google Images"
+          add_images_view:
+            title: "Add Images"
+            choose_upload_image: "Choose image(s) to upload"
+          detail_view:
+            title: "Image"
+            add_to_page: "Add to page"
+            set_as_background: "Set as background"
+            show_on_flickr: "Show photo page on Flickr"
+            remove_from_my_images: "Remove from My Images"
+            delete: "Delete image"
+            add_to_my_images: "Add to My Images"
+        videos: 
+          title: "Videos"
+          my_videos: "My videos"
+          web: "Web"
+          web_detail: "Search videos on the web"
+          show_details: "Show video details"
+          services:
+            youtube: "Youtube"
+            vimeo: "Vimeo"
+          detail_view:
+            title: "Video"
+            add_to_page: "Add to page"
+            drag_handle: "drag and drop to add"
+            show_on: "Show photo page on *"
+            remove_from_my_videos: "Remove from My Videos"
+            delete: "Delete video"
+            add_to_my_videos: "Add to My Videos"
+          
+        apps:
+          title: "Apps"
+          my_apps: "My apps"
+          show_details: "Show app details"
+          detail_view:
+            title: "App"
+            add_to_page: "Add to page"
+        web:
+          title: "Web"
+          web_browser: "Web browser"
+          show_browser: "Show Browser"
+          links:
+            google: "Google"
+            flickr: "Flickr"
+            facebook: "Facebook"
+            wikipedia: "Wikipedia"
+          detail_view:
+            title: "Web browser"
+          
         buttons:
+          back: "Back"
+          search: "Search"
+          close: "Close"
           upload: "Upload"
-          apply_background_all_pages: "Apply background to all pages"
-      css: "CSS"
-      
-    item_inspector:
-      title: "Item inspector"
-      empty: "Empty"
-      image_url: "Image URL"
-      palette: 
-        title: "Palette"
-        no_iframe: "No iframe"
-      properties:
-        title: "Properties"
-        top: "Top"
-        left: "Left"
-        width: "Width"
-        height: "Height"
-        show_scroll: "Show scroll"
-        opacity: "Opacity"
-      
-    library:
-      title: "Library"
-      images: 
-        title: "Images"
-        add_image: "Add Images"
-        my_images: "My images"
-        web: "Web"
-        web_detail: "Search images on the web"
-        show_details: "Show image details"
-        services:
-          flickr: "Flickr"
-          google: "Google Images"
-        add_images_view:
-          title: "Add Images"
-          choose_upload_image: "Choose image(s) to upload"
-        detail_view:
-          title: "Image"
-          add_to_page: "Add to page"
-          set_as_background: "Set as background"
-          show_on_flickr: "Show photo page on Flickr"
-          remove_from_my_images: "Remove from My Images"
-          delete: "Delete image"
-          add_to_my_images: "Add to My Images"
-      videos: 
-        title: "Videos"
-        my_videos: "My videos"
-        web: "Web"
-        web_detail: "Search videos on the web"
-        show_details: "Show video details"
-        services:
-          youtube: "Youtube"
-          vimeo: "Vimeo"
-        detail_view:
-          title: "Video"
-          add_to_page: "Add to page"
-          drag_handle: "drag and drop to add"
-          show_on: "Show photo page on *"
-          remove_from_my_videos: "Remove from My Videos"
-          delete: "Delete video"
-          add_to_my_videos: "Add to My Videos"
-        
-      apps:
-        title: "Apps"
-        my_apps: "My apps"
-        show_details: "Show app details"
-        detail_view:
-          title: "App"
-          add_to_page: "Add to page"
-      web:
-        title: "Web"
-        web_browser: "Web browser"
-        show_browser: "Show Browser"
-        links:
-          google: "Google"
-          flickr: "Flickr"
-          facebook: "Facebook"
-          wikipedia: "Wikipedia"
-        detail_view:
-          title: "Web browser"
-        
-      buttons:
-        back: "Back"
-        search: "Search"
-        close: "Close"
-        upload: "Upload"
-        cancel_uplad: "Cancel upload"
+          cancel_uplad: "Cancel upload"
   
   datastore:
     index:
-      no_rights: 'User has no right on the document' 
+      no_rights: 'User has no rights to the document' 
          
   flash:
     notice:
@@ -282,9 +284,6 @@ en:
         already_up_to_date: "Already up to date, no update needed"
       category:
         destroyed_successful: "Category successfully deleted"
-  
-      
-  layouts:
   
   user_sessions:
     new:

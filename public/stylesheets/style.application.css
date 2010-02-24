@@ -633,10 +633,7 @@ ul#widget-list li {
   margin:5px 20px 0 0;
   padding:2px;
 }
-#palette_empty {
-  height:160px;
-  padding-top:140px;  
-}
+
 /* === pen palette */
 #palette_text {
   font-size:12px;

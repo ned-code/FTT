@@ -1,18 +1,18 @@
-%div.inspector
+%div#document-inspector.inspector{ :style => "display: none" }
   %div.head
     %div
-      %h2= t('.title')
+      %h2 Document
     
   %div.content
     %div
-      %label= t('.name')
+      %label Name
       %br
       %input#document-title{ :type => "text", :value => t('.default_name') }
     %div
-      %label= t('.description') 
+      %label Description
       %br
       %textarea#document-description{ :rows => "5"}
     %div
-      %label= t('.category')
+      %label Category
       %br
       %select#document-category
