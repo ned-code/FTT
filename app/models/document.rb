@@ -22,7 +22,7 @@ class Document < ActiveRecord::Base
   # =============
   
   before_create :create_default_page
-  after_create :set_creator_as_owner
+  after_create :set_creator_as_editor
   
   # =================
   # = Class Methods =
@@ -32,7 +32,7 @@ class Document < ActiveRecord::Base
     documents_ids = []
     #TODO need to optimize document filtering by doing it in a single SQL query
       if document_filter
-        # Filter possibilities: owner, editor, reader
+        # Filter possibilities: editor, reader
         # Retrieve documents for the current user and the global user
         current_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => document_filter}).each do |role|
           documents_ids << role.authorizable_id if role.authorizable_id
@@ -117,8 +117,8 @@ class Document < ActiveRecord::Base
 private
   
   # after_create
-  def set_creator_as_owner
-    accepts_role!("owner", creator)
+  def set_creator_as_editor
+    accepts_role!("editor", creator)
   end
   
   # before_create
