@@ -58,6 +58,7 @@ body                          { background-color: hsl(194, 8%, 60%); }
 
 .inspector .head>div          { background-color: hsla(194, 12%, 30%, 0.8); color: white; }
 .inspector .foot>ul,
+.inspector .foot>form,
 .inspector .foot>div          { background-color: hsla(194, 12%, 30%, 0.8); color: white; }
 .inspector form.content       { background-color: hsl(194, 3%, 88%); }
 .inspector .box               { background-color: hsl(194, 6%, 56%);

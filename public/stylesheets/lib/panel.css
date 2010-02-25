@@ -26,8 +26,9 @@
 .inspector .head,
 .inspector .foot,
 .inspector .head>div,
-.inspector .foot>div,
 .inspector .head>ul,
+.inspector .foot>div,
+.inspector .foot>form,
 .inspector .foot>ul {
     position: absolute;
     left: 0; right: 0;
@@ -59,7 +60,8 @@
 }
 
 .inspector .foot>div,
-.inspector .foot>ul {
+.inspector .foot>ul,
+.inspector .foot>form {
     top: 0;
     min-height: 24px;
 }

@@ -11,6 +11,11 @@
 
 WebDoc.InspectorController = $.klass({
   initialize: function() {
+    ddd('[InspectorController] initialize');
+    
+    var emptyPalette = $("#empty-inspector").hide();
+    var penPelette = $("#draw-inspector").hide();
+    var imagePelette = $("#image-inspector").hide();
     
     // Get DOM node
     this.domNode = $("#item_inspector");
@@ -18,11 +23,7 @@ WebDoc.InspectorController = $.klass({
     this.visible = true;
     this.widgetInspectorApi = new WebDoc.WidgetApi(null, true);
     
-    var emptyPalette = $("#empty-inspector").hide();
-    var penPelette = $("#draw-inspector").hide();
-    var imagePelette = $("#image-inspector").hide();
-    
-    this.imagePaletteController = new WebDoc.ImagePaletteController( "#image-inspector" );
+    this.imageInspector = new WebDoc.ImagePaletteController( "#image-inspector" );
     this.textInspector = new WebDoc.TextPaletteController( "#text-inspector" );
     this.htmlInspector = new WebDoc.InnerHtmlController( "#html-inspector" );
     
@@ -50,88 +51,82 @@ WebDoc.InspectorController = $.klass({
       this.textInspector.domNode,
       penPelette,
       widgetPalette,
-      imagePelette,
+      this.imageInspector.domNode,
       this.htmlInspector.domNode
     ];
     
-    this.updatePalette(0);
-    this.subInspectors = [];
-    //var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
-    //this.subInspectors.push(propertiesInspectorController);               
+    this._properties = new WebDoc.PropertiesInspectorController( '#properties' );
+    this._updatePalette(0);
     
-    var paletteInspector = $("#palette_inspector");
-    var propertiesInspector = $("#properties_inspector");
-    
-    this.inspectors = [this.domNode, propertiesInspector[0], this.htmlInspector.domNode[0]];
     this.lastInspectorId = 1;
-    this.selectInspector(0);
     this.currentInspectorId = 0;
     WebDoc.application.boardController.addSelectionListener(this);
-  }, 
-  
-  selectInspector: function(inspectorId) {
-    //$("#inspectors").accordion("activate", inspectorId);        
   },
   
   selectPalette: function(paletteId) {
-      this.updatePalette(paletteId);
-      this.selectInspector(0);
+    this._updatePalette(paletteId);
   },
   
-  updatePalette: function(paletteId) {
-    var footHeight;
+  _updatePalette: function(paletteId) {
+    var inspectorNode = this._inspectorNodes[paletteId];
     
-    if (paletteId !== this.currentPaletteId) {
-      if (this.currentPaletteId !== undefined) {
-        ddd("hide palette", this.currentPaletteId);
-        this._inspectorNodes[this.currentPaletteId].hide();
+    ddd("[InspectorController] updatePalette", paletteId, inspectorNode );
+    
+    if (paletteId !== this.currentInspectorId) {
+      // Hide current inspector
+      if (this.currentInspectorId !== undefined) {
+        ddd("hide palette", this.currentInspectorId);
+        this._inspectorNodes[this.currentInspectorId].hide();
       }
-      ddd("show palette", paletteId, this._inspectorNodes[paletteId]);
+      
+      // Inspector belongs to widget
       if (typeof paletteId == 'string') {
         this._inspectorNodes[3].show();
-        this.currentPaletteId = 3;
+        this.currentInspectorId = 3;
       }
+      
+      // Inspector is native
       else {
-        this._inspectorNodes[paletteId].show();
-        
-        footHeight = this._inspectorNodes[paletteId].find('.foot>div').height();
-        
-        this._inspectorNodes[paletteId].css({
-            bottom: footHeight
-        });
-        
-        this.currentPaletteId = paletteId;
+        inspectorNode.show();
+        this.currentInspectorId = paletteId;
       }
+      
+      // This is, admittedly, a bit of a hack. We get the properties
+      // node and plonk it into this inspector. We may end up moving the
+      // properties node, so lets leave it like this for the time being.
+      inspectorNode
+      .find('.foot')
+      .html(this._properties.domNode);
+      
+      inspectorNode
+      .css({
+        bottom: this._properties.domNode.outerHeight()
+      });
+      
+      this.refreshSubInspectors();
     }
   },
   
   selectionChanged: function() {
     ddd("selected item ", WebDoc.application.boardController.selection());
-    if (WebDoc.application.boardController.selection().length > 0) {             
-      this.updatePalette(WebDoc.application.boardController.selection()[0].inspectorId());
+    
+    if ( WebDoc.application.boardController.selection().length > 0 ) {             
+      this._updatePalette( WebDoc.application.boardController.selection()[0].inspectorId() );
     }
     else {
-      this.updatePalette(0);
+      this._updatePalette(0);
     }
-    this.refreshSubInspectors();    
   },
   
   refreshProperties: function() {
-    //this.subInspectors[0];
-    //subInspector.refresh();
+    this._properties.refresh();
   },
   
   
   refreshSubInspectors: function() {
-    // refresh sub inspector
-    for (var i=0; i < this.subInspectors.length; i++) {
-      var subInspector = this.subInspectors[i];
-      if (subInspector.refresh) {
-        subInspector.refresh();
-      }
-    }
+    this.refreshProperties();
     
-    switch (this.currentPaletteId) {
+    switch (this.currentInspectorId) {
       case 3:
         this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);        
         if (this._inspectorNodes[3].attr("src") != WebDoc.application.boardController.selection()[0].inspectorId()) {
@@ -148,7 +143,7 @@ WebDoc.InspectorController = $.klass({
         }
         break;
       case 4:
-        this.imagePaletteController.refresh();
+        this.imageInspector.refresh();
         break;
       case 5:
         this.htmlInspector.refresh();
