@@ -19,13 +19,12 @@ WebDoc.InspectorController = $.klass({
     this.widgetInspectorApi = new WebDoc.WidgetApi(null, true);
     
     var emptyPalette = $("#empty-inspector").hide();
-    var textPalette = $("#palette_text").hide();
     var penPelette = $("#draw-inspector").hide();
     var imagePelette = $("#image-inspector").hide();
     
     this.imagePaletteController = new WebDoc.ImagePaletteController( "#image-inspector" );
-    this.textPaletteController = new WebDoc.TextPaletteController( "#text-inspector" );
-    this.htmlInspectorController = new WebDoc.InnerHtmlController( "#html-inspector" );
+    this.textInspector = new WebDoc.TextPaletteController( "#text-inspector" );
+    this.htmlInspector = new WebDoc.InnerHtmlController( "#html-inspector" );
     
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
@@ -48,13 +47,13 @@ WebDoc.InspectorController = $.klass({
     
     this._inspectorNodes = [
       emptyPalette,
-      textPalette,
+      this.textInspector.domNode,
       penPelette,
       widgetPalette,
       imagePelette,
-      this.htmlInspectorController.domNode
+      this.htmlInspector.domNode
     ];
-
+    
     this.updatePalette(0);
     this.subInspectors = [];
     //var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
@@ -63,7 +62,7 @@ WebDoc.InspectorController = $.klass({
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
     
-    this.inspectors = [this.domNode, propertiesInspector[0], this.htmlInspectorController.domNode[0]];
+    this.inspectors = [this.domNode, propertiesInspector[0], this.htmlInspector.domNode[0]];
     this.lastInspectorId = 1;
     this.selectInspector(0);
     this.currentInspectorId = 0;
@@ -124,7 +123,7 @@ WebDoc.InspectorController = $.klass({
   
   
   refreshSubInspectors: function() {
-    // refresh su inspector
+    // refresh sub inspector
     for (var i=0; i < this.subInspectors.length; i++) {
       var subInspector = this.subInspectors[i];
       if (subInspector.refresh) {
@@ -152,7 +151,7 @@ WebDoc.InspectorController = $.klass({
         this.imagePaletteController.refresh();
         break;
       case 5:
-        this.htmlInspectorController.refresh();
+        this.htmlInspector.refresh();
         break;
     }
   },

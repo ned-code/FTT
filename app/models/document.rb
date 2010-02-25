@@ -76,7 +76,8 @@ class Document < ActiveRecord::Base
     result = { :access => [] }
     all_document_access.each do |role|
       role.users.each do |user|
-        user_infos = [:id => user.id, :username => user.username, :email => user.email, :role => role.name]
+        is_creator = (self.creator && self.creator.id == user.id)? true : false
+        user_infos = [:id => user.id, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator]
         result[:access] << user_infos
       end
     end

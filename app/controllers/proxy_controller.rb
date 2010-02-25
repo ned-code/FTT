@@ -16,6 +16,12 @@ class ProxyController < ApplicationController
     render :text => page.body
   end
 
+  # GET proxy/get
+  def get
+    url = params[:url]
+    render :text => Net::HTTP.get(URI.parse(url))
+  end
+
 end
 
 class RedirectFollower
