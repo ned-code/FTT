@@ -22,12 +22,10 @@ WebDoc.InspectorController = $.klass({
     var textPalette = $("#palette_text").hide();
     var penPelette = $("#draw-inspector").hide();
     var imagePelette = $("#image-inspector").hide();
-    var htmlSnippetPalette;
-    var htmlInspector = htmlSnippetPalette = $("#html-inspector").hide();
     
-    this.imagePaletteController = new WebDoc.ImagePaletteController();
-    this.textPaletteController = new WebDoc.TextPaletteController();
-    this.innerHtmlController = new WebDoc.InnerHtmlController();
+    this.imagePaletteController = new WebDoc.ImagePaletteController( "#image-inspector" );
+    this.textPaletteController = new WebDoc.TextPaletteController( "#text-inspector" );
+    this.innerHtmlController = new WebDoc.InnerHtmlController( "#html-inspector" );
     
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
@@ -48,7 +46,7 @@ WebDoc.InspectorController = $.klass({
       }                      
     }.pBind(this));
     
-    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette, imagePelette, htmlSnippetPalette];
+    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette, imagePelette, this.innerHtmlController.domNode];
 
     this.updatePalette(0);
     this.subInspectors = [];
@@ -58,7 +56,7 @@ WebDoc.InspectorController = $.klass({
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
     
-    this.inspectors = [this.domNode, propertiesInspector[0], htmlInspector[0]];
+    this.inspectors = [this.domNode, propertiesInspector[0], this.innerHtmlController.domNode[0]];
     this.lastInspectorId = 1;
     this.selectInspector(0);
     this.currentInspectorId = 0;
