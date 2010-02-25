@@ -41,7 +41,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     $super();
     
     // Add feature detected styles to head
-    MTools.Application.createStyle('.push-scroll {'+
+    MTools.Application.createStyle('body, .push-scroll {'+
       'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
       'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
     '}');

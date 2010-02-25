@@ -46,6 +46,11 @@ WebDoc.PageInspectorController = $.klass({
     
     this.currentPageChanged();
     this.domNode = $('#page_inspector');
+    
+    var footHeight = this.domNode.find('.foot>div').height();
+    this.domNode
+    .css({bottom: footHeight})
+    .hide();
   },
 
   performAction: function(e) {

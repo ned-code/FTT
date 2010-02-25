@@ -28,11 +28,9 @@ WebDoc.RightBarController = $.klass({
     
     var library = WebDoc.application.libraryController = new WebDoc.LibrariesController(),
         itemInspector = WebDoc.application.inspectorController = new WebDoc.InspectorController();
-        //pageInspector = WebDoc.application.pageInspectorController = new WebDoc.PageInspectorController();
     
     library.buttonSelector = this.LIBRARY_BUTTON_SELECTOR;
     itemInspector.buttonSelector = this.ITEM_INSPECTOR_BUTTON_SELECTOR;
-    //pageInspector.buttonSelector = this.PAGE_INSPECTOR_BUTTON_SELECTOR;
     
     this.visible = false;
     
@@ -44,7 +42,6 @@ WebDoc.RightBarController = $.klass({
     this.contentMap = {
       library: library,
       itemInspector: itemInspector
-      //pageInspector: pageInspector
     };
   },
   
@@ -141,6 +138,8 @@ WebDoc.RightBarController = $.klass({
     this._changeButtonState(inspector);
     this.showRightBar();
   },
+  
+  // Show / hide Right bar ----------------------------------
   
   _show: function() {
     var panel = this.domNode,

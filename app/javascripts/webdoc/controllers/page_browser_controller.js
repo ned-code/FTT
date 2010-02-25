@@ -133,7 +133,9 @@ WebDoc.PageBrowserController = $.klass({
 
   updateSelectedPage: function() {
     var page = WebDoc.application.pageEditor.currentPage;
-    this._selectPageUI( page );
+    if (page) {
+      this._selectPageUI( page );
+    }
   },
   
   objectChanged: function(page) {
@@ -243,10 +245,6 @@ WebDoc.PageBrowserController = $.klass({
       this.selectPage( page );
     }
   },
-
-   showPageInspector: function(event) {
-     WebDoc.application.rightBarController.showPageInspector();
-   },
   
   editPageTitle: function(page){
     ddd('[pageBrowserController] editPageTitle');

@@ -12,7 +12,7 @@
 WebDoc.InspectorController = $.klass({
   initialize: function() {
     
-    // Get DOM tree
+    // Get DOM node
     this.domNode = $("#item_inspector");
     
     this.visible = true;
@@ -25,7 +25,7 @@ WebDoc.InspectorController = $.klass({
     
     this.imagePaletteController = new WebDoc.ImagePaletteController( "#image-inspector" );
     this.textPaletteController = new WebDoc.TextPaletteController( "#text-inspector" );
-    this.innerHtmlController = new WebDoc.InnerHtmlController( "#html-inspector" );
+    this.htmlInspectorController = new WebDoc.InnerHtmlController( "#html-inspector" );
     
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
@@ -46,7 +46,14 @@ WebDoc.InspectorController = $.klass({
       }                      
     }.pBind(this));
     
-    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette, imagePelette, this.innerHtmlController.domNode];
+    this._inspectorNodes = [
+      emptyPalette,
+      textPalette,
+      penPelette,
+      widgetPalette,
+      imagePelette,
+      this.htmlInspectorController.domNode
+    ];
 
     this.updatePalette(0);
     this.subInspectors = [];
@@ -56,7 +63,7 @@ WebDoc.InspectorController = $.klass({
     var paletteInspector = $("#palette_inspector");
     var propertiesInspector = $("#properties_inspector");
     
-    this.inspectors = [this.domNode, propertiesInspector[0], this.innerHtmlController.domNode[0]];
+    this.inspectors = [this.domNode, propertiesInspector[0], this.htmlInspectorController.domNode[0]];
     this.lastInspectorId = 1;
     this.selectInspector(0);
     this.currentInspectorId = 0;
@@ -78,19 +85,19 @@ WebDoc.InspectorController = $.klass({
     if (paletteId !== this.currentPaletteId) {
       if (this.currentPaletteId !== undefined) {
         ddd("hide palette", this.currentPaletteId);
-        this.palettes[this.currentPaletteId].hide();
+        this._inspectorNodes[this.currentPaletteId].hide();
       }
-      ddd("show palette", paletteId, this.palettes[paletteId]);
+      ddd("show palette", paletteId, this._inspectorNodes[paletteId]);
       if (typeof paletteId == 'string') {
-        this.palettes[3].show();
+        this._inspectorNodes[3].show();
         this.currentPaletteId = 3;
       }
       else {
-        this.palettes[paletteId].show();
+        this._inspectorNodes[paletteId].show();
         
-        footHeight = this.palettes[paletteId].find('.foot>div').height();
+        footHeight = this._inspectorNodes[paletteId].find('.foot>div').height();
         
-        this.palettes[paletteId].css({
+        this._inspectorNodes[paletteId].css({
             bottom: footHeight
         });
         
@@ -128,12 +135,12 @@ WebDoc.InspectorController = $.klass({
     switch (this.currentPaletteId) {
       case 3:
         this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);        
-        if (this.palettes[3].attr("src") != WebDoc.application.boardController.selection()[0].inspectorId()) {
-          this.palettes[3].attr("src", WebDoc.application.boardController.selection()[0].inspectorId());
+        if (this._inspectorNodes[3].attr("src") != WebDoc.application.boardController.selection()[0].inspectorId()) {
+          this._inspectorNodes[3].attr("src", WebDoc.application.boardController.selection()[0].inspectorId());
         }      
         else {
-          if (this.palettes[3][0].contentWindow && this.palettes[3][0].contentWindow.widget) {
-            var widgetObject = this.palettes[3][0].contentWindow.widget;
+          if (this._inspectorNodes[3][0].contentWindow && this._inspectorNodes[3][0].contentWindow.widget) {
+            var widgetObject = this._inspectorNodes[3][0].contentWindow.widget;
             widgetObject.lang = "en";
             widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
             widgetObject.mode = "Edit";
@@ -145,21 +152,21 @@ WebDoc.InspectorController = $.klass({
         this.imagePaletteController.refresh();
         break;
       case 5:
-        this.innerHtmlController.refresh();
+        this.htmlInspectorController.refresh();
         break;
     }
   },
   
   refreshWidgetPalette: function() {         
     ddd("refresh widget palette"); 
-    if (this.palettes[3][0].contentWindow) {
+    if (this._inspectorNodes[3][0].contentWindow) {
       ddd("widow found");
-      if (this.palettes[3][0].contentWindow.widget) {
-        this.palettes[3][0].contentWindow.widget._onPreferencesChange();
+      if (this._inspectorNodes[3][0].contentWindow.widget) {
+        this._inspectorNodes[3][0].contentWindow.widget._onPreferencesChange();
       }
-      else if (this.palettes[3][0].contentWindow.initialize) {
+      else if (this._inspectorNodes[3][0].contentWindow.initialize) {
         ddd("call initialize");
-        this.palettes[3][0].contentWindow.initialize();
+        this._inspectorNodes[3][0].contentWindow.initialize();
       }
     }    
   }  

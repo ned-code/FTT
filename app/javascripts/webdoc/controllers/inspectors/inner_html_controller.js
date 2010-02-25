@@ -14,7 +14,7 @@ WebDoc.InnerHtmlController = $.klass({
           parserfile: ['parsexml.js', 'parsecss.js', 'tokenizejavascript.js', 'parsejavascript.js', 'parsehtmlmixed.js'],
           stylesheet: '/stylesheets/style.codemirror.css',
           lineNumbers: true,
-          indentUnit: 4,
+          indentUnit: 2,
           height: '100%',
           initCallback: function( editor ) {
             // Hide inspector once this thread has finished
@@ -39,6 +39,7 @@ WebDoc.InnerHtmlController = $.klass({
       var item = WebDoc.application.boardController.selection()[0].item;
       var html = item.getInnerHtml();
       
+      // Fill the editor
       this._editor.setCode( html || '' );
       this._editor.reindent();
       
@@ -70,6 +71,7 @@ WebDoc.InnerHtmlController = $.klass({
   
   applyInnerHtml: function() {
     var html = this._editor.getCode();
+    
     if (html) {
       if (WebDoc.application.boardController.selection().length > 0) {
         WebDoc.application.boardController.selection()[0].item.setInnerHtml(html);

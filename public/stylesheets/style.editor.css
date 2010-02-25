@@ -450,7 +450,6 @@ body {
   position:absolute;
 }
 .mode-edit .item_wrap {
-  border-style: solid;
   border-width: 1px;
   margin-top: -1px;
   margin-left: -1px;
