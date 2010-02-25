@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   SprocketsApplication.routes(map)
   map.connect 'proxy/resolve', :controller => 'proxy', :action => 'resolve', :conditions => { :method => :get }
+  map.connect 'proxy/get', :controller => 'proxy', :action => 'get', :conditions => { :method => :get }
   
   map.root :controller => 'home', :action => :show
   
