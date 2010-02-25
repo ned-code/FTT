@@ -117,17 +117,20 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     var pageToLoad = this.currentDocument.findPageWithUuidOrPosition(pageId);
     ddd("found page");
     ddd(pageToLoad);
-    if (pageToLoad) {
+    // if (pageToLoad && pageToLoad.uuid() !== pageId) {
+    if(pageToLoad) {
       this.loadPage(pageToLoad);
     }
   },
   
   loadPage: function(page) {
-    WebDoc.application.undoManager.clear();
-    ddd("set hash to current page position");
-    window.location.hash = "#" + (page.uuid());
-    this.currentPage = page;
-    WebDoc.application.boardController.setCurrentPage(this.currentPage);
+    if(this.currentPage == null || this.currentPage.uuid() !== page.uuid()) {
+      WebDoc.application.undoManager.clear();
+      ddd("set hash to current page position");
+      window.location.hash = "#" + (page.uuid());
+      this.currentPage = page;
+      WebDoc.application.boardController.setCurrentPage(this.currentPage);      
+    }
   },
   
   prevPage: function() {

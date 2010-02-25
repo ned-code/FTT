@@ -4,17 +4,21 @@
 //= require <webdoc/model/document>
 
 WebDoc.DocumentAccessController = $.klass({
+  
+  documentAccessDialog: null,
+  documentAccessTabs: null,
+  
   initialize: function() {
     this.roles = ["reader", "editor"];
     this.domNode = $("#document_access_list");
-    //$("#add_access").click(this.addAccess.pBind(this));
     $(".delete_access").live("click", this.deleteAccess.pBind(this));    
-    
-    $("#wb-document-access-tabs").tabs( {
+    documentAccessTabs = $("#wb-document-access-tabs");
+    documentAccessDialog = $("#wb-change-access-dialog");
+    documentAccessTabs.tabs( {
       select: this.changeActionsButtons.pBind(this),
     });
     
-    $("#wb-change-access-dialog").dialog(
+    documentAccessDialog.dialog(
     {
         bgiframe: true,
         autoOpen: false,
@@ -33,17 +37,13 @@ WebDoc.DocumentAccessController = $.klass({
     // Change buttons and actions dynamically
     if( ui.index === 0 ) {
       // Invitation tab
-      $('#wb-change-access-dialog').dialog('option', 'buttons', { "Invite": this.applyInvitations.pBind(this), "Cancel":  this.closeDialog});
+      documentAccessDialog.dialog('option', 'buttons', { "Invite": this.applyInvitations.pBind(this), "Cancel":  this.closeDialog});
     }
     else {
       // Listing tab
-      $('#wb-change-access-dialog').dialog('option', 'buttons', { "Apply": this.applyAccess.pBind(this), "Cancel":  this.closeDialog});
+      documentAccessDialog.dialog('option', 'buttons', { "Apply": this.applyAccess.pBind(this), "Cancel":  this.closeDialog});
     }
   },
-  
-  // addAccess: function() {
-  //   this.domNode.prepend(this.createAccessItem());      
-  // },
   
   deleteAccess: function(e) {
     e.preventDefault();
@@ -58,15 +58,15 @@ WebDoc.DocumentAccessController = $.klass({
     $("#wb-invitation-add-editors-message").attr("disabled", "true");
     $("#wb-invitation-add-viewers-message").attr("disabled", "true");
     
-    // document access can be change only when we are online. So we can do ajax request here
+    // document access can be changed only when we are online. So we can do ajax request here
     $.ajax({
       url: "/documents/" + document.uuid() + "/accesses",
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
         ddd("access", data);
-        $("#wb-change-access-dialog").dialog('option', 'title', 'Change access to document "' + document.title() + '"');
-        $("#wb-change-access-dialog").dialog('open');
+        documentAccessDialog.dialog('option', 'title', 'Change access to document "' + document.title() + '"');
+        documentAccessDialog.dialog('open');
         this.loadAccess(data);
       }.pBind(this),
     
@@ -86,7 +86,6 @@ WebDoc.DocumentAccessController = $.klass({
   },
   
   createAccessItem: function(userInfos) {
-    ddd("Passage createAccessItem")
     ddd(userInfos.id +", "+userInfos.role);
     var result = null;
     result = $("<div/>").attr({ id: userInfos.id}).addClass("user_access");
@@ -99,16 +98,19 @@ WebDoc.DocumentAccessController = $.klass({
       var aRole = this.roles[i];
       var roleItem = $('<option/>').attr("value", aRole).text(aRole);    
       if (userInfos.role == aRole) { roleItem.attr("selected", "true"); } 
-      if (userInfos.role === 'owner' && aRole === 'editor') { 
-        roleItem.attr("selected", "true"); 
-        rolesPopup.attr("disabled", "true");
-      }
+      if (userInfos.creator) { rolesPopup.attr("disabled", "true"); }
       rolesPopup.append(roleItem);      
     }
     accessActions.append($('<a href="#"/>').addClass("delete_access").attr("title", "Delete"));
     accessActions.append(rolesPopup);    
     result.append(accessActions);    
     return result;
+  },
+
+  applyInvitations: function() {
+    var inviteAsEditorRecipients = $("#wb-invitation-add-editors").val();
+    var inviteAsViewerRecipients = $("#wb-invitation-add-viewers").val();
+    this.createRightsToRecipients(this.getInvitationAccess(inviteAsEditorRecipients, inviteAsViewerRecipients));
   },
   
   getAccess: function() {
@@ -164,22 +166,12 @@ WebDoc.DocumentAccessController = $.klass({
       dataType: 'json',
       data: this.getAccess(),    
       success: function(data) {
-        // $(this).dialog('close');
+        documentAccessDialog.dialog('close');
       },    
       error: function(MLHttpRequest, textStatus, errorThrown) {
         ddd("error", textStatus);
       }
     });    
-  },
-  
-  applyInvitations: function() {
-    var inviteAsEditorRecipients = $("#wb-invitation-add-editors").val();
-    var inviteAsViewerRecipients = $("#wb-invitation-add-viewers").val();
-    this.createRightsToRecipients(this.getInvitationAccess(inviteAsEditorRecipients, inviteAsViewerRecipients));
-  },
-  
-  closeDialog: function() {
-      $(this).dialog('close');
   },
   
   createRightsToRecipients: function(jSONData) {
@@ -190,13 +182,16 @@ WebDoc.DocumentAccessController = $.klass({
       data: jSONData,    
       success: function(data) {
         this.loadAccess(data);
+        documentAccessTabs.tabs('select', 1);
       }.pBind(this),    
       error: function(MLHttpRequest, textStatus, errorThrown) {
         ddd("error", textStatus);
       }
     });
+  },  
+  
+  closeDialog: function() {
+      $(this).dialog('close');
   },
       
 });
-
-$.extend(WebDoc.PageBrowserController, {});
