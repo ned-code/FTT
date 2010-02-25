@@ -14,6 +14,18 @@ class AddPlubicBooleanToDocuments < ActiveRecord::Migration
     global_user = User.find_by_username("all")
     global_user.has_no_roles! if global_user
     global_user.destroy if global_user
+    
+    # Wanted to execute the following code but the database is locked while migrating, so rake task fails
+    # Use rake roles:migrate_owner instead
+    
+    # arguments = 'roles:migrate_owner'
+    # if RUBY_PLATFORM =~ /mswin/
+    #  rake_cmd = "rake.bat" #very important because windows will break with just "rake"
+    # else
+    #  rake_cmd = "rake"
+    # end
+    # puts "calling #{rake_cmd} " + arguments
+    # puts system("#{rake_cmd} " + arguments)
   end
   
   def self.down

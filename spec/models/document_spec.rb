@@ -10,8 +10,8 @@ describe Document do
     
     its(:pages) { should be_present }
     
-    it "should have creator as owner on create" do
-      subject.creator.has_role?("owner").should be_true
+    it "should have creator as editor on create" do
+      subject.creator.has_role?("editor").should be_true
     end
   end
   

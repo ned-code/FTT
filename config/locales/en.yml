@@ -62,7 +62,7 @@ en:
     index:
       title: "Documents"
       all_items_by_date: "All items"
-      owned_by_me: "Owned by me"
+      created_by_me: "Created by me"
       shared_with_me_as_editor: "Shared with me (as editor)"
       shared_with_me_as_viewer: "Shared with me (as viewer)" 
       create_new_document: "Create a new document"

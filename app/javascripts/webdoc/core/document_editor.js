@@ -60,7 +60,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $(".wb-document-delete").live("click", this.deleteDocument);
         $(".wb-document-access").live("click", this.changeDocumentAccess);
         $("#wb-document-filter-date").bind("click", this.loadDocuments.pBind(this));
-        $("#wb-document-filter-owned-by-me").bind("click", {document_filter: 'owner'}, this.loadDocumentsWithFilter.pBind(this));
+        $("#wb-document-filter-owned-by-me").bind("click", {document_filter: 'creator'}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-shared-with-me-as-editor").bind("click", {document_filter: 'editor'}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-shared-with-me-as-viewer").bind("click", {document_filter: 'reader'}, this.loadDocumentsWithFilter.pBind(this));
         newDocCustomSizeWidthField.bind("keypress", this.validateInteger);
@@ -73,7 +73,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $("#wb-document-list-container").append(this.documentList.domNode.get(0));
         
         // Default selection, documents owned by me
-        this.loadDocumentsWithFilter({document_filter: 'owner'});
+        this.loadDocumentsWithFilter({document_filter: 'creator'});
         
         // create new document dialog
         $("#wb-new-document-dialog").dialog(
