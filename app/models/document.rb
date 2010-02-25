@@ -22,7 +22,7 @@ class Document < ActiveRecord::Base
   # =============
   
   before_create :create_default_page
-  after_create :set_creator_as_owner
+  after_create :set_creator_as_editor
   
   # =================
   # = Class Methods =
@@ -30,35 +30,37 @@ class Document < ActiveRecord::Base
   
   def self.all_with_filter(current_user, document_filter)
     documents_ids = []
-    #TODO need to optimize document filtering by doing it in a single SQL query
-      if document_filter
-        # Filter possibilities: owner, editor, reader
-        # Retrieve documents for the current user and the global user
+    if document_filter
+      # Filter possibilities: editor, reader, creator
+      if document_filter == 'creator'
+        return current_user.documents
+      else
+        # Retrieve documents for the current user
         current_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => document_filter}).each do |role|
           documents_ids << role.authorizable_id if role.authorizable_id
         end
-        
-        # On shared as editor and shared as viewer filter, must remove owned documents
-        if document_filter != 'owner'
+        # Must remove owned documents
+        if document_filter != 'creator'
           owner_ids = []
-          current_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => 'owner'}).each do |role|
-          owner_ids << role.authorizable_id
-        end
-        # Diff of both arrays
-        documents_ids = documents_ids - owner_ids
-      end
-      documents = Document.find_all_by_id(documents_ids)
-      else
-        if (!current_user.has_role?("superAdmin"))
-          roles = current_user.role_objects.all.each do |role|
-            documents_ids << role.authorizable_id
+          current_user.documents.each do |doc|
+            owner_ids << doc.id
           end
-          documents = Document.find_all_by_id(documents_ids)
-        else
-          documents = Document.all
+          # Diff of both arrays
+          documents_ids = documents_ids - owner_ids
         end
+        documents = Document.find_all_by_id(documents_ids)
       end
-      documents
+    else
+      if (!current_user.has_role?("admin"))
+        roles = current_user.role_objects.all.each do |role|
+          documents_ids << role.authorizable_id
+        end
+        documents = Document.find_all_by_id(documents_ids)
+      else
+        documents = Document.all
+      end
+    end
+    documents
    end
   
   # ====================
@@ -117,8 +119,8 @@ class Document < ActiveRecord::Base
 private
   
   # after_create
-  def set_creator_as_owner
-    accepts_role!("owner", creator)
+  def set_creator_as_editor
+    accepts_role!("editor", creator)
   end
   
   # before_create

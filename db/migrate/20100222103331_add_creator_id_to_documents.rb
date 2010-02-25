@@ -5,13 +5,26 @@ class AddCreatorIdToDocuments < ActiveRecord::Migration
     Document.all.each do |document|
       begin
         if role = document.accepted_roles.first(:conditions => { :name => 'owner' })
-          document.creator = role.users.first(:order => :created_at)
+          # JBA do not add condition to sort by createion date because it fails on ysql
+          document.creator = role.users.first
           document.save
         end
-      rescue
-        puts "Error adding creator to document #{document.id} - #{document.title}"
+      rescue => e
+        puts "Error adding creator to document #{document.id} - #{document.title} - #{e}"
       end
     end
+    
+    # Update roles
+    Role.all(:conditions => { :name => 'owner' }).each do |role|
+      count = Role.all(:conditions => { :name => 'editor', :authorizable_type => role.authorizable_type, :authorizable_id => role.authorizable_id }).count
+      if count > 0 # editor on same document already exists, so delete current record
+        role.destroy
+      else
+        role.name = "editor"
+        role.save
+      end
+    end
+    puts "Roles owner updated to editor"
   end
   
   def self.down
