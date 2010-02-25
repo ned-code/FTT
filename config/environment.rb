@@ -20,7 +20,6 @@ Rails::Initializer.run do |config|
   config.gem "sqlite3-ruby", :lib => "sqlite3"
   
   config.gem 'haml'
-  config.gem 'sprockets'
   config.gem "is_paranoid"
   config.gem 'uuid'
   config.gem 'rubyzip', :lib => 'zip/zip'
@@ -34,7 +33,7 @@ Rails::Initializer.run do |config|
   config.gem 'right_aws'
   config.gem 'will_paginate'
   config.gem 'warden'
-  # config.gem 'sprockets-rails'
+  config.gem 'jammit'
   config.gem 'i18n'
   config.gem 'formtastic'
   config.gem "validation_reflection"

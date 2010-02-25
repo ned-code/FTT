@@ -28,16 +28,9 @@ WebDoc.DocumentList = $.klass(
         {
             previousElement = $(sectionToUpdate.nextAll().get(index - 1));
         }
-        previousElement.after($("<div id='" + document.uuid() + "' class='wb-document-item'>\
-                                                        <div class='wb-document-title'>" +
+        previousElement.after($("<div id='" + document.uuid() + "' class='wb-document-item'><div class='wb-document-title'>" +
         '<a class="wb-document-edit" href="" title="Open this document">' + document.title() + '</a>' +
-        "</div>\
-                                                        <div class='wb-document-actions'>\
-                                                        <a class='wb-document-delete' href='' title='delete'></a>\
-                                                        <a class='wb-document-rename sec-action' href='' title='edit'>edit</a>\
-                                                        <a class='wb-document-access sec-action' href='' title='share'>share</a>\                                                           
-                                                        </div>\
-                                                      </div>").get(0));
+        "</div><div class='wb-document-actions'><a class='wb-document-delete' href='' title='delete'></a><a class='wb-document-rename sec-action' href='' title='edit'>edit</a><a class='wb-document-access sec-action' href='' title='share'>share</a></div></div>").get(0));
     },
     
     removeDocument: function(id)
@@ -55,16 +48,9 @@ WebDoc.DocumentList = $.klass(
             for (var i = 0; i < this.datasource.nbDocuments(section); i++) 
             {
                 var document = this.datasource.document(section, i);
-                this.domNode.append($("<div id='" + document.uuid() + "' class='wb-document-item'>\
-                                                        <div class='wb-document-title'>" +
+                this.domNode.append($("<div id='" + document.uuid() + "' class='wb-document-item'><div class='wb-document-title'>" +
                 '<a class="wb-document-edit" href="" title="Open this document">' + document.title() + '</a>' +
-                "</div>\
-                                                        <div class='wb-document-actions'>\
-                                                        <a class='wb-document-delete' href='' title='delete'></a>\
-                                                        <a class='wb-document-rename sec-action' href='' title='edit'>edit</a>\
-                                                        <a class='wb-document-access sec-action' href='' title='share'>share</a>\                                                        
-                                                        </div>\
-                                                      </div>").get(0));
+                "</div><div class='wb-document-actions'><a class='wb-document-delete' href='' title='delete'></a><a class='wb-document-rename sec-action' href='' title='edit'>edit</a><a class='wb-document-access sec-action' href='' title='share'>share</a></div></div>").get(0));
             }
         }
     }
