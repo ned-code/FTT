@@ -40,6 +40,18 @@ class User < ActiveRecord::Base
     first_name ? "#{first_name} #{last_name}" : username
   end
   
+  def avatar_url
+    avatar.url
+  end
+  
+  def avatar_thumb_url
+    avatar.thumb.url
+  end
+  
+  def documents_count
+    documents.count
+  end
+  
   def create_xmpp_user
     XmppUserSynch.create_xmpp_user(self)
   end
