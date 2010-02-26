@@ -19,7 +19,8 @@
     = javascript_include_tag 'jquery.extensions'
     =# javascript_include_tag 'jquery.panel'    
     = javascript_include_tag 'klass'
-    = sprockets_include_tag      
+    = include_javascripts :mtools    
+    = include_javascripts :document_editor       
     :javascript      
       $(function()
       {

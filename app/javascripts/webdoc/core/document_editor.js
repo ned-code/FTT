@@ -35,6 +35,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.documents = [];
         this.documentList = null;
         this.filter = undefined;
+        this.myPageId = 1;
         WebDoc.application.documentEditor = this;
         WebDoc.application.undoManager = new MTools.UndoManager();
         WebDoc.application.accessController = new WebDoc.DocumentAccessController();
@@ -59,7 +60,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $(".wb-document-rename").live("click", this.renameDocument);
         $(".wb-document-delete").live("click", this.deleteDocument);
         $(".wb-document-access").live("click", this.changeDocumentAccess);
-        $("#wb-document-filter-date").bind("click", this.loadDocuments.pBind(this));
+        $("#wb-document-filter-date").bind("click", {document_filter: null}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-owned-by-me").bind("click", {document_filter: 'creator'}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-shared-with-me-as-editor").bind("click", {document_filter: 'editor'}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-shared-with-me-as-viewer").bind("click", {document_filter: 'reader'}, this.loadDocumentsWithFilter.pBind(this));
@@ -209,54 +210,59 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     
     deleteDocument: function(e)
     {
-        e.preventDefault();
-        var that = WebDoc.application.documentEditor;
-        var documentIdToDelete = $(this).parent().parent().attr("id");
-        that.editedDocument = that.documentWithId(documentIdToDelete);
-        var choice = confirm("Are you sure you want to delete document " + that.editedDocument.title());
-        if (choice) {
-          that.editedDocument.destroy(function(persitedDoc)
-          {
-              that.filter.removeDocument(that.editedDocument);
-          });
-        }
-    },
-    
-    loadDocuments: function(event)
-    {
-        this.updateCurrentFilterSelection(event);
-
-        MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
+      e.preventDefault();
+      var that = WebDoc.application.documentEditor;
+      var documentIdToDelete = $(this).parent().parent().attr("id");
+      that.editedDocument = that.documentWithId(documentIdToDelete);
+      var choice = confirm("Are you sure you want to delete document " + that.editedDocument.title());
+      if (choice) {
+        that.editedDocument.destroy(function(persitedDoc)
         {
-            this.documents = data;
-            this.refreshDocumentList();
-        }.pBind(this));
+            that.filter.removeDocument(that.editedDocument);
+        });
+      }
+    },
+        
+    incrementPageId: function(pageIncrement) {
+      this.myPageId += pageIncrement;
+      if (this.myPageId < 1) { this.myPageId = 1; }
     },
 
     loadDocumentsWithFilter: function(event)
     {
-        var filter; 
         if(event && event.data){
-           filter = event.data.document_filter;
+           this.documentFilter = event.data.document_filter;
         }
         else{
-           filter = event.document_filter;
+           this.documentFilter = event.document_filter;
         }
+        
         this.updateCurrentFilterSelection(event);
-
-         MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
-         {
-            this.documents = data;
-            this.refreshDocumentList();
-         }.pBind(this), { ajaxParams: { document_filter: filter }});
+        this.loadDocuments(0);
     },
     
-    refreshDocumentList: function()
+    loadDocuments: function(pageIncrement) {
+      this.myPageId += pageIncrement;
+      if (this.myPageId < 1) { this.myPageId = 1; }
+      
+      MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
+      {
+        this.documents = data.documents;
+        this.refreshDocumentList(data.pagination);
+      }.pBind(this), this.createAjaxParams());
+    },
+    
+    createAjaxParams: function() {
+      return (this.documentFilter !== null)? { ajaxParams: { document_filter: this.documentFilter, page: this.myPageId }} :  { ajaxParams: { page:this.myPageId }};
+    },
+    
+    refreshDocumentList: function(pagination)
     {
         this.filter.setDocuments(this.documents);
         this.documentList.repaint();
+        this.documentList.repaintPagination(pagination);
     },
-    
+        
     documentWithId: function(id)
     {
         for (var i = 0; i < this.documents.length; i++) 

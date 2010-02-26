@@ -42,7 +42,8 @@
   = javascript_include_tag 'jquery.form'
   = javascript_include_tag 'jquery.hashchange'
   
-  = sprockets_include_tag
+  = include_javascripts :mtools
+  = include_javascripts :page_editor
   :javascript
     
     $(function()

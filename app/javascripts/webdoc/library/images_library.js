@@ -103,7 +103,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           page.setBackgroundImage("url("+imgUrl+")");
           page.setBackgroundRepeatMode("no-repeat");
           page.setBackgroundPosition("center center");
-          WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
+          WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
           break;
           
         case "delete_image_action": //delete an uploaded image from My Images

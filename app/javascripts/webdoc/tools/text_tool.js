@@ -53,24 +53,27 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
 
     this.textView = textView;
     this.delegate.enterEditMode(textView.itemDomNode[0]);
-    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);    
+    this.delegate.activateToolbar(true);
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool); 
+    var textViewToExit = this.textView; 
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.exitEditMode(textViewToExit);
+    }.pBind(this)); 
   },
   
   exitEditMode: function() {
     this.delegate.exitEditMode();
+    this.delegate.activateToolbar(false);
+    var textViewToEdit = this.textView; 
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.enterEditMode(textViewToEdit);
+    }.pBind(this));    
   },
   
   applyTextContent: function(content, classValue) {
-    var previousContent = this.textView.item.data.data.innerHTML;
-    ddd("previous text content", previousContent);
-    var previousClass = this.textView.item.data.data['class'];
     this.textView.item.data.data.innerHTML = content;
     this.textView.item.data.data['class'] = classValue;
     this.textView.item.fireInnerHtmlChanged();
     this.textView.item.save();
-    WebDoc.application.undoManager.registerUndo(function() {
-      this.applyTextContent(previousContent, previousClass);
-    }
-.pBind(this));
   }
 });

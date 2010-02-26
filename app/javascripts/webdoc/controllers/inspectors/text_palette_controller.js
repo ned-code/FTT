@@ -4,13 +4,13 @@
 WebDoc.TextPaletteController = $.klass({
   initialize: function() {
     this.initGUI("palette_text");
-    WebDoc.application.paletteController = {delegate: this};
   },
   initGUI: function(container){
-    var thobj = this;
+  	var thobj = this;
     var containerObj = document.getElementById(container);
     var toolbarContent = 
     '<div id="toolbar_panel">'+
+        '<div id="toolbar_panel_cover"></div>'+
         '<div id="colorpickerHolder1" style="position:absolute;z-index: 150000;top:50px;"></div>'+
           '<div id="colorpickerHolder2" style="position:absolute;z-index: 150000;top:50px;"></div>'+
         '<select id="toolbar_panel_button_format" onchange="WebDoc.application.textTool.delegate.editorExec(\'format\',this.value);">'+
@@ -51,16 +51,26 @@ WebDoc.TextPaletteController = $.klass({
           '<option value="18pt">  18 pt</option>'+
           '<option value="19pt">  19 pt</option>'+
           '<option value="20pt">  20 pt</option>'+
+          '<option value="21pt">  21 pt</option>'+
           '<option value="22pt">  22 pt</option>'+
+          '<option value="23pt">  23 pt</option>'+
           '<option value="24pt">  24 pt</option>'+
+          '<option value="25pt">  25 pt</option>'+
           '<option value="26pt">  26 pt</option>'+
+          '<option value="27pt">  27 pt</option>'+
           '<option value="28pt">  28 pt</option>'+
           '<option value="30pt">  30 pt</option>'+
+          '<option value="31pt">  31 pt</option>'+
           '<option value="32pt">  32 pt</option>'+
+          '<option value="33pt">  33 pt</option>'+  
           '<option value="34pt">  34 pt</option>'+
+          '<option value="35pt">  35 pt</option>'+
           '<option value="36pt">  36 pt</option>'+
+          '<option value="37pt">  37 pt</option>'+
           '<option value="38pt">  38 pt</option>'+
-          '<option value="40pt">  40 pt</option>'+          
+          '<option value="39pt">  39 pt</option>'+
+          '<option value="40pt">  40 pt</option>'+   
+		  '<option value="40pt">  41 pt</option>'+       
           '<option value="42pt">  42 pt</option>'+
           '<option value="45pt">  45 pt</option>'+
           '<option value="48pt">  48 pt</option>'+
@@ -78,7 +88,15 @@ WebDoc.TextPaletteController = $.klass({
         '<a href="javascript:void(0);"  id="toolbar_panel_button_foreColor_arrow"                                         ><div class="icon_color_arrow"></div></a>'+
         '<a href="javascript:void(0);"  title="Background font color" id="toolbar_panel_button_hiliteColor"     onclick="WebDoc.application.textTool.delegate.editorExec(\'hiliteColor\',this.style.backgroundColor);"><div class="icon_hiliteColor"></div></a>'+ 
         '<a href="javascript:void(0);"  title="" id="toolbar_panel_button_hiliteColor_arrow"                                          ><div class="icon_color_arrow"></div></a>'+
-        
+       
+	    '<a href="javascript:void(0);"  title="Create link" id="toolbar_panel_button_createlink">  <div class="icon_createLink"></div></a>'+
+        '<form id="toolbar_panel_createlink_block" >'+
+        '<div><label id="toolbar_panel_button_createlink_text_label">Text</label><input type="text" id="toolbar_panel_button_createlink_text"></div>'+
+        '<div><label id="toolbar_panel_button_createlink_link_label">Link</label><input type="text" id="toolbar_panel_button_createlink_link"></div>'+
+        '<div><label>Type</label><input checked="checked" type="radio" name="toolbar_panel_button_createlink_type" id="toolbar_panel_button_createlink_type_web"> Web <input type="radio" name="toolbar_panel_button_createlink_type" id="toolbar_panel_button_createlink_type_mail"> E-mail'+
+        '<input type="button" id="toolbar_panel_button_createlink_cancel" value="cancel">'+
+	  	'<input type="button" id="toolbar_panel_button_createlink_ok" value="ok"></div>'+
+        '</form>'+
         '<a href="javascript:void(0);"  title="Insert Ordered List" id="toolbar_panel_button_insertOrderedList"   onclick="WebDoc.application.textTool.delegate.editorExec(\'insertOrderedList\');">  <div class="icon_insertOrderedList"></div></a>'+
         '<a href="javascript:void(0);"  title="Insert Unordered List" id="toolbar_panel_button_insertUnorderedList"   onclick="WebDoc.application.textTool.delegate.editorExec(\'insertUnorderedList\');">  <div class="icon_insertUnorderedList"></div></a>'+      
         '<a href="javascript:void(0);"  title="Indent" id="toolbar_panel_button_indent"         onclick="WebDoc.application.textTool.delegate.editorExec(\'indent\');">       <div class="icon_indent"></div></a>'+
@@ -100,6 +118,40 @@ WebDoc.TextPaletteController = $.klass({
     '</div>';
     containerObj.innerHTML = toolbarContent;
     
+    $('#toolbar_panel_button_createlink_ok').bind('click',function(){
+    	var value  = {
+			link:(($('#toolbar_panel_createlink_block input:radio:checked').attr('id') == 'toolbar_panel_button_createlink_type_mail')?('mailto:'):(''))+$('#toolbar_panel_button_createlink_link').val(), 
+			text:$('#toolbar_panel_button_createlink_text').val()
+		};
+		$('#toolbar_panel_createlink_block').hide();
+		WebDoc.application.textTool.delegate.editorExec('createlink',value);
+		
+		
+	});
+	
+	$('#toolbar_panel_button_createlink_cancel').bind('click',function(){
+		$('#toolbar_panel_createlink_block').hide();
+	});
+	
+	$('#toolbar_panel_button_createlink_type_web,#toolbar_panel_button_createlink_type_mail').bind('click',function(){
+		//alert($('#toolbar_panel_createlink_block input:radio:checked').attr('id')); 
+		
+		if($('#toolbar_panel_createlink_block input:radio:checked').attr('id') == 'toolbar_panel_button_createlink_type_mail') { 
+			$('#toolbar_panel_button_createlink_link_label').html('Email');
+		} else {
+		    $('#toolbar_panel_button_createlink_link_label').html('Link');
+		}
+	});
+    
+    $('#toolbar_panel_button_createlink').bind('click', function(e){
+      	var pos = $("#toolbar_panel_button_createlink").position();  
+        $('#toolbar_panel_createlink_block').stop().animate({height: 70}, 500);
+        $('#toolbar_panel_createlink_block').css('left',21);
+      	$('#toolbar_panel_createlink_block').css('top',pos.top+28);      
+      	$('#toolbar_panel_button_createlink_text').val(WebDoc.application.textTool.delegate.getSelectedText()); 
+      	$('#toolbar_panel_button_createlink_link').val();
+    });
+    
     $('#toolbar_panel_button_valign').bind('click', function(e){
       var pos = $("#toolbar_panel_button_valign").position();  
         $('#toolbar_panel_valign_block').stop().animate({height: 20}, 500);
@@ -107,35 +159,36 @@ WebDoc.TextPaletteController = $.klass({
       $('#toolbar_panel_valign_block').css('top',pos.top+28);
     });
     
+
     $('#toolbar_panel_button_valignBottom').bind('click',   function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignBottom");$('#toolbar_panel_valign_block').hide();});
     $('#toolbar_panel_button_valignMiddle').bind('click',   function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignMiddle");$('#toolbar_panel_valign_block').hide();});
     $('#toolbar_panel_button_valignTop').bind('click',    function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignTop");$('#toolbar_panel_valign_block').hide();});
     
     this.isHasParent = function(target,parentObj){
-      if(target.parentNode && target.parentNode==parentObj){
-      return true;
-    } else {
-      if(!target.parentNode){
-        return false;
-      } else {
-          return this.isHasParent(target.parentNode,parentObj);
-      }
-      
-    }
-  }
+	    if(target.parentNode && target.parentNode==parentObj){
+			return true;
+		} else {
+			if(!target.parentNode){
+				return false;
+			} else {
+			    return this.isHasParent(target.parentNode,parentObj);
+			}
+			
+		}
+	};
 
     $(document).bind('click', function(e) {
         e.stopPropagation();
         e.cancelBubble = true;
         var foc = (e.target.parentNode && e.target.parentNode.parentNode)?e.target.parentNode.parentNode.getAttribute('class'):'';
-    if($('#colorpickerHolder2').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder2')) || foc=='colorpicker_color'){
-      $('#colorpickerHolder2').stop().animate({height: 0}, 500);
-      $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
-    }
-    if($('#colorpickerHolder1').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder1')) || foc=='colorpicker_color'){
-      $('#colorpickerHolder1').stop().animate({height: 0}, 500);
-      $('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
-    }
+		if($('#colorpickerHolder2').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder2')) || foc=='colorpicker_color'){
+			$('#colorpickerHolder2').stop().animate({height: 0}, 500);
+			$('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
+		}
+		if($('#colorpickerHolder1').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder1')) || foc=='colorpicker_color'){
+			$('#colorpickerHolder1').stop().animate({height: 0}, 500);
+			$('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+		}
       });   
     
     $('#colorpickerHolder2').ColorPicker({
@@ -144,7 +197,7 @@ WebDoc.TextPaletteController = $.klass({
         onSubmit: function(hsb, hex, rgb) {
           $('#colorpickerHolder2').stop().animate({height: 0}, 500);
           $('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#' + hex);   
-      $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
+		  $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
           WebDoc.application.textTool.delegate.editorExec('foreColor','#' + hex);
           
         },
@@ -184,31 +237,31 @@ WebDoc.TextPaletteController = $.klass({
         e.stopPropagation();
         e.cancelBubble = true; 
         if($('#toolbar_panel_button_foreColor_arrow>div').attr('class')!='icon_color_arrow_top'){ 
-      $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow_top');
-          var pos = $("#toolbar_panel_button_foreColor").position();  
-          $('#colorpickerHolder2').css('left',0);//pos.left
-          $('#colorpickerHolder2').css('top',pos.top+28);
-          $('#colorpickerHolder2').stop().animate({height:173}, 500);
-          $('#colorpickerHolder1').stop().animate({height:0}, 500);
-      } else {
-        $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
-        $('#colorpickerHolder2').stop().animate({height: 0}, 500);
-    }
+			$('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow_top');
+        	var pos = $("#toolbar_panel_button_foreColor").position();  
+        	$('#colorpickerHolder2').css('left',0);//pos.left
+        	$('#colorpickerHolder2').css('top',pos.top+28);
+        	$('#colorpickerHolder2').stop().animate({height:173}, 500);
+        	$('#colorpickerHolder1').stop().animate({height:0}, 500);
+  		} else {
+  			$('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
+		    $('#colorpickerHolder2').stop().animate({height: 0}, 500);
+		}
       });
       $('#toolbar_panel_button_hiliteColor_arrow').bind('click', function(e) {
         e.stopPropagation();
         e.cancelBubble = true; 
         if($('#toolbar_panel_button_hiliteColor_arrow>div').attr('class')!='icon_color_arrow_top'){ 
-      $('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow_top');
-          var pos = $("#toolbar_panel_button_hiliteColor").position();  
-          $('#colorpickerHolder1').css('left',0);//pos.left
-          $('#colorpickerHolder1').css('top',pos.top+28);
-          $('#colorpickerHolder1').stop().animate({height:173}, 500);
-          $('#colorpickerHolder2').stop().animate({height:0}, 500);
-      } else {
-        $('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
-        $('#colorpickerHolder1').stop().animate({height: 0}, 500);
-    }
+			$('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow_top');
+        	var pos = $("#toolbar_panel_button_hiliteColor").position();  
+        	$('#colorpickerHolder1').css('left',0);//pos.left
+        	$('#colorpickerHolder1').css('top',pos.top+28);
+        	$('#colorpickerHolder1').stop().animate({height:173}, 500);
+        	$('#colorpickerHolder2').stop().animate({height:0}, 500);
+  		} else {
+  			$('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+		    $('#colorpickerHolder1').stop().animate({height: 0}, 500);
+		}
       });   
   },
   
@@ -229,22 +282,27 @@ WebDoc.TextPaletteController = $.klass({
                     document.getElementById('toolbar_panel_button_' + stp).className = 'active_button';
                 }
             } else if (toolbarHash[stp] === false) {
-        document.getElementById('toolbar_panel_button_' + stp).className = '';
-      } else if (document.getElementById('toolbar_panel_button_' + stp).tagName.toLowerCase() == 'select') {
-        this.setSelectBoxValue(document.getElementById('toolbar_panel_button_' + stp), toolbarHash[stp]);
-      }
+				document.getElementById('toolbar_panel_button_' + stp).className = '';
+			} else if (document.getElementById('toolbar_panel_button_' + stp).tagName.toLowerCase() == 'select') {
+				this.setSelectBoxValue(document.getElementById('toolbar_panel_button_' + stp), toolbarHash[stp]);
+			}
         }
   },
   
+  activate: function(bool) {
+       $('#toolbar_panel_cover').css('display', bool ? 'none' : 'block');
+  },
+  
   hideColorPickers: function() {
-    if($('#colorpickerHolder1').height()){
-      $('#colorpickerHolder1').stop().animate({height: 0}, 500);
-    $('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
-  }
-    if($('#colorpickerHolder2').height()){
-    $('#colorpickerHolder2').stop().animate({height: 0}, 500);
-    $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow'); 
-  }
+  	if($('#colorpickerHolder1').height()){
+	  	$('#colorpickerHolder1').stop().animate({height: 0}, 500);
+		$('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+	}
+  	if($('#colorpickerHolder2').height()){
+		$('#colorpickerHolder2').stop().animate({height: 0}, 500);
+		$('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow'); 
+	}
+	
   }
 
 });

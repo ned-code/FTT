@@ -15,11 +15,23 @@ class DocumentsController < DocumentController
   
   # GET /documents
   def index
-    @documents = Document.all_with_filter(current_user, params[:document_filter])
+    per_page = 20
+    @documents = Document.all_with_filter(current_user, params[:document_filter], params[:page], per_page)
     
     respond_to do |format|
       format.html
-      format.json { render :json => @documents }
+      format.json { render :json => { 
+        :documents => @documents,
+        :pagination => {
+          :per_page => per_page,
+          :current_page => @documents.current_page,
+          :total_pages => @documents.total_pages, 
+          :next_page => @documents.next_page,
+          :previous_page => @documents.previous_page,
+          :total => @documents.total_entries }
+        }
+      } 
+      
     end
   end
   
