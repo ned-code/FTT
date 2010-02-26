@@ -39,7 +39,8 @@ WebDoc.InspectorController = $.klass({
           widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
           widgetObject.mode = "Edit";
           //widgetObject._onLoad();
-		  widgetObject._loadCurrentSDK('http://localhost:3000/sdk/sdk.js');
+		  var path = document.location.protocol + '//' + document.location.host + '/sdk/sdk.js';
+		  widgetObject._loadCurrentSDK(path);
         }
         else if (widgetPalette[0].contentWindow.initialize) {
           widgetPalette[0].contentWindow.initialize();
