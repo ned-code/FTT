@@ -7,6 +7,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :documents, :has_many => { :pages => :items }, :member => { :change_user_access => :put, :user_access => :get} do |m|
     m.resource :accesses, :only => [:show, :create, :update]
+    m.resource :creators, :only => [:show]
   end
   
   map.resources :datastores, :only => [:show] do |datastore|

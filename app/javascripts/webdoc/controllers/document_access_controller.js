@@ -101,7 +101,7 @@ WebDoc.DocumentAccessController = $.klass({
       if (userInfos.creator) { rolesPopup.attr("disabled", "true"); }
       rolesPopup.append(roleItem);      
     }
-    accessActions.append($('<a href="#"/>').addClass("delete_access").attr("title", "Delete"));
+    if (!userInfos.creator) { accessActions.append($('<a href="#"/>').addClass("delete_access").attr("title", "Delete")); }
     accessActions.append(rolesPopup);    
     result.append(accessActions);    
     return result;

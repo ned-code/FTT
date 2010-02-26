@@ -104,6 +104,9 @@
     %li>
       %a.state-right-panel.current{ :href => "#document-inspector", :title => t('.toolbar.document_inspector') }
         = t('.toolbar.document_inspector')
+    %li>
+      %a.state-right-panel.current{ :href => "#social-panel", :title => t('.toolbar.social_panel') }
+        = t('.toolbar.social_panel')
 
 #left_bar.left-panel.panel
   #page_browser_left.pages-browser.inspector
@@ -133,6 +136,7 @@
   = render :partial => 'library'
   = render :partial => 'page_inspector'
   = render :partial => 'document_inspector'
+  = render :partial => 'social_panel'
 :javascript
   
     var WebDoc;
