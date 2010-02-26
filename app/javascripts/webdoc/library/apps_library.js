@@ -186,8 +186,8 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     return liWrap;
   },
   _refreshMyAppsPagination: function(pagination) {
-    this.hasPagination = pagination.total_pages > 1 ? true : false;
-    if (this.hasPagination) {
+    var hasPagination = pagination.total_pages > 1 ? true : false;
+    if (hasPagination) {
       this.paginationWrap.show();
       if (pagination.previous_page > 0) this.previousPageLink.show();
       else this.previousPageLink.hide();
