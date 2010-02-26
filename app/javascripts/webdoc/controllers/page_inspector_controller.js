@@ -161,7 +161,7 @@ WebDoc.PageInspectorController = $.klass({
   _changePageBackgroundImage: function() {
     try {
       page.setBackgroundImage($("#page_background_image_textbox").val()); 
-      WebDoc.application.pageEditor.loadPage(page);
+      WebDoc.application.pageEditor.loadPage(page, true);
     }
     catch(exc) {
       $("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
@@ -171,14 +171,14 @@ WebDoc.PageInspectorController = $.klass({
   _changePageBackgroundImageFromThumb: function() {
     var backGroundImageSrc = $('#background_image').data('url');
     page.setBackgroundImage('url(' + backGroundImageSrc + ')'); 
-    WebDoc.application.pageEditor.loadPage(page);
+    WebDoc.application.pageEditor.loadPage(page, true);
   },
 
   _changePageBackgroundRepeatMode: function(e) {
     if(e) { e.preventDefault(); }
     try {
       page.setBackgroundRepeatMode(this._getBackgroundRepeatMode());
-      WebDoc.application.pageEditor.loadPage(page); 
+      WebDoc.application.pageEditor.loadPage(page, true); 
      }
     catch(exc) {
       this._setBackgroundRepeatMode(page.data.data.css.background-repeat);
@@ -189,7 +189,7 @@ WebDoc.PageInspectorController = $.klass({
     if(e) {e.preventDefault(); }
     try {
       page.setBackgroundPosition(this._getBackgroundPosition());
-      WebDoc.application.pageEditor.loadPage(page); 
+      WebDoc.application.pageEditor.loadPage(page, true); 
      }
     catch(exc) {
       this._setBackroundPosition(page.data.data.css.backgroundPosition);
@@ -203,7 +203,7 @@ WebDoc.PageInspectorController = $.klass({
   
   _cancelImageBackground: function() {
     page.removeBackgroundImage();
-    WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
+    WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
   },
 
   _checkValidBackgroundImage: function(e) {
@@ -259,7 +259,7 @@ WebDoc.PageInspectorController = $.klass({
     for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
       this._applyBackgroundToPage(WebDoc.application.pageEditor.currentDocument.pages[i]);
     }
-    WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
+    WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
   },
 
   _applyBackgroundToPage: function(targetPage) {
@@ -278,7 +278,7 @@ WebDoc.PageInspectorController = $.klass({
   _updateExternalPageUrl: function() {  
     try {
       page.setExternalPageUrl($("#external_page_url").val());
-      WebDoc.application.pageEditor.loadPage(page);
+      WebDoc.application.pageEditor.loadPage(page, true);
     }
     catch(exc) {
       $("#external_page_url")[0].value = page.data.data.externalPageUrl;
@@ -300,7 +300,7 @@ WebDoc.PageInspectorController = $.klass({
       }
       if (newCss) {
         WebDoc.application.pageEditor.currentPage.applyCss(newCss);
-        WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage);
+        WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
       }
     }
   },

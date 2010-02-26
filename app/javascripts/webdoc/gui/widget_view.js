@@ -92,7 +92,8 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
         widgetObject.mode = "Edit";
         //widgetObject._onLoad();
 		//jQuery.getScript('/sdk/sdk.js',widgetObject._onLoad);
-		widgetObject._loadCurrentSDK('http://localhost:3000/sdk/sdk.js');
+		var path = document.location.protocol + '//' + document.location.host + '/sdk/sdk.js';
+		widgetObject._loadCurrentSDK(path);
       }
       
       // init widget whout SDK
