@@ -67,6 +67,32 @@ WebDoc.DocumentList = $.klass(
                                                       </div>").get(0));
             }
         }
-    }
+    },
+    
+    // Add next / previous page links if necessary, as well as page information
+    repaintPagination: function(pagination) {
+      // Next/Previous page links
+      var hasPagination = pagination.total_pages > 1 ? true : false;
+      if (hasPagination) {
+        this.paginationWrap = $("<div class='pagination'>");
+        $('<span>').html("Page " + pagination.current_page + " of " + pagination.total_pages + " ").appendTo(this.paginationWrap);
+        if (pagination.previous_page > 0) {
+          this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
+          this.previousPageLink.click(function(event){
+            WebDoc.application.documentEditor.loadDocuments(-1);
+            event.preventDefault();
+          }.pBind(this)).appendTo(this.paginationWrap);
+        }
+        if (pagination.next_page > 0) {
+          if(pagination.previous_page > 0) { $("<span>").html(' | ').appendTo(this.paginationWrap); }
+          this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
+          this.nextPageLink.click(function(event){
+            WebDoc.application.documentEditor.loadDocuments(1);
+            event.preventDefault();
+          }.pBind(this)).appendTo(this.paginationWrap);
+        }
+        this.domNode.append(this.paginationWrap);
+      }
+    },
 });
 
