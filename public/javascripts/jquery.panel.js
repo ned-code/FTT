@@ -187,16 +187,8 @@ jQuery.fn[plug] = function(){
     .bind('click', jQuery.delegate({
             '.toggle-head': toggleHead,
             '.toggle-foot': toggleFoot,
-            'a': callHandler//,
-            //'.pop': controlPop
-        })
-    )
-    .bind('open', jQuery.delegate({
-            '.pop': openPop
-        })
-    )
-    .bind('dblclick', jQuery.delegate({
-            '.pop': openPop
+            'a[href="#pop"]': controlPop,
+            'a': callHandler
         })
     )
     .bind('show-head', toggleHead)

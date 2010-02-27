@@ -12,13 +12,13 @@ var defaultTitle = 'enter a title',
     screenClass = 'screen layer',
     numberClass = 'number',
     cancelClass = 'cancel',
-    titleClass = 'title',
     popClass = 'pop';
 
 WebDoc.PageBrowserItemView = $.klass({
   
+  TITLE_CLASS: 'page-title',
   LOADING_ICON_CLASS: 'loading-icon',
-  SHOW_ON_ACTIVE_CLASS: 'active-show',
+  EDIT_ICON_CLASS: 'edit-icon',
   THUMB_CLASS: 'thumb',
   DEFAULT_CLASS: 'default',
   
@@ -27,52 +27,55 @@ WebDoc.PageBrowserItemView = $.klass({
     try {
       var titleObj = this.getPageTitle(page),
           pageItem = $('<li/>'),
-          pageForm = $('<form/>').attr({ method: 'post', title: 'Double click to edit' }).addClass(popClass),
-          pageTitle = $('<input/>').attr({ type: 'text', title: 'Page title' }),
-          pageSubmit = $('<input/>').attr({ type: 'submit' }).addClass( this.SHOW_ON_ACTIVE_CLASS ),
-          pageCancel = $('<a/>').attr({ href: '#cancel' }).addClass(cancelClass + ' ' + this.SHOW_ON_ACTIVE_CLASS ),
-          pageFormScreen = $('<div/>').addClass(screenClass),
+          pageItemTitle = $('<div/>').addClass( this.TITLE_CLASS ),
           pageItemNumber = $('<span/>').addClass(numberClass),
+          pageItemEdit = $('<a/>', {href: '#pop', target: 'pop', title: 'Click to edit'}).addClass( this.EDIT_ICON_CLASS ),
           pageItemLoading = $('<span/>').addClass( this.LOADING_ICON_CLASS ),
-          pageItemHead = $('<div/>').addClass(titleClass),
           pageItemThumb = $('<div/>').addClass( this.THUMB_CLASS ),
-          pageItemThumbView = new WebDoc.PageThumbnailView(page, 120, 90).domNode;
+          pageItemThumbView = new WebDoc.PageThumbnailView(page, 120, 90).domNode,
+          popForm = $('<form/>', { method: 'post', class: popClass }),
+          popTitle = $('<input/>', { type: 'text', title: 'Page title' }),
+          popSubmit = $('<input/>', { type: 'submit' }),
+          popCancel = $('<a/>', { href: '#cancel', class: cancelClass });
       
       this.domNode = pageItem;
       this.thumbNode = pageItemThumb;
-      this._titleNode = pageTitle;
-      this._popNode = pageForm;
+      this._titleNode = pageItemTitle;
       
       // If the title is default
       if(titleObj.defaultBehavior) {
         if( this.page.nbTextItems() > 0 ) {
           this.page.getFirstTextItem().addListener(this);
         }
-        pageTitle.addClass( defaultClass );
+        pageItemTitle.addClass( defaultClass );
       }
       
+      // Construct Pop DOM Tree
+      popForm
+      .append( popTitle )
+      .append( popCancel )
+      .append( popSubmit );
+      
       // Construct DOM tree
-      pageItem.append(
-        pageItemHead.append(
-          pageForm.append(
-            pageTitle.val( titleObj.title )
-          ).append(
-            pageSubmit.val( 'Save' )
-          ).append(
-            pageCancel.text( 'Cancel' )
-          ).append(
-            pageFormScreen
-          )
-        )
-      ).append(
-        pageItemThumb.append(
-          pageItemThumbView
-        )
-      ).append(
-        pageItemNumber
-      ).append(
-        pageItemLoading
-      );
+      pageItem
+      .append(
+        pageItemTitle
+        .text( titleObj.title )
+      )
+      .append(
+        pageItemThumb
+        .append( pageItemThumbView )
+      )
+      .append( pageItemEdit )
+      .append( pageItemNumber )
+      .append( pageItemLoading );
+      
+      // Store pop form in data
+      pageItemEdit.data('pop', {
+        node: popForm,
+        submit: this.updateTitle,
+        cancel: undefined
+      });
       
       page.addListener(this);
     }
@@ -83,7 +86,7 @@ WebDoc.PageBrowserItemView = $.klass({
   
   editTitle: function( str ) {
     if ( typeof str === 'undefined' ) {
-      this._popNode.trigger('open');
+      this.pageItemEdit.trigger('click');
     }
     else {
       // _changeTitle for string
@@ -101,10 +104,11 @@ WebDoc.PageBrowserItemView = $.klass({
     // Find item related to this page
     var newTitle = this.getPageTitle(page).title;
     
-    if(newTitle) {
-        this._titleNode.val( newTitle ).removeClass(this.DEFAULT_CLASS);
+    if( newTitle ) {
+        this._titleNode
+        .text( newTitle )
+        .removeClass( this.DEFAULT_CLASS );
     }
-
   },
   
   objectChanged: function(page) {
@@ -163,9 +167,9 @@ WebDoc.PageBrowserItemView = $.klass({
 
   checkUpdateTitle: function() {
     var title = this.getPageTitle(this.page),
-        currentTitle = this._titleNode.val();
+        currentTitle = this._titleNode.text();
     
-    if(title.title !== currentTitle) this._titleNode.val(title.title);
+    if(title.title !== currentTitle) this._titleNode.text(title.title);
     
     if(title.defaultBehavior) {
       this._titleNode.addClass(defaultClass);

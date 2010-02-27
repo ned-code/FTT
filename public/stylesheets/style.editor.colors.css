@@ -51,8 +51,8 @@ body                          { background-color: hsl(194, 8%, 60%); }
                                 -moz-box-shadow:    0 4px 12px hsl(14, 20%, 30%);
                                 box-shadow:         0 4px 12px hsl(14, 20%, 30%); }
 .pop input[type='text']:focus { background-color: hsl(194, 0.4%, 99%); color: black; outline: none; }
-.pop:hover input[type='text'],
-.pop.active input[type='text'] {background-color: hsl(194, 1%, 96%); }
+/*.pop:hover input[type='text'],
+.pop.active input[type='text'] {background-color: hsl(194, 1%, 96%); }*/
 
 /* Inspectors ------------------------ */
 
@@ -121,14 +121,17 @@ body                          { background-color: hsl(194, 8%, 60%); }
 }
 
 /* Page browser */
-.pages li .title              { background-color: hsl(194, 9%, 71%); }
-.pages li:hover .title        { background-color: hsl(194, 6%, 56%); }
-.pages li.current .title      { background-color: hsl(194, 3%, 88%); }
+.pages li .page-title         { background-color: hsl(194, 9%, 71%); }
+.pages li:hover .page-title   { background-color: hsl(194, 6%, 56%); }
+.pages li.current .page-title { background-color: hsl(194, 3%, 88%); }
 
 .number                       { background-color: hsla(194, 12%, 30%, 0.8); color: white; }
-.pages li .number             { background-color: hsl(194, 10%, 40%); color: white; }
-.pages li:hover .number       { background-color: hsl(194, 12%, 24%); color: white; }
-.pages li.current .number     { background-color: hsl(194, 12%, 24%); color: white; }
+.pages li .number,
+.pages li .loading-icon       { background-color: hsl(194, 10%, 40%); color: white; }
+.pages li:hover .number,
+.pages li:hover .loading-icon { background-color: hsl(194, 12%, 24%); color: white; }
+.pages li.current .number,
+.pages li.current .loading-icon { background-color: hsl(194, 12%, 24%); color: white; }
 
 
 /* Forms */

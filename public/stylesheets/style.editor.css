@@ -288,26 +288,26 @@ body {
     position: relative;
     cursor: move;
 }
-.pages li .title {
+.pages li .page-title {
     height: 1.5em;
+    line-height: 1.5em;
     background: hsl(194, 9%, 71%);
-    padding: 0.6em 0.6em 0.6em 2.5em;
+    padding: 0.6em 0.6em 0.6em 2.7em;
 }
 
 .number {
     display: inline-block;
-    width: 1.5em; height: 1.5em;
     margin: 0;
+    width: 1.5em; height: 1.5em;
+    -webkit-border-radius:  0.75em;
+    -moz-border-radius:     0.75em;
+    border-radius:          0.75em;
     
     /* Just to nudge the text into place */
     /*text-indent: 1px;*/
     font-weight: bold;
     line-height: 1.5;
     text-align: center;
-    
-    -webkit-border-radius:  0.75em;
-    -moz-border-radius:     0.75em;
-    border-radius:          0.75em;
 }
 .pages-info .number {
     position: absolute;
@@ -315,14 +315,31 @@ body {
     left: 50%;
     margin-left: -0.75em;
 }
+.pages li .edit-icon {
+  background-position: 50% 50%;
+  background-image: url('/images/loading-icon-16-white.gif');
+  background: hsl(198, 4%, 84%);
+}
+.pages li .number,
+.pages li .loading-icon,
+.pages li .edit-icon {
+    position: absolute;
+    top: 0.6em;
+    width: 1.5em; height: 1.5em;
+    -webkit-border-radius:  0.75em;
+    -moz-border-radius:     0.75em;
+    border-radius:          0.75em;
+}
 .pages li .number,
 .pages li .loading-icon {
-    position: absolute;
-    left: 0.6em; top: 0.6em;
+    left: 0.6em;
 }
-
-.pages li .loading-icon {
+.pages li .edit-icon {
+    display: none;
     right: 0.6em;
+}
+.pages li:hover .edit-icon {
+    display: block;
 }
 .page_browser_items li.current {
     background: none;
