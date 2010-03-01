@@ -78,26 +78,8 @@ jQuery.fn.extend({
     
     href: function(href) {
         return this.attr("href", href) ;
-    },
-    
-    /**!
-     * unwrap - v0.1 - 7/18/2009
-     * http://benalman.com/projects/jquery-unwrap-plugin/
-     * 
-     * Copyright (c) 2009 "Cowboy" Ben Alman
-     * Licensed under the MIT license
-     * http://benalman.com/about/license/
-     **/
-    // TODO: We no longer need this when we've got jQuery 1.4 !
-    
-    unwrap: function() {
-      this.parent(':not(body)')
-        .each(function(){
-          $(this).replaceWith( this.childNodes );
-        });
-      
-      return this;
     }
+    
 });
 
 // Extend jQuery with some helper functions
