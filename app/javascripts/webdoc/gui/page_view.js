@@ -9,7 +9,9 @@ WebDoc.PageView = $.klass({
         itemDomNode = $('<div/>').id('items').addClass("layer").css({overflow: 'visible'}),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
         eventCatcherNode = jQuery('<div/>').id("event-catcher").addClass('screnn layer').hide(),
-        that = this;
+        that = this,
+        boardContainerSize = {},
+        boardCss = {};
     
     // Extend this
     this.page = page;
@@ -23,19 +25,20 @@ WebDoc.PageView = $.klass({
     drawingDomNode.css("zIndex", 1000000);
     domNode.append( drawingDomNode );
     
-    if (page.data.data.externalPage && !page.data.data.allowAnnotation) {
-      boardContainer.css({
-        width: "100%",
-        height: "100%"
-      });
-    }
-    else {
-        boardContainer
-        .css( page.data.data.css );
-        
-        ddd( 'HEEEEEEEYYYYYYYY!!!!!!!!!' );
-        ddd( page.data.data.css );
-    }
+    boardContainerSize.top = page.data.data.css.top;
+    boardContainerSize.left = page.data.data.css.left;
+    boardContainerSize.width = page.data.data.css.width;
+    boardContainerSize.height = page.data.data.css.height; 
+    $.extend(boardCss, page.data.data.css);
+    delete boardCss.top;
+    delete boardCss.left;
+    delete boardCss.width;
+    delete boardCss.height;
+    boardContainer
+    .css( boardContainerSize );
+    this.domNode.css(boardCss);
+    ddd( 'HEEEEEEEYYYYYYYY!!!!!!!!!' );
+    ddd( page.data.data.css );
     
     if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
       // Handle case where page is an external webpage
@@ -43,20 +46,7 @@ WebDoc.PageView = $.klass({
       externalPage = $("<iframe/>").addClass('layer');
       
       if (page.data.data.externalPageUrl) {
-        externalPage.attr("src", page.data.data.externalPageUrl);
-        
-        if (page.data.data.css.width) {
-          boardContainer.css(page.data.data.css);
-        }
-        else {
-          externalPage.bind("load", function() {
-            page.data.data.css.width = externalPage[0].contentDocument.width;
-            page.data.data.css.height = externalPage[0].contentDocument.height;
-            page.save();
-            boardContainer.css(page.data.data.css);
-          }.pBind(this));
-        }
-        
+        externalPage.attr("src", page.data.data.externalPageUrl);        
         this.itemDomNode.append(externalPage[0]);
       }
     }
@@ -79,9 +69,20 @@ WebDoc.PageView = $.klass({
   
   objectChanged: function(page) {
     //this.domNode.animate(page.data.data.css, 'fast');
-    
+    var boardContainerSize = {};
+    var boardCss = {};
+    boardContainerSize.top = page.data.data.css.top;
+    boardContainerSize.left = page.data.data.css.left;
+    boardContainerSize.width = page.data.data.css.width;
+    boardContainerSize.height = page.data.data.css.height; 
+    $.extend(boardCss, page.data.data.css);
+    delete boardCss.top;
+    delete boardCss.left;
+    delete boardCss.width;
+    delete boardCss.height;
     WebDoc.application.boardController.boardContainerNode
-    .animate(page.data.data.css, 'fast');
+    .animate(boardContainerSize, 'fast');
+    this.domNode.animate(boardCss, 'fast');
     
   },
   
