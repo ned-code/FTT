@@ -73,7 +73,8 @@ WebDoc.BoardController = $.klass({
   },
   
   setCurrentPage: function(page) {
-    ddd('[board_controller] SetCurrentPage')
+    ddd('[board_controller] SetCurrentPage');
+    this._initialSize = null;
     var pageView = new WebDoc.PageView(page),
         board = pageView.domNode;
     
@@ -600,20 +601,22 @@ WebDoc.BoardController = $.klass({
     
     if (!this._initialSize) {
       this._initialSize = {
-        width: parseFloat(this.boardContainerNode.css("width").replace("px", "")),
-        height: parseFloat(this.boardContainerNode.css("height").replace("px", ""))
+        width: parseFloat(this.boardContainerNode.css("width")),
+        height: parseFloat(this.boardContainerNode.css("height")),
+        widthFlag: this.boardContainerNode.css("width").match(/px/)?"px":"%",
+        heightFlag: this.boardContainerNode.css("height").match(/px/)?"px":"%"
       };
     }
     
     boardContainerCss = {
-      width: this._initialSize.width * this._currentZoom,
-      height: this._initialSize.height * this._currentZoom
-    }
-    
+      width: (this._initialSize.width * this._currentZoom) + this._initialSize.widthFlag,
+      height: (this._initialSize.height * this._currentZoom) + this._initialSize.heightFlag
+    };
+    ddd("new board size", boardContainerCss.width, boardContainerCss.height);
     svgCss = {
       width: 100/this._currentZoom + '%',
       height: 100/this._currentZoom + '%'
-    }      
+    };     
 
     boardNode.css( boardCss );
     this.boardContainerNode.css( boardContainerCss );
