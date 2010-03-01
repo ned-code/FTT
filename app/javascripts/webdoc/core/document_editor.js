@@ -35,7 +35,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.documents = [];
         this.documentList = null;
         this.filter = undefined;
-        this.myPageId = 1;
+        this.currentListingPageId = 1;
         WebDoc.application.documentEditor = this;
         WebDoc.application.undoManager = new MTools.UndoManager();
         WebDoc.application.accessController = new WebDoc.DocumentAccessController();
@@ -224,8 +224,8 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     },
         
     incrementPageId: function(pageIncrement) {
-      this.myPageId += pageIncrement;
-      if (this.myPageId < 1) { this.myPageId = 1; }
+      this.currentListingPageId += pageIncrement;
+      if (this.currentListingPageId < 1) { this.currentListingPageId = 1; }
     },
 
     loadDocumentsWithFilter: function(event)
@@ -236,14 +236,14 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         else{
            this.documentFilter = event.document_filter;
         }
-        
+        this.currentListingPageId = 1;
         this.updateCurrentFilterSelection(event);
         this.loadDocuments(0);
     },
     
     loadDocuments: function(pageIncrement) {
-      this.myPageId += pageIncrement;
-      if (this.myPageId < 1) { this.myPageId = 1; }
+      this.currentListingPageId += pageIncrement;
+      if (this.currentListingPageId < 1) { this.currentListingPageId = 1; }
       
       MTools.ServerManager.getRecords(WebDoc.Document, null, function(data)
       {
@@ -253,7 +253,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     },
     
     createAjaxParams: function() {
-      return (this.documentFilter !== null)? { ajaxParams: { document_filter: this.documentFilter, page: this.myPageId }} :  { ajaxParams: { page:this.myPageId }};
+      return (this.documentFilter !== null)? { ajaxParams: { document_filter: this.documentFilter, page: this.currentListingPageId }} :  { ajaxParams: { page:this.currentListingPageId }};
     },
     
     refreshDocumentList: function(pagination)
