@@ -2,11 +2,16 @@
  * @author julien
  */
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
+  
+  initialize: function($super, item, pageView, afterItem) {
+    $super(item, pageView, afterItem);
+    if (this.itemDomNode.hasClass("empty")) {
+      this.itemDomNode.html(WebDoc.NEW_TEXTBOX_CONTENT);
+    }  
+  },
+  
   createDomNode: function($super) {
     var result = $super();
-    if (result.hasClass("empty")) {
-      result.html(WebDoc.NEW_TEXTBOX_CONTENT);
-    }
     return result;
   },
   
