@@ -71,8 +71,15 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   },
   
   applyTextContent: function(content, classValue) {
-    this.textView.item.data.data.innerHTML = content;
-    this.textView.item.data.data['class'] = classValue;
+
+    if (classValue && classValue === "empty") {
+      this.textView.itemDomNode.addClass("empty");
+    }
+    else {
+      this.textView.itemDomNode.removeClass("empty");
+    }
+    this.textView.item.data.data.innerHTML = content;    
+    this.textView.item.data.data['class'] = this.textView.itemDomNode.attr("class");
     this.textView.item.fireInnerHtmlChanged();
     this.textView.item.save();
   }

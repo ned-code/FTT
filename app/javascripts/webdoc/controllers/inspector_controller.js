@@ -30,7 +30,7 @@ WebDoc.InspectorController = $.klass({
     var widgetPalette = $("#palette_widget").hide();
     widgetPalette.bind("load", function() {
       ddd("must inject uniboard api in inspector");
-      if (widgetPalette[0].contentWindow) {
+      if (widgetPalette[0].contentWindow && WebDoc.application.boardController.selection().length) {
         ddd("inject uniboard api in inspector");
         widgetPalette[0].contentWindow.uniboard = this.widgetInspectorApi;
         if (widgetPalette[0].contentWindow.widget) {
@@ -38,9 +38,14 @@ WebDoc.InspectorController = $.klass({
           widgetObject.lang = "en";
           widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
           widgetObject.mode = "Edit";
-          //widgetObject._onLoad();
-		  var path = document.location.protocol + '//' + document.location.host + '/sdk/sdk.js';
-		  widgetObject._loadCurrentSDK(path);
+          // check if widget has the sdk_boot or the full sdk.
+          if (widgetObject._loadCurrentSDK) {
+            var path = document.location.protocol + '//' + document.location.host + '/sdk/sdk.js';
+            widgetObject._loadCurrentSDK(path);
+          }
+          else {
+            widgetObject._onLoad();  
+          }
         }
         else if (widgetPalette[0].contentWindow.initialize) {
           widgetPalette[0].contentWindow.initialize();
@@ -115,8 +120,7 @@ WebDoc.InspectorController = $.klass({
   },
   
   refreshProperties: function() {
-    this.subInspectors[0];
-    subInspector.refresh();
+    this.subInspectors[0].refresh();
   },
   
   
@@ -136,7 +140,7 @@ WebDoc.InspectorController = $.klass({
           this.palettes[3].attr("src", WebDoc.application.boardController.selection()[0].inspectorId());
         }      
         else {
-          if (this.palettes[3][0].contentWindow && this.palettes[3][0].contentWindow.widget) {
+          if (this.palettes[3][0].contentWindow && this.palettes[3][0].contentWindow.widget && this.palettes[3][0].contentWindow.widget._onLoad) {
             var widgetObject = this.palettes[3][0].contentWindow.widget;
             widgetObject.lang = "en";
             widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
