@@ -44,7 +44,8 @@ body {
 
 #webdoc         { z-index: 1; }
 .panel          { z-index: 2; }
-.toolbar-panel  { z-index: 3; }    
+.toolbar-panel  { z-index: 3; }
+.ui-pop         { z-index: 4; } 
 
 #webdoc .center     { z-index: 2; }
 #left-panel-ghost,
@@ -291,7 +292,6 @@ body {
 .pages li .page-title {
     height: 1.5em;
     line-height: 1.5em;
-    background: hsl(194, 9%, 71%);
     padding: 0.6em 0.6em 0.6em 2.7em;
 }
 
@@ -363,7 +363,7 @@ body {
   padding: 0;
   margin-bottom: 6px;
   
-  border: 6px solid hsl(194, 9%, 71%);
+  border: 6px solid;
   border-top: 0;
   
   -webkit-border-bottom-left-radius:  3px;
@@ -376,12 +376,6 @@ body {
   -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
   -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
   box-shadow:         0 6px 8px hsl(14, 6%, 30%);
-}
-.pages li:hover .thumb {
-  border-color: hsl(194, 6%, 56%);
-}
-.pages li.current .thumb {
-  border-color: hsl(194, 3%, 88%);
 }
 .hide-thumbs li .thumb {
   height: 0;
@@ -858,51 +852,4 @@ body {
   width:50px;
   height:50px;
   margin-bottom: 6px;
-}
-
-/* ================= */
-/* = Rails default = */
-/* ================= */
-
-pre {
-  background-color: #eee;
-  padding: 10px;
-  font-size: 11px;
-}
-
-.fieldWithErrors {
-  padding: 2px;
-  background-color: red;
-  display: table;
-}
-
-#errorExplanation {
-  width: 400px;
-  border: 2px solid red;
-  padding: 7px;
-  padding-bottom: 12px;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-}
-
-#errorExplanation h2 {
-  text-align: left;
-  font-weight: bold;
-  padding: 5px 5px 5px 15px;
-  font-size: 12px;
-  margin: -7px;
-  background-color: #c00;
-  color: #fff;
-}
-
-#errorExplanation p {
-  color: #333;
-  margin-bottom: 0;
-  padding: 5px;
-}
-
-#errorExplanation ul li {
-  font-size: 12px;
-  list-style: square;
-  margin: 4px;
 }

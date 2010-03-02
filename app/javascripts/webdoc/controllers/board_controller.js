@@ -594,7 +594,7 @@ WebDoc.BoardController = $.klass({
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
     
-    boardCss.WebkitTransformOrigin = "0px 0px"; //[ this._initialSize.width/2, 'px', ' ', this._initialSize.height/2, 'px' ].join('');
+    boardCss.WebkitTransformOrigin = "0px 0px";
     boardCss.WebkitTransform = this._currentZoom === 1 ? "" : "scale(" + this._currentZoom + ")" ;
     boardCss.MozTransformOrigin = this._currentZoom === 1 ? "" : "0px 0px" ;
     boardCss.MozTransform = boardCss.WebkitTransform;

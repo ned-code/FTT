@@ -23,7 +23,10 @@ WebDoc.PageBrowserItemView = $.klass({
   DEFAULT_CLASS: 'default',
   
   initialize: function(page) {
+    var self = this;
+    
     this.page = page;
+    
     try {
       var titleObj = this.getPageTitle(page),
           pageItem = $('<li/>'),
@@ -33,14 +36,19 @@ WebDoc.PageBrowserItemView = $.klass({
           pageItemLoading = $('<span/>').addClass( this.LOADING_ICON_CLASS ),
           pageItemThumb = $('<div/>').addClass( this.THUMB_CLASS ),
           pageItemThumbView = new WebDoc.PageThumbnailView(page, 120, 90).domNode,
-          popForm = $('<form/>', { method: 'post', class: popClass }),
-          popTitle = $('<input/>', { type: 'text', title: 'Page title' }),
-          popSubmit = $('<input/>', { type: 'submit' }),
-          popCancel = $('<a/>', { href: '#cancel', class: cancelClass });
+          popForm = $('<form/>', { method: 'post', 'class': 'ui-pop-page-title' }),
+          popLabel = $('<label/>', { 'class': 'underlay' }).text('enter a title'),
+          popTitle = $('<input/>', { type: 'text', title: 'Page title', name: 'page-title', value: '' }),
+          popActions = $('<div/>', { 'class': "ui-actions" }),
+          popSubmit = $('<input/>', { type: 'submit', name: 'page-title-form', value: 'Save' }),
+          popCancel = $('<a/>', { href: '#cancel', 'class': cancelClass, html: 'cancel' });
       
       this.domNode = pageItem;
       this.thumbNode = pageItemThumb;
       this._titleNode = pageItemTitle;
+      this._titleEditNode = pageItemEdit;
+      this._popForm = popForm;
+      this._popTitle = popTitle;
       
       // If the title is default
       if(titleObj.defaultBehavior) {
@@ -52,11 +60,15 @@ WebDoc.PageBrowserItemView = $.klass({
       
       // Construct Pop DOM Tree
       popForm
+      .append( popLabel )
       .append( popTitle )
-      .append( popCancel )
-      .append( popSubmit );
+      .append(
+        popActions
+        .append( popCancel )
+        .append( popSubmit )
+      );
       
-      // Construct DOM tree
+      // Construct Item DOM tree
       pageItem
       .append(
         pageItemTitle
@@ -70,12 +82,11 @@ WebDoc.PageBrowserItemView = $.klass({
       .append( pageItemNumber )
       .append( pageItemLoading );
       
-      // Store pop form in data
-      pageItemEdit.data('pop', {
-        node: popForm,
-        submit: this.updateTitle,
-        cancel: undefined
-      });
+      // Bind actions
+      pageItemEdit.bind('click', function(e){
+        this.editTitle();
+        return false;
+      }.pBind(this));
       
       page.addListener(this);
     }
@@ -85,12 +96,79 @@ WebDoc.PageBrowserItemView = $.klass({
   },
   
   editTitle: function( str ) {
+    var self = this,
+        node,
+        popOptions;
+    
     if ( typeof str === 'undefined' ) {
-      this.pageItemEdit.trigger('click');
+      
+      popOptions = {
+        // Some of these should really be put in a global setup
+        popWrapClass: 'ui ui-pop-position',
+        popClass: 'ui-pop ui-widget ui-corner-all',
+        width: '12em',
+        content: this._popForm,
+        openEasing: 'easeOutBack',
+        shutEasing: 'easeInQuart'
+      };
+      
+      // Decide where to trigger the pop
+      if ( WebDoc.application.pageBrowserController.visible ) {
+        node = this._titleEditNode;
+        node.css({ display: 'block' });
+        
+        popOptions.closeCallback = function(){
+          node.css({ display: '' });
+        }
+      } else {
+        // TODO: We a way of knowing what was clicked.
+        node = jQuery(".toolbar-panel a[href='#add-page']");
+        
+        popOptions.orientation = 'bottom';
+      }
+      
+      node.pop(
+        jQuery.extend( popOptions, {
+          initCallback: function(){
+            var currentTitle = self.page.getTitle();
+            
+            // Oh man, it returns the string 'undefined'
+            if (currentTitle === undefined || currentTitle === 'undefined') {
+              self._popTitle.addClass( 'default' );
+            }
+            else {
+              self._popTitle.val( currentTitle );
+            }
+            
+            self._popTitle.bind('keyup', function(){
+                
+              if ( self._popTitle.val().length === 0 ) {
+                self._popTitle.addClass( 'default' );
+              }
+              else {
+                self._popTitle.removeClass( 'default' );
+              }
+            });
+            
+            // Bind stuff to do on submit
+            self._popForm.bind('submit', function(e){
+              self.page.setTitle( self._popTitle.val() );
+              self._popForm.trigger('close');
+              
+              return false;
+            });
+            
+            // Give the input focus
+            self._popTitle.focus();
+          }
+        })
+      );
     }
     else {
       // _changeTitle for string
     }
+    
+    return false;
   },
   
   destroy: function() {
@@ -99,7 +177,7 @@ WebDoc.PageBrowserItemView = $.klass({
     this.domNode.remove();
   },
 
-  updateTitle: function(page){
+  updateTitle: function( page ){
     ddd("[PageBrowserController] Update title");
     // Find item related to this page
     var newTitle = this.getPageTitle(page).title;
@@ -126,7 +204,8 @@ WebDoc.PageBrowserItemView = $.klass({
   },
 
   itemAdded: function(addedItem) {
-   // If page contains a single text item, it will be used to define the page title, so add a listener to this item so it will notifiy its changes to the related browser node
+   // If page contains a single text item, it will be used to define the page title, so
+   // add a listener to this item so it will notify its changes to the related browser node
    if(this.page.nbTextItems()===1 && addedItem.type() === "text") {
      addedItem.addListener(this);
    }

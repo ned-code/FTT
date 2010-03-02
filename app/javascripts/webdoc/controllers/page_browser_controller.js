@@ -99,7 +99,6 @@ WebDoc.PageBrowserController = $.klass({
           number.html( i+1 );
           
           // Update current page number
-          // TODO: There must be a way of doing this without querying the DOM
           if ( $(this).hasClass( self.CURRENT_CLASS ) ) {
             $( self.PAGE_NUMBER_SELECTOR ).html( i+1 );
           }
@@ -117,16 +116,7 @@ WebDoc.PageBrowserController = $.klass({
     
     pageBrowserItems
     .bind('click', jQuery.delegate({
-        '.cancel':          this.cancelEditTitle,
         'li':               this.selectCurrentPage
-      }, this)
-    )
-    .bind('keydown', jQuery.delegate({
-        'input[type=text]': this.keydownEditTitle
-      }, this)
-    )
-    .bind('submit', jQuery.delegate({
-        'form':             this.submitEditTitle 
       }, this)
     );
   },  
@@ -271,37 +261,6 @@ WebDoc.PageBrowserController = $.klass({
     
     // Update current page number
     $( this.PAGE_NUMBER_SELECTOR ).html( items.index( pageBrowserItem.domNode[0] ) + 1 );
-  },
-  
-  // Titles ---------------------------------------------------------
-  
-  keydownEditTitle: function(event) {
-    if (event.which === 27) { // Escape key
-      this.cancelEditTitle(event);
-    }
-  },
-  
-  cancelEditTitle: function(event) {
-    ddd('[WebDoc.pageBrowserController] cancelEditTitle');
-    
-    var input = $( event.target ),
-        form = input.closest('form');
-    
-    return false;
-  },
-  
-  submitEditTitle: function(event) {
-    ddd('[WebDoc.pageBrowserController] submitEditTitle');
-    
-    var form = $( event.delegateTarget ),
-        input = form.find( 'input:eq(0)' ),
-        newTitle = input.val(),
-        pageItem = form.closest('li'),
-        data = pageItem.data('webdoc'),
-        page = data && data.page;
-    
-    page.setTitle(newTitle);
-    return false;
   },
   
   // Show / hide browser --------------------------------------------

@@ -1,10 +1,40 @@
 /* style.application.css
  *
- * Interface styles for application
+ * Styles for website
  *
  */
 
-body {}
+/* Base font-size is set to 1em == 12px in style.css.
+ * Use this chart to style using other font sizes:
+ *
+ * 10px == 0.8333em or 83.33%
+ * 11px == 0.9167em or 91.67%
+ * 12px == 1em      or 100%
+ * 14px == 1.1667em or 116.67%
+ * 15px == 1.25em   or 125%
+ * 16px == 1.3333em or 133.33%
+ * 18px == 1.5em    or 150%
+ * 20px == 1.6667em or 166.67%
+ * 22px == 1.8333em or 183.33%
+ * 24px == 2em      or 200%
+ * 28px == 2.3333em or 233.33%
+ * 32px == 2.6667em or 266.67%
+ * 36px == 3em      or 300%
+ *
+ */
+
+body {
+    line-height: 1.333;
+}
+
+
+
+
+
+
+
+
+
 
 a { color: #3B9EEF; }
 a{ outline: none;}
@@ -275,427 +305,6 @@ ul#widget-list li {
 
 .widget-controls {
   color: #666;
-}
-
-/*******************/
-/* = toolbars = */
-
-#titlebar {
-    overflow: visible;
-}
-
-#titlebar{
-    height: 24px;
-    background: url(../images/deco/tb_small_bg.png) 0 0 repeat-x;
-}
-#titlebar h1{
-    float: left;
-    height: 24px;
-}
-
-#tb_1_utilities {
-    float: right;
-    padding-top: 3px;
-    list-style: none;
-}
-#tb_1_utilities li {
-    float: left;
-    margin-left: 15px;
-    line-height: 1em;
-}
-#tb_1_utilities_preview{
-  margin-top: 1px;
-}
-#tb_1_utilities_preview a{
-    display: block;
-    height: 13px;
-    line-height: 13px;
-    padding: 4px 5px 0 20px;
-    margin-top: -1px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    background-color: #fff;
-    background-repeat: no-repeat;
-    background-position: 2px 0px;
-    border: 1px solid #afafaf;
-    text-transform: uppercase;
-    color: #999999;
-    text-decoration: none;
-    font-size: 11px;
-    font-weight: bold;
-}
-
-#tb_1_utilities_preview a{
-  background-image: url(../images/icons/edit_16.png);
-}
-.edit-mode #tb_1_utilities_preview a{
-  background-image: url(../images/icons/eye.png);
-}
-
-#tb_1_utilities_preview a:hover{
-    color: #4D4D4D;
-}
-#tb_1_utilities_preview a img{
-    vertical-align:middle;
-}
-#tb_1_utilities_docname{
-    padding-top: 5px;
-}
-#tb_1_utilities_docname span{
-    color: #8F8F8F;
-    margin-left: -2px;
-}
-#tb_1_utilities_docname #current_page{
-    font-weight: bold;
-}
-#tb_1_utilities_docname h2{
-    float: left;
-}
-#tb_1_utilities_docname #current_page{
-    margin-left: 5px;
-}
-#tb_1_utilities_settings_trigger{
-    display: block;
-    height: 18px;
-    padding: 0 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    background: #4D4D4D;
-
-}
-#tb_1_utilities_settings_trigger.tb_1_utilities_settings_attention{
-  background:#ee1111;
-}
-#tb_1_utilities_settings:hover > ul{
-    display: block;
-    z-index: 3000;
-}
-#tb_1_utilities_settings_trigger img{
-    vertical-align: bottom;
-}
-#tb_1_utilities_settings_dropdown{
-    display: none;
-    list-style: none;
-    z-index: 1000;
-    position: absolute;
-    top: 18px;
-    right: 10px;
-    -moz-border-radius: 5px 0 5px 5px;
-    -webkit-border-radius: 5px 0 0 0;
-    background:#4D4D4D;
-}
-#tb_1_utilities_settings_dropdown li{
-    float: none;
-    margin: 0;
-}
-
-#tb_1_utilities_settings li:hover > ul{
-  display:block;
-  list-style: none;
-}
-#tb_1_utilities_settings_dropdown li ul{
-  display:none;
-  position:relative;
-  margin-left:10px;
-}
-
-
-#tb_1_utilities_settings_dropdown a{
-    display: block;
-    padding: 3px;
-    margin: 5px 5px;
-    color: #efefef;
-    text-decoration: none;
-    font-size: 11px;
-}
-#tb_1_utilities_settings_dropdown a:hover{
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    background:#7F7F7F;
-}
-
-/*******************/
-
-/* == page browser = */
-.page_thumb {
-  position:relative;
-  margin-bottom:5px;
-  margin-left:auto;
-  margin-right:auto;
-  margin-top:5px;
-  border: solid 2px #ebebeb;
-  padding: 2px;  
-  background-color: #fff;
-}
-
-.selected_thumb {
-  padding: 2px;
-  border: solid 2px #3B9EEF;
-  -webkit-user-drag:element;
-}
-.page_thumb_url {
-  color:#000;
-  background-color: #fff;
-  margin-top:30px;
-}
-.page_thumb_external {
-  background-color: #fff;
-}
-.widget_thumb {
-  background-color: #aaf;
-}
-
-
-
-/* Page Browser */
-
-.page_browser_items li {
-  background: #555555;
-}
-.page_browser_items li.current {
-  background: #cccccc;
-}
-.page_browser_items input[type='text'] {
-  height: 28px;
-  border: none;
-  margin: 0 auto;
-  width: 100%;
-  text-align: center;
-  -webkit-border-radius: 14px;
-  -moz-border-radius: 14px;
-  border-radius: 14px;
-}
-.page_browser_items form {
-  height: 28px;
-  background: #333333;
-  overflow: hidden;
-}
-
-/*******************/
-/* = board part = */
-
-#document_loading {
-  text-align:center;
-  width:100%;
-  height:100%;
-}
-#document_loading img{
-  position:relative;
-  top:150px;
-}
-
-#board {
-    position: relative;
-    overflow: hidden;
-    font-family:Helvetica, Arial, sans-serif;
-    font-size: 2.5em;
-}
-
-#board.move-tool        { cursor: move; }
-#board.draw-tool        { cursor: url('/images/icons/cursor_pen.png'), crosshair; }
-#board.select-tool      { cursor: default; }
-#board.insert-html-tool {}
-#board.insert-text-tool {}
-
-#board ol, #board ul {
-  padding-left:1.5em;
-  margin-bottom: 0.4em;
-}
-#board ol ol, #board ul ul {
-  margin-top: -0.1em;
-  font-size: 0.8em;
-}
-#board ol li, #board ul li {
-  margin-bottom: 0.2em;
-}
-
-
-/* == Item view = */
-.drag_handle {
-  position:absolute;
-  z-index:1000000;
-}
-.drawing_handle {
-  position:absolute;
-  z-index:1000000;    
-}
-.resize_handle {
-  position:absolute;
-  z-index:1000000;   
-}
-
-.item {
-  overflow:hidden;
-}
-
-.item_wrap {
-  overflow:hidden;
-  position:absolute;
-}
-.edit-mode .item_wrap {
-  border-style: solid;
-  border-width: 1px;
-  margin-top: -1px;
-  margin-left: -1px;
-}
-.edit-mode .item_selected {
-  border-width: 3px;
-  margin-top: -3px;
-  margin-left: -3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-}
-
-
-.load_item {
-  overflow:hidden;
-  position:absolute;
-  border: solid 1px #888888;
-}
-
-
-.item-edited {
-  z-index: 2000000;
-}
-
-.ui-resizable-e {
-  cursor:e-resize;
-  height:100%;
-  right:-7px;
-  top:0;
-  width:14px;
-}
-
-.ui-resizable-s {
-  border:medium none #FFFFFF;
-  bottom:-7px;
-  cursor:s-resize;
-  height:14px;
-  left:0;
-  width:100%;
-}
-
-.ui-resizable-se {
-  bottom:-7px;
-  cursor:se-resize;
-  height:14px;
-  right:-7px;
-  width:14px;
-}
-.ui-resizable-handle {
-  z-index:1000000;  
-}
-/*******************/
-/* = right part = */
-.ui-accordion .ui-accordion-content {
-  padding:0px;
-}
-
-.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus {
-  background-color:  #fff;
-}
-
-.ui-state-hover a, .ui-state-hover a:hover {
-  background-color:  #fff;
-}
-#right_bar{
-    background-color: #ebebeb;
-}
-#inspectors {
-  position:relative;
-  overflow:auto; 
-  background-color:#ebebeb;
-}
-
-#inspectors .inspector{
-  background:#ebebeb;   
-  position:relative;
-  overflow:hidden; 
-  padding:10px;
-  padding-left:20px;
-}
-
-/* == properties inspector */
-.properties_line {
-  width:100%;
-}
-/* == palette inspector */
-.palette {
-  background:#ebebeb;
-  width:100%;
-  height:300px;  
-  margin:0;  
-}
-.palette li {
-  float:left;
-  list-style:none outside;
-  margin:5px 20px 0 0;
-  padding:2px;
-}
-
-/* === pen palette */
-#palette_text {
-  font-size:12px;
-}
-#palette_overlay {
-  position:absolute;
-  top:0;
-  left:0;
-}
-#palette_text ul li a:hover {
-  display: block;
-  background-color: #fff;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-}
-/* === pen palette */
-#colors li a div {
-  width:20px;
-  height:20px;
-  margin:5px;
-}
-#sizes li a img {
-  width:18px;
-  height:18px;
-  margin:5px;
-  border:1px solid #000;
-}
-
-#properties_inspector {
-  height:300px;
-}
-/* == inner HTML inspector */
-
-/* == Image and widget library = */
-.image_item {
-  width:100px;
-  height:70px;
-  padding:5px;
-}
-
-#widget_library_wrap {
-  overflow:auto;
-  width: 285px;
-  height: 50%; 
-  margin:10px 0;  
-  background-color:#ebebeb;
-}
-
-#widget_library_wrap ul {
-  list-style-image:none;
-  list-style-position:outside;
-  list-style-type:none;
-}
-
-#widget_library_wrap ul li{
-   float:left; 
-}
-
-.widget_item {
-  width:50px;
-  height:50px;
-  margin-bottom: 6px;
 }
 
 /* ================= */

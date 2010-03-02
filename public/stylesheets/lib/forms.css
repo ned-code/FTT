@@ -14,7 +14,7 @@ legend      { font-weight: bold; font-size:1.2em; }
 
 label {
   font-weight: bold; 
-  line-height: 1.077;  /* A magic number that equalises FF's label baseline to its default input baseline. */
+  line-height: 1.077;  /* A magic number that equalises FF's label baseline to its default input baseline. Mostly. */
 }
 input[type='text'], input[type='password'],
 input.text {
@@ -216,37 +216,44 @@ form.inline p { margin-bottom:0; }
     font-size: 1em;
 }
 
-/* Pop-ups */
+/* Pops */
 
-.pop {
-  height: 1.5em;
-  overflow: hidden;
-  
-  -webkit-border-radius: 1em;
-  -moz-border-radius:    1em;
-  border-radius:         1em;
-  
-  cursor: text;
+.ui-pop-position {
+	width: 0;
+	height: 0;
+	position: fixed;
 }
-.pop {
-    position: relative;
+.ui-pop {
+	position: absolute;
+	display: block;
+	background: black;
+  border: 3px solid;
+  margin: 0;
 }
-.pop .screen {
-    display: block;
-    opacity: 0;
-    filter: alpha(opacity=0);
+.ui-pop .ui-actions {
+  text-align: right;
 }
-.pop.active .screen {
-    display: none;
+.ui-pop .cancel:hover,
+.ui-pop .cancel:focus {
+  color: hsl(198, 8%, 98%);
+  text-decoration: underline;
 }
-.pop label,
-.pop input[type='text'] {
+.ui-pop .cancel {
+  margin-right: 0.6em;
+  color: hsl(198, 8%, 88%);
+  text-decoration: none;
+}
+.ui-pop-page-title {
+	width: 12em;
+}
+.ui-pop label,
+.ui-pop input[type='text'] {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   
   height: 1.5em;
-  margin: 0 0 0.8em 0;
+  margin: 0 0 0.6em 0;
   padding: 0.1659em 0.5em 0;
   font-family: 'Helvetica', sans-serif;
   font-size: 1em;
@@ -256,13 +263,21 @@ form.inline p { margin-bottom:0; }
   -moz-border-radius:    0.75em;
   border-radius:         0.75em;
 }
-.pop.active {
-  border: 3px solid hsla(194, 20%, 20%, 0.8);
-  margin: -3px;
-  z-index: 999;
+.ui-pop label.underlay {
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 1;
+  font-weight: normal;
 }
-.pop input[type='text']:focus {
-  outline: none;
+
+.ui-pop input {
+  position: relative;
+  z-index: 2;
+  -webkit-transition: opacity 0.06s ease-in;
+}
+.ui-pop input[type='text'].default {
+  opacity: 0.6;
+  -webkit-transition: opacity 0.66s ease-in;
 }
 
 .active-show {
