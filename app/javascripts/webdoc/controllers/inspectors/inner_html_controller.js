@@ -18,6 +18,7 @@ WebDoc.InnerHtmlController = $.klass({
           height: '100%',
           initCallback: function( editor ) {
             // Hide inspector once this thread has finished
+            ddd("code mirror callback");
             setTimeout( function(){ domNode.hide();
             }, 0 );
           },
@@ -34,6 +35,7 @@ WebDoc.InnerHtmlController = $.klass({
   },
   
   refresh: function() {
+    ddd("refresh html inspector");
     if (WebDoc.application.boardController.selection().length) {
       
       var item = WebDoc.application.boardController.selection()[0].item;
