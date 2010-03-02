@@ -80,7 +80,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       }
     }
   },  
-  
+
   initWidget: function() {
     $("#wait_" + this.item.uuid()).remove();
     if (this.itemDomNode.get(0).contentWindow) {
@@ -90,7 +90,14 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
         widgetObject.lang = "en";
         widgetObject.uuid = this.item.uuid();
         widgetObject.mode = "Edit";
-        widgetObject._onLoad();
+        // check if widget has the sdk_boot or the full sdk.
+        if (widgetObject._loadCurrentSDK) {
+          var path = document.location.protocol + '//' + document.location.host + '/sdk/sdk.js';
+          widgetObject._loadCurrentSDK(path);
+        }
+        else {
+          widgetObject._onLoad();  
+        }
       }
       
       // init widget whout SDK

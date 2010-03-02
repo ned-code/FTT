@@ -37,7 +37,6 @@ WebDoc.PageView = $.klass({
     boardContainer
     .css( boardContainerSize );
     this.domNode.css(boardCss);
-    ddd( 'HEEEEEEEYYYYYYYY!!!!!!!!!' );
     ddd( page.data.data.css );
     
     if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
@@ -82,8 +81,7 @@ WebDoc.PageView = $.klass({
     delete boardCss.height;
     WebDoc.application.boardController.boardContainerNode
     .animate(boardContainerSize, 'fast');
-    this.domNode.animate(boardCss, 'fast');
-    
+    this.domNode.animate(boardCss, 'fast');    
   },
   
   itemAdded: function(addedItem, afterItem) {

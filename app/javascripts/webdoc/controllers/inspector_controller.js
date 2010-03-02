@@ -27,10 +27,10 @@ WebDoc.InspectorController = $.klass({
     this.textInspector = new WebDoc.TextPaletteController( "#text-inspector" );
     this.htmlInspector = new WebDoc.InnerHtmlController( "#html-inspector" );
     
-    var widgetPalette = $("#palette_widget").hide();
+    var widgetPalette = $("#widget-inspector").hide();
     widgetPalette.bind("load", function() {
       ddd("must inject uniboard api in inspector");
-      if (widgetPalette[0].contentWindow) {
+      if (widgetPalette[0].contentWindow && WebDoc.application.boardController.selection().length) {
         ddd("inject uniboard api in inspector");
         widgetPalette[0].contentWindow.uniboard = this.widgetInspectorApi;
         if (widgetPalette[0].contentWindow.widget) {
@@ -38,7 +38,14 @@ WebDoc.InspectorController = $.klass({
           widgetObject.lang = "en";
           widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
           widgetObject.mode = "Edit";
-          widgetObject._onLoad();
+          // check if widget has the sdk_boot or the full sdk.
+          if (widgetObject._loadCurrentSDK) {
+            var path = document.location.protocol + '//' + document.location.host + '/sdk/sdk.js';
+            widgetObject._loadCurrentSDK(path);
+          }
+          else {
+            widgetObject._onLoad();  
+          }
         }
         else if (widgetPalette[0].contentWindow.initialize) {
           widgetPalette[0].contentWindow.initialize();
@@ -46,6 +53,7 @@ WebDoc.InspectorController = $.klass({
       }                      
     }.pBind(this));
     
+    this.textInspector.domNode.hide();
     this._inspectorNodes = [
       emptyPalette,
       this.textInspector.domNode,
@@ -58,8 +66,9 @@ WebDoc.InspectorController = $.klass({
     this._properties = new WebDoc.PropertiesInspectorController( '#properties' );
     this._updatePalette(0);
     
-    this.lastInspectorId = 1;
+    this.lastInspectorId = 0;
     this.currentInspectorId = 0;
+    
     WebDoc.application.boardController.addSelectionListener(this);
   },
   
@@ -68,7 +77,7 @@ WebDoc.InspectorController = $.klass({
   },
   
   _updatePalette: function(paletteId) {
-    var inspectorNode = this._inspectorNodes[paletteId];
+    var inspectorNode = null;
     
     ddd("[InspectorController] updatePalette", paletteId, inspectorNode );
     
@@ -81,16 +90,15 @@ WebDoc.InspectorController = $.klass({
       
       // Inspector belongs to widget
       if (typeof paletteId == 'string') {
-        this._inspectorNodes[3].show();
         this.currentInspectorId = 3;
       }
-      
       // Inspector is native
       else {
-        inspectorNode.show();
         this.currentInspectorId = paletteId;
       }
       
+      inspectorNode = this._inspectorNodes[this.currentInspectorId];
+      inspectorNode.show();
       // This is, admittedly, a bit of a hack. We get the properties
       // node and plonk it into this inspector. We may end up moving the
       // properties node, so lets leave it like this for the time being.
@@ -133,7 +141,7 @@ WebDoc.InspectorController = $.klass({
           this._inspectorNodes[3].attr("src", WebDoc.application.boardController.selection()[0].inspectorId());
         }      
         else {
-          if (this._inspectorNodes[3][0].contentWindow && this._inspectorNodes[3][0].contentWindow.widget) {
+          if (this._inspectorNodes[3][0].contentWindow && this._inspectorNodes[3][0].contentWindow.widget && this._inspectorNodes[3][0].contentWindow.widget._onLoad) {
             var widgetObject = this._inspectorNodes[3][0].contentWindow.widget;
             widgetObject.lang = "en";
             widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();

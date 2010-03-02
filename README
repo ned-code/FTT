@@ -12,10 +12,21 @@ Dependencies:
 
 Run in working repository:
 
- sudo gem install uuidtools
- sudo gem install sprockets
- sudo rake gems:install
+  sudo gem install uuidtools
+  sudo gem install sprockets
+  sudo rake gems:install
 
+
+Create a sym link to app/javascripts
+
+ On MacOSX or Linux fom the public/app folder do
+   ln -s ../../app/javascripts/ javascripts
+ On Windows vista or 7 from the public/app folder do
+   mklink /D javascripts ..\app\javascripts
+ On Windows XP sym link does not exist and you must modify config/assets.yml with
+   package_assets: always
+ 
+   
 If all tests pass, you can work on a big new feature ;-)
 
 

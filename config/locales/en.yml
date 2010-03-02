@@ -154,7 +154,7 @@ en:
         item_inspector: "Show Inspector"
         page_inspector: "Show Page inspector"
         document_inspector: "Show Document inspector"
-      
+        social_panel: "Show social panel"
       pages_browser:
         add_page: "Add page"
         add_web_page: "Add web page"
@@ -282,6 +282,9 @@ en:
         close: "Close"
         upload: "Upload"
         cancel_uplad: "Cancel upload"
+        
+    social_panel:
+      title: "Social panel"
   
   datastore:
     index:

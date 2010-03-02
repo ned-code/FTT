@@ -4,6 +4,7 @@
  */
 //= require <webdoc/controllers/page_inspector_controller>
 //= require <webdoc/controllers/document_inspector_controller>
+//= require <webdoc/controllers/social_panel_controller>
 
 WebDoc.RightBarController = $.klass({
   
@@ -14,6 +15,7 @@ WebDoc.RightBarController = $.klass({
   PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
   ITEM_INSPECTOR_BUTTON_SELECTOR: "a[href='#item-inspector']",
   DOCUMENT_INSPECTOR_BUTTON_SELECTOR: "a[href='#document-inspector']",
+  SOCIAL_PANEL_BUTTON_SELECTOR: "a[href='#social-panel']",
   
   STATE_BUTTON_SELECTOR: ".state-right-panel",
   PANEL_SELECTOR: "#right_bar",
@@ -139,7 +141,22 @@ WebDoc.RightBarController = $.klass({
     this.showRightBar();
   },
   
-  // Show / hide Right bar ----------------------------------
+  showSocialPanel: function() {
+    ddd("[RightBarController] showSocialPanel");
+    var socialPanel = this.contentMap.socialPanel;
+    
+    if (!socialPanel) { // lazily load the social panel
+      ddd('[RightBarController] Load social panel');
+      socialPanel = WebDoc.application.socialPanelController = new WebDoc.SocialPanelController();
+      socialPanel.buttonSelector = this.SOCIAL_PANEL_BUTTON_SELECTOR;
+    
+      this.contentMap.socialPanel = socialPanel;
+    }
+    
+    this._changePanelContent(socialPanel);
+    this._changeButtonState(socialPanel);
+    this.showRightBar();
+  },
   
   _show: function() {
     var panel = this.domNode,
