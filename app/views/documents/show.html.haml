@@ -149,6 +149,6 @@
       cookiesSessionKeyName:"#{cookies[session_key_name]}"
     };
     WebDoc.run = function() {
-      var editor = new WebDoc.PageEditor(#{params[:reader]?'false':'true'});
+      var editor = new WebDoc.PageEditor(#{@editor_mode});
       editor.load("#{@document.uuid}");
     } 
