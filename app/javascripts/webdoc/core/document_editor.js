@@ -60,10 +60,13 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $(".wb-document-rename").live("click", this.renameDocument);
         $(".wb-document-delete").live("click", this.deleteDocument);
         $(".wb-document-access").live("click", this.changeDocumentAccess);
+        $(".wb-document-share").live("click", this.shareDocument); 
+        $(".wb-document-unshare").live("click", this.unshareDocument); 
         $("#wb-document-filter-date").bind("click", {document_filter: null}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-owned-by-me").bind("click", {document_filter: 'creator'}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-shared-with-me-as-editor").bind("click", {document_filter: 'editor'}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-shared-with-me-as-viewer").bind("click", {document_filter: 'reader'}, this.loadDocumentsWithFilter.pBind(this));
+        $("#wb-document-filter-public").bind("click", {document_filter: 'public'}, this.loadDocumentsWithFilter.pBind(this));
         newDocCustomSizeWidthField.bind("keypress", this.validateInteger);
         newDocCustomSizeHeightField.bind("keypress", this.validateInteger);
         $("#wb-edit-document-size-custom-width").bind("keypress", this.validateInteger);
@@ -206,6 +209,30 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
       ddd("change acess");
       var documentToEdit = $(this).parent().parent().attr("id");            
       WebDoc.application.accessController.showAccess(WebDoc.application.documentEditor.documentWithId(documentToEdit));      
+    },
+    
+    shareDocument: function(e)
+    {
+      e.preventDefault();
+      ddd("must publish document"); 
+      var documentIdToPublish = $(this).parent().parent().attr("id");
+      var document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
+      document.share();
+      document.save(function(persistedDoc) {
+          WebDoc.application.documentEditor.filter.changeShareStatus(persistedDoc);
+      });
+    },
+    
+    unshareDocument: function(e)
+    {
+      e.preventDefault();
+      ddd("must unshare document"); 
+      var documentIdToPublish = $(this).parent().parent().attr("id");
+      var document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
+      document.unshare();
+      document.save(function(persistedDoc) {
+          WebDoc.application.documentEditor.filter.changeShareStatus(persistedDoc);
+      });
     },
     
     deleteDocument: function(e)

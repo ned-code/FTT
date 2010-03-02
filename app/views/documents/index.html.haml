@@ -14,6 +14,8 @@
         %a#wb-document-filter-shared-with-me-as-editor{ :href => "#shared_as_editor"}= t('.shared_with_me_as_editor')
       %li
         %a#wb-document-filter-shared-with-me-as-viewer{ :href => "#shared_as_viewer"}= t('.shared_with_me_as_viewer')
+      %li
+        %a#wb-document-filter-public{ :href => "#public"}= t('.public')
   #wb-document-list-container
 
 #wb-new-document-dialog{ :style => "display:none", :title => t('.create_new_document') }
@@ -82,6 +84,7 @@
 #wb-change-access-dialog{ :style => "display:none",:title => t('.document_forms.change_access_document') }
   #document_access-header
     -#%button#add_access.ui-button.ui-state-default.ui-corner-all= t('.document_forms.buttons.add_access')
+  = render :partial => 'layouts/flash'
   #wb-document-access-tabs
     %ul
       %li
