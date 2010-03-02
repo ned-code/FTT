@@ -106,9 +106,9 @@
 						css: wrapCss
 					}),
 					popShutCss = {
-						opacity: 0,
-						width: 0,
-						height: 0
+						//opacity: 0,
+						//width: 0,
+						//height: 0
 					},
 					popOpenCss = {
 						opacity: 1
@@ -135,17 +135,34 @@
 			
 			if ( options.init ) { options.init.call( pop ); }
 			
-			// Populate destination css and figure out orientation
+			// Populate destination css
 			popOpenCss.width = options.width || pop.width();
 			popOpenCss.height = options.height || pop.height();
-			popOpenCss[ wrapCss.left + popOpenCss.width < bodySize.width ? 'left' : 'right' ] = 0;
-			popOpenCss[ wrapCss.top + popOpenCss.height < bodySize.height ? 'top' : 'bottom' ] = 0;
+			console.log(bodySize.width);
+			
+			// Figure out orientation
+			popShutCss[ wrapCss.left + popOpenCss.width < bodySize.width ? 'left' : 'right' ] = 0;
+			popShutCss[ wrapCss.top + popOpenCss.height < bodySize.height ? 'top' : 'bottom' ] = 0;
+			popShutCss.WebkitTransformOrigin = '0px 0px';
 			
 			pop
 			.addClass( options.popClass )
-			.css( popShutCss )
-			.animate( popOpenCss, {
-				duration: 200,
+			.css( popShutCss );
+			
+			jQuery({
+				transform: 0.2
+			})
+			.animate({
+				transform: 1
+			}, {
+				step: function(a){
+					console.log(a);
+					pop.css({
+						WebkitTransform: 'scale('+a+')'//,
+						//opacity: a
+					});
+				},
+				duration: 150,
 				easing: options.easeOpen
 			});
 		});
@@ -188,7 +205,8 @@
 	jQuery(document).ready(function(){
 		body = jQuery('body');
 		
-		body.bind('resize.'+plugin, updateBodySize);
+		jQuery(window).bind('resize.'+plugin, updateBodySize);
+		
 		updateBodySize();
 	});
 })(jQuery);
@@ -199,7 +217,7 @@ jQuery(document).ready(function(){
 	jQuery(document)
 	.delegate("a[href=#pop]", 'click', function(){
 	  jQuery(this).pop({
-	  	content: jQuery('<span>hello!!</span>'),
+	  	content: jQuery('<form><input type="text" /><input type="submit" /></form>'),
 	  	init: function(){
 	  		//console.log('INIT');
 	  	},
