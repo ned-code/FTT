@@ -120,6 +120,7 @@ WebDoc.RightBarController = $.klass({
     }
     
     this._changePanelContent(inspector);
+    inspector.refresh();
     this._changeButtonState(inspector);
     this.showRightBar();
   },

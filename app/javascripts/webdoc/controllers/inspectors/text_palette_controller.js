@@ -3,12 +3,12 @@
  */
 WebDoc.TextPaletteController = $.klass({
   initialize: function(id) {
-    this.initGUI(id);
+    this.domNode = jQuery(id).hide();
+    this.initGUI("#text-inspector-content");
   },
   initGUI: function(container){
   	var thobj = this;
     var containerObj = jQuery(container);
-    this.domNode = containerObj;
     var toolbarContent = 
     '<div id="toolbar_panel">'+
         '<div id="toolbar_panel_cover"></div>'+

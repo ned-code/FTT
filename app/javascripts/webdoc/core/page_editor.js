@@ -94,8 +94,8 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       ddd("check editablity");
       if (WebDoc.application.boardController.isEditable()) {
         ddd("[PageEditor] call rightBarController.showLib");
-//        WebDoc.application.rightBarController.showLib();
-        WebDoc.application.rightBarController.showItemInspector();
+        WebDoc.application.rightBarController.showLib();
+//        WebDoc.application.rightBarController.showItemInspector();
       }
     }.pBind(this));
     

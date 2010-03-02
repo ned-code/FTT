@@ -28,13 +28,14 @@ WebDoc.InspectorController = $.klass({
     this.htmlInspector = new WebDoc.InnerHtmlController( "#html-inspector" );
     
     var widgetPalette = $("#widget-inspector").hide();
-    widgetPalette.bind("load", function() {
+    var widgetPaletteContent = widgetPalette.find("iframe");
+    widgetPaletteContent.bind("load", function() {
       ddd("must inject uniboard api in inspector");
-      if (widgetPalette[0].contentWindow && WebDoc.application.boardController.selection().length) {
+      if (widgetPaletteContent[0].contentWindow && WebDoc.application.boardController.selection().length) {
         ddd("inject uniboard api in inspector");
-        widgetPalette[0].contentWindow.uniboard = this.widgetInspectorApi;
-        if (widgetPalette[0].contentWindow.widget) {
-          var widgetObject = widgetPalette[0].contentWindow.widget;
+        widgetPaletteContent[0].contentWindow.uniboard = this.widgetInspectorApi;
+        if (widgetPaletteContent[0].contentWindow.widget) {
+          var widgetObject = widgetPaletteContent[0].contentWindow.widget;
           widgetObject.lang = "en";
           widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
           widgetObject.mode = "Edit";
@@ -47,13 +48,12 @@ WebDoc.InspectorController = $.klass({
             widgetObject._onLoad();  
           }
         }
-        else if (widgetPalette[0].contentWindow.initialize) {
-          widgetPalette[0].contentWindow.initialize();
+        else if (widgetPaletteContent[0].contentWindow.initialize) {
+          widgetPaletteContent[0].contentWindow.initialize();
         }
       }                      
     }.pBind(this));
-    
-    this.textInspector.domNode.hide();
+        
     this._inspectorNodes = [
       emptyPalette,
       this.textInspector.domNode,
@@ -115,14 +115,19 @@ WebDoc.InspectorController = $.klass({
     }
   },
   
+  refresh: function() {
+      this.selectionChanged();
+  },
+  
   selectionChanged: function() {
     ddd("selected item ", WebDoc.application.boardController.selection());
-    
-    if ( WebDoc.application.boardController.selection().length > 0 ) {             
-      this._updatePalette( WebDoc.application.boardController.selection()[0].inspectorId() );
-    }
-    else {
-      this._updatePalette(0);
+    if (this.domNode.is(':visible')) {
+      if (WebDoc.application.boardController.selection().length > 0) {
+        this._updatePalette(WebDoc.application.boardController.selection()[0].inspectorId());
+      }
+      else {
+        this._updatePalette(0);
+      }
     }
   },
   
@@ -136,13 +141,14 @@ WebDoc.InspectorController = $.klass({
     
     switch (this.currentInspectorId) {
       case 3:
-        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);        
-        if (this._inspectorNodes[3].attr("src") != WebDoc.application.boardController.selection()[0].inspectorId()) {
-          this._inspectorNodes[3].attr("src", WebDoc.application.boardController.selection()[0].inspectorId());
+        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);    
+        var widgetContent = this._inspectorNodes[3].find("iframe"); 
+        if (widgetContent.attr("src") != WebDoc.application.boardController.selection()[0].inspectorId()) {
+          widgetContent.attr("src", WebDoc.application.boardController.selection()[0].inspectorId());
         }      
         else {
-          if (this._inspectorNodes[3][0].contentWindow && this._inspectorNodes[3][0].contentWindow.widget && this._inspectorNodes[3][0].contentWindow.widget._onLoad) {
-            var widgetObject = this._inspectorNodes[3][0].contentWindow.widget;
+          if (widgetContent[0].contentWindow && widgetContent[0].contentWindow.widget && widgetContent[0].contentWindow.widget._onLoad) {
+            var widgetObject = widgetContent[0].contentWindow.widget;
             widgetObject.lang = "en";
             widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
             widgetObject.mode = "Edit";
@@ -161,14 +167,15 @@ WebDoc.InspectorController = $.klass({
   
   refreshWidgetPalette: function() {         
     ddd("refresh widget palette"); 
-    if (this._inspectorNodes[3][0].contentWindow) {
+    var widgetContent = this._inspectorNodes[3].find("iframe"); 
+    if (widgetContent[0].contentWindow) {
       ddd("widow found");
-      if (this._inspectorNodes[3][0].contentWindow.widget) {
-        this._inspectorNodes[3][0].contentWindow.widget._onPreferencesChange();
+      if (widgetContent[0].contentWindow.widget) {
+        widgetContent[0].contentWindow.widget._onPreferencesChange();
       }
-      else if (this._inspectorNodes[3][0].contentWindow.initialize) {
+      else if (widgetContent[0].contentWindow.initialize) {
         ddd("call initialize");
-        this._inspectorNodes[3][0].contentWindow.initialize();
+        widgetContent[0].contentWindow.initialize();
       }
     }    
   }  
