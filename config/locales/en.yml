@@ -307,13 +307,13 @@ en:
 
   email:
     user_registration_activation_email:
-      subject: "MyUniboard activation message"
+      subject: "WebDoc activation message"
 
     user_registration_confirmation_email:
-      subject: "MyUniboard confirmation message"
+      subject: "WebDoc confirmation message"
 
     user_reset_password_email:
-      subject: "MyUniboard reset password message"
+      subject: "WebDoc reset password message"
 
     user_publish_document_success_email:
       subject: "Your document {{document_name}} has been published"
