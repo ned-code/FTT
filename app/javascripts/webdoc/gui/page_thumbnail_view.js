@@ -9,6 +9,8 @@ var pageThumbClass = "page-thumb",
     pageThumbSelector = ".page-thumb";
 
 WebDoc.PageThumbnailView = $.klass({
+  PER_CENT_PAGE_WIDTH: 1280,
+  PER_CENT_PAGE_HEIGHT: 720,
   initialize: function(page, width, height) {
     this.page = page;
     this.width = width;
@@ -55,8 +57,10 @@ WebDoc.PageThumbnailView = $.klass({
   
   updateSize: function() {
     // define scale factor
-    var pageWidth = parseInt(this.page.data.data.css.width,10);
-    var pageHeight = parseInt(this.page.data.data.css.height,10);
+    var widthInPx = this.page.data.data.css.width.match(/.*px/);
+    var heightInPx = this.page.data.data.css.height.match(/.*px/);
+    var pageWidth = widthInPx? parseInt(this.page.data.data.css.width,10):this.PER_CENT_PAGE_WIDTH;
+    var pageHeight = heightInPx? parseInt(this.page.data.data.css.height,10):this.PER_CENT_PAGE_HEIGHT;
     
     if (this.page.data.data.externalPage) {
       this.factor = 1;
@@ -72,6 +76,12 @@ WebDoc.PageThumbnailView = $.klass({
         this.factor = verticalFactor;
       }
       this.pageThumbNode.css(this.page.data.data.css);
+      if (!widthInPx) {
+        this.pageThumbNode.css("width",this.PER_CENT_PAGE_WIDTH);  
+      }      
+      if (!heightInPx) {
+        this.pageThumbNode.css("height",this.PER_CENT_PAGE_HEIGHT);  
+      }            
       this.pageThumbNode.css("MozTransformOrigin", "0px 0px");
       this.pageThumbNode.css("MozTransform", "scaleX(" + this.factor + ") scaleY(" + this.factor + ")");
       this.pageThumbNode.css("WebkitTransformOrigin", "0px 0px");
