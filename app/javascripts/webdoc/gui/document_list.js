@@ -39,8 +39,7 @@ WebDoc.DocumentList = $.klass(
     },
     
     changeShareStatus: function(document) {
-      var shareTextNode = $('#'+document.uuid()+ '> .wb-document-actions').children()[3];
-      $(shareTextNode).replaceWith(this.buildShareValue(document));
+      $('#'+document.uuid()+ '> .wb-document-actions').children().eq(3).replaceWith(this.buildShareValue(document));
     },
     
     repaint: function()
