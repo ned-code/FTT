@@ -31,8 +31,8 @@ class User < ActiveRecord::Base
   has_many :images, :class_name => 'Medias::Image', :order => 'created_at DESC'
   has_many :videos, :class_name => 'Medias::Video', :order => 'created_at DESC'
   has_many :documents, :foreign_key => :creator_id
-  has_many :following_connections, :class_name => 'Connection', :foreign_key => 'follower_id'
-  has_many :follower_connections, :class_name => 'Connection', :foreign_key => 'following_id'
+  has_many :following_connections, :class_name => 'Followship', :foreign_key => 'follower_id'
+  has_many :follower_connections, :class_name => 'Followship', :foreign_key => 'following_id'
   has_many :following, :through => :following_connections
   has_many :followers, :through => :follower_connections
   
