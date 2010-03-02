@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+
+<title>jQuery.extensions</title>
+
+<link rel="icon" type="image/png" href="images/favicon.png" />
+
+<style type="text/css" media="screen, projection">
+    
+    @import url('../css-reset/css/yui2-reset.css');
+    @import url('../css/test.css');
+    
+    .test {
+        height: 100px;
+        margin: 0 auto 1em;
+        padding: 16px;
+        border: 1px dotted #666666;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .pop-wrap {
+    	width: 0;
+    	height: 0;
+    	position: fixed;
+    }
+    .pop {
+    	position: absolute;
+    	display: block;
+    	background: blue;
+    }
+    
+</style>
+
+</head>
+
+<body>
+
+<h2>jQuery.pop</h2>
+
+<div id="delegate" class="test">
+
+    <a href="#pop" class="one">one</a>
+    <a href="#pop" class="two">two</a>
+
+</div>
+
+<script type="text/javascript" src="../../public/javascripts/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="../../public/javascripts/jquery-ui-1.8rc2.js"></script>
+<script type="text/javascript" src="../../public/javascripts/jquery.extensions.js"></script>
+<script type="text/javascript">
+
+// jguery.pop.js
+// 0.1
+// Stephen Band
+// 
+// http://webdev.stephband.info
+
+(function(jQuery, undefined){
+
+	var plugin = 'pop',
+			options = {
+				popClass: plugin
+				// width
+				// height
+				// easeOpen
+				// easeShut
+				// (orientation)
+			},
+			bodySize,
+			body;
+	
+	function lostFocusHandler(e) {
+		jQuery.fn[plugin].close();
+	}
+	
+	function updateBodySize(e) {
+		bodySize = {
+			width: body.width(),
+			height: body.height()
+		};
+	}
+	
+	jQuery.fn[plugin] = function(o){
+		// Overwrite options
+		var options = jQuery.extend({}, jQuery.fn[plugin].options, o);
+		
+		// Define actions
+		return this.each(function(i) {
+			var node = jQuery(this),
+					data = node.data(plugin),
+					offset = node.offset(),
+					width = node.width(),
+					height = node.height(),
+					pop = options.content || data,
+					wrapCss = {
+						left: offset.left + 0.5 * width,
+						top: offset.top + 0.5 * height
+					}
+					wrap = jQuery('<div/>', {
+						'class': plugin+'-wrap',
+						css: wrapCss
+					}),
+					popShutCss = {
+						//opacity: 0,
+						//width: 0,
+						//height: 0
+					},
+					popOpenCss = {
+						opacity: 1
+					};
+			
+			// Store data
+			jQuery.fn[plugin].instances.push({
+				options: options,
+				node: pop,
+				wrap: wrap
+			});
+			
+			// Bind the 'lose focus' detector to the body (just once)
+			if ( i === 0 ) {
+				body.bind('click.' + plugin + ' focusin.' + plugin, lostFocusHandler);
+			}
+			
+			wrap
+			.html( pop )
+			.appendTo( body )
+			.bind( 'click.' + plugin + ' focusin.' + plugin, function(e){
+				return false;
+			});
+			
+			if ( options.init ) { options.init.call( pop ); }
+			
+			// Populate destination css
+			popOpenCss.width = options.width || pop.width();
+			popOpenCss.height = options.height || pop.height();
+			console.log(bodySize.width);
+			
+			// Figure out orientation
+			popShutCss[ wrapCss.left + popOpenCss.width < bodySize.width ? 'left' : 'right' ] = 0;
+			popShutCss[ wrapCss.top + popOpenCss.height < bodySize.height ? 'top' : 'bottom' ] = 0;
+			popShutCss.WebkitTransformOrigin = '0px 0px';
+			
+			pop
+			.addClass( options.popClass )
+			.css( popShutCss );
+			
+			jQuery({
+				transform: 0.2
+			})
+			.animate({
+				transform: 1
+			}, {
+				step: function(a){
+					console.log(a);
+					pop.css({
+						WebkitTransform: 'scale('+a+')'//,
+						//opacity: a
+					});
+				},
+				duration: 150,
+				easing: options.easeOpen
+			});
+		});
+	};
+	
+	jQuery.extend(jQuery.fn[plugin], {
+		options: options,
+		instances: [],
+		close: function() {
+			var l = this.instances.length,
+					instance;
+			
+			// Unbind 'lose focus' detection
+			body.unbind('.' + plugin);
+			
+			while (l--) {
+				instance = this.instances.pop(),
+				closeFn = instance.options.close;
+				
+				if ( closeFn ) { closeFn(); }
+				
+				instance.node
+				.animate({
+					opacity: 0,
+					width: 0,
+					height: 0
+				}, {
+					duration: 100,
+					easing: options.easeShut,
+					complete: function() {
+						instance.wrap.remove();
+					}
+				}); 
+			}
+		}
+	});
+	
+	jQuery.fn[plugin].options = options;
+	
+	jQuery(document).ready(function(){
+		body = jQuery('body');
+		
+		jQuery(window).bind('resize.'+plugin, updateBodySize);
+		
+		updateBodySize();
+	});
+})(jQuery);
+
+
+
+jQuery(document).ready(function(){
+	jQuery(document)
+	.delegate("a[href=#pop]", 'click', function(){
+	  jQuery(this).pop({
+	  	content: jQuery('<form><input type="text" /><input type="submit" /></form>'),
+	  	init: function(){
+	  		//console.log('INIT');
+	  	},
+	  	width: 200,
+	  	height: 100,
+	  	close: function(){
+	  		//console.log('CLOSE');
+	  	},
+	  	easeOpen: 'easeOutBack',
+	  	easeShut: 'easeInQuart'
+	  });
+	});
+});
+
+
+</script>
+
+</body>
+</html>
