@@ -36,6 +36,7 @@ class DocumentsController < DocumentController
   
   # GET /documents/:id
   def show
+      @editor_mode = current_user.has_role?("editor", @document)
     respond_to do |format|
       format.html { render :layout => "layouts/editor" }
       format.json { render :json => @document.to_json(:include => { :pages => { :include => :items} }) }

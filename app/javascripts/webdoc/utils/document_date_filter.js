@@ -81,6 +81,10 @@ WebDoc.DocumentDateFilter = $.klass(
         return index;
     },
     
+    changeShareStatus: function(document) {
+       this.view.changeShareStatus(document);
+    },
+    
     // document list datasource
     nbSections: function()
     {
