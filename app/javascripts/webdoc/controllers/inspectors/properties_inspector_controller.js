@@ -5,15 +5,22 @@
 WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector ) {
     this.domNode = $(selector);
-  
-    this.topNode = $("#property-top").blur(this.updateProperties.pBind(this));
-    this.rightNode = $("#property-right").blur(this.updateProperties.pBind(this));
-    this.bottomNode = $("#property-bottom").blur(this.updateProperties.pBind(this));
-    this.leftNode = $("#property-left").blur(this.updateProperties.pBind(this));
-    this.widthNode = $("#property-width").blur(this.updateProperties.pBind(this));
-    this.heightNode = $("#property-height").blur(this.updateProperties.pBind(this));
-    this.scrollNode = $("#property-scroll").bind("change", this.updateSroll.pBind(this));
-    this.opacityNode = $("#property-opacity").blur(this.updateProperties.pBind(this));
+    jQuery('#item_inspector').delegate("#property-top", 'blur', this.updateProperties.pBind(this));
+    jQuery('#item_inspector').delegate("#property-right", 'blur', this.updateProperties.pBind(this));
+    jQuery('#item_inspector').delegate("#property-bottom", 'blur', this.updateProperties.pBind(this));
+    jQuery('#item_inspector').delegate("#property-left", 'blur', this.updateProperties.pBind(this));
+    jQuery('#item_inspector').delegate("#property-width", 'blur', this.updateProperties.pBind(this));
+    jQuery('#item_inspector').delegate("#property-height", 'blur', this.updateProperties.pBind(this));
+    jQuery('#item_inspector').delegate("#property-scroll", 'blur', this.updateProperties.pBind(this));
+    jQuery('#item_inspector').delegate("#property-opacity", 'blur', this.updateProperties.pBind(this));    
+    this.topNode = jQuery("#property-top");
+    this.rightNode = jQuery("#property-right");
+    this.bottomNode = jQuery("#property-bottom");
+    this.leftNode = jQuery("#property-left");
+    this.widthNode = jQuery("#property-width");
+    this.heightNode = jQuery("#property-height");
+    this.scrollNode = jQuery("#property-scroll");
+    this.opacityNode = jQuery("#property-opacity");
   },
   
   refresh: function() {
@@ -43,7 +50,8 @@ WebDoc.PropertiesInspectorController = $.klass({
   },
   
   updateProperties: function(event) {
-    var changedProperty = event.target;
+    ddd("update properties",event);
+    var changedProperty = event.currentTarget;
     var item = WebDoc.application.boardController.selection()[0].item;
     switch(changedProperty){
       case this.leftNode[0]:
