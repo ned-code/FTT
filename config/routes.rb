@@ -5,7 +5,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.root :controller => 'home', :action => :show
   
-  map.resources :documents, :has_many => { :pages => :items }, :member => { :change_user_access => :put, :user_access => :get} do |m|
+  map.resources :documents, :has_many => { :pages => :items } do |m|
     m.resource :accesses, :only => [:show, :create, :update]
     m.resource :creators, :only => [:show]
   end
@@ -24,6 +24,11 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :widgets, :as => 'apps', :except => :show
     admin.resources :categories, :except => :show
   end
+  
+  map.connections 'followships/following', :controller => "followships", :action => 'following'
+  map.connections 'followships/followers', :controller => "followships", :action => 'followers'
+  map.connections 'followships', :controller => "followships", :action => :create
+  map.connections 'followships', :controller => "followships", :action => :destroy
   
   # dev controller
   map.resources :images,    :except => [:new, :edit, :update]

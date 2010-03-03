@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  rescue_from Acl9::AccessDenied, :with => :deny_access
+  rescue_from Acl9::AccessDenied, :with => :forbidden_access
   
   before_filter :http_authenticate
   before_filter :set_xmpp_client_id_in_thread
@@ -11,8 +11,9 @@ class ApplicationController < ActionController::Base
   
 protected
   
-  def deny_access
-    render_optional_error_file(:not_found)
+  def forbidden_access
+    # render_optional_error_file(:not_found)
+    render :status => :forbidden
   end
   
   def http_authenticate

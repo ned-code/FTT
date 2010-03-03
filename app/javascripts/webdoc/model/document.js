@@ -54,6 +54,15 @@ WebDoc.Document = $.klass(MTools.Record, {
     }
   },
 
+  share: function() {
+    this.data.public = true;
+    this.save();
+  },
+  
+  unshare: function() {
+    this.data.public = false;
+  },
+
   refresh: function($super, json) {
     $super(json);
     var that = this;

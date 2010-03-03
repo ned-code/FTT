@@ -31,7 +31,12 @@ class User < ActiveRecord::Base
   has_many :images, :class_name => 'Medias::Image', :order => 'created_at DESC'
   has_many :videos, :class_name => 'Medias::Video', :order => 'created_at DESC'
   has_many :documents, :foreign_key => :creator_id
+  has_many :following_connections, :class_name => 'Followship', :foreign_key => 'follower_id'
+  has_many :follower_connections, :class_name => 'Followship', :foreign_key => 'following_id'
+  has_many :following, :through => :following_connections
+  has_many :followers, :through => :follower_connections
   
+
   # ===================
   # = Instance Method =
   # ===================
@@ -52,6 +57,18 @@ class User < ActiveRecord::Base
     documents.count
   end
   
+  def following_info
+    following?(@current_user)
+  end
+  
+  def is_current_user
+    @current_user.id == self.id
+  end
+  
+  # def mutual_connection(current_user)
+  #   self.mutual_follower?(current_user)
+  # end
+  
   def create_xmpp_user
     XmppUserSynch.create_xmpp_user(self)
   end
@@ -68,6 +85,39 @@ class User < ActiveRecord::Base
       self.has_no_roles_for!(document)
       self.has_role!("reader", document)
     end
+  end
+  
+  def follow(user_id)
+    following_connections.create(:following_id => user_id)
+  end
+  
+  def unfollow(user_id)
+    following_connections.destroy(following_connections.find_by_following_id(user_id))
+  end
+  
+  def follower?(user)
+    followers.include?(user)
+  end
+  
+  def following?(user)
+    following.include?(user)
+  end
+  
+  def mutual_follower?(user)
+    following.include?(user) and followers.include?(user)
+  end
+  
+  def mutual_followers
+    mutual = []
+    following.each do |user|
+      mutual << user if followers.include?(user)
+    end
+    mutual
+  end
+  
+  def to_social_panel_json(current_user)
+    @current_user = current_user
+    to_json(:only => [:id, :username, :bio], :methods => [:avatar_thumb_url, :documents_count, :following_info, :is_current_user])
   end
   
 end
