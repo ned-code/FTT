@@ -33,7 +33,7 @@ WebDoc.DocumentInspectorController = $.klass({
     documentCategoryField.val(currentDocument.category());
     
     // Also update toolbar title field
-    $("#tb_1_document_title").text(currentDocument.title());
+    $(".document-title").text(currentDocument.title());
   },
   
   _loadDocumentCategories: function() {

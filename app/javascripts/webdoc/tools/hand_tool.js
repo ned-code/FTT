@@ -9,17 +9,13 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
     originalMovingPos: null,
     initialize: function($super, selector, boardClass) {
       $super(selector, boardClass);
-      this.boardContainer = $("#board_container");
+      this.scrollNode = $('#webdoc');
     },
     
     selectTool: function($super) {
       $super();
       WebDoc.application.boardController.unselectAll();      
     },
-    
-    //getCursor: function() {
-    //  return "move";  
-    //},
     
     mouseDown: function(e)
     {
@@ -34,8 +30,8 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
      
       this.originalPos = 
       {
-        x: this.boardContainer.find(".show-scroll").scrollLeft(),
-        y: this.boardContainer.find(".show-scroll").scrollTop()
+        x: this.scrollNode.scrollLeft(),
+        y: this.scrollNode.scrollTop()
       };
     },
     
@@ -44,20 +40,20 @@ WebDoc.HandTool = $.klass(WebDoc.Tool,
       e.preventDefault();      
         if (this.moving) 
         {
-            var xMove = this.originalMovingPos.x - e.screenX;
-            var yMove = this.originalMovingPos.y - e.screenY;
-            
-            this.boardContainer.find(".show-scroll")
-            .scrollTop( this.originalPos.y + yMove )
-            .scrollLeft( this.originalPos.x + xMove );
-            
-            e.stopPropagation();
+          var xMove = this.originalMovingPos.x - e.screenX;
+          var yMove = this.originalMovingPos.y - e.screenY;
+          
+          this.scrollNode
+          .scrollTop( this.originalPos.y + yMove )
+          .scrollLeft( this.originalPos.x + xMove );
+          
+          //e.stopPropagation();
         }
     },
     
     mouseUp: function(e)
     {
       e.preventDefault();      
-        this.moving = false;
+      this.moving = false;
     }
 });

@@ -1,0 +1,32 @@
+#right_bar.right-panel.panel
+  %ul.panel-tools.vertical.icons-only.thumbs.index
+    %li#toggle_inspector>
+      %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" } Inspector
+    %li>
+      %a.state-right-panel{ :href => "#library", :title => "Show Library" } Library
+    %li>
+      %a.state-right-panel{ :href => "#item-inspector", :title => "Show Inspector" } Item
+    %li>
+      %a.state-right-panel.current{ :href => "#page-inspector", :title => "Show Page inspector" } Page
+    %li>
+      %a.state-right-panel{ :href => "#document-inspector", :title => "Show Document inspector" } Document
+    %li>
+      %a.state-right-panel{ :href => "#social-panel", :title => "Show Social" } Social      
+    
+  -#%div.upper.border
+  -#%div.lower.border
+  
+  %div.scroll-free.layer
+    = render :partial => 'library'
+    
+    = render :partial => 'documents/inspectors/page_inspector'
+    = render :partial => 'documents/inspectors/document_inspector'
+    = render :partial => 'documents/social_panel'
+  
+  #item_inspector
+    = render :partial => 'documents/inspectors/draw_inspector'
+    = render :partial => 'documents/inspectors/widget_inspector'
+    = render :partial => 'documents/inspectors/empty_inspector'
+    = render :partial => 'documents/inspectors/html_inspector'
+    = render :partial => 'documents/inspectors/image_inspector'
+    = render :partial => 'documents/inspectors/text_inspector'

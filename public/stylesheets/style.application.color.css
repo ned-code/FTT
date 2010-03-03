@@ -1,0 +1,12 @@
+/* style.application.color.css
+ *
+ * Styles for website
+ *
+ */
+ 
+body {
+    color: hsl(198, 2%, 25%);
+    /*background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(198, 4%, 97%) ), to( hsl(198, 8%, 79%) ));
+    background-image: -moz-linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+    background-image:      linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );*/
+}

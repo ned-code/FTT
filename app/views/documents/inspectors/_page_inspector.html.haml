@@ -1,0 +1,83 @@
+#page_inspector.inspector{ :style => "display: none" }
+  %div.head
+    %div
+      %h2 Page
+  
+  %div.foot
+
+  
+  %div.content
+    %form
+      %fieldset.properties.externalPage-related
+        %legend= t('.page.title')    
+        %div
+          %label= t('.page.url')
+          %input#external_page_url{ :type => "text", :value => "http://" }
+      
+      %fieldset.properties
+        %legend= t('.properties.title')
+        %div
+          %label= t('.properties.name')
+          %input#page_title_textbox{ :type => "text" }
+        %div
+          %label= t('.properties.height')
+          %input#page_height_textbox{ :type => "text", :maxlength => "8" }
+        %div
+          %label= t('.properties.width')
+          %input#page_width_textbox{ :type => "text", :maxlength => "8" }
+        %div
+          %label= t('.properties.show_scroll')
+          %input#page_scroll_checkbox{ :type => "checkbox" }
+        %div.background-related
+          %label= t('.properties.background')
+          %input#page_background_color_textbox{ :type => "text" }
+        %div.background-related
+          %label= t('.properties.background_image')
+          %input#page_background_image_textbox{ :type => "text"}
+          %p= t('.properties.background_image_comment')
+        - form_tag '/images', :multipart => true, :name => "form_image", :id => "form_image" do
+          %span
+        %div.background-related
+          %label= t('.properties.background_image_position.horizontal')
+          %input#page_background_image_tileX_checkbox{ :type => "checkbox", :name => "xTile", :value => "none" }
+          %span.label= t('.properties.background_image_position.tile')
+          %input#page_background_image_align_hor_left_radio{ :type => "radio", :name => "xPos", :value => "left" }
+          %span.label= t('.properties.background_image_position.left')
+          %input#page_background_image_align_hor_center_radio{ :type => "radio", :name => "xPos", :value => "center" }
+          %span.label= t('.properties.background_image_position.center')
+          %input#page_background_image_align_hor_right_radio{ :type => "radio", :name => "xPos", :value => "right" }
+          %span.label= t('.properties.background_image_position.right')
+        %div.background-related
+          %label= t('.properties.background_image_position.vertical')
+          %input#page_background_image_tileY_checkbox{ :type => "checkbox", :name => "yTile", :value => "none" }
+          %span.label= t('.properties.background_image_position.tile')
+          %input#page_background_image_align_vert_top_radio{ :type => "radio", :name => "yPos", :value => "top" }
+          %span.label= t('.properties.background_image_position.top')
+          %input#page_background_image_align_vert_middle_radio{ :type => "radio", :name => "yPos", :value => "center" }
+          %span.label= t('.properties.background_image_position.middle')
+          %input#page_background_image_align_vert_bottom_radio{ :type => "radio", :name => "yPos", :value => "bottom" }
+          %span.label= t('.properties.background_image_position.bottom')
+        - form_tag '/bgimages', :multipart => true, :name => "image_send_form", :id => "image_send_form", :class => "background-related" do
+          %div
+            %label= t('.properties.background_image')
+            = file_field_tag :image
+          %div
+            = submit_tag t('.properties.buttons.upload')
+        %div#background_image_preview.background-related
+          %img#background_image
+          %p  
+            %a.page-remove-background-image{ :href => "#remove_background"}
+              = t('.properties.remove_image')
+        %div.background-related
+          %input#page_background_image_apply_all_button{ :type => "button", :value => t('.properties.buttons.apply_background_all_pages') }
+        %div
+          %a.page-navigation-link{ :href => "#prev-page"}
+            = t('documents.show.toolbar.previous_page')
+          |
+          %a.page-navigation-link{ :href => "#next-page"}
+            = t('documents.show.toolbar.next_page')
+
+    
+    -#%fieldset#page_css_editor.code-editor
+    -#  %legend= t('.css')
+    -#  %textarea.code

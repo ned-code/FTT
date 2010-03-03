@@ -59,6 +59,46 @@ en:
         inspector_url: "Inspector URL:"
   
   documents:
+    panels:
+      toolbar_panel:
+        of: "of"
+        quick_preview: "Preview"
+        save: "Save"
+        presentation_mode: "Presentation mode"
+        invite_collaborators: "Invite collaborators"
+        import: "Import"
+        publish: "Publish" 
+        extend_uniboard: "Extend Uniboard"
+        export: "Export"
+        print: "Print"
+        develop: "Develop"
+        disable_HTML: "Disable HTML"
+        left_panel: "Left Panel"
+        pages: "Pages browser"
+        prev: "Previous"
+        next: "Next"
+        add_page: "Add page"
+        zoom_in: "Zoom In"
+        zoom_out: "Zoom Out"
+        move: "Move"
+        undo: "Undo"
+        redo: "Redo"
+        send_to_back: "Send to back"
+        bring_to_front: "Bring to front"
+        delete: "Delete"
+        select: "Select"
+        html_tool: "Insert HTML"
+        text_tool: "Insert Text"
+        drawing_tool: "Draw"
+        toggle_inspector: "Toggle Inspector"
+        library: "Show Library"
+        item_inspector: "Show Inspector"
+        page_inspector: "Show Page inspector"
+        document_inspector: "Show Document inspector"
+        mode_edit: "Edit Mode"
+        mode_preview: "Preview Mode"
+        mode_embed: "Embed Mode"
+
     index:
       title: "Documents"
       all_items_by_date: "All items"
@@ -91,7 +131,7 @@ en:
         new_document: "New document"
         
     show:
-      toolbar:
+      toolbar_panel:
         left_panel: "Left Panel"
         pages: "Pages browser"
         previous_page: "Previous page"
@@ -121,60 +161,61 @@ en:
         copy_page: "Copy page"
         delete_page: "Delete page"
         show_thumbnails: "Show thumbnails"
-        
-    document_inspector:
-      title: "Document properties"
-      name: "Name"
-      default_name: "choose a title"
-      description: "Description"
-      category: "Category"
-      
-    page_inspector:
-      title: "Page inspector"
-      page: 
-        title: "Page"
-        url: "URL"
-      properties: 
-        title: "Properties"
+    
+    inspectors:
+      document_inspector:
+        title: "Document properties"
         name: "Name"
-        width: "Width"
-        height: "Height"
-        show_scroll: "Show scroll"
-        background: "Background"
-        background_image: "Background Image"
-        background_image_comment: "You can also choose an image from your image library and use the set as background button."
-        remove_image: "Remove image"
-        background_image_position:
-          horizontal: "Horizontal"
-          vertical : "oblique"
-          tile: "Tile"
-          left: "Left"
-          right: "Right"
-          center: "Center"
+        default_name: "choose a title"
+        description: "Description"
+        category: "Category"
+        
+      page_inspector:
+        title: "Page inspector"
+        page: 
+          title: "Page"
+          url: "URL"
+        properties: 
+          title: "Properties"
+          name: "Name"
+          width: "Width"
+          height: "Height"
+          show_scroll: "Show scroll"
+          background: "Background"
+          background_image: "Background Image"
+          background_image_comment: "You can also choose an image from your image library and use the set as background button."
+          remove_image: "Remove image"
+          background_image_position:
+            horizontal: "Horizontal"
+            vertical : "oblique"
+            tile: "Tile"
+            left: "Left"
+            right: "Right"
+            center: "Center"
+            top: "Top"
+            middle: "Middle"
+            bottom: "Bottom"
+          buttons:
+            upload: "Upload"
+            apply_background_all_pages: "Apply background to all pages"
+        css: "CSS"
+        
+      item_inspector:
+        title: "Item inspector"
+        empty: "Empty"
+        image_url: "Image URL"
+        palette: 
+          title: "Palette"
+          no_iframe: "No iframe"
+        properties:
+          title: "Properties"
           top: "Top"
-          middle: "Middle"
-          bottom: "Bottom"
-        buttons:
-          upload: "Upload"
-          apply_background_all_pages: "Apply background to all pages"
-      css: "CSS"
-      
-    item_inspector:
-      title: "Item inspector"
-      empty: "Empty"
-      image_url: "Image URL"
-      palette: 
-        title: "Palette"
-        no_iframe: "No iframe"
-      properties:
-        title: "Properties"
-        top: "Top"
-        left: "Left"
-        width: "Width"
-        height: "Height"
-        show_scroll: "Show scroll"
-        opacity: "Opacity"
-      
+          left: "Left"
+          width: "Width"
+          height: "Height"
+          show_scroll: "Show scroll"
+          opacity: "Opacity"
+        
     library:
       title: "Library"
       images: 
@@ -247,7 +288,7 @@ en:
   
   datastore:
     index:
-      no_rights: 'User has no right on the document' 
+      no_rights: 'User has no rights to the document' 
          
   flash:
     notice:
@@ -262,20 +303,6 @@ en:
         already_up_to_date: "Already up to date, no update needed"
       category:
         destroyed_successful: "Category successfully deleted"
-  
-  layouts:
-    main_editor_toolbar:
-      quick preview: "Quick preview"
-      save: "Save"
-      presentation_mode: "Presentation mode"
-      invite_collaborators: "Invite collaborators"
-      import: "Import"
-      publish: "Publish" 
-      extend_uniboard: "Extend Uniboard" 
-      export: "Export"
-      print: "Print"
-      develop: "Develop"
-      disable_HTML: "Disable HTML"
   
   registrations:
     new:

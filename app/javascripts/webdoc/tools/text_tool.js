@@ -29,7 +29,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     WebDoc.application.boardController.unselectAll();
     this.newTextBox();  
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-    $("#inspector").accordion('activate', 1);
+    //$("#inspector").accordion('activate', 1);
   },
   
   newTextBox: function() {

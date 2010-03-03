@@ -11,30 +11,31 @@
 
 WebDoc.InspectorController = $.klass({
   initialize: function() {
+    ddd('[InspectorController] initialize');
     
-    // Get DOM tree
+    var emptyPalette = $("#empty-inspector").hide();
+    var penPelette = $("#draw-inspector").hide();
+    var imagePelette = $("#image-inspector").hide();
+    
+    // Get DOM node
     this.domNode = $("#item_inspector");
     
     this.visible = true;
     this.widgetInspectorApi = new WebDoc.WidgetApi(null, true);
     
-    var emptyPalette = $("#palette_empty").hide();
-    var textPalette = $("#palette_text").hide();
-    var penPelette = $("#palette_pen").hide();
-    var imagePelette = $("#palette_image").hide();
-    var htmlSnippetPalette = $("#html_inspector").hide();
-    this.imagePaletteController = new WebDoc.ImagePaletteController();
-    this.textPaletteController = new WebDoc.TextPaletteController();
-    this.innerHtmlController = new WebDoc.InnerHtmlController();
+    this.imageInspector = new WebDoc.ImagePaletteController( "#image-inspector" );
+    this.textInspector = new WebDoc.TextPaletteController( "#text-inspector" );
+    this.htmlInspector = new WebDoc.InnerHtmlController( "#html-inspector" );
     
-    var widgetPalette = $("#palette_widget").hide();
-    widgetPalette.bind("load", function() {
+    var widgetPalette = $("#widget-inspector").hide();
+    var widgetPaletteContent = widgetPalette.find("iframe");
+    widgetPaletteContent.bind("load", function() {
       ddd("must inject uniboard api in inspector");
-      if (widgetPalette[0].contentWindow && WebDoc.application.boardController.selection().length) {
+      if (widgetPaletteContent[0].contentWindow && WebDoc.application.boardController.selection().length) {
         ddd("inject uniboard api in inspector");
-        widgetPalette[0].contentWindow.uniboard = this.widgetInspectorApi;
-        if (widgetPalette[0].contentWindow.widget) {
-          var widgetObject = widgetPalette[0].contentWindow.widget;
+        widgetPaletteContent[0].contentWindow.uniboard = this.widgetInspectorApi;
+        if (widgetPaletteContent[0].contentWindow.widget) {
+          var widgetObject = widgetPaletteContent[0].contentWindow.widget;
           widgetObject.lang = "en";
           widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
           widgetObject.mode = "Edit";
@@ -47,101 +48,107 @@ WebDoc.InspectorController = $.klass({
             widgetObject._onLoad();  
           }
         }
-        else if (widgetPalette[0].contentWindow.initialize) {
-          widgetPalette[0].contentWindow.initialize();
+        else if (widgetPaletteContent[0].contentWindow.initialize) {
+          widgetPaletteContent[0].contentWindow.initialize();
         }
       }                      
     }.pBind(this));
+        
+    this._inspectorNodes = [
+      emptyPalette,
+      this.textInspector.domNode,
+      penPelette,
+      widgetPalette,
+      this.imageInspector.domNode,
+      this.htmlInspector.domNode
+    ];
     
-    this.palettes = [emptyPalette, textPalette, penPelette, widgetPalette, imagePelette, htmlSnippetPalette];
-
-    this.updatePalette(0);
-    this.subInspectors = [];
-    var propertiesInspectorController = new WebDoc.PropertiesInspectorController();
-    this.subInspectors.push(propertiesInspectorController);               
+    this._properties = new WebDoc.PropertiesInspectorController( '#properties' );
+    this._updatePalette(0);
     
-    var paletteInspector = $("#palette_inspector");
-    var propertiesInspector = $("#properties_inspector");
-    var htmlInspector = $("#html_inspector"); 
-    this.inspectors = [paletteInspector[0], propertiesInspector[0], htmlInspector[0]];
-    this.lastInspectorId = 1;
-    this.selectInspector(0);
+    this.lastInspectorId = 0;
     this.currentInspectorId = 0;
-    WebDoc.application.boardController.addSelectionListener(this);
     
-    $("#inspectors").accordion({
-      autoHeight: false,
-      fillSpace: false,
-      change: function(event, ui) {
-        if (this.currentInspectorId > 0) {
-          this.lastInspectorId = this.currentInspectorId;
-        }
-        this.currentInspectorId = $.inArray(ui.newContent.parent()[0], this.inspectors);
-      }.pBind(this)
-    });
-  }, 
-  
-  selectInspector: function(inspectorId) {
-    $("#inspectors").accordion("activate", inspectorId);        
+    WebDoc.application.boardController.addSelectionListener(this);
   },
   
   selectPalette: function(paletteId) {
-      this.updatePalette(paletteId);
-      this.selectInspector(0);
+    this._updatePalette(paletteId);
   },
   
-  updatePalette: function(paletteId) {
-    if (paletteId !== this.currentPaletteId) {
-      if (this.currentPaletteId !== undefined) {
-        ddd("hide palette", this.currentPaletteId);
-        this.palettes[this.currentPaletteId].hide();
+  _updatePalette: function(paletteId) {
+    var inspectorNode = null;
+    
+    ddd("[InspectorController] updatePalette", paletteId, inspectorNode );
+    
+    if (paletteId !== this.currentInspectorId) {
+      // Hide current inspector
+      if (this.currentInspectorId !== undefined) {
+        ddd("hide palette", this.currentInspectorId);
+        this._inspectorNodes[this.currentInspectorId].hide();
       }
-      ddd("show palette", paletteId, this.palettes[paletteId]);
+      
+      // Inspector belongs to widget
       if (typeof paletteId == 'string') {
-        this.palettes[3].show();
-        this.currentPaletteId = 3;
+        this.currentInspectorId = 3;
       }
+      // Inspector is native
       else {
-        this.palettes[paletteId].show();
-        this.currentPaletteId = paletteId;        
+        this.currentInspectorId = paletteId;
       }
+      
+      inspectorNode = this._inspectorNodes[this.currentInspectorId];
+      inspectorNode.show();
+      // This is, admittedly, a bit of a hack. We get the properties
+      // node and plonk it into this inspector. We may end up moving the
+      // properties node, so lets leave it like this for the time being.
+      inspectorNode
+      .find('.foot')
+      .html(this._properties.domNode);
+      
+      inspectorNode
+      .css({
+        bottom: this._properties.domNode.outerHeight()
+      });
+      
+      this.refreshSubInspectors();
     }
+  },
+  
+  refresh: function() {
+      this.selectionChanged();
   },
   
   selectionChanged: function() {
     ddd("selected item ", WebDoc.application.boardController.selection());
-    if (WebDoc.application.boardController.selection().length > 0) {             
-      this.updatePalette(WebDoc.application.boardController.selection()[0].inspectorId());
+    if (this.domNode.is(':visible')) {
+      if (WebDoc.application.boardController.selection().length > 0) {
+        this._updatePalette(WebDoc.application.boardController.selection()[0].inspectorId());
+      }
+      else {
+        this._updatePalette(0);
+      }
     }
-    else {
-      this.updatePalette(0);
-    }
-    this.refreshSubInspectors();    
   },
   
   refreshProperties: function() {
-    this.subInspectors[0].refresh();
+    this._properties.refresh();
   },
   
   
   refreshSubInspectors: function() {
-    // refresh su inspector
-    for (var i=0; i < this.subInspectors.length; i++) {
-      var subInspector = this.subInspectors[i];
-      if (subInspector.refresh) {
-        subInspector.refresh();
-      }
-    }
+    this.refreshProperties();
     
-    switch (this.currentPaletteId) {
+    switch (this.currentInspectorId) {
       case 3:
-        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);        
-        if (this.palettes[3].attr("src") != WebDoc.application.boardController.selection()[0].inspectorId()) {
-          this.palettes[3].attr("src", WebDoc.application.boardController.selection()[0].inspectorId());
+        this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);    
+        var widgetContent = this._inspectorNodes[3].find("iframe"); 
+        if (widgetContent.attr("src") != WebDoc.application.boardController.selection()[0].inspectorId()) {
+          widgetContent.attr("src", WebDoc.application.boardController.selection()[0].inspectorId());
         }      
         else {
-          if (this.palettes[3][0].contentWindow && this.palettes[3][0].contentWindow.widget && this.palettes[3][0].contentWindow.widget._onLoad) {
-            var widgetObject = this.palettes[3][0].contentWindow.widget;
+          if (widgetContent[0].contentWindow && widgetContent[0].contentWindow.widget && widgetContent[0].contentWindow.widget._onLoad) {
+            var widgetObject = widgetContent[0].contentWindow.widget;
             widgetObject.lang = "en";
             widgetObject.uuid = WebDoc.application.boardController.selection()[0].item.uuid();
             widgetObject.mode = "Edit";
@@ -150,24 +157,25 @@ WebDoc.InspectorController = $.klass({
         }
         break;
       case 4:
-        this.imagePaletteController.refresh();
+        this.imageInspector.refresh();
         break;
       case 5:
-        this.innerHtmlController.refresh();
+        this.htmlInspector.refresh();
         break;
     }
   },
   
   refreshWidgetPalette: function() {         
     ddd("refresh widget palette"); 
-    if (this.palettes[3][0].contentWindow) {
+    var widgetContent = this._inspectorNodes[3].find("iframe"); 
+    if (widgetContent[0].contentWindow) {
       ddd("widow found");
-      if (this.palettes[3][0].contentWindow.widget) {
-        this.palettes[3][0].contentWindow.widget._onPreferencesChange();
+      if (widgetContent[0].contentWindow.widget) {
+        widgetContent[0].contentWindow.widget._onPreferencesChange();
       }
-      else if (this.palettes[3][0].contentWindow.initialize) {
+      else if (widgetContent[0].contentWindow.initialize) {
         ddd("call initialize");
-        this.palettes[3][0].contentWindow.initialize();
+        widgetContent[0].contentWindow.initialize();
       }
     }    
   }  

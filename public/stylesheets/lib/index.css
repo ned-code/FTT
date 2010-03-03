@@ -107,7 +107,28 @@
     padding-top: 0.2em;
 }
 
+.spaceless li {
+    margin: 0;
+    width: 50px;
+}
+.spaceless li a {
+    width: 50px; padding-top: 50px;
+}
+
+.scroll {
+    overflow: auto;
+}
+.vertical.scroll {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 /* Links as thumbs classes */
+
+.thumbs a:hover,
+.thumbs a:focus {
+    text-decoration: none;
+}
 
 .thumbs a {
     display: inline-block;
@@ -123,6 +144,7 @@
     overflow: hidden;
     /* Centre text */
     text-align: center;
+    text-decoration: none;
     background-repeat: no-repeat;
     background-position: 50% 0;
 }
@@ -147,7 +169,8 @@
     line-height: 48px;
     height: 48px;
     text-align: left;
-    background-position: 0 0;
+    /* TODO: This actually interferes with sprite positioning, because it overides */
+    background-position-x: 0;
 }
 .vertical.icons-only a {
     padding-right: 0;
@@ -182,8 +205,9 @@
 }
 
 .tools li {
-    margin-right: 0;
-    border-right: 1px solid rgba(120, 130, 140, 0.4);
+    margin-right: 2px;
+    border-right: none;
+    /*border-right: 1px solid rgba(120, 130, 140, 0.4);*/
 }
 .tools li:last-child {
     border-right: none;
@@ -193,6 +217,14 @@
 .toolbar-panel .tools {
     float: left;
     margin-right: 32px;
+}
+.toolbar-panel .mode-tools {
+    float: right;
+    margin-right: 0;
+    margin-left: 32px;
+}
+.mode-tools li {
+    margin-right: 0;
 }
 
 /* On the right ... */
@@ -205,176 +237,62 @@
     margin-left: 32px;
 }
 
-.tools a:hover{
-    background-color: #dedede;
-}
-.tools a.current{
-    background-color: #b5cdd5;
-}
+/* Inspector view controls */
 
-
-/* Pages tools */
-
-.pages-tools a {
-    background-image: url('/images/pages-tools.png');
-}
-
-a[href="#pages-browser"]            { background-position: 0 0; }
-a[href="#pages-browser"]:hover      { background-position: 0 -64px; }
-a[href="#pages-browser"]:active     { background-position: 0 -128px; }
-a[href="#pages-browser"].current    { background-position: 0 -192px; }
-
-a[href="#add-page"]                 { background-position: 0 -256px; }
-a[href="#add-page"]:hover           { background-position: 0 -320px; }
-a[href="#add-page"]:active          { background-position: 0 -384px; }
-
-a[href="#add-web-page"]             { background-position: 0 -448px; }
-a[href="#add-web-page"]:hover       { background-position: 0 -512px; }
-a[href="#add-web-page"]:active      { background-position: 0 -576px; }
-
-a[href="#copy-page"]                { background-position: 0 -640px; }
-a[href="#copy-page"]:hover          { background-position: 0 -704px; }
-a[href="#copy-page"]:active         { background-position: 0 -768px; }
-
-a[href="#remove-page"]              { background-position: 0 -832px; }
-a[href="#remove-page"]:hover        { background-position: 0 -896px; }
-a[href="#remove-page"]:active       { background-position: 0 -960px; }
-
-a[href="#prev-page"]                { background-position: 0 -1024px; }
-a[href="#prev-page"]:hover          { background-position: 0 -1088px; }
-a[href="#prev-page"]:active         { background-position: 0 -1152px; }
-
-a[href="#next-page"]                { background-position: 0 -1216px; }
-a[href="#next-page"]:hover          { background-position: 0 -1280px; }
-a[href="#next-page"]:active         { background-position: 0 -1344px; }
-
-a[href="#toggle-thumbs"].active        { background-position: 0 -1408px; }
-a[href="#toggle-thumbs"].active:hover  { background-position: 0 -1472px; }
-a[href="#toggle-thumbs"].active:active { background-position: 0 -1536px; }
-a[href="#toggle-thumbs"]            { background-position: 0 -1600px; }
-a[href="#toggle-thumbs"]:hover      { background-position: 0 -1664px; }
-a[href="#toggle-thumbs"]:active     { background-position: 0 -1728px; }
-
-/* Edit tools */
-
-.edit-tools a {
-    background-image: url('/images/edit-tools.png');
-}
-
-a[href="#select"]                   { background-position: 0 0; }
-a[href="#select"]:hover             { background-position: 0 -64px; }
-a[href="#select"]:active            { background-position: 0 -128px; }
-a[href="#select"].current           { background-position: 0 -192px; }
-
-a[href="#draw"]                     { background-position: 0 -256px; }
-a[href="#draw"]:hover               { background-position: 0 -320px; }
-a[href="#draw"]:active              { background-position: 0 -384px; }
-a[href="#draw"].current             { background-position: 0 -448px; }
-
-a[href="#insert-text"]              { background-position: 0 -512px; }
-a[href="#insert-text"]:hover        { background-position: 0 -576px; }
-a[href="#insert-text"]:active       { background-position: 0 -640px; }
-a[href="#insert-text"].current      { background-position: 0 -704px; }
-
-a[href="#insert-html"]              { background-position: 0 -768px; }
-a[href="#insert-html"]:hover        { background-position: 0 -832px; }
-a[href="#insert-html"]:active       { background-position: 0 -896px; }
-a[href="#insert-html"]:active       { background-position: 0 -960px; }
-
-a[href="#move"]                     { background-position: 0 -1024px; }
-a[href="#move"]:hover               { background-position: 0 -1088px; }
-a[href="#move"]:active              { background-position: 0 -1152px; }
-a[href="#move"].current             { background-position: 0 -1216px; }
-
-a[href="#zoom-in"]                  { background-position: 0 -1280px; }
-a[href="#zoom-in"]:hover            { background-position: 0 -1344px; }
-a[href="#zoom-in"]:active           { background-position: 0 -1408px; }
-a[href="#zoom-in"].current          { background-position: 0 -1472px; }
-
-a[href="#zoom-out"]                 { background-position: 0 -1536px; }
-a[href="#zoom-out"]:hover           { background-position: 0 -1600px; }
-a[href="#zoom-out"]:active          { background-position: 0 -1664px; }
-a[href="#zoom-out"].current         { background-position: 0 -1728px; }
-
-a[href="#delete"]                   { background-position: 0 -1792px; }
-a[href="#delete"]:hover             { background-position: 0 -1856px; }
-a[href="#delete"]:active            { background-position: 0 -1920px; }
-
-a[href="#undo"]                     { background-position: 0 -1984px; }
-a[href="#undo"]:hover               { background-position: 0 -2048px; }
-a[href="#undo"]:active              { background-position: 0 -2112px; }
-
-a[href="#redo"]                     { background-position: 0 -2176px; }
-a[href="#redo"]:hover               { background-position: 0 -2240px; }
-a[href="#redo"]:active              { background-position: 0 -2304px; }
-
-a[href="#to-back"]                  { background-position: 0 -2368px; }
-a[href="#to-back"]:hover            { background-position: 0 -2432px; }
-a[href="#to-back"]:active           { background-position: 0 -2496px; }
-
-a[href="#to-front"]                 { background-position: 0 -2560px; }
-a[href="#to-front"]:hover           { background-position: 0 -2624px; }
-a[href="#to-front"]:active          { background-position: 0 -2688px; }
-
-
-/* Panel tools */
-
-.panel-tools a {
-    background-image: url('/images/panel-tools.png');
-}
-
-/* A bit of a special case, the toggle buttons
-   They may even deserve their own list class */
-a[href="#left-panel-toggle"].current,
-a[href="#right-panel-toggle"]                   { background-position: 0 0; background-color: transparent; }
-a[href="#left-panel-toggle"].current:hover,
-a[href="#right-panel-toggle"]:hover             { background-position: 0 -64px; background-color: transparent;}
-a[href="#left-panel-toggle"].current:active,
-a[href="#right-panel-toggle"]:active            { background-position: 0 -128px; background-color: transparent;}
-a[href="#left-panel-toggle"],
-a[href="#right-panel-toggle"].current           { background-position: 0 -192px; background-color: transparent;}
-a[href="#left-panel-toggle"]:hover,
-a[href="#right-panel-toggle"].current:hover     { background-position: 0 -256px; background-color: transparent;}
-a[href="#left-panel-toggle"]:active,
-a[href="#right-panel-toggle"].current:active    { background-position: 0 -320px; background-color: transparent;}
-
-a[href="#item-inspector"]           { background-position: 0 -384px; }
-a[href="#item-inspector"]:hover     { background-position: 0 -448px; }
-a[href="#item-inspector"]:active    { background-position: 0 -512px; }
-a[href="#item-inspector"].current   { background-position: 0 -576px; }
-
-a[href="#library"]                  { background-position: 0 -640px; }
-a[href="#library"]:hover            { background-position: 0 -704px; }
-a[href="#library"]:active           { background-position: 0 -768px; }
-a[href="#library"].current          { background-position: 0 -832px; }
-
-a[href="#page-inspector"]           { background-position: 0 -1152px; }
-a[href="#page-inspector"]:hover     { background-position: 0 -1216px; }
-a[href="#page-inspector"]:active    { background-position: 0 -1280px; }
-a[href="#page-inspector"].current   { background-position: 0 -1344px; }
-
-.numbers {
+.inspector-views {
     position: absolute;
-    overflow: visible;
-    width: 0;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    /*border-left: 1px solid #444b4d;*/
+    top: 4px;
+    right: 4px;
 }
-.numbers li {
-    width: 16px; height: 16px;
-    margin-left: -9px;
-    /* Just to nudge the text into place */
-    padding-left: 1px;
-    margin-bottom: 33px;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
-    
-    font-weight: bold;
-    line-height: 15px;
-    text-align: center;
+
+.views {
+    margin: 0;
+    padding: 0 0 0 0;
 }
+.views li {
+    margin-right: 0;
+    border-right: none;
+}
+.views li:last-child {
+    border-right: none;
+}
+.views a {
+    padding-top: 24px;
+    min-width: 24px;
+}
+.icons-only.views a {
+    /*-moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;*/
+    width: 24px;
+}
+.views a:hover{
+    background-color: none;
+}
+.views a.current{
+    background-color: none;
+}
+
+
+/* Expanding Buttons */
+
+a[href='#draw'].current {
+    width: 64px;
+}
+a[href='#draw'] {
+    position: relative;
+}
+a[href='#draw'] .draw-port {
+    display: none;
+    position: absolute;
+    top: 0; left: 32px;
+    width: 32px; height: 32px;
+}
+a[href='#draw'].current .draw-port {
+    display: block;
+}
+
+/* Panel tools indexes */
 
 .page_browser_item {
     height: 48px;
@@ -388,21 +306,3 @@ a[href="#page-inspector"].current   { background-position: 0 -1344px; }
 	float: right;
 }
 
-/* NOT SURE WHAT THIS DOES - something about special rollover states */
-
-/*Special case to prevent page deletion :-)*/
-#removePage a {
-    background-image: url(../images/icons/page_remove.png);
-    background-repeat: no-repeat;
-    background-position: 1px 1px;
-}
-#removePage a:hover {
-    background-position: -23px 1px;
-}
-#page-browser.toggle_on_panel a{
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  background-color: #6F6F6F;
-  background-position: -23px 1px;
-}

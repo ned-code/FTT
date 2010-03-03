@@ -1,19 +1,18 @@
 /* CSS Panel classes
  * 
- * Panel classes for creating interface areas
+ * Panel classes for creating interface areas that 'stick' to screen position
  *
  */
 
 /* Panel class */
 
 .panel {
-    position: absolute;
+    position: fixed;
     left: 0; top: 0; right: 0; bottom: 0;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
-/* An Inspector goes INSIDE a panel. It requires .panel to
-   hide its overflow */
+/* An Inspector goes INSIDE a panel. */
 
 .inspector {
     position: absolute;
@@ -27,8 +26,9 @@
 .inspector .head,
 .inspector .foot,
 .inspector .head>div,
-.inspector .foot>div,
 .inspector .head>ul,
+.inspector .foot>div,
+.inspector .foot>form,
 .inspector .foot>ul {
     position: absolute;
     left: 0; right: 0;
@@ -36,7 +36,7 @@
 
 .inspector .content {
     /* IE8 doesn't display padding bottom. Tant pis. */
-    padding: 8px;
+    padding: 0;
     top: 0; bottom: 0;
     overflow-x: hidden;
     overflow-y: auto;
@@ -60,97 +60,21 @@
 }
 
 .inspector .foot>div,
-.inspector .foot>ul {
+.inspector .foot>ul,
+.inspector .foot>form {
     top: 0;
     min-height: 24px;
-}
-
-
-/* Interface panels */
-
-.board-panel {
-    top: 56px;
-}
-.left-panel,
-.right-panel {
-    top: 58px;
-}
-
-.embed-mode .board-panel {
-    top: 32px;
-}
-.embed-mode .left-panel,
-.embed-mode .right-panel {
-    top: 34px;
-}
-
-.board-panel {
-    bottom: 0;
-    min-width: 300px;
-}
-
-.titlebar-panel {
-    height: 25px;
-    padding: 0 4px;
-    overflow: hidden;
-}
-
-.toolbar-panel {
-    top: 24px;
-    height: 32px;
-    padding: 0 4px;
-}
-.embed-mode .toolbar-panel {
-    top: 0px;
-}
-.left-panel {
-    width: 164px;
-    margin-left: -164px;
-    
-    /*-webkit-border-top-right-radius: 8px;   */
-    /*-moz-border-top-right-radius: 8px;      */
-    /*border-top-right-radius: 8px;           */
-    /*-webkit-border-bottom-right-radius: 8px;*/
-    /*-moz-border-bottom-right-radius: 8px;   */
-    /*border-bottom-right-radius: 8px;        */
-}
-.pages-browser.inspector {
-    top: 0;
-}
-
-.right-panel {
-    width: 350px;
-    left: 100%;
-    margin-left: 0px;
-    
-    /*-webkit-border-top-left-radius: 8px;    */
-    /*-moz-border-top-left-radius: 8px;       */
-    /*border-top-left-radius: 8px;            */
-    /*-webkit-border-bottom-left-radius: 8px; */
-    /*-moz-border-bottom-left-radius: 8px;    */
-    /*border-bottom-left-radius: 8px;         */
-}
-
-/* Inspectors */
-
-.pages-browser {
-    top: 0;
 }
 
 /* Colors */
 
 #page_inspector.inspector {
-    /*background: #d5d7ca;*/
     bottom: 0;
-}
-.inspector .head>div {
-    background: #999999;
-    border-bottom: 2px solid #999999;
 }
 .inspector .head h2 {
     color: white;
     line-height: 32px;
     font-weight: bold;
-    font-size: 1.6em;
+    font-size: 1.4em;
     text-align: center;
 }

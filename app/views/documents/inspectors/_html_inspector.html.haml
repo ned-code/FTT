@@ -1,0 +1,26 @@
+%div#html-inspector.inspector
+  %div.head
+    %div
+      %h2 HTML
+  
+  %div.foot
+    %form#properties.properties
+      %div
+        %label{ :for => "property-width" } width
+        %input#property-width.property-width{ :type => "text", :value => "px" }
+      %div
+        %label{ :for => "property-height" } height
+        %input#property-height.property-height{ :type => "text", :value => "px" }        
+      %div
+        %label{ :for => "property-left" } left
+        %input#property-left.property-left{ :type => "text", :value => "px" }
+      %div
+        %label{ :for => "property-top" } top
+        %input#property-top.property-top{ :type => "text", :value => "px" }
+      %div
+        %label{ :for => "property-scroll" } Show Scroll
+        %input#property-scroll.property-scroll{ :type => "checkbox", :value => "checked" }
+      %div
+        %label{ :for => "property-opacity" } Opacity
+        %input#property-opacity.property-opacity{ :type => "text", :value => "" }  
+  %div.content#html-editor

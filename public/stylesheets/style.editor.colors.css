@@ -1,75 +1,405 @@
-/* Color theme */
+/* Color theme
+ * 
+ * Colours only. Nothing that affects layout.
+ */
 
-body            { background: white; }
-body.login      { background: white; }
-body.editor     { background: #bbc0c2; }
+body                          { background-color: hsl(198, 8%, 60%); }
 
+/* The board */
+
+#board-container              { -webkit-box-shadow: 0 2px 8px hsl(14, 24%, 35%);
+                                -moz-box-shadow:    0 2px 8px hsl(14, 24%, 35%); 
+                                box-shadow:         0 2px 8px hsl(14, 24%, 35%); }
 
 /* Panels */
+.toolbar-panel                { color: hsl(198, 7%, 41%);
+                                background-color: hsla(198, 7%, 41%, 0.92);
+                                background-image: url('/images/bg.png');
+                                background-position: 0 0;
+                                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(198, 4%, 97%) ), to( hsl(198, 8%, 79%) ));
+                                background-image: -moz-linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+                                background-image:      linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+                                background-repeat: repeat-x;
+                                border-color: hsla(198, 12%, 30%, 0.8);
+                                -webkit-box-shadow: 0 0 32px hsla(14, 24%, 35%, 0.6);
+                                -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
+                                box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
 
-.toolbar-panel  { background: #f2f2f2;
-                  -webkit-box-shadow: 0 0 32px rgba(77, 70, 68, 0.5);
-                  -moz-box-shadow: 0 0 32px rgba(77, 70, 68, 0.5);
-                  box-shadow: 0 0 32px rgba(77, 70, 68, 0.5); }
 .left-panel,
-.right-panel    { background-color: rgba(68, 75, 77, 0.6); }
+.right-panel                  { background-color: hsla(198, 7%, 41%, 0.92); }
+.panel-tools,
+.border                       { background-color: inherit; border-color: /*hsla(198, 12%, 30%, 0.8)*/ transparent; }
+.vertical.panel-tools li      { border-color: hsla(198, 12%, 30%, 0.8); }
+.panel-tools a.current        { background-color: hsla(198, 12%, 30%, 0.8); }
+
+/*  */
+
+.logo                         { background-image: url('/images/logo.png'); }
+
+/* Tools */
+
+.draw-size                    { background-color: black; }
+.draw-color                   { border-color: black; }
+
+/* Pops ------------------------------ */
+
+.ui-pop                       { -webkit-border-radius: 1em;
+                                -moz-border-radius:    1em;
+                                border-radius:         1em;
+                                border-color: hsla(194, 20%, 20%, 0.8); }
+.ui-pop label,
+.ui-pop input[type='text']    { color: black; }
+.ui-pop label.underlay        { background-color: white; }
+.ui-pop input[type='text']:focus { outline: none; }
+.ui-pop                       { background-color: hsla(198, 20%, 20%, 0.92); border-color: hsla(198, 20%, 20%, 0.8);
+                                -webkit-box-shadow: 0 4px 12px hsl(14, 20%, 30%);
+                                -moz-box-shadow:    0 4px 12px hsl(14, 20%, 30%);
+                                box-shadow:         0 4px 12px hsl(14, 20%, 30%); }
+.ui-pop input[type='text']:focus,
+.ui-pop:hover input[type='text'] { background-color: hsl(198, 0.4%, 99%); color: black; outline: none; }
 
 /* Inspectors ------------------------ */
 
-/* Foot contents */
-.inspector .foot > ul,
-.inspector .foot > div { background-color: rgba(220, 220, 220, 0.9); }
+.inspector .head>div          { background-color: hsla(198, 12%, 30%, 0.8); color: white; }
+.inspector .foot>ul,
+.inspector .foot>form,
+.inspector .foot>div          { background-color: hsla(198, 12%, 30%, 0.8); color: white; }
+.inspector .foot>ul           { background-image: url('/images/bg.png');
+                                background-position: 0 0;
+                                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(198, 4%, 97%) ), to( hsl(198, 8%, 79%) ));
+                                background-image: -moz-linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+                                background-image:      linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+                                background-repeat: repeat-x; }
+.inspector form.content       { background-color: hsl(198, 3%, 88%); }
+.inspector .box               { background-color: hsl(198, 6%, 56%);
+
+                                -webkit-background-size:  100%;
+                                -moz-background-size:     100% 100%;
+                                background-size:          100%;
+
+                                -webkit-border-radius:    12px;
+                                -moz-border-radius:       12px;
+                                border-radius:            12px; }
+
+/* ui elements */
+.scroller-thumb,
+.inspector .size-slider-value { background: none;
+                                border-color: transparent;
+                                color: white; }
+
+.text-thumb,
+.scroller-window              { background-color: hsl(198, 6%, 56%);
+                                -webkit-border-radius:    12px;
+                                -moz-border-radius:       12px;
+                                border-radius:            12px; }
+
+.inspector .size-slider       { background: hsl(198, 6%, 56%) url('/images/ui/slider_size_bg.png') no-repeat 100% 0; }
+.scroller-window a            { color: rgb(68, 75, 77); }
+.scroller-handle,
+.inspector .size-slider .ui-corner-all {
+                                background: hsla(198, 20%, 20%, 0.92);
+                                border-color: hsla(198, 20%, 20%, 0.8);
+                                -webkit-box-shadow: 0 2px 6px hsl(14, 20%, 30%);
+                                -moz-box-shadow:    0 2px 6px hsl(14, 20%, 30%);
+                                box-shadow:         0 2px 6px hsl(14, 20%, 30%);
+}
+.scroller-handle              { -webkit-border-radius:    21px;
+                                -moz-border-radius:       21px;
+                                border-radius:            21px; }
+.size-slider .ui-corner-all {   -webkit-border-radius:    17px;
+                                -moz-border-radius:       17px;
+                                border-radius:            17px; }
+.scroller-thumb               { color: black;
+                                background-color: hsl(198, 3%, 88%);
+                                -webkit-border-radius:    18px;
+                                -moz-border-radius:       18px;
+                                border-radius:            18px; }
+.inspector .size-slider .draw-port { 
+                                background-color: hsl(198, 3%, 88%);
+                                -webkit-border-radius:    14px;
+                                -moz-border-radius:       14px;
+                                border-radius:            14px; }
+.scroller:hover .scroller-thumb,
+.inspector .size-slider:hover .draw-port,
+.inspector .ui-slider-handle:focus .draw-port { background: hsl(198, 0.4%, 99%); }
+
+.inspector .size-slider input[type='text']:hover,
+.inspector .size-slider input[type='text']:focus { background-color: white; color: black;
+    -webkit-border-radius: 1em;
+    -moz-border-radius:    1em;
+    border-radius:         1em;
+}
 
 /* Page browser */
-.pages li:hover .title        { background: hsl(194, 6%, 56%); }
-.pages li.current .title      { background: hsl(194, 3%, 88%); }
-.pages li .number             { background-color: hsl(194, 10%, 40%); color: white; }
-.pages li:hover .number       { background-color: hsl(194, 12%, 24%); color: white; }
-.pages li.current .number     { background-color: hsl(194, 12%, 24%); color: white; }
+.pages li .page-title         { background-color: hsl(198, 9%, 71%); }
+.pages li:hover .page-title   { background-color: hsl(198, 6%, 56%); }
+.pages li.current .page-title { background-color: hsl(198, 3%, 88%); }
+
+.pages li .thumb              { border-color: hsl(198, 9%, 71%); }
+.pages li:hover .thumb        { border-color: hsl(198, 6%, 56%); }
+.pages li.current .thumb      { border-color: hsl(198, 3%, 88%); }
+
+.number                       { background-color: hsla(198, 12%, 30%, 0.8); color: white; }
+.pages li .number,
+.pages li .loading-icon       { background-color: hsl(198, 10%, 40%); color: white; }
+.pages li:hover .number,
+.pages li:hover .loading-icon { background-color: hsl(198, 12%, 24%); color: white; }
+.pages li.current .number,
+.pages li.current .loading-icon { background-color: hsl(198, 12%, 24%); color: white; }
+
 
 /* Forms */
-
 .properties,
-.code-editor {
-    background-color: hsl();
-    border-color: #666666;
-}
+.code-editor                  { border-color: hsl(198, 10%, 40%); }
 .properties legend,
-.code-editor legend {
-    background: #666666;
-    /*background: #9fa38b;*/
-    color: white;
-    /*color: #faffe5;*/
-}
-.properties input[type=text] {
-    border-color: #bbbbbb;
-    /*border: 2px solid rgba(88, 95, 58, 0.3);*/
-}
+.code-editor legend           { background-color: hsl(198, 10%, 40%); color: white; }
+.properties input[type=text]  { border-color: #bbbbbb; }
 
 /* Layers */
 
-.screen         { background-color: rgba(68, 75, 77, 0.6); }
+.screen                       { background-color: hsla(198, 12%, 30%, 0.6); }
 
 
 /* Index */
 
-
-/* The board */
-
-#board {
-    -webkit-box-shadow: 0 2px 8px rgb(77, 70, 68);
-    -moz-box-shadow:    0 2px 8px rgb(77, 70, 68); 
-    box-shadow:         0 2px 8px rgb(77, 70, 68);
-}
-
-.item_wrap      { border-color: rgba(76, 91, 76, 0.6); -webkit-border-radius: 2px;}
-.item_selected  { -webkit-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+.item_wrap      { border-color: hsla(198, 8%, 33%, 0.3333);
+                  border-style: dotted;
+                  -webkit-border-radius: 2px;
+                  -moz-border-radius:    2px;
+                  border-radius:         2px; }
+.item_wrap:hover { border-style: solid; }
+.item_selected  { border-style: solid;
+                  -webkit-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   -moz-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   box-shadow: 0 0 8px rgba(176, 227, 0, 1);
-                  border-color: rgba(176, 227, 0, 0.8);
-                /*border-color: rgba(197, 255, 0, 0.75);*/ }
+                  border-color: rgba(176, 227, 0, 0.8); }
+
+.toolbar-panel a,
+.toolbar-panel .mode-tools a        { -webkit-transition: width 0.18s ease-out; }
+.toolbar-panel a:active,
+.toolbar-panel .mode-tools a:active { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
+.toolbar-panel .current,
+.toolbar-panel .mode-tools .current { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      -webkit-transition: width 0.18s ease-out; }
+.toolbar-panel .mode-tools a        { -webkit-box-shadow: inset 0 0 2px -1px hsl(18, 16%, 12%);
+                                      -moz-box-shadow:    inset 0 0 2px -1px hsl(18, 16%, 12%);
+                                      box-shadow:         inset 0 0 2px -1px hsl(18, 16%, 12%); }
+
+#colors li a:active                 { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
+#colors li a.current                { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1); }
+
+.tools a{
+    -webkit-border-radius: 6px;
+    -moz-border-radius:    6px;
+    border-radius:         6px;
+}
+.tools a:hover,
+.tools a.current{
+    background-color: hsla( 194, 8%, 60%, 0.4 );
+}
+
+.mode-tools li a {
+    -webkit-border-radius: 0;
+    -moz-border-radius:    0;
+    border-radius:         0;
+}
+
+.mode-tools li:first-child a {
+    -webkit-border-top-left-radius:     6px;
+    -moz-border-radius-topleft:         6px;
+    border-top-left-radius:             6px;
+    -webkit-border-bottom-left-radius:  6px;
+    -moz-border-radius-bottomleft:      6px;
+    border-bottom-left-radius:          6px;
+}
+.mode-tools li:last-child a {
+    -webkit-border-top-right-radius:    6px;
+    -moz-border-radius-topright:        6px;
+    border-top-right-radius:            6px;
+    -webkit-border-bottom-right-radius: 6px;
+    -moz-border-radius-bottomright:     6px;
+    border-bottom-right-radius:         6px;
+}
+
+/* Pages tools */
+
+.pages-tools a                      { background-image: url('/images/pages-tools.png'); }
+
+a[href="#pages-browser"]            { background-position: 0 0; }
+a[href="#pages-browser"]:hover      { background-position: 0 -64px; }
+a[href="#pages-browser"]:active     { background-position: 0 -128px; }
+a[href="#pages-browser"].current    { background-position: 0 -192px; }
+
+a[href="#add-page"]                 { background-position: 0 -256px; }
+a[href="#add-page"]:hover           { background-position: 0 -320px; }
+a[href="#add-page"]:active          { background-position: 0 -384px; }
+
+a[href="#add-web-page"]             { background-position: 0 -448px; }
+a[href="#add-web-page"]:hover       { background-position: 0 -512px; }
+a[href="#add-web-page"]:active      { background-position: 0 -576px; }
+
+a[href="#copy-page"]                { background-position: 0 -640px; }
+a[href="#copy-page"]:hover          { background-position: 0 -704px; }
+a[href="#copy-page"]:active         { background-position: 0 -768px; }
+
+a[href="#remove-page"]              { background-position: 0 -832px; }
+a[href="#remove-page"]:hover        { background-position: 0 -896px; }
+a[href="#remove-page"]:active       { background-position: 0 -960px; }
+
+.toolbar-panel a[href="#prev-page"]        { background-position: 0 -1024px; }
+.toolbar-panel a[href="#prev-page"]:hover  { background-position: 0 -1088px; }
+.toolbar-panel a[href="#prev-page"]:active { background-position: 0 -1152px; }
+
+.toolbar-panel a[href="#next-page"]        { background-position: 0 -1216px; }
+.toolbar-panel a[href="#next-page"]:hover  { background-position: 0 -1280px; }
+.toolbar-panel a[href="#next-page"]:active { background-position: 0 -1344px; }
+
+a[href="#toggle-thumbs"].active        { background-position: 0 -1408px; }
+a[href="#toggle-thumbs"].active:hover  { background-position: 0 -1472px; }
+a[href="#toggle-thumbs"].active:active { background-position: 0 -1536px; }
+a[href="#toggle-thumbs"]            { background-position: 0 -1600px; }
+a[href="#toggle-thumbs"]:hover      { background-position: 0 -1664px; }
+a[href="#toggle-thumbs"]:active     { background-position: 0 -1728px; }
+
+/* Edit tools */
+
+.edit-tools a {
+    background-image: url('/images/edit-tools.png');
+}
+
+a[href="#select"]                   { background-position: 0 0; }
+a[href="#select"]:hover             { background-position: 0 -64px; }
+a[href="#select"]:active            { background-position: 0 -128px; }
+a[href="#select"].current           { background-position: 0 -192px; }
+
+a[href="#draw"]                     { background-position: 0 -256px; }
+a[href="#draw"]:hover               { background-position: 0 -320px; }
+a[href="#draw"]:active              { background-position: 0 -384px; }
+a[href="#draw"].current             { background-position: 0 -448px; }
+
+a[href="#insert-text"]              { background-position: 0 -512px; }
+a[href="#insert-text"]:hover        { background-position: 0 -576px; }
+a[href="#insert-text"]:active       { background-position: 0 -640px; }
+a[href="#insert-text"].current      { background-position: 0 -704px; }
+
+a[href="#insert-html"]              { background-position: 0 -768px; }
+a[href="#insert-html"]:hover        { background-position: 0 -832px; }
+a[href="#insert-html"]:active       { background-position: 0 -896px; }
+a[href="#insert-html"]:active       { background-position: 0 -960px; }
+
+a[href="#move"]                     { background-position: 0 -1024px; }
+a[href="#move"]:hover               { background-position: 0 -1088px; }
+a[href="#move"]:active              { background-position: 0 -1152px; }
+a[href="#move"].current             { background-position: 0 -1216px; }
+
+a[href="#zoom-in"]                  { background-position: 0 -1280px; }
+a[href="#zoom-in"]:hover            { background-position: 0 -1344px; }
+a[href="#zoom-in"]:active           { background-position: 0 -1408px; }
+a[href="#zoom-in"].current          { background-position: 0 -1472px; }
+
+a[href="#zoom-out"]                 { background-position: 0 -1536px; }
+a[href="#zoom-out"]:hover           { background-position: 0 -1600px; }
+a[href="#zoom-out"]:active          { background-position: 0 -1664px; }
+a[href="#zoom-out"].current         { background-position: 0 -1728px; }
+
+a[href="#delete"]                   { background-position: 0 -1792px; }
+a[href="#delete"]:hover             { background-position: 0 -1856px; }
+a[href="#delete"]:active            { background-position: 0 -1920px; }
+
+a[href="#undo"]                     { background-position: 0 -1984px; }
+a[href="#undo"]:hover               { background-position: 0 -2048px; }
+a[href="#undo"]:active              { background-position: 0 -2112px; }
+
+a[href="#redo"]                     { background-position: 0 -2176px; }
+a[href="#redo"]:hover               { background-position: 0 -2240px; }
+a[href="#redo"]:active              { background-position: 0 -2304px; }
+
+a[href="#to-back"]                  { background-position: 0 -2368px; }
+a[href="#to-back"]:hover            { background-position: 0 -2432px; }
+a[href="#to-back"]:active           { background-position: 0 -2496px; }
+
+a[href="#to-front"]                 { background-position: 0 -2560px; }
+a[href="#to-front"]:hover           { background-position: 0 -2624px; }
+a[href="#to-front"]:active          { background-position: 0 -2688px; }
+
+.inspector-views a,
+.panel-tools a                      { background-image: url('/images/panel-tools.png'); }
+
+/* A bit of a special case, the toggle buttons.
+   They may even deserve their own list class */
+
+a[href="#left-panel-toggle"].active,
+a[href="#right-panel-toggle"]                  { background-position: 0 0; background-color: transparent; }
+a[href="#left-panel-toggle"].active:hover,
+a[href="#right-panel-toggle"]:hover            { background-position: 0 -64px; background-color: transparent;}
+a[href="#left-panel-toggle"].active:active,
+a[href="#right-panel-toggle"]:active           { background-position: 0 -128px; background-color: transparent;}
+
+a[href="#left-panel-toggle"],
+a[href="#right-panel-toggle"].active           { background-position: 0 -192px; background-color: transparent;}
+a[href="#left-panel-toggle"]:hover,
+a[href="#right-panel-toggle"].active:hover     { background-position: 0 -256px; background-color: transparent;}
+a[href="#left-panel-toggle"]:active,
+a[href="#right-panel-toggle"].active:active    { background-position: 0 -320px; background-color: transparent;}
+
+a[href="#item-inspector"]             { background-position: 0 -384px; }
+a[href="#item-inspector"]:hover       { background-position: 0 -448px; }
+a[href="#item-inspector"]:active      { background-position: 0 -512px; }
+a[href="#item-inspector"].current     { background-position: 0 -576px; }
+
+a[href="#library"]                    { background-position: 0 -640px; }
+a[href="#library"]:hover              { background-position: 0 -704px; }
+a[href="#library"]:active             { background-position: 0 -768px; }
+a[href="#library"].current            { background-position: 0 -832px; }
+
+a[href="#pages-browser"]              { background-position: 0 -896px; }
+a[href="#pages-browser"]:hover        { background-position: 0 -960px; }
+a[href="#pages-browser"]:active       { background-position: 0 -1024px; }
+a[href="#pages-browser"].current      { background-position: 0 -1088px; }
+
+a[href="#page-inspector"]             { background-position: 0 -1152px; }
+a[href="#page-inspector"]:hover       { background-position: 0 -1216px; }
+a[href="#page-inspector"]:active      { background-position: 0 -1280px; }
+a[href="#page-inspector"].current     { background-position: 0 -1344px; }
+
+a[href="#document-inspector"]         { background-position: 0 -1408px; }
+a[href="#document-inspector"]:hover   { background-position: 0 -1472px; }
+a[href="#document-inspector"]:active  { background-position: 0 -1536px; }
+a[href="#document-inspector"].current { background-position: 0 -1600px; }
+
+a[href="#hide-thumbs"]                { background-position: -4px -1668px; }
+a[href="#hide-thumbs"]:hover          { background-position: -4px -1732px; }
+a[href="#hide-thumbs"].current        { background-position: -4px -1796px; }
+
+a[href="#show-thumbs"]                { background-position: -4px -1860px; }
+a[href="#show-thumbs"]:hover          { background-position: -4px -1924px; }
+a[href="#show-thumbs"].current        { background-position: -4px -1988px; }
+
+a[href="#prev-page"]                  { background-position: 0 -2051px; }
+a[href="#prev-page"]:hover            { background-position: 0 -2115px; }
+a[href="#prev-page"]:active           { background-position: 0 -2179px; }
+
+a[href="#next-page"]                  { background-position: 0 -2237px; }
+a[href="#next-page"]:hover            { background-position: 0 -2301px; }
+a[href="#next-page"]:active           { background-position: 0 -2365px; }
 
 
-/* The page browser */
+.mode-tools a { background-image: url('/images/mode-tools.png'); }
 
-.current        { background-color: #f4fbfd; }
+a[href="#mode-preview"]               { background-position: 0 0px; }
+a[href="#mode-preview"]:hover         { background-position: 0 -64px; }
+a[href="#mode-preview"]:active        { background-position: 0 -128px; }
+a[href="#mode-preview"].current       { background-position: 0 -192px; }
+
+a[href="#mode-edit"]                  { background-position: 0 -256px; }
+a[href="#mode-edit"]:hover            { background-position: 0 -320px; }
+a[href="#mode-edit"]:active           { background-position: 0 -384px; }
+a[href="#mode-edit"].current          { background-position: 0 -448px; }

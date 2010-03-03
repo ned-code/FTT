@@ -2,7 +2,9 @@
  * @author Julien Bachmann
  */
 WebDoc.ImagePaletteController = $.klass({
-  initialize: function() {
+  initialize: function( selector ) {
+    this.domNode = $( selector );
+    
     $("#property_src").blur(this.updateSrc.pBind(this));
   },
   

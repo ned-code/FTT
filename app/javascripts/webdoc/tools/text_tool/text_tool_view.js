@@ -1030,7 +1030,7 @@ WebDoc.TextToolView = $.klass({
       var ev = e || window.event;
       var el = ev.target || ev.srcElement;
       thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(el)));
-      WebDoc.application.inspectorController.textPaletteController.hideColorPickers();
+      WebDoc.application.inspectorController.textInspector.hideColorPickers();
     });
     
     this.addEvent(this.edDoc, "mouseup", function(e) {
@@ -1228,10 +1228,10 @@ WebDoc.TextToolView = $.klass({
   
   
   refreshPalette: function(toolbarHash) {
-    WebDoc.application.inspectorController.textPaletteController.refresh(toolbarHash);
+    WebDoc.application.inspectorController.textInspector.refresh(toolbarHash);
   },
   activateToolbar: function(bool) {
-    WebDoc.application.inspectorController.textPaletteController.activate(bool);
+    WebDoc.application.inspectorController.textInspector.activate(bool);
   },
   getSelectedText: function() {
     return this.edWin.getSelection().toString();

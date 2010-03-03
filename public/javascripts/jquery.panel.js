@@ -110,76 +110,6 @@ function callHandler(e){
     }
 }
 
-function openPop(e) {
-  var pop = jQuery( e.delegateTarget || e.currentTarget );
-  
-  pop
-  .addClass(activeClass)
-  .bind('submit', submitPop)
-  .bind('click', cancelPop)
-  .animate({
-    height: 64
-  }, {
-    duration: 160
-  })
-  .find('input:eq(0)')
-  // blur doesn't delegate (we need jQuery 1.4!!) so hack around it, for now
-  // TODO: The popup closes even if you click on it outside the input...
-  .bind('blur', blurPop)
-  .focus()
-  .select();
-}
-
-function controlPop(e) {
-  var target = jQuery( e.target );
-  
-  if ( target.closest(screenSelector).length ) {
-    openPop(e);
-  }
-}
-
-function submitPop(e) {
-  var pop = jQuery( e.currentTarget );
-  
-  deactivatePop(pop);
-}
-
-function cancelPop(e) {
-  var target = jQuery( e.target ),
-      pop = jQuery( e.currentTarget );
-  
-  if ( target.closest(cancelSelector).length ) {
-    deactivatePop(pop);
-  }
-}
-
-function blurPop(e) {
-  var input = jQuery( e.currentTarget ),
-      pop = input.closest('.pop');
-
-  deactivatePop(pop);
-}
-
-function deactivatePop(pop) {
-  pop
-  .unbind('submit', submitPop)
-  .unbind('click', cancelPop)
-  .animate({
-    height: 26
-  }, {
-    duration: 160,
-    complete: function(){
-      pop
-      .removeClass(activeClass)
-      .find('input')
-      // Remove once we delegate blur (we need jQuery 1.4!!)
-      // See hack above.
-      .unbind('blur')
-      .trigger('blur');
-    }
-  });
-}
-
 jQuery.fn[plug] = function(){
     var nodes = this;
     
@@ -187,46 +117,37 @@ jQuery.fn[plug] = function(){
     .bind('click', jQuery.delegate({
             '.toggle-head': toggleHead,
             '.toggle-foot': toggleFoot,
-            'a': callHandler//,
-            //'.pop': controlPop
-        })
-    )
-    .bind('open', jQuery.delegate({
-            '.pop': openPop
-        })
-    )
-    .bind('dblclick', jQuery.delegate({
-            '.pop': openPop
+            'a': callHandler
         })
     )
     .bind('show-head', toggleHead)
     .bind('show-foot', toggleFoot)
-    .bind('show-screen', function(){
-        var elem = jQuery(this),
-            screen = elem.children('.screen').add( elem.find('#board>.screen') ),
-            options = {
-                duration: 200
-            };
-        
-        elem.addClass("screened");
-        screen.animate({ opacity: 'show' }, options);
-        
-        return false;
-    })
-    .bind('hide-screen', function(){
-        var elem = jQuery(this),
-            screen = elem.children('.screen').add( elem.find('#board>.screen') ),
-            options = {
-                duration: 200,
-                complete: function(){
-                    elem.removeClass("screened");
-                }
-            };
-        
-        screen.animate({ opacity: 'hide' }, options);
-        
-        return false;
-    })
+//    .bind('show-screen', function(){
+//        var elem = jQuery(this),
+//            screen = elem.children('.screen').add( elem.find('#board>.screen') ),
+//            options = {
+//                duration: 200
+//            };
+//        
+//        elem.addClass("screened");
+//        screen.animate({ opacity: 'show' }, options);
+//        
+//        return false;
+//    })
+//    .bind('hide-screen', function(){
+//        var elem = jQuery(this),
+//            screen = elem.children('.screen').add( elem.find('#board>.screen') ),
+//            options = {
+//                duration: 200,
+//                complete: function(){
+//                    elem.removeClass("screened");
+//                }
+//            };
+//        
+//        screen.animate({ opacity: 'hide' }, options);
+//        
+//        return false;
+//    })
     .each(function(){
         var node = jQuery(this),
             inspector = jQuery(inspectorSelector, this);
@@ -243,82 +164,91 @@ jQuery.fn[plug] = function(){
 })(jQuery);
 
 
-// jquery.popup.js
-// 
-// Handles behaviour of panels
-// Requires jQuery.delegate
+
+// text style chooser
 
 (function(jQuery, undefined){
 
-var plug = 'popup',
-    screenClass = 'screen',
-    activeClass = 'active',
-    cancelClass = 'cancel',
-    screenSelector = ".screen",
-    cancelSelector = "a[href='#cancel']",
-    options = {
-        duration: 100
-    };
+    var state = [  
+          { fontWeight: 'bold', fontStyle: 'normal' },
+          { fontWeight: 'bold', fontStyle: 'italic' },
+          { fontWeight: 'normal', fontStyle: 'italic' },
+          { fontWeight: 'normal', fontStyle: 'normal' }
+        ],
+        i = 0;
+    
 
-function controlPop(e) {
-  var target = jQuery( e.target ),
-      pop = jQuery( e.delegateTarget || e.currentTarget );
-  
-  if ( target.closest(screenSelector).length ) {
-    pop
-    .addClass(activeClass)
-    .bind('submit', submitPop)
-    .bind('click', cancelPop)
-    .animate({
-      height: 64
-    }, {
-      duration: 160
-    })
-    .find('input:eq(0)')
-    // blur doesn't delegate (we need jQuery 1.4!!) so hack around it, for now
-    // TODO: The popup closes even if you click on it outside the input...
-    .bind('blur', blurPop)
-    .focus()
-    .select();
-  }
-}
+    jQuery('.text-style-toggle')
+    .bind('click', function(){
+        jQuery(this).css( state[ i++ % state.length ] );
+        return false;
+    });
 
-function submitPop(e) {
-  var pop = jQuery( e.currentTarget );
-  
-  deactivatePop(pop);
-}
+})(jQuery);
 
-function cancelPop(e) {
-  var target = jQuery( e.target ),
-      pop = jQuery( e.currentTarget );
-  
-  if ( target.closest(cancelSelector).length ) {
-    deactivatePop(pop);
-  }
-}
+(function(jQuery, undefined){
 
-function blurPop(e) {
-  var input = jQuery( e.currentTarget ),
-      pop = input.closest('.pop');
+    var state = [  
+          { textDecoration: 'underline', color: 'white' },
+          { textDecoration: 'none', color: 'none' }
+        ],
+        i = 0;
+    
+    jQuery('.text-underline-toggle span')
+    .bind('click', function(){
+        jQuery(this).css( state[ i++ % state.length ] );
+        return false;
+    });
 
-  deactivatePop(pop);
-}
+})(jQuery);
 
-function deactivatePop(pop) {
-  pop
-  .removeClass(activeClass)
-  .unbind('submit', submitPop)
-  .unbind('click', cancelPop)
-  .animate({
-    height: 28
-  }, {
-    duration: 160
-  });
-}
 
-jQuery.fn[plug] = function(){
 
-};
+// TODO: make this into a ui-scroller plugin
+
+(function(jQuery, undefined){
+
+jQuery().ready(function(){
+
+    var scroller = jQuery(".scroller"),
+        height = scroller.outerHeight(),
+        thumb = scroller.find('.scroller-thumb'),
+        window = scroller.find('.scroller-window'),
+        list = window.find('li a'),
+        first, last, diff, unit, currentIndex;
+    
+    window.find('ul').bind('scroll', function(){
+        
+        height = scroller.outerHeight();
+        
+        first = first || window.find('li:first').position().top;
+        last = last || window.find('li:last').position().top;
+        diff = diff || last - first;
+        unit = diff / list.length;
+        
+        var pos = -( window.find('li:first').position().top - height/2 + unit/2 ),
+            index = Math.floor( pos/unit ),
+            currentNode;
+        
+        index = index < 0 ? 0 : index < list.length ? index : list.length-1;
+        
+        if ( index !== currentIndex ) {
+            
+            // This should be a callback
+            
+            currentIndex = index;
+            
+            currentNode = list.eq( index < 0 ? 0 : index < list.length ? index : list.length-1 );
+            
+            list.removeClass('current');
+            currentNode.addClass('current');
+            
+            thumb.html(currentNode.clone());
+            
+            // Send result to text tool
+            WebDoc.application.textTool.delegate.editorExec('fontName', currentNode.css('fontFamily'));
+        }
+    });
+});
 
 })(jQuery);

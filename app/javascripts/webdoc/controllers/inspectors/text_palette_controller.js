@@ -2,12 +2,13 @@
  * @author Julien Bachmann
  */
 WebDoc.TextPaletteController = $.klass({
-  initialize: function() {
-    this.initGUI("palette_text");
+  initialize: function(id) {
+    this.domNode = jQuery(id).hide();
+    this.initGUI("#text-inspector-content");
   },
   initGUI: function(container){
   	var thobj = this;
-    var containerObj = document.getElementById(container);
+    var containerObj = jQuery(container);
     var toolbarContent = 
     '<div id="toolbar_panel">'+
         '<div id="toolbar_panel_cover"></div>'+
@@ -116,7 +117,7 @@ WebDoc.TextPaletteController = $.klass({
         '</div>'+
         '<div style="clear: both;"></div>'+
     '</div>';
-    containerObj.innerHTML = toolbarContent;
+    containerObj.html(toolbarContent);
     
     $('#toolbar_panel_button_createlink_ok').bind('click',function(){
     	var value  = {

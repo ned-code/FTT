@@ -4,10 +4,15 @@
  */
 
 
+/* Typography */
 
-
-
-
+html {
+    font-size:100.01%;
+}
+body{
+    font-size: 75%;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
 
 /* Clearfix */
 
@@ -29,8 +34,3 @@ form div {display:inline-block;}
 
 * html .clearfix,
 * html form div {height:1%;}*/
-
-
-/* Typography */
-
-em { font-style: italic; }

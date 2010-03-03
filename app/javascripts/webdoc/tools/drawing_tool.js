@@ -12,13 +12,82 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     
     $super( selector, boardClass );
     
-    $("#colors").bind("click", function(event) {
-      var link = $(event.target).closest('div')[0];
-      if (link) {
-        event.preventDefault();
-        this.penColor = $(link).css("backgroundColor");
+    $("#colors").bind("click", jQuery.delegate({
+        'a':  function(e) {
+                var link = $( e.delegateTarget || e.currentTarget );
+                    color = link.css("backgroundColor");
+                
+                ddd('[DrawingTool] Selected colour '+color);
+                
+                $(".state-draw-color")
+                .removeClass('current');
+                //.css({
+                //    WebkitBoxShadow: 'none',
+                //    MozBoxShadow:    'none',
+                //    BoxShadow:       'none'
+                //});
+                
+                link
+                .addClass('current')
+                //.css({
+                //    WebkitBoxShadow: '0 0 16px '+color,
+                //    MozBoxShadow:    '0 0 16px '+color,
+                //    BoxShadow:       '0 0 16px '+color
+                //});
+                
+                this.penColor = color;
+                $(".draw-color").css({ backgroundColor: color });
+                return false;
+        }
+      }, this)
+    )
+    
+    var self = this,
+        port = $('<div/>').addClass('draw-port'),
+        thumb = $('<div/>').addClass('draw-color draw-size'),
+        value = $('.size-slider-value');
+    
+    $(".size-slider")
+    .slider({
+      value: 2,
+      min: 1,
+      max: 24,
+      step: 1,
+      start: function(){
+        //cache all instances of draw-size on slide start
+        thumb = $(".draw-size");
+      },
+      slide: function(event, ui) {
+        var handle = $(ui.handle),
+            demival = ui.value/2;
+        
+        value.val(ui.value+'px');
+        self.penSize = ui.value;
+        
+        thumb
+        .css({
+          marginLeft: -demival,
+          marginTop: -demival,
+          WebkitBorderRadius: demival,
+          MozBorderRadius: demival,
+          borderRadius: demival,
+          width: ui.value,
+          height: ui.value
+        })
       }
-    }.pBind(this));
+    })
+    .find('.ui-slider-handle')
+    .append(
+      port.append(
+        thumb
+      )
+    )
+    .append(
+      value
+    );
+    
+    value.val( $(".size-slider").slider("value")+'px' );
+    
     $("#sizes").bind("click", function(event) {
       var link = $(event.target).closest('a')[0];
       if (link) {

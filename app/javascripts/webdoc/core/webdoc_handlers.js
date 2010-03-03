@@ -7,10 +7,10 @@
 
 WebDoc.handlers = {
   
-  'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggleBrowser(); },
+  'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggle(); },
   'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggleRightBar(); },
   
-  'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggleBrowser(); },
+  'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggle(); },
   'library':              function(e) { WebDoc.application.rightBarController.showLib(e); },
   'item-inspector':       function(e) { WebDoc.application.rightBarController.showItemInspector(e); },
   'page-inspector':       function(e) { WebDoc.application.rightBarController.showPageInspector(e); },
@@ -39,8 +39,13 @@ WebDoc.handlers = {
   'redo':                 function(e) { WebDoc.application.undoManager.redo(); },
   'delete':               function(e) { WebDoc.application.boardController.deleteSelection(); },
   
-  'mode-toggle':          function(e) { WebDoc.application.boardController.toggleInteractionMode(); },
   'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); },
   
-  'toggle-thumbs':        function(e) { WebDoc.application.pageBrowserController.toggleThumbs(e); }
+  'show-thumbs':          function(e) { WebDoc.application.pageBrowserController.showThumbs(e); },
+  'hide-thumbs':          function(e) { WebDoc.application.pageBrowserController.hideThumbs(e); },
+  'toggle-thumbs':        function(e) { WebDoc.application.pageBrowserController.toggleThumbs(e); },
+  
+  'mode-toggle':          function(e) { WebDoc.application.boardController.toggleMode(); },
+  'mode-edit':            function(e) { WebDoc.application.boardController.setMode(false); },
+  'mode-preview':         function(e) { WebDoc.application.boardController.setMode(true); }
 };

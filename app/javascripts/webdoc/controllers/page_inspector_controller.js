@@ -46,6 +46,11 @@ WebDoc.PageInspectorController = $.klass({
     
     this.currentPageChanged();
     this.domNode = $('#page_inspector');
+    
+    var footHeight = this.domNode.find('.foot>div').height();
+    this.domNode
+    .css({bottom: footHeight})
+    .hide();
   },
 
   performAction: function(e) {
@@ -159,6 +164,7 @@ WebDoc.PageInspectorController = $.klass({
   },
 
   _changePageBackgroundImage: function() {
+    ddd('[pageInspectorController] _changePageBackgroundImage');
     try {
       page.setBackgroundImage($("#page_background_image_textbox").val()); 
       WebDoc.application.pageEditor.loadPage(page, true);

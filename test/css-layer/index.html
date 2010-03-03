@@ -31,6 +31,10 @@
     .tall {
         height: 600px;
     }
+    .full {
+        width: 100%;
+        height: 100%;
+    }
     .layer {
         background: rgb(200, 230, 216);
         background: rgba(200, 230, 216, 0.6);
@@ -40,6 +44,11 @@
         margin: 0 auto 1em;
         border: 1px dotted #666666;
         position: relative;
+    }
+    .screen {
+        background-color: #666666;
+        display: block;
+        color: white;
     }
     
 </style>
@@ -53,11 +62,20 @@
 <p>Overlays a layer that fills the dimensions of its container, including the container's padding. Takes the additional classes:</p>
 
 <dl>
-    <dt>.centering</dt><dd>Centers content vertically and horizontally</dd>
+    <dt>.screen</dt><dd>For overlays and event catchers. Hidden by default.</dd>
+    <dt>.centering</dt><dd>Centers content vertically and horizontally.</dd>
     <dt>.hide-scroll</dt><dd></dd>
     <dt>.push-scroll</dt><dd></dd>
     <dt>.show-scroll</dt><dd></dd>
 </dl>
+
+<h2><pre>div.screen.layer</pre></h2>
+
+<div class="test">
+    <div class="screen layer">
+        I am a .screen.layer. By default, I have display: none; so you wouldn't normally see me.
+    </div>
+</div>
 
 <h2><pre>div.layer
   {content}</pre></h2>
@@ -209,6 +227,28 @@
                         <!-- Horizontal centering with auto margins-->
                         <div class="content">
                             <p>Hello. I am normal box, inside a scrolling construct, but I should not cause scrolling to take place.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="test">
+    <!-- Outer layer hides overflow -->
+    <div class="hide-scroll layer">
+        <!-- Push layer adds a padding right and bottom at same width of scrollbars. Width/height defined so that padding is added. -->
+        <div class="push-scroll layer">
+            <!-- A layer where width/height are not defined, so it inhabits padding of push layer. Also, scrollbars are forced. -->
+            <div class="show-scroll layer">
+                <!-- Centering displays a table - like layer to allow vertical centering -->
+                <div class="centering layer">
+                    <!-- Acts as a table cell -->
+                    <div>
+                        <!-- Horizontal centering with auto margins-->
+                        <div class="full content">
+                            <p>I have a width: 100%; height: 100%; I don't seem to work in FF.</p>
                         </div>
                     </div>
                 </div>

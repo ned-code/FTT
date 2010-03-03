@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+
+<title>jQuery.pop</title>
+
+<link rel="icon" type="image/png" href="images/favicon.png" />
+
+<style type="text/css" media="screen, projection">
+    
+    @import url('../css-reset/css/yui2-reset.css');
+    @import url('../css/test.css');
+    
+    .test {
+        height: 100px;
+        margin: 0 auto 1em;
+        padding: 16px;
+        border: 1px dotted #666666;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .pop-wrap {
+    	width: 0;
+    	height: 0;
+    	position: fixed;
+    }
+    .pop {
+    	position: absolute;
+    	display: block;
+    	background: blue;
+    }
+    
+</style>
+
+</head>
+
+<body>
+
+<h2>jQuery.pop</h2>
+
+<div id="delegate" class="test">
+
+    <a href="#pop" class="one">one</a>
+    <a href="#pop" class="two">two</a>
+
+</div>
+
+<script type="text/javascript" src="../../public/javascripts/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="../../public/javascripts/jquery-ui-1.8rc2.js"></script>
+<script type="text/javascript" src="../../public/javascripts/jquery.extensions.js"></script>
+<script type="text/javascript" src="../../public/javascripts/jquery.pop.js"></script>
+<script type="text/javascript">
+
+var form = jQuery('<form method="post"><input type="text" /><input type="submit" value="save" /></form>');
+
+jQuery(document).ready(function(){
+	jQuery('body')
+	.delegate("a[href=#pop]", 'click', function(){
+	  jQuery(this).pop({
+	  	content: form,
+	  	initCallback: function(){
+	  		console.log('INIT');
+	  		console.log( jQuery(this).html() );
+	  		
+	  		form.bind('submit', function(){
+	  	    console.log('SUBMIT');
+	  	    return false;
+	  		});
+	  	},
+	  	width: 200,
+	  	height: 120,
+	  	closeCallback: function(){
+	  		//console.log('CLOSE');
+	  	},
+	  	openEasing: 'easeOutBack',
+	  	closeEasing: 'easeInQuart'
+	  });
+	})
+	.append(
+	 jQuery('<form method="post"><input type="text" /><input type="submit" value="save" /></form>')
+  );
+	
+	
+	jQuery('form').bind('submit', function(){
+	 console.log('SUBMIT');
+	 return false;
+	});
+});
+
+
+</script>
+
+</body>
+</html>

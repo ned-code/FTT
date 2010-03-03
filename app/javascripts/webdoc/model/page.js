@@ -47,6 +47,12 @@ WebDoc.Page = $.klass(MTools.Record,
     }
   },
 
+  getTitle: function() {
+    // TODO: returns the string 'undefined' when title is not set.
+    // That's a bit silly.  Should return value undefined.
+    return this.data.title;
+  },
+
   setTitle: function(title) {
     if(this.data.title != title) {
       this.data.title = title;

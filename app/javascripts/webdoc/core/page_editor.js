@@ -41,10 +41,11 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     $super();
     
     // Add feature detected styles to head
-    MTools.Application.createStyle('.push-scroll {'+
+    MTools.Application.createStyle('body, .push-scroll {'+
       'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
       'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
     '}');
+    
     // Set up default panel behaviour (show screen, show footer etc.)
     jQuery(".panel").panel();
         
@@ -63,14 +64,14 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
     WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
-
+    
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
     WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
     WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
     WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
     WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
-
+    
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
     
@@ -80,7 +81,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     
     $(window).bind("hashchange", this._urlHashChanged.pBind(this));
   },
-  
 
   load: function(documentId) {
     ddd("[PageEditor] load " + documentId);
@@ -95,6 +95,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       if (WebDoc.application.boardController.isEditable()) {
         ddd("[PageEditor] call rightBarController.showLib");
         WebDoc.application.rightBarController.showLib();
+//        WebDoc.application.rightBarController.showItemInspector();
       }
     }.pBind(this));
     
@@ -110,10 +111,13 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   },
 
   loadPageId: function(pageId) {
+    ddd('[PageEditor] loadPageId');
     if (!pageId) {
       pageId = "1";
     }
+    
     ddd("load page id " + pageId);
+    
     var pageToLoad = this.currentDocument.findPageWithUuidOrPosition(pageId);
     ddd("found page");
     ddd(pageToLoad);

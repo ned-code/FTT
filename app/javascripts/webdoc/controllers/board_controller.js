@@ -14,19 +14,13 @@
  **/
 WebDoc.BoardController = $.klass({
   
-  // private Class attributes
-  _boardWrapHTML:'<div class="push-scroll layer">'+
-                  '<div class="show-scroll layer">'+
-                    '<div class="centering layer">'+
-                      '<div></div>'+
-                    '</div>'+
-                  '</div>'+
-                '</div>',
-  _screen: jQuery('<div/>').addClass('screen layer'),
-             
   // Constructor     
   initialize: function(editable, autoFit) {
-    this.boardContainerNode = $("#board_container");
+    this.boardCageNode = $("#webdoc");
+    this.boardContainerNode = $("#board-container");
+    this.screenUnderlayNode = $("#underlay");
+    this.screenNodes = this.boardCageNode.find('.board-screen');
+    
     this._editable = editable;
     this._autoFit = autoFit;
     this._currentZoom = 1; 
@@ -39,9 +33,9 @@ WebDoc.BoardController = $.klass({
     this._isInteraction = false;
     this._isMovingSelection = false;
     
-    // used to keep trak of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
+    // used to keep track of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
     // we resize manually the div and we need to know what was the original size to define the new size.
-    this._initialSize = null;  
+    this._initialSize = null;
   },
   
   selection: function() {
@@ -79,6 +73,8 @@ WebDoc.BoardController = $.klass({
   },
   
   setCurrentPage: function(page) {
+    ddd('[board_controller] SetCurrentPage');
+    this._initialSize = null;
     var pageView = new WebDoc.PageView(page),
         board = pageView.domNode;
     
@@ -96,11 +92,11 @@ WebDoc.BoardController = $.klass({
     this._selection = [];
     this._currentPage = page;
     
+    // Construct DOM tree
     this.boardContainerNode
     .empty()
-    .append( board )
-    .wrapInner( this._boardWrapHTML )
-    .prepend( this._screen );
+    .append(board)
+    .append(this.screenNodes);
     
     this._fireSelectionChanged();
     this._bindMouseEvent();
@@ -110,29 +106,11 @@ WebDoc.BoardController = $.klass({
     $(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));    
     
     this.zoom(1);
-    this.setInterationMode(this._isInteraction || !this._editable);
+    this.setMode(this._isInteraction || !this._editable);
     
-    // Autofit
-    if (this._autoFit && board.css("height") != "100%") {
-      //update zoom to fit browser page    
-      var initialHeight = board.height();
-      var initialWidth = board.width();      
-      var heightFactor = ($("#board_container").height() - initialHeight) / initialHeight;
-      var widthFactor = ($("#board_container").width() - initialWidth) / initialWidth;      
-      if (heightFactor < widthFactor) {
-        this.zoom(1 + heightFactor);
-      }
-      else {
-        this.zoom(1 + widthFactor);
-      }
-    }
+    this._fireCurrentPageChanged();
     
-    //if (WebDoc.application.) {
-      this._fireCurrentPageChanged();
-    //}
-    
-    $("#current_page").html(WebDoc.application.pageEditor.currentDocument.positionOfPage(this._currentPage));
-    $("#total_page").html(WebDoc.application.pageEditor.currentDocument.pages.length);
+    $(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
   },
   
@@ -140,41 +118,68 @@ WebDoc.BoardController = $.klass({
     return this._isInteraction;  
   },
   
-  setInterationMode: function(state) {
-    this._isInteraction = state;
-    if (state) {
-      // go to interaction mode
-      this.unselectAll();
-      $("#board")
-      .unbind("dragenter")
-      .unbind("dragover")
-      .unbind("drop");
-      
+  _setModeEdit: function() {
+    $("#board")
+    .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
+    .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
+    .bind("drop", this, WebDoc.DrageAndDropController.drop);      
+    
+    if (!this.currentTool) {
       this.setCurrentTool(WebDoc.application.arrowTool);
-      $(".preview_hidden").hide();
-      $(".item-layer").hide();
-      $("body").removeClass("edit-mode");
-      
-      $("#tb_1_utilities_preview a").text("EDIT MODE");
-      WebDoc.application.rightBarController.hideRightBar();
+    }
+    
+    $("body")
+    .removeClass('mode-preview')
+    .addClass("mode-edit");
+    
+    $(".item-layer").show();
+    
+    $(".state-mode")
+    .removeClass("current")
+    .filter("[href='#mode-edit']")
+    .addClass("current");
+    
+    WebDoc.application.pageBrowserController.reveal();
+    WebDoc.application.rightBarController.revealRightBar();
+    
+    this._isInteraction = false;
+    return this._isInteraction;
+  },
+  
+  _setModePreview: function() {
+    this.unselectAll();
+    $("#board")
+    .unbind("dragenter")
+    .unbind("dragover")
+    .unbind("drop");
+    
+    this.setCurrentTool(WebDoc.application.arrowTool);
+    $(".item-layer").hide();
+    
+    $("body")
+    .removeClass("mode-edit")
+    .addClass("mode-preview");
+    
+    $(".state-mode")
+    .removeClass("current")
+    .filter("[href='#mode-preview']")
+    .addClass("current");
+    
+    WebDoc.application.pageBrowserController.conceal();
+    WebDoc.application.rightBarController.concealRightBar();
+    
+    this._isInteraction = true;
+    return this._isInteraction;
+  },
+  
+  setMode: function(state) {
+    if (state) {
+      this._setModePreview();
     }
     else {
-      // go to non interaction mode
-      $("#board")
-      .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
-      .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
-      .bind("drop", this, WebDoc.DrageAndDropController.drop);      
-      
-      if (!this.currentTool) {
-        this.setCurrentTool(WebDoc.application.arrowTool);
-      }
-      
-      $("body").addClass("edit-mode");
-      $(".item-layer").show();
-      $(".preview_hidden").show();
-      
-      $("#tb_1_utilities_preview a").text("QUICK PREVIEW");        
+      this._setModeEdit();
     }
+    
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     if (MTools.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
       ddd("FF 3.5. drawing !");
@@ -182,14 +187,8 @@ WebDoc.BoardController = $.klass({
     }
   },
   
-  toggleInteractionMode: function() {  
-    if (!this._isInteraction) {
-      this.previousRightBarState = WebDoc.application.rightBarController.visible ? true : false;
-    }
-    this.setInterationMode(!this._isInteraction);
-    if (!this._isInteraction && this.previousRightBarState) {
-      WebDoc.application.rightBarController.showRightBar();
-    }  
+  toggleMode: function() {
+    return this.setMode(!this._isInteraction);
   },
   
   setCurrentTool: function(tool) {
@@ -278,7 +277,7 @@ WebDoc.BoardController = $.klass({
     }   
     if (MTools.Browser.WebKit) { 
       // Correct mouse vertical position according to the cursor icon height
-      // This doesn't work with a pen, as you can't change the registration point
+      // This doesn't work with a pen tablet, as you can't change the registration point
       // of the cursor.
       y += this.currentTool.getCursorHeight();
     }
@@ -312,8 +311,8 @@ WebDoc.BoardController = $.klass({
   
   zoomOut: function(e) {
     this.zoom(1 / 1.5);
-    $("#board_container").get(0).scrollTop = 0;
-    $("#board_container").get(0).scrollLeft = 0;
+    $("body").get(0).scrollTop = 0;
+    $("body").get(0).scrollLeft = 0;
   },
   
   selectItemViews: function(itemViews) {
@@ -321,41 +320,43 @@ WebDoc.BoardController = $.klass({
     if (this._editingItem) {
       this._editingItem.stopEditing();
       WebDoc.application.arrowTool.enableHilight();
-      jQuery('#board_container').trigger('hide-screen');
+      this.screenNodes.animate({ opacity: 'hide' }, { duration: 200 });
       this._editingItem = null;
     }
     
-    // do nothing if new selection is equal to old selection
-    if(itemViews.length == this._selection.length) {
-      var selectionIsEqual = true;
-      for (var i = 0; i < itemViews.length; i++) {
-        if (itemViews[i] != this._selection[i]) {
-          selectionIsEqual = false;
-          break;
+    if (itemViews) {
+      // do nothing if new selection is equal to old selection
+      if(itemViews.length === this._selection.length) {
+        var selectionIsEqual = true;
+        for (var i = 0; i < itemViews.length; i++) {
+          if (itemViews[i] != this._selection[i]) {
+            selectionIsEqual = false;
+            break;
+          }
+        }
+        if (selectionIsEqual) {
+          return;
         }
       }
-      if (selectionIsEqual) {
-        return;
-      }
+      
+      //deselect un-needed items
+      ddd("select item in view");
+      $.each(this._selection, function(index, itemToDeselect) {
+        if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
+          this.unselectItemViews([itemToDeselect]);
+        }
+      }.pBind(this));
+      
+      //select wanted items
+      $.each(itemViews, function(index, itemToSelect) {
+        if (jQuery.inArray(itemToSelect, this._selection) == -1) {
+          ddd("add item to selection");
+          this._selection.push(itemToSelect);
+        }
+        itemToSelect.select();
+      }.pBind(this));
+      this._fireSelectionChanged();
     }
-    
-    //deselect un-needed items
-    ddd("select item in view");
-    $.each(this._selection, function(index, itemToDeselect) {
-      if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
-        this.unselectItemViews([itemToDeselect]);
-      }
-    }.pBind(this));
-    
-    //select wanted items
-    $.each(itemViews, function(index, itemToSelect) {
-      if (jQuery.inArray(itemToSelect, this._selection) == -1) {
-        ddd("add item to selection");
-        this._selection.push(itemToSelect);
-      }
-      itemToSelect.select();
-    }.pBind(this));
-    this._fireSelectionChanged();
   },
   
   moveSelection: function(direction, scale) {
@@ -417,12 +418,12 @@ WebDoc.BoardController = $.klass({
           nodePos = node.position(),
           nodeLeft = nodePos.left,
           nodeTop = nodePos.top,
-          nodeWidth = node.width(),
-          nodeHeight = node.height(),
-          board = this._currentPageView.domNode,
-          boardWidth = board.width(),
-          boardHeight = board.height(),
-          screens = this._currentPageView.boardScreenNodes,
+          nodeWidth = node.width(),// * this._currentZoom,
+          nodeHeight = node.height(),// * this._currentZoom,
+          board = this.boardContainerNode,
+          boardWidth = board.width(),// * this._currentZoom,
+          boardHeight = board.height(),// * this._currentZoom,
+          screens = this.screenNodes,
           screenTop = screens.eq(0),
           screenBottom = screens.eq(1),
           screenLeft = screens.eq(2),
@@ -452,7 +453,7 @@ WebDoc.BoardController = $.klass({
       itemViewToEdit.edit();
                 
       WebDoc.application.arrowTool.disableHilight();
-      jQuery('#board').trigger('show-screen');
+      screens.animate({ opacity: 'show' }, { duration: 200 });
       return true;     
     }
     return false;
@@ -583,50 +584,43 @@ WebDoc.BoardController = $.klass({
   },
   
   zoom: function(factor) {
-    var boardElement = $("#board");
-    var previousZoom = this._currentZoom;
+    
+    var boardNode = $("#board"),
+        previousZoom = this._currentZoom,
+        boardContainerCss = {},
+        boardCss = {},
+        svgCss = {};
     
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
     
-    if (jQuery.browser.mozilla) {
-      boardElement.css("MozTransformOrigin", "0px 0px");
-      boardElement.css("MozTransform", "scale(" + this._currentZoom + ")");
-      // Directly remove the transform property so that windowed items are displayed
-      if (this._currentZoom == 1) {
-	      boardElement.css("MozTransformOrigin", "");
-	      boardElement.css("MozTransform", "");
-	    }
+    boardCss.WebkitTransformOrigin = "0px 0px";
+    boardCss.WebkitTransform = this._currentZoom === 1 ? "" : "scale(" + this._currentZoom + ")" ;
+    boardCss.MozTransformOrigin = this._currentZoom === 1 ? "" : "0px 0px" ;
+    boardCss.MozTransform = boardCss.WebkitTransform;
+    
+    if (!this._initialSize) {
+      this._initialSize = {
+        width: parseFloat(this.boardContainerNode.css("width")),
+        height: parseFloat(this.boardContainerNode.css("height")),
+        widthFlag: this.boardContainerNode.css("width").match(/px/)?"px":"%",
+        heightFlag: this.boardContainerNode.css("height").match(/px/)?"px":"%"
+      };
     }
-    else 
-      if (jQuery.browser.safari) {
-        ddd("apply webkit transform");
-        if (!this._initialSize) {
-          this._initialSize = {
-            width: parseFloat(boardElement.css("width").replace("px", "")) + 2,
-            height: parseFloat(boardElement.css("height").replace("px", "")) + 2
-          };
-        }
-        if (this._currentZoom > 1) {
-          boardElement.css({
-            width: this._initialSize.width * this._currentZoom,
-            height: this._initialSize.height * this._currentZoom
-          });
-        }
-        else {
-          boardElement.css({
-            width: this._initialSize.width,
-            height: this._initialSize.height
-          });
-        }
-        boardElement.css("WebkitTransformOrigin", "0px 0px");
-        if (this._currentZoom == 1) {
-          boardElement.css("WebkitTransform", "");
-        }
-        else {
-          boardElement.css("WebkitTransform", "scale(" + this._currentZoom + ")");
-        }
-      }
+    
+    boardContainerCss = {
+      width: (this._initialSize.width * this._currentZoom) + this._initialSize.widthFlag,
+      height: (this._initialSize.height * this._currentZoom) + this._initialSize.heightFlag
+    };
+    ddd("new board size", boardContainerCss.width, boardContainerCss.height);
+    svgCss = {
+      width: 100/this._currentZoom + '%',
+      height: 100/this._currentZoom + '%'
+    };     
+
+    boardNode.css( boardCss );
+    this.boardContainerNode.css( boardContainerCss );
+    this.boardContainerNode.find( 'svg' ).css( svgCss );
   },
   
   // Private methods
@@ -810,11 +804,18 @@ WebDoc.BoardController = $.klass({
   },
   
   _bindMouseEvent: function() {
-    $("#board").bind("mousedown", this, this._mouseDown.pBind(this));
-    $("#board").bind("click", this, this._mouseClick.pBind(this));
-    $("#board").bind("dblclick", this, this._mouseDblClick.pBind(this));
-    $("#board").bind("mouseover", this, this._mouseOver.pBind(this));    
-    $("#board").bind("mouseout", this, this._mouseOut.pBind(this));
+    $("#board")
+    .bind("mousedown", this, this._mouseDown.pBind(this))
+    .bind("click", this, this._mouseClick.pBind(this))
+    .bind("dblclick", this, this._mouseDblClick.pBind(this))
+    .bind("mouseover", this, this._mouseOver.pBind(this))
+    .bind("mouseout", this, this._mouseOut.pBind(this));
+
+    this.screenNodes
+    .bind('mousedown', this._mouseDown.pBind(this) )
+    .bind('mouseout', function(e){
+      ddd(e);
+    });
   },
   
   _setItemPositionZ: function(item, position) {

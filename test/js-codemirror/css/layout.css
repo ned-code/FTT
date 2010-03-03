@@ -1,0 +1,104 @@
+/* Layers */
+
+.layer {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+}
+#screen.layer   { z-index: 1000; display: none; overflow: hidden; background: black; opacity: 0.8; filter: alpha(opacity=80); }
+#loading.layer  { z-index: 1001; display: none; }
+#overlay.layer  { z-index: 1002; display: none; overflow: auto; }
+
+/* nav */
+
+#nav {}
+
+/* Level 1 */
+#nav li                 {}
+#nav li a               {}
+
+/* Level 2 */
+#nav ul                 {}
+#nav li:hover ul        {}
+#nav ul li              {}
+#nav ul li a:hover,
+#nav ul li a:focus,
+#nav ul li.active a     {}
+#nav ul li.active li a  {}
+#nav ul li a            {}
+
+/* Overlay Box */
+#overlay .box { 
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 800px;
+    height: 600px;
+    margin: -300px 0 0 -400px;
+    overflow: hidden;
+    padding: 0;
+    border: 3px solid #dddddd;
+}
+#loading {
+    background: url('../images/loading.gif') 50% 50% no-repeat;
+}
+#overlay .box>img { 
+    margin: 0;
+    display: block;
+}
+
+/* Assume clearfixed <ul>s contain floated <li>s */
+ul.clear li {
+    float: left;
+    list-style-type: none;
+}
+ul.clear ul li {
+    float: none;
+}
+
+/* Wrappers */
+
+.wrap {
+    position: relative;
+}
+.wrap_960 {
+    margin: 0 auto;
+    width: 960px;
+}
+
+/* Horizontal lists ( first | second | third ) */
+
+.nav li {
+    display: inline;
+    display: inline-block;
+    height: 1em;
+    line-height: 1em;
+    padding-right: 0.6em;
+    margin-right: 0.6em;
+    border-right: 1px solid black;
+}
+.nav li.last {
+    padding-right: 0;
+    border-right: none !important;
+}
+
+/* First & last */
+
+.first {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+}
+.last {
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+
+/* Corners */
+
+.tl, .tr, .bl, .br {
+    position: absolute;
+    overflow: hidden;
+}
+.tl, .tr { top: 0; }
+.bl, .br { bottom: 0; }
+.tl, .bl { left: 0; }
+.tr, .br { right: 0; }
