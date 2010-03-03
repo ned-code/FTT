@@ -28,12 +28,12 @@ class Document < ActiveRecord::Base
   # = Class Methods =
   # =================
   
-  def self.all_with_filter(current_user, document_filter, pageId, per_page)
+  def self.all_with_filter(current_user, document_filter, page, per_page)
     documents_ids = []
     if document_filter
       # Filter possibilities: editor, reader, creator
       if document_filter == 'creator'
-        return current_user.documents.paginate(:page => pageId, :per_page => per_page)
+        return current_user.documents.paginate(:page => page, :per_page => per_page)
       else
         # Retrieve documents for the current user
         current_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => document_filter}).each do |role|
@@ -48,16 +48,16 @@ class Document < ActiveRecord::Base
           # Diff of both arrays
           documents_ids = documents_ids - owner_ids
         end
-        documents = Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :id => documents_ids })
+        documents = Document.paginate(:page => page, :per_page => per_page, :conditions => { :id => documents_ids })
       end
     else
       if (!current_user.has_role?("admin"))
         roles = current_user.role_objects.all.each do |role|
           documents_ids << role.authorizable_id
         end
-        documents = Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :id => documents_ids }) 
+        documents = Document.paginate(:page => page, :per_page => per_page, :conditions => { :id => documents_ids }) 
       else
-        documents = Document.paginate(:page => pageId, :per_page => per_page)
+        documents = Document.paginate(:page => page, :per_page => per_page)
       end
     end
     documents
