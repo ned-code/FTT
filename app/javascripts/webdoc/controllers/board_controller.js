@@ -413,39 +413,52 @@ WebDoc.BoardController = $.klass({
   },
   
   editItemView: function(itemViewToEdit) {
-    if (itemViewToEdit && itemViewToEdit.canEdit()) { 
+    if (itemViewToEdit && itemViewToEdit.canEdit()) {
+    
       var node = itemViewToEdit.domNode,
-          nodePos = node.position(),
-          nodeLeft = nodePos.left,
-          nodeTop = nodePos.top,
-          nodeWidth = node.width(),// * this._currentZoom,
-          nodeHeight = node.height(),// * this._currentZoom,
+          css = itemViewToEdit.item.data.data.css,
+          zoom = this._currentZoom,
+          maxScreenSize = 2048,
+          size = parseInt( maxScreenSize / zoom ),
+          nodeLeft = parseInt(css.left),
+          nodeTop = parseInt(css.top),
+          nodeWidth = parseInt(css.width) * zoom,
+          nodeHeight = parseInt(css.height) * zoom,
           board = this.boardContainerNode,
-          boardWidth = board.width(),// * this._currentZoom,
-          boardHeight = board.height(),// * this._currentZoom,
+          boardWidth = board.width() * zoom,
+          boardHeight = board.height() * zoom,
           screens = this.screenNodes,
           screenTop = screens.eq(0),
           screenBottom = screens.eq(1),
           screenLeft = screens.eq(2),
           screenRight = screens.eq(3);
       
+      console.log('top', size);
+      console.log('[HEEEEYYY]', itemViewToEdit.item);
+      
       // Adjust the dimensions of the four screens surrounding the edited block
       screenTop.css({
-          height: nodeTop
+          height: size,
+          top: nodeTop - size,
+          left: - size,
+          width: size * 2
       });
       screenBottom.css({
           top: nodeTop + nodeHeight,
-          height: boardHeight - nodeTop - nodeHeight
+          height: size,
+          left: - size,
+          width: size * 2
       });
       screenLeft.css({
-          width: nodeLeft,
           top: nodeTop,
+          width: size,
+          left: nodeLeft - size,
           height: nodeHeight
       });
       screenRight.css({
-          left: nodeLeft + nodeWidth,
-          width: boardWidth - nodeLeft - nodeWidth,
           top: nodeTop,
+          left: nodeLeft + nodeWidth,
+          width: size,
           height: nodeHeight
       });
       
@@ -588,8 +601,8 @@ WebDoc.BoardController = $.klass({
     var boardNode = $("#board"),
         previousZoom = this._currentZoom,
         boardContainerCss = {},
-        boardCss = {},
-        svgCss = {};
+        boardCss = {};
+        //svgCss = {};
     
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
@@ -598,6 +611,8 @@ WebDoc.BoardController = $.klass({
     boardCss.WebkitTransform = this._currentZoom === 1 ? "" : "scale(" + this._currentZoom + ")" ;
     boardCss.MozTransformOrigin = this._currentZoom === 1 ? "" : "0px 0px" ;
     boardCss.MozTransform = boardCss.WebkitTransform;
+    boardCss.width = 100/this._currentZoom + '%';
+    boardCss.height = 100/this._currentZoom + '%';
     
     if (!this._initialSize) {
       this._initialSize = {
@@ -613,14 +628,15 @@ WebDoc.BoardController = $.klass({
       height: (this._initialSize.height * this._currentZoom) + this._initialSize.heightFlag
     };
     ddd("new board size", boardContainerCss.width, boardContainerCss.height);
-    svgCss = {
-      width: 100/this._currentZoom + '%',
-      height: 100/this._currentZoom + '%'
-    };     
+    
+    //svgCss = {
+    //  width: 100/this._currentZoom + '%',
+    //  height: 100/this._currentZoom + '%'
+    //};     
 
     boardNode.css( boardCss );
     this.boardContainerNode.css( boardContainerCss );
-    this.boardContainerNode.find( 'svg' ).css( svgCss );
+    //this.boardContainerNode.find( 'svg' ).css( svgCss );
   },
   
   // Private methods
