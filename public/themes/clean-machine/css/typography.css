@@ -10,7 +10,7 @@
  * 
  * The default webdoc font-size is 1em == 16px, the normal browser default. to
  * redefine the base font-size for your webdoc theme, set it in em or % as a
- * ratio of 16px on the #webdoc container. Use this table as a guide:
+ * ratio of 16px on the container. Use this table as a guide:
  * 
  * 10px == 0.625em or 62.5%
  * 12px == 0.75em  or 75%
@@ -26,46 +26,46 @@
  * 
  */
 
-#webdoc {
-    font-size: 1.125em;
+.webdoc {
+    font-size: 2em;
     font-family: Helvetica, Arial, sans-serif;
     line-height: 1.6667;
     color: #484848;
 }
 
-#webdoc pre, #webdoc code {
+pre, code {
     font-family: 'Courier', 'Andale Mono', 'Lucida Console', monospace;
 }
 
 /* Block */
 
-#webdoc h1, #webdoc h2, #webdoc h3, #webdoc h4, #webdoc h5, #webdoc h6 { font-weight: normal; margin: 0; color: #303030; word-spacing: -0.0833em; }
+h1, h2, h3, h4, h5, h6 { font-weight: normal; margin: 0; color: #303030; word-spacing: -0.0833em; }
 
-#webdoc h1                { font-size: 3em; line-height: 1; margin-bottom: 0.6667em; }
-#webdoc h2                { font-size: 2.6666em; line-height: 1.25; margin-bottom: 0.625em; }
-#webdoc h3                { font-size: 2em; line-height: 1.25; margin-bottom: 0.8333em; }
-#webdoc h4                { font-size: 1.3333em; line-height: 1.25; font-weight: bold; margin-bottom: 1.25em; }
-#webdoc h5                { font-size: 1em; font-weight: bold; }
-#webdoc h6                { font-size: 1em; font-weight: bold; font-style: italic; color: #484848; }
+h1                { font-size: 3em; line-height: 1; margin-bottom: 0.6667em; }
+h2                { font-size: 2.6666em; line-height: 1.25; margin-bottom: 0.625em; }
+h3                { font-size: 2em; line-height: 1.25; margin-bottom: 0.8333em; }
+h4                { font-size: 1.3333em; line-height: 1.25; font-weight: bold; margin-bottom: 1.25em; }
+h5                { font-size: 1em; font-weight: bold; }
+h6                { font-size: 1em; font-weight: bold; font-style: italic; color: #484848; }
 
-#webdoc *+h1              { margin-top: 0.6667em; }
-#webdoc *+h2              { margin-top: 0.625em; }
-#webdoc p+h3              { margin-top: 0.8333em; }
-#webdoc p+h4              { margin-top: 1.25em; }
-#webdoc p+h5, #webdoc p+h6, #webdoc p+div,
-#webdoc h6+h5, #webdoc h5+h6      { margin-top: 1em; }
+*+h1              { margin-top: 0.6667em; }
+*+h2              { margin-top: 0.625em; }
+p+h3              { margin-top: 0.8333em; }
+p+h4              { margin-top: 1.25em; }
+p+h5, p+h6, p+div,
+h6+h5, h5+h6      { margin-top: 1em; }
 
 
-#webdoc h1 img, #webdoc h2 img, #webdoc h3 img,
-#webdoc h4 img, #webdoc h5 img, #webdoc h6 img {
+h1 img, h2 img, h3 img,
+h4 img, h5 img, h6 img {
   margin: 0;
 }
 
-#webdoc p                 { margin: 0; }
-#webdoc p+p               { text-indent: 1.3333em; }
+p                 { margin: 0; }
+/*p+p               { text-indent: 1.3333em; }*/
 /* Things that should have margin after paragraphs */
-#webdoc p+ul, #webdoc p+dl, #webdoc p+ol, #webdoc p+table,
-#webdoc p+address, #webdoc p+pre, #webdoc p+blockquote
+p+ul, p+dl, p+ol, p+table,
+p+address, p+pre, p+blockquote
                   { margin-top: 1.3333em; }
 /* Make first letter different */
 /*p::first-letter   { font-size: 1.3333em; line-height: 1em; font-style: italic; letter-spacing: 0.1333em; }
@@ -75,54 +75,60 @@ p+p::first-letter { font-size: 1em; line-height: 1.3333; font-style: normal; let
 p+p::first-line   { font-weight: normal; }*/
 /* Start paragraphs with a character or symbol */
 /*p+p:before  { content: "\2767"; padding-right: 0.4em; }*/
-#webdoc p img             { float: right; margin: 1em 0 1em 1.3333em; padding: 0; }
+p img             { float: right; margin: 1em 0 1em 1.3333em; padding: 0; }
 
-#webdoc p, #webdoc li, #webdoc dt, #webdoc dd, #webdoc blockquote, #webdoc address { word-spacing: 0.2em; }
+p, .webdoc li, dt, dd, blockquote, address { word-spacing: 0.2em; }
 
-#webdoc li ul,
-#webdoc li ol             { margin: 0; }
-#webdoc ul, #webdoc ol    { margin: 1.3333em 0; padding-left: 2.6667em; }
 
-#webdoc ul                { list-style-type: disc; }
-#webdoc ol                { list-style-type: decimal; }
+/* We're not ready for this yet - need to protect the lists */
+.webdoc li ul,
+.webdoc li ol             { margin: 0; }
+.webdoc ul, .webdoc ol    { margin: 1.3333em 0; padding-left: 2.6667em; }
 
-#webdoc dl                { margin: 0 0 1.5em 0; }
-#webdoc dl dt             { font-weight: bold; margin-left: 1.3333em; }
-#webdoc dd                { margin-left: 1.5em; margin-left: 2.6667em; }
+.webdoc ul                { list-style-type: disc; }
+.webdoc ol                { list-style-type: decimal; }
 
-#webdoc blockquote        { margin: 1.3333em 0 1.3333em 2.6666em; font-style: italic; }
-#webdoc blockquote:before { content: "\201C"; font-size: 4.666em; color: #484848; float: left; margin-left: -0.6em; line-height: 0.78em;  }
-#webdoc pre               { margin: 1.3333em 0; line-height: 1.3333; white-space: pre; }
-#webdoc address           { margin: 1.3333em 0; margin-left: 2.6667em; }
+
+dl                { margin: 0 0 1.5em 0; }
+dl dt             { font-weight: bold; margin-left: 1.3333em; }
+dd                { margin-left: 1.5em; margin-left: 2.6667em; }
+
+blockquote        { margin: 1.3333em 0 1.3333em 2.6666em; font-style: italic; }
+blockquote:before { content: "\201C"; font-size: 4.666em; color: #484848; float: left; margin-left: -0.6em; line-height: 0.78em;  }
+pre               { margin: 1.3333em 0; line-height: 1.3333; white-space: pre; }
+address           { margin: 1.3333em 0; margin-left: 2.6667em; }
 
 
 /* Inline */
 
-#webdoc strong, #webdoc dfn { font-weight: bold; }
-#webdoc em, #webdoc dfn     { font-style: italic; }
-#webdoc sup, #webdoc sub    { line-height: 0; font-size: 0.75em; }
+strong, dfn { font-weight: bold; }
+em, dfn     { font-style: italic; }
+sup, sub    { line-height: 0; font-size: 0.75em; }
 
-#webdoc abbr                { letter-spacing: 0.1em; }
-#webdoc pre, #webdoc code   { font: 1em 'andale mono', 'lucida console', monospace; line-height: 1.5; }
-#webdoc del                 { color: #999999; font-style:italic; }
+abbr                { letter-spacing: 0.1em; }
+pre, code   { font: 1em 'andale mono', 'lucida console', monospace; line-height: 1.5; }
+del                 { color: #999999; font-style:italic; }
 
 /* Links */
 
-#webdoc a:focus,
-#webdoc a:hover           { color: hsl(194, 50%, 20%); border-bottom: 1px dotted hsl(194, 50%, 20%); text-decoration: none; }
-#webdoc a                 { color: hsl(194, 50%, 40%); border-bottom: 1px dotted hsl(194, 50%, 40%); text-decoration: none; }
+/* We're not ready for this yet */
+.webdoc a:focus,
+.webdoc a:hover           { color: hsl(194, 50%, 20%); border-bottom: 1px dotted hsl(194, 50%, 20%); text-decoration: none; }
+.webdoc a                 { color: hsl(194, 50%, 40%); border-bottom: 1px dotted hsl(194, 50%, 40%); text-decoration: none; }
 
 /* Tables */
 
-#webdoc table             { margin-bottom: 1.4em; width:100%; }
-#webdoc th                { font-weight: bold; }
-#webdoc thead th          { background: #c3d9ff; }
-#webdoc th,td,caption     { padding: 4px 10px 4px 5px; }
-#webdoc tr.even td        { background: #e5ecf9; }
-#webdoc tfoot             { font-style: italic; }
-#webdoc caption           { background: #eee; }
-                      
+/*
+table             { margin-bottom: 1.4em; width:100%; }
+th                { font-weight: bold; }
+thead th          { background: #c3d9ff; }
+th,td,caption     { padding: 4px 10px 4px 5px; }
+tr.even td        { background: #e5ecf9; }
+tfoot             { font-style: italic; }
+caption           { background: #eee; }
+*/
+
 /* Selected text */
 
-#webdoc *::selection      { background-color: rgba(176, 227, 0, 0.8); }
-#webdoc code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
+*::selection      { background-color: rgba(176, 227, 0, 0.8); }
+code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
