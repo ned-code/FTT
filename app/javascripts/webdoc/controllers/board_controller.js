@@ -165,7 +165,9 @@ WebDoc.BoardController = $.klass({
     .filter("[href='#mode-preview']")
     .addClass("current");
     
-    //WebDoc.application.pageBrowserController.conceal();
+    if(!this._editable) {$(".state-mode").filter("[href='#mode-edit']").hide(); }
+    
+    WebDoc.application.pageBrowserController.conceal();
     WebDoc.application.rightBarController.concealRightBar();
     
     this._isInteraction = true;
