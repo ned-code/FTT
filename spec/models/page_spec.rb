@@ -47,10 +47,10 @@ describe Page do
   
   describe "title" do
 
-    it "should have 'undefined' as title" do
+    it "should have '' as title" do
       document = Factory(:document)
       page = document.pages.create
-      page.title.should == "undefined"
+      page.title.should == ""
     end
   end
   
