@@ -92,7 +92,7 @@ WebDoc.PageInspectorController = $.klass({
       this._setBackgroundRepeatMode(page.data.data.css.backgroundRepeat); 
       this._setBackroundPosition(page.data.data.css.backgroundPosition);
       if(page.hasBackgroundImage()) {
-        $('#background_image').attr('src', page.getBackgroundImagePath()).css("width", "100px").css("height", "100px");
+        $('#background_image').attr('src', page.getBackgroundImagePath());
         $('#background_image_preview').show();
       }
       else {

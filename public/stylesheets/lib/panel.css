@@ -71,7 +71,7 @@
 #page_inspector.inspector {
     bottom: 0;
 }
-.inspector .head h2 {
+.inspector .inspector-title {
     color: white;
     line-height: 32px;
     font-weight: bold;

@@ -228,7 +228,6 @@ WebDoc.PageBrowserItemView = $.klass({
         for(var itemIndex in page.items) {
           if(page.items[itemIndex].type() == "text") {
             if(page.items[itemIndex].getInnerText() != "") {
-              //console.log('getPageTitle - pageItem exists');
               return { title: this.cropTitleToFit(page.items[itemIndex].getInnerText()), defaultBehavior: true};
             }
             else {

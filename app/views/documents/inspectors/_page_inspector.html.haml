@@ -1,7 +1,7 @@
 #page_inspector.inspector{ :style => "display: none" }
   %div.head
     %div
-      %h2 Page
+      %div.inspector-title Page
   
   %div.foot
 
@@ -15,10 +15,12 @@
           %input#external_page_url{ :type => "text", :value => "http://" }
       
       %fieldset.properties
-        %legend= t('.properties.title')
         %div
           %label= t('.properties.name')
           %input#page_title_textbox{ :type => "text" }
+      
+      %fieldset.properties
+        %legend= t('.properties.title')
         %div
           %label= t('.properties.height')
           %input#page_height_textbox{ :type => "text", :maxlength => "8" }
@@ -28,6 +30,8 @@
         %div
           %label= t('.properties.show_scroll')
           %input#page_scroll_checkbox{ :type => "checkbox" }
+      %fieldset.properties
+        %legend background
         %div.background-related
           %label= t('.properties.background')
           %input#page_background_color_textbox{ :type => "text" }
@@ -35,10 +39,8 @@
           %label= t('.properties.background_image')
           %input#page_background_image_textbox{ :type => "text"}
           %p= t('.properties.background_image_comment')
-        - form_tag '/images', :multipart => true, :name => "form_image", :id => "form_image" do
-          %span
         %div.background-related
-          %label= t('.properties.background_image_position.horizontal')
+          %label{ :for => 'page_background_image_tileX_checkbox' }= t('.properties.background_image_position.horizontal')
           %input#page_background_image_tileX_checkbox{ :type => "checkbox", :name => "xTile", :value => "none" }
           %span.label= t('.properties.background_image_position.tile')
           %input#page_background_image_align_hor_left_radio{ :type => "radio", :name => "xPos", :value => "left" }
@@ -48,7 +50,7 @@
           %input#page_background_image_align_hor_right_radio{ :type => "radio", :name => "xPos", :value => "right" }
           %span.label= t('.properties.background_image_position.right')
         %div.background-related
-          %label= t('.properties.background_image_position.vertical')
+          %label{ :for => 'page_background_image_tileY_checkbox' }= t('.properties.background_image_position.vertical')
           %input#page_background_image_tileY_checkbox{ :type => "checkbox", :name => "yTile", :value => "none" }
           %span.label= t('.properties.background_image_position.tile')
           %input#page_background_image_align_vert_top_radio{ :type => "radio", :name => "yPos", :value => "top" }
@@ -57,25 +59,30 @@
           %span.label= t('.properties.background_image_position.middle')
           %input#page_background_image_align_vert_bottom_radio{ :type => "radio", :name => "yPos", :value => "bottom" }
           %span.label= t('.properties.background_image_position.bottom')
-        - form_tag '/bgimages', :multipart => true, :name => "image_send_form", :id => "image_send_form", :class => "background-related" do
-          %div
-            %label= t('.properties.background_image')
-            = file_field_tag :image
-          %div
-            = submit_tag t('.properties.buttons.upload')
         %div#background_image_preview.background-related
           %img#background_image
-          %p  
+          %p
             %a.page-remove-background-image{ :href => "#remove_background"}
               = t('.properties.remove_image')
         %div.background-related
+          %label{ :for => 'page_background_image_apply_all_button' }
           %input#page_background_image_apply_all_button{ :type => "button", :value => t('.properties.buttons.apply_background_all_pages') }
+      
+    - form_tag '/bgimages', :multipart => true, :name => "image_send_form", :id => "image_send_form", :class => "background-related" do
+      %fieldset.properties
+        %legend upload image
         %div
-          %a.page-navigation-link{ :href => "#prev-page"}
-            = t('documents.show.toolbar.previous_page')
-          |
-          %a.page-navigation-link{ :href => "#next-page"}
-            = t('documents.show.toolbar.next_page')
+          %label= t('.properties.background_image')
+          = file_field_tag :image
+        %div
+          = submit_tag t('.properties.buttons.upload')
+
+    %div
+      %a.page-navigation-link{ :href => "#prev-page"}
+        = t('documents.show.toolbar_panel.previous_page')
+      |
+      %a.page-navigation-link{ :href => "#next-page"}
+        = t('documents.show.toolbar_panel.next_page')
 
     
     -#%fieldset#page_css_editor.code-editor
