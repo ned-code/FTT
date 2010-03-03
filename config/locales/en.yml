@@ -62,12 +62,11 @@ en:
     index:
       title: "Documents"
       all_items_by_date: "All items"
-      created_by_me: "Created by me"
-      shared_with_me_as_editor: "Shared with me (as editor)"
-      shared_with_me_as_viewer: "Shared with me (as viewer)" 
+      created_by_me: "My webdocs"
+      shared_with_me: "Shared with me"
       public: "Public"
       create_new_document: "Create a new document"
-      edit_document: "Edit document"
+      edit_document: "Webdoc info"
       document_forms:
         name: "Name"
         description: "Description"

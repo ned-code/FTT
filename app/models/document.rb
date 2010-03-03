@@ -31,25 +31,25 @@ class Document < ActiveRecord::Base
   def self.all_with_filter(current_user, document_filter, pageId, per_page)
     documents_ids = []
     if document_filter
-      # Filter possibilities: editor, reader, creator, public
+      # Filter possibilities: shared, creator, public
       if document_filter == 'creator'
         return current_user.documents.paginate(:page => pageId, :per_page => per_page, :order => 'created_at DESC')
       elsif document_filter == 'public'
         return Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :public => 't' }, :order => 'created_at DESC' )
       else
         # Retrieve documents for the current user
-        current_user.role_objects.all(:select => 'authorizable_id', :conditions => {:name => document_filter}).each do |role|
+        current_user.role_objects.all(:select => 'authorizable_id').each do |role|
           documents_ids << role.authorizable_id if role.authorizable_id
         end
+        
         # Must remove owned documents
-        if document_filter != 'creator'
-          owner_ids = []
-          current_user.documents.each do |doc|
-            owner_ids << doc.id
-          end
-          # Diff of both arrays
-          documents_ids = documents_ids - owner_ids
+        owner_ids = []
+        current_user.documents.each do |doc|
+          owner_ids << doc.id
         end
+        # Diff of both arrays
+        documents_ids = documents_ids - owner_ids
+        
         documents = Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :id => documents_ids }, :order => 'created_at DESC' )
       end
     else
@@ -83,6 +83,10 @@ class Document < ActiveRecord::Base
         result[:access] << user_infos
       end
     end
+    # if @unvalid_access_emails
+    #   @unvalid_access_emails.each do |email|
+    #     result[:access] << [:email => email, :valid => false]
+    # end
     result
   end
   
@@ -109,14 +113,27 @@ class Document < ActiveRecord::Base
     accesses_parsed = JSON.parse(accesses);
     readers = accesses_parsed['readers']
     editors = accesses_parsed['editors']
+    readersMessage = accesses_parsed['readersMessage']
+    editorsMessage = accesses_parsed['editorsMessage']
+    
     readers.each do |user_email|
       user = User.find_by_email(user_email)
-      user.add_reader_role(self) if user
+      if user 
+        user.add_reader_role(self, readersMessage)
+      else
+        add_unvalid_email_to_array(user_email)
+      end
     end
     editors.each do |user_email|
       user = User.find_by_email(user_email)
-      user.add_editor_role(self) if user
+      if user
+        user.add_editor_role(self, editorsMessage)
+      else
+        add_unvalid_email_to_array(user_email)
+      end
     end
+    
+    return false if @unvalid_access_emails and @unvalid_access_emails.count > 0
   end
   
 private
@@ -129,6 +146,11 @@ private
   # before_create
   def create_default_page
     pages.build
+  end
+  
+  def add_unvalid_email_to_array(email)
+    @unvalid_access_emails ||= []
+    @unvalid_access_emails << email
   end
   
 end
