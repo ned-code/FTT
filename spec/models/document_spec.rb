@@ -20,13 +20,13 @@ describe Document do
     
     it "should add user as editor" do
       user = Factory(:user)
-      subject.create_accesses({ :editors => [user.email], :readers => [] }.to_json)
+      subject.create_accesses({ :editors => [user.email], :readers => [], :editorsMessage => "Dummy", :readersMessage => "Dummy" }.to_json)
       user.has_role?("editor", subject).should be_true
     end
     
     it "should add user as reader" do
       user = Factory(:user)
-      subject.create_accesses({ :editors => [], :readers => [user.email] }.to_json)
+      subject.create_accesses({ :editors => [], :readers => [user.email], :editorsMessage => "Dummy", :readersMessage => "Dummy" }.to_json)
       accesses = subject.to_access_json
       user.has_role?("reader", subject).should be_true
     end

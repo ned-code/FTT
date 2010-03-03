@@ -113,13 +113,14 @@ class Document < ActiveRecord::Base
     accesses_parsed = JSON.parse(accesses);
     readers = accesses_parsed['readers']
     editors = accesses_parsed['editors']
-    readersMessage = accesses_parsed['readersMessage']
-    editorsMessage = accesses_parsed['editorsMessage']
+    #readersMessage = accesses_parsed['readersMessage']
+    #editorsMessage = accesses_parsed['editorsMessage']
     
     readers.each do |user_email|
       user = User.find_by_email(user_email)
       if user 
-        user.add_reader_role(self, readersMessage)
+        user.add_reader_role(self)
+        # user.add_reader_role(self, readersMessage)
       else
         add_unvalid_email_to_array(user_email)
       end
@@ -127,7 +128,8 @@ class Document < ActiveRecord::Base
     editors.each do |user_email|
       user = User.find_by_email(user_email)
       if user
-        user.add_editor_role(self, editorsMessage)
+        user.add_editor_role(self)
+        #user.add_editor_role(self, editorsMessage)
       else
         add_unvalid_email_to_array(user_email)
       end
