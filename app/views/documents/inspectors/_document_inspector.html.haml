@@ -4,15 +4,13 @@
       %h2 Document
     
   %div.content
-    %div
-      %label Name
-      %br
-      %input#document-title{ :type => "text", :value => t('.default_name') }
-    %div
-      %label Description
-      %br
-      %textarea#document-description{ :rows => "5"}
-    %div
-      %label Category
-      %br
-      %select#document-category
+    %form.properties
+      %div
+        %label Name
+        %input#document-title{ :type => "text", :value => t('.default_name') }
+      %div
+        %label Category
+        %select#document-category
+      %div
+        %label Description
+        %textarea#document-description{ :rows => "5"}

@@ -168,6 +168,17 @@ body                          { background-color: hsl(198, 8%, 60%); }
                   -moz-border-radius:    2px;
                   border-radius:         2px; }
 .item_wrap:hover { border-style: solid; }
+
+input           { outline-color: rgba(176, 227, 0, 0.8); }
+
+.properties textarea,
+.properties input[type='text'] { background-color: hsl(198, 3%, 88%); }
+.properties textarea:focus:focus,
+.properties input[type='text']:focus { background-color: white; }
+.properties textarea::selection,
+.properties input[type='text']::selection { background-color: rgba(176, 227, 0, 0.8); }
+.properties textarea:focus,
+.properties input[type='text']:focus,
 .item_selected  { border-style: solid;
                   -webkit-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
                   -moz-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
