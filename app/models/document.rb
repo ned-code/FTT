@@ -35,7 +35,7 @@ class Document < ActiveRecord::Base
       if document_filter == 'creator'
         return current_user.documents.paginate(:page => pageId, :per_page => per_page, :order => 'created_at DESC')
       elsif document_filter == 'public'
-        return Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :public => 't' }, :order => 'created_at DESC' )
+        return Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :public => true }, :order => 'created_at DESC' )
       else
         # Retrieve documents for the current user
         current_user.role_objects.all(:select => 'authorizable_id').each do |role|
