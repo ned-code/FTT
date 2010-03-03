@@ -150,9 +150,9 @@ body                          { background-color: hsl(198, 8%, 60%); }
 
 /* Forms */
 .properties,
-.code-editor                  { border-color: hsl(198, 10%, 40%); }
+.code-editor                  { border-color: hsl(198, 6%, 56%); }
 .properties legend,
-.code-editor legend           { background-color: hsl(198, 10%, 40%); color: white; }
+.code-editor legend           { background-color: hsl(198, 6%, 56%); color: white; }
 .properties input[type=text]  { border-color: #bbbbbb; }
 
 /* Layers */

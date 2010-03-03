@@ -177,17 +177,17 @@ en:
           url: "URL"
         properties: 
           title: "Properties"
-          name: "Name"
+          name: "page title"
           width: "Width"
           height: "Height"
           show_scroll: "Show scroll"
-          background: "Background"
-          background_image: "Background Image"
-          background_image_comment: "You can also choose an image from your image library and use the set as background button."
+          background: "color"
+          background_image: "image"
+          background_image_comment: "You can also choose an image from your image library and use the <strong>Set as background</strong> button."
           remove_image: "Remove image"
           background_image_position:
-            horizontal: "Horizontal"
-            vertical : "oblique"
+            horizontal: "horizontal"
+            vertical : "vertical"
             tile: "Tile"
             left: "Left"
             right: "Right"
@@ -197,7 +197,7 @@ en:
             bottom: "Bottom"
           buttons:
             upload: "Upload"
-            apply_background_all_pages: "Apply background to all pages"
+            apply_background_all_pages: "Apply to all pages"
         css: "CSS"
         
       item_inspector:

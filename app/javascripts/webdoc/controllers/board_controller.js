@@ -444,7 +444,7 @@ WebDoc.BoardController = $.klass({
     
     var node = itemNode || jQuery('.item_edited'),
         zoom = this._currentZoom,
-        size = 8000,
+        size = 4096,
         nodePos = node.position(),
         nodeLeft = parseInt( nodePos.left ),
         nodeTop = parseInt( nodePos.top ),

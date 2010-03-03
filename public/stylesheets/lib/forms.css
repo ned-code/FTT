@@ -82,7 +82,7 @@ form.inline p { margin-bottom:0; }
 .properties,
 .code-editor {
     /*background: #edefe6;*/
-    padding: 1em 0.4em 1.4em 0.4em;
+    padding: 1em 0 1.4em 0;
     border: none;
     border-top: 1px solid;
     margin: 0 0 -0.8em 0;
@@ -101,7 +101,7 @@ form.inline p { margin-bottom:0; }
     text-transform: lowercase;
     font-size: 1em;
     font-weight: bold;
-    margin-left: 1.8%;
+    margin-left: 2.4%;
     -moz-border-radius: 0.8em;
     -webkit-border-radius: 0.8em;
     border-radius: 0.8em;
@@ -109,7 +109,7 @@ form.inline p { margin-bottom:0; }
 .properties div {
     clear: both;
     /* form divs also have clearfix applied */
-    padding-left: 40%;
+    padding-left: 33.3333%;
     /* Try and preserve vertical spacing */
     min-height: 1.9em;
 }
@@ -155,7 +155,7 @@ form.inline p { margin-bottom:0; }
     line-height: 1.2em;
 }
 .properties .label {
-    letter-spacing: -0.096em;
+    /*letter-spacing: -0.096em;*/
     margin-right: 0.4em;
 }
 
@@ -213,6 +213,10 @@ form.inline p { margin-bottom:0; }
     
     font-family: Courier, monospace;
     font-size: 1em;
+}
+
+#background_image {
+  width: 100px; height: 100px; display: block;
 }
 
 /* Pops */
