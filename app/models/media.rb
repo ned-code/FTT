@@ -155,10 +155,6 @@ class Media < ActiveRecord::Base
 #   end
 end
 
-
-
-
-
 # == Schema Information
 #
 # Table name: medias

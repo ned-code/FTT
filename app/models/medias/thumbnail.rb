@@ -3,8 +3,6 @@ class Medias::Thumbnail < Media
   
 end
 
-
-
 # == Schema Information
 #
 # Table name: medias

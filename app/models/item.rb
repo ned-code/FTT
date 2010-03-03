@@ -39,7 +39,6 @@ class Item < ActiveRecord::Base
   end  
 end
 
-
 # == Schema Information
 #
 # Table name: items

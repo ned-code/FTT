@@ -157,6 +157,7 @@ private
   
 end
 
+
 # == Schema Information
 #
 # Table name: documents
@@ -170,5 +171,7 @@ end
 #  description :text
 #  size        :text
 #  category_id :integer
+#  creator_id  :integer
+#  public      :boolean         default(FALSE)
 #
 

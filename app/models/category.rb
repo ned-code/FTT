@@ -9,7 +9,6 @@ class Category < ActiveRecord::Base
   
 end
 
-
 # == Schema Information
 #
 # Table name: categories
@@ -17,3 +16,4 @@ end
 #  id   :integer         not null, primary key
 #  name :string(255)     not null
 #
+

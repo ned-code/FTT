@@ -18,9 +18,6 @@ protected
 
 end
 
-
-
-
 # == Schema Information
 #
 # Table name: medias

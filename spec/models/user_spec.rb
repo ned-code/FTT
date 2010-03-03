@@ -71,7 +71,6 @@ describe User do
   
 end
 
-
 # == Schema Information
 #
 # Table name: users

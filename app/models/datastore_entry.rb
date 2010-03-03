@@ -65,6 +65,7 @@ class DatastoreEntry < ActiveRecord::Base
   # ====================
   
 end
+
 # == Schema Information
 #
 # Table name: datastore_entries
