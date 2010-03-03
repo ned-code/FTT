@@ -1,10 +1,8 @@
 class ItemsController < PageController
-  before_filter :authenticate_user!
-  
   access_control do
     allow :admin
     allow :editor, :of => :document
-    actions [:index, :show] do
+    action :show do
       allow :reader, :of => :document
       allow all, :if => :document_is_public?
     end
@@ -13,11 +11,8 @@ class ItemsController < PageController
   # POST /documents/:document_id/pages/:page_id/items/:id
   def show
     @item = @page.items.find_by_uuid(params[:id])
-    if params[:fullHTML] && @item.data[:innerHTML] !=~ /<html>(.|\n)*<\/html>/mi
-      render :text => "<html><head></head><body>#{@item.data[:innerHTML]}</body>"
-    else
-      render :text => @item.data[:innerHTML]
-    end
+    
+    render :layout => false
   end
   
   # POST /documents/:document_id/pages/:page_id/items

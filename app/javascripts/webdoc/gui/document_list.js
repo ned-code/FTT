@@ -30,12 +30,16 @@ WebDoc.DocumentList = $.klass(
         }
         previousElement.after($("<div id='" + document.uuid() + "' class='wb-document-item'><div class='wb-document-title'>" +
         '<a class="wb-document-edit" href="" title="Open this document">' + document.title() + '</a>' +
-        "</div><div class='wb-document-actions'><a class='wb-document-delete' href='' title='delete'></a><a class='wb-document-rename sec-action' href='' title='edit'>edit</a><a class='wb-document-access sec-action' href='' title='share'>share</a></div></div>").get(0));
+        "</div><div class='wb-document-actions'><a class='wb-document-delete' href='' title='delete'></a><a class='wb-document-rename sec-action' href='' title='edit'>edit</a><a class='wb-document-publish sec-action' href='' title='share'>share</a></div></div>").get(0));
     },
     
     removeDocument: function(id)
     {
         $("#" + id).remove();
+    },
+    
+    changeShareStatus: function(document) {
+      $('#'+document.uuid()+ '> .wb-document-actions').children().eq(3).replaceWith(this.buildShareValue(document));
     },
     
     repaint: function()
@@ -50,7 +54,7 @@ WebDoc.DocumentList = $.klass(
                 var document = this.datasource.document(section, i);
                 this.domNode.append($("<div id='" + document.uuid() + "' class='wb-document-item'><div class='wb-document-title'>" +
                 '<a class="wb-document-edit" href="" title="Open this document">' + document.title() + '</a>' +
-                "</div><div class='wb-document-actions'><a class='wb-document-delete' href='' title='delete'></a><a class='wb-document-rename sec-action' href='' title='edit'>edit</a><a class='wb-document-access sec-action' href='' title='share'>share</a></div></div>").get(0));
+                "</div><div class='wb-document-actions'><a class='wb-document-delete' href='' title='delete'></a><a class='wb-document-rename sec-action' href='' title='info'>info</a><a class='wb-document-access sec-action' href='' title='collaborate'>collaborate</a>" +this.buildShareValue(document) +"</div></div>").get(0));
             }
         }
     },
@@ -80,5 +84,9 @@ WebDoc.DocumentList = $.klass(
         this.domNode.append(this.paginationWrap);
       }
     },
+    
+    buildShareValue: function(document) {
+      return document.data.public? '<a class="wb-document-unshare sec-action" title="unshare" href="">unshare</a>' : '<a class="wb-document-share sec-action" title="share" href="">share</a>'
+    }
 });
 

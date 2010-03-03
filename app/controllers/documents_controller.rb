@@ -1,14 +1,13 @@
 class DocumentsController < DocumentController
-  before_filter :authenticate_user!
   before_filter :load_document, :only => [:show, :update, :destroy]
   
   access_control do
     allow :admin
     allow logged_in, :to => [:index, :create]
     allow :editor, :of => :document, :to => [:update, :destroy]
-    actions :show do
-      allow :editor, :of => :document
+    action :show do
       allow :reader, :of => :document
+      allow :editor, :of => :document
       allow all, :if => :document_is_public?
     end
   end

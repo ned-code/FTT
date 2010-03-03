@@ -26,6 +26,48 @@ describe User do
     end
   end
   
+  describe "followships creation" do
+    subject { Factory(:user) }
+    
+    it "should have followed users" do 
+      user = Factory(:user)
+      subject.follow(user.id)
+      subject.following?(user).should be_true
+      subject.following.count.should == 1
+      user.followers.count.should == 1
+      user.follower?(subject).should be_true
+    end
+    
+    it "should have follower users" do
+      user = Factory(:user)
+      user.follow(subject.id)
+      subject.follower?(user).should be_true
+      subject.followers.count.should == 1
+    end
+    
+    it "should have a mutual relationship" do
+      user = Factory(:user)
+      user.follow(subject.id)
+      subject.follow(user.id)
+      subject.mutual_follower?(user).should be_true
+      user.mutual_follower?(subject).should be_true
+      subject.mutual_followers.count.should == 1
+      user.mutual_followers.count.should == 1
+    end
+  end
+  
+  describe "followships destruction" do
+    subject { Factory(:user) }
+    
+    it "sould remove following relationship" do
+      user = Factory(:user)
+      user.follow(subject.id)
+      user.following?(subject).should be_true
+      user.unfollow(subject.id)
+      user.following?(subject).should be_false
+      user.following.count.should == 0
+    end
+  end
   
 end
 
