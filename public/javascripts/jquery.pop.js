@@ -171,8 +171,6 @@
 					step: function(a){
 						var scale = 'scale('+a+')';
 						
-						console.log(a);
-						
 						instance.node.css({
 							WebkitTransform: scale,
 							MozTransform: scale,
