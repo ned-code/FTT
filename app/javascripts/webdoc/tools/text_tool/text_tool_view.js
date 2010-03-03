@@ -19,7 +19,6 @@ WebDoc.TextToolView = $.klass({
     };
     
     this.undoHandler = function(clonedForUndo) {
-      ddd("undo text");
       thobj.storeHistorySelection();
       var newClonedForUndo = thobj.edDoc.body.firstChild.cloneNode(true);
       WebDoc.application.undoManager.registerUndo(function() {
@@ -205,10 +204,10 @@ WebDoc.TextToolView = $.klass({
           'f12': 123
         };
         for (var i = 0; i < keys.length; i++) {
-          k = keys[i];
+          k = keys[i];   
           if (k == 'ctrl' || k == 'control') {
-            if (e.ctrlKey) {
-              kp++;
+            if (e.ctrlKey || e.metaKey) {  
+              kp++; 
             }
           }
           else 
@@ -226,18 +225,18 @@ WebDoc.TextToolView = $.klass({
               else 
                 if (k.length > 1) {
                   if (special_keys[k] == code) {
-                    kp++;
+                    kp++;   
                   }
                 }
                 else {
                   if (character == k) {
-                    kp++;
+                    kp++;  
                   }
                   else {
                     if (shift_nums[character] && e.shiftKey) {
                       character = shift_nums[character];
                       if (character == k) {
-                        kp++;
+                        kp++; 
                       }
                     }
                   }
@@ -571,42 +570,39 @@ WebDoc.TextToolView = $.klass({
         }
       return null;
     };
-    
     var global_stage;
     
-    this.findTagsInSubtree = function(bounds, tag_name, stage, second) {
+		this.findTagsInSubtree = function (bounds, tag_name, stage, second){
       var root = bounds.root;
       var start = bounds.start;
       var end = bounds.end;
-      if (!second) {
-        global_stage = stage;
+      if (start == end) {
+        return [start];
       }
+      if (!second) {
+	  	  global_stage = stage;
+      }			
       if (global_stage == 2) {
-        return [];
+	  	  return [];
       }
       if (!global_stage) {
-        global_stage = 0;
-      }
-      tag_name = tag_name.toLowerCase();
-      var nodes = [];
-      for (var node = root.firstChild; node; node = node.nextSibling) {
-        if (node == start && global_stage === 0) {
+	  	  global_stage = 0;
+      }			
+      tag_name = tag_name.toLowerCase();			
+      var nodes=[];
+      for(var node = root.firstChild; node; node = node.nextSibling){
+        if(node==start && !global_stage){
           global_stage = 1;
         }
-        if (node.nodeName.toLowerCase() == tag_name && node.nodeName != '#text' || tag_name === '') {
-          if (global_stage == 1) {
+        if(node.nodeName.toLowerCase() == tag_name && node.nodeName != '#text' || !tag_name){
+          if(global_stage == 1){
             nodes.push(node);
           }
         }
-        if (node == end && global_stage == 1) {
+        if(node==end && global_stage==1){
           global_stage = 2;
         }
-        nodes = nodes.concat(this.findTagsInSubtree({
-          root: node,
-          start: start,
-          end: end
-        }, tag_name, global_stage, true));
-        
+        nodes=nodes.concat(this.findTagsInSubtree({root:node, start:start, end:end}, tag_name, global_stage, true));
       }
       return nodes;
     };
@@ -757,10 +753,12 @@ WebDoc.TextToolView = $.klass({
         if (!selNodes || this.ua.indexOf("webkit") != -1) {
           var nodes = this.getSelectedTags('span');
           for (i = 0; i < nodes.length; i++) {
-            if (nodes[i].style[styleAttr]) {
+            if (nodes[i].style && nodes[i].style[styleAttr]) {
               nodes[i].style[styleAttr] = value;
             }
-            nodes[i].removeAttribute('class');
+            if(nodes[i].nodeName != '#text'){
+              nodes[i].removeAttribute('class');
+            }
           }
         }
         if (command == 'foreColor') {
@@ -856,7 +854,6 @@ WebDoc.TextToolView = $.klass({
       this.verticalCell.style.display = 'table-cell';
       this.verticalContainer.style.height = '100%';
       this.verticalContainer.style.width = '100%';
-      
     };
     
     this.formatHorisontal = function(command) {
@@ -910,9 +907,9 @@ WebDoc.TextToolView = $.klass({
     for (i = 0; i < this.mainPageStyles.length; i++) {
       this.frameStyles += "<link rel='stylesheet' href='" + this.mainPageStyles[i] + "' type='text/css' />";
     }
-    content.write("<html><head>" + this.frameStyles + "<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; height:100%; margin:0px; background-color:#ffffff;} </style></head><body contenteditable='true'></body></html>");
+    content.write("<html><head>" + this.frameStyles + "<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: hidden;} html,body { padding:0px; height:100%; margin:0px; background:none;} </style></head><body contenteditable='true'></body></html>");
     content.close();
-    this.edDoc.designMode = 'On';
+    thobj.edDoc.designMode = 'On';
     
     this.setCursorInInnerPosition = function() {
       var range = thobj.edDoc.createRange();
@@ -991,7 +988,7 @@ WebDoc.TextToolView = $.klass({
     this.firstEditionHandler = function() {
       this.createRootContainer();
       this.formatVertical();
-      this.verticalCell.innerHTML = '<span>&nbsp;</span>';
+      this.verticalCell.innerHTML = '&nbsp;';
       this.setCursorInInnerPosition();
     };
     
@@ -1003,6 +1000,15 @@ WebDoc.TextToolView = $.klass({
     };
     
     this.storeRootStructure = function() {
+      if (!thobj.edDoc.body.firstChild || !thobj.edDoc.body.firstChild.firstChild || !thobj.edDoc.body.firstChild.firstChild.firstChild) {
+        thobj.firstEditionHandler();
+      }
+      var divStructure = this.edDoc.body.firstChild.firstChild.firstChild.getElementsByTagName('div');
+      for(var d=0;d<divStructure.length;d++){
+        if(divStructure[d].style && divStructure[d].style.verticalAlign && divStructure[d].style.verticalAlign.toLowerCase()=='table'){  
+           edDoc.body.firstChild.parentNode.replaceChild(divStructure[d],edDoc.body.firstChild.firstChild);
+        }
+      }
       if (!thobj.edDoc.body.firstChild || !thobj.edDoc.body.firstChild.firstChild || !thobj.edDoc.body.firstChild.firstChild.firstChild) {
         thobj.firstEditionHandler();
       }
@@ -1050,7 +1056,7 @@ WebDoc.TextToolView = $.klass({
       return true;
     });
     
-    if (!storedContent) {
+    if (!storedContent || this.currentEditingBlockClass.indexOf('empty') != -1) {
       this.firstEditionHandler();
     }
     else {
@@ -1065,7 +1071,6 @@ WebDoc.TextToolView = $.klass({
     this.shortcut('Ctrl+Y', function() {
       WebDoc.application.undoManager.redo();
     });
-    
   },
   
   /**
@@ -1211,7 +1216,12 @@ WebDoc.TextToolView = $.klass({
     var currentSelected = thobj.edWin.getSelection().focusNode;
     if (currentSelected.nodeName == '#text') {
       currentSelected = currentSelected.parentNode;
-    }
+    }  
+    //for(var c=0;c<this.verticalCell.childNodes.length;c++){
+		  if(this.verticalCell.childNodes[0].nodeName!='#text'){  
+         // this.verticalCell.childNodes[0].style.verticalAlign = this.verticalCell.style.verticalAlign;
+      }
+    //}
     thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(currentSelected)));
     this.edWin.focus();
   },
