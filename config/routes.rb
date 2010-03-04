@@ -7,7 +7,6 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :documents, :has_many => { :pages => :items } do |m|
     m.resource :accesses, :only => [:show, :create, :update]
-    m.resource :creators, :only => [:show]
   end
   
   map.resources :datastores, :only => [:show] do |datastore|
@@ -29,6 +28,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connections 'followships/followers', :controller => "followships", :action => 'followers'
   map.connections 'followships', :controller => "followships", :action => :create
   map.connections 'followships', :controller => "followships", :action => :destroy
+
   
   # dev controller
   map.resources :images,    :except => [:new, :edit, :update]

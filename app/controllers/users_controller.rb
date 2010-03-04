@@ -9,6 +9,10 @@ class UsersController < ApplicationController
   # GET /users/:id
   def show
     @user = User.find(params[:id])
+    respond_to do |format|
+      format.html { @user }
+      format.json { render :json => @user.to_social_panel_json }
+    end
   end
   
   # GET /users/:id/edit

@@ -23,6 +23,10 @@ WebDoc.Document = $.klass(MTools.Record, {
     return this.data.size;
   },
   
+  creatorId: function() {
+    return this.data.creator_id;
+  },
+  
   setTitle: function(title, skipSave) {
     this.data.title = title;
     if(!skipSave && !skipSave == true) {

@@ -105,7 +105,7 @@ en:
       created_by_me: "My webdocs"
       shared_with_me: "Shared with me"
       public: "Public"
-      create_new_document: "Create a new document"
+      create_new_document: "Create a new webdoc"
       edit_document: "Webdoc info"
       document_forms:
         name: "Name"
@@ -128,7 +128,7 @@ en:
         buttons:
           add_access: "Add user"
       buttons:
-        new_document: "New document"
+        new_document: "New webdoc"
         
     show:
       toolbar_panel:

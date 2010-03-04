@@ -9,7 +9,6 @@ class AccessesController < DocumentController
   # POST /documents/:document_id/accesses
   def create
     if @document.create_accesses(params[:accesses])
-      #render :status => :success
       render :json => @document.to_access_json
     else
       render :status => :error
