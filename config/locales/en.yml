@@ -113,6 +113,13 @@ en:
         category: "Category"
         document_size_title: "Document size"
         creationDate: "Creation date"
+        change_access_dialog:
+          invite_tab: "Invite people" 
+          current_accesses: "Who has access"
+          add_editors: "Add editors (email separated by ';')"
+          add_readers: "Add viewers (email separated by ';')"
+          add_editors_message: "Your message"
+          add_readers_message: "Your message"
         share_document_dialog:
           title: "Share webdoc"
           explanation: "Your webdoc is going to be visible for all internet users"
