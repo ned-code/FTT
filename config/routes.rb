@@ -9,7 +9,7 @@ ActionController::Routing::Routes.draw do |map|
     m.resource :accesses, :only => [:show, :create, :update]
   end
   
-  map.resources :datastores, :only => [:show] do |datastore|
+  map.resources :datastores, :only => [:show, :index] do |datastore|
     datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
   end
   
