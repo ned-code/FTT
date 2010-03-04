@@ -81,30 +81,28 @@
 
 #wb-change-access-dialog{ :style => "display:none" }
   #document_access-header
-    -#%button#add_access.ui-button.ui-state-default.ui-corner-all= t('.document_forms.buttons.add_access')
-  = render :partial => 'layouts/flash'
   #wb-document-access-tabs
     %ul
       %li
         %a{ :href => "#wb-invitation-tab"}
-          Invite people
+          = t('.document_forms.change_access_dialog.invite_tab')
       %li
         %a{ :href => "#wb-access-list"}
-          Who has access
+          = t('.document_forms.change_access_dialog.current_accesses')
     #wb-invitation-tab
-      %label Add editors (email separated by ';')
+      %label= t('.document_forms.change_access_dialog.add_editors')
       %br
       %textarea#wb-invitation-add-editors{ :rows => 3, :cols => 20}
       %br
-      %label Your message
+      %label= t('.document_forms.change_access_dialog.add_editors_message')
       %br
       %textarea#wb-invitation-add-editors-message{ :rows => 3, :cols => 20}
       %hr
-      %label Add viewers (email separated by ';')
+      %label= t('.document_forms.change_access_dialog.add_readers') 
       %br
       %textarea#wb-invitation-add-viewers{ :rows => 3, :cols => 20}
       %br
-      %label Your message
+      %label= t('.document_forms.change_access_dialog.add_readers_message')
       %br
       %textarea#wb-invitation-add-viewers-message{ :rows => 3, :cols => 20}
     #wb-access-list

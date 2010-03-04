@@ -227,6 +227,11 @@ a:hover { color: #0069BF;}
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
 }
+
+#wb-invitation-failed {
+  color: #ff0000;
+}
+
 .user_access{
     clear: both;
     height: 25px;
@@ -260,6 +265,7 @@ a:hover { color: #0069BF;}
 .delete_access:hover {
     background: #fff url(../images/icons/delete_16.png) no-repeat -16px -2px ;
 }
+
 
 /* ======================= */
 /* = Apps administration = */

@@ -59,7 +59,7 @@ WebDoc.DocumentShareController = $.klass({
 
       this.sharedDocUrlField.attr('disabled', 'disabled');
     }
-    this.sharedDocUrlField.val(window.location.href + "/documents/" + this.document.uuid() + "#1");
+    this.sharedDocUrlField.val("http://" + window.location.host + "/documents/" + this.document.uuid() + "#1");
   },
   
   _closeDialog: function() {
