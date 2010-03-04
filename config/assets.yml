@@ -11,6 +11,7 @@ javascripts:
     - app/javascripts/webdoc/utils/*.js
     - app/javascripts/webdoc/controllers/document_access_controller.js
     - app/javascripts/webdoc/controllers/document_categories_controller.js
+    - app/javascripts/webdoc/controllers/document_share_controller.js
     - app/javascripts/webdoc/gui/document_list.js
     - app/javascripts/webdoc/core/document_editor.js
   page_editor:

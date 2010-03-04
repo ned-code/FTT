@@ -79,7 +79,7 @@
       = t('.document_forms.document_size.iPad')
          
 
-#wb-change-access-dialog{ :style => "display:none",:title => t('.document_forms.change_access_document') }
+#wb-change-access-dialog{ :style => "display:none" }
   #document_access-header
     -#%button#add_access.ui-button.ui-state-default.ui-corner-all= t('.document_forms.buttons.add_access')
   = render :partial => 'layouts/flash'
@@ -92,7 +92,7 @@
         %a{ :href => "#wb-access-list"}
           Who has access
     #wb-invitation-tab
-      %label Add editors
+      %label Add editors (email separated by ';')
       %br
       %textarea#wb-invitation-add-editors{ :rows => 3, :cols => 20}
       %br
@@ -100,7 +100,7 @@
       %br
       %textarea#wb-invitation-add-editors-message{ :rows => 3, :cols => 20}
       %hr
-      %label Add viewers
+      %label Add viewers (email separated by ';')
       %br
       %textarea#wb-invitation-add-viewers{ :rows => 3, :cols => 20}
       %br
@@ -108,7 +108,22 @@
       %br
       %textarea#wb-invitation-add-viewers-message{ :rows => 3, :cols => 20}
     #wb-access-list
+      #wb-invitation-failed
       %ul#document_access_list
+      
+#wb-share-document-dialog{ :style => "display:none", :title => t('.document_forms.share_document_dialog.title') }
+  %form
+    %p
+      = t('.document_forms.share_document_dialog.explanation')
+    %input#unshare_webdoc_radio{ :type => "radio", :name => "share", :value => "off" }
+    %span.label= t('.document_forms.share_document_dialog.unshare_radio')
+    %br
+    %input#share_webdoc_radio{ :type => "radio", :name => "share", :value => "on" }
+    %span.label= t('.document_forms.share_document_dialog.share_radio')
+    %br
+    %span.label= t('.document_forms.share_document_dialog.shared_address_label')
+    %br
+    %input#shared_webdoc_url{ :type => "text", :size => 40}
 
 :javascript
     var WebDoc;

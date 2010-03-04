@@ -27,6 +27,10 @@ WebDoc.Document = $.klass(MTools.Record, {
     return this.data.creator_id;
   },
   
+  isShared: function() {
+    return this.data.public;
+  },
+  
   setTitle: function(title, skipSave) {
     this.data.title = title;
     if(!skipSave && !skipSave == true) {
