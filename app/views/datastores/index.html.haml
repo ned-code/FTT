@@ -1,0 +1,27 @@
+= stylesheet_link_tag 'style.datastore'
+
+%h1= 'Datastores'
+
+- @last_doc_uuid = nil
+- @last_widget_uuid = nil
+- @records.each do |rec|
+  - if @last_doc_uuid != rec.uuid
+    %div{:class => 'ds-document'}
+      = link_to 'Document: ' + rec.title, '/documents/' + rec.uuid, {:target => '_new'}
+    - @last_doc_uuid = rec.uuid
+  - if @last_widget_uuid != rec.i_id
+    %div{:class => 'ds-app'}
+      = link_to 'App: ' + rec.m_title + ' (page: ' + (rec.p_position.to_i + 1).to_s + ')', '/documents/' + rec.uuid + '#' + rec.p_uuid,  {:target => '_new'}
+    - @last_widget_uuid = rec.i_id
+    %div{:class => 'ds-record'}
+      %table
+        %tr
+        %th{:class => 'ds-td-key'}= 'Key'
+        %th{:class => 'ds-td-value'}= 'Value'
+        %th{:class => 'ds-td-updated'}= 'Updated at'
+  %div{:class => cycle('ds-record ds-record-even', 'ds-record ds-record-odd')}
+    %table
+      %tr
+        %td{:class => 'ds-td-key'}= rec.de_key
+        %td{:class => 'ds-td-value'}= rec.de_value
+        %td{:class => 'ds-td-updated'}= rec.de_updated_at
