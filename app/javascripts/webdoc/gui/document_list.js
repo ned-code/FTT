@@ -87,9 +87,9 @@ WebDoc.DocumentList = $.klass(
     
     buildShareValue: function(document) {
       if(WebDoc.application.documentEditor.currentUser.id == document.creatorId()) {
-        return document.data.is_public? '<a class="wb-document-unshare sec-action" title="unshare" href="">unshare</a>' : '<a class="wb-document-share sec-action" title="share" href="">share</a>'
+        return document.data.is_public? '<a class="wb-document-unshare sec-action" title="unshare" href="">unshare</a>' : '<a class="wb-document-share sec-action" title="share" href="">share</a>';
       }
       else { return ""; }
-    },
+    }
 });
 
