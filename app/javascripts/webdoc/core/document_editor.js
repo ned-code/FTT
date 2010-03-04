@@ -12,6 +12,7 @@
 //= require <webdoc/gui/document_list>
 //= require <webdoc/controllers/document_access_controller>
 //= require <webdoc/controllers/document_categories_controller>
+//= require <webdoc/controllers/document_share_controller>
 
 // application singleton.
 WebDoc.application = {};
@@ -40,6 +41,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         WebDoc.application.undoManager = new MTools.UndoManager();
         WebDoc.application.accessController = new WebDoc.DocumentAccessController();
         WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
+        WebDoc.application.shareController = new WebDoc.DocumentShareController();
         WebDoc.application.categoriesController.addListener(this);
         newDocNameField = $("#wb-new-document-name");
         newDocDescriptionField = $("#wb-new-document-description");
@@ -216,10 +218,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
       ddd("must publish document"); 
       var documentIdToPublish = $(this).parent().parent().attr("id");
       var document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
-      document.share();
-      document.save(function(persistedDoc) {
-          WebDoc.application.documentEditor.filter.changeShareStatus(persistedDoc);
-      });
+      WebDoc.application.shareController.showShare(document);            
     },
     
     unshareDocument: function(e)
@@ -228,10 +227,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
       ddd("must unshare document"); 
       var documentIdToPublish = $(this).parent().parent().attr("id");
       var document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
-      document.unshare();
-      document.save(function(persistedDoc) {
-          WebDoc.application.documentEditor.filter.changeShareStatus(persistedDoc);
-      });
+      WebDoc.application.shareController.showShare(document);  
     },
     
     deleteDocument: function(e)
