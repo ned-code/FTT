@@ -61,9 +61,9 @@ class User < ActiveRecord::Base
     following?(@current_user)
   end
   
-  def is_current_user
-    @current_user.id == self.id
-  end
+  # def is_current_user
+  #   @current_user.id == self.id
+  # end
   
   # def mutual_connection(current_user)
   #   self.mutual_follower?(current_user)
@@ -73,14 +73,14 @@ class User < ActiveRecord::Base
     XmppUserSynch.create_xmpp_user(self)
   end
   
-  def add_editor_role(document)
+  def has_only_editor_role!(document, message = nil)
     if !self.has_role?("editor", document)
       self.has_no_roles_for!(document)
       self.has_role!("editor", document)
     end
   end
   
-  def add_reader_role(document)
+  def has_only_reader_role!(document, message = nil)
     if !self.has_role?("reader", document)
       self.has_no_roles_for!(document)
       self.has_role!("reader", document)
@@ -115,9 +115,9 @@ class User < ActiveRecord::Base
     mutual
   end
   
-  def to_social_panel_json(current_user)
-    @current_user = current_user
-    to_json(:only => [:id, :username, :bio], :methods => [:avatar_thumb_url, :documents_count, :following_info, :is_current_user])
+  # Need to use this method instead of the original to_json cause user references document and vice versa
+  def to_social_panel_json
+    to_json(:only => [:id, :username, :bio], :methods => [:avatar_thumb_url, :documents_count, :following_info])
   end
   
 end
