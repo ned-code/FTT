@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
 protected
   
   def forbidden_access
-    # render_optional_error_file(:not_found)
-    render :status => :forbidden
+    render_optional_error_file(:not_found)
+#    render :status => :forbidden
   end
   
   def http_authenticate
