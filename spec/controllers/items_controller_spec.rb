@@ -31,7 +31,9 @@ describe ItemsController do
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
         expects :items, :on => mock_page, :returns => Item
-        expects :create, :on => Item, :with => { "must_notify" => true }, :returns => mock_item
+        expects :new, :on => Item, :returns => mock_item
+        expects :must_notify=, :on => mock_item, :with => true
+        expects :save, :on => mock_item
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
@@ -78,7 +80,9 @@ describe ItemsController do
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
         expects :items, :on => mock_page, :returns => Item
-        expects :create, :on => Item, :with => { "must_notify" => true }, :returns => mock_item
+        expects :new, :on => Item, :returns => mock_item
+        expects :must_notify=, :on => mock_item, :with => true
+        expects :save, :on => mock_item
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
@@ -235,7 +239,9 @@ describe ItemsController do
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
         expects :items, :on => mock_page, :returns => Item
-        expects :create, :on => Item, :with => { "must_notify" => true }, :returns => mock_item
+        expects :new, :on => Item, :returns => mock_item
+        expects :must_notify=, :on => mock_item, :with => true
+        expects :save, :on => mock_item
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
@@ -282,7 +288,9 @@ describe ItemsController do
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
         expects :items, :on => mock_page, :returns => Item
-        expects :create, :on => Item, :with => { "must_notify" => true }, :returns => mock_item
+        expects :new, :on => Item, :returns => mock_item
+        expects :must_notify=, :on => mock_item, :with => true
+        expects :save, :on => mock_item
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
