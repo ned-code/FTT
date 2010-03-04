@@ -28,7 +28,7 @@ WebDoc.Document = $.klass(MTools.Record, {
   },
   
   isShared: function() {
-    return this.data.public;
+    return this.data.is_public;
   },
   
   setTitle: function(title, skipSave) {
@@ -63,12 +63,12 @@ WebDoc.Document = $.klass(MTools.Record, {
   },
 
   share: function() {
-    this.data.public = true;
+    this.data.is_public = true;
     this.save();
   },
   
   unshare: function() {
-    this.data.public = false;
+    this.data.is_public = false;
   },
 
   refresh: function($super, json) {
