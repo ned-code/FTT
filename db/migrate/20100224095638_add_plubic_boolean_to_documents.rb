@@ -11,7 +11,7 @@ class AddPlubicBooleanToDocuments < ActiveRecord::Migration
         puts "Error adding public to document #{document.id} - #{document.title}"
       end
     end
-    global_user = User.find_by_username("all")
+    global_user = User.find(:first, :conditions => { :username => "all"})
     global_user.has_no_roles! if global_user
     global_user.destroy if global_user
   end
