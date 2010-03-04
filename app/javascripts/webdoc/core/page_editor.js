@@ -90,7 +90,8 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       this.currentDocument = data[0];
       this.currentDocument.addListener(this);
       this.loadPageId(window.location.hash.replace("#", ""));
-      WebDoc.application.pageBrowserController.setDocument(this.currentDocument);      
+      WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
+      this._loadCreator();     
       ddd("check editablity");
       if (WebDoc.application.boardController.isEditable()) {
         ddd("[PageEditor] call rightBarController.showLib");
@@ -98,17 +99,21 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
 //        WebDoc.application.rightBarController.showItemInspector();
       }
     }.pBind(this));
-    
-    // ===========================================================
-    // = TODO REMOVE THIS (ZENO USES THIS TO DEBUG LIBRARY)
-    // setTimeout(function(){
-    //   WebDoc.application.rightBarController.showRightBar(WebDoc.application.rightBarController.showLib.pBind(WebDoc.application.rightBarController));
-    // },500);
-    // setTimeout(function(){
-    //   $('#videos').click();
-    // },600);
-    // ===========================================================
   },
+  
+  _loadCreator: function() {
+     $.ajax({
+       url: "/users/" + this.currentDocument.creatorId(),
+       type: 'GET',
+       dataType: 'json',              
+       success: function(data, textStatus) {
+         this.creator = data.user;
+       }.pBind(this),
+       error: function(XMLHttpRequest, textStatus, errorThrown) {
+         ddd("error", textStatus);          
+       }
+     });
+   },
 
   loadPageId: function(pageId) {
     ddd('[PageEditor] loadPageId');
