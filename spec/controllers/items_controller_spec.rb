@@ -7,7 +7,7 @@ describe ItemsController do
   before(:each) { mock_item(:to_json => {}) }
   
   describe "with public document" do
-    before(:each) { mock_document(:public? => true) }
+    before(:each) { mock_document(:is_public? => true) }
     
     context "accessed by admin" do
       before(:each) do 
@@ -211,7 +211,7 @@ describe ItemsController do
   end
   
   describe "with private document" do
-    before(:each) { mock_document(:public? => false, :to_json => {}) }
+    before(:each) { mock_document(:is_public? => false, :to_json => {}) }
     
     context "accessed by admin" do
       before(:each) do 

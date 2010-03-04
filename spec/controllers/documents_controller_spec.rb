@@ -5,7 +5,7 @@ describe DocumentsController do
   mock_models :document
   
   describe "with public document" do
-    before(:each) { mock_document(:public? => true, :to_json => {}) }
+    before(:each) { mock_document(:is_public? => true, :to_json => {}) }
     
     context "accessed by admin" do
       before(:each) do 
@@ -167,7 +167,7 @@ describe DocumentsController do
   end
   
   describe "with private document" do
-    before(:each) { mock_document(:public? => false, :to_json => {}) }
+    before(:each) { mock_document(:is_public? => false, :to_json => {}) }
     
     context "accessed by admin" do
       before(:each) do 
