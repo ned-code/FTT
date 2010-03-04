@@ -907,7 +907,7 @@ WebDoc.TextToolView = $.klass({
     for (i = 0; i < this.mainPageStyles.length; i++) {
       this.frameStyles += "<link rel='stylesheet' href='" + this.mainPageStyles[i] + "' type='text/css' />";
     }
-    content.write("<html><head>" + this.frameStyles + "<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: hidden;} html,body { padding:0px; height:100%; margin:0px; background:none;} </style></head><body contenteditable='true'></body></html>");
+    content.write("<html><head>" + this.frameStyles + "<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: hidden;} html,body { padding:0px; height:100%; margin:0px; background:none;position:relative} </style></head><body contenteditable='true'></body></html>");
     content.close();
     thobj.edDoc.designMode = 'On';
     
