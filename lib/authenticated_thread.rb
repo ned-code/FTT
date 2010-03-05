@@ -1,4 +1,4 @@
-module CurrentUserThread
+module AuthenticatedThread
   
   def self.included(base)
     base.class_eval do
@@ -16,6 +16,6 @@ end
 
 # Set it all up.
 if Object.const_defined?("ActiveRecord")
-  ActiveRecord::Base.send(:include, CurrentUserThread)
-  ActiveRecord::Observer.send(:include, CurrentUserThread)
+  ActiveRecord::Base.send(:include, AuthenticatedThread)
+  ActiveRecord::Observer.send(:include, AuthenticatedThread)
 end

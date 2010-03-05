@@ -196,6 +196,7 @@ WebDoc.ItemView = $.klass({
       distance: 5,
       start: function(e, ui) {
         ddd("start drag");
+        if(this.item.page.data.data.externalPage) {WebDoc.application.boardController.activateEventCatcher(true);}
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
         var currentPosition = {top: this.item.data.data.css.top, left: this.item.data.data.css.left};
 
@@ -213,6 +214,7 @@ WebDoc.ItemView = $.klass({
         this._moveTo(ui.position);
       }.pBind(this)        ,
       stop: function(e, ui) {
+        if(this.item.page.data.data.externalPage) {WebDoc.application.boardController.activateEventCatcher(false);}
         var newPosition = { top : ui.position.top + "px", left: ui.position.left + "px"};
         this.item.moveTo(newPosition);
         this.item.save();
@@ -221,6 +223,7 @@ WebDoc.ItemView = $.klass({
     }).resizable({
       handles: 's, e, se',
       start: function(e, ui) {
+        if(this.item.page.data.data.externalPage) {WebDoc.application.boardController.activateEventCatcher(true);}
         this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
         this.aspectRatio = ui.size.width / ui.size.height;
         var currentSize = { width: this.item.data.data.css.width, height: this.item.data.data.css.height};
@@ -243,6 +246,7 @@ WebDoc.ItemView = $.klass({
         this._resizeTo(ui.size);
       }.pBind(this)        ,
       stop: function(e, ui) {
+        if(this.item.page.data.data.externalPage) {WebDoc.application.boardController.activateEventCatcher(false);}
         var newSize = { width: ui.size.width + "px", height: ui.size.height + "px"};
         this.item.resizeTo(newSize);
         this.item.save();
