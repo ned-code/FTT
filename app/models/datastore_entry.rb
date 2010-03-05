@@ -80,14 +80,15 @@ class DatastoreEntry < ActiveRecord::Base
   # ====================
 end
 
+
 # == Schema Information
 #
 # Table name: datastore_entries
 #
-#  id          :integer         not null, primary key
+#  id          :integer(4)      not null, primary key
 #  ds_key      :string(255)     not null
-#  ds_value    :text(65537)     not null
-#  widget_uuid :text
+#  ds_value    :text(16777215)  default(""), not null
+#  widget_uuid :string(36)
 #  user_id     :string(36)
 #  created_at  :datetime
 #  updated_at  :datetime

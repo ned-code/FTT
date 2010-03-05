@@ -28,12 +28,12 @@ WebDoc.Document = $.klass(MTools.Record, {
   },
   
   isShared: function() {
-    return this.data.public;
+    return this.data.is_public;
   },
   
   setTitle: function(title, skipSave) {
     this.data.title = title;
-    if(!skipSave && !skipSave == true) {
+    if(!skipSave && !skipSave === true) {
       this.firePropertiesChanged();
       this.save();
     }
@@ -41,7 +41,7 @@ WebDoc.Document = $.klass(MTools.Record, {
   
   setDescription: function(description, skipSave) {
     this.data.description = description;
-    if(!skipSave && !skipSave == true) {
+    if(!skipSave && !skipSave === true) {
       this.firePropertiesChanged();
       this.save();
     }
@@ -49,7 +49,7 @@ WebDoc.Document = $.klass(MTools.Record, {
   
   setCategory: function(category_id, skipSave) {
     this.data.category_id = category_id;
-    if(!(skipSave && skipSave == true)) {
+    if(!(skipSave && skipSave === true)) {
       this.firePropertiesChanged();
       this.save();
     }
@@ -57,18 +57,18 @@ WebDoc.Document = $.klass(MTools.Record, {
   
   setSize: function(size, skipSave) {
     this.data.size = size;
-    if(!(skipSave && skipSave == true)) {
+    if(!(skipSave && skipSave === true)) {
       this.save();
     }
   },
 
   share: function() {
-    this.data.public = true;
+    this.data.is_public = true;
     this.save();
   },
   
   unshare: function() {
-    this.data.public = false;
+    this.data.is_public = false;
   },
 
   refresh: function($super, json) {

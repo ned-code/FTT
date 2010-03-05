@@ -15,7 +15,9 @@ class XmppItemObserver < ActiveRecord::Observer
     # item is created in the same ransaction then its containing page.    
     if (item.must_notify)
       message = { :source => xmpp_client_id, :item =>  item.attributes }
-      XmppNotification.xmpp_notify(message.to_json, item.page.document.uuid)
+      if (item.page)
+        XmppNotification.xmpp_notify(message.to_json, item.page.document.uuid)
+      end
     end
   end
 
