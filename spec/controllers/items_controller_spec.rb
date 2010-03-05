@@ -128,19 +128,19 @@ describe ItemsController do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :page_id => "uuid", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
@@ -167,19 +167,19 @@ describe ItemsController do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :page_id => "uuid", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
@@ -197,19 +197,19 @@ describe ItemsController do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :page_id => "uuid", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
   end
@@ -336,19 +336,19 @@ describe ItemsController do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :page_id => "uuid", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
@@ -367,25 +367,25 @@ describe ItemsController do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :post => :create, :document_id => "1", :page_id => "uuid", :item => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :page_id => "uuid", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
@@ -395,25 +395,25 @@ describe ItemsController do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :post => :create, :document_id => "1", :page_id => "uuid", :item => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :page_id => "uuid", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
   end
