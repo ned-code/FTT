@@ -52,3 +52,13 @@ td.ds-td-value, th.ds-td-value {
 td.ds-td-updated, th.ds-td-updated {
 	width: 150px;
 }
+a.ds-a-delete {
+	background:url("../images/icons/delete_16.png") no-repeat scroll 0 0;
+	float: left;
+	height: 16px;
+	width: 16px;
+	outline:medium none;
+}
+a.ds-a-delete:hover {
+	background:url("../images/icons/delete_16.png") no-repeat scroll -16px 0;
+}
