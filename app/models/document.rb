@@ -73,6 +73,12 @@ class Document < ActiveRecord::Base
     uuid
   end
   
+  # TODO JBA I don't think it is the correct way to do but it works for the moment.
+  #without this update of document failed because we recieve a key has_editor_right from the client.
+  def has_editor_rights=(right_flag)
+    
+  end
+  
   def has_editor_rights
     if current_user != nil
       current_user.has_role?('editor', self) or current_user.has_role?('admin')
