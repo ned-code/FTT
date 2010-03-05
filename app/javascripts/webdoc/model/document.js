@@ -31,6 +31,10 @@ WebDoc.Document = $.klass(MTools.Record, {
     return this.data.is_public;
   },
   
+  hasAuthenticatedUserEditorRights: function() {
+    return this.data.has_editor_rights;
+  },
+  
   setTitle: function(title, skipSave) {
     this.data.title = title;
     if(!skipSave && !skipSave === true) {

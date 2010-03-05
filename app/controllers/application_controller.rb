@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   
   before_filter :http_authenticate
   before_filter :set_xmpp_client_id_in_thread
-  after_filter  :set_current_user_in_thread 
+  before_filter  :set_current_user_in_thread 
   
   helper :all
   helper_method :current_session, :current_user

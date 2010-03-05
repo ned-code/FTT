@@ -59,9 +59,9 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         var that = this;
         $("#wb-create-document-button").bind("click", this.createDocument);
         $(".wb-document-edit").live("click", this.editDocument);
-        $(".wb-document-rename").live("click", this.renameDocument);
+        $(".wb-document-info").live("click", this.renameDocument);
         $(".wb-document-delete").live("click", this.deleteDocument);
-        $(".wb-document-access").live("click", this.changeDocumentAccess);
+        $(".wb-document-collaborate").live("click", this.changeDocumentAccess);
         $(".wb-document-share").live("click", this.shareDocument); 
         $(".wb-document-unshare").live("click", this.unshareDocument); 
         $("#wb-document-filter-date").bind("click", {document_filter: null}, this.loadDocumentsWithFilter.pBind(this));
