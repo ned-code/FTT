@@ -73,6 +73,22 @@ class Document < ActiveRecord::Base
     uuid
   end
   
+  def has_editor_rights
+    if current_user != nil
+      current_user.has_role?('editor', self) or current_user.has_role?('admin')
+    else
+      false
+    end
+  end
+  
+  def to_json(options = {})
+    method_hash = { :methods => :has_editor_rights }
+    if options != {}
+      method_hash.merge!(options)
+    end
+    super(method_hash)
+  end
+  
   def to_access_json
     all_document_access = self.accepted_roles
     result = { :access => [], :failed => [] }
