@@ -12,7 +12,7 @@ WebDoc.DocumentAccessController = $.klass({
     this.roles = ["reader", "editor"];
     this.domNode = $("#document_access_list");
     $(".delete_access").live("click", this.deleteAccess.pBind(this));    
-    documentAccessTabs = $("#wb-document-access-tabs");
+    documentAccessTabs = $("#wb-document-collaborate-tabs");
     documentAccessDialog = $("#wb-change-access-dialog");
     documentAccessTabs.tabs( {
       select: this.changeActionsButtons.pBind(this),

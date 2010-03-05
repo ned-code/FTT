@@ -1,40 +1,34 @@
 /**
- *
+ * @author david
  **/
-WebDoc.DocumentList = $.klass(
-{
+WebDoc.DocumentList = $.klass({
     domNode: null,
     datasource: null,
     id: null,
-    initialize: function(id, datasource)
-    {
+    initialize: function(id, datasource) {
         this.id = id;
-        this.domNode = this.createDomNode(id);
+        this.domNode = this._createDomNode(id);
         this.datasource = datasource;
         this.datasource.view = this;
         this.repaint();
     },
     
-    createDomNode: function(id)
-    {
-        return $("<div id='" + id + "' class='wb-document-list'/>");
-    },
-    
-    refreshNewDocument: function(section, index, document)
-    {
+    refreshNewDocument: function(section, index, document) {
         var sectionToUpdate = $(this.domNode.find("h3").get(section));
         var previousElement = sectionToUpdate;
         if (index > 0) 
         {
             previousElement = $(sectionToUpdate.nextAll().get(index - 1));
         }
-        previousElement.after($("<div id='" + document.uuid() + "' class='wb-document-item'><div class='wb-document-title'>" +
-        '<a class="wb-document-edit" href="" title="Open this document">' + document.title() + '</a>' +
-        "</div><div class='wb-document-actions'><a class='wb-document-delete' href='' title='delete'></a><a class='wb-document-rename sec-action' href='' title='edit'>edit</a> "+ this.buildShareValue(document) + "</div></div>").get(0));
+        var documentItemNode = $("<div>").addClass("wb-document-item").attr('id', document.uuid());
+        var documentItemTitle = $("<div>").addClass("wb-document-title");
+        documentItemTitle.append($("<a>").addClass("wb-document-edit").attr("href", "").attr("title", "Open this document").html(document.title()));
+        documentItemNode.append(documentItemTitle);
+        if (document.hasAuthenticatedUserEditorRights()) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
+        previousElement.after(documentItemNode);
     },
     
-    removeDocument: function(id)
-    {
+    removeDocument: function(id) {
         $("#" + id).remove();
     },
     
@@ -42,8 +36,7 @@ WebDoc.DocumentList = $.klass(
       $('#'+document.uuid()+ '> .wb-document-actions').children().eq(3).replaceWith(this.buildShareValue(document));
     },
     
-    repaint: function()
-    {
+    repaint: function() {
         this.domNode.empty();
         // iterate on all sections
         for (var section = 0; section < this.datasource.nbSections(); section++) 
@@ -52,9 +45,12 @@ WebDoc.DocumentList = $.klass(
             for (var i = 0; i < this.datasource.nbDocuments(section); i++) 
             {
                 var document = this.datasource.document(section, i);
-                this.domNode.append($("<div id='" + document.uuid() + "' class='wb-document-item'><div class='wb-document-title'>" +
-                '<a class="wb-document-edit" href="" title="Open this document">' + document.title() + '</a>' +
-                "</div><div class='wb-document-actions'><a class='wb-document-delete' href='' title='delete'></a><a class='wb-document-rename sec-action' href='' title='info'>info</a><a class='wb-document-access sec-action' href='' title='collaborate'>collaborate</a>" +this.buildShareValue(document) +"</div></div>").get(0));
+                var documentItemNode = $("<div>").addClass("wb-document-item").attr('id', document.uuid());
+                var documentItemTitle = $("<div>").addClass("wb-document-title");
+                documentItemTitle.append($("<a>").addClass("wb-document-edit").attr("href", "").attr("title", "Open this document").html(document.title()));
+                documentItemNode.append(documentItemTitle);
+                if (document.hasAuthenticatedUserEditorRights()) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
+                this.domNode.append(documentItemNode);
             }
         }
     },
@@ -85,11 +81,22 @@ WebDoc.DocumentList = $.klass(
       }
     },
     
-    buildShareValue: function(document) {
-      if(WebDoc.application.documentEditor.currentUser.id == document.creatorId()) {
-        return document.data.is_public? '<a class="wb-document-unshare sec-action" title="unshare" href="">unshare</a>' : '<a class="wb-document-share sec-action" title="share" href="">share</a>';
+    _buildDocumentActionsNode: function(document) {
+      var documentActionsNode = $("<div>").addClass("wb-document-actions");
+      documentActionsNode.append($("<a>").addClass("wb-document-delete").attr("href", "").attr("title", "delete"));
+      documentActionsNode.append($("<a>").addClass("wb-document-info sec-action").attr("href", "").attr("title", "info").html("info"));
+      documentActionsNode.append($("<a>").addClass("wb-document-collaborate sec-action").attr("href", "").attr("title", "collaborate").html("collaborate"));
+      if (document.isShared()) {
+        documentActionsNode.append($("<a>").addClass("wb-document-unshare sec-action").attr("href", "").attr("title", "unshare").html("unshare"));     
       }
-      else { return ""; }
+      else {
+        documentActionsNode.append($("<a>").addClass("wb-document-share sec-action").attr("href", "").attr("title", "share").html("share"));        
+      }
+      return documentActionsNode;
+    },
+    
+    _createDomNode: function(id) {
+        return $("<div>").attr('id', id).addClass("wb-document-list");
     }
 });
 
