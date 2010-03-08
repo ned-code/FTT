@@ -2,19 +2,19 @@
  * @author David Matthey
  */
 
-(function($, undefined){
+(function(jQuery, undefined){
 
  var documentTitleField,
      documentDescriptionField,
      documentCategoryField,
      currentDocument;
      
-WebDoc.DocumentInspectorController = $.klass({
+WebDoc.DocumentInspectorController = jQuery.klass({
   initialize: function() {
-    this.domNode = $('#document-inspector');
-    documentTitleField = $("#document-title", this.domNode);
-    documentDescriptionField = $("#document-description", this.domNode);
-    documentCategoryField = $("#document-category", this.domNode)
+    this.domNode = jQuery('#document-inspector');
+    documentTitleField = jQuery("#document-title", this.domNode);
+    documentDescriptionField = jQuery("#document-description", this.domNode);
+    documentCategoryField = jQuery("#document-category", this.domNode)
     currentDocument = WebDoc.application.pageEditor.currentDocument;
     
     documentTitleField.bind("change", this._changeDocumentTitle);
@@ -33,14 +33,14 @@ WebDoc.DocumentInspectorController = $.klass({
     documentCategoryField.val(currentDocument.category());
     
     // Also update toolbar title field
-    $(".document-title").text(currentDocument.title());
+    jQuery(".document-title").text(currentDocument.title());
   },
   
   _loadDocumentCategories: function() {
     if(WebDoc.application.categoriesController.documentCategories) {
       var categories = WebDoc.application.categoriesController.documentCategories;
-      $.each(categories, function(i, webDocCategory) {
-        documentCategoryField.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+      jQuery.each(categories, function(i, webDocCategory) {
+        documentCategoryField.append(jQuery('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
       });
     }
   },
