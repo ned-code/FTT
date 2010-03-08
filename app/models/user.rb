@@ -61,9 +61,9 @@ class User < ActiveRecord::Base
     following?(@current_user)
   end
   
-  def is_current_user
-    @current_user.id == self.id
-  end
+  # def is_current_user
+  #   @current_user.id == self.id
+  # end
   
   # def mutual_connection(current_user)
   #   self.mutual_follower?(current_user)
@@ -73,14 +73,14 @@ class User < ActiveRecord::Base
     XmppUserSynch.create_xmpp_user(self)
   end
   
-  def add_editor_role(document)
+  def has_only_editor_role!(document, message = nil)
     if !self.has_role?("editor", document)
       self.has_no_roles_for!(document)
       self.has_role!("editor", document)
     end
   end
   
-  def add_reader_role(document)
+  def has_only_reader_role!(document, message = nil)
     if !self.has_role?("reader", document)
       self.has_no_roles_for!(document)
       self.has_role!("reader", document)
@@ -115,17 +115,19 @@ class User < ActiveRecord::Base
     mutual
   end
   
-  def to_social_panel_json(current_user)
-    @current_user = current_user
-    to_json(:only => [:id, :username, :bio], :methods => [:avatar_thumb_url, :documents_count, :following_info, :is_current_user])
+  # Need to use this method instead of the original to_json cause user references document and vice versa
+  def to_social_panel_json
+    to_json(:only => [:id, :username, :bio], :methods => [:avatar_thumb_url, :documents_count, :following_info])
   end
   
 end
+
+
 # == Schema Information
 #
 # Table name: users
 #
-#  id                   :integer         not null, primary key
+#  id                   :integer(4)      not null, primary key
 #  email                :string(255)     not null
 #  username             :string(255)     not null
 #  encrypted_password   :string(255)     not null
@@ -136,12 +138,12 @@ end
 #  reset_password_token :string(20)
 #  remember_token       :string(20)
 #  remember_created_at  :datetime
-#  sign_in_count        :integer
+#  sign_in_count        :integer(4)
 #  current_sign_in_at   :datetime
 #  last_sign_in_at      :datetime
 #  current_sign_in_ip   :string(255)
 #  last_sign_in_ip      :string(255)
-#  failed_attempts      :integer         default(0)
+#  failed_attempts      :integer(4)      default(0)
 #  unlock_token         :string(20)
 #  locked_at            :datetime
 #  created_at           :datetime

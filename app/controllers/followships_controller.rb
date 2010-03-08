@@ -13,7 +13,7 @@ class FollowshipsController < ApplicationController
   
   # POST /followships/
   def create
-    current_user.follow(params[:following_id]) 
+    current_user.follow(params[:following_id])
     render :json => {}
   end
   

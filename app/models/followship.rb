@@ -11,3 +11,16 @@ class Followship < ActiveRecord::Base
   # ================
   
 end
+
+
+# == Schema Information
+#
+# Table name: followships
+#
+#  id           :integer(4)      not null, primary key
+#  follower_id  :integer(4)      not null
+#  following_id :integer(4)      not null
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+

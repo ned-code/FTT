@@ -8,7 +8,20 @@ MTools.Application = $.klass({
     if (allDomainsParts.length > 2) {
       document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
     }
+    this._getCurrentUser();
+  },
+  
+  _getCurrentUser: function() {
+    $.ajax({
+      url: "/user",
+      type: 'GET',
+      dataType: 'json',              
+      success: function(data, textStatus) {
+        this.currentUser = data.user;
+      }.pBind(this)
+    });
   }
+  
 });
 
 $.extend(MTools.Application, {

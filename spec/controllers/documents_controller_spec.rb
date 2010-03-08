@@ -5,7 +5,7 @@ describe DocumentsController do
   mock_models :document
   
   describe "with public document" do
-    before(:each) { mock_document(:public? => true, :to_json => {}) }
+    before(:each) { mock_document(:is_public? => true, :to_json => {}) }
     
     context "accessed by admin" do
       before(:each) do 
@@ -103,11 +103,11 @@ describe DocumentsController do
       end
       describe :put => :update, :id => "1", :document => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
@@ -137,37 +137,37 @@ describe DocumentsController do
       end
       describe :put => :update, :id => "1", :document => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
     context "accessed by anonymous" do
       
       describe :get => :index do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :get => :show, :id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         should_respond_with :success, :content_type => :html
       end
       describe :post => :create, :document => {} do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :id => "1", :document => {} do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :id => "1" do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
   end
   
   describe "with private document" do
-    before(:each) { mock_document(:public? => false, :to_json => {}) }
+    before(:each) { mock_document(:is_public? => false, :to_json => {}) }
     
     context "accessed by admin" do
       before(:each) do 
@@ -265,11 +265,11 @@ describe DocumentsController do
       end
       describe :put => :update, :id => "1", :document => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
@@ -290,7 +290,7 @@ describe DocumentsController do
       end
       describe :get => :show, :id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :post => :create, :document => {} do
         expects :documents, :on => lambda { @mock_user }, :returns => Document
@@ -299,31 +299,31 @@ describe DocumentsController do
       end
       describe :put => :update, :id => "1", :document => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
     context "accessed by anonymous" do
       
       describe :get => :index do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :get => :show, :id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :post => :create, :document => {} do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :id => "1", :document => {} do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :id => "1" do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
   end

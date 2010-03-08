@@ -1,0 +1,12 @@
+Hi <%= @user.username %>!
+
+You have been granted <%= @role %> rights on the document <%= @document.title %>
+<% if @custom_message %>
+
+You will find above a personal message: %>:
+<%= @custom_message %>
+
+<% end %>
+Best regards
+
+Your webdoc team

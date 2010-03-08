@@ -7,7 +7,7 @@ describe PagesController do
   before(:each) { mock_page(:to_json => {}) }
   
   describe "with public document" do
-    before(:each) { mock_document(:public? => true) }
+    before(:each) { mock_document(:is_public? => true) }
     
     context "accessed by admin" do
       before(:each) do 
@@ -123,15 +123,15 @@ describe PagesController do
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
@@ -159,15 +159,15 @@ describe PagesController do
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
@@ -185,19 +185,19 @@ describe PagesController do
         should_respond_with :success, :content_type => :html
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :id => "uuid" do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
   end
   
   describe "with private document" do
-    before(:each) { mock_document(:public? => false, :to_json => {}) }
+    before(:each) { mock_document(:is_public? => false, :to_json => {}) }
     
     context "accessed by admin" do
       before(:each) do 
@@ -313,15 +313,15 @@ describe PagesController do
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
@@ -338,23 +338,23 @@ describe PagesController do
       
       describe :get => :index, :document_id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :get => :show, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
     
@@ -362,20 +362,20 @@ describe PagesController do
       
       describe :get => :index, :document_id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :get => :show, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
       describe :delete => :destroy, :document_id => "1", :id => "uuid" do
-        should_respond_with :forbidden
+        should_respond_with :not_found
       end
     end
   end

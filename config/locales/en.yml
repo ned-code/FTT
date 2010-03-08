@@ -105,7 +105,7 @@ en:
       created_by_me: "My webdocs"
       shared_with_me: "Shared with me"
       public: "Public"
-      create_new_document: "Create a new document"
+      create_new_document: "Create a new webdoc"
       edit_document: "Webdoc info"
       document_forms:
         name: "Name"
@@ -113,7 +113,20 @@ en:
         category: "Category"
         document_size_title: "Document size"
         creationDate: "Creation date"
-        change_access_document: "Modify document access"
+        change_access_dialog:
+          invite_tab: "Invite people" 
+          current_accesses: "Who has access"
+          add_editors: "Add editors (email separated by ';')"
+          add_readers: "Add viewers (email separated by ';')"
+          add_editors_message: "Your message"
+          add_readers_message: "Your message"
+        share_document_dialog:
+          title: "Share webdoc"
+          explanation: "Your webdoc is going to be visible for all internet users"
+          share_radio: "On"
+          unshare_radio: "Off"
+          shared_address_label: "Public url"
+        share_document: "Share webdoc"
         everybody: "Everybody"
         choose_title: "Choose a title"
         new_webdoc: "a new webdoc"
@@ -128,7 +141,7 @@ en:
         buttons:
           add_access: "Add user"
       buttons:
-        new_document: "New document"
+        new_document: "New webdoc"
         
     show:
       toolbar_panel:

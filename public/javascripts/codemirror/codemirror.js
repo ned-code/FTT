@@ -305,9 +305,9 @@ var CodeMirror = (function(){
             }
           }
           // While there are un-processed number DIVs, or the scroller is smaller than the frame...
-          var target = 50 + Math.max(body.offsetHeight, frame.offsetHeight);
+          //var target = 50 + Math.max(body.offsetHeight, frame.offsetHeight);
           // JBA block more than 10000 line to avoid infinit loop. ust a test
-          while ((lineNum || scroller.offsetHeight < target) && (next < 10000 || lineNum)) addNum(next++);
+          while ((lineNum) && (next < 10000)) addNum(next++);
           doScroll();
         }
         function start() {

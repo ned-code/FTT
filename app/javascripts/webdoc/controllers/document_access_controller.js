@@ -12,7 +12,7 @@ WebDoc.DocumentAccessController = $.klass({
     this.roles = ["reader", "editor"];
     this.domNode = $("#document_access_list");
     $(".delete_access").live("click", this.deleteAccess.pBind(this));    
-    documentAccessTabs = $("#wb-document-access-tabs");
+    documentAccessTabs = $("#wb-document-collaborate-tabs");
     documentAccessDialog = $("#wb-change-access-dialog");
     documentAccessTabs.tabs( {
       select: this.changeActionsButtons.pBind(this),
@@ -55,8 +55,8 @@ WebDoc.DocumentAccessController = $.klass({
     this.document = document;
     $("#wb-invitation-add-editors").val("");
     $("#wb-invitation-add-readers").val("");
-    $("#wb-invitation-add-editors-message").attr("disabled", "true");
-    $("#wb-invitation-add-viewers-message").attr("disabled", "true");
+    $("#wb-invitation-add-editors-message").val("");
+    $("#wb-invitation-add-viewers-message").val("");
     
     // document access can be changed only when we are online. So we can do ajax request here
     $.ajax({
@@ -65,7 +65,7 @@ WebDoc.DocumentAccessController = $.klass({
       dataType: 'json',              
       success: function(data, textStatus) {
         ddd("access", data);
-        documentAccessDialog.dialog('option', 'title', 'Change access to document "' + document.title() + '"');
+        documentAccessDialog.dialog('option', 'title', 'Collaborate on "' + document.title() + '"');
         documentAccessDialog.dialog('open');
         this.loadAccess(data);
       }.pBind(this),
@@ -83,6 +83,23 @@ WebDoc.DocumentAccessController = $.klass({
       var accessEntry = this.createAccessItem(this.access[i][0]);
       this.domNode.append(accessEntry);      
     }
+    var failedEmailsWrapper = $('#wb-invitation-failed');
+    if(json.failed && json.failed.length > 0) {
+      failedEmailsWrapper.empty();
+      failedEmailsWrapper.append($('<p>').html('The following addresses were not found in the system'));
+      var addresses = "";
+      for (var i = 0; i < json.failed.length; i++) {
+        addresses += json.failed[i];
+        if(i !== json.failed.length -1) { addresses += ", "; }
+      }
+      failedEmailsWrapper.append($('<p>').html(addresses));
+      failedEmailsWrapper.show();
+      $('#document_access_list').before(failedEmailsWrapper);
+    }
+    else { 
+      failedEmailsWrapper.hide(); 
+      this.cleanInvitationFields();
+    }
   },
   
   createAccessItem: function(userInfos) {
@@ -98,10 +115,14 @@ WebDoc.DocumentAccessController = $.klass({
       var aRole = this.roles[i];
       var roleItem = $('<option/>').attr("value", aRole).text(aRole);    
       if (userInfos.role == aRole) { roleItem.attr("selected", "true"); } 
-      if (userInfos.creator) { rolesPopup.attr("disabled", "true"); }
       rolesPopup.append(roleItem);      
     }
-    if (!userInfos.creator) { accessActions.append($('<a href="#"/>').addClass("delete_access").attr("title", "Delete")); }
+    var deleteItem = $('<a href="#"/>').addClass("delete_access").attr("title", "Delete");
+    if(userInfos.creator) {
+      rolesPopup.attr("disabled", "true");
+      deleteItem.hide();
+    }
+    accessActions.append(deleteItem);
     accessActions.append(rolesPopup);    
     result.append(accessActions);    
     return result;
@@ -110,7 +131,9 @@ WebDoc.DocumentAccessController = $.klass({
   applyInvitations: function() {
     var inviteAsEditorRecipients = $("#wb-invitation-add-editors").val();
     var inviteAsViewerRecipients = $("#wb-invitation-add-viewers").val();
-    this.createRightsToRecipients(this.getInvitationAccess(inviteAsEditorRecipients, inviteAsViewerRecipients));
+    var invitationEditorsMessage = $("#wb-invitation-add-editors-message").val();
+    var invitationReadersMessage = $("#wb-invitation-add-viewers-message").val();
+    this.createRightsToRecipients(this.getInvitationAccess(inviteAsEditorRecipients, inviteAsViewerRecipients, invitationEditorsMessage, invitationReadersMessage));
   },
   
   getAccess: function() {
@@ -140,7 +163,7 @@ WebDoc.DocumentAccessController = $.klass({
     return { accesses : $.toJSON(access_content) };
   },
   
-  getInvitationAccess: function(editorRecipients, readerRecipients) {
+  getInvitationAccess: function(editorRecipients, readerRecipients, messageForEditors, messageForReaders) {
     var accesses_editors = [];
     var accesses_readers = [];
     if( editorRecipients !== "") {
@@ -155,7 +178,7 @@ WebDoc.DocumentAccessController = $.klass({
         accesses_readers[i] = recipients[i];
       }
     }
-    var access_content = { editors: accesses_editors, readers: accesses_readers};
+    var access_content = { editors: accesses_editors, readers: accesses_readers, editorsMessage: messageForEditors, readersMessage: messageForReaders };
     return { accesses : $.toJSON(access_content) };
   },
   
@@ -189,6 +212,13 @@ WebDoc.DocumentAccessController = $.klass({
       }
     });
   },  
+  
+  cleanInvitationFields: function() {
+    $("#wb-invitation-add-editors").val("");
+    $("#wb-invitation-add-viewers").val("");
+    $("#wb-invitation-add-editors-message").val("");
+    $("#wb-invitation-add-viewers-message").val("");
+  },
   
   closeDialog: function() {
       $(this).dialog('close');

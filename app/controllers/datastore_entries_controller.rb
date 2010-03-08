@@ -135,9 +135,9 @@ class DatastoreEntriesController < ApplicationController
     end
     
     if(only_current_user == true)
-      render :json => DatastoreEntry.find(:all,:joins=>"JOIN users ON datastore_entries.user_id=users.id",:select=>"datastore_entries.*,users.email",:conditions => {:ds_key => key, :widget_uuid => widget_uuid, :user_id => user_id}).to_json(:only => json_filter)
+      render :json => DatastoreEntry.find(:all,:joins=>"LEFT OUTER JOIN users ON datastore_entries.user_id=users.id",:select=>"datastore_entries.*,users.email",:conditions => {:ds_key => key, :widget_uuid => widget_uuid, :user_id => user_id}).to_json(:only => json_filter)
     else
-      render :json => DatastoreEntry.find(:all,:joins=>"JOIN users ON datastore_entries.user_id=users.id",:select=>"datastore_entries.*,users.email",:conditions => {:ds_key => key, :widget_uuid => widget_uuid}).to_json(:only => json_filter)
+      render :json => DatastoreEntry.find(:all,:joins=>"LEFT OUTER JOIN users ON datastore_entries.user_id=users.id",:select=>"datastore_entries.*,users.email",:conditions => {:ds_key => key, :widget_uuid => widget_uuid}).to_json(:only => json_filter)
     end
   end
   

@@ -35,7 +35,7 @@ class Document < ActiveRecord::Base
       if document_filter == 'creator'
         return current_user.documents.paginate(:page => pageId, :per_page => per_page, :order => 'created_at DESC')
       elsif document_filter == 'public'
-        return Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :public => true }, :order => 'created_at DESC' )
+        return Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :is_public => true }, :order => 'created_at DESC' )
       else
         # Retrieve documents for the current user
         current_user.role_objects.all(:select => 'authorizable_id').each do |role|
@@ -73,9 +73,31 @@ class Document < ActiveRecord::Base
     uuid
   end
   
+  # TODO JBA I don't think it is the correct way to do but it works for the moment.
+  #without this update of document failed because we recieve a key has_editor_right from the client.
+  def has_editor_rights=(right_flag)
+    
+  end
+  
+  def has_editor_rights
+    if current_user != nil
+      current_user.has_role?('editor', self) or current_user.has_role?('admin')
+    else
+      false
+    end
+  end
+  
+  def to_json(options = {})
+    method_hash = { :methods => :has_editor_rights }
+    if options != {}
+      method_hash.merge!(options)
+    end
+    super(method_hash)
+  end
+  
   def to_access_json
     all_document_access = self.accepted_roles
-    result = { :access => [] }
+    result = { :access => [], :failed => [] }
     all_document_access.each do |role|
       role.users.each do |user|
         is_creator = (self.creator && self.creator.id == user.id)? true : false
@@ -83,10 +105,11 @@ class Document < ActiveRecord::Base
         result[:access] << user_infos
       end
     end
-    # if @unvalid_access_emails
-    #   @unvalid_access_emails.each do |email|
-    #     result[:access] << [:email => email, :valid => false]
-    # end
+    if @unvalid_access_emails
+      @unvalid_access_emails.each do |email|
+        result[:failed] << email
+      end
+    end
     result
   end
   
@@ -99,11 +122,18 @@ class Document < ActiveRecord::Base
     all_document_access.each do |role|
       role.users.each do |user|
         if editors.include?(user.id)
-          user.add_editor_role(self)
+          if !user.has_role?("editor", self)
+            user.has_only_editor_role!(self)
+            Notifier.deliver_role_notification("editor", user, Thread.current[:user], self, nil)
+          end
         elsif readers.include?(user.id)
-          user.add_reader_role(self)
+          if !user.has_role?("reader", self)
+            user.has_only_reader_role!(self)
+            Notifier.deliver_role_notification("reader", user, Thread.current[:user], self, nil)
+          end
         else
           user.has_no_roles_for!(self)
+          Notifier.deliver_no_role_notification(user, Thread.current[:user], self)
         end
       end
     end
@@ -113,14 +143,16 @@ class Document < ActiveRecord::Base
     accesses_parsed = JSON.parse(accesses);
     readers = accesses_parsed['readers']
     editors = accesses_parsed['editors']
-    #readersMessage = accesses_parsed['readersMessage']
-    #editorsMessage = accesses_parsed['editorsMessage']
+    readers_message = accesses_parsed['readersMessage']
+    editors_message = accesses_parsed['editorsMessage']
     
     readers.each do |user_email|
       user = User.find_by_email(user_email)
       if user 
-        user.add_reader_role(self)
-        # user.add_reader_role(self, readersMessage)
+        if !user.has_role?("reader", self)
+          user.has_only_reader_role!(self)
+          Notifier.deliver_role_notification("reader", user, Thread.current[:user], self, readers_message)
+        end
       else
         add_unvalid_email_to_array(user_email)
       end
@@ -128,14 +160,16 @@ class Document < ActiveRecord::Base
     editors.each do |user_email|
       user = User.find_by_email(user_email)
       if user
-        user.add_editor_role(self)
-        #user.add_editor_role(self, editorsMessage)
+        if !user.has_role?("editor", self)
+          user.has_only_editor_role!(self)
+          Notifier.deliver_role_notification("editor", user, Thread.current[:user], self, editors_message)
+        end
       else
         add_unvalid_email_to_array(user_email)
       end
     end
     
-    return false if @unvalid_access_emails and @unvalid_access_emails.count > 0
+    #return false if @unvalid_access_emails and @unvalid_access_emails.count > 0
   end
   
 private
@@ -157,18 +191,22 @@ private
   
 end
 
+
+
 # == Schema Information
 #
 # Table name: documents
 #
-#  id          :integer         not null, primary key
 #  uuid        :string(36)
 #  title       :string(255)
 #  deleted_at  :datetime
 #  created_at  :datetime
 #  updated_at  :datetime
+#  id          :integer(4)      not null, primary key
 #  description :text
 #  size        :text
-#  category_id :integer
+#  category_id :integer(4)
+#  creator_id  :integer(4)
+#  is_public   :boolean(1)      default(FALSE)
 #
 

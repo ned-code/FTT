@@ -17,8 +17,9 @@ class ItemsController < PageController
   
   # POST /documents/:document_id/pages/:page_id/items
   def create
-    @item = @page.items.create(params[:item].merge(:must_notify => true))
-    
+    @item = @page.items.new(params[:item])
+    @item.must_notify = true
+    @item.save
     render :json => @item
   end
   

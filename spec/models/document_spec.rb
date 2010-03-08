@@ -80,18 +80,22 @@ describe Document do
 end
 
 
+
+
 # == Schema Information
 #
 # Table name: documents
 #
-#  id          :integer         not null, primary key
 #  uuid        :string(36)
 #  title       :string(255)
 #  deleted_at  :datetime
 #  created_at  :datetime
 #  updated_at  :datetime
+#  id          :integer(4)      not null, primary key
 #  description :text
 #  size        :text
-#  category_id :integer
+#  category_id :integer(4)
+#  creator_id  :integer(4)
+#  is_public   :boolean(1)      default(FALSE)
 #
 

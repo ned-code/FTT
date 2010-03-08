@@ -8,7 +8,7 @@ private
   end
   
   def document_is_public?
-    @document && @document.public?
+    @document && @document.is_public?
   end
   
 end

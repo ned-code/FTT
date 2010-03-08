@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100226115219) do
+ActiveRecord::Schema.define(:version => 20100304154452) do
 
   create_table "categories", :force => true do |t|
     t.string "name", :null => false
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(:version => 20100226115219) do
     t.text     "size"
     t.integer  "category_id"
     t.integer  "creator_id"
-    t.boolean  "public",                    :default => false
+    t.boolean  "is_public",                 :default => false
   end
 
   create_table "followships", :force => true do |t|
