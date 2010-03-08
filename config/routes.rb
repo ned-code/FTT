@@ -24,10 +24,10 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :categories, :except => :show
   end
   
-  map.connections 'followships/following', :controller => "followships", :action => 'following'
-  map.connections 'followships/followers', :controller => "followships", :action => 'followers'
-  map.connections 'followships', :controller => "followships", :action => :create
-  map.connections 'followships', :controller => "followships", :action => :destroy
+  map.connections 'following', :controller => "followships", :action => 'following'
+  map.connections 'followers', :controller => "followships", :action => 'followers'
+  map.connections 'follow', :controller => "followships", :action => :create
+  map.connections 'unfollow', :controller => "followships", :action => :destroy
 
   
   # dev controller

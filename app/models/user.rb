@@ -58,16 +58,12 @@ class User < ActiveRecord::Base
   end
   
   def following_info
-    following?(@current_user)
+    current_user.following?(self)
   end
   
-  # def is_current_user
-  #   @current_user.id == self.id
-  # end
-  
-  # def mutual_connection(current_user)
-  #   self.mutual_follower?(current_user)
-  # end
+  def mutual_connection
+    self.mutual_follower?(current_user)
+  end
   
   def create_xmpp_user
     XmppUserSynch.create_xmpp_user(self)

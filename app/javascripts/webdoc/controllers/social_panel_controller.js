@@ -46,13 +46,13 @@ WebDoc.SocialPanelController = $.klass({
   _subscribeAction: function() {
     ddd("Clicked on subscribe");
     $.ajax({
-      url: "/followships/",
+      url: "/follow",
       type: 'POST',
       data: { following_id :this.creator.id }, 
       dataType: 'json',              
       success: function(data, textStatus) {
         ddd('Must changed button to unsubscribe');
-        this._changeButtonStatus();
+        this._changeButtonStatus(true);
       }.pBind(this),
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         ddd("error", textStatus);          
@@ -63,13 +63,13 @@ WebDoc.SocialPanelController = $.klass({
   _unSubscribeAction: function() {
     ddd("Clicked on unsubscribe");
     $.ajax({
-      url: "/followships/",
+      url: "/unfollow",
       type: 'DELETE',
       data: { following_id :this.creator.id }, 
       dataType: 'json',              
       success: function(data, textStatus) { 
         ddd('Must changed button to subscribe');
-        this._changeButtonStatus();
+        this._changeButtonStatus(false);
       }.pBind(this),
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         ddd("error", textStatus);          
@@ -77,8 +77,15 @@ WebDoc.SocialPanelController = $.klass({
     });
   },
   
-  _changeButtonStatus: function() {
-    //$('#subscribe-button')
+  _changeButtonStatus: function(isSubscribing) {
+    if(isSubscribing) {
+      unsubscribeButton.show();
+      subscribeButton.hide();
+    }
+    else {
+      unsubscribeButton.hide();
+      subscribeButton.show();
+    }
   },
   
   _isCreatorCurrentUser: function() {
