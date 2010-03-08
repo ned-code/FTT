@@ -101,7 +101,7 @@ en:
 
     index:
       title: "Documents"
-      all_items_by_date: "All items"
+      all_items_by_date: "All"
       created_by_me: "My webdocs"
       shared_with_me: "Shared with me"
       public: "Public"

@@ -48,4 +48,9 @@ javascripts:
     - app/javascripts/webdoc/library/videos_library/*.js
     - app/javascripts/webdoc/library/videos_library.js
     - app/javascripts/webdoc/library/web_browser.js
-          
+
+template_function: on
+template_namespace: templates
+templates:
+  document_editor:
+    - app/views/templates/test.html

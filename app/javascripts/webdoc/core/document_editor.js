@@ -301,7 +301,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     updateCurrentFilterSelection: function(event)
     {
       if(event && event.currentTarget){
-        $("#wb-document-navigation ul li a").removeClass('active');
+        $(".state-tabs").removeClass('active');
         $(event.currentTarget).addClass('active');
       }
     },

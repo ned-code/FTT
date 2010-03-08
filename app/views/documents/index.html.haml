@@ -1,20 +1,20 @@
 - session_key_name = ActionController::Base.session_options[:key]
-#wb-document-main.ui-widget
-  #wb-document-header
-    %button#wb-create-document-button.ui-button.ui-state-default.ui-corner-all= t('.buttons.new_document')
-
-  #wb-document-navigation.wb-navigation
-    %h2#wb-document-navigation-title.wb-navigation-title= t('.title')
-    %ul
-      %li
-        %a#wb-document-filter-date{ :href => "#by_date"}= t('.all_items_by_date')
-      %li
-        %a#wb-document-filter-owned-by-me.active{ :href => "#created_by_me"}= t('.created_by_me')
-      %li
-        %a#wb-document-filter-shared-with-me{ :href => "#shared_with_me"}= t('.shared_with_me')
-      %li
-        %a#wb-document-filter-public{ :href => "#public"}= t('.public')
-  #wb-document-list-container
+%div.action-bar.bar{ :style => "overflow: hidden;" }
+  %div.wrap.clear
+    %a#wb-create-document-button.add-button.button create new webdoc
+    -#= t('.buttons.new_document')
+    
+    %ul.document-tabs.tabs.index
+      %li>
+        %a#wb-document-filter-date.state-tabs{ :href => "#by_date"}= t('.all_items_by_date')
+      %li>
+        %a#wb-document-filter-owned-by-me.active.state-tabs{ :href => "#created_by_me"}= t('.created_by_me')
+      %li>
+        %a#wb-document-filter-shared-with-me.state-tabs{ :href => "#shared_with_me"}= t('.shared_with_me')
+      %li>
+        %a#wb-document-filter-public.state-tabs{ :href => "#public"}= t('.public')
+%div.content
+  %div#wb-document-list-container.wrap
 
 #wb-new-document-dialog{ :style => "display:none", :title => t('.create_new_document') }
   %form#wb-new-form{ :action => ""}

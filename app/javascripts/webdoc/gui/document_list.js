@@ -14,14 +14,14 @@ WebDoc.DocumentList = $.klass({
     },
     
     refreshNewDocument: function(section, index, document) {
-        var sectionToUpdate = $(this.domNode.find("h3").get(section));
+        var sectionToUpdate = $(this.domNode.find(".document-index").get(section));
         var previousElement = sectionToUpdate;
-        if (index > 0) 
-        {
-            previousElement = $(sectionToUpdate.nextAll().get(index - 1));
-        }
-        var documentItemNode = $("<div>").addClass("wb-document-item").attr('id', document.uuid());
-        var documentItemTitle = $("<div>").addClass("wb-document-title");
+        //if (index > 0) 
+        //{
+            previousElement = $(sectionToUpdate.find('li').get(index - 1));
+        //}
+        var documentItemNode = $("<li/>").addClass("wb-document-item").attr('id', document.uuid());
+        var documentItemTitle = $("<span/>").addClass("document-title");
         documentItemTitle.append($("<a>").addClass("wb-document-edit").attr("href", "").attr("title", "Open this document").html(document.title()));
         documentItemNode.append(documentItemTitle);
         if (document.hasAuthenticatedUserEditorRights()) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
@@ -41,18 +41,22 @@ WebDoc.DocumentList = $.klass({
         // iterate on all sections
         for (var section = 0; section < this.datasource.nbSections(); section++) 
         {
-            this.domNode.append($("<h3>" + this.datasource.section(section) + "</h3>").get(0));
+            this.domNode.append( $("<h3>" + this.datasource.section(section) + "</h3>").get(0));
+            var list = $("<ul/>", { 'class': 'document-index vertical index' });
             for (var i = 0; i < this.datasource.nbDocuments(section); i++) 
             {
                 var document = this.datasource.document(section, i);
-                var documentItemNode = $("<div>").addClass("wb-document-item").attr('id', document.uuid());
-                var documentItemTitle = $("<div>").addClass("wb-document-title");
+                var documentItemNode = $("<li/>").addClass("wb-document-item").attr('id', document.uuid());
+                var documentItemTitle = $("<span>").addClass("document-title");
                 documentItemTitle.append($("<a>").addClass("wb-document-edit").attr("href", "").attr("title", "Open this document").html(document.title()));
                 documentItemNode.append(documentItemTitle);
                 if (document.hasAuthenticatedUserEditorRights()) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
-                this.domNode.append(documentItemNode);
+                list.append(documentItemNode);
             }
+            this.domNode.append(list);
         }
+    
+    
     },
     
     // Add next / previous page links if necessary, as well as page information

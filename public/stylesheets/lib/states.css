@@ -7,6 +7,7 @@
  *   .state-xxx   - Implies multipolar (0/1/2/...) state
  *   .mode-xxx    - Implies multipolar (0/1/2/...) state
  *   .current     - Current implies that one out of a number of items is the current one
+ *   .default     -
  * 
  * State classes must NOT have default style applied, they are there to indicate state only.
  * You can style specific nodes that happen to have state, or children of state nodes (for
