@@ -35,12 +35,15 @@ class ImagesController < ApplicationController
   # POST /images
   def create
     @image = current_user.images.build(params[:image])
-    @image.uuid = params[:image][:uuid]
+    #@image.uuid = params[:image][:uuid] 
     
-    if @image.save
-      render :json => @image
-    else
-      render :status => 503
+    respond_to do |format|
+      if @image.save
+        format.html { render :json => @image }
+        format.json { render :json => @image }
+      else
+        format.json { render :status => 503 }
+      end
     end
   end
   
