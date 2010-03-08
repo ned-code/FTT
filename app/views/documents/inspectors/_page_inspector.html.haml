@@ -8,16 +8,17 @@
   
   %div.content
     %form
-      %fieldset.properties.externalPage-related
-        %legend= t('.page.title')    
-        %div
-          %label= t('.page.url')
-          %input#external_page_url{ :type => "text", :value => "http://" }
       
       %fieldset.properties
         %div
           %label= t('.properties.name')
           %input#page_title_textbox{ :type => "text" }
+      
+      %fieldset.properties.externalPage-related
+        %legend= t('.page.title')    
+        %div
+          %label= t('.page.url')
+          %input#external_page_url{ :type => "text", :value => "http://" }
       
       %fieldset.properties
         %legend= t('.properties.title')
