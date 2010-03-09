@@ -5,6 +5,10 @@ stylesheets:
   common:
     - public/stylesheets/reset.css
     - public/stylesheets/jquery-ui-1.8rc3.custom.css
+    - public/stylesheets/lib/states.css
+    - public/stylesheets/lib/forms.css
+    - public/stylesheets/lib/index.css
+    - public/stylesheets/lib/layer.css
     - public/stylesheets/style.css
     - public/stylesheets/style.ui.css
   document_editor:
@@ -20,10 +24,6 @@ stylesheets:
   page_editor:    
     - public/stylesheets/library.css
     - public/stylesheets/lib/protect.css
-    - public/stylesheets/lib/states.css
-    - public/stylesheets/lib/forms.css
-    - public/stylesheets/lib/index.css
-    - public/stylesheets/lib/layer.css
     - public/stylesheets/lib/panel.css
     - public/stylesheets/style.editor.css    
     - public/stylesheets/style.editor.colors.css
