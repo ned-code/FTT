@@ -6,11 +6,15 @@ stylesheets:
     - public/stylesheets/reset.css
     - public/stylesheets/jquery-ui-1.8rc3.custom.css
     - public/stylesheets/style.css
+    - public/stylesheets/style.ui.css
   document_editor:
     - public/stylesheets/style.application.css
     - public/stylesheets/style.application.color.css
+    - public/stylesheets/style.application.typography.css
   application:
     - public/stylesheets/style.application.css
+    - public/stylesheets/style.application.color.css
+    - public/stylesheets/style.application.typography.css
     - public/stylesheets/formtastic.css   
     - public/stylesheets/formtastic_changes.css 
   page_editor:    
