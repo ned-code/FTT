@@ -39,7 +39,6 @@ WebDoc.PageInspectorController = jQuery.klass({
     jQuery("#page_background_image_align_vert_bottom_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
     jQuery("#page_background_image_apply_all_button").bind("click", this._applyBackgroundToAllPages.pBind(this));
     jQuery('#image_send_form').submit(this._uploadBackgroundImage.pBind(this));
-    jQuery('#image_send_form2').submit(this._uploadBackgroundImage.pBind(this));
     jQuery('.page-navigation-link').click(this.performAction.pBind(this));
     jQuery('.page-remove-background-image').click(this._removeBackgroundImage.pBind(this));
     WebDoc.application.boardController.addCurrentPageListener(this);
