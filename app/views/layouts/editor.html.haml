@@ -35,34 +35,16 @@
   %body.editor.embed-mode
   -else
   %body.editor.edit-mode
-  
     = yield
   = include_javascripts :common
   = include_javascripts :mtools
   = include_javascripts :page_editor
+
   :javascript
-    
-    = javascript_include_tag 'jquery.extensions'
-    = javascript_include_tag 'jquery.events'
-    = javascript_include_tag 'jquery.panel'
-    = javascript_include_tag 'jquery.pop'
-    
-    = javascript_include_tag 'klass'
-    = javascript_include_tag '../swfupload/swfupload.js'
-    = javascript_include_tag 'jquery-swfupload'
-    = javascript_include_tag 'sylvester'
-    = javascript_include_tag 'strophe'
-    = javascript_include_tag 'jquery.form'
-    = javascript_include_tag 'jquery.hashchange'
-    = javascript_include_tag 'codemirror/codemirror.js'
-    
-    = include_javascripts :mtools
-    = include_javascripts :page_editor
-    :javascript
       
       $(function()
       {
         WebDoc.run();
       });
     
-    = render :partial => "layouts/googleAnalytics"
+  = render :partial => "layouts/googleAnalytics"
