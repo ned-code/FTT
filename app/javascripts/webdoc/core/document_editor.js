@@ -106,7 +106,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                       {
                         that.documents.push(newDoc);
                         that.filter.addDocument(newDoc);
-                        window.open("/documents/" + newDoc.uuid() + "#1");
+                        document.location = "/documents/" + newDoc.uuid() + "#1";
                       }
                     });
                 },
@@ -153,12 +153,12 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     {
       e.preventDefault();
       var documentToEdit = $(this).parent().parent().attr("id");
-      window.open("/documents/" + documentToEdit + "#1");
+      document.location = "/documents/" + documentToEdit + "#1";
     },
     
     createDocument: function()
     {
-        newDocNameField.val(new Date().toLocaleDateString());
+        newDocNameField.val("Untitled");
         newDocDescriptionField.val("");
         $("#wb-new-document-size-classic")[0].checked = true;
         $("#wb-new-document-dialog").dialog('open');
