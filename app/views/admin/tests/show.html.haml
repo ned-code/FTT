@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 %html
   %head
-    %title = "webdoc Test Suite"
+    %title= "webdoc Test Suite"
     = stylesheet_link_tag 'qunit'
     = javascript_include_tag 'jquery-1.4.2'
+    = include_javascripts :common
     = include_javascripts :mtools
 
 
   %body
-    %h1#qunit-header = "webdoc Test Suite"
+    %h1#qunit-header= "webdoc Test Suite"
     %h2#qunit-banner
     #qunit-testrunner-toolbar
     %h2#qunit-userAgent

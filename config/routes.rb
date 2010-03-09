@@ -22,6 +22,7 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :admin do |admin|
     admin.resources :widgets, :as => 'apps', :except => :show
     admin.resources :categories, :except => :show
+    admin.resource :test, :only => :show
   end
   
   map.connections 'following', :controller => "followships", :action => 'following'
