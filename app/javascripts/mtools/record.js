@@ -17,7 +17,7 @@
  * 
  * @author Julien Bachmann
  */
-MTools.Record = $.klass(
+MTools.Record = jQuery.klass(
 {
 
   /**
@@ -123,7 +123,7 @@ MTools.Record = $.klass(
    * @param {Object} listener to remove
    */
   removeListener: function(listener) {
-    var index = $.inArray(listener, this.listeners);
+    var index = jQuery.inArray(listener, this.listeners);
     if (index > -1) {
       this.listeners.splice(index, 1);
     }
@@ -201,7 +201,7 @@ MTools.Record = $.klass(
 //**************
 // Class method
 //**************
-$.extend(MTools.Record, {
+jQuery.extend(MTools.Record, {
   /**
    * Convert an oject to a rails conpatible json object
    * @param {Object} objectToConvert the object to convert
@@ -214,7 +214,7 @@ $.extend(MTools.Record, {
       // array are serialized in standard json. I assume that all array of data are relationships and currently it is not
       // possible to passe this to rails in a correct format.
       // so all relationships must then have a special treatment on the server side.
-      if ($.isArray(value)) {
+      if (jQuery.isArray(value)) {
         for (var i = 0; i < value.length; i++) {
           var arrayItem = value[i];
           this.convertToRailsJSon(arrayItem, destinationObject, prefix + '[' + key + '_attributes][' + i +']');

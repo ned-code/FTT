@@ -8,13 +8,13 @@
  **/
 //= require <mtools/server_cache>
 
-MTools.ServerManager = $.klass({
+MTools.ServerManager = jQuery.klass({
   initialize: function() {
     ddd("Init server manager");
   }
 });
 
-$.extend(MTools.ServerManager, {
+jQuery.extend(MTools.ServerManager, {
   
   /**
   * cache used by the ServerManager singleton 
@@ -47,7 +47,7 @@ $.extend(MTools.ServerManager, {
     url += ".json";
     
     var ajaxParams = args && args.ajaxParams ? args.ajaxParams : {};
-    $.ajax({
+    jQuery.ajax({
       type: "GET",
       url: url,
       data: (ajaxParams),
@@ -60,7 +60,7 @@ $.extend(MTools.ServerManager, {
         // = but always assume there will be some kind of additional data passed like pagination...                         =
         // ==================================================================================================================
 
-        if ($.isArray(data)) {
+        if (jQuery.isArray(data)) {
           // the server returned a list of records with no other additional info: [{image1}, {image2}, ...]
           if (data.length > 0) {
             for (var i = 0; i < data.length; i++) {
@@ -112,14 +112,14 @@ $.extend(MTools.ServerManager, {
    */
   getObjects: function(url, objectClass, callback, context) {
   
-    $.ajax({
+    jQuery.ajax({
       type: "GET",
       url: url,
       dataType: "json",
       success: function(data) {
         if (objectClass) {
           var result = [];
-          if ($.isArray(data)) {
+          if (jQuery.isArray(data)) {
             for (var i = 0; i < data.length; i++) {
               var aJson = data[i];
               result.push(new objectClass(aJson));
@@ -154,8 +154,8 @@ $.extend(MTools.ServerManager, {
     var message = {
       xmpp_client_id: MTools.ServerManager.xmppClientId
     };
-    $.extend(message, object.to_json(true));
-    $.post(object.rootUrl() + "/" + object.pluralizedClassName(), message, function(data, textstatus) {
+    jQuery.extend(message, object.to_json(true));
+    jQuery.post(object.rootUrl() + "/" + object.pluralizedClassName(), message, function(data, textstatus) {
       // refresh is needed because some values are generated on server side
       // i.e. page size and background.
       object.refresh(data);
@@ -177,8 +177,8 @@ $.extend(MTools.ServerManager, {
       xmpp_client_id: MTools.ServerManager.xmppClientId,
       _method: "PUT"
     };
-    $.extend(param, object.to_json());
-    $.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
+    jQuery.extend(param, object.to_json());
+    jQuery.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
       //object.refresh(data);
       callBack.apply(this, [[object]]);
     }, "json");
@@ -195,7 +195,7 @@ $.extend(MTools.ServerManager, {
       xmpp_client_id: MTools.ServerManager.xmppClientId,
       _method: "DELETE"
     };
-    $.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
+    jQuery.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
       callBack.apply(this, [object]);
     }, "json");
   }
