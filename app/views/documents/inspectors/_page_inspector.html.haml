@@ -69,15 +69,15 @@
           %label{ :for => 'page_background_image_apply_all_button' }
           %input#page_background_image_apply_all_button{ :type => "button", :value => t('.properties.buttons.apply_background_all_pages') }
       
-    - form_tag '/bgimages', :multipart => true, :name => "image_send_form", :id => "image_send_form", :class => "background-related" do
+    - form_for :image, Medias::Image.new, :url => images_path, :html => { :multipart => true, :id => "image_send_form", :class => "background-related" } do |f|
       %fieldset.properties
         %legend upload image
         %div
           %label= t('.properties.background_image')
-          = file_field_tag :image
+          = f.file_field :file
         %div
           = submit_tag t('.properties.buttons.upload')
-
+          
     %div
       %a.page-navigation-link{ :href => "#prev-page"}
         = t('documents.show.toolbar_panel.previous_page')
