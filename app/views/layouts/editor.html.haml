@@ -4,15 +4,9 @@
     %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
     %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
     %title= "webdoc - alpha - #{yield(:title)}"
-    = stylesheet_link_tag 'reset'
-    = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
-    = stylesheet_link_tag 'library'
-    = stylesheet_link_tag 'lib/protect'
-    = stylesheet_link_tag 'lib/states'
-    = stylesheet_link_tag 'lib/forms'
-    = stylesheet_link_tag 'lib/index'
-    = stylesheet_link_tag 'lib/layer'
-    = stylesheet_link_tag 'lib/panel'
+    = include_stylesheets :common, :media => 'all'
+    = include_stylesheets :page_editor, :media => 'all'    
+
 
     -#%link{ :rel => "stylesheet", :href => "/fonts/Aaargh-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
     -#%link{ :rel => "stylesheet", :href => "/fonts/Adler-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
@@ -35,12 +29,6 @@
     -#%link{ :rel => "stylesheet", :href => "/fonts/Shardee-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
     -#%link{ :rel => "stylesheet", :href => "/fonts/Underwood-Champion-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
     
-    = stylesheet_link_tag 'style'
-    = stylesheet_link_tag 'style.editor'
-    = stylesheet_link_tag 'style.editor.colors'
-    = stylesheet_link_tag 'colorpicker'
-    = stylesheet_link_tag 'toolbar'
-    
     %link{ :rel => "stylesheet", :href => "/themes/clean-machine/css/typography.css", :type => "text/css", :charset => "utf-8" }
     
   -if params[:reader]
@@ -49,26 +37,7 @@
     %body.editor.edit-mode
   #wrap
     = yield
-  = javascript_include_tag 'jquery-1.4.2'
-  = javascript_include_tag 'jquery-json'
-  = javascript_include_tag 'jquery-string'
-  = javascript_include_tag 'jquery-ui-1.8'
-  = javascript_include_tag 'colorpicker'
-  
-  = javascript_include_tag 'jquery.extensions'
-  = javascript_include_tag 'jquery.events'
-  = javascript_include_tag 'jquery.panel'
-  = javascript_include_tag 'jquery.pop'
-  
-  = javascript_include_tag 'klass'
-  = javascript_include_tag '../swfupload/swfupload.js'
-  = javascript_include_tag 'jquery-swfupload'
-  = javascript_include_tag 'sylvester'
-  = javascript_include_tag 'strophe'
-  = javascript_include_tag 'jquery.form'
-  = javascript_include_tag 'jquery.hashchange'
-  = javascript_include_tag 'codemirror/codemirror.js'
-  
+  = include_javascripts :common
   = include_javascripts :mtools
   = include_javascripts :page_editor
   :javascript
