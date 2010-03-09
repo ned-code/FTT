@@ -1,0 +1,375 @@
+/* style.application.css
+ *
+ * Styles for website
+ *
+ */
+
+/* Block layout */
+
+html, body {
+    width: 100%; height: 100%;
+}
+
+.wrap {
+    position: relative;
+    width: 80%; max-width: 66em;
+    margin: 0 auto;
+}
+
+.action-bar {
+    padding-top: 1.6em;
+}
+.footer-bar {
+    height: 9em;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    
+}
+
+
+.tabs {
+    white-space: nowrap;
+}
+.tabs li {
+    margin-right: 1px;
+}
+.tabs li a {
+    padding: 0.6em;
+}
+
+.document-tabs {
+    float: right;
+}
+.content {
+    padding-top: 3.3333em;
+}
+
+.add-button {
+  padding: 0 0 0 28px;
+  background-repeat: no-repeat;
+  height: 20px;
+  line-height: 15px;
+  display: inline-block;
+  color: white;
+  /*font-weight: bold;*/
+  font-size: 1.6667em;
+}
+
+
+.navigation li {
+  float: left;
+  list-style-type: none;
+}
+
+#ub-login-logout {
+  float: right;
+  margin-top: 5px;
+}
+
+#home {
+  float: left;
+}
+
+#flash {
+    position: relative;
+    margin: 0 auto;
+    padding: 2px;
+    text-align: center ;
+    width: 300px;
+    background: #8CEF86;
+}
+
+/* ================= */
+/* = Login page = */
+/* ================= */
+/*#login_page {
+    position: relative;
+    width:380px;
+    margin: 50px auto 0 auto;
+}
+#login_box {
+    position: relative;
+    width: 350px;
+    margin: 0 auto 0 auto;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 5px solid #9F9F9F;
+    padding: 10px;
+    background: #efefef;
+}
+#login_box h2{
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+#new_user_session div {
+    clear: both;
+    margin-bottom: 15px;
+}
+#new_user_session label {
+    float: left;
+    padding-top:6px;
+}
+#new_user_session input {
+    float: right;
+}
+#remember_me {
+    float: right;
+}*/
+
+
+/* ================= */
+/* = Document list = */
+/* ================= */
+/*#wb-document-main{
+    padding: 0 10px;
+    min-width: 800px;
+}
+#wb-document-navigation,
+#wb-document-list-container{
+    float: left;
+}
+#wb-document-header{
+    margin: 20px 0;
+}
+#wb-document-navigation{
+    width: 150px;
+}
+#wb-document-navigation-title{
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+#wb-document-navigation ul li{
+    margin-bottom: 10px;
+    list-style: none;
+}
+#wb-document-navigation ul li a{
+    display: block;
+    padding: 5px;
+}
+#wb-document-navigation ul li a.active{
+	  display: block;
+    padding: 5px;
+    -moz-border-radius: 5px 0 0 5px;
+    -webkit-border-radius: 5px 0 0 5px;
+    background: #4d4d4d;
+    text-decoration: none;
+    color: #fff;
+}
+#wb-document-list-container{
+    width: 600px;
+		min-height: 150px;
+    padding: 15px;
+    border: 5px solid #4d4d4d;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+#wb-document-list{
+}
+#wb-document-list h3{
+    margin-bottom: 10px;
+    border-bottom: 2px solid #dfdfdf;
+    color: #afafaf;
+    font-style: italic;
+}
+.wb-document-item{
+    clear: both;
+    height: 25px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.wb-document-title{
+    float:left;
+    width: 65%;
+}
+.wb-document-title a{
+    display: block;
+    padding: 3px;
+}
+.wb-document-actions{
+    float:right;
+    width: 35%;
+}
+.wb-document-actions a{
+    float: right;
+    margin-left: 10px;
+}
+.wb-document-delete {
+    background: #fff url(../images/icons/delete_16.png) no-repeat 0 -2px ;
+    width: 16px;
+    height: 16px;
+}
+.wb-document-delete:hover {
+    background: #fff url(../images/icons/delete_16.png) no-repeat -16px -2px ;
+}
+.document_list {
+  float: left;
+  width:100%;
+}
+
+.document_list li {
+  float: left;
+  list-style-type: none;
+  margin: 10px;
+  text-align: right;
+}
+
+.page_list li {
+  float: left;
+  list-style-type: none;
+  margin: 10px;
+}
+
+.ub-document-title {
+  text-align: center ;
+  font-weight: bold; 
+  font-size: 14px;
+  padding: 5px;
+}*/
+
+/* =================== */
+/* = Document access = */
+/* =================== */
+/*#document_access-header {
+  margin: 20px 0;  
+}
+#document_access_list{
+    padding: 15px;
+    border: 5px solid #4d4d4d;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+#wb-invitation-failed {
+  color: #ff0000;
+}
+
+.user_access{
+    clear: both;
+    height: 25px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.user_email{
+    float:left;
+    width: 65%;
+}
+.user_role {
+  float:right;
+  position:relative;
+  top:-4px;  
+}
+#document_access_list input {
+  position:relative;
+  top:-4px;
+}
+.access_actions{
+    float:right;
+    width: 35%;
+}
+.delete_access {
+    background: #fff url(../images/icons/delete_16.png) no-repeat 0 -2px ;
+    width: 16px;
+    height: 16px;
+    float: right;
+    margin-left: 10px;    
+}
+.delete_access:hover {
+    background: #fff url(../images/icons/delete_16.png) no-repeat -16px -2px ;
+}*/
+
+
+/* ======================= */
+/* = Apps administration = */
+/* ======================= */
+
+ul#widget-list {
+	list-style: none;
+}
+
+ul#widget-list li {
+	min-height: 90px;
+}
+
+.widget-container {
+	width: 300px;
+	margin-bottom: 10px;
+}
+
+.widget-title-container {
+	background: #ccc;
+	border: 1px solid #333;
+	-moz-border-radius: 5px;
+}
+
+.widget-icon {
+	width: 75px;
+	height: 75px;
+	float: left;
+	margin-right: 5px;
+	margin-top: 3px;
+}
+
+.widget-title {
+	font-style: italic;
+	font-weight: bold;
+}
+
+.widget-version {
+	margin-top: 5px;
+	font-style: italic;
+	color: #666;
+}
+
+.widget-controls {
+  color: #666;
+}
+
+/* ================= */
+/* = Rails default = */
+/* ================= */
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+  margin: 4px;
+}

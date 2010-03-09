@@ -1,0 +1,62 @@
+/* style.application.color.css
+ *
+ * Styles for website
+ *
+ */
+ 
+body {
+    color: hsl(198, 2%, 25%);
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(198, 4%, 97%) ), to( hsl(198, 8%, 79%) ));
+    background-image: -moz-linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+    background-image:      linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+}
+
+.tabs {
+    -webkit-border-top-left-radius:   0.5em;
+    -moz-border-radius-topleft:       0.5em;
+    border-top-left-radius:           0.5em;
+    -webkit-border-top-right-radius:  0.5em;
+    -moz-border-radius-topright:      0.5em;
+    border-top-right-radius:          0.5em;
+    -webkit-box-shadow: 0 0 32px hsla(32, 2%, 0%, 0.8);
+    -moz-box-shadow:      0 0 32px hsla(32, 2%, 0%, 0.8);
+    box-shadow:           0 0 32px hsla(32, 2%, 0%, 0.8);
+}
+
+
+
+.tabs li {
+    background: #f0f1f1;
+}
+.tabs li:first-child {
+    -webkit-border-top-left-radius:   0.5em;
+    -moz-border-radius-topleft:       0.5em;
+    border-top-left-radius:           0.5em;
+}
+.tabs li:last-child {
+    -webkit-border-top-right-radius:  0.5em;
+    -moz-border-radius-topright:      0.5em;
+    border-top-right-radius:          0.5em;
+}
+
+.bar {
+    background-color: hsl(198, 4%, 33%);
+    -webkit-box-shadow: inset 0 0 32px hsla(32, 2%, 0%, 0.8);
+    -moz-box-shadow:    inset 0 0 32px hsla(32, 2%, 0%, 0.8);
+    box-shadow:         inset 0 0 32px hsla(32, 2%, 0%, 0.8);
+}
+
+.add-button:hover {
+    color: white;
+    background-image: url('/images/site-icons.png');
+    background-position: -6px -134px;
+}
+.add-button {
+    color: hsla( 198, 0%, 100%, 0.88 );
+    background-image: url('/images/site-icons.png');
+    background-position: -6px -6px;
+}
+
+
+.sec-action { color: #606060;}
+.sec-action:hover { color: #000; }
