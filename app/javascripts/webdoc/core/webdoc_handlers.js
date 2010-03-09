@@ -39,6 +39,7 @@ WebDoc.handlers = {
   'redo':                 function(e) { WebDoc.application.undoManager.redo(); },
   'delete':               function(e) { WebDoc.application.boardController.deleteSelection(); },
   
+  'close':                function(e) { WebDoc.application.pageEditor.closeDocument(); },
   'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); },
   
   'show-thumbs':          function(e) { WebDoc.application.pageBrowserController.showThumbs(e); },

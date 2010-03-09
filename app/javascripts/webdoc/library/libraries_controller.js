@@ -14,7 +14,7 @@ WebDoc.LibrariesController = $.klass({
     this.imagesLibrary = new WebDoc.ImagesLibrary("images");
     this.videosLibrary = new WebDoc.VideosLibrary("videos");
     this.appsLibrary = new WebDoc.AppsLibrary("apps");
-    this.webBrowser = new WebDoc.WebBrowser("browser");
+    // this.webBrowser = new WebDoc.WebBrowser("browser"); // Provisory, will be added in a later alpha
     
     this.domNode = $(this.LIBRARIES_SELECTOR)
   }
