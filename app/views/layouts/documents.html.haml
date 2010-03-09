@@ -4,34 +4,15 @@
     %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
     %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
     %title= "webdoc (#{I18n.locale}) - #{yield(:title)}"
-
-    = stylesheet_link_tag 'reset'
-    
-    = stylesheet_link_tag 'lib/states.css'
-    = stylesheet_link_tag 'lib/forms.css'
-    = stylesheet_link_tag 'lib/layer.css'
-    = stylesheet_link_tag 'lib/panel.css'
-    = stylesheet_link_tag 'lib/index.css'
-
-    = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
-    = stylesheet_link_tag 'style.ui'
-    
-    = stylesheet_link_tag 'style'
-    = stylesheet_link_tag 'style.application'
-    = stylesheet_link_tag 'style.application.color'
-    = stylesheet_link_tag 'style.application.typography'
+    = include_stylesheets :common, :media => 'all'
+    = include_stylesheets :document_editor, :media => 'all'
 
   %body
     = render :partial => "layouts/main_toolbar"    
     = yield
-    = javascript_include_tag 'jquery-1.4.2'
-    = javascript_include_tag 'jquery-ui-1.8rc2'
-    = javascript_include_tag 'jquery.extensions'
-    = javascript_include_tag 'jquery-json'
-    = javascript_include_tag 'jquery-string'
-    = javascript_include_tag 'klass'
-    = include_javascripts :mtools
-    = include_javascripts :document_editor
+    = include_javascripts :common
+    = include_javascripts :mtools    
+    = include_javascripts :document_editor      
     :javascript      
       $(function()
       {

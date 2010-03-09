@@ -138,7 +138,7 @@ WebDoc.Item = $.klass(MTools.Record,
     if (html != this.data.data.innerHTML || force) {
 	    // Force to wmode transparent if necessary
       this.data.data.innerHTML = this.checkForceWMode(html);      
-      if (!this.property("noIframe") && (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi))) {
+      if (!(this.property("noIframe") === "true") && (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi))) {
         ddd("replace tag");
         this.data.data.tag = "iframe";
         this.data.data.src = this.rootUrl() + "/items/" + this.uuid() + "?fullHTML=true";

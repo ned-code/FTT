@@ -1,7 +1,47 @@
 package_assets: on
 compress_assets: on
 javascript_compressor: yui
+stylesheets:
+  common:
+    - public/stylesheets/reset.css
+    - public/stylesheets/jquery-ui-1.8rc3.custom.css
+    - public/stylesheets/style.css
+  document_editor:
+    - public/stylesheets/style.application.css
+    - public/stylesheets/style.application.color.css
+  application:
+    - public/stylesheets/style.application.css
+    - public/stylesheets/formtastic.css   
+    - public/stylesheets/formtastic_changes.css 
+  page_editor:    
+    - public/stylesheets/library.css
+    - public/stylesheets/lib/protect.css
+    - public/stylesheets/lib/states.css
+    - public/stylesheets/lib/forms.css
+    - public/stylesheets/lib/index.css
+    - public/stylesheets/lib/layer.css
+    - public/stylesheets/lib/panel.css
+    - public/stylesheets/style.editor.css    
+    - public/stylesheets/style.editor.colors.css
+    - public/stylesheets/colorpicker.css
+    - public/stylesheets/toolbar.css
+      
 javascripts:
+  common:
+    - public/javascripts/jquery-1.4.2.js
+    - public/javascripts/jquery-json.js
+    - public/javascripts/jquery-string.js
+    - public/javascripts/jquery.extensions.js
+    - public/javascripts/jquery.events.js
+    - public/javascripts/jquery.panel.js
+    - public/javascripts/jquery.pop.js
+    - public/javascripts/klass.js    
+    - public/swfupload/swfupload.js
+    - public/javascripts/jquery-swfupload.js
+    - public/javscripts/jquery.form.js
+    - public/javascripts/jquery.hashchange.js
+    - public/javascripts/colorpicker.js
+    - public/javascripts/jquery-ui-1.8.js
   mtools:
     - app/javascripts/mtools.js
     - app/javascripts/mtools/*.js
@@ -15,6 +55,9 @@ javascripts:
     - app/javascripts/webdoc/gui/document_list.js
     - app/javascripts/webdoc/core/document_editor.js
   page_editor:
+    - public/javascripts/sylvester.js
+    - public/javascripts/strophe.js
+    - public/javascripts/codemirror/codemirror.js
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/model/*.js
     - app/javascripts/webdoc/sdk/*.js
@@ -39,7 +82,6 @@ javascripts:
     - app/javascripts/webdoc/controllers/*.js  
     - app/javascripts/webdoc/controllers/inspectors/*.js
     - app/javascripts/webdoc/core/*.js
-
     - app/javascripts/webdoc/library/jqtouch.js
     - app/javascripts/webdoc/library/libraries_controller.js
     - app/javascripts/webdoc/library/apps_library.js
@@ -48,9 +90,4 @@ javascripts:
     - app/javascripts/webdoc/library/videos_library/*.js
     - app/javascripts/webdoc/library/videos_library.js
     - app/javascripts/webdoc/library/web_browser.js
-
-template_function: on
-template_namespace: WebDoc.templates
-templates:
-  document_editor:
-    - app/views/templates/test.html
+          

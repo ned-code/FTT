@@ -1,7 +1,7 @@
 /**
  * @author Julien Bachmann
  */
-WebDoc.TextPaletteController = $.klass({
+WebDoc.TextPaletteController = jQuery.klass({
   initialize: function(id) {
     this.domNode = jQuery(id).hide();
     this.initGUI("#text-inspector-content");
@@ -119,51 +119,51 @@ WebDoc.TextPaletteController = $.klass({
     '</div>';
     containerObj.html(toolbarContent);
     
-    $('#toolbar_panel_button_createlink_ok').bind('click',function(){
+    jQuery('#toolbar_panel_button_createlink_ok').bind('click',function(){
     	var value  = {
-			link:(($('#toolbar_panel_createlink_block input:radio:checked').attr('id') == 'toolbar_panel_button_createlink_type_mail')?('mailto:'):(''))+$('#toolbar_panel_button_createlink_link').val(), 
-			text:$('#toolbar_panel_button_createlink_text').val()
+			link:((jQuery('#toolbar_panel_createlink_block input:radio:checked').attr('id') == 'toolbar_panel_button_createlink_type_mail')?('mailto:'):(''))+jQuery('#toolbar_panel_button_createlink_link').val(), 
+			text:jQuery('#toolbar_panel_button_createlink_text').val()
 		};
-		$('#toolbar_panel_createlink_block').hide();
+		jQuery('#toolbar_panel_createlink_block').hide();
 		WebDoc.application.textTool.delegate.editorExec('createlink',value);
 		
 		
 	});
 	
-	$('#toolbar_panel_button_createlink_cancel').bind('click',function(){
-		$('#toolbar_panel_createlink_block').hide();
+	jQuery('#toolbar_panel_button_createlink_cancel').bind('click',function(){
+		jQuery('#toolbar_panel_createlink_block').hide();
 	});
 	
-	$('#toolbar_panel_button_createlink_type_web,#toolbar_panel_button_createlink_type_mail').bind('click',function(){
-		//alert($('#toolbar_panel_createlink_block input:radio:checked').attr('id')); 
+	jQuery('#toolbar_panel_button_createlink_type_web,#toolbar_panel_button_createlink_type_mail').bind('click',function(){
+		//alert(jQuery('#toolbar_panel_createlink_block input:radio:checked').attr('id')); 
 		
-		if($('#toolbar_panel_createlink_block input:radio:checked').attr('id') == 'toolbar_panel_button_createlink_type_mail') { 
-			$('#toolbar_panel_button_createlink_link_label').html('Email');
+		if(jQuery('#toolbar_panel_createlink_block input:radio:checked').attr('id') == 'toolbar_panel_button_createlink_type_mail') { 
+			jQuery('#toolbar_panel_button_createlink_link_label').html('Email');
 		} else {
-		    $('#toolbar_panel_button_createlink_link_label').html('Link');
+		    jQuery('#toolbar_panel_button_createlink_link_label').html('Link');
 		}
 	});
     
-    $('#toolbar_panel_button_createlink').bind('click', function(e){
-      	var pos = $("#toolbar_panel_button_createlink").position();  
-        $('#toolbar_panel_createlink_block').stop().animate({height: 70}, 500);
-        $('#toolbar_panel_createlink_block').css('left',21);
-      	$('#toolbar_panel_createlink_block').css('top',pos.top+28);      
-      	$('#toolbar_panel_button_createlink_text').val(WebDoc.application.textTool.delegate.getSelectedText()); 
-      	$('#toolbar_panel_button_createlink_link').val();
+    jQuery('#toolbar_panel_button_createlink').bind('click', function(e){
+      	var pos = jQuery("#toolbar_panel_button_createlink").position();  
+        jQuery('#toolbar_panel_createlink_block').stop().animate({height: 70}, 500);
+        jQuery('#toolbar_panel_createlink_block').css('left',21);
+      	jQuery('#toolbar_panel_createlink_block').css('top',pos.top+28);      
+      	jQuery('#toolbar_panel_button_createlink_text').val(WebDoc.application.textTool.delegate.getSelectedText()); 
+      	jQuery('#toolbar_panel_button_createlink_link').val();
     });
     
-    $('#toolbar_panel_button_valign').bind('click', function(e){
-      var pos = $("#toolbar_panel_button_valign").position();  
-        $('#toolbar_panel_valign_block').stop().animate({height: 20}, 500);
-        $('#toolbar_panel_valign_block').css('left',pos.left);
-      $('#toolbar_panel_valign_block').css('top',pos.top+28);
+    jQuery('#toolbar_panel_button_valign').bind('click', function(e){
+      var pos = jQuery("#toolbar_panel_button_valign").position();  
+        jQuery('#toolbar_panel_valign_block').stop().animate({height: 20}, 500);
+        jQuery('#toolbar_panel_valign_block').css('left',pos.left);
+      jQuery('#toolbar_panel_valign_block').css('top',pos.top+28);
     });
     
 
-    $('#toolbar_panel_button_valignBottom').bind('click',   function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignBottom");$('#toolbar_panel_valign_block').hide();});
-    $('#toolbar_panel_button_valignMiddle').bind('click',   function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignMiddle");$('#toolbar_panel_valign_block').hide();});
-    $('#toolbar_panel_button_valignTop').bind('click',    function(e){$('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignTop");$('#toolbar_panel_valign_block').hide();});
+    jQuery('#toolbar_panel_button_valignBottom').bind('click',   function(e){jQuery('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignBottom");jQuery('#toolbar_panel_valign_block').hide();});
+    jQuery('#toolbar_panel_button_valignMiddle').bind('click',   function(e){jQuery('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignMiddle");jQuery('#toolbar_panel_valign_block').hide();});
+    jQuery('#toolbar_panel_button_valignTop').bind('click',    function(e){jQuery('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignTop");jQuery('#toolbar_panel_valign_block').hide();});
     
     this.isHasParent = function(target,parentObj){
 	    if(target.parentNode && target.parentNode==parentObj){
@@ -178,90 +178,90 @@ WebDoc.TextPaletteController = $.klass({
 		}
 	};
 
-    $(document).bind('click', function(e) {
+    jQuery(document).bind('click', function(e) {
         e.stopPropagation();
         e.cancelBubble = true;
         var foc = (e.target.parentNode && e.target.parentNode.parentNode)?e.target.parentNode.parentNode.getAttribute('class'):'';
-		if($('#colorpickerHolder2').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder2')) || foc=='colorpicker_color'){
-			$('#colorpickerHolder2').stop().animate({height: 0}, 500);
-			$('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
+		if(jQuery('#colorpickerHolder2').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder2')) || foc=='colorpicker_color'){
+			jQuery('#colorpickerHolder2').stop().animate({height: 0}, 500);
+			jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
 		}
-		if($('#colorpickerHolder1').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder1')) || foc=='colorpicker_color'){
-			$('#colorpickerHolder1').stop().animate({height: 0}, 500);
-			$('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+		if(jQuery('#colorpickerHolder1').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder1')) || foc=='colorpicker_color'){
+			jQuery('#colorpickerHolder1').stop().animate({height: 0}, 500);
+			jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
 		}
       });   
     
-    $('#colorpickerHolder2').ColorPicker({
+    jQuery('#colorpickerHolder2').ColorPicker({
         flat: true,
         color: '#000000',
         onSubmit: function(hsb, hex, rgb) {
-          $('#colorpickerHolder2').stop().animate({height: 0}, 500);
-          $('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#' + hex);   
-		  $('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
+          jQuery('#colorpickerHolder2').stop().animate({height: 0}, 500);
+          jQuery('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#' + hex);   
+		  jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
           WebDoc.application.textTool.delegate.editorExec('foreColor','#' + hex);
           
         },
         onHide: function (colpkr) {
-          $(colpkr).fadeOut(500);
+          jQuery(colpkr).fadeOut(500);
           return false;
         },                                    
         onChange: function (hsb, hex, rgb) {
-          $('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#' + hex);
+          jQuery('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#' + hex);
         }
       });
-      $('#colorpickerHolder1').ColorPicker({
+      jQuery('#colorpickerHolder1').ColorPicker({
         flat: true,
         color: '#000000',
         onSubmit: function(hsb, hex, rgb) {     
-          $('#colorpickerHolder1').stop().animate({height: 0}, 500);
-          $('#toolbar_panel_button_hiliteColor').css('backgroundColor', '#' + hex);
-          $('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+          jQuery('#colorpickerHolder1').stop().animate({height: 0}, 500);
+          jQuery('#toolbar_panel_button_hiliteColor').css('backgroundColor', '#' + hex);
+          jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
           WebDoc.application.textTool.delegate.editorExec('hiliteColor','#' + hex); 
           
         },
         onHide: function (colpkr) {
-          $(colpkr).fadeOut(500);
+          jQuery(colpkr).fadeOut(500);
           return false;
         },
         downSelector: function (colpkr) {
           alert('dfg');
         },
         onChange: function (hsb, hex, rgb) {
-          $('#toolbar_panel_button_hiliteColor').css('backgroundColor', '#' + hex);
+          jQuery('#toolbar_panel_button_hiliteColor').css('backgroundColor', '#' + hex);
         } 
       });
-      $('#colorpickerHolder1>div').css('position', 'absolute');
-      $('#colorpickerHolder2>div').css('position', 'absolute');
+      jQuery('#colorpickerHolder1>div').css('position', 'absolute');
+      jQuery('#colorpickerHolder2>div').css('position', 'absolute');
   
-      $('#toolbar_panel_button_foreColor_arrow').bind('click', function(e) {
+      jQuery('#toolbar_panel_button_foreColor_arrow').bind('click', function(e) {
         e.stopPropagation();
         e.cancelBubble = true; 
-        if($('#toolbar_panel_button_foreColor_arrow>div').attr('class')!='icon_color_arrow_top'){ 
-			$('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow_top');
-        	var pos = $("#toolbar_panel_button_foreColor").position();  
-        	$('#colorpickerHolder2').css('left',0);//pos.left
-        	$('#colorpickerHolder2').css('top',pos.top+28);
-        	$('#colorpickerHolder2').stop().animate({height:173}, 500);
-        	$('#colorpickerHolder1').stop().animate({height:0}, 500);
+        if(jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class')!='icon_color_arrow_top'){ 
+			jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow_top');
+        	var pos = jQuery("#toolbar_panel_button_foreColor").position();  
+        	jQuery('#colorpickerHolder2').css('left',0);//pos.left
+        	jQuery('#colorpickerHolder2').css('top',pos.top+28);
+        	jQuery('#colorpickerHolder2').stop().animate({height:173}, 500);
+        	jQuery('#colorpickerHolder1').stop().animate({height:0}, 500);
   		} else {
-  			$('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
-		    $('#colorpickerHolder2').stop().animate({height: 0}, 500);
+  			jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
+		    jQuery('#colorpickerHolder2').stop().animate({height: 0}, 500);
 		}
       });
-      $('#toolbar_panel_button_hiliteColor_arrow').bind('click', function(e) {
+      jQuery('#toolbar_panel_button_hiliteColor_arrow').bind('click', function(e) {
         e.stopPropagation();
         e.cancelBubble = true; 
-        if($('#toolbar_panel_button_hiliteColor_arrow>div').attr('class')!='icon_color_arrow_top'){ 
-			$('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow_top');
-        	var pos = $("#toolbar_panel_button_hiliteColor").position();  
-        	$('#colorpickerHolder1').css('left',0);//pos.left
-        	$('#colorpickerHolder1').css('top',pos.top+28);
-        	$('#colorpickerHolder1').stop().animate({height:173}, 500);
-        	$('#colorpickerHolder2').stop().animate({height:0}, 500);
+        if(jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class')!='icon_color_arrow_top'){ 
+			jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow_top');
+        	var pos = jQuery("#toolbar_panel_button_hiliteColor").position();  
+        	jQuery('#colorpickerHolder1').css('left',0);//pos.left
+        	jQuery('#colorpickerHolder1').css('top',pos.top+28);
+        	jQuery('#colorpickerHolder1').stop().animate({height:173}, 500);
+        	jQuery('#colorpickerHolder2').stop().animate({height:0}, 500);
   		} else {
-  			$('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
-		    $('#colorpickerHolder1').stop().animate({height: 0}, 500);
+  			jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+		    jQuery('#colorpickerHolder1').stop().animate({height: 0}, 500);
 		}
       });   
   },
@@ -291,17 +291,17 @@ WebDoc.TextPaletteController = $.klass({
   },
   
   activate: function(bool) {
-       $('#toolbar_panel_cover').css('display', bool ? 'none' : 'block');
+       jQuery('#toolbar_panel_cover').css('display', bool ? 'none' : 'block');
   },
   
   hideColorPickers: function() {
-  	if($('#colorpickerHolder1').height()){
-	  	$('#colorpickerHolder1').stop().animate({height: 0}, 500);
-		$('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+  	if(jQuery('#colorpickerHolder1').height()){
+	  	jQuery('#colorpickerHolder1').stop().animate({height: 0}, 500);
+		jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
 	}
-  	if($('#colorpickerHolder2').height()){
-		$('#colorpickerHolder2').stop().animate({height: 0}, 500);
-		$('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow'); 
+  	if(jQuery('#colorpickerHolder2').height()){
+		jQuery('#colorpickerHolder2').stop().animate({height: 0}, 500);
+		jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow'); 
 	}
 	
   }

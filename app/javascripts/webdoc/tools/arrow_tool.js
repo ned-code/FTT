@@ -4,7 +4,7 @@
  */
 //= require "tool"
 
-WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
+WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
   
   initialize: function($super, selector, boardClass) {
     $super( selector, boardClass );
@@ -45,7 +45,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   
   mouseDown: function(e) {
     if (!WebDoc.application.boardController.isInteractionMode()) {
-      var target = $(e.target);
+      var target = jQuery(e.target);
       ddd("mouse down on target", e.target);
       if (!target || target.length === 0 || !target.hasClass("drawing_handle")) {
         this.select(e);
@@ -68,7 +68,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
       ddd("dbl click", e.target);
       var objectToEdit = this._clickedItemView(e);
       if (WebDoc.application.boardController.editItemView(objectToEdit)) {
-        $(e.target).closest(".item-layer").css("opacity",0);
+        jQuery(e.target).closest(".item-layer").css("opacity",0);
         this.mouseOut(e);
       }
     }
@@ -76,9 +76,10 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   
   mouseOver: function(e) {
     this.lastTarget = e.target;
-    var target = $(e.target);
+    var target = jQuery(e.target);
+    ddd("over", target);
     if (target.hasClass("item-layer") && !this.disableHiLight) {
-      $(".item-layer").not(target).css("opacity", 0);
+      jQuery(".item-layer").not(target).css("opacity", 0);
       target.stop().animate({
         opacity: 0.8
       }, {
@@ -88,7 +89,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
   },
 
   mouseOut: function(e) {  
-    var target = $(e.target);
+    var target = jQuery(e.target);
     this.lastTarget = null;
     if (target.hasClass("item-layer") && !this.disableHiLight) {
       target.stop().animate({ opacity: 0 }, { duration: 100});
@@ -97,7 +98,7 @@ WebDoc.ArrowTool = $.klass(WebDoc.Tool, {
         
   _clickedItemView: function(e) {   
     var clickedItemView = null;
-    var target = $(e.target);
+    var target = jQuery(e.target);
     if (target && target.get(0) && target.get(0).tagName == "polyline") {
       clickedItemView = target.data("itemView");
     }

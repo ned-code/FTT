@@ -12,13 +12,13 @@
 /**
  * Uniboard board controller.
  **/
-WebDoc.BoardController = $.klass({
+WebDoc.BoardController = jQuery.klass({
   
   // Constructor     
   initialize: function(editable, autoFit) {
-    this.boardCageNode = $("#webdoc");
-    this.boardContainerNode = $("#board-container");
-    this.screenUnderlayNode = $("#underlay");
+    this.boardCageNode = jQuery("#webdoc");
+    this.boardContainerNode = jQuery("#board-container");
+    this.screenUnderlayNode = jQuery("#underlay");
     this.screenNodes = this.boardCageNode.find('.board-screen');
     
     this._editable = editable;
@@ -55,7 +55,7 @@ WebDoc.BoardController = $.klass({
   },
   
   removeSelectionListener: function(listener) {
-    var index = $.inArray(listener, this._selectionListeners);
+    var index = jQuery.inArray(listener, this._selectionListeners);
     if (index > -1) {
       this._selectionListeners.splice(index, 1);
     }
@@ -66,7 +66,7 @@ WebDoc.BoardController = $.klass({
   },
   
   removeCurrentPageListener: function(listener) {
-    var index = $.inArray(listener, this._currentPageListeners);
+    var index = jQuery.inArray(listener, this._currentPageListeners);
     if (index > -1) {
       this._currentPageListeners.splice(index, 1);
     }
@@ -78,10 +78,10 @@ WebDoc.BoardController = $.klass({
     var pageView = new WebDoc.PageView(page),
         board = pageView.domNode;
     
-    $("#board").unbind();
-    $(document).unbind("keydown", this._keyDown);
-    $(document).unbind("keypress", this._keyPress);
-    $(document).unbind("keyup", this._keyUp);
+    jQuery("#board").unbind();
+    jQuery(document).unbind("keydown", this._keyDown);
+    jQuery(document).unbind("keypress", this._keyPress);
+    jQuery(document).unbind("keyup", this._keyUp);
     
     // Set properties
     if (this._currentPageView) {
@@ -101,16 +101,16 @@ WebDoc.BoardController = $.klass({
     this._fireSelectionChanged();
     this._bindMouseEvent();
     
-    $(document).bind("keypress", this, jQuery.proxy(this, "_keyPress"));
-    $(document).bind("keydown", this, jQuery.proxy(this, "_keyDown"));
-    $(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));    
+    jQuery(document).bind("keypress", this, jQuery.proxy(this, "_keyPress"));
+    jQuery(document).bind("keydown", this, jQuery.proxy(this, "_keyDown"));
+    jQuery(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));    
     
     this.zoom(1);
     this.setMode(this._isInteraction || !this._editable);
     
     this._fireCurrentPageChanged();
     
-    $(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
+    jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
   },
   
@@ -119,7 +119,7 @@ WebDoc.BoardController = $.klass({
   },
   
   _setModeEdit: function() {
-    $("#board")
+    jQuery("#board")
     .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
     .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
     .bind("drop", this, WebDoc.DrageAndDropController.drop);      
@@ -128,13 +128,13 @@ WebDoc.BoardController = $.klass({
       this.setCurrentTool(WebDoc.application.arrowTool);
     }
     
-    $("body")
+    jQuery("body")
     .removeClass('mode-preview')
     .addClass("mode-edit");
     
-    $(".item-layer").show();
+    jQuery(".item-layer").show();
     
-    $(".state-mode")
+    jQuery(".state-mode")
     .removeClass("current")
     .filter("[href='#mode-edit']")
     .addClass("current");
@@ -148,24 +148,24 @@ WebDoc.BoardController = $.klass({
   
   _setModePreview: function() {
     this.unselectAll();
-    $("#board")
+    jQuery("#board")
     .unbind("dragenter")
     .unbind("dragover")
     .unbind("drop");
     
     this.setCurrentTool(WebDoc.application.arrowTool);
-    $(".item-layer").hide();
+    jQuery(".item-layer").hide();
     
-    $("body")
+    jQuery("body")
     .removeClass("mode-edit")
     .addClass("mode-preview");
     
-    $(".state-mode")
+    jQuery(".state-mode")
     .removeClass("current")
     .filter("[href='#mode-preview']")
     .addClass("current");
     
-    if(!this._editable) {$(".state-mode").filter("[href='#mode-edit']").hide(); }
+    if(!this._editable) {jQuery(".state-mode").filter("[href='#mode-edit']").hide(); }
     
     //WebDoc.application.pageBrowserController.conceal();
     WebDoc.application.rightBarController.concealRightBar();
@@ -185,7 +185,7 @@ WebDoc.BoardController = $.klass({
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     if (MTools.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
       ddd("FF 3.5. drawing !");
-      $("#board svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
+      jQuery("#board svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
     }
   },
   
@@ -234,7 +234,7 @@ WebDoc.BoardController = $.klass({
       var anItem = this.selection()[i].item;
       itemsDataArray.push(anItem.getData());
     }    
-    WebDoc.application.pasteBoardManager.putIntoPasboard("application/ub-item", $.toJSON(itemsDataArray));
+    WebDoc.application.pasteBoardManager.putIntoPasboard("application/ub-item", jQuery.toJSON(itemsDataArray));
   },
   
   paste: function() {
@@ -242,7 +242,7 @@ WebDoc.BoardController = $.klass({
       var itemsString = WebDoc.application.pasteBoardManager.getFromPasteBoard("application/ub-item");
       var newItems = [];
       if (itemsString) {
-        var items = $.evalJSON(itemsString);
+        var items = jQuery.evalJSON(itemsString);
         for (var i = 0; i < items.length; i++) {
           var anItem = new WebDoc.Item({
             item: items[i]
@@ -267,7 +267,7 @@ WebDoc.BoardController = $.klass({
   },
   
   mapToPageCoordinate: function(position) {
-    var x, y, board = $("#board");
+    var x, y, board = jQuery("#board");
     
     if (position.x) {
       x = position.x - board.offset().left;
@@ -293,7 +293,7 @@ WebDoc.BoardController = $.klass({
   },
   
   getBoardCenterPoint: function() {
-    var x, y, board = $("#board");
+    var x, y, board = jQuery("#board");
     
     x = board.width() / 2;
     y = board.height() / 2;
@@ -341,14 +341,14 @@ WebDoc.BoardController = $.klass({
       
       //deselect un-needed items
       ddd("select item in view");
-      $.each(this._selection, function(index, itemToDeselect) {
+      jQuery.each(this._selection, function(index, itemToDeselect) {
         if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
           this.unselectItemViews([itemToDeselect]);
         }
       }.pBind(this));
       
       //select wanted items
-      $.each(itemViews, function(index, itemToSelect) {
+      jQuery.each(itemViews, function(index, itemToSelect) {
         if (jQuery.inArray(itemToSelect, this._selection) == -1) {
           ddd("add item to selection");
           this._selection.push(itemToSelect);
@@ -490,7 +490,7 @@ WebDoc.BoardController = $.klass({
   
   insertImage: function(imageUrl, position) {
     var image = document.createElement('img'); /* Preload image in order to have width and height parameters available */
-    $(image).bind("load", position, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
+    jQuery(image).bind("load", position, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
     image.src = imageUrl;
   },
   
@@ -574,7 +574,7 @@ WebDoc.BoardController = $.klass({
   },
   
   insertItems: function(items) {
-    $.each(items, function(index, item) {           
+    jQuery.each(items, function(index, item) {           
       this._currentPage.addItem(item);
       if (!item.data.position && item.data.media_type !== WebDoc.ITEM_TYPE_DRAWING) {
         this._currentPage.moveFront(item);  
@@ -589,7 +589,7 @@ WebDoc.BoardController = $.klass({
   },
   
   removeItems: function(items) {
-    $.each(items, function(index, item) {
+    jQuery.each(items, function(index, item) {
       this._currentPage.removeItem(item);
       item.destroy();
     }.pBind(this));
@@ -601,7 +601,7 @@ WebDoc.BoardController = $.klass({
     
   deleteSelection: function(e) {
     var deletedItems = [];
-    $.each(this._selection, function(index, itemView) {
+    jQuery.each(this._selection, function(index, itemView) {
       deletedItems.push(itemView.item);
     }.pBind(this));
     this.removeItems(deletedItems);
@@ -614,7 +614,7 @@ WebDoc.BoardController = $.klass({
   
   zoom: function(factor) {
     
-    var boardNode = $("#board"),
+    var boardNode = jQuery("#board"),
         previousZoom = this._currentZoom,
         boardContainerCss = {},
         boardCss = {},
@@ -658,13 +658,13 @@ WebDoc.BoardController = $.klass({
   // Private methods
     
   _mouseDown: function(e) {
-    $(document).unbind("mousemove", this._mouseMove).unbind("mouseup", this._mouseUp);
+    jQuery(document).unbind("mousemove", this._mouseMove).unbind("mouseup", this._mouseUp);
     if (window.document.activeElement) {
       window.document.activeElement.blur();
     }
 
-    $(document).bind("mousemove", this, jQuery.proxy(this, "_mouseMove"));
-    $(document).bind("mouseup", this, jQuery.proxy(this, "_mouseUp"));
+    jQuery(document).bind("mousemove", this, jQuery.proxy(this, "_mouseMove"));
+    jQuery(document).bind("mouseup", this, jQuery.proxy(this, "_mouseUp"));
     this.currentTool.mouseDown(e);
 
   },
@@ -677,7 +677,7 @@ WebDoc.BoardController = $.klass({
   },
   
   _mouseUp: function(e) {
-    $(document).unbind("mousemove", this._mouseMove).unbind("mouseup", this._mouseUp);
+    jQuery(document).unbind("mousemove", this._mouseMove).unbind("mouseup", this._mouseUp);
     this.currentTool.mouseUp(e);
   },
   
@@ -687,7 +687,7 @@ WebDoc.BoardController = $.klass({
  
   
   _keyUp: function(e) {
-   var el = $(e.target);
+   var el = jQuery(e.target);
     if (el.is('input') || el.is('textarea')) { 
       return;
     }
@@ -706,7 +706,7 @@ WebDoc.BoardController = $.klass({
   
   
   _keyPress: function(e) {
-    var el = $(e.target);
+    var el = jQuery(e.target);
     if (el.is('input') || el.is('textarea')) { 
       return;
     }
@@ -739,7 +739,7 @@ WebDoc.BoardController = $.klass({
   },
   
   _keyDown: function(e) {
-    var el = $(e.target);
+    var el = jQuery(e.target);
     if (el.is('input') || el.is('textarea')) { 
       return;
     }
@@ -824,19 +824,19 @@ WebDoc.BoardController = $.klass({
   },   
   
   _fireSelectionChanged: function() {
-    $.each(this._selectionListeners, function() {
+    jQuery.each(this._selectionListeners, function() {
       this.selectionChanged();
     });
   },
   
   _fireCurrentPageChanged: function() {
-    $.each(this._currentPageListeners, function() {
+    jQuery.each(this._currentPageListeners, function() {
       this.currentPageChanged();
     });
   },
   
   _bindMouseEvent: function() {
-    $("#board")
+    jQuery("#board")
     .bind("mousedown", this, this._mouseDown.pBind(this))
     .bind("click", this, this._mouseClick.pBind(this))
     .bind("dblclick", this, this._mouseDblClick.pBind(this))

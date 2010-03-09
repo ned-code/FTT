@@ -3,9 +3,7 @@
     %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
     %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
     %title= "webdoc - alpha - #{yield(:title)}"
-    = stylesheet_link_tag 'reset'
-    = stylesheet_link_tag 'jquery-ui-1.7.2.custom'
-    = stylesheet_link_tag 'style'
+    = include_stylesheets :common, :media => 'all'
     = stylesheet_link_tag 'style.external'
 
   %body

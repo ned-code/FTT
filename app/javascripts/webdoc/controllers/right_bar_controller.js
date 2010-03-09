@@ -23,7 +23,7 @@ WebDoc.RightBarController = $.klass({
   PANEL_TOGGLE_SELECTOR: "a[href='#right-panel-toggle']",
   
   initialize: function() {
-    panel = $( this.PANEL_SELECTOR );
+    panel = jQuery( this.PANEL_SELECTOR );
     
     // Some of these are lazy loaded, and some are not -
     // pageInspector does not work if you try loading it now.
@@ -37,7 +37,7 @@ WebDoc.RightBarController = $.klass({
     this.visible = false;
     
     this.domNode = panel;
-    this.panelGhostNode = $( this.PANEL_GHOST_SELECTOR );
+    this.panelGhostNode = jQuery( this.PANEL_GHOST_SELECTOR );
     this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
     
     this.panelWidth = panel.outerWidth();
@@ -64,12 +64,12 @@ WebDoc.RightBarController = $.klass({
   _changeButtonState: function(inspector) {
     ddd('[RightBarController] _changeButtonState(inspector)');
     
-    var stateButtons = $( this.STATE_BUTTON_SELECTOR ),
+    var stateButtons = jQuery( this.STATE_BUTTON_SELECTOR ),
         currentClass = this.CURRENT_CLASS,
         buttonSelector = inspector.buttonSelector;
     
     stateButtons.removeClass( currentClass );
-    $( buttonSelector ).addClass( currentClass );
+    jQuery( buttonSelector ).addClass( currentClass );
   },
 
   showLib: function() {
@@ -178,7 +178,7 @@ WebDoc.RightBarController = $.klass({
       }
     });
     
-    $( this.PANEL_TOGGLE_SELECTOR ).addClass( this.ACTIVE_CLASS );
+    jQuery( this.PANEL_TOGGLE_SELECTOR ).addClass( this.ACTIVE_CLASS );
     
     return true;
   },
@@ -203,7 +203,7 @@ WebDoc.RightBarController = $.klass({
       }
     });
     
-    $( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.ACTIVE_CLASS );
+    jQuery( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.ACTIVE_CLASS );
     
     return false;
   },
