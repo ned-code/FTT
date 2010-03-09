@@ -141,7 +141,7 @@ en:
         buttons:
           add_access: "Add user"
       buttons:
-        new_document: "New webdoc"
+        new_document: "create a new webdoc"
         
     show:
       toolbar_panel:

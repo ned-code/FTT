@@ -1,12 +1,14 @@
 - session_key_name = ActionController::Base.session_options[:key]
+
+-#= include_template :document_editor
+
 %div.action-bar.bar{ :style => "overflow: hidden;" }
   %div.wrap.clear
-    %a#wb-create-document-button.add-button.button create new webdoc
-    -#= t('.buttons.new_document')
+    %a#wb-create-document-button.add-button.button= t('.buttons.new_document')
     
     %ul.document-tabs.tabs.index
       %li>
-        %a#wb-document-filter-date.state-tabs{ :href => "#by_date"}= t('.all_items_by_date')
+        %a#wb-document-filter-date.current.state-tabs{ :href => "#by_date"}= t('.all_items_by_date')
       %li>
         %a#wb-document-filter-owned-by-me.active.state-tabs{ :href => "#created_by_me"}= t('.created_by_me')
       %li>
@@ -122,6 +124,10 @@
     %span.label= t('.document_forms.share_document_dialog.shared_address_label')
     %br
     %input#shared_webdoc_url{ :type => "text", :size => 40}
+
+%div.footer-bar.bar
+  %div.wrap.clear
+    Footer
 
 :javascript
     var WebDoc;

@@ -22,9 +22,17 @@ WebDoc.DocumentList = $.klass({
         //}
         var documentItemNode = $("<li/>").addClass("wb-document-item").attr('id', document.uuid());
         var documentItemTitle = $("<span/>").addClass("document-title");
+        
+        
         documentItemTitle.append($("<a>").addClass("wb-document-edit").attr("href", "").attr("title", "Open this document").html(document.title()));
+        
+        
         documentItemNode.append(documentItemTitle);
+        
+        
         if (document.hasAuthenticatedUserEditorRights()) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
+        
+        
         previousElement.after(documentItemNode);
     },
     
@@ -55,8 +63,6 @@ WebDoc.DocumentList = $.klass({
             }
             this.domNode.append(list);
         }
-    
-    
     },
     
     // Add next / previous page links if necessary, as well as page information

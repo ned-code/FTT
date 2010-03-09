@@ -50,7 +50,7 @@ javascripts:
     - app/javascripts/webdoc/library/web_browser.js
 
 template_function: on
-template_namespace: templates
+template_namespace: WebDoc.templates
 templates:
   document_editor:
     - app/views/templates/test.html
