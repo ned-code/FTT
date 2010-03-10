@@ -35,7 +35,7 @@ pre, code {
 
 /* Block */
 
-h1, h2, h3, h4, h5, h6 { font-weight: normal; margin: 0; color: #303030; word-spacing: -0.0833em; }
+h1, h2, h3, h4, h5, h6 { font-weight: normal; margin: 0; word-spacing: -0.0833em; }
 
 h1                { font-size: 3em; line-height: 1; margin-bottom: 0.6667em; }
 h2                { font-size: 2.6666em; line-height: 1.25; margin-bottom: 0.625em; }
@@ -139,4 +139,8 @@ code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
 
 .tabs li a {
     font-size: 1.25em;
+}
+
+.bar h2 {
+    font-size: 2em; line-height: 1.25; margin-bottom: 0.8333em;
 }

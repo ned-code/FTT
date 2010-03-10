@@ -1,42 +1,76 @@
-/* Forms.css
+/* forms.css
  * 
  * Stephen Band
- *
- * Extends Blueprint by Joshua Clayton. Sets up some default styling for forms
- * and gives classes to enhance them.
  *
  * For just now, I'm only interested in Webkit and Mozilla.  IE can go jump.
  *
  */
 
-fieldset    { padding:1.4em; margin: 0 0 1.5em 0; border: 1px solid #ccc; }
+fieldset    { margin: 0 0 1.6667em 0; }
 legend      { font-weight: bold; font-size:1.2em; }
 
-label {
-  font-weight: bold; 
-  line-height: 1.077;  /* A magic number that equalises FF's label baseline to its default input baseline. Mostly. */
-}
-input[type='text'], input[type='password'],
-input.text {
-  text-indent: -1px;  /* Positions text in the same place it is in labels in WebKit / Mozilla */
-}
-input[type='text'], input[type='password'],
-input.text, textarea {
+label,
+input[type='text'],
+input[type='password'],
+textarea {
+  margin: 0;
   border: none;
+  padding: 0.4em;
+  width: 16em; height: 1.8em;
   -webkit-box-sizing: border-box;
   -moz-box-sizing:    border-box;
   box-sizing:         border-box;
+  
+  /*background: white;*/
 }
+
+label {
+  font-weight: bold;
+  /* Equalise FF's <label> baseline to its <input> baseline. Mostly. */
+  line-height: 1.077;
+  
+  /*background: black;*/
+}
+
+input[type='text'],
+input[type='password'] {
+  /* Position text in the same place it is in labels in WebKit / Mozilla */
+  text-indent: -1px;
+  opacity: 0.88;
+}
+
+input[type='text']:focus,
+input[type='password']:focus {
+  opacity: 1;
+  outline: none;
+}
+
 input.default {
   font-style: italic;
   font-weight: normal; 
 }
-textarea      { padding: 0.4em; }
+
+textarea {
+  padding: 0.4em;
+}
 
 input[type=checkbox], input[type=radio],
 input.checkbox, input.radio {
-  position:relative; top:0.25em;
+  position:relative; top:0;
 }
+
+.stack label {
+    display: block;
+    padding-left: 0;
+}
+
+.flank label {
+    display: inline;
+}
+
+
+
+
 
 /* Success, notice and error boxes */
 
@@ -57,15 +91,14 @@ input.checkbox, input.radio {
 }
 /* Fieldsets */
 .properties {
-    /*background: #edefe6;*/
     padding: 1em 0 1.4em 0;
     border: none;
-    margin: 0 0 -0.8em 0;
     position: relative;
     -moz-box-sizing: content-box;
 }
 fieldset.properties {
     border-top: 1px solid;
+    margin: 0 0 -0.8em 0;
 }
 fieldset.properties:first-child {
     border-top: none;

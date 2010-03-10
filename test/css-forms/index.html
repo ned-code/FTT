@@ -23,7 +23,17 @@
         margin: 0 auto 1em;
         border: 1px dotted #666666;
         position: relative;
-        overflow: hidden;
+    }
+    
+    label {
+      background: #eeeeee;
+    }
+    input {
+      background: #dddddd;
+    }
+    
+    .column {
+        background: orange;
     }
     
 </style>
@@ -33,6 +43,79 @@
 <body>
 
 <h1>forms</h1>
+
+<div class="test clear">
+     <div class="column one of-two">column 1</div
+    ><div class="column two of-two">column 2</div>
+</div>
+
+<div class="test clear">
+     <div class="column one of-three">column 1</div
+    ><div class="column two of-three">column 2</div
+    ><div class="column three of-three">column 3</div>
+</div>
+
+<div class="test">
+     <div class="column one of-four">column 1</div
+    ><div class="column two of-four">column 2</div
+    ><div class="column three of-four">column 3</div
+    ><div class="column four of-four">column 4</div>
+</div>
+
+<div class="test">
+     <div class="column one of-five">column 1</div
+    ><div class="column two of-five">column 2</div
+    ><div class="column three of-five">column 3</div
+    ><div class="column four of-five">column 4</div
+    ><div class="column five of-five">column 5</div>
+</div>
+
+<div class="test">
+     <div class="column one of-six">column 1</div
+    ><div class="column two of-six">column 2</div
+    ><div class="column three of-six">column 3</div
+    ><div class="column four of-six">column 4</div
+    ><div class="column five of-six">column 5</div
+    ><div class="column six of-six">column 6</div>
+</div>
+
+<form id="dummy" action="" method="post" class="test">
+  <fieldset>
+    <!--legend>Properties</legend-->
+    <div>
+      <label for="test-input-1">Text label</label><input type="text" id="test-input-1" name="test-input-1" value="Text" />
+    </div>
+    
+    <div>
+      <label for="test-input-2">Password label</label>
+      <input type="text" id="test-input-2" name="test-input-2" value="Password">
+    </div>
+    
+    <div>
+      <label for="test-input-3" class="disabled">Background Image</label>
+      <input type="text" id="test-input-3" name="test-input-3" value="Disabled text" disabled="disabled">
+    </div>
+    
+    <div>
+      <label for="dummy1">Width</label>
+      <input type="text" id="dummy1" name="dummy1" value="value">
+      <p>You can add a paragraph of text as an explanation of something in the form. It should align nicely with the input elements.</p>
+    </div>
+    
+    <div>
+      <label>Checkboxes</label>
+      <input type="checkbox">
+    </div>
+    
+    <div>
+      <label>Radio buttons</label>
+      <input type="radio" name="example"><span class="label">Radio one</span>
+      <input type="radio" name="example"><span class="label">Radio two</span>
+      <input type="radio" name="example"><span class="label">Radio three</span>
+    </div>
+  </fieldset>
+</form>
+
 
 <div class="test">
   <form id="dummy" action="" method="post">

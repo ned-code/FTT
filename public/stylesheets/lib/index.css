@@ -13,9 +13,9 @@
     padding: 0;
     margin: 0;
 }
-.index li,
-.index dt,
-.index dd {
+.index>li,
+.index>dt,
+.index>dd {
     display: inline-block;
     /* IE does not apply inline-block to block elements, make them inline... */
     *display: inline;
@@ -24,20 +24,21 @@
     vertical-align: bottom;
     margin-right: 6px;
 }
-.index li:last-child,
-.index li.last,
-.index dd:last-child,
-.index dd.last {
+.index>li:last-child,
+.index>li.last,
+.index>dd:last-child,
+.index>dd.last {
     margin-right: 0;
 }
-.index dt, dd {
+.index>dt,
+.index>dd {
     width: 160px;
     line-height: 1.6em;
 }
-.index dt {
+.index>dt {
     vertical-align: text-bottom;
 }
-.index dd {
+.index>dd {
     vertical-align: text-top;
     /* reset the margin that usually indents a dd */
     margin-left: 0;

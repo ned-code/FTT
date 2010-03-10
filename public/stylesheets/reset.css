@@ -34,7 +34,7 @@ blockquote:before, blockquote:after, q:before, q:after { content: ""; }
 blockquote, q { quotes: "" ""; }
 
 /* Remove annoying border on linked images. */
-a img { border: none; }
+/*a img { border: none; }*/
 
 /* Get rid of default focus outlines in FF */
 a:focus { outline: none; }
