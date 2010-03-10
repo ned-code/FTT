@@ -14,6 +14,7 @@ input[type='text'],
 input[type='password'],
 input[type='submit'],
 textarea {
+  font-size: inherit;
   margin: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing:    border-box;
@@ -25,7 +26,7 @@ input[type='text'],
 input[type='password'],
 textarea {
   border: none;
-  padding: 0.4em;
+  padding: 0.3333em;
   width: 100%; height: 1.8em;
 }
 
@@ -33,8 +34,6 @@ label {
   font-weight: bold;
   /* Equalise FF's <label> baseline to its <input> baseline. Mostly. */
   line-height: 1.077;
-  
-  /*background: black;*/
 }
 
 input[type='text'],
@@ -50,18 +49,22 @@ input[type='password']:focus {
   outline: none;
 }
 
-input.default {
-  font-style: italic;
-  font-weight: normal; 
-}
-
-textarea {
-  padding: 0.4em;
+input[type=submit] {
+    vertical-align: baseline;
+    /* Control the baseline position in FF. Doesn't affect Safari, and
+       doesn't do anything when button is left as default system button. */
+    padding-bottom: 0.23em;
 }
 
 input[type=checkbox], input[type=radio],
 input.checkbox, input.radio {
-  position:relative; top:0;
+  /*position:relative; top: 0em;*/
+  vertical-align: baseline;
+}
+
+input.default {
+  font-style: italic;
+  font-weight: normal; 
 }
 
 .stack label {

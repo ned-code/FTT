@@ -1,5 +1,4 @@
 namespace :users do
-  
   task :add_dev => :environment do
     users = [
       {:username => 'admin',  :email => "admin@mnemis.com", :pass => '123456'},
