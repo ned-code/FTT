@@ -18,16 +18,30 @@ describe Document do
   describe "accesses creation" do
     subject { Factory(:document) }
     
-    it "should add user as editor" do
+    it "should add user as editor (using create_accesses method)" do
       user = Factory(:user)
       subject.create_accesses({ :editors => [user.email], :readers => [], :editorsMessage => "Dummy", :readersMessage => "Dummy" }.to_json)
       user.has_role?("editor", subject).should be_true
     end
     
-    it "should add user as reader" do
+    it "should add user as reader (using create_accesses method)" do
       user = Factory(:user)
       subject.create_accesses({ :editors => [], :readers => [user.email], :editorsMessage => "Dummy", :readersMessage => "Dummy" }.to_json)
       accesses = subject.to_access_json
+      user.has_role?("reader", subject).should be_true
+    end
+    
+    it "should add user as editor" do
+      user = Factory(:user)
+      subject.create_role_for_users({ :role => "editor", :recipients => [user.email, "test@mnemis.com"], :message => "Dummy" }.to_json)
+      subject.to_user_for_this_role_json("editor")
+      user.has_role?("editor", subject).should be_true
+    end
+    
+    it "should add user as reader" do
+      user = Factory(:user)
+      subject.create_role_for_users({ :role => "reader", :recipients => [user.email, "test@mnemis.com"], :message => "Dummy" }.to_json)
+      subject.to_user_for_this_role_json("reader")
       user.has_role?("reader", subject).should be_true
     end
     
@@ -73,6 +87,44 @@ describe Document do
       user.has_role!("editor", subject)
       subject.update_accesses({ :editors => [user.id], :readers => [] }.to_json)
       user.has_role?("editor", subject).should be_true
+      user.has_roles_for?(subject).should be_true
+    end
+  end
+  
+  describe "accesses suppression" do
+    subject { Factory(:document) }
+    
+    it "should remove editor role" do
+      user = Factory(:user)
+      user.has_role!("editor", subject)
+      subject.remove_role({ :role => "editor", :user_id => user.id }.to_json)
+      user.has_role?("editor", subject).should be_false
+      user.has_roles_for?(subject).should be_false
+    end
+    
+    it "should remove reader role" do
+      user = Factory(:user)
+      user.has_role!("reader", subject)
+      subject.remove_role({ :role => "reader", :user_id => user.id }.to_json)
+      user.has_role?("reader", subject).should be_false
+      user.has_roles_for?(subject).should be_false
+    end
+    
+    it "sould remove editor role but keep other roles" do
+      user = Factory(:user)
+      user.has_role!("editor", subject)
+      user.has_role!("reader", subject)
+      subject.remove_role({ :role => "editor", :user_id => user.id }.to_json)
+      user.has_role?("editor", subject).should be_false
+      user.has_roles_for?(subject).should be_true
+    end
+    
+    it "sould remove reader role but keep other roles" do
+      user = Factory(:user)
+      user.has_role!("editor", subject)
+      user.has_role!("reader", subject)
+      subject.remove_role({ :role => "reader", :user_id => user.id }.to_json)
+      user.has_role?("reader", subject).should be_false
       user.has_roles_for?(subject).should be_true
     end
   end

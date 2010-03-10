@@ -39,7 +39,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.currentListingPageId = 1;
         WebDoc.application.documentEditor = this;
         WebDoc.application.undoManager = new MTools.UndoManager();
-        WebDoc.application.accessController = new WebDoc.DocumentAccessController();
+        WebDoc.application.accessController = new WebDoc.DocumentCollaborationController();
         WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
         WebDoc.application.shareController = new WebDoc.DocumentShareController();
         WebDoc.application.categoriesController.addListener(this);

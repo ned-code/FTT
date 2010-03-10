@@ -12,6 +12,13 @@ class Notifier < ActionMailer::Base
     subject     "No more role on document"
     body        :user => user, :current_user => current_user, :document => document
   end
+  
+  def removed_role_notification(role, user, current_user, document)
+    recipients  user.email
+    from        "info@webdoc.com"
+    subject     "Role #{role} removed on document"
+    body        :user => user, :current_user => current_user, :document => document, :role => role
+  end
 
   def start_follower_notification(user, follower)
     recipients  user.email

@@ -115,10 +115,11 @@ en:
         document_size_title: "Document size"
         creationDate: "Creation date"
         change_access_dialog:
-          invite_tab: "Invite people" 
+          invite_tab: "Invite" 
           current_editors: "Current editors"
-          add_editors: "Add editors (email separated by ';')"
-          add_readers: "Add viewers (email separated by ';')"
+          add_editors: "Allow these people to participate to the life of this webdoc"
+          add_editors_explanation: "(They will have the same rights as you have)"
+          add_readers: "(Enter emails)"
           add_editors_message: "Your message"
           add_readers_message: "Your message"
         share_document_dialog:
@@ -127,7 +128,7 @@ en:
           share_radio: "On"
           unshare_radio: "Off"
           shared_address_label: "Public url"
-          with_friends: "or with a few friends"
+          with_friends: "or with some webdoc members"
         share_document: "Share webdoc"
         everybody: "Everybody"
         choose_title: "Choose a title"

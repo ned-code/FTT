@@ -85,7 +85,7 @@ WebDoc.DocumentList = $.klass({
     var documentActionsNode = $("<div>").addClass("wb-document-actions");
     documentActionsNode.append($("<a>").addClass("wb-document-delete").attr("href", "").attr("title", "delete"));
     documentActionsNode.append($("<a>").addClass("wb-document-info sec-action").attr("href", "").attr("title", "info").html("info"));
-    documentActionsNode.append($("<a>").addClass("wb-document-collaborate sec-action").attr("href", "").attr("title", "collaborate").html("collaborate"));
+    documentActionsNode.append($("<a>").addClass("wb-document-collaborate sec-action").attr("href", "").attr("title", "invite co-editors").html("invite co-editors"));
     if (document.isShared()) {
       documentActionsNode.append($("<a>").addClass("wb-document-unshare sec-action").attr("href", "").attr("title", "unshare").html("unshare"));     
     }

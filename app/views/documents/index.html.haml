@@ -88,40 +88,52 @@
           = t('.document_forms.change_access_dialog.invite_tab')
       %li
         %a{ :href => "#wb-access-list"}
-          = t('.document_forms.change_access_dialog.current_accesses')
+          = t('.document_forms.change_access_dialog.current_editors')
     #wb-invitation-tab
       %label= t('.document_forms.change_access_dialog.add_editors')
+      %p= t('.document_forms.change_access_dialog.add_editors_explanation')
       %br
-      %textarea#wb-invitation-add-editors{ :rows => 3, :cols => 20}
+      %textarea#wb-invitation-add-editors{ :rows => 1, :cols => 20}
       %br
       %label= t('.document_forms.change_access_dialog.add_editors_message')
       %br
       %textarea#wb-invitation-add-editors-message{ :rows => 3, :cols => 20}
-      %hr
-      %label= t('.document_forms.change_access_dialog.add_readers') 
-      %br
-      %textarea#wb-invitation-add-viewers{ :rows => 3, :cols => 20}
-      %br
-      %label= t('.document_forms.change_access_dialog.add_readers_message')
-      %br
-      %textarea#wb-invitation-add-viewers-message{ :rows => 3, :cols => 20}
     #wb-access-list
       #wb-invitation-failed
       %ul#document_access_list
       
 #wb-share-document-dialog{ :style => "display:none", :title => t('.document_forms.share_document_dialog.title') }
-  %form
-    %p
-      = t('.document_forms.share_document_dialog.explanation')
-    %input#unshare_webdoc_radio{ :type => "radio", :name => "share", :value => "off" }
-    %span.label= t('.document_forms.share_document_dialog.unshare_radio')
-    %br
-    %input#share_webdoc_radio{ :type => "radio", :name => "share", :value => "on" }
-    %span.label= t('.document_forms.share_document_dialog.share_radio')
-    %br
-    %span.label= t('.document_forms.share_document_dialog.shared_address_label')
-    %br
-    %input#shared_webdoc_url{ :type => "text", :size => 40}
+  #wb-document-share-tabs
+    %ul
+      %li
+        %a{ :href => "#wb-sharing-tab"}
+          Sharing
+      %li
+        %a{ :href => "#wb-shared-users-list-tab"}
+          Shared with
+    #wb-sharing-tab
+      %form
+        %p
+          = t('.document_forms.share_document_dialog.explanation')
+        %input#unshare_webdoc_radio{ :type => "radio", :name => "share", :value => "off" }
+        %span.label= t('.document_forms.share_document_dialog.unshare_radio')
+        %br
+        %input#share_webdoc_radio{ :type => "radio", :name => "share", :value => "on" }
+        %span.label= t('.document_forms.share_document_dialog.share_radio')
+        %br
+        %span.label= t('.document_forms.share_document_dialog.shared_address_label')
+        %br
+        %input#shared_webdoc_url{ :type => "text", :size => 40}
+        %p= t('.document_forms.share_document_dialog.with_friends')
+        %label= t('.document_forms.change_access_dialog.add_readers') 
+        %br
+        %textarea#wb-invitation-add-viewers{ :rows => 1, :cols => 20}
+        %br
+        %label= t('.document_forms.change_access_dialog.add_readers_message')
+        %br
+        %textarea#wb-invitation-add-viewers-message{ :rows => 3, :cols => 20}
+    #wb-shared-users-list-tab
+      
 
 -#%div.footer-bar.bar
 -#  %div.wrap.clear

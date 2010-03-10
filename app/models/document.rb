@@ -80,19 +80,11 @@ class Document < ActiveRecord::Base
   end
   
   def has_editor_rights
-    if current_user != nil
-      current_user.has_role?('editor', self) or current_user.has_role?('admin')
-    else
-      false
-    end
+    current_user.present? && (current_user.has_role?('editor', self) || current_user.has_role?('admin'))
   end
   
   def to_json(options = {})
-    method_hash = { :methods => :has_editor_rights }
-    if options != {}
-      method_hash.merge!(options)
-    end
-    super(method_hash)
+    super options.merge(:methods => :has_editor_rights)
   end
   
   def to_access_json
@@ -113,6 +105,109 @@ class Document < ActiveRecord::Base
     result
   end
   
+  def to_user_for_this_role_json(role_name)
+    role = self.accepted_roles.first(:conditions => { :name => role_name })
+    result = { :access => [], :failed => [] }
+    role.users.each do |user|
+      is_creator = (self.creator && self.creator.id == user.id)? true : false
+      user_infos = [:id => user.id, :username => user.username, :email => user.email, :creator => is_creator]
+      result[:access] << user_infos
+    end
+    if @unvalid_access_emails
+      @unvalid_access_emails.each do |email|
+        result[:failed] << email
+      end
+    end
+    result
+  end
+  
+  # def to_editor_roles_json
+  #   editor_role = self.accepted_roles.first(:conditions => { :name => "editor" })
+  #   result = { :access => [], :failed => [] }
+  #   editor_role.users.each do |user|
+  #     is_creator = (self.creator && self.creator.id == user.id)? true : false
+  #     user_infos = [:id => user.id, :username => user.username, :email => user.email, :creator => is_creator]
+  #     result[:access] << user_infos
+  #   end
+  #   if @unvalid_editor_emails
+  #     @unvalid_editor_emails.each do |email|
+  #       result[:failed] << email
+  #     end
+  #   end
+  #   result
+  # end
+  
+  # No more used in current GUI
+  def create_accesses(accesses = {})
+    accesses_parsed = JSON.parse(accesses);
+    readers = accesses_parsed['readers']
+    editors = accesses_parsed['editors']
+    readers_message = accesses_parsed['readersMessage']
+    editors_message = accesses_parsed['editorsMessage']
+    
+    readers.each do |user_email|
+      user = User.find_by_email(user_email.strip)
+      if user 
+        if !user.has_role?("reader", self)
+          user.has_only_reader_role!(self)
+          Notifier.deliver_role_notification("reader", user, Thread.current[:user], self, readers_message)
+        end
+      else
+        add_unvalid_email_to_array(user_email)
+      end
+    end
+    editors.each do |user_email|
+      user = User.find_by_email(user_email)
+      if user
+        if !user.has_role?("editor", self)
+          user.has_only_editor_role!(self)
+          Notifier.deliver_role_notification("editor", user, Thread.current[:user], self, editors_message)
+        end
+      else
+        add_unvalid_email_to_array(user_email)
+      end
+    end
+  end
+  
+  def create_role_for_users(accesses = {})
+    accesses_parsed = JSON.parse(accesses);
+    role = accesses_parsed['role']
+    recipients = accesses_parsed['recipients']
+    message = accesses_parsed['message']
+    
+    recipients.each do |user_email|
+      user = User.find_by_email(user_email.strip)
+      if user 
+        if !user.has_role?(role, self)
+          #user.has_only_reader_role!(self)
+          user.has_role!(role, self)
+          Notifier.deliver_role_notification(role, user, current_user, self, message)
+        end
+      else
+        add_unvalid_email_to_array(user_email)
+      end
+    end
+  end
+  
+  # def create_editor_roles(editor_accesses = {})
+  #   accesses_parsed = JSON.parse(editor_accesses);
+  #   editors = accesses_parsed['editors']
+  #   editors_message = accesses_parsed['editorsMessage']
+  #   
+  #   editors.each do |user_email|
+  #     user = User.find_by_email(user_email)
+  #     if user
+  #       if !user.has_role?("editor", self)
+  #         user.has_only_editor_role!(self)
+  #         Notifier.deliver_role_notification("editor", user, Thread.current[:user], self, editors_message)
+  #       end
+  #     else
+  #       add_unvalid_editor_email_to_array(user_email)
+  #     end
+  #   end
+  # end
+  
+  # No more used in current GUI
   def update_accesses(accesses = {})
     accesses_parsed = JSON.parse(accesses);
     readers = accesses_parsed['readers']
@@ -137,40 +232,25 @@ class Document < ActiveRecord::Base
         end
       end
     end
+  end 
+  
+  def remove_role(params)
+    params_parsed = JSON.parse(params)
+    user = User.find(params_parsed['user_id'])
+    role = params_parsed['role']
+    if user
+      user.has_no_role!(role, self)
+      Notifier.deliver_removed_role_notification(role, user, current_user, self)
+    end
   end
   
-  def create_accesses(accesses = {})
-    accesses_parsed = JSON.parse(accesses);
-    readers = accesses_parsed['readers']
-    editors = accesses_parsed['editors']
-    readers_message = accesses_parsed['readersMessage']
-    editors_message = accesses_parsed['editorsMessage']
-    
-    readers.each do |user_email|
-      user = User.find_by_email(user_email)
-      if user 
-        if !user.has_role?("reader", self)
-          user.has_only_reader_role!(self)
-          Notifier.deliver_role_notification("reader", user, Thread.current[:user], self, readers_message)
-        end
-      else
-        add_unvalid_email_to_array(user_email)
-      end
-    end
-    editors.each do |user_email|
-      user = User.find_by_email(user_email)
-      if user
-        if !user.has_role?("editor", self)
-          user.has_only_editor_role!(self)
-          Notifier.deliver_role_notification("editor", user, Thread.current[:user], self, editors_message)
-        end
-      else
-        add_unvalid_email_to_array(user_email)
-      end
-    end
-    
-    #return false if @unvalid_access_emails and @unvalid_access_emails.count > 0
-  end
+  # def remove_reader_role(user_id)
+  #   user = User.find(user_id)
+  #   if user
+  #     user.has_no_role!("reader", self)
+  #     Notifier.deliver_no_role_notification(user, current_user, self)
+  #   end
+  # end
   
 private
   

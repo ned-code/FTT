@@ -56,7 +56,7 @@ class DocumentsController < DocumentController
     render :json => @document
   end
   
-  # DELETE /document/:id
+  # DELETE /documents/:id
   def destroy
     @document.destroy
     
