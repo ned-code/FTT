@@ -66,7 +66,8 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $(".wb-document-unshare").live("click", this.unshareDocument); 
         $("#wb-document-filter-date").bind("click", {document_filter: null}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-owned-by-me").bind("click", {document_filter: 'creator'}, this.loadDocumentsWithFilter.pBind(this));
-        $("#wb-document-filter-shared-with-me").bind("click", {document_filter: 'shared'}, this.loadDocumentsWithFilter.pBind(this));
+        $("#wb-document-filter-editor-rights").bind("click", {document_filter: 'editor'}, this.loadDocumentsWithFilter.pBind(this));
+        $("#wb-document-filter-shared-with-me").bind("click", {document_filter: 'reader'}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-public").bind("click", {document_filter: 'public'}, this.loadDocumentsWithFilter.pBind(this));
         newDocCustomSizeWidthField.bind("keypress", this.validateInteger);
         newDocCustomSizeHeightField.bind("keypress", this.validateInteger);
