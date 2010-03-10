@@ -57,7 +57,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     {
         ddd("Start Document editor");
         var that = this;
-        $("#wb-create-document-button").bind("click", this.createDocument);
+        $("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
         $(".wb-document-edit").live("click", this.editDocument);
         $(".wb-document-info").live("click", this.renameDocument);
         $(".wb-document-delete").live("click", this.deleteDocument);
@@ -81,42 +81,48 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         // Default selection, documents owned by me
         this.loadDocumentsWithFilter({document_filter: 'creator'});
         
+        //this.newDocumentDialog = $("#wb-new-document-dialog");
+        this.newDocumentDialog = $("#wb-new-form");
+        this.newDocumentDialog
+        .remove()
+        .css({ display: '' });
+        
         // create new document dialog
-        $("#wb-new-document-dialog").dialog(
-        {
-            bgiframe: true,
-            autoOpen: false,
-            width: 450,
-            height: 350,
-            modal: true,
-            buttons: 
-            {
-                Save: function()
-                {
-                    $(this).dialog('close');
-                    
-                    var newDoc = new WebDoc.Document();
-                    newDoc.setTitle(newDocNameField.val(), true);
-                    newDoc.setDescription(newDocDescriptionField.val(), true);
-                    newDoc.setCategory(newDocCategoryField.val(), true)
-                    var documentSizeChoice = $("input[@name='wb-new-document-size']:checked", $('#wb-new-form')).val();
-                    newDoc.setSize(that.getSizeFromChoice(documentSizeChoice, newDocCustomSizeWidthField.val(), newDocCustomSizeHeightField.val()), true);
-                    newDoc.save(function(newObject, status)
-                    {
-                      if (status == "OK") 
-                      {
-                        that.documents.push(newDoc);
-                        that.filter.addDocument(newDoc);
-                        document.location = "/documents/" + newDoc.uuid() + "#1";
-                      }
-                    });
-                },
-                Cancel: function()
-                {
-                    $(this).dialog('close');
-                }
-            }
-        });
+        //$("#wb-new-document-dialog").dialog(
+        //{
+        //    bgiframe: true,
+        //    autoOpen: false,
+        //    width: 450,
+        //    height: 350,
+        //    modal: true,
+        //    buttons: 
+        //    {
+        //        Save: function()
+        //        {
+        //            $(this).dialog('close');
+        //            
+        //            var newDoc = new WebDoc.Document();
+        //            newDoc.setTitle(newDocNameField.val(), true);
+        //            newDoc.setDescription(newDocDescriptionField.val(), true);
+        //            newDoc.setCategory(newDocCategoryField.val(), true)
+        //            var documentSizeChoice = $("input[@name='wb-new-document-size']:checked", $('#wb-new-form')).val();
+        //            newDoc.setSize(that.getSizeFromChoice(documentSizeChoice, newDocCustomSizeWidthField.val(), newDocCustomSizeHeightField.val()), true);
+        //            newDoc.save(function(newObject, status)
+        //            {
+        //              if (status == "OK") 
+        //              {
+        //                that.documents.push(newDoc);
+        //                that.filter.addDocument(newDoc);
+        //                document.location = "/documents/" + newDoc.uuid() + "#1";
+        //              }
+        //            });
+        //        },
+        //        Cancel: function()
+        //        {
+        //            $(this).dialog('close');
+        //        }
+        //    }
+        //});
         
         // create edit document dialog
         $("#wb-edit-document-dialog").dialog(
@@ -147,7 +153,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                     $(this).dialog('close');
                 }
             }
-        });    
+        });
     },
     
     editDocument: function(e)
@@ -157,12 +163,50 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
       document.location = "/documents/" + documentToEdit + "#1";
     },
     
-    createDocument: function()
+    createDocument: function(e)
     {
-        newDocNameField.val("Untitled");
+        var that = this;
+        
+        newDocNameField.val("My webdoc");
         newDocDescriptionField.val("");
-        $("#wb-new-document-size-classic")[0].checked = true;
-        $("#wb-new-document-dialog").dialog('open');
+        this.newDocumentDialog.find("#wb-new-document-size-classic")[0].checked = true;
+        
+        // This is is...
+        // this.newDocumentDialog.dialog('open');
+        
+        this.newDocumentDialog.pop({
+            attachTo: $( e.currentTarget ),
+            initCallback: function(){
+                var node = $(this);
+                
+                node
+                .bind('submit', function() {
+                    
+                    var newDoc = new WebDoc.Document();
+                    newDoc.setTitle(newDocNameField.val(), true);
+                    newDoc.setDescription(newDocDescriptionField.val(), true);
+                    newDoc.setCategory(newDocCategoryField.val(), true);
+
+                    var documentSizeChoice = $("input[name='wb-new-document-size']:checked", this).val();
+                    newDoc.setSize(that.getSizeFromChoice(documentSizeChoice, newDocCustomSizeWidthField.val(), newDocCustomSizeHeightField.val()), true);
+                    newDoc.save(function(newObject, status) {
+                      if (status == "OK") 
+                      {
+                        that.documents.push(newDoc);
+                        that.filter.addDocument(newDoc);
+                        document.location = "/documents/" + newDoc.uuid() + "#1";
+                      }
+                    });
+                    
+                    $(this).trigger('close');
+                    return false;
+                })
+                .find("input[type='text']")
+                .eq(0)
+                .focus()
+                .select();
+            }
+        });
     },
     
     renameDocument: function(e)

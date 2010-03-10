@@ -11,6 +11,7 @@
 				popClass: plugin,
 				popWrapClass: plugin+'-wrap',
 				origin: [12, 12]
+				// attachTo
 				// initCallback
 				// openCallback
 				// closeCallback
@@ -40,11 +41,11 @@
 		
 		// Define actions
 		return this.each(function(i) {
-			var node = jQuery(this),
+			var node = options.attachTo || body,
 					offset = node.offset(),
 					width = node.outerWidth(),
 					height = node.outerHeight(),
-					pop = options.content,
+					pop = jQuery(this),
 					wrapCss = {
 						left: offset.left + 0.5 * width,
 						top: offset.top + 0.5 * height
@@ -112,7 +113,8 @@
 			
 			// Figure out orientation
 			popShutCss[ wrapCss.left + pop.width() < bodySize.width ? 'left' : 'right' ] = -originX;
-			popShutCss[ wrapCss.top + pop.height() < bodySize.height ? 'top' : 'bottom' ] = -originY;
+			//popShutCss[ wrapCss.top + pop.height() < bodySize.height ? 'top' : 'bottom' ] = -originY;
+			popShutCss.top = -originY;
 			popShutCss.WebkitTransformOrigin = originX + 'px ' + originY + 'px';
 			popShutCss.MozTransformOrigin = originX + 'px ' + originY + 'px';
 			
@@ -197,3 +199,14 @@
 		updateBodySize();
 	});
 })(jQuery);
+
+
+// TODO: put this setup somewhere more sensible
+
+jQuery.extend(jQuery.fn.pop.options, {
+  // Some of these should really be put in a global setup
+  popWrapClass: 'ui ui-pop-position',
+  popClass: 'ui-pop ui-widget ui-corner-all',
+  openEasing: 'easeOutBack',
+  shutEasing: 'easeInQuart'
+});

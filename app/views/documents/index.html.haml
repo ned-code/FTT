@@ -18,35 +18,49 @@
   %div#wb-document-list-container.wrap
 
 #wb-new-document-dialog{ :style => "display:none", :title => t('.create_new_document') }
-  %form#wb-new-form{ :action => ""}
+  %form#wb-new-form.new-form{ :action => "", :title => t('.create_new_document') }
     %fieldset
-      %label{ :for => "name" }= t ".document_forms.name"
-      %br
-      %input#wb-new-document-name.ui-corner-all{ :type => "text", :name => "wb-new-document-name", :style => "width:100%"}
-      %br
-      %label{ :for => "description" }= t ".document_forms.description"
-      %br
-      %textarea#wb-new-document-description.ui-corner-all{ :rows => "3", :name => "wb-new-document-description", :style => "width:100%"}
-      %br
-      %label{ :for => "category" }= t ".document_forms.category"
-      %br
-      %select#wb-new-document-category
-      %br
-      %label{ :for => "document_size" }= t ".document_forms.document_size_title"
-      %br
-      %input#wb-new-document-size-custom{ :type => "radio", :name => "wb-new-document-size", :value => "custom" }
-      = t('.document_forms.document_size.custom')
-      = t('.document_forms.document_size.width')
-      %input#wb-new-document-size-custom-width{ :type => "text" , :size => 6}
-      = t('.document_forms.document_size.height')
-      %input#wb-new-document-size-custom-height{ :type => "text" , :size => 6}
-      %br
-      %input#wb-new-document-size-iPhone{ :type => "radio", :name => "wb-new-document-size", :value => "iPhone" }
-      = t('.document_forms.document_size.iPhone')
-      %input#wb-new-document-size-classic{ :type => "radio", :name => "wb-new-document-size", :value => "classic" }
-      = t('.document_forms.document_size.classic')
-      %input#wb-new-document-size-iPad{ :type => "radio", :name => "wb-new-document-size", :value => "iPad" }
-      = t('.document_forms.document_size.iPad')
+      %div.stack
+        %label{ :for => "name" }= t ".document_forms.name"
+        %input#wb-new-document-name.ui-corner-all{ :type => "text", :name => "wb-new-document-name", :placeholder => "My brand spanking new webdoc" }
+      %div.stack
+        %label{ :for => "category" }= t ".document_forms.category"
+        %select#wb-new-document-category
+      %div.stack
+        %label{ :for => "description" }= t ".document_forms.description"
+        %textarea#wb-new-document-description.ui-corner-all{ :rows => "3", :name => "wb-new-document-description" }
+      
+    %fieldset
+      %legend= t ".document_forms.document_size_title"
+      
+      %div.column.one.of-three
+        %label
+          %input#wb-new-document-size-custom{ :type => "radio", :name => "wb-new-document-size", :value => "custom" }
+          = t('.document_forms.document_size.custom')
+      %div.shunt.column.two.of-three>
+        %label= t('.document_forms.document_size.width')
+        %input#wb-new-document-size-custom-width{ :type => "text" , :size => 6}
+      %div.shunt.column.three.of-three>
+        %label= t('.document_forms.document_size.height')
+        %input#wb-new-document-size-custom-height{ :type => "text" , :size => 6}
+      
+      %div
+        %label
+          %input#wb-new-document-size-iPhone{ :type => "radio", :name => "wb-new-document-size", :value => "iPhone" }
+          = t('.document_forms.document_size.iPhone')
+      %div
+        %label
+          %input#wb-new-document-size-classic{ :type => "radio", :name => "wb-new-document-size", :value => "classic" }
+          = t('.document_forms.document_size.classic')
+      %div
+        %label
+          %input#wb-new-document-size-iPad{ :type => "radio", :name => "wb-new-document-size", :value => "iPad" }
+          = t('.document_forms.document_size.iPad')
+    
+    %div.ui-actions
+      %a{ :href => '#cancel', :class => 'cancel' } cancel
+      %input{ :type => 'submit', :name => 'new-document', :value => 'Create' }
+
 
 #wb-edit-document-dialog{ :style => "display:none",:title => t('.edit_document') }
   %form#wb-edit-form{ :action => ""}

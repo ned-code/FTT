@@ -107,7 +107,6 @@ WebDoc.PageBrowserItemView = $.klass({
         popWrapClass: 'ui ui-pop-position',
         popClass: 'ui-pop ui-widget ui-corner-all',
         width: '12em',
-        content: this._popForm,
         openEasing: 'easeOutBack',
         shutEasing: 'easeInQuart'
       };
@@ -121,18 +120,19 @@ WebDoc.PageBrowserItemView = $.klass({
           node.css({ display: '' });
         }
       } else {
-        // TODO: We a way of knowing what was clicked.
+        // TODO: We lack a way of knowing what was clicked.
         node = jQuery(".toolbar-panel a[href='#add-page']");
         
         popOptions.orientation = 'bottom';
       }
       
-      node.pop(
+      this._popForm.pop(
         jQuery.extend( popOptions, {
+          attachTo: node,
           initCallback: function(){
             var currentTitle = self.page.getTitle();
             
-            // Oh man, it returns the string 'undefined'
+            // It returns the string 'undefined'
             if (currentTitle === undefined || currentTitle === 'undefined') {
               self._popTitle.addClass( 'default' );
             }

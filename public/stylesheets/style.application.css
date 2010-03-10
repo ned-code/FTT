@@ -91,7 +91,9 @@ html, body {
 }
 
 
-
+.new-form {
+  width: 36em;
+}
 
 #flash {
     position: fixed;
