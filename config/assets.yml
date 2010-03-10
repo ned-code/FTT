@@ -9,6 +9,7 @@ stylesheets:
     - public/stylesheets/lib/forms.css
     - public/stylesheets/lib/index.css
     - public/stylesheets/lib/layer.css
+    - public/stylesheets/lib/column.css
     - public/stylesheets/style.css
     - public/stylesheets/style.ui.css
   document_editor:

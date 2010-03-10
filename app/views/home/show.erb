@@ -1,0 +1,57 @@
+<div class="action-bar bar">
+  <div class="wrap clear">
+    <h2>Log in</h2>
+    <form action="<%= session_path(@user) %>" method="post">
+      
+      <input name="authenticity_token" type="hidden" value="<%= protect_against_forgery? ? form_authenticity_token : '' %>" />
+      
+      <fieldset>
+        <div class="stack column one of-four">
+          <label for="<%= :email %>">Email</label>
+          <input id="<%= :email %>" name="<%= :email %>" size="30" type="text" />
+        </div>
+        <div class="stack column two of-four">
+          <label for="<%= :password %>">Password</label>
+          <input id="<%= :password %>" name="<%= :password %>" size="30" type="password" />
+        </div>
+      </fieldset>
+      
+      <fieldset>
+        <div>
+          
+          <label for="<%= :remember_me %>">
+            <input id="<%= :remember_me %>" name="<%= :remember_me %>" type="checkbox" value="1" />
+            Remember me
+          </label>
+          <input name="login" type="submit" value="Login">
+        </div>
+      </fieldset>
+    
+    </form>
+  </div>
+</div>
+
+<div>
+  <div class="wrap clear">
+    <%= render "shared/devise_links" %>
+  </div>
+</div>
+
+<!-- The haml version -->
+<!--
+    - form_for :user, :url => session_path(@user) do |f|
+      %div
+        = f.label :email
+        = f.text_field :email
+      %div
+        = f.label :password
+        = f.password_field :password
+      %div
+        %label{ :for => "user_remember_me" }
+          = f.check_box :remember_me
+          = "Remember me"
+      %div
+        = submit_tag "Login"
+    
+-->
+<!-- The html version -->

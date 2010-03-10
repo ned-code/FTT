@@ -28,14 +28,6 @@ html, body {
     
 }
 
-.columns-2 div {
-  float: left;
-  width: 48%;
-}
-.columns-2 div:first-child {
-  margin-right: 2%;
-}
-
 .tabs {
     white-space: nowrap;
 }
@@ -54,14 +46,31 @@ html, body {
 }
 
 .add-button {
-  padding: 0 0 0 28px;
-  background-repeat: no-repeat;
-  height: 20px;
-  line-height: 15px;
-  display: inline-block;
-  color: white;
-  /*font-weight: bold;*/
-  font-size: 1.6667em;
+    padding: 0 0 0 28px;
+    background-repeat: no-repeat;
+    height: 20px;
+    line-height: 15px;
+    display: inline-block;
+    color: white;
+    /*font-weight: bold;*/
+    font-size: 1.6667em;
+}
+
+.action-bar input[type=submit]:hover {
+    background: hsla( 198, 0%, 0%, 0.4);
+}
+.action-bar input[type=submit] {
+    background: hsla( 198, 0%, 0%, 0.4);
+    background: none;
+    font-weight: bold;
+    color: white;
+    border: 2px solid white;
+    height: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
+    -webkit-border-radius: 1em;
+    -moz-border-radius:    1em;
+    border-radius:         1em;
 }
 
 

@@ -1,0 +1,129 @@
+/* column.css
+ * 
+ * Uses a technique for getting inline-block behaviour in IE, explained well here:
+ * http://blog.mozilla.com/webdev/2009/02/20/cross-browser-inline-block/
+ */
+
+/* The inline-block method produces nice flow, but is susceptible to
+ * rounding errors and requires spaceless html.
+ */
+
+.column {
+    display: inline-block;
+    position: relative;
+    
+    /* IE does not apply inline-block to block elements, make them inline... */
+    *display: inline;
+    /* ...and trigger hasLayout */
+    zoom: 1;
+    vertical-align: top;
+    
+    /* Stop content pushing column wider than it should be */
+    overflow: hidden;
+    
+    min-height: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    box-sizing:         border-box;
+}
+
+.of-two {
+    width: 48%;
+    margin-right: 4%;
+}
+.of-three {
+    width: 30.6666%;
+    margin-right: 4%;
+}
+.of-four {
+    width: 22%;
+    margin-right: 4%;
+}
+.of-five {
+    width: 17.6%;
+    margin-right: 3%;
+}
+.of-six {
+    width: 15%;
+    margin-right: 2%;
+}
+.last,
+.two.of-two,
+.three.of-three,
+.four.of-four,
+.five.of-five,
+.six.of-six {
+    margin-right: 0;
+}
+
+/* The absolute position method is not susceptible to rounding errors,
+ * and can be forced to fill 100% height, but clearly causes problems with
+ * the overflow of the container.
+ */
+
+.absolute-column {
+    position: absolute;
+    top: 0;
+    
+    /* Stop content pushing column wider than it should be */
+    overflow: hidden;
+    
+    min-height: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    box-sizing:         border-box;
+}
+
+.absolute-column.one {
+    left: 0;
+}
+
+.absolute-column.two.of-two {
+    left: 52%;
+}
+
+.absolute-column.two.of-three {
+    left: 34.6667%;
+}
+.absolute-column.three.of-three {
+    left: 69.3333%;
+}
+
+.absolute-column.two.of-four {
+    left: 26%;
+}
+.absolute-column.three.of-four {
+    left: 52%;
+}
+.absolute-column.four.of-four {
+    left: 78%;
+}
+
+.absolute-column.two.of-five {
+    left: 20.6%;
+}
+.absolute-column.three.of-five {
+    left: 41.2%;
+}
+.absolute-column.four.of-five {
+    left: 61.8%;
+}
+.absolute-column.five.of-five {
+    left: 82.4%;
+}
+
+.absolute-column.two.of-six {
+    left: 17%;
+}
+.absolute-column.three.of-six {
+    left: 34%;
+}
+.absolute-column.four.of-six {
+    left: 51%;
+}
+.absolute-column.five.of-six {
+    left: 68%;
+}
+.absolute-column.six.of-six {
+    left: 85%;
+}
