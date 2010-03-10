@@ -216,6 +216,10 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     }.pBind(this));
   },
   
+  closeDocument: function(e) {
+    window.location = "/documents/";
+  },
+  
   toggleDebugMode: function() {
     this.disableHtml = !this.disableHtml; 
     this.loadPageId( this.currentPage.uuid());

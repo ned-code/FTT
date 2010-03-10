@@ -12,8 +12,8 @@
           %a{ :href =>'#videos'}= t('.videos.title')
         %li.apps
           %a{ :href =>'#apps'}= t('.apps.title')
-        %li.web-browser
-          %a{ :href =>'#web-browser-favorites'}= t('.web.title')          
+        -#%li.web-browser
+        -#  %a{ :href =>'#web-browser-favorites'}= t('.web.title')          
     #images.view
       .toolbar
         %h1= t('.images.title')
@@ -167,29 +167,29 @@
               %a#delete_from_my_videos_action{ :href => "" }= t('.videos.detail_view.remove_from_my_videos')
             %li
               %a#add_to_my_videos_action{ :href => "" }= t('.videos.detail_view.add_to_my_videos')
-    #web-browser-favorites.view
-      .toolbar
-        %h1= t('.web.web_browser')
-        %a.back{ :href =>'#' }= t('.buttons.back')
-        
-      %ul{ :style => "display:none" }
-        %li
-          %a#show_web-browser{ :href => '#web-browser' }= t('.web.show_browser')
-      #favorites-links
-        %ul      
-          %li
-            %a#google{ :href => '#http://www.google.com/m' }= t('.web.links.google')
-          %li
-            %a#flickr{ :href => '#http://m.flickr.com' }= t('.web.links.flickr')
-          %li
-            %a#facebook{ :href => '#http://m.facebook.com' }= t('.web.links.facebook')
-          %li
-            %a#wikipedia{ :href => '#http://m.wikipedia.org' }= t('.web.links.wikipedia')                            
-    #web-browser.view
-      .toolbar
-        %h1= t('.web.detail_view.title')
-        %a.back{ :href =>'#' }= t('.buttons.back')
-      #web-browser-ui.inspector        
-        .content
-          %iframe{ :src => "http://m.wikipedia.org", :style => "width:100%; height:100%" }           
+    -# #web-browser-favorites.view
+    -#  .toolbar
+    -#    %h1= t('.web.web_browser')
+    -#    %a.back{ :href =>'#' }= t('.buttons.back')
+    -#    
+    -#  %ul{ :style => "display:none" }
+    -#    %li
+    -#      %a#show_web-browser{ :href => '#web-browser' }= t('.web.show_browser')
+    -#  #favorites-links
+    -#    %ul      
+    -#      %li
+    -#        %a#google{ :href => '#http://www.google.com/m' }= t('.web.links.google')
+    -#      %li
+    -#        %a#flickr{ :href => '#http://m.flickr.com' }= t('.web.links.flickr')
+    -#      %li
+    -#        %a#facebook{ :href => '#http://m.facebook.com' }= t('.web.links.facebook')
+    -#      %li
+    -#        %a#wikipedia{ :href => '#http://m.wikipedia.org' }= t('.web.links.wikipedia')                            
+    -##web-browser.view
+    -#  .toolbar
+    -#    %h1= t('.web.detail_view.title')
+    -#    %a.back{ :href =>'#' }= t('.buttons.back')
+    -#  #web-browser-ui.inspector        
+    -#    .content
+    -#      %iframe{ :src => "http://m.wikipedia.org", :style => "width:100%; height:100%" }           
 
