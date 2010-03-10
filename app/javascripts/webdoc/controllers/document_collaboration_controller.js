@@ -91,8 +91,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.domNode.empty();
     this.access = json.access;
     for (var i = 0; i < this.access.length; i++) {
-      var accessEntry = this.createAccessItem(this.access[i][0]);
-      this.domNode.append(accessEntry);      
+      this.createAccessItem(this.access[i][0]);     
     }
     var failedEmailsWrapper = $('#wb-invitation-failed');
     if(json.failed && json.failed.length > 0) {
@@ -105,7 +104,7 @@ WebDoc.DocumentCollaborationController = $.klass({
       }
       failedEmailsWrapper.append($('<p>').html(addresses));
       failedEmailsWrapper.show();
-      $('#document_access_list').before(failedEmailsWrapper);
+      this.domNode.before(failedEmailsWrapper);
     }
     else { 
       failedEmailsWrapper.hide(); 
@@ -114,14 +113,15 @@ WebDoc.DocumentCollaborationController = $.klass({
   },
   
   createAccessItem: function(userInfos) {
-    ddd(userInfos.id +", "+userInfos.role);
-    var result = null;
-    result = $("<li>").attr({ id: userInfos.id}).addClass("user_access").html(userInfos.username + "(" + userInfos.email + ")");
+    if (userInfos.role === "editor" ) {
+      ddd(userInfos.id +", "+userInfos.role);
+      var accessEntry = $("<li>").attr({ id: userInfos.id}).addClass("user_access").html(userInfos.username + "(" + userInfos.email + ")");
     
-    var deleteItem = $('<a href="#"/>').addClass("delete_access").attr("title", "Delete").html("Delete");
-    if(userInfos.creator) { deleteItem.hide(); }  
-    result.append(deleteItem);    
-    return result;
+      var deleteItem = $('<a href="#"/>').addClass("delete_access").attr("title", "Delete").html("Delete");
+      if(userInfos.creator) { deleteItem.hide(); }  
+      accessEntry.append(deleteItem);    
+      this.domNode.append(accessEntry);
+    }
   },
 
   sendInvitations: function() {
