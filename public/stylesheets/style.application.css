@@ -17,9 +17,12 @@ html, body {
 }
 
 .action-bar {
-    padding: 1.6em 0;
     overflow: hidden;
 }
+.action-bar .wrap {
+    padding: 1.6em 0;
+}
+
 .footer-bar {
     height: 9em;
     position: absolute;
@@ -46,32 +49,36 @@ html, body {
 }
 
 .add-button {
-    padding: 0 0 0 28px;
+    /*padding: 0 0 0 28px;
     background-repeat: no-repeat;
     height: 20px;
     line-height: 15px;
     display: inline-block;
-    color: white;
+    color: white;*/
     /*font-weight: bold;*/
-    font-size: 1.6667em;
+    /*font-size: 1.6667em;*/
 }
 
-.action-bar input[type=submit]:hover {
-    background: hsla( 198, 0%, 0%, 0.4);
+.button {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    box-sizing:         border-box;
 }
-.action-bar input[type=submit] {
-    background: hsla( 198, 0%, 0%, 0.4);
-    background: none;
+
+.action-bar input[type=submit],
+.action-bar .button {
     font-weight: bold;
-    color: white;
-    border: 2px solid white;
+    border-width: 2px;
     height: 2em;
     padding-left: 1em;
     padding-right: 1em;
-    -webkit-border-radius: 1em;
-    -moz-border-radius:    1em;
-    border-radius:         1em;
 }
+
+.action-bar .tabs {
+    position: absolute;
+    bottom: 0; right: 0;
+}
+
 
 
 

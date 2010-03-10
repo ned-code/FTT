@@ -26,14 +26,21 @@ input[type='text'],
 input[type='password'],
 textarea {
   border: none;
-  padding: 0.3333em;
   width: 100%; height: 1.8em;
+}
+
+input[type='text'],
+input[type='password'],
+textarea {
+  padding: 0.3333em;
 }
 
 label {
   font-weight: bold;
   /* Equalise FF's <label> baseline to its <input> baseline. Mostly. */
   line-height: 1.077;
+  /* Only pad labels top and bottom */
+  padding: 0.3333em 0;
 }
 
 input[type='text'],
@@ -59,7 +66,12 @@ input[type=submit] {
 input[type=checkbox], input[type=radio],
 input.checkbox, input.radio {
   /*position:relative; top: 0em;*/
+  margin: 0;
   vertical-align: baseline;
+}
+
+label input[type=checkbox] {
+  margin-right: 0.6em;
 }
 
 input.default {
@@ -76,8 +88,9 @@ input.default {
     display: inline-block;
 }
 
-
-
+label .required {
+    color: hsl( 18, 90%, 66% );
+}
 
 
 /* Success, notice and error boxes */

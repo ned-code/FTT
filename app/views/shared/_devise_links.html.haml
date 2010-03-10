@@ -1,5 +1,6 @@
 %ul
-  %li= link_to t('devise.registrations.link'), new_registration_path(:user)
+  - if controller_name != 'registrations'
+    %li= link_to t('devise.registrations.link'), new_registration_path(:user)
   - if controller_name != 'home'
     %li= link_to t('devise.sessions.link'), root_path
   - if controller_name != 'passwords'

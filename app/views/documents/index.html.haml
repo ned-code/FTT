@@ -1,7 +1,7 @@
 - session_key_name = ActionController::Base.session_options[:key]
 
 %div.action-bar.bar
-  %div.wrap.clear
+  %div.wrap
     %a#wb-create-document-button.add-button.button= t('.buttons.new_document')
     
     %ul.document-tabs.tabs.index
@@ -13,6 +13,7 @@
         %a#wb-document-filter-shared-with-me.state-tabs{ :href => "#shared_with_me"}= t('.shared_with_me')
       %li>
         %a#wb-document-filter-public.state-tabs{ :href => "#public"}= t('.public')
+
 %div.content
   %div#wb-document-list-container.wrap
 

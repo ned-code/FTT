@@ -58,6 +58,21 @@ body {
     background-position: -6px -6px;
 }
 
+.action-bar input[type=submit]:hover,
+.action-bar .button:hover {
+    background: hsla( 198, 0%, 0%, 0.4);
+}
+.action-bar input[type=submit],
+.action-bar .button {
+    background: none;
+    color: white;
+    border-style: solid;
+    border-color: white;
+    -webkit-border-radius: 1em;
+    -moz-border-radius:    1em;
+    border-radius:         1em;
+}
+
 
 .sec-action { color: #606060;}
 .sec-action:hover { color: #000; }

@@ -1,12 +1,27 @@
-<h2>Resend confirmation instructions</h2>
+<div class="action-bar bar">
+  <div class="wrap clear">
+    <h2>My confirmation instructions got lost in the ether...</h2>
+    <form action="<%= confirmation_path(resource_name) %>" method="post">
+      <input name="authenticity_token" type="hidden" value="<%= protect_against_forgery? ? form_authenticity_token : '' %>" />
+      
+      <fieldset>
+        <div class="stack column one of-four">
+          <label for="user_<%= :email %>">Email <abbr class="required" title="required">*</abbr></label>
+          <input maxlength="255" id="user_<%= :email %>" name="user[<%= :email %>]" type="text" required="required" autocomplete="on" autofocus="on" placeholder="stelio@webdoc.com" />
+        </div>
+      </fieldset>
+      
+      <fieldset>
+        <div>
+          <input id="user_submit" name="commit" type="submit" value="Resend confirmation instructions">
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>
 
-<% form_for resource_name, resource, :url => confirmation_path(resource_name) do |f| %>
-  <%= f.error_messages %>
-
-  <p><%= f.label :email %></p>
-  <p><%= f.text_field :email %></p>
-
-  <p><%= f.submit "Resend confirmation instructions" %></p>
-<% end %>
-
-<%= render :partial => "shared/devise_links" %>
+<div>
+  <div class="wrap clear">
+    <%= render "shared/devise_links" %>
+  </div>
+</div>
