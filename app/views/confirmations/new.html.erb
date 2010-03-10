@@ -1,6 +1,6 @@
 <div class="action-bar bar">
   <div class="wrap clear">
-    <h2>My confirmation instructions got lost in the ether...</h2>
+    <h2>My confirmation instructions got lost...</h2>
     <form action="<%= confirmation_path(resource_name) %>" method="post">
       <input name="authenticity_token" type="hidden" value="<%= protect_against_forgery? ? form_authenticity_token : '' %>" />
       
@@ -11,11 +11,7 @@
         </div>
       </fieldset>
       
-      <fieldset>
-        <div>
-          <input id="user_submit" name="commit" type="submit" value="Resend confirmation instructions">
-        </div>
-      </fieldset>
+      <input id="user_submit" name="commit" type="submit" value="Resend">
     </form>
   </div>
 </div>

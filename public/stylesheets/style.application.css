@@ -1,7 +1,6 @@
 /* style.application.css
  *
  * Styles for website
- *
  */
 
 /* Block layout */
@@ -20,7 +19,10 @@ html, body {
     overflow: hidden;
 }
 .action-bar .wrap {
-    padding: 1.6em 0;
+    padding: 2.5em 0 0 0;
+}
+.action-bar .wrap form {
+    margin-bottom: 2.6667em;
 }
 
 .footer-bar {
@@ -48,31 +50,40 @@ html, body {
     padding-top: 3.3333em;
 }
 
-.add-button {
-    /*padding: 0 0 0 28px;
-    background-repeat: no-repeat;
-    height: 20px;
-    line-height: 15px;
-    display: inline-block;
-    color: white;*/
-    /*font-weight: bold;*/
-    /*font-size: 1.6667em;*/
-}
-
 .button {
+    display: inline-block;
     -webkit-box-sizing: border-box;
     -moz-box-sizing:    border-box;
     box-sizing:         border-box;
 }
 
+.action-bar input[type=submit] {
+    /* Just tweak the spacing of the bottom button a little */
+    margin-top: 0.6em;
+}
+
 .action-bar input[type=submit],
 .action-bar .button {
     font-weight: bold;
-    border-width: 2px;
-    height: 2em;
+    border-width: 0.2em;
+    height: 2.5em;
+    line-height: 2.1;
     padding-left: 1em;
     padding-right: 1em;
+    margin-right: 1.6667em;
 }
+
+.action-bar input[type=submit]:last-child,
+.action-bar .button:last-child {
+    margin-right: 0;
+}
+
+.action-bar .button {
+    padding-left: 32px;
+    margin-bottom: 2.5em;
+}
+
+
 
 .action-bar .tabs {
     position: absolute;

@@ -1,5 +1,5 @@
 <!doctype html>
-%html( xmlns:ub="#{XML_UNIBOARD_DOCUMENT_NAMESPACE}" xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg" )
+%html( xmlns="http://www.w3.org/1999/xhtml" )
   %head
     %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
     %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
@@ -7,7 +7,7 @@
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :application, :media => 'all'
     
-  %body
+  %body{ :class => controller_name }
     = render :partial => "layouts/main_toolbar"
     = yield
     

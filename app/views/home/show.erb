@@ -15,19 +15,12 @@
         </div>
       </fieldset>
       
-      <fieldset>
-        <div>
-          <label for="user_<%= :remember_me %>">
-            <input id="user_<%= :remember_me %>" name="user[<%= :remember_me %>]" type="checkbox" value="1" required="required" />
-            Remember me
-          </label>
-        </div>
-      </fieldset>
-      <fieldset>
-        <div>
-          <input name="login" type="submit" value="Login">
-        </div>
-      </fieldset>
+      <input name="login" type="submit" value="Login">
+      <label for="user_<%= :remember_me %>">
+        <input id="user_<%= :remember_me %>" name="user[<%= :remember_me %>]" type="checkbox" value="1" required="required" />
+          Remember me
+      </label>
+      
     </form>
   </div>
 </div>

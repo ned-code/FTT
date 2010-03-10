@@ -18,7 +18,7 @@ body {
     -webkit-border-top-right-radius:  0.5em;
     -moz-border-radius-topright:      0.5em;
     border-top-right-radius:          0.5em;
-    -webkit-box-shadow: 0 0 32px hsla(32, 2%, 0%, 0.8);
+    -webkit-box-shadow:   0 0 32px hsla(32, 2%, 0%, 0.8);
     -moz-box-shadow:      0 0 32px hsla(32, 2%, 0%, 0.8);
     box-shadow:           0 0 32px hsla(32, 2%, 0%, 0.8);
 }
@@ -47,32 +47,58 @@ body {
     box-shadow:         inset 0 0 32px hsla(32, 2%, 0%, 0.8);
 }
 
-.add-button:hover {
-    color: white;
-    background-image: url('/images/site-icons.png');
-    background-position: -6px -134px;
+.action-bar {
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
 }
-.add-button {
-    color: hsla( 198, 0%, 100%, 0.88 );
-    background-image: url('/images/site-icons.png');
-    background-position: -6px -6px;
+.confirmations .action-bar {
+    background-image: url('/images/action-bar-bg-confirmations.jpg');
+}
+.passwords .action-bar {
+    background-image: url('/images/action-bar-bg-forgotten-pass.jpg');
 }
 
 .action-bar input[type=submit]:hover,
 .action-bar .button:hover {
-    background: hsla( 198, 0%, 0%, 0.4);
+    background-color: hsla( 18, 92%, 44%, 1);
+}
+.action-bar input[type=submit] {
+    background-image: -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 76%, 44%)), to(hsl(18, 80%, 50%)));
+    background-image: -moz-linear-gradient( 90deg, hsl( 18, 76%, 44% ), hsl( 18, 80%, 50% ) );
+    background-image:      linear-gradient( 90deg, hsl( 18, 76%, 44% ), hsl( 18, 80%, 50% ) );
+}
+.action-bar input[type=submit]:hover {
+    background: -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 82%, 46%)), to(hsl(18, 88%, 52%)));
+    background: -moz-linear-gradient( 90deg, hsl( 18, 82%, 46% ), hsl( 18, 88%, 52% ) );
+    background:      linear-gradient( 90deg, hsl( 18, 82%, 46% ), hsl( 18, 88%, 52% ) );
 }
 .action-bar input[type=submit],
 .action-bar .button {
-    background: none;
+    background-color: hsla( 18, 76%, 44%, 1 );
     color: white;
     border-style: solid;
     border-color: white;
-    -webkit-border-radius: 1em;
-    -moz-border-radius:    1em;
-    border-radius:         1em;
+    -webkit-border-radius: 1.25em;
+    -moz-border-radius:    1.25em;
+    border-radius:         1.25em;
 }
 
+.button {
+    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 76%, 44%)), to(hsl(18, 80%, 50%)));
+    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl( 18, 76%, 44% ), hsl( 18, 80%, 50% ) );
+    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl( 18, 76%, 44% ), hsl( 18, 80%, 50% ) );
+}
+.button:hover {
+    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 82%, 46%)), to(hsl(18, 88%, 52%)));
+    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl( 18, 82%, 46% ), hsl( 18, 88%, 52% ) );
+    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl( 18, 82%, 46% ), hsl( 18, 88%, 52% ) );
+}
+.add-button:hover {
+    background-position: -1px -131px;
+}
+.add-button {
+    background-position: -1px -131px;
+}
 
 .sec-action { color: #606060;}
 .sec-action:hover { color: #000; }

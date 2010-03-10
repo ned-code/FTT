@@ -6,8 +6,14 @@
  *
  */
 
-fieldset    { margin: 0 0 1.6667em 0; }
-legend      { font-weight: bold; font-size:1.2em; }
+fieldset    {
+    margin: 0 0 1.6667em 0;
+}
+
+legend      {
+    font-weight: bold;
+    font-size:1.2em;
+}
 
 label,
 input[type='text'],
@@ -26,21 +32,15 @@ input[type='text'],
 input[type='password'],
 textarea {
   border: none;
-  width: 100%; height: 1.8em;
+  width: 100%; height: 1.6667em;
 }
 
 input[type='text'],
 input[type='password'],
 textarea {
-  padding: 0.3333em;
-}
-
-label {
-  font-weight: bold;
-  /* Equalise FF's <label> baseline to its <input> baseline. Mostly. */
-  line-height: 1.077;
-  /* Only pad labels top and bottom */
-  padding: 0.3333em 0;
+  padding: 0 0.3333em;
+  /* Nudge up the baseline position in FF. Doesn't affect Webkit */
+  padding-bottom: 0.077em;
 }
 
 input[type='text'],
@@ -58,9 +58,16 @@ input[type='password']:focus {
 
 input[type=submit] {
     vertical-align: baseline;
-    /* Control the baseline position in FF. Doesn't affect Safari, and
-       doesn't do anything when button is left as default system button. */
-    padding-bottom: 0.23em;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+label {
+  font-weight: bold;
+  /* Equalise FF's <label> baseline to its <input> baseline. Mostly. */
+  line-height: 1.077;
+  /* Only pad labels top and bottom */
+  padding: 0.3333em 0;
 }
 
 input[type=checkbox], input[type=radio],
@@ -84,8 +91,19 @@ input.default {
     padding-left: 0;
 }
 
-.shunt label {
+.shunt label,
+.shunt input {
     display: inline-block;
+}
+.shunt label {
+    width: 40%;
+    text-align: right;
+}
+.shunt input {
+    width: 50%;
+}
+.shunt label input {
+    width: auto;
 }
 
 label .required {
