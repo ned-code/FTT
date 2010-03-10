@@ -31,14 +31,14 @@ class Document < ActiveRecord::Base
   def self.all_with_filter(current_user, document_filter, pageId, per_page)
     documents_ids = []
     if document_filter
-      # Filter possibilities: shared, creator, public
+      # Filter possibilities: reader, editor, creator, public
       if document_filter == 'creator'
         return current_user.documents.paginate(:page => pageId, :per_page => per_page, :order => 'created_at DESC')
       elsif document_filter == 'public'
         return Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :is_public => true }, :order => 'created_at DESC' )
       else
         # Retrieve documents for the current user
-        current_user.role_objects.all(:select => 'authorizable_id').each do |role|
+        current_user.role_objects.all(:select => 'authorizable_id', :conditions => { :name => document_filter } ).each do |role|
           documents_ids << role.authorizable_id if role.authorizable_id
         end
         
