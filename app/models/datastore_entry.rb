@@ -2,7 +2,7 @@ class DatastoreEntry < ActiveRecord::Base
   # ================
   # = Associations =
   # ================
-  belongs_to :widget, :class_name => "Medias::Widget"
+  belongs_to :item, :primary_key => "uuid", :foreign_key => "widget_uuid"
   belongs_to :user
   
   # ===============
@@ -65,17 +65,27 @@ class DatastoreEntry < ActiveRecord::Base
   
   #return all datastore entries for the current user
   #and linked to items, medias, pages and documents info 
-  def self.all_for_user_with_extra_data(user_id)
-    @join = "INNER JOIN items ON datastore_entries.widget_uuid=items.uuid"
-    @join += " INNER JOIN medias ON items.media_id=medias.id"
-    @join += " INNER JOIN pages ON items.page_id=pages.id"
-    @join += " INNER JOIN documents ON pages.document_id=documents.id "
-    @select = "documents.title,documents.uuid"
-    @select += ",items.id as i_id, medias.title as m_title, pages.position as p_position, pages.uuid as p_uuid"
-    @select += ",datastore_entries.id as de_id,datastore_entries.ds_key as de_key,datastore_entries.ds_value as de_value,datastore_entries.updated_at as de_updated_at"
-    @order = "documents.title, documents.id,medias.title,datastore_entries.updated_at"
-    
-    return DatastoreEntry.find(:all,:select => @select, :joins=>@join, :order=>@order, :conditions => {:user_id => user_id})
+  def self.all_for_user_with_extra_data
+    result = []
+    #try to find an optimized solution
+    current_user.documents.each do |document|
+      document.pages.each do |page|
+        page.items.find_all_by_media_type("widget").each do |widget|
+          result.concat widget.datastore_entries
+        end
+      end
+    end
+    return result
+#    @join = "INNER JOIN items ON datastore_entries.widget_uuid=items.uuid"
+#    @join += " INNER JOIN medias ON items.media_id=medias.id"
+#    @join += " INNER JOIN pages ON items.page_id=pages.id"
+#    @join += " INNER JOIN documents ON pages.document_id=documents.id "
+#    @select = "documents.title,documents.uuid"
+#    @select += ",items.id as i_id, medias.title as m_title, pages.position as p_position, pages.uuid as p_uuid"
+#    @select += ",datastore_entries.id as de_id,datastore_entries.ds_key as de_key,datastore_entries.ds_value as de_value,datastore_entries.updated_at as de_updated_at"
+#    @order = "documents.title, documents.id,medias.title,datastore_entries.updated_at"
+#    
+#    return DatastoreEntry.find(:all,:select => @select, :joins=>@join, :order=>@order, :conditions => {:user_id => current_user.id})
   end
   
   # ====================
