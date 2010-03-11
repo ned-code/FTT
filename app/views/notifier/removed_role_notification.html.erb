@@ -1,6 +1,6 @@
 Hi <%= @user.username %>!
 
-Your right <%= @role %> on the document <%= @document.title %> has been removed.
+Your right <%= @role %> on the document <%= @document.title %> has been removed<% if @current_user %> by user <%= @current_user.username %> <% end %>.
 
 Best regards
 

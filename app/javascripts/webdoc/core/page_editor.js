@@ -217,7 +217,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   },
   
   closeDocument: function(e) {
-    window.location = "/documents/";
+    window.location = "/";
   },
   
   toggleDebugMode: function() {

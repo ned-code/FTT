@@ -1,9 +1,10 @@
 Hi <%= @user.username %>!
 
-You have been granted <%= @role %> rights on the document <%= @document.title %>
-<% if @custom_message %>
+You have been granted <%= @role %> rights on the document <%= @document.title %><% if @current_user %> by <%= @current_user.username %> <% end %>
+<% if @custom_message && !@custom_message.empty? %>
 
-You will find above a personal message: %>:
+You will find above a personal message<% if @current_user %> from <%= @current_user.username %> <% end %>:
+
 <%= @custom_message %>
 
 <% end %>

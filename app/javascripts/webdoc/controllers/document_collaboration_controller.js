@@ -16,7 +16,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     documentAccessTabs = $("#wb-document-collaborate-tabs");
     documentAccessDialog = $("#wb-change-access-dialog");
     documentAccessTabs.tabs( {
-      select: this.changeActionsButtons.pBind(this),
+      select: this.changeActionsButtons.pBind(this)
     });
     
     documentAccessDialog.dialog(
@@ -29,7 +29,7 @@ WebDoc.DocumentCollaborationController = $.klass({
         buttons: 
         {
             Send: this.sendInvitations.pBind(this),
-            Cancel: this.closeDialog,
+            Cancel: this.closeDialog
         }
     });
   },
@@ -52,7 +52,7 @@ WebDoc.DocumentCollaborationController = $.klass({
 
     // document access can be changed only when we are online. So we can do ajax request here
     $.ajax({
-      url: "/documents/" + document.uuid() + "/accesses",
+      url: "/documents/" + document.uuid() + "/document_roles",
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
@@ -73,7 +73,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     var userId = $(e.target).parent().attr("id");
     ddd("delete editor role for: "+userId);
     $.ajax({
-      url: "/documents/" + this.document.uuid() + "/accesses",
+      url: "/documents/" + this.document.uuid() + "/document_roles",
       type: 'DELETE',
       dataType: 'json',    
       data: this.getDeleteAccess(userId),             
@@ -149,7 +149,7 @@ WebDoc.DocumentCollaborationController = $.klass({
   
   createRightsToRecipients: function(jSONData) {
     $.ajax({
-      url: '/documents/' + this.document.uuid() + '/accesses',
+      url: '/documents/' + this.document.uuid() + '/document_roles',
       type: 'POST',
       dataType: 'json',
       data: jSONData,    
