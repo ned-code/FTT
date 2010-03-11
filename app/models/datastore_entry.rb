@@ -83,7 +83,7 @@ class DatastoreEntry < ActiveRecord::Base
   # ====================
   
   def email
-    user.email
+    user.email if user
   end
   
 end
