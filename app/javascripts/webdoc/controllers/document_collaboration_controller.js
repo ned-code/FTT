@@ -16,7 +16,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     documentAccessTabs = $("#wb-document-collaborate-tabs");
     documentAccessDialog = $("#wb-change-access-dialog");
     documentAccessTabs.tabs( {
-      select: this.changeActionsButtons.pBind(this),
+      select: this.changeActionsButtons.pBind(this)
     });
     
     documentAccessDialog.dialog(
@@ -29,7 +29,7 @@ WebDoc.DocumentCollaborationController = $.klass({
         buttons: 
         {
             Send: this.sendInvitations.pBind(this),
-            Cancel: this.closeDialog,
+            Cancel: this.closeDialog
         }
     });
   },
