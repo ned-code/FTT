@@ -236,7 +236,7 @@ WebDoc.PageInspectorController = jQuery.klass({
     var options = {  
       success:       this._displayBackgroundImage.pBind(this), 
       type:          "POST",
-      dataType:      "json",
+      dataType:      "json"
     };
     try{
       // submit the form
