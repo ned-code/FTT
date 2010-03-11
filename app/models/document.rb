@@ -72,20 +72,6 @@ class Document < ActiveRecord::Base
     uuid
   end
   
-  # TODO JBA I don't think it is the correct way to do but it works for the moment.
-  #without this update of document failed because we receive a key has_editor_right from the client.
-  def has_editor_rights=(right_flag)
-    
-  end
-  
-  def has_editor_rights
-    current_user.present? && (current_user.has_role?('editor', self) || current_user.has_role?('admin'))
-  end
-  
-  def to_json(options = {})
-    super options.merge(:methods => :has_editor_rights)
-  end
-  
   def to_access_json
     all_document_access = self.accepted_roles
     result = { :access => [], :failed => [] }
