@@ -51,7 +51,7 @@ WebDoc.DocumentShareController = $.klass({
     this._initFields();
     
     $.ajax({
-      url: "/documents/" + document.uuid() + "/accesses",
+      url: "/documents/" + document.uuid() + "/document_roles",
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
@@ -163,7 +163,7 @@ WebDoc.DocumentShareController = $.klass({
   
   _createRightsToRecipients: function(jSONData) {
     $.ajax({
-      url: '/documents/' + this.document.uuid() + '/accesses',
+      url: '/documents/' + this.document.uuid() + '/document_roles',
       type: 'POST',
       dataType: 'json',
       data: jSONData,    
@@ -182,7 +182,7 @@ WebDoc.DocumentShareController = $.klass({
      var userId = $(e.target).parent().attr("id");
      ddd("delete reader role for: "+userId);
      $.ajax({
-       url: "/documents/" + this.document.uuid() + "/accesses",
+       url: "/documents/" + this.document.uuid() + "/document_roles",
        type: 'DELETE',
        dataType: 'json',    
        data: this._getDeleteAccess(userId),             
