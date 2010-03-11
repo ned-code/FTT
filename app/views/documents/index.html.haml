@@ -19,10 +19,11 @@
 
 #wb-new-document-dialog{ :style => "display:none", :title => t('.create_new_document') }
   %form#wb-new-form.new-form{ :action => "", :title => t('.create_new_document') }
+    %h4 Create new webdoc
     %fieldset
       %div.stack
         %label{ :for => "name" }= t ".document_forms.name"
-        %input#wb-new-document-name.ui-corner-all{ :type => "text", :name => "wb-new-document-name", :placeholder => "My brand spanking new webdoc" }
+        %input#wb-new-document-name.ui-corner-all{ :type => "text", :name => "wb-new-document-name", :placeholder => "My new webdoc" }
       %div.stack
         %label{ :for => "category" }= t ".document_forms.category"
         %select#wb-new-document-category

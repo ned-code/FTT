@@ -11,4 +11,13 @@
     = render :partial => "layouts/main_toolbar"
     = yield
     
+    = include_javascripts :common
+    
+    :javascript
+      var flash = $('#flash');
+      
+      flash
+      .delay(3000)
+      .animate({ opacity: 0, marginTop: -flash.height() }, { duration: 3000, easing: 'easeInCubic' });
+    
     = render :partial => "layouts/googleAnalytics"

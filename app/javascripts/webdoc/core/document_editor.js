@@ -171,7 +171,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         newDocDescriptionField.val("");
         this.newDocumentDialog.find("#wb-new-document-size-classic")[0].checked = true;
         
-        // This is is...
         // this.newDocumentDialog.dialog('open');
         
         this.newDocumentDialog.pop({
@@ -181,6 +180,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                 
                 node
                 .bind('submit', function() {
+                    node.addClass('loading');
                     
                     var newDoc = new WebDoc.Document();
                     newDoc.setTitle(newDocNameField.val(), true);
@@ -192,13 +192,16 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                     newDoc.save(function(newObject, status) {
                       if (status == "OK") 
                       {
+                        node
+                        .removeClass('loading')
+                        .trigger('close');
+                        
                         that.documents.push(newDoc);
                         that.filter.addDocument(newDoc);
                         document.location = "/documents/" + newDoc.uuid() + "#1";
                       }
                     });
                     
-                    $(this).trigger('close');
                     return false;
                 })
                 .find("input[type='text']")

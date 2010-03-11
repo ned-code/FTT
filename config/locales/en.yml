@@ -112,7 +112,7 @@ en:
         name: "Name"
         description: "Description"
         category: "Category"
-        document_size_title: "Document size"
+        document_size_title: "Size"
         creationDate: "Creation date"
         change_access_dialog:
           invite_tab: "Invite" 
@@ -135,12 +135,12 @@ en:
         new_webdoc: "a new webdoc"
         add_description: "Add a description"
         document_size:
-          custom: "Custom"
+          custom: "Custom size:"
           iPhone: "iPhone (620x480)"
           classic: "Classic (800x600)"
           iPad: "iPad (1024x768)"
-          width: "Width"
-          height: "Height"
+          width: "width"
+          height: "height"
         buttons:
           add_access: "Add user"
       buttons:
