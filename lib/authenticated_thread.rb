@@ -18,4 +18,5 @@ end
 if Object.const_defined?("ActiveRecord")
   ActiveRecord::Base.send(:include, AuthenticatedThread)
   ActiveRecord::Observer.send(:include, AuthenticatedThread)
+  ActionMailer::Base.send(:include, AuthenticatedThread)
 end

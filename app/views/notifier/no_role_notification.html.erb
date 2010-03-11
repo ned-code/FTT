@@ -1,6 +1,6 @@
 Hi <%= @user.username %>!
 
-All your rights on the document <%= @document.title %> have been removed.
+All your rights on the document <%= @document.title %> have been removed <% if @current_user %> by user <%= @current_user.username %> <% end %>.
 
 Best regards
 
