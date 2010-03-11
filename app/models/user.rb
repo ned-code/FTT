@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
   end
   
   def following_info
-    current_user.following?(self)
+    current_user ? current_user.following?(self) : false
   end
   
   def mutual_connection

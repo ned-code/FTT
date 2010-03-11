@@ -1,5 +1,4 @@
 class CategoriesController < ApplicationController
-  before_filter :authenticate_user!
   
   # GET /categories
   def index
