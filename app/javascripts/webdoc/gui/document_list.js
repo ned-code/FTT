@@ -10,6 +10,7 @@ WebDoc.DocumentList = $.klass({
       this.domNode = this._createDomNode(id);
       this.datasource = datasource;
       this.datasource.view = this;
+      this._getCurrentUserRolesDocuments();
       this.repaint();
   },
   
@@ -24,7 +25,7 @@ WebDoc.DocumentList = $.klass({
       var documentItemTitle = $("<div>").addClass("wb-document-title");
       documentItemTitle.append($("<a>").addClass("wb-document-edit").attr("href", "").attr("title", "Open this document").html(document.title()));
       documentItemNode.append(documentItemTitle);
-      if (document.hasAuthenticatedUserEditorRights()) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
+      if (this._hasAuthenticatedUserEditorRights(document.data.id)) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
       previousElement.after(documentItemNode);
   },
   
@@ -49,7 +50,7 @@ WebDoc.DocumentList = $.klass({
               var documentItemTitle = $("<div>").addClass("wb-document-title");
               documentItemTitle.append($("<a>").addClass("wb-document-edit").attr("href", "").attr("title", "Open this document").html(document.title()));
               documentItemNode.append(documentItemTitle);
-              if (document.hasAuthenticatedUserEditorRights()) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
+              if (this._hasAuthenticatedUserEditorRights(document.data.id)) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
               this.domNode.append(documentItemNode);
           }
       }
@@ -81,6 +82,18 @@ WebDoc.DocumentList = $.klass({
     }
   },
   
+  _getCurrentUserRolesDocuments: function() {
+    $.ajax({
+      url: "/roles/documents",
+      type: 'GET',
+      dataType: 'json',              
+      success: function(data, textStatus) {
+        this.currentUserDocumentsEditor = data.editor;
+        this.currentUserDocumentsReader = data.reader;
+      }.pBind(this)
+    });
+  },
+  
   _buildDocumentActionsNode: function(document) {
     var documentActionsNode = $("<div>").addClass("wb-document-actions");
     documentActionsNode.append($("<a>").addClass("wb-document-delete").attr("href", "").attr("title", "delete"));
@@ -103,6 +116,13 @@ WebDoc.DocumentList = $.klass({
   
   _createDomNode: function(id) {
       return $("<div>").attr('id', id).addClass("wb-document-list");
-  }
+  },
+  
+  _hasAuthenticatedUserEditorRights: function(documentId) {
+     for (var i = 0; i< this.currentUserDocumentsEditor.length; i++) {
+       if (this.currentUserDocumentsEditor[i] == documentId) { return true; }
+     }
+     return false;
+   }
 });
 

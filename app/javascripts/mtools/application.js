@@ -18,7 +18,10 @@ MTools.Application = $.klass({
       dataType: 'json',              
       success: function(data, textStatus) {
         this.currentUser = data.user;
-      }.pBind(this)
+      }.pBind(this),
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        ddd("Error occured:" + textStatus);
+      }
     });
   }
   

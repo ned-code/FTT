@@ -19,7 +19,7 @@
     vertical-align: top;
     
     /* Stop content pushing column wider than it should be */
-    overflow: hidden;
+    overflow: visible;
     
     min-height: 100%;
     -webkit-box-sizing: border-box;

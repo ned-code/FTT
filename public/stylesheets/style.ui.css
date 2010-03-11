@@ -6,6 +6,8 @@
 
 /* Pops */
 
+element {-webkit-focus-ring-color: hsl(72, 100%, 50%);}
+
 .ui-pop-position {
 	width: 0;
 	height: 0;
@@ -45,9 +47,7 @@
   border-radius:         0.8333em;
 }
 .ui-pop textarea {
-  -webkit-border-bottom-right-radius: 2px;
-  -moz-border-radius-bottomright:     2px;
-  border-bottom-right-radius:         2px;
+
 }
 .ui-pop label.underlay {
   position: absolute;
@@ -85,6 +85,28 @@
   /*background-color: hsla(208, 20%, 16%, 0.8);*/
 }
 
+.ui-pop select:focus {
+    /* Declare solid before auto - FF doesn't get auto */
+    /* outline: hsl(72, 100%, 50%) solid 2px; */
+
+    /*border: 2px solid hsl( 72, 100%, 50% );
+    padding: 0 0.8333em;*/
+    /*-webkit-box-shadow: 0 0 8px hsl( 72, 100%, 50% );
+    -moz-box-shadow:    0 0 8px hsl( 72, 100%, 50% );
+    box-shadow:         0 0 8px hsl( 72, 100%, 50% );*/
+}
+.ui-pop select {
+    /*background-color: hsl(208, 0.4%, 99%);*/
+    /* Make non-system style select boxes in FF */
+    border: 0;
+    -webkit-border-radius: 0.8333em;
+    -moz-border-radius:    0.8333em;
+    border-radius:         0.8333em;
+    
+    /* padding doesn't change anything in Webkit, so use it to position the
+       baseline in FF */
+    padding: 0.1em 0.8333em;
+}
 
 /* Colors ------------------------------ */
 .ui-pop {
