@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'home', :action => :show
   
   map.resources :documents, :has_many => { :pages => :items } do |m|
-    m.resource :accesses, :only => [:show, :create, :update, :destroy]
+    m.resource :document_roles, :only => [:show, :create, :update, :destroy]
   end
   
   map.resources :datastores, :only => [:show, :index] do |datastore|
@@ -36,5 +36,5 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :videos,    :except => [:new, :edit, :update]
   map.resources :widgets,   :except => [:new, :edit, :update, :destroy]
   map.resources :categories, :except => [:new, :edit, :show, :update, :destroy, :create]
-  #map.resources :roles_documents, :only => :index, :as => "roles/documents"
+#  map.resources :roles_documents, :only => :index, :as => "roles/documents"
 end
