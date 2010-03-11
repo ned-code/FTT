@@ -14,12 +14,12 @@ class DatastoreEntry < ActiveRecord::Base
   # =================
   # = Class Methods =
   # =================
-  def self.createOrUpdate(datastore_id, key, value, is_unique)
+  def self.create_or_update(item, params)
     key_to_save = nil
     #check if the key already exists
-    if(is_unique)
-      existing_key = DatastoreEntry.find(:first,:conditions => {:ds_key => key, :widget_uuid => datastore_id})
-      if (existing_key && (existing_key.user_id == nil || exist_key.user_id == current_user.id))
+    if(params[:unique_key] == 'true')
+      existing_key = DatastoreEntry.find(:first,:conditions => {:ds_key => params[:key], :widget_uuid => item.uuid})
+      if (existing_key && (existing_key.user_id == nil || (current_user && exist_key.user_id == current_user.id)))
         key_to_save = existing_key
       else
         key_to_save = DatastoreEntry.new
@@ -28,7 +28,7 @@ class DatastoreEntry < ActiveRecord::Base
       #is user connected
       if(current_user)
         #has already a record for itself
-        key_to_save = DatastoreEntry.find(:first,:conditions => {:ds_key => key, :widget_uuid => datastore_id, :user_id => current_user.id})
+        key_to_save = DatastoreEntry.find(:first,:conditions => {:ds_key => params[:key], :widget_uuid => item.uuid, :user_id => current_user.id})
         unless key_to_save 
           key_to_save = DatastoreEntry.new
         end
@@ -39,9 +39,9 @@ class DatastoreEntry < ActiveRecord::Base
     end
     
     if(key_to_save)
-      key_to_save.ds_key = key
-      key_to_save.ds_value = value
-      key_to_save.widget_uuid = datastore_id
+      key_to_save.ds_key = params[:key]
+      key_to_save.ds_value = params[:value]
+      key_to_save.widget_uuid = item.uuid
       if (current_user)
         key_to_save.user_id = current_user.id
       else
@@ -51,15 +51,15 @@ class DatastoreEntry < ActiveRecord::Base
     end    
   end
   
-  def self.getAllDatastoreEntries(datastore_id, key, only_current_user)
+  def self.get_all_datastore_entries(item, key, only_current_user)
     if(only_current_user)
       if (current_user)
-        DatastoreEntry.find(:all, :conditions => {:ds_key => key, :widget_uuid => datastore_id, :user_id => current_user.id})
+        DatastoreEntry.find(:all, :conditions => {:ds_key => key, :widget_uuid => item.uuid, :user_id => current_user.id})
       else
         #TODO need to manage anonymous user
       end
     else
-      DatastoreEntry.find(:all, :conditions => {:ds_key => key, :widget_uuid => datastore_id})
+      DatastoreEntry.find(:all, :conditions => {:ds_key => key, :widget_uuid => item.uuid})
     end
   end
   

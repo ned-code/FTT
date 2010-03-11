@@ -11,6 +11,8 @@ class Item < ActiveRecord::Base
   # = Associations =
   # ================
   
+  has_many :datastore_entries, :primary_key => "uuid", :foreign_key => "widget_uuid", :dependent => :destroy
+  
   belongs_to :page
   belongs_to :media, :polymorphic => true
   

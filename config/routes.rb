@@ -9,8 +9,13 @@ ActionController::Routing::Routes.draw do |map|
     m.resource :document_roles, :only => [:show, :create, :update, :destroy]
   end
   
+  map.resources :items do |item|
+    item.resources :datastore_entries, :only => [:index, :show, :create, :destroy]
+  end
+  map.connect 'items/:item_id/datastore_entries', :controller => 'datastore_entries', :action => 'destroy_all', :conditions => { :method => :delete }
+  
   map.resources :datastores, :only => [:show, :index] do |datastore|
-    datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
+    # datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
   end
   
   map.devise_for :users
