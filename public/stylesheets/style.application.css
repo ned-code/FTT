@@ -15,6 +15,44 @@ html, body {
     margin: 0 auto;
 }
 
+/* Header */
+
+header {
+    height: 88px;
+}
+
+.logo {
+    overflow: hidden;
+    width: 0; height: 0;
+    padding: 64px 0 0 192px;
+    margin: 0;
+    background: url('/images/webdoc-logo-192x64.png') no-repeat;
+}
+
+.userbar {
+    position: absolute;
+    right: 0;
+    top: 28px;
+}
+.userbar li .user-email {
+    font-weight: bold;
+}
+.userbar .item {
+    display: block;
+    height: 2.5em;
+    line-height: 2.5;
+    padding: 0 0.8333em;
+}
+.userbar li:first-child .item {
+    padding-left: 1.3333em;
+}
+.userbar li:last-child .item {
+    padding-right: 1.3333em;
+}
+.userbar li {
+    margin-right: 0;
+}
+
 .action-bar {
     overflow: hidden;
 }

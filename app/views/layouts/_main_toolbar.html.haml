@@ -1,10 +1,16 @@
 %header
-  %div.wrap
-    %h1.logo webdoc
-    -#%img{ :src => "/images/logo.png", :alt =>"WebDoc logo"}
-    %div
-      - if user_signed_in?
-        = current_user.name + ' - ' + current_user.email
-        = link_to "edit", edit_user_path(current_user)
-        = link_to "logout", destroy_user_session_path
+  %div.clear.wrap
+    %a{ :href => "/" }
+      %h1.logo webdoc
+    
+    - if user_signed_in?
+      %ul.userbar.index
+        %li>
+          %div.user-email.item
+            = current_user.email
+        %li>
+          = link_to "edit", edit_user_path(current_user), { :class => "user-edit item" }
+        %li>
+          = link_to "logout", destroy_user_session_path, { :class => "user-logout item" }
+    
     = render "layouts/flash", :object => flash

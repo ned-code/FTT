@@ -3,14 +3,68 @@
  * Styles for website
  *
  */
- 
+
+/* Color theme:
+ * 
+ * 208 - base
+ * 
+ * 343 - 
+ * 358 - 
+ * 13  - 
+ * 28  - compliment
+ * 43  - 
+ * 58  - 
+ * 72  - 
+ */
+
 body {
-    color: hsl(198, 2%, 25%);
-    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(198, 4%, 97%) ), to( hsl(198, 8%, 79%) ));
-    background-image: -moz-linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
-    background-image:      linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+    color: hsl(208, 2%, 25%);
+    background-color: hsla(208, 33%, 98%, 0.88);
+    /*background-image: url('/images/texture_bg.jpg');
+    background-position: 50% 0%;
+    -webkit-background-size:  100% 100%;
+    -moz-background-size:     100% 100%;
+    background-size:          100% 100%;*/
+}
+header {
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsla(208, 33%, 98%, 0.88) ), to( hsl(208, 12%, 82%) ));
+    background-image: -moz-linear-gradient( -90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
+    background-image:      linear-gradient( -90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
+}
+.content {
+    background-image: -webkit-gradient( linear, 0% 100%, 0% 0%, from( hsla(208, 33%, 98%, 0.88) ), to( hsl(208, 12%, 82%) ));
+    background-image: -moz-linear-gradient( 90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
+    background-image:      linear-gradient( 90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
 }
 
+.userbar li .item {
+    color: hsl(208, 4%, 33%);
+    background: hsla(208, 4%, 84%, 0.2);
+}
+.userbar li a.item:hover {
+    color: hsl(208, 4%, 25%);
+    background: hsl(208, 4%, 60%, 0.2);
+}
+.userbar li .user-email {
+    color: white;
+    background: hsla(208, 4%, 52%, 0.2);
+}
+.userbar li:first-child .item {
+    -webkit-border-top-left-radius:     1.25em;
+    -moz-border-radius-topleft:         1.25em;
+    border-top-left-radius:             1.25em;
+    -webkit-border-bottom-left-radius:  1.25em;
+    -moz-border-radius-bottomleft:      1.25em;
+    border-bottom-left-radius:          1.25em;
+}
+.userbar li:last-child .item {
+    -webkit-border-top-right-radius:    1.25em;
+    -moz-border-radius-topright:        1.25em;
+    border-top-right-radius:            1.25em;
+    -webkit-border-bottom-right-radius: 1.25em;
+    -moz-border-radius-bottomright:     1.25em;
+    border-bottom-right-radius:         1.25em;
+}
 .tabs {
     -webkit-border-top-left-radius:   0.5em;
     -moz-border-radius-topleft:       0.5em;
@@ -18,15 +72,18 @@ body {
     -webkit-border-top-right-radius:  0.5em;
     -moz-border-radius-topright:      0.5em;
     border-top-right-radius:          0.5em;
-    -webkit-box-shadow:   0 0 32px hsla(32, 2%, 0%, 0.8);
-    -moz-box-shadow:      0 0 32px hsla(32, 2%, 0%, 0.8);
-    box-shadow:           0 0 32px hsla(32, 2%, 0%, 0.8);
+    -webkit-box-shadow: 0 0 32px hsla(32, 2%, 0%, 0.8);
+    -moz-box-shadow:    0 0 32px hsla(32, 2%, 0%, 0.8);
+    box-shadow:         0 0 32px hsla(32, 2%, 0%, 0.8);
 }
 
 
 
 .tabs li {
-    background: #f0f1f1;
+    background-color: hsl(208, 12%, 82%);
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(208, 18%, 88%) ), to( hsl(208, 12%, 82%) ));
+    background-image: -moz-linear-gradient( -90deg, hsl(208, 18%, 88%), hsl(208, 12%, 82%) );
+    background-image:      linear-gradient( -90deg, hsl(208, 18%, 88%), hsl(208, 12%, 82%) );
 }
 .tabs li:first-child {
     -webkit-border-top-left-radius:   0.5em;
@@ -38,10 +95,9 @@ body {
     -moz-border-radius-topright:      0.5em;
     border-top-right-radius:          0.5em;
 }
-
 .bar {
-    color: hsl( 198, 3%, 98% );
-    background-color: hsl(198, 4%, 33%);
+    color: hsl(208, 4%, 98% );
+    background-color: hsl(208, 4%, 33%);
     -webkit-box-shadow: inset 0 0 32px hsla(32, 2%, 0%, 0.8);
     -moz-box-shadow:    inset 0 0 32px hsla(32, 2%, 0%, 0.8);
     box-shadow:         inset 0 0 32px hsla(32, 2%, 0%, 0.8);
@@ -64,13 +120,13 @@ body {
 }
 .action-bar input[type=submit] {
     background-image: -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 76%, 44%)), to(hsl(18, 80%, 50%)));
-    background-image: -moz-linear-gradient( 90deg, hsl( 18, 76%, 44% ), hsl( 18, 80%, 50% ) );
-    background-image:      linear-gradient( 90deg, hsl( 18, 76%, 44% ), hsl( 18, 80%, 50% ) );
+    background-image: -moz-linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
+    background-image:      linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
 }
 .action-bar input[type=submit]:hover {
     background: -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 82%, 46%)), to(hsl(18, 88%, 52%)));
-    background: -moz-linear-gradient( 90deg, hsl( 18, 82%, 46% ), hsl( 18, 88%, 52% ) );
-    background:      linear-gradient( 90deg, hsl( 18, 82%, 46% ), hsl( 18, 88%, 52% ) );
+    background: -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
+    background:      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
 }
 .action-bar input[type=submit],
 .action-bar .button {
@@ -85,13 +141,13 @@ body {
 
 .button {
     background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 76%, 44%)), to(hsl(18, 80%, 50%)));
-    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl( 18, 76%, 44% ), hsl( 18, 80%, 50% ) );
-    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl( 18, 76%, 44% ), hsl( 18, 80%, 50% ) );
+    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
+    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
 }
 .button:hover {
     background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 82%, 46%)), to(hsl(18, 88%, 52%)));
-    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl( 18, 82%, 46% ), hsl( 18, 88%, 52% ) );
-    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl( 18, 82%, 46% ), hsl( 18, 88%, 52% ) );
+    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
+    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
 }
 .add-button:hover {
     background-position: -1px -131px;

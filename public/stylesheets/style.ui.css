@@ -44,6 +44,11 @@
   -moz-border-radius:    0.8333em;
   border-radius:         0.8333em;
 }
+.ui-pop textarea {
+  -webkit-border-bottom-right-radius: 2px;
+  -moz-border-radius-bottomright:     2px;
+  border-bottom-right-radius:         2px;
+}
 .ui-pop label.underlay {
   position: absolute;
   top: 0; left: 0;
@@ -64,22 +69,41 @@
   -moz-transition:    opacity 0.66s ease-in;
   transition:         opacity 0.66s ease-in;
 }
+.ui-pop>h4,
+.ui-pop>h5 {
+  text-align: center;
+  -webkit-border-top-left-radius:   0.625em;
+  -moz-border-radius-topleft:       0.625em;
+  border-top-left-radius:           0.625em;
+  -webkit-border-top-right-radius:  0.625em;
+  -moz-border-radius-topright:      0.625em;
+  border-top-right-radius:          0.625em;
+  font-size: 1.3333em;
+  height: 1.6667em;
+  line-height: 1.6667;
+  margin-bottom: 0;
+  /*background-color: hsla(208, 20%, 16%, 0.8);*/
+}
+
 
 /* Colors ------------------------------ */
+.ui-pop {
+    color: white;
+    background-color: hsla(208, 20%, 20%, 0.92);
+    border-color: hsla(208, 20%, 16%, 0.8);
+    -webkit-border-radius: 1.0833em;
+    -moz-border-radius:    1.0833em;
+    border-radius:         1.0833em;
+    -webkit-box-shadow: 0 4px 12px hsl(28, 20%, 25%);
+    -moz-box-shadow:    0 4px 12px hsl(28, 20%, 25%);
+    box-shadow:         0 4px 12px hsl(28, 20%, 25%);
+}
 
-.ui-pop                       { color: white;
-                                -webkit-border-radius: 1.0833em;
-                                -moz-border-radius:    1.0833em;
-                                border-radius:         1.0833em;
-                                border-color: hsla(194, 20%, 20%, 0.8); }
 .ui-pop .cover label,
 .ui-pop input[type='text']    { color: black; }
 .ui-pop label.underlay        { background-color: white; }
-.ui-pop                       { background-color: hsla(198, 20%, 20%, 0.92); border-color: hsla(198, 20%, 20%, 0.8);
-                                -webkit-box-shadow: 0 4px 12px hsl(14, 20%, 30%);
-                                -moz-box-shadow:    0 4px 12px hsl(14, 20%, 30%);
-                                box-shadow:         0 4px 12px hsl(14, 20%, 30%); }
+
 .ui-pop input[type='text']:focus,
 .ui-pop textarea:focus,
 .ui-pop:hover input[type='text'],
-.ui-pop:hover textarea { background-color: hsl(198, 0.4%, 99%); color: black; }
+.ui-pop:hover textarea { background-color: hsl(208, 0.4%, 99%); color: black; }
