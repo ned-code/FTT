@@ -30,15 +30,15 @@ config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
 # config.gem 'sqlite3-ruby', :lib => "sqlite3"
 
-# config.gem 'rspec', :lib => false
-# config.gem 'rspec-rails', :lib => false
-# config.gem 'remarkable_rails', :lib => false
-# 
-# config.gem 'factory_girl', :lib => false
-# config.gem 'yannlugrin-rspec-factory-girl', :lib => false, :source => "http://gems.github.com"
-# 
-# config.gem 'webrat', :lib => false
-# config.gem 'cucumber', :lib => false
-# config.gem 'email_spec', :lib => false
-# 
-# config.gem 'spork'
+config.gem 'rspec', :lib => false
+config.gem 'rspec-rails', :lib => false
+config.gem 'remarkable_rails', :lib => false
+
+config.gem 'factory_girl', :lib => false
+config.gem 'rspec-factory-girl', :lib => false
+
+config.gem 'webrat', :lib => false
+config.gem 'cucumber', :lib => false
+config.gem 'email_spec', :lib => false
+
+config.gem 'spork', :lib => false
