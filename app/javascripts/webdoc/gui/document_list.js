@@ -38,21 +38,63 @@ WebDoc.DocumentList = $.klass({
   },
   
   repaint: function() {
-      this.domNode.empty();
+      var sectionIndex,
+          sectionCount = this.datasource.nbSections(),
+          sectionTitle,
+          sectionList,
+          documentIndex,
+          documentCount,
+          document,
+          documentNode,
+          documentTitleNode;
+  
+      this.domNode
+      .empty();
+      
       // iterate on all sections
-      for (var section = 0; section < this.datasource.nbSections(); section++) 
+      for ( sectionIndex = 0; sectionIndex < sectionCount; sectionIndex++ ) 
       {
-          this.domNode.append($("<h3>" + this.datasource.section(section) + "</h3>").get(0));
-          for (var i = 0; i < this.datasource.nbDocuments(section); i++) 
+        documentCount = this.datasource.nbDocuments( sectionIndex );
+        
+        // Are there any documents in this section?
+        if ( documentCount > 0 ) {
+          
+          // Then create the list
+          sectionTitle = $('<h3/>').html( this.datasource.section( sectionIndex ) );
+          sectionList = $('<ul/>');
+          
+          for ( documentIndex = 0; documentIndex < documentCount; documentIndex++ )
           {
-              var document = this.datasource.document(section, i);
-              var documentItemNode = $("<div>").addClass("wb-document-item").attr('id', document.uuid());
-              var documentItemTitle = $("<div>").addClass("wb-document-title");
-              documentItemTitle.append($("<a>").addClass("wb-document-edit").attr("href", "").attr("title", "Open this document").html(document.title()));
-              documentItemNode.append(documentItemTitle);
-              if (this._hasAuthenticatedUserEditorRights(document.data.id)) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
-              this.domNode.append(documentItemNode);
+              document = this.datasource.document( sectionIndex, documentIndex );
+              
+              documentNode = $("<li/>", {
+                "class": "wb-document-item",
+                "id": document.uuid()
+              });
+              documentTitle = $("<a/>", {
+                "class": "wb-document-title wb-document-edit",
+                "href": "#"+document.uuid(),
+                "title": "Open this document",
+                html: document.title()
+              });
+              
+              documentNode.append( documentTitle );
+              
+              if ( this._hasAuthenticatedUserEditorRights( document.data.id ) ) {
+                documentNode.append( this._buildDocumentActionsNode( document ) );
+              }
+              
+              sectionList.append( documentNode );
           }
+          
+          // And add it to the DOM
+          this.domNode
+          .append(
+            sectionTitle
+          ).append(
+            sectionList
+          );
+        }
       }
   },
   

@@ -172,7 +172,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.newDocumentDialog.find("#wb-new-document-size-classic")[0].checked = true;
         
         // this.newDocumentDialog.dialog('open');
-        
         this.newDocumentDialog.pop({
             attachTo: $( e.currentTarget ),
             initCallback: function(){
