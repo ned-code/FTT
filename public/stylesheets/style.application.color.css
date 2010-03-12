@@ -95,6 +95,15 @@ header {
     -moz-border-radius-topright:      0.5em;
     border-top-right-radius:          0.5em;
 }
+.tabs li a {
+    color: hsl(208, 6%, 30%);
+    background-color: hsla(0, 0%, 0%, 0.1);
+}
+.tabs li a:hover,
+.tabs li a.current {
+    color: hsl(208, 12%, 30%);
+    background: none;
+}
 .bar {
     color: hsl(208, 4%, 98% );
     background-color: hsl(208, 4%, 33%);
@@ -160,7 +169,6 @@ header {
     color: hsl(208, 6%, 12%);
     background-color: hsla(208, 6%, 80%, 0.6);
 }
-
 
 .button {
     background-color: hsl( 208, 4%, 50% );
