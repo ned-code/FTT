@@ -127,11 +127,11 @@ WebDoc.DocumentList = $.klass({
   
   _buildDocumentItemNode: function( document ){
       var documentNode = $("<li/>", {
-            "class": "document-item clear",
-            "id": document.uuid()
+            "class": "document-item clear"
           }),
           documentTitle = $("<a/>", {
             "class": "document-title wb-document-edit",
+            "id": document.uuid(),
             "href": "#"+document.uuid(),
             "title": "Open this document",
             html: document.title()

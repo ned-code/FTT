@@ -151,10 +151,17 @@ header {
     background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(208, 4%, 50% ), hsl(208, 8%, 66% ) );
     background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(208, 4%, 50% ), hsl(208, 8%, 66% ) );
 }
+
 .info-button:hover {
-    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 82%, 46%)), to(hsl(18, 88%, 52%)));
-    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
-    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
+    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(208, 82%, 46%)), to(hsl(208, 88%, 52%)));
+    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(208, 82%, 46% ), hsl(208, 88%, 52% ) );
+    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(208, 82%, 46% ), hsl(208, 88%, 52% ) );
+}
+
+.delete-button {
+    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(358, 48%, 46%)), to(hsl(358, 66%, 52%)));
+    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(358, 48%, 46% ), hsl(358, 66%, 52% ) );
+    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(358, 48%, 46% ), hsl(358, 66%, 52% ) );
 }
 .delete-button:hover {
     background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(358, 82%, 46%)), to(hsl(358, 88%, 52%)));

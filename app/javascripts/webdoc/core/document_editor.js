@@ -58,7 +58,9 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         ddd("Start Document editor");
         var that = this;
         $("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
+        
         $(".wb-document-edit").live("click", this.editDocument);
+        
         $(".wb-document-info").live("click", this.renameDocument);
         $(".wb-document-delete").live("click", this.deleteDocument);
         $(".wb-document-collaborate").live("click", this.changeDocumentAccess);
@@ -159,7 +161,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     editDocument: function(e)
     {
       e.preventDefault();
-      var documentToEdit = $(this).parent().parent().attr("id");
+      var documentToEdit = $(this).href().replace( /^#/, '' );
       document.location = "/documents/" + documentToEdit + "#1";
     },
     
