@@ -52,7 +52,7 @@ WebDoc.DocumentCollaborationController = $.klass({
 
     // document access can be changed only when we are online. So we can do ajax request here
     $.ajax({
-      url: "/documents/" + document.uuid() + "/document_roles",
+      url: "/documents/" + document.uuid() + "/roles",
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
@@ -73,7 +73,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     var userId = $(e.target).parent().attr("id");
     ddd("delete editor role for: "+userId);
     $.ajax({
-      url: "/documents/" + this.document.uuid() + "/document_roles",
+      url: "/documents/" + this.document.uuid() + "/roles",
       type: 'DELETE',
       dataType: 'json',    
       data: this.getDeleteAccess(userId),             
@@ -149,7 +149,7 @@ WebDoc.DocumentCollaborationController = $.klass({
   
   createRightsToRecipients: function(jSONData) {
     $.ajax({
-      url: '/documents/' + this.document.uuid() + '/document_roles',
+      url: '/documents/' + this.document.uuid() + '/roles',
       type: 'POST',
       dataType: 'json',
       data: jSONData,    
