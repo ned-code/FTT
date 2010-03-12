@@ -10,7 +10,28 @@ class DatastoreEntry < ActiveRecord::Base
   # ===============
   validates_presence_of :ds_key
   validates_presence_of :widget_uuid
-
+  
+  
+  # ====================
+  # = Instance Methods =
+  # ====================
+  
+  def email
+    user.email if user
+  end
+  
+  def to_json
+    if current_user && current_user.has_role?("editor", item.page.document)
+      json_filter = [:ds_key, :ds_value, :updated_at]
+      methods = [:email]
+    else
+      json_filter = [:ds_key, :ds_value]
+      methods = []
+    end
+    
+    super(:only => json_filter, :methods => methods)
+  end
+  
   # =================
   # = Class Methods =
   # =================
@@ -86,14 +107,6 @@ class DatastoreEntry < ActiveRecord::Base
 #    @order = "documents.title, documents.id,medias.title,datastore_entries.updated_at"
 #    
 #    return DatastoreEntry.find(:all,:select => @select, :joins=>@join, :order=>@order, :conditions => {:user_id => current_user.id})
-  end
-  
-  # ====================
-  # = Instance Methods =
-  # ====================
-  
-  def email
-    user.email if user
   end
   
 end

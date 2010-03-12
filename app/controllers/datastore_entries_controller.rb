@@ -23,17 +23,15 @@ class DatastoreEntriesController < ApplicationController
   
   # GET /items/:item_id/datastore_entries/:id
   def show
-    only_current_user = params[:only_current_user] == 'true'
-    
-    json_filter = [:ds_key, :ds_value]
-    methods = []
-    if (current_user && current_user.has_role?("editor", @document))
-      json_filter = [:ds_key, :ds_value, :updated_at]
-      methods = [:email]
+    if user_signed_in?
+      @datastore_entry = current_user.datastore_entries.find_by_ds_key!(params[:id])
+    else
+      # need to manage anonymous user
     end
     
-    all_entries = DatastoreEntry.get_all_datastore_entries(@item, params[:id], only_current_user)
-    render :json => all_entries.to_json(:only => json_filter, :methods => methods)
+    respond_to do |format|
+      format.json { render @datastore_entry }
+    end
   end
   
   # POST /items/:item_id/datastore_entries
@@ -41,21 +39,21 @@ class DatastoreEntriesController < ApplicationController
     DatastoreEntry.create_or_update(@item, params[:datastore_entries])
     
     respond_to do |format|
-      format.json { render :json => '', :status => :ok }
+      format.json { render :json => {}, :status => :ok }
     end
   end
   
   # DELETE /items/:item_id/datastore_entries/:id
   def destroy
     if user_signed_in?
-      @item = current_user.datastore_entries.find_by_ds_key!(params[:id])
+      @datastore_entry = current_user.datastore_entries.find_by_ds_key!(params[:id])
     else
       # need to manage anonymous user
     end
-    @item.destroy
+    @datastore_entry.destroy
     
     respond_to do |format|
-      format.json { render :json => '', :status => :ok }
+      format.json { render :json => {}, :status => :ok }
     end
   end
   
@@ -64,7 +62,7 @@ class DatastoreEntriesController < ApplicationController
     DatastoreEntry.destroy_all(:widget_uuid => @item.uuid)
     
     respond_to do |format|
-      format.json { render :json => '', :status => :ok }
+      format.json { render :json => {}, :status => :ok }
     end
   end
   
