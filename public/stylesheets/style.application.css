@@ -90,27 +90,19 @@ header {
     padding-top: 3.3333em;
 }
 
-.button {
-    display: inline-block;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing:    border-box;
-    box-sizing:         border-box;
-}
-
 .action-bar input[type=submit] {
     /* Just tweak the spacing of the bottom button a little */
     margin-top: 0.6em;
 }
 
 .action-bar input[type=submit],
-.action-bar .button {
+.button {
     font-weight: bold;
     border-width: 0.2em;
     height: 2.5em;
     line-height: 2.1;
     padding-left: 1em;
     padding-right: 1em;
-    margin-right: 1.6667em;
 }
 
 .action-bar input[type=submit]:last-child,
@@ -119,8 +111,8 @@ header {
 }
 
 .action-bar .button {
-    padding-left: 32px;
     margin-bottom: 2.5em;
+    margin-right: 1.6667em;
 }
 
 
@@ -145,9 +137,6 @@ header {
     padding-top: 1.6667em;
     padding-bottom: 1.6667em;
     margin-bottom: 1.6667em;
-    /*-webkit-box-shadow: inset 0 0 8px rgba(176, 227, 0, 1);
-    -moz-box-shadow:    inset 0 0 8px rgba(176, 227, 0, 1);
-    box-shadow:         inset 0 0 8px rgba(176, 227, 0, 1);*/
 }
 .document-item {
     background: #cccccc;
@@ -157,42 +146,71 @@ header {
     -webkit-border-bottom-right-radius: 1.6667em;
     -moz-border-radius-bottomright:     1.6667em;
     border-bottom-right-radius:         1.6667em;
-    
-    padding-right: 1.6667em;
 }
 
 .document-title,
 .document-actions {
-    display: inline;
     height: 3.333em;
-    line-height: 3.3333;
     -webkit-box-sizing: border-box;
     -moz-box-sizing:    border-box;
     box-sizing:         border-box;
 }
 .document-title {
     float: left;
+    line-height: 3.3333;
     background: #999999;
     width: 50%;
     padding: 0 1em;
+    font-weight: bold;
 }
 .document-actions {
     float: right;
-    background: #aaaaaa;
     width: auto;
+    padding-top: 0.6667em;
+    padding-right: 0.6667em;
 }
 
 
 
-
-
-
-
-
-
-
-
-
+.action-bar .button {
+    border-width: 0.2em;
+    height: 2.5em;
+    line-height: 2.1;
+}
+.document-actions .button {
+    display: block;
+}
+.button {
+    display: inline-block;
+    
+    font-weight: bold;
+    height: 2em;
+    line-height: 2;
+    padding-left: 0.8333em;
+    padding-right: 0.8333em;
+    
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    box-sizing:         border-box;
+}
+.collaborate-button,
+.share-button,
+.add-button {
+    padding-left: 32px;
+}
+.delete-button,
+.info-button {
+    padding-top: 2.1em;
+    height: 0;
+    width: 2.1em;
+    overflow: hidden;
+}
+.collaborate-button {
+    
+}
+.share-button {
+    
+}
 
 
 
