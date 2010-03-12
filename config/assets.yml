@@ -20,8 +20,7 @@ stylesheets:
     - public/stylesheets/style.application.css
     - public/stylesheets/style.application.color.css
     - public/stylesheets/style.application.typography.css
-    - public/stylesheets/formtastic.css   
-    - public/stylesheets/formtastic_changes.css 
+
   page_editor:    
     - public/stylesheets/library.css
     - public/stylesheets/lib/protect.css
@@ -43,7 +42,6 @@ javascripts:
     - public/javascripts/klass.js    
     - public/swfupload/swfupload.js
     - public/javascripts/jquery-swfupload.js
-    - public/javscripts/jquery.form.js
     - public/javascripts/jquery.hashchange.js
     - public/javascripts/colorpicker.js
     - public/javascripts/jquery-ui-1.8.js
