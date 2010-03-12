@@ -10,27 +10,28 @@ class DatastoreEntriesController < ApplicationController
     end
   end
   
-  # GET /items/:item_id/datastore_entries?only_current_user=bool
+  # GET /items/:item_id/datastore_entries?key=string&only_current_user=bool
   def index
-    only_current_user = params[:only_current_user] == 'true'
+    condition = {}
+    condition[:user_id] = current_user.id if params[:only_current_user] == 'true'
+    condition[:ds_key] = params[:key] if  params.has_key?(:key)
+    result = @item.datastore_entries.find(:all, :conditions => condition)
     
-    if(only_current_user)
-      render :json => DatastoreEntry.find(:all,:conditions => {:widget_uuid => @item.uuid, :user_id => current_user.id}).to_json(:only => [:ds_key, :ds_value])    
-    else
-      render :json => DatastoreEntry.find(:all,:conditions => {:widget_uuid => @item.uuid}).to_json(:only => [:ds_key, :ds_value])    
-    end
+    render :json => result 
   end
   
   # GET /items/:item_id/datastore_entries/:id
   def show
+    #JBA SDK API is already public and returning json must be an Array.
+    @datastore_entries = []
     if user_signed_in?
-      @datastore_entry = current_user.datastore_entries.find_by_ds_key!(params[:id])
+      @datastore_entries << current_user.datastore_entries.find_by_ds_key!(params[:id])
     else
       # need to manage anonymous user
     end
     
     respond_to do |format|
-      format.json { render @datastore_entry }
+      format.json { render :json => @datastore_entries }
     end
   end
   

@@ -20,7 +20,7 @@ class DatastoreEntry < ActiveRecord::Base
     user.email if user
   end
   
-  def to_json
+  def to_json(options = {})
     if current_user && current_user.has_role?("editor", item.page.document)
       json_filter = [:ds_key, :ds_value, :updated_at]
       methods = [:email]
