@@ -138,15 +138,6 @@ header {
     padding-bottom: 1.6667em;
     margin-bottom: 1.6667em;
 }
-.document-item {
-    background: #cccccc;
-    -webkit-border-top-right-radius:    1.6667em;
-    -moz-border-radius-topright:        1.6667em;
-    border-top-right-radius:            1.6667em;
-    -webkit-border-bottom-right-radius: 1.6667em;
-    -moz-border-radius-bottomright:     1.6667em;
-    border-bottom-right-radius:         1.6667em;
-}
 
 .document-title,
 .document-actions {
@@ -158,7 +149,7 @@ header {
 .document-title {
     float: left;
     line-height: 3.3333;
-    background: #999999;
+    /*background: #999999;*/
     width: 50%;
     padding: 0 1em;
     font-weight: bold;

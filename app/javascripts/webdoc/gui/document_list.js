@@ -189,12 +189,12 @@ WebDoc.DocumentList = $.klass({
     
     // Construct DOM tree and return it
     return documentActionsNode.append(
-      infoItemNode.html(
-        infoNode
-      )
-    ).append(
       deleteItemNode.html(
         deleteNode
+      )
+    ).append(
+      infoItemNode.html(
+        infoNode
       )
     ).append(
       collaborateItemNode.html(

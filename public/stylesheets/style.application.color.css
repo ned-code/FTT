@@ -137,6 +137,16 @@ header {
     -moz-border-radius:    1.25em;
     border-radius:         1.25em;
 }
+.document-item {
+    background: hsla(208, 8%, 66%, 0.6);
+    -webkit-border-top-right-radius:    1.6667em;
+    -moz-border-radius-topright:        1.6667em;
+    border-top-right-radius:            1.6667em;
+    -webkit-border-bottom-right-radius: 1.6667em;
+    -moz-border-radius-bottomright:     1.6667em;
+    border-bottom-right-radius:         1.6667em;
+}
+
 
 .button {
     background-color: hsl( 208, 4%, 50% );
@@ -147,52 +157,56 @@ header {
 }
 
 .button {
-    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(208, 4%, 50%)), to(hsl(208, 8%, 66%)));
-    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(208, 4%, 50% ), hsl(208, 8%, 66% ) );
-    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(208, 4%, 50% ), hsl(208, 8%, 66% ) );
+    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(208, 4%, 50%)), to(hsl(208, 8%, 66%)));
+    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(208, 4%, 50% ), hsl(208, 8%, 66% ) );
+    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(208, 4%, 50% ), hsl(208, 8%, 66% ) );
 }
 
 .info-button:hover {
-    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(208, 82%, 46%)), to(hsl(208, 88%, 52%)));
-    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(208, 82%, 46% ), hsl(208, 88%, 52% ) );
-    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(208, 82%, 46% ), hsl(208, 88%, 52% ) );
+    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 82%, 46%)), to(hsl(28, 88%, 52%)));
+    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
+    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
 }
 
 .delete-button {
-    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(358, 48%, 46%)), to(hsl(358, 66%, 52%)));
-    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(358, 48%, 46% ), hsl(358, 66%, 52% ) );
-    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(358, 48%, 46% ), hsl(358, 66%, 52% ) );
+    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(13, 48%, 46%)), to(hsl(13, 66%, 52%)));
+    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(13, 48%, 46% ), hsl(13, 66%, 52% ) );
+    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(13, 48%, 46% ), hsl(13, 66%, 52% ) );
 }
 .delete-button:hover {
-    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(358, 82%, 46%)), to(hsl(358, 88%, 52%)));
-    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(358, 82%, 46% ), hsl(358, 88%, 52% ) );
-    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(358, 82%, 46% ), hsl(358, 88%, 52% ) );
+    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(13, 82%, 46%)), to(hsl(13, 88%, 52%)));
+    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(13, 82%, 46% ), hsl(13, 88%, 52% ) );
+    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(13, 82%, 46% ), hsl(13, 88%, 52% ) );
 }
 
 .collaborate-button:hover,
 .share-button:hover {
-    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(72, 76%, 46%)), to(hsl(72, 82%, 52%)));
-    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(72, 76%, 46% ), hsl(72, 82%, 52% ) );
-    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(72, 76%, 46% ), hsl(72, 82%, 52% ) );
+    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(58, 76%, 46%)), to(hsl(58, 82%, 52%)));
+    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(58, 76%, 46% ), hsl(58, 82%, 52% ) );
+    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(58, 76%, 46% ), hsl(58, 82%, 52% ) );
 }
 
 .add-button {
-    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
-    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
-    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
+    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
+    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
+    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
 }
 .add-button:hover {
-    background: url('/images/site-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 82%, 46%)), to(hsl(28, 88%, 52%)));
-    background: url('/images/site-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
-    background: url('/images/site-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
+    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 82%, 46%)), to(hsl(28, 88%, 52%)));
+    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
+    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
 }
 
-.add-button:hover {
-    background-position: -1px -131px;
-}
-.add-button {
-    background-position: -1px -131px;
-}
+.delete-button:hover      { background-position: -3px -67px; }
+.delete-button            { background-position: -3px -67px; }
+.add-button:hover         { background-position: -1px -131px; }
+.add-button               { background-position: -1px -131px; }
+.info-button:hover        { background-position: -3px -195px; }
+.info-button              { background-position: -3px -195px; }
+.collaborate-button:hover { background-position: -2px -260px; }
+.collaborate-button       { background-position: -2px -260px; }
+.share-button:hover       { background-position: -2px -344px; }
+.share-button             { background-position: -2px -344px; }
 
 .sec-action { color: #606060;}
 .sec-action:hover { color: #000; }
