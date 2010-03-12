@@ -52,13 +52,13 @@
 
 /* Vertical */
 
-.vertical li {
+.vertical>li {
     display: block;
     margin-right: 0;
     margin-bottom: 6px;
 }
-.vertical li:last-child,
-.vertical li.last {
+.vertical>li:last-child,
+.vertical>li.last {
     margin-bottom: 0;
 }
 

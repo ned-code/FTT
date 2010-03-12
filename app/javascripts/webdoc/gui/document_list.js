@@ -17,39 +17,20 @@ WebDoc.DocumentList = $.klass({
   refreshNewDocument: function(section, index, document) {
       
       // TODO: This has to work when the Today list doesn't exist yet
+      // Not sure why we do this at all, since as soon as you create a page
+      // you are directed to a new window...
       
-      var sectionToUpdate = $(this.domNode.find("h3").get(section));
-      
-      var previousElement = sectionToUpdate;
-      if (index > 0) 
-      {
-          previousElement = $(sectionToUpdate.nextAll().get(index - 1));
-      }
-      
-      var documentItemNode = this.makeDocumentItemNode( document );
-      
-      previousElement.after(documentItemNode);
-  },
-  
-  makeDocumentItemNode: function( document ){
-      var documentNode = $("<li/>", {
-            "class": "document-item",
-            "id": document.uuid()
-          }),
-          documentTitle = $("<a/>", {
-            "class": "wb-document-title wb-document-edit",
-            "href": "#"+document.uuid(),
-            "title": "Open this document",
-            html: document.title()
-          });
-      
-      documentNode.append( documentTitle );
-      
-      if ( this._hasAuthenticatedUserEditorRights( document.data.id ) ) {
-        documentNode.append( this._buildDocumentActionsNode( document ) );
-      }
-      
-      return documentNode;
+      // var sectionToUpdate = $(this.domNode.find("h3").get(section));
+      // 
+      // var previousElement = sectionToUpdate;
+      // if (index > 0) 
+      // {
+      //     previousElement = $(sectionToUpdate.nextAll().get(index - 1));
+      // }
+      // 
+      // var documentItemNode = this._buildDocumentItemNode( document );
+      // 
+      // previousElement.after(documentItemNode);
   },
   
   removeDocument: function(id) {
@@ -57,7 +38,7 @@ WebDoc.DocumentList = $.klass({
   },
   
   changeShareStatus: function(document) {
-    $('#'+document.uuid()+ '> .wb-document-actions').children().eq(3).replaceWith(this._buildShareValue(document));
+    $('#'+document.uuid()+ '> .document-actions').children().eq(3).replaceWith(this._buildShareValue(document));
   },
   
   repaint: function() {
@@ -91,7 +72,7 @@ WebDoc.DocumentList = $.klass({
           for ( documentIndex = 0; documentIndex < documentCount; documentIndex++ )
           {
               document = this.datasource.document( sectionIndex, documentIndex );
-              documentNode = this.makeDocumentItemNode( document );
+              documentNode = this._buildDocumentItemNode( document );
               sectionList.append( documentNode );
           }
           
@@ -144,18 +125,86 @@ WebDoc.DocumentList = $.klass({
     });
   },
   
+  _buildDocumentItemNode: function( document ){
+      var documentNode = $("<li/>", {
+            "class": "document-item clear",
+            "id": document.uuid()
+          }),
+          documentTitle = $("<a/>", {
+            "class": "document-title wb-document-edit",
+            "href": "#"+document.uuid(),
+            "title": "Open this document",
+            html: document.title()
+          });
+      
+      documentNode.append( documentTitle );
+      
+      if ( this._hasAuthenticatedUserEditorRights( document.data.id ) ) {
+        documentNode.append( this._buildDocumentActionsNode( document ) );
+      }
+      
+      return documentNode;
+  },
+  
   _buildDocumentActionsNode: function(document) {
-    var documentActionsNode = $("<div>").addClass("wb-document-actions");
-    documentActionsNode.append($("<a>").addClass("wb-document-delete").attr("href", "").attr("title", "delete"));
-    documentActionsNode.append($("<a>").addClass("wb-document-info sec-action").attr("href", "").attr("title", "info").html("info"));
-    documentActionsNode.append($("<a>").addClass("wb-document-collaborate sec-action").attr("href", "").attr("title", "invite co-editors").html("invite co-editors"));
-    if (document.isShared()) {
-      documentActionsNode.append($("<a>").addClass("wb-document-unshare sec-action").attr("href", "").attr("title", "unshare").html("unshare"));     
-    }
-    else {
-      documentActionsNode.append($("<a>").addClass("wb-document-share sec-action").attr("href", "").attr("title", "share").html("share"));        
-    }
-    return documentActionsNode;
+    var documentActionsNode = $("<ul/>", {
+          "class": "document-actions index"
+        }),
+        deleteItemNode = $("<li/>"),
+        deleteNode = $("<a/>", {
+          "class": "wb-document-delete delete-button button",
+          href: "",
+          title: "delete",
+          html: "delete"
+        }),
+        infoItemNode = $("<li/>"),
+        infoNode = $("<a/>", {
+          "class": "wb-document-info sec-action info-button button",
+          href: "",
+          title: "info",
+          html: "info"
+        }),
+        collaborateItemNode = $("<li/>"),
+        collaborateNode = $("<a/>", {
+          "class": "wb-document-collaborate sec-action collaborate-button button",
+          href: "",
+          title: "invite co-editors",
+          html: "invite co-editors"
+        }),
+        shareItemNode = $("<li/>"),
+        shareNode = ( document.isShared() ) ?
+          $("<a/>", {
+            "class": "wb-document-unshare sec-action unshare-button button",
+            href: "#unshare",
+            title: "unshare",
+            html: "unshare"
+          }) :     
+          $("<a/>", {
+            "class": "wb-document-share sec-action share-button button",
+            href: "#share",
+            title: "share",
+            html: "share"
+          })
+        ;
+    
+    // Construct DOM tree and return it
+    return documentActionsNode.append(
+      infoItemNode.html(
+        infoNode
+      )
+    ).append(
+      deleteItemNode.html(
+        deleteNode
+      )
+    ).append(
+      collaborateItemNode.html(
+        collaborateNode
+      )
+    ).append(
+      shareItemNode.html(
+        shareNode
+      )
+    );
   },
   
   _buildShareValue: function(document) {
