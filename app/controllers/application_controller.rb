@@ -14,7 +14,7 @@ protected
   
   def forbidden_access
     render_optional_error_file(:not_found)
-#    render :status => :forbidden
+    # render :status => :forbidden
   end
   
   def http_authenticate
@@ -33,6 +33,10 @@ protected
   
   def set_current_user_in_thread
     Thread.current[:user] = current_user
+  end
+  
+  def document_is_public?
+    @document && @document.is_public?
   end
   
 end

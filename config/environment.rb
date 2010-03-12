@@ -17,29 +17,31 @@ Rails::Initializer.run do |config|
   # Specify gems that this application depends on and have them installed with rake gems:install
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6'
-  config.gem "sqlite3-ruby", :lib => "sqlite3"
   
+  # Rails 3 OK
+  config.gem "sqlite3-ruby", :lib => "sqlite3"
   config.gem 'haml'
-  config.gem "is_paranoid"
-  config.gem 'uuid'
-  config.gem 'rubyzip', :lib => 'zip/zip'
+  config.gem 'i18n'
   config.gem 'mime-types', :lib => 'mime/types'
-  config.gem 'xml-object'
-  config.gem 'hpricot'
   config.gem 'json'
+  config.gem 'rubyzip', :lib => 'zip/zip'
   config.gem 'xmpp4r'
+  config.gem 'right_aws'
+  config.gem 'warden'
+  config.gem 'devise'
+  config.gem 'will_paginate'
+  config.gem 'uuidtools' # for has_uuid plugin
+  # config.gem 'uuid'
+  
+  # Rails 3 Maybe
   config.gem 'carrierwave'
   config.gem 'mini_magick'
-  config.gem 'right_aws'
-  config.gem 'will_paginate'
-  config.gem 'warden'
-  config.gem 'jammit'
-  config.gem 'i18n'
-  config.gem 'formtastic'
-  config.gem "validation_reflection"
-  config.gem 'uuidtools' # for has_uuid plugin
-  config.gem 'devise'
   config.gem 'acl9'
+  
+  # Rails 3 ARG
+  config.gem 'jammit' # use plugin for the moment
+  # config.gem 'formtastic'
+  # config.gem "validation_reflection"
   
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named

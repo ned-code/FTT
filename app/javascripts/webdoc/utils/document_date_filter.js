@@ -13,11 +13,13 @@ WebDoc.DocumentDateFilter = $.klass(
     {
         this.todayDocuments = [];
         this.previousDocuments = [];
+        this.initializing = true;
         for (var i = documents.length - 1; i >= 0; i--) 
         {
             var aDocument = documents[i];
             this.addDocument(aDocument);
         }
+        this.initializing = false;
     },
     
     refreshDocument: function(modifiedDocument)
@@ -55,7 +57,9 @@ WebDoc.DocumentDateFilter = $.klass(
         }
         
         // notify
-        this.view.refreshNewDocument(section, index, newDocument);
+        if (!this.initializing) {
+          this.view.refreshNewDocument(section, index, newDocument);
+        }
     },
     
     removeDocument: function(document)

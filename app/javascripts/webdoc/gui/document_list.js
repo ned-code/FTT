@@ -209,7 +209,7 @@ WebDoc.DocumentList = $.klass({
   
   _buildShareValue: function(document) {
     var shareAction = "";
-    document.data.is_public? shareAction = "unshare" : shareAction = "share";
+    shareAction = document.data.is_public ?  "unshare" : "share" ;
     return $('<a>').addClass("wb-document-" + shareAction + " sec-action").attr("href", "").attr("title", shareAction).html(shareAction);
   },
   

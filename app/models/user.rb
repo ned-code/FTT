@@ -1,4 +1,3 @@
-require 'storage'
 require 'xmpp_user_synch'
 
 class User < ActiveRecord::Base
@@ -35,8 +34,8 @@ class User < ActiveRecord::Base
   has_many :follower_connections, :class_name => 'Followship', :foreign_key => 'following_id'
   has_many :following, :through => :following_connections
   has_many :followers, :through => :follower_connections
+  has_many :datastore_entries
   
-
   # ===================
   # = Instance Method =
   # ===================
@@ -151,4 +150,3 @@ end
 #  gender               :string(255)
 #  website              :string(255)
 #
-
