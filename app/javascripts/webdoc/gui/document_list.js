@@ -15,18 +15,41 @@ WebDoc.DocumentList = $.klass({
   },
   
   refreshNewDocument: function(section, index, document) {
+      
+      // TODO: This has to work when the Today list doesn't exist yet
+      
       var sectionToUpdate = $(this.domNode.find("h3").get(section));
+      
       var previousElement = sectionToUpdate;
       if (index > 0) 
       {
           previousElement = $(sectionToUpdate.nextAll().get(index - 1));
       }
-      var documentItemNode = $("<div>").addClass("wb-document-item").attr('id', document.uuid());
-      var documentItemTitle = $("<div>").addClass("wb-document-title");
-      documentItemTitle.append($("<a>").addClass("wb-document-edit").attr("href", "").attr("title", "Open this document").html(document.title()));
-      documentItemNode.append(documentItemTitle);
-      if (this._hasAuthenticatedUserEditorRights(document.data.id)) { documentItemNode.append(this._buildDocumentActionsNode(document)); }
+      
+      var documentItemNode = this.makeDocumentItemNode( document );
+      
       previousElement.after(documentItemNode);
+  },
+  
+  makeDocumentItemNode: function( document ){
+      var documentNode = $("<li/>", {
+            "class": "document-item",
+            "id": document.uuid()
+          }),
+          documentTitle = $("<a/>", {
+            "class": "wb-document-title wb-document-edit",
+            "href": "#"+document.uuid(),
+            "title": "Open this document",
+            html: document.title()
+          });
+      
+      documentNode.append( documentTitle );
+      
+      if ( this._hasAuthenticatedUserEditorRights( document.data.id ) ) {
+        documentNode.append( this._buildDocumentActionsNode( document ) );
+      }
+      
+      return documentNode;
   },
   
   removeDocument: function(id) {
@@ -61,29 +84,14 @@ WebDoc.DocumentList = $.klass({
           
           // Then create the list
           sectionTitle = $('<h3/>').html( this.datasource.section( sectionIndex ) );
-          sectionList = $('<ul/>');
+          sectionList = $('<ul/>', {
+            "class": "vertical document-index index"
+          });
           
           for ( documentIndex = 0; documentIndex < documentCount; documentIndex++ )
           {
               document = this.datasource.document( sectionIndex, documentIndex );
-              
-              documentNode = $("<li/>", {
-                "class": "wb-document-item",
-                "id": document.uuid()
-              });
-              documentTitle = $("<a/>", {
-                "class": "wb-document-title wb-document-edit",
-                "href": "#"+document.uuid(),
-                "title": "Open this document",
-                html: document.title()
-              });
-              
-              documentNode.append( documentTitle );
-              
-              if ( this._hasAuthenticatedUserEditorRights( document.data.id ) ) {
-                documentNode.append( this._buildDocumentActionsNode( document ) );
-              }
-              
+              documentNode = this.makeDocumentItemNode( document );
               sectionList.append( documentNode );
           }
           
