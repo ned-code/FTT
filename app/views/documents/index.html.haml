@@ -17,7 +17,13 @@
         %a#wb-document-filter-public.state-tabs{ :href => "#public"}= t('.public')
 
 %div.content
-  %div#wb-document-list-container.wrap
+  %div.wrap
+    %div.column.one.double.of-three
+      %div#wb-document-list-container
+    %div.column.three.of-three
+      %h4 Manage your Webdocs
+      %p Create your own new webdoc, or choose a webdoc to view from the list.
+      %p You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, click <strong>share</strong>. You can choose to share your webdoc with just your friends, or with everybody on the world wide&nbsp;web.
 
 #wb-new-document-dialog{ :style => "display:none", :title => t('.create_new_document') }
   %form#wb-new-form.new-form{ :action => "", :title => t('.create_new_document') }

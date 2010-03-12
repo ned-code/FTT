@@ -88,6 +88,7 @@ header {
 }
 .content {
     padding-top: 3.3333em;
+    min-height: 400px;
 }
 
 .action-bar input[type=submit] {
@@ -135,7 +136,6 @@ header {
     padding-top: 1.6667em;
     padding-bottom: 1.6667em;
     margin-bottom: 1.6667em;
-    width: 80%;
 }
 .document-index li {
     margin-bottom: 2px;

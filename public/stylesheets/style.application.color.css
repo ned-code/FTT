@@ -151,10 +151,6 @@ header {
     border-left-style: solid;
     border-left-color: hsla(208, 8%, 70%, 0.7);
 }
-.document-index:hover {
-    border-left-style: solid;
-    border-left-color: hsla(208, 6%, 80%, 0.6);
-}
 .document-title {
     color: hsl(208, 6%, 30%);
     background: hsla(208, 8%, 70%, 0.7);
@@ -167,7 +163,7 @@ header {
 }
 .document-item:hover .document-title {
     color: hsl(208, 6%, 12%);
-    background-color: hsla(208, 6%, 80%, 0.6);
+    background-color: hsla(208, 6%, 76%, 0.6);
 }
 
 .button {
@@ -182,11 +178,16 @@ header {
 .button:hover {
     color: white;
 }
-.info-button:hover        { background-color: hsl(43, 44%, 46% ); }
-.delete-button            { background-color: hsl(13, 50%, 46% ); }
-.delete-button:hover      { background-color: hsl(13, 66%, 52% ); }
-.collaborate-button:hover { background-color: hsl(58, 44%, 46%); }
-.share-button:hover       { background-color: hsl(72, 44%, 46%); }
+
+.document-item:hover .delete-button      { background-color: hsl(13, 46%, 54% ); }
+.document-item:hover .info-button        { background-color: hsl(208, 36%, 56% ); }
+.document-item:hover .collaborate-button { background-color: hsl(43, 54%, 46%); }
+.document-item:hover .share-button       { background-color: hsl(72, 44%, 46%); }
+
+.document-item .delete-button:hover      { background-color: hsl(13, 66%, 54% ); }
+.document-item .info-button:hover        { background-color: hsl(208, 52%, 59% ); }
+.document-item .collaborate-button:hover { background-color: hsl(43, 66%, 46%); }
+.document-item .share-button:hover       { background-color: hsl(72, 60%, 46%); }
 
 .add-button {
     background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));

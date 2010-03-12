@@ -12,13 +12,15 @@ WebDoc.DocumentList = $.klass({
       this.datasource.view = this;
       this._getCurrentUserRolesDocuments();
       this.repaint();
+      this.map = {};
   },
   
   refreshNewDocument: function(section, index, document) {
       
-      // TODO: This has to work when the Today list doesn't exist yet
       // Not sure why we do this at all, since as soon as you create a page
       // you are directed to a new window...
+      
+      // TODO: This has to work when the Today list doesn't exist yet
       
       // var sectionToUpdate = $(this.domNode.find("h3").get(section));
       // 
@@ -34,7 +36,11 @@ WebDoc.DocumentList = $.klass({
   },
   
   removeDocument: function(id) {
-      $("#" + id).remove();
+      var obj = this.map[ id ];
+      // Remove the documents node from the DOM
+      obj.domNode && obj.domNode.remove();
+      // ..and from the map
+      delete this.map[ id ];
   },
   
   changeShareStatus: function(document) {
@@ -44,13 +50,9 @@ WebDoc.DocumentList = $.klass({
   repaint: function() {
       var sectionIndex,
           sectionCount = this.datasource.nbSections(),
-          sectionTitle,
-          sectionList,
-          documentIndex,
-          documentCount,
-          document,
-          documentNode,
-          documentTitleNode;
+          sectionTitle, sectionList,
+          documentIndex, documentCount,
+          document, documentNode;
   
       this.domNode
       .empty();
@@ -126,27 +128,38 @@ WebDoc.DocumentList = $.klass({
   },
   
   _buildDocumentItemNode: function( document ){
-      var documentNode = $("<li/>", {
-            "class": "document-item clear"
+      var id = document.uuid(),
+          data = {
+            webdoc: {
+              id: id
+            }
+          },
+          documentNode = $("<li/>", {
+            "class": "document-item clear",
+            data: data
           }),
           documentTitle = $("<a/>", {
             "class": "document-title wb-document-edit",
-            "id": document.uuid(),
-            "href": "#"+document.uuid(),
+            "href": "#" + id,
             "title": "Open this document",
+            data: data,
             html: document.title()
           });
       
       documentNode.append( documentTitle );
       
       if ( this._hasAuthenticatedUserEditorRights( document.data.id ) ) {
-        documentNode.append( this._buildDocumentActionsNode( document ) );
+        documentNode.append( this._buildDocumentActionsNode( document, data ) );
       }
+      
+      this.map[ id ] = {
+        domNode: documentNode
+      };
       
       return documentNode;
   },
   
-  _buildDocumentActionsNode: function(document) {
+  _buildDocumentActionsNode: function( document, data ) {
     var documentActionsNode = $("<ul/>", {
           "class": "document-actions index"
         }),
@@ -155,21 +168,24 @@ WebDoc.DocumentList = $.klass({
           "class": "wb-document-delete delete-button button",
           href: "",
           title: "delete",
-          html: "delete"
+          html: "delete",
+          data: data
         }),
         infoItemNode = $("<li/>"),
         infoNode = $("<a/>", {
           "class": "wb-document-info sec-action info-button button",
           href: "",
           title: "info",
-          html: "info"
+          html: "info",
+          data: data
         }),
         collaborateItemNode = $("<li/>"),
         collaborateNode = $("<a/>", {
           "class": "wb-document-collaborate sec-action collaborate-button button",
           href: "",
-          title: "invite co-editors",
-          html: "invite co-editors"
+          title: "Invite other people to help you edit your webdoc",
+          html: "invite",
+          data: data
         }),
         shareItemNode = $("<li/>"),
         shareNode = ( document.isShared() ) ?
@@ -177,13 +193,15 @@ WebDoc.DocumentList = $.klass({
             "class": "wb-document-unshare sec-action unshare-button button",
             href: "#unshare",
             title: "unshare",
-            html: "unshare"
+            html: "unshare",
+            data: data
           }) :     
           $("<a/>", {
             "class": "wb-document-share sec-action share-button button",
             href: "#share",
-            title: "share",
-            html: "share"
+            title: "Share your webdoc with the world - or just your friends",
+            html: "share",
+            data: data
           })
         ;
     

@@ -33,6 +33,9 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     initialize: function($super)
     {
         $super();
+        
+        this.documentListContainerNode = $("#wb-document-list-container");
+        
         this.documents = [];
         this.documentList = null;
         this.filter = undefined;
@@ -59,13 +62,14 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         var that = this;
         $("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
         
-        $(".wb-document-edit").live("click", this.editDocument);
-        
-        $(".wb-document-info").live("click", this.renameDocument);
-        $(".wb-document-delete").live("click", this.deleteDocument);
-        $(".wb-document-collaborate").live("click", this.changeDocumentAccess);
-        $(".wb-document-share").live("click", this.shareDocument); 
-        $(".wb-document-unshare").live("click", this.unshareDocument); 
+        this.documentListContainerNode
+        .delegate( ".wb-document-edit", 'click', this.editDocument )
+        .delegate( ".wb-document-info", 'click', this.renameDocument )
+        .delegate( ".wb-document-delete", 'click', this.deleteDocument )
+        .delegate( ".wb-document-collaborate", 'click', this.changeDocumentAccess )
+        .delegate( ".wb-document-share", 'click', this.shareDocument )
+        .delegate( ".wb-document-unshare", 'click', this.unshareDocument );
+
         $("#wb-document-filter-date").bind("click", {document_filter: null}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-owned-by-me").bind("click", {document_filter: 'creator'}, this.loadDocumentsWithFilter.pBind(this));
         $("#wb-document-filter-editor-rights").bind("click", {document_filter: 'editor'}, this.loadDocumentsWithFilter.pBind(this));
@@ -78,7 +82,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         
         this.filter = new WebDoc.DocumentDateFilter();
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
-        $("#wb-document-list-container").append(this.documentList.domNode.get(0));
+        this.documentListContainerNode.append(this.documentList.domNode.get(0));
         
         // Default selection, documents owned by me
         this.loadDocumentsWithFilter({document_filter: 'creator'});
@@ -216,9 +220,13 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     renameDocument: function(e)
     {
         e.preventDefault();
-        var that = WebDoc.application.documentEditor;
-        var documentIdToRename = $(this).parent().parent().attr("id");
+        
+        var that = WebDoc.application.documentEditor,
+            data = $(this).closest('.document-item').data("webdoc"),
+            documentIdToRename = data && data.id;
+        
         that.editedDocument = that.documentWithId(documentIdToRename);
+        
         var previousName = that.editedDocument.title();
         $("#wb-edit-document-name").val(previousName);
         $("#wb-edit-document-description").val(that.editedDocument.description());
@@ -257,41 +265,50 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     {
       e.preventDefault();
       ddd("change acess");
-      var documentToEdit = $(this).parent().parent().attr("id");            
+      var data = $(this).closest(".document-item").data("webdoc"),
+          documentToEdit = data && data.id;
+      
       WebDoc.application.accessController.showAccess(WebDoc.application.documentEditor.documentWithId(documentToEdit));      
     },
     
-    shareDocument: function(e)
-    {
-      e.preventDefault();
+    shareDocument: function(e) {
       ddd("must publish document"); 
-      var documentIdToPublish = $(this).parent().parent().attr("id");
-      var document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
+      var data = $(this).data('webdoc'),
+          documentIdToPublish = data && data.id,
+          document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
+      
       WebDoc.application.shareController.showShare(document);            
+      
+      e.preventDefault();
     },
     
-    unshareDocument: function(e)
-    {
-      e.preventDefault();
+    unshareDocument: function(e) {
       ddd("must unshare document"); 
-      var documentIdToPublish = $(this).parent().parent().attr("id");
-      var document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
+      var data = $(this).data('webdoc'),
+          documentIdToPublish = data && data.id,
+          document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
+      
       WebDoc.application.shareController.showShare(document);  
+      
+      e.preventDefault();
     },
     
-    deleteDocument: function(e)
-    {
-      e.preventDefault();
-      var that = WebDoc.application.documentEditor;
-      var documentIdToDelete = $(this).parent().parent().attr("id");
+    deleteDocument: function(e) {
+      var that = WebDoc.application.documentEditor,
+          data = $(this).data("webdoc"),
+          documentIdToDelete = data && data.id;
+      
       that.editedDocument = that.documentWithId(documentIdToDelete);
-      var choice = confirm("Are you sure you want to delete document " + that.editedDocument.title());
+      
+      var choice = confirm("Are you sure you want to delete the webdoc:\n\n" + that.editedDocument.title());
+      
       if (choice) {
-        that.editedDocument.destroy(function(persitedDoc)
-        {
-            that.filter.removeDocument(that.editedDocument);
+        that.editedDocument.destroy( function(persitedDoc){
+          that.filter.removeDocument( that.editedDocument );
         });
       }
+      
+      e.preventDefault();
     },
         
     incrementPageId: function(pageIncrement) {
