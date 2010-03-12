@@ -37,6 +37,7 @@ Rails::Initializer.run do |config|
   config.gem 'carrierwave'
   config.gem 'mini_magick'
   config.gem 'acl9'
+  config.gem 'formtastic'
   
   # Rails 3 ARG
   config.gem 'jammit' # use plugin for the moment
