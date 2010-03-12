@@ -14,12 +14,12 @@ stylesheets:
     - public/stylesheets/style.ui.css
   document_editor:
     - public/stylesheets/style.application.css
-    - public/stylesheets/style.application.color.css
     - public/stylesheets/style.application.typography.css
+    - public/stylesheets/style.application.color.css
   application:
     - public/stylesheets/style.application.css
-    - public/stylesheets/style.application.color.css
     - public/stylesheets/style.application.typography.css
+    - public/stylesheets/style.application.color.css
 
   page_editor:    
     - public/stylesheets/library.css

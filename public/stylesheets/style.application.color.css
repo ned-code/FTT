@@ -18,7 +18,7 @@
  */
 
 body {
-    color: hsl(208, 2%, 25%);
+    color: hsl(208, 6%, 30%);
     background-color: hsla(208, 33%, 98%, 0.88);
     /*background-image: url('/images/texture_bg.jpg');
     background-position: 50% 0%;
@@ -137,8 +137,18 @@ header {
     -moz-border-radius:    1.25em;
     border-radius:         1.25em;
 }
-.document-item {
-    background: hsla(208, 8%, 66%, 0.6);
+
+.document-index {
+    border-left-style: solid;
+    border-left-color: hsla(208, 8%, 70%, 0.7);
+}
+.document-index:hover {
+    border-left-style: solid;
+    border-left-color: hsla(208, 6%, 80%, 0.6);
+}
+.document-title {
+    color: hsl(208, 6%, 30%);
+    background: hsla(208, 8%, 70%, 0.7);
     -webkit-border-top-right-radius:    1.6667em;
     -moz-border-radius-topright:        1.6667em;
     border-top-right-radius:            1.6667em;
@@ -146,45 +156,29 @@ header {
     -moz-border-radius-bottomright:     1.6667em;
     border-bottom-right-radius:         1.6667em;
 }
+.document-item:hover .document-title {
+    color: hsl(208, 6%, 12%);
+    background-color: hsla(208, 6%, 80%, 0.6);
+}
 
 
 .button {
     background-color: hsl( 208, 4%, 50% );
+    background-image: url('/images/button-icons.png');
+    background-repeat: no-repeat;
     color: white;
     -webkit-border-radius: 1em;
     -moz-border-radius:    1em;
     border-radius:         1em;
 }
-
-.button {
-    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(208, 4%, 50%)), to(hsl(208, 8%, 66%)));
-    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(208, 4%, 50% ), hsl(208, 8%, 66% ) );
-    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(208, 4%, 50% ), hsl(208, 8%, 66% ) );
+.button:hover {
+    color: white;
 }
-
-.info-button:hover {
-    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 82%, 46%)), to(hsl(28, 88%, 52%)));
-    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
-    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
-}
-
-.delete-button {
-    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(13, 48%, 46%)), to(hsl(13, 66%, 52%)));
-    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(13, 48%, 46% ), hsl(13, 66%, 52% ) );
-    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(13, 48%, 46% ), hsl(13, 66%, 52% ) );
-}
-.delete-button:hover {
-    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(13, 82%, 46%)), to(hsl(13, 88%, 52%)));
-    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(13, 82%, 46% ), hsl(13, 88%, 52% ) );
-    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(13, 82%, 46% ), hsl(13, 88%, 52% ) );
-}
-
-.collaborate-button:hover,
-.share-button:hover {
-    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(58, 76%, 46%)), to(hsl(58, 82%, 52%)));
-    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(58, 76%, 46% ), hsl(58, 82%, 52% ) );
-    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(58, 76%, 46% ), hsl(58, 82%, 52% ) );
-}
+.info-button:hover        { background-color: hsl(43, 44%, 46% ); }
+.delete-button            { background-color: hsl(13, 50%, 46% ); }
+.delete-button:hover      { background-color: hsl(13, 66%, 52% ); }
+.collaborate-button:hover { background-color: hsl(58, 44%, 46%); }
+.share-button:hover       { background-color: hsl(72, 44%, 46%); }
 
 .add-button {
     background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
@@ -205,8 +199,5 @@ header {
 .info-button              { background-position: -3px -195px; }
 .collaborate-button:hover { background-position: -2px -260px; }
 .collaborate-button       { background-position: -2px -260px; }
-.share-button:hover       { background-position: -2px -344px; }
-.share-button             { background-position: -2px -344px; }
-
-.sec-action { color: #606060;}
-.sec-action:hover { color: #000; }
+.share-button:hover       { background-position: -2px -324px; }
+.share-button             { background-position: -2px -324px; }

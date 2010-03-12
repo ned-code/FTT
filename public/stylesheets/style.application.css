@@ -132,11 +132,16 @@ header {
 
 .document-index {
     border-left-width: 2px;
-    border-left-style: solid;
-    border-left-color: hsl(208, 8%, 40%);
     padding-top: 1.6667em;
     padding-bottom: 1.6667em;
     margin-bottom: 1.6667em;
+    width: 80%;
+}
+.document-index li {
+    margin-bottom: 2px;
+}
+.document-item {
+    position: relative;
 }
 
 .document-title,
@@ -147,15 +152,16 @@ header {
     box-sizing:         border-box;
 }
 .document-title {
-    float: left;
+    display: block;
     line-height: 3.3333;
-    /*background: #999999;*/
-    width: 50%;
+    width: 100%;
     padding: 0 1em;
     font-weight: bold;
 }
 .document-actions {
-    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
     width: auto;
     padding-top: 0.6667em;
     padding-right: 0.6667em;
@@ -185,7 +191,9 @@ header {
     box-sizing:         border-box;
 }
 .collaborate-button,
-.share-button,
+.share-button {
+    padding-left: 28px;
+}
 .add-button {
     padding-left: 32px;
 }
@@ -195,12 +203,6 @@ header {
     height: 0;
     width: 2.1em;
     overflow: hidden;
-}
-.collaborate-button {
-    
-}
-.share-button {
-    
 }
 
 
