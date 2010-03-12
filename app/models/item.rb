@@ -11,8 +11,13 @@ class Item < ActiveRecord::Base
   # = Associations =
   # ================
   
+  has_many :datastore_entries, :primary_key => "uuid", :foreign_key => "widget_uuid", :dependent => :destroy
+  
   belongs_to :page
   belongs_to :media, :polymorphic => true
+  
+  
+  
   
   def to_param
     uuid
@@ -44,6 +49,7 @@ end
 #
 # Table name: items
 #
+#  id         :integer(4)      not null, primary key
 #  uuid       :string(36)
 #  page_id    :integer(4)
 #  media_id   :integer(4)
@@ -51,7 +57,6 @@ end
 #  data       :text(16777215)
 #  created_at :datetime
 #  updated_at :datetime
-#  id         :integer(4)      not null, primary key
 #  position   :integer(4)
 #
 

@@ -3,56 +3,26 @@ class DatastoreEntriesController < ApplicationController
   before_filter :instantiate_document_and_item
   
   access_control do
-    allow :admin    
-    allow :reader, :of => :document
+    allow :admin
     allow :editor, :of => :document
-    allow all, :if => :document_is_public?, :except => [:index]
+    actions :show, :create, :destroy do
+      allow :reader, :of => :document
+      allow all, :if => :document_is_public?
+    end
   end
   
-  #GET /datastores/:widget_item_id/datastoreEntries?only_current_user=bool
+  #GET /items/:item_id/datastore_entries?only_current_user=bool
   def index
     only_current_user = params[:only_current_user] == 'true'
     
     if(only_current_user)
-      render :json => DatastoreEntry.find(:all,:conditions => {:widget_uuid => @widget_item.uuid, :user_id => current_user.id}).to_json(:only => [:ds_key, :ds_value])    
+      render :json => DatastoreEntry.find(:all,:conditions => {:widget_uuid => @item.uuid, :user_id => current_user.id}).to_json(:only => [:ds_key, :ds_value])    
     else
-      render :json => DatastoreEntry.find(:all,:conditions => {:widget_uuid => @widget_item.uuid}).to_json(:only => [:ds_key, :ds_value])    
+      render :json => DatastoreEntry.find(:all,:conditions => {:widget_uuid => @item.uuid}).to_json(:only => [:ds_key, :ds_value])    
     end
   end
   
-  #POST /datastores/:widget_item_id/datastoreEntries
-  def create
-    key = params[:key]
-    value = params[:value]
-    datastore_id = params[:datastore_id]
-    is_unique = params[:unique_key]
-    
-    #check parameters
-    if(key == nil || key == '')
-      render :text => 'Key is nil.' #print error
-      return
-    end
-    if(value == nil || value == '')
-      render :text => 'Value is nil.' #print error
-      return
-    end
-    if(is_unique == 'true' || is_unique == true)
-      is_unique = true
-    else
-      is_unique = false
-    end
-    
-    #check if widget exists
-    if(!@widget_item)
-        render :text => 'Widget doesn\'t exist.' #print error
-        return
-    end
-    DatastoreEntry.createOrUpdate(datastore_id, key, value, is_unique)
-    
-    render :text => '' #ok, no error
-  end
-  
-  #GET /datastores/:widget_item_id/datastoreEntries/:id
+  #GET /items/:item_id/datastore_entries/:id
   def show
     key = params[:id]
     datastore_id = params[:datastore_id]
@@ -75,40 +45,67 @@ class DatastoreEntriesController < ApplicationController
     render :json => all_entries.to_json(:only => json_filter, :methods => methods)
   end
   
-  #DELETE /datastores/:widget_item_id/datastoreEntries/:id
-  #DELETE /datastores/:widget_item_id/datastoreEntries/ALL?ALL=true => remove all keys
-  def destroy
-    key = params[:id]
-    delete_all = params[:ALL] == 'true'
+  #POST /items/:item_id/datastore_entries
+  def create
+    key = params[:key]
+    value = params[:value]
     datastore_id = params[:datastore_id]
+    is_unique = params[:unique_key]
     
-    
-    if(delete_all && current_user && current_user.has_role?("editor", @document)) #delete all keys
-      DatastoreEntry.destroy_all(:widget_uuid => datastore_id)
-    else #delete 1 key
-      #check parameters
-      if(key == nil || key == '')
-        render :text => 'Key is nil' #print error
-        return
-      end     
-      if (current_user)
-        DatastoreEntry.destroy_all(:ds_key => key, :widget_uuid => datastore_id, :user_id => current_user.id)
-      else
-        # need to manage anonymous user
-      end    
+    #check parameters
+    if(key == nil || key == '')
+      render :text => 'Key is nil.' #print error
+      return
     end
+    if(value == nil || value == '')
+      render :text => 'Value is nil.' #print error
+      return
+    end
+    if(is_unique == 'true' || is_unique == true)
+      is_unique = true
+    else
+      is_unique = false
+    end
+    
+    #check if widget exists
+    if(!@item)
+        render :text => 'Widget doesn\'t exist.' #print error
+        return
+    end
+    DatastoreEntry.createOrUpdate(params[:datastore_entries]) datastore_id, key, value, is_unique)
     
     render :text => '' #ok, no error
   end
   
-  #####################################################################################################################
-  ####################################### private internal method #####################################################
-  #####################################################################################################################
-  private
+  #DELETE /items/:item_id/datastore_entries/:id
+  def destroy
+    if user_signed_in?
+      @item = current_user.datastore_entries.find_by_ds_key!(params[:id])
+    else
+      # need to manage anonymous user
+    end
+    @item.destroy
+    
+    respond_to do |format|
+      format.json { render :status => :ok }
+    end
+  end
+  
+  #DELETE /items/:item_id/datastore_entries
+  def destroy_all
+    DatastoreEntry.destroy_all(:widget_uuid => @item.uuid)
+    
+    respond_to do |format|
+      format.json { render :status => :ok }
+    end
+  end
+  
+  
+private
   
   def instantiate_document_and_item
-    @widget_item = Item.find_by_uuid(params[:datastore_id])
-    @document = @widget_item.page.document if @widget_item
+    @item = Item.find_by_uuid!(params[:item_id])
+    @document = @item.page.document
   end
   
   def document_is_public?
