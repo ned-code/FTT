@@ -24,15 +24,7 @@ class DatastoreEntriesController < ApplicationController
   
   #GET /items/:item_id/datastore_entries/:id
   def show
-    key = params[:id]
-    datastore_id = params[:datastore_id]
     only_current_user = params[:only_current_user] == 'true'
-    
-    #check parameters
-    if(key == nil || key == '')
-      render :text => 'Key is nil' #print error
-      return
-    end    
     
     json_filter = [:ds_key, :ds_value]
     methods = []
@@ -41,40 +33,17 @@ class DatastoreEntriesController < ApplicationController
       methods = [:email]
     end
     
-    all_entries = DatastoreEntry.getAllDatastoreEntries(datastore_id, key, only_current_user)
+    all_entries = DatastoreEntry.get_all_datastore_entries(@item, params[:id], only_current_user)
     render :json => all_entries.to_json(:only => json_filter, :methods => methods)
   end
   
   #POST /items/:item_id/datastore_entries
   def create
-    key = params[:key]
-    value = params[:value]
-    datastore_id = params[:datastore_id]
-    is_unique = params[:unique_key]
+    DatastoreEntry.create_or_update(@item, params[:datastore_entries])
     
-    #check parameters
-    if(key == nil || key == '')
-      render :text => 'Key is nil.' #print error
-      return
+    respond_to do |format|
+      format.json { render :json => '', :status => :ok }
     end
-    if(value == nil || value == '')
-      render :text => 'Value is nil.' #print error
-      return
-    end
-    if(is_unique == 'true' || is_unique == true)
-      is_unique = true
-    else
-      is_unique = false
-    end
-    
-    #check if widget exists
-    if(!@item)
-        render :text => 'Widget doesn\'t exist.' #print error
-        return
-    end
-    DatastoreEntry.createOrUpdate(params[:datastore_entries]) datastore_id, key, value, is_unique)
-    
-    render :text => '' #ok, no error
   end
   
   #DELETE /items/:item_id/datastore_entries/:id
@@ -87,7 +56,7 @@ class DatastoreEntriesController < ApplicationController
     @item.destroy
     
     respond_to do |format|
-      format.json { render :status => :ok }
+      format.json { render :json => '', :status => :ok }
     end
   end
   
@@ -96,10 +65,9 @@ class DatastoreEntriesController < ApplicationController
     DatastoreEntry.destroy_all(:widget_uuid => @item.uuid)
     
     respond_to do |format|
-      format.json { render :status => :ok }
+      format.json { render :json => '', :status => :ok }
     end
   end
-  
   
 private
   
@@ -110,6 +78,6 @@ private
   
   def document_is_public?
     @document && @document.is_public?
-  end  
+  end
   
 end

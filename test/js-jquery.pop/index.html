@@ -11,7 +11,16 @@
 
 <style type="text/css" media="screen, projection">
     
-    @import url('../css-reset/css/yui2-reset.css');
+    @import url('../../public/stylesheets/reset.css');
+    
+    @import url('../../public/stylesheets/lib/index.css');
+    @import url('../../public/stylesheets/lib/forms.css');
+    @import url('../../public/stylesheets/lib/column.css');
+    @import url('../../public/stylesheets/style.css');
+    @import url('../../public/stylesheets/style.ui.css');
+    @import url('../../public/stylesheets/style.application.css');
+    @import url('../../public/stylesheets/style.application.typography.css');
+    @import url('../../public/stylesheets/style.application.color.css');
     @import url('../css/test.css');
     
     .test {
@@ -31,8 +40,13 @@
     .pop {
     	position: absolute;
     	display: block;
-    	background: blue;
     }
+    
+    .ui {
+      z-index: 100;
+    }
+    
+
     
 </style>
 
@@ -41,6 +55,61 @@
 <body>
 
 <h2>jQuery.pop</h2>
+
+<div class="ui ui-pop-position" style="left: 200px; top: 80px; "><form action="" class="new-form ui-pop ui-widget ui-corner-all" id="wb-new-form" title="Create a new webdoc" style="left: -12px; top: -12px; -webkit-transform-origin-x: 12px; -webkit-transform-origin-y: 12px; -webkit-transform: scale(1); opacity: 1; ">
+  <h4>Create new webdoc</h4>
+  <fieldset>
+    <div class="stack">
+      <label for="name">Name</label>
+      <input class="ui-corner-all" id="wb-new-document-name" name="wb-new-document-name" placeholder="My new webdoc" type="text">
+    </div>
+    <div class="stack">
+      <label for="category">Category</label>
+      <select id="wb-new-document-category"><option value="1">Activism &amp; Non Profits</option><option value="2">Art</option><option value="3">Books</option><option value="4">Business</option><option value="5">Education</option><option value="6">Entertainment</option><option value="7">Everyday life</option><option value="8">Health &amp; Medicine</option><option value="9">History</option><option value="10">Movies</option><option value="11">News</option><option value="12">Travel</option><option value="13">Products</option><option value="14">Photos</option><option value="15">Politics</option><option value="16">Spiritual</option><option value="17">Sports</option><option value="18">Technology</option></select>
+    </div>
+    <div class="stack">
+      <label for="description">Description</label>
+      <textarea class="ui-corner-all" id="wb-new-document-description" name="wb-new-document-description" rows="3"></textarea>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Size</legend>
+    <div class="column one of-three">
+      <label>
+        <input id="wb-new-document-size-custom" name="wb-new-document-size" type="radio" value="custom">
+        Custom size:
+      </label>
+    </div><div class="shunt column two of-three">
+      <label>width</label>
+      <input id="wb-new-document-size-custom-width" size="6" type="text">
+    </div><div class="shunt column three of-three">
+      <label>height</label>
+      <input id="wb-new-document-size-custom-height" size="6" type="text">
+    </div><div>
+      <label>
+        <input id="wb-new-document-size-iPhone" name="wb-new-document-size" type="radio" value="iPhone">
+        iPhone (620x480)
+      </label>
+    </div>
+    <div>
+      <label>
+        <input id="wb-new-document-size-classic" name="wb-new-document-size" type="radio" value="classic">
+        Classic (800x600)
+      </label>
+    </div>
+    <div>
+      <label>
+        <input id="wb-new-document-size-iPad" name="wb-new-document-size" type="radio" value="iPad">
+        iPad (1024x768)
+      </label>
+    </div>
+  </fieldset>
+  <div class="ui-actions">
+    <a class="cancel" href="#cancel">cancel</a>
+    <input name="new-document" type="submit" value="Create">
+  </div>
+  </form>
+</div>
 
 <div id="delegate" class="test">
 

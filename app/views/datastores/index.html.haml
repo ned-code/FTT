@@ -8,14 +8,14 @@
 - @last_doc_uuid = nil
 - @last_widget_uuid = nil
 - @records.each do |rec|
-  - if @last_doc_uuid != rec.uuid
+  - if @last_doc_uuid != rec.item.page.document.uuid
     %div{:class => 'ds-document'}
-      = link_to 'Document: ' + rec.title, '/documents/' + rec.uuid, {:target => '_new'}
-    - @last_doc_uuid = rec.uuid
-  - if @last_widget_uuid != rec.i_id
+      = link_to 'Document: ' + rec.item.page.document.title, '/documents/' + rec.item.page.document.uuid, {:target => '_new'}
+    - @last_doc_uuid = rec.item.page.document.uuid
+  - if @last_widget_uuid != rec.item.uuid
     %div{:class => 'ds-app'}
-      = link_to 'App: ' + rec.m_title + ' (page: ' + (rec.p_position.to_i + 1).to_s + ')', '/documents/' + rec.uuid + '#' + rec.p_uuid,  {:target => '_new'}
-    - @last_widget_uuid = rec.i_id
+      = rec.item.uuid.to_s
+    - @last_widget_uuid = rec.item.uuid
     %div{:class => 'ds-record'}
       %table
         %tr
@@ -26,7 +26,7 @@
     %table
       %tr
         %td{:class => 'ds-td-key'}
-          = link_to_function '', 'confirmDelete(' + rec.de_id + ')', {:class => 'ds-a-delete'}
-          = rec.de_key
-        %td{:class => 'ds-td-value'}= rec.de_value
-        %td{:class => 'ds-td-updated'}= rec.de_updated_at
+          = link_to_function '', 'confirmDelete(' + rec.id.to_s + ')', {:class => 'ds-a-delete'}
+          = rec.ds_key
+        %td{:class => 'ds-td-value'}= rec.ds_value
+        %td{:class => 'ds-td-updated'}= rec.updated_at

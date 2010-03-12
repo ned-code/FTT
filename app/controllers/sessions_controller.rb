@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   include Devise::Controllers::InternalHelpers
   
-  before_filter :require_no_authentication, :only => [ :new, :create, :show ]
+  before_filter :require_no_authentication, :only => [ :new, :create ]
   
   # GET /user
   def show

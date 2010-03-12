@@ -16,8 +16,15 @@
     :javascript
       var flash = $('#flash');
       
+      // TODO: put this somewhere more sensible
       flash
       .delay(3000)
-      .animate({ opacity: 0, marginTop: -flash.height() }, { duration: 3000, easing: 'easeInCubic' });
+      .animate({
+        opacity: 0,
+        marginTop: -flash.height()
+      }, {
+        duration: 3000,
+        easing: 'easeInCubic'
+      });
     
     = render :partial => "layouts/googleAnalytics"

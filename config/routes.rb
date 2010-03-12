@@ -34,12 +34,12 @@ ActionController::Routing::Routes.draw do |map|
   map.connections 'followers', :controller => "followships", :action => 'followers'
   map.connections 'follow', :controller => "followships", :action => :create
   map.connections 'unfollow', :controller => "followships", :action => :destroy
-
   
   # dev controller
   map.resources :images,    :except => [:new, :edit, :update]
   map.resources :videos,    :except => [:new, :edit, :update]
   map.resources :widgets,   :except => [:new, :edit, :update, :destroy]
   map.resources :categories, :only => :index
-#  map.resources :roles_documents, :only => :index, :as => "roles/documents"
+  map.resources :roles_documents, :only => :index, :as => "roles/documents"
+  
 end
