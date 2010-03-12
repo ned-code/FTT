@@ -31,5 +31,4 @@ class DocumentRolesController < DocumentController
     render :json => {}
   end
   
-  
 end

@@ -1,5 +1,5 @@
-class DocumentsController < DocumentController
-  before_filter :load_document, :only => [:show, :update, :destroy]
+class DocumentsController < ApplicationController
+  before_filter :instantiate_document, :only => [:show, :update, :destroy]
   
   access_control do
     allow :admin
@@ -65,7 +65,7 @@ class DocumentsController < DocumentController
   
 protected
   
-  def load_document
+  def instantiate_document
     @document = Document.find_by_uuid(params[:id])
   end
   

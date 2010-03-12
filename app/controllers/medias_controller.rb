@@ -20,13 +20,13 @@ class MediasController < ApplicationController
     respond_to do |format|
       format.html { redirect_to @media.file.url }
       format.json { render :json => @media }
-    end    
+    end
   end
   
   # GET /medias/new
   def new
   end
-    
+  
   # POST /medias
   def create
     @media = eval(params[:type]).new(:file => params[:file], :system_name => params[:system_name])
@@ -37,7 +37,7 @@ class MediasController < ApplicationController
     @media.save
     redirect_to medias_path
   end
-
+  
   # DELETE /medias/:id
   def destroy
     @media = Media.find_by_uuid(params[:id])
@@ -45,5 +45,5 @@ class MediasController < ApplicationController
     
     redirect_to medias_path
   end
-
+  
 end

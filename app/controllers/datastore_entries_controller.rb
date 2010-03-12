@@ -1,5 +1,4 @@
 class DatastoreEntriesController < ApplicationController
-  
   before_filter :instantiate_document_and_item
   
   access_control do
@@ -11,7 +10,7 @@ class DatastoreEntriesController < ApplicationController
     end
   end
   
-  #GET /items/:item_id/datastore_entries?only_current_user=bool
+  # GET /items/:item_id/datastore_entries?only_current_user=bool
   def index
     only_current_user = params[:only_current_user] == 'true'
     
@@ -22,7 +21,7 @@ class DatastoreEntriesController < ApplicationController
     end
   end
   
-  #GET /items/:item_id/datastore_entries/:id
+  # GET /items/:item_id/datastore_entries/:id
   def show
     only_current_user = params[:only_current_user] == 'true'
     
@@ -37,7 +36,7 @@ class DatastoreEntriesController < ApplicationController
     render :json => all_entries.to_json(:only => json_filter, :methods => methods)
   end
   
-  #POST /items/:item_id/datastore_entries
+  # POST /items/:item_id/datastore_entries
   def create
     DatastoreEntry.create_or_update(@item, params[:datastore_entries])
     
@@ -46,7 +45,7 @@ class DatastoreEntriesController < ApplicationController
     end
   end
   
-  #DELETE /items/:item_id/datastore_entries/:id
+  # DELETE /items/:item_id/datastore_entries/:id
   def destroy
     if user_signed_in?
       @item = current_user.datastore_entries.find_by_ds_key!(params[:id])
@@ -60,7 +59,7 @@ class DatastoreEntriesController < ApplicationController
     end
   end
   
-  #DELETE /items/:item_id/datastore_entries
+  # DELETE /items/:item_id/datastore_entries
   def destroy_all
     DatastoreEntry.destroy_all(:widget_uuid => @item.uuid)
     
@@ -74,10 +73,6 @@ private
   def instantiate_document_and_item
     @item = Item.find_by_uuid!(params[:item_id])
     @document = @item.page.document
-  end
-  
-  def document_is_public?
-    @document && @document.is_public?
   end
   
 end

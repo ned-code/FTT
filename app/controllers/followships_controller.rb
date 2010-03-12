@@ -22,4 +22,5 @@ class FollowshipsController < ApplicationController
    current_user.unfollow(params[:following_id])
    render :json => {}
   end
+  
 end
