@@ -33,7 +33,7 @@
 .of-five  { width: 17.6%;     margin-right: 3%; }
 .of-six   { width: 15%;       margin-right: 2%; }
 
-.double.of-three    { width: 65.1%; } /* Should be 65.6667% Rounding errors in Webkit force this to be a less than ideal value */
+.double.of-three    { width: 64%; } /* Should be 65.6667% Rounding errors in both FF and Webkit force this to be a less than ideal value */
 .double.of-four     { width: 48%; }
 .triple.of-four     { width: 74%; }
 .double.of-five     { width: 38.2%; }
