@@ -36,8 +36,9 @@ header {
 }
 .userbar li .user-email {
     font-weight: bold;
+    color: hsl(208, 12%, 50%);
 }
-.userbar .item {
+/*.userbar .item {
     display: block;
     height: 2.5em;
     line-height: 2.5;
@@ -51,7 +52,7 @@ header {
 }
 .userbar li {
     margin-right: 0;
-}
+}*/
 
 /* leader */
 
@@ -94,6 +95,7 @@ header {
 .action-bar input[type=submit] {
     /* Just tweak the spacing of the bottom button a little */
     margin-top: 0.6em;
+    margin-right: 1.6667em;
 }
 
 .action-bar input[type=submit],
@@ -217,7 +219,7 @@ header {
     margin-left: -16.6667%;
     padding: 1em 0.6em;
     text-align: center ;
-    background: hsla( 18, 12%, 33%, 0.92 );
+    background: hsla(28, 66%, 12%, 0.6);
     -webkit-border-bottom-left-radius:   0.5em;
     -moz-border-radius-bottomleft:       0.5em;
     border-bottom-left-radius:           0.5em;

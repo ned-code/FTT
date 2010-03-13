@@ -26,6 +26,11 @@ body {
     -moz-background-size:     100% 100%;
     background-size:          100% 100%;*/
 }
+
+a:focus,
+a:hover { color: hsl(208, 40%, 20%); }
+a       { color: hsl(208, 40%, 40%); }
+
 header {
     background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsla(208, 33%, 98%, 0.88) ), to( hsl(208, 12%, 82%) ));
     background-image: -moz-linear-gradient( -90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
@@ -37,7 +42,7 @@ header {
     background-image:      linear-gradient( 90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
 }
 
-.userbar li .item {
+/*.userbar li .item {
     color: hsl(208, 4%, 33%);
     background: hsla(208, 4%, 84%, 0.2);
 }
@@ -75,7 +80,7 @@ header {
     -webkit-box-shadow: 0 0 32px hsla(32, 2%, 0%, 0.8);
     -moz-box-shadow:    0 0 32px hsla(32, 2%, 0%, 0.8);
     box-shadow:         0 0 32px hsla(32, 2%, 0%, 0.8);
-}
+}*/
 
 
 
@@ -116,6 +121,9 @@ header {
     background-repeat: no-repeat;
     background-position: 100% 100%;
 }
+.action-bar a {
+    color: hsl(208, 48%, 80%);
+}
 .confirmations .action-bar {
     background-image: url('/images/action-bar-bg-confirmations.jpg');
 }
@@ -128,17 +136,18 @@ header {
     background-color: hsla( 18, 92%, 44%, 1);
 }
 .action-bar input[type=submit] {
-    background-image: -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 76%, 44%)), to(hsl(18, 80%, 50%)));
+    background-image: -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
     background-image: -moz-linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
     background-image:      linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
 }
 .action-bar input[type=submit]:hover {
-    background: -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(18, 82%, 46%)), to(hsl(18, 88%, 52%)));
+    background: -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 82%, 46%)), to(hsl(28, 88%, 52%)));
     background: -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
     background:      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
 }
 .action-bar input[type=submit],
 .action-bar .button {
+    color: white;
     background-color: hsl( 18, 76%, 44% );
     border-style: solid;
     border-color: white;

@@ -109,12 +109,12 @@ del                 { color: #999999; font-style:italic; }
 
 /* We're not ready for this yet */
 a:focus,
-a:hover           { color: hsl(194, 50%, 20%); text-decoration: none; }
-a                 { color: hsl(194, 50%, 40%); text-decoration: none; }
+a:hover           { text-decoration: none; }
+a                 { text-decoration: none; }
 
 p a:focus,
-p a:hover           { color: hsl(194, 50%, 20%); border-bottom: 1px dotted hsl(194, 50%, 20%); text-decoration: none; }
-p a                 { color: hsl(194, 50%, 40%); border-bottom: 1px dotted hsl(194, 50%, 40%); text-decoration: none; }
+p a:hover           { color: hsl(208, 50%, 20%); border-bottom: 1px dotted hsl(194, 50%, 20%); text-decoration: none; }
+p a                 { color: hsl(208, 50%, 40%); border-bottom: 1px dotted hsl(194, 50%, 40%); text-decoration: none; }
 
 /* Tables */
 

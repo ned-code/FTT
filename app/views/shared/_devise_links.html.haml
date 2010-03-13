@@ -1,4 +1,4 @@
-%ul
+%ul.divided.index
   - if controller_name != 'registrations'
     %li= link_to t('devise.registrations.link'), new_registration_path(:user)
   - if controller_name != 'home'
