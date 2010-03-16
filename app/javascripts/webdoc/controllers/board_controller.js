@@ -151,8 +151,8 @@ WebDoc.BoardController = jQuery.klass({
     .filter("[href='#mode-edit']")
     .addClass("current");
     
-    WebDoc.application.pageBrowserController.reveal();
-    WebDoc.application.rightBarController.revealRightBar();
+    //WebDoc.application.pageBrowserController.reveal();
+    //WebDoc.application.rightBarController.revealRightBar();
     
     this._isInteraction = false;
     return this._isInteraction;
@@ -177,14 +177,14 @@ WebDoc.BoardController = jQuery.klass({
     .filter("[href='#mode-preview']")
     .addClass("current");
     
-    if(!this._editable) {
-      jQuery("#tb_1_utilities").hide();
-      jQuery(".mode-tools").hide(); 
-    }
+//    if(!this._editable) {
+//      jQuery("#tb_1_utilities").hide();
+//      jQuery(".mode-tools").hide(); 
+//    }
     
     //WebDoc.application.pageBrowserController.conceal();
-    WebDoc.application.rightBarController.concealRightBar();
-    
+    //WebDoc.application.rightBarController.concealRightBar();
+    WebDoc.application.rightBarController.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
     this._isInteraction = true;
     return this._isInteraction;
   },

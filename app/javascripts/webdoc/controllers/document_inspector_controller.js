@@ -10,8 +10,11 @@
      currentDocument;
      
 WebDoc.DocumentInspectorController = jQuery.klass({
+  DOCUMENT_INSPECTOR_BUTTON_SELECTOR: "a[href='#document-inspector']",  
+  
   initialize: function() {
     this.domNode = jQuery('#document-inspector');
+    this.buttonSelector = this.DOCUMENT_INSPECTOR_BUTTON_SELECTOR;
     documentTitleField = jQuery("#document-title", this.domNode);
     documentDescriptionField = jQuery("#document-description", this.domNode);
     documentCategoryField = jQuery("#document-category", this.domNode)

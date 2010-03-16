@@ -9,8 +9,10 @@ var jQT = new $.jQTouch("libraries", { preloadImages: [] });
 WebDoc.LibrariesController = $.klass({
   
   LIBRARIES_SELECTOR: ".libraries_wrap",
-  
+  LIBRARY_BUTTON_SELECTOR: "a[href='#library']",
+
   initialize: function() {
+    this.buttonSelector = this.LIBRARY_BUTTON_SELECTOR;
     this.imagesLibrary = new WebDoc.ImagesLibrary("images");
     this.videosLibrary = new WebDoc.VideosLibrary("videos");
     this.appsLibrary = new WebDoc.AppsLibrary("apps");

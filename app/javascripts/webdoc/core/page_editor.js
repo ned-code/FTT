@@ -39,7 +39,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   
   initialize: function($super, editable) {
     $super();
-    
+    this._creatorListeners = [];
     // Add feature detected styles to head
     MTools.Application.createStyle('body, .push-scroll {'+
       'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
@@ -88,10 +88,10 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     MTools.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
     {
       this.currentDocument = data[0];
+      this._loadCreator();     
       this.currentDocument.addListener(this);
       this.loadPageId(window.location.hash.replace("#", ""));
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
-      this._loadCreator();     
       ddd("check editablity");
       if (WebDoc.application.boardController.isEditable()) {
         ddd("[PageEditor] call rightBarController.showLib");
@@ -108,6 +108,10 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
        dataType: 'json',              
        success: function(data, textStatus) {
          this.creator = data.user;
+         var listenersCount = this._creatorListeners.length;
+         for (var i = 0; i < listenersCount; i++) {
+            this._creatorListeners[i].call(this, this.creator);
+         }
        }.pBind(this),
        error: function(XMLHttpRequest, textStatus, errorThrown) {
          ddd("error", textStatus);          
@@ -115,6 +119,15 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
      });
    },
 
+  getCreator: function(callBack) {
+    if (this.creator) {
+      callBack.call(this, this.creator);
+    }
+    else {
+      this._creatorListeners.push(callBack);
+    }
+  },
+  
   loadPageId: function(pageId) {
     ddd('[PageEditor] loadPageId');
     if (!pageId) {

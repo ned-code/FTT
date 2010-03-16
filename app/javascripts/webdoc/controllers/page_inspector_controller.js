@@ -13,9 +13,10 @@ var cssEditor,
     page;
 
 WebDoc.PageInspectorController = jQuery.klass({
-  
+  PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
+
   initialize: function() {
-    
+    this.buttonSelector = this.PAGE_INSPECTOR_BUTTON_SELECTOR; 
     cssEditorFieldset = jQuery("#page_css_editor");
     cssEditor = cssEditorFieldset.find('textarea.code');
     externalPageControls = jQuery('.externalPage-related');

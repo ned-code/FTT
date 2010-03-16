@@ -31,10 +31,10 @@
     
     %link{ :rel => "stylesheet", :href => "/themes/clean-machine/css/typography.css", :type => "text/css", :charset => "utf-8" }
     
-  -if params[:reader]
-  %body.editor.embed-mode
+  -if params[:reader] == 'true'
+  %body.editor.mode-embed
   -else
-  %body.editor.edit-mode
+  %body.editor.mode-edit
     = yield
   = include_javascripts :common
   = include_javascripts :mtools

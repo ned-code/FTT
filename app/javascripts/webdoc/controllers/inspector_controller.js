@@ -10,9 +10,11 @@
 //= require <webdoc/sdk/widget_api>
 
 WebDoc.InspectorController = $.klass({
+  ITEM_INSPECTOR_BUTTON_SELECTOR: "a[href='#item-inspector']",
+  
   initialize: function() {
     ddd('[InspectorController] initialize');
-    
+    this.buttonSelector = this.ITEM_INSPECTOR_BUTTON_SELECTOR;    
     var emptyPalette = $("#empty-inspector").hide();
     var penPelette = $("#draw-inspector").hide();
     var imagePelette = $("#image-inspector").hide();

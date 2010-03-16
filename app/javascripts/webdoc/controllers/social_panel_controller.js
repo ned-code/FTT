@@ -1,22 +1,24 @@
-/**
+  /**
  * @author David Matthey
  */
      
 WebDoc.SocialPanelController = jQuery.klass({
   
-  subscribeButton: null,
-  unsubscribeButton: null,
+  SOCIAL_PANEL_BUTTON_SELECTOR: "a[href='#social-panel']",
   
   initialize: function() {
-    subscribeButton = jQuery('#subscribe-button');
-    unsubscribeButton = jQuery('#unsubscribe-button');
+    this.buttonSelector = this.SOCIAL_PANEL_BUTTON_SELECTOR;
+    this.subscribeButton = jQuery('#subscribe-button');
+    this.unsubscribeButton = jQuery('#unsubscribe-button');
     
     this.domNode = jQuery('#social-panel');
     this.currentDocument = WebDoc.application.pageEditor.currentDocument;
-    this.creator = WebDoc.application.pageEditor.creator;
-    subscribeButton.click(this._subscribeAction.pBind(this));
-    unsubscribeButton.click(this._unSubscribeAction.pBind(this));
-    this._loadCreatorInformation();
+    WebDoc.application.pageEditor.getCreator(function(creator) {
+      this.creator = creator;
+      this._loadCreatorInformation();
+    }.pBind(this));
+    this.subscribeButton.click(this._subscribeAction.pBind(this));
+    this.unsubscribeButton.click(this._unSubscribeAction.pBind(this));
   },
   
   _loadCreatorInformation: function() {
@@ -28,17 +30,17 @@ WebDoc.SocialPanelController = jQuery.klass({
     jQuery('#creator-docs-count').html(this.creator.documents_count + ' ' + (this.creator.documents_count>1? 'webdocs' : 'webdoc'));
     
     if(this._isCreatorCurrentUser()) {
-      unsubscribeButton.hide();
-      subscribeButton.hide();
+      this.unsubscribeButton.hide();
+      this.subscribeButton.hide();
     }
     else {
       if(this.creator.following_info) {
-        unsubscribeButton.show();
-        subscribeButton.hide();
+        this.unsubscribeButton.show();
+        this.subscribeButton.hide();
       }
       else {
-        unsubscribeButton.hide();
-        subscribeButton.show();
+        this.unsubscribeButton.hide();
+        this.subscribeButton.show();
       }
     }
   },
@@ -79,12 +81,12 @@ WebDoc.SocialPanelController = jQuery.klass({
   
   _changeButtonStatus: function(isSubscribing) {
     if(isSubscribing) {
-      unsubscribeButton.show();
-      subscribeButton.hide();
+      this.unsubscribeButton.show();
+      this.subscribeButton.hide();
     }
     else {
-      unsubscribeButton.hide();
-      subscribeButton.show();
+      this.unsubscribeButton.hide();
+      this.subscribeButton.show();
     }
   },
   

@@ -63,6 +63,9 @@ body {
  * .mode-embed
  *
  */
+.mode-preview .mode-preview-hide { display: none}
+.mode-edit .mode-edit-hide { display: none}
+.mode-embed .mode-embed-hide { display: none}
 
 .mode-preview .mode-edit-show,
 .mode-embed .mode-edit-show { display: none; }
