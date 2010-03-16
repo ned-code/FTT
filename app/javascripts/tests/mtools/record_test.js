@@ -33,7 +33,7 @@ test("Record class definition", function() {
 test("New record", function() {
   
   var newRecord  = new TestSpace.RecordTestClass();
-  var serverManagerMock = new jqMock.Mock(MTools.ServerManager, "newObject");
+  var serverManagerMock = QUnit.mockObject(MTools, 'ServerManager');
   
   ok(newRecord.isNew, 'New record is flagged as new record');
   ok(newRecord.uuid().match(/([0-9a-fA-F]{8})-([0-9a-fA-F]{4})-([0-9a-fA-F]{4})-([0-9a-fA-F]{4})-([0-9a-fA-F]{12})/),'New record has a valid UUID: ' + newRecord.uuid());
@@ -41,11 +41,11 @@ test("New record", function() {
   equals(newRecord.className(), 'RecordTestClass', 'New record has a correct class name');
   equals(newRecord.pluralizedClassName(), 'RecordTestClasses', 'New reord has a correct pluralized class name');
   same(newRecord.to_json(), { 'RecordTestClass[uuid]' : newRecord.uuid(), 'RecordTestClass[created_at]' : newRecord.creationDate().toISO8601String()}, "New record generate correct rails json");   
-  serverManagerMock.modify().args(jqMock.is.anything,jqMock.is.anything);
+  serverManagerMock.expects(1).method('newObject').withArguments(Variable, Function);
   newRecord.save();    
-  serverManagerMock.verify("saving new record Call newObject");  
+  ok(serverManagerMock.verify(), "saving new record Call newObject");  
   
-  serverManagerMock.restore();
+  QUnit.restoreMock(serverManagerMock);
 });
 
 test("ExistingRecord", function() {
@@ -58,7 +58,7 @@ test("ExistingRecord", function() {
     created_at: rDate.toISO8601String(),
     name: rName
   }});
-  var serverManagerMock = new jqMock.Mock(MTools.ServerManager, "updateObject");
+  var serverManagerMock = QUnit.mockObject(MTools, 'ServerManager');
   ok(!existingRecord.isNew, 'New record is not flagged as new record');
   equals(existingRecord.uuid(), rUuid ,'Existing record has corresponding UUID');
   same(existingRecord.creationDate(), rDate, "Existing record has correct creation date");
@@ -68,11 +68,11 @@ test("ExistingRecord", function() {
   same(existingRecord.to_json(), {'RecordTestClass[uuid]': rUuid,
                                   'RecordTestClass[created_at]': rDate.toISO8601String(),
                                   'RecordTestClass[name]': rName}, "Existing record generate correct rails json");   
-  serverManagerMock.modify().args(jqMock.is.anything,jqMock.is.anything);
+  serverManagerMock.expects(1).method('updateObject').withArguments(Variable, Function);
   existingRecord.save();    
-  serverManagerMock.verify("saving existing record Call updateObject");  
+  ok(serverManagerMock.verify(), "saving existing record Call updateObject");  
   
-  serverManagerMock.restore();  
+  QUnit.restoreMock(serverManagerMock);
 });
 
 test("Destroy a record", function() {
@@ -85,11 +85,11 @@ test("Destroy a record", function() {
     created_at: rDate.toISO8601String(),
     name: rName
   }});
-  var serverManagerMock = new jqMock.Mock(MTools.ServerManager, "deleteObject"); 
+  var serverManagerMock = QUnit.mockObject(MTools, 'ServerManager');
   
-  serverManagerMock.modify().args(jqMock.is.anything, jqMock.is.anything);
+  serverManagerMock.expects(1).method('deleteObject').withArguments(Variable, Function);
   existingRecord.destroy();    
-  serverManagerMock.verify("destroying existing record Call deleteObject");  
+  ok(serverManagerMock.verify(), "destroying existing record Call deleteObject");  
   
-  serverManagerMock.restore();   
+  QUnit.restoreMock(serverManagerMock);
 });
