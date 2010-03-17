@@ -230,6 +230,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   },
   
   closeDocument: function(e) {
+    WebDoc.application.collaborationManager.disconnect();
     window.location = "/";
   },
   
