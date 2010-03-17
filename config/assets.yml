@@ -94,5 +94,7 @@ javascripts:
     - app/javascripts/webdoc/library/videos_library.js
     - app/javascripts/webdoc/library/web_browser.js
   tests:
+    - app/javascripts/tests/test_helper.js
     - app/javascripts/tests/mtools/*.js
+    - app/javascripts/tests/webdoc/*.js
           
