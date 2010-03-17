@@ -3,7 +3,7 @@ class CreateDatastoreEntries < ActiveRecord::Migration
     create_table :datastore_entries do |t|
       t.string  :ds_key, :null => false
       t.text    :ds_value, :null => false, :limit => 64.kilobytes + 1
-      t.text :widget_uuid
+      t.text    :widget_uuid
       t.string  :user_id, :limit => 36
       t.timestamps
     end

@@ -25,14 +25,13 @@ private
   
 end
 
-
 # == Schema Information
 #
 # Table name: followships
 #
-#  id           :integer(4)      not null, primary key
-#  follower_id  :integer(4)      not null
-#  following_id :integer(4)      not null
+#  id           :integer         not null, primary key
+#  follower_id  :integer         not null
+#  following_id :integer         not null
 #  created_at   :datetime
 #  updated_at   :datetime
 #

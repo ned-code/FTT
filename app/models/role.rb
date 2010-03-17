@@ -18,15 +18,14 @@ class Role < ActiveRecord::Base
   
 end
 
-
 # == Schema Information
 #
 # Table name: roles
 #
-#  id                :integer(4)      not null, primary key
+#  id                :integer         not null, primary key
 #  name              :string(40)
 #  authorizable_type :string(40)
-#  authorizable_id   :integer(4)
+#  authorizable_id   :integer
 #  created_at        :datetime
 #  updated_at        :datetime
 #
