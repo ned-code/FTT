@@ -2,6 +2,7 @@
  * Controller of the right bar. It manages the show, the hide and the toggle the right bar. It also manages if the right bar shows the inspector or the lib.
  * @author Julien Bachmann
  */
+// define all inspector type that can be displayed in the right bar
 WebDoc.RightBarInspectorType = {
   LIBRARY: 'library',
   ITEM: 'item',
@@ -39,19 +40,38 @@ WebDoc.RightBarController = $.klass({
     this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
     
     this.panelWidth = panel.outerWidth();
-    this._inspectorsControllersClasses = {
-      library: WebDoc.LibrariesController,
-      item: WebDoc.InspectorController,
-      page: WebDoc.PageInspectorController,
-      document: WebDoc.DocumentInspectorController,
-      social: WebDoc.SocialPanelController
-    }; 
-    this._inspectorsControllers = {
-      library: library,
-      item: itemInspector
-    };
+    this._inspectorsControllersClasses = {};
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.LIBRARY] = WebDoc.LibrariesController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.ITEM] = WebDoc.InspectorController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PAGE] = WebDoc.PageInspectorController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.SOCIAL] = WebDoc.SocialPanelController;
+
+    this._inspectorsControllers = {};
+    this._inspectorsControllers[WebDoc.RightBarInspectorType.LIBRARY] = library;
+    this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;    
   },
 
+  showRightBar: function() {
+    this.visible = (this.visible) ? this.visible : this._show() ;
+  },
+  
+  hideRightBar: function() {
+    this.visible = (this.visible) ? this._hide() : this.visible ;
+  },
+  
+  toggleRightBar: function() {
+    this.visible = (this.visible) ? this._hide() : this._show() ;
+  },
+  
+  concealRightBar: function() {
+    return this._hide( 36 );
+  },
+  
+  revealRightBar: function() {
+    return (this.visible) ? this._show() : this._hide() ;
+  },
+  
   selectInspector: function(inspectorType) {
     ddd("[RightBarController] select inspecor", inspectorType);
     var inspectorController = this._inspectorsControllers[inspectorType]; 
@@ -100,7 +120,7 @@ WebDoc.RightBarController = $.klass({
     for (var key in inspectors) {
       if ( inspectors[key] === inspector ) {
         inspectors[key].domNode.show();
-        //inspectors[key].select();
+        inspectors[key].refresh();
       }
       else {
         inspectors[key].domNode.hide();
@@ -112,7 +132,7 @@ WebDoc.RightBarController = $.klass({
     ddd('[RightBarController] _changeButtonState(inspector)');
 
     jQuery( this.STATE_BUTTON_SELECTOR ).removeClass( this.CURRENT_CLASS );
-    jQuery( inspector.buttonSelector ).addClass( this.CURRENT_CLASS );
+    jQuery( inspector.buttonSelector() ).addClass( this.CURRENT_CLASS );
   },
     
   _show: function() {
@@ -162,26 +182,6 @@ WebDoc.RightBarController = $.klass({
     jQuery( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.ACTIVE_CLASS );
     
     return false;
-  },
-  
-  showRightBar: function() {
-    this.visible = (this.visible) ? this.visible : this._show() ;
-  },
-  
-  hideRightBar: function() {
-    this.visible = (this.visible) ? this._hide() : this.visible ;
-  },
-  
-  toggleRightBar: function() {
-    this.visible = (this.visible) ? this._hide() : this._show() ;
-  },
-  
-  concealRightBar: function() {
-    return this._hide( 36 );
-  },
-  
-  revealRightBar: function() {
-    return (this.visible) ? this._show() : this._hide() ;
   }
   
 });

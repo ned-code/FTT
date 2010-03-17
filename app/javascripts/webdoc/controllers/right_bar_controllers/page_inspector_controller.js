@@ -12,11 +12,10 @@ var cssEditor,
     backgroundImageControlsEnabled,
     page;
 
-WebDoc.PageInspectorController = jQuery.klass({
+WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController, {
   PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
 
-  initialize: function() {
-    this.buttonSelector = this.PAGE_INSPECTOR_BUTTON_SELECTOR; 
+  initialize: function() { 
     cssEditorFieldset = jQuery("#page_css_editor");
     cssEditor = cssEditorFieldset.find('textarea.code');
     externalPageControls = jQuery('.externalPage-related');
@@ -54,6 +53,10 @@ WebDoc.PageInspectorController = jQuery.klass({
     .hide();
   },
 
+  buttonSelector: function() {
+    return this.PAGE_INSPECTOR_BUTTON_SELECTOR;  
+  },
+  
   performAction: function(e) {
     e.preventDefault();
     clickedButton = jQuery(e.target);
