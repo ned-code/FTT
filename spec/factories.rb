@@ -22,9 +22,10 @@ Factory.define :admin_role, :class => Role do |f|
 end
 
 Factory.define :document do |f|
-  f.title "Test Document"
+  f.title       "Test Document"
+  f.is_public   true
   
-  f.creator  { |f| f.association(:user)}
+  f.creator     { |f| f.association(:user)}
 end
 
 Factory.define :page do |f|
@@ -50,4 +51,10 @@ Factory.define :datastore_entry do |f|
   f.ds_value      1
   f.item          { |f| f.association(:item) }
   f.user          { |f| f.association(:user) }
+end
+
+Factory.define :view_count do |f|
+  f.session_id    "fake"
+  f.ip_address    "127.0.0.1"
+  f.viewable     { |f| f.association(:document) }
 end

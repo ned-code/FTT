@@ -9,6 +9,7 @@ class Document < ActiveRecord::Base
   # ================
   
   has_many :pages, :order => 'position ASC', :dependent => :destroy
+  has_many :view_counts, :as => :viewable
   has_one :document_access
   belongs_to :metadata_media, :class_name => 'Media'
   belongs_to :creator, :class_name => 'User'
