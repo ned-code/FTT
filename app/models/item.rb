@@ -11,22 +11,19 @@ class Item < ActiveRecord::Base
   # = Associations =
   # ================
   
-  has_many :datastore_entries, :primary_key => "uuid", :foreign_key => "widget_uuid", :dependent => :destroy
+  has_many :datastore_entries, :dependent => :destroy
   
   belongs_to :page
   belongs_to :media, :polymorphic => true
   
-  
-  
-  
   def to_param
     uuid
   end
-
+  
   def after_initialize
     self.must_notify = false
   end
-
+  
   def to_html
     result = "<#{self.data[:tag]} "
     data.each_pair do |key, value| 
@@ -41,22 +38,22 @@ class Item < ActiveRecord::Base
       result += data[:innerHTML]
     end
     result += "</#{self.data[:tag]}>"
-  end  
+  end
+  
 end
-
 
 # == Schema Information
 #
 # Table name: items
 #
-#  id         :integer(4)      not null, primary key
+#  id         :integer         not null, primary key
 #  uuid       :string(36)
-#  page_id    :integer(4)
-#  media_id   :integer(4)
+#  page_id    :integer         not null
+#  media_id   :integer
 #  media_type :string(255)
-#  data       :text(16777215)
+#  data       :text(65537)
 #  created_at :datetime
 #  updated_at :datetime
-#  position   :integer(4)
+#  position   :integer
 #
 
