@@ -49,7 +49,10 @@ WebDoc.RightBarController = $.klass({
 
     this._inspectorsControllers = {};
     this._inspectorsControllers[WebDoc.RightBarInspectorType.LIBRARY] = library;
-    this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;    
+    this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;
+    
+    this._currentInspectorType = null;  
+    this.selectInspector(WebDoc.RightBarInspectorType.LIBRARY);  
   },
 
   showRightBar: function() {
@@ -72,15 +75,22 @@ WebDoc.RightBarController = $.klass({
     return (this.visible) ? this._show() : this._hide() ;
   },
   
+  getSelectedInspector: function() {
+    return this._currentInspectorType;  
+  },
+  
   selectInspector: function(inspectorType) {
     ddd("[RightBarController] select inspecor", inspectorType);
-    var inspectorController = this._inspectorsControllers[inspectorType]; 
-    if (!inspectorController) {
-      inspectorController = new this._inspectorsControllersClasses[inspectorType]();
-      this._inspectorsControllers[inspectorType] = inspectorController;
+    if (this._currentInspectorType !== inspectorType) {
+      var inspectorController = this._inspectorsControllers[inspectorType];
+      if (!inspectorController) {
+        inspectorController = new this._inspectorsControllersClasses[inspectorType]();
+        this._inspectorsControllers[inspectorType] = inspectorController;
+      }
+      this._changePanelContent(inspectorController);
+      this._changeButtonState(inspectorController);
+      this._currentInspectorType = inspectorType;
     }
-    this._changePanelContent(inspectorController);
-    this._changeButtonState(inspectorController);
   },
   
   showLib: function() {

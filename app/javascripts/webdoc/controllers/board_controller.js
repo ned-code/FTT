@@ -1,14 +1,3 @@
-
-//= require <webdoc/model/page>
-//= require <webdoc/model/item>
-//= require <webdoc/gui/page_view>
-//= require <webdoc/gui/item_view>
-//= require <webdoc/gui/drawing_view>
-//= require <webdoc/gui/image_view>
-//= require <webdoc/gui/text_view>
-//= require <webdoc/gui/widget_view>
-//= require <webdoc/controllers/drag_and_drop_controller>
-
 /**
  * Uniboard board controller.
  **/
@@ -32,6 +21,7 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPageView = null;
     this._isInteraction = false;
     this._isMovingSelection = false;
+    this._previousInspector = null;
     
     // used to keep track of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
     // we resize manually the div and we need to know what was the original size to define the new size.
@@ -153,7 +143,9 @@ WebDoc.BoardController = jQuery.klass({
     
     //WebDoc.application.pageBrowserController.reveal();
     //WebDoc.application.rightBarController.revealRightBar();
-    
+    if (this._previousInspector) {
+      WebDoc.application.rightBarController.selectInspector(this._previousInspector);      
+    }
     this._isInteraction = false;
     return this._isInteraction;
   },
@@ -184,6 +176,7 @@ WebDoc.BoardController = jQuery.klass({
     
     //WebDoc.application.pageBrowserController.conceal();
     //WebDoc.application.rightBarController.concealRightBar();
+    this._previousInspector = WebDoc.application.rightBarController.getSelectedInspector();
     WebDoc.application.rightBarController.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
     this._isInteraction = true;
     return this._isInteraction;
