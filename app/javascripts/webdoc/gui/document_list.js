@@ -13,6 +13,8 @@ WebDoc.DocumentList = $.klass({
       this._getCurrentUserRolesDocuments();
       this.repaint();
       this.map = {};
+      this.currentUserDocumentsEditor = [];
+      this.currentUserDocumentsReader = [];
   },
   
   refreshNewDocument: function(section, index, document) {
@@ -121,8 +123,12 @@ WebDoc.DocumentList = $.klass({
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
-        this.currentUserDocumentsEditor = data.editor;
-        this.currentUserDocumentsReader = data.reader;
+        if (data.editor) {
+          this.currentUserDocumentsEditor = data.editor;
+        }
+        if (data.reader) {
+          this.currentUserDocumentsReader = data.reader;
+        }
       }.pBind(this)
     });
   },
