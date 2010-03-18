@@ -1,12 +1,15 @@
 class RenameDatastoreEntriesWidgetUuidToItemId < ActiveRecord::Migration
   def self.up
     add_column :datastore_entries, :item_id, :integer
-    
-    DatastoreEntry.reset_column_information
-    DatastoreEntry.all.each do |entry|
-      entry.update_attribute(:item_id, Item.find_by_uuid!(entry.widget_uuid).id)
+    begin
+      DatastoreEntry.reset_column_information
+      DatastoreEntry.all.each do |entry|
+        corresponding_item = Item.find_by_uuid(entry.widget_uuid)
+        entry.update_attribute(:item_id, corresponding_item.id) if corresponding_item
+      end
+    rescue
+      remove_column :datastore_entries, :item_id
     end
-    
     remove_column :datastore_entries, :widget_uuid
   end
   
