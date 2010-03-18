@@ -30,8 +30,10 @@
 .of-two   { width: 48%;       margin-right: 4%; }
 .of-three { width: 30.6666%;  margin-right: 4%; }
 .of-four  { width: 22%;       margin-right: 4%; }
-.of-five  { width: 17.6%;     margin-right: 3%; }
-.of-six   { width: 15%;       margin-right: 2%; }
+.of-five  { width: 17.44%;     margin-right: 3.2%; }
+.of-six   { width: 14.4445%;  margin-right: 2.6667%; }
+.of-seven { width: 12.3265%;  margin-right: 2.2857%; }
+.of-eight { width: 10.75%;    margin-right: 2%; }
 
 .double.of-three    { width: 64%; } /* Should be 65.6667% Rounding errors in both FF and Webkit force this to be a less than ideal value */
 .double.of-four     { width: 48%; }
@@ -43,13 +45,20 @@
 .triple.of-six      { width: 49%; }
 .quadruple.of-six   { width: 68%; }
 .quintuple.of-six   { width: 85%; }
+.double.of-eight    { width: 23%; }
+.triple.of-eight    { width: 35.5%; }
+.quadruple.of-eight { width: 48%; }
+.quintuple.of-eight { width: 60.5%; }
+.sextuple.of-eight  { width: 73%; }
 
 .last,
 .two.of-two,
 .three.of-three,
 .four.of-four,
 .five.of-five,
-.six.of-six { margin-right: 0; }
+.six.of-six,
+.seven.of-seven,
+.eight.of-eight { margin-right: 0; }
 
 /* The absolute position method is not susceptible to rounding errors,
  * and can be forced to fill 100% height, but clearly causes problems with

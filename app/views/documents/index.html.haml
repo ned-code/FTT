@@ -1,33 +1,40 @@
 - session_key_name = ActionController::Base.session_options[:key]
 
-%div.action-bar.bar
+%div.action-zone.zone
   %div.wrap
     %a#wb-create-document-button.add-button.button= t('.buttons.new_document')
-    
     %ul.document-tabs.tabs.index
       %li>
-        %a#wb-document-filter-date.current.state-tabs{ :href => "#by_date"}= t('.all_items_by_date')
+        %a#wb-document-filter-date.button.current.state-filter-tab{ :href => "#filter-by-date" }= t('.all_items_by_date')
       %li>
-        %a#wb-document-filter-owned-by-me.active.state-tabs{ :href => "#created_by_me"}= t('.created_by_me')
-      %li>
-        %a#wb-document-filter-editor-rights.state-tabs{ :href => "#editor_rights"}= t('.editor_rights')
-      %li>
-        %a#wb-document-filter-shared-with-me.state-tabs{ :href => "#shared_with_me"}= t('.shared_with_me')
-      %li>
-        %a#wb-document-filter-public.state-tabs{ :href => "#public"}= t('.public')
+        %a#wb-document-filter-public.button.state-filter-tab{ :href => "#filter-public" }= t('.public')
 
 %div.content
   %div.wrap
-    %div.column.one.double.of-three
+    %div.column.one.double.of-three>
+      %dl#document-subtabs.bar.index.state-public-hide
+        %dt>
+          Filter webdocs by
+        %dd>
+          %a#wb-document-filter-owned-by-me.current.state-filter-subtab{ :href => "#filter-author" }= t('.created_by_me')
+        %dd>
+          %a#wb-document-filter-editor-rights.state-filter-subtab{ :href => "#filter-editable" }= t('.editor_rights')
+        %dd>
+          %a#wb-document-filter-shared-with-me.state-filter-subtab{ :href => "#filter-shared" }= t('.shared_with_me')
+      
       %div#wb-document-list-container
-    %div.column.three.of-three
+    
+    %div.column.three.of-three.state-public-show>
+      %h4 Public webdocs
+      %p Shared webdocs.
+    %div.column.three.of-three.state-public-hide>
       %h4 Manage your Webdocs
       %p Create your own new webdoc, or choose a webdoc to view from the list.
       %p You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, click <strong>share</strong>. You can choose to share your webdoc with just your friends, or with everybody on the world wide&nbsp;web.
-
+    
 #wb-new-document-dialog{ :style => "display:none", :title => t('.create_new_document') }
   %form#wb-new-form.new-form{ :action => "", :title => t('.create_new_document') }
-    %h4 Create new webdoc
+    %h4#new-document-dialog-header Create new webdoc
     %fieldset
       %div.stack
         %label{ :for => "name" }= t ".document_forms.name"
@@ -69,39 +76,6 @@
     %div.ui-actions
       %a{ :href => '#cancel', :class => 'cancel' } cancel
       %input{ :type => 'submit', :name => 'new-document', :value => 'Create' }
-
-
-#wb-edit-document-dialog{ :style => "display:none",:title => t('.edit_document') }
-  %form#wb-edit-form{ :action => ""}
-    %fieldset
-      %label{ :for => "name" }= t ".document_forms.name"
-      %br
-      %input#wb-edit-document-name.ui-corner-all{ :type => "text", :name => "wb-edit-document-name", :style => "width:100%"}
-      %br
-      %label{ :for => "description" }= t ".document_forms.description"
-      %br
-      %textarea#wb-edit-document-description.ui-corner-all{ :rows => "3", :name => "wb-edit-document-description", :style => "width:100%"}
-      %br
-      %label{ :for => "category" }= t ".document_forms.category"
-      %br
-      %select#wb-edit-document-category
-      %br
-      %label{ :for => "document_size" }= t ".document_forms.document_size_title"
-      %br
-      %input#wb-edit-document-size-custom{ :type => "radio", :name => "wb-edit-document-size", :value => "custom" }
-      = t('.document_forms.document_size.custom')
-      = t('.document_forms.document_size.width')
-      %input#wb-edit-document-size-custom-width{ :type => "text",  :size => 6}
-      = t('.document_forms.document_size.height')
-      %input#wb-edit-document-size-custom-height{ :type => "text", :size => 6}
-      %br
-      %input#wb-edit-document-size-iPhone{ :type => "radio", :name => "wb-edit-document-size", :value => "iPhone" }
-      = t('.document_forms.document_size.iPhone')
-      %input#wb-edit-document-size-classic{ :type => "radio", :name => "wb-edit-document-size", :value => "classic" }
-      = t('.document_forms.document_size.classic')
-      %input#wb-edit-document-size-iPad{ :type => "radio", :name => "wb-edit-document-size", :value => "iPad" }
-      = t('.document_forms.document_size.iPad')
-         
 
 #wb-change-access-dialog{ :style => "display:none" }
   #document_access-header
@@ -161,10 +135,6 @@
       #wb-readers-invitation-failed
       %ul#document_readers_list
       
-
--#%div.footer-bar.bar
--#  %div.wrap.clear
--#    Footer
 
 :javascript
     var WebDoc;
