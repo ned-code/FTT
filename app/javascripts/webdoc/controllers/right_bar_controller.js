@@ -2,21 +2,20 @@
  * Controller of the right bar. It manages the show, the hide and the toggle the right bar. It also manages if the right bar shows the inspector or the lib.
  * @author Julien Bachmann
  */
-//= require <webdoc/controllers/page_inspector_controller>
-//= require <webdoc/controllers/document_inspector_controller>
-//= require <webdoc/controllers/social_panel_controller>
+// define all inspector type that can be displayed in the right bar
+WebDoc.RightBarInspectorType = {
+  LIBRARY: 'library',
+  ITEM: 'item',
+  PAGE: 'page',
+  DOCUMENT: 'document',
+  SOCIAL: 'social'
+};
 
 WebDoc.RightBarController = $.klass({
-  
+    
   CURRENT_CLASS: "current",
   ACTIVE_CLASS: "active",
-  
-  LIBRARY_BUTTON_SELECTOR: "a[href='#library']",
-  PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
-  ITEM_INSPECTOR_BUTTON_SELECTOR: "a[href='#item-inspector']",
-  DOCUMENT_INSPECTOR_BUTTON_SELECTOR: "a[href='#document-inspector']",
-  SOCIAL_PANEL_BUTTON_SELECTOR: "a[href='#social-panel']",
-  
+      
   STATE_BUTTON_SELECTOR: ".state-right-panel",
   PANEL_SELECTOR: "#right_bar",
   PANEL_GHOST_SELECTOR: "#right-panel-ghost",
@@ -28,11 +27,11 @@ WebDoc.RightBarController = $.klass({
     // Some of these are lazy loaded, and some are not -
     // pageInspector does not work if you try loading it now.
     
-    var library = WebDoc.application.libraryController = new WebDoc.LibrariesController(),
-        itemInspector = WebDoc.application.inspectorController = new WebDoc.InspectorController();
-    
-    library.buttonSelector = this.LIBRARY_BUTTON_SELECTOR;
-    itemInspector.buttonSelector = this.ITEM_INSPECTOR_BUTTON_SELECTOR;
+    var library = new WebDoc.LibrariesController(),
+        itemInspector = new WebDoc.InspectorController();
+        
+    WebDoc.application.libraryController = library;
+    WebDoc.application.inspectorController = itemInspector;
     
     this.visible = false;
     
@@ -41,19 +40,97 @@ WebDoc.RightBarController = $.klass({
     this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
     
     this.panelWidth = panel.outerWidth();
-    this.contentMap = {
-      library: library,
-      itemInspector: itemInspector
-    };
+    this._inspectorsControllersClasses = {};
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.LIBRARY] = WebDoc.LibrariesController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.ITEM] = WebDoc.InspectorController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PAGE] = WebDoc.PageInspectorController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.SOCIAL] = WebDoc.SocialPanelController;
+
+    this._inspectorsControllers = {};
+    this._inspectorsControllers[WebDoc.RightBarInspectorType.LIBRARY] = library;
+    this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;
+    
+    this._currentInspectorType = null;  
+    this.selectInspector(WebDoc.RightBarInspectorType.LIBRARY);  
+  },
+
+  showRightBar: function() {
+    this.visible = (this.visible) ? this.visible : this._show() ;
   },
   
+  hideRightBar: function() {
+    this.visible = (this.visible) ? this._hide() : this.visible ;
+  },
+  
+  toggleRightBar: function() {
+    this.visible = (this.visible) ? this._hide() : this._show() ;
+  },
+  
+  concealRightBar: function() {
+    return this._hide( 36 );
+  },
+  
+  revealRightBar: function() {
+    return (this.visible) ? this._show() : this._hide() ;
+  },
+  
+  getSelectedInspector: function() {
+    return this._currentInspectorType;  
+  },
+  
+  selectInspector: function(inspectorType) {
+    ddd("[RightBarController] select inspecor", inspectorType);
+    if (this._currentInspectorType !== inspectorType) {
+      var inspectorController = this._inspectorsControllers[inspectorType];
+      if (!inspectorController) {
+        inspectorController = new this._inspectorsControllersClasses[inspectorType]();
+        this._inspectorsControllers[inspectorType] = inspectorController;
+      }
+      this._changePanelContent(inspectorController);
+      this._changeButtonState(inspectorController);
+      this._currentInspectorType = inspectorType;
+    }
+  },
+  
+  showLib: function() {
+    ddd("[RightBarController] showLib");
+    this.selectInspector(WebDoc.RightBarInspectorType.LIBRARY);
+    this.showRightBar();
+  },
+  
+  showPageInspector: function() {
+    ddd("[RightBarController] show page inspector");
+    this.selectInspector(WebDoc.RightBarInspectorType.PAGE);
+    this.showRightBar();
+  },
+  
+  showItemInspector: function() {
+    ddd("[RightBarController] showItemInspector");
+    this.selectInspector(WebDoc.RightBarInspectorType.ITEM);
+    this.showRightBar();
+  },
+  
+  showDocumentInspector: function() {
+    ddd("[RightBarController] showDocumentInspector");
+    this.selectInspector(WebDoc.RightBarInspectorType.DOCUMENT);
+    this.showRightBar();
+  },
+  
+  showSocialPanel: function() {
+    ddd("[RightBarController] showSocialPanel");
+    this.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
+    this.showRightBar();
+  },
+
   _changePanelContent: function(inspector) {
     ddd('[RightBarController] _changePanelContent(inspector)' + inspector);
-    var inspectors = this.contentMap;
+    var inspectors = this._inspectorsControllers;
     
     for (var key in inspectors) {
       if ( inspectors[key] === inspector ) {
         inspectors[key].domNode.show();
+        inspectors[key].refresh();
       }
       else {
         inspectors[key].domNode.hide();
@@ -63,102 +140,11 @@ WebDoc.RightBarController = $.klass({
   
   _changeButtonState: function(inspector) {
     ddd('[RightBarController] _changeButtonState(inspector)');
-    
-    var stateButtons = jQuery( this.STATE_BUTTON_SELECTOR ),
-        currentClass = this.CURRENT_CLASS,
-        buttonSelector = inspector.buttonSelector;
-    
-    stateButtons.removeClass( currentClass );
-    jQuery( buttonSelector ).addClass( currentClass );
-  },
 
-  showLib: function() {
-    ddd("[RightBarController] showLib");
-    
-    var inspector = this.contentMap.library;
-    
-    if (!inspector) { // lazily load the library
-      ddd('[RightBarController] Load Library');
-      inspector = WebDoc.application.libraryController = new WebDoc.LibrariesController();
-      inspector.buttonSelector = this.LIBRARY_BUTTON_SELECTOR;
-      
-      this.contentMap.library = inspector;
-    }
-    
-    this._changePanelContent(inspector);
-    this._changeButtonState(inspector);
-    this.showRightBar();
+    jQuery( this.STATE_BUTTON_SELECTOR ).removeClass( this.CURRENT_CLASS );
+    jQuery( inspector.buttonSelector() ).addClass( this.CURRENT_CLASS );
   },
-  
-  showPageInspector: function() {
-    ddd("[RightBarController] showPageInspector");
-    var inspector = this.contentMap.pageInspector;
     
-    if (!inspector) { // lazily load the page inspector
-      ddd('[RightBarController] Load Page Inspector');
-      inspector = WebDoc.application.pageInspectorController = new WebDoc.PageInspectorController();
-      inspector.buttonSelector = this.PAGE_INSPECTOR_BUTTON_SELECTOR;
-    
-      this.contentMap.pageInspector = inspector;
-    }
-    
-    this._changePanelContent(inspector);
-    this._changeButtonState(inspector);
-    this.showRightBar();
-  },
-  
-  showItemInspector: function() {
-    ddd("[RightBarController] showItemInspector");
-    var inspector = this.contentMap.itemInspector;
-    
-    if (!inspector) { // lazily load the item inspector
-      ddd('[RightBarController] Load Item Inspector');
-      inspector = WebDoc.application.inspectorController = new WebDoc.InspectorController();
-      inspector.buttonSelector = this.ITEM_INSPECTOR_BUTTON_SELECTOR;
-      
-      this.contentMap.itemInspector = inspector;
-    }
-    
-    this._changePanelContent(inspector);
-    inspector.refresh();
-    this._changeButtonState(inspector);
-    this.showRightBar();
-  },
-  
-  showDocumentInspector: function() {
-    ddd("[RightBarController] showDocumentInspector");
-    var inspector = this.contentMap.documentInspector;
-    
-    if (!inspector) { // lazily load the page inspector
-      ddd('[RightBarController] Load Document Inspector');
-      inspector = WebDoc.application.documentInspectorController = new WebDoc.DocumentInspectorController();
-      inspector.buttonSelector = this.DOCUMENT_INSPECTOR_BUTTON_SELECTOR;
-    
-      this.contentMap.documentInspector = inspector;
-    }
-    
-    this._changePanelContent(inspector);
-    this._changeButtonState(inspector);
-    this.showRightBar();
-  },
-  
-  showSocialPanel: function() {
-    ddd("[RightBarController] showSocialPanel");
-    var socialPanel = this.contentMap.socialPanel;
-    
-    if (!socialPanel) { // lazily load the social panel
-      ddd('[RightBarController] Load social panel');
-      socialPanel = WebDoc.application.socialPanelController = new WebDoc.SocialPanelController();
-      socialPanel.buttonSelector = this.SOCIAL_PANEL_BUTTON_SELECTOR;
-    
-      this.contentMap.socialPanel = socialPanel;
-    }
-    
-    this._changePanelContent(socialPanel);
-    this._changeButtonState(socialPanel);
-    this.showRightBar();
-  },
-  
   _show: function() {
     var panel = this.domNode,
         self = this,
@@ -174,7 +160,7 @@ WebDoc.RightBarController = $.klass({
       step: function(val){
         bothGhosts.css({
           width: -val
-        })
+        });
       }
     });
     
@@ -196,7 +182,7 @@ WebDoc.RightBarController = $.klass({
       step: function(val){
         bothGhosts.css({
           width: -val
-        })
+        });
       },
       complete: function() {
         innerGhost.hide();
@@ -206,26 +192,6 @@ WebDoc.RightBarController = $.klass({
     jQuery( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.ACTIVE_CLASS );
     
     return false;
-  },
-  
-  showRightBar: function() {
-    this.visible = (this.visible) ? this.visible : this._show() ;
-  },
-  
-  hideRightBar: function() {
-    this.visible = (this.visible) ? this._hide() : this.visible ;
-  },
-  
-  toggleRightBar: function() {
-    this.visible = (this.visible) ? this._hide() : this._show() ;
-  },
-  
-  concealRightBar: function() {
-    return this._hide( 36 );
-  },
-  
-  revealRightBar: function() {
-    return (this.visible) ? this._show() : this._hide() ;
   }
   
 });

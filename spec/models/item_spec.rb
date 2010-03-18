@@ -14,20 +14,18 @@ describe Item do
   end
 end
 
-
-
 # == Schema Information
 #
 # Table name: items
 #
+#  id         :integer         not null, primary key
 #  uuid       :string(36)
-#  page_id    :integer(4)
-#  media_id   :integer(4)
+#  page_id    :integer         not null
+#  media_id   :integer
 #  media_type :string(255)
-#  data       :text(16777215)
+#  data       :text(65537)
 #  created_at :datetime
 #  updated_at :datetime
-#  id         :integer(4)      not null, primary key
-#  position   :integer(4)
+#  position   :integer
 #
 

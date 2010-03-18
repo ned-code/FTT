@@ -117,12 +117,11 @@ class User < ActiveRecord::Base
   
 end
 
-
 # == Schema Information
 #
 # Table name: users
 #
-#  id                   :integer(4)      not null, primary key
+#  id                   :integer         not null, primary key
 #  email                :string(255)     not null
 #  username             :string(255)     not null
 #  encrypted_password   :string(255)     not null
@@ -133,12 +132,12 @@ end
 #  reset_password_token :string(20)
 #  remember_token       :string(20)
 #  remember_created_at  :datetime
-#  sign_in_count        :integer(4)
+#  sign_in_count        :integer
 #  current_sign_in_at   :datetime
 #  last_sign_in_at      :datetime
 #  current_sign_in_ip   :string(255)
 #  last_sign_in_ip      :string(255)
-#  failed_attempts      :integer(4)      default(0)
+#  failed_attempts      :integer         default(0)
 #  unlock_token         :string(20)
 #  locked_at            :datetime
 #  created_at           :datetime
@@ -150,3 +149,4 @@ end
 #  gender               :string(255)
 #  website              :string(255)
 #
+

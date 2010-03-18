@@ -29,7 +29,7 @@
 .webdoc {
     font-size: 2em;
     font-family: Helvetica, Arial, sans-serif;
-    line-height: 1.6667;
+    line-height: 1.333;
     color: #484848;
 }
 
@@ -81,17 +81,32 @@ p, .webdoc li, dt, dd, blockquote, address { word-spacing: 0.2em; }
 
 
 /* We're not ready for this yet - need to protect the lists */
+/*
 .webdoc li ul,
 .webdoc li ol             { margin: 0; }
 .webdoc ul, .webdoc ol    { margin: 1.3333em 0; padding-left: 2.6667em; }
-
+*/
+.webdoc ol, .webdoc ul {
+  padding-left:1.5em;
+  margin-bottom: 0.4em;
+}
+.webdoc ol ol, .webdoc ul ul {
+  margin-top: -0.1em;
+  font-size: 0.8em;
+}
+.webdoc ol li, .webdoc ul li {
+  margin-bottom: 0.2em;
+}
 .webdoc ul                { list-style-type: disc; }
 .webdoc ol                { list-style-type: decimal; }
 
+<<<<<<< HEAD
 /* nested lists */
 .webdoc li li             { font-size: 0.875em; line-height: 1.9048; }
 .webdoc li li li          { font-size: 0.8571em; line-height: 1.6327; }
 
+=======
+>>>>>>> 06e4868bf4c99892ba753c08d3bb3098ff8ec572
 dl                { margin: 0 0 1.5em 0; }
 dl dt             { font-weight: bold; margin-left: 1.3333em; }
 dd                { margin-left: 1.5em; margin-left: 2.6667em; }

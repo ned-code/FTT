@@ -83,6 +83,7 @@ javascripts:
     - app/javascripts/webdoc/tools/text_tool.js
     - app/javascripts/webdoc/tools/text_tool/*.js
     - app/javascripts/webdoc/controllers/*.js  
+    - app/javascripts/webdoc/controllers/right_bar_controllers/*.js  
     - app/javascripts/webdoc/controllers/inspectors/*.js
     - app/javascripts/webdoc/core/*.js
     - app/javascripts/webdoc/library/jqtouch.js
@@ -94,5 +95,7 @@ javascripts:
     - app/javascripts/webdoc/library/videos_library.js
     - app/javascripts/webdoc/library/web_browser.js
   tests:
+    - app/javascripts/tests/test_helper.js
     - app/javascripts/tests/mtools/*.js
+    - app/javascripts/tests/webdoc/*.js
           
