@@ -1,9 +1,19 @@
 class ViewCount < ActiveRecord::Base
   
+  attr_accessible :user_id, :session_id, :ip_address
+  
+  # ================
+  # = Associations =
+  # ================
+  
   belongs_to :user
   belongs_to :viewable, :polymorphic => true, :counter_cache => :views_count
   
-  validates_uniqueness_of :session_id, :scope => [ :viewable_id, :viewable_type ]
+  # ===============
+  # = Validations =
+  # ===============
+  
+  validates_uniqueness_of :session_id, :scope => [:viewable_id, :viewable_type]
   
 end
 

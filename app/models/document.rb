@@ -2,6 +2,8 @@ class Document < ActiveRecord::Base
   has_uuid
   acts_as_authorization_object
   
+  attr_accessible :uuid, :title, :description, :size, :category_id, :is_public
+  
   serialize :size
   
   # ================
@@ -230,5 +232,6 @@ end
 #  category_id :integer
 #  creator_id  :integer
 #  is_public   :boolean         default(FALSE)
+#  views_count :integer         default(0)
 #
 

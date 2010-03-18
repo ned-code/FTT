@@ -1,9 +1,13 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Page do
+  
+  should_allow_mass_assignment_of :uuid, :thumbnail_id, :position, :version, :data, :title
+  should_not_allow_mass_assignment_of :id, :document_id, :created_at, :updated_at
+  
   should_be_built_by_factory
   should_be_created_by_factory
-
+  
   should_have_many :items, :dependent => :delete_all
   should_belong_to :document
   should_belong_to :thumbnail, :class_name => "Medias::Thumbnail"
@@ -32,7 +36,7 @@ describe Page do
     end
     
   end
-
+  
   describe 'collection nagivation' do
     before(:each) do
       @document = Factory(:document)
@@ -46,7 +50,6 @@ describe Page do
   end
   
   describe "title" do
-
     it "should have 'undefined' as title" do
       document = Factory(:document)
       page = document.pages.create
@@ -55,14 +58,14 @@ describe Page do
   end
   
   describe "size" do
-      it "should have width and height values used when creating a page" do
-        document = Factory(:document)
-        document.size = { :width => "100", :height => "200" }
-        document.save
-        page = document.pages.create
-        page.data.should == { :css => { :width => document.size[:width]+"px", :height => document.size[:height]+"px", :backgroundColor => "#fff" } }
-      end
+    it "should have width and height values used when creating a page" do
+      document = Factory(:document)
+      document.size = { :width => "100", :height => "200" }
+      document.save
+      page = document.pages.create
+      page.data.should == { :css => { :width => document.size[:width]+"px", :height => document.size[:height]+"px", :backgroundColor => "#fff" } }
     end
+  end
   
 end
 

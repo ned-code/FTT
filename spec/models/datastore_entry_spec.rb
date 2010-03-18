@@ -2,6 +2,9 @@ require 'spec_helper'
 
 describe DatastoreEntry do
   
+  should_allow_mass_assignment_of :ds_key, :ds_value
+  should_not_allow_mass_assignment_of :id, :user_id, :item_id, :created_at, :updated_at
+  
   describe "all_with_filter method" do
     
     before(:each) do

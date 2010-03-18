@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Document do
+  
+  should_allow_mass_assignment_of :uuid, :title, :description, :size, :category_id, :is_public
+  should_not_allow_mass_assignment_of :id, :creator_id, :deleted_at, :created_at, :updated_at
+  
   should_be_built_by_factory
   should_be_created_by_factory
   should_have_many :pages, :order => 'position ASC', :dependent => :destroy
@@ -146,5 +150,6 @@ end
 #  category_id :integer
 #  creator_id  :integer
 #  is_public   :boolean         default(FALSE)
+#  views_count :integer         default(0)
 #
 

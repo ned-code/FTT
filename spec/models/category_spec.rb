@@ -1,6 +1,9 @@
-class Category < ActiveRecord::Base
+require 'spec_helper'
+
+describe Category do
   
-  attr_accessible :name
+  should_allow_mass_assignment_of :name
+  should_not_allow_mass_assignment_of :id
   
 end
 

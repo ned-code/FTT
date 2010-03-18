@@ -3,9 +3,17 @@ class Medias::Widget < Media
   
   attr_accessor :status
   
+  # =============
+  # = Callbacks =
+  # =============
+  
   before_save :set_attributes_if_not_present
   before_save :update_new_file
   #after_destroy :delete_widget_folder # Will be done later, we currently need that all files keep unchanged so that existing documents still work
+  
+  # ====================
+  # = Instance Methods =
+  # ====================
   
   def version
     properties[:version]
@@ -16,21 +24,6 @@ class Medias::Widget < Media
       properties[property.to_sym]
     end
   end
-  
-  # # Not yet modified
-  # def delete_widget_folder
-  #   path = get_storage_path(@working_version)
-  #   if file.s3_bucket == nil
-  #     #parent_path = path.parent # Gives the app path
-  #     #FileUtils.rm_rf parent_path
-  #     FileUtils.rm_rf path
-  #   else
-  #     check_init_s3_parameters
-  #     s3_bucket = CarrierWave.yml_s3_bucket(:widgets)
-  #     # Delete file
-  #     @s3.delete(path, bucket) # Doesn't work apparently, must try foreach contained file
-  #   end
-  # end
   
 private
   
@@ -70,15 +63,6 @@ private
     end
   end
   
-  def get_mapped_path 
-    if file.s3_bucket == nil
-      file.store_url
-    else
-      path = Pathname.new(file.store_path)
-      "http://#{CarrierWave.yml_s3_bucket(:widgets).to_s}/#{path.dirname}"
-    end
-  end
-  
   # before_save
   def update_new_file
     if file_changed?
@@ -97,6 +81,30 @@ private
     end
   rescue
     @status = "updated_failed"
+  end
+  
+  # # Not yet modified
+  # def delete_widget_folder
+  #   path = get_storage_path(@working_version)
+  #   if file.s3_bucket == nil
+  #     #parent_path = path.parent # Gives the app path
+  #     #FileUtils.rm_rf parent_path
+  #     FileUtils.rm_rf path
+  #   else
+  #     check_init_s3_parameters
+  #     s3_bucket = CarrierWave.yml_s3_bucket(:widgets)
+  #     # Delete file
+  #     @s3.delete(path, bucket) # Doesn't work apparently, must try foreach contained file
+  #   end
+  # end
+  
+  def get_mapped_path
+    if file.s3_bucket == nil
+      file.store_url
+    else
+      path = Pathname.new(file.store_path)
+      "http://#{CarrierWave.yml_s3_bucket(:widgets).to_s}/#{path.dirname}"
+    end
   end
   
   def is_valid_widget_file(file_name)

@@ -2,6 +2,9 @@ require 'spec_helper'
 
 describe ViewCount do
   
+  should_allow_mass_assignment_of :user_id, :session_id, :ip_address
+  should_not_allow_mass_assignment_of :id, :viewable_id, :viewable_type, :created_at
+  
   should_belong_to :user
   should_belong_to :viewable, :polymorphic => true#, :counter_cache => true
   

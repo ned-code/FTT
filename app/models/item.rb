@@ -1,8 +1,8 @@
-require "xmpp_notification.rb"
-
 class Item < ActiveRecord::Base
   has_uuid
   serialize :data
+  
+  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position
   
   # see XmppItemObserver
   attr_accessor_with_default :must_notify, false
@@ -15,6 +15,10 @@ class Item < ActiveRecord::Base
   
   belongs_to :page
   belongs_to :media, :polymorphic => true
+  
+  # ====================
+  # = Instance Methods =
+  # ====================
   
   def to_param
     uuid

@@ -1,8 +1,13 @@
 require 'spec_helper'
 
 describe Media do
+  
+  should_allow_mass_assignment_of :uuid, :file, :properties, :system_name, :title, :description
+  should_not_allow_mass_assignment_of :id, :type, :created_at, :updated_at, :user_id
+  
   should_be_built_by_factory
   should_be_created_by_factory
+  
 end
 
 # == Schema Information
