@@ -55,33 +55,33 @@ WebDoc.WidgetApi = $.klass(
   network - object used by the sdk to make local or remote ajax call
   *********************************************************************/
   network: { //remote call - use rails proxy
-  getUrl: function(url,callback) {
+  getUrl: function(url,callback,extradata) {
     var proxy_url = '/proxy/get?url='+url;
-    this.local._ajax(proxy_url,null,'GET','text',callback);
+    this.local._ajax(proxy_url,null,'GET','text',callback,extradata);
   },
   local: { //local call - use direct jQuery call
-    getJson: function(url,callback) {
-      this._ajax(url,null,'GET','json',callback);
+    getJson: function(url,callback,extradata) {
+      this._ajax(url,null,'GET','json',callback,extradata);
     },
-    postText: function(url,data,callback) {
-      this._ajax(url,data,'POST','text',callback);
+    postText: function(url,data,callback,extradata) {
+      this._ajax(url,data,'POST','text',callback,extradata);
     },
-    deleteText: function(url,callback) {
-      this._ajax(url,null,'DELETE','text',callback);
+    deleteText: function(url,callback,extradata) {
+      this._ajax(url,null,'DELETE','text',callback,extradata);
     },
     
     //*****internal methods**********************************************************************
-    _ajax: function(url,data,type,dataType,callback) {
+    _ajax: function(url,data,type,dataType,callback,extradata) {
       jQuery.ajax({
         type:type,
         url:url,
         data:data,
         dataType:dataType,
         success:function(response){
-          callback(response,null);
+          callback(response,null,extradata);
               },
               error:function (xhr, ajaxOptions, thrownError){
-          callback(null,thrownError);
+          callback(null,thrownError,extradata);
               }
             });
     }
