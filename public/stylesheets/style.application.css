@@ -112,7 +112,7 @@ header {
     min-height: 400px;
 }
 
-.bar {
+.content .bar {
     margin-bottom: 2.6667em;
 }
 .bar li,
@@ -167,6 +167,23 @@ header {
 }
 .collaborate-dialog {
   width: 42em;
+}
+.share-dialog {
+  width: 42em;
+}
+
+.state-unshared-hide {
+  height: 4.8333em;
+  opacity: 1;
+  margin-bottom: 1.6667em;
+  -webkit-transition: height 0.2s ease-in, margin-bottom 0.2s ease-in, opacity 0.2s ease-in;
+  -moz-transition:    height 0.2s ease-in, margin-bottom 0.2s ease-in, opacity 0.2s ease-in;
+  transition:         height 0.2s ease-in, margin-bottom 0.2s ease-in, opacity 0.2s ease-in;
+}
+.state-unshared .state-unshared-hide {
+  height: 0;
+  margin-bottom: 0;
+  opacity: 0;
 }
 
 

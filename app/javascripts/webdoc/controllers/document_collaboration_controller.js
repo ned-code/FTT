@@ -19,12 +19,6 @@ WebDoc.DocumentCollaborationController = $.klass({
     
     $(".delete_access").live("click", this.deleteAccess.pBind(this));
     
-    this._popSetupObj = {
-      initCallback: function(){
-        self.documentAccessDialog.bind( 'submit', self.sendInvitations.pBind(self) );
-      }
-    };
-    
     this.documentAccessDialog
     .remove()
     .css({ display: '' });
@@ -41,8 +35,14 @@ WebDoc.DocumentCollaborationController = $.klass({
       dataType: 'json',              
       success: function(data, textStatus) {
         ddd("access", data);
-        this._popSetupObj.attachTo = $( e.currentTarget );
-        this.documentAccessDialog.pop( this._popSetupObj );
+        
+        this.documentAccessDialog.pop({
+          attachTo: $( e.currentTarget ),
+          initCallback: function(){
+            self.documentAccessDialog.bind( 'submit', self.sendInvitations.pBind(self) );
+          }
+        });
+        
         this.loadAccess(data);
       }.pBind(this),
       

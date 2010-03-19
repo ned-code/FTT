@@ -9,20 +9,10 @@ WebDoc.DocumentShareController = $.klass({
     this.document = null;
     this.domNode = $("#document_readers_list");
     $(".delete_reader_role").live("click", this._deleteReaderRole.pBind(this));   
-    this.documentShareDialog = $("#wb-share-document-dialog");
     
-    this.documentShareDialog.dialog(
-    {
-        bgiframe: true,
-        autoOpen: false,
-        height: 500,
-        width: 400,
-        modal: true,
-        buttons: 
-        {
-          Cancel: this._closeDialog,
-        }
-    });
+    this.documentShareDialog = $("#wb-share-document-dialog");
+    this.shareNode = $("#share_webdoc_radio");
+    this.unshareNode = $("#unshare_webdoc_radio");
     
     this.shareTabs = $("#wb-document-share-tabs");
     this.shareTabs.tabs();
@@ -33,31 +23,46 @@ WebDoc.DocumentShareController = $.klass({
     this.shareWithMembersTabs = $('.unshare-related');
     this.shareDocRadio.bind('change', this._shareDocument.pBind(this));
     this.unshareDocRadio.bind('change', this._unshareDocument.pBind(this));
-  },  
+    
+    this.documentShareDialog
+    .remove()
+    .css({display: ''});
+  },
   
-  //_changeActionsButtons: function(showSend) {
-  //  // Change buttons and actions dynamically
-  //  if(showSend) {
-  //    // Invitation tab
-  //    this.documentShareDialog.dialog('option', 'buttons', { "Send": this._sendInvitations.pBind(this), "Cancel":  this._closeDialog});
-  //  }
-  //  else {
-  //    // Listing tab
-  //    this.documentShareDialog.dialog('option', 'buttons', { "Cancel":  this._closeDialog});
-  //  }
-  //},
-  
-  
-  showShare: function(document) {
+  showShare: function(e, document) {
+    var self = this;
+    
     this.document = document;
-    this._initFields();
     
     $.ajax({
       url: "/documents/" + document.uuid() + "/roles",
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
-        this.documentShareDialog.dialog('open');
+        this.documentShareDialog.pop({
+          attachTo: $(e.currentTarget),
+          initCallback: function(){
+            var node = $(this);
+            
+            self._initFields();
+            
+            self.shareNode.bind('change', function(e){
+              self.documentShareDialog.removeClass("state-unshared");
+            });
+            self.unshareNode.bind('change', function(e){
+              self.documentShareDialog.addClass("state-unshared");
+            });
+            self.sharedDocUrlField.bind('focus', function(e){
+              $(this).select();
+            });
+            self.documentShareDialog.bind('submit', function(e){
+              self._sendInvitations.pBind(this);
+              
+              e.preventDefault();
+            });
+          }
+        });
+        
         this._loadAccess(data);
       }.pBind(this),
     
@@ -132,7 +137,6 @@ WebDoc.DocumentShareController = $.klass({
     });
     this.sharedDocUrlField.removeAttr('disabled');
     this.shareWithMembersTabs.hide();
-    //this._changeActionsButtons(false);
   },
   
   _unshareDocument: function() {
@@ -142,23 +146,16 @@ WebDoc.DocumentShareController = $.klass({
     });
     this.sharedDocUrlField.attr('disabled', 'disabled');
     this.shareWithMembersTabs.show();
-    //this._changeActionsButtons(true);
   },
   
   _initFields: function() {
     if(this.document.isShared()) { 
-      this.shareDocRadio.attr('checked', true); 
-      this.sharedDocUrlField.removeAttr('disabled');
-      //this.shareTabs.tabs('disable', 1);
-      this.shareWithMembersTabs.hide();
-      //this._changeActionsButtons(false);
+      this.shareDocRadio.click();
+      this.documentShareDialog.removeClass("state-unshared");
     }
     else { 
-      this.unshareDocRadio.attr('checked', true); 
-      this.sharedDocUrlField.attr('disabled', 'disabled');
-      //this.shareTabs.tabs('enable', 1);
-      this.shareWithMembersTabs.show();
-      //this._changeActionsButtons(true);
+      this.unshareDocRadio.click();
+      this.documentShareDialog.addClass("state-unshared");
     }
     this.sharedDocUrlField.val("http://" + window.location.host + "/documents/" + this.document.uuid() + "#1");
   },

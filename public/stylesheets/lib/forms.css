@@ -138,8 +138,8 @@ textarea {
 
 textarea.resizable {
     resize: resize;
-    /* Make sure the bottom left corner doesn't clip the resize icon */
-    -webkit-border-radius: 2px !important;
+    /* Make sure the bottom right corner doesn't clip the resize icon */
+    -webkit-border-bottom-right-radius: 2px !important;
 }
 
 label {
@@ -258,18 +258,20 @@ fieldset.properties:first-child {
 .properties .label,
 .properties input {
     float: left;
+    width: auto;
     font-size: 1em;
     padding: 0.16em 0.6em;
     margin: 0 0 0.2em 0;
+    height: 1.3333em;
 
     /* For some reason browsers force the 'traditional' box model on inputs
        in the Page Inspector. It may be because the inputs are not recognised as
        type "text", but I can't recreate the problem outside of webdoc, so I
        don't know why. Happily, we can force it back. */
-    -webkit-box-sizing: content-box;
+    /*-webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     -ms-box-sizing: content-box;
-    box-sizing: content-box;
+    box-sizing: content-box;*/
 }
 
 .properties label,
@@ -318,13 +320,6 @@ fieldset.properties:first-child {
     max-width: 96%;
 }
 
-.properties input[type='text']:focus,
-.properties textarea:focus {
-    outline: none;
-    border-color: #7b9600;
-    border-width: 2px;
-    margin: -2px -2px 0 -2px;
-}
 .properties input[disabled],
 .properties .disabled {
     opacity: 0.6;

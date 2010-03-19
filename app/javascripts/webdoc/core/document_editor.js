@@ -266,7 +266,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
           documentIdToPublish = data && data.id,
           document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
       
-      WebDoc.application.shareController.showShare(document);            
+      WebDoc.application.shareController.showShare(e, document);            
       
       e.preventDefault();
     },
@@ -277,7 +277,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
           documentIdToPublish = data && data.id,
           document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
       
-      WebDoc.application.shareController.showShare(document);  
+      WebDoc.application.shareController.showShare(e, document);  
       
       e.preventDefault();
     },
