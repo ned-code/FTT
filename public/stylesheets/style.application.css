@@ -70,6 +70,10 @@ header {
   display: block;
 }
 
+.state-readonly .state-readonly-hide {
+  display: none;
+}
+
 /* leader */
 
 .action-zone {
@@ -160,6 +164,9 @@ header {
 
 .new-form {
   width: 28em;
+}
+.collaborate-dialog {
+  width: 42em;
 }
 
 

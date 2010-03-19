@@ -77,29 +77,29 @@
       %a{ :href => '#cancel', :class => 'cancel' } cancel
       %input{ :type => 'submit', :name => 'new-document', :value => 'Create' }
 
-#wb-change-access-dialog{ :style => "display:none" }
-  #document_access-header
-  #wb-document-collaborate-tabs
-    %ul
-      %li
-        %a{ :href => "#wb-invitation-tab"}
-          = t('.document_forms.change_access_dialog.invite_tab')
-      %li
-        %a{ :href => "#wb-access-list"}
-          = t('.document_forms.change_access_dialog.current_editors')
-    #wb-invitation-tab
-      %label= t('.document_forms.change_access_dialog.add_editors')
-      %p= t('.document_forms.change_access_dialog.add_editors_explanation')
-      %br
-      %textarea#wb-invitation-add-editors{ :rows => 1, :cols => 20}
-      %br
-      %label= t('.document_forms.change_access_dialog.add_editors_message')
-      %br
-      %textarea#wb-invitation-add-editors-message{ :rows => 3, :cols => 20}
-    #wb-access-list
-      #wb-invitation-failed
-      %ul#document_access_list
-      
+#wb-change-access-dialog.collaborate-dialog{ :style => "display: none" }
+
+  %form.column.one.triple.of-five
+    %h4 Invite new editors
+    %p= t('.document_forms.change_access_dialog.add_editors_explanation')
+    
+    %fieldset
+      %div.stack
+        %label= t('.document_forms.change_access_dialog.add_editors')
+        %textarea#wb-invitation-add-editors{ :rows => 1, :cols => 20}
+        #wb-invitation-failed
+      %div.stack
+        %label= t('.document_forms.change_access_dialog.add_editors_message')
+        %textarea#wb-invitation-add-editors-message{ :rows => 3, :cols => 20}
+    
+    %div.ui-actions.state-readonly-hide
+      %a{ :href => '#cancel', :class => 'cancel' } cancel
+      %input{ :type => 'submit', :name => 'new-document', :value => 'Create' }
+  
+  %div.column.last.double.of-five#wb-access-list{ :style => "overflow: hidden;" }>
+    %h4 Current editors
+    %ul#document_access_list.vertical.divided.index
+  
 #wb-share-document-dialog{ :style => "display:none", :title => t('.document_forms.share_document_dialog.title') }
   %form
     %p

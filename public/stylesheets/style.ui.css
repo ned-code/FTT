@@ -69,20 +69,20 @@ element {-webkit-focus-ring-color: hsl(72, 100%, 50%);}
   -moz-transition:    opacity 0.66s ease-in;
   transition:         opacity 0.66s ease-in;
 }
-.ui-pop>h4,
+.ui-pop h4,
 .ui-pop>h5 {
   text-align: center;
+  font-size: 1.3333em;
+  height: 1.6667em;
+  line-height: 1.6667;
+  margin-bottom: 0;
+  /*background-color: hsla(208, 20%, 16%, 0.8);
   -webkit-border-top-left-radius:   0.625em;
   -moz-border-radius-topleft:       0.625em;
   border-top-left-radius:           0.625em;
   -webkit-border-top-right-radius:  0.625em;
   -moz-border-radius-topright:      0.625em;
-  border-top-right-radius:          0.625em;
-  font-size: 1.3333em;
-  height: 1.6667em;
-  line-height: 1.6667;
-  margin-bottom: 0;
-  /*background-color: hsla(208, 20%, 16%, 0.8);*/
+  border-top-right-radius:          0.625em;*/
 }
 
 .ui-pop select:focus {

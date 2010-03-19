@@ -10,6 +10,7 @@ WebDoc.DocumentShareController = $.klass({
     this.domNode = $("#document_readers_list");
     $(".delete_reader_role").live("click", this._deleteReaderRole.pBind(this));   
     this.documentShareDialog = $("#wb-share-document-dialog");
+    
     this.documentShareDialog.dialog(
     {
         bgiframe: true,
@@ -19,9 +20,10 @@ WebDoc.DocumentShareController = $.klass({
         modal: true,
         buttons: 
         {
-            Cancel: this._closeDialog,
+          Cancel: this._closeDialog,
         }
     });
+    
     this.shareTabs = $("#wb-document-share-tabs");
     this.shareTabs.tabs();
     
@@ -33,17 +35,17 @@ WebDoc.DocumentShareController = $.klass({
     this.unshareDocRadio.bind('change', this._unshareDocument.pBind(this));
   },  
   
-  _changeActionsButtons: function(showSend) {
-    // Change buttons and actions dynamically
-    if(showSend) {
-      // Invitation tab
-      this.documentShareDialog.dialog('option', 'buttons', { "Send": this._sendInvitations.pBind(this), "Cancel":  this._closeDialog});
-    }
-    else {
-      // Listing tab
-      this.documentShareDialog.dialog('option', 'buttons', { "Cancel":  this._closeDialog});
-    }
-  },
+  //_changeActionsButtons: function(showSend) {
+  //  // Change buttons and actions dynamically
+  //  if(showSend) {
+  //    // Invitation tab
+  //    this.documentShareDialog.dialog('option', 'buttons', { "Send": this._sendInvitations.pBind(this), "Cancel":  this._closeDialog});
+  //  }
+  //  else {
+  //    // Listing tab
+  //    this.documentShareDialog.dialog('option', 'buttons', { "Cancel":  this._closeDialog});
+  //  }
+  //},
   
   
   showShare: function(document) {
@@ -130,7 +132,7 @@ WebDoc.DocumentShareController = $.klass({
     });
     this.sharedDocUrlField.removeAttr('disabled');
     this.shareWithMembersTabs.hide();
-    this._changeActionsButtons(false);
+    //this._changeActionsButtons(false);
   },
   
   _unshareDocument: function() {
@@ -140,7 +142,7 @@ WebDoc.DocumentShareController = $.klass({
     });
     this.sharedDocUrlField.attr('disabled', 'disabled');
     this.shareWithMembersTabs.show();
-    this._changeActionsButtons(true);
+    //this._changeActionsButtons(true);
   },
   
   _initFields: function() {
@@ -149,14 +151,14 @@ WebDoc.DocumentShareController = $.klass({
       this.sharedDocUrlField.removeAttr('disabled');
       //this.shareTabs.tabs('disable', 1);
       this.shareWithMembersTabs.hide();
-      this._changeActionsButtons(false);
+      //this._changeActionsButtons(false);
     }
     else { 
       this.unshareDocRadio.attr('checked', true); 
       this.sharedDocUrlField.attr('disabled', 'disabled');
       //this.shareTabs.tabs('enable', 1);
       this.shareWithMembersTabs.show();
-      this._changeActionsButtons(true);
+      //this._changeActionsButtons(true);
     }
     this.sharedDocUrlField.val("http://" + window.location.host + "/documents/" + this.document.uuid() + "#1");
   },
