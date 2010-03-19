@@ -6,47 +6,25 @@
 WebDoc.DocumentCollaborationController = $.klass({
   
   documentAccessDialog: null,
-  documentAccessTabs: null,
   documentShareTabs: null,
   
   initialize: function() {
+    var self = this;
+    
     this.roles = ["reader", "editor"];
     this.domNode = $("#document_access_list");
-    $(".delete_access").live("click", this.deleteAccess.pBind(this));    
-    documentAccessTabs = $("#wb-document-collaborate-tabs");
-    documentAccessDialog = $("#wb-change-access-dialog");
-    documentAccessTabs.tabs( {
-      select: this.changeActionsButtons.pBind(this)
-    });
+    this.documentAccessDialog = $("#wb-change-access-dialog");
+    this.emailsNode = $('#wb-invitation-add-editors');
+    this.failedEmailsWrapper = $('#wb-invitation-failed');
     
-    documentAccessDialog.dialog(
-    {
-        bgiframe: true,
-        autoOpen: false,
-        height: 400,
-        width: 440,
-        modal: true,
-        buttons: 
-        {
-            Send: this.sendInvitations.pBind(this),
-            Cancel: this.closeDialog
-        }
-    });
+    $(".delete_access").live("click", this.deleteAccess.pBind(this));
+    
+    this.documentAccessDialog
+    .remove()
+    .css({ display: '' });
   },
   
-  changeActionsButtons: function(event, ui) {
-    // Change buttons and actions dynamically
-    if( ui.index === 0 ) {
-      // Invitation tab
-      documentAccessDialog.dialog('option', 'buttons', { "Send": this.sendInvitations.pBind(this), "Cancel":  this.closeDialog});
-    }
-    else {
-      // Listing tab
-      documentAccessDialog.dialog('option', 'buttons', { "Cancel":  this.closeDialog});
-    }
-  },
-  
-  showAccess: function(document) {
+  showAccess: function(e, document) {
     this.document = document;
     this.cleanInvitationFields();
 
@@ -57,11 +35,17 @@ WebDoc.DocumentCollaborationController = $.klass({
       dataType: 'json',              
       success: function(data, textStatus) {
         ddd("access", data);
-        documentAccessDialog.dialog('option', 'title', 'Invite co-editors on "' + document.title() + '"');
-        documentAccessDialog.dialog('open');
+        
+        this.documentAccessDialog.pop({
+          attachTo: $( e.currentTarget ),
+          initCallback: function(){
+            self.documentAccessDialog.bind( 'submit', self.sendInvitations.pBind(self) );
+          }
+        });
+        
         this.loadAccess(data);
       }.pBind(this),
-    
+      
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         ddd("error", textStatus);          
       }
@@ -90,25 +74,36 @@ WebDoc.DocumentCollaborationController = $.klass({
   loadAccess: function(json) {
     this.domNode.empty();
     this.access = json.access;
+    
     for (var i = 0; i < this.access.length; i++) {
       this.createAccessItem(this.access[i][0]);     
     }
-    var failedEmailsWrapper = $('#wb-invitation-failed');
+    
+    // TODO: instead of listing the emails again, take the successful ones out of the field, leaving the unsuccessful ones
+    // Display the message - these didn't work - then give them a choice to send a sign up for webdoc email
+    
     if(json.failed && json.failed.length > 0) {
-      failedEmailsWrapper.empty();
-      failedEmailsWrapper.append($('<p>').html('The following addresses were not found in the system'));
+      this.failedEmailsWrapper
+      .empty()
+      .append( $('<p/>').html('These people are not yet webdoc users!') )
+      .show()
+      // TODO: Flaky, do it better
+      .parent()
+      .addClass('error');
+      
       var addresses = "";
       for (var i = 0; i < json.failed.length; i++) {
         addresses += json.failed[i];
-        if(i !== json.failed.length -1) { addresses += ", "; }
+        if(i !== json.failed.length -1) { addresses += "\n"; }
       }
-      failedEmailsWrapper.append($('<p>').html(addresses));
-      failedEmailsWrapper.show();
-      this.domNode.before(failedEmailsWrapper);
+      
+      this.emailsNode.val( addresses );
+      return false;
     }
     else { 
-      failedEmailsWrapper.hide(); 
+      this.failedEmailsWrapper.hide(); 
       this.cleanInvitationFields();
+      return true;
     }
   },
   
@@ -124,10 +119,13 @@ WebDoc.DocumentCollaborationController = $.klass({
     }
   },
 
-  sendInvitations: function() {
+  sendInvitations: function(e) {
+    ddd('Send invitations');
+    
     var recipients = $("#wb-invitation-add-editors").val();
     var message = $("#wb-invitation-add-editors-message").val();
-    this.createRightsToRecipients(this.getInvitationAccess(recipients, message));
+    this.createRightsToRecipients( this.getInvitationAccess(recipients, message) );
+    e.preventDefault();
   },
   
   getDeleteAccess: function(userId) {
@@ -155,7 +153,6 @@ WebDoc.DocumentCollaborationController = $.klass({
       data: jSONData,    
       success: function(data) {
         this.loadAccess(data);
-        documentAccessTabs.tabs('select', 1);
       }.pBind(this),    
       error: function(MLHttpRequest, textStatus, errorThrown) {
         ddd("error", textStatus);

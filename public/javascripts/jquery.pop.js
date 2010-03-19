@@ -21,8 +21,9 @@
 				// closeEasing
 				// (orientation) ??
 			},
+			body,
 			bodySize,
-			body;
+			bodyScroll;
 	
 	function closeHandler(e) {
 		jQuery.fn[plugin].close();
@@ -32,6 +33,12 @@
 		bodySize = {
 			width: body.width(),
 			height: body.height()
+		};
+	}
+	function updateBodyScroll(e) {
+		bodyScroll = {
+			top: body.scrollTop(),
+			left: body.scrollLeft()
 		};
 	}
 	
@@ -47,18 +54,19 @@
 					height = node.outerHeight(),
 					pop = jQuery(this),
 					wrapCss = {
-						left: offset.left + 0.5 * width,
-						top: offset.top + 0.5 * height
-					}
+						left: offset.left + 0.88 * width,
+						top: offset.top + 0.5 * height - bodyScroll.top
+					},
 					wrap = jQuery('<div/>', {
 						'class': options.popWrapClass,
 						css: wrapCss
 					}),
 					popShutCss = {
 						opacity: 0
-					}
+					},
 					originX = options.origin[0],
-					originY = options.origin[1];
+					originY = options.origin[1],
+					diffY;
 			
 			// Close existing instances
 			if ( jQuery.fn[plugin].instances.length ) {
@@ -111,12 +119,15 @@
 			// Send the callback before we start animating
 			if ( options.initCallback ) { options.initCallback.call( pop ); }
 			
+			diffY = bodySize.height - 32 - ( wrapCss.top + pop.height() );
+			shiftY = diffY > 0 ? 0 : diffY ;
+			
 			// Figure out orientation
 			popShutCss[ wrapCss.left + pop.width() < bodySize.width ? 'left' : 'right' ] = -originX;
 			//popShutCss[ wrapCss.top + pop.height() < bodySize.height ? 'top' : 'bottom' ] = -originY;
-			popShutCss.top = -originY;
-			popShutCss.WebkitTransformOrigin = originX + 'px ' + originY + 'px';
-			popShutCss.MozTransformOrigin = originX + 'px ' + originY + 'px';
+			popShutCss.top = -originY + shiftY;
+			popShutCss.WebkitTransformOrigin = originX + 'px ' + ( originY - shiftY ) + 'px';
+			popShutCss.MozTransformOrigin = originX + 'px ' + ( originY - shiftY ) + 'px';
 			
 			// Animate using transform
 			pop
@@ -195,8 +206,10 @@
 		body = jQuery('body');
 		
 		jQuery(window).bind('resize.'+plugin, updateBodySize);
+		jQuery(window).bind('scroll.'+plugin, updateBodyScroll);
 		
 		updateBodySize();
+		updateBodyScroll();
 	});
 })(jQuery);
 

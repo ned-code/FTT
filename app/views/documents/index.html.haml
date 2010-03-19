@@ -77,64 +77,66 @@
       %a{ :href => '#cancel', :class => 'cancel' } cancel
       %input{ :type => 'submit', :name => 'new-document', :value => 'Create' }
 
-#wb-change-access-dialog{ :style => "display:none" }
-  #document_access-header
-  #wb-document-collaborate-tabs
-    %ul
-      %li
-        %a{ :href => "#wb-invitation-tab"}
-          = t('.document_forms.change_access_dialog.invite_tab')
-      %li
-        %a{ :href => "#wb-access-list"}
-          = t('.document_forms.change_access_dialog.current_editors')
-    #wb-invitation-tab
-      %label= t('.document_forms.change_access_dialog.add_editors')
-      %p= t('.document_forms.change_access_dialog.add_editors_explanation')
-      %br
-      %textarea#wb-invitation-add-editors{ :rows => 1, :cols => 20}
-      %br
-      %label= t('.document_forms.change_access_dialog.add_editors_message')
-      %br
-      %textarea#wb-invitation-add-editors-message{ :rows => 3, :cols => 20}
-    #wb-access-list
-      #wb-invitation-failed
-      %ul#document_access_list
-      
-#wb-share-document-dialog{ :style => "display:none", :title => t('.document_forms.share_document_dialog.title') }
-  %form
-    %p
-      = t('.document_forms.share_document_dialog.explanation')
-    %input#unshare_webdoc_radio{ :type => "radio", :name => "share", :value => "off" }
-    %span.label= t('.document_forms.share_document_dialog.unshare_radio')
-    %br
-    %input#share_webdoc_radio{ :type => "radio", :name => "share", :value => "on" }
-    %span.label= t('.document_forms.share_document_dialog.share_radio')
-    %br
-    %span.label= t('.document_forms.share_document_dialog.shared_address_label')
-    %br
-    %input#shared_webdoc_url{ :type => "text", :size => 40}
-    %p.unshare-related= t('.document_forms.share_document_dialog.with_friends')
-  #wb-document-share-tabs.unshare-related
-    %ul
-      %li
-        %a{ :href => "#wb-sharing-tab"}
-          Share
-      %li
-        %a{ :href => "#wb-shared-users-list-tab"}
-          Shared with
-    #wb-sharing-tab.unshare-related
-      %form
-        %label= t('.document_forms.change_access_dialog.add_readers') 
-        %br
+#wb-change-access-dialog.collaborate-dialog{ :style => "display: none" }
+
+  %form.column.one.triple.of-five
+    %h4 Invite new editors
+    %p= t('.document_forms.change_access_dialog.add_editors_explanation')
+    
+    %fieldset
+      %div.stack
+        %label= t('.document_forms.change_access_dialog.add_editors')
+        %textarea#wb-invitation-add-editors{ :rows => 1, :cols => 20}
+        #wb-invitation-failed
+      %div.stack
+        %label= t('.document_forms.change_access_dialog.add_editors_message')
+        %textarea#wb-invitation-add-editors-message{ :rows => 3, :cols => 20}
+    
+    %div.ui-actions.state-readonly-hide
+      %a{ :href => '#cancel', :class => 'cancel' } cancel
+      %input{ :type => 'submit', :name => 'new-document', :value => 'Create' }
+  
+  %div.column.last.double.of-five#wb-access-list{ :style => "overflow: hidden;" }>
+    %h4 Current editors
+    %ul#document_access_list.vertical.divided.index
+  
+#wb-share-document-dialog.share-dialog{ :style => "display:none", :title => t('.document_forms.share_document_dialog.title') }
+  %form.column.one.triple.of-five>
+    %h4 Share
+    
+    %fieldset
+      %p Share your webdoc with
+      %div.bar
+        %input#unshare_webdoc_radio{ :type => "radio", :name => "share", :value => "off" }
+        %label{ :for => "unshare_webdoc_radio" } other webdoc members
+        %input#share_webdoc_radio{ :type => "radio", :name => "share", :value => "on" }
+        %label{ :for => "share_webdoc_radio" } the whole internet
+    
+    %fieldset.state-unshared-hide
+      %label{ :for => "shared_webdoc_url" }= t('.document_forms.share_document_dialog.shared_address_label')
+      %input#shared_webdoc_url{ :type => "text", :size => 40 }
+      %p.unshare-related= t('.document_forms.share_document_dialog.with_friends')
+    
+    %fieldset
+      %div.stack
+        %label Email addresses
         %textarea#wb-invitation-add-readers{ :rows => 1, :cols => 20}
-        %br
-        %label= t('.document_forms.change_access_dialog.add_readers_message')
-        %br
-        %textarea#wb-invitation-add-readers-message{ :rows => 3, :cols => 20}    
-    #wb-shared-users-list-tab.unshare-related
-      #wb-readers-invitation-failed
-      %ul#document_readers_list
+        #wb-readers-invitation-failed
       
+      %div.stack
+        %label= t('.document_forms.change_access_dialog.add_readers_message')
+        %textarea#wb-invitation-add-readers-message{ :rows => 3, :cols => 20 }
+    
+    %div.ui-actions
+      %a{ :href => '#cancel', :class => 'cancel' } cancel
+      %input{ :type => 'submit', :name => 'new-document', :value => 'Make it so' }
+
+  #wb-document-share-tabs.column.last.double.of-five
+    %h4 Shared with
+    #wb-shared-users-list-tab.unshare-related
+    %ul#document_readers_list
+
+
 = include_javascripts :mtools
 = include_javascripts :document_editor
 :javascript

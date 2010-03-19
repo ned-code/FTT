@@ -251,14 +251,13 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         e.preventDefault();
     },
     
-    changeDocumentAccess: function(e)
-    {
-      e.preventDefault();
+    changeDocumentAccess: function(e) {
       ddd("change acess");
-      var data = $(this).closest(".document-item").data("webdoc"),
+      var data = $(this).data("webdoc"),
           documentToEdit = data && data.id;
       
-      WebDoc.application.accessController.showAccess(WebDoc.application.documentEditor.documentWithId(documentToEdit));      
+      WebDoc.application.accessController.showAccess( e, WebDoc.application.documentEditor.documentWithId(documentToEdit) );
+      e.preventDefault();
     },
     
     shareDocument: function(e) {
@@ -267,7 +266,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
           documentIdToPublish = data && data.id,
           document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
       
-      WebDoc.application.shareController.showShare(document);            
+      WebDoc.application.shareController.showShare(e, document);            
       
       e.preventDefault();
     },
@@ -278,7 +277,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
           documentIdToPublish = data && data.id,
           document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
       
-      WebDoc.application.shareController.showShare(document);  
+      WebDoc.application.shareController.showShare(e, document);  
       
       e.preventDefault();
     },

@@ -118,8 +118,8 @@ en:
         change_access_dialog:
           invite_tab: "Invite" 
           current_editors: "Current editors"
-          add_editors: "Allow these people to participate to the life of this webdoc"
-          add_editors_explanation: "(They will have the same rights as you have)"
+          add_editors: "Email addresses"
+          add_editors_explanation: "Allow other people to edit this webdoc. They will be given the same editing rights as you have."
           add_readers: "(Enter emails)"
           add_editors_message: "Your message"
           add_readers_message: "Your message"
