@@ -173,10 +173,9 @@ WebDoc.BoardController = jQuery.klass({
     .filter("[href='#mode-preview']")
     .addClass("current");
     
-//    if(!this._editable) {
-//      jQuery("#tb_1_utilities").hide();
-//      jQuery(".mode-tools").hide(); 
-//    }
+    if(!this._editable) {
+      jQuery(".mode-tools").hide(); 
+    }
     
     //WebDoc.application.pageBrowserController.conceal();
     //WebDoc.application.rightBarController.concealRightBar();
