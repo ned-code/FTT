@@ -10,19 +10,19 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     respond_to do |format|
-      format.html { @user }
+      format.html
       format.json { render :json => @user.to_social_panel_json }
     end
   end
   
   # GET /users/:id/edit
   def edit
-    @user = User.find(params[:id])
+    @user = current_user
   end
   
   # PUT /users/:id
   def update
-    @user = User.find(params[:id])
+    @user = current_user
     
     if @user.update_attributes(params[:user])
       redirect_to @user

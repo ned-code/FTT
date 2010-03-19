@@ -1,5 +1,6 @@
 class DocumentsController < ApplicationController
   before_filter :instantiate_document, :only => [:show, :update, :destroy]
+  after_filter :create_view_count, :only => :show
   
   access_control do
     allow :admin
@@ -67,6 +68,14 @@ protected
   
   def instantiate_document
     @document = Document.find_by_uuid(params[:id])
+  end
+  
+  def create_view_count
+    @document.view_counts.create(
+      :session_id => request.session_options[:id],
+      :ip_address => request.remote_ip,
+      :user_id    => current_user.try(:id)
+    )
   end
   
 end

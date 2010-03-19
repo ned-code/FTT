@@ -1,6 +1,10 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Item do
+  
+  should_allow_mass_assignment_of :uuid, :media, :media_id, :media_type, :data, :position
+  should_not_allow_mass_assignment_of :id, :page_id, :created_at, :updated_at
+  
   should_be_built_by_factory
   should_be_created_by_factory
   
@@ -12,6 +16,7 @@ describe Item do
     
     its(:must_notify) { should be_false }
   end
+  
 end
 
 # == Schema Information

@@ -2,6 +2,8 @@ class Document < ActiveRecord::Base
   has_uuid
   acts_as_authorization_object
   
+  attr_accessible :uuid, :title, :description, :size, :category_id, :is_public
+  
   serialize :size
   
   # ================
@@ -9,6 +11,7 @@ class Document < ActiveRecord::Base
   # ================
   
   has_many :pages, :order => 'position ASC', :dependent => :destroy
+  has_many :view_counts, :as => :viewable
   has_one :document_access
   belongs_to :metadata_media, :class_name => 'Media'
   belongs_to :creator, :class_name => 'User'
@@ -229,5 +232,6 @@ end
 #  category_id :integer
 #  creator_id  :integer
 #  is_public   :boolean         default(FALSE)
+#  views_count :integer         default(0)
 #
 

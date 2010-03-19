@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100316130008) do
+ActiveRecord::Schema.define(:version => 20100317104610) do
 
   create_table "categories", :force => true do |t|
     t.string "name", :null => false
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20100316130008) do
     t.integer  "category_id"
     t.integer  "creator_id"
     t.boolean  "is_public",                 :default => false
+    t.integer  "views_count",               :default => 0
   end
 
   create_table "followships", :force => true do |t|
@@ -145,5 +146,14 @@ ActiveRecord::Schema.define(:version => 20100316130008) do
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["unlock_token"], :name => "index_users_on_unlock_token", :unique => true
   add_index "users", ["username"], :name => "index_users_on_username"
+
+  create_table "view_counts", :force => true do |t|
+    t.integer  "viewable_id"
+    t.string   "viewable_type"
+    t.integer  "user_id"
+    t.string   "session_id"
+    t.string   "ip_address"
+    t.datetime "created_at"
+  end
 
 end
