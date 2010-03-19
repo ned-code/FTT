@@ -28,6 +28,10 @@ WebDoc.BoardController = jQuery.klass({
     this._initialSize = null;
   },
   
+  currentPageView: function() {
+    return this._currentPageView; 
+  },
+  
   selection: function() {
     return this._selection;  
   },
@@ -65,11 +69,11 @@ WebDoc.BoardController = jQuery.klass({
   setCurrentPage: function(page) {
     ddd('[board_controller] SetCurrentPage');
     this._initialSize = null;
-    var pageView = new WebDoc.PageView(page),
+    var pageView = new WebDoc.PageView(page, jQuery("#board-container")),
         board = pageView.domNode,
         defaultZoom = 1;
     
-    jQuery("#board").unbind();
+    board.unbind();
     jQuery(document).unbind("keydown", this._keyDown);
     jQuery(document).unbind("keypress", this._keyPress);
     jQuery(document).unbind("keyup", this._keyUp);
@@ -121,7 +125,7 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _setModeEdit: function() {
-    jQuery("#board")
+    this.currentPageView().domNode
     .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
     .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
     .bind("drop", this, WebDoc.DrageAndDropController.drop);      
@@ -152,7 +156,7 @@ WebDoc.BoardController = jQuery.klass({
   
   _setModePreview: function() {
     this.unselectAll();
-    jQuery("#board")
+    this.currentPageView().domNode
     .unbind("dragenter")
     .unbind("dragover")
     .unbind("drop");
@@ -193,7 +197,7 @@ WebDoc.BoardController = jQuery.klass({
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     if (MTools.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
       ddd("FF 3.5. drawing !");
-      jQuery("#board svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
+      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
     }
   },
   
@@ -275,7 +279,7 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   mapToPageCoordinate: function(position) {
-    var x, y, board = jQuery("#board");
+    var x, y, board = this.currentPageView().domNode;
     
     if (position.x) {
       x = position.x - board.offset().left;
@@ -301,7 +305,7 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   getBoardCenterPoint: function() {
-    var x, y, board = jQuery("#board");
+    var x, y, board = this.currentPageView().domNode;
     
     x = board.width() / 2;
     y = board.height() / 2;
@@ -622,7 +626,7 @@ WebDoc.BoardController = jQuery.klass({
   
   zoom: function(factor) {
     
-    var boardNode = jQuery("#board"),
+    var boardNode = this.currentPageView().domNode,
         previousZoom = this._currentZoom,
         boardContainerCss = {},
         boardCss = {},
@@ -844,7 +848,7 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _bindMouseEvent: function() {
-    jQuery("#board")
+    this.currentPageView().domNode
     .bind("mousedown", this, this._mouseDown.pBind(this))
     .bind("click", this, this._mouseClick.pBind(this))
     .bind("dblclick", this, this._mouseDblClick.pBind(this))

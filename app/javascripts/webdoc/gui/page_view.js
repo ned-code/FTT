@@ -2,18 +2,18 @@
 //= require <webdoc/model/item>
 
 WebDoc.PageView = $.klass({
-  initialize: function(page) {
-    var boardContainer = WebDoc.application.boardController.boardContainerNode,
-        externalPage,
-        domNode = $('<div>').id('board'),
-        itemDomNode = $('<div/>').id('items').addClass("layer").css({overflow: 'visible'}),
+  initialize: function(page, boardContainer) {
+    var externalPage,
+        domNode = $('<div>').id('page_' + page.uuid()),
+        itemDomNode = $('<div/>').id('items_' + page.uuid()).addClass("layer").css({overflow: 'visible'}),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
-        eventCatcherNode = jQuery('<div/>').id("event-catcher").addClass('screnn layer').hide(),
+        eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').hide(),
         that = this,
         boardContainerSize = {},
         boardCss = {};
     
     // Extend this
+    this._boardContainer = boardContainer;
     this.page = page;
     this.domNode = domNode;
     this.drawingDomNode = drawingDomNode;
@@ -34,8 +34,7 @@ WebDoc.PageView = $.klass({
     delete boardCss.left;
     delete boardCss.width;
     delete boardCss.height;
-    boardContainer
-    .css( boardContainerSize );
+    boardContainer.css( boardContainerSize );
     this.domNode.css(boardCss);
     ddd( page.data.data.css );
     
@@ -79,8 +78,7 @@ WebDoc.PageView = $.klass({
     delete boardCss.left;
     delete boardCss.width;
     delete boardCss.height;
-    WebDoc.application.boardController.boardContainerNode
-    .animate(boardContainerSize, 'fast');
+    this._boardContainer.animate(boardContainerSize, 'fast');
     this.domNode.animate(boardCss, 'fast');    
   },
   

@@ -43,7 +43,7 @@ WebDoc.DrawingView = $.klass(WebDoc.ItemView, {
     
   resetHandles: function() {
     var clientRect = this.domNode[0].getBoundingClientRect();
-    var board =  $("#board");
+    var board =  this.pageView.domNode;
     var handleCss = {
       top: parseFloat(clientRect.top) - parseFloat(board.offset().top),
       left: parseFloat(clientRect.left) - parseFloat(board.offset().left),
