@@ -95,6 +95,35 @@ select:focus {
     outline-offset: -3px;
 }
 
+.error input[type='text'],
+.error input[type='password'],
+.error select,
+.error textarea {
+    opacity: 1;
+    
+    /* In Webkit, outline doesn't fit the border curves, and in FF outline
+       is ugly. Recreate it with box-shadow */
+    outline: none;
+    
+    /* Old Safari doesn't do blur radius */
+    -webkit-box-shadow: 0 0 12px hsl( 13, 100%, 50% );
+    /* but Chrome does... */
+    -webkit-box-shadow: 0 0 4px 2px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
+    /* Create webkit-like outlines for FF */
+    -moz-box-shadow:    0 0 4px 2px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
+    box-shadow:         0 0 4px 3px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
+}
+
+.error select {
+    /* In Webkit, select boxes don't accept box-shadow. Outline-style: auto
+       kills the outline in FF, which is ok, because we re-created it (better)
+       using a box-shadow (for non-system-style select boxes. FF ignores outline
+       declarations for system-style select boxes, and uses system blue. Hey-ho.) */
+    outline: hsl( 13, 100%, 50% ) auto 6px;
+    -moz-outline-color: hsl( 13, 100%, 50% ); 
+    outline-offset: -3px;
+}
+
 input[type=submit] {
     vertical-align: baseline;
     padding-top: 0;
@@ -138,7 +167,8 @@ input.default {
   font-weight: normal; 
 }
 
-.stack label {
+.stack label,
+.stack img {
     display: block;
     padding-left: 0;
 }

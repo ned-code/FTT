@@ -5,21 +5,24 @@ WebDoc.DocumentDateFilter = $.klass(
 {
     todayDocuments: [],
     previousDocuments: [],
-    initialize: function()
-    {
+    initialize: function() {
     },
     
-    setDocuments: function(documents)
-    {
-        this.todayDocuments = [];
-        this.previousDocuments = [];
-        this.initializing = true;
-        for (var i = documents.length - 1; i >= 0; i--) 
-        {
-            var aDocument = documents[i];
-            this.addDocument(aDocument);
-        }
-        this.initializing = false;
+    setDocuments: function(documents) {
+      ddd('[document_date_filter] setDocuments');
+      
+      var i = documents.length;
+      
+      this.todayDocuments = [];
+      this.previousDocuments = [];
+      this.initializing = true;
+      
+      while(i--) {
+        var aDocument = documents[i];
+        this.addDocument(aDocument);
+      }
+      
+      this.initializing = false;
     },
     
     refreshDocument: function(modifiedDocument)

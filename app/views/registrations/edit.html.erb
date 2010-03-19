@@ -1,0 +1,39 @@
+<div class="action-zone zone">
+  <div class="wrap">
+    
+    <h2><%=t '.title' %></h2>
+    
+    <% form_for resource_name, resource, :url => registration_path(resource_name), :builder => CustomFormBuilder do |f| %>
+      <fieldset>
+        <div class="column one of-four stack">
+          <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :email, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "stelio@webdoc.com" %>
+        </div>
+        <div class="column two of-four stack">
+          <%= f.label :password, 'New password' %>
+          <%= f.password_field :password, :maxlength => 255, :autocomplete => "off", :title => "Leave blank if you don't want to change it" %>
+        </div>
+      </fieldset>
+      
+      <fieldset>
+        <div class="column one of-four stack">
+          <%= f.label :current_password, 'Current password <abbr class="required" title="required">*</abbr>' %>
+          <%= f.password_field :current_password, :maxlength => 255, :required => "required", :autocomplete => "off", :title => "We need your current password to confirm your changes" %>
+        </div>
+      </fieldset>
+      
+      <input name="submit" type="submit" value="Update" />
+    
+    <% end %>
+  </div>
+</div>
+
+<div class="content">
+  <div class="wrap">
+    
+    <h3><%= t('.cancel.title') %></h3>
+    <p>I don't want to be part of the exciting world of webdoc anymore.  I'll miss it, but no human being was ever supposed to have this much fun.</p>
+    
+    <%= button_to t('.cancel.link'), registration_path(resource_name), :confirm => t('confirm'), :method => :delete, :class => "button" %>
+  </div>
+</div>

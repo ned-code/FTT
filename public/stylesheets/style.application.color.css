@@ -42,6 +42,9 @@ header {
     background-image:      linear-gradient( 90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
 }
 
+.index.divided li {
+    border-color: hsla(208, 8%, 66%, 0.6);
+}
 /*.userbar li .item {
     color: hsl(208, 4%, 33%);
     background: hsla(208, 4%, 84%, 0.2);
@@ -69,8 +72,8 @@ header {
     -webkit-border-bottom-right-radius: 1.25em;
     -moz-border-radius-bottomright:     1.25em;
     border-bottom-right-radius:         1.25em;
-}
-.tabs {
+}*/
+/*.tabs {
     -webkit-border-top-left-radius:   0.5em;
     -moz-border-radius-topleft:       0.5em;
     border-top-left-radius:           0.5em;
@@ -81,25 +84,30 @@ header {
     -moz-box-shadow:    0 0 32px hsla(32, 2%, 0%, 0.8);
     box-shadow:         0 0 32px hsla(32, 2%, 0%, 0.8);
 }*/
-
-
-
-.tabs li {
+.tabs li a {
+    background-color: hsl(208, 12%, 56%);
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(208, 12%, 66%) ), to( hsl(208, 8%, 60%) ));
+    background-image: -moz-linear-gradient( -90deg, hsl(208, 12%, 66%), hsl(208, 8%, 60%) );
+    background-image:      linear-gradient( -90deg, hsl(208, 12%, 66%), hsl(208, 8%, 60%) );
+}
+.tabs li a:hover,
+.tabs li a.current {
     background-color: hsl(208, 12%, 82%);
     background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(208, 18%, 88%) ), to( hsl(208, 12%, 82%) ));
     background-image: -moz-linear-gradient( -90deg, hsl(208, 18%, 88%), hsl(208, 12%, 82%) );
     background-image:      linear-gradient( -90deg, hsl(208, 18%, 88%), hsl(208, 12%, 82%) );
 }
-.tabs li:first-child {
+/*
+.tabs li:first-child a {
     -webkit-border-top-left-radius:   0.5em;
     -moz-border-radius-topleft:       0.5em;
     border-top-left-radius:           0.5em;
 }
-.tabs li:last-child {
+.tabs li:last-child a {
     -webkit-border-top-right-radius:  0.5em;
     -moz-border-radius-topright:      0.5em;
     border-top-right-radius:          0.5em;
-}
+}*/
 .tabs li a {
     color: hsl(208, 6%, 30%);
     background-color: hsla(0, 0%, 0%, 0.1);
@@ -107,9 +115,62 @@ header {
 .tabs li a:hover,
 .tabs li a.current {
     color: hsl(208, 12%, 30%);
-    background: none;
 }
-.bar {
+
+/* Make bars rounded */
+.bar li:first-child>a,
+.bar dt:first-child {
+    padding-left: 1.6667em;
+    -webkit-border-top-left-radius:     1em;
+    -moz-border-radius-topleft:         1em;
+    border-top-left-radius:             1em;
+    -webkit-border-bottom-left-radius:  1em;
+    -moz-border-radius-bottomleft:      1em;
+    border-bottom-left-radius:          1em;
+}
+
+.bar li:last-child>a,
+.bar dt:last-child>a,
+.bar dd:last-child>a {
+    padding-right: 1.6667em;
+    background-image: none;
+    -webkit-border-top-right-radius:    1em;
+    -moz-border-radius-topright:        1em;
+    border-top-right-radius:            1em;
+    -webkit-border-bottom-right-radius: 1em;
+    -moz-border-radius-bottomright:     1em;
+    border-bottom-right-radius:         1em;
+    
+}
+
+
+.bar .label,
+.bar label,
+.bar dt,
+.bar dd>a.current,
+.bar dd>a.current:hover {
+    color: white;
+    background: hsl(208, 4%, 50%);
+}
+
+.bar .input,
+.bar input,
+.bar dd>a {
+    background-image: url('../../public/images/bar-arrow-light.png');
+    background-color: hsl(208, 25%, 76%);
+}
+
+.bar dd>a {
+    color: hsl(208, 6%, 30%);
+    background: hsla(208, 8%, 70%, 0.25);
+}
+
+.bar dd>a:hover {
+    color: hsl(208, 6%, 12%);
+    background-color: hsla(208, 12%, 76%, 0.6);
+}
+
+.zone {
     color: hsl(208, 4%, 98% );
     background-color: hsl(208, 4%, 33%);
     -webkit-box-shadow: inset 0 0 32px hsla(32, 2%, 0%, 0.8);
@@ -117,36 +178,36 @@ header {
     box-shadow:         inset 0 0 32px hsla(32, 2%, 0%, 0.8);
 }
 
-.action-bar {
+.action-zone {
     background-repeat: no-repeat;
     background-position: 100% 100%;
 }
-.action-bar a {
+.action-zone a {
     color: hsl(208, 48%, 80%);
 }
-.confirmations .action-bar {
+.confirmations .action-zone {
     background-image: url('/images/action-bar-bg-confirmations.jpg');
 }
-.passwords .action-bar {
+.passwords .action-zone {
     background-image: url('/images/action-bar-bg-forgotten-pass.jpg');
 }
 
-.action-bar input[type=submit]:hover,
-.action-bar .button:hover {
+.action-zone input[type=submit]:hover,
+.action-zone .button:hover {
     background-color: hsla( 18, 92%, 44%, 1);
 }
-.action-bar input[type=submit] {
+.action-zone input[type=submit] {
     background-image: -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
     background-image: -moz-linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
     background-image:      linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
 }
-.action-bar input[type=submit]:hover {
+.action-zone input[type=submit]:hover {
     background: -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 82%, 46%)), to(hsl(28, 88%, 52%)));
     background: -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
     background:      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
 }
-.action-bar input[type=submit],
-.action-bar .button {
+.action-zone input[type=submit],
+.action-zone .button {
     color: white;
     background-color: hsl( 18, 76%, 44% );
     border-style: solid;
@@ -158,11 +219,9 @@ header {
 
 .document-index {
     border-left-style: solid;
-    border-left-color: hsla(208, 8%, 70%, 0.7);
+    border-left-color: hsl(208, 4%, 50%);
 }
-.document-title {
-    color: hsl(208, 6%, 30%);
-    background: hsla(208, 8%, 70%, 0.7);
+.document-actions {
     -webkit-border-top-right-radius:    1.6667em;
     -moz-border-radius-topright:        1.6667em;
     border-top-right-radius:            1.6667em;
@@ -170,10 +229,38 @@ header {
     -moz-border-radius-bottomright:     1.6667em;
     border-bottom-right-radius:         1.6667em;
 }
+.document-controls {
+    -webkit-border-top-left-radius:     1.6667em;
+    -moz-border-radius-topleft:         1.6667em;
+    border-top-left-radius:             1.6667em;
+    -webkit-border-bottom-left-radius:  1.6667em;
+    -moz-border-radius-bottomleft:      1.6667em;
+    border-bottom-left-radius:          1.6667em;
+}
+.document-title {
+    color: hsl(208, 6%, 30%);
+    background: hsla(208, 8%, 70%, 0.25);
+}
 .document-item:hover .document-title {
     color: hsl(208, 6%, 12%);
-    background-color: hsla(208, 6%, 76%, 0.6);
+    background-color: hsla(208, 12%, 76%, 0.6);
 }
+.document-actions,
+.document-controls {
+    color: hsl(208, 6%, 30%);
+    background: hsla(208, 8%, 70%, 0.25);
+}
+.document-item:hover .document-actions,
+.document-item:hover .document-controls {
+    color: hsl(208, 6%, 12%);
+    background-color: hsla(208, 12%, 76%, 0.6);
+}
+
+
+/*.document-item:hover .document-controls {
+    color: hsl(208, 6%, 12%);
+    background: hsla(208, 8%, 76%, 0.3);
+}*/
 
 .button {
     background-color: hsl( 208, 4%, 50% );
@@ -188,15 +275,22 @@ header {
     color: white;
 }
 
-.document-item:hover .delete-button      { background-color: hsl(13, 46%, 54% ); }
-.document-item:hover .info-button        { background-color: hsl(208, 36%, 56% ); }
-.document-item:hover .collaborate-button { background-color: hsl(43, 54%, 46%); }
-.document-item:hover .share-button       { background-color: hsl(72, 44%, 46%); }
+.document-item .info-button              { background-color: transparent; }
 
-.document-item .delete-button:hover      { background-color: hsl(13, 66%, 54% ); }
+.document-item:hover .delete-button      { background-color: hsl(13, 66%, 52%); }
+.document-item .delete-button:hover      { background-color: hsl(13, 74%, 56%); }
+
+/* .document-item:hover .info-button        { background-color: hsl(208, 36%, 56% ); } */
 .document-item .info-button:hover        { background-color: hsl(208, 52%, 59% ); }
-.document-item .collaborate-button:hover { background-color: hsl(43, 66%, 46%); }
-.document-item .share-button:hover       { background-color: hsl(72, 60%, 46%); }
+
+
+.document-item:hover .collaborate-button { background-color: hsl(43, 54%, 46%); }
+.document-item:hover .share-button,
+.document-item:hover .unshare-button     { background-color: hsl(72, 44%, 46%); }
+
+.document-item .collaborate-button:hover { background-color: hsl(43, 68%, 48%); }
+.document-item .share-button:hover,
+.document-item .unshare-button:hover     { background-color: hsl(72, 60%, 46%); }
 
 .add-button {
     background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
@@ -209,13 +303,18 @@ header {
     background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
 }
 
-.delete-button:hover      { background-position: -3px -67px; }
-.delete-button            { background-position: -3px -67px; }
 .add-button:hover         { background-position: -1px -131px; }
 .add-button               { background-position: -1px -131px; }
-.info-button:hover        { background-position: -3px -195px; }
-.info-button              { background-position: -3px -195px; }
 .collaborate-button:hover { background-position: -2px -260px; }
 .collaborate-button       { background-position: -2px -260px; }
 .share-button:hover       { background-position: -2px -324px; }
 .share-button             { background-position: -2px -324px; }
+.unshare-button:hover     { background-position: -2px -388px; }
+.unshare-button           { background-position: -2px -388px; }
+
+/*.delete-button:hover      { background-position: -6px -518px; }*/
+.delete-button            { background-position: -4px -68px; }
+
+.info-button                      { background-position: -4px -580px; }
+/*.document-item:hover .info-button { background-position: -6px -644px; }*/
+.document-item .info-button:hover { background-position: -4px -196px; }
