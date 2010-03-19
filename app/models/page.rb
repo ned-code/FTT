@@ -3,7 +3,7 @@ require "xmpp_notification"
 class Page < ActiveRecord::Base
   has_uuid
   
-  attr_accessible :uuid, :thumbnail_id, :position, :version, :data, :title
+  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes
   
   serialize :data
   

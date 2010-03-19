@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Page do
   
-  should_allow_mass_assignment_of :uuid, :thumbnail_id, :position, :version, :data, :title
-  should_not_allow_mass_assignment_of :id, :document_id, :created_at, :updated_at
+  should_allow_mass_assignment_of :uuid, :position, :version, :data, :title, :items_attributes
+  should_not_allow_mass_assignment_of :id, :thumbnail_id, :document_id, :created_at, :updated_at
   
   should_be_built_by_factory
   should_be_created_by_factory
