@@ -1,5 +1,7 @@
 class DatastoreEntry < ActiveRecord::Base
   
+  attr_accessible :ds_key, :ds_value
+  
   # ================
   # = Associations =
   # ================

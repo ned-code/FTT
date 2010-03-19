@@ -5,7 +5,10 @@ describe DocumentsController do
   mock_models :document
   
   describe "with public document" do
-    before(:each) { mock_document(:is_public? => true, :to_json => {}) }
+    before(:each) do
+       mock_document(:is_public? => true, :to_json => {}, :view_counts => ViewCount)
+       ViewCount.stub(:create)
+    end
     
     context "accessed by admin" do
       before(:each) do 
@@ -167,7 +170,10 @@ describe DocumentsController do
   end
   
   describe "with private document" do
-    before(:each) { mock_document(:is_public? => false, :to_json => {}) }
+    before(:each) do
+       mock_document(:is_public? => false, :to_json => {}, :view_counts => ViewCount)
+       ViewCount.stub(:create)
+    end
     
     context "accessed by admin" do
       before(:each) do 

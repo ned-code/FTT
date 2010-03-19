@@ -14,6 +14,10 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :username, :first_name, :last_name, :terms_of_service,
                   :avatar, :avatar_cache, :remove_avatar, :bio, :website, :gender
   
+  # =============
+  # = Callbacks =
+  # =============
+  
   after_create :create_xmpp_user
   
   # ===============
@@ -64,10 +68,6 @@ class User < ActiveRecord::Base
     self.mutual_follower?(current_user)
   end
   
-  def create_xmpp_user
-    XmppUserSynch.create_xmpp_user(self)
-  end
-  
   def has_only_editor_role!(document, message = nil)
     if !self.has_role?("editor", document)
       self.has_no_roles_for!(document)
@@ -113,6 +113,13 @@ class User < ActiveRecord::Base
   # Need to use this method instead of the original to_json cause user references document and vice versa
   def to_social_panel_json
     to_json(:only => [:id, :username, :bio], :methods => [:avatar_thumb_url, :documents_count, :following_info])
+  end
+  
+protected
+  
+  # after_create
+  def create_xmpp_user
+    XmppUserSynch.create_xmpp_user(self)
   end
   
 end

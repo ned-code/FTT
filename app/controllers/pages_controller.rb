@@ -15,7 +15,7 @@ class PagesController < DocumentController
   
   # GET /documents/:document_id/pages/:id
   def show
-    @page = @document.pages.find_by_uuid_or_position(params[:id])
+    @page = @document.pages.find_by_uuid_or_position!(params[:id])
     respond_to do |format|
       # JBA TEMP
       # format.html do
@@ -33,9 +33,7 @@ class PagesController < DocumentController
   
   # POST /documents/:document_id/pages
   def create
-    @page = @document.pages.new(params[:page])
-    @page.uuid = params[:page][:uuid]
-    @page.save
+    @page = @document.pages.create(params[:page])
     
     render :json => @page.to_json(:include => :items)
   end

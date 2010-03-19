@@ -26,15 +26,13 @@ describe PagesController do
       describe :get => :show, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid_or_position, :on => Page, :with => "uuid", :returns => mock_page
+        expects :find_by_uuid_or_position!, :on => Page, :with => "uuid", :returns => mock_page
         should_respond_with :success, :content_type => :html
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
-        expects :uuid=, :on => mock_page, :with => "uuid"
-        expects :save, :on => mock_page, :returns => true
+        expects :create, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
@@ -72,15 +70,13 @@ describe PagesController do
       describe :get => :show, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid_or_position, :on => Page, :with => "uuid", :returns => mock_page
+        expects :find_by_uuid_or_position!, :on => Page, :with => "uuid", :returns => mock_page
         should_respond_with :success, :content_type => :html
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
-        expects :uuid=, :on => mock_page, :with => "uuid"
-        expects :save, :on => mock_page, :returns => true
+        expects :create, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
@@ -118,7 +114,7 @@ describe PagesController do
       describe :get => :show, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid_or_position, :on => Page, :with => "uuid", :returns => mock_page
+        expects :find_by_uuid_or_position!, :on => Page, :with => "uuid", :returns => mock_page
         should_respond_with :success, :content_type => :html
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
@@ -154,7 +150,7 @@ describe PagesController do
       describe :get => :show, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid_or_position, :on => Page, :with => "uuid", :returns => mock_page
+        expects :find_by_uuid_or_position!, :on => Page, :with => "uuid", :returns => mock_page
         should_respond_with :success, :content_type => :html
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
@@ -181,7 +177,7 @@ describe PagesController do
       describe :get => :show, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid_or_position, :on => Page, :with => "uuid", :returns => mock_page
+        expects :find_by_uuid_or_position!, :on => Page, :with => "uuid", :returns => mock_page
         should_respond_with :success, :content_type => :html
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
@@ -216,15 +212,13 @@ describe PagesController do
       describe :get => :show, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid_or_position, :on => Page, :with => "uuid", :returns => mock_page
+        expects :find_by_uuid_or_position!, :on => Page, :with => "uuid", :returns => mock_page
         should_respond_with :success, :content_type => :html
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
-        expects :uuid=, :on => mock_page, :with => "uuid"
-        expects :save, :on => mock_page, :returns => true
+        expects :create, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
@@ -262,15 +256,13 @@ describe PagesController do
       describe :get => :show, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid_or_position, :on => Page, :with => "uuid", :returns => mock_page
+        expects :find_by_uuid_or_position!, :on => Page, :with => "uuid", :returns => mock_page
         should_respond_with :success, :content_type => :html
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
-        expects :uuid=, :on => mock_page, :with => "uuid"
-        expects :save, :on => mock_page, :returns => true
+        expects :create, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
@@ -308,7 +300,7 @@ describe PagesController do
       describe :get => :show, :document_id => "1", :id => "uuid" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid_or_position, :on => Page, :with => "uuid", :returns => mock_page
+        expects :find_by_uuid_or_position!, :on => Page, :with => "uuid", :returns => mock_page
         should_respond_with :success, :content_type => :html
       end
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
