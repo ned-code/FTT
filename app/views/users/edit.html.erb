@@ -1,0 +1,81 @@
+<div class="action-zone zone">
+  <div class="wrap clear">
+    <h2><%=t '.title' %></h2>
+      <% form_for @user, :builder => CustomFormBuilder do |f| %>
+            <fieldset>
+              <div class="column one of-four stack">
+                <%= f.label :first_name, 'First name' %>
+                <%= f.text_field :first_name, :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "Stelio" %>
+              </div>
+              <div class="column two of-four stack">
+                <%= f.label :last_name, 'Last name' %>
+                <%= f.text_field :last_name, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "Tzonis" %>
+              </div>
+            </fieldset>
+            <fieldset>
+              <div class="column one of-four stack">
+                <%= f.label :username, 'User name' %>
+                <%= f.text_field :username, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "stelman" %>
+              </div>
+            </fieldset>
+            <fieldset>
+              <div class="column one double of-four stack">
+                <%= f.label :website, 'Website' %>
+                <%= f.text_field :website, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "www.webdoc.com/stelio" %>
+              </div>
+            </fieldset>
+            
+            <fieldset>
+              <div class="column one of-four stack">
+                <%= f.label :avatar, 'Avatar' %>
+                <% if @user.avatar? && !@user.errors.on(:avatar) %>
+                <img src="#{@user.avatar.url(:thumb)}" />
+                <% end %>
+              </div>
+              
+              <div class="column two of-four">
+                <%= f.check_box :remove_avatar %>
+                <%= f.label :remove_avatar, 'remove picture' %>
+              </div>
+              
+              <div class="column one double of-four">
+                <%= f.file_field :avatar, :maxlength => 255 %>
+              </div>
+              
+              <%= f.hidden_field :avatar_cache %>
+            </fieldset>
+            
+            <fieldset>
+              <div class="column one double of-two stack">
+                <%= f.label :bio, 'A little bit about yourself' %>
+                <%= f.text_area :bio, :maxlength => 255, :autocomplete => "on", :cols => '', :rows => '' %>
+              </div>
+            </fieldset>
+            
+            <fieldset>
+              <div class="stack">
+                <%= f.label :gender, 'Gender' %>
+                <%= f.select(:gender, [
+                  ['-', nil],
+                  ['Male', 'male'],
+                  ['Female', 'female']
+                ]) %>
+              </div>
+            </fieldset>
+            
+            <input name="submit" type="submit" value="Update" />
+            
+            <a href="<%= edit_registration_path(:user) %>" style="margin-bottom: 0;" class="button">Change email &amp; password</a>
+            
+      <% end %>
+  </div>
+</div>
+
+<div class="content">
+  <div class="wrap">
+    <ul class="divided index">
+      <li><a href="<%= @user %>">Show</a></li>
+      <li><a href="<%= :back %>">Back</a></li>
+    </ul>
+  </div>
+</div>

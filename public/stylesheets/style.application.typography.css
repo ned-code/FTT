@@ -135,12 +135,6 @@ code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
 
 
 
-
-
-.tabs li a {
-    font-size: 1.3333em;
-}
-
-.bar h2 {
+.action-zone h2 {
     font-size: 2em; line-height: 1.25; margin-bottom: 0.8333em;
 }

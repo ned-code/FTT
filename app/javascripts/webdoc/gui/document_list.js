@@ -1,5 +1,5 @@
 /**
- * @author david
+ * @author david / stephen
  **/
 WebDoc.DocumentList = $.klass({
   domNode: null,
@@ -13,6 +13,8 @@ WebDoc.DocumentList = $.klass({
       this._getCurrentUserRolesDocuments();
       this.repaint();
       this.map = {};
+      this.currentUserDocumentsEditor = [];
+      this.currentUserDocumentsReader = [];
   },
   
   refreshNewDocument: function(section, index, document) {
@@ -121,47 +123,66 @@ WebDoc.DocumentList = $.klass({
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
-        this.currentUserDocumentsEditor = data.editor;
-        this.currentUserDocumentsReader = data.reader;
+        if (data.editor) {
+          this.currentUserDocumentsEditor = data.editor;
+        }
+        if (data.reader) {
+          this.currentUserDocumentsReader = data.reader;
+        }
       }.pBind(this)
     });
   },
   
   _buildDocumentItemNode: function( document ){
-      var id = document.uuid(),
-          data = {
-            webdoc: {
-              id: id
-            }
-          },
-          documentNode = $("<li/>", {
-            "class": "document-item clear",
-            data: data
-          }),
-          documentTitle = $("<a/>", {
-            "class": "document-title wb-document-edit",
-            "href": "#" + id,
-            "title": "Open this document",
-            data: data,
-            html: document.title()
-          });
-      
-      documentNode.append( documentTitle );
-      
-      if ( this._hasAuthenticatedUserEditorRights( document.data.id ) ) {
-        documentNode.append( this._buildDocumentActionsNode( document, data ) );
-      }
-      
-      this.map[ id ] = {
-        domNode: documentNode
-      };
-      
-      return documentNode;
+    var id = document.uuid(),
+        data = {
+          webdoc: {
+            id: id
+          }
+        },
+        documentNode = $("<li/>", {
+          "class": "document-item clear",
+          data: data
+        }),
+        documentTitle = $("<a/>", {
+          "class": "document-title wb-document-edit",
+          "href": "#" + id,
+          "title": "Open this document",
+          data: data,
+          html: document.title()
+        });
+    
+    documentNode.append( documentTitle );
+    
+    if ( this._hasAuthenticatedUserEditorRights( document.data.id ) ) {
+      documentNode
+      .append( this._buildDocumentControlsNode( document, data ) )
+      .append( this._buildDocumentActionsNode( document, data ) )
+      .append( this._buildDocumentInfoNode( document, data ));
+    }
+    
+    this.map[ id ] = {
+      domNode: documentNode
+    };
+    
+    return documentNode;
   },
   
-  _buildDocumentActionsNode: function( document, data ) {
-    var documentActionsNode = $("<ul/>", {
-          "class": "document-actions index"
+  _buildDocumentInfoNode: function( document, data ){
+    var infoNode = $("<a/>", {
+          "class": "wb-document-info sec-action info-button button",
+          href: "",
+          title: "info",
+          html: "info",
+          data: data
+        });
+    
+    return infoNode;
+  },
+  
+  _buildDocumentControlsNode: function( document, data ) {
+    var documentControlsNode = $("<ul/>", {
+          "class": "document-controls index"
         }),
         deleteItemNode = $("<li/>"),
         deleteNode = $("<a/>", {
@@ -170,21 +191,26 @@ WebDoc.DocumentList = $.klass({
           title: "delete",
           html: "delete",
           data: data
-        }),
-        infoItemNode = $("<li/>"),
-        infoNode = $("<a/>", {
-          "class": "wb-document-info sec-action info-button button",
-          href: "",
-          title: "info",
-          html: "info",
-          data: data
+        });
+    
+    // Construct DOM tree and return it
+    return documentControlsNode.append(
+      deleteItemNode.html(
+        deleteNode
+      )
+    );
+  },
+  
+  _buildDocumentActionsNode: function( document, data ) {
+    var documentActionsNode = $("<ul/>", {
+          "class": "document-actions index"
         }),
         collaborateItemNode = $("<li/>"),
         collaborateNode = $("<a/>", {
           "class": "wb-document-collaborate sec-action collaborate-button button",
           href: "",
           title: "Invite other people to help you edit your webdoc",
-          html: "invite",
+          html: "invite co-editors",
           data: data
         }),
         shareItemNode = $("<li/>"),
@@ -207,14 +233,6 @@ WebDoc.DocumentList = $.klass({
     
     // Construct DOM tree and return it
     return documentActionsNode.append(
-      deleteItemNode.html(
-        deleteNode
-      )
-    ).append(
-      infoItemNode.html(
-        infoNode
-      )
-    ).append(
       collaborateItemNode.html(
         collaborateNode
       )

@@ -38,7 +38,8 @@ header {
     font-weight: bold;
     color: hsl(208, 12%, 50%);
 }
-/*.userbar .item {
+/*
+.userbar .item {
     display: block;
     height: 2.5em;
     line-height: 2.5;
@@ -52,21 +53,36 @@ header {
 }
 .userbar li {
     margin-right: 0;
-}*/
+}
+*/
+
+.subtabs {
+  /*margin-bottom: 3.3333em;*/
+}
+
+.state-public .state-public-hide {
+  display: none;
+}
+.state-public-show {
+  display: none;
+}
+.state-public .state-public-show {
+  display: block;
+}
 
 /* leader */
 
-.action-bar {
+.action-zone {
     overflow: hidden;
 }
-.action-bar .wrap {
+.action-zone .wrap {
     padding: 2.5em 0 0 0;
 }
-.action-bar .wrap form {
+.action-zone .wrap form {
     margin-bottom: 2.6667em;
 }
 
-.footer-bar {
+.footer-zone {
     height: 9em;
     position: absolute;
     bottom: 0;
@@ -78,27 +94,43 @@ header {
     white-space: nowrap;
 }
 .tabs li {
-    margin-right: 1px;
+    /*margin-right: 1px;*/
 }
 .tabs li a {
-    padding: 0.6em;
-}
-
-.document-tabs {
-    float: right;
+    padding: 0 0.6em;
+    height: 1.8em;
+    /* Just nudge it down a bit */
+    line-height: 1.9;
+    display: block;
 }
 .content {
     padding-top: 3.3333em;
     min-height: 400px;
 }
 
-.action-bar input[type=submit] {
+.bar {
+    margin-bottom: 2.6667em;
+}
+.bar li,
+.bar dt,
+.bar dd {
+    margin-right: 2px;
+}
+/*
+.bar li,
+.bar dt,
+.bar dd {
+    padding: 0 1.6667em 0 1em;
+}
+*/
+
+.action-zone input[type=submit] {
     /* Just tweak the spacing of the bottom button a little */
     margin-top: 0.6em;
     margin-right: 1.6667em;
 }
 
-.action-bar input[type=submit],
+.action-zone input[type=submit],
 .button {
     font-weight: bold;
     border-width: 0.2em;
@@ -108,19 +140,19 @@ header {
     padding-right: 1em;
 }
 
-.action-bar input[type=submit]:last-child,
-.action-bar .button:last-child {
+.action-zone input[type=submit]:last-child,
+.action-zone .button:last-child {
     margin-right: 0;
 }
 
-.action-bar .button {
+.action-zone .button {
     margin-bottom: 2.5em;
     margin-right: 1.6667em;
 }
 
 
 
-.action-bar .tabs {
+.action-zone .tabs {
     position: absolute;
     bottom: 0; right: 0;
 }
@@ -134,21 +166,26 @@ header {
 /* Content - document list */
 
 .document-index {
-    border-left-width: 2px;
+    /*border-left-width: 2px;*/
     padding-top: 1.6667em;
     padding-bottom: 1.6667em;
     margin-bottom: 1.6667em;
+    margin-left: 3.1667em;
+    margin-right: 20.1111em;
 }
 .document-index li {
     margin-bottom: 2px;
 }
+.document-index li li {
+    margin-bottom: 0;
+}
 .document-item {
     position: relative;
 }
-
 .document-title,
+.document-controls,
 .document-actions {
-    height: 3.333em;
+    height: 3.3333em;
     -webkit-box-sizing: border-box;
     -moz-box-sizing:    border-box;
     box-sizing:         border-box;
@@ -160,18 +197,30 @@ header {
     padding: 0 1em;
     font-weight: bold;
 }
+.document-controls,
 .document-actions {
     position: absolute;
     top: 0;
-    right: 0;
-    width: auto;
-    padding-top: 0.6667em;
-    padding-right: 0.6667em;
+    padding: 0.6667em;
+    padding-right: 0;
 }
-
-
-
-.action-bar .button {
+.document-controls {
+    left: -3.1667em;
+    margin-left: -2px;
+    width: 3.1667em;
+}
+.document-actions {
+    right: -20.1111em;
+    margin-right: -2px;
+    width: 20.1111em;
+}
+.document-controls li {
+    margin-right: 0.3333em;
+}
+.document-actions li {
+    margin-right: 0.6667em;
+}
+.action-zone .button {
     border-width: 0.2em;
     height: 2.5em;
     line-height: 2.1;
@@ -181,7 +230,6 @@ header {
 }
 .button {
     display: inline-block;
-    
     font-weight: bold;
     height: 2em;
     line-height: 2;
@@ -193,23 +241,32 @@ header {
     box-sizing:         border-box;
 }
 .collaborate-button,
-.share-button {
+.share-button,
+.unshare-button,
+.info-button {
     padding-left: 28px;
+}
+.share-button {
+    width: 7em;
+}
+.collaborate-button {
+    width: 11.1111em;
 }
 .add-button {
     padding-left: 32px;
 }
-.delete-button,
-.info-button {
-    padding-top: 2.1em;
+.info-button,
+.delete-button {
     height: 0;
-    width: 2.1em;
+    padding: 2em 0 0 0;
+    width: 2em;
     overflow: hidden;
 }
-
-
-
-
+.info-button {
+    position: absolute;
+    right: 0.6667em;
+    top: 0.6667em;
+}
 
 
 #flash {

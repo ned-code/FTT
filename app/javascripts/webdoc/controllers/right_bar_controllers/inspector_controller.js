@@ -9,10 +9,11 @@
 //= require <webdoc/controllers/inspectors/text_palette_controller>
 //= require <webdoc/sdk/widget_api>
 
-WebDoc.InspectorController = $.klass({
+WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
+  ITEM_INSPECTOR_BUTTON_SELECTOR: "a[href='#item-inspector']",
+  
   initialize: function() {
-    ddd('[InspectorController] initialize');
-    
+    ddd('[InspectorController] initialize');    
     var emptyPalette = $("#empty-inspector").hide();
     var penPelette = $("#draw-inspector").hide();
     var imagePelette = $("#image-inspector").hide();
@@ -71,6 +72,10 @@ WebDoc.InspectorController = $.klass({
     this.currentInspectorId = 0;
     
     WebDoc.application.boardController.addSelectionListener(this);
+  },
+  
+  buttonSelector: function() {
+    return this.ITEM_INSPECTOR_BUTTON_SELECTOR;  
   },
   
   selectPalette: function(paletteId) {

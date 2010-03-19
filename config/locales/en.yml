@@ -102,11 +102,11 @@ en:
 
     index:
       title: "Documents"
-      all_items_by_date: "All"
+      all_items_by_date: "View all webdocs"
       created_by_me: "I created"
       editor_rights: "I'm participating"
       shared_with_me: "Shared with me"
-      public: "Public"
+      public: "View public webdocs"
       create_new_document: "Create a new webdoc"
       edit_document: "Webdoc info"
       document_forms:

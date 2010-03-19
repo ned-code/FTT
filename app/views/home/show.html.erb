@@ -1,4 +1,4 @@
-<div class="action-bar bar">
+<div class="action-zone zone">
   <div class="wrap clear">
     <h2>Log in</h2>
     <form action="<%= session_path(@user) %>" method="post">
@@ -26,8 +26,7 @@
 </div>
 
 <div class="content">
-  <div class="wrap clear">
-    <%= render "shared/devise_links" %>
+  <div class="wrap">
   </div>
 </div>
 
@@ -48,4 +47,3 @@
         = submit_tag "Login"
     
 -->
-<!-- The html version -->
