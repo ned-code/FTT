@@ -6,25 +6,29 @@
     %title= "webdoc - alpha #{yield(:title)}"
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :application, :media => 'all'
+    = include_javascripts :common
     
   %body{ :class => controller_name }
     = render :partial => "layouts/main_toolbar"
-    = yield
-    
-    = include_javascripts :common
-    
+    = yield        
     :javascript
-      var flash = $('#flash');
-      
-      // TODO: put this somewhere more sensible
-      flash
-      .delay(3000)
-      .animate({
-        opacity: 0,
-        marginTop: -flash.height()
-      }, {
-        duration: 3000,
-        easing: 'easeInCubic'
+      var WebDoc;
+      $(function() {
+        var flash = $('#flash');
+        
+        // TODO: put this somewhere more sensible
+        flash
+        .delay(3000)
+        .animate({
+          opacity: 0,
+          marginTop: -flash.height()
+        }, {
+          duration: 3000,
+          easing: 'easeInCubic'
+        });        
+        // start application if it exists      
+        if (WebDoc && WebDoc.run) {
+          WebDoc.run();
+        }
       });
-    
     = render :partial => "layouts/googleAnalytics"

@@ -1,0 +1,11 @@
+.item {
+  overflow:hidden;
+}
+
+.item_wrap {
+  overflow:hidden;
+  position:absolute;
+}
+
+/* DDU fix problem of diffeent line height when switching from edit to non edit of text box.*/
+.webdoc span {display: inline-block}

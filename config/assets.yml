@@ -12,10 +12,7 @@ stylesheets:
     - public/stylesheets/lib/column.css
     - public/stylesheets/style.css
     - public/stylesheets/style.ui.css
-  document_editor:
-    - public/stylesheets/style.application.css
-    - public/stylesheets/style.application.typography.css
-    - public/stylesheets/style.application.color.css
+
   application:
     - public/stylesheets/style.application.css
     - public/stylesheets/style.application.typography.css
@@ -23,12 +20,18 @@ stylesheets:
 
   page_editor:    
     - public/stylesheets/library.css
-    - public/stylesheets/lib/protect.css
     - public/stylesheets/lib/panel.css
-    - public/stylesheets/style.editor.css    
+    - public/stylesheets/lib/protect.css    
+    - public/stylesheets/style.editor.css
+    - public/stylesheets/style.page_display.css    
     - public/stylesheets/style.editor.colors.css
     - public/stylesheets/colorpicker.css
     - public/stylesheets/toolbar.css
+    
+  page_viewer:
+    - public/stylesheets/lib/protect.css
+    - public/stylesheets/lib/panel.css
+    - public/stylesheets/style.page_display.css
       
 javascripts:
   common:

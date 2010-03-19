@@ -1,6 +1,7 @@
 - if flash.present?
-  - flash.each do |key,value|
-    #flash{ :class => "alert #{key}" }
-      %p= value
+  - if flash.length
+    -# we do not support more then one flash at a time. So we display the last one
+    #flash{ :class => "alert #{flash.keys.last}" }
+      %p= flash.values.last
 - else
   #flash{ :class => "alert", :style => "display:none" }

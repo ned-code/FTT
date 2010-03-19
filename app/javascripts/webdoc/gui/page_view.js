@@ -147,5 +147,40 @@ WebDoc.PageView = $.klass({
       var anItemView = this.itemViews[itemId];
       anItemView.destroy();
     }
+  },
+  
+  fitInContainer: function(width, height) {
+    var zoomToFit = 1;
+    var transform = {};
+    var heightFactor = height  / this._boardContainer.height();
+    var widthFactor = width  / this._boardContainer.width();      
+    if (heightFactor < widthFactor) {
+      zoomToFit =  heightFactor;
+    }
+    else {
+      zoomToFit =  widthFactor;
+    }
+
+    transform.WebkitTransformOrigin = "0px 0px";
+    transform.WebkitTransform = zoomToFit === 1 ? "" : "scale(" + zoomToFit + ")" ;
+    transform.MozTransformOrigin = zoomToFit === 1 ? "" : "0px 0px" ;
+    transform.MozTransform = transform.WebkitTransform;
+    transform.width = 100/zoomToFit + '%';
+    transform.height = 100/zoomToFit + '%';
+    
+    var containerChanges = {
+        width: parseFloat(this._boardContainer.css("width")),
+        height: parseFloat(this._boardContainer.css("height")),
+        widthFlag: this._boardContainer.css("width").match(/px/)?"px":"%",
+        heightFlag: this._boardContainer.css("height").match(/px/)?"px":"%"
+    };
+    
+    boardContainerCss = {
+      width: (containerChanges.width * zoomToFit) + containerChanges.widthFlag,
+      height: (containerChanges.height * zoomToFit) + containerChanges.heightFlag
+    };
+    
+    this.domNode.css( transform );
+    this._boardContainer.css( boardContainerCss );
   }
 });
