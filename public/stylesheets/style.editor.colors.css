@@ -379,6 +379,10 @@ a[href="#next-page"]                  { background-position: 0 -2237px; }
 a[href="#next-page"]:hover            { background-position: 0 -2301px; }
 a[href="#next-page"]:active           { background-position: 0 -2365px; }
 
+a[href="#social-inspector"]           { background-position: 0 -2432px; }
+a[href="#social-inspector"]:hover     { background-position: 0 -2496px; }
+a[href="#social-inspector"]:active    { background-position: 0 -2560px; }
+a[href="#social-inspector"].current   { background-position: 0 -2624px; }
 
 .mode-tools a { background-image: url('/images/mode-tools.png'); }
 

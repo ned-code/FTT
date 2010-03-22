@@ -117,13 +117,14 @@ WebDoc.DocumentList = $.klass({
   
   _buildDocumentItemNode: function( document ){
     var id = document.uuid(),
+        editor = this._hasAuthenticatedUserEditorRights( document.data.id ),
         data = {
           webdoc: {
             id: id
           }
         },
         documentNode = $("<li/>", {
-          "class": "document-item clear",
+          "class": "document-item " +( editor && "document-item-editable" )+ " clear",
           data: data
         }),
         documentTitle = $("<a/>", {
@@ -136,7 +137,7 @@ WebDoc.DocumentList = $.klass({
     
     documentNode.append( documentTitle );
     
-    if ( this._hasAuthenticatedUserEditorRights( document ) ) {
+    if ( editor ) {
       documentNode
       .append( this._buildDocumentControlsNode( document, data ) )
       .append( this._buildDocumentActionsNode( document, data ) )

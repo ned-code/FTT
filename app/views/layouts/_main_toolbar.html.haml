@@ -6,7 +6,7 @@
     %ul.userbar.divided.index
       - if user_signed_in?
         %li>
-          %div.user-email.item= current_user.email
+          %span.user-email.item= current_user.email
         %li>
           = link_to "edit", edit_user_path(current_user), { :class => "user-edit item" }
         %li>

@@ -237,6 +237,16 @@ header {
     -moz-border-radius-bottomleft:      1.6667em;
     border-bottom-left-radius:          1.6667em;
 }
+.document-item .document-title {
+    -webkit-border-radius: 1.6667em;
+    -moz-border-radius:    1.6667em;
+    border-radius:         1.6667em;
+}
+.document-item-editable .document-title {
+    -webkit-border-radius: 0;
+    -moz-border-radius:    0;
+    border-radius:         0;
+}
 .document-title {
     color: hsl(208, 6%, 30%);
     background: hsla(208, 8%, 70%, 0.25);
@@ -273,6 +283,11 @@ header {
 }
 .button:hover {
     color: white;
+}
+
+.sign-up:hover {
+    color: white;
+    background-color: hsl( 43, 80%, 50% );
 }
 
 .document-item .info-button              { background-color: transparent; }

@@ -16,6 +16,7 @@ legend      {
 }
 
 label,
+.label,
 input[type='text'],
 input[type='password'],
 input[type='submit'],
@@ -29,6 +30,7 @@ textarea {
 }
 
 label,
+.label,
 input[type='text'],
 input[type='password'],
 textarea {
@@ -37,6 +39,7 @@ textarea {
 }
 
 label,
+.label,
 input[type='text'],
 input[type='password'],
 select {
@@ -149,6 +152,10 @@ label {
     /* Only pad labels top and bottom */
     padding: 0.3333em 0;
 }
+.label {
+    line-height: 1;
+    padding: 0.3333em 0;
+}
 
 input[type=checkbox], input[type=radio],
 input.checkbox, input.radio {
@@ -168,6 +175,7 @@ input.default {
 }
 
 .stack label,
+.stack .label,
 .stack img {
     display: block;
     padding-left: 0;

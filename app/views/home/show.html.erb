@@ -14,7 +14,7 @@
         <div class="stack column two of-four">
           <label for="user_<%= :password %>">Password <abbr class="required" title="required">*</abbr></label>
           <input maxlength="255" id="user_<%= :password %>" name="user[<%= :password %>]" type="password" required="required" autocomplete="on" />
-          <p class="note"><%= link_to t('devise.passwords.link'), new_password_path(:user) %></p>
+          <span class="label"><%= link_to t('devise.passwords.link'), new_password_path(:user) %></label>
         </div>
       </fieldset>
       
