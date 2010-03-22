@@ -39,7 +39,7 @@
 .double.of-four     { width: 48%; }
 .triple.of-four     { width: 74%; }
 .double.of-five     { width: 38.2%; }
-.triple.of-five     { width: 58.8%; }
+.triple.of-five     { width: 58.6%; } /* Should be 58.8% Rounding errors in FF make it less */
 .quadruple.of-five  { width: 79.4%; }
 .double.of-six      { width: 32%; }
 .triple.of-six      { width: 49%; }

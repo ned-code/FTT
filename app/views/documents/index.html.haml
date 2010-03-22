@@ -78,7 +78,7 @@
       %input{ :type => 'submit', :name => 'new-document', :value => 'Create' }
 
 #wb-change-access-dialog.collaborate-dialog{ :style => "display: none" }
-  %form#wb-change-form.column.one.triple.of-five
+  %form#wb-change-form.column.one.triple.of-five>
     %h4 Invite new editors
     %p= t('.document_forms.change_access_dialog.add_editors_explanation')
     
@@ -94,7 +94,6 @@
     %div.ui-actions.state-readonly-hide
       %a{ :href => '#cancel', :class => 'cancel' } cancel
       %input{ :type => 'submit', :name => 'new-document', :value => 'Create' }
-  
   %div.column.last.double.of-five#wb-access-list{ :style => "overflow: hidden;" }>
     %h4 Current editors
     %ul#document_access_list.vertical.divided.index
