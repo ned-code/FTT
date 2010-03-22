@@ -91,7 +91,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
         this.documentListContainerNode
         .append( this.documentList.domNode );
-        
+        this._getCurrentUserRolesDocuments();
         infoDialogNode
         .remove()
         .css({ display: '' });
