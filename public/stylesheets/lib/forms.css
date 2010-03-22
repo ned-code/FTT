@@ -192,7 +192,9 @@ label .required {
     color: hsl( 18, 90%, 66% );
 }
 
-
+.note {
+  margin-bottom: 0;
+}
 /* Success, notice and error boxes */
 
 /*.error,

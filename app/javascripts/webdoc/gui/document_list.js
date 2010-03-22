@@ -18,7 +18,6 @@ WebDoc.DocumentList = $.klass({
   },
   
   refreshNewDocument: function(section, index, document) {
-      
       // Not sure why we do this at all, since as soon as you create a page
       // you are directed to a new window...
       
@@ -46,7 +45,7 @@ WebDoc.DocumentList = $.klass({
   },
   
   changeShareStatus: function(document) {
-    $('#'+document.uuid()+ '> .document-actions').children().eq(3).replaceWith(this._buildShareValue(document));
+    this.map[ document.uuid() ].domNode.find('.share-button, .unshare-button').replaceWith(this._buildShareValue(document));
   },
   
   repaint: function() {
@@ -246,7 +245,7 @@ WebDoc.DocumentList = $.klass({
   _buildShareValue: function(document) {
     var shareAction = "";
     shareAction = document.data.is_public ?  "unshare" : "share" ;
-    return $('<a>').addClass("wb-document-" + shareAction + " sec-action").attr("href", "").attr("title", shareAction).html(shareAction);
+    return $('<a>').addClass("wb-document-" + shareAction + " sec-action "+shareAction+"-button button").attr("href", "").attr("title", shareAction).html(shareAction);
   },
   
   _createDomNode: function(id) {
