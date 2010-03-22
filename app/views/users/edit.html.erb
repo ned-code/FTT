@@ -1,7 +1,7 @@
 <div class="action-zone zone">
   <div class="wrap clear">
     <h2><%=t '.title' %></h2>
-      <% form_for @user, :builder => CustomFormBuilder do |f| %>
+      <% form_for @user, :html => {:multipart => true}, :builder => CustomFormBuilder do |f| %>
             <fieldset>
               <div class="column one of-four stack">
                 <%= f.label :first_name, 'First name' %>
@@ -28,9 +28,7 @@
             <fieldset>
               <div class="column one of-four stack">
                 <%= f.label :avatar, 'Avatar' %>
-                <% if @user.avatar? && !@user.errors.on(:avatar) %>
-                <img src="#{@user.avatar.url(:thumb)}" />
-                <% end %>
+                <%= image_tag(@user.avatar.url(:thumb)) if @user.avatar? && !@user.errors.on(:avatar) %>
               </div>
               
               <div class="column two of-four">
