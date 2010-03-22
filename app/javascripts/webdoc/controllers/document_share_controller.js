@@ -22,8 +22,6 @@ WebDoc.DocumentShareController = $.klass({
     this.unshareDocRadio = $('#unshare_webdoc_radio'); 
     this.sharedDocUrlField = $('#shared_webdoc_url'); 
     this.shareWithMembersTabs = $('.unshare-related');
-    this.shareDocRadio.bind('change', this._shareDocument.pBind(this));
-    this.unshareDocRadio.bind('change', this._unshareDocument.pBind(this));
     
     this.documentShareDialog
     .remove()
@@ -56,6 +54,10 @@ WebDoc.DocumentShareController = $.klass({
             self.sharedDocUrlField.bind('focus', function(e){
               $(this).select();
             });
+            
+            self.shareDocRadio.bind('change', self._shareDocument.pBind(self));
+            self.unshareDocRadio.bind('change', self._unshareDocument.pBind(self));
+            
             self.documentShareForm.bind('submit', function(e){
               self._sendInvitations(e);
               

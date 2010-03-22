@@ -1,3 +1,5 @@
+<!-- home/show.html.erb -->
+
 <div class="action-zone zone">
   <div class="wrap clear">
     <h2>Log in</h2>
@@ -12,6 +14,7 @@
         <div class="stack column two of-four">
           <label for="user_<%= :password %>">Password <abbr class="required" title="required">*</abbr></label>
           <input maxlength="255" id="user_<%= :password %>" name="user[<%= :password %>]" type="password" required="required" autocomplete="on" />
+          <p class="note"><%= link_to t('devise.passwords.link'), new_password_path(:user) %></p>
         </div>
       </fieldset>
       
