@@ -57,7 +57,7 @@ WebDoc.DocumentShareController = $.klass({
               $(this).select();
             });
             self.documentShareForm.bind('submit', function(e){
-              self._sendInvitations.pBind(this);
+              self._sendInvitations(e);
               
               e.preventDefault();
             });
