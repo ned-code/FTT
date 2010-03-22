@@ -4,13 +4,13 @@
      
 WebDoc.SocialPanelController = jQuery.klass(WebDoc.RightBarInspectorController, {
   
-  SOCIAL_PANEL_BUTTON_SELECTOR: "a[href='#social-panel']",
+  SOCIAL_PANEL_BUTTON_SELECTOR: "a[href='#social-inspector']",
   
   initialize: function() {
     this.subscribeButton = jQuery('#subscribe-button');
     this.unsubscribeButton = jQuery('#unsubscribe-button');
     
-    this.domNode = jQuery('#social-panel');
+    this.domNode = jQuery('#social-inspector');
     this.currentDocument = WebDoc.application.pageEditor.currentDocument;
     WebDoc.application.pageEditor.getCreator(function(creator) {
       this.creator = creator;
