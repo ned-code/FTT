@@ -106,7 +106,7 @@
 					})
 					// Escape key is pressed
 					.bind('keydown.' + plugin, function(e){
-						if (event.which === 27) {
+						if (e.which === 27) {
 							jQuery.fn[plugin].close();
 						}
 					});
