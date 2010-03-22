@@ -10,11 +10,8 @@ WebDoc.DocumentList = $.klass({
       this.domNode = this._createDomNode(id);
       this.datasource = datasource;
       this.datasource.view = this;
-      this._getCurrentUserRolesDocuments();
       this.repaint();
       this.map = {};
-      this.currentUserDocumentsEditor = [];
-      this.currentUserDocumentsReader = [];
   },
   
   refreshNewDocument: function(section, index, document) {
@@ -117,21 +114,7 @@ WebDoc.DocumentList = $.klass({
     }
   },
   
-  _getCurrentUserRolesDocuments: function() {
-    $.ajax({
-      url: "/roles/documents",
-      type: 'GET',
-      dataType: 'json',              
-      success: function(data, textStatus) {
-        if (data.editor) {
-          this.currentUserDocumentsEditor = data.editor;
-        }
-        if (data.reader) {
-          this.currentUserDocumentsReader = data.reader;
-        }
-      }.pBind(this)
-    });
-  },
+
   
   _buildDocumentItemNode: function( document ){
     var id = document.uuid(),
@@ -154,7 +137,7 @@ WebDoc.DocumentList = $.klass({
     
     documentNode.append( documentTitle );
     
-    if ( this._hasAuthenticatedUserEditorRights( document.data.id ) ) {
+    if ( this._hasAuthenticatedUserEditorRights( document ) ) {
       documentNode
       .append( this._buildDocumentControlsNode( document, data ) )
       .append( this._buildDocumentActionsNode( document, data ) )
@@ -253,11 +236,8 @@ WebDoc.DocumentList = $.klass({
       return $("<div>").attr('id', id).addClass("wb-document-list");
   },
   
-  _hasAuthenticatedUserEditorRights: function(documentId) {
-     for (var i = 0; i< this.currentUserDocumentsEditor.length; i++) {
-       if (this.currentUserDocumentsEditor[i] == documentId) { return true; }
-     }
-     return false;
-   }
+  _hasAuthenticatedUserEditorRights: function(document) {
+    return (jQuery.inArray(document.data.id.toString(), WebDoc.application.documentEditor.currentUserDocumentsEditor()) !== -1);
+  }
 });
 

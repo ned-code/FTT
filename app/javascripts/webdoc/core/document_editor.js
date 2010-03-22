@@ -40,7 +40,8 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.documentList = null;
         this.filter = undefined;
         this.currentListingPageId = 1;
-        
+        this._currentUserDocumentsEditor = [];
+        this._currentUserDocumentsReader = [];        
         WebDoc.application.documentEditor = this;
         WebDoc.application.undoManager = new MTools.UndoManager();
         WebDoc.application.accessController = new WebDoc.DocumentCollaborationController();
@@ -63,7 +64,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         ddd("Start Document editor");
         var that = this;
         $("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
-        
         this.documentListContainerNode
         .delegate( ".wb-document-edit", 'click', this.editDocument )
         .delegate( ".wb-document-info", 'click', this.renameDocument )
@@ -88,11 +88,8 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.filter = new WebDoc.DocumentDateFilter();
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
         this.documentListContainerNode.append( this.documentList.domNode );
-        
-        // Default selection, documents owned by me
-        $("#wb-document-filter-owned-by-me").click();
-        
-        //infoDialogNode = $("#wb-new-document-dialog");
+       
+        this._getCurrentUserRolesDocuments();
         
         infoDialogNode
         .remove()
@@ -407,7 +404,33 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         default:
           return { width: "800", height: "600"};
       }
-    }
+    },
+    
+    currentUserDocumentsEditor: function() {
+      return this._currentUserDocumentsEditor;
+    },
+    
+    currentUserDocumentsReader: function() {
+      return this._currentUserDocumentsReader;
+    },
+    
+    _getCurrentUserRolesDocuments: function() {
+      $.ajax({
+        url: "/roles/documents",
+        type: 'GET',
+        dataType: 'json',              
+        success: function(data, textStatus) {
+          if (data.editor) {
+            this._currentUserDocumentsEditor = data.editor;
+          }
+          if (data.reader) {
+            this._currentUserDocumentsReader = data.reader;
+          }
+          // Default selection, documents owned by me
+          $("#wb-document-filter-owned-by-me").click();
+        }.pBind(this)
+      });
+    }    
 });
 
 })(jQuery);
