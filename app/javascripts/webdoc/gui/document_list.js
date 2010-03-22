@@ -250,7 +250,8 @@ WebDoc.DocumentList = $.klass({
   },
   
   _createDomNode: function(id) {
-      return $("<div>").attr('id', id).addClass("wb-document-list");
+      var docList = $('<div/>', {'class': 'wb-document-list'});
+      return docList;
   },
   
   _hasAuthenticatedUserEditorRights: function(documentId) {
@@ -258,6 +259,6 @@ WebDoc.DocumentList = $.klass({
        if (this.currentUserDocumentsEditor[i] == documentId) { return true; }
      }
      return false;
-   }
+  }
 });
 

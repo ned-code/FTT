@@ -191,6 +191,17 @@ header {
   opacity: 0;
 }
 
+/* fix to give us a loading icon */
+#wb-document-list-container {
+  position: relative;
+}
+#wb-document-list-container .loading-icon {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 50%;
+  margin-left: -8px;
+}
 
 /* Content - document list */
 
