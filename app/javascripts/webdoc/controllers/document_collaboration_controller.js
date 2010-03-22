@@ -35,11 +35,12 @@ WebDoc.DocumentCollaborationController = $.klass({
       dataType: 'json',              
       success: function(data, textStatus) {
         ddd("access", data);
+        var that = this;
         
         this.documentAccessDialog.pop({
           attachTo: $( e.currentTarget ),
           initCallback: function(){
-            self.documentAccessDialog.bind( 'submit', self.sendInvitations.pBind(self) );
+            that.documentAccessDialog.bind( 'submit', that.sendInvitations.pBind(self) );
           }
         });
         
