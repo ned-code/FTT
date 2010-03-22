@@ -117,7 +117,7 @@ WebDoc.DocumentList = $.klass({
   
   _buildDocumentItemNode: function( document ){
     var id = document.uuid(),
-        editor = this._hasAuthenticatedUserEditorRights( document.data.id ),
+        editor = this._hasAuthenticatedUserEditorRights( document ),
         data = {
           webdoc: {
             id: id
