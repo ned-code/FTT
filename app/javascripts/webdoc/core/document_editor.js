@@ -65,6 +65,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         var that = this;
         $("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
         this.documentListContainerNode
+        .addClass( 'loading' )
         .delegate( ".wb-document-edit", 'click', this.editDocument )
         .delegate( ".wb-document-info", 'click', this.renameDocument )
         .delegate( ".wb-document-delete", 'click', this.deleteDocument )
@@ -86,10 +87,10 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $("#wb-edit-document-size-custom-height").bind("keypress", this.validateInteger);
         
         this.filter = new WebDoc.DocumentDateFilter();
+        
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
-        this.documentListContainerNode.append( this.documentList.domNode );
-       
-        this._getCurrentUserRolesDocuments();
+        this.documentListContainerNode
+        .append( this.documentList.domNode );
         
         infoDialogNode
         .remove()
@@ -343,6 +344,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.filter.setDocuments(this.documents);
         this.documentList.repaint();
         this.documentList.repaintPagination(pagination);
+        this.documentListContainerNode.removeClass( 'loading' );
     },
         
     documentWithId: function(id)
