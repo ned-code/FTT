@@ -6,7 +6,7 @@
     %title= "webdoc - alpha - #{yield(:title)}"
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :page_editor, :media => 'all'    
-
+    = include_javascripts :common
 
     -#%link{ :rel => "stylesheet", :href => "/fonts/Aaargh-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
     -#%link{ :rel => "stylesheet", :href => "/fonts/Adler-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
@@ -36,7 +36,6 @@
   -else
   %body.editor.mode-edit
     = yield
-  = include_javascripts :common
   = include_javascripts :mtools
   = include_javascripts :page_editor
 
