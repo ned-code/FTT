@@ -38,6 +38,11 @@ header {
     font-weight: bold;
     color: hsl(208, 12%, 50%);
 }
+.userbar .button {
+    position: relative;
+    top: -0.5em;
+}
+
 /*
 .userbar .item {
     display: block;
@@ -143,10 +148,6 @@ header {
     padding-left: 1em;
     padding-right: 1em;
 }
-.userbar .button {
-    position: relative;
-    top: -0.5em;
-}
 
 .action-zone input[type=submit]:last-child,
 .action-zone .button:last-child {
@@ -198,8 +199,6 @@ header {
     padding-top: 1.6667em;
     padding-bottom: 1.6667em;
     margin-bottom: 1.6667em;
-    margin-left: 3.1667em;
-    margin-right: 20.1111em;
 }
 .document-index li {
     margin-bottom: 2px;
@@ -207,8 +206,12 @@ header {
 .document-index li li {
     margin-bottom: 0;
 }
-.document-item {
+.document-index .document-item {
     position: relative;
+}
+.document-item-editable {
+    margin-left: 3.1667em;
+    margin-right: 20.1111em !important; /* Overides .index styles */
 }
 .document-title,
 .document-controls,
