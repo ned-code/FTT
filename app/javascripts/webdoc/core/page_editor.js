@@ -97,7 +97,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
         ddd("[PageEditor] call rightBarController.showLib");
         WebDoc.application.rightBarController.showLib();
       }
-      jQuery("#toolbar").show();
       jQuery('#document_loading').remove();
     }.pBind(this));
   },
