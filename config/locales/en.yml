@@ -104,7 +104,7 @@ en:
       title: "Documents"
       all_items_by_date: "View all webdocs"
       created_by_me: "I created"
-      editor_rights: "I'm participating"
+      editor_rights: "I'm a co-editor"
       shared_with_me: "Shared with me"
       public: "View public webdocs"
       create_new_document: "Create a new webdoc"
@@ -340,7 +340,7 @@ en:
       title: "Sign up"
       button: "Sign up"
     edit:
-      title: "Editing user"
+      title: "Edit profile"
       button: "Update"
   
   label:
