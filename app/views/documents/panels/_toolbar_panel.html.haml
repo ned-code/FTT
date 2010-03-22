@@ -9,9 +9,9 @@
     -#%li.mode-preview-show>
     -#  %a{ :href => "#next-page", :title => t('.next') }
     -#    = t('.next')
-    -#%li.mode-edit-show>
-    -#  %a{ :href => "#add-page", :title => t('.add_page') }
-    -#   = t('.add_page')
+    %li.mode-edit-show>
+      %a{ :href => "#add-page", :title => t('.add_page') }
+        = t('.add_page')
     
   %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
@@ -67,7 +67,7 @@
       %ul#tb_1_utilities_settings_dropdown
         %li.action_button
           %a{ :href => "#close"}= t('.close')
-        %li#develop_sub_menu 
+        %li#develop_sub_menu.mode-edit-show 
           %a{ :href => "#"}= t('.develop')
           %ul
             %li.action_button

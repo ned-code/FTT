@@ -1,0 +1,34 @@
+<div class="action-zone zone">
+  <div class="wrap">
+  </div>
+</div>
+<div class="content">
+  <div class="wrap">
+    <ul>
+      <% @public_documents.each do |document| %>
+      <li style="float:left">
+        <div class="webdoc-viewer-container" id="<%= document.uuid() %>" style="position:relative;width:350px;height:290px; overflow:hidden"></div>
+      </li>      
+      <% end %>
+    </ul>
+  </div>
+</div>
+<%= include_stylesheets :page_viewer, :media => 'all' %>     
+<%= include_javascripts :mtools %>
+<%= include_javascripts :page_editor %> 
+<% javascript_tag  do -%>
+  var WebDoc;
+  if (!WebDoc) {
+    WebDoc = {};
+  }
+  WebDoc.authData = {
+    authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
+    sessionKeyName:"#{session_key_name}",
+    cookiesSessionKeyName:"#{cookies[session_key_name]}"
+  };
+  WebDoc.run = function() {
+    WebDoc.WebdocViewer.showViewers();
+  }
+<% end -%>
+
+      

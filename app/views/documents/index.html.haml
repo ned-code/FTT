@@ -135,17 +135,19 @@
     %ul#document_readers_list
 
 
+= include_javascripts :mtools
+= include_javascripts :document_editor
 :javascript
-    var WebDoc;
-    if (!WebDoc) {
-      WebDoc = {};
-    }
-    WebDoc.authData = {
-      authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
-      sessionKeyName:"#{session_key_name}",
-      cookiesSessionKeyName:"#{cookies[session_key_name]}"
-    };
-    WebDoc.run = function() {
-      var editor = new WebDoc.DocumentEditor();
-      editor.start();
-    }
+  var WebDoc;
+  if (!WebDoc) {
+    WebDoc = {};
+  }
+  WebDoc.authData = {
+    authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
+    sessionKeyName:"#{session_key_name}",
+    cookiesSessionKeyName:"#{cookies[session_key_name]}"
+  };
+  WebDoc.run = function() {
+    var editor = new WebDoc.DocumentEditor();
+    editor.start();
+  }

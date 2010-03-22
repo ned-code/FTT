@@ -201,7 +201,7 @@ WebDoc.Item = $.klass(MTools.Record,
   rootUrlArgs: function() {
     if (this.page) {
       return {
-        document_id: WebDoc.application.pageEditor.currentDocument.uuid(),
+        document_id:this.page.document.uuid(),
         page_id: this.page.uuid()
       };
     }

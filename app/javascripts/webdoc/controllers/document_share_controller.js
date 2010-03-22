@@ -59,7 +59,7 @@ WebDoc.DocumentShareController = $.klass({
             self.unshareDocRadio.bind('change', self._unshareDocument.pBind(self));
             
             self.documentShareForm.bind('submit', function(e){
-              self._sendInvitations;
+              self._sendInvitations(e);
               
               e.preventDefault();
             });

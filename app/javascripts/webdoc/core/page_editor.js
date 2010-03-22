@@ -128,7 +128,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     }
   },
   
-  loadPageId: function(pageId) {
+  loadPageId: function(pageId, force) {
     ddd('[PageEditor] loadPageId');
     if (!pageId) {
       pageId = "1";
@@ -141,7 +141,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     ddd(pageToLoad);
     // if (pageToLoad && pageToLoad.uuid() !== pageId) {
     if(pageToLoad) {
-      this.loadPage(pageToLoad);
+      this.loadPage(pageToLoad, force);
     }
   },
   
@@ -236,7 +236,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   
   toggleDebugMode: function() {
     this.disableHtml = !this.disableHtml; 
-    this.loadPageId( this.currentPage.uuid());
+    this.loadPageId( this.currentPage.uuid(), true);
     $("#debug-button").text(this.disableHtml?"Enable HTML":"Disable HTML");
     if (this.disableHtml) {
         $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");

@@ -53,9 +53,6 @@ body {
 
 #webdoc .board-screen   { z-index: 1000000; }  /* svg layer has 999999 */
 
-/* DDU fix problem of diffeent line height when switching from edit to non edit of text box.*/
-.webdoc span {display: inline-block}
-
 /* Manage modes. There are three modes, they are applied to the <body>:
  * 
  * .mode-edit
@@ -481,14 +478,6 @@ body {
   z-index:1000000;   
 }
 
-.item {
-  overflow:hidden;
-}
-
-.item_wrap {
-  overflow:hidden;
-  position:absolute;
-}
 .mode-edit .item_wrap {
   border-width: 1px;
   margin-top: -1px;

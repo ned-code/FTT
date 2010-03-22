@@ -42,7 +42,7 @@ WebDoc.DocumentCollaborationController = $.klass({
         this.documentAccessDialog.pop({
           attachTo: $( e.currentTarget ),
           initCallback: function(){
-            that.documentAccessForm.bind( 'submit', that.sendInvitations.pBind(self) );
+            that.documentAccessForm.bind( 'submit', that.sendInvitations.pBind(that) );
           }
         });
         
