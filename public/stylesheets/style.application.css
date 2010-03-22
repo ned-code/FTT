@@ -143,6 +143,10 @@ header {
     padding-left: 1em;
     padding-right: 1em;
 }
+.userbar .button {
+    position: relative;
+    top: -0.5em;
+}
 
 .action-zone input[type=submit]:last-child,
 .action-zone .button:last-child {
