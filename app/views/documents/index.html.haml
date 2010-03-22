@@ -78,8 +78,7 @@
       %input{ :type => 'submit', :name => 'new-document', :value => 'Create' }
 
 #wb-change-access-dialog.collaborate-dialog{ :style => "display: none" }
-
-  %form.column.one.triple.of-five
+  %form#wb-change-form.column.one.triple.of-five
     %h4 Invite new editors
     %p= t('.document_forms.change_access_dialog.add_editors_explanation')
     
@@ -101,7 +100,7 @@
     %ul#document_access_list.vertical.divided.index
   
 #wb-share-document-dialog.share-dialog{ :style => "display:none", :title => t('.document_forms.share_document_dialog.title') }
-  %form.column.one.triple.of-five>
+  %form#wb-share-form.column.one.triple.of-five>
     %h4 Share
     
     %fieldset

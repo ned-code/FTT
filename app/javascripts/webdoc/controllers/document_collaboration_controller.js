@@ -14,6 +14,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.roles = ["reader", "editor"];
     this.domNode = $("#document_access_list");
     this.documentAccessDialog = $("#wb-change-access-dialog");
+    this.documentAccessForm = $("#wb-change-form");
     this.emailsNode = $('#wb-invitation-add-editors');
     this.failedEmailsWrapper = $('#wb-invitation-failed');
     
@@ -25,9 +26,11 @@ WebDoc.DocumentCollaborationController = $.klass({
   },
   
   showAccess: function(e, document) {
+    var that = this;
+    
     this.document = document;
     this.cleanInvitationFields();
-
+    
     // document access can be changed only when we are online. So we can do ajax request here
     $.ajax({
       url: "/documents/" + document.uuid() + "/roles",
@@ -35,12 +38,11 @@ WebDoc.DocumentCollaborationController = $.klass({
       dataType: 'json',              
       success: function(data, textStatus) {
         ddd("access", data);
-        var that = this;
         
         this.documentAccessDialog.pop({
           attachTo: $( e.currentTarget ),
           initCallback: function(){
-            that.documentAccessDialog.bind( 'submit', that.sendInvitations.pBind(self) );
+            that.documentAccessForm.bind( 'submit', that.sendInvitations.pBind(self) );
           }
         });
         

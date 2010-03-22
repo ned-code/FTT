@@ -11,6 +11,7 @@ WebDoc.DocumentShareController = $.klass({
     $(".delete_reader_role").live("click", this._deleteReaderRole.pBind(this));   
     
     this.documentShareDialog = $("#wb-share-document-dialog");
+    this.documentShareForm = $("#wb-share-form");
     this.shareNode = $("#share_webdoc_radio");
     this.unshareNode = $("#unshare_webdoc_radio");
     
@@ -55,7 +56,7 @@ WebDoc.DocumentShareController = $.klass({
             self.sharedDocUrlField.bind('focus', function(e){
               $(this).select();
             });
-            self.documentShareDialog.bind('submit', function(e){
+            self.documentShareForm.bind('submit', function(e){
               self._sendInvitations.pBind(this);
               
               e.preventDefault();
@@ -112,10 +113,11 @@ WebDoc.DocumentShareController = $.klass({
     }
   },
   
-  _sendInvitations: function() {
+  _sendInvitations: function(e) {
     var recipients = $("#wb-invitation-add-readers").val();
     var message = $("#wb-invitation-add-readers-message").val();
     this._createRightsToRecipients(this._getInvitationAccess(recipients, message));
+    e.preventDefault();
   },
   
   _getInvitationAccess: function(recipients, message) {
