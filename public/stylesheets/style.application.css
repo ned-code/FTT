@@ -311,6 +311,30 @@ header {
 }
 
 
+#document_access_list li {
+    position: relative;
+    padding-left: 2em;
+}
+
+#document_access_list li .delete {
+    position: absolute;
+    left: 0;
+    top: -0.1667em;
+    width:  1.3333em;
+    padding-top: 1.3333em;
+    height: 0;
+    overflow: hidden;
+    -webkit-border-radius: 0.6667em;
+    -moz-border-radius:    0.6667em;
+    border-radius:         0.6667em;
+    background: #999999;
+    background-image: url('/images/pop-icons.png');
+    background-position: -8px -72px;
+}
+#document_access_list li .delete:hover {
+    background-color: #666666;
+}
+
 #flash {
     position: fixed;
     top: 0; left: 50%;
@@ -331,56 +355,7 @@ header {
     color: white;
 }
 
-/* =================== */
-/* = Document access = */
-/* =================== */
-/*#document_access-header {
-  margin: 20px 0;  
-}
-#document_access_list{
-    padding: 15px;
-    border: 5px solid #4d4d4d;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-}
 
-#wb-invitation-failed {
-  color: #ff0000;
-}
-
-.user_access{
-    clear: both;
-    height: 25px;
-    margin-bottom: 10px;
-    width: 100%;
-}
-.user_email{
-    float:left;
-    width: 65%;
-}
-.user_role {
-  float:right;
-  position:relative;
-  top:-4px;  
-}
-#document_access_list input {
-  position:relative;
-  top:-4px;
-}
-.access_actions{
-    float:right;
-    width: 35%;
-}
-.delete_access {
-    background: #fff url(../images/icons/delete_16.png) no-repeat 0 -2px ;
-    width: 16px;
-    height: 16px;
-    float: right;
-    margin-left: 10px;    
-}
-.delete_access:hover {
-    background: #fff url(../images/icons/delete_16.png) no-repeat -16px -2px ;
-}*/
 
 
 /* ======================= */

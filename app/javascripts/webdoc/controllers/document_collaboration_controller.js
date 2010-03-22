@@ -18,8 +18,6 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.emailsNode = $('#wb-invitation-add-editors');
     this.failedEmailsWrapper = $('#wb-invitation-failed');
     
-    $(".delete_access").live("click", this.deleteAccess.pBind(this));
-    
     this.documentAccessDialog
     .remove()
     .css({ display: '' });
@@ -42,7 +40,9 @@ WebDoc.DocumentCollaborationController = $.klass({
         this.documentAccessDialog.pop({
           attachTo: $( e.currentTarget ),
           initCallback: function(){
-            that.documentAccessForm.bind( 'submit', that.sendInvitations.pBind(that) );
+            that.documentAccessForm
+            .bind( 'submit', that.sendInvitations.pBind(that) )
+            .delegate("a[href='#delete']", "click", that.deleteAccess.pBind(that));
           }
         });
         
@@ -115,7 +115,7 @@ WebDoc.DocumentCollaborationController = $.klass({
       ddd(userInfos.id +", "+userInfos.role);
       var accessEntry = $("<li>").attr({ id: userInfos.id}).addClass("user_access").html(userInfos.username + "(" + userInfos.email + ")");
     
-      var deleteItem = $('<a href="#"/>').addClass("delete_access").attr("title", "Delete").html("Delete");
+      var deleteItem = $('<a/>', {'class': "delete", href: "#delete", title: "delete editor"}).html("Delete");
       if(userInfos.creator) { deleteItem.hide(); }  
       accessEntry.append(deleteItem);    
       this.domNode.append(accessEntry);
