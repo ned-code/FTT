@@ -1,11 +1,11 @@
 <!-- shared/_devise_links.html.haml -->
 
--# if controller_name != 'passwords'
--#  %li>= link_to t('devise.passwords.link'), new_password_path(:user)
--#  - if controller_name != 'confirmations'
--#    %li= link_to t('devise.confirmations.link'), new_confirmation_path(:user)
--#  - if controller_name != 'unlocks'
--#    %li= link_to t('devise.unlocks.link'), new_unlock_path(:user)
+%li>= link_to t('devise.passwords.link'), new_password_path(:user)
+-# if controller_name != 'confirmations'
+%li= link_to t('devise.confirmations.link'), new_confirmation_path(:user)
+-# if controller_name != 'unlocks'
+%li= link_to t('devise.unlocks.link'), new_unlock_path(:user)
+
 - if controller_name != 'home'
   %li>= link_to t('devise.sessions.link'), root_path
 - if controller_name != 'registrations'

@@ -3,30 +3,30 @@
     <h2><%=t '.title' %></h2>
       <% form_for @user, :builder => CustomFormBuilder do |f| %>
             <fieldset>
-              <div class="column one of-four stack">
+              <div class="column one of-four stack <% if @user.errors.on(:first_name) %>error<% end %>">
                 <%= f.label :first_name, 'First name' %>
                 <%= f.text_field :first_name, :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "Stelio" %>
               </div>
-              <div class="column two of-four stack">
+              <div class="column two of-four stack <% if @user.errors.on(:last_name) %>error<% end %>">
                 <%= f.label :last_name, 'Last name' %>
                 <%= f.text_field :last_name, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "Tzonis" %>
               </div>
             </fieldset>
             <fieldset>
-              <div class="column one of-four stack">
+              <div class="column one of-four stack <% if @user.errors.on(:username) %>error<% end %>">
                 <%= f.label :username, 'User name' %>
                 <%= f.text_field :username, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "stelman" %>
               </div>
             </fieldset>
             <fieldset>
-              <div class="column one double of-four stack">
+              <div class="column one double of-four stack <% if @user.errors.on(:website) %>error<% end %>">
                 <%= f.label :website, 'Website' %>
                 <%= f.text_field :website, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "www.webdoc.com/stelio" %>
               </div>
             </fieldset>
             
             <fieldset>
-              <div class="column one of-four stack">
+              <div class="column one of-four stack <% if @user.errors.on(:avatar) %>error<% end %>">
                 <%= f.label :avatar, 'Avatar' %>
                 <% if @user.avatar? && !@user.errors.on(:avatar) %>
                 <img src="#{@user.avatar.url(:thumb)}" />
@@ -46,7 +46,7 @@
             </fieldset>
             
             <fieldset>
-              <div class="column one double of-two stack">
+              <div class="column one double of-two stack <% if @user.errors.on(:bio) %>error<% end %>">
                 <%= f.label :bio, 'A little bit about yourself' %>
                 <%= f.text_area :bio, :maxlength => 255, :autocomplete => "on", :cols => '', :rows => '' %>
               </div>

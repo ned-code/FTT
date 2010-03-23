@@ -1,6 +1,7 @@
+<!-- registrations/edit -->
+
 <div class="action-zone zone">
   <div class="wrap">
-    
     <h2><%=t '.title' %></h2>
     
     <% form_for resource_name, resource, :url => registration_path(resource_name), :builder => CustomFormBuilder do |f| %>
@@ -30,9 +31,8 @@
 
 <div class="content">
   <div class="wrap">
-    
     <h3><%= t('.cancel.title') %></h3>
-    <p>I don't want to be part of the exciting world of webdoc anymore.  I'll miss it, but no human being was ever supposed to have this much fun.</p>
+    <p>I don't want to be part of the exciting world of webdoc anymore.  I'll miss it, but no human being was ever meant to have this much fun.</p>
     
     <%= button_to t('.cancel.link'), registration_path(resource_name), :confirm => t('confirm'), :method => :delete, :class => "button" %>
   </div>

@@ -69,64 +69,6 @@ input[type='password'] {
     text-indent: -1px;
 }
 
-input[type='text']:focus,
-input[type='password']:focus,
-select:focus,
-textarea:focus {
-    opacity: 1;
-    
-    /* In Webkit, outline doesn't fit the border curves, and in FF outline
-       is ugly. Recreate it with box-shadow */
-    outline: none;
-    
-    /* Old Safari doesn't do blur radius */
-    -webkit-box-shadow: 0 0 12px hsl( 72, 100%, 50% );
-    /* but Chrome does... */
-    -webkit-box-shadow: 0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
-    /* Create webkit-like outlines for FF */
-    -moz-box-shadow:    0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
-    box-shadow:         0 0 4px 3px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
-}
-
-select:focus {
-    /* In Webkit, select boxes don't accept box-shadow. Outline-style: auto
-       kills the outline in FF, which is ok, because we re-created it (better)
-       using a box-shadow (for non-system-style select boxes. FF ignores outline
-       declarations for system-style select boxes, and uses system blue. Hey-ho.) */
-    outline: hsl( 72, 100%, 50% ) auto 6px;
-    -moz-outline-color: hsl( 72, 100%, 50% ); 
-    outline-offset: -3px;
-}
-
-.error input[type='text'],
-.error input[type='password'],
-.error select,
-.error textarea {
-    opacity: 1;
-    
-    /* In Webkit, outline doesn't fit the border curves, and in FF outline
-       is ugly. Recreate it with box-shadow */
-    outline: none;
-    
-    /* Old Safari doesn't do blur radius */
-    -webkit-box-shadow: 0 0 12px hsl( 13, 100%, 50% );
-    /* but Chrome does... */
-    -webkit-box-shadow: 0 0 4px 2px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
-    /* Create webkit-like outlines for FF */
-    -moz-box-shadow:    0 0 4px 2px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
-    box-shadow:         0 0 4px 3px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
-}
-
-.error select {
-    /* In Webkit, select boxes don't accept box-shadow. Outline-style: auto
-       kills the outline in FF, which is ok, because we re-created it (better)
-       using a box-shadow (for non-system-style select boxes. FF ignores outline
-       declarations for system-style select boxes, and uses system blue. Hey-ho.) */
-    outline: hsl( 13, 100%, 50% ) auto 6px;
-    -moz-outline-color: hsl( 13, 100%, 50% ); 
-    outline-offset: -3px;
-}
-
 input[type=submit] {
     vertical-align: baseline;
     padding-top: 0;
@@ -159,26 +101,110 @@ label {
 
 input[type=checkbox], input[type=radio],
 input.checkbox, input.radio {
-  /*position:relative; top: 0em;*/
-  margin: 0;
-  vertical-align: baseline;
-  /* You can't style radio and checkbox colors effectively */
+    /*position:relative; top: 0em;*/
+    margin: 0;
+    vertical-align: baseline;
+    /* You can't style radio and checkbox colors effectively */
 }
 
 label input[type=checkbox] {
-  margin-right: 0.6em;
+    /* handle nested checkboxes inside lables */
+    margin-right: 0.6em;
+}
+
+/* Focus and error styles */
+
+input[type='text']:focus,
+input[type='password']:focus,
+select:focus,
+textarea:focus {
+    opacity: 1;
+    
+    /* In Webkit, outline doesn't fit the border curves, and in FF outline
+       is ugly. Lets recreate it with box-shadow */
+    outline: none;
+    
+    /* Old Safari doesn't do blur radius */
+    -webkit-box-shadow: 0 0 12px hsl( 72, 100%, 50% );
+    /* but Chrome does... */
+    -webkit-box-shadow: 0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+    /* Create webkit-like outlines for FF */
+    -moz-box-shadow:    0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+    box-shadow:         0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+}
+.error input[type='text'],
+.error input[type='password'],
+.error select,
+.error textarea {
+    opacity: 1;
+    -webkit-box-shadow: 0 0 12px hsl( 13, 100%, 50% );
+    -webkit-box-shadow: 0 0 4px 1px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
+    -moz-box-shadow:    0 0 4px 1px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
+    box-shadow:         0 0 4px 1px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
+}
+.error input[type='text']:focus,
+.error input[type='password']:focus,
+.error select:focus,
+.error textarea:focus {
+    -webkit-box-shadow: 0 0 12px hsl( 58, 100%, 50% );
+    -webkit-box-shadow: 0 0 4px 2px hsl( 58, 100%, 50% ), inset 0 0 4px hsl( 58, 100%, 50% );
+    -moz-box-shadow:    0 0 4px 2px hsl( 58, 100%, 50% ), inset 0 0 4px hsl( 58, 100%, 50% );
+    box-shadow:         0 0 4px 2px hsl( 58, 100%, 50% ), inset 0 0 4px hsl( 58, 100%, 50% );
+}
+
+select:focus {
+    /* In Webkit, select boxes don't accept box-shadow. Outline-style: auto
+       kills the outline in FF, which is ok, because we re-created it (better)
+       using a box-shadow (for non-system-style select boxes. FF ignores outline
+       declarations for system-style select boxes, and uses system blue (Mac). Hey-ho.) */
+    outline: hsl( 72, 100%, 50% ) auto 6px;
+    -moz-outline-color: hsl( 72, 100%, 50% ); 
+    outline-offset: -3px;
+}
+.error select {
+    outline: hsl( 13, 100%, 50% ) auto 6px;
+    -moz-outline-color: hsl( 13, 100%, 50% ); 
+    outline-offset: -3px;
+}
+
+.error select:focus {
+    outline: hsl( 72, 100%, 50% ) auto 6px;
+    -moz-outline-color: hsl( 72, 100%, 50% ); 
+    outline-offset: -3px;
+}
+
+.error-message {
+    line-height: 1.6667;
+    font-style: italic;
+    color: hsl( 13, 100%, 92% );
 }
 
 input.default {
-  font-style: italic;
-  font-weight: normal; 
+    font-style: italic;
+    font-weight: normal; 
 }
+
+
+
+/* Layout wrappers
+ *
+ * .stack     - stacks labels and inputs on top of one another
+ * .shunt     - places labels and inputs inline, beside one another
+ *
+ */
 
 .stack label,
 .stack .label,
+.stack .error-message,
 .stack img {
     display: block;
     padding-left: 0;
+}
+
+.stack .error-message {
+    position: absolute;
+    bottom: -1.6667em;
+    left: 0;
 }
 
 .shunt label,
