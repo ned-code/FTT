@@ -52,7 +52,7 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
       var pageView = new WebDoc.PageView(page,this._containerNode);      
       this._containerNode.empty().append(pageView.domNode);
       var width = this._viewerNode.width();
-      var height = this._viewerNode.height() - this.TOOL_BAR_HEIGHT;    
+      var height = this._containerNode.height();    
       pageView.fitInContainer(width, height);
     }
   },
@@ -77,7 +77,7 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
     var next = jQuery('<a/>').text('next').click(jQuery.proxy(this,'nextPage'));
     tb.append(previous).append(next);
     this._viewerNode.append(tb);
-    this._containerNode = jQuery('<div/>');
+    this._containerNode = jQuery('<div/>').css("overflow", "hidden");
     this._viewerNode.append(this._containerNode);
   }
 });
