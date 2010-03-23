@@ -572,7 +572,7 @@ WebDoc.TextToolView = $.klass({
     };
     var global_stage;
     
-		this.findTagsInSubtree = function (bounds, tag_name, stage, second){
+    this.findTagsInSubtree = function (bounds, tag_name, stage, second){
       var root = bounds.root;
       var start = bounds.start;
       var end = bounds.end;
@@ -580,15 +580,15 @@ WebDoc.TextToolView = $.klass({
         return [start];
       }
       if (!second) {
-	  	  global_stage = stage;
-      }			
+        global_stage = stage;
+      }     
       if (global_stage == 2) {
-	  	  return [];
+        return [];
       }
       if (!global_stage) {
-	  	  global_stage = 0;
-      }			
-      tag_name = tag_name.toLowerCase();			
+        global_stage = 0;
+      }     
+      tag_name = tag_name.toLowerCase();      
       var nodes=[];
       for(var node = root.firstChild; node; node = node.nextSibling){
         if(node==start && !global_stage){
@@ -856,8 +856,18 @@ WebDoc.TextToolView = $.klass({
       this.verticalContainer.style.width = '100%';
     };
     
+    
+    
     this.formatHorisontal = function(command) {
       this.edDoc.execCommand(command, false, false);
+    };
+    
+    this.indent = function(){
+      this.edDoc.execCommand('indent', null, null);
+    };
+        
+    this.list = function(command){
+      this.edDoc.execCommand(command, null, '');
     };
     
     this.applyStyleAttrToSelected = function(tag, styleAttr, value) {
@@ -1029,14 +1039,24 @@ WebDoc.TextToolView = $.klass({
     this.addEvent(this.edDoc, "click", function(e) {
       var ev = e || window.event;
       var el = ev.target || ev.srcElement;
-      thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(el)));
       WebDoc.application.inspectorController.textInspector.hideColorPickers();
     });
     
     this.addEvent(this.edDoc, "mouseup", function(e) {
+      var ev = e || window.event;
+      var el = ev.target || ev.srcElement; 
+      var detectNode = thobj.verticalCell;
+      if (thobj.edWin.getSelection().anchorNode.nodeName == "#text"){
+        detectNode = thobj.edWin.getSelection().anchorNode.parentNode;
+      } 
+      if(thobj.edWin.getSelection().focusNode.nodeName == "#text"){
+        detectNode = thobj.edWin.getSelection().focusNode.parentNode;
+      } 
       if (thobj.edWin.getSelection().focusNode == thobj.rootDiv) {
         thobj.edWin.getSelection().extend(thobj.verticalCell, 0);
-      }
+      } 
+      thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(detectNode)));
+      
     });
     
     this.addEvent(this.edDoc, "keydown", function(e) {
@@ -1044,6 +1064,11 @@ WebDoc.TextToolView = $.klass({
       var key = ev.keyCode;
       if ((key == 32) || (key == 13) || (key == 8)) {
         thobj.doBeforeTextChanged();
+      }       
+      if(key == '8'){//backspace
+        if(thobj.verticalCell.childNodes.length==1 && thobj.verticalCell.firstChild.nodeName != "#text" && (thobj.verticalCell.firstChild.tagName.toLowerCase()=='ul' || thobj.verticalCell.firstChild.tagName.toLowerCase()=='ol') && thobj.verticalCell.firstChild.firstChild && thobj.verticalCell.firstChild.firstChild.tagName.toLowerCase() == 'li' && thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue.length===1 && !(/\w/.test(thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue))){
+            thobj.firstEditionHandler();
+        }
       }
     });
     
@@ -1126,9 +1151,6 @@ WebDoc.TextToolView = $.klass({
     var thobj = this;
     this.doBeforeTextChanged();
     switch (command) {
-      case 'insertUnorderedList':
-      case 'insertOrderedList':
-      case 'indent':
       case 'outdent':
       case 'removeformat':
       case 'outdent':
@@ -1137,6 +1159,17 @@ WebDoc.TextToolView = $.klass({
         
       case 'format':
         this.edDoc.execCommand('formatblock', false, '<' + optional + '>');
+        break;
+      
+      case 'insertUnorderedList':
+        this.list('insertUnorderedList');
+        break;
+      case 'insertOrderedList':
+        this.list('insertOrderedList');
+        break;
+      
+      case 'indent':
+        this.indent();
         break;
         
       case 'hiliteColor':
@@ -1217,11 +1250,6 @@ WebDoc.TextToolView = $.klass({
     if (currentSelected.nodeName == '#text') {
       currentSelected = currentSelected.parentNode;
     }  
-    //for(var c=0;c<this.verticalCell.childNodes.length;c++){
-		  if(this.verticalCell.childNodes[0].nodeName!='#text'){  
-         // this.verticalCell.childNodes[0].style.verticalAlign = this.verticalCell.style.verticalAlign;
-      }
-    //}
     thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(currentSelected)));
     this.edWin.focus();
   },
