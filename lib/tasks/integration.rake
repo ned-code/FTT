@@ -1,11 +1,6 @@
 ENV['SCM'] = 'git'
 ENV['SKIP_TASKS'] = %w( 
                          backup:local
-                         spec:lib
-                         spec:models
-                         spec:helpers
-                         spec:controllers
-                         spec:views
                          test:rcov:units
                          test:rcov:units:verify
                          test:rcov:functionals
