@@ -4,7 +4,7 @@ describe ItemsController do
   include Devise::TestHelpers
   mock_models :document, :page, :item
   
-  before(:each) { mock_item(:to_json => {}) }
+  before(:each) { mock_item(:to_json => {}, :must_notify= => {}) }
   
   describe "with public document" do
     before(:each) { mock_document(:is_public? => true) }
