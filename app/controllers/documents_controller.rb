@@ -18,19 +18,20 @@ class DocumentsController < ApplicationController
     respond_to do |format|
       format.html
       format.json {
-          per_page = 20
-          @documents = Document.all_with_filter(current_user, params[:document_filter], params[:page], per_page)
-          render :json => { 
-            :documents => @documents,
-            :pagination => {
-              :per_page => per_page,
-              :current_page => @documents.current_page,
-              :total_pages => @documents.total_pages, 
-              :next_page => @documents.next_page,
-              :previous_page => @documents.previous_page,
-              :total => @documents.total_entries }
-            }
-          }       
+        per_page = 20
+        @documents = Document.all_with_filter(current_user, params[:document_filter], params[:page], per_page)
+        render :json => { 
+          :documents => @documents,
+          :pagination => {
+            :per_page => per_page,
+            :current_page => @documents.current_page,
+            :total_pages => @documents.total_pages, 
+            :next_page => @documents.next_page,
+            :previous_page => @documents.previous_page,
+            :total => @documents.total_entries
+          }
+        }
+      }
     end
   end
   
@@ -63,7 +64,7 @@ class DocumentsController < ApplicationController
     render :json => {}
   end
   
-protected
+  protected
   
   def instantiate_document
     @document = Document.find_by_uuid(params[:id])
