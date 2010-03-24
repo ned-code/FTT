@@ -72,7 +72,7 @@ header {
   display: none;
 }
 .state-public .state-public-show {
-  display: block;
+  display: inline-block;
 }
 
 .state-readonly .state-readonly-hide {

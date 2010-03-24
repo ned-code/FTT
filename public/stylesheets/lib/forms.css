@@ -18,6 +18,7 @@ legend      {
 label,
 .label,
 input[type='text'],
+input[type='file'],
 input[type='password'],
 input[type='submit'],
 select,
@@ -32,6 +33,7 @@ textarea {
 label,
 .label,
 input[type='text'],
+input[type='file'],
 input[type='password'],
 textarea {
     border: none;
@@ -41,12 +43,14 @@ textarea {
 label,
 .label,
 input[type='text'],
+input[type='file'],
 input[type='password'],
 select {
     height: 1.6667em;
 }
 
 input[type='text'],
+input[type='file'],
 input[type='password'],
 textarea {
     opacity: 0.88;
@@ -64,6 +68,7 @@ select {
 }
 
 input[type='text'],
+input[type='file'],
 input[type='password'] {
     /* Position text in the same place it is in labels in WebKit / Mozilla */
     text-indent: -1px;
@@ -175,7 +180,6 @@ select:focus {
 
 .error-message {
     line-height: 1.6667;
-    font-style: italic;
     color: hsl( 13, 70%, 66% );
 }
 
@@ -201,7 +205,6 @@ input.default {
 .stack .label,
 .stack .error-message,
 .stack img {
-    display: block;
     padding-left: 0;
 }
 
@@ -233,18 +236,30 @@ label .required {
 .note {
   margin-bottom: 0;
 }
-/* Success, notice and error boxes */
 
-/*.error,
-.notice,
-.success    { padding: .8em; margin-bottom: 1em; border: 2px solid #ddd; }
+/* File inputs. Good luck. */
+input[type='file'] {
+  color: inherit;
+  background: none;
+  display: block;
+}
 
-.error      { background: #FBE3E4; color: #8a1f11; border-color: #FBC2C4; }
-.notice     { background: #FFF6BF; color: #514721; border-color: #FFD324; }
-.success    { background: #E6EFC2; color: #264409; border-color: #C6D880; }
-.error a    { color: #8a1f11; }
-.notice a   { color: #514721; }
-.success a  { color: #264409; } */
+/* File inputs are especially problematic in FF
+ * they require a wrapper to get rid of their system border */
+@-moz-document url-prefix() {
+    .ff-input-file-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  input[type='file'] {
+    position: relative;
+    top: -2px;
+    left: -1px;
+    margin-bottom: -3px;
+  }
+}
 
 
 .inspector form.content {

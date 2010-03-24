@@ -3,47 +3,36 @@
 <div class="action-zone zone">
   <div class="wrap clear">
     <h2>Sign up</h2>
-    <form action="<%= registration_path(resource_name) %>" method="post">
-      <input name="authenticity_token" type="hidden" value="<%= protect_against_forgery? ? form_authenticity_token : '' %>" />
+    <% form_for resource_name, resource, :url => registration_path(resource_name), :builder => CustomFormBuilder do |f| %>
       
       <fieldset>
         <div class="stack column one of-four">
-          <label for="user_<%= :email %>">Email <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :email %>" name="user[<%= :email %>]" type="text" required="required" autocomplete="on" autofocus="on" placeholder="stelio@webdoc.com" />
+          <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :email, :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
         </div>
       </fieldset>
       
       <fieldset>
         <div class="stack column one of-four">
-          <label for="user_<%= :first_name %>">First name <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :first_name %>" name="user[<%= :first_name %>]" type="text" required="required" autocomplete="on" placeholder="Stelio" />
+          <%= f.label :first_name, 'First name <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :first_name, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "Stelio" %>
         </div>
         <div class="stack column two of-four">
-          <label for="user_<%= :last_name %>">Last name <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :last_name %>" name="user[<%= :last_name %>]" type="text" required="required" autocomplete="on" placeholder="Tzonis" />
+          <%= f.label :last_name, 'Last Name <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :last_name, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "Tzonis" %>
         </div>
       </fieldset>
       
       <fieldset>
         <div class="stack column one of-four">
-          <label for="user_<%= :username %>">Username <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :username %>" name="user[<%= :username %>]" type="text" required="required" autocomplete="on" placeholder="stelman" />
+          <%= f.label :username, 'Username <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :username, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "stelman" %>
         </div>
         <div class="stack column two of-four">
-          <label for="user_<%= :password %>">Password <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" minlength="6" id="user_<%= :password %>" name="user[<%= :password %>]" type="password" required="required" autocomplete="off" />
+          <%= f.label :password, 'Password <abbr class="required" title="required">*</abbr>' %>
+          <%= f.password_field :password, :maxlength => 255, :minlength => 6, :required => "required", :autocomplete => "off" %>
         </div>
       </fieldset>
-      
-      <!--fieldset>
-        <div>
-          <label for="user_<%= :terms_of_service %>">
-            <input name="user[<%= :terms_of_service %>]" type="hidden" value="0">
-            <input id="user_<%= :terms_of_service %>" name="user[<%= :terms_of_service %>]" type="checkbox" value="1" required="required" />
-            I agree to the <a href="#TODO">terms of service</a>
-          </label>
-        </div>
-      </fieldset-->
       
       <div>
         <div class="column one triple of-four">
@@ -59,7 +48,7 @@
       </div>
       
       <input id="user_submit" name="commit" type="submit" value="Sign up">
-    </form>
+    <% end %>
   </div>
 </div>
 

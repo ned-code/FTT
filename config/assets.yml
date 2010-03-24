@@ -40,7 +40,6 @@ javascripts:
     - public/javascripts/jquery-string.js
     - public/javascripts/jquery.extensions.js
     - public/javascripts/jquery.events.js
-    - public/javascripts/jquery.panel.js
     - public/javascripts/jquery.pop.js
     - public/javascripts/klass.js    
     - public/swfupload/swfupload.js
@@ -64,6 +63,7 @@ javascripts:
     - public/javascripts/sylvester.js
     - public/javascripts/strophe.js
     - public/javascripts/codemirror/codemirror.js
+    - public/javascripts/jquery.panel.js
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/model/*.js
     - app/javascripts/webdoc/sdk/*.js
