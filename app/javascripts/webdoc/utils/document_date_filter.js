@@ -27,8 +27,7 @@ WebDoc.DocumentDateFilter = $.klass(
     
     refreshDocument: function(modifiedDocument)
     {
-        var previousIndex = this.removeDocument(modifiedDocument);
-        this.addDocument(modifiedDocument, previousIndex);
+        this.view.refreshDocument(modifiedDocument);
     },
     
     addDocument: function(newDocument, previousIndex)
@@ -86,10 +85,6 @@ WebDoc.DocumentDateFilter = $.klass(
         }
         
         return index;
-    },
-    
-    changeShareStatus: function(document) {
-       this.view.changeShareStatus(document);
     },
     
     // document list datasource

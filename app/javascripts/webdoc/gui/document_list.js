@@ -14,6 +14,12 @@ WebDoc.DocumentList = $.klass({
       this.map = {};
   },
   
+  refreshDocument: function(document) {
+    var documentLine = this.map[ document.uuid() ];
+    var newDocumentLine = this._buildDocumentItemNode(document);
+    documentLine.domNode.replaceWith(newDocumentLine);
+  },
+  
   refreshNewDocument: function(section, index, document) {
       // Not sure why we do this at all, since as soon as you create a page
       // you are directed to a new window...
@@ -39,10 +45,6 @@ WebDoc.DocumentList = $.klass({
       obj.domNode && obj.domNode.remove();
       // ..and from the map
       delete this.map[ id ];
-  },
-  
-  changeShareStatus: function(document) {
-    this.map[ document.uuid() ].domNode.find('.share-button, .unshare-button').replaceWith(this._buildShareValue(document));
   },
   
   repaint: function() {
