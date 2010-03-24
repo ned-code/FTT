@@ -6,7 +6,7 @@
       <fieldset>
         <div class="stack column one of-four<% if resource.errors.on(:email) %> error<% end %>">
           <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
-          <%= f.text_field :email, :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
+          <%= f.text_field :email, :maxlength => 255, :type => "email", :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
         </div>
       </fieldset>
       
@@ -19,3 +19,12 @@
   <div class="wrap">
   </div>
 </div>
+
+<% content_for :scripts do %>
+  <%= include_javascripts :forms %>
+  <script type="text/javascript">
+    jQuery(document).ready(function(){
+      jQuery('form').validator();
+    });
+  </script>
+<% end %>

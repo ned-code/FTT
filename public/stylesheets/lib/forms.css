@@ -176,7 +176,11 @@ select:focus {
 .error-message {
     line-height: 1.6667;
     font-style: italic;
-    color: hsl( 13, 100%, 92% );
+    color: hsl( 13, 70%, 66% );
+}
+
+label.error-message {
+    line-height: 1;
 }
 
 input.default {

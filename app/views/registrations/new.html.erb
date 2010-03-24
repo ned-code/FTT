@@ -31,7 +31,7 @@
         </div>
         <div class="stack column two of-four">
           <label for="user_<%= :password %>">Password <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :password %>" name="user[<%= :password %>]" type="password" required="required" autocomplete="off" />
+          <input maxlength="255" minlength="6" id="user_<%= :password %>" name="user[<%= :password %>]" type="password" required="required" autocomplete="off" />
         </div>
       </fieldset>
       
@@ -68,21 +68,11 @@
   </div>
 </div>
 
-<!--
-%h1=t '.title'
-
-- semantic_form_for resource_name, resource, :url => registration_path(resource_name) do |f|
-  - f.inputs do
-    = f.input :email
-    = f.input :first_name
-    = f.input :last_name
-    = f.input :username
-    = f.input :password
-    = f.input :terms_of_service, :as => :boolean, :label => t('.terms_of_service', :link => link_to(t('.terms_of_service_link'), '#TODO'))
-    
-  - f.buttons do
-    = f.commit_button
-
-= link_to t('back'), :back
-
--->
+<% content_for :scripts do %>
+  <%= include_javascripts :forms %>
+  <script type="text/javascript">
+    jQuery(document).ready(function(){
+      jQuery('form').validator();
+    });
+  </script>
+<% end %>

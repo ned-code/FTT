@@ -79,3 +79,12 @@
     </ul>
   </div>
 </div>
+
+<% content_for :scripts do %>
+  <%= include_javascripts :forms %>
+  <script type="text/javascript">
+    jQuery(document).ready(function(){
+      jQuery('form').validator();
+    });
+  </script>
+<% end %>

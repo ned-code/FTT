@@ -101,4 +101,5 @@ javascripts:
     - app/javascripts/tests/test_helper.js
     - app/javascripts/tests/mtools/*.js
     - app/javascripts/tests/webdoc/*.js
-          
+  forms:
+    - public/javascripts/jquery.validator.js

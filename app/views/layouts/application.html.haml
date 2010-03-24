@@ -6,11 +6,13 @@
     %title= "webdoc - alpha #{yield(:title)}"
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :application, :media => 'all'
-    = include_javascripts :common
     
   %body{ :class => controller_name }
     = render :partial => "layouts/main_toolbar"
-    = yield        
+    = yield
+    = include_javascripts :common
+    = yield :scripts
+    
     :javascript
       var WebDoc;
       $(function() {
@@ -25,10 +27,12 @@
         }, {
           duration: 3000,
           easing: 'easeInCubic'
-        });        
-        // start application if it exists      
+        });
+        
+        // start application if it exists
         if (WebDoc && WebDoc.run) {
           WebDoc.run();
         }
       });
+    
     = render :partial => "layouts/googleAnalytics"

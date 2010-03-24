@@ -13,7 +13,7 @@
         </div>
         <div class="stack column two of-four<% if @user.errors.on(:password) %> error<% end %>">
           <%= f.label :password, 'Password <abbr class="required" title="required">*</abbr>' %>
-          <%= f.password_field :password, :maxlength => 255, :required => "required", :autocomplete => "on", :title => "Please enter your password" %>
+          <%= f.password_field :password, :maxlength => 255, :required => "required", :minlength => 6,  :autocomplete => "on", :title => "Please enter your password" %>
           <span class="label"><%= link_to t('devise.passwords.link'), new_password_path(:user) %></span>
         </div>
       </fieldset>
@@ -33,20 +33,11 @@
   </div>
 </div>
 
-<!-- The haml version -->
-<!--
-    - form_for :user, :url => session_path(@user) do |f|
-      %div
-        = f.label :email
-        = f.text_field :email
-      %div
-        = f.label :password
-        = f.password_field :password
-      %div
-        %label{ :for => "user_remember_me" }
-          = f.check_box :remember_me
-          = "Remember me"
-      %div
-        = submit_tag "Login"
-    
--->
+<% content_for :scripts do %>
+  <%= include_javascripts :forms %>
+  <script type="text/javascript">
+    jQuery(document).ready(function(){
+      jQuery('form').validator();
+    });
+  </script>
+<% end %>
