@@ -1,5 +1,7 @@
 class DocumentsController < ApplicationController
   before_filter :instantiate_document, :only => [:show, :update, :destroy]
+  before_filter :authenticate_if_needed, :only => [:show]
+  before_filter :authenticate_user!, :only => [:index]
   after_filter :create_view_count, :only => :show
   
   access_control do
@@ -7,9 +9,9 @@ class DocumentsController < ApplicationController
     allow logged_in, :to => [:index, :create]
     allow :editor, :of => :document, :to => [:update, :destroy]
     action :show do
-      allow :reader, :of => :document
-      allow :editor, :of => :document
       allow all, :if => :document_is_public?
+      allow :reader, :of => :document
+      allow :editor, :of => :document      
     end
   end
   
@@ -67,7 +69,11 @@ class DocumentsController < ApplicationController
   protected
   
   def instantiate_document
-    @document = Document.find_by_uuid(params[:id])
+    @document = Document.find_by_uuid(params[:id])     
+  end
+  
+  def authenticate_if_needed
+    authenticate_user! unless document_is_public?
   end
   
   def create_view_count
