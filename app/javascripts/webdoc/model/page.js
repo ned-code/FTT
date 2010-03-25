@@ -205,8 +205,15 @@ WebDoc.Page = $.klass(MTools.Record,
   
   _itemMoved: function(item) {
     this.nonDrawingItems.sort(function(a, b) {
+      a.data.position = a.data.position?a.data.position:0;
+      b.data.position = b.data.position?b.data.position:0;
       return a.data.position - b.data.position;
     });
+    this.items.sort(function(a,b) {
+      a.data.position = a.data.position?a.data.position:0;
+      b.data.position = b.data.position?b.data.position:0;
+      return a.data.position - b.data.position;
+    });    
     var afterItemIndex = $.inArray(item, this.nonDrawingItems);
     this.fireItemPositionChanged(item, afterItemIndex > 0 ? this.nonDrawingItems[afterItemIndex - 1] : null);
   },
@@ -229,6 +236,11 @@ WebDoc.Page = $.klass(MTools.Record,
     item.page = this;
 
     this.items.push(item);
+    this.items.sort(function(a,b) {
+      a.data.position = a.data.position?a.data.position:0;
+      b.data.position = b.data.position?b.data.position:0;
+      return a.data.position - b.data.position;
+    });    
     var afterItem = null;
     if (item.data.media_type != WebDoc.ITEM_TYPE_DRAWING) {
       this.nonDrawingItems.push(item);
