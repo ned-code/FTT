@@ -1,6 +1,7 @@
 Hi <%= @user.username %>!
 
-You have been granted <%= @role %> rights on the document <%= @document.title %><% if @current_user %> by <%= @current_user.username %> <% end %>
+You have been granted <%= @role %> rights on the document "<%= @document.title %>"<% if @current_user %> by <%= @current_user.username %> <% end %>
+Click the following link to view this document: <%= link_to document_url(@document), document_url(@document) %>
 <% if @custom_message && !@custom_message.empty? %>
 
 You will find above a personal message<% if @current_user %> from <%= @current_user.username %> <% end %>:
