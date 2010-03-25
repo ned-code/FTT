@@ -151,7 +151,7 @@ describe DocumentsController do
     context "accessed by anonymous" do
       
       describe :get => :index do
-        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :get => :show, :id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
@@ -316,11 +316,11 @@ describe DocumentsController do
     context "accessed by anonymous" do
       
       describe :get => :index do
-        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :get => :show, :id => "1" do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :post => :create, :document => {} do
         should_respond_with :not_found
