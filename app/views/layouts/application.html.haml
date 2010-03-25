@@ -11,6 +11,7 @@
     = render :partial => "layouts/main_toolbar"
     = yield
     = include_javascripts :common
+    = yield :scripts # include view specific scripts after common scripts.
     :javascript
       var WebDoc;
       $(function() {
@@ -32,5 +33,4 @@
           WebDoc.run();
         }
       });
-    = yield :scripts
     = render :partial => "layouts/googleAnalytics"

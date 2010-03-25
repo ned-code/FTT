@@ -16,19 +16,20 @@
 <%= include_stylesheets :page_viewer, :media => 'all' %>     
 <%= include_javascripts :mtools %>
 <%= include_javascripts :page_editor %> 
-<% javascript_tag  do -%>
-  var WebDoc;
-  if (!WebDoc) {
-    WebDoc = {};
-  }
-  WebDoc.authData = {
-    authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
-    sessionKeyName:"#{session_key_name}",
-    cookiesSessionKeyName:"#{cookies[session_key_name]}"
-  };
-  WebDoc.run = function() {
-    WebDoc.WebdocViewer.showViewers();
-  }
-<% end -%>
-
+<% content_for :scripts do %>
+  <% javascript_tag  do %>
+    var WebDoc;
+    if (!WebDoc) {
+      WebDoc = {};
+    }
+    WebDoc.authData = {
+      authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
+      sessionKeyName:"#{session_key_name}",
+      cookiesSessionKeyName:"#{cookies[session_key_name]}"
+    };
+    WebDoc.run = function() {
+      WebDoc.WebdocViewer.showViewers();
+    }
+  <% end -%>
+<% end %>
       
