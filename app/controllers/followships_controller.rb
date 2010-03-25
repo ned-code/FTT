@@ -1,6 +1,11 @@
 class FollowshipsController < ApplicationController
   before_filter :authenticate_user!
   
+  # GEt /followships
+  def index
+    @user = current_user  
+  end
+  
   # GET /following
   def following
     render :json => current_user.following.to_json(:only => [:id, :username, :bio], :methods => [:avatar_thumb_url, :documents_count])

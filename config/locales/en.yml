@@ -361,3 +361,10 @@ en:
 
     user_publish_document_success_email:
       subject: "Your document {{document_name}} has been published"
+  
+  followships:
+    index:
+      contacts: "contacts"
+      subscribe_to_me: "subscribed to me"
+      remove: "remove"
+      webdocs: "webdocs"

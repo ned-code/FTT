@@ -29,6 +29,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resource :test, :only => :show
   end
   
+  map.connections 'followships', :controller => "followships", :action => :index
   map.connections 'following', :controller => "followships", :action => 'following'
   map.connections 'followers', :controller => "followships", :action => 'followers'
   map.connections 'follow', :controller => "followships", :action => :create

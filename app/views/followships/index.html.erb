@@ -1,0 +1,43 @@
+<div class="action-zone zone">
+  <div class="wrap">
+  </div>
+</div>
+<div class="content">
+  <div class="wrap">
+    <h2>
+      <%= @user.following.length %> <%= t('.contacts')%>
+    </h2>
+    <ul>
+      <% @user.following.each do |user|%>
+        <li>
+          <div class="wb-user-item-wrap">
+            <div class="wb-user-item-avatar"><%= image_tag(user.avatar.url(:thumb)) if user.avatar? %></div>
+            <% if user.mutual_connection %>
+              <div class="wd-user-item-mutual"/>
+            <% end%>
+            <div class="wb-user-item-remove"><a href="#remove_contact"><%= t('.remove') %></a></div>
+            <div class="wb-user-item-name"><%= "#{user.first_name} #{user.last_name}" %></div>
+            <div class="wb-user-item-nb-webdoc"><%= "#{user.documents.length} #{t('.webdocs')}" %></div>
+          </div>
+        </li>
+      <% end%>
+    </ul>
+    <h2>
+      <%= @user.followers.length %> <%= t('.subscribe_to_me')%>
+    </h2>
+    <ul>
+      <% @user.followers.each do |user|%>
+        <li>
+          <div class="wb-user-item-wrap">
+            <div class="wb-user-item-avatar"><%= image_tag(user.avatar.url(:thumb)) if user.avatar? %></div>
+            <% if user.mutual_connection %>
+              <div class="wd-user-item-mutual"/>
+            <% end%>
+            <div class="wb-user-item-name"><%= "#{user.first_name} #{user.last_name}" %></div>
+            <div class="wb-user-item-nb-webdoc"><%= "#{user.documents.length} #{t('.webdocs')}" %></div>            
+          </div>
+        </li>
+      <% end%>
+    </ul>          
+  </div>
+</div>  
