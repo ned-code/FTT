@@ -68,7 +68,13 @@ WebDoc.BoardController = jQuery.klass({
   
   setCurrentPage: function(page) {
     ddd('[board_controller] SetCurrentPage');
-    this._initialSize = null;
+    if (this._editingItem) {
+      this._editingItem.stopEditing();
+    }
+    // Clean previous page view
+    if (this._currentPageView) {
+      this._currentPageView.destroy();
+    }
     var pageView = new WebDoc.PageView(page, jQuery("#board-container")),
         board = pageView.domNode,
         defaultZoom = 1;
@@ -78,14 +84,13 @@ WebDoc.BoardController = jQuery.klass({
     jQuery(document).unbind("keypress", this._keyPress);
     jQuery(document).unbind("keyup", this._keyUp);
     
-    // Set properties
-    if (this._currentPageView) {
-      this._currentPageView.destroy();
-    }
+
     this._currentPageView = pageView;
     this._currentZoom = 1;
     this._selection = [];
     this._currentPage = page;
+    this._editingItem = null;
+    this._initialSize = null;
     
     // Construct DOM tree
     this.boardContainerNode
