@@ -1,18 +1,17 @@
+<!-- passwords/new -->
 <div class="action-zone zone">
   <div class="wrap clear">
     <h2>Errm... I've forgotten my password</h2>
-    <form action="<%= password_path(resource_name) %>" method="post">
-      <input name="authenticity_token" type="hidden" value="<%= protect_against_forgery? ? form_authenticity_token : '' %>" />
-      
+    <% form_for resource_name, resource, :url => password_path(resource_name), :builder => CustomFormBuilder do |f| %>
       <fieldset>
-        <div class="stack column one of-four">
-          <label for="user_<%= :email %>">Email <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :email %>" name="user[<%= :email %>]" type="text" required="required" autocomplete="on" autofocus="on" placeholder="stelio@webdoc.com" />
+        <div class="stack column one of-four<% if resource.errors.on(:email) %> error<% end %>">
+          <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :email, :maxlength => 255, :type => "email", :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
         </div>
       </fieldset>
       
       <input id="user_submit" name="commit" type="submit" value="Send reset instructions">
-    </form>
+    <% end %>
   </div>
 </div>
 
@@ -20,3 +19,12 @@
   <div class="wrap">
   </div>
 </div>
+
+<% content_for :scripts do %>
+  <%= include_javascripts :forms %>
+  <script type="text/javascript">
+    jQuery(document).ready(function(){
+      jQuery('form').validator();
+    });
+  </script>
+<% end %>

@@ -18,6 +18,7 @@ legend      {
 label,
 .label,
 input[type='text'],
+input[type='file'],
 input[type='password'],
 input[type='submit'],
 select,
@@ -32,6 +33,7 @@ textarea {
 label,
 .label,
 input[type='text'],
+input[type='file'],
 input[type='password'],
 textarea {
     border: none;
@@ -41,12 +43,14 @@ textarea {
 label,
 .label,
 input[type='text'],
+input[type='file'],
 input[type='password'],
 select {
     height: 1.6667em;
 }
 
 input[type='text'],
+input[type='file'],
 input[type='password'],
 textarea {
     opacity: 0.88;
@@ -64,73 +68,41 @@ select {
 }
 
 input[type='text'],
+input[type='file'],
 input[type='password'] {
     /* Position text in the same place it is in labels in WebKit / Mozilla */
     text-indent: -1px;
 }
 
-input[type='text']:focus,
-input[type='password']:focus,
-select:focus,
-textarea:focus {
-    opacity: 1;
-    
-    /* In Webkit, outline doesn't fit the border curves, and in FF outline
-       is ugly. Recreate it with box-shadow */
-    outline: none;
-    
-    /* Old Safari doesn't do blur radius */
-    -webkit-box-shadow: 0 0 12px hsl( 72, 100%, 50% );
-    /* but Chrome does... */
-    -webkit-box-shadow: 0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
-    /* Create webkit-like outlines for FF */
-    -moz-box-shadow:    0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
-    box-shadow:         0 0 4px 3px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+/* File inputs. Good luck. */
+input[type='file'] {
+  color: inherit;
+  background: none;
+  display: block;
 }
 
-select:focus {
-    /* In Webkit, select boxes don't accept box-shadow. Outline-style: auto
-       kills the outline in FF, which is ok, because we re-created it (better)
-       using a box-shadow (for non-system-style select boxes. FF ignores outline
-       declarations for system-style select boxes, and uses system blue. Hey-ho.) */
-    outline: hsl( 72, 100%, 50% ) auto 6px;
-    -moz-outline-color: hsl( 72, 100%, 50% ); 
-    outline-offset: -3px;
-}
+/* File inputs are especially problematic in FF
+ * they require a wrapper to get rid of their system border */
+@-moz-document url-prefix() {
+    .ff-input-file-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
 
-.error input[type='text'],
-.error input[type='password'],
-.error select,
-.error textarea {
-    opacity: 1;
-    
-    /* In Webkit, outline doesn't fit the border curves, and in FF outline
-       is ugly. Recreate it with box-shadow */
-    outline: none;
-    
-    /* Old Safari doesn't do blur radius */
-    -webkit-box-shadow: 0 0 12px hsl( 13, 100%, 50% );
-    /* but Chrome does... */
-    -webkit-box-shadow: 0 0 4px 2px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
-    /* Create webkit-like outlines for FF */
-    -moz-box-shadow:    0 0 4px 2px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
-    box-shadow:         0 0 4px 3px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
-}
-
-.error select {
-    /* In Webkit, select boxes don't accept box-shadow. Outline-style: auto
-       kills the outline in FF, which is ok, because we re-created it (better)
-       using a box-shadow (for non-system-style select boxes. FF ignores outline
-       declarations for system-style select boxes, and uses system blue. Hey-ho.) */
-    outline: hsl( 13, 100%, 50% ) auto 6px;
-    -moz-outline-color: hsl( 13, 100%, 50% ); 
-    outline-offset: -3px;
+  .ff-input-file-wrapper input[type='file'] {
+    position: relative;
+    top: -2px;
+    left: -1px;
+    margin-bottom: -3px;
+  }
 }
 
 input[type=submit] {
     vertical-align: baseline;
     padding-top: 0;
     padding-bottom: 0;
+    cursor: pointer;
 }
 
 textarea {
@@ -159,26 +131,112 @@ label {
 
 input[type=checkbox], input[type=radio],
 input.checkbox, input.radio {
-  /*position:relative; top: 0em;*/
-  margin: 0;
-  vertical-align: baseline;
-  /* You can't style radio and checkbox colors effectively */
+    /*position:relative; top: 0em;*/
+    margin: 0;
+    vertical-align: baseline;
+    /* You can't style radio and checkbox colors effectively */
 }
 
 label input[type=checkbox] {
-  margin-right: 0.6em;
+    /* handle nested checkboxes inside lables */
+    margin-right: 0.6em;
+}
+
+/* Focus and error styles */
+
+input[type='text']:focus,
+input[type='password']:focus,
+select:focus,
+textarea:focus {
+    opacity: 1;
+    
+    /* In Webkit, outline doesn't fit the border curves, and in FF outline
+       is ugly. Lets recreate it with box-shadow */
+    outline: none;
+    
+    /* Old Safari doesn't do blur radius */
+    -webkit-box-shadow: 0 0 12px hsl( 72, 100%, 50% );
+    /* but Chrome does... */
+    -webkit-box-shadow: 0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+    /* Create webkit-like outlines for FF */
+    -moz-box-shadow:    0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+    box-shadow:         0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+}
+.error input[type='text'],
+.error input[type='password'],
+.error select,
+.error textarea {
+    opacity: 1;
+    -webkit-box-shadow: 0 0 12px hsl( 13, 100%, 50% );
+    -webkit-box-shadow: 0 0 4px 1px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
+    -moz-box-shadow:    0 0 4px 1px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
+    box-shadow:         0 0 4px 1px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
+}
+.error input[type='text']:focus,
+.error input[type='password']:focus,
+.error select:focus,
+.error textarea:focus {
+    -webkit-box-shadow: 0 0 12px hsl( 58, 100%, 50% );
+    -webkit-box-shadow: 0 0 4px 2px hsl( 58, 100%, 50% ), inset 0 0 4px hsl( 58, 100%, 50% );
+    -moz-box-shadow:    0 0 4px 2px hsl( 58, 100%, 50% ), inset 0 0 4px hsl( 58, 100%, 50% );
+    box-shadow:         0 0 4px 2px hsl( 58, 100%, 50% ), inset 0 0 4px hsl( 58, 100%, 50% );
+}
+
+select:focus {
+    /* In Webkit, select boxes don't accept box-shadow. Outline-style: auto
+       kills the outline in FF, which is ok, because we re-created it (better)
+       using a box-shadow (for non-system-style select boxes. FF ignores outline
+       declarations for system-style select boxes, and uses system blue (Mac). Hey-ho.) */
+    outline: hsl( 72, 100%, 50% ) auto 6px;
+    -moz-outline-color: hsl( 72, 100%, 50% ); 
+    outline-offset: -3px;
+}
+.error select {
+    outline: hsl( 13, 100%, 50% ) auto 6px;
+    -moz-outline-color: hsl( 13, 100%, 50% ); 
+    outline-offset: -3px;
+}
+
+.error select:focus {
+    outline: hsl( 72, 100%, 50% ) auto 6px;
+    -moz-outline-color: hsl( 72, 100%, 50% ); 
+    outline-offset: -3px;
+}
+
+.error-message {
+    line-height: 1.6667;
+    color: hsl( 13, 70%, 66% );
+}
+
+label.error-message {
+    line-height: 1;
 }
 
 input.default {
-  font-style: italic;
-  font-weight: normal; 
+    font-style: italic;
+    font-weight: normal; 
 }
+
+
+
+/* Layout wrappers
+ *
+ * .stack     - stacks labels and inputs on top of one another
+ * .shunt     - places labels and inputs inline, beside one another
+ *
+ */
 
 .stack label,
 .stack .label,
+.stack .error-message,
 .stack img {
-    display: block;
     padding-left: 0;
+}
+
+.stack .error-message {
+    position: absolute;
+    bottom: -1.6667em;
+    left: 0;
 }
 
 .shunt label,
@@ -203,19 +261,6 @@ label .required {
 .note {
   margin-bottom: 0;
 }
-/* Success, notice and error boxes */
-
-/*.error,
-.notice,
-.success    { padding: .8em; margin-bottom: 1em; border: 2px solid #ddd; }
-
-.error      { background: #FBE3E4; color: #8a1f11; border-color: #FBC2C4; }
-.notice     { background: #FFF6BF; color: #514721; border-color: #FFD324; }
-.success    { background: #E6EFC2; color: #264409; border-color: #C6D880; }
-.error a    { color: #8a1f11; }
-.notice a   { color: #514721; }
-.success a  { color: #264409; } */
-
 
 .inspector form.content {
     padding-top: 0.8em;

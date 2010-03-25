@@ -57,12 +57,12 @@ h4 img, h5 img, h6 img {
   margin: 0;
 }
 
-p                 { margin: 0 0 1.6667em 0; }
+p                 { margin: 0 0 0.8333em 0; }
 /*p+p               { text-indent: 1.3333em; }*/
 /* Things that should have margin after paragraphs */
-/*p+ul, p+dl, p+ol, p+table,
+p+ul, p+dl, p+ol, p+table,
 p+address, p+pre, p+blockquote
-                  { margin-top: 1.3333em; }*/
+                  { margin-top: 0.8333em; }*/
 /* Make first letter different */
 /*p::first-letter   { font-size: 1.3333em; line-height: 1em; font-style: italic; letter-spacing: 0.1333em; }
 p+p::first-letter { font-size: 1em; line-height: 1.3333; font-style: normal; letter-spacing: 0em; }*/
@@ -79,7 +79,7 @@ p, li, dt, dd, blockquote, address { word-spacing: 0.2em; }
 /* We're not ready for this yet - need to protect the lists */
 li ul,
 li ol             { margin: 0; }
-ul, ol    { margin: 1.3333em 0; padding-left: 2.6667em; }
+ul, ol            { margin: 0.8333em 0; padding-left: 2.6667em; }
 
 ul                { list-style-type: disc; }
 ol                { list-style-type: decimal; }

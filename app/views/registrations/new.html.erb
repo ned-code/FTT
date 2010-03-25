@@ -1,50 +1,54 @@
+<!-- Signup registrations/new.html.erb -->
+
 <div class="action-zone zone">
   <div class="wrap clear">
     <h2>Sign up</h2>
-    <form action="<%= registration_path(resource_name) %>" method="post">
-      <input name="authenticity_token" type="hidden" value="<%= protect_against_forgery? ? form_authenticity_token : '' %>" />
+    <% form_for resource_name, resource, :url => registration_path(resource_name), :builder => CustomFormBuilder do |f| %>
       
       <fieldset>
         <div class="stack column one of-four">
-          <label for="user_<%= :email %>">Email <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :email %>" name="user[<%= :email %>]" type="text" required="required" autocomplete="on" autofocus="on" placeholder="stelio@webdoc.com" />
+          <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :email, :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
         </div>
       </fieldset>
       
       <fieldset>
         <div class="stack column one of-four">
-          <label for="user_<%= :first_name %>">First name <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :first_name %>" name="user[<%= :first_name %>]" type="text" required="required" autocomplete="on" placeholder="Stelio" />
+          <%= f.label :first_name, 'First name <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :first_name, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "Stelio" %>
         </div>
         <div class="stack column two of-four">
-          <label for="user_<%= :last_name %>">Last name <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :last_name %>" name="user[<%= :last_name %>]" type="text" required="required" autocomplete="on" placeholder="Tzonis" />
+          <%= f.label :last_name, 'Last Name <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :last_name, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "Tzonis" %>
         </div>
       </fieldset>
       
       <fieldset>
         <div class="stack column one of-four">
-          <label for="user_<%= :username %>">Username <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :username %>" name="user[<%= :username %>]" type="text" required="required" autocomplete="on" placeholder="stelman" />
+          <%= f.label :username, 'Username <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :username, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "stelman" %>
         </div>
         <div class="stack column two of-four">
-          <label for="user_<%= :password %>">Password <abbr class="required" title="required">*</abbr></label>
-          <input maxlength="255" id="user_<%= :password %>" name="user[<%= :password %>]" type="password" required="required" autocomplete="off" />
+          <%= f.label :password, 'Password <abbr class="required" title="required">*</abbr>' %>
+          <%= f.password_field :password, :maxlength => 255, :minlength => 6, :required => "required", :autocomplete => "off" %>
         </div>
       </fieldset>
       
-      <fieldset>
-        <div>
-          <label for="user_<%= :terms_of_service %>">
-            <input name="user[<%= :terms_of_service %>]" type="hidden" value="0">
-            <input id="user_<%= :terms_of_service %>" name="user[<%= :terms_of_service %>]" type="checkbox" value="1" required="required" />
-            I agree to the <a href="#TODO">terms of service</a>
-          </label>
+      <div>
+        <div class="column one triple of-four">
+          <p><strong>webdoc</strong> is currently an early alpha release. Very few people know about it yet, and we'd like to keep it that way, so by signing up for <strong>webdoc</strong>, you agree to keep the fun to yourself for the time being, meaning that:</p>
+          <ul>
+            <li>You treat it as confidential &mdash; you won't blog, tweet, or otherwise tell people about <strong>webdoc</strong></li>
+            <li>You can play with <strong>webdoc</strong> as much as you want but you <em>won't</em> demo it to other people</li>
+            <li>You <em>cannot</em> invite people to sign up, and you <em>won't</em> share your password(s)</li>
+            <li>You <em>will have lots of fun!</em></li>
+          </ul>
+          <p>Thanks. Together we're going to create a stonking web app. Now press the button...</p>
         </div>
-      </fieldset>
+      </div>
       
       <input id="user_submit" name="commit" type="submit" value="Sign up">
-    </form>
+    <% end %>
   </div>
 </div>
 
@@ -53,21 +57,11 @@
   </div>
 </div>
 
-<!--
-%h1=t '.title'
-
-- semantic_form_for resource_name, resource, :url => registration_path(resource_name) do |f|
-  - f.inputs do
-    = f.input :email
-    = f.input :first_name
-    = f.input :last_name
-    = f.input :username
-    = f.input :password
-    = f.input :terms_of_service, :as => :boolean, :label => t('.terms_of_service', :link => link_to(t('.terms_of_service_link'), '#TODO'))
-    
-  - f.buttons do
-    = f.commit_button
-
-= link_to t('back'), :back
-
--->
+<% content_for :scripts do %>
+  <%= include_javascripts :forms %>
+  <script type="text/javascript">
+    jQuery(document).ready(function(){
+      jQuery('form').validator();
+    });
+  </script>
+<% end %>
