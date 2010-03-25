@@ -5,10 +5,10 @@
     <% form_for @user, :html => {:multipart => 'true'}, :builder => CustomFormBuilder do |f| %>
       <fieldset>
         <div class="column one of-four stack <% if @user.errors.on(:avatar) %>error<% end %>">
-          <label for="user_avatar">Avatar
-          <% if @user.avatar? && !@user.errors.on(:avatar) %>
-            <img src="#{@user.avatar.url(:thumb)}" />
-          <% end %>
+          <label for="user_avatar">Avatar<br/>
+            <% if (@user.avatar? && !@user.errors.on(:avatar)) %>
+              <img src="<%= @user.avatar.url(:thumb) %>" />
+            <% end %>
           </label>
         </div>
         
@@ -44,7 +44,7 @@
       <fieldset>
         <div class="column one double of-four stack <% if @user.errors.on(:website) %>error<% end %>">
           <%= f.label :website, 'Website' %>
-          <%= f.text_field :website, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "www.webdoc.com/stelio", :size => "28" %>
+          <%= f.text_field :website, :maxlength => 255, :autocomplete => "on", :placeholder => "www.webdoc.com/stelio", :size => "28" %>
         </div>
       </fieldset>
       
