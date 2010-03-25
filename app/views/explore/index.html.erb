@@ -13,11 +13,11 @@
     </ul>
   </div>
 </div>
-<%= include_stylesheets :page_viewer, :media => 'all' %>     
-<%= include_javascripts :mtools %>
-<%= include_javascripts :page_editor %> 
+<%= include_stylesheets :page_viewer, :media => 'all' %>      
 <% content_for :scripts do %>
-  <% javascript_tag  do %>
+  <%= include_javascripts :mtools %>
+  <%= include_javascripts :page_editor %>
+  <% javascript_tag  do %>  
     var WebDoc;
     if (!WebDoc) {
       WebDoc = {};
