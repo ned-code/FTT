@@ -74,10 +74,35 @@ input[type='password'] {
     text-indent: -1px;
 }
 
+/* File inputs. Good luck. */
+input[type='file'] {
+  color: inherit;
+  background: none;
+  display: block;
+}
+
+/* File inputs are especially problematic in FF
+ * they require a wrapper to get rid of their system border */
+@-moz-document url-prefix() {
+    .ff-input-file-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .ff-input-file-wrapper input[type='file'] {
+    position: relative;
+    top: -2px;
+    left: -1px;
+    margin-bottom: -3px;
+  }
+}
+
 input[type=submit] {
     vertical-align: baseline;
     padding-top: 0;
     padding-bottom: 0;
+    cursor: pointer;
 }
 
 textarea {
@@ -236,31 +261,6 @@ label .required {
 .note {
   margin-bottom: 0;
 }
-
-/* File inputs. Good luck. */
-input[type='file'] {
-  color: inherit;
-  background: none;
-  display: block;
-}
-
-/* File inputs are especially problematic in FF
- * they require a wrapper to get rid of their system border */
-@-moz-document url-prefix() {
-    .ff-input-file-wrapper {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-  }
-
-  input[type='file'] {
-    position: relative;
-    top: -2px;
-    left: -1px;
-    margin-bottom: -3px;
-  }
-}
-
 
 .inspector form.content {
     padding-top: 0.8em;

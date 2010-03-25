@@ -28,7 +28,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
       
       args.last.is_a?(Hash) && args.last.merge!(:id => "#{ActionController::RecordIdentifier.singular_class_name(@object)}_#{field_name}")
       
-      super(field_name, *args) + (inline_errors.nil? ? '' : "<span class='error-message'>This field #{inline_errors}</>")
+      super(field_name, *args) + (inline_errors.nil? ? '' : "<label class='error-message'>This field #{inline_errors}</label>")
       # super
     end
   end

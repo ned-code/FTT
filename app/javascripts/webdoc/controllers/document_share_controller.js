@@ -137,7 +137,7 @@ WebDoc.DocumentShareController = $.klass({
   _shareDocument: function() {
     this.document.share();
     this.document.save(function(persistedDoc) {
-        WebDoc.application.documentEditor.filter.changeShareStatus(persistedDoc);
+        WebDoc.application.documentEditor.documentList.refreshDocument(persistedDoc);
     });
     this.sharedDocUrlField.removeAttr('disabled');
     this.shareWithMembersTabs.hide();
@@ -146,7 +146,7 @@ WebDoc.DocumentShareController = $.klass({
   _unshareDocument: function() {
     this.document.unshare();
     this.document.save(function(persistedDoc) {
-        WebDoc.application.documentEditor.filter.changeShareStatus(persistedDoc);
+        WebDoc.application.documentEditor.documentList.refreshDocument(persistedDoc);
     });
     this.sharedDocUrlField.attr('disabled', 'disabled');
     this.shareWithMembersTabs.show();

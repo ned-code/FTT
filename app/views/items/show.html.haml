@@ -1,6 +1,6 @@
 - if params[:fullHTML] && @item.data[:innerHTML] !=~ /<html>(.|\n)*<\/html>/mi
   %html
-    %head/
-    %body= @item.data[:innerHTML]}
+    %head
+    %body= @item.data[:innerHTML]
 - else
   = @item.data[:innerHTML]

@@ -26,6 +26,7 @@ class ItemsController < PageController
   # PUT /documents/:document_id/pages/:page_id/items/:id
   def update
     @item = @page.items.find_by_uuid(params[:id])
+    @item.must_notify = true
     @item.update_attributes(params[:item].merge(:must_notify => true))
     
     render :json => @item

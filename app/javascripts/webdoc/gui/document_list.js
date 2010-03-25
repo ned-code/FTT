@@ -10,11 +10,14 @@ WebDoc.DocumentList = $.klass({
       this.domNode = this._createDomNode(id);
       this.datasource = datasource;
       this.datasource.view = this;
-      this._getCurrentUserRolesDocuments();
       this.repaint();
       this.map = {};
-      this.currentUserDocumentsEditor = [];
-      this.currentUserDocumentsReader = [];
+  },
+  
+  refreshDocument: function(document) {
+    var documentLine = this.map[ document.uuid() ];
+    var newDocumentLine = this._buildDocumentItemNode(document);
+    documentLine.domNode.replaceWith(newDocumentLine);
   },
   
   refreshNewDocument: function(section, index, document) {
@@ -42,10 +45,6 @@ WebDoc.DocumentList = $.klass({
       obj.domNode && obj.domNode.remove();
       // ..and from the map
       delete this.map[ id ];
-  },
-  
-  changeShareStatus: function(document) {
-    this.map[ document.uuid() ].domNode.find('.share-button, .unshare-button').replaceWith(this._buildShareValue(document));
   },
   
   repaint: function() {
@@ -116,25 +115,11 @@ WebDoc.DocumentList = $.klass({
     }
   },
   
-  _getCurrentUserRolesDocuments: function() {
-    $.ajax({
-      url: "/roles/documents",
-      type: 'GET',
-      dataType: 'json',              
-      success: function(data, textStatus) {
-        if (data.editor) {
-          this.currentUserDocumentsEditor = data.editor;
-        }
-        if (data.reader) {
-          this.currentUserDocumentsReader = data.reader;
-        }
-      }.pBind(this)
-    });
-  },
+
   
   _buildDocumentItemNode: function( document ){
     var id = document.uuid(),
-        editor = this._hasAuthenticatedUserEditorRights( document.data.id ),
+        editor = this._hasAuthenticatedUserEditorRights( document ),
         data = {
           webdoc: {
             id: id
@@ -254,11 +239,8 @@ WebDoc.DocumentList = $.klass({
       return docList;
   },
   
-  _hasAuthenticatedUserEditorRights: function(documentId) {
-     for (var i = 0; i< this.currentUserDocumentsEditor.length; i++) {
-       if (this.currentUserDocumentsEditor[i] == documentId) { return true; }
-     }
-     return false;
+  _hasAuthenticatedUserEditorRights: function(document) {
+    return (jQuery.inArray(document.data.id.toString(), WebDoc.application.documentEditor.currentUserDocumentsEditor()) !== -1);
   }
 });
 

@@ -27,4 +27,17 @@ namespace :users do
     User.update_all "confirmed_at = '#{Time.now.utc.to_s(:db)}'", :confirmed_at => nil
   end
   
+  task :fix_roles => :environment do
+    default_user = User.find(:first)
+    Document.all.each do |document|
+      if (document.creator)
+        document.creator.has_role!("editor", document)
+      else
+       document.creator = default_user
+       document.save
+       default_user.has_role!("editor", document)
+      end      
+    end
+  end  
+  
 end
