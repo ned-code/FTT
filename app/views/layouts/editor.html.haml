@@ -7,29 +7,6 @@
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :page_editor, :media => 'all'    
     = include_javascripts :common
-
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Aaargh-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Adler-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/CalligraphyFLF-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Colaborate-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Creampuff-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Droid-Sans-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/ElliotSix-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/GoodDog-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Impact-Label-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Inconsolata-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/JungleFever-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Komika-Title-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/League-Gothic-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Mirisch-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/MomsTypewriter-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/MonospaceTypewriter-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Playtime-With-Hot-Toddies-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/SF-Cartoonist-Hand-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Shardee-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    -#%link{ :rel => "stylesheet", :href => "/fonts/Underwood-Champion-fontfacekit/stylesheet.css", :type => "text/css", :charset => "utf-8" }
-    
-    %link{ :rel => "stylesheet", :href => "/themes/clean-machine/css/typography.css", :type => "text/css", :charset => "utf-8" }
     
   -if params[:reader] == 'true'
     -current_class = 'editor mode-embed'
@@ -40,14 +17,14 @@
        
   %body{ :class => current_class}
     = yield
-  = include_javascripts :mtools
-  = include_javascripts :page_editor
+    = include_javascripts :mtools
+    = include_javascripts :page_editor
 
-  :javascript
+    :javascript
       
       $(function()
       {
         WebDoc.run();
       });
     
-  = render :partial => "layouts/googleAnalytics"
+    = render :partial => "layouts/googleAnalytics"
