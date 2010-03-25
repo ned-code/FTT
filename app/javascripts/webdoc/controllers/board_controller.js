@@ -68,9 +68,7 @@ WebDoc.BoardController = jQuery.klass({
   
   setCurrentPage: function(page) {
     ddd('[board_controller] SetCurrentPage');
-    if (this._editingItem) {
-      this._editingItem.stopEditing();
-    }
+    this.stopEditing();
     // Clean previous page view
     if (this._currentPageView) {
       this._currentPageView.destroy();
@@ -331,15 +329,18 @@ WebDoc.BoardController = jQuery.klass({
     this.zoom(1 / 1.5);
   },
   
-  selectItemViews: function(itemViews) {
-    // exit edit mode for current editing item
+  stopEditing: function() {
     if (this._editingItem) {
       this._editingItem.stopEditing();
       WebDoc.application.arrowTool.enableHilight();
       this.screenNodes.animate({ opacity: 'hide' }, { duration: 200 });
       this._editingItem = null;
-    }
-    
+    }    
+  },
+  
+  selectItemViews: function(itemViews) {
+    // exit edit mode for current editing item
+    this.stopEditing();
     if (itemViews) {
       // do nothing if new selection is equal to old selection
       if(itemViews.length === this._selection.length) {
