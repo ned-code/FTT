@@ -5,7 +5,7 @@ module CarrierWave
       ((media_type && yml[media_type] && yml[media_type]['storage']) || yml[:storage]).try(:to_sym)
     end
     
-    def yml_s3_bucket(media_type)
+    def yml_s3_bucket(media_type = nil)
       (media_type && yml[media_type] && yml[media_type]['s3_bucket']) || yml[:s3_bucket]
     end
     
@@ -33,5 +33,6 @@ end
 CarrierWave.configure do |config|
   config.s3_access_key_id = CarrierWave.yml_s3_access_key_id
   config.s3_secret_access_key = CarrierWave.yml_s3_secret_access_key
+  config.s3_bucket = CarrierWave.yml_s3_bucket
   config.storage = CarrierWave.yml_storage
 end
