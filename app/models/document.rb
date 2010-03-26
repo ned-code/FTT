@@ -75,6 +75,22 @@ class Document < ActiveRecord::Base
     uuid
   end
   
+  # return a Hash with width and height formated with unit
+  def formated_size
+    result = { :width => "800px", :height => "600px"}
+    if size && size[:width] =~ /\d+%/
+      result[:width] = size[:width]
+    elsif size
+      result[:width] = "#{size[:width].to_i.to_s}px" 
+    end
+    if size && size[:height] =~ /[0-9]+%/
+      result[:height] = size[:height]
+    elsif size
+      result[:height] = "#{size[:height].to_i.to_s}px" 
+    end    
+    return result
+  end
+  
   def to_access_json
     all_document_access = self.accepted_roles
     result = { :access => [], :failed => [] }

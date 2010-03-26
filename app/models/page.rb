@@ -91,7 +91,7 @@ private
   
   # before_save
   def set_page_data
-    self.data ||= { :css => { :width => (document.size)? document.size[:width] + "px" : "800px", :height => (document.size)? document.size[:height] + "px" : "600px", :backgroundColor => "#fff" } }
+    self.data ||= { :css => { :width => document.formated_size[:width], :height => document.formated_size[:height], :backgroundColor => "#fff" } }
   end
   
   # before_create
