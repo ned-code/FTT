@@ -1,5 +1,7 @@
 development:
   synch_openfire_users: false
+  notify_administrator_onuser_creation: true
+  administrator_emails: julien@mnemis.com, stelio@mnemis.com, mathieu@mnemis.com, yann@mnemis.com  
 
 test:
   synch_openfire_users: false
@@ -13,4 +15,6 @@ production:
   synch_openfire_users: true
   openfire_user_service_url: http://localhost:9090/plugins/userService/
   openfire_user_service_secret: pt2AFc2B
+  notify_administrator_onuser_creation: true
+  administrator_emails: julien.bachmann@mnemis.com, stelio.tzonis@mnemis.com, mathieu.fivaz@mnemis.com, yann.ringgenberg@mnemis.com
   
