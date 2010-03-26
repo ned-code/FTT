@@ -17,8 +17,6 @@ WebDoc.handlers = {
   'document-inspector':   function(e) { WebDoc.application.rightBarController.showDocumentInspector(e); },
   'social-inspector':     function(e) { WebDoc.application.rightBarController.showSocialPanel(e); }, 
   
-  'prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },
-  'next-page':            function(e) { WebDoc.application.pageEditor.nextPage(); },
   'add-page':             function(e) { WebDoc.application.pageEditor.addPage(); },
   'add-web-page':         function(e) { WebDoc.application.pageEditor.addWebPage();},
   'copy-page':            function(e) { WebDoc.application.pageEditor.copyPage(); },
@@ -39,7 +37,6 @@ WebDoc.handlers = {
   'redo':                 function(e) { WebDoc.application.undoManager.redo(); },
   'delete':               function(e) { WebDoc.application.boardController.deleteSelection(); },
   
-  'close':                function(e) { WebDoc.application.pageEditor.closeDocument(); },
   'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); },
   
   'show-thumbs':          function(e) { WebDoc.application.pageBrowserController.showThumbs(e); },
@@ -48,5 +45,12 @@ WebDoc.handlers = {
   
   'mode-toggle':          function(e) { WebDoc.application.boardController.toggleMode(); },
   'mode-edit':            function(e) { WebDoc.application.boardController.setMode(false); },
-  'mode-preview':         function(e) { WebDoc.application.boardController.setMode(true); }
+  'mode-preview':         function(e) { WebDoc.application.boardController.setMode(true); },
+  
+  // Publicly accessible actions (to be bound to body)
+  
+  'prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },
+  'next-page':            function(e) { WebDoc.application.pageEditor.nextPage(); },
+  
+  'webdoc-close':         function(e) { WebDoc.application.pageEditor.closeDocument(); }
 };
