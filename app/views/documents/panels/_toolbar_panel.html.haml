@@ -60,19 +60,15 @@
         %div.draw-port
           %div.draw-size.draw-color
   
-  %ul#tb_1_utilities.mode-embed-hide
-    %li#tb_1_utilities_settings
-      %a#tb_1_utilities_settings_trigger{ :href => "#"}
-        %img{ :src => "/images/icons/settings.png", :alt => "Document settings"}
-      %ul#tb_1_utilities_settings_dropdown
-        %li.action_button
-          %a{ :href => "#close"}= t('.close')
-        %li#develop_sub_menu.mode-edit-show 
-          %a{ :href => "#"}= t('.develop')
-          %ul
-            %li.action_button
-              %a#debug-button{ :href => "#disable-html"}= t('.disable_HTML')
-  
+  %ul.control-tools.tools.thumbs.index.icons-only
+    %li#tb_1_utilities_settings.dropdown>
+      %a#tb_1_utilities_settings_trigger{ :href => "#settings"}
+      %ul#tb_1_utilities_settings_dropdown.vertical.divided.index.thumbs.text-only
+        %li
+          %a#debug-button{ :href => "#disable-html"} Disable HTML
+    %li>
+      %a{ :href => "#webdoc-close"}= t('.close')
+
   %ul.mode-tools.mode-embed-hide.tools.thumbs.index.icons-only
     %li>
       %a.state-mode{ :href => "#mode-edit"}= t('.mode_edit')

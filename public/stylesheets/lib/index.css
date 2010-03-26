@@ -291,14 +291,6 @@
     float: left;
     margin-right: 32px;
 }
-.toolbar-panel .mode-tools {
-    float: right;
-    margin-right: 0;
-    margin-left: 32px;
-}
-.mode-tools li {
-    margin-right: 0;
-}
 
 /* On the right ... */
 #toggle_inspector_wrap,
@@ -308,6 +300,16 @@
 }
 #toggle_inspector_wrap {
     margin-left: 32px;
+}
+
+.toolbar-panel .control-tools,
+.toolbar-panel .mode-tools {
+    float: right;
+    margin-right: 0;
+    margin-left: 32px;
+}
+.mode-tools li {
+    margin-right: 0;
 }
 
 /* Inspector view controls */
