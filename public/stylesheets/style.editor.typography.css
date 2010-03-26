@@ -136,7 +136,7 @@ code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
 
 /* Indentation */
 
-.website ul, ol, blockquote, dd,
+.webdoc ul, ol, blockquote, dd,
 .webdoc-indent-1  { padding-left: 2.5em; }
 .webdoc-indent-2  { padding-left: 5em; }
 .webdoc-indent-3  { padding-left: 7.5em; }
