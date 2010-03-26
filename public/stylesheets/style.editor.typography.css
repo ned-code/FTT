@@ -27,7 +27,7 @@
  * 
  */
 
-#webdoc {
+.webdoc {
     font-size: 1em;
     font-family: Helvetica, Arial, sans-serif;
     line-height: 1.25em;
@@ -93,7 +93,7 @@ blockquote, address { word-spacing: 0.2em; }
 .webdoc li ul,
 .webdoc li ol,
 dd                { margin: 0; }
-.wedoc ul, ol, dl { margin: 0 0 1.25em 0; }
+.webdoc ul, ol, dl { margin: 0 0 1.25em 0; }
 
 .webdoc li, dd    { margin-bottom: 0.625em; }
 .webdoc li li     { margin-bottom: 0; font-size: 0.875em; }
