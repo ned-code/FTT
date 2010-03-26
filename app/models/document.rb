@@ -218,7 +218,7 @@ private
   
   # after_create
   def set_creator_as_editor
-    accepts_role!("editor", creator)
+    accepts_role!("editor", creator) if creator
   end
   
   # before_create
