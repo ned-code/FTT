@@ -17,6 +17,25 @@ describe Document do
     it "should have creator as editor on create" do
       subject.creator.has_role?("editor").should be_true
     end
+    
+    it "should be possible to create document with % size unit" do
+      created_doc = Document.create({ :title => "test", :size => { :width => "100%", :height => "100%"}})
+      created_doc.pages.length.should == 1
+      created_doc.pages[0].data[:css][:width].should == "100%"
+      created_doc.pages[0].data[:css][:height].should == "100%"
+    end
+    it "should be possible to create document with px size unit" do
+      created_doc = Document.create({ :title => "test", :size => { :width => "120px", :height => "500px"}})
+      created_doc.pages.length.should == 1
+      created_doc.pages[0].data[:css][:width].should == "120px"
+      created_doc.pages[0].data[:css][:height].should == "500px"
+    end    
+    it "should be possible to create document with no size unit => px must be used" do
+      created_doc = Document.create({ :title => "test", :size => { :width => "300", :height => "200"}})
+      created_doc.pages.length.should == 1
+      created_doc.pages[0].data[:css][:width].should == "300px"
+      created_doc.pages[0].data[:css][:height].should == "200px"
+    end        
   end
   
   describe "accesses creation" do

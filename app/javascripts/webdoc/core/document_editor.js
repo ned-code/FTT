@@ -55,7 +55,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         infoDialogDescriptionNode = $("#wb-new-document-description");
         infoDialogCategoryNode = $("#wb-new-document-category");
         infoDialogWidthNode = $("#wb-new-document-size-custom-width");
-        infoDialogHeightNode = $("#wb-edit-document-size-custom-height");
+        infoDialogHeightNode = $("#wb-new-document-size-custom-height");
         infoDialogSubmitNode = infoDialogNode.find("input[type='submit']");
     },
     

@@ -35,4 +35,10 @@ class Notifier < ActionMailer::Base
     body        :user => user, :follower => follower
   end
   
+  def new_user_notification(recipients, new_user)
+    recipients  recipients
+    from        "info@webdoc.com"
+    subject     "[webdoc alpha] User #{new_user.email} just signed up."
+    body        :new_user => new_user    
+  end
 end

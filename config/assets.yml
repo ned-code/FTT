@@ -29,27 +29,27 @@ stylesheets:
     - public/stylesheets/colorpicker.css
     - public/stylesheets/toolbar.css
   
-  font_collection:
-    - public/fonts/Aaargh-fontfacekit/stylesheet
-    - public/fonts/Adler-fontfacekit/stylesheet
-    - public/fonts/CalligraphyFLF-fontfacekit/stylesheet
-    - public/fonts/Colaborate-fontfacekit/stylesheet
-    - public/fonts/Creampuff-fontfacekit/stylesheet
-    - public/fonts/Droid-Sans-fontfacekit/stylesheet
-    - public/fonts/ElliotSix-fontfacekit/stylesheet
-    - public/fonts/GoodDog-fontfacekit/stylesheet
-    - public/fonts/Impact-Label-fontfacekit/stylesheet
-    - public/fonts/Inconsolata-fontfacekit/stylesheet
-    - public/fonts/JungleFever-fontfacekit/stylesheet
-    - public/fonts/Komika-Title-fontfacekit/stylesheet
-    - public/fonts/League-Gothic-fontfacekit/stylesheet
-    - public/fonts/Mirisch-fontfacekit/stylesheet
-    - public/fonts/MomsTypewriter-fontfacekit/stylesheet
-    - public/fonts/MonospaceTypewriter-fontfacekit/stylesheet
-    - public/fonts/Playtime-With-Hot-Toddies-fontfacekit/stylesheet
-    - public/fonts/SF-Cartoonist-Hand-fontfacekit/stylesheet
-    - public/fonts/Shardee-fontfacekit/stylesheet
-    - public/fonts/Underwood-Champion-fontfacekit/stylesheet
+#  font_collection:
+#    - public/fonts/Aaargh-fontfacekit/stylesheet
+#    - public/fonts/Adler-fontfacekit/stylesheet
+#    - public/fonts/CalligraphyFLF-fontfacekit/stylesheet
+#    - public/fonts/Colaborate-fontfacekit/stylesheet
+#    - public/fonts/Creampuff-fontfacekit/stylesheet
+#    - public/fonts/Droid-Sans-fontfacekit/stylesheet
+#    - public/fonts/ElliotSix-fontfacekit/stylesheet
+#    - public/fonts/GoodDog-fontfacekit/stylesheet
+#    - public/fonts/Impact-Label-fontfacekit/stylesheet
+#    - public/fonts/Inconsolata-fontfacekit/stylesheet
+#    - public/fonts/JungleFever-fontfacekit/stylesheet
+#    - public/fonts/Komika-Title-fontfacekit/stylesheet
+#    - public/fonts/League-Gothic-fontfacekit/stylesheet
+#    - public/fonts/Mirisch-fontfacekit/stylesheet
+#    - public/fonts/MomsTypewriter-fontfacekit/stylesheet
+#    - public/fonts/MonospaceTypewriter-fontfacekit/stylesheet
+#    - public/fonts/Playtime-With-Hot-Toddies-fontfacekit/stylesheet
+#    - public/fonts/SF-Cartoonist-Hand-fontfacekit/stylesheet
+#    - public/fonts/Shardee-fontfacekit/stylesheet
+#    - public/fonts/Underwood-Champion-fontfacekit/stylesheet
     
   page_viewer:
     - public/stylesheets/lib/protect.css
