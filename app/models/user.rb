@@ -124,7 +124,7 @@ protected
   
   #after create. This is a temporary action until invitation has been implemented.
   def notify_administrators
-    if (APP_CONFIG['notify_administrator_onuser_creation'])  
+    if (APP_CONFIG['notify_administrator_on_user_creation'])  
       Notifier.deliver_new_user_notification(APP_CONFIG['administrator_emails'], self)
     end    
   end

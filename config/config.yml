@@ -10,11 +10,13 @@ staging:
   synch_openfire_users: true
   openfire_user_service_url: http://localhost:9090/plugins/userService/
   openfire_user_service_secret: rt8BTv4C
+  google_analytic_tracker_id: UA-11892994-2
 
 production:
   synch_openfire_users: true
   openfire_user_service_url: http://localhost:9090/plugins/userService/
   openfire_user_service_secret: pt2AFc2B
-  notify_administrator_onuser_creation: true
+  google_analytic_tracker_id: UA-11892994-3
+  notify_administrator_on_user_creation: true
   administrator_emails: julien.bachmann@mnemis.com, stelio.tzonis@mnemis.com, mathieu.fivaz@mnemis.com, yann.ringgenberg@mnemis.com
   
