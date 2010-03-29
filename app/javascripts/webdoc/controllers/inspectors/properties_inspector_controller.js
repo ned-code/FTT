@@ -33,8 +33,11 @@ WebDoc.PropertiesInspectorController = $.klass({
       this.leftNode.val( selectedItem.item.data.data.css.left );
       this.widthNode.val( selectedItem.item.data.data.css.width );
       this.heightNode.val( selectedItem.item.data.data.css.height );      
-      this.scrollNode.attr("checked", selectedItem.itemDomNode.css("overflow") === "auto");
       this.opacityNode.val( selectedItem.item.data.data.css.opacity || "1" );
+      // drawing item has no itemDomNode
+      if (selectedItem.itemDomNode) {
+        this.scrollNode.attr("checked", selectedItem.itemDomNode.css("overflow") === "auto");
+      }
     }
   },
   
