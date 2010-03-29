@@ -238,6 +238,40 @@ body {
     right: 0;
 }
 
+.card {
+  height: 128px;
+  color: white;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  padding: 0.8333em 0 0 0;
+  position: relative; 
+}
+.card-name {
+    background-color: hsl(198, 6%, 56%); color: white;
+
+    height: 1.2em;
+    line-height: 1.1em;
+    padding: 0.4em 24px;
+    margin: 0 12px 0.6em 92px;
+    
+    font-size: 1em;
+    font-weight: bold;
+    
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
+}
+.card-bio {
+  margin: 0 12px 0 116px;
+}
+.card-actions {
+  margin: 0;
+  position: absolute;
+  bottom: 12px;
+  left: 116px;
+  font-weight: bold;
+}
+
 #tb_1_utilities_settings_trigger.tb_1_utilities_settings_attention{
   background:#ee1111;
 }
@@ -839,3 +873,4 @@ body {
   height:50px;
   margin-bottom: 6px;
 }
+

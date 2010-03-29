@@ -1,9 +1,14 @@
-#social-inspector.layer{ :style => "display: none" }
-  #creator-info
-    %p About the author
-    %p#creator-name
-    %p#creator-bio
-    %p#creator-docs-count
-    %button#subscribe-button Subscribe
-    %button#unsubscribe-button Unsubscribe
-    %br
+%div#social-inspector.inspector{ :style => "display: none" }
+  %div.head
+    %div
+      %div.inspector-title About the author
+
+  %div.content
+    %div#creator-info.card
+      %div#creator-name.card-name
+      %div#creator-bio.card-bio
+      %ul.bar.index.card-actions
+        %li>
+          %a#subscribe-button.button{ :href => "#author-subscribe"} Subscribe
+          %a#unsubscribe-button.button{ :href => "#author-unsubscribe"} Unsubscribe
+        %li#creator-docs-count>

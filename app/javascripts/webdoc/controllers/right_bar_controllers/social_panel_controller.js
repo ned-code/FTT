@@ -21,12 +21,14 @@ WebDoc.SocialPanelController = jQuery.klass(WebDoc.RightBarInspectorController, 
   },
   
   buttonSelector: function() {
-    return this.SOCIAL_PANEL_BUTTON_SELECTOR;  
+    return this.SOCIAL_PANEL_BUTTON_SELECTOR;
   },  
   
   _loadCreatorInformation: function() {
     if (this.creator.avatar_thumb_url) {
-      jQuery('#creator-info').prepend(jQuery('<img>').attr('src', this.creator.avatar_thumb_url));
+      jQuery('#creator-info').css({
+        backgroundImage: "url('" + this.creator.avatar_thumb_url + "')"
+      });
     }
     jQuery('#creator-name').html(this.creator.username);
     jQuery('#creator-bio').html(this.creator.bio);
