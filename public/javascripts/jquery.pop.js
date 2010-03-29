@@ -62,7 +62,6 @@
 				transform = '11px ' + factor*node.height() + 'px';
 		
 		return {
-			opacity: 0,
 			left: - origin[0],
 			top:  - factor*node.height() - origin[1],
 			WebkitTransformOrigin: transform,
@@ -100,7 +99,11 @@
 			});
 			
 			jQuery(window).bind('scroll.'+plugin, function(){
-				wrap.css( makeWrapCss( node ) );
+				wrapCss = makeWrapCss( node );
+				popCss = makePopCss( pop, options.origin, wrapCss );
+				
+				wrap.css( wrapCss );
+				pop.css( popCss );
 			});
 			
 			pop
@@ -143,7 +146,10 @@
 			if ( options.initCallback ) { options.initCallback.call( pop ); }
 			
 			// Animate using transform
-			pop.css( makePopCss( pop, options.origin, wrapCss ) );
+			popCss = makePopCss( pop, options.origin, wrapCss );
+			popCss.opacity = 0;
+			
+			pop.css( popCss );
 			
 			jQuery({
 				transform: 0.2
