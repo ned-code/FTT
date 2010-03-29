@@ -469,7 +469,7 @@ body {
 
 
 .item-edited {
-  z-index: 2000000;
+  z-index: 1500000;
 }
 
 .ui-resizable-e {

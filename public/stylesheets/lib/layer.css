@@ -121,7 +121,7 @@
 /* Board items */
 .item-layer {
     opacity:0;
-    z-index:1000000;
+    z-index:500000;
     background-image: url('/images/icons/arrow_nav_128.png');
     background-position: center center;
     background-repeat: no-repeat;
