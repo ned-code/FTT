@@ -16,10 +16,10 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.delegate = new WebDoc.TextToolView();
     this.delegate.setEndEditionListener(this);
     this.textboxCss = {
+      overflow: "auto",
       cursor: "default",
       width: "400px",
       height: "200px",
-      overflow: "hidden",
       top: "20px",
       left: "20px"
     };
