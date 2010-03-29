@@ -10,7 +10,7 @@
 			options = {
 				popClass: plugin,
 				popWrapClass: plugin+'-wrap',
-				origin: [12, 12]
+				origin: [12, 12],
 				// attachTo
 				// initCallback
 				// openCallback
@@ -20,6 +20,8 @@
 				// openEasing
 				// closeEasing
 				// (orientation) ??
+				cancelSelector: 'a[href=#cancel], .cancel',
+				cancelEvent: 'close'
 			},
 			body,
 			windowSize,
@@ -37,10 +39,35 @@
 			height: win.height()
 		};
 	}
-	function updateBodyScroll(e) {
+	function updateScroll(e) {
 		bodyScroll = {
 			top: body.scrollTop(),
 			left: body.scrollLeft()
+		};
+	}
+	
+	function makeWrapCss( node ){
+		var	offset = node.offset(),
+				width = node.outerWidth(),
+				height = node.outerHeight();
+		
+		return {
+			left: offset.left + 0.88 * width - bodyScroll.left,
+			top: offset.top + 0.5 * height - bodyScroll.top
+		};
+	}
+	
+	function makePopCss( node, origin, wrapCss ){
+		var factor = wrapCss.top / windowSize.height,
+				transform = '11px ' + factor*node.height() + 'px';
+		
+		return {
+			opacity: 0,
+			left: - origin[0],
+			top:  - factor*node.height() - origin[1],
+			WebkitTransformOrigin: transform,
+			MozTransformOrigin: transform,
+			transformOrigin: transform
 		};
 	}
 	
@@ -50,24 +77,14 @@
 		
 		// Define actions
 		return this.each(function(i) {
-			var node = options.attachTo || body,
-					offset = node.offset(),
-					width = node.outerWidth(),
-					height = node.outerHeight(),
-					pop = jQuery(this),
-					wrapCss = {
-						left: offset.left + 0.88 * width,
-						top: offset.top + 0.5 * height - bodyScroll.top
-					},
+			var pop = jQuery(this),
+					node = options.attachTo || body,
+					wrapCss = makeWrapCss( node ),
 					wrap = jQuery('<div/>', {
 						'class': options.popWrapClass,
 						css: wrapCss
 					}),
-					popShutCss = {
-						opacity: 0
-					},
-					originX = options.origin[0],
-					originY = options.origin[1],
+					popCss,
 					diffY;
 			
 			// Close existing instances
@@ -82,6 +99,10 @@
 				wrap: wrap
 			});
 			
+			jQuery(window).bind('scroll.'+plugin, function(){
+				wrap.css( makeWrapCss( node ) );
+			});
+			
 			pop
 			.addClass( options.popClass );
 			
@@ -89,9 +110,9 @@
 			.html( pop )
 			.appendTo( body )
 			// Bind close event
-			.bind('close.'+plugin, closeHandler)
+			.bind(options.cancelEvent+plugin, closeHandler)
 			// Bind cancel button detector
-			.delegate('a[href=#cancel]', 'click.'+plugin, closeHandler);
+			.delegate(options.cancelSelector, 'click.'+plugin, closeHandler);
 			
 			// Bind the lose focus detector to body (just once)
 			if ( i === 0 ) {
@@ -100,7 +121,7 @@
 					
 					jQuery(document)
 					// Focus gets lost
-					.bind('click.' + plugin + ' focusin.' + plugin, function(e){
+					.bind( 'click.'+plugin + ' focusin.' + plugin, function(e){
 						// .closest() has problems with context - I've had to resort to .has()
 						if ( wrap.has( e.target ).length === 0 ) {
 							jQuery.fn[plugin].close();
@@ -121,19 +142,8 @@
 			// Send the callback before we start animating
 			if ( options.initCallback ) { options.initCallback.call( pop ); }
 			
-			diffY = windowSize.height - 32 - ( wrapCss.top + pop.height() );
-			shiftY = diffY > 0 ? 0 : diffY ;
-			
-			// Figure out orientation
-			popShutCss[ wrapCss.left + pop.width() < windowSize.width ? 'left' : 'right' ] = -originX;
-			//popShutCss[ wrapCss.top + pop.height() < windowSize.height ? 'top' : 'bottom' ] = -originY;
-			popShutCss.top = -originY + shiftY;
-			popShutCss.WebkitTransformOrigin = originX + 'px ' + ( originY - shiftY ) + 'px';
-			popShutCss.MozTransformOrigin = originX + 'px ' + ( originY - shiftY ) + 'px';
-			
 			// Animate using transform
-			pop
-			.css( popShutCss );
+			pop.css( makePopCss( pop, options.origin, wrapCss ) );
 			
 			jQuery({
 				transform: 0.2
@@ -142,7 +152,6 @@
 				transform: 1
 			}, {
 				step: function(a){
-					//console.log(a);
 					var scale = 'scale('+a+')';
 					
 					pop.css({
@@ -208,10 +217,10 @@
 		body = jQuery('body');
 		
 		jQuery(window).bind('resize.'+plugin, updateBodySize);
-		jQuery(window).bind('scroll.'+plugin, updateBodyScroll);
+		jQuery(window).bind('scroll.'+plugin, updateScroll);
 		
 		updateBodySize();
-		updateBodyScroll();
+		updateScroll();
 	});
 })(jQuery);
 
