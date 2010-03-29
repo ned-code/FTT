@@ -85,6 +85,9 @@ WebDoc.DocumentList = $.klass({
           ).append(
             sectionList
           );
+          
+          // Oh, and we better truncate all the document titles
+          $('.document-title').truncate().css({color: 'yellow'});
         }
       }
   },
@@ -132,7 +135,7 @@ WebDoc.DocumentList = $.klass({
         documentTitle = $("<a/>", {
           "class": "document-title wb-document-edit",
           "href": "#" + id,
-          "title": "Open this document",
+          "title": "Open '" + document.title() + "'",
           data: data,
           html: document.title()
         });

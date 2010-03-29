@@ -10,8 +10,10 @@
 <script src="../../public/javascripts/jquery.truncate.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-$(document).ready(function() {
-	jQuery('p').truncate();
+jQuery(document).ready(function() {
+	jQuery('p').truncate({
+		testContent: '<br /><br /><br />'
+	});
 });
 </script>
 

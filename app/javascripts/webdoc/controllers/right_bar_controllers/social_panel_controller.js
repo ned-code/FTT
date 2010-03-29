@@ -31,7 +31,11 @@ WebDoc.SocialPanelController = jQuery.klass(WebDoc.RightBarInspectorController, 
       });
     }
     jQuery('#creator-name').html(this.creator.username);
-    jQuery('#creator-bio').html(this.creator.bio);
+    jQuery('#creator-bio')
+    .truncate(this.creator.bio, {
+      testContent: '<br/><br/><br/><br/>'  // Truncate to four lines of text
+    });
+    
     jQuery('#creator-docs-count').html(this.creator.documents_count + ' ' + (this.creator.documents_count>1? 'webdocs' : 'webdoc'));
     
     if(this._isCreatorCurrentUser()) {
