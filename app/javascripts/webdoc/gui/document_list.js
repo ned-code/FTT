@@ -87,7 +87,7 @@ WebDoc.DocumentList = $.klass({
           );
           
           // Oh, and we better truncate all the document titles
-          $('.document-title').truncate().css({color: 'yellow'});
+          $('.document-title').truncate();
         }
       }
   },
