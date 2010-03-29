@@ -705,8 +705,11 @@ WebDoc.BoardController = jQuery.klass({
   
   _keyUp: function(e) {
    var el = jQuery(e.target);
-    if (el.is('input') || el.is('textarea')) { 
-      return;
+    if (this._editingItem !== null) {
+      e.preventDefault();      
+    }
+    if (el.is('input') || el.is('textarea') || this._editingItem !== null) { 
+      return true;
     }
     switch (e.keyCode) {
       case 37:
@@ -724,8 +727,11 @@ WebDoc.BoardController = jQuery.klass({
   
   _keyPress: function(e) {
     var el = jQuery(e.target);
-    if (el.is('input') || el.is('textarea')) { 
-      return;
+    if (this._editingItem !== null) {
+      e.preventDefault();      
+    }
+    if (el.is('input') || el.is('textarea') || this._editingItem !== null) { 
+      return true;
     }
     switch (e.keyCode) {
       case 37:
@@ -757,8 +763,11 @@ WebDoc.BoardController = jQuery.klass({
   
   _keyDown: function(e) {
     var el = jQuery(e.target);
-    if (el.is('input') || el.is('textarea')) { 
-      return;
+    if (this._editingItem !== null) {
+      e.preventDefault();      
+    }    
+    if (el.is('input') || el.is('textarea') || this._editingItem !== null) { 
+      return true;
     }
     if (!e.ctrlKey && !e.metaKey) {
       switch (e.which) {
