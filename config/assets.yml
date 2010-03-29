@@ -61,6 +61,7 @@ javascripts:
     - public/javascripts/jquery-1.4.2.js
     - public/javascripts/jquery-json.js
     - public/javascripts/jquery-string.js
+    - public/javascripts/jquery.form.js
     - public/javascripts/jquery.extensions.js
     - public/javascripts/jquery.events.js
     - public/javascripts/jquery.pop.js

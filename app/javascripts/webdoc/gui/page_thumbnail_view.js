@@ -28,7 +28,7 @@ WebDoc.PageThumbnailView = $.klass({
     }
     else {
       this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
-      this.drawingDomNode.css("zIndex", 999999);
+      this.drawingDomNode.css("zIndex", 1000000);
       this.pageThumbNode.append(this.drawingDomNode.get(0));
       
       this.itemDomNode = $('<div>').attr({

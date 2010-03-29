@@ -11,7 +11,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     jQuery('#item_inspector').delegate("#property-left", 'blur', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-width", 'blur', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-height", 'blur', this.updateProperties.pBind(this));
-    jQuery('#item_inspector').delegate("#property-scroll", 'blur', this.updateProperties.pBind(this));
+    jQuery('#item_inspector').delegate("#property-scroll", 'change', this.updateSroll.pBind(this));
     jQuery('#item_inspector').delegate("#property-opacity", 'blur', this.updateProperties.pBind(this));    
     this.topNode = jQuery("#property-top");
     this.rightNode = jQuery("#property-right");
@@ -33,18 +33,21 @@ WebDoc.PropertiesInspectorController = $.klass({
       this.leftNode.val( selectedItem.item.data.data.css.left );
       this.widthNode.val( selectedItem.item.data.data.css.width );
       this.heightNode.val( selectedItem.item.data.data.css.height );      
-      this.scrollNode.attr("checked", selectedItem.domNode.css("overflow") === "auto");
       this.opacityNode.val( selectedItem.item.data.data.css.opacity || "1" );
+      // drawing item has no itemDomNode
+      if (selectedItem.itemDomNode) {
+        this.scrollNode.attr("checked", selectedItem.itemDomNode.css("overflow") === "auto");
+      }
     }
   },
   
   updateSroll: function(event) {
     ddd("update scroll");
      var item = WebDoc.application.boardController.selection()[0].item;
-      if (item) {
+      if (item) {        
         var newOverflow = { overflow: this.scrollNode.attr("checked")?"auto":"hidden"};
         $.extend(item.data.data.css, newOverflow);
-        WebDoc.application.boardController.selection()[0].domNode.css(newOverflow);
+        WebDoc.application.boardController.selection()[0].itemDomNode.css("overflow", newOverflow.overflow);
         item.save();
       }
   },

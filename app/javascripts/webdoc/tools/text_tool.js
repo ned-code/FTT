@@ -16,10 +16,10 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.delegate = new WebDoc.TextToolView();
     this.delegate.setEndEditionListener(this);
     this.textboxCss = {
+      overflow: "auto",
       cursor: "default",
       width: "400px",
       height: "200px",
-      overflow: "hidden",
       top: "20px",
       left: "20px"
     };
@@ -57,7 +57,9 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool); 
     var textViewToExit = this.textView; 
     WebDoc.application.undoManager.registerUndo(function() {
-      this.exitEditMode(textViewToExit);
+      if (WebDoc.application.boardController.editingItem() === textViewToExit) {
+          WebDoc.application.boardController.stopEditing();
+      }
     }.pBind(this)); 
   },
   
@@ -66,7 +68,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.delegate.activateToolbar(false);
     var textViewToEdit = this.textView; 
     WebDoc.application.undoManager.registerUndo(function() {
-      this.enterEditMode(textViewToEdit);
+      WebDoc.application.boardController.editItemView(textViewToEdit);
     }.pBind(this));    
   },
   

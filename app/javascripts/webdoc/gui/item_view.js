@@ -105,7 +105,11 @@ WebDoc.ItemView = $.klass({
       height: this.item.data.data.css.height
     };
     this.domNode.stop();
-    this.domNode.animate(position, 'fast');
+    this.domNode.animate(position, 'fast', function() {
+      if (this.domNode.hasClass("item-edited")) {
+        WebDoc.application.boardController._updateScreens(this.domNode);
+      }
+    }.pBind(this));
     if (this.itemDomNode) {
       var itemCss = {};
       $.extend(itemCss, this.item.data.data.css);
@@ -113,6 +117,9 @@ WebDoc.ItemView = $.klass({
       delete itemCss.left;
       delete itemCss.width;
       delete itemCss.height;
+      if (itemCss.overflow && this.domNode.hasClass("item-edited")) {
+        delete itemCss.overflow;  
+      }
       this.itemDomNode.css(itemCss);
     }
   },
@@ -172,8 +179,8 @@ WebDoc.ItemView = $.klass({
     //by default item views are not editable (if your item is editable override this method in the subclass) 
     this.domNode.addClass("item-edited");
     this.itemLayerDomNode.hide();
-    this.domNode.draggable( 'destroy' );
-    this.domNode.resizable( 'destroy' );
+//    this.domNode.draggable( 'destroy' );
+//    this.domNode.resizable( 'destroy' );
     WebDoc.application.rightBarController.showItemInspector();    
     WebDoc.application.inspectorController.selectPalette(this.inspectorId());
   },
@@ -196,7 +203,7 @@ WebDoc.ItemView = $.klass({
       distance: 5,
       start: function(e, ui) {
         ddd("start drag");
-        if(this.item.page.data.data.externalPage) {WebDoc.application.boardController.activateEventCatcher(true);}
+        this.pageView.eventCatcherNode.show();
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
         var currentPosition = {top: this.item.data.data.css.top, left: this.item.data.data.css.left};
 
@@ -214,7 +221,7 @@ WebDoc.ItemView = $.klass({
         this._moveTo(ui.position);
       }.pBind(this)        ,
       stop: function(e, ui) {
-        if(this.item.page.data.data.externalPage) {WebDoc.application.boardController.activateEventCatcher(false);}
+        this.pageView.eventCatcherNode.hide();
         var newPosition = { top : ui.position.top + "px", left: ui.position.left + "px"};
         this.item.moveTo(newPosition);
         this.item.save();
@@ -223,7 +230,7 @@ WebDoc.ItemView = $.klass({
     }).resizable({
       handles: 's, e, se',
       start: function(e, ui) {
-        if(this.item.page.data.data.externalPage) {WebDoc.application.boardController.activateEventCatcher(true);}
+        this.pageView.eventCatcherNode.show();
         this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
         this.aspectRatio = ui.size.width / ui.size.height;
         var currentSize = { width: this.item.data.data.css.width, height: this.item.data.data.css.height};
@@ -246,7 +253,7 @@ WebDoc.ItemView = $.klass({
         this._resizeTo(ui.size);
       }.pBind(this)        ,
       stop: function(e, ui) {
-        if(this.item.page.data.data.externalPage) {WebDoc.application.boardController.activateEventCatcher(false);}
+        this.pageView.eventCatcherNode.hide();
         var newSize = { width: ui.size.width + "px", height: ui.size.height + "px"};
         this.item.resizeTo(newSize);
         this.item.save();
@@ -282,6 +289,9 @@ WebDoc.ItemView = $.klass({
     if (inspectorController) {
       inspectorController.refreshProperties();
     }
+    if (this.domNode.hasClass("item-edited")) {
+      WebDoc.application.boardController._updateScreens(this.domNode);
+    }
   }
 });
 
@@ -305,7 +315,7 @@ $.extend(WebDoc.ItemView, {
     WebDoc.application.undoManager.registerUndo(function() {
       WebDoc.ItemView._restoreSize(item, previousSize);
     }.pBind(this));
-    item.save();    
+    item.save();  
   }
 });
 

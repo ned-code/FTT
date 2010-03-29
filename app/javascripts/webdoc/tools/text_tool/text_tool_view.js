@@ -901,6 +901,9 @@ WebDoc.TextToolView = $.klass({
     }
     this.currentEditingBlock = divElement;
     this.currentEditingBlockClass = this.currentEditingBlock.className;
+    this.currentEditingOverflowX = this.currentEditingBlock.style.overflowX;
+    this.currentEditingOverflowY = this.currentEditingBlock.style.overflowY;
+    $(this.currentEditingBlock).css("overflow", "hidden");
     var storedContent = divElement.innerHTML;
     divElement.innerHTML = '';
     this.iframe = document.createElement('iframe');
@@ -917,7 +920,7 @@ WebDoc.TextToolView = $.klass({
     for (i = 0; i < this.mainPageStyles.length; i++) {
       this.frameStyles += "<link rel='stylesheet' href='" + this.mainPageStyles[i] + "' type='text/css' />";
     }
-    content.write("<!DOCTYPE html><html><head>" + this.frameStyles + "<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: hidden;} html,body { padding:0px; height:100%; margin:0px; background:none;position:relative} </style></head><body contenteditable='true'></body></html>");
+    content.write("<!DOCTYPE html><html><head>" + this.frameStyles + "<style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto;} html,body { padding:0px; height:100%; margin:0px; background:none;position:relative} </style></head><body contenteditable='true'></body></html>");
     content.close();
     thobj.edDoc.designMode = 'On';
     
@@ -993,7 +996,8 @@ WebDoc.TextToolView = $.klass({
       this.rootDiv.style.border = 'none';
       this.rootDiv.style.position = 'relative';
       this.rootDiv.style.background = 'rgba(255,255,255,0)';
-      
+      this.rootDiv.style.overflowX = this.currentEditingOverflowX;
+      this.rootDiv.style.overflowY = this.currentEditingOverflowY;      
     };
     this.firstEditionHandler = function() {
       this.createRootContainer();
@@ -1115,6 +1119,8 @@ WebDoc.TextToolView = $.klass({
     }
     
     this.currentEditingBlock.innerHTML = htmlToStore;
+    this.currentEditingBlock.style.overflowX = this.currentEditingOverflowX;
+    this.currentEditingBlock.style.overflowY = this.currentEditingOverflowY;
     this.endEditionListener.applyTextContent(htmlToStore, className);
     this.currentEditingBlock = null;
   },

@@ -472,15 +472,15 @@ a:hover { color: #0069BF;}
 /* == Item view = */
 .drag_handle {
   position:absolute;
-  z-index:1000000;
+  z-index:2000000;
 }
 .drawing_handle {
   position:absolute;
-  z-index:1000000;    
+  z-index:2000000;    
 }
 .resize_handle {
   position:absolute;
-  z-index:1000000;   
+  z-index:2000000;   
 }
 
 .item {
@@ -543,7 +543,7 @@ a:hover { color: #0069BF;}
   width:14px;
 }
 .ui-resizable-handle {
-  z-index:1000000;  
+  z-index:2000000;  
 }
 /*******************/
 /* = right part = */
