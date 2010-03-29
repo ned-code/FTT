@@ -124,42 +124,35 @@
 <script type="text/javascript" src="../../public/javascripts/jquery.pop.js"></script>
 <script type="text/javascript">
 
-var form = jQuery('<form method="post"><input type="text" /><input type="submit" value="save" /></form>');
+var form;
+
+function popIt(){
+	form.pop({
+		attachTo: jQuery(".one"),
+		initCallback: function(){
+		  console.log('INIT');
+		  
+		  this.bind('submit', function(){
+		    console.log('SUBMIT');
+		    return false;
+		  });
+		},
+		width: 200,
+		height: 120,
+		closeCallback: function(){
+		  console.log('CLOSE');
+		},
+		openEasing: 'easeOutBack',
+		closeEasing: 'easeInQuart'
+	});
+}
 
 jQuery(document).ready(function(){
-	jQuery('body')
-	.delegate("a[href=#pop]", 'click', function(){
-	  jQuery(this).pop({
-	  	content: form,
-	  	initCallback: function(){
-	  		console.log('INIT');
-	  		console.log( jQuery(this).html() );
-	  		
-	  		form.bind('submit', function(){
-	  	    console.log('SUBMIT');
-	  	    return false;
-	  		});
-	  	},
-	  	width: 200,
-	  	height: 120,
-	  	closeCallback: function(){
-	  		//console.log('CLOSE');
-	  	},
-	  	openEasing: 'easeOutBack',
-	  	closeEasing: 'easeInQuart'
-	  });
-	})
-	.append(
-	 jQuery('<form method="post"><input type="text" /><input type="submit" value="save" /></form>')
-  );
+	form = jQuery('#wb-new-form').remove();
+	jQuery(".one").bind('click', popIt);
 	
-	
-	jQuery('form').bind('submit', function(){
-	 console.log('SUBMIT');
-	 return false;
-	});
+	popIt();
 });
-
 
 </script>
 

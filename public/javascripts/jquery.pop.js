@@ -22,7 +22,7 @@
 				// (orientation) ??
 			},
 			body,
-			bodySize,
+			windowSize,
 			bodyScroll;
 	
 	function closeHandler(e) {
@@ -30,9 +30,11 @@
 	}
 	
 	function updateBodySize(e) {
-		bodySize = {
-			width: body.width(),
-			height: body.height()
+		var win = jQuery(window);
+		
+		windowSize = {
+			width: win.width(),
+			height: win.height()
 		};
 	}
 	function updateBodyScroll(e) {
@@ -119,12 +121,12 @@
 			// Send the callback before we start animating
 			if ( options.initCallback ) { options.initCallback.call( pop ); }
 			
-			diffY = bodySize.height - 32 - ( wrapCss.top + pop.height() );
+			diffY = windowSize.height - 32 - ( wrapCss.top + pop.height() );
 			shiftY = diffY > 0 ? 0 : diffY ;
 			
 			// Figure out orientation
-			popShutCss[ wrapCss.left + pop.width() < bodySize.width ? 'left' : 'right' ] = -originX;
-			//popShutCss[ wrapCss.top + pop.height() < bodySize.height ? 'top' : 'bottom' ] = -originY;
+			popShutCss[ wrapCss.left + pop.width() < windowSize.width ? 'left' : 'right' ] = -originX;
+			//popShutCss[ wrapCss.top + pop.height() < windowSize.height ? 'top' : 'bottom' ] = -originY;
 			popShutCss.top = -originY + shiftY;
 			popShutCss.WebkitTransformOrigin = originX + 'px ' + ( originY - shiftY ) + 'px';
 			popShutCss.MozTransformOrigin = originX + 'px ' + ( originY - shiftY ) + 'px';
