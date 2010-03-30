@@ -30,7 +30,7 @@
 .webdoc {
     font-size: 1em;
     font-family: Helvetica, Arial, sans-serif;
-    line-height: 1.25em;
+    line-height: 1.25;
     color: #484848;
 }
 
@@ -51,14 +51,14 @@ pre, code         { font-family: 'Courier', 'Andale Mono', 'Lucida Console', mon
 h1,h2,h3,h4,h5,h6 { font-weight: normal; margin: 0; word-spacing: -0.0833em; }
 h4,h5,h6          { font-weight: bold; }
 
-h1                { font-size: 3em;     line-height: 1.25em;    margin-bottom: 0.4167em; }
-h2                { font-size: 2.5em;   line-height: 1.5em;     margin-bottom: 0.5em; }
-h3                { font-size: 2em;     line-height: 1.25em;    margin-bottom: 0.625em; }
-h4                { font-size: 1.2em;   line-height: 1.0417em; }
-h5                { font-size: 1.1em;   line-height: 1.1364em; }
-h6                { font-size: 1em;     line-height: 1.25em; }
+h1                { font-size: 3em;                           margin-bottom: 0.4167em; }
+h2                { font-size: 2.5em;   line-height: 1.5;     margin-bottom: 0.5em; }
+h3                { font-size: 2em;     line-height: 1.25;    margin-bottom: 0.625em; }
+h4                { font-size: 1.2em;   line-height: 1.0417; }
+h5                { font-size: 1.1em;   line-height: 1.1364; }
+h6                { font-size: 1em; }
 
-*+h1              { margin-top: 0.4167em }
+*+h1              { margin-top: 0.4167em; }
 *+h2              { margin-top: 0.5em; }
 *+h3              { margin-top: 0.625em; }
 *+h4              { margin-top: 1.0417em; }
@@ -104,8 +104,8 @@ ol                { list-style-type: decimal; }
 dl dt             { font-weight: bold; }
 
 blockquote        { margin: 0 0 1.25em 0; padding: 0; font-style: italic; }
-blockquote:before { content: "\201C"; font-size: 4em; color: #484848; float: left; margin-left: -0.6em; line-height: 0.96em; }
-pre               { margin: 1.25em 0; line-height: 1.25em; white-space: pre; }
+blockquote:before { content: "\201C"; font-size: 4em; color: #484848; float: left; margin-left: -0.6em; line-height: 0.84em; }
+pre               { margin: 1.25em 0; white-space: pre; }
 address           { margin: 1.25em 0; }
 
 
@@ -116,7 +116,7 @@ em,dfn            { font-style: italic; }
 sup, sub          { line-height: 0; font-size: 0.625em; }
 
 abbr              { letter-spacing: 0.1em; }
-pre,code,tt       { font: 1em 'andale mono', 'lucida console', monospace; line-height: 1.5; }
+pre,code,tt       { font: 1em 'andale mono', 'lucida console', monospace; }
 del               { opacity: 0.6; filter: alpha(opacity=60%); font-style:italic; text-decoration: line-through; }
 
 /* Tables */
