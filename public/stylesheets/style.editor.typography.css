@@ -104,7 +104,7 @@ ol                { list-style-type: decimal; }
 dl dt             { font-weight: bold; }
 
 blockquote        { margin: 0 0 1.25em 0; padding: 0; font-style: italic; }
-blockquote:before { content: "\201C"; font-size: 4em; color: #484848; float: left; margin-left: -0.6em; line-height: 0.96em; }
+blockquote:before { content: "\201C"; font-size: 4em; color: #484848; float: left; margin-left: -0.6em; line-height: 0.84em; }
 pre               { margin: 1.25em 0; white-space: pre; }
 address           { margin: 1.25em 0; }
 
