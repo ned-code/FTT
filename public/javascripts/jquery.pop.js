@@ -40,9 +40,10 @@
 		};
 	}
 	function updateScroll(e) {
+    var theWindow = jQuery(window);
 		bodyScroll = {
-			top: body.scrollTop(),
-			left: body.scrollLeft()
+			top: theWindow.scrollTop(),
+			left: theWindow.scrollLeft()
 		};
 	}
 	
@@ -73,7 +74,6 @@
 	jQuery.fn[plugin] = function(o){
 		// Overwrite options
 		var options = jQuery.extend({}, jQuery.fn[plugin].options, o);
-		
 		// Define actions
 		return this.each(function(i) {
 			var pop = jQuery(this),
@@ -186,7 +186,7 @@
 			jQuery(document).unbind('.' + plugin);
 			
 			while (l--) {
-				instance = this.instances.pop(),
+				instance = this.instances.pop();
 				closeFn = instance.options.closeCallback;
 				
 				if ( closeFn ) { closeFn(); }
