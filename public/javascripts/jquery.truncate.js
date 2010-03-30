@@ -5,8 +5,12 @@
 // 
 // Truncates the html of a node so that the node is no greater than one line high
 // Options:
-// height				- the ideal height.  Html is truncated until node is shorter in height
-// testContent	- the ideal amount of content. Html is truncated to be shorter in height
+// height			- the target height.  Html is truncated until node is shorter in height
+// content		- the target amount of content. Html is truncated to be shorter in height
+//
+// TODO:
+// Try using letter-spacing to condense words before truncating them
+// Support file extensions by truncating the middle a la OS X: 'xxxxxx...xxx'
 
 (function(undefined){
 	
@@ -49,9 +53,9 @@
 			
 			// When the text is big, roughly hack off the chunk we don't need
 			// Remember 'm's are thicker than 'i's so we can't be too brutal 
-			// with the hacking-off factor.
-			if ( height > testHeight * 2.8 ) {
-				length = Math.ceil( length * testHeight * 2.8 / height );
+			// with the hacking-off factor. 3 is a good compromise.
+			if ( height > testHeight * 3 ) {
+				length = Math.ceil( length * testHeight * 3 / height );
 				newHtml = html.slice(0, length);
 			}
 			

@@ -11,9 +11,11 @@
 
 <script type="text/javascript">
 jQuery(document).ready(function() {
-	jQuery('p').truncate({
-		testContent: '<br /><br /><br />'
-	});
+	console.log( jQuery( ".marker" ).offset().top );
+	
+	jQuery('.truncate').truncate();
+
+	console.log( jQuery( ".marker" ).offset().top );
 });
 </script>
 
@@ -24,12 +26,34 @@ jQuery(document).ready(function() {
 .error {
 	background: red !important;
 }
+
+ul {
+  padding: 0;
+  width: 400px;
+  background: #dbdbdb;
+  list-style: none;
+  height: 20px;
+  line-height: 20px;
+}
+li {
+  float: left;
+  background: #ededed;
+}
+
 </style>
 
 </head>
 <body>
 
+<h2>Things that need truncated:</h2>
+
 <p>iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM</p>
+
+
+<ul>
+  <li style="width: 200px">floated list item</li>
+  <li class="truncate" style="background: #efdeff;"><span class="marker">*</span>iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM</li>
+</ul>
 
 </body>
 </html>

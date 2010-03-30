@@ -1,5 +1,5 @@
 // jquery.pop.js
-// 0.3
+// 0.4
 // Stephen Band
 // 
 // http://webdev.stephband.info
