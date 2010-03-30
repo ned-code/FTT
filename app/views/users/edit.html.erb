@@ -1,7 +1,9 @@
 <div class="action-zone zone">
   <div class="wrap clear">
-    <h2><%=t '.title' %></h2>
-    
+    <h2>
+      <%=t '.title' %>
+      <%= link_to "Back", :back, { :class => "wd-back-button" }%>
+    </h2>
     <% form_for @user, :html => {:multipart => 'true'}, :builder => CustomFormBuilder do |f| %>
       <fieldset>
         <div class="column one of-four stack <% if @user.errors.on(:avatar) %>error<% end %>">
