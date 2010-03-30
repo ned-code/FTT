@@ -25,7 +25,8 @@ class UsersController < ApplicationController
     @user = current_user
     
     if @user.update_attributes(params[:user])
-      redirect_to @user
+      flash[:notice] = t('flash.notice.users.edit_successful')
+      redirect_to documents_path
     else
       render :edit
     end

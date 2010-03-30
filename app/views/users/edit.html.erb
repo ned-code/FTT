@@ -6,8 +6,8 @@
       <fieldset>
         <div class="column one of-four stack <% if @user.errors.on(:avatar) %>error<% end %>">
           <label for="user_avatar">Avatar<br/>
-            <% if (@user.avatar? && !@user.errors.on(:avatar)) %>
-              <img src="<%= @user.avatar.url(:thumb) %>" />
+            <% if (@user.avatar_thumb_url && !@user.errors.on(:avatar)) %>
+              <img src="<%= @user.avatar_thumb_url %>" />
             <% end %>
           </label>
         </div>
@@ -71,15 +71,6 @@
       <a href="<%= edit_registration_path(:user) %>" style="margin-bottom: 0;" class="button">Change email &amp; password</a>
           
     <% end %>
-  </div>
-</div>
-
-<div class="content">
-  <div class="wrap">
-    <ul class="divided index">
-      <li><a href="<%= @user %>">Show</a></li>
-      <li><a href="<%= :back %>">Back</a></li>
-    </ul>
   </div>
 </div>
 
