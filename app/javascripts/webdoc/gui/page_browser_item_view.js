@@ -18,7 +18,7 @@ WebDoc.PageBrowserItemView = $.klass({
   
   TITLE_CLASS: 'page-title',
   LOADING_ICON_CLASS: 'loading-icon',
-  EDIT_ICON_CLASS: 'edit-icon',
+  EDIT_ICON_CLASS: 'edit-icon mode-edit-show',
   THUMB_CLASS: 'thumb',
   DEFAULT_CLASS: 'default',
   
