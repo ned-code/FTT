@@ -700,7 +700,7 @@ WebDoc.BoardController = jQuery.klass({
   
   _keyUp: function(e) {
    var el = jQuery(e.target);
-    if (this._editingItem !== null) {
+    if (this._editingItem !== null && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();      
     }
     if (el.is('input') || el.is('textarea') || this._editingItem !== null) { 
@@ -722,7 +722,7 @@ WebDoc.BoardController = jQuery.klass({
   
   _keyPress: function(e) {
     var el = jQuery(e.target);
-    if (this._editingItem !== null) {
+    if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();      
     }
     if (el.is('input') || el.is('textarea') || this._editingItem !== null) { 
@@ -758,7 +758,7 @@ WebDoc.BoardController = jQuery.klass({
   
   _keyDown: function(e) {
     var el = jQuery(e.target);
-    if (this._editingItem !== null) {
+    if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();      
     }    
     if (el.is('input') || el.is('textarea') || this._editingItem !== null) { 
