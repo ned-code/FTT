@@ -239,16 +239,15 @@ input.default {
     left: 0;
 }
 
-.shunt label,
 .shunt input {
     display: inline-block;
 }
 .shunt label {
-    width: 40%;
+    /*width: 40%;*/
     text-align: right;
 }
 .shunt input {
-    width: 50%;
+    /*width: 50%;*/
 }
 .shunt label input {
     width: auto;

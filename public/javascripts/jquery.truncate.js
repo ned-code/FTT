@@ -1,78 +1,116 @@
 // jquery.truncate.js
 // 
-// 0.2
+// 0.5
 // Stephen Band
 // 
 // Truncates the html of a node so that the node is no greater than one line high
 // Options:
-// height			- the target height.  Html is truncated until node is shorter in height
-// content		- the target amount of content. Html is truncated to be shorter in height
+// marker					- character or jQuery object placed at end of truncation.
+// match 					- content to match in height, typically smething like '<br /><br />'.
+// truncateByWord - causes truncation only to happen on word boundaries.
 //
 // TODO:
-// Try using letter-spacing to condense words before truncating them
+// Support html tags
 // Support file extensions by truncating the middle a la OS X: 'xxxxxx...xxx'
 
 (function(undefined){
 	
 	var options = {
-		marker: '&hellip;',
-		testContent: '&nbsp;'
-		//height: false
-	};
+				marker: '\u2026',
+				truncateByWord: false
+			},
+			// Uses a zero width space for testing
+			testNode = jQuery('<span/>').html('\u200B');
 	
-	jQuery.fn.truncate = function(text, o){
+	function fillNode(node, html, testNode){
+		node
+		.html(
+			jQuery( document.createTextNode( html ) )
+			.add( testNode )
+		);
+	}
+	
+	jQuery.fn.truncate = function(text, opt){
 		if (typeof text !== 'string') {
-			o = text;
+			opt = text;
 			text = undefined;
 		}
 		
-		o = jQuery.extend({}, options, o);
+		var o = jQuery.extend({}, options, opt);
 		
 		return this.each(function(){
 			var node = jQuery(this),
 					data = node.data('truncate'),
 					html = text || data && data.html || node.html(),
+					match = o.match || data && data.match || '&nbsp;',
 					newHtml = html,
-					height = node.height(),
-					testHeight = o.height,
 					length = html.length,
-					testNode = jQuery('<span/>');
+					targetOffset, normalOffset, currentOffset, x;
 			
 			if ( !data ) {
 				node.data('truncate', {
-					html: html
+					html: html,
+					match: match
+				});
+				
+				jQuery(window)
+				.bind('resize', function(){
+					// Iterative, yes, cool, questionable
+					node.truncate();
 				});
 			}
 			
-			node.html( testNode );
-			
-			if ( !testHeight ) {
-				// Find out how high it would be with the test content in it
-				testHeight = testNode.html( o.testContent ).height();
+			// If it's not visible we can't do anything with it
+			if ( !node.is(":visible") ) {
+			 return;
 			}
 			
-			// When the text is big, roughly hack off the chunk we don't need
-			// Remember 'm's are thicker than 'i's so we can't be too brutal 
-			// with the hacking-off factor. 3 is a good compromise.
-			if ( height > testHeight * 3 ) {
-				length = Math.ceil( length * testHeight * 3 / height );
-				newHtml = html.slice(0, length);
-			}
+			// Offset of the node when it has target content.
+			node
+			.html( match )
+			.append( testNode );
+			targetOffset = testNode.offset();
 			
-			testNode.html( newHtml );
+			// Offset of the node when it's full.
+			node
+			.html( html )
+			.append( testNode );
+			currentOffset = testNode.offset();
 			
-			// Reduce length letter by letter
-			while ( length-- && testNode.height() > testHeight ){
-				// Reduce letters until we find a space
-				// TODO: needs more logic, because not all text has spaces
-				//while ( length-- && html[ length ] !== ' ' ) {}
+			// Why carry on if everything's already hunkydory?
+			if ( currentOffset.top <= targetOffset.top ) {
+				testNode.remove();
+				return;
+			};
+			
+			x = length;
+			
+			// Home in.
+			while ( x > 1 || currentOffset.top > targetOffset.top ) {
+				x = Math.ceil(x/2);
+				
+				length = currentOffset.top > targetOffset.top ?
+					length - x :
+					length + x ;
 				
 				newHtml = html.slice(0, length) + o.marker;
-				testNode.html( newHtml );
+				fillNode(node, newHtml, testNode);
+				currentOffset = testNode.offset();
 			}
 			
-			// Get rid of testNode
-			node.html( newHtml );
+			// Lop off letters until we find a space.
+			if ( o.truncateByWord ) {
+				while ( length-- ) {
+					if ( /\s/.test( html[length+1] ) ) {
+						newHtml = html.slice(0, length+1) + o.marker;
+				  		fillNode(node, newHtml, testNode);
+						break;
+					}
+				}
+			}
+			
+			testNode.remove();
+			return;
 		});
 	};
 })();

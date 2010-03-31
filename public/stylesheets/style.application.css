@@ -174,11 +174,11 @@ header {
   width: 42em;
 }
 .share-dialog {
-  width: 42em;
+  width: 28em;
 }
 
 .state-unshared-hide {
-  height: 4.8333em;
+  height: 3.3333em;
   opacity: 1;
   margin-bottom: 1.6667em;
   -webkit-transition: height 0.2s ease-in, margin-bottom 0.2s ease-in, opacity 0.2s ease-in;

@@ -11,11 +11,11 @@
 
 <script type="text/javascript">
 jQuery(document).ready(function() {
-	console.log( jQuery( ".marker" ).offset().top );
+	//console.log( jQuery( ".marker" ).offset().top );
 	
 	jQuery('.truncate').truncate();
 
-	console.log( jQuery( ".marker" ).offset().top );
+	//console.log( jQuery( ".marker" ).offset().top );
 });
 </script>
 
@@ -27,13 +27,15 @@ jQuery(document).ready(function() {
 	background: red !important;
 }
 
+p {}
+
 ul {
   padding: 0;
   width: 400px;
   background: #dbdbdb;
   list-style: none;
   height: 20px;
-  line-height: 20px;
+  line-height: 2;
 }
 li {
   float: left;
@@ -45,14 +47,23 @@ li {
 </head>
 <body>
 
+<h2>Things that don't need truncated:</h2>
+
+<p class="truncate">iii</p>
+
+<ul>
+  <li style="width: 200px">floated list item</li>
+  <li class="truncate" style="background: #efdeff;">iii</li>
+</ul>
+
 <h2>Things that need truncated:</h2>
 
-<p>iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM</p>
+<p class="truncate">iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM</p>
 
 
 <ul>
   <li style="width: 200px">floated list item</li>
-  <li class="truncate" style="background: #efdeff;"><span class="marker">*</span>iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM</li>
+  <li class="truncate" style="background: #efdeff;">iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii iii MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM MMM</li>
 </ul>
 
 </body>
