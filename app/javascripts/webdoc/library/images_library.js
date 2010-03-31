@@ -332,5 +332,5 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
   },
   preloadImageError: function() {
     this.detailsView.find('.loading').remove();
-  },
+  }
 });
