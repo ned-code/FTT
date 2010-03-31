@@ -39,3 +39,4 @@ app/javascripts/webdoc/library/images_library/background_image_uploader.js
 public/app/javascripts
 db/test.sqlite3-journal
 *.orig
+public/shinding_test.html
