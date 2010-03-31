@@ -41,9 +41,8 @@ WebDoc.PageBrowserController = $.klass({
     this._pagesPanelWidth = this.domNode.outerWidth();
     
     ddd("[PageBrowserController] Pages panel width: " + this._pagesPanelWidth);
-    
     this.visible = false;
-    this.pageMap = {};  
+    this.pageMap = {};    
   },
   
   setDocument: function(document) {
@@ -79,33 +78,35 @@ WebDoc.PageBrowserController = $.klass({
     this._updateIndexNumbers();
     this._updateThumbs();
     
-    pageBrowserItems.sortable({
-      axis: 'y',
-      distance: 8,
-      opacity: 0.8,
-      containment: '.content',
-      start:  this.dragStart.pBind(this),
-      update: this.dragUpdate.pBind(this),
-      change: function(e, ui){
-        var list = jQuery( e.target ),
-            items = list.children().not( ui.item[0] ),
-            numberSelector = this.NUMBER_SELECTOR,
-            self = this;
-        
-        items
-        .each(function(i){
-          var number = ( this === ui.placeholder[0] ) ? ui.item.find(numberSelector) : jQuery(numberSelector, this) ;
+    if (WebDoc.application.boardController.isEditable()) {
+      pageBrowserItems.sortable({
+        axis: 'y',
+        distance: 8,
+        opacity: 0.8,
+        containment: '.content',
+        start:  this.dragStart.pBind(this),
+        update: this.dragUpdate.pBind(this),
+        change: function(e, ui){
+          var list = jQuery( e.target ),
+              items = list.children().not( ui.item[0] ),
+              numberSelector = this.NUMBER_SELECTOR,
+              self = this;
           
-          number.html( i+1 );
-          
-          // Update current page number
-          if ( $(this).hasClass( self.CURRENT_CLASS ) ) {
-            $( self.PAGE_NUMBER_SELECTOR ).html( i+1 );
-          }
-          
-        });
-      }.pBind(this)
-    });
+          items
+          .each(function(i){
+            var number = ( this === ui.placeholder[0] ) ? ui.item.find(numberSelector) : jQuery(numberSelector, this) ;
+            
+            number.html( i+1 );
+            
+            // Update current page number
+            if ( $(this).hasClass( self.CURRENT_CLASS ) ) {
+              $( self.PAGE_NUMBER_SELECTOR ).html( i+1 );
+            }
+            
+          });
+        }.pBind(this)
+      });
+    }
     this.bindEventHandlers();
     WebDoc.application.boardController.addCurrentPageListener(this);
   },

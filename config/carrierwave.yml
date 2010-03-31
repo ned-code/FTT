@@ -17,12 +17,12 @@ test:
 staging:
   s3_access_key_id: 'AKIAJSQQ2RDIXG2UOZ5Q'
   s3_secret_access_key: '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'
+  s3_bucket: "assets.staging.webdoc.com"
+  storage: right_s3  
   assets:
     s3_bucket: "assets.staging.webdoc.com"
-    storage: right_s3
   widgets:
     s3_bucket: "apps.staging.webdoc.com"
-    storage: right_s3
 production:
   s3_access_key_id: 'AKIAJSQQ2RDIXG2UOZ5Q'
   s3_secret_access_key: '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'

@@ -41,8 +41,8 @@ WebDoc.DocumentCollaborationController = $.klass({
           attachTo: $( e.currentTarget ),
           initCallback: function(){
             that.documentAccessForm
-            .bind( 'submit', that.sendInvitations.pBind(that) )
-            .delegate("a[href='#delete']", "click", that.deleteAccess.pBind(that));
+            .bind( 'submit', that.sendInvitations.pBind(that) );
+            that.domNode.delegate("a[href='#delete']", "click", that.deleteAccess.pBind(that));
           }
         });
         

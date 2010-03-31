@@ -60,18 +60,18 @@ body {
  * .mode-embed
  *
  */
-.mode-preview .mode-preview-hide { display: none;}
-.mode-edit .mode-edit-hide { display: none;}
-.mode-embed .mode-embed-hide { display: none;}
+.mode-preview .mode-preview-hide { display: none ! important ;}
+.mode-edit .mode-edit-hide { display: none ! important ;}
+.mode-embed .mode-embed-hide { display: none ! important ;}
 
 .mode-preview .mode-edit-show,
-.mode-embed .mode-edit-show { display: none; }
+.mode-embed .mode-edit-show { display: none ! important ; }
 
 .mode-edit .mode-preview-show,
-.mode-embed .mode-preview-show { display: none; }
+.mode-embed .mode-preview-show { display: none ! important ; }
 
 .mode-edit .mode-embed-show,
-.mode-preview .mode-embed-show { display: none; }
+.mode-preview .mode-embed-show { display: none ! important ; }
 
 /* Webdoc */
 

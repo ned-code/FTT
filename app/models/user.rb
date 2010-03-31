@@ -53,7 +53,11 @@ class User < ActiveRecord::Base
   end
   
   def avatar_thumb_url
-    avatar.thumb.url
+    thumb_url = avatar.thumb.url
+    if (!thumb_url)
+      thumb_url = "/images/thumb_icon_no_photo_100x100.png"
+    end
+    return thumb_url
   end
   
   def documents_count

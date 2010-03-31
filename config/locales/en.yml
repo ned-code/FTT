@@ -313,6 +313,8 @@ en:
       login_successful: "Login successful!"
       logout_successful: "Logout successful!"
       user_confirmed: "Your user is confirmed!"
+      users:
+        edit_successful: "Your profile has been updated successfully"
       widget:
         destroyed_successful: "Widget successfully deleted"
         updated_successful: "Widget successfully updated"

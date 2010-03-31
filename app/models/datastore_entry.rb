@@ -40,7 +40,6 @@ class DatastoreEntry < ActiveRecord::Base
       options[:methods] = [:email]
     else
       options[:only]    = [:ds_key, :ds_value]
-      options[:methods] = [:email]
     end
     
     super(options)
