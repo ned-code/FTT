@@ -8,6 +8,11 @@
 WebDoc.ToolbarController = $.klass({
   initialize: function() {
     ddd("init toolbar controller");
+    
+    var domNode = $("#toolbar");
+    
+    domNode.find('.document-title').truncate();
+    
     //try {
     //  $("#toolbar").click(this.performAction.pBind(this));
     //}

@@ -48,7 +48,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     
     // Set up default panel behaviour (show screen, show footer etc.)
     jQuery(".panel").panel();
-        
+    
     MTools.ServerManager.xmppClientId = new MTools.UUID().id;
     
     WebDoc.application.pageEditor = this;
