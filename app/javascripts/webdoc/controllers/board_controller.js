@@ -22,10 +22,6 @@ WebDoc.BoardController = jQuery.klass({
     this._isInteraction = false;
     this._isMovingSelection = false;
     this._previousInspector = null;
-    
-    // used to keep track of original board size. As WebKit doesnt autoatically resize a div when it has a scale transform
-    // we resize manually the div and we need to know what was the original size to define the new size.
-    this._initialSize = null;
   },
   
   currentPageView: function() {
@@ -88,7 +84,6 @@ WebDoc.BoardController = jQuery.klass({
     this._selection = [];
     this._currentPage = page;
     this._editingItem = null;
-    this._initialSize = null;
     
     // Construct DOM tree
     this.boardContainerNode
@@ -649,18 +644,18 @@ WebDoc.BoardController = jQuery.klass({
     boardCss.width = 100/this._currentZoom + '%';
     boardCss.height = 100/this._currentZoom + '%';
     
-    if (!this._initialSize) {
-      this._initialSize = {
-        width: parseFloat(this.boardContainerNode.css("width")),
-        height: parseFloat(this.boardContainerNode.css("height")),
-        widthFlag: this.boardContainerNode.css("width").match(/px/)?"px":"%",
-        heightFlag: this.boardContainerNode.css("height").match(/px/)?"px":"%"
-      };
-    }
+
+    var initialSize = {
+      width: parseFloat(this._currentPage.data.data.css.width),
+      height: parseFloat(this._currentPage.data.data.css.height),
+      widthFlag: this._currentPage.data.data.css.width.match(/px/)?"px":"%",
+      heightFlag: this._currentPage.data.data.css.height.match(/px/)?"px":"%"
+    };
+
     
     boardContainerCss = {
-      width: (this._initialSize.width * this._currentZoom) + this._initialSize.widthFlag,
-      height: (this._initialSize.height * this._currentZoom) + this._initialSize.heightFlag
+      width: (initialSize.width * this._currentZoom) + initialSize.widthFlag,
+      height: (initialSize.height * this._currentZoom) + initialSize.heightFlag
     };
     
     ddd("new board size", boardContainerCss.width, boardContainerCss.height);
