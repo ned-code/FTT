@@ -11,7 +11,8 @@ WebDoc.ToolbarController = $.klass({
     
     var domNode = $("#toolbar");
     
-    domNode.find('.document-title').truncate();
+    // JBA temp comment this line until it doesn't freeze the application
+    //domNode.find('.document-title').truncate();
     
     //try {
     //  $("#toolbar").click(this.performAction.pBind(this));
