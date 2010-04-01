@@ -22,6 +22,48 @@ class ProxyController < ApplicationController
     render :text => Net::HTTP.get(URI.parse(url))
   end
   
+  # POST proxy/post
+  def post
+    url = params[:url]
+    data = params[:data]
+    #logger.info data
+    if data == nil || data == ''
+      data = {}
+    end
+
+    render :text => Net::HTTP.post_form(URI.parse(url),data).body
+  end
+  
+  # PUST proxy/put
+  def put
+    url = params[:url]
+    data = params[:data]
+    #logger.info data
+    if data == nil || data == ''
+      data = {}
+    end
+
+    url = URI.parse(url)
+    req = Net::HTTP::Put.new(url.path)
+    req.set_form_data(data)
+    response = Net::HTTP.new(url.host, url.port).start { |http| http.request(req) }
+    render :text => response.body
+    
+    #render :text => Net::HTTP.put(URI.parse(url),data)
+  end
+  
+  # DELETE proxy/delete
+  def delete
+    url = params[:url]
+
+    url = URI.parse(url)
+    req = Net::HTTP::Delete.new(url.path)
+    response = Net::HTTP.new(url.host, url.port).start { |http| http.request(req) }
+    render :text => response.body
+    
+    #render :text => Net::HTTP::Delete(URI.parse(url))
+  end
+  
 end
 
 class RedirectFollower

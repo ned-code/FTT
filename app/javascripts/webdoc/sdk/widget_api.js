@@ -59,6 +59,18 @@ WebDoc.WidgetApi = $.klass(
     var proxy_url = '/proxy/get?url='+url;
     this.local._ajax(proxy_url,null,'GET','text',callback,extradata);
   },
+	postUrl: function(url,data,callback,extradata) {
+		var proxy_url = '/proxy/post?url='+url;
+		this.local._ajax(proxy_url,data,'POST','text',callback,extradata);
+	},
+	putUrl: function(url,data,callback,extradata) {
+		var proxy_url = '/proxy/put?url='+url;
+		this.local._ajax(proxy_url,data,'PUT','text',callback,extradata);
+	},
+	deleteUrl: function(url,callback,extradata) {
+		var proxy_url = '/proxy/delete?url='+url;
+		this.local._ajax(proxy_url,null,'DELETE','text',callback,extradata);
+	},
   local: { //local call - use direct jQuery call
     getJson: function(url,callback,extradata) {
       this._ajax(url,null,'GET','json',callback,extradata);
