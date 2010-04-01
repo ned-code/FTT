@@ -12,7 +12,7 @@
         %li>
           %span.user-email.item= current_user.email
         %li>
-          = link_to "edit", edit_user_path(current_user), { :class => "user-edit item" }
+          = link_to "edit profile", edit_user_path(current_user), { :class => "user-edit item" }
         %li>
           = link_to "logout", destroy_user_session_path, { :class => "user-logout item" }
       - else
