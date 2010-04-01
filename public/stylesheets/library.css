@@ -834,33 +834,6 @@ object:hover, object:focus, object:active {
 /* = Apps = */
 /* ========== */
 
-#apps .thumbnails ul {
-  list-style-type:none;
-  padding:0;
-}
-
-#apps .thumbnails ul li {
-  list-style: none;
-  width:33%;
-  padding:0 0 18px 0;
-  float:left;
-  text-align:left;
-}
-
-#apps .thumbnails ul li:nth-child(3n+2) {text-align:center;}
-#apps .thumbnails ul li:nth-child(3n+3) {text-align:right;}
-
-#apps .thumbnails ul li a {
-  text-decoration:none;
-  position:relative;
-}
-
-#apps .thumbnails ul li img {
-  width:75px;
-  height:75px;
-}
-
-
 #apps .rows .no_items {
   font-size:14px;
   text-align:center;

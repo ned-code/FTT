@@ -238,6 +238,47 @@ body {
     right: 0;
 }
 
+
+/* Apps index */
+
+.apps-index {
+  /* A quick hack to get three thumbs in a row */
+  margin-left: -8px;
+  margin-right: -14px;
+}
+
+.apps-index a {
+  color: black;
+  padding-top: 96px;
+  height: auto;
+  width: 96px;
+  margin-bottom: 6px;
+  line-height: 1.25;
+  -webkit-background-size: 80px 80px;
+  -moz-background-size:    80px 80px;
+  background-size:         80px 80px;
+  -webkit-border-radius:   12px;
+  -moz-border-radius:      12px;
+  border-radius:           12px;
+  background-position: 50% 8px;
+  /* Make this draggable */
+  -webkit-user-drag: element;
+}
+.apps-index a:hover {
+  background-color: #aaaaaa;
+}
+.apps-index a .title {
+  line-height: ;
+  display: block;
+}
+.apps-index a .version {
+  color: #666666;
+  display: block;
+  font-size: 0.75em;
+}
+
+/* ---- */
+
 .card {
   height: 128px;
   color: white;
