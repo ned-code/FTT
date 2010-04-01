@@ -102,15 +102,15 @@
 #wb-share-document-dialog.share-dialog{ :style => "display:none", :title => t('.document_forms.share_document_dialog.title') }
   %form#wb-share-form
     -#.column.one.triple.of-five>
-    %h4 Share with
+    %h4 Share
     
     %fieldset
       %div.shunt
         %input#unshare_webdoc_radio{ :type => "radio", :name => "share", :value => "off" }
-        %label{ :for => "unshare_webdoc_radio" } other webdoc members
+        %label{ :for => "unshare_webdoc_radio" } with other webdoc members
       %div.shunt
         %input#share_webdoc_radio{ :type => "radio", :name => "share", :value => "on" }
-        %label{ :for => "share_webdoc_radio" } the whole wwworld
+        %label{ :for => "share_webdoc_radio" } with the whole wwworld
     
     %fieldset.state-unshared-hide
       %label{ :for => "shared_webdoc_url" }= t('.document_forms.share_document_dialog.shared_address_label')
