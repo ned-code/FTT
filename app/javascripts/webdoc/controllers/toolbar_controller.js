@@ -11,7 +11,8 @@ WebDoc.ToolbarController = $.klass({
     
     var domNode = $("#toolbar");
     
-    domNode.find('.document-title').truncate();
+    // JBA temp comment this line until it doesn't freeze the application
+    //domNode.find('.document-title').truncate();
     
     //try {
     //  $("#toolbar").click(this.performAction.pBind(this));
@@ -22,7 +23,7 @@ WebDoc.ToolbarController = $.klass({
     //$("#tb_1_utilities_preview").click(this.toggleInteractionMode.pBind(this));
     //$("#tb_1_utilities_settings_dropdown").click(this.performAction.pBind(this));
   },
-
+  
   performAction: function(e) {
     //e.preventDefault();
     //var clickedButton = $(e.target).closest("li");
@@ -39,75 +40,75 @@ WebDoc.ToolbarController = $.klass({
     //  ddd("unknown toolbar action: " + clickedButton.attr("id"));
     //  ddt();
     //}    
-  },
-  
-//  'undo': function(e) {
-//    WebDoc.application.undoManager.undo();
-//  },
-//
-//  'redo': function(e) {
-//    WebDoc.application.undoManager.redo();
-//  },
-//
-//  'zoom_in': function(e) {
-//    WebDoc.application.boardController.zoomIn();
-//  },
-//
-//  'zoom_out': function(e) {
-//    WebDoc.application.boardController.zoomOut();
-//  },
-//
-//  'delete_item': function(e) {
-//    WebDoc.application.boardController.deleteSelection();
-//  },   
-//   
-//  'lib_view': function(e) {
-//    WebDoc.application.rightBarController.showLib();
-//  },
-//  
-//  'page_inspector_view': function(e) {
-//    WebDoc.application.rightBarController.showPageInspector();
-//  },
-//  
-//  'item_inspector_view': function(e) {
-//    WebDoc.application.rightBarController.showItemInspector();
-//  },
-//  
-//  'page-browser': function(e) {
-//    WebDoc.application.pageBrowserController.toggleBrowser();
-//  },
-//  
-//  'toggle_inspector': function(e) {
-//    WebDoc.application.rightBarController.toggleRightBar();
-//  },
-  
-//  'toggleInteractionMode': function(e) {
-//    e.preventDefault();
-//    WebDoc.application.boardController.toggleInteractionMode();
-//  }
-  
-//  'move-front': function(e) {
-//    e.preventDefault();
-//    WebDoc.application.pageEditor.currentPage.moveFront(WebDoc.application.boardController.selection()[0].item);
-//    WebDoc.application.boardController.selection()[0].item.save();
-//  },
-//
-//  'move-back': function(e) {
-//    e.preventDefault();
-//    WebDoc.application.pageEditor.currentPage.moveBack(WebDoc.application.boardController.selection()[0].item);
-//    WebDoc.application.boardController.selection()[0].item.save();
-//  },
-//    
-//  disable_html: function(e) {
-//    WebDoc.application.pageEditor.disableHtml = !WebDoc.application.pageEditor.disableHtml; 
-//    WebDoc.application.pageEditor.loadPageId( WebDoc.application.pageEditor.currentPage.uuid());
-//    $("#disable_html a").text(WebDoc.application.pageEditor.disableHtml?"Enable HTML":"Disable HTML");
-//    if (WebDoc.application.pageEditor.disableHtml) {
-//      $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");
-//    }
-//    else {
-//      $("#tb_1_utilities_settings_trigger").removeClass("tb_1_utilities_settings_attention");
-//    }
-//  }
+  }
+
+  //  'undo': function(e) {
+  //    WebDoc.application.undoManager.undo();
+  //  },
+  //
+  //  'redo': function(e) {
+  //    WebDoc.application.undoManager.redo();
+  //  },
+  //
+  //  'zoom_in': function(e) {
+  //    WebDoc.application.boardController.zoomIn();
+  //  },
+  //
+  //  'zoom_out': function(e) {
+  //    WebDoc.application.boardController.zoomOut();
+  //  },
+  //
+  //  'delete_item': function(e) {
+  //    WebDoc.application.boardController.deleteSelection();
+  //  },   
+  //   
+  //  'lib_view': function(e) {
+  //    WebDoc.application.rightBarController.showLib();
+  //  },
+  //  
+  //  'page_inspector_view': function(e) {
+  //    WebDoc.application.rightBarController.showPageInspector();
+  //  },
+  //  
+  //  'item_inspector_view': function(e) {
+  //    WebDoc.application.rightBarController.showItemInspector();
+  //  },
+  //  
+  //  'page-browser': function(e) {
+  //    WebDoc.application.pageBrowserController.toggleBrowser();
+  //  },
+  //  
+  //  'toggle_inspector': function(e) {
+  //    WebDoc.application.rightBarController.toggleRightBar();
+  //  },
+
+  //  'toggleInteractionMode': function(e) {
+  //    e.preventDefault();
+  //    WebDoc.application.boardController.toggleInteractionMode();
+  //  }
+
+  //  'move-front': function(e) {
+  //    e.preventDefault();
+  //    WebDoc.application.pageEditor.currentPage.moveFront(WebDoc.application.boardController.selection()[0].item);
+  //    WebDoc.application.boardController.selection()[0].item.save();
+  //  },
+  //
+  //  'move-back': function(e) {
+  //    e.preventDefault();
+  //    WebDoc.application.pageEditor.currentPage.moveBack(WebDoc.application.boardController.selection()[0].item);
+  //    WebDoc.application.boardController.selection()[0].item.save();
+  //  },
+  //    
+  //  disable_html: function(e) {
+  //    WebDoc.application.pageEditor.disableHtml = !WebDoc.application.pageEditor.disableHtml; 
+  //    WebDoc.application.pageEditor.loadPageId( WebDoc.application.pageEditor.currentPage.uuid());
+  //    $("#disable_html a").text(WebDoc.application.pageEditor.disableHtml?"Enable HTML":"Disable HTML");
+  //    if (WebDoc.application.pageEditor.disableHtml) {
+  //      $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");
+  //    }
+  //    else {
+  //      $("#tb_1_utilities_settings_trigger").removeClass("tb_1_utilities_settings_attention");
+  //    }
+  //  }
 });
 
