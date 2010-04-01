@@ -31,7 +31,7 @@ class ProxyController < ApplicationController
       data = {}
     end
 
-    render :text => Net::HTTP.post_form(URI.parse(url),data)
+    render :text => Net::HTTP.post_form(URI.parse(url),data).body
   end
   
   # PUST proxy/put
@@ -47,7 +47,7 @@ class ProxyController < ApplicationController
     req = Net::HTTP::Put.new(url.path)
     req.set_form_data(data)
     response = Net::HTTP.new(url.host, url.port).start { |http| http.request(req) }
-    render :text => response
+    render :text => response.body
     
     #render :text => Net::HTTP.put(URI.parse(url),data)
   end
@@ -59,7 +59,7 @@ class ProxyController < ApplicationController
     url = URI.parse(url)
     req = Net::HTTP::Delete.new(url.path)
     response = Net::HTTP.new(url.host, url.port).start { |http| http.request(req) }
-    render :text => response
+    render :text => response.body
     
     #render :text => Net::HTTP::Delete(URI.parse(url))
   end
