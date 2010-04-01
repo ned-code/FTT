@@ -52,9 +52,10 @@ stylesheets:
 #    - public/fonts/Underwood-Champion-fontfacekit/stylesheet
     
   page_viewer:
-    - public/stylesheets/lib/protect.css
-    - public/stylesheets/lib/panel.css
-    - public/stylesheets/style.page_display.css
+    - public/stylesheets/lib/panel.css    
+    - public/stylesheets/style.page_display.css    
+    - public/stylesheets/style.viewer.css    
+    - public/stylesheets/style.editor.typography.css    
       
 javascripts:
   common:

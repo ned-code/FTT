@@ -5,6 +5,8 @@
 
 WebDoc.Page = $.klass(MTools.Record, 
 { 
+  DEFAULT_PAGE_HEIGHT_PX: 600,
+  DEFAULT_PAGE_WIDTH_PX: 800,
   initialize: function($super, json, document) {
     // initialize relationship before super.
     this.firstPosition = 0;
@@ -60,13 +62,47 @@ WebDoc.Page = $.klass(MTools.Record,
       this.save();
     }
   },
-  
+
+  height: function(unit) {
+    if (!this.data.data.css.height) {
+      // this should not happend but old pages are in this case
+      this.data.data.css.height = "600px";
+    }  
+    if (!unit || unit !== "px") {
+      return this.data.data.css.height.toString();
+    }
+    else {
+      var result = parseFloat(this.data.data.css.height);
+      if (this.data.data.css.height.match(/\%/)) {
+        result = this.DEFAULT_PAGE_HEIGHT_PX * (result/100);
+      }
+      return result;
+    }
+  },
+    
   setHeight: function(height) {
     WebDoc.InspectorFieldsValidator.validateSize(height);
     if(this.data.data.css.height != height) {
       this.data.data.css.height = height;
       this.fireObjectChanged();
       this.save();
+    }
+  },
+  
+  width: function(unit) {
+    if (!this.data.data.css.width) {
+      // this should not happend but old pages are in this case
+      this.data.data.css.width = "800px";
+    }  
+    if (!unit || unit !== "px") {
+      return this.data.data.css.width.toString();
+    }
+    else {
+      var result = parseFloat(this.data.data.css.width);
+      if (this.data.data.css.width.match(/\%/)) {
+        result = this.DEFAULT_PAGE_WIDTH_PX * (result/100);
+      }
+      return result;      
     }
   },
   

@@ -52,7 +52,8 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
       var pageView = new WebDoc.PageView(page,this._containerNode);      
       this._containerNode.empty().append(pageView.domNode);
       var width = this._viewerNode.width();
-      var height = this._containerNode.height();    
+      var height = this._viewerNode.height() - this.TOOL_BAR_HEIGHT; 
+      ddd("fit page view to ", width, height);   
       pageView.fitInContainer(width, height);
     }
   },
@@ -71,14 +72,29 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
     }
   },
   
+  open: function() {
+    window.location.href = "/documents/" + this._currentDocument.uuid()
+  },
+  
   _createViewerGUI: function() {
-    var tb = jQuery("<div/>").addClass("wd-viewer-toolbar").css('height', this.TOOL_BAR_HEIGHT);
-    var previous = jQuery('<a/>').text('previous').click(jQuery.proxy(this,'prevPage'));
-    var next = jQuery('<a/>').text('next').click(jQuery.proxy(this,'nextPage'));
-    tb.append(previous).append(next);
+    var tb = jQuery("<ul/>").addClass("wd-viewer-toolbar toolbar-panel tools pages-tools thumbs index icons-only").css({
+      height: this.TOOL_BAR_HEIGHT,
+      width: "100%",
+      position: "absolute",
+      top: "0px",
+      zIndex: 10
+    });
+    var previous = jQuery('<li/>').append(jQuery('<a/>').attr("href", "#prev-page").click(jQuery.proxy(this,'prevPage')));
+    var next = jQuery('<li/>').append(jQuery('<a/>').attr("href", "#next-page").click(jQuery.proxy(this,'nextPage')));
+    var open = jQuery('<li/>').append(jQuery('<a/>').attr("href", "#open").text('open').click(jQuery.proxy(this,'open')));
+    tb.append(previous).append(next).append(open);
     this._viewerNode.append(tb);
-    this._containerNode = jQuery('<div/>').css("overflow", "hidden");
-    this._viewerNode.append(this._containerNode);
+    this._containerNode = jQuery('<div/>').css({
+      overflow: "hidden",   
+    }).addClass("center-box");    
+    var pageLayout = jQuery("<div/>").addClass("layer").css( {paddingTop: this.TOOL_BAR_HEIGHT, overflow: "hidden" }).append(jQuery("<div/>").addClass("center").append(jQuery("<div/>").addClass("center-cell").append(this._containerNode)));
+
+    this._viewerNode.append(pageLayout);
   }
 });
 

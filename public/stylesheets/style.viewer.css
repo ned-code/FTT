@@ -1,0 +1,44 @@
+.webdoc-viewer-container {
+  position:relative;
+  width:400px;
+  height:290px; 
+  overflow:hidden
+}
+.toolbar-panel                { color: hsl(198, 7%, 41%);
+                                background-color: hsla(198, 7%, 41%, 0.92);
+                                background-image: url('/images/bg.png');
+                                background-position: 0 0;
+                                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(198, 4%, 97%) ), to( hsl(198, 8%, 79%) ));
+                                background-image: -moz-linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+                                background-image:      linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+                                background-repeat: repeat-x;
+                                border-color: hsla(198, 12%, 30%, 0.8);
+                                -webkit-box-shadow: 0 0 32px hsla(14, 24%, 35%, 0.6);
+                                -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
+                                box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
+
+.toolbar-panel a,
+.toolbar-panel .mode-tools a        { -webkit-transition: width 0.18s ease-out; }
+.toolbar-panel a:active,
+.toolbar-panel .mode-tools a:active { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
+.toolbar-panel .current,
+.toolbar-panel .mode-tools .current { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1);
+                                      -webkit-transition: width 0.18s ease-out; }
+.toolbar-panel .mode-tools a        { -webkit-box-shadow: inset 0 0 2px -1px hsl(18, 16%, 12%);
+                                      -moz-box-shadow:    inset 0 0 2px -1px hsl(18, 16%, 12%);
+                                      box-shadow:         inset 0 0 2px -1px hsl(18, 16%, 12%); }
+                                      
+                                      
+.pages-tools a                      { background-image: url('/images/pages-tools.png'); }
+.toolbar-panel a[href="#prev-page"]        { background-position: 0 -1024px; }
+.toolbar-panel a[href="#prev-page"]:hover  { background-position: 0 -1088px; }
+.toolbar-panel a[href="#prev-page"]:active { background-position: 0 -1152px; }
+
+.toolbar-panel a[href="#next-page"]        { background-position: 0 -1216px; }
+.toolbar-panel a[href="#next-page"]:hover  { background-position: 0 -1280px; }
+.toolbar-panel a[href="#next-page"]:active { background-position: 0 -1344px; }
+                                      

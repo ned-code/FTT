@@ -152,8 +152,8 @@ WebDoc.PageView = $.klass({
   fitInContainer: function(width, height) {
     var zoomToFit = 1;
     var transform = {};
-    var heightFactor = height  / this._boardContainer.height();
-    var widthFactor = width  / this._boardContainer.width();      
+    var heightFactor = height  / this.page.height("px");
+    var widthFactor = width  / this.page.width("px");      
     if (heightFactor < widthFactor) {
       zoomToFit =  heightFactor;
     }
@@ -167,19 +167,15 @@ WebDoc.PageView = $.klass({
     transform.MozTransform = transform.WebkitTransform;
     transform.width = 100/zoomToFit + '%';
     transform.height = 100/zoomToFit + '%';
-    
-    var containerChanges = {
-        width: parseFloat(this._boardContainer.css("width")),
-        height: parseFloat(this._boardContainer.css("height")),
-        widthFlag: this._boardContainer.css("width").match(/px/)?"px":"%",
-        heightFlag: this._boardContainer.css("height").match(/px/)?"px":"%"
-    };
-    
+    transform.top = "0px";
+    transform.left = "0px";
+    transform.position = "absolute";
+    ddd("zoom to fit", zoomToFit);
     boardContainerCss = {
-      width: (containerChanges.width * zoomToFit) + containerChanges.widthFlag,
-      height: (containerChanges.height * zoomToFit) + containerChanges.heightFlag
+      width: (this.page.width("px") * zoomToFit).toString() + "px",
+      height: (this.page.height("px") * zoomToFit).toString() + "px"
     };
-    
+    ddd("board container css", boardContainerCss);
     this.domNode.css( transform );
     this._boardContainer.css( boardContainerCss );
   }

@@ -1,14 +1,15 @@
 <div class="action-zone zone">
   <div class="wrap">
+    <%= will_paginate @public_documents %>
   </div>
 </div>
 <div class="content">
-  <div class="wrap">
-    <ul>
+  <div id="webdoc" class="wrap" style="font-size:133%">
+    <ul class="index">
       <% @public_documents.each do |document| %>
-      <li style="float:left">
-        <div class="webdoc-viewer-container" id="<%= document.uuid() %>" style="position:relative;width:350px;height:290px; overflow:hidden"></div>
-      </li>      
+        <li>
+          <div class="webdoc-viewer-container" id="<%= document.uuid() %>"></div>
+        </li>      
       <% end %>
     </ul>
   </div>
