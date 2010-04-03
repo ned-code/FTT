@@ -77,11 +77,13 @@ class DocumentsController < ApplicationController
   end
   
   def create_view_count
-    @document.view_counts.create(
-      :session_id => request.session_options[:id],
-      :ip_address => request.remote_ip,
-      :user_id    => current_user.try(:id)
-    )
+    if (request.format() === "text/html")
+      @document.view_counts.create(
+        :session_id => request.session_options[:id],
+        :ip_address => request.remote_ip,
+        :user_id    => current_user.try(:id)
+      )
+    end
   end
   
 end

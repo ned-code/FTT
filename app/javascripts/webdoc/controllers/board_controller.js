@@ -648,8 +648,8 @@ WebDoc.BoardController = jQuery.klass({
     var initialSize = {
       width: parseFloat(this._currentPage.data.data.css.width),
       height: parseFloat(this._currentPage.data.data.css.height),
-      widthFlag: this._currentPage.data.data.css.width.match(/px/)?"px":"%",
-      heightFlag: this._currentPage.data.data.css.height.match(/px/)?"px":"%"
+      widthFlag: this._currentPage.width().match(/px/)?"px":"%",
+      heightFlag: this._currentPage.height().match(/px/)?"px":"%"
     };
 
     
