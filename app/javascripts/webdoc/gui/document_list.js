@@ -145,8 +145,8 @@ WebDoc.DocumentList = $.klass({
     if ( editor ) {
       documentNode
       .append( this._buildDocumentControlsNode( document, data ) )
-      .append( this._buildDocumentActionsNode( document, data ) )
-      .append( this._buildDocumentInfoNode( document, data ));
+      .append( this._buildDocumentActionsNode( document, data ) );
+      //.append( this._buildDocumentInfoNode( document, data ));
     }
     
     this.map[ id ] = {
@@ -156,17 +156,17 @@ WebDoc.DocumentList = $.klass({
     return documentNode;
   },
   
-  _buildDocumentInfoNode: function( document, data ){
-    var infoNode = $("<a/>", {
-          "class": "wb-document-info sec-action info-button button",
-          href: "",
-          title: "info",
-          html: "info",
-          data: data
-        });
-    
-    return infoNode;
-  },
+  //_buildDocumentInfoNode: function( document, data ){
+  //  var infoNode = $("<a/>", {
+  //        "class": "wb-document-info sec-action info-button button",
+  //        href: "",
+  //        title: "info",
+  //        html: "info",
+  //        data: data
+  //      });
+  //  
+  //  return infoNode;
+  //},
   
   _buildDocumentControlsNode: function( document, data ) {
     var documentControlsNode = $("<ul/>", {
@@ -192,6 +192,14 @@ WebDoc.DocumentList = $.klass({
   _buildDocumentActionsNode: function( document, data ) {
     var documentActionsNode = $("<ul/>", {
           "class": "document-actions index"
+        }),
+        infoItemNode = $("<li/>"),
+        infoNode = $("<a/>", {
+          "class": "wb-document-info sec-action info-button button",
+          href: "",
+          title: "info",
+          html: "info",
+          data: data
         }),
         collaborateItemNode = $("<li/>"),
         collaborateNode = $("<a/>", {
@@ -220,7 +228,12 @@ WebDoc.DocumentList = $.klass({
         ;
     
     // Construct DOM tree and return it
-    return documentActionsNode.append(
+    return documentActionsNode
+    .html(
+      infoItemNode.html(
+        infoNode
+      )
+    ).append(
       collaborateItemNode.html(
         collaborateNode
       )

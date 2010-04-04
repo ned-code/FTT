@@ -1,37 +1,41 @@
 - session_key_name = ActionController::Base.session_options[:key]
 
+<!-- documents/index -->
+
 %div.action-zone.zone
   %div.wrap
     %a#wb-create-document-button.add-button.button= t('.buttons.new_document')
-    %ul.document-tabs.tabs.index
+    %ul.tabs.index
       %li>
-        %a#wb-document-filter-date.button.current.state-filter-tab{ :href => "#filter-by-date" }= t('.all_items_by_date')
+        %ul.filter-bar.bar.index.state-public-hide{ :style => "float: right;" }
+          %li>
+            %a#wb-document-filter-owned-by-me.current.state-filter-subtab{ :href => "#filter-author" }= t('.created_by_me')
+          %li>
+            %a#wb-document-filter-editor-rights.state-filter-subtab{ :href => "#filter-editable" }= t('.editor_rights')
+          %li>
+            %a#wb-document-filter-shared-with-me.state-filter-subtab{ :href => "#filter-shared" }= t('.shared_with_me')
+      
+        %a#wb-document-filter-date.button.current.state-filter-tab{ :style => "float: left;", :href => "#filter-by-date" }= t('.all_items_by_date')
       %li>
         %a#wb-document-filter-public.button.state-filter-tab{ :href => "#filter-public" }= t('.public')
+    
+
+
 
 %div.content
   %div.wrap
-    %div.column.one.double.of-three>
-      %dl#document-subtabs.bar.index.state-public-hide
-        %dt>
-          Filter webdocs by
-        %dd>
-          %a#wb-document-filter-owned-by-me.current.state-filter-subtab{ :href => "#filter-author" }= t('.created_by_me')
-        %dd>
-          %a#wb-document-filter-editor-rights.state-filter-subtab{ :href => "#filter-editable" }= t('.editor_rights')
-        %dd>
-          %a#wb-document-filter-shared-with-me.state-filter-subtab{ :href => "#filter-shared" }= t('.shared_with_me')
-      
-      %div#wb-document-list-container
-        %div.loading-icon
+    -#%div.column.one.double.of-three>
     
-    %div.column.three.of-three.state-public-show>
-      %h4 Public webdocs
-      %p Shared webdocs.
-    %div.column.three.of-three.state-public-hide>
-      %h4 Manage your Webdocs
-      %p Create your own new webdoc, or choose a webdoc to view from the list.
-      %p You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, click <strong>share</strong>. You can choose to share your webdoc with just your friends, or with everybody on the world wide&nbsp;web.
+    %div#wb-document-list-container
+      %div.loading-icon
+
+    -#%div.column.three.of-three.state-public-show>
+    -#  %h4 Public webdocs
+    -#  %p Shared webdocs.
+    -#%div.column.three.of-three.state-public-hide>
+    -#  %h4 Manage your Webdocs
+    -#  %p Create your own new webdoc, or choose a webdoc to view from the list.
+    -#  %p You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, click <strong>share</strong>. You can choose to share your webdoc with just your friends, or with everybody on the world wide&nbsp;web.
     
 #wb-new-document-dialog{ :style => "display:none", :title => t('.create_new_document') }
   %form#wb-new-form.new-form{ :action => "", :title => t('.create_new_document') }
@@ -107,10 +111,10 @@
     %fieldset
       %div.shunt
         %input#unshare_webdoc_radio{ :type => "radio", :name => "share", :value => "off" }
-        %label{ :for => "unshare_webdoc_radio" } with other webdoc members
+        %label{ :for => "unshare_webdoc_radio" } don't share (co-editors can still see this document)
       %div.shunt
         %input#share_webdoc_radio{ :type => "radio", :name => "share", :value => "on" }
-        %label{ :for => "share_webdoc_radio" } with the whole wwworld
+        %label{ :for => "share_webdoc_radio" } share
     
     %fieldset.state-unshared-hide
       %label{ :for => "shared_webdoc_url" }= t('.document_forms.share_document_dialog.shared_address_label')

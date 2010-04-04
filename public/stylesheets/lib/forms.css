@@ -167,10 +167,10 @@ textarea:focus {
 .error select,
 .error textarea {
     opacity: 1;
-    -webkit-box-shadow: 0 0 12px hsl( 13, 100%, 50% );
-    -webkit-box-shadow: 0 0 4px 1px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
-    -moz-box-shadow:    0 0 4px 1px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
-    box-shadow:         0 0 4px 1px hsl( 13, 100%, 50% ), inset 0 0 4px hsl( 13, 100%, 50% );
+    -webkit-box-shadow: 0 0 12px hsl( 28, 100%, 50% );
+    -webkit-box-shadow: 0 0 4px 1px hsl( 28, 100%, 50% ), inset 0 0 4px hsl( 28, 100%, 50% );
+    -moz-box-shadow:    0 0 4px 1px hsl( 28, 100%, 50% ), inset 0 0 4px hsl( 28, 100%, 50% );
+    box-shadow:         0 0 4px 1px hsl( 28, 100%, 50% ), inset 0 0 4px hsl( 28, 100%, 50% );
 }
 .error input[type='text']:focus,
 .error input[type='password']:focus,
@@ -205,7 +205,7 @@ select:focus {
 
 .error-message {
     line-height: 1.6667;
-    color: hsl( 13, 70%, 66% );
+    color: hsl( 13, 74%, 62% );
 }
 
 label.error-message {
@@ -232,7 +232,11 @@ input.default {
 .stack img {
     padding-left: 0;
 }
-
+.stack label,
+.stack .label,
+.stack .error-message {
+  white-space: nowrap;
+}
 .stack .error-message {
     position: absolute;
     bottom: -1.6667em;
@@ -314,7 +318,6 @@ fieldset.properties:first-child {
     float: left;
     width: auto;
     font-size: 1em;
-    padding: 0.16em 0.6em;
     margin: 0 0 0.2em 0;
     height: 1.3333em;
 
@@ -327,6 +330,11 @@ fieldset.properties:first-child {
     -ms-box-sizing: content-box;
     box-sizing: content-box;*/
 }
+.properties label,
+.properties .label,
+.properties input[type='text'] {
+    padding: 0.16em 0.6em;
+}
 
 .properties label,
 .properties .label {
@@ -335,7 +343,6 @@ fieldset.properties:first-child {
     text-transform: lowercase;
     padding: 0.1em 0 0 0;
     white-space: nowrap;
-    text-transform: lowercase;
 }
 .properties label {
     min-width: 10em;

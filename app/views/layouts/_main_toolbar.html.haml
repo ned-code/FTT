@@ -3,22 +3,31 @@
     %a{ :href => "/" }
       %h1.logo webdoc
     
-    %ul.userbar.divided.index      
+    %ul.navbar.divided.index
+      %li>
+        %a{ :href => "/" } home
       %li>
         = link_to "explore", explore_path, { :class => "item" }
-      - if user_signed_in?
-        %li>
-          = link_to "contacts", followships_path, { :class => "item" }
-        %li>
-          %span.user-email.item= current_user.email
-        %li>
-          = link_to "edit profile", edit_user_path(current_user), { :class => "user-edit item" }
-        %li>
-          = link_to "logout", destroy_user_session_path, { :class => "user-logout item" }
-      - else
-        - if controller_name != 'home'
-          %li>= link_to t('devise.sessions.link'), root_path
-        - if controller_name != 'registrations'
-          %li>= link_to t('devise.registrations.link'), new_registration_path(:user), :class => "sign-up button"
+    
+    - if user_signed_in?
+      %div.userbar
+        %h5.user-email.item
+          - if user_signed_in?
+            = current_user.email
+        %ul.divided.index
+          - if user_signed_in?
+            %li>
+              = link_to "contacts", followships_path, { :class => "item" }
+            %li>
+              = link_to "profile", edit_user_path(current_user), { :class => "user-edit item" }
+            %li>
+              = link_to "logout", destroy_user_session_path, { :class => "user-logout item" }
+    - else
+      %div.sessionbar
+        %ul.divided.index
+          - if controller_name != 'home'
+            %li>= link_to t('devise.sessions.link'), root_path
+          - if controller_name != 'registrations'
+            %li>= link_to t('devise.registrations.link'), new_registration_path(:user), :class => "sign-up button"
     
     = render "layouts/flash", :object => flash

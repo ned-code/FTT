@@ -20,6 +20,7 @@
 body {
     color: hsl(208, 6%, 30%);
     background-color: hsla(208, 33%, 98%, 0.88);
+    background-image: url('/images/application/content_bg.png');
     /*background-image: url('/images/texture_bg.jpg');
     background-position: 50% 0%;
     -webkit-background-size:  100% 100%;
@@ -32,58 +33,31 @@ a:hover { color: hsl(208, 40%, 20%); }
 a       { color: hsl(208, 40%, 40%); }
 
 header {
-    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsla(208, 33%, 98%, 0.88) ), to( hsl(208, 12%, 82%) ));
+    color: white;
+    background-image: url('/images/application/header_bg.png');
+    /*background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsla(208, 33%, 98%, 0.88) ), to( hsl(208, 12%, 82%) ));
     background-image: -moz-linear-gradient( -90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
-    background-image:      linear-gradient( -90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
+    background-image:      linear-gradient( -90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );*/
 }
 .content {
-    background-image: -webkit-gradient( linear, 0% 100%, 0% 0%, from( hsla(208, 33%, 98%, 0.88) ), to( hsl(208, 12%, 82%) ));
+    /*background-image: -webkit-gradient( linear, 0% 100%, 0% 0%, from( hsla(208, 33%, 98%, 0.88) ), to( hsl(208, 12%, 82%) ));
     background-image: -moz-linear-gradient( 90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
-    background-image:      linear-gradient( 90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
+    background-image:      linear-gradient( 90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );*/
 }
 
-.index.divided li {
-    border-color: hsla(208, 8%, 66%, 0.6);
+header .index.divided>li {
+    border-color: hsl(28, 50%, 76%);
 }
-/*.userbar li .item {
-    color: hsl(208, 4%, 33%);
-    background: hsla(208, 4%, 84%, 0.2);
+
+header a:focus,
+header a:hover {
+    color: hsl(28, 80%, 85%);
 }
-.userbar li a.item:hover {
-    color: hsl(208, 4%, 25%);
-    background: hsl(208, 4%, 60%, 0.2);
-}
-.userbar li .user-email {
+
+header a {
     color: white;
-    background: hsla(208, 4%, 52%, 0.2);
 }
-.userbar li:first-child .item {
-    -webkit-border-top-left-radius:     1.25em;
-    -moz-border-radius-topleft:         1.25em;
-    border-top-left-radius:             1.25em;
-    -webkit-border-bottom-left-radius:  1.25em;
-    -moz-border-radius-bottomleft:      1.25em;
-    border-bottom-left-radius:          1.25em;
-}
-.userbar li:last-child .item {
-    -webkit-border-top-right-radius:    1.25em;
-    -moz-border-radius-topright:        1.25em;
-    border-top-right-radius:            1.25em;
-    -webkit-border-bottom-right-radius: 1.25em;
-    -moz-border-radius-bottomright:     1.25em;
-    border-bottom-right-radius:         1.25em;
-}*/
-/*.tabs {
-    -webkit-border-top-left-radius:   0.5em;
-    -moz-border-radius-topleft:       0.5em;
-    border-top-left-radius:           0.5em;
-    -webkit-border-top-right-radius:  0.5em;
-    -moz-border-radius-topright:      0.5em;
-    border-top-right-radius:          0.5em;
-    -webkit-box-shadow: 0 0 32px hsla(32, 2%, 0%, 0.8);
-    -moz-box-shadow:    0 0 32px hsla(32, 2%, 0%, 0.8);
-    box-shadow:         0 0 32px hsla(32, 2%, 0%, 0.8);
-}*/
+
 .tabs li a {
     background-color: hsl(208, 12%, 56%);
     background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(208, 12%, 66%) ), to( hsl(208, 8%, 60%) ));
@@ -97,6 +71,22 @@ header {
     background-image: -moz-linear-gradient( -90deg, hsl(208, 18%, 88%), hsl(208, 12%, 82%) );
     background-image:      linear-gradient( -90deg, hsl(208, 18%, 88%), hsl(208, 12%, 82%) );
 }
+
+.filter-bar li a {
+    background-color: hsl(208, 8%, 66%);
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsla(208, 14%, 72%, 0.6) ), to( hsla(208, 8%, 50%, 0.4) ));
+    background-image: -moz-linear-gradient( -90deg, hsla(208, 14%, 72%, 0.6), hsla(208, 8%, 50%, 0.4) );
+    background-image:      linear-gradient( -90deg, hsla(208, 14%, 72%, 0.6), hsla(208, 8%, 50%, 0.4) );
+}
+.filter-bar li a:hover,
+.filter-bar li a.current {
+    color: hsl(208, 14%, 92%) !important;
+    background-color: hsl(208, 8%, 66%);
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsla(208, 14%, 72%, 0.6) ), to( hsla(208, 8%, 30%, 0.4) ));
+    background-image: -moz-linear-gradient( -90deg, hsla(208, 14%, 72%, 0.6), hsla(208, 8%, 30%, 0.4) );
+    background-image:      linear-gradient( -90deg, hsla(208, 14%, 72%, 0.6), hsla(208, 8%, 30%, 0.4) );
+}
+
 /*
 .tabs li:first-child a {
     -webkit-border-top-left-radius:   0.5em;
@@ -120,7 +110,7 @@ header {
 /* Make bars rounded */
 .bar li:first-child>a,
 .bar dt:first-child {
-    padding-left: 1.6667em;
+    padding-left: 2.6667em;
     -webkit-border-top-left-radius:     1em;
     -moz-border-radius-topleft:         1em;
     border-top-left-radius:             1em;
@@ -132,8 +122,8 @@ header {
 .bar li:last-child>a,
 .bar dt:last-child>a,
 .bar dd:last-child>a {
-    padding-right: 1.6667em;
-    background-image: none;
+    padding-right: 0.8333em;
+    /*background-image: none;*/
     -webkit-border-top-right-radius:    1em;
     -moz-border-radius-topright:        1em;
     border-top-right-radius:            1em;
@@ -228,60 +218,23 @@ header {
     border-left-style: solid;
     border-left-color: hsl(208, 4%, 50%);
 }
-.document-actions {
-    -webkit-border-top-right-radius:    1.6667em;
-    -moz-border-radius-topright:        1.6667em;
-    border-top-right-radius:            1.6667em;
-    -webkit-border-bottom-right-radius: 1.6667em;
-    -moz-border-radius-bottomright:     1.6667em;
-    border-bottom-right-radius:         1.6667em;
-}
-.document-controls {
-    -webkit-border-top-left-radius:     1.6667em;
-    -moz-border-radius-topleft:         1.6667em;
-    border-top-left-radius:             1.6667em;
-    -webkit-border-bottom-left-radius:  1.6667em;
-    -moz-border-radius-bottomleft:      1.6667em;
-    border-bottom-left-radius:          1.6667em;
-}
-.document-item .document-title {
-    -webkit-border-radius: 1.6667em;
-    -moz-border-radius:    1.6667em;
-    border-radius:         1.6667em;
-}
-.document-item-editable .document-title {
-    -webkit-border-radius: 0;
-    -moz-border-radius:    0;
-    border-radius:         0;
-}
-.document-title {
+.document-item {
     color: hsl(208, 6%, 30%);
-    background: hsla(208, 8%, 70%, 0.25);
+    background: hsla(208, 8%, 100%, 0.33);
 }
-.document-item:hover .document-title {
+.document-item:hover {
     color: hsl(208, 6%, 12%);
-    background-color: hsla(208, 12%, 76%, 0.6);
-}
-.document-actions,
-.document-controls {
-    color: hsl(208, 6%, 30%);
-    background: hsla(208, 8%, 70%, 0.25);
-}
-.document-item:hover .document-actions,
-.document-item:hover .document-controls {
-    color: hsl(208, 6%, 12%);
-    background-color: hsla(208, 12%, 76%, 0.6);
+    background-color: hsla(208, 8%, 100%, 0.60);
 }
 
-
-/*.document-item:hover .document-controls {
-    color: hsl(208, 6%, 12%);
-    background: hsla(208, 8%, 76%, 0.3);
-}*/
+.document-title:focus,
+.document-title:hover                 { color: black; }
+.document-title                       { color: hsl(208, 2.4%, 33%); }
+.document-item:hover .document-title  { color: hsl(208, 1.6%, 24%); }
 
 .button {
     background-color: hsl( 208, 4%, 50% );
-    background-image: url('/images/button-icons.png');
+    background-image: url('/images/application/icons.png');
     background-repeat: no-repeat;
     color: white;
     -webkit-border-radius: 1em;
@@ -297,46 +250,58 @@ header {
     background-color: hsl( 43, 80%, 50% );
 }
 
-.document-item .info-button              { background-color: transparent; }
+.document-item .button:hover {
+    color: hsl(208, 4%, 100%);
+}
+.document-item .button {
+    color: hsl(208, 4%, 33%);
+    background-color: hsla(208, 4%, 33%, 0.12);
+    border: 2px solid hsl(208, 2.5%, 37%);
+    -webkit-border-radius: 1.1em;
+    -moz-border-radius:    1.1em;
+    border-radius:         1.1em;
+}
+.document-item:hover .button {
+    border-color: hsl(208, 4%, 33%);
+}
 
-.document-item:hover .delete-button      { background-color: hsl(13, 66%, 52%); }
-.document-item .delete-button:hover      { background-color: hsl(13, 74%, 56%); }
+.document-item .delete-button            { background-color: hsl(13, 34%, 63%); }
+.document-item:hover .delete-button      { background-color: hsl(13, 58%, 54%); }
+.document-item .delete-button:hover      { background-color: hsl(13, 76%, 48%); }
 
 /* .document-item:hover .info-button        { background-color: hsl(208, 36%, 56% ); } */
 .document-item .info-button:hover        { background-color: hsl(208, 52%, 59% ); }
-
-
-.document-item:hover .collaborate-button { background-color: hsl(43, 54%, 46%); }
-.document-item:hover .share-button,
-.document-item:hover .unshare-button     { background-color: hsl(72, 44%, 46%); }
 
 .document-item .collaborate-button:hover { background-color: hsl(43, 68%, 48%); }
 .document-item .share-button:hover,
 .document-item .unshare-button:hover     { background-color: hsl(72, 60%, 46%); }
 
 .add-button {
-    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
-    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
-    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
+    background: url('/images/application/icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
+    background: url('/images/application/icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
+    background: url('/images/application/icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
 }
 .add-button:hover {
-    background: url('/images/button-icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 82%, 46%)), to(hsl(28, 88%, 52%)));
-    background: url('/images/button-icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
-    background: url('/images/button-icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
+    background: url('/images/application/icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 82%, 46%)), to(hsl(28, 88%, 52%)));
+    background: url('/images/application/icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
+    background: url('/images/application/icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
 }
 
-.add-button:hover         { background-position: -1px -131px; }
-.add-button               { background-position: -1px -131px; }
-.collaborate-button:hover { background-position: -2px -260px; }
-.collaborate-button       { background-position: -2px -260px; }
-.share-button:hover       { background-position: -2px -324px; }
-.share-button             { background-position: -2px -324px; }
-.unshare-button:hover     { background-position: -2px -388px; }
-.unshare-button           { background-position: -2px -388px; }
+.add-button:hover                         { background-position: 0 -962px; }
+.add-button                               { background-position: 0 -962px; }
+.document-item:hover .collaborate-button  { background-position: -2px -453px; }
+.document-item .collaborate-button:hover  { background-position: -2px -517px; }
+.collaborate-button                       { background-position: -2px -389px; }
+.document-item:hover .share-button        { background-position: -2px -645px; }
+.document-item .share-button:hover        { background-position: -2px -709px; }
+.share-button                             { background-position: -2px -581px; }
+.document-item:hover .unshare-button      { background-position: -2px -645px; }
+.document-item .unshare-button:hover      { background-position: -2px -709px; }
+.unshare-button                           { background-position: -2px -581px; }
 
-/*.delete-button:hover      { background-position: -6px -518px; }*/
-.delete-button            { background-position: -4px -68px; }
+.document-item:hover .delete-button       { background-position: -5px -133px; }
+.delete-button                            { background-position: -5px -69px; }
 
-.info-button                      { background-position: -4px -580px; }
-/*.document-item:hover .info-button { background-position: -6px -644px; }*/
-.document-item .info-button:hover { background-position: -4px -196px; }
+.info-button                              { background-position: -5px -197px; }
+.document-item:hover .info-button         { background-position: -5px -261px; }
+.document-item .info-button:hover         { background-position: -5px -325px; }

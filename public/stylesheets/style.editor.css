@@ -284,16 +284,19 @@ body {
   color: white;
   background-repeat: no-repeat;
   background-position: 0 0;
-  padding: 0.8333em 0 0 0;
+  -webkit-background-size:  112px 112px;
+  -moz-background-size:     112px 112px;
+  background-size:          112px 112px;
+  padding: 6px 0 0 0;
   position: relative; 
 }
 .card-name {
-    background-color: hsl(198, 6%, 56%); color: white;
+    background-color: hsla(198, 6%, 70%, 0.8); color: white;
 
     height: 1.2em;
     line-height: 1.1em;
-    padding: 0.4em 24px;
-    margin: 0 12px 0.6em 92px;
+    padding: 0.4em 1.6667em;
+    margin: 0 6px 0.6em 6px;
     
     font-size: 1em;
     font-weight: bold;

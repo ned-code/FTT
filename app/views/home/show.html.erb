@@ -13,7 +13,7 @@
         </div>
         <div class="stack column two of-four<% if @user.errors.on(:password) %> error<% end %>">
           <%= f.label :password, 'Password <abbr class="required" title="required">*</abbr>' %>
-          <%= f.password_field :password, :maxlength => 255, :required => "required", :autocomplete => "on", :title => "Please enter your password" %>
+          <%= f.password_field :password, :minlength => 6, :maxlength => 255, :required => "required", :autocomplete => "on", :title => "Please enter your password" %>
           <span class="label"><%= link_to t('devise.passwords.link'), new_password_path(:user) %></span>
         </div>
       </fieldset>

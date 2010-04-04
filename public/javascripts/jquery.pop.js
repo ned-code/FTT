@@ -53,17 +53,18 @@
 				height = node.outerHeight();
 		
 		return {
-			left: offset.left + 0.88 * width - bodyScroll.left,
+			left: offset.left + 0.5 * width - bodyScroll.left,
 			top: offset.top + 0.5 * height - bodyScroll.top
 		};
 	}
 	
 	function makePopCss( node, origin, wrapCss ){
 		var factor = wrapCss.top / windowSize.height,
-				transform = '11px ' + factor*node.height() + 'px';
+		    factorWidth = wrapCss.left / windowSize.width,
+				transform = factorWidth*node.width() + 'px ' + factor*node.height() + 'px';
 		
 		return {
-			left: - origin[0],
+			left:  - factorWidth*node.width() - origin[0],
 			top:  - factor*node.height() - origin[1],
 			WebkitTransformOrigin: transform,
 			MozTransformOrigin: transform,
@@ -98,6 +99,7 @@
 				wrap: wrap
 			});
 			
+			// Respond to scroll
 			jQuery(window).bind('scroll.'+plugin, function(){
 				wrapCss = makeWrapCss( node );
 				popCss = makePopCss( pop, options.origin, wrapCss );
@@ -117,7 +119,7 @@
 			// Bind cancel button detector
 			.delegate(options.cancelSelector, 'click.'+plugin, closeHandler);
 			
-			// Bind the lose focus detector to body (just once)
+			// Bind the lose focus detector (just once)
 			if ( i === 0 ) {
 				// Wait till this thread has finished
 				var t = setTimeout(function() {
