@@ -1326,15 +1326,23 @@ WebDoc.TextToolView = $.klass({
         }
         var attributes =  allTags[i].attributes;
         var attributesToRemove = [];
+        var setBlankTarget = false;
         var attrLength = attributes.length;  
         for(var a=0;a<attrLength;a++){
           if(!this.isInListOfWhiteAttrs(attributes[a].nodeName) && allTags[i].className.indexOf('webdoc-editor-elem')==-1){
             attributesToRemove[attributesToRemove.length] = attributes[a].nodeName;
           } 
+          if(attributes[a].nodeName == 'href' && allTags[i].className.indexOf('webdoc-editor-elem')==-1){
+            setBlankTarget = true;
+          }
         }
         for(var r=0;r<attributesToRemove.length;r++){
            allTags[i].removeAttribute(attributesToRemove[r]);
         }
+        if(setBlankTarget){
+           allTags[i].setAttribute('target','_blank');
+        }
+        
       }
     };
    
@@ -1707,7 +1715,7 @@ WebDoc.TextToolView = $.klass({
    */
   editorExec: function(command, optional) {
     var thobj = this;
-    this.correctUserSelection();
+    //this.correctUserSelection();
     this.edWin.focus();
     this.doBeforeTextChanged();
     this.setEditionRestrictMarker(); 

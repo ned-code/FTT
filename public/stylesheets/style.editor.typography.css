@@ -97,7 +97,7 @@ blockquote, address { word-spacing: 0.2em; }
 dd                { margin: 0; }
 .webdoc ul, ol, dl { margin: 0 0 1.25em 0; }
 
-.webdoc li, dd    { margin-bottom: 0.625em; }
+.webdoc li, dd    { margin-bottom: 0.625em; margin-left:0.25em }
 .webdoc li li     { line-height: 1.4286; margin-bottom: 0; font-size: 0.875em; }
 .webdoc li li li  { line-height: 1.68; }
 
