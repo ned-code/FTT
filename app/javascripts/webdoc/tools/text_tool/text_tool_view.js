@@ -351,7 +351,7 @@ WebDoc.TextToolView = $.klass({
       for (var i = 0; i < nodes.length; i++) {
         nodes[i].removeAttribute('class');
         if (nodes[i].style[styleAttr] && nodes[i].style.length === 1) {
-          if (nodes[i].tagName.toLowerCase() == tag && nodes[i].parentNode.childNodes.length == 1 && nodes[i].parentNode.style[styleAttr] && nodes[i].parentNode.style.length === 1) {
+          if (nodes[i].tagName.toLowerCase() == tag && nodes[i].parentNode.tagName.toLowerCase() == tag && nodes[i].parentNode.childNodes.length == 1 && nodes[i].parentNode.style[styleAttr] && nodes[i].parentNode.style.length === 1) {
             nodesToKill[k] = nodes[i];
             k++;
           }
@@ -685,20 +685,28 @@ WebDoc.TextToolView = $.klass({
       var s = thobj.getSelectBounds();
       if(s.an == s.fn && s.ao == s.fo && (s.an == thobj.verticalCell || s.an == thobj.verticalContainer  || s.an == thobj.rootDiv || s.an == thobj.edDoc.body)){
         this.selectCustomNodeContent(this.verticalCell);
-        return false
+        return false;
       }
-      if(s.an == s.fn && s.ao == s.fo) return false;
+      if (s.an == s.fn && s.ao == s.fo) {
+		  	return false;
+		  }
       var fromStartToEnd = 'undefined';
       thobj.edWin.getSelection().removeAllRanges();
       var range = thobj.edDoc.createRange();
         if((s.an == thobj.verticalCell || s.an == thobj.verticalContainer  || s.an == thobj.rootDiv || s.an == thobj.edDoc.body) && s.ao<1){
         range.selectNodeContents(thobj.verticalCell);
-        if(s.ao==0) fromStartToEnd = true; 
-        else fromStartToEnd = false;   
+        if (s.ao === 0) {
+					fromStartToEnd = true;
+				} else {
+					fromStartToEnd = false;
+				}   
       } else if((s.fn == thobj.verticalCell || s.fn == thobj.verticalContainer || s.fn == thobj.rootDiv  || s.fn == thobj.edDoc.body) && s.fo<1){
         range.selectNodeContents(thobj.verticalCell);
-        if(s.fo==0) fromStartToEnd = false; 
-        else fromStartToEnd = true;
+        if (s.fo === 0) {
+					fromStartToEnd = false;
+				} else {
+					fromStartToEnd = true;
+				}
       }                                                                                                                                                
       if(fromStartToEnd === true){
         if(s.an != thobj.verticalCell && s.an != thobj.verticalContainer && s.an != thobj.rootDiv){
@@ -723,7 +731,7 @@ WebDoc.TextToolView = $.klass({
           range.setEnd(s.an,s.ao);
         }
       }
-      thobj.edWin.getSelection().addRange(range);         
+      thobj.edWin.getSelection().addRange(range);       
     };                                                                                                            
 
     
@@ -963,9 +971,9 @@ WebDoc.TextToolView = $.klass({
       }
     };
     
-    this.formatInline = function(command, attr, styleAttr, value) {
+    this.formatInline = function(command, attr, styleAttr, value) {      
       this.edDoc.execCommand(command, null, value);
-      if (this.edWin.getSelection().toString()) {
+      if (this.edWin.getSelection().toString().length) {
         var selNodes = this.getSelectedTags('font');
         for (var i = 0; i < selNodes.length; i++) {
           if (selNodes[i].nodeName != '#text' && (selNodes[i].getAttribute(attr) || selNodes[i].style[styleAttr])) {
@@ -1124,15 +1132,10 @@ WebDoc.TextToolView = $.klass({
       var range = thobj.edDoc.createRange();
       range.setStart(this.edWin.getSelection().anchorNode, this.edWin.getSelection().anchorOffset);
       range.setEnd(this.edWin.getSelection().anchorNode, this.edWin.getSelection().anchorOffset);
-      if(typeof(customNode) == 'undefined'){
-        range.surroundContents(newEditionPoint);
-      } else {
-        customNode.appendChild(newEditionPoint);
-      }    
-      newEditionPoint.innerHTML = '&nbsp';//&lrm;
+      range.surroundContents(newEditionPoint);
+      newEditionPoint.innerHTML = '&nbsp;';//&lrm;
       range.selectNodeContents(newEditionPoint);
       thobj.edWin.getSelection().addRange(range);
-      
       thobj.edWin.getSelection().selectAllChildren(newEditionPoint);
     };
     
@@ -1184,7 +1187,7 @@ WebDoc.TextToolView = $.klass({
     this.getFirstIndentTag = function(){
       var tags = thobj.verticalCell.getElementsByTagName('div'); 
       for(var i=0;i<tags.length;i++){
-        if(tags[i].className == 'webdoc-indent-1'){
+        if(tags[i].className.indexOf('webdoc-indent-1')!=-1){
           return tags[i];
         }
       }
@@ -1192,7 +1195,7 @@ WebDoc.TextToolView = $.klass({
     };
     
     this.doBeforeIndent = function(){ 
-      this.antiBlinkRule(true);
+      thobj.antiBlinkRule(true);
       var blockQuotes = thobj.verticalCell.getElementsByTagName('blockquote'); 
       for(var i=0;i<blockQuotes.length;i++){
          blockQuotes[i].realBlockquote = true;
@@ -1201,83 +1204,82 @@ WebDoc.TextToolView = $.klass({
     };
     
     this.doAfterIndent = function(){
-      this.storeHistorySelection();
+      thobj.storeHistorySelection();
       while(this.getFirstUnmarkedBlockQuote()){
-          var btr = this.getFirstUnmarkedBlockQuote();
-          
-          var indentTag = this.edDoc.createElement('div');
-          indentTag.className = 'webdoc-indent-1';
+          var btr = thobj.getFirstUnmarkedBlockQuote();
+          var indentTag = thobj.edDoc.createElement('div');
+          jQuery(indentTag).addClass('webdoc-indent-1');
           btrChilds = btr.childNodes;
           for(var b=0;b<btrChilds.length;b++){ 
              indentTag.appendChild(btrChilds[b].cloneNode(true));
           }
-          this.importSelectionMarkers(btr,indentTag);
+          thobj.importSelectionMarkers(btr,indentTag);
           btr.parentNode.replaceChild(indentTag,btr);
       } 
-      this.repairHistorySelection();  
-      this.deleteSelectionMarkers();   
-      this.antiBlinkRule(false);
+      thobj.repairHistorySelection();  
+      thobj.deleteSelectionMarkers();   
+      thobj.antiBlinkRule(false);
     };
     
     
     this.doBeforeOutdent = function(){
-      this.antiBlinkRule(true);
+      thobj.antiBlinkRule(true);
       var blockQuotes = thobj.verticalCell.getElementsByTagName('blockquote'); 
       for(var i=0;i<blockQuotes.length;i++){
          blockQuotes[i].realBlockquote = true;
       }
-      this.storeHistorySelection(); 
-      while(this.getFirstIndentTag()){
-          var itr = this.getFirstIndentTag();
-          var blockQuote = this.edDoc.createElement('blockquote');
+      thobj.storeHistorySelection(); 
+      while(thobj.getFirstIndentTag()){
+          var itr = thobj.getFirstIndentTag();
+          var blockQuote = thobj.edDoc.createElement('blockquote');
           itrChilds = itr.childNodes;
           for(var b=0;b<itrChilds.length;b++){
              blockQuote.appendChild(itrChilds[b].cloneNode(true));
           }
-          this.importSelectionMarkers(itr,blockQuote);
+          thobj.importSelectionMarkers(itr,blockQuote);
           itr.parentNode.replaceChild(blockQuote,itr);
       } 
-      this.repairHistorySelection();  
-      this.deleteSelectionMarkers();  
+      thobj.repairHistorySelection();  
+      thobj.deleteSelectionMarkers();  
     };
     
     this.doAfterOutdent = function(){
-      this.storeHistorySelection(); 
-      while(this.getFirstUnmarkedBlockQuote()){
-          var btr = this.getFirstUnmarkedBlockQuote();
-          var indentTag = this.edDoc.createElement('div');
-          indentTag.className = 'webdoc-indent-1';
+      thobj.storeHistorySelection(); 
+      while(thobj.getFirstUnmarkedBlockQuote()){
+          var btr = thobj.getFirstUnmarkedBlockQuote();
+          var indentTag = thobj.edDoc.createElement('div');
+          jQuery(indentTag).addClass('webdoc-indent-1');
           btrChilds = btr.childNodes;
           for(var b=0;b<btrChilds.length;b++){
              indentTag.appendChild(btrChilds[b].cloneNode(true));
           }
-          this.importSelectionMarkers(btr,indentTag);
+          thobj.importSelectionMarkers(btr,indentTag);
           btr.parentNode.replaceChild(indentTag,btr);
       }       
-      this.repairHistorySelection();  
-      this.deleteSelectionMarkers();   
-      this.antiBlinkRule(false);
+      thobj.repairHistorySelection();  
+      thobj.deleteSelectionMarkers();   
+      thobj.antiBlinkRule(false);
     };
     
     this.antiBlinkRule = function(bool){
-      if(this.ua.indexOf("webkit") == -1){
-        this.rootDiv.style.visibility = (bool)?"hidden":'visible';
+      if(thobj.ua.indexOf("webkit") == -1){
+        thobj.rootDiv.style.visibility = (bool)?"hidden":'visible';
       }
     };
     
     this.indent = function(){
       thobj.edDoc.execCommand("useCSS", false, true);
-      this.doBeforeIndent();
-      this.edDoc.execCommand('indent',null,null);            
-      this.doAfterIndent(); 
+      thobj.doBeforeIndent();
+      thobj.edDoc.execCommand('indent',null,null);            
+      thobj.doAfterIndent(); 
       thobj.edDoc.execCommand("useCSS", false, false);
     };
     
-    this.outdent = function(){
+    this.outdent = function(){    
       thobj.edDoc.execCommand("useCSS", false, true);
-      this.doBeforeOutdent();
-      this.edDoc.execCommand('outdent',null,null);
-      this.doAfterOutdent();
+      thobj.doBeforeOutdent();
+      thobj.edDoc.execCommand('outdent',null,null);
+      thobj.doAfterOutdent();
       thobj.edDoc.execCommand("useCSS", false, false);
     };
 
@@ -1309,7 +1311,7 @@ WebDoc.TextToolView = $.klass({
     this.markNodesAsExistingBeforePaste = function(){
       var allTags = thobj.verticalCell.getElementsByTagName('*'); 
       for(var i=0;i<allTags.length;i++){
-         allTags[i].oldTag = true;
+         jQuery(allTags[i]).addClass('webdoc-editor-elem');
       } 
     };
 
@@ -1326,7 +1328,7 @@ WebDoc.TextToolView = $.klass({
         var attributesToRemove = [];
         var attrLength = attributes.length;  
         for(var a=0;a<attrLength;a++){
-          if(!this.isInListOfWhiteAttrs(attributes[a].nodeName) && !allTags[i].oldTag){
+          if(!this.isInListOfWhiteAttrs(attributes[a].nodeName) && allTags[i].className.indexOf('webdoc-editor-elem')==-1){
             attributesToRemove[attributesToRemove.length] = attributes[a].nodeName;
           } 
         }
@@ -1381,7 +1383,7 @@ WebDoc.TextToolView = $.klass({
 	  this.findFirstToRemoveTag = function(){    
 	    var allTags = thobj.verticalCell.getElementsByTagName('*');  
 	    for(var t=0;t<allTags.length;t++){
-	      if(!this.isInListOfWhiteTags(allTags[t]) && !allTags[t].oldTag){
+	      if(!this.isInListOfWhiteTags(allTags[t]) && allTags[t].className.indexOf('webdoc-editor-elem')==-1){
 	        if(this.isInListOfBlackTags(allTags[t])){
 	          return {'node':allTags[t],'store_content':false};
 	        } else {
@@ -1414,7 +1416,7 @@ WebDoc.TextToolView = $.klass({
    
    
     this.doOnPaste = function(){  
-      //chrome fix
+      //chrome fix     
       thobj.searchForSidePasting();
       thobj.removeAttributesOfPastedTags();
       var tagToRemove=true;
@@ -1644,10 +1646,11 @@ WebDoc.TextToolView = $.klass({
       WebDoc.application.undoManager.redo();
     });
     this.shortcut('Ctrl+A', function(){
-    console.log('ctrl+a')
       thobj.selectCustomNodeContent(thobj.verticalCell);
     });    
-    
+    this.shortcut('Tab', function(){
+      thobj.editorExec('indent');
+    }); 
     //setTimeout(function(){thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.getPropertyDetectionNode())))},1000);
   },
   
