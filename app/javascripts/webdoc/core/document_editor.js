@@ -232,7 +232,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                     that.editedDocument.save(function(persitedDoc){
                         node
                         .removeClass('loading')
-                        .trigger('close');
+                        .trigger({type: 'close'});
                         
                         that.filter.refreshDocument(persitedDoc);
                     });

@@ -134,7 +134,7 @@ WebDoc.DocumentList = $.klass({
         }),
         documentTitle = $("<a/>", {
           "class": "document-title wb-document-edit",
-          "href": "#" + id,
+          "href": id,
           "title": "Open '" + document.title() + "'",
           data: data,
           html: document.title()
@@ -146,7 +146,6 @@ WebDoc.DocumentList = $.klass({
       documentNode
       .append( this._buildDocumentControlsNode( document, data ) )
       .append( this._buildDocumentActionsNode( document, data ) );
-      //.append( this._buildDocumentInfoNode( document, data ));
     }
     
     this.map[ id ] = {
@@ -155,18 +154,6 @@ WebDoc.DocumentList = $.klass({
     
     return documentNode;
   },
-  
-  //_buildDocumentInfoNode: function( document, data ){
-  //  var infoNode = $("<a/>", {
-  //        "class": "wb-document-info sec-action info-button button",
-  //        href: "",
-  //        title: "info",
-  //        html: "info",
-  //        data: data
-  //      });
-  //  
-  //  return infoNode;
-  //},
   
   _buildDocumentControlsNode: function( document, data ) {
     var documentControlsNode = $("<ul/>", {

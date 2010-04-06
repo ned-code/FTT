@@ -235,7 +235,8 @@ input.default {
 .stack label,
 .stack .label,
 .stack .error-message {
-  white-space: nowrap;
+    display: block;
+    white-space: nowrap;
 }
 .stack .error-message {
     position: absolute;

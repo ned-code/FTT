@@ -104,7 +104,7 @@ en:
       title: "Documents"
       all_items_by_date: "View your webdocs"
       created_by_me: "You created"
-      editor_rights: "You co-edit"
+      editor_rights: "You can edit"
       shared_with_me: "Shared with you"
       public: "View public webdocs"
       create_new_document: "Create a new webdoc"
@@ -121,7 +121,7 @@ en:
           add_editors: "Email addresses"
           add_editors_explanation: "Allow other people to edit this webdoc. They will be given the same editing rights as you have."
           add_readers: "(Enter emails)"
-          add_editors_message: "Your message"
+          add_editors_message: "Invitation message"
           add_readers_message: "Your message"
         share_document_dialog:
           title: "Share webdoc"
