@@ -40,6 +40,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this.documentList = null;
         this.filter = undefined;
         this.currentListingPageId = 1;
+        this._creatingDoc = false;
         this._currentUserDocumentsEditor = [];
         this._currentUserDocumentsReader = [];        
         WebDoc.application.documentEditor = this;
@@ -133,30 +134,33 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                 
                 node
                 .bind('submit', function() {
-                    node.addClass('loading');
-                    
-                    var newDoc = new WebDoc.Document(),
-                        documentSizeChoice = $("input[name='wb-new-document-size']:checked", this).val();
-                    
-                    newDoc.setTitle( infoDialogTitleNode.val(), true );
-                    newDoc.setDescription( infoDialogDescriptionNode.val(), true);
-                    newDoc.setCategory( infoDialogCategoryNode.val(), true);
-                    
-                    newDoc.setSize( that.getSizeFromChoice( documentSizeChoice, infoDialogWidthNode.val(), infoDialogHeightNode.val() ), true);
-                    newDoc.save(function(newObject, status) {
-                      if (status == "OK") 
-                      {
-                        node
-                        .removeClass('loading')
-                        .trigger('close');
-                        
-                        that.documents.push(newDoc);
-                        that.filter.addDocument(newDoc);
-                        document.location = "/documents/" + newDoc.uuid() + "#1";
-                      }
-                    });
-                    
-                    return false;
+                    if (!that._creatingDoc) {
+                      node.addClass('loading');
+                      
+                      var newDoc = new WebDoc.Document(),
+                          documentSizeChoice = $("input[name='wb-new-document-size']:checked", this).val();
+                      
+                      newDoc.setTitle( infoDialogTitleNode.val(), true );
+                      newDoc.setDescription( infoDialogDescriptionNode.val(), true);
+                      newDoc.setCategory( infoDialogCategoryNode.val(), true);
+                      
+                      newDoc.setSize( that.getSizeFromChoice( documentSizeChoice, infoDialogWidthNode.val(), infoDialogHeightNode.val() ), true);
+                      that._creatingDoc = true;
+                      newDoc.save(function(newObject, status) {
+                        if (status == "OK") 
+                        {
+                          node
+                          .removeClass('loading')
+                          .trigger('close');
+                          
+                          that.documents.push(newDoc);
+                          that.filter.addDocument(newDoc);
+                          document.location = "/documents/" + newDoc.uuid() + "#1";
+                        }
+                        that._creatingDoc = false;                        
+                      });
+                    }
+                  return false;
                 })
                 .find("input[type='text']")
                 .eq(0)

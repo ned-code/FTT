@@ -51,6 +51,8 @@ pre, code         { font-family: 'Courier', 'Andale Mono', 'Lucida Console', mon
 h1,h2,h3,h4,h5,h6 { font-weight: normal; margin: 0; word-spacing: -0.0833em; }
 h4,h5,h6          { font-weight: bold; }
 
+.webdoc span,font {word-spacing: normal;}
+
 h1                { font-size: 3em;                           margin-bottom: 0.4167em; }
 h2                { font-size: 2.5em;   line-height: 1.5;     margin-bottom: 0.5em; }
 h3                { font-size: 2em;     line-height: 1.25;    margin-bottom: 0.625em; }

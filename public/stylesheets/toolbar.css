@@ -1,35 +1,36 @@
-#toolbar_panel {background:none;/*#E5E5E5 url(../images/toolbar_background.png) repeat-x scroll 0 -192px;*/height:27px;clear:both;}
+#toolbar_panel {background:none;display: none;}
 #toolbar_panel select {display:block;float:left;margin:0px 3px;border:solid 1px #cccccc}
-#toolbar_panel a div{display:block;color: transparent;margin:2px}
-#toolbar_panel a 	{display:block;float:left;border:solid 1px transparent;height:18px;width:20px;margin:6px 1px 0px 1px;outline: none;text-decoration:none;}                                         
-#toolbar_panel a:hover {border:solid 1px #cccccc;}
-#toolbar_panel a.active_button {border:solid 1px #55ff55;background-color: #CFFFFA;}
+#toolbar_panel a div{display:block;color:transparent;margin:2px 3px}
+#toolbar_panel a {margin:0px 0px 0px 2px;}                                         
+#toolbar_panel a:hover {border:solid 1px #49565B}
+#toolbar_panel a.active_button {border:solid 1px #B0E300;background:#E3FF7F !important;-moz-box-shadow:0 0 2px #B0E300;}
 #toolbar_panel_cover{position:absolute;width:100%;height:100%;background-color:white;opacity:0.7;}
-#toolbar_panel a#toolbar_panel_button_foreColor{background-color: #ffffff;margin:6px 0px 0px 0px;}
-#toolbar_panel a#toolbar_panel_button_hiliteColor{background-color: #ffffff;margin:6px 0px 0px 0px;}
+/*#toolbar_panel a#toolbar_panel_button_foreColor{background-color: #ffffff;margin:6px 0px 0px 0px;}
+#toolbar_panel a#toolbar_panel_button_hiliteColor{background-color: #ffffff;margin:6px 0px 0px 0px;}*/
 #toolbar_panel_button_foreColor>div{background-color: #000000;}
-#toolbar_panel a#toolbar_panel_button_foreColor_arrow{margin:6px 0px 0px 0px;padding:0px;width:11px;overflow: hidden;}
-#toolbar_panel a#toolbar_panel_button_hiliteColor_arrow{margin:6px 0px 0px 0px;padding:0px;width:11px;overflow: hidden;} 
+#toolbar_panel_button_hiliteColor>div{background-color: #ffffff;}
+#toolbar_panel a#toolbar_panel_button_foreColor_arrow{margin:0px;padding:0px;width:13px;overflow: hidden;}
+#toolbar_panel a#toolbar_panel_button_hiliteColor_arrow{margin:0px;padding:0px;width:13px;overflow: hidden;} 
 #toolbar_panel_valign_block a{margin-top: 0px;}
-#toolbar_panel_valign_block{position:absolute;border:1px solid #cccccc;display:none;overflow: hidden;padding: 2px 1px;background-color: #ffffff;}   
+#toolbar_panel_valign_block{position:absolute;height:22px !important;display:none;overflow:hidden;padding:2px 1px;}   
 .icon_valign_arrow{background:url(../images/toolbar.png) no-repeat -388px;width:8px;height:16px;margin:0px;float:left}
-#toolbar_panel_button_valign{width:33px !important}
+#toolbar_panel_button_valign{width:37px !important}
+#toolbar_selectbox_container{margin:2px 2px;height:22px}
 
 
-
-.icon_increasefontsize{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -1042px;}
-.icon_decreasefontsize{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -1026px;}
+.icon_increasefontsize{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -1041px;}
+.icon_decreasefontsize{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -1025px;}
 .icon_bold{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -32px}
 .icon_italic{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -48px}
 .icon_underline{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -64px}
-.icon_foreColor{background:url(../images/toolbar.png) no-repeat -80px;width:16px;height:16px}
+.icon_foreColor{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -80px;}
 
-.icon_color_arrow{background:url(../images/toolbar.png) no-repeat -388px;width:16px;height:16px;margin:0px;}
-.icon_color_arrow_top{background:url(../images/toolbar.png) no-repeat -388px;width:16px;height:16px;margin:0px;}/*TODO TOP ARROW*/
+.icon_color_arrow{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -388px;}
+.icon_color_arrow_top{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -388px;}/*TODO TOP ARROW*/
 
-.icon_backColor{background:url(../images/toolbar.png) no-repeat -96px;width:16px;height:16px}
-.icon_indent{background:url(../images/toolbar.png) no-repeat -416px;width:16px;height:16px} 
-.icon_outdent{background:url(../images/toolbar.png) no-repeat -400px;width:16px;height:16px}
+.icon_backColor{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -96px;}
+.icon_indent{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -416px;} 
+.icon_outdent{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -400px;}
 .icon_insertUnorderedList{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -160px}
 .icon_insertOrderedList{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -176px}
 .icon_justifyLeft{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -192px}
@@ -42,18 +43,34 @@
 .icon_subScript{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -608px}
 .icon_superScript{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -640px}
 .icon_removeFormat{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -256px}
-.icon_foreColor{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -80px}
-.icon_hiliteColor{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -96px}
+.icon_foreColor{height:16px;width:16px;background:url(../images/toolbar.png) no-repeat -80px}
+.icon_hiliteColor{height:16px;width:16px;background:url(../images/toolbar.png) no-repeat -96px}
 
 .icon_valignTop{width:16px;height:16px;background:url(../images/toolbar.png) no-repeat -977px;float:left;}
-.icon_valignMiddle{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -993px;float:left;}
-.icon_valignBottom{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -1009px;float:left;}
+.icon_valignMiddle{height:16px;width:16px;background:url(../images/toolbar.png) no-repeat -993px;float:left;}
+.icon_valignBottom{height:16px;width:16px;background:url(../images/toolbar.png) no-repeat -1009px;float:left;}
 
-.icon_createLink{height:12px;width:16px;background:url(../images/toolbar.png) no-repeat -560px;float:left;}
-#toolbar_panel_createlink_block			{z-index:99999999;position:absolute;height:70px;border:1px solid #cccccc;display:none;overflow: hidden;padding: 2px 1px;background-color: #ffffff;color:#666666;}   
-#toolbar_panel_createlink_block  input[type="text"] {display:block;float:left;width:232px;margin:1px 2px 1px 0px;height:16px;padding:0px 3px;border:1px solid #cccccc !important}
-#toolbar_panel_createlink_block  input[type="button"] {display:block;float:right;}
-#toolbar_panel_createlink_block  label {display:block;float:left;width:40px;text-align:left;padding:0px 10px;height:16px;line-height:21px}
+.icon_createLink{height:16px;width:16px;background:url(../images/toolbar.png) no-repeat -560px;float:left;}
+.icon_clearLink{height:16px;width:16px;background:url(../images/toolbar.png) no-repeat -576px;float:left;}
+
+#toolbar_panel_createlink_block	 {z-index:99999999 !important;position:absolute !important;height:65px !important;display:none ;overflow: hidden !important;padding: 5px 3px !important;}   
+#toolbar_panel_createlink_block  input[type="text"] {display:block;float:left;width:275px;margin:1px 2px 1px 0px;height:20px;padding:0px 3px;border:1px solid #cccccc !important;font-size:11px;}
+#toolbar_panel_createlink_block  input[type="radio"] {display:block;float:left;width:17px;margin:1px 2px 1px 0px;height:21px;padding:0px 3px;}
+#toolbar_panel_createlink_block  input[type="button"] {display:block;float:right;font-size: 12px;}    
+#toolbar_panel_createlink_block  label {display:block;float:left;width:60px;text-align:left;padding:0px 10px;height:16px;line-height:21px;font-size: 12px;}
+#toolbar_panel_createlink_block  label.inline_label {display:block;float:left;width:auto;text-align:left;padding:0px 7px 0px 0px;line-height: 24px;font-size:11px;}
+#toolbar_panel_createlink_block  div {display:block;height:20px;line-height:20px}
+#toolbar_panel_createlink_block button {float:right !important;padding:1px !important;display:block !important;margin-top:2px !important}
 
 
 
+.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
+.ui-autocomplete-input { padding: 1px 0 1px 5px }
+.ui_dropdown_container {background: none;padding:20px 50px 30px 30px;position:absolute;z-index:500;}
+.ui_custom_input {font-size: 11px !important;height: 18px !important;top:0px !important;float:left !important;padding-left:3px !important;border: 1px solid #CCCCCC !important;}
+.ui_custom_button {font-size: 14px !important;width:20px !important;height:22px !important;top:0px !important;left:-1px!important;float:left !important;}
+
+.toolbar-custom-combobox-button{}
+.toolbar-custom-combobox-ul{font-size: 12px;font-weight:normal;float:none;z-index: 3;top:0;left:0;}
+.toolbar-custom-combobox-li{font-size: 12px;font-weight:normal;float:none;}
+.toolbar-custom-combobox-li a{float:none !important;line-height:1.2 !important;padding:1px 3px !important;cursor: default;border:solid 1px transparent}
