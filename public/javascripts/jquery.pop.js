@@ -4,6 +4,8 @@
 // 
 // http://webdev.stephband.info
 
+function shout(input){ if ( window.console && console.log ) console.log('HEY!' || input); }
+
 (function(jQuery, undefined){
 
 	var plugin = 'pop',
@@ -115,7 +117,7 @@
 			.html( pop )
 			.appendTo( body )
 			// Bind close event
-			.bind(options.cancelEvent+plugin, closeHandler)
+			.bind(options.cancelEvent+'.'+plugin, closeHandler)
 			// Bind cancel button detector
 			.delegate(options.cancelSelector, 'click.'+plugin, closeHandler);
 			

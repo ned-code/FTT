@@ -19,7 +19,7 @@
             %li>
               = link_to "contacts", followships_path, { :class => "item" }
             %li>
-              = link_to "profile", edit_user_path(current_user), { :class => "user-edit item" }
+              = link_to "your profile", edit_user_path(current_user), { :class => "user-edit item" }
             %li>
               = link_to "logout", destroy_user_session_path, { :class => "user-logout item" }
     - else
@@ -27,7 +27,7 @@
         %ul.divided.index
           - if controller_name != 'home'
             %li>= link_to t('devise.sessions.link'), root_path
-          - if controller_name != 'registrations'
-            %li>= link_to t('devise.registrations.link'), new_registration_path(:user), :class => "sign-up button"
+          - if controller_name != 'registrations' && controller_name != 'home'
+            %li>= link_to "sign up", new_registration_path(:user)
     
     = render "layouts/flash", :object => flash

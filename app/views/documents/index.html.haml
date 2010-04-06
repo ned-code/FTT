@@ -12,15 +12,12 @@
             %a#wb-document-filter-owned-by-me.current.state-filter-subtab{ :href => "#filter-author" }= t('.created_by_me')
           %li>
             %a#wb-document-filter-editor-rights.state-filter-subtab{ :href => "#filter-editable" }= t('.editor_rights')
-          %li>
-            %a#wb-document-filter-shared-with-me.state-filter-subtab{ :href => "#filter-shared" }= t('.shared_with_me')
+          -#%li>
+          -#  %a#wb-document-filter-shared-with-me.state-filter-subtab{ :href => "#filter-shared" }= t('.shared_with_me')
       
         %a#wb-document-filter-date.button.current.state-filter-tab{ :style => "float: left;", :href => "#filter-by-date" }= t('.all_items_by_date')
       %li>
         %a#wb-document-filter-public.button.state-filter-tab{ :href => "#filter-public" }= t('.public')
-    
-
-
 
 %div.content
   %div.wrap
@@ -97,8 +94,8 @@
         %textarea#wb-invitation-add-editors-message{ :rows => 3, :cols => 20}
     
     %div.ui-actions.state-readonly-hide
-      %a{ :href => '#cancel', :class => 'cancel' } cancel
-      %input{ :type => 'submit', :name => 'new-document', :value => 'Create' }
+      %a{ :href => '#cancel', :class => 'cancel' } close
+      %input{ :type => 'submit', :name => 'new-document', :value => 'Add' }
   %div.column.last.double.of-five#wb-access-list{ :style => "overflow: hidden;" }>
     %h4 Current editors
     %ul#document_access_list.vertical.divided.index
