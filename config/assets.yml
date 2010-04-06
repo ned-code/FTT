@@ -10,6 +10,7 @@ stylesheets:
     - public/stylesheets/lib/index.css
     - public/stylesheets/lib/layer.css
     - public/stylesheets/lib/column.css
+    - public/stylesheets/lib/card.css
     - public/stylesheets/style.css
     - public/stylesheets/style.ui.css
 

@@ -4,40 +4,40 @@
 </div>
 <div class="content">
   <div class="wrap">
-    <h2>
-      <%= @user.following.length %> <%= t('.contacts')%>
-    </h2>
-    <ul>
-      <% @user.following.each do |user|%>
+    <div class="column one double of-four">
+      <h2>
+        <%= @user.following.length %> <%= t('.contacts')%>
+      </h2>
+      <ul class="vertical index">
+        <% @user.following.each do |user|%>
         <li>
-          <div class="wb-user-item-wrap">
-            <div class="wb-user-item-avatar"><%= image_tag(user.avatar.url(:thumb)) if user.avatar? %></div>
-            <% if user.mutual_connection %>
-              <div class="wd-user-item-mutual"/>
-            <% end%>
-            <div class="wb-user-item-remove"><a href="#remove_contact"><%= t('.remove') %></a></div>
-            <div class="wb-user-item-name"><%= "#{user.first_name} #{user.last_name}" %></div>
-            <div class="wb-user-item-nb-webdoc"><%= "#{user.documents.length} #{t('.webdocs')}" %></div>
-          </div>
+          <%= render :partial => "card", :locals => { :user => user, :subscribed => user.following_info } %>
         </li>
-      <% end%>
-    </ul>
-    <h2>
-      <%= @user.followers.length %> <%= t('.subscribe_to_me')%>
-    </h2>
-    <ul>
-      <% @user.followers.each do |user|%>
+        <% end%>
+      </ul>
+    </div><!-- spaceless
+ --><div class="column last double of-four">
+      <h2>
+        <%= @user.followers.length %> <%= t('.subscribe_to_me')%>
+      </h2>
+      <ul class="vertical index">
+        <% @user.followers.each do |user|%>
         <li>
-          <div class="wb-user-item-wrap">
-            <div class="wb-user-item-avatar"><%= image_tag(user.avatar.url(:thumb)) if user.avatar? %></div>
-            <% if user.mutual_connection %>
-              <div class="wd-user-item-mutual"/>
-            <% end%>
-            <div class="wb-user-item-name"><%= "#{user.first_name} #{user.last_name}" %></div>
-            <div class="wb-user-item-nb-webdoc"><%= "#{user.documents.length} #{t('.webdocs')}" %></div>            
-          </div>
+          <% if user.following_info %>
+          <%= render :partial => "card", :locals => { :user => user } %>
+          <% else %>
+          <%= render :partial => "card", :locals => { :user => user, :subscribed => user.following_info } %>
+          <% end %>
         </li>
-      <% end%>
-    </ul>          
+        <% end%>
+      </ul>
+    </div>
   </div>
-</div>  
+</div>
+
+<% content_for :scripts do %>
+  <script type="text/javascript">
+    jQuery(".card-name").truncate();
+    jQuery(".card-bio").truncate({ match: '<br/><br/>' });
+  </script>
+<% end %>

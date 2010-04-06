@@ -2,16 +2,15 @@
   <div class="wrap clear">
     <h2>
       <%=t '.title' %>
-      <%= link_to "Back", :back, { :class => "wd-back-button" }%>
+      <!--%= link_to "Back", :back, { :class => "wd-back-button" }%-->
     </h2>
     <% form_for @user, :html => {:multipart => 'true'}, :builder => CustomFormBuilder do |f| %>
       <fieldset>
         <div class="column one of-four stack <% if @user.errors.on(:avatar) %>error<% end %>">
-          <label for="user_avatar">Avatar<br/>
-            <% if (@user.avatar_thumb_url && !@user.errors.on(:avatar)) %>
-              <img src="<%= @user.avatar_thumb_url %>" />
-            <% end %>
-          </label>
+          <label for="user_avatar" class="avatar-label">Avatar</label>
+          <% if (@user.avatar_thumb_url && !@user.errors.on(:avatar)) %>
+            <img src="<%= @user.avatar_thumb_url %>" alt="avatar" />
+          <% end %>
         </div>
         
         <div class="column two of-four">
@@ -51,7 +50,7 @@
       </fieldset>
       
       <fieldset>
-        <div class="column one double of-two stack <% if @user.errors.on(:bio) %>error<% end %>">
+        <div class="column one double of-four stack <% if @user.errors.on(:bio) %>error<% end %>">
           <%= f.label :bio, 'A little bit about yourself' %>
           <%= f.text_area :bio, :maxlength => 255, :autocomplete => "on", :cols => '', :rows => '' %>
         </div>

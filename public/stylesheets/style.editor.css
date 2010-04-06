@@ -277,45 +277,6 @@ body {
   font-size: 0.75em;
 }
 
-/* ---- */
-
-.card {
-  height: 128px;
-  color: white;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  -webkit-background-size:  112px 112px;
-  -moz-background-size:     112px 112px;
-  background-size:          112px 112px;
-  padding: 6px 0 0 0;
-  position: relative; 
-}
-.card-name {
-    background-color: hsla(198, 6%, 70%, 0.8); color: white;
-
-    height: 1.2em;
-    line-height: 1.1em;
-    padding: 0.4em 1.6667em;
-    margin: 0 6px 0.6em 6px;
-    
-    font-size: 1em;
-    font-weight: bold;
-    
-    -moz-border-radius: 1em;
-    -webkit-border-radius: 1em;
-    border-radius: 1em;
-}
-.card-bio {
-  margin: 0 12px 0 116px;
-}
-.card-actions {
-  margin: 0;
-  position: absolute;
-  bottom: 12px;
-  left: 116px;
-  font-weight: bold;
-}
-
 #tb_1_utilities_settings_trigger.tb_1_utilities_settings_attention{
   background:#ee1111;
 }

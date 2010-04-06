@@ -1,0 +1,14 @@
+<!-- views/followships/_card -->
+
+<div class="card <% if local_assigns.has_key? :subscribed %>card-with-button<% end %>" <% if user.avatar %>style="background-image: url('<%= user.avatar.url(:thumb) %>');"<% end %>>
+  <% if user.mutual_connection %>
+    <div class="wd-user-item-mutual" ></div>
+  <% end%>
+  <h4 class="card-name card-name-avoid-button"><%= "#{user.first_name} #{user.last_name}" %></h4>
+  <p class="card-bio"><%= "#{user.bio}" %></p>
+  <div class="card-stats"><%= "#{user.documents.length}" %> webdoc<% if user.documents.length > 1 %>s<% end %></div>
+  
+  <% if local_assigns.has_key? :subscribed %>
+  <a class="subscribe-button button" href="#subscribe"><% if subscribed %>unfollow<% else %>follow<% end %></a>
+  <% end %>
+</div>
