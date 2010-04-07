@@ -1,3 +1,4 @@
+<!-- views/followships/index -->
 <div class="action-zone zone">
   <div class="wrap">
   </div>
@@ -37,6 +38,13 @@
 
 <% content_for :scripts do %>
 <script type="text/javascript">
+  
+  function makeError(status, error) {
+    return jQuery('<p/>').html("Hmmm. We haven't been able to do that. Sorry. The error is:")
+    .add( jQuery('<h4/>').html( status ) )
+    .add( jQuery('<p/>').html( error ) );
+  }
+
   jQuery(document).ready(function(){
     var cards = jQuery(".card");
     
@@ -71,6 +79,8 @@
       function errorback(request, status, error) {
         button
         .removeClass('loading');
+        
+        makeError(status, error).flash();
       }
       
       button.addClass('loading');
@@ -104,9 +114,7 @@
         button
         .removeClass('loading');
         
-        //jQuery('<div/>')
-        //.html("<p>Hmmm. We haven't been able to do that. Sorry. Technically, the error is:</p><p>"+error+"</p>")
-        //.flash();
+        makeError(status, error).flash();
       }
       
       button.addClass('loading');

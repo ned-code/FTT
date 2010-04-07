@@ -56,8 +56,7 @@
 		// Overwrite options
 		var options = jQuery.extend({}, jQuery.fn[plugin].options, o);
 		
-		// Put the
-		 message in the flash...
+		// Put the message in the flash...
 		flash.html(this);
 		
 		if (state === 0) {
