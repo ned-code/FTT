@@ -243,7 +243,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     var options = {  
       success:       this._displayBackgroundImage.pBind(this), 
       type:          "POST",
-      error: function(response) { ddd("error", response);}
+      error: function(response, errorType, exc) { ddd("error", response,errorType, exc );}
     };
     try{
       // submit the form
