@@ -45,7 +45,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     WebDoc.application.pageEditor.currentPage.addListener(this); 
     
     this.currentPageChanged();
-    this.domNode = jQuery('#page_inspector');
+    this.domNode = jQuery('#page-inspector');
     
     var footHeight = this.domNode.find('.foot>div').height();
     this.domNode
@@ -318,7 +318,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   },
 
   objectChanged: function(page) {
-    ddd('page_inspector_controller: objectChanged: must update fields');
+    ddd('page-inspector_controller: objectChanged: must update fields');
     var page = WebDoc.application.pageEditor.currentPage;
     this._updatePageRelatedFields();
   },

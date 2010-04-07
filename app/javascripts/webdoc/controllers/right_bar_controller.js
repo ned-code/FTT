@@ -52,7 +52,10 @@ WebDoc.RightBarController = $.klass({
     this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;
     
     this._currentInspectorType = null;  
-    this.selectInspector(WebDoc.RightBarInspectorType.LIBRARY);  
+    this.selectInspector(WebDoc.RightBarInspectorType.LIBRARY);
+    
+    // This is a hack. Ultimately, we need a better way than this to be wrangling with show/hide
+    $('#page-inspector, #document-inspector, #social-inspector').hide();
   },
 
   showRightBar: function() {

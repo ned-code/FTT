@@ -65,7 +65,7 @@ WebDoc.ToolbarController = $.klass({
   //    WebDoc.application.rightBarController.showLib();
   //  },
   //  
-  //  'page_inspector_view': function(e) {
+  //  'page-inspector_view': function(e) {
   //    WebDoc.application.rightBarController.showPageInspector();
   //  },
   //  
