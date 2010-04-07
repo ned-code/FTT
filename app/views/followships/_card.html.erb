@@ -1,6 +1,6 @@
 <!-- views/followships/_card -->
 
-<div data-webdoc-user-id="<%= user.id %>" class="card <% if local_assigns.has_key? :subscribed %>card-with-button<% end %>" <% if user.avatar %>style="background-image: url('<%= user.avatar_thumb_url %>');"<% end %>>
+<div class="card <% if local_assigns.has_key? :subscribed %>card-with-button<% end %>" data-webdoc-user-id="<%= user.id %>" <% if user.avatar %>style="background-image: url('<%= user.avatar_thumb_url %>');"<% end %>>
   <% if user.mutual_connection %>
     <div class="wd-user-item-mutual" ></div>
   <% end%>
@@ -12,97 +12,3 @@
   <a class="subscribe-button button" href="#<% if subscribed %>un<% end %>subscribe"><% if subscribed %>unfollow<% else %>follow<% end %></a>
   <% end %>
 </div>
-
-<% content_for :scripts do %>
-  <script type="text/javascript">
-    jQuery(document).ready(function(){
-      var cards = jQuery(".card");
-      
-      cards.find(".card-name").truncate();
-      cards.find(".card-bio").truncate({ match: '<br/><br/>' });
-      
-      cards
-      .each(function(i){
-        var card = jQuery(this),
-            data = {
-              user: {
-                id: card.attr('data-webdoc-user-id')
-              }
-            };
-        
-        card.data('webdoc', data);
-      })
-      // Ideally this delegation should happen on some parent of all the cards,
-      // like the body, but we can't use the body in the editor!  What to do?
-      .delegate("a[href='#subscribe']:not(.loading)", "click", function(e){
-        var button = jQuery(this),
-            card = button.closest('.card'),
-            data = {
-              following_id: card.data('webdoc').user.id
-            };
-        
-        function callback(json) {
-          button
-          .removeClass('loading')
-          .href('#unsubscribe')
-          .html('unfollow');
-        }
-        
-        function errorback(request, status, error) {
-          button
-          .removeClass('loading');
-        }
-        
-        button.addClass('loading');
-        
-        jQuery.ajax({
-          url: "/follow",
-          type: 'POST',
-          data: data, 
-          dataType: 'json',              
-          success: callback,
-          error: errorback
-        });
-        
-        e.preventDefault();
-      })
-      .delegate("a[href='#unsubscribe']:not(.loading)", "click", function(e){
-        var button = jQuery(this),
-            card = button.closest('.card'),
-            data = {
-              following_id: card.data('webdoc').user.id
-            };
-        
-        function callback(json) {
-          button
-          .removeClass('loading')
-          .href('#subscribe')
-          .html('follow');
-        }
-        
-        function errorback(request, status, error) {
-          button
-          .removeClass('loading');
-          
-          //jQuery('<div/>')
-          //.html("<p>Hmmm. We haven't been able to do that. Sorry. Technically, the error is:</p><p>"+error+"</p>")
-          //.flash();
-        }
-        
-        button.addClass('loading');
-        
-        jQuery.ajax({
-          url: "/unfollow",
-          type: 'DELETE',
-          data: data, 
-          dataType: 'json',              
-          success: callback,
-          error: errorback
-        });
-        
-        e.preventDefault();
-      });
-    });
-    
-  </script>
-<% end %>

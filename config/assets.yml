@@ -68,6 +68,7 @@ javascripts:
     - public/javascripts/jquery.events.js
     - public/javascripts/jquery.pop.js
     - public/javascripts/jquery.truncate.js
+    - public/javascripts/jquery.flash.js
     - public/javascripts/klass.js    
     - public/swfupload/swfupload.js
     - public/javascripts/jquery-swfupload.js

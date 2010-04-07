@@ -34,3 +34,94 @@
     </div>
   </div>
 </div>
+
+<% content_for :scripts do %>
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    var cards = jQuery(".card");
+    
+    cards.find(".card-name").truncate();
+    cards.find(".card-bio").truncate({ match: '<br/><br/>' });
+    cards.each(function(i){
+      var card = jQuery(this),
+          data = {
+            user: {
+              id: card.attr('data-webdoc-user-id')
+            }
+          };
+      
+      card.data('webdoc', data);
+    });
+    
+    jQuery(document)
+    .delegate(".card a[href='#subscribe']:not(.loading)", "click", function(e){
+      var button = jQuery(e.currentTarget),
+          card = button.closest('.card'),
+          data = {
+            following_id: card.data('webdoc').user.id
+          };
+      
+      function callback(json) {
+        button
+        .removeClass('loading')
+        .href('#unsubscribe')
+        .html('unfollow');
+      }
+      
+      function errorback(request, status, error) {
+        button
+        .removeClass('loading');
+      }
+      
+      button.addClass('loading');
+      
+      jQuery.ajax({
+        url: "/follow",
+        type: 'POST',
+        data: data, 
+        dataType: 'json',              
+        success: callback,
+        error: errorback
+      });
+      
+      e.preventDefault();
+    })
+    .delegate(".card a[href='#unsubscribe']:not(.loading)", "click", function(e){
+      var button = jQuery(e.currentTarget),
+          card = button.closest('.card'),
+          data = {
+            following_id: card.data('webdoc').user.id
+          };
+      
+      function callback(json) {
+        button
+        .removeClass('loading')
+        .href('#subscribe')
+        .html('follow');
+      }
+      
+      function errorback(request, status, error) {
+        button
+        .removeClass('loading');
+        
+        //jQuery('<div/>')
+        //.html("<p>Hmmm. We haven't been able to do that. Sorry. Technically, the error is:</p><p>"+error+"</p>")
+        //.flash();
+      }
+      
+      button.addClass('loading');
+      
+      jQuery.ajax({
+        url: "/unfollow",
+        type: 'DELETE',
+        data: data, 
+        dataType: 'json',              
+        success: callback,
+        error: errorback
+      });
+      
+      e.preventDefault();
+    });
+  });
+</script>
+<% end %>

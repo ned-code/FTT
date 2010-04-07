@@ -15,19 +15,6 @@
     :javascript
       var WebDoc;
       $(function() {
-        var flash = $('#flash');
-        
-        // TODO: put this somewhere more sensible
-        flash
-        .delay(3000)
-        .animate({
-          opacity: 0,
-          marginTop: -flash.height()
-        }, {
-          duration: 3000,
-          easing: 'easeInCubic'
-        });
-        
         // start application if it exists
         if (WebDoc && WebDoc.run) {
           WebDoc.run();
