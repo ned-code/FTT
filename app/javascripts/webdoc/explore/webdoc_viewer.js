@@ -90,7 +90,7 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
     tb.append(previous).append(next).append(open);
     this._viewerNode.append(tb);
     this._containerNode = jQuery('<div/>').css({
-      overflow: "hidden",   
+      overflow: "hidden"  
     }).addClass("center-box");    
     var pageLayout = jQuery("<div/>").addClass("layer").css( {paddingTop: this.TOOL_BAR_HEIGHT, overflow: "hidden" }).append(jQuery("<div/>").addClass("center").append(jQuery("<div/>").addClass("center-cell").append(this._containerNode)));
 

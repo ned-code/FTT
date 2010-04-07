@@ -138,7 +138,6 @@
 
 
 = content_for :scripts do
-  = include_javascripts :mtools
   = include_javascripts :document_editor
   :javascript
     var WebDoc;
@@ -150,7 +149,7 @@
       sessionKeyName:"#{session_key_name}",
       cookiesSessionKeyName:"#{cookies[session_key_name]}"
     };
-    WebDoc.run = function() {
+    MTools.Application.main(function() {
       var editor = new WebDoc.DocumentEditor();
       editor.start();
-    }
+    });

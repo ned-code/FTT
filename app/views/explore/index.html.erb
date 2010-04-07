@@ -5,6 +5,21 @@
 </div>
 <div class="content">
   <div id="webdoc" class="wrap" style="font-size:133%">
+    <div>
+      Show the most 
+      <select id="wd-main-filter">
+        <option value="recent" <%= "selected=\"true\"" if params[:main_filter] == "recent" %>><%= t(".select.main_filter.recent")%></option>
+        <option value="viewed" <%= "selected=\"true\"" if params[:main_filter] == "viewed" %>><%= t(".select.main_filter.viewed")%></option>  
+      </select>
+      webdocs in
+      <select id="wd-category-filter">
+        <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t(".select.category.all")%></option>
+        <% Category.all.each do |category|%>
+          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= t(".select.category_filter.#{category.name}") %></option>  
+        <% end %>        
+      </select>
+      categories
+    </div>
     <ul class="index">
       <% @public_documents.each do |document| %>
         <li>
@@ -16,21 +31,7 @@
 </div>
 <%= include_stylesheets :page_viewer, :media => 'all' %>      
 <% content_for :scripts do %>
-  <%= include_javascripts :mtools %>
   <%= include_javascripts :page_editor %>
-  <% javascript_tag  do %>  
-    var WebDoc;
-    if (!WebDoc) {
-      WebDoc = {};
-    }
-    WebDoc.authData = {
-      authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
-      sessionKeyName:"#{session_key_name}",
-      cookiesSessionKeyName:"#{cookies[session_key_name]}"
-    };
-    WebDoc.run = function() {
-      WebDoc.WebdocViewer.showViewers();
-    }
-  <% end -%>
+  <%= include_javascripts :explore %>
 <% end %>
       

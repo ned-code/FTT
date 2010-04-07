@@ -15,7 +15,7 @@
 
 <% content_for :scripts do %>
   <script type="text/javascript">
-    jQuery(document).ready(function(){
+    MTools.Application.beforeMain("card", function(){
       var cards = jQuery(".card");
       
       cards.find(".card-name").truncate();

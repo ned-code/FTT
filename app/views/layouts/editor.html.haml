@@ -1,3 +1,5 @@
+- document_title @document.title
+- session_key_name = ActionController::Base.session_options[:key]
 <!DOCTYPE html>
 %html( xmlns:ub="#{XML_UNIBOARD_DOCUMENT_NAMESPACE}" xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg" )
   %head
@@ -19,12 +21,21 @@
     = yield
     = include_javascripts :mtools
     = include_javascripts :page_editor
-
-    :javascript
-      
-      $(function()
-      {
-        WebDoc.run();
-      });
+    = yield :scripts
+    :javascript  
+      var WebDoc;
+      if (!WebDoc) {
+        WebDoc = {};
+      }
+      WebDoc.authData = {
+        authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
+        sessionKeyName:"#{session_key_name}",
+        cookiesSessionKeyName:"#{cookies[session_key_name]}"
+      };
+      MTools.Application.main(function() {
+        var editor = new WebDoc.PageEditor(#{edit_mode?});
+        editor.load("#{@document.uuid}");
+      });      
+      MTools.Application.start();
     
     = render :partial => "layouts/google_analytics"
