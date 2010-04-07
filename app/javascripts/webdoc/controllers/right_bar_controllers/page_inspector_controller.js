@@ -243,8 +243,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     var options = {  
       success:       this._displayBackgroundImage.pBind(this), 
       type:          "POST",
-      dataType:      "json",
-      error: function(response) { ddd("error", response);}
+      error: function(response, errorType, exc) { ddd("error", response,errorType, exc );}
     };
     try{
       // submit the form
@@ -258,6 +257,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
 
   _displayBackgroundImage: function(responseText, statusText) {
     // Put thumbnail url in the page data so that it can be re-used later
+    responseText = $.evalJSON(responseText);
     var thumbUrl = responseText.image.properties.thumb_url;
     jQuery('#background_image').attr('src', thumbUrl).data('url', responseText.image.properties.url);
     this._changePageBackgroundImageFromThumb();
