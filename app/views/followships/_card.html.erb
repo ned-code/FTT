@@ -18,22 +18,29 @@
     jQuery(document).ready(function(){
       jQuery(".card-name").truncate();
       jQuery(".card-bio").truncate({ match: '<br/><br/>' });
+    
+      //jQuery(".card")
+      //.delegate("a[href='#subscribe']", "click")
+    
+    
     });
     
     
-    jQuery.ajax({
-      url: "/follow",
-      type: 'POST',
-      data: { following_id :this.creator.id }, 
-      dataType: 'json',              
-      success: function(data, textStatus) {
-        ddd('Must changed button to unsubscribe');
-        this._changeButtonStatus(true);
-      }.pBind(this),
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
-        ddd("error", textStatus);          
-      }
-    });
+    
+    
+    //jQuery.ajax({
+    //  url: "/follow",
+    //  type: 'POST',
+    //  data: { following_id :this.creator.id }, 
+    //  dataType: 'json',              
+    //  success: function(data, textStatus) {
+    //    ddd('Must changed button to unsubscribe');
+    //    this._changeButtonStatus(true);
+    //  }.pBind(this),
+    //  error: function(XMLHttpRequest, textStatus, errorThrown) {
+    //    ddd("error", textStatus);          
+    //  }
+    //});
     
   </script>
 <% end %>
