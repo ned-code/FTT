@@ -40,3 +40,4 @@ public/app/javascripts
 db/test.sqlite3-journal
 *.orig
 public/shinding_test.html
+.idea

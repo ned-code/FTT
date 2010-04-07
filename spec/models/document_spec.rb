@@ -151,7 +151,87 @@ describe Document do
       user.has_roles_for?(subject).should be_true
     end
   end
-  
+
+  describe "last_modified_from_following" do
+    before do
+      @user = Factory(:user)
+      @user_to_follow = Factory(:user)
+      @user.follow(@user_to_follow.id)
+      @user_unknow = Factory(:user)
+
+      now = Time.now
+
+      @doc1 = Factory(:document, :creator => @user_to_follow, :created_at => now-90.minutes, :updated_at => now-60.minutes)
+      @doc2 = Factory(:document, :creator => @user_to_follow, :created_at => now-90.minutes, :updated_at => now-58.minutes)
+      @doc3 = Factory(:document, :creator => @user_to_follow, :created_at => now-90.minutes, :updated_at => now-56.minutes, :is_public => false)
+      @doc4 = Factory(:document, :creator => @user_to_follow, :created_at => now-90.minutes, :updated_at => now-54.minutes, :is_public => false)
+      @doc5 = Factory(:document, :creator => @user_unknow, :created_at => now-90.minutes, :updated_at => now-52.minutes)
+      @doc6 = Factory(:document, :creator => @user_unknow, :created_at => now-90.minutes, :updated_at => now-50.minutes, :is_public => false)
+    end
+
+    it "should find all public documents from following" do
+      docs = Document.last_modified_from_following(@user, 10)
+      docs.size.should == 2
+      docs.should == [@doc2, @doc1]
+    end
+
+    it "should find all public and not public with reader role" do
+      @user.has_role!("reader", @doc3)
+      docs = Document.last_modified_from_following(@user, 10)
+      docs.size.should == 3
+      docs.should == [@doc3, @doc2, @doc1]
+    end
+
+    it "should find all public and not public with editor role" do
+      @user.has_role!("editor", @doc4)
+      docs = Document.last_modified_from_following(@user, 10)
+      docs.size.should == 3
+      docs.should == [@doc4, @doc2, @doc1]
+    end
+
+    it "should find all public and not public with reader and editor role" do
+      @user.has_role!("editor", @doc4)
+      @user.has_role!("reader", @doc4)
+      docs = Document.last_modified_from_following(@user, 10)
+      docs.size.should == 3
+      docs.should == [@doc4, @doc2, @doc1]
+    end
+
+    it "should limit the number of document returned" do
+      docs = Document.last_modified_from_following(@user, 1)
+      docs.size.should == 1
+      docs.should == [@doc2]
+    end
+
+    it "should find only following users documents" do
+      @user_unknow.has_role!("editor", @doc4)
+      docs = Document.last_modified_from_following(@user_unknow, 10)
+      docs.size.should == 0
+    end
+
+    it "should return an empty array when the user haven't following users" do
+      docs = Document.last_modified_from_following(@user_unknow, 10)
+      docs.should == Array.new
+    end
+
+    it "should order by updated_at" do
+      @doc1.updated_at = Time.now
+      @doc1.save!
+      docs = Document.last_modified_from_following(@user, 10)
+      docs.should == [@doc1, @doc2]
+    end
+
+     it "should find all when the user have many following" do
+      another_user = Factory(:user)
+      @user.follow(another_user.id)
+      another_doc = Factory(:document, :creator => another_user, :is_public => true)
+
+      docs = Document.last_modified_from_following(@user, 10)
+      docs.size.should == 3
+    end
+
+  end
+
 end
 
 # == Schema Information

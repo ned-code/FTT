@@ -146,7 +146,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   },
   
   loadPage: function(page, forceReload) {
-    if(this.currentPage == null || this.currentPage.uuid() !== page.uuid() || forceReload) {
+    if(this.currentPage == null || this.currentPage.uuid() !== page.uuid() || forceReload) {
       WebDoc.application.undoManager.clear();
       ddd("set hash to current page position");
       window.location.hash = "#" + (page.uuid());
