@@ -125,9 +125,15 @@ javascripts:
     - app/javascripts/webdoc/library/videos_library/*.js
     - app/javascripts/webdoc/library/videos_library.js
     - app/javascripts/webdoc/library/web_browser.js
+    - app/javascripts/webdoc/card/*.js
+  explore:
+    - app/javascripts/webdoc/explore/*.js
   tests:
     - app/javascripts/tests/test_helper.js
     - app/javascripts/tests/mtools/*.js
     - app/javascripts/tests/webdoc/*.js
   forms:
     - public/javascripts/jquery.validator.js
+    - app/javascripts/webdoc/form/*.js
+  card:
+    - app/javascripts/webdoc/card/*.js

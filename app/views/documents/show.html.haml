@@ -19,19 +19,3 @@
 = render :partial => "documents/panels/toolbar_panel"
 = render :partial => "documents/panels/left_panel"
 = render :partial => "documents/panels/right_panel"
-
-:javascript
-  
-    var WebDoc;
-    if (!WebDoc) {
-      WebDoc = {};
-    }
-    WebDoc.authData = {
-      authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
-      sessionKeyName:"#{session_key_name}",
-      cookiesSessionKeyName:"#{cookies[session_key_name]}"
-    };
-    WebDoc.run = function() {
-      var editor = new WebDoc.PageEditor(#{edit_mode?});
-      editor.load("#{@document.uuid}");
-    } 

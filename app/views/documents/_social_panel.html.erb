@@ -7,13 +7,14 @@
     </div>
   </div>
   <div class="content">
-    <%= render :partial => "followships/card", :locals => { :user => @document.creator, :subscribed => @document.creator.following_info } %>
-    <!--div id="creator-info" class="card">
-      <h4 id="creator-name" class="card-name"></h4>
-      <p id="creator-bio" class="card-bio"></p>
-      <a id="subscribe-button" class="button subscribe-button" href="#author-subscribe">Follow</a>
-      <a id="unsubscribe-button" class="button subscribe-button" href="#author-unsubscribe">Unfollow</a>
-      <div id="creator-docs-count"></div>
-    </div-->
+    <% if @document.creator == current_user %>
+      <%= render :partial => "followships/card", :locals => { :user => @document.creator } %>
+    <% else %>
+      <%= render :partial => "followships/card", :locals => { :user => @document.creator, :subscribed => @document.creator.following_info } %>
+    <% end %>
   </div>
 </div>
+
+<% content_for :scripts do %>
+  <%= include_javascripts :card %>
+<% end %>

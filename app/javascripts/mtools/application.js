@@ -1,8 +1,13 @@
 MTools.Application = $.klass({
 
   initialize: function() {
-    
-    $.ajaxSetup({data:{authenticity_token : WebDoc.authData.authToken}});
+  
+    if (WebDoc && WebDoc.authData)
+    $.ajaxSetup({
+      data: {
+        authenticity_token: WebDoc.authData.authToken
+      }
+    });
     // change domain to be able to synch with apps
     var allDomainsParts = document.domain.split(".");
     if (allDomainsParts.length > 2) {
@@ -15,10 +20,11 @@ MTools.Application = $.klass({
     $.ajax({
       url: "/user",
       type: 'GET',
-      dataType: 'json',              
+      dataType: 'json',
       success: function(data, textStatus) {
         this.currentUser = data.user;
-      }.pBind(this),
+      }
+.pBind(this)      ,
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         ddd("Error occured:" + textStatus);
       }
@@ -28,8 +34,48 @@ MTools.Application = $.klass({
 });
 
 $.extend(MTools.Application, {
+  _beforeMain: {},
+  _afterMain: {},
+  _mainFunction: undefined,
   // Take string of CSS and add to head
-  createStyle: function( cssString ){
-    jQuery('head').append('<style type="text/css">'+cssString+'</style>');
+  createStyle: function(cssString) {
+    jQuery('head').append('<style type="text/css">' + cssString + '</style>');
+  },
+  
+  beforeMain: function(id, beforeFunction) {
+    if (MTools.Application._beforeMain[id] === undefined) {
+      MTools.Application._beforeMain[id] = beforeFunction;
+    }
+  },
+  
+  main: function(mainFunction) {
+    if (MTools.Application._mainFunction) {
+      throw ("Main function already defined");
+    }
+    else {
+      MTools.Application._mainFunction = mainFunction
+    }
+  },
+  
+  afterMain: function(id, afterFunction) {
+    if (MTools.Application._afterMain[id] === undefined) {
+      MTools.Application._afterMain[id] = afterFunction;
+    }
+  },
+  
+  start: function() {
+    $(function() {
+      // execute before methods
+      for (var beforeKey in MTools.Application._beforeMain) {
+        MTools.Application._beforeMain[beforeKey].call(this);
+      }
+      if (MTools.Application._mainFunction) {
+        MTools.Application._mainFunction.call(this);
+      }      
+      // execute before methods
+      for (var afterKey in MTools.Application._afterMain) {
+        MTools.Application._afterMain[afterKey].call(this);
+      }
+    });
   }
 });
