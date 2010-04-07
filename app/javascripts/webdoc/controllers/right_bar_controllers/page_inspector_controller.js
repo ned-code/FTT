@@ -237,10 +237,14 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   },
 
   _uploadBackgroundImage: function(e) {
+    // return false to prevent normal browser submit and page navigation 
+    e.preventDefault();
+    e.stopPropagation();
     var options = {  
       success:       this._displayBackgroundImage.pBind(this), 
       type:          "POST",
-      dataType:      "json"
+      dataType:      "json",
+      error: function(response) { ddd("error", response);}
     };
     try{
       // submit the form
@@ -249,8 +253,6 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     catch(exc) {
       ddd('_uploadBackgroundImage: encountered exception: name: '+exc.name + ' , message: '+exc.message);
     } 
-    // return false to prevent normal browser submit and page navigation 
-    e.preventDefault();
     return false;
   },
 
