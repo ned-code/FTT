@@ -45,6 +45,14 @@ describe User do
       subject.followers.count.should == 1
     end
     
+    it "sould follow only once the same user" do
+      user = Factory(:user)
+      user.follow(subject.id)
+      user.follow(subject.id)
+      user.following?(subject).should be_true
+      user.following.count.should == 1
+    end
+    
     it "should have a mutual relationship" do
       user = Factory(:user)
       user.follow(subject.id)
