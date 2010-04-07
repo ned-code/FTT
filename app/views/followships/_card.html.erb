@@ -1,6 +1,6 @@
 <!-- views/followships/_card -->
 
-<div class="card <% if local_assigns.has_key? :subscribed %>card-with-button<% end %>" <% if user.avatar %>style="background-image: url('<%= user.avatar.url(:thumb) %>');"<% end %>>
+<div data-webdoc-userid="<%= user.id %>" class="card <% if local_assigns.has_key? :subscribed %>card-with-button<% end %>" <% if user.avatar %>style="background-image: url('<%= user.avatar_thumb_url %>');"<% end %>>
   <% if user.mutual_connection %>
     <div class="wd-user-item-mutual" ></div>
   <% end%>
@@ -9,6 +9,31 @@
   <div class="card-stats"><%= "#{user.documents.length}" %> webdoc<% if user.documents.length > 1 %>s<% end %></div>
   
   <% if local_assigns.has_key? :subscribed %>
-  <a class="subscribe-button button" href="#subscribe"><% if subscribed %>unfollow<% else %>follow<% end %></a>
+  <a class="subscribe-button button" href="#<% if subscribed %>un<% end %>subscribe"><% if subscribed %>unfollow<% else %>follow<% end %></a>
   <% end %>
 </div>
+
+<% content_for :scripts do %>
+  <script type="text/javascript">
+    jQuery(document).ready(function(){
+      jQuery(".card-name").truncate();
+      jQuery(".card-bio").truncate({ match: '<br/><br/>' });
+    });
+    
+    
+    jQuery.ajax({
+      url: "/follow",
+      type: 'POST',
+      data: { following_id :this.creator.id }, 
+      dataType: 'json',              
+      success: function(data, textStatus) {
+        ddd('Must changed button to unsubscribe');
+        this._changeButtonStatus(true);
+      }.pBind(this),
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        ddd("error", textStatus);          
+      }
+    });
+    
+  </script>
+<% end %>
