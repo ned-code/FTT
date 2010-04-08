@@ -66,11 +66,10 @@
             %a.page-remove-background-image{ :href => "#remove_background"}
               = t('.properties.remove_image')
         #upload-container
-        %input#upload_images_button{ :type => "button", :value => "Choose images", :style => "position:relative; top:0px; left:0px"}              
+          %input#upload_images_button{ :type => "button", :value => "Choose images"}              
         %div.background-related
           %label{ :for => 'page_background_image_apply_all_button' }
-          %input#page_background_image_apply_all_button{ :type => "button", :value => t('.properties.buttons.apply_background_all_pages') }
-                
+          %input#page_background_image_apply_all_button{ :type => "button", :value => t('.properties.buttons.apply_background_all_pages') }                
     %div
       %a.page-navigation-link{ :href => "#prev-page"}
         = t('documents.show.toolbar_panel.previous_page')
