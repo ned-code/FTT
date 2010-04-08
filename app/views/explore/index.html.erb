@@ -23,28 +23,37 @@
     <ul class="index">
       <% @public_documents.each do |document| %>
         <li>
-          <div class="webdoc-viewer-container" id="<%= document.uuid() %>"></div>
+          <div>
+            <div><%= link_to h(document.title), document_path(document.uuid()) %></div>
+            <div><%= link_to h(document.category.name), explore_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %></div>
+
+            <div>
+              <ul>
+                <li>
+                  <a href="#prev-page" data-webdoc-document-id="<%= document.uuid() %>">prev page</a>
+                </li>
+                <li>
+                  <a href="#next-page" data-webdoc-document-id="<%= document.uuid() %>">next page</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="webdoc-viewer-container" id="<%= document.uuid() %>"></div>
+            
+            <div><%= relative_date document.created_at %></div>
+            <div><%=h document.creator.first_name %></div>
+          </div>
         </li>      
       <% end %>
     </ul>
   </div>
 </div>
+
+
 <%= include_stylesheets :page_viewer, :media => 'all' %>      
 <% content_for :scripts do %>
   <%= include_javascripts :page_editor %>
   <%= include_javascripts :explore %>
-
-   <script type="text/javascript">
-    jQuery(document).ready(function(){
-      jQuery('#wd-main-filter').change(function(){
-        window.location.href = "/explore?main_filter="+jQuery(this).val()+"&category_filter="+jQuery('#wd-category-filter').val();
-      });
-      jQuery('#wd-category-filter').change(function(){
-        window.location.href = "/explore?main_filter="+jQuery("#wd-main-filter").val()+"&category_filter="+jQuery(this).val();
-      });
-    });
-  </script>
-
 <% end %>
 
 

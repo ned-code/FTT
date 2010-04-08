@@ -8,6 +8,7 @@ describe Document do
   should_be_built_by_factory
   should_be_created_by_factory
   should_have_many :pages, :order => 'position ASC', :dependent => :destroy
+  should_belong_to :category
   
   describe "default" do
     subject { Factory(:document) }

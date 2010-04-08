@@ -19,6 +19,8 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
     this._viewerNode = viewerNode;
     this._containerNode = null;   
     WebDoc.application.pageEditor = this;
+
+    viewerNode.data('object', this);
         
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     this._createViewerGUI();
@@ -77,18 +79,6 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
   },
   
   _createViewerGUI: function() {
-    var tb = jQuery("<ul/>").addClass("wd-viewer-toolbar toolbar-panel tools pages-tools thumbs index icons-only").css({
-      height: this.TOOL_BAR_HEIGHT,
-      width: "100%",
-      position: "absolute",
-      top: "0px",
-      zIndex: 10
-    });
-    var previous = jQuery('<li/>').append(jQuery('<a/>').attr("href", "#prev-page").click(jQuery.proxy(this,'prevPage')));
-    var next = jQuery('<li/>').append(jQuery('<a/>').attr("href", "#next-page").click(jQuery.proxy(this,'nextPage')));
-    var open = jQuery('<li/>').append(jQuery('<a/>').attr("href", "#open").text('open').click(jQuery.proxy(this,'open')));
-    tb.append(previous).append(next).append(open);
-    this._viewerNode.append(tb);
     this._containerNode = jQuery('<div/>').css({
       overflow: "hidden"  
     }).addClass("center-box");    

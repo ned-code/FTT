@@ -15,6 +15,7 @@ class Document < ActiveRecord::Base
   has_one :document_access
   belongs_to :metadata_media, :class_name => 'Media'
   belongs_to :creator, :class_name => 'User'
+  belongs_to :category
   
   # ===============
   # = Validations =
@@ -67,32 +68,23 @@ class Document < ActiveRecord::Base
     documents
   end
 
-  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", page_id=nil, per_page=4)
+  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", page_id=nil, per_page=4, include=[:category, :creator])
     documents = Array.new
+    paginate_params = {:page => page_id, :per_page => per_page, :include => include}
 
     if order_string.present? && order_string == 'viewed'
-      order = 'views_count DESC'
+      paginate_params[:order] = 'views_count DESC'
     else
-      order = 'created_at DESC'
+      paginate_params[:order] = 'created_at DESC'
     end
 
     if category_filter.present? && category_filter != "all"
-      documents = Document.paginate(
-              :page => page_id,
-              :per_page => per_page,
-              :conditions => ['documents.is_public = ? AND documents.category_id = ?', true, category_filter],
-              :order => order
-      )
+      paginate_params[:conditions] = ['documents.is_public = ? AND documents.category_id = ?', true, category_filter]
     else
-      documents = Document.paginate(
-              :page => page_id,
-              :per_page => per_page,
-              :conditions => ['documents.is_public = ?', true],
-              :order => order
-      )  
+      paginate_params[:conditions] = ['documents.is_public = ?', true]
     end
 
-    documents
+    documents = Document.paginate(paginate_params)
   end
 
   def self.last_modified_from_following(current_user, limit=5)
