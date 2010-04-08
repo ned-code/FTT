@@ -15,6 +15,14 @@ legend      {
     font-size:1.2em;
 }
 
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
 label,
 .label,
 input[type='text'],
@@ -23,7 +31,6 @@ input[type='password'],
 input[type='submit'],
 select,
 textarea {
-    font-size: inherit;
     margin: 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing:    border-box;
@@ -106,7 +113,8 @@ input[type=submit] {
 }
 
 textarea {
-    min-height: 6em;
+    min-height: 6.6667em;
+    line-height: inherit;
     /* Switch off resizing (Webkit) by default */
     resize: none;
 }
@@ -251,9 +259,6 @@ input.default {
     /*width: 40%;*/
     text-align: right;
 }
-.shunt input {
-    /*width: 50%;*/
-}
 .shunt label input {
     width: auto;
 }
@@ -315,7 +320,9 @@ fieldset.properties:first-child {
 
 .properties label,
 .properties .label,
-.properties input[type='text'] {
+.properties input[type='text'],
+.properties input[type='radio'],
+.properties input[type='checkbox'] {
     float: left;
     width: auto;
     font-size: 1em;
