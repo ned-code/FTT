@@ -244,10 +244,10 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     this.loadPageId( this.currentPage.uuid(), true);
     $("#debug-button").text(this.disableHtml?"Enable HTML":"Disable HTML");
     if (this.disableHtml) {
-        $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");
+        $("#debug-button").addClass("active");
     }
     else {
-        $("#tb_1_utilities_settings_trigger").removeClass("tb_1_utilities_settings_attention");
+        $("#debug-button").removeClass("active");
     }
   },
   
