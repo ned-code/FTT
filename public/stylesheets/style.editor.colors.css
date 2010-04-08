@@ -3,7 +3,7 @@
  * Colours only. Nothing that affects layout.
  */
 
-body                          { background-color: hsl(198, 8%, 60%); }
+body                          { background-color: hsl(208, 8%, 60%); }
 
 /* The board */
 
@@ -12,25 +12,25 @@ body                          { background-color: hsl(198, 8%, 60%); }
                                 box-shadow:         0 2px 8px hsl(14, 24%, 35%); }
 
 /* Panels */
-.toolbar-panel                { color: hsl(198, 7%, 41%);
-                                background-color: hsla(198, 7%, 41%, 0.92);
+.toolbar-panel                { color: hsl(208, 7%, 41%);
+                                background-color: hsla(208, 7%, 41%, 0.92);
                                 background-image: url('/images/bg.png');
                                 background-position: 0 0;
-                                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(198, 4%, 97%) ), to( hsl(198, 8%, 79%) ));
-                                background-image: -moz-linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
-                                background-image:      linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+                                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(208, 4%, 97%) ), to( hsl(208, 8%, 79%) ));
+                                background-image: -moz-linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
+                                background-image:      linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
                                 background-repeat: repeat-x;
-                                border-color: hsla(198, 12%, 30%, 0.8);
+                                border-color: hsla(208, 12%, 30%, 0.8);
                                 -webkit-box-shadow: 0 0 32px hsla(14, 24%, 35%, 0.6);
                                 -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
                                 box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
 
 .left-panel,
-.right-panel                  { background-color: hsla(198, 7%, 41%, 0.92); }
+.right-panel                  { background-color: hsla(208, 7%, 41%, 0.92); }
 .panel-tools,
-.border                       { background-color: inherit; border-color: /*hsla(198, 12%, 30%, 0.8)*/ transparent; }
-.vertical.panel-tools li      { border-color: hsla(198, 12%, 30%, 0.8); }
-.panel-tools a.current        { background-color: hsla(198, 12%, 30%, 0.8); }
+.border                       { background-color: inherit; border-color: /*hsla(208, 12%, 30%, 0.8)*/ transparent; }
+.vertical.panel-tools li      { border-color: hsla(208, 12%, 30%, 0.8); }
+.panel-tools a.current        { background-color: hsla(208, 12%, 30%, 0.8); }
 
 /*  */
 
@@ -43,18 +43,18 @@ body                          { background-color: hsl(198, 8%, 60%); }
 
 /* Inspectors ------------------------ */
 
-.inspector .head>div          { background-color: hsla(198, 12%, 30%, 0.8); color: white; }
+.inspector .head>div          { background-color: hsla(208, 12%, 30%, 0.8); color: white; }
 .inspector .foot>ul,
 .inspector .foot>form,
-.inspector .foot>div          { background-color: hsla(198, 12%, 30%, 0.8); color: white; }
+.inspector .foot>div          { background-color: hsla(208, 12%, 30%, 0.8); color: white; }
 .inspector .foot>ul           { background-image: url('/images/bg.png');
                                 background-position: 0 0;
-                                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(198, 4%, 97%) ), to( hsl(198, 8%, 79%) ));
-                                background-image: -moz-linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
-                                background-image:      linear-gradient( -90deg, hsl(198, 4%, 97%), hsl(198, 8%, 79%) );
+                                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(208, 4%, 97%) ), to( hsl(208, 8%, 79%) ));
+                                background-image: -moz-linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
+                                background-image:      linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
                                 background-repeat: repeat-x; }
-.inspector form.content       { background-color: hsl(198, 3%, 88%); }
-.inspector .box               { background-color: hsl(198, 6%, 56%);
+.inspector form.content       { background-color: hsl(208, 3%, 88%); }
+.inspector .box               { background-color: hsl(208, 6%, 56%);
 
                                 -webkit-background-size:  100%;
                                 -moz-background-size:     100% 100%;
@@ -71,17 +71,17 @@ body                          { background-color: hsl(198, 8%, 60%); }
                                 color: white; }
 
 .text-thumb,
-.scroller-window              { background-color: hsl(198, 6%, 56%);
+.scroller-window              { background-color: hsl(208, 6%, 56%);
                                 -webkit-border-radius:    12px;
                                 -moz-border-radius:       12px;
                                 border-radius:            12px; }
 
-.inspector .size-slider       { background: hsl(198, 6%, 56%) url('/images/ui/slider_size_bg.png') no-repeat 100% 0; }
+.inspector .size-slider       { background: hsl(208, 6%, 56%) url('/images/ui/slider_size_bg.png') no-repeat 100% 0; }
 .scroller-window a            { color: rgb(68, 75, 77); }
 .scroller-handle,
 .inspector .size-slider .ui-corner-all {
-                                background: hsla(198, 20%, 20%, 0.92);
-                                border-color: hsla(198, 20%, 20%, 0.8);
+                                background: hsla(208, 20%, 20%, 0.92);
+                                border-color: hsla(208, 20%, 20%, 0.8);
                                 -webkit-box-shadow: 0 2px 6px hsl(14, 20%, 30%);
                                 -moz-box-shadow:    0 2px 6px hsl(14, 20%, 30%);
                                 box-shadow:         0 2px 6px hsl(14, 20%, 30%);
@@ -93,18 +93,18 @@ body                          { background-color: hsl(198, 8%, 60%); }
                                 -moz-border-radius:       17px;
                                 border-radius:            17px; }
 .scroller-thumb               { color: black;
-                                background-color: hsl(198, 3%, 88%);
+                                background-color: hsl(208, 3%, 88%);
                                 -webkit-border-radius:    18px;
                                 -moz-border-radius:       18px;
                                 border-radius:            18px; }
 .inspector .size-slider .draw-port { 
-                                background-color: hsl(198, 3%, 88%);
+                                background-color: hsl(208, 3%, 88%);
                                 -webkit-border-radius:    14px;
                                 -moz-border-radius:       14px;
                                 border-radius:            14px; }
 .scroller:hover .scroller-thumb,
 .inspector .size-slider:hover .draw-port,
-.inspector .ui-slider-handle:focus .draw-port { background: hsl(198, 0.4%, 99%); }
+.inspector .ui-slider-handle:focus .draw-port { background: hsl(208, 0.4%, 99%); }
 
 .inspector .size-slider input[type='text']:hover,
 .inspector .size-slider input[type='text']:focus { background-color: white; color: black;
@@ -114,36 +114,36 @@ body                          { background-color: hsl(198, 8%, 60%); }
 }
 
 /* Page browser */
-.pages li .page-title         { background-color: hsl(198, 9%, 71%); }
-.pages li:hover .page-title   { background-color: hsl(198, 6%, 56%); }
-.pages li.current .page-title { background-color: hsl(198, 3%, 88%); }
+.pages li .page-title         { background-color: hsl(208, 9%, 71%); }
+.pages li:hover .page-title   { background-color: hsl(208, 6%, 56%); }
+.pages li.current .page-title { background-color: hsl(208, 3%, 88%); }
 
-.pages li .thumb              { border-color: hsl(198, 9%, 71%); }
-.pages li:hover .thumb        { border-color: hsl(198, 6%, 56%); }
-.pages li.current .thumb      { border-color: hsl(198, 3%, 88%); }
+.pages li .thumb              { border-color: hsl(208, 9%, 71%); }
+.pages li:hover .thumb        { border-color: hsl(208, 6%, 56%); }
+.pages li.current .thumb      { border-color: hsl(208, 3%, 88%); }
 
-.number                       { background-color: hsla(198, 12%, 30%, 0.8); color: white; }
+.number                       { background-color: hsla(208, 12%, 30%, 0.8); color: white; }
 .pages li .number,
-.pages li .loading-icon       { background-color: hsl(198, 10%, 40%); color: white; }
+.pages li .loading-icon       { background-color: hsl(208, 10%, 40%); color: white; }
 .pages li:hover .number,
-.pages li:hover .loading-icon { background-color: hsl(198, 12%, 24%); color: white; }
+.pages li:hover .loading-icon { background-color: hsl(208, 12%, 24%); color: white; }
 .pages li.current .number,
-.pages li.current .loading-icon { background-color: hsl(198, 12%, 24%); color: white; }
+.pages li.current .loading-icon { background-color: hsl(208, 12%, 24%); color: white; }
 
 
 /* Forms */
-fieldset.properties          { border-color: hsl(198, 6%, 56%); }
-fieldset.properties legend   { background-color: hsl(198, 6%, 56%); color: white; }
+fieldset.properties          { border-color: hsl(208, 6%, 56%); }
+fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white; }
 .properties input[type=text]  { border-color: #bbbbbb; }
 
 /* Layers */
 
-.screen                       { background-color: hsla(198, 12%, 30%, 0.33); }
+.screen                       { background-color: hsla(208, 12%, 30%, 0.33); }
 
 
 /* Index */
 
-.item_wrap      { border-color: hsla(198, 8%, 33%, 0.3333);
+.item_wrap      { border-color: hsla(208, 8%, 33%, 0.3333);
                   border-style: dotted;
                   -webkit-border-radius: 2px;
                   -moz-border-radius:    2px;
@@ -151,7 +151,7 @@ fieldset.properties legend   { background-color: hsl(198, 6%, 56%); color: white
 .item_wrap:hover { border-style: solid; }
 
 .properties textarea,
-.properties input[type='text'] { background-color: hsl(198, 3%, 88%); }
+.properties input[type='text'] { background-color: hsl(208, 3%, 88%); }
 .properties textarea:focus:focus,
 .properties input[type='text']:focus { background-color: white; }
 .properties textarea::selection,
@@ -215,6 +215,14 @@ fieldset.properties legend   { background-color: hsl(198, 6%, 56%); color: white
     -webkit-border-bottom-right-radius: 6px;
     -moz-border-radius-bottomright:     6px;
     border-bottom-right-radius:         6px;
+}
+
+.panel h4 {
+    color: hsl(208, 11%, 24%);
+}
+.panel .card {
+    color: hsl(208, 12%, 30%);
+    background-color: hsl(208, 9%, 71%);
 }
 
 /* Pages tools */

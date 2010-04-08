@@ -235,7 +235,8 @@ input.default {
 .stack label,
 .stack .label,
 .stack .error-message {
-  white-space: nowrap;
+    display: block;
+    white-space: nowrap;
 }
 .stack .error-message {
     position: absolute;
@@ -314,7 +315,7 @@ fieldset.properties:first-child {
 
 .properties label,
 .properties .label,
-.properties input {
+.properties input[type='text'] {
     float: left;
     width: auto;
     font-size: 1em;

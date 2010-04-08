@@ -10,6 +10,7 @@ stylesheets:
     - public/stylesheets/lib/index.css
     - public/stylesheets/lib/layer.css
     - public/stylesheets/lib/column.css
+    - public/stylesheets/lib/card.css
     - public/stylesheets/style.css
     - public/stylesheets/style.ui.css
 
@@ -67,6 +68,7 @@ javascripts:
     - public/javascripts/jquery.events.js
     - public/javascripts/jquery.pop.js
     - public/javascripts/jquery.truncate.js
+    - public/javascripts/jquery.flash.js
     - public/javascripts/klass.js    
     - public/swfupload/swfupload.js
     - public/javascripts/jquery-swfupload.js
@@ -123,9 +125,17 @@ javascripts:
     - app/javascripts/webdoc/library/videos_library/*.js
     - app/javascripts/webdoc/library/videos_library.js
     - app/javascripts/webdoc/library/web_browser.js
+    - app/javascripts/webdoc/card/*.js
+  explore:
+    - app/javascripts/webdoc/explore/*.js
   tests:
     - app/javascripts/tests/test_helper.js
     - app/javascripts/tests/mtools/*.js
     - app/javascripts/tests/webdoc/*.js
   forms:
     - public/javascripts/jquery.validator.js
+    - app/javascripts/webdoc/form/*.js
+  card:
+    - app/javascripts/webdoc/card/card.js
+  contacts:
+    - app/javascripts/webdoc/card/card.contacts.js

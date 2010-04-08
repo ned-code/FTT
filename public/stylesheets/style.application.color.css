@@ -218,9 +218,10 @@ header a {
     border-left-style: solid;
     border-left-color: hsl(208, 4%, 50%);
 }
+.card,
 .document-item {
     color: hsl(208, 6%, 30%);
-    background: hsla(208, 8%, 100%, 0.33);
+    background-color: hsla(208, 8%, 100%, 0.33);
 }
 .document-item:hover {
     color: hsl(208, 6%, 12%);
@@ -253,6 +254,7 @@ header a {
 .document-item .button:hover {
     color: hsl(208, 4%, 100%);
 }
+.button,
 .document-item .button {
     color: hsl(208, 4%, 33%);
     background-color: hsla(208, 4%, 33%, 0.12);
@@ -265,8 +267,10 @@ header a {
     border-color: hsl(208, 4%, 33%);
 }
 
+.card .delete-button,
 .document-item .delete-button            { background-color: hsl(13, 34%, 63%); }
 .document-item:hover .delete-button      { background-color: hsl(13, 58%, 54%); }
+.card .delete-button:hover,
 .document-item .delete-button:hover      { background-color: hsl(13, 76%, 48%); }
 
 /* .document-item:hover .info-button        { background-color: hsl(208, 36%, 56% ); } */

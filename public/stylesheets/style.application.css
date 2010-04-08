@@ -159,12 +159,9 @@ header .index>li {
     margin-right: 1.6667em;
 }
 
-
-
 .action-zone .tabs {
     float: right;
 }
-
 
 .new-form {
   width: 28em;
@@ -299,6 +296,20 @@ header .index>li {
 .unshare-button,
 .share-button {
     width: 7.3em;
+}
+
+.subscribe-button {
+    position: absolute;
+    top: 9px; right: 9px;
+    height: 2em;
+    line-height: 1.6667 !important; /* We need this overide for the moment, until we get buttons in the lib */
+    margin: -2px;
+}
+.subscribe-button[href='#unsubscribe']:hover {
+    background-color: hsl(43, 56%, 48%);
+}
+.subscribe-button[href='#subscribe']:hover {
+    background-color: hsl(73, 56%, 48%);
 }
 
 

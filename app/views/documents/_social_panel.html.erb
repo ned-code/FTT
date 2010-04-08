@@ -1,0 +1,20 @@
+<div id="social-inspector" class="inspector">
+  <div class="head">
+    <div>
+      <div class="inspector-title">
+        Meet the creator
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <% if @document.creator == current_user %>
+      <%= render :partial => "followships/card", :locals => { :user => @document.creator } %>
+    <% else %>
+      <%= render :partial => "followships/card", :locals => { :user => @document.creator, :subscribed => @document.creator.following_info } %>
+    <% end %>
+  </div>
+</div>
+
+<% content_for :scripts do %>
+  <%= include_javascripts :card %>
+<% end %>

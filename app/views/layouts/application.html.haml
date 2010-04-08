@@ -8,29 +8,15 @@
     = include_stylesheets :application, :media => 'all'
     
   %body{ :class => controller_name }
-    = render :partial => "layouts/main_toolbar"
+    = render :partial => "layouts/main_toolbar"    
     = yield
-    = include_javascripts :common
+    = include_javascripts :common 
+    = include_javascripts :mtools    
     = yield :scripts # include view specific scripts after common scripts.
     :javascript
-      var WebDoc;
-      $(function() {
-        var flash = $('#flash');
-        
-        // TODO: put this somewhere more sensible
-        flash
-        .delay(3000)
-        .animate({
-          opacity: 0,
-          marginTop: -flash.height()
-        }, {
-          duration: 3000,
-          easing: 'easeInCubic'
-        });
-        
-        // start application if it exists
-        if (WebDoc && WebDoc.run) {
-          WebDoc.run();
-        }
-      });
+      var MTools;
+      if (MTools) {    
+        MTools.Application.start();
+      }
+      
     = render :partial => "layouts/google_analytics"

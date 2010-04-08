@@ -45,7 +45,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     WebDoc.application.pageEditor.currentPage.addListener(this); 
     
     this.currentPageChanged();
-    this.domNode = jQuery('#page_inspector');
+    this.domNode = jQuery('#page-inspector');
     
     var footHeight = this.domNode.find('.foot>div').height();
     this.domNode
@@ -237,10 +237,13 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   },
 
   _uploadBackgroundImage: function(e) {
+    // return false to prevent normal browser submit and page navigation 
+    e.preventDefault();
+    e.stopPropagation();
     var options = {  
       success:       this._displayBackgroundImage.pBind(this), 
       type:          "POST",
-      dataType:      "json"
+      error: function(response, errorType, exc) { ddd("error", response,errorType, exc );}
     };
     try{
       // submit the form
@@ -249,13 +252,12 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     catch(exc) {
       ddd('_uploadBackgroundImage: encountered exception: name: '+exc.name + ' , message: '+exc.message);
     } 
-    // return false to prevent normal browser submit and page navigation 
-    e.preventDefault();
     return false;
   },
 
   _displayBackgroundImage: function(responseText, statusText) {
     // Put thumbnail url in the page data so that it can be re-used later
+    responseText = $.evalJSON(responseText);
     var thumbUrl = responseText.image.properties.thumb_url;
     jQuery('#background_image').attr('src', thumbUrl).data('url', responseText.image.properties.url);
     this._changePageBackgroundImageFromThumb();
@@ -316,7 +318,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   },
 
   objectChanged: function(page) {
-    ddd('page_inspector_controller: objectChanged: must update fields');
+    ddd('page-inspector_controller: objectChanged: must update fields');
     var page = WebDoc.application.pageEditor.currentPage;
     this._updatePageRelatedFields();
   },

@@ -1,17 +1,15 @@
 <!-- home/show.html.erb -->
 <div class="action-zone zone">
   <div class="wrap clear">
-    <h2>Log in</h2>
-    
-    <% form_for @user, :url => session_path(@user), :builder => CustomFormBuilder do |f| %>
-      <input name="authenticity_token" type="hidden" value="<%= protect_against_forgery? ? form_authenticity_token : '' %>" />
+    <% form_for @user, :url => session_path(@user), :builder => CustomFormBuilder, :html => { :class => "column one double of-four" } do |f| %>
+      <h2>Log in&hellip;</h2>
       
       <fieldset>
-        <div class="stack column one of-four<% if @user.errors.on(:email) %> error<% end %>">
+        <div class="stack column one of-two<% if @user.errors.on(:email) %> error<% end %>">
           <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
           <%= f.text_field :email, :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
-        </div>
-        <div class="stack column two of-four<% if @user.errors.on(:password) %> error<% end %>">
+        </div><!-- spaceless
+     --><div class="stack column two of-two<% if @user.errors.on(:password) %> error<% end %>">
           <%= f.label :password, 'Password <abbr class="required" title="required">*</abbr>' %>
           <%= f.password_field :password, :minlength => 6, :maxlength => 255, :required => "required", :autocomplete => "on", :title => "Please enter your password" %>
           <span class="label"><%= link_to t('devise.passwords.link'), new_password_path(:user) %></span>
@@ -24,7 +22,11 @@
         <input id="user_<%= :remember_me %>" name="user[<%= :remember_me %>]" type="checkbox" value="1" required="required" />
           Remember me
       </label>
-    <% end %>
+    <% end%><!-- spaceless
+ --><div class="column last double of-four">
+      <h3>&hellip;or sign up</h3>
+      <p>Want to get started creating your own webdocs? Registering takes 30 seconds, and <em>it's free!</em> Simply hop across to our <a href="/users/sign_up">sign&nbsp;up&nbsp;page</a>.</p>
+    </div>
   </div>
 </div>
 
@@ -32,7 +34,6 @@
   <div class="wrap">
   </div>
 </div>
-
 <% content_for :scripts do %>
   <%= include_javascripts :forms %>
   <script type="text/javascript">

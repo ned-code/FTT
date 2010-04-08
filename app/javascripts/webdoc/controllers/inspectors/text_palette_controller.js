@@ -240,12 +240,29 @@ WebDoc.TextPaletteController = jQuery.klass({
     jQuery(document).bind('click', function(e) {
         e.stopPropagation();
         e.cancelBubble = true;
+        var hex;
+				if(e.target.parentNode.parentNode.className == 'colorpicker_color' && e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('id') == 'colorpickerHolder2'){
+          hex = jQuery('#toolbar_panel_button_foreColor>div').css('backgroundColor');
+          jQuery('#colorpickerHolder2').stop().animate({height: 0}, 500);
+          jQuery('#toolbar_panel_button_foreColor>div').css('backgroundColor',hex);   
+		      jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
+          WebDoc.application.textTool.delegate.editorExec('foreColor',hex);
+        }
+        
+        if(e.target.parentNode.parentNode.className == 'colorpicker_color' && e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('id') == 'colorpickerHolder1'){
+          hex = jQuery('#toolbar_panel_button_hiliteColor>div').css('backgroundColor');
+          jQuery('#colorpickerHolder1').stop().animate({height: 0}, 500);
+          jQuery('#toolbar_panel_button_hiliteColor>div').css('backgroundColor',hex);
+          jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
+          WebDoc.application.textTool.delegate.editorExec('hiliteColor',hex);   
+        }
+        
         var foc = (e.target.parentNode && e.target.parentNode.parentNode)?e.target.parentNode.parentNode.getAttribute('class'):'';
-    		if(jQuery('#colorpickerHolder2').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder2')) || foc=='colorpicker_color'){
+    		if(jQuery('#colorpickerHolder2').height() && !thobj.isHasParent(e.target,document.getElementById('colorpickerHolder2')) || foc=='colorpicker_color'){
     			jQuery('#colorpickerHolder2').stop().animate({height: 0}, 500);
     			jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
     		}
-    		if(jQuery('#colorpickerHolder1').height() &&!thobj.isHasParent(e.target,document.getElementById('colorpickerHolder1')) || foc=='colorpicker_color'){
+    		if(jQuery('#colorpickerHolder1').height() && !thobj.isHasParent(e.target,document.getElementById('colorpickerHolder1')) || foc=='colorpicker_color'){
     			jQuery('#colorpickerHolder1').stop().animate({height: 0}, 500);
     			jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
     		}
@@ -257,9 +274,8 @@ WebDoc.TextPaletteController = jQuery.klass({
         onSubmit: function(hsb, hex, rgb) {
           jQuery('#colorpickerHolder2').stop().animate({height: 0}, 500);
           jQuery('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#' + hex);   
-		  jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
+		      jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class','icon_color_arrow');
           WebDoc.application.textTool.delegate.editorExec('foreColor','#' + hex);
-          
         },
         onHide: function (colpkr) {
           jQuery(colpkr).fadeOut(500);
@@ -277,7 +293,6 @@ WebDoc.TextPaletteController = jQuery.klass({
           jQuery('#toolbar_panel_button_hiliteColor>div').css('backgroundColor', '#' + hex);
           jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class','icon_color_arrow');
           WebDoc.application.textTool.delegate.editorExec('hiliteColor','#' + hex); 
-          
         },
         onHide: function (colpkr) {
           jQuery(colpkr).fadeOut(500);
@@ -353,7 +368,6 @@ WebDoc.TextPaletteController = jQuery.klass({
             } else {
               this.setComboboxValue(stp,toolbarHash[stp],parameters);
             }
-            //this.setSelectBoxValue(document.getElementById('toolbar_panel_button_' + stp), toolbarHash[stp]);
     			}
         }
   },
