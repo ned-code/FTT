@@ -189,9 +189,11 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
     -moz-border-radius:    6px;
     border-radius:         6px;
 }
-.tools a:hover,
+.tools a:hover {
+    background-color: hsla( 208, 4%, 60%, 0.4 );
+}
 .tools a.current{
-    background-color: hsla( 194, 8%, 60%, 0.4 );
+    background-color: hsla( 208, 8%, 92%, 0.6 );
 }
 
 .mode-tools li a {
@@ -409,7 +411,10 @@ a[href="#webdoc-close"]               { background-position: 0 -512px; }
 a[href="#webdoc-close"]:hover         { background-position: 0 -576px; }
 a[href="#webdoc-close"]:active        { background-position: 0 -640px; }
 
-a[href="#settings"]                   { background-position: 0 -704px; }
-a[href="#settings"]:hover             { background-position: 0 -768px; }
-a[href="#settings"]:active            { background-position: 0 -832px; }
+a[href="#disable-html"]               { background-position: 0 -704px; }
+a[href="#disable-html"]:hover         { background-position: 0 -768px; }
+a[href="#disable-html"]:active        { background-position: 0 -832px; }
+a[href="#disable-html"].active        { background-position: 0 -704px; }
+a[href="#disable-html"].active:hover  { background-position: 0 -768px; }
+a[href="#disable-html"].active:active { background-position: 0 -832px; }
 
