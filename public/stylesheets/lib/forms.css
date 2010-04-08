@@ -315,7 +315,7 @@ fieldset.properties:first-child {
 
 .properties label,
 .properties .label,
-.properties input {
+.properties input[type='text'] {
     float: left;
     width: auto;
     font-size: 1em;

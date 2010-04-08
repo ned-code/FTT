@@ -238,6 +238,10 @@ body {
     right: 0;
 }
 
+.panel .card {
+    line-height: 1.6667;
+}
+
 
 /* Apps index */
 

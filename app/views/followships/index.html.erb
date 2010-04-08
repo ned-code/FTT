@@ -9,7 +9,7 @@
       <h2>
         <%= @user.following.length %> <%= t('.contacts')%>
       </h2>
-      <ul class="vertical index">
+      <ul id="contacts" class="vertical index">
         <% @user.following.each do |user|%>
         <li>
           <%= render :partial => "card", :locals => { :user => user, :subscribed => user.following_info } %>
@@ -21,7 +21,7 @@
       <h2>
         <%= @user.followers.length %> <%= t('.subscribe_to_me')%>
       </h2>
-      <ul class="vertical index">
+      <ul id="followers" class="vertical index">
         <% @user.followers.each do |user|%>
         <li>
           <% if user.following_info %>
@@ -38,4 +38,5 @@
 
 <% content_for :scripts do %>
 <%= include_javascripts :card %>
+<%= include_javascripts :contacts %>
 <% end %>

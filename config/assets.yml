@@ -136,4 +136,6 @@ javascripts:
     - public/javascripts/jquery.validator.js
     - app/javascripts/webdoc/form/*.js
   card:
-    - app/javascripts/webdoc/card/*.js
+    - app/javascripts/webdoc/card/card.js
+  contacts:
+    - app/javascripts/webdoc/card/card.contacts.js
