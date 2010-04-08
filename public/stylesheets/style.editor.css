@@ -86,6 +86,7 @@ body {
     top: 0;
     height: 36px;
     padding: 0 6px;
+    overflow: hidden;
 }
 .toolbar-panel .tools {
     margin-top: 2px;
