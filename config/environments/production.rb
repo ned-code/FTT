@@ -29,8 +29,7 @@ config.action_mailer.smtp_settings = {
   :enable_starttls_auto => false
 }
 config.action_mailer.default_url_options = { :host => 'alpha.webdoc.com' }
-# Devise
-config.action_mailer.default_url_options = { :host => 'alpha.webdoc.com' }
+
 
 # Enable threaded mode
 # config.threadsafe!
