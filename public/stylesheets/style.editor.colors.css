@@ -169,6 +169,7 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
                                       -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
 .toolbar-panel .current,
+.toolbar-panel .active,
 .toolbar-panel .mode-tools .current { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1);
@@ -413,8 +414,6 @@ a[href="#webdoc-close"]:active        { background-position: 0 -640px; }
 
 a[href="#disable-html"]               { background-position: 0 -704px; }
 a[href="#disable-html"]:hover         { background-position: 0 -768px; }
+a[href="#disable-html"].active,
 a[href="#disable-html"]:active        { background-position: 0 -832px; }
-a[href="#disable-html"].active        { background-position: 0 -704px; }
-a[href="#disable-html"].active:hover  { background-position: 0 -768px; }
-a[href="#disable-html"].active:active { background-position: 0 -832px; }
 

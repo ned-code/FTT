@@ -94,7 +94,8 @@ body {
 .toolbar-panel .logo {
     float: left;
     margin: 6px 12px 0 12px;
-    width: 120px; height: 25px;
+    width: 93px; height: 32px;
+    background-repeat: no-repeat;
 }
 .toolbar-panel .document-title,
 .toolbar-panel .page-details {
