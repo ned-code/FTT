@@ -152,6 +152,55 @@ describe Document do
     end
   end
 
+  describe "all_with_explore_params" do
+    before do
+      @user = Factory(:user)
+      now = Time.now
+
+      @cat1 = Factory(:category)
+      @cat2 = Factory(:category)
+
+      @doc1 = Factory(:document, :creator => @user, :created_at => now-90.minutes, :updated_at => now-60.minutes, :views_count => 300, :category_id => @cat1.id)
+      @doc2 = Factory(:document, :creator => @user, :created_at => now-80.minutes, :updated_at => now-58.minutes, :views_count => 100, :category_id => @cat1.id)
+      @doc3 = Factory(:document, :creator => @user, :created_at => now-70.minutes, :updated_at => now-56.minutes, :views_count => 250, :category_id => @cat2.id)
+      @doc4 = Factory(:document, :creator => @user, :created_at => now-60.minutes, :updated_at => now-54.minutes, :is_public => false, :category_id => @cat2.id)
+    end
+
+    it "should return the most recent public documents when he han't params" do
+      docs = Document.all_public_paginated_with_explore_params()
+      docs.should == [@doc3, @doc2, @doc1]
+    end
+
+    it "should return the most recent public documents when the params order_string equals 'recent'" do
+      docs = Document.all_public_paginated_with_explore_params('recent')
+      docs.should == [@doc3, @doc2, @doc1]
+    end
+
+    it "should return the most viewed public documents when the params order_string equals 'viewed'" do
+      docs = Document.all_public_paginated_with_explore_params('viewed')
+      docs.should == [@doc1, @doc3, @doc2]
+    end
+
+    it "should return all document in a category when the params category_id is set" do
+      docs = Document.all_public_paginated_with_explore_params('', @cat1)
+      docs.should == [@doc2, @doc1]
+    end
+
+    it "should set a number of document per page" do
+      docs = Document.all_public_paginated_with_explore_params('', '', nil, 2)
+      docs.size.should == 2
+    end
+
+    it "should set a default number of document per page (4)" do
+      @doc5 = Factory(:document, :creator => @user)
+      @doc6 = Factory(:document, :creator => @user)
+      @doc7 = Factory(:document, :creator => @user)
+      docs = Document.all_public_paginated_with_explore_params
+      docs.size.should == 4
+    end
+
+  end
+                                                            
   describe "last_modified_from_following" do
     before do
       @user = Factory(:user)

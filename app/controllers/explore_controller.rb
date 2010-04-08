@@ -2,7 +2,7 @@ class ExploreController < ApplicationController
   
   # GET /explore
   def index
-    @public_documents = Document.paginate_by_is_public(true, :page => params[:page], :per_page => 4)
+    @public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:page])
   end
   
 end

@@ -67,6 +67,34 @@ class Document < ActiveRecord::Base
     documents
   end
 
+  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", page_id=nil, per_page=4)
+    documents = Array.new
+
+    if order_string.present? && order_string == 'viewed'
+      order = 'views_count DESC'
+    else
+      order = 'created_at DESC'
+    end
+
+    if category_filter.present? && category_filter != "all"
+      documents = Document.paginate(
+              :page => page_id,
+              :per_page => per_page,
+              :conditions => ['documents.is_public = ? AND documents.category_id = ?', true, category_filter],
+              :order => order
+      )
+    else
+      documents = Document.paginate(
+              :page => page_id,
+              :per_page => per_page,
+              :conditions => ['documents.is_public = ?', true],
+              :order => order
+      )  
+    end
+
+    documents
+  end
+
   def self.last_modified_from_following(current_user, limit=5)
     following_ids = current_user.following_ids
     if following_ids.present?
