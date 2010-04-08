@@ -39,6 +39,11 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   
   initialize: function($super, editable) {
     $super();
+    // change domain to be able to synch with apps
+    var allDomainsParts = document.domain.split(".");
+    if (allDomainsParts.length > 2) {
+      document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
+    } 
     this._creatorListeners = [];
     // Add feature detected styles to head
     MTools.Application.createStyle('body, .push-scroll {'+
