@@ -32,7 +32,7 @@ WebDoc.PageBrowserItemView = $.klass({
           pageItem = $('<li/>'),
           pageItemTitle = $('<div/>').addClass( this.TITLE_CLASS ),
           pageItemNumber = $('<span/>').addClass(numberClass),
-          pageItemEdit = $('<a/>', {href: '#pop', target: 'pop', title: 'Click to edit'}).addClass( this.EDIT_ICON_CLASS ),
+          pageItemEdit = $('<a/>', {href: '#pop', target: 'pop', title: 'Click to edit'}).addClass( this.EDIT_ICON_CLASS ).html('<span>edit</span>'),
           pageItemLoading = $('<span/>').addClass( this.LOADING_ICON_CLASS ),
           pageItemThumb = $('<div/>').addClass( this.THUMB_CLASS ),
           pageItemThumbView = new WebDoc.PageThumbnailView(page, 120, 90).domNode,
@@ -83,10 +83,13 @@ WebDoc.PageBrowserItemView = $.klass({
       .append( pageItemLoading );
       
       // Bind actions
-      pageItemEdit.bind('click', function(e){
+      function clickHandler(e) {
         this.editTitle();
-        return false;
-      }.pBind(this));
+        e.preventDefault();
+      }
+      
+      pageItemEdit.bind( 'click', clickHandler.pBind(this) );
+      pageItemTitle.bind( 'dblclick', clickHandler.pBind(this) );
       
       page.addListener(this);
     }

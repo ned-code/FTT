@@ -340,9 +340,16 @@ body {
   background-image: url('/images/loading-icon-16-white.gif');
   background: hsl(198, 4%, 84%);
 }
+.pages li .edit-icon span {
+  font-size: 0.3333em;
+  color: hsl(208, 4%, 40%);
+}
 .pages li .number,
 .pages li .loading-icon,
 .pages li .edit-icon {
+    text-align: center;
+    line-height: 1.5;
+    text-decoration: none;
     position: absolute;
     top: 0.6em;
     width: 1.5em; height: 1.5em;
