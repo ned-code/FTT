@@ -87,7 +87,7 @@ WebDoc.PropertiesInspectorController = $.klass({
 	      };
 	      if (newSize.width != previousSize.width || newSize.height != previousSize.height) {
 	        WebDoc.application.undoManager.registerUndo(function() {
-	          WebDoc.ItemView._restoreSize(item, previousSize);
+	          WebDoc.ItemView.restoreSize(item, previousSize);
 	        }.pBind(this));
 	        item.resizeTo(newSize);
 	        item.save();

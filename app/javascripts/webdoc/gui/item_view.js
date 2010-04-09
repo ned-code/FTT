@@ -235,7 +235,7 @@ WebDoc.ItemView = $.klass({
         this.aspectRatio = ui.size.width / ui.size.height;
         var currentSize = { width: this.item.data.data.css.width, height: this.item.data.data.css.height};
         WebDoc.application.undoManager.registerUndo(function() {
-          WebDoc.ItemView._restoreSize(this.item, currentSize);
+          WebDoc.ItemView.restoreSize(this.item, currentSize);
         }.pBind(this));
       }.pBind(this)        ,
       resize: function(e, ui) {
@@ -308,12 +308,12 @@ $.extend(WebDoc.ItemView, {
     item.save();    
   },
   
-  _restoreSize: function(item, size) {
+  restoreSize: function(item, size) {
     ddd("restore size" + size.height + ":" + size.width);
     var previousSize = { width: item.data.data.css.width, height: item.data.data.css.height};
     item.resizeTo(size);
     WebDoc.application.undoManager.registerUndo(function() {
-      WebDoc.ItemView._restoreSize(item, previousSize);
+      WebDoc.ItemView.restoreSize(item, previousSize);
     }.pBind(this));
     item.save();  
   }
