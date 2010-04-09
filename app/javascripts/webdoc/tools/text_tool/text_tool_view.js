@@ -4,9 +4,9 @@ WebDoc.TextToolView = $.klass({
   FONTSIZES:[['8 pt','8pt'],['9 pt','9pt'],['10 pt','10pt'],['12 pt','12pt'],['14 pt','14pt'],['16 pt','16pt'],['18 pt','18pt'],['19 pt','20pt'],['24 pt','24pt'],['28 pt','28pt'],['32 pt','32pt'],['36 pt','36pt'],['40 pt','40pt'],['44 pt','44pt'],['48 pt','48pt'],['54 pt','54pt'],['60 pt','60pt'],['66 pt','66pt'],['72 pt','72pt'],['80 pt','80pt'],['88 pt','88pt'],['96 pt','96pt']],
   FONTNAMES:[['Arial','Arial'],['Helvetica','helvetica'],['Tahoma','Tahoma'],['Comic Sans MS','Comic Sans MS'],['Courier New','Courier New'],['Trebuchet MS','Trebuchet MS'],['Verdana','Verdana'],['Serif','Serif']],
   FORMATS:[['&lt;h1&gt;  Document title','h1'],['&lt;h2&gt;  Page title','h2'],['&lt;h3&gt;  Section title','h3'],['&lt;h4&gt; Heading','h4'],['&lt;h5&gt;  Sub-heading','h5'],['&lt;h6&gt;  Sub-sub-heading','h6'],['&lt;p&gt;  Paragraph','p'],['&lt;blockquote&gt;  Quotation','blockquote'],['&lt;address&gt;  Address','address'],['&lt;pre&gt;  Unformatted','pre']],
-  BLOCKTAGS:['div','p','ul','li','ol','address','blockquote','h1','h2','h3','h4','h5','h6'],
+  BLOCKTAGS:['div','p','ul','li','ol','pre','address','blockquote','h1','h2','h3','h4','h5','h6'],
   HTAGS:['h1','h2','h3','h4','h5','h6'],
-  INLINEPROPERTIES:['backgroundColor'],
+  INLINEPROPERTIES:['backgroundColor','textDecoration','color','fontSize','fontStyle','fontWeight','fontFamily'],
   INLINETAGS:['span','font'],
   
   /**
@@ -58,9 +58,9 @@ WebDoc.TextToolView = $.klass({
         thobj.undoHandler(newClonedForUndo);
       });
       thobj.edDoc.body.firstChild.parentNode.replaceChild(clonedForUndo.cloneNode(true), thobj.edDoc.body.firstChild);
+      thobj.formatVertical();
       thobj.repairHistorySelection();
       thobj.deleteSelectionMarkers();
-      
     };
     
     this.doBeforeTextChanged = function() {
@@ -120,12 +120,14 @@ WebDoc.TextToolView = $.klass({
       for (var k = 0; k < allClonedChilds.length; k++) {
         var tnodes = allClonedChilds[k].childNodes;
         for (var t = 0; t < tnodes.length; t++) {
+          try{
           if (tnodes[t].parentNode.getAttribute('selectionStartMarker') && tnodes[t].parentNode.childNodes[tnodes[t].parentNode.getAttribute('selectionStartChildNumber')] == tnodes[t]) {
             range.setStart(tnodes[t], tnodes[t].parentNode.getAttribute('selectionStartOffset'));
           }
           if (tnodes[t].parentNode.getAttribute('selectionEndMarker') && tnodes[t].parentNode.childNodes[tnodes[t].parentNode.getAttribute('selectionEndChildNumber')] == tnodes[t]) {
             range.setEnd(tnodes[t], tnodes[t].parentNode.getAttribute('selectionEndOffset'));
           }
+          } catch(e){}
         }
       }
       this.edWin.getSelection().addRange(range);
@@ -287,8 +289,8 @@ WebDoc.TextToolView = $.klass({
                 }
         }
         if (kp == keys.length) {
-          callback(e);
-          if (!opt.propagate) {
+          var callBackResult = callback(e);
+          if (!callBackResult) {
             e.cancelBubble = true;
             e.returnValue = false;
             if (e.stopPropagation) {
@@ -349,7 +351,6 @@ WebDoc.TextToolView = $.klass({
       var k = 0;
       var nodesToKill = [];
       for (var i = 0; i < nodes.length; i++) {
-        nodes[i].removeAttribute('class');
         if (nodes[i].style[styleAttr] && nodes[i].style.length === 1) {
           if (nodes[i].tagName.toLowerCase() == tag && nodes[i].parentNode.tagName.toLowerCase() == tag && nodes[i].parentNode.childNodes.length == 1 && nodes[i].parentNode.style[styleAttr] && nodes[i].parentNode.style.length === 1) {
             nodesToKill[k] = nodes[i];
@@ -683,7 +684,7 @@ WebDoc.TextToolView = $.klass({
 
     this.correctUserSelection = function(){
       var s = thobj.getSelectBounds();
-      if(s.an == s.fn && s.ao == s.fo && (s.an == thobj.verticalCell || s.an == thobj.verticalContainer  || s.an == thobj.rootDiv || s.an == thobj.edDoc.body)){
+      if(s.an == s.fn && s.ao != s.fo && s.ao-s.fo!=-1 && s.ao-s.fo!=1 && (s.an == thobj.verticalCell || s.an == thobj.verticalContainer  || s.an == thobj.rootDiv || s.an == thobj.edDoc.body)){
         this.selectCustomNodeContent(this.verticalCell);
         return false;
       }
@@ -731,7 +732,7 @@ WebDoc.TextToolView = $.klass({
           range.setEnd(s.an,s.ao);
         }
       }
-      thobj.edWin.getSelection().addRange(range);       
+      thobj.edWin.getSelection().addRange(range);
     };                                                                                                            
 
     
@@ -915,7 +916,7 @@ WebDoc.TextToolView = $.klass({
         this.allTags[j].c = null;
         this.allTags[j].s = null;
         this.allTags[j].removeAttribute('size');
-      }
+      } 
     };
     
     
@@ -1001,17 +1002,6 @@ WebDoc.TextToolView = $.klass({
         this.createNewEditionPoint();
         this.formatInline(command, attr, styleAttr, value);
       }
-      var allNodes = this.findTagsByType(this.verticalCell,'inline');
-      for (i = 0; i < allNodes.length; i++) {
-        if (this.getFirstLiParent(allNodes[i])) {
-          if (allNodes[i].style.color && allNodes[i].style.color != 'rgb(1, 1, 1)') {
-            this.getFirstLiParent(allNodes[i]).style.color = allNodes[i].style.color;
-          }
-          if(!this.isHeadingTag(allNodes[i]) && !this.isHeadingTag(allNodes[i].parentNode) && !this.isHeadingTag(allNodes[i].parentNode.parentNode)){
-             this.getFirstLiParent(allNodes[i]).style.fontSize = Math.round((this.edWin.getComputedStyle(allNodes[i], null).getPropertyValue("font-size").split('px')[0]) * 75 / 100)+'pt';
-          }
-        }
-      }
     };
     
     this.markAllBlocksAsOld = function(){
@@ -1096,29 +1086,42 @@ WebDoc.TextToolView = $.klass({
       return false;
     };
    
-    this.correctBgColorForBlockElements = function(){
+    this.correctInlineProprertiesForBlockElements = function(property){
 			var blockTagsWithInlineProperties = this.findAllBlockTagsWithInlineProperties();
 			for (var i = 0; i < blockTagsWithInlineProperties.length; i++) {
-				var allBlockChilds = this.findTagsByType(blockTagsWithInlineProperties[i].node, 'block');
-				allBlockChilds[allBlockChilds.length] = blockTagsWithInlineProperties[i].node;
-				for (var j = 0; j < allBlockChilds.length; j++) {
-					var childs = allBlockChilds[j].childNodes;
-					for (var c = 0; c < childs.length; c++) {
-						nodeToEdit = childs[c];
-						if (this.getTypeOfNode(nodeToEdit) == 'inline') {
-							nodeToEdit.style[blockTagsWithInlineProperties[i].property] = blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property];
-						} else if (this.getTypeOfNode(nodeToEdit) == 'text') {
-							var innerTag = this.edDoc.createElement('span');
-							innerTag.style[blockTagsWithInlineProperties[i].property] = blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property];
-							nodeToEdit.parentNode.insertBefore(innerTag, nodeToEdit);
-							innerTag.appendChild(nodeToEdit);
-						}
-					}
-				}
-				blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property] = null;
-				this.selectCustomNodeContent(blockTagsWithInlineProperties[i].node);
+        if(blockTagsWithInlineProperties[i].property == property){
+  				var allBlockChilds = this.findTagsByType(blockTagsWithInlineProperties[i].node, 'block');
+  				allBlockChilds[allBlockChilds.length] = blockTagsWithInlineProperties[i].node;
+  				for (var j = 0; j < allBlockChilds.length; j++) {
+  					var childs = allBlockChilds[j].childNodes;
+  					for (var c = 0; c < childs.length; c++) {
+  						nodeToEdit = childs[c];
+  						if (this.getTypeOfNode(nodeToEdit) == 'inline' && !nodeToEdit.style[blockTagsWithInlineProperties[i].property]) {
+  							nodeToEdit.style[blockTagsWithInlineProperties[i].property] = blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property];
+  						} else if (this.getTypeOfNode(nodeToEdit) == 'text') {
+  							var innerTag = this.edDoc.createElement('span');
+  							innerTag.style[blockTagsWithInlineProperties[i].property] = blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property];
+  							nodeToEdit.parentNode.insertBefore(innerTag, nodeToEdit);
+  							innerTag.appendChild(nodeToEdit);
+  						}
+  					}
+  				}
+  				blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property] = null;
+  				//this.selectCustomNodeContent(blockTagsWithInlineProperties[i].node);
+        }
 			}
 		};
+    
+    this.correctInlineItalicElementWordsCut = function(){
+      var nodes = this.findTagsByType(this.verticalCell, 'inline');
+      for(var i=0;i<nodes.length;i++){
+        if(nodes[i].style.fontStyle.toLowerCase() == 'italic'){
+          nodes[i].style.paddingRight = "0.13em";
+        } else {
+          nodes[i].style.paddingRight = null;
+        }
+      }
+    };
 		
     this.formatStyle = function(command, styleAttr, value) {
       if (!this.edWin.getSelection().toString()) {
@@ -1299,7 +1302,7 @@ WebDoc.TextToolView = $.klass({
     this.setEditionRestrictMarker = function(){
 	    var editionRestrictMarker = this.edDoc.createElement('div');
 	    editionRestrictMarker.setAttribute('id','edition_restrict_marker');
-	    editionRestrictMarker.innerHTML = '&nbsp;';
+	    editionRestrictMarker.innerHTML = '&nbsp;';         
 	    this.verticalCell.appendChild(editionRestrictMarker);
     }; 
    
@@ -1483,7 +1486,7 @@ WebDoc.TextToolView = $.klass({
     for (i = 0; i < this.mainPageStyles.length; i++) {
       this.frameStyles += "<link rel='stylesheet' href='" + this.mainPageStyles[i] + "' type='text/css' />";
     }
-    content.write("<!DOCTYPE html><html><head>" + this.frameStyles + "<style>html {overflow-x: auto; overflow-y: auto;} body { overflow: auto;} html,body { padding:0px; height:100%; margin:0px; background:none;position:relative} </style></head><body contenteditable='true'></body></html>");
+    content.write("<!DOCTYPE html><html><head>" + this.frameStyles + "<style>html {overflow-x: auto; overflow-y: auto;} body { overflow: auto;font-family:Helvetica;} html,body { padding:0px; height:100%; margin:0px; background:none;position:relative} </style></head><body contenteditable='true'></body></html>");
     content.close();
     thobj.edDoc.designMode = 'On';
     thobj.edDoc.execCommand("styleWithCSS", false, true);
@@ -1578,34 +1581,60 @@ WebDoc.TextToolView = $.klass({
       thobj.edWin.getSelection().addRange(range);
     };
     
-    this.onSelectAll = function() {
-      var range = thobj.edDoc.createRange();
-      range.selectNodeContents(thobj.verticalCell);
-      thobj.edWin.getSelection().removeAllRanges();
-      thobj.edWin.getSelection().addRange(range);
+    this.isIndentTag = function(obj){
+      return (obj.className.indexOf('webdoc-indent-1')==-1)?false:true;
+    };
+    
+    this.doOnBackspacePressed = function(){ 
+        var s = thobj.getSelectBounds();
+        if((s.an.nodeName != '#text' && s.fn.nodeName != '#text' && thobj.isIndentTag(s.an) && thobj.isIndentTag(s.fn) && !s.ao && !s.fo) || (s.an.nodeName == '#text' && s.an == s.fn && !s.ao && s.ao == s.fo && ((thobj.isIndentTag(s.an.parentNode) && s.an.parentNode.firstChild == s.an) || (thobj.isIndentTag(s.an.parentNode.parentNode) && s.an.parentNode.parentNode.firstChild.firstChild == s.an) || (thobj.isIndentTag(s.an.parentNode.parentNode.parentNode) && s.an.parentNode.parentNode.parentNode.firstChild.firstChild.firstChild == s.an)))){
+           thobj.editorExec('outdent');
+           return false;
+        }
+        if(thobj.deleteSelectedImages()){
+           return false;
+        }
+        if(thobj.verticalCell.childNodes.length==1 && thobj.verticalCell.firstChild.nodeName != "#text" && (thobj.verticalCell.firstChild.tagName.toLowerCase()=='ul' || thobj.verticalCell.firstChild.tagName.toLowerCase()=='ol') && thobj.verticalCell.firstChild.firstChild && thobj.verticalCell.firstChild.firstChild.tagName.toLowerCase() == 'li' && thobj.verticalCell.firstChild.firstChild.firstChild && thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue && thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue.length===1 && !(/\w/.test(thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue))){
+           thobj.firstEditionHandler();
+           return false;
+        }
+        return true;
     };
     
     this.getPropertyDetectionNode = function(){   
-      var detectNode = thobj.verticalCell;
-      if (thobj.edWin.getSelection().focusNode.nodeName == "#text" && thobj.edWin.getSelection().focusNode.parentNode!=thobj.verticalCell){
-        detectNode = thobj.edWin.getSelection().focusNode.parentNode;
-      } else if(thobj.edWin.getSelection().anchorNode.nodeName == "#text" && thobj.edWin.getSelection().anchorNode.parentNode!=thobj.verticalCell){
+      var detectNode = thobj.verticalCell;       
+      if ((thobj.edWin.getSelection().focusNode.nodeName == "#text" || thobj.edWin.getSelection().focusNode.nodeName == "#comment") && thobj.edWin.getSelection().focusNode.parentNode!=thobj.verticalCell){
+        detectNode = thobj.edWin.getSelection().focusNode.parentNode;      
+      } else if((thobj.edWin.getSelection().anchorNode.nodeName == "#text" || thobj.edWin.getSelection().anchorNode.nodeName == "#comment") && thobj.edWin.getSelection().anchorNode.parentNode!=thobj.verticalCell){
         detectNode = thobj.edWin.getSelection().anchorNode.parentNode;
-      } else if(thobj.edWin.getSelection().focusNode.nodeName != "#text" && thobj.edWin.getSelection().focusNode!=thobj.verticalCell){
+      } else if(thobj.edWin.getSelection().focusNode.nodeName != "#text" && thobj.edWin.getSelection().focusNode.nodeName != "#comment" && thobj.edWin.getSelection().focusNode!=thobj.verticalCell){
         detectNode = thobj.edWin.getSelection().focusNode;
-      } else if(thobj.edWin.getSelection().anchorNode.nodeName != "#text" && thobj.edWin.getSelection().anchorNode!=thobj.verticalCell){
+      } else if(thobj.edWin.getSelection().anchorNode.nodeName != "#text" && thobj.edWin.getSelection().anchorNode.nodeName != "#comment" && thobj.edWin.getSelection().anchorNode!=thobj.verticalCell){
         detectNode = thobj.edWin.getSelection().anchorNode;
       }   
       return detectNode;
     };
+      
+    this.deleteSelectedImages = function(){
+      var imgsToRemove = []; 
+      var imgs = this.edDoc.getElementsByTagName('img');
+      for(var i=0;i<imgs.length;i++){
+        if(imgs[i].getAttribute('_moz_resizing')){
+          imgsToRemove.push(imgs[i]);
+        }
+      }
+      var result = imgsToRemove.length;
+      for(var j=0;j<imgsToRemove.length;j++){
+        imgsToRemove[j].parentNode.removeChild(imgsToRemove[j]);
+      }
+      return result;
+    };  
       
     this.addEvent(this.edDoc, "click", function(e) {
       var ev = e || window.event;
       var el = ev.target || ev.srcElement;
       WebDoc.application.inspectorController.textInspector.hideColorPickers();
     });
-    
-    
     
     this.addEvent(this.edDoc, "mouseup", function(e) {
       var ev = e || window.event;
@@ -1614,18 +1643,16 @@ WebDoc.TextToolView = $.klass({
       thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.getPropertyDetectionNode())));
     });
     
-    this.addEvent(this.edDoc, "keydown", function(e) {
+    this.addEvent(this.edDoc, "keydown", function(e) {    
       var ev = e || window.event;
       var key = ev.keyCode;
+      ev.stopPropagation();
+      ev.cancelBubble = true;       
       if ((key == 32) || (key == 13) || (key == 8)) {
         thobj.doBeforeTextChanged();
       }       
-      if(key == '8'){//backspace
-        if(thobj.verticalCell.childNodes.length==1 && thobj.verticalCell.firstChild.nodeName != "#text" && (thobj.verticalCell.firstChild.tagName.toLowerCase()=='ul' || thobj.verticalCell.firstChild.tagName.toLowerCase()=='ol') && thobj.verticalCell.firstChild.firstChild && thobj.verticalCell.firstChild.firstChild.tagName.toLowerCase() == 'li' && thobj.verticalCell.firstChild.firstChild.firstChild && thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue && thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue.length===1 && !(/\w/.test(thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue))){
-            thobj.firstEditionHandler();
-        }
-      }   
-    });
+      return true;   
+    });     
     
     this.addEvent(this.edDoc, "keyup", function(e) {    
       thobj.storeRootStructure();
@@ -1642,23 +1669,30 @@ WebDoc.TextToolView = $.klass({
     else {
       this.secondtEditionHandler(storedContent);
     }
-    thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.getPropertyDetectionNode())));
+    
+    thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.verticalCell)));
     
     this.doBeforeTextChanged();
     
     
     this.shortcut('Ctrl+Z', function(){
       WebDoc.application.undoManager.undo();
+      return false;
     });
     this.shortcut('Ctrl+Y', function(){
       WebDoc.application.undoManager.redo();
+      return false;
     });
     this.shortcut('Ctrl+A', function(){
       thobj.selectCustomNodeContent(thobj.verticalCell);
+       return false;
     });    
     this.shortcut('Tab', function(){
-      thobj.editorExec('indent');
-    }); 
+      thobj.editorExec('indent'); 
+      return false;
+    });
+    this.shortcut('backspace', thobj.doOnBackspacePressed);
+    
     //setTimeout(function(){thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.getPropertyDetectionNode())))},1000);
   },
   
@@ -1715,16 +1749,21 @@ WebDoc.TextToolView = $.klass({
    */
   editorExec: function(command, optional) {
     var thobj = this;
-    //this.correctUserSelection();
     this.edWin.focus();
     this.doBeforeTextChanged();
     this.setEditionRestrictMarker(); 
-    
+
     switch (command) {
       case 'removeformat':
         this.edDoc.execCommand(command, null, optional ? optional : '');
+        var lis = this.verticalCell.getElementsByTagName('li');
+        for(var i=0;i<lis.length;i++){
+          if(!this.findTagsByType(lis[i],'inline').length){
+            lis[i].style.color = null;
+            lis[i].style.fontSize = null;      
+          }
+        }
         break;
-        
       case 'format':
         this.formatBlock(optional);
         break;
@@ -1741,25 +1780,54 @@ WebDoc.TextToolView = $.klass({
         this.outdent();
         break;  
       case 'hiliteColor':
-        this.formatInline(command, '', 'backgroundColor', optional);  
+        this.formatInline(command, '', 'backgroundColor', optional); 
+        this.storeHistorySelection(); 
+        this.correctInlineProprertiesForBlockElements('backgroundColor'); 
+        this.repairHistorySelection();  
+        this.deleteSelectionMarkers();  
+        
         break;
       case 'fontSize':
         this.formatInline(command, 'size', 'fontSize', optional);
+        this.storeHistorySelection();
+        this.correctInlineProprertiesForBlockElements('fontSize');
+        this.repairHistorySelection();  
+        this.deleteSelectionMarkers();  
         break;
       case 'foreColor':
         this.formatInline(command, 'color', 'color', optional);
+        this.storeHistorySelection(); 
+        this.correctInlineProprertiesForBlockElements('color');
+        this.repairHistorySelection();  
+        this.deleteSelectionMarkers();  
         break;
       case 'fontName':
         this.formatStyle(command, false, optional);
+        this.storeHistorySelection();
+        this.correctInlineProprertiesForBlockElements('fontFamily');
+        this.repairHistorySelection();  
+        this.deleteSelectionMarkers();  
         break;
       case 'bold':
         this.formatStyle(command, false, null);
+        this.storeHistorySelection();
+        this.correctInlineProprertiesForBlockElements('fontWeight');
+        this.repairHistorySelection();  
+        this.deleteSelectionMarkers();  
         break;
       case 'italic':
         this.formatStyle(command, false, null);
+        this.storeHistorySelection();
+        this.correctInlineProprertiesForBlockElements('fontStyle');
+        this.repairHistorySelection();  
+        this.deleteSelectionMarkers();  
         break;
       case 'underline':
         this.formatStyle(command, 'textDecoration', null);
+        this.storeHistorySelection();
+        this.correctInlineProprertiesForBlockElements('textDecoration');
+        this.repairHistorySelection();  
+        this.deleteSelectionMarkers();  
         break;
       case 'superScript':
         this.formatStyle(command, false, null);
@@ -1778,9 +1846,17 @@ WebDoc.TextToolView = $.klass({
         break;
       case 'increasefontsize':
         this.increaseFontSize(+1,'rgb(1, 1, 1)');
+        this.storeHistorySelection();
+        this.correctInlineProprertiesForBlockElements('fontSize');
+        this.repairHistorySelection();  
+        this.deleteSelectionMarkers();  
         break;
       case 'decreasefontsize':
         this.increaseFontSize(-1,'rgb(1, 1, 1)');
+        this.storeHistorySelection();
+        this.correctInlineProprertiesForBlockElements('fontSize');
+        this.repairHistorySelection();  
+        this.deleteSelectionMarkers();  
         break;
       case 'createlink':
         this.createLink(command, optional);
@@ -1791,37 +1867,28 @@ WebDoc.TextToolView = $.klass({
       default:
         alert('Command ' + command + ' is not defined');
     }
-    // firefox bags correcting
-    if (this.rootDiv.style.textAlign) {
-      this.verticalCell.style.textAlign = this.rootDiv.style.textAlign;
-    }
-    if (this.rootDiv.style.textDecoration) {
-      this.verticalCell.style.textDecoration = this.rootDiv.style.textDecoration;
-    }
-    if (this.rootDiv.style.fontWeight) {
-      this.verticalCell.style.fontWeight = this.rootDiv.style.fontWeight;
-    }
-    if (this.rootDiv.style.color) {
-      this.verticalCell.style.color = this.rootDiv.style.color;
-    }
-    if (this.rootDiv.style.marginLeft) {
-      this.verticalContainer.style.marginLeft = this.rootDiv.style.marginLeft;
-      this.rootDiv.style.marginLeft = null;
-    }
-    else 
-      if (this.verticalCell.style.marginLeft) {
-        this.verticalContainer.style.marginLeft = this.verticalCell.style.marginLeft;
-      }
-    
-
     
 
     this.removeEditionRestrictMarker();
-    
-    // firefox bug with backGround for block elements, but not for inline elements
-    if(command == 'hiliteColor'){
-      this.correctBgColorForBlockElements();
-    }         
+      
+      
+      var allNodes = this.findTagsByType(this.verticalCell,'inline');
+      for (i = 0; i < allNodes.length; i++) {
+        if (this.getFirstLiParent(allNodes[i])) {
+          if (allNodes[i].style.color && allNodes[i].style.color != 'rgb(1, 1, 1)') {
+            this.getFirstLiParent(allNodes[i]).style.color = allNodes[i].style.color;
+          }
+          if(!this.isHeadingTag(allNodes[i]) && !this.isHeadingTag(allNodes[i].parentNode) && !this.isHeadingTag(allNodes[i].parentNode.parentNode)){
+             this.getFirstLiParent(allNodes[i]).style.fontSize = Math.round((this.edWin.getComputedStyle(allNodes[i], null).getPropertyValue("font-size").split('px')[0]) * 75 / 100)+'pt';
+          }
+        }
+      }   
+      
+      
+    //bug with eating of italic-style words
+
+      this.correctInlineItalicElementWordsCut();
+          
     thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.getPropertyDetectionNode())));
     this.markNodesAsExistingBeforePaste();
     thobj.edWin.focus();
