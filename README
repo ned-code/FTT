@@ -12,10 +12,9 @@ Dependencies:
 
 Run in working repository:
 
+  sudo gem install rack-debug
   sudo gem install uuidtools
-  sudo gem install sprockets
   sudo rake gems:install
-
 
 Create a sym link to app/javascripts
 
