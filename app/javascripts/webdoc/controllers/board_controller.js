@@ -252,14 +252,25 @@ WebDoc.BoardController = jQuery.klass({
       var newItems = [];
       if (itemsString) {
         var items = jQuery.evalJSON(itemsString);
+        var itemsDataArray = [];
         for (var i = 0; i < items.length; i++) {
           var anItem = new WebDoc.Item({
             item: items[i]
           });
           var newItem = anItem.copy();
+
+          if(anItem.data.page_id === this._currentPage.data.id) {
+            newItem.data.data.css.left = (parseFloat(anItem.data.data.css.left)+15).toString()+"px";
+            newItem.data.data.css.top = (parseFloat(anItem.data.data.css.top)+15).toString()+"px";
+          }
+          newItem.data.page_id = this._currentPage.data.id;
+
           newItems.push(newItem);
+          itemsDataArray.push(newItem.getData());
         }
+
         this.insertItems(newItems);
+        WebDoc.application.pasteBoardManager.putIntoPasboard("application/ub-item", jQuery.toJSON(itemsDataArray));
       }
     }
   },
