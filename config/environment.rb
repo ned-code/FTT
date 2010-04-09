@@ -38,7 +38,7 @@ Rails::Initializer.run do |config|
   config.gem 'mini_magick'
   config.gem 'acl9'
   config.gem 'formtastic'
-  
+  config.gem 'erubis'
   # Rails 3 ARG
   config.gem 'jammit' # use plugin for the moment
   # config.gem 'formtastic'
