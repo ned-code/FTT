@@ -10,6 +10,7 @@ var cssEditor,
     backgroundControls,
     backgroundImageControls,
     backgroundImageControlsEnabled,
+    supportedImagesExtensions = ["jpg","jpeg","png","gif"],
     page;
 
 WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController, {
@@ -38,12 +39,14 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     jQuery("#page_background_image_align_vert_middle_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
     jQuery("#page_background_image_align_vert_bottom_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
     jQuery("#page_background_image_apply_all_button").bind("click", this._applyBackgroundToAllPages.pBind(this));
-    jQuery('#image_send_form').submit(this._uploadBackgroundImage.pBind(this));
+    //jQuery('#image_send_form').submit(this._uploadBackgroundImage.pBind(this));
     jQuery('.page-navigation-link').click(this.performAction.pBind(this));
     jQuery('.page-remove-background-image').click(this._removeBackgroundImage.pBind(this));
     WebDoc.application.boardController.addCurrentPageListener(this);
     WebDoc.application.pageEditor.currentPage.addListener(this); 
     
+    this._uploadControl = jQuery("#upload-container");
+    this._setupFlashUpload();
     this.currentPageChanged();
     this.domNode = jQuery('#page-inspector');
     
@@ -53,6 +56,81 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     .hide();
   },
 
+  _setupFlashUpload: function() {
+    // Setting up SWFUpload (but at this point it'll be still "hidden", and it'll get loaded once I'll make it visible)
+    this._uploadControl.swfupload({
+      upload_url: "/images",
+      file_post_name: "image[file]",
+      file_size_limit: "2048",
+      file_types: "*."+supportedImagesExtensions.join(";*."), // "*.jpg;*.jpeg;*.png;*.gif"
+      file_types_description: "Web Image Files",
+      //file_upload_limit: "1",
+      flash_url: "/swfupload/swfupload.swf",
+      //button_image_url: '/images/libraries/upload_button.png',
+      button_text : '<span class="blueText">Choose image</span>', 
+      button_text_style : ".blueText { font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14pt; color: #0000FF; text-decoration: underline; }", 
+      button_action : SWFUpload.BUTTON_ACTION.SELECT_FILE,
+      button_cursor : SWFUpload.CURSOR.HAND, 
+      button_width: 200,
+      button_height: 21,
+      button_placeholder: $('#upload_images_button')[0],
+      button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+      debug: false
+    })
+    
+    .bind('swfuploadLoaded', function(event){
+      ddd("swfupload loaded");
+      this.uploadButtonFlash = this._uploadControl.find('object');
+    }.pBind(this))
+    
+    .bind('fileQueued', function(event, file){
+      ddd("file queued: "+file.name);
+      
+      this._uploadControl.swfupload('startUpload');
+    }.pBind(this))
+    
+    .bind('fileQueueError', function(event, file, errorCode, message){
+      ddd("file queued error: "+message);
+    }.pBind(this))
+    
+    .bind('fileDialogStart', function(event){
+      ddd("File dialog start");
+    }.pBind(this))
+    
+    .bind('fileDialogComplete', function(event, numFilesSelected, numFilesQueued){
+      ddd("File dialog complete. Files selected: "+numFilesSelected);
+    }.pBind(this))
+    
+    .bind('uploadStart', function(event, file){
+      ddd("Upload start: "+file.name);
+      // adding post params
+      var sessionKeyName = WebDoc.authData.sessionKeyName;
+      var postParams = {
+        "authenticity_token": WebDoc.authData.authToken
+      };
+      postParams[sessionKeyName] = WebDoc.authData.cookiesSessionKeyName;
+      postParams["image[uuid]"] = new MTools.UUID().id;
+      $.swfupload.getInstance(this._uploadControl).setPostParams(postParams);
+    }.pBind(this))
+    
+    .bind('uploadSuccess', function(event, file, serverData){
+      ddd("Upload success: "+file.name);
+      ddd("server data", serverData);
+      this._displayBackgroundImage(serverData);
+    }.pBind(this))
+    
+    .bind('uploadComplete', function(event, file){
+      // pay attention: this is always fired (after uploadError or uploadSuccess)
+      ddd("Upload complete: "+file.name);
+    
+    }.pBind(this))
+    
+    .bind('uploadError', function(event, file, errorCode, message){
+      ddd("Upload error: "+message+" (err "+errorCode+")");
+    }.pBind(this));
+  },
+  
+  
   buttonSelector: function() {
     return this.PAGE_INSPECTOR_BUTTON_SELECTOR;  
   },
@@ -236,6 +314,13 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     }
   },
 
+  _chooseBackgroundImage: function(e) {
+    e.preventDefault();
+    ddd("choose b");
+    return false;
+  },
+  
+  
   _uploadBackgroundImage: function(e) {
     // return false to prevent normal browser submit and page navigation 
     e.preventDefault();
@@ -243,6 +328,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     var options = {  
       success:       this._displayBackgroundImage.pBind(this), 
       type:          "POST",
+      iframeSrc: "/image_upload.html",
       error: function(response, errorType, exc) { ddd("error", response,errorType, exc );}
     };
     try{
