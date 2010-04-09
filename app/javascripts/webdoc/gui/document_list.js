@@ -134,7 +134,7 @@ WebDoc.DocumentList = $.klass({
         }),
         documentTitle = $("<a/>", {
           "class": "document-title wb-document-edit",
-          "href": id,
+          "href": '/documents/'+id,
           "title": "Open '" + document.title() + "'",
           data: data,
           html: document.title()
