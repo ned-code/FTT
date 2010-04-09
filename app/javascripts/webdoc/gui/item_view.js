@@ -242,7 +242,7 @@ WebDoc.ItemView = $.klass({
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
         var newWidth = ui.originalSize.width + (mappedPoint.x - this.resizeOrigin.x);
         var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y);
-        if(e.shiftKey){
+        if(e.shiftKey || this.item.data.data.preserve_aspect_ratio === "true"){
           ui.size.width = this.aspectRatio*newHeight;
         }
         else {
