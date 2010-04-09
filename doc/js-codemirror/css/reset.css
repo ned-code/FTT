@@ -26,12 +26,6 @@ hgroup, nav, section {
   display:block;
 }
 
-input, textarea, select {
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-}
-
 /* Enable resizing for IE */
 .ie input, .ie textarea, .ie select {font-size: 100%;}
 
