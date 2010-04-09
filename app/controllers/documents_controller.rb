@@ -41,7 +41,10 @@ class DocumentsController < ApplicationController
   def show
     respond_to do |format|
       format.html { render :layout => "layouts/editor" }
-      format.json { render :json => @document.to_json(:include => { :pages => { :include => :items} }) }
+      format.json do
+        set_cache_buster
+        render :json => @document.to_json(:include => { :pages => { :include => :items} })
+      end
     end
   end
   
