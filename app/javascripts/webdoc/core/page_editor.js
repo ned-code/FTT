@@ -39,6 +39,11 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   
   initialize: function($super, editable) {
     $super();
+    // change domain to be able to synch with apps
+    var allDomainsParts = document.domain.split(".");
+    if (allDomainsParts.length > 2) {
+      document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
+    } 
     this._creatorListeners = [];
     // Add feature detected styles to head
     MTools.Application.createStyle('body, .push-scroll {'+
@@ -239,10 +244,10 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     this.loadPageId( this.currentPage.uuid(), true);
     $("#debug-button").text(this.disableHtml?"Enable HTML":"Disable HTML");
     if (this.disableHtml) {
-        $("#tb_1_utilities_settings_trigger").addClass("tb_1_utilities_settings_attention");
+        $("#debug-button").addClass("active");
     }
     else {
-        $("#tb_1_utilities_settings_trigger").removeClass("tb_1_utilities_settings_attention");
+        $("#debug-button").removeClass("active");
     }
   },
   

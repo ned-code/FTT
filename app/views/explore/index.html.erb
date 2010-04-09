@@ -1,10 +1,7 @@
 <div class="action-zone zone">
   <div class="wrap">
     <%= will_paginate @public_documents %>
-  </div>
-</div>
-<div class="content">
-  <div id="webdoc" class="wrap" style="font-size:133%">
+  
     <div>
       Show the most 
       <select id="wd-main-filter">
@@ -20,7 +17,12 @@
       </select>
       categories
     </div>
-    <ul class="index">
+  </div>
+</div>
+<div class="content">
+  <div id="webdoc" class="wrap">
+
+    <ul class="index" style="font-size:133%">
       <% @public_documents.each do |document| %>
         <li>
           <div>

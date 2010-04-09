@@ -6,8 +6,8 @@
     %ul.navbar.divided.index
       %li>
         %a{ :href => "/" } home
-      %li>
-        = link_to "explore", explore_path, { :class => "item" }
+    -#%li>
+      -#= link_to "explore", explore_path, { :class => "item" }
     
     - if user_signed_in?
       %div.userbar
@@ -25,9 +25,7 @@
     - else
       %div.sessionbar
         %ul.divided.index
-          - if controller_name != 'home'
-            %li>= link_to t('devise.sessions.link'), root_path
-          - if controller_name != 'registrations' && controller_name != 'home'
-            %li>= link_to "sign up", new_registration_path(:user)
+          %li>= link_to "login", root_path
+          %li>= link_to "sign up", new_registration_path(:user)
     
     = render "layouts/flash", :object => flash
