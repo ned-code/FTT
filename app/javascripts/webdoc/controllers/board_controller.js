@@ -770,7 +770,7 @@ WebDoc.BoardController = jQuery.klass({
   _keyDown: function(e) {
     var el = jQuery(e.target);
     if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
-      e.preventDefault();      
+      e.preventDefault();
     }    
     if (el.is('input') || el.is('textarea') || this._editingItem !== null) { 
       return true;
@@ -797,8 +797,8 @@ WebDoc.BoardController = jQuery.klass({
           this.setCurrentTool(WebDoc.application.arrowTool);
           break;  
      case 37:
-        if (this._isInteraction) {
-          WebDoc.application.pageEditor.prevPage(); 
+        if (this._isInteraction || this._selection.length === 0) {
+          WebDoc.application.pageEditor.prevPage();
         }
         else {
           this.moveSelection("left", e.shiftKey?"big" : "small");
@@ -806,13 +806,16 @@ WebDoc.BoardController = jQuery.klass({
         e.preventDefault();          
         break;
       case 38:
-        if (!this._isInteraction) {
+        if (this._isInteraction || this._selection.length === 0) {
+          WebDoc.application.pageEditor.prevPage();
+        }
+        else {
           this.moveSelection("up", e.shiftKey?"big" : "small");
         }
         e.preventDefault();          
         break;          
       case 39:
-        if (this._isInteraction) {
+        if (this._isInteraction || this._selection.length === 0) {
           WebDoc.application.pageEditor.nextPage();
         }
         else {
@@ -821,7 +824,10 @@ WebDoc.BoardController = jQuery.klass({
         e.preventDefault();           
         break;
       case 40:
-        if (!this._isInteraction) {
+        if (this._isInteraction || this._selection.length === 0) {
+          WebDoc.application.pageEditor.nextPage();
+        }
+        else {
           this.moveSelection("down", e.shiftKey?"big" : "small");
         }
         e.preventDefault();          
@@ -838,6 +844,14 @@ WebDoc.BoardController = jQuery.klass({
         case 86:
             this.paste();
             e.preventDefault();
+          break;
+        case 90:
+            if(e.shiftKey) {
+              WebDoc.application.undoManager.redo(); 
+            }
+            else {
+              WebDoc.application.undoManager.undo();
+            }
           break;
       }
     }
