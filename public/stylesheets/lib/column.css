@@ -94,8 +94,8 @@
 .sextuple.of-eight  { width: 74.625%; }
 .septuple.of-eight  { width: 87.3125%; }
 
-column:last-child,
-column.last,
+.column:last-child,
+.column.last,
 .two.of-two,
 .three.of-three,
 .four.of-four,

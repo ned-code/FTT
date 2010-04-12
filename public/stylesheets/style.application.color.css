@@ -49,6 +49,7 @@ header .index.divided>li {
     border-color: hsl(28, 50%, 76%);
 }
 
+header a.current,
 header a:focus,
 header a:hover {
     color: hsl(28, 80%, 85%);

@@ -108,10 +108,10 @@
     %fieldset
       %div.shunt
         %input#unshare_webdoc_radio{ :type => "radio", :name => "share", :value => "off" }
-        %label{ :for => "unshare_webdoc_radio" } don't share (co-editors can still see this document)
+        %label{ :for => "unshare_webdoc_radio" } don't share (only co-editors will see this document)
       %div.shunt
         %input#share_webdoc_radio{ :type => "radio", :name => "share", :value => "on" }
-        %label{ :for => "share_webdoc_radio" } share
+        %label{ :for => "share_webdoc_radio" } share (make it public)
     
     %fieldset.state-unshared-hide
       %label{ :for => "shared_webdoc_url" }= t('.document_forms.share_document_dialog.shared_address_label')
