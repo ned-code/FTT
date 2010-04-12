@@ -74,7 +74,7 @@ WebDoc.ItemView = $.klass({
       for (var key in this.item.data.data) {
         switch(key) {
           case "innerHtml":
-            itemNode.html(this.item.data.data[key]);
+            itemNode.html($string().scriptScripts(this.item.data.data[key]));
             break;
           case "css":        
           case "preference":
@@ -127,7 +127,7 @@ WebDoc.ItemView = $.klass({
   
   innerHtmlChanged: function() {
     if (!WebDoc.application.pageEditor.disableHtml) {    
-      this.itemDomNode.html(this.item.data.data.innerHTML);
+      this.itemDomNode.html($string().stripScripts(this.item.data.data.innerHTML));
     }
   },
   
