@@ -177,7 +177,9 @@ WebDoc.BoardController = jQuery.klass({
     
     //WebDoc.application.pageBrowserController.conceal();
     //WebDoc.application.rightBarController.concealRightBar();
-    this._previousInspector = WebDoc.application.rightBarController.getSelectedInspector();
+    if(WebDoc.application.rightBarController.getSelectedInspector() !== WebDoc.RightBarInspectorType.SOCIAL) {
+      this._previousInspector = WebDoc.application.rightBarController.getSelectedInspector();
+    }
     WebDoc.application.rightBarController.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
     this._isInteraction = true;
     return this._isInteraction;
