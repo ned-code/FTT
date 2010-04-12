@@ -25,7 +25,7 @@ WebDoc.PageBrowserController = $.klass({
   NUMBER_SELECTOR: '.number',
   THUMB_SELECTOR: '.thumb',
   PANEL_GHOST_SELECTOR: '#left-panel-ghost',
-  
+
   initialize: function() {
     ddd("[PageBrowserController] init");
     
@@ -66,7 +66,9 @@ WebDoc.PageBrowserController = $.klass({
       pageItemNode = pageItem.domNode;
       
       pageBrowserItems.prepend(pageItemNode);
-      
+
+      pageItem.truncateTitleWithActualTitle();
+
       this.pageMap[ page.uuid() ] = pageItem;
       
       pageItemNode.data('webdoc', {
@@ -120,7 +122,7 @@ WebDoc.PageBrowserController = $.klass({
         'li':               this.selectCurrentPage
       }, this)
     );
-  },  
+  },
 
   updateSelectedPage: function() {
     var page = WebDoc.application.pageEditor.currentPage;
