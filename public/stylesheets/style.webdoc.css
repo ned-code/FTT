@@ -1,8 +1,8 @@
-.item {
+#webdoc .item {
   overflow:hidden;
 }
 
-.item_wrap {
+#webdoc .item_wrap {
   overflow:hidden;
   position:absolute;
 }

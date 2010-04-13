@@ -2,6 +2,15 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  words:
+    all:            "all"
+  
+  phrases:
+    most_recent:    "most recent"
+    most_popular:   "most popular"
+    Created_by:     "Created by"
+  
+  
   back: "Back"
   show: "Show"
   edit: "Edit"

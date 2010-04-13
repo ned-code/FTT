@@ -114,7 +114,9 @@ body                          { background-color: hsl(208, 8%, 60%); }
 }
 
 /* Page browser */
+.tag-list a,
 .pages li .page-title         { background-color: hsl(208, 9%, 71%); }
+.tag-list a:hover,
 .pages li:hover .page-title   { background-color: hsl(208, 6%, 56%); }
 .pages li.current .page-title { background-color: hsl(208, 3%, 88%); }
 

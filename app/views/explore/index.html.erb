@@ -1,62 +1,48 @@
 <div class="action-zone zone">
   <div class="wrap">
-    <%= will_paginate @public_documents %>
-  
-    <div>
-      Show the most 
+    <h2>Explore</h2>
+    <p>Show the
       <select id="wd-main-filter">
-        <option value="recent" <%= "selected=\"true\"" if params[:main_filter] == "recent" %>><%= t(".select.main_filter.recent")%></option>
-        <option value="viewed" <%= "selected=\"true\"" if params[:main_filter] == "viewed" %>><%= t(".select.main_filter.viewed")%></option>  
+        <option value="recent" <%= "selected=\"true\"" if params[:main_filter] == "recent" %>><%= t("phrases.most_recent")%></option>
+        <option value="viewed" <%= "selected=\"true\"" if params[:main_filter] == "viewed" %>><%= t("phrases.most_popular")%></option>
       </select>
-      webdocs in
+      webdocs in the category
       <select id="wd-category-filter">
-        <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t(".select.category.all")%></option>
+        <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t("words.all")%></option>
         <% Category.all.each do |category|%>
-          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= t(".select.category_filter.#{category.name}") %></option>  
+          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= category.name %></option>  
         <% end %>        
       </select>
-      categories
-    </div>
+    </p>
   </div>
 </div>
 <div class="content">
-  <div id="webdoc" class="wrap">
-
-    <ul class="index" style="font-size:133%">
+  <div class="wrap">
+    <ul id="webdoc" class="webdoc-viewer-index index" >
       <% @public_documents.each do |document| %>
-        <li>
-          <div>
-            <div><%= link_to h(document.title), document_path(document.uuid()) %></div>
-            <div><%= link_to h(document.category.name), explore_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %></div>
-
-            <div>
-              <ul>
-                <li>
-                  <a href="#prev-page" data-webdoc-document-id="<%= document.uuid() %>">prev page</a>
-                </li>
-                <li>
-                  <a href="#next-page" data-webdoc-document-id="<%= document.uuid() %>">next page</a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="webdoc-viewer-container" id="<%= document.uuid() %>"></div>
-            
-            <div><%= relative_date document.created_at %></div>
-            <div><%=h document.creator.first_name %></div>
-          </div>
-        </li>      
+        <li class="column double of-four">
+          <ul class="index">
+            <li class="button-group">
+              <a href="#prev-page" class="button" data-webdoc-document-id="<%= document.uuid() %>" title="previous page">&lt;</a
+              ><a href="#next-page" class="button" data-webdoc-document-id="<%= document.uuid() %>" title="next page">&gt;</a>
+            </li>
+            <li>
+              <a class="webdoc-viewer-title" href="<%= document_path(document.uuid()) %>"><h4><%= h(document.title) %></h4></a>
+            </li>
+          </ul>
+          
+          <div class="webdoc-viewer-container" data-webdoc-document-id="<%= document.uuid() %>" id="<%= document.uuid() %>"></div>
+          
+          <p class="webdoc-viewer-details"><%= t("phrases.Created_by")%> <%=h document.creator.first_name %> <%= relative_date document.created_at %><% if params[:category_filter] == "all" %> in <%= link_to h(document.category.name), explore_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %><% end %></p>
+        </li>
       <% end %>
     </ul>
+    <%= raw( will_paginate(@public_documents, :container => false) ) %>
   </div>
 </div>
-
 
 <%= include_stylesheets :page_viewer, :media => 'all' %>      
 <% content_for :scripts do %>
   <%= include_javascripts :page_editor %>
   <%= include_javascripts :explore %>
 <% end %>
-
-
-

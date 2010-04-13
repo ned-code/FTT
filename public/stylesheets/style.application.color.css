@@ -111,7 +111,7 @@ header a {
 /* Make bars rounded */
 .bar li:first-child>a,
 .bar dt:first-child {
-    padding-left: 2.6667em;
+    padding-left: 0.8333em;
     -webkit-border-top-left-radius:     1em;
     -moz-border-radius-topleft:         1em;
     border-top-left-radius:             1em;
@@ -230,7 +230,7 @@ header a {
 }
 
 .document-title:focus,
-.document-title:hover                 { color: black; }
+.document-item .document-title:hover  { color: black; text-decoration: underline; }
 .document-title                       { color: hsl(208, 2.4%, 33%); }
 .document-item:hover .document-title  { color: hsl(208, 1.6%, 24%); }
 
@@ -239,12 +239,40 @@ header a {
     background-image: url('/images/application/icons.png');
     background-repeat: no-repeat;
     color: white;
-    -webkit-border-radius: 1em;
-    -moz-border-radius:    1em;
-    border-radius:         1em;
+    -webkit-border-radius:              1em;
+    -moz-border-radius:                 1em;
+    border-radius:                      1em;
 }
 .button:hover {
+    background-color: hsla( 208, 4%, 50%, 0.6 );
     color: white;
+}
+.button-group .button {
+    -webkit-border-radius:              0;
+    -moz-border-radius:                 0;
+    border-radius:                      0;
+}
+.button-group .button+.button {
+    border-left: none;
+    padding-left: 0.6667em;
+}
+.button-group .button:first-child {
+    -webkit-border-top-left-radius:     1em;
+    -moz-border-radius-topleft:         1em;
+    border-top-left-radius:             1em;
+    -webkit-border-bottom-left-radius:  1em;
+    -moz-border-radius-bottomleft:      1em;
+    border-bottom-left-radius:          1em;
+    padding-right: 0.6667em;
+}
+.button-group .button:last-child {
+    -webkit-border-top-right-radius:    1em;
+    -moz-border-radius-topright:        1em;
+    border-top-right-radius:            1em;
+    -webkit-border-bottom-right-radius: 1em;
+    -moz-border-radius-bottomright:     1em;
+    border-bottom-right-radius:         1em;
+    padding-right: 0.8333em;
 }
 
 .sign-up:hover {
@@ -260,9 +288,6 @@ header a {
     color: hsl(208, 4%, 33%);
     background-color: hsla(208, 4%, 33%, 0.12);
     border: 2px solid hsl(208, 2.5%, 37%);
-    -webkit-border-radius: 1.1em;
-    -moz-border-radius:    1.1em;
-    border-radius:         1.1em;
 }
 .document-item:hover .button {
     border-color: hsl(208, 4%, 33%);
