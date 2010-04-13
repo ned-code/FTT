@@ -73,8 +73,12 @@ WebDoc.ItemView = $.klass({
       itemNode = $('<' + this.item.data.data.tag + '/>');
       for (var key in this.item.data.data) {
         switch(key) {
+          case "innerHTML":
+            itemNode.html($.string().stripScripts(this.item.data.data[key]));
+            break;
+          // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
           case "innerHtml":
-            itemNode.html($string().scriptScripts(this.item.data.data[key]));
+            itemNode.html($.string().stripScripts(this.item.data.data[key]));
             break;
           case "css":        
           case "preference":
@@ -127,11 +131,11 @@ WebDoc.ItemView = $.klass({
   
   innerHtmlChanged: function() {
     if (!WebDoc.application.pageEditor.disableHtml) {    
-      this.itemDomNode.html($string().stripScripts(this.item.data.data.innerHTML));
+      this.itemDomNode.html($.string().stripScripts(this.item.data.data.innerHTML));
     }
   },
   
-  domNodeChangedChanged: function() {
+  domNodeChanged: function() {
     if (!WebDoc.application.pageEditor.disableHtml) {
       this.unSelect();
       this.itemDomNode.remove();
