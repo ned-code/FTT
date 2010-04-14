@@ -8,7 +8,7 @@ class DocumentRolesController < DocumentController
   
   # POST /documents/:document_id/roles
   def create
-    if @document.create_role_for_users(params[:accesses])
+    if @document.create_role_for_users(current_user, params[:accesses])
       render :json => @document.to_access_json
     else
       render :status => :error
@@ -26,7 +26,7 @@ class DocumentRolesController < DocumentController
   
   # DELETE /documents/:document_id/roles
   def destroy
-    @document.remove_role(params[:accesses])
+    @document.remove_role(current_user, params[:accesses])
     
     render :json => {}
   end

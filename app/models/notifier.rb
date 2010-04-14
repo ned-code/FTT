@@ -1,20 +1,20 @@
 class Notifier < ActionMailer::Base
   
-  def role_notification(role, user, document, message)
+  def role_notification(current_user, role, user, document, message)
     recipients  user.email
     from        APP_CONFIG['mail_from']
     subject     "#{current_user.username} invites you to co-edit webdoc #{document.title}"
     body        :role => role, :user => user, :current_user => current_user, :document => document, :custom_message => message
   end
   
-  def no_role_notification(user, document)
+  def no_role_notification(current_user, user, document)
     recipients  user.email
     from        APP_CONFIG['mail_from']
     subject     "No more role on document"
     body        :user => user, :current_user => current_user, :document => document
   end
   
-  def removed_role_notification(role, user, document)
+  def removed_role_notification(current_user, role, user, document)
     recipients  user.email
     from        APP_CONFIG['mail_from']
     subject     "#{current_user.username} removes you from the co-editors of document #{document.title}"

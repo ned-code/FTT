@@ -13,19 +13,19 @@ class DatastoreEntriesController < ApplicationController
   # GET /items/:item_id/datastore_entries
   # GET /items/:item_id/datastore_entries/:key  (with only_current_user = true)
   def index
-    @datastore_entries = @item.datastore_entries.filter_with(params)
+    @datastore_entries = @item.datastore_entries.filter_with(current_user, params)
     
     respond_to do |format|
-      format.json { render :json => @datastore_entries }
+      format.json { render :json => @datastore_entries.map{ |de| de.filtered_json(current_user) } }
     end
   end
   
   # POST /items/:item_id/datastore_entries
   def create
-    @datastore_entry = DatastoreEntry.create_or_update(@item, params[:datastore_entries])
+    @datastore_entry = DatastoreEntry.create_or_update(current_user, @item, params[:datastore_entries])
     
     respond_to do |format|
-      format.json { render :json => @datastore_entry, :status => :ok }
+      format.json { render :json => @datastore_entry.filtered_json(current_user), :status => :ok }
     end
   end
   
