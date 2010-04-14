@@ -81,6 +81,7 @@ function shout(input){ if ( window.console && console.log ) console.log('HEY!' |
 		return this.each(function(i) {
 			var pop = jQuery(this),
 					node = options.attachTo || body,
+					loadingIcon = jQuery('<div/>', { 'class': "loading-icon layer ui-pop-loading" }),
 					wrapCss = makeWrapCss( node ),
 					wrap = jQuery('<div/>', {
 						'class': options.popWrapClass,
@@ -89,7 +90,7 @@ function shout(input){ if ( window.console && console.log ) console.log('HEY!' |
 					popCss,
 					diffY;
 			
-			// Close existing instances
+			// Close existing instances - makes only one open at any one time
 			if ( jQuery.fn[plugin].instances.length ) {
 		    jQuery.fn[plugin].close();
 			}
@@ -111,6 +112,7 @@ function shout(input){ if ( window.console && console.log ) console.log('HEY!' |
 			});
 			
 			pop
+			.append( loadingIcon )
 			.addClass( options.popClass );
 			
 			wrap

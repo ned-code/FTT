@@ -20,6 +20,13 @@ element {-webkit-focus-ring-color: hsl(72, 100%, 50%);}
   border: 3px solid;
   margin: 0;
 }
+.ui-pop-loading {
+  background-color: hsla(208, 4%, 90%, 0.5);
+  z-index: 3;
+  -webkit-border-radius: 0.8333em;
+  -moz-border-radius:    0.8333em;
+  border-radius:         0.8333em;
+}
 .ui-pop .ui-actions {
   text-align: right;
 }
