@@ -128,13 +128,22 @@ WebDoc.Item = $.klass(MTools.Record,
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
 
-	setOpacity: function(newOpacity){
-		if(parseFloat(newOpacity)){
-			this.data.data.css.opacity = parseFloat(newOpacity);
-			this.fireObjectChanged();
-		}
-	},
-  
+  moveToAndResizeTo: function(top, left, width, height) {
+    this.data.data.css.top = top;
+    this.data.data.css.left = left;
+    this.data.data.css.width = width;
+    this.data.data.css.height = height;
+    this.fireObjectChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+
+  setOpacity: function(newOpacity){
+      if(parseFloat(newOpacity)){
+          this.data.data.css.opacity = parseFloat(newOpacity);
+          this.fireObjectChanged();
+      }
+  },
+
   setInnerHtml: function(html, force) {
     if (html != this.data.data.innerHTML || force) {
 	    // Force to wmode transparent if necessary
@@ -184,8 +193,8 @@ WebDoc.Item = $.klass(MTools.Record,
   
   fireDomNodeChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
-      if (this.listeners[i].domNodeChanged) {
-        this.listeners[i].domNodeChanged();
+      if (this.listeners[i].domNodeChangedChanged) {
+        this.listeners[i].domNodeChangedChanged();
       }
     }    
   },

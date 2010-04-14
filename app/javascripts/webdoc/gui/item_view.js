@@ -320,6 +320,18 @@ $.extend(WebDoc.ItemView, {
       WebDoc.ItemView.restoreSize(item, previousSize);
     }.pBind(this));
     item.save();  
+  },
+
+  restorePositionAndSize: function(item, top, left, width, height) {
+    var previousTop = item.data.data.css.top,
+        previousLeft = item.data.data.css.left,
+        previousWidth = item.data.data.css.width,
+        previousHeight = item.data.data.css.height;
+    item.moveToAndResizeTo(top, left, width, height);
+    WebDoc.application.undoManager.registerUndo(function() {
+      WebDoc.ItemView.restorePositionAndSize(item, previousTop, previousLeft, previousWidth, previousHeight);
+	}.pBind(this));
   }
+  
 });
 
