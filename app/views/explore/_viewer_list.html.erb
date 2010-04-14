@@ -1,0 +1,30 @@
+<ul id="webdoc" class="webdoc-viewer-index index" >
+  <% documents.each do |document| %>
+    <li class="column double of-four">
+      <ul class="index">
+        <li class="button-group">
+          <a href="#prev-page" class="button" data-webdoc-document-id="<%= document.uuid() %>" title="previous page">&lt;</a
+          ><a href="#next-page" class="button" data-webdoc-document-id="<%= document.uuid() %>" title="next page">&gt;</a>
+        </li>
+        <li>
+          <a class="webdoc-viewer-title" href="<%= document_path(document.uuid()) %>"><h4><%= h(document.title) %></h4></a>
+        </li>
+      </ul>
+
+      <div class="webdoc-viewer-container" data-webdoc-document-id="<%= document.uuid() %>" id="<%= document.uuid() %>"></div>
+
+      <p class="webdoc-viewer-details">
+        <%= t("phrases.Created_by")%> <%=h document.creator.first_name %>
+        <%= relative_date document.created_at %>
+        <% if ((!params[:category_filter] || params[:category_filter] == "all") &&  document.category) %>
+            in <%= link_to h(document.category.name), explore_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %>
+        <% end %>
+      </p>
+    </li>
+  <% end %>
+</ul>
+<%= include_stylesheets :page_viewer, :media => 'all' %>
+<% content_for :scripts do %>
+  <%= include_javascripts :page_editor %>
+  <%= include_javascripts :explore %>
+<% end %>
