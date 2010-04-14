@@ -3,12 +3,12 @@
     %li>
       %a{ :href => "#left-panel-toggle", :title => "Left Panel" } Left Panel
     %li>
-      %a{ :href => "#prev-page" , :title => "Previous page" } Prev
+      %a{ :href => "#webdoc-prev-page" , :title => "Previous page" } Prev
     %li.pages-info>
       %a{ :href => "#pages-browser", :title => "Pages browser" }
         %span.webdoc-page-number.number 1
     %li>
-      %a{ :href => "#next-page" , :title => "Next Page" } Next
+      %a{ :href => "#webdoc-next-page" , :title => "Next Page" } Next
 
   -#%div.upper.border
   -#%div.lower.border
@@ -40,3 +40,16 @@
       %ul.page_browser_items.vertical.pages.index
     
     %div.foot
+      %ul.pages-tools.tools.thumbs.index.icons-only
+        %li>
+          %a{ :href => "#add-page", :title => t('.pages_browser.add_page') }
+            = t('.pages_browser.add_page')
+        %li>
+          %a{ :href => "#add-web-page", :title => t('.pages_browser.add_web_page') }
+            = t('.pages_browser.add_web_page')
+        %li>
+          %a{ :href => "#copy-page", :title => t('.pages_browser.copy_page') }
+            = t('.pages_browser.copy_page')
+        %li>
+          %a{ :href => "#remove-page", :title => "Copy page" }
+            Remove

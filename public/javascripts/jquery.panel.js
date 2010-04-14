@@ -105,7 +105,6 @@ function callHandler(e){
         }
         finally {
           e.preventDefault();
-          return false;
         }
     }
 }
@@ -116,8 +115,7 @@ jQuery.fn[plug] = function(){
     return nodes
     .bind('click', jQuery.delegate({
             '.toggle-head': toggleHead,
-            '.toggle-foot': toggleFoot,
-            'a': callHandler
+            '.toggle-foot': toggleFoot
         })
     )
     .bind('togglehead', toggleHead)
