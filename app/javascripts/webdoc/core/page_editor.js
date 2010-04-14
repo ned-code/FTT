@@ -103,6 +103,30 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
         WebDoc.application.rightBarController.showLib();
       }
       jQuery('#document_loading').remove();
+      
+      // Highlight code blocks in the webdoc
+      // There's probably a better place for this
+      jQuery('.code').each( function(i){
+        var node = jQuery(this),
+            clone = node.clone().empty(),
+            numbers = jQuery('<div/>');
+        
+        // Line numbers
+        var lineNo = 1, output = clone[0];
+      
+        function addLine(line) {
+          numbers.append(document.createTextNode(String(lineNo++)));
+          numbers.append(document.createElement("BR"));
+          for (var i = 0; i < line.length; i++) output.appendChild(line[i]);
+          output.appendChild(document.createElement("BR"));
+        }
+        
+        highlightText( node.html(), output ); //addLine);
+        node.replaceWith( numbers.add(clone) );
+      });
+    
+    
+    
     }.pBind(this));
   },
   

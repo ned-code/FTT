@@ -22,7 +22,7 @@ WebDoc.handlers = {
   _makeLinkHandler: function( obj ){
     var regex = this.regex;
     
-    // Keep obj and regex in scope of new handler
+    // Curry linkHandler using these params
     return function(e){
       var link = jQuery(this),
           href = link.attr('href'),
@@ -91,7 +91,7 @@ WebDoc.handlers = {
       jQT.goTo('#images', 'slide');
       // Then click the tab
       // There must be a better way than this
-      jQuery('#images').find('a.my_images').click();
+      //jQuery('#images').find('a.my_images').click();
     }
   },
   // Publicly accessible actions (to be bound to document)

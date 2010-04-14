@@ -30,6 +30,9 @@ stylesheets:
     - public/stylesheets/style.webdoc.typography.css
     - public/stylesheets/colorpicker.css
     - public/stylesheets/toolbar.css
+    
+    # code highlighting
+    - public/stylesheets/style.codemirror.css
   
 #  font_collection:
 #    - public/fonts/Aaargh-fontfacekit/stylesheet
@@ -89,7 +92,18 @@ javascripts:
   page_editor:
     - public/javascripts/sylvester.js
     - public/javascripts/strophe.js
+    
+    # code highlighting
     - public/javascripts/codemirror/codemirror.js
+    - public/javascripts/codemirror/highlight.js
+    - public/javascripts/codemirror/stringstream.js
+    - public/javascripts/codemirror/tokenize.js
+    - public/javascripts/codemirror/tokenizejavascript.js
+    - public/javascripts/codemirror/parsecss.js
+    - public/javascripts/codemirror/parsexml.js
+    - public/javascripts/codemirror/parsejavascript.js
+    - public/javascripts/codemirror/parsehtmlmixed.js
+    
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/model/*.js
     - app/javascripts/webdoc/sdk/*.js
