@@ -13,8 +13,21 @@ WebDoc.TextPaletteController = jQuery.klass({
     '<div id="toolbar_panel" class="ui-widget">'+
         '<div id="colorpickerHolder1" style="position:absolute;z-index: 150000;top:50px;"></div>'+
         '<div id="colorpickerHolder2" style="position:absolute;z-index: 150000;top:50px;"></div>'+
+        // Stephen
+        //'<ul class="webdoc tag-list">'+
+        //    '<li><a href="#"><span class="number">h1</span><h1>Document Title</h1></a></li>'+
+        //    '<li><a href="#"><span class="number">h2</span><h2>Page Title</h2></a></li>'+
+        //    '<li><a href="#"><span class="number">h3</span><h3>Section Title</h3></a></li>'+
+        //    '<li><a href="#"><span class="number">h4</span><h4>Heading</h4></a></li>'+
+        //    '<li><a href="#"><span class="number">h5</span><h5>Sub-heading</h5></a></li>'+
+        //    '<li><a href="#"><span class="number">h6</span><h6>Sub-sub-heading</h6></a></li>'+
+        //    '<li><a href="#"><span class="number">p</span><p>Paragraph</p></a></li>'+
+        //    '<li><a href="#"><span class="number">blockquote</span><blockquote>Quotation</blockquote></a></li>'+
+        //    '<li><a href="#"><span class="number">address</span><address>Address</address></a></li>'+
+        //    '<li><a href="#">None</a></li>'+
+        //'</ul>'+
         '<div id="toolbar_selectbox_container">'+
-            '<select style="width:125px" id="toolbar_panel_button_format"></select>'+      
+            '<select style="width:125px" id="toolbar_panel_button_format"></select>'+
             '<select style="width:80px" id="toolbar_panel_button_fontName"></select>'+
             '<select style="width:30px" id="toolbar_panel_button_fontSize"></select>'+ 
         '</div>'+
@@ -50,7 +63,7 @@ WebDoc.TextPaletteController = jQuery.klass({
             '<a href="javascript:void(0);"  title="Insert Ordered List" id="toolbar_panel_button_insertOrderedList"   onclick="WebDoc.application.textTool.delegate.editorExec(\'insertOrderedList\');">  <div class="icon_insertOrderedList"></div></a>'+
             '<a href="javascript:void(0);"  title="Insert Unordered List" id="toolbar_panel_button_insertUnorderedList"   onclick="WebDoc.application.textTool.delegate.editorExec(\'insertUnorderedList\');">  <div class="icon_insertUnorderedList"></div></a>'+      
             '<a href="javascript:void(0);"  title="Indent" id="toolbar_panel_button_indent"         onclick="WebDoc.application.textTool.delegate.editorExec(\'indent\');">       <div class="icon_indent"></div></a>'+
-            '<a href="javascript:void(0);"  title="Unindent" id="toolbar_panel_button_outdent"        onclick="WebDoc.application.textTool.delegate.editorExec(\'outdent\');">        <div class="icon_outdent"></div></a>'+      
+            '<a href="javascript:void(0);"  title="Unindent" id= "toolbar_panel_button_outdent"        onclick="WebDoc.application.textTool.delegate.editorExec(\'outdent\');">        <div class="icon_outdent"></div></a>'+      
             '<a href="javascript:void(0);"  title="Align Left" id="toolbar_panel_button_justifyLeft"      onclick="WebDoc.application.textTool.delegate.editorExec(\'justifyLeft\');">      <div class="icon_justifyLeft"></div></a>'+
             '<a href="javascript:void(0);"  title="Align Center" id="toolbar_panel_button_justifyCenter"      onclick="WebDoc.application.textTool.delegate.editorExec(\'justifyCenter\');">    <div class="icon_justifyCenter"></div></a>'+
             '<a href="javascript:void(0);"  title="Align Right" id="toolbar_panel_button_justifyRight"      onclick="WebDoc.application.textTool.delegate.editorExec(\'justifyRight\');">     <div class="icon_justifyRight"></div></a>'+
@@ -67,7 +80,7 @@ WebDoc.TextPaletteController = jQuery.klass({
     '</div>';
     containerObj.html(toolbarContent);
     
-    jQuery('#toolbar_panel a').addClass('ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only');
+    jQuery('#toolbar_panel a:not(.tag-list a)').addClass('ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only');
     jQuery('#toolbar_panel_button_foreColor').addClass('ui-corner-left').removeClass('ui-corner-all').css('margin-right','-1px');
     jQuery('#toolbar_panel_button_foreColor_arrow').addClass('ui-corner-right').removeClass('ui-corner-all');
     jQuery('#toolbar_panel_button_hiliteColor').addClass('ui-corner-left').removeClass('ui-corner-all').css('margin-right','-1px');
@@ -135,7 +148,7 @@ WebDoc.TextPaletteController = jQuery.klass({
             self.dropdown = jQuery('#'+id);
             jQuery('#'+id+' li a').click(function(){
                 self.dropdown.remove();
-                //input.val(this.getAttribute('title'));
+                input.val(this.getAttribute('title'));
                 self.options.onChangeHandler(this.getAttribute('title'));
              }); 
              jQuery('#'+id).mouseleave(function(){
@@ -345,6 +358,16 @@ WebDoc.TextPaletteController = jQuery.klass({
     jQuery("#toolbar_panel_button_fontSize").webdocPaletteControllerCombobox({'values':parameters.fontSize,'onChangeHandler':function(val){WebDoc.application.textTool.delegate.editorExec('fontSize',val);},'isFontDropdown':false,'isEditable':true});
     jQuery("#toolbar_panel_button_fontName").webdocPaletteControllerCombobox({'values':parameters.fontName,'onChangeHandler':function(val){WebDoc.application.textTool.delegate.editorExec('fontName',val);},'isFontDropdown':true,'isEditable':false});
     jQuery("#toolbar_panel_button_format").webdocPaletteControllerCombobox({'values':parameters.format,'onChangeHandler':function(val){WebDoc.application.textTool.delegate.editorExec('format',val);},'isFontDropdown':false,'isEditable':false});
+    
+    // Stephen
+    //jQuery(".tag-list").delegate('a', 'click', function(e){
+    //    var node = jQuery(this).children().not('span'),
+    //        tag = node && node[0].tagName.toLowerCase() || 'u';
+    //    
+    //    WebDoc.application.textTool.delegate.editorExec('format', tag);
+    //    e.preventDefault();
+    //});
+    
       this.setComboboxValue = function(id,val,parameters){
             for (i = 0; i < parameters[id].length; i++) {
                 if (parameters[id][i][1].toLowerCase().split(',')[0].split(' ')[0] === val) {
@@ -362,7 +385,8 @@ WebDoc.TextPaletteController = jQuery.klass({
                 }
             } else if (toolbarHash[stp] === false) {
 				  jQuery('#toolbar_panel_button_' + stp).removeClass('active_button');
-    			} else if (document.getElementById('toolbar_panel_button_' + stp).tagName.toLowerCase() == 'select') {
+    			} else if (document.getElementById('toolbar_panel_button_' + stp)
+    			   && document.getElementById('toolbar_panel_button_' + stp).tagName.toLowerCase() == 'select') {
             if(stp == 'fontSize' ){
               jQuery("#toolbar_panel_button_fontSize").webdocPaletteControllerCombobox("setCurrent",toolbarHash[stp].split('pt')[0]+' pt'); 
             } else {

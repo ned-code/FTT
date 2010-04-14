@@ -26,7 +26,7 @@ stylesheets:
     - public/stylesheets/style.editor.css
     - public/stylesheets/style.page_display.css    
     - public/stylesheets/style.editor.colors.css
-    - public/stylesheets/style.editor.typography.css
+    - public/stylesheets/style.webdoc.typography.css
     - public/stylesheets/colorpicker.css
     - public/stylesheets/toolbar.css
   
@@ -53,10 +53,8 @@ stylesheets:
 #    - public/fonts/Underwood-Champion-fontfacekit/stylesheet
     
   page_viewer:
-    - public/stylesheets/lib/panel.css    
-    - public/stylesheets/style.page_display.css    
-    - public/stylesheets/style.viewer.css    
-    - public/stylesheets/style.editor.typography.css    
+    - public/stylesheets/style.webdoc.css
+    - public/stylesheets/style.webdoc.typography.css
       
 javascripts:
   common:

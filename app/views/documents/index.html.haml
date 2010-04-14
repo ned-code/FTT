@@ -15,14 +15,12 @@
           -#%li>
           -#  %a#wb-document-filter-shared-with-me.state-filter-subtab{ :href => "#filter-shared" }= t('.shared_with_me')
       
-        %a#wb-document-filter-date.button.current.state-filter-tab{ :style => "float: left;", :href => "#filter-by-date" }= t('.all_items_by_date')
-      %li>
-        %a#wb-document-filter-public.button.state-filter-tab{ :href => "#filter-public" }= t('.public')
+        -#%a#wb-document-filter-date.button.current.state-filter-tab{ :style => "float: left;", :href => "#filter-by-date" }= t('.all_items_by_date')
+      -#%li>
+        -#%a#wb-document-filter-public.button.state-filter-tab{ :href => "#filter-public" }= t('.public')
 
 %div.content
   %div.wrap
-    -#%div.column.one.double.of-three>
-    
     %div#wb-document-list-container
       %div.loading-icon
 
@@ -108,10 +106,10 @@
     %fieldset
       %div.shunt
         %input#unshare_webdoc_radio{ :type => "radio", :name => "share", :value => "off" }
-        %label{ :for => "unshare_webdoc_radio" } don't share (co-editors can still see this document)
+        %label{ :for => "unshare_webdoc_radio" } don't share (only co-editors will see this document)
       %div.shunt
         %input#share_webdoc_radio{ :type => "radio", :name => "share", :value => "on" }
-        %label{ :for => "share_webdoc_radio" } share
+        %label{ :for => "share_webdoc_radio" } share (make it public)
     
     %fieldset.state-unshared-hide
       %label{ :for => "shared_webdoc_url" }= t('.document_forms.share_document_dialog.shared_address_label')
