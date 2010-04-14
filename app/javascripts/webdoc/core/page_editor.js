@@ -26,6 +26,7 @@
 //= require <webdoc/tools/hand_tool>
 //= require <webdoc/tools/text_tool>
 //= require <webdoc/tools/html_tool>
+//= require <webdoc/tools/iframe_tool>
 
 //= require <webdoc/utils/field_validator>
 
@@ -76,7 +77,8 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
     WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
     WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
-    
+    WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
+
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
     

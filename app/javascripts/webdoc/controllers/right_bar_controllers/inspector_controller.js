@@ -5,6 +5,7 @@
 //= require <webdoc/model/video>
 //= require <webdoc/controllers/inspectors/properties_inspector_controller>
 //= require <webdoc/controllers/inspectors/inner_html_controller>
+//= require <webdoc/controllers/inspectors/inner_iframe_controller>
 //= require <webdoc/controllers/inspectors/image_palette_controller>
 //= require <webdoc/controllers/inspectors/text_palette_controller>
 //= require <webdoc/sdk/widget_api>
@@ -17,6 +18,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     var emptyPalette = $("#empty-inspector").hide();
     var penPelette = $("#draw-inspector").hide();
     var imagePelette = $("#image-inspector").hide();
+    var iframePelette = $("#iframe-inspector").hide();
     
     // Get DOM node
     this.domNode = $("#item_inspector");
@@ -27,7 +29,8 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     this.imageInspector = new WebDoc.ImagePaletteController( "#image-inspector" );
     this.textInspector = new WebDoc.TextPaletteController( "#text-inspector" );
     this.htmlInspector = new WebDoc.InnerHtmlController( "#html-inspector" );
-    
+    this.iframeInspector = new WebDoc.IframeController( "#iframe-inspector" );
+
     var widgetPalette = $("#widget-inspector").hide();
     var widgetPaletteContent = widgetPalette.find("iframe");
     widgetPaletteContent.bind("load", function() {
@@ -62,7 +65,8 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
       penPelette,
       widgetPalette,
       this.imageInspector.domNode,
-      this.htmlInspector.domNode
+      this.htmlInspector.domNode,
+      this.iframeInspector.domNode
     ];
     
     this._properties = new WebDoc.PropertiesInspectorController( '#properties' );
@@ -169,6 +173,9 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
         break;
       case 5:
         this.htmlInspector.refresh();
+        break;
+      case 6:
+        this.iframeInspector.refresh();
         break;
     }
   },
