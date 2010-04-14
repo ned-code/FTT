@@ -1,7 +1,7 @@
 <!-- views/followships/_card -->
 
 <div class="card <% if local_assigns.has_key? :subscribed %>card-with-button<% end %>" data-webdoc-user-id="<%= user.id %>" <% if user.avatar %>style="background-image: url('<%= user.avatar_thumb_url %>');"<% end %>>
-  <% if user.mutual_connection %>
+  <% if user.mutual_connection(current_user) %>
     <div class="wd-user-item-mutual" ></div>
   <% end%>
   <h4 class="card-name card-name-avoid-button"><%= "#{user.first_name} #{user.last_name}" %></h4>

@@ -168,7 +168,7 @@ class Document < ActiveRecord::Base
   end
   
   # No more used in current GUI
-  def create_accesses(accesses = {})
+  def create_accesses(current_user, accesses = {})
     accesses_parsed = JSON.parse(accesses);
     readers = accesses_parsed['readers']
     editors = accesses_parsed['editors']
@@ -180,7 +180,7 @@ class Document < ActiveRecord::Base
       if user 
         if !user.has_role?("reader", self)
           user.has_only_reader_role!(self)
-          Notifier.deliver_role_notification("reader", user, self, readers_message)
+          Notifier.deliver_role_notification(current_user, "reader", user, self, readers_message)
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -191,7 +191,7 @@ class Document < ActiveRecord::Base
       if user
         if !user.has_role?("editor", self)
           user.has_only_editor_role!(self)
-          Notifier.deliver_role_notification("editor", user, self, editors_message)
+          Notifier.deliver_role_notification(current_user, "editor", user, self, editors_message)
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -199,7 +199,7 @@ class Document < ActiveRecord::Base
     end
   end
   
-  def create_role_for_users(accesses = {})
+  def create_role_for_users(current_user, accesses = {})
     accesses_parsed = JSON.parse(accesses);
     role = accesses_parsed['role']
     recipients = accesses_parsed['recipients']
@@ -211,7 +211,7 @@ class Document < ActiveRecord::Base
         if !user.has_role?(role, self)
           #user.has_only_reader_role!(self)
           user.has_role!(role, self)
-          Notifier.deliver_role_notification(role, user, self, message)
+          Notifier.deliver_role_notification(current_user, role, user, self, message)
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -220,7 +220,7 @@ class Document < ActiveRecord::Base
   end
   
   # No more used in current GUI
-  def update_accesses(accesses = {})
+  def update_accesses(current_user, accesses = {})
     accesses_parsed = JSON.parse(accesses);
     readers = accesses_parsed['readers']
     editors = accesses_parsed['editors']
@@ -231,28 +231,28 @@ class Document < ActiveRecord::Base
         if editors.include?(user.id)
           if !user.has_role?("editor", self)
             user.has_only_editor_role!(self)
-            Notifier.deliver_role_notification("editor", user, self, nil)
+            Notifier.deliver_role_notification(current_user, "editor", user, self, nil)
           end
         elsif readers.include?(user.id)
           if !user.has_role?("reader", self)
             user.has_only_reader_role!(self)
-            Notifier.deliver_role_notification("reader", user, self, nil)
+            Notifier.deliver_role_notification(current_user, "reader", user, self, nil)
           end
         else
           user.has_no_roles_for!(self)
-          Notifier.deliver_no_role_notification(user, self)
+          Notifier.deliver_no_role_notification(current_user, user, self)
         end
       end
     end
   end 
   
-  def remove_role(params)
+  def remove_role(current_user, params)
     params_parsed = JSON.parse(params)
     user = User.find(params_parsed['user_id'])
     role = params_parsed['role']
     if user
       user.has_no_role!(role, self)
-      Notifier.deliver_removed_role_notification(role, user, self)
+      Notifier.deliver_removed_role_notification(current_user, role, user, self)
     end
   end
   

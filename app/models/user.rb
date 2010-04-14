@@ -63,13 +63,9 @@ class User < ActiveRecord::Base
   def documents_count
     documents.count
   end
-  
-  def following_info
-    current_user ? current_user.following?(self) : false
-  end
-  
-  def mutual_connection
-    self.mutual_follower?(current_user)
+
+  def mutual_connection(user)
+    self.mutual_follower?(user)
   end
   
   def has_only_editor_role!(document, message = nil)
@@ -115,8 +111,17 @@ class User < ActiveRecord::Base
   end
   
   # Need to use this method instead of the original to_json cause user references document and vice versa
-  def to_social_panel_json
-    to_json(:only => [:id, :username, :bio], :methods => [:avatar_thumb_url, :documents_count, :following_info])
+  def to_social_panel_json(current_user)
+    { :user =>
+            {
+                    :id => self.id,
+                    :username => self.username,
+                    :bio => self.bio,
+                    :avatar_thumb_url => self.avatar_thumb_url,
+                    :documents_count => self.documents_count,
+                    :following_info => self.follower?(current_user)
+            }
+    }.to_json
   end
   
 protected
