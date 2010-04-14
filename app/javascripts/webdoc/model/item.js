@@ -193,8 +193,8 @@ WebDoc.Item = $.klass(MTools.Record,
   
   fireDomNodeChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
-      if (this.listeners[i].domNodeChangedChanged) {
-        this.listeners[i].domNodeChangedChanged();
+      if (this.listeners[i].domNodeChanged) {
+        this.listeners[i].domNodeChanged();
       }
     }    
   },
