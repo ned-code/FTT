@@ -13,7 +13,7 @@
   -#%div.upper.border
   -#%div.lower.border
 
-  #page_browser_left.pages-browser.inspector
+  #page_browser_left.pages-inspector.inspector
     %div.head
       %div
         %div.inspector-title Pages
@@ -22,22 +22,21 @@
             %a{ :class => "state-pages-thumbs current", :href => "#hide-thumbs", :title => "Toggle thumbs" }
           %li>
             %a{ :class => "state-pages-thumbs", :href => "#show-thumbs", :title => "Toggle thumbs" }
-    
+        %ul.pages-tools.tools.thumbs.index.icons-only
+          %li>
+            %a{ :href => "#add-page", :title => t('.pages_browser.add_page') }
+              = t('.pages_browser.add_page')
+          %li>
+            %a{ :href => "#add-web-page", :title => t('.pages_browser.add_web_page') }
+              = t('.pages_browser.add_web_page')
+          %li>
+            %a{ :href => "#copy-page", :title => t('.pages_browser.copy_page') }
+              = t('.pages_browser.copy_page')
+          %li>
+            %a{ :href => "#remove-page", :title => "Copy page" }
+              Remove
     #page_browser_container.content
       -#%ul.page_browser_numbered_list.vertical.numbers.index
       %ul.page_browser_items.vertical.pages.index
     
     %div.foot
-      %ul.pages-tools.tools.thumbs.index.icons-only
-        %li>
-          %a{ :href => "#add-page", :title => t('.pages_browser.add_page') }
-            = t('.pages_browser.add_page')
-        %li>
-          %a{ :href => "#add-web-page", :title => t('.pages_browser.add_web_page') }
-            = t('.pages_browser.add_web_page')
-        %li>
-          %a{ :href => "#copy-page", :title => t('.pages_browser.copy_page') }
-            = t('.pages_browser.copy_page')
-        %li>
-          %a{ :href => "#remove-page", :title => "Copy page" }
-            Remove
