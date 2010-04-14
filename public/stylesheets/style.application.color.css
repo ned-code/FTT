@@ -174,10 +174,9 @@ header a {
     background-position: 100% 100%;
 }
 
-.loading-icon {
+.content .loading-icon {
     background-image: url('/images/loading-icon-16-greyblue.gif');
 }
-
 
 .action-zone a {
     color: hsl(208, 48%, 80%);
