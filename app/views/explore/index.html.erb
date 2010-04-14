@@ -10,7 +10,7 @@
       <select id="wd-category-filter">
         <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t("words.all")%></option>
         <% Category.all.each do |category|%>
-          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= category.name %></option>  
+          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= "#{category.name} (#{category.number_of_public_documents})" %></option>  
         <% end %>        
       </select>
     </p>
@@ -33,7 +33,13 @@
           
           <div class="webdoc-viewer-container" data-webdoc-document-id="<%= document.uuid() %>" id="<%= document.uuid() %>"></div>
           
-          <p class="webdoc-viewer-details"><%= t("phrases.Created_by")%> <%=h document.creator.first_name %> <%= relative_date document.created_at %><% if params[:category_filter] == "all" %> in <%= link_to h(document.category.name), explore_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %><% end %></p>
+          <p class="webdoc-viewer-details">
+            <%= t("phrases.Created_by")%> <%=h document.creator.first_name %>
+            <%= relative_date document.created_at %>
+            <% if (params[:category_filter] == "all" &&  document.category) %>
+                in <%= link_to h(document.category.name), explore_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %>
+            <% end %>
+          </p>
         </li>
       <% end %>
     </ul>
