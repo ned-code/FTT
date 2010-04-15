@@ -51,9 +51,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
     '}');
     
-    // Set up default panel behaviour (show screen, show footer etc.)
-    jQuery(".panel").panel();
-    
     MTools.ServerManager.xmppClientId = new MTools.UUID().id;
     
     WebDoc.application.pageEditor = this;
@@ -79,6 +76,9 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
+    
+    // Create and bind global event handlers
+    WebDoc.handlers.initialise();
     
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
@@ -123,6 +123,28 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
        }
      });
    },
+
+  _createLinkHandler: function( obj ){
+    // Keep obj in scope of new handler
+    return function(e){
+      var link = jQuery(this),
+          href = link.attr('href'),
+          match = regex.hashRef.exec(href);
+      
+      ddd( '[page_editor.linkHandler] Event handler ref: "' + match + '"' );
+      
+      // If the href contains a hashRef that matches a handler
+      if ( match && obj[match[1]] ) {
+          // Call it with current scope
+          try {
+            obj[match[1]].call(this, e);
+          }
+          finally {
+            e.preventDefault();
+          }
+      }
+    };
+  },
 
   getCreator: function(callBack) {
     if (this.creator) {

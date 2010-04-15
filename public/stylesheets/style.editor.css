@@ -44,7 +44,7 @@ body {
 
 #webdoc         { z-index: 1; }
 .panel          { z-index: 2; }
-.toolbar-panel  { z-index: 3; }
+.toolbar-panel  { z-index: 2; }
 .ui-pop         { z-index: 4; } 
 
 #webdoc .center     { z-index: 2; }
@@ -604,6 +604,14 @@ body {
   overflow:hidden; 
   padding:10px;
   padding-left:20px;
+}
+
+.pages-inspector {
+    top: 65px;
+    bottom: 0;
+}
+.inspector .tools {
+    margin-bottom: 1px;
 }
 
 /* ui elements */

@@ -180,7 +180,8 @@
   border-bottom: 1px solid #bbb;
   padding: 10px;
   height: 17px;
-  background: #ccc;
+  background-color: hsla(208, 12%, 30%, 0.8);
+  color: white;
   position: relative;
 }
 .toolbar > h1 {
@@ -196,7 +197,6 @@
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #333;
 }
 
 .button, .back, /*.cancel,*/ .add {

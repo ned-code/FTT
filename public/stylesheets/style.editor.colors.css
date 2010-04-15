@@ -47,7 +47,7 @@ body                          { background-color: hsl(208, 8%, 60%); }
 .inspector .foot>ul,
 .inspector .foot>form,
 .inspector .foot>div          { background-color: hsla(208, 12%, 30%, 0.8); color: white; }
-.inspector .foot>ul           { background-image: url('/images/bg.png');
+.inspector .tools             { background-image: url('/images/bg.png');
                                 background-position: 0 0;
                                 background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(208, 4%, 97%) ), to( hsl(208, 8%, 79%) ));
                                 background-image: -moz-linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
@@ -255,13 +255,13 @@ a[href="#remove-page"]              { background-position: 0 -832px; }
 a[href="#remove-page"]:hover        { background-position: 0 -896px; }
 a[href="#remove-page"]:active       { background-position: 0 -960px; }
 
-.toolbar-panel a[href="#prev-page"]        { background-position: 0 -1024px; }
-.toolbar-panel a[href="#prev-page"]:hover  { background-position: 0 -1088px; }
-.toolbar-panel a[href="#prev-page"]:active { background-position: 0 -1152px; }
+.toolbar-panel a[href="#webdoc-prev-page"]        { background-position: 0 -1024px; }
+.toolbar-panel a[href="#webdoc-prev-page"]:hover  { background-position: 0 -1088px; }
+.toolbar-panel a[href="#webdoc-prev-page"]:active { background-position: 0 -1152px; }
 
-.toolbar-panel a[href="#next-page"]        { background-position: 0 -1216px; }
-.toolbar-panel a[href="#next-page"]:hover  { background-position: 0 -1280px; }
-.toolbar-panel a[href="#next-page"]:active { background-position: 0 -1344px; }
+.toolbar-panel a[href="#webdoc-next-page"]        { background-position: 0 -1216px; }
+.toolbar-panel a[href="#webdoc-next-page"]:hover  { background-position: 0 -1280px; }
+.toolbar-panel a[href="#webdoc-next-page"]:active { background-position: 0 -1344px; }
 
 a[href="#toggle-thumbs"].active        { background-position: 0 -1408px; }
 a[href="#toggle-thumbs"].active:hover  { background-position: 0 -1472px; }
@@ -384,13 +384,13 @@ a[href="#show-thumbs"]                { background-position: -4px -1860px; }
 a[href="#show-thumbs"]:hover          { background-position: -4px -1924px; }
 a[href="#show-thumbs"].current        { background-position: -4px -1988px; }
 
-a[href="#prev-page"]                  { background-position: 0 -2051px; }
-a[href="#prev-page"]:hover            { background-position: 0 -2115px; }
-a[href="#prev-page"]:active           { background-position: 0 -2179px; }
+a[href="#webdoc-prev-page"]           { background-position: 0 -2051px; }
+a[href="#webdoc-prev-page"]:hover     { background-position: 0 -2115px; }
+a[href="#webdoc-prev-page"]:active    { background-position: 0 -2179px; }
 
-a[href="#next-page"]                  { background-position: 0 -2237px; }
-a[href="#next-page"]:hover            { background-position: 0 -2301px; }
-a[href="#next-page"]:active           { background-position: 0 -2365px; }
+a[href="#webdoc-next-page"]           { background-position: 0 -2237px; }
+a[href="#webdoc-next-page"]:hover     { background-position: 0 -2301px; }
+a[href="#webdoc-next-page"]:active    { background-position: 0 -2365px; }
 
 a[href="#social-inspector"]           { background-position: 0 -2432px; }
 a[href="#social-inspector"]:hover     { background-position: 0 -2496px; }
