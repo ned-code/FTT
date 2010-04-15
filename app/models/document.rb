@@ -272,6 +272,12 @@ private
     @unvalid_access_emails ||= []
     @unvalid_access_emails << email
   end
+
+  def duplicate
+    new_document = self.clone
+
+    new_document
+  end
   
 end
 

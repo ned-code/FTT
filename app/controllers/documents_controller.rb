@@ -54,6 +54,14 @@ class DocumentsController < ApplicationController
     
     render :json => @document
   end
+
+  def duplicate
+    @new_document = @document.duplicate
+
+    @new_document.save!
+
+    redirect_to @new_document
+  end
   
   # PUT /documents/:id
   def update
