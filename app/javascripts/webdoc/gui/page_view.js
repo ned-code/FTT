@@ -133,6 +133,9 @@ WebDoc.PageView = $.klass({
       case WebDoc.ITEM_TYPE_WIDGET:
         itemView = new WebDoc.WidgetView(item, this, afterItem);
         break;
+      case WebDoc.ITEM_TYPE_IFRAME:
+        itemView = new WebDoc.IframeView(item, this, afterItem);
+        break;
       default:
         itemView = new WebDoc.ItemView(item, this, afterItem);
         break;

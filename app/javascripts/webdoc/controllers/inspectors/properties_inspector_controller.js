@@ -13,6 +13,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     jQuery('#item_inspector').delegate("#property-height", 'blur', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-scroll", 'change', this.updateSroll.pBind(this));
     jQuery('#item_inspector').delegate("#property-opacity", 'blur', this.updateProperties.pBind(this));    
+    jQuery('#item_inspector').delegate("a[href='#property-fit-to-screen']", 'click', this.updatePropertiesWithFitToScreen.pBind(this));
     this.topNode = jQuery("#property-top");
     this.rightNode = jQuery("#property-right");
     this.bottomNode = jQuery("#property-bottom");
@@ -107,15 +108,31 @@ WebDoc.PropertiesInspectorController = $.klass({
 				break;
 		}
   },
-	restoreOpacity: function(item, opacity){
-		ddd("restore opacity "+opacity);
-		var previousOpacity=item.data.data.css.opacity;
-		item.setOpacity(opacity);
-		WebDoc.application.undoManager.registerUndo(function(){
-			this.restoreOpacity(item, previousOpacity);
-		}.pBind(this));
-		item.save();
-	}
+
+  restoreOpacity: function(item, opacity){
+      ddd("restore opacity "+opacity);
+      var previousOpacity=item.data.data.css.opacity;
+      item.setOpacity(opacity);
+      WebDoc.application.undoManager.registerUndo(function(){
+          this.restoreOpacity(item, previousOpacity);
+      }.pBind(this));
+      item.save();
+  },
+
+  updatePropertiesWithFitToScreen: function(event) {
+    var item = WebDoc.application.boardController.selection()[0].item;
+	var previousTop = item.data.data.css.top,
+            previousLeft = item.data.data.css.left,
+            previousWidth = item.data.data.css.width,
+            previousHeight = item.data.data.css.height;
+    item.moveToAndResizeTo("0px", "0px", "100%", "100%");
+    item.save(function(){
+      WebDoc.application.undoManager.registerUndo(function() {
+        WebDoc.ItemView.restorePositionAndSize(item, previousTop, previousLeft, previousWidth, previousHeight);
+	  }.pBind(this));
+    });
+    return false;
+  }
 });
 
 
