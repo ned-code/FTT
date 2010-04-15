@@ -195,7 +195,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     var externalPageUrl = null;
     do {
       externalPageUrl = prompt("Web page URL: ", "http://");
-    }while(externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl))
+    } while (externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl));
 
     if(externalPageUrl != null) {
       var newPage = new WebDoc.Page(null, this.currentDocument);
@@ -238,7 +238,12 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   
   closeDocument: function(e) {
     WebDoc.application.collaborationManager.disconnect();
-    window.location = "/";
+    if (WebDoc.closeUrl && WebDoc.closeUrl !== "javascript:history.back()") {
+      window.location = WebDoc.closeUrl;
+    }
+    else {
+      window.location = "/";
+    }
   },
   
   toggleDebugMode: function() {

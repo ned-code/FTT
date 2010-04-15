@@ -6,6 +6,8 @@
 
 WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
+  DEFAULT_WIDGET_HTML: "<div>Enter the HTML you want in the inspector</div>",
+
   initialize: function($super, item, pageView, afterItem) {
     $super(item, pageView, afterItem);
     this.itemDomNode.css({ width:"100%", height:"100%"}); 
@@ -36,7 +38,9 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       }.pBind(this));
       
     }
-  
+    else {
+      this._displayDefaultContentIfNeeded(widgetNode);
+    }
     return widgetNode;
   },
   
@@ -54,6 +58,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   innerHtmlChanged: function($super) {
     $super();
+    this._displayDefaultContentIfNeeded(this.itemDomNode);
     // resize if inner html is iframe
     var innerIframe = this.itemDomNode.find("iframe");
     if (innerIframe.get(0)) {
@@ -121,6 +126,12 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
        this.domNode.get(0).contentDocument.body.addEventListener("mousemove", WebDoc.application.boardController.mouseMove.pBind(WebDoc.application.boardController), true);
        this.domNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
        */
+    }
+  },
+
+  _displayDefaultContentIfNeeded: function(parent) {
+    if (this.item.data.data.tag !== "iframe"  && (!this.item.data.data.innerHTML || $.string().blank(this.item.data.data.innerHTML))) {
+      parent.html(this.DEFAULT_WIDGET_HTML);
     }
   }
 });

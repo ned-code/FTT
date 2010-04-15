@@ -8,13 +8,13 @@
  * 
  * 208 - base
  * 
- * 343 - 
- * 358 - 
+ * 343 - violet
+ * 358 - red
  * 13  - 
- * 28  - compliment
+ * 28  - compliment - rusty orange
  * 43  - 
- * 58  - 
- * 72  - 
+ * 58  - yellow
+ * 72  - lime
  */
 
 body {
@@ -174,11 +174,9 @@ header a {
     background-position: 100% 100%;
 }
 
-.loading-icon {
-    background-color: transparent;
+.content .loading-icon {
     background-image: url('/images/loading-icon-16-greyblue.gif');
 }
-
 
 .action-zone a {
     color: hsl(208, 48%, 80%);

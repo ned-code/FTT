@@ -10,7 +10,7 @@
       <select id="wd-category-filter">
         <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t("words.all")%></option>
         <% Category.all.each do |category|%>
-          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= category.name %></option>  
+          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= "#{category.name} (#{category.number_of_public_documents})" %></option>  
         <% end %>        
       </select>
     </p>
@@ -18,31 +18,7 @@
 </div>
 <div class="content">
   <div class="wrap">
-    <ul id="webdoc" class="webdoc-viewer-index index" >
-      <% @public_documents.each do |document| %>
-        <li class="column double of-four">
-          <ul class="index">
-            <li class="button-group">
-              <a href="#prev-page" class="button" data-webdoc-document-id="<%= document.uuid() %>" title="previous page">&lt;</a
-              ><a href="#next-page" class="button" data-webdoc-document-id="<%= document.uuid() %>" title="next page">&gt;</a>
-            </li>
-            <li>
-              <a class="webdoc-viewer-title" href="<%= document_path(document.uuid()) %>"><h4><%= h(document.title) %></h4></a>
-            </li>
-          </ul>
-          
-          <div class="webdoc-viewer-container" data-webdoc-document-id="<%= document.uuid() %>" id="<%= document.uuid() %>"></div>
-          
-          <p class="webdoc-viewer-details"><%= t("phrases.Created_by")%> <%=h document.creator.first_name %> <%= relative_date document.created_at %><% if params[:category_filter] == "all" %> in <%= link_to h(document.category.name), explore_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %><% end %></p>
-        </li>
-      <% end %>
-    </ul>
+    <%= render :partial => "viewer_list", :locals => { :documents => @public_documents } %>
     <%= raw( will_paginate(@public_documents, :container => false) ) %>
   </div>
 </div>
-
-<%= include_stylesheets :page_viewer, :media => 'all' %>      
-<% content_for :scripts do %>
-  <%= include_javascripts :page_editor %>
-  <%= include_javascripts :explore %>
-<% end %>

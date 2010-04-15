@@ -3,6 +3,7 @@ class HomeController < ApplicationController
   
   def show
     @user = User.new
+    @top_documents = Document.all_public_paginated_with_explore_params("recent", "all", nil, 4)
   end
   
 private
