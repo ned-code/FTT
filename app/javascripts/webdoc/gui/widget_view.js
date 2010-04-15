@@ -62,7 +62,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     // resize if inner html is iframe
     var innerIframe = this.itemDomNode.find("iframe");
     if (innerIframe.get(0)) {
-      this.resizeTo({
+      this._resizeTo({
         width: parseFloat(innerIframe.css("width").replace("px", "")),
         height: parseFloat(innerIframe.css("height").replace("px", ""))
       });
