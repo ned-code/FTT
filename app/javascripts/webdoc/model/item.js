@@ -180,7 +180,7 @@ WebDoc.Item = $.klass(MTools.Record,
   },
 
   setSrc: function(newSrc) {
-    
+
     this.data.data.src = newSrc;
     this.save();
     this.fireDomNodeChanged();
