@@ -20,10 +20,7 @@ WebDoc.IframeController = $.klass({
 
   updateSrc: function(event) {
     var item = WebDoc.application.boardController.selection()[0].item;
-    item.data.data.src =  $("#property-iframe-src")[0].value;       
-    item.save(function() {
-      item.fireDomNodeChanged();
-    });
+    item.setSrc( $("#property-iframe-src")[0].value );
   }
   
 });

@@ -178,6 +178,13 @@ WebDoc.Item = $.klass(MTools.Record,
   getInnerText: function() {
     return this.removeHtmlTags(this.data.data.innerHTML);
   },
+
+  setSrc: function(newSrc) {
+    
+    this.data.data.src = newSrc;
+    this.save();
+    this.fireDomNodeChanged();
+  },
   
   fireObjectChanged: function($super) {
     $super();
