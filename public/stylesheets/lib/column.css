@@ -32,7 +32,7 @@
  * margin = x/n
  * width  = (100 - (n-1) * margin)/n
  * 
- * where x is a base column margin factor n is the number of columns
+ * where x is a base column margin factor and n is the number of columns
  */
 
 /* x = 16 */
@@ -45,11 +45,12 @@
 .of-seven { width: 12.3265%;  margin-right: 2.2857%; }
 .of-eight { width: 10.75%;    margin-right: 2%; }*/
 
-.double.of-three    { width: 64%; } /* Should be 65.6667% Rounding errors in both FF and Webkit force this to be a less than ideal value */
+/*
+.double.of-three    { width: 64%; } /* Should be 65.6667% Rounding errors in both FF and Webkit force this to be a less than ideal value
 .double.of-four     { width: 48%; }
 .triple.of-four     { width: 74%; }
 .double.of-five     { width: 38.2%; }
-.triple.of-five     { width: 58.6%; } /* Should be 58.8% Rounding errors in FF make it less */
+.triple.of-five     { width: 58.6%; } /* Should be 58.8% Rounding errors in FF make it less
 .quadruple.of-five  { width: 79.4%; }
 .double.of-six      { width: 32%; }
 .triple.of-six      { width: 49%; }
@@ -59,7 +60,7 @@
 .triple.of-eight    { width: 35.5%; }
 .quadruple.of-eight { width: 48%; }
 .quintuple.of-eight { width: 60.5%; }
-.sextuple.of-eight  { width: 73%; }
+.sextuple.of-eight  { width: 73%; }*/
 
 /* x = 12 */
 
@@ -93,7 +94,8 @@
 .sextuple.of-eight  { width: 74.625%; }
 .septuple.of-eight  { width: 87.3125%; }
 
-.last,
+column:last-child,
+column.last,
 .two.of-two,
 .three.of-three,
 .four.of-four,

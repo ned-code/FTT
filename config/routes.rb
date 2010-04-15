@@ -46,5 +46,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :widgets,   :except => [:new, :edit, :update, :destroy]
   map.resources :categories, :only => :index
   map.resources :roles_documents, :only => :index, :as => "roles/documents"
-  
+
+  #opensocial
+  map.connect 'opensocial/person/:id', :controller => 'opensocial', :action => 'person', :conditions => { :method => :get }
+  map.connect 'opensocial/friends/:id', :controller => 'opensocial', :action => 'friends', :conditions => { :method => :get }  
 end

@@ -40,7 +40,7 @@
           %label= t('.properties.background_image')
           %input#page_background_image_textbox{ :type => "text"}
           %p= t('.properties.background_image_comment')
-        %div.background-related
+        %div.background-related.shunt
           %label{ :for => 'page_background_image_tileX_checkbox' }= t('.properties.background_image_position.horizontal')
           %input#page_background_image_tileX_checkbox{ :type => "checkbox", :name => "xTile", :value => "none" }
           %span.label= t('.properties.background_image_position.tile')
@@ -62,22 +62,14 @@
           %span.label= t('.properties.background_image_position.bottom')
         %div#background_image_preview.background-related
           %img#background_image
-          %p
+          %p            
             %a.page-remove-background-image{ :href => "#remove_background"}
               = t('.properties.remove_image')
+        #upload-container
+          %input#upload_images_button{ :type => "button", :value => "Choose images"}              
         %div.background-related
           %label{ :for => 'page_background_image_apply_all_button' }
-          %input#page_background_image_apply_all_button{ :type => "button", :value => t('.properties.buttons.apply_background_all_pages') }
-      
-    - form_for :image, Medias::Image.new, :url => images_path, :html => { :multipart => true, :id => "image_send_form", :class => "background-related" } do |f|
-      %fieldset.properties
-        %legend upload image
-        %div
-          %label= t('.properties.background_image')
-          = f.file_field :file
-        %div
-          = submit_tag t('.properties.buttons.upload')
-          
+          %input#page_background_image_apply_all_button{ :type => "button", :value => t('.properties.buttons.apply_background_all_pages') }                
     %div
       %a.page-navigation-link{ :href => "#prev-page"}
         = t('documents.show.toolbar_panel.previous_page')

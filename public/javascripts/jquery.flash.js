@@ -64,7 +64,7 @@
 		}
 		
 		setTimeout(function(){
-			if ( state === 1 ) {
+		  if ( state === 1 ) {
 				hide( options, arguments[2] || options.hideCallback );
 			}
 		}, options.delay);
@@ -77,7 +77,7 @@
 		flash = jQuery( options.selector );
 		
 		// If flash is open on load, delay for a while, check again, then hide it
-		if (flash.isVisible) {
+		if ( flash.hasClass('active') ) {
 			state = 1;
 			
 			setTimeout(function(){

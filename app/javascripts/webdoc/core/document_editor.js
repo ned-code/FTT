@@ -67,7 +67,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         $("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
         this.documentListContainerNode
         .addClass( 'loading' )
-        .delegate( ".wb-document-edit", 'click', this.editDocument )
         .delegate( ".wb-document-info", 'click', this.renameDocument )
         .delegate( ".wb-document-delete", 'click', this.deleteDocument )
         .delegate( ".wb-document-collaborate", 'click', this.changeDocumentAccess )
@@ -108,12 +107,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
     filterByPublic: function(e){
       $('body').addClass("state-public");
       this.loadDocumentsWithFilter(e);
-      e.preventDefault();
-    },
-    
-    editDocument: function(e) {
-      var documentToEdit = $(this).href().replace( /^#/, '' );
-      document.location = "/documents/" + documentToEdit + "#1";
       e.preventDefault();
     },
     
