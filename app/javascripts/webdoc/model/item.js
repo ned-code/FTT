@@ -180,10 +180,28 @@ WebDoc.Item = $.klass(MTools.Record,
   },
 
   setSrc: function(newSrc) {
-
     this.data.data.src = newSrc;
     this.save();
     this.fireDomNodeChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+
+  getSrc: function() {
+    var pattern_url = /[A-Za-z0-9\.-]{3,}\.[A-Za-z]+/;
+    var pattern_has_protocole = /^(ftp|http|https):\/\/?(\w*)/;
+
+    if (this.data.data.src.match(pattern_url)) {
+      if (this.data.data.src.match(pattern_has_protocole)) {
+        return this.data.data.src;
+      }
+      else {
+        return "http://" + this.data.data.src;
+      }
+
+    }
+    else {
+      return "";
+    }
   },
   
   fireObjectChanged: function($super) {

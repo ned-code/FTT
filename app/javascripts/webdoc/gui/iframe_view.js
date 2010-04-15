@@ -19,11 +19,11 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   updateOverlay: function() {
     ddd('update overlay');
     if (!WebDoc.application.pageEditor.disableHtml) {
-      if (this.item.data.data.src === "" || this.item.data.data.src === undefined) {
+      var src = this.item.getSrc();
+      if (src === "" || src === undefined) {
         var that = this;
         var input = $('<input/>', { type: 'text', title: 'Web page address', name: 'input-iframe-src', value: '' }).blur(function(){
           that.item.setSrc( $(this).val() );
-          WebDoc.application.inspectorController.refreshSubInspectors();
         });
 
         this.overlayDomNode.remove();

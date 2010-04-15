@@ -14,7 +14,7 @@ WebDoc.IframeController = $.klass({
     ddd("refresh iframe inspector");
     var selectedItem = WebDoc.application.boardController.selection()[0];
     if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IFRAME) {
-      $("#property-iframe-src")[0].value = selectedItem.item.data.data.src;
+      $("#property-iframe-src")[0].value = selectedItem.item.getSrc();
     }
   },
 

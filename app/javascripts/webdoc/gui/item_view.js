@@ -80,6 +80,8 @@ WebDoc.ItemView = $.klass({
           case "innerHtml":
             itemNode.html($.string().stripScripts(this.item.data.data[key]));
             break;
+          case "src":
+            itemNode.attr(key, this.item.getSrc());
           case "css":        
           case "preference":
           case "properties":
