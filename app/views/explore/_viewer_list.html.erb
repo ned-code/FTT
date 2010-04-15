@@ -14,8 +14,12 @@
       <div class="webdoc-viewer-container" data-webdoc-document-id="<%= document.uuid() %>" id="<%= document.uuid() %>"></div>
 
       <p class="webdoc-viewer-details">
-        <%= t("phrases.Created_by")%> <%=h document.creator.first_name %>
-        <%= relative_date document.created_at %>
+        <%= t("phrases.Created_by")%> <%= document.creator.first_name %>
+        <% if ((params[:main_filter] && params[:main_filter] == "viewed")) %>
+           viewed <%= document.views_count %> times
+        <% else %>
+          <%= relative_date document.created_at %>
+        <% end %>
         <% if ((!params[:category_filter] || params[:category_filter] == "all") &&  document.category) %>
             in <%= link_to h(document.category.name), explore_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %>
         <% end %>
