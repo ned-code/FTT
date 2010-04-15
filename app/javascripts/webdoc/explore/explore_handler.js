@@ -22,8 +22,9 @@ MTools.Application.beforeMain("explore", function() {
     e.preventDefault();
   })
   .delegate('.webdoc-viewer-container', 'click', function(e){
-    var id = $(this).attr('data-webdoc-document-id');
-    window.location.href = '/documents/'+id;
+    $("#"+$(this).attr('data-webdoc-document-id')).data('object').open();
+//    var id = $(this).attr('data-webdoc-document-id');
+//    window.location.href = '/documents/'+id;
   });
   
   jQuery('.webdoc-viewer-title h4').truncate();

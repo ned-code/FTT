@@ -7,7 +7,7 @@
 //= require "text_tool/text_tool_view"
 
 WebDoc.TEXTBOX_WRAP_CLASS = "textbox_wrap";
-WebDoc.NEW_TEXTBOX_CONTENT = "Empty content";
+WebDoc.NEW_TEXTBOX_CONTENT = '<div class="center" syle="width:100%, height:100%"><div class="center-cell"><div class="center-box" style="text-align:center;">Double-click to start writing</div><div></div><div></div>';
 
 
 WebDoc.TextTool = $.klass(WebDoc.Tool, {
