@@ -104,8 +104,9 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       }
       jQuery('#document_loading').remove();
       
+      
       // Highlight code blocks in the webdoc
-      // There's probably a better place for this
+      // Work in progress - there's almost certainly a better place for this
       jQuery('.code').each( function(i){
         var node = jQuery(this),
             clone = node.clone().empty(),
@@ -124,7 +125,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
         highlightText( node.html(), output ); //addLine);
         node.replaceWith( numbers.add(clone) );
       });
-    
     
     
     }.pBind(this));
