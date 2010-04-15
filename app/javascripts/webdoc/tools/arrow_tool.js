@@ -82,7 +82,7 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
       target.stop().animate({
         opacity: 0.8
       }, {
-        duration: 100
+        duration: 40
       });
     }
   },

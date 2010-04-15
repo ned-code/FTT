@@ -341,7 +341,7 @@ WebDoc.BoardController = jQuery.klass({
     if (this._editingItem) {
       this._editingItem.stopEditing();
       WebDoc.application.arrowTool.enableHilight();
-      this.screenNodes.animate({ opacity: 'hide' }, { duration: 200 });
+      this._hideScreens();
       this._editingItem = null;
     }    
   },

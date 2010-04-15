@@ -6,12 +6,13 @@
 
 WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
-  DEFAULT_WIDGET_HTML: "<div>Enter the HTML you want in the inspector</div>",
+  DEFAULT_WIDGET_HTML: '<div class="item-placeholder"><div class="item-icon"></div>Double-click to edit, and enter HTML in the inspector</div>',
 
   initialize: function($super, item, pageView, afterItem) {
     $super(item, pageView, afterItem);
-    this.itemDomNode.css({ width:"100%", height:"100%"}); 
-    this.api = new WebDoc.WidgetApi(item, false);  
+    this.itemDomNode.css({ width:"100%", height:"100%"}).addClass('item-widget'); 
+    this.api = new WebDoc.WidgetApi(item, false);
+    
   },
   
   createDomNode: function($super) {
@@ -36,7 +37,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
         ddd("widget loaded");
         this.initWidget();
       }.pBind(this));
-      
     }
     else {
       this._displayDefaultContentIfNeeded(widgetNode);

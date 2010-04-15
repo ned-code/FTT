@@ -7,7 +7,7 @@
 //= require "text_tool/text_tool_view"
 
 WebDoc.TEXTBOX_WRAP_CLASS = "textbox_wrap";
-WebDoc.NEW_TEXTBOX_CONTENT = '<div class="center" syle="width:100%, height:100%"><div class="center-cell"><div class="center-box" style="text-align:center;">Double-click to start writing</div><div></div><div></div>';
+WebDoc.NEW_TEXTBOX_CONTENT = '<div class="item-placeholder"><div class="item-icon"></div>Double-click to start writing</div>';
 
 
 WebDoc.TextTool = $.klass(WebDoc.Tool, {
@@ -37,7 +37,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_TEXT;
     newItem.data.data.tag = "div";
-    newItem.data.data['class'] = "textbox empty";
+    newItem.data.data['class'] = "item-text empty";
     newItem.data.data.innerHTML = "";
     newItem.data.data.css = this.textboxCss;
     //Create view
