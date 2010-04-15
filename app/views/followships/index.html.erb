@@ -12,7 +12,7 @@
       <ul id="contacts" class="vertical index">
         <% @user.following.each do |user|%>
         <li>
-          <%= render :partial => "card", :locals => { :user => user, :subscribed => user.following_info } %>
+          <%= render :partial => "card", :locals => { :user => user, :subscribed => user.follower?(current_user) } %>
         </li>
         <% end%>
       </ul>
@@ -24,10 +24,10 @@
       <ul id="followers" class="vertical index">
         <% @user.followers.each do |user|%>
         <li>
-          <% if user.following_info %>
+          <% if user.follower?(current_user) %>
           <%= render :partial => "card", :locals => { :user => user } %>
           <% else %>
-          <%= render :partial => "card", :locals => { :user => user, :subscribed => user.following_info } %>
+          <%= render :partial => "card", :locals => { :user => user, :subscribed => user.follower?(current_user) } %>
           <% end %>
         </li>
         <% end%>

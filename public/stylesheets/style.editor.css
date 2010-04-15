@@ -44,7 +44,7 @@ body {
 
 #webdoc         { z-index: 1; }
 .panel          { z-index: 2; }
-.toolbar-panel  { z-index: 3; }
+.toolbar-panel  { z-index: 2; }
 .ui-pop         { z-index: 4; } 
 
 #webdoc .center     { z-index: 2; }
@@ -209,8 +209,42 @@ body {
     right: -3px;
 }*/
 
-
-
+.webdoc.tag-list li {
+    padding: 0;
+    margin: 0;
+}
+#toolbar_panel .tag-list a {
+    display: block;
+    min-height: 2.7em;
+    margin: 0 0 1px 0;
+    position: relative;
+    text-decoration: none;
+    border-bottom: none;
+    line-height: 2.7em;
+    color: inherit;
+}
+#toolbar_panel .tag-list a:hover {
+    border: none;
+}
+.tag-list h1,
+.tag-list h2,
+.tag-list h3,
+.tag-list h4,
+.tag-list h5,
+.tag-list h6,
+.tag-list p,
+.tag-list blockquote,
+.tag-list address {
+    margin: 0;
+    padding: 0 0 0 32px;
+    height: 32px;
+    line-height: 32px;
+}
+.tag-list .number {
+  position: absolute;
+  left: 0.6667em;
+  top: 0.6667em;
+}
 #tb_1_utilities {
     float: right;
     padding-top: 9px;
@@ -460,28 +494,10 @@ body {
     overflow: visible;
 }
 #board.move-tool        { cursor: move; }
-#board.draw-tool        { cursor: /*url('/images/icons/cursor_pen.png'),*/ crosshair; }
+#board.draw-tool        { cursor: crosshair; }
 #board.select-tool      { cursor: default; }
 #board.insert-html-tool {}
 #board.insert-text-tool {}
-
-/*
-.board-style {
-  font-family:Helvetica, Arial, sans-serif;
-  font-size: 2.5em;
-}
-
-.board-style ol, .board-style ul {
-  padding-left:1.5em;
-  margin-bottom: 0.4em;
-}
-.board-style ol ol, .board-style ul ul {
-  margin-top: -0.1em;
-  font-size: 0.8em;
-}
-.board-style ol li, .board-style ul li {
-  margin-bottom: 0.2em;
-}*/
 
 
 /* == Item view = */
@@ -588,6 +604,14 @@ body {
   overflow:hidden; 
   padding:10px;
   padding-left:20px;
+}
+
+.pages-inspector {
+    top: 65px;
+    bottom: 0;
+}
+.inspector .tools {
+    margin-bottom: 1px;
 }
 
 /* ui elements */

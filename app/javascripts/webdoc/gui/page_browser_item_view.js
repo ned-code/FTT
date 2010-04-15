@@ -90,7 +90,7 @@ WebDoc.PageBrowserItemView = $.klass({
       
       pageItemEdit.bind( 'click', clickHandler.pBind(this) );
       pageItemTitle.bind( 'dblclick', clickHandler.pBind(this) );
-      
+
       page.addListener(this);
     }
     catch(e) {
@@ -184,11 +184,11 @@ WebDoc.PageBrowserItemView = $.klass({
     ddd("[PageBrowserController] Update title");
     // Find item related to this page
     var newTitle = this.getPageTitle(page).title;
-    
+
     if( newTitle ) {
         this._titleNode
-        .text( newTitle )
-        .removeClass( this.DEFAULT_CLASS );
+              .removeClass( this.DEFAULT_CLASS );
+        this.setAndTruncateTitle( newTitle );
     }
   },
   
@@ -225,13 +225,13 @@ WebDoc.PageBrowserItemView = $.klass({
   getPageTitle: function(page) {
     if(!page.data.title || page.data.title === "undefined") {
       if(page.data.data && page.data.data.externalPage) {
-        return { title: this.cropTitleToFit(page.data.data.externalPageUrl), defaultBehavior: true} ;
+        return { title: page.data.data.externalPageUrl, defaultBehavior: true} ;
       }
       else {
         for(var itemIndex in page.items) {
           if(page.items[itemIndex].type() == "text") {
             if(page.items[itemIndex].getInnerText() != "") {
-              return { title: this.cropTitleToFit(page.items[itemIndex].getInnerText()), defaultBehavior: true};
+              return { title: page.items[itemIndex].getInnerText(), defaultBehavior: true};
             }
             else {
               return { title: defaultTitle, defaultBehavior: true};
@@ -242,7 +242,7 @@ WebDoc.PageBrowserItemView = $.klass({
       }
     }
     else {
-      return  { title: this.cropTitleToFit(page.data.title), defaultBehavior: false };
+      return  { title: page.data.title, defaultBehavior: false };
     }
   },
 
@@ -251,7 +251,7 @@ WebDoc.PageBrowserItemView = $.klass({
         currentTitle = this._titleNode.text();
     
     if(title.title !== currentTitle) this._titleNode.text(title.title);
-    
+
     if(title.defaultBehavior) {
       this._titleNode.addClass(defaultClass);
     }
@@ -259,16 +259,15 @@ WebDoc.PageBrowserItemView = $.klass({
       this._titleNode.removeClass(defaultClass);
     }
   },
-  
-  cropTitleToFit: function(title) {
-    var titleMaxLength = 20;
-    if(title.length > titleMaxLength) {
-      return title.substr(0, titleMaxLength)+"...";
-    }
-    else {
-      return title;
-    }
+
+  setAndTruncateTitle: function(title) {
+    this._titleNode.truncate(title);
+  },
+
+  truncateTitleWithActualTitle: function() {
+    this.setAndTruncateTitle(this._titleNode);
   }
+  
 });
 
 })();

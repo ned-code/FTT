@@ -1,0 +1,21 @@
+#webdoc .item {
+  overflow:hidden;
+}
+
+#webdoc .item_wrap {
+  overflow:hidden;
+  position:absolute;
+}
+
+.webdoc .code {
+  padding: 0.2em 0.3333em;
+  background: hsla(208, 8%, 25%, 0.75);
+  -webkit-border-radius: 0.3333em;
+  -moz-border-radius:    0.3333em;
+  border-radius:         0.3333em;
+}
+
+.webdoc pre.code {
+  padding: 0.4165em;
+  overflow: auto;
+}

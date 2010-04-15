@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render :json => @user.to_social_panel_json }
+      format.json { render :json => @user.to_social_panel_json(current_user) }
     end
   end
   

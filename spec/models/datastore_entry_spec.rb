@@ -17,19 +17,17 @@ describe DatastoreEntry do
     end
     
     it "should find all item's entries with 'vote' key" do
-      entries = @item.datastore_entries.filter_with(:key => 'vote')
+      entries = @item.datastore_entries.filter_with(@user1, { :key => 'vote'})
       entries.should == [@datastore_entry1, @datastore_entry3]
     end
     
     it "should find all item's entries from current_user" do
-      Thread.current[:user] = @user1
-      entries = @item.datastore_entries.filter_with(:only_current_user => 'true')
+      entries = @item.datastore_entries.filter_with(@user1, { :only_current_user => 'true' })
       entries.should == [@datastore_entry1, @datastore_entry2]
     end
     
     it "should find all item's entries with 'text' key from current_user" do
-      Thread.current[:user] = @user1
-      entries = @item.datastore_entries.filter_with(:only_current_user => 'true', :key => 'vote')
+      entries = @item.datastore_entries.filter_with(@user1, { :only_current_user => 'true', :key => 'vote'})
       entries.should == [@datastore_entry1]
     end
     

@@ -9,13 +9,12 @@
 WebDoc.application = {};
 
 WebDoc.WebdocViewer = $.klass(MTools.Application,{
-  
-  TOOL_BAR_HEIGHT: 30,
-  
+    
   initialize: function($super, viewerNode) {
     $super();
     this._currentDocument = null;
     this._currentPage = null;
+    this._currentPageView = null;
     this._viewerNode = viewerNode;
     this._containerNode = null;   
     WebDoc.application.pageEditor = this;
@@ -50,13 +49,19 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
   
   loadPage: function(page) {
     if(!this._currentPage || this._currentPage.uuid() !== page.uuid()) {
+      // Clean previous page view
+      if (this._currentPageView) {
+        this._currentPageView.destroy();
+      }
       this._currentPage = page;  
-      var pageView = new WebDoc.PageView(page,this._containerNode);      
-      this._containerNode.empty().append(pageView.domNode);
+      this._currentPageView = new WebDoc.PageView(page,this._containerNode);
+      this._currentPageView.eventCatcherNode.show();
+      this._currentPageView.eventCatcherNode.css("cursor", "move");
+      this._containerNode.empty().append(this._currentPageView.domNode);
       var width = this._viewerNode.width();
-      var height = this._viewerNode.height() - this.TOOL_BAR_HEIGHT; 
+      var height = this._viewerNode.height();
       ddd("fit page view to ", width, height);   
-      pageView.fitInContainer(width, height);
+      this._currentPageView.fitInContainer(width, height);
     }
   },
   
@@ -82,7 +87,7 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
     this._containerNode = jQuery('<div/>').css({
       overflow: "hidden"  
     }).addClass("center-box");    
-    var pageLayout = jQuery("<div/>").addClass("layer").css( {paddingTop: this.TOOL_BAR_HEIGHT, overflow: "hidden" }).append(jQuery("<div/>").addClass("center").append(jQuery("<div/>").addClass("center-cell").append(this._containerNode)));
+    var pageLayout = jQuery("<div/>").addClass("layer").css( {overflow: "hidden" }).append(jQuery("<div/>").addClass("center").append(jQuery("<div/>").addClass("center-cell").append(this._containerNode)));
 
     this._viewerNode.append(pageLayout);
   }
