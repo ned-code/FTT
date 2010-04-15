@@ -430,9 +430,10 @@ ul#widget-list li {
 .webdoc-viewer-container {
     position:relative;
     width: 100%;
-    height: 280px; 
+    height: 300px; 
     overflow:hidden;
     margin-bottom: 0.8333em;
+    font-size: 133%;
 }
 .webdoc-viewer-container>div {
     padding-top: 0 !important;
