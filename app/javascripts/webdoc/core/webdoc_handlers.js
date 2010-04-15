@@ -22,7 +22,7 @@ WebDoc.handlers = {
   _makeLinkHandler: function( obj ){
     var regex = this.regex;
     
-    // Curry linkHandler using these params
+    // Curry linkHandler using this scope
     return function(e){
       var link = jQuery(this),
           href = link.attr('href'),

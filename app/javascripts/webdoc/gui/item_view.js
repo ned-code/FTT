@@ -61,6 +61,9 @@ WebDoc.ItemView = $.klass({
     delete itemCss.height;
     this.itemDomNode.css(itemCss);
 
+    if (this.item.data.data.innerHTML) {
+      this.innerHtmlChanged();
+    }
   },
   
   createDomNode: function() {
@@ -74,12 +77,8 @@ WebDoc.ItemView = $.klass({
       for (var key in this.item.data.data) {
         switch(key) {
           case "innerHTML":
-            itemNode.html($.string().stripScripts(this.item.data.data[key]));
-            break;
           // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
           case "innerHtml":
-            itemNode.html($.string().stripScripts(this.item.data.data[key]));
-            break;
           case "css":        
           case "preference":
           case "properties":
