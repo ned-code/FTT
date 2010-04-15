@@ -59,14 +59,36 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   innerHtmlChanged: function($super) {
     $super();
     this._displayDefaultContentIfNeeded(this.itemDomNode);
-    // resize if inner html is iframe
-    var innerIframe = this.itemDomNode.find("iframe");
-    if (innerIframe.get(0)) {
-      this.resizeTo({
-        width: parseFloat(innerIframe.css("width").replace("px", "")),
-        height: parseFloat(innerIframe.css("height").replace("px", ""))
-      });
-    }
+    
+    // Highlight code blocks in the html -
+    // nodes that have class "code"
+    this.itemDomNode.find('code, .code').each( function(i){
+      var node = jQuery(this),
+          clone = node.clone().empty(),
+          numbers = jQuery('<div/>');
+      
+      var lineNo = 1,
+          output = clone[0],
+          lastChild;
+    
+      function addLine(line) {
+        numbers.append(document.createTextNode(String(lineNo++)));
+        numbers.append(document.createElement("BR"));
+        for (var i = 0; i < line.length; i++) output.appendChild(line[i]);
+        output.appendChild(document.createElement("BR"));
+      }
+      
+      // This is global - it comes from codemirror,
+      // but it would be good to find a way of packaging it
+      highlightText( node.html(), output ); //addLine);
+      
+      // Hack to remove br tag from last line -
+      // it gets in the way in inline code elements
+      lastChild = clone.children().eq(-1);
+      if (lastChild.is('br')) lastChild.remove();
+      
+      node.replaceWith( clone );
+    });
   },
   
   canEdit: function() {

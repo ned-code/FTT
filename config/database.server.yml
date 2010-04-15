@@ -10,6 +10,8 @@ test:
   username: webdoc
   password: webdoc
   host: localhost
+  encoding: utf8
+  collation: utf8_unicode_ci
 
 staging:
   adapter: mysql
@@ -17,6 +19,8 @@ staging:
   username: webdoc
   password: webdoc
   host: localhost
+  encoding: utf8
+  collation: utf8_unicode_ci
 
 production:
   adapter: mysql
@@ -24,3 +28,6 @@ production:
   username: webdoc
   password: webdoc
   host: webdoc-production.chnus0k5dbng.us-east-1.rds.amazonaws.com
+  encoding: utf8
+  collation: utf8_unicode_ci
+    
