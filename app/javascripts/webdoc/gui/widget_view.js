@@ -59,14 +59,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   innerHtmlChanged: function($super) {
     $super();
     this._displayDefaultContentIfNeeded(this.itemDomNode);
-    // resize if inner html is iframe
-    var innerIframe = this.itemDomNode.find("iframe");
-    if (innerIframe.get(0)) {
-      this._resizeTo({
-        width: parseFloat(innerIframe.css("width").replace("px", "")),
-        height: parseFloat(innerIframe.css("height").replace("px", ""))
-      });
-    }
     
     // Highlight code blocks in the html -
     // nodes that have class "code"
