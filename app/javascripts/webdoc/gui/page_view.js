@@ -44,8 +44,14 @@ WebDoc.PageView = $.klass({
       externalPage = $("<iframe/>").addClass('layer');
       
       if (page.data.data.externalPageUrl) {
+        wait = jQuery('<div class="center layer"><div class="center-cell"><div class="center-box"><center><img src="/images/icons/waiting_wheel.gif"/></center></div></div></div>');
+       
+        externalPage.bind('load', function() {
+          wait.remove();
+        }.pBind(this));
         externalPage.attr("src", page.data.data.externalPageUrl);        
         this.itemDomNode.append(externalPage[0]);
+        this.itemDomNode.append(wait);
       }
     }
     else {
@@ -132,6 +138,9 @@ WebDoc.PageView = $.klass({
         break;
       case WebDoc.ITEM_TYPE_WIDGET:
         itemView = new WebDoc.WidgetView(item, this, afterItem);
+        break;
+      case WebDoc.ITEM_TYPE_IFRAME:
+        itemView = new WebDoc.IframeView(item, this, afterItem);
         break;
       default:
         itemView = new WebDoc.ItemView(item, this, afterItem);

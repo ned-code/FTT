@@ -43,7 +43,8 @@ class DocumentsController < ApplicationController
       format.html { render :layout => "layouts/editor" }
       format.json do
         set_cache_buster
-        render :json => @document.to_json(:include => { :pages => { :include => :items} })
+
+        render :json => Rails.cache.fetch(@document.cache_key) { @document.to_json(:include => { :pages => { :include => :items} }) }
       end
     end
   end
@@ -53,6 +54,14 @@ class DocumentsController < ApplicationController
     @document = current_user.documents.create(params[:document])
     
     render :json => @document
+  end
+
+  def duplicate
+    @new_document = @document.duplicate
+
+    @new_document.save!
+
+    redirect_to @new_document
   end
   
   # PUT /documents/:id

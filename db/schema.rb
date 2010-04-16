@@ -9,7 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD:db/schema.rb
 ActiveRecord::Schema.define(:version => 20100413140417) do
+=======
+ActiveRecord::Schema.define(:version => 20100416082915) do
+>>>>>>> 44a297b895063c76fec4efcee1145807cc55ea28:db/schema.rb
 
   create_table "categories", :force => true do |t|
     t.string "name", :null => false
@@ -24,6 +28,21 @@ ActiveRecord::Schema.define(:version => 20100413140417) do
     t.integer  "item_id"
   end
 
+<<<<<<< HEAD:db/schema.rb
+=======
+  add_index "datastore_entries", ["item_id"], :name => "index_datastore_entries_on_item_id"
+  add_index "datastore_entries", ["user_id"], :name => "index_datastore_entries_on_user_id"
+
+  create_table "datastores", :force => true do |t|
+    t.string   "ds_key",                          :null => false
+    t.text     "ds_value",    :limit => 16777215, :null => false
+    t.string   "widget_uuid", :limit => 36
+    t.string   "user_id",     :limit => 36
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+>>>>>>> 44a297b895063c76fec4efcee1145807cc55ea28:db/schema.rb
   create_table "documents", :force => true do |t|
     t.string   "uuid",        :limit => 36
     t.string   "title"
@@ -38,12 +57,20 @@ ActiveRecord::Schema.define(:version => 20100413140417) do
     t.integer  "views_count",               :default => 0
   end
 
+  add_index "documents", ["category_id"], :name => "index_documents_on_category_id"
+  add_index "documents", ["creator_id"], :name => "index_documents_on_creator_id"
+  add_index "documents", ["is_public"], :name => "index_documents_on_is_public"
+  add_index "documents", ["uuid"], :name => "index_documents_on_uuid"
+
   create_table "followships", :force => true do |t|
     t.integer  "follower_id",  :null => false
     t.integer  "following_id", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "followships", ["follower_id"], :name => "index_followships_on_follower_id"
+  add_index "followships", ["following_id"], :name => "index_followships_on_following_id"
 
   create_table "items", :force => true do |t|
     t.string   "uuid",       :limit => 36
@@ -57,6 +84,7 @@ ActiveRecord::Schema.define(:version => 20100413140417) do
   end
 
   add_index "items", ["page_id"], :name => "index_items_on_page_id"
+  add_index "items", ["uuid"], :name => "index_items_on_uuid"
 
   create_table "medias", :force => true do |t|
     t.string   "uuid",        :limit => 36
@@ -73,6 +101,7 @@ ActiveRecord::Schema.define(:version => 20100413140417) do
 
   add_index "medias", ["system_name"], :name => "index_medias_on_system_name"
   add_index "medias", ["user_id"], :name => "index_medias_on_user_id"
+  add_index "medias", ["uuid"], :name => "index_medias_on_uuid"
 
   create_table "pages", :force => true do |t|
     t.string   "uuid",         :limit => 36
@@ -87,6 +116,7 @@ ActiveRecord::Schema.define(:version => 20100413140417) do
   end
 
   add_index "pages", ["document_id"], :name => "index_pages_on_document_id"
+  add_index "pages", ["uuid"], :name => "index_pages_on_uuid"
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
@@ -157,5 +187,7 @@ ActiveRecord::Schema.define(:version => 20100413140417) do
     t.string   "ip_address"
     t.datetime "created_at"
   end
+
+  add_index "view_counts", ["session_id"], :name => "index_view_counts_on_session_id"
 
 end

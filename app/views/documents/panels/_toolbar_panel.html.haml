@@ -4,10 +4,10 @@
   
   %ul.pages-tools.tools.thumbs.index.icons-only
     -# JBA we need to define ho to manage those new button
-    %li.mode-edit-show>
+    %li>
       %a{ :href => "#webdoc-prev-page", :title => t('.prev') }
         = t('.prev')
-    %li.mode-edit-show>
+    %li>
       %a{ :href => "#webdoc-next-page", :title => t('.next') }
         = t('.next')
     %li.mode-edit-show>
@@ -52,6 +52,9 @@
     %li.mode-edit-show>
       %a{ :href => "#insert-html" , :title => t('.html_tool') }
         = t('.html_tool')
+    %li.mode-edit-show>
+      %a{ :href => "#insert-iframe" , :title => t('.iframe_tool') }
+        = t('.iframe_tool')
     %li.mode-edit-show>
       %a{ :href => "#insert-text" , :title => t('.text_tool') }
         = t('.text_tool')

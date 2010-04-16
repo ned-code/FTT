@@ -57,7 +57,16 @@ WebDoc.ItemThumbnailView = $.klass({
   
   innerHtmlChanged: function() {
     this.domNode.html(this.item.data.data.innerHTML);
+  },
+
+  domNodeChanged: function() {
+    if (!WebDoc.application.pageEditor.disableHtml) {
+      this.domNode.remove();
+      this.domNode = this.createDomNode();
+      this.domNode.css({ position: "absolute"}); 
+    }
   }
+
 });
 
 WebDoc.ImageThumbnailView = $.klass(WebDoc.ItemThumbnailView, {

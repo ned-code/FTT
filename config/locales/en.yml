@@ -99,6 +99,7 @@ en:
         select: "Select"
         html_tool: "Insert HTML"
         text_tool: "Insert Text"
+        iframe_tool: "Insert Web page"
         drawing_tool: "Draw"
         toggle_inspector: "Toggle Inspector"
         library: "Show Library"

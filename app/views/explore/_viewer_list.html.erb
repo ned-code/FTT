@@ -14,8 +14,12 @@
       <div class="webdoc-viewer-container" data-webdoc-document-id="<%= document.uuid() %>" id="<%= document.uuid() %>"></div>
 
       <p class="webdoc-viewer-details">
-        <%= t("phrases.Created_by")%> <%=h document.creator.first_name %>
-        <%= relative_date document.created_at %>
+        <%= t("phrases.Created_by")%> <%= document.creator.first_name %>
+        <% if ((params[:main_filter] && params[:main_filter] == "viewed")) %>
+           viewed <%= document.views_count %> times
+        <% else %>
+          <%= relative_date document.created_at %>
+        <% end %>
         <% if ((!params[:category_filter] || params[:category_filter] == "all") &&  document.category) %>
             in <%= link_to h(document.category.name), explore_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %>
         <% end %>
@@ -29,8 +33,10 @@
   <%= include_javascripts :explore %>
   <% javascript_tag do -%>
     <% documents.each do |document| %>
+      <% # we need to remove </script> in the json otherwise it ends the containg script tag too early %>
+      <% cached_document = Rails.cache.fetch("#{document.cache_key}_wo_script") { document.to_json(:include => { :pages => { :include => :items} }).gsub(/<\/script>/, "</*script>") } %>
       try {
-        MTools.ServerManager.cache.store(new WebDoc.Document(<%= raw document.to_json(:include => { :pages => { :include => :items} }).gsub(/<\/script>/, "</*script>") %>));
+        MTools.ServerManager.cache.store(new WebDoc.Document(<%= raw cached_document.dup %>));
       }
       catch(e) {
         ddd("error in doc ", e);
