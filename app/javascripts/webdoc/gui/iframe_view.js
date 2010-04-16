@@ -13,6 +13,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
 
   domNodeChanged: function($super) {
     $super();
+    this.itemDomNode.css('overflow', this.item.data.data.css.overflow);
     this.updateOverlay();
   },
 
@@ -34,6 +35,29 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
       }
       else {
         this.overlayDomNode.html('');
+
+        var wait = $("<div/>")
+                  .attr("id", "wait_" + this.item.uuid())
+                  .css(this.item.data.data.css)
+                  .addClass("load_item").addClass("layer")
+                    .css("textAlign", "center");
+        var imageTop = (parseFloat(this.item.data.data.css.height) / 2) - 16;
+        var image = $("<img/>")
+                      .attr("src", "/images/icons/waiting_wheel.gif")
+                      .css({
+                            verticalAlign: "middle",
+                            position: "relative",
+                            top: imageTop + "px"
+                           });
+        wait.append(image);
+        this.pageView.itemDomNode.append(wait);
+
+        var that = this;
+        this.itemDomNode.bind('load', function() {
+          ddd("iframe loaded");
+          $("#wait_" + that.item.uuid()).remove();
+        });
+
       }
     }
   },
