@@ -19,22 +19,8 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   createDomNode: function($super) {
     var widgetNode = $super();   
-    if (this.item.data.data.tag == "iframe" && !WebDoc.application.pageEditor.disableHtml) {      
-      var wait = $("<div/>")
-                    .attr("id", "wait_" + this.item.uuid())
-                    .css(this.item.data.data.css)
-                    .addClass("load_item").addClass("layer")
-                    .css("textAlign", "center");
-      var imageTop = (parseFloat(this.item.data.data.css.height) / 2) - 16;
-      var image = $("<img/>")
-                      .attr("src", "/images/icons/waiting_wheel.gif")
-                      .css({
-                            verticalAlign: "middle",
-                            position: "relative",
-                            top: imageTop + "px"
-                           });
-      wait.append(image);
-      this.pageView.itemDomNode.append(wait);
+    if (this.item.data.data.tag == "iframe" && !WebDoc.application.pageEditor.disableHtml) {            
+      this.domNode.addClass('loading');
       widgetNode.bind('load', function() {
         ddd("widget loaded");
         this.initWidget();
@@ -116,7 +102,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   },  
 
   initWidget: function() {
-    $("#wait_" + this.item.uuid()).remove();
+    this.domNode.removeClass('loading');
     if (this.itemDomNode.get(0).contentWindow) {
       this.itemDomNode.get(0).contentWindow.uniboard = this.api;
       if (this.itemDomNode.get(0).contentWindow.widget) {
