@@ -3,7 +3,8 @@ require 'xmpp_user_synch'
 class User < ActiveRecord::Base
   acts_as_authorization_subject
   mount_uploader :avatar, AvatarUploader
-  
+  has_uuid  
+
   # Include default devise modules.
   # Others available are :lockable, :timeoutable and :activatable.
   devise :registerable, :authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable, :lockable

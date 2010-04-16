@@ -39,6 +39,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   
   domNodeChanged: function($super) {
     $super();
+    this.itemDomNode.css('overflow', this.item.data.data.css.overflow);
     this.updateOverlay();
   },
 
