@@ -37,7 +37,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_TEXT;
     newItem.data.data.tag = "div";
-    newItem.data.data['class'] = "item-text empty";
+    newItem.data.data['class'] = "empty";
     newItem.data.data.innerHTML = "";
     newItem.data.data.css = this.textboxCss;
     //Create view

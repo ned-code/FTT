@@ -9,10 +9,12 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   DEFAULT_WIDGET_HTML: '<div class="item-placeholder"><div class="item-icon"></div>Double-click to edit, and enter HTML in the inspector</div>',
 
   initialize: function($super, item, pageView, afterItem) {
+    this.placeholderNode = $( this.DEFAULT_WIDGET_HTML );
     $super(item, pageView, afterItem);
-    this.itemDomNode.css({ width:"100%", height:"100%"}).addClass('item-widget'); 
+    this.itemDomNode.css({ width:"100%", height:"100%"}); 
     this.api = new WebDoc.WidgetApi(item, false);
-    
+    this._displayDefaultContentIfNeeded( this.domNode );
+    this.domNode.addClass('item-widget');
   },
   
   createDomNode: function($super) {
@@ -38,9 +40,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
         this.initWidget();
       }.pBind(this));
     }
-    else {
-      this._displayDefaultContentIfNeeded(widgetNode);
-    }
+
     return widgetNode;
   },
   
@@ -58,7 +58,9 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   innerHtmlChanged: function($super) {
     $super();
-    this._displayDefaultContentIfNeeded(this.itemDomNode);
+    this._displayDefaultContentIfNeeded(this.domNode);
+    
+    console.log('changed', this.item.data.data.innerHTML);
     
     // Highlight code blocks in the html -
     // nodes that have class "code"
@@ -89,6 +91,11 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       
       node.replaceWith( clone );
     });
+  },
+  
+  edit: function($super){
+    $super();
+    this.placeholderNode.remove();
   },
   
   canEdit: function() {
@@ -153,7 +160,10 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
   _displayDefaultContentIfNeeded: function(parent) {
     if (this.item.data.data.tag !== "iframe"  && (!this.item.data.data.innerHTML || $.string().blank(this.item.data.data.innerHTML))) {
-      parent.html(this.DEFAULT_WIDGET_HTML);
+      parent.append( this.placeholderNode );
+    }
+    else {
+      this.placeholderNode && this.placeholderNode.remove();
     }
   }
 });

@@ -331,6 +331,10 @@ a[href="#to-front"]                 { background-position: 0 -2560px; }
 a[href="#to-front"]:hover           { background-position: 0 -2624px; }
 a[href="#to-front"]:active          { background-position: 0 -2688px; }
 
+a[href="#insert-iframe"]            { background-position: 0 -2752px; }
+a[href="#insert-iframe"]:hover      { background-position: 0 -2816px; }
+a[href="#insert-iframe"]:active     { background-position: 0 -2880px; }
+
 .inspector-views a,
 .panel-tools a                      { background-image: url('/images/panel-tools.png'); }
 
