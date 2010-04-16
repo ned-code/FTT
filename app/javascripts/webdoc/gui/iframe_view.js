@@ -4,7 +4,6 @@
 
 
 WebDoc.IframeView = $.klass(WebDoc.ItemView, {
-
   initialize: function($super, item, pageView, afterItem) {
     var that = this;
     var placeholder = $('<form/>', {'class': 'item-placeholder stack'});
@@ -23,8 +22,8 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     
     this.domNode
     .addClass("item-iframe")
-    .delegate('.item-placeholder', 'submit', this._makeSetSrcEventHandler() )
-    .delegate('.item-placeholder input', 'blur', this._makeSetSrcEventHandler() );
+    .delegate('.item-placeholder', 'submit', this._makeSetSrcEventHandler() );
+    //.delegate('.item-placeholder input', 'blur', this._makeSetSrcEventHandler() );
   },
   
   _makeSetSrcEventHandler: function(){
@@ -32,7 +31,19 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     
     return function(e){
       var value = that.inputNode.val();
-      if ( value ) { that.item.setSrc( value ); }
+      if ( value ) {
+        that.domNode.addClass('loading');
+        that.item.setSrc( value );
+      }
+      e.preventDefault();
+    };
+  },
+  
+  _makeLoadEventHandler: function(){
+    var that = this;
+    
+    return function(e){
+      that.domNode.removeClass('loading');
       e.preventDefault();
     };
   },
@@ -49,9 +60,12 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
       var src = this.item.getSrc();
       if (src === "" || src === undefined) {
         this.domNode.append( this.placeholderNode );
+        this.domNode.removeClass('loading');
       }
       else {
         this.placeholderNode.remove();
+        this.itemDomNode
+        .bind('load', this._makeLoadEventHandler() );
       }
     }
   },

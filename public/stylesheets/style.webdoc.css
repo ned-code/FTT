@@ -74,3 +74,10 @@
 #webdoc .item-iframe label  {
   font-weight: normal;
 }
+
+
+#webdoc .item_wrap.loading .screen {
+  display: block;
+  opacity: 1 !important;
+  background-image: url('/images/loading-icon-16.gif');
+}
