@@ -1,5 +1,5 @@
 /**
- * @author Noé
+ * @author Noé / Stephen
  */
 
 
@@ -43,7 +43,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   },
 
   updateOverlay: function() {
-    ddd('update overlay');
+    ddd('[iframe_view] updateOverlay()');
     if (!WebDoc.application.pageEditor.disableHtml) {
       var src = this.item.getSrc();
       if (src === "" || src === undefined) {

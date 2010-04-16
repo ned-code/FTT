@@ -165,17 +165,21 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
                   border-color: rgba(176, 227, 0, 0.8); }
 
 .toolbar-panel a,
+.toolbar-panel .group-tools a,
 .toolbar-panel .mode-tools a        { -webkit-transition: width 0.18s ease-out; }
 .toolbar-panel a:active,
+.toolbar-panel .group-tools a:active,
 .toolbar-panel .mode-tools a:active { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
 .toolbar-panel .current,
 .toolbar-panel .active,
+.toolbar-panel .group-tools .current,
 .toolbar-panel .mode-tools .current { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -webkit-transition: width 0.18s ease-out; }
+.toolbar-panel .group-tools a,
 .toolbar-panel .mode-tools a        { -webkit-box-shadow: inset 0 0 2px -1px hsl(18, 16%, 12%);
                                       -moz-box-shadow:    inset 0 0 2px -1px hsl(18, 16%, 12%);
                                       box-shadow:         inset 0 0 2px -1px hsl(18, 16%, 12%); }
@@ -198,13 +202,13 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
 .tools a.current{
     background-color: hsla( 208, 8%, 92%, 0.6 );
 }
-
+.group-tools li a,
 .mode-tools li a {
     -webkit-border-radius: 0;
     -moz-border-radius:    0;
     border-radius:         0;
 }
-
+.group-tools li:first-child a,
 .mode-tools li:first-child a {
     -webkit-border-top-left-radius:     6px;
     -moz-border-radius-topleft:         6px;
@@ -213,6 +217,7 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
     -moz-border-radius-bottomleft:      6px;
     border-bottom-left-radius:          6px;
 }
+.group-tools li:last-child a,
 .mode-tools li:last-child a {
     -webkit-border-top-right-radius:    6px;
     -moz-border-radius-topright:        6px;

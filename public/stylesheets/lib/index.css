@@ -303,11 +303,13 @@
 }
 
 .toolbar-panel .control-tools,
+
 .toolbar-panel .mode-tools {
     float: right;
     margin-right: 0;
     margin-left: 32px;
 }
+.group-tools li,
 .mode-tools li {
     margin-right: 0;
 }
