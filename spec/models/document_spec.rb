@@ -205,14 +205,6 @@ describe Document do
       docs.size.should == 2
     end
 
-    it "should set a default number of document per page (4)" do
-      @doc5 = Factory(:document, :creator => @user)
-      @doc6 = Factory(:document, :creator => @user)
-      @doc7 = Factory(:document, :creator => @user)
-      docs = Document.all_public_paginated_with_explore_params
-      docs.size.should == 4
-    end
-
   end
                                                             
   describe "last_modified_from_following" do
@@ -293,6 +285,38 @@ describe Document do
       docs.size.should == 3
     end
 
+  end
+  
+  describe "deep_clone" do
+
+    subject{ Factory(:document) }
+
+    it "should clone a empty document" do
+      clone = subject.deep_clone
+      clone.pages.length.should == 1
+    end
+
+    it "should clone a document with many pages" do
+      subject.pages.create
+      clone = subject.deep_clone
+      clone.pages.length.should == 2
+    end
+
+    it "should clone a document with many pages and many items" do
+      subject.pages.first.items.create
+      subject.pages.create
+      subject.pages.last.items.create
+      subject.pages.last.items.create
+
+      clone = subject.deep_clone
+      clone.pages.first.items.length.should == 1
+      clone.pages.last.items.length.should == 2            
+    end
+
+    it "should save when call deep_clone_and_save!" do
+      subject.deep_clone_and_save!.should be_present
+    end
+    
   end
 
 end

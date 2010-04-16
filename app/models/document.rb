@@ -255,6 +255,23 @@ class Document < ActiveRecord::Base
       Notifier.deliver_removed_role_notification(current_user, role, user, self)
     end
   end
+
+  def deep_clone
+    cloned_document = self.clone
+    self.pages.each do |page|
+      cloned_document.pages << page.deep_clone
+    end
+    cloned_document
+  end
+
+  def deep_clone_and_save!
+    cloned_document = nil
+    self.transaction do
+      cloned_document = self.deep_clone
+      result = cloned_document.save!
+    end
+    cloned_document
+  end
   
 private
   
@@ -271,12 +288,6 @@ private
   def add_unvalid_email_to_array(email)
     @unvalid_access_emails ||= []
     @unvalid_access_emails << email
-  end
-
-  def duplicate
-    new_document = self.clone
-
-    new_document
   end
   
 end

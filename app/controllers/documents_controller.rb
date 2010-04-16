@@ -56,10 +56,7 @@ class DocumentsController < ApplicationController
   end
 
   def duplicate
-    @new_document = @document.duplicate
-
-    @new_document.save!
-
+    @new_document = @document.deep_clone_and_save!
     redirect_to @new_document
   end
   
