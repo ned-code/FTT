@@ -25,6 +25,7 @@ class SessionsController < ApplicationController
     else
       set_now_flash_message :alert, warden.message || :invalid
       @user = User.new
+      @top_documents = Document.all_public_paginated_with_explore_params("recent", "all", nil, 4)
       render 'home/show'
     end
   end
