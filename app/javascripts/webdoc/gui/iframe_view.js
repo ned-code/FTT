@@ -15,6 +15,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     .append( input );
     
     this.placeholderNode = placeholder;
+    this.inputNode = input;
     
     $super(item, pageView, afterItem);
     this.overlayDomNode = $("<div />");
@@ -22,24 +23,16 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     
     this.domNode
     .addClass("item-iframe")
-    .delegate('.item-placeholder', 'submit', this._makeSubmitEventHandler() )
-    .delegate('.item-placeholder input:eq(0)', 'blur', this._makeSubmitEventHandler() );
+    .delegate('.item-placeholder', 'submit', this._makeSetSrcEventHandler() )
+    .delegate('.item-placeholder input', 'blur', this._makeSetSrcEventHandler() );
   },
   
-  _makeSubmitEventHandler: function(){
+  _makeSetSrcEventHandler: function(){
     var that = this;
     
     return function(e){
-      var elem = $(this),
-          // this can be the form or the input
-          value = elem.is('input') ? elem.val() : elem.find('input').val() ;
-      
-      if ( value ) {
-        that.item.setSrc( value );
-      }
-      else {
-        ddd('[iframe_view] input doesnt have value')
-      }
+      var value = that.inputNode.val();
+      if ( value ) { that.item.setSrc( value ); }
       e.preventDefault();
     };
   },
