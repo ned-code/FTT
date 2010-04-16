@@ -44,10 +44,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   innerHtmlChanged: function($super) {
     $super();
-    this._displayDefaultContentIfNeeded(this.domNode);
-    
-    console.log('changed', this.item.data.data.innerHTML);
-    
+    this._displayDefaultContentIfNeeded(this.domNode);    
     // Highlight code blocks in the html -
     // nodes that have class "code"
     this.itemDomNode.find('code, .code').each( function(i){
