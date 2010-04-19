@@ -19,3 +19,65 @@
   padding: 0.4165em;
   overflow: auto;
 }
+
+/* Board items */
+#webdoc .item-layer {
+    opacity:0;
+    z-index: 2;
+    background-image: url('/images/icons/move_32.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.mode-edit .item-layer {
+    display: block;
+}
+#webdoc .item-placeholder {
+  position: relative;
+  margin: 0.8333em;
+  color: white;
+  padding: 0.4em 0.6em 0.4em 36px;
+  font-size: 14px;
+  background: hsla(208, 8%, 25%, 0.4);
+  border-color: hsla(208, 6%, 47.2%, 1);
+  border-width: 2px;
+  border-style: solid;
+  -webkit-border-radius: 0.6em;
+  -moz-border-radius:    0.6em;
+  border-radius:         0.6em;
+  z-index: 3;
+  pointer-events: none;
+}
+/*#webdoc .item-placeholder input{
+  pointer-events: visible;
+}*/
+#webdoc .item-icon {
+  overflow: hidden;
+  width: 24px;
+  height: 24px;
+  background-image: url('/images/edit-tools.png')
+}
+#webdoc .item-widget .item-icon  {
+  position: absolute;
+  top: 1px; left: 0.4em;
+  background-position: -3px -771px;
+}
+#webdoc .item-text .item-icon  {
+  position: absolute;
+  top: 0; left: 0.4em;
+  background-position: -3px -515px;
+}
+#webdoc .item-iframe .item-icon  {
+  position: absolute;
+  top: 0.4em; left: 0.4em;
+  background-position: -3px -2755px;
+}
+#webdoc .item-iframe label  {
+  font-weight: normal;
+}
+
+
+#webdoc .item_wrap.loading .screen {
+  display: block;
+  opacity: 1 !important;
+  background-image: url('/images/loading-icon-16.gif');
+}

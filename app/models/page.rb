@@ -12,7 +12,7 @@ class Page < ActiveRecord::Base
   # ================
   
   has_many :items, :dependent => :delete_all
-  belongs_to :document
+  belongs_to :document, :touch => true
   belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
   
   # should be placed after associations declaration

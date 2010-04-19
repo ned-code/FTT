@@ -13,7 +13,7 @@ class Item < ActiveRecord::Base
   
   has_many :datastore_entries, :dependent => :destroy
   
-  belongs_to :page
+  belongs_to :page, :touch => true
   belongs_to :media, :polymorphic => true
   
   # ====================

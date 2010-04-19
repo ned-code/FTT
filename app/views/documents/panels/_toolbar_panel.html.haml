@@ -17,14 +17,14 @@
   %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li>
-      %a{ :href => "#zoom-in" , :title => t('.zoom_in') }
-        = t('.zoom_in')
-    %li>
       %a{ :href => "#zoom-out" , :title => t('.zoom_out') }
         = t('.zoom_out')
     %li>
-      %a.state-tool{ :href => "#move" , :title => t('.move') }
-        = t('.move')
+      %a{ :href => "#zoom-in" , :title => t('.zoom_in') }
+        = t('.zoom_in')
+    -#%li>
+    -#  %a.state-tool{ :href => "#move" , :title => t('.move') }
+    -#    = t('.move')
   
   %ul#edit_tools.edit-tools.tools.thumbs.index.icons-only.mode-edit-show
     -# Whitespace is removed between lis to preserve layout
@@ -46,9 +46,6 @@
   
   %ul#misc_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li>
-      %a.state-tool{ :href => "#select" , :title => t('.select') }
-        = t('.select')
     %li.mode-edit-show>
       %a{ :href => "#insert-html" , :title => t('.html_tool') }
         = t('.html_tool')
@@ -58,6 +55,15 @@
     %li.mode-edit-show>
       %a{ :href => "#insert-text" , :title => t('.text_tool') }
         = t('.text_tool')
+
+  %ul#misc_tools.edit-tools.group-tools.tools.thumbs.index.icons-only
+    -# Whitespace is removed between lis to preserve layout
+    %li>
+      %a.state-tool{ :href => "#select" , :title => t('.select') }
+        = t('.select')
+    %li>
+      %a.state-tool{ :href => "#move" , :title => t('.move') }
+        = t('.move')
     %li.mode-edit-show>
       %a.state-tool{ :href => "#draw" , :title => t('.drawing_tool') }
         = t('.drawing_tool')

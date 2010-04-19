@@ -44,8 +44,14 @@ WebDoc.PageView = $.klass({
       externalPage = $("<iframe/>").addClass('layer');
       
       if (page.data.data.externalPageUrl) {
+        wait = jQuery('<div class="center layer"><div class="center-cell"><div class="center-box"><center><img src="/images/icons/waiting_wheel.gif"/></center></div></div></div>');
+       
+        externalPage.bind('load', function() {
+          wait.remove();
+        }.pBind(this));
         externalPage.attr("src", page.data.data.externalPageUrl);        
         this.itemDomNode.append(externalPage[0]);
+        this.itemDomNode.append(wait);
       }
     }
     else {
@@ -181,5 +187,10 @@ WebDoc.PageView = $.klass({
     ddd("board container css", boardContainerCss);
     this.domNode.css( transform );
     this._boardContainer.css( boardContainerCss );
+    
+    // try to set all flash content as windowless
+    this.itemDomNode.find("embed[type='application/x-shockwave-flash']").each( function(index, element) {
+      $(this).attr('wmode', 'transparent');
+    });
   }
 });

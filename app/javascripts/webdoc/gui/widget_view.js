@@ -6,41 +6,27 @@
 
 WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
-  DEFAULT_WIDGET_HTML: "<div>Enter the HTML you want in the inspector</div>",
+  DEFAULT_WIDGET_HTML: '<div class="item-placeholder"><div class="item-icon"></div>Double-click to edit, and enter HTML in the inspector</div>',
 
   initialize: function($super, item, pageView, afterItem) {
+    this.placeholderNode = $( this.DEFAULT_WIDGET_HTML );
     $super(item, pageView, afterItem);
     this.itemDomNode.css({ width:"100%", height:"100%"}); 
-    this.api = new WebDoc.WidgetApi(item, false);  
+    this.api = new WebDoc.WidgetApi(item, false);
+    this._displayDefaultContentIfNeeded( this.domNode );
+    this.domNode.addClass('item-widget');
   },
   
   createDomNode: function($super) {
     var widgetNode = $super();   
-    if (this.item.data.data.tag == "iframe" && !WebDoc.application.pageEditor.disableHtml) {      
-      var wait = $("<div/>")
-                    .attr("id", "wait_" + this.item.uuid())
-                    .css(this.item.data.data.css)
-                    .addClass("load_item").addClass("layer")
-                    .css("textAlign", "center");
-      var imageTop = (parseFloat(this.item.data.data.css.height) / 2) - 16;
-      var image = $("<img/>")
-                      .attr("src", "/images/icons/waiting_wheel.gif")
-                      .css({
-                            verticalAlign: "middle",
-                            position: "relative",
-                            top: imageTop + "px"
-                           });
-      wait.append(image);
-      this.pageView.itemDomNode.append(wait);
+    if (this.item.data.data.tag == "iframe" && !WebDoc.application.pageEditor.disableHtml) {            
+      this.domNode.addClass('loading');
       widgetNode.bind('load', function() {
         ddd("widget loaded");
         this.initWidget();
       }.pBind(this));
-      
     }
-    else {
-      this._displayDefaultContentIfNeeded(widgetNode);
-    }
+
     return widgetNode;
   },
   
@@ -58,8 +44,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   innerHtmlChanged: function($super) {
     $super();
-    this._displayDefaultContentIfNeeded(this.itemDomNode);
-    
+    this._displayDefaultContentIfNeeded(this.domNode);    
     // Highlight code blocks in the html -
     // nodes that have class "code"
     this.itemDomNode.find('code, .code').each( function(i){
@@ -91,6 +76,11 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     });
   },
   
+  edit: function($super){
+    $super();
+    this.placeholderNode.remove();
+  },
+  
   canEdit: function() {
     return true;
   },
@@ -109,7 +99,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   },  
 
   initWidget: function() {
-    $("#wait_" + this.item.uuid()).remove();
+    this.domNode.removeClass('loading');
     if (this.itemDomNode.get(0).contentWindow) {
       this.itemDomNode.get(0).contentWindow.uniboard = this.api;
       if (this.itemDomNode.get(0).contentWindow.widget) {
@@ -153,7 +143,10 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
   _displayDefaultContentIfNeeded: function(parent) {
     if (this.item.data.data.tag !== "iframe"  && (!this.item.data.data.innerHTML || $.string().blank(this.item.data.data.innerHTML))) {
-      parent.html(this.DEFAULT_WIDGET_HTML);
+      parent.append( this.placeholderNode );
+    }
+    else {
+      this.placeholderNode && this.placeholderNode.remove();
     }
   }
 });

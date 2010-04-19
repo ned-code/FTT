@@ -82,7 +82,7 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
       target.stop().animate({
         opacity: 0.8
       }, {
-        duration: 100
+        duration: 40
       });
     }
   },
@@ -96,13 +96,15 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
   },
         
   _clickedItemView: function(e) {   
-    var clickedItemView = null;
+    var clickedItemView = null, itemWrap;
     var target = jQuery(e.target);
     if (target && target.get(0) && target.get(0).tagName == "polyline") {
       clickedItemView = target.data("itemView");
     }
     else {
-      clickedItemView = target.closest(".item_wrap").data("itemView");
+      itemWrap = target.closest(".item_wrap");
+      clickedItemView = itemWrap.data("itemView");
+      itemWrap.find('.item-placeholder input:eq(0)').focus();
     }
     return clickedItemView;
   }
