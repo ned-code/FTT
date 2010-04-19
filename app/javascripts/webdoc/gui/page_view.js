@@ -187,5 +187,10 @@ WebDoc.PageView = $.klass({
     ddd("board container css", boardContainerCss);
     this.domNode.css( transform );
     this._boardContainer.css( boardContainerCss );
+    
+    // try to set all flash content as windowless
+    this.itemDomNode.find("embed[type='application/x-shockwave-flash']").each( function(index, element) {
+      $(this).attr('wmode', 'transparent');
+    });
   }
 });
