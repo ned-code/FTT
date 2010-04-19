@@ -32,7 +32,7 @@
         sessionKeyName:"#{session_key_name}",
         cookiesSessionKeyName:"#{cookies[session_key_name]}"
       };
-      WebDoc.closeUrl = "#{ url_for(:back)}";
+      WebDoc.closeUrl = "#{ (params[:keep_close_url].present? && params[:keep_close_url] == 'false') ?  '/' : url_for(:back) }";
       MTools.Application.main(function() {
         var editor = new WebDoc.PageEditor(#{edit_mode?});
         editor.load("#{@document.uuid}");

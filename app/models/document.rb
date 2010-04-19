@@ -275,7 +275,6 @@ class Document < ActiveRecord::Base
     self.transaction do
       cloned_document = self.deep_clone(creator)
       cloned_document.save!
-      cloned_document.accepts_role!("editor", creator)
       # TODO In version 2.3.6, there is a reset_counters(id, *counters) which do the next line properly
       # but this function don't exist in 2.3.5
       Document.connection.update("UPDATE `documents` SET `views_count` = #{cloned_document.view_counts.count} WHERE `id` = #{cloned_document.id}")
@@ -292,7 +291,7 @@ private
   
   # before_create
   def create_default_page
-    pages.build
+    pages.build if pages.size == 0
   end
   
   def add_unvalid_email_to_array(email)

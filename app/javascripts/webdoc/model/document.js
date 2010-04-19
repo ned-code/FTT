@@ -261,7 +261,7 @@ WebDoc.Document = $.klass(MTools.Record, {
     MTools.ServerManager.sendObject(
             this,
             function(newDocument) {
-              window.location.href = '/documents/' + newDocument.document.uuid;
+              window.location = '/documents/' + newDocument.document.uuid + '?keep_close_url=false';
             },
             "POST",
             "duplicate"
