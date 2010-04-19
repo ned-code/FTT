@@ -267,6 +267,11 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       window.location = "/";
     }
   },
+
+  duplicateDocument: function(e) {
+    ddd("duplicate document");
+    this.currentDocument.duplicate();
+  },
   
   toggleDebugMode: function() {
     this.disableHtml = !this.disableHtml; 

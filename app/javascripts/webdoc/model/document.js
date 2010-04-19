@@ -252,6 +252,20 @@ WebDoc.Document = $.klass(MTools.Record, {
       return page;
     }
     return null;
+  },
+  
+  /**
+   * Duplicate a record SERVER SIDE. A method "duplicate" must be implemented in the rails controller
+   */
+  duplicate: function() {
+    MTools.ServerManager.sendObject(
+            this,
+            function(newDocument) {
+              window.location.href = '/documents/' + newDocument.document.uuid;
+            },
+            "POST",
+            "duplicate"
+    );
   }
     
 });

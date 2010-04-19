@@ -1,12 +1,12 @@
 class DocumentsController < ApplicationController
-  before_filter :instantiate_document, :only => [:show, :update, :destroy]
+  before_filter :instantiate_document, :only => [:show, :update, :duplicate, :destroy]
   before_filter :authenticate_if_needed, :only => [:show]
   before_filter :authenticate_user!, :only => [:index]
   after_filter :create_view_count, :only => :show
   
   access_control do
     allow :admin
-    allow logged_in, :to => [:index, :create]
+    allow logged_in, :to => [:index, :create, :duplicate]
     allow :editor, :of => :document, :to => [:update, :destroy]
     action :show do
       allow all, :if => :document_is_public?
@@ -55,9 +55,10 @@ class DocumentsController < ApplicationController
     render :json => @document
   end
 
+  # POST /documents/:id/duplicate
   def duplicate
-    @new_document = @document.deep_clone_and_save!
-    redirect_to @new_document
+    @new_document = @document.deep_clone_and_save!(current_user)
+    render :json => @new_document.to_json(:only => :uuid)
   end
   
   # PUT /documents/:id

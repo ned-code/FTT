@@ -77,8 +77,11 @@ class Page < ActiveRecord::Base
 
   def deep_clone
     cloned_page = self.clone
+    cloned_page.uuid = nil
+    cloned_page.created_at = nil
+    cloned_page.updated_at = nil
     self.items.each do |item|
-      cloned_page.items << item.clone
+      cloned_page.items << item.deep_clone
     end
     cloned_page
   end

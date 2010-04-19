@@ -99,8 +99,9 @@ WebDoc.handlers = {
   },
   // Publicly accessible actions (to be bound to document)
   _documentHandlers: {
-    'webdoc-prev-page':     function(e) { WebDoc.application.pageEditor.prevPage(); },
-    'webdoc-next-page':     function(e) { WebDoc.application.pageEditor.nextPage(); },
-    'webdoc-close':         function(e) { WebDoc.application.pageEditor.closeDocument(); }
+    'webdoc-prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },
+    'webdoc-next-page':            function(e) { WebDoc.application.pageEditor.nextPage(); },
+    'webdoc-duplicate-document':   function(e) { WebDoc.application.pageEditor.duplicateDocument(); },
+    'webdoc-close':                function(e) { WebDoc.application.pageEditor.closeDocument(); }
   }
 };

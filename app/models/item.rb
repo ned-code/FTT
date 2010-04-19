@@ -43,7 +43,15 @@ class Item < ActiveRecord::Base
     end
     result += "</#{self.data[:tag]}>"
   end
-  
+
+  def deep_clone
+    cloned_item = self.clone
+    cloned_item.uuid = nil
+    cloned_item.created_at = nil
+    cloned_item.updated_at = nil
+    cloned_item
+  end
+
 end
 
 # == Schema Information
