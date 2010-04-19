@@ -79,6 +79,7 @@ WebDoc.ItemView = $.klass({
           case "innerHTML":
           // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
           case "innerHtml":
+          case "tag":
           case "css":        
           case "preference":
           case "properties":
@@ -126,10 +127,9 @@ WebDoc.ItemView = $.klass({
       this.itemDomNode.css(itemCss);
     }
   },
- 
-  
+
   innerHtmlChanged: function() {
-    if (!WebDoc.application.pageEditor.disableHtml) {    
+    if (!WebDoc.application.pageEditor.disableHtml && this.item.data.data.tag !== "iframe") {    
       this.itemDomNode.html($.string().stripScripts(this.item.data.data.innerHTML));
     }
   },
