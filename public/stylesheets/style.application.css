@@ -15,7 +15,7 @@ body {
 
 .wrap {
     position: relative;
-    width: 80%; max-width: 66em;
+    width: 80%; max-width: 80em;
     margin: 0 auto;
 }
 
@@ -179,8 +179,6 @@ header .index>li {
 /* Content - document list */
 
 .document-index {
-    padding-top: 1.6667em;
-    padding-bottom: 1.6667em;
     margin-bottom: 1.6667em;
 }
 .document-index li {
@@ -414,7 +412,12 @@ ul#widget-list li {
 
 .webdoc-viewer-index li {
     margin-bottom: 1.6667em;
+    width: 48%;
+    margin-right: 3.6%; 
     vertical-align: top;
+}
+.webdoc-viewer-index li:nth-child(even) {
+    margin-right: 0;
 }
 .webdoc-viewer-index li li {
     margin-bottom: 0;

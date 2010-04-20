@@ -1,6 +1,6 @@
 - session_key_name = ActionController::Base.session_options[:key]
 
-<!-- documents/index -->
+<!-- app/views/documents/index -->
 
 %div.action-zone.zone
   %div.wrap
@@ -21,16 +21,12 @@
 
 %div.content
   %div.wrap
-    %div#wb-document-list-container
+    %div#wb-document-list-container.column.triple.of-four
       %div.loading-icon
-
-    -#%div.column.three.of-three.state-public-show>
-    -#  %h4 Public webdocs
-    -#  %p Shared webdocs.
-    -#%div.column.three.of-three.state-public-hide>
-    -#  %h4 Manage your Webdocs
-    -#  %p Create your own new webdoc, or choose a webdoc to view from the list.
-    -#  %p You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, click <strong>share</strong>. You can choose to share your webdoc with just your friends, or with everybody on the world wide&nbsp;web.
+    %div.column.last.of-four.state-public-hide{ :style => 'text-align: justify;' }>
+      %h3 Your Webdocs
+      %p Create your own new webdoc, or choose a webdoc to view from the list.
+      %p You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, choose <strong>sharing</strong>.
     
 #wb-new-document-dialog{ :style => "display:none", :title => t('.create_new_document') }
   %form#wb-new-form.new-form{ :action => "", :title => t('.create_new_document') }
