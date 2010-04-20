@@ -67,6 +67,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
     WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
+    WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
     
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
@@ -273,7 +274,16 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
 
   duplicateDocument: function(e) {
     ddd("duplicate document");
-    this.currentDocument.duplicate();
+
+    WebDoc.application.documentDuplicateController.showDialog(e, this.currentDocument);
+
+
+    // jQuery('#webdoc-duplicate-document').pop({
+    //   attachTo: $( e.currentTarget ),
+    //   initCallback: function(){
+    //     this.currentDocument.duplicate();
+    //   }
+    // });
   },
   
   toggleDebugMode: function() {
