@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   
   # GET /user
   def show
-    render :json => current_user ? current_user.to_json(:only => [:id, :username]) : "{}"
+    render :json => current_user ? current_user.to_json(:only => [:id, :username, :uuid]) : "{}"
   end
   
   # GET /resource/sign_in

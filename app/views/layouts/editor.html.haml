@@ -12,7 +12,7 @@
     
   -if params[:reader] == 'true'
     -current_class = 'editor mode-embed'
-  -elsif edit_mode?
+  -elsif params[:edit] == 'true'
     -current_class = 'editor mode-edit'
   -else
     -current_class = 'editor mode-preview'
@@ -32,7 +32,7 @@
         sessionKeyName:"#{session_key_name}",
         cookiesSessionKeyName:"#{cookies[session_key_name]}"
       };
-      WebDoc.closeUrl = "#{ (params[:keep_close_url].present? && params[:keep_close_url] == 'false') ?  '/' : url_for(:back) }";
+      WebDoc.closeUrl = "#{ get_return_to }";
       MTools.Application.main(function() {
         var editor = new WebDoc.PageEditor(#{edit_mode?});
         editor.load("#{@document.uuid}");
