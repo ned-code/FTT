@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :username, :first_name, :last_name, :terms_of_service,
-                  :avatar, :avatar_cache, :remove_avatar, :bio, :website, :gender
+                  :avatar, :avatar_cache, :remove_avatar, :bio, :website, :gender, :uuid
   
   # =============
   # = Callbacks =
@@ -118,6 +118,7 @@ class User < ActiveRecord::Base
                     :id => self.id,
                     :username => self.username,
                     :bio => self.bio,
+                    :uuid => self.uuid,
                     :avatar_thumb_url => self.avatar_thumb_url,
                     :documents_count => self.documents_count,
                     :following_info => self.follower?(current_user)
