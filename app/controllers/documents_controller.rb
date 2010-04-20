@@ -18,7 +18,9 @@ class DocumentsController < ApplicationController
   # GET /documents
   def index    
     respond_to do |format|
-      format.html
+      format.html {
+        set_return_to
+      }
       format.json {
         per_page = 20
         @documents = Document.all_with_filter(current_user, params[:document_filter], params[:page], per_page)
