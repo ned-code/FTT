@@ -2,6 +2,7 @@ class HomeController < ApplicationController
   before_filter :redirect_if_user_signed_in
   
   def show
+    set_return_to
     @user = User.new
     @top_documents = Document.all_public_paginated_with_explore_params("recent", "all", nil, 4)
   end

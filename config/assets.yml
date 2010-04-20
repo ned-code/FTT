@@ -24,7 +24,6 @@ stylesheets:
     - public/stylesheets/lib/panel.css
     - public/stylesheets/lib/protect.css    
     - public/stylesheets/style.editor.css
-    - public/stylesheets/style.page_display.css    
     - public/stylesheets/style.editor.colors.css
     - public/stylesheets/style.webdoc.css
     - public/stylesheets/style.webdoc.typography.css
