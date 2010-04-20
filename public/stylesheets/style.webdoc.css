@@ -7,6 +7,7 @@
   position:absolute;
 }
 
+.webdoc code,
 .webdoc .code {
   padding: 0.2em 0.3333em;
   background: hsla(208, 8%, 25%, 0.75);

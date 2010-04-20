@@ -201,15 +201,15 @@ WebDoc.DocumentList = $.klass({
           $("<a/>", {
             "class": "wb-document-unshare sec-action unshare-button button",
             href: "#unshare",
-            title: "unshare",
-            html: "unshare",
+            title: "Share your webdoc with the world - or just your friends",
+            html: "sharing",
             data: data
           }) :     
           $("<a/>", {
             "class": "wb-document-share sec-action share-button button",
             href: "#share",
             title: "Share your webdoc with the world - or just your friends",
-            html: "share",
+            html: "sharing",
             data: data
           })
         ;

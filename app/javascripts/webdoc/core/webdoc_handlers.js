@@ -14,12 +14,7 @@ WebDoc.handlers = {
     jQuery('.panel')
     .delegate('a', 'click', this._makeLinkHandler( this._panelHandlers ));
   },
-  regex: {
-    hash:       /^#?$/,             // Single hash or empty string
-    hashRef:    /^#(\S+)/,          // Matches a hash ref, captures all non-space characters following the hash
-    slashRef:   /^\//,              // Begins with a slash
-    urlRef:     /^[a-z]+:\/\//      // Begins with protocol xxx://
-  },
+  regex: jQuery.regex,
   _makeLinkHandler: function( obj ){
     var regex = this.regex;
     

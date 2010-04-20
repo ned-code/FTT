@@ -33,5 +33,3 @@ config.action_mailer.default_url_options = { :host => 'alpha.webdoc.com' }
 
 # Enable threaded mode
 # config.threadsafe!
-
-config.gem 'mysql'

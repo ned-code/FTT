@@ -302,7 +302,11 @@ header a {
 
 .document-item .collaborate-button:hover { background-color: hsl(43, 68%, 48%); }
 .document-item .share-button:hover,
+.document-item:hover .unshare-button,
 .document-item .unshare-button:hover     { background-color: hsl(72, 60%, 46%); }
+.document-item .unshare-button           { background-color: hsl(72, 32%, 56%); }
+
+.document-item .unshare-button           { color: white; }
 
 .add-button {
     background: url('/images/application/icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
@@ -323,9 +327,9 @@ header a {
 .document-item:hover .share-button        { background-position: -2px -645px; }
 .document-item .share-button:hover        { background-position: -2px -709px; }
 .share-button                             { background-position: -2px -581px; }
-.document-item:hover .unshare-button      { background-position: -2px -645px; }
-.document-item .unshare-button:hover      { background-position: -2px -709px; }
-.unshare-button                           { background-position: -2px -581px; }
+.document-item:hover .unshare-button      { background-position: -2px -901px; }
+.document-item .unshare-button:hover      { background-position: -2px -837px; }
+.unshare-button                           { background-position: -2px -773px; }
 
 .document-item:hover .delete-button       { background-position: -5px -133px; }
 .delete-button                            { background-position: -5px -69px; }
