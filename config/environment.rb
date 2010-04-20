@@ -19,28 +19,28 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6'
   
   # Rails 3 OK
-  config.gem "sqlite3-ruby", :lib => "sqlite3"
-  config.gem 'haml'
-  config.gem 'i18n'
-  config.gem 'mime-types', :lib => 'mime/types'
-  config.gem 'json'
-  config.gem 'rubyzip', :lib => 'zip/zip'
-  config.gem 'xmpp4r'
-  config.gem 'right_aws'
-  config.gem 'warden'
-  config.gem 'devise'
-  config.gem 'will_paginate'
-  config.gem 'uuidtools' # for has_uuid plugin
+  # config.gem "sqlite3-ruby", :lib => "sqlite3"
+  # config.gem 'haml'
+  # config.gem 'i18n'
+  # config.gem 'mime-types', :lib => 'mime/types'
+  # config.gem 'json'
+  # config.gem 'rubyzip', :lib => 'zip/zip'
+  # config.gem 'xmpp4r'
+  # config.gem 'right_aws'
+  # config.gem 'warden'
+  # config.gem 'devise'
+  # config.gem 'will_paginate'
+  # config.gem 'uuidtools' # for has_uuid plugin
   # config.gem 'uuid'
   
   # Rails 3 Maybe
-  config.gem 'carrierwave'
-  config.gem 'mini_magick'
-  config.gem 'acl9'
-  config.gem 'formtastic'
-  config.gem 'erubis'
+  # config.gem 'carrierwave'
+  # config.gem 'mini_magick'
+  # config.gem 'acl9'
+  # config.gem 'formtastic'
+  # config.gem 'erubis'
   # Rails 3 ARG
-  config.gem 'jammit' # use plugin for the moment
+  # config.gem 'jammit' # use plugin for the moment
   # config.gem 'formtastic'
   # config.gem "validation_reflection"
   
@@ -62,16 +62,4 @@ Rails::Initializer.run do |config|
   # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
-end
-
-ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
-#   error_class = "errors"
-#   if html_tag =~ /<(input|textarea|select)[^>]+class=/
-#     class_attribute = html_tag =~ /class=['"]/
-#     html_tag.insert(class_attribute + 7, "#{error_class} ")
-#   elsif html_tag =~ /<(input|textarea|select)/
-#     first_whitespace = html_tag =~ /\s/
-#     html_tag[first_whitespace] = " class='#{error_class}' "
-#   end
-  html_tag
 end
