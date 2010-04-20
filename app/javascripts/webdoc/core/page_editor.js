@@ -100,7 +100,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       this.loadPageId(window.location.hash.replace("#", ""));
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
       ddd("check editablity");
-      if (WebDoc.application.boardController.isEditable()) {
+      if (WebDoc.application.boardController.isEditable() && jQuery("body").hasClass('mode-edit')) {
         ddd("[PageEditor] call rightBarController.showLib");
         WebDoc.application.rightBarController.showLib();
       }

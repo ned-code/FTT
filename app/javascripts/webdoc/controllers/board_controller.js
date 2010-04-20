@@ -110,7 +110,7 @@ WebDoc.BoardController = jQuery.klass({
       }
     }
     this.zoom(defaultZoom);
-    this.setMode(this._isInteraction || !this._editable);
+    this.setMode(!jQuery("body").hasClass('mode-edit'));
     
     this._fireCurrentPageChanged();
     

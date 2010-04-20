@@ -12,7 +12,7 @@
     
   -if params[:reader] == 'true'
     -current_class = 'editor mode-embed'
-  -elsif edit_mode?
+  -elsif params[:edit] == 'true'
     -current_class = 'editor mode-edit'
   -else
     -current_class = 'editor mode-preview'
