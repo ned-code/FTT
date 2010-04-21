@@ -31,6 +31,7 @@
 <% content_for :scripts do %>
   <%= include_javascripts :page_editor %>
   <%= include_javascripts :explore %>
+  <%= javascript_include_tag "/gadgets/js/rpc.js?c=1&debug=1", "/gadgets/files/container/cookies.js", "/gadgets/files/container/util.js", "/gadgets/files/container/gadgets.js", "/gadgets/files/container/cookiebaseduserprefstore.js" %>
   <% javascript_tag do -%>
     <% documents.each do |document| %>
       <% # we need to remove </script> in the json otherwise it ends the containg script tag too early %>

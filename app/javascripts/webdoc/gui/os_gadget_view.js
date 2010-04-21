@@ -111,9 +111,9 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   
   _getSecureToken: function(callBack) {
     ddd("generate secure token");
-    WebDoc.application.pageEditor.getCreator(function(creator) {
-      ddd("receive creator");
-      var token = creator.uuid + ":" + MTools.Application.getCurrentUser().uuid + ":" + this.item.uuid() + ":cont:url:0:home";
+    MTools.ServerManager.getRecords(WebDoc.User, this.item.page.document.creatorId(), function(result) {
+      ddd("receive creator", result);
+      var token = result[0].uuid() + ":" + MTools.Application.getCurrentUser().uuid + ":" + this.item.uuid() + ":cont:url:0:home";
       callBack.call(this, token);
     }.pBind(this));
   }
