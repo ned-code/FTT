@@ -82,3 +82,19 @@
   opacity: 1 !important;
   background-image: url('/images/loading-icon-16.gif');
 }
+
+/* shinding gadget */
+.gadgets-gadget-title-bar {
+  display:none;
+}
+
+.gadgets-gadget-content {
+  width:100%;
+  height:100%;
+}
+
+.gadgets-gadget {
+  width:100%;
+  height:100%;
+  margin-bottom:-5px;
+}

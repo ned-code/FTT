@@ -41,24 +41,27 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   
   initGadget: function() {
     ddd("init gadget");
-    if (this.item.getGadgetUrl()) {  
-      gadgets.container.setView("home");
-      if (this.gadget) {
-        gadgets.container.removeGadget(this.gadget);
-        this.gadget = null;
+    if (window.gadgets) {
+      if (this.item.getGadgetUrl()) {
+        gadgets.container.setView("home");
+        if (this.gadget) {
+          gadgets.container.removeGadget(this.gadget);
+          this.gadget = null;
+        }
+        this.gadget = gadgets.container.createGadget({
+          specUrl: this.item.getGadgetUrl()
+        });
+        gadgets.container.addGadget(this.gadget);
+        gadgets.container.layoutManager.addGadgetChromeId(this.gadget.id, "gadget-" + this.item.uuid());
+        
+        this._getSecureToken(function(token) {
+          this.gadget.secureToken = token;
+          this.gadget.setServerBase('/gadgets/');
+          gadgets.container.renderGadget(this.gadget);
+          
+        }.pBind(this));        
       }
-      this.gadget = gadgets.container.createGadget({specUrl: this.item.getGadgetUrl()});
-      gadgets.container.addGadget(this.gadget);
-      gadgets.container.layoutManager.addGadgetChromeId(this.gadget.id, "gadget-" + this.item.uuid());
-
-      this._getSecureToken(function(token) {
-       this.gadget.secureToken = token;
-       this.gadget.setServerBase('/gadgets/');
-       gadgets.container.renderGadget(this.gadget);
-       
-      }.pBind(this));
-      
-    }    
+    }  
   },
   
   _makeSetGadgetUrlEventHandler: function(){
@@ -101,7 +104,9 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   
   destroy: function($super) {
     $super();
-    gadgets.container.removeGadget(this.gadget);
+    if (window.gadgets) {
+      gadgets.container.removeGadget(this.gadget);
+    }
   },
   
   _getSecureToken: function(callBack) {
