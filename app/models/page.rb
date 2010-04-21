@@ -74,8 +74,19 @@ class Page < ActiveRecord::Base
   def to_param
     uuid
   end
-  
-private
+
+  def deep_clone
+    cloned_page = self.clone
+    cloned_page.uuid = nil
+    cloned_page.created_at = nil
+    cloned_page.updated_at = nil
+    self.items.each do |item|
+      cloned_page.items << item.deep_clone
+    end
+    cloned_page
+  end
+
+  private
   
   # before_save
   def update_position_if_moved

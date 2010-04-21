@@ -41,6 +41,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
     WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
+    WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
     
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
@@ -154,8 +155,11 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   },
   
   loadPage: function(page, forceReload) {
-    if(this.currentPage == null || this.currentPage.uuid() !== page.uuid() || forceReload) {
-      WebDoc.application.undoManager.clear();
+    var differentPages = (this.currentPage == null || this.currentPage.uuid() !== page.uuid());
+    if(differentPages || forceReload) {
+      if (differentPages) {
+        WebDoc.application.undoManager.clear();
+      }
       ddd("set hash to current page position");
       window.location.hash = "#" + (page.uuid());
       this.currentPage = page;
@@ -245,6 +249,11 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     else {
       window.location = "/";
     }
+  },
+
+  duplicateDocument: function(e) {
+    ddd("duplicate document");
+    WebDoc.application.documentDuplicateController.showDialog(e, this.currentDocument);
   },
   
   toggleDebugMode: function() {

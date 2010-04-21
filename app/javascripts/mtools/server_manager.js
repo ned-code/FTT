@@ -198,5 +198,42 @@ jQuery.extend(MTools.ServerManager, {
     jQuery.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
       callBack.apply(this, [object]);
     }, "json");
+  },
+
+  /**
+   * Send a request to the server with a object
+   * @param {Object} object the object
+   * @params {Object} callBack function that called
+   * @params {String} verb the HTTP Verb
+   * @params {String} action the action
+   */
+  sendObject: function(object, callBack, verb, action, extraParams) {
+    var params = {
+      xmpp_client_id: MTools.ServerManager.xmppClientId
+    };
+
+    if (extraParams !== null) {
+      for(key in extraParams) {
+        params[key] = extraParams[key];
+      }
+    }
+
+    var url = object.rootUrl() + "/" + object.className() + "s/" + object.uuid() + "/" + action;
+
+    jQuery.ajax({
+      type: verb.toUpperCase(),
+      url: url,
+      data: params,
+      dataType: "json",
+      success: function(data, textstatus) {
+         callBack.call(this, data);
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        ddd("error " + textStatus + " " + errorThrown);
+        ddd(XMLHttpRequest);
+      }
+    });
+
   }
+
 });

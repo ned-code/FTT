@@ -85,7 +85,7 @@ WebDoc.PageView = $.klass({
     delete boardCss.width;
     delete boardCss.height;
     this._boardContainer.animate(boardContainerSize, 'fast');
-    this.domNode.animate(boardCss, 'fast');    
+    this.domNode.css(boardCss, 'fast');    
   },
   
   itemAdded: function(addedItem, afterItem) {
