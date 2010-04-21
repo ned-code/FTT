@@ -7,7 +7,7 @@
   <div class="wrap">
     <div class="column one double of-four">
       <h2>
-        <%= @user.following.length %> <%= t('.contacts')%>
+        <span id="contactscount"><%= @user.following.length %></span> <%= t('.contacts')%>
       </h2>
       <ul id="contacts" class="vertical index">
         <% @user.following.each do |user|%>
@@ -19,7 +19,7 @@
     </div><!-- spaceless
  --><div class="column last double of-four">
       <h2>
-        <%= @user.followers.length %> <%= t('.subscribe_to_me')%>
+        <span id="followerscount"><%= @user.followers.length %></span> <%= t('.subscribe_to_me')%>
       </h2>
       <ul id="followers" class="vertical index">
         <% @user.followers.each do |user|%>

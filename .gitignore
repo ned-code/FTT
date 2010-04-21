@@ -42,4 +42,5 @@ db/test.sqlite3-journal
 public/shinding_test.html
 .idea
 db/schema.rb
+.bundle
 

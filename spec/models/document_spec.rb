@@ -205,13 +205,13 @@ describe Document do
       docs.size.should == 2
     end
 
-    it "should set a default number of document per page (4)" do
-      @doc5 = Factory(:document, :creator => @user)
-      @doc6 = Factory(:document, :creator => @user)
-      @doc7 = Factory(:document, :creator => @user)
-      docs = Document.all_public_paginated_with_explore_params
-      docs.size.should == 4
-    end
+    # it "should set a default number of document per page (4)" do
+    #   @doc5 = Factory(:document, :creator => @user)
+    #   @doc6 = Factory(:document, :creator => @user)
+    #   @doc7 = Factory(:document, :creator => @user)
+    #   docs = Document.all_public_paginated_with_explore_params
+    #   docs.size.should == 4
+    # end
 
   end
                                                             
