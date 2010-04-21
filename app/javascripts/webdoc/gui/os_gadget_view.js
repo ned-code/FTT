@@ -34,24 +34,23 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   },
   
   domNodeChanged: function($super) {
-    $super.domNodeChanged();
+    $super(); 
+    this.updateOverlay();   
     this.initGadget();
   },
   
   initGadget: function() {
     ddd("init gadget");
     if (this.item.getGadgetUrl()) {  
-      this.gadetContainer = new gadgets.IfrContainer();    
-      var gadget = this.gadetContainer.createGadget({specUrl: this.item.getGadgetUrl()});
-      this.gadetContainer.addGadget(gadget);
-      var layoutMap = {};
-      layoutMap[gadget.id] = "gadget-" + this.item.uuid();
-      this.gadetContainer.layoutManager.setGadgetChromeIds(layoutMap);
+      gadgets.container.setView("home");
+      this.gadget = gadgets.container.createGadget({specUrl: this.item.getGadgetUrl()});
+      gadgets.container.addGadget(this.gadget);
+      gadgets.container.layoutManager.addGadgetChromeId(this.gadget.id, "gadget-" + this.item.uuid());
 
       this._getSecureToken(function(token) {
-       gadget.secureToken = token;
-       gadget.setServerBase('/gadgets/');
-       this.gadetContainer.renderGadget(gadget);
+       this.gadget.secureToken = token;
+       this.gadget.setServerBase('/gadgets/');
+       gadgets.container.renderGadget(this.gadget);
        
       }.pBind(this));
       
@@ -69,11 +68,6 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
       }
       e.preventDefault();
     };
-  },
-  
-  domNodeChanged: function($super) {
-    $super();
-    this.updateOverlay();
   },
 
   updateOverlay: function() {
@@ -99,6 +93,11 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   viewDidLoad: function($super) {
     $super();
     this.initGadget();    
+  },
+  
+  destroy: function($super) {
+    $super();
+    gadgets.container.removeGadget(this.gadget);
   },
   
   _getSecureToken: function(callBack) {
