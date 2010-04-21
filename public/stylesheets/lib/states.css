@@ -23,6 +23,7 @@
     background-color: transparent;
     background-repeat: no-repeat;
 }
+.loading.loading-icon,
 .loading .loading-icon {
     display: block;
 }

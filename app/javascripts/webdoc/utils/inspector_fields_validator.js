@@ -22,7 +22,7 @@ $.extend(WebDoc.InspectorFieldsValidator, {
 
   validateBackgroundUrl: function(url) {
     var re = new RegExp("^url\((?:\"|')?(.*)(?:\"|')?\)$"); // Accepts string of type url(/images/back.png)
-    if(!url.match(re)) {
+    if(url && !url.match(re)) {
       throw("this method needs a value of type: url(<url>)");
     }
   },

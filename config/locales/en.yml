@@ -101,6 +101,7 @@ en:
         text_tool: "Insert Text"
         iframe_tool: "Insert Web page"
         drawing_tool: "Draw"
+        duplicate_document: "Duplicate document"
         toggle_inspector: "Toggle Inspector"
         library: "Show Library"
         item_inspector: "Show Inspector"
