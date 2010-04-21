@@ -114,15 +114,15 @@ class User < ActiveRecord::Base
   # Need to use this method instead of the original to_json cause user references document and vice versa
   def to_social_panel_json(current_user)
     { :user =>
-            {
-                    :id => self.id,
-                    :username => self.username,
-                    :bio => self.bio,
-                    :uuid => self.uuid,
-                    :avatar_thumb_url => self.avatar_thumb_url,
-                    :documents_count => self.documents_count,
-                    :following_info => self.follower?(current_user)
-            }
+      {
+        :id => self.id,
+        :username => self.username,
+        :bio => self.bio,
+        :uuid => self.uuid,
+        :avatar_thumb_url => self.avatar_thumb_url,
+        :documents_count => self.documents_count,
+        :following_info => self.follower?(current_user)
+      }
     }.to_json
   end
   
