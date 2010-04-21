@@ -22,8 +22,8 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     
     this.domNode
     .addClass("item-iframe")
-    .delegate('.item-placeholder', 'submit', this._makeSetSrcEventHandler() );
-    //.delegate('.item-placeholder input', 'blur', this._makeSetSrcEventHandler() );
+    .delegate('.item-placeholder', 'submit', this._makeSetSrcEventHandler() )
+    .delegate('.item-placeholder input', 'blur', this._makeSetSrcEventHandler() );
   },
   
   _makeSetSrcEventHandler: function(){

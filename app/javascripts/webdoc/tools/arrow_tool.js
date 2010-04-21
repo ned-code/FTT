@@ -104,7 +104,7 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     else {
       itemWrap = target.closest(".item_wrap");
       clickedItemView = itemWrap.data("itemView");
-      itemWrap.find('.item-placeholder input:eq(0)').focus();
+      // itemWrap.find('.item-placeholder input:eq(0)').focus();
     }
     return clickedItemView;
   }

@@ -32,6 +32,11 @@
 .mode-edit .item-layer {
     display: block;
 }
+
+#webdoc .item-placeholder input {
+  pointer-events: visible;
+}
+
 #webdoc .item-placeholder {
   position: relative;
   margin: 0.8333em;

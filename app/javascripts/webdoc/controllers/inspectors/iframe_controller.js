@@ -6,7 +6,7 @@ WebDoc.IframeController = $.klass({
   initialize: function( selector ) {
     this.domNode = $(selector);
 
-    $("#property-iframe-src").blur(this.updateSrc);
+    $("#property-iframe-src").change(this.updateSrc);
 
   },
 
