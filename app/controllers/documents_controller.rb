@@ -60,7 +60,7 @@ class DocumentsController < ApplicationController
 
   # POST /documents/:id/duplicate
   def duplicate
-    @new_document = @document.deep_clone_and_save!(current_user)
+    @new_document = @document.deep_clone_and_save!(current_user, params[:title])
     render :json => @new_document.to_json(:only => :uuid)
   end
   
