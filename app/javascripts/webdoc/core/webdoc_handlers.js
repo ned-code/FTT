@@ -63,6 +63,7 @@ WebDoc.handlers = {
     'insert-html':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.htmlSnipplet ); },
     'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
     'insert-iframe':        function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.iframeTool ); },
+    'insert-os-gadget':     function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.osGadgetTool ); },
 
     
     'to-back':              function(e) { WebDoc.application.boardController.moveSelectionToBack(); },
