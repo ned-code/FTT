@@ -73,9 +73,10 @@
         %div.draw-port
           %div.draw-size.draw-color
 
-  %ul.control-tools.edit-tools.tools.thumbs.index.icons-only.mode-preview-show
-    %li>
-      %a{ :href => "#webdoc-duplicate-document", :title => t('.duplicate_document') } Duplicate document
+  - if current_user.present?
+    %ul.control-tools.edit-tools.tools.thumbs.index.icons-only.mode-preview-show
+      %li>
+        %a{ :href => "#webdoc-duplicate-document", :title => t('.duplicate_document') } Duplicate document
 
   %ul.control-tools.mode-embed-hide.tools.thumbs.index.icons-only
     %li>
