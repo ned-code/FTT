@@ -96,7 +96,7 @@ WebDoc.handlers = {
   _documentHandlers: {
     'webdoc-prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },
     'webdoc-next-page':            function(e) { WebDoc.application.pageEditor.nextPage(); },
-    'webdoc-duplicate-document':   function(e) { WebDoc.application.pageEditor.duplicateDocument(); },
+    'webdoc-duplicate-document':   function(e) { WebDoc.application.pageEditor.duplicateDocument(e); },
     'webdoc-close':                function(e) { WebDoc.application.pageEditor.closeDocument(); }
   }
 };

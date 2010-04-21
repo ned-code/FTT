@@ -274,16 +274,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
 
   duplicateDocument: function(e) {
     ddd("duplicate document");
-
     WebDoc.application.documentDuplicateController.showDialog(e, this.currentDocument);
-
-
-    // jQuery('#webdoc-duplicate-document').pop({
-    //   attachTo: $( e.currentTarget ),
-    //   initCallback: function(){
-    //     this.currentDocument.duplicate();
-    //   }
-    // });
   },
   
   toggleDebugMode: function() {
