@@ -3,32 +3,6 @@
  * 
  * @author Julien Bachmann
 **/
-//= require <mtools/application>
-//= require <mtools/undo_manager>
-//= require <mtools/server_manager>
-//= require <mtools/uuid>
-
-//= require <webdoc/core/widget_manager>
-//= require <webdoc/core/webdoc_handlers>
-//= require <webdoc/core/pasteboard_manager>
-//= require <webdoc/adaptors/svg_renderer>
-//= require <webdoc/core/collaboration_manager>
-//= require <webdoc/controllers/board_controller>
-//= require <webdoc/library/libraries_controller>
-//= require <webdoc/controllers/right_bar_controller>
-//= require <webdoc/controllers/inspector_controller>
-//= require <webdoc/controllers/page_browser_controller>
-//= require <webdoc/controllers/toolbar_controller>
-//= require <webdoc/controllers/document_categories_controller>
-
-//= require <webdoc/tools/arrow_tool>
-//= require <webdoc/tools/drawing_tool>
-//= require <webdoc/tools/hand_tool>
-//= require <webdoc/tools/text_tool>
-//= require <webdoc/tools/html_tool>
-//= require <webdoc/tools/iframe_tool>
-
-//= require <webdoc/utils/field_validator>
 
 // application singleton.
 WebDoc.application = {};
@@ -76,6 +50,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
     WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
     WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
+    WebDoc.application.osGadgetTool = new WebDoc.OsGadgetTool( "a[href='#insert-os-gadget']", "insert-os-gadget" );
 
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
@@ -115,10 +90,13 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
        type: 'GET',
        dataType: 'json',              
        success: function(data, textStatus) {
+         ddd("will notify creator listener", this._creatorListeners);
          this.creator = data.user;
          var listenersCount = this._creatorListeners.length;
          for (var i = 0; i < listenersCount; i++) {
+            ddd("noify with callback", this._creatorListeners[i]);
             this._creatorListeners[i].call(this, this.creator);
+            ddd("notify done");
          }
        }.pBind(this),
        error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -154,6 +132,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       callBack.call(this, this.creator);
     }
     else {
+      ddd("register creator listener");
       this._creatorListeners.push(callBack);
     }
   },

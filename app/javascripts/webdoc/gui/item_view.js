@@ -199,6 +199,10 @@ WebDoc.ItemView = $.klass({
     this.item.removeListener();
   },
   
+  viewDidLoad: function() {
+    
+  },
+  
   _initDragAndResize: function() {
     this.domNode.draggable({
       containment: "parent",
@@ -329,7 +333,7 @@ $.extend(WebDoc.ItemView, {
     item.moveToAndResizeTo(top, left, width, height);
     WebDoc.application.undoManager.registerUndo(function() {
       WebDoc.ItemView.restorePositionAndSize(item, previousTop, previousLeft, previousWidth, previousHeight);
-	}.pBind(this));
+	  }.pBind(this));
   }
   
 });

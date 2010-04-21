@@ -14,7 +14,6 @@ WebDoc.SocialPanelController = jQuery.klass(WebDoc.RightBarInspectorController, 
     this.currentDocument = WebDoc.application.pageEditor.currentDocument;
     WebDoc.application.pageEditor.getCreator(function(creator) {
       this.creator = creator;
-      this._loadCreatorInformation();
     }.pBind(this));
     this.subscribeButton.click(this._subscribeAction.pBind(this));
     this.unsubscribeButton.click(this._unSubscribeAction.pBind(this));
@@ -23,36 +22,6 @@ WebDoc.SocialPanelController = jQuery.klass(WebDoc.RightBarInspectorController, 
   buttonSelector: function() {
     return this.SOCIAL_PANEL_BUTTON_SELECTOR;
   },  
-  
-  _loadCreatorInformation: function() {
-    if (this.creator.avatar_thumb_url) {
-      jQuery('#creator-info').css({
-        backgroundImage: "url('" + this.creator.avatar_thumb_url + "')"
-      });
-    }
-    jQuery('#creator-name').html(this.creator.username);
-    jQuery('#creator-bio')
-    .truncate(this.creator.bio, {
-      match: '<br/><br/><br/><br/>'  // Truncate to four lines of text
-    });
-    
-    jQuery('#creator-docs-count').html(this.creator.documents_count + ' ' + (this.creator.documents_count>1? 'webdocs' : 'webdoc'));
-    
-    if(this._isCreatorCurrentUser()) {
-      this.unsubscribeButton.hide();
-      this.subscribeButton.hide();
-    }
-    else {
-      if(this.creator.following_info) {
-        this.unsubscribeButton.show();
-        this.subscribeButton.hide();
-      }
-      else {
-        this.unsubscribeButton.hide();
-        this.subscribeButton.show();
-      }
-    }
-  },
   
   _subscribeAction: function() {
     ddd("Clicked on subscribe");

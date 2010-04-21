@@ -118,6 +118,7 @@ WebDoc.PageView = $.klass({
     else if (!afterItemView) {
       this.itemDomNode.prepend(itemViewToMove.domNode);
     }
+    itemViewToMove.viewDidLoad();
   },
    
   findItemView: function(uuid) {
@@ -142,6 +143,9 @@ WebDoc.PageView = $.klass({
       case WebDoc.ITEM_TYPE_IFRAME:
         itemView = new WebDoc.IframeView(item, this, afterItem);
         break;
+      case WebDoc.ITEM_TYPE_OS_GADGET:
+        itemView = new WebDoc.OsGadgetView(item, this, afterItem);
+        break;        
       default:
         itemView = new WebDoc.ItemView(item, this, afterItem);
         break;
@@ -192,5 +196,13 @@ WebDoc.PageView = $.klass({
     this.itemDomNode.find("embed[type='application/x-shockwave-flash']").each( function(index, element) {
       $(this).attr('wmode', 'transparent');
     });
+  },
+  
+  viewDidLoad: function() {
+    for (var itemId in this.itemViews) {
+      var anItemView = this.itemViews[itemId];
+      anItemView.viewDidLoad();
+      ddd("item view", anItemView);
+    }
   }
 });

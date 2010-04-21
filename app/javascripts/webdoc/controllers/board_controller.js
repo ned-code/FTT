@@ -116,6 +116,7 @@ WebDoc.BoardController = jQuery.klass({
     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
+    pageView.viewDidLoad();
   },
   
   isInteractionMode: function() {

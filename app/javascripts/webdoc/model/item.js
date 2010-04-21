@@ -6,6 +6,7 @@ WebDoc.ITEM_TYPE_IMAGE = "image";
 WebDoc.ITEM_TYPE_DRAWING = "drawing";
 WebDoc.ITEM_TYPE_WIDGET = "widget";
 WebDoc.ITEM_TYPE_IFRAME = "iframe";
+WebDoc.ITEM_TYPE_OS_GADGET = "os_gadget";
 
 WebDoc.Item = $.klass(MTools.Record, 
 {
@@ -186,6 +187,15 @@ WebDoc.Item = $.klass(MTools.Record,
 
   getSrc: function() {
     return this.data.data.src;
+  },
+  
+  getGadgetUrl: function() {
+    return this.property("gadgetUrl");  
+  },
+  
+  setGadgetUrl: function(url) {
+    this.setProperty("gadgetUrl", url);
+    this.fireDomNodeChanged();
   },
   
   fireObjectChanged: function($super) {

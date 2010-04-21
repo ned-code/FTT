@@ -118,12 +118,14 @@ javascripts:
     - app/javascripts/webdoc/gui/text_view.js
     - app/javascripts/webdoc/gui/widget_view.js
     - app/javascripts/webdoc/gui/iframe_view.js
+    - app/javascripts/webdoc/gui/os_gadget_view.js    
     - app/javascripts/webdoc/tools/tool.js
     - app/javascripts/webdoc/tools/arrow_tool.js
     - app/javascripts/webdoc/tools/drawing_tool.js
     - app/javascripts/webdoc/tools/hand_tool.js
     - app/javascripts/webdoc/tools/html_tool.js
     - app/javascripts/webdoc/tools/iframe_tool.js
+    - app/javascripts/webdoc/tools/os_gadget_tool.js
     - app/javascripts/webdoc/tools/text_tool.js
     - app/javascripts/webdoc/tools/text_tool/*.js
     - app/javascripts/webdoc/controllers/*.js  
