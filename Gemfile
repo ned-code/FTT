@@ -16,7 +16,7 @@ gem 'uuid'
 gem "mysql"
 
 # rails 3 Maybe
-gem 'carrierwave'
+gem 'carrierwave', "0.4.3"
 gem 'mini_magick'
 gem 'acl9'
 gem 'formtastic'
