@@ -118,6 +118,7 @@ WebDoc.PageView = $.klass({
     else if (!afterItemView) {
       this.itemDomNode.prepend(itemViewToMove.domNode);
     }
+    itemViewToMove.viewDidLoad();
   },
    
   findItemView: function(uuid) {

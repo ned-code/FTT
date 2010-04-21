@@ -43,6 +43,10 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
     ddd("init gadget");
     if (this.item.getGadgetUrl()) {  
       gadgets.container.setView("home");
+      if (this.gadget) {
+        gadgets.container.removeGadget(this.gadget);
+        this.gadget = null;
+      }
       this.gadget = gadgets.container.createGadget({specUrl: this.item.getGadgetUrl()});
       gadgets.container.addGadget(this.gadget);
       gadgets.container.layoutManager.addGadgetChromeId(this.gadget.id, "gadget-" + this.item.uuid());
