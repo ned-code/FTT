@@ -255,6 +255,36 @@ class Document < ActiveRecord::Base
       Notifier.deliver_removed_role_notification(current_user, role, user, self)
     end
   end
+
+  def deep_clone(creator, title)
+    cloned_document = self.clone
+    cloned_document.uuid = nil
+    cloned_document.created_at = nil
+    cloned_document.updated_at = nil
+    cloned_document.is_public = false
+    cloned_document.creator = creator
+    if title.present?
+      cloned_document.title = title
+    else
+      cloned_document.title = "Copy of " + self.title
+    end
+    self.pages.each do |page|
+      cloned_document.pages << page.deep_clone
+    end
+    cloned_document
+  end
+
+  def deep_clone_and_save!(creator, title)
+    cloned_document = nil
+    self.transaction do
+      cloned_document = self.deep_clone(creator, title)
+      cloned_document.save!
+      # TODO In version 2.3.6, there is a reset_counters(id, *counters) which do the next line properly
+      # but this function don't exist in 2.3.5
+      Document.connection.update("UPDATE `documents` SET `views_count` = #{cloned_document.view_counts.count} WHERE `id` = #{cloned_document.id}")
+    end
+    cloned_document
+  end
   
 private
   
@@ -265,18 +295,12 @@ private
   
   # before_create
   def create_default_page
-    pages.build
+    pages.build if pages.size == 0
   end
   
   def add_unvalid_email_to_array(email)
     @unvalid_access_emails ||= []
     @unvalid_access_emails << email
-  end
-
-  def duplicate
-    new_document = self.clone
-
-    new_document
   end
   
 end

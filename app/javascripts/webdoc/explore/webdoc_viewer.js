@@ -58,6 +58,7 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
       this._currentPageView.eventCatcherNode.show();
       this._currentPageView.eventCatcherNode.css("cursor", "move");
       this._containerNode.empty().append(this._currentPageView.domNode);
+      this._currentPageView.viewDidLoad();
       var width = this._viewerNode.width();
       var height = this._viewerNode.height();
       ddd("fit page view to ", width, height);   

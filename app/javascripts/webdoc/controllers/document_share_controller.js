@@ -211,5 +211,5 @@ WebDoc.DocumentShareController = $.klass({
   
   _closeDialog: function() {
     $(this).dialog('close');
-  },
+  }
 });

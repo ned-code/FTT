@@ -220,7 +220,7 @@ jQuery.extend(MTools.Record, {
           this.convertToRailsJSon(arrayItem, destinationObject, prefix + '[' + key + '_attributes][' + i +']');
         }               
       }
-      else if (typeof value == 'object') {
+      else if (value && typeof value == 'object') {
         var empty = true;
         for (var att in value) {
           empty = false;
