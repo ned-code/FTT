@@ -29,8 +29,9 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
     '}');
     
-    // Change input range sliders to text fields when sliders have no native UI.
-    // We can't style range inputs as text inputs, so we change them to text inputs.
+    // Change input range sliders to text fields when sliders have no native UI. We can't
+    // style range inputs as text inputs, so we change them to text inputs. Really, we
+    // should re-implement sliders by replacing the input, but right now I can't be arsed.
     // Apparently changing input types throws errors in <IE7...
     if ( !jQuery.support.inputTypes || !jQuery.support.inputTypes.range ) {
       jQuery("input[type='range']")
