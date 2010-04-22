@@ -145,7 +145,7 @@ WebDoc.BoardController = jQuery.klass({
     .addClass("current");
     
     //WebDoc.application.pageBrowserController.reveal();
-    //WebDoc.application.rightBarController.revealRightBar();
+    //WebDoc.application.rightBarController.reveal();
     if (this._previousInspector) {
       WebDoc.application.rightBarController.selectInspector(this._previousInspector);      
     }
@@ -177,7 +177,7 @@ WebDoc.BoardController = jQuery.klass({
     }
     
     //WebDoc.application.pageBrowserController.conceal();
-    //WebDoc.application.rightBarController.concealRightBar();
+    //WebDoc.application.rightBarController.conceal();
     if(WebDoc.application.rightBarController.getSelectedInspector() !== WebDoc.RightBarInspectorType.SOCIAL) {
       this._previousInspector = WebDoc.application.rightBarController.getSelectedInspector();
     }

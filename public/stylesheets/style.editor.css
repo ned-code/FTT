@@ -610,6 +610,9 @@ body {
     top: 65px;
     bottom: 0;
 }
+.mode-preview .pages-inspector {
+    top: 32px;
+}
 .inspector .tools {
     margin-bottom: 1px;
 }

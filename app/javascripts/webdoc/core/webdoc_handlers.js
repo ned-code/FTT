@@ -41,7 +41,7 @@ WebDoc.handlers = {
   // Editor actions (to be bound to the interface panels)
   _panelHandlers: {
     'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggle(); },
-    'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggleRightBar(); },
+    'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggle(); },
     
     'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggle(); },
     'library':              function(e) { WebDoc.application.rightBarController.showLib(e); },
