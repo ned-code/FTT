@@ -73,14 +73,12 @@
         %div.draw-port
           %div.draw-size.draw-color
 
-  - if current_user.present?
-    %ul.control-tools.edit-tools.tools.thumbs.index.icons-only.mode-preview-show
-      %li>
-        %a{ :href => "#webdoc-duplicate-document", :title => t('.duplicate_document') } Duplicate document
-
   %ul.control-tools.mode-embed-hide.tools.thumbs.index.icons-only
     %li>
       %a#debug-button{ :href => "#disable-html", :title => 'Disable HTML' } Disable HTML
+    - if current_user.present?
+      %li>
+        %a{ :href => "#webdoc-duplicate", :title => t('.duplicate_document') } Duplicate webdoc
     %li>
       %a{ :href => "#webdoc-close", :title => 'Close document' }= t('.close')
 

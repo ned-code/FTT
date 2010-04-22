@@ -91,13 +91,14 @@ WebDoc.handlers = {
       // Then click the tab
       // There must be a better way than this
       //jQuery('#images').find('a.my_images').click();
-    }
+    },
+    
+    'webdoc-duplicate':     function(e) { WebDoc.application.pageEditor.duplicateDocument(e); }
   },
   // Publicly accessible actions (to be bound to document)
   _documentHandlers: {
-    'webdoc-prev-page':            function(e) { WebDoc.application.pageEditor.prevPage(); },
-    'webdoc-next-page':            function(e) { WebDoc.application.pageEditor.nextPage(); },
-    'webdoc-duplicate-document':   function(e) { WebDoc.application.pageEditor.duplicateDocument(e); },
-    'webdoc-close':                function(e) { WebDoc.application.pageEditor.closeDocument(); }
+    'webdoc-prev-page':     function(e) { WebDoc.application.pageEditor.prevPage(); },
+    'webdoc-next-page':     function(e) { WebDoc.application.pageEditor.nextPage(); },
+    'webdoc-close':         function(e) { WebDoc.application.pageEditor.closeDocument(); }
   }
 };
