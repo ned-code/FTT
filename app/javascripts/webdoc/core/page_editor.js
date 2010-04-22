@@ -41,7 +41,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
         
         ddd('[PageEditor] input[type=range] changed to input[type=text] '+(i+1));
       });
-      jQuery("input-range-readout").remove();
+      jQuery(".input-range-readout").remove();
     }
     
     MTools.ServerManager.xmppClientId = new MTools.UUID().id;
