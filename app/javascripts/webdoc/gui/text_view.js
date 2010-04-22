@@ -42,7 +42,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   },
   
   innerHtmlChanged: function() {
-    if (!WebDoc.application.pageEditor.disableHtml) {
+    if (!WebDoc.application.disableHtml) {
       if ($.string(this.item.data.data.innerHTML).blank()) {
         this.domNode.append( this.placeholderNode );
       }

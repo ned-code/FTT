@@ -17,11 +17,8 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
     this._currentPageView = null;
     this._viewerNode = viewerNode;
     this._containerNode = null;   
-    WebDoc.application.pageEditor = this;
 
     viewerNode.data('object', this);
-        
-    WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     this._createViewerGUI();
   },
 
@@ -56,7 +53,7 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
       this._currentPage = page;  
       this._currentPageView = new WebDoc.PageView(page,this._containerNode);
       this._currentPageView.eventCatcherNode.show();
-      this._currentPageView.eventCatcherNode.css("cursor", "move");
+      this._currentPageView.eventCatcherNode.css("cursor", "pointer");
       this._containerNode.empty().append(this._currentPageView.domNode);
       this._currentPageView.viewDidLoad();
       var width = this._viewerNode.width();
@@ -96,6 +93,7 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
 
 $.extend(WebDoc.WebdocViewer, {
   showViewers: function() {
+    WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     var allViewerContainers = jQuery(".webdoc-viewer-container");
     for (var i = 0; i < allViewerContainers.length; i++) {
       var aViewerContainer = jQuery(allViewerContainers[i]);

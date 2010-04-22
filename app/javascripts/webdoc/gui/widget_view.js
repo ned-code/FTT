@@ -19,7 +19,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   createDomNode: function($super) {
     var widgetNode = $super();   
-    if (this.item.data.data.tag == "iframe" && !WebDoc.application.pageEditor.disableHtml) {            
+    if (this.item.data.data.tag == "iframe" && !WebDoc.application.disableHtml) {            
       this.domNode.addClass('loading');
       widgetNode.bind('load', function() {
         ddd("widget loaded");

@@ -78,7 +78,7 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   },
 
   updateOverlay: function() {
-    if (!WebDoc.application.pageEditor.disableHtml) {
+    if (!WebDoc.application.disableHtml) {
       var src = this.item.getGadgetUrl();
       if (!src) {
         this.domNode.append( this.placeholderNode );

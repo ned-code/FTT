@@ -4,10 +4,6 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  mongrel: 
-    group: 
-    - :development
-    version: ">= 0"
   rails: 
     group: 
     - :default
@@ -16,6 +12,16 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
+  mongrel: 
+    group: 
+    - :development
+    version: ">= 0"
+  sqlite3-ruby: 
+    group: 
+    - :test
+    version: ">= 0"
+    require: 
+    - sqlite3
   mysql: 
     group: 
     - :default
@@ -28,23 +34,13 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  sqlite3-ruby: 
-    group: 
-    - :test
-    version: ">= 0"
-    require: 
-    - sqlite3
   rack-debug: 
     group: 
-    - :test
+    - :default
     version: ">= 0"
   uuid: 
     group: 
     - :default
-    version: ">= 0"
-  rspec: 
-    group: 
-    - :test
     version: ">= 0"
   mime-types: 
     group: 
@@ -52,26 +48,34 @@ dependencies:
     version: ">= 0"
     require: 
     - mime/types
-  formtastic: 
+  rspec: 
     group: 
-    - :default
+    - :test
     version: ">= 0"
   rspec-rails: 
     group: 
     - :test
     version: ">= 0"
+  formtastic: 
+    group: 
+    - :default
+    version: ">= 0"
   webrat: 
     group: 
     - :test
     version: ">= 0"
-  capistrano-ext: 
+  factory_girl: 
     group: 
-    - :development
+    - :test
     version: ">= 0"
-  jammit: 
+  erubis: 
     group: 
     - :default
     version: ">= 0"
+  carrierwave: 
+    group: 
+    - :default
+    version: = 0.4.3
   devise: 
     group: 
     - :default
@@ -88,17 +92,13 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  carrierwave: 
-    group: 
-    - :default
-    version: = 0.4.3
-  erubis: 
+  jammit: 
     group: 
     - :default
     version: ">= 0"
-  factory_girl: 
+  capistrano-ext: 
     group: 
-    - :test
+    - :development
     version: ">= 0"
   rspactor: 
     group: 
@@ -108,11 +108,7 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  remarkable_rails: 
-    group: 
-    - :test
-    version: ">= 0"
-  mini_magick: 
+  acl9: 
     group: 
     - :default
     version: ">= 0"
@@ -120,15 +116,15 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  acl9: 
+  mini_magick: 
     group: 
     - :default
     version: ">= 0"
-  cucumber: 
+  remarkable_rails: 
     group: 
     - :test
     version: ">= 0"
-  rspec-factory-girl: 
+  cucumber: 
     group: 
     - :test
     version: ">= 0"
@@ -141,6 +137,10 @@ dependencies:
   warden: 
     group: 
     - :default
+    version: ">= 0"
+  rspec-factory-girl: 
+    group: 
+    - :test
     version: ">= 0"
   capistrano: 
     group: 
@@ -293,7 +293,7 @@ specs:
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: 1538ff7d0f31d63da3c5b1eb2a387cbe6d39f5dc
+hash: 100efbb3c974e128aad4836866e89dc1e823d957
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

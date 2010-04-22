@@ -60,7 +60,7 @@ WebDoc.ItemThumbnailView = $.klass({
   },
 
   domNodeChanged: function() {
-    if (!WebDoc.application.pageEditor.disableHtml) {
+    if (!WebDoc.application.disableHtml) {
       this.domNode.remove();
       this.domNode = this.createDomNode();
       this.domNode.css({ position: "absolute"}); 
