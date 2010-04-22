@@ -56,7 +56,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
 
   updateOverlay: function() {
     ddd('[iframe_view] updateOverlay()');
-    if (!WebDoc.application.pageEditor.disableHtml) {
+    if (!WebDoc.application.disableHtml) {
       var src = this.item.getSrc();
       if (src === "" || src === undefined) {
         this.domNode.append( this.placeholderNode );

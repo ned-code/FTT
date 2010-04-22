@@ -257,10 +257,10 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   },
   
   toggleDebugMode: function() {
-    this.disableHtml = !this.disableHtml; 
+    WebDoc.application.disableHtml = !WebDoc.application.disableHtml; 
     this.loadPageId( this.currentPage.uuid(), true);
-    $("#debug-button").text(this.disableHtml?"Enable HTML":"Disable HTML");
-    if (this.disableHtml) {
+    $("#debug-button").text(WebDoc.application.disableHtml?"Enable HTML":"Disable HTML");
+    if (WebDoc.application.disableHtml) {
         $("#debug-button").addClass("active");
     }
     else {

@@ -38,7 +38,7 @@ WebDoc.PageView = $.klass({
     this.domNode.css(boardCss);
     ddd( page.data.data.css );
     
-    if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
+    if (page.data.data.externalPage && !WebDoc.application.disableHtml) {
       // Handle case where page is an external webpage
       
       externalPage = $("<iframe/>").addClass('layer');

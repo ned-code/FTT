@@ -1,4 +1,9 @@
-MTools.Application.beforeMain("explore", function() {
+/**
+ * This script add viewer list capabilities to the page. It must be included in each page that uses the _viewer_list partial
+ * Basically, it will instanciate all webdoc viewer on the page and connaect all webdoc viewer actions with the viewers (previous page, next page, pen, etc...)
+ * @author Julien Bachmann
+ */
+MTools.Application.beforeMain("viewer_list_handler", function() {
   //bind all necessary events
   
   // launch viewers
@@ -23,8 +28,6 @@ MTools.Application.beforeMain("explore", function() {
   })
   .delegate('.webdoc-viewer-container', 'click', function(e){
     $("#"+$(this).attr('data-webdoc-document-id')).data('object').open();
-//    var id = $(this).attr('data-webdoc-document-id');
-//    window.location.href = '/documents/'+id;
   });
   
   jQuery('.webdoc-viewer-title h4').truncate();
