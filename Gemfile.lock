@@ -64,6 +64,10 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
+  capistrano-ext: 
+    group: 
+    - :development
+    version: ">= 0"
   jammit: 
     group: 
     - :default
@@ -138,6 +142,10 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
+  capistrano: 
+    group: 
+    - :development
+    version: ">= 0"
 specs: 
 - rake: 
     version: 0.8.7
@@ -165,6 +173,20 @@ specs:
     version: 2.3.5
 - builder: 
     version: 2.1.2
+- highline: 
+    version: 1.5.2
+- net-ssh: 
+    version: 2.0.22
+- net-scp: 
+    version: 1.0.2
+- net-sftp: 
+    version: 2.0.4
+- net-ssh-gateway: 
+    version: 1.0.1
+- capistrano: 
+    version: 2.5.18
+- capistrano-ext: 
+    version: 1.2.1
 - carrierwave: 
     version: 0.4.3
 - cgi_multipart_eof_fix: 
@@ -271,7 +293,7 @@ specs:
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: 45c588c15ac407ffbd5b05e195035ac7113d58e7
+hash: 1538ff7d0f31d63da3c5b1eb2a387cbe6d39f5dc
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

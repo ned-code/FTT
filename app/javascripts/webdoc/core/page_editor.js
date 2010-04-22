@@ -20,11 +20,29 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
     } 
     this._creatorListeners = [];
+    
+    // Feature detection
+    
     // Add feature detected styles to head
     MTools.Application.createStyle('body, .push-scroll {'+
       'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
       'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
     '}');
+    
+    // Change input range sliders to text fields when sliders have no native UI. We can't
+    // style range inputs as text inputs, so we change them to text inputs. Really, we
+    // should re-implement sliders by replacing the input, but right now I can't be arsed.
+    // Apparently changing input types throws errors in <IE7...
+    if ( !jQuery.support.inputTypes || !jQuery.support.inputTypes.range ) {
+      jQuery("input[type='range']")
+      .each(function(i){
+        var input = this;
+        input.type = "text";
+        
+        ddd('[PageEditor] input[type=range] changed to input[type=text] '+(i+1));
+      });
+      jQuery("input-range-readout").remove();
+    }
     
     MTools.ServerManager.xmppClientId = new MTools.UUID().id;
     
