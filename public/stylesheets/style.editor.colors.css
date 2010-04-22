@@ -340,6 +340,10 @@ a[href="#insert-iframe"]            { background-position: 0 -2752px; }
 a[href="#insert-iframe"]:hover      { background-position: 0 -2816px; }
 a[href="#insert-iframe"]:active     { background-position: 0 -2880px; }
 
+a[href="#insert-os-gadget"]         { background-position: 0 -2944px; }
+a[href="#insert-os-gadget"]:hover   { background-position: 0 -3008px; }
+a[href="#insert-os-gadget"]:active  { background-position: 0 -3072px; }
+
 .inspector-views a,
 .panel-tools a                      { background-image: url('/images/panel-tools.png'); }
 
@@ -427,4 +431,9 @@ a[href="#disable-html"]               { background-position: 0 -704px; }
 a[href="#disable-html"]:hover         { background-position: 0 -768px; }
 a[href="#disable-html"].active,
 a[href="#disable-html"]:active        { background-position: 0 -832px; }
+
+a[href="#webdoc-duplicate"]           { background-position: 0 -896px; }
+a[href="#webdoc-duplicate"]:hover     { background-position: 0 -960px; }
+a[href="#webdoc-duplicate"].active,
+a[href="#webdoc-duplicate"]:active    { background-position: 0 -1024px; }
 

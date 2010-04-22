@@ -1,5 +1,5 @@
 class ExploreController < ApplicationController
-  
+  before_filter :authenticate_user!
   # GET /explore
   def index
     set_return_to
