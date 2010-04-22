@@ -92,12 +92,11 @@ class Document < ActiveRecord::Base
     if following_ids.present?
       all(
         :joins => "INNER JOIN roles ON roles.authorizable_id = documents.id INNER JOIN roles_users ON roles_users.role_id = roles.id",
-        :conditions => ['creator_id IN (?) AND (documents.is_public = ? OR (roles.authorizable_type = ? AND (roles.name = ? OR roles.name = ?) AND roles_users.user_id = ?))',
+        :conditions => ['creator_id IN (?) AND (documents.is_public = ? OR (roles.authorizable_type = ? AND roles.name IN (?) AND roles_users.user_id = ?))',
                       following_ids,
                       true,
                       self.class_name.to_s,
-                      'editor',
-                      'reader',
+                      [ 'editor', 'reader' ],
                       current_user.id
         ],
         :limit => limit,
