@@ -33,6 +33,8 @@ group :development do
   # bundler requires these gems in development
   gem "sqlite3-ruby", :require => "sqlite3"
   gem "mongrel"
+  gem "capistrano"
+  gem "capistrano-ext"
 end
 
 group :test do
