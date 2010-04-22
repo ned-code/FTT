@@ -230,13 +230,6 @@ describe Document do
       docs.should == [@doc2, @doc1]
     end
 
-    it "should find all public and not public with reader role" do
-      @user.has_role!("reader", @doc3)
-      docs = Document.last_modified_from_following(@user, 10)
-      docs.size.should == 3
-      docs.should == [@doc3, @doc2, @doc1]
-    end
-
     it "should find all public and not public with editor role" do
       @user.has_role!("editor", @doc4)
       docs = Document.last_modified_from_following(@user, 10)
@@ -291,14 +284,18 @@ describe Document do
 
     subject{ Factory(:document) }
 
+    before do
+      @creator = Factory(:user)
+    end
+
     it "should clone a empty document" do
-      clone = subject.deep_clone
+      clone = subject.deep_clone(@creator, 'test')
       clone.pages.length.should == 1
     end
 
     it "should clone a document with many pages" do
       subject.pages.create
-      clone = subject.deep_clone
+      clone = subject.deep_clone(@creator, 'test')
       clone.pages.length.should == 2
     end
 
@@ -308,15 +305,22 @@ describe Document do
       subject.pages.last.items.create
       subject.pages.last.items.create
 
-      clone = subject.deep_clone
+      clone = subject.deep_clone(@creator, 'test')
       clone.pages.first.items.length.should == 1
       clone.pages.last.items.length.should == 2            
     end
 
     it "should save when call deep_clone_and_save!" do
-      subject.deep_clone_and_save!.should be_present
+      subject.deep_clone_and_save!(@creator, 'test').should be_present
     end
-    
+
+    it "should update the views_count" do
+      Factory(:view_count, :viewable => subject)
+      subject.reload.views_count.should == 1
+      clone = subject.deep_clone_and_save!(@creator, 'test')
+      clone.reload.views_count.should == 0
+    end
+
   end
 
 end
