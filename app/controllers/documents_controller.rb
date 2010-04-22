@@ -1,7 +1,10 @@
 class DocumentsController < ApplicationController
+  # need to be authenticate for alpha release.
+  # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document
+  before_filter :authenticate_user!
   before_filter :instantiate_document, :only => [:show, :update, :duplicate, :destroy]
-  before_filter :authenticate_if_needed, :only => [:show]
-  before_filter :authenticate_user!, :only => [:index]
+  #before_filter :authenticate_if_needed, :only => [:show]
+  #before_filter :authenticate_user!, :only => [:index]
   after_filter :create_view_count, :only => :show
   
   access_control do

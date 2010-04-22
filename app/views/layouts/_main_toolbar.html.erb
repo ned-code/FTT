@@ -3,7 +3,8 @@
     <a href="/">
       <h1 class="logo">webdoc</h1>
     </a>
-    <ul class="navbar divided index">
+    <% if user_signed_in? %>
+    <ul class="navbar index">
       <li>
         <a href="/" <% if params[:controller]=='documents' %>class="current"<% end %>>home</a>
       </li
@@ -11,6 +12,7 @@
         <a href="/explore" <% if params[:controller]=='explore' %>class="current"<% end %>>explore</a>
       </li>
     </ul>
+    <% end %>
     
     <% if user_signed_in? %>
     <div class="userbar">
