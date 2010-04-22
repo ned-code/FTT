@@ -100,6 +100,7 @@ en:
         html_tool: "Insert HTML"
         text_tool: "Insert Text"
         iframe_tool: "Insert Web page"
+        os_gadget_tool: "Insert open social app"
         drawing_tool: "Draw"
         duplicate_document: "Duplicate document"
         toggle_inspector: "Toggle Inspector"
