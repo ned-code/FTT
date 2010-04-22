@@ -14,6 +14,7 @@ gem 'will_paginate'
 gem 'uuidtools' # for has_uuid plugin
 gem 'uuid'
 gem "mysql"
+gem 'rack-debug'
 
 # rails 3 Maybe
 gem 'carrierwave', "0.4.3"
@@ -46,8 +47,6 @@ group :test do
 
   gem 'factory_girl'
   gem 'rspec-factory-girl'
-
-  gem 'rack-debug'
 
   gem 'webrat'
   gem 'cucumber'
