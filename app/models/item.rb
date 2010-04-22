@@ -6,6 +6,8 @@ class Item < ActiveRecord::Base
   
   # see XmppItemObserver
   attr_accessor_with_default :must_notify, false
+
+  attr_accessor_with_default :touch_page_active, true
   
   # ================
   # = Associations =
@@ -13,9 +15,16 @@ class Item < ActiveRecord::Base
   
   has_many :datastore_entries, :dependent => :destroy
   
-  belongs_to :page, :touch => true
+  belongs_to :page
   belongs_to :media, :polymorphic => true
-  
+
+  # =============
+  # = Callbacks =
+  # =============
+
+  after_save :touch_page
+  after_destroy :touch_page
+
   # ====================
   # = Instance Methods =
   # ====================
@@ -46,10 +55,19 @@ class Item < ActiveRecord::Base
 
   def deep_clone
     cloned_item = self.clone
+    cloned_item.touch_page_active = false
     cloned_item.uuid = nil
     cloned_item.created_at = nil
     cloned_item.updated_at = nil
     cloned_item
+  end
+
+  private
+
+  # after_save
+  # after_destroy
+  def touch_page
+    self.page.touch if touch_page_active == true
   end
 
 end
