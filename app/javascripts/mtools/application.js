@@ -39,7 +39,7 @@ $.extend(MTools.Application, {
         type: 'GET',
         dataType: 'json',
         success: function(data, textStatus) {
-          if (WebDoc && WebDoc.authData) {
+          if (window.WebDoc && WebDoc.authData) {
             $.ajaxSetup({
               data: {
                 authenticity_token: WebDoc.authData.authToken

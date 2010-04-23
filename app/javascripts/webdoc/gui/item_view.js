@@ -68,7 +68,7 @@ WebDoc.ItemView = $.klass({
   
   createDomNode: function() {
     var itemNode;
-    if (WebDoc.application.pageEditor.disableHtml) {
+    if (WebDoc.application.disableHtml) {
       itemNode = $('<div/>');
       itemNode.css(this.item.data.data.css);
     }
@@ -129,13 +129,13 @@ WebDoc.ItemView = $.klass({
   },
 
   innerHtmlChanged: function() {
-    if (!WebDoc.application.pageEditor.disableHtml && this.item.data.data.tag !== "iframe") {    
+    if (!WebDoc.application.disableHtml && this.item.data.data.tag !== "iframe") {    
       this.itemDomNode.html($.string().stripScripts(this.item.data.data.innerHTML));
     }
   },
   
   domNodeChanged: function() {
-    if (!WebDoc.application.pageEditor.disableHtml) {
+    if (!WebDoc.application.disableHtml) {
       this.unSelect();
       this.itemDomNode.remove();
       this.itemDomNode = this.createDomNode().addClass("item").addClass("layer webdoc").css({

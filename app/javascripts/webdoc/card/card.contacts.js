@@ -121,7 +121,7 @@ function removeFromContacts(e) {
 		duration: 500,
 		step: step,
 		complete: callback
-	})
+	});
 }
 
 function makeUpdateCount( listNode, countNode ) {
@@ -133,8 +133,8 @@ function makeUpdateCount( listNode, countNode ) {
 }
 
 jQuery(document).ready(function(){
-	contacts = jQuery('#contacts'),
-	contactscount = jQuery('#contactscount'),
+	contacts = jQuery('#contacts');
+	contactscount = jQuery('#contactscount');
 	followers = jQuery('#followers');
 	
 	followers

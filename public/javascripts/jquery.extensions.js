@@ -1,19 +1,25 @@
-// Feature detection
+// Extensions to jQuery
+//
+// Stephen Band
+//
+// Feature detection, and helper methods for jQuery and jQuery.fn
 
-// Detects whether different types of html5 form elements have native UI implemented
-// You may find inspirarion at Mike Taylor's site, here:
+// Detect whether different types of html5 form elements have native UI implemented
+// and store boolean in jQuery.support.inputTypes[type]. For now, types not used in
+// webdoc are commented out.
+// You may find inspiration at Mike Taylor's site, here:
 // http://www.miketaylr.com/code/html5-forms-ui-support.html
 
 (function(jQuery, undefined){
     var input = jQuery('<input/>', { }).css({ position: 'absolute', top: -100 }),
         types = jQuery.support.inputTypes = {
-          datetime: false,
-          date: false,
-          month: false,
-          week: false,
-          time: false,
-          'datetime-local': false,
-          number: false,
+          //datetime: false,
+          //date: false,
+          //month: false,
+          //week: false,
+          //time: false,
+          //'datetime-local': false,
+          //number: false,
           range: false
         };
     
@@ -28,6 +34,7 @@
           // Change the input type, then check to see if it still behaves like a text input.
           // According to jQuery, changing type property causes problems in IE:
           // http://stackoverflow.com/questions/1544317/jquery-change-type-of-input-field
+          // so we may have to change this...
           
           input[0].type = type;
           input[0].value = testValue;
