@@ -14,17 +14,17 @@
 
 <style type="text/css" media="screen, projection">
 
-    /*@import url('../../public/stylesheets/reset.css');*/
-    /*@import url('../../public/stylesheets/style.css');*/
-    @import url('../../public/stylesheets/style.editor.typography.css');
+    @import url('../../public/stylesheets/reset.css');
+    @import url('../../public/stylesheets/style.css');
+    @import url('../../public/stylesheets/theme.swisschocolate.typography.css');
     
     /**/
     body {
-      background: url('images/grid_20px.png');
+      background-image: url('images/grid_21px.png') !important;
     }
-    h1,h2,h3,h4,h5,h6,p,li, blockquote {
-      outline: 1px solid #fbdeee;
-    }
+    /*h1,h2,h3,h4,h5,h6,p,li, blockquote {
+      outline: 1px solid hsla(0, 0%, 100%, 0.1);
+    }*/
     /**/
 
     html {
@@ -38,6 +38,10 @@
     .test {
       margin: 0;
       padding: 0 32px;
+    }
+    .color {
+      width: 128px; height: 128px;
+      float: left;
     }
 
 </style>
@@ -174,6 +178,21 @@ Suisse
 <code>.style {
   background-color: 34px;
 }</code>
+
+<div class="test clear">
+<div class="color theme-color-1"></div>
+<div class="color theme-color-2"></div>
+<div class="color theme-color-3"></div>
+<div class="color theme-color-4"></div>
+<div class="color theme-color-5"></div>
+<div class="color theme-color-6"></div>
+<div class="color theme-color-7"></div>
+<div class="color theme-color-8"></div>
+<div class="color theme-color-9"></div>
+<div class="color theme-color-10"></div>
+<div class="color theme-color-11"></div>
+<div class="color theme-color-12"></div>
+</div>
 
 <pre>
 font-family

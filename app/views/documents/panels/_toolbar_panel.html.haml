@@ -1,14 +1,15 @@
 #toolbar.toolbar-panel.panel
-  %div.logo
+  %a{ :href => "#webdoc-close" }
+    %div.logo
   
   %ul.pages-tools.tools.thumbs.index.icons-only
     -# JBA we need to define ho to manage those new button
-    -#%li.mode-preview-show>
-    -#  %a{ :href => "#prev-page", :title => t('.prev') }
-    -#    = t('.prev')
-    -#%li.mode-preview-show>
-    -#  %a{ :href => "#next-page", :title => t('.next') }
-    -#    = t('.next')
+    %li>
+      %a{ :href => "#webdoc-prev-page", :title => t('.prev') }
+        = t('.prev')
+    %li>
+      %a{ :href => "#webdoc-next-page", :title => t('.next') }
+        = t('.next')
     %li.mode-edit-show>
       %a{ :href => "#add-page", :title => t('.add_page') }
         = t('.add_page')
@@ -16,14 +17,14 @@
   %ul#view_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
     %li>
-      %a{ :href => "#zoom-in" , :title => t('.zoom_in') }
-        = t('.zoom_in')
-    %li>
       %a{ :href => "#zoom-out" , :title => t('.zoom_out') }
         = t('.zoom_out')
     %li>
-      %a.state-tool{ :href => "#move" , :title => t('.move') }
-        = t('.move')
+      %a{ :href => "#zoom-in" , :title => t('.zoom_in') }
+        = t('.zoom_in')
+    -#%li>
+    -#  %a.state-tool{ :href => "#move" , :title => t('.move') }
+    -#    = t('.move')
   
   %ul#edit_tools.edit-tools.tools.thumbs.index.icons-only.mode-edit-show
     -# Whitespace is removed between lis to preserve layout
@@ -45,32 +46,47 @@
   
   %ul#misc_tools.edit-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li>
-      %a.state-tool{ :href => "#select" , :title => t('.select') }
-        = t('.select')
     %li.mode-edit-show>
       %a{ :href => "#insert-html" , :title => t('.html_tool') }
         = t('.html_tool')
     %li.mode-edit-show>
+      %a{ :href => "#insert-iframe" , :title => t('.iframe_tool') }
+        = t('.iframe_tool')
+    %li.mode-edit-show>
       %a{ :href => "#insert-text" , :title => t('.text_tool') }
         = t('.text_tool')
+    %li.mode-edit-show>
+      %a{ :href => "#insert-os-gadget" , :title => t('.os_gadget_tool') }
+        = t('.os_gadget_tool')        
+
+  %ul#misc_tools.edit-tools.group-tools.tools.thumbs.index.icons-only
+    -# Whitespace is removed between lis to preserve layout
+    %li>
+      %a.state-tool{ :href => "#select" , :title => t('.select') }
+        = t('.select')
+    %li>
+      %a.state-tool{ :href => "#move" , :title => t('.move') }
+        = t('.move')
     %li.mode-edit-show>
       %a.state-tool{ :href => "#draw" , :title => t('.drawing_tool') }
         = t('.drawing_tool')
         %div.draw-port
           %div.draw-size.draw-color
-  
+
   %ul.control-tools.mode-embed-hide.tools.thumbs.index.icons-only
     %li>
-      %a#debug-button{ :href => "#disable-html"} Disable HTML
+      %a#debug-button{ :href => "#disable-html", :title => 'Disable HTML' } Disable HTML
+    - if current_user.present?
+      %li>
+        %a{ :href => "#webdoc-duplicate", :title => t('.duplicate_document') } Duplicate webdoc
     %li>
-      %a{ :href => "#webdoc-close"}= t('.close')
+      %a{ :href => "#webdoc-close", :title => 'Close document' }= t('.close')
 
   %ul.mode-tools.mode-embed-hide.tools.thumbs.index.icons-only
     %li>
-      %a.state-mode{ :href => "#mode-edit"}= t('.mode_edit')
+      %a.state-mode{ :href => "#mode-edit", :title => 'Edit mode' }= t('.mode_edit')
     %li>
-      %a.state-mode{ :href => "#mode-preview"}= t('.mode_preview')
+      %a.state-mode{ :href => "#mode-preview", :title => 'Preview mode' }= t('.mode_preview')
   
   %div.page-details
     %span.webdoc-page-number.number 0

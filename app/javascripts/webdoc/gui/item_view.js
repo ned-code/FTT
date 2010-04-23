@@ -61,11 +61,14 @@ WebDoc.ItemView = $.klass({
     delete itemCss.height;
     this.itemDomNode.css(itemCss);
 
+    if (this.item.data.data.innerHTML) {
+      this.innerHtmlChanged();
+    }
   },
   
   createDomNode: function() {
     var itemNode;
-    if (WebDoc.application.pageEditor.disableHtml) {
+    if (WebDoc.application.disableHtml) {
       itemNode = $('<div/>');
       itemNode.css(this.item.data.data.css);
     }
@@ -73,9 +76,10 @@ WebDoc.ItemView = $.klass({
       itemNode = $('<' + this.item.data.data.tag + '/>');
       for (var key in this.item.data.data) {
         switch(key) {
+          case "innerHTML":
+          // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
           case "innerHtml":
-            itemNode.html($string().scriptScripts(this.item.data.data[key]));
-            break;
+          case "tag":
           case "css":        
           case "preference":
           case "properties":
@@ -123,16 +127,15 @@ WebDoc.ItemView = $.klass({
       this.itemDomNode.css(itemCss);
     }
   },
- 
-  
+
   innerHtmlChanged: function() {
-    if (!WebDoc.application.pageEditor.disableHtml) {    
-      this.itemDomNode.html($string().stripScripts(this.item.data.data.innerHTML));
+    if (!WebDoc.application.disableHtml && this.item.data.data.tag !== "iframe") {    
+      this.itemDomNode.html($.string().stripScripts(this.item.data.data.innerHTML));
     }
   },
   
-  domNodeChangedChanged: function() {
-    if (!WebDoc.application.pageEditor.disableHtml) {
+  domNodeChanged: function() {
+    if (!WebDoc.application.disableHtml) {
       this.unSelect();
       this.itemDomNode.remove();
       this.itemDomNode = this.createDomNode().addClass("item").addClass("layer webdoc").css({
@@ -196,6 +199,10 @@ WebDoc.ItemView = $.klass({
     this.item.removeListener();
   },
   
+  viewDidLoad: function() {
+    
+  },
+  
   _initDragAndResize: function() {
     this.domNode.draggable({
       containment: "parent",
@@ -235,14 +242,14 @@ WebDoc.ItemView = $.klass({
         this.aspectRatio = ui.size.width / ui.size.height;
         var currentSize = { width: this.item.data.data.css.width, height: this.item.data.data.css.height};
         WebDoc.application.undoManager.registerUndo(function() {
-          WebDoc.ItemView._restoreSize(this.item, currentSize);
+          WebDoc.ItemView.restoreSize(this.item, currentSize);
         }.pBind(this));
       }.pBind(this)        ,
       resize: function(e, ui) {
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
         var newWidth = ui.originalSize.width + (mappedPoint.x - this.resizeOrigin.x);
         var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y);
-        if(e.shiftKey){
+        if(e.shiftKey || this.item.data.data.preserve_aspect_ratio === "true"){
           ui.size.width = this.aspectRatio*newHeight;
         }
         else {
@@ -308,14 +315,26 @@ $.extend(WebDoc.ItemView, {
     item.save();    
   },
   
-  _restoreSize: function(item, size) {
+  restoreSize: function(item, size) {
     ddd("restore size" + size.height + ":" + size.width);
     var previousSize = { width: item.data.data.css.width, height: item.data.data.css.height};
     item.resizeTo(size);
     WebDoc.application.undoManager.registerUndo(function() {
-      WebDoc.ItemView._restoreSize(item, previousSize);
+      WebDoc.ItemView.restoreSize(item, previousSize);
     }.pBind(this));
     item.save();  
+  },
+
+  restorePositionAndSize: function(item, top, left, width, height) {
+    var previousTop = item.data.data.css.top,
+        previousLeft = item.data.data.css.left,
+        previousWidth = item.data.data.css.width,
+        previousHeight = item.data.data.css.height;
+    item.moveToAndResizeTo(top, left, width, height);
+    WebDoc.application.undoManager.registerUndo(function() {
+      WebDoc.ItemView.restorePositionAndSize(item, previousTop, previousLeft, previousWidth, previousHeight);
+	  }.pBind(this));
   }
+  
 });
 

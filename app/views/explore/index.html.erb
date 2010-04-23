@@ -1,39 +1,24 @@
 <div class="action-zone zone">
   <div class="wrap">
-    <%= will_paginate @public_documents %>
-  
-    <div>
-      Show the most 
+    <h2>Explore</h2>
+    <p>Show the
       <select id="wd-main-filter">
-        <option value="recent" <%= "selected=\"true\"" if params[:main_filter] == "recent" %>><%= t(".select.main_filter.recent")%></option>
-        <option value="viewed" <%= "selected=\"true\"" if params[:main_filter] == "viewed" %>><%= t(".select.main_filter.viewed")%></option>  
+        <option value="recent" <%= "selected=\"true\"" if params[:main_filter] == "recent" %>><%= t("phrases.most_recent")%></option>
+        <option value="viewed" <%= "selected=\"true\"" if params[:main_filter] == "viewed" %>><%= t("phrases.most_popular")%></option>
       </select>
-      webdocs in
+      webdocs in the category
       <select id="wd-category-filter">
-        <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t(".select.category.all")%></option>
+        <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t("words.all")%></option>
         <% Category.all.each do |category|%>
-          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= t(".select.category_filter.#{category.name}") %></option>  
+          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= "#{category.name} (#{category.number_of_public_documents})" %></option>  
         <% end %>        
       </select>
-      categories
-    </div>
+    </p>
   </div>
 </div>
 <div class="content">
-  <div id="webdoc" class="wrap">
-
-    <ul class="index" style="font-size:133%">
-      <% @public_documents.each do |document| %>
-        <li>
-          <div class="webdoc-viewer-container" id="<%= document.uuid() %>"></div>
-        </li>      
-      <% end %>
-    </ul>
+  <div class="wrap">
+    <%= render :partial => "viewer_list", :locals => { :documents => @public_documents } %>
+    <%= raw( will_paginate(@public_documents, :container => false) ) %>
   </div>
 </div>
-<%= include_stylesheets :page_viewer, :media => 'all' %>      
-<% content_for :scripts do %>
-  <%= include_javascripts :page_editor %>
-  <%= include_javascripts :explore %>
-<% end %>
-      

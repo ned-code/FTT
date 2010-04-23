@@ -5,6 +5,8 @@ WebDoc.ITEM_TYPE_TEXT = "text";
 WebDoc.ITEM_TYPE_IMAGE = "image";
 WebDoc.ITEM_TYPE_DRAWING = "drawing";
 WebDoc.ITEM_TYPE_WIDGET = "widget";
+WebDoc.ITEM_TYPE_IFRAME = "iframe";
+WebDoc.ITEM_TYPE_OS_GADGET = "os_gadget";
 
 WebDoc.Item = $.klass(MTools.Record, 
 {
@@ -127,13 +129,20 @@ WebDoc.Item = $.klass(MTools.Record,
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
 
-	setOpacity: function(newOpacity){
-		if(parseFloat(newOpacity)){
-			this.data.data.css.opacity = parseFloat(newOpacity);
-			this.fireObjectChanged();
-		}
-	},
-  
+  moveToAndResizeTo: function(top, left, width, height) {
+    this.data.data.css.top = top;
+    this.data.data.css.left = left;
+    this.data.data.css.width = width;
+    this.data.data.css.height = height;
+    this.fireObjectChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+
+  setOpacity: function(newOpacity){
+    this.data.data.css.opacity = parseFloat(newOpacity);
+    this.fireObjectChanged();
+  },
+
   setInnerHtml: function(html, force) {
     if (html != this.data.data.innerHTML || force) {
 	    // Force to wmode transparent if necessary
@@ -168,6 +177,26 @@ WebDoc.Item = $.klass(MTools.Record,
   getInnerText: function() {
     return this.removeHtmlTags(this.data.data.innerHTML);
   },
+
+  setSrc: function(newSrc) {
+    this.data.data.src = this._consolidateSrc(newSrc);
+    this.save();
+    this.fireDomNodeChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+
+  getSrc: function() {
+    return this.data.data.src;
+  },
+  
+  getGadgetUrl: function() {
+    return this.property("gadgetUrl");  
+  },
+  
+  setGadgetUrl: function(url) {
+    this.setProperty("gadgetUrl", url);
+    this.fireDomNodeChanged();
+  },
   
   fireObjectChanged: function($super) {
     $super();
@@ -183,8 +212,8 @@ WebDoc.Item = $.klass(MTools.Record,
   
   fireDomNodeChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
-      if (this.listeners[i].domNodeChangedChanged) {
-        this.listeners[i].domNodeChangedChanged();
+      if (this.listeners[i].domNodeChanged) {
+        this.listeners[i].domNodeChanged();
       }
     }    
   },
@@ -246,6 +275,25 @@ WebDoc.Item = $.klass(MTools.Record,
   _endsWith: function(s, pattern) {
     var d = s.length - pattern.length;
     return d >= 0 && s.lastIndexOf(pattern) === d;
+  },
+  
+  _consolidateSrc: function(src) {
+        
+    var pattern_url = /[A-Za-z0-9\.-]{3,}\.[A-Za-z]+/;
+    var pattern_has_protocole = /^(ftp|http|https):\/\/?(\w*)/;
+
+    if (src.match(pattern_url)) {
+      if (src.match(pattern_has_protocole)) {
+        return src;
+      }
+      else {
+        return "http://" + src;
+      }
+
+    }
+    else {
+      return "";
+    }
   }
 });
 

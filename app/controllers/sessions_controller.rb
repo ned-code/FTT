@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   
   # GET /user
   def show
-    render :json => current_user ? current_user.to_json(:only => [:id, :username]) : "{}"
+    render :json => current_user ? current_user.to_json(:only => [:id, :username, :uuid]) : "{}"
   end
   
   # GET /resource/sign_in
@@ -25,6 +25,7 @@ class SessionsController < ApplicationController
     else
       set_now_flash_message :alert, warden.message || :invalid
       @user = User.new
+      @top_documents = Document.all_public_paginated_with_explore_params("recent", "all", nil, 4)
       render 'home/show'
     end
   end

@@ -8,8 +8,10 @@
     = include_stylesheets :application, :media => 'all'
     
   %body{ :class => controller_name }
-    = render :partial => "layouts/main_toolbar"    
+    = render :partial => "layouts/main_toolbar"
     = yield
+    = render "layouts/flash", :object => flash
+    
     = include_javascripts :common 
     = include_javascripts :mtools    
     = yield :scripts # include view specific scripts after common scripts.

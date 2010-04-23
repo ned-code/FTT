@@ -1,4 +1,5 @@
 class PagesController < DocumentController
+  before_filter :authenticate_user!
   access_control do
     allow :admin
     allow :editor, :of => :document

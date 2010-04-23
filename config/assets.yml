@@ -24,11 +24,14 @@ stylesheets:
     - public/stylesheets/lib/panel.css
     - public/stylesheets/lib/protect.css    
     - public/stylesheets/style.editor.css
-    - public/stylesheets/style.page_display.css    
     - public/stylesheets/style.editor.colors.css
-    - public/stylesheets/style.editor.typography.css
+    - public/stylesheets/style.webdoc.css
+    - public/stylesheets/style.webdoc.typography.css
     - public/stylesheets/colorpicker.css
     - public/stylesheets/toolbar.css
+    
+    # code highlighting
+    - public/stylesheets/style.codemirror.css
   
 #  font_collection:
 #    - public/fonts/Aaargh-fontfacekit/stylesheet
@@ -53,10 +56,8 @@ stylesheets:
 #    - public/fonts/Underwood-Champion-fontfacekit/stylesheet
     
   page_viewer:
-    - public/stylesheets/lib/panel.css    
-    - public/stylesheets/style.page_display.css    
-    - public/stylesheets/style.viewer.css    
-    - public/stylesheets/style.editor.typography.css    
+    - public/stylesheets/style.webdoc.css
+    - public/stylesheets/style.webdoc.typography.css
       
 javascripts:
   common:
@@ -90,8 +91,18 @@ javascripts:
   page_editor:
     - public/javascripts/sylvester.js
     - public/javascripts/strophe.js
+    
+    # code highlighting
     - public/javascripts/codemirror/codemirror.js
-    - public/javascripts/jquery.panel.js
+    - public/javascripts/codemirror/highlight.js
+    - public/javascripts/codemirror/stringstream.js
+    - public/javascripts/codemirror/tokenize.js
+    - public/javascripts/codemirror/tokenizejavascript.js
+    - public/javascripts/codemirror/parsecss.js
+    - public/javascripts/codemirror/parsexml.js
+    - public/javascripts/codemirror/parsejavascript.js
+    - public/javascripts/codemirror/parsehtmlmixed.js
+    
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/model/*.js
     - app/javascripts/webdoc/sdk/*.js
@@ -106,11 +117,15 @@ javascripts:
     - app/javascripts/webdoc/gui/page_view.js
     - app/javascripts/webdoc/gui/text_view.js
     - app/javascripts/webdoc/gui/widget_view.js
+    - app/javascripts/webdoc/gui/iframe_view.js
+    - app/javascripts/webdoc/gui/os_gadget_view.js    
     - app/javascripts/webdoc/tools/tool.js
     - app/javascripts/webdoc/tools/arrow_tool.js
     - app/javascripts/webdoc/tools/drawing_tool.js
     - app/javascripts/webdoc/tools/hand_tool.js
     - app/javascripts/webdoc/tools/html_tool.js
+    - app/javascripts/webdoc/tools/iframe_tool.js
+    - app/javascripts/webdoc/tools/os_gadget_tool.js
     - app/javascripts/webdoc/tools/text_tool.js
     - app/javascripts/webdoc/tools/text_tool/*.js
     - app/javascripts/webdoc/controllers/*.js  

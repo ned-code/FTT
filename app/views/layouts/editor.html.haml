@@ -12,7 +12,7 @@
     
   -if params[:reader] == 'true'
     -current_class = 'editor mode-embed'
-  -elsif edit_mode?
+  -elsif params[:edit] == 'true'
     -current_class = 'editor mode-edit'
   -else
     -current_class = 'editor mode-preview'
@@ -21,6 +21,7 @@
     = yield
     = include_javascripts :mtools
     = include_javascripts :page_editor
+    = javascript_include_tag "/gadgets/js/rpc.js?c=1&debug=1", "/gadgets/files/container/cookies.js", "/gadgets/files/container/util.js", "/gadgets/files/container/gadgets.js", "/gadgets/files/container/cookiebaseduserprefstore.js"
     = yield :scripts
     :javascript  
       var WebDoc;
@@ -32,6 +33,7 @@
         sessionKeyName:"#{session_key_name}",
         cookiesSessionKeyName:"#{cookies[session_key_name]}"
       };
+      WebDoc.closeUrl = "#{ get_return_to }";
       MTools.Application.main(function() {
         var editor = new WebDoc.PageEditor(#{edit_mode?});
         editor.load("#{@document.uuid}");

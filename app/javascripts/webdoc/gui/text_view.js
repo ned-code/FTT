@@ -4,10 +4,13 @@
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
   
   initialize: function($super, item, pageView, afterItem) {
+    this.placeholderNode = $(WebDoc.NEW_TEXTBOX_CONTENT);
+    
     $super(item, pageView, afterItem);
     if (this.itemDomNode.hasClass("empty")) {
-      this.itemDomNode.html(WebDoc.NEW_TEXTBOX_CONTENT);
-    }  
+      this.domNode.append( this.placeholderNode );
+    }
+    this.domNode.addClass('item-text');
   },
   
   createDomNode: function($super) {
@@ -25,6 +28,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   
   edit: function($super) { //called if we clicked on an already selected textbox
     $super();
+    this.placeholderNode.remove();
     WebDoc.application.textTool.enterEditMode(this);
   },
   
@@ -38,11 +42,12 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   },
   
   innerHtmlChanged: function() {
-    if (!WebDoc.application.pageEditor.disableHtml) {
+    if (!WebDoc.application.disableHtml) {
       if ($.string(this.item.data.data.innerHTML).blank()) {
-        this.itemDomNode.html(WebDoc.NEW_TEXTBOX_CONTENT);
+        this.domNode.append( this.placeholderNode );
       }
       else {
+        this.placeholderNode.remove();
         this.itemDomNode.html(this.item.data.data.innerHTML);
       }
     }

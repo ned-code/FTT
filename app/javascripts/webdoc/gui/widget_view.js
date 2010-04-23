@@ -6,37 +6,27 @@
 
 WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
+  DEFAULT_WIDGET_HTML: '<div class="item-placeholder"><div class="item-icon"></div>Double-click to edit, and enter HTML in the inspector</div>',
+
   initialize: function($super, item, pageView, afterItem) {
+    this.placeholderNode = $( this.DEFAULT_WIDGET_HTML );
     $super(item, pageView, afterItem);
     this.itemDomNode.css({ width:"100%", height:"100%"}); 
-    this.api = new WebDoc.WidgetApi(item, false);  
+    this.api = new WebDoc.WidgetApi(item, false);
+    this._displayDefaultContentIfNeeded( this.domNode );
+    this.domNode.addClass('item-widget');
   },
   
   createDomNode: function($super) {
     var widgetNode = $super();   
-    if (this.item.data.data.tag == "iframe" && !WebDoc.application.pageEditor.disableHtml) {      
-      var wait = $("<div/>")
-                    .attr("id", "wait_" + this.item.uuid())
-                    .css(this.item.data.data.css)
-                    .addClass("load_item").addClass("layer")
-                    .css("textAlign", "center");
-      var imageTop = (parseFloat(this.item.data.data.css.height) / 2) - 16;
-      var image = $("<img/>")
-                      .attr("src", "/images/icons/waiting_wheel.gif")
-                      .css({
-                            verticalAlign: "middle",
-                            position: "relative",
-                            top: imageTop + "px"
-                           });
-      wait.append(image);
-      this.pageView.itemDomNode.append(wait);
+    if (this.item.data.data.tag == "iframe" && !WebDoc.application.disableHtml) {            
+      this.domNode.addClass('loading');
       widgetNode.bind('load', function() {
         ddd("widget loaded");
         this.initWidget();
       }.pBind(this));
-      
     }
-  
+
     return widgetNode;
   },
   
@@ -54,14 +44,41 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   innerHtmlChanged: function($super) {
     $super();
-    // resize if inner html is iframe
-    var innerIframe = this.itemDomNode.find("iframe");
-    if (innerIframe.get(0)) {
-      this.resizeTo({
-        width: parseFloat(innerIframe.css("width").replace("px", "")),
-        height: parseFloat(innerIframe.css("height").replace("px", ""))
-      });
-    }
+    this._displayDefaultContentIfNeeded(this.domNode);    
+    // Highlight code blocks in the html -
+    // nodes that have class "code"
+    this.itemDomNode.find('code, .code').each( function(i){
+      var node = jQuery(this),
+          clone = node.clone().empty(),
+          numbers = jQuery('<div/>');
+      
+      var lineNo = 1,
+          output = clone[0],
+          lastChild;
+    
+      function addLine(line) {
+        numbers.append(document.createTextNode(String(lineNo++)));
+        numbers.append(document.createElement("BR"));
+        for (var i = 0; i < line.length; i++) output.appendChild(line[i]);
+        output.appendChild(document.createElement("BR"));
+      }
+      
+      // This is global - it comes from codemirror,
+      // but it would be good to find a way of packaging it
+      highlightText( node.html(), output ); //addLine);
+      
+      // Hack to remove br tag from last line -
+      // it gets in the way in inline code elements
+      lastChild = clone.children().eq(-1);
+      if (lastChild.is('br')) lastChild.remove();
+      
+      node.replaceWith( clone );
+    });
+  },
+  
+  edit: function($super){
+    $super();
+    this.placeholderNode.remove();
   },
   
   canEdit: function() {
@@ -82,7 +99,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   },  
 
   initWidget: function() {
-    $("#wait_" + this.item.uuid()).remove();
+    this.domNode.removeClass('loading');
     if (this.itemDomNode.get(0).contentWindow) {
       this.itemDomNode.get(0).contentWindow.uniboard = this.api;
       if (this.itemDomNode.get(0).contentWindow.widget) {
@@ -121,6 +138,15 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
        this.domNode.get(0).contentDocument.body.addEventListener("mousemove", WebDoc.application.boardController.mouseMove.pBind(WebDoc.application.boardController), true);
        this.domNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
        */
+    }
+  },
+
+  _displayDefaultContentIfNeeded: function(parent) {
+    if (this.item.data.data.tag !== "iframe"  && (!this.item.data.data.innerHTML || $.string().blank(this.item.data.data.innerHTML))) {
+      parent.append( this.placeholderNode );
+    }
+    else {
+      this.placeholderNode && this.placeholderNode.remove();
     }
   }
 });

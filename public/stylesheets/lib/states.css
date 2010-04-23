@@ -20,8 +20,10 @@
     display: none;
     background-position: 50% 50%;
     background-image: url('/images/loading-icon-16-white.gif');
-    background-color: hsl(198, 4%, 80%);
+    background-color: transparent;
+    background-repeat: no-repeat;
 }
+.loading.loading-icon,
 .loading .loading-icon {
     display: block;
 }

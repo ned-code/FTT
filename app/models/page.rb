@@ -4,6 +4,8 @@ class Page < ActiveRecord::Base
   has_uuid
   
   attr_accessible :uuid, :position, :version, :data, :title, :items_attributes
+
+  attr_accessor_with_default :touch_document_active, true
   
   serialize :data
   
@@ -35,8 +37,9 @@ class Page < ActiveRecord::Base
   before_save :update_position_if_moved
   before_save :set_page_data
   before_create :set_position
-  after_destroy :update_next_page_position
-  
+  after_save :touch_document
+  after_destroy :update_next_page_position, :touch_document
+
   # =================
   # = Class Methods =
   # =================
@@ -74,8 +77,20 @@ class Page < ActiveRecord::Base
   def to_param
     uuid
   end
-  
-private
+
+  def deep_clone
+    cloned_page = self.clone
+    cloned_page.touch_document_active = false
+    cloned_page.uuid = nil
+    cloned_page.created_at = nil
+    cloned_page.updated_at = nil
+    self.items.each do |item|
+      cloned_page.items << item.deep_clone
+    end
+    cloned_page
+  end
+
+  private
   
   # before_save
   def update_position_if_moved
@@ -104,6 +119,12 @@ private
   # after_destroy
   def update_next_page_position
     Page.update_all("position = position - 1", "position > #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")
+  end
+
+  # after_save
+  # after_destroy
+  def touch_document
+    self.document.touch if touch_document_active == true
   end
   
 end

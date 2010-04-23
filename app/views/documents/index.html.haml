@@ -1,6 +1,6 @@
 - session_key_name = ActionController::Base.session_options[:key]
 
-<!-- documents/index -->
+<!-- app/views/documents/index -->
 
 %div.action-zone.zone
   %div.wrap
@@ -15,24 +15,18 @@
           -#%li>
           -#  %a#wb-document-filter-shared-with-me.state-filter-subtab{ :href => "#filter-shared" }= t('.shared_with_me')
       
-        %a#wb-document-filter-date.button.current.state-filter-tab{ :style => "float: left;", :href => "#filter-by-date" }= t('.all_items_by_date')
-      %li>
-        %a#wb-document-filter-public.button.state-filter-tab{ :href => "#filter-public" }= t('.public')
+        -#%a#wb-document-filter-date.button.current.state-filter-tab{ :style => "float: left;", :href => "#filter-by-date" }= t('.all_items_by_date')
+      -#%li>
+        -#%a#wb-document-filter-public.button.state-filter-tab{ :href => "#filter-public" }= t('.public')
 
 %div.content
   %div.wrap
-    -#%div.column.one.double.of-three>
-    
-    %div#wb-document-list-container
+    %div#wb-document-list-container.column.triple.of-four
       %div.loading-icon
-
-    -#%div.column.three.of-three.state-public-show>
-    -#  %h4 Public webdocs
-    -#  %p Shared webdocs.
-    -#%div.column.three.of-three.state-public-hide>
-    -#  %h4 Manage your Webdocs
-    -#  %p Create your own new webdoc, or choose a webdoc to view from the list.
-    -#  %p You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, click <strong>share</strong>. You can choose to share your webdoc with just your friends, or with everybody on the world wide&nbsp;web.
+    %div.column.last.of-four.state-public-hide{ :style => 'text-align: justify;' }>
+      %h3 Your Webdocs
+      %p Create your own new webdoc, or choose a webdoc to view from the list.
+      %p You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, choose <strong>sharing</strong>.
     
 #wb-new-document-dialog{ :style => "display:none", :title => t('.create_new_document') }
   %form#wb-new-form.new-form{ :action => "", :title => t('.create_new_document') }
@@ -108,10 +102,10 @@
     %fieldset
       %div.shunt
         %input#unshare_webdoc_radio{ :type => "radio", :name => "share", :value => "off" }
-        %label{ :for => "unshare_webdoc_radio" } don't share (co-editors can still see this document)
+        %label{ :for => "unshare_webdoc_radio" } don't share (only co-editors will see this document)
       %div.shunt
         %input#share_webdoc_radio{ :type => "radio", :name => "share", :value => "on" }
-        %label{ :for => "share_webdoc_radio" } share
+        %label{ :for => "share_webdoc_radio" } share (make it public)
     
     %fieldset.state-unshared-hide
       %label{ :for => "shared_webdoc_url" }= t('.document_forms.share_document_dialog.shared_address_label')

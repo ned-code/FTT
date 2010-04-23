@@ -3,31 +3,6 @@
  * 
  * @author Julien Bachmann
 **/
-//= require <mtools/application>
-//= require <mtools/undo_manager>
-//= require <mtools/server_manager>
-//= require <mtools/uuid>
-
-//= require <webdoc/core/widget_manager>
-//= require <webdoc/core/webdoc_handlers>
-//= require <webdoc/core/pasteboard_manager>
-//= require <webdoc/adaptors/svg_renderer>
-//= require <webdoc/core/collaboration_manager>
-//= require <webdoc/controllers/board_controller>
-//= require <webdoc/library/libraries_controller>
-//= require <webdoc/controllers/right_bar_controller>
-//= require <webdoc/controllers/inspector_controller>
-//= require <webdoc/controllers/page_browser_controller>
-//= require <webdoc/controllers/toolbar_controller>
-//= require <webdoc/controllers/document_categories_controller>
-
-//= require <webdoc/tools/arrow_tool>
-//= require <webdoc/tools/drawing_tool>
-//= require <webdoc/tools/hand_tool>
-//= require <webdoc/tools/text_tool>
-//= require <webdoc/tools/html_tool>
-
-//= require <webdoc/utils/field_validator>
 
 // application singleton.
 WebDoc.application = {};
@@ -45,14 +20,29 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
     } 
     this._creatorListeners = [];
+    
+    // Feature detection
+    
     // Add feature detected styles to head
     MTools.Application.createStyle('body, .push-scroll {'+
       'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
       'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
     '}');
     
-    // Set up default panel behaviour (show screen, show footer etc.)
-    jQuery(".panel").panel();
+    // Change input range sliders to text fields when sliders have no native UI. We can't
+    // style range inputs as text inputs, so we change them to text inputs. Really, we
+    // should re-implement sliders by replacing the input, but right now I can't be arsed.
+    // Apparently changing input types throws errors in <IE7...
+    if ( !jQuery.support.inputTypes || !jQuery.support.inputTypes.range ) {
+      jQuery("input[type='range']")
+      .each(function(i){
+        var input = this;
+        input.type = "text";
+        
+        ddd('[PageEditor] input[type=range] changed to input[type=text] '+(i+1));
+      });
+      jQuery(".input-range-readout").remove();
+    }
     
     MTools.ServerManager.xmppClientId = new MTools.UUID().id;
     
@@ -69,6 +59,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
     WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
+    WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
     
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
@@ -76,9 +67,14 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
     WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
     WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
-    
+    WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
+    WebDoc.application.osGadgetTool = new WebDoc.OsGadgetTool( "a[href='#insert-os-gadget']", "insert-os-gadget" );
+
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
+    
+    // Create and bind global event handlers
+    WebDoc.handlers.initialise();
     
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
@@ -98,7 +94,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       this.loadPageId(window.location.hash.replace("#", ""));
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
       ddd("check editablity");
-      if (WebDoc.application.boardController.isEditable()) {
+      if (WebDoc.application.boardController.isEditable() && jQuery("body").hasClass('mode-edit')) {
         ddd("[PageEditor] call rightBarController.showLib");
         WebDoc.application.rightBarController.showLib();
       }
@@ -112,10 +108,13 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
        type: 'GET',
        dataType: 'json',              
        success: function(data, textStatus) {
+         ddd("will notify creator listener", this._creatorListeners);
          this.creator = data.user;
          var listenersCount = this._creatorListeners.length;
          for (var i = 0; i < listenersCount; i++) {
+            ddd("noify with callback", this._creatorListeners[i]);
             this._creatorListeners[i].call(this, this.creator);
+            ddd("notify done");
          }
        }.pBind(this),
        error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -124,11 +123,34 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
      });
    },
 
+  _createLinkHandler: function( obj ){
+    // Keep obj in scope of new handler
+    return function(e){
+      var link = jQuery(this),
+          href = link.attr('href'),
+          match = regex.hashRef.exec(href);
+      
+      ddd( '[page_editor.linkHandler] Event handler ref: "' + match + '"' );
+      
+      // If the href contains a hashRef that matches a handler
+      if ( match && obj[match[1]] ) {
+          // Call it with current scope
+          try {
+            obj[match[1]].call(this, e);
+          }
+          finally {
+            e.preventDefault();
+          }
+      }
+    };
+  },
+
   getCreator: function(callBack) {
     if (this.creator) {
       callBack.call(this, this.creator);
     }
     else {
+      ddd("register creator listener");
       this._creatorListeners.push(callBack);
     }
   },
@@ -151,8 +173,11 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   },
   
   loadPage: function(page, forceReload) {
-    if(this.currentPage == null || this.currentPage.uuid() !== page.uuid() || forceReload) {
-      WebDoc.application.undoManager.clear();
+    var differentPages = (this.currentPage == null || this.currentPage.uuid() !== page.uuid());
+    if(differentPages || forceReload) {
+      if (differentPages) {
+        WebDoc.application.undoManager.clear();
+      }
       ddd("set hash to current page position");
       window.location.hash = "#" + (page.uuid());
       this.currentPage = page;
@@ -193,7 +218,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     var externalPageUrl = null;
     do {
       externalPageUrl = prompt("Web page URL: ", "http://");
-    }while(externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl))
+    } while (externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl));
 
     if(externalPageUrl != null) {
       var newPage = new WebDoc.Page(null, this.currentDocument);
@@ -236,14 +261,24 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   
   closeDocument: function(e) {
     WebDoc.application.collaborationManager.disconnect();
-    window.location = "/";
+    if (WebDoc.closeUrl && WebDoc.closeUrl !== "javascript:history.back()") {
+      window.location = WebDoc.closeUrl;
+    }
+    else {
+      window.location = "/";
+    }
+  },
+
+  duplicateDocument: function(e) {
+    ddd("duplicate document");
+    WebDoc.application.documentDuplicateController.showDialog(e, this.currentDocument);
   },
   
   toggleDebugMode: function() {
-    this.disableHtml = !this.disableHtml; 
+    WebDoc.application.disableHtml = !WebDoc.application.disableHtml; 
     this.loadPageId( this.currentPage.uuid(), true);
-    $("#debug-button").text(this.disableHtml?"Enable HTML":"Disable HTML");
-    if (this.disableHtml) {
+    $("#debug-button").text(WebDoc.application.disableHtml?"Enable HTML":"Disable HTML");
+    if (WebDoc.application.disableHtml) {
         $("#debug-button").addClass("active");
     }
     else {

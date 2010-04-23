@@ -1,11 +1,13 @@
 // card.contacts.js
 //
+// Extends card.js
+//
 // Provides animations for adding and removing cards from contact lists
 // on the contacts page.
 
 (function(undefined){
 
-var contacts, followers;
+var contacts, contactscount, followers;
 
 function insertIntoContacts(e) {
 	var card = jQuery(e.currentTarget),
@@ -33,6 +35,7 @@ function insertIntoContacts(e) {
 	
 	function callback() {
 		newCard.css({ position: '' });
+		contacts.trigger('update');
 	}
 	
 	clone.css({
@@ -86,6 +89,7 @@ function removeFromContacts(e) {
 	
 	function callback() {
 		item.remove();
+		contacts.trigger('update');
 	}
 	
 	// Find out if the removed card is one of the followers
@@ -117,15 +121,28 @@ function removeFromContacts(e) {
 		duration: 500,
 		step: step,
 		complete: callback
-	})
+	});
+}
+
+function makeUpdateCount( listNode, countNode ) {
+	return function(e) {
+		var items = listNode.find('.card');
+		countNode.html( items.length );
+		return;
+	};
 }
 
 jQuery(document).ready(function(){
-	contacts = jQuery('#contacts'),
+	contacts = jQuery('#contacts');
+	contactscount = jQuery('#contactscount');
 	followers = jQuery('#followers');
 	
-	followers.delegate('.card', 'follow', insertIntoContacts);
-	contacts.delegate('.card', 'unfollow', removeFromContacts);
+	followers
+	.delegate('.card', 'follow', insertIntoContacts);
+	
+	contacts
+	.delegate('.card', 'unfollow', removeFromContacts)
+	.bind('update', makeUpdateCount( contacts, contactscount ));
 });
 
 })();

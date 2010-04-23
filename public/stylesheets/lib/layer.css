@@ -117,15 +117,3 @@
 .screen {
     display: none;
 }
-
-/* Board items */
-.item-layer {
-    opacity:0;
-    z-index:500000;
-    background-image: url('/images/icons/arrow_nav_128.png');
-    background-position: center center;
-    background-repeat: no-repeat;
-}
-.mode-edit .item-layer {
-    display: block;
-}

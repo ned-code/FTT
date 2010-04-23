@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!, :except => [:new, :create, :show]
+  before_filter :authenticate_user!, :except => [:new, :create]
   
   # GET /users
   def index
@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render :json => @user.to_social_panel_json }
+      format.json { render :json => @user.to_social_panel_json(current_user) }
     end
   end
   

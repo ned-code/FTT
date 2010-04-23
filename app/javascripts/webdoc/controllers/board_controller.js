@@ -110,12 +110,13 @@ WebDoc.BoardController = jQuery.klass({
       }
     }
     this.zoom(defaultZoom);
-    this.setMode(this._isInteraction || !this._editable);
+    this.setMode(!jQuery("body").hasClass('mode-edit'));
     
     this._fireCurrentPageChanged();
     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
+    pageView.viewDidLoad();
   },
   
   isInteractionMode: function() {
@@ -144,7 +145,7 @@ WebDoc.BoardController = jQuery.klass({
     .addClass("current");
     
     //WebDoc.application.pageBrowserController.reveal();
-    //WebDoc.application.rightBarController.revealRightBar();
+    //WebDoc.application.rightBarController.reveal();
     if (this._previousInspector) {
       WebDoc.application.rightBarController.selectInspector(this._previousInspector);      
     }
@@ -176,8 +177,10 @@ WebDoc.BoardController = jQuery.klass({
     }
     
     //WebDoc.application.pageBrowserController.conceal();
-    //WebDoc.application.rightBarController.concealRightBar();
-    this._previousInspector = WebDoc.application.rightBarController.getSelectedInspector();
+    //WebDoc.application.rightBarController.conceal();
+    if(WebDoc.application.rightBarController.getSelectedInspector() !== WebDoc.RightBarInspectorType.SOCIAL) {
+      this._previousInspector = WebDoc.application.rightBarController.getSelectedInspector();
+    }
     WebDoc.application.rightBarController.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
     this._isInteraction = true;
     return this._isInteraction;
@@ -252,14 +255,25 @@ WebDoc.BoardController = jQuery.klass({
       var newItems = [];
       if (itemsString) {
         var items = jQuery.evalJSON(itemsString);
+        var itemsDataArray = [];
         for (var i = 0; i < items.length; i++) {
           var anItem = new WebDoc.Item({
             item: items[i]
           });
           var newItem = anItem.copy();
+
+          if(anItem.data.page_id === this._currentPage.data.id) {
+            newItem.data.data.css.left = (parseFloat(anItem.data.data.css.left)+15).toString()+"px";
+            newItem.data.data.css.top = (parseFloat(anItem.data.data.css.top)+15).toString()+"px";
+          }
+          newItem.data.page_id = this._currentPage.data.id;
+
           newItems.push(newItem);
+          itemsDataArray.push(newItem.getData());
         }
+
         this.insertItems(newItems);
+        WebDoc.application.pasteBoardManager.putIntoPasboard("application/ub-item", jQuery.toJSON(itemsDataArray));
       }
     }
   },
@@ -328,7 +342,7 @@ WebDoc.BoardController = jQuery.klass({
     if (this._editingItem) {
       this._editingItem.stopEditing();
       WebDoc.application.arrowTool.enableHilight();
-      this.screenNodes.animate({ opacity: 'hide' }, { duration: 200 });
+      this._hideScreens();
       this._editingItem = null;
     }    
   },
@@ -759,7 +773,7 @@ WebDoc.BoardController = jQuery.klass({
   _keyDown: function(e) {
     var el = jQuery(e.target);
     if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
-      e.preventDefault();      
+      e.preventDefault();
     }    
     if (el.is('input') || el.is('textarea') || this._editingItem !== null) { 
       return true;
@@ -786,8 +800,8 @@ WebDoc.BoardController = jQuery.klass({
           this.setCurrentTool(WebDoc.application.arrowTool);
           break;  
      case 37:
-        if (this._isInteraction) {
-          WebDoc.application.pageEditor.prevPage(); 
+        if (this._isInteraction || this._selection.length === 0) {
+          WebDoc.application.pageEditor.prevPage();
         }
         else {
           this.moveSelection("left", e.shiftKey?"big" : "small");
@@ -795,13 +809,16 @@ WebDoc.BoardController = jQuery.klass({
         e.preventDefault();          
         break;
       case 38:
-        if (!this._isInteraction) {
+        if (this._isInteraction || this._selection.length === 0) {
+          WebDoc.application.pageEditor.prevPage();
+        }
+        else {
           this.moveSelection("up", e.shiftKey?"big" : "small");
         }
         e.preventDefault();          
         break;          
       case 39:
-        if (this._isInteraction) {
+        if (this._isInteraction || this._selection.length === 0) {
           WebDoc.application.pageEditor.nextPage();
         }
         else {
@@ -810,7 +827,10 @@ WebDoc.BoardController = jQuery.klass({
         e.preventDefault();           
         break;
       case 40:
-        if (!this._isInteraction) {
+        if (this._isInteraction || this._selection.length === 0) {
+          WebDoc.application.pageEditor.nextPage();
+        }
+        else {
           this.moveSelection("down", e.shiftKey?"big" : "small");
         }
         e.preventDefault();          
@@ -827,6 +847,14 @@ WebDoc.BoardController = jQuery.klass({
         case 86:
             this.paste();
             e.preventDefault();
+          break;
+        case 90:
+            if(e.shiftKey) {
+              WebDoc.application.undoManager.redo(); 
+            }
+            else {
+              WebDoc.application.undoManager.undo();
+            }
           break;
       }
     }

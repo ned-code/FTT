@@ -2,6 +2,15 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  words:
+    all:            "all"
+  
+  phrases:
+    most_recent:    "most recent"
+    most_popular:   "most popular"
+    Created_by:     "Created by"
+  
+  
   back: "Back"
   show: "Show"
   edit: "Edit"
@@ -90,7 +99,10 @@ en:
         select: "Select"
         html_tool: "Insert HTML"
         text_tool: "Insert Text"
+        iframe_tool: "Insert Web page"
+        os_gadget_tool: "Insert open social app"
         drawing_tool: "Draw"
+        duplicate_document: "Duplicate document"
         toggle_inspector: "Toggle Inspector"
         library: "Show Library"
         item_inspector: "Show Inspector"
@@ -370,3 +382,11 @@ en:
       subscribe_to_me: "subscribed to me"
       remove: "remove"
       webdocs: "webdocs"
+
+  relative_date:
+    x_hours:
+      one: "1 hour ago"
+      other: "{{count}} hours ago"
+    x_days:
+      one: "1 day ago"
+      other: "{{count}} days ago"

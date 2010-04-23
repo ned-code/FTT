@@ -25,10 +25,7 @@ select {
 
 label,
 .label,
-input[type='text'],
-input[type='file'],
-input[type='password'],
-input[type='submit'],
+input,
 select,
 textarea {
     margin: 0;
@@ -146,7 +143,7 @@ input.checkbox, input.radio {
 }
 
 label input[type=checkbox] {
-    /* handle nested checkboxes inside lables */
+    /* handle nested checkboxes inside labels */
     margin-right: 0.6em;
 }
 
@@ -322,7 +319,8 @@ fieldset.properties:first-child {
 .properties .label,
 .properties input[type='text'],
 .properties input[type='radio'],
-.properties input[type='checkbox'] {
+.properties input[type='checkbox'],
+.properties input[type=range] {
     float: left;
     width: auto;
     font-size: 1em;
@@ -405,4 +403,8 @@ fieldset.properties:first-child {
 
 #background_image {
   width: 100px; height: 100px; display: block;
+}
+
+input[type='range'] {
+
 }

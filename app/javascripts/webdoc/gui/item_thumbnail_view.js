@@ -57,7 +57,16 @@ WebDoc.ItemThumbnailView = $.klass({
   
   innerHtmlChanged: function() {
     this.domNode.html(this.item.data.data.innerHTML);
+  },
+
+  domNodeChanged: function() {
+    if (!WebDoc.application.disableHtml) {
+      this.domNode.remove();
+      this.domNode = this.createDomNode();
+      this.domNode.css({ position: "absolute"}); 
+    }
   }
+
 });
 
 WebDoc.ImageThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
@@ -110,7 +119,7 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
   createDomNode: function($super) {
     
     if (this.item.data.data.tag == "iframe" || 
-        this.item.data.data.innerHTML.match(/<iframe|<script|<object/)) {
+        this.item.data.data.innerHTML.match(/<iframe|<script|<object|<embed/i)) {
       var itemNode = $('<div/>');
     
       itemNode.attr("id", "thumb_" + this.item.uuid());
@@ -126,8 +135,11 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
   },
   
   innerHtmlChanged: function() {
-    if (this.item.data.data.tag != "iframe" || !this.item.data.data.innerHTML.match(/<iframe|<script|<object/)) {
+    if (this.item.data.data.tag != "iframe" && !this.item.data.data.innerHTML.match(/<iframe|<script|<object|<embed/i)) {
       this.domNode.html(this.item.data.data.innerHTML);
+    }
+    else if (!this.domNode.hasClass('widget_thumb')) {
+        this.domNode.addClass('widget_thumb');
     }
   }   
 });

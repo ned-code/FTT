@@ -3,16 +3,17 @@ require 'xmpp_user_synch'
 class User < ActiveRecord::Base
   acts_as_authorization_subject
   mount_uploader :avatar, AvatarUploader
-  
+  has_uuid  
+
   # Include default devise modules.
   # Others available are :lockable, :timeoutable and :activatable.
-  devise :registerable, :authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable, :lockable
+  devise :registerable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable, :lockable
   
   attr_accessor :terms_of_service
   
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :username, :first_name, :last_name, :terms_of_service,
-                  :avatar, :avatar_cache, :remove_avatar, :bio, :website, :gender
+                  :avatar, :avatar_cache, :remove_avatar, :bio, :website, :gender, :uuid
   
   # =============
   # = Callbacks =
@@ -63,13 +64,9 @@ class User < ActiveRecord::Base
   def documents_count
     documents.count
   end
-  
-  def following_info
-    current_user ? current_user.following?(self) : false
-  end
-  
-  def mutual_connection
-    self.mutual_follower?(current_user)
+
+  def mutual_connection(user)
+    self.mutual_follower?(user)
   end
   
   def has_only_editor_role!(document, message = nil)
@@ -115,8 +112,18 @@ class User < ActiveRecord::Base
   end
   
   # Need to use this method instead of the original to_json cause user references document and vice versa
-  def to_social_panel_json
-    to_json(:only => [:id, :username, :bio], :methods => [:avatar_thumb_url, :documents_count, :following_info])
+  def to_social_panel_json(current_user)
+    { :user =>
+      {
+        :id => self.id,
+        :username => self.username,
+        :bio => self.bio,
+        :uuid => self.uuid,
+        :avatar_thumb_url => self.avatar_thumb_url,
+        :documents_count => self.documents_count,
+        :following_info => self.follower?(current_user)
+      }
+    }.to_json
   end
   
 protected

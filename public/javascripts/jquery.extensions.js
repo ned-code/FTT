@@ -1,3 +1,51 @@
+// Extensions to jQuery
+//
+// Stephen Band
+//
+// Feature detection, and helper methods for jQuery and jQuery.fn
+
+// Detect whether different types of html5 form elements have native UI implemented
+// and store boolean in jQuery.support.inputTypes[type]. For now, types not used in
+// webdoc are commented out.
+// You may find inspiration at Mike Taylor's site, here:
+// http://www.miketaylr.com/code/html5-forms-ui-support.html
+
+(function(jQuery, undefined){
+    var input = jQuery('<input/>', { }).css({ position: 'absolute', top: -100 }),
+        types = jQuery.support.inputTypes = {
+          //datetime: false,
+          //date: false,
+          //month: false,
+          //week: false,
+          //time: false,
+          //'datetime-local': false,
+          //number: false,
+          range: false
+        };
+    
+    jQuery(document).ready(function(){
+        var testValue = '::',
+            type;
+        
+        document.body.appendChild( input[0] );
+        
+        // Loop over types
+        for (type in types) {
+          // Change the input type, then check to see if it still behaves like a text input.
+          // According to jQuery, changing type property causes problems in IE:
+          // http://stackoverflow.com/questions/1544317/jquery-change-type-of-input-field
+          // so we may have to change this...
+          
+          input[0].type = type;
+          input[0].value = testValue;
+          
+          types[type] = input[0].value !== testValue;
+        }
+        
+        input.remove();
+    });
+})(jQuery);
+
 // Stores browser scrollbar width as jQuery.support.scrollbarWidth
 // Only available after document ready
 // TODO: Not tested, and probably not working in IE. You may find inspiration here:
@@ -79,10 +127,9 @@ jQuery.fn.extend({
     href: function(href) {
         return this.attr("href", href) ;
     }
-    
 });
 
-// Extend jQuery with some helper functions
+// Extend jQuery with some helper methods
 
 jQuery.extend({
     
@@ -124,8 +171,10 @@ jQuery.extend({
     // Some helpful regex for parsing hrefs and css urls etc.
     
     regex: {
-      // matches url(xxx), url('xxx') or url("xxx") and captures xxx
-      cssUrl: /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/
-      
+      cssUrl:     /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/,   // matches url(xxx), url('xxx') or url("xxx") and captures xxx
+      hash:       /^#?$/,                                         // Single hash or empty string
+      hashRef:    /^#(\S+)/,                                      // Matches a hash ref, captures all non-space characters following the hash
+      slashRef:   /^\//,                                          // Begins with a slash
+      urlRef:     /^[a-z]+:\/\//                                  // Begins with protocol xxx://
     }
 });

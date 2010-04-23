@@ -12,7 +12,8 @@ WebDoc.PropertiesInspectorController = $.klass({
     jQuery('#item_inspector').delegate("#property-width", 'blur', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-height", 'blur', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-scroll", 'change', this.updateSroll.pBind(this));
-    jQuery('#item_inspector').delegate("#property-opacity", 'blur', this.updateProperties.pBind(this));    
+    jQuery('#item_inspector').delegate("#property-opacity", 'change', this.updateProperties.pBind(this));    
+    jQuery('#item_inspector').delegate("#property-fit-to-screen", 'click', this.updatePropertiesWithFitToScreen.pBind(this));
     this.topNode = jQuery("#property-top");
     this.rightNode = jQuery("#property-right");
     this.bottomNode = jQuery("#property-bottom");
@@ -21,6 +22,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     this.heightNode = jQuery("#property-height");
     this.scrollNode = jQuery("#property-scroll");
     this.opacityNode = jQuery("#property-opacity");
+    this.opacityReadoutNode = jQuery("#property-opacity-readout");
   },
   
   refresh: function() {
@@ -87,7 +89,7 @@ WebDoc.PropertiesInspectorController = $.klass({
 	      };
 	      if (newSize.width != previousSize.width || newSize.height != previousSize.height) {
 	        WebDoc.application.undoManager.registerUndo(function() {
-	          WebDoc.ItemView._restoreSize(item, previousSize);
+	          WebDoc.ItemView.restoreSize(item, previousSize);
 	        }.pBind(this));
 	        item.resizeTo(newSize);
 	        item.save();
@@ -95,27 +97,45 @@ WebDoc.PropertiesInspectorController = $.klass({
 				break;
 			case this.opacityNode[0]:
 				var previousOpacity = item.data.data.css.opacity || 1;
-				var newOpacity = this.opacityNode.val();
-				ddd('previous opacity:'+previousOpacity);
+				var newOpacity = parseFloat( this.opacityNode.val(), 10 ).toFixed(2);
+				ddd('[Properties] Opacity new: '+newOpacity+' previous: '+previousOpacity);
 				if(newOpacity != previousOpacity){
 					WebDoc.application.undoManager.registerUndo(function(){
 						this.restoreOpacity(item, previousOpacity);
 					}.pBind(this));
 					item.setOpacity(newOpacity);
+					this.opacityReadoutNode.html( newOpacity );
 					item.save();
 				}
 				break;
 		}
   },
-	restoreOpacity: function(item, opacity){
-		ddd("restore opacity "+opacity);
-		var previousOpacity=item.data.data.css.opacity;
-		item.setOpacity(opacity);
-		WebDoc.application.undoManager.registerUndo(function(){
-			this.restoreOpacity(item, previousOpacity);
-		}.pBind(this));
-		item.save();
-	}
+
+  restoreOpacity: function(item, opacity){
+      ddd("restore opacity "+opacity);
+      var previousOpacity=item.data.data.css.opacity;
+      item.setOpacity(opacity);
+      WebDoc.application.undoManager.registerUndo(function(){
+          this.restoreOpacity(item, previousOpacity);
+      }.pBind(this));
+      item.save();
+  },
+
+  updatePropertiesWithFitToScreen: function(event) {
+    var item = WebDoc.application.boardController.selection()[0].item;
+    var previousTop = item.data.data.css.top,
+        previousLeft = item.data.data.css.left,
+        previousWidth = item.data.data.css.width,
+        previousHeight = item.data.data.css.height;
+    item.moveToAndResizeTo("0px", "0px", "100%", "100%");
+    item.save(function(){
+      WebDoc.application.undoManager.registerUndo(function() {
+        WebDoc.ItemView.restorePositionAndSize(item, previousTop, previousLeft, previousWidth, previousHeight);
+	  }.pBind(this));
+    });
+    event.preventDefault();
+    return;
+  }
 });
 
 

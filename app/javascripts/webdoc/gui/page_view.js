@@ -38,14 +38,20 @@ WebDoc.PageView = $.klass({
     this.domNode.css(boardCss);
     ddd( page.data.data.css );
     
-    if (page.data.data.externalPage && !WebDoc.application.pageEditor.disableHtml) {
+    if (page.data.data.externalPage && !WebDoc.application.disableHtml) {
       // Handle case where page is an external webpage
       
       externalPage = $("<iframe/>").addClass('layer');
       
       if (page.data.data.externalPageUrl) {
+        wait = jQuery('<div class="center layer"><div class="center-cell"><div class="center-box"><center><img src="/images/icons/waiting_wheel.gif"/></center></div></div></div>');
+       
+        externalPage.bind('load', function() {
+          wait.remove();
+        }.pBind(this));
         externalPage.attr("src", page.data.data.externalPageUrl);        
         this.itemDomNode.append(externalPage[0]);
+        this.itemDomNode.append(wait);
       }
     }
     else {
@@ -79,7 +85,7 @@ WebDoc.PageView = $.klass({
     delete boardCss.width;
     delete boardCss.height;
     this._boardContainer.animate(boardContainerSize, 'fast');
-    this.domNode.animate(boardCss, 'fast');    
+    this.domNode.css(boardCss, 'fast');    
   },
   
   itemAdded: function(addedItem, afterItem) {
@@ -112,6 +118,7 @@ WebDoc.PageView = $.klass({
     else if (!afterItemView) {
       this.itemDomNode.prepend(itemViewToMove.domNode);
     }
+    itemViewToMove.viewDidLoad();
   },
    
   findItemView: function(uuid) {
@@ -133,6 +140,12 @@ WebDoc.PageView = $.klass({
       case WebDoc.ITEM_TYPE_WIDGET:
         itemView = new WebDoc.WidgetView(item, this, afterItem);
         break;
+      case WebDoc.ITEM_TYPE_IFRAME:
+        itemView = new WebDoc.IframeView(item, this, afterItem);
+        break;
+      case WebDoc.ITEM_TYPE_OS_GADGET:
+        itemView = new WebDoc.OsGadgetView(item, this, afterItem);
+        break;        
       default:
         itemView = new WebDoc.ItemView(item, this, afterItem);
         break;
@@ -178,5 +191,18 @@ WebDoc.PageView = $.klass({
     ddd("board container css", boardContainerCss);
     this.domNode.css( transform );
     this._boardContainer.css( boardContainerCss );
+    
+    // try to set all flash content as windowless
+    this.itemDomNode.find("embed[type='application/x-shockwave-flash']").each( function(index, element) {
+      $(this).attr('wmode', 'transparent');
+    });
+  },
+  
+  viewDidLoad: function() {
+    for (var itemId in this.itemViews) {
+      var anItemView = this.itemViews[itemId];
+      anItemView.viewDidLoad();
+      ddd("item view", anItemView);
+    }
   }
 });

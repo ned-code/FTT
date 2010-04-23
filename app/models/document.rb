@@ -15,6 +15,7 @@ class Document < ActiveRecord::Base
   has_one :document_access
   belongs_to :metadata_media, :class_name => 'Media'
   belongs_to :creator, :class_name => 'User'
+  belongs_to :category
   
   # ===============
   # = Validations =
@@ -66,7 +67,47 @@ class Document < ActiveRecord::Base
     end
     documents
   end
-  
+
+  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", page_id=nil, per_page=8, include=[:category, :creator])
+    documents = Array.new
+    paginate_params = {:page => page_id, :per_page => per_page, :include => include}
+
+    if order_string.present? && order_string == 'viewed'
+      paginate_params[:order] = 'views_count DESC'
+    else
+      paginate_params[:order] = 'created_at DESC'
+    end
+
+    if category_filter.present? && category_filter != "all"
+      paginate_params[:conditions] = ['documents.is_public = ? AND documents.category_id = ?', true, category_filter]
+    else
+      paginate_params[:conditions] = ['documents.is_public = ?', true]
+    end
+
+    documents = Document.paginate(paginate_params)
+  end
+
+  def self.last_modified_from_following(current_user, limit=5)
+    following_ids = current_user.following_ids
+    if following_ids.present?
+      all(
+        :joins => "INNER JOIN roles ON roles.authorizable_id = documents.id INNER JOIN roles_users ON roles_users.role_id = roles.id",
+        :conditions => ['creator_id IN (?) AND (documents.is_public = ? OR (roles.authorizable_type = ? AND roles.name IN (?) AND roles_users.user_id = ?))',
+                      following_ids,
+                      true,
+                      self.class_name.to_s,
+                      [ 'editor', 'reader' ],
+                      current_user.id
+        ],
+        :limit => limit,
+        :order => 'documents.updated_at DESC',
+        :group => 'documents.id'
+      )
+    else
+      []
+    end
+  end
+
   # ====================
   # = Instance Methods =
   # ====================
@@ -126,7 +167,7 @@ class Document < ActiveRecord::Base
   end
   
   # No more used in current GUI
-  def create_accesses(accesses = {})
+  def create_accesses(current_user, accesses = {})
     accesses_parsed = JSON.parse(accesses);
     readers = accesses_parsed['readers']
     editors = accesses_parsed['editors']
@@ -138,7 +179,7 @@ class Document < ActiveRecord::Base
       if user 
         if !user.has_role?("reader", self)
           user.has_only_reader_role!(self)
-          Notifier.deliver_role_notification("reader", user, self, readers_message)
+          Notifier.deliver_role_notification(current_user, "reader", user, self, readers_message)
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -149,7 +190,7 @@ class Document < ActiveRecord::Base
       if user
         if !user.has_role?("editor", self)
           user.has_only_editor_role!(self)
-          Notifier.deliver_role_notification("editor", user, self, editors_message)
+          Notifier.deliver_role_notification(current_user, "editor", user, self, editors_message)
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -157,7 +198,7 @@ class Document < ActiveRecord::Base
     end
   end
   
-  def create_role_for_users(accesses = {})
+  def create_role_for_users(current_user, accesses = {})
     accesses_parsed = JSON.parse(accesses);
     role = accesses_parsed['role']
     recipients = accesses_parsed['recipients']
@@ -169,7 +210,7 @@ class Document < ActiveRecord::Base
         if !user.has_role?(role, self)
           #user.has_only_reader_role!(self)
           user.has_role!(role, self)
-          Notifier.deliver_role_notification(role, user, self, message)
+          Notifier.deliver_role_notification(current_user, role, user, self, message)
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -178,7 +219,7 @@ class Document < ActiveRecord::Base
   end
   
   # No more used in current GUI
-  def update_accesses(accesses = {})
+  def update_accesses(current_user, accesses = {})
     accesses_parsed = JSON.parse(accesses);
     readers = accesses_parsed['readers']
     editors = accesses_parsed['editors']
@@ -189,29 +230,59 @@ class Document < ActiveRecord::Base
         if editors.include?(user.id)
           if !user.has_role?("editor", self)
             user.has_only_editor_role!(self)
-            Notifier.deliver_role_notification("editor", user, self, nil)
+            Notifier.deliver_role_notification(current_user, "editor", user, self, nil)
           end
         elsif readers.include?(user.id)
           if !user.has_role?("reader", self)
             user.has_only_reader_role!(self)
-            Notifier.deliver_role_notification("reader", user, self, nil)
+            Notifier.deliver_role_notification(current_user, "reader", user, self, nil)
           end
         else
           user.has_no_roles_for!(self)
-          Notifier.deliver_no_role_notification(user, self)
+          Notifier.deliver_no_role_notification(current_user, user, self)
         end
       end
     end
   end 
   
-  def remove_role(params)
+  def remove_role(current_user, params)
     params_parsed = JSON.parse(params)
     user = User.find(params_parsed['user_id'])
     role = params_parsed['role']
     if user
       user.has_no_role!(role, self)
-      Notifier.deliver_removed_role_notification(role, user, self)
+      Notifier.deliver_removed_role_notification(current_user, role, user, self)
     end
+  end
+
+  def deep_clone(creator, title)
+    cloned_document = self.clone
+    cloned_document.uuid = nil
+    cloned_document.created_at = nil
+    cloned_document.updated_at = nil
+    cloned_document.is_public = false
+    cloned_document.creator = creator
+    if title.present?
+      cloned_document.title = title
+    else
+      cloned_document.title = "Copy of " + self.title
+    end
+    self.pages.each do |page|
+      cloned_document.pages << page.deep_clone
+    end
+    cloned_document
+  end
+
+  def deep_clone_and_save!(creator, title)
+    cloned_document = nil
+    self.transaction do
+      cloned_document = self.deep_clone(creator, title)
+      cloned_document.save!
+      # TODO In version 2.3.6, there is a reset_counters(id, *counters) which do the next line properly
+      # but this function don't exist in 2.3.5
+      Document.connection.update("UPDATE `documents` SET `views_count` = #{cloned_document.view_counts.count} WHERE `id` = #{cloned_document.id}")
+    end
+    cloned_document
   end
   
 private
@@ -223,7 +294,7 @@ private
   
   # before_create
   def create_default_page
-    pages.build
+    pages.build if pages.size == 0
   end
   
   def add_unvalid_email_to_array(email)

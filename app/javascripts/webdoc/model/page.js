@@ -83,9 +83,13 @@ WebDoc.Page = $.klass(MTools.Record,
   setHeight: function(height) {
     WebDoc.InspectorFieldsValidator.validateSize(height);
     if(this.data.data.css.height != height) {
+      var old_height = this.data.data.css.height;
       this.data.data.css.height = height;
       this.fireObjectChanged();
       this.save();
+      WebDoc.application.undoManager.registerUndo(function() {
+        this.setHeight(old_height);
+      }.pBind(this));
     }
   },
   
@@ -109,9 +113,13 @@ WebDoc.Page = $.klass(MTools.Record,
   setWidth: function(width) {
     WebDoc.InspectorFieldsValidator.validateSize(width);
     if(this.data.data.css.width != width) {
+      var old_width = this.data.data.css.width;
       this.data.data.css.width = width;
       this.fireObjectChanged();
       this.save();
+      WebDoc.application.undoManager.registerUndo(function() {
+        this.setWidth(old_width);
+      }.pBind(this));
     }
   },
 
@@ -127,9 +135,18 @@ WebDoc.Page = $.klass(MTools.Record,
   setBackgroundImage: function(backgroundUrl) {
     WebDoc.InspectorFieldsValidator.validateBackgroundUrl(backgroundUrl);
     if(this.data.data.css.backgroundImage != backgroundUrl) {
-      this.data.data.css.backgroundImage = backgroundUrl;
+      var old_background = this.data.data.css.backgroundImage;
+      if (backgroundUrl === "") {
+        this.data.data.css.backgroundImage = "url('')";  
+      }
+      else {
+        this.data.data.css.backgroundImage = backgroundUrl;  
+      }
       this.fireObjectChanged();
       this.save();
+      WebDoc.application.undoManager.registerUndo(function() {
+        this.setBackgroundImage(old_background);
+      }.pBind(this));
     }
   },
 

@@ -1,12 +1,15 @@
 class DocumentsController < ApplicationController
-  before_filter :instantiate_document, :only => [:show, :update, :destroy]
-  before_filter :authenticate_if_needed, :only => [:show]
-  before_filter :authenticate_user!, :only => [:index]
+  # need to be authenticate for alpha release.
+  # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document
+  before_filter :authenticate_user!
+  before_filter :instantiate_document, :only => [:show, :update, :duplicate, :destroy]
+  #before_filter :authenticate_if_needed, :only => [:show]
+  #before_filter :authenticate_user!, :only => [:index]
   after_filter :create_view_count, :only => :show
   
   access_control do
     allow :admin
-    allow logged_in, :to => [:index, :create]
+    allow logged_in, :to => [:index, :create, :duplicate]
     allow :editor, :of => :document, :to => [:update, :destroy]
     action :show do
       allow all, :if => :document_is_public?
@@ -18,7 +21,9 @@ class DocumentsController < ApplicationController
   # GET /documents
   def index    
     respond_to do |format|
-      format.html
+      format.html {
+        set_return_to
+      }
       format.json {
         per_page = 20
         @documents = Document.all_with_filter(current_user, params[:document_filter], params[:page], per_page)
@@ -41,7 +46,11 @@ class DocumentsController < ApplicationController
   def show
     respond_to do |format|
       format.html { render :layout => "layouts/editor" }
-      format.json { render :json => @document.to_json(:include => { :pages => { :include => :items} }) }
+      format.json do
+        set_cache_buster
+
+        render :json => Rails.cache.fetch(@document.cache_key) { @document.to_json(:include => { :pages => { :include => :items} }) }
+      end
     end
   end
   
@@ -50,6 +59,12 @@ class DocumentsController < ApplicationController
     @document = current_user.documents.create(params[:document])
     
     render :json => @document
+  end
+
+  # POST /documents/:id/duplicate
+  def duplicate
+    @new_document = @document.deep_clone_and_save!(current_user, params[:title])
+    render :json => @new_document.to_json(:only => :uuid)
   end
   
   # PUT /documents/:id

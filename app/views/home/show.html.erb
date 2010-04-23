@@ -25,13 +25,17 @@
     <% end%><!-- spaceless
  --><div class="column last double of-four">
       <h3>&hellip;or sign up</h3>
-      <p>Want to get started creating your own webdocs? Registering takes 30 seconds, and <em>it's free!</em> Simply hop across to our <a href="/users/sign_up">sign&nbsp;up&nbsp;page</a>.</p>
+      <p>Want to get started creating your own webdocs? Registering takes 30 seconds, and <em>it's free!</em>.  <a href="/users/sign_up" style="font-weight: bold; font-style: italic;">Sign&nbsp;up&nbsp;now...</a></p>
     </div>
   </div>
 </div>
 
+<% # this code has been removed for the alpha release %>
+<% if false %>
 <div class="content">
   <div class="wrap">
+    <h2>Most recent webdocs <a href="<%= explore_path%>">(->View all)</a></h2>
+    <%= render :partial => "explore/viewer_list", :locals => { :documents => @top_documents } %>    
   </div>
 </div>
 <% content_for :scripts do %>
@@ -42,3 +46,5 @@
     });
   </script>
 <% end %>
+<% end %>
+ 

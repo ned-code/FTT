@@ -148,7 +148,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
                           
                           that.documents.push(newDoc);
                           that.filter.addDocument(newDoc);
-                          document.location = "/documents/" + newDoc.uuid() + "#1";
+                          document.location = "/documents/" + newDoc.uuid() + "?edit=true#1";
                         }
                         that._creatingDoc = false;                        
                       });

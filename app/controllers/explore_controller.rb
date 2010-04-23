@@ -1,8 +1,9 @@
 class ExploreController < ApplicationController
-  
+  before_filter :authenticate_user!
   # GET /explore
   def index
-    @public_documents = Document.paginate_by_is_public(true, :page => params[:page], :per_page => 4)
+    set_return_to
+    @public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:page])
   end
   
 end

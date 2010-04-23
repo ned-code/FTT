@@ -47,7 +47,7 @@ body                          { background-color: hsl(208, 8%, 60%); }
 .inspector .foot>ul,
 .inspector .foot>form,
 .inspector .foot>div          { background-color: hsla(208, 12%, 30%, 0.8); color: white; }
-.inspector .foot>ul           { background-image: url('/images/bg.png');
+.inspector .tools             { background-image: url('/images/bg.png');
                                 background-position: 0 0;
                                 background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(208, 4%, 97%) ), to( hsl(208, 8%, 79%) ));
                                 background-image: -moz-linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
@@ -114,7 +114,9 @@ body                          { background-color: hsl(208, 8%, 60%); }
 }
 
 /* Page browser */
+.tag-list a,
 .pages li .page-title         { background-color: hsl(208, 9%, 71%); }
+.tag-list a:hover,
 .pages li:hover .page-title   { background-color: hsl(208, 6%, 56%); }
 .pages li.current .page-title { background-color: hsl(208, 3%, 88%); }
 
@@ -163,17 +165,21 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
                   border-color: rgba(176, 227, 0, 0.8); }
 
 .toolbar-panel a,
+.toolbar-panel .group-tools a,
 .toolbar-panel .mode-tools a        { -webkit-transition: width 0.18s ease-out; }
 .toolbar-panel a:active,
+.toolbar-panel .group-tools a:active,
 .toolbar-panel .mode-tools a:active { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
 .toolbar-panel .current,
 .toolbar-panel .active,
+.toolbar-panel .group-tools .current,
 .toolbar-panel .mode-tools .current { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -webkit-transition: width 0.18s ease-out; }
+.toolbar-panel .group-tools a,
 .toolbar-panel .mode-tools a        { -webkit-box-shadow: inset 0 0 2px -1px hsl(18, 16%, 12%);
                                       -moz-box-shadow:    inset 0 0 2px -1px hsl(18, 16%, 12%);
                                       box-shadow:         inset 0 0 2px -1px hsl(18, 16%, 12%); }
@@ -196,13 +202,13 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
 .tools a.current{
     background-color: hsla( 208, 8%, 92%, 0.6 );
 }
-
+.group-tools li a,
 .mode-tools li a {
     -webkit-border-radius: 0;
     -moz-border-radius:    0;
     border-radius:         0;
 }
-
+.group-tools li:first-child a,
 .mode-tools li:first-child a {
     -webkit-border-top-left-radius:     6px;
     -moz-border-radius-topleft:         6px;
@@ -211,6 +217,7 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
     -moz-border-radius-bottomleft:      6px;
     border-bottom-left-radius:          6px;
 }
+.group-tools li:last-child a,
 .mode-tools li:last-child a {
     -webkit-border-top-right-radius:    6px;
     -moz-border-radius-topright:        6px;
@@ -253,13 +260,13 @@ a[href="#remove-page"]              { background-position: 0 -832px; }
 a[href="#remove-page"]:hover        { background-position: 0 -896px; }
 a[href="#remove-page"]:active       { background-position: 0 -960px; }
 
-.toolbar-panel a[href="#prev-page"]        { background-position: 0 -1024px; }
-.toolbar-panel a[href="#prev-page"]:hover  { background-position: 0 -1088px; }
-.toolbar-panel a[href="#prev-page"]:active { background-position: 0 -1152px; }
+.toolbar-panel a[href="#webdoc-prev-page"]        { background-position: 0 -1024px; }
+.toolbar-panel a[href="#webdoc-prev-page"]:hover  { background-position: 0 -1088px; }
+.toolbar-panel a[href="#webdoc-prev-page"]:active { background-position: 0 -1152px; }
 
-.toolbar-panel a[href="#next-page"]        { background-position: 0 -1216px; }
-.toolbar-panel a[href="#next-page"]:hover  { background-position: 0 -1280px; }
-.toolbar-panel a[href="#next-page"]:active { background-position: 0 -1344px; }
+.toolbar-panel a[href="#webdoc-next-page"]        { background-position: 0 -1216px; }
+.toolbar-panel a[href="#webdoc-next-page"]:hover  { background-position: 0 -1280px; }
+.toolbar-panel a[href="#webdoc-next-page"]:active { background-position: 0 -1344px; }
 
 a[href="#toggle-thumbs"].active        { background-position: 0 -1408px; }
 a[href="#toggle-thumbs"].active:hover  { background-position: 0 -1472px; }
@@ -329,6 +336,14 @@ a[href="#to-front"]                 { background-position: 0 -2560px; }
 a[href="#to-front"]:hover           { background-position: 0 -2624px; }
 a[href="#to-front"]:active          { background-position: 0 -2688px; }
 
+a[href="#insert-iframe"]            { background-position: 0 -2752px; }
+a[href="#insert-iframe"]:hover      { background-position: 0 -2816px; }
+a[href="#insert-iframe"]:active     { background-position: 0 -2880px; }
+
+a[href="#insert-os-gadget"]         { background-position: 0 -2944px; }
+a[href="#insert-os-gadget"]:hover   { background-position: 0 -3008px; }
+a[href="#insert-os-gadget"]:active  { background-position: 0 -3072px; }
+
 .inspector-views a,
 .panel-tools a                      { background-image: url('/images/panel-tools.png'); }
 
@@ -382,13 +397,13 @@ a[href="#show-thumbs"]                { background-position: -4px -1860px; }
 a[href="#show-thumbs"]:hover          { background-position: -4px -1924px; }
 a[href="#show-thumbs"].current        { background-position: -4px -1988px; }
 
-a[href="#prev-page"]                  { background-position: 0 -2051px; }
-a[href="#prev-page"]:hover            { background-position: 0 -2115px; }
-a[href="#prev-page"]:active           { background-position: 0 -2179px; }
+a[href="#webdoc-prev-page"]           { background-position: 0 -2051px; }
+a[href="#webdoc-prev-page"]:hover     { background-position: 0 -2115px; }
+a[href="#webdoc-prev-page"]:active    { background-position: 0 -2179px; }
 
-a[href="#next-page"]                  { background-position: 0 -2237px; }
-a[href="#next-page"]:hover            { background-position: 0 -2301px; }
-a[href="#next-page"]:active           { background-position: 0 -2365px; }
+a[href="#webdoc-next-page"]           { background-position: 0 -2237px; }
+a[href="#webdoc-next-page"]:hover     { background-position: 0 -2301px; }
+a[href="#webdoc-next-page"]:active    { background-position: 0 -2365px; }
 
 a[href="#social-inspector"]           { background-position: 0 -2432px; }
 a[href="#social-inspector"]:hover     { background-position: 0 -2496px; }
@@ -416,4 +431,9 @@ a[href="#disable-html"]               { background-position: 0 -704px; }
 a[href="#disable-html"]:hover         { background-position: 0 -768px; }
 a[href="#disable-html"].active,
 a[href="#disable-html"]:active        { background-position: 0 -832px; }
+
+a[href="#webdoc-duplicate"]           { background-position: 0 -896px; }
+a[href="#webdoc-duplicate"]:hover     { background-position: 0 -960px; }
+a[href="#webdoc-duplicate"].active,
+a[href="#webdoc-duplicate"]:active    { background-position: 0 -1024px; }
 

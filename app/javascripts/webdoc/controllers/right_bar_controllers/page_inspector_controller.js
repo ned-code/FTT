@@ -357,7 +357,9 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
       this._applyBackgroundToPage(WebDoc.application.pageEditor.currentDocument.pages[i]);
     }
+    var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
     WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
+    WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);
   },
 
   _applyBackgroundToPage: function(targetPage) {

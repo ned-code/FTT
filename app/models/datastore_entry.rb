@@ -9,7 +9,7 @@ class DatastoreEntry < ActiveRecord::Base
   belongs_to :item
   belongs_to :user
   
-  named_scope :filter_with, lambda { |params|
+  named_scope :filter_with, lambda { |current_user, params|
     conditions = {}
     conditions[:ds_key]  = params[:key] if params.has_key?(:key)
     conditions[:user_id] = current_user if current_user && params[:only_current_user] == 'true'
@@ -31,7 +31,7 @@ class DatastoreEntry < ActiveRecord::Base
     user.email if user
   end
   
-  def to_json(options = {})
+  def filtered_json(current_user, options = {})
     options[:only] ||= []
     options[:methods] ||= []
     
@@ -42,14 +42,14 @@ class DatastoreEntry < ActiveRecord::Base
       options[:only]    = [:ds_key, :ds_value]
     end
     
-    super(options)
+    as_json(options)
   end
   
   # =================
   # = Class Methods =
   # =================
   
-  def self.create_or_update(item, params)
+  def self.create_or_update(current_user, item, params)
     key_to_save = nil
     #check if the key already exists
     if params[:unique_key] == 'true'
@@ -88,7 +88,7 @@ class DatastoreEntry < ActiveRecord::Base
   
   #return all datastore entries for the current user
   #and linked to items, medias, pages and documents info 
-  def self.all_for_current_user_documents
+  def self.all_for_current_user_documents(current_user)
     #try to find an optimized solution
     # current_user.documents.inject([]) do |datastore_entries, document|
     #   document.pages.each do |page|

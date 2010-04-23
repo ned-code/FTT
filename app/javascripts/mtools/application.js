@@ -1,32 +1,4 @@
-MTools.Application = $.klass({
-
-  initialize: function() {
-  
-    if (WebDoc && WebDoc.authData)
-    $.ajaxSetup({
-      data: {
-        authenticity_token: WebDoc.authData.authToken
-      }
-    });
-
-    this._getCurrentUser();
-  },
-  
-  _getCurrentUser: function() {
-    $.ajax({
-      url: "/user",
-      type: 'GET',
-      dataType: 'json',
-      success: function(data, textStatus) {
-        this.currentUser = data.user;
-      }
-.pBind(this)      ,
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
-        ddd("Error occured:" + textStatus);
-      }
-    });
-  }
-  
+MTools.Application = $.klass({  
 });
 
 $.extend(MTools.Application, {
@@ -44,7 +16,7 @@ $.extend(MTools.Application, {
     }
   },
   
-  main: function(mainFunction) {
+  main: function(mainFunction) {    
     if (MTools.Application._mainFunction) {
       throw ("Main function already defined");
     }
@@ -61,17 +33,40 @@ $.extend(MTools.Application, {
   
   start: function() {
     $(function() {
-      // execute before methods
-      for (var beforeKey in MTools.Application._beforeMain) {
-        MTools.Application._beforeMain[beforeKey].call(this);
-      }
-      if (MTools.Application._mainFunction) {
-        MTools.Application._mainFunction.call(this);
-      }      
-      // execute before methods
-      for (var afterKey in MTools.Application._afterMain) {
-        MTools.Application._afterMain[afterKey].call(this);
-      }
+      
+      $.ajax({
+        url: "/user",
+        type: 'GET',
+        dataType: 'json',
+        success: function(data, textStatus) {
+          if (window.WebDoc && WebDoc.authData) {
+            $.ajaxSetup({
+              data: {
+                authenticity_token: WebDoc.authData.authToken
+              }
+            });
+          }
+          this.currentUser = data.user;
+          // execute before methods
+          for (var beforeKey in MTools.Application._beforeMain) {
+            MTools.Application._beforeMain[beforeKey].call(this);
+          }
+          if (MTools.Application._mainFunction) {
+            MTools.Application._mainFunction.call(this);
+          }      
+          // execute before methods
+          for (var afterKey in MTools.Application._afterMain) {
+            MTools.Application._afterMain[afterKey].call(this);
+          }          
+        }.pBind(MTools.Application),
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+          ddd("Error occured:" + textStatus);
+        }
+      });      
     });
+  },
+  
+  getCurrentUser: function() {
+    return this.currentUser;
   }
 });

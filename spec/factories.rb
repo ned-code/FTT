@@ -58,3 +58,7 @@ Factory.define :view_count do |f|
   f.ip_address    "127.0.0.1"
   f.viewable     { |f| f.association(:document) }
 end
+
+Factory.define :category do |f|
+  f.sequence(:name) { |n| "category#{n}" } 
+end
