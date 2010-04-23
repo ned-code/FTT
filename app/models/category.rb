@@ -4,6 +4,7 @@ class Category < ActiveRecord::Base
 
   attr_accessible :name
 
+  named_scope :have_public_documents, :include => :documents, :conditions => ['documents.is_public = ?', true]
 
   def number_of_public_documents
     Document.count(:conditions => "category_id = #{id} and is_public = 1")

@@ -9,8 +9,8 @@
       webdocs in the category
       <select id="wd-category-filter">
         <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t("words.all")%></option>
-        <% Category.all.each do |category|%>
-          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= "#{category.name} (#{category.number_of_public_documents})" %></option>  
+        <% Category.have_public_documents.all.each do |category|%>
+          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= "#{category.name}" %></option>  
         <% end %>        
       </select>
     </p>
