@@ -13,6 +13,7 @@ staging:
   openfire_user_service_secret: rt8BTv4C
   mail_from: st-wd@webdoc.com
   google_analytic_tracker_id: UA-11892994-2
+  must_check_user_email: true
 
 production:
   synch_openfire_users: true
@@ -21,5 +22,6 @@ production:
   google_analytic_tracker_id: UA-11892994-3
   notify_administrator_on_user_creation: true
   mail_from: info@webdoc.com
+  must_check_user_email: true
   administrator_emails: julien.bachmann@mnemis.com, stelio.tzonis@mnemis.com, mathieu.fivaz@mnemis.com, yann.ringgenberg@mnemis.com
   

@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   # = Callbacks =
   # =============
   
+  validate_on_create :must_be_allowed_email
   after_create :create_xmpp_user, :notify_administrators
   
   # ===============
@@ -137,6 +138,18 @@ protected
   def notify_administrators
     if (APP_CONFIG['notify_administrator_on_user_creation'])  
       Notifier.deliver_new_user_notification(APP_CONFIG['administrator_emails'], self)
+    end    
+  end
+  
+  def must_be_allowed_email
+    if (APP_CONFIG['must_check_user_email'])
+      allowed_users = []
+      begin
+        allowed_users = YAML.load_file("#{RAILS_ROOT}/config/allowed_user_email.yml")
+      rescue => exception
+        logger.warn("cannot open file '#{RAILS_ROOT}/config/allowed_user_email.yml'. Reason: #{exception.message}")
+      end
+      errors.add(:email, :not_authorized_email) unless allowed_users.include? self.email
     end    
   end
 end
