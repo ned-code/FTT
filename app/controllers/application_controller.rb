@@ -17,7 +17,7 @@ protected
   end
   
   def http_authenticate
-    if (Rails.env.production? || Rails.env.staging?) 
+    if (Rails.env.staging?) 
       authenticate_or_request_with_http_basic do |username, password|
         username == "wduser" && password == "wdalpha001"
       end

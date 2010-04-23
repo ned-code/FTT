@@ -4,7 +4,8 @@ class HomeController < ApplicationController
   def show
     set_return_to
     @user = User.new
-    @top_documents = Document.all_public_paginated_with_explore_params("recent", "all", nil, 4)
+    #TODO uncomment this line if you want to have top documents on home page
+    #@top_documents = Document.all_public_paginated_with_explore_params("recent", "all", nil, 4)
   end
   
 private
