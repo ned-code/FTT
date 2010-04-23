@@ -1,12 +1,12 @@
-set :deploy_to,  "/var/www/#{application}"
+set :deploy_to,  "/var/www/prod#{application}"
 
-role :web,      ""
-role :app,      ""
-role :memcache, ""
-role :db,       "", :primary => true
+role :web,      "ec2-174-129-27-25.compute-1.amazonaws.com"
+role :app,      "ec2-174-129-27-25.compute-1.amazonaws.com"
+role :memcache, "ec2-174-129-27-25.compute-1.amazonaws.com"
+role :db,       "ec2-174-129-27-25.compute-1.amazonaws.com", :primary => true
 
 set :branch, "master"
 
 set :rails_env, "production"
 
-# ssh_options[:keys] = ["#{ENV['HOME']}/.ssh/ec2-mnemis"]
+ssh_options[:keys] = ["#{ENV['HOME']}/.ssh/webdoc"]

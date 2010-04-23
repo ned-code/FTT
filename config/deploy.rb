@@ -6,7 +6,7 @@ require 'capistrano/ext/multistage'
 
 set :user, "webdoc"
 set :runner, "webdoc"
-set :use_sudo, true
+set :use_sudo, false
 
 default_run_options[:pty] = true
 set :scm, :git
@@ -26,9 +26,10 @@ namespace :deploy do
   end
   task :link_config do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    run "ln -nfs #{shared_path}/config/allowed_user_email.yml #{release_path}/config/allowed_user_email.yml"
   end
   task :generate_assets do
-    send(:run, "cd #{release_path} && /usr/bin/jammit --force config/assets.yml")
+    send(:run, "cd #{release_path} && RAILS_ENV=#{rails_env} /usr/bin/jammit --force config/assets.yml")
   end
 end
 
@@ -44,7 +45,7 @@ namespace :passenger do
     run "sudo passenger-status"
   end
 end
-
+                                 
 task :uname do
   run "uname -a"
 end
