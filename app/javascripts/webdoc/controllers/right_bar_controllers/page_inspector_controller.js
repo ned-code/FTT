@@ -4,25 +4,34 @@
 
 (function(jQuery, undefined){
 
-var cssEditor,
+var inspector,
+    cssEditor,
     cssEditorFieldset,
     externalPageControls,
     backgroundControls,
     backgroundImageControls,
     backgroundImageControlsEnabled,
-    supportedImagesExtensions = ["jpg","jpeg","png","gif"],
+    supportedImageExtensions = ["jpg","jpeg","png","gif"],
     page;
 
 WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController, {
   PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
 
   initialize: function() { 
+    inspector = jQuery('#page-inspector');
+    form = inspector.find('.content>form');
+    
     cssEditorFieldset = jQuery("#page_css_editor");
     cssEditor = cssEditorFieldset.find('textarea.code');
     externalPageControls = jQuery('.externalPage-related');
     backgroundControls = jQuery('.background-related');
     backgroundImageControls = jQuery('#page_background_image_tileX_checkbox, #page_background_image_align_hor_left_radio, #page_background_image_align_hor_center_radio, #page_background_image_align_hor_right_radio, #page_background_image_tileY_checkbox, #page_background_image_align_vert_top_radio, #page_background_image_align_vert_middle_radio, #page_background_image_align_vert_bottom_radio');
-
+    
+    form
+    .bind('submit', function(e){
+      e.preventDefault();
+    });
+    
     cssEditor.bind("blur", this._applyPageCss);
     jQuery("#external_page_url").bind("blur", this._updateExternalPageUrl.pBind(this));
     jQuery("#page_title_textbox").bind("change", this._changePageTitle);
@@ -48,7 +57,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     this._uploadControl = jQuery("#upload-container");
     this._setupFlashUpload();
     this.currentPageChanged();
-    this.domNode = jQuery('#page-inspector');
+    this.domNode = inspector;
     
     var footHeight = this.domNode.find('.foot>div').height();
     this.domNode
@@ -62,7 +71,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
       upload_url: "/images",
       file_post_name: "image[file]",
       file_size_limit: "2048",
-      file_types: "*."+supportedImagesExtensions.join(";*."), // "*.jpg;*.jpeg;*.png;*.gif"
+      file_types: "*."+supportedImageExtensions.join(";*."), // "*.jpg;*.jpeg;*.png;*.gif"
       file_types_description: "Web Image Files",
       //file_upload_limit: "1",
       flash_url: "/swfupload/swfupload.swf",
@@ -249,7 +258,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     ddd('[pageInspectorController] _changePageBackgroundImage');
     try {
       page.setBackgroundImage(jQuery("#page_background_image_textbox").val()); 
-      WebDoc.application.pageEditor.loadPage(page, true);
+      //WebDoc.application.pageEditor.loadPage(page, true);
     }
     catch(exc) {
       jQuery("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
@@ -259,14 +268,14 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   _changePageBackgroundImageFromThumb: function() {
     var backGroundImageSrc = jQuery('#background_image').data('url');
     page.setBackgroundImage('url(' + backGroundImageSrc + ')'); 
-    WebDoc.application.pageEditor.loadPage(page, true);
+    //WebDoc.application.pageEditor.loadPage(page, true);
   },
 
   _changePageBackgroundRepeatMode: function(e) {
+    ddd('[Page Inspector Controller] _changePageBackgroundRepeatMode');
     if(e) { e.preventDefault(); }
     try {
       page.setBackgroundRepeatMode(this._getBackgroundRepeatMode());
-      WebDoc.application.pageEditor.loadPage(page, true); 
      }
     catch(exc) {
       this._setBackgroundRepeatMode(page.data.data.css.background-repeat);
@@ -277,7 +286,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     if(e) {e.preventDefault(); }
     try {
       page.setBackgroundPosition(this._getBackgroundPosition());
-      WebDoc.application.pageEditor.loadPage(page, true); 
+      //WebDoc.application.pageEditor.loadPage(page, true); 
      }
     catch(exc) {
       this._setBackroundPosition(page.data.data.css.backgroundPosition);
@@ -291,7 +300,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   
   _cancelImageBackground: function() {
     page.removeBackgroundImage();
-    WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
+    //WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
   },
 
   _checkValidBackgroundImage: function(e) {
@@ -358,7 +367,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
       this._applyBackgroundToPage(WebDoc.application.pageEditor.currentDocument.pages[i]);
     }
     var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
-    WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
+    //WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
     WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);
   },
 
@@ -378,7 +387,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   _updateExternalPageUrl: function() {  
     try {
       page.setExternalPageUrl(jQuery("#external_page_url").val());
-      WebDoc.application.pageEditor.loadPage(page, true);
+      //WebDoc.application.pageEditor.loadPage(page, true);
     }
     catch(exc) {
       jQuery("#external_page_url")[0].value = page.data.data.externalPageUrl;
@@ -400,7 +409,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
       }
       if (newCss) {
         WebDoc.application.pageEditor.currentPage.applyCss(newCss);
-        WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
+        //WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
       }
     }
   },
