@@ -30,6 +30,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :widgets, :as => 'apps', :except => :show
     admin.resources :categories, :except => :show
     admin.resource :test, :only => :show
+    admin.resources :themes
   end
   
   map.followships 'followships', :controller => "followships", :action => :index

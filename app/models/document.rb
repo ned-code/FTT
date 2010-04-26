@@ -16,6 +16,7 @@ class Document < ActiveRecord::Base
   belongs_to :metadata_media, :class_name => 'Media'
   belongs_to :creator, :class_name => 'User'
   belongs_to :category
+  belongs_to :theme
   
   # ===============
   # = Validations =
