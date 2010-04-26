@@ -172,7 +172,7 @@ WebDoc.Page = $.klass(MTools.Record,
     WebDoc.InspectorFieldsValidator.validateUrl(url);
     if(this.data.data.externalPageUrl != url) {
       this.data.data.externalPageUrl = url;
-      this.fireObjectChanged();
+      this.fireObjectChanged('pageUrl');
       this.save();
     }
   },

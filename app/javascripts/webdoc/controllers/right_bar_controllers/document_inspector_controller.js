@@ -4,24 +4,32 @@
 
 (function(jQuery, undefined){
 
- var documentTitleField,
-     documentDescriptionField,
-     documentCategoryField,
-     currentDocument;
-     
+var inpsector,
+    form,
+    documentTitleField,
+    documentDescriptionField,
+    documentCategoryField,
+    currentDocument;
+    
 WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorController, {
   DOCUMENT_INSPECTOR_BUTTON_SELECTOR: "a[href='#document-inspector']",  
   
   initialize: function() {
-    this.domNode = jQuery('#document-inspector');    
-    documentTitleField = jQuery("#document-title", this.domNode);
-    documentDescriptionField = jQuery("#document-description", this.domNode);
-    documentCategoryField = jQuery("#document-category", this.domNode)
+    this.domNode = inspector = jQuery('#document-inspector');
+    
+    form = inspector.find('form.properties');
+    documentTitleField = jQuery("#document-title", inspector);
+    documentDescriptionField = jQuery("#document-description", inspector);
+    documentCategoryField = jQuery("#document-category", inspector)
     currentDocument = WebDoc.application.pageEditor.currentDocument;
     
-    documentTitleField.bind("change", this._changeDocumentTitle);
-    documentDescriptionField.bind("change", this._changeDocumentDescription);
-    documentCategoryField.bind("change", this._changeDocumentCategory);
+    form
+    .bind('submit', function(e){
+      e.preventDefault();
+    })
+    .delegate('#document-title', 'change', this._changeDocumentTitle)
+    .delegate('#document-description', 'change', this._changeDocumentDescription)
+    .delegate('#document-category', 'change', this._changeDocumentCategory);
     
     currentDocument.addListener(this);
     
