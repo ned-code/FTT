@@ -21,7 +21,7 @@ WebDoc.handlers = {
           href = link.attr('href'),
           match = regex.hashRef.exec(href);
       
-      ddd( '[linkHandler] Event handler ref: "' + match + '"' );
+      ddd( '[Handler] "' + match + '"' );
       
       // If the href contains a hashRef that matches an obj key
       if ( match && obj[match[1]] ) {

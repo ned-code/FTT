@@ -11,6 +11,7 @@ en:
               not_authorized_email: "is not authorized to register"
   words:
     all:            "all"
+    themes:         "themes"
   
   phrases:
     most_recent:    "most recent"

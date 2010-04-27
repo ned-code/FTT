@@ -344,6 +344,10 @@ a[href="#insert-os-gadget"]         { background-position: 0 -2944px; }
 a[href="#insert-os-gadget"]:hover   { background-position: 0 -3008px; }
 a[href="#insert-os-gadget"]:active  { background-position: 0 -3072px; }
 
+a[href="#themes"]                   { background-position: 0 -3136px; }
+a[href="#themes"]:hover             { background-position: 0 -3200px; }
+a[href="#themes"]:active            { background-position: 0 -3264px; }
+
 .inspector-views a,
 .panel-tools a                      { background-image: url('/images/panel-tools.png'); }
 
