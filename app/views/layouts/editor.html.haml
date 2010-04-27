@@ -8,7 +8,6 @@
     %title= "webdoc - alpha - #{yield(:title)}"
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :page_editor, :media => 'all'
-    = include_stylesheets :feedback, :media => 'all'
     = include_javascripts :common
     
   -if params[:reader] == 'true'
@@ -22,10 +21,8 @@
     = yield
     = include_javascripts :mtools
     = include_javascripts :page_editor
-    = include_javascripts :feedback
-    
-    = javascript_include_tag "http://assets0.zendesk.com/external/zenbox/overlay.js", "/gadgets/js/rpc.js?c=1&debug=1", "/gadgets/files/container/cookies.js", "/gadgets/files/container/util.js", "/gadgets/files/container/gadgets.js", "/gadgets/files/container/cookiebaseduserprefstore.js"
     = yield :scripts
+    = javascript_include_tag "/gadgets/js/rpc.js?c=1&debug=1", "/gadgets/files/container/cookies.js", "/gadgets/files/container/util.js", "/gadgets/files/container/gadgets.js", "/gadgets/files/container/cookiebaseduserprefstore.js"
     :javascript  
       var WebDoc;
       if (!WebDoc) {
@@ -42,5 +39,5 @@
         editor.load("#{@document.uuid}");
       });      
       MTools.Application.start();
-    
+    = render :partial => "layouts/feedback";
     = render :partial => "layouts/google_analytics"
