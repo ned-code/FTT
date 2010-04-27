@@ -25,6 +25,11 @@ class Item < ActiveRecord::Base
   after_save :touch_page
   after_destroy :touch_page
 
+  # ===============
+  # = Validations =
+  # ===============
+  validates_uniqueness_of :uuid  
+
   # ====================
   # = Instance Methods =
   # ====================

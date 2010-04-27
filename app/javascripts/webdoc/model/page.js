@@ -7,7 +7,7 @@ WebDoc.Page = $.klass(MTools.Record,
 { 
   DEFAULT_PAGE_HEIGHT_PX: 600,
   DEFAULT_PAGE_WIDTH_PX: 800,
-  initialize: function($super, json, document) {
+  initialize: function($super, json, document, externalPageUrl) {
     // initialize relationship before super.
     this.firstPosition = 0;
     this.lastPosition = 0;
@@ -15,6 +15,13 @@ WebDoc.Page = $.klass(MTools.Record,
     this.nonDrawingItems = [];
     this.document = document;
     $super(json);
+    if (externalPageUrl) {
+      if (!this.data.data) {
+        this.data.data = {};
+      }
+      this.data.data.externalPage = true;
+      this.data.data.externalPageUrl = externalPageUrl;
+    }
   },
   
   getDocument: function() {
@@ -24,27 +31,11 @@ WebDoc.Page = $.klass(MTools.Record,
   setDocument: function(document) {
     this.document = document;
   },
-  
-  setExternalPageMode: function(mode) {
-    ddd("set mode", mode);  
-    this.data.data.externalPage = mode;
-    this.fireObjectChanged();    
-  },
-  
-  setAllowAnnotation: function(mode) {
-    ddd("set allow annotation", mode);
-    this.data.data.allowAnnotation = mode;
-    if (mode) {
-      delete this.data.data.css.width;
-      delete this.data.data.css.height;
-    }
-    this.fireObjectChanged();    
-  },
-  
+    
   applyCss: function(newCss) {   
     if (newCss != this.data.data.css) {
       this.data.data.css = newCss;
-      this.fireObjectChanged();
+      this.fireObjectChanged({ modifedAttribute: 'css' });
       this.save();
     }
   },
@@ -58,7 +49,7 @@ WebDoc.Page = $.klass(MTools.Record,
   setTitle: function(title) {
     if(this.data.title != title) {
       this.data.title = title;
-      this.fireObjectChanged();
+      this.fireObjectChanged({ modifedAttribute: 'title' });
       this.save();
     }
   },
@@ -85,7 +76,7 @@ WebDoc.Page = $.klass(MTools.Record,
     if(this.data.data.css.height != height) {
       var old_height = this.data.data.css.height;
       this.data.data.css.height = height;
-      this.fireObjectChanged();
+      this.fireObjectChanged({ modifedAttribute: 'css.height' });
       this.save();
       WebDoc.application.undoManager.registerUndo(function() {
         this.setHeight(old_height);
@@ -115,7 +106,7 @@ WebDoc.Page = $.klass(MTools.Record,
     if(this.data.data.css.width != width) {
       var old_width = this.data.data.css.width;
       this.data.data.css.width = width;
-      this.fireObjectChanged();
+      this.fireObjectChanged({ modifedAttribute: 'css.width' });
       this.save();
       WebDoc.application.undoManager.registerUndo(function() {
         this.setWidth(old_width);
@@ -127,7 +118,7 @@ WebDoc.Page = $.klass(MTools.Record,
     WebDoc.InspectorFieldsValidator.validateColor(backgroundColor);
     if(this.data.data.css.backgroundColor != backgroundColor) {
       this.data.data.css.backgroundColor = backgroundColor;
-      this.fireObjectChanged();
+      this.fireObjectChanged({ modifedAttribute: 'css.backgroundColor' });
       this.save();
     }
   },
@@ -142,7 +133,7 @@ WebDoc.Page = $.klass(MTools.Record,
       else {
         this.data.data.css.backgroundImage = backgroundUrl;  
       }
-      this.fireObjectChanged();
+      this.fireObjectChanged({ modifedAttribute: 'css.backgroundImage' });
       this.save();
       WebDoc.application.undoManager.registerUndo(function() {
         this.setBackgroundImage(old_background);
@@ -154,7 +145,7 @@ WebDoc.Page = $.klass(MTools.Record,
     WebDoc.InspectorFieldsValidator.validateBackgroundRepeat(repeatMode);
     if(this.data.data.css.backgroundRepeat != repeatMode) {
       this.data.data.css.backgroundRepeat = repeatMode;
-      this.fireObjectChanged();
+      this.fireObjectChanged({ modifedAttribute: 'css.backgroundRepeat' });
       this.save();
     }
   },
@@ -163,7 +154,7 @@ WebDoc.Page = $.klass(MTools.Record,
     WebDoc.InspectorFieldsValidator.validateBackgroundPosition(position);
     if(this.data.data.css.backgroundPosition != position) {
       this.data.data.css.backgroundPosition = position;
-      this.fireObjectChanged();
+      this.fireObjectChanged({ modifedAttribute: 'css.backgroundPosition' });
       this.save();
     }
   },
@@ -172,7 +163,7 @@ WebDoc.Page = $.klass(MTools.Record,
     WebDoc.InspectorFieldsValidator.validateUrl(url);
     if(this.data.data.externalPageUrl != url) {
       this.data.data.externalPageUrl = url;
-      this.fireObjectChanged('pageUrl');
+      this.fireObjectChanged({ modifedAttribute: 'externalPageUrl' });
       this.save();
     }
   },
@@ -181,7 +172,7 @@ WebDoc.Page = $.klass(MTools.Record,
     delete this.data.data.css.backgroundImage;
     delete this.data.data.css.backgroundRepeat;
     delete this.data.data.css.backgroundPosition;   
-    this.fireObjectChanged();
+    this.fireObjectChanged({ modifedAttribute: 'css.background' });
     this.save();    
   },
   
@@ -338,17 +329,6 @@ WebDoc.Page = $.klass(MTools.Record,
       }
     }
     return null;
-  },
-  
-  toggleBkg: function() {
-    ddd("toggle");
-    var previousColor = this.data.data.css.backgroundColor;
-    var newColor = "white";
-    if (previousColor == "white") {
-      newColor = "black";
-    }
-    this.data.data.css.backgroundColor = newColor;
-    this.fireObjectChanged();
   },
   
   fireItemAdded: function(addedItem, afterItem) {

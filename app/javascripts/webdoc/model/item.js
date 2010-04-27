@@ -57,13 +57,13 @@ WebDoc.Item = $.klass(MTools.Record,
     }
     
     // TODO: can remove this fecth. it ise used only for old item that were created before that inspector url is set in item properties.
-    if (this.data.media_id && this.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
-      MTools.ServerManager.getRecords(WebDoc.Widget, this.data.media_id, function(data) {
-        if (data.length > 0) {
-          this.media = data[0];
-        }
-      }.pBind(this));
-    }
+//    if (this.data.media_id && this.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
+//      MTools.ServerManager.getRecords(WebDoc.Widget, this.data.media_id, function(data) {
+//        if (data.length > 0) {
+//          this.media = data[0];
+//        }
+//      }.pBind(this));
+//    }
     // END of to do
     
     if (refreshPreferences) {
