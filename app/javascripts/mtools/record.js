@@ -131,11 +131,12 @@ MTools.Record = jQuery.klass(
   
   /**
    * private method used to notify listeners when record has changed.
+   * @param options options is an object hat will be passes to the listener.
    */
-  fireObjectChanged: function() {
+  fireObjectChanged: function(options) {
     for (var i = 0; i < this.listeners.length; i++) {
       if (this.listeners[i].objectChanged) {
-        this.listeners[i].objectChanged(this);
+        this.listeners[i].objectChanged(this, options);
       }
     }
   },
@@ -147,7 +148,7 @@ MTools.Record = jQuery.klass(
   refresh: function(json) {
     this.isNew = false;
     this.data = json[this.className()];
-    this.fireObjectChanged();
+    this.fireObjectChanged({ refresh: true });
   },
   
   /**
@@ -195,6 +196,13 @@ MTools.Record = jQuery.klass(
   copy: function() {
     var recordCopy = new this.constructor();
     return recordCopy;
+  },
+  
+  _isAttributeModified: function(options, attributeName) {
+    if (options && options.modifedAttribute) {
+      return (options.modifedAttribute.indexOf(attributeName) !== -1);
+    }
+    return true;
   }
 });
 

@@ -3,8 +3,7 @@
 
 WebDoc.PageView = $.klass({
   initialize: function(page, boardContainer) {
-    var externalPage,
-        domNode = $('<div>').id('page_' + page.uuid()),
+    var domNode = $('<div>').id('page_' + page.uuid()),
         itemDomNode = $('<div/>').id('items_' + page.uuid()).addClass("layer").css({overflow: 'visible'}),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
         eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(),
@@ -39,20 +38,7 @@ WebDoc.PageView = $.klass({
     ddd( page.data.data.css );
     
     if (page.data.data.externalPage && !WebDoc.application.disableHtml) {
-      // Handle case where page is an external webpage
-      
-      externalPage = $("<iframe/>").addClass('layer');
-      
-      if (page.data.data.externalPageUrl) {
-        wait = jQuery('<div class="center layer"><div class="center-cell"><div class="center-box"><center><img src="/images/icons/waiting_wheel.gif"/></center></div></div></div>');
-       
-        externalPage.bind('load', function() {
-          wait.remove();
-        }.pBind(this));
-        externalPage.attr("src", page.data.data.externalPageUrl);        
-        this.itemDomNode.append(externalPage[0]);
-        this.itemDomNode.append(wait);
-      }
+        this._loadExternalPage();
     }
     else {
       // Handle case where page is a webdoc
@@ -71,21 +57,26 @@ WebDoc.PageView = $.klass({
     page.addListener(this);
   },
   
-  objectChanged: function(page) {
-    //this.domNode.animate(page.data.data.css, 'fast');
-    var boardContainerSize = {};
-    var boardCss = {};
-    boardContainerSize.top = page.data.data.css.top;
-    boardContainerSize.left = page.data.data.css.left;
-    boardContainerSize.width = page.data.data.css.width;
-    boardContainerSize.height = page.data.data.css.height; 
-    $.extend(boardCss, page.data.data.css);
-    delete boardCss.top;
-    delete boardCss.left;
-    delete boardCss.width;
-    delete boardCss.height;
-    this._boardContainer.animate(boardContainerSize, 'fast');
-    this.domNode.css(boardCss, 'fast');    
+  objectChanged: function(page, options) {
+    
+    if (page._isAttributeModified(options, 'css')) {
+      var boardContainerSize = {};
+      var boardCss = {};
+      boardContainerSize.top = page.data.data.css.top;
+      boardContainerSize.left = page.data.data.css.left;
+      boardContainerSize.width = page.data.data.css.width;
+      boardContainerSize.height = page.data.data.css.height;
+      $.extend(boardCss, page.data.data.css);
+      delete boardCss.top;
+      delete boardCss.left;
+      delete boardCss.width;
+      delete boardCss.height;
+      this._boardContainer.animate(boardContainerSize, 'fast');
+      this.domNode.css(boardCss, 'fast');
+    }
+    else if (page._isAttributeModified(options, 'externalPageUrl')) {
+      this._loadExternalPage();
+    }
   },
   
   itemAdded: function(addedItem, afterItem) {
@@ -204,5 +195,22 @@ WebDoc.PageView = $.klass({
       anItemView.viewDidLoad();
       ddd("item view", anItemView);
     }
+  },
+  
+  _loadExternalPage: function() {
+    this.itemDomNode.empty();
+    // Handle case where page is an external webpage
+    if (this.page.data.data.externalPageUrl) {
+      var externalPage = $("<iframe/>").addClass('layer');
+      
+      wait = jQuery('<div class="center layer"><div class="center-cell"><div class="center-box"><center><img src="/images/icons/waiting_wheel.gif"/></center></div></div></div>');
+      
+      externalPage.bind('load', function() {
+        wait.remove();
+      }.pBind(this));
+      externalPage.attr("src", this.page.data.data.externalPageUrl);
+      this.itemDomNode.append(externalPage[0]);
+      this.itemDomNode.append(wait);
+    }    
   }
 });
