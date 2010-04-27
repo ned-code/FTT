@@ -28,7 +28,8 @@ class User < ActiveRecord::Base
   
   validates_presence_of :username, :first_name, :last_name
   validates_acceptance_of :terms_of_service, :on => :create
-  
+  validates_uniqueness_of :uuid  
+
   # ================
   # = Associations =
   # ================
