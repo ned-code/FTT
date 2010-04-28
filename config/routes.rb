@@ -46,6 +46,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :videos,    :except => [:new, :edit, :update]
   map.resources :widgets,   :except => [:new, :edit, :update, :destroy]
   map.resources :categories, :only => :index
+  map.resources :themes, :only => [:index, :show]
   map.resources :roles_documents, :only => :index, :as => "roles/documents"
   
 end

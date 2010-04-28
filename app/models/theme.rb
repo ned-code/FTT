@@ -35,6 +35,11 @@ class Theme < ActiveRecord::Base
     uuid
   end
 
+  # overwrite to_json options
+  def to_json(options = {})
+    as_json(options.merge(:except => :file, :include => :layouts))
+  end
+  
   def config_dom
     @config_file_dom ||= Zip::ZipFile.open(file.current_path) do |file|
       entry = file.find_entry("config.xml")

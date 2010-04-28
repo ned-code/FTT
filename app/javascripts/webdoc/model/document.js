@@ -76,9 +76,10 @@ WebDoc.Document = $.klass(MTools.Record, {
     var that = this;
     this.pages = [];    
     if (this.data.pages && $.isArray(this.data.pages)) {
-      $.each(this.data.pages, function() {
-        that.createOrUpdatePage({ page: this });
-      });
+      for (var i = 0; i < this.data.pages.length; i++) {
+        var pageData = this.data.pages[i];
+        this.createOrUpdatePage({ page: pageData });
+      }
     }    
   },
   
