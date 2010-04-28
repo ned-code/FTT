@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-class ThumbnailUploader < CarrierWave::Uploader::Base
+class ThemeUploader < CarrierWave::Uploader::Base
 
   # Include RMagick or ImageScience support
   # include CarrierWave::RMagick
   # include CarrierWave::ImageScience
-  include CarrierWave::MiniMagick
+  # include CarrierWave::MiniMagick
 
   # Choose what kind of storage to use for this uploader
   storage   CarrierWave.yml_storage(:assets)
@@ -15,7 +15,15 @@ class ThumbnailUploader < CarrierWave::Uploader::Base
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
     store_prefix = CarrierWave.yml_storage(:assets).to_s == 'file' ? 'uploads/' : ''
-    "#{store_prefix}#{model.class.to_s.underscore}/#{model.uuid}/"
+    "#{store_prefix}#{model.class.to_s.underscore}/#{model.uuid}/#{model.version}/"
+  end
+
+  def store_url
+    if s3_bucket == nil
+      "/#{store_dir}"
+    else
+      "http://#{s3_bucket}.s3.amazonaws.com/#{model.class.to_s.underscore}/#{model.uuid}/#{model.version}/"
+    end
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded
@@ -30,16 +38,11 @@ class ThumbnailUploader < CarrierWave::Uploader::Base
   #       # do something
   #     end
 
-  # Create different versions of your uploaded files
-  version :thumb do
-    process :resize_to_fill => [100, 100]
-  end
-
   # Add a white list of extensions which are allowed to be uploaded,
   # for images you might use something like this:
-  #     def extension_white_list
-  #       %w(jpg jpeg gif png)
-  #     end
+  def extension_white_list
+    %w(zip)
+  end
 
   # Override the filename of the uploaded files
   #     def filename

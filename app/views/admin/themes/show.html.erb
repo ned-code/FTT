@@ -1,0 +1,18 @@
+<h1><%= t('.title', :name => @theme.name) %></h1>
+
+<ul>
+  <li><%= image_tag(@theme.thumbnail_url) %></li>
+  <li>Style: <%= link_to @theme.style_url, @theme.style_url%></li>
+  <li>File: <%= @theme.file %></li>
+  <li>Versions: <%= @theme.version %></li>
+</ul>
+
+<h2>Layouts</h2>
+<% for layout in @theme.layouts %>
+  <ul>
+    <li>Name: <%= layout.name %></li>
+    <li>Thumbnail: <%= image_tag(layout.thumbnail_url) %></li>
+  </ul>
+<% end %>
+
+<%= link_to t('back'), admin_themes_path %>
