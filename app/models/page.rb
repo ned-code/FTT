@@ -16,6 +16,7 @@ class Page < ActiveRecord::Base
   has_many :items, :dependent => :delete_all
   belongs_to :document
   belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
+  belongs_to :layout
   
   # should be placed after associations declaration
   accepts_nested_attributes_for :items

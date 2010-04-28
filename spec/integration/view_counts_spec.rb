@@ -2,11 +2,12 @@ require 'spec_helper'
 
 describe "ViewCounts" do
   
-  it "view document should create a view_count" do
-    document = Factory(:document)
-    visit document_path(document)
-    ViewCount.last.viewable.should == document
-  end
+# need to add this test again when public document will be added again  
+#  it "view document should create a view_count" do
+#    document = Factory(:document)
+#    visit document_path(document)
+#    ViewCount.last.viewable.should == document
+#  end
   
   it "view document should create a view_count with currrent_user" do
     document = Factory(:document)

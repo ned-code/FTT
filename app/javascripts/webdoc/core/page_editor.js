@@ -62,7 +62,8 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     //WebDoc.application.inspectorController = new WebDoc.InspectorController();
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
-    WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
+    WebDoc.application.categoriesManager = new WebDoc.DocumentCategoriesManager();
+    
     WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
     WebDoc.application.themesController = new WebDoc.ThemesController();
     

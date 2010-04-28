@@ -33,7 +33,7 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     
     currentDocument.addListener(this);
     
-    this._loadDocumentCategories();
+    WebDoc.application.categoriesManager.getAllCategories(this._loadDocumentCategories.pBind(this));
     this._updateFields();
   },
   
@@ -50,13 +50,10 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     jQuery(".document-title").text(currentDocument.title());
   },
   
-  _loadDocumentCategories: function() {
-    if(WebDoc.application.categoriesController.documentCategories) {
-      var categories = WebDoc.application.categoriesController.documentCategories;
+  _loadDocumentCategories: function(categories) {
       jQuery.each(categories, function(i, webDocCategory) {
         documentCategoryField.append(jQuery('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
-      });
-    }
+    });
   },
   
   _changeDocumentTitle: function() {
@@ -71,7 +68,7 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     currentDocument.setCategory(documentCategoryField.val());
   },
   
-  documentPropertiesChanged: function() {
+  objectChanged: function() {
     this._updateFields();
   }
 });

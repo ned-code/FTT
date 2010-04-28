@@ -17,3 +17,14 @@ task :move_uuid_to_id => :environment do
   ActiveRecord::Migration.execute "alter table roles modify authorizable_id INT(11) UNSIGNED"
   
 end
+
+task :fix_items_uuid => :environment do
+  duplicate_uuid = Item.find_by_sql "select * from items group by uuid having (count(uuid) > 1)"
+  duplicate_uuid.each do |item_uuid|
+    duplicat_items = Item.find_all_by_uuid(item_uuid.uuid)
+    duplicat_items.each do |item|
+      item.uuid = UUID::generate
+      item.save!
+    end
+  end  
+end

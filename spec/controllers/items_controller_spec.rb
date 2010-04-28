@@ -186,30 +186,34 @@ describe ItemsController do
     context "accessed by anonymous" do
       
       describe :get => :show, :document_id => "1", :page_id => "uuid", :id => "uuid" do
-        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        expects :items, :on => mock_page, :returns => Item
-        expects :find_by_uuid, :on => Item, :with => "uuid", :returns => mock_item
-        should_respond_with :success, :content_type => :html
+#        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
+#        expects :pages, :on => mock_document, :returns => Page
+#        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
+#        expects :items, :on => mock_page, :returns => Item
+#        expects :find_by_uuid, :on => Item, :with => "uuid", :returns => mock_item
+#        should_respond_with :success, :content_type => :html
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :post => :create, :document_id => "1", :page_id => "uuid", :item => {} do
-        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :not_found
+#        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
+#        expects :pages, :on => mock_document, :returns => Page
+#        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
-        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :not_found
+#        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
+#        expects :pages, :on => mock_document, :returns => Page
+#        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :delete => :destroy, :document_id => "1", :page_id => "uuid", :id => "uuid" do
-        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :not_found
+#        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
+#        expects :pages, :on => mock_document, :returns => Page
+#        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
     end
   end
@@ -392,28 +396,32 @@ describe ItemsController do
     context "accessed by anonymous" do
       
       describe :get => :show, :document_id => "1", :page_id => "uuid", :id => "uuid" do
-        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :not_found
+#        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
+#        expects :pages, :on => mock_document, :returns => Page
+#        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :post => :create, :document_id => "1", :page_id => "uuid", :item => {} do
-        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :not_found
+#        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
+#        expects :pages, :on => mock_document, :returns => Page
+#        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :put => :update, :document_id => "1", :page_id => "uuid", :id => "uuid", :item => {} do
-        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :not_found
+#        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
+#        expects :pages, :on => mock_document, :returns => Page
+#        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :delete => :destroy, :document_id => "1", :page_id => "uuid", :id => "uuid" do
-        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        expects :pages, :on => mock_document, :returns => Page
-        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
-        should_respond_with :not_found
+#        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
+#        expects :pages, :on => mock_document, :returns => Page
+#        expects :find_by_uuid, :on => Page, :with => "uuid", :returns => mock_page
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
     end
   end

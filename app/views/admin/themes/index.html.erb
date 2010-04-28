@@ -1,0 +1,16 @@
+<h1><%= t('.title') %></h1>
+
+<%= render :partial => 'layouts/flash' %>
+
+<ul>
+  <% @themes.each do |theme| %>
+    <li>
+      <%= "#{theme.name}" %>
+      |
+      <%= link_to t('show'), admin_theme_path(theme) %>
+      <%# link_to t('edit'), edit_admin_theme_path(theme) %>
+      <%= link_to t('destroy'), admin_theme_path(theme), :confirm => I18n.t('destroy_confirmation'), :method => :delete %>
+  <% end %>
+</ul>
+
+<div><%= link_to t('.add'), new_admin_theme_path %></div>
