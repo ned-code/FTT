@@ -8,11 +8,13 @@ class XmppPageObserver < ActiveRecord::Observer
   end
 
   def after_create(page)
-    #TODO nedd to find a nicer solution for merging json
-    message = { :source => xmpp_client_id }
-    json_result = page.to_json(:include => :items)
-    message.merge!(JSON.parse(json_result))
-    XmppNotification.xmpp_notify(message.to_json, page.document.uuid)        
+    if page.document.present?
+      #TODO nedd to find a nicer solution for merging json
+      message = { :source => xmpp_client_id }
+      json_result = page.to_json(:include => :items)
+      message.merge!(JSON.parse(json_result))
+      XmppNotification.xmpp_notify(message.to_json, page.document.uuid)
+    end
   end
 
   def after_destroy(page)

@@ -29,6 +29,7 @@ class Layout < ActiveRecord::Base
   def create_model_page!
     if self.model_page.blank?
       page = self.build_model_page
+      page.touch_document_active = false
       page.data = { :css => { :width => '600px', :height => '400px', :backgroundColor => "#fff" } }
       self.save!
     end
