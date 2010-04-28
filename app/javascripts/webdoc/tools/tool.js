@@ -26,8 +26,12 @@ WebDoc.Tool = $.klass({
       ddd('[WebDoc.Tool] set board class "' + this.boardClass + '"');
       
       // Set class on the board so that style changes
-      if (WebDoc.application.boardController.currentPageView()) {
-        WebDoc.application.boardController.currentPageView().domNode.removeClass().addClass(this.boardClass);
+      if (WebDoc.application.boardController.domNode) {
+        WebDoc.application.boardController.domNode
+        .removeClass( this._previousBoardClass || 'tool_default')
+        .addClass(this.boardClass);
+        
+        this._previousBoardClass = this.boardClass;
       }
     }
     WebDoc.application.boardController.activateEventCatcher(true);

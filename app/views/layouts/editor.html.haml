@@ -8,6 +8,9 @@
     %title= "webdoc - alpha - #{yield(:title)}"
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :page_editor, :media => 'all'
+    
+    <link id="theme" rel="stylesheet" href="" type="text/css" />
+    
     = include_javascripts :common
     
   -if params[:reader] == 'true'

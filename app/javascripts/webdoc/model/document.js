@@ -61,7 +61,13 @@ WebDoc.Document = $.klass(MTools.Record, {
       this.save();
     }
   },
-
+  
+  setTheme: function( themeObj ){
+    this.data.theme = themeObj;
+    
+    WebDoc.application.boardController.setTheme();
+  },
+  
   share: function() {
     this.data.is_public = true;
     this.save();

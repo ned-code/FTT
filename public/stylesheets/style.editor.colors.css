@@ -144,6 +144,17 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
 
 
 /* Index */
+.themes-index {
+  width: 16em;
+}
+.themes-index>li a {
+  -webkit-background-size:  contain;
+  -moz-background-size:     contain;
+  background-size:          contain;
+  
+  color: white;
+}
+
 
 .item_wrap      { border-color: hsla(208, 8%, 33%, 0.3333);
                   border-style: dotted;
@@ -344,9 +355,9 @@ a[href="#insert-os-gadget"]         { background-position: 0 -2944px; }
 a[href="#insert-os-gadget"]:hover   { background-position: 0 -3008px; }
 a[href="#insert-os-gadget"]:active  { background-position: 0 -3072px; }
 
-a[href="#themes"]                   { background-position: 0 -3136px; }
-a[href="#themes"]:hover             { background-position: 0 -3200px; }
-a[href="#themes"]:active            { background-position: 0 -3264px; }
+a[href="#themes-chooser"]           { background-position: 0 -3136px; }
+a[href="#themes-chooser"]:hover     { background-position: 0 -3200px; }
+a[href="#themes-chooser"]:active    { background-position: 0 -3264px; }
 
 .inspector-views a,
 .panel-tools a                      { background-image: url('/images/panel-tools.png'); }

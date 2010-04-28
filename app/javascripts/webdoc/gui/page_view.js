@@ -3,7 +3,7 @@
 
 WebDoc.PageView = $.klass({
   initialize: function(page, boardContainer) {
-    var domNode = $('<div>').id('page_' + page.uuid()),
+    var domNode = $('<div>', {'class': 'webdoc', id: 'page_'+page.uuid() }),
         itemDomNode = $('<div/>').id('items_' + page.uuid()).addClass("layer").css({overflow: 'visible'}),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
         eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(),
