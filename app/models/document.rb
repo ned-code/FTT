@@ -21,7 +21,8 @@ class Document < ActiveRecord::Base
   # ===============
   # = Validations =
   # ===============
-  
+  validates_uniqueness_of :uuid  
+
   # =============
   # = Callbacks =
   # =============

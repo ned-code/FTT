@@ -47,11 +47,9 @@
             %a.page-remove-background-image{ :href => "#remove_background"}
               = t('.properties.remove_image')
         
-        %p
+        %p.background-related
           %a{ :href => "#library-images-myimages" } Choose an image from the library
         
-        -#upload-container
-        -#  %input#upload_images_button{ :type => "button", :value => "Choose images"}
         
         %div.background-related
           %label{ :for => 'page_background_image_tileY_checkbox' }= t('.properties.background_image_position.vertical')

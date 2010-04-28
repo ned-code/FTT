@@ -93,6 +93,11 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
 
 $.extend(WebDoc.WebdocViewer, {
   showViewers: function() {
+    // change domain to be able to synch with apps
+    var allDomainsParts = document.domain.split(".");
+    if (allDomainsParts.length > 2) {
+      document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
+    } 
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     var allViewerContainers = jQuery(".webdoc-viewer-container");
     for (var i = 0; i < allViewerContainers.length; i++) {

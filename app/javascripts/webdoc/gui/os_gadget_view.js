@@ -41,23 +41,23 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   
   initGadget: function() {
     ddd("init gadget");
-    if (window.gadgets) {
+    if (window.shindig && shindig.container) {
       if (this.item.getGadgetUrl()) {
-        gadgets.container.setView("home");
+        shindig.container.setView("home");
         if (this.gadget) {
-          gadgets.container.removeGadget(this.gadget);
+          shindig.container.removeGadget(this.gadget);
           this.gadget = null;
         }
-        this.gadget = gadgets.container.createGadget({
+        this.gadget = shindig.container.createGadget({
           specUrl: this.item.getGadgetUrl()
         });
-        gadgets.container.addGadget(this.gadget);
-        gadgets.container.layoutManager.addGadgetChromeId(this.gadget.id, "gadget-" + this.item.uuid());
+        shindig.container.addGadget(this.gadget);
+        shindig.container.layoutManager.addGadgetChromeId(this.gadget.id, "gadget-" + this.item.uuid());
         
         this._getSecureToken(function(token) {
           this.gadget.secureToken = token;
           this.gadget.setServerBase('/gadgets/');
-          gadgets.container.renderGadget(this.gadget);
+          shindig.container.renderGadget(this.gadget);
           
         }.pBind(this));        
       }
@@ -104,8 +104,8 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   
   destroy: function($super) {
     $super();
-    if (window.gadgets) {
-      gadgets.container.removeGadget(this.gadget);
+    if (window.shindig && shindig.container) {
+      shindig.container.removeGadget(this.gadget);
     }
   },
   

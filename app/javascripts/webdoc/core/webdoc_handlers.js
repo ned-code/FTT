@@ -1,9 +1,6 @@
 /**
  * @author Stephen Band / Julien Bachmann
  */
-//= require <webdoc/model/document>
-//= require <webdoc/model/page>
-//= require <webdoc/gui/page_thumbnail_view>
 
 WebDoc.handlers = {
 
@@ -24,19 +21,27 @@ WebDoc.handlers = {
           href = link.attr('href'),
           match = regex.hashRef.exec(href);
       
-      ddd( '[linkHandler] Event handler ref: "' + match + '"' );
-      
       // If the href contains a hashRef that matches an obj key
       if ( match && obj[match[1]] ) {
+        ddd( '[Handler] call handler "' + match + '"' );
         // Call it with link as scope
-        try {
-          obj[match[1]].call(this, e);
-        }
-        finally {
-          e.preventDefault();
-        }
+        obj[match[1]].call(this, e);
+        e.preventDefault();
+      }
+      else {
+        ddd( '[Handler] no handler for "' + match + '"' );
       }
     };
+  },
+  addPanelHandlers: function( obj ){
+    for (var key in obj) {
+      this._panelHandlers[key] = obj[key];
+    }
+  },
+  addDocumentHandlers: function( obj ){
+    for (var key in obj) {
+      this._documentHandlers[key] = obj[key];
+    }
   },
   // Editor actions (to be bound to the interface panels)
   _panelHandlers: {
@@ -64,7 +69,6 @@ WebDoc.handlers = {
     'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
     'insert-iframe':        function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.iframeTool ); },
     'insert-os-gadget':     function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.osGadgetTool ); },
-
     
     'to-back':              function(e) { WebDoc.application.boardController.moveSelectionToBack(); },
     'to-front':             function(e) { WebDoc.application.boardController.moveSelectionToFront(); },
@@ -93,6 +97,7 @@ WebDoc.handlers = {
       //jQuery('#images').find('a.my_images').click();
     },
     
+    'themes':               function(e) { ddd('CALL THE THEMES CHOOSER'); WebDoc.application.themes.openChooser(e); },
     'webdoc-duplicate':     function(e) { WebDoc.application.pageEditor.duplicateDocument(e); }
   },
   // Publicly accessible actions (to be bound to document)

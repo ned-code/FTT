@@ -221,15 +221,11 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     } while (externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl));
 
     if(externalPageUrl != null) {
-      var newPage = new WebDoc.Page(null, this.currentDocument);
+      var newPage = new WebDoc.Page(null, this.currentDocument, externalPageUrl);
       newPage.data.position = this.currentPage.data.position + 1;
       newPage.save( function(newObject, status) {
-        newPage.setExternalPageMode(true);
-        newPage.data.data.externalPageUrl = externalPageUrl;
-        newPage.save();
         this.currentDocument.addPage(newPage, true);      
         this.loadPage(newPage);
-  
       }.pBind(this));
     }
   },

@@ -24,6 +24,13 @@
  * 36px == 2.25em   or 225%
  * 
  */
+
+@font-face {
+	font-family: 'MomRegular';
+	src: url('../fonts/MomsTypewriter/Moms_typewriter.eot');
+	src: local('Mom Regular'), local('MomsTypewriter'), url('../fonts/MomsTypewriter/Moms_typewriter.ttf') format('truetype');
+}
+
 html,
 body {
   height: 100%;
@@ -33,19 +40,37 @@ body {
     font-size: 0.875em;
     font-family: Georgia, Palatino, Times, 'Times New Roman', serif;
     line-height: 1.5;
-    color: hsl(42, 11%, 86%);
-    background-color: hsl(32, 80%, 4%);
+    color: hsl(208, 6%, 36%);
+    background-color: white;
 }
 
 /* Links */
 
 .webdoc a:focus,
-.webdoc a:hover           { color: hsl(208, 50%, 20%); border-bottom: 1px dotted hsl(208, 50%, 20%); text-decoration: none; }
-.webdoc a                 { color: hsl(42, 75%, 30%); border-bottom: 1px dotted hsl(42, 60%, 22%); text-decoration: none; }
+.webdoc a:hover           {
+  text-decoration: none;
+  
+  -webkit-border-image: url('../images/border_rip_blue_hover.png') 18 stretch stretch;
+  -moz-border-image:    url('../images/border_rip_blue_hover.png') 18 stretch stretch;
+  border-image:         url('../images/border_rip_blue_hover.png') 18 stretch stretch;
+}
+.webdoc a                 {
+  color: white;
+  text-decoration: none; 
+  
+  font-family: 'MomRegular';
+  font-size: 0.96em;
+  
+  -webkit-border-image: url('../images/border_rip_blue.png') 18 stretch stretch;
+  -moz-border-image:    url('../images/border_rip_blue.png') 18 stretch stretch;
+  border-image:         url('../images/border_rip_blue.png') 18 stretch stretch;
+  border-width: 6px;
+}
 
 /* Fonts */
 
-.webdoc pre, .webdoc code { font-family: 'Courier', 'Andale Mono', 'Lucida Console', monospace; }
+.webdoc pre,
+.webdoc code              { font-family: 'Courier', 'Andale Mono', 'Lucida Console', monospace; }
 
 /* Block elements */
 
@@ -54,17 +79,76 @@ body {
 .webdoc h3,
 .webdoc h4,
 .webdoc h5,
-.webdoc h6                { color: hsl(42, 68%, 28%); font-weight: normal; margin: 0; word-spacing: -0.0833em; text-shadow: hsl(42, 90%, 26%) 0px 0px 12px; }
+.webdoc h6                { 
+  -webkit-border-image: url('../images/border_rip.png') 1 stretch stretch;
+  -moz-border-image:    url('../images/border_rip.png') 1 stretch stretch;
+  border-image:         url('../images/border_rip.png') 1 stretch stretch;
+  border-width: 1px;
+
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
+  background: white;
+
+  font-family: 'MomRegular';
+  
+  -webkit-transform: rotate(-1.2deg);
+  -moz-transform: rotate(-1.2deg);
+  transform: rotate(-1.2deg);
+  
+  color: hsl(208, 4%, 96%);
+  font-weight: normal;
+  margin: 0;
+  padding: 0.6em;
+  word-spacing: -0.0833em;
+  display: inline-block;
+}
 .webdoc h4,
 .webdoc h5,
-.webdoc h6                { font-style: italic; }
+.webdoc h6                {  }
 
-.webdoc h1                { font-size: 3em;   line-height: 1;   margin-top: 0.5em;    margin-bottom: 0.5em;    text-indent: -0.3em; width: 50%; }
-.webdoc h2                { font-size: 2em;   line-height: 1;   margin-top: 1.2em;    margin-bottom: 0.8em;    text-indent: -0.45em; width: 50%; }
-.webdoc h3                { font-size: 1.5em; line-height: 1;   margin-top: 0.8571em; margin-bottom: 0.1429em; text-indent: -0.6em; width: 50%; }
-.webdoc h4                { font-size: 1.5em; line-height: 1;   margin-top: 0.8571em; margin-bottom: 0.1429em; /*text-indent: -0.6em;*/ width: 50%; }
-.webdoc h5                { font-size: 1.1429em; line-height: 1.3125; margin-top: 1.25em; margin-bottom: 0.0625em; /*text-indent: -0.7875em;*/ }
-.webdoc h6                { font-size: 1em;                     margin-top: 1.5em; /*text-indent: -0.9em;*/ }
+.webdoc h1+h2 {  }
+
+h1+p::first-line,
+h2+p::first-line,
+h3+p::first-line,
+h4+p::first-line,
+h5+p::first-line,
+h6+p::first-line { font-weight: bold; line-height: 1.7 !important; }
+
+p                               { line-height: 1.4; font-size: 1.1em; -webkit-transform: rotate(0.5deg); -moz-transform: rotate(0.5deg); transform: rotate(0.5deg); }
+p:nth-child(4n+2)               { font-size: 1em; }
+p:nth-child(3n+2)               { margin-left: 0.8em; line-height: 1.7; -webkit-transform: rotate(-0.2deg); -moz-transform: rotate(-0.2deg); transform: rotate(-0.2deg); }
+p:nth-child(3n+2)::first-line   { font-weight: normal; line-height: 0.9; }
+p:nth-child(8n+3)               { font-size: 0.92em; }
+p:nth-child(5n+3)               { margin-left: 0.2em; line-height: 1.2; -webkit-transform: rotate(-0.9deg); -moz-transform: rotate(-0.9deg); transform: rotate(-0.9deg); }
+p:nth-child(5n+3)::first-line   { line-height: 2; }
+p:nth-child(5n+4)               { font-size: 1.08em; }
+p:nth-child(6n+4)               { margin-left: 0.8em; line-height: 1.1; -webkit-transform: rotate(-2deg); -moz-transform: rotate(-2deg); transform: rotate(-2deg); }
+p:nth-child(6n+4)::first-line   { line-height: 1.2; }
+p:nth-child(9n+5)               { font-size: 1.2em; }
+p:nth-child(7n+5)               { margin-left: 2em; line-height: 0.8; -webkit-transform: rotate(-0.9deg); -moz-transform: rotate(-0.9deg); transform: rotate(-0.9deg); }
+p:nth-child(7n+5)::first-line   { line-height: 1.2; }
+blockquote+p,
+p:nth-child(11n+6)              { font-size: 1em; }
+p:nth-child(4n+6)               { margin-left: -0.5em; line-height: 1.4; -webkit-transform: rotate(-0.8deg); -moz-transform: rotate(-0.8deg); transform: rotate(-0.8deg); }
+blockquote+p::first-line        { line-height: 3; font-weight: normal; text-indent: 0; }
+p:nth-child(4n+6)::first-line   { line-height: 0.92; }
+
+/* IE only */
+/*.clearfix,
+form div {display:inline-block;}
+
+* html .clearfix,
+* html form div {height:1%;}*/
+
+
+.webdoc h1                { -webkit-transform: rotate(-1.2deg); -moz-transform: rotate(-1.2deg); transform: rotate(-1.2deg); margin: 0.4em 0 0 0.6em; padding: 0.6em 0.2em 0.4em 0.9em; font-size: 3em;   line-height: 1;   margin-top: 0.5em;    margin-bottom: 0.5em;    text-indent: -0.3em; }
+.webdoc h2                { -webkit-transform: rotate(0.8deg);  -moz-transform: rotate(0.8deg);  transform: rotate(0.8deg); margin: 0.1em 0 0 0.5em; padding: 0.3em 0.3em 0.8em 1.2em; font-size: 2em;   line-height: 1;   margin-top: 1.2em;    margin-bottom: 0.8em;    text-indent: -0.45em; }
+.webdoc h3                { -webkit-transform: rotate(0.3deg);  -moz-transform: rotate(0.3deg);  transform: rotate(0.3deg); margin: 0 0 0 0.2em;     padding: 0.5em 2em 0.3em 0.5em;   font-size: 1.5em; line-height: 1;   margin-top: 0.8571em; margin-bottom: 0.1429em; text-indent: -0.6em; }
+.webdoc h4                { -webkit-transform: rotate(-0.4deg); -moz-transform: rotate(-0.4deg); transform: rotate(-0.4deg); margin: 0.3em 0 0 -0.9em;padding: 0.6em 0.2em 0.4em 0.6em; font-size: 1.5em; line-height: 1;   margin-top: 0.8571em; margin-bottom: 0.1429em; /*text-indent: -0.6em;*/ }
+.webdoc h5                { -webkit-transform: rotate(-0.2deg); -moz-transform: rotate(-0.2deg); transform: rotate(-0.2deg); margin: 0.1em 0 0 0.6em; padding: 0.6em 0.3em 0.1em 0.1em; font-size: 1.1429em; line-height: 1.3125; margin-top: 1.25em; margin-bottom: 0.0625em; /*text-indent: -0.7875em;*/ }
+.webdoc h6                { -webkit-transform: rotate(0.6deg);  -moz-transform: rotate(0.6deg);  transform: rotate(0.6deg); margin: 0.2em 0 0 0;     padding: 0.6em 0.4em 0.4em 1.3em; font-size: 1em;                     margin-top: 1.5em; /*text-indent: -0.9em;*/ }
 
 .webdoc h1:first-child,
 .webdoc h2:first-child,
@@ -89,17 +173,22 @@ body {
 .webdoc p+blockquote      { margin-top: 1.5em; }
 
 /* Paragraphs */
-.webdoc p                 { margin: 0; min-height: 3em; }
+.webdoc p                 { margin-bottom: 1em; min-height: 3em; }
 .webdoc p+p               { min-height: 1.5em; text-indent: 1.5em; }
 
 /* Make first letter different */
-.webdoc p::first-letter   { float: left; font-family: 'Lucida Calligraphy', 'Apple Chancery', 'URW Chancery L', 'Monotype Corsiva', cursive; font-size: 3em; line-height: 1em; font-style: italic; letter-spacing: 0.15em; }
+/*.webdoc p::first-letter   { font-family: Courier; font-size: 2.5em; line-height: 1em; -webkit-transform: rotate(180deg); float: left;}
 .webdoc address+p::first-letter,
 .webdoc blockquote+p::first-letter,
-.webdoc p+p::first-letter { float: none; font-size: 1em; font-family: inherit; line-height: inherit; font-style: normal;  }
+.webdoc p+p::first-letter { float: none; font-size: 1em; font-family: inherit; line-height: inherit; font-style: normal;  }*/
+
+/* Make first line different */
+p::first-line     { font-weight: bold; }
+p+p::first-line   { font-weight: normal; line-height: 0.9; }
+p+p+p::first-line   { line-height: 2; font-weight: normal; }
 
 /* Start paragraphs with a character or symbol */
-.webdoc p+p:before        { content: "\2767"; line-height: 0; padding-right: 0.2em;  color: hsl(42, 68%, 28%); text-shadow: hsl(42, 90%, 26%) 0px 0px 12px; }
+/*.webdoc p+p:before        { content: "\2767"; line-height: 0; padding-right: 0.2em;  color: hsl(42, 68%, 28%); text-shadow: hsl(42, 90%, 26%) 0px 0px 12px; }*/
 .webdoc p img             { float: right; margin: 1em 0 1em 1.5em; padding: 0; }
 
 .webdoc p,
@@ -128,8 +217,44 @@ body {
 .webdoc dt                { color: hsl(42, 60%, 22%); font-weight: normal; }
 .webdoc dd                { font-style: italic; }
 
-.webdoc blockquote        { margin: 0 0 1.5em 0; padding: 0; font-style: italic; }
-.webdoc blockquote:before { content: "\201C"; font-size: 3em; color: hsl(42, 68%, 28%); text-shadow: hsl(42, 90%, 26%) 0px 0px 12px; float: left; text-indent: -0.5em; line-height: 0.96em; }
+.webdoc blockquote        { margin: 0 0 1.5em 0; padding: 0;
+
+  -webkit-border-image: url('../images/border_rip_blockquote.png') 1 stretch stretch;
+  -moz-border-image:    url('../images/border_rip_blockquote.png') 1 stretch stretch;
+  border-image:         url('../images/border_rip_blockquote.png') 1 stretch stretch;
+  border-width: 1px;
+  
+  color: white;
+  font-family: 'MomsTypewriter';
+  font-size: 0.96em;
+  
+  -webkit-transform: rotate(0.7deg);
+  
+  padding: 20px;
+}
+.webdoc blockquote:before { 
+  content: "\201C";
+  font-size: 3em;
+  color: white;
+  text-indent: -0.5em;
+  line-height: 0.96em;
+  display: inline-block;
+  position: relative;
+  top: 0.6em;
+  left: -0.2em;
+}
+.webdoc blockquote:after { 
+  content: "\201D";
+  font-size: 3em;
+  color: white;
+  text-indent: -0.5em;
+  line-height: 0.96em;
+  display: inline-block;
+  line-height: 0;
+  position: relative;
+  top: 0.6em;
+  left: 0.8em;
+}
 .webdoc pre               { margin: 1.25em 0; white-space: pre; }
 .webdoc address           { margin: 1.25em 0; }
 
@@ -161,7 +286,7 @@ body {
                       
 /* Selected text */
 
-.webdoc *::selection      { background-color: hsl(42, 50%, 60%); }
+.webdoc *::selection      { background-color: black; color: white; }
 .webdoc code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
 
 /* Indentation */
@@ -201,7 +326,7 @@ ul, ol, blockquote, dd,
 .theme-color-1  { background-color: hsl(32, 80%, 4%); }
 .theme-color-2  { background-color: hsl(32, 60%, 12%); }
 .theme-color-3  { background-color: hsl(32, 40%, 20%); }
-.theme-color-4  { background-color: hsl(42, 11%, 86%); }
+.theme-color-4  { background-color: hsl(342, 100%, 50%); }
 .theme-color-5  { background-color: hsl(42, 92%, 18%); }
 .theme-color-6  { background-color: hsl(42, 84%, 24%); }
 .theme-color-7  { background-color: hsl(42, 75%, 30%); }
@@ -226,6 +351,12 @@ ul, ol, blockquote, dd,
   background-image: url('../images/bg_cross.png');
   background-repeat: no-repeat;
   background-position: 100% 100%;
+}
+
+.theme-border-1 {
+  -webkit-border-image: url('../images/border_rip.png') 20 stretch stretch;
+  -moz-border-image:    url('../images/border_rip.png') 20 stretch stretch;
+  border-image:         url('../images/border_rip.png') 20 stretch stretch;
 }
 
 /* Layouts */
