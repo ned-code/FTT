@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'spec_helper'
-
 describe Admin::WidgetsController do
   include Devise::TestHelpers
   
