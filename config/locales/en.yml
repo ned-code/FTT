@@ -85,6 +85,9 @@ en:
 
       new:
         title: "Add new theme"
+
+      edit:
+        title: "Edit theme"
         
   
   documents:
@@ -353,7 +356,9 @@ en:
         updated_failed: "An error occured when attempting to update the widget"
         already_up_to_date: "Already up to date, no update needed"
       theme:
-        destroyed_successful: "Theme successfully deleted" 
+        destroyed_successful: "Theme successfully deleted"
+        updated_successful: "Theme successfully updated"
+        updated_failed: "An error occured when attempting to update the theme"
       category:
         destroyed_successful: "Category successfully deleted"
   

@@ -9,7 +9,7 @@ class Layout < ActiveRecord::Base
   # ================
   
   belongs_to :theme
-  belongs_to :model_page, :class_name => "Page", :foreign_key => "model_page_id"
+  belongs_to :model_page, :class_name => "Page", :foreign_key => "model_page_id", :dependent => :delete
   has_many :pages
 
   # ===============
