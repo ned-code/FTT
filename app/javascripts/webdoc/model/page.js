@@ -247,7 +247,7 @@ WebDoc.Page = $.klass(MTools.Record,
     this.addItem(newItem);
   },
   
-  _itemMoved: function(item) {
+  _itemZMoved: function(item) {
     this.nonDrawingItems.sort(function(a, b) {
       a.data.position = a.data.position?a.data.position:0;
       b.data.position = b.data.position?b.data.position:0;

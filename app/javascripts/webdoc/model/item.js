@@ -1,6 +1,4 @@
 
-//= require <mtools/record>
-
 WebDoc.ITEM_TYPE_TEXT = "text";
 WebDoc.ITEM_TYPE_IMAGE = "image";
 WebDoc.ITEM_TYPE_DRAWING = "drawing";
@@ -33,7 +31,7 @@ WebDoc.Item = $.klass(MTools.Record,
   
   setPositionZ: function(newPosition) {
     this.data.position = newPosition;
-    this.page._itemMoved(this);
+    this.page._itemZMoved(this);
   },
   
   refresh: function($super, json) {
@@ -70,7 +68,7 @@ WebDoc.Item = $.klass(MTools.Record,
       this.fireWidgetChanged();
     }
     if (refreshPositionZ) {
-      this.page._itemMoved(this);      
+      this.page._itemZMoved(this);      
     }
   },
   
