@@ -7,7 +7,7 @@
 // not claiming that jquery.validate is un-neccessarily bloated: it's one of the best
 // jQuery plugins out there. But it failed my first test (responding to the attribute
 // required="required"), and instead of hacking through 1146 lines of code I chose to
-// make a plug that does exactly what we need it to do. And no more.
+// make a plug that does exactly what we need it to do.
 // 
 // Validation rules can be added to the rules object like this:
 //
@@ -28,6 +28,32 @@
 				errorClass: "error",
 				errorNode: jQuery('<label/>', { 'class': 'error-message' }),
 				errorWrapSelector: "p, fieldset, div"
+			},
+			types = {
+				// All the html5 types
+				url: {
+					test: function(field) {
+						// Must look like a url
+						// http://docs.jquery.com/Plugins/Validation/Methods/url
+						// contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
+						var value = field.val();
+						return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
+					}
+				},
+				email: {},
+				datetime: {},
+				date: {},
+				month: {},
+				week: {},
+				time: {},
+				"datetime-local": {},
+				number: {},
+				range: {},
+				tel: {},
+				search: {},
+				color: {},
+				// Some extra types
+				cssvalue: {}
 			},
 			rules = {
 				required: {
@@ -51,13 +77,7 @@
 				},
 				url: {
 					selector: "input[type='url']",
-					test: function(field) {
-						// Must look like a url
-						// http://docs.jquery.com/Plugins/Validation/Methods/url
-						// contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
-						var value = field.val();
-						return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
-					},
+					test: types.url.test
 					error: 'This doesn\'t look like a url'
 				},
 				minlength: {
@@ -80,6 +100,15 @@
 						return value.length <= maxlength;
 					},
 					error: 'Too long'
+				}
+				cssvalue: {
+					selector: "input[type='cssvalue']",
+					type: "cssvalue",
+					test: function(field) {
+						var value = jQuery.trim( field.val() );
+				    return jQuery.regex.cssValue.test(value);
+					},
+					error: 'Not a valid CSS value'
 				}
 			};
 	
@@ -170,7 +199,7 @@
 				
 				fields = form
 				.find( validator.selector )
-				.each( function(){ handle.call(this, e, rule); } );
+				.each( function(i){ handle.call(this, e, rule); } );
 				
 				// Dont go on to delegate events when it has already been done
 				// or when there's no fields to validate for this rule
@@ -181,6 +210,20 @@
 			}
 			
 			data.attempt++;
+		});
+	};
+	
+	jQuery.fn.validate = function(t, options){
+		return this.each(function(i){
+			var input = jQuery(this),
+					type = t || input.attr("type"),
+					value;
+			
+			if (type && types[type]) {
+				value = input.val();
+				types[type]( value );
+			}
+			
 		});
 	};
 	

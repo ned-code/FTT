@@ -53,10 +53,9 @@ class Theme < ActiveRecord::Base
       self.assign_uuid
       self.version = config_dom.root.attribute('version').to_s
       self.name = config_dom.root.elements['name'].text
-      
-      path = self.get_mapped_path # set path after set version to get the version in path
+      path = self.get_mapped_path
       self.thumbnail_url = path + config_dom.root.attribute('thumbnail').to_s
-      self.style_url = path + config_dom.root.elements['style'].attribute('src').to_s
+      self.style_url = path + "css/parsed_theme_style.css"
       self.save!
       
       config_dom.root.elements['layouts'].each_child do |layout|
@@ -77,6 +76,7 @@ class Theme < ActiveRecord::Base
 
       begin
         extract_files_from_zip_file(file.current_path, file.store_dir)
+        create_parsed_style
       rescue
         raise ActiveRecord::Rollback
       end
@@ -85,6 +85,52 @@ class Theme < ActiveRecord::Base
 
     saved
   end
+
+
+  def create_parsed_style
+    files_path = Array.new
+    parsed = ""
+
+    config_dom.root.elements['styles'].each_child do |style|
+      if style.class == REXML::Element
+        if self.file.s3_bucket == nil
+          files_path << File.join(Rails.root, 'public', self.file.store_dir, style.attribute('src').to_s)
+        else
+          files_path << File.join(self.file.store_dir, style.attribute('src').to_s)
+        end
+
+      end
+    end
+
+    for file_path in files_path
+      file = IO.read(file_path).strip
+      file.gsub!(/\/\*[^\/]*\//, '') # remove comments
+      file.split(/\}/).each do |set|
+        set.strip!
+        parts = set.split(/\{/)
+        if parts.size > 1
+          (0..((parts.size)-2)).each do |i|
+            paths = parts[i].split(/,/)
+            (0..((paths.size)-1)).each do |k|
+              paths[k].strip!
+              paths[k].chomp!
+              parsed += ".theme_#{self.id} " + paths[k]
+              parsed += ", "  if k < (paths.size-1)
+            end
+          end
+          parsed += " { "+parts.last.strip+" }\r\n"
+        end
+      end
+    end
+
+    if self.file.s3_bucket == nil
+      File.open(File.join(Rails.root, 'public', self.style_url), 'wb') {|f| f.write(parsed) }
+    else
+      @s3 ||= RightAws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
+      @s3.put(file.s3_bucket, filePath, parsed, 'x-amz-acl' => 'public-read')
+    end
+  end
+
 
 
   def get_mapped_path
