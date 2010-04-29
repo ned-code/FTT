@@ -4,29 +4,23 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  rails: 
-    group: 
-    - :default
-    version: ~> 2.3.5
-  xmpp4r: 
-    group: 
-    - :default
-    version: ">= 0"
   mongrel: 
     group: 
     - :development
     version: ">= 0"
-  sqlite3-ruby: 
-    group: 
-    - :test
-    version: ">= 0"
-    require: 
-    - sqlite3
-  mysql: 
+  xmpp4r: 
     group: 
     - :default
     version: ">= 0"
-  uuidtools: 
+  rails: 
+    group: 
+    - :default
+    version: ~> 2.3.5
+  annotate: 
+    group: 
+    - :development
+    version: ">= 0"
+  rack-debug: 
     group: 
     - :default
     version: ">= 0"
@@ -34,10 +28,20 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  rack-debug: 
+  uuidtools: 
     group: 
     - :default
     version: ">= 0"
+  mysql: 
+    group: 
+    - :default
+    version: ">= 0"
+  sqlite3-ruby: 
+    group: 
+    - :test
+    version: ">= 0"
+    require: 
+    - sqlite3
   uuid: 
     group: 
     - :default
@@ -68,23 +72,11 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  erubis: 
+  capistrano-ext: 
     group: 
-    - :default
+    - :development
     version: ">= 0"
-  carrierwave: 
-    group: 
-    - :default
-    version: = 0.4.3
-  devise: 
-    group: 
-    - :default
-    version: ">= 0"
-  right_aws: 
-    group: 
-    - :default
-    version: ">= 0"
-  json: 
+  jammit: 
     group: 
     - :default
     version: ">= 0"
@@ -92,13 +84,25 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  jammit: 
+  json: 
     group: 
     - :default
     version: ">= 0"
-  capistrano-ext: 
+  right_aws: 
     group: 
-    - :development
+    - :default
+    version: ">= 0"
+  devise: 
+    group: 
+    - :default
+    version: ">= 0"
+  carrierwave: 
+    group: 
+    - :default
+    version: = 0.4.3
+  erubis: 
+    group: 
+    - :default
     version: ">= 0"
   rspactor: 
     group: 
@@ -108,7 +112,7 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  acl9: 
+  mini_magick: 
     group: 
     - :default
     version: ">= 0"
@@ -116,7 +120,7 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  mini_magick: 
+  acl9: 
     group: 
     - :default
     version: ">= 0"
@@ -128,16 +132,16 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
+  warden: 
+    group: 
+    - :default
+    version: ">= 0"
   rubyzip: 
     group: 
     - :default
     version: ">= 0"
     require: 
     - zip/zip
-  warden: 
-    group: 
-    - :default
-    version: ">= 0"
   rspec-factory-girl: 
     group: 
     - :test
@@ -171,6 +175,8 @@ specs:
     version: 2.3.5
 - activeresource: 
     version: 2.3.5
+- annotate: 
+    version: 2.4.0
 - builder: 
     version: 2.1.2
 - highline: 
@@ -198,7 +204,7 @@ specs:
 - diff-lcs: 
     version: 1.1.2
 - json_pure: 
-    version: 1.2.4
+    version: 1.4.2
 - polyglot: 
     version: 0.3.1
 - term-ansicolor: 
@@ -226,7 +232,7 @@ specs:
 - gem_plugin: 
     version: 0.2.3
 - haml: 
-    version: 2.2.23
+    version: 2.2.24
 - i18n: 
     version: 0.3.7
 - rails: 
@@ -236,7 +242,7 @@ specs:
 - jammit: 
     version: 0.4.4
 - json: 
-    version: 1.2.4
+    version: 1.4.2
 - linecache: 
     version: "0.43"
 - macaddr: 
@@ -272,7 +278,7 @@ specs:
 - right_http_connection: 
     version: 1.2.4
 - right_aws: 
-    version: 1.10.0
+    version: 2.0.0
 - rspactor: 
     version: 0.6.3
 - rspec-factory-girl: 
@@ -288,12 +294,12 @@ specs:
 - uuidtools: 
     version: 2.1.1
 - webrat: 
-    version: 0.7.0
+    version: 0.7.1
 - will_paginate: 
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: 100efbb3c974e128aad4836866e89dc1e823d957
+hash: de7ff603019677613f02a6832d36402590d0199b
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

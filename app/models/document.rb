@@ -306,21 +306,24 @@ private
   
 end
 
+
 # == Schema Information
 #
 # Table name: documents
 #
-#  id          :integer         not null, primary key
 #  uuid        :string(36)
 #  title       :string(255)
 #  deleted_at  :datetime
 #  created_at  :datetime
 #  updated_at  :datetime
+#  id          :integer(4)      not null, primary key
 #  description :text
 #  size        :text
-#  category_id :integer
-#  creator_id  :integer
-#  is_public   :boolean         default(FALSE)
-#  views_count :integer         default(0)
+#  category_id :integer(4)
+#  creator_id  :integer(4)
+#  is_public   :boolean(1)      default(FALSE)
+#  views_count :integer(4)      default(0)
+#  theme_id    :integer(4)
+#  style_url   :string(255)
 #
 
