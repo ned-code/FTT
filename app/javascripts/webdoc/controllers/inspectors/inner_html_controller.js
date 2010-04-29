@@ -30,8 +30,6 @@ WebDoc.InnerHtmlController = $.klass({
 
     this.domNode = domNode;
     this._editor = editor;
-    this._noIframeBox = $("#no_iframe");
-    this._noIframeBox.bind("change", this.updateNoIframe.pBind(this));
   },
   
   refresh: function() {
@@ -43,31 +41,20 @@ WebDoc.InnerHtmlController = $.klass({
       
       // Fill the editor
       this._editor.setCode( html || '' );
-      this._editor.reindent();
+      try {
+        this._editor.reindent();
+      }
+      catch (exception) {
+        ddd("cannot indent HTML");
+      }
       
       var noIframe = false;
       if (item.data.data.properties) {
         noIframe = item.property("noIframe");
       }      
-      this._noIframeBox.attr("checked", noIframe);
-      this._noIframeBox.attr("disabled", "");
     }
     else {
       this._editor.setCode( '' );
-      
-      this._noIframeBox.attr("checked", false);
-      this._noIframeBox.attr("disabled", "true");
-    }
-  },
-  
-  updateNoIframe: function(event) {
-    ddd("update no iframe");
-    var item = WebDoc.application.boardController.selection()[0].item;
-    if (item) {
-      ddd("update item", item);
-      item.setProperty("noIframe", this._noIframeBox.attr("checked"));
-      item.setInnerHtml(item.data.data.innerHTML, true);
-      item.save();
     }
   },
   
