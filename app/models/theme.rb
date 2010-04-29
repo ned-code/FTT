@@ -44,21 +44,26 @@ class Theme < ActiveRecord::Base
   def ancestor
     Theme.first :conditions => ['updated_theme_id = ?', self.id], :limit => 1
   end
-
+  
+  # overwrite to_json options
+  def to_json(options = {})
+    as_json(options.merge(:except => :file, :include => :layouts))
+  end
+  
   def set_attribute_from_config_file_and_save(ancestor_theme=nil)
     # TODO if version.nil? || config_dom.root.attribute("version").to_s > version
     saved = false
-
+    
     self.transaction do
       self.assign_uuid
       self.version = config_dom.root.attribute('version').to_s
       self.name = config_dom.root.elements['name'].text
-
+      
       path = self.get_mapped_path # set path after set version to get the version in path
       self.thumbnail_url = path + config_dom.root.attribute('thumbnail').to_s
       self.style_url = path + config_dom.root.elements['style'].attribute('src').to_s
       self.save!
-
+      
       config_dom.root.elements['layouts'].each_child do |layout|
         if layout.class == REXML::Element
           layout_object = Layout.new
@@ -69,7 +74,7 @@ class Theme < ActiveRecord::Base
           layout_object.create_model_page!
         end
       end
-
+      
       if ancestor_theme.present?
         ancestor_theme.updated_theme_id = self.id
         ancestor_theme.save!

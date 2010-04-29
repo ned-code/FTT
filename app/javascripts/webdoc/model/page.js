@@ -115,9 +115,10 @@ WebDoc.Page = $.klass(MTools.Record,
   },
 
   setBackgroundColor: function(backgroundColor) {
-    WebDoc.InspectorFieldsValidator.validateColor(backgroundColor);
-    if(this.data.data.css.backgroundColor != backgroundColor) {
-      this.data.data.css.backgroundColor = backgroundColor;
+    var css = this.data.data.css;
+    
+    if( css.backgroundColor != backgroundColor && WebDoc.InspectorFieldsValidator.validateColor( backgroundColor ) ) {
+      css.backgroundColor = backgroundColor;
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundColor' });
       this.save();
     }
@@ -247,7 +248,7 @@ WebDoc.Page = $.klass(MTools.Record,
     this.addItem(newItem);
   },
   
-  _itemMoved: function(item) {
+  _itemZMoved: function(item) {
     this.nonDrawingItems.sort(function(a, b) {
       a.data.position = a.data.position?a.data.position:0;
       b.data.position = b.data.position?b.data.position:0;

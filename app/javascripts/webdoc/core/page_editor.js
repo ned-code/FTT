@@ -44,6 +44,9 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       jQuery(".input-range-readout").remove();
     }
     
+    // Create and bind global event handlers
+    WebDoc.handlers.initialise();
+    
     MTools.ServerManager.xmppClientId = new MTools.UUID().id;
     
     WebDoc.application.pageEditor = this;
@@ -51,6 +54,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
         
     WebDoc.application.widgetManager = new WebDoc.WidgetManager();
     WebDoc.application.pasteBoardManager = new WebDoc.PasteboardManager();    
+    
     // create all controllers
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
@@ -58,8 +62,10 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     //WebDoc.application.inspectorController = new WebDoc.InspectorController();
     WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
     WebDoc.application.toolbarController = new WebDoc.ToolbarController();
-    WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
+    WebDoc.application.categoriesManager = new WebDoc.DocumentCategoriesManager();
+    
     WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
+    WebDoc.application.themesController = new WebDoc.ThemesController();
     
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
@@ -72,9 +78,6 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
 
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
-    
-    // Create and bind global event handlers
-    WebDoc.handlers.initialise();
     
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();

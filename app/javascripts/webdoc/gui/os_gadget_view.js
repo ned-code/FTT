@@ -43,7 +43,7 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
     ddd("init gadget");
     if (window.shindig && shindig.container) {
       if (this.item.getGadgetUrl()) {
-        shindig.container.setView("home");
+        shindig.container.setView("canvas");
         if (this.gadget) {
           shindig.container.removeGadget(this.gadget);
           this.gadget = null;
@@ -113,8 +113,14 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
     ddd("generate secure token");
     MTools.ServerManager.getRecords(WebDoc.User, this.item.page.document.creatorId(), function(result) {
       ddd("receive creator", result);
-      var token = result[0].uuid() + ":" + MTools.Application.getCurrentUser().uuid + ":" + this.item.uuid() + ":cont:url:0:home";
-      callBack.call(this, token);
+      var token = result[0].uuid() + "::";
+          token += MTools.Application.getCurrentUser().uuid + "::";
+          token += this.item.uuid();
+          token += "::webdoc.com::";
+          token += this.item.getGadgetUrl();
+          token += "::0::webdoc";
+
+      callBack.call(this, escape(token));
     }.pBind(this));
   }
 });
