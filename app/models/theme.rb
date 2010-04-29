@@ -45,11 +45,6 @@ class Theme < ActiveRecord::Base
     Theme.first :conditions => ['updated_theme_id = ?', self.id], :limit => 1
   end
   
-  # overwrite to_json options
-  def to_json(options = {})
-    as_json(options.merge(:except => :file, :include => :layouts))
-  end
-  
   def set_attribute_from_config_file_and_save(ancestor_theme=nil)
     # TODO if version.nil? || config_dom.root.attribute("version").to_s > version
     saved = false
