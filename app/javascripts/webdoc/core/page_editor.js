@@ -94,6 +94,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
       this.currentDocument = data[0];
       this._loadCreator();     
       this.currentDocument.addListener(this);
+      WebDoc.application.boardController.applyDocumentTheme();
       this.loadPageId(window.location.hash.replace("#", ""));
       WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
       ddd("check editablity");
@@ -282,6 +283,12 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     }
     else {
         $("#debug-button").removeClass("active");
+    }
+  },
+  
+  objectChanged: function(record, options) {
+    if (record._isAttributeModified(options, 'theme')) {
+      WebDoc.application.boardController.applyDocumentTheme();
     }
   },
   

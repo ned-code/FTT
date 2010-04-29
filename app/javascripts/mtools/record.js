@@ -49,6 +49,10 @@ MTools.Record = jQuery.klass(
     return this.data;
   },
   
+  id: function() {
+    return this.data.id;
+  },
+  
   /**
    * @return {String} the uuid of the record. You should always use this function instead of directly reading the datauuid attribute.
    */

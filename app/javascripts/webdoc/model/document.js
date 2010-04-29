@@ -62,11 +62,18 @@ WebDoc.Document = $.klass(MTools.Record, {
     }
   },
   
-  setTheme: function( themeObj ){
-    this.data.theme = themeObj;
-    
-    WebDoc.application.boardController.setTheme();
+  setTheme: function( theme, skipSave ){
+    this.data.theme_id = theme.id();
+    this.data.style_url = theme.getStyleUrl();
+    if(!(skipSave && skipSave === true)) {
+      this.fireObjectChanged({ modifedAttribute: 'theme' });
+      this.save();
+    }
   },
+  
+  styleUrl: function() {
+    return this.data.style_url;
+  },  
   
   share: function() {
     this.data.is_public = true;

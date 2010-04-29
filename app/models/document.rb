@@ -2,7 +2,7 @@ class Document < ActiveRecord::Base
   has_uuid
   acts_as_authorization_object
   
-  attr_accessible :uuid, :title, :description, :size, :category_id, :is_public
+  attr_accessible :uuid, :title, :description, :size, :category_id, :is_public, :style_url, :theme_id 
   
   serialize :size
   

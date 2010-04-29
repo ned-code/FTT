@@ -211,22 +211,20 @@ WebDoc.BoardController = jQuery.klass({
   
   // Theme ----------------------------------------
   
-  setTheme: function() {
-    var theme = WebDoc.application.pageEditor.currentDocument.data.theme,
-        stylesheetUrl = theme.path + theme.stylesheet,
-        thumbUrl = theme.path + theme.thumb,
-        id = theme.id,
+  applyDocumentTheme: function() {
+    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl(),
+        id = WebDoc.application.pageEditor.currentDocument.data.theme_id,
         currentClass = this._themeClass || 'theme_default',
         newClass = 'theme_'+id;
     
-    this.themeNode[0].href = stylesheetUrl;
-    
-    this.boardContainerNode
-    .removeClass(currentClass)
-    .addClass(newClass);
-    
-    // Store the class so we know what to remove on the next setTheme
-    this._themeClass = newClass;
+    if (id) {
+      this.themeNode[0].href = stylesheetUrl;
+      
+      this.boardContainerNode.removeClass(currentClass).addClass(newClass);
+      
+      // Store the class so we know what to remove on the next setTheme
+      this._themeClass = newClass;
+    }
   },
   
   // Tool -----------------------------------------

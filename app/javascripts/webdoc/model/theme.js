@@ -12,7 +12,7 @@ WebDoc.Theme = $.klass(MTools.Record, {
     if (this.data.layouts && $.isArray(this.data.layouts)) {
       for (var i = 0; i < this.data.layouts.length; i++) {
         var layoutData = this.data.layouts[i];
-        this._createLayout({ page: layoutData });
+        this._createLayout({ layout: layoutData });
       }
     }   
   },
