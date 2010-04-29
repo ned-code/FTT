@@ -9,6 +9,7 @@ WebDoc.BoardController = jQuery.klass({
     this.boardContainerNode = jQuery("#board-container");
     this.screenUnderlayNode = jQuery("#underlay");
     this.screenNodes = this.boardCageNode.find('.board-screen');
+    this.themeNode = jQuery('#theme');
     
     this._editable = editable;
     this._autoFit = autoFit;
@@ -69,11 +70,12 @@ WebDoc.BoardController = jQuery.klass({
     if (this._currentPageView) {
       this._currentPageView.destroy();
     }
-    var pageView = new WebDoc.PageView(page, jQuery("#board-container")),
+    var pageView = new WebDoc.PageView(page, this.boardContainerNode),
         board = pageView.domNode,
         defaultZoom = 1;
     
     board.unbind();
+    
     jQuery(document).unbind("keydown", this._keyDown);
     jQuery(document).unbind("keypress", this._keyPress);
     jQuery(document).unbind("keyup", this._keyUp);
@@ -186,6 +188,8 @@ WebDoc.BoardController = jQuery.klass({
     return this._isInteraction;
   },
   
+  // Mode -----------------------------------------
+  
   setMode: function(state) {
     if (state) {
       this._setModePreview();
@@ -204,6 +208,28 @@ WebDoc.BoardController = jQuery.klass({
   toggleMode: function() {
     return this.setMode(!this._isInteraction);
   },
+  
+  // Theme ----------------------------------------
+  
+  setTheme: function() {
+    var theme = WebDoc.application.pageEditor.currentDocument.data.theme,
+        stylesheetUrl = theme.path + theme.stylesheet,
+        thumbUrl = theme.path + theme.thumb,
+        id = theme.id,
+        currentClass = this._themeClass || 'theme_default',
+        newClass = 'theme_'+id;
+    
+    this.themeNode[0].href = stylesheetUrl;
+    
+    this.boardContainerNode
+    .removeClass(currentClass)
+    .addClass(newClass);
+    
+    // Store the class so we know what to remove on the next setTheme
+    this._themeClass = newClass;
+  },
+  
+  // Tool -----------------------------------------
   
   setCurrentTool: function(tool) {
     ddd(tool);

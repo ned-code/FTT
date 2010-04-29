@@ -5,14 +5,13 @@
 WebDoc.handlers = {
 
   initialise: function(){
-    jQuery(document)
-    .delegate('a', 'click', this._makeLinkHandler( this._documentHandlers ));
+    this.panelNode = jQuery('.panel');
     
-    jQuery('.panel')
-    .delegate('a', 'click', this._makeLinkHandler( this._panelHandlers ));
+    this.addDocumentHandlers( 'click', this._documentHandlers );
+    this.addPanelHandlers( 'click', this._panelHandlers );
   },
   regex: jQuery.regex,
-  _makeLinkHandler: function( obj ){
+  _makeLinkHandler: function( obj, context ){
     var regex = this.regex;
     
     // Curry linkHandler using this scope
@@ -24,8 +23,9 @@ WebDoc.handlers = {
       // If the href contains a hashRef that matches an obj key
       if ( match && obj[match[1]] ) {
         ddd( '[Handler] call handler "' + match + '"' );
+        
         // Call it with link as scope
-        obj[match[1]].call(this, e);
+        obj[match[1]].call( context||this, e );
         e.preventDefault();
       }
       else {
@@ -33,15 +33,13 @@ WebDoc.handlers = {
       }
     };
   },
-  addPanelHandlers: function( obj ){
-    for (var key in obj) {
-      this._panelHandlers[key] = obj[key];
-    }
+  addPanelHandlers: function( eventType, obj, context ){
+    this.panelNode
+    .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
   },
-  addDocumentHandlers: function( obj ){
-    for (var key in obj) {
-      this._documentHandlers[key] = obj[key];
-    }
+  addDocumentHandlers: function( eventType, obj, context ){
+    jQuery(document)
+    .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
   },
   // Editor actions (to be bound to the interface panels)
   _panelHandlers: {
@@ -97,7 +95,7 @@ WebDoc.handlers = {
       //jQuery('#images').find('a.my_images').click();
     },
     
-    'themes':               function(e) { ddd('CALL THE THEMES CHOOSER'); WebDoc.application.themes.openChooser(e); },
+    //'themes-chooser':       function(e) { WebDoc.application.themesController.openChooser(e); },
     'webdoc-duplicate':     function(e) { WebDoc.application.pageEditor.duplicateDocument(e); }
   },
   // Publicly accessible actions (to be bound to document)

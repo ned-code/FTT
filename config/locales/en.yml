@@ -74,6 +74,18 @@ en:
         icon_url: "Icon URL:"
         index_url: "Index URL:"
         inspector_url: "Inspector URL:"
+
+    themes:
+      index:
+        title: "Themes listing"
+        add: "Add new theme"
+
+      show:
+        title: "Show theme {{name}}"
+
+      new:
+        title: "Add new theme"
+        
   
   documents:
     panels:
@@ -340,6 +352,8 @@ en:
         updated_successful: "Widget successfully updated"
         updated_failed: "An error occured when attempting to update the widget"
         already_up_to_date: "Already up to date, no update needed"
+      theme:
+        destroyed_successful: "Theme successfully deleted" 
       category:
         destroyed_successful: "Category successfully deleted"
   

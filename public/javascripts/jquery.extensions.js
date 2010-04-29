@@ -175,6 +175,10 @@ jQuery.extend({
       hash:       /^#?$/,                                         // Single hash or empty string
       hashRef:    /^#(\S+)/,                                      // Matches a hash ref, captures all non-space characters following the hash
       slashRef:   /^\//,                                          // Begins with a slash
-      urlRef:     /^[a-z]+:\/\//                                  // Begins with protocol xxx://
+      urlRef:     /^[a-z]+:\/\//,                                 // Begins with protocol xxx://
+      cssMeasure: /^\\d+(px|%|em|ex|pt|in|cm|mm|pt|pc)$/,         // Accepts any valid unit of css measurement
+      hslColor:   /^(?:hsl\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})%\s?,\s?([0-9]{1,3})%\s?\)?$/,   // hsl(xx, xx%, xx%)
+      hexColor:   /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6}$)/,          // #xxxxxx
+      rgbColor:   /^(?:rgb\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?\)?$/   // rgb(xxx, xxx, xxx)  - not perect yet, as it allows values greater than 255
     }
 });

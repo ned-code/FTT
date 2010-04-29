@@ -86,8 +86,8 @@ javascripts:
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/model/*.js
     - app/javascripts/webdoc/utils/*.js
+    - app/javascripts/webdoc/managers/*
     - app/javascripts/webdoc/controllers/document_collaboration_controller.js
-    - app/javascripts/webdoc/controllers/document_categories_controller.js
     - app/javascripts/webdoc/controllers/document_share_controller.js
     - app/javascripts/webdoc/gui/document_list.js
     - app/javascripts/webdoc/core/document_editor.js
@@ -107,6 +107,7 @@ javascripts:
     - public/javascripts/codemirror/parsehtmlmixed.js
     
     - app/javascripts/webdoc.js
+    - app/javascripts/webdoc/managers/*
     - app/javascripts/webdoc/model/*.js
     - app/javascripts/webdoc/sdk/*.js
     - app/javascripts/webdoc/adaptors/*.js
