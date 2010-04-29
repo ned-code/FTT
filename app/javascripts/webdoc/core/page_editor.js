@@ -65,7 +65,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     WebDoc.application.categoriesManager = new WebDoc.DocumentCategoriesManager();
     
     WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
-    //WebDoc.application.themesController = new WebDoc.ThemesController();
+    WebDoc.application.themesController = new WebDoc.ThemesController();
     
     // create all tools
     WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
