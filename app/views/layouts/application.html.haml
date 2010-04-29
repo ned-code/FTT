@@ -20,5 +20,11 @@
       if (MTools) {    
         MTools.Application.start();
       }
+      var WebDoc;
+      if (!WebDoc) {
+        WebDoc = {};
+      }
+      WebDoc.shindig = {};
+      WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";
     = render :partial => "layouts/feedback";
     = render :partial => "layouts/google_analytics"
