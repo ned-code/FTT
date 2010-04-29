@@ -6,7 +6,8 @@ WebDoc.ThemesController = jQuery.klass({
   
   // Constructor     
   initialize: function() {
-    var that = this;
+    var that = this,
+        defaultTheme;
     
     this.chooserNode = jQuery("<div/>");
     this.listNode = jQuery('<ul/>', {'class': 'vertical thumbs themes-index index'});
@@ -20,7 +21,34 @@ WebDoc.ThemesController = jQuery.klass({
       'theme': this.handlers.changeTheme
     }, this );
     
-    this._updateListNode();
+    // Get themes and populate themes list
+    MTools.ServerManager.getRecords( WebDoc.Theme, null, function( themes ){
+      var theme, l = themes.length;
+      
+      // Convert array to object so that we
+      // can reference themes by id later
+      while(l--){
+        theme = themes[l];
+        console.log('THEME', theme);
+        that.list[ theme.data.id ] = theme;
+      }
+    });
+    
+    defaultTheme = new WebDoc.Theme({
+      theme: {
+        id: 'default',
+        name: 'Webdoc Default',
+        layouts: [],
+        style_url: '/themes/default/css/typography.css',
+        thumbnail_url: ''
+      }
+    });
+    
+    // Override theme object methods
+    // that we don't want on default
+    defaultTheme.refresh = function(){};
+    
+    this.list['default'] = defaultTheme;
   },
   
   // Event handlers
@@ -31,18 +59,20 @@ WebDoc.ThemesController = jQuery.klass({
       
       // Give this link theme data, if it does not already have it
       if (!data) {
-        data = this.list[ link.attr('data-theme') ];
+        data = this.list[ link.attr('data-theme-id') ];
         link.data('theme', data);
       }
       
-      ddd('[Themes Controller] instantiate theme: '+data.name);
+      ddd('[Themes Controller] set theme: ' + data.getName() );
       
       WebDoc.application.pageEditor.currentDocument.setTheme( data );
     },
 
     openChooser: function(e){
       var anchor = e && jQuery(e.currentTarget);
-    
+      
+      this._refreshListNode();
+      
       this.listNode
       .pop({
         attachTo: anchor,
@@ -55,44 +85,18 @@ WebDoc.ThemesController = jQuery.klass({
     }
   },
   
-  // Themes list
-  list: {
-    'swisschocolate': {
-      id: 'swisschocolate',
-      name: 'Swiss Chocolate',
-      version: 0.1,
-      path: '/themes/swisschocolate',
-      thumb: '/images/thumb.png',
-      stylesheet: '/css/typography.css'
-    },
-    'notmytype': {
-      id: 'notmytype',
-      name: 'Not My Type',
-      version: 0.1,
-      path: '/themes/notmytype',
-      thumb: '/images/thumb.png',
-      stylesheet: '/css/typography.css'
-    },
-    'default': {
-      id: 'default',
-      name: 'Webdoc default',
-      version: 0.1,
-      path: '/themes/default',
-      thumb: '/images/thumb.png',
-      stylesheet: '/css/typography.css'
-    }
-  },
+  // List of themes
+  list: {},
   
   // Populate listNode with list of themes
-  _updateListNode: function(){
-    var key, item,
-        list = this.list,
-        html = '';
-    
-    for (key in list) {
-      item = list[key];
+  _refreshListNode: function(){
+    var list = this.list,
+        html = '',
+        theme, key;
       
-      html += '<li><a href="#theme" data-theme="'+key+'" style="background-image: url(\''+ item.path + item.thumb +'\');"><h3>'+key+'</h3></a></li>';
+    for (key in list) {
+      theme = list[key];
+      html += '<li><a href="#theme" data-theme-id="'+key+'" style="background-image: url(\''+ theme.getThumbnailUrl() +'\');"><h3>'+theme.getName()+'</h3></a></li>';
     }
     
     this.listNode.html(html);

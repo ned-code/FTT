@@ -23,8 +23,12 @@ $.extend(WebDoc.InspectorFieldsValidator, {
   },
   
   validateSize: function(size) {
-    var re = jQuery.regex.cssMeasure;
+    var re = jQuery.regex.cssValue;
+    
+    console.log('SIZE: '+size);
+    
     if( !re.test(size) ) {
+      console.log('No match');
       throw("this method needs a valid pixel value (ex: 200px)");
     }
   },
