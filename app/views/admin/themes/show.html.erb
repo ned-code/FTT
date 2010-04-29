@@ -5,6 +5,9 @@
   <li>Style: <%= link_to @theme.style_url, @theme.style_url%></li>
   <li>File: <%= @theme.file %></li>
   <li>Versions: <%= @theme.version %></li>
+  <% if @theme.ancestor.present? %>
+    <li>Ancestor theme: <%= link_to(@theme.ancestor.id, admin_theme_path(@theme.ancestor)) %></li>
+  <% end %>
 </ul>
 
 <h2>Layouts</h2>
