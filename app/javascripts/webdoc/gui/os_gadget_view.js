@@ -56,7 +56,7 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
         
         this._getSecureToken(function(token) {
           this.gadget.secureToken = token;
-          this.gadget.setServerBase('/gadgets/');
+          this.gadget.setServerBase(WebDoc.shindig.serverBase);
           shindig.container.renderGadget(this.gadget);
           
         }.pBind(this));        
