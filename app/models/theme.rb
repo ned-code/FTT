@@ -46,43 +46,42 @@ class Theme < ActiveRecord::Base
   end
 
   def set_attribute_from_config_file_and_save(ancestor_theme=nil)
-    # TODO if version.nil? || config_dom.root.attribute("version").to_s > version
     saved = false
+    if ancestor_theme.blank? || config_dom.root.attribute("version").to_s > ancestor_theme.version
+      self.transaction do
+        self.assign_uuid
+        self.version = config_dom.root.attribute('version').to_s
+        self.name = config_dom.root.elements['name'].text
+        path = self.get_mapped_path
+        self.thumbnail_url = path + config_dom.root.attribute('thumbnail').to_s
+        self.style_url = path + "css/parsed_theme_style.css"
+        self.save!
 
-    self.transaction do
-      self.assign_uuid
-      self.version = config_dom.root.attribute('version').to_s
-      self.name = config_dom.root.elements['name'].text
-      path = self.get_mapped_path
-      self.thumbnail_url = path + config_dom.root.attribute('thumbnail').to_s
-      self.style_url = path + "css/parsed_theme_style.css"
-      self.save!
-
-      config_dom.root.elements['layouts'].each_child do |layout|
-        if layout.class == REXML::Element
-          layout_object = Layout.new
-          layout_object.name = layout.elements['name'].text
-          layout_object.thumbnail_url = path + layout.attribute('thumbnail').to_s
-          layout_object.theme = self
-          layout_object.save!
-          layout_object.create_model_page!
+        config_dom.root.elements['layouts'].each_child do |layout|
+          if layout.class == REXML::Element
+            layout_object = Layout.new
+            layout_object.name = layout.elements['name'].text
+            layout_object.thumbnail_url = path + layout.attribute('thumbnail').to_s
+            layout_object.theme = self
+            layout_object.save!
+            layout_object.create_model_page!
+          end
         end
-      end
 
-      if ancestor_theme.present?
-        ancestor_theme.updated_theme_id = self.id
-        ancestor_theme.save!
-      end
+        if ancestor_theme.present?
+          ancestor_theme.updated_theme_id = self.id
+          ancestor_theme.save!
+        end
 
-      begin
-        extract_files_from_zip_file(file.current_path, file.store_dir)
-        create_parsed_style
-      rescue
-        raise ActiveRecord::Rollback
+        begin
+          extract_files_from_zip_file(file.current_path, file.store_dir)
+          create_parsed_style
+        rescue
+          raise ActiveRecord::Rollback
+        end
+        saved = true
       end
-      saved = true
     end
-
     saved
   end
 
