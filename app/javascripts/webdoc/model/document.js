@@ -73,7 +73,7 @@ WebDoc.Document = $.klass(MTools.Record, {
   
   styleUrl: function() {
     return this.data.style_url;
-  },  
+  },
   
   share: function() {
     this.data.is_public = true;
