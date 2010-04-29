@@ -150,6 +150,9 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     this.refreshProperties();
     
     switch (this.currentInspectorId) {
+      case 1:
+        this.textInspector.refreshInnerHtml();
+        break;
       case 3:
         this.widgetInspectorApi.setWidgetItem(WebDoc.application.boardController.selection()[0].item);    
         var widgetContent = this._inspectorNodes[3].find("iframe"); 
