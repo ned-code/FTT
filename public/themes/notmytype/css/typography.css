@@ -8,7 +8,7 @@
  * 
  * The default webdoc font-size is 1em == 16px, the normal browser default. to
  * redefine the base font-size for your webdoc theme, set it in em or % as a
- * ratio of 16px on the #webdoc container. Use this table as a guide:
+ * ratio of 16px on the .webdoc container. Use this table as a guide:
  * 
  * 10px == 0.625em  or 62.5%
  * 12px == 0.75em   or 75%
@@ -31,11 +31,6 @@
 	src: local('Mom Regular'), local('MomsTypewriter'), url('../fonts/MomsTypewriter/Moms_typewriter.ttf') format('truetype');
 }
 
-html,
-body {
-  height: 100%;
-}
-
 .webdoc {
     font-size: 0.875em;
     font-family: Georgia, Palatino, Times, 'Times New Roman', serif;
@@ -46,15 +41,14 @@ body {
 
 /* Links */
 
-.webdoc a:focus,
-.webdoc a:hover           {
+a:focus, a:hover {
   text-decoration: none;
   
   -webkit-border-image: url('../images/border_rip_blue_hover.png') 18 stretch stretch;
   -moz-border-image:    url('../images/border_rip_blue_hover.png') 18 stretch stretch;
   border-image:         url('../images/border_rip_blue_hover.png') 18 stretch stretch;
 }
-.webdoc a                 {
+a {
   color: white;
   text-decoration: none; 
   
@@ -69,17 +63,11 @@ body {
 
 /* Fonts */
 
-.webdoc pre,
-.webdoc code              { font-family: 'Courier', 'Andale Mono', 'Lucida Console', monospace; }
+pre, code         { font-family: 'Courier', 'Andale Mono', 'Lucida Console', monospace; }
 
 /* Block elements */
 
-.webdoc h1,
-.webdoc h2,
-.webdoc h3,
-.webdoc h4,
-.webdoc h5,
-.webdoc h6                { 
+h1, h2, h3, h4, h5, h6 { 
   -webkit-border-image: url('../images/border_rip.png') 1 stretch stretch;
   -moz-border-image:    url('../images/border_rip.png') 1 stretch stretch;
   border-image:         url('../images/border_rip.png') 1 stretch stretch;
@@ -103,11 +91,6 @@ body {
   word-spacing: -0.0833em;
   display: inline-block;
 }
-.webdoc h4,
-.webdoc h5,
-.webdoc h6                {  }
-
-.webdoc h1+h2 {  }
 
 h1+p::first-line,
 h2+p::first-line,
@@ -135,46 +118,39 @@ p:nth-child(4n+6)               { margin-left: -0.5em; line-height: 1.4; -webkit
 blockquote+p::first-line        { line-height: 3; font-weight: normal; text-indent: 0; }
 p:nth-child(4n+6)::first-line   { line-height: 0.92; }
 
-/* IE only */
-/*.clearfix,
-form div {display:inline-block;}
 
-* html .clearfix,
-* html form div {height:1%;}*/
+h1                { -webkit-transform: rotate(-1.2deg); -moz-transform: rotate(-1.2deg); transform: rotate(-1.2deg); margin: 0.4em 0 0 0.6em; padding: 0.6em 0.2em 0.4em 0.9em; font-size: 3em;   line-height: 1;   margin-top: 0.5em;    margin-bottom: 0.5em;    text-indent: -0.3em; }
+h2                { -webkit-transform: rotate(0.8deg);  -moz-transform: rotate(0.8deg);  transform: rotate(0.8deg); margin: 0.1em 0 0 0.5em; padding: 0.3em 0.3em 0.8em 1.2em; font-size: 2em;   line-height: 1;   margin-top: 1.2em;    margin-bottom: 0.8em;    text-indent: -0.45em; }
+h3                { -webkit-transform: rotate(0.3deg);  -moz-transform: rotate(0.3deg);  transform: rotate(0.3deg); margin: 0 0 0 0.2em;     padding: 0.5em 2em 0.3em 0.5em;   font-size: 1.5em; line-height: 1;   margin-top: 0.8571em; margin-bottom: 0.1429em; text-indent: -0.6em; }
+h4                { -webkit-transform: rotate(-0.4deg); -moz-transform: rotate(-0.4deg); transform: rotate(-0.4deg); margin: 0.3em 0 0 -0.9em;padding: 0.6em 0.2em 0.4em 0.6em; font-size: 1.5em; line-height: 1;   margin-top: 0.8571em; margin-bottom: 0.1429em; /*text-indent: -0.6em;*/ }
+h5                { -webkit-transform: rotate(-0.2deg); -moz-transform: rotate(-0.2deg); transform: rotate(-0.2deg); margin: 0.1em 0 0 0.6em; padding: 0.6em 0.3em 0.1em 0.1em; font-size: 1.1429em; line-height: 1.3125; margin-top: 1.25em; margin-bottom: 0.0625em; /*text-indent: -0.7875em;*/ }
+h6                { -webkit-transform: rotate(0.6deg);  -moz-transform: rotate(0.6deg);  transform: rotate(0.6deg); margin: 0.2em 0 0 0;     padding: 0.6em 0.4em 0.4em 1.3em; font-size: 1em;                     margin-top: 1.5em; /*text-indent: -0.9em;*/ }
 
-
-.webdoc h1                { -webkit-transform: rotate(-1.2deg); -moz-transform: rotate(-1.2deg); transform: rotate(-1.2deg); margin: 0.4em 0 0 0.6em; padding: 0.6em 0.2em 0.4em 0.9em; font-size: 3em;   line-height: 1;   margin-top: 0.5em;    margin-bottom: 0.5em;    text-indent: -0.3em; }
-.webdoc h2                { -webkit-transform: rotate(0.8deg);  -moz-transform: rotate(0.8deg);  transform: rotate(0.8deg); margin: 0.1em 0 0 0.5em; padding: 0.3em 0.3em 0.8em 1.2em; font-size: 2em;   line-height: 1;   margin-top: 1.2em;    margin-bottom: 0.8em;    text-indent: -0.45em; }
-.webdoc h3                { -webkit-transform: rotate(0.3deg);  -moz-transform: rotate(0.3deg);  transform: rotate(0.3deg); margin: 0 0 0 0.2em;     padding: 0.5em 2em 0.3em 0.5em;   font-size: 1.5em; line-height: 1;   margin-top: 0.8571em; margin-bottom: 0.1429em; text-indent: -0.6em; }
-.webdoc h4                { -webkit-transform: rotate(-0.4deg); -moz-transform: rotate(-0.4deg); transform: rotate(-0.4deg); margin: 0.3em 0 0 -0.9em;padding: 0.6em 0.2em 0.4em 0.6em; font-size: 1.5em; line-height: 1;   margin-top: 0.8571em; margin-bottom: 0.1429em; /*text-indent: -0.6em;*/ }
-.webdoc h5                { -webkit-transform: rotate(-0.2deg); -moz-transform: rotate(-0.2deg); transform: rotate(-0.2deg); margin: 0.1em 0 0 0.6em; padding: 0.6em 0.3em 0.1em 0.1em; font-size: 1.1429em; line-height: 1.3125; margin-top: 1.25em; margin-bottom: 0.0625em; /*text-indent: -0.7875em;*/ }
-.webdoc h6                { -webkit-transform: rotate(0.6deg);  -moz-transform: rotate(0.6deg);  transform: rotate(0.6deg); margin: 0.2em 0 0 0;     padding: 0.6em 0.4em 0.4em 1.3em; font-size: 1em;                     margin-top: 1.5em; /*text-indent: -0.9em;*/ }
-
-.webdoc h1:first-child,
-.webdoc h2:first-child,
-.webdoc h3:first-child,
-.webdoc h4:first-child,
-.webdoc h5:first-child,
-.webdoc h6:first-child    { margin-top: 0; }
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child,
+h6:first-child    { margin-top: 0; }
 
 /* Things that should have margin after headings */
-.webdoc h1+p,
-.webdoc h2+p              { margin-top: 1.5em; }
-.webdoc h3+p              { margin-top: 1.6429em; }
+h1+p,
+h2+p              { margin-top: 1.5em; }
+h3+p              { margin-top: 1.6429em; }
 
 /* Things that should have margin after paragraphs */
 
-.webdoc p+ul,
-.webdoc p+dl,
-.webdoc p+ol,
-.webdoc p+table,
-.webdoc p+address,
-.webdoc p+pre,
-.webdoc p+blockquote      { margin-top: 1.5em; }
+p+ul,
+p+dl,
+p+ol,
+p+table,
+p+address,
+p+pre,
+p+blockquote      { margin-top: 1.5em; }
 
 /* Paragraphs */
-.webdoc p                 { margin-bottom: 1em; min-height: 3em; }
-.webdoc p+p               { min-height: 1.5em; text-indent: 1.5em; }
+p                 { margin-bottom: 1em; min-height: 3em; }
+p+p               { min-height: 1.5em; text-indent: 1.5em; }
 
 /* Make first letter different */
 /*.webdoc p::first-letter   { font-family: Courier; font-size: 2.5em; line-height: 1em; -webkit-transform: rotate(180deg); float: left;}
@@ -189,35 +165,29 @@ p+p+p::first-line   { line-height: 2; font-weight: normal; }
 
 /* Start paragraphs with a character or symbol */
 /*.webdoc p+p:before        { content: "\2767"; line-height: 0; padding-right: 0.2em;  color: hsl(42, 68%, 28%); text-shadow: hsl(42, 90%, 26%) 0px 0px 12px; }*/
-.webdoc p img             { float: right; margin: 1em 0 1em 1.5em; padding: 0; }
+p img             { float: right; margin: 1em 0 1em 1.5em; padding: 0; }
 
-.webdoc p,
-.webdoc li,
-.webdoc dt,
-.webdoc dd,
-.webdoc blockquote,
-.webdoc address           { word-spacing: 0.2em; }
+p, li, dt, dd,
+blockquote,
+address           { word-spacing: 0.2em; }
 
-.webdoc li ul,
-.webdoc li ol,
-.webdoc dd                { margin: 0; }
-.webdoc ul,
-.webdoc ol,
-.webdoc dl                { margin: 0 0 1.5em 0; }
-.webdoc li,
-.webdoc dd                { margin-bottom: 0em; }
+li ul,
+li ol,
+dd                { margin: 0; }
+ul, ol, dl        { margin: 0 0 1.5em 0; }
+li, dd            { margin-bottom: 0em; }
 
-.webdoc li li             { line-height: 1.75; margin-bottom: 0; font-size: 0.8571em; }
-.webdoc li li li          { line-height: 2.1; }
+li li             { line-height: 1.75; margin-bottom: 0; font-size: 0.8571em; }
+li li li          { line-height: 2.1; }
 
-.webdoc ul                { list-style-type: disc; padding-left: 0; }
-.webdoc ul ul             { margin-left: 1.5em; }
-.webdoc ol                { list-style-type: decimal; }
+ul                { list-style-type: disc; padding-left: 0; }
+ul ul             { margin-left: 1.5em; }
+ol                { list-style-type: decimal; }
 
-.webdoc dt                { color: hsl(42, 60%, 22%); font-weight: normal; }
-.webdoc dd                { font-style: italic; }
+dt                { color: hsl(42, 60%, 22%); font-weight: normal; }
+dd                { font-style: italic; }
 
-.webdoc blockquote        { margin: 0 0 1.5em 0; padding: 0;
+blockquote        { margin: 0 0 1.5em 0; padding: 0;
 
   -webkit-border-image: url('../images/border_rip_blockquote.png') 1 stretch stretch;
   -moz-border-image:    url('../images/border_rip_blockquote.png') 1 stretch stretch;
@@ -232,7 +202,7 @@ p+p+p::first-line   { line-height: 2; font-weight: normal; }
   
   padding: 20px;
 }
-.webdoc blockquote:before { 
+blockquote:before { 
   content: "\201C";
   font-size: 3em;
   color: white;
@@ -243,7 +213,7 @@ p+p+p::first-line   { line-height: 2; font-weight: normal; }
   top: 0.6em;
   left: -0.2em;
 }
-.webdoc blockquote:after { 
+blockquote:after { 
   content: "\201D";
   font-size: 3em;
   color: white;
@@ -255,56 +225,55 @@ p+p+p::first-line   { line-height: 2; font-weight: normal; }
   top: 0.6em;
   left: 0.8em;
 }
-.webdoc pre               { margin: 1.25em 0; white-space: pre; }
-.webdoc address           { margin: 1.25em 0; }
+pre               { margin: 1.25em 0; white-space: pre; }
+address           { margin: 1.25em 0; }
 
 
 /* Inline elements */
 
-.webdoc strong,
-.webdoc dfn               { font-weight: bold; }
-.webdoc em,
-.webdoc dfn               { font-style: italic; }
-.webdoc sup,
-.webdoc sub               { line-height: 0; font-size: 0.625em; }
+strong,
+dfn               { font-weight: bold; }
+em,
+dfn               { font-style: italic; }
+sup,
+sub               { line-height: 0; font-size: 0.625em; }
 
-.webdoc abbr              { letter-spacing: 0.1em; }
-.webdoc pre,
-.webdoc code,
-.webdoc tt                { font: 1em 'andale mono', 'lucida console', monospace; }
-.webdoc del               { opacity: 0.6; filter: alpha(opacity=60%); font-style:italic; text-decoration: line-through; }
+abbr              { letter-spacing: 0.1em; }
+pre,
+code,
+tt                { font: 1em 'andale mono', 'lucida console', monospace; }
+del               { opacity: 0.6; filter: alpha(opacity=60%); font-style:italic; text-decoration: line-through; }
 
 /* Tables */
 
-.webdoc table             { margin-bottom: 1.4em; width:100%; }
-.webdoc th                { font-weight: bold; }
-.webdoc th,
-.webdoc td,
-.webdoc caption           { padding: 4px 10px 4px 5px; }
-.webdoc tfoot             { font-style: italic; }
-.webdoc caption           { background: #eee; }
+table             { margin-bottom: 1.4em; width:100%; }
+th                { font-weight: bold; }
+th,
+td,
+caption           { padding: 4px 10px 4px 5px; }
+tfoot             { font-style: italic; }
+caption           { background: #eee; }
                       
 /* Selected text */
 
-.webdoc *::selection      { background-color: black; color: white; }
-.webdoc code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
+*::selection      { background-color: black; color: white; }
+code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
 
 /* Indentation */
 
-.webdoc ul,
-.webdoc ul ul,
-.webdoc .webdoc-indent-1  { margin-left: 3em; }
-.webdoc .webdoc-indent-2  { margin-left: 6em; }
-.webdoc .webdoc-indent-3  { margin-left: 9em; }
-.webdoc .webdoc-indent-4  { margin-left: 12em; }
-.webdoc .webdoc-indent-5  { margin-left: 15em; }
-.webdoc .webdoc-indent-6  { margin-left: 18em; }
-.webdoc .webdoc-indent-7  { margin-left: 21em; }
-.webdoc .webdoc-indent-8  { margin-left: 24em; }
-.webdoc .webdoc-indent-9  { margin-left: 27em; }
-.webdoc .webdoc-indent-10 { margin-left: 30em; }
-.webdoc .webdoc-indent-11 { margin-left: 33em; }
-.webdoc .webdoc-indent-12 { margin-left: 36em; }
+ul, ul ul,
+.webdoc-indent-1  { margin-left: 3em; }
+.webdoc-indent-2  { margin-left: 6em; }
+.webdoc-indent-3  { margin-left: 9em; }
+.webdoc-indent-4  { margin-left: 12em; }
+.webdoc-indent-5  { margin-left: 15em; }
+.webdoc-indent-6  { margin-left: 18em; }
+.webdoc-indent-7  { margin-left: 21em; }
+.webdoc-indent-8  { margin-left: 24em; }
+.webdoc-indent-9  { margin-left: 27em; }
+.webdoc-indent-10 { margin-left: 30em; }
+.webdoc-indent-11 { margin-left: 33em; }
+.webdoc-indent-12 { margin-left: 36em; }
 
 /*
 ul, ol, blockquote, dd,

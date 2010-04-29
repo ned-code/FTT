@@ -37,70 +37,70 @@
 
 /* color theme */
 
-.webdoc h1,
-.webdoc h2,
-.webdoc h3,
-.webdoc h4,
-.webdoc h5,
-.webdoc h6                { color: #484848; }
+.theme_default h1,
+.theme_default h2,
+.theme_default h3,
+.theme_default h4,
+.theme_default h5,
+.theme_default h6                { color: #484848; }
 
-.webdoc a:focus,
-.webdoc a:hover           { color: hsl(208, 50%, 20%); border-bottom: 1px dotted hsl(208, 50%, 20%); text-decoration: none; }
-.webdoc a                 { color: hsl(208, 60%, 50%); border-bottom: 1px dotted hsl(208, 60%, 50%); text-decoration: none; }
+.theme_default a:focus,
+.theme_default a:hover           { color: hsl(208, 50%, 20%); border-bottom: 1px dotted hsl(208, 50%, 20%); text-decoration: none; }
+.theme_default a                 { color: hsl(208, 60%, 50%); border-bottom: 1px dotted hsl(208, 60%, 50%); text-decoration: none; }
 
 /* Fonts */
 
-.webdoc pre, .webdoc code { font-family: 'Courier', 'Andale Mono', 'Lucida Console', monospace; }
+.theme_default pre, .theme_default code { font-family: 'Courier', 'Andale Mono', 'Lucida Console', monospace; }
 
 /* Block elements */
 
-.webdoc h1,
-.webdoc h2,
-.webdoc h3,
-.webdoc h4,
-.webdoc h5,
-.webdoc h6                { font-weight: normal; margin: 0; word-spacing: -0.0833em; }
-.webdoc h4,
-.webdoc h5,
-.webdoc h6                { font-weight: bold; }
+.theme_default h1,
+.theme_default h2,
+.theme_default h3,
+.theme_default h4,
+.theme_default h5,
+.theme_default h6                { font-weight: normal; margin: 0; word-spacing: -0.0833em; }
+.theme_default h4,
+.theme_default h5,
+.theme_default h6                { font-weight: bold; }
 
-.webdoc span,
-.webdoc font {
+.theme_default span,
+.theme_default font {
   -moz-background-inline-policy:continuous;
   -moz-background-origin:padding, content;
   -moz-background-size:cover;
 }
 
-.webdoc h1                { font-size: 3em;                           margin-top: 0.4167em;   margin-bottom: 0.4167em; }
-.webdoc h2                { font-size: 2.5em;   line-height: 1.5;     margin-top: 0.5em;      margin-bottom: 0.5em; }
-.webdoc h3                { font-size: 2em;     line-height: 1.25;    margin-top: 0.625em;    margin-bottom: 0.625em; }
-.webdoc h4                { font-size: 1.2em;   line-height: 1.0417;  margin-top: 1.0417em; }
-.webdoc h5                { font-size: 1.1em;   line-height: 1.1364;  margin-top: 1.1364em; }
-.webdoc h6                { font-size: 1em;                           margin-top: 1.25em; }
+.theme_default h1                { font-size: 3em;                           margin-top: 0.4167em;   margin-bottom: 0.4167em; }
+.theme_default h2                { font-size: 2.5em;   line-height: 1.5;     margin-top: 0.5em;      margin-bottom: 0.5em; }
+.theme_default h3                { font-size: 2em;     line-height: 1.25;    margin-top: 0.625em;    margin-bottom: 0.625em; }
+.theme_default h4                { font-size: 1.2em;   line-height: 1.0417;  margin-top: 1.0417em; }
+.theme_default h5                { font-size: 1.1em;   line-height: 1.1364;  margin-top: 1.1364em; }
+.theme_default h6                { font-size: 1em;                           margin-top: 1.25em; }
 
-.webdoc h1:first-child,
-.webdoc h2:first-child,
-.webdoc h3:first-child,
-.webdoc h4:first-child,
-.webdoc h5:first-child,
-.webdoc h6:first-child    { margin-top: 0; }
+.theme_default h1:first-child,
+.theme_default h2:first-child,
+.theme_default h3:first-child,
+.theme_default h4:first-child,
+.theme_default h5:first-child,
+.theme_default h6:first-child    { margin-top: 0; }
 
-.webdoc p                 { margin: 0; }
+.theme_default p                 { margin: 0; }
 
 /* Things that should have margin after headings */
-.webdoc h1+p,
-.webdoc h2+p,
-.webdoc h3+p              { margin-top: 1.25em; }
+.theme_default h1+p,
+.theme_default h2+p,
+.theme_default h3+p              { margin-top: 1.25em; }
 
 /* Things that should have margin after paragraphs */
-.webdoc p+p,
-.webdoc p+ul,
-.webdoc p+dl,
-.webdoc p+ol,
-.webdoc p+table,
-.webdoc p+address,
-.webdoc p+pre,
-.webdoc p+blockquote      { margin-top: 1.25em; }
+.theme_default p+p,
+.theme_default p+ul,
+.theme_default p+dl,
+.theme_default p+ol,
+.theme_default p+table,
+.theme_default p+address,
+.theme_default p+pre,
+.theme_default p+blockquote      { margin-top: 1.25em; }
 
 /* Make first letter different */
 /*p::first-letter   { font-size: 1.3333em; line-height: 1em; font-style: italic; letter-spacing: 0.1333em; }
@@ -111,79 +111,79 @@ p+p::first-line   { font-weight: normal; }*/
 /* Start paragraphs with a character or symbol */
 /*p+p:before  { content: "\2767"; padding-right: 0.4em; }*/
 
-.webdoc p img             { float: right; margin: 1em 0 1em 1.25em; padding: 0; }
+.theme_default p img             { float: right; margin: 1em 0 1em 1.25em; padding: 0; }
 
-.webdoc p,
-.webdoc li,
-.webdoc dt,
-.webdoc dd,
-.webdoc blockquote,
-.webdoc address           { word-spacing: 0.2em; }
+.theme_default p,
+.theme_default li,
+.theme_default dt,
+.theme_default dd,
+.theme_default blockquote,
+.theme_default address           { word-spacing: 0.2em; }
 
-.webdoc li ul,
-.webdoc li ol,
-.webdoc dd                { margin: 0; }
-.webdoc ul,
-.webdoc ol,
-.webdoc dl                { margin: 0 0 1.25em 0; }
-.webdoc li,
-.webdoc dd                { margin-bottom: 0.625em;}
+.theme_default li ul,
+.theme_default li ol,
+.theme_default dd                { margin: 0; }
+.theme_default ul,
+.theme_default ol,
+.theme_default dl                { margin: 0 0 1.25em 0; }
+.theme_default li,
+.theme_default dd                { margin-bottom: 0.625em;}
 
 /*fix that would avoid a cutoff of digits in the ordered list, using a large font size*/
 /* Yes, but it breaks the horizontal typographic grid, as well as the ability to add classes like .index to a list */
-/*.webdoc li,
-.webdoc dd        { margin-left: 0.625em;}*/
+/*.theme_default li,
+.theme_default dd        { margin-left: 0.625em;}*/
 
-.webdoc li li             { line-height: 1.4286; margin-bottom: 0; font-size: 0.875em; }
-.webdoc li li li          { line-height: 1.68; }
+.theme_default li li             { line-height: 1.4286; margin-bottom: 0; font-size: 0.875em; }
+.theme_default li li li          { line-height: 1.68; }
 
-.webdoc ul                { list-style-type: disc; }
-.webdoc ol                { list-style-type: decimal; }
+.theme_default ul                { list-style-type: disc; }
+.theme_default ol                { list-style-type: decimal; }
 
-.webdoc dt                { font-weight: bold; }
+.theme_default dt                { font-weight: bold; }
 
-.webdoc blockquote        { margin: 0 0 1.25em 0; padding: 0; font-style: italic; }
-.webdoc blockquote:before { content: "\201C"; font-size: 3em; color: #484848; float: left; margin-left: -0.6em; line-height: 0.84em; }
-.webdoc pre               { margin: 1.25em 0; white-space: pre; }
-.webdoc address           { margin: 1.25em 0; }
+.theme_default blockquote        { margin: 0 0 1.25em 0; padding: 0; font-style: italic; }
+.theme_default blockquote:before { content: "\201C"; font-size: 3em; color: #484848; float: left; margin-left: -0.6em; line-height: 0.84em; }
+.theme_default pre               { margin: 1.25em 0; white-space: pre; }
+.theme_default address           { margin: 1.25em 0; }
 
 
 /* Inline elements */
 
-.webdoc strong,
-.webdoc dfn               { font-weight: bold; }
-.webdoc em,
-.webdoc dfn               { font-style: italic; }
-.webdoc sup,
-.webdoc sub               { line-height: 0; font-size: 0.625em; }
+.theme_default strong,
+.theme_default dfn               { font-weight: bold; }
+.theme_default em,
+.theme_default dfn               { font-style: italic; }
+.theme_default sup,
+.theme_default sub               { line-height: 0; font-size: 0.625em; }
 
-.webdoc abbr              { letter-spacing: 0.1em; }
-.webdoc pre,
-.webdoc code,
-.webdoc tt                { font: 1em 'andale mono', 'lucida console', monospace; }
-.webdoc del               { opacity: 0.6; filter: alpha(opacity=60%); font-style:italic; text-decoration: line-through; }
+.theme_default abbr              { letter-spacing: 0.1em; }
+.theme_default pre,
+.theme_default code,
+.theme_default tt                { font: 1em 'andale mono', 'lucida console', monospace; }
+.theme_default del               { opacity: 0.6; filter: alpha(opacity=60%); font-style:italic; text-decoration: line-through; }
 
 /* Tables */
 
-.webdoc table             { margin-bottom: 1.4em; width:100%; }
-.webdoc th                { font-weight: bold; }
-.webdoc th,
-.webdoc td,
-.webdoc caption           { padding: 4px 10px 4px 5px; }
-.webdoc tfoot             { font-style: italic; }
-.webdoc caption           { background: #eee; }
+.theme_default table             { margin-bottom: 1.4em; width:100%; }
+.theme_default th                { font-weight: bold; }
+.theme_default th,
+.theme_default td,
+.theme_default caption           { padding: 4px 10px 4px 5px; }
+.theme_default tfoot             { font-style: italic; }
+.theme_default caption           { background: #eee; }
                       
 /* Selected text */
 
-.webdoc *::selection      { background-color: rgba(176, 227, 0, 0.8); }
-.webdoc code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
+.theme_default *::selection      { background-color: rgba(176, 227, 0, 0.8); }
+.theme_default code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
 
 /* Indentation */
 
-.webdoc ul,
-.webdoc ol,
-.webdoc blockquote,
-.webdoc dd,
+.theme_default ul,
+.theme_default ol,
+.theme_default blockquote,
+.theme_default dd,
 .webdoc-indent-1  { margin-left: 2.5em; }
 .webdoc-indent-2  { margin-left: 5em; }
 .webdoc-indent-3  { margin-left: 7.5em; }
