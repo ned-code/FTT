@@ -127,7 +127,7 @@ class Theme < ActiveRecord::Base
       File.open(File.join(Rails.root, 'public', self.style_url), 'wb') {|f| f.write(parsed) }
     else
       @s3 ||= RightAws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
-      @s3.put(file.s3_bucket, filePath, zip_file.get_input_stream.read, 'x-amz-acl' => 'public-read')
+      @s3.put(file.s3_bucket, filePath, parsed, 'x-amz-acl' => 'public-read')
     end
   end
 
