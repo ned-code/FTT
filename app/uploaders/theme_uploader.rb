@@ -15,14 +15,14 @@ class ThemeUploader < CarrierWave::Uploader::Base
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
     store_prefix = CarrierWave.yml_storage(:assets).to_s == 'file' ? 'uploads/' : ''
-    "#{store_prefix}#{model.class.to_s.underscore}/#{model.uuid}/#{model.version}/"
+    "#{store_prefix}#{model.class.to_s.underscore}/#{model.uuid}/"
   end
 
   def store_url
     if s3_bucket == nil
       "/#{store_dir}"
     else
-      "http://#{s3_bucket}.s3.amazonaws.com/#{model.class.to_s.underscore}/#{model.uuid}/#{model.version}/"
+      "http://#{s3_bucket}.s3.amazonaws.com/#{model.class.to_s.underscore}/#{model.uuid}/"
     end
   end
 
