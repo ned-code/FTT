@@ -251,14 +251,9 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     });
   },
 
-  _changePageBackgroundImage: function() {
+  _changePageBackgroundImage: function(url) {
     ddd('[pageInspectorController] _changePageBackgroundImage');
-    try {
-      page.setBackgroundImage(jQuery("#page_background_image_textbox").val());
-    }
-    catch(exc) {
-      jQuery("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
-    } 
+    page.setBackgroundImage( url === "" ? url : "url('"+url+"')" ) ;
   },
 
   _changePageBackgroundImageFromThumb: function() {
@@ -291,32 +286,30 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   
   _removeBackgroundImage: function(e) {
     e.preventDefault();
-    this._cancelImageBackground();
-  },
-  
-  _cancelImageBackground: function() {
     page.removeBackgroundImage();
-    //WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
   },
 
   _checkValidBackgroundImage: function(e) {
-    if(e) { e.preventDefault(); }
-    try {
-      WebDoc.InspectorFieldsValidator.validateBackgroundUrl(e.target.value);
-      this._changePageBackgroundImage();
-      this._changePageBackgroundRepeatMode(e);
-      this._changePageBackgroundPosition(e);
-      this._setBackgroundControlsMode(true);
-    }
-    catch(exc) {
-      if(e.target.value === "") {
-        this._cancelImageBackground();
-        this._setBackgroundControlsMode(false);
-      }
-      else {
-        e.target.value = page.data.data.css.backgroundImage;
-      }
-    }
+    var that = this,
+        field = jQuery(e.currentTarget);
+    
+    e.preventDefault();
+    
+    field.validate({
+      pass: function(value){
+        if (value = "") {
+          page.removeBackgroundImage();
+          that._setBackgroundControlsMode(false);
+        }
+        else {
+          that._changePageBackgroundImage(value);
+          that._changePageBackgroundRepeatMode(e);
+          that._changePageBackgroundPosition(e);
+          that._setBackgroundControlsMode(true);
+        }
+      },
+      fail: function(error){}
+    });
   },
 
   _chooseBackgroundImage: function(e) {

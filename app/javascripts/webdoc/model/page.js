@@ -123,15 +123,10 @@ WebDoc.Page = $.klass(MTools.Record,
   },
 
   setBackgroundImage: function(backgroundUrl) {
-    WebDoc.InspectorFieldsValidator.validateBackgroundUrl(backgroundUrl);
     if(this.data.data.css.backgroundImage != backgroundUrl) {
       var old_background = this.data.data.css.backgroundImage;
-      if (backgroundUrl === "") {
-        this.data.data.css.backgroundImage = "url('')";  
-      }
-      else {
-        this.data.data.css.backgroundImage = backgroundUrl;  
-      }
+      this.data.data.css.backgroundImage = backgroundUrl;  
+      
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundImage' });
       this.save();
       WebDoc.application.undoManager.registerUndo(function() {
