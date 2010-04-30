@@ -14,6 +14,7 @@ describe Theme do
   should_have_many :layouts, :dependent => :delete_all  
 
   describe "set_attributes_from_config_file_and_save" do
+    
     subject { Theme.new(:file => File.open(Rails.root.join('spec','fixtures','theme_1_v0_1.zip'))) }
 
     it "should can set attributes form config file and save without ancestor" do

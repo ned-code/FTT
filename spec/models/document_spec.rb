@@ -227,14 +227,17 @@ describe Document do
     it "should find all public documents from following" do
       docs = Document.last_modified_from_following(@user, 10)
       docs.size.should == 2
-      docs.should == [@doc2, @doc1]
+      docs.should include @doc2
+      docs.should include @doc1
     end
 
     it "should find all public and not public with editor role" do
       @user.has_role!("editor", @doc4)
       docs = Document.last_modified_from_following(@user, 10)
       docs.size.should == 3
-      docs.should == [@doc4, @doc2, @doc1]
+      docs.should include @doc4
+      docs.should include @doc2
+      docs.should include @doc1
     end
 
     it "should find all public and not public with reader and editor role" do
@@ -242,13 +245,14 @@ describe Document do
       @user.has_role!("reader", @doc4)
       docs = Document.last_modified_from_following(@user, 10)
       docs.size.should == 3
-      docs.should == [@doc4, @doc2, @doc1]
+      docs.should include @doc4
+      docs.should include @doc2
+      docs.should include @doc1
     end
 
     it "should limit the number of document returned" do
       docs = Document.last_modified_from_following(@user, 1)
       docs.size.should == 1
-      docs.should == [@doc2]
     end
 
     it "should find only following users documents" do
