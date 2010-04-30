@@ -29,7 +29,6 @@ WebDoc.ThemesController = jQuery.klass({
       // can reference themes by id later
       while(l--){
         theme = themes[l];
-        console.log('THEME', theme);
         that.list[ theme.data.id ] = theme;
       }
     });

@@ -47,6 +47,39 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     jQuery("#page_background_image_align_vert_top_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
     jQuery("#page_background_image_align_vert_middle_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
     jQuery("#page_background_image_align_vert_bottom_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
+    
+    //
+    //{
+    //  page_title: this._changePageTitle;
+    //  page_height: this._changePageHeight;
+    //  page_width: this._changePageWidth;
+    //  page_background_color_textbox: this._changePageBackgroundColor;
+    //  page_background_image_textbox: this._checkValidBackgroundImage.pBind(this);
+    //  page_background_image_tileX_checkbox: this._changePageBackgroundRepeatMode.pBind(this);
+    //  page_background_image_tileY_checkbox: this._changePageBackgroundRepeatMode.pBind(this);
+    //  page_background_image_align_hor_left_radio: this._changePageBackgroundPosition.pBind(this);
+    //  page_background_image_align_hor_center_radio: this._changePageBackgroundPosition.pBind(this);
+    //  page_background_image_align_hor_right_radio: this._changePageBackgroundPosition.pBind(this);
+    //  page_background_image_align_vert_top_radio: this._changePageBackgroundPosition.pBind(this);
+    //  page_background_image_align_vert_middle_radio: this._changePageBackgroundPosition.pBind(this);
+    //  page_background_image_align_vert_bottom_radio: this._changePageBackgroundPosition.pBind(this);
+    //}
+    //
+    //inspector
+    //.delegate('input', 'change', function(e){
+    //  var field = jQuery(this),
+    //      id = field.id;
+    //  
+    //  
+    //  
+    //  field.validate({
+    //    pass: function(value) { page.setHeight( value ); },
+    //    fail: function(error) {}
+    //  });
+    //  
+    //});
+    //
+    
     jQuery("#page_background_image_apply_all_button").bind("click", this._applyBackgroundToAllPages.pBind(this));
     //jQuery('#image_send_form').submit(this._uploadBackgroundImage.pBind(this));
     jQuery('.page-navigation-link').click(this.performAction.pBind(this));
