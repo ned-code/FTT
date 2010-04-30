@@ -21,14 +21,15 @@ describe ViewCount do
   
 end
 
+
 # == Schema Information
 #
 # Table name: view_counts
 #
-#  id            :integer         not null, primary key
-#  viewable_id   :integer
+#  id            :integer(4)      not null, primary key
+#  viewable_id   :integer(4)
 #  viewable_type :string(255)
-#  user_id       :integer
+#  user_id       :integer(4)
 #  session_id    :string(255)
 #  ip_address    :string(255)
 #  created_at    :datetime

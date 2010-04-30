@@ -79,12 +79,12 @@ class Theme < ActiveRecord::Base
           ancestor_theme.save!
         end
 
-        #begin
+        begin
           extract_files_from_zip_file(file_current_path, file.store_dir)
           create_parsed_style
-        #rescue
-        #  raise ActiveRecord::Rollback
-        #end
+        rescue
+          raise ActiveRecord::Rollback
+        end
         saved = true
       end
     end
@@ -192,3 +192,18 @@ class Theme < ActiveRecord::Base
   end
 
 end
+
+# == Schema Information
+#
+# Table name: themes
+#
+#  id               :integer(4)      not null, primary key
+#  uuid             :string(255)
+#  name             :string(255)
+#  thumbnail_url    :string(255)
+#  style_url        :string(255)
+#  file             :string(255)
+#  version          :string(255)
+#  updated_theme_id :integer(4)
+#
+

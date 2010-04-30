@@ -154,17 +154,21 @@ describe DocumentsController do
         should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :get => :show, :id => "1" do
-        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-        should_respond_with :success, :content_type => :html
+#        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
+#        should_respond_with :success, :content_type => :html
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :post => :create, :document => {} do
-        should_respond_with :not_found
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :put => :update, :id => "1", :document => {} do
-        should_respond_with :not_found
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')        
       end
       describe :delete => :destroy, :id => "1" do
-        should_respond_with :not_found
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')        
       end
     end
   end
@@ -319,17 +323,20 @@ describe DocumentsController do
         should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :get => :show, :id => "1" do
-        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
+#        expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :post => :create, :document => {} do
-        should_respond_with :not_found
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
       describe :put => :update, :id => "1", :document => {} do
-        should_respond_with :not_found
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')        
       end
       describe :delete => :destroy, :id => "1" do
-        should_respond_with :not_found
+#        should_respond_with :not_found
+        should_redirect_to('http://test.host/users/sign_in?unauthenticated=true')
       end
     end
   end

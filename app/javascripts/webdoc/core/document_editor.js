@@ -1,18 +1,6 @@
 /**
  * WBEditor is the main function of the application. It define UB namespace.
  **/
-//= require <mtools/application>
-//= require <mtools/undo_manager>
-//= require <mtools/server_manager>
-//= require <mtools/uuid>
-
-//= require <webdoc/model/document>
-//= require <webdoc/model/category>
-//= require <webdoc/utils/document_date_filter>
-//= require <webdoc/gui/document_list>
-//= require <webdoc/controllers/document_access_controller>
-//= require <webdoc/controllers/document_categories_controller>
-//= require <webdoc/controllers/document_share_controller>
 
 // application singleton.
 WebDoc.application = {};
@@ -46,9 +34,14 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         WebDoc.application.documentEditor = this;
         WebDoc.application.undoManager = new MTools.UndoManager();
         WebDoc.application.accessController = new WebDoc.DocumentCollaborationController();
-        WebDoc.application.categoriesController = new WebDoc.DocumentCategoriesController();
+        WebDoc.application.categoriesManager = new WebDoc.DocumentCategoriesManager();
+        WebDoc.application.categoriesManager.getAllCategories(function(categories){
+          $.each(categories, function(i, webDocCategory) {
+            infoDialogCategoryNode.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+          });
+        }.pBind(this));
+        
         WebDoc.application.shareController = new WebDoc.DocumentShareController();
-        WebDoc.application.categoriesController.addListener(this);
         
         infoDialogNode = $("#wb-new-form");
         infoDialogHeaderNode = $("#new-document-dialog-header");
@@ -371,15 +364,6 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
       if ( !this.subtabs ) { this.subtabs = jQuery(".state-filter-subtab"); }
       this.subtabs.removeClass('current');
       node.addClass('current');
-    },
-    
-    // Will be notified by the categories controller once its content is loaded
-    categoriesLoaded: function()
-    {
-      var categories = WebDoc.application.categoriesController.documentCategories;
-      $.each(categories, function(i, webDocCategory) {
-        infoDialogCategoryNode.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
-      });
     },
     
     validateInteger: function(evt) {

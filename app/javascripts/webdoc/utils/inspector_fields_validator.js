@@ -1,21 +1,30 @@
 /**
  * @author David Matthey
  */
+
+(function(undefined){
+
+
 WebDoc.InspectorFieldsValidator = $.klass(
 {
 });
 
 $.extend(WebDoc.InspectorFieldsValidator, {
   validateColor: function(color) {
-    var re = new RegExp("^#([0-9a-f]{3}|[0-9a-f]{6})$"); // Accepts only strings of type #fff or #ffffff
-    if(!color.match(re)) {
-      throw("this method needs a valid color (ex: #ffffff or #ddd)"); 
+    var hex = jQuery.regex.hexColor,
+        hsl = jQuery.regex.hslColor,
+        rgb = jQuery.regex.rgbColor;
+    
+    if( !rgb.test(color) && !hsl.test(color) && !hex.test(color) && !(color === '') && !colors[color] ){
+      throw("this method needs a valid color");
     }
+    
+    return true;
   },
-
+  
   validateSize: function(size) {
-    var re = new RegExp("^\\d+(px|%)$"); // Accepts only string of type <integer>px or <integer>%
-    if(!size.match(re)) {
+    var re = jQuery.regex.cssMeasure;
+    if( !re.test(size) ) {
       throw("this method needs a valid pixel value (ex: 200px)");
     }
   },
@@ -57,3 +66,27 @@ $.extend(WebDoc.InspectorFieldsValidator, {
     return re.exec(url)[1];
   }
 });
+
+// Valid CSS color names
+var colors = {
+  aqua: true,
+  black: true,
+  blue: true,
+  fuchsia: true,
+  gray: true,
+  green: true,
+  lime: true,
+  maroon: true,
+  navy: true,
+  olive: true,
+  purple: true,
+  red: true,
+  silver: true,
+  teal: true,
+  white: true,
+  yellow: true,
+  transparent: true
+};
+
+
+})()

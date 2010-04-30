@@ -34,7 +34,7 @@ WebDoc.Document = $.klass(MTools.Record, {
   setTitle: function(title, skipSave) {
     this.data.title = title;
     if(!skipSave && !skipSave === true) {
-      this.firePropertiesChanged();
+      this.fireObjectChanged({ modifedAttribute: 'title' });
       this.save();
     }
   },
@@ -42,7 +42,7 @@ WebDoc.Document = $.klass(MTools.Record, {
   setDescription: function(description, skipSave) {
     this.data.description = description;
     if(!skipSave && !skipSave === true) {
-      this.firePropertiesChanged();
+      this.fireObjectChanged({ modifedAttribute: 'description' });
       this.save();
     }
   },
@@ -50,7 +50,7 @@ WebDoc.Document = $.klass(MTools.Record, {
   setCategory: function(category_id, skipSave) {
     this.data.category_id = category_id;
     if(!(skipSave && skipSave === true)) {
-      this.firePropertiesChanged();
+      this.fireObjectChanged({ modifedAttribute: 'category' });
       this.save();
     }
   },
@@ -61,7 +61,20 @@ WebDoc.Document = $.klass(MTools.Record, {
       this.save();
     }
   },
-
+  
+  setTheme: function( theme, skipSave ){
+    this.data.theme_id = theme.id();
+    this.data.style_url = theme.getStyleUrl();
+    if(!(skipSave && skipSave === true)) {
+      this.fireObjectChanged({ modifedAttribute: 'theme' });
+      this.save();
+    }
+  },
+  
+  styleUrl: function() {
+    return this.data.style_url;
+  },  
+  
   share: function() {
     this.data.is_public = true;
     this.save();
@@ -76,9 +89,10 @@ WebDoc.Document = $.klass(MTools.Record, {
     var that = this;
     this.pages = [];    
     if (this.data.pages && $.isArray(this.data.pages)) {
-      $.each(this.data.pages, function() {
-        that.createOrUpdatePage({ page: this });
-      });
+      for (var i = 0; i < this.data.pages.length; i++) {
+        var pageData = this.data.pages[i];
+        this.createOrUpdatePage({ page: pageData });
+      }
     }    
   },
   
@@ -218,14 +232,6 @@ WebDoc.Document = $.klass(MTools.Record, {
     }      
   },
   
-  firePropertiesChanged: function() {
-    for (var i = 0; i < this.listeners.length; i++) {
-      if(this.listeners[i].documentPropertiesChanged) {
-        this.listeners[i].documentPropertiesChanged();
-      }
-    }
-  },
-  
   movePage: function(movedPageUuid, newPosition) {
     var page = this.findPageWithUuidOrPosition(movedPageUuid);
     ddd("move page", page, "to position", newPosition);
@@ -248,7 +254,6 @@ WebDoc.Document = $.klass(MTools.Record, {
       page.data.position = newPosition;  
       this.sortPages();
       this.firePageMoved(page, newPosition, previousPosition);
-      //this.firePageAdded(page);       
       return page;
     }
     return null;
@@ -284,6 +289,6 @@ $.extend(WebDoc.Document, {
     return "";
   },
   pluralizedClassName: function() {
-    return this.className() + "s";
+    return "documents";
   } 
 });

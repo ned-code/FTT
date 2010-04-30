@@ -109,7 +109,7 @@ class Page < ActiveRecord::Base
   # before_save
   def set_page_data
     if document.present?
-      default_css = { :width => document.formated_size[:width], :height => document.formated_size[:height], :backgroundColor => "#fff" }
+      default_css = { :width => document.formated_size[:width], :height => document.formated_size[:height] }
       if (self.data)
         self.data[:css] ||= default_css
       else
@@ -138,19 +138,21 @@ class Page < ActiveRecord::Base
   
 end
 
+
 # == Schema Information
 #
 # Table name: pages
 #
-#  id           :integer         not null, primary key
 #  uuid         :string(36)
-#  document_id  :integer         not null
-#  thumbnail_id :integer
-#  position     :integer         not null
-#  version      :integer         default(1), not null
-#  data         :text(65537)
+#  document_id  :integer(4)
+#  thumbnail_id :integer(4)
+#  position     :integer(4)      not null
+#  version      :integer(4)      default(1), not null
+#  data         :text(16777215)
 #  created_at   :datetime
 #  updated_at   :datetime
+#  id           :integer(4)      not null, primary key
 #  title        :string(255)     default("undefined")
+#  layout_id    :integer(4)
 #
 
