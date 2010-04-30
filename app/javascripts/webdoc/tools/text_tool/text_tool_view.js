@@ -1466,7 +1466,7 @@ WebDoc.TextToolView = $.klass({
       this.exitEditMode();
     }      
     this.currentEditingBlock = divElement;
-    this.currentEditingBlockClass = this.currentEditingBlock.className + " theme_" + WebDoc.application.pageEditor.currentDocument.data.theme_id;
+    this.currentEditingBlockClass = this.currentEditingBlock.className + " webdoc";
     this.currentEditingOverflowX = this.currentEditingBlock.style.overflowX;
     this.currentEditingOverflowY = this.currentEditingBlock.style.overflowY;
     $(this.currentEditingBlock).css("overflow", "hidden");
@@ -1487,7 +1487,7 @@ WebDoc.TextToolView = $.klass({
       this.frameStyles += "<link rel='stylesheet' href='" + this.mainPageStyles[i] + "' type='text/css' />";
     }
     this.frameStyles += "<link rel='stylesheet' href='" + jQuery('#theme')[0].href + "' type='text/css' />";
-    content.write("<!DOCTYPE html><html><head>" + this.frameStyles + "<style>html {overflow-x: auto; overflow-y: auto;} body { overflow: auto;font-family:Helvetica;} html,body { padding:0px; height:100%; margin:0px; background:none;position:relative} </style></head><body contenteditable='true'></body></html>");
+    content.write("<!DOCTYPE html><html><head>" + this.frameStyles + "<style>html {overflow-x: auto; overflow-y: auto;} body { overflow: auto;font-family:Helvetica;} html,body { padding:0px; height:100%; margin:0px; background:none;position:relative} </style></head><body class='theme_" + WebDoc.application.pageEditor.currentDocument.data.theme_id + "' contenteditable='true'></body></html>");
     content.close();
     thobj.edDoc.designMode = 'On';
     thobj.edDoc.execCommand("styleWithCSS", false, true);
