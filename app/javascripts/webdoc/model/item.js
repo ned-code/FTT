@@ -172,6 +172,11 @@ WebDoc.Item = $.klass(MTools.Record,
     return this.data.data.innerHTML;
   },
 
+
+  getInnerHtmlPlaceholder: function() {
+    return this.data.data.innerHTMLPlaceholder;
+  },
+  
   getInnerText: function() {
     return this.removeHtmlTags(this.data.data.innerHTML);
   },

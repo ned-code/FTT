@@ -9,10 +9,10 @@ test:
   s3_access_key_id: 'AKIAJSQQ2RDIXG2UOZ5Q'
   s3_secret_access_key: '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'
   assets:
-    s3_bucket: 'wd-david-test'
+    s3_bucket: 'assets.test.webdoc.com'
     storage: right_s3
   widgets:
-    s3_bucket: 'wd-david-test'
+    s3_bucket: 'apps.test.webdoc.com'
     storage: right_s3
 staging:
   s3_access_key_id: 'AKIAJSQQ2RDIXG2UOZ5Q'

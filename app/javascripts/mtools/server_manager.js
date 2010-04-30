@@ -206,6 +206,7 @@ jQuery.extend(MTools.ServerManager, {
    * @params {Object} callBack function that called
    * @params {String} verb the HTTP Verb
    * @params {String} action the action
+   * @params {Array} parameters to happends to the request
    */
   sendObject: function(object, callBack, verb, action, extraParams) {
     var params = {
@@ -220,12 +221,24 @@ jQuery.extend(MTools.ServerManager, {
 
     var url = object.rootUrl() + "/" + object.className() + "s/" + object.uuid() + "/" + action;
 
+    this.request(url, callBack, verb, params);
+  },
+  
+  /**
+   * Send a request to the server
+   * @param {String} url
+   * @params {Object} callBack function that called
+   * @params {String} verb the HTTP Verb
+   * @params {Array} parameters to append to the request
+   */
+  request: function(url, callBack, verb, extraParams) {
+
     jQuery.ajax({
       type: verb.toUpperCase(),
       url: url,
-      data: params,
+      data: extraParams,
       dataType: "json",
-      success: function(data, textstatus) {
+      success: function(data, textstatus) {    	
          callBack.call(this, data);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -233,7 +246,5 @@ jQuery.extend(MTools.ServerManager, {
         ddd(XMLHttpRequest);
       }
     });
-
   }
-
 });

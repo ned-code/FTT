@@ -79,6 +79,7 @@ WebDoc.ItemView = $.klass({
           case "innerHTML":
           // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
           case "innerHtml":
+          case "innerHTMLPlaceholder":
           case "tag":
           case "css":        
           case "preference":

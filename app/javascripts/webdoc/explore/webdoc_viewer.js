@@ -27,7 +27,17 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
     MTools.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
     {
       this._currentDocument = data[0];
-      this.loadPageId("1");      
+      this.loadPageId("1");   
+      var stylesheetUrl = this._currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme(),
+        newClass = this._currentDocument.styleClass() || 'theme_default';
+    
+      //check if style is already loaded
+      var styleElement = jQuery('#' + newClass);
+      if (styleElement.length === 0) {
+        jQuery('head').append('<link type="text/css" rel="stylesheet" media="all" href="' + stylesheetUrl + '">');  
+      }
+      this._containerNode.addClass(newClass);     
+   
     }.pBind(this));
   },
 

@@ -33,19 +33,7 @@ WebDoc.ThemesController = jQuery.klass({
       }
     });
     
-    defaultTheme = new WebDoc.Theme({
-      theme: {
-        id: 'default',
-        name: 'Webdoc Default',
-        layouts: [],
-        style_url: '/themes/default/css/typography.css',
-        thumbnail_url: ''
-      }
-    });
-    
-    // Override theme object methods
-    // that we don't want on default
-    defaultTheme.refresh = function(){};
+    defaultTheme = WebDoc.ThemeManager.getInstance().getDefaultTheme();
     
     this.list['default'] = defaultTheme;
   },

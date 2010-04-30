@@ -32,7 +32,7 @@ describe Page do
     subject { Factory.create(:page) }
     
     it "should have default css data" do
-      subject.data.should == { :css => { :width => "800px", :height => "600px", :backgroundColor => "#fff" } }
+      subject.data.should == { :css => { :width => "800px", :height => "600px" } }
     end
     
   end
@@ -63,7 +63,7 @@ describe Page do
       document.size = { :width => "100", :height => "200" }
       document.save
       page = document.pages.create
-      page.data.should == { :css => { :width => document.size[:width]+"px", :height => document.size[:height]+"px", :backgroundColor => "#fff" } }
+      page.data.should == { :css => { :width => document.size[:width]+"px", :height => document.size[:height]+"px" } }
     end
   end
   
