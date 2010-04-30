@@ -1,3 +1,6 @@
+
+require 'lib/shindig'
+
 class ItemsController < PageController
   before_filter :authenticate_user!
   access_control do
@@ -9,7 +12,7 @@ class ItemsController < PageController
     end
   end
   
-  # POST /documents/:document_id/pages/:page_id/items/:id
+  # GET /documents/:document_id/pages/:page_id/items/:id
   def show
     @item = @page.items.find_by_uuid(params[:id])
     
@@ -39,6 +42,15 @@ class ItemsController < PageController
     @item.destroy
     
     render :json => {}
+  end
+  
+  # GET /documents/:document_id/pages/:page_id/items/:id/secure_token
+  def secure_token
+    @item = @page.items.find_by_uuid(params[:id])
+    
+    token = Shindig.generate_secure_token(@item.page.document.creator.uuid, current_user.uuid, @item.uuid, 0, '')
+    
+    render :text => token
   end
   
 end
