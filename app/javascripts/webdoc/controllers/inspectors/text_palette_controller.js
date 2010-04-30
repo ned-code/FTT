@@ -257,13 +257,14 @@ WebDoc.TextPaletteController = jQuery.klass({
         this.htmlEdit = true;
         jQuery("#inner_text_html").show();
         jQuery('#toolbar_panel_html_edit').text("Hide HTML");
+        this.refreshInnerHtml();
       }
       else {
         this.htmlEdit = false;
         jQuery("#inner_text_html").hide();
         jQuery('#toolbar_panel_html_edit').text("HTML edit");        
       }
-    });    
+    }.pBind(this));    
     this.isHasParent = function(target,parentObj){
 	    if(target.parentNode && target.parentNode==parentObj){
 			return true;
@@ -427,7 +428,9 @@ WebDoc.TextPaletteController = jQuery.klass({
        jQuery('#toolbar_panel').css('display', bool ? 'block' : 'none');
        if (bool) {
          jQuery("#choose-edit-method").hide();
-//         this.htmlInspector.domNode.hide();
+         this.htmlEdit = false;
+         jQuery("#inner_text_html").hide();
+         jQuery('#toolbar_panel_html_edit').text("HTML edit");   
        }
        else {
          this.refreshInnerHtml();
@@ -437,7 +440,9 @@ WebDoc.TextPaletteController = jQuery.klass({
   refreshInnerHtml: function() {
     jQuery("#choose-edit-method").show();
 //    this.htmlInspector.domNode.show();
-    this.htmlInspector.refresh();
+    if (this.htmlEdit) {
+      this.htmlInspector.refresh();
+    }
   },
   
   setParameters: function(parameters) {
