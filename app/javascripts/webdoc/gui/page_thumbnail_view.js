@@ -18,7 +18,7 @@ WebDoc.PageThumbnailView = $.klass({
     this.domNode = $('<div>').attr({
       id: "thumb_" + page.uuid(),
       draggable: "true"
-    }).addClass( pageThumbClass );
+    }).addClass( pageThumbClass + " webdoc" );
     
     this.pageThumbNode = $('<div/>');
     if (this.page.data.data.externalPage) {

@@ -75,6 +75,10 @@ WebDoc.Document = $.klass(MTools.Record, {
     return this.data.style_url;
   },
   
+  styleClass: function() {
+    return "theme_" + this.data.theme_id;
+  },
+  
   share: function() {
     this.data.is_public = true;
     this.save();
