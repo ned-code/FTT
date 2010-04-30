@@ -13,7 +13,7 @@
           %input#page_title_textbox{ :type => "text" }
       
       %fieldset.properties.externalPage-related
-        %legend= t('.page.title')    
+        %legend= t('.page.title')
         %div
           %label= t('.page.url')
           %input#external_page_url{ :type => "text", :value => "http://" }
@@ -22,10 +22,10 @@
         %legend= t('.properties.title')
         %div
           %label= t('.properties.height')
-          %input#page_height_textbox{ :type => "text", :maxlength => "8" }
+          <input id="page_height_textbox" type="text" data-type="cssvalue" required="required" />
         %div
           %label= t('.properties.width')
-          %input#page_width_textbox{ :type => "text", :maxlength => "8" }
+          <input id="page_width_textbox" type="text" data-type="cssvalue" required="required" />
         %div
           %label= t('.properties.show_scroll')
           %input#page_scroll_checkbox{ :type => "checkbox" }
@@ -35,7 +35,7 @@
         
         %div.background-related
           %label= t('.properties.background')
-          %input#page_background_color_textbox{ :type => "text" }
+          <input id="page_background_color_textbox" type="text" data-type="csscolor" />
         
         %div.background-related
           %label= t('.properties.background_image')

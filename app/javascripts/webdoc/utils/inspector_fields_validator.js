@@ -5,33 +5,9 @@
 (function(undefined){
 
 
-WebDoc.InspectorFieldsValidator = $.klass(
-{
-});
+WebDoc.InspectorFieldsValidator = $.klass({});
 
 $.extend(WebDoc.InspectorFieldsValidator, {
-  validateColor: function(color) {
-    var hex = jQuery.regex.hexColor,
-        hsl = jQuery.regex.hslColor,
-        rgb = jQuery.regex.rgbColor;
-    
-    if( !rgb.test(color) && !hsl.test(color) && !hex.test(color) && !(color === '') && !colors[color] ){
-      throw("this method needs a valid color");
-    }
-    
-    return true;
-  },
-  
-  validateSize: function(size) {
-    var re = jQuery.regex.cssValue;
-    
-    console.log('SIZE: '+size);
-    
-    if( !re.test(size) ) {
-      console.log('No match');
-      throw("this method needs a valid pixel value (ex: 200px)");
-    }
-  },
 
   validateBackgroundUrl: function(url) {
     var re = new RegExp("^url\((?:\"|')?(.*)(?:\"|')?\)$"); // Accepts string of type url(/images/back.png)
@@ -70,27 +46,5 @@ $.extend(WebDoc.InspectorFieldsValidator, {
     return re.exec(url)[1];
   }
 });
-
-// Valid CSS color names
-var colors = {
-  aqua: true,
-  black: true,
-  blue: true,
-  fuchsia: true,
-  gray: true,
-  green: true,
-  lime: true,
-  maroon: true,
-  navy: true,
-  olive: true,
-  purple: true,
-  red: true,
-  silver: true,
-  teal: true,
-  white: true,
-  yellow: true,
-  transparent: true
-};
-
 
 })()

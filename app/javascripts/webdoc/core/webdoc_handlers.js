@@ -9,6 +9,17 @@ WebDoc.handlers = {
     
     this.addDocumentHandlers( 'click', this._documentHandlers );
     this.addPanelHandlers( 'click', this._panelHandlers );
+    
+    // Global form validation
+    jQuery(document)
+    .delegate( 'input, textarea', 'change', function(e) {
+      jQuery(this).validate({
+        pass: function(){},
+        fail: function(){
+          e.preventDefault();
+        }
+      });
+    });
   },
   regex: jQuery.regex,
   _makeLinkHandler: function( obj, context ){

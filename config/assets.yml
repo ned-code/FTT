@@ -72,6 +72,7 @@ javascripts:
     - public/javascripts/jquery.events.js
     - public/javascripts/jquery.pop.js
     - public/javascripts/jquery.truncate.js
+    - public/javascripts/jquery.validator.js
     - public/javascripts/jquery.flash.js
     - public/javascripts/klass.js    
     - public/swfupload/swfupload.js
@@ -152,7 +153,6 @@ javascripts:
     - app/javascripts/tests/mtools/*.js
     - app/javascripts/tests/webdoc/*.js
   forms:
-    - public/javascripts/jquery.validator.js
     - app/javascripts/webdoc/form/*.js
   card:
     - app/javascripts/webdoc/card/card.js

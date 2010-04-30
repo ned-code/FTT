@@ -223,42 +223,38 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     e.preventDefault();
     page.setTitle(jQuery("#page_title_textbox").val());   
   },
-
+  
   _changePageHeight: function(e) {
-    e.preventDefault();
-    try {
-      page.setHeight(jQuery("#page_height_textbox").val());   
-    }
-    catch(exc) {
-      jQuery("#page_height_textbox")[0].value = page.data.data.css.height;
-    }   
+    var field = jQuery(e.currentTarget);
+    
+    field.validate({
+      pass: function(value) { page.setHeight( value ); },
+      fail: function(error) {}
+    });
   },
-
+  
   _changePageWidth: function(e) {
-    e.preventDefault();
-    try {
-      page.setWidth(jQuery("#page_width_textbox").val()); 
-    }
-    catch(exc) {
-      jQuery("#page_width_textbox")[0].value = page.data.data.css.width;
-    }
+    var field = jQuery(e.currentTarget);
+    
+    field.validate({
+      pass: function(value) { page.setWidth( value ); },
+      fail: function(error) {}
+    });
   },
 
   _changePageBackgroundColor: function(e) {
-    e.preventDefault();
-    try {
-      page.setBackgroundColor(jQuery("#page_background_color_textbox").val()); 
-    }
-    catch(exc) {
-      jQuery("#page_background_color_textbox")[0].value = page.data.data.css.backgroundColor;
-    }
+    var field = jQuery(e.currentTarget);
+    
+    field.validate({
+      pass: function(value) { page.setBackgroundColor( value ); },
+      fail: function(error) {}
+    });
   },
 
   _changePageBackgroundImage: function() {
     ddd('[pageInspectorController] _changePageBackgroundImage');
     try {
-      page.setBackgroundImage(jQuery("#page_background_image_textbox").val()); 
-      //WebDoc.application.pageEditor.loadPage(page, true);
+      page.setBackgroundImage(jQuery("#page_background_image_textbox").val());
     }
     catch(exc) {
       jQuery("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
@@ -362,23 +358,39 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   },
 
   _applyBackgroundToAllPages: function(e) {
+    var valid = true,
+        backgroundColor, backgroundImage, page;
+    
     e.preventDefault();
-    for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
-      this._applyBackgroundToPage(WebDoc.application.pageEditor.currentDocument.pages[i]);
+    
+    jQuery("#page_background_color_textbox").validate({
+      pass: function(value){ backgroundColor = value; },
+      fail: function(error){ valid = false; }
+    });
+    
+    jQuery("#page_background_image_textbox").validate({
+      pass: function(value){ backgroundImage = value; },
+      fail: function(error){ valid = false; }
+    });
+    
+    if (valid) {
+      for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
+        page = WebDoc.application.pageEditor.currentDocument.pages[i];
+        this._applyBackgroundToPage( page, backgroundColor, backgroundImage );
+      }
+      var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
+      WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);
     }
-    var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
-    //WebDoc.application.pageEditor.loadPage(WebDoc.application.pageEditor.currentPage, true);
-    WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);
   },
 
-  _applyBackgroundToPage: function(targetPage) {
-    targetPage.setBackgroundColor(jQuery("#page_background_color_textbox").val()); 
-    var imageFieldValue = jQuery("#page_background_image_textbox").val();     
-    if(imageFieldValue == "" || imageFieldValue == "undefined") {
+  _applyBackgroundToPage: function(targetPage, backgroundColor, backgroundImage) {
+    targetPage.setBackgroundColor( backgroundColor );
+    
+    if( backgroundImage === "" ) {
       targetPage.removeBackgroundImage();
     }
     else {
-      targetPage.setBackgroundImage(imageFieldValue);
+      targetPage.setBackgroundImage( backgroundImage );
       targetPage.setBackgroundRepeatMode(this._getBackgroundRepeatMode());
       targetPage.setBackgroundPosition(this._getBackgroundPosition());
     }
