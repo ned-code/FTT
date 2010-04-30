@@ -3,7 +3,7 @@ class Theme < ActiveRecord::Base
 
   has_uuid
 
-  attr_accessible :uuid, :file, :name, :thumbnail_url, :style_url
+  attr_accessible :uuid, :file, :name, :thumbnail_url, :style_url, :version
   
   # ================
   # = Associations =
@@ -27,8 +27,6 @@ class Theme < ActiveRecord::Base
 
   named_scope :last_version, :conditions => ['updated_theme_id IS ?', nil]
 
-
-
   # =============
   # = Callbacks =
   # =============
@@ -45,7 +43,14 @@ class Theme < ActiveRecord::Base
     Theme.first :conditions => ['updated_theme_id = ?', self.id], :limit => 1
   end
 
-  def set_attribute_from_config_file_and_save(ancestor_theme=nil)
+  def destroy_with_all_ancestors
+    if self.ancestor
+      self.ancestor.destroy_with_all_ancestors
+    end
+    self.destroy
+  end
+
+  def set_attributes_from_config_file_and_save(ancestor_theme=nil)
     saved = false
     if ancestor_theme.blank? || config_dom.root.attribute("version").to_s > ancestor_theme.version
       self.transaction do
@@ -55,6 +60,7 @@ class Theme < ActiveRecord::Base
         path = self.get_mapped_path
         self.thumbnail_url = path + config_dom.root.attribute('thumbnail').to_s
         self.style_url = path + "css/parsed_theme_style.css"
+        file_current_path = self.file.current_path
         self.save!
 
         config_dom.root.elements['layouts'].each_child do |layout|
@@ -73,12 +79,12 @@ class Theme < ActiveRecord::Base
           ancestor_theme.save!
         end
 
-        begin
-          extract_files_from_zip_file(file.current_path, file.store_dir)
+        #begin
+          extract_files_from_zip_file(file_current_path, file.store_dir)
           create_parsed_style
-        rescue
-          raise ActiveRecord::Rollback
-        end
+        #rescue
+        #  raise ActiveRecord::Rollback
+        #end
         saved = true
       end
     end
@@ -102,9 +108,13 @@ class Theme < ActiveRecord::Base
     end
 
     for file_path in files_path
-      file = IO.read(file_path).strip
-      file.gsub!(/\/\*[^\/]*\//, '') # remove comments
-      file.split(/\}/).each do |set|
+      if self.file.s3_bucket == nil
+        file_readed = IO.read(file_path).strip
+      else
+        file_readed = @s3.get_object(self.file.s3_bucket, file_path)
+      end
+      file_readed.gsub!(/\/\*[^\/]*\//, '') # remove comments
+      file_readed.split(/\}/).each do |set|
         set.strip!
         parts = set.split(/\{/)
         if parts.size > 1
@@ -126,7 +136,7 @@ class Theme < ActiveRecord::Base
       File.open(File.join(Rails.root, 'public', self.style_url), 'wb') {|f| f.write(parsed) }
     else
       @s3 ||= RightAws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
-      @s3.put(file.s3_bucket, filePath, parsed, 'x-amz-acl' => 'public-read')
+      @s3.put(file.s3_bucket, self.file.store_dir + "css/parsed_theme_style.css", parsed, 'x-amz-acl' => 'public-read')
     end
   end
 
@@ -137,7 +147,7 @@ class Theme < ActiveRecord::Base
       file.store_url
     else
       path = Pathname.new(file.store_path)
-      "http://#{CarrierWave.yml_s3_bucket(:assets).to_s}/#{path.dirname}"
+      "http://#{CarrierWave.yml_s3_bucket(:assets).to_s}/#{path.dirname}/"
     end
   end
 
@@ -161,8 +171,8 @@ class Theme < ActiveRecord::Base
             local_path = File.join(Rails.root, 'public', filePath)
             FileUtils.mkdir_p(File.dirname(local_path))
             if(!File.directory?(local_path))
-              File.open(local_path, 'wb') do |file|
-                file << zip_file.get_input_stream.read
+              File.open(local_path, 'wb') do |f|
+                f << zip_file.get_input_stream.read
               end
             end
           else

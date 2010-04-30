@@ -3,7 +3,7 @@ class Layout < ActiveRecord::Base
   has_uuid
 
   attr_accessible :uuid, :name, :thumbnail_url  
-  
+
   # ================
   # = Associations =
   # ================
