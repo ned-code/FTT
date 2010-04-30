@@ -212,12 +212,12 @@ WebDoc.BoardController = jQuery.klass({
   // Theme ----------------------------------------
   
   applyDocumentTheme: function() {
-    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() || WebDoc.application.themesController.list['default'].getStyleUrl(),
-        id = WebDoc.application.pageEditor.currentDocument.data.theme_id || 'default',
+    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
         currentClass = this._themeClass || 'theme_default',
-        newClass = 'theme_'+id;
+        newClass = WebDoc.application.pageEditor.currentDocument.styleClass() || 'theme_default';
     
     this.themeNode[0].href = stylesheetUrl;
+    jQuery("." + currentClass).removeClass(currentClass).addClass(newClass);
     this.boardContainerNode.removeClass(currentClass).addClass(newClass);
     
     // Store the class so we know what to remove on the next setTheme
