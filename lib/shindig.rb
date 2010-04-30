@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 
 require 'digest/sha1'
 require 'base64'
@@ -19,10 +18,9 @@ module Shindig
   HmacKeyLabel = [1]
   CipherKeyLength = 16; 
   TimestampKey = 't'
-  MasterKey = 'YHsu+Y59Kx5njHT5+1FhoLXliYQG+8n3Hvx/+q3k4x4='
-  
+   
   # mapping from org.apache.shindig.auth.BlobCrypterSecurityToken
-  
+  #
   OwnerKey = 'o' # mapped to token.owner_id
   ViewerKey = 'v'# mapped to token.viewer_id
   GadgetKey = 'g' # mapped to token.app_url and token.app_id
@@ -34,8 +32,9 @@ module Shindig
   #  
   def self.generate_secure_token(owner_uuid, viewer_uuid, app_uuid, module_id, trusted_json)
     
-    @cipher_key ||= derive_key(CipherKeyLabel, MasterKey, CipherKeyLength)
-    @hmac_key ||= derive_key(HmacKeyLabel, MasterKey, 0)
+    @master_key ||= APP_CONFIG['shindig_secure_token_key']
+    @cipher_key ||= derive_key(CipherKeyLabel, @master_key, CipherKeyLength)
+    @hmac_key ||= derive_key(HmacKeyLabel, @master_key, 0)
        
     data_hash = Hash.new
     data_hash[OwnerKey] = owner_uuid;
@@ -43,9 +42,10 @@ module Shindig
     data_hash[GadgetKey] = app_uuid;
     data_hash[GadgetInstanceKey] = module_id.to_s;
     data_hash[TrustedJsonKey] = trusted_json;
-        
-    return wrap(data_hash)
     
+    @container_name ||= APP_CONFIG['shindig_container']
+        
+    return CGI.escape(@container_name + ':' + wrap(data_hash))
   end
 
   #
@@ -102,10 +102,9 @@ module Shindig
      sha1  = OpenSSL::Digest.new('sha1')     
      hmac = OpenSSL::HMAC.digest(sha1, @hmac_key, iv_cipher_text)
         
-     return Base64.b64encode(iv_cipher_text + hmac);
+     return Base64.encode64(iv_cipher_text + hmac);
      
    end
    
 end
 
-puts Shindig.generate_secure_token('owner--uuid', 'viewer--uuid', 'app--uuid', 0, 'trusted-json-data')

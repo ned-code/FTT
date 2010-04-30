@@ -110,17 +110,15 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   },
   
   _getSecureToken: function(callBack) {
-    ddd("generate secure token");
-    MTools.ServerManager.getRecords(WebDoc.User, this.item.page.document.creatorId(), function(result) {
-      ddd("receive creator", result);
-      var token = result[0].uuid() + "::";
-          token += MTools.Application.getCurrentUser().uuid + "::";
-          token += this.item.uuid();
-          token += "::webdoc.com::";
-          token += this.item.getGadgetUrl();
-          token += "::0::webdoc";
 
-      callBack.call(this, escape(token));
-    }.pBind(this));
+      var url = '/documents/' + this.item.page.document.uuid() + '/pages/' + this.item.page.uuid() + '/items/' + this.item.uuid() + '/secure_token';  	
+  		  
+	  MTools.ServerManager.request(url, function(data) {
+		  
+	  var token = data['security_token'];
+                  
+      callBack.call(this, token);
+      
+    }.pBind(this), "GET");
   }
 });

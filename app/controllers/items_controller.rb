@@ -50,7 +50,10 @@ class ItemsController < PageController
     
     token = Shindig.generate_secure_token(@item.page.document.creator.uuid, current_user.uuid, @item.uuid, 0, '')
     
-    render :text => token
+    response = Hash.new
+    response['security_token'] = token;
+    
+    render :json => response
   end
   
 end
