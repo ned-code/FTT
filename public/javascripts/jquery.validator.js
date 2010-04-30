@@ -66,7 +66,6 @@
 			
 			rules = {
 				type: {
-					selector: "input[type]",
 					test: function( field, value ){
 						var type = field.attr("type");
 						
@@ -75,7 +74,6 @@
 					}
 				},
 				required: {
-					selector: "input[required], textarea[required]",
 					test: function( field, value ) {
 						var required = field.attr("required");
 						
@@ -84,7 +82,6 @@
 					}
 				},
 				minlength: {
-					selector: "input[minlength]",
 					test: function( field, value ) {
 						var minlength = field.attr("minlength");
 						
@@ -93,7 +90,6 @@
 					}
 				},
 				maxlength: {
-					selector: "input[maxlength]",
 					test: function( field, value ) {
 						var maxlength = parseInt( field.attr("maxlength") );
 						
@@ -118,31 +114,29 @@
 			if (response === true) {
 				// Remove the error message
 				if ( data ) {
-				  if ( data[rule] && data[rule].flag === false ) {
-						data[rule].flag = true;
-						data[rule].errorNode.remove();
+				  if ( data[rule] === false ) {
+						data[rule] = true;
+						data.errorNode.remove();
 				  }
 				}
 			}
 			else {
 				if (!data) {
-				  data = {};
+				  data = {
+				    errorNode: options.errorNode
+				               .clone()
+				               .attr("for", field.attr("id") || "" )
+				  };
 				  field.data('validate', data);
 				}
 				
-				if (!data[rule]) {
-				  data[rule] = {
-				  	errorNode: options.errorNode
-				  		.clone()
-				  		.attr("for", field.attr("id") || "" )
-				  		.html( field.attr('data-error-'+rule) || response )
-				  };
-				}
+				data.errorNode
+				.html( field.attr('data-error-'+rule) || response );
 				
-				data[rule].flag = false;
+				data[rule] = false;
 				
 				field
-				.after( data[rule].errorNode )
+				.after( data.errorNode )
 				.closest( options.errorWrapSelector )
 				.addClass( options.errorClass );
 				
@@ -283,7 +277,6 @@
 			};
 	
 	jQuery.fn.validator.rules.dataTypes = {
-		selector: "input[data-type]",
 		test: function( field, value ){
 		  var type = field.attr("data-type");
 		  
