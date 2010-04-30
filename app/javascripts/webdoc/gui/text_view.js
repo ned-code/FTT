@@ -4,7 +4,8 @@
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
   
   initialize: function($super, item, pageView, afterItem) {
-    this.placeholderNode = $(WebDoc.NEW_TEXTBOX_CONTENT);
+    var placeholderContent = item.getInnerHtmlPlaceholder() || WebDoc.NEW_TEXTBOX_CONTENT; 
+    this.placeholderNode = $(placeholderContent);
     
     $super(item, pageView, afterItem);
     if (this.itemDomNode.hasClass("empty")) {
