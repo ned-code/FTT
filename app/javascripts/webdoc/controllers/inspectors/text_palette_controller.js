@@ -77,9 +77,19 @@ WebDoc.TextPaletteController = jQuery.klass({
             '<a href="javascript:void(0);"  title="Remove Format" id="toolbar_panel_button_removeFormat"      onclick="WebDoc.application.textTool.delegate.editorExec(\'removeformat\');"><div class="icon_removeFormat"></div></a>'+
         '</div>'+
         '<div style="clear: both;"></div>'+
-    '</div>';
+    '</div>' +
+    '<div id="choose-edit-method" class="ui-widget content">' +
+      'Choose how you want to edit this text' +    
+      '<div>' +
+        '<button id="toolbar_panel_inline_edit">Inline edit</button>' +
+        '<button id="toolbar_panel_html_edit">HTML edit</button>' +
+      '</div>' +  
+      '<div id="inner_text_html">' +    
+        '<div class="content" style="top:45px" id="html-editor"/>' +
+      '</div>' +
+    '</div>';      
     containerObj.html(toolbarContent);
-    
+    this.htmlInspector = new WebDoc.InnerHtmlController("#inner_text_html");
     jQuery('#toolbar_panel a:not(.tag-list a)').addClass('ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only');
     jQuery('#toolbar_panel_button_foreColor').addClass('ui-corner-left').removeClass('ui-corner-all').css('margin-right','-1px');
     jQuery('#toolbar_panel_button_foreColor_arrow').addClass('ui-corner-right').removeClass('ui-corner-all');
@@ -190,7 +200,7 @@ WebDoc.TextPaletteController = jQuery.klass({
 			'link':link, 
       'target':target,
 			'text':text
-		};
+		};        
 		jQuery('#toolbar_panel_createlink_block').hide();
 		WebDoc.application.textTool.delegate.editorExec('createlink',value);	
 	});
@@ -237,6 +247,24 @@ WebDoc.TextPaletteController = jQuery.klass({
     jQuery('#toolbar_panel_button_valignMiddle').bind('click',   function(e){jQuery('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignMiddle");jQuery('#toolbar_panel_valign_block').hide();});
     jQuery('#toolbar_panel_button_valignTop').bind('click',    function(e){jQuery('#toolbar_panel_button_valign').find(":first").attr("class","icon_valignTop");jQuery('#toolbar_panel_valign_block').hide();});
     
+    jQuery('#toolbar_panel_inline_edit').bind('click', function(e) {
+      WebDoc.application.boardController.editItemView(WebDoc.application.boardController.selection()[0]);
+    });
+    this.htmlEdit = false;
+    jQuery("#inner_text_html").hide();
+    jQuery('#toolbar_panel_html_edit').bind('click', function(e) {
+      if (!this.htmlEdit) {
+        this.htmlEdit = true;
+        jQuery("#inner_text_html").show();
+        jQuery('#toolbar_panel_html_edit').text("Hide HTML");
+        this.refreshInnerHtml();
+      }
+      else {
+        this.htmlEdit = false;
+        jQuery("#inner_text_html").hide();
+        jQuery('#toolbar_panel_html_edit').text("HTML edit");        
+      }
+    }.pBind(this));    
     this.isHasParent = function(target,parentObj){
 	    if(target.parentNode && target.parentNode==parentObj){
 			return true;
@@ -398,6 +426,23 @@ WebDoc.TextPaletteController = jQuery.klass({
   
   activate: function(bool) {
        jQuery('#toolbar_panel').css('display', bool ? 'block' : 'none');
+       if (bool) {
+         jQuery("#choose-edit-method").hide();
+         this.htmlEdit = false;
+         jQuery("#inner_text_html").hide();
+         jQuery('#toolbar_panel_html_edit').text("HTML edit");   
+       }
+       else {
+         this.refreshInnerHtml();
+       }
+  },
+  
+  refreshInnerHtml: function() {
+    jQuery("#choose-edit-method").show();
+//    this.htmlInspector.domNode.show();
+    if (this.htmlEdit) {
+      this.htmlInspector.refresh();
+    }
   },
   
   setParameters: function(parameters) {

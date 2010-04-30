@@ -7,7 +7,7 @@
       <fieldset>
         <div class="column one of-four stack">
           <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
-          <%= f.text_field :email, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "stelio@webdoc.com" %>
+          <%= f.text_field :email, :'data-type' => "email", :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "stelio@webdoc.com" %>
         </div>
         <div class="column two of-four stack">
           <%= f.label :password, 'New password' %>
@@ -39,9 +39,4 @@
 
 <% content_for :scripts do %>
   <%= include_javascripts :forms %>
-  <script type="text/javascript">
-    jQuery(document).ready(function(){
-      jQuery('form').validator();
-    });
-  </script>
 <% end %>

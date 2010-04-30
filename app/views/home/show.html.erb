@@ -7,7 +7,7 @@
       <fieldset>
         <div class="stack column one of-two<% if @user.errors.on(:email) %> error<% end %>">
           <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
-          <%= f.text_field :email, :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
+          <%= f.text_field :email, :'data-type' => "email", :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
         </div><!-- spaceless
      --><div class="stack column two of-two<% if @user.errors.on(:password) %> error<% end %>">
           <%= f.label :password, 'Password <abbr class="required" title="required">*</abbr>' %>
@@ -30,6 +30,10 @@
   </div>
 </div>
 
+<% content_for :scripts do %>
+  <%= include_javascripts :forms %>
+<% end %>
+
 <% # this code has been removed for the alpha release %>
 <% if false %>
 <div class="content">
@@ -38,13 +42,5 @@
     <%= render :partial => "explore/viewer_list", :locals => { :documents => @top_documents } %>    
   </div>
 </div>
-<% content_for :scripts do %>
-  <%= include_javascripts :forms %>
-  <script type="text/javascript">
-    jQuery(document).ready(function(){
-      jQuery('form').validator();
-    });
-  </script>
-<% end %>
 <% end %>
  

@@ -55,10 +55,10 @@ WebDoc.Page = $.klass(MTools.Record,
   },
 
   height: function(unit) {
-    if (!this.data.data.css.height) {
-      // this should not happend but old pages are in this case
-      this.data.data.css.height = "600px";
-    }  
+    //if (!this.data.data.css.height) {
+    //  // this should not happend but old pages are in this case
+    //  this.data.data.css.height = "600px";
+    //}  
     if (!unit || unit !== "px") {
       return this.data.data.css.height.toString();
     }
@@ -72,7 +72,6 @@ WebDoc.Page = $.klass(MTools.Record,
   },
     
   setHeight: function(height) {
-    WebDoc.InspectorFieldsValidator.validateSize(height);
     if(this.data.data.css.height != height) {
       var old_height = this.data.data.css.height;
       this.data.data.css.height = height;
@@ -85,10 +84,10 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   width: function(unit) {
-    if (!this.data.data.css.width) {
-      // this should not happend but old pages are in this case
-      this.data.data.css.width = "800px";
-    }  
+    //if (!this.data.data.css.width) {
+    //  // this should not happend but old pages are in this case
+    //  this.data.data.css.width = "800px";
+    //}  
     if (!unit || unit !== "px") {
       return this.data.data.css.width.toString();
     }
@@ -102,7 +101,6 @@ WebDoc.Page = $.klass(MTools.Record,
   },
   
   setWidth: function(width) {
-    WebDoc.InspectorFieldsValidator.validateSize(width);
     if(this.data.data.css.width != width) {
       var old_width = this.data.data.css.width;
       this.data.data.css.width = width;
@@ -117,7 +115,7 @@ WebDoc.Page = $.klass(MTools.Record,
   setBackgroundColor: function(backgroundColor) {
     var css = this.data.data.css;
     
-    if( css.backgroundColor != backgroundColor && WebDoc.InspectorFieldsValidator.validateColor( backgroundColor ) ) {
+    if( css.backgroundColor != backgroundColor ) {
       css.backgroundColor = backgroundColor;
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundColor' });
       this.save();
@@ -125,15 +123,10 @@ WebDoc.Page = $.klass(MTools.Record,
   },
 
   setBackgroundImage: function(backgroundUrl) {
-    WebDoc.InspectorFieldsValidator.validateBackgroundUrl(backgroundUrl);
     if(this.data.data.css.backgroundImage != backgroundUrl) {
       var old_background = this.data.data.css.backgroundImage;
-      if (backgroundUrl === "") {
-        this.data.data.css.backgroundImage = "url('')";  
-      }
-      else {
-        this.data.data.css.backgroundImage = backgroundUrl;  
-      }
+      this.data.data.css.backgroundImage = backgroundUrl;  
+      
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundImage' });
       this.save();
       WebDoc.application.undoManager.registerUndo(function() {

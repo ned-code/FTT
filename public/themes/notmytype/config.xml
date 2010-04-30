@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme version="0.1" thumbnail="images/thumbs/theme.png">
+  <name>Not My Type</name>
+  <author href="http://webdoc.com"
+          email="stephband@webdoc.com">Stephen Band</author>
+  <styles>
+    <style src="css/typography.css" />
+  </styles>
+  <layouts>
+  </layouts>
+</theme>

@@ -12,8 +12,8 @@
     = yield
     = render "layouts/flash", :object => flash
     
-    = include_javascripts :common 
-    = include_javascripts :mtools    
+    = include_javascripts :common
+    = include_javascripts :mtools
     = yield :scripts # include view specific scripts after common scripts.
     :javascript
       var MTools;
