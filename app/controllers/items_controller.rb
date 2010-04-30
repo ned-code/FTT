@@ -46,14 +46,16 @@ class ItemsController < PageController
   
   # GET /documents/:document_id/pages/:page_id/items/:id/secure_token
   def secure_token
-    @item = @page.items.find_by_uuid(params[:id])
-    
-    token = Shindig.generate_secure_token(@item.page.document.creator.uuid, current_user.uuid, @item.uuid, 0, '')
-    
     response = Hash.new
-    response['security_token'] = token;
-    
-    render :json => response
+    if current_user
+      @item = @page.items.find_by_uuid(params[:id])
+      
+      token = Shindig.generate_secure_token(@item.page.document.creator.uuid, current_user.uuid, @item.uuid, 0, '')
+      response['security_token'] = token;
+    else
+      response['security_token'] = "";
+    end
+     render :json => response
   end
   
 end
