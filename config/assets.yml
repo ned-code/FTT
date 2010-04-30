@@ -97,15 +97,15 @@ javascripts:
     - public/javascripts/strophe.js
     
     # code highlighting
-    - public/javascripts/codemirror/codemirror.js
-    - public/javascripts/codemirror/highlight.js
-    - public/javascripts/codemirror/stringstream.js
-    - public/javascripts/codemirror/tokenize.js
-    - public/javascripts/codemirror/tokenizejavascript.js
-    - public/javascripts/codemirror/parsecss.js
-    - public/javascripts/codemirror/parsexml.js
-    - public/javascripts/codemirror/parsejavascript.js
-    - public/javascripts/codemirror/parsehtmlmixed.js
+    - public/codemirror/js/codemirror.js
+    - public/codemirror/js/highlight.js
+    - public/codemirror/js/stringstream.js
+    - public/codemirror/js/tokenize.js
+    - public/codemirror/js/tokenizejavascript.js
+    - public/codemirror/js/parsecss.js
+    - public/codemirror/js/parsexml.js
+    - public/codemirror/js/parsejavascript.js
+    - public/codemirror/js/parsehtmlmixed.js
     
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/managers/*

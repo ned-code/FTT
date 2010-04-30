@@ -25,7 +25,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     cssEditor = cssEditorFieldset.find('textarea.code');
     externalPageControls = jQuery('.externalPage-related');
     backgroundControls = jQuery('.background-related');
-    backgroundImageControls = jQuery('#page_background_image_tileX_checkbox, #page_background_image_align_hor_left_radio, #page_background_image_align_hor_center_radio, #page_background_image_align_hor_right_radio, #page_background_image_tileY_checkbox, #page_background_image_align_vert_top_radio, #page_background_image_align_vert_middle_radio, #page_background_image_align_vert_bottom_radio');
+    backgroundImageControls = jQuery("input[name='page_background_image_tileX'], .page_background_image_align, input[name='page_background_image_tileY']");
     
     form
     .bind('submit', function(e){
@@ -34,51 +34,29 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     
     cssEditor.bind("blur", this._applyPageCss);
     jQuery("#external_page_url").bind("blur", this._updateExternalPageUrl.pBind(this));
-    jQuery("#page_title_textbox").bind("change", this._changePageTitle);
-    jQuery("#page_height_textbox").bind("change", this._changePageHeight);
-    jQuery("#page_width_textbox").bind("change", this._changePageWidth);
-    jQuery("#page_background_color_textbox").bind("change", this._changePageBackgroundColor);
-    jQuery("#page_background_image_textbox").bind("change", this._checkValidBackgroundImage.pBind(this));
-    jQuery("#page_background_image_tileX_checkbox").bind("change", this._changePageBackgroundRepeatMode.pBind(this));
-    jQuery("#page_background_image_tileY_checkbox").bind("change", this._changePageBackgroundRepeatMode.pBind(this));
-    jQuery("#page_background_image_align_hor_left_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
-    jQuery("#page_background_image_align_hor_center_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
-    jQuery("#page_background_image_align_hor_right_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
-    jQuery("#page_background_image_align_vert_top_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
-    jQuery("#page_background_image_align_vert_middle_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
-    jQuery("#page_background_image_align_vert_bottom_radio").bind("change", this._changePageBackgroundPosition.pBind(this));
     
-    //
-    //{
-    //  page_title: this._changePageTitle;
-    //  page_height: this._changePageHeight;
-    //  page_width: this._changePageWidth;
-    //  page_background_color_textbox: this._changePageBackgroundColor;
-    //  page_background_image_textbox: this._checkValidBackgroundImage.pBind(this);
-    //  page_background_image_tileX_checkbox: this._changePageBackgroundRepeatMode.pBind(this);
-    //  page_background_image_tileY_checkbox: this._changePageBackgroundRepeatMode.pBind(this);
-    //  page_background_image_align_hor_left_radio: this._changePageBackgroundPosition.pBind(this);
-    //  page_background_image_align_hor_center_radio: this._changePageBackgroundPosition.pBind(this);
-    //  page_background_image_align_hor_right_radio: this._changePageBackgroundPosition.pBind(this);
-    //  page_background_image_align_vert_top_radio: this._changePageBackgroundPosition.pBind(this);
-    //  page_background_image_align_vert_middle_radio: this._changePageBackgroundPosition.pBind(this);
-    //  page_background_image_align_vert_bottom_radio: this._changePageBackgroundPosition.pBind(this);
-    //}
-    //
-    //inspector
-    //.delegate('input', 'change', function(e){
-    //  var field = jQuery(this),
-    //      id = field.id;
-    //  
-    //  
-    //  
-    //  field.validate({
-    //    pass: function(value) { page.setHeight( value ); },
-    //    fail: function(error) {}
-    //  });
-    //  
-    //});
-    //
+    var handler = {
+      page_title:                   this._changePageTitle,
+      page_height:                  this._changePageHeight,
+      page_width:                   this._changePageWidth,
+      page_background_color:        this._changePageBackgroundColor,
+      page_background_image:        this._checkValidBackgroundImage.pBind(this),
+      page_background_repeat:       this._setBgRepeat.pBind(this),
+      page_background_image_align:  this._changePageBackgroundPosition.pBind(this)
+    };
+    
+    inspector
+    .delegate('input', 'change', function(e){
+      var field = jQuery(this),
+          property = field.attr('data-property');
+      
+      e.preventDefault();
+      
+      field.validate({
+        pass: handler[property],
+        fail: function(error) {}
+      });
+    });
     
     jQuery("#page_background_image_apply_all_button").bind("click", this._applyBackgroundToAllPages.pBind(this));
     //jQuery('#image_send_form').submit(this._uploadBackgroundImage.pBind(this));
@@ -199,9 +177,9 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
 
   _updatePageRelatedFields: function() {
     cssEditor.val( jQuery.toJSON(page.data.data.css) ); 
-    jQuery("#page_title_textbox").val( page.data.title == "undefined" ? "enter a title" : page.data.title );
-    jQuery("#page_height_textbox")[0].value = page.data.data.css.height; 
-    jQuery("#page_width_textbox")[0].value = page.data.data.css.width; 
+    jQuery("#page_title").val( page.data.title == "undefined" ? "enter a title" : page.data.title );
+    jQuery("#page_height")[0].value = page.data.data.css.height; 
+    jQuery("#page_width")[0].value = page.data.data.css.width; 
     if(page.data.data.externalPageUrl) {
       cssEditorFieldset.hide();
       externalPageControls.show();
@@ -211,9 +189,9 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
       cssEditorFieldset.show();
       externalPageControls.hide();
       backgroundControls.show();
-      jQuery("#page_background_color_textbox")[0].value = page.data.data.css.backgroundColor;
-      jQuery("#page_background_image_textbox")[0].value = page.data.data.css.backgroundImage;
-      this._setBackgroundRepeatMode(page.data.data.css.backgroundRepeat); 
+      jQuery("#page_background_color")[0].value = page.data.data.css.backgroundColor;
+      jQuery("#page_background_image")[0].value = page.data.data.css.backgroundImage;
+      this._setBgRepeatFromValue( page.data.data.css.backgroundRepeat ); 
       this._setBackroundPosition(page.data.data.css.backgroundPosition);
       if(page.hasBackgroundImage()) {
         jQuery('#background_image').attr('src', page.getBackgroundImagePath());
@@ -227,7 +205,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
 
   _checkEnableBackgroundControls: function() {
     try {
-      WebDoc.InspectorFieldsValidator.validateBackgroundUrl(jQuery("#page_background_image_textbox")[0].value);
+      WebDoc.InspectorFieldsValidator.validateBackgroundUrl(jQuery("#page_background_image")[0].value);
       this._setBackgroundControlsMode(true);
     }
     catch(exc) {
@@ -252,37 +230,10 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     }
   },
   
-  _changePageTitle: function(e) {
-    e.preventDefault();
-    page.setTitle(jQuery("#page_title_textbox").val());   
-  },
-  
-  _changePageHeight: function(e) {
-    var field = jQuery(e.currentTarget);
-    
-    field.validate({
-      pass: function(value) { page.setHeight( value ); },
-      fail: function(error) {}
-    });
-  },
-  
-  _changePageWidth: function(e) {
-    var field = jQuery(e.currentTarget);
-    
-    field.validate({
-      pass: function(value) { page.setWidth( value ); },
-      fail: function(error) {}
-    });
-  },
-
-  _changePageBackgroundColor: function(e) {
-    var field = jQuery(e.currentTarget);
-    
-    field.validate({
-      pass: function(value) { page.setBackgroundColor( value ); },
-      fail: function(error) {}
-    });
-  },
+  _changePageTitle: function( value ) { page.setTitle( value ); },
+  _changePageHeight: function( value ) { page.setHeight( value ); },
+  _changePageWidth: function( value ) { page.setWidth( value ); },
+  _changePageBackgroundColor: function( value ) { page.setBackgroundColor( value ); },
 
   _changePageBackgroundImage: function(url) {
     ddd('[pageInspectorController] _changePageBackgroundImage');
@@ -297,24 +248,11 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
 
   _changePageBackgroundRepeatMode: function(e) {
     ddd('[Page Inspector Controller] _changePageBackgroundRepeatMode');
-    if(e) { e.preventDefault(); }
-    try {
-      page.setBackgroundRepeatMode(this._getBackgroundRepeatMode());
-     }
-    catch(exc) {
-      this._setBackgroundRepeatMode(page.data.data.css.background-repeat);
-    } 
+    page.setBackgroundRepeatMode(this._getBgRepeatValue());
   },
 
   _changePageBackgroundPosition: function(e) {
-    if(e) {e.preventDefault(); }
-    try {
-      page.setBackgroundPosition(this._getBackgroundPosition());
-      //WebDoc.application.pageEditor.loadPage(page, true); 
-     }
-    catch(exc) {
-      this._setBackroundPosition(page.data.data.css.backgroundPosition);
-    } 
+    page.setBackgroundPosition(this._getBackgroundPosition());
   },
   
   _removeBackgroundImage: function(e) {
@@ -322,27 +260,17 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     page.removeBackgroundImage();
   },
 
-  _checkValidBackgroundImage: function(e) {
-    var that = this,
-        field = jQuery(e.currentTarget);
-    
-    e.preventDefault();
-    
-    field.validate({
-      pass: function(value){
-        if (value = "") {
-          page.removeBackgroundImage();
-          that._setBackgroundControlsMode(false);
-        }
-        else {
-          that._changePageBackgroundImage(value);
-          that._changePageBackgroundRepeatMode(e);
-          that._changePageBackgroundPosition(e);
-          that._setBackgroundControlsMode(true);
-        }
-      },
-      fail: function(error){}
-    });
+  _checkValidBackgroundImage: function(value) {
+    if (value = "") {
+      page.removeBackgroundImage();
+      this._setBackgroundControlsMode(false);
+    }
+    else {
+      this._changePageBackgroundImage(value);
+      this._changePageBackgroundRepeatMode(e);
+      this._changePageBackgroundPosition(e);
+      this._setBackgroundControlsMode(true);
+    }
   },
 
   _chooseBackgroundImage: function(e) {
@@ -389,12 +317,12 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     
     e.preventDefault();
     
-    jQuery("#page_background_color_textbox").validate({
+    jQuery("#page_background_color").validate({
       pass: function(value){ backgroundColor = value; },
       fail: function(error){ valid = false; }
     });
     
-    jQuery("#page_background_image_textbox").validate({
+    jQuery("#page_background_image").validate({
       pass: function(value){ backgroundImage = value; },
       fail: function(error){ valid = false; }
     });
@@ -417,7 +345,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     }
     else {
       targetPage.setBackgroundImage( backgroundImage );
-      targetPage.setBackgroundRepeatMode(this._getBackgroundRepeatMode());
+      targetPage.setBackgroundRepeatMode(this._getBgRepeatValue());
       targetPage.setBackgroundPosition(this._getBackgroundPosition());
     }
   },
@@ -457,21 +385,55 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     var page = WebDoc.application.pageEditor.currentPage;
     this._updatePageRelatedFields();
   },
-
-  _getBackgroundRepeatMode: function() {
-    if(jQuery('#page_background_image_tileX_checkbox:checked').val() !== undefined && jQuery('#page_background_image_tileY_checkbox:checked').val() !== undefined) {
-      return "none";
-    }
-    else if(jQuery('#page_background_image_tileX_checkbox:checked').val() !== undefined) {
-      return "repeat-x";
-    }
-    else if(jQuery('#page_background_image_tileY_checkbox:checked').val() !== undefined) {
-      return "repeat-y";
-    }
-    else {
-      return "no-repeat";
-    }
+  
+  // Background repeat ------------------------------------------------
+  
+  _bgRepeatState: { x: true, y: true },
+  
+  _setBgRepeat: function( value, bool ){
+    this._bgRepeatState[value] = !!bool;
+    page.setBackgroundRepeatMode( this._getBgRepeatValue() );
   },
+  
+  _getBgRepeatValue: function() {
+    var state = this._bgRepeatState;
+    
+    return ( state.x && state.y ) ? 'repeat' :
+           ( state.x ) ? 'repeat-x' :
+           ( state.y ) ? 'repeat-y' : 
+           'no-repeat';
+  },
+  
+  _setBgRepeatFromValue: function( cssValue ){
+    var x = false, y = false;
+    
+    switch(cssValue) {
+      case "repeat":
+      case "none":
+        x = true, y = true;
+        break;
+      case "repeat-x":
+        x = true;
+        break;
+      case "repeat-y":
+        y = true;
+        break;
+    }
+    
+    this._bgRepeatState.x = x;
+    this._bgRepeatState.y = y;
+    
+    this._setBgRepeatUI();
+  },
+  
+  _setBgRepeatUI: function(){
+    var state = this._bgRepeatState;
+    
+    jQuery("input[name='page-bg-repeat-x']").attr('checked', state.x);
+    jQuery("input[name='page-bg-repeat-y']").attr('checked', state.y);
+  },
+  
+  // Background position ----------------------------------------------
 
   _getBackgroundPosition: function() {
     return this._getBackgroundHorizontalPosition() + " " + this._getBackgroundVerticalPosition();
@@ -485,61 +447,36 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     return jQuery('input[name=yPos]:checked').val();
   },
 
-  _setBackgroundRepeatMode: function(mode) {
-    switch(mode) {
-      case "none":
-        jQuery('#page_background_image_tileX_checkbox').attr('checked', true);
-        jQuery('#page_background_image_tileY_checkbox').attr('checked', true);
-        break;
-      case "repeat-x":
-        jQuery('#page_background_image_tileX_checkbox').attr('checked', true);
-        jQuery('#page_background_image_tileY_checkbox').attr('checked', false);
-        break;
-      case "repeat-y":
-        jQuery('#page_background_image_tileX_checkbox').attr('checked', false);
-        jQuery('#page_background_image_tileY_checkbox').attr('checked', true);
-        break;
-      case "no-repeat":
-        jQuery('#page_background_image_tileX_checkbox').attr('checked', false);
-        jQuery('#page_background_image_tileY_checkbox').attr('checked', false);
-        break;
-      case undefined:
-      default:
-        jQuery('#page_background_image_tileX_checkbox').attr('checked', false);
-        jQuery('#page_background_image_tileY_checkbox').attr('checked', false);
-    }
-  },
-
   _setBackroundPosition: function(position) {
     // Default, everything centered
-    jQuery('#page_background_image_align_hor_center_radio').attr('checked', true);
-    jQuery('#page_background_image_align_vert_middle_radio').attr('checked', true);
+    jQuery('#page_background_image_align_hor_center').attr('checked', true);
+    jQuery('#page_background_image_align_vert_middle').attr('checked', true);
     if(position !== undefined) {
       // Horizontal align
       if(position.indexOf('left') >= 0) {
-        jQuery('#page_background_image_align_hor_left_radio').attr('checked', true);
+        jQuery('#page_background_image_align_hor_left').attr('checked', true);
       }
       else if(position.indexOf('center') >= 0) {
-        jQuery('#page_background_image_align_hor_center_radio').attr('checked', true);
+        jQuery('#page_background_image_align_hor_center').attr('checked', true);
       }
       else if(position.indexOf('right') >= 0) {
-        jQuery('#page_background_image_align_hor_right_radio').attr('checked', true);
+        jQuery('#page_background_image_align_hor_right').attr('checked', true);
       }
       else {
-        jQuery('#page_background_image_align_hor_center_radi').attr('checked', true);
+        jQuery('#page_background_image_align_hor_center').attr('checked', true);
       }
       // Vertical align
       if(position.indexOf('top') >= 0) {
-        jQuery('#page_background_image_align_vert_top_radio').attr('checked', true);
+        jQuery('#page_background_image_align_vert_top').attr('checked', true);
       }
       else if(position.indexOf('bottom') >= 0) {
-        jQuery('#page_background_image_align_vert_bottom_radio').attr('checked', true);
+        jQuery('#page_background_image_align_vert_bottom').attr('checked', true);
       }
       else if(position.indexOf('middle') >= 0) {
-        jQuery('#page_background_image_align_vert_middle_radio').attr('checked', true);
+        jQuery('#page_background_image_align_vert_middle').attr('checked', true);
       }
       else {
-        jQuery('#page_background_image_align_vert_middle_radio').attr('checked', true);
+        jQuery('#page_background_image_align_vert_middle').attr('checked', true);
       }
     }
   }

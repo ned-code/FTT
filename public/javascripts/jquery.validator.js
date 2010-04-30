@@ -154,7 +154,7 @@
 		
 		// Fire callback
 		if ( options.pass ) {
-			options.pass.call(node, value);
+			options.pass.call( node, value, field.attr('checked') );
 		}
 		
 		return true;

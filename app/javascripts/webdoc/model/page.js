@@ -136,7 +136,7 @@ WebDoc.Page = $.klass(MTools.Record,
   },
 
   setBackgroundRepeatMode: function(repeatMode) {
-    WebDoc.InspectorFieldsValidator.validateBackgroundRepeat(repeatMode);
+    ddd('[Page] setBackgroundRepeatMode('+repeatMode+')')
     if(this.data.data.css.backgroundRepeat != repeatMode) {
       this.data.data.css.backgroundRepeat = repeatMode;
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundRepeat' });
@@ -145,7 +145,6 @@ WebDoc.Page = $.klass(MTools.Record,
   },
 
   setBackgroundPosition: function(position) {
-    WebDoc.InspectorFieldsValidator.validateBackgroundPosition(position);
     if(this.data.data.css.backgroundPosition != position) {
       this.data.data.css.backgroundPosition = position;
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundPosition' });
