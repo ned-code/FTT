@@ -133,7 +133,7 @@ class Page < ActiveRecord::Base
   # after_save
   # after_destroy
   def touch_document
-    self.document.touch if touch_document_active == true
+    self.document.touch if self.document.present? && touch_document_active == true
   end
   
 end

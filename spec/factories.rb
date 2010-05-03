@@ -39,6 +39,7 @@ Factory.define :item do |f|
 end
 
 Factory.define :media do |f|
+  f.sequence(:system_name) { |n| "system_name#{n}" }
 end
 
 Factory.define :widget, :class => Medias::Widget do |f|
@@ -61,4 +62,10 @@ end
 
 Factory.define :category do |f|
   f.sequence(:name) { |n| "category#{n}" } 
+end
+
+Factory.define :layout do |f|
+  f.name            "Layout 1"
+  f.thumbnail_url   Rails.root.join('spec','fixtures','thumbnail.png')
+  f.template_url    Rails.root.join('spec','fixtures','layout.html')
 end

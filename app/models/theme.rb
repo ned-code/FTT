@@ -68,6 +68,7 @@ class Theme < ActiveRecord::Base
             layout_object = Layout.new
             layout_object.name = layout.elements['name'].text
             layout_object.thumbnail_url = path + layout.attribute('thumbnail').to_s
+            layout_object.template_url = path + layout.attribute('src').to_s
             layout_object.theme = self
             layout_object.save!
             layout_object.create_model_page!

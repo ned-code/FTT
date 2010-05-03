@@ -8,23 +8,19 @@ dependencies:
     group: 
     - :development
     version: ">= 0"
-  xmpp4r: 
-    group: 
-    - :default
-    version: ">= 0"
   rails: 
     group: 
     - :default
     version: ~> 2.3.5
+  xmpp4r: 
+    group: 
+    - :default
+    version: ">= 0"
   annotate: 
     group: 
     - :development
     version: ">= 0"
-  rack-debug: 
-    group: 
-    - :default
-    version: ">= 0"
-  haml: 
+  mysql: 
     group: 
     - :default
     version: ">= 0"
@@ -32,7 +28,11 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  mysql: 
+  haml: 
+    group: 
+    - :default
+    version: ">= 0"
+  rack-debug: 
     group: 
     - :default
     version: ">= 0"
@@ -80,11 +80,7 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  will_paginate: 
-    group: 
-    - :default
-    version: ">= 0"
-  json: 
+  devise: 
     group: 
     - :default
     version: ">= 0"
@@ -92,7 +88,11 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  devise: 
+  json: 
+    group: 
+    - :default
+    version: ">= 0"
+  will_paginate: 
     group: 
     - :default
     version: ">= 0"
@@ -132,19 +132,23 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  warden: 
-    group: 
-    - :default
-    version: ">= 0"
   rubyzip: 
     group: 
     - :default
     version: ">= 0"
     require: 
     - zip/zip
+  warden: 
+    group: 
+    - :default
+    version: ">= 0"
   rspec-factory-girl: 
     group: 
     - :test
+    version: ">= 0"
+  nokogiri: 
+    group: 
+    - :default
     version: ">= 0"
   capistrano: 
     group: 
@@ -299,7 +303,7 @@ specs:
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: de7ff603019677613f02a6832d36402590d0199b
+hash: 7aa01a724f25540d42c4183b7e7d44958fdc1664
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org
