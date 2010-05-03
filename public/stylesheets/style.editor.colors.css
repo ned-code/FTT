@@ -151,7 +151,8 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
   -webkit-background-size:  contain;
   -moz-background-size:     contain;
   background-size:          contain;
-  
+  background-position: 0 0;
+  width: 100%;
   color: white;
 }
 
