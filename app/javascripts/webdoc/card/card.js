@@ -6,16 +6,16 @@
 
 
 // TODO: move Application errors to somewhere sensible
-MTools.Application.errors = {};
+WebDoc.Application.errors = {};
   
-MTools.Application.errors.ajaxError = function makeError(status, error) {
+WebDoc.Application.errors.ajaxError = function makeError(status, error) {
   return jQuery('<p/>').html("Hmmm. We haven't been able to do that. Sorry. The error is:")
   .add( jQuery('<h4/>').html( status ) )
   .add( jQuery('<p/>').html( error ) );
-}
+};
 
 
-MTools.Application.beforeMain('card', function(){
+WebDoc.Application.beforeMain('card', function(){
   var cards = jQuery(".card");
   
   cards.find(".card-name").truncate();
@@ -53,7 +53,7 @@ MTools.Application.beforeMain('card', function(){
       button.removeClass('loading');
       card.trigger('error');
       
-      MTools.Application.errors.ajaxError(status, error).flash();
+      WebDoc.Application.errors.ajaxError(status, error).flash();
     }
     
     jQuery.ajax({
@@ -89,7 +89,7 @@ MTools.Application.beforeMain('card', function(){
       button.removeClass('loading');
       card.trigger('error');
       
-      MTools.Application.errors.ajaxError(status, error).flash();
+      WebDoc.Application.errors.ajaxError(status, error).flash();
     }
     
     jQuery.ajax({

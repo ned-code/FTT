@@ -13,17 +13,9 @@
     = render "layouts/flash", :object => flash
     
     = include_javascripts :common
-    = include_javascripts :mtools
     = yield :scripts # include view specific scripts after common scripts.
     :javascript
-      var MTools;
-      if (MTools) {    
-        MTools.Application.start();
-      }
-      var WebDoc;
-      if (!WebDoc) {
-        WebDoc = {};
-      }
+      WebDoc.Application.start();
       WebDoc.shindig = {};
       WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";
     = render :partial => "layouts/feedback";

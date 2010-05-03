@@ -3,7 +3,7 @@
 //= require <webdoc/model/item>
 //= require <webdoc/utils/inspector_fields_validator>
 
-WebDoc.Page = $.klass(MTools.Record, 
+WebDoc.Page = $.klass(WebDoc.Record, 
 { 
   DEFAULT_PAGE_HEIGHT_PX: 600,
   DEFAULT_PAGE_WIDTH_PX: 800,

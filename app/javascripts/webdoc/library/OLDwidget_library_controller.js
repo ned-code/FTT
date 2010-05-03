@@ -12,7 +12,7 @@ WebDoc.WidgetLibraryController = $.klass({
   
   loadWidgets: function() {
     this.domNode.find("ul").empty();
-    MTools.ServerManager.getRecords(WebDoc.Widget, null, function(data)
+    WebDoc.ServerManager.getRecords(WebDoc.Widget, null, function(data)
         {
           this.widgets = {};
           for (var i = 0; i < data.length; i++) {

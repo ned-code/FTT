@@ -90,7 +90,7 @@ WebDoc.ImagesUploader = $.klass({
         "authenticity_token": WebDoc.authData.authToken
       };
       postParams[sessionKeyName] = WebDoc.authData.cookiesSessionKeyName;
-      postParams["image[uuid]"] = new MTools.UUID().id;
+      postParams["image[uuid]"] = new WebDoc.UUID().id;
       $.swfupload.getInstance(this.uploadControl).setPostParams(postParams);
     }.pBind(this))
     

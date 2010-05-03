@@ -3,7 +3,7 @@
  * 
  * @author Julien Bachmann
  **/
-MTools.UndoManager = $.klass({
+WebDoc.UndoManager = $.klass({
   
   initialize: function() {
     this.undoStack = [];

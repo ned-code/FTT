@@ -1,7 +1,7 @@
 /** 
  * A global Object that detect the current browser.
 **/
-MTools.Browser = {
+WebDoc.Browser = {
   IE:     !!(window.attachEvent && !window.opera), 
   IE7:    (/MSIE\s7/).test(navigator.appVersion), 
   IE6:    (/MSIE\s6/).test(navigator.appVersion), 

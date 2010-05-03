@@ -24,7 +24,7 @@ WebDoc.CollaborationManager = $.klass(
 
     listenXMPPNode: function(nodeName) {
       $.getJSON("/user", function(userData) {
-        this._from = userData.user.username.toLowerCase() + "@webdoc.com/web_" + MTools.ServerManager.xmppClientId ;
+        this._from = userData.user.username.toLowerCase() + "@webdoc.com/web_" + WebDoc.ServerManager.xmppClientId ;
         ddd("XMPP user from", this._from, userData);
         // we want to listen only one node. So be sure to remove all previous connection and create a new fresh XMPP connection.
         this.disconnect();
@@ -147,13 +147,13 @@ WebDoc.CollaborationManager = $.klass(
     _dispathMessage: function(body) {      
       var messageObject = $.evalJSON($(body).text());
       ddd("check message", messageObject);      
-      if (messageObject.source != MTools.ServerManager.xmppClientId) {
+      if (messageObject.source != WebDoc.ServerManager.xmppClientId) {
         ddd("dispatch message", messageObject);
         if (messageObject.page) {
           WebDoc.application.pageEditor.currentDocument.createOrUpdatePage(messageObject);
         }
         if (messageObject.item) {   
-          var modifiedPage = MTools.ServerManager.cache.get(WebDoc.Page, messageObject.item.page_id);       
+          var modifiedPage = WebDoc.ServerManager.cache.get(WebDoc.Page, messageObject.item.page_id);       
           if (modifiedPage) {
             modifiedPage.createOrUpdateItem(messageObject);
           }

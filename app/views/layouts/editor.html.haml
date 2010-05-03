@@ -11,8 +11,6 @@
     
     <link id="theme" rel="stylesheet" href="/themes/default/typography.css" type="text/css" />
     
-    = include_javascripts :common
-    
   -if params[:reader] == 'true'
     -current_class = 'editor mode-embed'
   -elsif params[:edit] == 'true'
@@ -22,16 +20,12 @@
        
   %body{ :class => current_class}
     = yield
-    = include_javascripts :mtools
+    = include_javascripts :common
     = include_javascripts :page_editor
     - if !Rails.env.production?
       = javascript_include_tag "#{APP_CONFIG['shindig_server_base']}/js/core:rpc:pubsub:shindig-container.js?c=1&debug=1"
     = yield :scripts
     :javascript  
-      var WebDoc;
-      if (!WebDoc) {
-        WebDoc = {};
-      }
       WebDoc.authData = {
         authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
         sessionKeyName:"#{session_key_name}",
@@ -41,10 +35,10 @@
       WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";
       
       WebDoc.closeUrl = "#{ get_return_to }";
-      MTools.Application.main(function() {
+      WebDoc.Application.main(function() {
         var editor = new WebDoc.PageEditor(#{edit_mode?});
         editor.load("#{@document.uuid}");
       });      
-      MTools.Application.start();
+      WebDoc.Application.start();
     = render :partial => "layouts/feedback";
     = render :partial => "layouts/google_analytics"

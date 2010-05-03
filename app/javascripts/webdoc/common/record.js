@@ -17,7 +17,7 @@
  * 
  * @author Julien Bachmann
  */
-MTools.Record = jQuery.klass(
+WebDoc.Record = jQuery.klass(
 {
 
   /**
@@ -33,12 +33,12 @@ MTools.Record = jQuery.klass(
       this.isNew = true;
       this.data = {};
       this.data.created_at = new Date().toISO8601String();
-      this.data.uuid = new MTools.UUID().toString();
+      this.data.uuid = new WebDoc.UUID().toString();
     }
     else {
       this.refresh(json);
     }
-    MTools.ServerManager.cache.store(this);
+    WebDoc.ServerManager.cache.store(this);
   },
   
   /**
@@ -162,7 +162,7 @@ MTools.Record = jQuery.klass(
    */
   to_json: function(withRelationShips) {
     var result = {};
-    MTools.Record.convertToRailsJSon(this.getData(withRelationShips), result, this.className());
+    WebDoc.Record.convertToRailsJSon(this.getData(withRelationShips), result, this.className());
     return result;
   },
   
@@ -172,12 +172,12 @@ MTools.Record = jQuery.klass(
    */
   save: function(callBack) {
     if (this.isNew) {
-      MTools.ServerManager.newObject(this, function(persitedDoc) {
+      WebDoc.ServerManager.newObject(this, function(persitedDoc) {
         if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
       });
     }
     else {
-      MTools.ServerManager.updateObject(this, function(persitedDoc) {
+      WebDoc.ServerManager.updateObject(this, function(persitedDoc) {
         if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
       });
     }
@@ -188,7 +188,7 @@ MTools.Record = jQuery.klass(
    * @param {Object} callBack a callback method that is called when object has been deleted
    */
   destroy: function(callBack) {
-    MTools.ServerManager.deleteObject(this, function(persitedDoc) {
+    WebDoc.ServerManager.deleteObject(this, function(persitedDoc) {
       if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
     });
   },
@@ -213,7 +213,7 @@ MTools.Record = jQuery.klass(
 //**************
 // Class method
 //**************
-jQuery.extend(MTools.Record, {
+jQuery.extend(WebDoc.Record, {
   /**
    * Convert an oject to a rails conpatible json object
    * @param {Object} objectToConvert the object to convert

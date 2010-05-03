@@ -1,5 +1,5 @@
 
-WebDoc.Theme = $.klass(MTools.Record, {
+WebDoc.Theme = $.klass(WebDoc.Record, {
   initialize: function($super, json) {
     this.layouts = [];
     $super(json);

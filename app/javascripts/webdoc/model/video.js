@@ -1,7 +1,7 @@
 
 //= require <mtools/record>
 
-WebDoc.Video = $.klass(MTools.Record, {
+WebDoc.Video = $.klass(WebDoc.Record, {
   initialize: function($super, json) {
     $super(json);
   }

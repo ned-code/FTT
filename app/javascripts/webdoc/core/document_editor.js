@@ -16,7 +16,7 @@ var infoDialogNode,
     infoDialogHeightNode,
     infoDialogSubmitNode;
 
-WebDoc.DocumentEditor = $.klass(MTools.Application,
+WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 {
     initialize: function($super)
     {
@@ -32,7 +32,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
         this._currentUserDocumentsEditor = [];
         this._currentUserDocumentsReader = [];        
         WebDoc.application.documentEditor = this;
-        WebDoc.application.undoManager = new MTools.UndoManager();
+        WebDoc.application.undoManager = new WebDoc.UndoManager();
         WebDoc.application.accessController = new WebDoc.DocumentCollaborationController();
         WebDoc.application.categoriesManager = new WebDoc.DocumentCategoriesManager();
         WebDoc.application.categoriesManager.getAllCategories(function(categories){
@@ -318,7 +318,7 @@ WebDoc.DocumentEditor = $.klass(MTools.Application,
       this.currentListingPageId += pageIncrement;
       if (this.currentListingPageId < 1) { this.currentListingPageId = 1; }
       
-      MTools.ServerManager.getRecords(WebDoc.Document, null, function(data) {
+      WebDoc.ServerManager.getRecords(WebDoc.Document, null, function(data) {
         this.documents = data.documents;
         this.refreshDocumentList(data.pagination);
       }.pBind(this), this.createAjaxParams());

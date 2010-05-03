@@ -143,7 +143,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           li.append(info);
           
           var railsParams = {};
-          MTools.Record.convertToRailsJSon({ properties : properties }, railsParams, "image");
+          WebDoc.Record.convertToRailsJSon({ properties : properties }, railsParams, "image");
           $.ajax({
             type: "POST",
             url: this.imagesUploader.uploadUrl,
@@ -205,7 +205,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       
       this.showSpinner(thumbsWrap);
       
-      MTools.ServerManager.getRecords(WebDoc.Image, null, function(data) {
+      WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
         if (data.images.length === 0) {
           var noImages = $("<span>").addClass('no_items').text('No Images');
           thumbsWrap.append(noImages);

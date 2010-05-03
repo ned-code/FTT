@@ -1,7 +1,7 @@
-MTools.Application = $.klass({  
+WebDoc.Application = $.klass({  
 });
 
-$.extend(MTools.Application, {
+$.extend(WebDoc.Application, {
   _beforeMain: {},
   _afterMain: {},
   _mainFunction: undefined,
@@ -11,23 +11,23 @@ $.extend(MTools.Application, {
   },
   
   beforeMain: function(id, beforeFunction) {
-    if (MTools.Application._beforeMain[id] === undefined) {
-      MTools.Application._beforeMain[id] = beforeFunction;
+    if (WebDoc.Application._beforeMain[id] === undefined) {
+      WebDoc.Application._beforeMain[id] = beforeFunction;
     }
   },
   
   main: function(mainFunction) {    
-    if (MTools.Application._mainFunction) {
+    if (WebDoc.Application._mainFunction) {
       throw ("Main function already defined");
     }
     else {
-      MTools.Application._mainFunction = mainFunction
+      WebDoc.Application._mainFunction = mainFunction;
     }
   },
   
   afterMain: function(id, afterFunction) {
-    if (MTools.Application._afterMain[id] === undefined) {
-      MTools.Application._afterMain[id] = afterFunction;
+    if (WebDoc.Application._afterMain[id] === undefined) {
+      WebDoc.Application._afterMain[id] = afterFunction;
     }
   },
   
@@ -48,17 +48,17 @@ $.extend(MTools.Application, {
           }
           this.currentUser = data.user;
           // execute before methods
-          for (var beforeKey in MTools.Application._beforeMain) {
-            MTools.Application._beforeMain[beforeKey].call(this);
+          for (var beforeKey in WebDoc.Application._beforeMain) {
+            WebDoc.Application._beforeMain[beforeKey].call(this);
           }
-          if (MTools.Application._mainFunction) {
-            MTools.Application._mainFunction.call(this);
+          if (WebDoc.Application._mainFunction) {
+            WebDoc.Application._mainFunction.call(this);
           }      
           // execute before methods
-          for (var afterKey in MTools.Application._afterMain) {
-            MTools.Application._afterMain[afterKey].call(this);
+          for (var afterKey in WebDoc.Application._afterMain) {
+            WebDoc.Application._afterMain[afterKey].call(this);
           }          
-        }.pBind(MTools.Application),
+        }.pBind(WebDoc.Application),
         error: function(XMLHttpRequest, textStatus, errorThrown) {
           ddd("Error occured:" + textStatus);
         }

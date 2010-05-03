@@ -6,8 +6,8 @@ WebDoc.WidgetManager = $.klass(
 {  
   initialize: function(document)    
   {
-    MTools.ServerManager.getRecords(WebDoc.Widget, 'youtube', this._assignYoutubeWidget.pBind(this));
-    MTools.ServerManager.getRecords(WebDoc.Widget, 'vimeo', this._assignVimeoWidget.pBind(this));
+    WebDoc.ServerManager.getRecords(WebDoc.Widget, 'youtube', this._assignYoutubeWidget.pBind(this));
+    WebDoc.ServerManager.getRecords(WebDoc.Widget, 'vimeo', this._assignVimeoWidget.pBind(this));
   },
 
   getVimeoWidget: function() {

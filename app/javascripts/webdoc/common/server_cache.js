@@ -9,7 +9,7 @@
  * Cache is used by the ServerManager to avoid fetching multiple times the same record. 
  * @author Julien Bachmann
  **/
-MTools.ServerCache = $.klass(
+WebDoc.ServerCache = $.klass(
 {
     initialize: function()
     {

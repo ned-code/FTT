@@ -19,7 +19,7 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
     this.inputNode = input;
     
     $super(item, pageView, afterItem);
-    this.overlayDomNode = $("<div />");
+    this.overlayDomNode = $("<div/>");
     this.updateOverlay();
     
     this.domNode
@@ -105,7 +105,9 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   destroy: function($super) {
     $super();
     if (window.shindig && shindig.container) {
-      shindig.container.removeGadget(this.gadget);
+      if (this.gadget) {
+        shindig.container.removeGadget(this.gadget);
+      }
     }
   },
   
@@ -113,7 +115,7 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
 
       var url = '/documents/' + this.item.page.document.uuid() + '/pages/' + this.item.page.uuid() + '/items/' + this.item.uuid() + '/secure_token';  	
   		  
-	  MTools.ServerManager.request(url, function(data) {
+	  WebDoc.ServerManager.request(url, function(data) {
 		  
 	  var token = data['security_token'];
                   

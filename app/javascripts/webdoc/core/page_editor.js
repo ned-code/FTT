@@ -7,7 +7,7 @@
 // application singleton.
 WebDoc.application = {};
 
-WebDoc.PageEditor = $.klass(MTools.Application,{
+WebDoc.PageEditor = $.klass(WebDoc.Application,{
 
   currentDocument: null,
   currentPage: null,
@@ -24,7 +24,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     // Feature detection
     
     // Add feature detected styles to head
-    MTools.Application.createStyle('body, .push-scroll {'+
+    WebDoc.Application.createStyle('body, .push-scroll {'+
       'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
       'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
     '}');
@@ -47,10 +47,10 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
     // Create and bind global event handlers
     WebDoc.handlers.initialise();
     
-    MTools.ServerManager.xmppClientId = new MTools.UUID().id;
+    WebDoc.ServerManager.xmppClientId = new WebDoc.UUID().id;
     
     WebDoc.application.pageEditor = this;
-    WebDoc.application.undoManager = new MTools.UndoManager();
+    WebDoc.application.undoManager = new WebDoc.UndoManager();
         
     WebDoc.application.widgetManager = new WebDoc.WidgetManager();
     WebDoc.application.pasteBoardManager = new WebDoc.PasteboardManager();    
@@ -89,7 +89,7 @@ WebDoc.PageEditor = $.klass(MTools.Application,{
   load: function(documentId) {
     ddd("[PageEditor] load " + documentId);
     WebDoc.application.collaborationManager.listenXMPPNode(documentId);              
-    MTools.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
+    WebDoc.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
     {
       this.currentDocument = data[0];
       this._loadCreator();     

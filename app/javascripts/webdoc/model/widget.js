@@ -1,7 +1,7 @@
 
 //= require <mtools/record>
 
-WebDoc.Widget = $.klass(MTools.Record, {
+WebDoc.Widget = $.klass(WebDoc.Record, {
   initialize: function($super, json) {
     $super(json);
   }  

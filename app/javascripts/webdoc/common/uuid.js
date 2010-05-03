@@ -29,7 +29,7 @@
  (more research needed)
  - Documentation needs improvement
  **/
-MTools.UUID = $.klass(
+WebDoc.UUID = $.klass(
 {
     initialize: function()
     {
@@ -50,26 +50,26 @@ MTools.UUID = $.klass(
         var dc = new Date();
         var t = dc.getTime() - dg.getTime();
         var h = '-';
-        var tl = MTools.UUID.getIntegerBits(t, 0, 31);
-        var tm = MTools.UUID.getIntegerBits(t, 32, 47);
-        var thv = MTools.UUID.getIntegerBits(t, 48, 59) + '1'; // version 1, security version is 2
-        var csar = MTools.UUID.getIntegerBits(MTools.UUID.rand(4095), 0, 7);
-        var csl = MTools.UUID.getIntegerBits(MTools.UUID.rand(4095), 0, 7);
+        var tl = WebDoc.UUID.getIntegerBits(t, 0, 31);
+        var tm = WebDoc.UUID.getIntegerBits(t, 32, 47);
+        var thv = WebDoc.UUID.getIntegerBits(t, 48, 59) + '1'; // version 1, security version is 2
+        var csar = WebDoc.UUID.getIntegerBits(WebDoc.UUID.rand(4095), 0, 7);
+        var csl = WebDoc.UUID.getIntegerBits(WebDoc.UUID.rand(4095), 0, 7);
         
-        var n = MTools.UUID.getIntegerBits(MTools.UUID.rand(8191), 0, 7) +
-        MTools.UUID.getIntegerBits(MTools.UUID.rand(8191), 8, 15) +
-        MTools.UUID.getIntegerBits(MTools.UUID.rand(8191), 0, 7) +
-        MTools.UUID.getIntegerBits(MTools.UUID.rand(8191), 8, 15) +
-        MTools.UUID.getIntegerBits(MTools.UUID.rand(8191), 0, 15); // this last number is two octets long
+        var n = WebDoc.UUID.getIntegerBits(WebDoc.UUID.rand(8191), 0, 7) +
+        WebDoc.UUID.getIntegerBits(WebDoc.UUID.rand(8191), 8, 15) +
+        WebDoc.UUID.getIntegerBits(WebDoc.UUID.rand(8191), 0, 7) +
+        WebDoc.UUID.getIntegerBits(WebDoc.UUID.rand(8191), 8, 15) +
+        WebDoc.UUID.getIntegerBits(WebDoc.UUID.rand(8191), 0, 15); // this last number is two octets long
         return tl + h + tm + h + thv + h + csar + csl + h + n;
     }
 });
 
-$.extend(MTools.UUID,
+$.extend(WebDoc.UUID,
 {
     getIntegerBits: function(val, start, end)
     {
-        var base16 = MTools.UUID.returnBase(val, 16);
+        var base16 = WebDoc.UUID.returnBase(val, 16);
         var quadArray = [];
         var quadString = '';
         var i = 0;
@@ -100,6 +100,6 @@ $.extend(MTools.UUID,
     uuidPattern: /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/,
     
     isUUID: function(value) {
-      return value.match(MTools.UUID.uuidPattern);
+      return value.match(WebDoc.UUID.uuidPattern);
     }
 });

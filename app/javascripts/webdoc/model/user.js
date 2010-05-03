@@ -1,7 +1,7 @@
 
 //= require <mtools/record>
 
-WebDoc.User = $.klass(MTools.Record, {
+WebDoc.User = $.klass(WebDoc.Record, {
   initialize: function($super, json) {
     $super(json);
   }

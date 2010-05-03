@@ -104,7 +104,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
           li.append(info);
           
           var railsParams = {};
-          MTools.Record.convertToRailsJSon({ properties : properties }, railsParams, "video");
+          WebDoc.Record.convertToRailsJSon({ properties : properties }, railsParams, "video");
           $.ajax({
             type: "POST",
             url: "/videos",
@@ -211,7 +211,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
       
       this.showSpinner(videoRowsWrap);
       
-      MTools.ServerManager.getRecords(WebDoc.Video, null, function(data) {
+      WebDoc.ServerManager.getRecords(WebDoc.Video, null, function(data) {
         if (data.videos.length === 0) {
           var noVideos = $("<span>").addClass('no_items').text('No Videos');
           videoRowsWrap.append(noVideos);

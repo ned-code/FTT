@@ -129,7 +129,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
         "authenticity_token": WebDoc.authData.authToken
       };
       postParams[sessionKeyName] = WebDoc.authData.cookiesSessionKeyName;
-      postParams["image[uuid]"] = new MTools.UUID().id;
+      postParams["image[uuid]"] = new WebDoc.UUID().id;
       $.swfupload.getInstance(this._uploadControl).setPostParams(postParams);
     }.pBind(this))
     
@@ -261,7 +261,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   },
 
   _checkValidBackgroundImage: function(value) {
-    if (value = "") {
+    if (value === "") {
       page.removeBackgroundImage();
       this._setBackgroundControlsMode(false);
     }
@@ -410,7 +410,7 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
     switch(cssValue) {
       case "repeat":
       case "none":
-        x = true, y = true;
+        x = true; y = true;
         break;
       case "repeat-x":
         x = true;

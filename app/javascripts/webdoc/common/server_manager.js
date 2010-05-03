@@ -8,32 +8,32 @@
  **/
 //= require <mtools/server_cache>
 
-MTools.ServerManager = jQuery.klass({
+WebDoc.ServerManager = jQuery.klass({
   initialize: function() {
     ddd("Init server manager");
   }
 });
 
-jQuery.extend(MTools.ServerManager, {
+jQuery.extend(WebDoc.ServerManager, {
   
   /**
   * cache used by the ServerManager singleton 
   */
-  cache: new MTools.ServerCache(),
+  cache: new WebDoc.ServerCache(),
   
   /**
    * Fetch record object from the server
    * @param {Object} recordClass the record class to fetch
    * @param {Object} uuid the uuid of the record or null if we want all records
    * @param {function} callBack function that is called with the fetched records.
-   *                 function callback(MTools.Record[])
-   * @param {Object} args arguments used for the fetch. Arguments depends on the record class. It can be arguments needed for nested resources (@see MTools.Record.rootUrl() documentation)
+   *                 function callback(WebDoc.Record[])
+   * @param {Object} args arguments used for the fetch. Arguments depends on the record class. It can be arguments needed for nested resources (@see WebDoc.Record.rootUrl() documentation)
    *                 In the futur it can be attributes for the fetch (page number, etc...)
    */
   getRecords: function(recordClass, uuid, callBack, args) {
     // we can check the cache if we search a record by uuid. Otherwise we need to request the database.
     if (uuid) {
-      var cachedRecord = MTools.ServerManager.cache.get(recordClass, uuid);
+      var cachedRecord = WebDoc.ServerManager.cache.get(recordClass, uuid);
       if (cachedRecord) {
         callBack.call(this, [cachedRecord]);
         return;
@@ -152,7 +152,7 @@ jQuery.extend(MTools.ServerManager, {
    **/
   newObject: function(object, callBack) {
     var message = {
-      xmpp_client_id: MTools.ServerManager.xmppClientId
+      xmpp_client_id: WebDoc.ServerManager.xmppClientId
     };
     jQuery.extend(message, object.to_json(true));
     jQuery.post(object.rootUrl() + "/" + object.pluralizedClassName(), message, function(data, textstatus) {
@@ -161,7 +161,7 @@ jQuery.extend(MTools.ServerManager, {
       object.refresh(data);
       object.isNew = false;
       // we must update the cache with the id that comes from the server
-      MTools.ServerManager.cache.store(object);
+      WebDoc.ServerManager.cache.store(object);
       callBack.apply(this, [[object]]);
     }, "json");
   },
@@ -174,7 +174,7 @@ jQuery.extend(MTools.ServerManager, {
    */
   updateObject: function(object, callBack) {
     var param = {
-      xmpp_client_id: MTools.ServerManager.xmppClientId,
+      xmpp_client_id: WebDoc.ServerManager.xmppClientId,
       _method: "PUT"
     };
     jQuery.extend(param, object.to_json());
@@ -192,7 +192,7 @@ jQuery.extend(MTools.ServerManager, {
    */
   deleteObject: function(object, callBack) {
     var param = {
-      xmpp_client_id: MTools.ServerManager.xmppClientId,
+      xmpp_client_id: WebDoc.ServerManager.xmppClientId,
       _method: "DELETE"
     };
     jQuery.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
@@ -210,7 +210,7 @@ jQuery.extend(MTools.ServerManager, {
    */
   sendObject: function(object, callBack, verb, action, extraParams) {
     var params = {
-      xmpp_client_id: MTools.ServerManager.xmppClientId
+      xmpp_client_id: WebDoc.ServerManager.xmppClientId
     };
 
     if (extraParams !== null) {

@@ -8,7 +8,7 @@
 // application singleton.
 WebDoc.application = {};
 
-WebDoc.WebdocViewer = $.klass(MTools.Application,{
+WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
     
   initialize: function($super, viewerNode) {
     $super();
@@ -24,7 +24,7 @@ WebDoc.WebdocViewer = $.klass(MTools.Application,{
 
   load: function(documentId) {
     ddd("[Viewer] load " + documentId);              
-    MTools.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
+    WebDoc.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
     {
       this._currentDocument = data[0];
       this.loadPageId("1");   
