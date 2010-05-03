@@ -32,7 +32,10 @@ stylesheets:
     
     # code highlighting
     - public/stylesheets/style.codemirror.css
-  
+
+  feedback:
+    - public/stylesheets/zenbox.css
+
 #  font_collection:
 #    - public/fonts/Aaargh-fontfacekit/stylesheet
 #    - public/fonts/Adler-fontfacekit/stylesheet
@@ -154,3 +157,5 @@ javascripts:
     - app/javascripts/webdoc/card/card.js
   contacts:
     - app/javascripts/webdoc/card/card.contacts.js
+  feedback:
+    - app/javascripts/webdoc/feedback/zendesk.js
