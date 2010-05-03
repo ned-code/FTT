@@ -134,10 +134,6 @@
 = content_for :scripts do
   = include_javascripts :document_editor
   :javascript
-    var WebDoc;
-    if (!WebDoc) {
-      WebDoc = {};
-    }
     WebDoc.authData = {
       authToken:"#{protect_against_forgery? ? form_authenticity_token : ''}",
       sessionKeyName:"#{session_key_name}",

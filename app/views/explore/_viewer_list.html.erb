@@ -1,3 +1,4 @@
+<%= include_stylesheets :page_viewer, :media => 'all' %>
 <ul id="webdoc" class="webdoc-viewer-index index" >
   <% documents.each do |document| %>
     <li>
@@ -27,25 +28,3 @@
     </li>
   <% end %>
 </ul>
-<%= include_stylesheets :page_viewer, :media => 'all' %>
-<% content_for :scripts do %>
-  <%= include_javascripts :page_editor %>
-  <%= include_javascripts :explore %>
-  <% if !Rails.env.production? %>
-    <%= javascript_include_tag APP_CONFIG['shindig_server_base'] + "/gadgets/js/core:rpc:pubsub:shindig-container.js?c=1&debug=1" %>
-  <% end %>
-  <% javascript_tag do -%>
-    <% documents.each do |document| %>
-      <% # we need to remove </script> in the json otherwise it ends the containg script tag too early %>
-      <% # we preload the server cache with document content %>
-      <% cached_document = Rails.cache.fetch("#{document.cache_key}_wo_script") { document.to_json(:include => { :pages => { :include => :items} }).gsub(/<\/script>/, "</*script>") } %>
-      try {
-        WebDoc.ServerManager.cache.store(new WebDoc.Document(<%= raw cached_document.dup %>));
-      }
-      catch(e) {
-        ddd("error in doc ", e);
-      }
-    <% end %>
-  <% end -%>
-
-<% end %>

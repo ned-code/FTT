@@ -15,8 +15,10 @@
     = include_javascripts :common
     = yield :scripts # include view specific scripts after common scripts.
     :javascript
-      WebDoc.Application.start();
       WebDoc.shindig = {};
       WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";
+      
+      WebDoc.Application.start();
+      
     = render :partial => "layouts/feedback";
     = render :partial => "layouts/google_analytics"

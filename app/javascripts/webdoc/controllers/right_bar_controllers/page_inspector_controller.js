@@ -423,11 +423,6 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   
   // Background position ----------------------------------------------
   
-  _bgPositionState {
-    x: 0,
-    y: 0
-  }
-  
   // Refactor this lot so that it doesn't rely on the DOM for its state,
   // but instead uses the above object.
   
