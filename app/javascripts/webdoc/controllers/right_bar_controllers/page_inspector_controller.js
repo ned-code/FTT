@@ -405,20 +405,8 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   },
   
   _setBgRepeatFromValue: function( cssValue ){
-    var x = false, y = false;
-    
-    switch(cssValue) {
-      case "repeat":
-      case "none":
-        x = true, y = true;
-        break;
-      case "repeat-x":
-        x = true;
-        break;
-      case "repeat-y":
-        y = true;
-        break;
-    }
+    var x = ( cssValue === "repeat" || cssValue === "none" || cssValue === "repeat-x" ),
+        y = ( cssValue === "repeat" || cssValue === "none" || cssValue === "repeat-y" );
     
     this._bgRepeatState.x = x;
     this._bgRepeatState.y = y;
@@ -434,7 +422,15 @@ WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController
   },
   
   // Background position ----------------------------------------------
-
+  
+  _bgPositionState {
+    x: 0,
+    y: 0
+  }
+  
+  // Refactor this lot so that it doesn't rely on the DOM for its state,
+  // but instead uses the above object.
+  
   _getBackgroundPosition: function() {
     return this._getBackgroundHorizontalPosition() + " " + this._getBackgroundVerticalPosition();
   },
