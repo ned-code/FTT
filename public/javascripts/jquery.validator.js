@@ -50,7 +50,7 @@
 				number: {
 					test: function( value ) { return regex.number.test(value) },
 					error: 'That\'s not a number.'
-				},
+				}
 				//datetime: {},
 				//date: {},
 				//month: {},
