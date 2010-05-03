@@ -9,7 +9,8 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   DEFAULT_WIDGET_HTML: '<div class="item-placeholder"><div class="item-icon"></div>Double-click to edit, and enter HTML in the inspector</div>',
 
   initialize: function($super, item, pageView, afterItem) {
-    this.placeholderNode = $( this.DEFAULT_WIDGET_HTML );
+    var placeholderContent = item.getInnerHtmlPlaceholder() || this.DEFAULT_WIDGET_HTML; 
+    this.placeholderNode = $(placeholderContent);    
     $super(item, pageView, afterItem);
     this.itemDomNode.css({ width:"100%", height:"100%"}); 
     this.api = new WebDoc.WidgetApi(item, false);
@@ -85,6 +86,11 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     return true;
   },
   
+  stopEditing: function($super) {
+    $super();
+    this._displayDefaultContentIfNeeded(this.domNode);  
+  },
+  
   widgetChanged: function() {
     ddd("update widget state");
     if (this.itemDomNode.get(0).contentWindow) {
@@ -142,11 +148,13 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   },
 
   _displayDefaultContentIfNeeded: function(parent) {
-    if (this.item.data.data.tag !== "iframe"  && (!this.item.data.data.innerHTML || $.string().blank(this.item.data.data.innerHTML))) {
-      parent.append( this.placeholderNode );
-    }
-    else {
-      this.placeholderNode && this.placeholderNode.remove();
+    if (!this.domNode.hasClass("item-edited")) {
+      if (this.item.data.data.tag !== "iframe" && (!this.item.data.data.innerHTML || $.string().blank(this.item.data.data.innerHTML))) {
+        parent.append(this.placeholderNode);
+      }
+      else {
+        this.placeholderNode && this.placeholderNode.remove();
+      }
     }
   }
 });
