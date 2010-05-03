@@ -1,4 +1,4 @@
-set :deploy_to,  "/var/www/st#{application}"
+set :deploy_to,  "/var/www/#{application}"
 
 role :web,      "ec2-79-125-11-127.eu-west-1.compute.amazonaws.com"
 role :app,      "ec2-79-125-11-127.eu-west-1.compute.amazonaws.com"
