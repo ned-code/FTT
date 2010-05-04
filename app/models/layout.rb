@@ -39,7 +39,11 @@ class Layout < ActiveRecord::Base
       page_width = style_body['width'].present? ? style_body['width'] : '800px'
 
       page.title = self.name
-      page.data = { :class => body_class, :css => { :width => page_height, :height =>  page_width } }
+      page.data = HashWithIndifferentAccess.new
+      page.data[:class] = body_class
+      page.data[:css] = HashWithIndifferentAccess.new
+      page.data[:css][:width] = page_height
+      page.data[:css][:height] =  page_width
 
       doc_body.children.each do |doc_item|
         if doc_item.class == Nokogiri::XML::Element
@@ -75,28 +79,30 @@ class Layout < ActiveRecord::Base
               item.data[:src] = doc_item.attr('src')
               item.media_type = 'iframe'
             when 'object'
-              case doc_item.attr('type')
-                when 'video/youtube' || 'video/vimeo'
-                  media = Medias::Widget.find_by_system_name(doc_item.attr('type').split(/\//)[1])
-                  item = page.items.build
-                  item.media_id = media.id
-                  item.data = default_item_data_form_doc_item(doc_item)
-                  item.data[:preference] = { :url => doc_item.attr('data') }
-                  item.media_type = 'widget'
-                when 'application/wd-app'
-                  # media = Medias::Widget.find_by_uuid(doc_item.attr('data'))
-                  # item = page.items.build
-                  # item.media_id = media.id
-                  # item.data = default_item_data_form_doc_item(doc_item)
-                  # item.media_type = 'widget'
+              item = page.items.build
+              item.data = default_item_data_form_doc_item(doc_item)
+              if doc_item.attr('type') == 'video/vimeo' || doc_item.attr('type') == 'video/youtube'
+                media = Medias::Widget.find_by_system_name(doc_item.attr('type').split(/\//)[1])
+                item.data[:preference][:url] = doc_item.attr('data')
+              else # application/wd-app
+                media = Medias::Widget.find_by_uuid(doc_item.attr('data'))
               end
-
+              item.media_id = media.id
+              item.media_type = 'widget'
+              for object_item in doc_item.children
+                if object_item == 'param'
+                  if object_item.attr('name').present? && object_item.attr('value').present?
+                    item.data[:preference][object_item.attr('name')] = object_item.attr('value')
+                  end
+                end
+              end
             when 'svg'
               for svg_item in doc_item.children
                 if svg_item.node_name == 'polyline'
                   item = page.items.build
                   item.data = default_item_data_form_doc_item(doc_item)
-                  item.data[:css] = { :zIndex => "2000" }
+                  item.data[:css] = HashWithIndifferentAccess.new
+                  item.data[:css][:zIndex] = "2000"
                   item.data[:tag] = 'polyline'
                   item.data[:stroke] = doc_item.attr('stroke')
                   item.data[:strokeWidth] = doc_item.attr('strokeWidth')
@@ -116,7 +122,7 @@ class Layout < ActiveRecord::Base
   end
 
   def get_style_hash_from_doc_item(doc_item)
-    hash = Hash.new
+    hash = HashWithIndifferentAccess.new
     if doc_item.attr('style').present?
       doc_item.attr('style').content.split(/;/).each do |s|
         css_rule = s.split(/:/)
@@ -128,17 +134,14 @@ class Layout < ActiveRecord::Base
     hash
   end
 
-  def get_params_hash_form_doc_item(doc_item)
-
-    
-  end
-
   def default_item_data_form_doc_item(doc_item)
-    {
-      :css => get_style_hash_from_doc_item(doc_item),
-      :class => doc_item.attr('class'),
-      :preference => { :rails_empty => 'dummy' }
-    }
+    hash = HashWithIndifferentAccess.new
+    css_hash = get_style_hash_from_doc_item(doc_item)
+    hash[:css] = css_hash if css_hash.present? 
+    hash[:class] = doc_item.attr('class') if doc_item.attr('class').present?
+    hash[:preference] = HashWithIndifferentAccess.new
+    hash[:preference][:rails_empty] = 'dummy'
+    hash
   end
 
 end
