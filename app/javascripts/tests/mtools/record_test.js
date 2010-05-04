@@ -6,7 +6,7 @@ module("record.js");
 var TestSpace = {};
 try {
   // Define a RecordTestClass that can be used in test cases
-  TestSpace.RecordTestClass = $.klass(MTools.Record);
+  TestSpace.RecordTestClass = $.klass(WebDoc.Record);
   $.extend(TestSpace.RecordTestClass, {
     className: function() {
       return "RecordTestClass";

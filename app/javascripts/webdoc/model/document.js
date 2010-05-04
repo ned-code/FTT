@@ -1,7 +1,7 @@
 
 //= require <mtools/record>
 
-WebDoc.Document = $.klass(MTools.Record, {
+WebDoc.Document = $.klass(WebDoc.Record, {
   initialize: function($super, json) {
     this.pages = [];
     $super(json);
@@ -117,7 +117,7 @@ WebDoc.Document = $.klass(MTools.Record, {
     ddd("find page with uuid or position " + pUuid);
         
     var checkedAttribute = "uuid";
-    if (!MTools.UUID.isUUID(pUuid)) {
+    if (!WebDoc.UUID.isUUID(pUuid)) {
       checkedAttribute = "position";
       var pagePosition = (parseInt(pUuid, 10) - 1);
       return this.pages[pagePosition];
@@ -272,7 +272,7 @@ WebDoc.Document = $.klass(MTools.Record, {
       extraParams = { 'title': newTitle }; 
     }
 
-    MTools.ServerManager.sendObject(
+    WebDoc.ServerManager.sendObject(
             this,
             function(newDocument) {
               window.location = '/documents/' + newDocument.document.uuid;

@@ -26,7 +26,6 @@ stylesheets:
     - public/stylesheets/style.editor.css
     - public/stylesheets/style.editor.colors.css
     - public/stylesheets/style.webdoc.css
-    - public/stylesheets/style.webdoc.typography.css
     - public/stylesheets/colorpicker.css
     - public/stylesheets/toolbar.css
     
@@ -80,11 +79,10 @@ javascripts:
     - public/javascripts/jquery.hashchange.js
     - public/javascripts/colorpicker.js
     - public/javascripts/jquery-ui-1.8.js
-  mtools:
-    - app/javascripts/mtools.js
-    - app/javascripts/mtools/*.js
-  document_editor:
     - app/javascripts/webdoc.js
+    - app/javascripts/webdoc/common/*.js
+
+  document_editor:
     - app/javascripts/webdoc/model/*.js
     - app/javascripts/webdoc/utils/*.js
     - app/javascripts/webdoc/managers/*
@@ -97,17 +95,16 @@ javascripts:
     - public/javascripts/strophe.js
     
     # code highlighting
-    - public/javascripts/codemirror/codemirror.js
-    - public/javascripts/codemirror/highlight.js
-    - public/javascripts/codemirror/stringstream.js
-    - public/javascripts/codemirror/tokenize.js
-    - public/javascripts/codemirror/tokenizejavascript.js
-    - public/javascripts/codemirror/parsecss.js
-    - public/javascripts/codemirror/parsexml.js
-    - public/javascripts/codemirror/parsejavascript.js
-    - public/javascripts/codemirror/parsehtmlmixed.js
+    - public/codemirror/js/codemirror.js
+    - public/codemirror/js/highlight.js
+    - public/codemirror/js/stringstream.js
+    - public/codemirror/js/tokenize.js
+    - public/codemirror/js/tokenizejavascript.js
+    - public/codemirror/js/parsecss.js
+    - public/codemirror/js/parsexml.js
+    - public/codemirror/js/parsejavascript.js
+    - public/codemirror/js/parsehtmlmixed.js
     
-    - app/javascripts/webdoc.js
     - app/javascripts/webdoc/managers/*
     - app/javascripts/webdoc/model/*.js
     - app/javascripts/webdoc/sdk/*.js
@@ -145,18 +142,15 @@ javascripts:
     - app/javascripts/webdoc/library/videos_library/*.js
     - app/javascripts/webdoc/library/videos_library.js
     - app/javascripts/webdoc/library/web_browser.js
-    - app/javascripts/webdoc/card/*.js
+    - app/javascripts/webdoc/card/card.js
   explore:
     - app/javascripts/webdoc/explore/*.js
   tests:
     - app/javascripts/tests/test_helper.js
     - app/javascripts/tests/mtools/*.js
-    - app/javascripts/tests/webdoc/*.js
   forms:
-    - app/javascripts/webdoc/form/*.js
-  card:
-    - app/javascripts/webdoc/card/card.js
+    - app/javascripts/webdoc/form/*.js    
   contacts:
-    - app/javascripts/webdoc/card/card.contacts.js
+    - app/javascripts/webdoc/card/*.js
   feedback:
     - app/javascripts/webdoc/feedback/zendesk.js

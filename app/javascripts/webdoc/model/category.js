@@ -1,7 +1,7 @@
 
 //= require <mtools/record>
 
-WebDoc.Category = $.klass(MTools.Record, {
+WebDoc.Category = $.klass(WebDoc.Record, {
   initialize: function($super, json) {
     $super(json);
   }

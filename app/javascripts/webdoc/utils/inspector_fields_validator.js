@@ -4,7 +4,6 @@
 
 (function(undefined){
 
-
 WebDoc.InspectorFieldsValidator = $.klass({});
 
 $.extend(WebDoc.InspectorFieldsValidator, {
@@ -20,13 +19,6 @@ $.extend(WebDoc.InspectorFieldsValidator, {
     var re = new RegExp("^(none|repeat-x|repeat-y|no-repeat)$");
     if(!repeatMode.match(re)) {
       throw("this method needs a value among these: none, repeat-x, repeat-y. no-repeat");
-    }
-  },
-
-  validateBackgroundPosition: function(position) {
-    var re = new RegExp("^((top|center|bottom)\\s(left|center|right))|((left|center|right)\\s(top|center|bottom))$");
-    if(!position.match(re)) {
-      throw("this method needs a combination of the following values: top, center, bottom - left, center, right");
     }
   },
   

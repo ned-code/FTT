@@ -125,7 +125,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   },
 
   beginDraw: function(e) {
-    var uuid = new MTools.UUID();
+    var uuid = new WebDoc.UUID();
     var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
     ddd("begin draw at point " + mappedPoint.x + ":" + mappedPoint.y);
 

@@ -4,13 +4,14 @@
 
 WebDoc.InnerHtmlController = $.klass({
   initialize: function( selector ) {
+
     var domNode = $(selector),
         self = this,
         
         // Initialise CodeMirror. CodeMirror must be visible
         // while it is being set up.
         editor = new CodeMirror( domNode.find('.content')[0] , {
-          path: '/javascripts/codemirror/',
+          path: '/codemirror/js/',
           parserfile: ['parsexml.js', 'parsecss.js', 'tokenizejavascript.js', 'parsejavascript.js', 'parsehtmlmixed.js'],
           stylesheet: '/stylesheets/style.codemirror.css',
           lineNumbers: true,
@@ -18,9 +19,8 @@ WebDoc.InnerHtmlController = $.klass({
           height: '100%',
           initCallback: function( editor ) {
             // Hide inspector once this thread has finished
-            ddd("code mirror callback");
-            setTimeout( function(){ domNode.hide();
-            }, 0 );
+            ddd("[CodeMirror] initCallback");
+            setTimeout( function(){ domNode.hide(); }, 0 );
           },
           // Use one of these to react to key input. onChange is slower
           // but less taxing on the computer.

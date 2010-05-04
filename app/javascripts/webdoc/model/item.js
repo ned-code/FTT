@@ -6,7 +6,7 @@ WebDoc.ITEM_TYPE_WIDGET = "widget";
 WebDoc.ITEM_TYPE_IFRAME = "iframe";
 WebDoc.ITEM_TYPE_OS_GADGET = "os_gadget";
 
-WebDoc.Item = $.klass(MTools.Record, 
+WebDoc.Item = $.klass(WebDoc.Record, 
 {
   initialize: function($super, json, page, media) {
     this.page = page;
@@ -56,7 +56,7 @@ WebDoc.Item = $.klass(MTools.Record,
     
     // TODO: can remove this fecth. it ise used only for old item that were created before that inspector url is set in item properties.
 //    if (this.data.media_id && this.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
-//      MTools.ServerManager.getRecords(WebDoc.Widget, this.data.media_id, function(data) {
+//      WebDoc.ServerManager.getRecords(WebDoc.Widget, this.data.media_id, function(data) {
 //        if (data.length > 0) {
 //          this.media = data[0];
 //        }
@@ -172,6 +172,11 @@ WebDoc.Item = $.klass(MTools.Record,
     return this.data.data.innerHTML;
   },
 
+
+  getInnerHtmlPlaceholder: function() {
+    return this.data.data.innerHTMLPlaceholder;
+  },
+  
   getInnerText: function() {
     return this.removeHtmlTags(this.data.data.innerHTML);
   },

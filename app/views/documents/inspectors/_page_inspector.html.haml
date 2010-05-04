@@ -10,7 +10,7 @@
       %fieldset.properties
         %div
           %label= t('.properties.name')
-          %input#page_title_textbox{ :type => "text" }
+          <input type="text" data-property="page_title" id="page_title" class="page-title" />
       
       %fieldset.properties.externalPage-related
         %legend= t('.page.title')
@@ -22,10 +22,10 @@
         %legend= t('.properties.title')
         %div
           %label= t('.properties.height')
-          <input id="page_height_textbox" type="text" data-type="cssvalue" required="required" />
+          <input data-property="page_height" id="page_height" type="text" data-type="cssvalue" required="required" />
         %div
           %label= t('.properties.width')
-          <input id="page_width_textbox" type="text" data-type="cssvalue" required="required" />
+          <input data-property="page_width" id="page_width" type="text" data-type="cssvalue" required="required" />
         %div
           %label= t('.properties.show_scroll')
           %input#page_scroll_checkbox{ :type => "checkbox" }
@@ -35,11 +35,11 @@
         
         %div.background-related
           %label= t('.properties.background')
-          <input id="page_background_color_textbox" type="text" data-type="csscolor" />
+          <input data-property="page_background_color" id="page_background_color" type="text" data-type="csscolor" />
         
         %div.background-related
           %label= t('.properties.background_image')
-          <input id="page_background_image_textbox" type="text" data-type="imageurl" />
+          <input data-property="page_background_image" id="page_background_image" type="text" data-type="imageurl" />
 
         %div#background_image_preview.background-related
           %img#background_image
@@ -53,24 +53,24 @@
         
         %div.background-related
           %label{ :for => 'page_background_image_tileY_checkbox' }= t('.properties.background_image_position.vertical')
-          %input#page_background_image_tileY_checkbox{ :type => "checkbox", :name => "yTile", :value => "none" }
+          <input type="checkbox" name="page-bg-repeat-y" value="y" data-property="page_background_repeat" />
           %span.label= t('.properties.background_image_position.tile')
-          %input#page_background_image_align_vert_top_radio{ :type => "radio", :name => "yPos", :value => "top" }
+          <input type="radio" name="yPos" value="0%" data-property="page_background_image_align" />
           %span.label= t('.properties.background_image_position.top')
-          %input#page_background_image_align_vert_middle_radio{ :type => "radio", :name => "yPos", :value => "center" }
+          <input type="radio" name="yPos" value="50%" data-property="page_background_image_align" />
           %span.label= t('.properties.background_image_position.middle')
-          %input#page_background_image_align_vert_bottom_radio{ :type => "radio", :name => "yPos", :value => "bottom" }
+          <input type="radio" name="yPos" value="100%" data-property="page_background_image_align" />
           %span.label= t('.properties.background_image_position.bottom')
 
         %div.background-related.shunt
           %label{ :for => 'page_background_image_tileX_checkbox' }= t('.properties.background_image_position.horizontal')
-          %input#page_background_image_tileX_checkbox{ :type => "checkbox", :name => "xTile", :value => "none" }
+          <input type="checkbox" name="page-bg-repeat-x" value="x" data-property="page_background_repeat" />
           %span.label= t('.properties.background_image_position.tile')
-          %input#page_background_image_align_hor_left_radio{ :type => "radio", :name => "xPos", :value => "left" }
+          <input type="radio" name="xPos" value="0%" data-property="page_background_image_align" />
           %span.label= t('.properties.background_image_position.left')
-          %input#page_background_image_align_hor_center_radio{ :type => "radio", :name => "xPos", :value => "center" }
+          <input type="radio" name="xPos" value="50%" data-property="page_background_image_align" />
           %span.label= t('.properties.background_image_position.center')
-          %input#page_background_image_align_hor_right_radio{ :type => "radio", :name => "xPos", :value => "right" }
+          <input type="radio" name="xPos" value="100%" data-property="page_background_image_align" />
           %span.label= t('.properties.background_image_position.right')
 
         %div.background-related

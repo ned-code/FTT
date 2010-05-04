@@ -156,7 +156,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
       
       this.showSpinner(appsThumbWrap);
       
-      MTools.ServerManager.getRecords(WebDoc.Widget, null, function(data) {
+      WebDoc.ServerManager.getRecords(WebDoc.Widget, null, function(data) {
         var appsList, noApps;
         
         if (data.widgets.length === 0) {

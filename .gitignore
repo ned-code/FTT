@@ -43,4 +43,8 @@ public/shinding_test.html
 .idea
 db/schema.rb
 .bundle
+*.BACKUP.*
+*.REMOTE.*
+*.BASE.*
+*.LOCAL.*
 

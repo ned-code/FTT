@@ -12,14 +12,14 @@ WebDoc.handlers = {
     
     // Global form validation
     jQuery(document)
-    .delegate( 'input, textarea', 'change', function(e) {
+    .delegate( 'input, textarea', 'keyup', function(e) {
       jQuery(this).validate({
         pass: function(){},
         fail: function(){
           e.preventDefault();
         }
       });
-    });
+    });;
   },
   regex: jQuery.regex,
   _makeLinkHandler: function( obj, context ){

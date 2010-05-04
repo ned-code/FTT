@@ -18,6 +18,9 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.connect 'items/:item_id/datastore_entries', :controller => 'datastore_entries', :action => 'destroy_all', :conditions => { :method => :delete }
   
+    
+  map.connect '/documents/:document_id/pages/:page_id/items/:id/secure_token', :controller => 'items', :action => 'secure_token', :conditions => { :method => :get }
+  
   map.resources :datastores, :only => [:show, :index] do |datastore|
     # datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
   end

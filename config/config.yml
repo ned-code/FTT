@@ -4,6 +4,8 @@ development:
   notify_administrator_onuser_creation: true
   administrator_emails: julien@mnemis.com, stelio@mnemis.com, mathieu@mnemis.com, yann@mnemis.com  
   shindig_server_base: http://localhost:8080/gadgets/
+  shindig_secure_token_key: YHsu+Y59Kx5njHT5+1FhoLXliYQG+8n3Hvx/+q3k4x4=
+  shindig_container: default
 
 test:
   synch_openfire_users: false
@@ -16,6 +18,9 @@ staging:
   google_analytic_tracker_id: UA-11892994-2
   must_check_user_email: true
   shindig_server_base: http://st-sh.webdoc.com:8080/gadgets/
+  shindig_secure_token_key: YHsu+Y59Kx5njHT5+1FhoLXliYQG+8n3Hvx/+q3k4x4=
+  shindig_container: default
+  
 
 production:
   synch_openfire_users: true
@@ -27,4 +32,6 @@ production:
   must_check_user_email: true
   administrator_emails: julien.bachmann@mnemis.com, stelio.tzonis@mnemis.com, mathieu.fivaz@mnemis.com, yann.ringgenberg@mnemis.com
   shindig_server_base: http://social.webdoc.com/gadgets/
+  shindig_secure_token_key: YHsu+Y59Kx5njHT5+1FhoLXliYQG+8n3Hvx/+q3k4x4= 
+  shindig_container: default
   

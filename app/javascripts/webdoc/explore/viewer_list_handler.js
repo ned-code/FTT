@@ -3,7 +3,7 @@
  * Basically, it will instanciate all webdoc viewer on the page and connaect all webdoc viewer actions with the viewers (previous page, next page, pen, etc...)
  * @author Julien Bachmann
  */
-MTools.Application.beforeMain("viewer_list_handler", function() {
+WebDoc.Application.beforeMain("viewer_list_handler", function() {
   //bind all necessary events
   
   // launch viewers

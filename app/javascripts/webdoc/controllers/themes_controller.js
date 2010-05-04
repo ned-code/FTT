@@ -22,14 +22,13 @@ WebDoc.ThemesController = jQuery.klass({
     }, this );
     
     // Get themes and populate themes list
-    MTools.ServerManager.getRecords( WebDoc.Theme, null, function( themes ){
+    WebDoc.ServerManager.getRecords( WebDoc.Theme, null, function( themes ){
       var theme, l = themes.length;
       
       // Convert array to object so that we
       // can reference themes by id later
       while(l--){
         theme = themes[l];
-        console.log('THEME', theme);
         that.list[ theme.data.id ] = theme;
       }
     });

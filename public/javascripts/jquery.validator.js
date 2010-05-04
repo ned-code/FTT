@@ -50,7 +50,7 @@
 				number: {
 					test: function( value ) { return regex.number.test(value) },
 					error: 'That\'s not a number.'
-				},
+				}
 				//datetime: {},
 				//date: {},
 				//month: {},
@@ -154,7 +154,7 @@
 		
 		// Fire callback
 		if ( options.pass ) {
-			options.pass.call(node, value);
+			options.pass.call( node, value, field.attr('checked') );
 		}
 		
 		return true;

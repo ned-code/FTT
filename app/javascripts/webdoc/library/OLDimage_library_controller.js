@@ -11,7 +11,7 @@ WebDoc.ImageLibraryController = $.klass({
   
   loadImages: function() {
     this.domNode.find("ul").empty();
-    MTools.ServerManager.getRecords(WebDoc.Image, null, function(data) {
+    WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
       this.images = {};
       for (var i = 0; i < data.length; i++) {
         this.images[data[i].uuid()] = data[i];

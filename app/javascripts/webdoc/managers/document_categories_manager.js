@@ -19,7 +19,7 @@ WebDoc.DocumentCategoriesManager = $.klass({
   },
   
   _loadDocumentCategories: function() {
-    MTools.ServerManager.getRecords(WebDoc.Category, null, function(data)
+    WebDoc.ServerManager.getRecords(WebDoc.Category, null, function(data)
     {
       if (data.length !== 0) {
         this._documentCategories = data;

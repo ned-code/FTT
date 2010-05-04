@@ -1,7 +1,7 @@
 
 //= require <mtools/record>
 
-WebDoc.Image = $.klass(MTools.Record, {
+WebDoc.Image = $.klass(WebDoc.Record, {
   initialize: function($super, json) {
     $super(json);
   }

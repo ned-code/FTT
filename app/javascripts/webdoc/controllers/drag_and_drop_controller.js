@@ -67,5 +67,5 @@ $.extend(WebDoc.DrageAndDropController, {
       }
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     }
-  },
+  }
 });
