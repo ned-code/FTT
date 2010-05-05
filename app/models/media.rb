@@ -13,6 +13,8 @@ class Media < ActiveRecord::Base
   # ===============
   # = Validations =
   # ===============
+
+  validates_uniqueness_of :system_name
   
   # =============
   # = Callbacks =

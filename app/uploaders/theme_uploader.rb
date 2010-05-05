@@ -22,7 +22,7 @@ class ThemeUploader < CarrierWave::Uploader::Base
     if s3_bucket == nil
       "/#{store_dir}"
     else
-      "http://#{s3_bucket}.s3.amazonaws.com/#{model.class.to_s.underscore}/#{model.uuid}/"
+      "http://#{s3_bucket}.s3.amazonaws.com/#{store_dir}"
     end
   end
 

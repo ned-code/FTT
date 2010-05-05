@@ -64,20 +64,6 @@ describe Medias::Widget do
     
   end
   
-  describe 'with valid youtube widget and updated file' do
-    subject do
-      Factory(:widget, :file => File.open(fixture_path + '/Youtube.zip'), :system_name => 'youtube')
-      media = Medias::Widget.last
-      media.update_attributes(:file => File.open(fixture_path + '/Youtube_new.zip'))
-      media
-    end
-    
-    its(:version)     { should == "1.32" }
-    its(:title)       { should == "Youtube player" }
-    its(:description) { should == "Watch and edit Youtube's videos." }
-    
-  end
-  
   describe 'with valid base and update WGT files' do
     subject do
       Factory(:widget, :file => File.open(fixture_path + '/Youtube.wgt'), :system_name => 'youtube')
@@ -85,11 +71,11 @@ describe Medias::Widget do
       media.update_attributes(:file => File.open(fixture_path + '/Youtube_new.wgt'))
       media
     end
-    
+
     its(:version)     { should == "1.32" }
     its(:title)       { should == "Youtube player" }
     its(:description) { should == "Watch and edit Youtube's videos." }
-    
+
   end
 end
 

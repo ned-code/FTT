@@ -57,10 +57,10 @@ class Theme < ActiveRecord::Base
         self.assign_uuid
         self.version = config_dom.root.attribute('version').to_s
         self.name = config_dom.root.elements['name'].text
-        path = self.get_mapped_path
+        path = file.store_url
         self.thumbnail_url = path + config_dom.root.attribute('thumbnail').to_s
         self.style_url = path + "css/parsed_theme_style.css"
-        file_current_path = self.file.current_path
+        file_current_path = self.file.current_path if file.s3_bucket != nil
         self.save!
 
         config_dom.root.elements['layouts'].each_child do |layout|
@@ -68,9 +68,9 @@ class Theme < ActiveRecord::Base
             layout_object = Layout.new
             layout_object.name = layout.elements['name'].text
             layout_object.thumbnail_url = path + layout.attribute('thumbnail').to_s
+            layout_object.template_url = path + layout.attribute('src').to_s
             layout_object.theme = self
             layout_object.save!
-            layout_object.create_model_page!
           end
         end
 
@@ -80,13 +80,19 @@ class Theme < ActiveRecord::Base
         end
 
         begin
-          extract_files_from_zip_file(file_current_path, file.store_dir)
+          extract_files_from_zip_file(file.s3_bucket != nil ? file_current_path : self.file.current_path, file.store_dir)
           create_parsed_style
-        rescue
+          for layout_saved in self.layouts
+            layout_saved.create_model_page!
+          end
+        rescue Exception => e
+          self.errors.add(:file, "Error: #{e}")
           raise ActiveRecord::Rollback
         end
         saved = true
       end
+    else
+      self.errors.add(:file, "Error: version of this file is equal or under the actual version")
     end
     saved
   end
@@ -137,17 +143,6 @@ class Theme < ActiveRecord::Base
     else
       @s3 ||= RightAws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
       @s3.put(file.s3_bucket, self.file.store_dir + "css/parsed_theme_style.css", parsed, 'x-amz-acl' => 'public-read')
-    end
-  end
-
-
-
-  def get_mapped_path
-    if file.s3_bucket == nil
-      file.store_url
-    else
-      path = Pathname.new(file.store_path)
-      "http://#{CarrierWave.yml_s3_bucket(:assets).to_s}/#{path.dirname}/"
     end
   end
 

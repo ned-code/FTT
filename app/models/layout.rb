@@ -29,10 +29,124 @@ class Layout < ActiveRecord::Base
   def create_model_page!
     if self.model_page.blank?
       page = self.build_model_page
+
+      doc = nil
+      if self.theme.file.s3_bucket == nil
+        doc = Nokogiri::HTML(open(File.join(Rails.root, 'public', self.template_url)));
+      else
+        doc = Nokogiri::HTML(open(self.template_url));
+      end
+      doc_body = doc.xpath('/html/body')
+      body_class = doc_body.attr('class').content
+
+      style_body = get_style_hash_from_doc_item(doc_body)
+      page_height = style_body['height'].present? ? style_body['height'] : '600px'
+      page_width = style_body['width'].present? ? style_body['width'] : '800px'
+
+      page.title = self.name
+      page.data = HashWithIndifferentAccess.new
+      page.data[:class] = body_class
+      page.data[:css] = HashWithIndifferentAccess.new
+      page.data[:css][:width] = page_height
+      page.data[:css][:height] =  page_width
+
+      doc_body.children.each do |doc_item|
+        if doc_item.class == Nokogiri::XML::Element
+          case doc_item.node_name
+            when 'div'
+              item = page.items.build
+              item.data = default_item_data_form_doc_item(doc_item)
+              item.data[:tag] = 'div'
+              if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
+                item.data[:innerHTML] = ""
+                item.data[:innerHTMLPlaceholder] = doc_item.inner_html
+              else
+                item.data[:innerHTML] = doc_item.inner_html
+                item.data[:innerHTMLPlaceholder] = ""
+              end
+              item.data[:innerHTML] = doc_item.inner_html
+              if doc_item['data-item-type'] == 'text'
+                item.media_type = 'text'
+              else
+                item.media_type = 'widget'
+              end
+              item.data = item.data.to_yaml
+            when 'img'
+              item = page.items.build
+              item.data = default_item_data_form_doc_item(doc_item)
+              item.data[:tag] = 'img'
+              item.data[:src] = doc_item.attr('src')
+              item.media_type = 'image'
+            when 'iframe'
+              item = page.items.build
+              item.data = default_item_data_form_doc_item(doc_item)
+              item.data[:tag] = 'iframe'
+              item.data[:src] = doc_item.attr('src')
+              item.media_type = 'iframe'
+            when 'object'
+              item = page.items.build
+              item.data = default_item_data_form_doc_item(doc_item)
+              if doc_item.attr('type') == 'video/vimeo' || doc_item.attr('type') == 'video/youtube'
+                media = Medias::Widget.find_by_system_name(doc_item.attr('type').split(/\//)[1])
+                item.data[:preference][:url] = doc_item.attr('data')
+              else # application/wd-app
+                media = Medias::Widget.find_by_uuid(doc_item.attr('data'))
+              end
+              item.media_id = media.id
+              item.media_type = 'widget'
+              for object_item in doc_item.children
+                if object_item == 'param'
+                  if object_item.attr('name').present? && object_item.attr('value').present?
+                    item.data[:preference][object_item.attr('name')] = object_item.attr('value')
+                  end
+                end
+              end
+            when 'svg'
+              for svg_item in doc_item.children
+                if svg_item.node_name == 'polyline'
+                  item = page.items.build
+                  item.data = default_item_data_form_doc_item(doc_item)
+                  item.data[:css] = HashWithIndifferentAccess.new
+                  item.data[:css][:zIndex] = "2000"
+                  item.data[:tag] = 'polyline'
+                  item.data[:stroke] = doc_item.attr('stroke')
+                  item.data[:strokeWidth] = doc_item.attr('strokeWidth')
+                  item.data[:points] = doc_item.attr('points')
+                  item.media_type = 'drawing'
+                end
+              end
+          end
+        end
+      end
+
       page.touch_document_active = false
-      page.data = { :css => { :width => '600px', :height => '400px', :backgroundColor => "#fff" } }
       self.save!
     end
+    
+    true
+  end
+
+  def get_style_hash_from_doc_item(doc_item)
+    hash = HashWithIndifferentAccess.new
+    if doc_item.attr('style').present?
+      doc_item.attr('style').content.split(/;/).each do |s|
+        css_rule = s.split(/:/)
+        css_key = css_rule[0].strip.chomp
+        css_val = css_rule[1].strip.chomp
+        hash[css_key] = css_val
+      end
+    end
+    hash
+  end
+
+  def default_item_data_form_doc_item(doc_item)
+    hash = HashWithIndifferentAccess.new
+    css_hash = get_style_hash_from_doc_item(doc_item)
+    hash[:css] = css_hash if css_hash.present? 
+    hash[:class] = doc_item.attr('class') if doc_item.attr('class').present?
+    hash[:preference] = HashWithIndifferentAccess.new
+    hash[:preference][:rails_empty] = 'dummy'
+    hash
   end
 
 end

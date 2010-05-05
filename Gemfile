@@ -15,6 +15,7 @@ gem 'uuidtools' # for has_uuid plugin
 gem 'uuid'
 gem "mysql"
 gem 'rack-debug'
+gem 'nokogiri'
 
 # rails 3 Maybe
 gem 'carrierwave', "0.4.3"
