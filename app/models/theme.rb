@@ -60,7 +60,7 @@ class Theme < ActiveRecord::Base
         path = file.store_url
         self.thumbnail_url = path + config_dom.root.attribute('thumbnail').to_s
         self.style_url = path + "css/parsed_theme_style.css"
-        file_current_path = self.file.current_path
+        file_current_path = self.file.current_path if file.s3_bucket != nil
         self.save!
 
         config_dom.root.elements['layouts'].each_child do |layout|
@@ -80,13 +80,13 @@ class Theme < ActiveRecord::Base
         end
 
         begin
-          extract_files_from_zip_file(file_current_path, file.store_dir)
+          extract_files_from_zip_file(file.s3_bucket != nil ? file_current_path : self.file.current_path, file.store_dir)
           create_parsed_style
           for layout_saved in self.layouts
             layout_saved.create_model_page!
           end
         rescue Exception => e
-          p e
+          self.errors.add(:file, "Error: #{e}")
           raise ActiveRecord::Rollback
         end
         saved = true

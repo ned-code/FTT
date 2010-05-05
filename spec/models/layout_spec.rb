@@ -8,11 +8,12 @@ describe Layout do
   should_belong_to :theme
   should_belong_to :model_page, :dependent => :delete
   should_have_many :pages
-
-
+  
   describe "create_model_page! with the layout.html example" do
     before(:all) do
-      @layout = Factory(:layout)
+      theme = mock_model(Theme)
+      theme.stub!(:file).and_return(mock("file", :s3_bucket => 'assets.test.webdoc.com'))
+      @layout = Factory(:layout, :theme => theme)
       @youtube_media = Factory(:widget, :system_name => 'youtube')
       @vimeo_media = Factory(:widget, :system_name => 'vimeo')
       @widget_media = Factory(:widget, :uuid => 'f8f78724-5922-4cd3-a99a-f87b601c8419')

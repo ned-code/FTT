@@ -30,7 +30,12 @@ class Layout < ActiveRecord::Base
     if self.model_page.blank?
       page = self.build_model_page
 
-      doc = Nokogiri::HTML(open(self.template_url));
+      doc = nil
+      if self.theme.file.s3_bucket == nil
+        doc = Nokogiri::HTML(open(File.join(Rails.root, 'public', self.template_url)));
+      else
+        doc = Nokogiri::HTML(open(self.template_url));
+      end
       doc_body = doc.xpath('/html/body')
       body_class = doc_body.attr('class').content
 
