@@ -16,6 +16,8 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     
     this.colorsNode = jQuery("#colors");
     
+    WebDoc.application.boardController.themeNode.bind( 'load', this.makeThemeColors.pBind(this) );
+    
     jQuery('#draw-inspector').bind("click", jQuery.delegate({
         '.colors-index a':  function(e) {
                 var link = $( e.delegateTarget || e.currentTarget );
@@ -96,13 +98,9 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
         state = this._themeColorsState,
         className;
     
-    console.log('Make Theme colors');
-    
     for ( className in themeColors.getClasses() ) {
       html += '<li><a href="#draw-color" class="state-draw-color '+className+'" title="Theme color"></a></li>';
     }
-    
-    console.log(html);
     
     if ( html === '' ) {
       if (state) {
@@ -124,7 +122,6 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     WebDoc.application.boardController.unselectAll();
     WebDoc.application.rightBarController.showItemInspector();
     WebDoc.application.inspectorController.selectPalette(2);
-    this.makeThemeColors();
   },
   
   mouseDown: function(e) {
