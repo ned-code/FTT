@@ -23,6 +23,7 @@ WebDoc.BoardController = jQuery.klass({
     this._isInteraction = false;
     this._isMovingSelection = false;
     this._previousInspector = null;
+    this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);    
   },
   
   currentPageView: function() {
@@ -79,7 +80,6 @@ WebDoc.BoardController = jQuery.klass({
     jQuery(document).unbind("keydown", this._keyDown);
     jQuery(document).unbind("keypress", this._keyPress);
     jQuery(document).unbind("keyup", this._keyUp);
-    
 
     this._currentPageView = pageView;
     this._currentZoom = 1;
@@ -99,7 +99,7 @@ WebDoc.BoardController = jQuery.klass({
     jQuery(document).bind("keypress", this, jQuery.proxy(this, "_keyPress"));
     jQuery(document).bind("keydown", this, jQuery.proxy(this, "_keyDown"));
     jQuery(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));    
-    
+
     if (this._autoFit && this.boardContainerNode.css("width").match(/px/) && this.boardContainerNode.css("height").match(/px/)) {
       //update zoom to fit browser page    
       var heightFactor = $("#webdoc").parent().height() / $("#board-container").height();
@@ -118,7 +118,7 @@ WebDoc.BoardController = jQuery.klass({
     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
-    pageView.viewDidLoad();
+    pageView.viewDidLoad();    
   },
   
   isInteractionMode: function() {
@@ -949,5 +949,45 @@ WebDoc.BoardController = jQuery.klass({
       height: this.height + "px"
     };
     WebDoc.application.boardController.insertItems([newItem]);
+  },
+  
+  _touchMove: function(event) {
+    // Prevent scrolling on this element
+    event.preventDefault();
+  },
+  
+  _handleTouch: function(event) {
+    var type = '';
+      
+    switch(event.type)
+    {
+      case 'touchstart':
+        type = 'mousedown';
+        break;
+        
+      case 'touchmove':
+        type = 'mousemove';
+        break;        
+        
+      case 'touchend':
+        type = 'mouseup';
+        break;
+        
+      default:
+        return;
+    }    
+//    for(var eventProp in event) {
+//      ddd("here is a prop of the event");
+//      ddd(eventProp);
+//    }
+    ddd(event.type);
+    var first = event.originalEvent.changedTouches[0];
+
+    var simulatedEvent = document.createEvent('MouseEvent');
+    simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
+                               
+    first.target.dispatchEvent(simulatedEvent);
+
+    event.preventDefault();
   }
 });
