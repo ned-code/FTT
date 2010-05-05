@@ -39,6 +39,9 @@ class Admin::ThemesController < Admin::AdminController
       redirect_to admin_theme_path(@updated_theme)
     else
       flash[:failure] = t('flash.notice.theme.updated_failed')
+      for on, error in @updated_theme.errors
+        @theme.errors.add(on, error)
+      end
       render :edit
     end
   end

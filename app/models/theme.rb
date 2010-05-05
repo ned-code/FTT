@@ -91,6 +91,8 @@ class Theme < ActiveRecord::Base
         end
         saved = true
       end
+    else
+      self.errors.add(:file, "Error: version of this file is equal or under the actual version")
     end
     saved
   end
