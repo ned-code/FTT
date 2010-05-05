@@ -180,30 +180,30 @@ ul, ol, blockquote, dd,
 
 /* Colors */
 
-.theme-color-1  { background-color: hsl(32, 80%, 4%); }
-.theme-color-2  { background-color: hsl(32, 60%, 12%); }
-.theme-color-3  { background-color: hsl(32, 40%, 20%); }
-.theme-color-4  { background-color: hsl(42, 11%, 86%); }
-.theme-color-5  { background-color: hsl(42, 92%, 18%); }
-.theme-color-6  { background-color: hsl(42, 84%, 24%); }
-.theme-color-7  { background-color: hsl(42, 75%, 30%); }
-.theme-color-8  { background-color: hsl(2, 100%, 30%); }
-.theme-color-9  { background-color: hsl(2, 100%, 20%); }
-.theme-color-10 { background-color: hsl(2, 75%, 14%); }
-.theme-color-11 { background-color: hsl(2, 75%, 18%); }
-.theme-color-12 { background-color: hsl(192, 60%, 17%); }
+.theme_color_1  { background-color: hsl(32, 80%, 4%); }
+.theme_color_2  { background-color: hsl(32, 60%, 12%); }
+.theme_color_3  { background-color: hsl(32, 40%, 20%); }
+.theme_color_4  { background-color: hsl(42, 11%, 86%); }
+.theme_color_5  { background-color: hsl(42, 92%, 18%); }
+.theme_color_6  { background-color: hsl(42, 84%, 24%); }
+.theme_color_7  { background-color: hsl(42, 75%, 30%); }
+.theme_color_8  { background-color: hsl(2, 100%, 30%); }
+.theme_color_9  { background-color: hsl(2, 100%, 20%); }
+.theme_color_10 { background-color: hsl(2, 75%, 14%); }
+.theme_color_11 { background-color: hsl(2, 75%, 18%); }
+.theme_color_12 { background-color: hsl(192, 60%, 17%); }
 
 /* Backgrounds */
 
-.theme-background-1  {
+.theme_background_1  {
   background: hsl(32, 80%, 4%);
 }
-.theme-background-2  {
+.theme_background_2  {
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from( rgb(0,0,0) ), to( hsl(192, 8%, 30%) ) );
   background-image: -moz-linear-gradient(center top, rgb(0,0,0), hsl(192, 8%, 30%));
   background-image: linear-gradient(center top, rgb(0,0,0), hsl(192, 8%, 30%));
 }
-.theme-background-3  { 
+.theme_background_3  { 
   background-color: hsl(2, 75%, 14%);
   background-image: url('../images/bg_cross.png');
   background-repeat: no-repeat;
@@ -212,7 +212,7 @@ ul, ol, blockquote, dd,
 
 /* Borders */
 
-.theme-border-1 {
+.theme_border_1 {
   -webkit-border-image: url('../images/border_gildedframe.png') 114 stretch stretch;
   -moz-border-image:    url('../images/border_gildedframe.png') 114 stretch stretch;
   border-image:         url('../images/border_gildedframe.png') 114 stretch stretch;

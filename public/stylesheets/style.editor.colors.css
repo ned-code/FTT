@@ -196,10 +196,10 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
                                       -moz-box-shadow:    inset 0 0 2px -1px hsl(18, 16%, 12%);
                                       box-shadow:         inset 0 0 2px -1px hsl(18, 16%, 12%); }
 
-#colors li a:active                 { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+.colors-index li a:active           { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
-#colors li a.current                { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
+.colors-index li a.current          { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1); }
 

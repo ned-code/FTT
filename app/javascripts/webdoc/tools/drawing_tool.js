@@ -8,39 +8,30 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   drawing: false,
   penColor: "black",
   penSize: "1",
+  themeColorsNode: jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs colors-index index"}),
+  
   initialize: function($super, selector, boardClass) {
     
     $super( selector, boardClass );
     
-    $("#colors").bind("click", jQuery.delegate({
-        'a':  function(e) {
+    this.colorsNode = jQuery("#colors");
+    
+    jQuery('#draw-inspector').bind("click", jQuery.delegate({
+        '.colors-index a':  function(e) {
                 var link = $( e.delegateTarget || e.currentTarget );
                     color = link.css("backgroundColor");
                 
                 ddd('[DrawingTool] Selected colour '+color);
                 
-                $(".state-draw-color")
-                .removeClass('current');
-                //.css({
-                //    WebkitBoxShadow: 'none',
-                //    MozBoxShadow:    'none',
-                //    BoxShadow:       'none'
-                //});
-                
-                link
-                .addClass('current')
-                //.css({
-                //    WebkitBoxShadow: '0 0 16px '+color,
-                //    MozBoxShadow:    '0 0 16px '+color,
-                //    BoxShadow:       '0 0 16px '+color
-                //});
+                jQuery(".state-draw-color").removeClass('current');
+                link.addClass('current');
                 
                 this.penColor = color;
                 $(".draw-color").css({ backgroundColor: color });
                 return false;
         }
       }, this)
-    )
+    );
     
     var self = this,
         port = $('<div/>').addClass('draw-port'),
@@ -96,12 +87,44 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
       }
     }.pBind(this));    
   },
-
+  
+  _themeColorsState: false, // true when in the DOM
+  
+  makeThemeColors: function(){
+    var themeColors = new WebDoc.ClassList( 'theme_color_', 'backgroundColor' ),
+        html = '',
+        state = this._themeColorsState,
+        className;
+    
+    console.log('Make Theme colors');
+    
+    for ( className in themeColors.getClasses() ) {
+      html += '<li><a href="#draw-color" class="state-draw-color '+className+'" title="Theme color"></a></li>';
+    }
+    
+    console.log(html);
+    
+    if ( html === '' ) {
+      if (state) {
+        this.themeColorsNode.remove();
+        this._themeColorsState = false;
+      }
+    }
+    else {
+      this.themeColorsNode.html( html );
+      if (!state) {
+        this.themeColorsNode.insertAfter( this.colorsNode );
+        this._themeColorsState = true;
+      }
+    }
+  },
+  
   selectTool: function($super) {
     $super();
     WebDoc.application.boardController.unselectAll();
     WebDoc.application.rightBarController.showItemInspector();
     WebDoc.application.inspectorController.selectPalette(2);
+    this.makeThemeColors();
   },
   
   mouseDown: function(e) {

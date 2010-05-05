@@ -34,10 +34,10 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   inspectorId: function() {
 
     ddd("check if widget has an inspector url", this.item);
-    if (this.item.data.data.properties && this.item.data.data.properties.inspector_url != null) {
+    if (this.item.data.data.properties && this.item.data.data.properties.inspector_url) {
       return this.item.data.data.properties.inspector_url;
     }      
-    else if (this.item.media && this.item.media.data.properties.inspector_url != null) {
+    else if (this.item.media && this.item.media.data.properties.inspector_url) {
       return this.item.media.data.properties.inspector_url;
     }
     return 5;
@@ -60,7 +60,9 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       function addLine(line) {
         numbers.append(document.createTextNode(String(lineNo++)));
         numbers.append(document.createElement("BR"));
-        for (var i = 0; i < line.length; i++) output.appendChild(line[i]);
+        for (var i = 0; i < line.length; i++) {
+          output.appendChild(line[i]);
+        }
         output.appendChild(document.createElement("BR"));
       }
       
@@ -71,7 +73,9 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       // Hack to remove br tag from last line -
       // it gets in the way in inline code elements
       lastChild = clone.children().eq(-1);
-      if (lastChild.is('br')) lastChild.remove();
+      if (lastChild.is('br')) {
+        lastChild.remove();
+      }
       
       node.replaceWith( clone );
     });
@@ -152,8 +156,8 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       if (this.item.data.data.tag !== "iframe" && (!this.item.data.data.innerHTML || $.string().blank(this.item.data.data.innerHTML))) {
         parent.append(this.placeholderNode);
       }
-      else {
-        this.placeholderNode && this.placeholderNode.remove();
+      else if (this.placeholderNode) {
+        this.placeholderNode.remove();
       }
     }
   }
