@@ -37,6 +37,8 @@
     while ( detectClass( className, styles ) ) {
       classlist.addClass( className );
       i++;
+      // Guard against the detector parting en boucle. 64 theme styles should be enough for anyone...
+      if (i > 64) { return; }
       className = classPrefix + i;
     }
   }
