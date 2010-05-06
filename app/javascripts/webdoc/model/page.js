@@ -35,6 +35,14 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.document = document;
   },
     
+  getLayoutId: function() {
+    return this.data.layout_id;  
+  },
+  
+  getLayout: function(callBack) {
+    WebDoc.ServerManager.getRecords(WebDoc.Layout, this.data.layout_id, callBack);
+  },
+  
   applyCss: function(newCss) {   
     if (newCss != this.data.data.css) {
       this.data.data.css = newCss;
@@ -402,7 +410,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
   
   assignLayout: function(layout) {
     // remove all previous items
-    for (var itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
+    for (var itemIndex = this.items.length - 1; itemIndex >= 0; itemIndex--) {
       var item = this.items[itemIndex];
       this.removeItem(item);
       item.destroy();
@@ -410,6 +418,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.data.layout_id = layout.id();
     this.data.data = $.evalJSON($.toJSON(layout.getModelPage().data.data));
     this.data.items = [];
+    this.fireObjectChanged({ modifedAttribute: "class css"});
     this.save();
     if (layout.getModelPage().items && $.isArray(layout.getModelPage().items)) {
       for (var index = 0; index < layout.getModelPage().items.length; index++) {

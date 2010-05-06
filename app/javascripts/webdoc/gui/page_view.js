@@ -76,10 +76,11 @@ WebDoc.PageView = $.klass({
       this._boardContainer.animate(boardContainerSize, 'fast');
       this.domNode.css(boardCss, 'fast');
     }
-    else if (page._isAttributeModified(options, 'class')) {
+    if (page._isAttributeModified(options, 'class')) {
+      this.domNode.attr("class", "");
       this.domNode.addClass(this.page.data.data['class']);      
     }
-    else if (page._isAttributeModified(options, 'externalPageUrl')) {
+    if (page._isAttributeModified(options, 'externalPageUrl')) {
       this._loadExternalPage();
     }
   },

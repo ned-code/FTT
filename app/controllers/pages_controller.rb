@@ -34,14 +34,16 @@ class PagesController < DocumentController
   
   # POST /documents/:document_id/pages
   def create
-    @page = @document.pages.create(params[:page])
-    
+    @page = @document.pages.new(params[:page])
+    @page.must_notify = true
+    @page.save
     render :json => @page.to_json(:include => :items)
   end
   
   # PUT /documents/:document_id/pages/:id
   def update
     @page = @document.pages.find_by_uuid(params[:id])
+    @page.must_notify = true
     @page.update_attributes(params[:page])
     
     render :json => @page
@@ -50,6 +52,7 @@ class PagesController < DocumentController
   # DELETE /documents/:document_id/pages/:id
   def destroy
     @page = @document.pages.find_by_uuid(params[:id])
+    @page.must_notify = true
     @page.destroy
     
     render :json => {}

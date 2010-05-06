@@ -9,6 +9,9 @@ class Page < ActiveRecord::Base
   
   serialize :data
   
+  # see XmppPageObserver
+  attr_accessor_with_default :must_notify, false
+  
   # ================
   # = Associations =
   # ================
