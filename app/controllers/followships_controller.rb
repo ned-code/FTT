@@ -3,7 +3,7 @@ class FollowshipsController < ApplicationController
   
   # GEt /followships
   def index
-    @user = current_user  
+    @user = current_user
   end
   
   # GET /following

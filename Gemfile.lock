@@ -1,9 +1,5 @@
 --- 
 dependencies: 
-  spork: 
-    group: 
-    - :test
-    version: ">= 0"
   mongrel: 
     group: 
     - :development
@@ -104,14 +100,6 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  rspactor: 
-    group: 
-    - :test
-    version: ">= 0"
-  email_spec: 
-    group: 
-    - :test
-    version: ">= 0"
   mini_magick: 
     group: 
     - :default
@@ -125,10 +113,6 @@ dependencies:
     - :default
     version: ">= 0"
   remarkable_rails: 
-    group: 
-    - :test
-    version: ">= 0"
-  cucumber: 
     group: 
     - :test
     version: ">= 0"
@@ -146,6 +130,8 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
+    require: 
+    - spec/factory_girl
   nokogiri: 
     group: 
     - :default
@@ -181,8 +167,6 @@ specs:
     version: 2.3.5
 - annotate: 
     version: 2.4.0
-- builder: 
-    version: 2.1.2
 - highline: 
     version: 1.5.2
 - net-ssh: 
@@ -205,26 +189,12 @@ specs:
     version: 0.2.2
 - columnize: 
     version: 0.3.1
-- diff-lcs: 
-    version: 1.1.2
-- json_pure: 
-    version: 1.4.2
-- polyglot: 
-    version: 0.3.1
-- term-ansicolor: 
-    version: 1.0.5
-- treetop: 
-    version: 1.4.5
-- cucumber: 
-    version: 0.6.4
 - daemons: 
     version: 1.0.10
 - warden: 
     version: 0.10.3
 - devise: 
-    version: 1.0.6
-- email_spec: 
-    version: 0.6.2
+    version: 1.0.7
 - erubis: 
     version: 2.6.5
 - factory_girl: 
@@ -246,7 +216,7 @@ specs:
 - jammit: 
     version: 0.4.4
 - json: 
-    version: 1.4.2
+    version: 1.4.3
 - linecache: 
     version: "0.43"
 - macaddr: 
@@ -283,14 +253,10 @@ specs:
     version: 1.2.4
 - right_aws: 
     version: 2.0.0
-- rspactor: 
-    version: 0.6.3
 - rspec-factory-girl: 
     version: 0.2.0
 - rubyzip: 
     version: 0.9.4
-- spork: 
-    version: 0.8.3
 - sqlite3-ruby: 
     version: 1.2.5
 - uuid: 
@@ -303,7 +269,7 @@ specs:
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: 7aa01a724f25540d42c4183b7e7d44958fdc1664
+hash: 28eb518aca278567069a879affffba8378feebbd
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

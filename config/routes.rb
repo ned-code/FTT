@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.root :controller => 'home', :action => :show
   
-  map.resources :documents, :has_many => { :pages => :items }, :member => { :duplicate => :post } do |m|
+  map.resources :documents, :has_many => { :pages => :items }, :member => { :duplicate => :post }, :collection => { :explore => :get } do |m|
     m.resource :document_roles, :as => 'roles', :only => [:show, :create, :update, :destroy]
   end
   
@@ -42,7 +42,7 @@ ActionController::Routing::Routes.draw do |map|
   map.follow 'follow', :controller => "followships", :action => :create
   map.unfollow 'unfollow', :controller => "followships", :action => :destroy
   
-  map.explore 'explore', :controller => "explore", :action => 'index'
+
   
   # dev controller
   map.resources :images,    :except => [:new, :edit, :update]

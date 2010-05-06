@@ -10,11 +10,11 @@ WebDoc.Application.beforeMain("viewer_list_handler", function() {
   WebDoc.WebdocViewer.showViewers();
 
   jQuery('#wd-main-filter').change(function(){
-    window.location.href = "/explore?main_filter="+jQuery(this).val()+"&category_filter="+jQuery('#wd-category-filter').val();
+    window.location.href = "/documents/explore?main_filter="+jQuery(this).val()+"&category_filter="+jQuery('#wd-category-filter').val();
   });
 
   jQuery('#wd-category-filter').change(function(){
-    window.location.href = "/explore?main_filter="+jQuery("#wd-main-filter").val()+"&category_filter="+jQuery(this).val();
+    window.location.href = "/documents/explore?main_filter="+jQuery("#wd-main-filter").val()+"&category_filter="+jQuery(this).val();
   });
 
   jQuery(document)
