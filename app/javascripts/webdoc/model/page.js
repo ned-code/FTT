@@ -7,13 +7,16 @@ WebDoc.Page = $.klass(WebDoc.Record,
 { 
   DEFAULT_PAGE_HEIGHT_PX: 600,
   DEFAULT_PAGE_WIDTH_PX: 800,
+  
   initialize: function($super, json, document, externalPageUrl) {
     // initialize relationship before super.
     this.firstPosition = 0;
     this.lastPosition = 0;
     this.items = [];
     this.nonDrawingItems = [];
-    this.document = document;
+    if (document.className() === WebDoc.Document.className()) {
+      this.document = document;
+    }
     $super(json);
     if (externalPageUrl) {
       if (!this.data.data) {
@@ -395,6 +398,27 @@ WebDoc.Page = $.klass(WebDoc.Record,
         return this.nonDrawingItems[i];
       }
     }
+  },
+  
+  assignLayout: function(layout) {
+    // remove all previous items
+    for (var itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
+      var item = this.items[itemIndex];
+      this.removeItem(item);
+      item.destroy();
+    }
+    this.data.layout_id = layout.id();
+    this.data.data = $.evalJSON($.toJSON(layout.getModelPage().data.data));
+    this.data.items = [];
+    this.save();
+    if (layout.getModelPage().items && $.isArray(layout.getModelPage().items)) {
+      for (var index = 0; index < layout.getModelPage().items.length; index++) {
+        var itemToCopy = layout.getModelPage().items[index];
+        var copiedItem = itemToCopy.copy();
+        this.addItem(copiedItem);
+        copiedItem.save();        
+      }
+    }                
   }
 });
 

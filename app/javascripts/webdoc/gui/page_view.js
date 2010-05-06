@@ -36,7 +36,9 @@ WebDoc.PageView = $.klass({
     boardContainer.css( boardContainerSize );
     this.domNode.css(boardCss);
     ddd( page.data.data.css );
-    
+    if (this.page.data.data['class']) {
+      this.domNode.addClass(this.page.data.data['class']);
+    }
     if (page.data.data.externalPage && !WebDoc.application.disableHtml) {
         this._loadExternalPage();
     }
@@ -73,6 +75,9 @@ WebDoc.PageView = $.klass({
       delete boardCss.height;
       this._boardContainer.animate(boardContainerSize, 'fast');
       this.domNode.css(boardCss, 'fast');
+    }
+    else if (page._isAttributeModified(options, 'class')) {
+      this.domNode.addClass(this.page.data.data['class']);      
     }
     else if (page._isAttributeModified(options, 'externalPageUrl')) {
       this._loadExternalPage();
