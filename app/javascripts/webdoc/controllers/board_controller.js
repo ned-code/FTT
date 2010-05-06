@@ -226,7 +226,7 @@ WebDoc.BoardController = jQuery.klass({
     }, 1800);
     
     jQuery("." + currentClass).removeClass(currentClass).addClass(newClass);
-    
+    this.boardContainerNode.addClass(newClass);
     // Store the class so we know what to remove on the next setTheme
     this._themeClass = newClass;
   },

@@ -18,7 +18,7 @@
     while(l--) {
       cssValue = testNode.css( styleList[l] );
       
-      if ( !cssValue || cssValue === 'none' || cssValue === 'rgba(0, 0, 0, 0)' ) {
+      if ( !cssValue || cssValue === 'none' || cssValue === 'rgba(0, 0, 0, 0)' || cssValue === 'transparent' ) {
         testNode.addClass( className );
         return false;
       }
