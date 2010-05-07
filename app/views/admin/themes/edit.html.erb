@@ -1,4 +1,4 @@
-<h1><%= "#{t('.title')} #{@theme.name}" %></h1>
+<h1><%= "#{t('.title')} #{@theme.title}" %></h1>
 
 <% semantic_form_for @theme, :url => admin_theme_path(@theme), :html => { :enctype => 'multipart/form-data' } do |f| %>
   <% f.inputs do %>
