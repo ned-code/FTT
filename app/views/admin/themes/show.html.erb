@@ -2,7 +2,8 @@
 
 <ul>
   <li><%= image_tag(@theme.thumbnail_url) %></li>
-  <li>Style: <%= link_to @theme.style_url, @theme.style_url%></li>
+  <li>Style: <%= link_to @theme.style_url, @theme.style_url %></li>
+  <li>Elements: <%= link_to @theme.elements_url, @theme.elements_url %></li>
   <li>File: <%= @theme.file %></li>
   <% if @theme.author.present? %>
     <li>Author: <%= @theme.author %></li>

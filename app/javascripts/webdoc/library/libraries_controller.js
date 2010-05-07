@@ -20,7 +20,7 @@ WebDoc.LibrariesController = $.klass(WebDoc.RightBarInspectorController, {
     
     this.domNode = $(this.LIBRARIES_SELECTOR);
   },
-  
+
   buttonSelector: function() {
     return this.LIBRARY_BUTTON_SELECTOR;  
   } 
@@ -124,5 +124,6 @@ LibraryUtils = $.klass({
 //= require <webdoc/library/images_library>
 //= require <webdoc/library/videos_library>
 //= require <webdoc/library/apps_library>
+//= require <webdoc/library/theme_elements_library>
 //= require <webdoc/library/web_browser>
 

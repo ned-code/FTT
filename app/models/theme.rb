@@ -59,6 +59,7 @@ class Theme < ActiveRecord::Base
         self.author = config_dom.root.elements['author'].text
         self.title = config_dom.root.elements['title'].text
         path = file.store_url
+        self.elements_url = path + config_dom.root.attribute('elements').to_s
         self.thumbnail_url = path + config_dom.root.attribute('thumbnail').to_s
         self.style_url = path + "css/parsed_theme_style.css"
         file_current_path = self.file.current_path if file.s3_bucket != nil
