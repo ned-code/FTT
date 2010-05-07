@@ -57,7 +57,7 @@ WebDoc.Application.beforeMain('card', function(){
     }
     
     jQuery.ajax({
-      url: "/follow",
+      url: "/followships/follow",
       type: 'POST',
       data: data, 
       dataType: 'json',              
@@ -93,7 +93,7 @@ WebDoc.Application.beforeMain('card', function(){
     }
     
     jQuery.ajax({
-      url: "/unfollow",
+      url: "/followships/unfollow",
       type: 'DELETE',
       data: data, 
       dataType: 'json',              

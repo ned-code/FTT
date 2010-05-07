@@ -16,14 +16,13 @@ class DocumentsController < ApplicationController
       allow :reader, :of => :document
       allow :editor, :of => :document      
     end
+    allow all, :to => :explore
   end
   
   # GET /documents
   def index    
     respond_to do |format|
-      format.html {
-        set_return_to
-      }
+      format.html { set_return_to }
       format.json {
         per_page = 20
         @documents = Document.all_with_filter(current_user, params[:document_filter], params[:page], per_page)
@@ -40,6 +39,12 @@ class DocumentsController < ApplicationController
         }
       }
     end
+  end
+
+  # GET /documents/explore
+  def explore
+    set_return_to
+    @public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:page])
   end
   
   # GET /documents/:id
@@ -84,7 +89,7 @@ class DocumentsController < ApplicationController
   protected
   
   def instantiate_document
-    @document = Document.find_by_uuid(params[:id])     
+    @document = Document.find_by_uuid(params[:id])
   end
   
   def authenticate_if_needed
@@ -92,7 +97,7 @@ class DocumentsController < ApplicationController
   end
   
   def create_view_count
-    if (request.format() === "text/html")
+    if request.format == "text/html"
       @document.view_counts.create(
         :session_id => request.session_options[:id],
         :ip_address => request.remote_ip,

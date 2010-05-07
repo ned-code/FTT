@@ -25,9 +25,9 @@
         <% @user.followers.each do |user|%>
         <li>
           <% if user.follower?(current_user) %>
-          <%= render :partial => "card", :locals => { :user => user } %>
+            <%= render :partial => "card", :locals => { :user => user } %>
           <% else %>
-          <%= render :partial => "card", :locals => { :user => user, :subscribed => user.follower?(current_user) } %>
+            <%= render :partial => "card", :locals => { :user => user, :subscribed => user.follower?(current_user) } %>
           <% end %>
         </li>
         <% end%>
