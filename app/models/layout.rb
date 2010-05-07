@@ -2,7 +2,7 @@ class Layout < ActiveRecord::Base
 
   has_uuid
 
-  attr_accessible :uuid, :name, :thumbnail_url, :system_name  
+  attr_accessible :uuid, :title, :thumbnail_url, :kind
 
   # ================
   # = Associations =
@@ -14,9 +14,11 @@ class Layout < ActiveRecord::Base
   # ===============
   # = Validations =
   # ===============
-  
+
+  validates_presence_of :title
   validates_presence_of :thumbnail_url
-  validates_presence_of :system_name
+  validates_presence_of :template_url
+  validates_presence_of :kind
 
   # ====================
   # = Instance Methods =
@@ -43,7 +45,8 @@ class Layout < ActiveRecord::Base
       page_height = style_body['height'].present? ? style_body['height'] : '600px'
       page_width = style_body['width'].present? ? style_body['width'] : '800px'
 
-      page.title = self.name
+      page.title = self.title
+      page.layout_kind = self.kind
       page.data = HashWithIndifferentAccess.new
       page.data[:class] = body_class
       page.data[:css] = HashWithIndifferentAccess.new

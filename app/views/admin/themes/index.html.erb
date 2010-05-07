@@ -5,7 +5,7 @@
 <ul>
   <% @themes.each do |theme| %>
     <li>
-      <%= "#{theme.name} (#{theme.version})" %>
+      <%= "#{theme.title} (#{theme.version})" %>
       |
       <%= link_to t('show'), admin_theme_path(theme) %>
       <%= link_to t('edit'), edit_admin_theme_path(theme) %>

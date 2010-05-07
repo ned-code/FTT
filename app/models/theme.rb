@@ -3,7 +3,7 @@ class Theme < ActiveRecord::Base
 
   has_uuid
 
-  attr_accessible :uuid, :file, :name, :thumbnail_url, :style_url, :version, :author
+  attr_accessible :uuid, :file, :title, :thumbnail_url, :style_url, :version, :author
   
   # ================
   # = Associations =
@@ -17,7 +17,7 @@ class Theme < ActiveRecord::Base
   # ===============
 
   validates_presence_of :file
-  validates_presence_of :name
+  validates_presence_of :title
   validates_presence_of :thumbnail_url
   validates_presence_of :style_url
 
@@ -57,7 +57,7 @@ class Theme < ActiveRecord::Base
         self.assign_uuid
         self.version = config_dom.root.attribute('version').to_s
         self.author = config_dom.root.elements['author'].text
-        self.name = config_dom.root.elements['name'].text
+        self.title = config_dom.root.elements['title'].text
         path = file.store_url
         self.thumbnail_url = path + config_dom.root.attribute('thumbnail').to_s
         self.style_url = path + "css/parsed_theme_style.css"
@@ -67,8 +67,8 @@ class Theme < ActiveRecord::Base
         config_dom.root.elements['layouts'].each_child do |layout|
           if layout.class == REXML::Element
             layout_object = Layout.new
-            layout_object.name = layout.elements['name'].text
-            layout_object.system_name = layout.elements['system_name'].text
+            layout_object.title = layout.elements['title'].text
+            layout_object.kind = layout.elements['kind'].text
             layout_object.thumbnail_url = path + layout.attribute('thumbnail').to_s
             layout_object.template_url = path + layout.attribute('src').to_s
             layout_object.theme = self

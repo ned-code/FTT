@@ -1,4 +1,4 @@
-<h1><%= t('.title', :name => @theme.name) %></h1>
+<h1><%= t('.title', :name => @theme.title) %></h1>
 
 <ul>
   <li><%= image_tag(@theme.thumbnail_url) %></li>
@@ -16,8 +16,8 @@
 <h2>Layouts</h2>
 <% for layout in @theme.layouts %>
   <ul>
-    <li>Name: <%= layout.name %></li>
-    <li>System name: <%= layout.system_name %></li>
+    <li>Title: <%= layout.title %></li>
+    <li>Kind: <%= layout.kind %></li>
     <li>Thumbnail: <%= image_tag(layout.thumbnail_url) %></li>
     <li>Template: <%= link_to(layout.template_url, layout.template_url) %></li>
   </ul>
