@@ -7,7 +7,6 @@ describe Layout do
 
   should_belong_to :theme
   should_belong_to :model_page, :dependent => :delete
-  should_have_many :pages
   
   describe "create_model_page! with the layout.html example" do
     before(:all) do

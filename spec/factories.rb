@@ -66,7 +66,8 @@ Factory.define :category do |f|
 end
 
 Factory.define :layout do |f|
-  f.name            "Layout 1"
+  f.name                   "Layout 1"
+  f.sequence(:system_name) { |n| "system_name#{n}" } 
   f.thumbnail_url   Rails.root.join('spec','fixtures','thumbnail.png')
   f.template_url    Rails.root.join('spec','fixtures','layout.html')
 end
