@@ -43,6 +43,10 @@ describe Layout do
       @layout.model_page.items.count(:conditions => ['media_type = ?', 'text']).should == 1
     end
 
+    it "should create text item and the item have a kind" do
+      @layout.model_page.items.first(:conditions => ['media_type = ?', 'text']).kind.should == 'item_1'
+    end
+
     it "should create html item" do
       @layout.model_page.items.count(:conditions => ['media_type = ? AND media_id IS ?', 'widget', nil]).should == 1
     end

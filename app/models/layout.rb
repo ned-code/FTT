@@ -57,8 +57,7 @@ class Layout < ActiveRecord::Base
         if doc_item.class == Nokogiri::XML::Element
           case doc_item.node_name
             when 'div'
-              item = page.items.build
-              item.data = default_item_data_form_doc_item(doc_item)
+              item = build_default_item(page, doc_item)
               item.data[:tag] = 'div'
               if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
                 item.data[:innerHTML] = ""
@@ -75,20 +74,17 @@ class Layout < ActiveRecord::Base
               end
               item.data = item.data.to_yaml
             when 'img'
-              item = page.items.build
-              item.data = default_item_data_form_doc_item(doc_item)
+              item = build_default_item(page, doc_item)
               item.data[:tag] = 'img'
               item.data[:src] = doc_item.attr('src')
               item.media_type = 'image'
             when 'iframe'
-              item = page.items.build
-              item.data = default_item_data_form_doc_item(doc_item)
+              item = build_default_item(page, doc_item)
               item.data[:tag] = 'iframe'
               item.data[:src] = doc_item.attr('src')
               item.media_type = 'iframe'
             when 'object'
-              item = page.items.build
-              item.data = default_item_data_form_doc_item(doc_item)
+              item = build_default_item(page, doc_item)
               if doc_item.attr('type') == 'video/vimeo' || doc_item.attr('type') == 'video/youtube'
                 media = Medias::Widget.find_by_system_name(doc_item.attr('type').split(/\//)[1])
                 item.data[:preference][:url] = doc_item.attr('data')
@@ -107,8 +103,7 @@ class Layout < ActiveRecord::Base
             when 'svg'
               for svg_item in doc_item.children
                 if svg_item.node_name == 'polyline'
-                  item = page.items.build
-                  item.data = default_item_data_form_doc_item(doc_item)
+                  item = build_default_item(page, doc_item)
                   item.data[:css] = HashWithIndifferentAccess.new
                   item.data[:css][:zIndex] = "2000"
                   item.data[:tag] = 'polyline'
@@ -150,6 +145,13 @@ class Layout < ActiveRecord::Base
     hash[:preference] = HashWithIndifferentAccess.new
     hash[:preference][:rails_empty] = 'dummy'
     hash
+  end
+
+  def build_default_item(page, doc_item)
+    item = page.items.build
+    item.kind = doc_item.attr('data-item-kind') if doc_item.attr('data-item-kind').present?
+    item.data = default_item_data_form_doc_item(doc_item)
+    item
   end
 
 end
