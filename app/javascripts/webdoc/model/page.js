@@ -196,7 +196,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
       ddd("restore previous tems");
       this.data.items = previousItems;
       //clear previous item view
-      for (var itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
+      for (var itemIndex = this.items.length - 1; itemIndex >= 0; itemIndex--) {
         this.removeItem(this.items[itemIndex]);
       }
     }
@@ -418,8 +418,8 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.data.layout_id = layout.id();
     this.data.data = $.evalJSON($.toJSON(layout.getModelPage().data.data));
     this.data.items = [];
-    this.fireObjectChanged({ modifedAttribute: "class css"});
     this.save();
+    this.fireObjectChanged({ modifedAttribute: "class css"});    
     if (layout.getModelPage().items && $.isArray(layout.getModelPage().items)) {
       for (var index = 0; index < layout.getModelPage().items.length; index++) {
         var itemToCopy = layout.getModelPage().items[index];
@@ -428,6 +428,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
         copiedItem.save();        
       }
     }                
+//    this.save(undefined,true);
   }
 });
 

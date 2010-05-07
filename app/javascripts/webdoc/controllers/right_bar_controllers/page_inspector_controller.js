@@ -71,6 +71,9 @@
       if (this._page) {
         this._page.removeListener(this);
       }   
+      else {
+        WebDoc.application.pageEditor.currentPage.document.addListener(this);
+      }
       this._page = WebDoc.application.pageEditor.currentPage;
       this._page.addListener(this);
       this._updatePageRelatedFields();
@@ -247,9 +250,14 @@
       }
     },
   
-    objectChanged: function(page) {
+    objectChanged: function(record, options) {
       ddd('page-inspector_controller: objectChanged: must update fields');
-      this._updatePageRelatedFields();
+      if (record.className() == "page") {
+        this._updatePageRelatedFields();
+      }
+      else if (record._isAttributeModified(options, 'theme')) {
+        this._updateThemeDropDown();
+      }
     },
     
     // Background repeat ------------------------------------------------  

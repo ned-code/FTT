@@ -45,8 +45,11 @@ class PagesController < DocumentController
     @page = @document.pages.find_by_uuid(params[:id])
     @page.must_notify = true
     @page.update_attributes(params[:page])
-    
-    render :json => @page
+    if (params[:page][:items_attributes].present?)
+      render :json => @page.to_json(:include => :items)
+    else
+      render :json => @page
+    end
   end
   
   # DELETE /documents/:document_id/pages/:id

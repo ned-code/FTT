@@ -172,12 +172,12 @@ jQuery.extend(WebDoc.ServerManager, {
    * @param {Object} callBack function that called when object is updated
    *        callback recieve an array that has the updated object.
    */
-  updateObject: function(object, callBack) {
+  updateObject: function(object, callBack, withRelationships) {
     var param = {
       xmpp_client_id: WebDoc.ServerManager.xmppClientId,
       _method: "PUT"
     };
-    jQuery.extend(param, object.to_json());
+    jQuery.extend(param, object.to_json(withRelationships));
     jQuery.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
       //object.refresh(data);
       callBack.apply(this, [[object]]);
