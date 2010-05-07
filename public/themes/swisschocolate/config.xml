@@ -9,12 +9,15 @@
   <layouts>
     <layout src="layout-1head1column.html" thumbnail="images/thumbs/layout_1_1.png">
       <name>1 title, 1 column</name>   
+      <system_name>layout_1</system_name>   
     </layout>
     <layout src="layout-1head2column.html" thumbnail="images/thumbs/layout_1_2.png">
       <name>1 title, 2 columns</name>   
+      <system_name>layout_2</system_name>   
     </layout>
     <layout src="layout-1head3column.html" thumbnail="images/thumbs/layout_1_3.png">
       <name>1 title, 3 columns</name>   
+      <system_name>layout_3</system_name>   
     </layout>
   </layouts>
 </theme>

@@ -40,5 +40,9 @@ group :test do
   gem 'factory_girl'
   gem 'rspec-factory-girl', :require => 'spec/factory_girl'
   
-  gem 'webrat'
+  gem 'steak'
+  # brew install libffi
+  gem 'capybara'
+  gem 'selenium-webdriver'
+  
 end

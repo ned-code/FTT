@@ -2,7 +2,7 @@ class Layout < ActiveRecord::Base
 
   has_uuid
 
-  attr_accessible :uuid, :name, :thumbnail_url  
+  attr_accessible :uuid, :name, :thumbnail_url, :system_name  
 
   # ================
   # = Associations =
@@ -10,13 +10,13 @@ class Layout < ActiveRecord::Base
   
   belongs_to :theme
   belongs_to :model_page, :class_name => "Page", :foreign_key => "model_page_id", :dependent => :delete
-  has_many :pages
 
   # ===============
   # = Validations =
   # ===============
   
   validates_presence_of :thumbnail_url
+  validates_presence_of :system_name
 
   # ====================
   # = Instance Methods =

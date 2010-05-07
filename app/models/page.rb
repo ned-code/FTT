@@ -3,7 +3,7 @@ require "xmpp_notification"
 class Page < ActiveRecord::Base
   has_uuid
   
-  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_id
+  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_system_name
 
   attr_accessor_with_default :touch_document_active, true
   
@@ -19,7 +19,6 @@ class Page < ActiveRecord::Base
   has_many :items, :dependent => :delete_all
   belongs_to :document
   belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
-  belongs_to :layout
   
   # should be placed after associations declaration
   accepts_nested_attributes_for :items
@@ -33,6 +32,7 @@ class Page < ActiveRecord::Base
   # ===============
   # = Validations =
   # ===============
+
   validates_uniqueness_of :uuid  
 
   # =============

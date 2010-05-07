@@ -1,5 +1,5 @@
 
-require 'lib/shindig'
+require Rails.root + 'lib/shindig'
 
 class ItemsController < PageController
   before_filter :authenticate_user!
