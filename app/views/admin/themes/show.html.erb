@@ -4,6 +4,9 @@
   <li><%= image_tag(@theme.thumbnail_url) %></li>
   <li>Style: <%= link_to @theme.style_url, @theme.style_url%></li>
   <li>File: <%= @theme.file %></li>
+  <% if @theme.author.present? %>
+    <li>Author: <%= @theme.author %></li>
+  <% end %>
   <li>Versions: <%= @theme.version %></li>
   <% if @theme.ancestor.present? %>
     <li>Ancestor theme: <%= link_to(@theme.ancestor.id, admin_theme_path(@theme.ancestor)) %></li>
@@ -14,7 +17,9 @@
 <% for layout in @theme.layouts %>
   <ul>
     <li>Name: <%= layout.name %></li>
+    <li>System name: <%= layout.system_name %></li>
     <li>Thumbnail: <%= image_tag(layout.thumbnail_url) %></li>
+    <li>Template: <%= link_to(layout.template_url, layout.template_url) %></li>
   </ul>
 <% end %>
 
