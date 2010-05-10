@@ -46,7 +46,7 @@ WebDoc.PageView = $.klass({
     if (page._isAttributeModified(options, 'class')) {
       this._initPageClass();      
     }
-    if (page._isAttributeModified(options, 'externalPageUrl')) {
+    if (page.data.data.externalPage && page._isAttributeModified(options, 'externalPageUrl')) {
       this._loadExternalPage();
     }
   },

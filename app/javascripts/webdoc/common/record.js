@@ -150,7 +150,10 @@ WebDoc.Record = jQuery.klass(
    */
   refresh: function(json) {
     this.isNew = false;
-    this.data = json[this.className()];
+    if (!this.data) {
+      this.data = {};
+    }
+    jQuery.extend(this.data, json[this.className()]);       
     this._initRelationShips(json);
     this.fireObjectChanged({ refresh: true });
   },

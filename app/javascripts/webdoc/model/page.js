@@ -15,7 +15,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this._layout = undefined;
     this.items = [];
     this.nonDrawingItems = [];
-    if (document.className() === WebDoc.Document.className()) {
+    if (document && document.className() === WebDoc.Document.className()) {
       this.document = document;
     }
     $super(json);
@@ -204,33 +204,23 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
   
   refresh: function($super, json) {
-    //backup previous items if we need to keep them
-    var previousItems = [];
-    $.each(this.items, function() {
-      previousItems.push(this.getData());
-    });
-    ddd("previous items", previousItems);
-    $super(json);
-    if ((this.data.items === null || this.data.items === undefined) && previousItems) {
-      ddd("restore previous tems");
-      this.data.items = previousItems;
-      //clear previous item view
-      for (var itemIndex = this.items.length - 1; itemIndex >= 0; itemIndex--) {
-        this.removeItem(this.items[itemIndex]);
-      }
-    }
-    var that = this;
-    this.items = [];
-    this.nonDrawingItems = [];    
-    if (this.data.items && $.isArray(this.data.items)) {
+    this._layout = undefined;
+    $super(json);  
+    // if recieved json contains items then we create all items records.
+    // if json does not contains items we leave all previous items as they were
+    if (json.page.items && $.isArray(json.page.items)) {
+      var that = this;
+      this.items = [];
+      this.nonDrawingItems = [];        
       this.data.items.sort(function(a,b) {
         a.position = a.position?a.position:0;
         b.position = b.position?b.position:0;
         return a.position - b.position;
       });
-      $.each(this.data.items, function() {
-        that.createOrUpdateItem({ item: this });
-      });
+      for (var i = this.data.items.length -1; i >= 0; i--) {
+        var itemData = this.data.items[i];
+        that.createOrUpdateItem({ item: itemData });
+      }
     }    
   },
   
@@ -338,7 +328,6 @@ WebDoc.Page = $.klass(WebDoc.Record,
           this.nonDrawingItems.splice(nonDrawingIndex, 1);    
         }
       }
-      //ddd(this.items);
       this.fireItemRemoved(item);
     }
   },
@@ -436,12 +425,11 @@ WebDoc.Page = $.klass(WebDoc.Record,
       if (item.getKind()) {
         previousItemsMap[item.getKind()] = item;
       }
-//      this.removeItem(item);
-//      item.destroy();
     }
     if (layout) {
       this.data.layout_kind = layout.getKind();
-      // JBA do not copy data of model page but page view will tae value from model page.
+      this._layout = undefined;
+      // JBA do not copy data of model page but page view will take value from model page.
       //    this.data.data = $.evalJSON($.toJSON(layout.getModelPage().data.data));
       //this.data.items = [];
       //this.save();
@@ -469,11 +457,22 @@ WebDoc.Page = $.klass(WebDoc.Record,
     for (itemKind in previousItemsMap) {
       var itemToRemove = previousItemsMap[itemKind];
       if (itemToRemove) {
-        this.removeItem(itemToRemove);
-        itemToRemove.destroy();
+        itemToRemove.data._delete = true;
+        //this.removeItem(itemToRemove);
+        //itemToRemove.destroy();
       }
     }    
     this.save(undefined,true);
+  },
+  
+  save: function($super, callBack, withRelationships) {
+    $super(callBack, withRelationships);
+    for (var i = this.items.length - 1; i >= 0; i--) {
+      var item = this.items[i];
+      if (item.data._delete) {
+        this.removeItem(item);
+      }
+    }
   }
 });
 
