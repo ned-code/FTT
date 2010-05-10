@@ -66,7 +66,7 @@ WebDoc.ThemesController = jQuery.klass({
         initCallback: function(){
           //console.log('HEY - THEMES CONTROLLER');
         }
-      })
+      });
     
       ddd('[Themes] open chooser');
     }

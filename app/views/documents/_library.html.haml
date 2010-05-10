@@ -12,7 +12,7 @@
           %a{ :href =>'#videos'}= t('.videos.title')
         %li.apps
           %a{ :href =>'#apps'}= t('.apps.title')
-        %li.stickies
+        %li.theme_elements
           %a{ :href => '#theme_elements' }= t('.theme_elements.title')
         -#%li.web-browser
         -#  %a{ :href =>'#web-browser-favorites'}= t('.web.title')          
@@ -176,6 +176,7 @@
         %a.back{ :href =>'#' }= t('.buttons.back')
 
       .tab_content#theme_elements_content
+        %iframe{ :src => '', :width => '100%', :height => '100%' }#theme_elements_iframe
 
       -#    .thumbnails
       -#    .spacer
