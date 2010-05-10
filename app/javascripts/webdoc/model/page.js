@@ -422,7 +422,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     for (var itemIndex = this.items.length - 1; itemIndex >= 0; itemIndex--) {
       var item = this.items[itemIndex];
       // we take only items that come from layout
-      if (item.getKind()) {
+      if (item.getKind() && item.getKind() !== 'null') {
         previousItemsMap[item.getKind()] = item;
       }
     }
