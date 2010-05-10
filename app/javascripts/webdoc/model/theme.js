@@ -9,8 +9,8 @@ WebDoc.Theme = $.klass(WebDoc.Record, {
     $super(json);
   },
   
-  getName: function() {
-    return this.data.name;
+  getTitle: function() {
+    return this.data.title;
   },
   
   getStyleUrl: function() {

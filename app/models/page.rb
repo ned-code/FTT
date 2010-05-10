@@ -3,7 +3,7 @@ require "xmpp_notification"
 class Page < ActiveRecord::Base
   has_uuid
   
-  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_system_name
+  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind
 
   attr_accessor_with_default :touch_document_active, true
   

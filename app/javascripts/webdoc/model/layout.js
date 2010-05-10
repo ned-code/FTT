@@ -17,12 +17,16 @@ WebDoc.Layout = $.klass(WebDoc.Record, {
     return this.model_page;  
   },
   
-  getName: function() {
-    return this.data.name;
+  getTitle: function() {
+    return this.data.title;
   },
-
+  
   getThumbnailUrl: function() {
     return this.data.thumbnail_url;
+  },
+  
+  getKind: function() {
+    return this.data.kind;
   }
   
 });

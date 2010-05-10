@@ -12,6 +12,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     // initialize relationship before super.
     this.firstPosition = 0;
     this.lastPosition = 0;
+    this._layout = undefined;
     this.items = [];
     this.nonDrawingItems = [];
     if (document.className() === WebDoc.Document.className()) {
@@ -35,12 +36,30 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.document = document;
   },
     
-  getLayoutId: function() {
-    return this.data.layout_id;  
+  getLayoutkind: function() {
+    return this.data.layout_kind;  
   },
   
   getLayout: function(callBack) {
-    WebDoc.ServerManager.getRecords(WebDoc.Layout, this.data.layout_id, callBack);
+    if (this._layout !== undefined) {
+      callBack.call(this, this._layout);
+    }
+    else {
+      this.document.getTheme(function(theme) {
+        if (theme && theme.length === 1) {
+          var aTheme = theme[0];
+          for (var i = aTheme.getLayouts().length - 1; i >= 0; i--) {
+            var aLayout = aTheme.getLayouts()[i];
+            if (aLayout.getKind() === this.getLayoutkind()) {
+              this._layout = aLayout;
+              break;
+            }
+          }
+          callBack.call(this, this._layout);
+        }
+      }.pBind(this));
+    }
+    return this._layout;
   },
   
   applyCss: function(newCss) {   
@@ -408,27 +427,53 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
   },
   
-  assignLayout: function(layout) {
+  assignLayout: function(layout) {    
     // remove all previous items
+    var previousItemsMap = {};
     for (var itemIndex = this.items.length - 1; itemIndex >= 0; itemIndex--) {
       var item = this.items[itemIndex];
-      this.removeItem(item);
-      item.destroy();
-    }
-    this.data.layout_id = layout.id();
-    this.data.data = $.evalJSON($.toJSON(layout.getModelPage().data.data));
-    this.data.items = [];
-    this.save();
-    this.fireObjectChanged({ modifedAttribute: "class css"});    
-    if (layout.getModelPage().items && $.isArray(layout.getModelPage().items)) {
-      for (var index = 0; index < layout.getModelPage().items.length; index++) {
-        var itemToCopy = layout.getModelPage().items[index];
-        var copiedItem = itemToCopy.copy();
-        this.addItem(copiedItem);
-        copiedItem.save();        
+      // we take only items that come from layout
+      if (item.getKind()) {
+        previousItemsMap[item.getKind()] = item;
       }
-    }                
-//    this.save(undefined,true);
+//      this.removeItem(item);
+//      item.destroy();
+    }
+    if (layout) {
+      this.data.layout_kind = layout.getKind();
+      // JBA do not copy data of model page but page view will tae value from model page.
+      //    this.data.data = $.evalJSON($.toJSON(layout.getModelPage().data.data));
+      //this.data.items = [];
+      //this.save();
+      this.fireObjectChanged({
+        modifedAttribute: "class css"
+      });
+      if (layout.getModelPage().items && $.isArray(layout.getModelPage().items)) {
+        for (var index = 0; index < layout.getModelPage().items.length; index++) {
+          var itemToCopy = layout.getModelPage().items[index];
+          var previousItemWithSameKind = previousItemsMap[itemToCopy.getKind()];
+          var copiedItem;
+          if (!previousItemWithSameKind) {
+            copiedItem = itemToCopy.copy();
+            this.addItem(copiedItem);
+          }
+          else {
+            copiedItem = previousItemWithSameKind;
+            copiedItem.setInnerHtmlPlaceholder(itemToCopy.getInnerHtmlPlaceholder());
+            previousItemsMap[itemToCopy.getKind()] = null;
+          }
+        }
+      }
+    }
+    // remove unecessary items
+    for (itemKind in previousItemsMap) {
+      var itemToRemove = previousItemsMap[itemKind];
+      if (itemToRemove) {
+        this.removeItem(itemToRemove);
+        itemToRemove.destroy();
+      }
+    }    
+    this.save(undefined,true);
   }
 });
 
