@@ -1,24 +1,16 @@
 
 WebDoc.Theme = $.klass(WebDoc.Record, {
+  
   initialize: function($super, json) {
+    this.hasMany = { 
+      layouts: WebDoc.Layout 
+    };
     this.layouts = [];
     $super(json);
   },
   
-  refresh: function($super, json) {
-    $super(json);
-    var that = this;
-    this.layouts = [];    
-    if (this.data.layouts && $.isArray(this.data.layouts)) {
-      for (var i = 0; i < this.data.layouts.length; i++) {
-        var layoutData = this.data.layouts[i];
-        this._createLayout({ layout: layoutData });
-      }
-    }   
-  },
-  
-  getName: function() {
-    return this.data.name;
+  getTitle: function() {
+    return this.data.title;
   },
   
   getStyleUrl: function() {
@@ -28,14 +20,13 @@ WebDoc.Theme = $.klass(WebDoc.Record, {
   getThumbnailUrl: function() {
     return this.data.thumbnail_url;
   },
+
+  getElementsUrl: function() {
+    return this.data.elements_url;
+  },
   
   getLayouts: function() {
     return this.layouts;
-  },
-  
-  _createLayout: function(layoutData) {
-    var newLayout = new WebDoc.Layout(layoutData, this);
-    this.layouts.push(newLayout);
   }
 });
 

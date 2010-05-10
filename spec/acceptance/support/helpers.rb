@@ -1,4 +1,5 @@
-class ActionController::IntegrationTest
+module HelperMethods
+  # Put here any helper method you need to be available in all your acceptance tests
   
   def warden
     request.env['warden']
@@ -25,8 +26,8 @@ class ActionController::IntegrationTest
   def sign_in_as_user(options={}, &block)
     user = create_user(options)
     visit root_path unless options[:visit] == false
-    fill_in 'email', :with => user.email
-    fill_in 'password', :with => '123456'
+    fill_in 'user_email', :with => user.email
+    fill_in 'user_password', :with => '123456'
     check 'remember me' if options[:remember_me] == true
     yield if block_given?
     click_button 'Login'
@@ -61,5 +62,9 @@ protected
     url = "http://#{request.host}#{url}" if url[0] == ?/
     url
   end
-  
+    
 end
+
+Spec::Runner.configuration.include(HelperMethods)
+
+

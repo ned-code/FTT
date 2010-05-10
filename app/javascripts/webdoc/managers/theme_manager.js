@@ -7,10 +7,11 @@ WebDoc.ThemeManager = $.klass({
     this._defaultTheme = new WebDoc.Theme({
       theme: {
         id: 'default',
-        name: 'Webdoc Default',
+        title: 'Webdoc Default',
         layouts: [],
         style_url: '/themes/default/css/typography.css',
-        thumbnail_url: ''
+        thumbnail_url: '',
+        elements_url: ''
       }
     });
     // Override theme object methods

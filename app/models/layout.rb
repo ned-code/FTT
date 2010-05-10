@@ -2,7 +2,7 @@ class Layout < ActiveRecord::Base
 
   has_uuid
 
-  attr_accessible :uuid, :name, :thumbnail_url  
+  attr_accessible :uuid, :title, :thumbnail_url, :kind
 
   # ================
   # = Associations =
@@ -10,13 +10,15 @@ class Layout < ActiveRecord::Base
   
   belongs_to :theme
   belongs_to :model_page, :class_name => "Page", :foreign_key => "model_page_id", :dependent => :delete
-  has_many :pages
 
   # ===============
   # = Validations =
   # ===============
-  
+
+  validates_presence_of :title
   validates_presence_of :thumbnail_url
+  validates_presence_of :template_url
+  validates_presence_of :kind
 
   # ====================
   # = Instance Methods =
@@ -43,7 +45,8 @@ class Layout < ActiveRecord::Base
       page_height = style_body['height'].present? ? style_body['height'] : '600px'
       page_width = style_body['width'].present? ? style_body['width'] : '800px'
 
-      page.title = self.name
+      page.title = self.title
+      page.layout_kind = self.kind
       page.data = HashWithIndifferentAccess.new
       page.data[:class] = body_class
       page.data[:css] = HashWithIndifferentAccess.new
@@ -54,8 +57,7 @@ class Layout < ActiveRecord::Base
         if doc_item.class == Nokogiri::XML::Element
           case doc_item.node_name
             when 'div'
-              item = page.items.build
-              item.data = default_item_data_form_doc_item(doc_item)
+              item = build_default_item(page, doc_item)
               item.data[:tag] = 'div'
               if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
                 item.data[:innerHTML] = ""
@@ -72,20 +74,17 @@ class Layout < ActiveRecord::Base
               end
               item.data = item.data.to_yaml
             when 'img'
-              item = page.items.build
-              item.data = default_item_data_form_doc_item(doc_item)
+              item = build_default_item(page, doc_item)
               item.data[:tag] = 'img'
               item.data[:src] = doc_item.attr('src')
               item.media_type = 'image'
             when 'iframe'
-              item = page.items.build
-              item.data = default_item_data_form_doc_item(doc_item)
+              item = build_default_item(page, doc_item)
               item.data[:tag] = 'iframe'
               item.data[:src] = doc_item.attr('src')
               item.media_type = 'iframe'
             when 'object'
-              item = page.items.build
-              item.data = default_item_data_form_doc_item(doc_item)
+              item = build_default_item(page, doc_item)
               if doc_item.attr('type') == 'video/vimeo' || doc_item.attr('type') == 'video/youtube'
                 media = Medias::Widget.find_by_system_name(doc_item.attr('type').split(/\//)[1])
                 item.data[:preference][:url] = doc_item.attr('data')
@@ -104,8 +103,7 @@ class Layout < ActiveRecord::Base
             when 'svg'
               for svg_item in doc_item.children
                 if svg_item.node_name == 'polyline'
-                  item = page.items.build
-                  item.data = default_item_data_form_doc_item(doc_item)
+                  item = build_default_item(page, doc_item)
                   item.data[:css] = HashWithIndifferentAccess.new
                   item.data[:css][:zIndex] = "2000"
                   item.data[:tag] = 'polyline'
@@ -147,6 +145,13 @@ class Layout < ActiveRecord::Base
     hash[:preference] = HashWithIndifferentAccess.new
     hash[:preference][:rails_empty] = 'dummy'
     hash
+  end
+
+  def build_default_item(page, doc_item)
+    item = page.items.build
+    item.kind = doc_item.attr('data-item-kind') if doc_item.attr('data-item-kind').present?
+    item.data = default_item_data_form_doc_item(doc_item)
+    item
   end
 
 end

@@ -71,6 +71,10 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     }
   },
   
+  getTheme: function(callBack) {
+    WebDoc.ServerManager.getRecords(WebDoc.Theme, this.data.theme_id, callBack);
+  },
+    
   styleUrl: function() {
     return this.data.style_url;
   },

@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 describe FollowshipsController do
-
-  should_route :index,    '/followships', :controller => 'followships', :action => :index
-  should_route :get,    '/followers', :controller => 'followships', :action => :followers
-  should_route :get,    '/following', :controller => 'followships', :action => :following
-  should_route :post,   '/follow', :controller => 'followships', :action => :create
-  should_route :delete, '/unfollow', :controller => 'followships', :action => :destroy
+  
+  should_route :get,    '/followships', :action => :index
+  should_route :post,   '/followships/follow', :action => :follow
+  should_route :delete, '/followships/unfollow', :action => :unfollow
   
 end

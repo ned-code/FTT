@@ -52,7 +52,7 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
           specUrl: this.item.getGadgetUrl()
         });
         shindig.container.addGadget(this.gadget);
-        shindig.container.layoutManager.addGadgetChromeId(this.gadget.id, "gadget-" + this.item.uuid());
+        shindig.container.layoutManager.setGadgetChromeIds(["gadget-" + this.item.uuid()]);
         
         this._getSecureToken(function(token) {
           this.gadget.secureToken = token;

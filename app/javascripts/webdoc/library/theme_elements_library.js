@@ -1,0 +1,49 @@
+/**
+ * @author Noe
+**/
+
+WebDoc.ThemeElementsLibrary = $.klass(WebDoc.Library, {
+  initialize: function($super, libraryId) {
+    $super(libraryId);
+
+    this.themeElementsContainer = $("#theme_elements_content");
+    this.themeElementsContainer.addClass('loading');
+
+    this.themeElementsIFrame = this.themeElementsContainer.find('iframe');
+
+    this.element.bind('pageAnimationEnd', function(event, info) {
+      var currentViewId = this.currentViewId();
+      if (currentViewId === this.element.attr("id")) {
+        if(this.themeElementsIFrame.attr('src') === '') {
+          this._refreshElements();
+        }
+        var currentDocument = WebDoc.application.pageEditor.currentDocument;
+        currentDocument.addListener(this);
+      }
+    }.pBind(this));
+  },
+
+  objectChanged: function(record, options) {
+    if (record._isAttributeModified(options, 'theme')) {
+      this._refreshElements();
+    }
+  },
+
+  _refreshElements: function() {
+    this.themeElementsContainer.addClass('loading');
+    var that = this;
+    WebDoc.application.pageEditor.currentDocument.getTheme(function(theme) {
+      that.themeElementsContainer.removeClass('loading');
+      ddd(theme[0].getElementsUrl());
+      if (theme && theme.length === 1 && theme[0].getElementsUrl() !== null
+              && theme[0].getElementsUrl() !== undefined && theme[0].getElementsUrl() !== '') {
+        // that.themeElementsIFrame.attr('src', theme[0].getElementsUrl());
+        that.themeElementsContainer.html(theme[0].getElementsUrl());
+      } else {
+        // that.themeElementsIFrame.attr('src', '');
+        that.themeElementsContainer.html('no elements');
+      }
+    });
+  }
+  
+});

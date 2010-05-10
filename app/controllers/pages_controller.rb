@@ -34,22 +34,36 @@ class PagesController < DocumentController
   
   # POST /documents/:document_id/pages
   def create
-    @page = @document.pages.create(params[:page])
-    
-    render :json => @page.to_json(:include => :items)
+    @page = @document.pages.new(params[:page])
+    @page.must_notify = true
+    @page.save!
+    if (params[:page][:items_attributes].present?)
+      render :json => @page.to_json(:include => :items)
+    else
+      render :json => @page
+    end
   end
   
   # PUT /documents/:document_id/pages/:id
   def update
+    deep_notify = params[:page][:items_attributes].present?
     @page = @document.pages.find_by_uuid(params[:id])
-    @page.update_attributes(params[:page])
-    
-    render :json => @page
+    @page.must_notify = true
+    @page.deep_notify = deep_notify
+    @page.update_attributes!(params[:page])
+    # TODO JBA seems that update atribute does not refresh nested attributes so we need to refresh
+    @page.reload
+    if (deep_notify)
+      render :json => @page.to_json(:include => :items)
+    else
+      render :json => @page
+    end
   end
   
   # DELETE /documents/:document_id/pages/:id
   def destroy
     @page = @document.pages.find_by_uuid(params[:id])
+    @page.must_notify = true
     @page.destroy
     
     render :json => {}

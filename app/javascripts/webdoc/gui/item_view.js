@@ -44,6 +44,9 @@ WebDoc.ItemView = $.klass({
     else {
       this.pageView.itemDomNode.prepend(this.domNode);
     }
+    if (!this.item.data.data.css) {
+      this.item.data.data.css = {};
+    }
     // css must be applied to item node. Only position and size must be set to dom node wrapper
     var position = {
       top: this.item.data.data.css.top,
@@ -52,7 +55,9 @@ WebDoc.ItemView = $.klass({
       height: this.item.data.data.css.height
     };
     this.domNode.css(position);
-
+    if (this.item.data.data['class']) {
+      this.domNode.addClass(this.item.data.data['class']);
+    }
     var itemCss = {};
     $.extend(itemCss, this.item.data.data.css);
     delete itemCss.top;
@@ -79,9 +84,10 @@ WebDoc.ItemView = $.klass({
           case "innerHTML":
           // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
           case "innerHtml":
+          case "class":  
           case "innerHTMLPlaceholder":
           case "tag":
-          case "css":        
+          case "css":   
           case "preference":
           case "properties":
             break;
@@ -145,6 +151,9 @@ WebDoc.ItemView = $.klass({
         height: "100%"
       });
       this.domNode.append(this.itemDomNode);
+      if (this.item.data.data.innerHTML) {
+        this.innerHtmlChanged();
+      }      
       this.select();
     }
   },  

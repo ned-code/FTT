@@ -157,7 +157,7 @@ jQuery.extend(WebDoc.ServerManager, {
     jQuery.extend(message, object.to_json(true));
     jQuery.post(object.rootUrl() + "/" + object.pluralizedClassName(), message, function(data, textstatus) {
       // refresh is needed because some values are generated on server side
-      // i.e. page size and background.
+      // i.e. page size and background and id
       object.refresh(data);
       object.isNew = false;
       // we must update the cache with the id that comes from the server
@@ -172,14 +172,17 @@ jQuery.extend(WebDoc.ServerManager, {
    * @param {Object} callBack function that called when object is updated
    *        callback recieve an array that has the updated object.
    */
-  updateObject: function(object, callBack) {
+  updateObject: function(object, callBack, withRelationships) {
     var param = {
       xmpp_client_id: WebDoc.ServerManager.xmppClientId,
       _method: "PUT"
     };
-    jQuery.extend(param, object.to_json());
+    jQuery.extend(param, object.to_json(withRelationships));
     jQuery.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
-      //object.refresh(data);
+      // if we save objects with relationshipd we must refresh object because its relations can be new objects. So we need to take the id of those new objects
+      if (withRelationships) {
+        object.refresh(data);
+      }
       callBack.apply(this, [[object]]);
     }, "json");
   },

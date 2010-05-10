@@ -1,6 +1,10 @@
 
 WebDoc.Layout = $.klass(WebDoc.Record, {
+  
   initialize: function($super, json, theme) {
+    this.belongsTo = {
+      model_page: WebDoc.Page  
+    };
     this.theme = theme;
     $super(json);
   },
@@ -9,12 +13,20 @@ WebDoc.Layout = $.klass(WebDoc.Record, {
     return this.theme;
   },
   
-  getName: function() {
-    return this.data.name;
+  getModelPage: function() {
+    return this.model_page;  
   },
-
+  
+  getTitle: function() {
+    return this.data.title;
+  },
+  
   getThumbnailUrl: function() {
     return this.data.thumbnail_url;
+  },
+  
+  getKind: function() {
+    return this.data.kind;
   }
   
 });

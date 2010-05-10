@@ -19,7 +19,6 @@
  */
 WebDoc.Record = jQuery.klass(
 {
-
   /**
    * constructor take a json as parameter to initialize the data of the object
    * @param {Object} json. If object is passed then it initialized the Record with this data and object is considered as an existing object.
@@ -151,8 +150,40 @@ WebDoc.Record = jQuery.klass(
    */
   refresh: function(json) {
     this.isNew = false;
-    this.data = json[this.className()];
+    if (!this.data) {
+      this.data = {};
+    }
+    jQuery.extend(this.data, json[this.className()]);       
+    this._initRelationShips(json);
     this.fireObjectChanged({ refresh: true });
+  },
+  
+  _initRelationShips: function(json) {
+    if (this.hasMany) {
+      for (var manyAttribute in this.hasMany) {
+        var manyClass = this.hasMany[manyAttribute];
+        this[manyAttribute] = [];    
+        if (this.data[manyAttribute] && $.isArray(this.data[manyAttribute])) {
+          for (var i = 0; i < this.data[manyAttribute].length; i++) {
+            var manyData = {};
+            manyData[manyClass.className()] = this.data[manyAttribute][i];
+             
+            var newManyClass = new manyClass(manyData, this);
+            this[manyAttribute].push(newManyClass);            
+          }
+        }          
+      }
+    }
+    if (this.belongsTo) {
+      for (var belongsToAttribute in this.belongsTo) {
+        var belongsToClass = this.belongsTo[belongsToAttribute];
+        if (this.data[belongsToAttribute]) {
+          var belongsTodata = {};
+          belongsTodata[belongsToClass.className()] = this.data[belongsToAttribute];
+          this[belongsToAttribute] = new belongsToClass(belongsTodata, this);
+        }
+      }
+    }
   },
   
   /**
@@ -170,7 +201,7 @@ WebDoc.Record = jQuery.klass(
    * save the record using REST URL. It use the correct URL depending on if the object is new or updated
    * @param {Object} callBack a callback method that is called when object has been saved.
    */
-  save: function(callBack) {
+  save: function(callBack, withRelationships) {
     if (this.isNew) {
       WebDoc.ServerManager.newObject(this, function(persitedDoc) {
         if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
@@ -179,7 +210,7 @@ WebDoc.Record = jQuery.klass(
     else {
       WebDoc.ServerManager.updateObject(this, function(persitedDoc) {
         if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
-      });
+      }, withRelationships);
     }
   },
   
@@ -214,6 +245,7 @@ WebDoc.Record = jQuery.klass(
 // Class method
 //**************
 jQuery.extend(WebDoc.Record, {
+  _hasManyRelationships: [],
   /**
    * Convert an oject to a rails conpatible json object
    * @param {Object} objectToConvert the object to convert
@@ -266,6 +298,6 @@ jQuery.extend(WebDoc.Record, {
    */
   rootUrl: function(args) {
     return "";
-  }  
+  }
 });
 
