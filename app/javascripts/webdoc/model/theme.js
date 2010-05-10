@@ -20,6 +20,10 @@ WebDoc.Theme = $.klass(WebDoc.Record, {
   getThumbnailUrl: function() {
     return this.data.thumbnail_url;
   },
+
+  getElementsUrl: function() {
+    return this.data.elements_url;
+  },
   
   getLayouts: function() {
     return this.layouts;

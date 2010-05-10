@@ -20,7 +20,7 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     form = inspector.find('form.properties');
     documentTitleField = jQuery("#document-title", inspector);
     documentDescriptionField = jQuery("#document-description", inspector);
-    documentCategoryField = jQuery("#document-category", inspector)
+    documentCategoryField = jQuery("#document-category", inspector);
     currentDocument = WebDoc.application.pageEditor.currentDocument;
     
     form

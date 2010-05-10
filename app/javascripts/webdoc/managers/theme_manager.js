@@ -10,7 +10,8 @@ WebDoc.ThemeManager = $.klass({
         title: 'Webdoc Default',
         layouts: [],
         style_url: '/themes/default/css/typography.css',
-        thumbnail_url: ''
+        thumbnail_url: '',
+        elements_url: ''
       }
     });
     // Override theme object methods

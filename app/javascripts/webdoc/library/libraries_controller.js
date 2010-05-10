@@ -15,7 +15,7 @@ WebDoc.LibrariesController = $.klass(WebDoc.RightBarInspectorController, {
     this.imagesLibrary = new WebDoc.ImagesLibrary("images");
     this.videosLibrary = new WebDoc.VideosLibrary("videos");
     this.appsLibrary = new WebDoc.AppsLibrary("apps");
-    // this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");
+    this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");
     // this.webBrowser = new WebDoc.WebBrowser("browser"); // Provisory, will be added in a later alpha
     
     this.domNode = $(this.LIBRARIES_SELECTOR);
