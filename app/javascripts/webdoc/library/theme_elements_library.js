@@ -37,11 +37,9 @@ WebDoc.ThemeElementsLibrary = $.klass(WebDoc.Library, {
       ddd(theme[0].getElementsUrl());
       if (theme && theme.length === 1 && theme[0].getElementsUrl() !== null
               && theme[0].getElementsUrl() !== undefined && theme[0].getElementsUrl() !== '') {
-        // that.themeElementsIFrame.attr('src', theme[0].getElementsUrl());
-        that.themeElementsContainer.html(theme[0].getElementsUrl());
+        that.themeElementsIFrame.attr('src', theme[0].getElementsUrl());
       } else {
-        // that.themeElementsIFrame.attr('src', '');
-        that.themeElementsContainer.html('no elements');
+        that.themeElementsIFrame.attr('src', '');
       }
     });
   }
