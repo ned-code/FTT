@@ -151,6 +151,9 @@ WebDoc.ItemView = $.klass({
         height: "100%"
       });
       this.domNode.append(this.itemDomNode);
+      if (this.item.data.data.innerHTML) {
+        this.innerHtmlChanged();
+      }      
       this.select();
     }
   },  
