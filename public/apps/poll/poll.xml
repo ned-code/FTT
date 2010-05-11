@@ -1,0 +1,21 @@
+<?xml version = "1.0" encoding="UTF-8" ?>
+<Module>
+  
+  <ModulePrefs title = "Mnemiss poll module" height="400">
+    <Require feature = "opensocial-0.8" />
+    <Require feature = "osapi" />
+    <Require feature = "settitle" />
+    <!--<Require feature = "caja" />-->
+    <Require feature = "views" />
+    <Require feature = "dynamic-height"/>
+  </ModulePrefs>
+  
+  <Content type="html" view="home" href="views/home.html"></Content>
+  
+  <!-- <Content type="html" view="inspector-style" href="views/inspector-style.html"></Content> -->
+  
+  <Content type="html" view="inspector-settings" href="views/inspector-settings.html"></Content>
+  
+  <!-- <Content type="html" view="inspector-stats" href="views/inspector-stats.html"></Content> -->
+  
+</Module>

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+  
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    
+    <title>Style</title>
+    
+    <script type="text/javascript" src="../js/util.js"></script>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/klass.js"></script>
+    <script type="text/javascript">
+    // var styleInspectorId = window.name;
+    // var mainId = "";//styleInspectorId.replace('style', 'main');
+    // 
+    // if (typeof window.addEventListener != 'undefined') {
+    //   window.addEventListener('message', onmessage, false);
+    // } else if (typeof window.attachEvent != 'undefined') {
+    //   window.attachEvent('onmessage', onmessage);
+    // }
+    // 
+    // function newMessage(receiver, action) {
+    //   document.getElementById('messages').innerHTML += "<li>[to " + receiver + "] : " + action + "</li>";
+    //   
+    //   if(receiver != null) receiver = window.parent.document.getElementById(receiver).contentWindow;
+    //   else receiver = window.parent;
+    //   
+    //   if(receiver != null) receiver.postMessage(mainId + "," + action, '*');
+    //   else gadgets.log("receiver is null!");
+    // }
+    // 
+    // function onmessage(e) {
+    //   var dataArray_ = e.data.split(',');
+    //   var origin = e.origin;
+    //   var fromId = dataArray_[0];
+    //   var message = dataArray_[1];
+    //   
+    //   if(origin == document.location.protocol + "//" + document.location.host) {
+    //     gadgets.log("in style inspector from same domain, module: " + fromId + ", message: " + message);
+    //     
+    //     document.getElementById('messages').innerHTML += "<li>[from " +fromId+ "] " + message + "</li>";
+    //     
+    //     if(fromId == mainId) {
+    //       newMessage(mainId, 'say_hi_to_webdoc');
+    //     }
+    //   }
+    //   else {
+    //     gadgets.log("from somewhere else: " + origin);;
+    //   }
+    // }
+    // 
+    // function init() {
+    // }
+    // 
+    // gadgets.util.registerOnLoadHandler(init);
+    </script>
+  </head>
+  
+  <body>
+    <ul id="messages"></ul>
+    <h1>Style</h1>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+form.content {
+  padding:0 10px;
+}
+
+form.content .section {
+  padding:8px 0;
+}
+
+form.content .entry {
+  padding:5px 0;
+}
+
+hr.separator {
+  border:none;
+  border-top: 1px solid rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+}
