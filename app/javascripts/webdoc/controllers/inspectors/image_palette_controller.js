@@ -66,7 +66,6 @@ WebDoc.ImagePaletteController = $.klass({
   },
 
   addToMyImage: function() {
-
     var selectedItem = WebDoc.application.boardController.selection()[0];
     if (selectedItem && selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
       if (selectedItem.item.data.data.src !== undefined && selectedItem.item.data.data.src !== '') {
@@ -75,6 +74,8 @@ WebDoc.ImagePaletteController = $.klass({
         image = new WebDoc.Image;
         image.data.remote_file_url = this.propertySrc.val();
         image.save(function(){
+          WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.LIBRARY)
+                  .imagesLibrary.refreshMyImages();
           this.addToMyImageResult.text('Image uploaded in my images!');
         }.pBind(this));
       }
