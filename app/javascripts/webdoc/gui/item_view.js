@@ -43,6 +43,9 @@ WebDoc.ItemView = $.klass({
     else {
       this.pageView.itemDomNode.prepend(this.domNode);
     }
+    if (!this.item.data.data.css) {
+      this.item.data.data.css = {};
+    }
     // css must be applied to item node. Only position and size must be set to dom node wrapper
     var position = {
       top: this.item.data.data.css.top,
@@ -51,6 +54,10 @@ WebDoc.ItemView = $.klass({
       height: this.item.data.data.css.height
     };
     this.domNode.css(position);
+    
+    if (this.item.data.data['class']) {
+      this.domNode.addClass(this.item.data.data['class']);
+    }
     
     var itemCss = {};
     $.extend(itemCss, this.item.data.data.css);
@@ -78,9 +85,14 @@ WebDoc.ItemView = $.klass({
           case "innerHTML":
           // for compatibility we also check innerHtml like this because old document can have this key instead of innerHTML
           case "innerHtml":
+          case "class":  
           case "innerHTMLPlaceholder":
           case "tag":
+<<<<<<< HEAD
           case "css":
+=======
+          case "css":   
+>>>>>>> dev
           case "preference":
           case "properties":
             break;
@@ -144,6 +156,9 @@ WebDoc.ItemView = $.klass({
         height: "100%"
       });
       this.domNode.append(this.itemDomNode);
+      if (this.item.data.data.innerHTML) {
+        this.innerHtmlChanged();
+      }      
       this.select();
     }
   },  
@@ -311,7 +326,7 @@ $.extend(WebDoc.ItemView, {
     WebDoc.application.undoManager.registerUndo(function() {
       WebDoc.ItemView._restorePosition(item, previousPosition);
     }.pBind(this));
-    item.save();    
+    item.save();
   },
   
   restoreSize: function(item, size) {
@@ -323,7 +338,7 @@ $.extend(WebDoc.ItemView, {
     }.pBind(this));
     item.save();  
   },
-
+  
   restorePositionAndSize: function(item, top, left, width, height) {
     var previousTop = item.data.data.css.top,
         previousLeft = item.data.data.css.left,
@@ -332,8 +347,7 @@ $.extend(WebDoc.ItemView, {
     item.moveToAndResizeTo(top, left, width, height);
     WebDoc.application.undoManager.registerUndo(function() {
       WebDoc.ItemView.restorePositionAndSize(item, previousTop, previousLeft, previousWidth, previousHeight);
-	  }.pBind(this));
+    }.pBind(this));
   }
   
 });
-

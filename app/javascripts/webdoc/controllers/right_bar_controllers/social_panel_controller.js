@@ -26,7 +26,7 @@ WebDoc.SocialPanelController = jQuery.klass(WebDoc.RightBarInspectorController, 
   _subscribeAction: function() {
     ddd("Clicked on subscribe");
     jQuery.ajax({
-      url: "/follow",
+      url: "/followships/follow",
       type: 'POST',
       data: { following_id :this.creator.id }, 
       dataType: 'json',              
@@ -43,7 +43,7 @@ WebDoc.SocialPanelController = jQuery.klass(WebDoc.RightBarInspectorController, 
   _unSubscribeAction: function() {
     ddd("Clicked on unsubscribe");
     jQuery.ajax({
-      url: "/unfollow",
+      url: "/followships/unfollow",
       type: 'DELETE',
       data: { following_id :this.creator.id }, 
       dataType: 'json',              

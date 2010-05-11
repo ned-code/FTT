@@ -2,7 +2,7 @@ class Item < ActiveRecord::Base
   has_uuid
   serialize :data
   
-  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position
+  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind
   
   # see XmppItemObserver
   attr_accessor_with_default :must_notify, false

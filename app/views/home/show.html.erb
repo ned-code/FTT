@@ -38,8 +38,8 @@
 <% if false %>
 <div class="content">
   <div class="wrap">
-    <h2>Most recent webdocs <a href="<%= explore_path%>">(->View all)</a></h2>
-    <%= render :partial => "explore/viewer_list", :locals => { :documents => @top_documents } %>    
+    <h2>Most recent webdocs <a href="<%= explore_documents_path%>">(->View all)</a></h2>
+    <%= render :partial => "documents/viewer_list", :locals => { :documents => @top_documents } %>    
   </div>
 </div>
 <% end %>

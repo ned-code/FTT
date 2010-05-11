@@ -12,6 +12,8 @@
           %a{ :href =>'#videos'}= t('.videos.title')
         %li.apps
           %a{ :href =>'#apps'}= t('.apps.title')
+        %li.theme_elements
+          %a{ :href => '#theme_elements' }= t('.theme_elements.title')
         -#%li.web-browser
         -#  %a{ :href =>'#web-browser-favorites'}= t('.web.title')          
     #images.view
@@ -167,6 +169,21 @@
               %a#delete_from_my_videos_action{ :href => "" }= t('.videos.detail_view.remove_from_my_videos')
             %li
               %a#add_to_my_videos_action{ :href => "" }= t('.videos.detail_view.add_to_my_videos')
+
+    #theme_elements.view
+      .toolbar
+        %h1= t('.theme_elements.title')
+        %a.back{ :href =>'#' }= t('.buttons.back')
+
+      .tab_content#theme_elements_content
+        %iframe{ :src => '', :width => '100%', :height => '100%' }#theme_elements_iframe
+
+      -#    .thumbnails
+      -#    .spacer
+      -#%ul{ :style => "display:none" }
+      -#  %li
+      -#    %a#show_app_details{ :href => '#app_details' }= t('.apps.show_details')
+
     -# #web-browser-favorites.view
     -#  .toolbar
     -#    %h1= t('.web.web_browser')

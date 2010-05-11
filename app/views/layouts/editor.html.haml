@@ -1,7 +1,7 @@
 - document_title @document.title
 - session_key_name = ActionController::Base.session_options[:key]
 <!DOCTYPE html>
-%html( xmlns:ub="#{XML_UNIBOARD_DOCUMENT_NAMESPACE}" xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg" )
+%html( xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg" )
   %head
     %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
     %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
@@ -9,7 +9,7 @@
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :page_editor, :media => 'all'
     
-    <link id="theme" rel="stylesheet" href="/themes/default/typography.css" type="text/css" />
+    <link id="theme" rel="stylesheet" href="/themes/default/css/typography.css" type="text/css" />
     
   -if params[:reader] == 'true'
     -current_class = 'editor mode-embed'

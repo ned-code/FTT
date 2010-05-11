@@ -33,7 +33,7 @@
     <h3><%= t('.cancel.title') %></h3>
     <p>I don't want to be part of the exciting world of webdoc anymore.  I'll miss it, but no human being was ever meant to have this much fun.</p>
     
-    <%= button_to t('.cancel.link'), registration_path(resource_name), :confirm => t('confirm'), :method => :delete, :class => "button" %>
+    <%= raw button_to t('.cancel.link'), registration_path(resource_name), :confirm => t('confirm'), :method => :delete, :class => "button" %>
   </div>
 </div>
 

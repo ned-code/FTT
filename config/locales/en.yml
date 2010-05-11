@@ -316,6 +316,10 @@ en:
         detail_view:
           title: "App"
           add_to_page: "Add to page"
+
+      theme_elements:
+        title: "Theme elements"
+
       web:
         title: "Web"
         web_browser: "Web browser"

@@ -7,13 +7,17 @@ WebDoc.Page = $.klass(WebDoc.Record,
 { 
   DEFAULT_PAGE_HEIGHT_PX: 600,
   DEFAULT_PAGE_WIDTH_PX: 800,
+  
   initialize: function($super, json, document, externalPageUrl) {
     // initialize relationship before super.
     this.firstPosition = 0;
     this.lastPosition = 0;
+    this._layout = undefined;
     this.items = [];
     this.nonDrawingItems = [];
-    this.document = document;
+    if (document && document.className() === WebDoc.Document.className()) {
+      this.document = document;
+    }
     $super(json);
     if (externalPageUrl) {
       if (!this.data.data) {
@@ -32,6 +36,32 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.document = document;
   },
     
+  getLayoutkind: function() {
+    return this.data.layout_kind;  
+  },
+  
+  getLayout: function(callBack) {
+    if (this._layout !== undefined) {
+      callBack.call(this, this._layout);
+    }
+    else {
+      this.document.getTheme(function(theme) {
+        if (theme && theme.length === 1) {
+          var aTheme = theme[0];
+          for (var i = aTheme.getLayouts().length - 1; i >= 0; i--) {
+            var aLayout = aTheme.getLayouts()[i];
+            if (aLayout.getKind() === this.getLayoutkind()) {
+              this._layout = aLayout;
+              break;
+            }
+          }
+          callBack.call(this, this._layout);
+        }
+      }.pBind(this));
+    }
+    return this._layout;
+  },
+  
   applyCss: function(newCss) {   
     if (newCss != this.data.data.css) {
       this.data.data.css = newCss;
@@ -174,33 +204,23 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
   
   refresh: function($super, json) {
-    //backup previous items if we need to keep them
-    var previousItems = [];
-    $.each(this.items, function() {
-      previousItems.push(this.getData());
-    });
-    ddd("previous items", previousItems);
-    $super(json);
-    if ((this.data.items === null || this.data.items === undefined) && previousItems) {
-      ddd("restore previous tems");
-      this.data.items = previousItems;
-      //clear previous item view
-      for (var itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
-        this.removeItem(this.items[itemIndex]);
-      }
-    }
-    var that = this;
-    this.items = [];
-    this.nonDrawingItems = [];    
-    if (this.data.items && $.isArray(this.data.items)) {
+    this._layout = undefined;
+    $super(json);  
+    // if recieved json contains items then we create all items records.
+    // if json does not contains items we leave all previous items as they were
+    if (json.page.items && $.isArray(json.page.items)) {
+      var that = this;
+      this.items = [];
+      this.nonDrawingItems = [];        
       this.data.items.sort(function(a,b) {
         a.position = a.position?a.position:0;
         b.position = b.position?b.position:0;
         return a.position - b.position;
       });
-      $.each(this.data.items, function() {
-        that.createOrUpdateItem({ item: this });
-      });
+      for (var i = this.data.items.length -1; i >= 0; i--) {
+        var itemData = this.data.items[i];
+        that.createOrUpdateItem({ item: itemData });
+      }
     }    
   },
   
@@ -308,7 +328,6 @@ WebDoc.Page = $.klass(WebDoc.Record,
           this.nonDrawingItems.splice(nonDrawingIndex, 1);    
         }
       }
-      //ddd(this.items);
       this.fireItemRemoved(item);
     }
   },
@@ -393,6 +412,65 @@ WebDoc.Page = $.klass(WebDoc.Record,
     for (var i = 0; i < this.nonDrawingItems.length; i++) {
       if(this.nonDrawingItems[i].type() == "text") {
         return this.nonDrawingItems[i];
+      }
+    }
+  },
+  
+  assignLayout: function(layout) {    
+    // remove all previous items
+    var previousItemsMap = {};
+    for (var itemIndex = this.items.length - 1; itemIndex >= 0; itemIndex--) {
+      var item = this.items[itemIndex];
+      // we take only items that come from layout
+      if (item.getKind() && item.getKind() !== 'null') {
+        previousItemsMap[item.getKind()] = item;
+      }
+    }
+    if (layout) {
+      this.data.layout_kind = layout.getKind();
+      this._layout = undefined;
+      // JBA do not copy data of model page but page view will take value from model page.
+      //    this.data.data = $.evalJSON($.toJSON(layout.getModelPage().data.data));
+      //this.data.items = [];
+      //this.save();
+      this.fireObjectChanged({
+        modifedAttribute: "class css"
+      });
+      if (layout.getModelPage().items && $.isArray(layout.getModelPage().items)) {
+        for (var index = 0; index < layout.getModelPage().items.length; index++) {
+          var itemToCopy = layout.getModelPage().items[index];
+          var previousItemWithSameKind = previousItemsMap[itemToCopy.getKind()];
+          var copiedItem;
+          if (!previousItemWithSameKind) {
+            copiedItem = itemToCopy.copy();
+            this.addItem(copiedItem);
+          }
+          else {
+            copiedItem = previousItemWithSameKind;
+            copiedItem.setInnerHtmlPlaceholder(itemToCopy.getInnerHtmlPlaceholder());
+            previousItemsMap[itemToCopy.getKind()] = null;
+          }
+        }
+      }
+    }
+    // remove unecessary items
+    for (itemKind in previousItemsMap) {
+      var itemToRemove = previousItemsMap[itemKind];
+      if (itemToRemove) {
+        itemToRemove.data._delete = true;
+        //this.removeItem(itemToRemove);
+        //itemToRemove.destroy();
+      }
+    }    
+    this.save(undefined,true);
+  },
+  
+  save: function($super, callBack, withRelationships) {
+    $super(callBack, withRelationships);
+    for (var i = this.items.length - 1; i >= 0; i--) {
+      var item = this.items[i];
+      if (item.data._delete) {
+        this.removeItem(item);
       }
     }
   }

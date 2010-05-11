@@ -143,6 +143,7 @@ javascripts:
     - app/javascripts/webdoc/library/images_library.js
     - app/javascripts/webdoc/library/videos_library/*.js
     - app/javascripts/webdoc/library/videos_library.js
+    - app/javascripts/webdoc/library/theme_elements_library.js
     - app/javascripts/webdoc/library/web_browser.js
     - app/javascripts/webdoc/card/card.js
   explore:

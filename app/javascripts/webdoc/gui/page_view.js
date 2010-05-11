@@ -7,9 +7,8 @@ WebDoc.PageView = $.klass({
         itemDomNode = $('<div/>').id('items_' + page.uuid()).addClass("layer").css({overflow: 'visible'}),
         drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
         eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(),
-        that = this,
-        boardContainerSize = {},
-        boardCss = {};
+        that = this;
+
     
     // Extend this
     this._boardContainer = boardContainer;
@@ -21,30 +20,10 @@ WebDoc.PageView = $.klass({
     this.itemViews = {};
     
     // Set up page view
+    this._initPageCss();
+    this._initPageClass();
     drawingDomNode.css("zIndex", 1000000);
-    domNode.append( drawingDomNode );
-    
-    boardContainerSize.top = page.data.data.css.top;
-    boardContainerSize.left = page.data.data.css.left;
-    boardContainerSize.width = page.data.data.css.width;
-    boardContainerSize.height = page.data.data.css.height; 
-    $.extend(boardCss, page.data.data.css);
-    delete boardCss.top;
-    delete boardCss.left;
-    delete boardCss.width;
-    delete boardCss.height;
-    boardContainer.css( boardContainerSize );
-    this.domNode.css(boardCss);
-    ddd( page.data.data.css );
-    
-    if (page.data.data.externalPage && !WebDoc.application.disableHtml) {
-        this._loadExternalPage();
-    }
-    else {
-      // Handle case where page is a webdoc
-      ddd('Page is a webdoc page');
-    }
-    
+    domNode.append( drawingDomNode );    
     this.domNode.append( itemDomNode );
     this.domNode.append( eventCatcherNode );
     
@@ -53,40 +32,39 @@ WebDoc.PageView = $.klass({
             that.createItemView(this, "end");
         });
     }
-    
-    page.addListener(this);
+    page.addListener(this);    
+    if (page.data.data.externalPage && !WebDoc.application.disableHtml) {
+        this._loadExternalPage();
+    }
   },
   
   objectChanged: function(page, options) {
     
     if (page._isAttributeModified(options, 'css')) {
-      var boardContainerSize = {};
-      var boardCss = {};
-      boardContainerSize.top = page.data.data.css.top;
-      boardContainerSize.left = page.data.data.css.left;
-      boardContainerSize.width = page.data.data.css.width;
-      boardContainerSize.height = page.data.data.css.height;
-      $.extend(boardCss, page.data.data.css);
-      delete boardCss.top;
-      delete boardCss.left;
-      delete boardCss.width;
-      delete boardCss.height;
-      this._boardContainer.animate(boardContainerSize, 'fast');
-      this.domNode.css(boardCss, 'fast');
+      this._initPageCss();
     }
-    else if (page._isAttributeModified(options, 'externalPageUrl')) {
+    if (page._isAttributeModified(options, 'class')) {
+      this._initPageClass();      
+    }
+    if (page.data.data.externalPage && page._isAttributeModified(options, 'externalPageUrl')) {
       this._loadExternalPage();
     }
   },
   
   itemAdded: function(addedItem, afterItem) {
     var relatedItemView = this.itemViews[addedItem.uuid()];
+
     var afterItemView = afterItem? this.itemViews[afterItem.uuid()]: null;
     // be sure not to add twice the same item
     if (!relatedItemView) {
       this.createItemView(addedItem, afterItemView);
     }
     else {
+      // be sure the related item is correct. If we recieve a item added and we already have of view for that item uuid
+      // then we probaby have a view that is related to another version of the item.
+      relatedItemView.item.removeListener(relatedItemView);
+      relatedItemView.item = addedItem;       
+      relatedItemView.item.addListener(relatedItemView);
       relatedItemView.objectChanged(addedItem);
     }
   },
@@ -197,7 +175,33 @@ WebDoc.PageView = $.klass({
     }
   },
   
-  _loadExternalPage: function() {
+  _initPageCss: function() {
+    var boardContainerSize = {},
+        boardCss = {};
+    boardContainerSize.top = this.page.data.data.css.top;
+    boardContainerSize.left = this.page.data.data.css.left;
+    boardContainerSize.width = this.page.data.data.css.width;
+    boardContainerSize.height = this.page.data.data.css.height; 
+    $.extend(boardCss, this.page.data.data.css);
+    delete boardCss.top;
+    delete boardCss.left;
+    delete boardCss.width;
+    delete boardCss.height;
+    this._boardContainer.css( boardContainerSize );
+    this.domNode.css(boardCss);
+  },
+  
+  _initPageClass: function() {
+    this.domNode.attr("class", "webdoc");
+    this.domNode.addClass(this.page.data.data['class']);
+    this.page.getLayout(function(layout) {
+      if (layout) {
+        this.domNode.addClass(layout.getModelPage().data.data['class']);
+      }
+    }.pBind(this));    
+  },
+  
+  _loadExternalPage: function() {    
     this.itemDomNode.empty();
     // Handle case where page is an external webpage
     if (this.page.data.data.externalPageUrl) {

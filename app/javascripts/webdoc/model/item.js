@@ -141,6 +141,10 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.fireObjectChanged();
   },
 
+  getKind: function() {
+    return this.data.kind;  
+  },
+  
   setInnerHtml: function(html, force) {
     if (html != this.data.data.innerHTML || force) {
 	    // Force to wmode transparent if necessary
@@ -175,6 +179,10 @@ WebDoc.Item = $.klass(WebDoc.Record,
 
   getInnerHtmlPlaceholder: function() {
     return this.data.data.innerHTMLPlaceholder;
+  },
+  
+  setInnerHtmlPlaceholder: function(html) {
+    this.data.data.innerHTMLPlaceholder = html;
   },
   
   getInnerText: function() {
@@ -226,6 +234,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     newItem.data.data = $.evalJSON($.toJSON(this.data.data));
     newItem.data.media_type = this.data.media_type;
     newItem.data.media_id = this.data.media_id;
+    newItem.data.kind = this.data.kind;
     newItem.media = this.media;
     return newItem;
   },

@@ -50,7 +50,7 @@ WebDoc.ThemesController = jQuery.klass({
         link.data('theme', data);
       }
       
-      ddd('[Themes Controller] set theme: ' + data.getName() );
+      ddd('[Themes Controller] set theme: ' + data.getTitle() );
       
       WebDoc.application.pageEditor.currentDocument.setTheme( data );
     },
@@ -66,7 +66,7 @@ WebDoc.ThemesController = jQuery.klass({
         initCallback: function(){
           //console.log('HEY - THEMES CONTROLLER');
         }
-      })
+      });
     
       ddd('[Themes] open chooser');
     }
@@ -83,7 +83,7 @@ WebDoc.ThemesController = jQuery.klass({
       
     for (key in list) {
       theme = list[key];
-      html += '<li><a href="#theme" data-theme-id="'+key+'" style="background-image: url(\''+ theme.getThumbnailUrl() +'\');"><h3>'+theme.getName()+'</h3></a></li>';
+      html += '<li><a href="#theme" data-theme-id="'+key+'" style="background-image: url(\''+ theme.getThumbnailUrl() +'\');"><h3>'+theme.getTitle()+'</h3></a></li>';
     }
     
     this.listNode.html(html);
