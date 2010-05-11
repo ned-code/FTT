@@ -22,8 +22,9 @@
     = yield
     = include_javascripts :common
     = include_javascripts :page_editor
-    - if !Rails.env.production?
-      = javascript_include_tag "#{APP_CONFIG['shindig_server_base']}/js/core:rpc:pubsub:shindig-container.js?c=1&debug=1"
+    - unless Rails.env.production?
+      = javascript_include_tag "#{APP_CONFIG['shindig_server_base']}/js/core:rpc:pubsub.js?c=1&debug=1"
+    = include_javascripts :apps
     = yield :scripts
     :javascript  
       WebDoc.authData = {
@@ -32,7 +33,7 @@
         cookiesSessionKeyName:"#{cookies[session_key_name]}"
       };
       WebDoc.shindig = {};
-      WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";     
+      WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";
       WebDoc.closeUrl = "#{ get_return_to }";
       
       WebDoc.Application.main(function() {

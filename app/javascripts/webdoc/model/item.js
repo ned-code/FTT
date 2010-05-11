@@ -1,10 +1,10 @@
 
-WebDoc.ITEM_TYPE_TEXT = "text";
-WebDoc.ITEM_TYPE_IMAGE = "image";
+WebDoc.ITEM_TYPE_TEXT    = "text";
+WebDoc.ITEM_TYPE_IMAGE   = "image";
 WebDoc.ITEM_TYPE_DRAWING = "drawing";
-WebDoc.ITEM_TYPE_WIDGET = "widget";
-WebDoc.ITEM_TYPE_IFRAME = "iframe";
-WebDoc.ITEM_TYPE_OS_GADGET = "os_gadget";
+WebDoc.ITEM_TYPE_WIDGET  = "widget";
+WebDoc.ITEM_TYPE_IFRAME  = "iframe";
+WebDoc.ITEM_TYPE_APP     = "app";
 
 WebDoc.Item = $.klass(WebDoc.Record, 
 {
@@ -22,11 +22,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   setPage: function(page) {
-    this.page = page;  
+    this.page = page;
   },
   
   positionZ: function() {
-    return this.data.position;  
+    return this.data.position;
   },
   
   setPositionZ: function(newPosition) {
@@ -38,7 +38,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var refreshInnerHtml = false;
     var refreshPreferences = false;
     var refreshPositionZ = false;
-
+    
     if (this.data && this.data.position && json.item.position != this.data.position) {
       refreshPositionZ = true;
     }

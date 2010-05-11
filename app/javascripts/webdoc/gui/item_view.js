@@ -2,12 +2,11 @@
 //= require <mtools/record>
 //= require <webdoc/model/item>
 
-
 WebDoc.ItemView = $.klass({
   item: null,
   pageView: null,
   initialize: function(item, pageView, afterItem) {
-  
+    
     if (pageView) {
       this.pageView = pageView;
     }
@@ -16,9 +15,9 @@ WebDoc.ItemView = $.klass({
     }
     
     this.item = item;
-    // item wrapper    
-    this.domNode = $("<div/>").addClass("item_wrap"); 
-
+    // item wrapper
+    this.domNode = $("<div/>").addClass("item_wrap");
+    
     this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
         overflow: "hidden",
         width: "100%",
@@ -52,7 +51,7 @@ WebDoc.ItemView = $.klass({
       height: this.item.data.data.css.height
     };
     this.domNode.css(position);
-
+    
     var itemCss = {};
     $.extend(itemCss, this.item.data.data.css);
     delete itemCss.top;
@@ -60,7 +59,7 @@ WebDoc.ItemView = $.klass({
     delete itemCss.width;
     delete itemCss.height;
     this.itemDomNode.css(itemCss);
-
+    
     if (this.item.data.data.innerHTML) {
       this.innerHtmlChanged();
     }
@@ -77,11 +76,11 @@ WebDoc.ItemView = $.klass({
       for (var key in this.item.data.data) {
         switch(key) {
           case "innerHTML":
-          // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
+          // for compatibility we also check innerHtml like this because old document can have this key instead of innerHTML
           case "innerHtml":
           case "innerHTMLPlaceholder":
           case "tag":
-          case "css":        
+          case "css":
           case "preference":
           case "properties":
             break;
@@ -185,7 +184,7 @@ WebDoc.ItemView = $.klass({
     this.itemLayerDomNode.hide();
 //    this.domNode.draggable( 'destroy' );
 //    this.domNode.resizable( 'destroy' );
-    WebDoc.application.rightBarController.showItemInspector();    
+    WebDoc.application.rightBarController.showItemInspector();
     WebDoc.application.inspectorController.selectPalette(this.inspectorId());
   },
   
@@ -193,7 +192,6 @@ WebDoc.ItemView = $.klass({
     this.domNode.removeClass("item-edited");
     this._initDragAndResize();
     this.itemLayerDomNode.show();
-
   },
   
   destroy: function() {

@@ -1,0 +1,70 @@
+.floating {
+  font-size:11px;
+  color:#fff;
+}
+
+.app_inspector.floating {
+  padding:10px 10px 15px;
+  width:200px;
+  position:relative;
+}
+
+.app_inspector.floating .box {
+  border:1px solid #000;
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(49, 52, 55, 0.8)), color-stop(1, rgba(34, 38, 41, 0.8)));
+  -webkit-border-radius:10px;
+  -webkit-box-shadow:#555 0 1px 5px;
+  background-image:-moz-linear-gradient(top, rgba(49, 52, 55, 0.8), rgba(34, 38, 41, 0.8));
+  -moz-border-radius:10px;
+  -moz-box-shadow:#555 0 1px 5px;
+}
+
+.app_inspector.floating .titlebar {
+  background:#454749;
+  padding:7px 0;
+  position:relative;
+  -webkit-border-top-left-radius:10px;
+  -webkit-border-top-right-radius:10px;
+  -moz-border-radius-topleft:10px;
+  -moz-border-radius-topright:10px;
+}
+
+.app_inspector.floating.attached .titlebar .attached_indicator {
+  display:block;
+  width:100%;
+  height:9px;
+  background:url(images/inspectors/triangle_top.png) center no-repeat;
+  position:absolute;
+  top:-9px;
+  left:0;
+}
+
+.app_inspector.floating .titlebar a {
+  display:block;
+  position:absolute;
+}
+
+.app_inspector.floating .titlebar a.hide {
+  width:13px;
+  height:13px;
+  background:url(images/inspectors/hide.png) no-repeat;
+  top:7px;
+  left:6px;
+}
+
+.app_inspector.floating .titlebar a.arrow.right {
+  width:13px;
+  height:13px;
+  background:url(images/inspectors/arrow_right.png) no-repeat;
+  top:7px;
+  right:6px;
+}
+
+.app_inspector.floating .titlebar a span {display:none;}
+
+.app_inspector.floating .titlebar strong.title {
+  display:block;
+  text-align:center;
+  font-size:13px;
+/*  color:#fff;*/
+}

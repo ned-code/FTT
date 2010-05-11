@@ -134,9 +134,9 @@ WebDoc.PageView = $.klass({
       case WebDoc.ITEM_TYPE_IFRAME:
         itemView = new WebDoc.IframeView(item, this, afterItem);
         break;
-      case WebDoc.ITEM_TYPE_OS_GADGET:
-        itemView = new WebDoc.OsGadgetView(item, this, afterItem);
-        break;        
+      case WebDoc.ITEM_TYPE_APP:
+        itemView = new WebDoc.AppView(item, this, afterItem);
+        break;
       default:
         itemView = new WebDoc.ItemView(item, this, afterItem);
         break;

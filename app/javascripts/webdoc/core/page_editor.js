@@ -47,35 +47,35 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     // Create and bind global event handlers
     WebDoc.handlers.initialise();
     
-    WebDoc.ServerManager.xmppClientId = new WebDoc.UUID().id;
+    WebDoc.ServerManager.xmppClientId    = new WebDoc.UUID().id;
     
-    WebDoc.application.pageEditor = this;
-    WebDoc.application.undoManager = new WebDoc.UndoManager();
+    WebDoc.application.pageEditor        = this;
+    WebDoc.application.undoManager       = new WebDoc.UndoManager();
         
-    WebDoc.application.widgetManager = new WebDoc.WidgetManager();
-    WebDoc.application.pasteBoardManager = new WebDoc.PasteboardManager();    
+    WebDoc.application.widgetManager     = new WebDoc.WidgetManager();
+    WebDoc.application.pasteBoardManager = new WebDoc.PasteboardManager();
     
     // create all controllers
-    WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
-    WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
-    WebDoc.application.rightBarController = new WebDoc.RightBarController();
-    //WebDoc.application.inspectorController = new WebDoc.InspectorController();
-    WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
-    WebDoc.application.toolbarController = new WebDoc.ToolbarController();
-    WebDoc.application.categoriesManager = new WebDoc.DocumentCategoriesManager();
+    WebDoc.application.svgRenderer                 = new WebDoc.SvgRenderer();
+    WebDoc.application.boardController             = new WebDoc.BoardController(editable, !editable);
+    WebDoc.application.rightBarController          = new WebDoc.RightBarController();
+    //WebDoc.application.inspectorController       = new WebDoc.InspectorController();
+    WebDoc.application.pageBrowserController       = new WebDoc.PageBrowserController();
+    WebDoc.application.toolbarController           = new WebDoc.ToolbarController();
+    WebDoc.application.categoriesManager           = new WebDoc.DocumentCategoriesManager();
     
     WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
-    WebDoc.application.themesController = new WebDoc.ThemesController();
+    WebDoc.application.themesController            = new WebDoc.ThemesController();
     
     // create all tools
-    WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
-    WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
-    WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
-    WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
+    WebDoc.application.drawingTool  = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
+    WebDoc.application.arrowTool    = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
+    WebDoc.application.handTool     = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
+    WebDoc.application.textTool     = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
     WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
-    WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
-    WebDoc.application.osGadgetTool = new WebDoc.OsGadgetTool( "a[href='#insert-os-gadget']", "insert-os-gadget" );
-
+    WebDoc.application.iframeTool   = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
+    WebDoc.application.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "insert-app" );
+    
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
     
@@ -85,10 +85,10 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     
     $(window).bind("hashchange", this._urlHashChanged.pBind(this));
   },
-
+  
   load: function(documentId) {
     ddd("[PageEditor] load " + documentId);
-    WebDoc.application.collaborationManager.listenXMPPNode(documentId);              
+    WebDoc.application.collaborationManager.listenXMPPNode(documentId);
     WebDoc.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
     {
       this.currentDocument = data[0];
