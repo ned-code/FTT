@@ -221,6 +221,8 @@ WebDoc.ItemView = $.klass({
   
   position: function() {
     var result = { top: this.item.top(), left: this.item.left() };
+    result.topInherted = (result.top === undefined);
+    result.leftInherted = (result.left === undefined);
     result.top = result.top || this.domNode.position().top + 'px';
     result.left =  result.left || this.domNode.position().left + 'px';
     return result;
@@ -228,6 +230,8 @@ WebDoc.ItemView = $.klass({
   
   size: function() {
     var result = { width: this.item.width(), height: this.item.height() };
+    result.widthInherted = (result.width === undefined);
+    result.heightInherted = (result.height === undefined);    
     result.width = result.width || this.domNode.width() + 'px';
     result.height = result.height || this.domNode.height() + 'px';
     return result;    
