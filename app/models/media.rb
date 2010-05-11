@@ -2,7 +2,7 @@ class Media < ActiveRecord::Base
   has_uuid
   serialize :properties
   
-  attr_accessible :uuid, :file, :properties, :system_name, :title, :description
+  attr_accessible :uuid, :file, :properties, :system_name, :title, :description, :remote_file_url
   
   # ================
   # = Associations =
@@ -14,7 +14,7 @@ class Media < ActiveRecord::Base
   # = Validations =
   # ===============
 
-  validates_uniqueness_of :system_name
+  validates_uniqueness_of :system_name, :allow_nil => true, :allow_blank => true
   
   # =============
   # = Callbacks =

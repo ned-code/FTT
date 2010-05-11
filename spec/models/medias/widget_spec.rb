@@ -4,7 +4,7 @@ describe Medias::Widget do
   
   before(:each) do
     @s3 = mock("s3")
-    RightAws::S3Interface.stub(:new).and_return(@s3)
+    Aws::S3Interface.stub(:new).and_return(@s3)
     @s3.stub(:put) # stub here to be able to use should_receive
   end
   
@@ -21,13 +21,6 @@ describe Medias::Widget do
   it "should be valid with zip file" do
     widget = Factory.build(:widget)
     widget.should be_valid
-  end
-  
-  if CarrierWave.yml_storage(:widgets).to_s == "right_s3"
-    it "should upload zip files to s3" do
-      @s3.should_receive(:put).exactly(28)
-      Factory(:widget)
-    end
   end
   
   describe 'with valid widget file' do

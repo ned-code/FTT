@@ -7,7 +7,8 @@ gem 'mime-types', :require => 'mime/types'
 gem 'json'
 gem 'rubyzip', :require => 'zip/zip'
 gem 'xmpp4r'
-gem 'right_aws'
+gem 'aws'
+gem 'aws-s3' # for rails 2.3.5 and carrierwave 0.4.5, use only aws if we change versions
 gem 'warden'
 gem 'devise'
 gem 'will_paginate'
@@ -16,7 +17,7 @@ gem 'uuid'
 gem "mysql"
 gem 'rack-debug'
 gem 'nokogiri'
-gem 'carrierwave', "0.4.3"
+gem 'carrierwave'
 gem 'mini_magick'
 gem 'acl9'
 gem 'formtastic'

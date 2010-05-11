@@ -4,12 +4,16 @@
 WebDoc.ImagePaletteController = $.klass({
   initialize: function( selector ) {
     this.domNode = $( selector );
-    
-    $("#property_src").blur(this.updateSrc.pBind(this));
+
+    this.propertySrc = $("#property_src");
+    this.propertySrc.blur(this.updateSrc.pBind(this));
 
     $("#restore_original_size").click(this.restoreOriginalSize);
 
     $("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
+
+    this.addToMyImageLink = $(selector + " a[href=#add_to_my_images]");
+    this.addToMyImageLink.click(this.addToMyImage.pBind(this));
   },
   
   refresh: function() {
@@ -26,6 +30,7 @@ WebDoc.ImagePaletteController = $.klass({
       }
     }
   },
+  
   updateSrc: function(event) {
     var item = WebDoc.application.boardController.selection()[0].item;
     item.data.data.src =  $("#property_src")[0].value;       
@@ -56,6 +61,18 @@ WebDoc.ImagePaletteController = $.klass({
       }
       item.save();
     } 
+  },
+
+  addToMyImage: function() {
+    if (this.propertySrc.val() != '') {
+      image = new WebDoc.Image;
+      // image.data.type = 'external';
+      image.data.remote_file_url = this.propertySrc.val();
+      image.save(function(){
+        // this.addToMyImageLink.text('saved!');
+
+      }.pBind(this));
+    }  
   }
 
 });

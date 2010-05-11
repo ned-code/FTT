@@ -7,7 +7,11 @@ describe PagesController do
   before(:each) { mock_page(:to_json => {}) }
   
   describe "with public document" do
-    before(:each) { mock_document(:is_public? => true) }
+    before(:each) do
+      mock_document(:is_public? => true)
+      @mock_page = mock_page
+      @mock_page.stub(:must_notify=).with(true)
+    end
     
     context "accessed by admin" do
       before(:each) do 
@@ -32,7 +36,8 @@ describe PagesController do
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :create, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
+        expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
+        expects :save, :on => mock_page, :returns => true
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
@@ -76,7 +81,8 @@ describe PagesController do
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :create, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
+        expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
+        expects :save, :on => mock_page, :returns => true
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
@@ -198,7 +204,11 @@ describe PagesController do
   end
   
   describe "with private document" do
-    before(:each) { mock_document(:is_public? => false, :to_json => {}) }
+    before(:each) do
+      mock_document(:is_public? => false, :to_json => {})
+      @mock_page = mock_page
+      @mock_page.stub(:must_notify=).with(true)
+    end
     
     context "accessed by admin" do
       before(:each) do 
@@ -223,7 +233,8 @@ describe PagesController do
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :create, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
+        expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
+        expects :save, :on => mock_page, :returns => true
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
@@ -267,7 +278,8 @@ describe PagesController do
       describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
-        expects :create, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
+        expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
+        expects :save, :on => mock_page, :returns => true
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
