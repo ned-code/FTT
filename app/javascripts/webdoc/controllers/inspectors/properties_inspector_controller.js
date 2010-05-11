@@ -112,7 +112,7 @@ WebDoc.PropertiesInspectorController = $.klass({
 		    		}
 		    		break;
 		      }
-        this.refresh();
+        that.refresh();
         
       },
       fail: function(error) {
