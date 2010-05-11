@@ -25,10 +25,17 @@ WebDoc.PropertiesInspectorController = $.klass({
     var selectedItem = WebDoc.application.boardController.selection()[0];
     
     if ( selectedItem ) {
-      this.topNode.val(selectedItem.position().top);
-      this.leftNode.val(selectedItem.position().left);
-      this.widthNode.val(selectedItem.size().width);
-      this.heightNode.val(selectedItem.size().height);
+      var position = selectedItem.position();
+      var size = selectedItem.size();
+      this.topNode.data("inherited", position.topInherted);
+      this.topNode.val(position.top);
+      this.leftNode.data("inherited", position.leftInherted);
+      this.leftNode.val(position.left);  
+      this.widthNode.data("inherited", size.widthInherted);
+      this.widthNode.val(size.width);  
+      this.heightNode.data("inherited", size.heightInherted);
+      this.heightNode.val(size.height);  
+      
       this.opacityNode.val( selectedItem.item.data.data.css.opacity || "1" );
       // drawing item has no itemDomNode
       if (selectedItem.itemDomNode) {
@@ -67,8 +74,8 @@ WebDoc.PropertiesInspectorController = $.klass({
 	            left: css.left
 	          };
 	          var newPosition = {
-	            top: that.topNode.val(),
-	            left: that.leftNode.val()
+	            top: (this === that.topNode[0])? that.topNode.val() : css.top,
+	            left: (this === that.leftNode[0])? that.leftNode.val() : css.left
 	          };
 	          if (newPosition.left != previousPosition.left || newPosition.top != previousPosition.top) {
 	            WebDoc.application.undoManager.registerUndo(function() {
@@ -86,8 +93,8 @@ WebDoc.PropertiesInspectorController = $.klass({
 	            height: css.height
 	          }; 
 	          var newSize = {
-	            width: that.widthNode.val(),
-	            height: that.heightNode.val()
+              width: (this === that.widthNode[0])? that.widthNode.val() : css.width,
+              height: (this === that.heightNode[0])? that.heightNode.val() : css.height              
 	          };
 	          if (newSize.width != previousSize.width || newSize.height != previousSize.height) {
 	            WebDoc.application.undoManager.registerUndo(function() {
