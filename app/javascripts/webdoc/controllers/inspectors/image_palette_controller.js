@@ -13,6 +13,8 @@ WebDoc.ImagePaletteController = $.klass({
     $("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
     this.addToMyImageLink = $(selector + " a[href=#add_to_my_images]");
+    this.addToMyImageResult = $(selector + " #add_to_my_images_result");
+
     this.addToMyImageLink.click(this.addToMyImage.pBind(this));
   },
   
@@ -64,15 +66,20 @@ WebDoc.ImagePaletteController = $.klass({
   },
 
   addToMyImage: function() {
-    if (this.propertySrc.val() != '') {
-      image = new WebDoc.Image;
-      // image.data.type = 'external';
-      image.data.remote_file_url = this.propertySrc.val();
-      image.save(function(){
-        // this.addToMyImageLink.text('saved!');
 
-      }.pBind(this));
-    }  
+    var selectedItem = WebDoc.application.boardController.selection()[0];
+    if (selectedItem && selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+      if (selectedItem.item.data.data.src !== undefined && selectedItem.item.data.data.src !== '') {
+        this.addToMyImageLink.hide();
+        this.addToMyImageResult.text('Uploading...');
+        image = new WebDoc.Image;
+        image.data.remote_file_url = this.propertySrc.val();
+        image.save(function(){
+          this.addToMyImageResult.text('Image uploaded in my images!');
+        }.pBind(this));
+      }
+    }
+    return false;
   }
 
 });
