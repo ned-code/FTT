@@ -110,17 +110,23 @@ WebDoc.ItemView = $.klass({
   objectChanged: function(item) {
     // css must be applied to item node. Only position and size must be set to dom node wrapper
     var position = {
-      top: this.item.data.data.css.top,
-      left: this.item.data.data.css.left,
-      width: this.item.data.data.css.width,
-      height: this.item.data.data.css.height
+      top: this.item.data.data.css.top || "",
+      left: this.item.data.data.css.left || "",
+      width: this.item.data.data.css.width || "",
+      height: this.item.data.data.css.height || ""
     };
-    this.domNode.stop();
-    this.domNode.animate(position, 'fast', function() {
-      if (this.domNode.hasClass("item-edited")) {
-        WebDoc.application.boardController._updateScreens(this.domNode);
-      }
-    }.pBind(this));
+    var canAnimate = position.top && position.left && position.width && position.height;
+    this.domNode.stop();      
+    if (canAnimate) {
+      this.domNode.animate(position, 'fast', function() {
+        if (this.domNode.hasClass("item-edited")) {
+          WebDoc.application.boardController._updateScreens(this.domNode);
+        }
+      }.pBind(this));
+    }
+    else {
+      this.domNode.css(position);      
+    }
     if (this.itemDomNode) {
       var itemCss = {};
       $.extend(itemCss, this.item.data.data.css);
@@ -151,6 +157,9 @@ WebDoc.ItemView = $.klass({
         height: "100%"
       });
       this.domNode.append(this.itemDomNode);
+      if (this.item.data.data.innerHTML) {
+        this.innerHtmlChanged();
+      }      
       this.select();
     }
   },  
@@ -210,6 +219,20 @@ WebDoc.ItemView = $.klass({
     
   },
   
+  position: function() {
+    var result = { top: this.item.top(), left: this.item.left() };
+    result.top = result.top || this.domNode.position().top + 'px';
+    result.left =  result.left || this.domNode.position().left + 'px';
+    return result;
+  },
+  
+  size: function() {
+    var result = { width: this.item.width(), height: this.item.height() };
+    result.width = result.width || this.domNode.width() + 'px';
+    result.height = result.height || this.domNode.height() + 'px';
+    return result;    
+  },
+  
   _initDragAndResize: function() {
     this.domNode.draggable({
       containment: "parent",
@@ -219,7 +242,7 @@ WebDoc.ItemView = $.klass({
         ddd("start drag");
         this.pageView.eventCatcherNode.show();
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-        var currentPosition = {top: this.item.data.data.css.top, left: this.item.data.data.css.left};
+        var currentPosition = this.position();
 
         this.dragOffsetLeft = mappedPoint.x - parseFloat(currentPosition.left);
         this.dragOffsetTop = mappedPoint.y - parseFloat(currentPosition.top);
@@ -247,7 +270,7 @@ WebDoc.ItemView = $.klass({
         this.pageView.eventCatcherNode.show();
         this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
         this.aspectRatio = ui.size.width / ui.size.height;
-        var currentSize = { width: this.item.data.data.css.width, height: this.item.data.data.css.height};
+        var currentSize = this.size();
         WebDoc.application.undoManager.registerUndo(function() {
           WebDoc.ItemView.restoreSize(this.item, currentSize);
         }.pBind(this));

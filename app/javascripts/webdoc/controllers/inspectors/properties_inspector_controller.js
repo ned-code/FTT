@@ -6,8 +6,6 @@ WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector ) {
     this.domNode = $(selector);
     jQuery('#item_inspector').delegate("#property-top", 'change', this.updateProperties.pBind(this));
-    jQuery('#item_inspector').delegate("#property-right", 'change', this.updateProperties.pBind(this));
-    jQuery('#item_inspector').delegate("#property-bottom", 'change', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-left", 'change', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-width", 'change', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-height", 'change', this.updateProperties.pBind(this));
@@ -15,8 +13,6 @@ WebDoc.PropertiesInspectorController = $.klass({
     jQuery('#item_inspector').delegate("#property-opacity", 'change', this.updateProperties.pBind(this));    
     jQuery('#item_inspector').delegate("#property-fit-to-screen", 'click', this.updatePropertiesWithFitToScreen.pBind(this));
     this.topNode = jQuery("#property-top");
-    this.rightNode = jQuery("#property-right");
-    this.bottomNode = jQuery("#property-bottom");
     this.leftNode = jQuery("#property-left");
     this.widthNode = jQuery("#property-width");
     this.heightNode = jQuery("#property-height");
@@ -29,12 +25,10 @@ WebDoc.PropertiesInspectorController = $.klass({
     var selectedItem = WebDoc.application.boardController.selection()[0];
     
     if ( selectedItem ) {
-      this.topNode.val( selectedItem.item.data.data.css.top );
-      this.rightNode.val( selectedItem.item.data.data.css.left );
-      this.bottomNode.val( selectedItem.item.data.data.css.top );
-      this.leftNode.val( selectedItem.item.data.data.css.left );
-      this.widthNode.val( selectedItem.item.data.data.css.width );
-      this.heightNode.val( selectedItem.item.data.data.css.height );      
+      this.topNode.val(selectedItem.position().top);
+      this.leftNode.val(selectedItem.position().left);
+      this.widthNode.val(selectedItem.size().width);
+      this.heightNode.val(selectedItem.size().height);
       this.opacityNode.val( selectedItem.item.data.data.css.opacity || "1" );
       // drawing item has no itemDomNode
       if (selectedItem.itemDomNode) {
@@ -118,7 +112,7 @@ WebDoc.PropertiesInspectorController = $.klass({
 		    		}
 		    		break;
 		      }
-        
+        that.refresh();
         
       },
       fail: function(error) {

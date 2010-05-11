@@ -36,16 +36,24 @@ class PagesController < DocumentController
   def create
     @page = @document.pages.new(params[:page])
     @page.must_notify = true
-    @page.save
-    render :json => @page.to_json(:include => :items)
+    @page.save!
+    if (params[:page][:items_attributes].present?)
+      render :json => @page.to_json(:include => :items)
+    else
+      render :json => @page
+    end
   end
   
   # PUT /documents/:document_id/pages/:id
   def update
+    deep_notify = params[:page][:items_attributes].present?
     @page = @document.pages.find_by_uuid(params[:id])
     @page.must_notify = true
-    @page.update_attributes(params[:page])
-    if (params[:page][:items_attributes].present?)
+    @page.deep_notify = deep_notify
+    @page.update_attributes!(params[:page])
+    # TODO JBA seems that update atribute does not refresh nested attributes so we need to refresh
+    @page.reload
+    if (deep_notify)
       render :json => @page.to_json(:include => :items)
     else
       render :json => @page

@@ -46,19 +46,25 @@ WebDoc.PageView = $.klass({
     if (page._isAttributeModified(options, 'class')) {
       this._initPageClass();      
     }
-    if (page._isAttributeModified(options, 'externalPageUrl')) {
+    if (page.data.data.externalPage && page._isAttributeModified(options, 'externalPageUrl')) {
       this._loadExternalPage();
     }
   },
   
   itemAdded: function(addedItem, afterItem) {
     var relatedItemView = this.itemViews[addedItem.uuid()];
+
     var afterItemView = afterItem? this.itemViews[afterItem.uuid()]: null;
     // be sure not to add twice the same item
     if (!relatedItemView) {
       this.createItemView(addedItem, afterItemView);
     }
     else {
+      // be sure the related item is correct. If we recieve a item added and we already have of view for that item uuid
+      // then we probaby have a view that is related to another version of the item.
+      relatedItemView.item.removeListener(relatedItemView);
+      relatedItemView.item = addedItem;       
+      relatedItemView.item.addListener(relatedItemView);
       relatedItemView.objectChanged(addedItem);
     }
   },
@@ -181,7 +187,7 @@ WebDoc.PageView = $.klass({
     delete boardCss.left;
     delete boardCss.width;
     delete boardCss.height;
-    this._boardContainer.animate( boardContainerSize );
+    this._boardContainer.css( boardContainerSize );
     this.domNode.css(boardCss);
   },
   

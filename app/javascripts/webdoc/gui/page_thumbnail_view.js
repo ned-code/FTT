@@ -18,7 +18,7 @@ WebDoc.PageThumbnailView = $.klass({
     this.domNode = $('<div>').attr({
       id: "thumb_" + page.uuid(),
       draggable: "true"
-    }).addClass( pageThumbClass + " webdoc" );
+    });
     
     this.pageThumbNode = $('<div/>');
     if (this.page.data.data.externalPage) {
@@ -45,7 +45,8 @@ WebDoc.PageThumbnailView = $.klass({
       }
     }
     page.addListener(this);    
-    this.updateSize();
+    this._initPageCss();
+    this._initPageClass();
     this.domNode.append(this.pageThumbNode);
   },
   
@@ -55,7 +56,7 @@ WebDoc.PageThumbnailView = $.klass({
     this.domNode.remove();
   },
   
-  updateSize: function() {
+  _initPageCss: function() {
     // define scale factor
     var widthInPx = this.page.data.data.css.width? this.page.width().match(/.*px/) : false;
     var heightInPx = this.page.data.data.css.height? this.page.height().match(/.*px/) : false;
@@ -97,13 +98,29 @@ WebDoc.PageThumbnailView = $.klass({
     });
   },
   
-  objectChanged: function(page) {
-    this.updateSize();
+  objectChanged: function(page, options) {
+    if (page._isAttributeModified(options, 'css')) {
+      this._initPageCss();
+    }
+    if (page._isAttributeModified(options, 'class')) {
+      this._initPageClass();      
+    }
+    if (page.data.data.externalPage && page._isAttributeModified(options, 'externalPageUrl')) {
+      this._loadExternalPage();
+    }
   },
   
-  itemAdded: function(addedItem) {
+  itemAdded: function(addedItem, afterItem) {
     if (!this.page.data.data.externalPage) {
-      this.createItemView(addedItem);
+      var relatedItemView = this.itemViews[addedItem.uuid()];
+      var afterItemView = afterItem? this.itemViews[afterItem.uuid()]: null;
+      // be sure not to add twice the same item
+      if (!relatedItemView) {
+        this.createItemView(addedItem, afterItemView);
+      }
+      else {
+        relatedItemView.objectChanged(addedItem);
+      }
     }
   },
   
@@ -117,29 +134,39 @@ WebDoc.PageThumbnailView = $.klass({
     }
   },
   
-  createItemView: function(item) {
+  createItemView: function(item, afterItem) {
     var itemView;
     
     switch (item.data.media_type) {
       case WebDoc.ITEM_TYPE_TEXT:
-        itemView = new WebDoc.ItemThumbnailView(item, this);
+        itemView = new WebDoc.ItemThumbnailView(item, this, afterItem);
         break;
       case WebDoc.ITEM_TYPE_IMAGE:
-        itemView = new WebDoc.ImageThumbnailView(item, this);
+        itemView = new WebDoc.ImageThumbnailView(item, this, afterItem);
         break;
       case WebDoc.ITEM_TYPE_DRAWING:
         itemView = new WebDoc.DrawingThumbnailView(item, this);
         break;
       case WebDoc.ITEM_TYPE_WIDGET:
-        itemView = new WebDoc.WidgetThumbnailView(item, this);
+        itemView = new WebDoc.WidgetThumbnailView(item, this, afterItem);
         break;
       default:
-        itemView = new WebDoc.ItemThumbnailView(item, this);
+        itemView = new WebDoc.ItemThumbnailView(item, this, afterItem);
         break;
     }
     this.itemViews[item.uuid()] = itemView;
     
     return itemView;
+  },
+  
+  _initPageClass: function() {
+    this.domNode.attr("class", pageThumbClass + " webdoc");
+    this.domNode.addClass(this.page.data.data['class']);
+    this.page.getLayout(function(layout) {
+      if (layout) {
+        this.domNode.addClass(layout.getModelPage().data.data['class']);
+      }
+    }.pBind(this));    
   }
 });
 

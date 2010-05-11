@@ -11,6 +11,7 @@ class Page < ActiveRecord::Base
   
   # see XmppPageObserver
   attr_accessor_with_default :must_notify, false
+  attr_accessor_with_default :deep_notify, false
   
   # ================
   # = Associations =
@@ -21,7 +22,7 @@ class Page < ActiveRecord::Base
   belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
   
   # should be placed after associations declaration
-  accepts_nested_attributes_for :items
+  accepts_nested_attributes_for :items, :allow_destroy => true
   
   # ==========
   # = Scopes =
