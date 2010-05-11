@@ -88,11 +88,7 @@ WebDoc.ItemView = $.klass({
           case "class":  
           case "innerHTMLPlaceholder":
           case "tag":
-<<<<<<< HEAD
           case "css":
-=======
-          case "css":   
->>>>>>> dev
           case "preference":
           case "properties":
             break;
@@ -336,7 +332,7 @@ $.extend(WebDoc.ItemView, {
     WebDoc.application.undoManager.registerUndo(function() {
       WebDoc.ItemView.restoreSize(item, previousSize);
     }.pBind(this));
-    item.save();  
+    item.save();
   },
   
   restorePositionAndSize: function(item, top, left, width, height) {

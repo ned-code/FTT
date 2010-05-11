@@ -9,14 +9,14 @@
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :page_editor, :media => 'all'
     
-    <link id="theme" rel="stylesheet" href="/themes/default/css/typography.css" type="text/css" />
+    == <link id="theme" rel="stylesheet" href="/themes/default/css/typography.css" type="text/css" />
     
-  -if params[:reader] == 'true'
-    -current_class = 'editor mode-embed'
-  -elsif params[:edit] == 'true'
-    -current_class = 'editor mode-edit'
-  -else
-    -current_class = 'editor mode-preview'
+  - if params[:reader] == 'true'
+    - current_class = 'editor mode-embed'
+  - elsif params[:edit] == 'true'
+    - current_class = 'editor mode-edit'
+  - else
+    - current_class = 'editor mode-preview'
        
   %body{ :class => current_class}
     = yield
@@ -39,7 +39,7 @@
       WebDoc.Application.main(function() {
         var editor = new WebDoc.PageEditor(#{edit_mode?});
         editor.load("#{@document.uuid}");
-      });      
+      });
       WebDoc.Application.start();
     = render :partial => "layouts/feedback";
     = render :partial => "layouts/google_analytics"
