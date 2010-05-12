@@ -4,7 +4,7 @@ describe Medias::Widget do
   
   before(:each) do
     @s3 = mock("s3")
-    Aws::S3Interface.stub(:new).and_return(@s3)
+    RightAws::S3Interface.stub(:new).and_return(@s3)
     @s3.stub(:put) # stub here to be able to use should_receive
   end
   

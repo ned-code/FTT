@@ -144,7 +144,7 @@ class Theme < ActiveRecord::Base
     if self.file.s3_bucket == nil
       File.open(File.join(Rails.root, 'public', self.style_url), 'wb') {|f| f.write(parsed) }
     else
-      @s3 ||= Aws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
+      @s3 ||= RightAws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
       @s3.put(file.s3_bucket, self.file.store_dir + "css/parsed_theme_style.css", parsed, 'x-amz-acl' => 'public-read')
     end
   end
@@ -174,7 +174,7 @@ class Theme < ActiveRecord::Base
               end
             end
           else
-            @s3 ||=Aws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
+            @s3 ||= RightAws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
             @s3.put(file.s3_bucket, filePath, zip_file.get_input_stream.read, 'x-amz-acl' => 'public-read')
           end
         end

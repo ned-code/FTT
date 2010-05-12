@@ -4,14 +4,14 @@ dependencies:
     group: 
     - :development
     version: ">= 0"
-  xmpp4r: 
-    group: 
-    - :default
-    version: ">= 0"
   rails: 
     group: 
     - :default
     version: ~> 2.3.5
+  xmpp4r: 
+    group: 
+    - :default
+    version: ">= 0"
   annotate: 
     group: 
     - :development
@@ -80,6 +80,10 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
+  right_aws: 
+    group: 
+    - :default
+    version: ">= 0"
   json: 
     group: 
     - :default
@@ -91,7 +95,7 @@ dependencies:
   carrierwave: 
     group: 
     - :default
-    version: ">= 0"
+    version: = 0.4.3
   erubis: 
     group: 
     - :default
@@ -99,10 +103,6 @@ dependencies:
   steak: 
     group: 
     - :test
-    version: ">= 0"
-  aws: 
-    group: 
-    - :default
     version: ">= 0"
   mini_magick: 
     group: 
@@ -119,10 +119,6 @@ dependencies:
   remarkable_rails: 
     group: 
     - :test
-    version: ">= 0"
-  aws-s3: 
-    group: 
-    - :default
     version: ">= 0"
   rubyzip: 
     group: 
@@ -179,20 +175,6 @@ specs:
     version: 2.3.5
 - annotate: 
     version: 2.4.0
-- http_connection: 
-    version: 1.3.0
-- uuidtools: 
-    version: 2.1.1
-- xml-simple: 
-    version: 1.0.12
-- aws: 
-    version: 2.3.8
-- builder: 
-    version: 2.1.2
-- mime-types: 
-    version: "1.16"
-- aws-s3: 
-    version: 0.6.2
 - highline: 
     version: 1.5.2
 - net-ssh: 
@@ -209,6 +191,8 @@ specs:
     version: 1.2.1
 - culerity: 
     version: 0.2.10
+- mime-types: 
+    version: "1.16"
 - nokogiri: 
     version: 1.4.1
 - rack-test: 
@@ -222,7 +206,7 @@ specs:
 - capybara: 
     version: 0.3.7
 - carrierwave: 
-    version: 0.4.5
+    version: 0.4.3
 - cgi_multipart_eof_fix: 
     version: 2.5.0
 - closure-compiler: 
@@ -246,7 +230,7 @@ specs:
 - gem_plugin: 
     version: 0.2.3
 - haml: 
-    version: 3.0.1
+    version: 3.0.2
 - i18n: 
     version: 0.3.7
 - rails: 
@@ -283,6 +267,10 @@ specs:
     version: 1.3.2
 - remarkable_rails: 
     version: 3.1.13
+- right_http_connection: 
+    version: 1.2.4
+- right_aws: 
+    version: 2.0.0
 - rspec-factory-girl: 
     version: 0.2.0
 - rubyzip: 
@@ -293,11 +281,13 @@ specs:
     version: 0.3.7
 - uuid: 
     version: 2.3.1
+- uuidtools: 
+    version: 2.1.1
 - will_paginate: 
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: 9db9f8e2f07dc1fcb6506f97594685e1b35c278f
+hash: 124f24ca7e8fe29c5d48ac93186fc69886873fff
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org
