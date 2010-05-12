@@ -72,7 +72,12 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   },
   
   getTheme: function(callBack) {
-    WebDoc.ServerManager.getRecords(WebDoc.Theme, this.data.theme_id, callBack);
+    if (this.data.theme_id) {
+      WebDoc.ServerManager.getRecords(WebDoc.Theme, this.data.theme_id, callBack);
+    }
+    else {
+      callBack.call(this, null);
+    }
   },
     
   styleUrl: function() {
