@@ -95,7 +95,7 @@ dependencies:
   carrierwave: 
     group: 
     - :default
-    version: = 0.4.3
+    version: = 0.4.5
   erubis: 
     group: 
     - :default
@@ -206,7 +206,7 @@ specs:
 - capybara: 
     version: 0.3.7
 - carrierwave: 
-    version: 0.4.3
+    version: 0.4.5
 - cgi_multipart_eof_fix: 
     version: 2.5.0
 - closure-compiler: 
@@ -287,7 +287,7 @@ specs:
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: 124f24ca7e8fe29c5d48ac93186fc69886873fff
+hash: 12c828163e360e709e9c572fb9d68bd2c1a9d333
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org
