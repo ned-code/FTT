@@ -52,9 +52,11 @@ describe Theme do
       @theme.elements_url.should be_present
     end
 
-    if CarrierWave.yml_storage(:assets).to_s == "right_s3"
+    if CarrierWave.yml_storage(:assets).to_s == "right_s3" || CarrierWave.yml_storage(:assets).to_s == "s3"
       it "should return the right url of the s3 to file.url" do
-        @theme.file.url.include?(CarrierWave.yml_s3_bucket(:assets)).should be_true
+        p @theme.file.url
+        p CarrierWave.yml_s3_bucket(:assets)
+        @theme.file.url.include?("http://"+CarrierWave.yml_s3_bucket(:assets)).should be_true
       end
     end
 
