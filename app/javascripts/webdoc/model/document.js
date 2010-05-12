@@ -80,7 +80,8 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   },
   
   styleClass: function() {
-    return "theme_" + this.data.theme_id;
+    var themeName = this.data.theme_id || 'default'
+    return "theme_" + themeName;
   },
   
   share: function() {

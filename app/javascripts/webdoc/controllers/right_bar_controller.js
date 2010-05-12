@@ -85,15 +85,21 @@ WebDoc.RightBarController = $.klass({
   selectInspector: function(inspectorType) {
     ddd("[RightBarController] select inspecor", inspectorType);
     if (this._currentInspectorType !== inspectorType) {
-      var inspectorController = this._inspectorsControllers[inspectorType];
-      if (!inspectorController) {
-        inspectorController = new this._inspectorsControllersClasses[inspectorType]();
-        this._inspectorsControllers[inspectorType] = inspectorController;
-      }
+      var inspectorController = this.getInspector(inspectorType);
       this._changePanelContent(inspectorController);
       this._changeButtonState(inspectorController);
       this._currentInspectorType = inspectorType;
     }
+  },
+
+  getInspector: function(inspectorType) {
+    ddd("[RightBarController] get inspector", inspectorType);
+    var inspectorController = this._inspectorsControllers[inspectorType];
+    if (!inspectorController) {
+      inspectorController = new this._inspectorsControllersClasses[inspectorType]();
+      this._inspectorsControllers[inspectorType] = inspectorController;
+    }
+    return this._inspectorsControllers[inspectorType];
   },
   
   showLib: function() {

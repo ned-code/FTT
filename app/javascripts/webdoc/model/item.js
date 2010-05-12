@@ -25,6 +25,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.page = page;  
   },
   
+  
   positionZ: function() {
     return this.data.position;  
   },
@@ -107,6 +108,19 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.fireObjectChanged();
   },
   
+  top: function() {
+    return this.data.data.css.top;
+  },
+  left: function() {
+    return this.data.data.css.left;
+  },
+  width: function() {
+    return this.data.data.css.width;
+  },
+  height: function() {
+    return this.data.data.css.height;
+  },  
+  
   shiftBy: function(offsetPosition) {
     var newTop = (parseFloat(this.data.data.css.top) + offsetPosition.top) + "px";
     var newLeft = (parseFloat(this.data.data.css.left) + offsetPosition.left) + "px";
@@ -114,24 +128,65 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   moveTo: function(newPosition) {
-    this.data.data.css.left = newPosition.left;
-    this.data.data.css.top = newPosition.top;
-    this.fireObjectChanged();
+    if (newPosition.left && !jQuery.string(newPosition.left).empty()) {
+      this.data.data.css.left = newPosition.left;
+    }
+    else {
+      delete this.data.data.css.left;
+    }
+    if (newPosition.top && !jQuery.string(newPosition.top).empty()) {
+      this.data.data.css.top = newPosition.top;
+    }
+    else {
+      delete this.data.data.css.top;
+    }
+    this.fireObjectChanged({ modifedAttribute: 'css' });
     WebDoc.application.inspectorController.refreshSubInspectors();    
   },
   
-  resizeTo: function(newSize) {
-    this.data.data.css.width = newSize.width;
-    this.data.data.css.height = newSize.height;
+  resizeTo: function(newSize) {    
+    if (newSize.width && !jQuery.string(newSize.width).empty()) {
+      this.data.data.css.width = newSize.width;
+    }
+    else {
+      delete this.data.data.css.width;
+    }
+    if (newSize.height && !jQuery.string(newSize.height).empty()) {
+      this.data.data.css.height = newSize.height;
+    }
+    else {
+      delete this.data.data.css.height;
+    }    
+    
     this.fireObjectChanged();
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
 
   moveToAndResizeTo: function(top, left, width, height) {
-    this.data.data.css.top = top;
-    this.data.data.css.left = left;
-    this.data.data.css.width = width;
-    this.data.data.css.height = height;
+    if (top && !jQuery.string(top).empty()) {
+      this.data.data.css.top = top;
+    }
+    else {
+      delete this.data.data.css.top;
+    }    
+    if (left && !jQuery.string(left).empty()) {
+      this.data.data.css.left = left;
+    }
+    else {
+      delete this.data.data.css.left;
+    }    
+    if (width && !jQuery.string(width).empty()) {
+      this.data.data.css.width = width
+    }
+    else {
+      delete this.data.data.css.width;
+    }    
+    if (height && !jQuery.string(height).empty()) {
+      this.data.data.css.height = height;
+    }
+    else {
+      delete this.data.data.css.height;
+    }                
     this.fireObjectChanged();
     WebDoc.application.inspectorController.refreshSubInspectors();
   },

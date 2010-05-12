@@ -4,12 +4,18 @@
 WebDoc.ImagePaletteController = $.klass({
   initialize: function( selector ) {
     this.domNode = $( selector );
-    
-    $("#property_src").blur(this.updateSrc.pBind(this));
+
+    this.propertySrc = $("#property_src");
+    this.propertySrc.blur(this.updateSrc.pBind(this));
 
     $("#restore_original_size").click(this.restoreOriginalSize);
 
     $("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
+
+    this.addToMyImageLink = $(selector + " a[href=#add_to_my_images]");
+    this.addToMyImageResult = $(selector + " #add_to_my_images_result");
+
+    this.addToMyImageLink.click(this.addToMyImage.pBind(this));
   },
   
   refresh: function() {
@@ -26,6 +32,7 @@ WebDoc.ImagePaletteController = $.klass({
       }
     }
   },
+  
   updateSrc: function(event) {
     var item = WebDoc.application.boardController.selection()[0].item;
     item.data.data.src =  $("#property_src")[0].value;       
@@ -56,6 +63,24 @@ WebDoc.ImagePaletteController = $.klass({
       }
       item.save();
     } 
+  },
+
+  addToMyImage: function() {
+    var selectedItem = WebDoc.application.boardController.selection()[0];
+    if (selectedItem && selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+      if (selectedItem.item.data.data.src !== undefined && selectedItem.item.data.data.src !== '') {
+        this.addToMyImageLink.hide();
+        this.addToMyImageResult.text('Uploading...');
+        image = new WebDoc.Image;
+        image.data.remote_file_url = this.propertySrc.val();
+        image.save(function(){
+          WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.LIBRARY)
+                  .imagesLibrary.refreshMyImages();
+          this.addToMyImageResult.text('Image uploaded in my images!');
+        }.pBind(this));
+      }
+    }
+    return false;
   }
 
 });

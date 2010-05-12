@@ -6,8 +6,6 @@ WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector ) {
     this.domNode = $(selector);
     jQuery('#item_inspector').delegate("#property-top", 'change', this.updateProperties.pBind(this));
-    jQuery('#item_inspector').delegate("#property-right", 'change', this.updateProperties.pBind(this));
-    jQuery('#item_inspector').delegate("#property-bottom", 'change', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-left", 'change', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-width", 'change', this.updateProperties.pBind(this));
     jQuery('#item_inspector').delegate("#property-height", 'change', this.updateProperties.pBind(this));
@@ -15,8 +13,6 @@ WebDoc.PropertiesInspectorController = $.klass({
     jQuery('#item_inspector').delegate("#property-opacity", 'change', this.updateProperties.pBind(this));    
     jQuery('#item_inspector').delegate("#property-fit-to-screen", 'click', this.updatePropertiesWithFitToScreen.pBind(this));
     this.topNode = jQuery("#property-top");
-    this.rightNode = jQuery("#property-right");
-    this.bottomNode = jQuery("#property-bottom");
     this.leftNode = jQuery("#property-left");
     this.widthNode = jQuery("#property-width");
     this.heightNode = jQuery("#property-height");
@@ -29,12 +25,17 @@ WebDoc.PropertiesInspectorController = $.klass({
     var selectedItem = WebDoc.application.boardController.selection()[0];
     
     if ( selectedItem ) {
-      this.topNode.val( selectedItem.item.data.data.css.top );
-      this.rightNode.val( selectedItem.item.data.data.css.left );
-      this.bottomNode.val( selectedItem.item.data.data.css.top );
-      this.leftNode.val( selectedItem.item.data.data.css.left );
-      this.widthNode.val( selectedItem.item.data.data.css.width );
-      this.heightNode.val( selectedItem.item.data.data.css.height );      
+      var position = selectedItem.position();
+      var size = selectedItem.size();
+      this.topNode.data("inherited", position.topInherted);
+      this.topNode.val(position.top);
+      this.leftNode.data("inherited", position.leftInherted);
+      this.leftNode.val(position.left);  
+      this.widthNode.data("inherited", size.widthInherted);
+      this.widthNode.val(size.width);  
+      this.heightNode.data("inherited", size.heightInherted);
+      this.heightNode.val(size.height);  
+      
       this.opacityNode.val( selectedItem.item.data.data.css.opacity || "1" );
       // drawing item has no itemDomNode
       if (selectedItem.itemDomNode) {
@@ -73,8 +74,8 @@ WebDoc.PropertiesInspectorController = $.klass({
 	            left: css.left
 	          };
 	          var newPosition = {
-	            top: that.topNode.val(),
-	            left: that.leftNode.val()
+	            top: (this === that.topNode[0])? that.topNode.val() : css.top,
+	            left: (this === that.leftNode[0])? that.leftNode.val() : css.left
 	          };
 	          if (newPosition.left != previousPosition.left || newPosition.top != previousPosition.top) {
 	            WebDoc.application.undoManager.registerUndo(function() {
@@ -92,8 +93,8 @@ WebDoc.PropertiesInspectorController = $.klass({
 	            height: css.height
 	          }; 
 	          var newSize = {
-	            width: that.widthNode.val(),
-	            height: that.heightNode.val()
+              width: (this === that.widthNode[0])? that.widthNode.val() : css.width,
+              height: (this === that.heightNode[0])? that.heightNode.val() : css.height              
 	          };
 	          if (newSize.width != previousSize.width || newSize.height != previousSize.height) {
 	            WebDoc.application.undoManager.registerUndo(function() {
@@ -118,7 +119,7 @@ WebDoc.PropertiesInspectorController = $.klass({
 		    		}
 		    		break;
 		      }
-        
+        that.refresh();
         
       },
       fail: function(error) {
