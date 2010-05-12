@@ -192,7 +192,8 @@ specs:
 - mime-types: 
     version: "1.16"
 - aws-s3: 
-    version: 0.6.2
+    version: 0.4.1
+    source: 0
 - highline: 
     version: 1.5.2
 - net-ssh: 
@@ -246,7 +247,7 @@ specs:
 - gem_plugin: 
     version: 0.2.3
 - haml: 
-    version: 3.0.1
+    version: 3.0.2
 - i18n: 
     version: 0.3.7
 - rails: 
@@ -297,7 +298,11 @@ specs:
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: 9db9f8e2f07dc1fcb6506f97594685e1b35c278f
+hash: af662ee90ac5d230a314fb21bef910f75977e9b3
 sources: 
+- Git: 
+    uri: http://github.com/isaacfeliu/aws-s3.git
+    git: http://github.com/isaacfeliu/aws-s3.git
+    ref: 1396f0e44e9d4c72d0ce1074de10375ec8d41932
 - Rubygems: 
     uri: http://gemcutter.org
