@@ -2,6 +2,13 @@
   overflow:hidden;
 }
 
+.item_wrap {
+ right: -100px;
+ top: 0px;
+ width: 100px;
+ height: 100px;  
+}
+
 #webdoc .item_wrap {
   overflow:hidden;
   position:absolute;
