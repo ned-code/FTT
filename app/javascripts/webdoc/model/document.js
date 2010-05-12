@@ -72,7 +72,7 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   },
   
   getTheme: function(callBack) {
-    if (this.data.theme_id) {
+    if (this.data.theme_id && this.data.theme_id !== 'null') {
       WebDoc.ServerManager.getRecords(WebDoc.Theme, this.data.theme_id, callBack);
     }
     else {
@@ -85,7 +85,7 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   },
   
   styleClass: function() {
-    var themeName = this.data.theme_id || 'default'
+    var themeName = this.data.theme_id || 'default';
     return "theme_" + themeName;
   },
   
