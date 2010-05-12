@@ -38,7 +38,7 @@ WebDoc.ThemesController = jQuery.klass({
     
     defaultTheme = WebDoc.ThemeManager.getInstance().getDefaultTheme();
     
-    this.list['default'] = defaultTheme;
+    this.list['default'] = this._currentTheme = defaultTheme;
   },
   
   // Event handlers

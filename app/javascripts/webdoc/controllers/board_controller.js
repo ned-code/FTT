@@ -212,9 +212,11 @@ WebDoc.BoardController = jQuery.klass({
   // Theme ----------------------------------------
   
   applyDocumentTheme: function() {
-    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() ||WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
-        currentClass = this._themeClass || 'theme_default',
-        newClass = WebDoc.application.pageEditor.currentDocument.styleClass() || 'theme_default',
+    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
+        previousTheme = WebDoc.application.themesController.getPreviousTheme(),
+        currentTheme = WebDoc.application.themesController.getCurrentTheme(),
+        previousClass = previousTheme ? 'theme_' + previousTheme.data.id : 'theme_default',
+        currentClass = currentTheme ? 'theme_' + currentTheme.data.id : 'theme_default',
         themeNode = this.themeNode;
     
     themeNode[0].href = stylesheetUrl;
@@ -225,10 +227,8 @@ WebDoc.BoardController = jQuery.klass({
       themeNode.trigger('load');
     }, 1800);
     
-    jQuery("." + currentClass).removeClass(currentClass).addClass(newClass);
-    this.boardContainerNode.addClass(newClass);
-    // Store the class so we know what to remove on the next setTheme
-    this._themeClass = newClass;
+    jQuery("." + currentClass).removeClass(previousClass).addClass(currentClass);
+    this.boardContainerNode.addClass(currentClass);
   },
   
   // Tool -----------------------------------------

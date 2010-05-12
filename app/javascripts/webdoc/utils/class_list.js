@@ -53,7 +53,7 @@
     // classPrefix    string of class prefix without index:   "theme_background_"
     // stylesToCheck  string of space-separated style rules:  "font-face background-color"
     initialize: function( classPrefix, stylesToCheck ){
-      var currentTheme = WebDoc.themesController.getCurrentTheme(),
+      var currentTheme = WebDoc.application.themesController.getCurrentTheme(),
       		themeClass = 'theme_'+currentTheme.data.id;
       
       this.list = {};
