@@ -37,7 +37,7 @@ describe PagesController do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
-        expects :save, :on => mock_page, :returns => true
+        expects :save!, :on => mock_page, :returns => true
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
@@ -82,7 +82,7 @@ describe PagesController do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
-        expects :save, :on => mock_page, :returns => true
+        expects :save!, :on => mock_page, :returns => true
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
@@ -234,7 +234,7 @@ describe PagesController do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
-        expects :save, :on => mock_page, :returns => true
+        expects :save!, :on => mock_page, :returns => true
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
@@ -279,7 +279,7 @@ describe PagesController do
         expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
         expects :pages, :on => mock_document, :returns => Page
         expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
-        expects :save, :on => mock_page, :returns => true
+        expects :save!, :on => mock_page, :returns => true
         should_respond_with :success, :content_type => :json
       end
       describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
