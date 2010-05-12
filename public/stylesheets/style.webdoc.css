@@ -16,6 +16,13 @@
   border-radius:         0.3333em;
 }
 
+.webdoc span,font {
+  word-spacing: normal;
+  -moz-background-inline-policy:continuous;
+  -moz-background-origin:padding, content;
+  -moz-background-size:cover;
+}
+
 .webdoc pre.code {
   padding: 0.4165em;
   overflow: auto;
