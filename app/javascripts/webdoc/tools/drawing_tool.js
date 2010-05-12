@@ -104,7 +104,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     }
     
     if (previousTheme) {
-      this.themeColorsNode.removeClass( 'theme_'+previousTheme.data.id )
+      this.themeColorsNode.removeClass( 'theme_'+previousTheme.data.id );
     }
     
     this.themeColorsNode.addClass( 'theme_'+currentTheme.data.id );
