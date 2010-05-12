@@ -95,7 +95,7 @@ dependencies:
   carrierwave: 
     group: 
     - :default
-    version: = 0.4.5
+    version: ">= 0"
   erubis: 
     group: 
     - :default
@@ -287,7 +287,7 @@ specs:
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: 12c828163e360e709e9c572fb9d68bd2c1a9d333
+hash: 92b31276fdb5a0a64952994c77662609e31fce5b
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org
