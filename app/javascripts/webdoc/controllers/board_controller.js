@@ -23,6 +23,7 @@ WebDoc.BoardController = jQuery.klass({
     this._isInteraction = false;
     this._isMovingSelection = false;
     this._previousInspector = null;
+    this._currentClass = undefined;
     this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);    
   },
   
@@ -213,12 +214,10 @@ WebDoc.BoardController = jQuery.klass({
   
   applyDocumentTheme: function() {
     var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
-        previousTheme = WebDoc.application.themesController.getPreviousTheme(),
-        currentTheme = WebDoc.application.themesController.getCurrentTheme(),
-        previousClass = previousTheme ? 'theme_' + previousTheme.data.id : 'theme_default',
-        currentClass = currentTheme ? 'theme_' + currentTheme.data.id : 'theme_default',
+        previousClass = this._currentClass || 'theme_default', 
         themeNode = this.themeNode;
     
+    this._currentClass = WebDoc.application.pageEditor.currentDocument.styleClass();
     themeNode[0].href = stylesheetUrl;
     
     // There's no load event on the link tag.  This is a problem.
@@ -227,8 +226,7 @@ WebDoc.BoardController = jQuery.klass({
       themeNode.trigger('load');
     }, 1800);
     
-    jQuery("." + currentClass).removeClass(previousClass).addClass(currentClass);
-    this.boardContainerNode.addClass(currentClass);
+    this.boardContainerNode.addClass(this._currentClass);
   },
   
   // Tool -----------------------------------------
