@@ -176,19 +176,22 @@ WebDoc.PageView = $.klass({
   },
   
   _initPageCss: function() {
-    var boardContainerSize = {},
-        boardCss = {};
-    boardContainerSize.top = this.page.data.data.css.top;
-    boardContainerSize.left = this.page.data.data.css.left;
-    boardContainerSize.width = this.page.data.data.css.width;
-    boardContainerSize.height = this.page.data.data.css.height; 
-    $.extend(boardCss, this.page.data.data.css);
-    delete boardCss.top;
-    delete boardCss.left;
-    delete boardCss.width;
-    delete boardCss.height;
-    this._boardContainer.css( boardContainerSize );
-    this.domNode.css(boardCss);
+    this.page.getLayout(function(layout) {
+      var globalCss = {},
+          boardContainerSize = {};            
+          
+      if (layout) {
+        jQuery.extend(globalCss, layout.getModelPage().data.data.css);
+      }
+      jQuery.extend(globalCss, this.page.data.data.css);        
+      boardContainerSize.width = globalCss.width;
+      boardContainerSize.height = globalCss.height; 
+      delete globalCss.width;
+      delete globalCss.height;
+      this._boardContainer.css( boardContainerSize );
+      this.domNode.css(globalCss);
+      
+    }.pBind(this));          
   },
   
   _initPageClass: function() {

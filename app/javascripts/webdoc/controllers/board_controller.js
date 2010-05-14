@@ -231,6 +231,11 @@ WebDoc.BoardController = jQuery.klass({
       this.boardContainerNode.removeClass(this.previousThemeClass);
     }
     this.boardContainerNode.addClass(this.currentThemeClass);
+    if (this.currentPageView()) {
+      //TODO JBA small hack to force regreshing layout if page when them changed 
+      this._currentPage._layout = undefined;
+      this.currentPageView()._initPageClass(); 
+    }
   },
   
   // Tool -----------------------------------------

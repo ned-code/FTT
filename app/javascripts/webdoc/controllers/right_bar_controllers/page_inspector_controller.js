@@ -118,7 +118,7 @@
         if (this._currentDropDownTheme !== pageTheme) {
           this._currentDropDownTheme = pageTheme;
           this._layoutDropDownNode.empty();
-          for (var i = 0; i < pageTheme.layouts.length; i++) {
+          for (var i = 0; pageTheme && i < pageTheme.layouts.length; i++) {
             var aLayout = pageTheme.layouts[i];
             this._layoutDropDownNode.append(jQuery('<option/>').id("layout-dd-"+ aLayout.getKind()).val(aLayout.getKind()).text(aLayout.getTitle()).data("layout", aLayout));            
           }
