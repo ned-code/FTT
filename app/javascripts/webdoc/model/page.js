@@ -467,8 +467,8 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
 
   setClass: function(newClass) {
-    if (newClass != this.data.data.class) {
-      this.data.data.class = newClass;
+    if (newClass != this.data.data['class']) {
+      this.data.data['class'] = newClass;
       this.fireObjectChanged({ modifedAttribute: 'class' });
       this.save();
     }
