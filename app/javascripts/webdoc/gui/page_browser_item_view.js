@@ -91,6 +91,7 @@ WebDoc.PageBrowserItemView = $.klass({
       pageItemEdit.bind( 'click', clickHandler.pBind(this) );
       pageItemTitle.bind( 'dblclick', clickHandler.pBind(this) );
 
+      page.document.addListener(this);
       page.addListener(this);
     }
     catch(e) {
@@ -177,6 +178,7 @@ WebDoc.PageBrowserItemView = $.klass({
   destroy: function() {
     ddd("destroy page browser item view", this);
     this.page.removeListener(this);
+    this.page.document.removeListener(this);
     this.domNode.remove();
   },
 
@@ -192,11 +194,22 @@ WebDoc.PageBrowserItemView = $.klass({
     }
   },
   
-  objectChanged: function(page) {
-    ddd("[PageBrowserItemView] objectChanged", page);
-    switch(page.className()) {
+  objectChanged: function(record, options) {
+    ddd("[PageBrowserItemView] objectChanged", record);
+    switch(record.className()) {
       case "page":
-        this.updateTitle(page);
+        this.updateTitle(record);
+        break;
+      case "document":
+        if (record._isAttributeModified(options, 'theme')) {
+          var previousThemeClass = WebDoc.application.boardController.previousThemeClass,
+              currentThemeClass = WebDoc.application.boardController.currentThemeClass;
+
+          if (previousThemeClass) {
+            this.thumbNode.removeClass(previousThemeClass);
+          }
+          this.thumbNode.addClass(currentThemeClass);
+        }
         break;
     }
   },
