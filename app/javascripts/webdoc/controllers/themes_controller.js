@@ -55,7 +55,7 @@ WebDoc.ThemesController = jQuery.klass({
       
       ddd('[Themes Controller] set theme: ' + data.getTitle() );
       
-      this.setTheme( data );
+      WebDoc.application.pageEditor.currentDocument.setTheme( data );
     },
 
     openChooser: function(e){
@@ -73,20 +73,6 @@ WebDoc.ThemesController = jQuery.klass({
     
       ddd('[Themes] open chooser');
     }
-  },
-  
-  setTheme: function( data ){
-    this._previousTheme = this._currentTheme;
-    this._currentTheme = data;
-    WebDoc.application.pageEditor.currentDocument.setTheme( data );
-  },
-  
-  getCurrentTheme: function(){
-  	return this._currentTheme;
-  },
-  
-  getPreviousTheme: function(){
-  	return this._previousTheme;
   },
   
   // Populate listNode with list of themes

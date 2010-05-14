@@ -23,7 +23,8 @@ WebDoc.BoardController = jQuery.klass({
     this._isInteraction = false;
     this._isMovingSelection = false;
     this._previousInspector = null;
-    this._currentClass = undefined;
+    this.previousThemeClass = undefined;
+    this.currentThemeClass = undefined;
     this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);    
   },
   
@@ -214,10 +215,10 @@ WebDoc.BoardController = jQuery.klass({
   
   applyDocumentTheme: function() {
     var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
-        previousClass = this._currentClass || 'theme_default', 
         themeNode = this.themeNode;
     
-    this._currentClass = WebDoc.application.pageEditor.currentDocument.styleClass();
+    this.previousThemeClass = this.currentThemeClass;
+    this.currentThemeClass = WebDoc.application.pageEditor.currentDocument.styleClass();
     themeNode[0].href = stylesheetUrl;
     
     // There's no load event on the link tag.  This is a problem.
@@ -226,7 +227,15 @@ WebDoc.BoardController = jQuery.klass({
       themeNode.trigger('load');
     }, 1800);
     
-    this.boardContainerNode.addClass(this._currentClass);
+    if ( this.previousThemeClass ) {
+      this.boardContainerNode.removeClass(this.previousThemeClass);
+    }
+    this.boardContainerNode.addClass(this.currentThemeClass);
+    if (this.currentPageView()) {
+      //TODO JBA small hack to force regreshing layout if page when them changed 
+      this._currentPage._layout = undefined;
+      this.currentPageView()._initPageClass(); 
+    }
   },
   
   // Tool -----------------------------------------
@@ -666,42 +675,11 @@ WebDoc.BoardController = jQuery.klass({
   
   zoom: function(factor) {
     
-    var boardNode = this.currentPageView().domNode,
-        previousZoom = this._currentZoom,
-        boardContainerCss = {},
-        boardCss = {},
-        editingItem = this.editingItem();
+    var editingItem = this.editingItem();
     
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
-    
-    // TODO: can we animate this?
-    
-    boardCss.WebkitTransformOrigin = "0px 0px";
-    boardCss.WebkitTransform = this._currentZoom === 1 ? "" : "scale(" + this._currentZoom + ")" ;
-    boardCss.MozTransformOrigin = this._currentZoom === 1 ? "" : "0px 0px" ;
-    boardCss.MozTransform = boardCss.WebkitTransform;
-    boardCss.width = 100/this._currentZoom + '%';
-    boardCss.height = 100/this._currentZoom + '%';
-    
-
-    var initialSize = {
-      width: parseFloat(this._currentPage.data.data.css.width),
-      height: parseFloat(this._currentPage.data.data.css.height),
-      widthFlag: this._currentPage.width().match(/px/)?"px":"%",
-      heightFlag: this._currentPage.height().match(/px/)?"px":"%"
-    };
-
-    
-    boardContainerCss = {
-      width: (initialSize.width * this._currentZoom) + initialSize.widthFlag,
-      height: (initialSize.height * this._currentZoom) + initialSize.heightFlag
-    };
-    
-    ddd("new board size", boardContainerCss.width, boardContainerCss.height);
-
-    boardNode.css( boardCss );
-    this.boardContainerNode.css( boardContainerCss );
+    this.currentPageView().setZoomFactor(this._currentZoom);
     
     // If item is being edited, reposition screens
     if ( editingItem ) { this._updateScreens( editingItem.domNode ); }
