@@ -226,7 +226,9 @@ WebDoc.BoardController = jQuery.klass({
       themeNode.trigger('load');
     }, 1800);
     
-    this.boardContainerNode.removeClass(previousClass).addClass(this._currentClass);
+    jQuery('.' + previousClass).removeClass(previousClass).addClass(this._currentClass);
+    // be sur board container has the correct current class (First time applyDocumentTheme is called boardCOnatiner has not the previous class)
+    this.boardContainerNode.addClass(this._currentClass);
     if (this.currentPageView()) {
       //TODO JBA small hack to force regreshing layout if page when them changed 
       this._currentPage._layout = undefined;
