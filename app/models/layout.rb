@@ -66,7 +66,6 @@ class Layout < ActiveRecord::Base
                 item.data[:innerHTML] = doc_item.inner_html
                 item.data[:innerHTMLPlaceholder] = ""
               end
-              item.data[:innerHTML] = doc_item.inner_html
               if doc_item['data-item-type'] == 'text'
                 item.media_type = 'text'
               else
