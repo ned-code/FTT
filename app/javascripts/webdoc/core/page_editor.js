@@ -104,6 +104,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
         WebDoc.application.rightBarController.showLib();
       }
       jQuery('#document_loading').remove();
+      jQuery('body').trigger('webdocready');
     }.pBind(this));
   },
   

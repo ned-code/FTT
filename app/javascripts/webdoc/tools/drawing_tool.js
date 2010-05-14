@@ -93,8 +93,8 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   
   makeThemeColors: function(){
     var themeColors = new WebDoc.ClassList( 'theme_color_', 'backgroundColor' ),
-        previousTheme = WebDoc.application.themesController.getPreviousTheme(),
-        currentTheme = WebDoc.application.themesController.getCurrentTheme(),
+        previousThemeClass = WebDoc.application.boardController.previousThemeClass,
+        currentThemeClass = WebDoc.application.boardController.currentThemeClass,
         html = '',
         state = this._themeColorsState,
         className;
@@ -103,11 +103,11 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
       html += '<li><a href="#draw-color" class="state-draw-color '+className+'" title="Theme color"></a></li>';
     }
     
-    if (previousTheme) {
-      this.themeColorsNode.removeClass( 'theme_'+previousTheme.data.id );
+    if (previousThemeClass) {
+      this.themeColorsNode.removeClass( previousThemeClass );
     }
     
-    this.themeColorsNode.addClass( 'theme_'+currentTheme.data.id );
+    this.themeColorsNode.addClass( currentThemeClass );
     
     if ( html === '' ) {
       if (state) {
