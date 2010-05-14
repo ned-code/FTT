@@ -62,6 +62,7 @@ class Layout < ActiveRecord::Base
               if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
                 item.data[:innerHTML] = ""
                 item.data[:innerHTMLPlaceholder] = doc_item.inner_html
+                item.data[:class] += " empty"
               else
                 item.data[:innerHTML] = doc_item.inner_html
                 item.data[:innerHTMLPlaceholder] = ""
