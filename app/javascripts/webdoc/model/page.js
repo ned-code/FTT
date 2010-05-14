@@ -370,6 +370,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
   copy: function($super) {
     newPage = $super();
     newPage.data.data = $.evalJSON($.toJSON(this.data.data));
+    newPage.data.layout_kind = this.getLayoutkind();
     newPage.data.items = [];
     newPage.data.position = -1;
     newPage.data.title = this.data.title;

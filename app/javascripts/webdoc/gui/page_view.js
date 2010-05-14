@@ -3,12 +3,13 @@
 
 WebDoc.PageView = $.klass({
   initialize: function(page, boardContainer) {
-    var domNode = $('<div>', {'class': 'webdoc', id: 'page_'+page.uuid() }),
-        itemDomNode = $('<div/>').id('items_' + page.uuid()).addClass("layer").css({overflow: 'visible'}),
-        drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() ),
-        eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(),
-        that = this;
-
+    var domNode = $('<div>', {
+      'class': 'webdoc',
+      id: 'page_' + page.uuid()
+    }), itemDomNode = $('<div/>').id('items_' + page.uuid()).addClass("layer").css({
+      overflow: 'visible'
+    }), drawingDomNode = $(WebDoc.application.svgRenderer.createSurface()), eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(), that = this;
+    
     
     // Extend this
     this._boardContainer = boardContainer;
@@ -18,33 +19,33 @@ WebDoc.PageView = $.klass({
     this.itemDomNode = itemDomNode;
     this.eventCatcherNode = eventCatcherNode;
     this.itemViews = {};
-    
+    this._zoomFactor = 1;
     // Set up page view
     this._initPageCss();
     this._initPageClass();
     drawingDomNode.css("zIndex", 1000000);
-    domNode.append( drawingDomNode );    
-    this.domNode.append( itemDomNode );
-    this.domNode.append( eventCatcherNode );
+    domNode.append(drawingDomNode);
+    this.domNode.append(itemDomNode);
+    this.domNode.append(eventCatcherNode);
     
     if (page.items && $.isArray(page.items)) {
-        $.each(page.items, function() {
-            that.createItemView(this, "end");
-        });
+      $.each(page.items, function() {
+        that.createItemView(this, "end");
+      });
     }
-    page.addListener(this);    
+    page.addListener(this);
     if (page.data.data.externalPage && !WebDoc.application.disableHtml) {
-        this._loadExternalPage();
+      this._loadExternalPage();
     }
   },
   
   objectChanged: function(page, options) {
-    
+  
     if (page._isAttributeModified(options, 'css')) {
       this._initPageCss();
     }
     if (page._isAttributeModified(options, 'class')) {
-      this._initPageClass();      
+      this._initPageClass();
     }
     if (page.data.data.externalPage && page._isAttributeModified(options, 'externalPageUrl')) {
       this._loadExternalPage();
@@ -53,8 +54,8 @@ WebDoc.PageView = $.klass({
   
   itemAdded: function(addedItem, afterItem) {
     var relatedItemView = this.itemViews[addedItem.uuid()];
-
-    var afterItemView = afterItem? this.itemViews[afterItem.uuid()]: null;
+    
+    var afterItemView = afterItem ? this.itemViews[afterItem.uuid()] : null;
     // be sure not to add twice the same item
     if (!relatedItemView) {
       this.createItemView(addedItem, afterItemView);
@@ -63,7 +64,7 @@ WebDoc.PageView = $.klass({
       // be sure the related item is correct. If we recieve a item added and we already have of view for that item uuid
       // then we probaby have a view that is related to another version of the item.
       relatedItemView.item.removeListener(relatedItemView);
-      relatedItemView.item = addedItem;       
+      relatedItemView.item = addedItem;
       relatedItemView.item.addListener(relatedItemView);
       relatedItemView.objectChanged(addedItem);
     }
@@ -80,16 +81,17 @@ WebDoc.PageView = $.klass({
   itemMovedAfterItem: function(item, afterItem) {
     var itemViewToMove = this.findItemView(item.uuid());
     
-    var afterItemView = afterItem? this.findItemView(afterItem.uuid()):null;
+    var afterItemView = afterItem ? this.findItemView(afterItem.uuid()) : null;
     if (afterItemView && itemViewToMove != afterItemView) {
       afterItemView.domNode.after(itemViewToMove.domNode);
     }
-    else if (!afterItemView) {
-      this.itemDomNode.prepend(itemViewToMove.domNode);
-    }
+    else 
+      if (!afterItemView) {
+        this.itemDomNode.prepend(itemViewToMove.domNode);
+      }
     itemViewToMove.viewDidLoad();
   },
-   
+  
   findItemView: function(uuid) {
     return this.itemViews[uuid];
   },
@@ -114,7 +116,7 @@ WebDoc.PageView = $.klass({
         break;
       case WebDoc.ITEM_TYPE_OS_GADGET:
         itemView = new WebDoc.OsGadgetView(item, this, afterItem);
-        break;        
+        break;
       default:
         itemView = new WebDoc.ItemView(item, this, afterItem);
         break;
@@ -133,38 +135,36 @@ WebDoc.PageView = $.klass({
   
   fitInContainer: function(width, height) {
     var zoomToFit = 1;
-    var transform = {};
-    var heightFactor = height  / this.page.height("px");
-    var widthFactor = width  / this.page.width("px");      
+    var heightFactor = height / this.page.height("px");
+    var widthFactor = width / this.page.width("px");
     if (heightFactor < widthFactor) {
-      zoomToFit =  heightFactor;
+      zoomToFit = heightFactor;
     }
     else {
-      zoomToFit =  widthFactor;
+      zoomToFit = widthFactor;
     }
-
+    this.setZoomFactor(zoomToFit);
+    // try to set all flash content as windowless
+    this.itemDomNode.find("embed[type='application/x-shockwave-flash']").each(function(index, element) {
+      $(this).attr('wmode', 'transparent');
+    });
+  },
+  
+  setZoomFactor: function(factor) {
+    var transform = {};
+    this._zoomFactor = factor;
     transform.WebkitTransformOrigin = "0px 0px";
-    transform.WebkitTransform = zoomToFit === 1 ? "" : "scale(" + zoomToFit + ")" ;
-    transform.MozTransformOrigin = zoomToFit === 1 ? "" : "0px 0px" ;
+    transform.WebkitTransform = this._zoomFactor === 1 ? "" : "scale(" + this._zoomFactor + ")";
+    transform.MozTransformOrigin = this._zoomFactor === 1 ? "" : "0px 0px";
     transform.MozTransform = transform.WebkitTransform;
-    transform.width = 100/zoomToFit + '%';
-    transform.height = 100/zoomToFit + '%';
+    transform.width = 100 / this._zoomFactor + '%';
+    transform.height = 100 / this._zoomFactor + '%';
     transform.top = "0px";
     transform.left = "0px";
     transform.position = "absolute";
-    ddd("zoom to fit", zoomToFit);
-    boardContainerCss = {
-      width: (this.page.width("px") * zoomToFit).toString() + "px",
-      height: (this.page.height("px") * zoomToFit).toString() + "px"
-    };
-    ddd("board container css", boardContainerCss);
-    this.domNode.css( transform );
-    this._boardContainer.css( boardContainerCss );
-    
-    // try to set all flash content as windowless
-    this.itemDomNode.find("embed[type='application/x-shockwave-flash']").each( function(index, element) {
-      $(this).attr('wmode', 'transparent');
-    });
+    ddd("zoom to fit", this._zoomFactor);
+    this.domNode.css(transform);
+    this._initPageSize();
   },
   
   viewDidLoad: function() {
@@ -177,21 +177,39 @@ WebDoc.PageView = $.klass({
   
   _initPageCss: function() {
     this.page.getLayout(function(layout) {
-      var globalCss = {},
-          boardContainerSize = {};            
-          
+      var globalCss = {};
+      
       if (layout) {
         jQuery.extend(globalCss, layout.getModelPage().data.data.css);
       }
-      jQuery.extend(globalCss, this.page.data.data.css);        
-      boardContainerSize.width = globalCss.width;
-      boardContainerSize.height = globalCss.height; 
+      jQuery.extend(globalCss, this.page.data.data.css);
+      
       delete globalCss.width;
       delete globalCss.height;
-      this._boardContainer.css( boardContainerSize );
-      this.domNode.css(globalCss);
       
-    }.pBind(this));          
+      this.domNode.css(globalCss);
+      this._initPageSize();
+      
+    }.pBind(this));
+  },
+  
+  _initPageSize: function() {
+    var unit = null;
+    var boardContainerCss;
+    if (this._zoomFactor !== 1) {
+      boardContainerCss = {
+        width: this.page.width("px") * this._zoomFactor,
+        height: this.page.height("px") * this._zoomFactor
+      };
+    }
+    else {
+      boardContainerCss = {
+        width: this.page.width(),
+        height: this.page.height()
+      };
+    }
+    this._boardContainer.css(boardContainerCss);
+    
   },
   
   _initPageClass: function() {
@@ -201,10 +219,10 @@ WebDoc.PageView = $.klass({
       if (layout) {
         this.domNode.addClass(layout.getModelPage().data.data['class']);
       }
-    }.pBind(this));    
+    }.pBind(this));
   },
   
-  _loadExternalPage: function() {    
+  _loadExternalPage: function() {
     this.itemDomNode.empty();
     // Handle case where page is an external webpage
     if (this.page.data.data.externalPageUrl) {
@@ -218,6 +236,6 @@ WebDoc.PageView = $.klass({
       externalPage.attr("src", this.page.data.data.externalPageUrl);
       this.itemDomNode.append(externalPage[0]);
       this.itemDomNode.append(wait);
-    }    
+    }
   }
 });
