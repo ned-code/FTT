@@ -23,7 +23,8 @@ WebDoc.BoardController = jQuery.klass({
     this._isInteraction = false;
     this._isMovingSelection = false;
     this._previousInspector = null;
-    this._currentClass = undefined;
+    this.previousThemeClass = undefined;
+    this.currentThemeClass = undefined;
     this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);    
   },
   
@@ -214,10 +215,10 @@ WebDoc.BoardController = jQuery.klass({
   
   applyDocumentTheme: function() {
     var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
-        previousClass = this._currentClass || 'theme_default', 
         themeNode = this.themeNode;
     
-    this._currentClass = WebDoc.application.pageEditor.currentDocument.styleClass();
+    this.previousThemeClass = this.currentThemeClass;
+    this.currentThemeClass = WebDoc.application.pageEditor.currentDocument.styleClass();
     themeNode[0].href = stylesheetUrl;
     
     // There's no load event on the link tag.  This is a problem.
@@ -226,9 +227,10 @@ WebDoc.BoardController = jQuery.klass({
       themeNode.trigger('load');
     }, 1800);
     
-    jQuery('.' + previousClass).removeClass(previousClass).addClass(this._currentClass);
-    // be sur board container has the correct current class (First time applyDocumentTheme is called boardCOnatiner has not the previous class)
-    this.boardContainerNode.addClass(this._currentClass);
+    if ( this.previousThemeClass ) {
+      this.boardContainerNode.removeClass(this.previousThemeClass);
+    }
+    this.boardContainerNode.addClass(this.currentThemeClass);
     if (this.currentPageView()) {
       //TODO JBA small hack to force regreshing layout if page when them changed 
       this._currentPage._layout = undefined;
