@@ -166,7 +166,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
 
   setBackgroundRepeatMode: function(repeatMode) {
-    ddd('[Page] setBackgroundRepeatMode('+repeatMode+')')
+    ddd('[Page] setBackgroundRepeatMode('+repeatMode+')');
     if(this.data.data.css.backgroundRepeat != repeatMode) {
       this.data.data.css.backgroundRepeat = repeatMode;
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundRepeat' });
@@ -464,7 +464,23 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }    
     this.save(undefined,true);
   },
-  
+
+  setClass: function(newClass) {
+    if (newClass != this.data.data.class) {
+      this.data.data.class = newClass;
+      this.fireObjectChanged({ modifedAttribute: 'class' });
+      this.save();
+    }
+  },
+
+  addCss: function(newCss) {
+    if (newCss) {
+      this.data.data.css = jQuery.extend( this.data.data.css, newCss );
+      this.fireObjectChanged({ modifedAttribute: 'css' });
+      this.save();
+    }
+  },
+
   save: function($super, callBack, withRelationships) {
     $super(callBack, withRelationships);
     for (var i = this.items.length - 1; i >= 0; i--) {

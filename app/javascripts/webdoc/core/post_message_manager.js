@@ -11,13 +11,71 @@ WebDoc.PostMessageManager = $.klass({
   },
 
   startListener: function() {
-    window.addEventListener("message", function(e){
-      ddd('received a new message:' + e.data);
-      // e.domain e.data e.source e.origin
-      // if (event.origin !== "http://localhost") {
-      //   return;
-      // }
-    }, false);
+    window.addEventListener("message", function(event){
+      // event.domain event.data event.source event.origin
+      ddd('[post message manager] received a new message: ' + event.data);
+
+      if (event.origin !== "http://assets.test.webdoc.com" &&
+          event.origin !== "http://assets.staging.webdoc.com" &&
+          event.origin !== "http://assets.webdoc.com" &&
+          event.origin !==  'http://localhost') {
+        ddd(event.origin + ' not allowed!');
+        return;
+      } else {
+        var parsedUrl = this.parseUrl(event.data);
+        this.processMessage(parsedUrl);
+      }
+    }.pBind(this), false);
+  },
+
+  /*
+   * Return a associative array from the url
+   */
+  parseUrl: function(url) {
+    var array = new Array();
+    array['params'] = new Array();
+    url = url.slice(1,url.length);
+    url_array = url.split("?");
+    array['action'] = url_array[0];
+    params = url_array[1].split("&");
+    for(i=0;i<params.length;i++){
+      keyValue = params[i].split("=");
+      array['params'][keyValue[0]] = keyValue[1];
+    }
+    return array;
+  },
+
+  processMessage: function(parsedUrl) {
+    if(parsedUrl['action']) {
+      ddd('[post message manager] action ' + parsedUrl['action']);
+      switch(parsedUrl['action']) {
+        case 'set_page_class':
+          if(parsedUrl['params']['class']) {
+            WebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['class']);
+          }
+          break;
+        case 'set_page_css':
+          //var parsedCss = this.parseCss(parsedUrl['params']['css']);
+          //WebDoc.application.pageEditor.currentPage.addCss(parsedUrl['params']['css']);
+          break;
+        case 'set_item_class':
+          break;
+        case 'set_item_css':
+          break;
+        case 'add_item':
+          break;
+        default:
+          ddd('[post message manager] action not implemented');
+          break;
+      }
+    } else {
+      ddd('[post message manager] action not found')
+    }
+  },
+
+  parseCss: function(css) {
+
   }
 
 });
+

@@ -1,3 +1,19 @@
-<div class="elements">
-  themes elements for swisschocolate 
-</div>
+<script type="text/javascript">
+  window.onload = function() {
+    var webdoc = window.parent;
+    var links = document.getElementsByTagName("a");
+    for(i=0;i<links.length;i++) {
+      if(links[i].getAttribute('class')) {
+        links[i].onclick = function(event) {
+          webdoc.postMessage(event.target.getAttribute('href'), '*');
+        };
+      }
+    }
+  };
+</script>
+
+<div><a href="#set_page_class?class=theme_color_1" class="webdoc_message">Set page class</a></div>
+<div><a href="#set_page_css?background-color=#440000" class="webdoc_message">Set page css</a></div>
+<div><a href="#set_item_class?class=theme_color_2" class="webdoc_message">Set item class</a></div>
+<div><a href="#set_item_css?background-color=#004400" class="webdoc_message">Set item css</a></div>
+<div><a href="#add_item?type=image&url=http://chachatelier.fr/programmation/images/mozodojo-original-image.jpg" class="webdoc_message">Add item</a></div>
