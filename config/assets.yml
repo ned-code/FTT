@@ -156,6 +156,7 @@ javascripts:
   contacts:
     - app/javascripts/webdoc/card/*.js
   apps:
-    - app/javascripts/apps.js
+    - app/javascripts/webdoc/apps/apps_messaging.js
+    - app/javascripts/webdoc/apps/apps.js
   feedback:
     - app/javascripts/webdoc/feedback/zendesk.js

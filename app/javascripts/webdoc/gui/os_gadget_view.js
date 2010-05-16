@@ -42,14 +42,14 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
   initGadget: function() {
     ddd("init gadget");
     if (window.shindig && shindig.container) {
-      if (this.item.getGadgetUrl()) {
+      if (this.item.getAppUrl()) {
         shindig.container.setView("canvas");
         if (this.gadget) {
           shindig.container.removeGadget(this.gadget);
           this.gadget = null;
         }
         this.gadget = shindig.container.createGadget({
-          specUrl: this.item.getGadgetUrl()
+          specUrl: this.item.getAppUrl()
         });
         shindig.container.addGadget(this.gadget);
         shindig.container.layoutManager.setGadgetChromeIds(["gadget-" + this.item.uuid()]);
@@ -70,7 +70,7 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
     return function(e){
       var value = that.inputNode.val();
       if ( value ) {
-        that.item.setGadgetUrl(value);
+        that.item.setAppUrl(value);
         that.item.save();
       }
       e.preventDefault();
@@ -79,7 +79,7 @@ WebDoc.OsGadgetView = $.klass(WebDoc.ItemView, {
 
   updateOverlay: function() {
     if (!WebDoc.application.disableHtml) {
-      var src = this.item.getGadgetUrl();
+      var src = this.item.getAppUrl();
       if (!src) {
         this.domNode.append( this.placeholderNode );
       }

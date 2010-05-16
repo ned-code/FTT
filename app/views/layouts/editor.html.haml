@@ -23,7 +23,7 @@
     = include_javascripts :common
     = include_javascripts :page_editor
     - unless Rails.env.production?
-      = javascript_include_tag "#{APP_CONFIG['shindig_server_base']}/js/core:rpc:pubsub.js?c=1&debug=1"
+      = javascript_include_tag "#{APP_CONFIG['shindig_server_base']}js/core:rpc:pubsub.js?c=1&debug=1"
     = include_javascripts :apps
     = yield :scripts
     :javascript  

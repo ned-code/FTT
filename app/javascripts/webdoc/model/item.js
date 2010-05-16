@@ -200,12 +200,12 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return this.data.data.src;
   },
   
-  getGadgetUrl: function() {
-    return this.property("gadgetUrl");  
+  getAppUrl: function() {
+    return this.property("appUrl");  
   },
   
-  setGadgetUrl: function(url) {
-    this.setProperty("gadgetUrl", url);
+  setAppUrl: function(url) {
+    this.setProperty("appUrl", url);
     this.fireDomNodeChanged();
   },
   

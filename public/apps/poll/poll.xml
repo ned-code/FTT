@@ -11,11 +11,6 @@
   </ModulePrefs>
   
   <Content type="html" view="home" href="views/home.html"></Content>
-  
-  <!-- <Content type="html" view="inspector-style" href="views/inspector-style.html"></Content> -->
-  
-  <Content type="html" view="inspector-settings" href="views/inspector-settings.html"></Content>
-  
-  <!-- <Content type="html" view="inspector-stats" href="views/inspector-stats.html"></Content> -->
+  <Content type="html" view="settings" href="views/settings_pane.html"></Content>
   
 </Module>

@@ -24,7 +24,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
       padding: "15px"
     });
     
-    this.inspectors
+    // this.inspectors
   },
   
   createDomNode: function($super) {
@@ -40,8 +40,8 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   },
   
   initApp: function() {
-    if (window.gadgets) {
-      if (this.item.getGadgetUrl()) {
+    if (WebDoc.appsContainer) {
+      if (this.item.getAppUrl()) {
         if (this.app) {
           WebDoc.appsContainer.removeApp(this.app);
           this.app = null;
@@ -49,7 +49,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
         
         this._getSecureToken(function(token) {
           this.app = WebDoc.appsContainer.createApp({
-            specUrl:     this.item.getGadgetUrl(),
+            specUrl:     this.item.getAppUrl(),
             appDomId:    this.appDomId(),
             secureToken: token,
             serverBase:  WebDoc.shindig.serverBase
@@ -63,7 +63,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
     return function(e){
       var value = this.inputNode.val();
       if (value) {
-        this.item.setGadgetUrl(value);
+        this.item.setAppUrl(value);
         this.item.save();
       }
       e.preventDefault();
@@ -72,7 +72,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   
   updateOverlay: function() {
     if (!WebDoc.application.disableHtml) {
-      var src = this.item.getGadgetUrl();
+      var src = this.item.getAppUrl();
       if (!src) {
         this.domNode.append( this.placeholderNode );
       }

@@ -1,9 +1,6 @@
 var gadgets = gadgets || {};
 
-/**
- * Base implementation of GadgetService.
- * @constructor
- */
+// Was  GadgetService NOT USED AT THE MOMENT?
 WebDoc.AppService = $.klass({
   initialize: function () {
     // gadgets.rpc namespace defined in "shindig/features/src/main/javascript/features/rpc/rpc.js"
@@ -55,6 +52,7 @@ WebDoc.OpenSocialApp = $.klass({
     
     if (params) {
       for (var name in params) {
+        //this will set (among other thing) the app.id
         if (params.hasOwnProperty(name)) this[name] = params[name];
       }
     }
@@ -137,78 +135,92 @@ WebDoc.App = $.klass(WebDoc.OpenSocialApp, {
   initialize: function($super, params) {
     $super(params);
     this.view = "home";
-    this.inspectors = new Array();
-    this.createInspectors();
+    // this.inspectors = new Array();
+    this.render();
   },
   
   render: function() {
     var content = this.getContent();
     
-    $("#" + this.appDomId).hide();
-    $("#" + this.appDomId).append(content);
+    $("#"+this.appDomId).hide();
+    $("#"+this.appDomId).append(content);
     
-    $.each(this.inspectors, function(index, inspector) {
-      ddd("Rendering " + inspector.view + " inspector!");
-      inspector.render();
-    });
+    WebDoc.appsMessagingController.sendInitMessage(this.id, this.getIframeId());
     
-    // Show !
-    $.each(this.inspectors, function(index, inspector) {
-      $("#"+inspector.domId).show();
-    });
-    $("#" + this.appDomId).show();
+    $("#"+this.appDomId).show();
   },
   
-  createInspectors: function() {
-    var requestData = {
-      context: {},
-      gadgets: [{
-        url: this.specUrl,
-        moduleId: this.id
-      }]
-    };
+  createInspectorPanes: function(panes) {
     
-    $.ajax({
-      url: '/gadgets/metadata?st=' + this.secureToken,
-      type: 'POST',
-      dataType: 'json',
-      data: gadgets.json.stringify(requestData),
-      success: function(data, textStatus) {
-        $.each(data.gadgets[0].views, function(inspectorViewName, infos) {
-          if(inspectorViewName.match(/^inspector-/) != null) {
-            ddd("Creating " + inspectorViewName + " inspector...");
-            this.inspectors.push(new WebDoc.AppInspector({
-              specUrl:         this.specUrl,
-              view:            inspectorViewName,
-              appWrapperDomId: "app_wrapper_"+this.getIframeId(),
-              appDomId:        this.appDomId,
-              secureToken:     this.secureToken,
-              id:              this.id,
-              serverBase:      this.serverBase
-            }));
-          }
-        }.pBind(this));
-        this.render();
-      }.pBind(this),
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
-        ddd("error", textStatus);
-      }
-    });
+    $.each(panes, function(index, paneViewName) {
+      
+      var appPane = new WebDoc.AppPane({
+        specUrl:         this.specUrl,
+        view:            paneViewName,
+        appWrapperDomId: "app_wrapper_"+this.getIframeId(),
+        appDomId:        this.appDomId,
+        secureToken:     this.secureToken,
+        id:              this.id,
+        serverBase:      this.serverBase
+      });
+      //this.inspectors.push(appPane);
+      
+    }.pBind(this));
+
+    //OLD method that is not working when shindig is not on the same domain:
+    //
+    // var requestData = {
+    //   context: {},
+    //   gadgets: [{
+    //     url: this.specUrl,
+    //     moduleId: this.id
+    //   }]
+    // };
+    // 
+    // $.ajax({
+    //   url: '/gadgets/metadata?st=' + this.secureToken,
+    //   type: 'POST',
+    //   dataType: 'json',
+    //   data: gadgets.json.stringify(requestData),
+    //   success: function(data, textStatus) {
+    //     $.each(data.gadgets[0].views, function(inspectorViewName, infos) {
+    //       if(inspectorViewName.match(/^inspector-/)) {
+    //         ddd("Creating " + inspectorViewName + " inspector...");
+    //         this.inspectors.push(new WebDoc.AppPane({
+    //           specUrl:         this.specUrl,
+    //           view:            inspectorViewName,
+    //           appWrapperDomId: "app_wrapper_"+this.getIframeId(),
+    //           appDomId:        this.appDomId,
+    //           secureToken:     this.secureToken,
+    //           id:              this.id,
+    //           serverBase:      this.serverBase
+    //         }));
+    //       }
+    //     }.pBind(this));
+    //   }.pBind(this),
+    //   error: function(XMLHttpRequest, textStatus, errorThrown) {
+    //     ddd("error", textStatus);
+    //   }
+    // });
   }
 });
 
-WebDoc.AppInspector = $.klass(WebDoc.OpenSocialApp, {
+WebDoc.AppPane = $.klass(WebDoc.OpenSocialApp, {
   initialize: function($super, params) {
     $super(params);
     
     this.inspectorPaneView = null;
+    
+    this.render();
   },
   
   render: function() {
     var content = this.getContent();
-    var title = this.view.replace('inspector-', '')
-    title = title.charAt(0).toUpperCase() + title.substring(1);
+    var title = this.view.charAt(0).toUpperCase() + this.view.substring(1);
     this.inspectorPaneView = new WebDoc.InspectorPaneView(title, content);
+    
+    //Note that "this.id" is the main app id while this.getIframeId() the appPANE iframe id...
+    WebDoc.appsMessagingController.sendInitMessage(this.id, this.getIframeId()); 
     
     // var inspectorDiv = null;
     // var boxDiv = null;
@@ -252,19 +264,20 @@ WebDoc.AppInspector = $.klass(WebDoc.OpenSocialApp, {
   }
 });
 
-/**
- * Container that renders an app
- * @constructor
- */
+// Container that renders an app
 WebDoc.AppsContainer = $.klass({
   initialize: function() {
-    this.gadgets_              = {};
-    this.parentUrl_            = 'http://' + document.location.host;
-    this.country_              = 'ALL';
-    this.language_             = 'ALL';
-    this.nocache_              = 1;
-    this.nextGadgetInstanceId_ = 0;
-    this.maxheight_            = 0x7FFFFFFF;
+    this.apps_ = {}; // a hash olding all the instanciated apps in the form of { appId:appInstace, ... }, 
+                     // where appId is
+                     // and appInstance is of type WebDoc.App
+    
+    this.parentUrl_ = 'http://' + document.location.host;
+    this.country_ = 'ALL';
+    this.language_ = 'ALL';
+    this.nocache_ = 1;
+    this.nextAppInstanceId_ = 0;
+    this.maxheight_ = 0x7FFFFFFF;
+    this.appKeyPrefix = "app_";
     
     // this.gadgetService = new WebDoc.AppService();
   },
@@ -292,54 +305,45 @@ WebDoc.AppsContainer = $.klass({
     this.maxheight_ = maxheight;
   },
   
-  getGadgetKey_: function(instanceId) {
-    return 'gadget_' + instanceId;
+  getAppKey_: function(instanceId) {
+    return this.appKeyPrefix + instanceId;
   },
   
-  getGadget: function(instanceId) {
-    return this.gadgets_[this.getGadgetKey_(instanceId)];
+  getApp: function(instanceId) {
+    return this.apps_[this.getAppKey_(instanceId)];
   },
   
   createApp: function(opt_params) {
-    opt_params.id = this.getNextGadgetInstanceId();
+    opt_params.id = this.getNextAppInstanceId(); //autoincrement integer
     var newApp = new WebDoc.App(opt_params);
     this.addApp(newApp);
     return newApp;
   },
   
-  addApp: function(gadget) {
-    this.gadgets_[this.getGadgetKey_(gadget.id)] = gadget;
+  addApp: function(app) {
+    this.apps_[this.getAppKey_(app.id)] = app;
   },
   
-  removeApp: function(gadget) {
-    delete this.gadgets_[this.getGadgetKey_(gadget.id)];
+  removeApp: function(app) {
+    delete this.apps_[this.getAppKey_(app.id)];
   },
   
-  purge: function(gadget) {
-    this.gadgets_ = {};
-  },
-  
-  addApps: function(gadgets) {
-    for (var i = 0; i < gadgets.length; i++) {
-      this.addApp(gadgets[i]);
+  renderApps: function() {
+    for (var key in this.apps_) {
+      this.apps_[key].render();
     }
   },
   
-  renderGadgets: function() {
-    for (var key in this.gadgets_) {
-      this.gadgets_[key].render();
-    }
+  getNextAppInstanceId: function() {
+    return this.nextAppInstanceId_++;
   },
   
-  getNextGadgetInstanceId: function() {
-    return this.nextGadgetInstanceId_++;
-  },
-  
-  refreshGadgets: function() {
-    for (var key in this.gadgets_) {
-      this.gadgets_[key].refresh();
+  refreshApps: function() {
+    for (var key in this.apps_) {
+      this.apps_[key].refresh();
     }
   }
 });
 
 WebDoc.appsContainer = new WebDoc.AppsContainer();
+WebDoc.appsMessagingController = new WebDoc.AppsMessagingController();
