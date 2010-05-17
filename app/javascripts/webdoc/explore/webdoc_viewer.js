@@ -28,7 +28,7 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
     {
       this._currentDocument = data[0];
       this.loadPageId("1");   
-      var stylesheetUrl = this._currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme(),
+      var stylesheetUrl = this._currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
         newClass = this._currentDocument.styleClass() || 'theme_default';
     
       //check if style is already loaded

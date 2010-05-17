@@ -57,6 +57,9 @@ WebDoc.Page = $.klass(WebDoc.Record,
           }
           callBack.call(this, this._layout);
         }
+        else {
+          callBack.call(this, null);
+        }
       }.pBind(this));
     }
     return this._layout;
