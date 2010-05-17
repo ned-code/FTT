@@ -17,7 +17,7 @@ WebDoc.ItemView = $.klass({
     
     this.item = item;
     // item wrapper    
-    this.domNode = $("<div/>").addClass("item_wrap");
+    this.domNode = $("<div/>");
 
     this.itemDomNode = this.createDomNode().css({
         overflow: "hidden",
@@ -58,9 +58,13 @@ WebDoc.ItemView = $.klass({
   },
 
   _initItemClass: function() {
-    this.itemDomNode.attr("class", "item").addClass("layer");
+    this.itemDomNode.attr("class", "item layer");
     if(this.item.data.data['class']) {
       this.itemDomNode.addClass(this.item.data.data['class']);
+    }
+    this.domNode.attr("class", "item_wrap");
+    if (this.item.getKind() && this.item.getKinf() !== 'null') {
+      this.domNode.addClass(this.item.getKind());
     }
   },
 
