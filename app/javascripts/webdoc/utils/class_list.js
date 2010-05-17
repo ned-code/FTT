@@ -3,13 +3,20 @@
 (function(WebDoc, jQuery, undefined){
 
   var themeNode = jQuery('<div/>'),
-  		testNode = jQuery('<div/>').css({ position: 'absolute', top: -1, left: 0, width: 1, height: 1 });
+  		testNode = jQuery('<div/>').css({ position: 'absolute', top: -1, left: 0, width: 1, height: 1 }),
+  		nullCssValues = {
+  			'none': true,
+  			'rgba(0, 0, 0, 0)': true,
+  			'hsla(0, 0%, 0%, 0)': true,
+  			'transparent': true
+  		};
 	
   // Find out if adding a class to testNode gives it
   // a sense of style and panache
   function detectClass( className, styles ){
     var styleList = styles.split(' '),
         l = styleList.length,
+        flag = false,
         cssValue;
     
     if (l === 0) { return false; }
@@ -18,15 +25,15 @@
     
     while(l--) {
       cssValue = testNode.css( styleList[l] );
-      
-      if ( !cssValue || cssValue === 'none' || cssValue === 'rgba(0, 0, 0, 0)' || cssValue === 'transparent' ) {
-        testNode.addClass( className );
-        return false;
+      console.log(cssValue);
+
+      if ( cssValue && !nullCssValues[cssValue] ) {
+        flag = true;
       }
     }
     
     testNode.removeClass( className );
-    return true;
+    return flag;
   }
   
   // Try classNames with postfixed numbers until

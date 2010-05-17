@@ -299,20 +299,9 @@ ul, ol, blockquote, dd,
 
 /* Backgrounds */
 
-.theme_background_1  {
-  background: hsl(32, 80%, 4%);
-}
-.theme_background_2  {
-  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from( rgb(0,0,0) ), to( hsl(192, 8%, 30%) ) );
-  background-image: -moz-linear-gradient(center top, rgb(0,0,0), hsl(192, 8%, 30%));
-  background-image: linear-gradient(center top, rgb(0,0,0), hsl(192, 8%, 30%));
-}
-.theme_background_3  { 
-  background-color: hsl(2, 75%, 14%);
-  background-image: url('../images/bg_cross.png');
-  background-repeat: no-repeat;
-  background-position: 100% 100%;
-}
+.theme_background_1  { background-color: white; }
+.theme_background_2  {  }
+.theme_background_3  {  }
 
 .theme_border_1 {
   -webkit-border-image: url('../images/border_rip.png') 20 stretch stretch;

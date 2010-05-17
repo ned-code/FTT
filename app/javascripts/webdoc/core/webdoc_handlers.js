@@ -96,6 +96,8 @@ WebDoc.handlers = {
     'mode-edit':            function(e) { WebDoc.application.boardController.setMode(false); },
     'mode-preview':         function(e) { WebDoc.application.boardController.setMode(true); },
     
+    'theme-class':          function(e) {  },
+    
     'library-images-myimages': function(e) {
       // Open the libraries
       WebDoc.application.rightBarController.showLib(e);

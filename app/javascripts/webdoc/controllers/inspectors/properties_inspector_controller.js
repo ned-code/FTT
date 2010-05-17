@@ -4,21 +4,34 @@
 
 WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector ) {
-    this.domNode = $(selector);
-    jQuery('#item_inspector').delegate("#property-top", 'change', this.updateProperties.pBind(this));
-    jQuery('#item_inspector').delegate("#property-left", 'change', this.updateProperties.pBind(this));
-    jQuery('#item_inspector').delegate("#property-width", 'change', this.updateProperties.pBind(this));
-    jQuery('#item_inspector').delegate("#property-height", 'change', this.updateProperties.pBind(this));
-    jQuery('#item_inspector').delegate("#property-scroll", 'change', this.updateSroll.pBind(this));
-    jQuery('#item_inspector').delegate("#property-opacity", 'change', this.updateProperties.pBind(this));    
-    jQuery('#item_inspector').delegate("#property-fit-to-screen", 'click', this.updatePropertiesWithFitToScreen.pBind(this));
-    this.topNode = jQuery("#property-top");
-    this.leftNode = jQuery("#property-left");
-    this.widthNode = jQuery("#property-width");
-    this.heightNode = jQuery("#property-height");
-    this.scrollNode = jQuery("#property-scroll");
-    this.opacityNode = jQuery("#property-opacity");
-    this.opacityReadoutNode = jQuery("#property-opacity-readout");
+    var domNode = this.domNode = $(selector);
+    
+    domNode.delegate('input', 'change', jQuery.proxy( this, 'update' ));
+    
+    
+    
+    
+//    jQuery('#item_inspector').delegate("#property_top", 'change', this.updateProperties.pBind(this));
+//    jQuery('#item_inspector').delegate("#property_right", 'change', this.updateProperties.pBind(this));
+//    jQuery('#item_inspector').delegate("#property_bottom", 'change', this.updateProperties.pBind(this));
+//    jQuery('#item_inspector').delegate("#property_left", 'change', this.updateProperties.pBind(this));
+//    jQuery('#item_inspector').delegate("#property_background", 'change', this.updateProperties.pBind(this));
+//    jQuery('#item_inspector').delegate("#property_rotation", 'change', this.updateProperties.pBind(this));
+//    jQuery('#item_inspector').delegate("#property_padding", 'change', this.updateProperties.pBind(this));
+//    jQuery('#item_inspector').delegate("#property_width", 'change', this.updateProperties.pBind(this));
+//    jQuery('#item_inspector').delegate("#property_height", 'change', this.updateProperties.pBind(this));
+//    jQuery('#item_inspector').delegate("#property_scroll", 'change', this.updateSroll.pBind(this));
+//    jQuery('#item_inspector').delegate("#property_opacity", 'change', this.updateProperties.pBind(this));    
+//    jQuery('#item_inspector').delegate("#property-fit-to-screen", 'click', this.updatePropertiesWithFitToScreen.pBind(this));
+//    
+//    this.topNode = jQuery("#property_top");
+//    this.leftNode = jQuery("#property_left");
+//    this.widthNode = jQuery("#property_width");
+//    this.heightNode = jQuery("#property_height");
+//    this.scrollNode = jQuery("#property_scroll");
+//    this.opacityNode = jQuery("#property_opacity");
+//    this.opacityReadoutNode = jQuery("#property_opacity_readout");
+  
   },
   
   refresh: function() {
@@ -55,6 +68,33 @@ WebDoc.PropertiesInspectorController = $.klass({
       }
   },
   
+  update: function(){
+    var self = this,
+        field = jQuery(e.target);
+    
+    field.validate({
+      pass: function(){ 
+        var property = field.attr('data-css-property');
+        
+        
+        
+        
+        
+        
+        self.updateItem.call( self );
+      },
+      fail: function(){}
+    });
+  },
+  
+  updateItem: function(){
+    var item = WebDoc.application.boardController.selection()[0].item,
+        css = item.data.data.css;
+    
+    
+    
+  },
+  
   updateProperties: function(e) {
     ddd("updateProperties", e);
     
@@ -65,60 +105,60 @@ WebDoc.PropertiesInspectorController = $.klass({
     
     field.validate({
       pass: function(value) {
-        
-        switch( this ){
-          case that.leftNode[0]:
-          case that.topNode[0]:
-            var previousPosition = {
-	            top: css.top,
-	            left: css.left
-	          };
-	          var newPosition = {
-	            top: (this === that.topNode[0])? that.topNode.val() : css.top,
-	            left: (this === that.leftNode[0])? that.leftNode.val() : css.left
-	          };
-	          if (newPosition.left != previousPosition.left || newPosition.top != previousPosition.top) {
-	            WebDoc.application.undoManager.registerUndo(function() {
-	              WebDoc.ItemView._restorePosition(item, previousPosition);
-	            }.pBind(that));
-	            item.moveTo(newPosition);
-	            item.save();
-	          }
-		    		break;
-            
-		    	case that.widthNode[0]:
-		    	case that.heightNode[0]:
-		    		var previousSize = {
-	            width: css.width,
-	            height: css.height
-	          }; 
-	          var newSize = {
-              width: (this === that.widthNode[0])? that.widthNode.val() : css.width,
-              height: (this === that.heightNode[0])? that.heightNode.val() : css.height              
-	          };
-	          if (newSize.width != previousSize.width || newSize.height != previousSize.height) {
-	            WebDoc.application.undoManager.registerUndo(function() {
-	              WebDoc.ItemView.restoreSize(item, previousSize);
-	            }.pBind(that));
-	            item.resizeTo(newSize);
-	            item.save();
-	          }
-		        break;
-		      
-		    	case that.opacityNode[0]:
-		    		var previousOpacity = item.data.data.css.opacity || 1;
-		    		var newOpacity = parseFloat( that.opacityNode.val(), 10 ).toFixed(2);
-		    		ddd('[Properties] Opacity new: '+newOpacity+' previous: '+previousOpacity);
-		    		if(newOpacity != previousOpacity){
-		    			WebDoc.application.undoManager.registerUndo(function(){
-		    				that.restoreOpacity(item, previousOpacity);
-		    			}.pBind(that));
-		    			item.setOpacity(newOpacity);
-		    			that.opacityReadoutNode.html( newOpacity );
-		    			item.save();
-		    		}
-		    		break;
-		      }
+  
+//        switch( this ){
+//          case that.leftNode[0]:
+//          case that.topNode[0]:
+//            var previousPosition = {
+//	            top: css.top,
+//	            left: css.left
+//	          };
+//	          var newPosition = {
+//	            top: (this === that.topNode[0])? that.topNode.val() : css.top,
+//	            left: (this === that.leftNode[0])? that.leftNode.val() : css.left
+//	          };
+//	          if (newPosition.left != previousPosition.left || newPosition.top != previousPosition.top) {
+//	            WebDoc.application.undoManager.registerUndo(function() {
+//	              WebDoc.ItemView._restorePosition(item, previousPosition);
+//	            }.pBind(that));
+//	            item.moveTo(newPosition);
+//	            item.save();
+//	          }
+//		    		break;
+//            
+//		    	case that.widthNode[0]:
+//		    	case that.heightNode[0]:
+//		    		var previousSize = {
+//	            width: css.width,
+//	            height: css.height
+//	          }; 
+//	          var newSize = {
+//              width: (this === that.widthNode[0])? that.widthNode.val() : css.width,
+//              height: (this === that.heightNode[0])? that.heightNode.val() : css.height              
+//	          };
+//	          if (newSize.width != previousSize.width || newSize.height != previousSize.height) {
+//	            WebDoc.application.undoManager.registerUndo(function() {
+//	              WebDoc.ItemView.restoreSize(item, previousSize);
+//	            }.pBind(that));
+//	            item.resizeTo(newSize);
+//	            item.save();
+//	          }
+//		        break;
+//		      
+//		    	case that.opacityNode[0]:
+//		    		var previousOpacity = item.data.data.css.opacity || 1;
+//		    		var newOpacity = parseFloat( that.opacityNode.val(), 10 ).toFixed(2);
+//		    		ddd('[Properties] Opacity new: '+newOpacity+' previous: '+previousOpacity);
+//		    		if(newOpacity != previousOpacity){
+//		    			WebDoc.application.undoManager.registerUndo(function(){
+//		    				that.restoreOpacity(item, previousOpacity);
+//		    			}.pBind(that));
+//		    			item.setOpacity(newOpacity);
+//		    			that.opacityReadoutNode.html( newOpacity );
+//		    			item.save();
+//		    		}
+//		    		break;
+//		    }
         that.refresh();
         
       },

@@ -211,3 +211,12 @@ ul, ol, blockquote, dd,
 .webdoc-indent-10 { padding-left: 40%; }
 .webdoc-indent-11 { padding-left: 44%; }
 .webdoc-indent-12 { padding-left: 48%; }*/
+
+
+.theme_background_1   { background-color: hsl(208, 4%, 100%); }
+.theme_background_2   { background-color: hsl(208, 4%, 80%); }
+.theme_background_3   { background-color: hsl(208, 4%, 60%); }
+.theme_background_4   { background-color: hsl(208, 4%, 40%); }
+.theme_background_5   { background-color: hsl(208, 4%, 20%); }
+.theme_background_6   { background-color: hsl(208, 4%, 0%); }
+.theme_background_7   { background-color: hsl(208, 40%, 50%); }
