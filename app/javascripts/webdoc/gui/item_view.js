@@ -56,7 +56,7 @@ WebDoc.ItemView = $.klass({
     };
     this.domNode.css(position);
     if (this.item.data.data['class']) {
-      this.domNode.addClass(this.item.data.data['class']);
+      this.itemDomNode.addClass(this.item.data.data['class']);
     }
     var itemCss = {};
     $.extend(itemCss, this.item.data.data.css);
