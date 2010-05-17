@@ -300,7 +300,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   copy: function($super) {
-    newItem = $super();
+    var newItem = $super();
     newItem.data.data = $.evalJSON($.toJSON(this.data.data));
     newItem.data.media_type = this.data.media_type;
     newItem.data.media_id = this.data.media_id;

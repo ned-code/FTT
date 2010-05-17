@@ -7,5 +7,17 @@
     <style src="css/typography.css" />
   </styles>
   <layouts>
+    <layout src="layout-1head1column.html" thumbnail="images/thumbs/layout_1_1.png">
+      <title>1 title, 1 column</title>   
+      <kind>layout_1</kind>   
+    </layout>
+    <layout src="layout-1head2column.html" thumbnail="images/thumbs/layout_1_2.png">
+      <title>1 title, 2 columns</title>   
+      <kind>layout_2</kind>   
+    </layout>
+    <layout src="layout-1head3column.html" thumbnail="images/thumbs/layout_1_3.png">
+      <title>1 title, 3 columns</title>   
+      <kind>layout_3</kind>   
+    </layout>
   </layouts>
 </theme>
