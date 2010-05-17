@@ -81,6 +81,9 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   },
     
   styleUrl: function() {
+    if (this.data.style_url && this.data.style_url === 'null') {
+      return null;
+    }
     return this.data.style_url;
   },
   
