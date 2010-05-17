@@ -55,12 +55,23 @@ WebDoc.PostMessageManager = $.klass({
           }
           break;
         case 'set_page_css':
-          //var parsedCss = this.parseCss(parsedUrl['params']['css']);
-          //WebDoc.application.pageEditor.currentPage.addCss(parsedUrl['params']['css']);
+          var cssParams = this.getCssParams(parsedUrl['params']);
+          WebDoc.application.pageEditor.currentPage.addCss(cssParams);
           break;
         case 'set_item_class':
+          if(parsedUrl['params']['class']) {
+            var selection = WebDoc.application.boardController.selection()[0];
+            if(selection) {
+              selection.item.setClass(parsedUrl['params']['class']);
+            }
+          }
           break;
         case 'set_item_css':
+          var selection = WebDoc.application.boardController.selection()[0];
+          if(selection) {
+            var cssParams = this.getCssParams(parsedUrl['params']);
+            selection.item.addCss(cssParams);
+          }
           break;
         case 'add_item':
           break;
@@ -73,8 +84,14 @@ WebDoc.PostMessageManager = $.klass({
     }
   },
 
-  parseCss: function(css) {
-
+  getCssParams: function(params) {
+    var cssArray = new Array();
+    for each(key in params) {
+      if (params[key] === 'border' || params[key] === 'background-color') {
+        cssArray[key] = params[key];
+      }
+    }
+    return cssArray;
   }
 
 });

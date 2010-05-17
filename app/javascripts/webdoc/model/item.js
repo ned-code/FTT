@@ -24,7 +24,22 @@ WebDoc.Item = $.klass(WebDoc.Record,
   setPage: function(page) {
     this.page = page;  
   },
-  
+
+  setClass: function(newClass) {
+    if (newClass != this.data.data['class']) {
+      this.data.data['class'] = newClass;
+      this.fireObjectChanged({ modifedAttribute: 'class' });
+      this.save();
+    }
+  },
+
+  addCss: function(newCss) {
+    if (newCss) {
+      this.data.data.css = jQuery.extend( this.data.data.css, newCss );
+      this.fireObjectChanged({ modifedAttribute: 'css' });
+      this.save();
+    }
+  },
   
   positionZ: function() {
     return this.data.position;  
