@@ -61,14 +61,14 @@ WebDoc.PostMessageManager = $.klass({
         case 'set_item_class':
           if(parsedUrl['params']['class']) {
             var selection = WebDoc.application.boardController.selection()[0];
-            if(selection) {
+            if(selection && selection.item) {
               selection.item.setClass(parsedUrl['params']['class']);
             }
           }
           break;
         case 'set_item_css':
           var selection = WebDoc.application.boardController.selection()[0];
-          if(selection) {
+          if(selection && selection.item) {
             var cssParams = this.getCssParams(parsedUrl['params']);
             selection.item.addCss(cssParams);
           }
@@ -86,9 +86,9 @@ WebDoc.PostMessageManager = $.klass({
 
   getCssParams: function(params) {
     var cssArray = new Array();
-    for each(key in params) {
-      if (params[key] === 'border' || params[key] === 'background-color') {
-        cssArray[key] = params[key];
+    for (param in params) {
+      if (param === 'border' || param === 'background-color') {
+        cssArray[param] = params[param];
       }
     }
     return cssArray;
