@@ -3,7 +3,7 @@ class ThemesController < ApplicationController
   
   # GET /users
   def index
-    @themes = Theme.all
+    @themes = Theme.last_version
     render :json => @themes.to_json(:except => :file, :include => {:layouts => {:include => {:model_page => {:include => :items }}}})
   end
   

@@ -8,7 +8,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
     this.placeholderNode = $(placeholderContent);
     
     $super(item, pageView, afterItem);
-    if (this.domNode.hasClass("empty")) {
+    if (this.itemDomNode.hasClass("empty")) {
       this.domNode.append( this.placeholderNode );
     }
     this.domNode.addClass('item-text');

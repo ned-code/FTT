@@ -17,9 +17,9 @@ WebDoc.ItemView = $.klass({
     
     this.item = item;
     // item wrapper    
-    this.domNode = $("<div/>").addClass("item_wrap"); 
+    this.domNode = $("<div/>");
 
-    this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
+    this.itemDomNode = this.createDomNode().css({
         overflow: "hidden",
         width: "100%",
         height: "100%"
@@ -44,30 +44,61 @@ WebDoc.ItemView = $.klass({
     else {
       this.pageView.itemDomNode.prepend(this.domNode);
     }
+
     if (!this.item.data.data.css) {
       this.item.data.data.css = {};
     }
-    // css must be applied to item node. Only position and size must be set to dom node wrapper
-    var position = {
-      top: this.item.data.data.css.top,
-      left: this.item.data.data.css.left,
-      width: this.item.data.data.css.width,
-      height: this.item.data.data.css.height
-    };
-    this.domNode.css(position);
-    if (this.item.data.data['class']) {
-      this.domNode.addClass(this.item.data.data['class']);
-    }
-    var itemCss = {};
-    $.extend(itemCss, this.item.data.data.css);
-    delete itemCss.top;
-    delete itemCss.left;
-    delete itemCss.width;
-    delete itemCss.height;
-    this.itemDomNode.css(itemCss);
 
     if (this.item.data.data.innerHTML) {
       this.innerHtmlChanged();
+    }
+
+    this._initItemClass();
+    this._initItemCss(false);
+  },
+
+  _initItemClass: function() {
+    this.itemDomNode.attr("class", "item layer");
+    if(this.item.data.data['class']) {
+      this.itemDomNode.addClass(this.item.data.data['class']);
+    }
+    this.domNode.attr("class", "item_wrap");
+    if (this.item.getKind() && this.item.getKinf() !== 'null') {
+      this.domNode.addClass(this.item.getKind());
+    }
+  },
+
+  _initItemCss: function(withAnimate) {
+    // css must be applied to item node. Only position and size must be set to dom node wrapper
+    var position = {
+      top: this.item.data.data.css.top || "",
+      left: this.item.data.data.css.left || "",
+      width: this.item.data.data.css.width || "",
+      height: this.item.data.data.css.height || ""
+    };
+    var canAnimate = position.top && position.left && position.width && position.height;
+    this.domNode.stop();
+    if (withAnimate && canAnimate) {
+      this.domNode.animate(position, 'fast', function() {
+        if (this.domNode.hasClass("item-edited")) {
+          WebDoc.application.boardController._updateScreens(this.domNode);
+        }
+      }.pBind(this));
+    }
+    else {
+      this.domNode.css(position);
+    }
+    if (this.itemDomNode) {
+      var itemCss = {};
+      $.extend(itemCss, this.item.data.data.css);
+      delete itemCss.top;
+      delete itemCss.left;
+      delete itemCss.width;
+      delete itemCss.height;
+      if (itemCss.overflow && this.domNode.hasClass("item-edited")) {
+        delete itemCss.overflow;
+      }
+      this.itemDomNode.css(itemCss);
     }
   },
   
@@ -107,37 +138,12 @@ WebDoc.ItemView = $.klass({
     this.domNode.remove();
   },
   
-  objectChanged: function(item) {
-    // css must be applied to item node. Only position and size must be set to dom node wrapper
-    var position = {
-      top: this.item.data.data.css.top || "",
-      left: this.item.data.data.css.left || "",
-      width: this.item.data.data.css.width || "",
-      height: this.item.data.data.css.height || ""
-    };
-    var canAnimate = position.top && position.left && position.width && position.height;
-    this.domNode.stop();      
-    if (canAnimate) {
-      this.domNode.animate(position, 'fast', function() {
-        if (this.domNode.hasClass("item-edited")) {
-          WebDoc.application.boardController._updateScreens(this.domNode);
-        }
-      }.pBind(this));
+  objectChanged: function(item, options) {
+    if (item._isAttributeModified(options, 'css')) {
+      this._initItemCss(true);
     }
-    else {
-      this.domNode.css(position);      
-    }
-    if (this.itemDomNode) {
-      var itemCss = {};
-      $.extend(itemCss, this.item.data.data.css);
-      delete itemCss.top;
-      delete itemCss.left;
-      delete itemCss.width;
-      delete itemCss.height;
-      if (itemCss.overflow && this.domNode.hasClass("item-edited")) {
-        delete itemCss.overflow;  
-      }
-      this.itemDomNode.css(itemCss);
+    if (item._isAttributeModified(options, 'class')) {
+      this._initItemClass();
     }
   },
 
@@ -333,7 +339,15 @@ WebDoc.ItemView = $.klass({
     if (this.domNode.hasClass("item-edited")) {
       WebDoc.application.boardController._updateScreens(this.domNode);
     }
+  },
+
+  _isAttributeModified: function(options, attributeName) {
+    if (options && options.modifedAttribute) {
+      return (options.modifedAttribute.indexOf(attributeName) !== -1);
+    }
+    return true;
   }
+  
 });
 
 $.extend(WebDoc.ItemView, {
