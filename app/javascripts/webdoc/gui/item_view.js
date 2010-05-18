@@ -132,9 +132,6 @@ WebDoc.ItemView = $.klass({
         delete itemCss.overflow;
       }
       
-      console.log( position );
-      console.log( itemCss );
-      
       this.itemDomNode.css(itemCss);
     }
   },

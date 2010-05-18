@@ -83,9 +83,12 @@ WebDoc.PropertiesInspectorController = $.klass({
       fail: function( value, error ){
         var type = field.attr('data-type') || field.attr('type');
         
+        // If we can autocomplete, override the failure
         if ( self.autocompleters[type] ) {
           return self.autocompleters[type]( field, value );
         }
+        
+        return false;
       }
     });
   },

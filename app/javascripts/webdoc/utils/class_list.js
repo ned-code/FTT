@@ -25,7 +25,6 @@
     
     while(l--) {
       cssValue = testNode.css( styleList[l] );
-      console.log(cssValue);
 
       if ( cssValue && !nullCssValues[cssValue] ) {
         flag = true;
