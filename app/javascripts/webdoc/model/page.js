@@ -164,6 +164,9 @@ WebDoc.Page = $.klass(WebDoc.Record,
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundImage' });
       this.save();
       WebDoc.application.undoManager.registerUndo(function() {
+        if(old_background === undefined) {
+          old_background = "url('')";
+        }
         this.setBackgroundImage(old_background);
       }.pBind(this));
     }
