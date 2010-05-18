@@ -150,20 +150,31 @@ jQuery.extend(WebDoc.ServerManager, {
    * @param callBack function that called when object is persisted.
    *        callback recieve an array that has the created object.
    **/
-  newObject: function(object, callBack) {
+  newObject: function(object, callBack, synch) {
     var message = {
       xmpp_client_id: WebDoc.ServerManager.xmppClientId
-    };
+    };    
     jQuery.extend(message, object.to_json(true));
-    jQuery.post(object.rootUrl() + "/" + object.pluralizedClassName(), message, function(data, textstatus) {
-      // refresh is needed because some values are generated on server side
-      // i.e. page size and background and id
-      object.refresh(data);
-      object.isNew = false;
-      // we must update the cache with the id that comes from the server
-      WebDoc.ServerManager.cache.store(object);
-      callBack.apply(this, [[object]]);
-    }, "json");
+    $.ajax({
+      async: !synch,
+      type: 'POST',
+      url: object.rootUrl() + "/" + object.pluralizedClassName(),
+      data: message,
+      success: function(data, textstatus) {
+        // refresh is needed because some values are generated on server side
+        // i.e. page size and background and id
+        object.refresh(data);
+        object.isNew = false;
+        // we must update the cache with the id that comes from the server
+        WebDoc.ServerManager.cache.store(object);
+        callBack.apply(this, [[object]]);        
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        throw errorThrown;
+      },      
+      dataType: "json"
+    });
+    
   },
   
   /**
@@ -172,19 +183,29 @@ jQuery.extend(WebDoc.ServerManager, {
    * @param {Object} callBack function that called when object is updated
    *        callback recieve an array that has the updated object.
    */
-  updateObject: function(object, callBack, withRelationships) {
+  updateObject: function(object, callBack, withRelationships, synch) {
     var param = {
       xmpp_client_id: WebDoc.ServerManager.xmppClientId,
       _method: "PUT"
     };
     jQuery.extend(param, object.to_json(withRelationships));
-    jQuery.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
-      // if we save objects with relationshipd we must refresh object because its relations can be new objects. So we need to take the id of those new objects
-      if (withRelationships) {
-        object.refresh(data);
-      }
-      callBack.apply(this, [[object]]);
-    }, "json");
+    $.ajax({
+      async: !synch,
+      type: 'POST',
+      url: object.rootUrl() + "/" + object.className() + "s/" + object.uuid(),
+      data: param,
+      success: function(data, textstatus) {
+        // if we save objects with relationshipd we must refresh object because its relations can be new objects. So we need to take the id of those new objects
+        if (withRelationships) {
+          object.refresh(data);
+        }
+        callBack.apply(this, [[object]]);
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        throw errorThrown;
+      },      
+      dataType: "json"
+    });    
   },
   
   /**

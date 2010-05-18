@@ -14,6 +14,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.lastPosition = 0;
     this._layout = undefined;
     this.items = [];
+    this._itemsToRemoveAfterSave = [];
     this.nonDrawingItems = [];
     if (document && document.className() === WebDoc.Document.className()) {
       this.document = document;
@@ -331,8 +332,8 @@ WebDoc.Page = $.klass(WebDoc.Record,
           this.nonDrawingItems.splice(nonDrawingIndex, 1);    
         }
       }
-      this.fireItemRemoved(item);
     }
+    this.fireItemRemoved(item);
   },
   
   findItemWithUuid: function(pUuid) {
@@ -420,7 +421,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
   },
   
-  assignLayout: function(layout) {    
+  assignLayout: function(layout, callBack) {    
     // remove all previous items
     var previousItemsMap = {};
     for (var itemIndex = this.items.length - 1; itemIndex >= 0; itemIndex--) {
@@ -437,9 +438,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
       //    this.data.data = $.evalJSON($.toJSON(layout.getModelPage().data.data));
       //this.data.items = [];
       //this.save();
-      this.fireObjectChanged({
-        modifedAttribute: "class css"
-      });
+
       if (layout.getModelPage().items && $.isArray(layout.getModelPage().items)) {
         for (var index = 0; index < layout.getModelPage().items.length; index++) {
           var itemToCopy = layout.getModelPage().items[index];
@@ -461,12 +460,12 @@ WebDoc.Page = $.klass(WebDoc.Record,
     for (itemKind in previousItemsMap) {
       var itemToRemove = previousItemsMap[itemKind];
       if (itemToRemove) {
+        // tell rails to remove this item
         itemToRemove.data._delete = true;
-        //this.removeItem(itemToRemove);
-        //itemToRemove.destroy();
+        this._itemsToRemoveAfterSave.push(itemToRemove);
       }
     }    
-    this.save(undefined,true);
+    this.save(callBack,true, true);
   },
 
   setClass: function(newClass) {
@@ -485,14 +484,18 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
   },
 
-  save: function($super, callBack, withRelationships) {
-    $super(callBack, withRelationships);
-    for (var i = this.items.length - 1; i >= 0; i--) {
-      var item = this.items[i];
-      if (item.data._delete) {
+  save: function($super, callBack, withRelationships, synch) {
+    $super(function(page, status) {
+      for (var i = this._itemsToRemoveAfterSave.length - 1; i >= 0; i--) {
+        var item = this._itemsToRemoveAfterSave[i];
         this.removeItem(item);
       }
-    }
+      this._itemsToRemoveAfterSave = [];
+      if (callBack) {
+        callBack.apply(page, [page, status]);
+      }
+    }.pBind(this), withRelationships, synch);
+    
   }
 });
 

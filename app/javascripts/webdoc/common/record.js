@@ -201,16 +201,16 @@ WebDoc.Record = jQuery.klass(
    * save the record using REST URL. It use the correct URL depending on if the object is new or updated
    * @param {Object} callBack a callback method that is called when object has been saved.
    */
-  save: function(callBack, withRelationships) {
+  save: function(callBack, withRelationships, synch) {
     if (this.isNew) {
       WebDoc.ServerManager.newObject(this, function(persitedDoc) {
         if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
-      });
+      }, synch);
     }
     else {
       WebDoc.ServerManager.updateObject(this, function(persitedDoc) {
         if (callBack) {callBack.apply(persitedDoc[0], [persitedDoc[0], "OK"]);}
-      }, withRelationships);
+      }, withRelationships, synch);
     }
   },
   

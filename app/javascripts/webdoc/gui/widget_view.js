@@ -10,11 +10,11 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
   initialize: function($super, item, pageView, afterItem) {
     var placeholderContent = item.getInnerHtmlPlaceholder() || this.DEFAULT_WIDGET_HTML; 
-    this.placeholderNode = jQuery('<div/>').addClass('item layer').css("overflow", "hidden").append(placeholderContent);    
+    this.placeholderNode = jQuery(placeholderContent);    
     $super(item, pageView, afterItem);
     this.itemDomNode.css({ width:"100%", height:"100%"}); 
     this.api = new WebDoc.WidgetApi(item, false);
-    this._displayDefaultContentIfNeeded( this.domNode );
+    this._displayDefaultContentIfNeeded( this.itemDomNode );
     this.domNode.addClass('item-widget');
   },
   
@@ -45,7 +45,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   innerHtmlChanged: function($super) {
     $super();
-    this._displayDefaultContentIfNeeded(this.domNode);    
+    this._displayDefaultContentIfNeeded(this.itemDomNode);    
     // Highlight code blocks in the html -
     // nodes that have class "code"
     this.itemDomNode.find('code, .code').each( function(i){
@@ -92,7 +92,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   stopEditing: function($super) {
     $super();
-    this._displayDefaultContentIfNeeded(this.domNode);  
+    this._displayDefaultContentIfNeeded(this.itemDomNode);  
   },
   
   widgetChanged: function() {
