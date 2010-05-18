@@ -158,6 +158,7 @@ WebDoc.PageBrowserController = $.klass({
     });
     
     this._updateIndexNumbers();
+    pageItem.truncateTitleWithActualTitle();
   },
   
   pageRemoved: function(page) {
