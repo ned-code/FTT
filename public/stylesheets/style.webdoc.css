@@ -101,6 +101,14 @@
   font-weight: normal;
 }
 
+#webdoc .loading {
+  display: block;
+  opacity: 1 !important;
+  background-image: url('/images/loading-icon-16.gif');  
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 #webdoc .item_wrap.loading .screen {
   display: block;
   opacity: 1 !important;

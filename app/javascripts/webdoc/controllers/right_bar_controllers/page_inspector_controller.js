@@ -409,7 +409,15 @@
     _changeLayout: function(event) {
       if (!this._initializingGui) {
         ddd("change layout", event);
-        this._page.assignLayout(this._layoutDropDownNode.find('#layout-dd-' + this._layoutDropDownNode.val()).data("layout"));
+        WebDoc.application.boardController.currentPageView().setLoading(true);
+        try {
+          this._page.assignLayout(this._layoutDropDownNode.find('#layout-dd-' + this._layoutDropDownNode.val()).data("layout"), function(pag, status){
+            WebDoc.application.boardController.currentPageView().setLoading(false);
+          });
+        }
+        catch(e) {
+          WebDoc.application.boardController.currentPageView().setLoading(false);
+        }
       }
     }
   });
