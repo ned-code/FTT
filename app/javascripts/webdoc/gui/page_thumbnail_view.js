@@ -160,11 +160,11 @@ WebDoc.PageThumbnailView = $.klass({
   },
   
   _initPageClass: function() {
-    this.domNode.attr("class", pageThumbClass + " webdoc");
-    this.domNode.addClass(this.page.data.data['class']);
+    this.pageThumbNode.attr("class", pageThumbClass + " webdoc");
+    this.pageThumbNode.addClass(this.page.data.data['class']);
     this.page.getLayout(function(layout) {
       if (layout) {
-        this.domNode.addClass(layout.getModelPage().data.data['class']);
+        this.pageThumbNode.addClass(layout.getModelPage().data.data['class']);
       }
     }.pBind(this));    
   }

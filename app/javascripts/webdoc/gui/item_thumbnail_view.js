@@ -28,19 +28,29 @@ WebDoc.ItemThumbnailView = $.klass({
     itemNode.attr("id", "thumb_" + this.item.uuid());
     itemNode.addClass("item_thumb");
     for (var key in this.item.data.data) {
-      if (key == 'css') {
-        itemNode.css(this.item.data.data.css);
-      }
-      else {
-        if (key == 'innerHtml') {
+      switch(key) {         
+        case "innerHTMLPlaceholder":
+        case "tag":  
+        case "preference":
+        case "properties":
+          break;
+        case "class": 
+          itemNode.addClass(this.item.data.data[key]);
+          break;
+        case "wrapClass":
+          itemNode.addClass(this.item.data.data[key]);
+          break;          
+        case "innerHTML":
+        // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
+        case "innerHtml":
           itemNode.html(this.item.data.data[key]);
-        }
-        else {
-          if (key != 'tag' && key != 'preference') {
-            itemNode.attr(key, this.item.data.data[key]);
-          }
-        }
-      }
+          break;          
+        case "css": 
+          itemNode.css(this.item.data.data.css);  
+          break;        
+        default:
+          itemNode.attr(key, this.item.data.data[key]);
+      }           
     }
     this.pageView.itemDomNode.append(itemNode.get(0));
     return itemNode;
@@ -53,6 +63,9 @@ WebDoc.ItemThumbnailView = $.klass({
   
   objectChanged: function(item) {
     this.domNode.animate(item.data.data.css, 'fast');
+    this.domNode.attr("class", "item_thumb");
+    this.domNode.addClass(item.data.data['class']);
+    this.domNode.addClass(item.data.data.wrapClass);
   },
   
   innerHtmlChanged: function() {
