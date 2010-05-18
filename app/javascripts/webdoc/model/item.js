@@ -129,12 +129,18 @@ WebDoc.Item = $.klass(WebDoc.Record,
   left: function() {
     return this.data.data.css.left;
   },
+//  bottom: function() {
+//    return this.data.data.css.bottom;
+//  },
+//  right: function() {
+//    return this.data.data.css.right;
+//  },
   width: function() {
     return this.data.data.css.width;
   },
   height: function() {
     return this.data.data.css.height;
-  },  
+  },
   
   shiftBy: function(offsetPosition) {
     var newTop = (parseFloat(this.data.data.css.top) + offsetPosition.top) + "px";
@@ -176,32 +182,26 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.fireObjectChanged();
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
-
-  moveToAndResizeTo: function(top, left, width, height) {
-    if (top && !jQuery.string(top).empty()) {
-      this.data.data.css.top = top;
+  
+  changeCss: function( cssObj ) {
+    var that = this,
+        previousCss = this.data.data.css,
+        property;
+    
+    WebDoc.application.undoManager.registerUndo(function() {
+      that.changeCss( previousCss );
+    });
+    
+    for ( property in cssObj ) {
+      if ( jQuery.trim( cssObj[property] ) === '' ) {
+        delete this.data.data.css[property];
+      }
+      else {
+        this.data.data.css[property] = cssObj[property];
+      }
     }
-    else {
-      delete this.data.data.css.top;
-    }    
-    if (left && !jQuery.string(left).empty()) {
-      this.data.data.css.left = left;
-    }
-    else {
-      delete this.data.data.css.left;
-    }    
-    if (width && !jQuery.string(width).empty()) {
-      this.data.data.css.width = width
-    }
-    else {
-      delete this.data.data.css.width;
-    }    
-    if (height && !jQuery.string(height).empty()) {
-      this.data.data.css.height = height;
-    }
-    else {
-      delete this.data.data.css.height;
-    }                
+    
+    this.save();
     this.fireObjectChanged();
     WebDoc.application.inspectorController.refreshSubInspectors();
   },

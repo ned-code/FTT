@@ -21,7 +21,9 @@ WebDoc.handlers = {
       });
     });;
   },
+  
   regex: jQuery.regex,
+  
   _makeLinkHandler: function( obj, context ){
     var regex = this.regex;
     
@@ -44,14 +46,17 @@ WebDoc.handlers = {
       }
     };
   },
+  
   addPanelHandlers: function( eventType, obj, context ){
     this.panelNode
     .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
   },
+  
   addDocumentHandlers: function( eventType, obj, context ){
     jQuery(document)
     .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
   },
+  
   // Editor actions (to be bound to the interface panels)
   _panelHandlers: {
     'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggle(); },
@@ -111,6 +116,7 @@ WebDoc.handlers = {
     //'themes-chooser':       function(e) { WebDoc.application.themesController.openChooser(e); },
     'webdoc-duplicate':     function(e) { WebDoc.application.pageEditor.duplicateDocument(e); }
   },
+  
   // Publicly accessible actions (to be bound to document)
   _documentHandlers: {
     'webdoc-prev-page':     function(e) { WebDoc.application.pageEditor.prevPage(); },

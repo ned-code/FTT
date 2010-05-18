@@ -10,41 +10,52 @@
   <div class="foot">
     <form id="properties" class="properties">
       <div>
-        <label for="property_background">background</label>
-        <input id="property_background" type="text" data-type="cssvalue" value="" />
+        <label for="property_color">color</label>
+        <input id="property_color" type="text" data-type="csscolor" data-property="color" value="" />
       </div>
       <div>
-        <label for="property_width">width and height</label>
-        <input id="property_width" type="text" data-type="cssvalue" value="" />
-        <input id="property_height" type="text" data-type="cssvalue" value="" />
+        <label for="property_background_color">background color</label>
+        <input id="property_background_color" type="text" data-type="csscolor" data-property="backgroundColor" value="" />
+      </div>
+      <!--div>
+        <label for="property_background">background image</label>
+        <input id="property_background" type="url" data-property="background-image" value="" />
+      </div-->
+      <div>
+        <label for="property_width">width</label>
+        <input id="property_width" type="text" data-type="cssvalue" data-property="width" value="" />
+      </div>
+      <div>
+        <label for="property_height">height</label>
+        <input id="property_height" type="text" data-type="cssvalue" data-property="height" value="" />
       </div>
       <div>
         <label for="property_left">left</label>
-        <input id="property_left" type="text" data-type="cssvalue" value="" />
+        <input id="property_left" type="text" data-type="cssvalue" data-property="left" value="" />
       </div>
       <div>
         <label for="property_top">top</label>
-        <input id="property_top" type="text" data-type="cssvalue" value="" />
+        <input id="property_top" type="text" data-type="cssvalue" data-property="top" value="" />
       </div>
-      <div>
+      <!--div>
         <label for="property_right">right</label>
-        <input id="property_right" type="text" data-type="cssvalue" data-css-property="right" value="" />
+        <input id="property_right" type="text" data-type="cssvalue" data-property="right" value="" />
       </div>
       <div>
         <label for="property_bottom">bottom</label>
-        <input id="property_bottom" type="text" data-type="cssvalue" value="" />
-      </div>
+        <input id="property_bottom" type="text" data-type="cssvalue" data-property="bottom" value="" />
+      </div-->
       <div>
         <label for="property_rotation">rotation</label>
-        <input id="property_rotation" type="text" data-type="angle" value="" />
+        <input id="property_rotation" type="text" data-type="angle" data-property="rotation" value="" />
       </div>
       <div>
         <label for="property_padding">padding</label>
-        <input id="property_padding" type="text" value="" />
+        <input id="property_padding" type="text" data-type="cssvalue" data-property="padding" value="" />
       </div>
       <div>
-        <label for="property_radius">radius</label>
-        <input id="property_radius" type="text" data-type="cssvalue" value="" />
+        <label for="property_radius">border radius</label>
+        <input id="property_radius" type="text" data-type="cssvalue" data-property="borderRadius" value="" />
       </div>
       <div>
         <label for="property_scroll">Show Scroll</label>

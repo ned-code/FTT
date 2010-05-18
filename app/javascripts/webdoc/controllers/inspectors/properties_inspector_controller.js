@@ -6,31 +6,19 @@ WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector ) {
     var domNode = this.domNode = $(selector);
     
-    domNode.delegate('input', 'change', jQuery.proxy( this, 'update' ));
+    jQuery('#item_inspector').delegate('input', 'change', jQuery.proxy( this, 'changeProperty' ));
     
-    
-    
-    
-//    jQuery('#item_inspector').delegate("#property_top", 'change', this.updateProperties.pBind(this));
-//    jQuery('#item_inspector').delegate("#property_right", 'change', this.updateProperties.pBind(this));
-//    jQuery('#item_inspector').delegate("#property_bottom", 'change', this.updateProperties.pBind(this));
-//    jQuery('#item_inspector').delegate("#property_left", 'change', this.updateProperties.pBind(this));
-//    jQuery('#item_inspector').delegate("#property_background", 'change', this.updateProperties.pBind(this));
-//    jQuery('#item_inspector').delegate("#property_rotation", 'change', this.updateProperties.pBind(this));
-//    jQuery('#item_inspector').delegate("#property_padding", 'change', this.updateProperties.pBind(this));
-//    jQuery('#item_inspector').delegate("#property_width", 'change', this.updateProperties.pBind(this));
-//    jQuery('#item_inspector').delegate("#property_height", 'change', this.updateProperties.pBind(this));
 //    jQuery('#item_inspector').delegate("#property_scroll", 'change', this.updateSroll.pBind(this));
 //    jQuery('#item_inspector').delegate("#property_opacity", 'change', this.updateProperties.pBind(this));    
 //    jQuery('#item_inspector').delegate("#property-fit-to-screen", 'click', this.updatePropertiesWithFitToScreen.pBind(this));
 //    
-//    this.topNode = jQuery("#property_top");
-//    this.leftNode = jQuery("#property_left");
-//    this.widthNode = jQuery("#property_width");
-//    this.heightNode = jQuery("#property_height");
-//    this.scrollNode = jQuery("#property_scroll");
-//    this.opacityNode = jQuery("#property_opacity");
-//    this.opacityReadoutNode = jQuery("#property_opacity_readout");
+    this.topNode = jQuery("#property_top");
+    this.leftNode = jQuery("#property_left");
+    this.widthNode = jQuery("#property_width");
+    this.heightNode = jQuery("#property_height");
+    this.scrollNode = jQuery("#property_scroll");
+    this.opacityNode = jQuery("#property_opacity");
+    this.opacityReadoutNode = jQuery("#property_opacity_readout");
   
   },
   
@@ -68,30 +56,52 @@ WebDoc.PropertiesInspectorController = $.klass({
       }
   },
   
-  update: function(){
+  changeProperty: function(e){
     var self = this,
         field = jQuery(e.target);
     
+    ddd('[propertiesInspector] changeProperty ', e.target);
+    
     field.validate({
-      pass: function(){ 
-        var property = field.attr('data-css-property');
+      pass: function( value ){ 
+        var property = field.attr('data-property'),
+            item = WebDoc.application.boardController.selection()[0].item,
+            cssObj;
         
+        // TODO: convert property to camelCase if it isn't already
         
+        if ( self.properties[property] ) {
+          cssObj = self.properties[property]( value );
+        }
+        else {
+          cssObj = {};
+          cssObj[property] = value;
+        }
         
-        
-        
-        
-        self.updateItem.call( self );
+        item.changeCss( cssObj );
       },
       fail: function(){}
     });
+  },
+  
+  properties: {
+    rotation: function( value ){
+      return {
+        transform: 'rotate('+value+'deg)'
+      };
+    },
+    backgroundImage: function( value ){
+      return {
+        backgroundImage: 'url('+value+')'
+      };
+    }
   },
   
   updateItem: function(){
     var item = WebDoc.application.boardController.selection()[0].item,
         css = item.data.data.css;
     
-    
+    item.changeCssProperty(  )
     
   },
   
@@ -180,22 +190,12 @@ WebDoc.PropertiesInspectorController = $.klass({
       item.save();
   },
 
-  updatePropertiesWithFitToScreen: function(event) {
-    var item = WebDoc.application.boardController.selection()[0].item,
-        css = item.data.data.css,
-        previousTop = css.top,
-        previousLeft = css.left,
-        previousWidth = css.width,
-        previousHeight = css.height;
+  updatePropertiesWithFitToScreen: function(e) {
+    var item = WebDoc.application.boardController.selection()[0].item;
     
-    item.moveToAndResizeTo("0px", "0px", "100%", "100%");
-    item.save(function(){
-      WebDoc.application.undoManager.registerUndo(function() {
-        WebDoc.ItemView.restorePositionAndSize(item, previousTop, previousLeft, previousWidth, previousHeight);
-	  }.pBind(this));
-    });
-    event.preventDefault();
-    return;
+    item.changeCss({ top: 0, left: 0, width: '100%', height: '100%' });
+    
+    e.preventDefault();
   }
 });
 

@@ -63,41 +63,70 @@ WebDoc.ItemView = $.klass({
       this.itemDomNode.addClass(this.item.data.data['class']);
     }
     this.domNode.attr("class", "item_wrap");
-    if (this.item.getKind() && this.item.getKinf() !== 'null') {
+    if (this.item.getKind() && this.item.getKind() !== 'null') {
       this.domNode.addClass(this.item.getKind());
     }
   },
 
-  _initItemCss: function(withAnimate) {
+  _initItemCss: function( withAnimate ) {
     // css must be applied to item node. Only position and size must be set to dom node wrapper
     var position = {
       top: this.item.data.data.css.top || "",
       left: this.item.data.data.css.left || "",
+      //bottom: this.item.data.data.css.bottom || "",
+      //right: this.item.data.data.css.right || "",
       width: this.item.data.data.css.width || "",
-      height: this.item.data.data.css.height || ""
+      height: this.item.data.data.css.height || "",
+      
+      transform: this.item.data.data.css.transform || "none",
+      WebkitTransform: this.item.data.data.css.transform || "none",
+      MozTransform: this.item.data.data.css.transform || "none"
     };
-    var canAnimate = position.top && position.left && position.width && position.height;
-    this.domNode.stop();
-    if (withAnimate && canAnimate) {
-      this.domNode.animate(position, 'fast', function() {
-        if (this.domNode.hasClass("item-edited")) {
-          WebDoc.application.boardController._updateScreens(this.domNode);
-        }
-      }.pBind(this));
-    }
-    else {
-      this.domNode.css(position);
-    }
+    
+    //var canAnimate = position.top && position.left && position.width && position.height;
+    //this.domNode.stop();
+    
+    // TODO: animate with CSS, not JS
+    //if (withAnimate && canAnimate) {
+    //  this.domNode.animate(position, 'fast', function() {
+    //    if (this.domNode.hasClass("item-edited")) {
+    //      WebDoc.application.boardController._updateScreens(this.domNode);
+    //    }
+    //  }.pBind(this));
+    //}
+    //else {
+    //  this.domNode.css( position );
+    //}
+    
+    this.domNode.addClass('animate');
+    this.domNode.css( position );
+    
+    console.log(this.domNode[0]);
+    
+    //if ( withAnimate ) { this.domNode.removeClass( 'animate' ); }
+    
     if (this.itemDomNode) {
       var itemCss = {};
       $.extend(itemCss, this.item.data.data.css);
       delete itemCss.top;
       delete itemCss.left;
+      //delete itemCss.bottom;
+      //delete itemCss.right;
       delete itemCss.width;
       delete itemCss.height;
+      delete itemCss.transform;
+      // These should not end up as properties of the
+      // css object, but just in case...
+      delete itemCss.WebkitTransform;
+      delete itemCss.MozTransform;
+      
       if (itemCss.overflow && this.domNode.hasClass("item-edited")) {
         delete itemCss.overflow;
       }
+      
+      console.log( position );
+      console.log( itemCss );
+      
       this.itemDomNode.css(itemCss);
     }
   },
@@ -371,18 +400,6 @@ $.extend(WebDoc.ItemView, {
       WebDoc.ItemView.restoreSize(item, previousSize);
     }.pBind(this));
     item.save();  
-  },
-
-  restorePositionAndSize: function(item, top, left, width, height) {
-    var previousTop = item.data.data.css.top,
-        previousLeft = item.data.data.css.left,
-        previousWidth = item.data.data.css.width,
-        previousHeight = item.data.data.css.height;
-    item.moveToAndResizeTo(top, left, width, height);
-    WebDoc.application.undoManager.registerUndo(function() {
-      WebDoc.ItemView.restorePositionAndSize(item, previousTop, previousLeft, previousWidth, previousHeight);
-	  }.pBind(this));
   }
-  
 });
 
