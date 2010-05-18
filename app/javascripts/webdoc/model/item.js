@@ -98,7 +98,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   setPoints: function(points) {
     this.data.data.points = points;
-    this.fireObjectChanged();
+    this.fireObjectChanged({ modifedAttribute: 'points' });
   },
   
   type: function() {
@@ -120,7 +120,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
       this.data.data.properties = {};
     }
     this.data.data.properties[key] = value;
-    this.fireObjectChanged();
+    this.fireObjectChanged({ modifedAttribute: 'properties' });
   },
   
   top: function() {
@@ -179,7 +179,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
       delete this.data.data.css.height;
     }    
     
-    this.fireObjectChanged();
+    this.fireObjectChanged({ modifedAttribute: 'css' });
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
   
@@ -208,7 +208,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
 
   setOpacity: function(newOpacity){
     this.data.data.css.opacity = parseFloat(newOpacity);
-    this.fireObjectChanged();
+    this.fireObjectChanged({ modifedAttribute: 'css' });
   },
 
   getKind: function() {

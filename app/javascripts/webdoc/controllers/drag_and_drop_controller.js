@@ -4,7 +4,7 @@
 WebDoc.DrageAndDropController = $.klass({});
 
 $.extend(WebDoc.DrageAndDropController, {
-  KNOWN_TYPES : ['application/ub-image', 'application/ub-widget', 'application/ub-video', 'application/x-moz-file-promise-url', 'text/html'],
+  KNOWN_TYPES : ['application/ub-image', 'application/ub-widget', 'application/ub-video', 'application/x-moz-file-promise-url', 'text/html', 'application/post-message-action'],
 
   dragEnter: function(evt) {
     ddd("drag enter");
@@ -47,23 +47,32 @@ $.extend(WebDoc.DrageAndDropController, {
             WebDoc.application.boardController.insertWidget(widgetData, pos);
           }
           break;
-        case 'application/x-moz-file-promise-url' :
+        case 'application/x-moz-file-promise-url':
           var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
-        case 'application/ub-image' :   
-          var ubImage = evt.originalEvent.dataTransfer.getData('application/ub-image');
-          var url = ubImage ? ubImage : imageUrl;
-          
-          WebDoc.application.boardController.insertImage(url, pos);
+        case 'application/ub-image' :
+          if(imageUrl === undefined) {
+            var params = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-image'));
+            var imageUrl = params.url;
+            var id = params.id ? params.id : undefined;  
+          }
+          WebDoc.application.boardController.insertImage(imageUrl, pos, id);
           break;
         case 'application/ub-video':                                       
           var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-video'));
           WebDoc.application.boardController.insertVideo(videoProperties, pos);
           break;
-        case 'text/html' :
+        case 'text/html':
           var html = evt.originalEvent.dataTransfer.getData('text/html');
           if (html) {
             WebDoc.application.boardController.insertHtml(html, pos);
           }
+          break;
+        case 'application/post-message-action':
+          var action = evt.originalEvent.dataTransfer.getData('application/post-message-action');
+          if (action) {
+            WebDoc.application.postMessageManager.processMessage(action, pos);
+          }
+          break;
       }
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     }

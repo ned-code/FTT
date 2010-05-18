@@ -64,8 +64,8 @@ WebDoc.PropertiesInspectorController = $.klass({
     
     field.validate({
       pass: function( value ){ 
-        var property = field.attr('data-property'),
-            item = WebDoc.application.boardController.selection()[0].item,
+        var item = WebDoc.application.boardController.selection()[0].item,
+            property = field.attr('data-property'),
             cssObj;
         
         // TODO: convert property to camelCase if it isn't already
@@ -80,20 +80,41 @@ WebDoc.PropertiesInspectorController = $.klass({
         
         item.changeCss( cssObj );
       },
-      fail: function(){}
+      fail: function( value, error ){
+        var type = field.attr('data-type') || field.attr('type');
+        
+        if ( self.autocompleters[type] ) {
+          return self.autocompleters[type]( field, value );
+        }
+      }
     });
   },
   
   properties: {
     rotation: function( value ){
       return {
-        transform: 'rotate('+value+'deg)'
+        transform: 'rotate('+value+')'
       };
     },
     backgroundImage: function( value ){
       return {
         backgroundImage: 'url('+value+')'
       };
+    }
+  },
+  
+  autocompleters: {
+    cssvalue: function( field, value ){
+      if ( jQuery.regex.integer.test( value ) ){
+        field.val( value+'px' );
+        return true;
+      }
+    },
+    cssangle: function( field, value ){
+      if ( jQuery.regex.integer.test( value ) ){
+        field.val( value+'deg' );
+        return true;
+      }
     }
   },
   

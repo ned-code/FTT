@@ -17,7 +17,7 @@ WebDoc.ItemView = $.klass({
     
     this.item = item;
     // item wrapper    
-    this.domNode = $("<div/>");
+    this.domNode = $("<div/>").addClass('item_wrap');
 
     this.itemDomNode = this.createDomNode().css({
         overflow: "hidden",
@@ -62,26 +62,31 @@ WebDoc.ItemView = $.klass({
     if(this.item.data.data['class']) {
       this.itemDomNode.addClass(this.item.data.data['class']);
     }
-    this.domNode.attr("class", "item_wrap");
-    if (this.item.getKind() && this.item.getKind() !== 'null') {
-      this.domNode.addClass(this.item.getKind());
+    if (this.domNode.data('wdClasses')) {
+      this.domNode.removeClass(this.domNode.data('wdClasses'));
+    }
+    if (this.item.data.data.wrapClass && this.item.data.data.wrapClass) {
+      this.domNode.addClass(this.item.data.data.wrapClass);
+      this.domNode.data('wdClasses', this.item.data.data.wrapClass);
     }
   },
 
   _initItemCss: function( withAnimate ) {
     // css must be applied to item node. Only position and size must be set to dom node wrapper
-    var position = {
-      top: this.item.data.data.css.top || "",
-      left: this.item.data.data.css.left || "",
-      //bottom: this.item.data.data.css.bottom || "",
-      //right: this.item.data.data.css.right || "",
-      width: this.item.data.data.css.width || "",
-      height: this.item.data.data.css.height || "",
-      
-      transform: this.item.data.data.css.transform || "none",
-      WebkitTransform: this.item.data.data.css.transform || "none",
-      MozTransform: this.item.data.data.css.transform || "none"
-    };
+    var domNode = this.domNode,
+        position = {
+          top: this.item.data.data.css.top || "",
+          left: this.item.data.data.css.left || "",
+          //bottom: this.item.data.data.css.bottom || "",
+          //right: this.item.data.data.css.right || "",
+          width: this.item.data.data.css.width || "",
+          height: this.item.data.data.css.height || "",
+          
+          transform: this.item.data.data.css.transform || "none",
+          WebkitTransform: this.item.data.data.css.transform || "none",
+          MozTransform: this.item.data.data.css.transform || "none"
+        },
+        timer;
     
     //var canAnimate = position.top && position.left && position.width && position.height;
     //this.domNode.stop();
@@ -98,12 +103,15 @@ WebDoc.ItemView = $.klass({
     //  this.domNode.css( position );
     //}
     
-    this.domNode.addClass('animate');
+    if ( withAnimate ) {
+      domNode.addClass('animate');
+      timer = setTimeout(function(){
+        domNode.removeClass('animate');
+        timer = null;
+      }, 500);
+    }
+    
     this.domNode.css( position );
-    
-    console.log(this.domNode[0]);
-    
-    //if ( withAnimate ) { this.domNode.removeClass( 'animate' ); }
     
     if (this.itemDomNode) {
       var itemCss = {};
@@ -144,7 +152,8 @@ WebDoc.ItemView = $.klass({
           case "innerHTML":
           // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
           case "innerHtml":
-          case "class":  
+          case "class": 
+          case "wrapClass": 
           case "innerHTMLPlaceholder":
           case "tag":
           case "css":   

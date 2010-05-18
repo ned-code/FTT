@@ -1,5 +1,9 @@
 
-#webdoc .item_wrap {
+.item_thumb {
+  overflow: hidden;  
+}
+
+.item_wrap {
   position:absolute;
   overflow:visible;
   right: -100px;
@@ -15,6 +19,10 @@
   -webkit-border-radius: 0.3333em;
   -moz-border-radius:    0.3333em;
   border-radius:         0.3333em;
+}
+
+.webdoc li, dd    { 
+  margin-left:0.625em;
 }
 
 .webdoc span,font {

@@ -22,6 +22,12 @@ WebDoc.ImagePaletteController = $.klass({
     if (WebDoc.application.boardController.selection().length) {      
       var selectedItem = WebDoc.application.boardController.selection()[0];
       if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+        this.addToMyImageResult.text('');
+        if(selectedItem.item.data.media_id) {
+          this.addToMyImageLink.hide();
+        } else {
+          this.addToMyImageLink.show();
+        }
         $("#property_src")[0].value = selectedItem.item.data.data.src;
         if(selectedItem.item.data.data.preserve_aspect_ratio === "true") {
           $("#preserve_aspect_ratio").attr("checked", "checked");  
@@ -73,9 +79,13 @@ WebDoc.ImagePaletteController = $.klass({
         this.addToMyImageResult.text('Uploading...');
         image = new WebDoc.Image;
         image.data.remote_file_url = this.propertySrc.val();
-        image.save(function(){
+        this.selectedItem = selectedItem;
+        image.save(function(event){
           WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.LIBRARY)
                   .imagesLibrary.refreshMyImages();
+          ddd('image media id: ' + event.data.id);
+          this.selectedItem.item.data.media_id = event.data.id;
+          this.selectedItem.item.save();
           this.addToMyImageResult.text('Image uploaded in my images!');
         }.pBind(this));
       }

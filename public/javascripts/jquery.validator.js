@@ -3,11 +3,11 @@
 // Stephen Band
 // 
 // Strongly inspired by jquery.validate.js (Jörn Zaefferer), indeed, regex is borrowed
-// from there. Why did I choose not to use that plugin, then? To avoid bloat. Now, I'm
-// not claiming that jquery.validate is un-neccessarily bloated: it's one of the best
-// jQuery plugins out there. But it failed my first test (responding to the attribute
-// required="required"), and instead of hacking through 1146 lines of code I chose to
-// make a plug that does exactly what we need it to do.
+// from there. I chose not to use that plugin to avoid bloat. I'm not claiming that
+// jquery.validate is un-neccessarily bloated: it's one of the best jQuery plugins out
+// there, but it failed my first test (responding to the attribute required="required"),
+// and instead of hacking through 1146 lines of code I chose to make a plug that does
+// exactly what we need it to do.
 // 
 // Validation rules can be added to the rules object like this:
 //
@@ -17,7 +17,7 @@
 //		error: string 					- the error message
 // }
 //
-// You can define error messages in html by giving the field the data- attribute:
+// You can define error messages in html by giving the field the data-error-ruleName attribute:
 //
 // <input data-error-ruleName="Custom error message" />
 //
@@ -48,7 +48,7 @@
 					error: 'Enter a valid email'
 				},
 				number: {
-					test: function( value ) { return regex.number.test(value) },
+					test: function( value ) { return regex.number.test(value); },
 					error: 'That\'s not a number.'
 				}
 				//datetime: {},
@@ -110,7 +110,9 @@
 		for (rule in rules) {
 			response = rules[rule].test( field, value );
 			
-			if (response === true) {
+			// If the response is true, it passed this test
+			if ( response === true ) {
+				
 				// Remove the error message
 				if ( data ) {
 					if ( data[rule] === false ) {
@@ -120,28 +122,48 @@
 				}
 			}
 			else {
-				if (!data) {
-					data = {
-						errorNode: options.errorNode
-							.clone()
-							.attr("for", field.attr("id") || "" )
-					};
-					field.data('validate', data);
+				// If the fail callback returns true, override the
+				// failure, and don't do any more tests. Just pass
+				// it.
+				if ( options.fail && options.fail.call(node, value, response) === true ) {
+					
+					// In case the fail callback modified the value,
+					// get it again
+					value = field.val();
+					
+					// Remove the error message
+					if ( data ) {
+						if ( data[rule] === false ) {
+							data[rule] = true;
+							data.errorNode.remove();
+						}
+					}
+					
+					break;
 				}
-				
-				data.errorNode
-				.html( field.attr('data-error-'+rule) || response );
-				
-				data[rule] = false;
-				
-				field
-				.after( data.errorNode )
-				.closest( options.errorWrapSelector )
-				.addClass( options.errorClass );
-				
-				if ( options.fail ) { options.fail.call(node, response); }
-				
-				return false;
+				// Otherwise, it's the end of the road for this one
+				else {
+					if (!data) {
+						data = {
+							errorNode: options.errorNode
+								.clone()
+								.attr("for", field.attr("id") || "" )
+						};
+						field.data('validate', data);
+					}
+					
+					data.errorNode
+					.html( field.attr('data-error-'+rule) || response );
+					
+					data[rule] = false;
+					
+					field
+					.after( data.errorNode )
+					.closest( options.errorWrapSelector )
+					.addClass( options.errorClass );
+					
+					return false;
+				}
 			};
 		}
 		
@@ -218,6 +240,8 @@
 //
 // cssvalue
 // csscolor
+// imageurl
+// email (workaround for rails)
 
 (function(jQuery, undefined){
 
@@ -226,28 +250,160 @@
 				hslColor: /^(?:hsl\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})%\s?,\s?([0-9]{1,3})%\s?\)?$/,
 				rgbColor: /^(?:rgb\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?\)?$/,
 				cssValue: /^(0)$|^(\-?\d+(?:\.\d+)?)\s?(px|%|em|ex|pt|in|cm|mm|pt|pc)$/,
+				cssAngle:	/^[0-9]+deg$/,
 				imgFile:	/(?:\.png|\.gif|\.jpeg|\.jpg)$/
 			},
 			
-			// CSS color names
 			cssColors = {
+				transparent: true,
+				// CSS3 color names
+				aliceblue: true,
+				antiquewhite: true,
 				aqua: true,
+				aquamarine: true,
+				azure: true,
+				beige: true,
+				bisque: true,
 				black: true,
+				blanchedalmond: true,
 				blue: true,
+				blueviolet: true,
+				brown: true,
+				burlywood: true,
+				cadetblue: true,
+				chartreuse: true,
+				chocolate: true,
+				coral: true,
+				cornflowerblue: true,
+				cornsilk: true,
+				crimson: true,
+				cyan: true,
+				darkblue: true,
+				darkcyan: true,
+				darkgoldenrod: true,
+				darkgray: true,
+				darkgreen: true,
+				darkgrey: true,
+				darkkhaki: true,
+				darkmagenta: true,
+				darkolivegreen: true,
+				darkorange: true,
+				darkorchid: true,
+				darkred: true,
+				darksalmon: true,
+				darkseagreen: true,
+				darkslateblue: true,
+				darkslategray: true,
+				darkslategrey: true,
+				darkturquoise: true,
+				darkviolet: true,
+				deeppink: true,
+				deepskyblue: true,
+				dimgray: true,
+				dimgrey: true,
+				dodgerblue: true,
+				firebrick: true,
+				floralwhite: true,
+				forestgreen: true,
 				fuchsia: true,
+				gainsboro: true,
+				ghostwhite: true,
+				gold: true,
+				goldenrod: true,
 				gray: true,
 				green: true,
+				greenyellow: true,
+				grey: true,
+				honeydew: true,
+				hotpink: true,
+				indianred: true,
+				indigo: true,
+				ivory: true,
+				khaki: true,
+				lavender: true,
+				lavenderblush: true,
+				lawngreen: true,
+				lemonchiffon: true,
+				lightblue: true,
+				lightcoral: true,
+				lightcyan: true,
+				lightgoldenrodyellow: true,
+				lightgray: true,
+				lightgreen: true,
+				lightgrey: true,
+				lightpink: true,
+				lightsalmon: true,
+				lightseagreen: true,
+				lightskyblue: true,
+				lightslategray: true,
+				lightslategrey: true,
+				lightsteelblue: true,
+				lightyellow: true,
 				lime: true,
+				limegreen: true,
+				linen: true,
+				magenta: true,
 				maroon: true,
+				mediumaquamarine: true,
+				mediumblue: true,
+				mediumorchid: true,
+				mediumpurple: true,
+				mediumseagreen: true,
+				mediumslateblue: true,
+				mediumspringgreen: true,
+				mediumturquoise: true,
+				mediumvioletred: true,
+				midnightblue: true,
+				mintcream: true,
+				mistyrose: true,
+				moccasin: true,
+				navajowhite: true,
 				navy: true,
+				oldlace: true,
 				olive: true,
+				olivedrab: true,
+				orange: true,
+				orangered: true,
+				orchid: true,
+				palegoldenrod: true,
+				palegreen: true,
+				paleturquoise: true,
+				palevioletred: true,
+				papayawhip: true,
+				peachpuff: true,
+				peru: true,
+				pink: true,
+				plum: true,
+				powderblue: true,
 				purple: true,
 				red: true,
+				rosybrown: true,
+				royalblue: true,
+				saddlebrown: true,
+				salmon: true,
+				sandybrown: true,
+				seagreen: true,
+				seashell: true,
+				sienna: true,
 				silver: true,
+				skyblue: true,
+				slateblue: true,
+				slategray: true,
+				slategrey: true,
+				snow: true,
+				springgreen: true,
+				steelblue: true,
+				tan: true,
 				teal: true,
+				thistle: true,
+				tomato: true,
+				turquoise: true,
+				violet: true,
+				wheat: true,
 				white: true,
+				whitesmoke: true,
 				yellow: true,
-				transparent: true
+				yellowgreen: true
 			},
 			
 			// Data types
@@ -268,6 +424,12 @@
 						);
 					},
 					error: 'Not a valid CSS color value'
+				},
+				cssangle: {
+					test: function( value ) {
+						return regex.cssAngle.test(value);
+					},
+				  error: 'A valid CSS angle, that isn\'t'
 				},
 				imageurl: {
 					test: function( value ) {
