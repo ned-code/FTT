@@ -128,6 +128,11 @@ WebDoc.ItemView = $.klass({
       delete itemCss.WebkitTransform;
       delete itemCss.MozTransform;
       
+      if (itemCss.borderRadius) {
+        itemCss.MozBorderRadius = itemCss.borderRadius;
+        itemCss.WebKitBorderRadius = itemCss.borderRadius;
+      }
+      
       if (itemCss.overflow && this.domNode.hasClass("item-edited")) {
         delete itemCss.overflow;
       }

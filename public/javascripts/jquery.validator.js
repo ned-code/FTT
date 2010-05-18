@@ -250,7 +250,7 @@
 				hslColor: /^(?:hsl\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})%\s?,\s?([0-9]{1,3})%\s?\)?$/,
 				rgbColor: /^(?:rgb\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?\)?$/,
 				cssValue: /^(0)$|^(\-?\d+(?:\.\d+)?)\s?(px|%|em|ex|pt|in|cm|mm|pt|pc)$/,
-				cssAngle:	/^[0-9]+deg$/,
+				cssAngle:	/^-?[0-9]+deg$/,
 				imgFile:	/(?:\.png|\.gif|\.jpeg|\.jpg)$/
 			},
 			
