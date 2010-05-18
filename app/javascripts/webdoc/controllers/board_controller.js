@@ -549,9 +549,9 @@ WebDoc.BoardController = jQuery.klass({
     });
   },
   
-  insertImage: function(imageUrl, position) {
+  insertImage: function(imageUrl, position, media_id) {
     var image = document.createElement('img'); /* Preload image in order to have width and height parameters available */
-    jQuery(image).bind("load", position, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
+    jQuery(image).bind("load", {position: position, media_id: media_id}, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
     image.src = imageUrl;
   },
   
@@ -914,7 +914,8 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _createImageItemAfterLoad: function(e) {
-    var position = e.data;
+    var position = e.data.position;
+    var media_id = e.data.media_id;
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
     if(!position) { position = WebDoc.application.boardController.getBoardCenterPoint();}
@@ -924,6 +925,9 @@ WebDoc.BoardController = jQuery.klass({
     if (y < 0) { y = 0;}
     newItem.data.data.tag = "img";
     newItem.data.data.src = this.src;
+    if(media_id !== undefined) {
+      newItem.data.media_id = media_id;
+    }
     newItem.data.data.css = {
       overflow: "hidden",
       top: y + "px",

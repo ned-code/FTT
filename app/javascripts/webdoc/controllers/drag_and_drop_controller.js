@@ -49,11 +49,13 @@ $.extend(WebDoc.DrageAndDropController, {
           break;
         case 'application/x-moz-file-promise-url':
           var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
-        case 'application/ub-image' :   
-          var ubImage = evt.originalEvent.dataTransfer.getData('application/ub-image');
-          var url = ubImage ? ubImage : imageUrl;
-          
-          WebDoc.application.boardController.insertImage(url, pos);
+        case 'application/ub-image' :
+          if(imageUrl === undefined) {
+            var params = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-image'));
+            var imageUrl = params.url;
+            var id = params.id ? params.id : undefined;  
+          }
+          WebDoc.application.boardController.insertImage(imageUrl, pos, id);
           break;
         case 'application/ub-video':                                       
           var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-video'));
