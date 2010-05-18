@@ -74,6 +74,17 @@ WebDoc.PostMessageManager = $.klass({
           }
           break;
         case 'add_item':
+          if(parsedUrl['params']['type']) {
+            switch(parsedUrl['params']['type']) {
+              case 'image':
+                if(parsedUrl['params']['url']) {
+                  WebDoc.application.boardController.insertImage(parsedUrl['params']['url'], { x: 0, y: 0 });
+                }
+                break;
+              default:
+                break;
+            }
+          }
           break;
         default:
           ddd('[post message manager] action not implemented');
