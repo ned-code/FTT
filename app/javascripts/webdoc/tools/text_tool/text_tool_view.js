@@ -9,7 +9,7 @@ WebDoc.TextToolView = $.klass({
   RELATIVESIZETAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub', 'sup'],
   INLINEPROPERTIES: ['backgroundColor', 'textDecoration', 'color', 'fontSize', 'fontStyle', 'fontWeight'],
   INLINETAGS: ['span', 'font', 'a', 'b', 'i', 'u', 'strong', 'small', 'cite', 'sub', 'sup', 'br'],
-  INDENTCLASSES: ['webdoc-indent-1', 'webdoc-indent-2', 'webdoc-indent-3', 'webdoc-indent-4', 'webdoc-indent-5', 'webdoc-indent-6', 'webdoc-indent-7', 'webdoc-indent-8', 'webdoc-indent-9', 'webdoc-indent-10', 'webdoc-indent-11', 'webdoc-indent-12'],
+  INDENTCLASSES: ['webdoc_indent_1', 'webdoc_indent_2', 'webdoc_indent_3', 'webdoc_indent_4', 'webdoc_indent_5', 'webdoc_indent_6', 'webdoc_indent_7', 'webdoc_indent_8', 'webdoc_indent_9', 'webdoc_indent_10', 'webdoc_indent_11', 'webdoc_indent_12'],
   NATIVEELEMENTSCLASS: 'webdoc-editor-elem',
   
   /**
