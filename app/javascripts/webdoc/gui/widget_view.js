@@ -10,7 +10,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
   initialize: function($super, item, pageView, afterItem) {
     var placeholderContent = item.getInnerHtmlPlaceholder() || this.DEFAULT_WIDGET_HTML; 
-    this.placeholderNode = $(placeholderContent);    
+    this.placeholderNode = jQuery('<div/>').addClass('item layer').css("overflow", "hidden").append(placeholderContent);    
     $super(item, pageView, afterItem);
     this.itemDomNode.css({ width:"100%", height:"100%"}); 
     this.api = new WebDoc.WidgetApi(item, false);
