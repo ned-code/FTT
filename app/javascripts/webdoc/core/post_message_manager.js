@@ -22,8 +22,7 @@ WebDoc.PostMessageManager = $.klass({
         ddd(event.origin + ' not allowed!');
         return;
       } else {
-        var parsedUrl = this.parseUrl(event.data);
-        this.processMessage(parsedUrl);
+        this.processMessage(event.data);
       }
     }.pBind(this), false);
   },
@@ -45,7 +44,11 @@ WebDoc.PostMessageManager = $.klass({
     return array;
   },
 
-  processMessage: function(parsedUrl) {
+  /*
+   * Process an action with a optional position
+   */
+  processMessage: function(action, pos) {
+    var parsedUrl = this.parseUrl(action);
     if(parsedUrl['action']) {
       ddd('[post message manager] action ' + parsedUrl['action']);
       switch(parsedUrl['action']) {
@@ -78,7 +81,7 @@ WebDoc.PostMessageManager = $.klass({
             switch(parsedUrl['params']['type']) {
               case 'image':
                 if(parsedUrl['params']['url']) {
-                  WebDoc.application.boardController.insertImage(parsedUrl['params']['url'], { x: 0, y: 0 });
+                  WebDoc.application.boardController.insertImage(parsedUrl['params']['url'], pos);
                 }
                 break;
               default:

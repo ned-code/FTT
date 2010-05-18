@@ -63,7 +63,7 @@ WebDoc.ItemView = $.klass({
       this.itemDomNode.addClass(this.item.data.data['class']);
     }
     this.domNode.attr("class", "item_wrap");
-    if (this.item.getKind() && this.item.getKinf() !== 'null') {
+    if (this.item.getKind() && this.item.getKind() !== 'null') {
       this.domNode.addClass(this.item.getKind());
     }
   },
