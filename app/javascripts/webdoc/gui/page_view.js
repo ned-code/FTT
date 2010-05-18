@@ -4,11 +4,13 @@
 WebDoc.PageView = $.klass({
   initialize: function(page, boardContainer) {
     var domNode = $('<div>', {
-      'class': 'webdoc',
-      id: 'page_' + page.uuid()
-    }), itemDomNode = $('<div/>').id('items_' + page.uuid()).addClass("layer").css({
-      overflow: 'visible'
-    }), drawingDomNode = $(WebDoc.application.svgRenderer.createSurface()), eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(), that = this;
+          'class': 'webdoc',
+          id: 'page_' + page.uuid()
+        }), 
+        itemDomNode = $('<div/>').id('items_' + page.uuid()).addClass("layer").css({
+          overflow: 'visible'
+        }), 
+        drawingDomNode = $(WebDoc.application.svgRenderer.createSurface()), eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(), that = this;
     
     
     // Extend this
@@ -67,6 +69,17 @@ WebDoc.PageView = $.klass({
       relatedItemView.item = addedItem;
       relatedItemView.item.addListener(relatedItemView);
       relatedItemView.objectChanged(addedItem);
+    }
+  },
+  
+  setLoading: function(state) {
+    if (state) {
+      this.itemDomNode.hide();
+      this.domNode.addClass('loading');
+    }  
+    else {
+      this.itemDomNode.show();
+      this.domNode.removeClass('loading');
     }
   },
   
