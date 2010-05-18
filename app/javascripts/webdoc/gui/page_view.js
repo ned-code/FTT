@@ -186,7 +186,7 @@ WebDoc.PageView = $.klass({
       
       delete globalCss.width;
       delete globalCss.height;
-      
+            
       this.domNode.css(globalCss);
       this._initPageSize();
       

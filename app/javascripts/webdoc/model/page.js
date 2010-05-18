@@ -195,9 +195,9 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
 
   removeBackgroundImage: function() {
-    delete this.data.data.css.backgroundImage;
-    delete this.data.data.css.backgroundRepeat;
-    delete this.data.data.css.backgroundPosition;   
+    this.data.data.css.backgroundImage = "";
+    this.data.data.css.backgroundRepeat = "";
+    this.data.data.css.backgroundPosition = "";   
     this.fireObjectChanged({ modifedAttribute: 'css.background' });
     this.save();    
   },
