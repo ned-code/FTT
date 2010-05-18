@@ -56,7 +56,6 @@ stylesheets:
     
   page_viewer:
     - public/stylesheets/style.webdoc.css
-    - public/stylesheets/style.webdoc.typography.css
   
   feedback:
     - public/stylesheets/zenbox.css
