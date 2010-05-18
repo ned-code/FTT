@@ -21,11 +21,11 @@
       %fieldset.properties
         %legend= t('.properties.title')
         %div
+          %label= t('.properties.width')
+          <input data-property="page_width" id="page_width" type="text" data-type="cssvalue" required="required" />        
+        %div
           %label= t('.properties.height')
           <input data-property="page_height" id="page_height" type="text" data-type="cssvalue" required="required" />
-        %div
-          %label= t('.properties.width')
-          <input data-property="page_width" id="page_width" type="text" data-type="cssvalue" required="required" />
         %div
           %label= t('.properties.show_scroll')
           %input#page_scroll_checkbox{ :type => "checkbox" }
