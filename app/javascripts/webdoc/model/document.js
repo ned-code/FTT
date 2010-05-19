@@ -104,13 +104,15 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   refresh: function($super, json) {
     $super(json);
     var that = this;
-    this.pages = [];    
-    if (this.data.pages && $.isArray(this.data.pages)) {
-      for (var i = 0; i < this.data.pages.length; i++) {
-        var pageData = this.data.pages[i];
-        this.createOrUpdatePage({ page: pageData });
-      }
-    }    
+    if (json.document.pages && $.isArray(json.document.pages)) {
+      this.pages = [];    
+      if (this.data.pages && $.isArray(this.data.pages)) {
+        for (var i = 0; i < this.data.pages.length; i++) {
+          var pageData = this.data.pages[i];
+          this.createOrUpdatePage({ page: pageData });
+        }
+      }    
+    }
   },
   
   getData: function($super, withRelationShips) {
