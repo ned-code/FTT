@@ -74,6 +74,7 @@ class DocumentsController < ApplicationController
   
   # PUT /documents/:id
   def update
+    @document.must_notify = true;
     @document.update_attributes(params[:document])
     
     render :json => @document
