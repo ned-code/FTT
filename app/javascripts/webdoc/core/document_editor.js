@@ -48,8 +48,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         infoDialogTitleNode = $("#wb-new-document-name");
         infoDialogDescriptionNode = $("#wb-new-document-description");
         infoDialogCategoryNode = $("#wb-new-document-category");
-        infoDialogWidthNode = $("#wb-new-document-size-custom-width");
-        infoDialogHeightNode = $("#wb-new-document-size-custom-height");
+        infoDialogWidthNode = $("#wb-new-document-size-width");
+        infoDialogHeightNode = $("#wb-new-document-size-height");
         infoDialogSubmitNode = infoDialogNode.find("input[type='submit']");
     },
     
@@ -75,9 +75,14 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         
         infoDialogWidthNode.bind("keypress", this.validateInteger);
         infoDialogHeightNode.bind("keypress", this.validateInteger);
-        
-        $("#wb-edit-document-size-custom-width").bind("keypress", this.validateInteger);
-        $("#wb-edit-document-size-custom-height").bind("keypress", this.validateInteger);
+
+        $("a[href='#set-classic-size']").bind( 'over', function() { ddd('ici'); } );
+        $("a[href='#set-iphone-size']").bind('click', this.setSizeByName.pBind(this) );
+        // $("a[href='#set-ipad-size']").bind('click', function() { this.setSizeByName('ipad') } );
+
+
+        // $("#wb-edit-document-size-width").bind("keypress", this.validateInteger);
+        // $("#wb-edit-document-size-height").bind("keypress", this.validateInteger);
         
         this.filter = new WebDoc.DocumentDateFilter();
         
@@ -109,10 +114,10 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         infoDialogHeaderNode.html("Create new webdoc");
         infoDialogTitleNode.val("Untitled webdoc");
         infoDialogDescriptionNode.val("");
+        infoDialogWidthNode.val("800");
+        infoDialogHeightNode.val("600");
         infoDialogSubmitNode.val("Create");
-        
-        infoDialogNode.find("#wb-new-document-size-classic")[0].checked = true;
-        
+
         infoDialogNode.pop({
             attachTo: $( e.currentTarget ),
             initCallback: function(){
@@ -123,14 +128,14 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
                     if (!that._creatingDoc) {
                       node.addClass('loading');
                       
-                      var newDoc = new WebDoc.Document(),
-                          documentSizeChoice = $("input[name='wb-new-document-size']:checked", this).val();
+                      var newDoc = new WebDoc.Document(); //,
+                          // documentSizeChoice = $("input[name='wb-new-document-size']:checked", this).val();
                       
                       newDoc.setTitle( infoDialogTitleNode.val(), true );
                       newDoc.setDescription( infoDialogDescriptionNode.val(), true);
                       newDoc.setCategory( infoDialogCategoryNode.val(), true);
                       
-                      newDoc.setSize( that.getSizeFromChoice( documentSizeChoice, infoDialogWidthNode.val(), infoDialogHeightNode.val() ), true);
+                      newDoc.setSize( { width: infoDialogWidthNode.val(), height: infoDialogHeightNode.val() }, true);
                       that._creatingDoc = true;
                       newDoc.save(function(newObject, status) {
                         if (status == "OK") 
@@ -387,6 +392,22 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         default:
           return { width: "800", height: "600"};
       }
+    },
+
+    setSizeByName: function(e) {
+      var name = 'test';
+      ddd('set size to '+name);
+      var size = undefined;
+      switch(name){
+        case "iphone":
+          size = { width: "620", height: "480"};
+        case "ipad":
+          size = { width: "1024", height: "768"};
+        case "classic":
+        default:
+          size = { width: "800", height: "600"};
+      }
+      e.preventDefault();
     },
     
     currentUserDocumentsEditor: function() {
