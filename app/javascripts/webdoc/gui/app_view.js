@@ -24,7 +24,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
       padding: "15px"
     });
     
-    // this.inspectors
+    this.inspectorPaneViews = [];
   },
   
   createDomNode: function($super) {
@@ -40,23 +40,23 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   },
   
   initApp: function() {
-    if (WebDoc.appsContainer) {
-      if (this.item.getAppUrl()) {
-        if (this.app) {
-          WebDoc.appsContainer.removeApp(this.app);
-          this.app = null;
-        }
-        
-        this._getSecureToken(function(token) {
-          this.app = WebDoc.appsContainer.createApp({
-            specUrl:     this.item.getAppUrl(),
-            appDomId:    this.appDomId(),
-            secureToken: token,
-            serverBase:  WebDoc.shindig.serverBase
-          });
-        }.pBind(this));
+    
+    if (this.item.getAppUrl()) {
+      if (this.app) {
+        WebDoc.appsContainer.removeApp(this.app);
+        this.app = null;
       }
+      
+      this._getSecureToken(function(token) {
+        this.app = WebDoc.appsContainer.createApp({
+          specUrl:     this.item.getAppUrl(),
+          appDomId:    this.appDomId(),
+          secureToken: token,
+          serverBase:  WebDoc.shindig.serverBase
+        });
+      }.pBind(this));
     }
+
   },
   
   _makeSetGadgetUrlEventHandler: function() {
@@ -95,10 +95,17 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
     this.initApp();
   },
   
+  remove: function($super) {
+    $super();
+    if (this.app) {
+      WebDoc.appsContainer.removeApp(this.app); //this we'll also remove the app's inspector panes
+    }
+  },
+  
   destroy: function($super) {
     $super();
-    if (window.gadgets) {
-      WebDoc.appsContainer.removeApp(this.app);
+    if (this.app) {
+      WebDoc.appsContainer.removeApp(this.app); //this we'll also remove the app's inspector panes
     }
   },
   

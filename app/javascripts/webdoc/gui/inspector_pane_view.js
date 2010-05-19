@@ -2,13 +2,18 @@
 //= require <mtools/record>
 
 WebDoc.InspectorPaneView = $.klass({
-  initialize: function(title, content) {
+  initialize: function(title, content, appPane) {
     // inspector pane wrapper
     this.domNode = $("<div>").addClass("inspector_pane_wrap app_inspector floating attached");
+    this.appPane = appPane; // can be null/undefined if this is an inspector pane not related to an app
     
     this.build(title, content);
     
     WebDoc.application.boardController.boardContainerNode.after(this.domNode);
+  },
+  
+  isAppPane: function() {
+    return !!this.appPane;
   },
   
   build: function(title, content) {
@@ -34,5 +39,10 @@ WebDoc.InspectorPaneView = $.klass({
       });
       
     }.pBind(this), 1000)
+  },
+  
+  remove: function() {
+    this.domNode.remove();
   }
+  
 });
