@@ -129,7 +129,7 @@
         }
       }
     },
-    
+
     _updatePageRelatedFields: function() {
       this._initializingGui = true; 
       jQuery("#page_title").val( this._page.data.title == "undefined" ? "enter a title" : this._page.data.title );
@@ -168,12 +168,18 @@
         if (this._currentDropDownTheme !== pageTheme) {
           this._currentDropDownTheme = pageTheme;
           this._layoutDropDownNode.empty();
+          this._layoutDropDownNode.append(jQuery('<option/>').id("layout-dd-none").val('none').text('No layout').data("layout", null));
           for (var i = 0; pageTheme && i < pageTheme.layouts.length; i++) {
             var aLayout = pageTheme.layouts[i];
             this._layoutDropDownNode.append(jQuery('<option/>').id("layout-dd-"+ aLayout.getKind()).val(aLayout.getKind()).text(aLayout.getTitle()).data("layout", aLayout));            
           }
         }
-        this._layoutDropDownNode.find('#layout-dd-' + this._page.getLayoutkind()).attr("selected", "true");
+        if (this._page.getLayoutkind()) {
+          this._layoutDropDownNode.find('#layout-dd-' + this._page.getLayoutkind()).attr("selected", "true");
+        }
+        else {
+          this._layoutDropDownNode.find('#layout-dd-none').attr("selected", "true");
+        }
       }.pBind(this));               
     },
     

@@ -158,6 +158,11 @@ WebDoc.CollaborationManager = $.klass(
             modifiedPage.createOrUpdateItem(messageObject);
           }
         }
+        if (messageObject.document) {
+          WebDoc.application.pageEditor.currentDocument.refresh({
+            document: messageObject.document
+          });
+        }
       }
     }
   });

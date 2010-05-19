@@ -6,6 +6,9 @@ class Document < ActiveRecord::Base
   
   serialize :size
   
+  # see XmppDocumentObserver  
+  attr_accessor_with_default :must_notify, false
+  
   # ================
   # = Associations =
   # ================

@@ -38,7 +38,10 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
     
   getLayoutkind: function() {
-    return this.data.layout_kind;  
+    if (this.data.layout_kind && this.data.layout_kind !== 'null') {
+      return this.data.layout_kind;
+    }
+    return null;
   },
   
   getLayout: function(callBack) {
@@ -458,6 +461,10 @@ WebDoc.Page = $.klass(WebDoc.Record,
           }
         }
       }
+    }
+    else {
+      this.data.layout_kind = null;
+      this._layout = undefined;      
     }
     // remove unecessary items
     for (itemKind in previousItemsMap) {
