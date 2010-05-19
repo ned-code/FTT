@@ -183,6 +183,14 @@ WebDoc.Item = $.klass(WebDoc.Record,
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
   
+  changeThemeBgClass: function( currentClass ) {
+    this.previousThemeBgClass = this._currentThemeBgClass;
+    this.currentThemeBgClass = currentClass;
+    
+    this.save();
+    this.fireObjectChanged({ modifedAttribute: 'class' });
+  },
+  
   changeCss: function( cssObj ) {
     var that = this,
         previousCss = this.data.data.css,
@@ -202,7 +210,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
     
     this.save();
-    this.fireObjectChanged();
+    this.fireObjectChanged({ modifedAttribute: 'css' });
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
 

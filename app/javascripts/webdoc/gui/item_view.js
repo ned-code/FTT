@@ -163,7 +163,18 @@ WebDoc.ItemView = $.klass({
     borderRadius: true,
     boxShadow: true
   },
-
+  
+  _changeThemeBgClass: function(){
+    var item = this.item,
+        itemDomNode = this.itemDomNode,
+        previousClass = item.previousThemeBgClass,
+        currentClass = item.currentThemeBgClass;
+    
+    itemDomNode
+    .removeClass( previousClass )
+    .addClass( currentClass );
+  },
+  
   createDomNode: function() {
     var itemNode;
     if (WebDoc.application.disableHtml) {
@@ -207,6 +218,9 @@ WebDoc.ItemView = $.klass({
     }
     if (item._isAttributeModified(options, 'class')) {
       this._initItemClass();
+    }
+    if (item._isAttributeModified(options, 'themeclass')) {
+      this._changeThemeBgClass();
     }
   },
 

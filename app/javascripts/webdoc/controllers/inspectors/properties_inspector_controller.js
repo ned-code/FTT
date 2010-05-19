@@ -7,8 +7,12 @@ WebDoc.PropertiesInspectorController = $.klass({
     var domNode = this.domNode = $(selector);
     
     jQuery('#item_inspector')
-    .delegate('input', 'change', jQuery.proxy( this, 'changeProperty' ))
-    .delegate("#property-fit-to-screen", 'click', this.updatePropertiesWithFitToScreen.pBind(this));
+    .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
+    .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
+    .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ));
+    
+    WebDoc.application.boardController.themeNode
+    .bind( 'load', jQuery.proxy( this, 'makeThemeBackgrounds' ));
     
     this.fields = {
       top:              jQuery("#property_top"),
@@ -27,6 +31,56 @@ WebDoc.PropertiesInspectorController = $.klass({
       overflow:         jQuery("#property_overflow_hidden, #property_overflow_auto, #property_overflow_visible"),
       opacity:          jQuery("#property_opacity, #property_opacity_readout")
     };
+    
+    //this._themeColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"});
+    this._themeBgColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"}).css('clear', 'both');
+    this._themeBgState = false;
+  },
+  
+  makeThemeBackgrounds: function() {
+    ddd('[PageInspectorController] makeThemeBackgrounds');
+    
+    var themeColors = new WebDoc.ClassList( 'theme_background_', 'backgroundImage backgroundColor' ),
+        previousThemeClass = WebDoc.application.boardController.previousThemeClass,
+        currentThemeClass = WebDoc.application.boardController.currentThemeClass,
+        html = '',
+        state = this._themeBgState,
+        className;
+    
+    for ( className in themeColors.getClasses() ) {
+      html += '<li><a href="#theme_class" data-theme-class="'+className+'" class="'+className+'" title="Theme background"></a></li>';
+    }
+    
+    if (previousThemeClass) {
+      this._themeBgColorsNode.removeClass( previousThemeClass );
+    }
+    
+    this._themeBgColorsNode.addClass( currentThemeClass );
+    
+    if ( html === '' ) {
+      if (state) {
+        this._themeBgColorsNode.remove();
+        this._themeBgState = false;
+      }
+    }
+    else {
+      this._themeBgColorsNode.html( html );
+      if (!state) {
+        this._themeBgColorsNode.prependTo( this.domNode );
+        this._themeBgState = true;
+      }
+    }
+  },
+  
+  changeClass: function(e){
+    var self = this,
+        link = jQuery( e.target ),
+        className = link.attr('data-theme-class'),
+        item = WebDoc.application.boardController.selection()[0].item;
+    
+    e.preventDefault();
+    
+    item.changeThemeBgClass( className );
   },
   
   refresh: function() {
