@@ -40,9 +40,23 @@ protected
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
 
-  def set_return_to
-    session[:return_to] = request.request_uri if request.get?
+  def set_return_to(scope=nil)
+    if scope == nil
+      session[:return_to] = request.request_uri if request && request.get?
+    else
+      session[:"return_to_#{scope}"] = request.request_uri if request && request.get?
+    end
   end
 
+  def get_return_to(scope=nil)
+    path = nil
+    if scope == nil
+      path = session[:return_to] || root_path
+    else
+      path = session[:"return_to_#{scope}"] || root_path
+      session[:"return_to_#{scope}"] = nil
+    end
+    path
+  end
 
 end
