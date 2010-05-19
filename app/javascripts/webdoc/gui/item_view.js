@@ -164,16 +164,6 @@ WebDoc.ItemView = $.klass({
     boxShadow: true
   },
   
-  _changeThemeBgClass: function(){
-    var item = this.item,
-        itemDomNode = this.itemDomNode,
-        previousClass = item.previousThemeBgClass,
-        currentClass = item.currentThemeBgClass;
-    
-    itemDomNode
-    .removeClass( previousClass )
-    .addClass( currentClass );
-  },
   
   createDomNode: function() {
     var itemNode;
@@ -218,9 +208,6 @@ WebDoc.ItemView = $.klass({
     }
     if (item._isAttributeModified(options, 'class')) {
       this._initItemClass();
-    }
-    if (item._isAttributeModified(options, 'themeclass')) {
-      this._changeThemeBgClass();
     }
   },
 
