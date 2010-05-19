@@ -193,7 +193,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     });
     
     for ( property in cssObj ) {
-      if ( jQuery.trim( cssObj[property] ) === '' ) {
+      if ( cssObj[property] === '' ) {
         delete this.data.data.css[property];
       }
       else {

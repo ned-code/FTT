@@ -54,20 +54,25 @@
         <input id="property_padding" type="text" data-type="cssvalue" data-property="padding" value="" />
       </div>
       <div>
-        <label for="property_radius">border radius</label>
-        <input id="property_radius" type="text" data-type="cssvalue" data-property="borderRadius" value="" />
+        <label for="property_border_radius">border radius</label>
+        <input id="property_border_radius" type="text" data-type="cssvalue" data-property="borderRadius" value="" />
       </div>
       <div>
-        <label for="property_scroll">Show Scroll</label>
-        <input id="property_scroll" type="checkbox" value="checked" />
+        <label for="property_overflow">Overflow</label>
+        <input name="property_overflow" id="property_overflow_hidden" type="radio" data-property="overflow" value="hidden" />
+        <span class="label" for="property_overflow_hidden">hide</span>
+        <input name="property_overflow" id="property_overflow_visible" type="radio" data-property="overflow" value="visible" />
+        <span class="label" for="property_overflow_hidden">show</span>
+        <input name="property_overflow" id="property_overflow_auto" type="radio" data-property="overflow" value="auto" />
+        <span class="label" for="property_overflow_hidden">scroll</span>
       </div>
       <div>
         <label for="property_opacity">Opacity</label>
-        <input id="property_opacity" type="range" min="0.00" max="1.00" step="0.01" value="1.00" />
-        <span class="input-range-readout" id="property_opacity_readout">ui</span>
+        <input id="property_opacity" type="range" min="0.00" max="1.00" step="0.01" data-property="opacity" value="1.00" />
+        <span class="readout" id="property_opacity_readout">ui</span>
       </div>
       <div>
-        <input id="property-fit-to-screen" type="button" value="Fit to screen" />
+        <input id="property-fit-to-screen" type="button" value="Fit to webdoc" />
       </div>
     </form>
   </div> 

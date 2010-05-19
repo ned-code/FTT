@@ -72,26 +72,45 @@ WebDoc.ItemView = $.klass({
   },
 
   _initItemCss: function( withAnimate ) {
-    // css must be applied to item node. Only position and size must be set to dom node wrapper
     var domNode = this.domNode,
-        position = {
-          top: this.item.data.data.css.top || "",
-          left: this.item.data.data.css.left || "",
-          //bottom: this.item.data.data.css.bottom || "",
-          //right: this.item.data.data.css.right || "",
-          width: this.item.data.data.css.width || "",
-          height: this.item.data.data.css.height || "",
-          
-          transform: this.item.data.data.css.transform || "none",
-          WebkitTransform: this.item.data.data.css.transform || "none",
-          MozTransform: this.item.data.data.css.transform || "none"
-        },
-        timer;
+        itemDomNode = this.itemDomNode,
+        css = this.item.data.data.css,
+        wrapCss = {},
+        itemCss = {},
+        wrapCssKeys = this._wrapCssKeys,
+        browserCssKeys = this._browserCssKeys,
+        key, timer;
+    
+    // Split css object into css to be applied to item_wrap
+    // and css to be applied to item
+    for ( key in css ) {
+      if ( wrapCssKeys[key] ) {
+        wrapCss[key] = css[key];
+      }
+      else {
+        itemCss[key] = css[key];
+      }
+    }
+    
+    // Loop through the results and apply browser specific
+    // extensions where needed
+    for ( key in wrapCss ) {
+      if ( browserCssKeys[key] ) {
+        wrapCss['-webkit-'+key] = wrapCss['-moz-'+key] = wrapCss[key];
+      }
+    }
+    
+    for ( key in itemCss ) {
+      if ( browserCssKeys[key] ) {
+        itemCss['-webkit-'+key] = itemCss['-moz-'+key] = itemCss[key];
+      }
+    }
+    
+    // TODO: feature detect css transition, and use javascript animation if not present
     
     //var canAnimate = position.top && position.left && position.width && position.height;
     //this.domNode.stop();
     
-    // TODO: animate with CSS, not JS
     //if (withAnimate && canAnimate) {
     //  this.domNode.animate(position, 'fast', function() {
     //    if (this.domNode.hasClass("item-edited")) {
@@ -103,6 +122,7 @@ WebDoc.ItemView = $.klass({
     //  this.domNode.css( position );
     //}
     
+    // Animate using css transitions given by the animate class
     if ( withAnimate ) {
       domNode.addClass('animate');
       timer = setTimeout(function(){
@@ -111,36 +131,39 @@ WebDoc.ItemView = $.klass({
       }, 500);
     }
     
-    this.domNode.css( position );
+    domNode
+    .attr( 'style', '' )
+    .css( wrapCss );
     
-    if (this.itemDomNode) {
-      var itemCss = {};
-      $.extend(itemCss, this.item.data.data.css);
-      delete itemCss.top;
-      delete itemCss.left;
-      //delete itemCss.bottom;
-      //delete itemCss.right;
-      delete itemCss.width;
-      delete itemCss.height;
-      delete itemCss.transform;
-      // These should not end up as properties of the
-      // css object, but just in case...
-      delete itemCss.WebkitTransform;
-      delete itemCss.MozTransform;
+    if (itemDomNode) {
       
-      if (itemCss.borderRadius) {
-        itemCss.MozBorderRadius = itemCss.borderRadius;
-        itemCss.WebKitBorderRadius = itemCss.borderRadius;
-      }
-      
-      if (itemCss.overflow && this.domNode.hasClass("item-edited")) {
+      if ( itemCss.overflow && this.domNode.hasClass("item-edited") ) {
         delete itemCss.overflow;
       }
       
-      this.itemDomNode.css(itemCss);
+      itemDomNode
+      .attr( 'style', '' )
+      .css( itemCss );
     }
   },
   
+  _wrapCssKeys: {
+    top: true,
+    left: true,
+    bottom: true,
+    right: true,
+    width: true,
+    height: true,
+    transform: true
+  },
+
+  _browserCssKeys: {
+    transform: true,
+    transition: true,
+    borderRadius: true,
+    boxShadow: true
+  },
+
   createDomNode: function() {
     var itemNode;
     if (WebDoc.application.disableHtml) {
@@ -280,7 +303,11 @@ WebDoc.ItemView = $.klass({
     result.heightInherted = (result.height === undefined);    
     result.width = result.width || this.domNode.width() + 'px';
     result.height = result.height || this.domNode.height() + 'px';
-    return result;    
+    return result;
+  },
+  
+  css: function(){
+    return this.item.data.data.css;
   },
   
   _initDragAndResize: function() {
