@@ -10,19 +10,9 @@ WebDoc.AppsMessagingController = $.klass({
          //uncomment the line below to see the other messages the opensocial gadget is sending me (t'hallucines...)
         // ddd("POSTMESSAGE RECEIVED ON WEBDOC: "+event.data)
         
-        // var appId = event.data.match(/^app-id:(\w+)$/);
         var registerInspectorPanes = event.data.match(/^app:(.*):register-inspector-panes:(.*)$/);
         var appCall = event.data.match(/^app:(.*):pane-to-app-call:(.*):(.*)$/);
-        
-        // ==========
-        // = App ID =
-        // ==========
-        // if (appId) {
-        //   // appsAndPanes.push(event.source)
-        //   var id = appId[1];
-        //   ddd("MESSAGING:WebDoc: Got back message from app:"+id);
-        // }
-        
+            
         // ============================
         // = Register Inspector Panes =
         // ============================

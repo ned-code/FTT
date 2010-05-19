@@ -13,7 +13,7 @@ WebDoc.initMessage = function(initData, messageEvent) {
   WebDoc.appId = initData[1];
   WebDoc.webdocWindow = messageEvent.source;
   ddd("MESSAGING:App-"+WebDoc.appId+": Got the init message from WebDoc + its reference")
-  
+  if (WebDoc.appInit) WebDoc.appInit();
   // call WebDoc back with this app reference (not necessary?)
   // WebDoc.webdocWindow.postMessage("app-id:"+WebDoc.appId,"*");
 }

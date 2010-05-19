@@ -174,7 +174,7 @@ WebDoc.ItemView = $.klass({
       this._initDragAndResize();      
       if (lastSelectedObjectMouseDownEvent) {
         this.domNode.trigger(lastSelectedObjectMouseDownEvent);
-      }      
+      }
       
     }
   },

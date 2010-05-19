@@ -161,55 +161,14 @@ WebDoc.App = $.klass(WebDoc.OpenSocialApp, {
         appDomId:        this.appDomId,
         secureToken:     this.secureToken,
         id:              this.id,
-        serverBase:      this.serverBase
+        serverBase:      this.serverBase,
+        appView:         this.appView
       });
       this.inspectorPanes.push(appPane);
       
     }.pBind(this));
-
-    //OLD method that is not working when shindig is not on the same domain:
-    //
-    // var requestData = {
-    //   context: {},
-    //   gadgets: [{
-    //     url: this.specUrl,
-    //     moduleId: this.id
-    //   }]
-    // };
-    // 
-    // $.ajax({
-    //   url: '/gadgets/metadata?st=' + this.secureToken,
-    //   type: 'POST',
-    //   dataType: 'json',
-    //   data: gadgets.json.stringify(requestData),
-    //   success: function(data, textStatus) {
-    //     $.each(data.gadgets[0].views, function(inspectorViewName, infos) {
-    //       if(inspectorViewName.match(/^inspector-/)) {
-    //         ddd("Creating " + inspectorViewName + " inspector...");
-    //         this.inspectors.push(new WebDoc.AppPane({
-    //           specUrl:         this.specUrl,
-    //           view:            inspectorViewName,
-    //           appWrapperDomId: "app_wrapper_"+this.getIframeId(),
-    //           appDomId:        this.appDomId,
-    //           secureToken:     this.secureToken,
-    //           id:              this.id,
-    //           serverBase:      this.serverBase
-    //         }));
-    //       }
-    //     }.pBind(this));
-    //   }.pBind(this),
-    //   error: function(XMLHttpRequest, textStatus, errorThrown) {
-    //     ddd("error", textStatus);
-    //   }
-    // });
-  },
-  
-  destroy: function() {
-    //destroy this app's inspector panes
-    $.each(this.inspectorPanes, function(index, pane) {
-      pane.destroy();
-    });
   }
+
 });
 
 WebDoc.AppPane = $.klass(WebDoc.OpenSocialApp, {
@@ -224,9 +183,12 @@ WebDoc.AppPane = $.klass(WebDoc.OpenSocialApp, {
   render: function() {
     var content = this.getContent();
     var title = this.view.charAt(0).toUpperCase() + this.view.substring(1);
-    this.inspectorPaneView = new WebDoc.InspectorPaneView(title, content, this);
     
-    //Note that "this.id" is the main app id while this.getIframeId() the appPANE iframe id...
+    // Instantiate the inspector pane view object (it'll handle the pane gernic UI and and behavior)
+    this.inspectorPaneView = new WebDoc.InspectorPaneView(title, content, this);
+    this.appView.inspectorPaneViews.push(this.inspectorPaneView);
+    
+    // Note that "this.id" is the main app id while this.getIframeId() the appPANE iframe id...
     WebDoc.appsMessagingController.sendInitMessage(this.id, this.getIframeId()); 
     
     // var inspectorDiv = null;
@@ -268,11 +230,8 @@ WebDoc.AppPane = $.klass(WebDoc.OpenSocialApp, {
   
   getIframeId: function($super) {
     return $super() + "_" + this.view;
-  },
-  
-  destroy: function() {
-    this.inspectorPaneView.remove();
   }
+
 });
 
 // Container that renders an app
@@ -336,7 +295,6 @@ WebDoc.AppsContainer = $.klass({
   },
   
   removeApp: function(app) {
-    app.destroy();
     delete this.apps_[this.getAppKey_(app.id)];
   },
   

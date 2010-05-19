@@ -3,13 +3,19 @@
 
 WebDoc.InspectorPaneView = $.klass({
   initialize: function(title, content, appPane) {
-    // inspector pane wrapper
-    this.domNode = $("<div>").addClass("inspector_pane_wrap app_inspector floating attached");
     this.appPane = appPane; // can be null/undefined if this is an inspector pane not related to an app
     
+    // inspector pane wrapper
+    this.domNode = $("<div>").addClass("inspector_pane_wrap app_inspector floating");
+    this.hide();
     this.build(title, content);
-    
     WebDoc.application.boardController.boardContainerNode.after(this.domNode);
+
+    var position = {
+      top: "100px",
+      left: "100px"
+    };
+    this.domNode.css(position);
   },
   
   isAppPane: function() {
@@ -39,6 +45,14 @@ WebDoc.InspectorPaneView = $.klass({
       });
       
     }.pBind(this), 1000)
+  },
+
+  show: function() {
+    this.domNode.show();
+  },
+
+  hide: function() {
+    this.domNode.hide();
   },
   
   remove: function() {

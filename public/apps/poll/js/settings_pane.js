@@ -10,7 +10,7 @@ gadgets.util.registerOnLoadHandler(function() {
 PollSettings = $.klass({
   initialize: function() {
     $('#setting_allow_multiple_selection').bind('change', function() {
-      WebDoc.appCall("allowMultipleSelection", this.checked)
+      WebDoc.appCall("allowMultipleSelection", this.checked);
     });
   }
 });

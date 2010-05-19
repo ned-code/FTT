@@ -6,7 +6,7 @@
 .app_inspector.floating {
   padding:10px 10px 15px;
   width:200px;
-  position:relative;
+  position:absolute;
 }
 
 .app_inspector.floating .box {

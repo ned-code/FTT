@@ -1,14 +1,16 @@
 //Note: use registerOnLoadHandler instead of $(document).ready(function() {}); ($(document).ready may be called too early?)
 gadgets.util.registerOnLoadHandler(function() {
   
-  WebDoc.registerInspectorPanes("settings");
-  //for multiple panes use: WebDoc.registerInspectorPanes(["inspector-settings", ...])
-  
   var poll = new Poll();
   
   gadgets.window.adjustHeight();
   
 });
+
+WebDoc.appInit = function() {
+  WebDoc.registerInspectorPanes("settings");
+  //for multiple panes use: WebDoc.registerInspectorPanes(["inspector-settings", ...])
+}
 
 Poll = $.klass({
   initialize: function() {
@@ -25,23 +27,23 @@ Poll = $.klass({
     
     this.build();
     
-    $('h2.question.title.editable').editable('#', {
-        type      : 'autogrow',
-        cancel    : '<button class="cancel"><span>Cancel</span></button>',
-        submit    : '<button class="ok"><span>OK</span></button>',
-        indicator : 'Saving...',
-        tooltip   : 'Click to edit...',
-        onblur    : 'ignore',
-        onreset   : function() {
-          removeEditingClass($(this));
-        },
-        onsubmit  : function() {
-          removeEditingClass($(this));
-        },
-        autogrow  : { lineHeight : 30 }
-    });
+    // $('h2.question.title.editable').editable('#', {
+    //     type      : 'autogrow',
+    //     cancel    : '<button class="cancel"><span>Cancel</span></button>',
+    //     submit    : '<button class="ok"><span>OK</span></button>',
+    //     indicator : 'Saving...',
+    //     tooltip   : 'Click to edit...',
+    //     onblur    : 'ignore',
+    //     onreset   : function() {
+    //       removeEditingClass($(this));
+    //     },
+    //     onsubmit  : function() {
+    //       removeEditingClass($(this));
+    //     },
+    //     autogrow  : { lineHeight : 30 }
+    // });
     
-    setInterval(this.heightResize, 100);
+    // setInterval(this.heightResize, 100);
     
     // Register app calls
     WebDoc.registerAppCall("allowMultipleSelection", this.setMultipleSelections, this);
@@ -92,35 +94,11 @@ Poll = $.klass({
   },
   
   heightResize: function() {
+    ddd("test")
     $('.poll').parents('iframe').removeAttr('height').css({ height: $('.poll').height()+20 });
   },
   
-  newMessage: function(receiver, action) {
-    $('#messages').append($('<li>').html("<li>[to " + receiver + "] : " + action + "</li>"));
-    
-    if(receiver != null) receiver = $('#'+receiver, this.parentWin.document)[0].contentWindow;
-    else receiver = this.parentWin;
-    
-    if(receiver != null) receiver.postMessage(mainId + "," + action, '*');
-    else gadgets.log("receiver is null!");
-  },
-  
-  onmessage: function(e) {
-    var dataArray_ = e.data.split(',');
-    var origin = e.origin;
-    var fromId = dataArray_[0];
-    var message = dataArray_[1];
-    if(origin == document.location.protocol + "//" + document.location.host) {
-      gadgets.log("in main from same domain, module: " + fromId + ", message: " + message);
-      
-      document.getElementById('messages').innerHTML += "<li>[from " +fromId+ "] " + message + "</li>";
-      gadgets.log(e.source);
-      e.source.postMessage('with e.source','*');
-    }
-    else {
-      gadgets.log("from somewhere else: " + origin);
-    }
-  }
+
 });
 
 // var mainId = window.name;

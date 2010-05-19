@@ -42,17 +42,15 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   initApp: function() {
     
     if (this.item.getAppUrl()) {
-      if (this.app) {
-        WebDoc.appsContainer.removeApp(this.app);
-        this.app = null;
-      }
+      this.removeAppAndPanes();
       
       this._getSecureToken(function(token) {
         this.app = WebDoc.appsContainer.createApp({
           specUrl:     this.item.getAppUrl(),
           appDomId:    this.appDomId(),
           secureToken: token,
-          serverBase:  WebDoc.shindig.serverBase
+          serverBase:  WebDoc.shindig.serverBase,
+          appView:     this
         });
       }.pBind(this));
     }
@@ -82,6 +80,41 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
     }
   },
   
+  removeAppAndPanes: function() {
+    if (this.app) {
+      WebDoc.appsContainer.removeApp(this.app); 
+      
+      // Remove the app's inspector panes
+      $.each(this.inspectorPaneViews, function(index, paneView) {
+        paneView.remove();
+      });
+      
+      this.app = null;
+    }
+  },
+  
+  showInspectorPanes: function() {
+    $.each(this.inspectorPaneViews, function(index, paneView) {
+      paneView.show();
+    });
+  },
+
+  hideInspectorPanes: function() {
+    $.each(this.inspectorPaneViews, function(index, paneView) {
+      paneView.hide();
+    });
+  },
+  
+  select: function($super) {
+    $super();
+    this.showInspectorPanes();
+  },
+  
+  unSelect: function($super) {
+    $super();
+    this.hideInspectorPanes();
+  },
+  
   canEdit: function() {
     return true;
   },
@@ -97,16 +130,12 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   
   remove: function($super) {
     $super();
-    if (this.app) {
-      WebDoc.appsContainer.removeApp(this.app); //this we'll also remove the app's inspector panes
-    }
+    this.removeAppAndPanes();
   },
   
   destroy: function($super) {
     $super();
-    if (this.app) {
-      WebDoc.appsContainer.removeApp(this.app); //this we'll also remove the app's inspector panes
-    }
+    this.removeAppAndPanes();
   },
   
   appDomId: function() {
