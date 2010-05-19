@@ -1,46 +1,59 @@
 /**
- * @author julien
+ * @author julien / stephen
  */
 
 WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector ) {
     var domNode = this.domNode = $(selector);
     
-    jQuery('#item_inspector').delegate('input', 'change', jQuery.proxy( this, 'changeProperty' ));
+    jQuery('#item_inspector')
+    .delegate('input', 'change', jQuery.proxy( this, 'changeProperty' ))
+    .delegate("#property-fit-to-screen", 'click', this.updatePropertiesWithFitToScreen.pBind(this));
     
-//    jQuery('#item_inspector').delegate("#property_scroll", 'change', this.updateSroll.pBind(this));
-//    jQuery('#item_inspector').delegate("#property_opacity", 'change', this.updateProperties.pBind(this));    
-//    jQuery('#item_inspector').delegate("#property-fit-to-screen", 'click', this.updatePropertiesWithFitToScreen.pBind(this));
-//    
-    this.topNode = jQuery("#property_top");
-    this.leftNode = jQuery("#property_left");
-    this.widthNode = jQuery("#property_width");
-    this.heightNode = jQuery("#property_height");
-    this.scrollNode = jQuery("#property_scroll");
-    this.opacityNode = jQuery("#property_opacity");
-    this.opacityReadoutNode = jQuery("#property_opacity_readout");
-  
+    this.fields = {
+      top:              jQuery("#property_top"),
+      //right:            jQuery("#property_right"),
+      //bottom:           jQuery("#property_bottom"),
+      left:             jQuery("#property_left"),
+      width:            jQuery("#property_width"),
+      height:           jQuery("#property_height"),
+      rotation:         jQuery("#property_rotation"),
+      
+      color:            jQuery("#property_color"),
+      backgroundColor:  jQuery("#property_background_color"),
+      padding:          jQuery("#property_padding"),
+      borderRadius:     jQuery("#property_border_radius"),
+      scroll:           jQuery("#property_scroll"),
+      overflow:         jQuery("#property_overflow_hidden, #property_overflow_auto, #property_overflow_visible"),
+      opacity:          jQuery("#property_opacity, #property_opacity_readout")
+    };
   },
   
   refresh: function() {
     var selectedItem = WebDoc.application.boardController.selection()[0];
     
     if ( selectedItem ) {
-      var position = selectedItem.position();
-      var size = selectedItem.size();
-      this.topNode.data("inherited", position.topInherted);
-      this.topNode.val(position.top);
-      this.leftNode.data("inherited", position.leftInherted);
-      this.leftNode.val(position.left);  
-      this.widthNode.data("inherited", size.widthInherted);
-      this.widthNode.val(size.width);  
-      this.heightNode.data("inherited", size.heightInherted);
-      this.heightNode.val(size.height);  
+      var css = selectedItem.css(),
+          fields = this.fields,
+          key, field, value;
       
-      this.opacityNode.val( selectedItem.item.data.data.css.opacity || "1" );
-      // drawing item has no itemDomNode
-      if (selectedItem.itemDomNode) {
-        this.scrollNode.attr("checked", selectedItem.itemDomNode.css("overflow") === "auto");
+      for ( key in fields ) {
+        field = fields[key];
+        
+        // If this field has a property translator then it
+        // processes the CSS and is responsible for updating the field...
+        if ( this.properties[key] && this.properties[key].output ) {
+          this.properties[key].output( field, css );
+        }
+        // Otherwise we display the css value directly...
+        else if ( css[key] ) {
+          field.val( css[key] );
+        }
+        // when the css value is inherited put it in the placeholder
+        else {
+          value = selectedItem.itemDomNode.css( key );
+          field.attr( "placeholder", value );
+        }
       }
     }
   },
@@ -68,11 +81,15 @@ WebDoc.PropertiesInspectorController = $.klass({
             property = field.attr('data-property'),
             cssObj;
         
+        if ( typeof property === 'undefined' ) { return; }
         // TODO: convert property to camelCase if it isn't already
         
-        if ( self.properties[property] ) {
-          cssObj = self.properties[property]( value );
+        // If this field has a property translator then it
+        // processes the value and gives us some CSS...
+        if ( self.properties[property] && self.properties[property].input ) {
+          cssObj = self.properties[property].input( value );
         }
+        // Otherwise we use the value directly
         else {
           cssObj = {};
           cssObj[property] = value;
@@ -83,7 +100,7 @@ WebDoc.PropertiesInspectorController = $.klass({
       fail: function( value, error ){
         var type = field.attr('data-type') || field.attr('type');
         
-        // If we can autocomplete, override the failure
+        // If we can autocomplete the value, override the validation failure
         if ( self.autocompleters[type] ) {
           return self.autocompleters[type]( field, value );
         }
@@ -93,19 +110,57 @@ WebDoc.PropertiesInspectorController = $.klass({
     });
   },
   
+  // Property translators convert field input strings to
+  // css (the 'input' methods) and css to field displays
+  // (the 'output' methods)
   properties: {
-    rotation: function( value ){
-      return {
-        transform: 'rotate('+value+')'
-      };
+    overflow: {
+      output: function( field, css ){
+        field
+        .filter( "[value="+ css.overflow +"]" )
+        .attr('checked', 'checked');
+      }
     },
-    backgroundImage: function( value ){
-      return {
-        backgroundImage: 'url('+value+')'
-      };
+    opacity: {
+      output: function( field, css ){
+        var value = parseFloat(css.opacity).toFixed(2) || 1;
+        field.filter('input').val( value );
+        field.filter('.readout').html( value );
+      }
+    },
+    rotation: {
+      input: function( value ){
+        return {
+          transform: (value === '') ? value : 'rotate('+value+')'
+        };
+      },
+      output: function( field, css ){
+        var transform = css.transform,
+            value = /^rotate\((.+)\)/.exec( transform );
+        
+        if ( transform && value ) {
+          field.val( value[1] );
+        }
+        else {
+          field.attr( "placeholder", "none" );
+        }
+      }
+    },
+    backgroundImage: {
+      input: function( value ){
+        return {
+          backgroundImage: (value === '') ? value : 'url('+value+')'
+        };
+      },
+      output: function( field, css ){
+        field.val( /^url\((.+)\)/.exec( css.backgroundImage )[1] );
+      }
     }
   },
   
+  // Autocompleters try to correct fields that have
+  // failed validation, and if successful, they force
+  // a validation pass
   autocompleters: {
     cssvalue: function( field, value ){
       if ( jQuery.regex.integer.test( value ) ){
@@ -125,8 +180,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     var item = WebDoc.application.boardController.selection()[0].item,
         css = item.data.data.css;
     
-    item.changeCssProperty(  )
-    
+    item.changeCssProperty(  );
   },
   
   updateProperties: function(e) {

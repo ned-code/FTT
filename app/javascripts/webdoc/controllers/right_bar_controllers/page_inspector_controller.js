@@ -8,19 +8,19 @@
     PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
     SUPPORTED_IMAGE_EXTENSIONS: ["jpg","jpeg","png","gif"],
     
-    themeColorsNode: jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"}),
-    
     initialize: function() { 
       var form;
       
       this.domNode = jQuery('#page-inspector');    
       this._layoutDropDownNode = jQuery('#layout-dropdown');
+      this.themeColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"});
       this._page = null;
       this._backgroundProperties = jQuery("#background_properties");
       this._externalPageControls = jQuery('.externalPage-related');
       this._backgroundControls = jQuery('.background-related');
       this._backgroundImageControls = jQuery("input[name='page_background_image_tileX'], .page_background_image_align, input[name='page_background_image_tileY']");
       this._bgRepeatState = { x: true, y: true };
+      this._themeBgState = false;                   // true when in the DOM
       form = this.domNode.find('.content>form');
       
       form
@@ -95,13 +95,6 @@
       this._checkEnableBackgroundControls();
      },
     
-    
-    
-    
-    
-    
-    _themeBgState: false, // true when in the DOM
-    
     makeThemeBackgrounds: function(){
       ddd('[PageInspectorController] makeThemeBackgrounds');
       
@@ -136,11 +129,6 @@
         }
       }
     },
-    
-    
-    
-    
-    
     
     _updatePageRelatedFields: function() {
       this._initializingGui = true; 
@@ -191,7 +179,6 @@
     
     _checkEnableBackgroundControls: function() {
       try {
-  //      WebDoc.InspectorFieldsValidator.validateBackgroundUrl(jQuery("#page_background_image")[0].value);
         this._setBackgroundControlsMode(true);
       }
       catch(exc) {
