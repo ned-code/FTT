@@ -75,9 +75,10 @@ WebDoc.ItemView = $.klass({
     var domNode = this.domNode,
         itemDomNode = this.itemDomNode,
         css = this.item.data.data.css,
-        wrapCssKeys = this._wrapCssKeys,
         wrapCss = {},
         itemCss = {},
+        wrapCssKeys = this._wrapCssKeys,
+        browserCssKeys = this._browserCssKeys,
         key, timer;
     
     // Split css object into css to be applied to item_wrap
@@ -91,8 +92,18 @@ WebDoc.ItemView = $.klass({
       }
     }
     
-    if ( typeof wrapCss.transform !== 'undefined' ) {
-      wrapCss.WebkitTransform = wrapCss.MozTransform = wrapCss.transform;
+    // Loop through the results and apply browser specific
+    // extensions where needed
+    for ( key in wrapCss ) {
+      if ( browserCssKeys[key] ) {
+        wrapCss['-webkit-'+key] = wrapCss['-moz-'+key] = wrapCss[key];
+      }
+    }
+    
+    for ( key in itemCss ) {
+      if ( browserCssKeys[key] ) {
+        itemCss['-webkit-'+key] = itemCss['-moz-'+key] = itemCss[key];
+      }
     }
     
     // TODO: feature detect css transition, and use javascript animation if not present
@@ -126,10 +137,6 @@ WebDoc.ItemView = $.klass({
     
     if (itemDomNode) {
       
-      if ( typeof itemCss.borderRadius !== 'undefined' ) {
-        itemCss.MozBorderRadius = itemCss.WebKitBorderRadius = itemCss.borderRadius;
-      }
-      
       if ( itemCss.overflow && this.domNode.hasClass("item-edited") ) {
         delete itemCss.overflow;
       }
@@ -149,7 +156,14 @@ WebDoc.ItemView = $.klass({
     height: true,
     transform: true
   },
-  
+
+  _browserCssKeys: {
+    transform: true,
+    transition: true,
+    borderRadius: true,
+    boxShadow: true
+  },
+
   createDomNode: function() {
     var itemNode;
     if (WebDoc.application.disableHtml) {

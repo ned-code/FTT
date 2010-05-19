@@ -271,7 +271,7 @@ WebDoc.PropertiesInspectorController = $.klass({
   updatePropertiesWithFitToScreen: function(e) {
     var item = WebDoc.application.boardController.selection()[0].item;
     
-    item.changeCss({ top: 0, left: 0, width: '100%', height: '100%' });
+    item.changeCss({ top: 0, left: 0, width: '100%', height: '100%', transform: '' });
     
     e.preventDefault();
   }
