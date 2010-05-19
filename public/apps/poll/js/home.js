@@ -7,8 +7,8 @@ gadgets.util.registerOnLoadHandler(function() {
   var poll = new Poll();
   
   gadgets.window.adjustHeight();
+  
 });
-
 
 Poll = $.klass({
   initialize: function() {
@@ -42,6 +42,9 @@ Poll = $.klass({
     });
     
     setInterval(this.heightResize, 100);
+    
+    // Register app calls
+    WebDoc.registerAppCall("allowMultipleSelection", this.setMultipleSelections, this);
   },
   
   build: function() {
@@ -78,7 +81,10 @@ Poll = $.klass({
   },
   
   setMultipleSelections: function(multiple) {
-    var type = multiple ? 'checkbox' : 'radio';
+    // this.wrapper.toggle();
+    
+    var type = eval(multiple) ? 'checkbox' : 'radio';
+
     $.each(this.answers, function(index, answer){
       answer.find('input').remove();
       answer.prepend(this.buildInput(type, index));

@@ -117,7 +117,7 @@ var MTools = {};
 $.extend(MTools, {
   update: function(array, args) {
     var arrayLength = array.length, length = args.length;
-    while (length--) { array[arrayLength + length] = args[length];}
+    while (length--) { array[arrayLength + length] = args[length]; }
     return array;
   },
   merge: function(array, args) {

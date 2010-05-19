@@ -7,8 +7,8 @@ WebDoc.AppsMessagingController = $.klass({
     window.addEventListener('message', function(event) {
       
       if (event.data) {
-         //uncomment the line below to see the other messages the opensocial gadget is sending me....t'hallucines...
-        // ddd("RICEVUTO MESSAGGIO SU WEBDOC: "+event.data)
+         //uncomment the line below to see the other messages the opensocial gadget is sending me (t'hallucines...)
+        // ddd("POSTMESSAGE RECEIVED ON WEBDOC: "+event.data)
         
         // var appId = event.data.match(/^app-id:(\w+)$/);
         var registerInspectorPanes = event.data.match(/^app:(.*):register-inspector-panes:(.*)$/);
@@ -37,20 +37,25 @@ WebDoc.AppsMessagingController = $.klass({
         // = Pane to App call =
         // ====================
         if (appCall) {
+          // we now bounce the entire message (event.data) to the app
           var appId = appCall[1];
-          var functionName = appCall[2];
-          var functionParam = appCall[3];
-          var paneWindow = event.source;
+          this.sendCall(appId, event.data);
           
-          ddd("I'll need to call the function \""+functionName+"\" (of app "+appId+") with param "+functionParam)
-          //   var appWindow = f(inspectorSource)
+          // var functionName = appCall[2];
+          // var functionParam = appCall[3];
+          // var paneWindow = event.source;
+          // ddd("I'll need to call the function \""+functionName+"\" (of app "+appId+") with param "+functionParam)
         }
       }
-    }, false);
+    }.pBind(this), false);
   },
-  sendInitMessage: function(appId, appOrPaneFrameid) {
-    $("#"+appOrPaneFrameid).load(function(event) {
+  sendInitMessage: function(appId, appOrPaneFrameId) {
+    $("#"+appOrPaneFrameId).load(function(event) {
       event.target.contentWindow.postMessage("webdoc-init:"+appId, "*");
     });
+  },
+  sendCall: function(appId, message) {
+    var appFrameId = WebDoc.appsContainer.getApp(appId).getIframeId();
+    $("#"+appFrameId)[0].contentWindow.postMessage(message, "*");
   }
 });
