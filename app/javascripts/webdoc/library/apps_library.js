@@ -227,6 +227,10 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   _dragStart: function(event, widgetData) {
     var dt = event.originalEvent.dataTransfer;
     dt.setData('application/ub-widget', $.toJSON(widgetData));
+
+    if(WebDoc.application.boardController.editingItem()) {
+      WebDoc.application.boardController.stopEditing();
+    }
     
     // Drag "feedback"
     var properties = widgetData.properties;
