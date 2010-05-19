@@ -56,11 +56,11 @@
       %div.shunt
         %ul
           %li
-            %a#set-classic-size{ :href => '#set-classic-size' }= t('.document_forms.document_size.classic')
+            %a{ :class => 'set_size', :href => '#set-classic-size', :'data-webdoc-size-name' => 'classic' }= t('.document_forms.document_size.classic')
           %li
-            %a#set-iphone-size{ :href => '#set-iphone-size' }= t('.document_forms.document_size.iPhone')
+            %a{ :class => 'set_size', :href => '#set-iphone-size', :'data-webdoc-size-name' => 'iphone' }= t('.document_forms.document_size.iPhone')
           %li
-            %a#set-ipad-size{ :href => '#set-ipad-size' }= t('.document_forms.document_size.iPad')
+            %a{ :class => 'set_size', :href => '#set-ipad-size', :'data-webdoc-size-name' => 'ipad' }= t('.document_forms.document_size.iPad')
     
     %div.ui-actions
       %a{ :href => '#cancel', :class => 'cancel' } cancel
