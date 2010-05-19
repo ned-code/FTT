@@ -72,9 +72,10 @@ WebDoc.ImagePaletteController = $.klass({
   },
 
   addToMyImage: function() {
-    var selectedItem = WebDoc.application.boardController.selection()[0];
-    if (selectedItem && selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
-      if (selectedItem.item.data.data.src !== undefined && selectedItem.item.data.data.src !== '') {
+    var selected = WebDoc.application.boardController.selection()[0];
+    if (selected && selected.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+      var selectedItem = selected.item;
+      if (selectedItem.data.data.src !== undefined && selectedItem.data.data.src !== '') {
         this.addToMyImageLink.hide();
         this.addToMyImageResult.text('Uploading...');
         image = new WebDoc.Image;
@@ -83,9 +84,12 @@ WebDoc.ImagePaletteController = $.klass({
         image.save(function(event){
           WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.LIBRARY)
                   .imagesLibrary.refreshMyImages();
-          ddd('image media id: ' + event.data.id);
-          this.selectedItem.item.data.media_id = event.data.id;
-          this.selectedItem.item.save();
+          this.selectedItem.data.media_id = event.data.id;
+          this.selectedItem.data.data.src = event.data.properties.url;
+          ddd(event.data.properties.url);
+          ddd(this.selectedItem.data.data.src);
+          this.selectedItem.save();
+          this.refresh();
           this.addToMyImageResult.text('Image uploaded in my images!');
         }.pBind(this));
       }
