@@ -30,6 +30,8 @@
 				errorWrapSelector: "p, fieldset, div"
 			},
 			
+			debug = (window.console && window.console.log),
+			
 			// Regex
 			regex = {
 				url:			/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i,
@@ -90,11 +92,12 @@
 				},
 				maxlength: {
 					test: function( field, value ) {
-						var maxlength = parseInt( field.attr("maxlength") );
+						var maxlength = field.attr("maxlength"),
+								number = parseInt( maxlength );
 						
-						// Be careful, maxlength is implicitly there whether it's
-						// in the html or not, and sometimes it's -1
-						return ( !value || maxlength === -1 || value.length <= maxlength ) ||
+						// Be careful, if there is no value maxlength is implicitly there
+						// whether it's in the html or not, and sometimes it's -1
+						return ( !value || !maxlength || number === -1 || value.length <= number ) ||
 							'Too long. '+maxlength+' characters at most.' ;
 					}
 				}
@@ -174,7 +177,8 @@
 		.closest( '.' + options.errorClass )
 		.removeClass( options.errorClass );
 		
-		// Fire callback
+		// Fire callback with input as context and arguments
+		// value(string), checked(boolean)
 		if ( options.pass ) {
 			options.pass.call( node, value, field.attr('checked') );
 		}
@@ -215,11 +219,44 @@
 		});
 	};
 	
+	// Call .validate() on each of a forms inputs
+	// and textareas, and call pass if everything
+	// passed and fail if at least one thing failed
+	function handleForm( node, options ){
+		var failCount = 0;
+		
+		jQuery(node)
+		.find("input, textarea")
+		.validate({
+		  pass: function( value ){
+		  	if (debug) { console.log( value + ' - PASS' ); }
+		  },
+		  fail: function( value ){
+		  	if (debug) { console.log( value + ' - FAIL' ); }
+		  	failCount++;
+		  }
+		});
+		
+		if (failCount && options.fail) {
+		  options.fail.call(this);
+		}
+		else if (options.pass) {
+		  options.pass.call(this);
+		}
+	}
+	
 	jQuery.fn.validate = function(o){
 		var options = jQuery.extend({}, jQuery.fn.validator.options, o);
 		
 		return this.each(function(i){
-			handle(this, options);
+			var tagName = this.nodeName.toLowerCase();
+			
+			if (tagName === 'form') {
+				handleForm(this, options);
+			}
+			else if (tagName === 'input' || tagName === 'textarea') {
+				handle(this, options);
+			}
 		});
 	};
 	

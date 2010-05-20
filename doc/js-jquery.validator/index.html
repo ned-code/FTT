@@ -13,10 +13,24 @@
 jQuery(document).ready(function() {
 	//jQuery('form').validator();
 	
-	jQuery(document)
-	.delegate('input, textarea', 'blur', function(e){
-		jQuery(this).validate();
-	})
+	//jQuery(document)
+	//.delegate('input, textarea', 'blur', function(e){
+	//	jQuery(this).validate();
+	//});
+
+  jQuery('form')
+  .bind('submit', function(e){
+    jQuery(this).validate({
+      pass: function(){
+        console.log('PASS');
+      },
+      fail: function(){
+        console.log('FAIL');
+      }
+    });
+    
+    e.preventDefault();
+  });
 });
 </script>
 
