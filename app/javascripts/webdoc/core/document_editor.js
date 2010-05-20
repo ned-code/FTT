@@ -72,7 +72,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         .delegate( "a[href='#filter-editable']",'click', { filter: 'editor' }, this.loadDocumentsWithFilter.pBind(this) )
         .delegate( "a[href='#filter-shared']",  'click', { filter: 'reader' }, this.loadDocumentsWithFilter.pBind(this) )
         .delegate( "a[href='#filter-public']",  'click', { filter: 'public' }, this.filterByPublic.pBind(this) );
-        
+
         this.filter = new WebDoc.DocumentDateFilter();
         
         this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
@@ -120,7 +120,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
                 .bind('submit', function() {
                     if (!that._creatingDoc) {
                       node.addClass('loading');
-                      
+
                       var newDoc = new WebDoc.Document();
 
                       newDoc.setTitle( infoDialogTitleNode.val(), true );

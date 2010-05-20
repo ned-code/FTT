@@ -29,16 +29,18 @@ WebDoc.PageView = $.klass({
     domNode.append(drawingDomNode);
     this.domNode.append(itemDomNode);
     this.domNode.append(eventCatcherNode);
-    
+
+    this.externalPageDomNode = null;
+    this.externalPageIframe = null;
+    if (page.data.data.externalPage && !WebDoc.application.disableHtml) {
+      this._loadExternalPage();
+    }
     if (page.items && $.isArray(page.items)) {
       $.each(page.items, function() {
         that.createItemView(this, "end");
       });
     }
     page.addListener(this);
-    if (page.data.data.externalPage && !WebDoc.application.disableHtml) {
-      this._loadExternalPage();
-    }
   },
   
   objectChanged: function(page, options) {
@@ -236,19 +238,27 @@ WebDoc.PageView = $.klass({
   },
   
   _loadExternalPage: function() {
-    this.itemDomNode.empty();
-    // Handle case where page is an external webpage
     if (this.page.data.data.externalPageUrl) {
-      var externalPage = $("<iframe/>").addClass('layer');
-      
+      if(!this.externalPageDomNode) {
+        this._createExternalPageDomNode();
+      }
       wait = jQuery('<div class="center layer"><div class="center-cell"><div class="center-box"><center><img src="/images/icons/waiting_wheel.gif"/></center></div></div></div>');
-      
-      externalPage.bind('load', function() {
+      this.externalPageIframe.bind('load', function() {
         wait.remove();
       }.pBind(this));
-      externalPage.attr("src", this.page.data.data.externalPageUrl);
-      this.itemDomNode.append(externalPage[0]);
+      this.externalPageIframe.attr("src", this.page.data.data.externalPageUrl);
       this.itemDomNode.append(wait);
     }
+  },
+
+  _createExternalPageDomNode: function() {
+    this.externalPageDomNode = $("<div/>").addClass('layer');
+    var overLayer = $("<div>").addClass("layer");
+    overLayer.css("display", "block");
+    this.externalPageIframe = $("<iframe/>").addClass('layer');
+    this.externalPageDomNode.append(this.externalPageIframe);
+    this.externalPageDomNode.append(overLayer);
+    this.itemDomNode.append(this.externalPageDomNode);
   }
+  
 });
