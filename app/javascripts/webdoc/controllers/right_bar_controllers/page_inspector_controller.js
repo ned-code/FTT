@@ -7,21 +7,36 @@
   WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController, {
     PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
     SUPPORTED_IMAGE_EXTENSIONS: ["jpg","jpeg","png","gif"],
+    
     initialize: function() { 
       var form;
       
       this.domNode = jQuery('#page-inspector');    
       this._layoutDropDownNode = jQuery('#layout-dropdown');
-      this._page = null;    
+      this.themeColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"});
+      this._page = null;
+      this._backgroundProperties = jQuery("#background_properties");
       this._externalPageControls = jQuery('.externalPage-related');
       this._backgroundControls = jQuery('.background-related');
       this._backgroundImageControls = jQuery("input[name='page_background_image_tileX'], .page_background_image_align, input[name='page_background_image_tileY']");
       this._bgRepeatState = { x: true, y: true };
+      this._themeBgState = false;                   // true when in the DOM
       form = this.domNode.find('.content>form');
+      
       form
       .bind('submit', function(e){
         e.preventDefault();
-      });
+      })
+      .delegate('.backgrounds_index a', 'click', function(e){
+        var link = jQuery( e.target ),
+            themeClass = link.attr('data-theme-class');
+        
+        e.preventDefault();
+        
+        this._page.setClass( themeClass );
+      }.pBind(this));
+      
+      WebDoc.application.boardController.themeNode.bind( 'load', this.makeThemeBackgrounds.pBind(this) );
       
       jQuery("#external_page_url").bind("blur", this._updateExternalPageUrl.pBind(this));
       
@@ -79,7 +94,42 @@
       this._updatePageRelatedFields();
       this._checkEnableBackgroundControls();
      },
-  
+    
+    makeThemeBackgrounds: function(){
+      ddd('[PageInspectorController] makeThemeBackgrounds');
+      
+      var themeColors = new WebDoc.ClassList( 'theme_background_', 'backgroundImage backgroundColor' ),
+          previousThemeClass = WebDoc.application.boardController.previousThemeClass,
+          currentThemeClass = WebDoc.application.boardController.currentThemeClass,
+          html = '',
+          state = this._themeBgState,
+          className;
+      
+      for ( className in themeColors.getClasses() ) {
+        html += '<li><a href="#theme-class" data-theme-class="'+className+'" class="'+className+'" title="Theme background"></a></li>';
+      }
+      
+      if (previousThemeClass) {
+        this.themeColorsNode.removeClass( previousThemeClass );
+      }
+      
+      this.themeColorsNode.addClass( currentThemeClass );
+      
+      if ( html === '' ) {
+        if (state) {
+          this.themeColorsNode.remove();
+          this._themeBgState = false;
+        }
+      }
+      else {
+        this.themeColorsNode.html( html );
+        if (!state) {
+          this.themeColorsNode.insertAfter( this._backgroundProperties.find('legend') );
+          this._themeBgState = true;
+        }
+      }
+    },
+
     _updatePageRelatedFields: function() {
       this._initializingGui = true; 
       jQuery("#page_title").val( this._page.data.title == "undefined" ? "enter a title" : this._page.data.title );
@@ -118,18 +168,23 @@
         if (this._currentDropDownTheme !== pageTheme) {
           this._currentDropDownTheme = pageTheme;
           this._layoutDropDownNode.empty();
-          for (var i = 0; i < pageTheme.layouts.length; i++) {
+          this._layoutDropDownNode.append(jQuery('<option/>').id("layout-dd-none").val('none').text('No layout').data("layout", null));
+          for (var i = 0; pageTheme && i < pageTheme.layouts.length; i++) {
             var aLayout = pageTheme.layouts[i];
             this._layoutDropDownNode.append(jQuery('<option/>').id("layout-dd-"+ aLayout.getKind()).val(aLayout.getKind()).text(aLayout.getTitle()).data("layout", aLayout));            
           }
         }
-        this._layoutDropDownNode.find('#layout-dd-' + this._page.getLayoutkind()).attr("selected", "true");
+        if (this._page.getLayoutkind()) {
+          this._layoutDropDownNode.find('#layout-dd-' + this._page.getLayoutkind()).attr("selected", "true");
+        }
+        else {
+          this._layoutDropDownNode.find('#layout-dd-none').attr("selected", "true");
+        }
       }.pBind(this));               
     },
     
     _checkEnableBackgroundControls: function() {
       try {
-  //      WebDoc.InspectorFieldsValidator.validateBackgroundUrl(jQuery("#page_background_image")[0].value);
         this._setBackgroundControlsMode(true);
       }
       catch(exc) {
@@ -347,7 +402,15 @@
     _changeLayout: function(event) {
       if (!this._initializingGui) {
         ddd("change layout", event);
-        this._page.assignLayout(this._layoutDropDownNode.find('#layout-dd-' + this._layoutDropDownNode.val()).data("layout"));
+        WebDoc.application.boardController.currentPageView().setLoading(true);
+        try {
+          this._page.assignLayout(this._layoutDropDownNode.find('#layout-dd-' + this._layoutDropDownNode.val()).data("layout"), function(pag, status){
+            WebDoc.application.boardController.currentPageView().setLoading(false);
+          });
+        }
+        catch(e) {
+          WebDoc.application.boardController.currentPageView().setLoading(false);
+        }
       }
     }
   });

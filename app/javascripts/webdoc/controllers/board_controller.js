@@ -23,6 +23,8 @@ WebDoc.BoardController = jQuery.klass({
     this._isInteraction = false;
     this._isMovingSelection = false;
     this._previousInspector = null;
+    this.previousThemeClass = undefined;
+    this.currentThemeClass = undefined;
     this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);    
   },
   
@@ -212,11 +214,11 @@ WebDoc.BoardController = jQuery.klass({
   // Theme ----------------------------------------
   
   applyDocumentTheme: function() {
-    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() ||WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
-        currentClass = this._themeClass || 'theme_default',
-        newClass = WebDoc.application.pageEditor.currentDocument.styleClass() || 'theme_default',
+    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
         themeNode = this.themeNode;
     
+    this.previousThemeClass = this.currentThemeClass;
+    this.currentThemeClass = WebDoc.application.pageEditor.currentDocument.styleClass();
     themeNode[0].href = stylesheetUrl;
     
     // There's no load event on the link tag.  This is a problem.
@@ -225,10 +227,15 @@ WebDoc.BoardController = jQuery.klass({
       themeNode.trigger('load');
     }, 1800);
     
-    jQuery("." + currentClass).removeClass(currentClass).addClass(newClass);
-    this.boardContainerNode.addClass(newClass);
-    // Store the class so we know what to remove on the next setTheme
-    this._themeClass = newClass;
+    if ( this.previousThemeClass ) {
+      this.boardContainerNode.removeClass(this.previousThemeClass);
+    }
+    this.boardContainerNode.addClass(this.currentThemeClass);
+    if (this.currentPageView()) {
+      //TODO JBA small hack to force regreshing layout if page when them changed 
+      this._currentPage._layout = undefined;
+      this.currentPageView()._initPageClass(); 
+    }
   },
   
   // Tool -----------------------------------------
@@ -542,9 +549,9 @@ WebDoc.BoardController = jQuery.klass({
     });
   },
   
-  insertImage: function(imageUrl, position) {
+  insertImage: function(imageUrl, position, media_id) {
     var image = document.createElement('img'); /* Preload image in order to have width and height parameters available */
-    jQuery(image).bind("load", position, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
+    jQuery(image).bind("load", {position: position, media_id: media_id}, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
     image.src = imageUrl;
   },
   
@@ -668,42 +675,11 @@ WebDoc.BoardController = jQuery.klass({
   
   zoom: function(factor) {
     
-    var boardNode = this.currentPageView().domNode,
-        previousZoom = this._currentZoom,
-        boardContainerCss = {},
-        boardCss = {},
-        editingItem = this.editingItem();
+    var editingItem = this.editingItem();
     
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
-    
-    // TODO: can we animate this?
-    
-    boardCss.WebkitTransformOrigin = "0px 0px";
-    boardCss.WebkitTransform = this._currentZoom === 1 ? "" : "scale(" + this._currentZoom + ")" ;
-    boardCss.MozTransformOrigin = this._currentZoom === 1 ? "" : "0px 0px" ;
-    boardCss.MozTransform = boardCss.WebkitTransform;
-    boardCss.width = 100/this._currentZoom + '%';
-    boardCss.height = 100/this._currentZoom + '%';
-    
-
-    var initialSize = {
-      width: parseFloat(this._currentPage.data.data.css.width),
-      height: parseFloat(this._currentPage.data.data.css.height),
-      widthFlag: this._currentPage.width().match(/px/)?"px":"%",
-      heightFlag: this._currentPage.height().match(/px/)?"px":"%"
-    };
-
-    
-    boardContainerCss = {
-      width: (initialSize.width * this._currentZoom) + initialSize.widthFlag,
-      height: (initialSize.height * this._currentZoom) + initialSize.heightFlag
-    };
-    
-    ddd("new board size", boardContainerCss.width, boardContainerCss.height);
-
-    boardNode.css( boardCss );
-    this.boardContainerNode.css( boardContainerCss );
+    this.currentPageView().setZoomFactor(this._currentZoom);
     
     // If item is being edited, reposition screens
     if ( editingItem ) { this._updateScreens( editingItem.domNode ); }
@@ -938,7 +914,8 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _createImageItemAfterLoad: function(e) {
-    var position = e.data;
+    var position = e.data.position;
+    var media_id = e.data.media_id;
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
     if(!position) { position = WebDoc.application.boardController.getBoardCenterPoint();}
@@ -948,6 +925,9 @@ WebDoc.BoardController = jQuery.klass({
     if (y < 0) { y = 0;}
     newItem.data.data.tag = "img";
     newItem.data.data.src = this.src;
+    if(media_id !== undefined) {
+      newItem.data.media_id = media_id;
+    }
     newItem.data.data.css = {
       overflow: "hidden",
       top: y + "px",

@@ -78,6 +78,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
+    WebDoc.application.postMessageManager = new WebDoc.PostMessageManager();
     
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
@@ -103,6 +104,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
         WebDoc.application.rightBarController.showLib();
       }
       jQuery('#document_loading').remove();
+      jQuery('body').trigger('webdocready');
     }.pBind(this));
   },
   

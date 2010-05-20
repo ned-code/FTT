@@ -15,10 +15,11 @@ WebDoc.ItemView = $.klass({
     }
     
     this.item = item;
-    // item wrapper
-    this.domNode = $("<div/>").addClass("item_wrap");
     
-    this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
+    // item wrapper
+    this.domNode = $("<div/>").addClass('item_wrap');
+    
+    this.itemDomNode = this.createDomNode().css({
         overflow: "hidden",
         width: "100%",
         height: "100%"
@@ -43,34 +44,126 @@ WebDoc.ItemView = $.klass({
     else {
       this.pageView.itemDomNode.prepend(this.domNode);
     }
+
     if (!this.item.data.data.css) {
       this.item.data.data.css = {};
     }
-    // css must be applied to item node. Only position and size must be set to dom node wrapper
-    var position = {
-      top: this.item.data.data.css.top,
-      left: this.item.data.data.css.left,
-      width: this.item.data.data.css.width,
-      height: this.item.data.data.css.height
-    };
-    this.domNode.css(position);
-    
-    if (this.item.data.data['class']) {
-      this.domNode.addClass(this.item.data.data['class']);
-    }
-    
-    var itemCss = {};
-    $.extend(itemCss, this.item.data.data.css);
-    delete itemCss.top;
-    delete itemCss.left;
-    delete itemCss.width;
-    delete itemCss.height;
-    this.itemDomNode.css(itemCss);
-    
+
     if (this.item.data.data.innerHTML) {
       this.innerHtmlChanged();
     }
+
+    this._initItemClass();
+    this._initItemCss(false);
   },
+
+  _initItemClass: function() {
+    this.itemDomNode.attr("class", "item layer");
+    if(this.item.data.data['class']) {
+      this.itemDomNode.addClass(this.item.data.data['class']);
+    }
+    if (this.domNode.data('wdClasses')) {
+      this.domNode.removeClass(this.domNode.data('wdClasses'));
+    }
+    if (this.item.data.data.wrapClass && this.item.data.data.wrapClass) {
+      this.domNode.addClass(this.item.data.data.wrapClass);
+      this.domNode.data('wdClasses', this.item.data.data.wrapClass);
+    }
+  },
+
+  _initItemCss: function( withAnimate ) {
+    var domNode = this.domNode,
+        itemDomNode = this.itemDomNode,
+        css = this.item.data.data.css,
+        wrapCss = {},
+        itemCss = {},
+        wrapCssKeys = this._wrapCssKeys,
+        browserCssKeys = this._browserCssKeys,
+        key, timer;
+    
+    // Split css object into css to be applied to item_wrap
+    // and css to be applied to item
+    for ( key in css ) {
+      if ( wrapCssKeys[key] ) {
+        wrapCss[key] = css[key];
+      }
+      else {
+        itemCss[key] = css[key];
+      }
+    }
+    
+    // Loop through the results and apply browser specific
+    // extensions where needed
+    for ( key in wrapCss ) {
+      if ( browserCssKeys[key] ) {
+        wrapCss['-webkit-'+key] = wrapCss['-moz-'+key] = wrapCss[key];
+      }
+    }
+    
+    for ( key in itemCss ) {
+      if ( browserCssKeys[key] ) {
+        itemCss['-webkit-'+key] = itemCss['-moz-'+key] = itemCss[key];
+      }
+    }
+    
+    // TODO: feature detect css transition, and use javascript animation if not present
+    
+    //var canAnimate = position.top && position.left && position.width && position.height;
+    //this.domNode.stop();
+    
+    //if (withAnimate && canAnimate) {
+    //  this.domNode.animate(position, 'fast', function() {
+    //    if (this.domNode.hasClass("item-edited")) {
+    //      WebDoc.application.boardController._updateScreens(this.domNode);
+    //    }
+    //  }.pBind(this));
+    //}
+    //else {
+    //  this.domNode.css( position );
+    //}
+    
+    // Animate using css transitions given by the animate class
+    if ( withAnimate ) {
+      domNode.addClass('animate');
+      timer = setTimeout(function(){
+        domNode.removeClass('animate');
+        timer = null;
+      }, 500);
+    }
+    
+    domNode
+    .attr( 'style', '' )
+    .css( wrapCss );
+    
+    if (itemDomNode) {
+      
+      if ( itemCss.overflow && this.domNode.hasClass("item-edited") ) {
+        delete itemCss.overflow;
+      }
+      
+      itemDomNode
+      .attr( 'style', '' )
+      .css( itemCss );
+    }
+  },
+  
+  _wrapCssKeys: {
+    top: true,
+    left: true,
+    bottom: true,
+    right: true,
+    width: true,
+    height: true,
+    transform: true
+  },
+
+  _browserCssKeys: {
+    transform: true,
+    transition: true,
+    borderRadius: true,
+    boxShadow: true
+  },
+  
   
   createDomNode: function() {
     var itemNode;
@@ -85,7 +178,8 @@ WebDoc.ItemView = $.klass({
           case "innerHTML":
           // for compatibility we also check innerHtml like this because old document can have this key instead of innerHTML
           case "innerHtml":
-          case "class":  
+          case "class": 
+          case "wrapClass": 
           case "innerHTMLPlaceholder":
           case "tag":
           case "css":
@@ -108,31 +202,12 @@ WebDoc.ItemView = $.klass({
     this.domNode.remove();
   },
   
-  objectChanged: function(item) {
-    // css must be applied to item node. Only position and size must be set to dom node wrapper
-    var position = {
-      top: this.item.data.data.css.top,
-      left: this.item.data.data.css.left,
-      width: this.item.data.data.css.width,
-      height: this.item.data.data.css.height
-    };
-    this.domNode.stop();
-    this.domNode.animate(position, 'fast', function() {
-      if (this.domNode.hasClass("item-edited")) {
-        WebDoc.application.boardController._updateScreens(this.domNode);
-      }
-    }.pBind(this));
-    if (this.itemDomNode) {
-      var itemCss = {};
-      $.extend(itemCss, this.item.data.data.css);
-      delete itemCss.top;
-      delete itemCss.left;
-      delete itemCss.width;
-      delete itemCss.height;
-      if (itemCss.overflow && this.domNode.hasClass("item-edited")) {
-        delete itemCss.overflow;  
-      }
-      this.itemDomNode.css(itemCss);
+  objectChanged: function(item, options) {
+    if (item._isAttributeModified(options, 'css')) {
+      this._initItemCss(true);
+    }
+    if (item._isAttributeModified(options, 'class')) {
+      this._initItemClass();
     }
   },
 
@@ -213,6 +288,28 @@ WebDoc.ItemView = $.klass({
     
   },
   
+  position: function() {
+    var result = { top: this.item.top(), left: this.item.left() };
+    result.topInherted = (result.top === undefined);
+    result.leftInherted = (result.left === undefined);
+    result.top = result.top || this.domNode.position().top + 'px';
+    result.left =  result.left || this.domNode.position().left + 'px';
+    return result;
+  },
+  
+  size: function() {
+    var result = { width: this.item.width(), height: this.item.height() };
+    result.widthInherted = (result.width === undefined);
+    result.heightInherted = (result.height === undefined);    
+    result.width = result.width || this.domNode.width() + 'px';
+    result.height = result.height || this.domNode.height() + 'px';
+    return result;
+  },
+  
+  css: function(){
+    return this.item.data.data.css;
+  },
+  
   _initDragAndResize: function() {
     this.domNode.draggable({
       containment: "parent",
@@ -222,7 +319,7 @@ WebDoc.ItemView = $.klass({
         ddd("start drag");
         this.pageView.eventCatcherNode.show();
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-        var currentPosition = {top: this.item.data.data.css.top, left: this.item.data.data.css.left};
+        var currentPosition = this.position();
 
         this.dragOffsetLeft = mappedPoint.x - parseFloat(currentPosition.left);
         this.dragOffsetTop = mappedPoint.y - parseFloat(currentPosition.top);
@@ -250,7 +347,7 @@ WebDoc.ItemView = $.klass({
         this.pageView.eventCatcherNode.show();
         this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
         this.aspectRatio = ui.size.width / ui.size.height;
-        var currentSize = { width: this.item.data.data.css.width, height: this.item.data.data.css.height};
+        var currentSize = this.size();
         WebDoc.application.undoManager.registerUndo(function() {
           WebDoc.ItemView.restoreSize(this.item, currentSize);
         }.pBind(this));
@@ -309,7 +406,15 @@ WebDoc.ItemView = $.klass({
     if (this.domNode.hasClass("item-edited")) {
       WebDoc.application.boardController._updateScreens(this.domNode);
     }
+  },
+
+  _isAttributeModified: function(options, attributeName) {
+    if (options && options.modifedAttribute) {
+      return (options.modifedAttribute.indexOf(attributeName) !== -1);
+    }
+    return true;
   }
+  
 });
 
 $.extend(WebDoc.ItemView, {
@@ -332,18 +437,6 @@ $.extend(WebDoc.ItemView, {
     WebDoc.application.undoManager.registerUndo(function() {
       WebDoc.ItemView.restoreSize(item, previousSize);
     }.pBind(this));
-    item.save();
-  },
-  
-  restorePositionAndSize: function(item, top, left, width, height) {
-    var previousTop = item.data.data.css.top,
-        previousLeft = item.data.data.css.left,
-        previousWidth = item.data.data.css.width,
-        previousHeight = item.data.data.css.height;
-    item.moveToAndResizeTo(top, left, width, height);
-    WebDoc.application.undoManager.registerUndo(function() {
-      WebDoc.ItemView.restorePositionAndSize(item, previousTop, previousLeft, previousWidth, previousHeight);
-    }.pBind(this));
+    item.save();  
   }
-  
 });

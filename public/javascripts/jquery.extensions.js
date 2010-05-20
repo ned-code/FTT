@@ -171,6 +171,7 @@ jQuery.extend({
     // Some helpful regex for parsing hrefs and css urls etc.
     
     regex: {
+      integer:    /^-?[0-9]+$/,
       cssUrl:     /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/,   // matches url(xxx), url('xxx') or url("xxx") and captures xxx
       hash:       /^#?$/,                                         // Single hash or empty string
       hashRef:    /^#(\S+)/,                                      // Matches a hash ref, captures all non-space characters following the hash

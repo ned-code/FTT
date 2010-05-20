@@ -6,6 +6,9 @@ class Document < ActiveRecord::Base
   
   serialize :size
   
+  # see XmppDocumentObserver  
+  attr_accessor_with_default :must_notify, false
+  
   # ================
   # = Associations =
   # ================
@@ -28,6 +31,7 @@ class Document < ActiveRecord::Base
   # =============
   
   before_create :create_default_page
+  before_create :validate_size
   after_create :set_creator_as_editor
   
   # =================
@@ -297,6 +301,16 @@ private
   # before_create
   def create_default_page
     pages.build if pages.size == 0
+  end
+
+  # before_create
+  def validate_size
+    if size.blank? || size[:height].blank? || size[:width].blank?
+      errors.add(:size, "Error in size of document")
+      false
+    else
+      true
+    end
   end
   
   def add_unvalid_email_to_array(email)

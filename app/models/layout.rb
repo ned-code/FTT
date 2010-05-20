@@ -62,11 +62,11 @@ class Layout < ActiveRecord::Base
               if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
                 item.data[:innerHTML] = ""
                 item.data[:innerHTMLPlaceholder] = doc_item.inner_html
+                item.data[:class] += " empty"
               else
                 item.data[:innerHTML] = doc_item.inner_html
                 item.data[:innerHTMLPlaceholder] = ""
               end
-              item.data[:innerHTML] = doc_item.inner_html
               if doc_item['data-item-type'] == 'text'
                 item.media_type = 'text'
               else
@@ -140,8 +140,11 @@ class Layout < ActiveRecord::Base
   def default_item_data_form_doc_item(doc_item)
     hash = HashWithIndifferentAccess.new
     css_hash = get_style_hash_from_doc_item(doc_item)
+    classes = []
+    classes.concat(doc_item.attr('class').split(' ')) if doc_item.attr('class').present?
     hash[:css] = css_hash if css_hash.present? 
-    hash[:class] = doc_item.attr('class') if doc_item.attr('class').present?
+    hash[:class] = classes.select { |class_name| !(class_name =~ /layout_*./)}.join(' ')
+    hash[:wrapClass] = classes.select { |class_name| class_name =~ /layout_*./}.join(' ')
     hash[:preference] = HashWithIndifferentAccess.new
     hash[:preference][:rails_empty] = 'dummy'
     hash

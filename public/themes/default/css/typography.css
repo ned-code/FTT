@@ -184,34 +184,38 @@ p+p::first-line   { font-weight: normal; }*/
 .theme_default ol,
 .theme_default blockquote,
 .theme_default dd,
-.webdoc-indent-1  { margin-left: 2.5em; }
-.webdoc-indent-2  { margin-left: 5em; }
-.webdoc-indent-3  { margin-left: 7.5em; }
-.webdoc-indent-4  { margin-left: 10em; }
-.webdoc-indent-5  { margin-left: 12.5em; }
-.webdoc-indent-6  { margin-left: 15em; }
-.webdoc-indent-7  { margin-left: 17.5em; }
-.webdoc-indent-8  { margin-left: 20em; }
-.webdoc-indent-9  { margin-left: 22.5em; }
-.webdoc-indent-10 { margin-left: 25em; }
-.webdoc-indent-11 { margin-left: 27.5em; }
-.webdoc-indent-12 { margin-left: 30em; }
+.webdoc_indent_1  { margin-left: 2.5em; }
+.webdoc_indent_2  { margin-left: 5em; }
+.webdoc_indent_3  { margin-left: 7.5em; }
+.webdoc_indent_4  { margin-left: 10em; }
+.webdoc_indent_5  { margin-left: 12.5em; }
+.webdoc_indent_6  { margin-left: 15em; }
+.webdoc_indent_7  { margin-left: 17.5em; }
+.webdoc_indent_8  { margin-left: 20em; }
+.webdoc_indent_9  { margin-left: 22.5em; }
+.webdoc_indent_10 { margin-left: 25em; }
+.webdoc_indent_11 { margin-left: 27.5em; }
+.webdoc_indent_12 { margin-left: 30em; }
 
 /*
 ul, ol, blockquote, dd,
-.webdoc-indent-1  { padding-left: 4%; }
-.webdoc-indent-2  { padding-left: 8%; }
-.webdoc-indent-3  { padding-left: 12%; }
-.webdoc-indent-4  { padding-left: 16%; }
-.webdoc-indent-5  { padding-left: 20%; }
-.webdoc-indent-6  { padding-left: 24%; }
-.webdoc-indent-7  { padding-left: 28%; }
-.webdoc-indent-8  { padding-left: 32%; }
-.webdoc-indent-9  { padding-left: 36%; }
-.webdoc-indent-10 { padding-left: 40%; }
-.webdoc-indent-11 { padding-left: 44%; }
-.webdoc-indent-12 { padding-left: 48%; }*/
+.webdoc_indent_1  { padding-left: 4%; }
+.webdoc_indent_2  { padding-left: 8%; }
+.webdoc_indent_3  { padding-left: 12%; }
+.webdoc_indent_4  { padding-left: 16%; }
+.webdoc_indent_5  { padding-left: 20%; }
+.webdoc_indent_6  { padding-left: 24%; }
+.webdoc_indent_7  { padding-left: 28%; }
+.webdoc_indent_8  { padding-left: 32%; }
+.webdoc_indent_9  { padding-left: 36%; }
+.webdoc_indent_10 { padding-left: 40%; }
+.webdoc_indent_11 { padding-left: 44%; }
+.webdoc_indent_12 { padding-left: 48%; }*/
 
 
-.theme_color_1 { background-color: #343434; }
-.theme_color_2 { background-color: #828484; }
+.theme_background_1   { background-color: hsl(208, 4%, 100%); }
+.theme_background_2   { background-color: hsl(208, 4%, 80%); }
+.theme_background_3   { background-color: hsl(208, 4%, 60%); }
+.theme_background_4   { background-color: hsl(208, 4%, 40%); }
+.theme_background_5   { background-color: hsl(208, 4%, 20%); }
+.theme_background_6   { background-color: hsl(208, 4%, 0%); }

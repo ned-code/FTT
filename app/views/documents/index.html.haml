@@ -44,30 +44,23 @@
       
     %fieldset
       %legend= t ".document_forms.document_size_title"
-      
-      %div.column.one.of-three
-        %label
-          %input#wb-new-document-size-custom{ :type => "radio", :name => "wb-new-document-size", :value => "custom" }
-          = t('.document_forms.document_size.custom')
-      %div.shunt.column.two.of-three>
-        %label= t('.document_forms.document_size.width')
-        %input#wb-new-document-size-custom-width{ :type => "text" , :size => 6}
-      %div.shunt.column.three.of-three>
-        %label= t('.document_forms.document_size.height')
-        %input#wb-new-document-size-custom-height{ :type => "text" , :size => 6}
-      
-      %div
-        %label
-          %input#wb-new-document-size-iPhone{ :type => "radio", :name => "wb-new-document-size", :value => "iPhone" }
-          = t('.document_forms.document_size.iPhone')
-      %div
-        %label
-          %input#wb-new-document-size-classic{ :type => "radio", :name => "wb-new-document-size", :value => "classic" }
-          = t('.document_forms.document_size.classic')
-      %div
-        %label
-          %input#wb-new-document-size-iPad{ :type => "radio", :name => "wb-new-document-size", :value => "iPad" }
-          = t('.document_forms.document_size.iPad')
+
+
+      %div.shunt.column.one.of-two>
+        %label{ :for => 'wb-new-document-size-width' }= t('.document_forms.document_size.width')
+        %input#wb-new-document-size-width{ :type => "text" , :size => 6, :required => 'required', :'data-type' => 'cssvalue' }
+      %div.shunt.column.two.of-two>
+        %label{ :for => 'wb-new-document-size-height' }= t('.document_forms.document_size.height')
+        %input#wb-new-document-size-height{ :type => "text" , :size => 6, :required => 'required', :'data-type' => 'cssvalue' }
+
+      %div.shunt
+        %ul
+          %li
+            %a{ :class => 'set_size', :href => '#set-classic-size', :'data-webdoc-size-name' => 'classic' }= t('.document_forms.document_size.classic')
+          %li
+            %a{ :class => 'set_size', :href => '#set-iphone-size', :'data-webdoc-size-name' => 'iphone' }= t('.document_forms.document_size.iPhone')
+          %li
+            %a{ :class => 'set_size', :href => '#set-ipad-size', :'data-webdoc-size-name' => 'ipad' }= t('.document_forms.document_size.iPad')
     
     %div.ui-actions
       %a{ :href => '#cancel', :class => 'cancel' } cancel

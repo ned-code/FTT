@@ -119,6 +119,11 @@ WebDoc.PageThumbnailView = $.klass({
         this.createItemView(addedItem, afterItemView);
       }
       else {
+        // be sure the related item is correct. If we recieve a item added and we already have of view for that item uuid
+        // then we probaby have a view that is related to another version of the item.
+        relatedItemView.item.removeListener(relatedItemView);
+        relatedItemView.item = addedItem;
+        relatedItemView.item.addListener(relatedItemView);
         relatedItemView.objectChanged(addedItem);
       }
     }
@@ -160,11 +165,11 @@ WebDoc.PageThumbnailView = $.klass({
   },
   
   _initPageClass: function() {
-    this.domNode.attr("class", pageThumbClass + " webdoc");
-    this.domNode.addClass(this.page.data.data['class']);
+    this.pageThumbNode.attr("class", pageThumbClass + " webdoc");
+    this.pageThumbNode.addClass(this.page.data.data['class']);
     this.page.getLayout(function(layout) {
       if (layout) {
-        this.domNode.addClass(layout.getModelPage().data.data['class']);
+        this.pageThumbNode.addClass(layout.getModelPage().data.data['class']);
       }
     }.pBind(this));    
   }

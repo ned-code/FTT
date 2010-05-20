@@ -11,6 +11,9 @@ WebDoc.ThemesController = jQuery.klass({
     
     this.chooserNode = jQuery("<div/>");
     this.listNode = jQuery('<ul/>', {'class': 'vertical thumbs themes-index index'});
+    this.list = {};
+    this._currentTheme;
+    this._previousTheme;
     
     // Delegate event handling
     WebDoc.handlers.addPanelHandlers( 'click', {
@@ -35,7 +38,7 @@ WebDoc.ThemesController = jQuery.klass({
     
     defaultTheme = WebDoc.ThemeManager.getInstance().getDefaultTheme();
     
-    this.list['default'] = defaultTheme;
+    this.list['default'] = this._currentTheme = defaultTheme;
   },
   
   // Event handlers
@@ -71,9 +74,6 @@ WebDoc.ThemesController = jQuery.klass({
       ddd('[Themes] open chooser');
     }
   },
-  
-  // List of themes
-  list: {},
   
   // Populate listNode with list of themes
   _refreshListNode: function(){

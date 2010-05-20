@@ -1,4 +1,5 @@
 class DocumentsController < ApplicationController
+  before_filter :store_url_in_session_if_user_not_logged
   # need to be authenticate for alpha release.
   # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document
   before_filter :authenticate_user!
@@ -50,7 +51,10 @@ class DocumentsController < ApplicationController
   # GET /documents/:id
   def show
     respond_to do |format|
-      format.html { render :layout => "layouts/editor" }
+      format.html do
+        @get_return_to = get_return_to
+        render :layout => "layouts/editor"
+      end
       format.json do
         set_cache_buster
 
@@ -74,6 +78,7 @@ class DocumentsController < ApplicationController
   
   # PUT /documents/:id
   def update
+    @document.must_notify = true;
     @document.update_attributes(params[:document])
     
     render :json => @document
@@ -103,6 +108,12 @@ class DocumentsController < ApplicationController
         :ip_address => request.remote_ip,
         :user_id    => current_user.try(:id)
       )
+    end
+  end
+
+  def store_url_in_session_if_user_not_logged
+    if current_user.blank? && params[:action] == 'show' && params[:format] != 'json'
+      set_return_to('document')
     end
   end
   

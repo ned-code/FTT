@@ -25,6 +25,22 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.page = page;
   },
   
+  setClass: function(newClass) {
+    if (newClass != this.data.data['class']) {
+      this.data.data['class'] = newClass;
+      this.fireObjectChanged({ modifedAttribute: 'class' });
+      this.save();
+    }
+  },
+
+  addCss: function(newCss) {
+    if (newCss) {
+      this.data.data.css = jQuery.extend( this.data.data.css, newCss );
+      this.fireObjectChanged({ modifedAttribute: 'css' });
+      this.save();
+    }
+  },
+  
   positionZ: function() {
     return this.data.position;
   },
@@ -82,7 +98,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   setPoints: function(points) {
     this.data.data.points = points;
-    this.fireObjectChanged();
+    this.fireObjectChanged({ modifedAttribute: 'points' });
   },
   
   type: function() {
@@ -104,7 +120,26 @@ WebDoc.Item = $.klass(WebDoc.Record,
       this.data.data.properties = {};
     }
     this.data.data.properties[key] = value;
-    this.fireObjectChanged();
+    this.fireObjectChanged({ modifedAttribute: 'properties' });
+  },
+  
+  top: function() {
+    return this.data.data.css.top;
+  },
+  left: function() {
+    return this.data.data.css.left;
+  },
+//  bottom: function() {
+//    return this.data.data.css.bottom;
+//  },
+//  right: function() {
+//    return this.data.data.css.right;
+//  },
+  width: function() {
+    return this.data.data.css.width;
+  },
+  height: function() {
+    return this.data.data.css.height;
   },
   
   shiftBy: function(offsetPosition) {
@@ -114,31 +149,76 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   moveTo: function(newPosition) {
-    this.data.data.css.left = newPosition.left;
-    this.data.data.css.top = newPosition.top;
-    this.fireObjectChanged();
+    if (newPosition.left && !jQuery.string(newPosition.left).empty()) {
+      this.data.data.css.left = newPosition.left;
+    }
+    else {
+      delete this.data.data.css.left;
+    }
+    if (newPosition.top && !jQuery.string(newPosition.top).empty()) {
+      this.data.data.css.top = newPosition.top;
+    }
+    else {
+      delete this.data.data.css.top;
+    }
+    this.fireObjectChanged({ modifedAttribute: 'css' });
     WebDoc.application.inspectorController.refreshSubInspectors();    
   },
   
-  resizeTo: function(newSize) {
-    this.data.data.css.width = newSize.width;
-    this.data.data.css.height = newSize.height;
-    this.fireObjectChanged();
+  resizeTo: function(newSize) {    
+    if (newSize.width && !jQuery.string(newSize.width).empty()) {
+      this.data.data.css.width = newSize.width;
+    }
+    else {
+      delete this.data.data.css.width;
+    }
+    if (newSize.height && !jQuery.string(newSize.height).empty()) {
+      this.data.data.css.height = newSize.height;
+    }
+    else {
+      delete this.data.data.css.height;
+    }    
+    
+    this.fireObjectChanged({ modifedAttribute: 'css' });
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
+  
+  changeThemeBgClass: function( currentClass ) {
+    this.previousThemeBgClass = this.currentThemeBgClass;
+    this.currentThemeBgClass = currentClass;
+    jQuery.string(this.data.data['class']).gsub(/theme_background.*( )/, ' ');
+    this.data.data['class'] += " " + currentClass;
 
-  moveToAndResizeTo: function(top, left, width, height) {
-    this.data.data.css.top = top;
-    this.data.data.css.left = left;
-    this.data.data.css.width = width;
-    this.data.data.css.height = height;
-    this.fireObjectChanged();
+    this.save();
+    this.fireObjectChanged({ modifedAttribute: 'class' });
+  },
+  
+  changeCss: function( cssObj ) {
+    var that = this,
+        previousCss = this.data.data.css,
+        property;
+    
+    WebDoc.application.undoManager.registerUndo(function() {
+      that.changeCss( previousCss );
+    });
+    
+    for ( property in cssObj ) {
+      if ( cssObj[property] === '' ) {
+        delete this.data.data.css[property];
+      }
+      else {
+        this.data.data.css[property] = cssObj[property];
+      }
+    }
+    
+    this.save();
+    this.fireObjectChanged({ modifedAttribute: 'css' });
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
 
   setOpacity: function(newOpacity){
     this.data.data.css.opacity = parseFloat(newOpacity);
-    this.fireObjectChanged();
+    this.fireObjectChanged({ modifedAttribute: 'css' });
   },
 
   getKind: function() {
@@ -230,7 +310,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   copy: function($super) {
-    newItem = $super();
+    var newItem = $super();
     newItem.data.data = $.evalJSON($.toJSON(this.data.data));
     newItem.data.media_type = this.data.media_type;
     newItem.data.media_id = this.data.media_id;

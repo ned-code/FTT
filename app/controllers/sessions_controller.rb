@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
     if @user = authenticate(:user)
       set_flash_message :notice, :signed_in
       sign_in(@user)
-      redirect_to root_path
+      redirect_to get_return_to('document') || root_path
     else
       set_now_flash_message :alert, warden.message || :invalid
       @user = User.new

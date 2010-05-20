@@ -542,7 +542,7 @@ Strophe = {
      *  The version of the Strophe library. Unreleased builds will have
      *  a version of head-HASH where HASH is a partial revision.
      */
-    VERSION: "77fd143",
+    VERSION: "1.0.1",
 
     /** Constants: XMPP Namespace Constants
      *  Common namespace constants from the XMPP RFCs and XEPs.
@@ -608,6 +608,7 @@ Strophe = {
      *  Status.CONNECTED - The connection has succeeded
      *  Status.DISCONNECTED - The connection has been terminated
      *  Status.DISCONNECTING - The connection is currently being terminated
+     *  Status.ATTACHED - The connection has been attached
      */
     Status: {
         ERROR: 0,
@@ -617,7 +618,8 @@ Strophe = {
         AUTHFAIL: 4,
         CONNECTED: 5,
         DISCONNECTED: 6,
-        DISCONNECTING: 7
+        DISCONNECTING: 7,
+        ATTACHED: 8
     },
 
     /** Constants: Log Level Constants
@@ -653,13 +655,17 @@ Strophe = {
      *  These should not be changed unless you know exactly what you are
      *  doing.
      *
-     *  TIMEOUT - Time to wait for a request to return.  This defaults to
-     *      70 seconds.
-     *  SECONDARY_TIMEOUT - Time to wait for immediate request return. This
-     *      defaults to 7 seconds.
+     *  TIMEOUT - Timeout multiplier. A waiting request will be considered
+     *      failed after Math.floor(TIMEOUT * wait) seconds have elapsed.
+     *      This defaults to 1.1, and with default wait, 66 seconds.
+     *  SECONDARY_TIMEOUT - Secondary timeout multiplier. In cases where
+     *      Strophe can detect early failure, it will consider the request
+     *      failed if it doesn't return after
+     *      Math.floor(SECONDARY_TIMEOUT * wait) seconds have elapsed.
+     *      This defaults to 0.1, and with default wait, 6 seconds.
      */
-    TIMEOUT: 70,
-    SECONDARY_TIMEOUT: 7,
+    TIMEOUT: 1.1,
+    SECONDARY_TIMEOUT: 0.1,
 
     /** Function: forEachChild
      *  Map a function over some or all child elements of a given element.
@@ -1128,7 +1134,9 @@ Strophe = {
                if(elem.attributes[i].nodeName != "_realname") {
                  result += " " + elem.attributes[i].nodeName.toLowerCase() +
                 "='" + elem.attributes[i].value
-                    .replace("'", "&#39;").replace("&", "&#x26;") + "'";
+                    .replace("&", "&amp;")
+                       .replace("'", "&apos;")
+                       .replace("<", "&lt;") + "'";
                }
         }
 
@@ -1393,18 +1401,30 @@ Strophe.Builder.prototype = {
  *    (String) type - The element type to match.
  *    (String) id - The element id attribute to match.
  *    (String) from - The element from attribute to match.
+ *    (Object) options - Handler options
  *
  *  Returns:
  *    A new Strophe.Handler object.
  */
-Strophe.Handler = function (handler, ns, name, type, id, from)
+Strophe.Handler = function (handler, ns, name, type, id, from, options)
 {
     this.handler = handler;
     this.ns = ns;
     this.name = name;
     this.type = type;
     this.id = id;
-    this.from = from;
+    this.options = options || {matchbare: false};
+    
+    // default matchBare to false if undefined
+    if (!this.options.matchBare) {
+        this.options.matchBare = false;
+    }
+
+    if (this.options.matchBare) {
+        this.from = Strophe.getBareJidFromJid(from);
+    } else {
+        this.from = from;
+    }
 
     // whether the handler is a user handler or a system handler
     this.user = true;
@@ -1423,6 +1443,13 @@ Strophe.Handler.prototype = {
     isMatch: function (elem)
     {
         var nsMatch;
+        var from = null;
+        
+        if (this.options.matchBare) {
+            from = Strophe.getBareJidFromJid(elem.getAttribute('from'));
+        } else {
+            from = elem.getAttribute('from');
+        }
 
         nsMatch = false;
         if (!this.ns) {
@@ -1440,9 +1467,9 @@ Strophe.Handler.prototype = {
 
         if (nsMatch &&
             (!this.name || Strophe.isTagEqual(elem, this.name)) &&
-            (!this.type || elem.getAttribute("type") == this.type) &&
-            (!this.id || elem.getAttribute("id") == this.id) &&
-            (!this.from || elem.getAttribute("from") == this.from)) {
+            (!this.type || elem.getAttribute("type") === this.type) &&
+            (!this.id || elem.getAttribute("id") === this.id) &&
+            (!this.from || from === this.from)) {
                 return true;
         }
 
@@ -1741,7 +1768,9 @@ Strophe.Connection = function (service)
 
     this.paused = false;
 
-    // default BOSH window
+    // default BOSH values
+    this.hold = 1;
+    this.wait = 60;
     this.window = 5;
 
     this._data = [];
@@ -1885,10 +1914,8 @@ Strophe.Connection.prototype = {
      *    (Integer) hold - The optional HTTPBIND hold value.  This is the
      *      number of connections the server will hold at one time.  This
      *      should almost always be set to 1 (the default).
-     *    (Integer) wind - The optional HTTBIND window value.  This is the
-     *      allowed range of request ids that are valid.  The default is 5.
      */
-    connect: function (jid, pass, callback, wait, hold, wind)
+    connect: function (jid, pass, callback, wait, hold)
     {
         this.jid = jid;
         this.pass = pass;
@@ -1898,9 +1925,8 @@ Strophe.Connection.prototype = {
         this.authenticated = false;
         this.errors = 0;
 
-        if (!wait) { wait = 60; }
-        if (!hold) { hold = 1; }
-        if (wind) { this.window = wind; }
+        this.wait = wait || this.wait;
+        this.hold = hold || this.hold;
 
         // parse jid for domain and resource
         this.domain = Strophe.getDomainFromJid(this.jid);
@@ -1909,9 +1935,8 @@ Strophe.Connection.prototype = {
         var body = this._buildBody().attrs({
             to: this.domain,
             "xml:lang": "en",
-            wait: wait,
-            hold: hold,
-            window: this.window,
+            wait: this.wait,
+            hold: this.hold,
             content: "text/xml; charset=utf-8",
             ver: "1.6",
             "xmpp:version": "1.0",
@@ -1942,8 +1967,17 @@ Strophe.Connection.prototype = {
      *    (String) rid - The current RID of the BOSH session.  This RID
      *      will be used by the next request.
      *    (Function) callback The connect callback function.
+     *    (Integer) wait - The optional HTTPBIND wait value.  This is the
+     *      time the server will wait before returning an empty result for
+     *      a request.  The default setting of 60 seconds is recommended.
+     *      Other settings will require tweaks to the Strophe.TIMEOUT value.
+     *    (Integer) hold - The optional HTTPBIND hold value.  This is the
+     *      number of connections the server will hold at one time.  This
+     *      should almost always be set to 1 (the default).
+     *    (Integer) wind - The optional HTTBIND window value.  This is the
+     *      allowed range of request ids that are valid.  The default is 5.
      */
-    attach: function (jid, sid, rid, callback)
+    attach: function (jid, sid, rid, callback, wait, hold, wind)
     {
         this.jid = jid;
         this.sid = sid;
@@ -1954,6 +1988,12 @@ Strophe.Connection.prototype = {
 
         this.authenticated = true;
         this.connected = true;
+
+        this.wait = wait || this.wait;
+        this.hold = hold || this.hold;
+        this.window = wind || this.window;
+
+        this._changeConnectStatus(Strophe.Status.ATTACHED, null);
     },
 
     /** Function: xmlInput
@@ -2052,6 +2092,22 @@ Strophe.Connection.prototype = {
         this._throttledRequestHandler();
         clearTimeout(this._idleTimeout);
         this._idleTimeout = setTimeout(this._onIdle.bind(this), 100);
+    },
+
+    /** Function: flush
+     *  Immediately send any pending outgoing data.
+     *  
+     *  Normally send() queues outgoing data until the next idle period
+     *  (100ms), which optimizes network use in the common cases when
+     *  several send()s are called in succession. flush() can be used to 
+     *  immediately send all pending data.
+     */
+    flush: function ()
+    {
+        // cancel the pending idle period and run the idle function
+        // immediately
+        clearTimeout(this._idleTimeout);
+        this._onIdle();
     },
 
     /** Function: sendIQ
@@ -2216,6 +2272,13 @@ Strophe.Connection.prototype = {
      *  and also any of its immediate children.  This is primarily to make
      *  matching /iq/query elements easy.
      *
+     *  The options argument contains handler matching flags that affect how
+     *  matches are determined. Currently the only flag is matchBare (a
+     *  boolean). When matchBare is true, the from parameter and the from
+     *  attribute on the stanza will be matched as bare JIDs instead of
+     *  full JIDs. To use this, pass {matchBare: true} as the value of
+     *  options. The default value for matchBare is false. 
+     *
      *  The return value should be saved if you wish to remove the handler
      *  with deleteHandler().
      *
@@ -2226,13 +2289,14 @@ Strophe.Connection.prototype = {
      *    (String) type - The stanza type attribute to match.
      *    (String) id - The stanza id attribute to match.
      *    (String) from - The stanza from attribute to match.
+     *    (String) options - The handler options
      *
      *  Returns:
      *    A reference to the handler that can be used to remove it.
      */
-    addHandler: function (handler, ns, name, type, id, from)
+    addHandler: function (handler, ns, name, type, id, from, options)
     {
-        var hand = new Strophe.Handler(handler, ns, name, type, id, from);
+        var hand = new Strophe.Handler(handler, ns, name, type, id, from, options);
         this.addHandlers.push(hand);
         return hand;
     },
@@ -2406,9 +2470,9 @@ Strophe.Connection.prototype = {
 
         var time_elapsed = req.age();
         var primaryTimeout = (!isNaN(time_elapsed) &&
-                              time_elapsed > Strophe.TIMEOUT);
+                              time_elapsed > Math.floor(Strophe.TIMEOUT * this.wait));
         var secondaryTimeout = (req.dead !== null &&
-                                req.timeDead() > Strophe.SECONDARY_TIMEOUT);
+                                req.timeDead() > Math.floor(Strophe.SECONDARY_TIMEOUT * this.wait));
         var requestCompletedWithServerError = (req.xhr.readyState == 4 &&
                                                (reqStatus < 1 ||
                                                 reqStatus >= 500));
@@ -2419,8 +2483,8 @@ Strophe.Connection.prototype = {
                               this._requests[i].id +
                               " timed out (secondary), restarting");
             }
-            req.xhr.abort();
             req.abort = true;
+            req.xhr.abort();
             // setting to null fails on IE6, so set to empty function
             req.xhr.onreadystatechange = function () {};
             this._requests[i] = new Strophe.Request(req.xmlData,
@@ -2572,7 +2636,7 @@ Strophe.Connection.prototype = {
                 // completed request has been removed from the queue already
                 if (reqIs1 ||
                     (reqIs0 && this._requests.length > 0 &&
-                     this._requests[0].age() > Strophe.SECONDARY_TIMEOUT)) {
+                     this._requests[0].age() > Math.floor(Strophe.SECONDARY_TIMEOUT * this.wait))) {
                     this._restartRequest(0);
                 }
                 // call handler
@@ -2767,16 +2831,6 @@ Strophe.Connection.prototype = {
                                           .prependArg(this._dataRecv.bind(this)),
                                       body.tree().getAttribute("rid"));
 
-        // abort and clear all waiting requests
-        var r;
-        while (this._requests.length > 0) {
-            r = this._requests.pop();
-            r.xhr.abort();
-            r.abort = true;
-            // jslint complains, but this is necessary for IE6
-            r.xhr.onreadystatechange = function () {};
-        }
-
         this._requests.push(req);
         this._throttledRequestHandler();
     },
@@ -2830,8 +2884,14 @@ Strophe.Connection.prototype = {
         if (!this.stream_id) {
             this.stream_id = bodyWrap.getAttribute("authid");
         }
+        var wind = bodyWrap.getAttribute('requests');
+        if (wind) { this.window = parseInt(wind, 10); }
+        var hold = bodyWrap.getAttribute('hold');
+        if (hold) { this.hold = parseInt(hold, 10); }
+        var wait = bodyWrap.getAttribute('wait');
+        if (wait) { this.wait = parseInt(wait, 10); }
+        
 
-        // TODO - add SASL anonymous for guest accounts
         var do_sasl_plain = false;
         var do_sasl_digest_md5 = false;
         var do_sasl_anonymous = false;
@@ -3354,8 +3414,8 @@ Strophe.Connection.prototype = {
         var req;
         while (this._requests.length > 0) {
             req = this._requests.pop();
-            req.xhr.abort();
             req.abort = true;
+            req.xhr.abort();
             // jslint complains, but this is fine. setting to empty func
             // is necessary for IE6
             req.xhr.onreadystatechange = function () {};
@@ -3450,15 +3510,15 @@ Strophe.Connection.prototype = {
             time_elapsed = this._requests[0].age();
             if (this._requests[0].dead !== null) {
                 if (this._requests[0].timeDead() >
-                    Strophe.SECONDARY_TIMEOUT) {
+                    Math.floor(Strophe.SECONDARY_TIMEOUT * this.wait)) {
                     this._throttledRequestHandler();
                 }
             }
 
-            if (time_elapsed > Strophe.TIMEOUT) {
+            if (time_elapsed > Math.floor(Strophe.TIMEOUT * this.wait)) {
                 Strophe.warn("Request " +
                              this._requests[0].id +
-                             " timed out, over " + Strophe.TIMEOUT +
+                             " timed out, over " + Math.floor(Strophe.TIMEOUT * this.wait) +
                              " seconds since last activity");
                 this._throttledRequestHandler();
             }

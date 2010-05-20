@@ -94,7 +94,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
         
         case "add_image_to_page_action":
           ddd("add_image_to_page_action");
-          WebDoc.application.boardController.insertImage(properties.url);
+          WebDoc.application.boardController.insertImage(properties.url, undefined, properties.id);
           break;
           
         case "set_image_as_bg_action": 
@@ -172,7 +172,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     // ddd("drag target",event.target);
     // ddd("propeties", properties);
     var dt = event.originalEvent.dataTransfer;
-    dt.setData("application/ub-image", properties.url);
+    dt.setData("application/ub-image", $.toJSON({url:properties.url,id:properties.id}));
     
     // Drag "feedback"
     var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
@@ -216,7 +216,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           
           $.each(data.images, function(i,webDocImage){
             
-            myImagesList.append(this.buildThumbnail(webDocImage.uuid(), webDocImage.data.properties));
+            myImagesList.append(this.buildThumbnail(webDocImage.id(), webDocImage.uuid(), webDocImage.data.properties));
             
           }.pBind(this));
         }
@@ -235,7 +235,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       
        $.each(newImages, function(i,image) {
          
-         myImagesList.prepend(this.buildThumbnail(image.uuid, image.properties));
+         myImagesList.prepend(this.buildThumbnail(image.id(), image.uuid, image.properties));
           
         }.pBind(this));
     }
@@ -245,12 +245,12 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       this.loadMyImages(0);
     }
   },
-  buildThumbnail: function(uuid, properties) {
+  buildThumbnail: function(id, uuid, properties) {
     var thumb = $("<img>").attr({
       src : properties.thumb_url,
       alt : ""
     })
-    .data("properties", jQuery.extend({type:"my_image", uuid:uuid}, properties));
+    .data("properties", jQuery.extend({type:"my_image", id:id, uuid:uuid}, properties));
     
     var liWrap = $("<li>");
     if (properties.type) liWrap.addClass(properties.type);

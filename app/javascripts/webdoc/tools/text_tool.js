@@ -72,17 +72,23 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     }.pBind(this));    
   },
   
-  applyTextContent: function(content, classValue) {
+  applyTextContent: function(content, classValue, scrollTop) {
 
     if (classValue && classValue === "empty") {
       this.textView.itemDomNode.addClass("empty");
+      if (this.textView.item.data.data['class'].indexOf('empty') < 0) {
+        this.textView.item.data.data['class'] = this.textView.item.data.data['class'] + " empty";
+      }
     }
     else {
       this.textView.itemDomNode.removeClass("empty");
+      if (this.textView.item.data.data['class'].indexOf('empty') >= 0) {
+        this.textView.item.data.data['class'] = jQuery.string().gsub("empty", "", this.textView.item.data.data['class']);
+      }
     }
     this.textView.item.data.data.innerHTML = content;    
-    this.textView.item.data.data['class'] = this.textView.itemDomNode.attr("class");
+    this.textView.itemDomNode.scrollTop(scrollTop);
     this.textView.item.fireInnerHtmlChanged();
-    this.textView.item.save();
+    this.textView.item.save();        
   }
 });

@@ -95,7 +95,7 @@ dependencies:
   carrierwave: 
     group: 
     - :default
-    version: = 0.4.3
+    version: ">= 0"
   erubis: 
     group: 
     - :default
@@ -206,7 +206,7 @@ specs:
 - capybara: 
     version: 0.3.7
 - carrierwave: 
-    version: 0.4.3
+    version: 0.4.5
 - cgi_multipart_eof_fix: 
     version: 2.5.0
 - closure-compiler: 
@@ -230,7 +230,7 @@ specs:
 - gem_plugin: 
     version: 0.2.3
 - haml: 
-    version: 2.2.24
+    version: 3.0.2
 - i18n: 
     version: 0.3.7
 - rails: 
@@ -280,14 +280,14 @@ specs:
 - steak: 
     version: 0.3.7
 - uuid: 
-    version: 2.3.0
+    version: 2.3.1
 - uuidtools: 
     version: 2.1.1
 - will_paginate: 
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: fa6f6a8dddc7fa072caec3e5f0574fd842f5f432
+hash: 92b31276fdb5a0a64952994c77662609e31fce5b
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

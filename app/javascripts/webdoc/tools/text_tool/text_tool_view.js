@@ -1,32 +1,33 @@
 WebDoc.TextToolView = $.klass({
   /**
-  * parameters of TextToolView */  
-  FONTSIZES:[['8 pt','8pt'],['9 pt','9pt'],['10 pt','10pt'],['12 pt','12pt'],['14 pt','14pt'],['16 pt','16pt'],['18 pt','18pt'],['19 pt','20pt'],['24 pt','24pt'],['28 pt','28pt'],['32 pt','32pt'],['36 pt','36pt'],['40 pt','40pt'],['44 pt','44pt'],['48 pt','48pt'],['54 pt','54pt'],['60 pt','60pt'],['66 pt','66pt'],['72 pt','72pt'],['80 pt','80pt'],['88 pt','88pt'],['96 pt','96pt']],
-  FONTNAMES:[['Arial','Arial'],['Helvetica','helvetica'],['Tahoma','Tahoma'],['Comic Sans MS','Comic Sans MS'],['Courier New','Courier New'],['Trebuchet MS','Trebuchet MS'],['Verdana','Verdana'],['Serif','Serif']],
-  FORMATS:[['&lt;h1&gt;  Document title','h1'],['&lt;h2&gt;  Page title','h2'],['&lt;h3&gt;  Section title','h3'],['&lt;h4&gt; Heading','h4'],['&lt;h5&gt;  Sub-heading','h5'],['&lt;h6&gt;  Sub-sub-heading','h6'],['&lt;p&gt;  Paragraph','p'],['&lt;blockquote&gt;  Quotation','blockquote'],['&lt;address&gt;  Address','address'],['&lt;pre&gt;  Unformatted','pre']],
-  BLOCKTAGS:['div','p','ul','li','ol','pre','address','blockquote','h1','h2','h3','h4','h5','h6'],
-  HTAGS:['h1','h2','h3','h4','h5','h6'],
-  INLINEPROPERTIES:['backgroundColor','textDecoration','color','fontSize','fontStyle','fontWeight','fontFamily'],
-  INLINETAGS:['span','font'],
+   * parameters of TextToolView */
+  FONTSIZES: [['8 pt', '8pt'], ['9 pt', '9pt'], ['10 pt', '10pt'], ['12 pt', '12pt'], ['14 pt', '14pt'], ['16 pt', '16pt'], ['18 pt', '18pt'], ['20 pt', '20pt'], ['24 pt', '24pt'], ['28 pt', '28pt'], ['32 pt', '32pt'], ['36 pt', '36pt'], ['40 pt', '40pt'], ['44 pt', '44pt'], ['48 pt', '48pt'], ['54 pt', '54pt'], ['60 pt', '60pt'], ['66 pt', '66pt'], ['72 pt', '72pt'], ['80 pt', '80pt'], ['88 pt', '88pt'], ['96 pt', '96pt']],
+  FONTNAMES: [['Arial', 'Arial'], ['Helvetica', 'helvetica'], ['Tahoma', 'Tahoma'], ['Comic Sans MS', 'Comic Sans MS'], ['Courier New', 'Courier New'], ['Trebuchet MS', 'Trebuchet MS'], ['Verdana', 'Verdana'], ['Serif', 'Serif']],
+  FORMATS: [['&lt;h1&gt;  Document title', 'h1'], ['&lt;h2&gt;  Page title', 'h2'], ['&lt;h3&gt;  Section title', 'h3'], ['&lt;h4&gt; Heading', 'h4'], ['&lt;h5&gt;  Sub-heading', 'h5'], ['&lt;h6&gt;  Sub-sub-heading', 'h6'], ['&lt;p&gt;  Paragraph', 'p'], ['&lt;blockquote&gt;  Quotation', 'blockquote'], ['&lt;address&gt;  Address', 'address'], ['&lt;pre&gt; Pre-formatted text', 'pre'], ['Unformatted', 'div']],
+  BLOCKTAGS: ['div', 'p', 'ul', 'li', 'ol', 'pre', 'address', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'dd', 'dt', 'dl'],
+  HTAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+  RELATIVESIZETAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub', 'sup'],
+  INLINEPROPERTIES: ['backgroundColor', 'textDecoration', 'color', 'fontSize', 'fontStyle', 'fontWeight'],
+  INLINETAGS: ['span', 'font', 'a', 'b', 'i', 'u', 'strong', 'small', 'cite', 'sub', 'sup', 'br'],
+  INDENTCLASSES: ['webdoc_indent_1', 'webdoc_indent_2', 'webdoc_indent_3', 'webdoc_indent_4', 'webdoc_indent_5', 'webdoc_indent_6', 'webdoc_indent_7', 'webdoc_indent_8', 'webdoc_indent_9', 'webdoc_indent_10', 'webdoc_indent_11', 'webdoc_indent_12'],
+  NATIVEELEMENTSCLASS: 'webdoc-editor-elem',
   
   /**
-  * tags to total remove from dom on paste event */
-  BLACKLISTTAGS:['object','iframe','figure','map','meta','meter','script','noscript','select','source','style','video','audio'],
+   * tags to total remove from dom on paste event */
+  BLACKLISTTAGS: ['object', 'iframe', 'figure', 'map', 'meta', 'meter', 'script', 'noscript', 'select', 'source', 'style', 'video', 'audio'],
   /**
-  * tags to store in dom on paste event (remove only all attributes that are not in WHITELISTATTRIBUTES) */
-  WHITELISTTAGS:['h1','h2','h3','h4','h5','h6','p','blockquote','pre','a','abbr','acronym','address','code','mark','menu','del','dfn','em','img','b','br','cite','hr','i','q','dl','dt','dd','ol','ul','li','output','ruby','rp','rt','samp','small','strong','sub','sup'],
+   * tags to store in dom on paste event (remove only all attributes that are not in WHITELISTATTRIBUTES) */
+  WHITELISTTAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'blockquote', 'pre', 'a', 'abbr', 'acronym', 'address', 'code', 'mark', 'menu', 'del', 'dfn', 'em', 'img', 'b', 'br', 'cite', 'hr', 'i', 'q', 'dl', 'dt', 'dd', 'ol', 'ul', 'li', 'output', 'ruby', 'rp', 'rt', 'samp', 'small', 'strong', 'sub', 'sup'],
   /**
-  * attributes that are stored in tags from WHITELISTTAGS */   
-  WHITELISTATTRIBUTES:['href','src','alt','title','type','rel','media','start','reversed','dir','lang'],
+   * attributes that are stored in tags from WHITELISTTAGS */
+  WHITELISTATTRIBUTES: ['href', 'src', 'alt', 'title', 'type', 'rel', 'media', 'start', 'reversed', 'dir', 'lang'],
   /**
-  *Tags that are not in BLACKLISTTAGS, nor in the WHITELISTTAGS will be removed from the DOM, but their content will be saved
-  */
-  
+   *Tags that are not in BLACKLISTTAGS, nor in the WHITELISTTAGS will be removed from the DOM, but their content will be saved
+   */
   /**
    * Constructor.  Create a TextiewTool object that can make a div element editable.
    */
-  initialize: function() {
-    //config
+  initialize: function(){
     var thobj = this;
     this.ua = navigator.userAgent.toLowerCase();
     this.currentEditingBlock = null;
@@ -34,6 +35,7 @@ WebDoc.TextToolView = $.klass({
     this.parameters.blockTags = this.BLOCKTAGS;
     this.parameters.inlineTags = this.INLINETAGS;
     this.parameters.hTags = this.HTAGS;
+    this.parameters.relativeSizeTags = this.RELATIVESIZETAGS;
     this.parameters.inlineProperties = this.INLINEPROPERTIES;
     this.parameters.fontSize = this.FONTSIZES;
     this.parameters.fontName = this.FONTNAMES;
@@ -42,8 +44,14 @@ WebDoc.TextToolView = $.klass({
     this.parameters.whiteListTags = this.WHITELISTTAGS;
     this.parameters.whiteListAttributes = this.WHITELISTATTRIBUTES;
     this.parameters.format = this.FORMATS;
+    this.parameters.indentClasses = this.INDENTCLASSES;
+    this.nativeElementsClass = this.NATIVEELEMENTSCLASS;
     this.mainPageStyles = [];
     this.currentEl = null;
+    this.newEditionPoint = false;
+    this.lastStyleHash = false;
+    this.firstAction = true;
+    this.blockStructure = false;
     var mainPageStylesTags = document.getElementsByTagName('link');
     for (i = 0; i < mainPageStylesTags.length; i++) {
       if (mainPageStylesTags[i].getAttribute('type') == 'text/css') {
@@ -51,89 +59,94 @@ WebDoc.TextToolView = $.klass({
       }
     }
     
-    this.undoHandler = function(clonedForUndo) {
+    this.undoHandler = function(clonedForUndo, scroll){
+      var newScroll = thobj.edDoc.body.firstChild.scrollTop;
       thobj.storeHistorySelection();
       var newClonedForUndo = thobj.edDoc.body.firstChild.cloneNode(true);
-      WebDoc.application.undoManager.registerUndo(function() {
-        thobj.undoHandler(newClonedForUndo);
-      });
+      WebDoc.application.undoManager.registerUndo(function(){
+        thobj.undoHandler(newClonedForUndo, newScroll);
+      });     
       thobj.edDoc.body.firstChild.parentNode.replaceChild(clonedForUndo.cloneNode(true), thobj.edDoc.body.firstChild);
       thobj.formatVertical();
+      thobj.edDoc.body.firstChild.scrollTop = scroll;
       thobj.repairHistorySelection();
-      thobj.deleteSelectionMarkers();
+      thobj.deleteHistorySelectionMarkers();
     };
     
-    this.doBeforeTextChanged = function() {
+    this.doBeforeTextChanged = function(){
       thobj.storeHistorySelection();
+      var newScroll = thobj.edDoc.body.firstChild.scrollTop;
       var clonedForUndo = thobj.edDoc.body.firstChild.cloneNode(true);
-      WebDoc.application.undoManager.registerUndo(function() {
-        thobj.undoHandler(clonedForUndo);
+      WebDoc.application.undoManager.registerUndo(function(){
+        thobj.undoHandler(clonedForUndo, newScroll);
       });
-      thobj.deleteSelectionMarkers();
+      thobj.deleteHistorySelectionMarkers();
     };
     
-    this.storeHistorySelection = function() {
-      var selection = this.edWin.getSelection();
+    this.storeHistorySelection = function(){
+      var s = this.getSelectBounds();
       var allClonedChilds = this.edDoc.body.firstChild.getElementsByTagName('*');
       for (var k = 0; k < allClonedChilds.length; k++) {
         var tnodes = allClonedChilds[k].childNodes;
         for (var t = 0; t < tnodes.length; t++) {
-          if (tnodes[t] == selection.anchorNode) {
+          if (tnodes[t] == s.an) {
             tnodes[t].parentNode.setAttribute('selectionStartMarker', true);
             tnodes[t].parentNode.setAttribute('selectionStartChildNumber', t);
-            tnodes[t].parentNode.setAttribute('selectionStartOffset', selection.anchorOffset);
+            tnodes[t].parentNode.setAttribute('selectionStartOffset', s.ao);
           }
-          if (tnodes[t] == selection.focusNode) {
+          if (tnodes[t] == s.fn) {
             tnodes[t].parentNode.setAttribute('selectionEndMarker', true);
             tnodes[t].parentNode.setAttribute('selectionEndChildNumber', t);
-            tnodes[t].parentNode.setAttribute('selectionEndOffset', selection.focusOffset);
+            tnodes[t].parentNode.setAttribute('selectionEndOffset', s.fo);
           }
         }
       }
     };
     
-    this.importSelectionMarkers = function(oldNode,newNode){
-        if(oldNode.getAttribute('selectionStartMarker')!==null){
-            newNode.setAttribute('selectionStartMarker',oldNode.getAttribute('selectionStartMarker'));
-        }
-        if(oldNode.getAttribute('selectionStartChildNumber')!==null){
-            newNode.setAttribute('selectionStartChildNumber',oldNode.getAttribute('selectionStartChildNumber'));
-        }
-        if(oldNode.getAttribute('selectionStartOffset')!==null){
-            newNode.setAttribute('selectionStartOffset',oldNode.getAttribute('selectionStartOffset'));
-        }
-        if(oldNode.getAttribute('selectionEndMarker')!==null){
-            newNode.setAttribute('selectionEndMarker',oldNode.getAttribute('selectionEndMarker'));
-        }
-        if(oldNode.getAttribute('selectionEndChildNumber')!==null){
-            newNode.setAttribute('selectionEndChildNumber',oldNode.getAttribute('selectionEndChildNumber'));
-        }
-        if(oldNode.getAttribute('selectionEndOffset')!==null){
-            newNode.setAttribute('selectionEndOffset',oldNode.getAttribute('selectionEndOffset'));
-        }
+    this.importHistorySelectionMarkers = function(oldNode, newNode){
+      if (oldNode.getAttribute('selectionStartMarker') !== null) {
+        newNode.setAttribute('selectionStartMarker', oldNode.getAttribute('selectionStartMarker'));
+      }
+      if (oldNode.getAttribute('selectionStartChildNumber') !== null) {
+        newNode.setAttribute('selectionStartChildNumber', oldNode.getAttribute('selectionStartChildNumber'));
+      }
+      if (oldNode.getAttribute('selectionStartOffset') !== null) {
+        newNode.setAttribute('selectionStartOffset', oldNode.getAttribute('selectionStartOffset'));
+      }
+      if (oldNode.getAttribute('selectionEndMarker') !== null) {
+        newNode.setAttribute('selectionEndMarker', oldNode.getAttribute('selectionEndMarker'));
+      }
+      if (oldNode.getAttribute('selectionEndChildNumber') !== null) {
+        newNode.setAttribute('selectionEndChildNumber', oldNode.getAttribute('selectionEndChildNumber'));
+      }
+      if (oldNode.getAttribute('selectionEndOffset') !== null) {
+        newNode.setAttribute('selectionEndOffset', oldNode.getAttribute('selectionEndOffset'));
+      }
     };
     
-    this.repairHistorySelection = function() {
+    this.repairHistorySelection = function(){
       this.edWin.getSelection().removeAllRanges();
       var range = this.edDoc.createRange();
       var allClonedChilds = this.edDoc.body.firstChild.getElementsByTagName('*');
       for (var k = 0; k < allClonedChilds.length; k++) {
         var tnodes = allClonedChilds[k].childNodes;
         for (var t = 0; t < tnodes.length; t++) {
-          try{
-          if (tnodes[t].parentNode.getAttribute('selectionStartMarker') && tnodes[t].parentNode.childNodes[tnodes[t].parentNode.getAttribute('selectionStartChildNumber')] == tnodes[t]) {
-            range.setStart(tnodes[t], tnodes[t].parentNode.getAttribute('selectionStartOffset'));
+          try {
+            if (tnodes[t].parentNode.getAttribute('selectionStartMarker') && tnodes[t].parentNode.childNodes[tnodes[t].parentNode.getAttribute('selectionStartChildNumber')] == tnodes[t]) {
+              range.setStart(tnodes[t], tnodes[t].parentNode.getAttribute('selectionStartOffset'));
+            }
+            if (tnodes[t].parentNode.getAttribute('selectionEndMarker') && tnodes[t].parentNode.childNodes[tnodes[t].parentNode.getAttribute('selectionEndChildNumber')] == tnodes[t]) {
+              range.setEnd(tnodes[t], tnodes[t].parentNode.getAttribute('selectionEndOffset'));
+            }
+          } 
+          catch (e) {
           }
-          if (tnodes[t].parentNode.getAttribute('selectionEndMarker') && tnodes[t].parentNode.childNodes[tnodes[t].parentNode.getAttribute('selectionEndChildNumber')] == tnodes[t]) {
-            range.setEnd(tnodes[t], tnodes[t].parentNode.getAttribute('selectionEndOffset'));
-          }
-          } catch(e){}
         }
       }
       this.edWin.getSelection().addRange(range);
     };
     
-    this.deleteSelectionMarkers = function() {
+    this.deleteHistorySelectionMarkers = function(){
       var alltags = this.edDoc.body.firstChild.getElementsByTagName('*');
       for (var k = 0; k < alltags.length; k++) {
         alltags[k].removeAttribute('selectionStartMarker');
@@ -145,11 +158,59 @@ WebDoc.TextToolView = $.klass({
       }
     };
     
-    this.getCurrentElement = function() {
+    this.storeSelection = function(){
+      this.correctUserSelection();
+      var s = this.getSelectBounds();
+      if (s.fo == s.fn.textContent.length) {
+        s.fo = 'end';
+      }
+      if (s.ao === 0) {
+        s.ao = 'begin';
+      }
+      $('<span id="selectionStartMarker" style="color:#ffffff" class="' + this.nativeElementsClass + '" title="' + s.ao + '">|</span>').insertAfter($(s.an));
+      $('<span id="selectionEndMarker" style="color:#ffffff" class="' + this.nativeElementsClass + '" title="' + s.fo + '">|</span>').insertBefore($(s.fn));
+    };
+    
+    this.repairSelection = function(){
+      this.edWin.getSelection().removeAllRanges();
+      
+      var range = this.edDoc.createRange();
+      var sao = $('#selectionStartMarker', this.verticalCell).first().attr('title');
+      var sfo = $('#selectionEndMarker', this.verticalCell).first().attr('title');
+      
+      var san = $('#selectionStartMarker', this.verticalCell)[0].previousSibling;
+      if (this.gnt(san) != 'text' && this.gnt(san) != 'br' && this.gnt(san) != 'img' && this.gnt(san) != 'comment') {
+        san = this.findPrevTextNode($('#selectionStartMarker', this.verticalCell)[0].firstChild);
+      }
+      var sfn = $('#selectionEndMarker', this.verticalCell)[0].nextSibling;
+      if (this.gnt(sfn) != 'text' && this.gnt(sfn) != 'br' && this.gnt(sfn) != 'img' && this.gnt(sfn) != 'comment') {
+        sfn = this.findNextTextNode($('#selectionEndMarker', this.verticalCell)[0].firstChild);
+      }
+      
+      
+      
+      
+      if (sfo == 'end') {
+        sfo = sfn.textContent.length;
+      }
+      if (sao == 'begin') {
+        sao = 0;
+      }
+      $('#selectionStartMarker', this.verticalCell).remove();
+      $('#selectionEndMarker', this.verticalCell).remove();
+      try{
+        range.setStart(san, sao);
+        range.setEnd(sfn, sfo);      
+        this.edWin.getSelection().addRange(range);
+      } catch(e){}
+      
+    };
+    
+    this.getCurrentElement = function(){
       return thobj.currentEl;
     };
     
-    this.shortcut = function(shortcut, callback, opt) {
+    this.shortcut = function(shortcut, callback, opt){
       var default_options = {
         'type': 'keydown',
         'propagate': false,
@@ -170,16 +231,14 @@ WebDoc.TextToolView = $.klass({
         ele = document.getElementById(opt.target);
       }
       var ths = this;
-      //The function to be called at keypress
-      var func = function(e) {
+      var func = function(e){
         e = e || window.event;
         if (e.keyCode) {
           code = e.keyCode;
         }
-        else 
-          if (e.which) {
-            code = e.which;
-          }
+        else if (e.which) {
+          code = e.which;
+        }
         var character = String.fromCharCode(code).toLowerCase();
         var keys = shortcut.toLowerCase().split("+");
         var kp = 0;
@@ -250,43 +309,40 @@ WebDoc.TextToolView = $.klass({
           'f12': 123
         };
         for (var i = 0; i < keys.length; i++) {
-          k = keys[i];   
+          k = keys[i];
           if (k == 'ctrl' || k == 'control') {
-            if (e.ctrlKey || e.metaKey) {  
-              kp++; 
+            if (e.ctrlKey || e.metaKey) {
+              kp++;
             }
           }
-          else 
-            if (k == 'shift') {
-              if (e.shiftKey) {
-                kp++;
-              }
+          else if (k == 'shift') {
+            if (e.shiftKey) {
+              kp++;
             }
-            else 
-              if (k == 'alt') {
-                if (e.altKey) {
+          }
+          else if (k == 'alt') {
+            if (e.altKey) {
+              kp++;
+            }
+          }
+          else if (k.length > 1) {
+            if (special_keys[k] == code) {
+              kp++;
+            }
+          }
+          else {
+            if (character == k) {
+              kp++;
+            }
+            else {
+              if (shift_nums[character] && e.shiftKey) {
+                character = shift_nums[character];
+                if (character == k) {
                   kp++;
                 }
               }
-              else 
-                if (k.length > 1) {
-                  if (special_keys[k] == code) {
-                    kp++;   
-                  }
-                }
-                else {
-                  if (character == k) {
-                    kp++;  
-                  }
-                  else {
-                    if (shift_nums[character] && e.shiftKey) {
-                      character = shift_nums[character];
-                      if (character == k) {
-                        kp++; 
-                      }
-                    }
-                  }
-                }
+            }
+          }
         }
         if (kp == keys.length) {
           var callBackResult = callback(e);
@@ -304,49 +360,64 @@ WebDoc.TextToolView = $.klass({
       if (ele.addEventListener) {
         ele.addEventListener(opt.type, func, false);
       }
-      else 
-        if (ele.attachEvent) {
-          ele.attachEvent('on' + opt.type, func);
-        }
-        else {
-          ele['on' + opt.type] = func;
-        }
-    };
-    
-    this.addEvent = function(obj, type, fn) {
-      if (obj.addEventListener) {
-        obj.addEventListener(type, fn, false);
+      else if (ele.attachEvent) {
+        ele.attachEvent('on' + opt.type, func);
       }
       else {
-        obj["e" + type + fn] = fn;
-        obj[type + fn] = function() {
-          obj["e" + type + fn](window.event);
-        };
-        obj.attachEvent("on" + type, obj[type + fn]);
+        ele['on' + opt.type] = func;
       }
     };
     
-    this.removeEvent = function(obj, type, fn) {
-      if (obj.removeEventListener) {
-        obj.removeEventListener(type, fn, false);
-      }
-      else {
-        obj.detachEvent("on" + type, obj[type + fn]);
-        obj[type + fn] = null;
-        obj["e" + type + fn] = null;
-      }
-    };
-    
-    this.isContainText = function(obj) {
-      if (!obj || (obj.textContent && this.trimRL(obj.textContent).charCodeAt(0) == '8206' && obj.textContent.length == 1)) {
-        return false;
-      }
-      if (obj.textContent && this.trimRL(obj.textContent)!=='') {
+    this.isContainText = function(obj){
+      if (obj.textContent && this.trimRL(obj.textContent)) {
         return true;
       }
+      else {
+        return false;
+      }
     };
-
-    this.repeatedStylePropertiesNodesRemover = function(container, tag, styleAttr) {
+    
+    this.nbspFilter = function(){
+      var textNodes = this.filterTextNodes(this.getAllTextNodes(this.verticalCell));
+      $.each(textNodes, function(i, val){
+        var tempTextContent = '';
+        $.each(val, function(j, ch){
+          if (val.textContent.charCodeAt(j) == 160 || val.textContent.charCodeAt(j) == 32) {
+            tempTextContent += String.fromCharCode(8200);
+          }
+          else {
+            tempTextContent += val.textContent[j];
+          }
+        });
+        val.replaceData(0, val.textContent.length, tempTextContent);
+      });
+      
+    };
+    
+    this.isNative = function(node){
+      if ($(node).hasClass(this.nativeElementsClass)) {
+        return true;
+      }
+      return false;
+    };
+    
+    this.doOnSpacePressed = function(){
+      thobj.correctUserSelection();
+      s = thobj.getSelectBounds();
+      var newEditionPoint = thobj.edDoc.createTextNode(String.fromCharCode(8200));
+      var range = thobj.edDoc.createRange();
+      range.setStart(s.an, s.ao);
+      range.setEnd(s.fn, s.fo);
+      range.insertNode(newEditionPoint);
+      range.selectNode(newEditionPoint);
+      thobj.edWin.getSelection().removeAllRanges();
+      thobj.edWin.getSelection().addRange(range);
+      thobj.edWin.getSelection().collapseToEnd();
+      thobj.correctUserSelection();
+      return false;
+    };
+    
+    this.repeatedStylePropertiesNodesRemover = function(container, tag, styleAttr){
       var nodes = container.getElementsByTagName(tag);
       var k = 0;
       var nodesToKill = [];
@@ -363,50 +434,60 @@ WebDoc.TextToolView = $.klass({
       }
     };
     
-    this.outputFilter = function(html) {
+    this.outputFilter = function(html){
       html = html.replace(/<font/ig, '<span').replace(/font>/ig, 'span>');
       var outputFilterContainer = document.createElement('div');
       outputFilterContainer.innerHTML = html;
-      this.repeatedStylePropertiesNodesRemover(outputFilterContainer, 'span', 'fontSize');
-      this.repeatedStylePropertiesNodesRemover(outputFilterContainer, 'span', 'color');
-      this.repeatedStylePropertiesNodesRemover(outputFilterContainer, 'span', 'backgroundColor');
-      this.convertAttributesToStyleAttrs(outputFilterContainer, 'span', 'face', 'font-family');
       return outputFilterContainer.innerHTML;
     };
     
     this.trimL = function(str){
-      return str.replace(/^\s+/,'');
+      return str.replace(/^\s+/, '');
     };
-
+    
     this.trimR = function(str){
-      return str.replace(/\s+/,'');
+      return str.replace(/\s+/, '');
     };
-		
+    
     this.trimRL = function(str){
       return this.trimR(this.trimL(str));
     };
     
-    this.selectCustomNode = function(node) {
-      var range = thobj.edDoc.createRange();
+    this.selectCustomNode = function(node, range){
+      if (!range) {
+        range = thobj.edDoc.createRange();
+      }
       range.selectNode(node);
+      thobj.edWin.getSelection().removeAllRanges();
       thobj.edWin.getSelection().addRange(range);
       return range;
     };
     
-    this.selectCustomNodeContent = function(node) {
-      var range = thobj.edDoc.createRange();
+    this.selectCustomNodeContent = function(node, range){
+      if (!range) {
+        range = thobj.edDoc.createRange();
+      }
       range.selectNodeContents(node);
+      thobj.edWin.getSelection().removeAllRanges();
       thobj.edWin.getSelection().addRange(range);
       return range;
     };
     
-    this.getElementStyleData = function(elem) {
-      var el = (elem ? elem : this.getPropertyDetectionNode());
+    this.getElementStyleData = function(elem){
+      var el = elem;
       if (!el) {
         return false;
       }
+      if (thobj.gnt(el) == "comment") {
+        return false;
+      }
       if (this.edWin.getComputedStyle) {
-        var st = this.edWin.getComputedStyle(el, null);
+        try {
+          var st = this.edWin.getComputedStyle(el, null);
+        } 
+        catch (e) {
+          return false;
+        }
         this.style = {
           fontStyle: st.getPropertyValue("font-style"),
           fontSize: st.getPropertyValue("font-size"),
@@ -418,6 +499,24 @@ WebDoc.TextToolView = $.klass({
           bgColor: st.getPropertyValue("background-color"),
           valign: st.getPropertyValue("vertical-align")
         };
+      }
+      if (this.style.textDecoration != 'underline') {
+        var uparents = this.getAllNodeParents(el);
+        for (var u = 0; u < uparents.length; u++) {
+          if (uparents[u].nodeName.toLowerCase() == 'u' || uparents[u].style.textDecoration == 'underline') {
+            this.style.textDecoration = 'underline';
+            break;
+          }
+        }
+      }
+      if (this.style.bgColor == 'transparent') {
+        var parents = this.getAllNodeParents(el);
+        for (var i = 0; i < parents.length; i++) {
+          if (parents[i].style.backgroundColor && parents[i].style.backgroundColor != 'transparent') {
+            this.style.bgColor = parents[i].style.backgroundColor;
+            break;
+          }
+        }
       }
       this.setStyleProperty(el, "h1");
       this.setStyleProperty(el, "h2");
@@ -434,54 +533,57 @@ WebDoc.TextToolView = $.klass({
       this.setStyleProperty(el, "sub");
       this.setStyleProperty(el, "sup");
       this.setStyleProperty(el, "u");
+      this.setStyleProperty(el, "pre");
       return (this.style);
     };
     
-    this.formatElementStyleData = function(styleHash) {
+    this.formatElementStyleData = function(styleHash){
+      if (!styleHash) {
+        return false;
+      }
+      
       toolbarHash = {};
-      toolbarHash.bold = (styleHash.fontWeight == 'bold') ? true : false;
+      toolbarHash.bold = (styleHash.fontWeight == 'bold' || styleHash.fontWeight > 400) ? true : false;
       toolbarHash.italic = (styleHash.fontStyle == 'italic') ? true : false;
       toolbarHash.underline = (styleHash.textDecoration == 'underline') ? true : false;
+      
       if (styleHash.h1) {
         toolbarHash.format = 'h1';
       }
-      else 
-        if (styleHash.h2) {
-          toolbarHash.format = 'h2';
-        }
-        else 
-          if (styleHash.h3) {
-            toolbarHash.format = 'h3';
-          }
-          else 
-            if (styleHash.h4) {
-              toolbarHash.format = 'h4';
-            }
-            else 
-              if (styleHash.h5) {
-                toolbarHash.format = 'h5';
-              }
-              else 
-                if (styleHash.h6) {
-                  toolbarHash.format = 'h6';
-                }
-                else 
-                  if (styleHash.blockquote) {
-                    toolbarHash.format = 'blockquote';
-                  } 
-                  else 
-                    if (styleHash.address) {
-                      toolbarHash.format = 'address';
-                    }                                 
-                    else 
-                      if (styleHash.p) {
-                        toolbarHash.format = 'p';
-                      }
-                      else{
-                        toolbarHash.format = 'pre';
-                      }
+      else if (styleHash.h2) {
+        toolbarHash.format = 'h2';
+      }
+      else if (styleHash.h3) {
+        toolbarHash.format = 'h3';
+      }
+      else if (styleHash.h4) {
+        toolbarHash.format = 'h4';
+      }
+      else if (styleHash.h5) {
+        toolbarHash.format = 'h5';
+      }
+      else if (styleHash.h6) {
+        toolbarHash.format = 'h6';
+      }
+      else if (styleHash.blockquote) {
+        toolbarHash.format = 'blockquote';
+      }
+      else if (styleHash.address) {
+        toolbarHash.format = 'address';
+      }
+      else if (styleHash.p) {
+        toolbarHash.format = 'p';
+      }
+      else if (styleHash.pre) {
+        toolbarHash.format = 'pre';
+      }
+      else {
+        toolbarHash.format = 'div';
+      }
       toolbarHash.fontSize = Math.round((styleHash.fontSize.split('px')[0]) * 75 / 100) + 'pt';
+      toolbarHash.fontSizePx = styleHash.fontSize;
       toolbarHash.fontName = (styleHash.fontFamily.toLowerCase().split(',')[0].split(' ')[0].replace('\'', ''));
+      toolbarHash.fontNameFull = styleHash.fontFamily;
       toolbarHash.foreColor = (styleHash.fontColor);
       toolbarHash.hiliteColor = (styleHash.bgColor);
       toolbarHash.justifyLeft = (styleHash.textAlign == 'left' || styleHash.textAlign == 'start' || styleHash.textAlign == 'auto') ? true : false;
@@ -498,11 +600,65 @@ WebDoc.TextToolView = $.klass({
       return toolbarHash;
     };
     
-    this.getParentByTag = function(node, tag_name) {
+    this.getSelectedNodesBySelectedTextNodes = function(selectedTextNodes){
+      var out = [];
+      for (var i = 0; i < selectedTextNodes.length; i++) {
+        if (selectedTextNodes[i].parentNode && selectedTextNodes[i].parentNode != this.verticalCell && $.trim(selectedTextNodes[i].textContent)) {
+          out.push(selectedTextNodes[i].parentNode);
+        }
+      }
+      if (!out.length && this.getSelectBounds().fn.parentNode) {
+        out.push((thobj.gnt(this.getSelectBounds().fn)=='text')?this.getSelectBounds().fn.parentNode:this.getSelectBounds().fn);
+      }
+      return out;
+    };
+    
+    this.getSelectedNodesStyleHash = function(){
+      var propertysMarker = false; 
+      var outStyleHash = false;
+      var blockHashProperties = ['format', 'insertOrderedList', 'insertUnorderedList', 'justifyCenter', 'justifyFull', 'justifyLeft', 'justifyRight', 'valignBottom', 'valignMiddle', 'valignTop'];
+      var selectedNodes = this.getSelectedNodesBySelectedTextNodes(this.filterTextNodes(this.getSelectedTextNodes()));
+      $.each(selectedNodes,function(){
+        if(thobj.gnt(this)=='inline'){
+          propertysMarker = this;
+        }
+      });
+      
+      
+      if(!propertysMarker){
+        propertysMarker = selectedNodes[0]; 
+      }
+      outStyleHash = this.formatElementStyleData(this.getElementStyleData(propertysMarker));
+      for (var i = 0; i < selectedNodes.length; i++) {
+          currStyleHash = this.formatElementStyleData(this.getElementStyleData(selectedNodes[i]));
+          for (s in currStyleHash) {
+            if ((this.gnt(selectedNodes[i]) == 'block' /*&& $.inArray(s, blockHashProperties) != -1*/) || this.gnt(selectedNodes[i]) == 'inline') {
+              if (currStyleHash[s] != outStyleHash[s] && outStyleHash[s] != 'different') {
+                if (currStyleHash.subScript && currStyleHash.superScript && s == 'fontSise') {
+                }
+                else {    
+                  outStyleHash[s] = 'different';
+                }
+              } 
+            }
+            
+          }
+        }   
+      return outStyleHash;
+    };
+    
+    this.getParentByTag = function(node, tag_name){
       tag_name = tag_name.toLowerCase();
       var p = node;
       do {
-        if (tag_name === "" || p.nodeName.toLowerCase() == tag_name) {
+        if (tag_name == 'ul' && p.nodeName.toLowerCase() == 'ol') {
+          return false;
+        }
+        if (tag_name == 'ol' && p.nodeName.toLowerCase() == 'ul') {
+          return false;
+        }
+        if (p.nodeName.toLowerCase() == tag_name) {
+        
           return p;
         }
         p = p.parentNode;
@@ -510,7 +666,7 @@ WebDoc.TextToolView = $.klass({
       while (p.parentNode);
     };
     
-    this.isStyleProperty = function(node, tag_name, name, value) {
+    this.isStyleProperty = function(node, tag_name, name, value){
       tag_name = tag_name.toLowerCase();
       var n = node;
       do {
@@ -523,26 +679,23 @@ WebDoc.TextToolView = $.klass({
       return false;
     };
     
-    this.setStyleProperty = function(el, Nq) {
+    this.setStyleProperty = function(el, Nq){
       this.style[Nq] = false;
-      if(el.tagName.toLowerCase() == Nq){
+      if (el.tagName.toLowerCase() == Nq) {
         this.style[Nq] = true;
-      } 
-      else 
-        {
-          var n = this.getParentByTag(el, Nq);
-          if (n && (n.tagName.toLowerCase() == Nq)) {
-            this.style[Nq] = true;
-          }
-          if (Nq == "del") {
-            if (this.getParentByTag(el, "strike") && (this.getParentByTag(el, "strike").tagName.toLowerCase() == "strike")) {
-              this.style.del = true;
-            }
-          } 
+      }
+      else {
+        var n = this.getParentByTag(el, Nq);
+        if (n && (n.tagName.toLowerCase() == Nq)) {
+          this.style[Nq] = true;
         }
+      }
     };
     
-    this.getLastestChild = function(node) {
+    this.getLastestChild = function(node){
+      if (!node) {
+        return this.verticalCell;
+      }
       if (node.lastChild) {
         return this.getLastestChild(node.lastChild);
       }
@@ -551,7 +704,10 @@ WebDoc.TextToolView = $.klass({
       }
     };
     
-    this.getFirstestChild = function(node) {
+    this.getFirstestChild = function(node){
+      if (!node) {
+        return this.verticalCell;
+      }
       if (node.firstChild) {
         return this.getFirstestChild(node.firstChild);
       }
@@ -560,260 +716,93 @@ WebDoc.TextToolView = $.klass({
       }
     };
     
-    
-    this.getSelectionBounds = function() {
-      var range, root, start, end;
-      if (this.edWin.getSelection) {
-        var selection = this.edWin.getSelection();
-        range = selection.getRangeAt(selection.rangeCount - 1);
-        start = range.startContainer;
-        end = range.endContainer;
-        root = range.commonAncestorContainer;
-        if (start.nodeName == "#text") {
-          root = root.parentNode;
-        }
-        if (start.nodeName == "#text") {
-          start = start.parentNode;
-        }
-        if (start.nodeName.toLowerCase() == "body") {
-          start = start.firstChild;
-        }
-        if (end.nodeName == "#text") {
-          end = end.parentNode;
-        }
-        if (end.nodeName.toLowerCase() == "body") {
-          end = end.lastChild;
-        }
-        if (start == end) {
-          root = start;
-        }
-        if (start == root) {
-          start = this.getFirstestChild(root);
-        }
-        if (end == root) {
-          end = this.getLastestChild(root);
-        }
-        
-        return {
-          root: root,
-          start: start,
-          end: end
-        };
-      }
-      else 
-        if (this.edWin.document.selection) {
-          range = this.edDoc.selection.createRange();
-          if (!range.duplicate) {
-            return null;
+    $.fn.emptyTextNodes = function(){
+      var ret = [];
+      this.each(function(){
+        var fn = arguments.callee;
+        $(this).contents().each(function(){
+          if (this.nodeType == 3 && !this.textContent && !thobj.isNative(this.parentNode)) {
+            ret.push(this);
           }
-          root = range.parentElement();
-          var r1 = range.duplicate();
-          var r2 = range.duplicate();
-          r1.collapse(true);
-          r2.moveToElementText(r1.parentElement());
-          r2.setEndPoint("EndToStart", r1);
-          start = r1.parentElement();
-          r1 = range.duplicate();
-          r2 = range.duplicate();
-          r2.collapse(false);
-          r1.moveToElementText(r2.parentElement());
-          r1.setEndPoint("StartToEnd", r2);
-          end = r2.parentElement();
-          if (start.nodeName.toLowerCase() == "body") {
-            start = start.firstChild;
+          else {
+            fn.apply($(this));
           }
-          if (end.nodeName.toLowerCase() == "body") {
-            end = end.lastChild;
-          }
-          
-          if (start == end) {
-            root = start;
-          }
-          return {
-            root: root,
-            start: start,
-            end: end
-          };
-        }
-      return null;
-    };
-    var global_stage;
-    
-    this.findTagsInSubtree = function (bounds, tag_name, stage, second){
-      var root = bounds.root;
-      var start = bounds.start;
-      var end = bounds.end;
-      if (start == end) {
-        return [start];
-      }
-      if (!second) {
-        global_stage = stage;
-      }     
-      if (global_stage == 2) {
-        return [];
-      }
-      if (!global_stage) {
-        global_stage = 0;
-      }     
-      tag_name = tag_name.toLowerCase();      
-      var nodes=[];
-      for(var node = root.firstChild; node; node = node.nextSibling){
-        if(node==start && !global_stage){
-          global_stage = 1;
-        }
-        if(node.nodeName.toLowerCase() == tag_name && node.nodeName != '#text' || !tag_name){
-          if(global_stage == 1){
-            nodes.push(node);
-          }
-        }
-        if(node==end && global_stage==1){
-          global_stage = 2;
-        }
-        nodes=nodes.concat(this.findTagsInSubtree({root:node, start:start, end:end}, tag_name, global_stage, true));
-      }
-      return nodes;
+        });
+      });
+      return $(ret);
     };
     
-    this.getSelectBounds = function(){
-      var an = thobj.edWin.getSelection().anchorNode;
-      var fn = thobj.edWin.getSelection().focusNode;
-      var ao = thobj.edWin.getSelection().anchorOffset;
-      var fo = thobj.edWin.getSelection().focusOffset;
-      return {'an':an,'fn':fn,'ao':ao,'fo':fo};
+    $.fn.textNodes = function(){
+      var ret = [];
+      this.each(function(){
+        var fn = arguments.callee;
+        $(this).contents().each(function(){
+          if (this.nodeType == 3 || $.nodeName(this, "br") || $.nodeName(this, "img")) {
+            ret.push(this);
+          }
+          else {
+            fn.apply($(this));
+          }
+        });
+      });
+      return $(ret);
     };
-
-    this.correctUserSelection = function(){
-      var s = thobj.getSelectBounds();
-      if(s.an == s.fn && s.ao != s.fo && s.ao-s.fo!=-1 && s.ao-s.fo!=1 && (s.an == thobj.verticalCell || s.an == thobj.verticalContainer  || s.an == thobj.rootDiv || s.an == thobj.edDoc.body)){
-        this.selectCustomNodeContent(this.verticalCell);
-        return false;
-      }
-      if (s.an == s.fn && s.ao == s.fo) {
-		  	return false;
-		  }
-      var fromStartToEnd = 'undefined';
-      thobj.edWin.getSelection().removeAllRanges();
-      var range = thobj.edDoc.createRange();
-        if((s.an == thobj.verticalCell || s.an == thobj.verticalContainer  || s.an == thobj.rootDiv || s.an == thobj.edDoc.body) && s.ao<1){
-        range.selectNodeContents(thobj.verticalCell);
-        if (s.ao === 0) {
-					fromStartToEnd = true;
-				} else {
-					fromStartToEnd = false;
-				}   
-      } else if((s.fn == thobj.verticalCell || s.fn == thobj.verticalContainer || s.fn == thobj.rootDiv  || s.fn == thobj.edDoc.body) && s.fo<1){
-        range.selectNodeContents(thobj.verticalCell);
-        if (s.fo === 0) {
-					fromStartToEnd = false;
-				} else {
-					fromStartToEnd = true;
-				}
-      }                                                                                                                                                
-      if(fromStartToEnd === true){
-        if(s.an != thobj.verticalCell && s.an != thobj.verticalContainer && s.an != thobj.rootDiv){
-          range.setStart(s.an,s.ao);
-        }
-        if(s.fn != thobj.verticalCell && s.fn != thobj.verticalContainer && s.fn != thobj.rootDiv){
-          range.setEnd(s.fn,s.fo);
-        } 
-      } else if(fromStartToEnd === false){
-        if(s.an != thobj.verticalCell && s.an != thobj.verticalContainer && s.an != thobj.rootDiv){
-          range.setStart(s.fn,s.fo);
-        }
-        if(s.fn != thobj.verticalCell && s.fn != thobj.verticalContainer && s.fn != thobj.rootDiv){
-          range.setEnd(s.an,s.ao);
-        }
-      }
-      if(fromStartToEnd=='undefined'){
-        range.setStart(s.an,s.ao);
-        range.setEnd(s.fn,s.fo);
-        if(!range.toString()){
-          range.setStart(s.fn,s.fo);
-          range.setEnd(s.an,s.ao);
-        }
-      }
-      thobj.edWin.getSelection().addRange(range);
-    };                                                                                                            
-
     
-    this.getPrevNodes = function(node){
-      el = node.previousSibling;
+    $.fn.commentNodes = function(){
+      var ret = [];
+      this.each(function(){
+        var fn = arguments.callee;
+        $(this).contents().each(function(){
+          if (this.nodeType == 8) {
+            ret.push(this);
+          }
+          else {
+            fn.apply($(this));
+          }
+        });
+      });
+      return $(ret);
+    };
+    
+    this.getAllTextNodes = function(root){
+      return $(root).textNodes();
+    };
+    
+    this.getAllCommentNodes = function(root){
+      return $(root).commentNodes();
+    };
+    
+    this.getFirstestChilds = function(node){
       out = [];
-      var i=0;
-      while(el!==null){
-        out[i]=el;
-        el = el.previousSibling;
-        i++;
-      }
-      return out; 
-    };
-    
-    this.getNextNodes = function(node){  
-      el = node.nextSibling;
-      out = [];
-      var i=0;
-      while (el!==null) {
-        out[i]=el;
-        el = el.nextSibling;
-        i++;
+      var cnode = node;
+      while (cnode.firstChild) {
+        out.push(cnode.firstChild);
+        cnode = cnode.firstChild;
       }
       return out;
     };
-
-    this.searchNodeInChilds = function(container,node){
-      var childs = container.childNodes;        
-      var is_found = false; 
-      if (container == node) {
-		  	return true;
-		  }
-      if (container.childNodes.length) {
-		  	for (var i = 0; i < childs.length; i++) {
-		  		if (childs[i] == node) {
-		  			return true;
-		  		} else {
-		  			is_found = (is_found) ? (is_found) : this.searchNodeInChilds(childs[i], node);
-		  		}
-		  	}
-		  	if (is_found) {
-		  		return true;
-		  	} else {
-		  		return false;
-		  	}
-		  } else {
-		  	return false;
-		  }
-    };
-   
-    this.getSelectTags = function(tag){
-      var s = this.getSelectBounds();
-      var outTags = [];
-      var allTags = this.verticalCell.getElementsByTagName(tag);
-      for(var i=0;i<allTags.length;i++){
-        var rightAnchor = false;
-        var rightFocus = false;
-        var parents = this.getAllNodeParents(allTags[i]);
-        parents[parents.length]=allTags[i]; 
-        for(var p=0;p<parents.length;p++){
-          var prevs = this.getPrevNodes(parents[p]); 
-          for(var ps=0;ps<prevs.length;ps++){
-             rightAnchor = (rightAnchor)?(rightAnchor):this.searchNodeInChilds(prevs[ps],s.an);
-          }
-          var nexts = this.getNextNodes(parents[p]);
-          for(var ns=0;ns<nexts.length;ns++){
-             rightFocus = (rightFocus)?(rightFocus):this.searchNodeInChilds(nexts[ns],s.fn);
-          }
-        }
-        if(rightFocus && rightAnchor){outTags.push(allTags[i]);}
-      } 
-      return outTags; 
+    
+    this.isCorrectRootStructure = function(){
+      if (!this.edDoc.body.firstChild || !this.edDoc.body.firstChild.firstChild || !this.edDoc.body.firstChild.firstChild.firstChild) {
+        return false;
+      }
+      return true;
     };
     
-    
-    this.getAllNodeParents = function(node) {
+    this.getAllNodeParents = function(node){
       var parents = [];
       var cnode = node;
+      if (!cnode) {
+        return parents;
+      }
+      if (!this.isCorrectRootStructure()) {
+        return parents;
+      }
+      if (!cnode.parentNode) {
+        return parents;
+      }
       for (var i = 0; true; i++) {
-        if (cnode.parentNode && cnode.parentNode!=this.verticalCell && cnode.parentNode!=this.verticalContainer) {
+        if (cnode.parentNode && cnode.parentNode != this.edDoc && cnode.parentNode != this.edDoc.body.firstChild && cnode.parentNode != this.edDoc.body.firstChild.firstChild && cnode.parentNode != this.edDoc.body.firstChild.firstChild.firstChild) {
           parents[i] = cnode.parentNode;
           cnode = cnode.parentNode;
         }
@@ -824,103 +813,265 @@ WebDoc.TextToolView = $.klass({
       return parents;
     };
     
+    this.getSelectBounds = function(){
+      var an = thobj.edWin.getSelection().anchorNode;
+      var fn = thobj.edWin.getSelection().focusNode;
+      var ao = thobj.edWin.getSelection().anchorOffset;
+      var fo = thobj.edWin.getSelection().focusOffset;
+      return {
+        'an': an,
+        'fn': fn,
+        'ao': ao,
+        'fo': fo
+      };
+    };
     
-    this.getSelectedTags = function(tag_name) {
-      if (tag_name) {
-        tag_name = tag_name.toLowerCase();
+    this.correctUserSelection = function(){
+      var s = thobj.getSelectBounds();
+      if (!s.an || !s.an) {
+				return false;
+			}
+      var range = thobj.edDoc.createRange();
+      if (s.an == s.fn && s.ao == s.fo) {
+        this.edWin.getSelection().removeAllRanges();
+        
+        if (this.gnt(s.fn) != 'text' && this.gnt(s.fn) != 'img' && this.gnt(s.fn) != 'br' && this.gnt(s.fn) != 'comment') {
+          if (!s.fn.childNodes.length) {
+            var emptyTn = this.edDoc.createTextNode('');
+            s.fn.appendChild(emptyTn);
+          }
+          var node = s.fo > 0 ? s.fn.childNodes[s.fo - 1] : s.fn.childNodes[0];
+          var foc = this.getLastestChild(node);
+          if (this.gnt(foc) == 'br') {               
+            emptyTn = this.edDoc.createTextNode('');
+            foc.parentNode.insertBefore(emptyTn, foc);
+            foc = this.findPrevTextNode(foc);  
+          }
+          
+          if (foc && (foc.textContent || foc.textContent === '')) {
+            range.setEnd(foc, foc.textContent.length);
+            range.setStart(foc, foc.textContent.length);
+          }
+          else {
+            range.setEnd(s.fn, s.fo);
+            range.setStart(s.fn, s.fo);
+          }
+        }
+        else if (s.fo === 0) {
+          var prevTextNode = this.findPrevTextNode(s.fn);
+          if (this.isFromOwnContainer([prevTextNode, s.fn])) {
+            range.setStart(prevTextNode, prevTextNode.textContent.length);
+            range.setEnd(prevTextNode, prevTextNode.textContent.length);
+          }
+          else {
+            range.setEnd(s.fn, s.fo);
+            range.setStart(s.fn, s.fo);
+          }
+        }
+        else {
+          range.setEnd(s.fn, s.fo);
+          range.setStart(s.fn, s.fo);
+        }
+      }
+      
+      else {
+        this.edWin.getSelection().removeAllRanges();
+        range.setStart(s.an, s.ao);
+        range.setEnd(s.fn, s.fo);
+        if (!range.toString()) {
+          range = thobj.edDoc.createRange();
+          range.setEnd(s.an, s.ao);
+          range.setStart(s.fn, s.fo);
+        }
+        this.edWin.getSelection().addRange(range);
+        s = thobj.getSelectBounds();
+        range = thobj.edDoc.createRange();
+        thobj.edWin.getSelection().removeAllRanges();
+        if (this.gnt(s.fn) != 'text' && this.gnt(s.fn) != 'img' && this.gnt(s.fn) != 'br' && this.gnt(s.fn) != 'comment') {
+          if (!s.fn.childNodes.length) {
+            emptyTn = this.edDoc.createTextNode('');
+            s.fn.appendChild(emptyTn);
+          }
+          node = (s.fo > 0) ? s.fn.childNodes[s.fo - 1] : s.fn.childNodes[0];
+          foc = this.getLastestChild(node);
+          if (this.gnt(foc) == 'br') {
+            foc = this.findPrevTextNode(foc);
+          }
+          if (foc) {
+            range.setEnd(foc, foc.textContent.length);
+          }
+        }
+        else if (s.fo === 0) {
+          prevTextNode = this.findPrevTextNode(s.fn);
+          range.setEnd(prevTextNode, prevTextNode.textContent.length);
+        }
+        else {
+          range.setEnd(s.fn, s.fo);
+        }
+        
+        if (this.gnt(s.an) != 'text' && this.gnt(s.an) != 'img' && this.gnt(s.fn) != 'br' && this.gnt(s.an) != 'comment') {
+          if (!s.an.childNodes.length) {
+            emptyTn = this.edDoc.createTextNode('');
+            s.an.appendChild(emptyTn);
+          }
+          node = s.ao > 0 ? s.an.childNodes[s.ao - 1] : s.an.childNodes[0];
+          var aoc = this.getFirstestChild(node);
+          if (this.gnt(aoc) == 'br') {
+            aoc = this.findNextTextNode(aoc);
+          }
+          if (aoc) {
+            range.setStart(aoc, 0);
+          }
+        }
+        else if (s.an.textContent.length == s.ao) {
+          var nextTextNode = this.findNextTextNode(s.an);
+          range.setStart(nextTextNode, 0);
+        }
+        else {
+          range.setStart(s.an, s.ao);
+        }
+      }
+      thobj.edWin.getSelection().addRange(range);
+      s = thobj.getSelectBounds();
+      this.edWin.focus();
+    };
+    
+    this.isFromOwnContainer = function(arr){
+      if (arr.length) {
+        var firstItem = arr[0];
+        var isFromOwn = true;
+        $.each(arr, function(){
+          if (thobj.isHasBlockParents(this) != thobj.isHasBlockParents(firstItem)) {
+            isFromOwn = false;
+          }
+        });
+        return isFromOwn;
       }
       else {
-        tag_name = '';
+        return false;
       }
-      var bounds = this.getSelectionBounds(this.edWin);
-      if (!bounds) {
-        return null;
-      }
-      bounds.start = this.closest_parent_by_tag_name(bounds.start, tag_name);
-      bounds.end = this.closest_parent_by_tag_name(bounds.end, tag_name);
-      return this.findTagsInSubtree(bounds, tag_name);
     };
     
-    this.closest_parent_by_tag_name = function(node, tag_name) {
-      tag_name = tag_name.toLowerCase();
-      var p = node;
-      do {
-        if (tag_name === '' || p.nodeName.toLowerCase() == tag_name) {
-          return p;
-        }
-        p = p.parentNode;
-      }
-      while (p.parentNode);
-      return node;
-    };
-
-    this.increaseFontSize = function(inc,uc) {
-      this.findNearBeforeFontValueInFontParameters = function(value){
-          for(var n=this.parameters.fontSize.length-1;n>=0;n--){
-            if(value > this.parameters.fontSize[n][1].split('pt')[0]  && value <= this.parameters.fontSize[this.parameters.fontSize.length-1][1].split('pt')[0]){
-              return this.parameters.fontSize[n][1];
-            }
+    this.findPrevTextNode = function(node){
+      var textNodes = this.getAllTextNodes(this.verticalCell);
+      for (var i = textNodes.length - 1; i >= 0; i--) {
+        if (node == textNodes[i]) {
+          if (this.gnt(textNodes[i - 1]) != 'br') {
+            return textNodes[i - 1];
           }
-          return false;
-      };
-      this.findNearAfterFontValueInFontParameters = function(value){
-          for(var n=0;n<this.parameters.fontSize.length;n++){
-            if(value < this.parameters.fontSize[n][1].split('pt')[0] && value>=this.parameters.fontSize[0][1].split('pt')[0]){
-              return this.parameters.fontSize[n][1];
-            }
+          else if (this.gnt(textNodes[i - 1]) == 'br') {
+            return this.findPrevTextNode(textNodes[i - 1]);
           }
-          return false;
-      };
-    
-      this.allTags = this.edDoc.body.getElementsByTagName("*");
-      for (var l = 0; l < this.allTags.length; l++) {
-        if (this.allTags[l].style.color) {
-          this.allTags[l].c = this.allTags[l].style.color;
         }
-        this.allTags[l].style.color = '';
-        this.allTags[l].setAttribute('size', "");
       }
-      this.formatInline('foreColor', 'color', 'color', uc);
-      this.allTags = this.edDoc.body.getElementsByTagName("*");
-      for (var i = 0; i < this.allTags.length; i++) {
-        if (this.allTags[i].style.color == uc) {
-          var oldSize = Math.round((this.edWin.getComputedStyle(this.allTags[i], null).getPropertyValue("font-size").split('px')[0]) * 75 / 100);
-          if(inc < 0){
-            this.allTags[i].s = this.findNearBeforeFontValueInFontParameters(oldSize) || (((oldSize.toString().split('pt')[0]-1)*1 || 1)+'pt');
-          } else {
-            this.allTags[i].s = this.findNearAfterFontValueInFontParameters(oldSize)  || ((oldSize.toString().split('pt')[0]*1+1)+'pt');
-          } 
-          var innerNodes = this.allTags[i].getElementsByTagName('*');
-          for (var s = 0; s < innerNodes.length; s++) {
-            if (innerNodes[s].style.color != uc) {
-              var oldInnerSize = Math.round((this.edWin.getComputedStyle(innerNodes[s], null).getPropertyValue("font-size").split('px')[0]) * 75 / 100);
-              if(inc < 0){
-                innerNodes[s].s = this.findNearBeforeFontValueInFontParameters(oldInnerSize) || (((oldInnerSize.toString().split('pt')[0]-1)*1 || 1)+'pt');
-              } else {
-                innerNodes[s].s = this.findNearAfterFontValueInFontParameters(oldInnerSize)  || ((oldInnerSize.toString().split('pt')[0]*1+1)+'pt');
-              } 
-            }
-          }     
-          
-        }
-        this.allTags[i].style.color = '';
-      }
-      this.allTags = this.edDoc.body.getElementsByTagName("*");
-      for (var j = 0; j < this.allTags.length; j++) {
-        if (this.allTags[j].c) {
-          this.allTags[j].style.color = this.allTags[j].c;
-        }
-        if (this.allTags[j].s) {
-          this.allTags[j].style.fontSize = this.allTags[j].s;
-        }
-        this.allTags[j].c = null;
-        this.allTags[j].s = null;
-        this.allTags[j].removeAttribute('size');
-      } 
+      return false;
     };
     
+    this.findNextTextNode = function(node){
+      var textNodes = this.getAllTextNodes(this.verticalCell);
+      for (var i = 0; i < textNodes.length; i++) {
+        if (node == textNodes[i]) {
+          if (this.gnt(textNodes[i + 1]) != 'br') {
+            return textNodes[i + 1];
+          }
+          else if (this.gnt(textNodes[i + 1]) == 'br') {
+            return this.findNextTextNode(textNodes[i + 1]);
+          }
+        }
+      }
+      return false;
+    };
     
-    this.getFirstLiParent = function(node) {
+    this.getPrevNodes = function(node){
+      el = node.previousSibling;
+      out = [];
+      var i = 0;
+      while (el !== null) {
+        out[i] = el;
+        el = el.previousSibling;
+        i++;
+      }
+      return out;
+    };
+    
+    this.getNextNodes = function(node){
+      el = node.nextSibling;
+      out = [];
+      var i = 0;
+      while (el !== null) {
+        out[i] = el;
+        el = el.nextSibling;
+        i++;
+      }
+      return out;
+    };
+    
+    this.searchNodeInChilds = function(container, node){
+      var childs = container.childNodes;
+      var is_found = false;
+      if (container == node) {
+        return true;
+      }
+      if (container.childNodes.length) {
+        for (var i = 0; i < childs.length; i++) {
+          if (childs[i] == node) {
+            return true;
+          }
+          else {
+            is_found = (is_found) ? (is_found) : this.searchNodeInChilds(childs[i], node);
+          }
+        }
+        if (is_found) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+      else {
+        return false;
+      }
+    };
+    
+    this.getSelectedTextNodes = function(tag){
+      var s = this.getSelectBounds();
+      var allTextNodes = this.getAllTextNodes(this.verticalCell);
+      var outTags = [];
+      
+      for (var i = 0; i < allTextNodes.length; i++) {
+        var rightAnchor = false;
+        var rightFocus = false;
+        for (var b = i; b >= 0; b--) {
+          if (allTextNodes[b] == s.an) {
+            rightAnchor = true;
+            break;
+          }
+        }
+        for (var e = i; e < allTextNodes.length; e++) {
+          if (allTextNodes[e] == s.fn) {
+            rightFocus = true;
+            break;
+          }
+        }
+        if (rightFocus && rightAnchor) {
+          outTags.push(allTextNodes[i]);
+        }
+      }
+      
+      return outTags;
+    };
+    
+    this.filterTextNodes = function(arr){
+      var out = [];
+      for (var i = 0; i < arr.length; i++) {
+        if (this.gnt(arr[i]) == 'text') {
+          out.push(arr[i]);
+        }
+      }
+      return out;
+    };
+    
+    this.getFirstLiParent = function(node){
       var parents = this.getAllNodeParents(node);
       for (var i = 0; i < parents.length; i++) {
         if (parents[i].tagName && parents[i].tagName.toLowerCase() == 'li') {
@@ -935,7 +1086,7 @@ WebDoc.TextToolView = $.klass({
       return false;
     };
     
-    this.updateChildsStyleAttr = function(node, childsTag, styleAttr, value) {
+    this.updateChildsStyleAttr = function(node, childsTag, styleAttr, value){
       var innerNodes = node.getElementsByTagName(childsTag);
       for (var s = 0; s < innerNodes.length; s++) {
         if (innerNodes[s].style[styleAttr]) {
@@ -945,7 +1096,7 @@ WebDoc.TextToolView = $.klass({
       return innerNodes.length;
     };
     
-    this.setChildsStyleAttr = function(node, childsTag, styleAttr, value) {
+    this.setChildsStyleAttr = function(node, childsTag, styleAttr, value){
       var innerNodes = node.getElementsByTagName(childsTag);
       for (var s = 0; s < innerNodes.length; s++) {
         innerNodes[s].style[styleAttr] = value;
@@ -953,7 +1104,7 @@ WebDoc.TextToolView = $.klass({
       return innerNodes.length;
     };
     
-    this.convertAttributesToStyleAttrs = function(root, childsTag, attr, styleAttr) {
+    this.convertAttributesToStyleAttrs = function(root, childsTag, attr, styleAttr){
       var allNodes = root.getElementsByTagName(childsTag);
       for (var i = 0; i < allNodes.length; i++) {
         if (allNodes[i].getAttribute(attr)) {
@@ -963,194 +1114,439 @@ WebDoc.TextToolView = $.klass({
       }
     };
     
-    this.webKitFontSizeMaker = function(root, size) {
-      var allNodes = root.getElementsByTagName('span');
-      for (var i = 0; i < allNodes.length; i++) {
-        if (allNodes[i].style && allNodes[i].style.fontSize && allNodes[i].style.fontSize.indexOf('pt') == -1) {
-          allNodes[i].style.fontSize = size;
+    this.createNewEditionPoint = function(customNode){
+      var newEditionPoint = this.edDoc.createElement('span');
+      $(newEditionPoint).addClass('newEditionPoint');
+      var range = thobj.edWin.getSelection().getRangeAt(0);
+      thobj.edWin.getSelection().removeAllRanges();
+      range.surroundContents(newEditionPoint);
+      newEditionPoint.innerHTML = '&nbsp;';
+      range.selectNodeContents(newEditionPoint);
+      thobj.edWin.getSelection().addRange(range);
+      return newEditionPoint;
+    };
+    
+    
+    this.clearNewEditionPoints = function(newEditionPoint){
+      $('.newEditionPoint', this.verticalCell).each(function(){
+        if (!thobj.isContainText(this)) {
+          $(this).remove();
         }
-      }
-    };
-    
-    this.formatInline = function(command, attr, styleAttr, value) {      
-      this.edDoc.execCommand(command, null, value);
-      if (this.edWin.getSelection().toString().length) {
-        var selNodes = this.getSelectedTags('font');
-        for (var i = 0; i < selNodes.length; i++) {
-          if (selNodes[i].nodeName != '#text' && (selNodes[i].getAttribute(attr) || selNodes[i].style[styleAttr])) {
-            this.updateChildsStyleAttr(selNodes[i], 'font', styleAttr, (selNodes[i].getAttribute(attr)) ? (selNodes[i].getAttribute(attr)) : selNodes[i].style[styleAttr]);
-            this.updateChildsStyleAttr(selNodes[i], 'a', styleAttr, (selNodes[i].getAttribute(attr)) ? (selNodes[i].getAttribute(attr)) : selNodes[i].style[styleAttr]);
-            this.updateChildsStyleAttr(selNodes[i], 'span', styleAttr, (selNodes[i].getAttribute(attr)) ? (selNodes[i].getAttribute(attr)) : selNodes[i].style[styleAttr]);
-            this.updateChildsStyleAttr(selNodes[i], 'div', styleAttr, (selNodes[i].getAttribute(attr)) ? (selNodes[i].getAttribute(attr)) : selNodes[i].style[styleAttr]);
-          }
+        else {
+          $(this).removeClass('.newEditionPoint');
         }
-        this.convertAttributesToStyleAttrs(this.rootDiv, '*', attr, styleAttr);
-        this.webKitFontSizeMaker(this.rootDiv, value);
-        if (!selNodes || this.ua.indexOf("webkit") != -1) {
-          var nodes = this.getSelectedTags('span');
-          for (i = 0; i < nodes.length; i++) {
-            if (nodes[i].style && nodes[i].style[styleAttr]) {
-              nodes[i].style[styleAttr] = value;
-            }
-            if(nodes[i].nodeName != '#text'){
-              nodes[i].removeAttribute('class');
-            }
-          }
-        }
-      }
-      else {
-        this.createNewEditionPoint();
-        this.formatInline(command, attr, styleAttr, value);
-      }
+      });
     };
     
-    this.markAllBlocksAsOld = function(){
-        var oldBlocks = this.findTagsByType(this.verticalCell,'block');
-        for(var i=0;i<oldBlocks.length;i++){
-           oldBlocks[i].oldBlock = true;
-        }        
-    };
+    this.formatStyle = function(command, styleAttr, value){
     
-    this.clearStyleOfNewBlocks = function(){
-        var blocks = this.findTagsByType(this.verticalCell,'block');
-        for(var i=0;i<blocks.length;i++){ 
-          if(!blocks[i].oldBlock){
-            var innerNodes = blocks[i].getElementsByTagName('*');
-            for(var j=0;j<innerNodes.length;j++){
-               innerNodes[j].style.fontSize=null;
-               innerNodes[j].style.textDecoration=null;
-               innerNodes[j].style.fontWeight=null;
-               innerNodes[j].style.fontStyle=null;
-            }            
-          }
-        }
-    };        
-    
-    this.formatBlock = function(optional){
-      this.markAllBlocksAsOld();
-      this.edDoc.execCommand('formatBlock', null, '<' + optional + '>');
-      this.clearStyleOfNewBlocks();
-    };
-    
-    
-    this.findAllBlockTagsWithInlineProperties = function(){
-       var blockTags = this.findTagsByType(this.verticalCell,'block');
-       var inlineProp = this.parameters.inlineProperties;
-       var out = [];
-       for(var i=0;i<blockTags.length;i++){
-          for(var j=0;j<inlineProp.length;j++){
-            if(blockTags[i].style[inlineProp[j]]){
-               out[out.length]  =  {'node':blockTags[i],'property':inlineProp[j]};
-            }
-          }
-       }
-       return out;
-    };
-    
-    this.findTagsByType = function(root,type){
-       var out = [];
-       var templateTags = ((type=='block')?this.parameters.blockTags:this.parameters.inlineTags);
-       for(var i=0;i<templateTags.length;i++){  
-          var current = root.getElementsByTagName(templateTags[i]);  
-          for(j=0;j<current.length;j++){
-            out[out.length]  =  current[j];
-          }
-       }
-       return out;
-    };
-    
-    this.findElementInArray = function(array,element){
-      for(var i=0 ;i<array.length;i++){
-        if (array[i].toLowerCase() == element.toLowerCase()) {
-          return element;
-		    }
-      }
-      return false;
-    };
-    
-    this.getTypeOfNode = function(node){
-      if (node.nodeName == '#text') {
-        return 'text';
-	   } else if (this.findElementInArray(this.parameters.inlineTags, node.nodeName)) {
-        return 'inline';
-	   } else if (this.findElementInArray(this.parameters.blockTags, node.nodeName)) {
-        return 'block';
-	   }
-       return false;
-    };
-
-    this.isHeadingTag = function(node){
-      if (this.findElementInArray(this.parameters.hTags,node.nodeName)){
-         return true;
-      }
-      return false;
-    };
-   
-    this.correctInlineProprertiesForBlockElements = function(property){
-			var blockTagsWithInlineProperties = this.findAllBlockTagsWithInlineProperties();
-			for (var i = 0; i < blockTagsWithInlineProperties.length; i++) {
-        if(blockTagsWithInlineProperties[i].property == property){
-  				var allBlockChilds = this.findTagsByType(blockTagsWithInlineProperties[i].node, 'block');
-  				allBlockChilds[allBlockChilds.length] = blockTagsWithInlineProperties[i].node;
-  				for (var j = 0; j < allBlockChilds.length; j++) {
-  					var childs = allBlockChilds[j].childNodes;
-  					for (var c = 0; c < childs.length; c++) {
-  						nodeToEdit = childs[c];
-  						if (this.getTypeOfNode(nodeToEdit) == 'inline' && !nodeToEdit.style[blockTagsWithInlineProperties[i].property]) {
-  							nodeToEdit.style[blockTagsWithInlineProperties[i].property] = blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property];
-  						} else if (this.getTypeOfNode(nodeToEdit) == 'text') {
-  							var innerTag = this.edDoc.createElement('span');
-  							innerTag.style[blockTagsWithInlineProperties[i].property] = blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property];
-  							nodeToEdit.parentNode.insertBefore(innerTag, nodeToEdit);
-  							innerTag.appendChild(nodeToEdit);
-  						}
-  					}
-  				}
-  				blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property] = null;
-  				//this.selectCustomNodeContent(blockTagsWithInlineProperties[i].node);
-        }
-			}
-		};
-    
-    this.correctInlineItalicElementWordsCut = function(){
-      var nodes = this.findTagsByType(this.verticalCell, 'inline');
-      for(var i=0;i<nodes.length;i++){
-        if(nodes[i].style.fontStyle.toLowerCase() == 'italic'){
-          nodes[i].style.paddingRight = "0.13em";
-        } else {
-          nodes[i].style.paddingRight = null;
-        }
-      }
-    };
-		
-    this.formatStyle = function(command, styleAttr, value) {
       if (!this.edWin.getSelection().toString()) {
         this.createNewEditionPoint();
       }
       this.edDoc.execCommand(command, null, value);
+      this.listItemsStyleClear();
     };
     
-    this.createNewEditionPoint = function(customNode) {
-      var newEditionPoint = this.edDoc.createElement('span');
-      var range = thobj.edDoc.createRange();
-      range.setStart(this.edWin.getSelection().anchorNode, this.edWin.getSelection().anchorOffset);
-      range.setEnd(this.edWin.getSelection().anchorNode, this.edWin.getSelection().anchorOffset);
-      range.surroundContents(newEditionPoint);
-      newEditionPoint.innerHTML = '&nbsp;';//&lrm;
-      range.selectNodeContents(newEditionPoint);
-      thobj.edWin.getSelection().addRange(range);
-      thobj.edWin.getSelection().selectAllChildren(newEditionPoint);
+    
+    this.findNearBeforeFontValueInFontParameters = function(value){
+      for (var n = this.parameters.fontSize.length - 1; n >= 0; n--) {
+        if (value > this.parameters.fontSize[n][1].split('pt')[0] && value <= this.parameters.fontSize[this.parameters.fontSize.length - 1][1].split('pt')[0]) {
+          return this.parameters.fontSize[n][1];
+        }
+      }
+      return false;
+    };
+    this.findNearAfterFontValueInFontParameters = function(value){
+      for (var n = 0; n < this.parameters.fontSize.length; n++) {
+        if (value < this.parameters.fontSize[n][1].split('pt')[0] && value >= this.parameters.fontSize[0][1].split('pt')[0]) {
+          return this.parameters.fontSize[n][1];
+        }
+      }
+      return false;
     };
     
-    this.createLink = function(command, optional) {
-      this.edDoc.execCommand('insertHtml',null,'<a target="'+optional.target+'" href="'+optional.link+'">'+optional.text+'</a>'); 
-    };   
+    
+    this.formatInline = function(styleAttr, value, antiValue){
+      if (!this.edWin.getSelection().toString()) {
+        this.createNewEditionPoint();
+        this.formatInline(styleAttr, value, antiValue);
+      }
+      else {
+        this.storeSelection();
+        var inlinetagsString = this.parameters.inlineTags.join(',');
+        $(inlinetagsString, this.verticalCell).each(function(){
+          $(this).attr('background', this.style.backgroundColor);
+          this.style.backgroundColor = null;
+        });
+        this.repairSelection();
+        
+        this.edDoc.execCommand('hiliteColor', null, 'rgb(255, 255, 255)');
+        
+        this.storeSelection();
+        this.correctInlineProprertiesForBlockElements('backgroundColor');
+        this.repairSelection();
+        
+        this.storeSelection();
+        $(inlinetagsString, this.verticalCell).each(function(){
+          if (this.style.backgroundColor == 'rgb(255, 255, 255)') {
+            this.style.backgroundColor = null;
+            if (styleAttr == 'increaseFontSize') {
+              var oldSize = Math.round((thobj.edWin.getComputedStyle(this, null).getPropertyValue("font-size").split('px')[0]) * 75 / 100);
+              if (value < 0) {
+                this.style.fontSize = thobj.findNearBeforeFontValueInFontParameters(oldSize) || (((oldSize.toString().split('pt')[0] - 1) * 1 || 1) + 'pt');
+              }
+              else {
+                this.style.fontSize = thobj.findNearAfterFontValueInFontParameters(oldSize) || ((oldSize.toString().split('pt')[0] * 1 + 1) + 'pt');
+              }
+              $(inlinetagsString, this).each(function(){
+                var innerOldSize = Math.round((thobj.edWin.getComputedStyle(this, null).getPropertyValue("font-size").split('px')[0]) * 75 / 100);
+                if (value < 0) {
+                  this.style.fontSize = thobj.findNearBeforeFontValueInFontParameters(innerOldSize) || (((innerOldSize.toString().split('pt')[0] - 1) * 1 || 1) + 'pt');
+                }
+                else {
+                  this.style.fontSize = thobj.findNearAfterFontValueInFontParameters(innerOldSize) || ((innerOldSize.toString().split('pt')[0] * 1 + 1) + 'pt');
+                }
+              });
+              
+            }
+            else {
+              if (!antiValue) {
+                this.style[styleAttr] = value;
+                if (thobj.lastStyleHash.underline === true && styleAttr == 'color') {
+                  this.style.textDecoration = 'underline';
+                }
+                $(inlinetagsString, this).each(function(){
+                  this.style[styleAttr] = value;
+                });
+              }
+              else {
+                if (thobj.lastStyleHash[value] === true) {
+                  if (styleAttr == 'textDecoration') {
+                    thobj.selectCustomNodeContent(this);
+                    thobj.correctUserSelection();
+                    thobj.edDoc.execCommand('underline', null, null);
+                  }
+                  else {
+                    this.style[styleAttr] = antiValue;
+                    $(inlinetagsString, this).each(function(){
+                      this.style[styleAttr] = antiValue;
+                    });
+                  }
+                }
+                else {
+                  $(inlinetagsString, this).each(function(){
+                    if (this.style[styleAttr] == antiValue) {
+                      this.style[styleAttr] = null;
+                    }
+                  });
+                  this.style[styleAttr] = value;
+                }
+              }
+            }
+          }
+          
+        });
+        
+        this.repairSelection();
+        
+        $(inlinetagsString, this.verticalCell).each(function(){
+          if (!this.style.backgroundColor) {
+            $(this).css('backgroundColor', $(this).attr('background'));
+          }
+          $(this).removeAttr('background');
+        });
+      }
+      
+      $('span', this.verticalCell).each(function(){
+        if (this.style[styleAttr] && this.parentNode.style[styleAttr] && this.style[styleAttr] == this.parentNode.style[styleAttr]) {
+          this.style[styleAttr] = null;
+        }
+      });
+      
+    };
+    
+    this.listItemsStyleClear = function(){
+      $('li', this.verticalCell).each(function(){
+        var align = this.style.textAlign;
+        $(this).removeAttr('style');
+        if(align){
+          this.style.textAlign = align;
+        }
+      });
+    };
+    
+    this.listItemStyleCorrection = function(){
+      var allNodes = this.findTagsByType(this.verticalCell, 'inline');
+      $.each(allNodes, function(){
+        if (thobj.getFirstLiParent(this)) {
+          if (this.style.color) {
+            thobj.getFirstLiParent(this).style.color = this.style.color;
+          }
+          if (this.style.fontStyle) {
+            thobj.getFirstLiParent(this).style.fontStyle = this.style.fontStyle;
+          }
+          if (this.style.fontWeight) {
+            thobj.getFirstLiParent(this).style.fontWeight = this.style.fontWeight;
+          }
+          if (this.style.fontFamily) {
+            thobj.getFirstLiParent(this).style.fontFamily = this.style.fontFamily;
+          }
+          var hasRelativeSizeParents = false;
+          var parents = thobj.getAllNodeParents(this);
+          parents.unshift(this);
+          $.each(parents, function(){
+            var name = this.nodeName.toLowerCase();
+            if ($.inArray(name, thobj.parameters.relativeSizeTags) != -1) {
+              hasRelativeSizeParents = true;
+            }
+          });
+          if (!hasRelativeSizeParents) {
+            thobj.getFirstLiParent(this).style.fontSize = Math.round((thobj.edWin.getComputedStyle(this, null).getPropertyValue("font-size").split('px')[0]) * 75 / 100) + 'pt';
+          }
+        }
+      });
+    };
+    
+    this.markAllBlocksAsOld = function(){
+      var oldBlocks = this.findTagsByType(this.verticalCell, 'block');
+      for (var i = 0; i < oldBlocks.length; i++) {
+        oldBlocks[i].oldBlock = true;
+      }
+      
+    };
+    
+    this.clearStyleOfNewBlocks = function(){
+      var blocks = this.findTagsByType(this.verticalCell, 'block');
+      for (var i = 0; i < blocks.length; i++) {
+        if (!blocks[i].oldBlock) {
+          var innerNodes = blocks[i].getElementsByTagName('*');
+          for (var j = 0; j < innerNodes.length; j++) {
+            innerNodes[j].style.fontSize = null;
+          }
+        }
+      }
+      
+      $('div', thobj.verticalCell).each(function(){
+        if (thobj.gnt(this.firstChild) == 'block' && this.childNodes.length == 1) {
+          thobj.unwrap(this.firstChild);
+        }
+      });
+    };
+    
+    this.formatBlock = function(optional){
+      this.markAllBlocksAsOld();
+      this.storeSelection();
+      this.doBeforeChangeStructure();
+      $.each(this.getSelectedTextNodes(), function(){
+        var blockParent = thobj.isHasBlockParents(this);
+        if (blockParent) {
+          if (blockParent.parentNode && blockParent.parentNode.nodeName.toLowerCase() == 'blockquote') {
+            thobj.selectCustomNode(blockParent);
+            thobj.edDoc.execCommand('outdent', null, null);
+          }
+        }
+      });
+      this.blockStructure = this.verticalCell.cloneNode(true);
+      $('li', this.verticalCell).each(function(){
+        if (thobj.gnt(this.firstChild) != 'block' && thobj.gnt(this.lastChild) != 'br') {
+          $(this).append('<br>');
+        }
+      });
+      this.edDoc.execCommand('formatBlock', null, '<' + optional + '>');
+      this.clearStyleOfNewBlocks();
+      
+      $('li', this.verticalCell).each(function(){
+        if (thobj.gnt(this.lastChild) == 'br') {
+          $(this.lastChild).remove();
+        }
+        if (thobj.gnt(this.firstChild) == 'block') {
+          thobj.importHistorySelectionMarkers(this, this.firstChild);
+        }
+      });
+      this.repairSelection();
+      this.inheritIndentation(this.blockStructure);
+      this.blockStructure = false;
+      
+    };
+    
+    this.findAllBlockTagsWithInlineProperties = function(){
+      var blockTags = this.findTagsByType(this.verticalCell, 'block');
+      var inlineProp = this.parameters.inlineProperties;
+      var out = [];
+      for (var i = 0; i < blockTags.length; i++) {
+        for (var j = 0; j < inlineProp.length; j++) {
+          if (blockTags[i].style[inlineProp[j]]) {
+            out[out.length] = {
+              'node': blockTags[i],
+              'property': inlineProp[j]
+            };
+          }
+        }
+      }
+      return out;
+    };
+    
+    this.findTagsByType = function(root, type){
+      var out = [];
+      var templateTags = ((type == 'block') ? this.parameters.blockTags : this.parameters.inlineTags);
+      for (var i = 0; i < templateTags.length; i++) {
+        var current = root.getElementsByTagName(templateTags[i]);
+        for (j = 0; j < current.length; j++) {
+          out[out.length] = current[j];
+        }
+      }
+      return out;
+    };
+    
+    this.findElementInArray = function(array, element){
+      for (var i = 0; i < array.length; i++) {
+        if (array[i].toLowerCase() == element.toLowerCase()) {
+          return element;
+        }
+      }
+      return false;
+    };
+    
+    this.findValueInArray = function(array, value){
+      for (var i = 0; i < array.length; i++) {
+        if (array[i] == value) {
+          return true;
+        }
+      }
+      return false;
+    };
+    
+    this.gnt = function(node){
+      if (!node || !node.nodeName) {
+        return false;
+      }
+      if (node.nodeName == '#text') {
+        return 'text';
+      }
+      else if (node.nodeName == '#comment') {
+        return 'comment';
+      }
+      else if (node.nodeName.toLowerCase() == 'br') {
+        return 'br';
+      }
+      else if (node.nodeName.toLowerCase() == 'img') {
+        return 'img';
+      }
+      else if (this.findElementInArray(this.parameters.inlineTags, node.nodeName)) {
+        return 'inline';
+      }
+      else if (this.findElementInArray(this.parameters.blockTags, node.nodeName)) {
+        return 'block';
+      }
+      return false;
+    };
+    
+    this.isHeadingTag = function(node){
+      if (this.findElementInArray(this.parameters.hTags, node.nodeName)) {
+        return true;
+      }
+      return false;
+    };
+    
+    this.isHasBlockParents = function(node){
+      var parents = this.getAllNodeParents(node);
+      parents.unshift(node);
+      for (var i = 0; i < parents.length; i++) {
+        if (this.gnt(parents[i]) == 'block') {
+          return parents[i];
+        }
+      }
+      return false;
+    };
+    
+    this.correctInlineProprertiesForBlockElements = function(property){
+      var blockTagsWithInlineProperties = this.findAllBlockTagsWithInlineProperties();
+      for (var i = 0; i < blockTagsWithInlineProperties.length; i++) {
+        if (blockTagsWithInlineProperties[i].property == property) {
+          var allBlockChilds = this.findTagsByType(blockTagsWithInlineProperties[i].node, 'block');
+          allBlockChilds[allBlockChilds.length] = blockTagsWithInlineProperties[i].node;
+          for (var j = 0; j < allBlockChilds.length; j++) {
+            var childs = allBlockChilds[j].childNodes;
+            for (var c = 0; c < childs.length; c++) {
+              nodeToEdit = childs[c];
+              if (this.gnt(nodeToEdit) == 'inline') {
+                nodeToEdit.style[blockTagsWithInlineProperties[i].property] = blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property];
+              }
+              else if (this.gnt(nodeToEdit) == 'text' || (this.gnt(nodeToEdit) == 'br' && nodeToEdit.parentNode == allBlockChilds[j] && allBlockChilds[j].childNodes.length == 1)) {
+                var innerTag = this.edDoc.createElement('span');
+                this.importHistorySelectionMarkers(allBlockChilds[j], innerTag);
+                innerTag.style[blockTagsWithInlineProperties[i].property] = blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property];
+                nodeToEdit.parentNode.insertBefore(innerTag, nodeToEdit);
+                innerTag.appendChild(nodeToEdit);
+              }
+              else if (this.gnt(nodeToEdit) == 'br' && nodeToEdit.parentNode == allBlockChilds[j] && allBlockChilds[j].childNodes.length == 1) {
+              
+              }
+            }
+          }
+        }
+      }
+      for (i = 0; i < blockTagsWithInlineProperties.length; i++) {
+        blockTagsWithInlineProperties[i].node.style[blockTagsWithInlineProperties[i].property] = null;
+      }
+    };
+    
+    
+    
+    this.isSelectionMarker = function(node){
+      if ($(node).attr('id') == 'selectionStartMarker') {
+        return node;
+      }
+      else if ($(node).attr('id') == 'selectionEndMarker') {
+        return node;
+      }
+      else {
+        return false;
+      }
+    };
+    
+    
+    this.createLink = function(command, optional){
+      if (!this.edWin.getSelection().toString()) {
+        var a = this.edDoc.createElement('a');
+        $(a).attr('href', optional.link);
+        $(a).attr('target', optional.target);
+        $(a).html(optional.text);
+        range = this.edWin.getSelection().getRangeAt(0);
+        range.insertNode(a);
+        thobj.selectCustomNodeContent(a);
+        thobj.correctUserSelection();
+      }
+      else {
+        $('a', thobj.verticalCell).each(function(){
+          $(this).addClass('existing_link');
+        });
+        this.edDoc.execCommand('unlink', null, null);
+        this.edDoc.execCommand('createLink', null, optional.link);
+        
+        if (optional.text !== '') {
+          $('a', thobj.verticalCell).each(function(){
+            if (!$(this).hasClass('existing_link')) {
+              $(this).html(optional.text);
+              $(this).attr('target', optional.target);
+              thobj.selectCustomNodeContent(this);
+              thobj.correctUserSelection();
+            }
+            
+          });
+        }
+        
+        $('a', thobj.verticalCell).each(function(){
+          $(this).removeClass('existing_link');
+        });
+      }
+    };
     
     this.clearLink = function(){
-        this.edDoc.execCommand('unlink', null,null);
-    };    
+      this.edDoc.execCommand('unlink', null, null);
+    };
     
-    this.formatVertical = function(value) {
+    this.formatVertical = function(value){
       if (!this.edDoc.body.firstChild.firstChild || !this.edDoc.body.firstChild.firstChild.style || this.edDoc.body.firstChild.firstChild.style.display != 'table') {
         this.verticalContainer = this.edDoc.createElement('div');
         this.verticalCell = this.edDoc.createElement('div');
@@ -1172,183 +1568,429 @@ WebDoc.TextToolView = $.klass({
       this.verticalContainer.style.height = '100%';
       this.verticalContainer.style.width = '100%';
     };
-
-    this.formatHorisontal = function(command) {
+    
+    this.formatHorisontal = function(command){
       this.edDoc.execCommand(command, false, false);
+      this.convertAttributesToStyleAttrs(this.rootDiv, '*', 'align', 'textAlign');
     };
     
-    this.getFirstUnmarkedBlockQuote = function(){
-      var blockQuotes = thobj.verticalCell.getElementsByTagName('blockquote'); 
-      for(var i=0;i<blockQuotes.length;i++){
-        if(1){
-          return blockQuotes[i];
+    this.getIndentLevel = function(node){
+      for (var i = 0; i < this.parameters.indentClasses.length; i++) {
+        if ($(node).hasClass(this.parameters.indentClasses[i])) {
+          return i + 1;
         }
       }
-      return false; 
+      return 0;
     };
     
-    this.getFirstIndentTag = function(){
-      var tags = thobj.verticalCell.getElementsByTagName('div'); 
-      for(var i=0;i<tags.length;i++){
-        if(tags[i].className.indexOf('webdoc-indent-1')!=-1){
-          return tags[i];
-        }
+    this.setIndentLevel = function(node, level){
+      var nodeClass = node.className;
+      for (var i = 0; i < this.parameters.indentClasses.length; i++) {
+        $(node).removeClass(this.parameters.indentClasses[i]);
       }
-      return false; 
-    };
-    
-    this.doBeforeIndent = function(){ 
-      thobj.antiBlinkRule(true);
-      var blockQuotes = thobj.verticalCell.getElementsByTagName('blockquote'); 
-      for(var i=0;i<blockQuotes.length;i++){
-         blockQuotes[i].realBlockquote = true;
-      } 
+      if (level > 0) {
+        $(node).addClass(this.parameters.indentClasses[level - 1]);
+      }
       
     };
     
-    this.doAfterIndent = function(){
-      thobj.storeHistorySelection();
-      while(this.getFirstUnmarkedBlockQuote()){
-          var btr = thobj.getFirstUnmarkedBlockQuote();
-          var indentTag = thobj.edDoc.createElement('div');
-          jQuery(indentTag).addClass('webdoc-indent-1');
-          btrChilds = btr.childNodes;
-          for(var b=0;b<btrChilds.length;b++){ 
-             indentTag.appendChild(btrChilds[b].cloneNode(true));
-          }
-          thobj.importSelectionMarkers(btr,indentTag);
-          btr.parentNode.replaceChild(indentTag,btr);
-      } 
-      thobj.repairHistorySelection();  
-      thobj.deleteSelectionMarkers();   
-      thobj.antiBlinkRule(false);
-    };
-    
-    
-    this.doBeforeOutdent = function(){
-      thobj.antiBlinkRule(true);
-      var blockQuotes = thobj.verticalCell.getElementsByTagName('blockquote'); 
-      for(var i=0;i<blockQuotes.length;i++){
-         blockQuotes[i].realBlockquote = true;
+    this.replaceNodeTagName = function(node, tagName, cl){
+      var newNode = thobj.edDoc.createElement(tagName);
+      if (cl) {
+        newNode.className = cl;
       }
-      thobj.storeHistorySelection(); 
-      while(thobj.getFirstIndentTag()){
-          var itr = thobj.getFirstIndentTag();
-          var blockQuote = thobj.edDoc.createElement('blockquote');
-          itrChilds = itr.childNodes;
-          for(var b=0;b<itrChilds.length;b++){
-             blockQuote.appendChild(itrChilds[b].cloneNode(true));
-          }
-          thobj.importSelectionMarkers(itr,blockQuote);
-          itr.parentNode.replaceChild(blockQuote,itr);
-      } 
-      thobj.repairHistorySelection();  
-      thobj.deleteSelectionMarkers();  
-    };
-    
-    this.doAfterOutdent = function(){
-      thobj.storeHistorySelection(); 
-      while(thobj.getFirstUnmarkedBlockQuote()){
-          var btr = thobj.getFirstUnmarkedBlockQuote();
-          var indentTag = thobj.edDoc.createElement('div');
-          jQuery(indentTag).addClass('webdoc-indent-1');
-          btrChilds = btr.childNodes;
-          for(var b=0;b<btrChilds.length;b++){
-             indentTag.appendChild(btrChilds[b].cloneNode(true));
-          }
-          thobj.importSelectionMarkers(btr,indentTag);
-          btr.parentNode.replaceChild(indentTag,btr);
-      }       
-      thobj.repairHistorySelection();  
-      thobj.deleteSelectionMarkers();   
-      thobj.antiBlinkRule(false);
-    };
-    
-    this.antiBlinkRule = function(bool){
-      if(thobj.ua.indexOf("webkit") == -1){
-        thobj.rootDiv.style.visibility = (bool)?"hidden":'visible';
+      for (a in node.attributes) {
+        newNode.setAttribute(node.attributes[a].nodeName, node.attributes[a].textContent);
       }
+      nodeChilds = node.childNodes;
+      for (var b = 0; b < nodeChilds.length; b++) {
+        newNode.appendChild(nodeChilds[b].cloneNode(true));
+      }
+      thobj.importHistorySelectionMarkers(node, newNode);
+      node.parentNode.replaceChild(newNode, node);
+      return newNode;
+    };
+    
+    this.getTypeOfListItem = function(item){
+      var parents = this.getAllNodeParents(item);
+      for (var i = 0; i < parents.length; i++) {
+        if (parents[i].nodeName.toLowerCase() == 'ul') {
+          return 'ul';
+        }
+        if (parents[i].nodeName.toLowerCase() == 'ol') {
+          return 'ol';
+        }
+      }
+      return false;
+    };
+    
+    this.getTopLevelBlockParent = function(node){
+      var parents = this.getAllNodeParents(node);
+      parents.unshift(node);
+      for (var i = parents.length - 1; i >= 0; i--) {
+        if (this.gnt(parents[i]) == 'block') {
+          return parents[i];
+        }
+      }
+      return false;
+    };
+    
+    this.getTopLevelInlineParent = function(node){
+      var parents = this.getAllNodeParents(node);
+      parents.unshift(node);
+      for (var i = parents.length - 1; i >= 0; i--) {
+        if (this.gnt(parents[i]) == 'inline') {
+          return parents[i];
+        }
+      }
+      return false;
+    };
+    
+    this.getTopLevelParent = function(node){
+      var parents = this.getAllNodeParents(node);
+      parents.unshift(node);
+      return parents[parents.length - 1];
+    };
+    
+    this.isLiItemContent = function(node){
+      var parents = this.getAllNodeParents(node);
+      parents.unshift(node);
+      for (var i = 0; i < parents.length; i++) {
+        if (parents[i].nodeName.toLowerCase() == 'li') {
+          return parents[i];
+        }
+      }
+      return false;
+    };
+    
+    this.wrap = function(tagName, cl, node){
+      var newNode = thobj.edDoc.createElement(tagName);
+      newNode.appendChild(node.cloneNode(true));
+      $(newNode).addClass(cl);
+      node.parentNode.replaceChild(newNode, node);
+      return newNode;
+    };
+    
+    this.unwrap = function(node){
+      var childs = node.childNodes;
+      for (var i = 0; i < childs.length; i++) {
+        node.parentNode.insertBefore(node.childNodes[i].cloneNode(true), node);
+      }
+      $(node).remove();
+      return node.parentNode;
+    };
+    
+    this.getFirstTagByClass = function(tagName, cl){
+      var nodes = thobj.verticalCell.getElementsByTagName(tagName);
+      for (var i = 0; i < nodes.length; i++) {
+        if ($(nodes[i]).hasClass(cl)) {
+          return nodes[i];
+        }
+      }
+      return false;
+    };
+    
+    this.doOnDent = function(parameter){
+      this.storeSelection();
+      $('*', this.verticalCell).addClass('not_indented');
+      var selNodes = this.getSelectedTextNodes(this.verticalCell);
+      
+      if (!selNodes.length) {
+        selNodes.push(this.getSelectBounds().fn);
+      }
+      
+      for (var j = 0; j < selNodes.length; j++) {
+        if (this.getTopLevelBlockParent(selNodes[j])) {
+          if (this.isLiItemContent(selNodes[j])) {
+            var liItem = this.isLiItemContent(selNodes[j]);
+            $(liItem).addClass('li_to_indent');
+          }
+          else {
+            var blockTag = this.getTopLevelBlockParent(selNodes[j]);
+            $(blockTag).removeClass('not_indented');
+          }
+        }
+        else {
+          if(this.getTopLevelInlineParent(selNodes[j])){
+            var inlineTag = this.getTopLevelInlineParent(selNodes[j]);
+            $(inlineTag).addClass('to_wrap');
+          } else {
+            this.wrap('span', 'to_wrap', selNodes[j]);
+          }
+          
+        }
+      }
+      
+      while (this.getFirstTagByClass('*', 'to_wrap')) {
+        var nf = this.getFirstTagByClass('*', 'to_wrap');
+        $(nf).addClass('not_indented');
+        $(nf).removeClass('to_wrap');
+        if (!$(thobj.getTopLevelParent(nf)).hasClass('div_wrapper')) {
+          if (!$(thobj.getTopLevelParent(nf).previousSibling).hasClass('div_wrapper') || (nf.nextSibling && nf.nextSibling.firstChild && thobj.gnt(nf.nextSibling.firstChild) == 'br')) {
+            this.wrap('div', 'div_wrapper', thobj.getTopLevelParent(nf));
+          }
+          else {
+            $(nf).removeClass('to_wrap');
+            thobj.getTopLevelParent(nf).previousSibling.appendChild(thobj.getTopLevelParent(nf).cloneNode(true));
+            $(thobj.getTopLevelParent(nf)).remove();
+          }
+        }
+      }
+      
+      while (this.getFirstTagByClass('li', 'li_to_indent')) {
+        var li = this.getFirstTagByClass('li', 'li_to_indent');
+        $(li).removeClass('li_to_indent');
+        if (parameter == +1) {
+          if (!$(li.previousSibling).hasClass('ul_wrapper')) {
+            this.wrap(this.getTypeOfListItem(li), 'ul_wrapper not_indented', li);
+          }
+          else {
+            li.previousSibling.appendChild(li.cloneNode(true));
+            li.parentNode.removeChild(li);
+          }
+        }
+        else {
+          var selectLiWithAllSiblings = true;
+          for (var i = 0; i < li.parentNode.childNodes.length; i++) {
+            if (!$(li.parentNode.childNodes[i]).hasClass('li_to_indent') && li.parentNode.childNodes[i] != li) {
+              selectLiWithAllSiblings = false;
+              
+              break;
+            }
+          }
+          if (selectLiWithAllSiblings) {
+            $(li.parentNode).addClass('ul_wrapper').removeClass('not_indented');
+          }
+          else if ($(li.parentNode).hasClass('not_indented')) {
+            this.selectCustomNodeContent(li);
+            this.correctUserSelection();
+            var newBlockName = (this.gnt(li.firstChild) == 'block') ? li.firstChild.nodeName.toLowerCase() : 'div';
+            this.edDoc.execCommand('outdent', null, null);
+            this.edDoc.execCommand('formatBlock', null, '<' + newBlockName + '>');
+          }
+        }
+      }
+      
+      var allNodes = thobj.verticalCell.getElementsByTagName('*');
+      for (i = 0; i < allNodes.length; i++) {
+        $(allNodes[i]).removeClass('div_wrapper');
+        if (!$(allNodes[i]).hasClass('not_indented') && allNodes[i].nodeName.toLowerCase() != 'li') {
+          if (!this.getIndentLevel(allNodes[i]) && (allNodes[i].nodeName.toLowerCase() == 'ul' || allNodes[i].nodeName.toLowerCase() == 'ol')) {
+            $('li', allNodes[i]).each(function(){
+              var li = this;
+              thobj.selectCustomNodeContent(li);
+              var newBlockName = (thobj.gnt(li.firstChild) == 'block') ? li.firstChild.nodeName.toLowerCase() : 'div';
+              thobj.edDoc.execCommand('outdent', null, null);
+              thobj.edDoc.execCommand('formatBlock', null, '<' + newBlockName + '>');
+            });
+          }
+          else {
+            this.setIndentLevel(allNodes[i], this.getIndentLevel(allNodes[i]) * 1 + parameter);
+          }
+        }
+        $(allNodes[i]).removeClass('not_indented');
+        $(allNodes[i]).removeClass('ul_wrapper');
+        $(allNodes[i]).removeClass('to_wrap');
+        $(allNodes[i]).removeClass('li_to_indent');
+      }
+      
+      $('ul,ol', this.verticalCell).each(function(){
+        if ((this.parentNode.nodeName.toLowerCase() == 'ul' || this.parentNode.nodeName.toLowerCase() == 'ol') && this.parentNode.childNodes.length == 1) {
+          if (this.parentNode.style.textAlign) {
+            this.style.textAlign = this.parentNode.style.textAlign;
+          }
+          thobj.setIndentLevel(this, thobj.getIndentLevel(this.parentNode) * 1 + parameter);
+          this.parentNode.parentNode.replaceChild(this, this.parentNode);
+        }
+      });
+      thobj.repairSelection();
     };
     
     this.indent = function(){
-      thobj.edDoc.execCommand("useCSS", false, true);
-      thobj.doBeforeIndent();
-      thobj.edDoc.execCommand('indent',null,null);            
-      thobj.doAfterIndent(); 
-      thobj.edDoc.execCommand("useCSS", false, false);
+      thobj.doOnDent(1);
     };
     
-    this.outdent = function(){    
-      thobj.edDoc.execCommand("useCSS", false, true);
-      thobj.doBeforeOutdent();
-      thobj.edDoc.execCommand('outdent',null,null);
-      thobj.doAfterOutdent();
-      thobj.edDoc.execCommand("useCSS", false, false);
+    this.outdent = function(){
+      thobj.doOnDent(-1);
     };
-
+    
     this.list = function(command){
-      this.edDoc.execCommand(command, null, '');
+      this.blockStructure = this.verticalCell.cloneNode(true);
+      this.doBeforeChangeStructure();
+      this.edDoc.execCommand(command, null, null);
+      this.lastStyleHash = this.getSelectedNodesStyleHash();
+      if(!this.lastStyleHash.insertOrderedList && !this.lastStyleHash.insertUnorderedList){
+        thobj.edDoc.execCommand('formatBlock',null,'<div>');
+      }
+      this.inheritIndentation(this.blockStructure);
+      this.blockStructure = false;
     };
     
-    this.applyStyleAttrToSelected = function(tag, styleAttr, value) {
-      var nodes = this.getSelectedTags(tag);
-      for (var i = 0; i < nodes.length; i++) {
-        if (nodes[i] != this.edDoc.body.firstChild) {
-          nodes[i].style[styleAttr] = value;
+    this.getIerString = function(el, str){
+      if (el.parentNode && el.parentNode != this.verticalCell.parentNode) {
+        for (var i = 0; i < el.parentNode.childNodes.length; i++) {
+          if (el.parentNode.childNodes[i] == el) {
+            return this.getIerString(el.parentNode, str + i + '-');
+          }
         }
+      }
+      else {
+        return str;
       }
     };
     
-    this.setEditionRestrictMarker = function(){
-	    var editionRestrictMarker = this.edDoc.createElement('div');
-	    editionRestrictMarker.setAttribute('id','edition_restrict_marker');
-	    editionRestrictMarker.innerHTML = '&nbsp;';         
-	    this.verticalCell.appendChild(editionRestrictMarker);
-    }; 
-   
-    this.removeEditionRestrictMarker = function(){
-      var editionRestrictMarker = this.edDoc.getElementById('edition_restrict_marker');
-      editionRestrictMarker.parentNode.removeChild(editionRestrictMarker);
-    }; 
-   
-    this.markNodesAsExistingBeforePaste = function(){
-      var allTags = thobj.verticalCell.getElementsByTagName('*'); 
-      for(var i=0;i<allTags.length;i++){
-         jQuery(allTags[i]).addClass('webdoc-editor-elem');
-      } 
+    this.doBeforeChangeStructure = function(){
+      $('*', this.verticalCell).each(function(){
+        if (thobj.gnt(this) == 'block') {
+          $(this).addClass('existing_before_change_structure');
+        }
+      });
     };
-
+    
+    this.inheritIndentation = function(oldStructure){
+      var oldStructureHash = {};
+      $('*', oldStructure).each(function(){
+        if (thobj.gnt(this) == 'block') {
+          var oldElStr = thobj.getIerString(this, '');
+          oldStructureHash[oldElStr] = this;
+        }
+      });
+      $('*', this.verticalCell).each(function(){
+        if (thobj.gnt(this) == 'block' && !$(this).hasClass('existing_before_change_structure')) {
+          var newElStr = thobj.getIerString(this, '');
+          if (oldStructureHash[newElStr]) {
+            var newName = this.nodeName.toLowerCase();
+            var oldName = oldStructureHash[newElStr].nodeName.toLowerCase();
+            if (newName == 'ul' || newName == 'ol') {
+              if (this.previousSibling && (this.previousSibling.nodeName.toLowerCase() == 'ul' || this.previousSibling.nodeName.toLowerCase() == 'ol')) {
+                thobj.setIndentLevel(this, thobj.getIndentLevel(this.previousSibling));
+                this.style.textAlign = this.previousSibling.style.textAlign;
+              }
+              else if (this.nextSibling && (this.nextSibling.nodeName.toLowerCase() == 'ul' || this.nextSibling.nodeName.toLowerCase() == 'ol')) {
+                thobj.setIndentLevel(this, thobj.getIndentLevel(this.nextSibling));
+                this.style.textAlign = this.nextSibling.style.textAlign;
+              }
+              else {
+                this.className = oldStructureHash[newElStr].className;
+                this.style.textAlign = oldStructureHash[newElStr].style.textAlign;
+              }
+            }  
+          }
+        }
+        
+        if (thobj.gnt(this) == 'block' && this.parentNode.nodeName.toLowerCase() == 'li') {
+          thobj.setIndentLevel(this, 0);
+        }
+        $(this).removeClass('existing_before_change_structure');
+      });
+      
+      
+    };
+    
+    this.setEditionRestrictMarker = function(){
+      var editionRestrictMarker = this.edDoc.createElement('div');
+      editionRestrictMarker.setAttribute('id', 'edition_restrict_marker');
+      editionRestrictMarker.innerHTML = '&nbsp;';
+      this.verticalCell.appendChild(editionRestrictMarker);
+    };
+    
+    this.removeEditionRestrictMarker = function(){
+      while (this.edDoc.getElementById('edition_restrict_marker')) {
+        this.edDoc.getElementById('edition_restrict_marker').parentNode.removeChild(this.edDoc.getElementById('edition_restrict_marker'));
+      }
+    };
+    
+    this.removeEmptyStyleInlineTags = function(){
+      this.storeSelection();
+      $('span', this.verticalCell).each(function(){
+        if (!$(this).attr('style')) {
+          thobj.unwrap(this);
+        }
+      });
+      this.repairSelection();
+    };
+    
+    
+    this.doOnPaste = function(){
+      $(thobj.edDoc.body).append('<div class="pasting" style="margin:10px;color:#aaaaaa">Pasting...  Please wait...<div>');
+      $(thobj.rootDiv).hide();
+      $.each($(thobj.edDoc.body).emptyTextNodes(), function(){
+        $(this).remove();
+      }); 
+      //thobj.searchForSidePasting();
+      thobj.removeAttributesOfPastedTags();
+      thobj.correctUserSelection();
+      thobj.storeSelection();
+      var tagToRemove = true;
+      while (tagToRemove) {
+        tagToRemove = thobj.findFirstToRemoveTag();
+        if (tagToRemove) {
+          if (tagToRemove.store_content) {
+            thobj.removeNodeButStoreItContent(tagToRemove.node);
+          }
+          else {
+            thobj.removeNode(tagToRemove.node);
+          }
+        }
+      }
+      var commentNodes = thobj.getAllCommentNodes(thobj.edDoc.body);
+      $.each(commentNodes, function(){
+        $(this).remove();
+      });
+      $('*', thobj.verticalCell).each(function(){
+        if (thobj.gnt(this) != 'text' && thobj.gnt(this) != 'br' && thobj.gnt(this) != 'img' && !this.childNodes.length) {
+          $(this).remove();
+        }
+      });
+      $('.pasting', thobj.edDoc.body).remove();
+      thobj.nbspFilter();
+      $(thobj.rootDiv).show();
+      thobj.markNodesAsExistingBeforePaste();
+      thobj.repairSelection();
+      thobj.doBeforeTextChanged();
+      WebDoc.application.undoManager.undo();
+    };
+    
+    
+    
+    this.markNodesAsExistingBeforePaste = function(){
+      var allTags = thobj.verticalCell.getElementsByTagName('*');
+      for (var i = 0; i < allTags.length; i++) {
+        jQuery(allTags[i]).addClass(this.nativeElementsClass);
+      }
+    };
+    
     this.removeAttributesOfPastedTags = function(){
-      var allTags = thobj.verticalCell.getElementsByTagName('*'); 
-      for(var i=0;i<allTags.length;i++){
-        if(allTags[i].href){  
-          var pattern = new RegExp("^javascript:","g");
+      var allTags = thobj.verticalCell.getElementsByTagName('*');
+      for (var i = 0; i < allTags.length; i++) {
+        if (allTags[i].href) {
+          var pattern = new RegExp("^javascript:", "g");
           if (pattern.test(allTags[i].href)) {
             allTags[i].href = '#';
-          }  
+          }
         }
-        var attributes =  allTags[i].attributes;
+        var attributes = allTags[i].attributes;
         var attributesToRemove = [];
         var setBlankTarget = false;
-        var attrLength = attributes.length;  
-        for(var a=0;a<attrLength;a++){
-          if(!this.isInListOfWhiteAttrs(attributes[a].nodeName) && allTags[i].className.indexOf('webdoc-editor-elem')==-1){
+        var attrLength = attributes.length;
+        for (var a = 0; a < attrLength; a++) {
+          if (!this.isInListOfWhiteAttrs(attributes[a].nodeName) && !thobj.isNative(allTags[i])) {
             attributesToRemove[attributesToRemove.length] = attributes[a].nodeName;
-          } 
-          if(attributes[a].nodeName == 'href' && allTags[i].className.indexOf('webdoc-editor-elem')==-1){
+          }
+          if (attributes[a].nodeName == 'href' && !thobj.isNative(allTags[i])) {
             setBlankTarget = true;
           }
         }
-        for(var r=0;r<attributesToRemove.length;r++){
-           allTags[i].removeAttribute(attributesToRemove[r]);
+        for (var r = 0; r < attributesToRemove.length; r++) {
+          allTags[i].removeAttribute(attributesToRemove[r]);
         }
-        if(setBlankTarget){
-           allTags[i].setAttribute('target','_blank');
+        if (setBlankTarget) {
+          allTags[i].setAttribute('target', '_blank');
         }
         
       }
     };
-   
+    
     this.removeNodeButStoreItContent = function(node){
       var childs = node.childNodes;
       for (var i = 0; i < childs.length; i++) {
@@ -1356,95 +1998,93 @@ WebDoc.TextToolView = $.klass({
       }
       node.parentNode.removeChild(node);
     };
-   
+    
     this.removeNode = function(node){
-       node.parentNode.removeChild(node);
+      node.parentNode.removeChild(node);
     };
-   
-    this.isInListOfWhiteTags = function(node){   
-      var whiteTags = thobj.parameters.whiteListTags;        
-      for(var w=0;w<whiteTags.length;w++){    
-        if(node.tagName.toLowerCase() == whiteTags[w].toLowerCase()){
+    
+    this.isInListOfWhiteTags = function(node){
+      var whiteTags = thobj.parameters.whiteListTags;
+      for (var w = 0; w < whiteTags.length; w++) {
+        if (node.tagName.toLowerCase() == whiteTags[w].toLowerCase()) {
           return true;
         }
       }
       return false;
     };
-   
-    this.isInListOfBlackTags = function(node){          
-	    var blackTags = thobj.parameters.blackListTags;
-	     for(var b=0;b<blackTags.length;b++){    
-	        if(node.tagName.toLowerCase() == blackTags[b].toLowerCase()){
-	          return true;
-	        }
-	      }
-	    return false;
-    };
-
-    this.isInListOfWhiteAttrs = function(attr){   
-      var whiteAttributes = thobj.parameters.whiteListAttributes;        
-      for(var w=0;w<whiteAttributes.length;w++){    
-        if(attr.toLowerCase() == whiteAttributes[w].toLowerCase()){
+    
+    this.isInListOfBlackTags = function(node){
+      var blackTags = thobj.parameters.blackListTags;
+      for (var b = 0; b < blackTags.length; b++) {
+        if (node.tagName.toLowerCase() == blackTags[b].toLowerCase()) {
           return true;
         }
       }
       return false;
     };
-   
-	  this.findFirstToRemoveTag = function(){    
-	    var allTags = thobj.verticalCell.getElementsByTagName('*');  
-	    for(var t=0;t<allTags.length;t++){
-	      if(!this.isInListOfWhiteTags(allTags[t]) && allTags[t].className.indexOf('webdoc-editor-elem')==-1){
-	        if(this.isInListOfBlackTags(allTags[t])){
-	          return {'node':allTags[t],'store_content':false};
-	        } else {
-	          return {'node':allTags[t],'store_content':true};
-	        }
-	      }
-	    }
-	    return false;
-	 };
-   
-     this.searchForSidePasting = function(){
-       var rootChilds = thobj.rootDiv.childNodes;
-       var containerChilds = thobj.verticalContainer.childNodes;
-       var toReplace = [];
-       for(var i=0;i<rootChilds.length;i++){
-         if(rootChilds[i]!=this.verticalContainer){toReplace[toReplace.length]  = rootChilds[i];}
-       }
-       for(var j=0;j<containerChilds.length;j++){
-         if(containerChilds[j]!=this.verticalCell){toReplace[toReplace.length] = containerChilds[j];}
-       }
-       for(var r=0;r<toReplace.length;r++){
-         if(this.getTypeOfNode(toReplace[r])!='text' && this.isInListOfBlackTags(toReplace[r])){
-           toReplace[r].parentNode.removeChild(toReplace[r]);
-         } else {
-           this.verticalCell.appendChild(toReplace[r]);
-         }
-         
-       }
-     };
-   
-   
-    this.doOnPaste = function(){  
-      //chrome fix     
-      thobj.searchForSidePasting();
-      thobj.removeAttributesOfPastedTags();
-      var tagToRemove=true;
-      while(tagToRemove){ 
-        tagToRemove = thobj.findFirstToRemoveTag();
-        if(tagToRemove){
-          if(tagToRemove.store_content){
-            thobj.removeNodeButStoreItContent(tagToRemove.node);
-          } else {
-            thobj.removeNode(tagToRemove.node);
+    
+    this.isInListOfWhiteAttrs = function(attr){
+      var whiteAttributes = thobj.parameters.whiteListAttributes;
+      for (var w = 0; w < whiteAttributes.length; w++) {
+        if (attr.toLowerCase() == whiteAttributes[w].toLowerCase()) {
+          return true;
+        }
+      }
+      return false;
+    };
+    
+    this.findFirstToRemoveTag = function(){
+      var allTags = thobj.verticalCell.getElementsByTagName('*');
+      for (var t = 0; t < allTags.length; t++) {
+        var isImageWithRelativePath = false;
+        if (allTags[t].nodeName.toLowerCase() == 'img' && allTags[t].getAttribute('src') && allTags[t].getAttribute('src').indexOf('http') == -1) {
+          isImageWithRelativePath = true;
+        }
+        if ((!this.isInListOfWhiteTags(allTags[t]) && !thobj.isNative(allTags[t])) || (isImageWithRelativePath)) {
+          if (this.isInListOfBlackTags(allTags[t]) || (isImageWithRelativePath)) {
+            return {
+              'node': allTags[t],
+              'store_content': false
+            };
+          }
+          else {
+            return {
+              'node': allTags[t],
+              'store_content': true
+            };
           }
         }
       }
-      thobj.markNodesAsExistingBeforePaste();
-    }; 
+      return false;
+    };
     
-    
+    this.searchForSidePasting = function(){
+      var rootChilds = thobj.rootDiv.childNodes;
+      var containerChilds = thobj.verticalContainer.childNodes;
+      var toReplace = [];
+      for (var i = 0; i < rootChilds.length; i++) {
+        if (rootChilds[i] != this.verticalContainer) {
+          toReplace[toReplace.length] = rootChilds[i];
+        }
+      }
+      for (var j = 0; j < containerChilds.length; j++) {
+        if (containerChilds[j] != this.verticalCell) {
+          toReplace[toReplace.length] = containerChilds[j];
+        }
+      }
+      
+      if (toReplace.length) {
+      }
+      for (var r = 0; r < toReplace.length; r++) {
+        if (this.gnt(toReplace[r]) != 'text' && this.gnt(toReplace[r]) != 'comment' && this.isInListOfBlackTags(toReplace[r])) {
+          toReplace[r].parentNode.removeChild(toReplace[r]);
+        }
+        else {
+          this.verticalCell.appendChild(toReplace[r]);
+        }
+        
+      }
+    };
   },
   
   /**
@@ -1453,18 +2093,21 @@ WebDoc.TextToolView = $.klass({
    * html is the html content of the edited div. If the div is empty "Empty content" value is set as html
    * classValue is all classes of the div. TextViewTool add a class "empty" if the div is empty
    */
-  setEndEditionListener: function(listener) {
+  setEndEditionListener: function(listener){
     this.endEditionListener = listener;
   },
   /**
    * make divElement editable. Once a div element is editable, a caret appear and user can edit text with keyboard.
    * @param divElement the DOM element that you want to make editable.
    */
-  enterEditMode: function(divElement) {
+  enterEditMode: function(divElement){
     var thobj = this;
+    this.firstAction = true;
     if (this.currentEditingBlock) {
       this.exitEditMode();
-    }      
+    }
+    var scrollTop = divElement.scrollTop;
+    this.lastStyleHash = false;
     this.currentEditingBlock = divElement;
     this.currentEditingBlockClass = this.currentEditingBlock.className + " webdoc";
     this.currentEditingOverflowX = this.currentEditingBlock.style.overflowX;
@@ -1480,31 +2123,36 @@ WebDoc.TextToolView = $.klass({
     this.edWin = this.iframe.contentWindow;
     this.edDoc = this.edWin.document;
     this.edDoc.designMode = 'On';
-    var content = this.edDoc;
+    content = this.edDoc;
     content.open("text/html", "replace");
     this.frameStyles = '';
     for (i = 0; i < this.mainPageStyles.length; i++) {
       this.frameStyles += "<link rel='stylesheet' href='" + this.mainPageStyles[i] + "' type='text/css' />";
     }
     this.frameStyles += "<link rel='stylesheet' href='" + jQuery('#theme')[0].href + "' type='text/css' />";
-    content.write("<!DOCTYPE html><html><head>" + this.frameStyles + "<style>html {overflow-x: auto; overflow-y: auto;} body { overflow: auto;font-family:Helvetica;} html,body { padding:0px; height:100%; margin:0px; background:none; position:relative} </style></head><body class='" + WebDoc.application.pageEditor.currentDocument.styleClass() + "' contenteditable='true'></body></html>");
+    content.write("<!DOCTYPE html><html><head>" + this.frameStyles + "<style>html{overflow-x: auto; overflow-y: auto;} body { overflow: auto;font-family:Helvetica;} html,body { padding:0px; height:100%; margin:0px; background:none;position:relative} </style></head><body class='" + WebDoc.application.pageEditor.currentDocument.styleClass() + "' contenteditable='true'></body></html>");
     content.close();
     thobj.edDoc.designMode = 'On';
-    thobj.edDoc.execCommand("styleWithCSS", false, true);
+    thobj.edDoc.execCommand("useCSS", false, false);
+    // thobj.edDoc.execCommand("styleWithCSS", false, true);
     jQuery(this.edDoc.body).bind('paste', function(e){
-			setTimeout(thobj.doOnPaste,500);
-		});
-   
-    this.setCursorInInnerPosition = function() {
+      setTimeout(thobj.doOnPaste, 500);
+    });
+    
+    
+    
+    this.setCursorInInnerPosition = function(){
       var range = thobj.edDoc.createRange();
-      range.setStartAfter(this.verticalCell.firstChild);
-      range.setEndAfter(this.verticalCell.firstChild);
+      range.setStart(this.getFirstestChild(this.verticalCell).parentNode, 0);
+      range.setEnd(this.getFirstestChild(this.verticalCell).parentNode, 0);
       this.edWin.getSelection().addRange(range);
-      this.edWin.getSelection().collapseToEnd();
+      if (this.ua.indexOf("webkit") == -1) {
+        this.edWin.getSelection().collapseToEnd();
+      }
       this.edWin.focus();
     };
     
-    this.getAllFirstChilds = function(node) {
+    this.getAllFirstChilds = function(node){
       var firstChilds = [];
       var cnode = node;
       for (var i = 0; true; i++) {
@@ -1518,8 +2166,8 @@ WebDoc.TextToolView = $.klass({
       }
       return firstChilds;
     };
-
-    this.isNodeInVerticalCell = function(node) {
+    
+    this.isNodeInVerticalCell = function(node){
       var parents = this.getAllNodeParents(node);
       for (var i = 0; i < parents.length; i++) {
         if (parents[i] == this.verticalCell) {
@@ -1529,20 +2177,20 @@ WebDoc.TextToolView = $.klass({
       return false;
     };
     
-    this.isCursorInInnerPosition = function(cursorAnchorNode, cursorFocusNode) {
+    this.isCursorInInnerPosition = function(cursorAnchorNode, cursorFocusNode){
       if (!this.isNodeInVerticalCell(cursorAnchorNode) && !this.isNodeInVerticalCell(cursorFocusNode)) {
         return false;
       }
       return true;
     };
     
-    this.searchForInnerCursorPosition = function() {
+    this.searchForInnerCursorPosition = function(){
       if (!thobj.isCursorInInnerPosition(thobj.edWin.getSelection().anchorNode, (thobj.edWin.getSelection().focusNode))) {
         thobj.setCursorInInnerPosition();
       }
     };
     
-    this.createRootContainer = function() {
+    this.createRootContainer = function(){
       this.edDoc.body.innerHTML = "<div></div>";
       this.rootDiv = this.edDoc.body.firstChild;
       this.rootDiv.className = this.currentEditingBlockClass;
@@ -1553,129 +2201,237 @@ WebDoc.TextToolView = $.klass({
       this.rootDiv.style.background = 'rgba(255,255,255,0)';
       this.rootDiv.style.backgroundImage = 'none';
       this.rootDiv.style.overflowX = this.currentEditingOverflowX;
-      this.rootDiv.style.overflowY = this.currentEditingOverflowY; 
+      this.rootDiv.style.overflowY = this.currentEditingOverflowY;
       
     };
-		
-    this.firstEditionHandler = function() {
+    
+    this.firstEditionHandler = function(){
+      var oldStyle = this.lastStyleHash;
       this.createRootContainer();
-      this.formatVertical();   
-      this.verticalCell.innerHTML = '&lrm;';
+      this.formatVertical();
+      var firstP = this.edDoc.createElement('p');
+      firstP.innerHTML = '<br />';
+      this.verticalCell.appendChild(firstP);
+      if (oldStyle.bold && oldStyle.bold != 'different') {
+        $(firstP).css('fontWeight', 'bold');
+        this.correctInlineProprertiesForBlockElements('fontWeight');
+      }
+      if (oldStyle.italic && oldStyle.italic != 'different') {
+        $(firstP).css('fontStyle', 'italic');
+        this.correctInlineProprertiesForBlockElements('fontStyle');
+      }
+      if (oldStyle.underline && oldStyle.underline != 'different') {
+        $(firstP).css('textDecoration', 'underline');
+        this.correctInlineProprertiesForBlockElements('textDecoration');
+      }
+      if (oldStyle.fontSize && oldStyle.fontSize != 'different' && oldStyle.fontSize != this.formatElementStyleData(this.getElementStyleData(this.verticalCell)).fontSize) {
+        $(firstP).css('fontSize', oldStyle.fontSize);
+        this.correctInlineProprertiesForBlockElements('fontSize');
+      }
+      if (oldStyle.foreColor && oldStyle.fontColor != 'different' && oldStyle.foreColor != this.formatElementStyleData(this.getElementStyleData(this.verticalCell)).foreColor) {
+        $(firstP).css('color', oldStyle.foreColor);
+        this.correctInlineProprertiesForBlockElements('color');
+      }
+      if (oldStyle.hiliteColor && oldStyle.hiliteColor != 'different' && oldStyle.hiliteColor != this.formatElementStyleData(this.getElementStyleData(this.verticalCell)).hiliteColor) {
+        $(firstP).css('backgroundColor', oldStyle.hiliteColor);
+        this.correctInlineProprertiesForBlockElements('backgroundColor');
+      }
+      if (oldStyle.fontName && oldStyle.fontName != 'different' && oldStyle.fontName != this.formatElementStyleData(this.getElementStyleData(this.verticalCell)).fontName) {
+        $(firstP).css('fontFamily', oldStyle.fontNameFull);
+        this.correctInlineProprertiesForBlockElements('fontFamily');
+      }
       this.setCursorInInnerPosition();
+      thobj.refreshPalette(thobj.getSelectedNodesStyleHash());
+      this.markNodesAsExistingBeforePaste();
     };
     
-    this.secondtEditionHandler = function() {
+    this.secondtEditionHandler = function(){
       this.createRootContainer();
       this.edDoc.body.firstChild.innerHTML = storedContent;
       this.formatVertical();
       this.setCursorInInnerPosition();
     };
     
-    this.storeRootStructure = function() {
-      if (!thobj.edDoc.body.firstChild || !thobj.edDoc.body.firstChild.firstChild || !thobj.edDoc.body.firstChild.firstChild.firstChild) {
+    this.storeRootStructure = function(){
+      if (thobj.edDoc.body.firstChild && this.isContainText(thobj.edDoc.body.firstChild)) {
+      }
+      else if (thobj.edDoc.body.firstChild && thobj.edDoc.body.firstChild.firstChild && thobj.edDoc.body.firstChild.firstChild.firstChild && thobj.edDoc.body.firstChild.firstChild.firstChild.firstChild && this.gnt(thobj.edDoc.body.firstChild.firstChild.firstChild.firstChild) == 'block') {
+        if (thobj.edDoc.body.firstChild.firstChild.firstChild.childNodes.length == 1 && !this.isContainText(thobj.edDoc.body.firstChild.firstChild.firstChild.firstChild)) {
+          this.correctUserSelection();
+        }
+      }
+      else {
         thobj.firstEditionHandler();
       }
     };
     
-    this.selectNode = function(node) {
+    this.selectNode = function(node){
       var range = thobj.edDoc.createRange();
       range.selectNode(node);
       thobj.edWin.getSelection().addRange(range);
     };
     
-    this.isIndentTag = function(obj){
-      return (obj.className.indexOf('webdoc-indent-1')==-1)?false:true;
+    this.doOnBackspacePressed = function(){
+      var s = thobj.getSelectBounds();
+      var blockParent = thobj.isHasBlockParents(s.fn);
+      if (blockParent && s.fo === 0 && !thobj.edWin.getSelection().toString().length && $.inArray(s.fn, thobj.getFirstestChilds(blockParent)) != -1) {
+        if (blockParent.nodeName.toLowerCase() != 'li' && blockParent.className.indexOf('webdoc-indent') != -1 && thobj.getIndentLevel(blockParent) > 0) {
+          thobj.editorExec('outdent');
+          return false;
+        }
+        else if (blockParent.nodeName.toLowerCase() == 'li') {
+        
+        }
+      }
+      if (thobj.deleteSelectedImages()) {
+        return false;
+      }
+      if (thobj.verticalCell.childNodes.length == 1 && thobj.verticalCell.firstChild.nodeName != "#text" && (thobj.verticalCell.firstChild.tagName.toLowerCase() == 'ul' || thobj.verticalCell.firstChild.tagName.toLowerCase() == 'ol') && thobj.verticalCell.firstChild.firstChild && thobj.verticalCell.firstChild.firstChild.tagName.toLowerCase() == 'li' && thobj.verticalCell.firstChild.firstChild.firstChild && thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue && thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue.length === 1 && !(/\w/.test(thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue))) {
+        thobj.firstEditionHandler();
+        return false;
+      }
+      thobj.storeRootStructure();
+      return true;
     };
     
-    this.doOnBackspacePressed = function(){ 
-        var s = thobj.getSelectBounds();
-        if((s.an.nodeName != '#text' && s.fn.nodeName != '#text' && thobj.isIndentTag(s.an) && thobj.isIndentTag(s.fn) && !s.ao && !s.fo) || (s.an.nodeName == '#text' && s.an == s.fn && !s.ao && s.ao == s.fo && ((thobj.isIndentTag(s.an.parentNode) && s.an.parentNode.firstChild == s.an) || (thobj.isIndentTag(s.an.parentNode.parentNode) && s.an.parentNode.parentNode.firstChild.firstChild == s.an) || (thobj.isIndentTag(s.an.parentNode.parentNode.parentNode) && s.an.parentNode.parentNode.parentNode.firstChild.firstChild.firstChild == s.an)))){
-           thobj.editorExec('outdent');
-           return false;
-        }
-        if(thobj.deleteSelectedImages()){
-           return false;
-        }
-        if(thobj.verticalCell.childNodes.length==1 && thobj.verticalCell.firstChild.nodeName != "#text" && (thobj.verticalCell.firstChild.tagName.toLowerCase()=='ul' || thobj.verticalCell.firstChild.tagName.toLowerCase()=='ol') && thobj.verticalCell.firstChild.firstChild && thobj.verticalCell.firstChild.firstChild.tagName.toLowerCase() == 'li' && thobj.verticalCell.firstChild.firstChild.firstChild && thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue && thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue.length===1 && !(/\w/.test(thobj.verticalCell.firstChild.firstChild.firstChild.nodeValue))){
-           thobj.firstEditionHandler();
-           return false;
-        }
-        return true;
-    };
-    
-    this.getPropertyDetectionNode = function(){   
-      var detectNode = thobj.verticalCell;       
-      if ((thobj.edWin.getSelection().focusNode.nodeName == "#text" || thobj.edWin.getSelection().focusNode.nodeName == "#comment") && thobj.edWin.getSelection().focusNode.parentNode!=thobj.verticalCell){
-        detectNode = thobj.edWin.getSelection().focusNode.parentNode;      
-      } else if((thobj.edWin.getSelection().anchorNode.nodeName == "#text" || thobj.edWin.getSelection().anchorNode.nodeName == "#comment") && thobj.edWin.getSelection().anchorNode.parentNode!=thobj.verticalCell){
-        detectNode = thobj.edWin.getSelection().anchorNode.parentNode;
-      } else if(thobj.edWin.getSelection().focusNode.nodeName != "#text" && thobj.edWin.getSelection().focusNode.nodeName != "#comment" && thobj.edWin.getSelection().focusNode!=thobj.verticalCell){
-        detectNode = thobj.edWin.getSelection().focusNode;
-      } else if(thobj.edWin.getSelection().anchorNode.nodeName != "#text" && thobj.edWin.getSelection().anchorNode.nodeName != "#comment" && thobj.edWin.getSelection().anchorNode!=thobj.verticalCell){
-        detectNode = thobj.edWin.getSelection().anchorNode;
-      }   
-      return detectNode;
-    };
+    this.doOnDeletePressed = function(){
+      var s = thobj.getSelectBounds();
+      if (thobj.deleteSelectedImages()) {
+        return false;
+      }
       
+      return true;
+    };
+    
     this.deleteSelectedImages = function(){
-      var imgsToRemove = []; 
+      var imgsToRemove = [];
       var imgs = this.edDoc.getElementsByTagName('img');
-      for(var i=0;i<imgs.length;i++){
-        if(imgs[i].getAttribute('_moz_resizing')){
+      for (var i = 0; i < imgs.length; i++) {
+        if (imgs[i].getAttribute('_moz_resizing')) {
           imgsToRemove.push(imgs[i]);
         }
       }
       var result = imgsToRemove.length;
-      for(var j=0;j<imgsToRemove.length;j++){
-        imgsToRemove[j].parentNode.removeChild(imgsToRemove[j]);
+      for (var j = 0; j < imgsToRemove.length; j++) {
+        if (imgsToRemove[j].parentNode && imgsToRemove[j].parentNode.nodeName.toLowerCase() == 'a' && imgsToRemove[j].parentNode.childNodes.length == 1) {
+          imgsToRemove[j].parentNode.parentNode.removeChild(imgsToRemove[j].parentNode);
+        }
+        else {
+          imgsToRemove[j].parentNode.removeChild(imgsToRemove[j]);
+        }
       }
-      return result;
-    };  
       
-    this.addEvent(this.edDoc, "click", function(e) {
+      return result;
+    };
+    
+    $(this.edDoc).bind("click", function(e){
       var ev = e || window.event;
       var el = ev.target || ev.srcElement;
       WebDoc.application.inspectorController.textInspector.hideColorPickers();
+      thobj.edDoc.close();
     });
     
-    this.addEvent(this.edDoc, "mouseup", function(e) {
+    $(this.edDoc).bind("mousedown", function(e){
       var ev = e || window.event;
-      var el = ev.target || ev.srcElement;    
-      thobj.correctUserSelection();
-      thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.getPropertyDetectionNode())));
+      var el = ev.target || ev.srcElement;
+      //store focus after drag out of editor window
+      $('<input>').prependTo(thobj.currentEditingBlock).focus().remove();
+      thobj.edWin.focus();
     });
     
-    this.addEvent(this.edDoc, "keydown", function(e) {    
+    $(this.edDoc).bind("mouseup", function(e){
+      var ev = e || window.event;
+      var el = ev.target || ev.srcElement;
+      
+      thobj.clearNewEditionPoints();
+      
+      thobj.correctUserSelection();
+      thobj.lastStyleHash = thobj.getSelectedNodesStyleHash();
+      thobj.refreshPalette(thobj.lastStyleHash);
+    });
+    
+    this.doAfterKeyUp = function(){
+    };
+    
+    $(this.edDoc).bind("keydown", function(e){
       var ev = e || window.event;
       var key = ev.keyCode;
-      ev.stopPropagation();
-      ev.cancelBubble = true;       
+      var el = ev.target || ev.srcElement;
+      var keys = [37, 38, 39, 40, 8, 9, 16, 18, 20, 91, 45, 93, 36, 33, 34, 35, 144];
+      if (thobj.findValueInArray(keys, key) || (ev.ctrlKey && (key == 88 || key == 86 || key == 67 || key == 65 || key == 17 || key == 89 || key == 90))) {
+        //ctrl+c or ctrl+v                                                                                        
+      }
+      else if (thobj.edWin.getSelection().toString().length) {
+        thobj.doBeforeTextChanged();
+        thobj.edDoc.designMode = 'On';
+        thobj.edWin.focus();
+        thobj.correctUserSelection();
+        thobj.edDoc.execCommand('fontColor', null, 'red');//firexox delete fix
+        try {
+          thobj.edDoc.execCommand('delete', null, null);
+        } 
+        catch (e) {
+        }
+        if (key == 46 || key == 13) {
+          if (e.stopPropagation) {
+            e.stopPropagation();
+            e.preventDefault();
+          }
+        }
+      }
+      if (key != 13) {
+       thobj.storeRootStructure();
+       } 
       if ((key == 32) || (key == 13) || (key == 8)) {
         thobj.doBeforeTextChanged();
-      }       
-      return true;   
-    });     
-    
-    this.addEvent(this.edDoc, "keyup", function(e) {    
-      thobj.storeRootStructure();
-      var ev = e || window.event;
-      var key = ev.keyCode;                    
-      var el = ev.target || ev.srcElement;
-      thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.getPropertyDetectionNode())));
+      }
+      if (thobj.firstAction) {
+        thobj.doBeforeTextChanged();
+        thobj.firstAction = false;
+      }
+      if (key == 13 && !ev.shiftKey) {
+        var prevBlockTag = thobj.isHasBlockParents(thobj.getSelectBounds().fn);
+        if (prevBlockTag && !thobj.isLiItemContent(prevBlockTag)) {
+          if (thobj.isHeadingTag(prevBlockTag) || (prevBlockTag.nodeName.toLowerCase() == 'li' && !prevBlockTag.textContent.length)) {
+            thobj.doAfterKeyUp = function(){
+              thobj.correctUserSelection();
+              thobj.edDoc.execCommand('formatBlock', null, '<p>');
+              thobj.lastStyleHash = thobj.getSelectedNodesStyleHash();
+              thobj.refreshPalette(thobj.lastStyleHash);
+            };
+          }
+          else {
+            thobj.doAfterKeyUp = function(){
+            };
+          }
+        }
+        else if (prevBlockTag && thobj.isLiItemContent(prevBlockTag)) {
+        
+          thobj.doAfterKeyUp = function(){
+          
+          };
+        }
+      }
       return true;
-    });  
-       
-    if (!storedContent || this.currentEditingBlockClass.indexOf('empty') != -1) {
-      this.firstEditionHandler();
-    }
-    else {
-      this.secondtEditionHandler(storedContent);
-    }
+    });
     
-    thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.verticalCell)));
-    
-    this.doBeforeTextChanged();
-    
+    $(this.edDoc).bind("keyup", function(e){
+      thobj.doAfterKeyUp();
+      thobj.doAfterKeyUp = function(){
+      };
+      var ev = e || window.event;
+      var key = ev.keyCode;
+      if (key != 13) {
+        thobj.storeRootStructure();
+      }
+      var el = ev.target || ev.srcElement;
+      if (key == 35 || key == 36) {
+        thobj.correctUserSelection();
+      }
+      thobj.lastStyleHash = thobj.getSelectedNodesStyleHash();
+      thobj.refreshPalette(thobj.lastStyleHash);
+      return true;
+    });
     
     this.shortcut('Ctrl+Z', function(){
       WebDoc.application.undoManager.undo();
@@ -1687,15 +2443,32 @@ WebDoc.TextToolView = $.klass({
     });
     this.shortcut('Ctrl+A', function(){
       thobj.selectCustomNodeContent(thobj.verticalCell);
-       return false;
-    });    
+      thobj.correctUserSelection();
+      thobj.lastStyleHash = thobj.getSelectedNodesStyleHash();
+      thobj.refreshPalette(thobj.lastStyleHash);
+      return false;
+    });
     this.shortcut('Tab', function(){
-      thobj.editorExec('indent'); 
+      thobj.editorExec('indent');
       return false;
     });
     this.shortcut('backspace', thobj.doOnBackspacePressed);
+    this.shortcut('delete', thobj.doOnDeletePressed);
+    this.shortcut('space', thobj.doOnSpacePressed);
+    this.shortcut('enter', function(){
+      return true;
+    });
     
-    //setTimeout(function(){thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.getPropertyDetectionNode())))},1000);
+    if (!storedContent || this.currentEditingBlockClass.indexOf('empty') != -1) {
+      this.firstEditionHandler();
+    }
+    else {
+      this.secondtEditionHandler(storedContent);
+    }
+    
+    $(thobj.iframe).bind('load', function(){
+      $(thobj.edDoc.body.firstChild).scrollTop(scrollTop);
+    });
   },
   
   /**
@@ -1703,21 +2476,21 @@ WebDoc.TextToolView = $.klass({
    * If no element is in edition mode this method does nothing.
    * @return String. return html corresponding to the edited div.
    */
-  exitEditMode: function() {
+  exitEditMode: function(){
     var thobj = this;
     var className = 'empty';
     var htmlToStore = '';
-    
+    var scrollTop = thobj.edDoc.body.firstChild.scrollTop;
     if (this.isContainText(this.edDoc.body.firstChild)) {
-      this.deleteSelectionMarkers();
+      this.deleteHistorySelectionMarkers();
       htmlToStore = this.outputFilter(this.edDoc.body.firstChild.innerHTML);
+      htmlToStore = htmlToStore.replace(/<br(.*?)>/ig, "<br $1 />");
       className = '';
     }
-    
     this.currentEditingBlock.innerHTML = htmlToStore;
     this.currentEditingBlock.style.overflowX = this.currentEditingOverflowX;
     this.currentEditingBlock.style.overflowY = this.currentEditingOverflowY;
-    this.endEditionListener.applyTextContent(htmlToStore, className);
+    this.endEditionListener.applyTextContent(htmlToStore, className, scrollTop);
     this.currentEditingBlock = null;
   },
   
@@ -1749,22 +2522,17 @@ WebDoc.TextToolView = $.klass({
    ---* - subScript: make selected text subscript
    ---* - removeFormat: remove all formatting on selected text
    */
-  editorExec: function(command, optional) {
+  editorExec: function(command, optional){
     var thobj = this;
     this.edWin.focus();
     this.doBeforeTextChanged();
-    this.setEditionRestrictMarker(); 
-
+    this.setEditionRestrictMarker();
     switch (command) {
       case 'removeformat':
-        this.edDoc.execCommand(command, null, optional ? optional : '');
-        var lis = this.verticalCell.getElementsByTagName('li');
-        for(var i=0;i<lis.length;i++){
-          if(!this.findTagsByType(lis[i],'inline').length){
-            lis[i].style.color = null;
-            lis[i].style.fontSize = null;      
-          }
-        }
+        this.edDoc.execCommand(command, false, true);
+        break;
+      case 'clearBackground':
+        this.formatInline('backgroundColor', 'transparent', false);
         break;
       case 'format':
         this.formatBlock(optional);
@@ -1777,59 +2545,36 @@ WebDoc.TextToolView = $.klass({
         break;
       case 'indent':
         this.indent();
-        break;      
+        break;
       case 'outdent':
         this.outdent();
-        break;  
+        break;
       case 'hiliteColor':
-        this.formatInline(command, '', 'backgroundColor', optional); 
-        this.storeHistorySelection(); 
-        this.correctInlineProprertiesForBlockElements('backgroundColor'); 
-        this.repairHistorySelection();  
-        this.deleteSelectionMarkers();  
-        
+        this.formatInline('backgroundColor', optional, false);
         break;
       case 'fontSize':
-        this.formatInline(command, 'size', 'fontSize', optional);
-        this.storeHistorySelection();
-        this.correctInlineProprertiesForBlockElements('fontSize');
-        this.repairHistorySelection();  
-        this.deleteSelectionMarkers();  
+        this.formatInline('fontSize', optional, false);
         break;
       case 'foreColor':
-        this.formatInline(command, 'color', 'color', optional);
-        this.storeHistorySelection(); 
-        this.correctInlineProprertiesForBlockElements('color');
-        this.repairHistorySelection();  
-        this.deleteSelectionMarkers();  
+        this.formatInline('color', optional, false);
         break;
       case 'fontName':
-        this.formatStyle(command, false, optional);
-        this.storeHistorySelection();
-        this.correctInlineProprertiesForBlockElements('fontFamily');
-        this.repairHistorySelection();  
-        this.deleteSelectionMarkers();  
+        this.formatInline('fontFamily', optional, false);
         break;
       case 'bold':
-        this.formatStyle(command, false, null);
-        this.storeHistorySelection();
-        this.correctInlineProprertiesForBlockElements('fontWeight');
-        this.repairHistorySelection();  
-        this.deleteSelectionMarkers();  
+        this.formatInline('fontWeight', 'bold', 'normal');
         break;
       case 'italic':
-        this.formatStyle(command, false, null);
-        this.storeHistorySelection();
-        this.correctInlineProprertiesForBlockElements('fontStyle');
-        this.repairHistorySelection();  
-        this.deleteSelectionMarkers();  
+        this.formatInline('fontStyle', 'italic', 'normal');
         break;
       case 'underline':
-        this.formatStyle(command, 'textDecoration', null);
-        this.storeHistorySelection();
-        this.correctInlineProprertiesForBlockElements('textDecoration');
-        this.repairHistorySelection();  
-        this.deleteSelectionMarkers();  
+        this.formatInline('textDecoration', 'underline', 'none');
+        break;
+      case 'increasefontsize':
+        this.formatInline('increaseFontSize', +1);
+        break;
+      case 'decreasefontsize':
+        this.formatInline('increaseFontSize', -1);
         break;
       case 'superScript':
         this.formatStyle(command, false, null);
@@ -1846,20 +2591,7 @@ WebDoc.TextToolView = $.klass({
       case 'justifyFull':
         this.formatHorisontal(command);
         break;
-      case 'increasefontsize':
-        this.increaseFontSize(+1,'rgb(1, 1, 1)');
-        this.storeHistorySelection();
-        this.correctInlineProprertiesForBlockElements('fontSize');
-        this.repairHistorySelection();  
-        this.deleteSelectionMarkers();  
-        break;
-      case 'decreasefontsize':
-        this.increaseFontSize(-1,'rgb(1, 1, 1)');
-        this.storeHistorySelection();
-        this.correctInlineProprertiesForBlockElements('fontSize');
-        this.repairHistorySelection();  
-        this.deleteSelectionMarkers();  
-        break;
+        
       case 'createlink':
         this.createLink(command, optional);
         break;
@@ -1869,40 +2601,39 @@ WebDoc.TextToolView = $.klass({
       default:
         alert('Command ' + command + ' is not defined');
     }
-    
-
+    this.removeEmptyStyleInlineTags();
     this.removeEditionRestrictMarker();
-      
-      
-      var allNodes = this.findTagsByType(this.verticalCell,'inline');
-      for (i = 0; i < allNodes.length; i++) {
-        if (this.getFirstLiParent(allNodes[i])) {
-          if (allNodes[i].style.color && allNodes[i].style.color != 'rgb(1, 1, 1)') {
-            this.getFirstLiParent(allNodes[i]).style.color = allNodes[i].style.color;
-          }
-          if(!this.isHeadingTag(allNodes[i]) && !this.isHeadingTag(allNodes[i].parentNode) && !this.isHeadingTag(allNodes[i].parentNode.parentNode)){
-             this.getFirstLiParent(allNodes[i]).style.fontSize = Math.round((this.edWin.getComputedStyle(allNodes[i], null).getPropertyValue("font-size").split('px')[0]) * 75 / 100)+'pt';
-          }
-        }
-      }   
-      
-      
-    //bug with eating of italic-style words
-
-      this.correctInlineItalicElementWordsCut();
-          
-    thobj.refreshPalette(thobj.formatElementStyleData(thobj.getElementStyleData(thobj.getPropertyDetectionNode())));
+    this.listItemsStyleClear();
+    this.listItemStyleCorrection();
+    this.correctUserSelection();
+    this.lastStyleHash = this.getSelectedNodesStyleHash();
+    this.refreshPalette(this.lastStyleHash);
     this.markNodesAsExistingBeforePaste();
-    thobj.edWin.focus();
+    thobj.edWin.focus(); 
   },
-
-  refreshPalette: function(toolbarHash) {
-    WebDoc.application.inspectorController.textInspector.refresh(toolbarHash,this.parameters);
+  
+  refreshPalette: function(toolbarHash){
+    WebDoc.application.inspectorController.textInspector.refresh(toolbarHash, this.parameters);
   },
-  activateToolbar: function(bool) {
+  
+  activateToolbar: function(bool){
     WebDoc.application.inspectorController.textInspector.activate(bool);
   },
-  getSelectedText: function() {
-    return this.edWin.getSelection().toString();
-  } 
+  
+  getSelectedText: function(){
+    if (this.isFromOwnContainer(this.getSelectedTextNodes()) || !this.edWin.getSelection().toString()) {
+      return this.edWin.getSelection().toString();
+    }
+    else {
+      return false;
+    }
+    
+  },
+  
+  focus: function(){
+    this.edWin.focus();
+  }
+  
+  
+  
 });

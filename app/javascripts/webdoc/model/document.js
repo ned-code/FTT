@@ -72,15 +72,24 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   },
   
   getTheme: function(callBack) {
-    WebDoc.ServerManager.getRecords(WebDoc.Theme, this.data.theme_id, callBack);
+    if (this.data.theme_id && this.data.theme_id !== 'null') {
+      WebDoc.ServerManager.getRecords(WebDoc.Theme, this.data.theme_id, callBack);
+    }
+    else {
+      callBack.call(this, null);
+    }
   },
     
   styleUrl: function() {
+    if (this.data.style_url && this.data.style_url === 'null') {
+      return null;
+    }
     return this.data.style_url;
   },
   
   styleClass: function() {
-    return "theme_" + this.data.theme_id;
+    var themeName = this.data.theme_id || 'default';
+    return "theme_" + themeName;
   },
   
   share: function() {
@@ -95,13 +104,15 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   refresh: function($super, json) {
     $super(json);
     var that = this;
-    this.pages = [];    
-    if (this.data.pages && $.isArray(this.data.pages)) {
-      for (var i = 0; i < this.data.pages.length; i++) {
-        var pageData = this.data.pages[i];
-        this.createOrUpdatePage({ page: pageData });
-      }
-    }    
+    if (json.document.pages && $.isArray(json.document.pages)) {
+      this.pages = [];    
+      if (this.data.pages && $.isArray(this.data.pages)) {
+        for (var i = 0; i < this.data.pages.length; i++) {
+          var pageData = this.data.pages[i];
+          this.createOrUpdatePage({ page: pageData });
+        }
+      }    
+    }
   },
   
   getData: function($super, withRelationShips) {

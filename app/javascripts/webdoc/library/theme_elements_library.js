@@ -34,14 +34,11 @@ WebDoc.ThemeElementsLibrary = $.klass(WebDoc.Library, {
     var that = this;
     WebDoc.application.pageEditor.currentDocument.getTheme(function(theme) {
       that.themeElementsContainer.removeClass('loading');
-      ddd(theme[0].getElementsUrl());
       if (theme && theme.length === 1 && theme[0].getElementsUrl() !== null
               && theme[0].getElementsUrl() !== undefined && theme[0].getElementsUrl() !== '') {
-        // that.themeElementsIFrame.attr('src', theme[0].getElementsUrl());
-        that.themeElementsContainer.html(theme[0].getElementsUrl());
+        that.themeElementsIFrame.attr('src', theme[0].getElementsUrl());
       } else {
-        // that.themeElementsIFrame.attr('src', '');
-        that.themeElementsContainer.html('no elements');
+        that.themeElementsIFrame.attr('src', '');
       }
     });
   }

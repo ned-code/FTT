@@ -48,4 +48,4 @@ db/schema.rb
 *.REMOTE.*
 *.BASE.*
 *.LOCAL.*
-
+public/local/*

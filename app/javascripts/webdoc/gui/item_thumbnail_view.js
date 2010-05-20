@@ -28,19 +28,33 @@ WebDoc.ItemThumbnailView = $.klass({
     itemNode.attr("id", "thumb_" + this.item.uuid());
     itemNode.addClass("item_thumb");
     for (var key in this.item.data.data) {
-      if (key == 'css') {
-        itemNode.css(this.item.data.data.css);
-      }
-      else {
-        if (key == 'innerHtml') {
-          itemNode.html(this.item.data.data[key]);
-        }
-        else {
-          if (key != 'tag' && key != 'preference') {
-            itemNode.attr(key, this.item.data.data[key]);
-          }
-        }
-      }
+      switch(key) {         
+        case "innerHTMLPlaceholder":
+        case "tag":  
+        case "preference":
+        case "properties":
+        case "innerHTML":
+        // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
+        case "innerHtml":        
+          break;
+        case "class": 
+          itemNode.addClass(this.item.data.data[key]);
+          break;
+        case "wrapClass":
+          itemNode.addClass(this.item.data.data[key]);
+          break;          
+        case "css": 
+          itemNode.css(this.item.data.data.css);  
+          break;        
+        default:
+          itemNode.attr(key, this.item.data.data[key]);
+      }           
+    }
+    if (!jQuery.string(this.item.data.data.innerHTML).empty()) {
+      itemNode.html(this.item.data.data.innerHTML);
+    }
+    else if (this.item.data.data.innerHTMLPlaceholder){
+      itemNode.html(this.item.data.data.innerHTMLPlaceholder);      
     }
     this.pageView.itemDomNode.append(itemNode.get(0));
     return itemNode;
@@ -53,10 +67,18 @@ WebDoc.ItemThumbnailView = $.klass({
   
   objectChanged: function(item) {
     this.domNode.animate(item.data.data.css, 'fast');
+    this.domNode.attr("class", "item_thumb");
+    this.domNode.addClass(item.data.data['class']);
+    this.domNode.addClass(item.data.data.wrapClass);
   },
   
   innerHtmlChanged: function() {
-    this.domNode.html(this.item.data.data.innerHTML);
+    if (!jQuery.string(this.item.data.data.innerHTML).empty()) {
+      this.domNode.html(this.item.data.data.innerHTML);
+    }
+    else if (this.item.data.data.innerHTMLPlaceholder){
+      this.domNode.html(this.item.data.data.innerHTMLPlaceholder);      
+    }
   },
 
   domNodeChanged: function() {
@@ -107,7 +129,7 @@ WebDoc.DrawingThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
   },
   
   objectChanged: function($super, item) {
-    $super(item);
+    this.domNode.animate(item.data.data.css, 'fast');
     WebDoc.application.svgRenderer.updatePolyline(this.domNode.get(0), {
       points: item.data.data.points
     });
@@ -134,9 +156,21 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
     }
   },
   
+  objectChanged: function($super, item) {
+    $super(item);
+    if (this.item.data.data.tag == "iframe" || this.item.data.data.innerHTML.match(/<iframe|<script|<object|<embed/i)) {
+      this.domNode.addClass("widget_thumb");    
+    }
+  },
+  
   innerHtmlChanged: function() {
     if (this.item.data.data.tag != "iframe" && !this.item.data.data.innerHTML.match(/<iframe|<script|<object|<embed/i)) {
-      this.domNode.html(this.item.data.data.innerHTML);
+      if (!jQuery.string(this.item.data.data.innerHTML).empty()) {
+        this.domNode.html(this.item.data.data.innerHTML);
+      }
+      else if (this.item.data.data.innerHTMLPlaceholder){
+        this.domNode.html(this.item.data.data.innerHTMLPlaceholder);      
+      }
     }
     else if (!this.domNode.hasClass('widget_thumb')) {
         this.domNode.addClass('widget_thumb');

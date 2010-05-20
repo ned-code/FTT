@@ -48,8 +48,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         infoDialogTitleNode = $("#wb-new-document-name");
         infoDialogDescriptionNode = $("#wb-new-document-description");
         infoDialogCategoryNode = $("#wb-new-document-category");
-        infoDialogWidthNode = $("#wb-new-document-size-custom-width");
-        infoDialogHeightNode = $("#wb-new-document-size-custom-height");
+        infoDialogWidthNode = $("#wb-new-document-size-width");
+        infoDialogHeightNode = $("#wb-new-document-size-height");
         infoDialogSubmitNode = infoDialogNode.find("input[type='submit']");
     },
     
@@ -72,12 +72,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         .delegate( "a[href='#filter-editable']",'click', { filter: 'editor' }, this.loadDocumentsWithFilter.pBind(this) )
         .delegate( "a[href='#filter-shared']",  'click', { filter: 'reader' }, this.loadDocumentsWithFilter.pBind(this) )
         .delegate( "a[href='#filter-public']",  'click', { filter: 'public' }, this.filterByPublic.pBind(this) );
-        
-        infoDialogWidthNode.bind("keypress", this.validateInteger);
-        infoDialogHeightNode.bind("keypress", this.validateInteger);
-        
-        $("#wb-edit-document-size-custom-width").bind("keypress", this.validateInteger);
-        $("#wb-edit-document-size-custom-height").bind("keypress", this.validateInteger);
         
         this.filter = new WebDoc.DocumentDateFilter();
         
@@ -109,10 +103,14 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         infoDialogHeaderNode.html("Create new webdoc");
         infoDialogTitleNode.val("Untitled webdoc");
         infoDialogDescriptionNode.val("");
+        infoDialogWidthNode.val("800");
+        infoDialogHeightNode.val("600");
         infoDialogSubmitNode.val("Create");
-        
-        infoDialogNode.find("#wb-new-document-size-classic")[0].checked = true;
-        
+
+        infoDialogNode.delegate("a.set_size", 'click', this.setSizeByName.pBind(this) );
+        infoDialogWidthNode.bind("keypress", this.validateInteger);
+        infoDialogHeightNode.bind("keypress", this.validateInteger);
+
         infoDialogNode.pop({
             attachTo: $( e.currentTarget ),
             initCallback: function(){
@@ -123,14 +121,13 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
                     if (!that._creatingDoc) {
                       node.addClass('loading');
                       
-                      var newDoc = new WebDoc.Document(),
-                          documentSizeChoice = $("input[name='wb-new-document-size']:checked", this).val();
-                      
+                      var newDoc = new WebDoc.Document();
+
                       newDoc.setTitle( infoDialogTitleNode.val(), true );
                       newDoc.setDescription( infoDialogDescriptionNode.val(), true);
                       newDoc.setCategory( infoDialogCategoryNode.val(), true);
                       
-                      newDoc.setSize( that.getSizeFromChoice( documentSizeChoice, infoDialogWidthNode.val(), infoDialogHeightNode.val() ), true);
+                      newDoc.setSize( { width: infoDialogWidthNode.val(), height: infoDialogHeightNode.val() }, true);
                       that._creatingDoc = true;
                       newDoc.save(function(newObject, status) {
                         if (status == "OK") 
@@ -387,6 +384,25 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         default:
           return { width: "800", height: "600"};
       }
+    },
+
+    setSizeByName: function(e) {
+      var name = e.target.attributes['data-webdoc-size-name'].value;
+      ddd('set size for '+name);
+      var size = undefined;
+      switch(name){
+        case "iphone":
+          size = { width: "620", height: "480"};
+          break;
+        case "ipad":
+          size = { width: "1024", height: "768"};
+          break;
+        case "classic":
+        default:
+          size = { width: "800", height: "600"};
+      }
+      infoDialogWidthNode.val(size.width);
+      infoDialogHeightNode.val(size.height);
     },
     
     currentUserDocumentsEditor: function() {

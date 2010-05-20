@@ -5,11 +5,11 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   
   initialize: function($super, item, pageView, afterItem) {
     var placeholderContent = item.getInnerHtmlPlaceholder() || WebDoc.NEW_TEXTBOX_CONTENT; 
-    this.placeholderNode = $(placeholderContent);
+    this.placeholderNode = jQuery(placeholderContent);
     
     $super(item, pageView, afterItem);
     if (this.itemDomNode.hasClass("empty")) {
-      this.domNode.append( this.placeholderNode );
+      this.itemDomNode.append( this.placeholderNode );
     }
     this.domNode.addClass('item-text');
   },
@@ -45,7 +45,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   innerHtmlChanged: function() {
     if (!WebDoc.application.disableHtml) {
       if ($.string(this.item.data.data.innerHTML).blank()) {
-        this.domNode.append( this.placeholderNode );
+        this.itemDomNode.append( this.placeholderNode );
       }
       else {
         this.placeholderNode.remove();

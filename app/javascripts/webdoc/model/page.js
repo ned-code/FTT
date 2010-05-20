@@ -14,6 +14,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.lastPosition = 0;
     this._layout = undefined;
     this.items = [];
+    this._itemsToRemoveAfterSave = [];
     this.nonDrawingItems = [];
     if (document && document.className() === WebDoc.Document.className()) {
       this.document = document;
@@ -37,7 +38,10 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
     
   getLayoutkind: function() {
-    return this.data.layout_kind;  
+    if (this.data.layout_kind && this.data.layout_kind !== 'null') {
+      return this.data.layout_kind;
+    }
+    return null;
   },
   
   getLayout: function(callBack) {
@@ -56,6 +60,9 @@ WebDoc.Page = $.klass(WebDoc.Record,
             }
           }
           callBack.call(this, this._layout);
+        }
+        else {
+          callBack.call(this, null);
         }
       }.pBind(this));
     }
@@ -160,13 +167,16 @@ WebDoc.Page = $.klass(WebDoc.Record,
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundImage' });
       this.save();
       WebDoc.application.undoManager.registerUndo(function() {
+        if(old_background === undefined) {
+          old_background = "url('')";
+        }
         this.setBackgroundImage(old_background);
       }.pBind(this));
     }
   },
 
   setBackgroundRepeatMode: function(repeatMode) {
-    ddd('[Page] setBackgroundRepeatMode('+repeatMode+')')
+    ddd('[Page] setBackgroundRepeatMode('+repeatMode+')');
     if(this.data.data.css.backgroundRepeat != repeatMode) {
       this.data.data.css.backgroundRepeat = repeatMode;
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundRepeat' });
@@ -192,9 +202,9 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
 
   removeBackgroundImage: function() {
-    delete this.data.data.css.backgroundImage;
-    delete this.data.data.css.backgroundRepeat;
-    delete this.data.data.css.backgroundPosition;   
+    this.data.data.css.backgroundImage = "";
+    this.data.data.css.backgroundRepeat = "";
+    this.data.data.css.backgroundPosition = "";   
     this.fireObjectChanged({ modifedAttribute: 'css.background' });
     this.save();    
   },
@@ -328,8 +338,8 @@ WebDoc.Page = $.klass(WebDoc.Record,
           this.nonDrawingItems.splice(nonDrawingIndex, 1);    
         }
       }
-      this.fireItemRemoved(item);
     }
+    this.fireItemRemoved(item);
   },
   
   findItemWithUuid: function(pUuid) {
@@ -370,6 +380,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
   copy: function($super) {
     newPage = $super();
     newPage.data.data = $.evalJSON($.toJSON(this.data.data));
+    newPage.data.layout_kind = this.getLayoutkind();
     newPage.data.items = [];
     newPage.data.position = -1;
     newPage.data.title = this.data.title;
@@ -416,7 +427,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
   },
   
-  assignLayout: function(layout) {    
+  assignLayout: function(layout, callBack) {    
     // remove all previous items
     var previousItemsMap = {};
     for (var itemIndex = this.items.length - 1; itemIndex >= 0; itemIndex--) {
@@ -433,9 +444,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
       //    this.data.data = $.evalJSON($.toJSON(layout.getModelPage().data.data));
       //this.data.items = [];
       //this.save();
-      this.fireObjectChanged({
-        modifedAttribute: "class css"
-      });
+
       if (layout.getModelPage().items && $.isArray(layout.getModelPage().items)) {
         for (var index = 0; index < layout.getModelPage().items.length; index++) {
           var itemToCopy = layout.getModelPage().items[index];
@@ -453,26 +462,50 @@ WebDoc.Page = $.klass(WebDoc.Record,
         }
       }
     }
+    else {
+      this.data.layout_kind = null;
+      this._layout = undefined;      
+    }
     // remove unecessary items
     for (itemKind in previousItemsMap) {
       var itemToRemove = previousItemsMap[itemKind];
       if (itemToRemove) {
+        // tell rails to remove this item
         itemToRemove.data._delete = true;
-        //this.removeItem(itemToRemove);
-        //itemToRemove.destroy();
+        this._itemsToRemoveAfterSave.push(itemToRemove);
       }
     }    
-    this.save(undefined,true);
+    this.save(callBack,true, true);
   },
-  
-  save: function($super, callBack, withRelationships) {
-    $super(callBack, withRelationships);
-    for (var i = this.items.length - 1; i >= 0; i--) {
-      var item = this.items[i];
-      if (item.data._delete) {
+
+  setClass: function(newClass) {
+    if (newClass != this.data.data['class']) {
+      this.data.data['class'] = newClass;
+      this.fireObjectChanged({ modifedAttribute: 'class' });
+      this.save();
+    }
+  },
+
+  addCss: function(newCss) {
+    if (newCss) {
+      this.data.data.css = jQuery.extend( this.data.data.css, newCss );
+      this.fireObjectChanged({ modifedAttribute: 'css' });
+      this.save();
+    }
+  },
+
+  save: function($super, callBack, withRelationships, synch) {
+    $super(function(page, status) {
+      for (var i = this._itemsToRemoveAfterSave.length - 1; i >= 0; i--) {
+        var item = this._itemsToRemoveAfterSave[i];
         this.removeItem(item);
       }
-    }
+      this._itemsToRemoveAfterSave = [];
+      if (callBack) {
+        callBack.apply(page, [page, status]);
+      }
+    }.pBind(this), withRelationships, synch);
+    
   }
 });
 
