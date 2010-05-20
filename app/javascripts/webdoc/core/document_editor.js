@@ -103,13 +103,11 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         infoDialogHeaderNode.html("Create new webdoc");
         infoDialogTitleNode.val("Untitled webdoc");
         infoDialogDescriptionNode.val("");
-        infoDialogWidthNode.val("800");
-        infoDialogHeightNode.val("600");
+        infoDialogWidthNode.val("800px");
+        infoDialogHeightNode.val("600px");
         infoDialogSubmitNode.val("Create");
 
         infoDialogNode.delegate("a.set_size", 'click', this.setSizeByName.pBind(this) );
-        infoDialogWidthNode.bind("keypress", this.validateInteger);
-        infoDialogHeightNode.bind("keypress", this.validateInteger);
 
         infoDialogNode.pop({
             attachTo: $( e.currentTarget ),
@@ -119,29 +117,39 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
                 node
                 .bind('submit', function() {
                     if (!that._creatingDoc) {
-                      node.addClass('loading');
 
-                      var newDoc = new WebDoc.Document();
 
-                      newDoc.setTitle( infoDialogTitleNode.val(), true );
-                      newDoc.setDescription( infoDialogDescriptionNode.val(), true);
-                      newDoc.setCategory( infoDialogCategoryNode.val(), true);
-                      
-                      newDoc.setSize( { width: infoDialogWidthNode.val(), height: infoDialogHeightNode.val() }, true);
-                      that._creatingDoc = true;
-                      newDoc.save(function(newObject, status) {
-                        if (status == "OK") 
-                        {
-                          node
-                          .removeClass('loading')
-                          .trigger('close');
+                      node.validate({
+                        pass: function() {
+                          node.addClass('loading');
                           
-                          that.documents.push(newDoc);
-                          that.filter.addDocument(newDoc);
-                          document.location = "/documents/" + newDoc.uuid() + "?edit=true#1";
-                        }
-                        that._creatingDoc = false;                        
+                          var newDoc = new WebDoc.Document();
+
+                          newDoc.setTitle( infoDialogTitleNode.val(), true );
+                          newDoc.setDescription( infoDialogDescriptionNode.val(), true);
+                          newDoc.setCategory( infoDialogCategoryNode.val(), true);
+
+                          newDoc.setSize( { width: infoDialogWidthNode.val(), height: infoDialogHeightNode.val() }, true);
+                          that._creatingDoc = true;
+                          newDoc.save(function(newObject, status) {
+                            if (status == "OK")
+                            {
+                              node
+                              .removeClass('loading')
+                              .trigger('close');
+
+                              that.documents.push(newDoc);
+                              that.filter.addDocument(newDoc);
+                              document.location = "/documents/" + newDoc.uuid() + "?edit=true#1";
+                            }
+                            that._creatingDoc = false;
+                          });
+
+                        },
+                        fail: function() {}
                       });
+
+
                     }
                   return false;
                 })
@@ -401,8 +409,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         default:
           size = { width: "800", height: "600"};
       }
-      infoDialogWidthNode.val(size.width);
-      infoDialogHeightNode.val(size.height);
+      infoDialogWidthNode.val(size.width+"px");
+      infoDialogHeightNode.val(size.height+"px");
     },
     
     currentUserDocumentsEditor: function() {
