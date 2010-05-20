@@ -163,7 +163,8 @@ WebDoc.ItemView = $.klass({
     borderRadius: true,
     boxShadow: true
   },
-
+  
+  
   createDomNode: function() {
     var itemNode;
     if (WebDoc.application.disableHtml) {

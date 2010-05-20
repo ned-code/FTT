@@ -250,6 +250,7 @@ en:
           buttons:
             upload: "Upload"
             apply_background_all_pages: "Apply to all pages"
+          layout: "Layout"
         css: "CSS"
         
       item_inspector:
