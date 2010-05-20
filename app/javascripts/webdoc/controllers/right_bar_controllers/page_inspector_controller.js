@@ -13,6 +13,8 @@
       
       this.domNode = jQuery('#page-inspector');    
       this._layoutDropDownNode = jQuery('#layout-dropdown');
+      
+      this._layoutsNode = jQuery("#layouts"),
       this.themeColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"});
       this._page = null;
       this._backgroundProperties = jQuery("#background_properties");

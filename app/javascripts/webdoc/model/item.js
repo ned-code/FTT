@@ -184,11 +184,13 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   changeThemeBgClass: function( currentClass ) {
-    this.previousThemeBgClass = this.currentThemeBgClass;
-    this.currentThemeBgClass = currentClass;
-    jQuery.string(this.data.data['class']).gsub(/theme_background.*( )/, ' ');
-    this.data.data['class'] += " " + currentClass;
-
+    var regex = /theme_background_[0-9]+/,
+        data = this.data.data;
+    
+    // Get rid of any theme_background_ classes
+    // and add currentClass
+    data['class'] = data['class'].replace( regex, '' ) + ' ' + currentClass;
+    
     this.save();
     this.fireObjectChanged({ modifedAttribute: 'class' });
   },
