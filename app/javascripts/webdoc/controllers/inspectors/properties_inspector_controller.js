@@ -12,7 +12,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ));
     
     WebDoc.application.boardController.themeNode
-    .bind( 'load', jQuery.proxy( this, 'makeThemeBackgrounds' ));
+    .bind( 'load', jQuery.proxy( this, 'makeThemeBackgrounds' ) );
     
     this.fields = {
       top:              jQuery("#property_top"),
@@ -32,7 +32,6 @@ WebDoc.PropertiesInspectorController = $.klass({
       opacity:          jQuery("#property_opacity, #property_opacity_readout")
     };
     
-    //this._themeColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"});
     this._themeBgColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"}).css('clear', 'both');
     this._themeBgState = false;
   },
