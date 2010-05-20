@@ -263,7 +263,9 @@ WebDoc.PageBrowserItemView = $.klass({
     var title = this.getPageTitle(this.page),
         currentTitle = this._titleNode.text();
     
-    if(title.title !== currentTitle) this._titleNode.text(title.title);
+    if(title.title !== currentTitle) {
+      this.setAndTruncateTitle(title.title);
+    }
 
     if(title.defaultBehavior) {
       this._titleNode.addClass(defaultClass);
