@@ -72,9 +72,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         .delegate( "a[href='#filter-editable']",'click', { filter: 'editor' }, this.loadDocumentsWithFilter.pBind(this) )
         .delegate( "a[href='#filter-shared']",  'click', { filter: 'reader' }, this.loadDocumentsWithFilter.pBind(this) )
         .delegate( "a[href='#filter-public']",  'click', { filter: 'public' }, this.filterByPublic.pBind(this) );
-
-        // $("#wb-edit-document-size-width").bind("keypress", this.validateInteger);
-        // $("#wb-edit-document-size-height").bind("keypress", this.validateInteger);
         
         this.filter = new WebDoc.DocumentDateFilter();
         
