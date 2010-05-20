@@ -193,14 +193,21 @@
                     }
                 }
             }
-            if (animatePages(fromPage, toPage, animation)) {
-                addPageToHistory(toPage, animation);
-                return publicObj;
+
+            // test added by noe: if we are on the same page, do nothing
+            if (fromPage[0] != toPage[0]) {
+                if (animatePages(fromPage, toPage, animation)) {
+                    addPageToHistory(toPage, animation);
+                    return publicObj;
+                }
+                else
+                {
+                    console.error('Could not animate pages.');
+                    return false;
+                }
             }
-            else
-            {
-                console.error('Could not animate pages.');
-                return false;
+            else {
+                return publicObj;
             }
         }
         
