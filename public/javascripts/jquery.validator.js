@@ -1,27 +1,26 @@
 // jquery.validator.js
 // 
+// 0.6
+// 
 // Stephen Band
 // 
-// Strongly inspired by jquery.validate.js (Jörn Zaefferer), indeed, regex is borrowed
-// from there. I chose not to use that plugin to avoid bloat. I'm not claiming that
-// jquery.validate is un-neccessarily bloated: it's one of the best jQuery plugins out
-// there, but it failed my first test (responding to the attribute required="required"),
-// and instead of hacking through 1146 lines of code I chose to make a plug that does
-// exactly what we need it to do.
+// Strongly inspired by jquery.validate.js (Jörn Zaefferer) - some regex is borrowed
+// from there. I chose not to use that plugin to avoid bloat (I'm not saying that
+// jquery.validate is bloated: it's one of the best jQuery plugins out there, but
+// instead of hacking through 1200 lines of code I chose to make a plug that does
+// exactly what we need it to do).
 // 
 // Validation rules can be added to the rules object like this:
 //
 // jQuery.fn.validator.rules[ruleName] = {
-//		selector: string 				- selects the field(s) to test against
-//		test: function(field){} - the validation logic, returning true (valid) or false (invalid).
-//		error: string 					- the error message
+//		test: function(field, value) - the validation logic, returning true (pass) or false (fail)
 // }
 //
-// You can define error messages in html by giving the field the data-error-ruleName attribute:
+// Define error messages in html by giving the field the data-error-ruleName attribute:
 //
 // <input data-error-ruleName="Custom error message" />
 //
-// You can display error messages in whatever DOMNode you like, by defining options.errorNode
+// Display error messages in whatever DOMNode you like, by defining options.errorNode
 
 (function(jQuery, undefined){
 	var options = {
