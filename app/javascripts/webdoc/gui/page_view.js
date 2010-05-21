@@ -78,11 +78,11 @@ WebDoc.PageView = $.klass({
     this._loading = state;
     if (state) {
       this.itemDomNode.hide();
-      this.domNode.addClass('loading');
+      WebDoc.application.boardController.loadingNode.addClass('loading');
     }  
     else {
       this.itemDomNode.show();
-      this.domNode.removeClass('loading');
+      WebDoc.application.boardController.loadingNode.removeClass('loading');
     }
   },
   

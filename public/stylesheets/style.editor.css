@@ -43,6 +43,7 @@ body {
 /* Manage layering */
 
 #webdoc         { z-index: 1; }
+#webdoc_loading { z-index: 1; }
 .panel          { z-index: 2; }
 .toolbar-panel  { z-index: 2; }
 .ui-pop         { z-index: 4; } 
@@ -481,16 +482,6 @@ body {
 
 /*******************/
 /* = board part = */
-
-#document_loading {
-  text-align:center;
-  width:100%;
-  height:100%;
-}
-#document_loading img{
-  position:relative;
-  top:150px;
-}
 
 #board {
     overflow: visible;
