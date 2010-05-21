@@ -948,9 +948,10 @@ body {
 }
 .layouts-index a.current {
   -webkit-box-shadow: 0 0 12px hsl( 72, 100%, 50% );
-  /* but Chrome does... */
   -webkit-box-shadow: 0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
-  /* Create webkit-like outlines for FF */
   -moz-box-shadow:    0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
   box-shadow:         0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+}
+.layouts-index a.loading {
+  background-color: pink;
 }

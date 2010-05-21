@@ -80,19 +80,30 @@
     },
     
     _changeLayout: function(e){
-      var key, layout;
+      var link = jQuery(e.currentTarget),
+          key, layout;
       
       e.preventDefault();
       
+      
+      
       if (!this._initializingGui) {
         WebDoc.application.boardController.currentPageView().setLoading(true);
-
-        key = parseInt( jQuery(e.target).attr('data-layout-key') );
+      
+        key = parseInt( link.attr('data-layout-key') );
         layout = this._layoutsMap[ key ];
+        
+        // Highlight loading thumbnail
+        this._layoutsNode
+        .find( '.loading' )
+        .removeClass( 'loading' );
+        
+        link.addClass( 'loading' );
         
         try {
           this._page.assignLayout( layout, function(page, status){
             WebDoc.application.boardController.currentPageView().setLoading(false);
+            link.removeClass('loading');
           });
         }
         catch(e) {
