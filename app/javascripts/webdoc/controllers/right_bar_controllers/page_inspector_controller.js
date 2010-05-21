@@ -64,7 +64,8 @@
           fail: function(error) {}
         });
       })
-      .delegate('a[href=#layout]', 'click', jQuery.proxy( this, '_changeLayout' ));
+      .delegate('a[href=#layout]', 'click', jQuery.proxy( this, '_changeLayout' ))
+      .delegate('a[href=#layout_remove]', 'click', jQuery.proxy( this, '_removeLayout' ));
       
       jQuery("#page_background_image_apply_all_button").bind("click", this._applyBackgroundToAllPages.pBind(this));
       jQuery('.page-remove-background-image').click(this._removeBackgroundImage.pBind(this));
@@ -77,40 +78,6 @@
       this.domNode
       .css({bottom: footHeight})
       .hide();
-    },
-    
-    _changeLayout: function(e){
-      var link = jQuery(e.currentTarget),
-          key, layout;
-      
-      e.preventDefault();
-      
-      
-      
-      if (!this._initializingGui) {
-        WebDoc.application.boardController.currentPageView().setLoading(true);
-      
-        key = parseInt( link.attr('data-layout-key') );
-        layout = this._layoutsMap[ key ];
-        
-        // Highlight loading thumbnail
-        this._layoutsNode
-        .find( '.loading' )
-        .removeClass( 'loading' );
-        
-        link.addClass( 'loading' );
-        
-        try {
-          this._page.assignLayout( layout, function(page, status){
-            WebDoc.application.boardController.currentPageView().setLoading(false);
-            link.removeClass('loading');
-          });
-        }
-        catch(e) {
-          ddd('[pageInspectorController] _changeLayout ERROR: ', e);
-          WebDoc.application.boardController.currentPageView().setLoading(false);
-        }
-      }
     },
     
     // used by inspector controller
@@ -447,6 +414,57 @@
         else {
           jQuery('#page_background_image_align_vert_middle').attr('checked', true);
         }
+      }
+    },
+    
+    _changeLayout: function(e){
+      var link = jQuery(e.currentTarget),
+          key, layout;
+      
+      e.preventDefault();
+      
+      // Stop this being called again while we're waiting for the server to return
+      if (!this._initializingGui && !WebDoc.application.boardController.currentPageView().isLoading() ) {
+        WebDoc.application.boardController.currentPageView().setLoading(true);
+      
+        key = parseInt( link.attr('data-layout-key') );
+        layout = this._layoutsMap[ key ];
+        
+        // Highlight loading thumbnail
+        this._layoutsNode
+        .find( '.loading' )
+        .removeClass( 'loading' );
+        
+        link.addClass( 'loading' );
+        
+        try {
+          this._page.assignLayout( layout, function(page, status){
+            WebDoc.application.boardController.currentPageView().setLoading(false);
+            link.removeClass('loading');
+          });
+        }
+        catch(e) {
+          ddd('[pageInspectorController] _changeLayout ERROR: ', e);
+          WebDoc.application.boardController.currentPageView().setLoading(false);
+        }
+      }
+    },
+    
+    _removeLayout: function(e){
+      var link = jQuery(e.currentTarget);
+      
+      e.preventDefault();
+      
+      // Stop this being called again while we're waiting for the server to return
+      if (!this._initializingGui && !WebDoc.application.boardController.currentPageView().isLoading() ) {
+        
+        // Highlight remove button while loading
+        link.addClass('loading');
+        
+        this._page.assignLayout( null, function(){
+          WebDoc.application.boardController.currentPageView().setLoading(false);
+          link.removeClass('loading');
+        });
       }
     }
   });
