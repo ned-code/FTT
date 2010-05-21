@@ -63,11 +63,12 @@
           pass: handler[property],
           fail: function(error) {}
         });
-      });
+      })
+      .delegate('a[href=#layout]', 'click', jQuery.proxy( this, '_changeLayout' ));
       
       jQuery("#page_background_image_apply_all_button").bind("click", this._applyBackgroundToAllPages.pBind(this));
       jQuery('.page-remove-background-image').click(this._removeBackgroundImage.pBind(this));
-      this._layoutDropDownNode.change(this._changeLayout.pBind(this));
+      
       WebDoc.application.boardController.addCurrentPageListener(this);
       
       this.currentPageChanged();    
@@ -77,7 +78,30 @@
       .css({bottom: footHeight})
       .hide();
     },
-  
+    
+    _changeLayout: function(e){
+      var key, layout;
+      
+      e.preventDefault();
+      
+      if (!this._initializingGui) {
+        WebDoc.application.boardController.currentPageView().setLoading(true);
+
+        key = parseInt( jQuery(e.target).attr('data-layout-key') );
+        layout = this._layoutsMap[ key ];
+        
+        try {
+          this._page.assignLayout( layout, function(page, status){
+            WebDoc.application.boardController.currentPageView().setLoading(false);
+          });
+        }
+        catch(e) {
+          ddd('[pageInspectorController] _changeLayout ERROR: ', e);
+          WebDoc.application.boardController.currentPageView().setLoading(false);
+        }
+      }
+    },
+    
     // used by inspector controller
     buttonSelector: function() {
       return this.PAGE_INSPECTOR_BUTTON_SELECTOR;  
@@ -107,24 +131,26 @@
           state = this._themeBgState,
           className;
       
-      for ( className in themeColors.getClasses() ) {
-        html += '<li><a href="#theme-class" data-theme-class="'+className+'" class="'+className+'" title="Theme background"></a></li>';
-      }
+      this.themeColorsNode
+      .list( themeColors.getClasses(), {
+        href: ['#theme-class'],
+        'data-theme-class': true,
+        'class': true,
+        title: ['Theme background']
+      })
+      .addClass( currentThemeClass );
       
       if (previousThemeClass) {
         this.themeColorsNode.removeClass( previousThemeClass );
       }
       
-      this.themeColorsNode.addClass( currentThemeClass );
-      
-      if ( html === '' ) {
+      if ( this.themeColorsNode.children().length === 0 ) {
         if (state) {
           this.themeColorsNode.remove();
           this._themeBgState = false;
         }
       }
       else {
-        this.themeColorsNode.html( html );
         if (!state) {
           this.themeColorsNode.insertAfter( this._backgroundProperties.find('legend') );
           this._themeBgState = true;
@@ -163,24 +189,36 @@
   
     _updateThemeDropDown: function() {
       this._page.document.getTheme(function(theme) {
-        var pageTheme = null;
+        var pageTheme, layouts, attrMap;
+        
         if (theme && theme.length) {
           pageTheme = theme[0];
         }
         if (this._currentDropDownTheme !== pageTheme) {
           this._currentDropDownTheme = pageTheme;
-          this._layoutDropDownNode.empty();
-          this._layoutDropDownNode.append(jQuery('<option/>').id("layout-dd-none").val('none').text('No layout').data("layout", null));
-          for (var i = 0; pageTheme && i < pageTheme.layouts.length; i++) {
-            var aLayout = pageTheme.layouts[i];
-            this._layoutDropDownNode.append(jQuery('<option/>').id("layout-dd-"+ aLayout.getKind()).val(aLayout.getKind()).text(aLayout.getTitle()).data("layout", aLayout));            
-          }
+          
+          layouts = this._layoutsMap = pageTheme.layouts;
+          attrMap = {
+            text: 'getTitle',
+            href: ['#layout'],
+            id: ['layout_', 'getKind'],
+            style: ["background-image: url('", 'getThumbnailUrl', "')"],
+            'data-layout-key': true
+          };
+          
+          // Fill the list with layout thumbnail links
+          this._layoutsNode.list( this._layoutsMap, attrMap );
         }
+        
+        // Highlight the current thumbnail
+        this._layoutsNode
+        .find( '.current' )
+        .removeClass( 'current' );
+        
         if (this._page.getLayoutkind()) {
-          this._layoutDropDownNode.find('#layout-dd-' + this._page.getLayoutkind()).attr("selected", "true");
-        }
-        else {
-          this._layoutDropDownNode.find('#layout-dd-none').attr("selected", "true");
+          this._layoutsNode
+          .find( '#layout_'+this._page.getLayoutkind() )
+          .addClass( 'current' );
         }
       }.pBind(this));               
     },
@@ -397,21 +435,6 @@
         }
         else {
           jQuery('#page_background_image_align_vert_middle').attr('checked', true);
-        }
-      }
-    },
-    
-    _changeLayout: function(event) {
-      if (!this._initializingGui) {
-        ddd("change layout", event);
-        WebDoc.application.boardController.currentPageView().setLoading(true);
-        try {
-          this._page.assignLayout(this._layoutDropDownNode.find('#layout-dd-' + this._layoutDropDownNode.val()).data("layout"), function(pag, status){
-            WebDoc.application.boardController.currentPageView().setLoading(false);
-          });
-        }
-        catch(e) {
-          WebDoc.application.boardController.currentPageView().setLoading(false);
         }
       }
     }
