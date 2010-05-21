@@ -37,7 +37,7 @@
 	
 	// typeOf function that distinguishes Objects from Arrays
 	// http://javascript.crockford.com/remedial.html
-	if (!typeOf) {
+	if (!window.typeOf) {
 		function typeOf(value) {
 			var s = typeof value;
 			if (s === 'object') {
