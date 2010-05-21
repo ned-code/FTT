@@ -21,7 +21,7 @@ WebDoc.handlers = {
       });
     })
     .delegate( '.loading-icon', 'transitionend webkitTransitionEnd', function(e){
-      console.log('TRANSITION END', e);
+      
     });
   },
   
