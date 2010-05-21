@@ -33,13 +33,14 @@ describe DocumentsController do
         response.should be_success
       end
       it "should respond with success to POST :create" do
-        @mock_user.stub_chain(:documents, :create)
+        @mock_user.stub_chain(:documents, :create)        
         post :create, :document => {}
         response.should be_success
       end
       it "should respond with success to PUT :update" do
         Document.stub(:find_by_uuid).with('1').and_return(@mock_document)
         @mock_document.stub(:update_attributes)
+        @mock_document.stub(:must_notify=)
         put :update, :document => {}, :id => '1'
         response.should be_success
       end

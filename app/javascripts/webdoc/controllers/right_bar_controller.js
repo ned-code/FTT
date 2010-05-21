@@ -83,12 +83,17 @@ WebDoc.RightBarController = $.klass({
   },
   
   selectInspector: function(inspectorType) {
-    ddd("[RightBarController] select inspecor", inspectorType);
+    ddd("[RightBarController] select inspector", inspectorType);
     if (this._currentInspectorType !== inspectorType) {
       var inspectorController = this.getInspector(inspectorType);
       this._changePanelContent(inspectorController);
       this._changeButtonState(inspectorController);
       this._currentInspectorType = inspectorType;
+    }
+    else {
+      if(this._currentInspectorType === WebDoc.RightBarInspectorType.LIBRARY) {
+        jQT.goTo('#libraries_manager', 'slide');
+      }
     }
   },
 
