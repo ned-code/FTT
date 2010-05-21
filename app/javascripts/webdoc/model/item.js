@@ -136,11 +136,21 @@ WebDoc.Item = $.klass(WebDoc.Record,
 //  right: function() {
 //    return this.data.data.css.right;
 //  },
-  width: function() {
-    return this.data.data.css.width;
+  width: function(unit) {
+    if (!unit || unit !== "px") {
+      return this.data.data.css.width.toString();
+    }
+    else {
+      return parseFloat(this.data.data.css.width);
+    }
   },
-  height: function() {
-    return this.data.data.css.height;
+  height: function(unit) {
+    if (!unit || unit !== "px") {
+      return this.data.data.css.height.toString();
+    }
+    else {
+      return parseFloat(this.data.data.css.height);
+    }
   },
   
   shiftBy: function(offsetPosition) {

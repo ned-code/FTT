@@ -323,9 +323,26 @@ WebDoc.PropertiesInspectorController = $.klass({
 
   updatePropertiesWithFitToScreen: function(e) {
     var item = WebDoc.application.boardController.selection()[0].item;
-    
-    item.changeCss({ top: 0, left: 0, width: '100%', height: '100%', transform: '' });
-    
+    var size = null;
+    var position = null;
+    if(item.data.media_type == WebDoc.ITEM_TYPE_IMAGE && item.data.data.preserve_aspect_ratio === "true") {
+      var aspectRatio = item.width("px") / item.height("px");
+      var currentPageHeight = WebDoc.application.pageEditor.currentPage.height("px");
+      var currentPageWidth = WebDoc.application.pageEditor.currentPage.width("px");
+      if(currentPageHeight*aspectRatio < currentPageWidth) {
+        size = { width: currentPageHeight*aspectRatio, height: currentPageHeight };
+      }
+      else {
+        size = { width: currentPageWidth, height: currentPageWidth/aspectRatio };
+      }
+      var boardCenterPoint = WebDoc.application.boardController.getBoardCenterPoint();
+      position = { left: boardCenterPoint.x-(size.width/2), top: boardCenterPoint.y-(size.height/2) };
+    }
+    else {
+      size = { width: '100%', height: '100%' };
+      position = { left: 0, top: 0 };
+    }
+    item.changeCss(jQuery.extend({ transform: '' }, size, position));
     e.preventDefault();
   }
 });
