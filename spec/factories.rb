@@ -24,6 +24,7 @@ end
 Factory.define :document do |f|
   f.title       "Test Document"
   f.is_public   true
+  f.size({ :height => 600, :width => 400 }).to_json
   
   f.creator     { |f| f.association(:user)}
 end

@@ -28,15 +28,6 @@ describe Page do
     
   end
   
-  describe "new" do
-    subject { Factory.create(:page) }
-    
-    it "should have default css data" do
-      subject.data.should == { :css => { :width => "800px", :height => "600px" } }
-    end
-    
-  end
-  
   describe 'collection nagivation' do
     before(:each) do
       @document = Factory(:document)

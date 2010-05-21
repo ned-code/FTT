@@ -76,7 +76,12 @@ class Layout < ActiveRecord::Base
             when 'img'
               item = build_default_item(page, doc_item)
               item.data[:tag] = 'img'
-              item.data[:src] = doc_item.attr('src')
+              src = doc_item.attr('src')
+              path = ""
+              unless src.start_with? "http://"
+                path = self.theme.file.store_url 
+              end
+              item.data[:src] = path + src
               item.media_type = 'image'
             when 'iframe'
               item = build_default_item(page, doc_item)
