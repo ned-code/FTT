@@ -67,11 +67,9 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         .delegate( ".wb-document-unshare", 'click', this.unshareDocument );
         
         $('body')
-        .delegate( "a[href='#filter-by-date']", 'click', { filter: null }, this.filterByDate.pBind(this) )
         .delegate( "a[href='#filter-author']",  'click', { filter: 'creator' }, this.loadDocumentsWithFilter.pBind(this) )
         .delegate( "a[href='#filter-editable']",'click', { filter: 'editor' }, this.loadDocumentsWithFilter.pBind(this) )
-        .delegate( "a[href='#filter-shared']",  'click', { filter: 'reader' }, this.loadDocumentsWithFilter.pBind(this) )
-        .delegate( "a[href='#filter-public']",  'click', { filter: 'public' }, this.filterByPublic.pBind(this) );
+        .delegate( "input#wb-documents-search", 'click', { filter: 'test'}, this.loadDocumentsWithFilter.pBind(this));
 
         this.filter = new WebDoc.DocumentDateFilter();
         
@@ -82,19 +80,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         infoDialogNode
         .remove()
         .css({ display: '' });
-    },
-    
-    filterByDate: function(e){
-      $('body').removeClass("state-public");
-      $('.state-filter-subtab').removeClass("current");
-      this.loadDocumentsWithFilter(e);
-      e.preventDefault();
-    },
-    
-    filterByPublic: function(e){
-      $('body').addClass("state-public");
-      this.loadDocumentsWithFilter(e);
-      e.preventDefault();
     },
     
     createDocument: function(e) {
@@ -168,18 +153,20 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
             editedDocument = that.documentWithId(documentIdToRename),
             previousName = editedDocument.title(),
             previousDescription = editedDocument.description(),
-            previousCategory = editedDocument.category();
-        
+            previousCategory = editedDocument.category(),
+            previousWidth = editedDocument.size().width,
+            previousHeight = editedDocument.size().height;
+
         that.editedDocument = editedDocument;
         
         infoDialogHeaderNode.html("Edit webdoc info");
         infoDialogTitleNode.val( previousName );
         infoDialogDescriptionNode.val( previousDescription );
         infoDialogCategoryNode.val( previousCategory );
-        infoDialogWidthNode.val("");
-        infoDialogHeightNode.val("");
+        infoDialogWidthNode.val(previousWidth);
+        infoDialogHeightNode.val(previousHeight);
         infoDialogSubmitNode.val("Update");
-        
+                
         // Get current document size
         
         //if(that.editedDocument.data.size) {
@@ -221,8 +208,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
                     that.editedDocument.setTitle( infoDialogTitleNode.val(), true );
                     that.editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
                     that.editedDocument.setCategory( infoDialogCategoryNode.val(), true );
-                    //var documentSizeChoice = $("input[@name='wb-edit-document-size']:checked", $('#wb-edit-form')).val();
-                    //that.editedDocument.setSize(that.getSizeFromChoice(documentSizeChoice, infoDialogWidthNode.val(), infoDialogHeightNode.val()), true);
                     
                     that.editedDocument.save(function(persitedDoc){
                         node
@@ -310,10 +295,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         if ( node.hasClass("state-filter-tab") ) {
           this._updateCurrentTab( node );
         }
-        else {
-          this._updateCurrentSubTab( node );
-        }
-        
+
         this.currentListingPageId = 1;
         this.loadDocuments(0);
     },
@@ -363,14 +345,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
       node.addClass('current');
     },
     
-    _updateCurrentSubTab: function( node ) {
-      ddd('[document_editor] _updateCurrentTab');
-      
-      if ( !this.subtabs ) { this.subtabs = jQuery(".state-filter-subtab"); }
-      this.subtabs.removeClass('current');
-      node.addClass('current');
-    },
-    
     validateInteger: function(evt) {
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if (charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -378,20 +352,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         return false;
       }
       return true;
-    },
-    
-    getSizeFromChoice: function(choice, customFieldWidth, customFieldHeight) {
-      switch(choice){
-        case "custom":
-          return { width: customFieldWidth, height: customFieldHeight};
-        case "iPhone":
-          return { width: "620", height: "480"};
-        case "iPad":
-          return { width: "1024", height: "768"};
-        case "classic":
-        default:
-          return { width: "800", height: "600"};
-      }
     },
 
     setSizeByName: function(e) {
