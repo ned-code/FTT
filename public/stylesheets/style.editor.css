@@ -927,6 +927,7 @@ body {
 }
 
 .layouts-index a {
+  position: relative;
   width: 70px;
   padding-top: 70px;
   -webkit-background-size: contain;
@@ -942,7 +943,4 @@ body {
   -webkit-box-shadow: 0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
   -moz-box-shadow:    0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
   box-shadow:         0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
-}
-.layouts-index a.loading {
-  background-color: pink;
 }

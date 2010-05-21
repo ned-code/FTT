@@ -177,7 +177,7 @@
           
           layouts = this._layoutsMap = pageTheme.layouts;
           attrMap = {
-            text: 'getTitle',
+            text: ['<div class="loading-icon layer"></div>', 'getTitle'],
             href: ['#layout'],
             id: ['layout_', 'getKind'],
             style: ["background-image: url('", 'getThumbnailUrl', "')"],
