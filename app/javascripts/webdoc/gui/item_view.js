@@ -1,11 +1,25 @@
 
-//= require <mtools/record>
-//= require <webdoc/model/item>
-
-
 WebDoc.ItemView = $.klass({
-  item: null,
-  pageView: null,
+
+  // Define all css keys that must be set at the wrap level of item
+  WRAP_CSS_KEYS: {
+    top: true,
+    left: true,
+    bottom: true,
+    right: true,
+    width: true,
+    height: true,
+    transform: true
+  },
+
+  // Define all css keys that must be translate in browser specific keys (-moz and -webkit)
+  BROWSER_CSS_KEYS: {
+    transform: true,
+    transition: true,
+    borderRadius: true,
+    boxShadow: true
+  },
+
   initialize: function(item, pageView, afterItem) {
   
     if (pageView) {
@@ -19,13 +33,9 @@ WebDoc.ItemView = $.klass({
     // item wrapper    
     this.domNode = $("<div/>").addClass('item_wrap');
 
-    this.itemDomNode = this.createDomNode().css({
-        overflow: "hidden",
-        width: "100%",
-        height: "100%"
-      });
-    this.itemLayerDomNode = $("<div>").addClass("layer").addClass("screen").addClass("item-layer");
-    this.itemLayerDomNode.css("display", "block");
+    this.itemDomNode = this.createDomNode();
+    this.itemLayerDomNode = $("<div>").addClass("layer screen item-layer").css("display", "block");
+
     this.domNode.append(this.itemDomNode);
     this.domNode.append(this.itemLayerDomNode);
     
@@ -45,6 +55,7 @@ WebDoc.ItemView = $.klass({
       this.pageView.itemDomNode.prepend(this.domNode);
     }
 
+    // if item has no css we just set its css to empty hash. It avoids to always check ater it item has css.
     if (!this.item.data.data.css) {
       this.item.data.data.css = {};
     }
@@ -62,6 +73,7 @@ WebDoc.ItemView = $.klass({
     if(this.item.data.data['class']) {
       this.itemDomNode.addClass(this.item.data.data['class']);
     }
+    // we put all item classes in wdClasses data. It is used to know which classes to remove when classes of item changed.
     if (this.domNode.data('wdClasses')) {
       this.domNode.removeClass(this.domNode.data('wdClasses'));
     }
@@ -76,15 +88,13 @@ WebDoc.ItemView = $.klass({
         itemDomNode = this.itemDomNode,
         css = this.item.data.data.css,
         wrapCss = {},
-        itemCss = {},
-        wrapCssKeys = this._wrapCssKeys,
-        browserCssKeys = this._browserCssKeys,
+        itemCss = { overflow: 'hidden' },
         key, timer;
     
     // Split css object into css to be applied to item_wrap
     // and css to be applied to item
     for ( key in css ) {
-      if ( wrapCssKeys[key] ) {
+      if ( this.WRAP_CSS_KEYS[key] ) {
         wrapCss[key] = css[key];
       }
       else {
@@ -95,13 +105,13 @@ WebDoc.ItemView = $.klass({
     // Loop through the results and apply browser specific
     // extensions where needed
     for ( key in wrapCss ) {
-      if ( browserCssKeys[key] ) {
+      if ( this.BROWSER_CSS_KEYS[key] ) {
         wrapCss['-webkit-'+key] = wrapCss['-moz-'+key] = wrapCss[key];
       }
     }
     
     for ( key in itemCss ) {
-      if ( browserCssKeys[key] ) {
+      if ( this.BROWSER_CSS_KEYS[key] ) {
         itemCss['-webkit-'+key] = itemCss['-moz-'+key] = itemCss[key];
       }
     }
@@ -131,39 +141,13 @@ WebDoc.ItemView = $.klass({
       }, 500);
     }
     
-    domNode
-    .attr( 'style', '' )
-    .css( wrapCss );
+    domNode.attr( 'style', '' ).css( wrapCss );
     
-    if (itemDomNode) {
-      
-      if ( itemCss.overflow && this.domNode.hasClass("item-edited") ) {
-        delete itemCss.overflow;
-      }
-      
-      itemDomNode
-      .attr( 'style', '' )
-      .css( itemCss );
+    // apply item css if needed (drawing item view has no item dom node)
+    if (itemDomNode) {      
+      itemDomNode.attr( 'style', '' ).css( itemCss );
     }
   },
-  
-  _wrapCssKeys: {
-    top: true,
-    left: true,
-    bottom: true,
-    right: true,
-    width: true,
-    height: true,
-    transform: true
-  },
-
-  _browserCssKeys: {
-    transform: true,
-    transition: true,
-    borderRadius: true,
-    boxShadow: true
-  },
-  
   
   createDomNode: function() {
     var itemNode;
