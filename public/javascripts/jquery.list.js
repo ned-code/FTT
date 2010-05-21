@@ -16,17 +16,16 @@
 				path: '#'
 			},
 			
-			debug = (window.console && window.console.log),
+			//debug = (window.console && window.console.log),
+			debug = false;
 			
 			maps = {
 				a: {
-					href: 'href',
-					title: 'title',
-					'class': 'class',
-					id: 'id'
+					href: ['#', true],
+					title: true,
+					text: true
 				},
 				input: {
-					id: 'id',
 					type: 'type',
 					value: 'value'
 				}
@@ -58,35 +57,38 @@
 		// Item contents
 		var itemObj = obj[key],
 				content = ['<', linkTag],
-				attr, prefix, value, mattr, textPre, textVal;
+				attr, prefix, value, postfix, mattr, textPre, textVal;
 		
 		for (attr in map) {
 			// Ignore the tag attribute, dumbass!
 			if ( ignore[attr] ) { continue; }
 			
 			prefix = undefined;
+			postfix = undefined;
 			mattr = map[attr];
 			
 			// Append everything else as attributes, if they exist
 			if ( typeOf(mattr) === 'array' ) {
 				prefix = mattr[0];
+				postfix = mattr[2];
 				mattr = mattr[1];
 			}
 			
-			value = (mattr === true) ? key : itemObj[mattr] ;
+			value = (mattr === true) ? key : (typeof itemObj[mattr] === 'function') ? itemObj[mattr]() : itemObj[mattr] ;
 			
 			if (prefix !== undefined || value !== undefined) {
 				if (attr === 'text') {
 					textPre = prefix;
 					textVal = value;
+					textPost = postfix;
 				}
 				else {
-					content.push(' ', attr, '="', prefix, value, '"');
+					content.push(' ', attr, '="', prefix, value, postfix, '"');
 				}
 			}
 		}
 		
-		content.push('>', textPre, textVal, '</', linkTag, '>');
+		content.push('>', textPre, textVal, textPost, '</', linkTag, '>');
 		
 		return content.join('');
 	}
