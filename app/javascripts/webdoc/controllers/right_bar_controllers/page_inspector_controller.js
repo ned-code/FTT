@@ -107,6 +107,18 @@
           state = this._themeBgState,
           className;
       
+      // This isn't going to work, because we can't get at the key!!!  Bollocks!!!
+      //this.themeColorsNode.populate( themeColors.getClasses(), {
+      //  map: {
+      //    'data-theme-class': true,
+      //    'class': true
+      //  },
+      //  prefix: {
+      //    href: '#theme-class',
+      //    title: 'Theme background'
+      //  }
+      //});
+      
       for ( className in themeColors.getClasses() ) {
         html += '<li><a href="#theme-class" data-theme-class="'+className+'" class="'+className+'" title="Theme background"></a></li>';
       }
@@ -169,7 +181,7 @@
         }
         if (this._currentDropDownTheme !== pageTheme) {
           this._currentDropDownTheme = pageTheme;
-          this._layoutDropDownNode.empty();
+          this._layoutDropDownNode.empty(); 
           this._layoutDropDownNode.append(jQuery('<option/>').id("layout-dd-none").val('none').text('No layout').data("layout", null));
           for (var i = 0; pageTheme && i < pageTheme.layouts.length; i++) {
             var aLayout = pageTheme.layouts[i];
