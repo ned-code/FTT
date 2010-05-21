@@ -11,7 +11,7 @@ body                          { background-color: hsl(208, 8%, 60%); }
                                 -moz-box-shadow:    0 2px 8px hsl(14, 24%, 35%); 
                                 box-shadow:         0 2px 8px hsl(14, 24%, 35%); }
 
-#webdoc_loading               { background-color: hsla(208, 4%, 8%, 0.6); }
+#webdoc_loading               { background-color: hsla(208, 8%, 60%, 0.7); }
 
 .layouts-index .loading-icon  { background-color: hsla(208, 4%, 8%, 0.36);
                                 -webkit-border-radius: 6px;
