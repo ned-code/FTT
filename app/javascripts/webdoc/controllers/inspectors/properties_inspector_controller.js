@@ -102,8 +102,10 @@ WebDoc.PropertiesInspectorController = $.klass({
         else if ( css[key] ) {
           field.val( css[key] );
         }
-        // when the css value is inherited put it in the placeholder
+        // when the css value is inherited, clear the field
+        // and set its placeholder
         else {
+          field.val('');
           value = selectedItem.itemDomNode.css( key );
           field.attr( "placeholder", value );
         }
@@ -176,7 +178,8 @@ WebDoc.PropertiesInspectorController = $.klass({
     },
     opacity: {
       output: function( field, css ){
-        var value = parseFloat(css.opacity).toFixed(2) || 1;
+        var value = (css.opacity) ? parseFloat(css.opacity).toFixed(2) : '1.00' ;
+        
         field.filter('input').val( value );
         field.filter('.readout').html( value );
       }
@@ -195,6 +198,7 @@ WebDoc.PropertiesInspectorController = $.klass({
           field.val( value[1] );
         }
         else {
+          field.val('');
           field.attr( "placeholder", "none" );
         }
       }
@@ -234,91 +238,6 @@ WebDoc.PropertiesInspectorController = $.klass({
         css = item.data.data.css;
     
     item.changeCssProperty(  );
-  },
-  
-  updateProperties: function(e) {
-    ddd("updateProperties", e);
-    
-    var that = this,
-        field = jQuery(e.currentTarget),
-        item = WebDoc.application.boardController.selection()[0].item,
-        css = item.data.data.css;
-    
-    field.validate({
-      pass: function(value) {
-  
-//        switch( this ){
-//          case that.leftNode[0]:
-//          case that.topNode[0]:
-//            var previousPosition = {
-//	            top: css.top,
-//	            left: css.left
-//	          };
-//	          var newPosition = {
-//	            top: (this === that.topNode[0])? that.topNode.val() : css.top,
-//	            left: (this === that.leftNode[0])? that.leftNode.val() : css.left
-//	          };
-//	          if (newPosition.left != previousPosition.left || newPosition.top != previousPosition.top) {
-//	            WebDoc.application.undoManager.registerUndo(function() {
-//	              WebDoc.ItemView._restorePosition(item, previousPosition);
-//	            }.pBind(that));
-//	            item.moveTo(newPosition);
-//	            item.save();
-//	          }
-//		    		break;
-//            
-//		    	case that.widthNode[0]:
-//		    	case that.heightNode[0]:
-//		    		var previousSize = {
-//	            width: css.width,
-//	            height: css.height
-//	          }; 
-//	          var newSize = {
-//              width: (this === that.widthNode[0])? that.widthNode.val() : css.width,
-//              height: (this === that.heightNode[0])? that.heightNode.val() : css.height              
-//	          };
-//	          if (newSize.width != previousSize.width || newSize.height != previousSize.height) {
-//	            WebDoc.application.undoManager.registerUndo(function() {
-//	              WebDoc.ItemView.restoreSize(item, previousSize);
-//	            }.pBind(that));
-//	            item.resizeTo(newSize);
-//	            item.save();
-//	          }
-//		        break;
-//		      
-//		    	case that.opacityNode[0]:
-//		    		var previousOpacity = item.data.data.css.opacity || 1;
-//		    		var newOpacity = parseFloat( that.opacityNode.val(), 10 ).toFixed(2);
-//		    		ddd('[Properties] Opacity new: '+newOpacity+' previous: '+previousOpacity);
-//		    		if(newOpacity != previousOpacity){
-//		    			WebDoc.application.undoManager.registerUndo(function(){
-//		    				that.restoreOpacity(item, previousOpacity);
-//		    			}.pBind(that));
-//		    			item.setOpacity(newOpacity);
-//		    			that.opacityReadoutNode.html( newOpacity );
-//		    			item.save();
-//		    		}
-//		    		break;
-//		    }
-        that.refresh();
-        
-      },
-      fail: function(error) {
-        
-      }
-    })
-    
-
-  },
-
-  restoreOpacity: function(item, opacity){
-      ddd("restore opacity "+opacity);
-      var previousOpacity=item.data.data.css.opacity;
-      item.setOpacity(opacity);
-      WebDoc.application.undoManager.registerUndo(function(){
-          this.restoreOpacity(item, previousOpacity);
-      }.pBind(this));
-      item.save();
   },
 
   updatePropertiesWithFitToScreen: function(e) {
