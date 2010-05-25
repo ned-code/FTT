@@ -26,7 +26,7 @@ class DocumentsController < ApplicationController
       format.html { set_return_to }
       format.json {
         per_page = 20
-        @documents = Document.all_with_filter(current_user, params[:document_filter], params[:page], per_page)
+        @documents = Document.all_with_filter(current_user, params[:document_filter], params[:query], params[:page], per_page)
         render :json => { 
           :documents => @documents,
           :pagination => {
