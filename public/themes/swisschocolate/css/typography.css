@@ -218,6 +218,17 @@ ul, ol, blockquote, dd,
   border-image:         url('../images/border_gildedframe.png') 114 stretch stretch;
   border-width: 2em;
 }
+.theme_border_2 {
+  -webkit-box-shadow: 0 0 12px hsl(42, 90%, 26%);
+  -moz-box-shadow:    0 0 12px hsl(42, 90%, 26%);
+  box-shadow:         0 0 12px hsl(42, 90%, 26%);
+  border-color: hsl(42, 90%, 26%);
+  border-width: 3px;
+  border-style: solid;
+  -webkit-border-radius: 8px;
+  -moz-border-radius:    8px;
+  border-radius:         8px;
+}
 p img.theme_border_1  { margin: 0.5em 0 0.5em 0.5em; }
 
 /* Layouts */
