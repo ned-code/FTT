@@ -184,8 +184,6 @@
     .delegate('a', 'click', function(e){
       var href = jQuery(e.target).attr('href');
       
-      console.log(href);
-      
       if ( router[ href ] ) { router[ href ](); }
       
       e.preventDefault();

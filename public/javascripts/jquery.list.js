@@ -38,7 +38,7 @@
 	// typeOf function that distinguishes Objects from Arrays
 	// http://javascript.crockford.com/remedial.html
 	if (!window.typeOf) {
-		function typeOf(value) {
+		window.typeOf = function(value) {
 			var s = typeof value;
 			if (s === 'object') {
 				if (value) {
@@ -50,7 +50,7 @@
 				}
 			}
 			return s;
-		}
+		};
 	}
 	
 	function itemString(obj, key, map, linkTag){
@@ -160,4 +160,4 @@
 	jQuery.list.options = options;
 	jQuery.fn.list.options = options;
 	
-})(jQuery);
+}(jQuery));

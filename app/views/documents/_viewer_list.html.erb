@@ -5,7 +5,7 @@
       <ul class="viewer-controls-index index">
         <li class="button-group">
           <a href="#prev-page" class="button" data-webdoc-document-id="<%= document.uuid() %>" title="previous page">&lt;</a
-          ><a href="#next-page" class="button" data-webdoc-document-id="<%= document.uuid() %>" title="next page">&gt;</a>
+         ><a href="#next-page" class="button" data-webdoc-document-id="<%= document.uuid() %>" title="next page">&gt;</a>
         </li>
         <li>
           <a class="webdoc-viewer-title" href="<%= document_path(document.uuid()) %>"><h4><%= h(document.title) %></h4></a>
@@ -16,13 +16,11 @@
 
       <p class="webdoc-viewer-details">
         <%= t("phrases.Created_by")%> <%= document.creator.first_name %>
-        <% if ((params[:main_filter] && params[:main_filter] == "viewed")) %>
-           viewed <%= document.views_count %> times
-        <% else %>
-          <%= relative_date document.created_at %>
-        <% end %>
+
+        <%= relative_date document.created_at %> and viewed <%= document.views_count %> times.
+
         <% if ((!params[:category_filter] || params[:category_filter] == "all") &&  document.category) %>
-            in <%= link_to h(document.category.name), explore_documents_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %>
+          ( <%= link_to h(document.category.name), explore_documents_path(:main_filter => params[:main_filter], :category_filter => document.category.id) %> )
         <% end %>
       </p>
     </li>
