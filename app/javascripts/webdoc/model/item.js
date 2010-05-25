@@ -234,11 +234,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
 
-  setOpacity: function(newOpacity){
-    this.data.data.css.opacity = parseFloat(newOpacity);
-    this.fireObjectChanged({ modifedAttribute: 'css' });
-  },
-
   getKind: function() {
     return this.data.kind;  
   },
