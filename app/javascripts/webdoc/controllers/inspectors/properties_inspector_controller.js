@@ -12,7 +12,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ));
     
     WebDoc.application.boardController.themeNode
-    .bind( 'load', jQuery.proxy( this, 'makeThemeBackgrounds' ) );
+    .bind( 'load', jQuery.proxy( this, '_makeThemeBackgrounds' ) );
     
     this.fields = {
       top:              jQuery("#property_top"),
@@ -36,8 +36,8 @@ WebDoc.PropertiesInspectorController = $.klass({
     this._themeBgState = false;
   },
   
-  makeThemeBackgrounds: function() {
-    ddd('[PageInspectorController] makeThemeBackgrounds');
+  _makeThemeBackgrounds: function() {
+    ddd('[PageInspectorController] _makeThemeBackgrounds');
     
     var themeColors = new WebDoc.ClassList( 'theme_background_', 'backgroundImage backgroundColor' ),
         previousThemeClass = WebDoc.application.boardController.previousThemeClass,
@@ -307,8 +307,6 @@ WebDoc.PropertiesInspectorController = $.klass({
         
       }
     })
-    
-
   },
 
   restoreOpacity: function(item, opacity){
