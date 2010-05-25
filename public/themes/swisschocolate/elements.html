@@ -6,6 +6,7 @@
 <title>Swiss Chocolate</title>
 <link rel="stylesheet" href="css/typography.css" type="text/css" charset="utf-8">
 <link rel="stylesheet" href="http://localhost:3000/stylesheets/lib/index.css" type="text/css" charset="utf-8">
+<link rel="stylesheet" href="http://localhost:3000/stylesheets/lib/index.css" type="text/css" charset="utf-8">
 
 <style type="">
   
@@ -13,6 +14,9 @@
     padding: 1em;
     padding-right: 0;
     background-color: #fffbeb;
+    /*background-image: url('images/inspector_bg.png'), -webkit-gradient(linear, 0% 0%, 0% 100%, from( rgb(0,0,0) ), to( hsl(192, 8%, 30%) ) );
+    background-image: url('images/inspector_bg.png'), -moz-linear-gradient(center top, rgb(0,0,0), hsl(192, 8%, 30%));
+    background-image: url('images/inspector_bg.png'), linear-gradient(center top, rgb(0,0,0), hsl(192, 8%, 30%));*/
     background-image: url('images/inspector_bg.png');
     background-repeat: no-repeat;
     background-position: 0 -20px;
@@ -30,7 +34,8 @@
   }
   
   .colors-index a,
-  .backgrounds-index a {
+  .backgrounds-index a,
+  .inspector-index a {
     border-bottom: none;
     -webkit-background-size: contain;
     -moz-background-size:    contain;
@@ -50,13 +55,35 @@
     background-size:         100% 100%;
   }
   
+  .inspector-index {
+    position: absolute;
+    top: 12.8em;
+    right: 1.6em;
+  }
+  
+  .inspector-index li {
+    margin-right: 0.6em;
+  }
+  
+  #decor {
+    display: none;
+  }
+  
 </style>
 
 </head>
 
 <body class="webdoc layout_1head1column">
 
-<h1>Swiss<br/>Chocolate</h1>
+<h1>Swiss Chocolate</h1>
+
+<ul class="inspector-index divided index">
+   <li><a href="#palette">Color Palette</a></li
+  ><li><a href="#decor">Decor</a></li>
+</ul>
+
+<div id="palette">
+
 <h4>Colours</h4>
 
 <ul class="colors-index icons-only thumbs index">
@@ -82,12 +109,16 @@
   ><li><a href="#set_item_class?class=theme_background_3" class="webdoc_message theme_background_3"></a></li>
 </ul>
 
-<!--h4>Borders</h4>
+</div>
+
+<div id="decor">
+
+<h4>Borders</h4>
 
 <ul class="borders-index icons-only thumbs index">
   <li><a href="#set_item_class?class=theme_border_1" class="webdoc_message theme_border_1"></a></li>
   <li><a href="#set_item_class?class=theme_border_2" class="webdoc_message theme_border_2"></a></li>
-</ul-->
+</ul>
   
 
 
@@ -98,14 +129,17 @@
 <div><a href="#set_item_css?background-color=#004400" class="webdoc_message">Set item css</a></div>
 <div><a href="#add_item?type=image&url=http://chachatelier.fr/programmation/images/mozodojo-original-image.jpg" class="webdoc_message">Add item</a></div-->
 
-<!--h4>Images</h4>
+<h4>Images</h4>
 
 <div draggable="true"
      class="webdoc_message_draggable"
      data-webdoc-action="#add_item?type=image&url=http://chachatelier.fr/programmation/images/mozodojo-original-image.jpg">
   <img src="images/flag.png" />
-</div-->
+</div>
 
+</div>
+
+<script src="http://localhost:3000/javascripts/jquery-1.4.2.js"></script>
 <script type="text/javascript">
   window.onload = function() {
     var webdoc = window.parent;
@@ -128,6 +162,35 @@
       }, false);
     }
   };
+  
+  var decorNode,
+      paletteNode,
+      router = {
+        '#palette': function(){
+          paletteNode.show();
+          decorNode.hide();
+        },
+        '#decor':   function(){
+          decorNode.show();
+          paletteNode.hide();
+        }
+      };
+  
+  jQuery(document).ready(function(){
+    decorNode = jQuery('#decor');
+    paletteNode = jQuery('#palette');
+    
+    jQuery('.inspector-index')
+    .delegate('a', 'click', function(e){
+      var href = jQuery(e.target).attr('href');
+      
+      console.log(href);
+      
+      if ( router[ href ] ) { router[ href ](); }
+      
+      e.preventDefault();
+    });
+  });
 </script>
 
 </body>
