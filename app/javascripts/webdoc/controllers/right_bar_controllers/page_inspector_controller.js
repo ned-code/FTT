@@ -14,7 +14,7 @@
       this.domNode = jQuery('#page-inspector');    
       this._layoutDropDownNode = jQuery('#layout-dropdown');
       
-      this._layoutsNode = jQuery("#layouts"),
+      this._layoutsNode = jQuery("#layouts");
       this.themeColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"});
       this._page = null;
       this._backgroundProperties = jQuery("#background_properties");
@@ -72,7 +72,8 @@
       
       WebDoc.application.boardController.addCurrentPageListener(this);
       
-      this.currentPageChanged();    
+      this.currentPageChanged(); 
+      this.makeThemeBackgrounds();
       
       var footHeight = this.domNode.find('.foot>div').height();
       this.domNode
