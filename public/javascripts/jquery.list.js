@@ -57,7 +57,7 @@
 		// Item contents
 		var itemObj = obj[key],
 				content = ['<', linkTag],
-				attr, prefix, value, postfix, mattr, textPre, textVal;
+				attr, prefix, value, postfix, mattr, textPre, textVal, textPost;
 		
 		for (attr in map) {
 			// Ignore the tag attribute, dumbass!
