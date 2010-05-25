@@ -138,7 +138,10 @@ WebDoc.Item = $.klass(WebDoc.Record,
 //  },
   width: function(unit) {
     if (!unit || unit !== "px") {
-      return this.data.data.css.width.toString();
+      if (this.data.data.css.width) {
+        return this.data.data.css.width.toString();
+      }
+      else { return ""; }
     }
     else {
       return parseFloat(this.data.data.css.width);
@@ -146,7 +149,12 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   height: function(unit) {
     if (!unit || unit !== "px") {
-      return this.data.data.css.height.toString();
+      if (this.data.data.css.height) {
+        return this.data.data.css.height.toString();
+      }
+      else {
+        return "";
+      }
     }
     else {
       return parseFloat(this.data.data.css.height);
@@ -216,6 +224,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
     });
     
     for ( property in cssObj ) {
+      // be sure the previousCss contains the new css attribute. If the attribute was not present
+      // we put '' as previous attribute value. We do that so that undo can remove the new property
+      if (previousCss[property] === undefined) {
+        previousCss[property] = '';
+      }
       if ( cssObj[property] === '' ) {
         delete this.data.data.css[property];
       }
