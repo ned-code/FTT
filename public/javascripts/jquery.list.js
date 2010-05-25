@@ -17,7 +17,7 @@
 			},
 			
 			//debug = (window.console && window.console.log),
-			debug = false;
+			debug = false,
 			
 			maps = {
 				a: {
