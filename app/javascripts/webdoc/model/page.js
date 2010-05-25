@@ -475,7 +475,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
         this._itemsToRemoveAfterSave.push(itemToRemove);
       }
     }    
-    this.save(callBack,true, true);
+    this.save(callBack, true);
   },
 
   setClass: function(newClass) {

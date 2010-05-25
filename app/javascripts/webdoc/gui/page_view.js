@@ -75,14 +75,19 @@ WebDoc.PageView = $.klass({
   },
   
   setLoading: function(state) {
+    this._loading = state;
     if (state) {
       this.itemDomNode.hide();
-      this.domNode.addClass('loading');
+      WebDoc.application.boardController.loadingNode.addClass('loading');
     }  
     else {
       this.itemDomNode.show();
-      this.domNode.removeClass('loading');
+      WebDoc.application.boardController.loadingNode.removeClass('loading');
     }
+  },
+  
+  isLoading: function(){
+    return this._loading;
   },
   
   itemRemoved: function(removedItem) {

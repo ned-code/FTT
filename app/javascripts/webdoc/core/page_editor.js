@@ -103,7 +103,10 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
         ddd("[PageEditor] call rightBarController.showLib");
         WebDoc.application.rightBarController.showLib();
       }
-      jQuery('#document_loading').remove();
+      
+      WebDoc.application.boardController.loadingNode.removeClass('loading');
+      
+      //jQuery('#document_loading').remove();
       jQuery('body').trigger('webdocready');
     }.pBind(this));
   },

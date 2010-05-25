@@ -76,6 +76,9 @@
         %div.background-related
           %label{ :for => 'page_background_image_apply_all_button' }
           %input#page_background_image_apply_all_button{ :type => "button", :value => t('.properties.buttons.apply_background_all_pages') }
+      
       %fieldset.properties
         %legend=t('.properties.layout')
+        %div
+          <a href="#layout_remove">Don't use a layout</a>
         %ul#layouts.layouts-index.icons-only.thumbs.index
