@@ -208,7 +208,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   changeCss: function( cssObj ) {
     var that = this,
-        previousCss = this.data.data.css,
+        previousCss = jQuery.extend({}, this.data.data.css),
         property;
     
     WebDoc.application.undoManager.registerUndo(function() {
