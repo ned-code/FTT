@@ -10,9 +10,9 @@
       %li>
         %ul.filter-bar.bar.index.state-public-hide{ :style => "float: right;" }
           %li>
-            %a#wb-document-filter-owned-by-me.current.state-filter-tab{ :href => "#filter-author" }= t('.created_by_me')
+            %a#wb-document-filter-owned-by-me.current.state-filter-tab{ :href => "#filter-author", :'data-webdoc-documents-filter-type' => 'creator' }= t('.created_by_me')
           %li>
-            %a#wb-document-filter-editor-rights.state-filter-tab{ :href => "#filter-editable" }= t('.editor_rights')
+            %a#wb-document-filter-editor-rights.state-filter-tab{ :href => "#filter-editable", :'data-webdoc-documents-filter-type' => 'editor' }= t('.editor_rights')
 %div.content
   %div.wrap
     %div#wb-document-list-container.column.triple.of-four
