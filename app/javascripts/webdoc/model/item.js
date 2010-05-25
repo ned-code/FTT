@@ -138,7 +138,10 @@ WebDoc.Item = $.klass(WebDoc.Record,
 //  },
   width: function(unit) {
     if (!unit || unit !== "px") {
-      return this.data.data.css.width.toString();
+      if (this.data.data.css.width) {
+        return this.data.data.css.width.toString();
+      }
+      else { return ""; }
     }
     else {
       return parseFloat(this.data.data.css.width);
@@ -146,7 +149,12 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   height: function(unit) {
     if (!unit || unit !== "px") {
-      return this.data.data.css.height.toString();
+      if (this.data.data.css.height) {
+        return this.data.data.css.height.toString();
+      }
+      else {
+        return "";
+      }
     }
     else {
       return parseFloat(this.data.data.css.height);
