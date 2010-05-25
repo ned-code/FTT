@@ -216,6 +216,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
     });
     
     for ( property in cssObj ) {
+      // be sure the previousCss contains the new css attribute. If the attribute was not present
+      // we put '' as previous attribute value. We do that so that undo can remove the new property
+      if (previousCss[property] === undefined) {
+        previousCss[property] = '';
+      }
       if ( cssObj[property] === '' ) {
         delete this.data.data.css[property];
       }
