@@ -1,10 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+<meta charset="utf-8" />
+<title>Swiss Chocolate</title>
+<link rel="stylesheet" href="css/typography.css" type="text/css" charset="utf-8">
+<link rel="stylesheet" href="http://localhost:3000/stylesheets/lib/index.css" type="text/css" charset="utf-8">
+
+<style type="">
+  
+  body.webdoc {
+    padding: 1em;
+    padding-right: 0;
+    background-color: #fffbeb;
+    background-image: url('images/inspector_bg.png');
+    background-repeat: no-repeat;
+    background-position: 0 -20px;
+  }
+  
+  h1 {
+    text-indent: -0.24em;
+    margin-bottom: 92px;
+  }
+  
+  h4 {
+    margin-bottom: 0.5em;
+    color: #120a02;
+    text-shadow: none;
+  }
+  
+  .colors-index a,
+  .backgrounds-index a {
+    border-bottom: none;
+    -webkit-background-size: contain;
+    -moz-background-size:    contain;
+    background-size:         contain;
+  }
+  
+  .index li {
+    margin-right: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .borders-index a {
+    width: 72px;
+    background-image: url('images/flag.png');
+    -webkit-background-size: 100% 100%;
+    -moz-background-size:    100% 100%;
+    background-size:         100% 100%;
+  }
+  
+</style>
+
+</head>
+
+<body class="webdoc layout_1head1column">
+
+<h1>Swiss<br/>Chocolate</h1>
+<h4>Colours</h4>
+
+<ul class="colors-index icons-only thumbs index">
+   <li><a href="#set_item_class?class=theme_color_1" class="webdoc_message theme_color_1"></a></li
+  ><li><a href="#set_item_class?class=theme_color_2" class="webdoc_message theme_color_2"></a></li
+  ><li><a href="#set_item_class?class=theme_color_3" class="webdoc_message theme_color_3"></a></li
+  ><li><a href="#set_item_class?class=theme_color_4" class="webdoc_message theme_color_4"></a></li
+  ><li><a href="#set_item_class?class=theme_color_5" class="webdoc_message theme_color_5"></a></li
+  ><li><a href="#set_item_class?class=theme_color_6" class="webdoc_message theme_color_6"></a></li
+  ><li><a href="#set_item_class?class=theme_color_7" class="webdoc_message theme_color_7"></a></li
+  ><li><a href="#set_item_class?class=theme_color_8" class="webdoc_message theme_color_8"></a></li
+  ><li><a href="#set_item_class?class=theme_color_9" class="webdoc_message theme_color_9"></a></li
+  ><li><a href="#set_item_class?class=theme_color_10" class="webdoc_message theme_color_10"></a></li
+  ><li><a href="#set_item_class?class=theme_color_11" class="webdoc_message theme_color_11"></a></li
+  ><li><a href="#set_item_class?class=theme_color_12" class="webdoc_message theme_color_12"></a></li>
+</ul>
+
+<h4>Backgrounds</h4>
+
+<ul class="backgrounds-index icons-only thumbs index">
+   <li><a href="#set_item_class?class=theme_background_1" class="webdoc_message theme_background_1"></a></li
+  ><li><a href="#set_item_class?class=theme_background_2" class="webdoc_message theme_background_2"></a></li
+  ><li><a href="#set_item_class?class=theme_background_3" class="webdoc_message theme_background_3"></a></li>
+</ul>
+
+<!--h4>Borders</h4>
+
+<ul class="borders-index icons-only thumbs index">
+  <li><a href="#set_item_class?class=theme_border_1" class="webdoc_message theme_border_1"></a></li>
+  <li><a href="#set_item_class?class=theme_border_2" class="webdoc_message theme_border_2"></a></li>
+</ul-->
+  
+
+
+
+<!--div><a href="#set_page_class?class=theme_color_2" class="webdoc_message">Set page class</a></div>
+<div><a href="#set_page_css?background-color=#440000&border=3px" class="webdoc_message">Set page css</a></div>
+<div><a href="#set_item_class?class=theme_color_3" class="webdoc_message">Set item class</a></div>
+<div><a href="#set_item_css?background-color=#004400" class="webdoc_message">Set item css</a></div>
+<div><a href="#add_item?type=image&url=http://chachatelier.fr/programmation/images/mozodojo-original-image.jpg" class="webdoc_message">Add item</a></div-->
+
+<!--h4>Images</h4>
+
+<div draggable="true"
+     class="webdoc_message_draggable"
+     data-webdoc-action="#add_item?type=image&url=http://chachatelier.fr/programmation/images/mozodojo-original-image.jpg">
+  <img src="images/flag.png" />
+</div-->
+
 <script type="text/javascript">
   window.onload = function() {
     var webdoc = window.parent;
 
     var links = document.getElementsByTagName("a");
     for(i=0;i<links.length;i++) {
-      if(links[i].getAttribute('class') === 'webdoc_message') {
+      if( /webdoc_message/.test( links[i].getAttribute('class') ) ) {
         links[i].onclick = function(event) {
           webdoc.postMessage(event.target.getAttribute('href'), '*');
         };
@@ -22,14 +130,4 @@
   };
 </script>
 
-<div><a href="#set_page_class?class=theme_color_2" class="webdoc_message">Set page class</a></div>
-<div><a href="#set_page_css?background-color=#440000&border=3px" class="webdoc_message">Set page css</a></div>
-<div><a href="#set_item_class?class=theme_color_3" class="webdoc_message">Set item class</a></div>
-<div><a href="#set_item_css?background-color=#004400" class="webdoc_message">Set item css</a></div>
-<div><a href="#add_item?type=image&url=http://chachatelier.fr/programmation/images/mozodojo-original-image.jpg" class="webdoc_message">Add item</a></div>
-
-<div draggable="true"
-     class="webdoc_message_draggable"
-     data-webdoc-action="#add_item?type=image&url=http://chachatelier.fr/programmation/images/mozodojo-original-image.jpg">
-  Drag an image
-</div>
+</body>

@@ -18,7 +18,8 @@ WebDoc.PostMessageManager = $.klass({
       if (event.origin !== "http://assets.test.webdoc.com" &&
           event.origin !== "http://assets.staging.webdoc.com" &&
           event.origin !== "http://assets.webdoc.com" &&
-          event.origin !==  'http://localhost') {
+          event.origin !==  'http://localhost' &&
+          event.origin !==  'http://localhost:3000' ) {
         ddd(event.origin + ' not allowed!');
         return;
       } else {
