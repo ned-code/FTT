@@ -1,0 +1,39 @@
+/* Webdoc default colors and backgrounds
+ * 
+ * Stephen Band
+ *
+ */
+
+/* Colors */
+
+.theme_color_1  { color: black;   } /* Jet Black */
+.theme_color_2  { color: #92b322; } /* Dirty Lime */
+.theme_color_3  { color: #ccf245; } /* Bright Lime */
+.theme_color_4  { color: #b39322; } /* Dirty Orange */
+.theme_color_5  { color: #ffd200; } /* Bright Orange */
+.theme_color_6  { color: #ff5400; } /* Starsky and Hutch */
+.theme_color_7  { color: #c33200; } /* Twin Peaks */
+.theme_color_8  { color: #f20951; } /* Lipstick */
+.theme_color_9  { color: #b32248; } /* Sultry Lipstick */
+.theme_color_10 { color: #22a4b3; } /* Dirty Marine */
+.theme_color_11 { color: #00dce4; } /* Clean Marine */
+.theme_color_12 { color: #009982; } /* Beach Lagoon */
+.theme_color_13 { color: #43e4cb; } /* Turquoise */
+.theme_color_14 { color: white;   } /* White */
+
+/* Backgrounds */
+
+.theme_background_1   { background-color: hsl(208, 4%, 100%); }
+.theme_background_2   { background-color: hsl(208, 4%, 80%); }
+.theme_background_3   { background-color: hsl(208, 4%, 60%); }
+.theme_background_4   { background-color: hsl(208, 4%, 40%); }
+.theme_background_5   { background-color: hsl(208, 4%, 20%); }
+.theme_background_6   { background-color: hsl(208, 4%, 0%); }
+
+/* Borders */
+
+.theme_border_1 {
+  -webkit-box-shadow: 0 0 40px hsla(208, 6%, 25%, 0.6);
+  -moz-box-shadow:    0 0 40px hsla(208, 6%, 25%, 0.6);
+  box-shadow:         0 0 40px hsla(208, 6%, 25%, 0.6);
+}
