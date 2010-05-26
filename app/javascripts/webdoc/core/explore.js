@@ -60,6 +60,8 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
 
     if(pageIncrement) {
       this._incrementPageId(pageIncrement);
+    } else {
+      this.currentListingPageId = 1;
     }
     
     this.domNode.html('');

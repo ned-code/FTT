@@ -51,7 +51,7 @@ class DocumentsController < ApplicationController
         set_return_to
       end
       format.json do
-        per_page = 1
+        per_page = 8
         public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:query], params[:page], per_page)
         render :json => {
           :documents => public_documents.map{|doc| {
