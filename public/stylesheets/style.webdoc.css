@@ -101,7 +101,7 @@
   font-weight: normal;
 }
 
-#webdoc .loading {
+.webdoc.loading {
   display: block;
   opacity: 1 !important;
   background-image: url('/images/loading-icon-16.gif');  

@@ -127,12 +127,12 @@ class Document < ActiveRecord::Base
     result = { :width => "800px", :height => "600px"}
     if size && size[:width] =~ /\d+%/
       result[:width] = size[:width]
-    elsif size
+    elsif size && size[:width]
       result[:width] = "#{size[:width].to_i.to_s}px" 
     end
-    if size && size[:height] =~ /[0-9]+%/
+    if size && size[:height] =~ /\d+%/
       result[:height] = size[:height]
-    elsif size
+    elsif size && size[:width]
       result[:height] = "#{size[:height].to_i.to_s}px" 
     end    
     return result

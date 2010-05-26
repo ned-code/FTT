@@ -135,11 +135,29 @@ WebDoc.Item = $.klass(WebDoc.Record,
 //  right: function() {
 //    return this.data.data.css.right;
 //  },
-  width: function() {
-    return this.data.data.css.width;
+  width: function(unit) {
+    if (!unit || unit !== "px") {
+      if (this.data.data.css.width) {
+        return this.data.data.css.width.toString();
+      }
+      else { return ""; }
+    }
+    else {
+      return parseFloat(this.data.data.css.width);
+    }
   },
-  height: function() {
-    return this.data.data.css.height;
+  height: function(unit) {
+    if (!unit || unit !== "px") {
+      if (this.data.data.css.height) {
+        return this.data.data.css.height.toString();
+      }
+      else {
+        return "";
+      }
+    }
+    else {
+      return parseFloat(this.data.data.css.height);
+    }
   },
   
   shiftBy: function(offsetPosition) {
@@ -184,18 +202,20 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   changeThemeBgClass: function( currentClass ) {
-    this.previousThemeBgClass = this.currentThemeBgClass;
-    this.currentThemeBgClass = currentClass;
-    jQuery.string(this.data.data['class']).gsub(/theme_background.*( )/, ' ');
-    this.data.data['class'] += " " + currentClass;
-
+    var regex = /theme_background_[0-9]+/,
+        data = this.data.data;
+    
+    // Get rid of any theme_background_ classes
+    // and add currentClass
+    data['class'] = data['class'].replace( regex, '' ) + ' ' + currentClass;
+    
     this.save();
     this.fireObjectChanged({ modifedAttribute: 'class' });
   },
   
   changeCss: function( cssObj ) {
     var that = this,
-        previousCss = this.data.data.css,
+        previousCss = jQuery.extend({}, this.data.data.css),
         property;
     
     WebDoc.application.undoManager.registerUndo(function() {
@@ -203,6 +223,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
     });
     
     for ( property in cssObj ) {
+      // be sure the previousCss contains the new css attribute. If the attribute was not present
+      // we put '' as previous attribute value. We do that so that undo can remove the new property
+      if (previousCss[property] === undefined) {
+        previousCss[property] = '';
+      }
       if ( cssObj[property] === '' ) {
         delete this.data.data.css[property];
       }
@@ -214,11 +239,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.save();
     this.fireObjectChanged({ modifedAttribute: 'css' });
     WebDoc.application.inspectorController.refreshSubInspectors();
-  },
-
-  setOpacity: function(newOpacity){
-    this.data.data.css.opacity = parseFloat(newOpacity);
-    this.fireObjectChanged({ modifedAttribute: 'css' });
   },
 
   getKind: function() {

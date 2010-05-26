@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>jQuery list plug-in - comment form example</title>
+
+<link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
+
+<script src="../../public/javascripts/jquery-1.4.2.js" type="text/javascript"></script>
+<script src="../../public/javascripts/jquery.list.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  var body = jQuery("body"),
+      listObj = {
+        parsimonious: {
+          href: 'bollocks',
+          text: 'bollocks'
+        },
+        hobblegob: {
+          text: 'never do it',
+          title: 'silly dumb blonde'
+        }
+      },
+      listArr = [
+        {
+          href: 'pranghref',
+          text: 'prang text'
+        }, {
+          href: 'prang2href',
+          text: 'prang 2 text',
+          title: 'prang 2 title'
+        }
+      ];
+  
+  //var list = jQuery.list({
+  //  href: {
+  //    href: 'bollocks',
+  //    text: 'bollocks'
+  //  },
+  //  text: {
+  //    text: 'bollocks2'
+  //  }
+  //});
+  //
+  //body.append(list);
+  
+  jQuery('<ul/>')
+  .list(listObj, {
+      href: ['#link/'],
+      text: true,
+      title: 'title'
+  })
+  .appendTo(body);
+  
+  jQuery('<ul/>')
+  .list(listArr, {
+      href: 'href',
+      text: ['Hoo ', true],
+      title: 'title'
+  })
+  .appendTo(body);
+});
+
+</script>
+
+<style type="text/css">
+#commentForm { width: 500px; }
+#commentForm label { width: 250px; }
+#commentForm label.error, #commentForm input.submit { margin-left: 253px; }
+.error {
+	background: red !important;
+}
+</style>
+
+</head>
+<body>
+
+</body>
+</html>

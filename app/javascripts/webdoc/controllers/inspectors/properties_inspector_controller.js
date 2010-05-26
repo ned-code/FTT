@@ -12,7 +12,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ));
     
     WebDoc.application.boardController.themeNode
-    .bind( 'load', jQuery.proxy( this, 'makeThemeBackgrounds' ));
+    .bind( 'load', jQuery.proxy( this, '_makeThemeBackgrounds' ) );
     
     this.fields = {
       top:              jQuery("#property_top"),
@@ -32,13 +32,12 @@ WebDoc.PropertiesInspectorController = $.klass({
       opacity:          jQuery("#property_opacity, #property_opacity_readout")
     };
     
-    //this._themeColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"});
     this._themeBgColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"}).css('clear', 'both');
     this._themeBgState = false;
   },
   
-  makeThemeBackgrounds: function() {
-    ddd('[PageInspectorController] makeThemeBackgrounds');
+  _makeThemeBackgrounds: function() {
+    ddd('[PageInspectorController] _makeThemeBackgrounds');
     
     var themeColors = new WebDoc.ClassList( 'theme_background_', 'backgroundImage backgroundColor' ),
         previousThemeClass = WebDoc.application.boardController.previousThemeClass,
@@ -103,8 +102,10 @@ WebDoc.PropertiesInspectorController = $.klass({
         else if ( css[key] ) {
           field.val( css[key] );
         }
-        // when the css value is inherited put it in the placeholder
+        // when the css value is inherited, clear the field
+        // and set its placeholder
         else {
+          field.val('');
           value = selectedItem.itemDomNode.css( key );
           field.attr( "placeholder", value );
         }
@@ -177,7 +178,8 @@ WebDoc.PropertiesInspectorController = $.klass({
     },
     opacity: {
       output: function( field, css ){
-        var value = parseFloat(css.opacity).toFixed(2) || 1;
+        var value = (css.opacity) ? parseFloat(css.opacity).toFixed(2) : '1.00' ;
+        
         field.filter('input').val( value );
         field.filter('.readout').html( value );
       }
@@ -196,6 +198,7 @@ WebDoc.PropertiesInspectorController = $.klass({
           field.val( value[1] );
         }
         else {
+          field.val('');
           field.attr( "placeholder", "none" );
         }
       }
@@ -236,97 +239,29 @@ WebDoc.PropertiesInspectorController = $.klass({
     
     item.changeCssProperty(  );
   },
-  
-  updateProperties: function(e) {
-    ddd("updateProperties", e);
-    
-    var that = this,
-        field = jQuery(e.currentTarget),
-        item = WebDoc.application.boardController.selection()[0].item,
-        css = item.data.data.css;
-    
-    field.validate({
-      pass: function(value) {
-  
-//        switch( this ){
-//          case that.leftNode[0]:
-//          case that.topNode[0]:
-//            var previousPosition = {
-//	            top: css.top,
-//	            left: css.left
-//	          };
-//	          var newPosition = {
-//	            top: (this === that.topNode[0])? that.topNode.val() : css.top,
-//	            left: (this === that.leftNode[0])? that.leftNode.val() : css.left
-//	          };
-//	          if (newPosition.left != previousPosition.left || newPosition.top != previousPosition.top) {
-//	            WebDoc.application.undoManager.registerUndo(function() {
-//	              WebDoc.ItemView._restorePosition(item, previousPosition);
-//	            }.pBind(that));
-//	            item.moveTo(newPosition);
-//	            item.save();
-//	          }
-//		    		break;
-//            
-//		    	case that.widthNode[0]:
-//		    	case that.heightNode[0]:
-//		    		var previousSize = {
-//	            width: css.width,
-//	            height: css.height
-//	          }; 
-//	          var newSize = {
-//              width: (this === that.widthNode[0])? that.widthNode.val() : css.width,
-//              height: (this === that.heightNode[0])? that.heightNode.val() : css.height              
-//	          };
-//	          if (newSize.width != previousSize.width || newSize.height != previousSize.height) {
-//	            WebDoc.application.undoManager.registerUndo(function() {
-//	              WebDoc.ItemView.restoreSize(item, previousSize);
-//	            }.pBind(that));
-//	            item.resizeTo(newSize);
-//	            item.save();
-//	          }
-//		        break;
-//		      
-//		    	case that.opacityNode[0]:
-//		    		var previousOpacity = item.data.data.css.opacity || 1;
-//		    		var newOpacity = parseFloat( that.opacityNode.val(), 10 ).toFixed(2);
-//		    		ddd('[Properties] Opacity new: '+newOpacity+' previous: '+previousOpacity);
-//		    		if(newOpacity != previousOpacity){
-//		    			WebDoc.application.undoManager.registerUndo(function(){
-//		    				that.restoreOpacity(item, previousOpacity);
-//		    			}.pBind(that));
-//		    			item.setOpacity(newOpacity);
-//		    			that.opacityReadoutNode.html( newOpacity );
-//		    			item.save();
-//		    		}
-//		    		break;
-//		    }
-        that.refresh();
-        
-      },
-      fail: function(error) {
-        
-      }
-    })
-    
-
-  },
-
-  restoreOpacity: function(item, opacity){
-      ddd("restore opacity "+opacity);
-      var previousOpacity=item.data.data.css.opacity;
-      item.setOpacity(opacity);
-      WebDoc.application.undoManager.registerUndo(function(){
-          this.restoreOpacity(item, previousOpacity);
-      }.pBind(this));
-      item.save();
-  },
 
   updatePropertiesWithFitToScreen: function(e) {
     var item = WebDoc.application.boardController.selection()[0].item;
-    
-    item.changeCss({ top: 0, left: 0, width: '100%', height: '100%', transform: '' });
-    
+    var size = null;
+    var position = null;
+    if(item.data.media_type == WebDoc.ITEM_TYPE_IMAGE && item.data.data.preserve_aspect_ratio === "true") {
+      var aspectRatio = item.width("px") / item.height("px");
+      var currentPageHeight = WebDoc.application.pageEditor.currentPage.height("px");
+      var currentPageWidth = WebDoc.application.pageEditor.currentPage.width("px");
+      if(currentPageHeight*aspectRatio < currentPageWidth) {
+        size = { width: currentPageHeight*aspectRatio, height: currentPageHeight };
+      }
+      else {
+        size = { width: currentPageWidth, height: currentPageWidth/aspectRatio };
+      }
+      var boardCenterPoint = WebDoc.application.boardController.getBoardCenterPoint();
+      position = { left: boardCenterPoint.x-(size.width/2), top: boardCenterPoint.y-(size.height/2) };
+    }
+    else {
+      size = { width: '100%', height: '100%' };
+      position = { left: 0, top: 0 };
+    }
+    item.changeCss(jQuery.extend({ transform: '' }, size, position));
     e.preventDefault();
   }
 });

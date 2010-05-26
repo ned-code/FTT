@@ -69,6 +69,7 @@ javascripts:
     - public/javascripts/jquery.form.js
     - public/javascripts/jquery.extensions.js
     - public/javascripts/jquery.events.js
+    - public/javascripts/jquery.list.js
     - public/javascripts/jquery.pop.js
     - public/javascripts/jquery.truncate.js
     - public/javascripts/jquery.validator.js

@@ -46,6 +46,27 @@
     });
 })(jQuery);
 
+// Detect css3 features like transition and store in jQuery.support.css
+
+(function(jQuery, undefined){
+    
+    var debug = (window.console && console.log);
+    
+    jQuery.support.css = {};
+    
+    function transitionEnd(e){
+      if (debug) { console.log('[CSS] transition detected'); };
+      jQuery.support.css.transition = true;
+      jQuery(document).unbind('transitionend webkitTransitionEnd oTransitionEnd', transitionEnd);
+    }
+    
+    jQuery(document).ready(function(){
+      // Lazily test for transition support by listening
+      // for the transitionend event
+      jQuery(document).bind('transitionend webkitTransitionEnd oTransitionEnd', transitionEnd);
+    });
+})(jQuery);
+
 // Stores browser scrollbar width as jQuery.support.scrollbarWidth
 // Only available after document ready
 // TODO: Not tested, and probably not working in IE. You may find inspiration here:

@@ -19,7 +19,10 @@ WebDoc.handlers = {
           e.preventDefault();
         }
       });
-    });;
+    })
+    .delegate( '.loading-icon', 'transitionend webkitTransitionEnd', function(e){
+      
+    });
   },
   
   regex: jQuery.regex,

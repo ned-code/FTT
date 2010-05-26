@@ -2,6 +2,23 @@
  * Some js extensions
 **/
 
+// typeOf function that distinguishes Objects from Arrays
+// http://javascript.crockford.com/remedial.html
+
+function typeOf(value) {
+	var s = typeof value;
+	if (s === 'object') {
+		if (value) {
+			if (value instanceof Array) {
+				s = 'array';
+			}
+		} else {
+			s = 'null';
+		}
+	}
+	return s;
+}
+
 $.extend(WebDoc, {
   update: function(array, args) {
     var arrayLength = array.length, length = args.length;

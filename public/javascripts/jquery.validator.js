@@ -1,27 +1,26 @@
 // jquery.validator.js
 // 
+// 0.6
+// 
 // Stephen Band
 // 
-// Strongly inspired by jquery.validate.js (Jörn Zaefferer), indeed, regex is borrowed
-// from there. I chose not to use that plugin to avoid bloat. I'm not claiming that
-// jquery.validate is un-neccessarily bloated: it's one of the best jQuery plugins out
-// there, but it failed my first test (responding to the attribute required="required"),
-// and instead of hacking through 1146 lines of code I chose to make a plug that does
-// exactly what we need it to do.
+// Strongly inspired by jquery.validate.js (Jörn Zaefferer) - some regex is borrowed
+// from there. I chose not to use that plugin to avoid bloat (I'm not saying that
+// jquery.validate is bloated: it's one of the best jQuery plugins out there, but
+// instead of hacking through 1200 lines of code I chose to make a plug that does
+// exactly what we need it to do).
 // 
 // Validation rules can be added to the rules object like this:
 //
 // jQuery.fn.validator.rules[ruleName] = {
-//		selector: string 				- selects the field(s) to test against
-//		test: function(field){} - the validation logic, returning true (valid) or false (invalid).
-//		error: string 					- the error message
+//		test: function(field, value) - the validation logic, returning true (pass) or false (fail)
 // }
 //
-// You can define error messages in html by giving the field the data-error-ruleName attribute:
+// Define error messages in html by giving the field the data-error-ruleName attribute:
 //
 // <input data-error-ruleName="Custom error message" />
 //
-// You can display error messages in whatever DOMNode you like, by defining options.errorNode
+// Display error messages in whatever DOMNode you like, by defining options.errorNode
 
 (function(jQuery, undefined){
 	var options = {
@@ -29,6 +28,8 @@
 				errorNode: jQuery('<label/>', { 'class': 'error-message' }),
 				errorWrapSelector: "p, fieldset, div"
 			},
+			
+			debug = (window.console && window.console.log),
 			
 			// Regex
 			regex = {
@@ -90,11 +91,12 @@
 				},
 				maxlength: {
 					test: function( field, value ) {
-						var maxlength = parseInt( field.attr("maxlength") );
+						var maxlength = field.attr("maxlength"),
+								number = parseInt( maxlength );
 						
-						// Be careful, maxlength is implicitly there whether it's
-						// in the html or not, and sometimes it's -1
-						return ( !value || maxlength === -1 || value.length <= maxlength ) ||
+						// Be careful, if there is no value maxlength is implicitly there
+						// whether it's in the html or not, and sometimes it's -1
+						return ( !value || !maxlength || number === -1 || value.length <= number ) ||
 							'Too long. '+maxlength+' characters at most.' ;
 					}
 				}
@@ -174,7 +176,8 @@
 		.closest( '.' + options.errorClass )
 		.removeClass( options.errorClass );
 		
-		// Fire callback
+		// Fire callback with input as context and arguments
+		// value(string), checked(boolean)
 		if ( options.pass ) {
 			options.pass.call( node, value, field.attr('checked') );
 		}
@@ -215,11 +218,44 @@
 		});
 	};
 	
+	// Call .validate() on each of a forms inputs
+	// and textareas, and call pass if everything
+	// passed and fail if at least one thing failed
+	function handleForm( node, options ){
+		var failCount = 0;
+		
+		jQuery(node)
+		.find("input, textarea")
+		.validate({
+		  pass: function( value ){
+		  	if (debug) { console.log( value + ' - PASS' ); }
+		  },
+		  fail: function( value ){
+		  	if (debug) { console.log( value + ' - FAIL' ); }
+		  	failCount++;
+		  }
+		});
+		
+		if (failCount && options.fail) {
+		  options.fail.call(this);
+		}
+		else if (options.pass) {
+		  options.pass.call(this);
+		}
+	}
+	
 	jQuery.fn.validate = function(o){
 		var options = jQuery.extend({}, jQuery.fn.validator.options, o);
 		
 		return this.each(function(i){
-			handle(this, options);
+			var tagName = this.nodeName.toLowerCase();
+			
+			if (tagName === 'form') {
+				handleForm(this, options);
+			}
+			else if (tagName === 'input' || tagName === 'textarea') {
+				handle(this, options);
+			}
 		});
 	};
 	

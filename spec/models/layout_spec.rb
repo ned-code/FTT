@@ -11,7 +11,9 @@ describe Layout do
   describe "create_model_page! with the layout.html example" do
     before(:all) do
       theme = mock_model(Theme)
-      theme.stub!(:file).and_return(mock("file", :s3_bucket => 'assets.test.webdoc.com'))
+      file = mock("file", :s3_bucket => 'assets.test.webdoc.com')
+      file.stub!(:store_url).and_return('http://assets.test.webdoc.com')
+      theme.stub!(:file).and_return(file)
       @layout = Factory(:layout, :theme => theme)
       @youtube_media = Factory(:widget, :system_name => 'youtube')
       @vimeo_media = Factory(:widget, :system_name => 'vimeo')
@@ -55,8 +57,12 @@ describe Layout do
       @layout.model_page.items.count(:conditions => ['media_type = ?', 'iframe']).should == 1
     end
 
-    it "should create object image item" do
-      @layout.model_page.items.count(:conditions => ['media_type = ?', 'image']).should == 1
+    it "should create object image item form web url" do
+      @layout.model_page.items.count(:conditions => ['media_type = ? AND data LIKE ?', 'image', '%image_from_web%']).should == 1
+    end
+
+    it "should create object image item form theme path" do
+      @layout.model_page.items.count(:conditions => ['media_type = ? AND data LIKE ?', 'image', '%image_from_theme%']).should == 1
     end
 
     it "should create object youtube item" do

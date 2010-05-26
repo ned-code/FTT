@@ -22,8 +22,17 @@
     background-image: url('/images/loading-icon-16-white.gif');
     background-color: transparent;
     background-repeat: no-repeat;
+    opacity: 0;
+    
+    /* TODO: If we want this to work, we'll have to get clever:
+       feature detect transition, if it exists bind to "transitionend webkitTransitionEnd"
+       a callback that set display: none after the transition instead of right away. */
+    -webkit-transition: opacity 0.1s ease-in;
+    -moz-transition:    opacity 1s ease-in;
+    transition:         opacity 0.1s ease-in;
 }
 .loading.loading-icon,
 .loading .loading-icon {
     display: block;
+    opacity: 1;
 }
