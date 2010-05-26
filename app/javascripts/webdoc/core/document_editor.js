@@ -294,15 +294,15 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
   documentWithId: function(id)
   {
-      for (var i = 0; i < this.documents.length; i++)
+    for (var i = 0; i < this.documents.length; i++)
+    {
+      aDocument = this.documents[i];
+      if (aDocument.uuid() == id)
       {
-          aDocument = this.documents[i];
-          if (aDocument.uuid() == id)
-          {
-              return aDocument;
-          }
+        return aDocument;
       }
-      return null;
+    }
+    return null;
   },
 
   setSizeByName: function(e) {

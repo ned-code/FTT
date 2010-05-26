@@ -81,9 +81,6 @@ class Document < ActiveRecord::Base
         paginate_params[:conditions] << documents_ids
       end
     end
-    
-    p "ici"
-    p paginate_params
 
     Document.paginate(paginate_params)
   end
@@ -133,6 +130,21 @@ class Document < ActiveRecord::Base
   
   def to_param
     uuid
+  end
+
+  def relative_created_at
+    diff_in_minutes = (((Time.now - self.created_at).abs)/60).round
+    text = ""
+
+    case diff_in_minutes
+    when 0..59 then text = I18n.t('relative_date.x_hours', :count => 1 )
+    when 60..1439 then text = I18n.t('relative_date.x_hours', :count => (diff_in_minutes/60).round )
+    when 1440..9800 then text = I18n.t('relative_date.x_days', :count => (diff_in_minutes/60/24).round )
+    else
+      text = I18n.l(self.created_at.to_date)
+    end
+
+    text
   end
   
   # return a Hash with width and height formated with unit

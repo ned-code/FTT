@@ -23,8 +23,10 @@ class DocumentsController < ApplicationController
   # GET /documents
   def index    
     respond_to do |format|
-      format.html { set_return_to }
-      format.json {
+      format.html do
+        set_return_to
+      end
+      format.json do
         per_page = 20
         @documents = Document.all_with_filter(current_user, params[:document_filter], params[:query], params[:page], per_page)
         render :json => { 
@@ -38,14 +40,41 @@ class DocumentsController < ApplicationController
             :total => @documents.total_entries
           }
         }
-      }
+      end
     end
   end
 
   # GET /documents/explore
   def explore
-    set_return_to
-    @public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:page])
+    respond_to do |format|
+      format.html do
+        set_return_to
+      end
+      format.json do
+        per_page = 8
+        public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:page], per_page)
+        render :json => {
+          :documents => public_documents.map{|doc| {
+                  :uuid => doc.uuid,
+                  :title => doc.title,
+                  :creator_first_name => doc.creator.first_name,
+                  :views_count => doc.views_count,
+                  :relative_created_at => doc.relative_created_at,
+                  :category_name => doc.category.present? ? doc.category.name : nil,
+                  :category_id => doc.category_id
+            }
+          },
+          :pagination => {
+            :per_page => per_page,
+            :current_page => public_documents.current_page,
+            :total_pages => public_documents.total_pages,
+            :next_page => public_documents.next_page,
+            :previous_page => public_documents.previous_page,
+            :total => public_documents.total_entries
+          }
+        }
+      end
+    end
   end
   
   # GET /documents/:id

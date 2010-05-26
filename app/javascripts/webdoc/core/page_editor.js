@@ -112,25 +112,25 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   },
   
   _loadCreator: function() {
-     $.ajax({
-       url: "/users/" + this.currentDocument.creatorId(),
-       type: 'GET',
-       dataType: 'json',              
-       success: function(data, textStatus) {
-         ddd("will notify creator listener", this._creatorListeners);
-         this.creator = data.user;
-         var listenersCount = this._creatorListeners.length;
-         for (var i = 0; i < listenersCount; i++) {
-            ddd("noify with callback", this._creatorListeners[i]);
-            this._creatorListeners[i].call(this, this.creator);
-            ddd("notify done");
-         }
-       }.pBind(this),
-       error: function(XMLHttpRequest, textStatus, errorThrown) {
-         ddd("error", textStatus);          
-       }
-     });
-   },
+    $.ajax({
+      url: "/users/" + this.currentDocument.creatorId(),
+      type: 'GET',
+      dataType: 'json',
+      success: function(data, textStatus) {
+        ddd("will notify creator listener", this._creatorListeners);
+        this.creator = data.user;
+        var listenersCount = this._creatorListeners.length;
+        for (var i = 0; i < listenersCount; i++) {
+           ddd("noify with callback", this._creatorListeners[i]);
+           this._creatorListeners[i].call(this, this.creator);
+           ddd("notify done");
+        }
+      }.pBind(this),
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        ddd("error", textStatus);
+      }
+    });
+  },
 
   _createLinkHandler: function( obj ){
     // Keep obj in scope of new handler
