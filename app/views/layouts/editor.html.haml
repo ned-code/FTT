@@ -7,9 +7,7 @@
     %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
     %title= "webdoc - alpha - #{yield(:title)}"
     = include_stylesheets :common, :media => 'all'
-    = include_stylesheets :page_editor, :media => 'all'
-    
-    <link id="theme" rel="stylesheet" href="/themes/default/css/typography.css" type="text/css" />
+    = include_stylesheets :page_editor, :media => 'all'    
     
   -if params[:reader] == 'true'
     -current_class = 'editor mode-embed'
@@ -36,8 +34,8 @@
       WebDoc.closeUrl = "#{ @get_return_to }";
       
       WebDoc.Application.main(function() {
-        var editor = new WebDoc.PageEditor(#{edit_mode?});
-        editor.load("#{@document.uuid}");
+        var editor = new WebDoc.PageEditor();
+        editor.load("#{@document.uuid}",#{edit_mode?});
       });      
       WebDoc.Application.start();
     = render :partial => "layouts/feedback";

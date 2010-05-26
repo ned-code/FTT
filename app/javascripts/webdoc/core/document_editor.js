@@ -20,6 +20,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 {
     initialize: function($super)
     {
+      var categories;
         $super();
         
         this.documentListContainerNode = $("#wb-document-list-container");
@@ -34,12 +35,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         WebDoc.application.documentEditor = this;
         WebDoc.application.undoManager = new WebDoc.UndoManager();
         WebDoc.application.accessController = new WebDoc.DocumentCollaborationController();
-        WebDoc.application.categoriesManager = new WebDoc.DocumentCategoriesManager();
-        WebDoc.application.categoriesManager.getAllCategories(function(categories){
-          $.each(categories, function(i, webDocCategory) {
-            infoDialogCategoryNode.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
-          });
-        }.pBind(this));
+
         
         WebDoc.application.shareController = new WebDoc.DocumentShareController();
         
@@ -55,8 +51,15 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     
     start: function()
     {
-        ddd("Start Document editor");
-        var that = this;
+      ddd("Start Document editor");
+      var that = this;
+      WebDoc.Application.initializeSingletons([WebDoc.DocumentCategoriesManager], function() {
+        
+        var categories = WebDoc.DocumentCategoriesManager.getInstance().getAllCategories();
+        $.each(categories, function(i, webDocCategory) {
+          infoDialogCategoryNode.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+        });
+                
         $("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
         this.documentListContainerNode
         .addClass( 'loading' )
@@ -82,6 +85,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         infoDialogNode
         .remove()
         .css({ display: '' });
+      }.pBind(this));
     },
     
     filterByDate: function(e){
