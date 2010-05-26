@@ -12,9 +12,7 @@ WebDoc.SocialPanelController = jQuery.klass(WebDoc.RightBarInspectorController, 
     
     this.domNode = jQuery('#social-inspector');
     this.currentDocument = WebDoc.application.pageEditor.currentDocument;
-    WebDoc.application.pageEditor.getCreator(function(creator) {
-      this.creator = creator;
-    }.pBind(this));
+    this.creator = WebDoc.application.pageEditor.getCreator(); 
     this.subscribeButton.click(this._subscribeAction.pBind(this));
     this.unsubscribeButton.click(this._unSubscribeAction.pBind(this));
   },

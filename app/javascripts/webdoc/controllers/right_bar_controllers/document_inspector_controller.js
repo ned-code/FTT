@@ -36,7 +36,7 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     
     currentDocument.addListener(this);
     
-    WebDoc.application.categoriesManager.getAllCategories(this._loadDocumentCategories.pBind(this));
+    this._loadDocumentCategories();
     this._updateFields();
   },
   
@@ -53,9 +53,10 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     jQuery(".document-title").text(currentDocument.title());
   },
   
-  _loadDocumentCategories: function(categories) {
-      jQuery.each(categories, function(i, webDocCategory) {
-        documentCategoryField.append(jQuery('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+  _loadDocumentCategories: function() {
+    var categories = WebDoc.DocumentCategoriesManager.getInstance().getAllCategories();    
+    jQuery.each(categories, function(i, webDocCategory) {
+      documentCategoryField.append(jQuery('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
     });
   },
   

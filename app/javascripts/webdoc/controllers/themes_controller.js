@@ -6,8 +6,7 @@ WebDoc.ThemesController = jQuery.klass({
   
   // Constructor     
   initialize: function() {
-    var that = this,
-        defaultTheme;
+    var that = this;
     
     this.chooserNode = jQuery("<div/>");
     this.listNode = jQuery('<ul/>', {'class': 'vertical thumbs themes-index index'});
@@ -35,10 +34,6 @@ WebDoc.ThemesController = jQuery.klass({
         that.list[ theme.data.id ] = theme;
       }
     });
-    
-    defaultTheme = WebDoc.ThemeManager.getInstance().getDefaultTheme();
-    
-    this.list['default'] = this._currentTheme = defaultTheme;
   },
   
   // Event handlers

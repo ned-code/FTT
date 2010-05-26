@@ -215,12 +215,19 @@ WebDoc.BoardController = jQuery.klass({
   // Theme ----------------------------------------
   
   applyDocumentTheme: function() {
-    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
+    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl(),
         themeNode = this.themeNode;
     
+    if (themeNode.length === 0) {
+      this.themeNode = jQuery('<link id="theme" rel="stylesheet" href="' + stylesheetUrl + '" type="text/css" />'); 
+      jQuery('head').append(this.themeNode);
+    }
+    else {
+      themeNode[0].href = stylesheetUrl;
+    }
     this.previousThemeClass = this.currentThemeClass;
     this.currentThemeClass = WebDoc.application.pageEditor.currentDocument.styleClass();
-    themeNode[0].href = stylesheetUrl;
+    
     
     // There's no load event on the link tag.  This is a problem.
     // Simulate with setTimeout until we think of a better way.
@@ -588,10 +595,10 @@ WebDoc.BoardController = jQuery.klass({
     var videoWidget;
     switch (videoProperties.type) {
       case 'youtube' :
-        videoWidget = WebDoc.application.widgetManager.getYoutubeWidget();
+        videoWidget = WebDoc.WidgetManager.getInstance().getYoutubeWidget();
         break;
       case 'vimeo' :
-        videoWidget = WebDoc.application.widgetManager.getVimeoWidget();
+        videoWidget = WebDoc.WidgetManager.getInstance().getVimeoWidget();
         break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
