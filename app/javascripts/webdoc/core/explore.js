@@ -53,18 +53,21 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
 
   _refreshViewers: function() {
     ddd("[explore] refresh viewers");
-    this._loadDocuments(1);
+    this._loadDocuments();
   },
 
   _loadDocuments: function(pageIncrement) {
 
-    this._incrementPageId(1);
-
+    if(pageIncrement) {
+      this._incrementPageId(pageIncrement);
+    }
+    
     this.domNode.html('');
     this.domNode.addClass('loading');
 
     WebDoc.ServerManager.request('/documents/explore.json', function(data) {
-      this._createViewWithDocuments(data.documents, data.pagination);
+      this._createViewWithDocuments(data.documents);
+      this._refreshPagination(data.pagination);
       this.domNode.removeClass('loading');
     }.pBind(this), 'GET',this._createAjaxParams());
   },  
@@ -74,8 +77,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
       main_filter: this.mainFilterDomNode.val(),
       category_filter: this.categoryFilterDomNode.val(),
       query: this.searchDomNode.val(),
-      // page: this.currentListingPageId
-      page: 1
+      page: this.currentListingPageId
     };
   },
 
@@ -97,6 +99,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
 
     var viewerControlsDomNode = jQuery('<ul />').addClass('viewer-controls-index').addClass('index');
     var buttonGroupDomNode = jQuery('<li />').addClass('button-group');
+
     var previousButton = jQuery('<a />')
     .attr('href', '#prev-page')
     .addClass('button')
@@ -104,6 +107,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     .attr('title', 'previous page')
     .html('&lt;');
     buttonGroupDomNode.append(previousButton);
+
     var nextButton = jQuery('<a />')
     .attr('href', '#next-page')
     .addClass('button')
@@ -111,12 +115,14 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     .attr('title', 'next page')
     .html('&gt;');
     buttonGroupDomNode.append(nextButton);
+
     var titleDomNode = jQuery('<li />');
     var titleLinkDomNode = $('<a />')
     .addClass('webdoc-viewer-title')
     .attr('href', '/documents/'+document.uuid)
     .append($('<h4 />').html(document.title));
     titleDomNode.append(titleLinkDomNode);
+
     viewerControlsDomNode.append(buttonGroupDomNode);
     viewerControlsDomNode.append(titleDomNode);
 
@@ -124,7 +130,6 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     .addClass('webdoc-viewer-container')
     .attr('data-webdoc-document-id', document.uuid)
     .attr('id', document.uuid);
-
 
     var viewerDetailsDomNode = $('<p />')
     .addClass('webdoc-viewer-details')
@@ -153,11 +158,29 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     documentDomNode.append(viewerDetailsDomNode);
 
     this.domNode.append(documentDomNode);
+  },
+
+  _refreshPagination: function(pagination) {
+    if (pagination.total_pages > 1) {
+      var paginationWrap = $("<div class='pagination'>");
+      $('<span>').html("Page " + pagination.current_page + " of " + pagination.total_pages + " ").appendTo(paginationWrap);
+      if (pagination.previous_page > 0) {
+        var previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
+        previousPageLink.click(function(event){
+          this._loadDocuments(-1);
+          event.preventDefault();
+        }.pBind(this)).appendTo(paginationWrap);
+      }
+      if (pagination.next_page > 0) {
+        if(pagination.previous_page > 0) { $("<span>").html(' | ').appendTo(paginationWrap); }
+        var nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
+        nextPageLink.click(function(event){
+          this._loadDocuments(1);
+          event.preventDefault();
+        }.pBind(this)).appendTo(paginationWrap);
+      }
+      this.domNode.append(paginationWrap);
+    }
   }
 
 });
-
-
-
-
-
