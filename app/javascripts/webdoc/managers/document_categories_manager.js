@@ -3,19 +3,14 @@
  */
 
 WebDoc.DocumentCategoriesManager = $.klass({
-  initialize: function() {
-    this._callBack = [];
+  initialize: function(callBack) {
+    this._callBack = callBack;
     this._documentCategories = undefined;
     this._loadDocumentCategories();
   },   
   
   getAllCategories: function(callBack) {
-    if (this._documentCategories) {
-      callBack.call(this, this._documentCategories);
-    }
-    else {
-      this._callBack.push(callBack);
-    }
+    return this._documentCategories;
   },
   
   _loadDocumentCategories: function() {
@@ -23,14 +18,24 @@ WebDoc.DocumentCategoriesManager = $.klass({
     {
       if (data.length !== 0) {
         this._documentCategories = data;
-        this._notifyCallBacks();
+        this._callBack.call(this, WebDoc.DocumentCategoriesManager);
       }
     }.pBind(this));
-  },
-    
-  _notifyCallBacks: function() {
-    for (var i= 0; i < this._callBack.length; i++) {
-      this._callBack[i].call(this, this._documentCategories);
+  }
+});
+
+$.extend(WebDoc.DocumentCategoriesManager, {  
+  
+  init: function(callBack) {
+    if (!this._instance) {
+      this._instance = new WebDoc.DocumentCategoriesManager(callBack);
+    }  
+    else {
+      callBack.call(this, true);
     }
+  },
+  
+  getInstance: function() {
+    return this._instance;    
   }
 });

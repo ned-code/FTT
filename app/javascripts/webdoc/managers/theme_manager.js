@@ -3,21 +3,15 @@
  */
 
 WebDoc.ThemeManager = $.klass({
-  initialize: function() {
-    this._defaultTheme = new WebDoc.Theme({
-      theme: {
-        id: 'default',
-        title: 'Webdoc Default',
-        layouts: [],
-        style_url: '/themes/default/css/typography.css',
-        thumbnail_url: '',
-        elements_url: ''
+  initialize: function(callBack) {
+
+    this._defaultTheme = undefined;
+    WebDoc.ServerManager.getRecords(WebDoc.Theme, null, function(data) {
+      if (data && data.length > 0) {
+        this._defaultTheme = data[0];
+        callBack.call(this, WebDoc.ThemeManager);
       }
-    });
-    // Override theme object methods
-    // that we don't want on default
-    this._defaultTheme.refresh = function(){};
-    this._defaultTheme.save = function(){};
+    }.pBind(this), { ajaxParams: { default_theme: true }});    
   },   
   
   getDefaultTheme: function(callBack) {
@@ -26,10 +20,17 @@ WebDoc.ThemeManager = $.klass({
 });
 
 $.extend(WebDoc.ThemeManager, {  
-  getInstance: function() {
+  
+  init: function(callBack) {
     if (!this._instance) {
-      this._instance = new WebDoc.ThemeManager();
+      this._instance = new WebDoc.ThemeManager(callBack);
+    }  
+    else {
+      callBack.call(this, true);
     }
+  },
+  
+  getInstance: function() {
     return this._instance;    
   }
 });

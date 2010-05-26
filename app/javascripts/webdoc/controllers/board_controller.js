@@ -588,10 +588,10 @@ WebDoc.BoardController = jQuery.klass({
     var videoWidget;
     switch (videoProperties.type) {
       case 'youtube' :
-        videoWidget = WebDoc.application.widgetManager.getYoutubeWidget();
+        videoWidget = WebDoc.WidgetManager.getInstance().getYoutubeWidget();
         break;
       case 'vimeo' :
-        videoWidget = WebDoc.application.widgetManager.getVimeoWidget();
+        videoWidget = WebDoc.WidgetManager.getInstance().getVimeoWidget();
         break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);

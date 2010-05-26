@@ -109,11 +109,13 @@ $.extend(WebDoc.WebdocViewer, {
       document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
     } 
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
-    var allViewerContainers = jQuery(".webdoc-viewer-container");
-    for (var i = 0; i < allViewerContainers.length; i++) {
-      var aViewerContainer = jQuery(allViewerContainers[i]);
-      var viewer = new WebDoc.WebdocViewer(aViewerContainer);
-      viewer.load(aViewerContainer.id());
-    }
+    WebDoc.Application.initializeSingletons([WebDoc.ThemeManager], function() {
+      var allViewerContainers = jQuery(".webdoc-viewer-container");
+      for (var i = 0; i < allViewerContainers.length; i++) {
+        var aViewerContainer = jQuery(allViewerContainers[i]);
+        var viewer = new WebDoc.WebdocViewer(aViewerContainer);
+        viewer.load(aViewerContainer.id());
+      }
+    });
   }
 });

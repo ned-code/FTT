@@ -92,15 +92,18 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     }
   },
     
-  styleUrl: function() {
+  styleUrl: function() {       
     if (this.data.style_url && this.data.style_url === 'null') {
-      return null;
+      return WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl();
     }
     return this.data.style_url;
   },
   
   styleClass: function() {
-    var themeName = this.data.theme_id || 'default';
+    var themeName = WebDoc.ThemeManager.getInstance().getDefaultTheme().id();
+    if (this.data.theme_id) {
+      themeName = this.data.theme_id;
+    }     
     return "theme_" + themeName;
   },
   
