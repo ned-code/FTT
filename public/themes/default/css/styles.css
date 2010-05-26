@@ -23,12 +23,49 @@
 
 /* Backgrounds */
 
-.theme_background_1   { background-color: hsl(208, 4%, 100%); }
-.theme_background_2   { background-color: hsl(208, 4%, 80%); }
-.theme_background_3   { background-color: hsl(208, 4%, 60%); }
-.theme_background_4   { background-color: hsl(208, 4%, 40%); }
-.theme_background_5   { background-color: hsl(208, 4%, 20%); }
-.theme_background_6   { background-color: hsl(208, 4%, 0%); }
+.theme_background_1 {
+  background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( #ededed ), to( #c3c3c3 ));
+  background-image: -moz-linear-gradient( -90deg, #ededed, #c3c3c3 );
+  background-image:      linear-gradient( -90deg, #ededed, #c3c3c3 );
+  background-color: #e7edd2;
+}
+.theme_background_2 {
+  background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( #e7edd2 ), to( #c8d2a6 ));
+  background-image: -moz-linear-gradient( -90deg, #e7edd2, #c8d2a6 );
+  background-image:      linear-gradient( -90deg, #e7edd2, #c8d2a6 );
+  background-color: #e7edd2;
+}
+.theme_background_3 {
+  background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( #f2ecd7 ), to( #d1c8a5 ));
+  background-image: -moz-linear-gradient( -90deg, #f2ecd7, #d1c8a5 );
+  background-image:      linear-gradient( -90deg, #f2ecd7, #d1c8a5 );
+  background-color: #e7edd2;
+}
+.theme_background_4 {
+  background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( #f2e5e0 ), to( #d4b1a5 ));
+  background-image: -moz-linear-gradient( -90deg, #f2e5e0, #d4b1a5 );
+  background-image:      linear-gradient( -90deg, #f2e5e0, #d4b1a5 );
+  background-color: #e7edd2;
+}
+.theme_background_5 {
+  background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( #f5e7ea ), to( #e2bec7 ));
+  background-image: -moz-linear-gradient( -90deg, #f5e7ea, #e2bec7 );
+  background-image:      linear-gradient( -90deg, #f5e7ea, #e2bec7 );
+  background-color: #e7edd2;
+}
+.theme_background_6 {
+  background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( #e2eff0 ), to( #9ecdd2 ));
+  background-image: -moz-linear-gradient( -90deg, #e2eff0, #9ecdd2 );
+  background-image:      linear-gradient( -90deg, #e2eff0, #9ecdd2 );
+  background-color: #e7edd2;
+}
+.theme_background_7 {
+  background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( #e5efed ), to( #abd7d0 ));
+  background-image: -moz-linear-gradient( -90deg, #e5efed, #abd7d0 );
+  background-image:      linear-gradient( -90deg, #e5efed, #abd7d0 );
+  background-color: #e7edd2;
+}
+
 
 /* Borders */
 
