@@ -218,9 +218,16 @@ WebDoc.BoardController = jQuery.klass({
     var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl(),
         themeNode = this.themeNode;
     
+    if (themeNode.length === 0) {
+      this.themeNode = jQuery('<link id="theme" rel="stylesheet" href="' + stylesheetUrl + '" type="text/css" />'); 
+      jQuery('head').append(this.themeNode);
+    }
+    else {
+      themeNode[0].href = stylesheetUrl;
+    }
     this.previousThemeClass = this.currentThemeClass;
     this.currentThemeClass = WebDoc.application.pageEditor.currentDocument.styleClass();
-    themeNode[0].href = stylesheetUrl;
+    
     
     // There's no load event on the link tag.  This is a problem.
     // Simulate with setTimeout until we think of a better way.

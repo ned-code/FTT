@@ -93,7 +93,7 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   },
     
   styleUrl: function() {       
-    if (this.data.style_url && this.data.style_url === 'null') {
+    if (!this.data.style_url || this.data.style_url === 'null') {
       return WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl();
     }
     return this.data.style_url;
