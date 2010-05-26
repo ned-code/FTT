@@ -215,7 +215,7 @@ WebDoc.BoardController = jQuery.klass({
   // Theme ----------------------------------------
   
   applyDocumentTheme: function() {
-    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl() || WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl(),
+    var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl(),
         themeNode = this.themeNode;
     
     this.previousThemeClass = this.currentThemeClass;
