@@ -19,6 +19,10 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     return this.data.category_id;
   },
   
+  featured: function() {
+    return this.data.featured;
+  },
+
   size: function() {
     return this.data.size;
   },
@@ -51,6 +55,14 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     this.data.category_id = category_id;
     if(!(skipSave && skipSave === true)) {
       this.fireObjectChanged({ modifedAttribute: 'category' });
+      this.save();
+    }
+  },
+
+  setFeatured: function(featured, skipSave) {
+    this.data.featured = featured;
+    if(!(skipSave && skipSave === true)) {
+      this.fireObjectChanged({ modifedAttribute: 'featured' });
       this.save();
     }
   },

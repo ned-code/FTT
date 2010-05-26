@@ -8,7 +8,11 @@
       <li>
         <a href="/" <% if params[:controller]=='documents' %>class="current"<% end %>>home</a>
       </li
-      ><li>
+      >
+      <li>
+        <a href="/documents/featured" <% if params[:controller]=='documents' && params[:action]=='featured' %>class="current"<% end %>>featured</a>
+      </li>
+      <li>
         <a href="/documents/explore" <% if params[:controller]=='documents' && params[:action]=='explore' %>class="current"<% end %>>explore</a>
       </li>
     </ul>

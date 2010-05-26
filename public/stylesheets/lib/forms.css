@@ -385,6 +385,7 @@ fieldset.properties:first-child {
     margin: 0;
     width: 96%;
     max-width: 96%;
+	margin-bottom:0.6em;
 }
 
 .properties input[disabled],

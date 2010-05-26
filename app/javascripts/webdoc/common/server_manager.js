@@ -195,11 +195,15 @@ jQuery.extend(WebDoc.ServerManager, {
       url: object.rootUrl() + "/" + object.className() + "s/" + object.uuid(),
       data: param,
       success: function(data, textstatus) {
-        // if we save objects with relationshipd we must refresh object because its relations can be new objects. So we need to take the id of those new objects
-        if (withRelationships) {
-          object.refresh(data);
+        try {
+          // if we save objects with relationshipd we must refresh object because its relations can be new objects. So we need to take the id of those new objects        
+          if (withRelationships) {
+            object.refresh(data);
+          }
         }
-        callBack.apply(this, [[object]]);
+        finally {
+          callBack.apply(this, [[object]]);
+        }
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         throw errorThrown;
