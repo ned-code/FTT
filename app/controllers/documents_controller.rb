@@ -18,6 +18,7 @@ class DocumentsController < ApplicationController
       allow :editor, :of => :document      
     end
     allow all, :to => :explore
+    allow all, :to => :featured
   end
   
   # GET /documents
@@ -46,6 +47,11 @@ class DocumentsController < ApplicationController
   def explore
     set_return_to
     @public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:page])
+  end
+  
+  #Get /documents/featured
+  def featured
+    @featured_documents = Document.all_featured_paginated
   end
   
   # GET /documents/:id

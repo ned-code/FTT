@@ -114,7 +114,13 @@ class Document < ActiveRecord::Base
       []
     end
   end
-
+  
+  def self.all_featured_paginated(page_id=nil, per_page=8, include=[:category, :creator])
+    paginate_params = {:page => page_id, :per_page => per_page, :include => include}
+    paginate_params[:order] = 'featured DESC'
+    paginate_params[:conditions] = ['documents.is_public = ? AND featured > ?', true,0]
+    Document.paginate(paginate_params)
+  end
   # ====================
   # = Instance Methods =
   # ====================
