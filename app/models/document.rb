@@ -85,19 +85,25 @@ class Document < ActiveRecord::Base
     Document.paginate(paginate_params)
   end
 
-  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", page_id=nil, per_page=8, include=[:category, :creator])
-    paginate_params = {:page => page_id, :per_page => per_page, :include => include}
+  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator])
+    paginate_params = {
+            :page => page_id,
+            :per_page => per_page,
+            :include => include,
+            :conditions => ['(documents.title LIKE ? OR documents.description LIKE ?) AND documents.is_public = ?',
+                            "%#{query}%",
+                            "%#{query}%",
+                            true],
+            :order => 'created_at DESC'
+    }
 
     if order_string.present? && order_string == 'viewed'
       paginate_params[:order] = 'views_count DESC'
-    else
-      paginate_params[:order] = 'created_at DESC'
     end
 
     if category_filter.present? && category_filter != "all"
-      paginate_params[:conditions] = ['documents.is_public = ? AND documents.category_id = ?', true, category_filter]
-    else
-      paginate_params[:conditions] = ['documents.is_public = ?', true]
+      paginate_params[:conditions][0] += ' AND documents.category_id = ?'
+      paginate_params[:conditions] << category_filter
     end
 
     Document.paginate(paginate_params)

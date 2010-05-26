@@ -59,9 +59,13 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
   _loadDocuments: function(pageIncrement) {
 
     this._incrementPageId(1);
-    
+
+    this.domNode.html('');
+    this.domNode.addClass('loading');
+
     WebDoc.ServerManager.request('/documents/explore.json', function(data) {
       this._createViewWithDocuments(data.documents, data.pagination);
+      this.domNode.removeClass('loading');
     }.pBind(this), 'GET',this._createAjaxParams());
   },  
 
@@ -77,7 +81,6 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
 
   _createViewWithDocuments: function(documents, pagination) {
     ddd("[explore] create view with documents");
-    this.domNode.html('');
 
     var i = documents.length;
     while(i--) {
