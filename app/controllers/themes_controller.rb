@@ -16,4 +16,8 @@ class ThemesController < ApplicationController
     render :json => @theme.to_json(:except => :file, :include => {:layouts => {:include => {:model_page => {:include => :items }}}})
   end
   
+  def default
+    @theme = Theme.default
+    render :json => @theme.to_json(:except => :file, :include => {:layouts => {:include => {:model_page => {:include => :items }}}})
+  end
 end
