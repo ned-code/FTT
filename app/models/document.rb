@@ -2,7 +2,7 @@ class Document < ActiveRecord::Base
   has_uuid
   acts_as_authorization_object
   
-  attr_accessible :uuid, :title, :description, :size, :category_id, :is_public, :style_url, :theme_id 
+  attr_accessible :uuid, :title, :description, :size, :category_id, :is_public, :style_url, :theme_id, :featured 
   
   serialize :size
   
@@ -24,7 +24,8 @@ class Document < ActiveRecord::Base
   # ===============
   # = Validations =
   # ===============
-  validates_uniqueness_of :uuid  
+  validates_uniqueness_of :uuid
+  validates_numericality_of :featured
 
   # =============
   # = Callbacks =

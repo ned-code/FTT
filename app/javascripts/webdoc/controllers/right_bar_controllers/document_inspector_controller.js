@@ -9,6 +9,7 @@ var inpsector,
     documentTitleField,
     documentDescriptionField,
     documentCategoryField,
+	documentFeaturedField,
     currentDocument;
     
 WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorController, {
@@ -21,6 +22,7 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     documentTitleField = jQuery("#document-title", inspector);
     documentDescriptionField = jQuery("#document-description", inspector);
     documentCategoryField = jQuery("#document-category", inspector);
+    documentFeaturedField = jQuery("#document-featured", inspector);
     currentDocument = WebDoc.application.pageEditor.currentDocument;
     
     form
@@ -29,7 +31,8 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     })
     .delegate('#document-title', 'change', this._changeDocumentTitle)
     .delegate('#document-description', 'change', this._changeDocumentDescription)
-    .delegate('#document-category', 'change', this._changeDocumentCategory);
+    .delegate('#document-category', 'change', this._changeDocumentCategory)
+    .delegate('#document-featured', 'change', this._changeDocumentFeatured);
     
     currentDocument.addListener(this);
     
@@ -45,7 +48,7 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     documentTitleField.val(currentDocument.title());
     documentDescriptionField.val(currentDocument.description());
     documentCategoryField.val(currentDocument.category());
-    
+    documentFeaturedField.val(currentDocument.featured());
     // Also update toolbar title field
     jQuery(".document-title").text(currentDocument.title());
   },
@@ -66,6 +69,10 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
   
   _changeDocumentCategory: function() {
     currentDocument.setCategory(documentCategoryField.val());
+  },
+
+  _changeDocumentFeatured: function() {
+    currentDocument.setFeatured(documentFeaturedField.val());
   },
   
   objectChanged: function() {
