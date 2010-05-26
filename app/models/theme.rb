@@ -61,9 +61,6 @@ class Theme < ActiveRecord::Base
   def set_attributes_from_config_file_and_save(ancestor_theme=nil)
     return false if validates_uniqueness_of_default_theme == false
     saved = false
-    
-    p "*****************************"
-    p config_dom
     if ancestor_theme.blank? || config_dom.root.attribute("version").to_s > ancestor_theme.version
       self.transaction do
         self.assign_uuid
