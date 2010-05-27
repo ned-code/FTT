@@ -492,8 +492,6 @@
 				  test: function(value) {
             var pattern_has_protocole = /^(ftp|http|https):\/\/?(\w*)/;
       	    var consolidateSrc = "";
-      	    ddd(value);
-      	    ddd(jQuery.fn.validator.regex.url.test(value));
       	    if (jQuery.fn.validator.regex.url.test(value)) {      	      
       	      if (value.match(pattern_has_protocole)) {
                 consolidateSrc = value;
