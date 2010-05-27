@@ -96,8 +96,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
   _createViewWithDocuments: function(documents, pagination) {
     ddd("[explore] create view with documents");
 
-    var i = documents.length;
-    while(i--) {
+    for(i=0; i<documents.length; i+=1) {
       var document = new WebDoc.Document(documents[i]);
       this._createViewForDocument(document);
     }
