@@ -39,20 +39,29 @@ class Document < ActiveRecord::Base
   # = Class Methods =
   # =================
   
-  def self.all_with_filter(current_user, document_filter, pageId, per_page)
-    documents_ids = []
+  def self.all_with_filter(current_user, document_filter, query, page_id, per_page)
+    documents = Array.new
+    paginate_params = {
+            :page => page_id,
+            :per_page => per_page,
+            :order => 'created_at DESC',
+            :conditions => ['(documents.title LIKE ? OR documents.description LIKE ?)', "%#{query}%", "%#{query}%"]
+    }
+
     if document_filter
       # Filter possibilities: reader, editor, creator, public
       if document_filter == 'creator'
-        return current_user.documents.paginate(:page => pageId, :per_page => per_page, :order => 'created_at DESC')
+        paginate_params[:conditions][0] += ' AND documents.creator_id = ?'
+        paginate_params[:conditions] << current_user.id
       elsif document_filter == 'public'
-        return Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :is_public => true }, :order => 'created_at DESC' )
+        paginate_params[:conditions][0] = ' AND documents.is_public = ?'
+        paginate_params[:conditions] << true
       else
         # Retrieve documents for the current user
+        documents_ids = Array.new
         current_user.role_objects.all(:select => 'authorizable_id', :conditions => { :name => document_filter } ).each do |role|
           documents_ids << role.authorizable_id if role.authorizable_id
         end
-        
         # Must remove owned documents
         owner_ids = []
         current_user.documents.each do |doc|
@@ -60,38 +69,45 @@ class Document < ActiveRecord::Base
         end
         # Diff of both arrays
         documents_ids = documents_ids - owner_ids
-        documents = Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :id => documents_ids }, :order => 'created_at DESC' )
+        paginate_params[:conditions][0] += ' AND documents.id IN (?)'
+        paginate_params[:conditions] << documents_ids
       end
     else
       if (!current_user.has_role?("admin"))
+        documents_ids = Array.new
         roles = current_user.role_objects.all.each do |role|
           documents_ids << role.authorizable_id
         end
-        documents = Document.paginate(:page => pageId, :per_page => per_page, :conditions => { :id => documents_ids }, :order => 'created_at DESC' ) 
-      else
-        documents = Document.paginate(:page => pageId, :per_page => per_page, :order => 'created_at DESC' )
+        paginate_params[:conditions][0] += ' AND documents.id IN (?)'
+        paginate_params[:conditions] << documents_ids
       end
     end
-    documents
+
+    Document.paginate(paginate_params)
   end
 
-  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", page_id=nil, per_page=8, include=[:category, :creator])
-    documents = Array.new
-    paginate_params = {:page => page_id, :per_page => per_page, :include => include}
+  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator])
+    paginate_params = {
+            :page => page_id,
+            :per_page => per_page,
+            :include => include,
+            :conditions => ['(documents.title LIKE ? OR documents.description LIKE ?) AND documents.is_public = ?',
+                            "%#{query}%",
+                            "%#{query}%",
+                            true],
+            :order => 'created_at DESC'
+    }
 
     if order_string.present? && order_string == 'viewed'
       paginate_params[:order] = 'views_count DESC'
-    else
-      paginate_params[:order] = 'created_at DESC'
     end
 
     if category_filter.present? && category_filter != "all"
-      paginate_params[:conditions] = ['documents.is_public = ? AND documents.category_id = ?', true, category_filter]
-    else
-      paginate_params[:conditions] = ['documents.is_public = ?', true]
+      paginate_params[:conditions][0] += ' AND documents.category_id = ?'
+      paginate_params[:conditions] << category_filter
     end
 
-    documents = Document.paginate(paginate_params)
+    Document.paginate(paginate_params)
   end
 
   def self.last_modified_from_following(current_user, limit=5)
@@ -127,6 +143,29 @@ class Document < ActiveRecord::Base
   
   def to_param
     uuid
+  end
+
+  def relative_created_at
+    diff_in_minutes = (((Time.now - self.created_at).abs)/60).round
+    text = ""
+
+    case diff_in_minutes
+    when 0..59 then text = I18n.t('relative_date.x_hours', :count => 1 )
+    when 60..1439 then text = I18n.t('relative_date.x_hours', :count => (diff_in_minutes/60).round )
+    when 1440..9800 then text = I18n.t('relative_date.x_days', :count => (diff_in_minutes/60/24).round )
+    else
+      text = I18n.l(self.created_at.to_date)
+    end
+
+    text
+  end
+
+  def extra_attributes
+    {
+      :creator_first_name => self.creator.first_name,
+      :relative_created_at => self.relative_created_at,
+      :category_name => self.category.present? ? self.category.name : nil,
+    }
   end
   
   # return a Hash with width and height formated with unit

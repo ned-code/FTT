@@ -1,15 +1,13 @@
 <h1><%= "#{t('.title')} #{@theme.title}" %></h1>
 
-<% semantic_form_for @theme, :url => admin_theme_path(@theme), :html => { :enctype => 'multipart/form-data' } do |f| %>
-  <% f.inputs do %>
-    <%= f.input :file, :as => :file %>
-    <%= f.input :is_default, :label => "Set as default", :input_html => { :disabled => true } %>
-  <% end %>
-
-  <%- f.buttons do %>
-    <%= f.commit_button t('upload') %>
-  <% end %>
-
+<% form_for @theme, :url => admin_theme_path(@theme), :html => { :enctype => 'multipart/form-data' } do |f| %>
+  <%= f.label :file %>
+  <%= f.file_field :file %>
+  <%= f.label :is_default, "Set as default" %>
+  <%= f.check_box :is_default, :disabled => 'disabled' %>
+  <p>
+    <%= f.submit "upload" %>
+  </p>
 <% end %>
 
 <%= link_to t('back'), admin_themes_path %>

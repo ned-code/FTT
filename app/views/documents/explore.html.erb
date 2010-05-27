@@ -1,44 +1,45 @@
+<%= include_stylesheets :page_viewer, :media => 'all' %>
+
 <div class="action-zone zone">
   <div class="wrap">
     <h2>Explore</h2>
-    <p>Show the
-      <select id="wd-main-filter">
-        <option value="recent" <%= "selected=\"true\"" if params[:main_filter] == "recent" %>><%= t("phrases.most_recent")%></option>
-        <option value="viewed" <%= "selected=\"true\"" if params[:main_filter] == "viewed" %>><%= t("phrases.most_popular")%></option>
-      </select>
-      webdocs in the category
-      <select id="wd-category-filter">
-        <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t("words.all")%></option>
-        <% Category.have_public_documents.all.each do |category|%>
-          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= "#{category.name}" %></option>  
-        <% end %>        
-      </select>
-    </p>
+    <div class="column triple of-four">
+      <p>Show the
+        <select id="wd-main-filter">
+          <option value="recent" <%= "selected=\"true\"" if params[:main_filter] == "recent" %>><%= t("phrases.most_recent")%></option>
+          <option value="viewed" <%= "selected=\"true\"" if params[:main_filter] == "viewed" %>><%= t("phrases.most_popular")%></option>
+        </select>
+        webdocs in the category
+        <select id="wd-category-filter">
+          <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t("words.all")%></option>
+          <% Category.have_public_documents.all.each do |category|%>
+            <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= "#{category.name}" %></option>  
+          <% end %>        
+        </select>
+      </p>
+    </div
+   ><div class="column last of-four">
+      <input id="wb-explore-search" class="ui-corner-all" type="text" name="wb-explore-search" placeholder="Search" />
+    </div>
   </div>
 </div>
 <div class="content">
-  <div class="wrap">
-    <%= render :partial => "viewer_list", :locals => { :documents => @public_documents } %>
-    <%= raw( will_paginate(@public_documents, :container => false) ) %>
+  <div id="explorer_content" class="wrap">
+    <div class="loading-icon"></div>
   </div>
 </div>
 <% content_for :scripts do %>
   <%= include_javascripts :page_editor %>
   <%= include_javascripts :explore %>
+
   <% if !Rails.env.production? %>
     <%= javascript_include_tag APP_CONFIG['shindig_server_base'] + "/js/core:rpc:pubsub:shindig-container.js?c=1&debug=1" %>
   <% end %>
+
   <% javascript_tag do -%>
-    <% @public_documents.each do |document| %>
-      <% # we need to remove </script> in the json otherwise it ends the containg script tag too early %>
-      <% # we preload the server cache with document content %>
-      <% cached_document = Rails.cache.fetch("#{document.cache_key}_wo_script") { document.to_json(:include => { :pages => { :include => :items} }).gsub(/<\/script>/, "</*script>") } %>
-      try {
-        WebDoc.ServerManager.cache.store(new WebDoc.Document(<%= raw cached_document.dup %>));
-      }
-      catch(e) {
-        ddd("error in doc ", e);
-      }
-    <% end %>
+    WebDoc.Application.main(function() {
+      var explore = new WebDoc.Explore('explore');
+      explore.start();
+    });
   <% end -%>
 <% end %>

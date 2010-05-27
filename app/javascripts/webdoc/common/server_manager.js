@@ -41,6 +41,9 @@ jQuery.extend(WebDoc.ServerManager, {
     }
     var pluralizedRecordClassName = recordClass.pluralizedClassName();
     var url = recordClass.rootUrl(args) + "/" + pluralizedRecordClassName;
+    if (args && args.action) {
+      url += "/" + args.action;
+    }
     if (uuid) {
       url += "/" + uuid;
     }

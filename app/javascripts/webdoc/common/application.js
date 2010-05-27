@@ -69,6 +69,7 @@ $.extend(WebDoc.Application, {
   initializeSingletons: function(singletons, callBack) {
     this._singletons = singletons;
     this._singletonsInitMap = [];
+    this._callBack = callBack;
     for (var i = 0; i < singletons.length; i++) {      
       if (singletons[i].init) {
         this._singletonsInitMap.push(false);
@@ -77,7 +78,8 @@ $.extend(WebDoc.Application, {
           if (index !== -1) {
             this._singletonsInitMap[index] = true;
           }      
-          if (jQuery.inArray(false, this._singletonsInitMap) === -1) {
+          if (jQuery.inArray(false, this._singletonsInitMap) === -1 && !this._callbackDone) {
+            this._callbackDone = true;
             callBack.call(this);
           }
         }.pBind(this));
@@ -86,12 +88,24 @@ $.extend(WebDoc.Application, {
         this._singletonsinitMap.push(true);
       }
     }
-    if (jQuery.inArray(false, this._singletonsInitMap) === -1) {
+    if (jQuery.inArray(false, this._singletonsInitMap) === -1 && !this._callbackDone) {
+      this._callbackDone = true;
       callBack.call(this);
     }
+    else {
+      setTimeout(WebDoc.Application._continue, 10000);
+    }
   },
-  
+    
   getCurrentUser: function() {
     return this.currentUser;
+  },
+  
+  _continue: function() {
+    if (jQuery.inArray(false, this._singletonsInitMap) !== -1 && !this._callbackDone) {
+      ddd("all singletons have not been initialized but we need to continue loading the app...");
+      this._callbackDone = true;
+      this._callBack.call(this);
+    }
   }
 });

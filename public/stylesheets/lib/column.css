@@ -105,8 +105,8 @@
 .eight.of-eight { margin-right: 0; }
 
 /* The absolute position method is not susceptible to rounding errors,
- * and can be forced to fill 100% height, but clearly causes problems with
- * the overflow of the container.
+ * and can be forced to fill 100% height, but clearly, being absolute,
+ * it causes problems with the overflow of the container.
  */
 
 .absolute-column {

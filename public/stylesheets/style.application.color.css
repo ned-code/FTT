@@ -175,6 +175,8 @@ header a {
 }
 
 .content .loading-icon {
+    width: 100%;
+    height: 40px;
     background-image: url('/images/loading-icon-16-greyblue.gif');
 }
 

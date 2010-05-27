@@ -9,9 +9,13 @@ WebDoc.ThemeManager = $.klass({
     WebDoc.ServerManager.getRecords(WebDoc.Theme, null, function(data) {
       if (data && data.length > 0) {
         this._defaultTheme = data[0];
-        callBack.call(this, WebDoc.ThemeManager);
       }
-    }.pBind(this), { ajaxParams: { default_theme: true }});    
+      else {
+        this._defaultTheme = null;
+      }
+      callBack.call(this, WebDoc.ThemeManager);
+            
+    }.pBind(this), { ajaxParams: { default_theme: true }, action: 'default' });    
   },   
   
   getDefaultTheme: function(callBack) {
