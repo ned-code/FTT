@@ -3,24 +3,30 @@
 <div class="action-zone zone">
   <div class="wrap">
     <h2>Explore</h2>
-    <p>Show the
-      <select id="wd-main-filter">
-        <option value="recent" <%= "selected=\"true\"" if params[:main_filter] == "recent" %>><%= t("phrases.most_recent")%></option>
-        <option value="viewed" <%= "selected=\"true\"" if params[:main_filter] == "viewed" %>><%= t("phrases.most_popular")%></option>
-      </select>
-      webdocs in the category
-      <select id="wd-category-filter">
-        <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t("words.all")%></option>
-        <% Category.have_public_documents.all.each do |category|%>
-          <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= "#{category.name}" %></option>  
-        <% end %>        
-      </select>
-    </p>
-    <!--<input id="wb-explore-search" class="ui-corner-all" type="text" name="wb-explore-search" placeholder="Search" />-->
+    <div class="column triple of-four">
+      <p>Show the
+        <select id="wd-main-filter">
+          <option value="recent" <%= "selected=\"true\"" if params[:main_filter] == "recent" %>><%= t("phrases.most_recent")%></option>
+          <option value="viewed" <%= "selected=\"true\"" if params[:main_filter] == "viewed" %>><%= t("phrases.most_popular")%></option>
+        </select>
+        webdocs in the category
+        <select id="wd-category-filter">
+          <option value="all" <%= "selected=\"true\"" if params[:category_filter] == "all" %>><%= t("words.all")%></option>
+          <% Category.have_public_documents.all.each do |category|%>
+            <option value="<%= category.id %>" <%= "selected=\"true\"" if params[:category_filter] == category.id.to_s %>><%= "#{category.name}" %></option>  
+          <% end %>        
+        </select>
+      </p>
+    </div
+   ><div class="column last of-four">
+      <input id="wb-explore-search" class="ui-corner-all" type="text" name="wb-explore-search" placeholder="Search" />
+    </div>
   </div>
 </div>
 <div class="content">
-  <div id="explorer_content" class="wrap"></div>
+  <div id="explorer_content" class="wrap">
+    <div class="loading-icon"></div>
+  </div>
 </div>
 <% content_for :scripts do %>
   <%= include_javascripts :page_editor %>

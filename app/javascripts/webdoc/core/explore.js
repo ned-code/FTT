@@ -15,8 +15,8 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
 
     this.currentListingPageId = 1;
 
-    this.domNode = jQuery('<ul/>').attr('id', 'webdoc').addClass('webdoc-viewer-index').addClass('index');
-    $('#explorer_content').html(this.domNode);
+    this.listNode = jQuery('<ul/>').attr('id', 'webdoc').addClass('webdoc-viewer-index').addClass('index');
+    this.domNode = $('#explorer_content').append(this.listNode);
 
     this.mainFilterDomNode = jQuery('#wd-main-filter');
     this.categoryFilterDomNode = jQuery('#wd-category-filter');
@@ -31,11 +31,11 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     var allDomainsParts = document.domain.split(".");
     if (allDomainsParts.length > 2) {
       document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
-    } 
+    }
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.Application.initializeSingletons([WebDoc.ThemeManager], function() {  
       this._refreshViewers();
-  
+    
       jQuery(document)
       .delegate('a[href="#prev-page"]', 'click', function(e){
         $("#"+$(this).attr('data-webdoc-document-id')).data('object').prevPage();
@@ -48,7 +48,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
       .delegate('.webdoc-viewer-container', 'click', function(e){
         $("#"+$(this).attr('data-webdoc-document-id')).data('object').open();
       });
-  
+    
       if(this.mode === 'explore') {
         this.mainFilterDomNode.bind('change', this._refreshViewers.pBind(this));
         this.categoryFilterDomNode.bind('change', this._refreshViewers.pBind(this));
@@ -80,7 +80,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
       this.currentListingPageId = 1;
     }
     
-    this.domNode.html('');
+    this.listNode.html('');
     this.domNode.addClass('loading');
 
     WebDoc.ServerManager.request('/documents/'+this.mode+'.json', function(data) {
@@ -176,7 +176,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     documentDomNode.append(viewerContainerDomNode);
     documentDomNode.append(viewerDetailsDomNode);
 
-    this.domNode.append(documentDomNode);
+    this.listNode.append(documentDomNode);
   },
 
   _refreshPagination: function(pagination) {
@@ -198,7 +198,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
           event.preventDefault();
         }.pBind(this)).appendTo(paginationWrap);
       }
-      this.domNode.append(paginationWrap);
+      this.listNode.append(paginationWrap);
     }
   }
 

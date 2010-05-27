@@ -4,15 +4,19 @@
 
 %div.action-zone.zone
   %div.wrap
-    %a#wb-create-document-button.add-button.button= t('.buttons.new_document')
-    -#%input#wb-documents-search.ui-corner-all{ :type => "text", :name => "wb-documents-search", :placeholder => "Search" }
-    %ul.tabs.index
-      %li>
-        %ul.filter-bar.bar.index.state-public-hide{ :style => "float: right;" }
-          %li>
-            %a#wb-document-filter-owned-by-me.current.state-filter-tab{ :href => "#filter-author", :'data-webdoc-documents-filter-type' => 'creator' }= t('.created_by_me')
-          %li>
-            %a#wb-document-filter-editor-rights.state-filter-tab{ :href => "#filter-editable", :'data-webdoc-documents-filter-type' => 'editor' }= t('.editor_rights')
+    %div.column.double.of-four>
+      %a#wb-create-document-button.add-button.button= t('.buttons.new_document')
+    %div.column.of-four>
+      %ul.tabs.index
+        %li>
+          %ul.filter-bar.bar.index.state-public-hide{ :style => "float: right;" }
+            %li>
+              %a#wb-document-filter-owned-by-me.current.state-filter-tab{ :href => "#filter-author", :'data-webdoc-documents-filter-type' => 'creator' }= t('.created_by_me')
+            %li>
+              %a#wb-document-filter-editor-rights.state-filter-tab{ :href => "#filter-editable", :'data-webdoc-documents-filter-type' => 'editor' }= t('.editor_rights')
+    %div.column.last.of-four
+      %input#wb-documents-search.ui-corner-all{ :type => "text", :name => "wb-documents-search", :placeholder => "Search" }
+    
 %div.content
   %div.wrap
     %div#wb-document-list-container.column.triple.of-four
