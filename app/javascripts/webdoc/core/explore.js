@@ -8,8 +8,10 @@ WebDoc.application = {};
 
 WebDoc.Explore = $.klass(WebDoc.Application,{
 
-  initialize: function($super) {
+  initialize: function($super, mode) {
     $super();
+
+    this.mode = mode;
 
     this.currentListingPageId = 1;
 
@@ -41,9 +43,11 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
       $("#"+$(this).attr('data-webdoc-document-id')).data('object').open();
     });
 
-    this.mainFilterDomNode.bind('change', this._refreshViewers.pBind(this));
-    this.categoryFilterDomNode.bind('change', this._refreshViewers.pBind(this));
-    this.searchDomNode.bind('keyup', this._refreshViewers.pBind(this));
+    if(this.mode === 'explore') {
+      this.mainFilterDomNode.bind('change', this._refreshViewers.pBind(this));
+      this.categoryFilterDomNode.bind('change', this._refreshViewers.pBind(this));
+      this.searchDomNode.bind('keyup', this._refreshViewers.pBind(this));
+    }
   },
   
   _incrementPageId: function(pageIncrement) {
@@ -67,7 +71,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     this.domNode.html('');
     this.domNode.addClass('loading');
 
-    WebDoc.ServerManager.request('/documents/explore.json', function(data) {
+    WebDoc.ServerManager.request('/documents/'+this.mode+'.json', function(data) {
       this._createViewWithDocuments(data.documents);
       this._refreshPagination(data.pagination);
       this.domNode.removeClass('loading');

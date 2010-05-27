@@ -78,7 +78,33 @@ class DocumentsController < ApplicationController
   
   #Get /documents/featured
   def featured
-    @featured_documents = Document.all_featured_paginated
+    respond_to do |format|
+      format.html do
+        set_return_to
+      end
+      format.json do
+        per_page = 8
+        featured_documents = Document.all_featured_paginated
+        docs_json = featured_documents.map do |doc|
+          ActiveSupport::JSON.decode(
+                  doc.to_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes)
+          )
+        end
+
+        render :json => {
+          :documents => docs_json,
+          :pagination => {
+            :per_page => per_page,
+            :current_page => featured_documents.current_page,
+            :total_pages => featured_documents.total_pages,
+            :next_page => featured_documents.next_page,
+            :previous_page => featured_documents.previous_page,
+            :total => featured_documents.total_entries
+          }
+        }
+      end
+    end
+
   end
   
   # GET /documents/:id
