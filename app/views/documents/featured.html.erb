@@ -1,8 +1,7 @@
+<%= include_stylesheets :page_viewer, :media => 'all' %>
+
 <div class="content">
-  <div class="wrap">
-    <%= render :partial => "viewer_list", :locals => { :documents => @featured_documents } %>
-    <%= raw( will_paginate(@featured_documents, :container => false) ) %>
-  </div>
+  <div id="explorer_content" class="wrap"></div>
 </div>
 <% content_for :scripts do %>
   <%= include_javascripts :page_editor %>
@@ -11,16 +10,9 @@
     <%= javascript_include_tag APP_CONFIG['shindig_server_base'] + "/js/core:rpc:pubsub:shindig-container.js?c=1&debug=1" %>
   <% end %>
   <% javascript_tag do -%>
-    <% @featured_documents.each do |document| %>
-      <% # we need to remove </script> in the json otherwise it ends the containg script tag too early %>
-      <% # we preload the server cache with document content %>
-      <% cached_document = Rails.cache.fetch("#{document.cache_key}_wo_script") { document.to_json(:include => { :pages => { :include => :items} }).gsub(/<\/script>/, "</*script>") } %>
-      try {
-        WebDoc.ServerManager.cache.store(new WebDoc.Document(<%= raw cached_document.dup %>));
-      }
-      catch(e) {
-        ddd("error in doc ", e);
-      }
-    <% end %>
+    WebDoc.Application.main(function() {
+      var explore = new WebDoc.Explore('featured');
+      explore.start();
+    });
   <% end -%>
 <% end %>
