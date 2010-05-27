@@ -6,7 +6,7 @@
     <% if user_signed_in? %>
     <ul class="navbar index">
       <li>
-        <a href="/" <% if params[:controller]=='documents' %>class="current"<% end %>>home</a>
+        <a href="/" <% if params[:controller]=='documents' && params[:action]=='index' %>class="current"<% end %>>home</a>
       </li
       >
       <li>
