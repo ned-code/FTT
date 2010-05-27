@@ -394,18 +394,26 @@ WebDoc.Item = $.klass(WebDoc.Record,
         
     var pattern_url = /[A-Za-z0-9\.-]{3,}\.[A-Za-z]+/;
     var pattern_has_protocole = /^(ftp|http|https):\/\/?(\w*)/;
-
+	  var consolidateSrc = "";
+	
     if (src.match(pattern_url)) {
       if (src.match(pattern_has_protocole)) {
-        return src;
+		    consolidateSrc = src;
       }
       else {
-        return "http://" + src;
+		    consolidateSrc = "http://" + src;
       }
-
+	    if(jQuery.inArray(consolidateSrc, WebDoc.IframeSrcBlacklist) == -1){
+	      return consolidateSrc;
+	    }
+	    else {
+	      ddd('Src in blacklist');
+	      return false;
+	    }
+	    
     }
     else {
-      return "";
+      return false;
     }
   }
 });
