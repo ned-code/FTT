@@ -37,7 +37,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     WebDoc.application.documentEditor = this;
     WebDoc.application.undoManager = new WebDoc.UndoManager();
     WebDoc.application.accessController = new WebDoc.DocumentCollaborationController();
-    WebDoc.application.categoriesManager = new WebDoc.DocumentCategoriesManager();
     WebDoc.application.shareController = new WebDoc.DocumentShareController();
 
     infoDialogNode = $("#wb-new-form");
