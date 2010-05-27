@@ -1,6 +1,4 @@
 
-//= require <mtools/record>
-
 WebDoc.InspectorPaneView = $.klass({
   initialize: function(title, content, appPane) {
     this.appPane = appPane; // can be null/undefined if this is an inspector pane not related to an app
@@ -22,12 +20,28 @@ WebDoc.InspectorPaneView = $.klass({
     return !!this.appPane;
   },
   
-  build: function(title, content) {
-    this.domNode.append($('<div>').addClass('box').html('<div class="titlebar"><span class="attached_indicator"></span>' +
-    '<a href="#" class="hide"><span>hide</span></a>' +
-    '<strong class="title">' + title + '</strong>' +
-    '<a href="#" class="arrow right" title="Send to sidebar"><span>Send to sidebar</span></a>' +
-    '</div>' + content));
+  build: function(title, content) { //content can be either a (html) string or element
+    
+    var attachedIndicator = $('<span class="attached_indicator">');
+    var closeLink = $('<a href="" class="hide"><span>hide</span></a>');
+    var sendToSidebarLink = $('<a href="" class="arrow right" title="Send to sidebar"><span>Send to sidebar</span></a>');
+    closeLink.click(this.hide.pBind(this));
+    sendToSidebarLink.click(this.sendToSidebar.pBind(this));
+    
+    var titleBar = $('<div class="titlebar">')
+    .append(attachedIndicator)
+    .append(closeLink)
+    .append('<strong class="title">' + title + '</strong>')
+    .append(sendToSidebarLink);
+    this.domNode.append($('<div class="box">').append(titleBar).append(content));
+    
+    // this.domNode.append($('<div>').addClass('box').html('<div class="titlebar"><span class="attached_indicator"></span>' +
+    // '<a href="#" class="hide"><span>hide</span></a>' +
+    // '<strong class="title">' + title + '</strong>' +
+    // '<a href="#" class="arrow right" title="Send to sidebar"><span>Send to sidebar</span></a>' +
+    // '</div>' + content));
+    
+    // Make the pane draggable
     setTimeout(function(){
       this.domNode.draggable({
         // containment: "parent",
@@ -44,19 +58,23 @@ WebDoc.InspectorPaneView = $.klass({
         }.pBind(this)
       });
       
-    }.pBind(this), 1000)
+    }.pBind(this), 100)
   },
-
+  
   show: function() {
     this.domNode.show();
   },
-
+  
   hide: function() {
     this.domNode.hide();
   },
   
   remove: function() {
     this.domNode.remove();
+  },
+  
+  sendToSidebar: function() {
+    ddd("Send to sidebar (TODO)")
   }
   
 });

@@ -1,10 +1,13 @@
+var poll = null;
+
 //Note: use registerOnLoadHandler instead of $(document).ready(function() {}); ($(document).ready may be called too early?)
 gadgets.util.registerOnLoadHandler(function() {
   
-  var poll = new Poll();
+  poll = new Poll();
   
-  gadgets.window.adjustHeight();
+  // gadgets.window.adjustHeight();
   
+  WebDoc.appEnteredPreviewMode();
 });
 
 WebDoc.appInit = function() {
@@ -12,9 +15,23 @@ WebDoc.appInit = function() {
   //for multiple panes use: WebDoc.registerInspectorPanes(["inspector-settings", ...])
 }
 
+WebDoc.appEnteredEditMode = function() {
+  poll.enableVoteButton(false);
+  poll.iButton.show();
+};
+
+WebDoc.appEnteredPreviewMode = function() {
+  poll.enableVoteButton(true);
+  poll.iButton.hide();
+};
+
+
 Poll = $.klass({
   initialize: function() {
-    this.wrapper = $('.poll_wrap');
+    this.questionEl = $('.question');
+    this.answersForm = $('form.answers');
+    this.voteButton = $('button.submit');
+    this.iButton = $('.show_inspector_pane');
     
     this.questionData = "Question?";
     this.answersData = [
@@ -50,13 +67,12 @@ Poll = $.klass({
   },
   
   build: function() {
-    var questionEl = $('<h2>').addClass('question title editable').html(this.questionData);
-    this.wrapper.append(questionEl);
+    this.questionEl.html(this.questionData);
     
-    $.each(this.answersData, function(index, answerData){
+    $.each(this.answersData.reverse(), function(index, answerData){
       var answerWrap = this.buildEntry("radio", answerData, index);
       
-      this.wrapper.append(answerWrap);
+      this.answersForm.prepend(answerWrap);
       this.answers.push(answerWrap);
     }.pBind(this));
   },
@@ -83,8 +99,6 @@ Poll = $.klass({
   },
   
   setMultipleSelections: function(multiple) {
-    // this.wrapper.toggle();
-    
     var type = eval(multiple) ? 'checkbox' : 'radio';
 
     $.each(this.answers, function(index, answer){
@@ -98,6 +112,16 @@ Poll = $.klass({
     $('.poll').parents('iframe').removeAttr('height').css({ height: $('.poll').height()+20 });
   },
   
+  enableVoteButton: function(flag) {
+    if (flag) {
+      this.voteButton.removeAttr('disabled');
+      this.voteButton.removeClass('disabled');
+    }
+    else {
+      this.voteButton.attr('disabled', 'disabled');
+      this.voteButton.addClass('disabled');
+    }
+  }
 
 });
 

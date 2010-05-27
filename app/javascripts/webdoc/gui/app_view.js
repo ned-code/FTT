@@ -20,10 +20,6 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
     .addClass("item-app")
     .delegate('.item-placeholder', 'submit', this._makeSetGadgetUrlEventHandler());
     
-    this.itemDomNode.css({
-      padding: "15px"
-    });
-    
     this.inspectorPaneViews = [];
   },
   
