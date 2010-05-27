@@ -291,7 +291,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   setSrc: function(newSrc) {
-    this.data.data.src = this._consolidateSrc(newSrc);
+    this.data.data.src = newSrc;
     this.save();
     this.fireDomNodeChanged();
     WebDoc.application.inspectorController.refreshSubInspectors();
@@ -388,35 +388,37 @@ WebDoc.Item = $.klass(WebDoc.Record,
   _endsWith: function(s, pattern) {
     var d = s.length - pattern.length;
     return d >= 0 && s.lastIndexOf(pattern) === d;
-  },
-  
-  _consolidateSrc: function(src) {
-        
-    var pattern_url = /[A-Za-z0-9\.-]{3,}\.[A-Za-z]+/;
-    var pattern_has_protocole = /^(ftp|http|https):\/\/?(\w*)/;
-	  var consolidateSrc = "";
-	
-    if (src.match(pattern_url)) {
-      if (src.match(pattern_has_protocole)) {
-		    consolidateSrc = src;
-      }
-      else {
-		    consolidateSrc = "http://" + src;
-      }
-	    if(jQuery.inArray(consolidateSrc, WebDoc.IframeSrcBlacklist) == -1){
-	      return consolidateSrc;
-	    }
-	    else {
-	      ddd('Src in blacklist');
-	      return false;
-	    }
-	    
-    }
-    else {
-      return false;
-    }
   }
-});
+}
+  
+//   _consolidateSrc: function(src) {
+//         
+//     var pattern_url = /[A-Za-z0-9\.-]{3,}\.[A-Za-z]+/;
+//     var pattern_has_protocole = /^(ftp|http|https):\/\/?(\w*)/;
+//    var consolidateSrc = "";
+//  
+//     if (src.match(pattern_url)) {
+//       if (src.match(pattern_has_protocole)) {
+//        consolidateSrc = src;
+//       }
+//       else {
+//        consolidateSrc = "http://" + src;
+//       }
+//      if(jQuery.inArray(consolidateSrc, WebDoc.IframeSrcBlacklist) == -1){
+//        return consolidateSrc;
+//      }
+//      else {
+//        ddd('Src in blacklist');
+//        return false;
+//      }
+//      
+//     }
+//     else {
+//       return false;
+//     }
+//   }
+// }
+);
 
 $.extend(WebDoc.Item, {
   className: function() {

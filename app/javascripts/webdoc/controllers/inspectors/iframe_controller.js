@@ -18,9 +18,29 @@ WebDoc.IframeController = $.klass({
     }
   },
 
-  updateSrc: function(event) {
-    var item = WebDoc.application.boardController.selection()[0].item;
-    item.setSrc( $("#property-iframe-src")[0].value );
+  updateSrc: function(e) {
+    var input = jQuery(e.target);
+    
+    input.validate({
+      pass: function( value ){
+        var item = WebDoc.application.boardController.selection()[0].item;
+        var pattern_has_protocole = /^(ftp|http|https):\/\//;
+        var consolidateSrc = '';
+        if (value.match(pattern_has_protocole)) {
+  		    consolidateSrc = value;
+        }
+        else {
+  		    consolidateSrc = "http://" + value;
+        }
+                
+        item.setSrc( consolidateSrc );
+      },
+      fail: function( value, error ){
+        ddd(error);
+      }
+    });
+    
+
   }
   
 });
