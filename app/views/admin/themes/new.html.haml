@@ -1,0 +1,11 @@
+%h1= t('.title')
+
+- semantic_form_for @theme, :url => admin_themes_path, :html => { :enctype => 'multipart/form-data' } do |f|
+  - f.inputs do
+    = f.input :file, :as => :file
+    = f.input :is_default, :label => "Set as default"
+
+  - f.buttons do
+    = f.commit_button t('upload')
+
+= link_to t('back'), admin_themes_path
