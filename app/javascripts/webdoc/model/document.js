@@ -88,7 +88,7 @@ WebDoc.Document = $.klass(WebDoc.Record, {
       WebDoc.ServerManager.getRecords(WebDoc.Theme, this.data.theme_id, callBack);
     }
     else {
-      callBack.call(this, null);
+      callBack.call(this, [WebDoc.ThemeManager.getInstance().getDefaultTheme()]);
     }
   },
     
