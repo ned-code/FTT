@@ -139,16 +139,14 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   },
   
   loadPageId: function(pageId, force) {
-    ddd('[PageEditor] loadPageId');
-    if (!pageId) {
+    if (!pageId || (!WebDoc.UUID.isUUID(pageId) && !pageId.match(/^\d+$/))) {
       pageId = "1";
     }
     
-    ddd("load page id " + pageId);
+    ddd("[PageEditor] load page id " + pageId);
     
     var pageToLoad = this.currentDocument.findPageWithUuidOrPosition(pageId);
-    ddd("found page");
-    ddd(pageToLoad);
+    ddd("[PageEditor] found page", pageToLoad);
     // if (pageToLoad && pageToLoad.uuid() !== pageId) {
     if(pageToLoad) {
       this.loadPage(pageToLoad, force);

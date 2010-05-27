@@ -56,6 +56,21 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.delegate.activateToolbar(true);
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool); 
     var textViewToExit = this.textView; 
+    if (textView.itemDomNode.hasClass("empty")) {
+      var placeholderNode = jQuery(textView.item.getInnerHtmlPlaceholder());
+      if (placeholderNode.length) {
+        if (placeholderNode[0].nodeName.match(/h[1-6]/i)) {
+          this.delegate.editorExec('format', placeholderNode[0].nodeName);    
+        }
+        else if (placeholderNode[0].nodeName.match(/ul/i)) {
+          this.delegate.editorExec('insertUnorderedList');
+        }
+        else if (placeholderNode[0].nodeName.match(/ol/i)) {
+          this.delegate.editorExec('insertOrderedList');
+        }        
+      }
+      
+    }
     WebDoc.application.undoManager.registerUndo(function() {
       if (WebDoc.application.boardController.editingItem() === textViewToExit) {
           WebDoc.application.boardController.stopEditing();

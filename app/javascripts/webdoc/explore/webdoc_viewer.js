@@ -34,7 +34,7 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
       //check if style is already loaded
       var styleElement = jQuery('#' + newClass);
       if (styleElement.length === 0) {
-        jQuery('head').append('<link type="text/css" rel="stylesheet" media="all" href="' + stylesheetUrl + '">');  
+        jQuery('head').append('<link id="' + newClass + '" type="text/css" rel="stylesheet" media="all" href="' + stylesheetUrl + '">');  
       }
       this._containerNode.addClass(newClass);     
    
@@ -103,19 +103,11 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
 
 $.extend(WebDoc.WebdocViewer, {
   showViewers: function() {
-    // change domain to be able to synch with apps
-    var allDomainsParts = document.domain.split(".");
-    if (allDomainsParts.length > 2) {
-      document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
-    } 
-    WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
-    WebDoc.Application.initializeSingletons([WebDoc.ThemeManager], function() {
-      var allViewerContainers = jQuery(".webdoc-viewer-container");
-      for (var i = 0; i < allViewerContainers.length; i++) {
-        var aViewerContainer = jQuery(allViewerContainers[i]);
-        var viewer = new WebDoc.WebdocViewer(aViewerContainer);
-        viewer.load(aViewerContainer.id());
-      }
-    });
+    var allViewerContainers = jQuery(".webdoc-viewer-container");
+    for (var i = 0; i < allViewerContainers.length; i++) {
+      var aViewerContainer = jQuery(allViewerContainers[i]);
+      var viewer = new WebDoc.WebdocViewer(aViewerContainer);
+      viewer.load(aViewerContainer.id());
+    }
   }
 });

@@ -56,9 +56,10 @@ class DocumentsController < ApplicationController
         public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:query], params[:page], per_page)
 
         docs_json = public_documents.map do |doc|
-          ActiveSupport::JSON.decode(
-                  doc.to_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes)
-          )
+          cached_doc = Rails.cache.fetch("#{doc.cache_key}_explore") do
+            doc.to_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes).gsub(/<\/script>/, "</*script>")
+          end
+          ActiveSupport::JSON.decode(cached_doc)
         end
         
         render :json => {
@@ -86,9 +87,10 @@ class DocumentsController < ApplicationController
         per_page = 8
         featured_documents = Document.all_featured_paginated
         docs_json = featured_documents.map do |doc|
-          ActiveSupport::JSON.decode(
-                  doc.to_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes)
-          )
+          cached_doc = Rails.cache.fetch("#{doc.cache_key}_explore") do
+            doc.to_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes).gsub(/<\/script>/, "</*script>")
+          end
+          ActiveSupport::JSON.decode(cached_doc)
         end
 
         render :json => {

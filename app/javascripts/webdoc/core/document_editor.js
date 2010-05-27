@@ -37,7 +37,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     WebDoc.application.documentEditor = this;
     WebDoc.application.undoManager = new WebDoc.UndoManager();
     WebDoc.application.accessController = new WebDoc.DocumentCollaborationController();
-    WebDoc.application.categoriesManager = new WebDoc.DocumentCategoriesManager();
     WebDoc.application.shareController = new WebDoc.DocumentShareController();
 
     infoDialogNode = $("#wb-new-form");
@@ -72,7 +71,12 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
       $('body')
       .delegate( "a[href='#filter-author']",  'click', this.searchDocuments.pBind(this) )
       .delegate( "a[href='#filter-editable']",'click', this.searchDocuments.pBind(this) );
-      this.queryDomNode.bind('keyup', this.searchDocuments.pBind(this));
+      this.queryDomNode.bind('keypress', function(e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if(code == 13) {
+          this.searchDocuments();
+        }
+      }.pBind(this));
 
       this.filter = new WebDoc.DocumentDateFilter();
 
@@ -259,11 +263,12 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   },
 
   searchDocuments: function(e) {
-
-    var node = $( e.currentTarget );
-    if ( node.hasClass("state-filter-tab") ) {
-      jQuery(".state-filter-tab").removeClass('current');
-      node.addClass('current');
+    if(e) {
+      var node = $( e.currentTarget );
+      if ( node.hasClass("state-filter-tab") ) {
+        jQuery(".state-filter-tab").removeClass('current');
+        node.addClass('current');
+      }  
     }
 
     this.currentListingPageId = 1;

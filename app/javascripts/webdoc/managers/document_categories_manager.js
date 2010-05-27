@@ -18,8 +18,11 @@ WebDoc.DocumentCategoriesManager = $.klass({
     {
       if (data.length !== 0) {
         this._documentCategories = data;
-        this._callBack.call(this, WebDoc.DocumentCategoriesManager);
       }
+      else {
+        this._documentCategories = [];
+      }
+      this._callBack.call(this, WebDoc.DocumentCategoriesManager);      
     }.pBind(this));
   }
 });
