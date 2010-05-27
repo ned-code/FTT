@@ -7,13 +7,12 @@
   <link rel="icon" type="image/png" href="images/favicon.png" />
   
   <style type="text/css" media="screen, projection">
-  
+      
       @import url('../../stylesheets/reset.css');
       @import url('../../stylesheets/style.css');
       @import url('css/typography.css');
-      @import url('css/layouts.css');
       @import url('css/styles.css');
-  
+      
       html {
           font-size: 100.01%;
       }
@@ -22,29 +21,30 @@
           padding: 0 0 0 0; margin: 0;
       }
       .test {
-        margin: 0;
+        margin: 0 0 1em 0;
         padding: 0 32px;
       }
       .color {
-        width: 128px; height: 128px;
+        width: 64px; height: 64px;
         float: left;
         -webkit-box-shadow: 0 0 40px hsla(208, 6%, 25%, 0.6);
         -moz-box-shadow:    0 0 40px hsla(208, 6%, 25%, 0.6);
         box-shadow:         0 0 40px hsla(208, 6%, 25%, 0.6);
-      }
-      
-      .webdoc>div {
-        position: absolute;
-        background: #f6f6f6;
+        overflow: hidden;
       }
       
       .square {
         font-family: Arial;
-        font-size: 1278px;
+        font-size: 639px;
         position: relative;
-        top: -1050px;
-        left: -116px;
+        top: -524px;
+        left: -58px;
         vertical-align: baseline;
+      }
+      
+      img {
+        width: 64px;
+        height: 64px;
       }
   </style>
 </head>
@@ -52,47 +52,47 @@
 <body>
 
   <div class="test clear">
-  <h1>Colors</h1>
-  <div class="color theme_color_1"><span class="square">.</span></div>
-  <div class="color theme_color_2"><span class="square">.</span></div>
-  <div class="color theme_color_3"><span class="square">.</span></div>
-  <div class="color theme_color_4"><span class="square">.</span></div>
-  <div class="color theme_color_5"><span class="square">.</span></div>
-  <div class="color theme_color_6"><span class="square">.</span></div>
-  <div class="color theme_color_7"><span class="square">.</span></div>
-  <div class="color theme_color_8"><span class="square">.</span></div>
-  <div class="color theme_color_9"><span class="square">.</span></div>
-  <div class="color theme_color_10"><span class="square">.</span></div>
-  <div class="color theme_color_11"><span class="square">.</span></div>
-  <div class="color theme_color_12"><span class="square">.</span></div>
-  <div class="color theme_color_13"><span class="square">.</span></div>
-  <div class="color theme_color_14"><span class="square">.</span></div>
+    <h3>Colors</h3>
+    <div class="color theme_color_1"><span class="square">.</span></div>
+    <div class="color theme_color_2"><span class="square">.</span></div>
+    <div class="color theme_color_3"><span class="square">.</span></div>
+    <div class="color theme_color_4"><span class="square">.</span></div>
+    <div class="color theme_color_5"><span class="square">.</span></div>
+    <div class="color theme_color_6"><span class="square">.</span></div>
+    <div class="color theme_color_7"><span class="square">.</span></div>
+    <div class="color theme_color_8"><span class="square">.</span></div>
+    <div class="color theme_color_9"><span class="square">.</span></div>
+    <div class="color theme_color_10"><span class="square">.</span></div>
+    <div class="color theme_color_11"><span class="square">.</span></div>
+    <div class="color theme_color_12"><span class="square">.</span></div>
+    <div class="color theme_color_13"><span class="square">.</span></div>
+    <div class="color theme_color_14"><span class="square">.</span></div>
   </div>
   
   <div class="test clear">
-  <h1>Backgrounds</h1>
-  <div class="color theme_background_1"></div>
-  <div class="color theme_background_2"></div>
-  <div class="color theme_background_3"></div>
-  <div class="color theme_background_4"></div>
-  <div class="color theme_background_5"></div>
-  <div class="color theme_background_6"></div>
-  <div class="color theme_background_7"></div>
+    <h3>Backgrounds</h3>
+    <div class="color theme_background_1"></div>
+    <div class="color theme_background_2"></div>
+    <div class="color theme_background_3"></div>
+    <div class="color theme_background_4"></div>
+    <div class="color theme_background_5"></div>
+    <div class="color theme_background_6"></div>
+    <div class="color theme_background_7"></div>
   </div>
   
   <div class="test">
-  <h1>Borders</h1>
-  <img class="theme_border_1" src="images/theme_thumb.png" />
-  <img class="theme_border_2" src="images/theme_thumb.png" />
-  <img class="theme_border_3" src="images/theme_thumb.png" />
-  <img class="theme_border_4" src="images/theme_thumb.png" />
-  <img class="theme_border_5" src="images/theme_thumb.png" />
-  <img class="theme_border_6" src="images/theme_thumb.png" />
-  <img class="theme_border_7" src="images/theme_thumb.png" />
+    <h3>Borders</h3>
+    <img class="theme_border_1" src="images/theme_thumb.png" />
+    <img class="theme_border_2" src="images/theme_thumb.png" />
+    <img class="theme_border_3" src="images/theme_thumb.png" />
+    <img class="theme_border_4" src="images/theme_thumb.png" />
+    <img class="theme_border_5" src="images/theme_thumb.png" />
+    <img class="theme_border_6" src="images/theme_thumb.png" />
+    <img class="theme_border_7" src="images/theme_thumb.png" />
   </div>
   
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-  <script>
+  <script type="text/javascript">
     window.onload = function() {
       var webdoc = window.parent;
       
