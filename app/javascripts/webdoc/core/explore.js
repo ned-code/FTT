@@ -27,27 +27,39 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
 
   start: function() {
     ddd("[explore] start");
-
-    this._refreshViewers();
-
-    jQuery(document)
-    .delegate('a[href="#prev-page"]', 'click', function(e){
-      $("#"+$(this).attr('data-webdoc-document-id')).data('object').prevPage();
-      e.preventDefault();
-    })
-    .delegate('a[href="#next-page"]', 'click', function(e){
-      $("#"+$(this).attr('data-webdoc-document-id')).data('object').nextPage();
-      e.preventDefault();
-    })
-    .delegate('.webdoc-viewer-container', 'click', function(e){
-      $("#"+$(this).attr('data-webdoc-document-id')).data('object').open();
-    });
-
-    if(this.mode === 'explore') {
-      this.mainFilterDomNode.bind('change', this._refreshViewers.pBind(this));
-      this.categoryFilterDomNode.bind('change', this._refreshViewers.pBind(this));
-      this.searchDomNode.bind('keyup', this._refreshViewers.pBind(this));
-    }
+    // change domain to be able to synch with apps
+    var allDomainsParts = document.domain.split(".");
+    if (allDomainsParts.length > 2) {
+      document.domain = allDomainsParts[allDomainsParts.length - 2] + "." + allDomainsParts[allDomainsParts.length - 1];
+    } 
+    WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
+    WebDoc.Application.initializeSingletons([WebDoc.ThemeManager], function() {  
+      this._refreshViewers();
+  
+      jQuery(document)
+      .delegate('a[href="#prev-page"]', 'click', function(e){
+        $("#"+$(this).attr('data-webdoc-document-id')).data('object').prevPage();
+        e.preventDefault();
+      })
+      .delegate('a[href="#next-page"]', 'click', function(e){
+        $("#"+$(this).attr('data-webdoc-document-id')).data('object').nextPage();
+        e.preventDefault();
+      })
+      .delegate('.webdoc-viewer-container', 'click', function(e){
+        $("#"+$(this).attr('data-webdoc-document-id')).data('object').open();
+      });
+  
+      if(this.mode === 'explore') {
+        this.mainFilterDomNode.bind('change', this._refreshViewers.pBind(this));
+        this.categoryFilterDomNode.bind('change', this._refreshViewers.pBind(this));
+        this.searchDomNode.bind('keypress', function(e) {
+          var code = (e.keyCode ? e.keyCode : e.which);
+          if(code == 13) {
+            this._refreshViewers();
+          }
+        }.pBind(this));  
+      }
+    }.pBind(this));
   },
   
   _incrementPageId: function(pageIncrement) {
@@ -90,8 +102,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
   _createViewWithDocuments: function(documents, pagination) {
     ddd("[explore] create view with documents");
 
-    var i = documents.length;
-    while(i--) {
+    for(i=0; i<documents.length; i+=1) {
       var document = new WebDoc.Document(documents[i]);
       this._createViewForDocument(document);
     }
@@ -145,7 +156,6 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
             +document.data.views_count+' times');
 
     if(this.categoryFilterDomNode.val() === 'all' && document.data.extra_attributes.category_name) {
-      ddd('ici');
       viewerDetailsDomNode
       .append(' ( ')
       .append(

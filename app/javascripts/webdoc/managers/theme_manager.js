@@ -11,7 +11,7 @@ WebDoc.ThemeManager = $.klass({
         this._defaultTheme = data[0];
         callBack.call(this, WebDoc.ThemeManager);
       }
-    }.pBind(this), { ajaxParams: { default_theme: true }});    
+    }.pBind(this), { ajaxParams: { default_theme: true }, action: 'default' });    
   },   
   
   getDefaultTheme: function(callBack) {

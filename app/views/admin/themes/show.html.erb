@@ -9,6 +9,8 @@
     <li>Author: <%= @theme.author %></li>
   <% end %>
   <li>Versions: <%= @theme.version %></li>
+  <li>Default: <%= @theme.is_default ? "Yes" : "No" %></li>
+  
   <% if @theme.ancestor.present? %>
     <li>Ancestor theme: <%= link_to(@theme.ancestor.id, admin_theme_path(@theme.ancestor)) %></li>
   <% end %>
