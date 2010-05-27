@@ -88,7 +88,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
 
     var i = documents.length;
     while(i--) {
-      var document = documents[i];
+      var document = new WebDoc.Document(documents[i]);
       this._createViewForDocument(document);
     }
 
@@ -105,7 +105,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     var previousButton = jQuery('<a />')
     .attr('href', '#prev-page')
     .addClass('button')
-    .attr('data-webdoc-document-id', document.uuid)
+    .attr('data-webdoc-document-id', document.data.uuid)
     .attr('title', 'previous page')
     .html('&lt;');
     buttonGroupDomNode.append(previousButton);
@@ -113,7 +113,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     var nextButton = jQuery('<a />')
     .attr('href', '#next-page')
     .addClass('button')
-    .attr('data-webdoc-document-id', document.uuid)
+    .attr('data-webdoc-document-id', document.data.uuid)
     .attr('title', 'next page')
     .html('&gt;');
     buttonGroupDomNode.append(nextButton);
@@ -121,8 +121,8 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     var titleDomNode = jQuery('<li />');
     var titleLinkDomNode = $('<a />')
     .addClass('webdoc-viewer-title')
-    .attr('href', '/documents/'+document.uuid)
-    .append($('<h4 />').html(document.title));
+    .attr('href', '/documents/'+document.data.uuid)
+    .append($('<h4 />').html(document.data.title));
     titleDomNode.append(titleLinkDomNode);
 
     viewerControlsDomNode.append(buttonGroupDomNode);
@@ -130,22 +130,25 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
 
     var viewerContainerDomNode = $('<div />')
     .addClass('webdoc-viewer-container')
-    .attr('data-webdoc-document-id', document.uuid)
-    .attr('id', document.uuid);
+    .attr('data-webdoc-document-id', document.data.uuid)
+    .attr('id', document.data.uuid);
 
     var viewerDetailsDomNode = $('<p />')
     .addClass('webdoc-viewer-details')
-    .append('Created by '+document.creator_first_name+' '+document.relative_created_at+' and viewed '+document.views_count+' times');
+    .append('Created by '
+            +document.data.extra_attributes.creator_first_name+' '
+            +document.data.extra_attributes.relative_created_at+' and viewed '
+            +document.data.views_count+' times');
 
-    if(this.categoryFilterDomNode.val() === 'all' && document.category_name) {
+    if(this.categoryFilterDomNode.val() === 'all' && document.data.extra_attributes.category_name) {
       ddd('ici');
       viewerDetailsDomNode
       .append(' ( ')
       .append(
         $('<a />')
         .attr('href', '#')
-        .text(document.category_name)
-        .attr('data-wd-category-id', document.category_id)
+        .text(document.data.extra_attributes.category_name)
+        .attr('data-wd-category-id', document.data.category_id)
         .bind('click', function(e) {
           var category_id = e.currentTarget.getAttribute('data-wd-category-id');
           this.categoryFilterDomNode.val(category_id);

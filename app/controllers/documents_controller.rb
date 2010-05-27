@@ -53,17 +53,15 @@ class DocumentsController < ApplicationController
       format.json do
         per_page = 8
         public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:query], params[:page], per_page)
+
+        docs_json = public_documents.map do |doc|
+          ActiveSupport::JSON.decode(
+                  doc.to_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes)
+          )
+        end
+        
         render :json => {
-          :documents => public_documents.map{|doc| {
-                  :uuid => doc.uuid,
-                  :title => doc.title,
-                  :creator_first_name => doc.creator.first_name,
-                  :views_count => doc.views_count,
-                  :relative_created_at => doc.relative_created_at,
-                  :category_name => doc.category.present? ? doc.category.name : nil,
-                  :category_id => doc.category_id
-            }
-          },
+          :documents => docs_json,
           :pagination => {
             :per_page => per_page,
             :current_page => public_documents.current_page,

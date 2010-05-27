@@ -16,14 +16,11 @@
         <% end %>        
       </select>
     </p>
-    <input id="wb-explore-search" class="ui-corner-all" type="text" name="wb-explore-search" placeholder="Search" />
+    <!--<input id="wb-explore-search" class="ui-corner-all" type="text" name="wb-explore-search" placeholder="Search" />-->
   </div>
 </div>
 <div class="content">
-  <div id="explorer_content" class="wrap">
-    <%#= render :partial => "viewer_list", :locals => { :documents => @public_documents } %>
-    <%#= raw( will_paginate(@public_documents, :container => false) ) %>
-  </div>
+  <div id="explorer_content" class="wrap"></div>
 </div>
 <% content_for :scripts do %>
   <%= include_javascripts :page_editor %>

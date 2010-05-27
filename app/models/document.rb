@@ -152,6 +152,14 @@ class Document < ActiveRecord::Base
 
     text
   end
+
+  def extra_attributes
+    {
+      :creator_first_name => self.creator.first_name,
+      :relative_created_at => self.relative_created_at,
+      :category_name => self.category.present? ? self.category.name : nil,
+    }
+  end
   
   # return a Hash with width and height formated with unit
   def formated_size
