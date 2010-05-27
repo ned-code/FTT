@@ -24,10 +24,12 @@ class DocumentsController < ApplicationController
   # GET /documents
   def index    
     respond_to do |format|
-      format.html { set_return_to }
-      format.json {
+      format.html do
+        set_return_to
+      end
+      format.json do
         per_page = 20
-        @documents = Document.all_with_filter(current_user, params[:document_filter], params[:page], per_page)
+        @documents = Document.all_with_filter(current_user, params[:document_filter], params[:query], params[:page], per_page)
         render :json => { 
           :documents => @documents,
           :pagination => {
@@ -39,19 +41,70 @@ class DocumentsController < ApplicationController
             :total => @documents.total_entries
           }
         }
-      }
+      end
     end
   end
 
   # GET /documents/explore
   def explore
-    set_return_to
-    @public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:page])
+    respond_to do |format|
+      format.html do
+        set_return_to
+      end
+      format.json do
+        per_page = 8
+        public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:query], params[:page], per_page)
+
+        docs_json = public_documents.map do |doc|
+          ActiveSupport::JSON.decode(
+                  doc.to_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes)
+          )
+        end
+        
+        render :json => {
+          :documents => docs_json,
+          :pagination => {
+            :per_page => per_page,
+            :current_page => public_documents.current_page,
+            :total_pages => public_documents.total_pages,
+            :next_page => public_documents.next_page,
+            :previous_page => public_documents.previous_page,
+            :total => public_documents.total_entries
+          }
+        }
+      end
+    end
   end
   
   #Get /documents/featured
   def featured
-    @featured_documents = Document.all_featured_paginated
+    respond_to do |format|
+      format.html do
+        set_return_to
+      end
+      format.json do
+        per_page = 8
+        featured_documents = Document.all_featured_paginated
+        docs_json = featured_documents.map do |doc|
+          ActiveSupport::JSON.decode(
+                  doc.to_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes)
+          )
+        end
+
+        render :json => {
+          :documents => docs_json,
+          :pagination => {
+            :per_page => per_page,
+            :current_page => featured_documents.current_page,
+            :total_pages => featured_documents.total_pages,
+            :next_page => featured_documents.next_page,
+            :previous_page => featured_documents.previous_page,
+            :total => featured_documents.total_entries
+          }
+        }
+      end
+    end
+
   end
   
   # GET /documents/:id
