@@ -14,3 +14,7 @@
       %div
         %label Description
         %textarea#document-description{ :rows => "5"}
+      - if current_user.has_role?(:admin)  
+        %div
+          %label Featured
+          %input#document-featured{ :type => "text" }

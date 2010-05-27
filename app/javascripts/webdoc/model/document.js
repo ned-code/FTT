@@ -19,6 +19,10 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     return this.data.category_id;
   },
   
+  featured: function() {
+    return this.data.featured;
+  },
+
   size: function() {
     return this.data.size;
   },
@@ -54,6 +58,14 @@ WebDoc.Document = $.klass(WebDoc.Record, {
       this.save();
     }
   },
+
+  setFeatured: function(featured, skipSave) {
+    this.data.featured = featured;
+    if(!(skipSave && skipSave === true)) {
+      this.fireObjectChanged({ modifedAttribute: 'featured' });
+      this.save();
+    }
+  },
   
   setSize: function(size, skipSave) {
     this.data.size = size;
@@ -80,15 +92,18 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     }
   },
     
-  styleUrl: function() {
-    if (this.data.style_url && this.data.style_url === 'null') {
-      return null;
+  styleUrl: function() {       
+    if (!this.data.style_url || this.data.style_url === 'null') {
+      return WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl();
     }
     return this.data.style_url;
   },
   
   styleClass: function() {
-    var themeName = this.data.theme_id || 'default';
+    var themeName = WebDoc.ThemeManager.getInstance().getDefaultTheme().id();
+    if (this.data.theme_id) {
+      themeName = this.data.theme_id;
+    }     
     return "theme_" + themeName;
   },
   

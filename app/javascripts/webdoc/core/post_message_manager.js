@@ -14,17 +14,7 @@ WebDoc.PostMessageManager = $.klass({
     window.addEventListener("message", function(event){
       // event.domain event.data event.source event.origin
       ddd('[post message manager] received a new message: ' + event.data);
-
-      if (event.origin !== "http://assets.test.webdoc.com" &&
-          event.origin !== "http://assets.staging.webdoc.com" &&
-          event.origin !== "http://assets.webdoc.com" &&
-          event.origin !==  'http://localhost' &&
-          event.origin !==  'http://localhost:3000' ) {
-        ddd(event.origin + ' not allowed!');
-        return;
-      } else {
-        this.processMessage(event.data);
-      }
+      this.processMessage(event.data);
     }.pBind(this), false);
   },
 

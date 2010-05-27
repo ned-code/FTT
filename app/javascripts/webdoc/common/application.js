@@ -66,6 +66,31 @@ $.extend(WebDoc.Application, {
     });
   },
   
+  initializeSingletons: function(singletons, callBack) {
+    this._singletons = singletons;
+    this._singletonsInitMap = [];
+    for (var i = 0; i < singletons.length; i++) {      
+      if (singletons[i].init) {
+        this._singletonsInitMap.push(false);
+        singletons[i].init(function(initializedClass) {
+          var index = jQuery.inArray(initializedClass, this._singletons);
+          if (index !== -1) {
+            this._singletonsInitMap[index] = true;
+          }      
+          if (jQuery.inArray(false, this._singletonsInitMap) === -1) {
+            callBack.call(this);
+          }
+        }.pBind(this));
+      }
+      else {
+        this._singletonsinitMap.push(true);
+      }
+    }
+    if (jQuery.inArray(false, this._singletonsInitMap) === -1) {
+      callBack.call(this);
+    }
+  },
+  
   getCurrentUser: function() {
     return this.currentUser;
   }

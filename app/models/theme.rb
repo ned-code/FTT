@@ -3,7 +3,7 @@ class Theme < ActiveRecord::Base
 
   has_uuid
 
-  attr_accessible :uuid, :file, :title, :thumbnail_url, :style_url, :version, :author
+  attr_accessible :uuid, :file, :title, :thumbnail_url, :style_url, :version, :author, :is_default
   
   # ================
   # = Associations =
@@ -30,7 +30,15 @@ class Theme < ActiveRecord::Base
   # =============
   # = Callbacks =
   # =============
-
+    
+  # =================
+  # = Class Methods =
+  # =================
+  
+  def self.default
+    Theme.find(:first, :conditions => { :is_default => true })
+  end
+  
   # ====================
   # = Instance Methods =
   # ====================
@@ -51,6 +59,7 @@ class Theme < ActiveRecord::Base
   end
 
   def set_attributes_from_config_file_and_save(ancestor_theme=nil)
+    return false if validates_uniqueness_of_default_theme == false
     saved = false
     if ancestor_theme.blank? || config_dom.root.attribute("version").to_s > ancestor_theme.version
       self.transaction do
@@ -148,7 +157,12 @@ class Theme < ActiveRecord::Base
       @s3.put(file.s3_bucket, self.file.store_dir + "css/parsed_theme_style.css", parsed, 'x-amz-acl' => 'public-read')
     end
   end
-
+  protected
+  
+  def validate
+    validates_uniqueness_of_default_theme
+  end
+  
   private
 
   def config_dom
@@ -188,7 +202,16 @@ class Theme < ActiveRecord::Base
       file_name.include?(".svn") ||
       file_name.include?(".DS_Store"))
   end
-
+  
+  def validates_uniqueness_of_default_theme
+    theme = Theme.default
+    if is_default == true && !theme.nil? && !theme.updated_theme_id.nil?
+      errors.add(:is_default, 'Default theme already set')
+      return false
+    else
+     return true
+    end
+  end
 end
 
 # == Schema Information

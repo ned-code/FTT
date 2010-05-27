@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.root :controller => 'home', :action => :show
   
-  map.resources :documents, :has_many => { :pages => :items }, :member => { :duplicate => :post }, :collection => { :explore => :get } do |m|
+  map.resources :documents, :has_many => { :pages => :items }, :member => { :duplicate => :post }, :collection => { :explore => :get, :featured => :get } do |m|
     m.resource :document_roles, :as => 'roles', :only => [:show, :create, :update, :destroy]
   end
   
