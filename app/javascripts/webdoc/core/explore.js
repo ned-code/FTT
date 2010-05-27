@@ -46,8 +46,14 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     if(this.mode === 'explore') {
       this.mainFilterDomNode.bind('change', this._refreshViewers.pBind(this));
       this.categoryFilterDomNode.bind('change', this._refreshViewers.pBind(this));
-      this.searchDomNode.bind('keyup', this._refreshViewers.pBind(this));
+      this.searchDomNode.bind('keypress', function(e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if(code == 13) {
+          this._refreshViewers();
+        }
+      }.pBind(this));  
     }
+    
   },
   
   _incrementPageId: function(pageIncrement) {
@@ -145,7 +151,6 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
             +document.data.views_count+' times');
 
     if(this.categoryFilterDomNode.val() === 'all' && document.data.extra_attributes.category_name) {
-      ddd('ici');
       viewerDetailsDomNode
       .append(' ( ')
       .append(
