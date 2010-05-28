@@ -252,6 +252,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
             popForm.bind('submit', function(e){
               popForm.validate({
                 pass : function(){
+                  
                   var pattern_has_protocole = /^(ftp|http|https):\/\//;
                   var consolidateSrc = '';
                   var value = popTitle.val();
@@ -266,7 +267,8 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
                   newPage.save( function(newObject, status) {
                     this.currentDocument.addPage(newPage, true);      
                     this.loadPage(newPage);
-                  }.pBind(this));                
+                  }.pBind(this));
+                  popForm.trigger('close');               
                 }.pBind(this),
                 fail : function(){}
               });
