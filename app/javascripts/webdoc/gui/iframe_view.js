@@ -7,7 +7,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   initialize: function($super, item, pageView, afterItem) {
     var that = this;
     var placeholder = $('<form/>', {'class': 'item-placeholder stack'});
-    var input = $('<input/>', { type: 'text', title: 'Web page address', name: 'input-iframe-src', value: '' });
+    var input = $('<input/>', { type: 'url', title: 'Web page address', name: 'input-iframe-src', value: '', 'data-type': 'webdoc_iframe_url' });
     
     placeholder
     .html('<div class="item-icon"></div><label>Enter a Web page url:</label>')
@@ -31,11 +31,26 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     
     return function(e){
       var value = that.inputNode.val();
-      if ( value ) {
-        that.domNode.addClass('loading');
-        that.item.setSrc( value );
-      }
-      e.preventDefault();
+      ddd('[IframeView] _makeSetSrcEventHandler')
+      that.inputNode.validate({
+        pass : function(){
+          ddd('[IframeView] Pass');
+          var value = that.inputNode.val();
+          var pattern_has_protocole = /^(ftp|http|https):\/\//;
+          var consolidateSrc = '';
+          if (value.match(pattern_has_protocole)) {
+    		    consolidateSrc = value;
+          }
+          else {
+    		    consolidateSrc = "http://" + value;
+          }
+          that.domNode.addClass('loading');
+          ddd(that.inputNode.val());
+          that.item.setSrc( consolidateSrc );
+          e.preventDefault();
+        },
+        fail : function(){}
+      });
     };
   },
   
