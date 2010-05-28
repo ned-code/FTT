@@ -315,13 +315,22 @@
       }
     },
     
-    _updateExternalPageUrl: function() {  
-      try {
-        this._page.setExternalPageUrl(jQuery("#external_page_url").val());
-      }
-      catch(exc) {
-        jQuery("#external_page_url")[0].value = this._page.data.data.externalPageUrl;
-      }
+    _updateExternalPageUrl: function() {
+      jQuery("#external_page_url").validate({
+        pass : function(){
+          consolidateSrc = WebDoc.UrlUtils.consolidateSrc(jQuery("#external_page_url").val());
+          this.domNode.addClass('loading');
+          this._page.setExternalPageUrl( consolidateSrc );
+        }.pBind(this),
+        fail : function(){}
+      });
+      // 
+      // try {
+      //   this._page.setExternalPageUrl(jQuery("#external_page_url").val());
+      // }
+      // catch(exc) {
+      //   jQuery("#external_page_url")[0].value = this._page.data.data.externalPageUrl;
+      // }
     },
   
     objectChanged: function(record, options) {

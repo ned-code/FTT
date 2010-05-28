@@ -106,9 +106,6 @@ WebDoc.PageThumbnailView = $.klass({
     if (page._isAttributeModified(options, 'class')) {
       this._initPageClass();      
     }
-    if (page.data.data.externalPage && page._isAttributeModified(options, 'externalPageUrl')) {
-      this._loadExternalPage();
-    }
   },
   
   itemAdded: function(addedItem, afterItem) {

@@ -16,7 +16,7 @@
         %legend= t('.page.title')
         %div
           %label= t('.page.url')
-          %input#external_page_url{ :type => "text", :value => "http://" }
+          %input#external_page_url{ :type => "url", :value => "http://", 'data-type' => 'webdoc_iframe_url' }
       
       %fieldset.properties
         %legend= t('.properties.title')

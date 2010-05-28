@@ -24,15 +24,7 @@ WebDoc.IframeController = $.klass({
     input.validate({
       pass: function( value ){
         var item = WebDoc.application.boardController.selection()[0].item;
-        var pattern_has_protocole = /^(ftp|http|https):\/\//;
-        var consolidateSrc = '';
-        if (value.match(pattern_has_protocole)) {
-  		    consolidateSrc = value;
-        }
-        else {
-  		    consolidateSrc = "http://" + value;
-        }
-                
+        consolidateSrc = WebDoc.UrlUtils.consolidateSrc(value);
         item.setSrc( consolidateSrc );
       },
       fail: function( value, error ){

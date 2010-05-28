@@ -195,14 +195,15 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     }
   },
   loadMyImages: function(pageIncrement) {
+    ddd('[images library] load my images');
     var thumbsWrap = this.myImagesContainer.find(".thumbnails");
     
     this.myImagesPage += pageIncrement;
     if (this.myImagesPage < 1) this.myImagesPage = 1;
-    
+
     if (pageIncrement !== 0 || !thumbsWrap.data('loaded')) { //load only if we are paginating, or if the images have never been loaded before
       thumbsWrap.html('');
-      
+
       this.showSpinner(thumbsWrap);
       
       WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
@@ -227,12 +228,13 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     }
   },
   refreshMyImages: function(newImages) {
+    ddd('[images library] reload my images');
     // Note: do not pass the newImages arg to force reloading the whole section
     
     //if we are in first page, don't reload the whole thing, just add the newly uploaded images to the top of the list 
     var myImagesList = this.myImagesContainer.find('.thumbnails ul');
     if (newImages && this.myImagesPage === 1 && myImagesList.length > 0) {
-      
+
        $.each(newImages, function(i,image) {
          
          myImagesList.prepend(this.buildThumbnail(image.id(), image.uuid, image.properties));
@@ -240,9 +242,11 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
         }.pBind(this));
     }
     else { // If not (or if no newImages are passed) reload the 1st page
-      this.myImagesContainer.find(".thumbnails").data('loaded', false);
-      this.myImagesPage = 1;
-      this.loadMyImages(0);
+      if(this.myImagesContainer.find(".thumbnails").data('loaded') !== false) {
+        this.myImagesContainer.find(".thumbnails").data('loaded', false);
+        this.myImagesPage = 1;
+        this.loadMyImages(0);  
+      }
     }
   },
   buildThumbnail: function(id, uuid, properties) {

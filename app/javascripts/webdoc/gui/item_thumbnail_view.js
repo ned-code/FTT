@@ -94,7 +94,7 @@ WebDoc.ItemThumbnailView = $.klass({
   
   objectChanged: function(item) {
     var domNode = this.domNode,
-        classes = ["item_thumb", item.data.data['class'], 'animate', item.data.data.wrapClass].join('');
+        classes = ["item_thumb", item.data.data['class'], 'animate', item.data.data.wrapClass].join(' ');
     
     domNode.attr("class", classes);
     
