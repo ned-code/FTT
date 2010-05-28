@@ -250,13 +250,17 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
             
             // Bind stuff to do on submit
             popForm.bind('submit', function(e){
-              var newPage = new WebDoc.Page(null, this.currentDocument, popTitle.val());
-              newPage.data.position = this.currentPage.data.position + 1;
-              newPage.save( function(newObject, status) {
-                this.currentDocument.addPage(newPage, true);      
-                this.loadPage(newPage);
-              }.pBind(this));
-              
+              popForm.validate({
+                pass : function(){
+                  var newPage = new WebDoc.Page(null, this.currentDocument, popTitle.val());
+                  newPage.data.position = this.currentPage.data.position + 1;
+                  newPage.save( function(newObject, status) {
+                    this.currentDocument.addPage(newPage, true);      
+                    this.loadPage(newPage);
+                  }.pBind(this));                
+                }.pBind(this),
+                fail : function(){}
+              });
               return false;
             }.pBind(this));
             
@@ -269,21 +273,6 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     else {
       // _changeTitle for string
     }
-        
-    // do {
-    //   externalPageUrl = prompt("Web page URL: ", "http://");
-    // } while (externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl));
-    // var newPage = new WebDoc.Page(null, this.currentDocument, "");
-    //   
-    // newPage.data.position = this.currentPage.data.position + 1;
-    // newPage.save( function(newObject, status) {
-    //   ddd("new web page ", newPage, newObject);
-    //   this.currentDocument.addPage(newPage, true);      
-    //   this.loadPage(newPage);
-    //   
-    //   WebDoc.application.pageBrowserController.editPageUrl(newPage);
-    //   
-    // }.pBind(this));
   },
   
   removePage: function() {
