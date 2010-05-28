@@ -252,16 +252,8 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
             popForm.bind('submit', function(e){
               popForm.validate({
                 pass : function(){
-                  
-                  var pattern_has_protocole = /^(ftp|http|https):\/\//;
-                  var consolidateSrc = '';
-                  var value = popTitle.val();
-                  if (value.match(pattern_has_protocole)) {
-            		    consolidateSrc = value;
-                  }
-                  else {
-            		    consolidateSrc = "http://" + value;
-                  }
+                  consolidateSrc = WebDoc.UrlUtils.consolidateSrc(popTitle.val())
+
                   var newPage = new WebDoc.Page(null, this.currentDocument, consolidateSrc);
                   newPage.data.position = this.currentPage.data.position + 1;
                   newPage.save( function(newObject, status) {

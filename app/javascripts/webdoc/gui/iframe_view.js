@@ -30,22 +30,11 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     var that = this;
     
     return function(e){
-      var value = that.inputNode.val();
       ddd('[IframeView] _makeSetSrcEventHandler')
       that.inputNode.validate({
         pass : function(){
-          ddd('[IframeView] Pass');
-          var value = that.inputNode.val();
-          var pattern_has_protocole = /^(ftp|http|https):\/\//;
-          var consolidateSrc = '';
-          if (value.match(pattern_has_protocole)) {
-    		    consolidateSrc = value;
-          }
-          else {
-    		    consolidateSrc = "http://" + value;
-          }
+          consolidateSrc = WebDoc.UrlUtils.consolidateSrc(that.inputNode.val());
           that.domNode.addClass('loading');
-          ddd(that.inputNode.val());
           that.item.setSrc( consolidateSrc );
           e.preventDefault();
         },
