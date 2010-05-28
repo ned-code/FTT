@@ -6,6 +6,16 @@
 WebDoc.ItemThumbnailView = $.klass({
   item: null,
   pageView: null,
+  
+  // Define all css keys that must be translated into
+  // browser specific keys (-moz and -webkit)
+  BROWSER_CSS_KEYS: {
+    transform: true,
+    transition: true,
+    borderRadius: true,
+    boxShadow: true
+  },
+  
   initialize: function(item, pageView) {
   
     if (pageView) {
@@ -17,7 +27,7 @@ WebDoc.ItemThumbnailView = $.klass({
     
     this.item = item;
     this.domNode = this.createDomNode();
-    this.domNode.css({ position: "absolute"}); 
+    this.domNode.css({ position: "absolute" }); 
     item.addListener(this);
   },
   
@@ -44,7 +54,9 @@ WebDoc.ItemThumbnailView = $.klass({
           itemNode.addClass(this.item.data.data[key]);
           break;          
         case "css": 
-          itemNode.css(this.item.data.data.css);  
+          this.makeCss( this.item.data.data.css, function( css ){
+            itemNode.css( css );
+          });
           break;        
         default:
           itemNode.attr(key, this.item.data.data[key]);
@@ -60,16 +72,35 @@ WebDoc.ItemThumbnailView = $.klass({
     return itemNode;
   },
   
+  makeCss: function( css, callback ){
+    var domNode = this.domNode,
+        itemCss = jQuery.extend({ overflow: 'hidden' }, css ),
+        key, timer;
+    
+    // Loop through the results and apply browser specific
+    // extensions where needed
+    for ( key in itemCss ) {
+      if ( this.BROWSER_CSS_KEYS[key] ) {
+        itemCss['-webkit-'+key] = itemCss['-moz-'+key] = itemCss[key];
+      }
+    }
+    
+    return callback( itemCss );
+  },
   
   remove: function() {
     this.domNode.remove();
   },
   
   objectChanged: function(item) {
-    this.domNode.animate(item.data.data.css, 'fast');
-    this.domNode.attr("class", "item_thumb");
-    this.domNode.addClass(item.data.data['class']);
-    this.domNode.addClass(item.data.data.wrapClass);
+    var domNode = this.domNode,
+        classes = ["item_thumb", item.data.data['class'], 'animate', item.data.data.wrapClass].join('');
+    
+    domNode.attr("class", classes);
+    
+    this.makeCss( item.data.data.css, function( css ){
+      domNode.css( css );
+    });
   },
   
   innerHtmlChanged: function() {
@@ -101,7 +132,9 @@ WebDoc.ImageThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
     
     for (var key in this.item.data.data) {
       if (key == 'css') {
-        itemNode.css(this.item.data.data.css);
+        this.makeCss( this.item.data.data.css, function( css ){
+          itemNode.css( css );
+        });
       }
       else {
         if (key == 'innerHtml') {
@@ -145,7 +178,9 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
       var itemNode = $('<div/>');
     
       itemNode.attr("id", "thumb_" + this.item.uuid());
-      itemNode.css(this.item.data.data.css);
+      this.makeCss( this.item.data.data.css, function( css ){
+        itemNode.css( css );
+      });
       itemNode.addClass("widget_thumb");
       this.pageView.itemDomNode.append(itemNode.get(0));
     

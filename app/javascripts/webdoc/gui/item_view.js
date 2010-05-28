@@ -12,7 +12,8 @@ WebDoc.ItemView = $.klass({
     transform: true
   },
 
-  // Define all css keys that must be translate in browser specific keys (-moz and -webkit)
+  // Define all css keys that must be translated into
+  // browser specific keys (-moz and -webkit)
   BROWSER_CSS_KEYS: {
     transform: true,
     transition: true,
@@ -133,6 +134,7 @@ WebDoc.ItemView = $.klass({
     //}
     
     // Animate using css transitions given by the animate class
+    // TODO: This would be done better by making use of the transitionend event
     if ( withAnimate ) {
       domNode.addClass('animate');
       timer = setTimeout(function(){
