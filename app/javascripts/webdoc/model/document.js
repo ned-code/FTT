@@ -88,19 +88,27 @@ WebDoc.Document = $.klass(WebDoc.Record, {
       WebDoc.ServerManager.getRecords(WebDoc.Theme, this.data.theme_id, callBack);
     }
     else {
-      callBack.call(this, [WebDoc.ThemeManager.getInstance().getDefaultTheme()]);
+      if (WebDoc.ThemeManager.getInstance().getDefaultTheme()) {
+        callBack.call(this, [WebDoc.ThemeManager.getInstance().getDefaultTheme()]);
+      }
+      else {
+        callBack.call(this, []);
+      }
     }
   },
     
   styleUrl: function() {       
-    if (!this.data.style_url || this.data.style_url === 'null') {
+    if ((!this.data.style_url || this.data.style_url === 'null') && WebDoc.ThemeManager.getInstance().getDefaultTheme()) {
       return WebDoc.ThemeManager.getInstance().getDefaultTheme().getStyleUrl();
     }
     return this.data.style_url;
   },
   
   styleClass: function() {
-    var themeName = WebDoc.ThemeManager.getInstance().getDefaultTheme().id();
+    var themeName = "";
+    if ( WebDoc.ThemeManager.getInstance().getDefaultTheme()) {
+      WebDoc.ThemeManager.getInstance().getDefaultTheme().id();
+    }
     if (this.data.theme_id) {
       themeName = this.data.theme_id;
     }     
