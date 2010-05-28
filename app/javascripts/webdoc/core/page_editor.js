@@ -217,8 +217,8 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       .append( popCancel )
       .append( popSubmit )
     );
+    
     if ( typeof str === 'undefined' ) {
-      ddd('str undefined');
       popOptions = {
         // Some of these should really be put in a global setup
         popWrapClass: 'ui ui-pop-position',
@@ -230,23 +230,14 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       
       // Decide where to trigger the pop
       node = jQuery(".pages-tools a[href='#add-web-page']");
-      ddd(node);
       popOptions.orientation = 'bottom';
       
       popForm.pop(
         jQuery.extend( popOptions, {
           attachTo: node,
           initCallback: function(){
-            var currentUrl = "http://"//self.page.getTitle();
-            ddd('pop');
-            // It returns the string 'undefined'
-            if (currentUrl === undefined || currentUrl === 'undefined') {
-              popTitle.addClass( 'default' );
-            }
-            else {
-              popTitle.val( currentUrl );
-            }
-            
+            var currentUrl = "http://"
+            popTitle.val( currentUrl );
             popTitle.bind('keyup', function(){
                 
               if ( popTitle.val().length === 0 ) {
@@ -259,16 +250,19 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
             
             // Bind stuff to do on submit
             popForm.bind('submit', function(e){
-              ddd('submit');
-              ddd(popTitle.val());              
-              //create page here
-              ddd('create page here');
+              var newPage = new WebDoc.Page(null, this.currentDocument, popTitle.val());
+              newPage.data.position = this.currentPage.data.position + 1;
+              newPage.save( function(newObject, status) {
+                this.currentDocument.addPage(newPage, true);      
+                this.loadPage(newPage);
+              }.pBind(this));
+              
               return false;
-            });
+            }.pBind(this));
             
             // Give the input focus
             popTitle.focus();
-          }
+          }.pBind(this)
         })
       );
     }
