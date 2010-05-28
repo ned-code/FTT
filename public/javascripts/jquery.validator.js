@@ -445,7 +445,8 @@
 			},
 			
 			urlBlacklist = [
-      	'http://nytimes.com'
+      	'http://nytimes.com',
+      	'http://gmail.com'
       ],
 			
 			
