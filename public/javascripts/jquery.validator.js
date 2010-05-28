@@ -445,9 +445,9 @@
 			},
 			
 			urlBlacklist = [
-      	'http://nytimes.com',
-      	'http://gmail.com',
-      	'http://www.softpedia.com'
+      	'http://nytimes.com', 'http://www.nytimes.com',
+      	'http://gmail.com', 'http://www.gmail.com',
+      	'http://softpedia.com', 'http://www.softpedia.com'
       ],
 			
 			
