@@ -197,18 +197,99 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   
   addWebPage: function() {
     var externalPageUrl = null;
-    do {
-      externalPageUrl = prompt("Web page URL: ", "http://");
-    } while (externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl));
-
-    if(externalPageUrl != null) {
-      var newPage = new WebDoc.Page(null, this.currentDocument, externalPageUrl);
-      newPage.data.position = this.currentPage.data.position + 1;
-      newPage.save( function(newObject, status) {
-        this.currentDocument.addPage(newPage, true);      
-        this.loadPage(newPage);
-      }.pBind(this));
+    ddd('[AddWebPage] addWebPage');
+    
+    var self = this,
+        node,
+        popOptions,
+        popForm = $('<form/>', { method: 'post', 'class': 'ui-pop-page-url' }),
+        popLabel = $('<label/>', { 'class': 'underlay' }).text('enter an url'),
+        popTitle = $('<input/>', { type: 'url', title: 'Page Url', name: 'page-url', value: 'http://', autocomplete: 'off', 'data-type': 'webdoc_iframe_url' }),
+        popActions = $('<div/>', { 'class': "ui-actions" }),
+        popSubmit = $('<input/>', { type: 'submit', name: 'page-url-form', value: 'Save' }),
+        popCancel = $('<a/>', { href: '#cancel', 'class': 'cancel', html: 'cancel' });
+        
+    popForm
+    .append( popLabel )
+    .append( popTitle )
+    .append(
+      popActions
+      .append( popCancel )
+      .append( popSubmit )
+    );
+    if ( typeof str === 'undefined' ) {
+      ddd('str undefined');
+      popOptions = {
+        // Some of these should really be put in a global setup
+        popWrapClass: 'ui ui-pop-position',
+        popClass: 'ui-pop ui-widget ui-corner-all',
+        width: '12em',
+        openEasing: 'easeOutBack',
+        shutEasing: 'easeInQuart'
+      };
+      
+      // Decide where to trigger the pop
+      node = jQuery(".pages-tools a[href='#add-web-page']");
+      ddd(node);
+      popOptions.orientation = 'bottom';
+      
+      popForm.pop(
+        jQuery.extend( popOptions, {
+          attachTo: node,
+          initCallback: function(){
+            var currentUrl = "http://"//self.page.getTitle();
+            ddd('pop');
+            // It returns the string 'undefined'
+            if (currentUrl === undefined || currentUrl === 'undefined') {
+              popTitle.addClass( 'default' );
+            }
+            else {
+              popTitle.val( currentUrl );
+            }
+            
+            popTitle.bind('keyup', function(){
+                
+              if ( popTitle.val().length === 0 ) {
+                popTitle.addClass( 'default' );
+              }
+              else {
+                popTitle.removeClass( 'default' );
+              }
+            });
+            
+            // Bind stuff to do on submit
+            popForm.bind('submit', function(e){
+              ddd('submit');
+              ddd(popTitle.val());              
+              //create page here
+              ddd('create page here');
+              return false;
+            });
+            
+            // Give the input focus
+            popTitle.focus();
+          }
+        })
+      );
     }
+    else {
+      // _changeTitle for string
+    }
+        
+    // do {
+    //   externalPageUrl = prompt("Web page URL: ", "http://");
+    // } while (externalPageUrl != null && !WebDoc.FieldValidator.isValidUrl(externalPageUrl));
+    // var newPage = new WebDoc.Page(null, this.currentDocument, "");
+    //   
+    // newPage.data.position = this.currentPage.data.position + 1;
+    // newPage.save( function(newObject, status) {
+    //   ddd("new web page ", newPage, newObject);
+    //   this.currentDocument.addPage(newPage, true);      
+    //   this.loadPage(newPage);
+    //   
+    //   WebDoc.application.pageBrowserController.editPageUrl(newPage);
+    //   
+    // }.pBind(this));
   },
   
   removePage: function() {
