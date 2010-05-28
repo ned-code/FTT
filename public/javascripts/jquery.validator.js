@@ -446,7 +446,8 @@
 			
 			urlBlacklist = [
       	'http://nytimes.com',
-      	'http://gmail.com'
+      	'http://gmail.com',
+      	'http://www.softpedia.com'
       ],
 			
 			
