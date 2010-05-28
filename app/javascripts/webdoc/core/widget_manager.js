@@ -23,6 +23,9 @@ WebDoc.WidgetManager = $.klass(
     if (data && data.length > 0) {
       this.youtubeWidget = data[0];
     }
+    else {
+      this.youtubeWidget = null;
+    }
     if (this.vimeoWidget !== undefined) {
       this._callBack.call(this,WebDoc.WidgetManager);
     }
@@ -32,6 +35,9 @@ WebDoc.WidgetManager = $.klass(
     if (data && data.length > 0) {
       this.vimeoWidget = data[0];
     }
+    else {
+      this.vimeoWidget = null;
+    }    
     if (this.youtubeWidget !== undefined) {
       this._callBack.call(this,WebDoc.WidgetManager);
     }    
