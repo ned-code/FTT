@@ -385,7 +385,7 @@ WebDoc.BoardController = jQuery.klass({
     if (this._editingItem) {
       this._editingItem.stopEditing();
       WebDoc.application.arrowTool.enableHilight();
-      this._hideScreens();
+      //this._hideScreens();
       this._editingItem = null;
     }    
   },
@@ -489,12 +489,12 @@ WebDoc.BoardController = jQuery.klass({
       
       var node = itemViewToEdit.domNode;
       
-      this._updateScreens( node );
+      //this._updateScreens( node );
       this._editingItem = itemViewToEdit;  
       itemViewToEdit.edit();
       
       WebDoc.application.arrowTool.disableHilight();
-      this._showScreens();
+      //this._showScreens();
       return true;     
     }
     return false;
