@@ -247,6 +247,13 @@ WebDoc.PageBrowserController = $.klass({
     currentPageItem.editTitle();
   },
   
+  addPageUrl: function(){
+    ddd('[pageBrowserController] editPageUrl');
+    var currentPageItem = this.pageMap[ page.uuid() ];
+    
+    currentPageItem.editUrl();
+  },
+  
   selectPage: function( page ) {
     ddd('[pageBrowserController] selectPage');
     WebDoc.application.pageEditor.loadPage( page );
