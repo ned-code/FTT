@@ -129,11 +129,13 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _setModeEdit: function() {
+    this.currentPageView().setModeEdit();
+
     this.currentPageView().domNode
     .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
     .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
-    .bind("drop", this, WebDoc.DrageAndDropController.drop);      
-    
+    .bind("drop", this, WebDoc.DrageAndDropController.drop);
+
     if (!this.currentTool) {
       this.setCurrentTool(WebDoc.application.arrowTool);
     }
@@ -160,6 +162,9 @@ WebDoc.BoardController = jQuery.klass({
   
   _setModePreview: function() {
     this.unselectAll();
+    
+    this.currentPageView().setModePreview();
+
     this.currentPageView().domNode
     .unbind("dragenter")
     .unbind("dragover")

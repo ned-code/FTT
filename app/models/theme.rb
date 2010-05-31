@@ -137,12 +137,16 @@ class Theme < ActiveRecord::Base
         parts = set.split(/\{/)
         if parts.size > 1
           (0..((parts.size)-2)).each do |i|
-            paths = parts[i].split(/,/)
-            (0..((paths.size)-1)).each do |k|
-              paths[k].strip!
-              paths[k].chomp!
-              parsed += ".theme_#{self.id} " + paths[k]
-              parsed += ", "  if k < (paths.size-1)
+            if ['@font-face'].include? parts[i].strip
+              parsed += parts[i].strip.chomp
+            else
+              paths = parts[i].split(/,/)
+              (0..((paths.size)-1)).each do |k|
+                paths[k].strip!
+                paths[k].chomp!
+                parsed += ".theme_#{self.id} " + paths[k]
+                parsed += ", "  if k < (paths.size-1)
+              end
             end
           end
           parsed += " { "+parts.last.strip+" }\r\n"
