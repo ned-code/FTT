@@ -14,6 +14,15 @@
       %div
         %label Description
         %textarea#document-description{ :rows => "5"}
+        
+      / %div
+      /         %label= t 'documents.index.document_forms.document_size_title'
+      %div
+        %label= t('documents.index.document_forms.document_size.width')
+        %input#document-size-width{ :type => "text" , :size => 6, :required => 'required', :'data-type' => 'cssvalue' }
+      %div
+        %label= t('documents.index.document_forms.document_size.height')
+        %input#document-size-height{ :type => "text" , :size => 6, :required => 'required', :'data-type' => 'cssvalue' }
       - if current_user.has_role?(:admin)  
         %div
           %label Featured

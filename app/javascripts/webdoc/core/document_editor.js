@@ -91,6 +91,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   },
 
   createDocument: function(e) {
+    ddd('[DocumentEditor] createDocument')
     var that = this;
 
     infoDialogHeaderNode.html("Create new webdoc");
@@ -150,6 +151,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   },
 
   renameDocument: function(e) {
+    ddd('[DocumentEditor] renameDocument')
     var that = WebDoc.application.documentEditor,
         data = $(this).closest('.document-item').data("webdoc"),
         documentIdToRename = data && data.id,
@@ -183,7 +185,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
             that.editedDocument.setTitle( infoDialogTitleNode.val(), true );
             that.editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
             that.editedDocument.setCategory( infoDialogCategoryNode.val(), true );
-
+            that.editedDocument.setSize( {width:  infoDialogWidthNode.val(), height: infoDialogHeightNode.val()}, true );
+            
             that.editedDocument.save(function(persitedDoc){
                 node
                 .removeClass('loading')
