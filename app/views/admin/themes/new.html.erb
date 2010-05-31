@@ -1,6 +1,7 @@
 <h1><%= t('.title') %> </h1>
 
 <% form_for @theme, :url => admin_themes_path, :html => { :enctype => 'multipart/form-data' } do |f| %>
+  <%= f.error_messages %>
   <%= f.label :file %>
   <%= f.file_field :file %>
   <%= f.label :is_default, "Set as default" %>

@@ -93,7 +93,7 @@ $.extend(WebDoc.Application, {
       callBack.call(this);
     }
     else {
-      setTimeout(WebDoc.Application._continue, 10000);
+      setTimeout(WebDoc.Application._continue.pBind(this), 10000);
     }
   },
     

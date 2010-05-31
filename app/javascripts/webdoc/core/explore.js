@@ -185,11 +185,15 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
       $('<span>').html("Page " + pagination.current_page + " of " + pagination.total_pages + " ").appendTo(paginationWrap);
       if (pagination.previous_page > 0) {
         var previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
-        previousPageLink.click(function(event){
+        
+        previousPageLink
+        .click(function(event){
           this._loadDocuments(-1);
           event.preventDefault();
-        }.pBind(this)).appendTo(paginationWrap);
+        }.pBind(this))
+        .appendTo(paginationWrap);
       }
+      
       if (pagination.next_page > 0) {
         if(pagination.previous_page > 0) { $("<span>").html(' | ').appendTo(paginationWrap); }
         var nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
@@ -198,7 +202,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
           event.preventDefault();
         }.pBind(this)).appendTo(paginationWrap);
       }
-      this.listNode.append(paginationWrap);
+      this.domNode.append(paginationWrap);
     }
   }
 
