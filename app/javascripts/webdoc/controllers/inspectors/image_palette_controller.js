@@ -78,7 +78,7 @@ WebDoc.ImagePaletteController = $.klass({
       if (selectedItem.data.data.src !== undefined && selectedItem.data.data.src !== '') {
         this.addToMyImageLink.hide();
         this.addToMyImageResult.text('Uploading...');
-        image = new WebDoc.Image;
+        var image = new WebDoc.Image;
         image.data.remote_file_url = this.propertySrc.val();
         this.selectedItem = selectedItem;
         image.save(function(event){

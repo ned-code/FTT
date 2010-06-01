@@ -141,23 +141,14 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
         case "add_to_my_images_action":
           link.hide();
           li.append(info);
-          
-          var railsParams = {};
-          WebDoc.Record.convertToRailsJSon({ properties : properties }, railsParams, "image");
-          $.ajax({
-            type: "POST",
-            url: this.imagesUploader.uploadUrl,
-            data: railsParams,
-            dataType: "json",
-            success: function(serverData) {
-              info.text("Done!");
-              setTimeout(function(){ info.fadeOut(500); }, 500);
-              this.refreshMyImages([serverData.image]);
-            }.pBind(this),
-            complete: function() {
-              setTimeout(function(){ li.hide(); info.remove(); link.show();  }, 1000);
-            }.pBind(this)
-          });
+          var image = new WebDoc.Image;
+          image.data.remote_file_url = properties.url;
+          image.save(function(persitedImage){
+            info.text("Done!");
+            setTimeout(function(){ info.fadeOut(500); }, 500);
+            setTimeout(function(){ li.hide(); info.remove(); link.show();  }, 1000);
+            this.refreshMyImages([persitedImage]);
+          }.pBind(this));
           break;
       }
       
@@ -237,7 +228,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
 
        $.each(newImages, function(i,image) {
          
-         myImagesList.prepend(this.buildThumbnail(image.id(), image.uuid, image.properties));
+         myImagesList.prepend(this.buildThumbnail(image.id(), image.uuid, image.data.properties));
           
         }.pBind(this));
     }
