@@ -180,18 +180,18 @@ ul, ol, blockquote, dd,
 
 /* Colors */
 
-.theme_color_1  { background-color: hsl(32, 80%, 4%); }
-.theme_color_2  { background-color: hsl(32, 60%, 12%); }
-.theme_color_3  { background-color: hsl(32, 40%, 20%); }
-.theme_color_4  { background-color: hsl(42, 11%, 86%); }
-.theme_color_5  { background-color: hsl(42, 92%, 18%); }
-.theme_color_6  { background-color: hsl(42, 84%, 24%); }
-.theme_color_7  { background-color: hsl(42, 75%, 30%); }
-.theme_color_8  { background-color: hsl(2, 100%, 30%); }
-.theme_color_9  { background-color: hsl(2, 100%, 20%); }
-.theme_color_10 { background-color: hsl(2, 75%, 14%); }
-.theme_color_11 { background-color: hsl(2, 75%, 18%); }
-.theme_color_12 { background-color: hsl(192, 60%, 17%); }
+.theme_color_1  { color: hsl(32, 80%, 4%); }
+.theme_color_2  { color: hsl(32, 60%, 12%); }
+.theme_color_3  { color: hsl(32, 40%, 20%); }
+.theme_color_4  { color: hsl(42, 11%, 86%); }
+.theme_color_5  { color: hsl(42, 92%, 18%); }
+.theme_color_6  { color: hsl(42, 84%, 24%); }
+.theme_color_7  { color: hsl(42, 75%, 30%); }
+.theme_color_8  { color: hsl(2, 100%, 30%); }
+.theme_color_9  { color: hsl(2, 100%, 20%); }
+.theme_color_10 { color: hsl(2, 75%, 14%); }
+.theme_color_11 { color: hsl(2, 75%, 18%); }
+.theme_color_12 { color: hsl(192, 60%, 17%); }
 
 /* Backgrounds */
 

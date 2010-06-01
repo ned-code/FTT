@@ -945,3 +945,8 @@ body {
   -moz-box-shadow:    0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
   box-shadow:         0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
 }
+
+.colors-index a>span {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120px;
+}
