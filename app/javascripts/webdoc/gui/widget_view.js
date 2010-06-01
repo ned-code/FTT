@@ -16,7 +16,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     this.api = new WebDoc.WidgetApi(item, false);
     this._displayDefaultContentIfNeeded( this.itemDomNode );
     this.domNode.addClass('item-widget');
-    this.itemLayerDomNode.addClass("item-layer screen");    
+    this.itemLayerDomNode.addClass("screen");    
   },
   
   createDomNode: function($super) {

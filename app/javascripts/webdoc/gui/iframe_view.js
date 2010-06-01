@@ -24,6 +24,8 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     .addClass("item-iframe")
     .delegate('.item-placeholder', 'submit', this._makeSetSrcEventHandler() )
     .delegate('.item-placeholder input', 'blur', this._makeSetSrcEventHandler() );
+    
+    this.itemLayerDomNode.addClass("screen"); 
   },
   
   _makeSetSrcEventHandler: function(){
@@ -74,10 +76,22 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     }
   },
 
+  edit: function($super){
+    $super();
+    this.domNode.addClass("item-edited");
+    this.itemLayerDomNode.hide();    
+  },
+  
   canEdit: function() {
     return true;
   },
-
+  
+  stopEditing: function($super) {
+    $super();
+    this.domNode.removeClass("item-edited");
+    this.itemLayerDomNode.show();  
+  },
+  
   inspectorId: function() {
     return 6;
   }
