@@ -107,7 +107,7 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   styleClass: function() {
     var themeName = "";
     if ( WebDoc.ThemeManager.getInstance().getDefaultTheme()) {
-      WebDoc.ThemeManager.getInstance().getDefaultTheme().id();
+      themeName = WebDoc.ThemeManager.getInstance().getDefaultTheme().id();
     }
     if (this.data.theme_id) {
       themeName = this.data.theme_id;

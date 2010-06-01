@@ -129,11 +129,13 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _setModeEdit: function() {
+    this.currentPageView().setModeEdit();
+
     this.currentPageView().domNode
     .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
     .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
-    .bind("drop", this, WebDoc.DrageAndDropController.drop);      
-    
+    .bind("drop", this, WebDoc.DrageAndDropController.drop);
+
     if (!this.currentTool) {
       this.setCurrentTool(WebDoc.application.arrowTool);
     }
@@ -160,6 +162,9 @@ WebDoc.BoardController = jQuery.klass({
   
   _setModePreview: function() {
     this.unselectAll();
+    
+    this.currentPageView().setModePreview();
+
     this.currentPageView().domNode
     .unbind("dragenter")
     .unbind("dragover")
@@ -385,7 +390,7 @@ WebDoc.BoardController = jQuery.klass({
     if (this._editingItem) {
       this._editingItem.stopEditing();
       WebDoc.application.arrowTool.enableHilight();
-      this._hideScreens();
+      //this._hideScreens();
       this._editingItem = null;
     }    
   },
@@ -489,12 +494,12 @@ WebDoc.BoardController = jQuery.klass({
       
       var node = itemViewToEdit.domNode;
       
-      this._updateScreens( node );
+      //this._updateScreens( node );
       this._editingItem = itemViewToEdit;  
       itemViewToEdit.edit();
       
       WebDoc.application.arrowTool.disableHilight();
-      this._showScreens();
+      //this._showScreens();
       return true;     
     }
     return false;

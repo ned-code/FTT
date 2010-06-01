@@ -60,11 +60,12 @@ class Layout < ActiveRecord::Base
               item = build_default_item(page, doc_item)
               item.data[:tag] = 'div'
               if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
+                inner_html = Item.sanitize_html_to_serialize(doc_item.inner_html)
                 item.data[:innerHTML] = ""
-                item.data[:innerHTMLPlaceholder] = doc_item.inner_html
+                item.data[:innerHTMLPlaceholder] = inner_html
                 item.data[:class] += " empty"
               else
-                item.data[:innerHTML] = doc_item.inner_html
+                item.data[:innerHTML] = inner_html
                 item.data[:innerHTMLPlaceholder] = ""
               end
               if doc_item['data-item-type'] == 'text'

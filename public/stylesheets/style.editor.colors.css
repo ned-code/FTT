@@ -163,14 +163,6 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
   color: white;
 }
 
-
-.item_wrap      { border-color: hsla(208, 8%, 33%, 0.3333);
-                  border-style: dotted;
-                  -webkit-border-radius: 2px;
-                  -moz-border-radius:    2px;
-                  border-radius:         2px; }
-.item_wrap:hover { border-style: solid; }
-
 .properties textarea,
 .properties input[type='text'] { background-color: hsl(208, 3%, 88%); }
 .properties textarea:focus:focus,

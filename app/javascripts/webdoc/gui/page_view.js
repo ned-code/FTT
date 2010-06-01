@@ -22,6 +22,7 @@ WebDoc.PageView = $.klass({
     this.eventCatcherNode = eventCatcherNode;
     this.itemViews = {};
     this._zoomFactor = 1;
+    this.wait = null;
     // Set up page view
     this._initPageCss();
     this._initPageClass();
@@ -32,6 +33,7 @@ WebDoc.PageView = $.klass({
 
     this.externalPageDomNode = null;
     this.externalPageIframe = null;
+    this.overLayer = null;
     if (page.data.data.externalPage && !WebDoc.application.disableHtml) {
       this._loadExternalPage();
     }
@@ -250,23 +252,45 @@ WebDoc.PageView = $.klass({
       if(!this.externalPageDomNode) {
         this._createExternalPageDomNode();
       }
-      wait = jQuery('<div class="center layer"><div class="center-cell"><div class="center-box"><center><img src="/images/icons/waiting_wheel.gif"/></center></div></div></div>');
+      if(!this.wait) {
+        this.wait = jQuery('<div class="center layer"><div class="center-cell"><div class="center-box"><center><img src="/images/icons/waiting_wheel.gif"/></center></div></div></div>');
+      }
       this.externalPageIframe.bind('load', function() {
-        wait.remove();
+        this.wait.remove();
       }.pBind(this));
       this.externalPageIframe.attr("src", this.page.data.data.externalPageUrl);
-      this.itemDomNode.append(wait);
+      this.itemDomNode.append(this.wait);
     }
   },
 
   _createExternalPageDomNode: function() {
     this.externalPageDomNode = $("<div/>").addClass('layer');
-    var overLayer = $("<div>").addClass("layer");
-    overLayer.css("display", "block");
+    this.overLayer = $("<div>").addClass("layer");
+    this.overLayer.css("display", "block");
     this.externalPageIframe = $("<iframe/>").addClass('layer');
     this.externalPageDomNode.append(this.externalPageIframe);
-    this.externalPageDomNode.append(overLayer);
+    this.externalPageDomNode.append(this.overLayer);
     this.itemDomNode.append(this.externalPageDomNode);
+  },
+
+  setModePreview: function() {
+    if(this.overLayer) {
+      this.overLayer.hide();
+    }
+    if(this.externalPageIframe) {
+      this.externalPageIframe.css('overflow', 'visible');
+      this._loadExternalPage();
+    }
+  },
+
+  setModeEdit: function() {
+    if(this.overLayer) {
+      this.overLayer.show();
+    }
+    if(this.externalPageIframe) {
+      this.externalPageIframe.css('overflow', 'hidden');
+      this._loadExternalPage();
+    }
   }
-  
+
 });

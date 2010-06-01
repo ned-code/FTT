@@ -183,7 +183,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
             that.editedDocument.setTitle( infoDialogTitleNode.val(), true );
             that.editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
             that.editedDocument.setCategory( infoDialogCategoryNode.val(), true );
-
+            that.editedDocument.setSize( {width:  infoDialogWidthNode.val(), height: infoDialogHeightNode.val()}, true );
+            
             that.editedDocument.save(function(persitedDoc){
                 node
                 .removeClass('loading')
