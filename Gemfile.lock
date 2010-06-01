@@ -42,10 +42,6 @@ dependencies:
     version: ">= 0"
     require: 
     - sqlite3
-  exception_notification: 
-    group: 
-    - :default
-    version: ">= 0"
   uuid: 
     group: 
     - :default
@@ -225,9 +221,6 @@ specs:
     version: 1.0.7
 - erubis: 
     version: 2.6.5
-- exception_notification: 
-    version: 2.3.3.0
-    source: 0
 - factory_girl: 
     version: 1.2.4
 - fastthread: 
@@ -296,10 +289,5 @@ specs:
     version: "0.5"
 hash: 92b31276fdb5a0a64952994c77662609e31fce5b
 sources: 
-- Git: 
-    uri: git://github.com/rails/exception_notification.git
-    branch: 2-3-stable
-    git: git://github.com/rails/exception_notification.git
-    ref: f9865f54b415e4f87e582f6256a811d5c5f54d7b
 - Rubygems: 
     uri: http://gemcutter.org
