@@ -576,6 +576,7 @@ WebDoc.TextPaletteController = jQuery.klass({
      jQuery('#toolbar_panel_html_edit').text("HTML edit");     
     }
     else {
+     jQuery("#choose-edit-method").show();
      this.refreshInnerHtml();
     }    
   },
@@ -600,8 +601,7 @@ WebDoc.TextPaletteController = jQuery.klass({
     WebDoc.application.textTool.delegate.focus();
   },
   
-  refreshInnerHtml: function() {
-    jQuery("#choose-edit-method").show();
+  refreshInnerHtml: function() {    
     if (this.htmlEdit) {
       this.htmlInspector.refresh();
     }
