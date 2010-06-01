@@ -75,6 +75,14 @@ class Item < ActiveRecord::Base
     self.page.touch if touch_page_active == true
   end
 
+  def self.sanitize_html_to_serialize(html)
+    sanitized_html = ""
+    html.each do |line|
+      sanitized_html += line.strip
+    end
+    sanitized_html
+  end
+
 end
 
 

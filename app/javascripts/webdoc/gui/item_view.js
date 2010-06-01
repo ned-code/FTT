@@ -12,7 +12,8 @@ WebDoc.ItemView = $.klass({
     transform: true
   },
 
-  // Define all css keys that must be translate in browser specific keys (-moz and -webkit)
+  // Define all css keys that must be translated into
+  // browser specific keys (-moz and -webkit)
   BROWSER_CSS_KEYS: {
     transform: true,
     transition: true,
@@ -35,8 +36,7 @@ WebDoc.ItemView = $.klass({
     this.domNode = $("<div/>").addClass('item_wrap');
     
     this.itemDomNode = this.createDomNode();
-    this.itemLayerDomNode = $("<div>").addClass("layer screen item-layer").css("display", "block");
-    
+    this.itemLayerDomNode = $("<div>").addClass("layer").css("display", "block");
     this.domNode.append(this.itemDomNode);
     this.domNode.append(this.itemLayerDomNode);
     
@@ -134,6 +134,7 @@ WebDoc.ItemView = $.klass({
     //}
     
     // Animate using css transitions given by the animate class
+    // TODO: This would be done better by making use of the transitionend event
     if ( withAnimate ) {
       domNode.addClass('animate');
       timer = setTimeout(function(){
@@ -246,23 +247,16 @@ WebDoc.ItemView = $.klass({
   },
   
   canEdit: function() {
-    return false;
+    return true;
   },
   
   edit: function() {
     //by default item views are not editable (if your item is editable override this method in the subclass) 
-    this.domNode.addClass("item-edited");
-    this.itemLayerDomNode.hide();
-//    this.domNode.draggable( 'destroy' );
-//    this.domNode.resizable( 'destroy' );
-    WebDoc.application.rightBarController.showItemInspector();
+    WebDoc.application.rightBarController.showItemInspector();    
     WebDoc.application.inspectorController.selectPalette(this.inspectorId());
   },
   
   stopEditing: function() {
-    this.domNode.removeClass("item-edited");
-    this._initDragAndResize();
-    this.itemLayerDomNode.show();
   },
   
   destroy: function() {
@@ -388,9 +382,9 @@ WebDoc.ItemView = $.klass({
     if (inspectorController) {
       inspectorController.refreshProperties();
     }
-    if (this.domNode.hasClass("item-edited")) {
-      WebDoc.application.boardController._updateScreens(this.domNode);
-    }
+//    if (this.domNode.hasClass("item-edited")) {
+//      WebDoc.application.boardController._updateScreens(this.domNode);
+//    }
   },
 
   _isAttributeModified: function(options, attributeName) {

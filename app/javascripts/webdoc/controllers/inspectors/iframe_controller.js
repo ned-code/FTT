@@ -18,9 +18,21 @@ WebDoc.IframeController = $.klass({
     }
   },
 
-  updateSrc: function(event) {
-    var item = WebDoc.application.boardController.selection()[0].item;
-    item.setSrc( $("#property-iframe-src")[0].value );
+  updateSrc: function(e) {
+    var input = jQuery(e.target);
+    
+    input.validate({
+      pass: function( value ){
+        var item = WebDoc.application.boardController.selection()[0].item;
+        consolidateSrc = WebDoc.UrlUtils.consolidateSrc(value);
+        item.setSrc( consolidateSrc );
+      },
+      fail: function( value, error ){
+        ddd(error);
+      }
+    });
+    
+
   }
   
 });

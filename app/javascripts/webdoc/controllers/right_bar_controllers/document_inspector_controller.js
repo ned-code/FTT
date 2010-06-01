@@ -23,6 +23,8 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     documentDescriptionField = jQuery("#document-description", inspector);
     documentCategoryField = jQuery("#document-category", inspector);
     documentFeaturedField = jQuery("#document-featured", inspector);
+    documentSizeWidthField = jQuery('#document-size-width', inspector);
+    documentSizeHeightField = jQuery('#document-size-height', inspector);
     currentDocument = WebDoc.application.pageEditor.currentDocument;
     
     form
@@ -32,6 +34,8 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     .delegate('#document-title', 'change', this._changeDocumentTitle)
     .delegate('#document-description', 'change', this._changeDocumentDescription)
     .delegate('#document-category', 'change', this._changeDocumentCategory)
+    .delegate('#document-size-width', 'change', this._changeDocumentWidth)
+    .delegate('#document-size-height', 'change', this._changeDocumentHeight)
     .delegate('#document-featured', 'change', this._changeDocumentFeatured);
     
     currentDocument.addListener(this);
@@ -49,6 +53,8 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     documentDescriptionField.val(currentDocument.description());
     documentCategoryField.val(currentDocument.category());
     documentFeaturedField.val(currentDocument.featured());
+    documentSizeWidthField.val(currentDocument.size().width);
+    documentSizeHeightField.val(currentDocument.size().height);
     // Also update toolbar title field
     jQuery(".document-title").text(currentDocument.title());
   },
@@ -74,6 +80,14 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
 
   _changeDocumentFeatured: function() {
     currentDocument.setFeatured(documentFeaturedField.val());
+  },
+  
+  _changeDocumentWidth: function() {
+    currentDocument.setSize({ width: documentSizeWidthField.val(), height: currentDocument.size().height});
+  },
+  
+  _changeDocumentHeight: function() {
+      currentDocument.setSize({  width: currentDocument.size().width, height: documentSizeHeightField.val()});
   },
   
   objectChanged: function() {

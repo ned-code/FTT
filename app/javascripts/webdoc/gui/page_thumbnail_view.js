@@ -33,7 +33,8 @@ WebDoc.PageThumbnailView = $.klass({
       
       this.itemDomNode = $('<div>').attr({
         id: "thumb_items",
-        style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
+        'class': "layer"
+        //style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
       });
       this.pageThumbNode.append(this.itemDomNode.get(0));   
       var that = this;
@@ -104,9 +105,6 @@ WebDoc.PageThumbnailView = $.klass({
     }
     if (page._isAttributeModified(options, 'class')) {
       this._initPageClass();      
-    }
-    if (page.data.data.externalPage && page._isAttributeModified(options, 'externalPageUrl')) {
-      this._loadExternalPage();
     }
   },
   

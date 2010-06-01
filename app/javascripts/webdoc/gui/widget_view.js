@@ -16,6 +16,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     this.api = new WebDoc.WidgetApi(item, false);
     this._displayDefaultContentIfNeeded( this.itemDomNode );
     this.domNode.addClass('item-widget');
+    this.itemLayerDomNode.addClass("item-layer screen");    
   },
   
   createDomNode: function($super) {
@@ -83,6 +84,8 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   edit: function($super){
     $super();
+    this.domNode.addClass("item-edited");
+    this.itemLayerDomNode.hide();    
     this.placeholderNode.remove();
   },
   
@@ -92,6 +95,9 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   stopEditing: function($super) {
     $super();
+    this.domNode.removeClass("item-edited");
+    this.itemLayerDomNode.show();
+    this._initDragAndResize();    
     this._displayDefaultContentIfNeeded(this.itemDomNode);  
   },
   

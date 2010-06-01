@@ -176,23 +176,28 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         var node = $(this);
         node
         .bind('submit', function() {
-            node.addClass('loading');
+          node.validate({
+           pass: function(){
+             node.addClass('loading');
 
-            ddd("edit doc with title " + $("#wb-edit-document-name").val());
-            $(this).dialog('close');
-            that.editedDocument.setTitle( infoDialogTitleNode.val(), true );
-            that.editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
-            that.editedDocument.setCategory( infoDialogCategoryNode.val(), true );
+             ddd("edit doc with title " + $("#wb-edit-document-name").val());
+             $(this).dialog('close');
+             that.editedDocument.setTitle( infoDialogTitleNode.val(), true );
+             that.editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
+             that.editedDocument.setCategory( infoDialogCategoryNode.val(), true );
+             that.editedDocument.setSize( {width:  infoDialogWidthNode.val(), height: infoDialogHeightNode.val()}, true );
 
-            that.editedDocument.save(function(persitedDoc){
-                node
-                .removeClass('loading')
-                .trigger({type: 'close'});
+             that.editedDocument.save(function(persitedDoc){
+                 node
+                 .removeClass('loading')
+                 .trigger({type: 'close'});
 
-                that.filter.refreshDocument(persitedDoc);
-            });
-
-            return false;
+                 that.filter.refreshDocument(persitedDoc);
+             });
+           },
+           fail: function() {}
+          });
+          return false;
         })
         .find("input[type='text']")
         .eq(0)
