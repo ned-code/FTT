@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
   rescue_from Acl9::AccessDenied, :with => :forbidden_access
   
+  include ExceptionNotification::Notifiable
+  
   before_filter :http_authenticate
   before_filter :set_xmpp_client_id_in_thread
 

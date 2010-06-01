@@ -30,6 +30,9 @@ config.action_mailer.smtp_settings = {
 }
 config.action_mailer.default_url_options = { :host => 'alpha.webdoc.com' }
 
+#ExceptionNotification config
+ExceptionNotification::Notifier.sender_address = %("WebDoc Alpha Error" <alpha.error@webdoc.com>)
+ExceptionNotification::Notifier.email_prefix = "[WebDoc Alpha]"
 
 # Enable threaded mode
 # config.threadsafe!
