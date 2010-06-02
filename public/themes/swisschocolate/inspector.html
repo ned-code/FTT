@@ -158,7 +158,7 @@
   ><li><a href="#set_item_class?class=theme_background_3" class="webdoc_message theme_background_3"></a></li>
 </ul>
 
-<a class="theme_color_5" href="#set_item_class?class= ">Remove styles</a>
+<a class="theme_color_5 webdoc_message" href="#set_item_class?class= ">Remove styles</a>
 
 </div>
 
@@ -188,7 +188,7 @@
   <img src="images/flag.png" />
 </div>
 
-<a class="theme_color_5" href="#set_item_class?class= ">Remove styles</a>
+<a class="theme_color_5 webdoc_message" href="#set_item_class?class= ">Remove styles</a>
 
 </div>
 
@@ -201,7 +201,7 @@
     for(i=0;i<links.length;i++) {
       if( /webdoc_message/.test( links[i].getAttribute('class') ) ) {
         links[i].onclick = function(event) {
-          webdoc.postMessage(event.target.getAttribute('href'), '*');
+          webdoc.postMessage(event.currentTarget.getAttribute('href'), '*');
         };
 
       }
