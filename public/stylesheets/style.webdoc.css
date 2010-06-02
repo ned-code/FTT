@@ -14,11 +14,8 @@
   height: 100px;    
 }
 
-img.item {
+.image_item img {
   position: absolute;
-  left: 50%; top: 50%;
-  margin-left: -50%;
-  margin-top: -50%;
 }
 
 .webdoc code,

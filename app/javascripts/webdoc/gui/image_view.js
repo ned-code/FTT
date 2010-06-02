@@ -3,95 +3,86 @@
  */
 WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   
-  // Classes applied to the item in _initItemClass
-  ITEMCLASSES: "item",
+  // Classes applied to the item in initItemClass
+  ITEMCLASSES: "item image_item layer",
+  
+  // Data to be ignored
+  IGNORE: {
+    "innerHTML": true,
+    "innerHtml": true,
+    "class": true,
+    "wrapClass": true,
+    "innerHTMLPlaceholder": true,
+    "tag": true,
+    "css": true,
+    "preference": true,
+    "properties": true,
+    "preserve_aspect_ratio": true
+  },
+  
   
   initialize: function($super, item, pageView, afterItem){
     $super(item, pageView, afterItem);
     
-    //var model = this.item,
-    //    aspectRatio = model.getProperty( 'aspectRatio' ),
-    //    dimensions = model.getProperty( 'dimensions' );
-    //
-    //if (!aspectRatio || !dimensions) {
-    //  this._setDimensions();
-    //  aspectRatio = model.getProperty( 'aspectRatio' );
-    //  dimensions = model.getProperty( 'dimensions' );
-    //}
-    //
-    //ddd( '[ImageView]', model.getProperty( 'dimensions' ), model.getProperty( 'aspectRatio' ) )
+    this.zoom();
+    this.displace();
   },
-  
-  _setDimensions: function(){
-  
-    var model = this.item,
-        image = new Image();
+
+  createDomNode: function() {
+    var imageNode = jQuery('<' + this.item.data.data.tag + '/>'),
+        frameNode = jQuery('<div/>', { 'class': "layer" });
     
-    image.src = model.data.data.src;
+    for (var key in this.item.data.data) {
+      if ( this.IGNORE[ key ] ) { continue; }
+      imageNode.attr(key, this.item.data.data[key]);
+    }
     
-    model.setProperty( 'dimensions', {
-      width: image.width,
-      height: image.height
-    });
+    frameNode.append( imageNode );
     
-    model.setProperty( 'aspectRatio', image.width / image.height );
+    this.imageNode = imageNode;
+    this.frameNode = frameNode;
+    
+    return frameNode;
   },
-  
-  displace: function( coords ){
-    var img = this.itemDomNode,
-        model = this.item,
-        imageSize = model.getProperty( 'dimensions' ),
-        wrapSize = {
-          width: this.domNode.width(),
-          height: this.domNode.height()
-        },
-        diffSize = {
-          width: wrapSize.width - imageSize.width,
-          height: wrapSize.height - imageSize.height
-        },
-        css = {
-          top: coords.top < diffSize.height ?
-            diffSize.height :
-            coords.top < 0 ?
-            coords.top :
-            0,
-          left: coords.left < diffSize.width ?
-            diffSize.width :
-            coords.left < 0 ?
-            coords.left :
-            0
-        };
-    
-    model.setProperty('cssDisplacement', css);
-    this.itemDomNode.css( css );
-  },
-  
+
   zoom: function(){
-    var img = this.itemDomNode,
+    var image = this.imageNode,
         model = this.item,
-        factor = model.getProperty( 'zoom' ),
-        imgSize = model.getProperty( 'dimensions' ),
-        aspectRatio = model.getProperty( 'aspectRatio' ),
+        wrap = this.domNode,
+        zoom = model.getProperty( 'zoom' ) || 1,
+        imgSize = model.getOriginalSize(),
+        displacement = model.getDisplacement(),
         css = {
-          width: imgSize.width * aspectRatio * factor,
-          height: imgSize.height * factor
+          left: - zoom * displacement.left,
+          top: - zoom * displacement.top,
+          width: imgSize.width * zoom,
+          height: imgSize.height * zoom
+        },
+        wrapCss = {
+          maxWidth: css.width,
+          maxHeight: css.height
         };
     
-    this.itemDomNode.css( css );
+    image.css( css );
+    wrap.css( wrapCss );
   },
   
   displace: function(){
     var model = this.item,
-        img = this.itemDomNode,
-        wrap = this.domNode,
-        zoom = model.getProperty( 'zoom' ),
-        size = model.getProperty( 'dimensions' ),
+        image = this.imageNode,
+        frame = this.frameNode,
+        displacement = model.getDisplacement(),
+        zoom = model.getZoom(),
+        dy = displacement.top * zoom,
+        dx = displacement.left * zoom,
+        travx = image.width() - frame.width(),
+        travy = image.height() - frame.height(),
         css = {
-          marginTop:  ( size.height * zoom - wrap.height() ) * model.displacement[1],
-          marginLeft: ( size.width * zoom  - wrap.width()  ) * model.displacement[0]
+          top: -( dy > travy ? travy : dy ),
+          left: -( dx > travx ? travx : dx )
         };
     
-    img.css( css );
+    image.css( css );
   },
   
   inspectorId: function() {

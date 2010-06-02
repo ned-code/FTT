@@ -388,14 +388,56 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return d >= 0 && s.lastIndexOf(pattern) === d;
   },
   
-  zoom: function(factor){
-    this.setProperty('zoom', factor);
-    //this.fireObjectChanged({ modifedAttribute: 'zoom' });
+  getOriginalSize: function(){
+    if (!this._originalSize) { this._calcOriginalSize(); }
+    return this._originalSize;
+  },
+  
+  _calcOriginalSize: function(){
+    var image = new Image();
+    
+    image.src = this.data.data.src;
+    
+    this._originalSize = {
+      width: image.width,
+      height: image.height
+    };
+  },
+  
+  getZoom: function(){
+    return this.getProperty('zoom') || 1;
+  },
+  
+  getDisplacement: function(){
+    return this.getProperty('displacement') || { top: 0, left: 0 }
+  },
+  
+  zoom: function(zoom){
+    var size = this.getOriginalSize(),
+        css = this.data.data.css;
+    
+    css.maxWidth = size.width * zoom;
+    css.maxHeight = size.height * zoom;
+    
+    this.setProperty('zoom', zoom);
+    this.save();
+    this.fireObjectChanged({ modifedAttribute: 'zoom' });
   },
   
   displace: function(coords) {
-    this.setProperty('displacement', coords);
-    //this.fireObjectChanged({ modifedAttribute: 'displacement' });
+    // coords is an object { top: n, left: n } that represents
+    // the origin relative to the images original pixel dimensions.
+    // The origin is limited to be within the dimensions of the image.
+    
+    var size = this.getOriginalSize(),
+        displacement = {
+          top: (coords.top < 0) ? 0 : (coords.top > size.height) ? size.height : coords.top,
+          left: (coords.left < 0) ? 0 : (coords.left > size.width) ? size.width : coords.left
+        };
+    
+    this.setProperty('displacement', displacement);
+    this.save();
+    this.fireObjectChanged({ modifedAttribute: 'displacement' });
   }
 });
 

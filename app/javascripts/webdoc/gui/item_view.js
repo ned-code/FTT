@@ -8,7 +8,11 @@ WebDoc.ItemView = $.klass({
     right: true,
     width: true,
     height: true,
-    transform: true
+    transform: true,
+    maxWidth: true,
+    maxHeight: true,
+    minWidth: true,
+    minHeight: true
   },
 
   // Define all css keys that must be translated into

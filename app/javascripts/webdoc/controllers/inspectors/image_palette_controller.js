@@ -33,24 +33,34 @@ WebDoc.ImagePaletteController = $.klass({
       item.zoom( factor );
     });
     
+    var that = this;
+    
     this.xshiftNode
     .bind('change', function(e){
       var xfactor = parseFloat( e.target.value ),
-          item = WebDoc.application.boardController.selection()[0].item;
+          item = WebDoc.application.boardController.selection()[0].item,
+          size = item.getOriginalSize();
       
-      this.xfactor = xfactor;
+      that.xfactor = xfactor;
       
-      item.displace([xfactor, this.yfactor]);
+      item.displace({
+        left: xfactor * size.width,
+        top: (that.yfactor || 0) * size.height
+      });
     });
     
     this.yshiftNode
     .bind('change', function(e){
       var yfactor = parseFloat( e.target.value ),
-          item = WebDoc.application.boardController.selection()[0].item;
+          item = WebDoc.application.boardController.selection()[0].item,
+          size = item.getOriginalSize();
       
-      this.yfactor = yfactor;
+      that.yfactor = yfactor;
       
-      item.displace([this.xfactor, yfactor]);
+      item.displace({
+        top: yfactor * size.height,
+        left: (that.xfactor || 0) * size.width
+      });
     });
   },
   
