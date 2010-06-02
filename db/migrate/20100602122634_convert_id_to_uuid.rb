@@ -163,7 +163,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
       rolesUser[:user_id] = user.uuid
       rolesUser[:role_id] = role.uuid
       p rolesUser
-      RolesUser.find(:first, :condtions => { :user_id => user_id, :role_id => role_id}).update_attributes!(rolesUser)
+      RolesUser.find(:first, :conditions => { :user_id => user_id, :role_id => role_id}).update_attributes!(rolesUser)
       
     end
   end
