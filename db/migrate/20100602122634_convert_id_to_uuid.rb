@@ -152,19 +152,19 @@ class ConvertIdToUuid < ActiveRecord::Migration
     
     #Role User
     RolesUser.all.each do |r|
-      rolesUser = {}
       User.set_primary_key :id
       Role.set_primary_key :id
       
       user = User.find(:first, :conditions => { :id => r.user_id })
       role = Role.find(:first, :conditions => { :id => r.role_id })
-      user_id = user.id
-      role_id = role.id
-      rolesUser[:user_id] = user.uuid
-      rolesUser[:role_id] = role.uuid
-      p rolesUser
-      RolesUser.find(:first, :conditions => { :user_id => user_id, :role_id => role_id}).update_attributes!(rolesUser)
+      p user.id
+      p role.id
       
+      p user.uuid
+      p role.uuid
+    
+      execute "UPDATE roles_users SET user_id='#{user.uuid}' where user_id='#{user.id}' AND role_id='#{role.id}'"
+      execute "UPDATE roles_users SET role_id='#{role.uuid}' where user_id='#{user.uuid}' AND role_id='#{role.id}'"
     end
   end
 
