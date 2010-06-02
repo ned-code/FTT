@@ -92,10 +92,6 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  carrierwave: 
-    group: 
-    - :default
-    version: ">= 0"
   erubis: 
     group: 
     - :default
@@ -104,8 +100,8 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  mini_magick: 
-    group: 
+  paperclip:
+    group:
     - :default
     version: ">= 0"
   i18n: 
@@ -205,8 +201,6 @@ specs:
     version: 0.0.18
 - capybara: 
     version: 0.3.7
-- carrierwave: 
-    version: 0.4.5
 - cgi_multipart_eof_fix: 
     version: 2.5.0
 - closure-compiler: 
@@ -245,13 +239,13 @@ specs:
     version: "0.43"
 - macaddr: 
     version: 1.0.0
-- mini_magick: 
-    version: 1.2.5
 - mongrel: 
     version: 1.1.5
 - mysql: 
     version: 2.8.1
-- ruby-debug-base: 
+- paperclip:
+    version: 2.3.1.1
+- ruby-debug-base:
     version: 0.10.3
 - ruby-debug: 
     version: 0.10.3
@@ -287,7 +281,7 @@ specs:
     version: 2.3.12
 - xmpp4r: 
     version: "0.5"
-hash: 92b31276fdb5a0a64952994c77662609e31fce5b
+hash: ef5f26ff1cdcc07293c18f48318403702ec4d544
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

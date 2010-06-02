@@ -18,8 +18,9 @@ gem 'uuid'
 gem "mysql"
 gem 'rack-debug'
 gem 'nokogiri'
-gem 'carrierwave' #, "0.4.5" #, :git => 'http://github.com/jnicklas/carrierwave.git' #, "0.4.3"
-gem 'mini_magick'
+gem 'paperclip'
+# gem 'carrierwave' #, "0.4.5" #, :git => 'http://github.com/jnicklas/carrierwave.git' #, "0.4.3"
+# gem 'mini_magick'
 gem 'acl9'
 gem 'formtastic'
 gem 'erubis'

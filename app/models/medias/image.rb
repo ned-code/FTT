@@ -1,5 +1,17 @@
 class Medias::Image < Media
-  mount_uploader :file, ImageUploader
+  # mount_uploader :file, ImageUploader
+
+  store_prefix = true ? '/uploads' : ''  
+  attachment_path = store_prefix+"/medias/image/:uuid/:cw_style:basename.:extension"
+  has_attached_file :attachment,
+                    :styles => { :thumb=> "100x100#", :default => "800x600>" },
+                    :default_url   => "",
+                    :url => attachment_path,
+                    :path => ":rails_root/public" + attachment_path
+
+  validates_attachment_presence :attachment
+  validates_attachment_size :attachment, :less_than => 5.megabytes
+  validates_attachment_content_type :attachment, :content_type => ['image/jpeg', 'image/png', 'image/gif', 'application/octet-stream']
   
   # =============
   # = Callbacks =
@@ -12,7 +24,11 @@ protected
   # after_save
   def set_properties_if_not_present
     unless properties.present?
-      update_attribute(:properties, { :thumb_url => file.thumb.url, :url => file.url })
+      update_attribute(:properties, {
+              :thumb_url => attachment.url(:thumb),
+              :default_url => attachment.url(:default),
+              :url => attachment.url 
+      })
     end
   end
   

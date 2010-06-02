@@ -1,5 +1,16 @@
 class Medias::Video < Media
-  mount_uploader :file, FileUploader
+
+  store_prefix = true ? '/uploads' : ''
+  attachment_path = store_prefix+"/medias/video/:uuid/:cw_style:basename.:extension"
+  has_attached_file :attachment,
+                    :styles => {},
+                    :default_url   => "",
+                    :url => attachment_path,
+                    :path => ":rails_root/public" + attachment_path
+
+  validates_attachment_presence :attachment
+  validates_attachment_size :attachment, :less_than => 5.megabytes
+  validates_attachment_content_type :attachment, :content_type => ['application/octet-stream']
   
   # =============
   # = Callbacks =

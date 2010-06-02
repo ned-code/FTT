@@ -1,5 +1,20 @@
 class Medias::Widget < Media
-  mount_uploader :file, WidgetUploader, :validate_integrity => true # Upload the zip file
+  # mount_uploader :file, WidgetUploader, :validate_integrity => true # Upload the zip file
+  # TODO validate integrity??
+  store_prefix = true ? '/uploads' : ''
+  attachment_path = store_prefix+"/medias/widget/:uuid/:version/:cw_style:basename.:extension"
+  has_attached_file :attachment,
+                    :styles => { :thumb=> "100x100#", :default => "800x600>" },
+                    :default_url   => "",
+                    :url => attachment_path,
+                    :path => ":rails_root/public" + attachment_path
+
+  validates_attachment_presence :attachment
+  validates_attachment_size :attachment, :less_than => 10.megabytes
+  # TODO content type for zip
+  # validates_attachment_content_type :attachment, :content_type => ['application/octet-stream']
+
+
   
   attr_accessor :status
   

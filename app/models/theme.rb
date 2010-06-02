@@ -1,5 +1,5 @@
 class Theme < ActiveRecord::Base
-  mount_uploader :file, ThemeUploader, :validate_integrity => true
+  # mount_uploader :file, ThemeUploader, :validate_integrity => true
 
   has_uuid
 

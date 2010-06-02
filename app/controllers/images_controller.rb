@@ -42,6 +42,7 @@ class ImagesController < ApplicationController
         format.html { render :json => @image }
         format.json { render :json => @image }
       else
+        p @image.errors
         format.json { render :status => 503 }
       end
     end
