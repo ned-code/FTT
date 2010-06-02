@@ -243,7 +243,7 @@ WebDoc.DocumentList = $.klass({
   },
   
   _hasAuthenticatedUserEditorRights: function(document) {
-    return (jQuery.inArray(document.data.id.toString(), WebDoc.application.documentEditor.currentUserDocumentsEditor()) !== -1);
+    return (jQuery.inArray(document.uuid(), WebDoc.application.documentEditor.currentUserDocumentsEditor()) !== -1);
   }
 });
 

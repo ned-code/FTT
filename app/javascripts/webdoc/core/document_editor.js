@@ -56,7 +56,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     WebDoc.Application.initializeSingletons([WebDoc.DocumentCategoriesManager], function() {
       var categories = WebDoc.DocumentCategoriesManager.getInstance().getAllCategories();
       $.each(categories, function(i, webDocCategory) {
-        infoDialogCategoryNode.append($('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+        infoDialogCategoryNode.append($('<option>').attr("value", webDocCategory.uuid()).html(webDocCategory.data.name));
       });
 
       $("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
