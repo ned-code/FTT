@@ -62,6 +62,9 @@ WebDoc.PageView = $.klass({
     var relatedItemView = this.itemViews[addedItem.uuid()];
     
     var afterItemView = afterItem ? this.itemViews[afterItem.uuid()] : null;
+    if(afterItemView === null && this.page.data.data.externalPageUrl) {
+      afterItemView = "end"
+    }
     // be sure not to add twice the same item
     if (!relatedItemView) {
       this.createItemView(addedItem, afterItemView);

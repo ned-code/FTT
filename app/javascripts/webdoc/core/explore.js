@@ -16,7 +16,9 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     this.currentListingPageId = 1;
 
     this.listNode = jQuery('<ul/>').attr('id', 'webdoc').addClass('webdoc-viewer-index').addClass('index');
+    this.paginationWrap = $("<div class='pagination'>");
     this.domNode = $('#explorer_content').append(this.listNode);
+    this.domNode.append(this.paginationWrap);
 
     this.mainFilterDomNode = jQuery('#wd-main-filter');
     this.categoryFilterDomNode = jQuery('#wd-category-filter');
@@ -180,9 +182,9 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
   },
 
   _refreshPagination: function(pagination) {
+    this.paginationWrap.empty();
     if (pagination.total_pages > 1) {
-      var paginationWrap = $("<div class='pagination'>");
-      $('<span>').html("Page " + pagination.current_page + " of " + pagination.total_pages + " ").appendTo(paginationWrap);
+      $('<span>').html("Page " + pagination.current_page + " of " + pagination.total_pages + " ").appendTo(this.paginationWrap);
       if (pagination.previous_page > 0) {
         var previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
         
@@ -191,18 +193,18 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
           this._loadDocuments(-1);
           event.preventDefault();
         }.pBind(this))
-        .appendTo(paginationWrap);
+        .appendTo(this.paginationWrap);
       }
       
       if (pagination.next_page > 0) {
-        if(pagination.previous_page > 0) { $("<span>").html(' | ').appendTo(paginationWrap); }
+        if(pagination.previous_page > 0) { $("<span>").html(' | ').appendTo(this.paginationWrap); }
         var nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
         nextPageLink.click(function(event){
           this._loadDocuments(1);
           event.preventDefault();
-        }.pBind(this)).appendTo(paginationWrap);
+        }.pBind(this)).appendTo(this.paginationWrap);
       }
-      this.domNode.append(paginationWrap);
+
     }
   }
 

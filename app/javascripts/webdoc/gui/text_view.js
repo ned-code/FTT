@@ -63,7 +63,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
     $super(withAnimate);
     // be sure that we don't have two scrol bar. Because text view in edition has its own overflow so we remove the overflow from the itemdomnode
     if (this.domNode.hasClass("item-edited") ) {
-      this.itemDomNode.css("overflow", "");    
+      this.itemDomNode.css("overflow", "hidden");    
     }
   }
 });

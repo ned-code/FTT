@@ -207,10 +207,11 @@ WebDoc.BoardController = jQuery.klass({
     }
     
     // TODO for FF .5 we put svg backward because pointer event is not implemented
-    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
-      ddd("FF 3.5. drawing !");
-      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
-    }
+    // it does not work on ff4
+//    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
+//      ddd("FF 3.5. drawing !");
+//      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
+//    }
   },
   
   toggleMode: function() {

@@ -93,7 +93,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
         this.currentDocument = data[0];
         this.currentDocument.addListener(this);
         WebDoc.application.boardController.applyDocumentTheme();
-        WebDoc.ServerManager.getRecords(WebDoc.User, this.currentDocument.creator_id, function(data, status) {
+        WebDoc.ServerManager.getRecords(WebDoc.User, this.currentDocument.data.creator_id, function(data, status) {
           this._creator = data[0];
           this.loadPageId(window.location.hash.replace("#", ""));
           WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
