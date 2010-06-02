@@ -1,4 +1,3 @@
-
 WebDoc.ItemView = $.klass({
 
   // Define all css keys that must be set at the wrap level of item
@@ -20,9 +19,11 @@ WebDoc.ItemView = $.klass({
     borderRadius: true,
     boxShadow: true
   },
-
-  initialize: function(item, pageView, afterItem) {
   
+  // Classes applied to the item in initItemClass
+  ITEMCLASSES: "item layer",
+  
+  initialize: function(item, pageView, afterItem) {
     if (pageView) {
       this.pageView = pageView;
     }
@@ -31,12 +32,13 @@ WebDoc.ItemView = $.klass({
     }
     
     this.item = item;
-    // item wrapper    
+    
+    // item wrapper
     this.domNode = $("<div/>").addClass('item_wrap');
-
+    
     this.itemDomNode = this.createDomNode();
-    this.itemLayerDomNode = $("<div>").addClass("layer").css("display", "block");
-
+    this.itemLayerDomNode = $("<div>", {'class': "layer"}).css("display", "block");
+    
     this.domNode.append(this.itemDomNode);
     this.domNode.append(this.itemLayerDomNode);
     
@@ -44,6 +46,7 @@ WebDoc.ItemView = $.klass({
     this.domNode.data("itemView", this);
     
     item.addListener(this);
+    
     if (afterItem) {
       if (afterItem == "end") {
         this.pageView.itemDomNode.append(this.domNode);
@@ -55,22 +58,23 @@ WebDoc.ItemView = $.klass({
     else {
       this.pageView.itemDomNode.prepend(this.domNode);
     }
-
-    // if item has no css we just set its css to empty hash. It avoids to always check ater it item has css.
+    
+    // if item has no css we just set its css to empty hash.
+    // It avoids to always check ater it item has css.
     if (!this.item.data.data.css) {
       this.item.data.data.css = {};
     }
-
+    
     if (this.item.data.data.innerHTML) {
       this.innerHtmlChanged();
     }
-
+    
     this._initItemClass();
     this._initItemCss(false);
   },
-
+  
   _initItemClass: function() {
-    this.itemDomNode.attr("class", "item layer");
+    this.itemDomNode.attr("class", this.ITEMCLASSES);
     if(this.item.data.data['class']) {
       this.itemDomNode.addClass(this.item.data.data['class']);
     }
@@ -83,7 +87,7 @@ WebDoc.ItemView = $.klass({
       this.domNode.data('wdClasses', this.item.data.data.wrapClass);
     }
   },
-
+  
   _initItemCss: function( withAnimate ) {
     var domNode = this.domNode,
         itemDomNode = this.itemDomNode,
@@ -134,7 +138,8 @@ WebDoc.ItemView = $.klass({
     //}
     
     // Animate using css transitions given by the animate class
-    // TODO: This would be done better by making use of the transitionend event
+    // TODO: The timer would be done better
+    // by making use of the "transitionend" event
     if ( withAnimate ) {
       domNode.addClass('animate');
       timer = setTimeout(function(){
@@ -171,6 +176,7 @@ WebDoc.ItemView = $.klass({
           case "css":   
           case "preference":
           case "properties":
+          case "preserve_aspect_ratio":
             break;
           default:
             itemNode.attr(key, this.item.data.data[key]);
@@ -194,6 +200,12 @@ WebDoc.ItemView = $.klass({
     }
     if (item._isAttributeModified(options, 'class')) {
       this._initItemClass();
+    }
+    if (item._isAttributeModified(options, 'zoom')) {
+      this.zoom();
+    }
+    if (item._isAttributeModified(options, 'displacement')) {
+      this.displace();
     }
   },
 

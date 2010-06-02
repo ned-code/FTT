@@ -109,12 +109,14 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return "object";
   },
   
-  property: function(key) {
+  getProperty: function(key) {
     if (this.data.data.properties) {
       return this.data.data.properties[key];
     }
     return null;
   },
+  
+  property: this.getProperty,
   
   setProperty: function(key, value) {
     if (!this.data.data.properties) {
@@ -310,10 +312,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.fireDomNodeChanged();
   },
   
-  fireObjectChanged: function($super) {
-    $super();
-  },
-  
   fireInnerHtmlChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
       if (this.listeners[i].innerHtmlChanged) {
@@ -388,6 +386,16 @@ WebDoc.Item = $.klass(WebDoc.Record,
   _endsWith: function(s, pattern) {
     var d = s.length - pattern.length;
     return d >= 0 && s.lastIndexOf(pattern) === d;
+  },
+  
+  zoom: function(factor){
+    this.setProperty('zoom', factor);
+    //this.fireObjectChanged({ modifedAttribute: 'zoom' });
+  },
+  
+  displace: function(coords) {
+    this.setProperty('displacement', coords);
+    //this.fireObjectChanged({ modifedAttribute: 'displacement' });
   }
 });
 

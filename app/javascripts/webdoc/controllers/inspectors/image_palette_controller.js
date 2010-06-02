@@ -14,8 +14,44 @@ WebDoc.ImagePaletteController = $.klass({
 
     this.addToMyImageLink = $(selector + " a[href=#add_to_my_images]");
     this.addToMyImageResult = $(selector + " #add_to_my_images_result");
-
+    
     this.addToMyImageLink.click(this.addToMyImage.pBind(this));
+    
+    this.zoomNode = jQuery('#image_zoom');
+    this.xshiftNode = jQuery('#image_xshift');
+    this.yshiftNode = jQuery('#image_yshift');
+    
+    this.zoomNode
+    .bind('change', function(e){
+      var factor = parseFloat( e.target.value ),
+          item = WebDoc.application.boardController.selection()[0].item;
+      
+      factor = 0.25/(1-factor);
+      
+      console.log(factor);
+      
+      item.zoom( factor );
+    });
+    
+    this.xshiftNode
+    .bind('change', function(e){
+      var xfactor = parseFloat( e.target.value ),
+          item = WebDoc.application.boardController.selection()[0].item;
+      
+      this.xfactor = xfactor;
+      
+      item.displace([xfactor, this.yfactor]);
+    });
+    
+    this.yshiftNode
+    .bind('change', function(e){
+      var yfactor = parseFloat( e.target.value ),
+          item = WebDoc.application.boardController.selection()[0].item;
+      
+      this.yfactor = yfactor;
+      
+      item.displace([this.xfactor, yfactor]);
+    });
   },
   
   refresh: function() {
@@ -53,7 +89,7 @@ WebDoc.ImagePaletteController = $.klass({
     if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && item.data.data.src !== undefined && item.data.data.src !== "") {
       var image = new Image();
       image.src = item.data.data.src;
-      ddd("restore original size: "+image.width+"x"+image.height+" pixels");
+      ddd("restore original size: "+image.width+"x"+image.height+"px");
       WebDoc.ItemView.restoreSize(item, { width: image.width, height: image.height});
     }
   },
