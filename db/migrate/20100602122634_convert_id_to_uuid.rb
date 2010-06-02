@@ -152,7 +152,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
     
     #Role User
     RolesUser.all.each do |r|
-      roleUser = {}
+      rolesUser = {}
       User.set_primary_key :id
       Role.set_primary_key :id
       
