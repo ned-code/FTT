@@ -1,3 +1,10 @@
+// ======
+// = UI =
+// ======
+
+WebDoc.showInspectorPanes
+
+
 // ===========================
 // = Post messages to webdoc =
 // ===========================
@@ -10,7 +17,7 @@ WebDoc.registerInspectorPanes = function(panes) { // panes is an array of string
     panes = [panes];
   }
   WebDoc.webdocWindow.postMessage("app:"+WebDoc.appId+":register-inspector-panes:"+panes.join(":"),"*");
-}
+};
 
 WebDoc.registerAppCall = function(functionName, handler, context) {
   
@@ -18,7 +25,12 @@ WebDoc.registerAppCall = function(functionName, handler, context) {
   WebDoc.registeredAppCalls[functionName+"Context"] = context;
   
   // webdoc_win,postMessage(myId+"", '*');
-}
+};
+
+WebDoc.adjustHeight = function() {
+  var height = document.height;
+  WebDoc.webdocWindow.postMessage("app:"+WebDoc.appId+":adjust-height:"+height,"*");
+};
 
 
 // ==============================================

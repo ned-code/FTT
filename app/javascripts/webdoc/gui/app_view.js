@@ -7,9 +7,9 @@
 WebDoc.AppView = $.klass(WebDoc.ItemView, {
   initialize: function($super, item, pageView, afterItem) {
     var placeholder = $('<form/>', { 'class': 'item-placeholder stack' });
-    var input       = $('<input/>', { type: 'text', title: 'Gadget xml url', name: 'input-iframe-src', value: '' });
+    var input       = $('<input/>', { type: 'text', title: 'App xml url', name: 'input-iframe-src', value: '' });
     
-    this.placeholderNode = placeholder.html('<div class="item-icon"></div><label>Enter a Gadet xml url:</label>').append(input);;
+    this.placeholderNode = placeholder.html('<div class="item-icon"></div><label>Enter an App xml url:</label>').append(input);;
     this.inputNode       = input;
     
     $super(item, pageView, afterItem);
@@ -20,7 +20,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
     .addClass("item-app")
     .delegate('.item-placeholder', 'submit', this._makeSetGadgetUrlEventHandler());
     
-    this.inspectorPaneViews = [];
+    this.inspectorPanesManager = new WebDoc.InspectorPanesManager(this);
   },
   
   createDomNode: function($super) {
@@ -76,39 +76,39 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
     }
   },
   
-  removeAppAndPanes: function() {
-    if (this.app) {
-      WebDoc.appsContainer.removeApp(this.app); 
-      
-      // Remove the app's inspector panes
-      $.each(this.inspectorPaneViews, function(index, paneView) {
-        paneView.remove();
-      });
-      
-      this.app = null;
-    }
+  objectChanged: function($super, item, options) {
+    $super(item, options);
+    
+    this.inspectorPanesManager.updateAttachedPanePosition();
   },
   
-  showInspectorPanes: function() {
-    $.each(this.inspectorPaneViews, function(index, paneView) {
-      paneView.show();
-    });
+  adjustHeight: function(height) {
+    //called from the app itself (via postmessaging)
+    
+    // this.item.changeCss({ width:this.domNode.width(), height:height });
+    
+    this.item.resizeTo({ width:this.domNode.width()+'px', height:height+'px' });
   },
-
-  hideInspectorPanes: function() {
-    $.each(this.inspectorPaneViews, function(index, paneView) {
-      paneView.hide();
-    });
+  
+  removeAppAndPanes: function() {
+    if (this.app) {
+      WebDoc.appsContainer.removeApp(this.app);
+      this.app = null;
+      this.inspectorPanesManager.destroy();
+    }
   },
   
   select: function($super) {
     $super();
-    this.showInspectorPanes();
+    this.inspectorPanesManager.domNode.show();
+    
+    //avoid resizing at the moment....
+    this.domNode.resizable( 'destroy' );
   },
   
   unSelect: function($super) {
     $super();
-    this.hideInspectorPanes();
+    this.inspectorPanesManager.domNode.hide();
   },
   
   canEdit: function() {

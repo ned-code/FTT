@@ -3,13 +3,13 @@
   color:#fff;
 }
 
-.app_inspector.floating {
+.inspector_pane.floating {
   padding:10px 10px 15px;
   width:200px;
   position:absolute;
 }
 
-.app_inspector.floating .box {
+.inspector_pane.floating .box {
   border:1px solid #000;
   background:-webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(49, 52, 55, 0.8)), color-stop(1, rgba(34, 38, 41, 0.8)));
   -webkit-border-radius:10px;
@@ -19,7 +19,7 @@
   -moz-box-shadow:#555 0 1px 5px;
 }
 
-.app_inspector.floating .titlebar {
+.inspector_pane.floating .titlebar {
   background:#454749;
   padding:7px 0;
   position:relative;
@@ -27,9 +27,11 @@
   -webkit-border-top-right-radius:10px;
   -moz-border-radius-topleft:10px;
   -moz-border-radius-topright:10px;
+  -webkit-user-select:none;
+  -moz-user-select:none;
 }
 
-.app_inspector.floating.attached .titlebar .attached_indicator {
+.inspector_pane.floating.attached .titlebar .attached_indicator {
   display:block;
   width:100%;
   height:9px;
@@ -39,12 +41,12 @@
   left:0;
 }
 
-.app_inspector.floating .titlebar a {
+.inspector_pane.floating .titlebar a {
   display:block;
   position:absolute;
 }
 
-.app_inspector.floating .titlebar a.hide {
+.inspector_pane.floating .titlebar a.hide {
   width:13px;
   height:13px;
   background:url(images/inspectors/hide.png) no-repeat;
@@ -52,7 +54,7 @@
   left:6px;
 }
 
-.app_inspector.floating .titlebar a.arrow.right {
+.inspector_pane.floating .titlebar a.arrow.right {
   width:13px;
   height:13px;
   background:url(images/inspectors/arrow_right.png) no-repeat;
@@ -60,11 +62,27 @@
   right:6px;
 }
 
-.app_inspector.floating .titlebar a span {display:none;}
+.inspector_pane.floating .titlebar a span {display:none;}
 
-.app_inspector.floating .titlebar strong.title {
+.inspector_pane.floating .titlebar strong.title {
   display:block;
   text-align:center;
   font-size:13px;
 /*  color:#fff;*/
 }
+
+
+.item_wrap a.show_inspector_panes {
+  display:block;
+  width:15px;
+  height:15px;
+  background:url(images/inspectors/i.png) no-repeat;
+  position:absolute;
+  bottom:10px;
+  right:10px;
+}
+
+.item_wrap a.show_inspector_panes span {display:none;}
+
+
+

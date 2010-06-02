@@ -18,7 +18,7 @@ body {
 
 .poll {
 /*  height:100%;*/
-  padding:15px;
+/*  padding:15px;*/
 }
 
 .poll .box {
@@ -29,10 +29,10 @@ body {
   background:-webkit-gradient(linear, left top, left bottom, color-stop(0, #d5dce3), color-stop(1, #c7cdd4));
   background-image:-moz-linear-gradient(top, #d5dce3, #c7cdd4);
   text-shadow:#e4e7eb 0 1px 0;
-  -webkit-border-radius:10px;
+/*  -webkit-border-radius:10px;
   -moz-border-radius:10px;
   -webkit-box-shadow:#aaa 0 1px 5px;
-  -moz-box-shadow:#aaa 0 1px 5px;
+  -moz-box-shadow:#aaa 0 1px 5px;*/
 }
 
 .poll .editable {
@@ -189,8 +189,8 @@ body {
   height:15px;
   background:url(../images/i.png) no-repeat;
   position:absolute;
-  bottom:15px;
-  right:15px;
+  bottom:10px;
+  right:10px;
 }
 .poll a.show_inspector_pane span {display:none;}
 

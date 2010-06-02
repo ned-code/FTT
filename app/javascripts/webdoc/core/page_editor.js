@@ -86,7 +86,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
       WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
-      WebDoc.application.postMessageManager = new WebDoc.PostMessageManager();      
+      // WebDoc.application.postMessageManager = new WebDoc.PostMessageManager();
       WebDoc.application.collaborationManager.listenXMPPNode(documentId);              
       WebDoc.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
       {

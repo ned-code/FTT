@@ -5,9 +5,9 @@ gadgets.util.registerOnLoadHandler(function() {
   
   poll = new Poll();
   
+  WebDoc.appEnteredEditMode();
+  WebDoc.adjustHeight();
   // gadgets.window.adjustHeight();
-  
-  WebDoc.appEnteredPreviewMode();
 });
 
 WebDoc.appInit = function() {
@@ -15,14 +15,16 @@ WebDoc.appInit = function() {
   //for multiple panes use: WebDoc.registerInspectorPanes(["inspector-settings", ...])
 }
 
+//TODO
 WebDoc.appEnteredEditMode = function() {
   poll.enableVoteButton(false);
-  poll.iButton.show();
+  // poll.iButton.show();
 };
 
+//TODO
 WebDoc.appEnteredPreviewMode = function() {
   poll.enableVoteButton(true);
-  poll.iButton.hide();
+  // poll.iButton.hide();
 };
 
 
@@ -31,7 +33,7 @@ Poll = $.klass({
     this.questionEl = $('.question');
     this.answersForm = $('form.answers');
     this.voteButton = $('button.submit');
-    this.iButton = $('.show_inspector_pane');
+    // this.iButton = $('.show_inspector_pane');
     
     this.questionData = "Question?";
     this.answersData = [
@@ -108,8 +110,8 @@ Poll = $.klass({
   },
   
   heightResize: function() {
-    ddd("test")
-    $('.poll').parents('iframe').removeAttr('height').css({ height: $('.poll').height()+20 });
+    // ddd("test")
+    // $('.poll').parents('iframe').removeAttr('height').css({ height: $('.poll').height()+20 });
   },
   
   enableVoteButton: function(flag) {

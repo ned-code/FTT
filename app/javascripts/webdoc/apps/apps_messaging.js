@@ -12,6 +12,7 @@ WebDoc.AppsMessagingController = $.klass({
         
         var registerInspectorPanes = event.data.match(/^app:(.*):register-inspector-panes:(.*)$/);
         var appCall = event.data.match(/^app:(.*):pane-to-app-call:(.*):(.*)$/);
+        var adjustHeight = event.data.match(/^app:(.*):adjust-height:(.*)$/);
             
         // ============================
         // = Register Inspector Panes =
@@ -22,7 +23,7 @@ WebDoc.AppsMessagingController = $.klass({
           
           WebDoc.appsContainer.getApp(appId).createInspectorPanes(panes);
         }
-
+        
         // ====================
         // = Pane to App call =
         // ====================
@@ -35,6 +36,16 @@ WebDoc.AppsMessagingController = $.klass({
           // var functionParam = appCall[3];
           // var paneWindow = event.source;
           // ddd("I'll need to call the function \""+functionName+"\" (of app "+appId+") with param "+functionParam)
+        }
+        
+        // =================
+        // = Adjust height =
+        // =================
+        if (adjustHeight) {
+          // we now bounce the entire message (event.data) to the app
+          var appId = adjustHeight[1];
+          var height = adjustHeight[2];
+          WebDoc.appsContainer.getApp(appId).appView.adjustHeight(height);
         }
       }
     }.pBind(this), false);

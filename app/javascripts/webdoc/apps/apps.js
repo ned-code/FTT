@@ -135,6 +135,7 @@ WebDoc.App = $.klass(WebDoc.OpenSocialApp, {
   initialize: function($super, params) {
     $super(params);
     this.view = "home";
+    
     this.inspectorPanes = [];
     this.render();
   },
@@ -167,6 +168,8 @@ WebDoc.App = $.klass(WebDoc.OpenSocialApp, {
       this.inspectorPanes.push(appPane);
       
     }.pBind(this));
+    
+    this.appView.inspectorPanesManager.createShowFloatingInspectorButton();
   }
 
 });
@@ -185,8 +188,7 @@ WebDoc.AppPane = $.klass(WebDoc.OpenSocialApp, {
     var title = this.view.charAt(0).toUpperCase() + this.view.substring(1);
     
     // Instantiate the inspector pane view object (it'll handle the pane gernic UI and and behavior)
-    this.inspectorPaneView = new WebDoc.InspectorPaneView(title, content, this);
-    this.appView.inspectorPaneViews.push(this.inspectorPaneView);
+    this.appView.inspectorPanesManager.initNewPane(title, content, this);
     
     // Note that "this.id" is the main app id while this.getIframeId() the appPANE iframe id...
     WebDoc.appsMessagingController.sendInitMessage(this.id, this.getIframeId()); 
@@ -197,7 +199,7 @@ WebDoc.AppPane = $.klass(WebDoc.OpenSocialApp, {
     // this.getContent(function(content) {
     //   var appIFrame = $("#"+this.appDomId+"-main").find('iframe');
     //   var appDiv = $("#"+this.appDomId+"-main");
-    //   inspectorDiv = $('<div>').attr({ "id":this.domId }).addClass("app_inspector floating attached");//.css({ "position":"absolute", "top":""+ (appIFrame.height()) +"px", "left":""+ (appIFrame.width()) +"px" });
+    //   inspectorDiv = $('<div>').attr({ "id":this.domId }).addClass("inspector_pane floating attached");//.css({ "position":"absolute", "top":""+ (appIFrame.height()) +"px", "left":""+ (appIFrame.width()) +"px" });
     //   inspectorDiv.hide();
     //   boxDiv = $('<div>').addClass('box').html(content);
     //   $("#" + this.appDomId).parent().parent().append(inspectorDiv.html(boxDiv));

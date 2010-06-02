@@ -17,8 +17,7 @@ WebDoc.AppTool = $.klass(WebDoc.Tool, {
       top: "100px",
       left: "100px",
       width: "300px",
-      height: "200px",
-      // padding: "15px",
+      height: "100px",
       overflow: "hidden"
     };
     newItem.data.data.tag = "div";
