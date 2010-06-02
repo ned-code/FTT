@@ -1,6 +1,8 @@
 class ViewCount < ActiveRecord::Base
+  has_uuid
+  set_primary_key :uuid
   
-  attr_accessible :user_id, :session_id, :ip_address
+  attr_accessible :user_id, :session_id, :ip_address, :uuid
   
   # ================
   # = Associations =

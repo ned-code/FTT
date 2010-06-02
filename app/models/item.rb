@@ -1,5 +1,7 @@
 class Item < ActiveRecord::Base
   has_uuid
+  set_primary_key :uuid
+  
   serialize :data
   
   attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind

@@ -1,6 +1,6 @@
 class Layout < ActiveRecord::Base
-
   has_uuid
+  set_primary_key :uuid
 
   attr_accessible :uuid, :title, :thumbnail_url, :kind
 

@@ -1,7 +1,10 @@
 class Role < ActiveRecord::Base
+  has_uuid
+  set_primary_key :uuid
+  
   acts_as_authorization_role
   
-  attr_accessible :name, :authorizable, :authorizable_id, :authorizable_type
+  attr_accessible :name, :authorizable, :authorizable_id, :authorizable_type, :uuid
   
   # ================
   # = Associations =

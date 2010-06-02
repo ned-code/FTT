@@ -2,6 +2,7 @@ class Theme < ActiveRecord::Base
   mount_uploader :file, ThemeUploader, :validate_integrity => true
 
   has_uuid
+  set_primary_key :uuid
 
   attr_accessible :uuid, :file, :title, :thumbnail_url, :style_url, :version, :author, :is_default
   

@@ -1,5 +1,6 @@
 class Media < ActiveRecord::Base
   has_uuid
+  set_primary_key :uuid
   serialize :properties
   
   attr_accessible :uuid, :file, :properties, :system_name, :title, :description, :remote_file_url

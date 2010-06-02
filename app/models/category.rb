@@ -1,8 +1,10 @@
 class Category < ActiveRecord::Base
-
+  has_uuid
+  set_primary_key :uuid
+  
   has_many :documents
 
-  attr_accessible :name
+  attr_accessible :name, :uuid
 
   named_scope :have_public_documents, :include => :documents, :conditions => ['documents.is_public = ?', true]
 

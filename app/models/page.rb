@@ -2,6 +2,7 @@ require "xmpp_notification"
 
 class Page < ActiveRecord::Base
   has_uuid
+  set_primary_key :uuid
   
   attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind
 

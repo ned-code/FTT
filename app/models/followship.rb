@@ -1,6 +1,8 @@
 class Followship < ActiveRecord::Base
+  has_uuid
+  set_primary_key :uuid
   
-  attr_accessible :following_id
+  attr_accessible :following_id, :uuid
   
   # ================
   # = Associations =

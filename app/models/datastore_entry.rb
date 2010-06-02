@@ -1,6 +1,8 @@
 class DatastoreEntry < ActiveRecord::Base
+  has_uuid
+  set_primary_key :uuid
   
-  attr_accessible :ds_key, :ds_value
+  attr_accessible :ds_key, :ds_value, :uuid
   
   # ================
   # = Associations =
