@@ -157,11 +157,6 @@ class ConvertIdToUuid < ActiveRecord::Migration
       
       user = User.find(:first, :conditions => { :id => r.user_id })
       role = Role.find(:first, :conditions => { :id => r.role_id })
-      p user.id
-      p role.id
-      
-      p user.uuid
-      p role.uuid
     
       execute "UPDATE roles_users SET user_id='#{user.uuid}' where user_id='#{user.id}' AND role_id='#{role.id}'"
       execute "UPDATE roles_users SET role_id='#{role.uuid}' where user_id='#{user.uuid}' AND role_id='#{role.id}'"
