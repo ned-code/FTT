@@ -197,7 +197,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
       }
       
       if (pagination.next_page > 0) {
-        if(pagination.previous_page > 0) { $("<span>").html(' | ').appendTo(paginationWrap); }
+        if(pagination.previous_page > 0) { $("<span>").html(' | ').appendTo(this.paginationWrap); }
         var nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
         nextPageLink.click(function(event){
           this._loadDocuments(1);

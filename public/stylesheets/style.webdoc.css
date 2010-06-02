@@ -47,12 +47,15 @@ img.item {
 }
 
 /* Board items */
-#webdoc .item-layer {
-    opacity:0;
-    z-index: 2;
+#webdoc .item-layer.screen {
     background-image: url('/images/icons/move_32.png');
     background-position: center center;
     background-repeat: no-repeat;
+}
+
+#webdoc .item-layer {
+    opacity:0;
+    z-index: 2;
     cursor: move;
 }
 .mode-edit .item-layer {

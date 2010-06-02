@@ -16,8 +16,11 @@ WebDoc.HtmlTool = $.klass(WebDoc.Tool, {
     newItem.data.data.tag = "div";
     newItem.data.data.innerHTML = "";
     newItem.data.data.css = { top: "100px", left: "100px", width: "256px", height: "128px"};
-    WebDoc.application.boardController.insertItems([newItem]);
-    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);        
+    WebDoc.application.boardController.insertItems([newItem]);    
+    var createdItemView = WebDoc.application.boardController.currentPageView().itemViews[newItem.uuid()];
+    // Select view
+    WebDoc.application.boardController.selectItemViews([createdItemView]);
+    WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
   }
 
 });
