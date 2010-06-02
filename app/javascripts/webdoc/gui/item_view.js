@@ -35,7 +35,7 @@ WebDoc.ItemView = $.klass({
     this.domNode = $("<div/>").addClass('item_wrap');
 
     this.itemDomNode = this.createDomNode();
-    this.itemLayerDomNode = $("<div>").addClass("layer").css("display", "block");
+    this.itemLayerDomNode = $("<div>").addClass("layer item-layer").css("display", "block");
 
     this.domNode.append(this.itemDomNode);
     this.domNode.append(this.itemLayerDomNode);
