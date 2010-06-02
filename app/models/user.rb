@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_attached_file :avatar,
                     :styles => { :thumb=> "128x128#" },
                     :default_url   => "/images/thumb_icon_no_photo_128x128.png",
+                    :storage => S3_CONFIG[:storage].to_sym,
                     :url => avatars_path,
                     :path => ":rails_root/public" + avatars_path
 

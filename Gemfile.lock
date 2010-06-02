@@ -4,14 +4,14 @@ dependencies:
     group: 
     - :development
     version: ">= 0"
-  rails: 
-    group: 
-    - :default
-    version: ~> 2.3.5
   xmpp4r: 
     group: 
     - :default
     version: ">= 0"
+  rails: 
+    group: 
+    - :default
+    version: ~> 2.3.5
   annotate: 
     group: 
     - :development
@@ -20,11 +20,7 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  mysql: 
-    group: 
-    - :default
-    version: ">= 0"
-  uuidtools: 
+  rack-debug: 
     group: 
     - :default
     version: ">= 0"
@@ -32,7 +28,11 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  rack-debug: 
+  uuidtools: 
+    group: 
+    - :default
+    version: ">= 0"
+  mysql: 
     group: 
     - :default
     version: ">= 0"
@@ -76,11 +76,11 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  devise: 
+  paperclip: 
     group: 
     - :default
     version: ">= 0"
-  right_aws: 
+  will_paginate: 
     group: 
     - :default
     version: ">= 0"
@@ -88,7 +88,7 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  will_paginate: 
+  devise: 
     group: 
     - :default
     version: ">= 0"
@@ -99,10 +99,6 @@ dependencies:
   steak: 
     group: 
     - :test
-    version: ">= 0"
-  paperclip:
-    group:
-    - :default
     version: ">= 0"
   i18n: 
     group: 
@@ -116,13 +112,17 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
+  warden: 
+    group: 
+    - :default
+    version: ">= 0"
   rubyzip: 
     group: 
     - :default
     version: ">= 0"
     require: 
     - zip/zip
-  warden: 
+  aws-s3: 
     group: 
     - :default
     version: ">= 0"
@@ -158,19 +158,28 @@ specs:
 - acl9: 
     version: 0.12.0
 - activesupport: 
-    version: 2.3.5
+    version: 2.3.8
 - rack: 
-    version: 1.0.1
+    version: 1.1.0
 - actionpack: 
-    version: 2.3.5
+    version: 2.3.8
 - actionmailer: 
-    version: 2.3.5
+    version: 2.3.8
 - activerecord: 
-    version: 2.3.5
+    version: 2.3.8
 - activeresource: 
-    version: 2.3.5
+    version: 2.3.8
 - annotate: 
     version: 2.4.0
+- builder: 
+    version: 2.1.2
+- mime-types: 
+    version: "1.16"
+- xml-simple: 
+    version: 1.0.12
+- aws-s3: 
+    version: 0.4.1
+    source: 0
 - highline: 
     version: 1.5.2
 - net-ssh: 
@@ -187,20 +196,18 @@ specs:
     version: 1.2.1
 - culerity: 
     version: 0.2.10
-- mime-types: 
-    version: "1.16"
 - nokogiri: 
-    version: 1.4.1
+    version: 1.4.2
 - rack-test: 
-    version: 0.5.3
+    version: 0.5.4
 - ffi: 
     version: 0.6.3
 - json_pure: 
     version: 1.4.3
 - selenium-webdriver: 
-    version: 0.0.18
+    version: 0.0.19
 - capybara: 
-    version: 0.3.7
+    version: 0.3.8
 - cgi_multipart_eof_fix: 
     version: 2.5.0
 - closure-compiler: 
@@ -210,7 +217,7 @@ specs:
 - daemons: 
     version: 1.0.10
 - warden: 
-    version: 0.10.3
+    version: 0.10.7
 - devise: 
     version: 1.0.7
 - erubis: 
@@ -220,15 +227,15 @@ specs:
 - fastthread: 
     version: 1.0.7
 - formtastic: 
-    version: 0.9.8
+    version: 0.9.10
 - gem_plugin: 
     version: 0.2.3
 - haml: 
-    version: 3.0.2
+    version: 3.0.9
 - i18n: 
-    version: 0.3.7
+    version: 0.4.0
 - rails: 
-    version: 2.3.5
+    version: 2.3.8
 - yui-compressor: 
     version: 0.9.1
 - jammit: 
@@ -243,9 +250,9 @@ specs:
     version: 1.1.5
 - mysql: 
     version: 2.8.1
-- paperclip:
+- paperclip: 
     version: 2.3.1.1
-- ruby-debug-base:
+- ruby-debug-base: 
     version: 0.10.3
 - ruby-debug: 
     version: 0.10.3
@@ -261,10 +268,6 @@ specs:
     version: 1.3.2
 - remarkable_rails: 
     version: 3.1.13
-- right_http_connection: 
-    version: 1.2.4
-- right_aws: 
-    version: 2.0.0
 - rspec-factory-girl: 
     version: 0.2.0
 - rubyzip: 
@@ -272,16 +275,20 @@ specs:
 - sqlite3-ruby: 
     version: 1.2.5
 - steak: 
-    version: 0.3.7
+    version: 0.3.8
 - uuid: 
     version: 2.3.1
 - uuidtools: 
     version: 2.1.1
 - will_paginate: 
-    version: 2.3.12
+    version: 2.3.14
 - xmpp4r: 
     version: "0.5"
-hash: ef5f26ff1cdcc07293c18f48318403702ec4d544
+hash: e6cc05fde3a22b9d6211466bfc1f79dc22f91336
 sources: 
+- Git: 
+    uri: http://github.com/isaacfeliu/aws-s3.git
+    git: http://github.com/isaacfeliu/aws-s3.git
+    ref: 1396f0e44e9d4c72d0ce1074de10375ec8d41932
 - Rubygems: 
     uri: http://gemcutter.org

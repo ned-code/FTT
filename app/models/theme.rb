@@ -1,5 +1,14 @@
 class Theme < ActiveRecord::Base
-  # mount_uploader :file, ThemeUploader, :validate_integrity => true
+  store_prefix = true ? '/uploads' : ''
+  attachment_path = store_prefix+"/theme/:uuid/:basename.:extension"
+  has_attached_file :attachment,
+                    :url => attachment_path,
+                    :path => ":rails_root/public" + attachment_path
+
+  validates_attachment_presence :attachment
+  validates_attachment_size :attachment, :less_than => 40.megabytes
+  # TODO content type for zip
+  # validates_attachment_content_type :attachment, :content_type => ['application/octet-stream']
 
   has_uuid
 
@@ -16,7 +25,6 @@ class Theme < ActiveRecord::Base
   # = Validations =
   # ===============
 
-  validates_presence_of :file
   validates_presence_of :title
   validates_presence_of :thumbnail_url
   validates_presence_of :style_url

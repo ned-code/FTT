@@ -6,6 +6,7 @@ class Medias::Image < Media
   has_attached_file :attachment,
                     :styles => { :thumb=> "100x100#", :default => "800x600>" },
                     :default_url   => "",
+                    :storage => S3_CONFIG[:storage].to_sym,
                     :url => attachment_path,
                     :path => ":rails_root/public" + attachment_path
 

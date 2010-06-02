@@ -15,3 +15,5 @@ end
 Paperclip.interpolates :version do |attachment, style|
   attachment.instance.version
 end
+
+S3_CONFIG = YAML::load(File.read(Rails.root.to_s+'/config/s3.yml'))[Rails.env].symbolize_keys
