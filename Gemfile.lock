@@ -178,8 +178,7 @@ specs:
 - xml-simple: 
     version: 1.0.12
 - aws-s3: 
-    version: 0.4.1
-    source: 0
+    version: 0.6.2
 - highline: 
     version: 1.5.2
 - net-ssh: 
@@ -284,11 +283,7 @@ specs:
     version: 2.3.14
 - xmpp4r: 
     version: "0.5"
-hash: e6cc05fde3a22b9d6211466bfc1f79dc22f91336
+hash: 34eecf4131d624164d2c43fd4b38ca411d8e89f4
 sources: 
-- Git: 
-    uri: http://github.com/isaacfeliu/aws-s3.git
-    git: http://github.com/isaacfeliu/aws-s3.git
-    ref: 1396f0e44e9d4c72d0ce1074de10375ec8d41932
 - Rubygems: 
     uri: http://gemcutter.org

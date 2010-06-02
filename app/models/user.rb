@@ -3,13 +3,15 @@ require 'xmpp_user_synch'
 class User < ActiveRecord::Base
   acts_as_authorization_subject
 
-  avatars_path = "/uploads/user/avatar/:id/:cw_style:basename.:extension"
+  avatars_path = "uploads/user/avatar/:id/:cw_style:basename.:extension"
   has_attached_file :avatar,
                     :styles => { :thumb=> "128x128#" },
                     :default_url   => "/images/thumb_icon_no_photo_128x128.png",
                     :storage => S3_CONFIG[:storage].to_sym,
-                    :url => avatars_path,
-                    :path => ":rails_root/public" + avatars_path
+                    :s3_credentials => S3_CONFIG,
+                    :bucket => S3_CONFIG[:assets_bucket],
+                    :path => S3_CONFIG[:storage] == 's3' ? avatars_path : ":rails_root/public/#{avatars_path}",
+                    :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{avatars_path}"
 
   validates_attachment_size :avatar, :less_than => 1.megabytes
   validates_attachment_content_type :avatar, :content_type => ['image/jpeg', 'image/png', 'image/gif']

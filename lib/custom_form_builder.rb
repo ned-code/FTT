@@ -7,7 +7,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
     if options[:notice]
       text += " <em>#{options[:notice]}</em>"
     end
-    super(method, text, options.merge(:for => "#{ActionController::RecordIdentifier.singular_class_name(@object)}_#{method}")).html_safe!
+    super(method, text, options.merge(:for => "#{ActionController::RecordIdentifier.singular_class_name(@object)}_#{method}")).html_safe
   end
 
   %w[text_field collection_select date_select select password_field text_area file_field hidden_field radio_button].each do |method_name|
@@ -28,7 +28,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
       
       args.last.is_a?(Hash) && args.last.merge!(:id => "#{ActionController::RecordIdentifier.singular_class_name(@object)}_#{field_name}")
       
-      super(field_name, *args) + (inline_errors.nil? ? '' : "<label class='error-message'>This field #{inline_errors}</label>").html_safe!
+      super(field_name, *args) + (inline_errors.nil? ? '' : "<label class='error-message'>This field #{inline_errors}</label>").html_safe
       # super
     end
   end
