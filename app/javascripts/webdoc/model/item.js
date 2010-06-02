@@ -109,12 +109,14 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return "object";
   },
   
-  property: function(key) {
+  getProperty: function(key) {
     if (this.data.data.properties) {
       return this.data.data.properties[key];
     }
     return null;
   },
+  
+  property: this.getProperty,
   
   setProperty: function(key, value) {
     if (!this.data.data.properties) {
@@ -310,10 +312,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.fireDomNodeChanged();
   },
   
-  fireObjectChanged: function($super) {
-    $super();
-  },
-  
   fireInnerHtmlChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
       if (this.listeners[i].innerHtmlChanged) {
@@ -388,6 +386,58 @@ WebDoc.Item = $.klass(WebDoc.Record,
   _endsWith: function(s, pattern) {
     var d = s.length - pattern.length;
     return d >= 0 && s.lastIndexOf(pattern) === d;
+  },
+  
+  getOriginalSize: function(){
+    if (!this._originalSize) { this._calcOriginalSize(); }
+    return this._originalSize;
+  },
+  
+  _calcOriginalSize: function(){
+    var image = new Image();
+    
+    image.src = this.data.data.src;
+    
+    this._originalSize = {
+      width: image.width,
+      height: image.height
+    };
+  },
+  
+  getZoom: function(){
+    return this.getProperty('zoom') || 1;
+  },
+  
+  getDisplacement: function(){
+    return this.getProperty('displacement') || { top: 0, left: 0 }
+  },
+  
+  zoom: function(zoom){
+    var size = this.getOriginalSize(),
+        css = this.data.data.css;
+    
+    css.maxWidth = size.width * zoom;
+    css.maxHeight = size.height * zoom;
+    
+    this.setProperty('zoom', zoom);
+    this.save();
+    this.fireObjectChanged({ modifedAttribute: 'zoom' });
+  },
+  
+  displace: function(coords) {
+    // coords is an object { top: n, left: n } that represents
+    // the origin relative to the images original pixel dimensions.
+    // The origin is limited to be within the dimensions of the image.
+    
+    var size = this.getOriginalSize(),
+        displacement = {
+          top: (coords.top < 0) ? 0 : (coords.top > size.height) ? size.height : coords.top,
+          left: (coords.left < 0) ? 0 : (coords.left > size.width) ? size.width : coords.left
+        };
+    
+    this.setProperty('displacement', displacement);
+    this.save();
+    this.fireObjectChanged({ modifedAttribute: 'displacement' });
   }
 });
 

@@ -5,6 +5,8 @@
           email="stephband@webdoc.com">Stephen Band</author>
   <styles>
     <style src="css/typography.css" />
+    <style src="css/styles.css" />
+    <style src="css/layouts.css" />
   </styles>
   <layouts>
     <layout src="layout-1head1column.html" thumbnail="images/thumbs/layout_1_1.png">

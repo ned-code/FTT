@@ -1,0 +1,52 @@
+<div class="inspector" id="image-inspector">
+  <div class="head">
+    <div>
+      <div class="inspector-title">Image</div>
+    </div>
+  </div>
+  
+  <div class="foot"></div>
+  
+  <div class="content">
+    <form>
+      <fieldset class="properties">
+        <div>
+          <label class="properties_label">Image URL</label>
+          <input type="text" id="property_src" />
+        </div>
+        
+        <div>
+          <label class="properties_label">Original size</label>
+          <input type="button" value="Original size" id="restore_original_size" />
+        </div>
+        
+        <div>
+          <label>Preserve aspect ratio</label>
+          <input type="checkbox" id="preserve_aspect_ratio" checked="checked" />
+        </div>
+        
+        <div>
+          <div>
+            <a href="#add_to_my_images">Add to my images</a>
+          </div>
+          <div id="add_to_my_images_result"></div>
+        </div>
+      </fieldset>
+      
+      <fieldset class="properties">
+        <div>
+          <label>Zoom</label>
+          <input type="range" id="image_zoom" min="0" max="0.9375" step="0.00625" />
+        </div>
+        <div>
+          <label>X Shift</label>
+          <input type="range" id="image_xshift" min="0" max="1" step="0.01" />
+        </div>
+        <div>
+          <label>Y Shift</label>
+          <input type="range" id="image_yshift" min="0" max="1" step="0.01" />
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>

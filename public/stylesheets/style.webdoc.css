@@ -14,6 +14,10 @@
   height: 100px;    
 }
 
+.image_item img {
+  position: absolute;
+}
+
 .webdoc code,
 .webdoc .code {
   padding: 0.2em 0.3333em;

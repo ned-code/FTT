@@ -48,4 +48,4 @@ db/schema.rb
 *.BASE.*
 *.LOCAL.*
 public/local/*
-public/themes/*/Archive*
+*Archive.zip
