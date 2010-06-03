@@ -64,6 +64,8 @@ class ConvertIdToUuid < ActiveRecord::Migration
     change_column :roles_users, :role_id, :string, :limit => 36
     
     change_column :themes, :id, :string, :limit => 36
+    change_column :themes, :updated_theme_id, :string, :limit => 36
+    
     change_column :users, :id, :string, :limit => 36
     
     change_column :view_counts, :id, :string, :limit => 36
