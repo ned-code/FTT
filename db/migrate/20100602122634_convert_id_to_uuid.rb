@@ -152,15 +152,15 @@ class ConvertIdToUuid < ActiveRecord::Migration
       p.save!
     end
     
-    #Role
-    Role.set_primary_key :id
-    Role.all.each do |r|
-      if !r.authorizable_id.nil?
-        item = Kernel.const_get(r.authorizable_type.camelize).find(:first, :conditions => { :id => r.authorizable_id} )
-        r.authorizable_id = item.uuid
-        r.save!
-      end
-    end
+    # #Role
+    #     Role.set_primary_key :id
+    #     Role.all.each do |r|
+    #       if !r.authorizable_id.nil?
+    #         item = Kernel.const_get(r.authorizable_type.camelize).find(:first, :conditions => { :id => r.authorizable_id} )
+    #         r.authorizable_id = item.uuid
+    #         r.save!
+    #       end
+    #     end
           
     #Role User
     User.set_primary_key :id
@@ -170,7 +170,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
       user = User.find(:first, :conditions => { :id => r.user_id })
       role = Role.find(:first, :conditions => { :id => r.role_id })
     
-      execute "UPDATE roles_users SET user_id='#{user.uuid}, role_id='#{role.uuid}' where user_id='#{user.id}' AND role_id='#{role.id}'"
+      execute "UPDATE roles_users SET user_id='#{user.uuid}', role_id='#{role.uuid}' where user_id='#{user.id}' AND role_id='#{role.id}'"
       #execute "UPDATE roles_users SET role_id='#{role.uuid}' where user_id='#{user.uuid}' AND role_id='#{role.id}'"
     end
     
