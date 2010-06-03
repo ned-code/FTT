@@ -165,11 +165,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
         item = class_name.find(:first, :conditions => { :id => r.authorizable_id} )
         execute "UPDATE roles SET authorizable_id='#{item.uuid}' where id='#{r.id}'"
       end
-    end
-    
-    #Works well in ruby console...
-    #Role.all.each{ |r| if r.authorizable_id; p r.authorizable_id; item = Kernel.const_get(r.authorizable_type.camelize).find(:first, :conditions => { :id => r.authorizable_id} ); p item.uuid;  r.authorizable_id = item.uuid; p r.authorizable_id; r.save! end}
-    
+    end    
           
     #Role User
     User.set_primary_key :id
