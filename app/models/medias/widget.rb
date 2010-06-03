@@ -140,7 +140,6 @@ private
     Zip::ZipFile.foreach(attachment.to_file.path) do |zip_file|
       if (!zip_file.directory?)
         file_path = File.join(attachment_root_path, zip_file.name)
-
         if (is_valid_widget_file(file_path))
           if S3_CONFIG[:storage] == 's3'
             AWS::S3::S3Object.store(file_path,

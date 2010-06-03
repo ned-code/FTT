@@ -142,7 +142,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           link.hide();
           li.append(info);
           var image = new WebDoc.Image;
-          image.data.remote_file_url = properties.url;
+          image.data.remote_attachment_url = properties.url;
           image.save(function(persitedImage){
             info.text("Done!");
             setTimeout(function(){ info.fadeOut(500); }, 500);

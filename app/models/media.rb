@@ -2,7 +2,7 @@ class Media < ActiveRecord::Base
   has_uuid
   serialize :properties
   
-  attr_accessible :uuid, :attachment, :properties, :system_name, :title, :description #, :remote_file_url
+  attr_accessible :uuid, :attachment, :properties, :system_name, :title, :description, :created_at #, :remote_file_url
   
   # ================
   # = Associations =
@@ -19,7 +19,7 @@ class Media < ActiveRecord::Base
   # =============
   # = Callbacks =
   # =============
-  
+
   # =================
   # = Class Methods =
   # =================

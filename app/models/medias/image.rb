@@ -15,15 +15,28 @@ class Medias::Image < Media
   validates_attachment_presence :attachment
   validates_attachment_size :attachment, :less_than => 5.megabytes
   validates_attachment_content_type :attachment, :content_type => ['image/jpeg', 'image/png', 'image/gif', 'application/octet-stream']
-  
+
+  attr_accessor :remote_attachment_url
+  attr_accessible :remote_attachment_url
+
   # =============
   # = Callbacks =
   # =============
-  
+
+  before_validation :download_image_provided_by_remote_attachment_url
   after_save :set_properties_if_not_present
   
 protected
   
+  # before_validation
+  def download_image_provided_by_remote_attachment_url
+    if remote_attachment_url.present?
+      io = open(URI.parse(remote_attachment_url))
+      def io.original_filename; base_uri.path.split('/').last; end
+      self.attachment = io
+    end
+  end
+
   # after_save
   def set_properties_if_not_present
     unless properties.present?
