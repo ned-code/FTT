@@ -152,16 +152,35 @@ class ConvertIdToUuid < ActiveRecord::Migration
       p.save!
     end
     
+    #Role
+    Role.set_primary_key :id
+    Role.all.each do |r|
+      if !r.authorizable_id.nil?
+        item = Kernel.const_get(r.authorizable_type.camelize).find(:first, :conditions => { :id => r.authorizable_id} )
+        r.authorizable_id = item.uuid
+        r.save!
+      end
+    end
+          
     #Role User
+    User.set_primary_key :id
+    Role.set_primary_key :id
+    
     RolesUser.all.each do |r|
-      User.set_primary_key :id
-      Role.set_primary_key :id
-      
       user = User.find(:first, :conditions => { :id => r.user_id })
       role = Role.find(:first, :conditions => { :id => r.role_id })
     
       execute "UPDATE roles_users SET user_id='#{user.uuid}' where user_id='#{user.id}' AND role_id='#{role.id}'"
       execute "UPDATE roles_users SET role_id='#{role.uuid}' where user_id='#{user.uuid}' AND role_id='#{role.id}'"
+    end
+    
+    #Theme
+    Theme.all.each do |t|
+      if !t.updated_theme_id.nil?
+        theme = Theme.find(:first, :conditions => { :id => t.updated_theme_id })
+        t.updated_theme_id = theme.uuid
+        t.save!
+      end
     end
   end
 
