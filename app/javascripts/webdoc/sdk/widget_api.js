@@ -51,6 +51,14 @@ WebDoc.WidgetApi = $.klass(
     WebDoc.application.drawingTool.penColor = color;
   } ,
   
+  getCurrentUser: function() {
+    WebDoc.Application.getCurrentUser();
+  },
+  
+  getDocumentCreator: function() {
+    WebDoc.application.pageEditor.getCreator();
+  },
+  
   /*********************************************************************
   network - object used by the sdk to make local or remote ajax call
   *********************************************************************/
