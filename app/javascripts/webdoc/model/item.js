@@ -437,7 +437,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
     if (coords.top > zoom) { coords.top = zoom; }    
     
     jQuery.extend(this.getProperty('displacement'), coords);
-    this.save();
     this.fireObjectChanged({ modifedAttribute: 'displacement' });
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
