@@ -205,12 +205,6 @@ WebDoc.ItemView = $.klass({
     if (item._isAttributeModified(options, 'class')) {
       this._initItemClass();
     }
-    if (item._isAttributeModified(options, 'zoom')) {
-      this.zoom();
-    }
-    if (item._isAttributeModified(options, 'displacement')) {
-      this.displace();
-    }
   },
 
   innerHtmlChanged: function() {

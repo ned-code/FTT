@@ -52,11 +52,11 @@ WebDoc.WidgetApi = $.klass(
   } ,
   
   getCurrentUser: function() {
-    WebDoc.Application.getCurrentUser();
+    return WebDoc.Application.getCurrentUser();
   },
   
   getDocumentCreator: function() {
-    WebDoc.application.pageEditor.getCreator();
+    return WebDoc.application.pageEditor.getCreator();
   },
   
   /*********************************************************************

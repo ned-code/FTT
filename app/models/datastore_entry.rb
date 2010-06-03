@@ -85,7 +85,9 @@ class DatastoreEntry < ActiveRecord::Base
         #TODO manage anonymous user
       end
       key_to_save.save
+      return key_to_save
     end
+    return nil
   end
   
   #return all datastore entries for the current user

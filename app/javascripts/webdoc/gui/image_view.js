@@ -24,10 +24,20 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   initialize: function($super, item, pageView, afterItem){
     $super(item, pageView, afterItem);
     
-    this.zoom();
-    this.displace();
+    this._zoom();
+    this._displace();
   },
 
+  objectChanged: function($super, item, options) {
+    $super(item, options);
+    if (item._isAttributeModified(options, 'zoom')) {
+      this._zoom();
+    }
+    if (item._isAttributeModified(options, 'displacement')) {
+      this._displace();
+    }
+  },
+  
   createDomNode: function() {
     var imageNode = jQuery('<' + this.item.data.data.tag + '/>'),
         frameNode = jQuery('<div/>', { 'class': "layer" });
@@ -45,41 +55,25 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     return frameNode;
   },
 
-  zoom: function(){
+  _zoom: function(){
     var image = this.imageNode,
         model = this.item,
-        wrap = this.domNode,
-        zoom = model.getProperty( 'zoom' ) || 1,
-        imgSize = model.getOriginalSize(),
-        displacement = model.getDisplacement(),
+        zoom = model.getZoom(),
         css = {
-          left: - zoom * displacement.left,
-          top: - zoom * displacement.top,
-          width: imgSize.width * zoom,
-          height: imgSize.height * zoom
-        },
-        wrapCss = {
-          maxWidth: css.width,
-          maxHeight: css.height
+          width: (100 + zoom) + "%",
+          height: (100 + zoom) + "%"
         };
     
     image.css( css );
-    wrap.css( wrapCss );
   },
   
-  displace: function(){
+  _displace: function(){
     var model = this.item,
         image = this.imageNode,
-        frame = this.frameNode,
         displacement = model.getDisplacement(),
-        zoom = model.getZoom(),
-        dy = displacement.top * zoom,
-        dx = displacement.left * zoom,
-        travx = image.width() - frame.width(),
-        travy = image.height() - frame.height(),
         css = {
-          top: -( dy > travy ? travy : dy ),
-          left: -( dx > travx ? travx : dx )
+          top: -( displacement.top ) + "%",
+          left: -( displacement.left ) + "%"
         };
     
     image.css( css );

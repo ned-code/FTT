@@ -20,9 +20,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     jQuery('#draw-inspector').bind("click", jQuery.delegate({
         '.colors-index a':  function(e) {
                 var link = $( e.target ).closest('a');
-                    color = link.css("color");
-                
-                console.log(link[0]);
+                    color = link.css("color");                
                 
                 ddd('[DrawingTool] Selected colour '+color);
                 
