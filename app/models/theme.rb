@@ -108,16 +108,16 @@ class Theme < ActiveRecord::Base
           ancestor_theme.save!
         end
 
-        # begin
+        begin
           extract_files_from_zip_file
           create_parsed_style
           for layout_saved in self.layouts
             layout_saved.create_model_page!
           end
-        # rescue Exception => e
-        #   self.errors.add(:attachment, "Error: #{e}")
-        #   raise ActiveRecord::Rollback
-        # end
+        rescue Exception => e
+          self.errors.add(:attachment, "Error: #{e}")
+          raise ActiveRecord::Rollback
+        end
         saved = true
       end
     else
@@ -139,10 +139,11 @@ class Theme < ActiveRecord::Base
 
     for file_path in files_path
       if S3_CONFIG[:storage] == 's3'
-        file_readed = @s3.get_object(self.file.s3_bucket, file_path)
+        file_readed = AWS::S3::S3Object.value(file_path, S3_CONFIG[:assets_bucket])
       else
-        file_readed = IO.read(file_path).strip
+        file_readed = IO.read(file_path)
       end
+      file_readed.strip!
       file_readed.gsub!(/\/\*[^\/]*\//, '') # remove comments
       file_readed.split(/\}/).each do |set|
         set.strip!
@@ -166,11 +167,15 @@ class Theme < ActiveRecord::Base
       end
     end
 
-    if S3_CONFIG[:storage] == 's3'
-      @s3 ||= RightAws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
-      @s3.put(file.s3_bucket, self.file.store_dir + "css/parsed_theme_style.css", parsed, 'x-amz-acl' => 'public-read')
+    if S3_CONFIG[:storage] == 's3'      
+      AWS::S3::S3Object.store(attachment_root_path+"css/parsed_theme_style.css",
+                        parsed,
+                        S3_CONFIG[:assets_bucket],
+                        {
+                          :access => :public_read
+                        })
     else
-      File.open(File.join(Rails.root, 'public', self.style_url), 'wb') {|f| f.write(parsed) }      
+      File.open(File.join(Rails.root, 'public', self.style_url), 'wb') {|f| f.write(parsed) }
     end
   end
   
@@ -194,18 +199,22 @@ class Theme < ActiveRecord::Base
   end
 
   def extract_files_from_zip_file
-    Zip::ZipFile.foreach(attachment.path) do |zip_file|
+    Zip::ZipFile.foreach(attachment.to_file.path) do |zip_file|
       if (!zip_file.directory?)
-        filePath = File.join(self.attachment_root_path, zip_file.name)
+        file_path = File.join(attachment_root_path, zip_file.name)
 
-        if (is_valid_theme_file(filePath))
+        if (is_valid_theme_file(file_path))
           if S3_CONFIG[:storage] == 's3'
-            @s3 ||= RightAws::S3Interface.new(file.s3_access_key_id, file.s3_secret_access_key)
-            @s3.put(file.s3_bucket, filePath, zip_file.get_input_stream.read, 'x-amz-acl' => 'public-read')
+            AWS::S3::S3Object.store(file_path,
+                                    zip_file.get_input_stream.read,
+                                    S3_CONFIG[:assets_bucket],
+                                    {
+                                      :access => :public_read
+                                    })
           else
-            FileUtils.mkdir_p(File.dirname(filePath))
-            if(!File.directory?(filePath))
-              File.open(filePath, 'wb') do |f|
+            FileUtils.mkdir_p(File.dirname(file_path))
+            if(!File.directory?(file_path))
+              File.open(file_path, 'wb') do |f|
                 f << zip_file.get_input_stream.read
               end
             end
