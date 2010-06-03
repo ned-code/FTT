@@ -288,30 +288,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.data.data.innerHTMLPlaceholder = html;
   },
   
-  getInnerText: function() {
-    return this.removeHtmlTags(this.data.data.innerHTML);
-  },
-
-  setSrc: function(newSrc) {
-    this.data.data.src = newSrc;
-    this.save();
-    this.fireDomNodeChanged();
-    WebDoc.application.inspectorController.refreshSubInspectors();
-  },
-
-  getSrc: function() {
-    return this.data.data.src;
-  },
-  
-  getGadgetUrl: function() {
-    return this.property("gadgetUrl");  
-  },
-  
-  setGadgetUrl: function(url) {
-    this.setProperty("gadgetUrl", url);
-    this.fireDomNodeChanged();
-  },
-  
   fireInnerHtmlChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
       if (this.listeners[i].innerHtmlChanged) {
@@ -352,12 +328,24 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
 
-  removeHtmlTags: function(str) {
+  /***************************************/
+  /** text item                          */
+  /***************************************/
+ 
+  getInnerText: function() {
+    return this._removeHtmlTags(this.data.data.innerHTML);
+  },
+  
+  _removeHtmlTags: function(str) {
     var regExp = /<\/?[^>]+>/gi;
     str = str.replace(regExp,"");
     return str;
   },
 
+  /***************************************/
+  /** html item (widget)                 */
+  /***************************************/
+ 
   // If HTML code contains an embed tag of type Flash, will create or force the wmode property to transparent
   // so that Flash content will be viewable into WebDoc
   checkForceWMode: function(html) {
@@ -388,6 +376,68 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return d >= 0 && s.lastIndexOf(pattern) === d;
   },
   
+  /***************************************/
+  /** Open social item                   */
+  /***************************************/
+  getGadgetUrl: function() {
+    return this.property("gadgetUrl");  
+  },
+  
+  setGadgetUrl: function(url) {
+    this.setProperty("gadgetUrl", url);
+    this.fireDomNodeChanged();
+  },
+
+  /***************************************/
+  /** Image item                         */
+  /***************************************/
+     
+  getZoom: function(){
+    return parseFloat(this.getProperty('zoom')) || 0;
+  },
+  
+  getDisplacement: function(){
+    var result = this.getProperty('displacement') || { top: 0, left: 0 };
+    result.top = parseFloat(result.top);
+    result.left = parseFloat(result.left);
+    return result;
+  },
+  
+  setSrc: function(newSrc) {
+    this.data.data.src = newSrc;
+    this.save();
+    this.fireDomNodeChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+
+  getSrc: function() {
+    return this.data.data.src;
+  },
+    
+  zoom: function(zoom){
+    var previousZoom = this.getZoom();
+    var diffZoom = zoom - previousZoom;
+    this.setProperty('zoom', zoom);
+    var newLeft = this.getDisplacement().left + diffZoom/2;
+    if (newLeft < 0) { newLeft = 0; }
+    var newTop = this.getDisplacement().top + diffZoom/2;
+    if (newTop < 0) { newTop = 0; }
+    this.displace({ left: newLeft, top: newTop});
+    this.fireObjectChanged({ modifedAttribute: 'zoom' });
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+  
+  displace: function(coords) {
+    var previousDisplacment = this.getProperty('displacement');
+    if (!previousDisplacment) {
+      this.setProperty('displacement', {});
+    }
+    jQuery.extend(this.getProperty('displacement'), coords);
+    this.save();
+    this.fireObjectChanged({ modifedAttribute: 'displacement' });
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+  
   getOriginalSize: function(){
     if (!this._originalSize) { this._calcOriginalSize(); }
     return this._originalSize;
@@ -402,43 +452,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
       width: image.width,
       height: image.height
     };
-  },
-  
-  getZoom: function(){
-    return this.getProperty('zoom') || 1;
-  },
-  
-  getDisplacement: function(){
-    return this.getProperty('displacement') || { top: 0, left: 0 }
-  },
-  
-  zoom: function(zoom){
-    var size = this.getOriginalSize(),
-        css = this.data.data.css;
-    
-    css.maxWidth = size.width * zoom;
-    css.maxHeight = size.height * zoom;
-    
-    this.setProperty('zoom', zoom);
-    this.save();
-    this.fireObjectChanged({ modifedAttribute: 'zoom' });
-  },
-  
-  displace: function(coords) {
-    // coords is an object { top: n, left: n } that represents
-    // the origin relative to the images original pixel dimensions.
-    // The origin is limited to be within the dimensions of the image.
-    
-    var size = this.getOriginalSize(),
-        displacement = {
-          top: (coords.top < 0) ? 0 : (coords.top > size.height) ? size.height : coords.top,
-          left: (coords.left < 0) ? 0 : (coords.left > size.width) ? size.width : coords.left
-        };
-    
-    this.setProperty('displacement', displacement);
-    this.save();
-    this.fireObjectChanged({ modifedAttribute: 'displacement' });
-  }
+  }  
 });
 
 $.extend(WebDoc.Item, {

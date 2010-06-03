@@ -25,9 +25,7 @@ WebDoc.ImagePaletteController = $.klass({
     .bind('change', function(e){
       var factor = parseFloat( e.target.value ),
           item = WebDoc.application.boardController.selection()[0].item;
-      
-      factor = 0.25/(1-factor);
-      
+         
       console.log(factor);
       
       item.zoom( factor );
@@ -38,28 +36,19 @@ WebDoc.ImagePaletteController = $.klass({
     this.xshiftNode
     .bind('change', function(e){
       var xfactor = parseFloat( e.target.value ),
-          item = WebDoc.application.boardController.selection()[0].item,
-          size = item.getOriginalSize();
-      
-      that.xfactor = xfactor;
-      
+          item = WebDoc.application.boardController.selection()[0].item;
       item.displace({
-        left: xfactor * size.width,
-        top: (that.yfactor || 0) * size.height
+        left: xfactor
       });
     });
     
     this.yshiftNode
     .bind('change', function(e){
       var yfactor = parseFloat( e.target.value ),
-          item = WebDoc.application.boardController.selection()[0].item,
-          size = item.getOriginalSize();
-      
-      that.yfactor = yfactor;
+          item = WebDoc.application.boardController.selection()[0].item;
       
       item.displace({
-        top: yfactor * size.height,
-        left: (that.xfactor || 0) * size.width
+        top: yfactor
       });
     });
   },
@@ -81,6 +70,9 @@ WebDoc.ImagePaletteController = $.klass({
         else {
           $("#preserve_aspect_ratio").removeAttr("checked");
         }
+        this.zoomNode[0].value = selectedItem.item.getZoom();
+        this.xshiftNode[0].value = selectedItem.item.getDisplacement().left;
+        this.yshiftNode[0].value = selectedItem.item.getDisplacement().top;
       }
     }
   },
