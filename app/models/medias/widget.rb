@@ -1,15 +1,17 @@
 class Medias::Widget < Media
-  # TODO validate integrity??
-  store_prefix = true ? '/uploads' : ''
-  attachment_path = store_prefix+"/medias/widget/:uuid/:version/:basename.:extension"
-  has_attached_file :attachment,
-                    :url => attachment_path,
-                    :path => ":rails_root/public" + attachment_path
 
+  store_prefix = S3_CONFIG[:storage] == 's3' ? '' : 'uploads/'
+  attachment_path = store_prefix+"medias/widget/:uuid/:version/:basename.:extension"
+  has_attached_file :attachment,
+                    :storage => S3_CONFIG[:storage].to_sym,
+                    :s3_credentials => S3_CONFIG,
+                    :bucket => S3_CONFIG[:widgets_bucket],
+                    :path => S3_CONFIG[:storage] == 's3' ? attachment_path : ":rails_root/public/#{attachment_path}",
+                    :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{attachment_path}"
+  
   validates_attachment_presence :attachment
   validates_attachment_size :attachment, :less_than => 10.megabytes
-  # TODO content type for zip
-  # validates_attachment_content_type :attachment, :content_type => ['application/octet-stream']
+  validates_attachment_content_type :attachment, :content_type => ['application/zip']
   
   attr_accessor :status
   

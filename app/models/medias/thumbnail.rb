@@ -1,12 +1,15 @@
 class Medias::Thumbnail < Media
 
-  store_prefix = true ? '/uploads' : ''
-  attachment_path = store_prefix+"/medias/thumbnail/:uuid/:cw_style:basename.:extension"
+  store_prefix = S3_CONFIG[:storage] == 's3' ? '' : 'uploads/'
+  attachment_path = store_prefix+"medias/thumbnail/:uuid/:cw_style:basename.:extension"
   has_attached_file :attachment,
                     :styles => {},
                     :default_url   => "",
-                    :url => attachment_path,
-                    :path => ":rails_root/public" + attachment_path
+                    :storage => S3_CONFIG[:storage].to_sym,
+                    :s3_credentials => S3_CONFIG,
+                    :bucket => S3_CONFIG[:assets_bucket],
+                    :path => S3_CONFIG[:storage] == 's3' ? attachment_path : ":rails_root/public/#{attachment_path}",
+                    :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{attachment_path}"
 
   validates_attachment_presence :attachment
   validates_attachment_size :attachment, :less_than => 1.megabytes

@@ -20,11 +20,7 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  rack-debug: 
-    group: 
-    - :default
-    version: ">= 0"
-  haml: 
+  mysql: 
     group: 
     - :default
     version: ">= 0"
@@ -32,7 +28,11 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  mysql: 
+  haml: 
+    group: 
+    - :default
+    version: ">= 0"
+  rack-debug: 
     group: 
     - :default
     version: ">= 0"
@@ -76,11 +76,7 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  paperclip: 
-    group: 
-    - :default
-    version: ">= 0"
-  will_paginate: 
+  devise: 
     group: 
     - :default
     version: ">= 0"
@@ -88,7 +84,11 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  devise: 
+  paperclip: 
+    group: 
+    - :default
+    version: ">= 0"
+  will_paginate: 
     group: 
     - :default
     version: ">= 0"
@@ -112,7 +112,7 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  warden: 
+  aws-s3: 
     group: 
     - :default
     version: ">= 0"
@@ -122,7 +122,7 @@ dependencies:
     version: ">= 0"
     require: 
     - zip/zip
-  aws-s3: 
+  warden: 
     group: 
     - :default
     version: ">= 0"
@@ -283,7 +283,7 @@ specs:
     version: 2.3.14
 - xmpp4r: 
     version: "0.5"
-hash: 34eecf4131d624164d2c43fd4b38ca411d8e89f4
+hash: 4d07ac257d3841a78aa89c8096f9d12c1637d65f
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org
