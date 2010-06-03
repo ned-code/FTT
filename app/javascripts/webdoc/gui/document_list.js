@@ -6,6 +6,7 @@ WebDoc.DocumentList = $.klass({
   datasource: null,
   id: null,
   initialize: function(id, datasource) {
+      ddd('[DocumentList] initialize');
       this.id = id;
       this.domNode = this._createDomNode(id);
       this.datasource = datasource;
@@ -15,6 +16,7 @@ WebDoc.DocumentList = $.klass({
   },
   
   refreshDocument: function(document) {
+    ddd('[DocumentList] refreshDocument')
     var documentLine = this.map[ document.uuid() ];
     var newDocumentLine = this._buildDocumentItemNode(document);
     documentLine.domNode.replaceWith(newDocumentLine);
@@ -48,6 +50,7 @@ WebDoc.DocumentList = $.klass({
   },
   
   repaint: function() {
+      ddd('[DocumentList] repaint')
       var sectionIndex,
           sectionCount = this.datasource.nbSections(),
           sectionTitle, sectionList,
@@ -121,6 +124,7 @@ WebDoc.DocumentList = $.klass({
 
   
   _buildDocumentItemNode: function( document ){
+    ddd('[DocumentList] _buildDocumentItemNode');
     var id = document.uuid(),
         editor = this._hasAuthenticatedUserEditorRights( document ),
         data = {
@@ -141,6 +145,8 @@ WebDoc.DocumentList = $.klass({
         });
     
     documentNode.append( documentTitle );
+    ddd('Editor: ');
+    ddd(editor);
     
     if ( editor ) {
       documentNode
@@ -156,6 +162,7 @@ WebDoc.DocumentList = $.klass({
   },
   
   _buildDocumentControlsNode: function( document, data ) {
+    ddd('[DocumentList] _buildDocumentControlsNode');
     var documentControlsNode = $("<ul/>", {
           "class": "document-controls index"
         }),
@@ -177,6 +184,7 @@ WebDoc.DocumentList = $.klass({
   },
   
   _buildDocumentActionsNode: function( document, data ) {
+    ddd('[DocumentList] _buildDocumentActionsNode');
     var documentActionsNode = $("<ul/>", {
           "class": "document-actions index"
         }),
@@ -243,6 +251,9 @@ WebDoc.DocumentList = $.klass({
   },
   
   _hasAuthenticatedUserEditorRights: function(document) {
+    ddd('[DocumentList] _hasAuthenticatedUserEditorRights');
+    ddd('document.uuid: ' + document.uuid);
+    ddd(WebDoc.application.documentEditor.currentUserDocumentsEditor());
     return (jQuery.inArray(document.uuid(), WebDoc.application.documentEditor.currentUserDocumentsEditor()) !== -1);
   }
 });

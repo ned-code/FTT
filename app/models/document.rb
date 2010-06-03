@@ -53,7 +53,7 @@ class Document < ActiveRecord::Base
       # Filter possibilities: reader, editor, creator, public
       if document_filter == 'creator'
         paginate_params[:conditions][0] += ' AND documents.creator_id = ?'
-        paginate_params[:conditions] << current_user.id
+        paginate_params[:conditions] << current_user.uuid
       elsif document_filter == 'public'
         paginate_params[:conditions][0] = ' AND documents.is_public = ?'
         paginate_params[:conditions] << true
@@ -66,7 +66,7 @@ class Document < ActiveRecord::Base
         # Must remove owned documents
         owner_ids = []
         current_user.documents.each do |doc|
-          owner_ids << doc.id
+          owner_ids << doc.uuid
         end
         # Diff of both arrays
         documents_ids = documents_ids - owner_ids
@@ -115,17 +115,17 @@ class Document < ActiveRecord::Base
     following_ids = current_user.following_ids
     if following_ids.present?
       all(
-        :joins => "INNER JOIN roles ON roles.authorizable_id = documents.id INNER JOIN roles_users ON roles_users.role_id = roles.id",
+        :joins => "INNER JOIN roles ON roles.authorizable_id = documents.uuid INNER JOIN roles_users ON roles_users.role_id = roles.uuid",
         :conditions => ['creator_id IN (?) AND (documents.is_public = ? OR (roles.authorizable_type = ? AND roles.name IN (?) AND roles_users.user_id = ?))',
                       following_ids,
                       true,
                       self.class_name.to_s,
                       [ 'editor', 'reader' ],
-                      current_user.id
+                      current_user.uuid
         ],
         :limit => limit,
         :order => 'documents.updated_at DESC',
-        :group => 'documents.id'
+        :group => 'documents.uuid'
       )
     else
       []
@@ -190,8 +190,8 @@ class Document < ActiveRecord::Base
     result = { :access => [], :failed => [] }
     all_document_access.each do |role|
       role.users.each do |user|
-        is_creator = (self.creator && self.creator.id == user.id)? true : false
-        user_infos = [:id => user.id, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator]
+        is_creator = (self.creator && self.creator.uuid == user.uuid)? true : false
+        user_infos = [:uuid => user.uuid, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator]
         result[:access] << user_infos
       end
     end
@@ -208,7 +208,7 @@ class Document < ActiveRecord::Base
     result = { :access => [], :failed => [] }
     role.users.each do |user|
       is_creator = (self.creator && self.creator.id == user.id)? true : false
-      user_infos = [:id => user.id, :username => user.username, :email => user.email, :creator => is_creator]
+      user_infos = [:uuid => user.uuid, :username => user.username, :email => user.email, :creator => is_creator]
       result[:access] << user_infos
     end
     if @unvalid_access_emails
@@ -333,7 +333,7 @@ class Document < ActiveRecord::Base
       cloned_document.save!
       # TODO In version 2.3.6, there is a reset_counters(id, *counters) which do the next line properly
       # but this function don't exist in 2.3.5
-      Document.connection.update("UPDATE `documents` SET `views_count` = #{cloned_document.view_counts.count} WHERE `id` = #{cloned_document.id}")
+      Document.connection.update("UPDATE `documents` SET `views_count` = #{cloned_document.view_counts.count} WHERE `uuid` = #{cloned_document.uuid}")
     end
     cloned_document
   end
