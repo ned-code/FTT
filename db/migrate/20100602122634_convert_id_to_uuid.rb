@@ -73,12 +73,17 @@ class ConvertIdToUuid < ActiveRecord::Migration
     change_column :view_counts, :viewable_id, :string, :limit => 36
     
     # #Datastore
-    #     change_column :datastore_entries, :user_id, :string, :limit => 36
-    #     DatastoreEntry.all.each do |d|
-    #       u = User.find(:first, :conditions => { :id => d.user_id })
-    #       d.user_id = u.uuid
-    #       d.save!
-    #     end
+    DatastoreEntry.all.each do |d|
+      user = User.find(:first, :conditions => { :id => d.user_id })
+      if user
+        d.user_id = user.uuid
+      end
+      item = Item.find(:first, :conditions => { :id => d.item_id })
+      if item
+        d.item_id = item.uuid
+      end
+      d.save!
+    end
     
     #Document
     Document.all.each do |d|
@@ -152,15 +157,19 @@ class ConvertIdToUuid < ActiveRecord::Migration
       p.save!
     end
     
-    # #Role
-    #     Role.set_primary_key :id
-    #     Role.all.each do |r|
-    #       if !r.authorizable_id.nil?
-    #         item = Kernel.const_get(r.authorizable_type.camelize).find(:first, :conditions => { :id => r.authorizable_id} )
-    #         r.authorizable_id = item.uuid
-    #         r.save!
-    #       end
-    #     end
+    #Role
+    Role.set_primary_key :id
+    Role.all.each do |r|
+      if !r.authorizable_id.nil?
+        class_name = r.authorizable_type.camelize.constantize
+        item = class_name.find(:first, :conditions => { :id => r.authorizable_id} )
+        execute "UPDATE roles SET authorizable_id='#{item.uuid}' where id='#{r.id}'"
+      end
+    end
+    
+    #Works well in ruby console...
+    #Role.all.each{ |r| if r.authorizable_id; p r.authorizable_id; item = Kernel.const_get(r.authorizable_type.camelize).find(:first, :conditions => { :id => r.authorizable_id} ); p item.uuid;  r.authorizable_id = item.uuid; p r.authorizable_id; r.save! end}
+    
           
     #Role User
     User.set_primary_key :id
@@ -171,7 +180,6 @@ class ConvertIdToUuid < ActiveRecord::Migration
       role = Role.find(:first, :conditions => { :id => r.role_id })
       p user.id
       p role.id
-      
     
       execute "UPDATE roles_users SET user_id='#{user.uuid}' where user_id='#{user.id}' AND role_id='#{role.id}'"
       execute "UPDATE roles_users SET role_id='#{role.uuid}' where user_id='#{user.uuid}' AND role_id='#{role.id}'"
