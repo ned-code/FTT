@@ -118,10 +118,9 @@ class User < ActiveRecord::Base
   def to_social_panel_json(current_user)
     { :user =>
       {
-        :id => self.id,
+        :uuid => self.uuid,
         :username => self.username,
         :bio => self.bio,
-        :uuid => self.uuid,
         :avatar_thumb_url => self.avatar_thumb_url,
         :documents_count => self.documents_count,
         :following_info => self.follower?(current_user)

@@ -49,7 +49,7 @@ class Theme < ActiveRecord::Base
   end
 
   def ancestor
-    Theme.first :conditions => ['updated_theme_id = ?', self.id], :limit => 1
+    Theme.first :conditions => ['updated_theme_id = ?', self.uuid], :limit => 1
   end
 
   def destroy_with_all_ancestors
@@ -88,7 +88,7 @@ class Theme < ActiveRecord::Base
         end
 
         if ancestor_theme.present?
-          ancestor_theme.updated_theme_id = self.id
+          ancestor_theme.updated_theme_id = self.uuid
           ancestor_theme.save!
         end
 

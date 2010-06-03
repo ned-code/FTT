@@ -15,6 +15,6 @@ class RemoveIdColumn < ActiveRecord::Migration
   end
 
   def self.down
-    Raise ActiveRecord::IrreversibleMigration
+    raise ActiveRecord::IrreversibleMigration
   end
 end

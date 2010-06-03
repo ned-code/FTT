@@ -97,7 +97,7 @@ class Layout < ActiveRecord::Base
               else # application/wd-app
                 media = Medias::Widget.find_by_uuid(doc_item.attr('data'))
               end
-              item.media_id = media.id
+              item.media_id = media.uuid
               item.media_type = 'widget'
               for object_item in doc_item.children
                 if object_item == 'param'

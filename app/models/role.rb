@@ -22,7 +22,7 @@ class Role < ActiveRecord::Base
       :joins      => :roles_users,
       :conditions => {
         :roles       => { :authorizable_type => "Document" },
-        :roles_users => { :user_id => user.id }
+        :roles_users => { :user_id => user.uuid }
       }
     ).group_by { |role| role.name }
     roles.each { |k,v| v.map! { |role| role.document_id } }
