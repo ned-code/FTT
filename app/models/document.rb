@@ -32,6 +32,7 @@ class Document < ActiveRecord::Base
   # = Callbacks =
   # =============
   
+  before_create :set_default_theme
   before_create :create_default_page
   before_create :validate_size
   after_create :set_creator_as_editor
@@ -343,6 +344,11 @@ private
   # after_create
   def set_creator_as_editor
     accepts_role!("editor", creator) if creator
+  end
+  
+  #before_create
+  def set_default_theme
+    self.theme_id = Theme.default.id
   end
   
   # before_create
