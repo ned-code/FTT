@@ -116,7 +116,13 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return null;
   },
   
-  property: this.getProperty,
+  // TMP hack
+  property: function(key) {
+    if (this.data.data.properties) {
+      return this.data.data.properties[key];
+    }
+    return null;
+  },
   
   setProperty: function(key, value) {
     if (!this.data.data.properties) {
