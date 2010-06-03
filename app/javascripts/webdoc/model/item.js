@@ -419,9 +419,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var diffZoom = zoom - previousZoom;
     this.setProperty('zoom', zoom);
     var newLeft = this.getDisplacement().left + diffZoom/2;
-    if (newLeft < 0) { newLeft = 0; }
-    var newTop = this.getDisplacement().top + diffZoom/2;
-    if (newTop < 0) { newTop = 0; }
+    var newTop = this.getDisplacement().top + diffZoom/2;    
     this.displace({ left: newLeft, top: newTop});
     this.fireObjectChanged({ modifedAttribute: 'zoom' });
     WebDoc.application.inspectorController.refreshSubInspectors();
@@ -429,9 +427,15 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   displace: function(coords) {
     var previousDisplacment = this.getProperty('displacement');
+    var zoom = this.getZoom();
     if (!previousDisplacment) {
       this.setProperty('displacement', {});
     }
+    if (coords.left < 0) { coords.left = 0; }
+    if (coords.top < 0) { coords.top = 0; }
+    if (coords.left > zoom) { coords.left = zoom; }
+    if (coords.top > zoom) { coords.top = zoom; }    
+    
     jQuery.extend(this.getProperty('displacement'), coords);
     this.save();
     this.fireObjectChanged({ modifedAttribute: 'displacement' });
