@@ -157,11 +157,11 @@ protected
 end
 
 
+
 # == Schema Information
 #
 # Table name: users
 #
-#  id                   :integer(4)      not null, primary key
 #  email                :string(255)     not null
 #  username             :string(255)     not null
 #  encrypted_password   :string(255)     not null
@@ -188,6 +188,6 @@ end
 #  bio                  :text
 #  gender               :string(255)
 #  website              :string(255)
-#  uuid                 :string(255)
+#  uuid                 :string(255)     primary key
 #
 

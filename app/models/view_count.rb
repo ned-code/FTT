@@ -20,16 +20,17 @@ class ViewCount < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: view_counts
 #
-#  id            :integer(4)      not null, primary key
-#  viewable_id   :integer(4)
+#  viewable_id   :string(36)
 #  viewable_type :string(255)
-#  user_id       :integer(4)
+#  user_id       :string(36)
 #  session_id    :string(255)
 #  ip_address    :string(255)
 #  created_at    :datetime
+#  uuid          :string(36)      primary key
 #
 

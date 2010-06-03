@@ -93,3 +93,17 @@ describe Layout do
   end
 
 end
+
+# == Schema Information
+#
+# Table name: layouts
+#
+#  uuid          :string(255)     primary key
+#  title         :string(255)
+#  thumbnail_url :string(255)
+#  theme_id      :string(36)
+#  model_page_id :string(36)
+#  template_url  :string(255)
+#  kind          :string(255)
+#
+

@@ -219,17 +219,20 @@ class Theme < ActiveRecord::Base
   end
 end
 
+
 # == Schema Information
 #
 # Table name: themes
 #
-#  id               :integer(4)      not null, primary key
-#  uuid             :string(255)
-#  name             :string(255)
+#  uuid             :string(255)     primary key
+#  title            :string(255)
 #  thumbnail_url    :string(255)
 #  style_url        :string(255)
 #  file             :string(255)
 #  version          :string(255)
 #  updated_theme_id :integer(4)
+#  author           :string(255)
+#  elements_url     :string(255)
+#  is_default       :boolean(1)      default(FALSE)
 #
 

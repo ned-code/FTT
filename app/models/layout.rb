@@ -165,15 +165,17 @@ class Layout < ActiveRecord::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: layouts
 #
-#  id            :integer(4)      not null, primary key
-#  uuid          :string(255)
-#  name          :string(255)
+#  uuid          :string(255)     primary key
+#  title         :string(255)
 #  thumbnail_url :string(255)
-#  theme_id      :integer(4)
-#  model_page_id :integer(4)
+#  theme_id      :string(36)
+#  model_page_id :string(36)
+#  template_url  :string(255)
+#  kind          :string(255)
 #
 
