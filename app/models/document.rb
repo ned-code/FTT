@@ -70,7 +70,7 @@ class Document < ActiveRecord::Base
         end
         # Diff of both arrays
         documents_ids = documents_ids - owner_ids
-        paginate_params[:conditions][0] += ' AND documents.id IN (?)'
+        paginate_params[:conditions][0] += ' AND documents.uuid IN (?)'
         paginate_params[:conditions] << documents_ids
       end
     else
@@ -79,7 +79,7 @@ class Document < ActiveRecord::Base
         roles = current_user.role_objects.all.each do |role|
           documents_ids << role.authorizable_id
         end
-        paginate_params[:conditions][0] += ' AND documents.id IN (?)'
+        paginate_params[:conditions][0] += ' AND documents.uuid IN (?)'
         paginate_params[:conditions] << documents_ids
       end
     end
