@@ -46,7 +46,7 @@ $.extend(WebDoc.Application, {
               }
             });
           }
-          this.currentUser = data.user;
+          this.currentUser = new WebDoc.User(data);
           // execute before methods
           for (var beforeKey in WebDoc.Application._beforeMain) {
             WebDoc.Application._beforeMain[beforeKey].call(this);
