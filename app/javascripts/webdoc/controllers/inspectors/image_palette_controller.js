@@ -130,7 +130,7 @@ WebDoc.ImagePaletteController = $.klass({
         image.save(function(event){
           WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.LIBRARY)
                   .imagesLibrary.refreshMyImages();
-          this.selectedItem.data.media_id = event.data.id;
+          this.selectedItem.data.media_id = event.data.uuid;
           this.selectedItem.data.data.src = event.data.properties.url;
           ddd(event.data.properties.url);
           ddd(this.selectedItem.data.data.src);

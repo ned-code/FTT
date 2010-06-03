@@ -311,11 +311,11 @@ WebDoc.BoardController = jQuery.klass({
           });
           var newItem = anItem.copy();
 
-          if(anItem.data.page_id === this._currentPage.data.id) {
+          if(anItem.data.page_id === this._currentPage.uuid()) {
             newItem.data.data.css.left = (parseFloat(anItem.data.data.css.left)+15).toString()+"px";
             newItem.data.data.css.top = (parseFloat(anItem.data.data.css.top)+15).toString()+"px";
           }
-          newItem.data.page_id = this._currentPage.data.id;
+          newItem.data.page_id = this._currentPage.uuid();
 
           newItems.push(newItem);
           itemsDataArray.push(newItem.getData());
@@ -576,8 +576,9 @@ WebDoc.BoardController = jQuery.klass({
       width = widgetData.properties.width;
       height = widgetData.properties.height;
     }
+    
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-    newItem.data.media_id = widgetData.id;
+    newItem.data.media_id = widgetData.uuid;
     newItem.data.data.tag = "iframe";
     newItem.data.data.src = widgetData.properties.index_url;
     newItem.data.data.properties = {
@@ -618,7 +619,7 @@ WebDoc.BoardController = jQuery.klass({
     if (x < 0) { x = 0;}
     if (y < 0) { y = 0;}
     newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
-    newItem.data.media_id = videoWidget.data.id;
+    newItem.data.media_id = videoWidget.uuid();
     newItem.data.data.tag = "iframe";
     newItem.data.data.src = videoWidget.data.properties.index_url;
     newItem.data.data.properties = {

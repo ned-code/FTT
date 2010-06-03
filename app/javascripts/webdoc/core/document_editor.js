@@ -294,7 +294,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
   refreshDocumentList: function(pagination)
   {
-    ddd('[document_editor] refreshDocumentList');
     this.filter.setDocuments(this.documents);
     this.documentList.repaint();
     this.documentList.repaintPagination(pagination);
