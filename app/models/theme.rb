@@ -220,10 +220,8 @@ class Theme < ActiveRecord::Base
             end
           end
         end
-        
       end
     end
-    
   end
 
   def is_valid_theme_file(file_name)
