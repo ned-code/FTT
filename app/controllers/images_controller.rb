@@ -35,7 +35,7 @@ class ImagesController < ApplicationController
   # POST /images
   def create
     @image = current_user.images.build(params[:image])
-    #@image.uuid = params[:image][:uuid] 
+    @image.uuid = params[:image][:uuid] 
     
     respond_to do |format|
       if @image.save
