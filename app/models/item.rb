@@ -31,7 +31,15 @@ class Item < ActiveRecord::Base
   # = Validations =
   # ===============
   validates_uniqueness_of :uuid  
-
+  
+  # =================
+  # = Class Methods =
+  # =================
+    def self.new_with_uuid(params)
+      new_record = self.class_name.constantize.new(params)
+      new_record.uuid = params[:uuid]
+      new_record
+    end
   # ====================
   # = Instance Methods =
   # ====================
