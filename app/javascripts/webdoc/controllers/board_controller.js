@@ -658,6 +658,10 @@ WebDoc.BoardController = jQuery.klass({
       item.save();
     }.pBind(this));
     
+    if (this._isInteraction) {
+      jQuery(".item-layer").hide();
+    }
+    
     WebDoc.application.undoManager.registerUndo(function() {
       this.removeItems(items);
     }.pBind(this));
