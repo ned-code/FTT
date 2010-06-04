@@ -208,7 +208,7 @@ class Document < ActiveRecord::Base
     role = self.accepted_roles.first(:conditions => { :name => role_name })
     result = { :access => [], :failed => [] }
     role.users.each do |user|
-      is_creator = (self.creator && self.creator.id == user.id)? true : false
+      is_creator = (self.creator && self.creator.uuid == user.uuid)? true : false
       user_infos = [:uuid => user.uuid, :username => user.username, :email => user.email, :creator => is_creator]
       result[:access] << user_infos
     end
@@ -348,7 +348,7 @@ private
   
   #before_create
   def set_default_theme
-    self.theme_id = Theme.default.id
+    self.theme_id = Theme.default.uuid
   end
   
   # before_create
