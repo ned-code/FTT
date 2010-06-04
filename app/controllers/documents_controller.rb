@@ -124,7 +124,7 @@ class DocumentsController < ApplicationController
   
   # POST /documents
   def create
-    @document = current_user.documents.create(params[:document])
+    @document = current_user.documents.create_with_uuid(params[:document])
     
     render :json => @document
   end
