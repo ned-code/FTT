@@ -22,9 +22,7 @@ class ItemsController < PageController
   # POST /documents/:document_id/pages/:page_id/items
   def create
     @item = @page.items.new_with_uuid(params[:item])
-    #@item = @page.items.new(params[:item])
     @item.must_notify = true
-    #@item.uuid = params[:item][:uuid]
     @item.save
     render :json => @item
   end
