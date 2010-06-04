@@ -34,7 +34,7 @@ class PagesController < DocumentController
   
   # POST /documents/:document_id/pages
   def create
-    @page = @document.pages.new(params[:page])
+    @page = @document.pages.new_with_uuid(params[:page])
     @page.must_notify = true
     @page.save!
     if (params[:page][:items_attributes].present?)
