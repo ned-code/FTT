@@ -36,7 +36,7 @@ class Theme < ActiveRecord::Base
   # =================
   
   def self.default
-    Theme.find(:first, :conditions => { :is_default => true })
+    Theme.find(:first, :conditions => { :is_default => true, :updated_theme_id => nil })
   end
   
   # ====================

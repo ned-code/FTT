@@ -14,8 +14,44 @@ WebDoc.ImagePaletteController = $.klass({
 
     this.addToMyImageLink = $(selector + " a[href=#add_to_my_images]");
     this.addToMyImageResult = $(selector + " #add_to_my_images_result");
-
+    
     this.addToMyImageLink.click(this.addToMyImage.pBind(this));
+    
+    this.zoomNode = jQuery('#image_zoom');
+    this.xshiftNode = jQuery('#image_xshift');
+    this.yshiftNode = jQuery('#image_yshift');
+       
+    var that = this;
+    this._nbChange = 0;    
+    this.zoomNode
+    .bind('change', function(e){
+      var factor = parseFloat( e.target.value ),
+          item = WebDoc.application.boardController.selection()[0].item;               
+      item.zoom( factor );
+      that._delayItemSave(item);
+    });
+   
+    
+    this.xshiftNode
+    .bind('change', function(e){
+      var xfactor = parseFloat( e.target.value ),
+          item = WebDoc.application.boardController.selection()[0].item;      
+      item.displace({
+        left: xfactor
+      });
+      that._delayItemSave(item);   
+    });
+    
+    this.yshiftNode
+    .bind('change', function(e){
+      var yfactor = parseFloat( e.target.value ),
+          item = WebDoc.application.boardController.selection()[0].item;
+      
+      item.displace({
+        top: yfactor
+      });
+      that._delayItemSave(item);
+    });
   },
   
   refresh: function() {
@@ -35,6 +71,9 @@ WebDoc.ImagePaletteController = $.klass({
         else {
           $("#preserve_aspect_ratio").removeAttr("checked");
         }
+        this.zoomNode[0].value = selectedItem.item.getZoom();
+        this.xshiftNode[0].value = selectedItem.item.getDisplacement().left;
+        this.yshiftNode[0].value = selectedItem.item.getDisplacement().top;
       }
     }
   },
@@ -53,7 +92,7 @@ WebDoc.ImagePaletteController = $.klass({
     if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && item.data.data.src !== undefined && item.data.data.src !== "") {
       var image = new Image();
       image.src = item.data.data.src;
-      ddd("restore original size: "+image.width+"x"+image.height+" pixels");
+      ddd("restore original size: "+image.width+"x"+image.height+"px");
       WebDoc.ItemView.restoreSize(item, { width: image.width, height: image.height});
     }
   },
@@ -95,6 +134,17 @@ WebDoc.ImagePaletteController = $.klass({
       }
     }
     return false;
+  },
+  
+  _delayItemSave: function(item) {
+      var that = this;
+      this._nbChange += 1;
+      var currentNbChange = this._nbChange;
+      setTimeout(function(){ 
+        if (currentNbChange == that._nbChange) {
+          item.save();
+          that._nbChange = 0;
+        }}, 500);    
   }
 
 });

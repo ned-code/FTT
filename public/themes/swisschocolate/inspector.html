@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Swiss Chocolate</title>
-<link rel="stylesheet" href="css/typography.css" type="text/css" charset="utf-8">
+<link rel="stylesheet" href="css/styles.css" type="text/css" charset="utf-8">
 <link rel="stylesheet" href="http://apps.webdoc.com/css/trunk/index.css" type="text/css" charset="utf-8">
 
 <style>
@@ -20,6 +20,37 @@
     background-repeat: no-repeat;
     background-position: 0 -20px;
   }
+  
+  .webdoc {
+      font-size: 0.875em;
+      font-family: Georgia, Palatino, Times, 'Times New Roman', serif;
+      line-height: 1.5;
+      color: hsl(42, 11%, 86%);
+      background-color: hsl(32, 80%, 4%);
+  }
+  
+  /* Fonts */
+  
+  pre, code               { font-family: 'Courier', 'Andale Mono', 'Lucida Console', monospace; }
+  
+  /* Block elements */
+  
+  h1, h2, h3, h4, h5, h6  { color: hsl(42, 68%, 28%); font-weight: normal; margin: 0; word-spacing: -0.0833em; text-shadow: hsl(42, 90%, 26%) 0px 0px 12px; }
+  h4, h5, h6              { font-style: italic; }
+  
+  h1                      { font-size: 3em;   line-height: 1;   margin-top: 0.5em;    margin-bottom: 0.5em; width: 50%; }
+  h2                      { font-size: 2em;   line-height: 1;   margin-top: 1.2em;    margin-bottom: 0.8em;   width: 50%; }
+  h3                      { font-size: 1.5em; line-height: 1;   margin-top: 0.8571em; margin-bottom: 0.1429em; width: 50%; }
+  h4                      { font-size: 1.5em; line-height: 1;   margin-top: 0.8571em; margin-bottom: 0.1429em; /*text-indent: -0.6em;*/ width: 50%; }
+  h5                      { font-size: 1.1429em; line-height: 1.3125; margin-top: 1.25em; margin-bottom: 0.0625em; /*text-indent: -0.7875em;*/ }
+  h6                      { font-size: 1em;                     margin-top: 1.5em; /*text-indent: -0.9em;*/ }
+  
+  h1:first-child,
+  h2:first-child,
+  h3:first-child,
+  h4:first-child,
+  h5:first-child,
+  h6:first-child          { margin-top: 0; }
   
   h1 {
     text-indent: -0.24em;
@@ -68,6 +99,24 @@
     display: none;
   }
   
+  .swatch {
+    width: 64px; height: 64px;
+    float: left;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    box-sizing:         border-box;
+  }
+  
+  .swatch>span {
+    font-family: Arial;
+    font-size: 639px;
+    line-height: 0;
+    position: relative;
+    top: -158px;
+    left: -58px;
+    background-color: #666666;
+  }
 </style>
 
 </head>
@@ -77,8 +126,8 @@
 <h1>Swiss Chocolate</h1>
 
 <ul class="inspector-index divided index">
-   <li><a href="#palette">Color Palette</a></li
-  ><li><a href="#decor">Decor</a></li>
+   <li><a class="theme_color_4" href="#palette">Color Palette</a></li
+  ><li><a class="theme_color_4" href="#decor">Decor</a></li>
 </ul>
 
 <div id="palette">
@@ -86,18 +135,19 @@
 <h4>Colours</h4>
 
 <ul class="colors-index icons-only thumbs index">
-   <li><a href="#set_item_class?class=theme_color_1" class="webdoc_message theme_color_1"></a></li
-  ><li><a href="#set_item_class?class=theme_color_2" class="webdoc_message theme_color_2"></a></li
-  ><li><a href="#set_item_class?class=theme_color_3" class="webdoc_message theme_color_3"></a></li
-  ><li><a href="#set_item_class?class=theme_color_4" class="webdoc_message theme_color_4"></a></li
-  ><li><a href="#set_item_class?class=theme_color_5" class="webdoc_message theme_color_5"></a></li
-  ><li><a href="#set_item_class?class=theme_color_6" class="webdoc_message theme_color_6"></a></li
-  ><li><a href="#set_item_class?class=theme_color_7" class="webdoc_message theme_color_7"></a></li
-  ><li><a href="#set_item_class?class=theme_color_8" class="webdoc_message theme_color_8"></a></li
-  ><li><a href="#set_item_class?class=theme_color_9" class="webdoc_message theme_color_9"></a></li
-  ><li><a href="#set_item_class?class=theme_color_10" class="webdoc_message theme_color_10"></a></li
-  ><li><a href="#set_item_class?class=theme_color_11" class="webdoc_message theme_color_11"></a></li
-  ><li><a href="#set_item_class?class=theme_color_12" class="webdoc_message theme_color_12"></a></li>
+   <li><a href="#set_item_class?class=theme_color_1" class="swatch webdoc_message theme_color_1"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_2" class="swatch webdoc_message theme_color_2"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_3" class="swatch webdoc_message theme_color_3"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_4" class="swatch webdoc_message theme_color_4"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_5" class="swatch webdoc_message theme_color_5"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_6" class="swatch webdoc_message theme_color_6"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_7" class="swatch webdoc_message theme_color_7"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_8" class="swatch webdoc_message theme_color_8"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_9" class="swatch webdoc_message theme_color_9"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_10" class="swatch webdoc_message theme_color_10"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_11" class="swatch webdoc_message theme_color_11"><span>K</span></a></li
+  ><li><a href="#set_item_class?class=theme_color_12" class="swatch webdoc_message theme_color_12"><span>K</span></a></li
+  >
 </ul>
 
 <h4>Backgrounds</h4>
@@ -107,6 +157,8 @@
   ><li><a href="#set_item_class?class=theme_background_2" class="webdoc_message theme_background_2"></a></li
   ><li><a href="#set_item_class?class=theme_background_3" class="webdoc_message theme_background_3"></a></li>
 </ul>
+
+<a class="theme_color_5 webdoc_message" href="#set_item_class?class= ">Remove styles</a>
 
 </div>
 
@@ -136,6 +188,8 @@
   <img src="images/flag.png" />
 </div>
 
+<a class="theme_color_5 webdoc_message" href="#set_item_class?class= ">Remove styles</a>
+
 </div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
@@ -147,7 +201,7 @@
     for(i=0;i<links.length;i++) {
       if( /webdoc_message/.test( links[i].getAttribute('class') ) ) {
         links[i].onclick = function(event) {
-          webdoc.postMessage(event.target.getAttribute('href'), '*');
+          webdoc.postMessage(event.currentTarget.getAttribute('href'), '*');
         };
 
       }

@@ -1,0 +1,61 @@
+/* Swiss Chocolate webdoc theme
+ * 
+ * 0.3
+ * 
+ * Stephen Band
+ * 
+ */
+
+/* Layouts */
+
+.layout_block_1 {}
+.layout_block_2 {}
+.layout_block_3 {}
+.layout_block_4 {}
+
+/* intro page */
+.layout-intro .layout_block_1 {
+  background-color: hsl(2, 75%, 14%);
+  background-image: url('../images/bg_cross.png');
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  top: 6%;
+  left: 6%;
+  height: 80%;
+  width: 80%;
+  padding: 4%;
+}
+
+/* 1 head, 1 column */
+.layout_1head1column .layout_block_1 { top: 6%; height: 16%; }
+.layout_1head1column .layout_block_2 { top: 25%; height: 69%; }
+
+.layout_1head1column .layout_block_1,
+.layout_1head1column .layout_block_2 { width: 88%; left: 6%; }
+
+/* 1 head, 2 columns */
+.layout_1head2column .layout_block_1 { top: 6%; width: 88%; height: 16%; }
+.layout_1head2column .layout_block_2,
+.layout_1head2column .layout_block_3 { top: 25%; height: 69%; }
+
+.layout_1head2column .layout_block_1,
+.layout_1head2column .layout_block_2 { left: 6%; }
+.layout_1head2column .layout_block_3 { left: 51.5%; }
+
+.layout_1head2column .layout_block_2,
+.layout_1head2column .layout_block_3 { width: 42.5%; }
+
+/* 1 head, 3 columns */
+.layout_1head3column .layout_block_1 { top: 6%; width: 88%; height: 16%; }
+.layout_1head3column .layout_block_2,
+.layout_1head3column .layout_block_3,
+.layout_1head3column .layout_block_4 { top: 25%; height: 69%; }
+
+.layout_1head3column .layout_block_1,
+.layout_1head3column .layout_block_2 { left: 6%; }
+.layout_1head3column .layout_block_3 { left: 36.33%; }
+.layout_1head3column .layout_block_4 { left: 66.66%; }
+
+.layout_1head3column .layout_block_2,
+.layout_1head3column .layout_block_3,
+.layout_1head3column .layout_block_4 { width: 27.33%; }

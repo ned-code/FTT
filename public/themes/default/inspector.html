@@ -27,6 +27,7 @@
           font-family: Helvetica, Arial, sans-serif;
           line-height: 1.25;
           color: #484848;
+          clear: left;
       }
       
       /* Fonts */
@@ -91,13 +92,23 @@
       }
       
       .border-swatch {
-        width: 58px; height: 58px;
-        margin-right: 6px;
+        width: 54px; height: 54px;
+        margin-right: 8px;
+        margin-bottom: 8px;
       }
       
       img {
         width: 64px;
         height: 64px;
+      }
+      
+      a:hover, a:focus {
+        text-decoration: underline;
+      }
+      a {
+        color: #666666;
+        text-decoration: none;
+        outline: none;
       }
   </style>
 </head>
@@ -120,8 +131,11 @@
     <a href="#" class="swatch color-swatch theme_color_12"><span>.</span></a>
     <a href="#" class="swatch color-swatch theme_color_13"><span>.</span></a>
     <a href="#" class="swatch color-swatch theme_color_14"><span>.</span></a>
+    
   </div>
-  
+  <div class="test">
+    <a href="#" class="">remove</a>
+  </div>
   <div class="test clear">
     <h3>Backgrounds</h3>
     <a href="#" class="swatch bg-swatch theme_background_1"></a>
@@ -133,7 +147,9 @@
     <a href="#" class="swatch bg-swatch theme_background_7"></a>
     <a href="#" class="swatch bg-swatch theme_background_8"></a>
   </div>
-  
+  <div class="test">
+    <a href="#" class="">remove</a>
+  </div>
   <div class="test">
     <h3>Borders</h3>
     <a href="#" class="swatch border-swatch theme_border_1"></a>
@@ -143,6 +159,9 @@
     <a href="#" class="swatch border-swatch theme_border_5"></a>
     <a href="#" class="swatch border-swatch theme_border_6"></a>
     <a href="#" class="swatch border-swatch theme_border_7"></a>
+  </div>
+  <div class="test">
+    <a href="#" class="">remove</a>
   </div>
   
   <!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script-->
@@ -174,11 +193,13 @@
           }
         }
         
-        messageStr = '#set_item_class?class=' + classes.join(' ');
+        messageStr = '#set_item_class?class=' + ( classes.length ? classes.join(' ') : ' ' ) ;
         
-        if (debug) { console.log( '[postMessage]', messageStr ); }
+        if (debug) { console.log( '[postMessage] ' + messageStr); }
         
         webdoc.postMessage( messageStr, '*' );
+        
+        return false;
       });
     });
     

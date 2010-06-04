@@ -109,6 +109,14 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return "object";
   },
   
+  getProperty: function(key) {
+    if (this.data.data.properties) {
+      return this.data.data.properties[key];
+    }
+    return null;
+  },
+  
+  // TMP hack
   property: function(key) {
     if (this.data.data.properties) {
       return this.data.data.properties[key];
@@ -286,34 +294,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.data.data.innerHTMLPlaceholder = html;
   },
   
-  getInnerText: function() {
-    return this.removeHtmlTags(this.data.data.innerHTML);
-  },
-
-  setSrc: function(newSrc) {
-    this.data.data.src = newSrc;
-    this.save();
-    this.fireDomNodeChanged();
-    WebDoc.application.inspectorController.refreshSubInspectors();
-  },
-
-  getSrc: function() {
-    return this.data.data.src;
-  },
-  
-  getGadgetUrl: function() {
-    return this.property("gadgetUrl");  
-  },
-  
-  setGadgetUrl: function(url) {
-    this.setProperty("gadgetUrl", url);
-    this.fireDomNodeChanged();
-  },
-  
-  fireObjectChanged: function($super) {
-    $super();
-  },
-  
   fireInnerHtmlChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
       if (this.listeners[i].innerHtmlChanged) {
@@ -354,12 +334,24 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
 
-  removeHtmlTags: function(str) {
+  /***************************************/
+  /** text item                          */
+  /***************************************/
+ 
+  getInnerText: function() {
+    return this._removeHtmlTags(this.data.data.innerHTML);
+  },
+  
+  _removeHtmlTags: function(str) {
     var regExp = /<\/?[^>]+>/gi;
     str = str.replace(regExp,"");
     return str;
   },
 
+  /***************************************/
+  /** html item (widget)                 */
+  /***************************************/
+ 
   // If HTML code contains an embed tag of type Flash, will create or force the wmode property to transparent
   // so that Flash content will be viewable into WebDoc
   checkForceWMode: function(html) {
@@ -388,7 +380,88 @@ WebDoc.Item = $.klass(WebDoc.Record,
   _endsWith: function(s, pattern) {
     var d = s.length - pattern.length;
     return d >= 0 && s.lastIndexOf(pattern) === d;
-  }
+  },
+  
+  /***************************************/
+  /** Open social item                   */
+  /***************************************/
+  getGadgetUrl: function() {
+    return this.property("gadgetUrl");  
+  },
+  
+  setGadgetUrl: function(url) {
+    this.setProperty("gadgetUrl", url);
+    this.fireDomNodeChanged();
+  },
+
+  /***************************************/
+  /** Image item                         */
+  /***************************************/
+     
+  getZoom: function(){
+    return parseFloat(this.getProperty('zoom')) || 0;
+  },
+  
+  getDisplacement: function(){
+    var result = this.getProperty('displacement') || { top: 0, left: 0 };
+    result.top = parseFloat(result.top);
+    result.left = parseFloat(result.left);
+    return result;
+  },
+  
+  setSrc: function(newSrc) {
+    this.data.data.src = newSrc;
+    this.save();
+    this.fireDomNodeChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+
+  getSrc: function() {
+    return this.data.data.src;
+  },
+    
+  zoom: function(zoom){
+    var previousZoom = this.getZoom();
+    var diffZoom = zoom - previousZoom;
+    this.setProperty('zoom', zoom);
+    var newLeft = this.getDisplacement().left + diffZoom/2;
+    var newTop = this.getDisplacement().top + diffZoom/2;    
+    this.displace({ left: newLeft, top: newTop});
+    this.fireObjectChanged({ modifedAttribute: 'zoom' });
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+  
+  displace: function(coords) {
+    var previousDisplacment = this.getProperty('displacement');
+    var zoom = this.getZoom();
+    if (!previousDisplacment) {
+      this.setProperty('displacement', {});
+    }
+    if (coords.left < 0) { coords.left = 0; }
+    if (coords.top < 0) { coords.top = 0; }
+    if (coords.left > zoom) { coords.left = zoom; }
+    if (coords.top > zoom) { coords.top = zoom; }    
+    
+    jQuery.extend(this.getProperty('displacement'), coords);
+    this.fireObjectChanged({ modifedAttribute: 'displacement' });
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+  
+  getOriginalSize: function(){
+    if (!this._originalSize) { this._calcOriginalSize(); }
+    return this._originalSize;
+  },
+  
+  _calcOriginalSize: function(){
+    var image = new Image();
+    
+    image.src = this.data.data.src;
+    
+    this._originalSize = {
+      width: image.width,
+      height: image.height
+    };
+  }  
 });
 
 $.extend(WebDoc.Item, {
