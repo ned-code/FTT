@@ -348,7 +348,9 @@ private
   
   #before_create
   def set_default_theme
-    self.theme_id = Theme.default.uuid
+    theme = Theme.default
+    self.theme_id = theme.id
+    self.style_url = theme.style_url
   end
   
   # before_create
