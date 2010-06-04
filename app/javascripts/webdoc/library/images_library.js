@@ -91,10 +91,19 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       var info = $("<span>").text("...");
       
       switch (link.attr("id")) {
-        
+
+        case "add_orignal_image_to_page_action":
+          ddd("orignal image");
         case "add_image_to_page_action":
-          ddd("add_image_to_page_action");
-          WebDoc.application.boardController.insertImage(properties.url, undefined, properties.id);
+          ddd("add (original) image to page action");
+          var imageUrl = null;
+          if(link.attr("id") == "add_orignal_image_to_page_action") {
+            imageUrl = properties.url
+          }
+          else {
+            imageUrl = properties.default_url ? properties.default_url : properties.url;
+          }
+          WebDoc.application.boardController.insertImage(imageUrl, undefined, properties.id);
           break;
           
         case "set_image_as_bg_action": 
@@ -163,7 +172,8 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     // ddd("drag target",event.target);
     // ddd("propeties", properties);
     var dt = event.originalEvent.dataTransfer;
-    dt.setData("application/ub-image", $.toJSON({url:properties.url,id:properties.id}));
+    var imageUrl = properties.default_url ? properties.default_url : properties.url;
+    dt.setData("application/ub-image", $.toJSON({url:imageUrl,id:properties.id}));
     
     // Drag "feedback"
     var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
@@ -306,6 +316,13 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     var imageActions = $("#image_details .actions");
     imageActions.find(".dyn").hide();
     imageActions.find("."+properties.type).show();
+
+    if(!properties.default_url) {
+      this.detailsView.find('#add_orignal_image_to_page_action').parent().hide();
+    }
+    else {
+      this.detailsView.find('#add_orignal_image_to_page_action').parent().show();
+    }
     
     // If Details view is loaded from the My Images section, we won't need this action...
     if (this.element.find('div.selected')[0] == this.tabContainers[0]) {

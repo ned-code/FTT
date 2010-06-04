@@ -25,6 +25,15 @@ class Medias::Image < Media
 
   before_validation :download_image_provided_by_remote_attachment_url
   after_save :set_properties_if_not_present
+
+
+  def update_properties
+    update_attribute(:properties, {
+              :thumb_url => attachment.url(:thumb),
+              :default_url => attachment.url(:default),
+              :url => attachment.url
+    })
+  end
   
 protected
   
@@ -40,11 +49,7 @@ protected
   # after_save
   def set_properties_if_not_present
     unless properties.present?
-      update_attribute(:properties, {
-              :thumb_url => attachment.url(:thumb),
-              :default_url => attachment.url(:default),
-              :url => attachment.url 
-      })
+      update_properties
     end
   end
   
