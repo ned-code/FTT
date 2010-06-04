@@ -334,7 +334,7 @@ class Document < ActiveRecord::Base
       cloned_document.save!
       # TODO In version 2.3.6, there is a reset_counters(id, *counters) which do the next line properly
       # but this function don't exist in 2.3.5
-      Document.connection.update("UPDATE `documents` SET `views_count` = #{cloned_document.view_counts.count} WHERE `uuid` = #{cloned_document.uuid}")
+      Document.connection.update("UPDATE `documents` SET `views_count` = #{cloned_document.view_counts.count} WHERE `uuid` = '#{cloned_document.uuid}"')
     end
     cloned_document
   end
