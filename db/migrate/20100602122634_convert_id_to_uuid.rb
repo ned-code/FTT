@@ -99,7 +99,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
       if theme
         d.theme_id = theme.uuid
         #64 is the length of :uuid/css/parsed_theme_style.css which sould be common between local and S3
-        d.style_url = "#{s[0..(d.style_url.length-64)]}#{theme.uuid}/css/parsed_theme_style.css"
+        d.style_url = "#{d.style_url[0..(d.style_url.length-64)]}#{theme.uuid}/css/parsed_theme_style.css"
       end
       d.save!
     end
