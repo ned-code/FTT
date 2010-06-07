@@ -12,5 +12,6 @@
   
   <Content type="html" view="home" href="views/home.html"></Content>
   <Content type="html" view="settings" href="views/settings_pane.html"></Content>
+  <Content type="html" view="style" href="views/style_pane.html"></Content>
   
 </Module>

@@ -125,15 +125,20 @@ WebDoc.InspectorPanesManager = $.klass({
   },
   
   buildPaneList: function() {
-    var attachedIndicator = $('<span class="attached_indicator">');
-    var titleBar = $('<div class="titlebar">').append(attachedIndicator);
-    var list = $('<ul class="list">');
-    
-    $.each(this.panesViews, function(title, paneView) { 
-      list.append($('<li>'+'pane'+'</li>'));
-    });
-    
-    this.domNode.append($('<div class="box list">').append(titleBar).append(list));
+    if (this.panesList) {
+      this.panesList.show();
+    }
+    else {
+      var attachedIndicator = $('<span class="attached_indicator">');
+      var list = $('<ul>');
+      
+      $.each(this.panesViews, function(title, paneView) { 
+        list.append($('<li><a href="">'+title+'</a></li>'));
+      });
+      
+      this.panesList = $('<div class="box list">').append(attachedIndicator).append(list);
+      this.domNode.append(this.panesList);
+    }
   },
   
   attachedPanePosition: function() { //could be the pane or the list of panes
@@ -158,6 +163,8 @@ WebDoc.InspectorPanesManager = $.klass({
     $.each(this.panesViews, function(title, paneView) { 
       paneView.domNode.hide();
     });
+    
+    if (this.panesList) this.panesList.hide();
     
     //reset to attached mode
     this.setMode("attached");

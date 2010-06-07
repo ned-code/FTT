@@ -11,8 +11,8 @@ gadgets.util.registerOnLoadHandler(function() {
 });
 
 WebDoc.appInit = function() {
-  WebDoc.registerInspectorPanes("settings");
-  //for multiple panes use: WebDoc.registerInspectorPanes(["inspector-settings", ...])
+  // WebDoc.registerInspectorPanes("settings");
+  WebDoc.registerInspectorPanes(["settings", "style"]);
 }
 
 //TODO

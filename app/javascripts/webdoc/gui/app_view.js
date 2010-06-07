@@ -99,6 +99,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   
   select: function($super) {
     $super();
+    
     this.inspectorPanesManager.domNode.show();
     
     //avoid resizing at the moment....
