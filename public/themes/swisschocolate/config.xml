@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<theme version="0.3" thumbnail="images/thumbs/theme.png" elements="inspector.html">
+<theme version="0.8" thumbnail="images/thumbs/theme.png" elements="inspector.html">
   <title>Swiss Chocolate</title>
   <author href="http://webdoc.com"
           email="stephband@webdoc.com">Stephen Band</author>
   <styles>
     <style src="css/typography.css" />
+    <style src="css/styles.css" />
+    <style src="css/layouts.css" />
   </styles>
   <layouts>
     <layout src="layout-1head1column.html" thumbnail="images/thumbs/layout_1_1.png">

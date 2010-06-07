@@ -65,6 +65,9 @@
   background-image:      linear-gradient( -90deg, #e5efed, #abd7d0 );
   background-color: #e7edd2;
 }
+.theme_background_8 {
+  background-color: white;
+}
 
 
 /* Borders */
@@ -85,6 +88,7 @@
   -webkit-box-shadow: 0 0 40px hsla(208, 6%, 25%, 0.6);
   -moz-box-shadow:    0 0 40px hsla(208, 6%, 25%, 0.6);
   box-shadow:         0 0 40px hsla(208, 6%, 25%, 0.6);
+  padding: 1em;
 }
 
 .theme_border_2 {

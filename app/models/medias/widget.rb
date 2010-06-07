@@ -65,7 +65,6 @@ private
   
   # before_save
   def update_new_file
-    if file_changed?
       new_version = config_dom.root.attribute("version").to_s
       if version.nil? || new_version > version
         self.properties[:version] = new_version
@@ -78,7 +77,6 @@ private
         @status = "already_up_to_date"
       end
       @status = "updated_successful"
-    end
   rescue
     @status = "updated_failed"
   end

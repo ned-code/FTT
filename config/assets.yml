@@ -74,6 +74,7 @@ javascripts:
     - public/javascripts/jquery.truncate.js
     - public/javascripts/jquery.validator.js
     - public/javascripts/jquery.flash.js
+    - public/javascripts/jquery.cookie.js
     - public/javascripts/klass.js    
     - public/swfupload/swfupload.js
     - public/javascripts/jquery-swfupload.js

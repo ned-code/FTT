@@ -5,6 +5,49 @@
 **/
 
 WebDoc.PostMessageManager = $.klass({
+  ILLEGALCSSPARAMS: {
+    'top': true,
+    'left': true,
+    'bottom': true,
+    'right': true,
+    'width': true,
+    'height': true,
+    'box-sizing': true,
+    'clear': true,
+    'display': true,
+    'display-model': true,
+    'display-role': true,
+    'float': true,
+    'float-offset': true,
+    'max-height': true,
+    'max-width': true,
+    'min-height': true,
+    'min-width': true,
+    'move-to': true,
+    'opacity': true,
+    'outline': true,
+    'outline-color': true,
+    'outline-offset': true,
+    'outline-style': true,
+    'outline-width': true,
+    'overflow-style': true,
+    'overflow-x': true,
+    'overflow-y': true,
+    'position': true,
+    'rendering-intent': true,
+    'resize': true,
+    'size': true,
+    'string-set': true,
+    'tab-side': true,
+    'table-layout': true,
+    'target': true,
+    'target-name': true,
+    'target-new': true,
+    'target-position': true,
+    'visibility': true,
+    'z-index': true
+  },
+  
   initialize: function() {
     ddd('initialize message manager');
     this.startListener();
@@ -92,7 +135,7 @@ WebDoc.PostMessageManager = $.klass({
   getCssParams: function(params) {
     var cssArray = new Array();
     for (param in params) {
-      if (param === 'border' || param === 'background-color') {
+      if ( !ILLEGALCSSPARAMS[param] ) {
         cssArray[param] = params[param];
       }
     }

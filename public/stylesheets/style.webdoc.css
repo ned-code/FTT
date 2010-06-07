@@ -14,6 +14,10 @@
   height: 100px;    
 }
 
+.image_item img {
+  position: absolute;
+}
+
 .webdoc code,
 .webdoc .code {
   padding: 0.2em 0.3333em;
@@ -39,13 +43,9 @@
   overflow: auto;
 }
 
-/* Board items */
 #webdoc .item-layer {
     opacity:0;
     z-index: 2;
-    background-image: url('/images/icons/move_32.png');
-    background-position: center center;
-    background-repeat: no-repeat;
     cursor: move;
 }
 .mode-edit .item-layer {
@@ -111,10 +111,14 @@
   background-repeat: no-repeat;
 }
 
-#webdoc .item_wrap.loading .screen {
+.item_wrap.loading .item-layer {
   display: block;
   opacity: 1 !important;
+  border-width: 1px;
+  border-style: dashed;
   background-image: url('/images/loading-icon-16.gif');
+  background-position: center;
+  background-repeat: no-repeat;  
 }
 
 .mode-preview #webdoc .item-placeholder {

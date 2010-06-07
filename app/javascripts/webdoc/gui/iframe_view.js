@@ -26,11 +26,17 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     .delegate('.item-placeholder input', 'blur', this._makeSetSrcEventHandler() );
   },
   
+  createDomNode: function($super) {
+    this.itemLayerDomNode.show();
+    this.domNode.addClass('loading');
+    return $super();              
+  },
+  
   _makeSetSrcEventHandler: function(){
     var that = this;
     
     return function(e){
-      ddd('[IframeView] _makeSetSrcEventHandler')
+      ddd('[IframeView] _makeSetSrcEventHandler');
       that.inputNode.validate({
         pass : function(){
           consolidateSrc = WebDoc.UrlUtils.consolidateSrc(that.inputNode.val());
@@ -74,10 +80,22 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     }
   },
 
+  edit: function($super){
+    $super();
+    this.domNode.addClass("item-edited");
+    this.itemLayerDomNode.hide();    
+  },
+  
   canEdit: function() {
     return true;
   },
-
+  
+  stopEditing: function($super) {
+    $super();
+    this.domNode.removeClass("item-edited");
+    this.itemLayerDomNode.show();  
+  },
+  
   inspectorId: function() {
     return 6;
   }

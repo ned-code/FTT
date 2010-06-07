@@ -249,17 +249,19 @@ WebDoc.PropertiesInspectorController = $.klass({
       var currentPageHeight = WebDoc.application.pageEditor.currentPage.height("px");
       var currentPageWidth = WebDoc.application.pageEditor.currentPage.width("px");
       if(currentPageHeight*aspectRatio < currentPageWidth) {
-        size = { width: currentPageHeight*aspectRatio, height: currentPageHeight };
+        size = { width: Math.round(currentPageHeight*aspectRatio), height: currentPageHeight};
       }
       else {
-        size = { width: currentPageWidth, height: currentPageWidth/aspectRatio };
+        size = { width: currentPageWidth, height: Math.round(currentPageWidth/aspectRatio) };
       }
       var boardCenterPoint = WebDoc.application.boardController.getBoardCenterPoint();
-      position = { left: boardCenterPoint.x-(size.width/2), top: boardCenterPoint.y-(size.height/2) };
+      position = { left: (boardCenterPoint.x-Math.round(size.width/2))+"px", top: (boardCenterPoint.y-Math.round(size.height/2))+"px" };
+      size['width'] += "px";
+      size['height'] += "px";
     }
     else {
       size = { width: '100%', height: '100%' };
-      position = { left: 0, top: 0 };
+      position = { left: '0px', top: '0px' };
     }
     item.changeCss(jQuery.extend({ transform: '' }, size, position));
     e.preventDefault();

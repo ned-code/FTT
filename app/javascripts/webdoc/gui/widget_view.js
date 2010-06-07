@@ -15,14 +15,14 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     this.itemDomNode.css({ width:"100%", height:"100%"}); 
     this.api = new WebDoc.WidgetApi(item, false);
     this._displayDefaultContentIfNeeded( this.itemDomNode );
-    this.domNode.addClass('item-widget');
-    this.itemLayerDomNode.addClass("item-layer screen");    
+    this.domNode.addClass('item-widget');   
   },
   
   createDomNode: function($super) {
     var widgetNode = $super();   
     if (this.item.data.data.tag == "iframe" && !WebDoc.application.disableHtml) {
       this.domNode.addClass('loading');
+      this.itemLayerDomNode.show();
       widgetNode.bind('load', function() {
         ddd("widget loaded");
         this.initWidget();
@@ -116,13 +116,19 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
   initWidget: function() {
     this.domNode.removeClass('loading');
+    if (this._editable) {
+      this.itemLayerDomNode.show();
+    }
+    else {
+      this.itemLayerDomNode.hide();
+    }
     if (this.itemDomNode.get(0).contentWindow) {
       this.itemDomNode.get(0).contentWindow.uniboard = this.api;
       if (this.itemDomNode.get(0).contentWindow.widget) {
         var widgetObject = this.itemDomNode.get(0).contentWindow.widget;
         widgetObject.lang = "en";
         widgetObject.uuid = this.item.uuid();
-        widgetObject.mode = "Edit";
+        widgetObject.mode = this.pageView.isEditable? "Edit": "View";
         // check if widget has the sdk_boot or the full sdk.
         if (widgetObject._loadCurrentSDK) {
           var path = document.location.protocol + '//' + document.location.host + '/sdk/sdk.js';
@@ -157,6 +163,17 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     }
   },
 
+  setEditable: function($super, editable) {
+    $super(editable);
+    if (this.itemDomNode.get(0).contentWindow) {
+      if (this.itemDomNode.get(0).contentWindow.widget) {
+        var widgetObject = this.itemDomNode.get(0).contentWindow.widget;
+        widgetObject.mode = editable ? "Edit" : "Read";
+        widgetObject._onModeChange();
+      }
+    }  
+  },
+  
   _displayDefaultContentIfNeeded: function(parent) {
     if (!this.domNode.hasClass("item-edited")) {
       if (this.item.data.data.tag !== "iframe" && (!this.item.data.data.innerHTML || $.string().blank(this.item.data.data.innerHTML))) {

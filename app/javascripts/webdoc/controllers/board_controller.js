@@ -74,7 +74,7 @@ WebDoc.BoardController = jQuery.klass({
     if (this._currentPageView) {
       this._currentPageView.destroy();
     }
-    var pageView = new WebDoc.PageView(page, this.boardContainerNode),
+    var pageView = new WebDoc.PageView(page, this.boardContainerNode, jQuery("body").hasClass('mode-edit')),
         board = pageView.domNode,
         defaultZoom = 1;
     
@@ -129,7 +129,7 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _setModeEdit: function() {
-    this.currentPageView().setModeEdit();
+    this.currentPageView().setEditable(true);
 
     this.currentPageView().domNode
     .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
@@ -143,9 +143,7 @@ WebDoc.BoardController = jQuery.klass({
     jQuery("body")
     .removeClass('mode-preview')
     .addClass("mode-edit");
-    
-    jQuery(".item-layer").show();
-    
+        
     jQuery(".state-mode")
     .removeClass("current")
     .filter("[href='#mode-edit']")
@@ -163,15 +161,14 @@ WebDoc.BoardController = jQuery.klass({
   _setModePreview: function() {
     this.unselectAll();
     
-    this.currentPageView().setModePreview();
+    this.currentPageView().setEditable(false);
 
     this.currentPageView().domNode
     .unbind("dragenter")
     .unbind("dragover")
     .unbind("drop");
     
-    this.setCurrentTool(WebDoc.application.arrowTool);
-    jQuery(".item-layer").hide();
+    this.setCurrentTool(WebDoc.application.arrowTool);    
     
     jQuery("body")
     .removeClass("mode-edit")
@@ -207,10 +204,11 @@ WebDoc.BoardController = jQuery.klass({
     }
     
     // TODO for FF .5 we put svg backward because pointer event is not implemented
-    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
-      ddd("FF 3.5. drawing !");
-      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
-    }
+    // it does not work on ff4
+//    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
+//      ddd("FF 3.5. drawing !");
+//      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
+//    }
   },
   
   toggleMode: function() {
@@ -656,6 +654,7 @@ WebDoc.BoardController = jQuery.klass({
       item.isNew = true;
       item.save();
     }.pBind(this));
+    
     
     WebDoc.application.undoManager.registerUndo(function() {
       this.removeItems(items);

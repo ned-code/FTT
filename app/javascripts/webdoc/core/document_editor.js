@@ -47,6 +47,9 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     infoDialogWidthNode = $("#wb-new-document-size-width");
     infoDialogHeightNode = $("#wb-new-document-size-height");
     infoDialogSubmitNode = infoDialogNode.find("input[type='submit']");
+
+    // reset document back url (used to close a document)
+    jQuery.cookie('document_back_url', null, { path: '/' });
   },
 
   start: function()
@@ -176,28 +179,24 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         var node = $(this);
         node
         .bind('submit', function() {
-          node.validate({
-           pass: function(){
-             node.addClass('loading');
+            node.addClass('loading');
 
-             ddd("edit doc with title " + $("#wb-edit-document-name").val());
-             $(this).dialog('close');
-             that.editedDocument.setTitle( infoDialogTitleNode.val(), true );
-             that.editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
-             that.editedDocument.setCategory( infoDialogCategoryNode.val(), true );
-             that.editedDocument.setSize( {width:  infoDialogWidthNode.val(), height: infoDialogHeightNode.val()}, true );
+            ddd("edit doc with title " + $("#wb-edit-document-name").val());
+            $(this).dialog('close');
+            that.editedDocument.setTitle( infoDialogTitleNode.val(), true );
+            that.editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
+            that.editedDocument.setCategory( infoDialogCategoryNode.val(), true );
+            that.editedDocument.setSize( {width:  infoDialogWidthNode.val(), height: infoDialogHeightNode.val()}, true );
+            
+            that.editedDocument.save(function(persitedDoc){
+                node
+                .removeClass('loading')
+                .trigger({type: 'close'});
 
-             that.editedDocument.save(function(persitedDoc){
-                 node
-                 .removeClass('loading')
-                 .trigger({type: 'close'});
+                that.filter.refreshDocument(persitedDoc);
+            });
 
-                 that.filter.refreshDocument(persitedDoc);
-             });
-           },
-           fail: function() {}
-          });
-          return false;
+            return false;
         })
         .find("input[type='text']")
         .eq(0)

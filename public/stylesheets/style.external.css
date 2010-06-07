@@ -616,12 +616,7 @@ a:hover { color: #0069BF;}
 }
 /* == inner HTML inspector */
 
-/* == Image and widget library = */
-.image_item {
-  width:100px;
-  height:70px;
-  padding:5px;
-}
+
 
 #widget_library_wrap {
   overflow:auto;
