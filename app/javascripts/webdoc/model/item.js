@@ -388,20 +388,31 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return d >= 0 && s.lastIndexOf(pattern) === d;
   },
   
-  getOriginalSize: function(){
-    if (!this._originalSize) { this._calcOriginalSize(); }
-    return this._originalSize;
+  getOriginalSize: function(callback){
+    // TODO: this needs to wait for the load callback before 
+    // stuff that depends on it can continue...
+    if (!this._originalSize) {
+      return this._calcOriginalSize(callback);
+    }
+    else {
+      return callback( this._originalSize );
+    }
   },
   
-  _calcOriginalSize: function(){
-    var image = new Image();
+  _calcOriginalSize: function(callback){
+    var image = new Image(),
+        that = this;
+    
+    image.onload = function(){
+      that._originalSize = {
+        width: image.width,
+        height: image.height
+      };
+      
+      callback && callback(that._originalSize);
+    };
     
     image.src = this.data.data.src;
-    
-    this._originalSize = {
-      width: image.width,
-      height: image.height
-    };
   },
   
   getZoom: function(){
@@ -430,10 +441,15 @@ WebDoc.Item = $.klass(WebDoc.Record,
     // The origin is limited to be within the dimensions of the image.
     
     var size = this.getOriginalSize(),
-        displacement = {
-          top: (coords.top < 0) ? 0 : (coords.top > size.height) ? size.height : coords.top,
-          left: (coords.left < 0) ? 0 : (coords.left > size.width) ? size.width : coords.left
-        };
+        dp = this.getDisplacement(),
+        displacement = jQuery.extend(dp, {
+          top:  coords.top !== undefined ?
+            (coords.top < 0) ? 0 : (coords.top > size.height) ? size.height : coords.top :
+            undefined,
+          left: coords.left !== undefined ?
+            (coords.left < 0) ? 0 : (coords.left > size.width) ? size.width : coords.left :
+            undefined
+        });
     
     this.setProperty('displacement', displacement);
     this.save();

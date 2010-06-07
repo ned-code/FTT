@@ -41,11 +41,8 @@ WebDoc.ImagePaletteController = $.klass({
           item = WebDoc.application.boardController.selection()[0].item,
           size = item.getOriginalSize();
       
-      that.xfactor = xfactor;
-      
       item.displace({
-        left: xfactor * size.width,
-        top: (that.yfactor || 0) * size.height
+        left: xfactor * size.width
       });
     });
     
@@ -55,11 +52,8 @@ WebDoc.ImagePaletteController = $.klass({
           item = WebDoc.application.boardController.selection()[0].item,
           size = item.getOriginalSize();
       
-      that.yfactor = yfactor;
-      
       item.displace({
-        top: yfactor * size.height,
-        left: (that.xfactor || 0) * size.width
+        top: yfactor * size.height
       });
     });
   },

@@ -53,8 +53,8 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
         imgSize = model.getOriginalSize(),
         displacement = model.getDisplacement(),
         css = {
-          left: - zoom * displacement.left,
-          top: - zoom * displacement.top,
+          left: - displacement.left * zoom,
+          top: - displacement.top * zoom,
           width: imgSize.width * zoom,
           height: imgSize.height * zoom
         },
@@ -69,20 +69,21 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   
   displace: function(){
     var model = this.item,
-        image = this.imageNode,
+        modelCss = model.data.data.css,
         frame = this.frameNode,
+        size = model.getOriginalSize(),
         displacement = model.getDisplacement(),
         zoom = model.getZoom(),
         dy = displacement.top * zoom,
         dx = displacement.left * zoom,
-        travx = image.width() - frame.width(),
-        travy = image.height() - frame.height(),
+        travx = (size.width * zoom) - modelCss.width,
+        travy = (size.height * zoom) - modelCss.height,
         css = {
           top: -( dy > travy ? travy : dy ),
           left: -( dx > travx ? travx : dx )
         };
     
-    image.css( css );
+    this.imageNode.css( css );
   },
   
   inspectorId: function() {
