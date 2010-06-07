@@ -3,7 +3,8 @@ class RemoveWebdocFromItems < ActiveRecord::Migration
     Item.all.each do |item|
       if item.data && item.data[:class]
         item.data[:class].gsub! "webdoc", ""
-        item.save!
+        item.touch_page_active = false
+        item.save(false)
       end
     end
   end
