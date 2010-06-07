@@ -37,11 +37,12 @@ WebDoc.ItemView = $.klass({
     
     this.item = item;
     
+    this._editable = pageView.isEditable();
     // item wrapper
     this.domNode = $("<div/>").addClass('item_wrap');
-    
+
+    this.itemLayerDomNode = $("<div>").addClass("layer item-layer").css("display", this._editable? "block" : "none");    
     this.itemDomNode = this.createDomNode();
-    this.itemLayerDomNode = $("<div>").addClass("layer item-layer").css("display", "block");
 
     this.domNode.append(this.itemDomNode);
     this.domNode.append(this.itemLayerDomNode);
@@ -298,6 +299,11 @@ WebDoc.ItemView = $.klass({
   css: function(){
     return this.item.data.data.css;
   },
+  
+  setEditable: function(editable) {
+    this._editable = editable;  
+  },
+  
   
   _initDragAndResize: function() {
     this.domNode.draggable({
