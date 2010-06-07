@@ -72,7 +72,11 @@ class ConvertIdToUuid < ActiveRecord::Migration
     change_column :view_counts, :user_id, :string, :limit => 36
     change_column :view_counts, :viewable_id, :string, :limit => 36
     
+    p "updating tables. This could take a lot of time !"
+    
+    User.set_primary_key :id
     # #Datastore
+    p "updating Datastore"
     DatastoreEntry.all.each do |d|
       user = User.find(:first, :conditions => { :id => d.user_id })
       if user
@@ -86,6 +90,8 @@ class ConvertIdToUuid < ActiveRecord::Migration
     end
     
     #Document
+    Theme.set_primary_key :id
+    p "updating Document"
     Document.all.each do |d|
       user = User.find(:first, :conditions => { :id => d.creator_id })
       if user
@@ -105,6 +111,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
     end
     
     #Followship
+    p "updating Followship"
     Followship.all.each do |f|
       user = User.find(f.follower_id)
       f.follower_id = user.uuid
@@ -114,6 +121,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
     end
     
     #Item
+    p "updating Item"
     Item.all.each do |i|
       page = Page.find(:first, :conditions => {:id => i.page_id})
       if page
@@ -123,10 +131,13 @@ class ConvertIdToUuid < ActiveRecord::Migration
       if media
         i.media_id = media.uuid
       end
+      i.touch_page_active = false
       i.save(false)
     end
     
     #layout
+    p "updating Layout"
+    Page.set_primary_key :id
     Layout.all.each do |l|
       theme = Theme.find(:first, :conditions => { :id => l.theme_id })
       if theme
@@ -139,13 +150,17 @@ class ConvertIdToUuid < ActiveRecord::Migration
       l.save(false)
     end
     
+    p "updating Media"
     #Media
     Media.all.each do |m|
       user = User.find(:first, :conditions => { :id => m.user_id})
-      m.user_id = user.uuid
-      m.save(false)
+      if user
+        m.user_id = user.uuid
+        m.save(false)
+      end
     end
     
+    p "updating Page"
     #Page
     Page.all.each do |p|
       document = Document.find(:first, :conditions => { :id => p.document_id })
@@ -156,32 +171,40 @@ class ConvertIdToUuid < ActiveRecord::Migration
       if thumbnail
         p.thumbnail_id = thumbnail.uuid
       end
+      p.touch_document_active = false
       p.save(false)
     end
     
     #Role
+    p "updating Role"
     Role.set_primary_key :id
-    Role.all.each do |r|
-      if !r.authorizable_id.nil?
-        class_name = r.authorizable_type.camelize.constantize
-        item = class_name.find(:first, :conditions => { :id => r.authorizable_id} )
-        execute "UPDATE roles SET authorizable_id='#{item.uuid}' where id='#{r.id}'"
+    Role.transaction do
+      Role.all.each do |r|
+        if !r.authorizable_id.nil?
+          class_name = r.authorizable_type.camelize.constantize
+          item = class_name.find(:first, :conditions => { :id => r.authorizable_id} )
+          execute "UPDATE roles SET authorizable_id='#{item.uuid}' where id='#{r.id}'"
+        end
       end
-    end    
+    end
           
-    #Role User    
-    RolesUser.all.each do |r|
-      User.set_primary_key :id
-      Role.set_primary_key :id
+    #Role User
+    p "updating RolesUser"
+    RolesUser.transaction do
+      RolesUser.all.each do |r|
+        User.set_primary_key :id
+        Role.set_primary_key :id
+        
+        user = User.find(:first, :select => 'id, uuid', :conditions => { :id => r.user_id })
+        role = Role.find(:first, :select => 'id, uuid', :conditions => { :id => r.role_id })
       
-      user = User.find(:first, :select => 'id, uuid', :conditions => { :id => r.user_id })
-      role = Role.find(:first, :select => 'id, uuid', :conditions => { :id => r.role_id })
-
-      execute "UPDATE roles_users SET user_id='#{user.uuid}' where user_id='#{r.user_id}' AND role_id='#{r.role_id}'"
-      execute "UPDATE roles_users SET role_id='#{role.uuid}' where user_id='#{user.uuid}' AND role_id='#{r.role_id}'"
+        execute "UPDATE roles_users SET user_id='#{user.uuid}' where user_id='#{r.user_id}' AND role_id='#{r.role_id}'"
+        execute "UPDATE roles_users SET role_id='#{role.uuid}' where user_id='#{user.uuid}' AND role_id='#{r.role_id}'"
+      end
     end
     
     #Theme
+    p "updating Theme"
     Theme.all.each do |t|
       if !t.updated_theme_id.nil?
         theme = Theme.find(:first, :conditions => { :id => t.updated_theme_id })
