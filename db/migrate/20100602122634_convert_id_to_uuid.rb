@@ -82,7 +82,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
       if item
         d.item_id = item.uuid
       end
-      d.save!
+      d.save(false)
     end
     
     #Document
@@ -136,7 +136,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
       if page
         l.model_page_id = page.uuid
       end
-      l.save!
+      l.save(false)
     end
     
     #Media
@@ -156,7 +156,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
       if thumbnail
         p.thumbnail_id = thumbnail.uuid
       end
-      p.save!
+      p.save(false)
     end
     
     #Role
