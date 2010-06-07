@@ -24,6 +24,10 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     this.categoryFilterDomNode = jQuery('#wd-category-filter');
     this.searchDomNode = jQuery('#wb-explore-search');
 
+    if(this.mode === 'explore') {
+      this._setExploreFilterFromUrl(); // get value for filter from url
+    }
+
     WebDoc.application.explore = this;
   },
 
@@ -36,8 +40,8 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     }
     WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
     WebDoc.Application.initializeSingletons([WebDoc.ThemeManager], function() {  
-      this._refreshViewers();
-    
+      this._loadDocuments();
+      var that = this;
       jQuery(document)
       .delegate('a[href="#prev-page"]', 'click', function(e){
         $("#"+$(this).attr('data-webdoc-document-id')).data('object').prevPage();
@@ -48,16 +52,17 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
         e.preventDefault();
       })
       .delegate('.webdoc-viewer-container', 'click', function(e){
+        jQuery.cookie('document_back_url', document.location.href, { path: '/' });
         $("#"+$(this).attr('data-webdoc-document-id')).data('object').open();
       });
     
       if(this.mode === 'explore') {
-        this.mainFilterDomNode.bind('change', this._refreshViewers.pBind(this));
-        this.categoryFilterDomNode.bind('change', this._refreshViewers.pBind(this));
+        this.mainFilterDomNode.bind('change', this._loadDocuments.pBind(this));
+        this.categoryFilterDomNode.bind('change', this._loadDocuments.pBind(this));
         this.searchDomNode.bind('keypress', function(e) {
           var code = (e.keyCode ? e.keyCode : e.which);
           if(code == 13) {
-            this._refreshViewers();
+            this._loadDocuments();
           }
         }.pBind(this));  
       }
@@ -69,12 +74,12 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     if (this.currentListingPageId < 1) { this.currentListingPageId = 1; }
   },
 
-  _refreshViewers: function() {
-    ddd("[explore] refresh viewers");
-    this._loadDocuments();
-  },
-
   _loadDocuments: function(pageIncrement) {
+    ddd("[explore] load documents");
+
+    if(this.mode === 'explore') {
+      this._setUrlWithExploreFilter();
+    }
 
     if(pageIncrement) {
       this._incrementPageId(pageIncrement);
@@ -168,7 +173,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
         .bind('click', function(e) {
           var category_id = e.currentTarget.getAttribute('data-wd-category-id');
           this.categoryFilterDomNode.val(category_id);
-          this._refreshViewers();
+          this._loadDocuments();
         }.pBind(this))
       )
       .append(' )');
@@ -205,6 +210,30 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
         }.pBind(this)).appendTo(this.paginationWrap);
       }
 
+    }
+  },
+
+  _setUrlWithExploreFilter: function () {
+    document.location.hash = "#?exploremainfilter=" + escape(this.mainFilterDomNode.val())
+                             + "&explorecategoryfilter=" + escape(this.categoryFilterDomNode.val())
+                             + "&exploresearch=" + escape(this.searchDomNode.val());
+  },
+
+  _setExploreFilterFromUrl: function() {
+    var hash = location.hash;
+    hash = hash.slice(2, hash.length); // remove #?
+    var blocs = hash.split("&");
+    for(i=0; i<blocs.length; i++){
+      var bloc = blocs[i].split("=");
+      if(bloc[0] == 'exploremainfilter') {
+        this.mainFilterDomNode.val(bloc[1]);
+      }
+      else if(bloc[0] == 'explorecategoryfilter') {
+        this.categoryFilterDomNode.val(bloc[1]);
+      }
+      else if(bloc[0] == 'exploresearch') {
+        this.searchDomNode.val(bloc[1]);
+      }
     }
   }
 

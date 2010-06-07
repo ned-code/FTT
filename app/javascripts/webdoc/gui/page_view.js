@@ -2,7 +2,7 @@
 //= require <webdoc/model/item>
 
 WebDoc.PageView = $.klass({
-  initialize: function(page, boardContainer) {
+  initialize: function(page, boardContainer, editable) {
     var domNode = $('<div>', {
           'class': 'webdoc',
           id: 'page_' + page.uuid()
@@ -14,6 +14,8 @@ WebDoc.PageView = $.klass({
     
     
     // Extend this
+    this._editable = undefined;  
+    this.setEditable(editable);  
     this._boardContainer = boardContainer;
     this.page = page;
     this.domNode = domNode;
@@ -150,6 +152,7 @@ WebDoc.PageView = $.klass({
         break;
     }
     this.itemViews[item.uuid()] = itemView;
+    
     return itemView;
   },
   
@@ -276,24 +279,36 @@ WebDoc.PageView = $.klass({
     this.itemDomNode.append(this.externalPageDomNode);
   },
 
-  setModePreview: function() {
-    if(this.overLayer) {
-      this.overLayer.hide();
-    }
-    if(this.externalPageIframe) {
-      this.externalPageIframe.css('overflow', 'visible');
-      this._loadExternalPage();
+  setEditable: function(editable) {
+    if (this._editable === undefined || editable !== this._editable) {
+      this._editable = editable;
+      
+      if (editable) {
+        if (this.overLayer) {
+          this.overLayer.show();
+        }
+        jQuery(".item-layer").show();
+      }
+      else {
+        if (this.overLayer) {
+          this.overLayer.hide();
+        }
+        jQuery(".item-layer").hide();
+      }
+      if(this.externalPageIframe) {
+        this.externalPageIframe.css('overflow', editable? 'hidden' : 'visible');
+        this._loadExternalPage();
+      }    
+      
+      for (var itemViewUuid in this.itemViews) {
+        var anItemView = this.itemViews[itemViewUuid];
+        anItemView.setEditable(editable);
+      }  
     }
   },
-
-  setModeEdit: function() {
-    if(this.overLayer) {
-      this.overLayer.show();
-    }
-    if(this.externalPageIframe) {
-      this.externalPageIframe.css('overflow', 'hidden');
-      this._loadExternalPage();
-    }
+  
+  isEditable: function() {
+    return this._editable;
   }
 
 });
