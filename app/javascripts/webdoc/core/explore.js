@@ -52,6 +52,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
         e.preventDefault();
       })
       .delegate('.webdoc-viewer-container', 'click', function(e){
+        jQuery.cookie('document_back_url', document.location.href, { path: '/' });
         $("#"+$(this).attr('data-webdoc-document-id')).data('object').open();
       });
     
@@ -216,7 +217,6 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     document.location.hash = "#?exploremainfilter=" + escape(this.mainFilterDomNode.val())
                              + "&explorecategoryfilter=" + escape(this.categoryFilterDomNode.val())
                              + "&exploresearch=" + escape(this.searchDomNode.val());
-    jQuery.cookie('document_back_url', document.location.href, { path: '/' });
   },
 
   _setExploreFilterFromUrl: function() {
