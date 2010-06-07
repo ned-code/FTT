@@ -123,7 +123,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
       if media
         i.media_id = media.uuid
       end
-      i.save!
+      i.save(false)
     end
     
     #layout
