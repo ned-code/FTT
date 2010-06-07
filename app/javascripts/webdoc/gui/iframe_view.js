@@ -24,15 +24,19 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     .addClass("item-iframe")
     .delegate('.item-placeholder', 'submit', this._makeSetSrcEventHandler() )
     .delegate('.item-placeholder input', 'blur', this._makeSetSrcEventHandler() );
-    
-    this.itemLayerDomNode.addClass("screen"); 
+  },
+  
+  createDomNode: function($super) {
+    this.itemLayerDomNode.show();
+    this.domNode.addClass('loading');
+    return $super();              
   },
   
   _makeSetSrcEventHandler: function(){
     var that = this;
     
     return function(e){
-      ddd('[IframeView] _makeSetSrcEventHandler')
+      ddd('[IframeView] _makeSetSrcEventHandler');
       that.inputNode.validate({
         pass : function(){
           consolidateSrc = WebDoc.UrlUtils.consolidateSrc(that.inputNode.val());

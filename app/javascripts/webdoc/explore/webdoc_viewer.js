@@ -61,7 +61,7 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
         this._currentPageView.destroy();
       }
       this._currentPage = page;  
-      this._currentPageView = new WebDoc.PageView(page,this._containerNode);
+      this._currentPageView = new WebDoc.PageView(page,this._containerNode, false);
       this._currentPageView.eventCatcherNode.show();
       this._currentPageView.eventCatcherNode.css("cursor", "pointer");
       this._containerNode.empty().append(this._currentPageView.domNode);
