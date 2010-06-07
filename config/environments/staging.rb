@@ -38,6 +38,7 @@ config.action_mailer.default_url_options = { :host => 'st-wd.webdoc.com' }
 #ExceptionNotification config
 ExceptionNotification::Notifier.sender_address = %("WebDoc Staging Error" <staging.error@webdoc.com>)
 ExceptionNotification::Notifier.email_prefix = "[WebDoc Staging]"
+ExceptionNotification::Notifier.exception_recipients = %w(staging.error@webdoc.com)
 
 # Enable threaded mode
 # config.threadsafe!
