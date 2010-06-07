@@ -3,34 +3,41 @@ class ConvertIdToUuid < ActiveRecord::Migration
     #create and fill the uuid column in model
     #where it was not present
     
+    #setting primary key to id (it's uuid in the model file)
+    Category.set_primary_key :id
+    DatastoreEntry.set_primary_key :id
+    Document.set_primary_key :id
+    Followship.set_primary_key :id
+    Media.set_primary_key :id
+    Page.set_primary_key :id
+    Role.set_primary_key :id
+    Theme.set_primary_key :id
+    User.set_primary_key :id
+    ViewCount.set_primary_key :id
+    
     #Category
     add_column :categories, :uuid, :string, :limit => 36
-    Category.set_primary_key :id
     Category.all.each do |record|
       record.update_attribute(:uuid, UUID::generate)
     end
     
     #DatastoreEntry
     add_column :datastore_entries, :uuid, :string, :limit => 36
-    DatastoreEntry.set_primary_key :id
     DatastoreEntry.all.each do |record|
       record.update_attribute(:uuid, UUID::generate)
     end
     
     add_column :followships, :uuid, :string, :limit => 36
-    Followship.set_primary_key :id
     Followship.all.each do |record|
       record.update_attribute(:uuid, UUID::generate)
     end
     
     add_column :roles, :uuid, :string, :limit => 36
-    Role.set_primary_key :id
     Role.all.each do |record|
       record.update_attribute(:uuid, UUID::generate)
     end
     
     add_column :view_counts, :uuid, :string, :limit => 36
-    ViewCount.set_primary_key :id
     ViewCount.all.each do |record|
       record.update_attribute(:uuid, UUID::generate)
     end
@@ -74,7 +81,6 @@ class ConvertIdToUuid < ActiveRecord::Migration
     
     p "updating tables. This could take a lot of time !"
     
-    User.set_primary_key :id
     # #Datastore
     p "updating Datastore"
     DatastoreEntry.all.each do |d|
@@ -90,7 +96,6 @@ class ConvertIdToUuid < ActiveRecord::Migration
     end
     
     #Document
-    Theme.set_primary_key :id
     p "updating Document"
     theme_default = Theme.default
     Document.all.each do |d|
@@ -142,7 +147,6 @@ class ConvertIdToUuid < ActiveRecord::Migration
     
     #layout
     p "updating Layout"
-    Page.set_primary_key :id
     Layout.all.each do |l|
       theme = Theme.find(:first, :conditions => { :id => l.theme_id })
       if theme
@@ -182,7 +186,6 @@ class ConvertIdToUuid < ActiveRecord::Migration
     
     #Role
     p "updating Role"
-    Role.set_primary_key :id
     Role.transaction do
       Role.all.each do |r|
         if !r.authorizable_id.nil?
@@ -196,10 +199,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
     #Role User
     p "updating RolesUser"
     RolesUser.transaction do
-      RolesUser.all.each do |r|
-        User.set_primary_key :id
-        Role.set_primary_key :id
-        
+      RolesUser.all.each do |r|     
         user = User.find(:first, :select => 'id, uuid', :conditions => { :id => r.user_id })
         role = Role.find(:first, :select => 'id, uuid', :conditions => { :id => r.role_id })
       
