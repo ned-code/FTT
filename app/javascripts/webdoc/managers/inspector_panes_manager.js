@@ -6,15 +6,49 @@ WebDoc.InspectorPanesManager = $.klass({
     
     // This is the wrapper is used to display both the list of panes and also a single (floating) pane
     this.domNode = $("<div>").addClass("inspector_pane_wrap inspector_pane floating attached");
-    this.domNode.hide();
+    
+    // We now move the panes container (domNode) out of screen (but we don't hide it) so that we can compute and adjust the height of each pane
+    // Once all panes are setup we'll bring the domNode back on screen
+    this.movePanesContainerOutScreen();
     
     WebDoc.application.boardController.boardContainerNode.after(this.domNode);
     
     this.panesViews = {}; // paneTitle:InspectorPaneView
+    this.currentPane = "list";
+    this.appPanesNeedingHeightAdjustment = 0;
+  },
+  
+  movePanesContainerOutScreen: function() {
+    this.domNode.css({ left:"-5000px", top:"-5000px" });
+    this.domNodeOutScreen = true;
   },
   
   initNewPane: function(title, content, appPane) {
     this.panesViews[title] = new WebDoc.InspectorPaneView(this, title, content, appPane);
+    if (appPane) this.appPanesNeedingHeightAdjustment += 1;
+  },
+  
+  adjustAppPaneHeight: function(paneIframeId, height) {
+    // This method is only used if the pane is an App inspector pane whose content is an iframe
+    // (this is called from the app pane itself (via postmessaging), height is the height of the iframe's document)
+    if (height > 0) {
+      $('#'+paneIframeId).height(height);
+    }
+    this.appPanesNeedingHeightAdjustment -= 1;
+    
+    // Bring back the domNode to screen
+    if (this.appPanesNeedingHeightAdjustment < 1) {
+      this.allPanesHeightsAdjusted();
+    }
+  },
+  
+  allPanesHeightsAdjusted: function() {
+    // Called automatically in case the panes are "AppPanes" (iframes),
+    // If your panes are not iframes and didn't need height adjustment, call this method manually (once all panes are loaded) to bring back the domNode on screen
+    this.domNode.hide();
+    this.hideAll(); //hide all panes views (".box") inside the panes container (domNode)
+    this.domNodeOutScreen = false;
+    this.updateAttachedPanePosition();
   },
   
   createShowFloatingInspectorButton: function() {
@@ -47,24 +81,26 @@ WebDoc.InspectorPanesManager = $.klass({
   showPanesList: function() {
     this.buildPaneList();
     this.domNode.show();
+    this.currentPane = "list";
   },
   
   showPane: function(title) {
     this.updateAttachedPanePosition();
     this.hideAll();
     this.panesViews[title].domNode.show();
+    this.currentPane = title;
   },
-
+  
   buildPaneList: function() {
     var attachedIndicator = $('<span class="attached_indicator">');
     var titleBar = $('<div class="titlebar">').append(attachedIndicator);
     var list = $('<ul class="list">');
     
     $.each(this.panesViews, function(title, paneView) { 
-      list.append($('<li>'+'pane'+'</li>'))
+      list.append($('<li>'+'pane'+'</li>'));
     });
     
-    this.domNode.append($('<div class="box">').append(titleBar).append(list));
+    this.domNode.append($('<div class="box list">').append(titleBar).append(list));
   },
   
   attachedPanePosition: function() { //could be the pane or the list of panes
@@ -76,11 +112,13 @@ WebDoc.InspectorPanesManager = $.klass({
     else {
       refElementOffset = this.domNode.offset();
     }
-    return {left:(refElementOffset.left-this.domNode.width()/2)-2, top:(refElementOffset.top+34)}
+    return {left:(refElementOffset.left-this.domNode.width()/2)-2, top:(refElementOffset.top+34)};
   },
   
   updateAttachedPanePosition: function() { //could be the pane or the list of panes
-    this.domNode.css(this.attachedPanePosition());
+    if (!this.domNodeOutScreen) {
+      this.domNode.css(this.attachedPanePosition());
+    }
   },
   
   setDetachedMode: function() {
@@ -103,7 +141,7 @@ WebDoc.InspectorPanesManager = $.klass({
         }.pBind(this)
       });
       
-    }.pBind(this), 100)
+    }.pBind(this), 100);
   },
   
   hideAll: function() {

@@ -1,10 +1,3 @@
-// ======
-// = UI =
-// ======
-
-WebDoc.showInspectorPanes
-
-
 // ===========================
 // = Post messages to webdoc =
 // ===========================
@@ -27,7 +20,7 @@ WebDoc.registerAppCall = function(functionName, handler, context) {
   // webdoc_win,postMessage(myId+"", '*');
 };
 
-WebDoc.adjustHeight = function() {
+WebDoc.adjustAppHeight = function() {
   var height = document.height;
   WebDoc.webdocWindow.postMessage("app:"+WebDoc.appId+":adjust-height:"+height,"*");
 };
@@ -43,9 +36,15 @@ window.addEventListener('message', function(event) {
   // ================
   // = Init message =
   // ================
-  var init = event.data.match(/^webdoc-init:(.*)$/);
-  if (init) {
-    WebDoc.initMessage(init, event);
+  var initData = event.data.match(/^webdoc-init:(.*):dom-id:(.*)$/);
+  if (initData) {
+    WebDoc.appId = initData[1];
+    WebDoc.domId = initData[2];
+    WebDoc.webdocWindow = event.source;
+    if (WebDoc.appInit) WebDoc.appInit();
+    
+    // call WebDoc back with this app reference (not necessary?)
+    // WebDoc.webdocWindow.postMessage("app-id:"+WebDoc.appId,"*");
   }
   
   // ====================

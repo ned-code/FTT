@@ -6,7 +6,7 @@ gadgets.util.registerOnLoadHandler(function() {
   poll = new Poll();
   
   WebDoc.appEnteredEditMode();
-  WebDoc.adjustHeight();
+  WebDoc.adjustAppHeight();
   // gadgets.window.adjustHeight();
 });
 

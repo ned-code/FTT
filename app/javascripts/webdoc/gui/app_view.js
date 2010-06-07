@@ -85,9 +85,8 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   adjustHeight: function(height) {
     //called from the app itself (via postmessaging)
     
-    // this.item.changeCss({ width:this.domNode.width(), height:height });
-    
-    this.item.resizeTo({ width:this.domNode.width()+'px', height:height+'px' });
+    this.item.changeCss({ width:this.domNode.width()+'px', height:height+'px' });
+    // this.item.resizeTo({ width:this.domNode.width()+'px', height:height+'px' });
   },
   
   removeAppAndPanes: function() {

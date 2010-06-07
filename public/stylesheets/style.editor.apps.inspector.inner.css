@@ -1,3 +1,4 @@
+/* the base style to inject into every app inspector pane's iframe */
 * {
   margin:0;
   padding:0;

@@ -3,7 +3,6 @@ gadgets.util.registerOnLoadHandler(function() {
 
   var pollSettings = new PollSettings();
   
-  gadgets.window.adjustHeight();
 }); 
 
 

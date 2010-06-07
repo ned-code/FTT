@@ -16,7 +16,6 @@ WebDoc.InspectorPaneView = $.klass({
     // When the pane is floating in the page (attached or detached mode) its domNode must be wrapped in the InspectorPanesManager's domMode
     // InspectorPanesManager will take cares domMode
     this.domNode = $('<div class="box">');
-    this.domNode.hide();
     
     var attachedIndicator = $('<span class="attached_indicator">');
     var closeLink = $('<a href="" class="hide"><span>hide</span></a>');
@@ -31,12 +30,11 @@ WebDoc.InspectorPaneView = $.klass({
     }.pBind(this));
     
     var titleBar = $('<div class="titlebar">')
-    .append(attachedIndicator)
     .append(closeLink)
     .append('<strong class="title">' + title + '</strong>')
     .append(sendToSidebarLink);
     
-    this.domNode.append(titleBar).append(content);
+    this.domNode.append(attachedIndicator).append(titleBar).append(content);
   },
   
   remove: function() {

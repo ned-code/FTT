@@ -183,9 +183,13 @@ WebDoc.AppPane = $.klass(WebDoc.OpenSocialApp, {
     this.render();
   },
   
+  paneTitle: function() {
+    return this.view.charAt(0).toUpperCase() + this.view.substring(1);
+  },
+  
   render: function() {
     var content = this.getContent();
-    var title = this.view.charAt(0).toUpperCase() + this.view.substring(1);
+    var title = this.paneTitle();
     
     // Instantiate the inspector pane view object (it'll handle the pane gernic UI and and behavior)
     this.appView.inspectorPanesManager.initNewPane(title, content, this);

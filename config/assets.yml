@@ -25,7 +25,7 @@ stylesheets:
     - public/stylesheets/lib/protect.css    
     - public/stylesheets/style.editor.css
     - public/stylesheets/style.editor.colors.css
-    - public/stylesheets/style.editor.apps.inspector.wrapper.css
+    - public/stylesheets/style.editor.apps.inspector.outer.css
     - public/stylesheets/style.webdoc.css
     - public/stylesheets/colorpicker.css
     - public/stylesheets/toolbar.css
