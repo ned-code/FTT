@@ -501,8 +501,10 @@
               else {
                 consolidateSrc = "http://" + value;
               }
-
-        	    if(jQuery.inArray(consolidateSrc, urlBlacklist) == -1){
+              
+              test_url = 'http://' + consolidateSrc.split('://')[1].split('/')[0];
+                       
+        	    if(jQuery.inArray(test_url, urlBlacklist) == -1){
         	      return true;
         	    }
         	    else {
