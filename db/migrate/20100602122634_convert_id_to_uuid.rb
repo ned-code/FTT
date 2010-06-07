@@ -101,7 +101,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
         #64 is the length of :uuid/css/parsed_theme_style.css which sould be common between local and S3
         d.style_url = "#{d.style_url[0..(d.style_url.length-64)]}#{theme.uuid}/css/parsed_theme_style.css"
       end
-      d.save!
+      d.save(false)
     end
     
     #Followship
@@ -110,7 +110,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
       f.follower_id = user.uuid
       user = User.find(f.following_id)
       f.following_id = user.uuid
-      f.save!
+      f.save(false)
     end
     
     #Item
@@ -143,7 +143,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
     Media.all.each do |m|
       user = User.find(:first, :conditions => { :id => m.user_id})
       m.user_id = user.uuid
-      m.save!
+      m.save(false)
     end
     
     #Page
@@ -186,7 +186,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
       if !t.updated_theme_id.nil?
         theme = Theme.find(:first, :conditions => { :id => t.updated_theme_id })
         t.updated_theme_id = theme.uuid
-        t.save!
+        t.save(false)
       end
     end
   end
