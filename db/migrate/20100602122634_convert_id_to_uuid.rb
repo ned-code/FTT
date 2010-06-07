@@ -92,6 +92,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
     #Document
     Theme.set_primary_key :id
     p "updating Document"
+    theme_default = Theme.default
     Document.all.each do |d|
       user = User.find(:first, :conditions => { :id => d.creator_id })
       if user
@@ -106,6 +107,9 @@ class ConvertIdToUuid < ActiveRecord::Migration
         d.theme_id = theme.uuid
         #64 is the length of :uuid/css/parsed_theme_style.css which sould be common between local and S3
         d.style_url = "#{d.style_url[0..(d.style_url.length-64)]}#{theme.uuid}/css/parsed_theme_style.css"
+      else
+        d.theme_id = theme_default.uuid
+        d.style_url = theme_default.style_url
       end
       d.save(false)
     end
