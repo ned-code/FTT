@@ -5,7 +5,8 @@ WebDoc.InspectorPanesManager = $.klass({
     this.itemView = itemView;
     
     // This is the wrapper is used to display both the list of panes and also a single (floating) pane
-    this.domNode = $("<div>").addClass("inspector_pane_wrap inspector_pane floating attached");
+    this.domNode = $("<div>").addClass("inspector_pane_wrap inspector_pane floating");
+    this.setMode("attached");
     
     // We now move the panes container (domNode) out of screen (but we don't hide it) so that we can compute and adjust the height of each pane
     // Once all panes are setup we'll bring the domNode back on screen
@@ -49,6 +50,38 @@ WebDoc.InspectorPanesManager = $.klass({
     this.hideAll(); //hide all panes views (".box") inside the panes container (domNode)
     this.domNodeOutScreen = false;
     this.updateAttachedPanePosition();
+    
+    this.setupDetachedMode();
+  },
+  
+  setupDetachedMode: function() {
+    // Make the pane draggable
+    setTimeout(function(){
+      this.domNode.draggable({
+        handle: 'div.titlebar',
+        cursor: 'move',
+        distance: 5,
+        iframeFix: true,
+        // start: function(e, ui) {}.pBind(this),
+        drag: function(e, ui) {
+          if (this.mode == "attached") {
+            this.setMode("detached");
+          }
+        }.pBind(this),
+        // stop: function(e, ui) {}.pBind(this)
+      });
+    }.pBind(this), 100);
+  },
+  
+  setMode: function(mode) { // attached / detached
+    if (mode == "detached") {
+      this.mode = "detached";
+      this.domNode.removeClass("attached");
+    }
+    else {
+      this.mode = "attached";
+      this.domNode.addClass("attached");
+    }
   },
   
   createShowFloatingInspectorButton: function() {
@@ -116,38 +149,18 @@ WebDoc.InspectorPanesManager = $.klass({
   },
   
   updateAttachedPanePosition: function() { //could be the pane or the list of panes
-    if (!this.domNodeOutScreen) {
+    if (!this.domNodeOutScreen && this.mode == "attached") {
       this.domNode.css(this.attachedPanePosition());
     }
-  },
-  
-  setDetachedMode: function() {
-    this.domNode.removeClass('attached');
-    
-    // Make the pane draggable
-    setTimeout(function(){
-      this.domNode.draggable({
-        // containment: "parent",
-        handle: 'div.titlebar',
-        cursor: 'move',
-        distance: 5,
-        // cursorAt: { top: 30, left: 100 },
-        iframeFix: true,
-        start: function(e, ui) {
-        }.pBind(this),
-        drag: function(e, ui) {
-        }.pBind(this),
-        stop: function(e, ui) {
-        }.pBind(this)
-      });
-      
-    }.pBind(this), 100);
   },
   
   hideAll: function() {
     $.each(this.panesViews, function(title, paneView) { 
       paneView.domNode.hide();
     });
+    
+    //reset to attached mode
+    this.setMode("attached");
   },
   
   destroy: function() {

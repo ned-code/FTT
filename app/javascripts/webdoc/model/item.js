@@ -384,11 +384,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
   /***************************************/
   /** Open social item                   */
   /***************************************/
-  getGadgetUrl: function() {
+  getAppUrl: function() {
     return this.property("gadgetUrl");  
   },
   
-  setGadgetUrl: function(url) {
+  setAppUrl: function(url) {
     this.setProperty("gadgetUrl", url);
     this.fireDomNodeChanged();
   },

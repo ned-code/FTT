@@ -28,6 +28,7 @@
   background:#454749;
   padding:7px 0;
   position:relative;
+  cursor:move;
   -webkit-border-top-left-radius:10px;
   -webkit-border-top-right-radius:10px;
   -moz-border-radius-topleft:10px;
@@ -134,6 +135,7 @@
   position:absolute;
   bottom:10px;
   right:10px;
+  z-index:2;
 }
 
 .item_wrap a.show_floating_inspector span {display:none;}
