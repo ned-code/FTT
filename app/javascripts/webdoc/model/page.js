@@ -100,9 +100,16 @@ WebDoc.Page = $.klass(WebDoc.Record,
       return this.data.data.css.height.toString();
     }
     else {
-      var result = parseFloat(this.data.data.css.height);
-      if (this.data.data.css.height.match(/\%/)) {
-        result = this.DEFAULT_PAGE_HEIGHT_PX * (result/100);
+      var pageHeight = this.data.data.css.height;
+      var result = parseFloat(pageHeight);
+      if (pageHeight.match(/\%/)) {
+        var documentHeight = this.document.data.size.height;
+        if (documentHeight.match(/\%/)) {
+          result = this.DEFAULT_PAGE_HEIGHT_PX * (result / 100);
+        }
+        else {
+          result = parseFloat(documentHeight);
+        }
       }
       return result;
     }
@@ -129,9 +136,16 @@ WebDoc.Page = $.klass(WebDoc.Record,
       return this.data.data.css.width.toString();
     }
     else {
-      var result = parseFloat(this.data.data.css.width);
-      if (this.data.data.css.width.match(/\%/)) {
-        result = this.DEFAULT_PAGE_WIDTH_PX * (result/100);
+      var pageWidth = this.data.data.css.width;
+      var result = parseFloat(pageWidth);
+      if (pageWidth.match(/\%/)) {
+        var documentWidth = this.document.data.size.width;
+        if (documentWidth.match(/\%/)) {
+          result = this.DEFAULT_PAGE_WIDTH_PX * (result / 100);
+        }
+        else {
+          result = parseFloat(documentWidth);
+        }
       }
       return result;      
     }
