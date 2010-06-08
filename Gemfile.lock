@@ -182,7 +182,7 @@ specs:
 - highline: 
     version: 1.5.2
 - net-ssh: 
-    version: 2.0.22
+    version: 2.0.23
 - net-scp: 
     version: 1.0.2
 - net-sftp: 
@@ -204,7 +204,7 @@ specs:
 - json_pure: 
     version: 1.4.3
 - selenium-webdriver: 
-    version: 0.0.19
+    version: 0.0.20
 - capybara: 
     version: 0.3.8
 - cgi_multipart_eof_fix: 
@@ -219,6 +219,7 @@ specs:
     version: 0.10.7
 - devise: 
     version: 1.0.7
+    source: 0
 - erubis: 
     version: 2.6.5
 - factory_girl: 
@@ -230,9 +231,9 @@ specs:
 - gem_plugin: 
     version: 0.2.3
 - haml: 
-    version: 3.0.9
+    version: 3.0.10
 - i18n: 
-    version: 0.4.0
+    version: 0.4.1
 - rails: 
     version: 2.3.8
 - yui-compressor: 
@@ -272,7 +273,7 @@ specs:
 - rubyzip: 
     version: 0.9.4
 - sqlite3-ruby: 
-    version: 1.2.5
+    version: 1.3.0
 - steak: 
     version: 0.3.8
 - uuid: 
@@ -283,7 +284,13 @@ specs:
     version: 2.3.14
 - xmpp4r: 
     version: "0.5"
-hash: 4d07ac257d3841a78aa89c8096f9d12c1637d65f
+hash: 7486562635ff3184ecb5acf33a2d25793699e445
 sources: 
+- Git: 
+    uri: git@github.com:webdoc/devise.git
+    branch: v1.0
+    tag: v1.0.7.1
+    git: git@github.com:webdoc/devise.git
+    ref: 4cee8be78e619d2ead379a38366e06f374ac93f9
 - Rubygems: 
     uri: http://gemcutter.org
