@@ -118,7 +118,7 @@ WebDoc.ImagePaletteController = $.klass({
         this.addToMyImageLink.hide();
         this.addToMyImageResult.text('Uploading...');
         var image = new WebDoc.Image;
-        image.data.remote_file_url = this.propertySrc.val();
+        image.data.remote_attachment_url = this.propertySrc.val();
         this.selectedItem = selectedItem;
         image.save(function(event){
           WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.LIBRARY)

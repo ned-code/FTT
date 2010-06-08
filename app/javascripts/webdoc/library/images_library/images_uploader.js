@@ -30,7 +30,7 @@ WebDoc.ImagesUploader = $.klass({
     // Setting up SWFUpload (but at this point it'll be still "hidden", and it'll get loaded once I'll make it visible)
     this.uploadControl.swfupload({
       upload_url: this.uploadUrl,
-      file_post_name: "image[file]",
+      file_post_name: "image[attachment]",
       file_size_limit: "2048",
       file_types: "*."+WebDoc.SupportedImagesExtensions.join(";*."), // "*.jpg;*.jpeg;*.png;*.gif"
       file_types_description: "Web Image Files",

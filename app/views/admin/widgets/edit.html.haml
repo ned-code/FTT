@@ -23,7 +23,7 @@
     %p
       = t('.inspector_url')
       = @widget.properties[:inspector_url]
-    = f.input :file, :as => :file
+    = f.input :attachment, :as => :file
 
   - f.buttons do
     = f.commit_button t('apply')

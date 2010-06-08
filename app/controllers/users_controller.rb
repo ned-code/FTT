@@ -1,5 +1,9 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!, :except => [:new, :create]
+
+  access_control do
+    allow logged_in, :except => [:index]
+    allow :admin, :to => [:index]
+  end
   
   # GET /users
   def index
@@ -23,10 +27,10 @@ class UsersController < ApplicationController
   # PUT /users/:id
   def update
     @user = current_user
-    
+
     if @user.update_attributes(params[:user])
       flash[:notice] = t('flash.notice.users.edit_successful')
-      redirect_to documents_path
+      redirect_to edit_user_path(@user)
     else
       render :edit
     end

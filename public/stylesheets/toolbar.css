@@ -1,12 +1,9 @@
-#toolbar_panel {background:none;display: none;}
+#toolbar_panel {background:none;}
 #toolbar_panel select {display:block;float:left;margin:0px 3px;border:solid 1px #cccccc}
 #toolbar_panel a div{display:block;color:transparent;margin:2px 3px}
 #toolbar_panel a {margin:0px 0px 0px 2px;}                                         
-#toolbar_panel a:hover {border:solid 1px #49565B}
+#toolbar_panel a:hover, .ui_dropdown_container a:hover {border:solid 1px #49565B}
 #toolbar_panel a.active_button {border:solid 1px #B0E300;background:#E3FF7F !important;-moz-box-shadow:0 0 2px #B0E300;}
-#toolbar_panel_cover{position:absolute;width:100%;height:100%;background-color:white;opacity:0.7;}
-/*#toolbar_panel a#toolbar_panel_button_foreColor{background-color: #ffffff;margin:6px 0px 0px 0px;}
-#toolbar_panel a#toolbar_panel_button_hiliteColor{background-color: #ffffff;margin:6px 0px 0px 0px;}*/
 #toolbar_panel_button_foreColor>div{background-color: #000000;}
 #toolbar_panel_button_hiliteColor>div{background-color: #ffffff;}
 #toolbar_panel a#toolbar_panel_button_foreColor_arrow{margin:0px;padding:0px;width:13px;overflow: hidden;}
@@ -53,24 +50,23 @@
 .icon_createLink{height:16px;width:16px;background:url(../images/toolbar.png) no-repeat -560px;float:left;}
 .icon_clearLink{height:16px;width:16px;background:url(../images/toolbar.png) no-repeat -576px;float:left;}
 
+.icon_editHTML{height:16px;width:30px;background:url(../images/toolbar.png) no-repeat -1060px;float:left;}
+
 #toolbar_panel_createlink_block	 {z-index:99999999 !important;position:absolute !important;height:65px !important;display:none ;overflow: hidden !important;padding: 5px 3px !important;}   
-#toolbar_panel_createlink_block  input[type="text"] {display:block;float:left;width:275px;margin:1px 2px 1px 0px;height:20px;padding:0px 3px;border:1px solid #cccccc !important;font-size:11px;}
+#toolbar_panel_createlink_block  input[type="text"] {display:block;float:left;width:260px;margin:1px 2px 1px 0px;height:20px;padding:0px 3px;border:1px solid #cccccc !important;font-size:11px;}
 #toolbar_panel_createlink_block  input[type="radio"] {display:block;float:left;width:17px;margin:1px 2px 1px 0px;height:21px;padding:0px 3px;}
 #toolbar_panel_createlink_block  input[type="button"] {display:block;float:right;font-size: 12px;}    
 #toolbar_panel_createlink_block  label {display:block;float:left;width:60px;text-align:left;padding:0px 10px;height:16px;line-height:21px;font-size: 12px;}
-#toolbar_panel_createlink_block  label.inline_label {display:block;float:left;width:auto;text-align:left;padding:0px 7px 0px 0px;line-height: 24px;font-size:11px;}
+#toolbar_panel_createlink_block  label.inline_label {display:block;float:left;width:auto;text-align:left;padding:0px 2px 0px 0px;line-height: 24px;font-size:11px;}
 #toolbar_panel_createlink_block  div {display:block;height:20px;line-height:20px}
 #toolbar_panel_createlink_block button {float:right !important;padding:1px !important;display:block !important;margin-top:2px !important}
-
-
 
 .ui-button-icon-only .ui-button-text { padding: 0.35em; } 
 .ui-autocomplete-input { padding: 1px 0 1px 5px }
 .ui_dropdown_container {background: none;padding:20px 50px 30px 30px;position:absolute;z-index:500;}
-.ui_custom_input {font-size: 11px !important;height: 18px !important;top:0px !important;float:left !important;padding-left:3px !important;border: 1px solid #CCCCCC !important;}
+.ui_custom_input {font-size: 11px !important;height: 18px !important;top:0px !important;float:left !important;padding-left:3px !important;border: 1px solid #CCCCCC !important;height:22px !important;}
 .ui_custom_button {font-size: 14px !important;width:20px !important;height:22px !important;top:0px !important;left:-1px!important;float:left !important;}
 
-.toolbar-custom-combobox-button{}
 .toolbar-custom-combobox-ul{font-size: 12px;font-weight:normal;float:none;z-index: 3;top:0;left:0;}
 .toolbar-custom-combobox-li{font-size: 12px;font-weight:normal;float:none;}
 .toolbar-custom-combobox-li a{float:none !important;line-height:1.2 !important;padding:1px 3px !important;cursor: default;border:solid 1px transparent}
