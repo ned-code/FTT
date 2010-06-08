@@ -446,6 +446,7 @@
 			
 			urlBlacklist = [
       	'http://nytimes.com', 'http://www.nytimes.com',
+      	'http://newyorktimes.com', 'http://www.newyorktimes.com',
       	'http://gmail.com', 'http://www.gmail.com',
       	'http://softpedia.com', 'http://www.softpedia.com'
       ],
@@ -501,8 +502,10 @@
               else {
                 consolidateSrc = "http://" + value;
               }
-
-        	    if(jQuery.inArray(consolidateSrc, urlBlacklist) == -1){
+              
+              test_url = 'http://' + consolidateSrc.split('://')[1].split('/')[0];
+                       
+        	    if(jQuery.inArray(test_url, urlBlacklist) == -1){
         	      return true;
         	    }
         	    else {

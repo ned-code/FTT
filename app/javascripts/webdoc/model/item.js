@@ -116,7 +116,13 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return null;
   },
   
-  property: this.getProperty,
+  // TMP hack
+  property: function(key) {
+    if (this.data.data.properties) {
+      return this.data.data.properties[key];
+    }
+    return null;
+  },
   
   setProperty: function(key, value) {
     if (!this.data.data.properties) {
@@ -288,30 +294,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.data.data.innerHTMLPlaceholder = html;
   },
   
-  getInnerText: function() {
-    return this.removeHtmlTags(this.data.data.innerHTML);
-  },
-
-  setSrc: function(newSrc) {
-    this.data.data.src = newSrc;
-    this.save();
-    this.fireDomNodeChanged();
-    WebDoc.application.inspectorController.refreshSubInspectors();
-  },
-
-  getSrc: function() {
-    return this.data.data.src;
-  },
-  
-  getGadgetUrl: function() {
-    return this.property("gadgetUrl");  
-  },
-  
-  setGadgetUrl: function(url) {
-    this.setProperty("gadgetUrl", url);
-    this.fireDomNodeChanged();
-  },
-  
   fireInnerHtmlChanged: function() {
     for (var i = 0; i < this.listeners.length; i++) {
       if (this.listeners[i].innerHtmlChanged) {
@@ -352,12 +334,24 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
 
-  removeHtmlTags: function(str) {
+  /***************************************/
+  /** text item                          */
+  /***************************************/
+ 
+  getInnerText: function() {
+    return this._removeHtmlTags(this.data.data.innerHTML);
+  },
+  
+  _removeHtmlTags: function(str) {
     var regExp = /<\/?[^>]+>/gi;
     str = str.replace(regExp,"");
     return str;
   },
 
+  /***************************************/
+  /** html item (widget)                 */
+  /***************************************/
+ 
   // If HTML code contains an embed tag of type Flash, will create or force the wmode property to transparent
   // so that Flash content will be viewable into WebDoc
   checkForceWMode: function(html) {
@@ -388,73 +382,86 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return d >= 0 && s.lastIndexOf(pattern) === d;
   },
   
-  getOriginalSize: function(callback){
-    // TODO: this needs to wait for the load callback before 
-    // stuff that depends on it can continue...
-    if (!this._originalSize) {
-      return this._calcOriginalSize(callback);
-    }
-    else {
-      return callback( this._originalSize );
-    }
+  /***************************************/
+  /** Open social item                   */
+  /***************************************/
+  getGadgetUrl: function() {
+    return this.property("gadgetUrl");  
   },
   
-  _calcOriginalSize: function(callback){
-    var image = new Image(),
-        that = this;
-    
-    image.onload = function(){
-      that._originalSize = {
-        width: image.width,
-        height: image.height
-      };
-      
-      callback && callback(that._originalSize);
-    };
-    
-    image.src = this.data.data.src;
+  setGadgetUrl: function(url) {
+    this.setProperty("gadgetUrl", url);
+    this.fireDomNodeChanged();
   },
-  
+
+  /***************************************/
+  /** Image item                         */
+  /***************************************/
+     
   getZoom: function(){
-    return this.getProperty('zoom') || 1;
+    return parseFloat(this.getProperty('zoom')) || 0;
   },
   
   getDisplacement: function(){
-    return this.getProperty('displacement') || { top: 0, left: 0 }
+    var result = this.getProperty('displacement') || { top: 0, left: 0 };
+    result.top = parseFloat(result.top);
+    result.left = parseFloat(result.left);
+    return result;
   },
   
-  zoom: function(zoom){
-    var size = this.getOriginalSize(),
-        css = this.data.data.css;
-    
-    css.maxWidth = size.width * zoom;
-    css.maxHeight = size.height * zoom;
-    
-    this.setProperty('zoom', zoom);
+  setSrc: function(newSrc) {
+    this.data.data.src = newSrc;
     this.save();
+    this.fireDomNodeChanged();
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+
+  getSrc: function() {
+    return this.data.data.src;
+  },
+    
+  zoom: function(zoom){
+    var previousZoom = this.getZoom();
+    var diffZoom = zoom - previousZoom;
+    this.setProperty('zoom', zoom);
+    var newLeft = this.getDisplacement().left + diffZoom/2;
+    var newTop = this.getDisplacement().top + diffZoom/2;    
+    this.displace({ left: newLeft, top: newTop});
     this.fireObjectChanged({ modifedAttribute: 'zoom' });
+    WebDoc.application.inspectorController.refreshSubInspectors();
   },
   
   displace: function(coords) {
-    // coords is an object { top: n, left: n } that represents
-    // the origin relative to the images original pixel dimensions.
-    // The origin is limited to be within the dimensions of the image.
+    var previousDisplacment = this.getProperty('displacement');
+    var zoom = this.getZoom();
+    if (!previousDisplacment) {
+      this.setProperty('displacement', {});
+    }
+    if (coords.left < 0) { coords.left = 0; }
+    if (coords.top < 0) { coords.top = 0; }
+    if (coords.left > zoom) { coords.left = zoom; }
+    if (coords.top > zoom) { coords.top = zoom; }    
     
-    var size = this.getOriginalSize(),
-        dp = this.getDisplacement(),
-        displacement = jQuery.extend(dp, {
-          top:  coords.top !== undefined ?
-            (coords.top < 0) ? 0 : (coords.top > size.height) ? size.height : coords.top :
-            undefined,
-          left: coords.left !== undefined ?
-            (coords.left < 0) ? 0 : (coords.left > size.width) ? size.width : coords.left :
-            undefined
-        });
-    
-    this.setProperty('displacement', displacement);
-    this.save();
+    jQuery.extend(this.getProperty('displacement'), coords);
     this.fireObjectChanged({ modifedAttribute: 'displacement' });
-  }
+    WebDoc.application.inspectorController.refreshSubInspectors();
+  },
+  
+  getOriginalSize: function(){
+    if (!this._originalSize) { this._calcOriginalSize(); }
+    return this._originalSize;
+  },
+  
+  _calcOriginalSize: function(){
+    var image = new Image();
+    
+    image.src = this.data.data.src;
+    
+    this._originalSize = {
+      width: image.width,
+      height: image.height
+    };
+  }  
 });
 
 $.extend(WebDoc.Item, {

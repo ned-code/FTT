@@ -24,10 +24,20 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   initialize: function($super, item, pageView, afterItem){
     $super(item, pageView, afterItem);
     
-    this.zoom();
-    this.displace();
+    this._zoom();
+    this._displace();
   },
 
+  objectChanged: function($super, item, options) {
+    $super(item, options);
+    if (item._isAttributeModified(options, 'zoom')) {
+      this._zoom();
+    }
+    if (item._isAttributeModified(options, 'displacement')) {
+      this._displace();
+    }
+  },
+  
   createDomNode: function() {
     var imageNode = jQuery('<' + this.item.data.data.tag + '/>'),
         frameNode = jQuery('<div/>', { 'class': "layer" });
@@ -45,45 +55,28 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     return frameNode;
   },
 
-  zoom: function(){
+  _zoom: function(){
     var image = this.imageNode,
         model = this.item,
-        wrap = this.domNode,
-        zoom = model.getProperty( 'zoom' ) || 1,
-        imgSize = model.getOriginalSize(),
-        displacement = model.getDisplacement(),
+        zoom = model.getZoom(),
         css = {
-          left: - displacement.left * zoom,
-          top: - displacement.top * zoom,
-          width: imgSize.width * zoom,
-          height: imgSize.height * zoom
-        },
-        wrapCss = {
-          maxWidth: css.width,
-          maxHeight: css.height
+          width: (100 + zoom) + "%",
+          height: (100 + zoom) + "%"
         };
     
     image.css( css );
-    wrap.css( wrapCss );
   },
   
-  displace: function(){
+  _displace: function(){
     var model = this.item,
-        modelCss = model.data.data.css,
-        frame = this.frameNode,
-        size = model.getOriginalSize(),
+        image = this.imageNode,
         displacement = model.getDisplacement(),
-        zoom = model.getZoom(),
-        dy = displacement.top * zoom,
-        dx = displacement.left * zoom,
-        travx = (size.width * zoom) - modelCss.width,
-        travy = (size.height * zoom) - modelCss.height,
         css = {
-          top: -( dy > travy ? travy : dy ),
-          left: -( dx > travx ? travx : dx )
+          top: -( displacement.top ) + "%",
+          left: -( displacement.left ) + "%"
         };
     
-    this.imageNode.css( css );
+    image.css( css );
   },
   
   inspectorId: function() {

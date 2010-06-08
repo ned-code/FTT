@@ -20,41 +20,37 @@ WebDoc.ImagePaletteController = $.klass({
     this.zoomNode = jQuery('#image_zoom');
     this.xshiftNode = jQuery('#image_xshift');
     this.yshiftNode = jQuery('#image_yshift');
-    
+       
+    var that = this;
+    this._nbChange = 0;    
     this.zoomNode
     .bind('change', function(e){
       var factor = parseFloat( e.target.value ),
-          item = WebDoc.application.boardController.selection()[0].item;
-      
-      factor = 0.25/(1-factor);
-      
-      console.log(factor);
-      
+          item = WebDoc.application.boardController.selection()[0].item;               
       item.zoom( factor );
+      that._delayItemSave(item);
     });
-    
-    var that = this;
+   
     
     this.xshiftNode
     .bind('change', function(e){
       var xfactor = parseFloat( e.target.value ),
-          item = WebDoc.application.boardController.selection()[0].item,
-          size = item.getOriginalSize();
-      
+          item = WebDoc.application.boardController.selection()[0].item;      
       item.displace({
-        left: xfactor * size.width
+        left: xfactor
       });
+      that._delayItemSave(item);   
     });
     
     this.yshiftNode
     .bind('change', function(e){
       var yfactor = parseFloat( e.target.value ),
-          item = WebDoc.application.boardController.selection()[0].item,
-          size = item.getOriginalSize();
+          item = WebDoc.application.boardController.selection()[0].item;
       
       item.displace({
-        top: yfactor * size.height
+        top: yfactor
       });
+      that._delayItemSave(item);
     });
   },
   
@@ -75,6 +71,9 @@ WebDoc.ImagePaletteController = $.klass({
         else {
           $("#preserve_aspect_ratio").removeAttr("checked");
         }
+        this.zoomNode[0].value = selectedItem.item.getZoom();
+        this.xshiftNode[0].value = selectedItem.item.getDisplacement().left;
+        this.yshiftNode[0].value = selectedItem.item.getDisplacement().top;
       }
     }
   },
@@ -135,6 +134,17 @@ WebDoc.ImagePaletteController = $.klass({
       }
     }
     return false;
+  },
+  
+  _delayItemSave: function(item) {
+      var that = this;
+      this._nbChange += 1;
+      var currentNbChange = this._nbChange;
+      setTimeout(function(){ 
+        if (currentNbChange == that._nbChange) {
+          item.save();
+          that._nbChange = 0;
+        }}, 500);    
   }
 
 });

@@ -109,6 +109,9 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
           jQuery('body').trigger('webdocready');          
         }.pBind(this));                
       }.pBind(this));
+
+      WebDoc.closeUrl = jQuery.cookie('document_back_url') ? jQuery.cookie('document_back_url') : null;
+      jQuery.cookie('document_back_url', null, { path: '/' });
     }.pBind(this));
   },
 

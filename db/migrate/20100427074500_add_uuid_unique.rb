@@ -5,7 +5,8 @@ class AddUuidUnique < ActiveRecord::Migration
       duplicat_items = Item.find_all_by_uuid(item_uuid.uuid)
       duplicat_items.each do |item|
         item.uuid = UUID::generate
-        item.save!
+        item.touch_page_active = false
+        item.save(false)
       end
     end
     add_index(:items, :uuid, :unique => true, :name => "index_items_unique_uuid")
