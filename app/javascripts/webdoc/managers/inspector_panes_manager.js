@@ -46,8 +46,7 @@ WebDoc.InspectorPanesManager = $.klass({
   allPanesHeightsAdjusted: function() {
     // Called automatically in case the panes are "AppPanes" (iframes),
     // If your panes are not iframes and didn't need height adjustment, call this method manually (once all panes are loaded) to bring back the domNode on screen
-    this.domNode.hide();
-    this.hideAll(); //hide all panes views (".box") inside the panes container (domNode)
+    this.closeAll(); //hide all panes views (".box") inside the panes container (domNode)
     this.domNodeOutScreen = false;
     this.updateAttachedPanePosition();
     
@@ -112,19 +111,9 @@ WebDoc.InspectorPanesManager = $.klass({
   },
   
   showPanesList: function() {
-    this.buildPaneList();
-    this.domNode.show();
-    this.currentPane = "list";
-  },
-  
-  showPane: function(title) {
+    this.closeAll();
     this.updateAttachedPanePosition();
-    this.hideAll();
-    this.panesViews[title].domNode.show();
-    this.currentPane = title;
-  },
-  
-  buildPaneList: function() {
+    
     if (this.panesList) {
       this.panesList.show();
     }
@@ -133,19 +122,35 @@ WebDoc.InspectorPanesManager = $.klass({
       var list = $('<ul>');
       
       $.each(this.panesViews, function(title, paneView) { 
-        list.append($('<li><a href="">'+title+'</a></li>'));
-      });
+        var paneLink = $('<a href="">'+title+'</a>');
+        paneLink.bind("click", function(event){
+          event.preventDefault();
+          this.showPane(title);
+        }.pBind(this));
+        
+        list.append($('<li>').append(paneLink));
+      }.pBind(this));
       
       this.panesList = $('<div class="box list">').append(attachedIndicator).append(list);
       this.domNode.append(this.panesList);
     }
+    
+    this.currentPane = "list";
+  },
+  
+  showPane: function(title) {
+    this.closeAll();
+    this.updateAttachedPanePosition();
+    
+    this.panesViews[title].domNode.show();
+    this.currentPane = title;
   },
   
   attachedPanePosition: function() { //could be the pane or the list of panes
     // Choose the reference element to align the pane (generally the "i" button)
     var refElementOffset;
     if (this.showFloatingInspectorButton) {
-       refElementOffset = this.showFloatingInspectorButton.offset();
+      refElementOffset = this.showFloatingInspectorButton.offset();
     }
     else {
       refElementOffset = this.domNode.offset();
@@ -159,8 +164,8 @@ WebDoc.InspectorPanesManager = $.klass({
     }
   },
   
-  hideAll: function() {
-    $.each(this.panesViews, function(title, paneView) { 
+  closeAll: function() {
+    $.each(this.panesViews, function(title, paneView) {
       paneView.domNode.hide();
     });
     
@@ -172,9 +177,20 @@ WebDoc.InspectorPanesManager = $.klass({
   
   destroy: function() {
     // Remove all inspector panes
-    $.each(this.panesViews, function(title, paneView) { 
+    $.each(this.panesViews, function(title, paneView) {
       paneView.remove();
     });
     this.domNode.remove();
-  }  
+  },
+  
+  itemDidSelect: function() {
+    this.domNode.show();
+  },
+  
+  itemDidUnselect: function() {
+    if (this.currentPane == "list") {
+      this.closeAll();
+    }
+    this.domNode.hide();
+  }
 });

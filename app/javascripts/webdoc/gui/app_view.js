@@ -100,7 +100,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   select: function($super) {
     $super();
     
-    this.inspectorPanesManager.domNode.show();
+    this.inspectorPanesManager.itemDidSelect();
     
     //avoid resizing at the moment....
     this.domNode.resizable( 'destroy' );
@@ -108,7 +108,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   
   unSelect: function($super) {
     $super();
-    this.inspectorPanesManager.domNode.hide();
+    this.inspectorPanesManager.itemDidUnselect();
   },
   
   canEdit: function() {

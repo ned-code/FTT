@@ -21,7 +21,7 @@ WebDoc.InspectorPaneView = $.klass({
     var closeLink = $('<a href="" class="hide"><span>hide</span></a>');
     closeLink.bind("click", function(event){
       event.preventDefault();
-      this.manager.hideAll();
+      this.manager.closeAll();
     }.pBind(this));
     var sendToSidebarLink = $('<a href="" class="arrow right" title="Send to sidebar"><span>Send to sidebar</span></a>');
     sendToSidebarLink.bind("click", function(event){

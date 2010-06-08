@@ -96,9 +96,9 @@ WebDoc.OpenSocialApp = $.klass({
     gadgets.rpc.setAuthToken(iframeId, this.rpcToken);
     
     return '<iframe id="' + iframeId + '" name="' + iframeId + '" style="" class="" src="'+ this.getIframeUrl() +
-        '" frameborder="no" scrolling="no" ' +
-        'height="' + (this.height ? this.height : '100%') +
+        '" frameborder="no" scrolling="no' +
         '" width="' + (this.width ? this.width : '100%') +
+        '" height="' + (this.height ? this.height : '100%') +
         '" allowtransparency="true"></iframe>';
   },
   
@@ -188,6 +188,7 @@ WebDoc.AppPane = $.klass(WebDoc.OpenSocialApp, {
   },
   
   render: function() {
+    this.height = "10px"; // to avoid setting height="100%" for this iframe (see getContent()) which would cause WebKit to bug
     var content = this.getContent();
     var title = this.paneTitle();
     
