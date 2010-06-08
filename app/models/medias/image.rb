@@ -39,6 +39,7 @@ protected
   
   # before_validation
   def download_image_provided_by_remote_attachment_url
+    require 'open-uri'
     if remote_attachment_url.present?
       io = open(URI.parse(remote_attachment_url))
       def io.original_filename; base_uri.path.split('/').last; end

@@ -105,7 +105,7 @@ class Theme < ActiveRecord::Base
 
         if ancestor_theme.present?
           ancestor_theme.updated_theme_id = self.id
-          ancestor_theme.save!
+          raise(ActiveRecord::RecordInvalid) unless ancestor_theme.save(false)
         end
 
         begin
