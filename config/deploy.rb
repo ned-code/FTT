@@ -27,9 +27,16 @@ namespace :deploy do
   task :link_config do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     run "ln -nfs #{shared_path}/config/allowed_user_email.yml #{release_path}/config/allowed_user_email.yml"
+    run "ln -nfs #{release_path}/config/s3.server.yml #{release_path}/config/s3.yml"
   end
   task :generate_assets do
     send(:run, "cd #{release_path} && RAILS_ENV=#{rails_env} /usr/bin/jammit --force config/assets.yml")
+  end
+  task :show_maintenance do
+    run "cp #{current_path}/app/views/layouts/maintenance.html #{current_path}/public/maintenance.html"
+  end
+  task :hide_maintenance do
+    run "rm #{current_path}/public/maintenance.html"
   end
 end
 

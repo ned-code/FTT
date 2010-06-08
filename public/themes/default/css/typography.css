@@ -29,18 +29,7 @@
     font-size: 1em;
     font-family: Helvetica, Arial, sans-serif;
     line-height: 1.25;
-    color: #484848;
-    background-color: white;
 }
-
-/* color theme */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6                { color: #484848; }
 
 a:focus,
 a:hover           { color: hsl(208, 50%, 20%); border-bottom: 1px dotted hsl(208, 50%, 20%); text-decoration: none; }
@@ -170,11 +159,6 @@ td,
 caption           { padding: 4px 10px 4px 5px; }
 tfoot             { font-style: italic; }
 caption           { background: #eee; }
-                      
-/* Selected text */
-
-*::selection      { background-color: rgba(176, 227, 0, 0.8); }
-code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }
 
 /* Indentation */
 

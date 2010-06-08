@@ -1,6 +1,6 @@
 <!-- views/followships/_card -->
 
-<div class="card <% if local_assigns.has_key? :subscribed %>card-with-button<% end %>" data-webdoc-user-id="<%= user.id %>" <% if user.avatar %>style="background-image: url('<%= user.avatar_thumb_url %>');"<% end %>>
+<div class="card <% if local_assigns.has_key? :subscribed %>card-with-button<% end %>" data-webdoc-user-id="<%= user.id %>" style="background-image: url('<%= user.avatar.url(:thumb) %>');">
   <% if user.mutual_connection(current_user) %>
     <div class="wd-user-item-mutual" ></div>
   <% end%>
