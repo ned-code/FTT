@@ -113,17 +113,6 @@ WebDoc.PropertiesInspectorController = $.klass({
     }
   },
   
-  updateSroll: function(event) {
-    ddd("update scroll");
-     var item = WebDoc.application.boardController.selection()[0].item;
-      if (item) {        
-        var newOverflow = { overflow: this.scrollNode.attr("checked")?"auto":"hidden"};
-        $.extend(item.data.data.css, newOverflow);
-        WebDoc.application.boardController.selection()[0].itemDomNode.css("overflow", newOverflow.overflow);
-        item.save();
-      }
-  },
-  
   changeProperty: function(e){
     var self = this,
         field = jQuery(e.target);
@@ -231,13 +220,6 @@ WebDoc.PropertiesInspectorController = $.klass({
         return true;
       }
     }
-  },
-  
-  updateItem: function(){
-    var item = WebDoc.application.boardController.selection()[0].item,
-        css = item.data.data.css;
-    
-    item.changeCssProperty(  );
   },
 
   updatePropertiesWithFitToScreen: function(e) {
