@@ -33,10 +33,10 @@ class Layout < ActiveRecord::Base
       page = self.build_model_page
 
       doc = nil
-      if self.theme.file.s3_bucket == nil
-        doc = Nokogiri::HTML(open(File.join(Rails.root, 'public', self.template_url)));
-      else
+      if S3_CONFIG[:storage] == 's3'
         doc = Nokogiri::HTML(open(self.template_url));
+      else
+        doc = Nokogiri::HTML(open(File.join(Rails.root, 'public', self.template_url)));
       end
       doc_body = doc.xpath('/html/body')
       body_class = doc_body.attr('class').content
@@ -80,7 +80,7 @@ class Layout < ActiveRecord::Base
               src = doc_item.attr('src')
               path = ""
               unless src.start_with? "http://"
-                path = self.theme.file.store_url 
+                path = self.theme.attachment_root_url
               end
               item.data[:src] = path + src
               item.media_type = 'image'
