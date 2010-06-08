@@ -8,6 +8,7 @@ class ConvertIdToUuid < ActiveRecord::Migration
     DatastoreEntry.set_primary_key :id
     Document.set_primary_key :id
     Followship.set_primary_key :id
+    Item.set_primary_key :id
     Media.set_primary_key :id
     Page.set_primary_key :id
     Role.set_primary_key :id
@@ -86,11 +87,17 @@ class ConvertIdToUuid < ActiveRecord::Migration
     DatastoreEntry.all.each do |d|
       user = User.find(:first, :conditions => { :id => d.user_id })
       if user
-        d.user_id = user.uuid
+        user_uuid = user.uuid
       end
       item = Item.find(:first, :conditions => { :id => d.item_id })
       if item
-        d.item_id = item.uuid
+        item_uuid = item.uuid
+      end
+      if item_uuid
+        execute "UPDATE datastore_entries SET item_id='#{item_uuid}' where id='#{d.id}'"
+      end
+      if user_uuid
+        execute "UPDATE datastore_entries SET user_id='#{user_uuid}' where id='#{d.id}'"
       end
       d.save(false)
     end
@@ -110,8 +117,12 @@ class ConvertIdToUuid < ActiveRecord::Migration
       theme = Theme.find(:first, :conditions => { :id => d.theme_id})
       if theme
         d.theme_id = theme.uuid
-        #64 is the length of :uuid/css/parsed_theme_style.css which sould be common between local and S3
-        d.style_url = "#{d.style_url[0..(d.style_url.length-64)]}#{theme.uuid}/css/parsed_theme_style.css"
+        if !d.style_url.nil?
+          #64 is the length of :uuid/css/parsed_theme_style.css which sould be common between local and S3
+          d.style_url = "#{d.style_url[0..(d.style_url.length-64)]}#{theme.uuid}/css/parsed_theme_style.css"
+        else
+          d.style_url = theme.style_url
+        end
       else
         #Here we set default theme if there is no theme
         d.theme_id = theme_default.uuid
@@ -123,11 +134,12 @@ class ConvertIdToUuid < ActiveRecord::Migration
     #Followship
     p "updating Followship"
     Followship.all.each do |f|
-      user = User.find(f.follower_id)
-      f.follower_id = user.uuid
-      user = User.find(f.following_id)
-      f.following_id = user.uuid
-      f.save(false)
+      follower = User.find(f.follower_id)
+      following = User.find(f.following_id)
+      
+      #f.save(false)
+      execute "UPDATE followships SET follower_id='#{follower.uuid}' where follower_id='#{f.follower_id}' AND following_id='#{f.following_id}'"
+      execute "UPDATE followships SET following_id='#{following.uuid}' where follower_id='#{follower.uuid}' AND following_id='#{f.following_id}'"
     end
     
     #Item
@@ -215,6 +227,29 @@ class ConvertIdToUuid < ActiveRecord::Migration
         theme = Theme.find(:first, :conditions => { :id => t.updated_theme_id })
         t.updated_theme_id = theme.uuid
         t.save(false)
+      end
+    end
+    
+    #View count
+    p "updating ViewCount"
+    ViewCount.all.each do |v|
+      item_uuid = nil
+      user_uuid = nil
+      class_name = v.viewable_type.camelize.constantize
+      item = class_name.find(:first, :conditions => { :id => v.viewable_id} )
+      
+      if item
+        item_uuid = item.uuid
+      end
+      user = User.find(:first, :select => 'id, uuid', :conditions => { :id => v.user_id })
+      if user
+        user_uuid = user.uuid
+      end
+      if !item_uuid.nil?
+        execute "UPDATE view_counts SET viewable_id='#{item_uuid}' where id='#{v.id}'"
+      end
+      if !user_uuid.nil?
+        execute "UPDATE view_counts SET user_id='#{user_uuid}' where id='#{v.id}'"
       end
     end
   end
