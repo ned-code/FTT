@@ -30,8 +30,7 @@
         cookiesSessionKeyName:"#{cookies[session_key_name]}"
       };
       WebDoc.shindig = {};
-      WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";     
-      WebDoc.closeUrl = "#{ @get_return_to }";
+      WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";
       
       WebDoc.Application.main(function() {
         var editor = new WebDoc.PageEditor();

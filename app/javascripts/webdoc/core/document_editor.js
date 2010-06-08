@@ -47,6 +47,9 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     infoDialogWidthNode = $("#wb-new-document-size-width");
     infoDialogHeightNode = $("#wb-new-document-size-height");
     infoDialogSubmitNode = infoDialogNode.find("input[type='submit']");
+
+    // reset document back url (used to close a document)
+    jQuery.cookie('document_back_url', null, { path: '/' });
   },
 
   start: function()

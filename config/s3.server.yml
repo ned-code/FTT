@@ -1,0 +1,27 @@
+common: &common
+  access_key_id: 'AKIAJSQQ2RDIXG2UOZ5Q'
+  secret_access_key: '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'
+
+development:
+  <<: *common
+  storage: filesystem
+  assets_bucket: 'assets.test.webdoc.com'
+  widgets_bucket: 'apps.test.webdoc.com'
+
+test:
+  <<: *common
+  storage: s3
+  assets_bucket: 'assets.test.webdoc.com'
+  widgets_bucket: 'apps.test.webdoc.com'
+
+staging:
+  <<: *common
+  storage: s3
+  assets_bucket: 'assets.test.webdoc.com'
+  widgets_bucket: 'apps.test.webdoc.com'
+
+production:
+  <<: *common
+  storage: s3
+  assets_bucket: 'assets.test.webdoc.com'
+  widgets_bucket: 'apps.test.webdoc.com'
