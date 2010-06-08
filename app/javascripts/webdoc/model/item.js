@@ -25,10 +25,31 @@ WebDoc.Item = $.klass(WebDoc.Record,
   setPage: function(page) {
     this.page = page;  
   },
-  
-  setClass: function(newClass) {
-    if (newClass != this.data.data['class']) {
-      this.data.data['class'] = newClass;
+
+  /*
+   * set a class to the item. a optional class type can be passed (like border or background)
+   */
+  setClass: function(newClass, classType) {
+    ddd('item setClass class:'+newClass+' type:'+classType);
+    var need_save = false;
+
+    if(classType === undefined || classType === 'class') {
+      if (newClass !== this.data.data[classType]) {
+        this.data.data['class'] = newClass;
+        need_save = true;
+      }
+    }
+    else {
+      if (!this.data.data.classes || newClass !== this.data.data.classes[classType]) {
+        if(!this.data.data.classes) {
+          this.data.data.classes = {};
+        }
+        this.data.data.classes[classType] = newClass;
+        need_save = true;
+      }
+    }
+
+    if(need_save) {
       this.fireObjectChanged({ modifedAttribute: 'class' });
       this.save();
     }
