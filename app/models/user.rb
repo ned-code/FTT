@@ -1,6 +1,7 @@
 require 'xmpp_user_synch'
 
 class User < ActiveRecord::Base
+  set_primary_key :uuid
   acts_as_authorization_subject
 
   avatars_path = "uploads/user/avatar/:id/:cw_style:basename.:extension"
@@ -17,7 +18,6 @@ class User < ActiveRecord::Base
   validates_attachment_content_type :avatar, :content_type => ['image/jpeg', 'image/png', 'image/gif']
 
   has_uuid  
-
   # Include default devise modules.
   # Others available are :lockable, :timeoutable and :activatable.
   devise :registerable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable, :lockable
@@ -123,12 +123,8 @@ class User < ActiveRecord::Base
         :uuid => self.uuid,
         :username => self.username,
         :bio => self.bio,
-<<<<<<< HEAD
-        :avatar_thumb_url => self.avatar_thumb_url,
-=======
         :uuid => self.uuid,
         :avatar_thumb_url => self.avatar.url(:thumb),
->>>>>>> dev
         :documents_count => self.documents_count,
         :following_info => self.follower?(current_user)
       }
