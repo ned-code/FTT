@@ -16,7 +16,7 @@ var defaultTitle = 'enter a title',
 
 WebDoc.PageBrowserItemView = $.klass({
   
-  TITLE_CLASS: 'page-title',
+  //TITLE_CLASS: 'page-title',
   LOADING_ICON_CLASS: 'loading-icon',
   EDIT_ICON_CLASS: 'edit-icon mode-edit-show',
   THUMB_CLASS: 'thumb',
@@ -30,7 +30,7 @@ WebDoc.PageBrowserItemView = $.klass({
     try {
       var titleObj = this.getPageTitle(page),
           pageItem = $('<li/>'),
-          pageItemTitle = $('<div/>').addClass( this.TITLE_CLASS ),
+          //pageItemTitle = $('<div/>').addClass( this.TITLE_CLASS ),
           pageItemNumber = $('<span/>').addClass(numberClass),
           pageItemEdit = $('<a/>', {href: '#pop', target: 'pop', title: 'Click to edit'}).addClass( this.EDIT_ICON_CLASS ).html('<span>edit</span>'),
           pageItemLoading = $('<span/>').addClass( this.LOADING_ICON_CLASS ),
@@ -45,18 +45,18 @@ WebDoc.PageBrowserItemView = $.klass({
       
       this.domNode = pageItem;
       this.thumbNode = pageItemThumb;
-      this._titleNode = pageItemTitle;
+      //this._titleNode = pageItemTitle;
       this._titleEditNode = pageItemEdit;
       this._popForm = popForm;
       this._popTitle = popTitle;
       
       // If the title is default
-      if(titleObj.defaultBehavior) {
-        if( this.page.nbTextItems() > 0 ) {
-          this.page.getFirstTextItem().addListener(this);
-        }
-        pageItemTitle.addClass( defaultClass );
-      }
+      //if(titleObj.defaultBehavior) {
+      //  if( this.page.nbTextItems() > 0 ) {
+      //    this.page.getFirstTextItem().addListener(this);
+      //  }
+      //  pageItemTitle.addClass( defaultClass );
+      //}
       
       // Construct Pop DOM Tree
       popForm
@@ -70,10 +70,10 @@ WebDoc.PageBrowserItemView = $.klass({
       
       // Construct Item DOM tree
       pageItem
-      .append(
-        pageItemTitle
-        .text( titleObj.title )
-      )
+      //.append(
+      //  pageItemTitle
+      //  .text( titleObj.title )
+      //)
       .append(
         pageItemThumb
         .append( pageItemThumbView )
@@ -89,7 +89,7 @@ WebDoc.PageBrowserItemView = $.klass({
       }
       
       pageItemEdit.bind( 'click', clickHandler.pBind(this) );
-      pageItemTitle.bind( 'dblclick', clickHandler.pBind(this) );
+      //pageItemTitle.bind( 'dblclick', clickHandler.pBind(this) );
 
       page.document.addListener(this);
       page.addListener(this);
@@ -182,23 +182,23 @@ WebDoc.PageBrowserItemView = $.klass({
     this.domNode.remove();
   },
 
-  updateTitle: function( page ){
-    ddd("[PageBrowserController] Update title");
-    // Find item related to this page
-    var newTitle = this.getPageTitle(page).title;
-
-    if( newTitle ) {
-        this._titleNode
-              .removeClass( this.DEFAULT_CLASS );
-        this.setAndTruncateTitle( newTitle );
-    }
-  },
+  //updateTitle: function( page ){
+  //  ddd("[PageBrowserController] Update title");
+  //  // Find item related to this page
+  //  var newTitle = this.getPageTitle(page).title;
+  //
+  //  if( newTitle ) {
+  //      //this._titleNode
+  //      //      .removeClass( this.DEFAULT_CLASS );
+  //      //this.setAndTruncateTitle( newTitle );
+  //  }
+  //},
   
   objectChanged: function(record, options) {
     ddd("[PageBrowserItemView] objectChanged", record);
     switch(record.className()) {
       case "page":
-        this.updateTitle(record);
+        //this.updateTitle(record);
         break;
       case "document":
         if (record._isAttributeModified(options, 'theme')) {
@@ -216,7 +216,7 @@ WebDoc.PageBrowserItemView = $.klass({
 
   innerHtmlChanged: function() {
     ddd('innerHTMLChanged');
-    this.checkUpdateTitle();
+    //this.checkUpdateTitle();
   },
 
   itemAdded: function(addedItem) {
@@ -225,12 +225,12 @@ WebDoc.PageBrowserItemView = $.klass({
    if(this.page.nbTextItems()===1 && addedItem.type() === "text") {
      addedItem.addListener(this);
    }
-   this.checkUpdateTitle();
+   //this.checkUpdateTitle();
   },
 
   itemRemoved: function(removedItem) {
    ddd('page_browser_item_view: itemRemoved');
-   this.checkUpdateTitle();
+   //this.checkUpdateTitle();
   },
 
   // Iterates through the page items and if contains a text item, takes it as page title
@@ -259,29 +259,29 @@ WebDoc.PageBrowserItemView = $.klass({
     }
   },
 
-  checkUpdateTitle: function() {
-    var title = this.getPageTitle(this.page),
-        currentTitle = this._titleNode.text();
+  //checkUpdateTitle: function() {
+  //  var title = this.getPageTitle(this.page);
+        //currentTitle = this._titleNode.text();
     
-    if(title.title !== currentTitle) {
-      this.setAndTruncateTitle(title.title);
-    }
+    //if(title.title !== currentTitle) {
+    //  this.setAndTruncateTitle(title.title);
+    //}
 
-    if(title.defaultBehavior) {
-      this._titleNode.addClass(defaultClass);
-    }
-    else {
-      this._titleNode.removeClass(defaultClass);
-    }
-  },
+    //if(title.defaultBehavior) {
+    //  this._titleNode.addClass(defaultClass);
+    //}
+    //else {
+    //  this._titleNode.removeClass(defaultClass);
+    //}
+  //},
 
-  setAndTruncateTitle: function(title) {
-    this._titleNode.truncate(title);
-  },
+  //setAndTruncateTitle: function(title) {
+  //  this._titleNode.truncate(title);
+  //},
 
-  truncateTitleWithActualTitle: function() {
-    this.setAndTruncateTitle(this._titleNode);
-  }
+  //truncateTitleWithActualTitle: function() {
+  //  this.setAndTruncateTitle(this._titleNode);
+  //}
   
 });
 

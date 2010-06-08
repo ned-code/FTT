@@ -34,7 +34,7 @@ WebDoc.PageBrowserController = $.klass({
     this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
     
     this._changedFromDrag = false;
-    this._stateThumbs = false;
+    this._stateThumbs = true;
     this._document = null;
     
     // defined in CSS
@@ -67,7 +67,7 @@ WebDoc.PageBrowserController = $.klass({
       
       pageBrowserItems.prepend(pageItemNode);
 
-      pageItem.truncateTitleWithActualTitle();
+      //pageItem.truncateTitleWithActualTitle();
 
       this.pageMap[ page.uuid() ] = pageItem;
       
@@ -158,7 +158,7 @@ WebDoc.PageBrowserController = $.klass({
     });
     
     this._updateIndexNumbers();
-    pageItem.truncateTitleWithActualTitle();
+    //pageItem.truncateTitleWithActualTitle();
   },
   
   pageRemoved: function(page) {

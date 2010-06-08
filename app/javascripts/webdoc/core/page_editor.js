@@ -222,59 +222,59 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     );
     
     if ( typeof str === 'undefined' ) {
-      popOptions = {
-        // Some of these should really be put in a global setup
-        popWrapClass: 'ui ui-pop-position',
-        popClass: 'ui-pop ui-widget ui-corner-all',
-        width: '12em',
-        openEasing: 'easeOutBack',
-        shutEasing: 'easeInQuart'
-      };
-      
-      // Decide where to trigger the pop
-      node = jQuery(".pages-tools a[href='#add-web-page']");
-      popOptions.orientation = 'bottom';
-      
-      popForm.pop(
-        jQuery.extend( popOptions, {
-          attachTo: node,
-          initCallback: function(){
-            var currentUrl = "http://"
-            popTitle.val( currentUrl );
-            popTitle.bind('keyup', function(){
-                
-              if ( popTitle.val().length === 0 ) {
-                popTitle.addClass( 'default' );
-              }
-              else {
-                popTitle.removeClass( 'default' );
-              }
-            });
-            
-            // Bind stuff to do on submit
-            popForm.bind('submit', function(e){
-              popForm.validate({
-                pass : function(){
-                  consolidateSrc = WebDoc.UrlUtils.consolidateSrc(popTitle.val())
-
-                  var newPage = new WebDoc.Page(null, this.currentDocument, consolidateSrc);
-                  newPage.data.position = this.currentPage.data.position + 1;
-                  newPage.save( function(newObject, status) {
-                    this.currentDocument.addPage(newPage, true);      
-                    this.loadPage(newPage);
-                  }.pBind(this));
-                  popForm.trigger('close');               
-                }.pBind(this),
-                fail : function(){}
-              });
-              return false;
-            }.pBind(this));
-            
-            // Give the input focus
-            popTitle.focus();
-          }.pBind(this)
-        })
-      );
+      //popOptions = {
+      //  // Some of these should really be put in a global setup
+      //  popWrapClass: 'ui ui-pop-position',
+      //  popClass: 'ui-pop ui-widget ui-corner-all',
+      //  width: '12em',
+      //  openEasing: 'easeOutBack',
+      //  shutEasing: 'easeInQuart'
+      //};
+      //
+      //// Decide where to trigger the pop
+      //node = jQuery(".pages-tools a[href='#add-web-page']");
+      //popOptions.orientation = 'bottom';
+      //
+      //popForm.pop(
+      //  jQuery.extend( popOptions, {
+      //    attachTo: node,
+      //    initCallback: function(){
+      //      var currentUrl = "http://"
+      //      popTitle.val( currentUrl );
+      //      popTitle.bind('keyup', function(){
+      //          
+      //        if ( popTitle.val().length === 0 ) {
+      //          popTitle.addClass( 'default' );
+      //        }
+      //        else {
+      //          popTitle.removeClass( 'default' );
+      //        }
+      //      });
+      //      
+      //      // Bind stuff to do on submit
+      //      popForm.bind('submit', function(e){
+      //        popForm.validate({
+      //          pass : function(){
+      //            consolidateSrc = WebDoc.UrlUtils.consolidateSrc(popTitle.val())
+      //
+      //            var newPage = new WebDoc.Page(null, this.currentDocument, consolidateSrc);
+      //            newPage.data.position = this.currentPage.data.position + 1;
+      //            newPage.save( function(newObject, status) {
+      //              this.currentDocument.addPage(newPage, true);      
+      //              this.loadPage(newPage);
+      //            }.pBind(this));
+      //            popForm.trigger('close');               
+      //          }.pBind(this),
+      //          fail : function(){}
+      //        });
+      //        return false;
+      //      }.pBind(this));
+      //      
+      //      // Give the input focus
+      //      popTitle.focus();
+      //    }.pBind(this)
+      //  })
+      //);
     }
     else {
       // _changeTitle for string
