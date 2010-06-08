@@ -169,7 +169,7 @@ WebDoc.App = $.klass(WebDoc.OpenSocialApp, {
       
     }.pBind(this));
     
-    this.appView.inspectorPanesManager.createShowFloatingInspectorButton();
+    this.appView.inspectorPanesManager.createOpenFloatingInspectorButton();
   }
 
 });
@@ -183,8 +183,15 @@ WebDoc.AppPane = $.klass(WebDoc.OpenSocialApp, {
     this.render();
   },
   
-  paneTitle: function() {
-    return this.view.charAt(0).toUpperCase() + this.view.substring(1);
+  paneTitle: function() { // "some_title" => "Some Title"
+    
+    var titleComponents = this.view.split('_');
+    
+    $.each(titleComponents, function(index, component) {
+      titleComponents[index] = component.charAt(0).toUpperCase() + component.substring(1);
+    });
+    
+    return titleComponents.join(' ');
   },
   
   render: function() {
@@ -244,7 +251,7 @@ WebDoc.AppPane = $.klass(WebDoc.OpenSocialApp, {
 // Container that renders an app
 WebDoc.AppsContainer = $.klass({
   initialize: function() {
-    this.apps_ = {}; // a hash olding all the instanciated apps in the form of { appId:appInstace, ... }, 
+    this.apps = {}; // a hash olding all the instanciated apps in the form of { appId:appInstace, ... }, 
                      // where appId is
                      // and appInstance is of type WebDoc.App
     
@@ -287,7 +294,7 @@ WebDoc.AppsContainer = $.klass({
   },
   
   getApp: function(instanceId) {
-    return this.apps_[this.getAppKey_(instanceId)];
+    return this.apps[this.getAppKey_(instanceId)];
   },
   
   createApp: function(opt_params) {
@@ -298,16 +305,16 @@ WebDoc.AppsContainer = $.klass({
   },
   
   addApp: function(app) {
-    this.apps_[this.getAppKey_(app.id)] = app;
+    this.apps[this.getAppKey_(app.id)] = app;
   },
   
   removeApp: function(app) {
-    delete this.apps_[this.getAppKey_(app.id)];
+    delete this.apps[this.getAppKey_(app.id)];
   },
   
   renderApps: function() {
-    for (var key in this.apps_) {
-      this.apps_[key].render();
+    for (var key in this.apps) {
+      this.apps[key].render();
     }
   },
   
@@ -316,8 +323,8 @@ WebDoc.AppsContainer = $.klass({
   },
   
   refreshApps: function() {
-    for (var key in this.apps_) {
-      this.apps_[key].refresh();
+    for (var key in this.apps) {
+      this.apps[key].refresh();
     }
   }
 });

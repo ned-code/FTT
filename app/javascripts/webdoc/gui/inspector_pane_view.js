@@ -1,5 +1,6 @@
 
 WebDoc.InspectorPaneView = $.klass({
+  
   initialize: function(manager, title, content, appPane) {
     this.manager = manager;
     this.title = title;

@@ -203,12 +203,23 @@ WebDoc.BoardController = jQuery.klass({
       this._setModeEdit();
     }
     
+    // Apps/Inspectors
+    var allItemsViews = this.currentPageView().itemViews;
+    $.each(allItemsViews, function(k, v) {
+      if (v.inspectorPanesManager) {
+        v.inspectorPanesManager.showOpenFloatingInspectorButton(!state);
+      }
+    });
+    if (WebDoc.appsContainer) {
+      WebDoc.appsMessagingController.notifyModeChanged(!state);
+    }
+    
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     // it does not work on ff4
-//    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
-//      ddd("FF 3.5. drawing !");
-//      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
-//    }
+    //    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
+    //      ddd("FF 3.5. drawing !");
+    //      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
+    //    }
   },
   
   toggleMode: function() {

@@ -1,4 +1,5 @@
 WebDoc.AppsMessagingController = $.klass({
+  
   initialize: function() {
     
     // ============================================
@@ -66,16 +67,31 @@ WebDoc.AppsMessagingController = $.klass({
       }
     }.pBind(this), false);
   },
+  
   sendInitMessage: function(appId, appOrPaneFrameId) { 
     // ex1 (app):  appId="0", appOrPaneFrameId="app_iframe_0"
     // ex2 (pane): appId="0", appOrPaneFrameId="app_iframe_0_settings"
-    var message = "webdoc-init:"+appId+":dom-id:"+appOrPaneFrameId;
+    
+    var editMode = WebDoc.application.boardController.currentPageView().isEditable(); // true is current page is in Edit mode, false if it's in Preview mode
+    var message = "webdoc-init:"+appId+":dom-id:"+appOrPaneFrameId+":edit-mode:"+editMode;
     $("#"+appOrPaneFrameId).load(function(event) {
       event.target.contentWindow.postMessage(message, "*");
     });
   },
-  sendCall: function(appId, message) {
-    var appFrameId = WebDoc.appsContainer.getApp(appId).getIframeId();
+  
+  notifyModeChanged: function(mode) {
+    // Tell all the apps the WebDoc mode (Edit/Preview) has changed
+    // mode=true => Edit, false => Preview
+    var message = "wd-edit-mode:"+mode;
+    $.each(WebDoc.appsContainer.apps, function(k, v) {
+      this.sendCall(v, message);
+    }.pBind(this));
+  },
+  
+  sendCall: function(appOrAppId, message) {
+    var app = (typeof appOrAppId == "object") ? appOrAppId : WebDoc.appsContainer.getApp(appOrAppId);
+    var appFrameId = app.getIframeId();
     $("#"+appFrameId)[0].contentWindow.postMessage(message, "*");
   }
+  
 });

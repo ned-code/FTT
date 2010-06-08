@@ -36,27 +36,43 @@ window.addEventListener('message', function(event) {
   // ================
   // = Init message =
   // ================
-  var initData = event.data.match(/^webdoc-init:(.*):dom-id:(.*)$/);
+  var initData = event.data.match(/^webdoc-init:(.*):dom-id:(.*):edit-mode:(.*)$/);
   if (initData) {
     WebDoc.appId = initData[1];
     WebDoc.domId = initData[2];
+    WebDoc.isEditMode = eval(initData[3]); //boolean
     WebDoc.webdocWindow = event.source;
     if (WebDoc.appInit) WebDoc.appInit();
     
     // call WebDoc back with this app reference (not necessary?)
     // WebDoc.webdocWindow.postMessage("app-id:"+WebDoc.appId,"*");
   }
+
+  // ===============================
+  // = WebDoc mode changed message =
+  // ===============================
+  var wdModeChanged = event.data.match(/^wd-edit-mode:(.*)$/);
+  if (wdModeChanged) {
+    WebDoc.isEditMode = eval(wdModeChanged[1]); //boolean
+    
+    if (WebDoc.isEditMode) {
+      WebDoc.appEnteredEditMode();
+    }
+    else {
+      WebDoc.appEnteredPreviewMode();
+    }
+  }
   
   // ====================
   // = Pane to App call =
   // ====================
-  var appCall = event.data.match(/^app:(.*):pane-to-app-call:(.*):(.*)$/);
-  if (appCall) {
-    var appId = appCall[1];
+  var paneToAppCall = event.data.match(/^app:(.*):pane-to-app-call:(.*):(.*)$/);
+  if (paneToAppCall) {
+    var appId = paneToAppCall[1];
     
     if (appId == WebDoc.appId) { //just proceed if appId matches
-      var functionName = appCall[2];
-      var functionParam = appCall[3];
+      var functionName = paneToAppCall[2];
+      var functionParam = paneToAppCall[3];
       // var paneWindow = event.source;
       
       // ddd("I need to execute the function \""+functionName+"\" with param "+functionParam);

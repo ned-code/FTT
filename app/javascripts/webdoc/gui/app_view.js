@@ -5,6 +5,7 @@
 //= require <webdoc/sdk/widget_api>
 
 WebDoc.AppView = $.klass(WebDoc.ItemView, {
+  
   initialize: function($super, item, pageView, afterItem) {
     var placeholder = $('<form/>', { 'class': 'item-placeholder stack' });
     var input       = $('<input/>', { type: 'text', title: 'App xml url', name: 'input-iframe-src', value: '' });
@@ -50,7 +51,6 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
         });
       }.pBind(this));
     }
-
   },
   
   _makeSetGadgetUrlEventHandler: function() {
@@ -144,4 +144,5 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
       callBack.call(this, data['security_token']);
     }.pBind(this), "GET");
   }
+
 });

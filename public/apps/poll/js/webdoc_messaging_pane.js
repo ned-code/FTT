@@ -22,10 +22,11 @@ window.addEventListener('message', function(event) {
   // ================
   // = Init message =
   // ================
-  var initData = event.data.match(/^webdoc-init:(.*):dom-id:(.*)$/);
+  var initData = event.data.match(/^webdoc-init:(.*):dom-id:(.*):edit-mode:(.*)$/);
   if (initData) {
     WebDoc.appId = initData[1];
     WebDoc.domId = initData[2];
+    WebDoc.isEditMode = eval(initData[3]); //boolean
     WebDoc.webdocWindow = event.source;
     
     // Call WebDoc back with to auto adjust the height of this pane
