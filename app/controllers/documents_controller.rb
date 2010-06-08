@@ -84,7 +84,7 @@ class DocumentsController < ApplicationController
       end
       format.json do
         per_page = 8
-        featured_documents = Document.all_featured_paginated
+        featured_documents = Document.all_featured_paginated(params[:page], per_page)
         docs_json = featured_documents.map do |doc|
           cached_doc = Rails.cache.fetch("#{doc.cache_key}_explore") do
             doc.as_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes)
