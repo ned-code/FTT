@@ -31,6 +31,12 @@ namespace :deploy do
   task :generate_assets do
     send(:run, "cd #{release_path} && RAILS_ENV=#{rails_env} /usr/bin/jammit --force config/assets.yml")
   end
+  task :show_maintenance do
+    run "cp #{current_path}/app/views/layouts/maintenance.html #{current_path}/public/maintenance.html"
+  end
+  task :hide_maintenance do
+    run "rm #{current_path}/public/maintenance.html"
+  end
 end
 
 namespace :passenger do
