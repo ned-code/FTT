@@ -312,6 +312,8 @@ class Document < ActiveRecord::Base
   def deep_clone(creator, title)
     cloned_document = self.clone
     cloned_document.uuid = nil
+    cloned_document.theme_id = self.theme_id
+    cloned_document.style_url = self.style_url
     cloned_document.created_at = nil
     cloned_document.updated_at = nil
     cloned_document.is_public = false
@@ -348,9 +350,11 @@ private
   
   #before_create
   def set_default_theme
-    theme = Theme.default
-    self.theme_id = theme.id
-    self.style_url = theme.style_url
+    if theme_id.nil?
+      theme = Theme.default
+      self.theme_id = theme.id
+      self.style_url = theme.style_url
+    end
   end
   
   # before_create
