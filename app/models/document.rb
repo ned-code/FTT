@@ -364,9 +364,8 @@ private
   end
 
   # before_create
-  def validate_size
-    size[:height]
-    if size.blank? || size[:height].blank? || size[:width].blank? || size[:width] == '0' || size[:height] == '0'
+  def validate_size    
+    if size.blank? || size == 'null' || size[:height].blank? || size[:width].blank? || size[:width] == '0' || size[:height] == '0'
       errors.add(:size, "Error in size of document")
       false
     else
