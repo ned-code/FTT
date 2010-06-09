@@ -10,6 +10,7 @@ WebDoc.BoardController = jQuery.klass({
     this.screenUnderlayNode = jQuery("#underlay");
     this.screenNodes = this.boardCageNode.find('.board-screen');
     this.themeNode = jQuery('#theme');
+    
     this.loadingNode = jQuery("#webdoc_loading");
     
     this._editable = editable;
@@ -221,6 +222,8 @@ WebDoc.BoardController = jQuery.klass({
     var stylesheetUrl = WebDoc.application.pageEditor.currentDocument.styleUrl(),
         themeNode = this.themeNode;
     
+    ddd('[boardController] applyDocumentTheme');
+    
     if (themeNode.length === 0) {
       this.themeNode = jQuery('<link id="theme" rel="stylesheet" href="' + stylesheetUrl + '" type="text/css" />'); 
       jQuery('head').append(this.themeNode);
@@ -235,6 +238,7 @@ WebDoc.BoardController = jQuery.klass({
     // There's no load event on the link tag.  This is a problem.
     // Simulate with setTimeout until we think of a better way.
     var t = setTimeout(function(){
+      ddd('[boardController] trigger load on themeNode');
       themeNode.trigger('load');
     }, 1800);
     

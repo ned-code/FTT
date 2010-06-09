@@ -39,7 +39,7 @@ dependencies:
   sqlite3-ruby: 
     group: 
     - :test
-    version: ">= 0"
+    version: = 1.2.5
     require: 
     - sqlite3
   uuid: 
@@ -252,7 +252,7 @@ specs:
 - mysql: 
     version: 2.8.1
 - paperclip: 
-    version: 2.3.2
+    version: 2.3.3
 - ruby-debug-base: 
     version: 0.10.3
 - ruby-debug: 
@@ -274,7 +274,7 @@ specs:
 - rubyzip: 
     version: 0.9.4
 - sqlite3-ruby: 
-    version: 1.3.0
+    version: 1.2.5
 - steak: 
     version: 0.3.8
 - uuid: 
@@ -285,7 +285,7 @@ specs:
     version: 2.3.14
 - xmpp4r: 
     version: "0.5"
-hash: 8e878896447a6a771f843fa11476ff2a3690faa3
+hash: 8ec946ac5a6dedf3edbd7a09c09b58079d6b9017
 sources: 
 - Git: 
     uri: http://github.com/webdoc/devise.git
