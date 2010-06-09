@@ -14,6 +14,7 @@ class Theme < ActiveRecord::Base
   validates_attachment_content_type :attachment, :content_type => ['application/zip']
 
   has_uuid
+  set_primary_key :uuid
 
   attr_accessible :uuid, :attachment, :title, :thumbnail_url, :style_url, :version, :author, :is_default
   
@@ -59,7 +60,7 @@ class Theme < ActiveRecord::Base
   end
 
   def ancestor
-    Theme.first :conditions => ['updated_theme_id = ?', self.id], :limit => 1
+    Theme.first :conditions => ['updated_theme_id = ?', self.uuid], :limit => 1
   end
 
   def destroy_with_all_ancestors
@@ -105,7 +106,7 @@ class Theme < ActiveRecord::Base
 
         if ancestor_theme.present?
           ancestor_theme.updated_theme_id = self.id
-          ancestor_theme.save!
+          raise(ActiveRecord::RecordInvalid) unless ancestor_theme.save(false)
         end
 
         begin
@@ -242,17 +243,20 @@ class Theme < ActiveRecord::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: themes
 #
-#  id               :integer(4)      not null, primary key
-#  uuid             :string(255)
-#  name             :string(255)
+#  uuid             :string(255)     primary key
+#  title            :string(255)
 #  thumbnail_url    :string(255)
 #  style_url        :string(255)
 #  file             :string(255)
 #  version          :string(255)
 #  updated_theme_id :integer(4)
+#  author           :string(255)
+#  elements_url     :string(255)
+#  is_default       :boolean(1)      default(FALSE)
 #
 

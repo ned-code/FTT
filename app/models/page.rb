@@ -2,6 +2,7 @@ require "xmpp_notification"
 
 class Page < ActiveRecord::Base
   has_uuid
+  set_primary_key :uuid
   
   attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind
 
@@ -143,20 +144,20 @@ class Page < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: pages
 #
-#  uuid         :string(36)
-#  document_id  :integer(4)
-#  thumbnail_id :integer(4)
+#  uuid         :string(36)      primary key
+#  document_id  :string(36)
+#  thumbnail_id :string(36)
 #  position     :integer(4)      not null
 #  version      :integer(4)      default(1), not null
 #  data         :text(16777215)
 #  created_at   :datetime
 #  updated_at   :datetime
-#  id           :integer(4)      not null, primary key
 #  title        :string(255)     default("undefined")
-#  layout_id    :integer(4)
+#  layout_kind  :string(255)
 #
 

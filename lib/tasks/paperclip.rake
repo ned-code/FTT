@@ -36,7 +36,7 @@ def for_all_attachments
   ids.each do |id|
     instance = klass.find(id)
     names.each do |name|
-      result = if instance.send("#{ name }?")
+      result = if instance.send("#{ name }?") && instance.send("#{ name }").exists?
                  yield(instance, name)
                else
                  true

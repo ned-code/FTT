@@ -83,6 +83,11 @@ WebDoc.ItemView = $.klass({
     if(this.item.data.data['class']) {
       this.itemDomNode.addClass(this.item.data.data['class']);
     }
+    if(this.item.data.data.classes) {
+      for(var css_class in this.item.data.data.classes) {
+        this.itemDomNode.addClass(this.item.data.data.classes[css_class]);
+      }
+    }
     // we put all item classes in wdClasses data. It is used to know which classes to remove when classes of item changed.
     if (this.domNode.data('wdClasses')) {
       this.domNode.removeClass(this.domNode.data('wdClasses'));

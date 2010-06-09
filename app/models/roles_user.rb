@@ -10,12 +10,13 @@ class RolesUser < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: roles_users
 #
-#  user_id    :integer(4)
-#  role_id    :integer(4)
+#  user_id    :string(36)
+#  role_id    :string(36)
 #  created_at :datetime
 #  updated_at :datetime
 #

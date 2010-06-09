@@ -164,6 +164,19 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
   },
 
+  setSize: function(size) {
+    if(size && (this.width() != size['width'] || this.height() != size['height'])) {
+      var old_size = { width: this.width(), height: this.width() };
+      this.data.data.css.width = size['width'];
+      this.data.data.css.height = size['height'];
+      this.fireObjectChanged({ modifedAttribute: 'css.width css.height' });
+      this.save();
+      WebDoc.application.undoManager.registerUndo(function() {
+        this.setSize(old_size);
+      }.pBind(this));
+    }
+  },
+
   setBackgroundColor: function(backgroundColor) {
     var css = this.data.data.css;
     
@@ -355,7 +368,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.fireItemAdded(item, afterItem);    
   },
   
-  removeItem: function(item) {    
+  removeItem: function(item) {
     var index = $.inArray(item, this.items);
     if (index != -1) {
       this.items.splice(index, 1);
@@ -505,9 +518,26 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.save(callBack, true);
   },
 
-  setClass: function(newClass) {
-    if (newClass != this.data.data['class']) {
-      this.data.data['class'] = newClass;
+  setClass: function(newClass, classType) {
+    var need_save = false;
+    
+    if(classType === undefined || classType === 'class') {
+      if(newClass != this.data.data['class']) {
+        this.data.data['class'] = newClass;
+        need_save = true;
+      }
+    }
+    else {
+      if(!this.data.data.classes || newClass != this.data.data.classes[classType]) {
+        if(!this.data.data.classes) {
+          this.data.data.classes = {};
+        }
+        this.data.data.classes[classType] = newClass;
+        need_save = true;
+      }
+    }
+    
+    if(need_save) {
       this.fireObjectChanged({ modifedAttribute: 'class' });
       this.save();
     }

@@ -25,10 +25,12 @@ WebDoc.ServerCache = $.klass(
       var store = this.getStoreForRecordClass(record.className());
       store[record.uuid()] = record;
       // cache map uuid and id because sometimes we only knows the id and not the uuid. Typically when we have a foreign key.
-      // As cache is done by class we never have collision of ids in map cache. 
-      if (record.data.id) {
-        store[record.data.id] = record;
-      }
+      // As cache is done by class we never have collision of ids in map cache.
+      
+      //UUId everywhere, we don't need to cache an object with id anymore
+      // if (record.data.id) {
+      //   store[record.data.id] = record;
+      // }
     },
     
     /**

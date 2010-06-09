@@ -36,6 +36,7 @@ config.action_mailer.smtp_settings = {
 config.action_mailer.default_url_options = { :host => 'st-wd.webdoc.com' }
 
 #ExceptionNotification config
+ExceptionNotification::Notifier.view_paths = ActionView::Base.process_view_paths(ExceptionNotification::Notifier.view_paths)
 ExceptionNotification::Notifier.sender_address = %("WebDoc Staging Error" <staging.error@webdoc.com>)
 ExceptionNotification::Notifier.email_prefix = "[WebDoc Staging]"
 ExceptionNotification::Notifier.exception_recipients = %w(staging.error@webdoc.com)

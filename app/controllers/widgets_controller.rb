@@ -22,7 +22,7 @@ class WidgetsController < ApplicationController
   
   # GET /widgets/:id
   def show
-    @widget = Medias::Widget.first(:conditions => ["id = :id OR uuid = :id OR system_name = :id", { :id => params[:id] }])
+    @widget = Medias::Widget.first(:conditions => ["uuid = :id OR system_name = :id", { :id => params[:id] }])
     
     respond_to do |format|
       format.html { redirect_to @widget.file.url }
