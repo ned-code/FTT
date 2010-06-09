@@ -31,7 +31,7 @@ class Document < ActiveRecord::Base
   # =============
   # = Callbacks =
   # =============
-  
+  before_update :validate_size
   before_create :set_default_theme
   before_create :create_default_page
   before_create :validate_size

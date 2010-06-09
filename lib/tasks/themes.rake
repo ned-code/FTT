@@ -13,7 +13,7 @@ namespace :themes do
     Document.all.each do |d|
       theme = d.theme
       if theme.nil?
-        d.theme_id = Theme.default.id
+        d.theme_id = Theme.default.uuid
         d.style_url = Theme.default.style_url
       else
         updated_theme = Theme.find(:first, :conditions => { :uuid => theme.updated_theme_id })
@@ -23,7 +23,7 @@ namespace :themes do
           updated_theme = Theme.find(:first, :conditions => { :uuid => updated_theme.updated_theme_id })
         end
         
-        d.theme_id = updated_theme.id
+        d.theme_id = updated_theme.uuid
         d.style_url = updated_theme.style_url
       end
       d.save(false)
