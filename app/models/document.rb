@@ -31,7 +31,8 @@ class Document < ActiveRecord::Base
   # =============
   # = Callbacks =
   # =============
-  #before_update :validate_size
+
+  before_update :validate_size
   before_create :set_default_theme
   before_create :create_default_page
   before_create :validate_size
@@ -364,7 +365,8 @@ private
 
   # before_create
   def validate_size
-    if size.blank? || size[:height].blank? || size[:width].blank?
+    size[:height]
+    if size.blank? || size[:height].blank? || size[:width].blank? || size[:width] == '0' || size[:height] == '0'
       errors.add(:size, "Error in size of document")
       false
     else
