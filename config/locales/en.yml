@@ -81,7 +81,7 @@ en:
         add: "Add new theme"
 
       show:
-        title: "Show theme {{name}}"
+        title: "Show theme %{name}"
 
       new:
         title: "Add new theme"
@@ -287,6 +287,7 @@ en:
         detail_view:
           title: "Image"
           add_to_page: "Add to page"
+          add_original_to_page: "Add original to page"
           set_as_background: "Set as background"
           show_on_flickr: "Show photo page on Flickr"
           remove_from_my_images: "Remove from My Images"
@@ -370,7 +371,7 @@ en:
   registrations:
     new:
       title: "Sign up"
-      terms_of_service: "I agree to {{link}}"
+      terms_of_service: "I agree to %{link}"
       terms_of_service_link: "terms of service"
     edit:
       title: "Edit account"
@@ -406,7 +407,7 @@ en:
       subject: "WebDoc reset password message"
 
     user_publish_document_success_email:
-      subject: "Your document {{document_name}} has been published"
+      subject: "Your document %{document_name} has been published"
   
   followships:
     index:
@@ -418,7 +419,7 @@ en:
   relative_date:
     x_hours:
       one: "1 hour ago"
-      other: "{{count}} hours ago"
+      other: "%{count} hours ago"
     x_days:
       one: "1 day ago"
-      other: "{{count}} days ago"
+      other: "%{count} days ago"

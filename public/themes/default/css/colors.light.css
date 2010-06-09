@@ -1,0 +1,28 @@
+/* Webdoc default colors and backgrounds
+ * 
+ * Stephen Band
+ *
+ */
+
+.webdoc {
+    color: #484848;
+    background-color: white;
+}
+
+/* Text Colors */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6              { color: #484848; }
+
+a:focus,
+a:hover           { color: hsl(208, 50%, 20%); border-color: hsl(208, 50%, 20%); }
+a                 { color: hsl(208, 60%, 50%); border-color: hsl(208, 60%, 50%); }
+
+/* Selected text */
+
+*::selection      { background-color: rgba(176, 227, 0, 0.8); }
+code::selection   { background-color: rgb(18, 23, 0); color: rgb(176, 227, 0); }

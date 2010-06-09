@@ -1,8 +1,9 @@
 class Media < ActiveRecord::Base
   has_uuid
+  set_primary_key :uuid
   serialize :properties
   
-  attr_accessible :uuid, :file, :properties, :system_name, :title, :description, :remote_file_url
+  attr_accessible :uuid, :attachment, :properties, :system_name, :title, :description, :created_at #, :remote_file_url
   
   # ================
   # = Associations =
@@ -19,7 +20,7 @@ class Media < ActiveRecord::Base
   # =============
   # = Callbacks =
   # =============
-  
+
   # =================
   # = Class Methods =
   # =================
@@ -44,18 +45,18 @@ class Media < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: medias
 #
-#  uuid        :string(36)
+#  uuid        :string(36)      primary key
 #  type        :string(255)
 #  created_at  :datetime
 #  updated_at  :datetime
 #  properties  :text(16777215)
-#  user_id     :integer(4)
+#  user_id     :string(36)
 #  file        :string(255)
-#  id          :integer(4)      not null, primary key
 #  system_name :string(255)
 #  title       :string(255)
 #  description :text

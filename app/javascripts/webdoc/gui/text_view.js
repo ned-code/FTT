@@ -45,6 +45,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
     this.itemLayerDomNode.show();
     this._initDragAndResize();    
     WebDoc.application.textTool.exitEditMode();
+    this._initItemCss(false);
   },
   
   innerHtmlChanged: function() {
@@ -63,7 +64,10 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
     $super(withAnimate);
     // be sure that we don't have two scrol bar. Because text view in edition has its own overflow so we remove the overflow from the itemdomnode
     if (this.domNode.hasClass("item-edited") ) {
-      this.itemDomNode.css("overflow", "hidden");    
+      this.itemDomNode.css("overflow", "hidden");
+      if (this.item.data.data.css.overflow) {
+        WebDoc.application.textTool.delegate.updateOverflow(this.item.data.data.css.overflow, this.item.data.data.css.overflow);
+      }    
     }
   }
 });

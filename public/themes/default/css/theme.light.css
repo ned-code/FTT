@@ -1,10 +1,4 @@
-/* Webdoc default colors and backgrounds
- * 
- * Stephen Band
- *
- */
-
-/* Colors */
+/* Theme Colors */
 
 .theme_color_1  { color: black;   } /* Jet Black */
 .theme_color_2  { color: #92b322; } /* Dirty Lime */
@@ -21,7 +15,7 @@
 .theme_color_13 { color: #43e4cb; } /* Turquoise */
 .theme_color_14 { color: white;   } /* White */
 
-/* Backgrounds */
+/* Theme Backgrounds */
 
 .theme_background_1 {
   background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( #ededed ), to( #c3c3c3 ));
@@ -30,9 +24,9 @@
   background-color: #e7edd2;
 }
 .theme_background_2 {
-  background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( #e7edd2 ), to( #c8d2a6 ));
-  background-image: -moz-linear-gradient( -90deg, #e7edd2, #c8d2a6 );
-  background-image:      linear-gradient( -90deg, #e7edd2, #c8d2a6 );
+  background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( #ecf0dc ), to( #c8d2a6 ));
+  background-image: -moz-linear-gradient( -90deg, #ecf0dc, #c8d2a6 );
+  background-image:      linear-gradient( -90deg, #ecf0dc, #c8d2a6 );
   background-color: #e7edd2;
 }
 .theme_background_3 {
@@ -70,7 +64,7 @@
 }
 
 
-/* Borders */
+/* Theme Borders */
 
 .theme_border_1,
 .theme_border_2,

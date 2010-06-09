@@ -273,12 +273,8 @@
 
 
 #colorpickerHolder1, #colorpickerHolder2 {
-	top: 32px;
 	left: 0;
-	width: 356px;
-	height: 0;
-	overflow: hidden;
-	position: absolute;
+	width: 350px;
 }
 #colorpickerHolder1 .colorpicker, #colorpickerHolder2 .colorpicker {
 	background-image: url(../images/custom_background.png);

@@ -8,14 +8,12 @@
       <fieldset>
         <div class="column one of-four stack <% if @user.errors.on(:avatar) %>error<% end %>">
           <label for="user_avatar" class="avatar-label">Avatar</label>
-          <% if (@user.avatar_thumb_url && !@user.errors.on(:avatar)) %>
-            <img src="<%= @user.avatar_thumb_url %>" alt="avatar" />
-          <% end %>
+          <img src="<%= @user.avatar.url(:thumb) %>" alt="avatar" />
         </div>
         
         <div class="column two of-four">
-          <%= f.check_box :remove_avatar %>
-          <%= f.label :remove_avatar, 'remove picture' %>
+          <%= f.check_box :clear_avatar %>
+          <%= f.label :clear_avatar, 'remove picture' %>
         </div>
         
         <div class="column one double of-four">
@@ -23,8 +21,6 @@
           <%= f.file_field :avatar, :maxlength => 255, :size => "39" %>
           </div>
         </div>
-        
-        <%= f.hidden_field :avatar_cache %>
       </fieldset>
       <fieldset>
         <div class="column one of-four stack <% if @user.errors.on(:first_name) %>error<% end %>">

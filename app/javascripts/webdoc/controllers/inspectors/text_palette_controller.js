@@ -5,17 +5,17 @@ WebDoc.TextPaletteController = jQuery.klass({
   initialize: function(id){
     this.domNode = jQuery(id).hide();
     this.initGUI("#text-inspector-content");
-  },
+  },       
   initGUI: function(container){
     var thobj = this;
     var containerObj = jQuery(container);
-    var toolbarContent = '<div id="toolbar_panel" class="ui-widget">' +
-    '<div id="colorpickerHolder1" style="position:absolute;z-index: 150000;top:50px;"></div>' +
-    '<div id="colorpickerHolder2" style="position:absolute;z-index: 150000;top:50px;"></div>' +
+    var toolbarContent = '<div id="toolbar_panel" style="height:75px" class="ui-widget">' +
+    '<div id="hiliteColorpickerContainer" style="padding:0px;position:absolute;z-index: 150000;top:50px;display:none;"><div id="colorpickerHolder1"></div></div>' +
+    '<div id="foreColorpickerContainer" style="padding:0px;position:absolute;z-index: 150000;top:50px;display:none;"><div id="colorpickerHolder2"></div></div>' +
     '<div id="toolbar_selectbox_container">' +
     '<select style="width:125px" id="toolbar_panel_button_format"></select>' +
-    '<select style="width:80px" id="toolbar_panel_button_fontName"></select>' +
-    '<select style="width:30px" id="toolbar_panel_button_fontSize"></select>' +
+    '<select style="width:90px" id="toolbar_panel_button_fontName"></select>' +
+    '<select style="width:35px" id="toolbar_panel_button_fontSize"></select>' +
     '</div>' +
     '<div id="toolbar_buttons_container">' +
     '<a href="javascript:void(0);" title="Decrease font size" id="toolbar_panel_button_decreasefontsize"    onclick="WebDoc.application.textTool.delegate.editorExec(\'decreasefontsize\');">         <div class="icon_decreasefontsize"></div></a>' +
@@ -56,24 +56,26 @@ WebDoc.TextPaletteController = jQuery.klass({
     '<a href="javascript:void(0);"  title="Align Full" id="toolbar_panel_button_justifyFull"      onclick="WebDoc.application.textTool.delegate.editorExec(\'justifyFull\');">      <div class="icon_justifyFull"></div></a>' +
     '<a href="javascript:void(0);"  title="Vertical align" id="toolbar_panel_button_valign"><div class="icon_valignTop"></div><div class="icon_valign_arrow"></div></a>' +
     '<div id="toolbar_panel_valign_block" class="ui-menu  ui-widget-content ui-corner-all ">' +
-    '<a href="javascript:void(0);"  title="Vertical align Top" id="toolbar_panel_button_valignTop"          onclick="WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'top\');">      <div class="icon_valignTop"></div></a>' +
-    '<a href="javascript:void(0);"  title="Vertical align Middle" id="toolbar_panel_button_valignMiddle"    onclick="WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'middle\');">     <div class="icon_valignMiddle"></div></a>' +
-    '<a href="javascript:void(0);"  title="Vertical align Bottom" id="toolbar_panel_button_valignBottom"    onclick="WebDoc.application.textTool.delegate.editorExec(\'verticalAlign\',\'bottom\');">     <div class="icon_valignBottom"></div></a>' +
+    '<a href="javascript:void(0);"  title="Vertical align Top" id="toolbar_panel_button_valignTop"><div class="icon_valignTop"></div></a>' +
+    '<a href="javascript:void(0);"  title="Vertical align Middle" id="toolbar_panel_button_valignMiddle"><div class="icon_valignMiddle"></div></a>' +
+    '<a href="javascript:void(0);"  title="Vertical align Bottom" id="toolbar_panel_button_valignBottom"><div class="icon_valignBottom"></div></a>' +
     '</div>' +
     '<a href="javascript:void(0);"  title="Remove Format" id="toolbar_panel_button_removeFormat"      onclick="WebDoc.application.textTool.delegate.editorExec(\'removeformat\');"><div class="icon_removeFormat"></div></a>' +
+    '<a href="javascript:void(0);"  title="Edit HTML" id="toolbar_panel_button_editHTML"><div class="icon_editHTML"></div></a>' +
     '</div>' +
-    '<div style="clear: both;"></div>' +   
+    '<div style="clear: both;"></div>' +
     '</div>' +
+    '<div style="position:relative;height:100%;">' +
     '<div id="choose-edit-method" class="ui-widget content">' +
-      'Choose how you want to edit this text' +    
-      '<div>' +
-        '<button id="toolbar_panel_inline_edit">Inline edit</button>' +
-        '<button id="toolbar_panel_html_edit">HTML edit</button>' +
-      '</div>' +  
-      '<div id="inner_text_html">' +    
-        '<div class="content" style="top:45px" id="html-editor"/>' +
-      '</div>' +
-     '</div>';     
+    '<!--div>' +
+    '<button id="toolbar_panel_inline_edit">Inline edit</button>' +
+    '<button id="toolbar_panel_html_edit">HTML edit</button>' +
+    '</div-->' +
+    '<div id="inner_text_html">' +
+    '<div class="content" id="html-editor"/>' +
+    '</div>' +
+    '</div>' +
+    '</div>';
     containerObj.html(toolbarContent);
     
     this.htmlInspector = new WebDoc.InnerHtmlController("#inner_text_html");
@@ -157,7 +159,7 @@ WebDoc.TextPaletteController = jQuery.klass({
           offset: "0 0"
         }).css("top", "").mouseup(function(){
           var id = select.attr('id') + new Date().getTime();
-          var dropdownConteiner = jQuery("<div class='ui_dropdown_container'  id='" + id + "'><div>").insertAfter(input).css('min-width', select.css('width').split('px')[0] * 1 + button.css('width').split('px')[0] * 1);
+          var dropdownConteiner = jQuery("<div class='ui_dropdown_container ui-widget'  id='" + id + "'><div>").appendTo('body').hide().css('min-width', select.css('width').split('px')[0] * 1 + button.css('width').split('px')[0] * 1).css('top', input.offset().top + 2).css('left', input.offset().left - 30).css('position', 'absolute');
           
           dropdownConteiner.append("<ul class=' ui-menu  ui-widget-content ui-corner-all toolbar-custom-combobox-ul'  role='menu' aria-activedescendant='ui-active-menuitem'></ul>");
           dropdownConteiner.bind('click', function(){
@@ -166,8 +168,8 @@ WebDoc.TextPaletteController = jQuery.klass({
           for (var i = 0; i < self.options.values.length; i++) {
             jQuery('#' + id + ' ul').append('<li class="ui-menu-item toolbar-custom-combobox-li" role="menuitem"><a class="ui-corner-all" ' + ((self.options.isFontDropdown) ? ("style='font-family:" + self.options.values[i][1] + "'") : '') + ' title="' + self.options.values[i][1] + '">' + self.options.values[i][0] + '</a></li>');
           }
-          jQuery('#' + id).css('left', input.position().left - 30).css('top', input.position().top + 3);
           self.dropdown = jQuery('#' + id);
+          dropdownConteiner.slideDown();
           jQuery('#' + id + ' li a').click(function(){
             self.dropdown.remove();
             self.options.onChangeHandler(this.getAttribute('title'));
@@ -243,11 +245,7 @@ WebDoc.TextPaletteController = jQuery.klass({
     
     jQuery('#toolbar_panel_button_createlink').bind('click', function(e){
       var pos = jQuery("#toolbar_panel_button_createlink").position();
-      jQuery('#toolbar_panel_createlink_block').stop().animate({
-        height: 70
-      }, 500);
-      jQuery('#toolbar_panel_createlink_block').css('left', 2);
-      jQuery('#toolbar_panel_createlink_block').css('top', 50);
+      jQuery('#toolbar_panel_createlink_block').appendTo('body').css('left', $('#toolbar_panel').offset().left + 3).css('top', $('#toolbar_panel').offset().top + 50).show();
       if (WebDoc.application.textTool.delegate.getSelectedText() !== false) {
         jQuery('#toolbar_panel_button_createlink_text').attr('disabled', false);
         jQuery('#toolbar_panel_button_createlink_text').css('fontStyle', 'normal');
@@ -266,45 +264,47 @@ WebDoc.TextPaletteController = jQuery.klass({
     
     jQuery('#toolbar_panel_button_valign').bind('click', function(e){
       var pos = jQuery("#toolbar_panel_button_valign").position();
-      jQuery('#toolbar_panel_valign_block').stop().animate({
-        height: 20
-      }, 500);
-      jQuery('#toolbar_panel_valign_block').css('left', pos.left + 3);
-      jQuery('#toolbar_panel_valign_block').css('top', pos.top + 23);
+      jQuery('#toolbar_panel_valign_block').show().css('zIndex', 50000).css('left', pos.left + 3).css('top', pos.top + 23);
     });
     
     
     jQuery('#toolbar_panel_button_valignBottom').bind('click', function(e){
+      WebDoc.application.textTool.delegate.editorExec('verticalAlign', 'bottom');
       jQuery('#toolbar_panel_button_valign').find(":first").attr("class", "icon_valignBottom");
       jQuery('#toolbar_panel_valign_block').hide();
     });
     jQuery('#toolbar_panel_button_valignMiddle').bind('click', function(e){
+      WebDoc.application.textTool.delegate.editorExec('verticalAlign', 'middle');
       jQuery('#toolbar_panel_button_valign').find(":first").attr("class", "icon_valignMiddle");
       jQuery('#toolbar_panel_valign_block').hide();
     });
     jQuery('#toolbar_panel_button_valignTop').bind('click', function(e){
+      WebDoc.application.textTool.delegate.editorExec('verticalAlign', 'top');
       jQuery('#toolbar_panel_button_valign').find(":first").attr("class", "icon_valignTop");
       jQuery('#toolbar_panel_valign_block').hide();
     });
     
-    jQuery('#toolbar_panel_inline_edit').bind('click', function(e) {
+    jQuery('#toolbar_panel_inline_edit').bind('click', function(e){
       WebDoc.application.boardController.editItemView(WebDoc.application.boardController.selection()[0]);
     });
+    
     this.htmlEdit = false;
-    jQuery("#inner_text_html").hide();
-    jQuery('#toolbar_panel_html_edit').bind('click', function(e) {
+    jQuery('#toolbar_panel_button_editHTML').bind('click', function(e){
       if (!this.htmlEdit) {
         this.htmlEdit = true;
+        WebDoc.application.textTool.delegate.exitEditMode();
         jQuery("#inner_text_html").show();
-        jQuery('#toolbar_panel_html_edit').text("Hide HTML");
+        $('#toolbar_panel_button_editHTML').addClass('active_button');
         this.refreshInnerHtml();
       }
       else {
         this.htmlEdit = false;
         jQuery("#inner_text_html").hide();
-        jQuery('#toolbar_panel_html_edit').text("HTML edit");        
+        $('#toolbar_panel_button_editHTML').removeClass('active_button');
       }
-    }.pBind(this));        
+    }
+.pBind(this));
+    
     this.isHasParent = function(target, parentObj){
       if (target.parentNode && target.parentNode == parentObj) {
         return true;
@@ -320,68 +320,61 @@ WebDoc.TextPaletteController = jQuery.klass({
       }
     };
     
-    jQuery(document).bind('click', function(e){
-      e.stopPropagation();
-      e.cancelBubble = true;
-      var hex;
-      if (e.target.parentNode && e.target.parentNode.parentNode && e.target.parentNode.parentNode.parentNode && e.target.parentNode.parentNode.parentNode.parentNode) {
-        if (e.target.parentNode.parentNode.className == 'colorpicker_color' && e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('id') == 'colorpickerHolder2') {
-          hex = jQuery('#toolbar_panel_button_foreColor>div').css('backgroundColor');
-          jQuery('#colorpickerHolder2').stop().animate({
-            height: 0
-          }, 500);
-          WebDoc.application.textTool.delegate.focus();
-          jQuery('#toolbar_panel_button_foreColor>div').css('backgroundColor', hex);
-          jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow');
-          WebDoc.application.textTool.delegate.editorExec('foreColor', hex);
-        }
-        
-        if (e.target.parentNode.parentNode.className == 'colorpicker_color' && e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('id') == 'colorpickerHolder1') {
-          hex = jQuery('#toolbar_panel_button_hiliteColor>div').css('backgroundColor');
-          jQuery('#colorpickerHolder1').stop().animate({
-            height: 0
-          }, 500);
-          WebDoc.application.textTool.delegate.focus();
-          jQuery('#toolbar_panel_button_hiliteColor>div').css('backgroundColor', hex);
-          jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow');
-          WebDoc.application.textTool.delegate.editorExec('hiliteColor', hex);
-        }
+    this.hideForeColorpicker = function(){
+      //jQuery('#foreColorpickerContainer').unbind('mouseleave');
+      if (jQuery('#foreColorpickerContainer').css('display') == "block") {
+        WebDoc.application.textTool.delegate.editorExec('foreColorCancel');
+        jQuery('#foreColorpickerContainer').hide('slow');
+        jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow');
       }
-      if (e.target.parentNode && e.target.parentNode.parentNode) {
-        var foc = (e.target.parentNode && e.target.parentNode.parentNode) ? e.target.parentNode.parentNode.getAttribute('class') : '';
-        if (jQuery('#colorpickerHolder2').height() && !thobj.isHasParent(e.target, document.getElementById('colorpickerHolder2')) || foc == 'colorpicker_color') {
-          jQuery('#colorpickerHolder2').stop().animate({
-            height: 0
-          }, 500);
-          jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow');
-        }
-        if (jQuery('#colorpickerHolder1').height() && !thobj.isHasParent(e.target, document.getElementById('colorpickerHolder1')) || foc == 'colorpicker_color') {
-          jQuery('#colorpickerHolder1').stop().animate({
-            height: 0
-          }, 500);
-          jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow');
-        }
+    };
+    
+    this.hideHiliteColorpicker = function(){
+     // jQuery('#hiliteColorpickerContainer').unbind('mouseleave');
+      if (jQuery('#hiliteColorpickerContainer').css('display') == "block") {
+        WebDoc.application.textTool.delegate.editorExec('hiliteColorCancel');
+        jQuery('#hiliteColorpickerContainer').hide('slow');
+        jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow');
       }
-    });
+    };
+    
+    this.showForeColorpicker = function(){
+      /*jQuery('#foreColorpickerContainer').bind('mouseleave', function(e){
+        thobj.hideForeColorpicker();
+      }); */
+      WebDoc.application.textTool.delegate.editorExec('foreColorShow');
+      jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow_top');
+      jQuery('#foreColorpickerContainer').appendTo('body').css('left', $('#toolbar_panel').offset().left - 3).css('top', $('#toolbar_panel').offset().top +46).css('height', '175px').slideDown('fast');
+      jQuery('#hiliteColorpickerContainer').hide('slow');
+      jQuery('#colorpickerHolder2 .colorpicker_current_color').css('backgroundColor', (thobj.currentToolBarHash.foreColor != 'different') ? thobj.currentToolBarHash.foreColor : 'transparent');
+    };
+    
+    this.showHiliteColorpicker = function(){
+      /*jQuery('#hiliteColorpickerContainer').bind('mouseleave', function(e){
+        thobj.hideHiliteColorpicker();
+      }); */
+      WebDoc.application.textTool.delegate.editorExec('hiliteColorShow');
+      jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow_top');
+      jQuery('#hiliteColorpickerContainer').prependTo('body').css('left', $('#toolbar_panel').offset().left - 3).css('top', $('#toolbar_panel').offset().top +46).css('height', '175px').slideDown('fast');
+      jQuery('#foreColorpickerContainer').hide('slow');
+      jQuery('#colorpickerHolder1 .colorpicker_current_color').css('backgroundColor', (thobj.currentToolBarHash.hiliteColor != 'different') ? thobj.currentToolBarHash.hiliteColor : 'transparent');
+    };
+    
+    
     
     jQuery('#colorpickerHolder2').ColorPicker({
       flat: true,
       color: '#000000',
       onSubmit: function(hsb, hex, rgb){
-        jQuery('#colorpickerHolder2').stop().animate({
-          height: 0
-        }, 500);
+        //jQuery('#foreColorpickerContainer').unbind('mouseleave');
+        jQuery('#foreColorpickerContainer').hide('slow');
         jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow');
+        WebDoc.application.textTool.delegate.editorExec('foreColor', '#' + hex);
         WebDoc.application.textTool.delegate.focus();
-      },
-      onHide: function(colpkr){
-        jQuery(colpkr).fadeOut(500);
-        WebDoc.application.textTool.delegate.focus();
-        return false;
       },
       onChange: function(hsb, hex, rgb){
         jQuery('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#' + hex);
-        WebDoc.application.textTool.delegate.editorExec('foreColor', '#' + hex);
+        WebDoc.application.textTool.delegate.editorExec('foreColorTesting', '#' + hex);
         WebDoc.application.textTool.delegate.focus();
       }
     });
@@ -391,47 +384,27 @@ WebDoc.TextPaletteController = jQuery.klass({
       flat: true,
       color: '#000000',
       onSubmit: function(hsb, hex, rgb){
-        jQuery('#colorpickerHolder1').stop().animate({
-          height: 0
-        }, 500);
+        //jQuery('#hiliteColorpickerContainer').unbind('mouseleave');
+        jQuery('#hiliteColorpickerContainer').hide('slow');
         jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow');
+        WebDoc.application.textTool.delegate.editorExec('hiliteColor', '#' + hex);
         WebDoc.application.textTool.delegate.focus();
-      },
-      onHide: function(colpkr){
-        jQuery(colpkr).fadeOut(500);
-        WebDoc.application.textTool.delegate.focus();
-        return false;
       },
       onChange: function(hsb, hex, rgb){
         jQuery('#toolbar_panel_button_hiliteColor>div').css('backgroundColor', '#' + hex);
-        WebDoc.application.textTool.delegate.editorExec('hiliteColor', '#' + hex);
+        WebDoc.application.textTool.delegate.editorExec('hiliteColorTesting', '#' + hex);
         WebDoc.application.textTool.delegate.focus();
       }
     });
-    jQuery('#colorpickerHolder1>div').css('position', 'absolute');
-    jQuery('#colorpickerHolder2>div').css('position', 'absolute');
     
     jQuery('#toolbar_panel_button_foreColor_arrow').bind('click', function(e){
       e.stopPropagation();
       e.cancelBubble = true;
       if (jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class') != 'icon_color_arrow_top') {
-        jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow_top');
-        var pos = jQuery("#toolbar_panel_button_foreColor").position();
-        jQuery('#colorpickerHolder2').css('left', 0);//pos.left
-        jQuery('#colorpickerHolder2').css('top', pos.top + 28);
-        jQuery('#colorpickerHolder2').stop().animate({
-          height: 173
-        }, 500);
-        jQuery('#colorpickerHolder1').stop().animate({
-          height: 0
-        }, 500);
-        jQuery('#colorpickerHolder2 .colorpicker_current_color').css('backgroundColor', (thobj.currentToolBarHash.foreColor != 'different') ? thobj.currentToolBarHash.foreColor : 'transparent');
+        thobj.showForeColorpicker();
       }
       else {
-        jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow');
-        jQuery('#colorpickerHolder2').stop().animate({
-          height: 0
-        }, 500);
+        thobj.hideForeColorpicker();
       }
       WebDoc.application.textTool.delegate.focus();
     });
@@ -440,62 +413,29 @@ WebDoc.TextPaletteController = jQuery.klass({
       e.stopPropagation();
       e.cancelBubble = true;
       if (jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class') != 'icon_color_arrow_top') {
-        jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow_top');
-        var pos = jQuery("#toolbar_panel_button_hiliteColor").position();
-        jQuery('#colorpickerHolder1').css('left', 0);//pos.left
-        jQuery('#colorpickerHolder1').css('top', pos.top + 28);
-        jQuery('#colorpickerHolder1').stop().animate({
-          height: 173
-        }, 500);
-        jQuery('#colorpickerHolder2').stop().animate({
-          height: 0
-        }, 500);
-        jQuery('#colorpickerHolder1 .colorpicker_current_color').css('backgroundColor', (thobj.currentToolBarHash.hiliteColor != 'different') ? thobj.currentToolBarHash.hiliteColor : 'transparent');
+        thobj.showHiliteColorpicker();
       }
       else {
-        jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow');
-        jQuery('#colorpickerHolder1').stop().animate({
-          height: 0
-        }, 500);
+        thobj.hideHiliteColorpicker();
       }
       WebDoc.application.textTool.delegate.focus();
     });
     
+    jQuery('#colorpickerHolder2').find('div.colorpicker_cancel').bind('click', function(){
+      thobj.hideForeColorpicker();
+    });
+    
     jQuery('#colorpickerHolder1').find('div.colorpicker_cancel').bind('click', function(){
-      jQuery('#colorpickerHolder1').stop().animate({
-        height: 0
-      }, 500);
-      jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow');
-      var color = jQuery('#colorpickerHolder1 .colorpicker_current_color').css('backgroundColor');
-      if (color != "transparent") {
-        color = '#' + thobj.RGBcss2Hex(color);
-      }
-      WebDoc.application.textTool.delegate.editorExec('hiliteColor', color);
+      thobj.hideHiliteColorpicker();
     });
     
     jQuery('#colorpickerHolder1').find('div.colorpicker_setdefault').bind('click', function(){
-      jQuery('#colorpickerHolder1').stop().animate({
-        height: 0
-      }, 500);
-      jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow');
+      thobj.hideHiliteColorpicker();
       WebDoc.application.textTool.delegate.editorExec('clearBackground');
     });
     
     
-    jQuery('#colorpickerHolder2').find('div.colorpicker_cancel').bind('click', function(){
-      jQuery('#colorpickerHolder2').stop().animate({
-        height: 0
-      }, 500);
-      jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow');
-      var color = jQuery('#colorpickerHolder2 .colorpicker_current_color').css('backgroundColor');
-      if (color != "transparent") {
-        color = '#' + thobj.RGBcss2Hex(color);
-      }
-      else {
-        color = "#484848";
-      }
-      WebDoc.application.textTool.delegate.editorExec('foreColor', color);
-    });
+    
     
     jQuery('#colorpickerHolder2').find('div.colorpicker_setdefault').hide();
   },
@@ -567,43 +507,22 @@ WebDoc.TextPaletteController = jQuery.klass({
     }
   },
   
-  activate: function(bool){
-    jQuery('#toolbar_panel').css('display', bool ? 'block' : 'none');
+  activate: function(bool, parameters){
+    this.parameters = parameters;
     if (bool) {
-     jQuery("#choose-edit-method").hide();
-     this.htmlEdit = false;
-     jQuery("#inner_text_html").hide();
-     jQuery('#toolbar_panel_html_edit').text("HTML edit");     
+      this.htmlEdit = false;
+      jQuery("#inner_text_html").hide();
+      $('#toolbar_panel_button_editHTML').removeClass('active_button');
     }
     else {
-     jQuery("#choose-edit-method").show();
-     this.refreshInnerHtml();
-    }    
-  },
-  
-  setParameters: function(parameters){
-    this.parameters = parameters;
-  },
-  
-  hideColorPickers: function(){
-    if (jQuery('#colorpickerHolder1').height()) {
-      jQuery('#colorpickerHolder1').stop().animate({
-        height: 0
-      }, 500);
-      jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow');
+      this.refreshInnerHtml();
     }
-    if (jQuery('#colorpickerHolder2').height()) {
-      jQuery('#colorpickerHolder2').stop().animate({
-        height: 0
-      }, 500);
-      jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow');
-    }
-    WebDoc.application.textTool.delegate.focus();
   },
   
-  refreshInnerHtml: function() {    
+  refreshInnerHtml: function(){
+    WebDoc.application.textTool.delegate.editorExec('styleRefresher');
     if (this.htmlEdit) {
       this.htmlInspector.refresh();
     }
-   }  
+  }
 });

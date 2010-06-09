@@ -1,25 +1,40 @@
 require 'xmpp_user_synch'
 
 class User < ActiveRecord::Base
+  set_primary_key :uuid
   acts_as_authorization_subject
-  mount_uploader :avatar, AvatarUploader
-  has_uuid  
 
+  avatars_path = "uploads/user/avatar/:id/:cw_style:basename.:extension"
+  has_attached_file :avatar,
+                    :styles => { :thumb=> "128x128#" },
+                    :default_url   => "/images/thumb_icon_no_photo_128x128.png",
+                    :storage => S3_CONFIG[:storage].to_sym,
+                    :s3_credentials => S3_CONFIG,
+                    :bucket => S3_CONFIG[:assets_bucket],
+                    :path => S3_CONFIG[:storage] == 's3' ? avatars_path : ":rails_root/public/#{avatars_path}",
+                    :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{avatars_path}"
+
+  validates_attachment_size :avatar, :less_than => 1.megabytes
+  validates_attachment_content_type :avatar, :content_type => ['image/jpeg', 'image/png', 'image/gif']
+
+  has_uuid  
   # Include default devise modules.
   # Others available are :lockable, :timeoutable and :activatable.
   devise :registerable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable, :lockable
   
   attr_accessor :terms_of_service
+  attr_accessor :clear_avatar
   
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :username, :first_name, :last_name, :terms_of_service,
-                  :avatar, :avatar_cache, :remove_avatar, :bio, :website, :gender, :uuid
+                  :bio, :website, :gender, :uuid, :avatar, :clear_avatar
   
   # =============
   # = Callbacks =
   # =============
   
   validate_on_create :must_be_allowed_email
+  before_save :check_clear_avatar
   after_create :create_xmpp_user, :notify_administrators
   
   # ===============
@@ -50,19 +65,7 @@ class User < ActiveRecord::Base
   def name
     first_name ? "#{first_name} #{last_name}" : username
   end
-  
-  def avatar_url
-    avatar.url
-  end
-  
-  def avatar_thumb_url
-    thumb_url = avatar.thumb.url
-    if (!thumb_url)
-      thumb_url = "/images/thumb_icon_no_photo_100x100.png"
-    end
-    return thumb_url
-  end
-  
+
   def documents_count
     documents.count
   end
@@ -117,11 +120,11 @@ class User < ActiveRecord::Base
   def to_social_panel_json(current_user)
     { :user =>
       {
-        :id => self.id,
+        :uuid => self.uuid,
         :username => self.username,
         :bio => self.bio,
         :uuid => self.uuid,
-        :avatar_thumb_url => self.avatar_thumb_url,
+        :avatar_thumb_url => self.avatar.url(:thumb),
         :documents_count => self.documents_count,
         :following_info => self.follower?(current_user)
       }
@@ -141,7 +144,12 @@ protected
       Notifier.deliver_new_user_notification(APP_CONFIG['administrator_emails'], self)
     end    
   end
-  
+
+  # before create
+  def check_clear_avatar
+    avatar.clear if clear_avatar == 1.to_s
+  end
+
   def must_be_allowed_email
     if (APP_CONFIG['must_check_user_email'])
       allowed_users = []
@@ -153,14 +161,15 @@ protected
       errors.add(:email, :not_authorized_email) unless allowed_users.include? self.email
     end    
   end
+  
 end
+
 
 
 # == Schema Information
 #
 # Table name: users
 #
-#  id                   :integer(4)      not null, primary key
 #  email                :string(255)     not null
 #  username             :string(255)     not null
 #  encrypted_password   :string(255)     not null
@@ -187,6 +196,6 @@ end
 #  bio                  :text
 #  gender               :string(255)
 #  website              :string(255)
-#  uuid                 :string(255)
+#  uuid                 :string(255)     primary key
 #
 

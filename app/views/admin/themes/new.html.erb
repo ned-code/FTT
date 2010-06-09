@@ -2,8 +2,8 @@
 
 <% form_for @theme, :url => admin_themes_path, :html => { :enctype => 'multipart/form-data' } do |f| %>
   <%= f.error_messages %>
-  <%= f.label :file %>
-  <%= f.file_field :file %>
+  <%= f.label :attachment %>
+  <%= f.file_field :attachment %>
   <%= f.label :is_default, "Set as default" %>
   <%= f.check_box :is_default %>
   <p>

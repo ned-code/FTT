@@ -7,19 +7,16 @@ gem 'mime-types', :require => 'mime/types'
 gem 'json'
 gem 'rubyzip', :require => 'zip/zip'
 gem 'xmpp4r'
-#gem 'aws'
-#gem 'aws-s3' #, :git => 'http://github.com/isaacfeliu/aws-s3.git' # for rails 2.3.5 and carrierwave 0.4.5, use only aws if we change versions
-gem 'right_aws'
+gem 'paperclip'
+gem 'aws-s3', :git => 'http://github.com/isaacfeliu/aws-s3.git'
 gem 'warden'
-gem 'devise'
+gem 'devise', :branch => 'v1.0', :git => 'http://github.com/webdoc/devise.git', :tag => 'v1.0.7.1'
 gem 'will_paginate'
 gem 'uuidtools' # for has_uuid plugin
 gem 'uuid'
 gem "mysql"
 gem 'rack-debug'
 gem 'nokogiri'
-gem 'carrierwave' #, "0.4.5" #, :git => 'http://github.com/jnicklas/carrierwave.git' #, "0.4.3"
-gem 'mini_magick'
 gem 'acl9'
 gem 'formtastic'
 gem 'erubis'
