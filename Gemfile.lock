@@ -179,7 +179,7 @@ specs:
     version: 1.0.12
 - aws-s3: 
     version: 0.4.1
-    source: 0
+    source: 1
 - highline: 
     version: 1.5.2
 - net-ssh: 
@@ -220,6 +220,7 @@ specs:
     version: 0.10.7
 - devise: 
     version: 1.0.7
+    source: 0
 - erubis: 
     version: 2.6.5
 - factory_girl: 
@@ -251,7 +252,7 @@ specs:
 - mysql: 
     version: 2.8.1
 - paperclip: 
-    version: 2.3.1.1
+    version: 2.3.2
 - ruby-debug-base: 
     version: 0.10.3
 - ruby-debug: 
@@ -284,8 +285,14 @@ specs:
     version: 2.3.14
 - xmpp4r: 
     version: "0.5"
-hash: 51c79fcdfb137c867b60be327b5f29931663e7e3
+hash: 8e878896447a6a771f843fa11476ff2a3690faa3
 sources: 
+- Git: 
+    uri: http://github.com/webdoc/devise.git
+    branch: v1.0
+    tag: v1.0.7.1
+    git: http://github.com/webdoc/devise.git
+    ref: 4cee8be78e619d2ead379a38366e06f374ac93f9
 - Git: 
     uri: http://github.com/isaacfeliu/aws-s3.git
     git: http://github.com/isaacfeliu/aws-s3.git

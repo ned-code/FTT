@@ -330,23 +330,24 @@ describe Document do
 end
 
 
+
 # == Schema Information
 #
 # Table name: documents
 #
-#  uuid        :string(36)
+#  uuid        :string(36)      primary key
 #  title       :string(255)
 #  deleted_at  :datetime
 #  created_at  :datetime
 #  updated_at  :datetime
-#  id          :integer(4)      not null, primary key
 #  description :text
 #  size        :text
-#  category_id :integer(4)
-#  creator_id  :integer(4)
+#  category_id :string(36)
+#  creator_id  :string(36)
 #  is_public   :boolean(1)      default(FALSE)
 #  views_count :integer(4)      default(0)
-#  theme_id    :integer(4)
+#  theme_id    :string(36)
 #  style_url   :string(255)
+#  featured    :integer(4)      default(0)
 #
 

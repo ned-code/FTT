@@ -1,6 +1,6 @@
 class Layout < ActiveRecord::Base
-
   has_uuid
+  set_primary_key :uuid
 
   attr_accessible :uuid, :title, :thumbnail_url, :kind
 
@@ -97,7 +97,7 @@ class Layout < ActiveRecord::Base
               else # application/wd-app
                 media = Medias::Widget.find_by_uuid(doc_item.attr('data'))
               end
-              item.media_id = media.id
+              item.media_id = media.uuid
               item.media_type = 'widget'
               for object_item in doc_item.children
                 if object_item == 'param'
@@ -165,15 +165,17 @@ class Layout < ActiveRecord::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: layouts
 #
-#  id            :integer(4)      not null, primary key
-#  uuid          :string(255)
-#  name          :string(255)
+#  uuid          :string(255)     primary key
+#  title         :string(255)
 #  thumbnail_url :string(255)
-#  theme_id      :integer(4)
-#  model_page_id :integer(4)
+#  theme_id      :string(36)
+#  model_page_id :string(36)
+#  template_url  :string(255)
+#  kind          :string(255)
 #
 

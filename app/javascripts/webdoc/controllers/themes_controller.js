@@ -31,7 +31,7 @@ WebDoc.ThemesController = jQuery.klass({
       // can reference themes by id later
       while(l--){
         theme = themes[l];
-        that.list[ theme.data.id ] = theme;
+        that.list[ theme.uuid() ] = theme;
       }
     });
   },

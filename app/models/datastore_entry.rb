@@ -1,6 +1,8 @@
 class DatastoreEntry < ActiveRecord::Base
+  has_uuid
+  set_primary_key :uuid
   
-  attr_accessible :ds_key, :ds_value
+  attr_accessible :ds_key, :ds_value, :uuid
   
   # ================
   # = Associations =
@@ -53,8 +55,8 @@ class DatastoreEntry < ActiveRecord::Base
     key_to_save = nil
     #check if the key already exists
     if params[:unique_key] == 'true'
-      existing_key = DatastoreEntry.find(:first, :conditions => { :ds_key => params[:key], :item_id => item.id })
-      if existing_key && (existing_key.user_id == nil || (current_user && existing_key.user_id == current_user.id))
+      existing_key = DatastoreEntry.find(:first, :conditions => { :ds_key => params[:key], :item_id => item.uuid })
+      if existing_key && (existing_key.user_id == nil || (current_user && existing_key.user_id == current_user.uuid))
         key_to_save = existing_key
       else
         key_to_save = DatastoreEntry.new
@@ -63,7 +65,7 @@ class DatastoreEntry < ActiveRecord::Base
       #is user connected
       if current_user
         #has already a record for itself
-        key_to_save = DatastoreEntry.find(:first,:conditions => { :ds_key => params[:key], :item_id => item.id, :user_id => current_user.id })
+        key_to_save = DatastoreEntry.find(:first,:conditions => { :ds_key => params[:key], :item_id => item.uuid, :user_id => current_user.uuid })
         unless key_to_save 
           key_to_save = DatastoreEntry.new
         end
@@ -76,9 +78,9 @@ class DatastoreEntry < ActiveRecord::Base
     if key_to_save 
       key_to_save.ds_key = params[:key]
       key_to_save.ds_value = params[:value]
-      key_to_save.item_id = item.id
+      key_to_save.item_id = item.uuid
       if current_user
-        key_to_save.user_id = current_user.id
+        key_to_save.user_id = current_user.uuid
       else
         #TODO manage anonymous user
       end
@@ -103,7 +105,7 @@ class DatastoreEntry < ActiveRecord::Base
     find(
       :all,
       :joins => { :item => { :page => :document } },
-      :conditions => { :documents => { :creator_id => current_user.id } }
+      :conditions => { :documents => { :creator_id => current_user.uuid } }
     )
     
     # @join = "INNER JOIN items ON datastore_entries.item_id=items.id"
@@ -120,16 +122,17 @@ class DatastoreEntry < ActiveRecord::Base
   
 end
 
+
 # == Schema Information
 #
 # Table name: datastore_entries
 #
-#  id         :integer(4)      not null, primary key
 #  ds_key     :string(255)     not null
 #  ds_value   :text(16777215)  default(""), not null
 #  user_id    :string(36)
 #  created_at :datetime
 #  updated_at :datetime
-#  item_id    :integer(4)
+#  item_id    :string(36)
+#  uuid       :string(36)      primary key
 #
 

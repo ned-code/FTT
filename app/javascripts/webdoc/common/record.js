@@ -49,7 +49,7 @@ WebDoc.Record = jQuery.klass(
   },
   
   id: function() {
-    return this.data.id;
+    return this.data.uuid;
   },
   
   /**
