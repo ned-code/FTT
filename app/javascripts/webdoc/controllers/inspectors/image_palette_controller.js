@@ -9,6 +9,8 @@ WebDoc.ImagePaletteController = $.klass({
     this.propertySrc.blur(this.updateSrc.pBind(this));
 
     $("#restore_original_size").click(this.restoreOriginalSize);
+    
+    $("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
 
     $("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
@@ -94,6 +96,16 @@ WebDoc.ImagePaletteController = $.klass({
       image.src = item.data.data.src;
       ddd("restore original size: "+image.width+"x"+image.height+"px");
       WebDoc.ItemView.restoreSize(item, { width: image.width, height: image.height});
+    }
+  },
+
+  setPageSizeToImageSize: function() {
+    var item = WebDoc.application.boardController.selection()[0].item;
+    if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && item.data.data.src !== undefined && item.data.data.src !== "") {
+      ddd("[image palette controller]: set page size to image size "+item.width()+"x"+item.height());
+      WebDoc.application.pageEditor.currentPage.setSize({width: item.width(), height: item.height()});
+      ddd("[image palette controller]: set image position to 00");
+      item.moveTo({ left: '0px', top: '0px' });
     }
   },
 

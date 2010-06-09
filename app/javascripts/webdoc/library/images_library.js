@@ -92,12 +92,12 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
       
       switch (link.attr("id")) {
 
-        case "add_orignal_image_to_page_action":
+        case "add_original_image_to_page_action":
           ddd("orignal image");
         case "add_image_to_page_action":
           ddd("add (original) image to page action");
           var imageUrl = null;
-          if(link.attr("id") == "add_orignal_image_to_page_action") {
+          if(link.attr("id") == "add_original_image_to_page_action") {
             imageUrl = properties.url
           }
           else {
@@ -318,10 +318,10 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     imageActions.find("."+properties.type).show();
 
     if(!properties.default_url) {
-      this.detailsView.find('#add_orignal_image_to_page_action').parent().hide();
+      this.detailsView.find('#add_original_image_to_page_action').parent().hide();
     }
     else {
-      this.detailsView.find('#add_orignal_image_to_page_action').parent().show();
+      this.detailsView.find('#add_original_image_to_page_action').parent().show();
     }
     
     // If Details view is loaded from the My Images section, we won't need this action...
