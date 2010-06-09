@@ -8,14 +8,15 @@ describe Followship do
 end
 
 
+
 # == Schema Information
 #
 # Table name: followships
 #
-#  id           :integer(4)      not null, primary key
-#  follower_id  :integer(4)      not null
-#  following_id :integer(4)      not null
+#  follower_id  :string(36)      not null
+#  following_id :string(36)      not null
 #  created_at   :datetime
 #  updated_at   :datetime
+#  uuid         :string(36)      primary key
 #
 

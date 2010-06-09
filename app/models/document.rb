@@ -1,5 +1,6 @@
 class Document < ActiveRecord::Base
   has_uuid
+  set_primary_key :uuid
   acts_as_authorization_object
   
   attr_accessible :uuid, :title, :description, :size, :category_id, :is_public, :style_url, :theme_id, :featured 
@@ -30,7 +31,7 @@ class Document < ActiveRecord::Base
   # =============
   # = Callbacks =
   # =============
-  
+  #before_update :validate_size
   before_create :set_default_theme
   before_create :create_default_page
   before_create :validate_size
@@ -53,7 +54,7 @@ class Document < ActiveRecord::Base
       # Filter possibilities: reader, editor, creator, public
       if document_filter == 'creator'
         paginate_params[:conditions][0] += ' AND documents.creator_id = ?'
-        paginate_params[:conditions] << current_user.id
+        paginate_params[:conditions] << current_user.uuid
       elsif document_filter == 'public'
         paginate_params[:conditions][0] = ' AND documents.is_public = ?'
         paginate_params[:conditions] << true
@@ -66,11 +67,11 @@ class Document < ActiveRecord::Base
         # Must remove owned documents
         owner_ids = []
         current_user.documents.each do |doc|
-          owner_ids << doc.id
+          owner_ids << doc.uuid
         end
         # Diff of both arrays
         documents_ids = documents_ids - owner_ids
-        paginate_params[:conditions][0] += ' AND documents.id IN (?)'
+        paginate_params[:conditions][0] += ' AND documents.uuid IN (?)'
         paginate_params[:conditions] << documents_ids
       end
     else
@@ -79,7 +80,7 @@ class Document < ActiveRecord::Base
         roles = current_user.role_objects.all.each do |role|
           documents_ids << role.authorizable_id
         end
-        paginate_params[:conditions][0] += ' AND documents.id IN (?)'
+        paginate_params[:conditions][0] += ' AND documents.uuid IN (?)'
         paginate_params[:conditions] << documents_ids
       end
     end
@@ -115,17 +116,17 @@ class Document < ActiveRecord::Base
     following_ids = current_user.following_ids
     if following_ids.present?
       all(
-        :joins => "INNER JOIN roles ON roles.authorizable_id = documents.id INNER JOIN roles_users ON roles_users.role_id = roles.id",
+        :joins => "INNER JOIN roles ON roles.authorizable_id = documents.uuid INNER JOIN roles_users ON roles_users.role_id = roles.uuid",
         :conditions => ['creator_id IN (?) AND (documents.is_public = ? OR (roles.authorizable_type = ? AND roles.name IN (?) AND roles_users.user_id = ?))',
                       following_ids,
                       true,
                       self.class_name.to_s,
                       [ 'editor', 'reader' ],
-                      current_user.id
+                      current_user.uuid
         ],
         :limit => limit,
         :order => 'documents.updated_at DESC',
-        :group => 'documents.id'
+        :group => 'documents.uuid'
       )
     else
       []
@@ -190,8 +191,8 @@ class Document < ActiveRecord::Base
     result = { :access => [], :failed => [] }
     all_document_access.each do |role|
       role.users.each do |user|
-        is_creator = (self.creator && self.creator.id == user.id)? true : false
-        user_infos = [:id => user.id, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator]
+        is_creator = (self.creator && self.creator.uuid == user.uuid)? true : false
+        user_infos = [:uuid => user.uuid, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator]
         result[:access] << user_infos
       end
     end
@@ -207,8 +208,8 @@ class Document < ActiveRecord::Base
     role = self.accepted_roles.first(:conditions => { :name => role_name })
     result = { :access => [], :failed => [] }
     role.users.each do |user|
-      is_creator = (self.creator && self.creator.id == user.id)? true : false
-      user_infos = [:id => user.id, :username => user.username, :email => user.email, :creator => is_creator]
+      is_creator = (self.creator && self.creator.uuid == user.uuid)? true : false
+      user_infos = [:uuid => user.uuid, :username => user.username, :email => user.email, :creator => is_creator]
       result[:access] << user_infos
     end
     if @unvalid_access_emails
@@ -311,6 +312,8 @@ class Document < ActiveRecord::Base
   def deep_clone(creator, title)
     cloned_document = self.clone
     cloned_document.uuid = nil
+    cloned_document.theme_id = self.theme_id
+    cloned_document.style_url = self.style_url
     cloned_document.created_at = nil
     cloned_document.updated_at = nil
     cloned_document.is_public = false
@@ -333,7 +336,7 @@ class Document < ActiveRecord::Base
       cloned_document.save!
       # TODO In version 2.3.6, there is a reset_counters(id, *counters) which do the next line properly
       # but this function don't exist in 2.3.5
-      Document.connection.update("UPDATE `documents` SET `views_count` = #{cloned_document.view_counts.count} WHERE `id` = #{cloned_document.id}")
+      Document.connection.update("UPDATE `documents` SET `views_count` = #{cloned_document.view_counts.count} WHERE `uuid` = '#{cloned_document.uuid}'")
     end
     cloned_document
   end
@@ -347,9 +350,11 @@ private
   
   #before_create
   def set_default_theme
-    theme = Theme.default
-    self.theme_id = theme.id
-    self.style_url = theme.style_url
+    if theme_id.nil?
+      theme = Theme.default
+      self.theme_id = theme.id
+      self.style_url = theme.style_url
+    end
   end
   
   # before_create
@@ -375,23 +380,24 @@ private
 end
 
 
+
 # == Schema Information
 #
 # Table name: documents
 #
-#  uuid        :string(36)
+#  uuid        :string(36)      primary key
 #  title       :string(255)
 #  deleted_at  :datetime
 #  created_at  :datetime
 #  updated_at  :datetime
-#  id          :integer(4)      not null, primary key
 #  description :text
 #  size        :text
-#  category_id :integer(4)
-#  creator_id  :integer(4)
+#  category_id :string(36)
+#  creator_id  :string(36)
 #  is_public   :boolean(1)      default(FALSE)
 #  views_count :integer(4)      default(0)
-#  theme_id    :integer(4)
+#  theme_id    :string(36)
 #  style_url   :string(255)
+#  featured    :integer(4)      default(0)
 #
 

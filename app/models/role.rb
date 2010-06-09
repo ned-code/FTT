@@ -1,7 +1,10 @@
 class Role < ActiveRecord::Base
+  has_uuid
+  set_primary_key :uuid
+  
   acts_as_authorization_role
   
-  attr_accessible :name, :authorizable, :authorizable_id, :authorizable_type
+  attr_accessible :name, :authorizable, :authorizable_id, :authorizable_type, :uuid
   
   # ================
   # = Associations =
@@ -19,7 +22,7 @@ class Role < ActiveRecord::Base
       :joins      => :roles_users,
       :conditions => {
         :roles       => { :authorizable_type => "Document" },
-        :roles_users => { :user_id => user.id }
+        :roles_users => { :user_id => user.uuid }
       }
     ).group_by { |role| role.name }
     roles.each { |k,v| v.map! { |role| role.document_id } }
@@ -29,15 +32,16 @@ class Role < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: roles
 #
-#  id                :integer(4)      not null, primary key
 #  name              :string(40)
 #  authorizable_type :string(40)
-#  authorizable_id   :integer(4)
+#  authorizable_id   :string(36)
 #  created_at        :datetime
 #  updated_at        :datetime
+#  uuid              :string(36)      primary key
 #
 

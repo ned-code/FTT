@@ -62,7 +62,7 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
   _loadDocumentCategories: function() {
     var categories = WebDoc.DocumentCategoriesManager.getInstance().getAllCategories();    
     jQuery.each(categories, function(i, webDocCategory) {
-      documentCategoryField.append(jQuery('<option>').attr("value", webDocCategory.data.id).html(webDocCategory.data.name));
+      documentCategoryField.append(jQuery('<option>').attr("value", webDocCategory.uuid()).html(webDocCategory.data.name));
     });
   },
   

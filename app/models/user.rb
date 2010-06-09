@@ -1,6 +1,7 @@
 require 'xmpp_user_synch'
 
 class User < ActiveRecord::Base
+  set_primary_key :uuid
   acts_as_authorization_subject
 
   avatars_path = "uploads/user/avatar/:id/:cw_style:basename.:extension"
@@ -17,7 +18,6 @@ class User < ActiveRecord::Base
   validates_attachment_content_type :avatar, :content_type => ['image/jpeg', 'image/png', 'image/gif']
 
   has_uuid  
-
   # Include default devise modules.
   # Others available are :lockable, :timeoutable and :activatable.
   devise :registerable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable, :lockable
@@ -120,7 +120,7 @@ class User < ActiveRecord::Base
   def to_social_panel_json(current_user)
     { :user =>
       {
-        :id => self.id,
+        :uuid => self.uuid,
         :username => self.username,
         :bio => self.bio,
         :uuid => self.uuid,
@@ -165,11 +165,11 @@ protected
 end
 
 
+
 # == Schema Information
 #
 # Table name: users
 #
-#  id                   :integer(4)      not null, primary key
 #  email                :string(255)     not null
 #  username             :string(255)     not null
 #  encrypted_password   :string(255)     not null
@@ -196,6 +196,6 @@ end
 #  bio                  :text
 #  gender               :string(255)
 #  website              :string(255)
-#  uuid                 :string(255)
+#  uuid                 :string(255)     primary key
 #
 

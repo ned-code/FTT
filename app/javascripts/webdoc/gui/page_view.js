@@ -246,6 +246,11 @@ WebDoc.PageView = $.klass({
   _initPageClass: function() {
     this.domNode.attr("class", "webdoc");
     this.domNode.addClass(this.page.data.data['class']);
+    if(this.page.data.data.classes) {
+      for(var css_class in this.page.data.data.classes) {
+        this.domNode.addClass(this.page.data.data.classes[css_class]);
+      }
+    }
     this.page.getLayout(function(layout) {
       if (layout) {
         this.domNode.addClass(layout.getModelPage().data.data['class']);
