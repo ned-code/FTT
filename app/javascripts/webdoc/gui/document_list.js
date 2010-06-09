@@ -141,7 +141,6 @@ WebDoc.DocumentList = $.klass({
         });
     
     documentNode.append( documentTitle );
-    
     if ( editor ) {
       documentNode
       .append( this._buildDocumentControlsNode( document, data ) )
@@ -243,7 +242,7 @@ WebDoc.DocumentList = $.klass({
   },
   
   _hasAuthenticatedUserEditorRights: function(document) {
-    return (jQuery.inArray(document.data.id.toString(), WebDoc.application.documentEditor.currentUserDocumentsEditor()) !== -1);
+    return (jQuery.inArray(document.uuid(), WebDoc.application.documentEditor.currentUserDocumentsEditor()) !== -1);
   }
 });
 

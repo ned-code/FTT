@@ -328,7 +328,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.fireItemAdded(item, afterItem);    
   },
   
-  removeItem: function(item) {    
+  removeItem: function(item) {
     var index = $.inArray(item, this.items);
     if (index != -1) {
       this.items.splice(index, 1);
