@@ -91,7 +91,14 @@ WebDoc.InspectorPanesManager = $.klass({
         event.preventDefault();
         this.showInspector();
       }.pBind(this));
-      this.openFloatingInspectorButton.hide();
+      
+      if (WebDoc.application.boardController.currentPageView().isEditable()) { // true is current page is in Edit mode, false if it's in Preview mode
+        this.openFloatingInspectorButton.show();
+      }
+      else {
+        this.openFloatingInspectorButton.hide();
+      }
+      
       this.itemView.domNode.append(this.openFloatingInspectorButton);
     }
   },
@@ -99,7 +106,7 @@ WebDoc.InspectorPanesManager = $.klass({
   showOpenFloatingInspectorButton: function(flag) { //called from board_controller when switching mode (Edit/Preview)
     if (this.panesCount() > 0) {
       if (!this.openFloatingInspectorButton) this.createOpenFloatingInspectorButton();
-    
+      
       if (flag) {
         this.openFloatingInspectorButton.show();
       }

@@ -9,7 +9,8 @@ gadgets.util.registerOnLoadHandler(function() {
 });
 
 WebDoc.appInit = function() {
-  WebDoc.registerInspectorPanes(["settings", "style"]);
+  // WebDoc.registerInspectorPanes(["settings", "style"]);
+  WebDoc.registerInspectorPanes(["settings"]);
 }
 
 WebDoc.appEnteredEditMode = function() {
