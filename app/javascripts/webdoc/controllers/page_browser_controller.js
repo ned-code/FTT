@@ -38,10 +38,13 @@ WebDoc.PageBrowserController = $.klass({
     this._document = null;
     
     // defined in CSS
-    this._pagesPanelWidth = this.domNode.outerWidth();
+    //this._pagesPanelWidth = this.domNode.outerWidth();
+    this._panelHeight = this.domNode.outerHeight();
     
     ddd("[PageBrowserController] Pages panel width: " + this._pagesPanelWidth);
-    this.visible = false;
+    ddd("[PageBrowserController] panel height: " + this._panelHeight);
+    
+    this.visible = true;
     this.pageMap = {};    
   },
   
@@ -278,21 +281,23 @@ WebDoc.PageBrowserController = $.klass({
   
   _show: function(){
     var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
-        panelWidth = this._pagesPanelWidth,
+        //panelWidth = this._pagesPanelWidth,
+        panelHeight = this._panelHeight,
         outerGhost = this.panelGhostNode,
         innerGhost = this.innerGhostNode,
         bothGhosts = outerGhost.add(innerGhost);
     
-    innerGhost.show();
+    //innerGhost.show();
     
     this.domNode.animate({
-        marginLeft: 0
+        marginBottom: 0
+        // marginLeft: 0
     }, {
-        step: function(val){
-            bothGhosts.css({
-              width: panelWidth + val
-            })
-        }.pBind(this)
+        //step: function(val){
+        //    bothGhosts.css({
+        //      width: panelWidth + val
+        //    })
+        //}.pBind(this)
     });
     
     pageBrowserButton.addClass(this.ACTIVE_CLASS);
@@ -308,7 +313,8 @@ WebDoc.PageBrowserController = $.klass({
         bothGhosts = outerGhost.add(innerGhost);
     
     this.domNode.animate({
-        marginLeft: - this._pagesPanelWidth - ( margin || 0 )
+        marginBottom: - this._panelHeight
+        //marginLeft: - this._pagesPanelWidth - ( margin || 0 )
     }, {
         step: function(val){
             bothGhosts.css({
