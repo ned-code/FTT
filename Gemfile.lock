@@ -251,7 +251,7 @@ specs:
 - mysql: 
     version: 2.8.1
 - paperclip: 
-    version: 2.3.1.1
+    version: 2.3.2
 - ruby-debug-base: 
     version: 0.10.3
 - ruby-debug: 
@@ -284,13 +284,13 @@ specs:
     version: 2.3.14
 - xmpp4r: 
     version: "0.5"
-hash: 7486562635ff3184ecb5acf33a2d25793699e445
+hash: d7255808aef6ff08d3f61d69de9ad88b3025d53d
 sources: 
 - Git: 
-    uri: git@github.com:webdoc/devise.git
+    uri: http://github.com/webdoc/devise.git
     branch: v1.0
     tag: v1.0.7.1
-    git: git@github.com:webdoc/devise.git
+    git: http://github.com/webdoc/devise.git
     ref: 4cee8be78e619d2ead379a38366e06f374ac93f9
 - Rubygems: 
     uri: http://gemcutter.org
