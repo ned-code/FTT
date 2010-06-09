@@ -6,11 +6,9 @@ gadgets.util.registerOnLoadHandler(function() {
   poll = new Poll();
   
   WebDoc.adjustAppHeight();
-  // gadgets.window.adjustHeight();
 });
 
 WebDoc.appInit = function() {
-  // WebDoc.registerInspectorPanes("settings");
   WebDoc.registerInspectorPanes(["settings", "style"]);
 }
 
@@ -26,7 +24,6 @@ WebDoc.appEnteredPreviewMode = function() {
   }
 };
 
-
 Poll = $.klass({
   initialize: function() {
     this.questionEl = $('.question');
@@ -36,9 +33,9 @@ Poll = $.klass({
     
     this.questionData = "Question?";
     this.answersData = [
-      "Answer 1",
-      "Answer 2",
-      "Answer 3"
+      "First answer",
+      "Second answer",
+      "Third answer"
     ];
     this.answers = [];
     this.parentWin = null;
@@ -85,7 +82,7 @@ Poll = $.klass({
   },
   
   buildLabel: function(html, index) {
-    return $('<label>').addClass('answer editable').attr({ "for":"answer_"+index, "name":"radio" }).html(html);
+    return $('<label>').addClass('answer').attr({ "for":"answer_"+index, "name":"radio" }).html(html);
   },
   
   buildEntry: function(type, html, index) {
@@ -100,6 +97,7 @@ Poll = $.klass({
     entryDiv.append($('<div>').addClass('spacer'));
     return entryDiv;
   },
+  
   setMultipleSelections: function(multiple) {
     var type = eval(multiple) ? 'checkbox' : 'radio';
     
@@ -116,24 +114,37 @@ Poll = $.klass({
   
   enableUI: function(flag) {
     if (flag) {
-      // enable inputs
       $.each(this.answers, function(index, answer){
+        // enable inputs
         answer.find('input').removeAttr("disabled");
+        
+        // make answers un-editable
+        answer.find('.answer').removeClass('editable');
       });
+      
+      $('.question').removeClass('editable');
       
       // enable vote button
       this.voteButton.removeAttr('disabled');
       this.voteButton.removeClass('disabled');
+      
     }
     else {
-      // disable inputs
       $.each(this.answers, function(index, answer){
+        // disable inputs
         answer.find('input').attr("disabled","disabled");
+        
+        // make answers editable
+        answer.find('.answer').addClass('editable');
       });
+      
+      $('.question').addClass('editable');
       
       // disable vote button
       this.voteButton.attr('disabled', 'disabled');
       this.voteButton.addClass('disabled');
+
+
     }
   }
 

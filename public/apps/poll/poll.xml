@@ -1,13 +1,13 @@
 <?xml version = "1.0" encoding="UTF-8" ?>
 <Module>
   
-  <ModulePrefs title = "Mnemiss poll module" height="400">
+  <ModulePrefs title = "WebDoc poll module" height="400">
     <Require feature = "opensocial-0.8" />
     <Require feature = "osapi" />
     <Require feature = "settitle" />
-    <!--<Require feature = "caja" />-->
     <Require feature = "views" />
     <Require feature = "dynamic-height"/>
+    <!--<Require feature = "caja" />-->
   </ModulePrefs>
   
   <Content type="html" view="home" href="views/home.html"></Content>

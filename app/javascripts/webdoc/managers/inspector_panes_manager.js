@@ -86,23 +86,26 @@ WebDoc.InspectorPanesManager = $.klass({
   
   createOpenFloatingInspectorButton: function() {
     if (!this.openFloatingInspectorButton) { //unless already created from the method below
-      this.openFloatingInspectorButton = $('<a href="" class="show_floating_inspector" title="Show inspectors"><span>Show inspectors</span></a>');
+      this.openFloatingInspectorButton = $('<a href="" class="show_floating_inspector" title="Show inspector"><span>Show inspector</span></a>');
       this.openFloatingInspectorButton.bind("click", function(event){
         event.preventDefault();
         this.showInspector();
       }.pBind(this));
+      this.openFloatingInspectorButton.hide();
       this.itemView.domNode.append(this.openFloatingInspectorButton);
     }
   },
   
-  showOpenFloatingInspectorButton: function(flag) {
-    if (!this.openFloatingInspectorButton) this.createOpenFloatingInspectorButton();
+  showOpenFloatingInspectorButton: function(flag) { //called from board_controller when switching mode (Edit/Preview)
+    if (this.panesCount() > 0) {
+      if (!this.openFloatingInspectorButton) this.createOpenFloatingInspectorButton();
     
-    if (flag) {
-      this.openFloatingInspectorButton.show();
-    }
-    else {
-      this.openFloatingInspectorButton.hide();
+      if (flag) {
+        this.openFloatingInspectorButton.show();
+      }
+      else {
+        this.openFloatingInspectorButton.hide();
+      }
     }
   },
   
@@ -133,7 +136,7 @@ WebDoc.InspectorPanesManager = $.klass({
     
     //start position adjustment poller
     if (this.positionPoller) clearInterval(this.positionPoller);
-    this.positionPoller = setInterval(this.updateAttachedPanePosition.pBind(this), 600);
+    this.positionPoller = setInterval(this.updateAttachedPanePosition.pBind(this), 800);
   },
   
   showPanesList_: function() { //do not call this directly, always call showInspector()

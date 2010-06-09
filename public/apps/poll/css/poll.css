@@ -29,14 +29,23 @@ body {
   background:-webkit-gradient(linear, left top, left bottom, color-stop(0, #d5dce3), color-stop(1, #c7cdd4));
   background-image:-moz-linear-gradient(top, #d5dce3, #c7cdd4);
   text-shadow:#e4e7eb 0 1px 0;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+
 /*  -webkit-border-radius:10px;
   -moz-border-radius:10px;
   -webkit-box-shadow:#aaa 0 1px 5px;
   -moz-box-shadow:#aaa 0 1px 5px;*/
 }
 
+.poll .question, .poll .answer {
+  border: 1px dashed transparent;
+}
+
 .poll .editable {
   border: 1px dashed transparent;
+  -webkit-user-select:none;
+  -moz-user-select:none;
 }
 
 .poll .editable:hover {border-color:#999;}
@@ -97,7 +106,7 @@ body {
   padding:0 1px;
   display:block;
   float:left;
-  width:166px;
+/*  width:166px;*/
 }
 
 .poll form .entry .actions a {
@@ -160,10 +169,10 @@ body {
 
 .poll form button.submit {
   position:relative;
-  top:5px;
+  top:8px;
   margin-top:10px;
   width:80px;
-  height:30px;
+  height:35px;
   border:1px solid #394046;
   text-shadow:#394046 0 -1px 0;
   background:-webkit-gradient(linear, left top, left bottom, color-stop(0, #777f83), color-stop(1, #4a535a));
