@@ -8,6 +8,8 @@ WebDoc.IframeController = $.klass({
 
     $("#property-iframe-src").change(this.updateSrc);
 
+    $("#set_page_size_to_iframe_size").click(this.setPageSizeToIframeize);
+
   },
 
   refresh: function() {
@@ -31,8 +33,18 @@ WebDoc.IframeController = $.klass({
         ddd(error);
       }
     });
-    
+  },
 
+  setPageSizeToIframeize: function(e) {
+    ddd('[iframe controller] set page size to item size');
+    var item = WebDoc.application.boardController.selection()[0].item;
+    if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IFRAME) {
+      ddd("[iframe controller] resize page to "+item.width()+"x"+item.height());
+      WebDoc.application.pageEditor.currentPage.setSize({width: item.width(), height: item.height()});
+      ddd("[iframe controller]: set iframe position to 00");
+      item.moveTo({ left: '0px', top: '0px' });
+      item.save();
+    }
   }
   
 });

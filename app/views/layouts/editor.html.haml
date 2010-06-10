@@ -9,6 +9,8 @@
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :page_editor, :media => 'all'    
     
+    <link id="theme" rel="stylesheet" href="" type="text/css">
+    
   -if params[:reader] == 'true'
     -current_class = 'editor mode-embed'
   -elsif params[:edit] == 'true'

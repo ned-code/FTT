@@ -2,7 +2,7 @@
 
 (function(WebDoc, jQuery, undefined){
 
-  var themeNode = jQuery('<div/>'),
+  var themeNode = jQuery('<div/>').css({ color: 'transparent' }),   // We need to put some value in here for all css properties that are inherited, or we won't be able to detect them
   		testNode = jQuery('<div/>').css({ position: 'absolute', top: -1, left: 0, width: 1, height: 1 }),
   		nullCssValues = {
   			'none': true,
@@ -12,10 +12,9 @@
   		};
 	
   // Find out if adding a class to testNode gives it
-  // a sense of style and panache
-  function detectClass( className, styles ){
-    var styleList = styles.split(' '),
-        l = styleList.length,
+  // a style
+  function detectClass( className, styleList ){
+    var l = styleList.length,
         flag = false,
         cssValue;
     
@@ -25,7 +24,7 @@
     
     while(l--) {
       cssValue = testNode.css( styleList[l] );
-
+      
       if ( cssValue && !nullCssValues[cssValue] ) {
         flag = true;
       }
@@ -41,7 +40,7 @@
     var i = 1,
         className = classPrefix + i;
     
-    while ( detectClass( className, styles ) ) {
+    while ( detectClass( className, styles.split(' ') ) ) {
       classlist.addClass( className );
       i++;
       // Guard against the detector parting en boucle.

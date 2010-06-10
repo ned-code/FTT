@@ -88,7 +88,7 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
   },
   
   open: function() {
-    window.location.href = "/documents/" + this._currentDocument.uuid()
+    window.location.href = "/documents/" + this._currentDocument.uuid() + "#" + this._currentPage.uuid();
   },
   
   _createViewerGUI: function() {
