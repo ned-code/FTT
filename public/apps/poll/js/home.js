@@ -5,11 +5,11 @@ gadgets.util.registerOnLoadHandler(function() {
   
   poll = new Poll();
   
-  WebDoc.adjustAppHeight();
 });
 
 WebDoc.appInit = function() {
   // WebDoc.registerInspectorPanes(["settings", "style"]);
+  WebDoc.adjustAppHeight();
   WebDoc.registerInspectorPanes(["settings"]);
 }
 
