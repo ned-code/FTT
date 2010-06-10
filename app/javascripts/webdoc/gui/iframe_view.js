@@ -37,6 +37,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     
     return function(e){
       ddd('[IframeView] _makeSetSrcEventHandler');
+			e.preventDefault();
       that.inputNode.validate({
         pass : function(){
           consolidateSrc = WebDoc.UrlUtils.consolidateSrc(that.inputNode.val());
