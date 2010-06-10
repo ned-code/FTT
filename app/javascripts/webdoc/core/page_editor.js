@@ -193,7 +193,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       this.currentDocument.addPage(newPage, true);      
       this.loadPage(newPage);
       
-      WebDoc.application.pageBrowserController.editPageTitle(newPage);
+      //WebDoc.application.pageBrowserController.editPageTitle(newPage);
       
     }.pBind(this));
   },

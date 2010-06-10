@@ -83,12 +83,12 @@ WebDoc.PageBrowserItemView = $.klass({
       .append( pageItemLoading );
       
       // Bind actions
-      function clickHandler(e) {
-        this.editTitle();
-        e.preventDefault();
-      }
+      //function clickHandler(e) {
+      //  this.editTitle();
+      //  e.preventDefault();
+      //}
       
-      pageItemEdit.bind( 'click', clickHandler.pBind(this) );
+      //pageItemEdit.bind( 'click', clickHandler.pBind(this) );
       //pageItemTitle.bind( 'dblclick', clickHandler.pBind(this) );
 
       page.document.addListener(this);
@@ -99,81 +99,81 @@ WebDoc.PageBrowserItemView = $.klass({
     }
   },
   
-  editTitle: function( str ) {
-    var self = this,
-        node,
-        popOptions;
-    
-    if ( typeof str === 'undefined' ) {
-      
-      popOptions = {
-        // Some of these should really be put in a global setup
-        popWrapClass: 'ui ui-pop-position',
-        popClass: 'ui-pop ui-widget ui-corner-all',
-        width: '12em',
-        openEasing: 'easeOutBack',
-        shutEasing: 'easeInQuart'
-      };
-      
-      // Decide where to trigger the pop
-      if ( WebDoc.application.pageBrowserController.visible ) {
-        node = this._titleEditNode;
-        node.css({ display: 'block' });
-        
-        popOptions.closeCallback = function(){
-          node.css({ display: '' });
-        }
-      } else {
-        // TODO: We lack a way of knowing what was clicked.
-        node = jQuery(".toolbar-panel a[href='#add-page']");
-        
-        popOptions.orientation = 'bottom';
-      }
-      
-      this._popForm.pop(
-        jQuery.extend( popOptions, {
-          attachTo: node,
-          initCallback: function(){
-            var currentTitle = self.page.getTitle();
-            
-            // It returns the string 'undefined'
-            if (currentTitle === undefined || currentTitle === 'undefined') {
-              self._popTitle.addClass( 'default' );
-            }
-            else {
-              self._popTitle.val( currentTitle );
-            }
-            
-            self._popTitle.bind('keyup', function(){
-                
-              if ( self._popTitle.val().length === 0 ) {
-                self._popTitle.addClass( 'default' );
-              }
-              else {
-                self._popTitle.removeClass( 'default' );
-              }
-            });
-            
-            // Bind stuff to do on submit
-            self._popForm.bind('submit', function(e){
-              self.page.setTitle( self._popTitle.val() );
-              self._popForm.trigger('close');
-              
-              return false;
-            });
-            
-            // Give the input focus
-            self._popTitle.focus();
-          }
-        })
-      );
-    }
-    else {
-      // _changeTitle for string
-    }
-    
-    return false;
-  },
+//  editTitle: function( str ) {
+//    var self = this,
+//        node,
+//        popOptions;
+//    
+//    if ( typeof str === 'undefined' ) {
+//      
+//      popOptions = {
+//        // Some of these should really be put in a global setup
+//        popWrapClass: 'ui ui-pop-position',
+//        popClass: 'ui-pop ui-widget ui-corner-all',
+//        width: '12em',
+//        openEasing: 'easeOutBack',
+//        shutEasing: 'easeInQuart'
+//      };
+//      
+//      // Decide where to trigger the pop
+//      if ( WebDoc.application.pageBrowserController.visible ) {
+//        node = this._titleEditNode;
+//        node.css({ display: 'block' });
+//        
+//        popOptions.closeCallback = function(){
+//          node.css({ display: '' });
+//        }
+//      } else {
+//        // TODO: We lack a way of knowing what was clicked.
+//        node = jQuery(".toolbar-panel a[href='#add-page']");
+//        
+//        popOptions.orientation = 'bottom';
+//      }
+//      
+//      this._popForm.pop(
+//        jQuery.extend( popOptions, {
+//          attachTo: node,
+//          initCallback: function(){
+//            var currentTitle = self.page.getTitle();
+//            
+//            // It returns the string 'undefined'
+//            if (currentTitle === undefined || currentTitle === 'undefined') {
+//              self._popTitle.addClass( 'default' );
+//            }
+//            else {
+//              self._popTitle.val( currentTitle );
+//            }
+//            
+//            self._popTitle.bind('keyup', function(){
+//                
+//              if ( self._popTitle.val().length === 0 ) {
+//                self._popTitle.addClass( 'default' );
+//              }
+//              else {
+//                self._popTitle.removeClass( 'default' );
+//              }
+//            });
+//            
+//            // Bind stuff to do on submit
+//            self._popForm.bind('submit', function(e){
+//              self.page.setTitle( self._popTitle.val() );
+//              self._popForm.trigger('close');
+//              
+//              return false;
+//            });
+//            
+//            // Give the input focus
+//            self._popTitle.focus();
+//          }
+//        })
+//      );
+//    }
+//    else {
+//      // _changeTitle for string
+//    }
+//    
+//    return false;
+//  },
   
   destroy: function() {
     ddd("destroy page browser item view", this);

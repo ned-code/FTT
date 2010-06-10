@@ -243,12 +243,12 @@ WebDoc.PageBrowserController = $.klass({
     }
   },
   
-  editPageTitle: function(page){
-    ddd('[pageBrowserController] editPageTitle');
-    var currentPageItem = this.pageMap[ page.uuid() ];
-    
-    currentPageItem.editTitle();
-  },
+//  editPageTitle: function(page){
+//    ddd('[pageBrowserController] editPageTitle');
+//    var currentPageItem = this.pageMap[ page.uuid() ];
+//    
+//    currentPageItem.editTitle();
+//  },
   
   addPageUrl: function(){
     ddd('[pageBrowserController] editPageUrl');
