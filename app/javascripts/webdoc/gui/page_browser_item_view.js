@@ -30,25 +30,27 @@ WebDoc.PageBrowserItemView = $.klass({
     try {
       var titleObj = this.getPageTitle(page),
           pageItem = $('<li/>'),
-          //pageItemTitle = $('<div/>').addClass( this.TITLE_CLASS ),
+          pageItemScreen = jQuery('<div/>', { 'class': "layer" }),
           pageItemNumber = $('<span/>').addClass(numberClass),
-          pageItemEdit = $('<a/>', {href: '#pop', target: 'pop', title: 'Click to edit'}).addClass( this.EDIT_ICON_CLASS ).html('<span>edit</span>'),
+          //pageItemTitle = $('<div/>').addClass( this.TITLE_CLASS ),
+          //pageItemEdit = $('<a/>', {href: '#pop', target: 'pop', title: 'Click to edit'}).addClass( this.EDIT_ICON_CLASS ).html('<span>edit</span>'),
           pageItemLoading = $('<span/>').addClass( this.LOADING_ICON_CLASS ),
           pageItemThumb = $('<div/>').addClass( this.THUMB_CLASS + " " + page.document.styleClass() ),
-          pageItemThumbView = new WebDoc.PageThumbnailView(page, 128, 128).domNode,
-          popForm = $('<form/>', { method: 'post', 'class': 'ui-pop-page-title' }),
-          popLabel = $('<label/>', { 'class': 'underlay' }).text('enter a title'),
-          popTitle = $('<input/>', { type: 'text', title: 'Page title', name: 'page-title', value: '', autocomplete: 'off' }),
-          popActions = $('<div/>', { 'class': "ui-actions" }),
-          popSubmit = $('<input/>', { type: 'submit', name: 'page-title-form', value: 'Save' }),
-          popCancel = $('<a/>', { href: '#cancel', 'class': cancelClass, html: 'cancel' });
+          pageItemThumbView = new WebDoc.PageThumbnailView(page, 128, 128).domNode;
+          //popForm = $('<form/>', { method: 'post', 'class': 'ui-pop-page-title' }),
+          //popLabel = $('<label/>', { 'class': 'underlay' }).text('enter a title'),
+          //popTitle = $('<input/>', { type: 'text', title: 'Page title', name: 'page-title', value: '', autocomplete: 'off' }),
+          //popActions = $('<div/>', { 'class': "ui-actions" }),
+          //popSubmit = $('<input/>', { type: 'submit', name: 'page-title-form', value: 'Save' }),
+          //popCancel = $('<a/>', { href: '#cancel', 'class': cancelClass, html: 'cancel' })
+          ;
       
       this.domNode = pageItem;
       this.thumbNode = pageItemThumb;
       //this._titleNode = pageItemTitle;
-      this._titleEditNode = pageItemEdit;
-      this._popForm = popForm;
-      this._popTitle = popTitle;
+      //this._titleEditNode = pageItemEdit;
+      //this._popForm = popForm;
+      //this._popTitle = popTitle;
       
       // If the title is default
       //if(titleObj.defaultBehavior) {
@@ -59,14 +61,14 @@ WebDoc.PageBrowserItemView = $.klass({
       //}
       
       // Construct Pop DOM Tree
-      popForm
-      .append( popLabel )
-      .append( popTitle )
-      .append(
-        popActions
-        .append( popCancel )
-        .append( popSubmit )
-      );
+      //popForm
+      //.append( popLabel )
+      //.append( popTitle )
+      //.append(
+      //  popActions
+      //  .append( popCancel )
+      //  .append( popSubmit )
+      //);
       
       // Construct Item DOM tree
       pageItem
@@ -78,7 +80,8 @@ WebDoc.PageBrowserItemView = $.klass({
         pageItemThumb
         .append( pageItemThumbView )
       )
-      .append( pageItemEdit )
+      //.append( pageItemEdit )
+      .append( pageItemScreen )
       .append( pageItemNumber )
       .append( pageItemLoading );
       
