@@ -95,7 +95,7 @@ WebDoc.ImagePaletteController = $.klass({
       var image = new Image();
       image.src = item.data.data.src;
       ddd("restore original size: "+image.width+"x"+image.height+"px");
-      WebDoc.ItemView.restoreSize(item, { width: image.width, height: image.height});
+      WebDoc.ItemView.restoreSize(item, { width: image.width+"px", height: image.height+"px"});
     }
   },
 
@@ -106,6 +106,7 @@ WebDoc.ImagePaletteController = $.klass({
       WebDoc.application.pageEditor.currentPage.setSize({width: item.width(), height: item.height()});
       ddd("[image palette controller]: set image position to 00");
       item.moveTo({ left: '0px', top: '0px' });
+      item.save();
     }
   },
 

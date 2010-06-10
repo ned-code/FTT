@@ -12,6 +12,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     // initialize relationship before super.
     this.firstPosition = 0;
     this.lastPosition = 0;
+    this.lastDrawingItemPosition = -1;
     this._layout = undefined;
     this.items = [];
     this._itemsToRemoveAfterSave = [];
@@ -100,9 +101,16 @@ WebDoc.Page = $.klass(WebDoc.Record,
       return this.data.data.css.height.toString();
     }
     else {
-      var result = parseFloat(this.data.data.css.height);
-      if (this.data.data.css.height.match(/\%/)) {
-        result = this.DEFAULT_PAGE_HEIGHT_PX * (result/100);
+      var pageHeight = this.data.data.css.height;
+      var result = parseFloat(pageHeight);
+      if (pageHeight.match(/\%/)) {
+        var documentHeight = this.document.data.size.height;
+        if (documentHeight.match(/\%/)) {
+          result = this.DEFAULT_PAGE_HEIGHT_PX * (result / 100);
+        }
+        else {
+          result = parseFloat(documentHeight);
+        }
       }
       return result;
     }
@@ -129,9 +137,16 @@ WebDoc.Page = $.klass(WebDoc.Record,
       return this.data.data.css.width.toString();
     }
     else {
-      var result = parseFloat(this.data.data.css.width);
-      if (this.data.data.css.width.match(/\%/)) {
-        result = this.DEFAULT_PAGE_WIDTH_PX * (result/100);
+      var pageWidth = this.data.data.css.width;
+      var result = parseFloat(pageWidth);
+      if (pageWidth.match(/\%/)) {
+        var documentWidth = this.document.data.size.width;
+        if (documentWidth.match(/\%/)) {
+          result = this.DEFAULT_PAGE_WIDTH_PX * (result / 100);
+        }
+        else {
+          result = parseFloat(documentWidth);
+        }
       }
       return result;      
     }
@@ -234,13 +249,16 @@ WebDoc.Page = $.klass(WebDoc.Record,
     if (json.page.items && $.isArray(json.page.items)) {
       var that = this;
       this.items = [];
-      this.nonDrawingItems = [];        
+      this.nonDrawingItems = [];   
+      this.lastDrawingItemPosition = -1;     
+      this.firstPosition = 0;
+      this.lastPosition = 0;      
       this.data.items.sort(function(a,b) {
         a.position = a.position?a.position:0;
         b.position = b.position?b.position:0;
         return a.position - b.position;
       });
-      for (var i = this.data.items.length -1; i >= 0; i--) {
+      for (var i = 0; i < this.data.items.length; i++) {
         var itemData = this.data.items[i];
         that.createOrUpdateItem({ item: itemData });
       }
@@ -322,7 +340,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
       return a.data.position - b.data.position;
     });    
     var afterItem = null;
-    if (item.data.media_type != WebDoc.ITEM_TYPE_DRAWING) {
+    if (item.data.media_type !== WebDoc.ITEM_TYPE_DRAWING) {
       this.nonDrawingItems.push(item);
       this.nonDrawingItems.sort(function(a,b) {
         return a.data.position - b.data.position;
@@ -338,6 +356,15 @@ WebDoc.Page = $.klass(WebDoc.Record,
         afterItem = this.nonDrawingItems[afterItemIndex];
       }
     }        
+    else {
+      if (item.data.position && item.data.position > this.lastDrawingItemPosition) {
+        this.lastDrawingItemPosition = item.data.position;
+      }
+      else {
+        this.lastDrawingItemPosition += 1;
+        item.data.position = this.lastDrawingItemPosition;
+      }
+    }
     this.fireItemAdded(item, afterItem);    
   },
   

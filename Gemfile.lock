@@ -232,7 +232,7 @@ specs:
 - gem_plugin: 
     version: 0.2.3
 - haml: 
-    version: 3.0.10
+    version: 3.0.11
 - i18n: 
     version: 0.4.1
 - rails: 

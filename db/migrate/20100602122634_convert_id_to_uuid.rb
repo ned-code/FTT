@@ -128,18 +128,23 @@ class ConvertIdToUuid < ActiveRecord::Migration
         d.theme_id = theme_default.uuid
         d.style_url = theme_default.style_url
       end
-      d.save(false)
+      if (d.size.blank? || d == 'null')
+        d.size = { :width => '800px', :height => '600px'}
+      end
+      d.save(false)      
     end
     
     #Followship
     p "updating Followship"
     Followship.all.each do |f|
-      follower = User.find(f.follower_id)
-      following = User.find(f.following_id)
+      follower = User.find_by_id(f.follower_id)
+      following = User.find_by_id(f.following_id)
       
       #f.save(false)
-      execute "UPDATE followships SET follower_id='#{follower.uuid}' where follower_id='#{f.follower_id}' AND following_id='#{f.following_id}'"
-      execute "UPDATE followships SET following_id='#{following.uuid}' where follower_id='#{follower.uuid}' AND following_id='#{f.following_id}'"
+      if (follower && following)
+        execute "UPDATE followships SET follower_id='#{follower.uuid}' where follower_id='#{f.follower_id}' AND following_id='#{f.following_id}'"
+        execute "UPDATE followships SET following_id='#{following.uuid}' where follower_id='#{follower.uuid}' AND following_id='#{f.following_id}'"
+      end
     end
     
     #Item
