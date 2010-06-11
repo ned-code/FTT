@@ -210,12 +210,7 @@ WebDoc.BoardController = jQuery.klass({
 //        v.inspectorPanesManager.showOpenFloatingInspectorButton(!state);
 //      }
 //    });
-    if (state) {
-      jQuery(".show_floating_inspector").hide();
-    }
-    else {
-      jQuery(".show_floating_inspector").show();
-    }
+
     if (WebDoc.appsContainer) {
       WebDoc.appsMessagingController.notifyModeChanged(!state);
     }

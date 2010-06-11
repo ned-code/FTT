@@ -135,7 +135,7 @@
 /* ========= */
 .item_wrap a.show_floating_inspector {
   border:none;
-  display:block;
+  display:none;
   width:15px;
   height:15px;
   background:url(images/inspectors/i.png) no-repeat;
@@ -143,6 +143,9 @@
   bottom:10px;
   right:10px;
   z-index:2;
+}
+.mode-edit .item_selected a.show_floating_inspector {
+  display:block;
 }
 
 .item_wrap a.show_floating_inspector:hover {

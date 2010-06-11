@@ -111,13 +111,7 @@ WebDoc.InspectorPanesManager = $.klass({
         event.preventDefault();
         this.showInspector(correspondingItemView);
       }.pBind(this));
-      
-      if (itemView._editable) { // true is current page is in Edit mode, false if it's in Preview mode
-        openFloatingInspectorButton.show();
-      }
-      else {
-        openFloatingInspectorButton.hide();
-      }      
+       
       itemView.domNode.append(openFloatingInspectorButton);
     }
   },
