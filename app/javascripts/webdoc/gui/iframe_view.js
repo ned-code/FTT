@@ -97,7 +97,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   },
   
   inspectorId: function() {
-    return 6;
+    return 5;
   }
 
 });

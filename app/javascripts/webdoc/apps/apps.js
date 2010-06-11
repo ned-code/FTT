@@ -169,7 +169,7 @@ WebDoc.App = $.klass(WebDoc.OpenSocialApp, {
       
     }.pBind(this));
     
-    this.appView.inspectorPanesManager.createOpenFloatingInspectorButton();
+    this.appView.inspectorPanesManager.createOpenFloatingInspectorButton(this.appView);
   }
 
 });

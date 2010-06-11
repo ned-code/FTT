@@ -6,7 +6,7 @@ WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector ) {
     var domNode = this.domNode = $(selector);
     
-    jQuery('#item_inspector')
+    jQuery(selector)
     .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
     .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ));
@@ -15,25 +15,29 @@ WebDoc.PropertiesInspectorController = $.klass({
     .bind( 'load', jQuery.proxy( this, '_makeThemeBackgrounds' ) );
     
     this.fields = {
-      top:              jQuery("#property_top"),
+      top:              jQuery(selector + " #property_top"),
       //right:            jQuery("#property_right"),
       //bottom:           jQuery("#property_bottom"),
-      left:             jQuery("#property_left"),
-      width:            jQuery("#property_width"),
-      height:           jQuery("#property_height"),
-      rotation:         jQuery("#property_rotation"),
+      left:             jQuery(selector + " #property_left"),
+      width:            jQuery(selector + " #property_width"),
+      height:           jQuery(selector + " #property_height"),
+      rotation:         jQuery(selector + " #property_rotation"),
       
-      color:            jQuery("#property_color"),
-      backgroundColor:  jQuery("#property_background_color"),
-      padding:          jQuery("#property_padding"),
-      borderRadius:     jQuery("#property_border_radius"),
-      scroll:           jQuery("#property_scroll"),
-      overflow:         jQuery("#property_overflow_hidden, #property_overflow_auto, #property_overflow_visible"),
-      opacity:          jQuery("#property_opacity, #property_opacity_readout")
+      color:            jQuery(selector + " #property_color"),
+      backgroundColor:  jQuery(selector + " #property_background_color"),
+      padding:          jQuery(selector + " #property_padding"),
+      borderRadius:     jQuery(selector + " #property_border_radius"),
+      scroll:           jQuery(selector + " #property_scroll"),
+      overflow:         jQuery(selector + " #property_overflow_hidden, " + selector +" #property_overflow_auto, " + selector +" #property_overflow_visible"),
+      opacity:          jQuery(selector + " #property_opacity, " + selector +" #property_opacity_readout")
     };
     
     this._themeBgColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"}).css('clear', 'both');
     this._themeBgState = false;
+  },
+  
+  inspectorTitle: function() {
+    return "properties";  
   },
   
   _makeThemeBackgrounds: function() {
@@ -250,4 +254,9 @@ WebDoc.PropertiesInspectorController = $.klass({
   }
 });
 
+WebDoc.ImagePropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
+  initialize: function($super, selector) {
+    $super("#image-property-inspector");
+  }
+});
 

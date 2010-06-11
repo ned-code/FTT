@@ -1,6 +1,8 @@
 /**
  * @author julien
  */
+WebDoc.IMAGE_INSPECTOR_GROUP = "ImageInspectorGroup";
+
 WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   
   // Classes applied to the item in initItemClass
@@ -25,9 +27,18 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     $super(item, pageView, afterItem);
     
     this._zoom();
-    this._displace();
+    this._displace();    
+    this.inspectorPanesManager.createOpenFloatingInspectorButton(this);
   },
 
+  inspectorGroupName: function() {
+    return WebDoc.IMAGE_INSPECTOR_GROUP;  
+  },
+    
+  inspectorControllersClasses: function() {
+    return [WebDoc.ImagePaletteController, WebDoc.ImagePropertiesInspectorController];
+  },
+  
   objectChanged: function($super, item, options) {
     $super(item, options);
     if (item._isAttributeModified(options, 'zoom')) {
@@ -80,6 +91,6 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   },
   
   inspectorId: function() {
-    return 4;
+    return 0;
   }
 });

@@ -76,6 +76,7 @@ WebDoc.ItemView = $.klass({
     
     this._initItemClass();
     this._initItemCss(false);
+    this.inspectorPanesManager = WebDoc.InspectorPanesManager.instanceFor(this); 
   },
   
   _initItemClass: function() {
@@ -211,6 +212,7 @@ WebDoc.ItemView = $.klass({
     if (item._isAttributeModified(options, 'class')) {
       this._initItemClass();
     }
+    this.inspectorPanesManager.updateAttachedPanePositionAndContent(this);    
   },
 
   innerHtmlChanged: function() {
@@ -251,15 +253,16 @@ WebDoc.ItemView = $.klass({
       this._initDragAndResize();      
       if (lastSelectedObjectMouseDownEvent) {
         this.domNode.trigger(lastSelectedObjectMouseDownEvent);
-      }
-      
+      }      
     }
+    this.inspectorPanesManager.itemDidSelect(this);    
   },
   
   unSelect: function() {
     this.domNode.removeClass("item_selected");
     this.domNode.draggable( 'destroy' );
     this.domNode.resizable( 'destroy' );
+    this.inspectorPanesManager.itemDidUnselect(this);    
   },
   
   canEdit: function() {
@@ -270,6 +273,7 @@ WebDoc.ItemView = $.klass({
     //by default item views are not editable (if your item is editable override this method in the subclass) 
     WebDoc.application.rightBarController.showItemInspector();    
     WebDoc.application.inspectorController.selectPalette(this.inspectorId());
+    this.domNode.addClass("item-edited");    
   },
   
   stopEditing: function() {

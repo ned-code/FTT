@@ -17,7 +17,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     ddd('[InspectorController] initialize');    
     var emptyPalette = $("#empty-inspector").hide();
     var penPelette = $("#draw-inspector").hide();
-    var imagePelette = $("#image-inspector").hide();
     var iframePelette = $("#iframe-inspector").hide();
     
     // Get DOM node
@@ -26,7 +25,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     this.visible = true;
     this.widgetInspectorApi = new WebDoc.WidgetApi(null, true);
     
-    this.imageInspector = new WebDoc.ImagePaletteController( "#image-inspector" );
     this.textInspector = new WebDoc.TextPaletteController( "#text-inspector" );
     this.htmlInspector = new WebDoc.InnerHtmlController( "#html-inspector" );
     this.iframeInspector = new WebDoc.IframeController( "#iframe-inspector" );
@@ -64,7 +62,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
       this.textInspector.domNode,
       penPelette,
       widgetPalette,
-      this.imageInspector.domNode,
       this.htmlInspector.domNode,
       this.iframeInspector.domNode
     ];
@@ -103,9 +100,8 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
         this.currentInspectorId = 3;
       }
       // Inspector is native
-      else {
-        this.currentInspectorId = paletteId;
-      }
+
+      this.currentInspectorId = paletteId;
       
       inspectorNode = this._inspectorNodes[this.currentInspectorId];
       inspectorNode.show();
@@ -170,9 +166,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
             widgetObject._onLoad();
           }
         }
-        break;
-      case 4:
-        this.imageInspector.refresh();
         break;
       case 5:
         this.htmlInspector.refresh();

@@ -1,57 +1,60 @@
-<div class="inspector" id="image-inspector">
-  <div class="head">
-    <div>
-      <div class="inspector-title">Image</div>
-    </div>
-  </div>
-  
-  <div class="foot"></div>
-  
-  <div class="content">
-    <form>
-      <fieldset class="properties">
-        <div>
-          <label class="properties_label">Image URL</label>
-          <input type="text" id="property_src" />
+<div id="image-inspector">
+  <div>
+    <form class="content">
+      <div class="section">
+        <div class="entry">
+          <label>
+            Image URL              
+            <input type="text" id="property_src" />
+          </label>
         </div>
-        
-        <div>
-          <label class="properties_label">Original size</label>
-          <input type="button" value="Original size" id="restore_original_size" />
+        <div class="entry">
+          <label>
+            Original size
+            <input type="button" value="Original size" id="restore_original_size" />
+          </label>
+        </div>        
+        <div class="entry">
+          <label>
+            Set as page
+            <input type="button" value="Set" id="set_page_size_to_image_size" />
+          </label>
         </div>
-
-        <div>
-          <label class="properties_label">Set as page</label>
-          <input type="button" value="Set" id="set_page_size_to_image_size" />
-        </div>
-        
-        <div>
-          <label>Preserve aspect ratio</label>
-          <input type="checkbox" id="preserve_aspect_ratio" checked="checked" />
-        </div>
-        
-        <div>
+        <div class="entry">
+          <label>
+            <input type="checkbox" id="preserve_aspect_ratio" checked="checked" />
+            Preserve aspect ratio
+          </label>
+        </div>      
+        <div class="entry">
           <div>
             <a href="#add_to_my_images">Add to my images</a>
           </div>
           <div id="add_to_my_images_result"></div>
+        </div>                             
+      </div>
+      <hr class="separator"/>
+      <div class="section">
+        <h4>Crop</h4>
+        <div class="entry">
+          <label>
+            Zoom
+            <input type="range" id="image_zoom" min="0" max="400" step="1" />
+          </label>
         </div>
-      </fieldset>
-      
-      <fieldset class="properties">
-        <div>
-          <label>Zoom</label>
-          <input type="range" id="image_zoom" min="0" max="400" step="1" />
+        <div class="entry">
+          <label>
+            X Shift
+            <input type="range" id="image_xshift" min="0" max="400" step="1" />
+          </label>
         </div>
-        <div>
-          <label>X Shift</label>
-          <input type="range" id="image_xshift" min="0" max="400" step="1" />
-        </div>
-        <div>
-          <label>Y Shift</label>
-          <input type="range" id="image_yshift" min="0" max="400" step="1" />
-        </div>
-      </fieldset>
+        <div class="entry">
+          <label>
+            Y Shift
+            <input type="range" id="image_yshift" min="0" max="400" step="1" />
+          </label>
+        </div>                    
+      </div>        
     </form>
   </div>
 </div>

@@ -41,7 +41,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     else if (this.item.media && this.item.media.data.properties.inspector_url) {
       return this.item.media.data.properties.inspector_url;
     }
-    return 5;
+    return 4;
   },
   
   innerHtmlChanged: function($super) {
@@ -84,7 +84,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   edit: function($super){
     $super();
-    this.domNode.addClass("item-edited");
     this.itemLayerDomNode.hide();    
     this.placeholderNode.remove();
   },

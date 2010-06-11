@@ -20,8 +20,6 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
     this.domNode
     .addClass("item-app")
     .delegate('.item-placeholder', 'submit', this._makeSetGadgetUrlEventHandler());
-    
-    this.inspectorPanesManager = new WebDoc.InspectorPanesManager(this);
   },
   
   createDomNode: function($super) {
@@ -77,9 +75,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   },
   
   objectChanged: function($super, item, options) {
-    $super(item, options);
-    
-    this.inspectorPanesManager.updateAttachedPanePosition();
+    $super(item, options);    
   },
   
   adjustHeight: function(height) {
@@ -91,24 +87,22 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   
   removeAppAndPanes: function() {
     if (this.app) {
+      this.inspectorPanesManager.destroy();    
       WebDoc.appsContainer.removeApp(this.app);
       this.app = null;
-      this.inspectorPanesManager.destroy();
     }
   },
   
   select: function($super) {
     $super();
     
-    this.inspectorPanesManager.itemDidSelect();
     
     //avoid resizing at the moment....
-    this.domNode.resizable( 'destroy' );
+    //this.domNode.resizable( 'destroy' );
   },
   
   unSelect: function($super) {
     $super();
-    this.inspectorPanesManager.itemDidUnselect();
   },
   
   canEdit: function() {

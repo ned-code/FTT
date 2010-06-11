@@ -2,20 +2,20 @@
  * @author Julien Bachmann
  */
 WebDoc.ImagePaletteController = $.klass({
-  initialize: function( selector ) {
-    this.domNode = $( selector );
+  initialize: function( ) {
+    this.domNode = $( "#image-inspector" );
 
     this.propertySrc = $("#property_src");
     this.propertySrc.blur(this.updateSrc.pBind(this));
 
-    $("#restore_original_size").click(this.restoreOriginalSize);
+    this.domNode.find("#restore_original_size").click(this.restoreOriginalSize);
     
-    $("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
+    this.domNode.find("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
 
-    $("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
+    this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
-    this.addToMyImageLink = $(selector + " a[href=#add_to_my_images]");
-    this.addToMyImageResult = $(selector + " #add_to_my_images_result");
+    this.addToMyImageLink = this.domNode.find("a[href=#add_to_my_images]");
+    this.addToMyImageResult = this.domNode.find("#add_to_my_images_result");
     
     this.addToMyImageLink.click(this.addToMyImage.pBind(this));
     
@@ -54,6 +54,10 @@ WebDoc.ImagePaletteController = $.klass({
       });
       that._delayItemSave(item);
     });
+  },
+  
+  inspectorTitle: function() {
+    return "Image";  
   },
   
   refresh: function() {

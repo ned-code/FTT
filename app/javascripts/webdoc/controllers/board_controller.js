@@ -204,12 +204,18 @@ WebDoc.BoardController = jQuery.klass({
     }
     
     // Apps/Inspectors
-    var allItemsViews = this.currentPageView().itemViews;
-    $.each(allItemsViews, function(k, v) {
-      if (v.inspectorPanesManager) {
-        v.inspectorPanesManager.showOpenFloatingInspectorButton(!state);
-      }
-    });
+//    var allItemsViews = this.currentPageView().itemViews;
+//    $.each(allItemsViews, function(k, v) {
+//      if (v.inspectorPanesManager) {
+//        v.inspectorPanesManager.showOpenFloatingInspectorButton(!state);
+//      }
+//    });
+    if (state) {
+      jQuery(".show_floating_inspector").hide();
+    }
+    else {
+      jQuery(".show_floating_inspector").show();
+    }
     if (WebDoc.appsContainer) {
       WebDoc.appsMessagingController.notifyModeChanged(!state);
     }

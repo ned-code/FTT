@@ -6,6 +6,10 @@
   color:#fff;
 }
 
+.inspector_pane_wrap {
+  z-index: 1500001;  
+}
+
 .inspector_pane.floating {
   padding:10px 10px 15px;
   width:200px;
@@ -147,5 +151,17 @@
 
 .item_wrap a.show_floating_inspector span {display:none;}
 
+
+.content {
+  padding:0 10px;
+}
+
+form.content .section {
+  padding:8px 0;
+}
+
+form.content .entry {
+  padding:5px 0;
+}
 
 
