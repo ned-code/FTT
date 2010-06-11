@@ -34,9 +34,11 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   
   _makeSetSrcEventHandler: function(){
     var that = this;
-
+		
     return function(e){
-				
+			if (that.inputNode.attr('value') == ''){
+				return false;
+			}
 			window.onbeforeunload = function (evt) { 
 				var message = 'You add a web page that automatic redirect to his domaine. Please press Cancel'; 
 				that.item.setSrc( '' );
