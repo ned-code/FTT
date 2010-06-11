@@ -39,8 +39,8 @@ WebDoc.ItemView = $.klass({
     
     this._editable = pageView.isEditable();
     // item wrapper
-    this.domNode = $("<div/>").addClass('item_wrap');
-    
+    this.domNode = $("<div/>").addClass('item_wrap').css("zIndex", 500000 + this.item.positionZ());
+
     this.itemLayerDomNode = $("<div>").addClass("layer item-layer").css("display", this._editable? "block" : "none");    
     this.itemDomNode = this.createDomNode();
     
@@ -103,7 +103,7 @@ WebDoc.ItemView = $.klass({
     var domNode = this.domNode,
         itemDomNode = this.itemDomNode,
         css = this.item.data.data.css,
-        wrapCss = {},
+        wrapCss = { zIndex: 500000 + this.item.positionZ() },
         itemCss = { overflow: 'hidden' },
         key, timer;
     
@@ -274,9 +274,11 @@ WebDoc.ItemView = $.klass({
     WebDoc.application.rightBarController.showItemInspector();    
     WebDoc.application.inspectorController.selectPalette(this.inspectorId());
     this.domNode.addClass("item-edited");    
+    this.domNode.css("zIndex", "");
   },
   
   stopEditing: function() {
+    this.domNode.css("zIndex", 500000 + this.item.positionZ());
   },
   
   destroy: function() {
