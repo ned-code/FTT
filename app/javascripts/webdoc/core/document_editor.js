@@ -164,7 +164,9 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         previousHeight = editedDocument.size().height;
 
     that.editedDocument = editedDocument;
-
+		
+		infoDialogNode.delegate("a.set_size", 'click', that.setSizeByName.pBind(this) );
+		
     infoDialogHeaderNode.html("Edit webdoc info");
     infoDialogTitleNode.val( previousName );
     infoDialogDescriptionNode.val( previousDescription );
