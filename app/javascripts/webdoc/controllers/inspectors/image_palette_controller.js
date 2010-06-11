@@ -14,6 +14,24 @@ WebDoc.ImagePaletteController = $.klass({
 
     $("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
+    this.addImageLink = $(selector + " a[href=#create_image_link]");
+    this.linkFormController = new WebDoc.LinkFormController();
+    this.addImageLink.click(function(e){
+      this.selectedElement = WebDoc.application.boardController.selection()[0];
+      this.linkFormController.showDialog(e, this.selectedElement.item.data.data.href, function(newLink){
+        if (this.selectedElement && this.selectedElement.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+          this.selectedElement.item.data.data.href = newLink;
+          this.selectedElement.item.save(function() {
+            this.selectedElement.item.fireDomNodeChanged();
+            this.refresh();
+          }.pBind(this));
+        }
+      }.pBind(this));
+    }.pBind(this));
+
+    this.clearImageLink = $(selector + " a[href=#clear_image_link]");
+    this.clearImageLink.click(this._clearLink.pBind(this));
+    
     this.addToMyImageLink = $(selector + " a[href=#add_to_my_images]");
     this.addToMyImageResult = $(selector + " #add_to_my_images_result");
     
@@ -76,6 +94,14 @@ WebDoc.ImagePaletteController = $.klass({
         this.zoomNode[0].value = selectedItem.item.getZoom();
         this.xshiftNode[0].value = selectedItem.item.getDisplacement().left;
         this.yshiftNode[0].value = selectedItem.item.getDisplacement().top;
+        if(selectedItem.item.data.data.href) {
+          this.addImageLink.text('Edit link');
+          this.clearImageLink.show();
+        }
+        else {
+          this.addImageLink.text('Create link');
+          this.clearImageLink.hide();
+        }
       }
     }
   },
@@ -147,6 +173,21 @@ WebDoc.ImagePaletteController = $.klass({
       }
     }
     return false;
+  },
+
+  _clearLink: function() {
+    ddd('[ImagePaletteController] clear link');
+    this.selectedElement = WebDoc.application.boardController.selection()[0];
+    if (this.selectedElement && this.selectedElement.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+      var selectedItem = this.selectedElement.item;
+      if (selectedItem.data.data.href) {
+        selectedItem.data.data.href = "";
+        selectedItem.save(function() {
+          this.selectedElement.item.fireDomNodeChanged();
+          this.refresh();
+        }.pBind(this));
+      }
+    }
   },
   
   _delayItemSave: function(item) {
