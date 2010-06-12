@@ -29,7 +29,7 @@ WebDoc.PageBrowserItemView = $.klass({
     
     try {
       var titleObj = this.getPageTitle(page),
-          pageItem = $('<li/>'),
+          pageItem = $('<li/>', { draggable: "true" }),
           pageItemScreen = jQuery('<div/>', { 'class': "layer" }),
           pageItemNumber = $('<span/>').addClass(numberClass),
           //pageItemTitle = $('<div/>').addClass( this.TITLE_CLASS ),

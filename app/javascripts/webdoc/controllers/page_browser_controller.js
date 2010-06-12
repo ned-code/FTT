@@ -29,6 +29,8 @@ WebDoc.PageBrowserController = $.klass({
   initialize: function() {
     ddd("[PageBrowserController] init");
     
+    var that = this;
+    
     this.domNode = $("#left_bar");
     this.panelGhostNode = $( this.PANEL_GHOST_SELECTOR );
     this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
@@ -45,7 +47,15 @@ WebDoc.PageBrowserController = $.klass({
     ddd("[PageBrowserController] panel height: " + this._panelHeight);
     
     this.visible = true;
-    this.pageMap = {};    
+    this.pageMap = {};
+    
+    this.domNode
+    .bind('mouseenter', function(e){
+      that.show();
+    })
+    .bind('mouseleave', function(e){
+      that.hide();
+    });
   },
   
   setDocument: function(document) {
@@ -57,7 +67,8 @@ WebDoc.PageBrowserController = $.klass({
   _initializePageBrowser: function() {
     ddd('[PageBrowserController] Initialising Page Browser');
     
-    var pageBrowserItems = this.domNode.find( this.PAGE_BROWSER_ITEM_SELECTOR ),
+    var that = this,
+        pageBrowserItems = this.domNode.find( this.PAGE_BROWSER_ITEM_SELECTOR ),
         l = this._document.pages.length,
         page, pageItem, pageItemNode, pageListNumber;
     
@@ -84,36 +95,200 @@ WebDoc.PageBrowserController = $.klass({
     this._updateThumbs();
     
     if (WebDoc.application.boardController.isEditable()) {
-      pageBrowserItems.sortable({
-        axis: 'y',
-        distance: 8,
-        opacity: 0.8,
-        containment: '.content',
-        start:  this.dragStart.pBind(this),
-        update: this.dragUpdate.pBind(this),
-        change: function(e, ui){
-          var list = jQuery( e.target ),
-              items = list.children().not( ui.item[0] ),
-              numberSelector = this.NUMBER_SELECTOR,
-              self = this;
-          
-          items
-          .each(function(i){
-            var number = ( this === ui.placeholder[0] ) ? ui.item.find(numberSelector) : jQuery(numberSelector, this) ;
-            
-            number.html( i+1 );
-            
-            // Update current page number
-            if ( $(this).hasClass( self.CURRENT_CLASS ) ) {
-              $( self.PAGE_NUMBER_SELECTOR ).html( i+1 );
-            }
-            
-          });
-        }.pBind(this)
+      
+      // DRAG TO SORT -----------------------------------------------------------------------------------------
+      
+      // TODO: we gotta consider whether we extract the following
+      // drag-to-sort functionality. It could be reusable if we put
+      // it in it's own object, or made it a jQuery plugin. All we
+      // need to keep are the callbacks.
+      
+      var itemsList = pageBrowserItems;
+      var divide = 0.55;
+      var dragTarget;
+      var startState;
+      var changedFlag = false;
+      
+      itemsList.delegate('li', 'dragstart', function(e){
+        //console.log('EVENT '+e.type, e);
+        
+        var eOrig = e.originalEvent;
+        
+        dragTarget = jQuery(this).addClass('ghost');
+        startState = itemsList.children();
+        
+        eOrig.dataTransfer.setDragImage(this, 0, 0);
+        
+        that._dragStartCallback.call(that, e, dragTarget);
+      })
+      .delegate('li', 'dragenter dragover', function(e){
+        //console.log('EVENT '+e.type, e);
+        
+        var item, mouse, width, height, offset;
+        
+        e.preventDefault();
+        e.originalEvent.dataTransfer.dropEffect = "move";
+        
+        if (!dragTarget) {
+        	// drag is coming from outside so create dragTarget for this DOM
+        	
+        	dragTarget = jQuery('<li/>', {'class': 'ghost', text: 'What? from another document? Are you nuts?'})
+        }
+        
+        if (dragTarget[0] === this) {
+        	// Don't react to drags over the original dragTarget
+        	
+        	//console.log('This is the bloody dragTarget, numb nuts.');
+        	return;
+        }
+        
+        // Interrogate position to find out how far down the item we are
+        // dragging and move the dragTarget into position accordingly.
+        // Obviously, it's going to depend on whether the list is horizontal
+        // or vertical as to whother you test width or height.
+        
+        item = jQuery(this),
+        mouse = {
+          top: e.pageY,
+          left: e.pageX
+        },
+        //height = item.outerHeight(),
+        width = item.outerWidth(),
+        offset = item.offset();
+        
+        //if ( (mouse.top - offset.top) < (divide * height) ) {
+        if ( (mouse.left - offset.left) < (divide * width) ) {
+        	item.before(dragTarget);
+        }
+        else {
+        	item.after(dragTarget);
+        }
+        
+        that._dragUpdateCallback.call(that, e, dragTarget);
+        changedFlag = true;
+        
+        return false;
+      })
+      .bind('dragleave', function(e){
+      	//console.log('EVENT '+e.type, e);
+      	
+      	var container = jQuery(this),
+      			mouse, size;
+      	
+      	// In WebKit the dragleave event does not have a relatedTarget so
+      	// we need to detect by coordinates when elvis has left the building.
+      	// Note this is not going to work well when complex objects overhang
+      	// this container.
+      	
+      	mouse = {
+      	  left: e.pageX,
+      	  top: e.pageY
+      	};
+      	
+      	// In WebKit, dragleave is fired and mouse is reported as 0, 0 when
+      	// dragTarget is dropped on this container.  Mitigate.
+      	
+      	if ( this === e.target && (mouse.left + mouse.top) === 0 ) {
+      		return;
+      	} 
+      	
+      	size = container.offset();
+      	
+      	size.width = container.outerWidth();
+      	size.height = container.outerHeight();
+      	size.bottom = size.top + size.height;
+      	size.right = size.left + size.width;
+      	
+      	if ( mouse.left > size.left && mouse.left < size.right &&
+      	  	 mouse.top > size.top && mouse.top < size.bottom ) {
+      	  
+      	  // If we get here, we're still inside this container, so don't
+      	  // do anything.
+      	  
+      	  return;
+      	}
+      	
+      	// Put the list back to its initial state.
+      	
+      	if ( startState ) {
+      		container.html( startState );
+      	}
+      	else {
+      		dragTarget.remove();
+      	}
+      	
+      	that._dragUpdateCallback.call(that, e, dragTarget);
+      	changedFlag = false;
+      })
+      .delegate('li', 'drop', function(e){
+      	//console.log('EVENT '+e.type, e);
+      	e.preventDefault();
+      })
+      .delegate('li', 'dragend', function(e){
+      	//console.log('EVENT '+e.type, e);
+      	
+      	e.preventDefault();
+      	
+      	dragTarget.removeClass('ghost');
+      	
+      	if (changedFlag) {
+          that._dragChangeCallback.call(that, e, dragTarget);
+          changedFlag = false;
+      	}
+      	
+      	dragTarget = undefined;
       });
+      // ----------------------------------------------------------------------------------------------------
     }
     this.bindEventHandlers();
     WebDoc.application.boardController.addCurrentPageListener(this);
+    
+  },
+  
+  _dragStartCallback: function(e, dragTarget){
+    var dataTransfer = e.originalEvent.dataTransfer;
+    
+    dataTransfer.setData("Text", 'Page title');
+    dataTransfer.setData("URL", window.location+' Add the page hash here!!!' );
+    dataTransfer.setData("application/webdoc-page", "Put some JSON here");
+  },
+  
+  _dragUpdateCallback: function(e, dragTarget){
+    var list = this.domNodeBrowserItems,
+        items = list.children(),
+        numberSelector = this.NUMBER_SELECTOR,
+        that = this;
+    
+    // Update page numbers in the page browser
+    items.each(function(i){
+      var number = jQuery(numberSelector, this);
+      
+      number.html( i+1 );
+      
+      // Update current page number across entire interface
+      if ( jQuery(this).hasClass( that.CURRENT_CLASS ) ) {
+        jQuery( that.PAGE_NUMBER_SELECTOR ).html( i+1 );
+      }
+    });
+  },
+  
+  _dragChangeCallback: function(e, dragTarget){
+    var dataTransfer = e.originalEvent.dataTransfer,
+        dropData = dragTarget.data("webdoc"),  // TODO: Really, we should be getting this from dataTransfer - but may not work in Chrome yet
+        dropPage = dropData && dropData.page,
+        dropPageIndex = dragTarget.index(),
+        pageToSave;
+    
+    // Define a flag to avoid rebuilding the page browser when items are dragged
+    // However, if the document is opened in other sessions, updates must be done
+    this._changedFromDrag = true;     
+    pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(dropPage.uuid(), dropPageIndex);
+    
+    if (pageToSave) {
+      pageToSave.save();
+    }
+    
+    this._changedFromDrag = false;
   },
   
   bindEventHandlers: function() {
@@ -206,29 +381,6 @@ WebDoc.PageBrowserController = $.klass({
     this.updateSelectedPage();
   },
 
-  dragStart: function(event, ui) {
-    ddd('Drag start');	
-  },
-
-  dragUpdate: function(event, ui) {
-     ddd('Drag update');
-     var dropItem = $(ui.item),
-         dropData = dropItem.data('webdoc'),
-         dropPage = dropData && dropData.page,
-         dropPageIndex = this.domNodeBrowserItems.children('li').index(ui.item),
-         pageToSave = null;
-     // Define a flag to avoid rebuilding the page browser when items are dragged
-     // However, if the document is opened in other sessions, updates must be done
-     this._changedFromDrag = true;     
-     pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(dropPage.uuid(), dropPageIndex);
-     
-     if (pageToSave) {
-       pageToSave.save();
-     }
-     
-     this._changedFromDrag = false;
-  },
-
   selectCurrentPage: function(e) {
     var pageNode = $( e.delegateTarget || e.target ),
         data = pageNode.data('webdoc'),
@@ -242,13 +394,6 @@ WebDoc.PageBrowserController = $.klass({
       this.selectPage( page );
     }
   },
-  
-//  editPageTitle: function(page){
-//    ddd('[pageBrowserController] editPageTitle');
-//    var currentPageItem = this.pageMap[ page.uuid() ];
-//    
-//    currentPageItem.editTitle();
-//  },
   
   addPageUrl: function(){
     ddd('[pageBrowserController] editPageUrl');
@@ -280,24 +425,12 @@ WebDoc.PageBrowserController = $.klass({
   // Show / hide browser --------------------------------------------
   
   _show: function(){
-    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
-        //panelWidth = this._pagesPanelWidth,
-        panelHeight = this._panelHeight,
-        outerGhost = this.panelGhostNode,
-        innerGhost = this.innerGhostNode,
-        bothGhosts = outerGhost.add(innerGhost);
-    
-    //innerGhost.show();
+    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
     
     this.domNode.animate({
-        marginBottom: 0
-        // marginLeft: 0
+      marginBottom: 0
     }, {
-        //step: function(val){
-        //    bothGhosts.css({
-        //      width: panelWidth + val
-        //    })
-        //}.pBind(this)
+      duration: 180
     });
     
     pageBrowserButton.addClass(this.ACTIVE_CLASS);
@@ -306,24 +439,12 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   _hide: function( margin ){
-    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
-        panelWidth = this._pagesPanelWidth,
-        outerGhost = this.panelGhostNode,
-        innerGhost = this.innerGhostNode,
-        bothGhosts = outerGhost.add(innerGhost);
+    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
     
     this.domNode.animate({
-        marginBottom: - this._panelHeight
-        //marginLeft: - this._pagesPanelWidth - ( margin || 0 )
+      marginBottom: - this._panelHeight
     }, {
-        step: function(val){
-            bothGhosts.css({
-              width: panelWidth + val
-            })
-        }.pBind(this),
-        complete: function(){
-            innerGhost.hide();
-        }
+      duration: 400
     });
     
     pageBrowserButton.removeClass(this.ACTIVE_CLASS);
