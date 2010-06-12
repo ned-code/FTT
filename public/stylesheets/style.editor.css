@@ -25,7 +25,6 @@ body {
     /* Set interface font-size to 12px */
     font-size: 75%;
 }
-#left-panel-ghost,
 #right-panel-ghost {
     display: table-cell;
     /* Width is animated with panel */
@@ -49,7 +48,6 @@ body {
 .ui-pop         { z-index: 4; } 
 
 #webdoc .center     { z-index: 2; }
-#left-panel-ghost,
 #right-panel-ghost  { z-index: 1; }
 
 #webdoc .board-screen   { z-index: 1000000; }  /* svg layer has 999999 */
@@ -228,6 +226,9 @@ body {
 .webdoc.tag-list li {
     padding: 0;
     margin: 0;
+}
+.toolbar-panel {
+  left: 0; right: 0;
 }
 #toolbar_panel .tag-list a {
     display: block;
@@ -517,6 +518,7 @@ body {
   -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
   box-shadow:         0 6px 8px hsl(14, 6%, 30%);
 }
+
 .hide-thumbs li .thumb {
   height: 0;
   margin-bottom: 0;
@@ -993,3 +995,4 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 120px;
 }
+
