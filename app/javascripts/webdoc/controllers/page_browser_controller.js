@@ -24,7 +24,6 @@ WebDoc.PageBrowserController = $.klass({
   LEFT_BAR_BUTTON_SELECTOR: "a[href='#left-panel-toggle']",
   NUMBER_SELECTOR: '.number',
   THUMB_SELECTOR: '.thumb',
-  PANEL_GHOST_SELECTOR: '#left-panel-ghost',
 
   initialize: function() {
     ddd("[PageBrowserController] init");
@@ -32,8 +31,6 @@ WebDoc.PageBrowserController = $.klass({
     var that = this;
     
     this.domNode = $("#left_bar");
-    this.panelGhostNode = $( this.PANEL_GHOST_SELECTOR );
-    this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
     
     this._changedFromDrag = false;
     this._stateThumbs = true;
@@ -274,15 +271,16 @@ WebDoc.PageBrowserController = $.klass({
   
   _dragChangeCallback: function(e, dragTarget){
     var dataTransfer = e.originalEvent.dataTransfer,
-        dropData = dragTarget.data("webdoc"),  // TODO: Really, we should be getting this from dataTransfer - but may not work in Chrome yet
-        dropPage = dropData && dropData.page,
+        dropData = dataTransfer.getData("application/webdoc-page") ?
+          JSON.parse( dataTransfer.getData("application/webdoc-page") ) :
+          dragTarget.data("webdoc").page ,
         dropPageIndex = dragTarget.index(),
         pageToSave;
     
     // Define a flag to avoid rebuilding the page browser when items are dragged
     // However, if the document is opened in other sessions, updates must be done
     this._changedFromDrag = true;     
-    pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(dropPage.uuid(), dropPageIndex);
+    pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(dropData.uuid(), dropPageIndex);
     
     if (pageToSave) {
       pageToSave.save();
@@ -427,10 +425,13 @@ WebDoc.PageBrowserController = $.klass({
   _show: function(){
     var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
     
-    this.domNode.animate({
+    this.domNode
+    .stop()
+    .animate({
       marginBottom: 0
     }, {
-      duration: 180
+      duration: 360,
+      easing: 'webdocBounce'
     });
     
     pageBrowserButton.addClass(this.ACTIVE_CLASS);
@@ -441,10 +442,12 @@ WebDoc.PageBrowserController = $.klass({
   _hide: function( margin ){
     var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
     
-    this.domNode.animate({
+    this.domNode
+    .stop()
+    .animate({
       marginBottom: - this._panelHeight
     }, {
-      duration: 400
+      duration: 540
     });
     
     pageBrowserButton.removeClass(this.ACTIVE_CLASS);
