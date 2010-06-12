@@ -114,7 +114,15 @@ WebDoc.PageBrowserController = $.klass({
         dragTarget = jQuery(this).addClass('ghost');
         startState = itemsList.children();
         
-        eOrig.dataTransfer.setDragImage(this, 0, 0);
+        // Quick hack to stop number being displayed in dragged thumb
+        dragTarget.find('.number').hide();
+        
+        eOrig.dataTransfer.setDragImage(this, 64, 64);
+        
+        // Quick hack to stop number being displayed in dragged thumb
+        var t = setTimeout(function(){
+          dragTarget.find('.number').show();
+        }, 0);
         
         that._dragStartCallback.call(that, e, dragTarget);
       })
@@ -271,8 +279,9 @@ WebDoc.PageBrowserController = $.klass({
   
   _dragChangeCallback: function(e, dragTarget){
     var dataTransfer = e.originalEvent.dataTransfer,
-        dropData = dataTransfer.getData("application/webdoc-page") ?
-          JSON.parse( dataTransfer.getData("application/webdoc-page") ) :
+        dropData = 
+          //dataTransfer.getData("application/webdoc-page") ?               // Enable this lot to get drag working between windows - once you have the JSON organised...
+          //JSON.parse( dataTransfer.getData("application/webdoc-page") ) :
           dragTarget.data("webdoc").page ,
         dropPageIndex = dragTarget.index(),
         pageToSave;
