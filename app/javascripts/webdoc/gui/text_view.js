@@ -38,9 +38,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   },
   
   edit: function($super) { //called if we clicked on an already selected textbox
-    $super();
-    this.domNode.addClass("item-edited");
-    this.itemLayerDomNode.hide();        
+    $super();        
     this.placeholderNode.remove();
     WebDoc.application.textTool.enterEditMode(this);
   },
@@ -50,10 +48,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   },
   
   stopEditing: function($super) {
-    $super();
-    this.domNode.removeClass("item-edited");
-    this.itemLayerDomNode.show();
-    this._initDragAndResize();    
+    $super();    
     WebDoc.application.textTool.exitEditMode();
     this._initItemCss(false);
   },

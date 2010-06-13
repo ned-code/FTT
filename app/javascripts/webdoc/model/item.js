@@ -5,6 +5,7 @@ WebDoc.ITEM_TYPE_DRAWING = "drawing";
 WebDoc.ITEM_TYPE_WIDGET  = "widget";
 WebDoc.ITEM_TYPE_IFRAME  = "iframe";
 WebDoc.ITEM_TYPE_APP     = "app";
+WebDoc.ITEM_TYPE_HTML    = "html";
 
 WebDoc.Item = $.klass(WebDoc.Record, 
 {
@@ -354,6 +355,16 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
 
+  /***************************************/
+  /** widget item                        */
+  /***************************************/
+  getInspectorUrl: function() {
+    if (this.data.data.properties && this.data.data.properties.inspector_url) {
+      return this.data.data.properties.inspector_url;
+    }
+    return null;      
+  },
+  
   /***************************************/
   /** text item                          */
   /***************************************/

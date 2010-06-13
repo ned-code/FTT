@@ -39,6 +39,8 @@ WebDoc.InspectorPanesManager = $.klass({
   initNewPaneWithController: function(inspectorPaneController) {
     this.panesViewsControllers[inspectorPaneController.inspectorTitle()] = inspectorPaneController;
     this.initNewPane(inspectorPaneController.inspectorTitle(), inspectorPaneController.domNode);
+    // be sure inspector node is not hidden
+    inspectorPaneController.domNode.show();
   },
   
   

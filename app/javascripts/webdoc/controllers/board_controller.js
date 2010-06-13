@@ -646,7 +646,7 @@ WebDoc.BoardController = jQuery.klass({
   
   insertHtml: function(html, position) {
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.media_type = WebDoc.ITEM_TYPE_HTML;
     newItem.data.data.tag = "div";
     newItem.data.data.innerHTML = html;
     newItem.data.data.css = {

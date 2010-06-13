@@ -4,7 +4,8 @@
 
 WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector ) {
-    var domNode = this.domNode = $(selector);
+    var domNode = $(selector);
+    this.domNode = domNode;
     domNode.show();
     jQuery(selector)
     .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
@@ -275,6 +276,12 @@ WebDoc.WidgetPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorC
 WebDoc.IFramePropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
   initialize: function($super, selector) {
     $super("#iframe-property-inspector");
+  }
+});
+
+WebDoc.HtmlPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
+  initialize: function($super, selector) {
+    $super("#html-property-inspector");
   }
 });
 

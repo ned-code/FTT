@@ -4,7 +4,7 @@
 WebDoc.ImagePaletteController = $.klass({
   initialize: function( ) {
     this.domNode = $( "#image-inspector" );
-
+    this.domNode.hide();
     this.propertySrc = $("#property_src");
     this.propertySrc.blur(this.updateSrc.pBind(this));
 

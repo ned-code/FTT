@@ -89,9 +89,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   },
 
   edit: function($super){
-    $super();
-    this.domNode.addClass("item-edited");
-    this.itemLayerDomNode.hide();    
+    $super();    
   },
   
   canEdit: function() {
@@ -100,8 +98,6 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   
   stopEditing: function($super) {
     $super();
-    this.domNode.removeClass("item-edited");
-    this.itemLayerDomNode.show();  
   },
   
   inspectorId: function() {
