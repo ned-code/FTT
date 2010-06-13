@@ -5,7 +5,7 @@
 WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector ) {
     var domNode = this.domNode = $(selector);
-    
+    domNode.show();
     jQuery(selector)
     .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
@@ -257,6 +257,24 @@ WebDoc.PropertiesInspectorController = $.klass({
 WebDoc.ImagePropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
   initialize: function($super, selector) {
     $super("#image-property-inspector");
+  }
+});
+
+WebDoc.TextPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
+  initialize: function($super, selector) {
+    $super("#text-property-inspector");
+  }
+});
+
+WebDoc.WidgetPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
+  initialize: function($super, selector) {
+    $super("#widget-property-inspector");
+  }
+});
+
+WebDoc.IFramePropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
+  initialize: function($super, selector) {
+    $super("#iframe-property-inspector");
   }
 });
 

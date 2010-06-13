@@ -3,6 +3,7 @@
  */
 
 //= require <webdoc/sdk/widget_api>
+WebDoc.WIDGET_INSPECTOR_GROUP = "WidgetInspectorGroup";
 
 WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
@@ -18,6 +19,14 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     this.domNode.addClass('item-widget');   
   },
   
+  inspectorGroupName: function() {
+    return WebDoc.WIDGET_INSPECTOR_GROUP;  
+  },
+    
+  inspectorControllersClasses: function() {
+    return [WebDoc.WidgetPropertiesInspectorController];
+  },
+    
   createDomNode: function($super) {
     var widgetNode = $super();   
     if (this.item.data.data.tag == "iframe" && !WebDoc.application.disableHtml) {

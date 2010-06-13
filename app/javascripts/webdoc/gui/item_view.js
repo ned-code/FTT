@@ -77,6 +77,7 @@ WebDoc.ItemView = $.klass({
     this._initItemClass();
     this._initItemCss(false);
     this.inspectorPanesManager = WebDoc.InspectorPanesManager.instanceFor(this); 
+    this.inspectorPanesManager.createOpenFloatingInspectorButton(this);
   },
   
   _initItemClass: function() {
@@ -390,10 +391,6 @@ WebDoc.ItemView = $.klass({
       top: this.item.data.data.css.top,
       left: this.item.data.data.css.left
     });
-    
-    if (inspectorController) {
-      inspectorController.refreshProperties();
-    }
   },
   
   _resizeTo: function(size) {
@@ -406,12 +403,6 @@ WebDoc.ItemView = $.klass({
       height: this.item.data.data.css.height
     });
     
-    if (inspectorController) {
-      inspectorController.refreshProperties();
-    }
-//    if (this.domNode.hasClass("item-edited")) {
-//      WebDoc.application.boardController._updateScreens(this.domNode);
-//    }
   },
 
   _isAttributeModified: function(options, attributeName) {

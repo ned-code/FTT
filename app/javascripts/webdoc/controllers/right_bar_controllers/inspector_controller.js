@@ -17,7 +17,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     ddd('[InspectorController] initialize');    
     var emptyPalette = $("#empty-inspector").hide();
     var penPelette = $("#draw-inspector").hide();
-    var iframePelette = $("#iframe-inspector").hide();
     
     // Get DOM node
     this.domNode = $("#item_inspector");
@@ -27,7 +26,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     
     this.textInspector = new WebDoc.TextPaletteController( "#text-inspector" );
     this.htmlInspector = new WebDoc.InnerHtmlController( "#html-inspector" );
-    this.iframeInspector = new WebDoc.IframeController( "#iframe-inspector" );
 
     var widgetPalette = $("#widget-inspector").hide();
     var widgetPaletteContent = widgetPalette.find("iframe");
@@ -62,11 +60,9 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
       this.textInspector.domNode,
       penPelette,
       widgetPalette,
-      this.htmlInspector.domNode,
-      this.iframeInspector.domNode
+      this.htmlInspector.domNode
     ];
     
-    this._properties = new WebDoc.PropertiesInspectorController( '#properties' );
     this._updatePalette(0);
     
     this.lastInspectorId = 0;
@@ -105,17 +101,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
       
       inspectorNode = this._inspectorNodes[this.currentInspectorId];
       inspectorNode.show();
-      // This is, admittedly, a bit of a hack. We get the properties
-      // node and plonk it into this inspector. We may end up moving the
-      // properties node, so lets leave it like this for the time being.
-      inspectorNode
-      .find('.foot')
-      .html(this._properties.domNode);
-      
-      inspectorNode
-      .css({
-        bottom: this._properties.domNode.outerHeight()
-      });
       
       this.refreshSubInspectors();
     }
@@ -137,13 +122,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     }
   },
   
-  refreshProperties: function() {
-    this._properties.refresh();
-  },
-  
-  
   refreshSubInspectors: function() {
-    this.refreshProperties();
     
     switch (this.currentInspectorId) {
       case 1:
@@ -169,9 +148,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
         break;
       case 5:
         this.htmlInspector.refresh();
-        break;
-      case 6:
-        this.iframeInspector.refresh();
         break;
     }
   },

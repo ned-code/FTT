@@ -28,7 +28,6 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     
     this._zoom();
     this._displace();    
-    this.inspectorPanesManager.createOpenFloatingInspectorButton(this);
   },
 
   inspectorGroupName: function() {

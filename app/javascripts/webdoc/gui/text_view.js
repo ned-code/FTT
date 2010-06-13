@@ -1,6 +1,8 @@
 /**
  * @author julien
  */
+WebDoc.TEXT_INSPECTOR_GROUP = "TextInspectorGroup"
+
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
   
   initialize: function($super, item, pageView, afterItem) {
@@ -23,6 +25,14 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
     return 1;
   },
   
+  inspectorGroupName: function() {
+    return WebDoc.TEXT_INSPECTOR_GROUP;  
+  },
+    
+  inspectorControllersClasses: function() {
+    return [WebDoc.TextPropertiesInspectorController];
+  },
+    
   canEdit: function() {
     return true;
   },

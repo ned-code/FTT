@@ -1,7 +1,7 @@
 /**
  * @author Noé / Stephen
  */
-
+WebDoc.IFRAME_INSPECTOR_GROUP = "IFrameInspectorGroup";
 
 WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   initialize: function($super, item, pageView, afterItem) {
@@ -26,6 +26,14 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     .delegate('.item-placeholder input', 'blur', this._makeSetSrcEventHandler() );
   },
   
+  inspectorGroupName: function() {
+    return WebDoc.IFRAME_INSPECTOR_GROUP;  
+  },
+    
+  inspectorControllersClasses: function() {
+    return [WebDoc.IframeController, WebDoc.IFramePropertiesInspectorController];
+  },
+      
   createDomNode: function($super) {
     this.itemLayerDomNode.show();
     this.domNode.addClass('loading');
@@ -97,7 +105,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   },
   
   inspectorId: function() {
-    return 5;
+    return 0;
   }
 
 });
