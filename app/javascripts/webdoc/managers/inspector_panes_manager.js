@@ -23,7 +23,9 @@ WebDoc.InspectorPanesManager = $.klass({
     // Once all panes are setup we'll bring the domNode back on screen
     this.movePanesContainerOffScreen();
     
-    WebDoc.application.boardController.boardContainerNode.after(this.domNode);
+    if (WebDoc.application.boardController) {
+     jQuery("#webdoc").after(this.domNode);
+    }
     
     this.panesViews = {}; // { paneTitle1:InspectorPaneView1, paneTitle2:InspectorPaneView2, ... }
     this.panesViewsControllers = {};
@@ -40,6 +42,9 @@ WebDoc.InspectorPanesManager = $.klass({
     this.panesViewsControllers[inspectorPaneController.inspectorTitle()] = inspectorPaneController;
     this.initNewPane(inspectorPaneController.inspectorTitle(), inspectorPaneController.domNode);
     // be sure inspector node is not hidden
+    if (inspectorPaneController.width) {
+      this.domNode.css('width', inspectorPaneController.width());
+    }
     inspectorPaneController.domNode.show();
   },
   
@@ -254,6 +259,18 @@ WebDoc.InspectorPanesManager = $.klass({
     this.domNode.hide();
   },
   
+  itemViewWillMove: function(itemView) {
+    if (this.mode == "attached") {
+      this.domNode.hide();
+    }
+  },
+  
+  itemViewDidMove: function(itemView) {
+    if (this.mode == "attached") {
+      this.domNode.show();
+    }
+  },
+  
   openButtonForItemiew: function(itemView) {
     return itemView.domNode.find(".show_floating_inspector");
   }
@@ -262,13 +279,18 @@ WebDoc.InspectorPanesManager = $.klass({
 
 jQuery.extend(WebDoc.InspectorPanesManager, {
   _allGroupManager: {},
-  
+  featureEnabled: false,
   instanceFor: function(itemView) {
-    if (!itemView.inspectorGroupName) {
-      return new WebDoc.InspectorPanesManager(itemView);
+    if (this.featureEnabled) {
+      if (!itemView.inspectorGroupName) {
+        return new WebDoc.InspectorPanesManager(itemView);
+      }
+      else {
+        return this._managerForGroup(itemView);
+      }
     }
     else {
-      return this._managerForGroup(itemView);
+      return this.dummyManager;
     }
   },
   
@@ -288,5 +310,72 @@ jQuery.extend(WebDoc.InspectorPanesManager, {
       }   
     }
     return this._allGroupManager[inspectorGroupName];    
+  },
+  
+  dummyManager: {
+    movePanesContainerOffScreen: function() {
+    },
+    
+    initNewPaneWithController: function(inspectorPaneController) {
+    },
+    
+    
+    initNewPane: function(title, content, appPane) {    
+    },
+    
+    adjustAppPaneHeight: function(paneIframeId, height) {
+    },
+    
+    allPanesHeightsAdjusted: function() {
+  
+    },
+    
+    setupDetachedMode: function() {
+    },
+    
+    setMode: function(mode) {
+    },
+    
+    createOpenFloatingInspectorButton: function(itemView) {
+    },
+    
+    panesCount: function() {
+    },
+    
+    showInspector: function(itemView, paneTitle) { 
+    },
+    
+    showPanesList_: function(itemView) { 
+    },
+    
+    showPane_: function(title) { 
+    },
+    
+    attachedPanePosition: function(openButtonDomNode) { 
+    },
+    
+    updateAttachedPanePositionAndContent: function(itemView) { 
+    },
+    
+    closeAll: function() {
+    },
+    
+    destroy: function() {
+    },
+    
+    itemDidSelect: function(itemView) {
+    },
+    
+    itemDidUnselect: function(itemView) {
+    },
+    
+    itemViewWillMove: function(itemView) {
+    },
+    
+    itemViewDidMove: function(itemView) {
+    },
+    
+    openButtonForItemiew: function(itemView) {
+    }    
   }
 });

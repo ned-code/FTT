@@ -49,7 +49,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     WebDoc.ServerManager.xmppClientId    = new WebDoc.UUID().id;
     
     WebDoc.application.pageEditor = this;
-    
+    WebDoc.InspectorPanesManager.featureEnabled = true;
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
     });

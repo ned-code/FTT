@@ -328,6 +328,7 @@ WebDoc.ItemView = $.klass({
       start: function(e, ui) {
         ddd("start drag");
         this.pageView.eventCatcherNode.show();
+        this.inspectorPanesManager.itemViewWillMove(this);
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
         var currentPosition = this.position();
 
@@ -346,6 +347,7 @@ WebDoc.ItemView = $.klass({
       }.pBind(this)        ,
       stop: function(e, ui) {
         this.pageView.eventCatcherNode.hide();
+        this.inspectorPanesManager.itemViewDidMove(this);
         var newPosition = { top : ui.position.top + "px", left: ui.position.left + "px"};
         this.item.moveTo(newPosition);
         this.item.save();
@@ -355,6 +357,7 @@ WebDoc.ItemView = $.klass({
       handles: 's, e, se',
       start: function(e, ui) {
         this.pageView.eventCatcherNode.show();
+        this.inspectorPanesManager.itemViewWillMove(this);
         this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
         this.aspectRatio = ui.size.width / ui.size.height;
         var currentSize = this.size();
@@ -378,6 +381,7 @@ WebDoc.ItemView = $.klass({
       }.pBind(this)        ,
       stop: function(e, ui) {
         this.pageView.eventCatcherNode.hide();
+        this.inspectorPanesManager.itemViewDidMove(this);        
         var newSize = { width: ui.size.width + "px", height: ui.size.height + "px"};
         this.item.resizeTo(newSize);
         this.item.save();

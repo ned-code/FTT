@@ -42,6 +42,10 @@ WebDoc.WidgetInspectorController = $.klass({
     return "app";  
   },
   
+  width: function() {
+    return '300px';  
+  },
+  
   refresh: function() {
     ddd("refresh iframe inspector");
     var selectedItem = WebDoc.application.boardController.selection()[0];

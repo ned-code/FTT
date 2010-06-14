@@ -28,13 +28,13 @@ WebDoc.PropertiesInspectorController = $.klass({
       backgroundColor:  jQuery(selector + " #property_background_color"),
       padding:          jQuery(selector + " #property_padding"),
       borderRadius:     jQuery(selector + " #property_border_radius"),
-      scroll:           jQuery(selector + " #property_scroll"),
       overflow:         jQuery(selector + " #property_overflow_hidden, " + selector +" #property_overflow_auto, " + selector +" #property_overflow_visible"),
       opacity:          jQuery(selector + " #property_opacity, " + selector +" #property_opacity_readout")
     };
     
-    this._themeBgColorsNode = jQuery('<ul/>', {'class': "ui-block spaceless icons-only thumbs backgrounds_index index"}).css('clear', 'both');
+    this._themeBgColorsNode = jQuery('<ul/>', {'class': "icons-only thumbs backgrounds_index index"}).css('clear', 'both');
     this._themeBgState = false;
+    this._makeThemeBackgrounds();
   },
   
   inspectorTitle: function() {
@@ -167,7 +167,7 @@ WebDoc.PropertiesInspectorController = $.klass({
       output: function( field, css ){
         field
         .filter( "[value="+ css.overflow +"]" )
-        .attr('checked', 'checked');
+        .attr('checked', 'true');
       }
     },
     opacity: {
@@ -258,7 +258,9 @@ WebDoc.PropertiesInspectorController = $.klass({
 WebDoc.ImagePropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
   initialize: function($super, selector) {
     $super("#image-property-inspector");
-  }
+  },
+  _makeThemeBackgrounds: function() {
+  }  
 });
 
 WebDoc.TextPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
@@ -270,13 +272,17 @@ WebDoc.TextPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorCon
 WebDoc.WidgetPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
   initialize: function($super, selector) {
     $super("#widget-property-inspector");
-  }
+  },
+  _makeThemeBackgrounds: function() {
+  }  
 });
 
 WebDoc.IFramePropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
   initialize: function($super, selector) {
     $super("#iframe-property-inspector");
-  }
+  },
+  _makeThemeBackgrounds: function() {
+  } 
 });
 
 WebDoc.HtmlPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
