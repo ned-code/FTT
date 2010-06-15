@@ -1,42 +1,28 @@
 /**
  * @author julien
  */
-//= require <webdoc/model/image>
-//= require <webdoc/model/video>
-//= require <webdoc/controllers/inspectors/properties_inspector_controller>
-//= require <webdoc/controllers/inspectors/inner_html_controller>
-//= require <webdoc/controllers/inspectors/inner_iframe_controller>
-//= require <webdoc/controllers/inspectors/image_palette_controller>
-//= require <webdoc/controllers/inspectors/text_palette_controller>
-//= require <webdoc/sdk/widget_api>
 
 WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
   ITEM_INSPECTOR_BUTTON_SELECTOR: "a[href='#item-inspector']",
   
   initialize: function() {
     ddd('[InspectorController] initialize');    
-    var emptyPalette = $("#empty-inspector").hide();
-    var penPelette = $("#draw-inspector").hide();
     
     // Get DOM node
     this.domNode = $("#item_inspector");    
     this.visible = true;
-    
     this.textInspector = new WebDoc.TextPaletteController( "#text-inspector" );
-    this.htmlInspector = new WebDoc.InnerHtmlController( "#html-inspector" );
 
-        
-    this._inspectorNodes = [
-      emptyPalette,
-      this.textInspector.domNode,
-      penPelette,
-      this.htmlInspector.domNode
-    ];
+    this._inspectorNodes = {};
+    this.initPaneWithController('empty', new WebDoc.InspectorEmptyController());
+    this.initPaneWithController('DrawingInspectorGroup', new WebDoc.DrawingInspectorController());    
+    this.initPaneWithController('TextInspectorGroup', this.textInspector);
+    this.initPaneWithController('HtmlInspectorGroup', new WebDoc.InnerHtmlController( "#html-inspector" ));
     
-    this._updatePalette(0);
+    this._updateInspector('empty');
     
-    this.lastInspectorId = 0;
-    this.currentInspectorId = 0;
+    this.lastInspectorId = 'empty';
+    this.currentInspectorId = 'empty';
     
     WebDoc.application.boardController.addSelectionListener(this);
   },
@@ -45,29 +31,35 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     return this.ITEM_INSPECTOR_BUTTON_SELECTOR;  
   },
   
-  selectPalette: function(paletteId) {
-    this._updatePalette(paletteId);
+  selectInspector: function(inspectorId) {
+    this._updateInspector(inspectorId);
   },
   
-  _updatePalette: function(paletteId) {
+  _updateInspector: function(inspectorId) {
     var inspectorNode = null;
     
-    ddd("[InspectorController] updatePalette", paletteId, inspectorNode );
-    
-    if (paletteId !== this.currentInspectorId) {
+    ddd("[InspectorController] updatePalette", inspectorId, inspectorNode );
+    if (this._inspectorNodes[inspectorId] === undefined) {
+      inspectorId = 'empty';
+    }
+    if (inspectorId !== this.currentInspectorId) {
       // Hide current inspector
       if (this.currentInspectorId !== undefined) {
-        ddd("hide palette", this.currentInspectorId);
-        this._inspectorNodes[this.currentInspectorId].hide();
+        ddd("hide inspector", this.currentInspectorId);
+        this._inspectorNodes[this.currentInspectorId].domNode.hide();
       }
 
-      this.currentInspectorId = paletteId;
+      this.currentInspectorId = inspectorId;
       
-      inspectorNode = this._inspectorNodes[this.currentInspectorId];
+      inspectorNode = this._inspectorNodes[this.currentInspectorId].domNode;
       inspectorNode.show();
       
-      this.refreshSubInspectors();
+      this.refresh();
     }
+  },
+  
+  initPaneWithController: function(inspectorGroupName, inspectorController) {
+    this._inspectorNodes[inspectorGroupName] = inspectorController;
   },
   
   refresh: function() {
@@ -78,38 +70,35 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     ddd("selected item ", WebDoc.application.boardController.selection());
     if (this.domNode.is(':visible')) {
       if (WebDoc.application.boardController.selection().length > 0) {
-        this._updatePalette(WebDoc.application.boardController.selection()[0].inspectorId());
+        this._updateInspector(WebDoc.application.boardController.selection()[0].inspectorGroupName());
       }
       else {
-        this._updatePalette(0);
+        this._updateInspector('empty');
       }
     }
   },
   
-  refreshSubInspectors: function() {
+  refresh: function() {
+    this._inspectorNodes[this.currentInspectorId].refresh();
+  }
+});
+
+WebDoc.InspectorEmptyController = $.klass({
+  initialize: function() {
+    this.domNode = jQuery("#empty-inspector").hide();
+  },
+  
+  refresh: function() {
     
-    switch (this.currentInspectorId) {
-      case 1:
-        this.textInspector.refreshInnerHtml();
-        break;
-      case 3:
-        this.htmlInspector.refresh();
-        break;
-    }
+  }
+});
+
+WebDoc.DrawingInspectorController = $.klass({
+  initialize: function() {
+    this.domNode = jQuery("#draw-inspector").hide();
   },
   
-  refreshWidgetPalette: function() {         
-    ddd("refresh widget palette"); 
-    var widgetContent = this._inspectorNodes[3].find("iframe"); 
-    if (widgetContent[0].contentWindow) {
-      ddd("widow found");
-      if (widgetContent[0].contentWindow.widget) {
-        widgetContent[0].contentWindow.widget._onPreferencesChange();
-      }
-      else if (widgetContent[0].contentWindow.initialize) {
-        ddd("call initialize");
-        widgetContent[0].contentWindow.initialize();
-      }
-    }    
-  }  
+  refresh: function() {
+    
+  }
 });

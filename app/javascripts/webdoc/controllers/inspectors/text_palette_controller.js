@@ -440,7 +440,7 @@ WebDoc.TextPaletteController = jQuery.klass({
     jQuery('#colorpickerHolder2').find('div.colorpicker_setdefault').hide();
   },
   
-  refresh: function(toolbarHash, parameters){
+  refreshState: function(toolbarHash, parameters){
     this.currentToolBarHash = toolbarHash;
     jQuery("#toolbar_panel_button_fontSize").webdocPaletteControllerCombobox({
       'values': parameters.fontSize,
@@ -517,6 +517,10 @@ WebDoc.TextPaletteController = jQuery.klass({
     else {
       this.refreshInnerHtml();
     }
+  },
+  
+  refresh: function() {
+    this.refreshInnerHtml();
   },
   
   refreshInnerHtml: function(){

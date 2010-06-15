@@ -157,6 +157,8 @@
 
 .content {
   padding:0 10px;
+  font-size:11px;
+  color:#fff;  
 }
 
 form.content .section {
@@ -165,6 +167,16 @@ form.content .section {
 
 form.content .entry {
   padding:5px 0;
+}
+
+.inspector-title {
+    color: white;
+    line-height: 32px;
+    font-weight: bold;
+    font-size: 1.4em;
+    text-align: center;
+    background-color:rgba(67, 77, 85, 0.8);
+    min-height:32px;
 }
 
 

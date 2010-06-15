@@ -2789,7 +2789,7 @@ WebDoc.TextToolView = $.klass({
   },
   
   refreshPalette: function(toolbarHash){
-    WebDoc.application.inspectorController.textInspector.refresh(toolbarHash, this.parameters);
+    WebDoc.application.inspectorController.textInspector.refreshState(toolbarHash, this.parameters);
   },
   
   getParameters: function(){

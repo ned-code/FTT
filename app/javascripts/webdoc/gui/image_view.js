@@ -35,8 +35,13 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   },
     
   inspectorControllersClasses: function() {
-    return [WebDoc.ImagePaletteController, WebDoc.ImagePropertiesInspectorController];
+    return [/*WebDoc.ImagePaletteController, WebDoc.ImagePropertiesInspectorController*/];
   },
+  
+  fullInspectorControllerClass: function() {
+    return WebDoc.ImagePaletteController;  
+  },
+  
   
   objectChanged: function($super, item, options) {
     $super(item, options);

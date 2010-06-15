@@ -111,7 +111,7 @@ WebDoc.InspectorPanesManager = $.klass({
   },
   
   createOpenFloatingInspectorButton: function(itemView) {
-    if (!this.openButtonForItemiew(itemView).length > 0) { //unless already created from the method below
+    if (!this.openButtonForItemiew(itemView).length > 0 && this.panesCount() > 0) { //unless already created from the method below
       var correspondingItemView = itemView;
       var openFloatingInspectorButton = $('<a href="" class="show_floating_inspector" title="Show inspector"><span>Show inspector</span></a>');
       openFloatingInspectorButton.bind("click", function(event){
@@ -123,22 +123,11 @@ WebDoc.InspectorPanesManager = $.klass({
     }
   },
   
-//  showOpenFloatingInspectorButton: function(flag) { //called from board_controller when switching mode (Edit/Preview)
-//    if (this.panesCount() > 0) {
-//      if (!this.openFloatingInspectorButton) this.createOpenFloatingInspectorButton();
-//      
-//      if (flag) {
-//        this.openFloatingInspectorButton.show();
-//      }
-//      else {
-//        this.openFloatingInspectorButton.hide();
-//      }
-//    }
-//  },
-  
   panesCount: function() {
     var count = 0;
-    for (var i in this.panesViews) count++;
+    for (var i in this.panesViews) {
+      count++;
+    }
     return count;
   },
   
@@ -152,7 +141,9 @@ WebDoc.InspectorPanesManager = $.klass({
     else {
       if (this.panesCount() == 1) {
         //directly show the pane
-        for (var firstPaneTitle in this.panesViews) break; // $.param(this.panesViews).split('=')[0];
+        for (var firstPaneTitle in this.panesViews) {
+          break;
+        } // $.param(this.panesViews).split('=')[0];
         this.showPane_(firstPaneTitle);
       }
       else {
@@ -160,10 +151,6 @@ WebDoc.InspectorPanesManager = $.klass({
         this.showPanesList_(itemView);
       }
     }
-    
-    //start position adjustment poller
-//    if (this.positionPoller) clearInterval(this.positionPoller);
-//    this.positionPoller = setInterval(this.updateAttachedPanePosition.pBind(this), 800);
   },
   
   showPanesList_: function(itemView) { //do not call this directly, always call showInspector()
@@ -211,7 +198,7 @@ WebDoc.InspectorPanesManager = $.klass({
   },
   
   updateAttachedPanePositionAndContent: function(itemView) { //could be the pane or the list of panes
-    if (itemView) {
+    if (itemView && this.panesCount() > 0) {
       this.itemView = itemView;
       if (!this.domNodeOffScreen && this.mode == "attached") {
         this.domNode.css(this.attachedPanePosition(this.openButtonForItemiew(itemView)));
@@ -231,10 +218,6 @@ WebDoc.InspectorPanesManager = $.klass({
     
     //reset to attached mode
     this.setMode("attached");
-    
-    
-    //stop position adjustment poller
-//    clearInterval(this.positionPoller);
   },
   
   destroy: function() {
@@ -246,13 +229,11 @@ WebDoc.InspectorPanesManager = $.klass({
   },
   
   itemDidSelect: function(itemView) {
-    ddd("[InspectorPaneManager] itemDidSelect");
     this.updateAttachedPanePositionAndContent(itemView);
     this.domNode.show();
   },
   
   itemDidUnselect: function(itemView) {
-    ddd("[InspectorPaneManager] itemDidUnselect");
     if (this.currentPane == "list") {
       this.closeAll();
     }
@@ -278,7 +259,7 @@ WebDoc.InspectorPanesManager = $.klass({
 });
 
 jQuery.extend(WebDoc.InspectorPanesManager, {
-  _allGroupManager: {},
+  _allGroupManager: {},  
   featureEnabled: false,
   instanceFor: function(itemView) {
     if (this.featureEnabled) {
@@ -307,11 +288,19 @@ jQuery.extend(WebDoc.InspectorPanesManager, {
           newManager.initNewPaneWithController(newInspectorController);
         }  
         newManager.allPanesHeightsAdjusted();
+      }
+      if (itemView.fullInspectorControllerClass) {
+        var constructor = itemView.fullInspectorControllerClass();
+        var fullInspectorController = new constructor();
+        WebDoc.application.inspectorController.initPaneWithController(inspectorGroupName, fullInspectorController);
       }   
     }
     return this._allGroupManager[inspectorGroupName];    
   },
   
+  /** 
+   * Manager that is used when feature is disabled. This maager does nothing
+   */
   dummyManager: {
     movePanesContainerOffScreen: function() {
     },

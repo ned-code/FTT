@@ -47,7 +47,6 @@ WebDoc.WidgetInspectorController = $.klass({
   },
   
   refresh: function() {
-    ddd("refresh iframe inspector");
     var selectedItem = WebDoc.application.boardController.selection()[0];
     this.widgetInspectorApi.setWidgetItem(selectedItem.item);    
     var widgetContent = this.domNode.find("iframe"); 

@@ -16,25 +16,24 @@
   -#%div.upper.border
   -#%div.lower.border
   
-  %div.scroll-free.layer
+  %div.layer
     = render :partial => 'library'
     
     = render :partial => 'documents/inspectors/page_inspector'
     = render :partial => 'documents/inspectors/document_inspector'
-    = render :partial => 'documents/social_panel'
-  
-  #item_inspector
-    = render :partial => 'documents/inspectors/draw_inspector'
-    = render :partial => 'documents/inspectors/widget_inspector'
-    = render :partial => 'documents/inspectors/empty_inspector'
-    = render :partial => 'documents/inspectors/html_inspector'
-    = render :partial => 'documents/inspectors/iframe_inspector'
-    = render :partial => 'documents/inspectors/text_inspector'    
-    = render :partial => 'documents/inspectors/image_inspector'
-    = render :partial => 'documents/inspectors/image_properties_inspector'
-    = render :partial => 'documents/inspectors/text_properties_inspector'
-    = render :partial => 'documents/inspectors/widget_properties_inspector'
-    = render :partial => 'documents/inspectors/iframe_properties_inspector'
-    = render :partial => 'documents/inspectors/html_properties_inspector'
+    = render :partial => 'documents/social_panel'  
+    #item_inspector
+      = render :partial => 'documents/inspectors/draw_inspector'
+      = render :partial => 'documents/inspectors/widget_inspector'
+      = render :partial => 'documents/inspectors/empty_inspector'
+      = render :partial => 'documents/inspectors/html_inspector'
+      = render :partial => 'documents/inspectors/iframe_inspector'
+      = render :partial => 'documents/inspectors/text_inspector'    
+      = render :partial => 'documents/inspectors/image_inspector'
+      = render :partial => 'documents/inspectors/image_properties_inspector'
+      = render :partial => 'documents/inspectors/text_properties_inspector'
+      = render :partial => 'documents/inspectors/widget_properties_inspector'
+      = render :partial => 'documents/inspectors/iframe_properties_inspector'
+      = render :partial => 'documents/inspectors/html_properties_inspector'
 
     
