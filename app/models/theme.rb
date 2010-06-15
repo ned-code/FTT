@@ -158,6 +158,10 @@ class Theme < ActiveRecord::Base
               (0..((paths.size)-1)).each do |k|
                 paths[k].strip!
                 paths[k].chomp!
+                if paths[k].start_with? ".theme_"
+                  parsed += ".panel " + paths[k]
+                  parsed += ", "
+                end
                 parsed += ".theme_#{self.id} " + paths[k]
                 parsed += ", "  if k < (paths.size-1)
               end
@@ -193,7 +197,12 @@ class Theme < ActiveRecord::Base
   end
 
   def config_dom
-    @config_file_dom ||= Zip::ZipFile.open(attachment_queued_for_write.path) do |file|
+    if attachment_queued_for_write.present?
+      path = attachment_queued_for_write.path
+    else
+      path = attachment.path
+    end
+    @config_file_dom ||= Zip::ZipFile.open(path) do |file|
       entry = file.find_entry("config.xml")
       entry.present? ? REXML::Document.new(entry.get_input_stream) : nil
     end

@@ -42,7 +42,7 @@ WebDoc.ImageLibraryController = $.klass({
     ddd("start drag");
     ddd($(e.target));
     ddd(this.images[$(e.target).attr("id")]);
-    e.originalEvent.dataTransfer.setData('application/ub-image', this.images[e.target.id].data.properties.url);
+    e.originalEvent.dataTransfer.setData('application/wd-image', this.images[e.target.id].data.properties.url);
   }
   
 });

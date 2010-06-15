@@ -62,6 +62,50 @@ WebDoc.Item = $.klass(WebDoc.Record,
       this.save();
     }
   },
+
+  getIsPlaceholder: function() {
+    ddd('[item] get is placeholder');
+    var classesArray = this.getClassesArray();
+    if(classesArray.length > 0  && jQuery.inArray("placeholder", classesArray) !== -1){
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
+  setIsPlaceholder: function(isPlaceholder) {
+    ddd('[item] set is placeholder with ' + isPlaceholder);
+    var classesArray = this.getClassesArray();
+    if(isPlaceholder) {
+      if(classesArray.length === 0 || jQuery.inArray("placeholder", classesArray) === -1){
+        classesArray.push('placeholder');
+        this.data.data['class'] = classesArray.join(" ");
+        this.fireObjectChanged({ modifedAttribute: 'class' });
+        this.save();
+      }
+    }
+    else {
+      if(classesArray.length > 0 && jQuery.inArray("placeholder", classesArray) !== -1){
+        var index = jQuery.inArray("placeholder", classesArray);
+        var part1 = classesArray.slice(0, index);
+        var part2 = classesArray.slice(index+1, classesArray.length);
+        classesArray = part1.concat(part2);
+        this.data.data['class'] = classesArray.join(" ");
+        this.fireObjectChanged({ modifedAttribute: 'class' });
+        this.save();
+      }
+    }
+  },
+
+  getClassesArray: function() {
+    if(this.data.data['class']) {
+      return this.data.data['class'].split(' ');
+    }
+    else {
+      return new Array();
+    }
+  },
   
   positionZ: function() {
     return this.data.position;  
@@ -468,21 +512,56 @@ WebDoc.Item = $.klass(WebDoc.Record,
     WebDoc.application.inspectorController.refreshSubInspectors();
   },
   
-  getOriginalSize: function(){
-    if (!this._originalSize) { this._calcOriginalSize(); }
-    return this._originalSize;
-  },
-  
-  _calcOriginalSize: function(){
-    var image = new Image();
-    
+  preLoadImageWithCallback: function(callback){
+    ddd('[item] preload image with callback');
+    var image = document.createElement('img');
+    jQuery(image).bind("load", callback);
     image.src = this.data.data.src;
-    
-    this._originalSize = {
-      width: image.width,
-      height: image.height
-    };
-  }  
+  },
+
+  getRatio: function() {
+    var ratioWidth  = 1;
+    var ratioHeight = 1;
+
+    if(this.getProperty('ratio')) {
+      if(this.getProperty('ratio').width) {
+        ratioWidth = parseFloat(this.getProperty('ratio').width);
+      }
+
+      if(this.getProperty('ratio').height) {
+        ratioHeight = parseFloat(this.getProperty('ratio').height)
+      }
+    }
+
+    return {
+      width:  ratioWidth,
+      height: ratioHeight
+    }
+  },
+
+  setRatio: function(ratio) {
+    ddd('[item] set ratio with: x '+ratio.width+'; y '+ratio.height);
+    this.setProperty('ratio', { width: ratio.width, height: ratio.height });
+  },
+
+  calcRatio: function(event) {
+    ddd('[item] calc ratio');
+    var ratioWidth = 1,
+        ratioHeight = 1,
+        ratio = (event.currentTarget.height / event.currentTarget.width) / (this.height('px') / this.width('px'));
+
+    if(ratio < 1) {
+      ratioWidth = (event.currentTarget.width / event.currentTarget.height) / (this.width('px') / this.height('px'));
+      ratioHeight = 1;
+    }
+    else {
+      ratioWidth = 1;
+      ratioHeight = ratio;
+    }
+
+    return { width: ratioWidth, height: ratioHeight };
+  }
+
 });
 
 $.extend(WebDoc.Item, {

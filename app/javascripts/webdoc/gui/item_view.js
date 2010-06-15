@@ -177,7 +177,7 @@ WebDoc.ItemView = $.klass({
       for (var key in this.item.data.data) {
         switch(key) {
           case "innerHTML":
-          // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
+          // for compatibility we also check innerHtml like this because old document can have this key instead of innerHTML
           case "innerHtml":
           case "class": 
           case "wrapClass": 
