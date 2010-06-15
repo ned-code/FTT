@@ -85,7 +85,6 @@ javascripts:
     - app/javascripts/webdoc/model/*.js
 
   document_editor:
-    - app/javascripts/webdoc/controllers/drag_and_drop_controllers.js
     - app/javascripts/webdoc/utils/*.js
     - app/javascripts/webdoc/managers/*
     - app/javascripts/webdoc/controllers/document_collaboration_controller.js
