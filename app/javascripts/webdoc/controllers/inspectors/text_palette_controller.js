@@ -10,7 +10,7 @@ WebDoc.TextPaletteController = jQuery.klass({
   initGUI: function(container){
     var thobj = this;
     var containerObj = jQuery(container);
-    var toolbarContent = '<div id="toolbar_panel" style="height:75px" class="ui-widget">' +
+    var toolbarContent = '<div id="toolbar_panel" style="height:100px" class="ui-widget">' +
     '<div id="hiliteColorpickerContainer" style="padding:0px;position:absolute;z-index: 150000;top:50px;display:none;"><div id="colorpickerHolder1"></div></div>' +
     '<div id="foreColorpickerContainer" style="padding:0px;position:absolute;z-index: 150000;top:50px;display:none;"><div id="colorpickerHolder2"></div></div>' +
     '<div id="toolbar_selectbox_container">' +
@@ -18,6 +18,11 @@ WebDoc.TextPaletteController = jQuery.klass({
     '<select style="width:90px" id="toolbar_panel_button_fontName"></select>' +
     '<select style="width:35px" id="toolbar_panel_button_fontSize"></select>' +
     '</div>' +
+    '<div id="toolbar_panel_fontSize_slider_container">' +
+      '<div id="toolbar_panel_fontSize_label">Font Size</div>'   +
+      '<div id="toolbar_panel_fontSize_slider"></div>'   +
+    '</div>'+             
+    '<div style="clear: both;"></div>' +
     '<div id="toolbar_buttons_container">' +
     '<a href="javascript:void(0);" title="Decrease font size" id="toolbar_panel_button_decreasefontsize"    onclick="WebDoc.application.textTool.delegate.editorExec(\'decreasefontsize\');">         <div class="icon_decreasefontsize"></div></a>' +
     '<a href="javascript:void(0);" title="Increase font size" id="toolbar_panel_button_increasefontsize"    onclick="WebDoc.application.textTool.delegate.editorExec(\'increasefontsize\');">         <div class="icon_increasefontsize"></div></a>' +
@@ -66,6 +71,7 @@ WebDoc.TextPaletteController = jQuery.klass({
     '</div>' +
     '<div style="clear: both;"></div>' +
     '</div>' +
+
     '<div style="position:relative;height:100%;">' +
     '<div id="choose-edit-method" class="ui-widget content">' +
     '<!--div>' +
@@ -77,6 +83,7 @@ WebDoc.TextPaletteController = jQuery.klass({
     '</div>' +
     '</div>' +
     '</div>';
+    
     containerObj.html(toolbarContent);
     
     this.htmlInspector = new WebDoc.InnerHtmlController("#inner_text_html");
@@ -322,7 +329,6 @@ WebDoc.TextPaletteController = jQuery.klass({
     };
     
     this.hideForeColorpicker = function(){
-      //jQuery('#foreColorpickerContainer').unbind('mouseleave');
       if (jQuery('#foreColorpickerContainer').css('display') == "block") {
         WebDoc.application.textTool.delegate.editorExec('foreColorCancel');
         jQuery('#foreColorpickerContainer').hide('slow');
@@ -331,7 +337,6 @@ WebDoc.TextPaletteController = jQuery.klass({
     };
     
     this.hideHiliteColorpicker = function(){
-     // jQuery('#hiliteColorpickerContainer').unbind('mouseleave');
       if (jQuery('#hiliteColorpickerContainer').css('display') == "block") {
         WebDoc.application.textTool.delegate.editorExec('hiliteColorCancel');
         jQuery('#hiliteColorpickerContainer').hide('slow');
@@ -340,9 +345,6 @@ WebDoc.TextPaletteController = jQuery.klass({
     };
     
     this.showForeColorpicker = function(){
-      /*jQuery('#foreColorpickerContainer').bind('mouseleave', function(e){
-        thobj.hideForeColorpicker();
-      }); */
       WebDoc.application.textTool.delegate.editorExec('foreColorShow');
       jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow_top');
       jQuery('#foreColorpickerContainer').appendTo('body').css('left', $('#toolbar_panel').offset().left - 3).css('top', $('#toolbar_panel').offset().top +46).css('height', '175px').slideDown('fast');
@@ -351,9 +353,6 @@ WebDoc.TextPaletteController = jQuery.klass({
     };
     
     this.showHiliteColorpicker = function(){
-      /*jQuery('#hiliteColorpickerContainer').bind('mouseleave', function(e){
-        thobj.hideHiliteColorpicker();
-      }); */
       WebDoc.application.textTool.delegate.editorExec('hiliteColorShow');
       jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow_top');
       jQuery('#hiliteColorpickerContainer').prependTo('body').css('left', $('#toolbar_panel').offset().left - 3).css('top', $('#toolbar_panel').offset().top +46).css('height', '175px').slideDown('fast');
@@ -367,7 +366,6 @@ WebDoc.TextPaletteController = jQuery.klass({
       flat: true,
       color: '#000000',
       onSubmit: function(hsb, hex, rgb){
-        //jQuery('#foreColorpickerContainer').unbind('mouseleave');
         jQuery('#foreColorpickerContainer').hide('slow');
         jQuery('#toolbar_panel_button_foreColor_arrow>div').attr('class', 'icon_color_arrow');
         WebDoc.application.textTool.delegate.editorExec('foreColor', '#' + hex);
@@ -385,7 +383,6 @@ WebDoc.TextPaletteController = jQuery.klass({
       flat: true,
       color: '#000000',
       onSubmit: function(hsb, hex, rgb){
-        //jQuery('#hiliteColorpickerContainer').unbind('mouseleave');
         jQuery('#hiliteColorpickerContainer').hide('slow');
         jQuery('#toolbar_panel_button_hiliteColor_arrow>div').attr('class', 'icon_color_arrow');
         WebDoc.application.textTool.delegate.editorExec('hiliteColor', '#' + hex);
@@ -397,6 +394,20 @@ WebDoc.TextPaletteController = jQuery.klass({
         WebDoc.application.textTool.delegate.focus();
       }
     });
+    
+    
+    jQuery('#colorpickerHolder1 .colorpicker_current_color').unbind('click').bind('click',function(){
+      if($(this).css('backgroundColor')!="transparent"){
+        $('#colorpickerHolder1').ColorPickerSetColor(thobj.RGBcss2Hex($(this).css('backgroundColor'))); 
+      }
+    });
+    
+    jQuery('#colorpickerHolder2 .colorpicker_current_color').unbind('click').bind('click',function(){
+      if($(this).css('backgroundColor')!="transparent"){
+        $('#colorpickerHolder2').ColorPickerSetColor(thobj.RGBcss2Hex($(this).css('backgroundColor'))); 
+      }
+    });
+    
     
     jQuery('#toolbar_panel_button_foreColor_arrow').bind('click', function(e){
       e.stopPropagation();
@@ -434,15 +445,29 @@ WebDoc.TextPaletteController = jQuery.klass({
       thobj.hideHiliteColorpicker();
       WebDoc.application.textTool.delegate.editorExec('clearBackground');
     });
-    
-    
-    
-    
     jQuery('#colorpickerHolder2').find('div.colorpicker_setdefault').hide();
   },
   
   refreshState: function(toolbarHash, parameters){
     this.currentToolBarHash = toolbarHash;
+     if(!$("#toolbar_panel_fontSize_slider")[0].firstChild){
+       $("#toolbar_panel_fontSize_slider").slider({
+        value:1,
+        min:  parameters.fontSliderRange.min,
+        max: parameters.fontSliderRange.max,
+        step: parameters.fontSliderRange.step,
+        slide: function(event, ui) {
+          WebDoc.application.textTool.delegate.editorExec('fontSizeTesting', ui.value+'pt');
+        },
+        start:function(event, ui) {
+          WebDoc.application.textTool.delegate.editorExec('fontSizeTestingStart',ui.value+'pt');          
+        },
+        stop:function(event, ui) {
+          WebDoc.application.textTool.delegate.editorExec('fontSize',ui.value+'pt');          
+        }
+      });
+    }
+    
     jQuery("#toolbar_panel_button_fontSize").webdocPaletteControllerCombobox({
       'values': parameters.fontSize,
       'onChangeHandler': function(val){
@@ -478,7 +503,6 @@ WebDoc.TextPaletteController = jQuery.klass({
         
         }
       }
-      
       if (!setted) {
         jQuery("#toolbar_panel_button_" + id).webdocPaletteControllerCombobox("setCurrent", '');
       }
@@ -488,6 +512,7 @@ WebDoc.TextPaletteController = jQuery.klass({
         if (document.getElementById('toolbar_panel_button_' + stp).tagName.toLowerCase() == 'select') {
           if (stp == 'fontSize') {
             jQuery("#toolbar_panel_button_fontSize").webdocPaletteControllerCombobox("setCurrent", (toolbarHash[stp] != 'different') ? toolbarHash[stp].split('pt')[0] + ' pt' : '');
+            $("#toolbar_panel_fontSize_slider").slider("value", (toolbarHash[stp] != 'different') ? toolbarHash[stp].split('pt')[0] : 0);
           }
           else {
             this.setComboboxValue(stp, toolbarHash[stp], parameters);

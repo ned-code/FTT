@@ -11,6 +11,7 @@ class RemoveIdColumn < ActiveRecord::Migration
     remove_column :roles, :id
     remove_column :themes, :id
     remove_column :users, :id
+    add_column :users, :id, :integer, :default => nil
     remove_column :view_counts, :id
   end
 

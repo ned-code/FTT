@@ -13,14 +13,34 @@ WebDoc.ImagePaletteController = $.klass({
 
     this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
+    $("#placeholder_checkbox").click(this.changePlaceholder);
+
+    this.addImageLink = this.domNode.find("a[href=#create_image_link]");
+    this.linkFormController = new WebDoc.LinkFormController();
+    this.addImageLink.click(function(e){
+      this.selectedElement = WebDoc.application.boardController.selection()[0];
+      this.linkFormController.showDialog(e, this.selectedElement.item.data.data.href, function(newLink){
+        if (this.selectedElement && this.selectedElement.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+          this.selectedElement.item.data.data.href = newLink;
+          this.selectedElement.item.save(function() {
+            this.selectedElement.item.fireDomNodeChanged();
+            this.refresh();
+          }.pBind(this));
+        }
+      }.pBind(this));
+    }.pBind(this));
+
+    this.clearImageLink = this.domNode.find("a[href=#clear_image_link]");
+    this.clearImageLink.click(this._clearLink.pBind(this));
+    
     this.addToMyImageLink = this.domNode.find("a[href=#add_to_my_images]");
     this.addToMyImageResult = this.domNode.find("#add_to_my_images_result");
     
     this.addToMyImageLink.click(this.addToMyImage.pBind(this));
     
-    this.zoomNode = jQuery('#image_zoom');
-    this.xshiftNode = jQuery('#image_xshift');
-    this.yshiftNode = jQuery('#image_yshift');
+    this.zoomNode = this.domNode.find('#image_zoom');
+    this.xshiftNode = this.domNode.find('#image_xshift');
+    this.yshiftNode = this.domNode.find('#image_yshift');
        
     var that = this;
     this._nbChange = 0;    
@@ -80,9 +100,23 @@ WebDoc.ImagePaletteController = $.klass({
         else {
           $("#preserve_aspect_ratio").removeAttr("checked");
         }
+        if(selectedItem.item.getIsPlaceholder()) {
+          $("#placeholder_checkbox").attr("checked", "checked");
+        }
+        else {
+          $("#placeholder_checkbox").removeAttr("checked");
+        }
         this.zoomNode[0].value = selectedItem.item.getZoom();
         this.xshiftNode[0].value = selectedItem.item.getDisplacement().left;
         this.yshiftNode[0].value = selectedItem.item.getDisplacement().top;
+        if(selectedItem.item.data.data.href) {
+          this.addImageLink.text('Edit link');
+          this.clearImageLink.show();
+        }
+        else {
+          this.addImageLink.text('Create link');
+          this.clearImageLink.hide();
+        }
       }
     }
   },
@@ -102,7 +136,7 @@ WebDoc.ImagePaletteController = $.klass({
       var image = new Image();
       image.src = item.data.data.src;
       ddd("restore original size: "+image.width+"x"+image.height+"px");
-      WebDoc.ItemView.restoreSize(item, { width: image.width, height: image.height});
+      WebDoc.ItemView.restoreSize(item, { width: image.width+"px", height: image.height+"px"});
     }
   },
 
@@ -130,6 +164,18 @@ WebDoc.ImagePaletteController = $.klass({
     } 
   },
 
+  changePlaceholder: function() {
+    var item = WebDoc.application.boardController.selection()[0].item;
+    if(item && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+      if($(this).is(':checked')) {
+        item.setIsPlaceholder(true);
+      }
+      else {
+        item.setIsPlaceholder(false);
+      }
+    }
+  },
+
   addToMyImage: function() {
     var selected = WebDoc.application.boardController.selection()[0];
     if (selected && selected.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
@@ -154,6 +200,21 @@ WebDoc.ImagePaletteController = $.klass({
       }
     }
     return false;
+  },
+
+  _clearLink: function() {
+    ddd('[ImagePaletteController] clear link');
+    this.selectedElement = WebDoc.application.boardController.selection()[0];
+    if (this.selectedElement && this.selectedElement.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+      var selectedItem = this.selectedElement.item;
+      if (selectedItem.data.data.href) {
+        selectedItem.data.data.href = "";
+        selectedItem.save(function() {
+          this.selectedElement.item.fireDomNodeChanged();
+          this.refresh();
+        }.pBind(this));
+      }
+    }
   },
   
   _delayItemSave: function(item) {

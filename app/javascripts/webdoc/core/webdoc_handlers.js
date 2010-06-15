@@ -9,7 +9,7 @@ WebDoc.handlers = {
     
     this.addDocumentHandlers( 'click', this._documentHandlers );
     this.addPanelHandlers( 'click', this._panelHandlers );
-    
+    this.addCenterCellHandlers();
     // Global form validation
     jQuery(document)
     .delegate( 'input, textarea', 'keyup', function(e) {
@@ -59,6 +59,15 @@ WebDoc.handlers = {
     jQuery(document)
     .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
   },
+
+	addCenterCellHandlers: function(){
+		$('.center-cell')
+		.bind('click', function(e){
+			if ($(e.target).hasClass('center-cell')) {
+				WebDoc.application.boardController.unselectAll();
+			};
+		});
+	},
   
   // Editor actions (to be bound to the interface panels)
   _panelHandlers: {
