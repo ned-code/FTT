@@ -19,9 +19,13 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   },
     
   inspectorControllersClasses: function() {
-    return [WebDoc.WidgetInspectorController, WebDoc.WidgetPropertiesInspectorController];
+    return [/*WebDoc.WidgetInspectorController, WebDoc.WidgetPropertiesInspectorController*/];
   },
     
+  fullInspectorControllerClass: function() {
+    return WebDoc.WidgetInspectorController;  
+  },
+      
   createDomNode: function($super) {
     var widgetNode = $super();   
     if (this.item.data.data.tag == "iframe" && !WebDoc.application.disableHtml) {

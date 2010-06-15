@@ -30,9 +30,13 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   },
     
   inspectorControllersClasses: function() {
-    return [WebDoc.TextPropertiesInspectorController];
+    return [/*WebDoc.TextPropertiesInspectorController*/];
   },
     
+//  fullInspectorControllerClass: function() {
+//    return WebDoc.ImagePaletteController;  
+//  },
+      
   canEdit: function() {
     return true;
   },

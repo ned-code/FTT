@@ -4,7 +4,6 @@
 WebDoc.ImagePaletteController = $.klass({
   initialize: function( ) {
     this.domNode = $( "#image-inspector" );
-    this.domNode.hide();
     this.propertySrc = $("#property_src");
     this.propertySrc.blur(this.updateSrc.pBind(this));
 
@@ -54,6 +53,9 @@ WebDoc.ImagePaletteController = $.klass({
       });
       that._delayItemSave(item);
     });
+    
+    // image properties
+    this.propertiesController = new WebDoc.PropertiesInspectorController('#image_properties', false);
   },
   
   inspectorTitle: function() {
@@ -61,6 +63,7 @@ WebDoc.ImagePaletteController = $.klass({
   },
   
   refresh: function() {
+    this.propertiesController.refresh();
     if (WebDoc.application.boardController.selection().length) {      
       var selectedItem = WebDoc.application.boardController.selection()[0];
       if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {

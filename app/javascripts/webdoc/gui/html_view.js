@@ -23,7 +23,7 @@ WebDoc.HtmlView = $.klass(WebDoc.ItemView, {
   },
     
   inspectorControllersClasses: function() {
-    return [WebDoc.HtmlPropertiesInspectorController];
+    return [/*WebDoc.HtmlPropertiesInspectorController*/];
   },
     
   createDomNode: function($super) {

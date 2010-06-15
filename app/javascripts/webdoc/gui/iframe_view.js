@@ -31,9 +31,12 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   },
     
   inspectorControllersClasses: function() {
-    return [WebDoc.IframeController, WebDoc.IFramePropertiesInspectorController];
+    return [/*WebDoc.IframeController, WebDoc.IFramePropertiesInspectorController*/];
   },
       
+  fullInspectorControllerClass: function() {
+    return WebDoc.IframeController;  
+  },
   createDomNode: function($super) {
     this.itemLayerDomNode.show();
     this.domNode.addClass('loading');

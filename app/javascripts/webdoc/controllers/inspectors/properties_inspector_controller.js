@@ -3,7 +3,7 @@
  */
 
 WebDoc.PropertiesInspectorController = $.klass({
-  initialize: function( selector ) {
+  initialize: function( selector, showBgColors ) {
     var domNode = $(selector);
     this.domNode = domNode;
     domNode.show();
@@ -12,8 +12,15 @@ WebDoc.PropertiesInspectorController = $.klass({
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
     .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ));
     
-    WebDoc.application.boardController.themeNode
-    .bind( 'load', jQuery.proxy( this, '_makeThemeBackgrounds' ) );
+    if (showBgColors) {
+      WebDoc.application.boardController.themeNode.bind('load', jQuery.proxy(this, '_makeThemeBackgrounds'));
+      this._themeBgColorsNode = jQuery('<ul/>', {'class': "icons-only thumbs backgrounds_index index"}).css('clear', 'both');
+      this._themeBgState = false;
+      var that = this;
+      setTimeout(function() {
+        that._makeThemeBackgrounds();
+      }, 1000);
+    }
     
     this.fields = {
       top:              jQuery(selector + " #property_top"),
@@ -31,10 +38,6 @@ WebDoc.PropertiesInspectorController = $.klass({
       overflow:         jQuery(selector + " #property_overflow_hidden, " + selector +" #property_overflow_auto, " + selector +" #property_overflow_visible"),
       opacity:          jQuery(selector + " #property_opacity, " + selector +" #property_opacity_readout")
     };
-    
-    this._themeBgColorsNode = jQuery('<ul/>', {'class': "icons-only thumbs backgrounds_index index"}).css('clear', 'both');
-    this._themeBgState = false;
-    this._makeThemeBackgrounds();
   },
   
   inspectorTitle: function() {

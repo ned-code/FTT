@@ -6,7 +6,6 @@ WebDoc.WidgetInspectorController = $.klass({
   initialize: function( ) {
     this.domNode = $("#widget-inspector");
     this.loadingWheel = $("#inspector-loading-wheel");
-    this.domNode.show();
     this.widgetInspectorApi = new WebDoc.WidgetApi(null, true);
 
     var widgetPaletteContent = this.domNode.find("iframe");
@@ -36,6 +35,7 @@ WebDoc.WidgetInspectorController = $.klass({
       }                      
     }.pBind(this));
     
+    this.propertiesController = new WebDoc.PropertiesInspectorController('#widget_properties', false);
   },
 
   inspectorTitle: function() {
@@ -47,6 +47,7 @@ WebDoc.WidgetInspectorController = $.klass({
   },
   
   refresh: function() {
+    this.propertiesController.refresh();
     var selectedItem = WebDoc.application.boardController.selection()[0];
     this.widgetInspectorApi.setWidgetItem(selectedItem.item);    
     var widgetContent = this.domNode.find("iframe"); 

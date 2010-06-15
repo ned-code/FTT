@@ -5,9 +5,8 @@
 WebDoc.IframeController = $.klass({
   initialize: function( ) {
     this.domNode = $("#iframe-inspector");
-    this.domNode.show();
     this.domNode.find("#property-iframe-src").change(this.updateSrc);
-
+    this.propertiesController = new WebDoc.PropertiesInspectorController('#iframe_properties', false);
   },
 
   inspectorTitle: function() {
@@ -16,6 +15,7 @@ WebDoc.IframeController = $.klass({
   
   refresh: function() {
     ddd("refresh iframe inspector");
+    this.propertiesController.refresh();
     var selectedItem = WebDoc.application.boardController.selection()[0];
     if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IFRAME) {
       $("#property-iframe-src")[0].value = selectedItem.item.getSrc();

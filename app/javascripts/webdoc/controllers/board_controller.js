@@ -9,7 +9,8 @@ WebDoc.BoardController = jQuery.klass({
     this.boardContainerNode = jQuery("#board-container");
     this.screenUnderlayNode = jQuery("#underlay");
     this.screenNodes = this.boardCageNode.find('.board-screen');
-    this.themeNode = jQuery('#theme');
+    this.themeNode = jQuery('<link id="theme" rel="stylesheet" type="text/css" />'); 
+    jQuery('head').append(this.themeNode);
     this.loadingNode = jQuery("#webdoc_loading");
     
     this._editable = editable;

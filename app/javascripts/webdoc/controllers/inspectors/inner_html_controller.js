@@ -30,10 +30,12 @@ WebDoc.InnerHtmlController = $.klass({
 
     this.domNode = domNode;
     this._editor = editor;
+    this.propertiesController = new WebDoc.PropertiesInspectorController('#html_properties', true);
   },
   
   refresh: function() {
     ddd("refresh html inspector");
+    this.propertiesController.refresh();
     if (WebDoc.application.boardController.selection().length) {
       
       var item = WebDoc.application.boardController.selection()[0].item;
