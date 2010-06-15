@@ -85,6 +85,7 @@ javascripts:
     - app/javascripts/webdoc/model/*.js
 
   document_editor:
+    - app/javascripts/webdoc/controllers/drag_and_drop_controllers.js
     - app/javascripts/webdoc/utils/*.js
     - app/javascripts/webdoc/managers/*
     - app/javascripts/webdoc/controllers/document_collaboration_controller.js
@@ -109,6 +110,7 @@ javascripts:
     - app/javascripts/webdoc/managers/*
     - app/javascripts/webdoc/sdk/*.js
     - app/javascripts/webdoc/adaptors/*.js
+    - app/javascripts/webdoc/controllers/drag_and_drop_controller.js
     - app/javascripts/webdoc/utils/*.js
     - app/javascripts/webdoc/gui/item_view.js
     - app/javascripts/webdoc/gui/drawing_view.js
