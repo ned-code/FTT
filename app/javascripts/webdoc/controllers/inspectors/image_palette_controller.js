@@ -14,6 +14,8 @@ WebDoc.ImagePaletteController = $.klass({
 
     $("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
+    $("#placeholder_checkbox").click(this.changePlaceholder);
+
     this.addImageLink = $(selector + " a[href=#create_image_link]");
     this.linkFormController = new WebDoc.LinkFormController();
     this.addImageLink.click(function(e){
@@ -91,6 +93,12 @@ WebDoc.ImagePaletteController = $.klass({
         else {
           $("#preserve_aspect_ratio").removeAttr("checked");
         }
+        if(selectedItem.item.getIsPlaceholder()) {
+          $("#placeholder_checkbox").attr("checked", "checked");
+        }
+        else {
+          $("#placeholder_checkbox").removeAttr("checked");
+        }
         this.zoomNode[0].value = selectedItem.item.getZoom();
         this.xshiftNode[0].value = selectedItem.item.getDisplacement().left;
         this.yshiftNode[0].value = selectedItem.item.getDisplacement().top;
@@ -147,6 +155,18 @@ WebDoc.ImagePaletteController = $.klass({
       }
       item.save();
     } 
+  },
+
+  changePlaceholder: function() {
+    var item = WebDoc.application.boardController.selection()[0].item;
+    if(item && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+      if($(this).is(':checked')) {
+        item.setIsPlaceholder(true);
+      }
+      else {
+        item.setIsPlaceholder(false);
+      }
+    }
   },
 
   addToMyImage: function() {

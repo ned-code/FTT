@@ -55,7 +55,21 @@ $.extend(WebDoc.DrageAndDropController, {
             var imageUrl = params.url;
             var id = params.id ? params.id : undefined;  
           }
-          WebDoc.application.boardController.insertImage(imageUrl, pos, id);
+          var parent = jQuery(evt.target).parent();
+          if(parent && parent.data('itemView') && parent.data('itemView').item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && parent.data('itemView').item.getIsPlaceholder()){
+            var itemView = parent.data('itemView');
+            itemView.item.data.data.src = imageUrl;
+            itemView.item.preLoadImageWithCallback(function(event){
+              itemView.item.setRatio(itemView.item.calcRatio(event));
+              itemView.item.save(function() {
+                itemView.item.fireDomNodeChanged();
+                itemView.item.fireObjectChanged({ modifedAttribute: 'zoom' });
+              });
+            });
+          }  
+          else {
+            WebDoc.application.boardController.insertImage(imageUrl, pos, id);
+          }
           break;
         case 'application/ub-video':                                       
           var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-video'));

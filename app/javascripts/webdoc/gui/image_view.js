@@ -65,13 +65,14 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
 
   _zoom: function(){
     var image = this.imageNode,
-        model = this.item,
-        zoom = model.getZoom(),
-        css = {
-          width: (100 + zoom) + "%",
-          height: (100 + zoom) + "%"
+      model = this.item,
+      zoom = model.getZoom();
+
+    var css = {
+          width:  ((100 + zoom) * model.getRatio().width) + "%",
+          height: ((100 + zoom) * model.getRatio().height) + "%"
         };
-    
+
     image.css( css );
   },
   
