@@ -3,8 +3,8 @@
  */
 
 	WebDoc.DrageAndDropController = {
-  //KNOWN_TYPES : ['application/ub-image', 'application/ub-widget', 'application/ub-video', 'application/x-moz-file-promise-url', 'text/html', 'application/post-message-action'],
-  KNOWN_TYPES : ['application/ub-image', 'application/ub-widget', 'application/ub-video', 'application/post-message-action'],
+  //KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/x-moz-file-promise-url', 'text/html', 'application/post-message-action'],
+  KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/post-message-action'],
 	
 	KNOWN_SOURCES: [],// All source are defined in utils/drag_source.js EX ['youtube.com', function(uri_list){alert(uri_list);}], 
 
@@ -45,8 +45,8 @@
       var width = 200, height = 200, x = 0, y = 0;      
       var newItem;
       switch (availableType) {
-        case 'application/ub-widget':
-          var widget = evt.originalEvent.dataTransfer.getData('application/ub-widget');
+        case 'application/wd-widget':
+          var widget = evt.originalEvent.dataTransfer.getData('application/wd-widget');
           if (widget) 
           {
             var widgetData = $.evalJSON(widget);
@@ -55,17 +55,17 @@
           break;
         // case 'application/x-moz-file-promise-url':
         //   var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
-        case 'application/ub-image' :
+        case 'application/wd-image' :
           if(imageUrl === undefined) {
-            var params = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-image'));
+            var params = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-image'));
             var imageUrl = params.url;
             var id = params.id ? params.id : undefined;  
           }
           WebDoc.application.boardController.insertImage(imageUrl, pos, id);
           break;
-        case 'application/ub-video':
+        case 'application/wd-video':
           ddd('ub-video type');
-          var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/ub-video'));
+          var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-video'));
 					ddd(videoProperties);
           WebDoc.application.boardController.insertVideo(videoProperties, pos);
           break;
@@ -116,25 +116,7 @@
 	},
 
 	_parseUriList: function(uri_list, evt) {
-		ddd('[DrageAndDropController] _parseUriList');
-				
-		// //test addSource
-		// this.addSource(
-		// 	'youtube.com',
-		// 	function(uri_list,evt){
-		// 		ddd('youtube processing called');
-		// 		
-		// 		var videoProperties = {
-		// 			type : 'youtube',
-		// 			video_id : "Om4eqmF1hlM"
-		// 		};
-		// 
-		// 		var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
-		// 		WebDoc.application.boardController.insertVideo(videoProperties, pos);
-		// 	}
-		// );
-		
-		
+		ddd('[DrageAndDropController] _parseUriList');		
 		var knowSources = this.KNOWN_SOURCES;
 		
 		//here we get the domain of the parsed element
@@ -153,7 +135,7 @@
 		}
 		
 		
-		//Check if image file or other (pdf)
+		//Check if image file or other (pdf etc)
 		
 		//We don't find the domain in KNOWN_SOURCES
 		return false
