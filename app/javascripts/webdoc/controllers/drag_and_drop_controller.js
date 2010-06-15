@@ -4,10 +4,11 @@
 
 	WebDoc.DrageAndDropController = {
   //KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/x-moz-file-promise-url', 'text/html', 'application/post-message-action'],
-  KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/post-message-action'],
+  KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/post-message-action', 'application/x-moz-file-promise-url'],
 	
 	KNOWN_SOURCES: [],// All source are defined in utils/drag_source.js EX ['youtube.com', function(uri_list){alert(uri_list);}], 
-
+	KNOW_FILE_TYPES: [], //All file type recognised by WD EX: jpg, .jpeg
+	
   dragEnter: function(evt) {
     ddd("drag enter");
     ddd(evt);
@@ -52,9 +53,9 @@
             var widgetData = $.evalJSON(widget);
             WebDoc.application.boardController.insertWidget(widgetData, pos);
           }
+					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+					return true;
           break;
-        // case 'application/x-moz-file-promise-url':
-        //   var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
         case 'application/wd-image' :
           if(imageUrl === undefined) {
             var params = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-image'));
@@ -62,12 +63,14 @@
             var id = params.id ? params.id : undefined;  
           }
           WebDoc.application.boardController.insertImage(imageUrl, pos, id);
+					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+					return true;
           break;
         case 'application/wd-video':
-          ddd('ub-video type');
           var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-video'));
-					ddd(videoProperties);
           WebDoc.application.boardController.insertVideo(videoProperties, pos);
+					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+					return true;
           break;
         // case 'text/html':
         //   var html = evt.originalEvent.dataTransfer.getData('text/html');
@@ -80,6 +83,8 @@
           if (action) {
             WebDoc.application.postMessageManager.processMessage(action, pos);
           }
+					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+					return true;
           break;
       }
 
@@ -90,8 +95,22 @@
 				if (receivedTypes[typeIndex] == 'text/uri-list'){
 					//if there is one, we try to parse it 
 					if(WebDoc.DrageAndDropController._parseUriList(evt.originalEvent.dataTransfer.getData('text/uri-list'), evt)){
+						WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
 						return true;
 					}
+				}
+			}
+			
+			//Works only for FireFox
+			for(typeIndex in receivedTypes){
+				if (receivedTypes[typeIndex] == 'application/x-moz-file-promise-url'){
+					//if there is one, we try to parse it 
+					var imageUrl = evt.originalEvent.dataTransfer.getData('application/x-moz-file-promise-url');
+					var id = undefined;
+					
+					WebDoc.application.boardController.insertImage(imageUrl, pos, id);
+					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+					return true;
 				}
 			}
 			//No text/uri-list, or not parsable. we look for antoher type...
@@ -111,13 +130,18 @@
     }
   },
 	
-	addSource: function(url, parse_method){
-		this.KNOWN_SOURCES.push([url,parse_method]);
+	addUriSource: function(uri, parse_method){
+		this.KNOWN_SOURCES.push([uri,parse_method]);
 	},
 
+	addFileTypeSource: function(extension, parse_method){
+		this.KNOW_FILE_TYPES.push([extension, parse_method]);
+	},
+	
 	_parseUriList: function(uri_list, evt) {
 		ddd('[DrageAndDropController] _parseUriList');		
 		var knowSources = this.KNOWN_SOURCES;
+		var knowFileType = this.KNOW_FILE_TYPES;
 		
 		//here we get the domain of the parsed element
 		domain = WebDoc.UrlUtils.consolidateSrc(uri_list).split('://')[1].split('/')[0];
@@ -134,10 +158,17 @@
 			}
 		}
 		
+		//src.match(pattern_has_protocole)
+		for(knowFileTypeIndex in knowFileType){
+			reg = new RegExp('(' + knowFileType[knowFileTypeIndex][0] + ')');
+			if(uri_list.match(knowFileType[knowFileTypeIndex][0])){
+				knowFileType[knowFileTypeIndex][1](uri_list,evt);
+				return true;
+			}
+		}
+		//uri-list not in KNOWN_SOURCES. We try to look if it's in KNOW_FILE_TYPES to display this file
 		
-		//Check if image file or other (pdf etc)
-		
-		//We don't find the domain in KNOWN_SOURCES
+		//We don't find the domain in KNOWN_SOURCES or KNOW_FILE_TYPES. We do nothing here
 		return false
 	},
 	
