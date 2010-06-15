@@ -85,11 +85,7 @@ javascripts:
     - app/javascripts/webdoc/model/*.js
 
   document_editor:
-    - app/javascripts/webdoc/utils/class_list.js
-    - app/javascripts/webdoc/utils/document_date_filter.js
-    - app/javascripts/webdoc/utils/field_validator.js
-    - app/javascripts/webdoc/utils/inspector_fields_validator.js
-    - app/javascripts/webdoc/utils/url_utils.js
+    - app/javascripts/webdoc/utils/*.js
     - app/javascripts/webdoc/managers/*
     - app/javascripts/webdoc/controllers/document_collaboration_controller.js
     - app/javascripts/webdoc/controllers/document_share_controller.js
@@ -113,7 +109,6 @@ javascripts:
     - app/javascripts/webdoc/managers/*
     - app/javascripts/webdoc/sdk/*.js
     - app/javascripts/webdoc/adaptors/*.js
-    - app/javascripts/webdoc/controllers/drag_and_drop_controller.js
     - app/javascripts/webdoc/utils/*.js
     - app/javascripts/webdoc/gui/item_view.js
     - app/javascripts/webdoc/gui/drawing_view.js
