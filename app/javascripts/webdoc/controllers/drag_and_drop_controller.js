@@ -3,11 +3,9 @@
  */
 
 	WebDoc.DrageAndDropController = {
-  //KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/x-moz-file-promise-url', 'text/html', 'application/post-message-action'],
   KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/post-message-action', 'application/x-moz-file-promise-url'],
-	
 	KNOWN_SOURCES: [],// All source are defined in utils/drag_source.js EX ['youtube.com', function(uri_list){alert(uri_list);}], 
-	KNOW_FILE_TYPES: [], //All file type recognised by WD EX: jpg, .jpeg
+	KNOWN_FILE_TYPES: [], //All file type recognised by WD EX: jpg, .jpeg. Defined in utils/drag_source.js
 	
   dragEnter: function(evt) {
     ddd("drag enter");
@@ -135,13 +133,13 @@
 	},
 
 	addFileTypeSource: function(extension, parse_method){
-		this.KNOW_FILE_TYPES.push([extension, parse_method]);
+		this.KNOWN_FILE_TYPES.push([extension, parse_method]);
 	},
 	
 	_parseUriList: function(uri_list, evt) {
 		ddd('[DrageAndDropController] _parseUriList');		
 		var knowSources = this.KNOWN_SOURCES;
-		var knowFileType = this.KNOW_FILE_TYPES;
+		var knowFileType = this.KNOWN_FILE_TYPES;
 		
 		//here we get the domain of the parsed element
 		domain = WebDoc.UrlUtils.consolidateSrc(uri_list).split('://')[1].split('/')[0];
@@ -172,8 +170,8 @@
 		return false
 	},
 	
+	//Not yet implemented
 	_parseHtml: function(html,evt){
-		ddd('_parseHtml');
 		return false;
 	}
 }
