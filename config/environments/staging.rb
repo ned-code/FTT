@@ -35,6 +35,8 @@ config.action_mailer.smtp_settings = {
 }
 config.action_mailer.default_url_options = { :host => 'st-wd.webdoc.com' }
 
+config.logger = Logger.new("#{RAILS_ROOT}/log/#{ENV['RAILS_ENV']}.log", 50, 5242880)
+
 #ExceptionNotification config
 ExceptionNotification::Notifier.view_paths = ActionView::Base.process_view_paths(ExceptionNotification::Notifier.view_paths)
 ExceptionNotification::Notifier.sender_address = %("WebDoc Staging Error" <staging.error@webdoc.com>)
