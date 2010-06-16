@@ -14,11 +14,12 @@ WebDoc.PageView = $.klass({
     
     
     // Extend this
-    this._editable = undefined;  
-    this.setEditable(editable);  
+    this._editable = undefined;
     this._boardContainer = boardContainer;
+    this.setEditable(editable);
     this.page = page;
     this.domNode = domNode;
+
     this.drawingDomNode = drawingDomNode;
     this.itemDomNode = itemDomNode;
     this.eventCatcherNode = eventCatcherNode;
@@ -301,10 +302,9 @@ WebDoc.PageView = $.klass({
           this.overLayer.hide();
         }
         jQuery(".item-layer").hide();
-        if(this._boardContainer) {
-          this._boardContainer.resizable('destroy');
-        }
+        this._boardContainer.resizable('destroy');
       }
+
       if(this.externalPageIframe) {
         this.externalPageIframe.css('overflow', editable? 'hidden' : 'visible');
         this._loadExternalPage();
