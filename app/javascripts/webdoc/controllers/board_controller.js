@@ -9,8 +9,8 @@ WebDoc.BoardController = jQuery.klass({
     this.boardContainerNode = jQuery("#board-container");
     this.screenUnderlayNode = jQuery("#underlay");
     this.screenNodes = this.boardCageNode.find('.board-screen');
-    this.themeNode = jQuery('#theme');
-    
+    this.themeNode = jQuery('<link id="theme" rel="stylesheet" type="text/css" />'); 
+    jQuery('head').append(this.themeNode);
     this.loadingNode = jQuery("#webdoc_loading");
     
     this._editable = editable;
@@ -116,13 +116,14 @@ WebDoc.BoardController = jQuery.klass({
       }
     }
     this.zoom(defaultZoom);
+
     this.setMode(!jQuery("body").hasClass('mode-edit'));
-    
+
     this._fireCurrentPageChanged();
     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
-    pageView.viewDidLoad();    
+    pageView.viewDidLoad();
   },
   
   isInteractionMode: function() {
@@ -149,6 +150,9 @@ WebDoc.BoardController = jQuery.klass({
     .removeClass("current")
     .filter("[href='#mode-edit']")
     .addClass("current");
+
+    this.boardContainerNode.resizable('destroy'); // destroy to refresh    
+    this._initResizable();
     
     //WebDoc.application.pageBrowserController.reveal();
     //WebDoc.application.rightBarController.reveal();
@@ -179,6 +183,8 @@ WebDoc.BoardController = jQuery.klass({
     .removeClass("current")
     .filter("[href='#mode-preview']")
     .addClass("current");
+
+    this.boardContainerNode.resizable('destroy');
     
     if(!this._editable) {
       jQuery(".mode-tools").hide(); 
@@ -204,12 +210,24 @@ WebDoc.BoardController = jQuery.klass({
       this._setModeEdit();
     }
     
+    // Apps/Inspectors
+//    var allItemsViews = this.currentPageView().itemViews;
+//    $.each(allItemsViews, function(k, v) {
+//      if (v.inspectorPanesManager) {
+//        v.inspectorPanesManager.showOpenFloatingInspectorButton(!state);
+//      }
+//    });
+
+    if (WebDoc.appsContainer) {
+      WebDoc.appsMessagingController.notifyModeChanged(!state);
+    }
+    
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     // it does not work on ff4
-//    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
-//      ddd("FF 3.5. drawing !");
-//      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
-//    }
+    //    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
+    //      ddd("FF 3.5. drawing !");
+    //      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
+    //    }
   },
   
   toggleMode: function() {
@@ -638,7 +656,7 @@ WebDoc.BoardController = jQuery.klass({
   
   insertHtml: function(html, position) {
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.media_type = WebDoc.ITEM_TYPE_HTML;
     newItem.data.data.tag = "div";
     newItem.data.data.innerHTML = html;
     newItem.data.data.css = {
@@ -792,6 +810,7 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _keyDown: function(e) {
+    ddd("[BoardController] keydown");
     var el = jQuery(e.target);
     if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();
@@ -993,5 +1012,25 @@ WebDoc.BoardController = jQuery.klass({
     first.target.dispatchEvent(simulatedEvent);
 
     event.preventDefault();
+  },
+
+  _initResizable: function() {
+    ddd('[page view] init resize')
+    this.boardContainerNode.resizable({
+      handles: 's, e, se',
+      start: function(e, ui) {
+        ddd('[page view] resize start');
+        this.setCurrentTool( WebDoc.application.arrowTool );
+        this.oldSize = { width: this._currentPage.width(), height: this._currentPage.height() };
+      }.pBind(this),
+      resize: function(e, ui) {
+        this._currentPage.setSize({ height: ui.size.height+'px', width: ui.size.width+'px' }, false);
+      }.pBind(this),
+      stop: function(e, ui) {
+        ddd('[page view] resize stop');
+        this._currentPage.setSize({ height: ui.size.height+'px', width: ui.size.width+'px' }, true, this.oldSize);
+      }.pBind(this)
+    });
   }
+  
 });

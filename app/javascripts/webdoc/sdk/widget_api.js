@@ -39,7 +39,7 @@ WebDoc.WidgetApi = $.klass(
       this.widgetItem.save();
       if (!this.isInspectorApi()) {
         ddd("will refresh inspector");
-        WebDoc.application.inspectorController.refreshWidgetPalette();
+        WebDoc.application.inspectorController.refresh();
       }
       else {
         this.widgetItem.fireWidgetChanged();
