@@ -116,13 +116,14 @@ WebDoc.BoardController = jQuery.klass({
       }
     }
     this.zoom(defaultZoom);
+
     this.setMode(!jQuery("body").hasClass('mode-edit'));
-    
+
     this._fireCurrentPageChanged();
     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
-    pageView.viewDidLoad();    
+    pageView.viewDidLoad();
   },
   
   isInteractionMode: function() {
@@ -149,6 +150,9 @@ WebDoc.BoardController = jQuery.klass({
     .removeClass("current")
     .filter("[href='#mode-edit']")
     .addClass("current");
+
+    this.boardContainerNode.resizable('destroy'); // destroy to refresh    
+    this._initResizable();
     
     //WebDoc.application.pageBrowserController.reveal();
     //WebDoc.application.rightBarController.reveal();
@@ -179,6 +183,8 @@ WebDoc.BoardController = jQuery.klass({
     .removeClass("current")
     .filter("[href='#mode-preview']")
     .addClass("current");
+
+    this.boardContainerNode.resizable('destroy');
     
     if(!this._editable) {
       jQuery(".mode-tools").hide(); 
@@ -993,5 +999,25 @@ WebDoc.BoardController = jQuery.klass({
     first.target.dispatchEvent(simulatedEvent);
 
     event.preventDefault();
+  },
+
+  _initResizable: function() {
+    ddd('[page view] init resize')
+    this.boardContainerNode.resizable({
+      handles: 's, e, se',
+      start: function(e, ui) {
+        ddd('[page view] resize start');
+        this.setCurrentTool( WebDoc.application.arrowTool );
+        this.oldSize = { width: this._currentPage.width(), height: this._currentPage.height() };
+      }.pBind(this),
+      resize: function(e, ui) {
+        this._currentPage.setSize({ height: ui.size.height+'px', width: ui.size.width+'px' }, false);
+      }.pBind(this),
+      stop: function(e, ui) {
+        ddd('[page view] resize stop');
+        this._currentPage.setSize({ height: ui.size.height+'px', width: ui.size.width+'px' }, true, this.oldSize);
+      }.pBind(this)
+    });
   }
+  
 });
