@@ -9,8 +9,8 @@ WebDoc.BoardController = jQuery.klass({
     this.boardContainerNode = jQuery("#board-container");
     this.screenUnderlayNode = jQuery("#underlay");
     this.screenNodes = this.boardCageNode.find('.board-screen');
-    this.themeNode = jQuery('#theme');
-    
+    this.themeNode = jQuery('<link id="theme" rel="stylesheet" type="text/css" />'); 
+    jQuery('head').append(this.themeNode);
     this.loadingNode = jQuery("#webdoc_loading");
     
     this._editable = editable;
@@ -210,12 +210,24 @@ WebDoc.BoardController = jQuery.klass({
       this._setModeEdit();
     }
     
+    // Apps/Inspectors
+//    var allItemsViews = this.currentPageView().itemViews;
+//    $.each(allItemsViews, function(k, v) {
+//      if (v.inspectorPanesManager) {
+//        v.inspectorPanesManager.showOpenFloatingInspectorButton(!state);
+//      }
+//    });
+
+    if (WebDoc.appsContainer) {
+      WebDoc.appsMessagingController.notifyModeChanged(!state);
+    }
+    
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     // it does not work on ff4
-//    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
-//      ddd("FF 3.5. drawing !");
-//      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
-//    }
+    //    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
+    //      ddd("FF 3.5. drawing !");
+    //      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
+    //    }
   },
   
   toggleMode: function() {
@@ -644,7 +656,7 @@ WebDoc.BoardController = jQuery.klass({
   
   insertHtml: function(html, position) {
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-    newItem.data.media_type = WebDoc.ITEM_TYPE_WIDGET;
+    newItem.data.media_type = WebDoc.ITEM_TYPE_HTML;
     newItem.data.data.tag = "div";
     newItem.data.data.innerHTML = html;
     newItem.data.data.css = {
@@ -798,6 +810,7 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _keyDown: function(e) {
+    ddd("[BoardController] keydown");
     var el = jQuery(e.target);
     if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();

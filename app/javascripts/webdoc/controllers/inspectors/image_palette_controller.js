@@ -2,21 +2,20 @@
  * @author Julien Bachmann
  */
 WebDoc.ImagePaletteController = $.klass({
-  initialize: function( selector ) {
-    this.domNode = $( selector );
-
+  initialize: function( ) {
+    this.domNode = $( "#image-inspector" );
     this.propertySrc = $("#property_src");
     this.propertySrc.blur(this.updateSrc.pBind(this));
 
-    $("#restore_original_size").click(this.restoreOriginalSize);
+    this.domNode.find("#restore_original_size").click(this.restoreOriginalSize);
     
-    $("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
+    this.domNode.find("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
 
-    $("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
+    this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
     $("#placeholder_checkbox").click(this.changePlaceholder);
 
-    this.addImageLink = $(selector + " a[href=#create_image_link]");
+    this.addImageLink = this.domNode.find("a[href=#create_image_link]");
     this.linkFormController = new WebDoc.LinkFormController();
     this.addImageLink.click(function(e){
       this.selectedElement = WebDoc.application.boardController.selection()[0];
@@ -31,17 +30,17 @@ WebDoc.ImagePaletteController = $.klass({
       }.pBind(this));
     }.pBind(this));
 
-    this.clearImageLink = $(selector + " a[href=#clear_image_link]");
+    this.clearImageLink = this.domNode.find("a[href=#clear_image_link]");
     this.clearImageLink.click(this._clearLink.pBind(this));
     
-    this.addToMyImageLink = $(selector + " a[href=#add_to_my_images]");
-    this.addToMyImageResult = $(selector + " #add_to_my_images_result");
+    this.addToMyImageLink = this.domNode.find("a[href=#add_to_my_images]");
+    this.addToMyImageResult = this.domNode.find("#add_to_my_images_result");
     
     this.addToMyImageLink.click(this.addToMyImage.pBind(this));
     
-    this.zoomNode = jQuery('#image_zoom');
-    this.xshiftNode = jQuery('#image_xshift');
-    this.yshiftNode = jQuery('#image_yshift');
+    this.zoomNode = this.domNode.find('#image_zoom');
+    this.xshiftNode = this.domNode.find('#image_xshift');
+    this.yshiftNode = this.domNode.find('#image_yshift');
        
     var that = this;
     this._nbChange = 0;    
@@ -74,9 +73,17 @@ WebDoc.ImagePaletteController = $.klass({
       });
       that._delayItemSave(item);
     });
+    
+    // image properties
+    this.propertiesController = new WebDoc.PropertiesInspectorController('#image_properties', false);
+  },
+  
+  inspectorTitle: function() {
+    return "Image";  
   },
   
   refresh: function() {
+    this.propertiesController.refresh();
     if (WebDoc.application.boardController.selection().length) {      
       var selectedItem = WebDoc.application.boardController.selection()[0];
       if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {

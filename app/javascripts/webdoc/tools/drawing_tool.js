@@ -131,7 +131,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     $super();
     WebDoc.application.boardController.unselectAll();
     WebDoc.application.rightBarController.showItemInspector();
-    WebDoc.application.inspectorController.selectPalette(2);
+    WebDoc.application.inspectorController.selectInspector('DrawingInspectorGroup');
   },
   
   mouseDown: function(e) {

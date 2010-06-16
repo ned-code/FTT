@@ -1,4 +1,5 @@
 namespace :users do
+  desc "Add 3 users: admin@mnemis.com/123456, guest@mnemis.com/123456 and all@mnemis.com/ycfeIDHUFvSzxXowiKZj"
   task :add_dev => :environment do
     users = [
       {:username => 'admin',  :email => "admin@mnemis.com", :pass => '123456'},
@@ -23,6 +24,7 @@ namespace :users do
     User.find_by_username("admin").has_role!("admin")
   end
   
+  desc "Confirm all users at once"
   task :confirm_all => :environment do
     User.update_all "confirmed_at = '#{Time.now.utc.to_s(:db)}'", :confirmed_at => nil
   end
@@ -36,8 +38,8 @@ namespace :users do
        document.creator = default_user
        document.save
        default_user.has_role!("editor", document)
-      end      
+      end
     end
-  end  
+  end
   
 end

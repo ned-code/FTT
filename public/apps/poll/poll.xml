@@ -1,0 +1,17 @@
+<?xml version = "1.0" encoding="UTF-8" ?>
+<Module>
+  
+  <ModulePrefs title = "WebDoc poll module" height="400">
+    <Require feature = "opensocial-0.8" />
+    <Require feature = "osapi" />
+    <Require feature = "settitle" />
+    <Require feature = "views" />
+    <Require feature = "dynamic-height"/>
+    <!--<Require feature = "caja" />-->
+  </ModulePrefs>
+  
+  <Content type="html" view="home" href="views/home.html"></Content>
+  <Content type="html" view="settings" href="views/settings_pane.html"></Content>
+  <Content type="html" view="style" href="views/style_pane.html"></Content>
+  
+</Module>
