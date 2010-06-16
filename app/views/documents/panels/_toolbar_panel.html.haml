@@ -65,7 +65,7 @@
 
   %ul#misc_tools.edit-tools.group-tools.tools.thumbs.index.icons-only
     -# Whitespace is removed between lis to preserve layout
-    %li>
+    %li.mode-edit-show>
       %a.state-tool{ :href => "#select" , :title => t('.select') }
         = t('.select')
     %li>
@@ -78,6 +78,9 @@
           %div.draw-size.draw-color
 
   %ul.control-tools.mode-embed-hide.tools.thumbs.index.icons-only
+    %li>
+      %a{ :href => "#open-browser", :title => 'Open Browser' } Open Browser
+    
     %li>
       %a#debug-button{ :href => "#disable-html", :title => 'Disable HTML' } Disable HTML
     - if current_user.present?

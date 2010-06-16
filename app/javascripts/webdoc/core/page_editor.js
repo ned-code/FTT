@@ -71,6 +71,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       //WebDoc.application.inspectorController = new WebDoc.InspectorController();
       WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
       WebDoc.application.toolbarController = new WebDoc.ToolbarController();
+			WebDoc.application.browserController = new WebDoc.BrowserController();
       
       WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
       WebDoc.application.themesController = new WebDoc.ThemesController();
@@ -83,7 +84,9 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
       WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
       WebDoc.application.osGadgetTool = new WebDoc.OsGadgetTool( "a[href='#insert-os-gadget']", "insert-os-gadget" );
-  
+  		WebDoc.application.browserTool = new WebDoc.BrowserTool("a[href='#open-browser']", "open-browser" );
+
+
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
       WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
       WebDoc.application.postMessageManager = new WebDoc.PostMessageManager();      

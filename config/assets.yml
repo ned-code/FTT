@@ -123,6 +123,7 @@ javascripts:
     - app/javascripts/webdoc/gui/os_gadget_view.js    
     - app/javascripts/webdoc/tools/tool.js
     - app/javascripts/webdoc/tools/arrow_tool.js
+    - app/javascripts/webdoc/tools/browser_tool.js
     - app/javascripts/webdoc/tools/drawing_tool.js
     - app/javascripts/webdoc/tools/hand_tool.js
     - app/javascripts/webdoc/tools/html_tool.js
