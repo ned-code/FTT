@@ -3,7 +3,7 @@
  */
 
 WebDoc.InnerHtmlController = $.klass({
-  initialize: function( selector ) {
+  initialize: function( selector, withProperties ) {
 
     var domNode = $(selector),
         self = this,
@@ -30,12 +30,16 @@ WebDoc.InnerHtmlController = $.klass({
 
     this.domNode = domNode;
     this._editor = editor;
-    this.propertiesController = new WebDoc.PropertiesInspectorController('#html_properties', true);
+    if (withProperties) {
+      this.propertiesController = new WebDoc.PropertiesInspectorController('#html_properties', true);
+    }
   },
   
   refresh: function() {
     ddd("refresh html inspector");
-    this.propertiesController.refresh();
+    if (this.propertiesController) {
+      this.propertiesController.refresh();
+    }
     if (WebDoc.application.boardController.selection().length) {
       
       var item = WebDoc.application.boardController.selection()[0].item;
