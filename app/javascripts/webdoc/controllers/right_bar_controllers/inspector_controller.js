@@ -54,7 +54,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
       inspectorNode = this._inspectorNodes[this.currentInspectorId].domNode;
       inspectorNode.show();
       
-      this.refresh();
+      this._inspectorNodes[this.currentInspectorId].refresh();
     }
   },
   
