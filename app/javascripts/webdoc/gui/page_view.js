@@ -326,6 +326,7 @@ WebDoc.PageView = $.klass({
       handles: 's, e, se',
       start: function(e, ui) {
         ddd('[page view] resize start');
+        WebDoc.application.boardController.setCurrentTool( WebDoc.application.arrowTool );
         this.oldSize = { width: this.page.width(), height: this.page.height() };
       }.pBind(this),
       resize: function(e, ui) {
