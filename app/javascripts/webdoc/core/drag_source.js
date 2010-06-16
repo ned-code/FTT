@@ -85,7 +85,33 @@ WebDoc.DrageAndDropController.addFileTypeSource(
 WebDoc.DrageAndDropController.addFileTypeSource(
 	'.html',
 	function(uri_list,evt){
-		ddd('html processor');
+		WebDoc.application.boardController.unselectAll();
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
+    newItem.data.data.src = uri_list;
+    newItem.data.data.css = { top: "100px", left: "100px", width: "600px", height: "400px", overflow: "auto"};
+    newItem.data.data.tag = "iframe";
+    WebDoc.application.boardController.insertItems([newItem]);
+	}
+);
+
+WebDoc.DrageAndDropController.addFileTypeSource(
+	'.php',
+	function(uri_list,evt){
+		ddd('php processor');
+		WebDoc.application.boardController.unselectAll();
+    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
+    newItem.data.data.src = uri_list;
+    newItem.data.data.css = { top: "100px", left: "100px", width: "600px", height: "400px", overflow: "auto"};
+    newItem.data.data.tag = "iframe";
+    WebDoc.application.boardController.insertItems([newItem]);
+	}
+);
+
+WebDoc.DrageAndDropController.addFileTypeSource(
+	'.php3',
+	function(uri_list,evt){
 		WebDoc.application.boardController.unselectAll();
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
