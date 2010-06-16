@@ -103,7 +103,7 @@
 }
 
 /* Ideally, all elements likely to be put in a centred layer should be listed here */
-.center-box>div,
+/* .center-box>div,
 .center-box>form,
 .center-box>img,
 .center-box>object,
@@ -113,7 +113,7 @@
 .center-box>canvas,
 .center-box>.content {
     height: 100%;
-}
+} */
 
 /* Screen */
 .screen {

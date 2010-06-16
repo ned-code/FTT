@@ -84,12 +84,6 @@
 					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
 					return true;
           break;
-        // case 'text/html':
-        //   var html = evt.originalEvent.dataTransfer.getData('text/html');
-        //   if (html) {
-        //     WebDoc.application.boardController.insertHtml(html, pos);
-        //   }
-        //   break;
         case 'application/post-message-action':
           var action = evt.originalEvent.dataTransfer.getData('application/post-message-action');
           if (action) {
@@ -127,16 +121,30 @@
 			}
 			//No text/uri-list, or not parsable. we look for antoher type...
 			//text/html
+			// for(typeIndex in receivedTypes){
+			// 	if (receivedTypes[typeIndex] == 'text/html'){
+			// 		//if there is one, we try to parse it 
+			// 		if(WebDoc.DrageAndDropController._parseHtml(evt.originalEvent.dataTransfer.getData('text/html'), evt)){
+			// 			return true;
+			// 		}
+			// 	}
+			// }
+			
+			//nothing found here, we display the url received (if there is one) in an iframe !
+			
 			for(typeIndex in receivedTypes){
-				if (receivedTypes[typeIndex] == 'text/html'){
-					//if there is one, we try to parse it 
-					if(WebDoc.DrageAndDropController._parseHtml(evt.originalEvent.dataTransfer.getData('text/html'), evt)){
-						return true;
-					}
+				if (receivedTypes[typeIndex] == 'text/uri-list'){
+					WebDoc.application.boardController.unselectAll();
+			    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+			    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
+			    newItem.data.data.src = evt.originalEvent.dataTransfer.getData('text/uri-list');
+			    newItem.data.data.css = { top: "100px", left: "100px", width: "600px", height: "400px", overflow: "auto"};
+			    newItem.data.data.tag = "iframe";
+			    WebDoc.application.boardController.insertItems([newItem]);
+					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+					return true;
 				}
 			}
-			
-			//nothing found here !
 			
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
     }

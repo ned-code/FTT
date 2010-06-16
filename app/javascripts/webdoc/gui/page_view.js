@@ -14,11 +14,12 @@ WebDoc.PageView = $.klass({
     
     
     // Extend this
-    this._editable = undefined;  
-    this.setEditable(editable);  
+    this._editable = undefined;
     this._boardContainer = boardContainer;
+    this.setEditable(editable);
     this.page = page;
     this.domNode = domNode;
+
     this.drawingDomNode = drawingDomNode;
     this.itemDomNode = itemDomNode;
     this.eventCatcherNode = eventCatcherNode;
@@ -294,13 +295,16 @@ WebDoc.PageView = $.klass({
           this.overLayer.show();
         }
         jQuery(".item-layer").show();
+        this._initResizable();
       }
       else {
         if (this.overLayer) {
           this.overLayer.hide();
         }
         jQuery(".item-layer").hide();
+        this._boardContainer.resizable('destroy');
       }
+
       if(this.externalPageIframe) {
         this.externalPageIframe.css('overflow', editable? 'hidden' : 'visible');
         this._loadExternalPage();
@@ -315,6 +319,24 @@ WebDoc.PageView = $.klass({
   
   isEditable: function() {
     return this._editable;
+  },
+
+  _initResizable: function() {
+    this._boardContainer.resizable({
+      handles: 's, e, se',
+      start: function(e, ui) {
+        ddd('[page view] resize start');
+        WebDoc.application.boardController.setCurrentTool( WebDoc.application.arrowTool );
+        this.oldSize = { width: this.page.width(), height: this.page.height() };
+      }.pBind(this),
+      resize: function(e, ui) {
+        this.page.setSize({ height: ui.size.height+'px', width: ui.size.width+'px' }, false);
+      }.pBind(this),
+      stop: function(e, ui) {
+        ddd('[page view] resize stop');
+        this.page.setSize({ height: ui.size.height+'px', width: ui.size.width+'px' }, true, this.oldSize);
+      }.pBind(this)
+    });
   }
 
 });
