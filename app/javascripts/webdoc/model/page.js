@@ -164,16 +164,24 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
   },
 
-  setSize: function(size) {
-    if(size && (this.width() != size['width'] || this.height() != size['height'])) {
-      var old_size = { width: this.width(), height: this.width() };
+  // by default saved, but if save is false the page isnt saved
+  // oldSize is optional too
+  setSize: function(size, save, oldSize) {
+    if(oldSize === undefined) {
+      oldSize = { width: this.width(), height: this.height() };
+    }
+    if(size && (oldSize.width !== size['width'] || oldSize.height !== size['height'])) {
+
       this.data.data.css.width = size['width'];
       this.data.data.css.height = size['height'];
       this.fireObjectChanged({ modifedAttribute: 'css.width css.height' });
-      this.save();
-      WebDoc.application.undoManager.registerUndo(function() {
-        this.setSize(old_size);
-      }.pBind(this));
+
+      if(save === undefined || save === true) {
+        this.save();
+        WebDoc.application.undoManager.registerUndo(function() {
+          this.setSize(oldSize);
+        }.pBind(this));
+      }
     }
   },
 
