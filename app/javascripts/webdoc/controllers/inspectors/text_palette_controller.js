@@ -136,12 +136,14 @@ WebDoc.TextPaletteController = jQuery.klass({
         self.input = input;
         if (!self.options.isEditable) {
           self.input.bind('keypress', function(){
+            ddd("[TextPaletteCOntroller] keydown");
             return false;
           });
           self.input.bind('keyup', function(){
             return false;
           });
           self.input.bind('keydown', function(){
+            ddd("[TextPaleteController] key down");
             return false;
           });
         }

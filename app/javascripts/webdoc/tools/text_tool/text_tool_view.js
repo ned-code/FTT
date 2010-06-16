@@ -2292,6 +2292,7 @@ WebDoc.TextToolView = $.klass({
     };
     
     $(this.edDoc).bind("keydown", function(e){
+      ddd("[TextToolView] keydown");
       var key = e.keyCode;
       var keys = [37, 38, 39, 40, 8, 9, 16, 18, 20, 91, 45, 93, 36, 33, 34, 35, 144];
       if (thobj.findValueInArray(keys, key) || e.ctrlKey || e.metaKey || e.altKey) {

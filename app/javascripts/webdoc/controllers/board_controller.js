@@ -804,6 +804,7 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _keyDown: function(e) {
+    ddd("[BoardController] keydown");
     var el = jQuery(e.target);
     if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();

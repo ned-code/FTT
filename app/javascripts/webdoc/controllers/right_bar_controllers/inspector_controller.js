@@ -63,7 +63,8 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
   },
   
   refresh: function() {
-      this.selectionChanged();
+    this.selectionChanged();
+    this._inspectorNodes[this.currentInspectorId].refresh();
   },
   
   selectionChanged: function() {
@@ -76,10 +77,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
         this._updateInspector('empty');
       }
     }
-  },
-  
-  refresh: function() {
-    this._inspectorNodes[this.currentInspectorId].refresh();
   }
 });
 

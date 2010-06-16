@@ -170,7 +170,7 @@ WebDoc.PropertiesInspectorController = $.klass({
       output: function( field, css ){
         field
         .filter( "[value="+ css.overflow +"]" )
-        .attr('checked', 'true');
+        .attr('checked', 'checked');
       }
     },
     opacity: {
