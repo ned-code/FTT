@@ -11,7 +11,7 @@ WebDoc.BrowserController = $.klass({
 
 	openBrowser: function(){
 		if(!this.bringToFront()){
-			this.window_ref = window.open('/browse','browser_window', 'width=undefined,height=undefined'); // 'width=undefined,height=undefined' is set to force Firefox to open a new window
+			this.window_ref = window.open('/browse','browser_window', 'width=undefined,height=undefined,toolbar=1'); // 'width=undefined,height=undefined' is set to force Firefox to open a new window
 		}
 	},
 	
