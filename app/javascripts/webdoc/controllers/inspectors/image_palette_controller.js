@@ -18,6 +18,7 @@ WebDoc.ImagePaletteController = $.klass({
     this.addImageLink = this.domNode.find("a[href=#create_image_link]");
     this.linkFormController = new WebDoc.LinkFormController();
     this.addImageLink.click(function(e){
+      e.preventDefault();
       this.selectedElement = WebDoc.application.boardController.selection()[0];
       this.linkFormController.showDialog(e, this.selectedElement.item.data.data.href, function(newLink){
         if (this.selectedElement && this.selectedElement.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
@@ -27,6 +28,7 @@ WebDoc.ImagePaletteController = $.klass({
             this.refresh();
           }.pBind(this));
         }
+        return false;
       }.pBind(this));
     }.pBind(this));
 
@@ -127,9 +129,10 @@ WebDoc.ImagePaletteController = $.klass({
     item.save(function() {
       item.fireDomNodeChanged();
     });
+    event.preventDefault();
   },
 
-  restoreOriginalSize: function() {
+  restoreOriginalSize: function(event) {
     var item = WebDoc.application.boardController.selection()[0].item;
 
     if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && item.data.data.src !== undefined && item.data.data.src !== "") {
@@ -138,9 +141,10 @@ WebDoc.ImagePaletteController = $.klass({
       ddd("restore original size: "+image.width+"x"+image.height+"px");
       WebDoc.ItemView.restoreSize(item, { width: image.width+"px", height: image.height+"px"});
     }
+    event.preventDefault();
   },
 
-  setPageSizeToImageSize: function() {
+  setPageSizeToImageSize: function(event) {
     var item = WebDoc.application.boardController.selection()[0].item;
     if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && item.data.data.src !== undefined && item.data.data.src !== "") {
       ddd("[image palette controller]: set page size to image size "+item.width()+"x"+item.height());
@@ -149,9 +153,10 @@ WebDoc.ImagePaletteController = $.klass({
       item.moveTo({ left: '0px', top: '0px' });
       item.save();
     }
+    event.preventDefault();
   },
 
-  changePreserveAspectRatio: function() {
+  changePreserveAspectRatio: function(event) {
     var item = WebDoc.application.boardController.selection()[0].item;
     if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
       if($(this).is(':checked')) {
@@ -164,7 +169,7 @@ WebDoc.ImagePaletteController = $.klass({
     } 
   },
 
-  changePlaceholder: function() {
+  changePlaceholder: function(event) {
     var item = WebDoc.application.boardController.selection()[0].item;
     if(item && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
       if($(this).is(':checked')) {
@@ -176,7 +181,8 @@ WebDoc.ImagePaletteController = $.klass({
     }
   },
 
-  addToMyImage: function() {
+  addToMyImage: function(event) {
+    event.preventDefault();
     var selected = WebDoc.application.boardController.selection()[0];
     if (selected && selected.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
       var selectedItem = selected.item;
@@ -202,7 +208,7 @@ WebDoc.ImagePaletteController = $.klass({
     return false;
   },
 
-  _clearLink: function() {
+  _clearLink: function(event) {
     ddd('[ImagePaletteController] clear link');
     this.selectedElement = WebDoc.application.boardController.selection()[0];
     if (this.selectedElement && this.selectedElement.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
@@ -215,6 +221,7 @@ WebDoc.ImagePaletteController = $.klass({
         }.pBind(this));
       }
     }
+    event.preventDefault();
   },
   
   _delayItemSave: function(item) {

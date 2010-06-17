@@ -25,10 +25,7 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   
   
   initialize: function($super, item, pageView, afterItem){
-    $super(item, pageView, afterItem);
-    
-    this._zoom();
-    this._displace();    
+    $super(item, pageView, afterItem);   
   },
 
   inspectorGroupName: function() {
@@ -74,6 +71,9 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
 
     this.imageNode = imageNode;
     this.frameNode = frameNode;
+
+    this._zoom();
+    this._displace();
     
     return frameNode;
   },
