@@ -1,3 +1,44 @@
+/ Old library
+
+/ #right_bar.right-panel.panel
+/   %ul.panel-tools.vertical.icons-only.thumbs.index
+/     %li#toggle_inspector>
+/       %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" } Inspector
+/     %li>
+/       %a.state-right-panel.mode-edit-show{ :href => "#library", :title => "Show Library" } Library
+/     %li>
+/       %a.state-right-panel.mode-edit-show{ :href => "#item-inspector", :title => "Show Inspector" } Item
+/     %li>
+/       %a.state-right-panel.mode-edit-show{ :href => "#page-inspector", :title => "Show Page inspector" } Page
+/     %li>
+/       %a.state-right-panel.mode-edit-show{ :href => "#document-inspector", :title => "Show Document inspector" } Document
+/     %li>
+/       %a.state-right-panel{ :href => "#social-inspector", :title => "Show Social" } Social      
+/     
+/   -#%div.upper.border
+/   -#%div.lower.border
+/   
+/ %div.layer
+/   = render :partial => 'library'
+/   
+/   = render :partial => 'documents/inspectors/page_inspector'
+/   = render :partial => 'documents/inspectors/document_inspector'
+/   = render :partial => 'documents/social_panel'  
+/   #item_inspector
+/     = render :partial => 'documents/inspectors/text_inspector'          
+/     = render :partial => 'documents/inspectors/draw_inspector'
+/     = render :partial => 'documents/inspectors/widget_inspector'
+/     = render :partial => 'documents/inspectors/empty_inspector'
+/     = render :partial => 'documents/inspectors/html_inspector'
+/     = render :partial => 'documents/inspectors/iframe_inspector'
+/     = render :partial => 'documents/inspectors/image_inspector'      
+/     = render :partial => 'documents/inspectors/text_properties_inspector'
+/     = render :partial => 'documents/inspectors/widget_properties_inspector'
+/     = render :partial => 'documents/inspectors/iframe_properties_inspector'
+/     = render :partial => 'documents/inspectors/html_properties_inspector'
+
+
+/new media browser
 #right_bar.right-panel.panel
   %ul.panel-tools.vertical.icons-only.thumbs.index
     %li#toggle_inspector>
@@ -11,13 +52,10 @@
     %li>
       %a.state-right-panel.mode-edit-show{ :href => "#document-inspector", :title => "Show Document inspector" } Document
     %li>
-      %a.state-right-panel{ :href => "#social-inspector", :title => "Show Social" } Social      
-    
-  -#%div.upper.border
-  -#%div.lower.border
-  
+      %a.state-right-panel{ :href => "#social-inspector", :title => "Show Social" } Social
   %div.layer
-    = render :partial => 'library'
+    = render 'media_browser/home'
+    /= render :partial => 'library'
     
     = render :partial => 'documents/inspectors/page_inspector'
     = render :partial => 'documents/inspectors/document_inspector'
@@ -34,5 +72,4 @@
       = render :partial => 'documents/inspectors/widget_properties_inspector'
       = render :partial => 'documents/inspectors/iframe_properties_inspector'
       = render :partial => 'documents/inspectors/html_properties_inspector'
-
     
