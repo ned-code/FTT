@@ -9,6 +9,7 @@ WebDoc.handlers = {
     
     this.addDocumentHandlers( 'click', this._documentHandlers );
     this.addPanelHandlers( 'click', this._panelHandlers );
+		this.addMediaBrowserHandlers( 'click', this._mediaBrowserHandlers )
     this.addCenterCellHandlers();
     // Global form validation
     jQuery(document)
@@ -51,6 +52,11 @@ WebDoc.handlers = {
   },
   
   addPanelHandlers: function( eventType, obj, context ){
+    this.panelNode
+    .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
+  },
+
+	addMediaBrowserHandlers: function( eventType, obj, context ){
     this.panelNode
     .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
   },
@@ -136,5 +142,14 @@ WebDoc.handlers = {
     'webdoc-prev-page':     function(e) { WebDoc.application.pageEditor.prevPage(); },
     'webdoc-next-page':     function(e) { WebDoc.application.pageEditor.nextPage(); },
     'webdoc-close':         function(e) { WebDoc.application.pageEditor.closeDocument(); }
-  }
+  },
+
+	_mediaBrowserHandlers: {
+		'media-browser-home': 	function(e) { WebDoc.application.mediaBrowserController.showHome();}, 
+		'media-browser-web': 	function(e) { WebDoc.application.mediaBrowserController.showWeb();}, 
+		'media-browser-packages': 	function(e) { WebDoc.application.mediaBrowserController.showPackages();}, 
+		'media-browser-apps': 	function(e) { WebDoc.application.mediaBrowserController.showApps();}, 
+		'media-browser-my-content': 	function(e) { WebDoc.application.mediaBrowserController.showMyContent();}, 
+		
+	}
 };
