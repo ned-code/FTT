@@ -138,6 +138,9 @@ javascripts:
     - app/javascripts/webdoc/controllers/right_bar_controllers/*.js
     - app/javascripts/webdoc/controllers/inspectors/*.js
     - app/javascripts/webdoc/core/*.js
+    
+    - app/javascripts/webdoc/media_browser/media_browser_controller.js
+    
     - app/javascripts/webdoc/library/jqtouch.js
     - app/javascripts/webdoc/library/libraries_controller.js
     - app/javascripts/webdoc/library/apps_library.js

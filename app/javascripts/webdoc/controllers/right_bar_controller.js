@@ -4,6 +4,7 @@
  */
 // define all inspector type that can be displayed in the right bar
 WebDoc.RightBarInspectorType = {
+	MEDIA_BROWSER: 'media-browser',
   LIBRARY: 'library',
   ITEM: 'item',
   PAGE: 'page',
@@ -28,9 +29,11 @@ WebDoc.RightBarController = $.klass({
     // pageInspector does not work if you try loading it now.
     
     var library = new WebDoc.LibrariesController(),
-        itemInspector = new WebDoc.InspectorController();
+        itemInspector = new WebDoc.InspectorController(),
+				mediaBrowser = new WebDoc.MediaBrowserController();
         
     WebDoc.application.libraryController = library;
+		WebDoc.application.mediaBrowserController = mediaBrowser;
     WebDoc.application.inspectorController = itemInspector;
     
     this.visible = false;
@@ -42,6 +45,7 @@ WebDoc.RightBarController = $.klass({
     this.panelWidth = panel.outerWidth();
     this._inspectorsControllersClasses = {};
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.LIBRARY] = WebDoc.LibrariesController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.MEDIA_BROWSER] = WebDoc.MediaBrowserController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.ITEM] = WebDoc.InspectorController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PAGE] = WebDoc.PageInspectorController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
@@ -52,7 +56,7 @@ WebDoc.RightBarController = $.klass({
     this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;
     
     this._currentInspectorType = null;  
-    this.selectInspector(WebDoc.RightBarInspectorType.LIBRARY);
+    this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
     
     // This is a hack. Ultimately, we need a better way than this to be wrangling with show/hide
     $('#page-inspector, #document-inspector, #social-inspector').hide();
@@ -107,6 +111,12 @@ WebDoc.RightBarController = $.klass({
     return this._inspectorsControllers[inspectorType];
   },
   
+	showMediaBrowser: function(){
+		ddd("[RightBarController] showMediaBrowser");
+    this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
+    this.show();
+	},
+	
   showLib: function() {
     ddd("[RightBarController] showLib");
     this.selectInspector(WebDoc.RightBarInspectorType.LIBRARY);
