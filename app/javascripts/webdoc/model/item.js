@@ -1,11 +1,11 @@
 
-WebDoc.ITEM_TYPE_TEXT = "text";
-WebDoc.ITEM_TYPE_IMAGE = "image";
+WebDoc.ITEM_TYPE_TEXT    = "text";
+WebDoc.ITEM_TYPE_IMAGE   = "image";
 WebDoc.ITEM_TYPE_DRAWING = "drawing";
-WebDoc.ITEM_TYPE_WIDGET = "widget";
-WebDoc.ITEM_TYPE_IFRAME = "iframe";
-WebDoc.ITEM_TYPE_OS_GADGET = "os_gadget";
-WebDoc.ITEM_TYPE_APP = "app";
+WebDoc.ITEM_TYPE_WIDGET  = "widget";
+WebDoc.ITEM_TYPE_IFRAME  = "iframe";
+WebDoc.ITEM_TYPE_APP     = "app";
+WebDoc.ITEM_TYPE_HTML    = "html";
 
 WebDoc.Item = $.klass(WebDoc.Record, 
 {
@@ -23,7 +23,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   setPage: function(page) {
-    this.page = page;  
+    this.page = page;
   },
 
   /*
@@ -62,9 +62,53 @@ WebDoc.Item = $.klass(WebDoc.Record,
       this.save();
     }
   },
+
+  getIsPlaceholder: function() {
+    ddd('[item] get is placeholder');
+    var classesArray = this.getClassesArray();
+    if(classesArray.length > 0  && jQuery.inArray("placeholder", classesArray) !== -1){
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
+  setIsPlaceholder: function(isPlaceholder) {
+    ddd('[item] set is placeholder with ' + isPlaceholder);
+    var classesArray = this.getClassesArray();
+    if(isPlaceholder) {
+      if(classesArray.length === 0 || jQuery.inArray("placeholder", classesArray) === -1){
+        classesArray.push('placeholder');
+        this.data.data['class'] = classesArray.join(" ");
+        this.fireObjectChanged({ modifedAttribute: 'class' });
+        this.save();
+      }
+    }
+    else {
+      if(classesArray.length > 0 && jQuery.inArray("placeholder", classesArray) !== -1){
+        var index = jQuery.inArray("placeholder", classesArray);
+        var part1 = classesArray.slice(0, index);
+        var part2 = classesArray.slice(index+1, classesArray.length);
+        classesArray = part1.concat(part2);
+        this.data.data['class'] = classesArray.join(" ");
+        this.fireObjectChanged({ modifedAttribute: 'class' });
+        this.save();
+      }
+    }
+  },
+
+  getClassesArray: function() {
+    if(this.data.data['class']) {
+      return this.data.data['class'].split(' ');
+    }
+    else {
+      return new Array();
+    }
+  },
   
   positionZ: function() {
-    return this.data.position;  
+    return this.data.position;
   },
   
   setPositionZ: function(newPosition) {
@@ -76,7 +120,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var refreshInnerHtml = false;
     var refreshPreferences = false;
     var refreshPositionZ = false;
-
+    
     if (this.data && this.data.position && json.item.position != this.data.position) {
       refreshPositionZ = true;
     }
@@ -210,7 +254,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
       delete this.data.data.css.top;
     }
     this.fireObjectChanged({ modifedAttribute: 'css' });
-    WebDoc.application.inspectorController.refreshSubInspectors();    
+    WebDoc.application.inspectorController.refresh();    
   },
   
   resizeTo: function(newSize) {    
@@ -228,7 +272,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }    
     
     this.fireObjectChanged({ modifedAttribute: 'css' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
   
   changeThemeBgClass: function( currentClass ) {
@@ -237,6 +281,9 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
     // Get rid of any theme_background_ classes
     // and add currentClass
+    if (!data['class']) {
+      data['class'] = '';
+    }
     data['class'] = data['class'].replace( regex, '' ) + ' ' + currentClass;
     
     this.save();
@@ -268,7 +315,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
     this.save();
     this.fireObjectChanged({ modifedAttribute: 'css' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
 
   getKind: function() {
@@ -356,6 +403,16 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   /***************************************/
+  /** widget item                        */
+  /***************************************/
+  getInspectorUrl: function() {
+    if (this.data.data.properties && this.data.data.properties.inspector_url) {
+      return this.data.data.properties.inspector_url;
+    }
+    return null;      
+  },
+  
+  /***************************************/
   /** text item                          */
   /***************************************/
  
@@ -406,11 +463,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
   /***************************************/
   /** Open social item                   */
   /***************************************/
-  getGadgetUrl: function() {
+  getAppUrl: function() {
     return this.property("gadgetUrl");  
   },
   
-  setGadgetUrl: function(url) {
+  setAppUrl: function(url) {
     this.setProperty("gadgetUrl", url);
     this.fireDomNodeChanged();
   },
@@ -434,7 +491,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.data.data.src = newSrc;
     this.save();
     this.fireDomNodeChanged();
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
 
   getSrc: function() {
@@ -449,7 +506,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var newTop = this.getDisplacement().top + diffZoom/2;    
     this.displace({ left: newLeft, top: newTop});
     this.fireObjectChanged({ modifedAttribute: 'zoom' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
   
   displace: function(coords) {
@@ -465,24 +522,59 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
     jQuery.extend(this.getProperty('displacement'), coords);
     this.fireObjectChanged({ modifedAttribute: 'displacement' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
   
-  getOriginalSize: function(){
-    if (!this._originalSize) { this._calcOriginalSize(); }
-    return this._originalSize;
-  },
-  
-  _calcOriginalSize: function(){
-    var image = new Image();
-    
+  preLoadImageWithCallback: function(callback){
+    ddd('[item] preload image with callback');
+    var image = document.createElement('img');
+    jQuery(image).bind("load", callback);
     image.src = this.data.data.src;
-    
-    this._originalSize = {
-      width: image.width,
-      height: image.height
-    };
-  }  
+  },
+
+  getRatio: function() {
+    var ratioWidth  = 1;
+    var ratioHeight = 1;
+
+    if(this.getProperty('ratio')) {
+      if(this.getProperty('ratio').width) {
+        ratioWidth = parseFloat(this.getProperty('ratio').width);
+      }
+
+      if(this.getProperty('ratio').height) {
+        ratioHeight = parseFloat(this.getProperty('ratio').height)
+      }
+    }
+
+    return {
+      width:  ratioWidth,
+      height: ratioHeight
+    }
+  },
+
+  setRatio: function(ratio) {
+    ddd('[item] set ratio with: x '+ratio.width+'; y '+ratio.height);
+    this.setProperty('ratio', { width: ratio.width, height: ratio.height });
+  },
+
+  calcRatio: function(event) {
+    ddd('[item] calc ratio');
+    var ratioWidth = 1,
+        ratioHeight = 1,
+        ratio = (event.currentTarget.height / event.currentTarget.width) / (this.height('px') / this.width('px'));
+
+    if(ratio < 1) {
+      ratioWidth = (event.currentTarget.width / event.currentTarget.height) / (this.width('px') / this.height('px'));
+      ratioHeight = 1;
+    }
+    else {
+      ratioWidth = 1;
+      ratioHeight = ratio;
+    }
+
+    return { width: ratioWidth, height: ratioHeight };
+  }
+
 });
 
 $.extend(WebDoc.Item, {

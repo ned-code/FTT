@@ -1,6 +1,8 @@
 /**
  * @author julien
  */
+WebDoc.IMAGE_INSPECTOR_GROUP = "ImageInspectorGroup";
+
 WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   
   // Classes applied to the item in initItemClass
@@ -17,17 +19,28 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     "css": true,
     "preference": true,
     "properties": true,
-    "preserve_aspect_ratio": true
+    "preserve_aspect_ratio": true,
+    "href": true
   },
   
   
   initialize: function($super, item, pageView, afterItem){
-    $super(item, pageView, afterItem);
-    
-    this._zoom();
-    this._displace();
+    $super(item, pageView, afterItem);   
   },
 
+  inspectorGroupName: function() {
+    return WebDoc.IMAGE_INSPECTOR_GROUP;  
+  },
+    
+  inspectorControllersClasses: function() {
+    return [/*WebDoc.ImagePaletteController, WebDoc.ImagePropertiesInspectorController*/];
+  },
+  
+  fullInspectorControllerClass: function() {
+    return WebDoc.ImagePaletteController;  
+  },
+  
+  
   objectChanged: function($super, item, options) {
     $super(item, options);
     if (item._isAttributeModified(options, 'zoom')) {
@@ -41,29 +54,40 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   createDomNode: function() {
     var imageNode = jQuery('<' + this.item.data.data.tag + '/>'),
         frameNode = jQuery('<div/>', { 'class': "layer" });
-    
+
     for (var key in this.item.data.data) {
       if ( this.IGNORE[ key ] ) { continue; }
       imageNode.attr(key, this.item.data.data[key]);
     }
     
-    frameNode.append( imageNode );
-    
+    if(this.item.data.data.href) {
+      var link = $('<a/>', { href: this.item.data.data.href, target: '_blank' });
+      link.append( imageNode );
+      frameNode.append(link);
+    }
+    else {
+      frameNode.append( imageNode );
+    }
+
     this.imageNode = imageNode;
     this.frameNode = frameNode;
+
+    this._zoom();
+    this._displace();
     
     return frameNode;
   },
 
   _zoom: function(){
     var image = this.imageNode,
-        model = this.item,
-        zoom = model.getZoom(),
-        css = {
-          width: (100 + zoom) + "%",
-          height: (100 + zoom) + "%"
+      model = this.item,
+      zoom = model.getZoom();
+
+    var css = {
+          width:  ((100 + zoom) * model.getRatio().width) + "%",
+          height: ((100 + zoom) * model.getRatio().height) + "%"
         };
-    
+
     image.css( css );
   },
   
@@ -80,6 +104,6 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   },
   
   inspectorId: function() {
-    return 4;
+    return 0;
   }
 });

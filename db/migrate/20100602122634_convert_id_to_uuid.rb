@@ -128,12 +128,15 @@ class ConvertIdToUuid < ActiveRecord::Migration
         d.theme_id = theme_default.uuid
         d.style_url = theme_default.style_url
       end
-      if (d.size.blank? || d == 'null')
-        d.size = { :width => '800px', :height => '600px'}
+      if (d.size.blank? || d.size == 'null')
+        size = HashWithIndifferentAccess.new
+        size[:width] = '800px'
+        size[:height] = '600px'
+        d.size = size
       end
       d.save(false)      
     end
-    
+      
     #Followship
     p "updating Followship"
     Followship.all.each do |f|

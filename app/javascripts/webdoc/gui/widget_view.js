@@ -3,24 +3,32 @@
  */
 
 //= require <webdoc/sdk/widget_api>
+WebDoc.WIDGET_INSPECTOR_GROUP = "WidgetInspectorGroup";
 
 WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
-  DEFAULT_WIDGET_HTML: '<div class="item-placeholder"><div class="item-icon"></div>Double-click to edit, and enter HTML in the inspector</div>',
-
-  initialize: function($super, item, pageView, afterItem) {
-    var placeholderContent = item.getInnerHtmlPlaceholder() || this.DEFAULT_WIDGET_HTML; 
-    this.placeholderNode = jQuery(placeholderContent);    
+  initialize: function($super, item, pageView, afterItem) {    
     $super(item, pageView, afterItem);
     this.itemDomNode.css({ width:"100%", height:"100%"}); 
     this.api = new WebDoc.WidgetApi(item, false);
-    this._displayDefaultContentIfNeeded( this.itemDomNode );
     this.domNode.addClass('item-widget');   
   },
   
+  inspectorGroupName: function() {
+    return WebDoc.WIDGET_INSPECTOR_GROUP;  
+  },
+    
+  inspectorControllersClasses: function() {
+    return [/*WebDoc.WidgetInspectorController, WebDoc.WidgetPropertiesInspectorController*/];
+  },
+    
+  fullInspectorControllerClass: function() {
+    return WebDoc.WidgetInspectorController;  
+  },
+      
   createDomNode: function($super) {
     var widgetNode = $super();   
-    if (this.item.data.data.tag == "iframe" && !WebDoc.application.disableHtml) {            
+    if (this.item.data.data.tag == "iframe" && !WebDoc.application.disableHtml) {
       this.domNode.addClass('loading');
       this.itemLayerDomNode.show();
       widgetNode.bind('load', function() {
@@ -34,59 +42,17 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   inspectorId: function() {
 
-    ddd("check if widget has an inspector url", this.item);
-    if (this.item.data.data.properties && this.item.data.data.properties.inspector_url) {
-      return this.item.data.data.properties.inspector_url;
-    }      
-    else if (this.item.media && this.item.media.data.properties.inspector_url) {
-      return this.item.media.data.properties.inspector_url;
-    }
-    return 5;
-  },
-  
-  innerHtmlChanged: function($super) {
-    $super();
-    this._displayDefaultContentIfNeeded(this.itemDomNode);    
-    // Highlight code blocks in the html -
-    // nodes that have class "code"
-    this.itemDomNode.find('code, .code').each( function(i){
-      var node = jQuery(this),
-          clone = node.clone().empty(),
-          numbers = jQuery('<div/>');
-      
-      var lineNo = 1,
-          output = clone[0],
-          lastChild;
-    
-      function addLine(line) {
-        numbers.append(document.createTextNode(String(lineNo++)));
-        numbers.append(document.createElement("BR"));
-        for (var i = 0; i < line.length; i++) {
-          output.appendChild(line[i]);
-        }
-        output.appendChild(document.createElement("BR"));
-      }
-      
-      // This is global - it comes from codemirror,
-      // but it would be good to find a way of packaging it
-      highlightText( node.html(), output ); //addLine);
-      
-      // Hack to remove br tag from last line -
-      // it gets in the way in inline code elements
-      lastChild = clone.children().eq(-1);
-      if (lastChild.is('br')) {
-        lastChild.remove();
-      }
-      
-      node.replaceWith( clone );
-    });
+//    if (this.item.data.data.properties && this.item.data.data.properties.inspector_url) {
+//      return this.item.data.data.properties.inspector_url;
+//    }      
+//    else if (this.item.media && this.item.media.data.properties.inspector_url) {
+//      return this.item.media.data.properties.inspector_url;
+//    }
+    return 0;
   },
   
   edit: function($super){
     $super();
-    this.domNode.addClass("item-edited");
-    this.itemLayerDomNode.hide();    
-    this.placeholderNode.remove();
   },
   
   canEdit: function() {
@@ -95,10 +61,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   stopEditing: function($super) {
     $super();
-    this.domNode.removeClass("item-edited");
-    this.itemLayerDomNode.show();
-    this._initDragAndResize();    
-    this._displayDefaultContentIfNeeded(this.itemDomNode);  
   },
   
   widgetChanged: function() {
@@ -172,16 +134,5 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
         widgetObject._onModeChange();
       }
     }  
-  },
-  
-  _displayDefaultContentIfNeeded: function(parent) {
-    if (!this.domNode.hasClass("item-edited")) {
-      if (this.item.data.data.tag !== "iframe" && (!this.item.data.data.innerHTML || $.string().blank(this.item.data.data.innerHTML))) {
-        parent.append(this.placeholderNode);
-      }
-      else if (this.placeholderNode) {
-        this.placeholderNode.remove();
-      }
-    }
-  }
+  } 
 });

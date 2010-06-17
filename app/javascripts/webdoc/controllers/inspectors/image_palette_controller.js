@@ -2,26 +2,47 @@
  * @author Julien Bachmann
  */
 WebDoc.ImagePaletteController = $.klass({
-  initialize: function( selector ) {
-    this.domNode = $( selector );
-
+  initialize: function( ) {
+    this.domNode = $( "#image-inspector" );
     this.propertySrc = $("#property_src");
     this.propertySrc.blur(this.updateSrc.pBind(this));
 
-    $("#restore_original_size").click(this.restoreOriginalSize);
+    this.domNode.find("#restore_original_size").click(this.restoreOriginalSize);
     
-    $("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
+    this.domNode.find("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
 
-    $("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
+    this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
-    this.addToMyImageLink = $(selector + " a[href=#add_to_my_images]");
-    this.addToMyImageResult = $(selector + " #add_to_my_images_result");
+    $("#placeholder_checkbox").click(this.changePlaceholder);
+
+    this.addImageLink = this.domNode.find("a[href=#create_image_link]");
+    this.linkFormController = new WebDoc.LinkFormController();
+    this.addImageLink.click(function(e){
+      e.preventDefault();
+      this.selectedElement = WebDoc.application.boardController.selection()[0];
+      this.linkFormController.showDialog(e, this.selectedElement.item.data.data.href, function(newLink){
+        if (this.selectedElement && this.selectedElement.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+          this.selectedElement.item.data.data.href = newLink;
+          this.selectedElement.item.save(function() {
+            this.selectedElement.item.fireDomNodeChanged();
+            this.refresh();
+          }.pBind(this));
+        }
+        return false;
+      }.pBind(this));
+    }.pBind(this));
+
+    this.clearImageLink = this.domNode.find("a[href=#clear_image_link]");
+    this.clearImageLink.click(this._clearLink.pBind(this));
+    
+    this.addToMyImageLink = this.domNode.find("a[href=#add_to_my_images]");
+    this.addToMyImageResult = this.domNode.find("#add_to_my_images_result");
     
     this.addToMyImageLink.click(this.addToMyImage.pBind(this));
     
-    this.zoomNode = jQuery('#image_zoom');
-    this.xshiftNode = jQuery('#image_xshift');
-    this.yshiftNode = jQuery('#image_yshift');
+    this.zoomNode = this.domNode.find('#image_zoom');
+    this.xshiftNode = this.domNode.find('#image_xshift');
+    this.yshiftNode = this.domNode.find('#image_yshift');
        
     var that = this;
     this._nbChange = 0;    
@@ -54,9 +75,17 @@ WebDoc.ImagePaletteController = $.klass({
       });
       that._delayItemSave(item);
     });
+    
+    // image properties
+    this.propertiesController = new WebDoc.PropertiesInspectorController('#image_properties', false);
+  },
+  
+  inspectorTitle: function() {
+    return "Image";  
   },
   
   refresh: function() {
+    this.propertiesController.refresh();
     if (WebDoc.application.boardController.selection().length) {      
       var selectedItem = WebDoc.application.boardController.selection()[0];
       if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
@@ -73,9 +102,23 @@ WebDoc.ImagePaletteController = $.klass({
         else {
           $("#preserve_aspect_ratio").removeAttr("checked");
         }
+        if(selectedItem.item.getIsPlaceholder()) {
+          $("#placeholder_checkbox").attr("checked", "checked");
+        }
+        else {
+          $("#placeholder_checkbox").removeAttr("checked");
+        }
         this.zoomNode[0].value = selectedItem.item.getZoom();
         this.xshiftNode[0].value = selectedItem.item.getDisplacement().left;
         this.yshiftNode[0].value = selectedItem.item.getDisplacement().top;
+        if(selectedItem.item.data.data.href) {
+          this.addImageLink.text('Edit link');
+          this.clearImageLink.show();
+        }
+        else {
+          this.addImageLink.text('Create link');
+          this.clearImageLink.hide();
+        }
       }
     }
   },
@@ -86,9 +129,10 @@ WebDoc.ImagePaletteController = $.klass({
     item.save(function() {
       item.fireDomNodeChanged();
     });
+    event.preventDefault();
   },
 
-  restoreOriginalSize: function() {
+  restoreOriginalSize: function(event) {
     var item = WebDoc.application.boardController.selection()[0].item;
 
     if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && item.data.data.src !== undefined && item.data.data.src !== "") {
@@ -97,9 +141,10 @@ WebDoc.ImagePaletteController = $.klass({
       ddd("restore original size: "+image.width+"x"+image.height+"px");
       WebDoc.ItemView.restoreSize(item, { width: image.width+"px", height: image.height+"px"});
     }
+    event.preventDefault();
   },
 
-  setPageSizeToImageSize: function() {
+  setPageSizeToImageSize: function(event) {
     var item = WebDoc.application.boardController.selection()[0].item;
     if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && item.data.data.src !== undefined && item.data.data.src !== "") {
       ddd("[image palette controller]: set page size to image size "+item.width()+"x"+item.height());
@@ -108,9 +153,10 @@ WebDoc.ImagePaletteController = $.klass({
       item.moveTo({ left: '0px', top: '0px' });
       item.save();
     }
+    event.preventDefault();
   },
 
-  changePreserveAspectRatio: function() {
+  changePreserveAspectRatio: function(event) {
     var item = WebDoc.application.boardController.selection()[0].item;
     if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
       if($(this).is(':checked')) {
@@ -123,7 +169,20 @@ WebDoc.ImagePaletteController = $.klass({
     } 
   },
 
-  addToMyImage: function() {
+  changePlaceholder: function(event) {
+    var item = WebDoc.application.boardController.selection()[0].item;
+    if(item && item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+      if($(this).is(':checked')) {
+        item.setIsPlaceholder(true);
+      }
+      else {
+        item.setIsPlaceholder(false);
+      }
+    }
+  },
+
+  addToMyImage: function(event) {
+    event.preventDefault();
     var selected = WebDoc.application.boardController.selection()[0];
     if (selected && selected.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
       var selectedItem = selected.item;
@@ -147,6 +206,22 @@ WebDoc.ImagePaletteController = $.klass({
       }
     }
     return false;
+  },
+
+  _clearLink: function(event) {
+    ddd('[ImagePaletteController] clear link');
+    this.selectedElement = WebDoc.application.boardController.selection()[0];
+    if (this.selectedElement && this.selectedElement.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+      var selectedItem = this.selectedElement.item;
+      if (selectedItem.data.data.href) {
+        selectedItem.data.data.href = "";
+        selectedItem.save(function() {
+          this.selectedElement.item.fireDomNodeChanged();
+          this.refresh();
+        }.pBind(this));
+      }
+    }
+    event.preventDefault();
   },
   
   _delayItemSave: function(item) {

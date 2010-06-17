@@ -280,7 +280,7 @@ WebDoc.PageBrowserController = $.klass({
   _dragChangeCallback: function(e, dragTarget){
     var dataTransfer = e.originalEvent.dataTransfer,
         dropData = 
-          //dataTransfer.getData("application/webdoc-page") ?               // Enable this lot to get drag working between windows - once you have the JSON organised...
+          //dataTransfer.getData("application/webdoc-page") ?               // Enable this lot to get drag working between windows (once you have the JSON organised...)
           //JSON.parse( dataTransfer.getData("application/webdoc-page") ) :
           dragTarget.data("webdoc").page ,
         dropPageIndex = dragTarget.index(),

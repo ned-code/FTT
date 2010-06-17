@@ -1,7 +1,7 @@
 /**
  * @author Noé / Stephen
  */
-
+WebDoc.IFRAME_INSPECTOR_GROUP = "IFrameInspectorGroup";
 
 WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   initialize: function($super, item, pageView, afterItem) {
@@ -19,13 +19,24 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     $super(item, pageView, afterItem);
     this.overlayDomNode = $("<div />");
     this.updateOverlay();
-    
+    		
     this.domNode
     .addClass("item-iframe")
     .delegate('.item-placeholder', 'submit', this._makeSetSrcEventHandler() )
     .delegate('.item-placeholder input', 'blur', this._makeSetSrcEventHandler() );
   },
   
+  inspectorGroupName: function() {
+    return WebDoc.IFRAME_INSPECTOR_GROUP;  
+  },
+    
+  inspectorControllersClasses: function() {
+    return [/*WebDoc.IframeController, WebDoc.IFramePropertiesInspectorController*/];
+  },
+      
+  fullInspectorControllerClass: function() {
+    return WebDoc.IframeController;  
+  },
   createDomNode: function($super) {
     this.itemLayerDomNode.show();
     this.domNode.addClass('loading');
@@ -34,9 +45,21 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   
   _makeSetSrcEventHandler: function(){
     var that = this;
-    
+		
     return function(e){
-      ddd('[IframeView] _makeSetSrcEventHandler');
+			if (that.inputNode.attr('value') == ''){
+				return false;
+			}
+			window.onbeforeunload = function (evt) { 
+				var message = 'You add a web page that automatic redirect to his domaine. Please press Cancel'; 
+				that.item.setSrc( '' );
+				that.inputNode.attr('value', '');
+				//removed the onbeforeunload event that prevent automatic redirecting
+				window.onbeforeunload = '';
+				return message; 
+			}
+			
+			e.preventDefault();
       that.inputNode.validate({
         pass : function(){
           consolidateSrc = WebDoc.UrlUtils.consolidateSrc(that.inputNode.val());
@@ -54,6 +77,8 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     
     return function(e){
       that.domNode.removeClass('loading');
+			//removed the onbeforeunload event that prevent automatic redirecting
+			window.onbeforeunload = '';
       e.preventDefault();
     };
   },
@@ -81,9 +106,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   },
 
   edit: function($super){
-    $super();
-    this.domNode.addClass("item-edited");
-    this.itemLayerDomNode.hide();    
+    $super();    
   },
   
   canEdit: function() {
@@ -92,12 +115,10 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   
   stopEditing: function($super) {
     $super();
-    this.domNode.removeClass("item-edited");
-    this.itemLayerDomNode.show();  
   },
   
   inspectorId: function() {
-    return 6;
+    return 0;
   }
 
 });

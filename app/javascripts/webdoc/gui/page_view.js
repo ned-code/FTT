@@ -14,11 +14,12 @@ WebDoc.PageView = $.klass({
     
     
     // Extend this
-    this._editable = undefined;  
-    this.setEditable(editable);  
+    this._editable = undefined;
     this._boardContainer = boardContainer;
+    this.setEditable(editable);
     this.page = page;
     this.domNode = domNode;
+
     this.drawingDomNode = drawingDomNode;
     this.itemDomNode = itemDomNode;
     this.eventCatcherNode = eventCatcherNode;
@@ -139,14 +140,14 @@ WebDoc.PageView = $.klass({
       case WebDoc.ITEM_TYPE_WIDGET:
         itemView = new WebDoc.WidgetView(item, this, afterItem);
         break;
+      case WebDoc.ITEM_TYPE_HTML:
+        itemView = new WebDoc.HtmlView(item, this, afterItem);
+        break;        
       case WebDoc.ITEM_TYPE_IFRAME:
         itemView = new WebDoc.IframeView(item, this, afterItem);
         break;
       case WebDoc.ITEM_TYPE_APP:
         itemView = new WebDoc.AppView(item, this, afterItem);
-        break;
-      case WebDoc.ITEM_TYPE_OS_GADGET:
-        itemView = new WebDoc.OsGadgetView(item, this, afterItem);
         break;
       default:
         itemView = new WebDoc.ItemView(item, this, afterItem);
@@ -301,6 +302,7 @@ WebDoc.PageView = $.klass({
         }
         jQuery(".item-layer").hide();
       }
+
       if(this.externalPageIframe) {
         this.externalPageIframe.css('overflow', editable? 'hidden' : 'visible');
         this._loadExternalPage();
