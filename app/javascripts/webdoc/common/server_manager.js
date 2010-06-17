@@ -15,7 +15,7 @@ WebDoc.ServerManager = jQuery.klass({
 });
 
 jQuery.extend(WebDoc.ServerManager, {
-  
+  requestByUuid: {},
   /**
   * cache used by the ServerManager singleton 
   */
@@ -147,6 +147,21 @@ jQuery.extend(WebDoc.ServerManager, {
     });
   },
   
+  _execRequest: function(object, requestFunction, args) {
+    var request = {
+      action: requestFunction,
+      arg: args
+    };
+    if (!this.requestByUuid[object.uuid()]) {
+      this.requestByUuid[object.uuid()] = [request];
+    }
+    else {
+      this.requestByUuid[object.uuid()].push(request);
+    }
+    this.execteWaitingRequest(object.uuid());
+    
+  },
+  
   /**
    * Make a new object persitant. Do an HTTP POST. (some value can be created on the server side). object is automatically refresh with the data recieved by the server
    * @param object the new object to persist
@@ -154,10 +169,17 @@ jQuery.extend(WebDoc.ServerManager, {
    *        callback recieve an array that has the created object.
    **/
   newObject: function(object, callBack, synch) {
+    object.isNew = false;
+    this._execRequest(object, this._newObject, arguments);
+  },
+  
+  _newObject: function(object, callBack, synch) {
+    object.isNew = false;
+    ddd("insert ", object.uuid());    
     var message = {
       xmpp_client_id: WebDoc.ServerManager.xmppClientId
     };    
-    jQuery.extend(message, object.to_json(true));
+    jQuery.extend(message, object.to_json(true));   
     $.ajax({
       async: !synch,
       type: 'POST',
@@ -170,14 +192,17 @@ jQuery.extend(WebDoc.ServerManager, {
         object.isNew = false;
         // we must update the cache with the id that comes from the server
         WebDoc.ServerManager.cache.store(object);
-        callBack.apply(this, [[object]]);        
+        callBack.apply(this, [[object]]);
+        WebDoc.ServerManager.requestByUuid[object.uuid()].splice(0,1);
+        WebDoc.ServerManager.execteWaitingRequest(object.uuid());
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
-        throw errorThrown;
-      },      
+        WebDoc.ErrorManager.notifyError('ServerManager.newObject', textStatus, object);
+        WebDoc.ServerManager.requestByUuid[object.uuid()].splice(0,1);
+        WebDoc.ServerManager.execteWaitingRequest(object.uuid());
+      },
       dataType: "json"
     });
-    
   },
   
   /**
@@ -187,6 +212,11 @@ jQuery.extend(WebDoc.ServerManager, {
    *        callback recieve an array that has the updated object.
    */
   updateObject: function(object, callBack, withRelationships, synch) {
+    this._execRequest(object, this._updateObject, arguments);
+  },
+  
+  _updateObject: function(object, callBack, withRelationships, synch) {
+    ddd("update object", object, arguments);
     var param = {
       xmpp_client_id: WebDoc.ServerManager.xmppClientId,
       _method: "PUT"
@@ -206,11 +236,15 @@ jQuery.extend(WebDoc.ServerManager, {
         }
         finally {
           callBack.apply(this, [[object]]);
+          WebDoc.ServerManager.requestByUuid[object.uuid()].splice(0, 1);
+          WebDoc.ServerManager.execteWaitingRequest(object.uuid());
         }
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
-        throw errorThrown;
-      },      
+        WebDoc.ErrorManager.notifyError('ServerManager.updateObject', textStatus, object);
+        WebDoc.ServerManager.requestByUuid[object.uuid()].splice(0, 1);
+        WebDoc.ServerManager.execteWaitingRequest(object.uuid());
+      },
       dataType: "json"
     });    
   },
@@ -222,14 +256,32 @@ jQuery.extend(WebDoc.ServerManager, {
    *        callback recieve an array that has the updated object.
    */
   deleteObject: function(object, callBack) {
+    this._execRequest(object, this._deleteObject, arguments);
+  },
+
+  _deleteObject: function(object, callBack) {
+    ddd("delete ", object.uuid());
     var param = {
       xmpp_client_id: WebDoc.ServerManager.xmppClientId,
       _method: "DELETE"
-    };
-    jQuery.post(object.rootUrl() + "/" + object.className() + "s/" + object.uuid(), param, function(data, textstatus) {
-      callBack.apply(this, [object]);
-    }, "json");
-  },
+    }; 
+    $.ajax({
+      type: 'POST',
+      url: object.rootUrl() + "/" + object.className() + "s/" + object.uuid(),
+      data: param,
+      success: function(data, textstatus) {
+        callBack.apply(this, [object]);
+        WebDoc.ServerManager.requestByUuid[object.uuid()].splice(0, 1);
+        WebDoc.ServerManager.execteWaitingRequest(object.uuid());
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        WebDoc.ErrorManager.notifyError('ServerManager.deleteObject', textStatus, object);
+        WebDoc.ServerManager.requestByUuid[object.uuid()].splice(0, 1);
+        WebDoc.ServerManager.execteWaitingRequest(object.uuid());
+      },
+      dataType: "json"
+    });
+  },  
 
   /**
    * Send a request to the server with a object
@@ -277,5 +329,22 @@ jQuery.extend(WebDoc.ServerManager, {
         ddd(XMLHttpRequest);
       }
     });
+  },
+  
+  execteWaitingRequest: function(uuid) {
+    if (this.requestByUuid[uuid].length === 0) {
+      delete this.requestByUuid[uuid];
+    }
+    else {
+      var action = this.requestByUuid[uuid][0].action;
+      var arg = this.requestByUuid[uuid][0].arg;
+      action.apply(this, arg);
+    }
   }
 });
+
+WebDoc.ErrorManager = {
+  notifyError: function(methodName, errorMessage, params) {
+    alert("Oops. An error has occured. " + methodName + " " + errorMessage + " " + params.uuid() + ". Please refresh the page :-(");
+  }
+}

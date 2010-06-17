@@ -720,6 +720,10 @@ WebDoc.BoardController = jQuery.klass({
     if ( editingItem ) { this._updateScreens( editingItem.domNode ); }
   },
   
+  getZoom: function() {
+    return this._currentZoom;
+  },
+  
   // Private methods
     
   _mouseDown: function(e) {
