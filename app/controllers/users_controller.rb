@@ -36,4 +36,9 @@ class UsersController < ApplicationController
     end
   end
   
+  def images
+    @user = current_user
+    @images = @user.images
+  end
+  
 end

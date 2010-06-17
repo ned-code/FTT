@@ -26,7 +26,9 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   map.devise_for :users
-  map.resources :users, :except => [:new, :create, :destroy]
+  map.resources :users, :except => [:new, :create, :destroy] do |user|
+    user.resources :images, :only => :index
+  end
   map.connect 'user', :controller => 'sessions', :action => 'show', :conditions => { :method => :get }
     
   map.namespace :admin do |admin|
