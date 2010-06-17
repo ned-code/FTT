@@ -39,7 +39,8 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     newItem.data.data.tag = "div";
     newItem.data.data['class'] = "empty";
     newItem.data.data.innerHTML = "";
-    newItem.data.data.css = this.textboxCss;
+    newItem.data.data.css = {};
+    jQuery.extend(newItem.data.data.css, this.textboxCss); 
     //Create view    
     WebDoc.application.boardController.insertItems([newItem]);
     var createdItemView = WebDoc.application.boardController.currentPageView().itemViews[newItem.uuid()];
