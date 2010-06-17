@@ -57,7 +57,13 @@ WebDoc.PostMessageManager = $.klass({
     window.addEventListener("message", function(event){
       // event.domain event.data event.source event.origin
       ddd('[post message manager] received a new message: ' + event.data);
-      this.processMessage(event.data);
+      try {
+        this.processMessage(event.data);
+      } 
+      catch (Exception) {
+        ddd("not a message for me");
+        WebDoc.appsMessagingController.processMessage(event);
+      }
     }.pBind(this), false);
   },
 
