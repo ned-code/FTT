@@ -46,17 +46,17 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     // Create and bind global event handlers
     WebDoc.handlers.initialise();
     
-    WebDoc.ServerManager.xmppClientId = new WebDoc.UUID().id;
+    WebDoc.ServerManager.xmppClientId    = new WebDoc.UUID().id;
     
     WebDoc.application.pageEditor = this;
-    
+    WebDoc.InspectorPanesManager.featureEnabled = true;
     $(window).unload(function() {
         WebDoc.application.collaborationManager.disconnect();
     });
     
     $(window).bind("hashchange", this._urlHashChanged.pBind(this));
   },
-
+  
   load: function(documentId, editable) {
     ddd("[PageEditor] load " + documentId);
     WebDoc.Application.initializeSingletons([WebDoc.ThemeManager, WebDoc.WidgetManager, WebDoc.DocumentCategoriesManager], function() {
@@ -83,9 +83,8 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
       WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
       WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
-      WebDoc.application.osGadgetTool = new WebDoc.OsGadgetTool( "a[href='#insert-os-gadget']", "insert-os-gadget" );
-  		WebDoc.application.browserTool = new WebDoc.BrowserTool("a[href='#open-browser']", "open-browser" );
-
+      WebDoc.application.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "insert-app" );
+      WebDoc.application.browserTool = new WebDoc.BrowserTool("a[href='#open-browser']", "open-browser" );
 
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
       WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();

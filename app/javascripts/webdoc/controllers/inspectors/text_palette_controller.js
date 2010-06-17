@@ -3,8 +3,9 @@
  */
 WebDoc.TextPaletteController = jQuery.klass({
   initialize: function(id){
-    this.domNode = jQuery(id).hide();
+    this.domNode = jQuery(id);
     this.initGUI("#text-inspector-content");
+    this.propertiesController = new WebDoc.PropertiesInspectorController('#text_properties', true);
   },       
   initGUI: function(container){
     var thobj = this;
@@ -135,12 +136,14 @@ WebDoc.TextPaletteController = jQuery.klass({
         self.input = input;
         if (!self.options.isEditable) {
           self.input.bind('keypress', function(){
+            ddd("[TextPaletteCOntroller] keydown");
             return false;
           });
           self.input.bind('keyup', function(){
             return false;
           });
           self.input.bind('keydown', function(){
+            ddd("[TextPaleteController] key down");
             return false;
           });
         }
@@ -447,7 +450,7 @@ WebDoc.TextPaletteController = jQuery.klass({
     jQuery('#colorpickerHolder2').find('div.colorpicker_setdefault').hide();
   },
   
-  refresh: function(toolbarHash, parameters){
+  refreshState: function(toolbarHash, parameters){
     this.currentToolBarHash = toolbarHash;
      if(!$("#toolbar_panel_fontSize_slider")[0].firstChild){
        $("#toolbar_panel_fontSize_slider").slider({
@@ -542,6 +545,11 @@ WebDoc.TextPaletteController = jQuery.klass({
     else {
       this.refreshInnerHtml();
     }
+  },
+  
+  refresh: function() {
+    this.propertiesController.refresh();
+    this.refreshInnerHtml();
   },
   
   refreshInnerHtml: function(){

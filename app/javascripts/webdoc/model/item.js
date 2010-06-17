@@ -1,11 +1,11 @@
 
-WebDoc.ITEM_TYPE_TEXT = "text";
-WebDoc.ITEM_TYPE_IMAGE = "image";
+WebDoc.ITEM_TYPE_TEXT    = "text";
+WebDoc.ITEM_TYPE_IMAGE   = "image";
 WebDoc.ITEM_TYPE_DRAWING = "drawing";
-WebDoc.ITEM_TYPE_WIDGET = "widget";
-WebDoc.ITEM_TYPE_IFRAME = "iframe";
-WebDoc.ITEM_TYPE_OS_GADGET = "os_gadget";
-WebDoc.ITEM_TYPE_APP = "app";
+WebDoc.ITEM_TYPE_WIDGET  = "widget";
+WebDoc.ITEM_TYPE_IFRAME  = "iframe";
+WebDoc.ITEM_TYPE_APP     = "app";
+WebDoc.ITEM_TYPE_HTML    = "html";
 
 WebDoc.Item = $.klass(WebDoc.Record, 
 {
@@ -23,7 +23,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   setPage: function(page) {
-    this.page = page;  
+    this.page = page;
   },
 
   /*
@@ -108,7 +108,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   positionZ: function() {
-    return this.data.position;  
+    return this.data.position;
   },
   
   setPositionZ: function(newPosition) {
@@ -120,7 +120,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var refreshInnerHtml = false;
     var refreshPreferences = false;
     var refreshPositionZ = false;
-
+    
     if (this.data && this.data.position && json.item.position != this.data.position) {
       refreshPositionZ = true;
     }
@@ -254,7 +254,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
       delete this.data.data.css.top;
     }
     this.fireObjectChanged({ modifedAttribute: 'css' });
-    WebDoc.application.inspectorController.refreshSubInspectors();    
+    WebDoc.application.inspectorController.refresh();    
   },
   
   resizeTo: function(newSize) {    
@@ -272,7 +272,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }    
     
     this.fireObjectChanged({ modifedAttribute: 'css' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
   
   changeThemeBgClass: function( currentClass ) {
@@ -281,6 +281,9 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
     // Get rid of any theme_background_ classes
     // and add currentClass
+    if (!data['class']) {
+      data['class'] = '';
+    }
     data['class'] = data['class'].replace( regex, '' ) + ' ' + currentClass;
     
     this.save();
@@ -312,7 +315,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
     this.save();
     this.fireObjectChanged({ modifedAttribute: 'css' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
 
   getKind: function() {
@@ -400,6 +403,16 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   /***************************************/
+  /** widget item                        */
+  /***************************************/
+  getInspectorUrl: function() {
+    if (this.data.data.properties && this.data.data.properties.inspector_url) {
+      return this.data.data.properties.inspector_url;
+    }
+    return null;      
+  },
+  
+  /***************************************/
   /** text item                          */
   /***************************************/
  
@@ -450,11 +463,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
   /***************************************/
   /** Open social item                   */
   /***************************************/
-  getGadgetUrl: function() {
+  getAppUrl: function() {
     return this.property("gadgetUrl");  
   },
   
-  setGadgetUrl: function(url) {
+  setAppUrl: function(url) {
     this.setProperty("gadgetUrl", url);
     this.fireDomNodeChanged();
   },
@@ -478,7 +491,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.data.data.src = newSrc;
     this.save();
     this.fireDomNodeChanged();
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
 
   getSrc: function() {
@@ -493,7 +506,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var newTop = this.getDisplacement().top + diffZoom/2;    
     this.displace({ left: newLeft, top: newTop});
     this.fireObjectChanged({ modifedAttribute: 'zoom' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
   
   displace: function(coords) {
@@ -509,7 +522,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
     jQuery.extend(this.getProperty('displacement'), coords);
     this.fireObjectChanged({ modifedAttribute: 'displacement' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
   
   preLoadImageWithCallback: function(callback){
