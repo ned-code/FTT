@@ -1024,11 +1024,17 @@ WebDoc.BoardController = jQuery.klass({
         this.oldSize = { width: this._currentPage.width(), height: this._currentPage.height() };
       }.pBind(this),
       resize: function(e, ui) {
-        this._currentPage.setSize({ height: ui.size.height+'px', width: ui.size.width+'px' }, false);
+        this._currentPage.setSize({
+          height: Math.round(this.mapToPageCoordinate(e).y)+'px',
+          width: Math.round(this.mapToPageCoordinate(e).x)+'px'
+        }, false);
       }.pBind(this),
       stop: function(e, ui) {
         ddd('[page view] resize stop');
-        this._currentPage.setSize({ height: ui.size.height+'px', width: ui.size.width+'px' }, true, this.oldSize);
+        this._currentPage.setSize({
+          height: Math.round(ui.element[0].clientHeight*1/this._currentZoom)+'px',
+          width: Math.round(ui.element[0].clientWidth*1/this._currentZoom)+'px'
+        }, true, this.oldSize);
       }.pBind(this)
     });
   }
