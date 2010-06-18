@@ -137,7 +137,6 @@ WebDoc.PageBrowserController = $.klass({
         
         if (dragTarget[0] === this) {
         	// Don't react to drags over the original dragTarget
-        	
         	//console.log('This is the bloody dragTarget, numb nuts.');
         	return;
         }
