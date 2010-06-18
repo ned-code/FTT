@@ -7,8 +7,13 @@ WebDoc.Page = $.klass(WebDoc.Record,
 { 
   DEFAULT_PAGE_HEIGHT_PX: 600,
   DEFAULT_PAGE_WIDTH_PX: 800,
-  ALLOWED_THEME_ELEMENT_TYPE: ['background', 'border', 'color', 'font'],
-  
+
+  CLASS_TYPE_BACKGROUND: 'background',
+  CLASS_TYPE_BORDER: 'border',
+  CLASS_TYPE_COLOR: 'color',
+  CLASS_TYPE_FONT: 'font',
+  CLASS_TYPE_OTHER: 'other',
+    
   initialize: function($super, json, document, externalPageUrl) {
     // initialize relationship before super.
     this.firstPosition = 0;
@@ -18,12 +23,14 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.items = [];
     this._itemsToRemoveAfterSave = [];
     this.nonDrawingItems = [];
+
     this._classes = new Array();
-    this._classes['other'] = '';
-    this._classes['background'] = '';
-    this._classes['border'] = '';
-    this._classes['color'] = '';
-    this._classes['font'] = '';
+    this._classes[this.CLASS_TYPE_BACKGROUND] = '';
+    this._classes[this.CLASS_TYPE_BORDER] = '';
+    this._classes[this.CLASS_TYPE_COLOR] = '';
+    this._classes[this.CLASS_TYPE_FONT] = '';
+    this._classes[this.CLASS_TYPE_OTHER] = '';
+    
     if (document && document.className() === WebDoc.Document.className()) {
       this.document = document;
     }
@@ -548,7 +555,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
         scope = this._getClassType(newClass);
       }
 
-      if(this.ALLOWED_THEME_ELEMENT_TYPE.indexOf(scope) !== null) {
+      if(this.getClassThemeTypeAllowed().indexOf(scope) !== null) {
         if(this._classes[scope] !== newClass) {
           this._classes[scope] = newClass;
           needSave = true;
@@ -570,7 +577,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
 
   clearClass: function(scope) {
-    if(this.ALLOWED_THEME_ELEMENT_TYPE.indexOf(scope) !== null) {
+    if(this.getClassThemeTypeAllowed().indexOf(scope) !== null) {
       if(this._classes[scope]) {
         this._classes[scope] = '';
         this.data.data['class'] = this.getClass();
@@ -592,6 +599,15 @@ WebDoc.Page = $.klass(WebDoc.Record,
     else {
       return this._classes[scope] || '';
     }
+  },
+
+  getClassThemeTypeAllowed: function() {
+    return [
+            this.CLASS_TYPE_BACKGROUND,
+            this.CLASS_TYPE_BORDER,
+            this.CLASS_TYPE_COLOR,
+            this.CLASS_TYPE_FONT
+    ];
   },
 
   _getClassesArrayFromData: function() {
