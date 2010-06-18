@@ -76,7 +76,8 @@ body {
 
 #webdoc {
     /* Compensate for height of toolbar panel */
-    padding-top: 36px;
+    padding-top: 38px;
+    padding-bottom: 36px;
 }
 
 /* Interface panels */
@@ -208,7 +209,7 @@ body {
     opacity: 0;
 }
 
-.pages_panel .inspector .active li .number {
+.pages_panel .inspector.active li .number {
     opacity: 1;
 }
 
