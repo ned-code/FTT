@@ -5,8 +5,8 @@
 
 WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
   
-  MEDIA_BROWSER_SELECTOR: ".media_browser_wrap",
-  MEDIA_BROWSER_BUTTON_SELECTOR: "a[href='#media_browser']",
+  MEDIA_BROWSER_SELECTOR: ".media-browser-wrap",
+  MEDIA_BROWSER_BUTTON_SELECTOR: "a[href='#media-browser']",
 
   initialize: function() {
     // this.imagesLibrary = new WebDoc.ImagesLibrary("images");
@@ -24,27 +24,53 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 	
 	showHome: function(){
 		ddd('[MediaBrowserController] showHome');
-		this.showTab('#media_browser_home');
+		//media-browser-home is always in the dom !
+		this.showTab('#media-browser-home');
 	},
 	
 	showWeb: function(){
 		ddd('[MediaBrowserController] showWeb');
-		this.showTab('#media_browser_web');
+		if($('#media-browser-web').length){
+			this.showTab('#media-browser-web');
+		}
+		else{
+			ddd('media-browser-web bot displayed, do ajax here');
+		}
 	},
 	
 	showPackages: function(){
 		ddd('[MediaBrowserController] showPackages');
-		this.showTab('#media_browser_packages');
+		if($('#media-browser-packages').length){
+			this.showTab('#media-browser-packages');
+		}
+		else{
+			ddd('media-browser-packages bot displayed, do ajax here');
+		}
 	},
 	
 	showApps: function(){
 		ddd('[MediaBrowserController] showApps');
-		this.showTab('#media_browser_apps');
+		if($('#media-browser-apps').length){
+			this.showTab('#media-browser-apps');
+		}
+		else{
+			ddd('media-browser-web bot displayed, do ajax here');
+		}
 	},
 	
-	showMyContent: function(){
-		ddd('[MediaBrowserController] showMyContent');
-		this.showTab('#media_browser_my_content');
+	showMyContent: function(){		
+		if($('#media-browser-my-content').length > 0){
+			this.showTab('#media-browser-my-content');
+		}
+		else{
+			$.ajax({
+			  url: "/images",
+			  success: function(html){
+					this._hideAll();
+			    $("#media-browser-content").append(html);
+			  }.pBind(this)
+			});
+		}
 	},
 	
 	showTab: function(tab_id){
@@ -54,6 +80,6 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 	},
 	
 	_hideAll: function(){
-		$('.media_browser_tab').hide();
+		$('.media-browser-tab').hide();
 	}
 });

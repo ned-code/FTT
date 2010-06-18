@@ -28,7 +28,7 @@ ActionController::Routing::Routes.draw do |map|
   map.devise_for :users
   map.resources :users, :except => [:new, :create, :destroy]
   map.connect 'user', :controller => 'sessions', :action => 'show', :conditions => { :method => :get }
-  map.conditions'users/:id/images', :controller => 'users', :action => 'images', :conditions => { :method => :get }
+  map.connect 'users/favorites', :controller => 'users', :action => 'favorites', :conditions => { :method => :get } #this route is used to get html that is display in media browser favorites
     
   map.namespace :admin do |admin|
     admin.resources :widgets, :as => 'apps', :except => :show
@@ -41,7 +41,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/browse', :controller => 'browser', :action => :index, :conditions => { :method => :get }
   
   # dev controller
-  map.resources :images,    :except => [:new, :edit, :update]
+  map.resources :images,    :except => [:new, :edit, :update] #/images is used to get html that is displayed in media browser my images
   map.resources :videos,    :except => [:new, :edit, :update]
   map.resources :widgets,   :except => [:new, :edit, :update, :destroy]
   map.resources :categories, :only => :index

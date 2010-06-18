@@ -1,0 +1,57 @@
+<div id="media-browser-my-content" class='media-browser-tab'>
+  <%= render 'users/my_content_header'%>
+  <div id="media-browser-my-images">
+    <% @images.each do |image| %>
+      <%= image_tag image.attachment.url(:thumb) %>
+    <% end %>
+  </div>
+</div>
+
+
+<script type='text/javascript'>
+  // MyContentController is used to manage my image and user favorites.
+  ddd('my content JS loaded');
+  WebDoc.MyContentController = $.klass({
+        
+    initialize: function() {
+     ddd('[BrowserController] initialize');
+     this.domNode = $('#media-browser-my-content');
+     this._createHandlers('click', this._myContentHandlers);
+     ddd(this.domNode);
+    },
+    
+    _createHandlers: function(eventType, obj, context){
+      ddd('create handler');    
+      this.domNode
+      .delegate('a', eventType, WebDoc.handlers._makeLinkHandler( obj, context ) );
+      //NOTE: _makeLinkHandler( obj, context ) is supposed to be private, be it's an easy way to listen the link
+    },
+    
+    _myContentHandlers: {
+      'my-images':  function(e){ WebDoc.application.myContentController.showMyImages(); },
+      'favorites':  function(e){ WebDoc.application.myContentController.showFavorites(); }
+    },
+    
+    showMyImages: function(){
+      ddd('_showMyImages');
+      if($('#media-browser-favorites').length){
+  			$('#media-browser-favorites').hide();
+			}
+			$('#media-browser-my-images').show();
+    },
+    
+    showFavorites: function(){
+      ddd('_showFavorites');
+      $('#media-browser-my-images').hide();
+      if($('#media-browser-favorites').length){
+  			$('#media-browser-favorites').show();
+			}
+			else{
+			  ddd('ajax request to display favorites');
+			}
+    }   
+  });
+  
+  WebDoc.application.myContentController = new WebDoc.MyContentController();
+  
+</script>
