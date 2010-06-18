@@ -167,7 +167,7 @@ body {
   padding: 2px;
 }
 
-/* Pages panel */
+/* Controls panel */
 
 .pages_panel {
     width: 100%;
@@ -232,7 +232,25 @@ body {
     box-shadow: 0 0 8px rgba(176, 227, 0, 1);
 }
 
+.controls_panel .toolbar {
+    position: absolute;
+    left: 25%; bottom: 0;
+    width: 75%; height: 32px;
+    padding: 0;
+    background: white;
 
+    -webkit-transition: bottom 0.2s ease-out;
+    -moz-transition:    bottom 0.2s ease-out;
+    transition:         bottom 0.2s ease-out;
+
+    -webkit-border-top-left-radius: 6px;
+    -moz-border-radius-topleft:     6px;
+    border-top-left-radius:         6px;
+}
+
+.controls_panel.active .toolbar {
+    bottom: -32px;
+}
 
 
 

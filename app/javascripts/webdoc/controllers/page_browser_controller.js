@@ -30,14 +30,13 @@ WebDoc.PageBrowserController = $.klass({
     
     var that = this;
     
-    this.domNode = $("#left_bar");
+    this.domNode = $("#page_browser");
     
     this._changedFromDrag = false;
     this._stateThumbs = true;
     this._document = null;
     
     // defined in CSS
-    //this._pagesPanelWidth = this.domNode.outerWidth();
     this._panelHeight = this.domNode.outerHeight();
     
     ddd("[PageBrowserController] Pages panel width: " + this._pagesPanelWidth);
@@ -67,24 +66,20 @@ WebDoc.PageBrowserController = $.klass({
     var that = this,
         pageBrowserItems = this.domNode.find( this.PAGE_BROWSER_ITEM_SELECTOR ),
         l = this._document.pages.length,
-        page, pageItem, pageItemNode, pageListNumber;
+        page, pageId, pageItem, pageItemNode, pageListNumber;
     
     this.domNodeBrowserItems = pageBrowserItems;
     
     while (l--) {
       page = this._document.pages[l];
+      pageId = page.uuid();
       pageItem = new WebDoc.PageBrowserItemView(page);
       pageItemNode = pageItem.domNode;
       
       pageBrowserItems.prepend(pageItemNode);
 
-      //pageItem.truncateTitleWithActualTitle();
-
-      this.pageMap[ page.uuid() ] = pageItem;
-      
-      pageItemNode.data('webdoc', {
-        page: page
-      });
+      this.pageMap[ pageId ] = pageItem;
+      pageItemNode.attr('data-webdoc-page', pageId);
     }
     
     this.updateSelectedPage();
@@ -246,6 +241,7 @@ WebDoc.PageBrowserController = $.klass({
       // ----------------------------------------------------------------------------------------------------
     }
     this.bindEventHandlers();
+    
     WebDoc.application.boardController.addCurrentPageListener(this);
     
   },
@@ -282,29 +278,30 @@ WebDoc.PageBrowserController = $.klass({
         dropData = 
           //dataTransfer.getData("application/webdoc-page") ?               // Enable this lot to get drag working between windows (once you have the JSON organised...)
           //JSON.parse( dataTransfer.getData("application/webdoc-page") ) :
-          dragTarget.data("webdoc").page ,
+          this.pageMap[ dragTarget.attr("data-webdoc-page") ],
         dropPageIndex = dragTarget.index(),
         pageToSave;
     
     // Define a flag to avoid rebuilding the page browser when items are dragged
     // However, if the document is opened in other sessions, updates must be done
-    this._changedFromDrag = true;     
-    pageToSave = WebDoc.application.pageEditor.currentDocument.movePage(dropData.uuid(), dropPageIndex);
+    this._changedFromDrag = true;
     
-    if (pageToSave) {
-      pageToSave.save();
-    }
+    console.log(dragTarget.attr("data-webdoc-page"), this.pageMap, dropData);
+    
+    pageToSave = WebDoc.application.pageEditor.currentDocument.movePage( dropData.page.uuid(), dropPageIndex );
+    
+    if (pageToSave) { pageToSave.save(); }
     
     this._changedFromDrag = false;
   },
   
   bindEventHandlers: function() {
     // You can bind to any parent of this - .inspector might be a better choice
-    var pageBrowserItems = this.domNodeBrowserItems;
+    var pageBrowserItems = this.domNode;
     
     pageBrowserItems
     .bind('click', jQuery.delegate({
-        'li':               this.selectCurrentPage
+        'li': this.selectCurrentPage
       }, this)
     );
   },
@@ -390,7 +387,7 @@ WebDoc.PageBrowserController = $.klass({
 
   selectCurrentPage: function(e) {
     var pageNode = $( e.delegateTarget || e.target ),
-        data = pageNode.data('webdoc'),
+        data = this.pageMap[ pageNode.attr('data-webdoc-page') ],
         currentId = WebDoc.application.pageEditor.currentPage.uuid(),
         page = data && data.page,
         clickedId = page && page.uuid();
