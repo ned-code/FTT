@@ -36,9 +36,8 @@ class UsersController < ApplicationController
     end
   end
   
-  def images
+  def favorites
     @user = current_user
-    @images = @user.images
     respond_to do |format|
       format.html { render :layout => false}
     end

@@ -5,13 +5,13 @@
 WebDoc.SupportedImagesExtensions = ["jpg","jpeg","png","gif"];
 
 WebDoc.ImagesUploader = $.klass({
-  initialize: function(uploadControlId, imagesLibrary) {
+  initialize: function(uploadControlId) {
     this.uploadControl = $('#'+uploadControlId);
     
     this.uploadUrl = "/images";
     
     // Set callback to the ImageLibrary
-    this.imagesLibrary = imagesLibrary;
+    //this.imagesLibrary = imagesLibrary;
     
     this.spinner = $("#upload_images_spinner");
     this.logInfo = this.uploadControl.find(".uploading_info");

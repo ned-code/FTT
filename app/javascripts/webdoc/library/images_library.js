@@ -35,8 +35,9 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     // Setup web images
     this.webImagesSearch = new WebDoc.WebImagesSearch('web_images_search_field', this);
     // Setup images uploader
-    this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
-    // Setup details view
+    //this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
+    
+		// Setup details view
     this.setupDetailsView();
     
     // Observe thumb clicks (with event delegation) for all current and future thumbnails
