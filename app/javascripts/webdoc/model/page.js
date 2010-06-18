@@ -7,6 +7,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
 { 
   DEFAULT_PAGE_HEIGHT_PX: 600,
   DEFAULT_PAGE_WIDTH_PX: 800,
+  ALLOWED_THEME_ELEMENT_TYPE: ['background', 'border', 'color', 'font'],
   
   initialize: function($super, json, document, externalPageUrl) {
     // initialize relationship before super.
@@ -547,7 +548,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
         scope = this._getClassType(newClass);
       }
 
-      if(['background', 'border', 'color', 'font'].indexOf(scope) !== null) {
+      if(this.ALLOWED_THEME_ELEMENT_TYPE.indexOf(scope) !== null) {
         if(this._classes[scope] !== newClass) {
           this._classes[scope] = newClass;
           needSave = true;
@@ -561,6 +562,17 @@ WebDoc.Page = $.klass(WebDoc.Record,
       }
 
       if((save === undefined || save === true) && needSave) {
+        this.data.data['class'] = this.getClass();
+        this.fireObjectChanged({ modifedAttribute: 'class' });
+        this.save();
+      }
+    }
+  },
+
+  clearClass: function(scope) {
+    if(this.ALLOWED_THEME_ELEMENT_TYPE.indexOf(scope) !== null) {
+      if(this._classes[scope]) {
+        this._classes[scope] = '';
         this.data.data['class'] = this.getClass();
         this.fireObjectChanged({ modifedAttribute: 'class' });
         this.save();
