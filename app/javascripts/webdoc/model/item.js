@@ -9,20 +9,23 @@ WebDoc.ITEM_TYPE_HTML    = "html";
 
 WebDoc.Item = $.klass(WebDoc.Record, 
 {
-
-  ALLOWED_THEME_ELEMENT_TYPE: ['background', 'border', 'color', 'font'],
+  CLASS_TYPE_BACKGROUND: 'background',
+  CLASS_TYPE_BORDER: 'border',
+  CLASS_TYPE_COLOR: 'color',
+  CLASS_TYPE_FONT: 'font',
+  CLASS_TYPE_OTHER: 'other',
 
   initialize: function($super, json, page, media) {
     this.page = page;
     this.media = media;
 
     this._classes = new Array();
-    this._classes['other'] = '';
-    this._classes['background'] = '';
-    this._classes['border'] = '';
-    this._classes['color'] = '';
-    this._classes['font'] = '';
-    
+    this._classes[this.CLASS_TYPE_BACKGROUND] = '';
+    this._classes[this.CLASS_TYPE_BORDER]     = '';
+    this._classes[this.CLASS_TYPE_COLOR]      = '';
+    this._classes[this.CLASS_TYPE_FONT]       = '';
+    this._classes[this.CLASS_TYPE_OTHER]      = '';
+                 
     $super(json);
     if (!json) {
       this.data.data = { preference: {}};
@@ -51,7 +54,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
         scope = this._getClassType(newClass);  
       }
 
-      if(this.ALLOWED_THEME_ELEMENT_TYPE.indexOf(scope) !== null) {
+      if(this.getClassThemeTypeAllowed().indexOf(scope) !== null) {
         if(this._classes[scope] !== newClass) {
           this._classes[scope] = newClass;
           needSave = true;
@@ -72,7 +75,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   clearClass: function(scope) {
-    if(this.ALLOWED_THEME_ELEMENT_TYPE.indexOf(scope) !== null) {
+    if(this.getClassThemeTypeAllowed().indexOf(scope) !== null) {
       if(this._classes[scope]) {
         this._classes[scope] = '';
         this.data.data['class'] = this.getClass();
@@ -94,6 +97,15 @@ WebDoc.Item = $.klass(WebDoc.Record,
     else {
       return this._classes[scope] || '';
     }
+  },
+
+  getClassThemeTypeAllowed: function() {
+    return [
+            this.CLASS_TYPE_BACKGROUND,
+            this.CLASS_TYPE_BORDER,
+            this.CLASS_TYPE_COLOR,
+            this.CLASS_TYPE_FONT
+    ];
   },
 
   _getClassesArrayFromData: function() {
