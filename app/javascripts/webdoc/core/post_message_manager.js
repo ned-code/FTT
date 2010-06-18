@@ -96,18 +96,6 @@ WebDoc.PostMessageManager = $.klass({
           if(parsedUrl['params']['class']) {
             WebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['class']);
           }
-          if(parsedUrl['params']['color_class']) {
-            WebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['color_class'], 'color');
-          }
-          if(parsedUrl['params']['font_class']) {
-            ebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['font_class'], 'font');
-          }
-          if(parsedUrl['params']['border_class']) {
-            WebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['border_class'], 'border');
-          }
-          if(parsedUrl['params']['background_class']) {
-            WebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['background_class'], 'background');
-          }
           break;
         case 'set_page_css':
           var cssParams = this.getCssParams(parsedUrl['params']);
@@ -118,18 +106,6 @@ WebDoc.PostMessageManager = $.klass({
           if(selection && selection.item) {
             if(parsedUrl['params']['class']) {
               selection.item.setClass(parsedUrl['params']['class']);
-            }
-            if(parsedUrl['params']['color_class']) {
-              selection.item.setClass(parsedUrl['params']['color_class'], 'color');
-            }
-            if(parsedUrl['params']['font_class']) {
-              selection.item.setClass(parsedUrl['params']['font_class'], 'font');
-            }
-            if(parsedUrl['params']['border_class']) {
-              selection.item.setClass(parsedUrl['params']['border_class'], 'border');
-            }
-            if(parsedUrl['params']['background_class']) {
-              selection.item.setClass(parsedUrl['params']['background_class'], 'background');
             }
           }
         break;
