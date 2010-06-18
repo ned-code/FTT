@@ -1,6 +1,6 @@
 <div id="media-browser-my-content" class='media-browser-tab'>
   <%= render 'users/my_content_header'%>
-  <div id="media-browser-my-images">
+  <div id="media-browser-my-images" class='my-content-tab'>
     <a href='#upload-images' class=''>
       <%= t('.images.add_image') %>
     </a>
@@ -13,7 +13,7 @@
   <div id="media-browser-my-images-detail">
   </div>
   
-  <div id="media-browser-upload-images" style='display:none'>
+  <div id="media-browser-upload-images" style='display:none' class='my-content-tab'>
       <h1><%= t('.images.add_images_view.title') %></h1>
       <div id="upload_control">
         <span id='upload_images_button_background' class='button'><%= t('.buttons.upload') %></span>
@@ -52,17 +52,12 @@
     },
     
     showMyImages: function(){
-      if($('#media-browser-favorites').length){
-  			$('#media-browser-favorites').hide();
-			}
-			if($('#media-browser-upload-images').length){
-			  $('#media-browser-upload-images').hide();
-			}
+      this._hideAll();
 			$('#media-browser-my-images').show();
     },
     
     showFavorites: function(){
-      $('#media-browser-my-images').hide();
+      this._hideAll();
       if($('#media-browser-favorites').length){
   			$('#media-browser-favorites').show();
 			}
@@ -78,8 +73,12 @@
     
     showUploader: function(){
       ddd('showUploader');
-      $('#media-browser-my-images').hide();
+      this._hideAll();
       $('#media-browser-upload-images').show();
+    },
+    
+    _hideAll: function(){
+      $('.my-content-tab').hide();
     }
   });
   
