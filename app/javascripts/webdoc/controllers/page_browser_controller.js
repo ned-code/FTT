@@ -434,14 +434,14 @@ WebDoc.PageBrowserController = $.klass({
   _show: function(){
     var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
     
-    this.domNode
-    .stop()
-    .animate({
-      marginBottom: 0
-    }, {
-      duration: 360,
-      easing: 'webdocBounce'
-    });
+    this.domNode.addClass(this.ACTIVE_CLASS);
+    //.stop()
+    //.animate({
+    //  marginBottom: 0
+    //}, {
+    //  duration: 360,
+    //  easing: 'webdocBounce'
+    //});
     
     pageBrowserButton.addClass(this.ACTIVE_CLASS);
     
@@ -451,13 +451,13 @@ WebDoc.PageBrowserController = $.klass({
   _hide: function( margin ){
     var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
     
-    this.domNode
-    .stop()
-    .animate({
-      marginBottom: - this._panelHeight
-    }, {
-      duration: 540
-    });
+    this.domNode.removeClass(this.ACTIVE_CLASS)
+    //.stop()
+    //.animate({
+    //  marginBottom: - this._panelHeight
+    //}, {
+    //  duration: 540
+    //});
     
     pageBrowserButton.removeClass(this.ACTIVE_CLASS);
     
