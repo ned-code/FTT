@@ -428,7 +428,7 @@ WebDoc.PageBrowserController = $.klass({
   // Show / hide browser --------------------------------------------
   
   _show: function(){
-    var inspector = this.domNode.find('.inspector'),
+    var inspector = this.domNode,
         pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
         startObj, endObj;
     
@@ -454,7 +454,7 @@ WebDoc.PageBrowserController = $.klass({
   },
   
   _hide: function( margin ){
-    var inspector = this.domNode.find('.inspector'),
+    var inspector = this.domNode,
         pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
         startObj, endObj;
     
