@@ -32,11 +32,24 @@ body                          { background-color: hsl(208, 8%, 60%); }
                                 -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
                                 box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
 
-.left-panel,
+.pages_panel,
 .right-panel                  { background-color: hsla(208, 7%, 41%, 0.92); }
+
+.pages_panel .panel_index {
+    -webkit-border-top-right-radius:  12px 12px;
+    -moz-border-radius-topright:      12px 12px;
+    border-top-right-radius:          12px 12px;
+    -webkit-border-top-left-radius:   12px 12px;
+    -moz-border-radius-topleft:       12px 12px;
+    border-top-left-radius:           12px 12px;
+    border-left: none;
+}
+
+.panel_index,
 .panel-tools,
-.border                       { background-color: inherit; border-color: /*hsla(208, 12%, 30%, 0.8)*/ transparent; }
+.border                       { background-color: inherit; border-color: hsla(208, 12%, 30%, 0.8); }
 .vertical.panel-tools li      { border-color: hsla(208, 12%, 30%, 0.8); }
+.panel_index a.current,
 .panel-tools a.current        { background-color: hsla(208, 12%, 30%, 0.8); }
 
 /*  */
@@ -60,6 +73,16 @@ body                          { background-color: hsl(208, 8%, 60%); }
                                 background-image: -moz-linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
                                 background-image:      linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
                                 background-repeat: repeat-x; }
+
+.inspector .vertical.tools_index {
+    background-image: url('/images/bg.png');
+    background-position: 0 0;
+    background-image: -webkit-gradient( linear, 0% 0%, 100% 0%, from( hsl(208, 4%, 97%) ), to( hsl(208, 8%, 79%) ));
+    background-image: -moz-linear-gradient( 0deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
+    background-image:      linear-gradient( 0deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
+    background-repeat: repeat-x;
+}
+
 .inspector form.content       { background-color: hsl(208, 3%, 88%); }
 .inspector .box               { background-color: hsl(208, 6%, 56%);
 
@@ -249,6 +272,8 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
     background-color: hsl(208, 9%, 71%);
 }
 
+.ghost { opacity: 0.6; }
+
 /* Pages tools */
 
 .pages-tools a                      { background-image: url('/images/pages-tools.png'); }
@@ -363,6 +388,7 @@ a[href="#themes-chooser"]:hover     { background-position: 0 -3200px; }
 a[href="#themes-chooser"]:active    { background-position: 0 -3264px; }
 
 .inspector-views a,
+.panel_index a,
 .panel-tools a                      { background-image: url('/images/panel-tools.png'); }
 
 /* A bit of a special case, the toggle buttons.

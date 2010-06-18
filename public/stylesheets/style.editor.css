@@ -25,7 +25,6 @@ body {
     /* Set interface font-size to 12px */
     font-size: 75%;
 }
-#left-panel-ghost,
 #right-panel-ghost {
     display: table-cell;
     /* Width is animated with panel */
@@ -49,7 +48,6 @@ body {
 .ui-pop         { z-index: 4; } 
 
 #webdoc .center     { z-index: 2; }
-#left-panel-ghost,
 #right-panel-ghost  { z-index: 1; }
 
 #webdoc .board-screen   { z-index: 1000000; }  /* svg layer has 999999 */
@@ -83,6 +81,10 @@ body {
 
 /* Interface panels */
 
+.header_panel {
+  top: 0;
+}
+
 .toolbar-panel {
     top: 0;
     height: 36px;
@@ -112,13 +114,14 @@ body {
     margin-left: 1.6em;
 }
 
-.left-panel,
 .right-panel {
     top: 36px;
+    bottom: 0px;
 }
-.left-panel {
-    width: 164px;
-    margin-left: -164px;
+.pages_panel {
+    width: 100%;
+    height: 128px;
+    bottom: 0;
 }
 .right-panel {
     width: 350px;
@@ -145,16 +148,7 @@ body {
     border-bottom-left-radius:          12px 12px;
     border-right: none;
 }
-.left-panel .panel-tools {
-    right: -36px;
-    -webkit-border-top-right-radius:    12px 12px;
-    -moz-border-radius-topright:        12px 12px;
-    border-top-right-radius:            12px 12px;
-    -webkit-border-bottom-right-radius: 12px 12px;
-    -moz-border-radius-bottomright:     12px 12px;
-    border-bottom-right-radius:         12px 12px;
-    border-left: none;
-}
+
 .left-panel .panel-tools li {
     border-bottom: none;
 }
@@ -186,12 +180,29 @@ body {
     height: 32px;
     padding-left: 32px;
 }
+
+.panel_index {
+  position: absolute;
+  padding: 2px;
+}
+
+.pages_panel .panel_index {
+  top: -36px;
+  height: 32px;
+  left: 56px;
+}
+
+
+
+
 .pages-info .number {
     position: absolute;
     top: -0.75em;
     left: 50%;
     margin-left: -0.75em;
 }
+
+
 /*.border {
     border: 3px solid;
     position: absolute;
@@ -215,6 +226,9 @@ body {
 .webdoc.tag-list li {
     padding: 0;
     margin: 0;
+}
+.toolbar-panel {
+  left: 0; right: 0;
 }
 #toolbar_panel .tag-list a {
     display: block;
@@ -337,12 +351,23 @@ body {
 
 /* Pages Browser */
 
+.pages-tools {
+  width: 32px;
+  float: left;
+  height: 100%;
+  margin-right: 1px;
+}
+.pages-tools li {
+  height: 32px;
+}
+
 .pages li {
-    margin-bottom: 1px;
+    margin-right: 1px;
     position: relative;
     cursor: move;
 }
 .pages li .page-title {
+    display: none;
     height: 1.5em;
     line-height: 1.5em;
     padding: 0.6em 0.6em 0.6em 2.7em;
@@ -417,7 +442,7 @@ body {
  
 /* 1. With border, looks like an extension of the title block */
 
-.pages li .thumb {
+/*.pages li .thumb {
   position: relative;
   width: 120px; height: 75px;
   margin: 0 auto;
@@ -450,7 +475,7 @@ body {
   position: absolute;
   left: 0; top: 50%;
   margin-top: -45px;
-}
+}*/
 
 /* 2. As a sheet, looks like it appears from a slot in the title block */
 
@@ -479,6 +504,31 @@ body {
   height: 0;
   border: none;
 }*/
+
+/* horizontally, without border */
+.pages li .thumb {
+  position: relative;
+  width: auto; height: 128px;
+  margin: 0 auto;
+  overflow: hidden;
+  top: 0px;
+  padding: 0;s
+  
+  -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
+  -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
+  box-shadow:         0 6px 8px hsl(14, 6%, 30%);
+}
+
+.hide-thumbs li .thumb {
+  height: 0;
+  margin-bottom: 0;
+  border-bottom-width: 0;
+}
+.pages li .thumb .page-thumb {
+  position: absolute;
+  left: 0; top: 50%;
+  margin-top: -64px;
+}
 
 /*******************/
 /* = board part = */
@@ -617,12 +667,10 @@ body {
 }
 
 .pages-inspector {
-    top: 65px;
+    top: 0;
     bottom: 0;
 }
-.mode-preview .pages-inspector {
-    top: 32px;
-}
+
 .inspector .tools {
     margin-bottom: 1px;
 }
@@ -947,3 +995,4 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 120px;
 }
+
