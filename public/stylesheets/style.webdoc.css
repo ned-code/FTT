@@ -125,6 +125,27 @@
   display: none;
 }
 
+#notification_bar {
+  position: fixed;
+  bottom:0px;
+  left:0px;
+  height: 25px;
+  background-color:#0078AE;
+  z-index:2000001;
+  padding-left:10px;
+  padding-right:10px;
+}
+
+#notification_bar.info {
+  background-color:#0078AE;
+}
+#notification_bar.error {
+  background-color:#EE5757;
+}
+#notification_bar.warning {
+  background-color:#EEB420;
+}
+
 /* shinding gadget */
 .gadgets-gadget-title-bar {
   display:none;
