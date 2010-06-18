@@ -234,7 +234,7 @@ body {
     width: 72.6%; height: 32px;
     
     /* these counter the effects of someone else's toolbar class - get rid of */
-    padding: 0; border-bottom: none;
+    padding: 1px 0; border-bottom: none;
 
     -webkit-transition: bottom 0.2s ease-out;
     -moz-transition:    bottom 0.2s ease-out;
