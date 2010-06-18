@@ -154,12 +154,24 @@ jQuery.extend(WebDoc.ServerManager, {
     };
     if (!this.requestByUuid[object.uuid()]) {
       this.requestByUuid[object.uuid()] = [request];
+      this.execteWaitingRequest(object.uuid());
     }
     else {
-      this.requestByUuid[object.uuid()].push(request);
-    }
-    this.execteWaitingRequest(object.uuid());
-    
+      // check if we can skip pending request because new request replace previous pending one
+      var nbRequest = this.requestByUuid[object.uuid()].length;
+      var addRequest = true;
+      // we cannot replace excecuting one that is the first
+      if (nbRequest > 1) {
+        var lastRequest = this.requestByUuid[object.uuid()][nbRequest-1];
+        if (lastRequest.action === request.action) {
+          lastRequest.arg = request.arg;
+          addRequest = false;
+        }
+      }
+      if (addRequest) {
+        this.requestByUuid[object.uuid()].push(request);
+      }
+    }    
   },
   
   /**
