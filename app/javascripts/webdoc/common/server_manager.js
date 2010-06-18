@@ -345,6 +345,11 @@ jQuery.extend(WebDoc.ServerManager, {
 
 WebDoc.ErrorManager = {
   notifyError: function(methodName, errorMessage, params) {
-    alert("Oops. An error has occured. " + methodName + " " + errorMessage + " " + params.uuid() + ". Please refresh the page :-(");
+    if (WebDoc.application.notificationController) {
+      WebDoc.application.notificationController.notify("Oops. An error occurs in the network. Please <a href=''>reload</a> the page", WebDoc.NotificationController.ERROR);
+    }
+    else {
+      alert("Oops. An error has occured. " + methodName + " " + errorMessage + " " + params.uuid() + ". Please refresh the page :-(");
+    }
   }
 }

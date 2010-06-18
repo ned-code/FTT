@@ -35,8 +35,6 @@ class Page < ActiveRecord::Base
   # = Validations =
   # ===============
 
-  validates_uniqueness_of :uuid  
-
   # =============
   # = Callbacks =
   # =============
@@ -97,6 +95,10 @@ class Page < ActiveRecord::Base
     cloned_page
   end
 
+  def touch
+    update_attribute("updated_at", Time.now)
+  end
+  
   private
   
   # before_save

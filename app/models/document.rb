@@ -25,7 +25,6 @@ class Document < ActiveRecord::Base
   # ===============
   # = Validations =
   # ===============
-  validates_uniqueness_of :uuid
   validates_numericality_of :featured
 
   # =============
@@ -340,6 +339,10 @@ class Document < ActiveRecord::Base
       Document.connection.update("UPDATE `documents` SET `views_count` = #{cloned_document.view_counts.count} WHERE `uuid` = '#{cloned_document.uuid}'")
     end
     cloned_document
+  end
+  
+  def touch
+    update_attribute("updated_at", Time.now)
   end
   
 private
