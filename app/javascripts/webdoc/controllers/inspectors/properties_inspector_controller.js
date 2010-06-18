@@ -87,7 +87,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     
     e.preventDefault();
     
-    item.changeThemeBgClass( className );
+    item.setClass( className, 'background', true );
   },
   
   refresh: function() {
