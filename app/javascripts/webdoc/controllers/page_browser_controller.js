@@ -43,7 +43,7 @@ WebDoc.PageBrowserController = $.klass({
     ddd("[PageBrowserController] Pages panel width: " + this._pagesPanelWidth);
     ddd("[PageBrowserController] panel height: " + this._panelHeight);
     
-    this.visible = true;
+    this.visible = false;
     this.pageMap = {};
     
     this.domNode
@@ -280,7 +280,7 @@ WebDoc.PageBrowserController = $.klass({
   _dragChangeCallback: function(e, dragTarget){
     var dataTransfer = e.originalEvent.dataTransfer,
         dropData = 
-          //dataTransfer.getData("application/webdoc-page") ?               // Enable this lot to get drag working between windows - once you have the JSON organised...
+          //dataTransfer.getData("application/webdoc-page") ?               // Enable this lot to get drag working between windows (once you have the JSON organised...)
           //JSON.parse( dataTransfer.getData("application/webdoc-page") ) :
           dragTarget.data("webdoc").page ,
         dropPageIndex = dragTarget.index(),
@@ -432,34 +432,53 @@ WebDoc.PageBrowserController = $.klass({
   // Show / hide browser --------------------------------------------
   
   _show: function(){
-    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
+    var inspector = this.domNode.find('.inspector'),
+        pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
+        startObj, endObj;
     
-    this.domNode
-    .stop()
-    .animate({
-      marginBottom: 0
-    }, {
-      duration: 360,
-      easing: 'webdocBounce'
-    });
-    
+    this.domNode.addClass(this.ACTIVE_CLASS);
     pageBrowserButton.addClass(this.ACTIVE_CLASS);
+    
+    if ( !jQuery.support.css.transition ) {
+      startObj = { scale: 0.25 };
+      endObj = { scale: 1 };
+      
+      jQuery(startObj)
+      .animate( endObj, {
+        step: function( s ){
+          inspector.css({
+            MozTransform: 'scale('+s+')'
+          });
+        },
+        duration: 200
+      });
+    }
     
     return true;
   },
   
   _hide: function( margin ){
-    var pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
+    var inspector = this.domNode.find('.inspector'),
+        pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
+        startObj, endObj;
     
-    this.domNode
-    .stop()
-    .animate({
-      marginBottom: - this._panelHeight
-    }, {
-      duration: 540
-    });
-    
+    this.domNode.removeClass(this.ACTIVE_CLASS)
     pageBrowserButton.removeClass(this.ACTIVE_CLASS);
+    
+    if ( !jQuery.support.css.transition ) {
+      startObj = { scale: 1 };
+      endObj = { scale: 0.25 };
+      
+      jQuery(startObj)
+      .animate( endObj, {
+        step: function( s ){
+          inspector.css({
+            MozTransform: 'scale('+s+')'
+          });
+        },
+        duration: 420
+      });
+    }
     
     return false;
   },

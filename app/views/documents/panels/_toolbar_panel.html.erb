@@ -1,9 +1,14 @@
-<%# <li>s must not have whitespace between them, or they won't display properly %>
+<%# lis must not have whitespace between them, or they won't display properly %>
 
 <div class="toolbar-panel panel" id="toolbar">
   <a href="#webdoc-close">
     <div class="logo"></div>
   </a>
+  <div class="page-details">
+    <span class="webdoc-page-number number">2</span>
+    <span class="webdoc-separator">of</span>
+    <span class="webdoc-page-total">3</span>
+  </div>
   <ul class="pages-tools tools thumbs index icons-only">
     <li>
       <a href="#webdoc-prev-page" title="Previous">Previous</a>
@@ -42,10 +47,12 @@
       <a href="#insert-iframe" title="Insert Web page">Insert Web page</a>
     </li><li class="mode-edit-show">
       <a href="#insert-text" title="Insert Text">Insert Text</a>
-    </li><% if !Rails.env.production? %><li class="mode-edit-show">
+    </li>
+    <% if !Rails.env.production? %>
+    <li class="mode-edit-show">
       <a href="#insert-os-gadget" title="Insert open social app">Insert open social app</a>
     </li>
-    <% end if %>
+    <% end %>
   </ul>
   <ul class="edit-tools group-tools tools thumbs index icons-only" id="misc_tools">
     <li>
@@ -76,10 +83,5 @@
       <a class="state-mode" href="#mode-preview" title="Preview mode">Preview Mode</a>
     </li>
   </ul>
-  <div class="page-details">
-    <span class="webdoc-page-number number">2</span>
-    <span class="webdoc-separator">of</span>
-    <span class="webdoc-page-total">3</span>
-  </div>
-  <div class="document-title"><%=@document.title %></div>
+  <div class="document-title"><%= @document.title %></div>
 </div>
