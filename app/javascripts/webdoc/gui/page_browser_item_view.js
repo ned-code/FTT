@@ -51,7 +51,7 @@ WebDoc.PageBrowserItemView = $.klass({
       page.addListener(this);
     }
     catch(e) {
-      ddd("PageBrowserItemView: initialize: error: "+e);
+      ddd("[PageBrowserItemView] initialize error: "+e);
     }
   },
   

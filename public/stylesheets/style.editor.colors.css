@@ -19,6 +19,7 @@ body                          { background-color: hsl(208, 8%, 60%); }
                                 border-radius:         6px; }
 
 /* Panels */
+.toolbar,
 .toolbar-panel                { color: hsl(208, 7%, 41%);
                                 background-color: hsla(208, 7%, 41%, 0.92);
                                 background-image: url('/images/bg.png');
@@ -299,13 +300,13 @@ a[href="#remove-page"]              { background-position: 0 -832px; }
 a[href="#remove-page"]:hover        { background-position: 0 -896px; }
 a[href="#remove-page"]:active       { background-position: 0 -960px; }
 
-.toolbar-panel a[href="#webdoc-prev-page"]        { background-position: 0 -1024px; }
-.toolbar-panel a[href="#webdoc-prev-page"]:hover  { background-position: 0 -1088px; }
-.toolbar-panel a[href="#webdoc-prev-page"]:active { background-position: 0 -1152px; }
+a[href="#webdoc-prev-page"]        { background-position: 0 -1024px; }
+a[href="#webdoc-prev-page"]:hover  { background-position: 0 -1088px; }
+a[href="#webdoc-prev-page"]:active { background-position: 0 -1152px; }
 
-.toolbar-panel a[href="#webdoc-next-page"]        { background-position: 0 -1216px; }
-.toolbar-panel a[href="#webdoc-next-page"]:hover  { background-position: 0 -1280px; }
-.toolbar-panel a[href="#webdoc-next-page"]:active { background-position: 0 -1344px; }
+a[href="#webdoc-next-page"]        { background-position: 0 -1216px; }
+a[href="#webdoc-next-page"]:hover  { background-position: 0 -1280px; }
+a[href="#webdoc-next-page"]:active { background-position: 0 -1344px; }
 
 a[href="#toggle-thumbs"].active        { background-position: 0 -1408px; }
 a[href="#toggle-thumbs"].active:hover  { background-position: 0 -1472px; }
@@ -444,13 +445,13 @@ a[href="#show-thumbs"]                { background-position: -4px -1860px; }
 a[href="#show-thumbs"]:hover          { background-position: -4px -1924px; }
 a[href="#show-thumbs"].current        { background-position: -4px -1988px; }
 
-a[href="#webdoc-prev-page"]           { background-position: 0 -2051px; }
+/*a[href="#webdoc-prev-page"]           { background-position: 0 -2051px; }
 a[href="#webdoc-prev-page"]:hover     { background-position: 0 -2115px; }
 a[href="#webdoc-prev-page"]:active    { background-position: 0 -2179px; }
 
 a[href="#webdoc-next-page"]           { background-position: 0 -2237px; }
 a[href="#webdoc-next-page"]:hover     { background-position: 0 -2301px; }
-a[href="#webdoc-next-page"]:active    { background-position: 0 -2365px; }
+a[href="#webdoc-next-page"]:active    { background-position: 0 -2365px; }*/
 
 a[href="#social-inspector"]           { background-position: 0 -2432px; }
 a[href="#social-inspector"]:hover     { background-position: 0 -2496px; }
