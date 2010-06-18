@@ -97,6 +97,11 @@ WebDoc.PostMessageManager = $.klass({
             WebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['class']);
           }
           break;
+        case 'remove_page_class':
+          if(parsedUrl['params']['type']) {  // can be 'border', 'background', 'color', 'font'
+            WebDoc.application.pageEditor.currentPage.clearClass(parsedUrl['params']['type']);
+          }
+          break;
         case 'set_page_css':
           var cssParams = this.getCssParams(parsedUrl['params']);
           WebDoc.application.pageEditor.currentPage.addCss(cssParams);
@@ -109,6 +114,14 @@ WebDoc.PostMessageManager = $.klass({
             }
           }
         break;
+        case 'remove_item_class':
+          var selection = WebDoc.application.boardController.selection()[0];
+          if(selection && selection.item) {
+            if(parsedUrl['params']['type']) {  // can be 'border', 'background', 'color', 'font'
+              selection.item.clearClass(parsedUrl['params']['type']);
+            }
+          }
+          break;
         case 'set_item_css':
           var selection = WebDoc.application.boardController.selection()[0];
           if(selection && selection.item) {
