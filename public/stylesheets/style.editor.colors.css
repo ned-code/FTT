@@ -201,21 +201,21 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
 
 .toolbar-panel a,
 .toolbar-panel .group-tools a,
-.toolbar-panel .mode-tools a        { -webkit-transition: width 0.18s ease-out; }
+.mode-tools a        { -webkit-transition: width 0.18s ease-out; }
 .toolbar-panel a:active,
 .toolbar-panel .group-tools a:active,
-.toolbar-panel .mode-tools a:active { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+.mode-tools a:active { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
 .toolbar-panel .current,
 .toolbar-panel .active,
 .toolbar-panel .group-tools .current,
-.toolbar-panel .mode-tools .current { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
+.mode-tools .current { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -webkit-transition: width 0.18s ease-out; }
 .toolbar-panel .group-tools a,
-.toolbar-panel .mode-tools a        { -webkit-box-shadow: inset 0 0 2px -1px hsl(18, 16%, 12%);
+.mode-tools a        { -webkit-box-shadow: inset 0 0 2px -1px hsl(18, 16%, 12%);
                                       -moz-box-shadow:    inset 0 0 2px -1px hsl(18, 16%, 12%);
                                       box-shadow:         inset 0 0 2px -1px hsl(18, 16%, 12%); }
 

@@ -27,7 +27,11 @@ WebDoc.BoardController = jQuery.klass({
     this._previousInspector = null;
     this.previousThemeClass = undefined;
     this.currentThemeClass = undefined;
-    this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);    
+    this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);
+    
+    jQuery(document).bind("keypress", this, jQuery.proxy(this, "_keyPress"));
+    jQuery(document).bind("keydown", this, jQuery.proxy(this, "_keyDown"));
+    jQuery(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));
   },
   
   currentPageView: function() {
@@ -80,10 +84,6 @@ WebDoc.BoardController = jQuery.klass({
         defaultZoom = 1;
     
     board.unbind();
-    
-    jQuery(document).unbind("keydown", this._keyDown);
-    jQuery(document).unbind("keypress", this._keyPress);
-    jQuery(document).unbind("keyup", this._keyUp);
 
     this._currentPageView = pageView;
     this._currentZoom = 1;
@@ -99,10 +99,6 @@ WebDoc.BoardController = jQuery.klass({
     
     this._fireSelectionChanged();
     this._bindMouseEvent();
-    
-    jQuery(document).bind("keypress", this, jQuery.proxy(this, "_keyPress"));
-    jQuery(document).bind("keydown", this, jQuery.proxy(this, "_keyDown"));
-    jQuery(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));    
 
     if (this._autoFit && this.boardContainerNode.css("width").match(/px/) && this.boardContainerNode.css("height").match(/px/)) {
       //update zoom to fit browser page    

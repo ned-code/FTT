@@ -76,7 +76,7 @@ body {
 
 #webdoc {
     /* Compensate for height of toolbar panel */
-    padding-top: 38px;
+    padding-top: 42px;
     padding-bottom: 36px;
 }
 
@@ -87,13 +87,13 @@ body {
 }
 
 .toolbar-panel {
-    top: 0;
-    height: 36px;
+    top: 4px;
+    height: 34px;
     padding: 0 6px;
     overflow: hidden;
 }
 .toolbar-panel .tools {
-    margin-top: 2px;
+    margin-top: 1px;
 }
 .toolbar-panel .logo {
     float: left;
@@ -310,7 +310,10 @@ body {
     margin: 0;
 }
 .toolbar-panel {
-  left: 0; right: 0;
+  left: 6px; right: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
 }
 #toolbar_panel .tag-list a {
     display: block;
