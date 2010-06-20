@@ -29,9 +29,10 @@ WebDoc.BoardController = jQuery.klass({
     this.currentThemeClass = undefined;
     this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);
     
-    jQuery(document).bind("keypress", this, jQuery.proxy(this, "_keyPress"));
-    jQuery(document).bind("keydown", this, jQuery.proxy(this, "_keyDown"));
-    jQuery(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));
+    jQuery(document)
+    .bind("keypress", this, jQuery.proxy(this, "_keyPress"))
+    .bind("keydown", this, jQuery.proxy(this, "_keyDown"))
+    .bind("keyup", this, jQuery.proxy(this, "_keyUp"));
   },
   
   currentPageView: function() {
@@ -112,10 +113,14 @@ WebDoc.BoardController = jQuery.klass({
       }
     }
     this.zoom(defaultZoom);
-
     this.setMode(!jQuery("body").hasClass('mode-edit'));
-
     this._fireCurrentPageChanged();
+    
+    jQuery('#webdoc').scrollbars({
+      x: jQuery('#scrollbar_x'),
+      y: jQuery('#scrollbar_y'),
+      dragImageUrl: '/images/icon_blank.png'
+    })
     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");

@@ -9,7 +9,9 @@
 (function( jQuery, undefined ){
 	
 	var debug = false; //(window.console && console.log);
-	var options = {};
+	var options = {
+		dragImageUrl: 'images/icon_blank.png'
+	};
 	
 	function update( elem, scroll, options ){
 
@@ -53,6 +55,9 @@
 				store = {},
 				scroll = {};
 		
+		if (options.x) { options.x[0].draggable = true; }
+		if (options.y) { options.y[0].draggable = true; }
+		
 		update( elem, scroll, options );
 		
 		// Trigger update when stuff resizes. This is a 
@@ -82,7 +87,7 @@
 		
 		// WebKit won't move the scrollbars without an image to
 		// use as a drag image.
-		icon.src = "images/icon_blank.png";
+		icon.src = options.dragImageUrl;
 		
 		// Set up dragging of the handle
 		options.x
@@ -98,6 +103,8 @@
 			eOrig.dataTransfer.setDragImage(icon, 12, 12);
 			eOrig.dataTransfer.effectAllowed = "none";
 			
+			// We can't rely on data for Chrome.  It's buggy.
+			store.currentMove = 'x';
 			store.xstartpos = e.pageX;
 			store.xstartratio = scroll.xratio;
 			
@@ -117,6 +124,8 @@
 			eOrig.dataTransfer.setDragImage(icon, 12, 12);
 			eOrig.dataTransfer.effectAllowed = "none";
 			
+			// We can't rely on data for Chrome.  It's buggy.
+			store.currentMove = 'y';
 			store.ystartpos = e.pageY;
 			store.ystartratio = scroll.yratio;
 			
@@ -135,7 +144,7 @@
 			var dataTransfer = e.originalEvent.dataTransfer,
 					travel, diff, ratio;
 			
-			if ( (dataTransfer.getData("scroll") === 'x') && (e.pageX !== store.x) ) {
+			if ( store.currentMove === 'x' && (e.pageX !== store.x) ) {
 				store.x = e.pageX;
 				
 				travel = ( 1 - scroll.xsize ) * scroll.xtravel ;
@@ -145,7 +154,7 @@
 				elem.scrollLeft( scroll.xmax * ratio );
 			}
 			
-			if ( (dataTransfer.getData("scroll") === 'y') && (e.pageY !== store.y) ) {
+			if ( store.currentMove === 'y' && (e.pageY !== store.y) ) {
 				store.y = e.pageY;
 				
 				travel = ( 1 - scroll.ysize ) * scroll.ytravel ;
