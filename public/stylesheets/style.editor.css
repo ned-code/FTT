@@ -1088,6 +1088,8 @@ body {
 /* --- */
 
 .x_scrollbar_container {
+  position: absolute;
+  
   -webkit-box-sizing: border-box;
   -moz-box-sizing:    border-box;
   box-sizing:         border-box;
@@ -1116,10 +1118,23 @@ body {
   z-index: 2;
 }
 
+/*#webdoc_x_scrollbar:hover,
+#webdoc_y_scrollbar:hover {
+  opacity: 1;
+  -webkit-transition: opacity 0.1s linear;
+  -moz-transition:    opacity 0.1s linear;
+  transition:         opacity 0.1s linear;
+}*/
+
 #webdoc_x_scrollbar,
 #webdoc_y_scrollbar {
   position: fixed;
   z-index: 2;
+  /*opacity: 0;
+  -webkit-transition: opacity 0.66s linear;
+  -moz-transition:    opacity 0.66s linear;
+  transition:         opacity 0.66s linear;
+  */
 }
 
 #webdoc_x_scrollbar {

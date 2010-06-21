@@ -75,7 +75,11 @@
 			update( elem, scroll, options );
 		});
 		
-		elem.bind('scroll', function(e){
+		elem
+		.bind('resize', function(e){
+			update( elem, scroll, options );
+		})
+		.bind('scroll', function(e){
 			
 			var elem = jQuery(this);
 			

@@ -130,15 +130,22 @@ WebDoc.PageBrowserController = $.klass({
       .delegate('li', 'dragenter dragover', function(e){
         //console.log('EVENT '+e.type, e);
         
-        var item, mouse, width, height, offset;
+        var item, mouse, width, height, offset, pageId ;
         
         e.preventDefault();
         e.originalEvent.dataTransfer.dropEffect = "move";
         
         if (!dragTarget) {
-        	// drag is coming from outside so create dragTarget for this DOM
-        	
-        	dragTarget = jQuery('<li/>', {'class': 'ghost', text: 'What? from another document? Are you nuts?'})
+          // drag is coming from outside this window
+          
+          pageId = e.originalEvent.dataTransfer.getData('webdoc/page');
+          
+          if ( !pageId || pageId === '' ) {
+            // Drag is not even a webdoc page
+            return;
+          }
+          
+          dragTarget = jQuery('<li/>', {'class': 'ghost', text: 'What? from another document? Are you nuts?'})
         }
         
         if (dragTarget[0] === this) {
@@ -256,7 +263,8 @@ WebDoc.PageBrowserController = $.klass({
     
     dataTransfer.setData("Text", 'Page title');
     dataTransfer.setData("URL", window.location+' Add the page hash here!!!' );
-    dataTransfer.setData("application/webdoc-page", "Put some JSON here");
+    dataTransfer.setData("application/json", "Put some JSON here");
+    dataTransfer.setData('webdoc/page', 'put page id here');
   },
   
   _dragUpdateCallback: function(e, dragTarget){
