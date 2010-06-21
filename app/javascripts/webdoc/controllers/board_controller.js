@@ -120,7 +120,7 @@ WebDoc.BoardController = jQuery.klass({
       x: jQuery('#scrollbar_x'),
       y: jQuery('#scrollbar_y'),
       dragImageUrl: '/images/icon_blank.png'
-    })
+    });
     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");

@@ -27,7 +27,11 @@
 		  scroll.xratio = scroll.x / scroll.xmax;
 		  scroll.xtravel = options.x.css({ WebkitTransition: 'none', width: '100%' }).width();
 		  
-		  options.x.css({ WebkitTransition: 'left 0.025s linear, width 0.1s linear', width: scroll.xsize * 100 + '%' });
+		  options.x.css({
+		  	WebkitTransition: 'left 0.025s linear, width 0.1s linear',
+		  	width: scroll.xsize * 100 + '%',
+		  	opacity: scroll.xsize === 1 ? 0 : 1 
+		  });
 		  elem.scrollLeft( scroll.x );
 		}
 		
@@ -41,7 +45,11 @@
 		  scroll.yratio = scroll.y / scroll.ymax;
 		  scroll.ytravel = options.y.css({ WebkitTransition: 'none', height: '100%' }).height();
 		  
-		  options.y.css({ WebkitTransition: 'top 0.025s linear, height 0.1s linear', height: scroll.ysize * 100 + '%' });
+		  options.y.css({
+		  	WebkitTransition: 'top 0.025s linear, height 0.1s linear',
+		  	height: scroll.ysize * 100 + '%',
+		  	opacity: scroll.ysize === 1 ? 0 : 1
+		  });
 		  elem.scrollTop( scroll.y );
 		}
 
@@ -90,47 +98,51 @@
 		icon.src = options.dragImageUrl;
 		
 		// Set up dragging of the handle
-		options.x
-		.bind('dragstart', function(e){
-			
-			if (debug) { console.log('EVENT '+e.type, e); }
-			
-			var eOrig = e.originalEvent;
-			
-			// FireFox must have have data bound here or it doesn't
-			// fire any of the other drag and drop events.
-			eOrig.dataTransfer.setData("scroll", "x");
-			eOrig.dataTransfer.setDragImage(icon, 12, 12);
-			eOrig.dataTransfer.effectAllowed = "none";
-			
-			// We can't rely on data for Chrome.  It's buggy.
-			store.currentMove = 'x';
-			store.xstartpos = e.pageX;
-			store.xstartratio = scroll.xratio;
-			
-		  return true;
-		});
+		if (options.x) {
+			options.x
+			.bind('dragstart', function(e){
+				
+				if (debug) { console.log('EVENT '+e.type, e); }
+				
+				var eOrig = e.originalEvent;
+				
+				// FireFox must have have data bound here or it doesn't
+				// fire any of the other drag and drop events.
+				eOrig.dataTransfer.setData("scroll", "x");
+				eOrig.dataTransfer.setDragImage(icon, 12, 12);
+				eOrig.dataTransfer.effectAllowed = "none";
+				
+				// We can't rely on data for Chrome.  It's buggy.
+				store.currentMove = 'x';
+				store.xstartpos = e.pageX;
+				store.xstartratio = scroll.xratio;
+				
+			  return true;
+			});
+		}
 		
-		options.y
-		.bind('dragstart', function(e){
-			
-			if (debug) { console.log('EVENT '+e.type, e); }
-			
-			var eOrig = e.originalEvent;
-			
-			// FireFox must have have data bound here or it doesn't
-			// fire any of the other drag and drop events.
-			eOrig.dataTransfer.setData("scroll", "y");
-			eOrig.dataTransfer.setDragImage(icon, 12, 12);
-			eOrig.dataTransfer.effectAllowed = "none";
-			
-			// We can't rely on data for Chrome.  It's buggy.
-			store.currentMove = 'y';
-			store.ystartpos = e.pageY;
-			store.ystartratio = scroll.yratio;
-			
-		  return true;
-		});
+		if (options.y) {
+			options.y
+			.bind('dragstart', function(e){
+				
+				if (debug) { console.log('EVENT '+e.type, e); }
+				
+				var eOrig = e.originalEvent;
+				
+				// FireFox must have have data bound here or it doesn't
+				// fire any of the other drag and drop events.
+				eOrig.dataTransfer.setData("scroll", "y");
+				eOrig.dataTransfer.setDragImage(icon, 12, 12);
+				eOrig.dataTransfer.effectAllowed = "none";
+				
+				// We can't rely on data for Chrome.  It's buggy.
+				store.currentMove = 'y';
+				store.ystartpos = e.pageY;
+				store.ystartratio = scroll.yratio;
+				
+				return true;
+			});
+		}
 		
 		// FireFox does not report mouse coordinates on drag event.
 		// That's pretty annoying, actually. It means we have to

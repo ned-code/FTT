@@ -52,6 +52,12 @@ WebDoc.PageBrowserController = $.klass({
     .bind('mouseleave', function(e){
       that.hide();
     });
+    
+    this.domNode
+    .find('.content')
+    .scrollbars({
+      x: this.domNode.find('.x_scrollbar')
+    });
   },
   
   setDocument: function(document) {
