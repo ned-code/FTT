@@ -392,6 +392,11 @@ a[href="#library"]:hover              { background-position: 0 -704px; }
 a[href="#library"]:active             { background-position: 0 -768px; }
 a[href="#library"].current            { background-position: 0 -832px; }
 
+a[href="#media-browser"]              { background-position: 0 -640px; }
+a[href="#media-browser"]:hover        { background-position: 0 -704px; }
+a[href="#media-browser"]:active       { background-position: 0 -768px; }
+a[href="#media-browser"].current      { background-position: 0 -832px; }
+
 a[href="#pages-browser"]              { background-position: 0 -896px; }
 a[href="#pages-browser"]:hover        { background-position: 0 -960px; }
 a[href="#pages-browser"]:active       { background-position: 0 -1024px; }

@@ -14,6 +14,10 @@
   </div>
   
   <div id="media-browser-upload-images" style='display:none' class='my-content-tab'>
+    <div id="swfupload_container" style='display:none'>
+      <input id='upload_images_button' type='button' value="Choose images" />
+    </div>
+
       <h1><%= t('.images.add_images_view.title') %></h1>
       <div id="upload_control">
         <span id='upload_images_button_background' class='button'><%= t('.buttons.upload') %></span>
@@ -35,7 +39,7 @@
       ddd('[BrowserController] initialize');
       this.domNode = $('#media-browser-my-content');
       this._createHandlers('click', this._myContentHandlers);
-      //this.imagesUploader = new WebDoc.ImagesUploader('upload_control');
+      this.imagesUploader = new WebDoc.ImagesUploader('upload_control');
     },
     
     _createHandlers: function(eventType, obj, context){
