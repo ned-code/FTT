@@ -85,7 +85,7 @@ class Layout < ActiveRecord::Base
               item.data[:src] = path + src
               item.media_type = 'image'
               if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
-                item.data[:is_placeholder] = true
+                item.data[:is_placeholder] = "true"
               end
             when 'iframe'
               item = build_default_item(page, doc_item)

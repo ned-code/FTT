@@ -96,7 +96,8 @@ WebDoc.ImagePaletteController = $.klass({
           this.addToMyImageLink.show();
         }
         $("#property_src")[0].value = selectedItem.item.data.data.src;
-        if(selectedItem.item.data.data.preserve_aspect_ratio === "true") {
+        if(selectedItem.item.data.data.preserve_aspect_ratio === true ||
+           selectedItem.item.data.data.preserve_aspect_ratio === "true") {
           $("#preserve_aspect_ratio").attr("checked", "checked");  
         }
         else {

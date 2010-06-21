@@ -24,7 +24,6 @@ class Item < ActiveRecord::Base
   # = Callbacks =
   # =============
 
-  before_create :create_default_params
   after_save :touch_page
   after_destroy :touch_page
 
@@ -74,15 +73,6 @@ class Item < ActiveRecord::Base
   end
 
   private
-
-  # before_create
-  def create_default_params
-    if media_type == 'image'
-      if data['preserve_aspect_ratio'].blank?
-        data['preserve_aspect_ratio'] = "true"
-      end
-    end
-  end
 
   # after_save
   # after_destroy

@@ -966,6 +966,7 @@ WebDoc.BoardController = jQuery.klass({
     if (y < 0) { y = 0;}
     newItem.data.data.tag = "img";
     newItem.data.data.src = this.src;
+    newItem.data.data.preserve_aspect_ratio = true;
     if(media_id !== undefined) {
       newItem.data.media_id = media_id;
     }
