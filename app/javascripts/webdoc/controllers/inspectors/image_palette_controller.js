@@ -13,7 +13,7 @@ WebDoc.ImagePaletteController = $.klass({
 
     this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
-    $("#placeholder_checkbox").click(this.changePlaceholder);
+    this.domNode.find("#placeholder_checkbox").click(this.changePlaceholder);
 
     this.addImageLink = this.domNode.find("a[href=#create_image_link]");
     this.linkFormController = new WebDoc.LinkFormController();
