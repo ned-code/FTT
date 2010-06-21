@@ -7,7 +7,13 @@ WebDoc.Page = $.klass(WebDoc.Record,
 { 
   DEFAULT_PAGE_HEIGHT_PX: 600,
   DEFAULT_PAGE_WIDTH_PX: 800,
-  
+
+  CLASS_TYPE_BACKGROUND: 'background',
+  CLASS_TYPE_BORDER: 'border',
+  CLASS_TYPE_COLOR: 'color',
+  CLASS_TYPE_FONT: 'font',
+  CLASS_TYPE_OTHER: 'other',
+    
   initialize: function($super, json, document, externalPageUrl) {
     // initialize relationship before super.
     this.firstPosition = 0;
@@ -17,6 +23,14 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.items = [];
     this._itemsToRemoveAfterSave = [];
     this.nonDrawingItems = [];
+
+    this._classes = new Array();
+    this._classes[this.CLASS_TYPE_BACKGROUND] = '';
+    this._classes[this.CLASS_TYPE_BORDER] = '';
+    this._classes[this.CLASS_TYPE_COLOR] = '';
+    this._classes[this.CLASS_TYPE_FONT] = '';
+    this._classes[this.CLASS_TYPE_OTHER] = '';
+    
     if (document && document.className() === WebDoc.Document.className()) {
       this.document = document;
     }
@@ -251,7 +265,8 @@ WebDoc.Page = $.klass(WebDoc.Record,
   
   refresh: function($super, json) {
     this._layout = undefined;
-    $super(json);  
+    $super(json);
+    this._refreshClasses();
     // if recieved json contains items then we create all items records.
     // if json does not contains items we leave all previous items as they were
     if (json.page.items && $.isArray(json.page.items)) {
@@ -526,28 +541,109 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.save(callBack, true);
   },
 
-  setClass: function(newClass, classType) {
-    var need_save = false;
-    
-    if(classType === undefined || classType === 'class') {
-      if(newClass != this.data.data['class']) {
-        this.data.data['class'] = newClass;
-        need_save = true;
+  /***************************************/
+  /** Classes                            */
+  /***************************************/
+
+  // scope is optional
+  // save optional, saved by default
+  setClass: function(newClass, scope, save) {
+    if(newClass) {
+      var needSave = false;
+
+      if(!scope) {
+        scope = this._getClassType(newClass);
       }
+
+      if(this.getClassThemeTypeAllowed().indexOf(scope) !== null) {
+        if(this._classes[scope] !== newClass) {
+          this._classes[scope] = newClass;
+          needSave = true;
+        }
+      }
+      else {
+        if(this._classes['other'] !== newClass) {
+          this._classes['other'] = newClass;
+          needSave = true;
+        }
+      }
+
+      if((save === undefined || save === true) && needSave) {
+        this.data.data['class'] = this.getClass();
+        this.fireObjectChanged({ modifedAttribute: 'class' });
+        this.save();
+      }
+    }
+  },
+
+  clearClass: function(scope) {
+    if(this.getClassThemeTypeAllowed().indexOf(scope) !== null) {
+      if(this._classes[scope]) {
+        this._classes[scope] = '';
+        this.data.data['class'] = this.getClass();
+        this.fireObjectChanged({ modifedAttribute: 'class' });
+        this.save();
+      }
+    }
+  },
+
+  // optional scope, if not: all classes returned
+  getClass: function(scope) {
+    if(!scope) {
+      var classes = '';
+      for (var i in this._classes) {
+        classes += this._classes[i]+' ';
+      }
+      return classes;
     }
     else {
-      if(!this.data.data.classes || newClass != this.data.data.classes[classType]) {
-        if(!this.data.data.classes) {
-          this.data.data.classes = {};
-        }
-        this.data.data.classes[classType] = newClass;
-        need_save = true;
-      }
+      return this._classes[scope] || '';
     }
-    
-    if(need_save) {
-      this.fireObjectChanged({ modifedAttribute: 'class' });
-      this.save();
+  },
+
+  getClassThemeTypeAllowed: function() {
+    return [
+            this.CLASS_TYPE_BACKGROUND,
+            this.CLASS_TYPE_BORDER,
+            this.CLASS_TYPE_COLOR,
+            this.CLASS_TYPE_FONT
+    ];
+  },
+
+  _getClassesArrayFromData: function() {
+    if(this.data.data['class']) {
+      return this.data.data['class'].split(' ');
+    }
+    else {
+      return new Array();
+    }
+  },
+
+  _getClassType: function(className) {
+    var type = 'other';
+    if(className.match("^theme_background_.*")) {
+      type = 'background';
+    }
+    else if(className.match("^theme_border_.*")) {
+      type = 'border';
+    }
+    else if(className.match("^theme_color_.*")) {
+      type = 'color';
+    }
+    else if(className.match("^theme_font_.*")) {
+      type = 'font';
+    }
+    return type;
+  },
+
+  _refreshClasses: function() {
+    var classes = this._getClassesArrayFromData();
+    if(classes.length > 0) {
+      for(var aClass in classes) {
+        if(classes[aClass]) {
+          this.setClass(classes[aClass], this._getClassType(classes[aClass]), false);
+        }
+      }
     }
   },
 

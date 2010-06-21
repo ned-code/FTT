@@ -49,4 +49,4 @@ db/schema.rb
 *.BASE.*
 *.LOCAL.*
 public/local/*
-*Archive.zip
+public/themes/*/*.zip

@@ -2,9 +2,6 @@
 
 <div id="webdoc" class="scroll layer">
   <div class="center">
-    <div id="left-panel-ghost">
-      <div class="panel-ghost"></div>
-    </div>
     <div class="center-cell">
       <div id="board-container" class="center-box"></div>
       <div id="notification_bar"></div>
@@ -15,8 +12,12 @@
   </div>
 </div>
 
+<div id="scrollbar_x" class="scrollbar_x"></div>
+<div id="scrollbar_y" class="scrollbar_y"></div>
+
 <div id="webdoc_loading" class="loading loading-icon layer"></div>
 
+<%#= render :partial => "documents/panels/header_panel" %>
 <%= render :partial => "documents/panels/toolbar_panel" %>
-<%= render :partial => "documents/panels/left_panel" %>
 <%= render :partial => "documents/panels/right_panel" %>
+<%= render :partial => "documents/panels/pages_panel" %>

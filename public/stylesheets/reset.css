@@ -39,6 +39,13 @@ blockquote, q { quotes: "" ""; }
 /* Get rid of default focus outlines in FF */
 a:focus { outline: none; }
 
+/* Make draggable elements draggable in WebKit */
+*[draggable=true] {
+  -webkit-user-drag: element;
+}
+
+
+
 /*
 Copyright (c) 2009, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:

@@ -21,6 +21,7 @@ gem 'acl9'
 gem 'formtastic'
 gem 'erubis'
 gem 'jammit' # use plugin for the moment
+gem 'whenever'
 
 group :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'

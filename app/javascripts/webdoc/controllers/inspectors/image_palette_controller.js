@@ -13,7 +13,7 @@ WebDoc.ImagePaletteController = $.klass({
 
     this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
-    $("#placeholder_checkbox").click(this.changePlaceholder);
+    this.domNode.find("#placeholder_checkbox").click(this.changePlaceholder);
 
     this.addImageLink = this.domNode.find("a[href=#create_image_link]");
     this.linkFormController = new WebDoc.LinkFormController();
@@ -96,7 +96,8 @@ WebDoc.ImagePaletteController = $.klass({
           this.addToMyImageLink.show();
         }
         $("#property_src")[0].value = selectedItem.item.data.data.src;
-        if(selectedItem.item.data.data.preserve_aspect_ratio === "true") {
+        if(selectedItem.item.data.data.preserve_aspect_ratio === true ||
+           selectedItem.item.data.data.preserve_aspect_ratio === "true") {
           $("#preserve_aspect_ratio").attr("checked", "checked");  
         }
         else {

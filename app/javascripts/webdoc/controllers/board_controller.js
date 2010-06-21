@@ -27,7 +27,12 @@ WebDoc.BoardController = jQuery.klass({
     this._previousInspector = null;
     this.previousThemeClass = undefined;
     this.currentThemeClass = undefined;
-    this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);    
+    this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);
+    
+    jQuery(document)
+    .bind("keypress", this, jQuery.proxy(this, "_keyPress"))
+    .bind("keydown", this, jQuery.proxy(this, "_keyDown"))
+    .bind("keyup", this, jQuery.proxy(this, "_keyUp"));
   },
   
   currentPageView: function() {
@@ -80,10 +85,6 @@ WebDoc.BoardController = jQuery.klass({
         defaultZoom = 1;
     
     board.unbind();
-    
-    jQuery(document).unbind("keydown", this._keyDown);
-    jQuery(document).unbind("keypress", this._keyPress);
-    jQuery(document).unbind("keyup", this._keyUp);
 
     this._currentPageView = pageView;
     this._currentZoom = 1;
@@ -99,10 +100,6 @@ WebDoc.BoardController = jQuery.klass({
     
     this._fireSelectionChanged();
     this._bindMouseEvent();
-    
-    jQuery(document).bind("keypress", this, jQuery.proxy(this, "_keyPress"));
-    jQuery(document).bind("keydown", this, jQuery.proxy(this, "_keyDown"));
-    jQuery(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));    
 
     if (this._autoFit && this.boardContainerNode.css("width").match(/px/) && this.boardContainerNode.css("height").match(/px/)) {
       //update zoom to fit browser page    
@@ -116,10 +113,14 @@ WebDoc.BoardController = jQuery.klass({
       }
     }
     this.zoom(defaultZoom);
-
     this.setMode(!jQuery("body").hasClass('mode-edit'));
-
     this._fireCurrentPageChanged();
+    
+    jQuery('#webdoc').scrollbars({
+      x: jQuery('#scrollbar_x'),
+      y: jQuery('#scrollbar_y'),
+      dragImageUrl: '/images/icon_blank.png'
+    })
     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
@@ -968,6 +969,7 @@ WebDoc.BoardController = jQuery.klass({
     if (y < 0) { y = 0;}
     newItem.data.data.tag = "img";
     newItem.data.data.src = this.src;
+    newItem.data.data.preserve_aspect_ratio = true;
     if(media_id !== undefined) {
       newItem.data.media_id = media_id;
     }
