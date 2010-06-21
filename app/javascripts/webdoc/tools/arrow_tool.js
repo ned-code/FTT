@@ -30,8 +30,9 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
       else {
         WebDoc.application.boardController.unselectAll();
       }
+      jQuery("a[href='#select']").focus();
     }
-    this.lastSelectedObject.event = null;
+    this.lastSelectedObject.event = null;    
   },
   
   disableHilight: function() {

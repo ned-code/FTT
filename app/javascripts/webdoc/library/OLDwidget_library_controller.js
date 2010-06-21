@@ -42,7 +42,7 @@ WebDoc.WidgetLibraryController = $.klass({
     ddd("start drag");
     ddd($(e.target));
     ddd(this.widgets[$(e.target).attr("id")]);
-    e.originalEvent.dataTransfer.setData('application/ub-widget', $.toJSON(this.widgets[e.target.id].getData()));
+    e.originalEvent.dataTransfer.setData('application/wd-widget', $.toJSON(this.widgets[e.target.id].getData()));
   }
 });
 

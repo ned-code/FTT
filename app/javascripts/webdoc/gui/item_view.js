@@ -43,7 +43,7 @@ WebDoc.ItemView = $.klass({
 
     this.itemLayerDomNode = $("<div>").addClass("layer item-layer").css("display", this._editable? "block" : "none");    
     this.itemDomNode = this.createDomNode();
-
+    
     this.domNode.append(this.itemDomNode);
     this.domNode.append(this.itemLayerDomNode);
     
@@ -76,18 +76,18 @@ WebDoc.ItemView = $.klass({
     
     this._initItemClass();
     this._initItemCss(false);
+    this.inspectorPanesManager = WebDoc.InspectorPanesManager.instanceFor(this); 
+    this.inspectorPanesManager.createOpenFloatingInspectorButton(this);
+  },
+  
+  inspectorGroupName: function() {
+    return "ItemInspectorGroup"  
   },
   
   _initItemClass: function() {
     this.itemDomNode.attr("class", this.ITEMCLASSES);
-    if(this.item.data.data['class']) {
-      this.itemDomNode.addClass(this.item.data.data['class']);
-    }
-    if(this.item.data.data.classes) {
-      for(var css_class in this.item.data.data.classes) {
-        this.itemDomNode.addClass(this.item.data.data.classes[css_class]);
-      }
-    }
+    this.itemDomNode.addClass(this.item.getClass());
+    
     // we put all item classes in wdClasses data. It is used to know which classes to remove when classes of item changed.
     if (this.domNode.data('wdClasses')) {
       this.domNode.removeClass(this.domNode.data('wdClasses'));
@@ -177,16 +177,17 @@ WebDoc.ItemView = $.klass({
       for (var key in this.item.data.data) {
         switch(key) {
           case "innerHTML":
-          // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
+          // for compatibility we also check innerHtml like this because old document can have this key instead of innerHTML
           case "innerHtml":
           case "class": 
           case "wrapClass": 
           case "innerHTMLPlaceholder":
           case "tag":
-          case "css":   
+          case "css":
           case "preference":
           case "properties":
           case "preserve_aspect_ratio":
+          case "is_placeholder":
             break;
           default:
             itemNode.attr(key, this.item.data.data[key]);
@@ -211,6 +212,7 @@ WebDoc.ItemView = $.klass({
     if (item._isAttributeModified(options, 'class')) {
       this._initItemClass();
     }
+    this.inspectorPanesManager.updateAttachedPanePositionAndContent(this);    
   },
 
   innerHtmlChanged: function() {
@@ -252,14 +254,15 @@ WebDoc.ItemView = $.klass({
       if (lastSelectedObjectMouseDownEvent) {
         this.domNode.trigger(lastSelectedObjectMouseDownEvent);
       }      
-      
     }
+    this.inspectorPanesManager.itemDidSelect(this);    
   },
   
   unSelect: function() {
     this.domNode.removeClass("item_selected");
     this.domNode.draggable( 'destroy' );
     this.domNode.resizable( 'destroy' );
+    this.inspectorPanesManager.itemDidUnselect(this);    
   },
   
   canEdit: function() {
@@ -269,11 +272,15 @@ WebDoc.ItemView = $.klass({
   edit: function() {
     //by default item views are not editable (if your item is editable override this method in the subclass) 
     WebDoc.application.rightBarController.showItemInspector();    
-    WebDoc.application.inspectorController.selectPalette(this.inspectorId());
+    WebDoc.application.inspectorController.selectInspector(this.inspectorGroupName());
+    this.itemLayerDomNode.hide();    
+    this.domNode.addClass("item-edited");    
     this.domNode.css("zIndex", "");
   },
   
   stopEditing: function() {
+    this.itemLayerDomNode.show();
+    this.domNode.removeClass("item-edited");    
     this.domNode.css("zIndex", 500000 + this.item.positionZ());
   },
   
@@ -320,6 +327,7 @@ WebDoc.ItemView = $.klass({
       start: function(e, ui) {
         ddd("start drag");
         this.pageView.eventCatcherNode.show();
+        this.inspectorPanesManager.itemViewWillMove(this);
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
         var currentPosition = this.position();
 
@@ -338,6 +346,7 @@ WebDoc.ItemView = $.klass({
       }.pBind(this)        ,
       stop: function(e, ui) {
         this.pageView.eventCatcherNode.hide();
+        this.inspectorPanesManager.itemViewDidMove(this);
         var newPosition = { top : ui.position.top + "px", left: ui.position.left + "px"};
         this.item.moveTo(newPosition);
         this.item.save();
@@ -347,6 +356,7 @@ WebDoc.ItemView = $.klass({
       handles: 's, e, se',
       start: function(e, ui) {
         this.pageView.eventCatcherNode.show();
+        this.inspectorPanesManager.itemViewWillMove(this);
         this.resizeOrigin = WebDoc.application.boardController.mapToPageCoordinate(e);
         this.aspectRatio = ui.size.width / ui.size.height;
         var currentSize = this.size();
@@ -370,6 +380,7 @@ WebDoc.ItemView = $.klass({
       }.pBind(this)        ,
       stop: function(e, ui) {
         this.pageView.eventCatcherNode.hide();
+        this.inspectorPanesManager.itemViewDidMove(this);        
         var newSize = { width: ui.size.width + "px", height: ui.size.height + "px"};
         this.item.resizeTo(newSize);
         this.item.save();
@@ -386,10 +397,6 @@ WebDoc.ItemView = $.klass({
       top: this.item.data.data.css.top,
       left: this.item.data.data.css.left
     });
-    
-    if (inspectorController) {
-      inspectorController.refreshProperties();
-    }
   },
   
   _resizeTo: function(size) {
@@ -402,12 +409,6 @@ WebDoc.ItemView = $.klass({
       height: this.item.data.data.css.height
     });
     
-    if (inspectorController) {
-      inspectorController.refreshProperties();
-    }
-//    if (this.domNode.hasClass("item-edited")) {
-//      WebDoc.application.boardController._updateScreens(this.domNode);
-//    }
   },
 
   _isAttributeModified: function(options, attributeName) {
@@ -429,7 +430,7 @@ $.extend(WebDoc.ItemView, {
     WebDoc.application.undoManager.registerUndo(function() {
       WebDoc.ItemView._restorePosition(item, previousPosition);
     }.pBind(this));
-    item.save();    
+    item.save();
   },
   
   restoreSize: function(item, size) {
@@ -442,4 +443,3 @@ $.extend(WebDoc.ItemView, {
     item.save();  
   }
 });
-

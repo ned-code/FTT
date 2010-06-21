@@ -30,7 +30,6 @@ class Item < ActiveRecord::Base
   # ===============
   # = Validations =
   # ===============
-  validates_uniqueness_of :uuid  
   
   # =================
   # = Class Methods =
@@ -89,6 +88,9 @@ class Item < ActiveRecord::Base
     sanitized_html
   end
 
+  def touch
+    update_attribute("updated_at", Time.now)
+  end
 end
 
 

@@ -173,7 +173,7 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
     // ddd("propeties", properties);
     var dt = event.originalEvent.dataTransfer;
     var imageUrl = properties.default_url ? properties.default_url : properties.url;
-    dt.setData("application/ub-image", $.toJSON({url:imageUrl,id:properties.id}));
+    dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id}));
     
     // Drag "feedback"
     var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);

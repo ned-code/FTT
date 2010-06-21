@@ -57,7 +57,13 @@ WebDoc.PostMessageManager = $.klass({
     window.addEventListener("message", function(event){
       // event.domain event.data event.source event.origin
       ddd('[post message manager] received a new message: ' + event.data);
-      this.processMessage(event.data);
+      try {
+        this.processMessage(event.data);
+      } 
+      catch (Exception) {
+        ddd("not a message for me");
+        WebDoc.appsMessagingController.processMessage(event);
+      }
     }.pBind(this), false);
   },
 
@@ -90,17 +96,10 @@ WebDoc.PostMessageManager = $.klass({
           if(parsedUrl['params']['class']) {
             WebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['class']);
           }
-          if(parsedUrl['params']['color_class']) {
-            WebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['color_class'], 'color');
-          }
-          if(parsedUrl['params']['font_class']) {
-            ebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['font_class'], 'font');
-          }
-          if(parsedUrl['params']['border_class']) {
-            WebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['border_class'], 'border');
-          }
-          if(parsedUrl['params']['background_class']) {
-            WebDoc.application.pageEditor.currentPage.setClass(parsedUrl['params']['background_class'], 'background');
+          break;
+        case 'remove_page_class':
+          if(parsedUrl['params']['type']) {  // can be 'border', 'background', 'color', 'font'
+            WebDoc.application.pageEditor.currentPage.clearClass(parsedUrl['params']['type']);
           }
           break;
         case 'set_page_css':
@@ -113,20 +112,16 @@ WebDoc.PostMessageManager = $.klass({
             if(parsedUrl['params']['class']) {
               selection.item.setClass(parsedUrl['params']['class']);
             }
-            if(parsedUrl['params']['color_class']) {
-              selection.item.setClass(parsedUrl['params']['color_class'], 'color');
-            }
-            if(parsedUrl['params']['font_class']) {
-              selection.item.setClass(parsedUrl['params']['font_class'], 'font');
-            }
-            if(parsedUrl['params']['border_class']) {
-              selection.item.setClass(parsedUrl['params']['border_class'], 'border');
-            }
-            if(parsedUrl['params']['background_class']) {
-              selection.item.setClass(parsedUrl['params']['background_class'], 'background');
-            }
           }
         break;
+        case 'remove_item_class':
+          var selection = WebDoc.application.boardController.selection()[0];
+          if(selection && selection.item) {
+            if(parsedUrl['params']['type']) {  // can be 'border', 'background', 'color', 'font'
+              selection.item.clearClass(parsedUrl['params']['type']);
+            }
+          }
+          break;
         case 'set_item_css':
           var selection = WebDoc.application.boardController.selection()[0];
           if(selection && selection.item) {

@@ -25,6 +25,7 @@ stylesheets:
     - public/stylesheets/lib/protect.css    
     - public/stylesheets/style.editor.css
     - public/stylesheets/style.editor.colors.css
+    - public/stylesheets/style.editor.apps.inspector.outer.css
     - public/stylesheets/style.webdoc.css
     - public/stylesheets/colorpicker.css
     - public/stylesheets/toolbar.css
@@ -73,6 +74,7 @@ javascripts:
     - public/javascripts/jquery.truncate.js
     - public/javascripts/jquery.validator.js
     - public/javascripts/jquery.flash.js
+    - public/javascripts/jquery.scrollbars.js
     - public/javascripts/jquery.cookie.js
     - public/javascripts/klass.js    
     - public/swfupload/swfupload.js
@@ -110,6 +112,7 @@ javascripts:
     - app/javascripts/webdoc/sdk/*.js
     - app/javascripts/webdoc/adaptors/*.js
     - app/javascripts/webdoc/utils/*.js
+    - app/javascripts/webdoc/gui/inspector_pane_view.js
     - app/javascripts/webdoc/gui/item_view.js
     - app/javascripts/webdoc/gui/drawing_view.js
     - app/javascripts/webdoc/gui/image_view.js
@@ -119,19 +122,21 @@ javascripts:
     - app/javascripts/webdoc/gui/page_view.js
     - app/javascripts/webdoc/gui/text_view.js
     - app/javascripts/webdoc/gui/widget_view.js
+    - app/javascripts/webdoc/gui/html_view.js
     - app/javascripts/webdoc/gui/iframe_view.js
-    - app/javascripts/webdoc/gui/os_gadget_view.js    
+    - app/javascripts/webdoc/gui/app_view.js
     - app/javascripts/webdoc/tools/tool.js
     - app/javascripts/webdoc/tools/arrow_tool.js
+    - app/javascripts/webdoc/tools/browser_tool.js
     - app/javascripts/webdoc/tools/drawing_tool.js
     - app/javascripts/webdoc/tools/hand_tool.js
     - app/javascripts/webdoc/tools/html_tool.js
     - app/javascripts/webdoc/tools/iframe_tool.js
-    - app/javascripts/webdoc/tools/os_gadget_tool.js
+    - app/javascripts/webdoc/tools/app_tool.js
     - app/javascripts/webdoc/tools/text_tool.js
     - app/javascripts/webdoc/tools/text_tool/*.js
     - app/javascripts/webdoc/controllers/*.js  
-    - app/javascripts/webdoc/controllers/right_bar_controllers/*.js  
+    - app/javascripts/webdoc/controllers/right_bar_controllers/*.js
     - app/javascripts/webdoc/controllers/inspectors/*.js
     - app/javascripts/webdoc/core/*.js
     - app/javascripts/webdoc/library/jqtouch.js
@@ -150,8 +155,11 @@ javascripts:
     - app/javascripts/tests/test_helper.js
     - app/javascripts/tests/mtools/*.js
   forms:
-    - app/javascripts/webdoc/form/*.js    
+    - app/javascripts/webdoc/form/*.js
   contacts:
     - app/javascripts/webdoc/card/*.js
+  apps:
+    - app/javascripts/webdoc/apps/apps_messaging.js
+    - app/javascripts/webdoc/apps/apps.js
   feedback:
     - app/javascripts/webdoc/feedback/zendesk.js

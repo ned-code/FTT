@@ -1,6 +1,8 @@
 /**
  * @author julien
  */
+WebDoc.TEXT_INSPECTOR_GROUP = "TextInspectorGroup"
+
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
   
   initialize: function($super, item, pageView, afterItem) {
@@ -23,14 +25,24 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
     return 1;
   },
   
+  inspectorGroupName: function() {
+    return WebDoc.TEXT_INSPECTOR_GROUP;  
+  },
+    
+  inspectorControllersClasses: function() {
+    return [/*WebDoc.TextPropertiesInspectorController*/];
+  },
+    
+//  fullInspectorControllerClass: function() {
+//    return WebDoc.ImagePaletteController;  
+//  },
+      
   canEdit: function() {
     return true;
   },
   
   edit: function($super) { //called if we clicked on an already selected textbox
-    $super();
-    this.domNode.addClass("item-edited");
-    this.itemLayerDomNode.hide();        
+    $super();        
     this.placeholderNode.remove();
     WebDoc.application.textTool.enterEditMode(this);
   },
@@ -40,10 +52,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   },
   
   stopEditing: function($super) {
-    $super();
-    this.domNode.removeClass("item-edited");
-    this.itemLayerDomNode.show();
-    this._initDragAndResize();    
+    $super();    
     WebDoc.application.textTool.exitEditMode();
     this._initItemCss(false);
   },

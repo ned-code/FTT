@@ -37,6 +37,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   map.resources :followships, :collection => { :follow => :post, :unfollow => :delete }
+  map.connect '/browse', :controller => 'browser', :action => :index, :conditions => { :method => :get }
   
   # dev controller
   map.resources :images,    :except => [:new, :edit, :update]

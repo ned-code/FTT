@@ -1,21 +1,37 @@
 
-WebDoc.ITEM_TYPE_TEXT = "text";
-WebDoc.ITEM_TYPE_IMAGE = "image";
+WebDoc.ITEM_TYPE_TEXT    = "text";
+WebDoc.ITEM_TYPE_IMAGE   = "image";
 WebDoc.ITEM_TYPE_DRAWING = "drawing";
-WebDoc.ITEM_TYPE_WIDGET = "widget";
-WebDoc.ITEM_TYPE_IFRAME = "iframe";
-WebDoc.ITEM_TYPE_OS_GADGET = "os_gadget";
-WebDoc.ITEM_TYPE_APP = "app";
+WebDoc.ITEM_TYPE_WIDGET  = "widget";
+WebDoc.ITEM_TYPE_IFRAME  = "iframe";
+WebDoc.ITEM_TYPE_APP     = "app";
+WebDoc.ITEM_TYPE_HTML    = "html";
 
 WebDoc.Item = $.klass(WebDoc.Record, 
 {
+  CLASS_TYPE_BACKGROUND: 'background',
+  CLASS_TYPE_BORDER: 'border',
+  CLASS_TYPE_COLOR: 'color',
+  CLASS_TYPE_FONT: 'font',
+  CLASS_TYPE_OTHER: 'other',
+
   initialize: function($super, json, page, media) {
     this.page = page;
     this.media = media;
+
+    this._classes = new Array();
+    this._classes[this.CLASS_TYPE_BACKGROUND] = '';
+    this._classes[this.CLASS_TYPE_BORDER]     = '';
+    this._classes[this.CLASS_TYPE_COLOR]      = '';
+    this._classes[this.CLASS_TYPE_FONT]       = '';
+    this._classes[this.CLASS_TYPE_OTHER]      = '';
+
+    this._isPlaceholder = false;
+
     $super(json);
     if (!json) {
       this.data.data = { preference: {}};
-    }
+    }    
   },
   
   getPage: function() {
@@ -23,35 +39,111 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   setPage: function(page) {
-    this.page = page;  
+    this.page = page;
   },
 
-  /*
-   * set a class to the item. a optional class type can be passed (like border or background)
-   */
-  setClass: function(newClass, classType) {
-    ddd('item setClass class:'+newClass+' type:'+classType);
-    var need_save = false;
+  /***************************************/
+  /** Classes                            */
+  /***************************************/
 
-    if(classType === undefined || classType === 'class') {
-      if (newClass !== this.data.data[classType]) {
-        this.data.data['class'] = newClass;
-        need_save = true;
+  // scope is optional
+  // save optional, saved by default  
+  setClass: function(newClass, scope, save) {
+    if(newClass) {
+      var needSave = false;
+
+      if(!scope) {
+        scope = this._getClassType(newClass);  
       }
+
+      if(this.getClassThemeTypeAllowed().indexOf(scope) !== null) {
+        if(this._classes[scope] !== newClass) {
+          this._classes[scope] = newClass;
+          needSave = true;
+        }
+      }
+      else {
+        if(this._classes['other'] !== newClass) {
+          this._classes['other'] = newClass;
+          needSave = true;
+        }
+      }
+      if((save === undefined || save === true ) && needSave) {
+        this.data.data['class'] = this.getClass();
+        this.fireObjectChanged({ modifedAttribute: 'class' });
+        this.save();
+      }
+    }
+  },
+
+  clearClass: function(scope) {
+    if(this.getClassThemeTypeAllowed().indexOf(scope) !== null) {
+      if(this._classes[scope]) {
+        this._classes[scope] = '';
+        this.data.data['class'] = this.getClass();
+        this.fireObjectChanged({ modifedAttribute: 'class' });
+        this.save();
+      }
+    }
+  },
+
+  // optional scope, if not: all classes returned
+  getClass: function(scope) {
+    if(!scope) {
+      var classes = '';
+      for (var i in this._classes) {
+        classes += this._classes[i]+' ';
+      }
+      return classes;
     }
     else {
-      if (!this.data.data.classes || newClass !== this.data.data.classes[classType]) {
-        if(!this.data.data.classes) {
-          this.data.data.classes = {};
-        }
-        this.data.data.classes[classType] = newClass;
-        need_save = true;
-      }
+      return this._classes[scope] || '';
     }
+  },
 
-    if(need_save) {
-      this.fireObjectChanged({ modifedAttribute: 'class' });
-      this.save();
+  getClassThemeTypeAllowed: function() {
+    return [
+            this.CLASS_TYPE_BACKGROUND,
+            this.CLASS_TYPE_BORDER,
+            this.CLASS_TYPE_COLOR,
+            this.CLASS_TYPE_FONT
+    ];
+  },
+
+  _getClassesArrayFromData: function() {
+    if(this.data.data && this.data.data['class']) {
+      return this.data.data['class'].split(' ');
+    }
+    else {
+      return new Array();
+    }
+  },
+
+  _getClassType: function(className) {
+    var type = 'other';
+    if(className.match("^theme_background_.*")) {
+      type = 'background';
+    }
+    else if(className.match("^theme_border_.*")) {
+      type = 'border';
+    }
+    else if(className.match("^theme_color_.*")) {
+      type = 'color';
+    }
+    else if(className.match("^theme_font_.*")) {
+      type = 'font';
+    }
+    return type;
+  },
+
+  _refreshClasses: function() {
+    var classes = this._getClassesArrayFromData();
+    if(classes.length > 0) {
+      for(var aClass in classes) {
+        if(classes[aClass]) {
+          this.setClass(classes[aClass], this._getClassType(classes[aClass]), false);
+        }
+      }
     }
   },
 
@@ -62,9 +154,35 @@ WebDoc.Item = $.klass(WebDoc.Record,
       this.save();
     }
   },
+
+  getIsPlaceholder: function() {
+    ddd('[item] get is placeholder');
+    if(this._isPlaceholder === true) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
+  // save optional, saved by default
+  setIsPlaceholder: function(isPlaceholder, save) {
+    ddd('[item] set is placeholder with ' + isPlaceholder);
+    if(isPlaceholder === true || isPlaceholder === 'true'){
+      this._isPlaceholder = true;
+    }
+    else {
+      this._isPlaceholder = false;
+    }
+
+    if(save === undefined || save === true) {
+      this.data.data.is_placeholder = this.getIsPlaceholder();
+      this.save();
+    }
+  },
   
   positionZ: function() {
-    return this.data.position;  
+    return this.data.position;
   },
   
   setPositionZ: function(newPosition) {
@@ -76,7 +194,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var refreshInnerHtml = false;
     var refreshPreferences = false;
     var refreshPositionZ = false;
-
+    
     if (this.data && this.data.position && json.item.position != this.data.position) {
       refreshPositionZ = true;
     }
@@ -88,19 +206,14 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
     
     $super(json);
+
+    this.setIsPlaceholder(this.data.data.is_placeholder, false); 
+
+    this._refreshClasses();
+
     if (refreshInnerHtml) {
       this.fireDomNodeChanged();
     }
-    
-    // TODO: can remove this fecth. it ise used only for old item that were created before that inspector url is set in item properties.
-//    if (this.data.media_id && this.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
-//      WebDoc.ServerManager.getRecords(WebDoc.Widget, this.data.media_id, function(data) {
-//        if (data.length > 0) {
-//          this.media = data[0];
-//        }
-//      }.pBind(this));
-//    }
-    // END of to do
     
     if (refreshPreferences) {
       this.fireWidgetChanged();
@@ -210,7 +323,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
       delete this.data.data.css.top;
     }
     this.fireObjectChanged({ modifedAttribute: 'css' });
-    WebDoc.application.inspectorController.refreshSubInspectors();    
+    WebDoc.application.inspectorController.refresh();    
   },
   
   resizeTo: function(newSize) {    
@@ -228,7 +341,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }    
     
     this.fireObjectChanged({ modifedAttribute: 'css' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
   
   changeThemeBgClass: function( currentClass ) {
@@ -237,6 +350,9 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
     // Get rid of any theme_background_ classes
     // and add currentClass
+    if (!data['class']) {
+      data['class'] = '';
+    }
     data['class'] = data['class'].replace( regex, '' ) + ' ' + currentClass;
     
     this.save();
@@ -268,7 +384,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
     this.save();
     this.fireObjectChanged({ modifedAttribute: 'css' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
 
   getKind: function() {
@@ -356,6 +472,16 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   /***************************************/
+  /** widget item                        */
+  /***************************************/
+  getInspectorUrl: function() {
+    if (this.data.data.properties && this.data.data.properties.inspector_url) {
+      return this.data.data.properties.inspector_url;
+    }
+    return null;      
+  },
+  
+  /***************************************/
   /** text item                          */
   /***************************************/
  
@@ -406,11 +532,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
   /***************************************/
   /** Open social item                   */
   /***************************************/
-  getGadgetUrl: function() {
+  getAppUrl: function() {
     return this.property("gadgetUrl");  
   },
   
-  setGadgetUrl: function(url) {
+  setAppUrl: function(url) {
     this.setProperty("gadgetUrl", url);
     this.fireDomNodeChanged();
   },
@@ -434,7 +560,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.data.data.src = newSrc;
     this.save();
     this.fireDomNodeChanged();
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
 
   getSrc: function() {
@@ -449,7 +575,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var newTop = this.getDisplacement().top + diffZoom/2;    
     this.displace({ left: newLeft, top: newTop});
     this.fireObjectChanged({ modifedAttribute: 'zoom' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
   
   displace: function(coords) {
@@ -465,24 +591,59 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
     jQuery.extend(this.getProperty('displacement'), coords);
     this.fireObjectChanged({ modifedAttribute: 'displacement' });
-    WebDoc.application.inspectorController.refreshSubInspectors();
+    WebDoc.application.inspectorController.refresh();
   },
   
-  getOriginalSize: function(){
-    if (!this._originalSize) { this._calcOriginalSize(); }
-    return this._originalSize;
-  },
-  
-  _calcOriginalSize: function(){
-    var image = new Image();
-    
+  preLoadImageWithCallback: function(callback){
+    ddd('[item] preload image with callback');
+    var image = document.createElement('img');
+    jQuery(image).bind("load", callback);
     image.src = this.data.data.src;
-    
-    this._originalSize = {
-      width: image.width,
-      height: image.height
-    };
-  }  
+  },
+
+  getRatio: function() {
+    var ratioWidth  = 1;
+    var ratioHeight = 1;
+
+    if(this.getProperty('ratio')) {
+      if(this.getProperty('ratio').width) {
+        ratioWidth = parseFloat(this.getProperty('ratio').width);
+      }
+
+      if(this.getProperty('ratio').height) {
+        ratioHeight = parseFloat(this.getProperty('ratio').height)
+      }
+    }
+
+    return {
+      width:  ratioWidth,
+      height: ratioHeight
+    }
+  },
+
+  setRatio: function(ratio) {
+    ddd('[item] set ratio with: x '+ratio.width+'; y '+ratio.height);
+    this.setProperty('ratio', { width: ratio.width, height: ratio.height });
+  },
+
+  calcRatio: function(event) {
+    ddd('[item] calc ratio');
+    var ratioWidth = 1,
+        ratioHeight = 1,
+        ratio = (event.currentTarget.height / event.currentTarget.width) / (this.height('px') / this.width('px'));
+
+    if(ratio < 1) {
+      ratioWidth = (event.currentTarget.width / event.currentTarget.height) / (this.width('px') / this.height('px'));
+      ratioHeight = 1;
+    }
+    else {
+      ratioWidth = 1;
+      ratioHeight = ratio;
+    }
+
+    return { width: ratioWidth, height: ratioHeight };
+  }
+
 });
 
 $.extend(WebDoc.Item, {

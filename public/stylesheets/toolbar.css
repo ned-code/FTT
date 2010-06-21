@@ -70,3 +70,11 @@
 .toolbar-custom-combobox-ul{font-size: 12px;font-weight:normal;float:none;z-index: 3;top:0;left:0;}
 .toolbar-custom-combobox-li{font-size: 12px;font-weight:normal;float:none;}
 .toolbar-custom-combobox-li a{float:none !important;line-height:1.2 !important;padding:1px 3px !important;cursor: default;border:solid 1px transparent}
+
+
+#toolbar_panel_fontSize_slider_container{height:13px;padding-top: 8px;}
+
+#toolbar_panel_fontSize_slider{height:2px;width:235px;float:right;margin-left:20px}        
+#toolbar_panel_fontSize_slider .ui-slider-handle {height:0.6em;width:0.6em;margin:1px 0 0 0;}  
+#toolbar_panel_fontSize_slider_container .ui-slider-horizontal{margin:0px 24px 0px 0px !important}
+#toolbar_panel_fontSize_label{float:left;width:52px;height:10px;line-height: 2px;color:#cccccc;padding-left:3px;text-align:center;}

@@ -96,7 +96,7 @@
   top: 0.4em;
   background-position: -3px -2755px;
 }
-#webdoc .item-os-gadget .item-icon {
+#webdoc .item-app .item-icon {
   background-position: -3px -2944px;
 }
 #webdoc .item-placeholder label  {
@@ -123,6 +123,27 @@
 
 .mode-preview #webdoc .item-placeholder {
   display: none;
+}
+
+#notification_bar {
+  position: fixed;
+  bottom:30px;
+  left:0px;
+  height: 25px;
+  background-color:#0078AE;
+  z-index:2000001;
+  padding-left:10px;
+  padding-right:10px;
+}
+
+#notification_bar.info {
+  background-color:#0078AE;
+}
+#notification_bar.error {
+  background-color:#EE5757;
+}
+#notification_bar.warning {
+  background-color:#EEB420;
 }
 
 /* shinding gadget */

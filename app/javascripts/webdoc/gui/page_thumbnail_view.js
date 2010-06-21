@@ -34,7 +34,6 @@ WebDoc.PageThumbnailView = $.klass({
       this.itemDomNode = $('<div>').attr({
         id: "thumb_items",
         'class': "layer"
-        //style: "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%"
       });
       this.pageThumbNode.append(this.itemDomNode.get(0));   
       var that = this;
@@ -151,6 +150,7 @@ WebDoc.PageThumbnailView = $.klass({
         itemView = new WebDoc.DrawingThumbnailView(item, this);
         break;
       case WebDoc.ITEM_TYPE_WIDGET:
+      case WebDoc.ITEM_TYPE_HTML:
         itemView = new WebDoc.WidgetThumbnailView(item, this, afterItem);
         break;
       default:

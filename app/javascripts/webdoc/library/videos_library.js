@@ -175,7 +175,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
   },
   dragStart: function(event, properties) {
     var dt = event.originalEvent.dataTransfer;
-    dt.setData("application/ub-video", $.toJSON(properties));
+    dt.setData("application/wd-video", $.toJSON(properties));
     
     // Drag "feedback"
     var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("video", properties.thumb_url);

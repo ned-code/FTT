@@ -4,6 +4,7 @@ spec/spec.opts.netbeans
 .DS_Store
 log/*.log
 tmp/**/*
+tmp/*
 config/database.yml
 config/storage/filesystem.yml
 config/storage/s3.yml
@@ -48,4 +49,4 @@ db/schema.rb
 *.BASE.*
 *.LOCAL.*
 public/local/*
-*Archive.zip
+public/themes/*/*.zip

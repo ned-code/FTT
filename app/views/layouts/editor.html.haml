@@ -9,21 +9,20 @@
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :page_editor, :media => 'all'    
     
-    <link id="theme" rel="stylesheet" href="" type="text/css">
-    
-  -if params[:reader] == 'true'
-    -current_class = 'editor mode-embed'
-  -elsif params[:edit] == 'true'
-    -current_class = 'editor mode-edit'
-  -else
-    -current_class = 'editor mode-preview'
+  - if params[:reader] == 'true'
+    - current_class = 'editor mode-embed'
+  - elsif params[:edit] == 'true'
+    - current_class = 'editor mode-edit'
+  - else
+    - current_class = 'editor mode-preview'
        
   %body{ :class => current_class}
     = yield
     = include_javascripts :common
     = include_javascripts :page_editor
-    - if !Rails.env.production?
-      = javascript_include_tag "#{APP_CONFIG['shindig_server_base']}/js/core:rpc:pubsub:shindig-container.js?c=1&debug=1"
+    - unless Rails.env.production?
+      = javascript_include_tag "#{APP_CONFIG['shindig_server_base']}js/core:rpc:pubsub.js?c=1&debug=1"
+    = include_javascripts :apps
     = yield :scripts
     :javascript  
       WebDoc.authData = {

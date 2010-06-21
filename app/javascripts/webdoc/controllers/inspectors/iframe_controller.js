@@ -3,17 +3,20 @@
  */
 
 WebDoc.IframeController = $.klass({
-  initialize: function( selector ) {
-    this.domNode = $(selector);
-
-    $("#property-iframe-src").change(this.updateSrc);
-
-    $("#set_page_size_to_iframe_size").click(this.setPageSizeToIframeize);
-
+  initialize: function( ) {
+    this.domNode = $("#iframe-inspector");
+    this.domNode.find("#property-iframe-src").change(this.updateSrc);
+	this.domNode.find("#set_page_size_to_iframe_size").click(this.setPageSizeToIframeize);
+    this.propertiesController = new WebDoc.PropertiesInspectorController('#iframe_properties', false);
   },
 
+  inspectorTitle: function() {
+    return "web page";  
+  },
+  
   refresh: function() {
     ddd("refresh iframe inspector");
+    this.propertiesController.refresh();
     var selectedItem = WebDoc.application.boardController.selection()[0];
     if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IFRAME) {
       $("#property-iframe-src")[0].value = selectedItem.item.getSrc();

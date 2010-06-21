@@ -1,6 +1,8 @@
 /**
  * @author julien
  */
+WebDoc.IMAGE_INSPECTOR_GROUP = "ImageInspectorGroup";
+
 WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   
   // Classes applied to the item in initItemClass
@@ -18,17 +20,28 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     "preference": true,
     "properties": true,
     "preserve_aspect_ratio": true,
-    "href": true
+    "href": true,
+    "placeholder": true
   },
   
   
   initialize: function($super, item, pageView, afterItem){
-    $super(item, pageView, afterItem);
-    
-    this._zoom();
-    this._displace();
+    $super(item, pageView, afterItem);   
   },
 
+  inspectorGroupName: function() {
+    return WebDoc.IMAGE_INSPECTOR_GROUP;  
+  },
+    
+  inspectorControllersClasses: function() {
+    return [/*WebDoc.ImagePaletteController, WebDoc.ImagePropertiesInspectorController*/];
+  },
+  
+  fullInspectorControllerClass: function() {
+    return WebDoc.ImagePaletteController;  
+  },
+  
+  
   objectChanged: function($super, item, options) {
     $super(item, options);
     if (item._isAttributeModified(options, 'zoom')) {
@@ -59,19 +72,23 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
 
     this.imageNode = imageNode;
     this.frameNode = frameNode;
+
+    this._zoom();
+    this._displace();
     
     return frameNode;
   },
 
   _zoom: function(){
     var image = this.imageNode,
-        model = this.item,
-        zoom = model.getZoom(),
-        css = {
-          width: (100 + zoom) + "%",
-          height: (100 + zoom) + "%"
+      model = this.item,
+      zoom = model.getZoom();
+
+    var css = {
+          width:  ((100 + zoom) * model.getRatio().width) + "%",
+          height: ((100 + zoom) * model.getRatio().height) + "%"
         };
-    
+
     image.css( css );
   },
   
@@ -88,6 +105,6 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   },
   
   inspectorId: function() {
-    return 4;
+    return 0;
   }
 });
