@@ -10,33 +10,26 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   initialize: function($super, libraryId) {
 		ddd('[AppsLibrary] initialize');
     $super(libraryId);
-
+		
+		this.detailsView = $('app_details');
     // Setup my apps
     this._setupMyApps();
     // Setup details view
-    //this._setupDetailsView();
+    this._setupDetailsView();
 
     // Observe thumbnails clicks with event delegation
     $("#"+libraryId).delegate(".thumbnails li a", "click", function (e) {
       
       // widget data is stored on the thumbnail element
       var widgetData = $( e.currentTarget ).data("widget");
-      
+      ddd('click !');
       this.prepareDetailsView( widgetData );
-      this.showDetailsView.click();
+			
+      //this.showDetailsView.click();
       
       e.preventDefault();
     }.pBind(this));
-		
-		//JQT
-    // view transition finished (slide in/out)
-    // this.element.bind('pageAnimationEnd', function(event, info){
-    //   var currentViewId = this.currentViewId();
-    //   if (currentViewId === this.element.attr("id")) { // #apps view did appear
-    //     this._loadMyApps(0);
-    //   }
-    // }.pBind(this));
-		
+	
 		this._loadMyApps();
 		
   },
@@ -55,21 +48,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     .delegate("a", "dragstart", this._prepareThumbDrag.pBind(this));
     
     $(document.body).append(this.buildMediaDragFeedbackElement("apps", "")); // just to preload the icon (so that it'll be immediately available at the first drag)
-    
-		//JQT
-    // // Next/Previous page links
-    // this.paginationWrap = $("<div class='pagination' style='display:none'>");
-    // this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
-    // this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
-    // this.previousPageLink.click(function(event){
-    //   this._loadMyApps(-1);
-    //   event.preventDefault();
-    // }.pBind(this)).appendTo(this.paginationWrap).hide();
-    // this.nextPageLink.click(function(event){
-    //   this._loadMyApps(+1);
-    //   event.preventDefault();
-    // }.pBind(this)).appendTo(this.paginationWrap).hide();
-    // this.myAppsContainer.append(this.paginationWrap);
   },
   
   _setupDetailsView: function() {
@@ -80,9 +58,9 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     .attr({ draggable: "true" })
     .bind("dragstart", this._prepareAppDrag.pBind(this));
 
-    // Handle title of Show app page action
-    var showAppPageEl = $("#show_app_page_action");
-    showAppPageEl.data("originalText", showAppPageEl.text());
+    // // Handle title of Show app page action
+    //     var showAppPageEl = $("#show_app_page_action");
+    //     showAppPageEl.data("originalText", showAppPageEl.text());
     
     this.detailsAppContainer = this.detailsView.find('.single_app');
     
@@ -90,7 +68,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     $("#app_details .actions").click(function(event){
       event.preventDefault();
       
-      var properties = this.detailsAppContainer.data("properties"); //properties of the currenlty displayed video are store in this element
+      var properties = this.detailsAppContainer.data("properties");
       
       var link = $(event.target);
       
@@ -136,7 +114,10 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     var desc = widgetData.description || "";
     var descEl = this.detailsView.find('.app_description');
     descEl.text(desc);
-  },
+		
+		$('#my-apps').hide();
+  	this.detailsView.show();
+	},
 
   _prepareThumbDrag: function(e) {
     var thumb = $( e.currentTarget );
@@ -181,8 +162,8 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
         .find('.title')
         .truncate();
       }
-      //this._refreshMyAppsPagination(data.pagination);
-      appsThumbWrap.data('loaded', true);
+     
+ 			appsThumbWrap.data('loaded', true);
       this.hideSpinner(appsThumbWrap);
     }.pBind(this));
   },
@@ -211,20 +192,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
       )
     );
   },
-  
-  _refreshMyAppsPagination: function(pagination) {
-    var hasPagination = pagination.total_pages > 1 ? true : false;
-    if (hasPagination) {
-      this.paginationWrap.show();
-      if (pagination.previous_page > 0) this.previousPageLink.show();
-      else this.previousPageLink.hide();
-      if (pagination.next_page > 0) this.nextPageLink.show();
-      else this.nextPageLink.hide();
-    }
-    else {
-      this.paginationWrap.hide();
-    }
-  },
+
   _dragStart: function(event, widgetData) {
     var dt = event.originalEvent.dataTransfer;
     dt.setData('application/wd-widget', $.toJSON(widgetData));

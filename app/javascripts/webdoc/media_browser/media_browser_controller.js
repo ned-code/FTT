@@ -51,7 +51,9 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 	showApps: function(){
 		ddd('[MediaBrowserController] showApps');
 		if($('#media-browser-apps').length){
+			//temps
 			this.showTab('#media-browser-apps');
+			$('#my-apps').show();
 		}
 		else{
 			ddd('ajax request to show apps');
