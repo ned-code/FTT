@@ -43,8 +43,10 @@ body {
 
 #webdoc         { z-index: 1; }
 #webdoc_loading { z-index: 1; }
-.panel          { z-index: 2; }
-.toolbar-panel  { z-index: 2; }
+.scrollbar_x,
+.scrollbar_y    { z-index: 2; }
+.panel          { z-index: 3; }
+.toolbar-panel  { z-index: 3; }
 .ui-pop         { z-index: 4; } 
 
 #webdoc .center     { z-index: 2; }
@@ -76,7 +78,8 @@ body {
 
 #webdoc {
     /* Compensate for height of toolbar panel */
-    padding-top: 36px;
+    padding-top: 42px;
+    padding-bottom: 36px;
 }
 
 /* Interface panels */
@@ -86,13 +89,13 @@ body {
 }
 
 .toolbar-panel {
-    top: 0;
-    height: 36px;
+    top: 4px;
+    height: 34px;
     padding: 0 6px;
     overflow: hidden;
 }
 .toolbar-panel .tools {
-    margin-top: 2px;
+    margin-top: 1px;
 }
 .toolbar-panel .logo {
     float: left;
@@ -100,8 +103,7 @@ body {
     width: 93px; height: 32px;
     background-repeat: no-repeat;
 }
-.toolbar-panel .document-title,
-.toolbar-panel .page-details {
+.toolbar-panel .document-title {
     float: left;
     height: 100%;
     line-height: 36px;
@@ -109,9 +111,6 @@ body {
 }
 .toolbar-panel .document-title {
     font-weight: bold;
-}
-.toolbar-panel .page-details {
-    margin-left: 1.6em;
 }
 
 .right-panel {
@@ -167,7 +166,7 @@ body {
   padding: 2px;
 }
 
-/* Pages panel */
+/* Controls panel */
 
 .pages_panel {
     width: 100%;
@@ -180,15 +179,15 @@ body {
     top: -96px;
     left: 0;
     -webkit-transform: scale(0.25);
-    -webkit-transform-origin: 0 128px;
+    -webkit-transform-origin: 3.2% 128px;
     -webkit-transition: -webkit-transform 0.2s ease-out;
     
     -moz-transform: scale(0.25);
-    -moz-transform-origin: 0px 128px;
+    -moz-transform-origin: 3.2% 128px;
     -moz-transition: -webkit-transform 0.2s ease-out;
     
     transform: scale(0.25);
-    transform-origin: 0px 128px;
+    transform-origin: 3.2% 128px;
     transition: -webkit-transform 0.2s ease-out;
 
     background: rgba(0,0,0,0.66);
@@ -199,20 +198,20 @@ body {
     overflow-y: hidden;
 }
 
-.pages_panel.active .inspector {
+.pages_panel .inspector.active {
     -webkit-transform:  scale(1);
     -moz-transform:     scale(1);
     transform:          scale(1);
 }
 
-.pages_panel .number {
+.pages_panel li .number {
     -webkit-transition: opacity 0.2s ease-out;
-    -moz-transition: opacity 0.2s ease-out;
-    transition: opacity 0.2s ease-out;
+    -moz-transition:    opacity 0.2s ease-out;
+    transition:         opacity 0.2s ease-out;
     opacity: 0;
 }
 
-.pages_panel.active .number {
+.pages_panel .inspector.active li .number {
     opacity: 1;
 }
 
@@ -232,7 +231,49 @@ body {
     box-shadow: 0 0 8px rgba(176, 227, 0, 1);
 }
 
+.controls_panel .toolbar {
+    position: absolute;
+    left: 27.4%; bottom: 0;
+    width: 72.6%; height: 32px;
+    
+    /* these counter the effects of someone else's toolbar class - get rid of */
+    padding: 1px 0; border-bottom: none;
 
+    -webkit-transition: bottom 0.2s ease-out;
+    -moz-transition:    bottom 0.2s ease-out;
+    transition:         bottom 0.2s ease-out;
+
+    -webkit-border-top-left-radius: 6px;
+    -moz-border-radius-topleft:     6px;
+    border-top-left-radius:         6px;
+}
+
+.controls_panel .left_toolbar {
+    left: 0; width: 2.4%;
+    
+    -webkit-border-top-left-radius:   0;
+    -moz-border-radius-topleft:       0;
+    border-top-left-radius:           0;
+    
+    -webkit-border-top-right-radius:  6px;
+    -moz-border-radius-topright:      6px;
+    border-top-right-radius:          6px;
+}
+
+.mode_buttons {
+    float: right;
+}
+
+.sharing_buttons {
+    float: right;
+}
+
+
+
+/*
+.controls_panel.active .toolbar {
+    bottom: -32px;
+}*/
 
 
 
@@ -271,7 +312,10 @@ body {
     margin: 0;
 }
 .toolbar-panel {
-  left: 0; right: 0;
+  left: 6px; right: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
 }
 #toolbar_panel .tag-list a {
     display: block;
@@ -1034,3 +1078,38 @@ body {
   font-size: 120px;
 }
 
+.page_details {
+    float: left;
+    height: 100%;
+    line-height: 36px;
+    margin-left: 32px;
+    margin-left: 8px;
+}
+
+/* --- */
+
+.scrollbar_x,
+.scrollbar_y {
+  position: fixed;
+  width: 10px; height: 10px;
+  min-width: 10px; min-height: 10px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
+  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+  
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  
+  background: rgba(0,0,0,0.5);
+}
+
+.scrollbar_x {
+  bottom: 38px;
+}
+
+.scrollbar_y {
+  right: 4px;
+}
