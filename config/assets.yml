@@ -142,6 +142,7 @@ javascripts:
     - app/javascripts/webdoc/media_browser/media_browser_controller.js
     
     - app/javascripts/webdoc/library/jqtouch.js
+    - app/javascripts/webdoc/library/library.js
     - app/javascripts/webdoc/library/libraries_controller.js
     - app/javascripts/webdoc/library/apps_library.js
     - app/javascripts/webdoc/library/images_library/*.js

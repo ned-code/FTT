@@ -25,7 +25,8 @@ ActionController::Routing::Routes.draw do |map|
     # datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
   end
 
-  map.connect 'users/favorites', :controller => 'users', :action => 'favorites', :conditions => { :method => :get } #this route is used to get html that is display in media browser favorites
+  map.connect '/apps', :controller => 'widgets', :action => 'index', :conditions => { :method => :get }
+  map.connect '/users/favorites', :controller => 'users', :action => 'favorites', :conditions => { :method => :get } #this route is used to get html that is display in media browser favorites
   map.devise_for :users
   map.resources :users, :except => [:new, :create, :destroy]
   map.connect 'user', :controller => 'sessions', :action => 'show', :conditions => { :method => :get }

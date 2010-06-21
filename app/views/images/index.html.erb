@@ -2,14 +2,16 @@
   <%= render 'users/my_content_header'%>
   <div id="media-browser-my-images" class='my-content-tab'>
     <a href='#upload-images' class=''>
-      <%= t('.images.add_image') %>
+      <%= t('.add_image') %>
     </a>
-    
-    <% @images.each do |image| %>
-      <%= image_tag image.attachment.url(:thumb) %>
-    <% end %>
+    <div id="my-images-library">
+      <% @images.each do |image| %>
+        <%= image_tag image.attachment.url(:thumb), :class => 'thumbnails' %>
+      <% end %>
+    </div>
   </div>
-    
+  
+  
   <div id="media-browser-my-images-detail">
   </div>
   
@@ -18,13 +20,13 @@
       <input id='upload_images_button' type='button' value="Choose images" />
     </div>
 
-      <h1><%= t('.images.add_images_view.title') %></h1>
+      <h1><%= t('.add_images_view.title') %></h1>
       <div id="upload_control">
         <span id='upload_images_button_background' class='button'><%= t('.buttons.upload') %></span>
         <button id='cancel_images_upload' class='button' style='display:none'><%= t('.buttons.cancel_upload') %></button>
         <div id="upload_images_spinner" style='display:none'></div>
-        <span class='uploading_info'><%= t('.images.add_images_view.choose_upload_image') %> </span>
-        <a href='#my-images'>Go back</a>
+        <span class='uploading_info'><%= t('.add_images_view.choose_upload_image') %> </span>
+        <a href='#my-images'><%= t('.buttons.back') %></a>
       </div>
     </div>
 </div>
@@ -32,14 +34,14 @@
 
 <script type='text/javascript'>
   // MyContentController is used to manage my image and user's favorites.
-  ddd('my content JS loaded');
   WebDoc.MyContentController = $.klass({
         
     initialize: function() {
       ddd('[BrowserController] initialize');
       this.domNode = $('#media-browser-my-content');
       this._createHandlers('click', this._myContentHandlers);
-      this.imagesUploader = new WebDoc.ImagesUploader('upload_control');
+      this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
+      $(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
     },
     
     _createHandlers: function(eventType, obj, context){
@@ -79,10 +81,54 @@
       ddd('showUploader');
       this._hideAll();
       $('#media-browser-upload-images').show();
+      this.imagesUploader.loadSWFUpload();
+    },
+    
+    insertImage: function(image_data){
+      var data = eval('(' + image_data + ')');
+      ddd('data :' + data);
+      var  thumb_url = data.image.properties.thumb_url;
+      var properties = {
+        url:data.image.properties.url,
+        thumb_url: thumb_url,
+        image_link: data.image.properties.default_url,
+        type: 'application/wd-image' 
+      };
+      ddd('properties' + properties);
+      
+      insertedImage= $("<img>").attr({
+        src:thumb_url,
+        alt: "",
+        class: 'thumbnails'
+      }).data("properties", properties);
+      
+      $('#my-images-library').prepend(insertedImage);
+      $(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
+      
+    },
+    
+    dragStart: function(event) {
+      ddd('[MyContentController] dragStart');
+      
+      // we take parent and then search down the img because safari and firefox have not the same target.
+      // on firefox target is the a tag but in safarai target is the img.
+      var draggingImg = $(event.target);
+
+      var properties = draggingImg.data("properties");
+
+      var dt = event.originalEvent.dataTransfer;
+      var imageUrl = properties.default_url ? properties.default_url : properties.url;
+      dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id}));
+      
+      // Drag "feedback"
+      //var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
+      //$(document.body).append(mediaDragFeedbackEl);
+      ///dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
     },
     
     _hideAll: function(){
       $('.my-content-tab').hide();
+      this.imagesUploader.unloadSWFUpload();
     }
   });
   

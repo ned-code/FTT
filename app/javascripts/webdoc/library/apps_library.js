@@ -8,12 +8,13 @@
 
 WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   initialize: function($super, libraryId) {
+		ddd('[AppsLibrary] initialize');
     $super(libraryId);
 
     // Setup my apps
     this._setupMyApps();
     // Setup details view
-    this._setupDetailsView();
+    //this._setupDetailsView();
 
     // Observe thumbnails clicks with event delegation
     $("#"+libraryId).delegate(".thumbnails li a", "click", function (e) {
@@ -26,14 +27,18 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
       
       e.preventDefault();
     }.pBind(this));
-
+		
+		//JQT
     // view transition finished (slide in/out)
-    this.element.bind('pageAnimationEnd', function(event, info){
-      var currentViewId = this.currentViewId();
-      if (currentViewId === this.element.attr("id")) { // #apps view did appear
-        this._loadMyApps(0);
-      }
-    }.pBind(this));
+    // this.element.bind('pageAnimationEnd', function(event, info){
+    //   var currentViewId = this.currentViewId();
+    //   if (currentViewId === this.element.attr("id")) { // #apps view did appear
+    //     this._loadMyApps(0);
+    //   }
+    // }.pBind(this));
+		
+		this._loadMyApps();
+		
   },
   
   didClickOnTab: function($super, tab) {
@@ -41,9 +46,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   },
   
   _setupMyApps: function() {
-    this.myAppsId = "my_apps";
-    
-    this.myAppsPage = 1;
+    this.myAppsId = "my-apps";
     this.myAppsContainer = $('#'+this.myAppsId);
     
     // Setup app thumbnails drag n' drop
@@ -53,19 +56,20 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     
     $(document.body).append(this.buildMediaDragFeedbackElement("apps", "")); // just to preload the icon (so that it'll be immediately available at the first drag)
     
-    // Next/Previous page links
-    this.paginationWrap = $("<div class='pagination' style='display:none'>");
-    this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
-    this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
-    this.previousPageLink.click(function(event){
-      this._loadMyApps(-1);
-      event.preventDefault();
-    }.pBind(this)).appendTo(this.paginationWrap).hide();
-    this.nextPageLink.click(function(event){
-      this._loadMyApps(+1);
-      event.preventDefault();
-    }.pBind(this)).appendTo(this.paginationWrap).hide();
-    this.myAppsContainer.append(this.paginationWrap);
+		//JQT
+    // // Next/Previous page links
+    // this.paginationWrap = $("<div class='pagination' style='display:none'>");
+    // this.previousPageLink = $("<a>").attr({ href:"", 'class':"previous_page button" }).html("&larr; Previous");
+    // this.nextPageLink = $("<a>").attr({ href:"", 'class':"next_page button" }).html("Next &rarr;");
+    // this.previousPageLink.click(function(event){
+    //   this._loadMyApps(-1);
+    //   event.preventDefault();
+    // }.pBind(this)).appendTo(this.paginationWrap).hide();
+    // this.nextPageLink.click(function(event){
+    //   this._loadMyApps(+1);
+    //   event.preventDefault();
+    // }.pBind(this)).appendTo(this.paginationWrap).hide();
+    // this.myAppsContainer.append(this.paginationWrap);
   },
   
   _setupDetailsView: function() {
@@ -148,42 +152,39 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   _loadMyApps: function(pageIncrement) {
     var appsThumbWrap = this.myAppsContainer.find(".thumbnails");
     
-    this.myAppsPage += pageIncrement;
-    if (this.myAppsPage < 1) this.myAppsPage = 1;
+    //this.myAppsPage += pageIncrement;
+    //if (this.myAppsPage < 1) this.myAppsPage = 1;
     
-    if (pageIncrement !== 0 || !appsThumbWrap.data('loaded')) { //load only if we are paginating, or if the apps have never been loaded before
-      appsThumbWrap.html('');
+    appsThumbWrap.html('');
+    this.showSpinner(appsThumbWrap);
+    
+    WebDoc.ServerManager.getRecords(WebDoc.Widget, null, function(data) {
+      var appsList, noApps;
       
-      this.showSpinner(appsThumbWrap);
-      
-      WebDoc.ServerManager.getRecords(WebDoc.Widget, null, function(data) {
-        var appsList, noApps;
+      if (data.widgets.length === 0) {
+        noApps = $("<span>").addClass('no_items').text('No Apps');
+        appsThumbWrap.append(appsThumbWrap);
+      }
+      else {   
+        appsList = $("<ul/>", {
+          'class': 'apps-index thumbs index'
+        });
         
-        if (data.widgets.length === 0) {
-          noApps = $("<span>").addClass('no_items').text('No Apps');
-          appsThumbWrap.append(appsThumbWrap);
+        for (var i = 0; i < data.widgets.length; i++) {
+          appsList.append( this._buildThumbnail(data.widgets[i])[0] );
         }
-        else {   
-          appsList = $("<ul/>", {
-            'class': 'apps-index thumbs index'
-          });
-          
-          for (var i = 0; i < data.widgets.length; i++) {
-            appsList.append( this._buildThumbnail(data.widgets[i])[0] );
-          }
-          
-          // Build DOM tree
-          appsThumbWrap.append(
-            appsList
-          )
-          .find('.title')
-          .truncate();
-        }
-        this._refreshMyAppsPagination(data.pagination);
-        appsThumbWrap.data('loaded', true);
-        this.hideSpinner(appsThumbWrap);
-      }.pBind(this), { ajaxParams: { page:this.myAppsPage }});
-    }
+        
+        // Build DOM tree
+        appsThumbWrap.append(
+          appsList
+        )
+        .find('.title')
+        .truncate();
+      }
+      //this._refreshMyAppsPagination(data.pagination);
+      appsThumbWrap.data('loaded', true);
+      this.hideSpinner(appsThumbWrap);
+    }.pBind(this));
   },
   
   _buildThumbnail: function(widget) {

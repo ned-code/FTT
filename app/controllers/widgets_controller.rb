@@ -6,6 +6,7 @@ class WidgetsController < ApplicationController
     @widgets = Medias::Widget.paginate(:page => params[:page], :per_page => per_page)
     
     respond_to do |format|
+      format.html { render :layout => false }
       format.json { render :json => { 
         :widgets => @widgets,
         :pagination => {

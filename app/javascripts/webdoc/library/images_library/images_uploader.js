@@ -5,9 +5,9 @@
 WebDoc.SupportedImagesExtensions = ["jpg","jpeg","png","gif"];
 
 WebDoc.ImagesUploader = $.klass({
-  initialize: function(uploadControlId) {		
+  initialize: function(uploadControlId, imagesLibrary) {
     this.uploadControl = $('#'+uploadControlId);
-    
+    this.imagesLibrary = imagesLibrary;
     this.uploadUrl = "/images";
     
     // Set callback to the ImageLibrary
@@ -41,7 +41,7 @@ WebDoc.ImagesUploader = $.klass({
       button_height: 40,
       button_placeholder: $('#upload_images_button')[0],
       button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
-      debug: true
+      debug: false
     })
     
     .bind('swfuploadLoaded', function(event){
@@ -97,7 +97,8 @@ WebDoc.ImagesUploader = $.klass({
     .bind('uploadSuccess', function(event, file, serverData){
       ddd("Upload success: "+file.name);
       this.successfulUploads += 1;
-      
+ 			this.imagesLibrary.insertImage(serverData);
+
       // if (!$("#add_images").is(":visible")) { //only if the Add Images pane has been closed during upload
       //         //this.imagesLibrary.refreshMyImages([$.evalJSON(serverData).image]);
       //         // ddd(serverData); //json string, ex: serverData = '{"image":{"created_at":"2009-12-21T15:53:34Z","uuid":"C42191E9-57C0-0001-E0F9-2A921B2FD820","updated_at":"2009-12-21T15:53:34Z","user_id":4,"properties":{"url":"/uploads/medias/image/file/C42191E9-57C0-0001-E0F9-2A921B2FD820/luca.jpg","thumb_url":"/uploads/medias/image/file/C42191E9-57C0-0001-E0F9-2A921B2FD820/thumb_luca.jpg"}}}'

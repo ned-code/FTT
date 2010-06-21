@@ -54,7 +54,14 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 			this.showTab('#media-browser-apps');
 		}
 		else{
-			ddd('media-browser-web bot displayed, do ajax here');
+			ddd('ajax request to show apps');
+			$.ajax({
+			  url: "/apps",
+			  success: function(html){
+					this._hideAll();
+			    $("#media-browser-content").append(html);
+			  }.pBind(this)
+			});
 		}
 	},
 	
