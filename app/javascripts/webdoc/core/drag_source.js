@@ -49,7 +49,11 @@ WebDoc.DrageAndDropController.addUriSource(
 WebDoc.DrageAndDropController.addUriSource(
 	'dailymotion.com',
 	function(uri_list,evt){
-		id = uri_list.substr(uri_list.lastIndexOf("/") + 1, uri_list.length).split('_')[0];
+    if(uri_list.indexOf('request=') !== -1){
+      id = uri_list.split('request=%2F')[1].split('video%2F')[1].split('_')[0];
+    } else {
+      id = uri_list.substr(uri_list.lastIndexOf("/") + 1, uri_list.length).split('_')[0];
+    }       
 		var videoProperties = {
 			type : 'dailymotion',
 			video_id : id
