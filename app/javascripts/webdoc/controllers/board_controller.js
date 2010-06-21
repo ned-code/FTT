@@ -626,6 +626,9 @@ WebDoc.BoardController = jQuery.klass({
       case 'vimeo' :
         videoWidget = WebDoc.WidgetManager.getInstance().getVimeoWidget();
         break;
+	  case 'dailymotion' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getDailymotionWidget();
+        break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     if (videoWidget.data.properties.width) {

@@ -24,10 +24,34 @@ WebDoc.DrageAndDropController.addUriSource(
 
 WebDoc.DrageAndDropController.addUriSource(
 	'youtube.com',
-	function(uri_list,evt){
-		id = uri_list.split('v=')[1].split('&')[0];
+	function(uri_list,evt){ 
+    var id = '';
+		//id = uri_list.split('v=')[1].split('&')[0];
+    if(uri_list.indexOf('v=') !== -1){
+              id = uri_list.split('v=')[1].split('&')[0];
+            } else if(uri_list.indexOf('video_ids=') !== -1){
+              var ids = uri_list.split('video_ids=')[1].split('%2C');
+              var index = (uri_list.indexOf('index=') !== -1) ? uri_list.split('index=')[1].split('&')[0] : 0;
+              id = ids[index].split('&')[0];
+            } else {
+              id = uri_list;
+            }  
 		var videoProperties = {
 			type : 'youtube',
+			video_id : id
+		};
+
+		var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
+		WebDoc.application.boardController.insertVideo(videoProperties, pos);
+	}
+);
+
+WebDoc.DrageAndDropController.addUriSource(
+	'dailymotion.com',
+	function(uri_list,evt){
+		id = uri_list.substr(uri_list.lastIndexOf("/") + 1, uri_list.length).split('_')[0];
+		var videoProperties = {
+			type : 'dailymotion',
 			video_id : id
 		};
 
