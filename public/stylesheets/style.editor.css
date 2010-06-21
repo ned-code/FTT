@@ -1088,15 +1088,9 @@ body {
 /* --- */
 
 .x_scrollbar_container {
-  position: absolute;
-  left: 6px; right: 6px; top: 112px;
-  height: 10px;
-  
   -webkit-box-sizing: border-box;
   -moz-box-sizing:    border-box;
   box-sizing:         border-box;
-  
-  z-index: 2;
 }
 
 .scrollbar {
@@ -1116,15 +1110,24 @@ body {
   background: rgba(128,128,128,0.5);
 }
 
-#scrollbar_x,
-#scrollbar_y {
+.pages_panel .x_scrollbar_container {
+  left: 6px; right: 6px; top: 112px;
+  height: 10px;
+  z-index: 2;
+}
+
+#webdoc_x_scrollbar,
+#webdoc_y_scrollbar {
   position: fixed;
+  z-index: 2;
 }
 
-#scrollbar_x {
-  bottom: 38px;
+#webdoc_x_scrollbar {
+  bottom: 38px; left: 6px; right: 6px;
+  height: 10px;
 }
 
-#scrollbar_y {
-  right: 4px;
+#webdoc_y_scrollbar {
+  top: 44px; bottom: 38px; right: 6px;
+  width: 10px;
 }

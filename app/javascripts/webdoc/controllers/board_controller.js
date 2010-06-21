@@ -117,8 +117,8 @@ WebDoc.BoardController = jQuery.klass({
     this._fireCurrentPageChanged();
     
     jQuery('#webdoc').scrollbars({
-      x: jQuery('#scrollbar_x'),
-      y: jQuery('#scrollbar_y'),
+      x: jQuery('#webdoc_x_scrollbar .scrollbar'),
+      y: jQuery('#webdoc_y_scrollbar .scrollbar'),
       dragImageUrl: '/images/icon_blank.png'
     });
     

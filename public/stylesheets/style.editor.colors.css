@@ -33,7 +33,6 @@ body                          { background-color: hsl(208, 8%, 60%); }
                                 -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
                                 box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
 
-.pages_panel,
 .right-panel                  { background-color: hsla(208, 7%, 41%, 0.92); }
 
 .pages_panel .panel_index {
