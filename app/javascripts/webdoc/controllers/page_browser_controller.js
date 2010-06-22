@@ -88,6 +88,9 @@ WebDoc.PageBrowserController = $.klass({
       pageItemNode.attr('data-webdoc-page', pageId);
     }
     
+    // Recalculate scrollbars
+    pageBrowserItems.trigger('resize');
+    
     this.updateSelectedPage();
     this._updateIndexNumbers();
     this._updateThumbs();
@@ -346,6 +349,9 @@ WebDoc.PageBrowserController = $.klass({
     else {
       this.domNodeBrowserItems.prepend( pageNode );
     }
+    
+    // Recalculate scrollbars
+    pageBrowserItems.trigger('resize');
     
     this._updateIndexNumbers();
     //pageItem.truncateTitleWithActualTitle();
