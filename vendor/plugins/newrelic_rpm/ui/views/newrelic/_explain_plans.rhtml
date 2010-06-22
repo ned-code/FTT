@@ -3,11 +3,11 @@
 	<% if @row_headers[r] %>
 		<tr>
 			<th align=right nowrap>
-				<%= @row_headers[r]%>
+				<%= raw @row_headers[r]%>
 			</th>
 			<% @explanation.each do |exp| %>
 				<td>
-					<%= exp[r]%>
+					<%= raw exp[r]%>
 				</td>
 			<% end %>
 		</tr>
@@ -19,7 +19,7 @@
   <td><p class="plan">
   <% @explanation.each do |row| -%>
       <% row.each do |col| -%>
-<%= h(col) %>
+<%= raw h(col) %>
       <% end -%>
   <% end -%>
   </p></td>
