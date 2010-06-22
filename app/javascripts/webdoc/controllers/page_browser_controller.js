@@ -333,9 +333,11 @@ WebDoc.PageBrowserController = $.klass({
     ddd("[pageBrowserController] pageAdded");
     var pageItem = new WebDoc.PageBrowserItemView(page),
         pageNode = pageItem.domNode,
+        pageId = page.uuid(),
         pos = page.data.position;
     
-    this.pageMap[ page.uuid() ] = pageItem;
+    this.pageMap[ pageId ] = pageItem;
+    pageNode.attr('data-webdoc-page', pageId);
     
     // Then put it in the DOM
     if (pos) {
@@ -344,10 +346,6 @@ WebDoc.PageBrowserController = $.klass({
     else {
       this.domNodeBrowserItems.prepend( pageNode );
     }
-    
-    pageNode.data('webdoc', {
-      page: page
-    });
     
     this._updateIndexNumbers();
     //pageItem.truncateTitleWithActualTitle();
