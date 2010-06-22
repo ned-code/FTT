@@ -252,10 +252,9 @@ WebDoc.PageBrowserController = $.klass({
       });
       // ----------------------------------------------------------------------------------------------------
     }
+    
     this.bindEventHandlers();
-    
     WebDoc.application.boardController.addCurrentPageListener(this);
-    
   },
   
   _dragStartCallback: function(e, dragTarget){
@@ -298,8 +297,6 @@ WebDoc.PageBrowserController = $.klass({
     // Define a flag to avoid rebuilding the page browser when items are dragged
     // However, if the document is opened in other sessions, updates must be done
     this._changedFromDrag = true;
-    
-    console.log(dragTarget.attr("data-webdoc-page"), this.pageMap, dropData);
     
     pageToSave = WebDoc.application.pageEditor.currentDocument.movePage( dropData.page.uuid(), dropPageIndex );
     
