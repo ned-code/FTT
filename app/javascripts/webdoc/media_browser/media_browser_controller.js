@@ -9,7 +9,7 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
   MEDIA_BROWSER_BUTTON_SELECTOR: "a[href='#media-browser']",
 
   initialize: function() {
-    this.webSearch = new WebDoc.WebSearch("media-browser-web");
+    this.webSearchController = new WebDoc.WebSearchController("media-browser-web");
     // this.videosLibrary = new WebDoc.VideosLibrary("videos");
     // this.appsLibrary = new WebDoc.AppsLibrary("apps");
     // this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");

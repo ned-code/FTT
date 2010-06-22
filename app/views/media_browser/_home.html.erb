@@ -35,7 +35,16 @@
       
     </div>
     <div id="media-browser-web" style="display:none" class='media-browser-tab'>
-      <div id="web_images" class='web_media'>
+      <div id="media-browser-web-header">
+        <ul>
+          <li>
+            <a href='#search_images' title='Search images'> <%= t('.images.web_detail')%></a>
+            <a href='#search_videos' title='Search videos'> <%= t('.videos.web_detail')%></a>
+          </li>
+        </ul>
+      </div>
+      
+      <div id="web-images" class='web_media web-search-tab'>
         <form>
           <div>
             <label for='web_images_search_field'> <%= t('.images.web_detail') %>  </label>
@@ -54,6 +63,30 @@
             <span class='results_number'> 0 </span>
           </h3>
         </div>
+      </div>
+      
+      <div id="web-videos" class='web_media web-search-tab' style='display:none'>
+        
+        <form>
+          <div>
+            <label for='web_videos_search_field'> <%= t('.videos.web_detail') %>  </label>
+            <input type='text' id='web_videos_search_field' class='web_media_search_field' />
+            <input type='submit' value='<%= t('.buttons.search') %>' id='web_videos_search_submit' class='web_media_search_submit' />
+          </div>
+        </form>
+        
+        <div id="youtube_videos" class='rows'>
+          <h3 class='service_bar'><%= t('.videos.services.youtube')%>
+            <span class='results_number'> 0 </span>
+          </h3>
+        </div>
+        
+        <div id="vimeo_videos" class='rows'>
+          <h3 class='service_bar'><%= t('.videos.services.vimeo')%>
+            <span class='results_number'> 0 </span>
+          </h3>
+        </div>
+        
       </div>
     </div>
     <!-- <div id="media-browser-web" style="display:none" class='media-browser-tab'>

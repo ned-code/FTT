@@ -140,7 +140,7 @@ javascripts:
     - app/javascripts/webdoc/core/*.js
     
     - app/javascripts/webdoc/library/library.js
-    - app/javascripts/webdoc/media_browser/web_search.js
+    - app/javascripts/webdoc/media_browser/web_search_controller.js
     - app/javascripts/webdoc/media_browser/media_browser_controller.js
     
     - app/javascripts/webdoc/library/jqtouch.js
