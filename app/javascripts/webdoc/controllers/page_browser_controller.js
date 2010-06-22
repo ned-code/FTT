@@ -88,6 +88,9 @@ WebDoc.PageBrowserController = $.klass({
       pageItemNode.attr('data-webdoc-page', pageId);
     }
     
+    // Recalculate scrollbars
+    pageBrowserItems.trigger('resize');
+    
     this.updateSelectedPage();
     this._updateIndexNumbers();
     this._updateThumbs();
@@ -333,9 +336,11 @@ WebDoc.PageBrowserController = $.klass({
     ddd("[pageBrowserController] pageAdded");
     var pageItem = new WebDoc.PageBrowserItemView(page),
         pageNode = pageItem.domNode,
+        pageId = page.uuid(),
         pos = page.data.position;
     
-    this.pageMap[ page.uuid() ] = pageItem;
+    this.pageMap[ pageId ] = pageItem;
+    pageNode.attr('data-webdoc-page', pageId);
     
     // Then put it in the DOM
     if (pos) {
@@ -345,9 +350,8 @@ WebDoc.PageBrowserController = $.klass({
       this.domNodeBrowserItems.prepend( pageNode );
     }
     
-    pageNode.data('webdoc', {
-      page: page
-    });
+    // Recalculate scrollbars
+    pageBrowserItems.trigger('resize');
     
     this._updateIndexNumbers();
     //pageItem.truncateTitleWithActualTitle();
