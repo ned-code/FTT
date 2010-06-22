@@ -34,6 +34,28 @@
       <h2>Packages we recommand</h2>
       
     </div>
+    <div id="media-browser-web" style="display:none" class='media-browser-tab'>
+      <div id="web_images" class='web_media'>
+        <form>
+          <div>
+            <label for='web_images_search_field'> <%= t('.images.web_detail') %>  </label>
+            <input type='text' id='web_images_search_field' class='web_media_search_field' />
+            <input type='submit' value='<%= t('.buttons.search') %>' id='web_images_search_submit' class='web_media_search_submit' />
+          </div>
+        </form>
+        <div id="flickr_images" class='thumbnails'>
+          <h3 class='service_bar'><%= t('.images.services.flickr')%>
+            <span class='results_number'> 0 </span>
+          </h3>
+        </div>
+        
+        <div id="google_images" class='thumbnails'>
+          <h3 class='service_bar'><%= t('.images.services.google')%>
+            <span class='results_number'> 0 </span>
+          </h3>
+        </div>
+      </div>
+    </div>
     <!-- <div id="media-browser-web" style="display:none" class='media-browser-tab'>
           web search
         </div>

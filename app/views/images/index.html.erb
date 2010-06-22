@@ -34,9 +34,10 @@
 
 <script type='text/javascript'>
   // MyContentController is used to manage my image and user's favorites.
-  WebDoc.MyContentController = $.klass({
+  WebDoc.MyContentController = $.klass(WebDoc.Library,{
         
-    initialize: function() {
+    initialize: function($super, libraryId) {
+  		$super(libraryId);
       ddd('[BrowserController] initialize');
       this.domNode = $('#media-browser-my-content');
       this._createHandlers('click', this._myContentHandlers);
@@ -121,9 +122,9 @@
       dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id}));
       
       // Drag "feedback"
-      //var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
-      //$(document.body).append(mediaDragFeedbackEl);
-      ///dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
+      var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
+      $(document.body).append(mediaDragFeedbackEl);
+      dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
     },
     
     _hideAll: function(){
@@ -132,6 +133,6 @@
     }
   });
   
-  WebDoc.application.myContentController = new WebDoc.MyContentController();
+  WebDoc.application.myContentController = new WebDoc.MyContentController('media-browser-my-content');
   
 </script>

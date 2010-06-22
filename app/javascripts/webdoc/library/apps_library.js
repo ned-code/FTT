@@ -15,7 +15,8 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     // Setup my apps
     this._setupMyApps();
     // Setup details view
-    this._setupDetailsView();
+    //#Todo
+		//this._setupDetailsView();
 
     // Observe thumbnails clicks with event delegation
     $("#"+libraryId).delegate(".thumbnails li a", "click", function (e) {
@@ -32,10 +33,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
 	
 		this._loadMyApps();
 		
-  },
-  
-  didClickOnTab: function($super, tab) {
-    $super(tab);
   },
   
   _setupMyApps: function() {
@@ -132,9 +129,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   
   _loadMyApps: function(pageIncrement) {
     var appsThumbWrap = this.myAppsContainer.find(".thumbnails");
-    
-    //this.myAppsPage += pageIncrement;
-    //if (this.myAppsPage < 1) this.myAppsPage = 1;
     
     appsThumbWrap.html('');
     this.showSpinner(appsThumbWrap);

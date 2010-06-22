@@ -4,6 +4,7 @@
 
 WebDoc.WebImagesSearch = $.klass({
   initialize: function(searchFieldId, imagesLibrary) {
+		ddd('[WebImagesSearch] initialize');
     this.searchField = $('#'+searchFieldId);
     this.searchForm = this.searchField.parents('form');
     
@@ -33,6 +34,7 @@ WebDoc.WebImagesSearch = $.klass({
 // Do not instanciate this directly (use one of its subclasses)
 WebDoc.ServiceImagesSearch = $.klass({
   initialize: function(containerId) {
+		ddd('[ServiceImagesSearch] initialize');
     this.container = $('#'+containerId);
     this.container.hide();
     this.resultsCount = this.container.find('.results_number');
@@ -87,6 +89,7 @@ WebDoc.ServiceImagesSearch = $.klass({
 
 WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   initialize: function($super) {
+		ddd('[FlickrImagesSearch] initialize');
     $super('flickr_images');
     
     this.flickrApiKey = '17877450af95abebef121754b8a8fe81';
@@ -179,6 +182,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
 
 WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   initialize: function($super) {
+		ddd('[GoogleImagesSearch] initialize');
     $super('google_images');
     
     this.googleApiKey = 'ABQIAAAApQVNSQ3vVhagmaEB0elu7BTPrwtLmcDxRofti2tV-VsxVMfrRRTawoNcxVFL3Hajl6ZPExg6uL8XGg';

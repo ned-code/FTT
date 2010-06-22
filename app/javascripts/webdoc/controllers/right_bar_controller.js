@@ -5,7 +5,6 @@
 // define all inspector type that can be displayed in the right bar
 WebDoc.RightBarInspectorType = {
 	MEDIA_BROWSER: 'media-browser',
-  LIBRARY: 'library',
   ITEM: 'item',
   PAGE: 'page',
   DOCUMENT: 'document',
@@ -28,11 +27,9 @@ WebDoc.RightBarController = $.klass({
     // Some of these are lazy loaded, and some are not -
     // pageInspector does not work if you try loading it now.
     
-    var library = new WebDoc.LibrariesController(),
-        itemInspector = new WebDoc.InspectorController(),
+    var itemInspector = new WebDoc.InspectorController(),
 				mediaBrowser = new WebDoc.MediaBrowserController();
         
-    WebDoc.application.libraryController = library;
 		WebDoc.application.mediaBrowserController = mediaBrowser;
     WebDoc.application.inspectorController = itemInspector;
     
@@ -44,7 +41,6 @@ WebDoc.RightBarController = $.klass({
     
     this.panelWidth = panel.outerWidth();
     this._inspectorsControllersClasses = {};
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.LIBRARY] = WebDoc.LibrariesController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.MEDIA_BROWSER] = WebDoc.MediaBrowserController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.ITEM] = WebDoc.InspectorController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PAGE] = WebDoc.PageInspectorController;
@@ -52,7 +48,7 @@ WebDoc.RightBarController = $.klass({
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.SOCIAL] = WebDoc.SocialPanelController;
 
     this._inspectorsControllers = {};
-    this._inspectorsControllers[WebDoc.RightBarInspectorType.LIBRARY] = library;
+    this._inspectorsControllers[WebDoc.RightBarInspectorType.MEDIA_BROWSER] = mediaBrowser;
     this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;
     
     this._currentInspectorType = null;  
@@ -95,9 +91,9 @@ WebDoc.RightBarController = $.klass({
       this._currentInspectorType = inspectorType;
     }
     else {
-      if(this._currentInspectorType === WebDoc.RightBarInspectorType.LIBRARY) {
-        jQT.goTo('#libraries_manager', 'slide');
-      }
+      // if(this._currentInspectorType === WebDoc.RightBarInspectorType.MEDIA_BROWSER) {
+      //         jQT.goTo('#media_browser', 'slide');
+      //       }
     }
   },
 
@@ -116,12 +112,6 @@ WebDoc.RightBarController = $.klass({
     this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
     this.show();
 	},
-	
-  showLib: function() {
-    ddd("[RightBarController] showLib");
-    this.selectInspector(WebDoc.RightBarInspectorType.LIBRARY);
-    this.show();
-  },
   
   showPageInspector: function() {
     ddd("[RightBarController] show page inspector");

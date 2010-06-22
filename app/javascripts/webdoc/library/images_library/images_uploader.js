@@ -1,5 +1,6 @@
 /**
  * @author Zeno Crivelli
+		modified by Jonathan
 **/
 
 WebDoc.SupportedImagesExtensions = ["jpg","jpeg","png","gif"];

@@ -33,23 +33,6 @@
       this.appsLibrary = new WebDoc.AppsLibrary("media-browser-apps");
       
       this.domNode = $('#media-browser-apps');
-      //this._createHandlers('click', this._myContentHandlers);
-    },
-    
-    _createHandlers: function(eventType, obj, context){
-      ddd('create handler');    
-      //this.domNode
-      //.delegate('a', eventType, WebDoc.handlers._makeLinkHandler( obj, context ) );
-      //NOTE: _makeLinkHandler( obj, context ) is supposed to be private, but it's an easy way to listen the link
-    },
-    
-    _appsHandlers: {
-      // 'my-images':  function(e){ WebDoc.application.myContentController.showMyImages(); },
-    },
-    
-    dragStart: function(event) {
-      ddd('[AppsController] dragStart');
-      
     }
   });
   
