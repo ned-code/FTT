@@ -11,9 +11,9 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     // Setup web images
     this.webVideosSearch = new WebDoc.WebVideosSearch('web_videos_search_field', this);
     // Setup my images
-    this.setupMyVideos();
+    //this.setupMyVideos();
     // Setup details view
-    this.setupDetailsView();
+   // this.setupDetailsView();
     
     // Observe video-rows clicks (with event delegation) for all current and future video-rows
     $("#"+libraryId+" .rows ul li a").live("click", function (event) {
@@ -26,11 +26,11 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
     }.pBind(this));
     
     // Observe end of page transition
-    this.element.bind('pageAnimationEnd', function(event, info){
-      if (this.currentViewId() === this.detailsView.attr("id")) {
-        this.detailsViewDidAppear();
-      }
-    }.pBind(this));
+    // this.element.bind('pageAnimationEnd', function(event, info){
+    //   if (this.currentViewId() === this.detailsView.attr("id")) {
+    //     this.detailsViewDidAppear();
+    //   }
+    // }.pBind(this));
     
     // An option...
     this.backToMyVideosListAfterRemoval = true;

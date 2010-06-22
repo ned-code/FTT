@@ -26,8 +26,33 @@ WebDoc.WebVideosSearch = $.klass({
     }.pBind(this));
     
     // Setup video rows drag n' drop
-    //$("#web_videos .rows").bind("dragstart", this.videosLibrary.prepareRowDrag.pBind(this.videosLibrary));
+    $("#web-videos .rows").bind("dragstart", this.prepareRowDrag.pBind(this));
+  },
+
+	prepareRowDrag: function(event) {
+    // Started dragging a video "row" from the web search results
+    
+    var target = $(event.target);
+    // if ($.isEmptyObject(target.closest('.video_row'))) { av in jQuery v1.4
+    if (target.closest('.video_row').length === 0 || target.find('img').length === 0) {
+      event.preventDefault();
+      return;
+    }
+    
+    var properties = target.find('img').data("properties");
+    this.dragStart(event, properties);
+  },
+
+	dragStart: function(event, properties) {
+    var dt = event.originalEvent.dataTransfer;
+    dt.setData("application/wd-video", $.toJSON(properties));
+    
+    // Drag "feedback"
+    var mediaDragFeedbackEl = this.videosLibrary.buildMediaDragFeedbackElement("video", properties.thumb_url);
+    $(document.body).append(mediaDragFeedbackEl);
+    dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   }
+
 });
 
 // Generic class to be used as parent class for YouTube, Vimeo or other web videos services implementations.

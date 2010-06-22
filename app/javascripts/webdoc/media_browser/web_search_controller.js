@@ -27,21 +27,6 @@ WebDoc.WebSearchController = $.klass(WebDoc.Library, {
       event.preventDefault();
     }.pBind(this));
   },
-  
-  dragStart: function(event) {		
-    // we take parent and then search down the img because safari and firefox have not the same target.
-    // on firefox target is the a tag but in safarai target is the img.
-    var draggingImg = $(event.target).parent().find('img');
-    var properties = draggingImg.data("properties");
-    var dt = event.originalEvent.dataTransfer;
-    var imageUrl = properties.default_url ? properties.default_url : properties.url;
-    dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id}));
-    
-    //Drag "feedback"
-    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
-    $(document.body).append(mediaDragFeedbackEl);
-    dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
-  },
 
 	_createHandlers: function(eventType, obj, context){
     ddd('create handler');    

@@ -25,7 +25,26 @@ WebDoc.WebImagesSearch = $.klass({
     }.pBind(this));
     
     // Setup thumbnails drag n' drop
-    $("#web_images .thumbnails").bind("dragstart", this.imagesLibrary.dragStart.pBind(this.imagesLibrary));
+    $("#web-images .thumbnails").bind("dragstart", function(event){
+			ddd('drats sfdgdf');
+			this.dragStart(event);
+		}.pBind(this));
+  },
+
+	dragStart: function(event) {
+		ddd('dragStart df');
+    // we take parent and then search down the img because safari and firefox have not the same target.
+    // on firefox target is the a tag but in safarai target is the img.
+    var draggingImg = $(event.target).parent().find('img');
+    var properties = draggingImg.data("properties");
+    var dt = event.originalEvent.dataTransfer;
+    var imageUrl = properties.default_url ? properties.default_url : properties.url;
+    dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id}));
+    
+    //Drag "feedback"
+    var mediaDragFeedbackEl = this.imagesLibrary.buildMediaDragFeedbackElement("image", properties.thumb_url);
+    $(document.body).append(mediaDragFeedbackEl);
+    dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   }
 });
 
