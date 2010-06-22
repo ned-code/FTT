@@ -43,8 +43,8 @@ body {
 
 #webdoc         { z-index: 1; }
 #webdoc_loading { z-index: 1; }
-.scrollbar_x,
-.scrollbar_y    { z-index: 2; }
+.x_scrollbar,
+.y_scrollbar    { z-index: 2; }
 .panel          { z-index: 3; }
 .toolbar-panel  { z-index: 3; }
 .ui-pop         { z-index: 4; } 
@@ -176,21 +176,25 @@ body {
 
 .pages_panel .inspector {
     position: absolute;
-    top: -96px;
-    left: 0;
+    left: 0; top: -130px;
+    
     -webkit-transform: scale(0.25);
-    -webkit-transform-origin: 3.2% 128px;
+    -webkit-transform-origin: 3.2% 173px;
     -webkit-transition: -webkit-transform 0.2s ease-out;
     
     -moz-transform: scale(0.25);
-    -moz-transform-origin: 3.2% 128px;
+    -moz-transform-origin: 3.2% 173px;
     -moz-transition: -webkit-transform 0.2s ease-out;
     
     transform: scale(0.25);
-    transform-origin: 3.2% 128px;
+    transform-origin: 3.2% 173px;
     transition: -webkit-transform 0.2s ease-out;
 
     background: rgba(0,0,0,0.66);
+    
+    /* Push the scrollbar */
+    height: 162px;
+    padding-bottom: 15px;
 }
 
 .pages_panel .inspector .content {
@@ -748,11 +752,6 @@ body {
   padding-left:20px;
 }
 
-.pages-inspector {
-    top: 0;
-    bottom: 0;
-}
-
 .inspector .tools {
     margin-bottom: 1px;
 }
@@ -1088,11 +1087,19 @@ body {
 
 /* --- */
 
-.scrollbar_x,
-.scrollbar_y {
-  position: fixed;
+.x_scrollbar_container {
+  position: absolute;
+  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+}
+
+.scrollbar {
+  position: absolute;
   width: 10px; height: 10px;
   min-width: 10px; min-height: 10px;
+  
   -webkit-border-radius: 6px;
   -moz-border-radius:    6px;
   border-radius:         6px;
@@ -1102,14 +1109,40 @@ body {
   box-sizing:         border-box;
   
   border: 1px solid rgba(255, 255, 255, 0.8);
-  
-  background: rgba(0,0,0,0.5);
+  background: rgba(128,128,128,0.5);
 }
 
-.scrollbar_x {
-  bottom: 38px;
+.pages_panel .x_scrollbar_container {
+  left: 6px; right: 6px; top: 112px;
+  height: 10px;
+  z-index: 2;
 }
 
-.scrollbar_y {
-  right: 4px;
+/*#webdoc_x_scrollbar:hover,
+#webdoc_y_scrollbar:hover {
+  opacity: 1;
+  -webkit-transition: opacity 0.1s linear;
+  -moz-transition:    opacity 0.1s linear;
+  transition:         opacity 0.1s linear;
+}*/
+
+#webdoc_x_scrollbar,
+#webdoc_y_scrollbar {
+  position: fixed;
+  z-index: 2;
+  /*opacity: 0;
+  -webkit-transition: opacity 0.66s linear;
+  -moz-transition:    opacity 0.66s linear;
+  transition:         opacity 0.66s linear;
+  */
+}
+
+#webdoc_x_scrollbar {
+  bottom: 38px; left: 6px; right: 6px;
+  height: 10px;
+}
+
+#webdoc_y_scrollbar {
+  top: 44px; bottom: 38px; right: 6px;
+  width: 10px;
 }

@@ -164,7 +164,8 @@ WebDoc.RightBarController = $.klass({
         self = this,
         outerGhost = this.panelGhostNode,
         innerGhost = this.innerGhostNode,
-        bothGhosts = outerGhost.add(innerGhost);
+        bothGhosts = outerGhost.add(innerGhost),
+        scrollbar = jQuery('#webdoc_x_scrollbar, #webdoc_y_scrollbar');
     
     innerGhost.show();
     
@@ -175,6 +176,13 @@ WebDoc.RightBarController = $.klass({
         bothGhosts.css({
           width: -val
         });
+        scrollbar.css({
+          right: -val + 6
+        });
+      },
+      complete: function(){
+        // Quick way of recalculating scrollbars
+        jQuery(window).trigger('resize');
       }
     });
     
@@ -188,7 +196,9 @@ WebDoc.RightBarController = $.klass({
         self = this,
         outerGhost = this.panelGhostNode,
         innerGhost = this.innerGhostNode,
-        bothGhosts = outerGhost.add(innerGhost);
+        bothGhosts = outerGhost.add(innerGhost),
+        scrollbars = jQuery('#webdoc_x_scrollbar, #webdoc_y_scrollbar');
+
     
     panel.animate({
       marginLeft: margin || 0
@@ -197,9 +207,15 @@ WebDoc.RightBarController = $.klass({
         bothGhosts.css({
           width: -val
         });
+        scrollbars.css({
+          right: -val + 6
+        });
       },
       complete: function() {
         innerGhost.hide();
+        
+        // Quick way of recalculating scrollbars
+        jQuery(window).trigger('resize');
       }
     });
     
