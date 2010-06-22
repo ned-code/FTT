@@ -20,7 +20,8 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     "preference": true,
     "properties": true,
     "preserve_aspect_ratio": true,
-    "href": true
+    "href": true,
+    "placeholder": true
   },
   
   

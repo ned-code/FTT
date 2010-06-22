@@ -2,6 +2,10 @@ class DatastoreEntry < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
   
+  CONST_PROTECTION_LEVEL_PRIVATE = 0
+  CONST_PROTECTION_LEVEL_READ = 1
+  CONST_PROTECTION_LEVEL_READ_WRITE = 2
+  
   attr_accessible :ds_key, :ds_value, :uuid
   
   # ================
@@ -12,10 +16,32 @@ class DatastoreEntry < ActiveRecord::Base
   belongs_to :user
   
   named_scope :filter_with, lambda { |current_user, params|
-    conditions = {}
-    conditions[:ds_key]  = params[:key] if params.has_key?(:key)
-    conditions[:user_id] = current_user if current_user && params[:only_current_user] == 'true'
-    { :conditions => { :datastore_entries => conditions } }
+    #conditions = {}
+    #conditions[:ds_key]  = params[:key] if params.has_key?(:key)
+    #conditions[:user_id] = current_user if current_user && params[:only_current_user] == 'true'
+    #{ :conditions => { :datastore_entries => conditions } }
+    
+    conditions = [];
+    if current_user #can read if owner or is public read
+      conditions[0] = '(user_id = ? or protection_level<>?)'
+      conditions.push(current_user)
+      conditions.push(CONST_PROTECTION_LEVEL_PRIVATE)
+    else #no user, can only read if public read
+      conditions[0] = '(protection_level<>?)'
+      conditions.push(CONST_PROTECTION_LEVEL_PRIVATE)
+    end
+    
+    if params.has_key?(:key) #check a particular key?
+      conditions[0] += ' and ds_key=?'
+      conditions.push(params[:key])
+    end
+    
+    if current_user && params[:only_current_user] == 'true' #only for current user?
+      conditions[0] += ' and user_id=?'
+      conditions.push(current_user)
+    end
+    
+    { :conditions => conditions }
   }
   
   # ===============
@@ -56,10 +82,11 @@ class DatastoreEntry < ActiveRecord::Base
     #check if the key already exists
     if params[:unique_key] == 'true'
       existing_key = DatastoreEntry.find(:first, :conditions => { :ds_key => params[:key], :item_id => item.uuid })
-      if existing_key && (existing_key.user_id == nil || (current_user && existing_key.user_id == current_user.uuid))
+      if existing_key && (existing_key.user_id == nil || existing_key.protection_level=CONST_PROTECTION_LEVEL_READ_WRITE || (current_user && existing_key.user_id == current_user.uuid))
         key_to_save = existing_key
       else
         key_to_save = DatastoreEntry.new
+        key_to_save.protection_level = params[:protection_level] != nil ? params[:protection_level] : 0;
       end
     else #record is not unique
       #is user connected
@@ -68,10 +95,12 @@ class DatastoreEntry < ActiveRecord::Base
         key_to_save = DatastoreEntry.find(:first,:conditions => { :ds_key => params[:key], :item_id => item.uuid, :user_id => current_user.uuid })
         unless key_to_save 
           key_to_save = DatastoreEntry.new
+          key_to_save.protection_level = params[:protection_level] != nil ? params[:protection_level] : 0;
         end
       else
         #TODO manage anonymous user
         key_to_save = DatastoreEntry.new
+        key_to_save.protection_level = params[:protection_level] != nil ? params[:protection_level] : 0;
       end
     end
     

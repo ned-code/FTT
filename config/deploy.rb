@@ -13,7 +13,7 @@ set :scm, :git
 set :repository, "git@git.assembla.com:webdoc"
 ssh_options[:forward_agent] = true
 
-after 'deploy:update_code', 'deploy:bundle_install', 'deploy:generate_assets', 'deploy:link_config'
+after 'deploy:update_code', 'deploy:bundle_install', 'deploy:generate_assets', 'deploy:link_config', 'deploy:update_crontab'
 
 namespace :deploy do
   task :start do ; end
@@ -37,6 +37,9 @@ namespace :deploy do
   end
   task :hide_maintenance do
     run "rm #{current_path}/public/maintenance.html"
+  end
+  task :update_crontab, :roles => :app do
+    run "cd #{release_path} && whenever --update-crontab #{application}"
   end
 end
 

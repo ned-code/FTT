@@ -25,11 +25,13 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this._classes[this.CLASS_TYPE_COLOR]      = '';
     this._classes[this.CLASS_TYPE_FONT]       = '';
     this._classes[this.CLASS_TYPE_OTHER]      = '';
-                 
+
+    this._isPlaceholder = false;
+
     $super(json);
     if (!json) {
       this.data.data = { preference: {}};
-    }
+    }    
   },
   
   getPage: function() {
@@ -155,8 +157,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
 
   getIsPlaceholder: function() {
     ddd('[item] get is placeholder');
-    var classesArray = this._getClassesArrayFromData();
-    if(classesArray.length > 0  && jQuery.inArray("placeholder", classesArray) !== -1){
+    if(this._isPlaceholder === true) {
       return true;
     }
     else {
@@ -164,27 +165,19 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
 
-  setIsPlaceholder: function(isPlaceholder) {
+  // save optional, saved by default
+  setIsPlaceholder: function(isPlaceholder, save) {
     ddd('[item] set is placeholder with ' + isPlaceholder);
-    var classesArray = this._getClassesArrayFromData();
-    if(isPlaceholder) {
-      if(classesArray.length === 0 || jQuery.inArray("placeholder", classesArray) === -1){
-        classesArray.push('placeholder');
-        this.data.data['class'] = classesArray.join(" ");
-        this.fireObjectChanged({ modifedAttribute: 'class' });
-        this.save();
-      }
+    if(isPlaceholder === true || isPlaceholder === 'true'){
+      this._isPlaceholder = true;
     }
     else {
-      if(classesArray.length > 0 && jQuery.inArray("placeholder", classesArray) !== -1){
-        var index = jQuery.inArray("placeholder", classesArray);
-        var part1 = classesArray.slice(0, index);
-        var part2 = classesArray.slice(index+1, classesArray.length);
-        classesArray = part1.concat(part2);
-        this.data.data['class'] = classesArray.join(" ");
-        this.fireObjectChanged({ modifedAttribute: 'class' });
-        this.save();
-      }
+      this._isPlaceholder = false;
+    }
+
+    if(save === undefined || save === true) {
+      this.data.data.is_placeholder = this.getIsPlaceholder();
+      this.save();
     }
   },
   
@@ -213,7 +206,9 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
     
     $super(json);
-    
+
+    this.setIsPlaceholder(this.data.data.is_placeholder, false); 
+
     this._refreshClasses();
 
     if (refreshInnerHtml) {

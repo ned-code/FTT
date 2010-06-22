@@ -187,6 +187,7 @@ WebDoc.ItemView = $.klass({
           case "preference":
           case "properties":
           case "preserve_aspect_ratio":
+          case "is_placeholder":
             break;
           default:
             itemNode.attr(key, this.item.data.data[key]);

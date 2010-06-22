@@ -627,6 +627,9 @@ WebDoc.BoardController = jQuery.klass({
       case 'vimeo' :
         videoWidget = WebDoc.WidgetManager.getInstance().getVimeoWidget();
         break;
+	  case 'dailymotion' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getDailymotionWidget();
+        break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     if (videoWidget.data.properties.width) {
@@ -966,6 +969,7 @@ WebDoc.BoardController = jQuery.klass({
     if (y < 0) { y = 0;}
     newItem.data.data.tag = "img";
     newItem.data.data.src = this.src;
+    newItem.data.data.preserve_aspect_ratio = true;
     if(media_id !== undefined) {
       newItem.data.media_id = media_id;
     }
