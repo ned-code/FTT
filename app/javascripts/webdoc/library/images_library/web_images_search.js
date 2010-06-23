@@ -29,10 +29,17 @@ WebDoc.WebImagesSearch = $.klass({
 			ddd('drats sfdgdf');
 			this.dragStart(event);
 		}.pBind(this));
+		
+		//setup click listening
+		$("#media-browser-web .thumbnails ul li a").live("click", function (event) {
+      var properties = $(event.target).parent().find('img').data("properties");
+      ddd('click on an image');
+			//this.showDetailsView(properties);
+      event.preventDefault();
+    }.pBind(this));
   },
 
 	dragStart: function(event) {
-		ddd('dragStart df');
     // we take parent and then search down the img because safari and firefox have not the same target.
     // on firefox target is the a tag but in safarai target is the img.
     var draggingImg = $(event.target).parent().find('img');
@@ -99,7 +106,7 @@ WebDoc.ServiceImagesSearch = $.klass({
     var liWrap = $("<li>").addClass(type);
     var aWrap = $("<a href=\""+imageLink+"\" title=\""+name+"\"></a>");
     aWrap.append(thumb);
-    // aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
+    aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
     liWrap.append(aWrap);
     
     return liWrap;

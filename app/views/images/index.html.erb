@@ -29,9 +29,6 @@
           <li>
             <a id="set_image_as_bg_action" href="">Set as background</a>
           </li>
-          <!-- <li>
-            <a id="delete_image_action" href="">Delete</a>
-          </li> -->
         </ul>
       </div>
     </div>
@@ -59,7 +56,6 @@
   WebDoc.MyContentController = $.klass(WebDoc.Library,{
         
     initialize: function($super, libraryId) {
-      ddd('[MyContentController] initialize');
   		$super(libraryId);
   		this.imageDetailsView = $('#image-details');
   		this.prepareImageDetailsView();
@@ -105,7 +101,6 @@
     },
     
     _createHandlers: function(eventType, obj, context){
-      ddd('create handler');    
       this.domNode
       .delegate('a', eventType, WebDoc.handlers._makeLinkHandler( obj, context ) );
       //NOTE: _makeLinkHandler( obj, context ) is supposed to be private, but it's an easy way to listen the link
@@ -212,7 +207,6 @@
     },
     
     showDetailsView: function(properties){
-      ddd('[MyContentController] showDetailsView');
       this._hideAll();
       this.detailsViewImg = this.imageDetailsView.find('.single_image img');
       
@@ -315,7 +309,7 @@
       var liWrap = $("<li>").attr({id: uuid});
       var aWrap = $("<a href='' title=''></a>");
       aWrap.append(thumb);
-      aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
+      //aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
       liWrap.append(aWrap);
     
       return liWrap;

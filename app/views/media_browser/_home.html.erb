@@ -87,12 +87,38 @@
           </h3>
         </div>
         
+        <div id="media-browser-web-images-details" style='display:none' class='my-content-tab web-search-tab'>
+          <a href='#my-images' id='image-detail-back' class='back'>Back</a>
+          <div id="image-details">
+            <div class='single_image'>
+              <a href='' onclick="window.open(this.getAttribute('href'), '_blank'); return false;">
+                <img src='' alt='' />
+                <div class='icon_overlay'></div>
+              </a>
+            </div>
+            <h4 class="image_name"></h4>
+            <h5 class="image_size"></h5>
+            <div class="actions">
+              <ul>
+                <li>
+                  <a id="add_image_to_page_action" href="">Add to page</a>
+                </li>
+                <li>
+                  <a id="set_image_as_bg_action" href="">Set as background</a>
+                </li>
+                <li>
+                  <a id="add_image_to_favorite" href="">Add to favorites</a>
+                </li>
+                <li>
+                  <a id="remove_image_from_favorite" href="">remove from favorites</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- <div id="media-browser-web" style="display:none" class='media-browser-tab'>
-          web search
-        </div>
-        <div id="media-browser-packages" style="display:none" class='media-browser-tab'>
+    <!--<div id="media-browser-packages" style="display:none" class='media-browser-tab'>
           package
         </div>
         <div id="media-browser-apps" style="display:none" class='media-browser-tab'>
