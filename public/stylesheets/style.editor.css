@@ -178,7 +178,7 @@ body {
     position: absolute;
     left: 0; top: -130px;
     
-    -webkit-transform: scale(0.25);
+    /*-webkit-transform: scale(0.25);
     -webkit-transform-origin: 3.2% 173px;
     -webkit-transition: -webkit-transform 0.2s ease-out;
     
@@ -189,7 +189,7 @@ body {
     transform: scale(0.25);
     transform-origin: 3.2% 173px;
     transition: -webkit-transform 0.2s ease-out;
-
+*/
     background: rgba(0,0,0,0.66);
     
     /* Push the scrollbar */
@@ -209,15 +209,31 @@ body {
 }
 
 .pages_panel li .number {
-    -webkit-transition: opacity 0.2s ease-out;
+    /*-webkit-transition: opacity 0.2s ease-out;
     -moz-transition:    opacity 0.2s ease-out;
     transition:         opacity 0.2s ease-out;
-    opacity: 0;
+    opacity: 0;*/
 }
 
 .pages_panel .inspector.active li .number {
     opacity: 1;
 }
+
+.page_thumb {
+  width: 128px; height: 128px;
+  position: relative;
+  overflow: hidden;
+}
+
+.page_thumb .webdoc {
+  position: absolute;
+  left: 0; top: 0;
+  overflow: hidden;
+}
+
+
+
+
 
 .page_browser_items {
     white-space: nowrap;
@@ -522,98 +538,6 @@ body {
 }
 .page_browser_items li.current {
     background: none;
-}
-
-/* I have two styles of thumbs for your delectation.
- * 
- * To change style you also need to edit the corresponding animations
- * in page_browser_controller.js. (That could be improved - we could auto-detect.)
- */
- 
-/* 1. With border, looks like an extension of the title block */
-
-/*.pages li .thumb {
-  position: relative;
-  width: 120px; height: 75px;
-  margin: 0 auto;
-  overflow: hidden;
-  position: relative;
-  top: 0px;
-  padding: 0;
-  margin-bottom: 6px;
-  
-  border: 6px solid;
-  border-top: 0;
-  
-  -webkit-border-bottom-left-radius:  3px;
-  -moz-border-radius-bottomleft:      3px;
-  border-bottom-left-radius:          3px;
-  -webkit-border-bottom-right-radius: 3px;
-  -moz-border-radius-bottomright:     3px;
-  border-bottom-right-radius:         3px;
-  
-  -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
-  -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
-  box-shadow:         0 6px 8px hsl(14, 6%, 30%);
-}
-.hide-thumbs li .thumb {
-  height: 0;
-  margin-bottom: 0;
-  border-bottom-width: 0;
-}
-.pages li .thumb .page-thumb {
-  position: absolute;
-  left: 0; top: 50%;
-  margin-top: -45px;
-}*/
-
-/* 2. As a sheet, looks like it appears from a slot in the title block */
-
-/* Thumb height is height+14, to account for shadow */
-/*.pages li .thumb {
-  position: relative;
-  width: 136px; height: 104px; 
-  margin: 0 auto;
-  overflow: hidden;
-  padding: 0;
-  top: -2px;
-  border: none;
-  border-top: 1px solid hsl(194, 15%, 40%);
-}
-.pages li .thumb .page-thumb {
-  position: absolute;
-  bottom: 14px;               
-  left: 50%;
-  margin-left: -60px;
-  
-  -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
-  -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
-  box-shadow:         0 6px 8px hsl(14, 6%, 30%);
-}
-.hide-thumbs li .thumb {
-  height: 0;
-  border: none;
-}*/
-
-/* horizontally, without border */
-.pages li .thumb {
-  position: relative;
-  width: auto; height: 128px;
-  margin: 0 auto;
-  overflow: hidden;
-  top: 0px;
-  padding: 0;s
-}
-
-.hide-thumbs li .thumb {
-  height: 0;
-  margin-bottom: 0;
-  border-bottom-width: 0;
-}
-.pages li .thumb .page-thumb {
-  position: absolute;
-  left: 0; top: 50%;
-  margin-top: -64px;
 }
 
 /*******************/

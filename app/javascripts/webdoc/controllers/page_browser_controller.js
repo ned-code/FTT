@@ -42,7 +42,7 @@ WebDoc.PageBrowserController = $.klass({
     ddd("[PageBrowserController] Pages panel width: " + this._pagesPanelWidth);
     ddd("[PageBrowserController] panel height: " + this._panelHeight);
     
-    this.visible = false;
+    this.visible = true;
     this.pageMap = {};
     
     this.domNode

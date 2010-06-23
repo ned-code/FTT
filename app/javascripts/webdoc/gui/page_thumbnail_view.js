@@ -9,41 +9,37 @@ var pageThumbClass = "page-thumb",
     pageThumbSelector = ".page-thumb";
 
 WebDoc.PageThumbnailView = $.klass({
-  PER_CENT_PAGE_WIDTH: 1280,
-  PER_CENT_PAGE_HEIGHT: 720,
+  //PER_CENT_PAGE_WIDTH: 1280,
+  //PER_CENT_PAGE_HEIGHT: 720,
+  SIZE_TO_REDUCE: {
+    width: 800,
+    height: 800
+  },
   initialize: function(page, width, height) {
     this.page = page;
     this.width = width;
     this.height = height;
     this.domNode = $('<div>').attr({
-      id: "thumb_" + page.uuid(),
-      draggable: "true"
+      'class': 'page_thumb',
+      'data-webdoc-page': page.uuid()
     });
-    
     this.pageThumbNode = $('<div/>');
-    if (this.page.data.data.externalPage) {
-      var url = $("<div/>").addClass("page_thumb_url").css("textAlign", "center").text(this.page.data.data.externalPageUrl);
-      this.pageThumbNode.append(url.get(0));
-      this.domNode.addClass("page-thumb-external");
-    }
-    else {
-      this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
-      this.drawingDomNode.css("zIndex", 1000000);
-      this.pageThumbNode.append(this.drawingDomNode.get(0));
-      
-      this.itemDomNode = $('<div>').attr({
-        id: "thumb_items",
-        'class': "layer"
+    this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
+    this.drawingDomNode.css("zIndex", 1000000);
+    this.pageThumbNode.append(this.drawingDomNode.get(0));
+    this.itemDomNode = $('<div>').attr({
+      id: "thumb_items",
+      'class': "layer"
+    });
+    this.pageThumbNode.append(this.itemDomNode.get(0));   
+    var that = this;
+    this.itemViews = {};
+    if (page.items && $.isArray(page.items)) {
+      $.each(page.items, function() {
+        that.createItemView(this);
       });
-      this.pageThumbNode.append(this.itemDomNode.get(0));   
-      var that = this;
-      this.itemViews = {};
-      if (page.items && $.isArray(page.items)) {
-        $.each(page.items, function() {
-          that.createItemView(this);
-        });
-      }
     }
+    
     page.addListener(this);    
     this._initPageCss();
     this._initPageClass();
@@ -56,45 +52,53 @@ WebDoc.PageThumbnailView = $.klass({
     this.domNode.remove();
   },
   
+  _calcOrigin: function calcOrigin( page, thumb, factor ){
+    return ( thumb - ( page * factor ) ) / ( 2 * ( 1 - factor ) );
+  },
+  
   _initPageCss: function() {
     // define scale factor
-    var widthInPx = this.page.data.data.css.width? this.page.width().match(/.*px/) : false;
-    var heightInPx = this.page.data.data.css.height? this.page.height().match(/.*px/) : false;
-    var pageWidth = widthInPx? parseInt(this.page.data.data.css.width,10):this.PER_CENT_PAGE_WIDTH;
-    var pageHeight = heightInPx? parseInt(this.page.data.data.css.height,10):this.PER_CENT_PAGE_HEIGHT;
+    var css = this.page.data.data.css,
+        regex = jQuery.regex,
+        hFactor = this.width / this.SIZE_TO_REDUCE.width,
+        vFactor = this.height / this.SIZE_TO_REDUCE.height,
+        factor = hFactor < vFactor ? hFactor : vFactor,
+        widthInPx = css.width ? regex.pxValue.test( this.page.width() ) : false,
+        heightInPx = css.height ? regex.pxValue.test( this.page.height() ) : false,
+        pageWidth = widthInPx ? parseInt( css.width, 10 ) : this.PER_CENT_PAGE_WIDTH,
+        pageHeight = heightInPx ? parseInt( css.height, 10 ) : this.PER_CENT_PAGE_HEIGHT;
     
-    if (this.page.data.data.externalPage) {
-      this.factor = 1;
-      this.pageThumbNode.css({ width: this.width+"px", height: this.height+"px"});
-    }
-    else {
-      var horizontalFactor = this.width / pageWidth;
-      var verticalFactor = this.height / pageHeight;
-      if (horizontalFactor < verticalFactor) {
-        this.factor = horizontalFactor;
-      }
-      else {
-        this.factor = verticalFactor;
-      }
-      this.pageThumbNode.css(this.page.data.data.css);
-      if (!widthInPx) {
-        this.pageThumbNode.css("width",this.PER_CENT_PAGE_WIDTH);  
-      }      
-      if (!heightInPx) {
-        this.pageThumbNode.css("height",this.PER_CENT_PAGE_HEIGHT);  
-      }            
-      this.pageThumbNode.css("MozTransformOrigin", "0px 0px");
-      this.pageThumbNode.css("MozTransform", "scaleX(" + this.factor + ") scaleY(" + this.factor + ")");
-      this.pageThumbNode.css("WebkitTransformOrigin", "0px 0px");
-      this.pageThumbNode.css("WebkitTransform", "scaleX(" + this.factor + ") scaleY(" + this.factor + ")");      
-    }        
-    var height = pageHeight * this.factor;
-    var width = pageWidth * this.factor;
+    // To use a central square of the page to make the thumb
     
-    this.domNode.css({
-      //top: (this.height - height) / 2,
-      width: width,
-      height: height
+    //this.pageThumbNode.css({
+    //  MozTransformOrigin: "50% 50%",
+    //  MozTransform: "scale(" + factor + ")",
+    //  WebkitTransformOrigin: "50% 50%",
+    //  WebkitTransform: "scale(" + factor + ")",
+    //  width: pageWidth,
+    //  marginLeft: -pageWidth/2,
+    //  height: pageHeight,
+    //  marginTop: -pageHeight/2,
+    //  position: 'absolute',
+    //  left: '50%',
+    //  top: '50%'
+    //});
+    
+    // To take the top left square of the page to make the thumb
+    
+    var w = this.SIZE_TO_REDUCE.width > pageWidth ? pageWidth : this.SIZE_TO_REDUCE.width ;
+    var h = this.SIZE_TO_REDUCE.height > pageHeight ? pageHeight : this.SIZE_TO_REDUCE.width ;
+    
+    var xOrigin = this._calcOrigin( w, this.width, factor );
+    var yOrigin = this._calcOrigin( h, this.height, factor );
+    
+    this.pageThumbNode.css({
+      MozTransformOrigin: xOrigin + "px " + yOrigin + "px",
+      MozTransform: "scale(" + factor + ")",
+      WebkitTransformOrigin: xOrigin + "px " + yOrigin + "px",
+      WebkitTransform: "scale(" + factor + ")",
+      width: pageWidth,
+      height: pageHeight
     });
   },
   
@@ -163,7 +167,7 @@ WebDoc.PageThumbnailView = $.klass({
   },
   
   _initPageClass: function() {
-    this.pageThumbNode.attr("class", pageThumbClass + " webdoc");
+    this.pageThumbNode.addClass("webdoc");
     this.pageThumbNode.addClass(this.page.data.data['class']);
     this.page.getLayout(function(layout) {
       if (layout) {
