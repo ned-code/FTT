@@ -99,7 +99,7 @@ WebDoc.PageBrowserItemView = $.klass({
   itemRemoved: function(removedItem) {
    ddd('page_browser_item_view: itemRemoved');
    //this.checkUpdateTitle();
-  },
+  }
   
 });
 

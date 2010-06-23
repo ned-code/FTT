@@ -10,8 +10,6 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   
   // Data to be ignored
   IGNORE: {
-    "innerHTML": true,
-    "innerHtml": true,
     "class": true,
     "wrapClass": true,
     "innerHTMLPlaceholder": true,

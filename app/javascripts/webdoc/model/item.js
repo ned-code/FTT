@@ -68,9 +68,10 @@ WebDoc.Item = $.klass(WebDoc.Record,
           needSave = true;
         }
       }
+      this.data.data['class'] = this.getClass();
+      this.fireObjectChanged({ modifedAttribute: 'class' });
+      
       if((save === undefined || save === true ) && needSave) {
-        this.data.data['class'] = this.getClass();
-        this.fireObjectChanged({ modifedAttribute: 'class' });
         this.save();
       }
     }
@@ -138,10 +139,18 @@ WebDoc.Item = $.klass(WebDoc.Record,
 
   _refreshClasses: function() {
     var classes = this._getClassesArrayFromData();
+    this._classes = {};
     if(classes.length > 0) {
-      for(var aClass in classes) {
-        if(classes[aClass]) {
-          this.setClass(classes[aClass], this._getClassType(classes[aClass]), false);
+      for(var aClassIndex in classes) {
+        var aClass = classes[aClassIndex]; 
+        if(aClass) {
+          var scope = this._getClassType(aClass);
+          if (!this._classes[scope]) {
+            this._classes[scope] = aClass;
+          }
+          else {
+            this._classes[scope] += " " + aClass;
+          }
         }
       }
     }
@@ -198,7 +207,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     if (this.data && this.data.position && json.item.position != this.data.position) {
       refreshPositionZ = true;
     }
-    if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
+    if (this.data && this.data && json.item.inner_html != this.data.inner_html) {
       refreshInnerHtml = true;
     }
     if (this.data.data && this.data.data.preference && json.item.data.preference && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
@@ -391,11 +400,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return this.data.kind;  
   },
   
-  setInnerHtml: function(html, force) {
-    if (html != this.data.data.innerHTML || force) {
+  setInnerHtml: function(html, force, skipSave) {
+    if (html != this.data.inner_html || force) {
 	    // Force to wmode transparent if necessary
-      this.data.data.innerHTML = this.checkForceWMode(html);      
-      if (!(this.property("noIframe") === "true") && (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi))) {
+      this.data.inner_html = this.checkForceWMode(html);      
+      if (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi)) {
         ddd("replace tag");
         this.data.data.tag = "iframe";
         this.data.data.src = this.rootUrl() + "/items/" + this.uuid() + "?fullHTML=true";
@@ -403,15 +412,16 @@ WebDoc.Item = $.klass(WebDoc.Record,
         this.fireDomNodeChanged();
       }
       else {
-        if (this.data.data.tag == "iframe") {
+        if (this.data.data.tag === "iframe") {
           this.data.data.tag = "div";
           delete this.data.data.src;
-          this.save();
           this.fireDomNodeChanged();
         }
         else {
-          this.save();
           this.fireInnerHtmlChanged();
+        }
+        if (!skipSave) {
+          this.save();
         }
       }
 
@@ -419,7 +429,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   getInnerHtml: function() {
-    return this.data.data.innerHTML;
+    return this.data.inner_html ? this.data.inner_html : "";
   },
 
 
@@ -453,6 +463,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     newItem.data.media_type = this.data.media_type;
     newItem.data.media_id = this.data.media_id;
     newItem.data.kind = this.data.kind;
+    newItem.data.inner_html = this.data.inner_html;
     newItem.media = this.media;
     return newItem;
   },
@@ -486,7 +497,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   /***************************************/
  
   getInnerText: function() {
-    return this._removeHtmlTags(this.data.data.innerHTML);
+    return this._removeHtmlTags(this.data.inner_html);
   },
   
   _removeHtmlTags: function(str) {

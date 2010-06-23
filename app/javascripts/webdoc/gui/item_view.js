@@ -70,7 +70,7 @@ WebDoc.ItemView = $.klass({
       this.item.data.data.css = {};
     }
     
-    if (this.item.data.data.innerHTML) {
+    if (this.item.getInnerHtml()) {
       this.innerHtmlChanged();
     }
     
@@ -176,9 +176,6 @@ WebDoc.ItemView = $.klass({
       itemNode = $('<' + this.item.data.data.tag + '/>');
       for (var key in this.item.data.data) {
         switch(key) {
-          case "innerHTML":
-          // for compatibility we also check innerHtml like this because old document can have this key instead of innerHTML
-          case "innerHtml":
           case "class": 
           case "wrapClass": 
           case "innerHTMLPlaceholder":
@@ -217,7 +214,7 @@ WebDoc.ItemView = $.klass({
 
   innerHtmlChanged: function() {
     if (!WebDoc.application.disableHtml && this.item.data.data.tag !== "iframe") {    
-      this.itemDomNode.html($.string().stripScripts(this.item.data.data.innerHTML));
+      this.itemDomNode.html($.string().stripScripts(this.item.getInnerHtml()));
     }
   },
   
@@ -231,7 +228,7 @@ WebDoc.ItemView = $.klass({
         height: "100%"
       });
       this.domNode.append(this.itemDomNode);
-      if (this.item.data.data.innerHTML) {
+      if (this.item.getInnerHtml()) {
         this.innerHtmlChanged();
       }      
       this.select();

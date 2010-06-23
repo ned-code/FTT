@@ -59,12 +59,12 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   
   innerHtmlChanged: function() {
     if (!WebDoc.application.disableHtml) {
-      if ($.string(this.item.data.data.innerHTML).blank()) {
+      if ($.string(this.item.getInnerHtml()).blank()) {
         this.itemDomNode.append( this.placeholderNode );
       }
       else {
         this.placeholderNode.remove();
-        this.itemDomNode.html(this.item.data.data.innerHTML);
+        this.itemDomNode.html(this.item.getInnerHtml());
       }
     }
   },
