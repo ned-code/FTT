@@ -118,15 +118,7 @@ WebDoc.PageBrowserController = $.klass({
         dragTarget = jQuery(this).addClass('ghost');
         startState = itemsList.children();
         
-        // Quick hack to stop number being displayed in dragged thumb
-        dragTarget.find('.number').hide();
-        
         eOrig.dataTransfer.setDragImage(this, 64, 64);
-        
-        // Quick hack to stop number being displayed in dragged thumb
-        var t = setTimeout(function(){
-          dragTarget.find('.number').show();
-        }, 0);
         
         that._dragStartCallback.call(that, e, dragTarget);
       })
@@ -262,6 +254,11 @@ WebDoc.PageBrowserController = $.klass({
   
   _dragStartCallback: function(e, dragTarget){
     var dataTransfer = e.originalEvent.dataTransfer;
+        
+    // Quick hack to stop number being displayed in dragged thumb
+    var t = setTimeout(function(){
+      dragTarget.find('.number').show();
+    }, 0);
     
     dataTransfer.setData("Text", 'Page title');
     dataTransfer.setData("URL", window.location+' Add the page hash here!!!' );
@@ -351,7 +348,7 @@ WebDoc.PageBrowserController = $.klass({
     }
     
     // Recalculate scrollbars
-    pageBrowserItems.trigger('resize');
+    this.pageBrowserItems.trigger('resize');
     
     this._updateIndexNumbers();
     //pageItem.truncateTitleWithActualTitle();
