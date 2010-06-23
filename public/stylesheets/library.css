@@ -672,7 +672,7 @@ div.tabs > div {
 /*WATCH OUT: if you can clic to upload, verify that this box is align with the upload control*/
 #swfupload_container {
   position:absolute;
-  top:152px;
+  top:123px;
   left:31px;
   z-index:1;
 }

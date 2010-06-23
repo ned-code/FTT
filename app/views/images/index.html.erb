@@ -1,13 +1,11 @@
 <div id="media-browser-my-content" class='media-browser-tab'>
   <%= render 'users/my_content_header'%>
-  <div id="media-browser-my-images" class='my-content-tab'>
+  <div id="media-browser-my-images" class='my-content-tab '>
     <a href='#upload-images' class=''>
       <%= t('.add_image') %>
     </a>
-    <div id="my-images-library">
-      <% @images.each do |image| %>
-        <%= image_tag image.attachment.url(:thumb), :class => 'thumbnails' %>
-      <% end %>
+    <div id="my-images-library" class='thumbnails'>
+
     </div>
   </div>
   
@@ -37,12 +35,44 @@
   WebDoc.MyContentController = $.klass(WebDoc.Library,{
         
     initialize: function($super, libraryId) {
+      ddd('[MyContentController] initialize');
+      
   		$super(libraryId);
-      ddd('[BrowserController] initialize');
-      this.domNode = $('#media-browser-my-content');
-      this._createHandlers('click', this._myContentHandlers);
+  		this.domNode = $('#media-browser-my-content');
+  		this._createHandlers('click', this._myContentHandlers);
+      
+      this.imagePage = 1;
+      this.myImagesContainer = $('#media-browser-my-images');
+      this.loadMyImages();  
       this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
+      
       $(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
+    },
+    
+    loadMyImages: function(){
+      var thumbsWrap = this.myImagesContainer.find(".thumbnails");
+      this.showSpinner(thumbsWrap);
+      
+      ddd(thumbsWrap);
+      
+      WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
+        if (data.images.length === 0) {
+          var noImages = $("<span>").addClass('no_items').text('No Images');
+          thumbsWrap.append(noImages);
+        }
+        else {
+          var myImagesList = $("<ul>");
+          thumbsWrap.append(myImagesList);
+          
+          $.each(data.images, function(i,webDocImage){
+            
+            myImagesList.append(this.buildThumbnail(webDocImage.data.properties));
+            
+          }.pBind(this));
+        }
+        thumbsWrap.data('loaded', true);
+        this.hideSpinner(thumbsWrap);
+      }.pBind(this), { ajaxParams: { page:this.myImagesPage }});
     },
     
     _createHandlers: function(eventType, obj, context){
@@ -85,27 +115,55 @@
       this.imagesUploader.loadSWFUpload();
     },
     
+    //Used for insert uploaded image directy in the dom
     insertImage: function(image_data){
       var data = eval('(' + image_data + ')');
-      ddd('data :' + data);
-      var  thumb_url = data.image.properties.thumb_url;
-      var properties = {
-        url:data.image.properties.url,
-        thumb_url: thumb_url,
-        image_link: data.image.properties.default_url,
-        type: 'application/wd-image' 
-      };
-      ddd('properties' + properties);
+      // var  thumb_url = data.image.properties.thumb_url;
+      // var properties = {
+      //   url:data.image.properties.url,
+      //   thumb_url: thumb_url,
+      //   image_link: data.image.properties.default_url,
+      //   type: 'application/wd-image' 
+      // };
+      // 
+      // insertedImage= $("<img>").attr({
+      //   src:thumb_url,
+      //   alt: ""      
+      // }).data("properties", properties);
+      var liWrap = this.buildThumbnail(data.image.properties);
       
-      insertedImage= $("<img>").attr({
-        src:thumb_url,
-        alt: "",
-        class: 'thumbnails'
-      }).data("properties", properties);
+      var ulWrap = $('#my-images-library').find('ul');
+      if( ulWrap.length < 1){
+        ulWrap = $('<ul>');
+        $('#my-images-library').append(ulWrap);
+      }
       
-      $('#my-images-library').prepend(insertedImage);
+      ulWrap.prepend(liWrap);
       $(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
       
+    },
+    
+    buildThumbnail: function(_properties) {
+      var properties = {
+        url: _properties.url,
+        thumb_url: _properties.thumb_url,
+        image_link: _properties.default_url,
+        type: 'application/wd-image' 
+      };
+      
+      var thumb = $("<img>").attr({
+        src : _properties.thumb_url,
+        alt : ""
+      })
+      .data("properties", properties);
+      
+      var liWrap = $("<li>");
+      var aWrap = $("<a href='' title=''></a>");
+      aWrap.append(thumb);
+      aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
+      liWrap.append(aWrap);
+    
+      return liWrap;
     },
     
     dragStart: function(event) {
@@ -113,7 +171,7 @@
       
       // we take parent and then search down the img because safari and firefox have not the same target.
       // on firefox target is the a tag but in safarai target is the img.
-      var draggingImg = $(event.target);
+      var draggingImg = $(event.target).parent().find('img');
 
       var properties = draggingImg.data("properties");
 
