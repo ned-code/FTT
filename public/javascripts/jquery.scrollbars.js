@@ -2,16 +2,14 @@
 // 
 // Stephen Band
 // 
-// 0.2
+// 0.3
 // 
 // initial port from POC code.
 
 (function( jQuery, undefined ){
 	
-	var debug = false; //(window.console && console.log);
-	var options = {
-		dragImageUrl: 'images/icon_blank.png'
-	};
+	var debug = (window.console && console.log);
+	var options = {};
 	
 	function update( elem, scroll, options ){
 
@@ -59,7 +57,6 @@
 		
 		var options = jQuery.extend( {}, jQuery.fn.scrollbars.options, o ),
 				elem = this.eq(0),
-				icon = new Image(),
 				store = {},
 				scroll = {};
 		
@@ -69,17 +66,15 @@
 		update( elem, scroll, options );
 		
 		// Trigger update when stuff resizes. This is a 
-		// tricky one, there are going to be more conditions when
+		// tricky one, there may be more conditions when
 		// we need to update...
-		jQuery(window).bind('resize', function(){
+		jQuery(window)
+		.add(elem)
+		.bind('resize', function(){
 			update( elem, scroll, options );
 		});
 		
-		elem
-		.bind('resize', function(e){
-			update( elem, scroll, options );
-		})
-		.bind('scroll', function(e){
+		elem.bind('scroll', function(e){
 			
 			var elem = jQuery(this);
 			
@@ -97,93 +92,90 @@
 			
 		});
 		
-		// WebKit won't move the scrollbars without an image to
-		// use as a drag image.
-		icon.src = options.dragImageUrl;
-		
 		// Set up dragging of the handle
 		if (options.x) {
+		
 			options.x
-			.bind('dragstart', function(e){
+			.bind('mousedown.scrollbars', function(e){
 				
-				if (debug) { console.log('EVENT '+e.type, e); }
+				e.preventDefault();
 				
-				var eOrig = e.originalEvent;
-				
-				// FireFox must have have data bound here or it doesn't
-				// fire any of the other drag and drop events.
-				eOrig.dataTransfer.setData("scroll", "x");
-				eOrig.dataTransfer.setDragImage(icon, 12, 12);
-				eOrig.dataTransfer.effectAllowed = "none";
-				
-				// We can't rely on data for Chrome.  It's buggy.
-				store.currentMove = 'x';
 				store.xstartpos = e.pageX;
 				store.xstartratio = scroll.xratio;
 				
-			  return true;
+				jQuery(document)
+				.bind('mousemove.scrollbars', function(e){
+					
+					if (debug) { console.log('EVENT '+e.type, e); }
+					
+					var travel, diff, ratio;
+					
+					if ( e.pageX !== store.x ) {
+						store.x = e.pageX;
+						
+						travel = ( 1 - scroll.xsize ) * scroll.xtravel ;
+						diff = ( store.x - store.xstartpos ) / travel ;
+						ratio = store.xstartratio + diff;
+						
+						elem.scrollLeft( scroll.xmax * ratio );
+					}
+					
+				})
+				.bind('mouseup.scrollbars', function(e){
+					
+					if (debug) { console.log('EVENT '+e.type, e); }
+					
+					jQuery(this).unbind('mousemove.scrollbars mouseup.scrollbars');
+					
+				});
+				
 			});
+		
 		}
 		
 		if (options.y) {
+		
 			options.y
-			.bind('dragstart', function(e){
+			.bind('mousedown.scrollbars', function(e){
 				
-				if (debug) { console.log('EVENT '+e.type, e); }
+				e.preventDefault();
 				
-				var eOrig = e.originalEvent;
-				
-				// FireFox must have have data bound here or it doesn't
-				// fire any of the other drag and drop events.
-				eOrig.dataTransfer.setData("scroll", "y");
-				eOrig.dataTransfer.setDragImage(icon, 12, 12);
-				eOrig.dataTransfer.effectAllowed = "none";
-				
-				// We can't rely on data for Chrome.  It's buggy.
-				store.currentMove = 'y';
 				store.ystartpos = e.pageY;
 				store.ystartratio = scroll.yratio;
 				
-				return true;
+				jQuery(document)
+				.bind('mousemove.scrollbars', function(e){
+					
+					if (debug) { console.log('EVENT '+e.type, e); }
+					
+					var travel, diff, ratio;
+					
+					if ( e.pageY !== store.y ) {
+						store.y = e.pageY;
+						
+						travel = ( 1 - scroll.ysize ) * scroll.ytravel ;
+						diff = ( store.y - store.ystartpos ) / travel ;
+						ratio = store.ystartratio + diff;
+						
+						elem.scrollTop( scroll.ymax * ratio );
+					}
+					
+				})
+				.bind('mouseup.scrollbars', function(e){
+					
+					if (debug) { console.log('EVENT '+e.type, e); }
+					
+					jQuery(this).unbind('mousemove.scrollbars mouseup.scrollbars');
+					
+				});
+				
 			});
+		
 		}
 		
-		// FireFox does not report mouse coordinates on drag event.
-		// That's pretty annoying, actually. It means we have to
-		// use dragover event on something else.
-		
-		jQuery(document)
-		.bind('dragenter dragover dragleave', function(e) {
-			
-			if (debug) { console.log('EVENT '+e.type, e); }
-			
-			var dataTransfer = e.originalEvent.dataTransfer,
-					travel, diff, ratio;
-			
-			if ( store.currentMove === 'x' && (e.pageX !== store.x) ) {
-				store.x = e.pageX;
-				
-				travel = ( 1 - scroll.xsize ) * scroll.xtravel ;
-				diff = ( store.x - store.xstartpos ) / travel ;
-				ratio = store.xstartratio + diff;
-				
-				elem.scrollLeft( scroll.xmax * ratio );
-			}
-			
-			if ( store.currentMove === 'y' && (e.pageY !== store.y) ) {
-				store.y = e.pageY;
-				
-				travel = ( 1 - scroll.ysize ) * scroll.ytravel ;
-				diff = ( store.y - store.ystartpos ) / travel ;
-				ratio = store.ystartratio + diff;
-				
-				elem.scrollTop( scroll.ymax * ratio );
-			}
-			
-		});
-		
+		// Return jQuery collection to chain
 		return this;
-	};
+	}
 	
 	jQuery.fn.scrollbars.options = options;
 	
