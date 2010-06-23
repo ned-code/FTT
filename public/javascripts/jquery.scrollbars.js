@@ -10,7 +10,7 @@
 	
 	var debug = false; //(window.console && console.log);
 	var options = {
-		dragImageUrl: 'images/icon_blank.png'
+		dragImageUrl: '/images/icon_blank.png'
 	};
 	
 	function update( elem, scroll, options ){
