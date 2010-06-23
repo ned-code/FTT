@@ -351,6 +351,7 @@ WebDoc.PageBrowserController = $.klass({
     }
     
     // Recalculate scrollbars
+    var pageBrowserItems = this.domNode;
     pageBrowserItems.trigger('resize');
     
     this._updateIndexNumbers();
