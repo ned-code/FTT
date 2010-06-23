@@ -13,7 +13,6 @@ class RemoveIdColumn < ActiveRecord::Migration
     remove_column :users, :id
     add_column :users, :id, :integer, :default => nil
     remove_column :view_counts, :id
-    Item.reset_column_information
   end
 
   def self.down
