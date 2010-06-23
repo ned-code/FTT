@@ -102,7 +102,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
           ddd("check editablity");
           if (WebDoc.application.boardController.isEditable() && jQuery("body").hasClass('mode-edit')) {
             ddd("[PageEditor] call rightBarController.showLib");
-            WebDoc.application.rightBarController.showLib();
+            WebDoc.application.rightBarController.showMediaBrowser();
           }
           
           WebDoc.application.boardController.loadingNode.removeClass('loading');

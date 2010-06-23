@@ -618,7 +618,7 @@ div.tabs > div {
 /* = Image Details = */
 /* ================= */
 
-#image_details .image_name {
+#image-details .image_name {
   font-size:15px;
   font-weight:bold;
   padding:6px;
@@ -626,29 +626,29 @@ div.tabs > div {
   color:#666;
 }
 
-#image_details .image_size {
+#image-details .image_size {
   text-align:center;
   color:#999;
 }
 
-#image_details .single_image {
+#image-details .single_image {
   overflow:hidden;
   text-align:center;
 /*  width:350px;*/
   padding:20px 0;
 }
 
-#image_details .single_image a {
+#image-details .single_image a {
   position:relative;
 }
 
-#image_details .single_image img {
+#image-details .single_image img {
   border:none;
   max-width:300px;
   max-height:300px;
 }
 
-#image_details .icon_overlay {
+#image-details .icon_overlay {
   position:absolute;
   right:10px;
   bottom:10px;
@@ -656,8 +656,8 @@ div.tabs > div {
   height:32px;
 }
 
-#image_details.flickr .icon_overlay {background:url(/images/libraries/flickr.png) no-repeat;}
-#image_details.google .icon_overlay {background:url(/images/libraries/google.png) no-repeat;}
+#image-details.flickr .icon_overlay {background:url(/images/libraries/flickr.png) no-repeat;}
+#image-details.google .icon_overlay {background:url(/images/libraries/google.png) no-repeat;}
 
 
 /* ========== */

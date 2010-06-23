@@ -4,27 +4,27 @@
 
 //= require <webdoc/library/jqtouch>
 
-var jQT = new $.jQTouch("libraries", { preloadImages: [] });
-
-WebDoc.LibrariesController = $.klass(WebDoc.RightBarInspectorController, {
-  
-  LIBRARIES_SELECTOR: ".libraries_wrap",
-  LIBRARY_BUTTON_SELECTOR: "a[href='#library']",
-
-  initialize: function() {
-    // this.imagesLibrary = new WebDoc.ImagesLibrary("images");
-    //     this.videosLibrary = new WebDoc.VideosLibrary("videos");
-    //     this.appsLibrary = new WebDoc.AppsLibrary("apps");
-    //     this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");
-    // this.webBrowser = new WebDoc.WebBrowser("browser"); // Provisory, will be added in a later alpha
-    
-    this.domNode = $(this.LIBRARIES_SELECTOR);
-  },
-
-  buttonSelector: function() {
-    return this.LIBRARY_BUTTON_SELECTOR;  
-  } 
-});
+//var jQT = new $.jQTouch("libraries", { preloadImages: [] });
+// 
+// WebDoc.LibrariesController = $.klass(WebDoc.RightBarInspectorController, {
+//   
+//   LIBRARIES_SELECTOR: ".libraries_wrap",
+//   LIBRARY_BUTTON_SELECTOR: "a[href='#library']",
+// 
+//   initialize: function() {
+//     // this.imagesLibrary = new WebDoc.ImagesLibrary("images");
+//     //     this.videosLibrary = new WebDoc.VideosLibrary("videos");
+//     //     this.appsLibrary = new WebDoc.AppsLibrary("apps");
+//     //     this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");
+//     // this.webBrowser = new WebDoc.WebBrowser("browser"); // Provisory, will be added in a later alpha
+//     
+//     this.domNode = $(this.LIBRARIES_SELECTOR);
+//   },
+// 
+//   buttonSelector: function() {
+//     return this.LIBRARY_BUTTON_SELECTOR;  
+//   } 
+// });
 
 // // Generic class to be used as parent class for every library implementation (Images library, Videos library ,etc).
 // // Do not instanciate this directly (use one of its subclasses)
