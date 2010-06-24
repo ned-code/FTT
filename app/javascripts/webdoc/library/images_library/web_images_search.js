@@ -13,6 +13,8 @@ WebDoc.WebImagesSearch = $.klass({
     
     // Set callback to the ImagesLibrary
     this.imagesLibrary = imagesLibrary;
+		this.imageDetailsView = $('#media-browser-web-images-details #image-details');
+		this.prepareDetailsView();
     
     // Observe search submission
     this.searchForm.submit(function(event) {
@@ -31,10 +33,10 @@ WebDoc.WebImagesSearch = $.klass({
 		}.pBind(this));
 		
 		//setup click listening
-		$("#media-browser-web .thumbnails ul li a").live("click", function (event) {
+		$("#web-images .thumbnails ul li a").live("click", function (event) {
       var properties = $(event.target).parent().find('img').data("properties");
-      ddd('click on an image');
-			//this.showDetailsView(properties);
+      ddd('click on an image + properties : ' + properties );
+			this.showDetailsView(properties);
       event.preventDefault();
     }.pBind(this));
   },
@@ -52,6 +54,119 @@ WebDoc.WebImagesSearch = $.klass({
     var mediaDragFeedbackEl = this.imagesLibrary.buildMediaDragFeedbackElement("image", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
+  },
+
+	prepareDetailsView: function(){
+    // handle possible actions 
+    $("#media-browser-web-images-details #image-details .actions").click(function(event){
+      event.preventDefault();
+
+      var properties = this.detailsViewImg.data("properties"); //properties of the currenlty displayed image are store in this element
+
+      var link = $(event.target);
+      var li = link.parent(); 
+      var info = $("<span>").text("...");
+
+      switch (link.attr("id")) {
+        case "add_image_to_page_action":
+          ddd("add (original) image to page action");
+          var imageUrl = null;
+          if(link.attr("id") == "add_original_image_to_page_action") {
+            imageUrl = properties.url
+          }
+          else {
+            imageUrl = properties.default_url ? properties.default_url : properties.url;
+          }
+          WebDoc.application.boardController.insertImage(imageUrl, undefined, properties.id);
+          break;
+
+        case "set_image_as_bg_action": 
+          var page = WebDoc.application.pageEditor.currentPage;
+          var imgUrl = this.detailsViewImg.attr("src");
+          page.setBackgroundImage("url("+imgUrl+")");
+          page.setBackgroundRepeatMode("no-repeat");
+          page.setBackgroundPosition("center center");
+          // Jump to page inspector, where you can set how the background image is displayed
+          WebDoc.application.rightBarController.showPageInspector();
+          break;
+				case 'add_image_to_favorite':
+					ddd('add_image_to_favorite');
+					break;
+				case 'remove_image_from_favorite':
+					ddd('remove_image_from_favorite');	
+					break;
+      }
+
+    }.pBind(this));
+  },
+	
+	showDetailsView: function(properties){
+		ddd('properties.type' + properties.type);
+		
+		this.detailsViewImg = this.imageDetailsView.find('.single_image img');
+		
+		this.imagesLibrary.hideAll();
+		
+		this.imageDetailsView.find('.single_image')
+    .attr({ draggable: "true" })
+    .bind("dragstart", this.dragStart.pBind(this));
+    
+    this.imageDetailsView.attr({'class':"view details_view "+properties.type});
+    
+    // Image name
+    var name = "";
+    if (properties.name){
+      name = properties.name;
+    }
+    else if (properties.url.match(/([^\/\\]+)\.([a-z0-9]{3,4})$/i)) { // extract filename
+      name = RegExp.$1 +"."+ RegExp.$2;
+    }
+    this.imageDetailsView.find('.image_name').text(name);
+    
+    // Image size
+    var imageSizeEl = this.imageDetailsView.find('.image_size');
+    if (properties.width && properties.height) {
+      imageSizeEl.text(properties.width+" x "+properties.height);
+    }
+    else {
+      imageSizeEl.text('');
+    }
+    
+    // Image Link
+    var imageLink = properties.image_link ? properties.image_link : properties.url;
+    this.imageDetailsView.find('.single_image a').attr({"href":imageLink});
+    
+    // Image source (+ store the current properties in the img element)
+    var imageContainer = this.imageDetailsView.find('.single_image');
+    imageContainer.hide();
+    imageContainer.before($('<div class="loading">Loading</div>'));
+    this.detailsViewImg.attr({'src':properties.url}).data("properties", properties);
+    this.preloadImage(properties.url);
+    
+    //setup the favorites links
+    // if( $('#media-browser-my-images-details #delete_image_action').length < 1){
+    //   liDelete = $('<li>').append($("<a href='' id='delete_image_action'>Delete </a>"));
+    //   $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
+    // }
+
+		$("#media-browser-web-images-details").show();
+	},
+   
+  preloadImage: function(imageSrc) {
+    var oImage = new Image();
+    // set up event handlers for the Image object
+    oImage.onload = this.preloadImageDidLoad.pBind(this);
+    oImage.onerror = this.preloadImageError.pBind(this);
+    oImage.src = imageSrc;
+  },
+  
+  preloadImageDidLoad: function() {
+    this.imageDetailsView.find('.loading').remove();
+    this.imageDetailsView.find('.single_image').show();
+  },
+  
+  preloadImageError: function() {
+    this.imageDetailsView.find('.loading').remove();
   }
 });
 

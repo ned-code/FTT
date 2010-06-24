@@ -57,7 +57,7 @@
         
     initialize: function($super, libraryId) {
   		$super(libraryId);
-  		this.imageDetailsView = $('#image-details');
+  		this.imageDetailsView = $('#media-browser-my-images-details #image-details');
   		this.prepareImageDetailsView();
   		this.domNode = $('#media-browser-my-content');
   		this._createHandlers('click', this._myContentHandlers);
@@ -140,7 +140,7 @@
     
     prepareImageDetailsView: function(){
       // handle possible actions 
-      $("#image-details .actions").click(function(event){
+      $("#media-browser-my-images-details .actions").click(function(event){
         event.preventDefault();
 
         var properties = this.detailsViewImg.data("properties"); //properties of the currenlty displayed image are store in this element
@@ -187,16 +187,8 @@
                   this.showMyImages();
                 }.pBind(this),
                 error: function(){
-                  ddd('error on ajax request');
                 },
                 complete: function() {
-                  //var delay = setTimeout(function(){ li.hide(); info.remove(); link.show(); }, 1000);
-                  if (link.attr("id") === "delete_image_action") { // Go back
-                    //in this case we need to immediately rehestablish the UI, in case the user will quickly reselects another thumbnail just after deleting this one
-                    //clearTimeout(delay); li.hide(); info.remove(); link.show();
-                    //this.detailsView.find(".toolbar .back").click();
-                    
-                  }
                 }.pBind(this)
               });
             }
@@ -247,9 +239,9 @@
       this.preloadImage(properties.url);
       
       //setup the delete link
-      if( $('#delete_image_action').length < 1){
+      if( $('#media-browser-my-images-details #delete_image_action').length < 1){
         liDelete = $('<li>').append($("<a href='' id='delete_image_action'>Delete </a>"));
-        $("#image-details .actions ul").append(liDelete);
+        $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
       }
       
       $('#media-browser-my-images-details').show();
