@@ -505,7 +505,7 @@ body {
 }
 .pages li .edit-icon {
   background-position: 50% 50%;
-  background-image: url('/images/loading-icon-16-white.gif');
+  background-image: url('../images/loading-icon-16-white.gif');
   background: hsl(198, 4%, 84%);
 }
 .pages li .edit-icon span {
