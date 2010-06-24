@@ -19,7 +19,7 @@
 .loading-icon {
     display: none;
     background-position: 50% 50%;
-    background-image: url('/images/loading-icon-16-white.gif');
+    background-image: url('../images/loading-icon-16-white.gif');
     background-color: transparent;
     background-repeat: no-repeat;
     opacity: 0;
