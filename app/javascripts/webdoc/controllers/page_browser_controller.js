@@ -42,7 +42,7 @@ WebDoc.PageBrowserController = $.klass({
     ddd("[PageBrowserController] Pages panel width: " + this._pagesPanelWidth);
     ddd("[PageBrowserController] panel height: " + this._panelHeight);
     
-    this.visible = false;
+    this.visible = true;
     this.pageMap = {};
     
     this.domNode
@@ -51,6 +51,12 @@ WebDoc.PageBrowserController = $.klass({
     })
     .bind('mouseleave', function(e){
       that.hide();
+    });
+    
+    this.domNode
+    .find('.content')
+    .scrollbars({
+      x: this.domNode.find('.x_scrollbar')
     });
   },
   
@@ -82,6 +88,9 @@ WebDoc.PageBrowserController = $.klass({
       pageItemNode.attr('data-webdoc-page', pageId);
     }
     
+    // Recalculate scrollbars
+    pageBrowserItems.trigger('resize');
+    
     this.updateSelectedPage();
     this._updateIndexNumbers();
     this._updateThumbs();
@@ -109,30 +118,29 @@ WebDoc.PageBrowserController = $.klass({
         dragTarget = jQuery(this).addClass('ghost');
         startState = itemsList.children();
         
-        // Quick hack to stop number being displayed in dragged thumb
-        dragTarget.find('.number').hide();
-        
         eOrig.dataTransfer.setDragImage(this, 64, 64);
-        
-        // Quick hack to stop number being displayed in dragged thumb
-        var t = setTimeout(function(){
-          dragTarget.find('.number').show();
-        }, 0);
         
         that._dragStartCallback.call(that, e, dragTarget);
       })
       .delegate('li', 'dragenter dragover', function(e){
         //console.log('EVENT '+e.type, e);
         
-        var item, mouse, width, height, offset;
+        var item, mouse, width, height, offset, pageId ;
         
         e.preventDefault();
         e.originalEvent.dataTransfer.dropEffect = "move";
         
         if (!dragTarget) {
-        	// drag is coming from outside so create dragTarget for this DOM
-        	
-        	dragTarget = jQuery('<li/>', {'class': 'ghost', text: 'What? from another document? Are you nuts?'})
+          // drag is coming from outside this window
+          
+          pageId = e.originalEvent.dataTransfer.getData('webdoc/page');
+          
+          if ( !pageId || pageId === '' ) {
+            // Drag is not even a webdoc page
+            return;
+          }
+          
+          dragTarget = jQuery('<li/>', {'class': 'ghost', text: 'What? from another document? Are you nuts?'})
         }
         
         if (dragTarget[0] === this) {
@@ -239,18 +247,23 @@ WebDoc.PageBrowserController = $.klass({
       });
       // ----------------------------------------------------------------------------------------------------
     }
+    
     this.bindEventHandlers();
-    
     WebDoc.application.boardController.addCurrentPageListener(this);
-    
   },
   
   _dragStartCallback: function(e, dragTarget){
     var dataTransfer = e.originalEvent.dataTransfer;
+        
+    // Quick hack to stop number being displayed in dragged thumb
+    var t = setTimeout(function(){
+      dragTarget.find('.number').show();
+    }, 0);
     
     dataTransfer.setData("Text", 'Page title');
     dataTransfer.setData("URL", window.location+' Add the page hash here!!!' );
-    dataTransfer.setData("application/webdoc-page", "Put some JSON here");
+    dataTransfer.setData("application/json", "Put some JSON here");
+    dataTransfer.setData('webdoc/page', 'put page id here');
   },
   
   _dragUpdateCallback: function(e, dragTarget){
@@ -284,8 +297,6 @@ WebDoc.PageBrowserController = $.klass({
     // Define a flag to avoid rebuilding the page browser when items are dragged
     // However, if the document is opened in other sessions, updates must be done
     this._changedFromDrag = true;
-    
-    console.log(dragTarget.attr("data-webdoc-page"), this.pageMap, dropData);
     
     pageToSave = WebDoc.application.pageEditor.currentDocument.movePage( dropData.page.uuid(), dropPageIndex );
     
@@ -322,9 +333,11 @@ WebDoc.PageBrowserController = $.klass({
     ddd("[pageBrowserController] pageAdded");
     var pageItem = new WebDoc.PageBrowserItemView(page),
         pageNode = pageItem.domNode,
+        pageId = page.uuid(),
         pos = page.data.position;
     
-    this.pageMap[ page.uuid() ] = pageItem;
+    this.pageMap[ pageId ] = pageItem;
+    pageNode.attr('data-webdoc-page', pageId);
     
     // Then put it in the DOM
     if (pos) {
@@ -334,9 +347,8 @@ WebDoc.PageBrowserController = $.klass({
       this.domNodeBrowserItems.prepend( pageNode );
     }
     
-    pageNode.data('webdoc', {
-      page: page
-    });
+    // Recalculate scrollbars
+    this.domNodeBrowserItems.trigger('resize');
     
     this._updateIndexNumbers();
     //pageItem.truncateTitleWithActualTitle();
@@ -349,6 +361,9 @@ WebDoc.PageBrowserController = $.klass({
     ddd('[pageBrowserController] pageRemoved: '+id);
     pageBrowserItem.destroy();
     delete this.pageMap[ page.uuid() ];
+    
+    // Recalculate scrollbars
+    this.domNodeBrowserItems.trigger('resize');
     this._updateIndexNumbers();
   },
 

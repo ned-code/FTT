@@ -263,9 +263,9 @@ WebDoc.Page = $.klass(WebDoc.Record,
     return this.data.data.css.backgroundImage && this.data.data.css.backgroundImage;
   },
   
-  refresh: function($super, json) {
+  refresh: function($super, json, onlyMissingValues) {
     this._layout = undefined;
-    $super(json);
+    $super(json, onlyMissingValues);
     this._refreshClasses();
     // if recieved json contains items then we create all items records.
     // if json does not contains items we leave all previous items as they were

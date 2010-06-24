@@ -43,8 +43,8 @@ body {
 
 #webdoc         { z-index: 1; }
 #webdoc_loading { z-index: 1; }
-.scrollbar_x,
-.scrollbar_y    { z-index: 2; }
+.x_scrollbar,
+.y_scrollbar    { z-index: 2; }
 .panel          { z-index: 3; }
 .toolbar-panel  { z-index: 3; }
 .ui-pop         { z-index: 4; } 
@@ -114,8 +114,8 @@ body {
 }
 
 .right-panel {
-    top: 36px;
-    bottom: 0px;
+    top: 42px;
+    bottom: 34px;
     width: 350px;
     left: 100%;
     margin-left: 0px;
@@ -176,21 +176,25 @@ body {
 
 .pages_panel .inspector {
     position: absolute;
-    top: -96px;
-    left: 0;
+    left: 0; top: -144px;
+    
     -webkit-transform: scale(0.25);
-    -webkit-transform-origin: 3.2% 128px;
+    -webkit-transform-origin: 3.2% 194px;
     -webkit-transition: -webkit-transform 0.2s ease-out;
     
     -moz-transform: scale(0.25);
-    -moz-transform-origin: 3.2% 128px;
+    -moz-transform-origin: 3.2% 194px;
     -moz-transition: -webkit-transform 0.2s ease-out;
     
     transform: scale(0.25);
-    transform-origin: 3.2% 128px;
+    transform-origin: 3.2% 194px;
     transition: -webkit-transform 0.2s ease-out;
 
     background: rgba(0,0,0,0.66);
+    
+    /* Push the scrollbar */
+    height: 176px;
+    padding-bottom: 15px;
 }
 
 .pages_panel .inspector .content {
@@ -205,14 +209,27 @@ body {
 }
 
 .pages_panel li .number {
-    -webkit-transition: opacity 0.2s ease-out;
+    /*-webkit-transition: opacity 0.2s ease-out;
     -moz-transition:    opacity 0.2s ease-out;
     transition:         opacity 0.2s ease-out;
-    opacity: 0;
+    opacity: 0;*/
 }
 
 .pages_panel .inspector.active li .number {
     opacity: 1;
+}
+
+.page_thumb {
+  width: 120px; height: 120px;
+  position: relative;
+  overflow: hidden;
+  background-color: hsla( 208, 8%, 20%, 0.9);
+}
+
+.page_thumb .webdoc {
+  position: absolute;
+  left: 0; top: 0;
+  overflow: hidden;
 }
 
 .page_browser_items {
@@ -447,8 +464,11 @@ body {
   height: 32px;
 }
 
+.pages {
+    margin-top: 4px;
+}
 .pages li {
-    margin-right: 1px;
+    margin-right: 4px;
     position: relative;
     cursor: move;
 }
@@ -518,98 +538,6 @@ body {
 }
 .page_browser_items li.current {
     background: none;
-}
-
-/* I have two styles of thumbs for your delectation.
- * 
- * To change style you also need to edit the corresponding animations
- * in page_browser_controller.js. (That could be improved - we could auto-detect.)
- */
- 
-/* 1. With border, looks like an extension of the title block */
-
-/*.pages li .thumb {
-  position: relative;
-  width: 120px; height: 75px;
-  margin: 0 auto;
-  overflow: hidden;
-  position: relative;
-  top: 0px;
-  padding: 0;
-  margin-bottom: 6px;
-  
-  border: 6px solid;
-  border-top: 0;
-  
-  -webkit-border-bottom-left-radius:  3px;
-  -moz-border-radius-bottomleft:      3px;
-  border-bottom-left-radius:          3px;
-  -webkit-border-bottom-right-radius: 3px;
-  -moz-border-radius-bottomright:     3px;
-  border-bottom-right-radius:         3px;
-  
-  -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
-  -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
-  box-shadow:         0 6px 8px hsl(14, 6%, 30%);
-}
-.hide-thumbs li .thumb {
-  height: 0;
-  margin-bottom: 0;
-  border-bottom-width: 0;
-}
-.pages li .thumb .page-thumb {
-  position: absolute;
-  left: 0; top: 50%;
-  margin-top: -45px;
-}*/
-
-/* 2. As a sheet, looks like it appears from a slot in the title block */
-
-/* Thumb height is height+14, to account for shadow */
-/*.pages li .thumb {
-  position: relative;
-  width: 136px; height: 104px; 
-  margin: 0 auto;
-  overflow: hidden;
-  padding: 0;
-  top: -2px;
-  border: none;
-  border-top: 1px solid hsl(194, 15%, 40%);
-}
-.pages li .thumb .page-thumb {
-  position: absolute;
-  bottom: 14px;               
-  left: 50%;
-  margin-left: -60px;
-  
-  -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
-  -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
-  box-shadow:         0 6px 8px hsl(14, 6%, 30%);
-}
-.hide-thumbs li .thumb {
-  height: 0;
-  border: none;
-}*/
-
-/* horizontally, without border */
-.pages li .thumb {
-  position: relative;
-  width: auto; height: 128px;
-  margin: 0 auto;
-  overflow: hidden;
-  top: 0px;
-  padding: 0;s
-}
-
-.hide-thumbs li .thumb {
-  height: 0;
-  margin-bottom: 0;
-  border-bottom-width: 0;
-}
-.pages li .thumb .page-thumb {
-  position: absolute;
-  left: 0; top: 50%;
-  margin-top: -64px;
 }
 
 /*******************/
@@ -746,11 +674,6 @@ body {
   overflow:hidden; 
   padding:10px;
   padding-left:20px;
-}
-
-.pages-inspector {
-    top: 0;
-    bottom: 0;
 }
 
 .inspector .tools {
@@ -1088,11 +1011,19 @@ body {
 
 /* --- */
 
-.scrollbar_x,
-.scrollbar_y {
-  position: fixed;
+.x_scrollbar_container {
+  position: absolute;
+  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+}
+
+.scrollbar {
+  position: absolute;
   width: 10px; height: 10px;
   min-width: 10px; min-height: 10px;
+  
   -webkit-border-radius: 6px;
   -moz-border-radius:    6px;
   border-radius:         6px;
@@ -1102,14 +1033,58 @@ body {
   box-sizing:         border-box;
   
   border: 1px solid rgba(255, 255, 255, 0.8);
-  
-  background: rgba(0,0,0,0.5);
+  background: rgba(128,128,128,0.5);
 }
 
-.scrollbar_x {
-  bottom: 38px;
+y_scrollbar {
+  -webkit-transition: top 0.025s linear, width 0.1s linear;
+  -moz-transition:    top 0.025s linear, width 0.1s linear;
+  transition:         top 0.025s linear, width 0.1s linear;
+}
+x_scrollbar {
+  -webkit-transition: left 0.025s linear, width 0.1s linear;
+  -moz-transition:    left 0.025s linear, width 0.1s linear;
+  transition:         left 0.025s linear, width 0.1s linear;
 }
 
-.scrollbar_y {
-  right: 4px;
+
+.pages_panel .x_scrollbar_container {
+  left: 6px; right: 6px; top: 128px;
+  height: 10px;
+  z-index: 2;
+}
+
+/*#webdoc_x_scrollbar:hover,
+#webdoc_y_scrollbar:hover {
+  opacity: 1;
+  -webkit-transition: opacity 0.1s linear;
+  -moz-transition:    opacity 0.1s linear;
+  transition:         opacity 0.1s linear;
+}*/
+
+#webdoc_x_scrollbar,
+#webdoc_y_scrollbar {
+  position: fixed;
+  z-index: 2;
+  /*opacity: 0;
+  -webkit-transition: opacity 0.66s linear;
+  -moz-transition:    opacity 0.66s linear;
+  transition:         opacity 0.66s linear;
+  */
+}
+
+#webdoc_x_scrollbar {
+  bottom: 38px; left: 6px; right: 6px;
+  height: 10px;
+}
+
+#webdoc_y_scrollbar {
+  top: 44px; bottom: 38px; right: 6px;
+  width: 10px;
+}
+
+.no_transition {
+  -webkit-transition: none;
+  -moz-transition:    none;
+  transition:         none;
 }

@@ -192,31 +192,21 @@ jQuery.extend({
     // Some helpful regex for parsing hrefs and css urls etc.
     
     regex: {
-      integer:    /^-?[0-9]+$/,
-      cssUrl:     /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/,   // matches url(xxx), url('xxx') or url("xxx") and captures xxx
+      integer:    /^-?[0-9]+$/,                                   // integer
       hash:       /^#?$/,                                         // Single hash or empty string
       hashRef:    /^#(\S+)/,                                      // Matches a hash ref, captures all non-space characters following the hash
       slashRef:   /^\//,                                          // Begins with a slash
       urlRef:     /^[a-z]+:\/\//,                                 // Begins with protocol xxx://
-      cssValue:   /^\d+\s?(px|%|em|ex|pt|in|cm|mm|pt|pc)$/,       // Accepts any valid unit of css measurement
+      
+      cssUrl:     /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/,   // matches url(xxx), url('xxx') or url("xxx") and captures xxx
+      cssValue:   /^(\d+)\s?(px|%|em|ex|pt|in|cm|mm|pt|pc)$/,     // Accepts any valid unit of css measurement, encapsulates the digits [1] and the units [2]
+      pxValue:    /^(\d+)\s?(px)$/,                               // Accepts px values, encapsulates the digits [1]
+      '%Value':   /^(\d+)\s?(%)$/,                                // Accepts % values, encapsulates the digits [1]
+      emValue:    /^(\d+)\s?(em)$/,                               // Accepts em values, encapsulates the digits [1]
       hslColor:   /^(?:hsl\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})%\s?,\s?([0-9]{1,3})%\s?\)?$/,   // hsl(xx, xx%, xx%)
       hexColor:   /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6}$)/,          // #xxxxxx
-      rgbColor:   /^(?:rgb\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?\)?$/   // rgb(xxx, xxx, xxx)  - not perect yet, as it allows values greater than 255
+      rgbColor:   /^(?:rgb\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?\)?$/   // rgb(xxx, xxx, xxx)  - not perfect yet, as it allows values greater than 255
     }
 });
 
 // Add easing functions to jQuery's animation capabilities
-
-jQuery.extend(jQuery.easing, {
-  // TODO: make this emulate 'muffled bounce' from the UIZE library
-  // because we like that. Yes, we do.
-  webdocBounce: function (x, t, b, c, d) {
-		if ((t/=d) < (1/2.5)) {
-			return c*(7.5625*t*t) + b;
-		} else if (t < (2/2.5)) {
-			return c*(7.5625*(t-=(1.5/2.5))*t + .75) + b;
-		} else {
-			return c*(7.5625*(t-=(2.25/2.5))*t + .9375) + b;
-		}
-	}
-})

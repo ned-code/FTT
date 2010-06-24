@@ -6,8 +6,9 @@ class Medias::Widget < Media
                     :storage => S3_CONFIG[:storage].to_sym,
                     :s3_credentials => S3_CONFIG,
                     :bucket => S3_CONFIG[:widgets_bucket],
+                    :s3_host_alias => S3_CONFIG[:widgets_bucket],
                     :path => S3_CONFIG[:storage] == 's3' ? attachment_path : ":rails_root/public/#{attachment_path}",
-                    :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{attachment_path}"
+                    :url => S3_CONFIG[:storage] == 's3' ? ":s3_alias_url" : "/#{attachment_path}"
   
   validates_attachment_presence :attachment
   validates_attachment_size :attachment, :less_than => 30.megabytes

@@ -9,6 +9,7 @@ WebDoc.WidgetManager = $.klass(
     this._callBack = callBack;
     WebDoc.ServerManager.getRecords(WebDoc.Widget, 'youtube', this._assignYoutubeWidget.pBind(this));
     WebDoc.ServerManager.getRecords(WebDoc.Widget, 'vimeo', this._assignVimeoWidget.pBind(this));
+	  WebDoc.ServerManager.getRecords(WebDoc.Widget, 'dailymotion', this._assignDailymotionWidget.pBind(this));
   },
 
   getVimeoWidget: function() {
@@ -17,6 +18,10 @@ WebDoc.WidgetManager = $.klass(
   
   getYoutubeWidget: function() {
     return this.youtubeWidget;   
+  },
+
+  getDailymotionWidget: function() {
+  	return this.dailymotionWidget;   
   },
   
   _assignYoutubeWidget: function(data) {
@@ -41,6 +46,18 @@ WebDoc.WidgetManager = $.klass(
     if (this.youtubeWidget !== undefined) {
       this._callBack.call(this,WebDoc.WidgetManager);
     }    
+  },  
+    
+  _assignDailymotionWidget: function(data) {
+    if (data && data.length > 0) {
+      this.dailymotionWidget = data[0];
+    }
+    else {
+      this.dailymotionWidget = null;
+    }
+    if (this.youtubeWidget !== undefined && this.vimeoWidget !== undefined) {
+      this._callBack.call(this,WebDoc.WidgetManager);
+    }
   }  
 });
 

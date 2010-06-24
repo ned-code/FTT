@@ -117,10 +117,10 @@ WebDoc.BoardController = jQuery.klass({
     this._fireCurrentPageChanged();
     
     jQuery('#webdoc').scrollbars({
-      x: jQuery('#scrollbar_x'),
-      y: jQuery('#scrollbar_y'),
+      x: jQuery('#webdoc_x_scrollbar .scrollbar'),
+      y: jQuery('#webdoc_y_scrollbar .scrollbar'),
       dragImageUrl: '/images/icon_blank.png'
-    })
+    });
     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
@@ -627,6 +627,9 @@ WebDoc.BoardController = jQuery.klass({
       case 'vimeo' :
         videoWidget = WebDoc.WidgetManager.getInstance().getVimeoWidget();
         break;
+	  case 'dailymotion' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getDailymotionWidget();
+        break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     if (videoWidget.data.properties.width) {
@@ -659,7 +662,7 @@ WebDoc.BoardController = jQuery.klass({
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_HTML;
     newItem.data.data.tag = "div";
-    newItem.data.data.innerHTML = html;
+    newItem.setInnerHtml(html,true, true);
     newItem.data.data.css = {
       top: position.y + "px",
       left: position.x + "px",

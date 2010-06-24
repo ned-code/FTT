@@ -3,9 +3,9 @@
 <td nowrap=true>
 <div class="segment_indent_level<%=indent%> <%='leaf_segment' if segment.called_segments.empty?%>">
 	<div style="display:inline;">
-		<%= expand_segment_image(segment, indent) %>
+		<%= raw expand_segment_image(segment, indent) %>
 	</div>
-	<%= write_segment_label segment%>
+	<%= raw write_segment_label segment%>
 	<small><%= link_to '?', url_for_metric_doc(segment.metric_name)%></small>
 </div>
 </td>
@@ -14,15 +14,15 @@
   <%= timestamp(segment) %>
 </td>
 <td nowrap=true align="right">
-  <%= with_delimiter(to_ms(segment.duration)) %>
+  <%= raw with_delimiter(to_ms(segment.duration)) %>
 </td>
 <td nowrap=true align="right">
-  <%= colorize(segment.exclusive_duration) %>
+  <%= raw colorize(segment.exclusive_duration) %>
 </td>
 
 <td nowrap=true>
   <small>
-  <%= explain_sql_links(segment) if indent > 0 %>
+  <%= raw explain_sql_links(segment) if indent > 0 %>
   </small>
 </td>
 </tr>

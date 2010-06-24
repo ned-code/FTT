@@ -39,7 +39,7 @@ namespace :deploy do
     run "rm #{current_path}/public/maintenance.html"
   end
   task :update_crontab, :roles => :app do
-    run "cd #{release_path} && whenever --update-crontab #{application}"
+#    run "cd #{release_path} && whenever --update-crontab #{application}"
   end
 end
 

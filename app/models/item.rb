@@ -4,7 +4,7 @@ class Item < ActiveRecord::Base
   
   serialize :data
   
-  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind
+  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind, :inner_html
   
   # see XmppItemObserver
   attr_accessor_with_default :must_notify, false
@@ -50,15 +50,15 @@ class Item < ActiveRecord::Base
   def to_html
     result = "<#{self.data[:tag]} "
     data.each_pair do |key, value| 
-    logger.debug key
-    logger.debug /innerHTML/.match(key)
-      if (!/innerHTML|css|tag|properties|preference/.match(key))
+      logger.debug key
+      logger.debug /innerHTML/.match(key)
+      if (!/css|tag|properties|preference/.match(key))
         result += "#{key}=\" #{value}\""
       end
     end
     result += ">"
-    if (data[:innerHTML])
-      result += data[:innerHTML]
+    if (self.inner_html)
+      result += self.inner_html
     end
     result += "</#{self.data[:tag]}>"
   end

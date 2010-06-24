@@ -43,10 +43,6 @@ WebDoc.ItemThumbnailView = $.klass({
         case "tag":  
         case "preference":
         case "properties":
-        case "innerHTML":
-        // for compatibility we also check innerHtml like this because old cocument can have this key instead of innerHTML
-        case "innerHtml":        
-          break;
         case "class": 
           itemNode.addClass(this.item.data.data[key]);
           break;
@@ -62,8 +58,8 @@ WebDoc.ItemThumbnailView = $.klass({
           itemNode.attr(key, this.item.data.data[key]);
       }           
     }
-    if (!jQuery.string(this.item.data.data.innerHTML).empty()) {
-      itemNode.html(this.item.data.data.innerHTML);
+    if (!jQuery.string(this.item.getInnerHtml()).empty()) {
+      itemNode.html(this.item.getInnerHtml());
     }
     else if (this.item.data.data.innerHTMLPlaceholder){
       itemNode.html(this.item.data.data.innerHTMLPlaceholder);      
@@ -104,8 +100,8 @@ WebDoc.ItemThumbnailView = $.klass({
   },
   
   innerHtmlChanged: function() {
-    if (!jQuery.string(this.item.data.data.innerHTML).empty()) {
-      this.domNode.html(this.item.data.data.innerHTML);
+    if (!jQuery.string(this.item.getInnerHtml()).empty()) {
+      this.domNode.html(this.item.getInnerHtml());
     }
     else if (this.item.data.data.innerHTMLPlaceholder){
       this.domNode.html(this.item.data.data.innerHTMLPlaceholder);      
@@ -137,13 +133,8 @@ WebDoc.ImageThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
         });
       }
       else {
-        if (key == 'innerHtml') {
-          imageNode.html(this.item.data.data[key]);
-        }
-        else {
-          if (key != 'tag') {
-            imageNode.attr(key, this.item.data.data[key]);
-          }
+        if (key != 'tag') {
+          imageNode.attr(key, this.item.data.data[key]);
         }
       }
     }
@@ -174,7 +165,7 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
   createDomNode: function($super) {
     
     if (this.item.data.data.tag == "iframe" || 
-        this.item.data.data.innerHTML.match(/<iframe|<script|<object|<embed/i)) {
+        this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i)) {
       var itemNode = $('<div/>');
     
       itemNode.attr("id", "thumb_" + this.item.uuid());
@@ -193,15 +184,15 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
   
   objectChanged: function($super, item) {
     $super(item);
-    if (this.item.data.data.tag == "iframe" || this.item.data.data.innerHTML.match(/<iframe|<script|<object|<embed/i)) {
+    if (this.item.data.data.tag == "iframe" || (this.item.getInnerHtml() && this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i))) {
       this.domNode.addClass("widget_thumb");    
     }
   },
   
   innerHtmlChanged: function() {
-    if (this.item.data.data.tag != "iframe" && !this.item.data.data.innerHTML.match(/<iframe|<script|<object|<embed/i)) {
-      if (!jQuery.string(this.item.data.data.innerHTML).empty()) {
-        this.domNode.html(this.item.data.data.innerHTML);
+    if (this.item.data.data.tag != "iframe" && (!this.item.getInnerHtml() || !this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i))) {
+      if (!jQuery.string(this.item.getInnerHtml()).empty()) {
+        this.domNode.html(this.item.getInnerHtml());
       }
       else if (this.item.data.data.innerHTMLPlaceholder){
         this.domNode.html(this.item.data.data.innerHTMLPlaceholder);      

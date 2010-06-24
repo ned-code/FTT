@@ -2,16 +2,15 @@
 // 
 // Stephen Band
 // 
-// 0.2
+// 0.3
 // 
 // initial port from POC code.
 
 (function( jQuery, undefined ){
 	
-	var debug = false; //(window.console && console.log);
-	var options = {
-		dragImageUrl: 'images/icon_blank.png'
-	};
+
+	var debug = (window.console && console.log);
+	var options = {};
 	
 	function update( elem, scroll, options ){
 
@@ -25,9 +24,14 @@
 		  scroll.xmax = elem.scrollLeft(9999999).scrollLeft();
 		  scroll.xsize = width / (width + scroll.xmax);
 		  scroll.xratio = scroll.x / scroll.xmax;
-		  scroll.xtravel = options.x.css({ WebkitTransition: 'none', width: '100%' }).width();
+		  scroll.xtravel = options.x.addClass('no_transition').css({ width: '100%' }).width();
 		  
-		  options.x.css({ WebkitTransition: 'left 0.025s linear, width 0.1s linear', width: scroll.xsize * 100 + '%' });
+		  options.x
+		  .removeClass('no_transition')
+		  .css({
+		  	width: scroll.xsize * 100 + '%',
+		  	opacity: scroll.xsize === 1 ? 0 : 1 
+		  });
 		  elem.scrollLeft( scroll.x );
 		}
 		
@@ -39,135 +43,160 @@
 		  scroll.ymax = elem.scrollTop(9999999).scrollTop();
 		  scroll.ysize = height / (height + scroll.ymax);
 		  scroll.yratio = scroll.y / scroll.ymax;
-		  scroll.ytravel = options.y.css({ WebkitTransition: 'none', height: '100%' }).height();
+		  scroll.ytravel = options.y.addClass('no_transition').css({ height: '100%' }).height();
 		  
-		  options.y.css({ WebkitTransition: 'top 0.025s linear, height 0.1s linear', height: scroll.ysize * 100 + '%' });
+		  options.y
+		  .removeClass('no_transition')
+		  .css({
+		  	height: scroll.ysize * 100 + '%',
+		  	opacity: scroll.ysize === 1 ? 0 : 1
+		  });
 		  elem.scrollTop( scroll.y );
 		}
 
+	}
+	
+	function moveBarX( elem, options, scroll ){
+		scroll.x = elem.scrollLeft();
+		scroll.xratio = scroll.x / scroll.xmax;
+		options.x.css({ left: scroll.xratio * (1 - scroll.xsize) * 100 + '%' });
+	}
+	
+	function moveBarY( elem, options, scroll ){
+		scroll.y = elem.scrollTop();
+		scroll.yratio = scroll.y / scroll.ymax;
+		options.y.css({ top: scroll.yratio * (1 - scroll.ysize) * 100 + '%' });
 	}
 	
 	jQuery.fn.scrollbars = function( o ){
 		
 		var options = jQuery.extend( {}, jQuery.fn.scrollbars.options, o ),
 				elem = this.eq(0),
-				icon = new Image(),
 				store = {},
 				scroll = {};
-		
-		if (options.x) { options.x[0].draggable = true; }
-		if (options.y) { options.y[0].draggable = true; }
 		
 		update( elem, scroll, options );
 		
 		// Trigger update when stuff resizes. This is a 
-		// tricky one, there are going to be more conditions when
+		// tricky one, there may be more conditions when
 		// we need to update...
-		jQuery(window).bind('resize', function(){
+		jQuery(window)
+		.add(elem)
+		.bind('resize', function(){
 			update( elem, scroll, options );
 		});
 		
 		elem.bind('scroll', function(e){
 			
-			var elem = jQuery(this);
-			
-			if (options.x) {
-				scroll.x = elem.scrollLeft();
-				scroll.xratio = scroll.x / scroll.xmax;
-				options.x.css({ left: scroll.xratio * (1 - scroll.xsize) * 100 + '%' });
+			// If this scrollbar exists, and isn't been grabbed
+			// directly by the mouse
+			if ( options.x ) {
+				moveBarX( elem, options, scroll );
 			}
 			
-			if (options.y) {
-				scroll.y = elem.scrollTop();
-				scroll.yratio = scroll.y / scroll.ymax;
-				options.y.css({ top: scroll.yratio * (1 - scroll.ysize) * 100 + '%' });
+			if ( options.y ) {
+				moveBarY( elem, options, scroll );
 			}
 			
 		});
-		
-		// WebKit won't move the scrollbars without an image to
-		// use as a drag image.
-		icon.src = options.dragImageUrl;
 		
 		// Set up dragging of the handle
-		options.x
-		.bind('dragstart', function(e){
-			
-			if (debug) { console.log('EVENT '+e.type, e); }
-			
-			var eOrig = e.originalEvent;
-			
-			// FireFox must have have data bound here or it doesn't
-			// fire any of the other drag and drop events.
-			eOrig.dataTransfer.setData("scroll", "x");
-			eOrig.dataTransfer.setDragImage(icon, 12, 12);
-			eOrig.dataTransfer.effectAllowed = "none";
-			
-			// We can't rely on data for Chrome.  It's buggy.
-			store.currentMove = 'x';
-			store.xstartpos = e.pageX;
-			store.xstartratio = scroll.xratio;
-			
-		  return true;
-		});
+		if (options.x) {
 		
-		options.y
-		.bind('dragstart', function(e){
-			
-			if (debug) { console.log('EVENT '+e.type, e); }
-			
-			var eOrig = e.originalEvent;
-			
-			// FireFox must have have data bound here or it doesn't
-			// fire any of the other drag and drop events.
-			eOrig.dataTransfer.setData("scroll", "y");
-			eOrig.dataTransfer.setDragImage(icon, 12, 12);
-			eOrig.dataTransfer.effectAllowed = "none";
-			
-			// We can't rely on data for Chrome.  It's buggy.
-			store.currentMove = 'y';
-			store.ystartpos = e.pageY;
-			store.ystartratio = scroll.yratio;
-			
-		  return true;
-		});
+			options.x
+			.bind('mousedown.scrollbars', function(e){
+				
+				e.preventDefault();
+				
+				// Take direct control of the bar and store initial mouse pos
+				//scroll.xgrabbed = true;
+				
+				store.xstartpos = e.pageX;
+				store.xstartratio = scroll.xratio;
+				options.x.addClass('no_transition');
+				
+				jQuery(document)
+				.bind('mousemove.scrollbars', function(e){
+					
+					if (debug) { console.log('EVENT '+e.type, e); }
+					
+					var travel, diff, ratio;
+					
+					if ( e.pageX !== store.x ) {
+						store.x = e.pageX;
+						
+						travel = ( 1 - scroll.xsize ) * scroll.xtravel ;
+						diff = ( store.x - store.xstartpos ) / travel ;
+						ratio = store.xstartratio + diff;
+						
+						//limit ratio to range 0-1
+						ratio = ratio < 0 ? 0 : ratio > 1 ? 1 : ratio ;
+						
+						elem.scrollLeft( scroll.xmax * ratio );
+					}
+					
+				})
+				.bind('mouseup.scrollbars', function(e){
+					
+					if (debug) { console.log('EVENT '+e.type, e); }
+					
+					jQuery(this).unbind('mousemove.scrollbars mouseup.scrollbars');
+					//scroll.xgrabbed = false;
+					options.x.removeClass('no_transition');
+					
+				});
+				
+			});
 		
-		// FireFox does not report mouse coordinates on drag event.
-		// That's pretty annoying, actually. It means we have to
-		// use dragover event on something else.
+		}
 		
-		jQuery(document)
-		.bind('dragenter dragover dragleave', function(e) {
-			
-			if (debug) { console.log('EVENT '+e.type, e); }
-			
-			var dataTransfer = e.originalEvent.dataTransfer,
-					travel, diff, ratio;
-			
-			if ( store.currentMove === 'x' && (e.pageX !== store.x) ) {
-				store.x = e.pageX;
-				
-				travel = ( 1 - scroll.xsize ) * scroll.xtravel ;
-				diff = ( store.x - store.xstartpos ) / travel ;
-				ratio = store.xstartratio + diff;
-				
-				elem.scrollLeft( scroll.xmax * ratio );
-			}
-			
-			if ( store.currentMove === 'y' && (e.pageY !== store.y) ) {
-				store.y = e.pageY;
-				
-				travel = ( 1 - scroll.ysize ) * scroll.ytravel ;
-				diff = ( store.y - store.ystartpos ) / travel ;
-				ratio = store.ystartratio + diff;
-				
-				elem.scrollTop( scroll.ymax * ratio );
-			}
-			
-		});
+		if (options.y) {
 		
+			options.y
+			.bind('mousedown.scrollbars', function(e){
+				
+				e.preventDefault();
+				
+				// Take direct control of the bar
+				scroll.ygrabbed = true;
+				
+				store.ystartpos = e.pageY;
+				store.ystartratio = scroll.yratio;
+				
+				jQuery(document)
+				.bind('mousemove.scrollbars', function(e){
+					
+					if (debug) { console.log('EVENT '+e.type, e); }
+					
+					var travel, diff, ratio;
+					
+					if ( e.pageY !== store.y ) {
+						store.y = e.pageY;
+						
+						travel = ( 1 - scroll.ysize ) * scroll.ytravel ;
+						diff = ( store.y - store.ystartpos ) / travel ;
+						ratio = store.ystartratio + diff;
+						
+						elem.scrollTop( scroll.ymax * ratio );
+					}
+					
+				})
+				.bind('mouseup.scrollbars', function(e){
+					
+					if (debug) { console.log('EVENT '+e.type, e); }
+					
+					jQuery(this).unbind('mousemove.scrollbars mouseup.scrollbars');
+					scroll.ygrabbed = false;
+					
+				});
+				
+			});
+		
+		}
+		
+		// Return jQuery collection to chain
 		return this;
-	};
+	}
 	
 	jQuery.fn.scrollbars.options = options;
 	
