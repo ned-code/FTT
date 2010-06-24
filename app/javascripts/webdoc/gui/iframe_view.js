@@ -57,7 +57,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
 				//removed the onbeforeunload event that prevent automatic redirecting
 				window.onbeforeunload = '';
 				return message; 
-			}
+			};
 			
 			e.preventDefault();
       that.inputNode.validate({

@@ -1,5 +1,5 @@
 class ThemesController < ApplicationController
-  before_filter :authenticate_user!
+  # before_filter :authenticate_user!
   
   # GET /users
   def index

@@ -11,16 +11,17 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :documents, :has_many => { :pages => :items }, :member => { :duplicate => :post }, :collection => { :explore => :get, :featured => :get } do |m|
     m.resource :document_roles, :as => 'roles', :only => [:show, :create, :update, :destroy]
   end
-  
+
   map.connect 'items/:item_id/datastore_entries/:key', :controller => 'datastore_entries', :action => 'index', :only_current_user => true, :conditions => { :method => :get }
   map.resources :items, :except => [:index, :show, :create, :new, :edit, :update, :destroy] do |item|
     item.resources :datastore_entries, :only => [:index, :create, :destroy]
   end
   map.connect 'items/:item_id/datastore_entries', :controller => 'datastore_entries', :action => 'destroy_all', :conditions => { :method => :delete }
   
-    
   map.connect '/documents/:document_id/pages/:page_id/items/:id/secure_token', :controller => 'items', :action => 'secure_token', :conditions => { :method => :get }
-  
+
+  map.connect '/documents/:document_id/pages/:page_id/callback_thumbnail', :controller => 'pages', :action => 'callback_thumbnail', :conditions => { :method => :get }
+
   map.resources :datastores, :only => [:show, :index] do |datastore|
     # datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
   end
