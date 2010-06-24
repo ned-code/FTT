@@ -8,6 +8,7 @@
 
 (function( jQuery, undefined ){
 	
+
 	var debug = (window.console && console.log);
 	var options = {};
 	

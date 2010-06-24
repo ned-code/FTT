@@ -662,7 +662,7 @@ WebDoc.BoardController = jQuery.klass({
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_HTML;
     newItem.data.data.tag = "div";
-    newItem.data.data.innerHTML = html;
+    newItem.setInnerHtml(html,true, true);
     newItem.data.data.css = {
       top: position.y + "px",
       left: position.x + "px",

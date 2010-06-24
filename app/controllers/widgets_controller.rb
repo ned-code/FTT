@@ -1,5 +1,6 @@
 class WidgetsController < ApplicationController
   before_filter :authenticate_user!
+  
   # GET /widgets
   def index
     per_page = 15
@@ -22,10 +23,9 @@ class WidgetsController < ApplicationController
   
   # GET /widgets/:id
   def show
-    @widget = Medias::Widget.first(:conditions => ["uuid = :id OR system_name = :id", { :id => params[:id] }])
+    @widget = Rails.cache.fetch("#widget_json_#{params[:id]}") { Medias::Widget.first(:conditions => ["uuid = :id OR system_name = :id", { :id => params[:id] }]).to_json }
     
     respond_to do |format|
-      format.html { redirect_to @widget.file.url }
       format.json { render :json => @widget }
     end
   end
