@@ -473,7 +473,7 @@ WebDoc.PageBrowserController = $.klass({
         pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
         startObj, endObj;
     
-    this.domNode.removeClass(this.ACTIVE_CLASS)
+    this.domNode.removeClass(this.ACTIVE_CLASS);
     pageBrowserButton.removeClass(this.ACTIVE_CLASS);
     
     if ( !jQuery.support.css.transition ) {
