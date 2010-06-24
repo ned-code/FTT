@@ -348,7 +348,7 @@ WebDoc.PageBrowserController = $.klass({
     }
     
     // Recalculate scrollbars
-    this.pageBrowserItems.trigger('resize');
+    this.domNodeBrowserItems.trigger('resize');
     
     this._updateIndexNumbers();
     //pageItem.truncateTitleWithActualTitle();
@@ -361,6 +361,9 @@ WebDoc.PageBrowserController = $.klass({
     ddd('[pageBrowserController] pageRemoved: '+id);
     pageBrowserItem.destroy();
     delete this.pageMap[ page.uuid() ];
+    
+    // Recalculate scrollbars
+    this.domNodeBrowserItems.trigger('resize');
     this._updateIndexNumbers();
   },
 
