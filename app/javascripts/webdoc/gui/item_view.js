@@ -70,7 +70,7 @@ WebDoc.ItemView = $.klass({
       this.item.data.data.css = {};
     }
     
-    if (this.item.getInnerHtml()) {
+    if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
       this.innerHtmlChanged();
     }
     
@@ -228,7 +228,7 @@ WebDoc.ItemView = $.klass({
         height: "100%"
       });
       this.domNode.append(this.itemDomNode);
-      if (this.item.getInnerHtml()) {
+      if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
         this.innerHtmlChanged();
       }      
       this.select();

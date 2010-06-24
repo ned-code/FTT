@@ -207,7 +207,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     if (this.data && this.data.position && json.item.position != this.data.position) {
       refreshPositionZ = true;
     }
-    if (this.data && this.data && json.item.inner_html != this.data.inner_html) {
+    if (this.data && json.item.inner_html != this.data.inner_html) {
       refreshInnerHtml = true;
     }
     if (this.data.data && this.data.data.preference && json.item.data.preference && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
@@ -216,6 +216,10 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
     $super(json, onlyMissingValues);
 
+    //TODO JBA Hack because sometime innerHtml is null but it comes a null string in database.
+    if (this.data.inner_html && this.data.inner_html === 'null') {
+      this.data.inner_html = null;
+    }
     this.setIsPlaceholder(this.data.data.is_placeholder, false); 
 
     this._refreshClasses();
