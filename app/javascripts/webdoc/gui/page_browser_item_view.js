@@ -25,34 +25,25 @@ WebDoc.PageBrowserItemView = $.klass({
     
     this.page = page;
     
-    try {
-      var pageItem = $('<li/>', { draggable: "true" }),
-          pageItemScreen = jQuery('<div/>', { 'class': "layer" }),
-          pageItemNumber = $('<span/>').addClass(numberClass),
-          pageItemLoading = $('<span/>').addClass( this.LOADING_ICON_CLASS ),
-          pageItemThumb = $('<div/>').addClass( this.THUMB_CLASS + " " + page.document.styleClass() ),
-          pageItemThumbView = new WebDoc.PageThumbnailView(page, 128, 128).domNode;
-      
-      this.domNode = pageItem;
-      this.thumbNode = pageItemThumb;
-      
-      // Construct Item DOM tree
-      pageItem
-      .append(
-        pageItemThumb
-        .append( pageItemThumbView )
-      )
-      //.append( pageItemEdit )
-      .append( pageItemScreen )
-      .append( pageItemNumber )
-      .append( pageItemLoading );
+    var pageItem = $('<li/>', { draggable: "true" }),
+        pageItemScreen = jQuery('<div/>', { 'class': "layer" }),
+        pageItemNumber = $('<span/>').addClass(numberClass),
+        pageItemLoading = $('<span/>').addClass( this.LOADING_ICON_CLASS ),
+        pageItemThumb = new WebDoc.PageThumbnailView(page, 120, 120).domNode.addClass( this.THUMB_CLASS + " " + page.document.styleClass() );
+    
+    this.domNode = pageItem;
+    this.thumbNode = pageItemThumb;
+    
+    // Construct Item DOM tree
+    pageItem
+    .append( pageItemThumb )
+    //.append( pageItemEdit )
+    .append( pageItemScreen )
+    .append( pageItemNumber )
+    .append( pageItemLoading );
 
-      page.document.addListener(this);
-      page.addListener(this);
-    }
-    catch(e) {
-      ddd("[PageBrowserItemView] initialize error: "+e);
-    }
+    page.document.addListener(this);
+    page.addListener(this);
   },
   
   destroy: function() {
@@ -90,9 +81,9 @@ WebDoc.PageBrowserItemView = $.klass({
   itemAdded: function(addedItem) {
    // If page contains a single text item, it will be used to define the page title, so
    // add a listener to this item so it will notify its changes to the related browser node
-   if(this.page.nbTextItems()===1 && addedItem.type() === "text") {
-     addedItem.addListener(this);
-   }
+   //if(this.page.nbTextItems()===1 && addedItem.type() === "text") {
+   //  addedItem.addListener(this);
+   //}
    //this.checkUpdateTitle();
   },
 
