@@ -68,6 +68,8 @@ WebDoc.PageThumbnailView = $.klass({
         pageWidth = widthInPx ? parseInt( css.width, 10 ) : this.PER_CENT_PAGE_WIDTH,
         pageHeight = heightInPx ? parseInt( css.height, 10 ) : this.PER_CENT_PAGE_HEIGHT;
     
+    this.pageThumbNode.css(this.page.data.data.css);
+    
     // To use a central square of the page to make the thumb
     
     //this.pageThumbNode.css({
