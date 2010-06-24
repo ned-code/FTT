@@ -5,16 +5,17 @@
 //= require "sha1"
 
 WebDoc.WebVideosSearch = $.klass({
-  initialize: function(searchFieldId, videosLibrary) {
+  initialize: function(searchFieldId, parentController) {
     this.searchField = $('#'+searchFieldId);
     this.searchForm = this.searchField.parents('form');
-    
+    this.libraryUtils = new LibraryUtils();
     this.youtubeSearch = new WebDoc.YoutubeSearch();
     this.vimeoSearch = new WebDoc.VimeoSearch();
     
-    // Set callback to the VideosLibrary
-    this.videosLibrary = videosLibrary;
-    
+    this.parentController = parentController;
+    this.detailsView = $('#media-browser-web-video-details');
+		this.prepareDetailsView();
+		
     // Observe search submission
     this.searchForm.submit(function(event) {
       event.preventDefault();
@@ -27,6 +28,15 @@ WebDoc.WebVideosSearch = $.klass({
     
     // Setup video rows drag n' drop
     $("#web-videos .rows").bind("dragstart", this.prepareRowDrag.pBind(this));
+		
+		//setup click listening
+		$("#web-videos .rows ul li a").live("click", function (event) {
+      var properties = $(event.target).parent().find('img').data("properties");
+			event.preventDefault();
+			this.showDetailsView(properties);
+      
+    }.pBind(this));
+
   },
 
 	prepareRowDrag: function(event) {
@@ -48,9 +58,139 @@ WebDoc.WebVideosSearch = $.klass({
     dt.setData("application/wd-video", $.toJSON(properties));
     
     // Drag "feedback"
-    var mediaDragFeedbackEl = this.videosLibrary.buildMediaDragFeedbackElement("video", properties.thumb_url);
+    var mediaDragFeedbackEl = this.parentController.buildMediaDragFeedbackElement("video", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
+  },
+
+	prepareDetailsView: function(){
+		this.detailsView.find('.drag_handle').attr({ draggable: "true" })
+    .bind("dragstart", this.prepareVideoDrag.pBind(this));
+
+		var showVideoPageEl = $("#show_video_page_action");
+    showVideoPageEl.data("originalText", showVideoPageEl.text());
+		
+		this.detailsVideoContainer = this.detailsView.find('.single_video');
+		
+		// handle possible actions 
+    $("#media-browser-web-video-details .actions").click(function(event){
+      event.preventDefault();
+      
+      var properties = this.detailsVideoContainer.data("properties"); //properties of the currenlty displayed video are store in this element
+      
+      var link = $(event.target);
+      var li = link.parent(); 
+      var info = $("<span>").text("...");
+      
+      switch (link.attr("id")) {
+        case "add_video_to_page_action":
+          ddd("add_video_to_page_action");
+          var properties = this.detailsVideoContainer.data("properties");
+          WebDoc.application.boardController.insertVideo(properties);
+          break;
+          
+        case "show_video_page_action" :
+          ddd("show_video_page_action");
+          window.open(properties.url, '_blank');
+          break;
+          
+        case "add_video_to_favorites" :
+					ddd('add_video_to_favorites');
+					break;
+				case "remove_video_from_favorites" :
+					ddd('remove_video_from_favorites');
+					break;
+			}
+		}.pBind(this));
+	},
+
+	showDetailsView: function(properties){
+		
+		// Set class in Titlebar ("youtube" or "vimeo")
+    this.detailsView.attr({'class':"view details_view web-search-tab "+properties.type});
+    
+    // Embed video
+    this.detailsVideoContainer.find('object').remove();
+    this.detailsVideoContainer.prepend(this.buildEmbeddedVideo(properties));
+    
+    // Store the current properties in detailsVideoContainer
+    this.detailsVideoContainer.data("properties", properties);
+    
+    // Title
+    var name = "";
+    if (properties.name) name = properties.name;
+    this.detailsView.find('.video_name').text(name);
+    
+    // View count
+    var viewCountEl = this.detailsView.find('.view_count span');
+    if (properties.view_count)
+      viewCountEl.text(this.libraryUtils.numberWithThousandsSeparator(properties.view_count,"'"));
+    else
+      viewCountEl.text('');
+    
+    // Description
+    var desc = properties.description || "";
+    var descEl = this.detailsView.find('.video_description');
+    descEl.text(desc);
+    
+    // Actions
+    var serviceName = properties.type === "youtube" ? "YouTube" : "Vimeo";
+    var showVideoPageEl = $("#show_video_page_action");
+    showVideoPageEl.text(showVideoPageEl.data("originalText").replace("*", serviceName));
+
+		this.parentController.hideAll();
+		$('#media-browser-web-video-details').show();
+	},
+	
+	prepareVideoDrag: function(event) {
+    // Started dragging a video from the details view (by grabbing its drag handle)
+    
+    var target = $(event.target);
+    if (!target.hasClass('drag_handle')) {
+      event.preventDefault();
+      return;
+    }
+    
+    var properties = this.detailsVideoContainer.data("properties");
+    this.dragStart(event, properties);
+  },
+
+	buildEmbeddedVideo: function(properties) {
+		ddd('buildEmbeddedVideo');
+		ddd(properties.type);
+		
+		var url,width,height;
+		
+		switch (properties.type) {
+			case 'youtube':
+				url = properties.embed_url + "&fs=1&hd=1&showinfo=0";
+		    width = 320;
+		    height = properties.aspect_ratio === "widescreen" ? 200 : 265;
+				break;
+			case 'vimeo' :
+				url = properties.embed_url;
+		    width = 320;
+		    height = parseInt(width * (properties.height / properties.width), 10);
+				break;
+		}
+    
+    var object = $("<object>").attr({
+      width: width,
+      height: height
+    })
+    .append($("<param>").attr({ name: "movie", value: url }))
+    .append($("<param>").attr({ name: "allowfullscreen", value: "true" }))
+    .append($("<param>").attr({ name: "allowscriptaccess", value: "always" }))
+    .append($("<embed>").attr({ 
+      src: url,
+      type: properties.embed_type,
+      allowscriptaccess: "always",
+      allowfullscreen: "true",
+      width: width,
+      height: height
+    }));
+    
+    return object;
   }
 
 });
@@ -149,31 +289,7 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
     }.pBind(this)).appendTo(this.videosContainerWrapper).wrap("<div class='load_more' style='display:none'>");
     this.loadMoreLink = this.container.find('.load_more');
   },
-  buildEmbeddedVideo: function(properties) {
-    // var src = "http://www.youtube.com/v/PZf8MRYasss&hl=en_US&fs=1&";
-    
-    var url = properties.embed_url + "&fs=1&hd=1&showinfo=0";
-    var width = 320;
-    var height = properties.aspect_ratio === "widescreen" ? 200 : 265;
-    
-    var object = $("<object>").attr({
-      width: width,
-      height: height
-    })
-    .append($("<param>").attr({ name: "movie", value: url }))
-    .append($("<param>").attr({ name: "allowFullScreen", value: "true" }))
-    .append($("<param>").attr({ name: "allowscriptaccess", value: "always" }))
-    .append($("<embed>").attr({ 
-      src: url,
-      type: properties.embed_type,
-      allowscriptaccess: "always",
-      allowfullscreen: "true",
-      width: width,
-      height: height
-    }));
-    
-    return object;
-  },
+
   performSearch: function() {
     // http://code.google.com/apis/youtube/2.0/developers_guide_protocol.html
     
@@ -189,7 +305,6 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
     
     $.getJSON(youtubeUrl,
       function(data){
-        // ddd(data)
         var totResults = data.feed.openSearch$totalResults.$t;
         
         this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(totResults,"'"));
@@ -264,38 +379,12 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
     }.pBind(this)).appendTo(this.videosContainerWrapper).wrap("<div class='load_more' style='display:none'>");
     this.loadMoreLink = this.container.find('.load_more');
   },
-  buildEmbeddedVideo: function() {
-    
-    var url = properties.embed_url;
-    var width = 320;
-    var height = parseInt(width * (properties.height / properties.width), 10);
-    
-    var object = $("<object>").attr({
-      width: width,
-      height: height
-    })
-    .append($("<param>").attr({ name: "movie", value: url }))
-    .append($("<param>").attr({ name: "allowfullscreen", value: "true" }))
-    .append($("<param>").attr({ name: "allowscriptaccess", value: "always" }))
-    .append($("<embed>").attr({ 
-      src: url,
-      type: properties.embed_type,
-      allowscriptaccess: "always",
-      allowfullscreen: "true",
-      width: width,
-      height: height
-    }));
-    
-    return object;
-  },
+
   performSearch: function() {
     // http://vimeo.proxy.app-base.com/api/docs/oauth
     // http://vimeo.com/api/docs/methods/vimeo.videos.search
     
     var timeStamp = parseInt(new Date().getTime() / 1000, 10); // seconds elapsed since Jan 1, 1970
-    /////
-    // ddd("TIME STAMP: "+timeStamp);
-    /////
     
     // Note: params order in this string will be ESSENTIAL (MUST be alphab. order)
     var requestParameterStringForSignature = 
@@ -333,31 +422,15 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
       encodeURIComponent(this.baseUrl) + "&" +
       encodeURIComponent(requestParameterStringForSignature);
     
-    /////
-    // ddd("BASE STRING: "+baseString);
-    /////
-    
     var key = this.consumerSecret + "&";
     
     var b64Signature = b64_hmac_sha1(key, baseString); // I use the sha1.js lib from jshash-2.2.zip (http://pajhome.org.uk/crypt/md5/instructions.html)
     
-    /////
-    // ddd("B64 SIGNATURE: "+b64Signature);
-    /////
-    
     var signature = encodeURIComponent(b64Signature+"=");
-    
-    /////
-    // ddd("PERCENT-ENCODED SIGNATURE: "+signature);
-    /////
     
     var vimeoUrl = this.baseUrl + "?" +
     requestParameterStringForUrl +
     "&oauth_signature=" + signature;
-    
-    /////
-    // ddd("FINAL URL: "+vimeoUrl);
-    /////
     
     // ABSOLUTELY ESSENTIAL DISCOVERY:
     // in this case I can't simply use $.getJSON as I do for youtube, 

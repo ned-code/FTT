@@ -10,10 +10,11 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 
   initialize: function() {
     this.webSearchController = new WebDoc.WebSearchController("media-browser-web");
-    // this.videosLibrary = new WebDoc.VideosLibrary("videos");
-    // this.appsLibrary = new WebDoc.AppsLibrary("apps");
+		// just to preload the icon (so that it'll be immediately available at the first drag)
+		
+		$(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("video", ""));
+		$(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("image", ""));
     // this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");
-    // this.webBrowser = new WebDoc.WebBrowser("browser"); // Provisory, will be added in a later alpha
     
     this.domNode = $(this.MEDIA_BROWSER_SELECTOR);
 	},

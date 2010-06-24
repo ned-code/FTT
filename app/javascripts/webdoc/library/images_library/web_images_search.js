@@ -3,7 +3,7 @@
 **/
 
 WebDoc.WebImagesSearch = $.klass({
-  initialize: function(searchFieldId, imagesLibrary) {
+  initialize: function(searchFieldId, parentController) {
 		ddd('[WebImagesSearch] initialize');
     this.searchField = $('#'+searchFieldId);
     this.searchForm = this.searchField.parents('form');
@@ -12,7 +12,7 @@ WebDoc.WebImagesSearch = $.klass({
     this.googleImagesSearch = new WebDoc.GoogleImagesSearch();
     
     // Set callback to the ImagesLibrary
-    this.imagesLibrary = imagesLibrary;
+    this.parentController= parentController;
 		this.imageDetailsView = $('#media-browser-web-images-details #image-details');
 		this.prepareDetailsView();
     
@@ -28,19 +28,17 @@ WebDoc.WebImagesSearch = $.klass({
     
     // Setup thumbnails drag n' drop
     $("#web-images .thumbnails").bind("dragstart", function(event){
-			ddd('drats sfdgdf');
 			this.dragStart(event);
 		}.pBind(this));
 		
 		//setup click listening
 		$("#web-images .thumbnails ul li a").live("click", function (event) {
       var properties = $(event.target).parent().find('img').data("properties");
-      ddd('click on an image + properties : ' + properties );
 			this.showDetailsView(properties);
       event.preventDefault();
     }.pBind(this));
   },
-
+	
 	dragStart: function(event) {
     // we take parent and then search down the img because safari and firefox have not the same target.
     // on firefox target is the a tag but in safarai target is the img.
@@ -51,7 +49,7 @@ WebDoc.WebImagesSearch = $.klass({
     dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id}));
     
     //Drag "feedback"
-    var mediaDragFeedbackEl = this.imagesLibrary.buildMediaDragFeedbackElement("image", properties.thumb_url);
+    var mediaDragFeedbackEl = this.parentController.buildMediaDragFeedbackElement("image", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   },
@@ -105,7 +103,7 @@ WebDoc.WebImagesSearch = $.klass({
 		
 		this.detailsViewImg = this.imageDetailsView.find('.single_image img');
 		
-		this.imagesLibrary.hideAll();
+		this.parentController.hideAll();
 		
 		this.imageDetailsView.find('.single_image')
     .attr({ draggable: "true" })
