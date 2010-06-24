@@ -1,10 +1,20 @@
 require "xmpp_notification"
 
 class Page < ActiveRecord::Base
+
   has_uuid
   set_primary_key :uuid
-  
-  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind
+
+  store_prefix = S3_CONFIG[:storage] == 's3' ? '' : 'uploads/'
+  attachment_path = store_prefix+"page/thumbnail/:uuid/:basename.:extension"
+  has_attached_file :thumbnail,
+                    :default_url   => "",
+                    :storage => S3_CONFIG[:storage].to_sym,
+                    :s3_credentials => S3_CONFIG,
+                    :bucket => S3_CONFIG[:assets_bucket],
+                    :path => S3_CONFIG[:storage] == 's3' ? attachment_path : ":rails_root/public/#{attachment_path}",
+                    :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{attachment_path}"
+      
 
   attr_accessor_with_default :touch_document_active, true
   
@@ -13,14 +23,18 @@ class Page < ActiveRecord::Base
   # see XmppPageObserver
   attr_accessor_with_default :must_notify, false
   attr_accessor_with_default :deep_notify, false
-  
+
+  attr_accessor :remote_thumbnail_url
+
+  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind, :remote_thumbnail_url
+
   # ================
   # = Associations =
   # ================
   
   has_many :items, :dependent => :delete_all
   belongs_to :document
-  belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
+  # belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
   
   # should be placed after associations declaration
   accepts_nested_attributes_for :items, :allow_destroy => true
@@ -38,7 +52,8 @@ class Page < ActiveRecord::Base
   # =============
   # = Callbacks =
   # =============
-  
+
+  before_validation :download_image_provided_by_remote_thumbnail_url
   before_save :update_position_if_moved
   before_save :set_page_data
   before_create :set_position
@@ -98,6 +113,33 @@ class Page < ActiveRecord::Base
   def touch
     update_attribute("updated_at", Time.now)
   end
+
+  def touch_and_need_update_thumbnail
+    update_attributes({
+            :updated_at => Time.now,
+            :thumbnail_need_update => true
+    })
+  end
+
+  def self.process_pending_thumbnails
+    pages = Page.all_need_process_thumbnail
+    if pages.present?
+      thumbnail_service = Services::Bluga.new
+      pages.each do |page|
+        thumbnail_service.process_page(page)
+      end
+    end
+  end
+
+  def self.all_need_process_thumbnail
+    self.all(
+      :conditions => ['thumbnail_secure_token IS ? AND thumbnail_need_update = ?', nil, true]
+    )
+  end
+
+  def generate_and_set_thumbnail_secure_token
+    self.thumbnail_secure_token = UUID::generate
+  end
   
   private
   
@@ -122,6 +164,15 @@ class Page < ActiveRecord::Base
       else
         self.data = { :css =>  default_css }
       end
+    end
+  end
+
+  def download_image_provided_by_remote_thumbnail_url
+    require 'open-uri'
+    if remote_thumbnail_url.present?
+      io = open(URI.parse(remote_thumbnail_url))
+      def io.original_filename; base_uri.path.split('/').last; end
+      self.thumbnail = io
     end
   end
   

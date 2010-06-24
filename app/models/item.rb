@@ -24,8 +24,8 @@ class Item < ActiveRecord::Base
   # = Callbacks =
   # =============
 
-  after_save :touch_page
-  after_destroy :touch_page
+  after_save :touch_page_and_need_update_thumbnail
+  after_destroy :touch_page_and_need_update_thumbnail
 
   # ===============
   # = Validations =
@@ -76,8 +76,8 @@ class Item < ActiveRecord::Base
 
   # after_save
   # after_destroy
-  def touch_page
-    self.page.touch if touch_page_active == true
+  def touch_page_and_need_update_thumbnail
+    self.page.touch_and_need_update_thumbnail if touch_page_active == true
   end
 
   def self.sanitize_html_to_serialize(html)

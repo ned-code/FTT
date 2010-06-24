@@ -3,8 +3,21 @@
   %head
     %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
     %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
-    %title= "#{yield(:page_title)}"
+    %title= "webdoc - alpha - #{yield(:title)}"
+    = include_stylesheets :common, :media => 'all'
 
   %body
     = yield
-  = render :partial => "layouts/googleAnalytics"
+
+    = include_javascripts :common
+    = yield :scripts # include view specific scripts after common scripts.
+    :javascript
+      WebDoc.shindig = {};
+      WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";
+
+      WebDoc.Application.start();
+
+
+
+
+
