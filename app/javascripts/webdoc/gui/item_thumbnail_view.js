@@ -184,13 +184,13 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
   
   objectChanged: function($super, item) {
     $super(item);
-    if (this.item.data.data.tag == "iframe" || this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i)) {
+    if (this.item.data.data.tag == "iframe" || (this.item.getInnerHtml() && this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i))) {
       this.domNode.addClass("widget_thumb");    
     }
   },
   
   innerHtmlChanged: function() {
-    if (this.item.data.data.tag != "iframe" && !this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i)) {
+    if (this.item.data.data.tag != "iframe" && (!this.item.getInnerHtml() || !this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i))) {
       if (!jQuery.string(this.item.getInnerHtml()).empty()) {
         this.domNode.html(this.item.getInnerHtml());
       }
