@@ -14,7 +14,6 @@ WebDoc.HtmlTool = $.klass(WebDoc.Tool, {
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_HTML;
     newItem.data.data.tag = "div";
-    newItem.data.data.innerHTML = "";
     newItem.data.data.css = { top: "100px", left: "100px", width: "256px", height: "128px"};
     WebDoc.application.boardController.insertItems([newItem]);    
     var createdItemView = WebDoc.application.boardController.currentPageView().itemViews[newItem.uuid()];

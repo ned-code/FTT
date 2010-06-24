@@ -19,11 +19,11 @@
   </tr>
   <tr>
     <th>Duration:</th>
-    <td><%= colorize(@sample.duration, 1, 2) %> ms</td>
+    <td><%= raw colorize(@sample.duration, 1, 2) %> ms</td>
   </tr>
   <tr>
     <th>CPU Burn:</th>
-    <td><%= to_ms(@sample.params[:cpu_time]) if @sample.params[:cpu_time] %> ms</td>
+    <td><%= raw to_ms(@sample.params[:cpu_time]) if @sample.params[:cpu_time] %> ms</td>
   </tr>
   
   <% unless @custom_params.empty? %>
@@ -62,7 +62,7 @@
 <br/>
 <div id="view_sample">
 	<% if @sample.profile %>
-	  <%= profile_table(@sample.profile) %> 
+	  <%= raw profile_table(@sample.profile) %> 
 	<% else %>
 	<div align=center width="100%">
 		<%= show_view_link 'Summary', 'show_sample_summary' %>
@@ -74,7 +74,7 @@
 		options = {:align => 'center', :id => p}
 		options[:style] = 'display: none' unless p == params[:action]
 		content_tag('div', render(:partial => p), options)
-	end.join(' ')%>
+	end.join(' ').html_safe%>
 	<% end -%>
 
 </div>

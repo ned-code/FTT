@@ -127,8 +127,8 @@
 
 #notification_bar {
   position: fixed;
-  bottom:30px;
-  left:0px;
+  top:38px;
+  left:7px;
   height: 25px;
   background-color:#0078AE;
   z-index:2000001;

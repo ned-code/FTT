@@ -45,7 +45,7 @@ WebDoc.HtmlView = $.klass(WebDoc.ItemView, {
   
   innerHtmlChanged: function($super) {
     if (this.item.data.data.tag !== 'iframe' && !WebDoc.application.disableHtml && this.item.data.data.tag !== "iframe") {    
-      this.itemDomNode.html($.string().stripScripts(this.item.data.data.innerHTML));
+      this.itemDomNode.html($.string().stripScripts(this.item.getInnerHtml()));
     }
     this._displayDefaultContentIfNeeded(this.itemDomNode);    
     // Highlight code blocks in the html -
@@ -113,7 +113,7 @@ WebDoc.HtmlView = $.klass(WebDoc.ItemView, {
   
   _displayDefaultContentIfNeeded: function(parent) {
     if (!this.domNode.hasClass("item-edited")) {
-      if (this.item.data.data.tag !== "iframe" && (!this.item.data.data.innerHTML || $.string().blank(this.item.data.data.innerHTML))) {
+      if (this.item.data.data.tag !== "iframe" && (!this.item.getInnerHtml() || $.string().blank(this.item.getInnerHtml()))) {
         parent.append(this.placeholderNode);
       }
       else if (this.placeholderNode) {

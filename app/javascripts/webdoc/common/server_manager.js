@@ -200,7 +200,7 @@ jQuery.extend(WebDoc.ServerManager, {
       success: function(data, textstatus) {
         // refresh is needed because some values are generated on server side
         // i.e. page size and background and id
-        object.refresh(data);
+        object.refresh(data, true);
         object.isNew = false;
         // we must update the cache with the id that comes from the server
         WebDoc.ServerManager.cache.store(object);

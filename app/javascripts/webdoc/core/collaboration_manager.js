@@ -23,16 +23,14 @@ WebDoc.CollaborationManager = $.klass(
     },
 
     listenXMPPNode: function(nodeName) {
-      $.getJSON("/user", function(userData) {
-        this._from = userData.user.username.toLowerCase() + "@webdoc.com/web_" + WebDoc.ServerManager.xmppClientId ;
-        ddd("XMPP user from", this._from, userData);
-        // we want to listen only one node. So be sure to remove all previous connection and create a new fresh XMPP connection.
-        this.disconnect();
-        this._nodeName = nodeName;
-        this._connection = new Strophe.Connection(this.BOSH_SERVICE);  
-        ddd("will connect");      
-        this._connection.connect(this._from,"1234", this._onConnect.pBind(this));              
-      }.pBind(this));      
+      this._from = WebDoc.Application.getCurrentUser().data.username.toLowerCase() + "@webdoc.com/web_" + WebDoc.ServerManager.xmppClientId ;
+      ddd("XMPP user from", this._from);
+      // we want to listen only one node. So be sure to remove all previous connection and create a new fresh XMPP connection.
+      this.disconnect();
+      this._nodeName = nodeName;
+      this._connection = new Strophe.Connection(this.BOSH_SERVICE);  
+      ddd("will connect");      
+      this._connection.connect(this._from,"1234", this._onConnect.pBind(this));                    
     },
     
     disconnect: function()
