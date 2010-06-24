@@ -1036,6 +1036,18 @@ body {
   background: rgba(128,128,128,0.5);
 }
 
+y_scrollbar {
+  -webkit-transition: top 0.025s linear, width 0.1s linear;
+  -moz-transition:    top 0.025s linear, width 0.1s linear;
+  transition:         top 0.025s linear, width 0.1s linear;
+}
+x_scrollbar {
+  -webkit-transition: left 0.025s linear, width 0.1s linear;
+  -moz-transition:    left 0.025s linear, width 0.1s linear;
+  transition:         left 0.025s linear, width 0.1s linear;
+}
+
+
 .pages_panel .x_scrollbar_container {
   left: 6px; right: 6px; top: 128px;
   height: 10px;
@@ -1069,4 +1081,10 @@ body {
 #webdoc_y_scrollbar {
   top: 44px; bottom: 38px; right: 6px;
   width: 10px;
+}
+
+.no_transition {
+  -webkit-transition: none;
+  -moz-transition:    none;
+  transition:         none;
 }

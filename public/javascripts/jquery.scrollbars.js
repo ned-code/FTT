@@ -24,10 +24,11 @@
 		  scroll.xmax = elem.scrollLeft(9999999).scrollLeft();
 		  scroll.xsize = width / (width + scroll.xmax);
 		  scroll.xratio = scroll.x / scroll.xmax;
-		  scroll.xtravel = options.x.css({ WebkitTransition: 'none', width: '100%' }).width();
+		  scroll.xtravel = options.x.addClass('no_transition').css({ width: '100%' }).width();
 		  
-		  options.x.css({
-		  	WebkitTransition: 'left 0.025s linear, width 0.1s linear',
+		  options.x
+		  .removeClass('no_transition')
+		  .css({
 		  	width: scroll.xsize * 100 + '%',
 		  	opacity: scroll.xsize === 1 ? 0 : 1 
 		  });
@@ -42,10 +43,11 @@
 		  scroll.ymax = elem.scrollTop(9999999).scrollTop();
 		  scroll.ysize = height / (height + scroll.ymax);
 		  scroll.yratio = scroll.y / scroll.ymax;
-		  scroll.ytravel = options.y.css({ WebkitTransition: 'none', height: '100%' }).height();
+		  scroll.ytravel = options.y.addClass('no_transition').css({ height: '100%' }).height();
 		  
-		  options.y.css({
-		  	WebkitTransition: 'top 0.025s linear, height 0.1s linear',
+		  options.y
+		  .removeClass('no_transition')
+		  .css({
 		  	height: scroll.ysize * 100 + '%',
 		  	opacity: scroll.ysize === 1 ? 0 : 1
 		  });
@@ -54,15 +56,24 @@
 
 	}
 	
+	function moveBarX( elem, options, scroll ){
+		scroll.x = elem.scrollLeft();
+		scroll.xratio = scroll.x / scroll.xmax;
+		options.x.css({ left: scroll.xratio * (1 - scroll.xsize) * 100 + '%' });
+	}
+	
+	function moveBarY( elem, options, scroll ){
+		scroll.y = elem.scrollTop();
+		scroll.yratio = scroll.y / scroll.ymax;
+		options.y.css({ top: scroll.yratio * (1 - scroll.ysize) * 100 + '%' });
+	}
+	
 	jQuery.fn.scrollbars = function( o ){
 		
 		var options = jQuery.extend( {}, jQuery.fn.scrollbars.options, o ),
 				elem = this.eq(0),
 				store = {},
 				scroll = {};
-		
-		if (options.x) { options.x[0].draggable = true; }
-		if (options.y) { options.y[0].draggable = true; }
 		
 		update( elem, scroll, options );
 		
@@ -77,18 +88,14 @@
 		
 		elem.bind('scroll', function(e){
 			
-			var elem = jQuery(this);
-			
-			if (options.x) {
-				scroll.x = elem.scrollLeft();
-				scroll.xratio = scroll.x / scroll.xmax;
-				options.x.css({ left: scroll.xratio * (1 - scroll.xsize) * 100 + '%' });
+			// If this scrollbar exists, and isn't been grabbed
+			// directly by the mouse
+			if ( options.x ) {
+				moveBarX( elem, options, scroll );
 			}
 			
-			if (options.y) {
-				scroll.y = elem.scrollTop();
-				scroll.yratio = scroll.y / scroll.ymax;
-				options.y.css({ top: scroll.yratio * (1 - scroll.ysize) * 100 + '%' });
+			if ( options.y ) {
+				moveBarY( elem, options, scroll );
 			}
 			
 		});
@@ -101,8 +108,12 @@
 				
 				e.preventDefault();
 				
+				// Take direct control of the bar and store initial mouse pos
+				//scroll.xgrabbed = true;
+				
 				store.xstartpos = e.pageX;
 				store.xstartratio = scroll.xratio;
+				options.x.addClass('no_transition');
 				
 				jQuery(document)
 				.bind('mousemove.scrollbars', function(e){
@@ -118,6 +129,9 @@
 						diff = ( store.x - store.xstartpos ) / travel ;
 						ratio = store.xstartratio + diff;
 						
+						//limit ratio to range 0-1
+						ratio = ratio < 0 ? 0 : ratio > 1 ? 1 : ratio ;
+						
 						elem.scrollLeft( scroll.xmax * ratio );
 					}
 					
@@ -127,6 +141,8 @@
 					if (debug) { console.log('EVENT '+e.type, e); }
 					
 					jQuery(this).unbind('mousemove.scrollbars mouseup.scrollbars');
+					//scroll.xgrabbed = false;
+					options.x.removeClass('no_transition');
 					
 				});
 				
@@ -140,6 +156,9 @@
 			.bind('mousedown.scrollbars', function(e){
 				
 				e.preventDefault();
+				
+				// Take direct control of the bar
+				scroll.ygrabbed = true;
 				
 				store.ystartpos = e.pageY;
 				store.ystartratio = scroll.yratio;
@@ -167,6 +186,7 @@
 					if (debug) { console.log('EVENT '+e.type, e); }
 					
 					jQuery(this).unbind('mousemove.scrollbars mouseup.scrollbars');
+					scroll.ygrabbed = false;
 					
 				});
 				
