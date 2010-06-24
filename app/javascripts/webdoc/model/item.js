@@ -199,7 +199,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.page._itemZMoved(this);
   },
   
-  refresh: function($super, json) {
+  refresh: function($super, json, onlyMissingValues) {
     var refreshInnerHtml = false;
     var refreshPreferences = false;
     var refreshPositionZ = false;
@@ -214,7 +214,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
       refreshPreferences = true;
     }
     
-    $super(json);
+    $super(json, onlyMissingValues);
 
     this.setIsPlaceholder(this.data.data.is_placeholder, false); 
 

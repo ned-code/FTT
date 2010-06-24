@@ -124,8 +124,8 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     this.data.is_public = false;
   },
 
-  refresh: function($super, json) {
-    $super(json);
+  refresh: function($super, json, onlyMissingValues) {
+    $super(json, onlyMissingValues);
     var that = this;
     if (json.document.pages && $.isArray(json.document.pages)) {
       this.pages = [];    
