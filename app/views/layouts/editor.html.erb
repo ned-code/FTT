@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<% document_title @document.title %>
+<% session_key_name = ActionController::Base.session_options[:key] %>
+<% if params[:reader] == 'true'
+    current_class = 'mode-embed'
+  elsif params[:edit] == 'true'
+    current_class = 'mode-edit'
+  else
+    current_class = 'mode-preview'
+  end if %>
+
+<html xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type">
+    <meta content="chrome=1" http-equiv="X-UA-Compatible">
+    
+    <title>webdoc - alpha - Meh</title>
+    
+    <%= include_stylesheets :common, :media => 'all' %>
+    <%= include_stylesheets :page_editor, :media => 'all' %>
+  </head>
+  
+  <body class="editor <%= current_class %>">
+    <%= yield %>
+    
+    <!-- scripts -->
+    
+    <%= include_javascripts :common %>
+    <%= include_javascripts :page_editor %>
+    <% unless Rails.env.production? %>
+      <%= javascript_include_tag "#{APP_CONFIG['shindig_server_base']}js/core:rpc:pubsub.js?c=1&debug=1" %>
+    <% end unless %>
+    <%= include_javascripts :apps %>
+    <%= yield :scripts %>
+    <script>
+      WebDoc.authData = {
+        authToken:"<%= protect_against_forgery? ? form_authenticity_token : '' %>",
+        sessionKeyName:"<%= session_key_name %>",
+        cookiesSessionKeyName:"<%= cookies[session_key_name] %>"
+      };
+      WebDoc.shindig = {};
+      WebDoc.shindig.serverBase = "<%= APP_CONFIG['shindig_server_base'] %>";
+      
+      WebDoc.Application.main(function() {
+        var editor = new WebDoc.PageEditor();
+        editor.load("<%= @document.uuid %>", <%= edit_mode? %>);
+      });      
+      WebDoc.Application.start();
+    </script>
+
+    <%= render :partial => "layouts/feedback"; %>
+    <%= render :partial => "layouts/google_analytics"; %>
+
+  </body>
+</html>
