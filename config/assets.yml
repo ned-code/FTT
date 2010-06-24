@@ -139,20 +139,18 @@ javascripts:
     - app/javascripts/webdoc/controllers/inspectors/*.js
     - app/javascripts/webdoc/core/*.js
     
-    - app/javascripts/webdoc/library/library.js
+    - app/javascripts/webdoc/media_browser/library.js
+    - app/javascripts/webdoc/media_browser/apps_library.js
+    - app/javascripts/webdoc/media_browser/images_uploader.js
+    - app/javascripts/webdoc/media_browser/sha1.js
+    - app/javascripts/webdoc/media_browser/web_images_search.js
+    - app/javascripts/webdoc/media_browser/web_videos_search.js
+    - app/javascripts/webdoc/media_browser/images_uploader.js
+    - app/javascripts/webdoc/media_browser/theme_elements_library.js
+    - app/javascripts/webdoc/media_browser/web_browser.js
     - app/javascripts/webdoc/media_browser/web_search_controller.js
     - app/javascripts/webdoc/media_browser/media_browser_controller.js
     
-    - app/javascripts/webdoc/library/jqtouch.js
-    
-    - app/javascripts/webdoc/library/libraries_controller.js
-    - app/javascripts/webdoc/library/apps_library.js
-    - app/javascripts/webdoc/library/images_library/*.js
-    - app/javascripts/webdoc/library/images_library.js
-    - app/javascripts/webdoc/library/videos_library/*.js
-    - app/javascripts/webdoc/library/videos_library.js
-    - app/javascripts/webdoc/library/theme_elements_library.js
-    - app/javascripts/webdoc/library/web_browser.js
     - app/javascripts/webdoc/card/card.js
   explore:
     - app/javascripts/webdoc/explore/*.js
