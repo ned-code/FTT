@@ -176,24 +176,24 @@ body {
 
 .pages_panel .inspector {
     position: absolute;
-    left: 0; top: -130px;
+    left: 0; top: -144px;
     
-    /*-webkit-transform: scale(0.25);
-    -webkit-transform-origin: 3.2% 173px;
+    -webkit-transform: scale(0.25);
+    -webkit-transform-origin: 3.2% 194px;
     -webkit-transition: -webkit-transform 0.2s ease-out;
     
     -moz-transform: scale(0.25);
-    -moz-transform-origin: 3.2% 173px;
+    -moz-transform-origin: 3.2% 194px;
     -moz-transition: -webkit-transform 0.2s ease-out;
     
     transform: scale(0.25);
-    transform-origin: 3.2% 173px;
+    transform-origin: 3.2% 194px;
     transition: -webkit-transform 0.2s ease-out;
-*/
+
     background: rgba(0,0,0,0.66);
     
     /* Push the scrollbar */
-    height: 162px;
+    height: 176px;
     padding-bottom: 15px;
 }
 
@@ -220,9 +220,10 @@ body {
 }
 
 .page_thumb {
-  width: 128px; height: 128px;
+  width: 120px; height: 120px;
   position: relative;
   overflow: hidden;
+  background-color: hsla( 208, 8%, 20%, 0.9);
 }
 
 .page_thumb .webdoc {
@@ -230,10 +231,6 @@ body {
   left: 0; top: 0;
   overflow: hidden;
 }
-
-
-
-
 
 .page_browser_items {
     white-space: nowrap;
@@ -467,8 +464,11 @@ body {
   height: 32px;
 }
 
+.pages {
+    margin-top: 4px;
+}
 .pages li {
-    margin-right: 1px;
+    margin-right: 4px;
     position: relative;
     cursor: move;
 }
@@ -1037,7 +1037,7 @@ body {
 }
 
 .pages_panel .x_scrollbar_container {
-  left: 6px; right: 6px; top: 112px;
+  left: 6px; right: 6px; top: 128px;
   height: 10px;
   z-index: 2;
 }

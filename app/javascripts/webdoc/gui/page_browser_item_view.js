@@ -29,7 +29,7 @@ WebDoc.PageBrowserItemView = $.klass({
         pageItemScreen = jQuery('<div/>', { 'class': "layer" }),
         pageItemNumber = $('<span/>').addClass(numberClass),
         pageItemLoading = $('<span/>').addClass( this.LOADING_ICON_CLASS ),
-        pageItemThumb = new WebDoc.PageThumbnailView(page, 128, 128).domNode.addClass( this.THUMB_CLASS + " " + page.document.styleClass() );
+        pageItemThumb = new WebDoc.PageThumbnailView(page, 120, 120).domNode.addClass( this.THUMB_CLASS + " " + page.document.styleClass() );
     
     this.domNode = pageItem;
     this.thumbNode = pageItemThumb;
