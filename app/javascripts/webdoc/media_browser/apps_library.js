@@ -11,12 +11,9 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
 		ddd('[AppsLibrary] initialize');
     $super(libraryId);
 		
-		this.detailsView = $('app_details');
-    // Setup my apps
+		this.detailsView = $('#app_details');
     this._setupMyApps();
-    // Setup details view
-    //#Todo
-		//this._setupDetailsView();
+		this._setupDetailsView();
 
     // Observe thumbnails clicks with event delegation
     $("#"+libraryId).delegate(".thumbnails li a", "click", function (e) {
@@ -43,8 +40,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     this.myAppsContainer
     .find(".thumbnails")
     .delegate("a", "dragstart", this._prepareThumbDrag.pBind(this));
-    
-    $(document.body).append(this.buildMediaDragFeedbackElement("apps", "")); // just to preload the icon (so that it'll be immediately available at the first drag)
   },
   
   _setupDetailsView: function() {
@@ -54,10 +49,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     this.detailsView.find('.single_app')
     .attr({ draggable: "true" })
     .bind("dragstart", this._prepareAppDrag.pBind(this));
-
-    // // Handle title of Show app page action
-    //     var showAppPageEl = $("#show_app_page_action");
-    //     showAppPageEl.data("originalText", showAppPageEl.text());
     
     this.detailsAppContainer = this.detailsView.find('.single_app');
     
@@ -112,7 +103,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     var descEl = this.detailsView.find('.app_description');
     descEl.text(desc);
 		
-		$('#my-apps').hide();
+		this._hideAll();
   	this.detailsView.show();
 	},
 
@@ -200,5 +191,9 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("app", properties.icon_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
-  }
+  },
+
+	_hideAll: function(){
+		$('.app-tab').hide();
+	}
 });

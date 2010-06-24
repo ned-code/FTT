@@ -10,10 +10,12 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 
   initialize: function() {
     this.webSearchController = new WebDoc.WebSearchController("media-browser-web");
-		// just to preload the icon (so that it'll be immediately available at the first drag)
+		this.appsLibrary = new WebDoc.AppsLibrary("media-browser-apps");
 		
+		// just to preload the icon (so that it'll be immediately available at the first drag)
 		$(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("video", ""));
 		$(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("image", ""));
+		$(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("apps", ""));
     // this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");
     
     this.domNode = $(this.MEDIA_BROWSER_SELECTOR);
@@ -54,7 +56,7 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 		if($('#media-browser-apps').length){
 			//temps
 			this.showTab('#media-browser-apps');
-			$('#my-apps').show();
+			//$('#my-apps').show();
 		}
 		else{
 			ddd('ajax request to show apps');
