@@ -128,6 +128,7 @@ WebDoc.ImagesUploader = $.klass({
         this.resetUploadingUI();
         // let's call refreshMyImages a last time by forcing to reload the whole thing to fix pagination that might have been added
         //this.imagesLibrary.refreshMyImages();
+				this.imagesLibrary.showMyImages();
       }
     }.pBind(this))
     
