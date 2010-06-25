@@ -11,16 +11,6 @@ WebDoc.ThemeElementsLibrary = $.klass(WebDoc.Library, {
 
     this.themeElementsIFrame = this.themeElementsContainer.find('iframe');
 
-    // this.element.bind('pageAnimationEnd', function(event, info) {
-    //       var currentViewId = this.currentViewId();
-    //       if (currentViewId === this.element.attr("id")) {
-    //         if(this.themeElementsIFrame.attr('src') === '') {
-    //           this._refreshElements();
-    //         }
-    //         var currentDocument = WebDoc.application.pageEditor.currentDocument;
-    //         currentDocument.addListener(this);
-    //       }
-    //     }.pBind(this));
   },
 
 	showView: function(){
