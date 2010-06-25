@@ -125,7 +125,7 @@ class DocumentsController < ApplicationController
   # POST /documents
   def create
     @document = current_user.documents.create_with_uuid(params[:document])
-    
+    XmppNotification.xmpp_create_node(@document.uuid) 
     render :json => @document
   end
 
@@ -137,8 +137,9 @@ class DocumentsController < ApplicationController
   
   # PUT /documents/:id
   def update
-    @document.must_notify = true;
     @document.update_attributes(params[:document])
+    message = { :source => params[:xmpp_client_id], :document =>  @document.attributes }
+    XmppNotification.xmpp_notify(message.to_json, @document.uuid)    
     render :json => @document
   end
   
