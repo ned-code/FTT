@@ -99,6 +99,12 @@ class Page < ActiveRecord::Base
     update_attribute("updated_at", Time.now)
   end
   
+  def items_attributes=(params={})
+    params.each_value do |item_hash|
+      self.items << Item.new_with_uuid(item_hash)
+    end
+  end
+  
   private
   
   # before_save
