@@ -41,7 +41,7 @@ function insertIntoContacts(e) {
 	clone.css({
 		height: 0,
 		opacity: 0
-	})
+	});
 	
 	marker = children.eq( item.index() );
 	

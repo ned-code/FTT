@@ -1,7 +1,7 @@
 /**
  * @author julien
  */
-WebDoc.TEXT_INSPECTOR_GROUP = "TextInspectorGroup"
+WebDoc.TEXT_INSPECTOR_GROUP = "TextInspectorGroup";
 
 WebDoc.TextView = $.klass(WebDoc.ItemView, {
   

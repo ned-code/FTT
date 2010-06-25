@@ -82,18 +82,21 @@ WebDoc.PageBrowserController = $.klass({
       pageItem = new WebDoc.PageBrowserItemView(page);
       pageItemNode = pageItem.domNode;
       
-      pageBrowserItems.prepend(pageItemNode);
+      pageItemNode
+      .attr( 'data-webdoc-page', pageId )
+      .prependTo( pageBrowserItems );
 
       this.pageMap[ pageId ] = pageItem;
-      pageItemNode.attr('data-webdoc-page', pageId);
     }
-    
-    // Recalculate scrollbars
-    pageBrowserItems.trigger('resize');
     
     this.updateSelectedPage();
     this._updateIndexNumbers();
     this._updateThumbs();
+    
+    // Recalculate scrollbars
+    this.domNode
+    .find('.content')
+    .trigger('resize');
     
     if (WebDoc.application.boardController.isEditable()) {
       
@@ -473,7 +476,7 @@ WebDoc.PageBrowserController = $.klass({
         pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
         startObj, endObj;
     
-    this.domNode.removeClass(this.ACTIVE_CLASS)
+    this.domNode.removeClass(this.ACTIVE_CLASS);
     pageBrowserButton.removeClass(this.ACTIVE_CLASS);
     
     if ( !jQuery.support.css.transition ) {

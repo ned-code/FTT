@@ -364,4 +364,4 @@ WebDoc.ErrorManager = {
       alert("Oops. An error has occured. " + methodName + " " + errorMessage + " " + params.uuid() + ". Please refresh the page :-(");
     }
   }
-}
+};

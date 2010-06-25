@@ -1,4 +1,4 @@
-$ /**
+ /**
  * @author Stephen Band / Julien Bachmann
  */
 

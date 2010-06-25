@@ -81,12 +81,15 @@
 		// tricky one, there may be more conditions when
 		// we need to update...
 		jQuery(window)
-		.add(elem)
 		.bind('resize', function(){
 			update( elem, scroll, options );
 		});
 		
-		elem.bind('scroll', function(e){
+		elem
+		.bind('resize', function(){
+			update( elem, scroll, options );
+		})
+		.bind('scroll', function(e){
 			
 			// If this scrollbar exists, and isn't been grabbed
 			// directly by the mouse
