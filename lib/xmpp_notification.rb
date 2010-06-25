@@ -3,7 +3,7 @@ require "xmpp4r/pubsub"
 
 class XmppNotification
   @@xmpp_client = Jabber::Client.new('server@webdoc.com')
-  @@xmpp_off = false
+  @@xmpp_off = true
   
   def self.xmpp_create_node(node_name)
     if (!@@xmpp_off)
