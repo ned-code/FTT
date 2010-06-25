@@ -484,3 +484,7 @@ a[href="#webdoc-duplicate"]:hover     { background-position: 0 -960px; }
 a[href="#webdoc-duplicate"].active,
 a[href="#webdoc-duplicate"]:active    { background-position: 0 -1024px; }
 
+a[href="#browser"]                    { background-position: 0 -1088px; }
+a[href="#browser"]:hover              { background-position: 0 -1152px; }
+a[href="#browser"]:active             { background-position: 0 -1216px; }
+
