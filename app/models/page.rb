@@ -8,7 +8,7 @@ class Page < ActiveRecord::Base
   store_prefix = S3_CONFIG[:storage] == 's3' ? '' : 'uploads/'
   attachment_path = store_prefix+"page/thumbnail/:uuid/:basename.:extension"
   has_attached_file :thumbnail,
-                    :default_url   => "",
+                    :default_url   => "/images/icon_no_thumb_page_640x480.png",
                     :storage => S3_CONFIG[:storage].to_sym,
                     :s3_credentials => S3_CONFIG,
                     :bucket => S3_CONFIG[:assets_bucket],
@@ -91,7 +91,7 @@ class Page < ActiveRecord::Base
   end
   
   def thumbnail_url
-    thumbnail.try(:url) || "/images/no_thumb.jpg"
+    thumbnail.url
   end
   
   def to_param

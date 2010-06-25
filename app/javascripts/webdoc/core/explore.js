@@ -115,7 +115,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     }
 
     jQuery('.webdoc-viewer-title h4').truncate();
-    WebDoc.WebdocViewer.showViewers();
+    WebDoc.WebdocViewer.showViewers(false);
   },
 
   _createViewForDocument: function(document) {
