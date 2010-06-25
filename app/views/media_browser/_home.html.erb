@@ -29,6 +29,56 @@
     </ul>
   </div>
   <div id="media-browser-content">
+    <div id="media-browser-my-content" class='media-browser-tab' style='display:none'>
+      <%= render 'users/my_content_header'%>
+      <div id="media-browser-my-images" class='my-content-tab '>
+        <a href='#upload-images' class=''>
+          <%= t('.images.add_image') %>
+        </a>
+        <div id="my-images-library" class='thumbnails'>
+
+        </div>
+      </div>
+
+      <div id="media-browser-my-images-details" style='display:none' class='my-content-tab'>
+        <a href='#my-images' id='image-detail-back' class='back'>Back</a>
+        <div id="image-details">
+          <div class='single_image'>
+            <a href='' onclick="window.open(this.getAttribute('href'), '_blank'); return false;">
+              <img src='' alt='' />
+              <div class='icon_overlay'></div>
+            </a>
+          </div>
+          <h4 class="image_name"></h4>
+          <h5 class="image_size"></h5>
+          <div class="actions">
+            <ul>
+              <li>
+                <a id="add_image_to_page_action" href="">Add to page</a>
+              </li>
+              <li>
+                <a id="set_image_as_bg_action" href="">Set as background</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="media-browser-upload-images" style='display:none' class='my-content-tab'>
+        <div id="swfupload_container" style='display:none'>
+          <input id='upload_images_button' type='button' value="Choose images" />
+        </div>
+
+        <h1><%= t('.images.add_images_view.title') %></h1>
+        <div id="upload_control">
+          <span id='upload_images_button_background' class='button'><%= t('.images.buttons.upload') %></span>
+          <button id='cancel_images_upload' class='button' style='display:none'><%= t('.images.buttons.cancel_upload') %></button>
+          <div id="upload_images_spinner" style='display:none'></div>
+          <span class='uploading_info'><%= t('.images.add_images_view.choose_upload_image') %> </span>
+          <a href='#my-images'><%= t('.buttons.back') %></a>
+        </div>
+      </div>
+    </div>
     <div id="media-browser-home" class='media-browser-tab'>
       <h2>Most used apps</h2>
       <h2>Packages we recommand</h2>

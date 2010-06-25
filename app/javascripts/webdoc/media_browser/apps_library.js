@@ -28,7 +28,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   },
 
 	_createHandlers: function(eventType, obj, context){
-		ddd('createHa');
     this.element
     .delegate('a', eventType, WebDoc.handlers._makeLinkHandler( obj, context ) );
     //NOTE: _makeLinkHandler( obj, context ) is supposed to be private, but it's an easy way to listen the link

@@ -11,12 +11,13 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
   initialize: function() {
     this.webSearchController = new WebDoc.WebSearchController("media-browser-web");
 		this.appsLibrary = new WebDoc.AppsLibrary("media-browser-apps");
+		// this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");
 		
 		// just to preload the icon (so that it'll be immediately available at the first drag)
 		$(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("video", ""));
 		$(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("image", ""));
 		$(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("apps", ""));
-    // this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");
+    
     
     this.domNode = $(this.MEDIA_BROWSER_SELECTOR);
 	},
@@ -26,19 +27,11 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 	},
 	
 	showHome: function(){
-		ddd('[MediaBrowserController] showHome');
-		//media-browser-home is always in the dom !
 		this.showTab('#media-browser-home');
 	},
 	
 	showWeb: function(){
-		ddd('[MediaBrowserController] showWeb');
-		if($('#media-browser-web').length){
-			this.showTab('#media-browser-web');
-		}
-		else{
-			ddd('media-browser-web bot displayed, do ajax here');
-		}
+		this.showTab('#media-browser-web');
 	},
 	
 	showPackages: function(){
@@ -52,40 +45,21 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 	},
 	
 	showApps: function(){
-		ddd('[MediaBrowserController] showApps');
-		if($('#media-browser-apps').length){
-			//temps
-			this.showTab('#media-browser-apps');
-		}
-		else{
-			ddd('ajax request to show apps');
-			$.ajax({
-			  url: "/apps",
-			  success: function(html){
-					this._hideAll();
-			    $("#media-browser-content").append(html);
-			  }.pBind(this)
-			});
-		}
+		this.showTab('#media-browser-apps');
 	},
 	
-	showMyContent: function(){		
-		if($('#media-browser-my-content').length > 0){
+	showMyContent: function(){
+		WebDoc.application.myContentController 
+		if(WebDoc.application.mediaBrowserController.myContentsController){
 			this.showTab('#media-browser-my-content');
 		}
 		else{
-			$.ajax({
-			  url: "/images",
-			  success: function(html){
-					this._hideAll();
-			    $("#media-browser-content").append(html);
-			  }.pBind(this)
-			});
+			WebDoc.application.mediaBrowserController.myContentsController = new WebDoc.MyContentsController('media-browser-my-content');
+			this.showTab('#media-browser-my-content');
 		}
 	},
 	
 	showTab: function(tab_id){
-		ddd('[MediaBrowserController] showTab ' + tab_id);
 		this._hideAll();
 		$(tab_id).show();
 	},

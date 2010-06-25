@@ -149,6 +149,7 @@ javascripts:
     - app/javascripts/webdoc/media_browser/theme_elements_library.js
     - app/javascripts/webdoc/media_browser/web_browser.js
     - app/javascripts/webdoc/media_browser/web_search_controller.js
+    - app/javascripts/webdoc/media_browser/my_contents_controller.js
     - app/javascripts/webdoc/media_browser/media_browser_controller.js
     
     - app/javascripts/webdoc/card/card.js

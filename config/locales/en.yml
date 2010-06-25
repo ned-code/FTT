@@ -347,9 +347,8 @@ en:
   images:
     index:
       add_image: "Add Images"
-      add_images_view:
-        title: "Add Images"
-        choose_upload_image: "Choose image(s) to upload"
+      upload: "Upload"
+      cancel_uplad: "Cancel upload"
       buttons:
         back: "Back"
         upload: "Upload"
@@ -367,8 +366,15 @@ en:
         services:
           flickr: "Flickr"
           google: "Google Images"
+        add_images_view:
+          title: "Add Images"
+          choose_upload_image: "Choose image(s) to upload"
+        buttons:
+          upload: "Upload"
+          cancel_upload: "Cancel upload"
       buttons:
         search: "Search"
+        back: "Back"
       videos: 
         title: "Videos"
         my_videos: "My videos"
