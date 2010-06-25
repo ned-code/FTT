@@ -33,37 +33,45 @@ $.extend(WebDoc.Application, {
   
   start: function() {
     $(function() {
-      
-      $.ajax({
-        url: "/user",
-        type: 'GET',
-        dataType: 'json',
-        success: function(data, textStatus) {
-          if (window.WebDoc && WebDoc.authData) {
-            $.ajaxSetup({
-              data: {
-                authenticity_token: WebDoc.authData.authToken
-              }
-            });
+      if (WebDoc.Application.currentUser) {
+        WebDoc.Application._startWithCurrentUser();
+      }
+      else {
+        $.ajax({
+          url: "/user",
+          type: 'GET',
+          dataType: 'json',
+          success: function(data, textStatus) {
+            if (window.WebDoc && WebDoc.authData) {
+              $.ajaxSetup({
+                data: {
+                  authenticity_token: WebDoc.authData.authToken
+                }
+              });
+            }
+            this.currentUser = new WebDoc.User(data);
+            this._startWithCurrentUser();
+          }.pBind(WebDoc.Application)          ,
+          error: function(XMLHttpRequest, textStatus, errorThrown) {
+            ddd("Error occured:" + textStatus);
           }
-          this.currentUser = new WebDoc.User(data);
-          // execute before methods
-          for (var beforeKey in WebDoc.Application._beforeMain) {
-            WebDoc.Application._beforeMain[beforeKey].call(this);
-          }
-          if (WebDoc.Application._mainFunction) {
-            WebDoc.Application._mainFunction.call(this);
-          }      
-          // execute before methods
-          for (var afterKey in WebDoc.Application._afterMain) {
-            WebDoc.Application._afterMain[afterKey].call(this);
-          }          
-        }.pBind(WebDoc.Application),
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-          ddd("Error occured:" + textStatus);
-        }
-      });      
+        });
+      }   
     });
+  },
+  
+  _startWithCurrentUser: function() {
+    // execute before methods
+    for (var beforeKey in WebDoc.Application._beforeMain) {
+      WebDoc.Application._beforeMain[beforeKey].call(this);
+    }
+    if (WebDoc.Application._mainFunction) {
+      WebDoc.Application._mainFunction.call(this);
+    }      
+    // execute before methods
+    for (var afterKey in WebDoc.Application._afterMain) {
+      WebDoc.Application._afterMain[afterKey].call(this);
+    }
   },
   
   initializeSingletons: function(singletons, callBack) {

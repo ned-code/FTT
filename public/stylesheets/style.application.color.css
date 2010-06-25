@@ -20,8 +20,8 @@
 body {
     color: hsl(208, 6%, 30%);
     background-color: hsla(208, 33%, 98%, 0.88);
-    background-image: url('/images/application/content_bg.png');
-    /*background-image: url('/images/texture_bg.jpg');
+    background-image: url('../images/application/content_bg.png');
+    /*background-image: url('../images/texture_bg.jpg');
     background-position: 50% 0%;
     -webkit-background-size:  100% 100%;
     -moz-background-size:     100% 100%;
@@ -34,7 +34,7 @@ a       { color: hsl(208, 40%, 40%); }
 
 header {
     color: white;
-    background-image: url('/images/application/header_bg.png');
+    background-image: url('../images/application/header_bg.png');
     /*background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsla(208, 33%, 98%, 0.88) ), to( hsl(208, 12%, 82%) ));
     background-image: -moz-linear-gradient( -90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );
     background-image:      linear-gradient( -90deg, hsla(208, 33%, 98%, 0.88), hsl(208, 12%, 82%) );*/
@@ -177,17 +177,17 @@ header a {
 .content .loading-icon {
     width: 100%;
     height: 40px;
-    background-image: url('/images/loading-icon-16-greyblue.gif');
+    background-image: url('../images/loading-icon-16-greyblue.gif');
 }
 
 .action-zone a {
     color: hsl(208, 48%, 80%);
 }
 .confirmations .action-zone {
-    background-image: url('/images/action-bar-bg-confirmations.jpg');
+    background-image: url('../images/action-bar-bg-confirmations.jpg');
 }
 .passwords .action-zone {
-    background-image: url('/images/action-bar-bg-forgotten-pass.jpg');
+    background-image: url('../images/action-bar-bg-forgotten-pass.jpg');
 }
 
 .action-zone input[type=submit]:hover,
@@ -236,7 +236,7 @@ header a {
 
 .button {
     background-color: hsl( 208, 4%, 50% );
-    background-image: url('/images/application/icons.png');
+    background-image: url('../images/application/icons.png');
     background-repeat: no-repeat;
     color: white;
     -webkit-border-radius:              1em;
@@ -311,14 +311,14 @@ header a {
 .document-item .unshare-button           { color: white; }
 
 .add-button {
-    background: url('/images/application/icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
-    background: url('/images/application/icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
-    background: url('/images/application/icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
+    background: url('../images/application/icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 76%, 44%)), to(hsl(28, 80%, 50%)));
+    background: url('../images/application/icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
+    background: url('../images/application/icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 76%, 44% ), hsl(28, 80%, 50% ) );
 }
 .add-button:hover {
-    background: url('/images/application/icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 82%, 46%)), to(hsl(28, 88%, 52%)));
-    background: url('/images/application/icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
-    background: url('/images/application/icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
+    background: url('../images/application/icons.png') no-repeat, -webkit-gradient( linear, 0% 100%, 0% 0%, from(hsl(28, 82%, 46%)), to(hsl(28, 88%, 52%)));
+    background: url('../images/application/icons.png') no-repeat, -moz-linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
+    background: url('../images/application/icons.png') no-repeat,      linear-gradient( 90deg, hsl(28, 82%, 46% ), hsl(28, 88%, 52% ) );
 }
 
 .add-button:hover                         { background-position: 0 -962px; }

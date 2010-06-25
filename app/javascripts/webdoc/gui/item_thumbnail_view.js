@@ -58,7 +58,7 @@ WebDoc.ItemThumbnailView = $.klass({
           itemNode.attr(key, this.item.data.data[key]);
       }           
     }
-    if (!jQuery.string(this.item.getInnerHtml()).empty()) {
+    if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
       itemNode.html(this.item.getInnerHtml());
     }
     else if (this.item.data.data.innerHTMLPlaceholder){
@@ -100,7 +100,7 @@ WebDoc.ItemThumbnailView = $.klass({
   },
   
   innerHtmlChanged: function() {
-    if (!jQuery.string(this.item.getInnerHtml()).empty()) {
+    if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
       this.domNode.html(this.item.getInnerHtml());
     }
     else if (this.item.data.data.innerHTMLPlaceholder){
@@ -165,7 +165,7 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
   createDomNode: function($super) {
     
     if (this.item.data.data.tag == "iframe" || 
-        this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i)) {
+        (this.item.getInnerHtml() && this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i))) {
       var itemNode = $('<div/>');
     
       itemNode.attr("id", "thumb_" + this.item.uuid());
@@ -184,13 +184,13 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
   
   objectChanged: function($super, item) {
     $super(item);
-    if (this.item.data.data.tag == "iframe" || this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i)) {
+    if (this.item.data.data.tag == "iframe" || (this.item.getInnerHtml() && this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i))) {
       this.domNode.addClass("widget_thumb");    
     }
   },
   
   innerHtmlChanged: function() {
-    if (this.item.data.data.tag != "iframe" && !this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i)) {
+    if (this.item.data.data.tag != "iframe" && (!this.item.getInnerHtml() || !this.item.getInnerHtml().match(/<iframe|<script|<object|<embed/i))) {
       if (!jQuery.string(this.item.getInnerHtml()).empty()) {
         this.domNode.html(this.item.getInnerHtml());
       }

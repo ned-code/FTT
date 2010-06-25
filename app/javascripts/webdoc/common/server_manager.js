@@ -31,6 +31,9 @@ jQuery.extend(WebDoc.ServerManager, {
    *                 In the futur it can be attributes for the fetch (page number, etc...)
    */
   getRecords: function(recordClass, uuid, callBack, args) {
+    if (uuid === 'null') {
+      WebDoc.application.notificationController.notify("try to get null docment", WebDoc.NotificationController.ERROR);
+    }
     // we can check the cache if we search a record by uuid. Otherwise we need to request the database.
     if (uuid) {
       var cachedRecord = WebDoc.ServerManager.cache.get(recordClass, uuid);
@@ -364,4 +367,4 @@ WebDoc.ErrorManager = {
       alert("Oops. An error has occured. " + methodName + " " + errorMessage + " " + params.uuid() + ". Please refresh the page :-(");
     }
   }
-}
+};

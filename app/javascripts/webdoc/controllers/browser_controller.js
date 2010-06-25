@@ -9,9 +9,11 @@ WebDoc.BrowserController = $.klass({
 		ddd('[BrowserController] initialize');
   },
 
-	openBrowser: function(){
+	openBrowser: function(event){
 		if(!this.bringToFront()){
-			this.window_ref = window.open('/browse','browser_window', 'width=500,height=400,toolbar=yes,scrollbars=yes'); // 'width=undefined,height=undefined' is set to force Firefox to open a new window
+      var left = event.originalEvent.screenX - 500;
+			this.window_ref = window.open('/browse','browser_window', 'left='+ left + ',width=480,height=650,toolbar=yes,scrollbars=yes'); // 'width=undefined,height=undefined' is set to force Firefox to open a new window
+			this.bringToFront();
 		}
 	},
 	

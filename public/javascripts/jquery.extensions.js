@@ -210,17 +210,3 @@ jQuery.extend({
 });
 
 // Add easing functions to jQuery's animation capabilities
-
-jQuery.extend(jQuery.easing, {
-  // TODO: make this emulate 'muffled bounce' from the UIZE library
-  // because we like that. Yes - we do.
-  webdocBounce: function (x, t, b, c, d) {
-		if ((t/=d) < (1/2.5)) {
-			return c*(7.5625*t*t) + b;
-		} else if (t < (2/2.5)) {
-			return c*(7.5625*(t-=(1.5/2.5))*t + .75) + b;
-		} else {
-			return c*(7.5625*(t-=(2.25/2.5))*t + .9375) + b;
-		}
-	}
-})

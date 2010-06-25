@@ -205,4 +205,4 @@
 	_parseHtml: function(html,evt){
 		return false;
 	}
-}
+};

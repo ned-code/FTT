@@ -31,7 +31,7 @@ class ItemsController < PageController
   def update
     @item = @page.items.find_by_uuid(params[:id])
     @item.must_notify = true
-    @item.update_attributes(params[:item].merge(:must_notify => true))
+    @item.update_attributes(params[:item])
     
     render :json => @item
   end

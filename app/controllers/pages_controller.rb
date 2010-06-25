@@ -1,11 +1,15 @@
 class PagesController < DocumentController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:show, :callback_thumbnail]
+  before_filter :authenticate_if_needed, :only => [:show, :callback_thumbnail]
   access_control do
     allow :admin
     allow :editor, :of => :document
     actions :index, :show do
       allow :reader, :of => :document
       allow all, :if => :document_is_public?
+    end
+    action :show, :callback_thumbnail do
+      allow all, :if => :has_valid_secure_token?
     end
   end
   
@@ -16,7 +20,7 @@ class PagesController < DocumentController
   
   # GET /documents/:document_id/pages/:id
   def show
-    @page = @document.pages.find_by_uuid_or_position!(params[:id])
+    @page ||= @document.pages.find_by_uuid_or_position!(params[:id])
     respond_to do |format|
       # JBA TEMP
       # format.html do
@@ -27,8 +31,12 @@ class PagesController < DocumentController
       #     render :layout => "layouts/static_page"
       #   end
       # end
-      format.html { render :layout => "layouts/static_page" }
-      format.json { render :json => @page.to_json(:include => :items) }
+      format.html do
+        render :layout => "layouts/static_page"
+      end
+      format.json do
+        render :json => @page.to_json(:include => :items)
+      end
     end
   end
   
@@ -67,6 +75,29 @@ class PagesController < DocumentController
     @page.destroy
     
     render :json => {}
+  end
+
+  def callback_thumbnail
+    Services::Bluga.recieve(params)
+    render :text => ''
+  end
+
+private
+
+  def authenticate_if_needed
+    authenticate_user! unless has_valid_secure_token?
+  end
+
+  def has_valid_secure_token?
+    return false if params[:secure_token].blank?
+    id = params[:id]
+    id = params[:page_id] if id.length < 36 
+    @page ||= Page.first(:conditions => ['uuid = ? && thumbnail_secure_token = ?', id, params[:secure_token]])
+    if @page.present?
+      return true
+    else
+      return false
+    end
   end
   
 end
