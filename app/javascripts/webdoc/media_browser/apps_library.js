@@ -15,7 +15,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
 		this.detailsView = $('#app_details');
     this._setupMyApps();
 		this._setupDetailsView();
-		this._createHandlers('click', this._appsHandlers);
+		this.createHandlers(this.element, 'click', this._appsHandlers);
 		
     // Observe thumbnails clicks with event delegation
     $("#"+libraryId).delegate(".thumbnails li a", "click", function (e) {
@@ -25,12 +25,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     }.pBind(this));
 		
 		this._loadMyApps();	
-  },
-
-	_createHandlers: function(eventType, obj, context){
-    this.element
-    .delegate('a', eventType, WebDoc.handlers._makeLinkHandler( obj, context ) );
-    //NOTE: _makeLinkHandler( obj, context ) is supposed to be private, but it's an easy way to listen the link
   },
 	
 	_appsHandlers: {

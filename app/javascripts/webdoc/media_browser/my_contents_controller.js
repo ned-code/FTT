@@ -5,7 +5,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 		this.imageDetailsView = $('#media-browser-my-images-details #image-details');
 		this.prepareImageDetailsView();
 		this.domNode = $('#media-browser-my-content');
-		this._createHandlers('click', this._myContentHandlers);
+		this.createHandlers(this.domNode, 'click', this._myContentHandlers);
     
     this.imagePage = 1;
     this.myImagesContainer = $('#media-browser-my-images');
@@ -43,12 +43,6 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       event.preventDefault();
     }.pBind(this));
     
-  },
-  
-  _createHandlers: function(eventType, obj, context){
-    this.domNode
-    .delegate('a', eventType, WebDoc.handlers._makeLinkHandler( obj, context ) );
-    //NOTE: _makeLinkHandler( obj, context ) is supposed to be private, but it's an easy way to listen the link
   },
   
   _myContentHandlers: {
