@@ -7,58 +7,65 @@ WebDoc.WidgetManager = $.klass(
   initialize: function(callBack)    
   {
     this._callBack = callBack;
-    WebDoc.ServerManager.getRecords(WebDoc.Widget, 'youtube', this._assignYoutubeWidget.pBind(this));
-    WebDoc.ServerManager.getRecords(WebDoc.Widget, 'vimeo', this._assignVimeoWidget.pBind(this));
-	  WebDoc.ServerManager.getRecords(WebDoc.Widget, 'dailymotion', this._assignDailymotionWidget.pBind(this));
+    if (!WebDoc.WidgetManager.youtubeWidget) {
+      WebDoc.ServerManager.getRecords(WebDoc.Widget, 'youtube', this._assignYoutubeWidget.pBind(this));
+    }
+    if (!WebDoc.WidgetManager.vimeoWidget) {
+      WebDoc.ServerManager.getRecords(WebDoc.Widget, 'vimeo', this._assignVimeoWidget.pBind(this));
+    }
+    if (!WebDoc.WidgetManager.dailymotionWidget) {
+      WebDoc.ServerManager.getRecords(WebDoc.Widget, 'dailymotion', this._assignDailymotionWidget.pBind(this));
+    }
   },
 
   getVimeoWidget: function() {
-    return this.vimeoWidget;   
+    return WebDoc.WidgetManager.vimeoWidget;   
   },
   
   getYoutubeWidget: function() {
-    return this.youtubeWidget;   
+    return WebDoc.WidgetManager.youtubeWidget;   
   },
 
   getDailymotionWidget: function() {
-  	return this.dailymotionWidget;   
+  	return WebDoc.WidgetManager.dailymotionWidget;   
   },
   
   _assignYoutubeWidget: function(data) {
     if (data && data.length > 0) {
-      this.youtubeWidget = data[0];
+      WebDoc.WidgetManager.youtubeWidget = data[0];
     }
     else {
-      this.youtubeWidget = null;
+      WebDoc.WidgetManager.youtubeWidget = null;
     }
-    if (this.vimeoWidget !== undefined) {
-      this._callBack.call(this,WebDoc.WidgetManager);
-    }
+    WebDoc.WidgetManager._readyForCallBack();
   },
   
   _assignVimeoWidget: function(data) {
     if (data && data.length > 0) {
-      this.vimeoWidget = data[0];
+      WebDoc.WidgetManager.vimeoWidget = data[0];
     }
     else {
-      this.vimeoWidget = null;
+      WebDoc.WidgetManager.vimeoWidget = null;
     }    
-    if (this.youtubeWidget !== undefined) {
-      this._callBack.call(this,WebDoc.WidgetManager);
-    }    
+    WebDoc.WidgetManager._readyForCallBack();
   },  
     
   _assignDailymotionWidget: function(data) {
     if (data && data.length > 0) {
-      this.dailymotionWidget = data[0];
+      WebDoc.WidgetManager.dailymotionWidget = data[0];
     }
     else {
-      this.dailymotionWidget = null;
+      WebDoc.WidgetManager.dailymotionWidget = null;
     }
-    if (this.youtubeWidget !== undefined && this.vimeoWidget !== undefined) {
-      this._callBack.call(this,WebDoc.WidgetManager);
-    }
-  }  
+    WebDoc.WidgetManager._readyForCallBack();
+  },
+  
+  _readyForCallBack: function() {
+    if (WebDoc.WidgetManager.youtubeWidget !== undefined && WebDoc.WidgetManager.vimeoWidget !== undefined && WebDoc.WidgetManager.dailymotionWidget !== undefined) {
+      WebDoc.WidgetManager._callBack.call(this,WebDoc.WidgetManager);
+    }   
+  }
+  
 });
 
 $.extend(WebDoc.WidgetManager, {  

@@ -41,7 +41,10 @@
       };
       WebDoc.shindig = {};
       WebDoc.shindig.serverBase = "<%= APP_CONFIG['shindig_server_base'] %>";
-      
+      WebDoc.Application.currentUser = new WebDoc.User(<%= raw current_user.to_json.gsub('/script','/sscript') %>);
+      WebDoc.WidgetManager.vimeoWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_vimeo") { Medias::Widget.first(:conditions => {:system_name => 'vimeo'}).to_json } %>)
+      WebDoc.WidgetManager.youtubeWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_youtube") { Medias::Widget.first(:conditions => {:system_name => 'youtube'}).to_json } %>)
+      WebDoc.WidgetManager.dailymotionWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_dailymotion") { Medias::Widget.first(:conditions => {:system_name => 'dailymotion'}).to_json } %>)      
       WebDoc.Application.main(function() {
         var editor = new WebDoc.PageEditor();
         editor.load("<%= @document.uuid %>", <%= edit_mode? %>);
