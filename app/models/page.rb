@@ -1,5 +1,3 @@
-require "xmpp_notification"
-
 class Page < ActiveRecord::Base
 
   has_uuid
@@ -139,6 +137,12 @@ class Page < ActiveRecord::Base
 
   def generate_and_set_thumbnail_secure_token
     self.thumbnail_secure_token = UUID::generate
+  end
+  
+  def items_attributes=(params={})
+    params.each_value do |item_hash|
+      self.items << Item.new_with_uuid(item_hash)
+    end
   end
   
   private
