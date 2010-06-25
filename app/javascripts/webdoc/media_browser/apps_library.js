@@ -2,6 +2,7 @@
  * @author Zeno Crivelli
  * Modified by David Matthey
  * Modified by Stephen
+ * Modified by jonathan
 **/
 
 //= require <webdoc/model/widget>
@@ -14,26 +15,31 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
 		this.detailsView = $('#app_details');
     this._setupMyApps();
 		this._setupDetailsView();
-
+		this._createHandlers('click', this._appsHandlers);
+		
     // Observe thumbnails clicks with event delegation
     $("#"+libraryId).delegate(".thumbnails li a", "click", function (e) {
-      
-      // widget data is stored on the thumbnail element
       var widgetData = $( e.currentTarget ).data("widget");
-      ddd('click !');
-      this.prepareDetailsView( widgetData );
-			
-      //this.showDetailsView.click();
-      
+      this.showDetailsView( widgetData );
       e.preventDefault();
     }.pBind(this));
-	
-		this._loadMyApps();
 		
+		this._loadMyApps();	
   },
-  
+
+	_createHandlers: function(eventType, obj, context){
+		ddd('createHa');
+    this.element
+    .delegate('a', eventType, WebDoc.handlers._makeLinkHandler( obj, context ) );
+    //NOTE: _makeLinkHandler( obj, context ) is supposed to be private, but it's an easy way to listen the link
+  },
+	
+	_appsHandlers: {
+    'apps-list':  function(e){ WebDoc.application.mediaBrowserController.appsLibrary.showList(); }
+  },
+
   _setupMyApps: function() {
-    this.myAppsId = "my-apps";
+    this.myAppsId = "apps-list";
     this.myAppsContainer = $('#'+this.myAppsId);
     
     // Setup app thumbnails drag n' drop
@@ -56,10 +62,12 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     $("#app_details .actions").click(function(event){
       event.preventDefault();
       
-      var properties = this.detailsAppContainer.data("properties");
-      
+			ddd('icicicicicci');
+      var properties = this.detailsAppContainer.data("widget");
+      ddd(this.detailsAppContainer);
       var link = $(event.target);
-      
+			ddd(link);
+      ddd(link.attr('id'));
       switch (link.attr("id")) {
         case "add_app_to_page_action":
           ddd("add_app_to_page_action");
@@ -71,12 +79,16 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     
   },
   
-  prepareDetailsView: function($super, widgetData) {
-    $super(widgetData.properties);
+	showList: function(){
+		this._hideAll();
+		$('#apps-list').show();
+	},
+	
+  showDetailsView: function(widgetData) {
     
     var properties = widgetData.properties;
     // View title
-    this.detailsView.attr({'class':"view details_view "+properties.type});
+    this.detailsView.attr({'class':"view details_view app-tab "+properties.type});
     
     // Store the current properties in detailsAppContainer
     this.detailsAppContainer.data("widget", widgetData);
