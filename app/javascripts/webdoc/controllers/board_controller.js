@@ -1024,7 +1024,7 @@ WebDoc.BoardController = jQuery.klass({
   },
 
   _initResizable: function() {
-    ddd('[page view] init resize')
+    ddd('[page view] init resize');
     this.boardContainerNode.resizable({
       handles: 's, e, se',
       start: function(e, ui) {

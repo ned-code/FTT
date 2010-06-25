@@ -15,7 +15,7 @@ class DocumentsController < ApplicationController
     action :show do
       allow all, :if => :document_is_public?
       allow :reader, :of => :document
-      allow :editor, :of => :document      
+      allow :editor, :of => :document
     end
     allow all, :to => :explore
     allow all, :to => :featured

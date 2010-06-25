@@ -149,7 +149,7 @@ function rstr2any(input, encoding)
 
   /* Append leading zero equivalents */
   var full_length = Math.ceil(input.length * 8 /
-                                    (Math.log(encoding.length) / Math.log(2)))
+                                    (Math.log(encoding.length) / Math.log(2)));
   for(i = output.length; i < full_length; i++)
     output = encoding[0] + output;
 

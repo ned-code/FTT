@@ -163,3 +163,6 @@ javascripts:
     - app/javascripts/webdoc/apps/apps.js
   feedback:
     - app/javascripts/webdoc/feedback/zendesk.js
+  static_page:
+    - app/javascripts/webdoc/explore/webdoc_viewer.js
+    - app/javascripts/webdoc/core/static_page.js
