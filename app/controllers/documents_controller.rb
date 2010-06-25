@@ -57,7 +57,7 @@ class DocumentsController < ApplicationController
 
         docs_json = public_documents.map do |doc|
           cached_doc = Rails.cache.fetch("#{doc.cache_key}_explore") do
-            doc.as_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes)
+            doc.as_json( :include => { :pages => { :methods => :thumbnail_url, :include => :items } }, :methods => :extra_attributes)
           end
         end
         
@@ -87,7 +87,7 @@ class DocumentsController < ApplicationController
         featured_documents = Document.all_featured_paginated(params[:page], per_page)
         docs_json = featured_documents.map do |doc|
           cached_doc = Rails.cache.fetch("#{doc.cache_key}_explore") do
-            doc.as_json( :include => { :pages => { :include => :items} }, :methods => :extra_attributes)
+            doc.as_json( :include => { :pages => { :methods => :thumbnail_url,  :include => :items} }, :methods => :extra_attributes)
           end
         end
 
@@ -125,7 +125,7 @@ class DocumentsController < ApplicationController
   # POST /documents
   def create
     @document = current_user.documents.create_with_uuid(params[:document])
-    
+    XmppNotification.xmpp_create_node(@document.uuid) 
     render :json => @document
   end
 
@@ -137,8 +137,9 @@ class DocumentsController < ApplicationController
   
   # PUT /documents/:id
   def update
-    @document.must_notify = true;
     @document.update_attributes(params[:document])
+    message = { :source => params[:xmpp_client_id], :document =>  @document.attributes }
+    XmppNotification.xmpp_notify(message.to_json, @document.uuid)    
     render :json => @document
   end
   

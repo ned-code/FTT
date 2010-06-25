@@ -22,17 +22,20 @@ class ItemsController < PageController
   # POST /documents/:document_id/pages/:page_id/items
   def create
     @item = @page.items.new_with_uuid(params[:item])
-    @item.must_notify = true
     @item.save
+    if (@item.page)
+      message = { :source => params[:xmpp_client_id], :item =>  @item.attributes }      
+      XmppNotification.xmpp_notify(message.to_json, @item.page.document.uuid)
+    end    
     render :json => @item
   end
   
   # PUT /documents/:document_id/pages/:page_id/items/:id
   def update
     @item = @page.items.find_by_uuid(params[:id])
-    @item.must_notify = true
-    @item.update_attributes(params[:item])
-    
+    @item.update_attributes(params[:item])    
+    message = { :source => params[:xmpp_client_id], :item =>  @item.attributes }
+    XmppNotification.xmpp_notify(message.to_json, @item.page.document.uuid)
     render :json => @item
   end
   
@@ -40,7 +43,8 @@ class ItemsController < PageController
   def destroy
     @item = @page.items.find_by_uuid(params[:id])
     @item.destroy
-    
+    message = { :source => params[:xmpp_client_id], :item =>  { :page_id => @item.page.id, :uuid => @item.uuid }, :action => "delete" }
+    XmppNotification.xmpp_notify(message.to_json, @item.page.document.uuid)   
     render :json => {}
   end
   
