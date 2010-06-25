@@ -85,7 +85,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
       WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
       WebDoc.application.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "insert-app" );
-      WebDoc.application.browserTool = new WebDoc.BrowserTool("a[href='#open-browser']", "open-browser" );
+      WebDoc.application.browserTool = new WebDoc.BrowserTool("a[href='#browser']");
 
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
       WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
