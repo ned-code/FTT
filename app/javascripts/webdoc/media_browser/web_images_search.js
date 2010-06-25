@@ -14,7 +14,7 @@ WebDoc.WebImagesSearch = $.klass({
     // Set callback to the ImagesLibrary
     this.parentController= parentController;
 		this.imageDetailsView = $('#media-browser-web-images-details #image-details');
-		this.prepareDetailsView();
+		this.setupDetailsView();
     
     // Observe search submission
     this.searchForm.submit(function(event) {
@@ -54,7 +54,7 @@ WebDoc.WebImagesSearch = $.klass({
     dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   },
 
-	prepareDetailsView: function(){
+	setupDetailsView: function(){
     // handle possible actions 
     $("#media-browser-web-images-details #image-details .actions").click(function(event){
       event.preventDefault();

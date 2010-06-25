@@ -3,7 +3,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   initialize: function($super, libraryId) {
 		$super(libraryId);
 		this.imageDetailsView = $('#media-browser-my-images-details #image-details');
-		this.prepareImageDetailsView();
+		this.setupImageDetailsView();
 		this.domNode = $('#media-browser-my-content');
 		this.createHandlers(this.domNode, 'click', this._myContentHandlers);
     
@@ -77,7 +77,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.imagesUploader.loadSWFUpload();
   },
   
-  prepareImageDetailsView: function(){
+  setupImageDetailsView: function(){
     // handle possible actions 
     $("#media-browser-my-images-details .actions").click(function(event){
       event.preventDefault();

@@ -14,7 +14,7 @@ WebDoc.WebVideosSearch = $.klass({
     
     this.parentController = parentController;
     this.detailsView = $('#media-browser-web-video-details');
-		this.prepareDetailsView();
+		this.setupDetailsView();
 		
     // Observe search submission
     this.searchForm.submit(function(event) {
@@ -63,7 +63,7 @@ WebDoc.WebVideosSearch = $.klass({
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   },
 
-	prepareDetailsView: function(){
+	setupDetailsView: function(){
 		this.detailsView.find('.drag_handle').attr({ draggable: "true" })
     .bind("dragstart", this.prepareVideoDrag.pBind(this));
 

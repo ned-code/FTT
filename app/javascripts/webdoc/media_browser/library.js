@@ -21,10 +21,6 @@ WebDoc.Library = $.klass({
     container.find('.loading').remove();
   },
 
-  prepareDetailsView: function(properties) {
-    //common code to be executed for all subclasses
-  },
-
   buildMediaDragFeedbackElement: function(type, thumbUrl) { //type=image|video
     $("#media_drag_feedback").remove();
     var mediaThumb = $("<img>").attr({ src:thumbUrl }), icon = $("<span>");
