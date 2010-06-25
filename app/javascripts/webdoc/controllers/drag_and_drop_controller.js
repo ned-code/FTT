@@ -135,11 +135,7 @@
 			for(typeIndex in receivedTypes){
 				if (receivedTypes[typeIndex] == 'text/uri-list'){
 					WebDoc.application.boardController.unselectAll();
-			    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-			    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
-			    newItem.data.data.src = evt.originalEvent.dataTransfer.getData('text/uri-list');
-			    newItem.data.data.css = { top: "100px", left: "100px", width: "600px", height: "400px", overflow: "auto"};
-			    newItem.data.data.tag = "iframe";
+					var newItem = WebDoc.DrageAndDropController.buildItemForIframe(evt.originalEvent.dataTransfer.getData('text/uri-list'),evt);
 			    WebDoc.application.boardController.insertItems([newItem]);
 					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
 					return true;
@@ -156,6 +152,19 @@
 
 	addFileTypeSource: function(extension, parse_method){
 		this.KNOWN_FILE_TYPES.push([extension, parse_method]);
+	},
+	
+	buildItemForIframe: function(uri_list,event){
+		var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+		var pos = WebDoc.application.boardController.mapToPageCoordinate(event);
+		var posX = pos.x +'px';
+		var posY = pos.y +'px';
+		
+    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
+    newItem.data.data.src = uri_list;
+    newItem.data.data.css = { top: posY, left: posX, width: "600px", height: "400px", overflow: "auto"};
+    newItem.data.data.tag = "iframe";
+		return newItem;
 	},
 	
 	_parseUriList: function(uri_list, evt) {
