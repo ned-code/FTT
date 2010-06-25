@@ -18,6 +18,16 @@
   position: absolute;
 }
 
+.webdoc {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  
+  -webkit-transform-origin: 0px 0px;
+  -moz-transform-origin: 0px 0px;
+  transform-origin: 0px 0px;
+}
+
 .webdoc code,
 .webdoc .code {
   padding: 0.2em 0.3333em;
@@ -31,10 +41,10 @@
   margin-left:0.625em;
 }
 
-.webdoc span,font {
+.webdoc span, font {
   word-spacing: normal;
-  -moz-background-inline-policy:continuous;
-  -moz-background-origin:padding, content;
+  -moz-background-inline-policy: continuous;
+  -moz-background-origin: padding, content;
   -moz-background-size:cover;
 }
 

@@ -186,15 +186,10 @@ WebDoc.PageView = $.klass({
   setZoomFactor: function(factor) {
     var transform = {};
     this._zoomFactor = factor;
-    transform.WebkitTransformOrigin = "0px 0px";
     transform.WebkitTransform = this._zoomFactor === 1 ? "" : "scale(" + this._zoomFactor + ")";
-    transform.MozTransformOrigin = this._zoomFactor === 1 ? "" : "0px 0px";
     transform.MozTransform = transform.WebkitTransform;
     transform.width = 100 / this._zoomFactor + '%';
     transform.height = 100 / this._zoomFactor + '%';
-    transform.top = "0px";
-    transform.left = "0px";
-    transform.position = "absolute";
     ddd("zoom to fit", this._zoomFactor);
     this.domNode.css(transform);
     this._initPageSize();

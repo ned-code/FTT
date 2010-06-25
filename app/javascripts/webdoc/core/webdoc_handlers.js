@@ -19,9 +19,6 @@ WebDoc.handlers = {
           e.preventDefault();
         }
       });
-    })
-    .delegate( '.loading-icon', 'transitionend webkitTransitionEnd', function(e){
-      
     });
   },
   
@@ -103,7 +100,7 @@ WebDoc.handlers = {
     'redo':                 function(e) { WebDoc.application.undoManager.redo(); },
     'delete':               function(e) { WebDoc.application.boardController.deleteSelection(); },
     
-	'browser':              function(e)	{ WebDoc.application.browserController.openBrowser()}, 
+    'browser':              function(e)	{ WebDoc.application.browserController.openBrowser()}, 
     'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); },
     
     'show-thumbs':          function(e) { WebDoc.application.pageBrowserController.showThumbs(e); },

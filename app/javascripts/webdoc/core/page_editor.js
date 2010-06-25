@@ -24,7 +24,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     // Feature detection
     
     // Add feature detected styles to head
-    WebDoc.Application.createStyle('body, .push-scroll {'+
+    WebDoc.Application.createStyle('.push-scroll {'+
       'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
       'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
     '}');

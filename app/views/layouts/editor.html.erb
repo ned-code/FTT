@@ -21,7 +21,7 @@
     <%= include_stylesheets :page_editor, :media => 'all' %>
   </head>
   
-  <body class="editor <%= current_class %>">
+  <body class="editor push-scroll <%= current_class %>">
     <%= yield %>
     
     <!-- scripts -->
@@ -48,9 +48,9 @@
       });      
       WebDoc.Application.start();
     </script>
-
+    
     <%= render :partial => "layouts/feedback"; %>
     <%= render :partial => "layouts/google_analytics"; %>
-
+    
   </body>
 </html>
