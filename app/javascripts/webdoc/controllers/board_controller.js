@@ -686,8 +686,9 @@ WebDoc.BoardController = jQuery.klass({
       item.isNew = true;
       item.save();
     }.pBind(this));
-    
-    
+    if (items.length > 0) {
+      this.selectItemViews([this._currentPageView.findItemView(items[0].uuid())]);
+    }
     WebDoc.application.undoManager.registerUndo(function() {
       this.removeItems(items);
     }.pBind(this));
