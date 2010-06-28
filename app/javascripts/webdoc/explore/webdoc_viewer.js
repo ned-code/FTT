@@ -10,10 +10,10 @@ WebDoc.application = {};
 
 WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
     
-  initialize: function($super, viewerNode, static) {
+  initialize: function($super, viewerNode, statik) {
     $super();
 
-    if(static === undefined || static === false) {
+    if(statik === undefined || statik === false) {
       this._static = false;
     }
     else {
@@ -147,11 +147,11 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
 });
 
 $.extend(WebDoc.WebdocViewer, {
-  showViewers: function(static) {
+  showViewers: function(statik) {
     var allViewerContainers = jQuery(".webdoc-viewer-container");
     for (var i = 0; i < allViewerContainers.length; i++) {
       var aViewerContainer = jQuery(allViewerContainers[i]);
-      var viewer = new WebDoc.WebdocViewer(aViewerContainer, static);
+      var viewer = new WebDoc.WebdocViewer(aViewerContainer, statik);
       viewer.load(aViewerContainer.id());
     }
   }

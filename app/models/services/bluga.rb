@@ -4,7 +4,7 @@ class Services::Bluga
   USER_ID = 7115
   DEFAULT_WIDTH  = 640
   DEFAULT_HEIGHT = 480
-  WEBDOC_HOST = 'wd-st.webdoc.com'
+  WEBDOC_HOST = 'st-wd.webdoc.com'
   # WEBDOC_HOST = 'dev1.webdoc.com'
 
   def initialize(options={})
