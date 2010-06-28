@@ -44,7 +44,10 @@
       WebDoc.Application.currentUser = new WebDoc.User(<%= raw current_user.to_json.gsub('/script','/sscript') %>);
       WebDoc.WidgetManager.vimeoWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_vimeo") { Medias::Widget.first(:conditions => {:system_name => 'vimeo'}).to_json } %>)
       WebDoc.WidgetManager.youtubeWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_youtube") { Medias::Widget.first(:conditions => {:system_name => 'youtube'}).to_json } %>)
-      WebDoc.WidgetManager.dailymotionWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_dailymotion") { Medias::Widget.first(:conditions => {:system_name => 'dailymotion'}).to_json } %>)      
+      WebDoc.WidgetManager.dailymotionWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_dailymotion") { Medias::Widget.first(:conditions => {:system_name => 'dailymotion'}).to_json } %>) 
+      WebDoc.WidgetManager.metacafeWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_metacafe") { Medias::Widget.first(:conditions => {:system_name => 'metacafe'}).to_json } %>) 
+      WebDoc.WidgetManager.vidsGoogleWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_googlevideo") { Medias::Widget.first(:conditions => {:system_name => 'googlevideo'}).to_json } %>) 
+      WebDoc.WidgetManager.vidsMyspaceWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_myspacevideo") { Medias::Widget.first(:conditions => {:system_name => 'myspacevideo'}).to_json } %>)      
       WebDoc.Application.main(function() {
         var editor = new WebDoc.PageEditor();
         editor.load("<%= @document.uuid %>", <%= edit_mode? %>);
