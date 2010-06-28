@@ -25,7 +25,7 @@ class ItemsController < PageController
     @item.save
     if (@item.page)
       message = { :source => params[:xmpp_client_id], :item =>  @item.attributes }      
-      XmppNotification.xmpp_notify(message.to_json, @item.page.document.uuid)
+      @@xmpp_notifier.xmpp_notify(message.to_json, @item.page.document.uuid)
     end    
     render :json => @item
   end
@@ -35,7 +35,7 @@ class ItemsController < PageController
     @item = @page.items.find_by_uuid(params[:id])
     @item.update_attributes(params[:item])    
     message = { :source => params[:xmpp_client_id], :item =>  @item.attributes }
-    XmppNotification.xmpp_notify(message.to_json, @item.page.document.uuid)
+    @@xmpp_notifier.xmpp_notify(message.to_json, @item.page.document.uuid)
     render :json => @item
   end
   
@@ -44,7 +44,7 @@ class ItemsController < PageController
     @item = @page.items.find_by_uuid(params[:id])
     @item.destroy
     message = { :source => params[:xmpp_client_id], :item =>  { :page_id => @item.page.id, :uuid => @item.uuid }, :action => "delete" }
-    XmppNotification.xmpp_notify(message.to_json, @item.page.document.uuid)   
+    @@xmpp_notifier.xmpp_notify(message.to_json, @item.page.document.uuid)   
     render :json => {}
   end
   
