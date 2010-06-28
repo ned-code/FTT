@@ -7,65 +7,103 @@ WebDoc.WidgetManager = $.klass(
   initialize: function(callBack)    
   {
     this._callBack = callBack;
-    if (!WebDoc.WidgetManager.youtubeWidget) {
-      WebDoc.ServerManager.getRecords(WebDoc.Widget, 'youtube', this._assignYoutubeWidget.pBind(this));
-    }
-    if (!WebDoc.WidgetManager.vimeoWidget) {
-      WebDoc.ServerManager.getRecords(WebDoc.Widget, 'vimeo', this._assignVimeoWidget.pBind(this));
-    }
-    if (!WebDoc.WidgetManager.dailymotionWidget) {
-      WebDoc.ServerManager.getRecords(WebDoc.Widget, 'dailymotion', this._assignDailymotionWidget.pBind(this));
-    }
+    WebDoc.ServerManager.getRecords(WebDoc.Widget, 'youtube', this._assignYoutubeWidget.pBind(this));
+    WebDoc.ServerManager.getRecords(WebDoc.Widget, 'vimeo', this._assignVimeoWidget.pBind(this));
+    WebDoc.ServerManager.getRecords(WebDoc.Widget, 'dailymotion', this._assignDailymotionWidget.pBind(this));
+    WebDoc.ServerManager.getRecords(WebDoc.Widget, 'myspacevideo', this._assignVidsMyspaceWidget.pBind(this));
+    WebDoc.ServerManager.getRecords(WebDoc.Widget, 'metacafe', this._assignMetacafeWidget.pBind(this));
+    WebDoc.ServerManager.getRecords(WebDoc.Widget, 'googlevideo', this._assignVidsGoogleWidget.pBind(this));
   },
 
   getVimeoWidget: function() {
-    return WebDoc.WidgetManager.vimeoWidget;   
+    return this.vimeoWidget;   
   },
   
   getYoutubeWidget: function() {
-    return WebDoc.WidgetManager.youtubeWidget;   
+    return this.youtubeWidget;   
   },
 
   getDailymotionWidget: function() {
-  	return WebDoc.WidgetManager.dailymotionWidget;   
+    return this.dailymotionWidget;   
+  },
+  
+  getVidsMyspaceWidget: function() {
+    return this.vidsMyspaceWidget;   
+  },
+
+  getMetacafeWidget: function() {
+    return this.metacafeWidget;   
+  },
+  
+  getVidsGoogleWidget: function() {
+    return this.vidsGoogleWidget;   
   },
   
   _assignYoutubeWidget: function(data) {
     if (data && data.length > 0) {
-      WebDoc.WidgetManager.youtubeWidget = data[0];
+      this.youtubeWidget = data[0];
     }
     else {
-      WebDoc.WidgetManager.youtubeWidget = null;
+      this.youtubeWidget = null;
     }
-    WebDoc.WidgetManager._readyForCallBack();
+    if (this.vimeoWidget !== undefined) {
+      this._callBack.call(this,WebDoc.WidgetManager);
+    }
   },
   
   _assignVimeoWidget: function(data) {
     if (data && data.length > 0) {
-      WebDoc.WidgetManager.vimeoWidget = data[0];
+      this.vimeoWidget = data[0];
     }
     else {
-      WebDoc.WidgetManager.vimeoWidget = null;
+      this.vimeoWidget = null;
     }    
-    WebDoc.WidgetManager._readyForCallBack();
+    if (this.youtubeWidget !== undefined) {
+      this._callBack.call(this,WebDoc.WidgetManager);
+    }    
   },  
     
   _assignDailymotionWidget: function(data) {
     if (data && data.length > 0) {
-      WebDoc.WidgetManager.dailymotionWidget = data[0];
+      this.dailymotionWidget = data[0];
     }
     else {
-      WebDoc.WidgetManager.dailymotionWidget = null;
+      this.dailymotionWidget = null;
     }
-    WebDoc.WidgetManager._readyForCallBack();
+    if (this.youtubeWidget !== undefined && this.vimeoWidget !== undefined) {
+      this._callBack.call(this,WebDoc.WidgetManager);
+    }
   },
   
-  _readyForCallBack: function() {
-    if (WebDoc.WidgetManager.youtubeWidget !== undefined && WebDoc.WidgetManager.vimeoWidget !== undefined && WebDoc.WidgetManager.dailymotionWidget !== undefined) {
-      WebDoc.WidgetManager._callBack.call(this,WebDoc.WidgetManager);
-    }   
-  }
+  _assignVidsMyspaceWidget: function(data) {
+    if (data && data.length > 0) {
+      this.vidsMyspaceWidget = data[0];
+    }
+    else {
+      this.vidsMyspaceWidget = null;
+    }
+    this._callBack.call(this,WebDoc.WidgetManager);
+  },
   
+  _assignMetacafeWidget: function(data) {
+    if (data && data.length > 0) {
+      this.metacafeWidget = data[0];
+    }
+    else {
+      this.metacafeWidget = null;
+    }
+    this._callBack.call(this,WebDoc.WidgetManager);
+  },
+  
+  _assignVidsGoogleWidget: function(data) {
+    if (data && data.length > 0) {
+      this.vidsGoogleWidget = data[0];
+    }
+    else {
+      this.vidsGoogleWidget = null;
+    }
+    this._callBack.call(this,WebDoc.WidgetManager);
+  }
 });
 
 $.extend(WebDoc.WidgetManager, {  
