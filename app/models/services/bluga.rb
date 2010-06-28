@@ -4,8 +4,8 @@ class Services::Bluga
   USER_ID = 7115
   DEFAULT_WIDTH  = 640
   DEFAULT_HEIGHT = 480
-  # WEBDOC_HOST = 'wd-st.webdoc.com'
-  WEBDOC_HOST = 'dev1.webdoc.com'
+  WEBDOC_HOST = 'wd-st.webdoc.com'
+  # WEBDOC_HOST = 'dev1.webdoc.com'
 
   def initialize(options={})
     @api_key  = options[:api_key].present?  ? options[:api_key]  : API_KEY
@@ -15,16 +15,15 @@ class Services::Bluga
   end
 
   def process_page(page)
-
     page.generate_and_set_thumbnail_secure_token
     if page.save
-      # begin
+      begin
         result = self.send("http://#{WEBDOC_HOST}/documents/#{page.document.uuid}/pages/#{page.uuid}?secure_token=#{page.thumbnail_secure_token}", "http://#{WEBDOC_HOST}/documents/#{page.document.uuid}/pages/#{page.uuid}/callback_thumbnail?secure_token=#{page.thumbnail_secure_token}")
-      #   raise 'result send request false' if result == false
-      # rescue
-      #   page.thumbnail_secure_token = nil
-      #   page.save!
-      # end
+        raise 'result send request false' if result == false
+      rescue
+        page.thumbnail_secure_token = nil
+        page.save!
+      end
     end
   end
   

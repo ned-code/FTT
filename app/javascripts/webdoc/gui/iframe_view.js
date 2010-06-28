@@ -51,6 +51,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
 				return false;
 			}
 			window.onbeforeunload = function (evt) { 
+				ddd('onbeforeunload');
 				var message = 'You add a web page that automatic redirect to his domaine. Please press Cancel'; 
 				that.item.setSrc( '' );
 				that.inputNode.attr('value', '');

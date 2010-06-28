@@ -78,6 +78,15 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
 
       if(this._static === true) {
 
+        // todo calc ratio
+        var ratio = 0.75;
+        height = width * ratio;  
+        if( height > this._viewerNode.height() ) {
+          width = this._viewerNode.width() * ratio;
+          height = this._viewerNode.height();
+        }
+
+
         var staticThumbDomNode = $('<div>', {'class': 'webdoc', id: 'page_' + page.uuid()}),
             staticThumb = $('<img/>', { 'src': page.getThumbnailUrl(), 'height': height, 'width': width });
 
@@ -85,6 +94,8 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
         staticThumbDomNode.append(staticThumb);
 
         this._currentPageView = staticThumbDomNode;
+        this._containerNode.css('height', height);
+        this._containerNode.css('width', width);
         this._containerNode.empty().append(this._currentPageView);
       }
       else {
@@ -103,8 +114,6 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
         this._currentPageView.fitInContainer(width, height);
 
       }
-
-
 
     }
   },
