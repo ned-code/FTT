@@ -164,8 +164,7 @@ WebDoc.DrageAndDropController.addFileTypeSource(
 	'.html',
 	function(uri_list,evt){
 		WebDoc.application.boardController.unselectAll();
-		var newItem = WebDoc.DrageAndDropController.buildItemForIframe(uri_list,evt);
-    WebDoc.application.boardController.insertItems([newItem]);
+		WebDoc.DrageAndDropController.buildItemForIframe(uri_list,evt);
 	}
 );
 
@@ -174,8 +173,7 @@ WebDoc.DrageAndDropController.addFileTypeSource(
 	function(uri_list,evt){
 		ddd('php processor');
 		WebDoc.application.boardController.unselectAll();
-    var newItem = WebDoc.DrageAndDropController.buildItemForIframe(uri_list,evt);
-    WebDoc.application.boardController.insertItems([newItem]);
+    WebDoc.DrageAndDropController.buildItemForIframe(uri_list,evt);
 	}
 );
 
@@ -183,7 +181,6 @@ WebDoc.DrageAndDropController.addFileTypeSource(
 	'.php3',
 	function(uri_list,evt){
 		WebDoc.application.boardController.unselectAll();
-    var newItem = WebDoc.DrageAndDropController.buildItemForIframe(uri_list,evt);
-    WebDoc.application.boardController.insertItems([newItem]);
+    WebDoc.DrageAndDropController.buildItemForIframe(uri_list,evt);
 	}
 );
