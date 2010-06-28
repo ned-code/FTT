@@ -135,8 +135,7 @@
 			for(typeIndex in receivedTypes){
 				if (receivedTypes[typeIndex] == 'text/uri-list'){
 					WebDoc.application.boardController.unselectAll();
-					var newItem = WebDoc.DrageAndDropController.buildItemForIframe(evt.originalEvent.dataTransfer.getData('text/uri-list'),evt);
-			    WebDoc.application.boardController.insertItems([newItem]);
+					WebDoc.DrageAndDropController.buildItemForIframe(evt.originalEvent.dataTransfer.getData('text/uri-list'),evt);
 					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
 					return true;
 				}
@@ -155,16 +154,26 @@
 	},
 	
 	buildItemForIframe: function(uri_list,event){
-		var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-		var pos = WebDoc.application.boardController.mapToPageCoordinate(event);
-		var posX = pos.x +'px';
-		var posY = pos.y +'px';
-		
-    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
-    newItem.data.data.src = uri_list;
-    newItem.data.data.css = { top: posY, left: posX, width: "600px", height: "400px", overflow: "auto"};
-    newItem.data.data.tag = "iframe";
-		return newItem;
+		//transform as input to validate
+		//<input type="url" title="Web page address" name="input-iframe-src" data-type="webdoc_iframe_url">
+		var src = $("<input type='url' name='input-iframe-src' data-type='webdoc_iframe_url' value='"+ uri_list +"'>");
+		src.validate({
+      pass: function( value ){
+				var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+				var pos = WebDoc.application.boardController.mapToPageCoordinate(event);
+				var posX = pos.x +'px';
+				var posY = pos.y +'px';
+
+		    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
+		    newItem.data.data.src = uri_list;
+				newItem.data.data.css = { top: posY, left: posX, width: "600px", height: "400px", overflow: "auto"};
+		    newItem.data.data.tag = "iframe";
+				WebDoc.application.boardController.insertItems([newItem]);
+      },
+      fail: function( value, error ){
+        ddd(error);
+      }
+    });
 	},
 	
 	_parseUriList: function(uri_list, evt) {
