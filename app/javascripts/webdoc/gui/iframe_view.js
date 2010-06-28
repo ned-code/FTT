@@ -39,16 +39,17 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   },
   createDomNode: function($super) {
 		var that = this;
-		
-		window.onbeforeunload = function (evt) { 
-			var message = 'You add a web page that automatic redirect to his domaine. Please press Cancel'; 
-			that.item.setSrc( '' );
-			that.inputNode.attr('value', '');
-			//removed the onbeforeunload event that prevent automatic redirecting
-			window.onbeforeunload = '';
-			return message; 
-		};
-		
+		var src = this.item.getSrc();
+		if (src){
+			window.onbeforeunload = function (evt) { 
+				var message = 'You add a web page that automatic redirect to his domaine. Please press Cancel'; 
+				that.item.setSrc( '' );
+				that.inputNode.attr('value', '');
+				//removed the onbeforeunload event that prevent automatic redirecting
+				window.onbeforeunload = '';
+				return message; 
+			};
+		}
     this.itemLayerDomNode.show();
     this.domNode.addClass('loading');
     return $super();              
