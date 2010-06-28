@@ -8,19 +8,19 @@ class XmppNotification
   def self.xmpp_create_node(node_name)
     if (!@@xmpp_off)
       begin  
-        p "************************************ XMPP Get pubsub service"
-        service = self.get_pubsub_service("pubsub.webdoc.com") 
-        begin
-          p "************************************ Create node"
-          service.create_node(node_name, Jabber::PubSub::NodeConfig.new(nil,{ 
-                    "pubsub#title" => node_name, 
-                    "pubsub#node_type" => "leaf", 
-                    "pubsub#send_last_published_item" => "never", 
-                    "pubsub#send_item_subscribe" => "0", 
-                    "pubsub#publish_model" => "open"})) 
-        rescue Jabber::JabberError => error
-          Rails.logger.warn "Error on create node #{error}"
-        end
+        Rails.logger.warn "************************************ XMPP Get pubsub service"
+#        service = self.get_pubsub_service("pubsub.webdoc.com") 
+#        begin
+#          Rails.logger.warn "************************************ Create node"
+#          service.create_node(node_name, Jabber::PubSub::NodeConfig.new(nil,{ 
+#                    "pubsub#title" => node_name, 
+#                    "pubsub#node_type" => "leaf", 
+#                    "pubsub#send_last_published_item" => "never", 
+#                    "pubsub#send_item_subscribe" => "0", 
+#                    "pubsub#publish_model" => "open"})) 
+#        rescue Jabber::JabberError => error
+#          Rails.logger.warn "Error on create node #{error}"
+#        end
            
       end 
     end
@@ -65,9 +65,9 @@ class XmppNotification
   def self.get_pubsub_service(pubsubjid)
     service = nil
     begin
-      p "************************************ New Serice helper"
+      Rails.logger.warn "************************************ New Serice helper"
       service = Jabber::PubSub::ServiceHelper.new(@@xmpp_client,pubsubjid)
-      p "************************************ OK"
+      Rails.logger.warn "************************************ OK"
     rescue Exception => error      
       Rails.logger.warn "Error on pubsub service #{error}"
       self.xmpp_connect
