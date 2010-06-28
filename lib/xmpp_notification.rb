@@ -3,22 +3,24 @@ require "xmpp4r/pubsub"
 
 class XmppNotification
   @@xmpp_client = Jabber::Client.new('server@webdoc.com')
-  @@xmpp_off = true
+  @@xmpp_off = false
   
   def self.xmpp_create_node(node_name)
     if (!@@xmpp_off)
-      begin        
-        service = self.get_pubsub_service("pubsub.webdoc.com") 
-        begin
-          service.create_node(node_name, Jabber::PubSub::NodeConfig.new(nil,{ 
-                    "pubsub#title" => node_name, 
-                    "pubsub#node_type" => "leaf", 
-                    "pubsub#send_last_published_item" => "never", 
-                    "pubsub#send_item_subscribe" => "0", 
-                    "pubsub#publish_model" => "open"})) 
-        rescue Jabber::JabberError => error
-          Rails.logger.warn "Error on create node #{error}"
-        end
+      begin  
+        Rails.logger.warn "************************************ XMPP Get pubsub service"
+#        service = self.get_pubsub_service("pubsub.webdoc.com") 
+#        begin
+#          Rails.logger.warn "************************************ Create node"
+#          service.create_node(node_name, Jabber::PubSub::NodeConfig.new(nil,{ 
+#                    "pubsub#title" => node_name, 
+#                    "pubsub#node_type" => "leaf", 
+#                    "pubsub#send_last_published_item" => "never", 
+#                    "pubsub#send_item_subscribe" => "0", 
+#                    "pubsub#publish_model" => "open"})) 
+#        rescue Jabber::JabberError => error
+#          Rails.logger.warn "Error on create node #{error}"
+#        end
            
       end 
     end
@@ -63,8 +65,10 @@ class XmppNotification
   def self.get_pubsub_service(pubsubjid)
     service = nil
     begin
+      Rails.logger.warn "************************************ New Serice helper"
       service = Jabber::PubSub::ServiceHelper.new(@@xmpp_client,pubsubjid)
-    rescue Jabber::JabberError => error
+      Rails.logger.warn "************************************ OK"
+    rescue Exception => error      
       Rails.logger.warn "Error on pubsub service #{error}"
       self.xmpp_connect
       service=Jabber::PubSub::ServiceHelper.new(@@xmpp_client,pubsubjid)
