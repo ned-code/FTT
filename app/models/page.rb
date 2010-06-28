@@ -24,7 +24,7 @@ class Page < ActiveRecord::Base
 
   attr_accessor :remote_thumbnail_url
 
-  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind, :remote_thumbnail_url
+  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind, :remote_thumbnail_url, :thumbnail_need_update
 
   # ================
   # = Associations =
@@ -113,10 +113,12 @@ class Page < ActiveRecord::Base
   end
 
   def touch_and_need_update_thumbnail
-    update_attributes({
+
+    update_attributes!({
             :updated_at => Time.now,
-            :thumbnail_need_update => true
+            :thumbnail_need_update => 1
     })
+
   end
 
   def self.process_pending_thumbnails
