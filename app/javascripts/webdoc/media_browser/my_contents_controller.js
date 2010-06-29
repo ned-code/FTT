@@ -58,32 +58,8 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 		container.append($("<div id='my-favorites-images' class='thumbnails'>"));
 		this.domNode.append(container);
 		this.myFavoritesContainer = $('#media-browser-my-favorites');
-    var thumbsWrap = this.myFavoritesContainer.find(".thumbnails");
-    this.showSpinner(thumbsWrap);
-          
-    WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
-      if (data.images.length === 0) {
-        var noImages = $("<span>").addClass('no_items').text('No Images');
-        thumbsWrap.append(noImages);
-      }
-      else {
-        var myImagesList = $("<ul>");
-        thumbsWrap.append(myImagesList);
-        
-        $.each(data.images, function(i,webDocImage){
-          myImagesList.append(this.buildThumbnail(webDocImage.data.properties, webDocImage.data.uuid));
-        }.pBind(this));
-      }
-      thumbsWrap.data('loaded', true);
-      this.hideSpinner(thumbsWrap);
-    }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 1 }});
     
-    $("#media-browser-my-favorites .thumbnails ul li a").live("click", function (event) {
-      var properties = $(event.target).parent().find('img').data("properties");
-      this.showDetailsView(properties,true);
-      event.preventDefault();
-    }.pBind(this));
-    
+    this._loadFavoritesImages();
   },
 
   _myContentHandlers: {
@@ -342,5 +318,33 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   _hideAll: function(){
     $('.my-content-tab').hide();
     // this.imagesUploader.unloadSWFUpload();
-  }
+  },
+
+	_loadFavoritesImages: function(){
+		var thumbsWrap = this.myFavoritesContainer.find(".thumbnails");
+    this.showSpinner(thumbsWrap);
+          
+    WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
+      if (data.images.length === 0) {
+        var noImages = $("<span>").addClass('no_items').text('No Images');
+        thumbsWrap.append(noImages);
+      }
+      else {
+        var myImagesList = $("<ul>");
+        thumbsWrap.append(myImagesList);
+        
+        $.each(data.images, function(i,webDocImage){
+          myImagesList.append(this.buildThumbnail(webDocImage.data.properties, webDocImage.data.uuid));
+        }.pBind(this));
+      }
+      thumbsWrap.data('loaded', true);
+      this.hideSpinner(thumbsWrap);
+    }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 1 }});
+    
+    $("#media-browser-my-favorites .thumbnails ul li a").live("click", function (event) {
+      var properties = $(event.target).parent().find('img').data("properties");
+      this.showDetailsView(properties,true);
+      event.preventDefault();
+    }.pBind(this));
+	}
 });
