@@ -107,7 +107,7 @@ dependencies:
   bundler: 
     group: 
     - :default
-    version: ">= 0"
+    version: = 0.9.26
   acl9: 
     group: 
     - :default
@@ -183,7 +183,7 @@ specs:
     version: 0.4.1
     source: 1
 - bundler: 
-    version: 0.9.25
+    version: 0.9.26
 - highline: 
     version: 1.5.2
 - net-ssh: 
@@ -297,7 +297,7 @@ specs:
     version: 2.3.14
 - xmpp4r: 
     version: "0.5"
-hash: 10605c2bb2fc8fbfe9ba48be865538f4f42315e5
+hash: 448962bccda68920179e53698c6a21d1410198ff
 sources: 
 - Git: 
     uri: http://github.com/webdoc/devise.git
