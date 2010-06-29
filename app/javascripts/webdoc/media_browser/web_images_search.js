@@ -93,6 +93,7 @@ WebDoc.WebImagesSearch = $.klass({
 				  li.append(info);
 				  var image = new WebDoc.Image;
 				  image.data.remote_attachment_url = properties.url;
+					image.data.favorites = 1;
 				  image.save(function(persitedImage){
 						if(WebDoc.application.mediaBrowserController.myContentsController){
 							WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data.properties, persitedImage.uuid());

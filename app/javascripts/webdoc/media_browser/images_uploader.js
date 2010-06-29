@@ -92,6 +92,7 @@ WebDoc.ImagesUploader = $.klass({
       };
       postParams[sessionKeyName] = WebDoc.authData.cookiesSessionKeyName;
       postParams["image[uuid]"] = new WebDoc.UUID().id;
+			postParams["image[favorites]"] = 0;
       $.swfupload.getInstance(this.uploadControl).setPostParams(postParams);
     }.pBind(this))
     

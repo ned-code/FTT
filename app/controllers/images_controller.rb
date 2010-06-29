@@ -35,6 +35,7 @@ class ImagesController < ApplicationController
   def create
     @image = current_user.images.build(params[:image])
     @image.uuid = params[:image][:uuid] 
+    @image.favorites = params[:image][:favorites]
     
     respond_to do |format|
       if @image.save
