@@ -10,7 +10,8 @@ WebDoc.BoardController = jQuery.klass({
     this.screenUnderlayNode = jQuery("#underlay");
     this.screenNodes = this.boardCageNode.find('.board-screen');
     this.themeNode = jQuery('<link id="theme" rel="stylesheet" type="text/css" />'); 
-    jQuery('head').append(this.themeNode);    this.loadingNode = jQuery("#webdoc_loading");
+    jQuery('head').append(this.themeNode);
+    this.loadingNode = jQuery("#webdoc_loading");
     
     this._editable = editable;
     this._autoFit = autoFit;
@@ -26,7 +27,12 @@ WebDoc.BoardController = jQuery.klass({
     this._previousInspector = null;
     this.previousThemeClass = undefined;
     this.currentThemeClass = undefined;
-    this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);    
+    this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);
+    
+    jQuery(document)
+    .bind("keypress", this, jQuery.proxy(this, "_keyPress"))
+    .bind("keydown", this, jQuery.proxy(this, "_keyDown"))
+    .bind("keyup", this, jQuery.proxy(this, "_keyUp"));   
   },
   
   currentPageView: function() {
@@ -79,10 +85,6 @@ WebDoc.BoardController = jQuery.klass({
         defaultZoom = 1;
     
     board.unbind();
-    
-    jQuery(document).unbind("keydown", this._keyDown);
-    jQuery(document).unbind("keypress", this._keyPress);
-    jQuery(document).unbind("keyup", this._keyUp);
 
     this._currentPageView = pageView;
     this._currentZoom = 1;
@@ -98,10 +100,7 @@ WebDoc.BoardController = jQuery.klass({
     
     this._fireSelectionChanged();
     this._bindMouseEvent();
-    
-    jQuery(document).bind("keypress", this, jQuery.proxy(this, "_keyPress"));
-    jQuery(document).bind("keydown", this, jQuery.proxy(this, "_keyDown"));
-    jQuery(document).bind("keyup", this, jQuery.proxy(this, "_keyUp"));    
+     
 
     if (this._autoFit && this.boardContainerNode.css("width").match(/px/) && this.boardContainerNode.css("height").match(/px/)) {
       //update zoom to fit browser page    
@@ -118,7 +117,12 @@ WebDoc.BoardController = jQuery.klass({
     this.setMode(!jQuery("body").hasClass('mode-edit'));
     
     this._fireCurrentPageChanged();
-    
+    jQuery('#webdoc').scrollbars({
+      x: jQuery('#webdoc_x_scrollbar .scrollbar'),
+      y: jQuery('#webdoc_y_scrollbar .scrollbar'),
+      dragImageUrl: '/images/icon_blank.png'
+    });
+     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
     pageView.viewDidLoad();    
@@ -667,7 +671,7 @@ WebDoc.BoardController = jQuery.klass({
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_HTML;
     newItem.data.data.tag = "div";
-    newItem.data.data.innerHTML = html;
+    newItem.setInnerHtml(html,true, true);
     newItem.data.data.css = {
       top: position.y + "px",
       left: position.x + "px",
@@ -730,6 +734,9 @@ WebDoc.BoardController = jQuery.klass({
     if ( editingItem ) { this._updateScreens( editingItem.domNode ); }
   },
   
+  getZoom: function() {
+    return this._currentZoom;
+  },  
   // Private methods
     
   _mouseDown: function(e) {
@@ -820,7 +827,7 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _keyDown: function(e) {
-	ddd("[BoardController] keydown");
+	  ddd("[BoardController] keydown");
     var el = jQuery(e.target);
     if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();
@@ -971,6 +978,7 @@ WebDoc.BoardController = jQuery.klass({
     if (y < 0) { y = 0;}
     newItem.data.data.tag = "img";
     newItem.data.data.src = this.src;
+    newItem.data.data.preserve_aspect_ratio = true;
     if(media_id !== undefined) {
       newItem.data.media_id = media_id;
     }
@@ -1034,11 +1042,16 @@ WebDoc.BoardController = jQuery.klass({
         this.oldSize = { width: this._currentPage.width(), height: this._currentPage.height() };
       }.pBind(this),
       resize: function(e, ui) {
-        this._currentPage.setSize({ height: ui.size.height+'px', width: ui.size.width+'px' }, false);
+        this._currentPage.setSize({
+          height: Math.round(this.mapToPageCoordinate(e).y)+'px',
+          width: Math.round(this.mapToPageCoordinate(e).x)+'px'
+        }, false);
       }.pBind(this),
       stop: function(e, ui) {
-        ddd('[page view] resize stop');
-        this._currentPage.setSize({ height: ui.size.height+'px', width: ui.size.width+'px' }, true, this.oldSize);
+        this._currentPage.setSize({
+          height: Math.round(ui.element[0].clientHeight*1/this._currentZoom)+'px',
+          width: Math.round(ui.element[0].clientWidth*1/this._currentZoom)+'px'
+        }, true, this.oldSize);
       }.pBind(this)
     });
   }
