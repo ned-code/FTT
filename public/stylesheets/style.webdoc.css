@@ -24,7 +24,7 @@
   width: 100%; height: 100%;
   
   -webkit-transform-origin: 0px 0px;
-  -moz-transform-origin: 0px 0px;
+  -moz-transform-origin: top left;
   transform-origin: 0px 0px;
 }
 

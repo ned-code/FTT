@@ -104,8 +104,8 @@ WebDoc.BoardController = jQuery.klass({
 
     if (this._autoFit && this.boardContainerNode.css("width").match(/px/) && this.boardContainerNode.css("height").match(/px/)) {
       //update zoom to fit browser page    
-      var heightFactor = $("#webdoc").parent().height() / $("#board-container").height();
-      var widthFactor = $("#webdoc").parent().width() / $("#board-container").width();      
+      var heightFactor = $("#webdoc").height() / $("#board-container").height();
+      var widthFactor = $("#webdoc").width() / $("#board-container").width();      
       if (heightFactor < widthFactor) {
         defaultZoom =  heightFactor;
       }
@@ -729,9 +729,6 @@ WebDoc.BoardController = jQuery.klass({
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
     this.currentPageView().setZoomFactor(this._currentZoom);
-    
-    // If item is being edited, reposition screens
-    if ( editingItem ) { this._updateScreens( editingItem.domNode ); }
   },
   
   getZoom: function() {
