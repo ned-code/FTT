@@ -107,7 +107,7 @@ WebDoc.VideosLibrary = $.klass(WebDoc.Library, {
           WebDoc.Record.convertToRailsJSon({ properties : properties }, railsParams, "video");
           $.ajax({
             type: "POST",
-            url: "/videos",
+            url: "/videos.json",
             data: railsParams,
             dataType: "json",
             success: function(serverData) {
