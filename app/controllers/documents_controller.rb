@@ -56,7 +56,7 @@ class DocumentsController < ApplicationController
         public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:query], params[:page], per_page)
 
         docs_json = public_documents.map do |doc|
-          cached_doc = Rails.cache.fetch("#{doc.cache_key}_explore") do
+          cached_doc = Rails.cache.fetch("document_#{doc.uuid}_explore") do
             doc.as_json( :include => { :pages => { :methods => :thumbnail_url, :include => :items } }, :methods => :extra_attributes)
           end
         end
@@ -86,7 +86,7 @@ class DocumentsController < ApplicationController
         per_page = 8
         featured_documents = Document.all_featured_paginated(params[:page], per_page)
         docs_json = featured_documents.map do |doc|
-          cached_doc = Rails.cache.fetch("#{doc.cache_key}_explore") do
+          cached_doc = Rails.cache.fetch("document_#{doc.uuid}_explore") do
             doc.as_json( :include => { :pages => { :methods => :thumbnail_url,  :include => :items} }, :methods => :extra_attributes)
           end
         end
@@ -117,7 +117,7 @@ class DocumentsController < ApplicationController
       format.json do
         logger.debug "return document json."
         set_cache_buster
-        render :json => Rails.cache.fetch(@document.cache_key) { @document.to_json(:include => { :pages => { :include => :items} }) }
+        render :json => Rails.cache.fetch("document_#{@document.uuid}") { @document.to_json(:include => { :pages => { :include => :items} }) }
       end
     end
   end

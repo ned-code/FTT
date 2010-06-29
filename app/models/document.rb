@@ -36,6 +36,8 @@ class Document < ActiveRecord::Base
   before_create :create_default_page
   before_create :validate_size
   after_create :set_creator_as_editor
+  after_save :invalidate_cache
+  after_destroy :invalidate_cache
   
   # =================
   # = Class Methods =
@@ -88,7 +90,7 @@ class Document < ActiveRecord::Base
     Document.paginate(paginate_params)
   end
 
-  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator])
+  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator, { :pages => [:items  ]}])
     paginate_params = {
             :page => page_id,
             :per_page => per_page,
@@ -345,6 +347,10 @@ class Document < ActiveRecord::Base
     update_attribute("updated_at", Time.now)
   end
   
+  def invalidate_cache
+    Rails.cache.delete("document_#{self.uuid}")
+    Rails.cache.delete("document_#{self.uuid}_explore")
+  end
 private
   
   # after_create
