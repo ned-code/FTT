@@ -39,7 +39,6 @@ class ImagesController < ApplicationController
     
     respond_to do |format|
       if @image.save
-        format.html { render :json => @image }
         format.json { render :json => @image }
       else
         format.json { render :status => 503 }
