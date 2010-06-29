@@ -104,6 +104,10 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
+  bundler: 
+    group: 
+    - :default
+    version: = 0.9.26
   acl9: 
     group: 
     - :default
@@ -178,6 +182,8 @@ specs:
 - aws-s3: 
     version: 0.4.1
     source: 1
+- bundler: 
+    version: 0.9.26
 - highline: 
     version: 1.5.2
 - net-ssh: 
@@ -189,7 +195,7 @@ specs:
 - net-ssh-gateway: 
     version: 1.0.1
 - capistrano: 
-    version: 2.5.18
+    version: 2.5.19
 - capistrano-ext: 
     version: 1.2.1
 - culerity: 
@@ -219,16 +225,16 @@ specs:
 - columnize: 
     version: 0.3.1
 - daemons: 
-    version: 1.0.10
+    version: 1.1.0
 - warden: 
     version: 0.10.7
 - devise: 
     version: 1.0.7
     source: 0
 - erubis: 
-    version: 2.6.5
+    version: 2.6.6
 - factory_girl: 
-    version: 1.3.0
+    version: 1.3.1
 - fastthread: 
     version: 1.0.7
 - formtastic: 
@@ -236,7 +242,7 @@ specs:
 - gem_plugin: 
     version: 0.2.3
 - haml: 
-    version: 3.0.12
+    version: 3.0.13
 - i18n: 
     version: 0.4.1
 - rails: 
@@ -286,12 +292,12 @@ specs:
 - uuidtools: 
     version: 2.1.1
 - whenever: 
-    version: 0.4.2
+    version: 0.5.0
 - will_paginate: 
     version: 2.3.14
 - xmpp4r: 
     version: "0.5"
-hash: 2e2e11bcb7856ccf757d3e4ac2e8e5cad313a830
+hash: 448962bccda68920179e53698c6a21d1410198ff
 sources: 
 - Git: 
     uri: http://github.com/webdoc/devise.git

@@ -119,6 +119,7 @@ class Page < ActiveRecord::Base
   end
 
   def self.process_pending_thumbnails
+    self.cleanup_old_requests
     pages = Page.all_need_process_thumbnail
     if pages.present?
       thumbnail_service = Services::Bluga.new
@@ -132,6 +133,20 @@ class Page < ActiveRecord::Base
     self.all(
       :conditions => ['thumbnail_secure_token IS ? AND thumbnail_need_update = ?', nil, true]
     )
+  end
+
+  def self.cleanup_old_requests
+    old_requests = Page.all(
+            :conditions => [
+                    'thumbnail_secure_token IS NOT ? AND thumbnail_need_update = ? AND thumbnail_request_at IS NOT ? AND thumbnail_request_at < ?',
+            nil, true, nil, (Time.now-30.minutes).utc])
+    if old_requests.present?
+      old_requests.each do |page|
+        page.thumbnail_secure_token = nil
+        page.thumbnail_request_at = nil
+        page.save!
+      end
+    end
   end
 
   def generate_and_set_thumbnail_secure_token

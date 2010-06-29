@@ -1,6 +1,6 @@
 source :gemcutter
 gem "rails", "~> 2.3.5"
-
+gem 'bundler', "0.9.26"
 gem 'haml'
 gem 'i18n'
 gem 'mime-types', :require => 'mime/types'

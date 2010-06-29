@@ -50,7 +50,6 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
 				return message; 
 			};
 		}
-    this.itemLayerDomNode.show();
     this.domNode.addClass('loading');
     return $super();              
   },

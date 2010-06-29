@@ -14,8 +14,13 @@ class User < ActiveRecord::Base
                     :path => S3_CONFIG[:storage] == 's3' ? avatars_path : ":rails_root/public/#{avatars_path}",
                     :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{avatars_path}"
 
-  validates_attachment_size :avatar, :less_than => 1.megabytes
-  validates_attachment_content_type :avatar, :content_type => ['image/jpeg', 'image/png', 'image/gif']
+  validates_attachment_size :avatar,
+                            :less_than => 1.megabytes,
+                            :unless => Proc.new {|user| user.avatar }
+
+  validates_attachment_content_type :avatar,
+                                    :content_type => ['image/jpeg', 'image/png', 'image/gif'],
+                                    :unless => Proc.new {|user| user.avatar }
 
   has_uuid  
   # Include default devise modules.

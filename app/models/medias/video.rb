@@ -11,9 +11,13 @@ class Medias::Video < Media
                     :path => S3_CONFIG[:storage] == 's3' ? attachment_path : ":rails_root/public/#{attachment_path}",
                     :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{attachment_path}"
   
-  validates_attachment_presence :attachment
-  validates_attachment_size :attachment, :less_than => 5.megabytes
-  validates_attachment_content_type :attachment, :content_type => ['application/octet-stream']
+  validates_attachment_size :attachment,
+                            :less_than => 5.megabytes,
+                            :unless => Proc.new {|a| a.attachment }
+  
+  validates_attachment_content_type :attachment,
+                                    :content_type => ['application/octet-stream'],
+                                    :unless => Proc.new {|a| a.attachment }
   
   # =============
   # = Callbacks =
