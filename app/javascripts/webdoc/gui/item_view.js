@@ -231,7 +231,7 @@ WebDoc.ItemView = $.klass({
       if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
         this.innerHtmlChanged();
       }      
-      this.select();
+      //this.select();
     }
   },  
   
