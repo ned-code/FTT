@@ -41,7 +41,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
     $("#media-browser-my-images .thumbnails ul li a").live("click", function (event) {
       var properties = $(event.target).parent().find('img').data("properties");
-      this.showDetailsView(properties);
+      this.showDetailsView(properties,false);
       event.preventDefault();
     }.pBind(this));
     
@@ -80,7 +80,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
     $("#media-browser-my-favorites .thumbnails ul li a").live("click", function (event) {
       var properties = $(event.target).parent().find('img').data("properties");
-      this.showDetailsView(properties);
+      this.showDetailsView(properties,true);
       event.preventDefault();
     }.pBind(this));
     
@@ -169,12 +169,34 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
             });
           }
           break;
+				case "remove_image_from_favorites": //delete an uploaded image from My favorites
+	        if (confirm ("Are you sure?")) {
+	          link.hide();
+	          li.append(info);
+        
+	          $.ajax({
+	            type: "DELETE",
+	            url: "/images/"+properties.uuid,
+	            success: function(serverData) {
+	              li.remove();
+	              //remove thumbnail from the my images' list
+	              $('#' + properties.uuid).remove();
+	              this.showFavorites();
+	            }.pBind(this),
+	            error: function(){
+	            },
+	            complete: function() {
+	            }.pBind(this)
+	          });
+	        }
+	      	break;
       }
 
     }.pBind(this));
   },
   
-  showDetailsView: function(properties){
+  showDetailsView: function(properties, isFavorites){
+		ddd('favorites' + isFavorites);
     this._hideAll();
     this.detailsViewImg = this.imageDetailsView.find('.single_image img');
     
@@ -214,11 +236,30 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.detailsViewImg.attr({'src':properties.url}).data("properties", properties);
     this.preloadImage(properties.url);
     
-    //setup the delete link
-    if( $('#media-browser-my-images-details #delete_image_action').length < 1){
-      liDelete = $('<li>').append($("<a href='' id='delete_image_action'>Delete </a>"));
-      $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
-    }
+    //setup the delete link of remove from favorites
+		var removeFavoritesLink = $('#media-browser-my-images-details #remove_image_from_favorites');
+		var deleteImageLink = $('#media-browser-my-images-details #delete_image_action');
+		
+		if(isFavorites){
+			if( !removeFavoritesLink.length ){
+    	  liDelete = $('<li>').append($("<a href='' id='remove_image_from_favorites'>Remove from favorites </a>"));
+    	  $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
+
+				if( deleteImageLink.length ){
+					deleteImageLink.remove();
+				}
+    	}
+		}
+		else{
+    	if( !deleteImageLink.length ){
+    	  liDelete = $('<li>').append($("<a href='' id='delete_image_action'>Delete </a>"));
+    	  $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
+
+				if( removeFavoritesLink.length ){
+					removeFavoritesLink.remove();
+				}
+    	}
+		}
     
     $('#media-browser-my-images-details').show();
   },
@@ -254,19 +295,19 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
   },
   
-  buildThumbnail: function(_properties, uuid) {
+  buildThumbnail: function(newProperties, uuid) {
     ddd('uuid : ' + uuid);
-    
+		
     var properties = {
-      url: _properties.url,
-      thumb_url: _properties.thumb_url,
-      image_link: _properties.default_url,
+      url: newProperties.url,
+      thumb_url: newProperties.thumb_url,
+      image_link: newProperties.default_url,
       type: 'application/wd-image',
       uuid: uuid
     };
     
     var thumb = $("<img>").attr({
-      src : _properties.thumb_url,
+      src : newProperties.thumb_url,
       alt : "",
       type:"my_image"
     })
