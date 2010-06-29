@@ -89,10 +89,22 @@ WebDoc.WebImagesSearch = $.klass({
           break;
 				case 'add_image_to_favorite':
 					ddd('add_image_to_favorite');
+					link.hide();
+				  li.append(info);
+				  var image = new WebDoc.Image;
+				  image.data.remote_attachment_url = properties.url;
+				  image.save(function(persitedImage){
+						if(WebDoc.application.mediaBrowserController.myContentsController){
+							WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data.properties, persitedImage.uuid());
+						}
+						//link.remove();
+				    info.text("Done!");
+				  }.pBind(this));
 					break;
-				case 'remove_image_from_favorite':
-					ddd('remove_image_from_favorite');	
-					break;
+				// remove_image_from_favorite is only used in my images !
+				// case 'remove_image_from_favorite':
+				// 	ddd('remove_image_from_favorite');	
+				// 	break;
       }
 
     }.pBind(this));
@@ -141,11 +153,13 @@ WebDoc.WebImagesSearch = $.klass({
     this.detailsViewImg.attr({'src':properties.url}).data("properties", properties);
     this.preloadImage(properties.url);
     
+		ddd('showDetailsView image search....');
     //setup the favorites links
-    // if( $('#media-browser-my-images-details #delete_image_action').length < 1){
-    //   liDelete = $('<li>').append($("<a href='' id='delete_image_action'>Delete </a>"));
-    //   $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
-    // }
+    if( $('#media-browser-web-images-details #add_image_to_favorite').length){
+			$('#media-browser-web-images-details #add_image_to_favorite').parent().remove(); 
+      liDelete = $('<li>').append($("<a href='' id='add_image_to_favorite'>Add to favorites</a>"));
+      $("#media-browser-web-images-details #image-details .actions ul").append(liDelete);
+    }
 
 		$("#media-browser-web-images-details").show();
 	},

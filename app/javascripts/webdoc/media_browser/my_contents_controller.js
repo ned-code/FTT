@@ -204,10 +204,8 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
   
   //Used for insert uploaded image directy in the dom
-  insertImage: function(image_data){
-    var data = eval('(' + image_data + ')');
-    var liWrap = this.buildThumbnail(data.image.properties, data.image.uuid);
-    
+  insertImage: function(properties, uuid){
+    var liWrap = this.buildThumbnail(properties, uuid);
     var ulWrap = $('#my-images-library').find('ul');
     if( ulWrap.length < 1){
       ulWrap = $('<ul>');
