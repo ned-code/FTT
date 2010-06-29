@@ -100,7 +100,7 @@ WebDoc.ImagesUploader = $.klass({
       ddd("Upload success: "+file.name);
       this.successfulUploads += 1;
 			var data = eval('(' + serverData + ')');
- 			this.imagesLibrary.insertImage(data.image.properties, data.image.uuid );
+ 			this.imagesLibrary.insertImage(data.image.properties, data.image.uuid, 'my-images-library');
 
       // if (!$("#add_images").is(":visible")) { //only if the Add Images pane has been closed during upload
       //         //this.imagesLibrary.refreshMyImages([$.evalJSON(serverData).image]);

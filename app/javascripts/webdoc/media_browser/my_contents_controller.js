@@ -9,6 +9,8 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
     this.imagePage = 1;
     this.myImagesContainer = $('#media-browser-my-images');
+		//this.myFavoritesContainer = $('#media-browser-my-favorites');
+		
     this.loadMyImages();  
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
     
@@ -35,7 +37,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       }
       thumbsWrap.data('loaded', true);
       this.hideSpinner(thumbsWrap);
-    }.pBind(this), { ajaxParams: { page:this.imagePage }});
+    }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 0 }});
     
     $("#media-browser-my-images .thumbnails ul li a").live("click", function (event) {
       var properties = $(event.target).parent().find('img').data("properties");
@@ -45,6 +47,45 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
   },
   
+	loadMyFavorites: function(){
+		//first, create the dom node
+		//  <div id="media-browser-my-favorites" class='my-content-tab'>
+    //    <div id="my-favorites-images" class='thumbnails'>
+    //
+    //    </div>
+    //  </div>
+		var container = $("<div id='media-browser-my-favorites' class='my-content-tab>");
+		container.append($("<div id='my-favorites-images' class='thumbnails'>"));
+		this.domNode.append(container);
+		this.myFavoritesContainer = $('#media-browser-my-favorites');
+    var thumbsWrap = this.myFavoritesContainer.find(".thumbnails");
+    this.showSpinner(thumbsWrap);
+          
+    WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
+      if (data.images.length === 0) {
+        var noImages = $("<span>").addClass('no_items').text('No Images');
+        thumbsWrap.append(noImages);
+      }
+      else {
+        var myImagesList = $("<ul>");
+        thumbsWrap.append(myImagesList);
+        
+        $.each(data.images, function(i,webDocImage){
+          myImagesList.append(this.buildThumbnail(webDocImage.data.properties, webDocImage.data.uuid));
+        }.pBind(this));
+      }
+      thumbsWrap.data('loaded', true);
+      this.hideSpinner(thumbsWrap);
+    }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 1 }});
+    
+    $("#media-browser-my-favorites .thumbnails ul li a").live("click", function (event) {
+      var properties = $(event.target).parent().find('img').data("properties");
+      this.showDetailsView(properties);
+      event.preventDefault();
+    }.pBind(this));
+    
+  },
+
   _myContentHandlers: {
     'my-images':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showMyImages(); },
     'favorites':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showFavorites(); },
@@ -58,16 +99,12 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   
   showFavorites: function(){
     this._hideAll();
-    if($('#media-browser-favorites').length){
-			$('#media-browser-favorites').show();
+    if($('#media-browser-my-favorites').length){
+			$('#media-browser-my-favorites').show();
 		}
 		else{
-		  $.ajax({
-			  url: "/users/favorites",
-			  success: function(html){
-			    $("#media-browser-my-content").append(html);
-			  }
-			});
+			this.loadMyFavorites();
+		  $('#media-browser-my-favorites').show();
 		}
   },
   
@@ -204,9 +241,9 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
   
   //Used for insert uploaded image directy in the dom
-  insertImage: function(properties, uuid){
+  insertImage: function(properties, uuid, domNode){
     var liWrap = this.buildThumbnail(properties, uuid);
-    var ulWrap = $('#my-images-library').find('ul');
+    var ulWrap = $('#'+domNode).find('ul');
     if( ulWrap.length < 1){
       ulWrap = $('<ul>');
       $('#my-images-library').append(ulWrap);

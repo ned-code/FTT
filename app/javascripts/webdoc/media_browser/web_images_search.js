@@ -95,8 +95,8 @@ WebDoc.WebImagesSearch = $.klass({
 				  image.data.remote_attachment_url = properties.url;
 					image.data.favorites = 1;
 				  image.save(function(persitedImage){
-						if(WebDoc.application.mediaBrowserController.myContentsController){
-							WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data.properties, persitedImage.uuid());
+						if($('#media-browser-my-favorites').length){
+							WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data.properties, persitedImage.uuid(), 'my-favorites-images');
 						}
 						//link.remove();
 				    info.text("Done!");
