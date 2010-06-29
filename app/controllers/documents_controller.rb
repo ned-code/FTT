@@ -109,17 +109,21 @@ class DocumentsController < ApplicationController
   
   # GET /documents/:id
   def show
-    respond_to do |format|
-      format.html do
-        @get_return_to = get_return_to 
-        render :layout => 'layouts/editor'
+    if (@document)
+      respond_to do |format|
+        format.html do
+          @get_return_to = get_return_to 
+          render :layout => 'layouts/editor'      
+        end
+        format.json do
+          logger.debug "return document json."
+          set_cache_buster
+          render :json => Rails.cache.fetch("document_#{@document.uuid}") { @document.to_json(:include => { :pages => { :include => :items} }) }
+        end
       end
-      format.json do
-        logger.debug "return document json."
-        set_cache_buster
-        render :json => Rails.cache.fetch("document_#{@document.uuid}") { @document.to_json(:include => { :pages => { :include => :items} }) }
-      end
-    end
+    else
+      forbidden_access
+    end    
   end
   
   # POST /documents
@@ -160,7 +164,7 @@ class DocumentsController < ApplicationController
   end
   
   def create_view_count
-    if request.format == "text/html"
+    if request.format == "text/html" && @document
       @document.view_counts.create(
         :session_id => request.session_options[:id],
         :ip_address => request.remote_ip,
