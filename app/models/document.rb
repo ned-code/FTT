@@ -90,7 +90,7 @@ class Document < ActiveRecord::Base
     Document.paginate(paginate_params)
   end
 
-  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator, { :pages => [:items  ]}])
+  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator])
     paginate_params = {
             :page => page_id,
             :per_page => per_page,
