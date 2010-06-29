@@ -119,6 +119,7 @@
 					return true;
 				}
 			}
+						
 			//No text/uri-list, or not parsable. we look for antoher type...
 			//text/html
 			// for(typeIndex in receivedTypes){
@@ -188,6 +189,22 @@
 			domain = domain.split('www.')[1];
 		}
 		
+		//FACEBOOK HACK to drop photo, we should normaly add a KNOWN_SOURCES
+		// and use the FB API !!!
+		if(uri_list.match('facebook.com')){
+			//we return false. It should normaly use the x-moz-file-promise-url to drop the photo
+			return false;
+		}
+		
+		//Google image hack
+		//if it's a google image search, we do the same hack as Facebook
+		if(uri_list.match('google')){
+			if(uri_list.match('images')){
+				//we return false. It should normaly use the x-moz-file-promise-url to drop the photo
+				return false;
+			}
+		}
+		
 		//Now we look if it's in KNOWN_SOURCES. If yes, we call the methods associated with it
 		for(knowSourceIndex in knowSources){
 			if(domain == knowSources[knowSourceIndex][0]){
@@ -198,12 +215,13 @@
 		
 		//src.match(pattern_has_protocole)
 		for(knowFileTypeIndex in knowFileType){
-			reg = new RegExp('(' + knowFileType[knowFileTypeIndex][0] + ')');
+			var reg = new RegExp('(' + knowFileType[knowFileTypeIndex][0] + ')');
 			if(uri_list.match(knowFileType[knowFileTypeIndex][0])){
 				knowFileType[knowFileTypeIndex][1](uri_list,evt);
 				return true;
 			}
 		}
+		
 		//uri-list not in KNOWN_SOURCES. We try to look if it's in KNOW_FILE_TYPES to display this file
 		
 		//We don't find the domain in KNOWN_SOURCES or KNOW_FILE_TYPES. We do nothing here
