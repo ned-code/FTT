@@ -109,11 +109,6 @@ WebDoc.WebVideosSearch = $.klass({
 						}
 				  }.pBind(this));
 					break;
-					
-				//display only in my videos details page
-				case "remove_video_from_favorites" :
-					ddd('remove_video_from_favorites');
-					break;
 			}
 		}.pBind(this));
 	},
@@ -176,10 +171,7 @@ WebDoc.WebVideosSearch = $.klass({
     this.dragStart(event, properties);
   },
 
-	buildEmbeddedVideo: function(properties) {
-		ddd('buildEmbeddedVideo');
-		ddd(properties.type);
-		
+	buildEmbeddedVideo: function(properties) {		
 		var url,width,height;
 		
 		switch (properties.type) {
@@ -214,7 +206,7 @@ WebDoc.WebVideosSearch = $.klass({
     return object;
   },
 
-	buildVideoRow: function(type, videoId, url, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height) {
+	buildVideoRow: function(type, videoId, url, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height, uuid) {
 	    var properties = { 
 	      type: type,
 	      video_id: videoId,
@@ -229,7 +221,8 @@ WebDoc.WebVideosSearch = $.klass({
 	      aspect_ratio: aspectRatio,  //yt
 	      is_hd: isHd,                //vimeo
 	      width: width,               //vimeo
-	      height: height              //vimeo
+	      height: height,              //vimeo
+				uuid: uuid
 	    };
 
 	    var thumb = $("<img>").attr({
@@ -244,15 +237,14 @@ WebDoc.WebVideosSearch = $.klass({
 	    var titleEl = $("<strong>").addClass("title").text(name);
 	    var viewCountEl = $("<span>").addClass("view_count").text(this.libraryUtils.numberWithThousandsSeparator(viewCount,"'")+" views");
 	    var durationEl = $("<span>").addClass("duration").text(this.libraryUtils.timeFromSeconds(duration));
-	    var liWrap = $("<li>").addClass("video_row").addClass(type);
+	    var liWrap = $("<li id='" + uuid +"'>").addClass("video_row").addClass(type);
 	    var aWrap = $("<a href=\"\"></a>");
 	    if (isHd === "1") thumbWrap.append($("<span>").addClass("hd_icon_overlay"));
 	    aWrap.append(thumbWrap).append(titleEl).append(durationEl).append(viewCountEl).append($("<span>").attr({'class':'spacer'}));
 
 	    liWrap.append(aWrap);
 	    return liWrap;
-	  }
-	
+	  } 
 
 });
 
@@ -292,44 +284,6 @@ WebDoc.ServiceVideosSearch = $.klass({
   showSpinner: function() {
     this.container.find('.load_more').hide();
     this.videosContainerWrapper.append($('<div class="loading">Loading</div>'));
-  },
-  buildVideoRow: function(type, videoId, url, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height) {
-    var properties = { 
-      type: type,
-      video_id: videoId,
-      url: url,
-      thumb_url: thumbUrl,
-      name: name,
-      duration: duration,
-      view_count: viewCount,
-      description: description,
-      embed_url: embedUrl,
-      embed_type: embedType,
-      aspect_ratio: aspectRatio,  //yt
-      is_hd: isHd,                //vimeo
-      width: width,               //vimeo
-      height: height              //vimeo
-    };
-    
-    var thumb = $("<img>").attr({
-      src : thumbUrl,
-      alt : ""
-    })
-    .data("properties", properties);
-    
-    var thumbWrap = $("<span>").attr({'class':'wrap'});
-    thumbWrap.append(thumb);
-    
-    var titleEl = $("<strong>").addClass("title").text(name);
-    var viewCountEl = $("<span>").addClass("view_count").text(this.libraryUtils.numberWithThousandsSeparator(viewCount,"'")+" views");
-    var durationEl = $("<span>").addClass("duration").text(this.libraryUtils.timeFromSeconds(duration));
-    var liWrap = $("<li>").addClass("video_row").addClass(type);
-    var aWrap = $("<a href=\"\"></a>");
-    if (isHd === "1") thumbWrap.append($("<span>").addClass("hd_icon_overlay"));
-    aWrap.append(thumbWrap).append(titleEl).append(durationEl).append(viewCountEl).append($("<span>").attr({'class':'spacer'}));
-    
-    liWrap.append(aWrap);
-    return liWrap;
   }
 });
 
@@ -387,7 +341,7 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
             var videoId = videoMediaGroup.yt$videoid.$t;
             
             this.videosContainer.append(
-              this.buildVideoRow("youtube", videoId, "http://www.youtube.com/watch?v="+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, "", "", "")
+              WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow("youtube", videoId, "http://www.youtube.com/watch?v="+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, "", "", "","")
             );
             
           }.pBind(this));
@@ -527,7 +481,6 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
       
       var results = data.videos.video;
       $.each(results, function(i, video) {
-        // ddd(video)
         
         var name = video.title;
         var duration = video.duration;
@@ -543,7 +496,7 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
         var height = parseInt(video.height,10);
         
         this.videosContainer.append(
-          this.buildVideoRow("vimeo", videoId, "http://vimeo.com/"+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height)
+          WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow("vimeo", videoId, "http://vimeo.com/"+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height, "")
         );
       }.pBind(this));
       
@@ -558,6 +511,7 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
     
     this.container.find('.loading').remove();
   },
+
   initialSearch: function($super, query) {
     if (query.replace(/\s/g,'') !== "") {
       $super();
@@ -568,6 +522,7 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
       this.performSearch();
     }
   },
+
   loadMore: function($super) {
     $super();
     this.performSearch();

@@ -3,7 +3,9 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   initialize: function($super, libraryId) {
 		$super(libraryId);
 		this.imageDetailsView = $('#media-browser-my-images-details #image-details');
+		this.videoDetailsView = $('#media-browser-my-favorites-videos-details #video-details');
 		this.setupImageDetailsView();
+		this.setupVideoDetailsView();
 		this.domNode = $('#media-browser-my-content');
 		this.createHandlers(this.domNode, 'click', this._myContentHandlers);
     
@@ -51,9 +53,10 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 		container.append($("<div id='my-favorites-images' class='thumbnails'>"));
 		container.append($("<div id='my-favorites-videos' class='thumbnails'>"));
 		this.domNode.append(container);
+		
 		this.imagesFavoritesContainer = $('#my-favorites-images');
     this.videosFavoritesContainer = $('#my-favorites-videos');
-
+		
     this._loadFavoritesImages();
 		this._loadFavoritesVideos();
   },
@@ -155,8 +158,6 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 	              $('#' + properties.uuid).remove();
 	              this.showFavorites();
 	            }.pBind(this),
-	            error: function(){
-	            },
 	            complete: function() {
 	            }.pBind(this)
 	          });
@@ -236,9 +237,97 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     $('#media-browser-my-images-details').show();
   },
 
+	setupVideoDetailsView: function(){
+		this.detailsVideoContainer = this.videoDetailsView.find('.single_video');
+		this.videoDetailsView.find('.drag_handle').attr({ draggable: "true" })
+    .bind("dragstart", this.prepareVideoDrag.pBind(this));
+
+		$("#media-browser-my-favorites-videos-details .actions").click(function(event){
+      event.preventDefault();
+      
+      var properties = this.detailsVideoContainer.data("properties"); //properties of the currenlty displayed video are store in this element
+      
+      var link = $(event.target);
+      var li = link.parent(); 
+      var info = $("<span>").text("...");
+      
+      switch (link.attr("id")) {
+        case "add_video_to_page_action":
+          ddd("add_video_to_page_action");
+          var properties = this.detailsVideoContainer.data("properties");
+          WebDoc.application.boardController.insertVideo(properties);
+          break;
+          
+        case "show_video_page_action" :
+          ddd("show_video_page_action");
+          window.open(properties.url, '_blank');
+          break;
+				//display only in my videos details page
+				case "remove_video_from_favorites" :
+					ddd('remove video');
+					if (confirm ("Are you sure?")) {
+	          link.hide();
+	          li.append(info);
+        
+	          $.ajax({
+	            type: "DELETE",
+	            url: "/videos/"+properties.uuid,
+	            success: function(serverData) {
+	              li.remove();
+	              //remove the video from the list
+	              $('#' + properties.uuid).remove();
+	              this.showFavorites();
+	            }.pBind(this),
+	            complete: function() {
+	            }.pBind(this)
+	          });
+	        }
+					break;
+			}
+		}.pBind(this));
+	},
+	
 	showVideoDetailsView: function(properties){
-		ddd('showVideoDetailsView');
+		this.videoDetailsView.attr({'class':"view details_view my-content-tab "+properties.type});
+    
+    // Embed video
+    this.detailsVideoContainer.find('object').remove();
+    this.detailsVideoContainer.prepend( WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildEmbeddedVideo(properties));
+    
+    // Store the current properties in detailsVideoContainer
+    this.detailsVideoContainer.data("properties", properties);
+    
+    // Title
+    var name = "";
+    if (properties.name) name = properties.name;
+    this.videoDetailsView.find('.video_name').text(name);
+    
+    // View count
+    var viewCountEl = this.videoDetailsView.find('.view_count span');
+    if (properties.view_count)
+      viewCountEl.text(this.libraryUtils.numberWithThousandsSeparator(properties.view_count,"'"));
+    else
+      viewCountEl.text('');
+    
+    // Description
+    var desc = properties.description || "";
+    var descEl = this.videoDetailsView.find('.video_description');
+    descEl.text(desc);
+    
+    // Actions
+    var serviceName = properties.type === "youtube" ? "YouTube" : "Vimeo";
+    var showVideoPageEl = $("#show_video_page_action");
+    showVideoPageEl.text(showVideoPageEl.data("originalText").replace("*", serviceName));
+
+		var removeVideoFromFavoritesLink = $('#media-browser-my-favorites-videos-details #remove_video_from_favorites');
+		if( !removeVideoFromFavoritesLink.length ){
+  	  liDelete = $('<li>').append($("<a href='' id='remove_video_from_favorites'>Remove from favorites</a>"));
+  	  $("#media-browser-my-favorites-videos-details #video-details .actions ul").append(liDelete);
+		}
 		
+		this._hideAll();
+		$('#media-browser-my-favorites-videos-details').show();
+		$('#media-browser-my-favorites-videos-details #video-details').show();
 	},
   
   preloadImage: function(imageSrc) {
@@ -325,7 +414,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 		
     var videosContainer = $('#my-favorites-videos ul');
     videosContainer.append(
-       WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow(videoType, videoId, videoUrl, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height)
+       WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow(videoType, videoId, videoUrl, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height,uuid)
      );
 
 	},
@@ -368,6 +457,17 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("video", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
+  },
+
+	prepareVideoDrag: function(event) {    
+    var target = $(event.target);
+    if (!target.hasClass('drag_handle')) {
+      event.preventDefault();
+      return;
+    }
+    
+    var properties = this.detailsVideoContainer.data("properties");
+    this.videoDragStart(event, properties);
   },
   
   _hideAll: function(){
@@ -432,5 +532,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     }.pBind(this));
 
 		$("#my-favorites-videos").bind("dragstart", this.prepareRowDrag.pBind(this));
+		
+		this.setupVideoDetailsView();
 	}
 });
