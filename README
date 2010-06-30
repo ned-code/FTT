@@ -30,3 +30,7 @@ If all tests pass, you can work on a big new feature ;-)
 
 == Plugins
 
+= How to ask for a merge request
+Push your commit to the repository.
+Then login to Assembla. In the Source/Git tab click on the Forks tab then click button send a merge request.
+
