@@ -2,6 +2,9 @@ class Category < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
   
+  after_save :invalidate_cache
+  after_destroy :invalidate_cache
+  
   has_many :documents
 
   attr_accessible :name, :uuid
@@ -10,6 +13,12 @@ class Category < ActiveRecord::Base
 
   def number_of_public_documents
     Document.count(:conditions => "category_id = #{uuid} and is_public = 1")
+  end
+  
+private
+
+  def invalidate_cache
+    Rails.cache.delete("categories_json")
   end
 end
 

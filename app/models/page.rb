@@ -108,17 +108,14 @@ class Page < ActiveRecord::Base
     cloned_page
   end
 
-  def touch
-    update_attribute("updated_at", Time.now)
-  end
-
   def touch_and_need_update_thumbnail
 
-    update_attributes!({
-            :updated_at => Time.now,
-            :thumbnail_need_update => 1
-    })
-
+    if (!thumbnail_need_update)
+      update_attributes!({
+              :thumbnail_need_update => 1
+      })
+    end
+    touch_document
   end
 
   def self.process_pending_thumbnails
@@ -212,7 +209,7 @@ class Page < ActiveRecord::Base
   # after_save
   # after_destroy
   def touch_document
-    self.document.touch if self.document.present? && touch_document_active == true
+    self.document.invalidate_cache if self.document.present? && touch_document_active == true
   end
   
 end

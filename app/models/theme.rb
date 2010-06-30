@@ -42,7 +42,10 @@ class Theme < ActiveRecord::Base
   # =============
   # = Callbacks =
   # =============
-    
+  
+  after_save :invalidate_cache
+  after_destroy :invalidate_cache
+  
   # =================
   # = Class Methods =
   # =================
@@ -250,6 +253,9 @@ class Theme < ActiveRecord::Base
     end
   end
 
+  def invalidate_cache
+    Rails.cache.delete("theme_#{self.uuid}")
+  end
 end
 
 

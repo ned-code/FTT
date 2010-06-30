@@ -5,7 +5,7 @@ class ThemesController < ApplicationController
   def index
     @themes = Theme.last_version
     theme_json = @themes.map do |theme|
-      cached_theme = Rails.cache.fetch(theme.cache_key) do
+      cached_theme = Rails.cache.fetch("theme_#{theme.uuid}") do
         theme.as_json(:except => :file, :include => {:layouts => {:include => {:model_page => {:include => :items }}}})
       end
     end    
@@ -22,7 +22,7 @@ class ThemesController < ApplicationController
         @theme = Theme.find(params[:id])
       end
     end
-    cached_theme = Rails.cache.fetch(@theme.cache_key) do
+    cached_theme = Rails.cache.fetch("theme_#{@theme.uuid}") do
       @theme.as_json(:except => :file, :include => {:layouts => {:include => {:model_page => {:include => :items }}}})
     end    
     render :json => cached_theme

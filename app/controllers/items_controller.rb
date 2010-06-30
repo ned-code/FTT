@@ -15,8 +15,11 @@ class ItemsController < PageController
   # GET /documents/:document_id/pages/:page_id/items/:id
   def show
     @item = @page.items.find_by_uuid(params[:id])
-    
-    render :layout => false
+    if @item
+      render :layout => false
+    else
+      forbidden_access
+    end  
   end
   
   # POST /documents/:document_id/pages/:page_id/items
