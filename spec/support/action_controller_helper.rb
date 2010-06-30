@@ -1,3 +1,7 @@
+class ActionController::TestCase
+  include Devise::TestHelpers  
+end
+
 # HTTP Response helper for rspec matchers
 class ActionController::TestResponse
 
@@ -21,3 +25,4 @@ end
 class ActionController::TestUploadedFile
   attr_accessor :uuid
 end
+

@@ -36,9 +36,7 @@ group :test do
   
   gem 'rspec'
   gem 'rspec-rails'
-  gem 'remarkable_rails'
   gem 'factory_girl'
-  gem 'rspec-factory-girl', :require => 'spec/factory_girl'
   
   gem 'steak'
   # brew install libffi

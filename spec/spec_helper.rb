@@ -1,10 +1,15 @@
-ENV["RAILS_ENV"] = "test"
-require File.dirname(__FILE__) + "/../config/environment"
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
+
+require 'spec/rails'
 
 # Require factories file
 # require File.dirname(__FILE__) + "/factories"
 # Spec Helpers
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |file| require file }
+
+
+
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
