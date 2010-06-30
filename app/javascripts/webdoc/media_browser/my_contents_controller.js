@@ -301,26 +301,31 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 	insertVideo: function(newProperties, uuid){
 		ddd('insertVideo');
 		ddd('uuid ' + uuid);
-		// var name = video.title.$t;
-		//     var duration = videoMediaGroup.yt$duration.seconds;
-		//     var description = videoMediaGroup.media$description.$t;
-		//     var thumbUrl = videoMediaGroup.media$thumbnail[0].url;
-		//     var aspectRatio = videoMediaGroup.yt$aspectRatio ? videoMediaGroup.yt$aspectRatio.$t : "normal";
-		//     var viewCount = video.yt$statistics ? video.yt$statistics.viewCount : "";
-		//     var embedUrl = video.content.src;
-		//     var embedType = video.content.type;
-		//     var videoId = videoMediaGroup.yt$videoid.$t;
+		var name = newProperties.name;
+		var duration = newProperties.duration;
+		var description = newProperties.description;
+		var thumbUrl = newProperties.thumb_url;
+		var aspectRatio = newProperties.aspect_ratio;
+		var viewCount = newProperties.viewCount;
+		var embedUrl = newProperties.embed_url;
+		var embedType = newProperties.embed_type;
+		var videoId = newProperties.video_id;
+		var videoUrl = newProperties.url;
+		var videoType = newProperties.type;
+		var isHd = newProperties.is_hd;
+		var height = newProperties.height;
+		var width = newProperties.width;
 
 		if(!$('#my-favorites-videos ul').length){
 			$('#my-favorites-videos').append($('<ul>'));
 		}
 		
+		ddd('thumbUrl ' + thumbUrl); 
 		
     var videosContainer = $('#my-favorites-videos ul');
-    videosContainer.append($('<p>tsouin tsouin</p>'));
-    // videosContainer.append(
-    //   WebDoc.ServiceVideosSearch.buildVideoRow("youtube", videoId, "http://www.youtube.com/watch?v="+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, "", "", "")
-    // );
+    videosContainer.append(
+       WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow(videoType, videoId, videoUrl, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height)
+     );
 
 	},
   
