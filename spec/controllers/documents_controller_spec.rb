@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DocumentsController do
-  include Devise::TestHelpers
   
   # context "with public document" do
   #   before(:each) do

@@ -3,12 +3,6 @@ require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environ
 
 require 'spec/rails'
 
-# Require factories file
-# require File.dirname(__FILE__) + "/factories"
-# Spec Helpers
-
-
-
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 Spec::Runner.configure do |config|
