@@ -36,6 +36,7 @@ class VideosController < ApplicationController
   def create
     @video = current_user.videos.build(params[:video])
     @video.uuid = params[:video][:uuid]
+    @video.favorites = params[:video][:favorites]
     
     respond_to do |format|
       if @video.save

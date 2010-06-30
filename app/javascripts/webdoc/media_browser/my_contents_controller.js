@@ -9,7 +9,6 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
     this.imagePage = 1;
     this.myImagesContainer = $('#media-browser-my-images');
-		//this.myFavoritesContainer = $('#media-browser-my-favorites');
 		
     this.loadMyImages();  
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
@@ -56,8 +55,9 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     //  </div>
 		var container = $("<div id='media-browser-my-favorites' class='my-content-tab>");
 		container.append($("<div id='my-favorites-images' class='thumbnails'>"));
+		container.append($("<div id='my-favorites-videos' class='thumbnails'>"));
 		this.domNode.append(container);
-		this.myFavoritesContainer = $('#media-browser-my-favorites');
+		this.imagesFavoritesContainer = $('#my-favorites-images');
     
     this._loadFavoritesImages();
   },
@@ -297,6 +297,32 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   
     return liWrap;
   },
+
+	insertVideo: function(newProperties, uuid){
+		ddd('insertVideo');
+		ddd('uuid ' + uuid);
+		// var name = video.title.$t;
+		//     var duration = videoMediaGroup.yt$duration.seconds;
+		//     var description = videoMediaGroup.media$description.$t;
+		//     var thumbUrl = videoMediaGroup.media$thumbnail[0].url;
+		//     var aspectRatio = videoMediaGroup.yt$aspectRatio ? videoMediaGroup.yt$aspectRatio.$t : "normal";
+		//     var viewCount = video.yt$statistics ? video.yt$statistics.viewCount : "";
+		//     var embedUrl = video.content.src;
+		//     var embedType = video.content.type;
+		//     var videoId = videoMediaGroup.yt$videoid.$t;
+
+		if(!$('#my-favorites-videos ul').length){
+			$('#my-favorites-videos').append($('<ul>'));
+		}
+		
+		
+    var videosContainer = $('#my-favorites-videos ul');
+    videosContainer.append($('<p>tsouin tsouin</p>'));
+    // videosContainer.append(
+    //   WebDoc.ServiceVideosSearch.buildVideoRow("youtube", videoId, "http://www.youtube.com/watch?v="+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, "", "", "")
+    // );
+
+	},
   
   dragStart: function(event) {      
     // we take parent and then search down the img because safari and firefox have not the same target.
@@ -321,7 +347,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
 
 	_loadFavoritesImages: function(){
-		var thumbsWrap = this.myFavoritesContainer.find(".thumbnails");
+		var thumbsWrap = this.imagesFavoritesContainer;
     this.showSpinner(thumbsWrap);
           
     WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {

@@ -154,7 +154,6 @@ WebDoc.WebImagesSearch = $.klass({
     this.detailsViewImg.attr({'src':properties.url}).data("properties", properties);
     this.preloadImage(properties.url);
     
-		ddd('showDetailsView image search....');
     //setup the favorites links
     if( $('#media-browser-web-images-details #add_image_to_favorite').length){
 			$('#media-browser-web-images-details #add_image_to_favorite').parent().remove(); 

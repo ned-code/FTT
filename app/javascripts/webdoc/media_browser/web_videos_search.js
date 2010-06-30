@@ -96,7 +96,21 @@ WebDoc.WebVideosSearch = $.klass({
           
         case "add_video_to_favorites" :
 					ddd('add_video_to_favorites');
+					link.hide();
+		      li.append(info);
+
+					var video = new WebDoc.Video;
+					video.data.properties = properties;
+					video.data.favorites = 1;
+					video.save(function(persitedVideo){
+				    info.text("Done!");
+						if($('#media-browser-my-favorites').length){
+							WebDoc.application.mediaBrowserController.myContentsController.insertVideo(persitedVideo.data.properties, persitedVideo.uuid());
+						}
+				  }.pBind(this));
 					break;
+					
+				//display only in my videos details page
 				case "remove_video_from_favorites" :
 					ddd('remove_video_from_favorites');
 					break;
@@ -137,6 +151,13 @@ WebDoc.WebVideosSearch = $.klass({
     var serviceName = properties.type === "youtube" ? "YouTube" : "Vimeo";
     var showVideoPageEl = $("#show_video_page_action");
     showVideoPageEl.text(showVideoPageEl.data("originalText").replace("*", serviceName));
+
+		//setup the favorites links
+    if( $('#media-browser-web-video-details #add_video_to_favorites').length){
+			$('#media-browser-web-video-details #add_video_to_favorites').parent().remove(); 
+      var liFavorites = $('<li>').append($("<a href='' id='add_video_to_favorites'>Add to favorites</a>"));
+      $("#media-browser-web-video-details .actions ul").append(liFavorites);
+    }
 
 		this.parentController.hideAll();
 		$('#media-browser-web-video-details').show();
