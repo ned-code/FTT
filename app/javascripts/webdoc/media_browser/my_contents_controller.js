@@ -5,7 +5,6 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 		this.imageDetailsView = $('#media-browser-my-images-details #image-details');
 		this.videoDetailsView = $('#media-browser-my-favorites-videos-details #video-details');
 		this.setupImageDetailsView();
-		this.setupVideoDetailsView();
 		this.domNode = $('#media-browser-my-content');
 		this.createHandlers(this.domNode, 'click', this._myContentHandlers);
     
@@ -242,7 +241,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 		this.videoDetailsView.find('.drag_handle').attr({ draggable: "true" })
     .bind("dragstart", this.prepareVideoDrag.pBind(this));
 
-		$("#media-browser-my-favorites-videos-details .actions").click(function(event){
+		$("#media-browser-my-favorites-videos-details #video-details .actions").click(function(event){
       event.preventDefault();
       
       var properties = this.detailsVideoContainer.data("properties"); //properties of the currenlty displayed video are store in this element
@@ -262,7 +261,6 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
           ddd("show_video_page_action");
           window.open(properties.url, '_blank');
           break;
-				//display only in my videos details page
 				case "remove_video_from_favorites" :
 					ddd('remove video');
 					if (confirm ("Are you sure?")) {
