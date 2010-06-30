@@ -47,19 +47,15 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
   
 	loadMyFavorites: function(){
-		//first, create the dom node
-		//  <div id="media-browser-my-favorites" class='my-content-tab'>
-    //    <div id="my-favorites-images" class='thumbnails'>
-    //
-    //    </div>
-    //  </div>
 		var container = $("<div id='media-browser-my-favorites' class='my-content-tab>");
 		container.append($("<div id='my-favorites-images' class='thumbnails'>"));
 		container.append($("<div id='my-favorites-videos' class='thumbnails'>"));
 		this.domNode.append(container);
 		this.imagesFavoritesContainer = $('#my-favorites-images');
-    
+    this.videosFavoritesContainer = $('#my-favorites-videos');
+
     this._loadFavoritesImages();
+		this._loadFavoritesVideos();
   },
 
   _myContentHandlers: {
@@ -377,5 +373,33 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       this.showDetailsView(properties,true);
       event.preventDefault();
     }.pBind(this));
+	},
+	
+	_loadFavoritesVideos: function(){
+		var thumbsWrap = this.videosFavoritesContainer;
+    this.showSpinner(thumbsWrap);
+          
+    WebDoc.ServerManager.getRecords(WebDoc.Video, null, function(data) {
+      if (data.videos.length === 0) {
+        var noVideos = $("<span>").addClass('no_items').text('No Videos');
+        thumbsWrap.append(noVideos);
+      }
+      else {
+        var myVideosList = $("<ul>");
+        thumbsWrap.append(myVideosList);
+        
+        $.each(data.videos, function(i,myVideo){
+          myVideosList.append(this.insertVideo(myVideo.data.properties, myVideo.data.uuid));
+        }.pBind(this));
+      }
+      thumbsWrap.data('loaded', true);
+      this.hideSpinner(thumbsWrap);
+    }.pBind(this), { ajaxParams: { favorites: 1 }});
+    
+    // $("#media-browser-my-favorites .thumbnails ul li a").live("click", function (event) {
+    //   var properties = $(event.target).parent().find('img').data("properties");
+    //   this.showDetailsView(properties,true);
+    //   event.preventDefault();
+    // }.pBind(this));
 	}
 });
