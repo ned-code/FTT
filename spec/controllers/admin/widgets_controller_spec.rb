@@ -1,34 +1,54 @@
 require 'spec_helper'
 
 describe Admin::WidgetsController do
-  include Devise::TestHelpers
-  
-  # context 'accessed by admin user' do
-  #
-  #   before(:each) { sign_in :user, Factory.create(:admin) }
-  #
-  #   describe :get => :index do
-  #     should_respond_with :success, :content_type => :html
-  #   end
-  #
-  #   describe :get => :new do
-  #     should_respond_with :success, :content_type => :html
-  #   end
-  #
-  # end
-  #
-  # context 'accessed by basic user' do
-  #
-  #   before(:each) { sign_in :user, Factory.create(:user) }
-  #
-  #   describe :get => :index do
-  #     should_not_respond_with :success, :content_type => :html
-  #   end
-  #
-  #   describe :get => :new do
-  #     should_not_respond_with :success, :content_type => :html
-  #   end
-  #
-  # end
+
+  it "should use Admin::WidgetsController" do
+    controller.should be_an_instance_of(Admin::WidgetsController)
+  end
+
+  context 'accessed by admin user' do
+
+    before do
+      sign_in :user, Factory(:admin)
+    end
+
+
+    describe "GET 'index'" do
+      it "should be successful" do
+        get 'index'
+        response.should be_success
+      end
+    end
+
+    describe "GET 'new'" do
+      it "should be successful" do
+        get 'new'
+        response.should be_success
+      end
+    end
+
+  end
+
+  context 'accessed by user' do
+
+    before do
+      sign_in :user, Factory(:user)
+    end
+
+    describe "GET 'index'" do
+      it "should not be successful" do
+        get 'index'
+        response.should_not be_success
+      end
+    end
+
+    describe "GET 'new'" do
+      it "should not be successful" do
+        get 'new'
+        response.should_not be_success
+      end
+    end
+
+  end
   
 end
