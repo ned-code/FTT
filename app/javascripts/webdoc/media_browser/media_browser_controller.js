@@ -49,7 +49,7 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 			this.showTab('#media-browser-my-content');
 		}
 		else{
-			WebDoc.application.mediaBrowserController.myContentsController = new WebDoc.MyContentsController('media-browser-my-content');
+			WebDoc.application.mediaBrowserController.myContentsController = new WebDoc.MyContentsController('media-browser-my-content', this);
 			this.showTab('#media-browser-my-content');
 		}
 	},

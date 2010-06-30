@@ -13,7 +13,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.loadMyImages();  
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
     
-    $(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
+    $("#my-images-library").bind("dragstart", this.dragStart.pBind(this));
     
   },
   
@@ -235,6 +235,11 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
     $('#media-browser-my-images-details').show();
   },
+
+	showVideoDetailsView: function(properties){
+		ddd('showVideoDetailsView');
+		
+	},
   
   preloadImage: function(imageSrc) {
     var oImage = new Image();
@@ -326,8 +331,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 	},
   
   dragStart: function(event) {      
-    // we take parent and then search down the img because safari and firefox have not the same target.
-    // on firefox target is the a tag but in safarai target is the img.
+		ddd('dragStart chababababa');
     var draggingImg = $(event.target).parent().find('img');
 
     var properties = draggingImg.data("properties");
@@ -340,6 +344,30 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
+  },
+
+	prepareRowDrag: function(event) {
+    // prepare Draging for video...
+		ddd('prepareRowDrag');
+		var target = $(event.target);
+    if (target.closest('.video_row').length === 0 || target.find('img').length === 0) {
+      event.preventDefault();
+      return;
+    }
+    
+    var properties = target.find('img').data("properties");
+    this.videoDragStart(event, properties);
+  },
+
+	videoDragStart: function(event, properties) {
+		ddd('videoDragStart');
+    var dt = event.originalEvent.dataTransfer;
+    dt.setData("application/wd-video", $.toJSON(properties));
+    
+    // Drag "feedback"
+    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("video", properties.thumb_url);
+    $(document.body).append(mediaDragFeedbackEl);
+    dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   },
   
   _hideAll: function(){
@@ -368,11 +396,12 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       this.hideSpinner(thumbsWrap);
     }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 1 }});
     
-    $("#media-browser-my-favorites .thumbnails ul li a").live("click", function (event) {
+    $("#my-favorites-images ul li a").live("click", function (event) {
       var properties = $(event.target).parent().find('img').data("properties");
       this.showDetailsView(properties,true);
       event.preventDefault();
     }.pBind(this));
+		$("#my-favorites-images").bind("dragstart", this.dragStart.pBind(this));
 	},
 	
 	_loadFavoritesVideos: function(){
@@ -396,10 +425,12 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       this.hideSpinner(thumbsWrap);
     }.pBind(this), { ajaxParams: { favorites: 1 }});
     
-    // $("#media-browser-my-favorites .thumbnails ul li a").live("click", function (event) {
-    //   var properties = $(event.target).parent().find('img').data("properties");
-    //   this.showDetailsView(properties,true);
-    //   event.preventDefault();
-    // }.pBind(this));
+    $("#my-favorites-videos ul li a").live("click", function (event) {
+      var properties = $(event.target).parent().find('img').data("properties");
+      this.showVideoDetailsView(properties,true);
+      event.preventDefault();
+    }.pBind(this));
+
+		$("#my-favorites-videos").bind("dragstart", this.prepareRowDrag.pBind(this));
 	}
 });
