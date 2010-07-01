@@ -112,10 +112,14 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
       this.appsLibrary.hideSpinner(appsThumbWrap);
     }.pBind(this), { ajaxParams: { most_used: 1 }});
 		
+		//listen to click
 		$("#most_used_apps").delegate("li a", "click", function (e) {
       var widgetData = $( e.currentTarget ).data("widget");
       this.showAppDetails(widgetData);
       e.preventDefault();
     }.pBind(this));
+
+		//Drag and drop
+		appsThumbWrap.delegate("a", "dragstart", this.appsLibrary._prepareThumbDrag.pBind(this.appsLibrary));
   }
 });
