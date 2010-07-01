@@ -182,6 +182,7 @@ WebDoc.ImagePaletteController = $.klass({
   },
 
   addToMyImage: function(event) {
+		ddd('add to my image');
     event.preventDefault();
     var selected = WebDoc.application.boardController.selection()[0];
     if (selected && selected.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
@@ -192,16 +193,16 @@ WebDoc.ImagePaletteController = $.klass({
         var image = new WebDoc.Image;
         image.data.remote_attachment_url = this.propertySrc.val();
         this.selectedItem = selectedItem;
+				image.data.favorites = 1;
         image.save(function(event){
-          WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.LIBRARY)
-                  .imagesLibrary.refreshMyImages();
+          if($('#media-browser-my-favorites').length){
+						WebDoc.application.mediaBrowserController.myContentsController.insertImage(event.data.properties, event.data.uuid, 'my-favorites-images');
+					 }
           this.selectedItem.data.media_id = event.data.uuid;
           this.selectedItem.data.data.src = event.data.properties.url;
-          ddd(event.data.properties.url);
-          ddd(this.selectedItem.data.data.src);
           this.selectedItem.save();
           this.refresh();
-          this.addToMyImageResult.text('Image uploaded in my images!');
+          this.addToMyImageResult.text('Image added to favorites !');
         }.pBind(this));
       }
     }
