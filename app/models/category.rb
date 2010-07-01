@@ -24,11 +24,12 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: categories
 #
 #  name :string(255)     not null
-#  uuid :string(36)      primary key
+#  uuid :string(36)      default(""), not null, primary key
 #
 

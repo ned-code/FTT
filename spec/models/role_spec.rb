@@ -1,10 +1,7 @@
 require 'spec_helper'
 
 describe Role do
-  
-  should_allow_mass_assignment_of :name, :authorizable, :authorizable_id, :authorizable_type
-  should_not_allow_mass_assignment_of :id, :created_at, :updated_at
-  
+    
   it "should returns roles user's documents ids grouped by name" do
     user = Factory(:admin)
     document1 = Factory(:document, :creator => user)
@@ -20,6 +17,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: roles
@@ -29,6 +27,6 @@ end
 #  authorizable_id   :string(36)
 #  created_at        :datetime
 #  updated_at        :datetime
-#  uuid              :string(36)      primary key
+#  uuid              :string(36)      default(""), not null, primary key
 #
 

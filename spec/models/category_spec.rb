@@ -13,14 +13,12 @@ describe Category do
     end
 
     it "should return the number of the public document" do
-      p @category_1.number_of_public_documents
-
       @category_1.number_of_public_documents.should == 1
-
     end
   end
   
 end
+
 
 
 
@@ -29,6 +27,6 @@ end
 # Table name: categories
 #
 #  name :string(255)     not null
-#  uuid :string(36)      primary key
+#  uuid :string(36)      default(""), not null, primary key
 #
 

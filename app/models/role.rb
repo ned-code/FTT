@@ -33,6 +33,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: roles
@@ -42,6 +43,6 @@ end
 #  authorizable_id   :string(36)
 #  created_at        :datetime
 #  updated_at        :datetime
-#  uuid              :string(36)      primary key
+#  uuid              :string(36)      default(""), not null, primary key
 #
 

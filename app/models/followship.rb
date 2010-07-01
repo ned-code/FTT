@@ -39,6 +39,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: followships
@@ -47,6 +48,6 @@ end
 #  following_id :string(36)      not null
 #  created_at   :datetime
 #  updated_at   :datetime
-#  uuid         :string(36)      primary key
+#  uuid         :string(36)      default(""), not null, primary key
 #
 

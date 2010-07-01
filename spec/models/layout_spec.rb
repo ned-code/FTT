@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe Layout do
-
-  should_allow_mass_assignment_of :uuid, :title, :thumbnail_url
-  should_not_allow_mass_assignment_of :id, :theme_id, :model_page_id, :created_at, :updated_at
-
-  should_belong_to :theme
-  should_belong_to :model_page, :dependent => :delete
   
   describe "create_model_page! with the layout.html example" do
     before(:all) do
@@ -94,11 +88,12 @@ describe Layout do
 
 end
 
+
 # == Schema Information
 #
 # Table name: layouts
 #
-#  uuid          :string(255)     primary key
+#  uuid          :string(255)     default(""), not null, primary key
 #  title         :string(255)
 #  thumbnail_url :string(255)
 #  theme_id      :string(36)

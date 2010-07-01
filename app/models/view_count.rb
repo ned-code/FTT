@@ -21,6 +21,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: view_counts
@@ -31,6 +32,6 @@ end
 #  session_id    :string(255)
 #  ip_address    :string(255)
 #  created_at    :datetime
-#  uuid          :string(36)      primary key
+#  uuid          :string(36)      default(""), not null, primary key
 #
 
