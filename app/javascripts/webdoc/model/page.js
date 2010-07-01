@@ -494,7 +494,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
   },
   
-  assignLayout: function(layout, callBack) {    
+  assignLayout: function(layout, callBack) {
     // remove all previous items
     var previousItemsMap = {};
     for (var itemIndex = this.items.length - 1; itemIndex >= 0; itemIndex--) {

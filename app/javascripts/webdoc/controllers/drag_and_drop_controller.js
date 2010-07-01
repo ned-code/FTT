@@ -183,10 +183,20 @@
 		var knowFileType = this.KNOWN_FILE_TYPES;
 		
 		//here we get the domain of the parsed element
-		domain = WebDoc.UrlUtils.consolidateSrc(uri_list).split('://')[1].split('/')[0];
+		domain = WebDoc.UrlUtils.consolidateSrc(uri_list).split('://')[1].split('/')[0].split('?')[0];
+		
 		//removed the www.
 		if (domain.split('www.').length > 1){
 			domain = domain.split('www.')[1];
+		}
+		
+		//here we get the url parameter domain of the parsed element (like http://www.example.com?url=http://www.example2.com)
+		if(WebDoc.UrlUtils.consolidateSrc(uri_list).split('://').length > 2){
+		  var urlParameterDomain = WebDoc.UrlUtils.consolidateSrc(uri_list).split('://')[2].split('/')[0].split('?')[0];
+		  //removed the www for urlParameterDomain.
+		  if (urlParameterDomain.split('www.').length > 1){
+		      urlParameterDomain = urlParameterDomain.split('www.')[1];
+		  }        
 		}
 		
 		//FACEBOOK HACK to drop photo, we should normaly add a KNOWN_SOURCES
@@ -211,6 +221,14 @@
 				knowSources[knowSourceIndex][1](uri_list,evt);
 				return true
 			}
+		}
+		
+		for(knowSourceIndex in knowSources){
+			if((urlParameterDomain && urlParameterDomain == knowSources[knowSourceIndex][0])){
+				uri_list = 'http://'+WebDoc.UrlUtils.consolidateSrc(uri_list).split('http://')[2]
+		    knowSources[knowSourceIndex][1](uri_list,evt);
+		    return true
+		   }
 		}
 		
 		//src.match(pattern_has_protocole)

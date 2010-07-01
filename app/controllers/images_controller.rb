@@ -34,6 +34,7 @@ class ImagesController < ApplicationController
   
   # POST /images
   def create
+    params[:image][:remote_attachment_url] = check_source(params[:image][:remote_attachment_url])
     @image = current_user.images.build(params[:image])
     @image.uuid = params[:image][:uuid] 
     
@@ -57,6 +58,21 @@ class ImagesController < ApplicationController
   
   #no authentication for images as SWFUpload does not like it so much
   def http_authenticate
+  end
+  
+private
+
+  def check_source(src)
+    extension = ['.png', '.jpg', '.gif']
+    src_ok = false
+    while !src_ok
+      if extension.include?(src[(src.length - 4)..src.length]) || src[(src.length - 5)..src.length] == '.jpeg'
+        src_ok = true
+      else
+        src = src.chop
+      end
+    end
+    src
   end
   
 end
