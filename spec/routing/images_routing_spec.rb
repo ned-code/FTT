@@ -1,10 +1,25 @@
 require 'spec_helper'
 
 describe ImagesController do
-  
-  # should_route :get,    '/images',        :action => :index
-  # should_route :get,    '/images/1',      :action => :show,    :id => 1
-  # should_route :post,   '/images',        :action => :create
-  # should_route :delete, '/images/1',      :action => :destroy, :id => 1
+
+  describe "routing" do
+
+    it "recognizes and generates #index" do
+      { :get => "/images" }.should route_to(:controller => "images", :action => "index")
+    end
+
+    it "recognizes and generates #show" do
+      { :get => "/images/1" }.should route_to(:controller => "images", :action => "show", :id => "1")
+    end
+
+    it "recognizes and generates #create" do
+      { :post => "/images" }.should route_to(:controller => "images", :action => "create")
+    end
+
+    it "recognizes and generates #destroy" do
+      { :delete => "/images/1" }.should route_to(:controller => "images", :action => "destroy", :id => "1")
+    end
+
+  end
   
 end
