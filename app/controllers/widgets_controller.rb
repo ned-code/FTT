@@ -23,7 +23,7 @@ class WidgetsController < ApplicationController
   
   # GET /widgets/:id
   def show
-    @widget = Rails.cache.fetch("#widget_json_#{params[:id]}") { Medias::Widget.first(:conditions => ["uuid = :id OR system_name = :id", { :id => params[:id] }]).to_json }
+    @widget = Rails.cache.fetch("widget_#{params[:id]}") { Medias::Widget.first(:conditions => ["uuid = :id OR system_name = :id", { :id => params[:id] }]).to_json }
     
     respond_to do |format|
       format.json { render :json => @widget }

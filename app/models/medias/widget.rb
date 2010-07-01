@@ -22,6 +22,9 @@ class Medias::Widget < Media
   
   before_save :set_attributes_if_not_present
   before_save :update_new_file
+  after_destroy :invalidate_cache
+  after_save :invalidate_cache
+  
   #after_destroy :delete_widget_folder # Will be done later, we currently need that all files keep unchanged so that existing documents still work
   
   # ====================
@@ -165,7 +168,14 @@ private
     attachment.queued_for_write[:original]
   end
   
+  def invalidate_cache
+    Rails.cache.delete("widget_#{self.uuid}")
+    if (self.system_name)
+      Rails.cache.delete("widget_#{self.system_name}")
+    end
+  end
 end
+
 
 
 
@@ -173,15 +183,18 @@ end
 #
 # Table name: medias
 #
-#  uuid        :string(36)      primary key
-#  type        :string(255)
-#  created_at  :datetime
-#  updated_at  :datetime
-#  properties  :text(16777215)
-#  user_id     :string(36)
-#  file        :string(255)
-#  system_name :string(255)
-#  title       :string(255)
-#  description :text
+#  uuid                    :string(36)      default(""), not null, primary key
+#  type                    :string(255)
+#  created_at              :datetime
+#  updated_at              :datetime
+#  properties              :text(16777215)
+#  user_id                 :string(36)
+#  attachment_file_name    :string(255)
+#  system_name             :string(255)
+#  title                   :string(255)
+#  description             :text
+#  attachment_content_type :string(255)
+#  attachment_file_size    :integer(4)
+#  attachment_updated_at   :datetime
 #
 

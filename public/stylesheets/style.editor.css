@@ -15,10 +15,6 @@ body {
     /* Prevent people overriding the body font size,
        which could wreak havoc with the interface. */
     font-size: 100% !important;
-    
-    /* push scrollbars of layers outside the window */
-    padding: 0 15px 15px 0;
-    margin: 0;
 }
 .ui,
 .panel {
@@ -202,7 +198,8 @@ body {
     overflow-y: hidden;
 }
 
-.pages_panel .inspector.active {
+.pages_panel .inspector.active,
+.pages_panel .inspector:hover {
     -webkit-transform:  scale(1);
     -moz-transform:     scale(1);
     transform:          scale(1);

@@ -87,11 +87,8 @@ class Item < ActiveRecord::Base
     end
     sanitized_html
   end
-
-  def touch
-    update_attribute("updated_at", Time.now)
-  end
 end
+
 
 
 
@@ -99,7 +96,7 @@ end
 #
 # Table name: items
 #
-#  uuid       :string(36)      primary key
+#  uuid       :string(36)      default(""), not null, primary key
 #  page_id    :string(36)      not null
 #  media_id   :string(36)
 #  media_type :string(255)
@@ -108,5 +105,6 @@ end
 #  updated_at :datetime
 #  position   :integer(4)
 #  kind       :string(255)
+#  inner_html :text(16777215)
 #
 

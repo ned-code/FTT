@@ -22,15 +22,6 @@ class PagesController < DocumentController
   def show
     @page ||= @document.pages.find_by_uuid_or_position!(params[:id])
     respond_to do |format|
-      # JBA TEMP
-      # format.html do
-      #   logger.debug "user agent #{request.user_agent}"
-      #   if (!/(.*)Google.*/.match(request.user_agent))
-      #     redirect_to "/documents/#{@document.uuid}##{@page.uuid}"
-      #   else
-      #     render :layout => "layouts/static_page"
-      #   end
-      # end
       format.html do
         render :layout => "layouts/static_page"
       end
@@ -42,9 +33,14 @@ class PagesController < DocumentController
   
   # POST /documents/:document_id/pages
   def create
+    deep_notify = params[:page][:items_attributes].present?
     @page = @document.pages.new_with_uuid(params[:page])
-    @page.must_notify = true
     @page.save!
+    options = {};
+    options[:include] = :items if deep_notify
+    message = @page.as_json(options)
+    message[:source] = params[:xmpp_client_id]
+    @@xmpp_notifier.xmpp_notify(message.to_json, @page.document.uuid)     
     if (params[:page][:items_attributes].present?)
       render :json => @page.to_json(:include => :items)
     else
@@ -56,11 +52,14 @@ class PagesController < DocumentController
   def update
     deep_notify = params[:page][:items_attributes].present?
     @page = @document.pages.find_by_uuid(params[:id])
-    @page.must_notify = true
-    @page.deep_notify = deep_notify
     @page.update_attributes!(params[:page])
     # TODO JBA seems that update atribute does not refresh nested attributes so we need to refresh
     @page.reload
+    options = {};
+    options[:include] = :items if deep_notify
+    message = @page.as_json(options)
+    message[:source] = params[:xmpp_client_id]
+    @@xmpp_notifier.xmpp_notify(message.to_json, @page.document.uuid)    
     if (deep_notify)
       render :json => @page.to_json(:include => :items)
     else
@@ -71,9 +70,9 @@ class PagesController < DocumentController
   # DELETE /documents/:document_id/pages/:id
   def destroy
     @page = @document.pages.find_by_uuid(params[:id])
-    @page.must_notify = true
     @page.destroy
-    
+    message = { :source => params[:xmpp_client_id], :page =>  { :uuid => @page.uuid }, :action => "delete" }
+    @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)    
     render :json => {}
   end
 

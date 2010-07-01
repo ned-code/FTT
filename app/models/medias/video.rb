@@ -11,9 +11,13 @@ class Medias::Video < Media
                     :path => S3_CONFIG[:storage] == 's3' ? attachment_path : ":rails_root/public/#{attachment_path}",
                     :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{attachment_path}"
   
-  validates_attachment_presence :attachment
-  validates_attachment_size :attachment, :less_than => 5.megabytes
-  validates_attachment_content_type :attachment, :content_type => ['application/octet-stream']
+  validates_attachment_size :attachment,
+                            :less_than => 5.megabytes,
+                            :unless => Proc.new {|a| a.attachment }
+  
+  validates_attachment_content_type :attachment,
+                                    :content_type => ['application/octet-stream'],
+                                    :unless => Proc.new {|a| a.attachment }
   
   # =============
   # = Callbacks =
@@ -34,19 +38,23 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: medias
 #
-#  uuid        :string(36)      primary key
-#  type        :string(255)
-#  created_at  :datetime
-#  updated_at  :datetime
-#  properties  :text(16777215)
-#  user_id     :string(36)
-#  file        :string(255)
-#  system_name :string(255)
-#  title       :string(255)
-#  description :text
+#  uuid                    :string(36)      default(""), not null, primary key
+#  type                    :string(255)
+#  created_at              :datetime
+#  updated_at              :datetime
+#  properties              :text(16777215)
+#  user_id                 :string(36)
+#  attachment_file_name    :string(255)
+#  system_name             :string(255)
+#  title                   :string(255)
+#  description             :text
+#  attachment_content_type :string(255)
+#  attachment_file_size    :integer(4)
+#  attachment_updated_at   :datetime
 #
 

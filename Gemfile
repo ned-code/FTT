@@ -1,6 +1,6 @@
 source :gemcutter
 gem "rails", "~> 2.3.5"
-
+gem 'bundler', "0.9.26"
 gem 'haml'
 gem 'i18n'
 gem 'mime-types', :require => 'mime/types'
@@ -36,9 +36,7 @@ group :test do
   
   gem 'rspec'
   gem 'rspec-rails'
-  gem 'remarkable_rails'
   gem 'factory_girl'
-  gem 'rspec-factory-girl', :require => 'spec/factory_girl'
   
   gem 'steak'
   # brew install libffi

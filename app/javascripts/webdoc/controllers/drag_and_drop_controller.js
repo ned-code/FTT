@@ -119,6 +119,7 @@
 					return true;
 				}
 			}
+						
 			//No text/uri-list, or not parsable. we look for antoher type...
 			//text/html
 			// for(typeIndex in receivedTypes){
@@ -135,12 +136,7 @@
 			for(typeIndex in receivedTypes){
 				if (receivedTypes[typeIndex] == 'text/uri-list'){
 					WebDoc.application.boardController.unselectAll();
-			    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-			    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
-			    newItem.data.data.src = evt.originalEvent.dataTransfer.getData('text/uri-list');
-			    newItem.data.data.css = { top: "100px", left: "100px", width: "600px", height: "400px", overflow: "auto"};
-			    newItem.data.data.tag = "iframe";
-			    WebDoc.application.boardController.insertItems([newItem]);
+					WebDoc.DrageAndDropController.buildItemForIframe(evt.originalEvent.dataTransfer.getData('text/uri-list'),evt);
 					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
 					return true;
 				}
@@ -158,6 +154,29 @@
 		this.KNOWN_FILE_TYPES.push([extension, parse_method]);
 	},
 	
+	buildItemForIframe: function(uri_list,event){
+		//transform as input to validate
+		//<input type="url" title="Web page address" name="input-iframe-src" data-type="webdoc_iframe_url">
+		var src = $("<input type='url' name='input-iframe-src' data-type='webdoc_iframe_url' value='"+ uri_list +"'>");
+		src.validate({
+      pass: function( value ){
+				var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
+				var pos = WebDoc.application.boardController.mapToPageCoordinate(event);
+				var posX = pos.x +'px';
+				var posY = pos.y +'px';
+
+		    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
+		    newItem.data.data.src = uri_list;
+				newItem.data.data.css = { top: posY, left: posX, width: "600px", height: "400px", overflow: "auto"};
+		    newItem.data.data.tag = "iframe";
+				WebDoc.application.boardController.insertItems([newItem]);
+      },
+      fail: function( value, error ){
+        ddd(error);
+      }
+    });
+	},
+	
 	_parseUriList: function(uri_list, evt) {
 		ddd('[DrageAndDropController] _parseUriList');		
 		var knowSources = this.KNOWN_SOURCES;
@@ -170,6 +189,22 @@
 			domain = domain.split('www.')[1];
 		}
 		
+		//FACEBOOK HACK to drop photo, we should normaly add a KNOWN_SOURCES
+		// and use the FB API !!!
+		if(uri_list.match('facebook.com')){
+			//we return false. It should normaly use the x-moz-file-promise-url to drop the photo
+			return false;
+		}
+		
+		//Google image hack
+		//if it's a google image search, we do the same hack as Facebook
+		if(uri_list.match('google')){
+			if(uri_list.match('images')){
+				//we return false. It should normaly use the x-moz-file-promise-url to drop the photo
+				return false;
+			}
+		}
+		
 		//Now we look if it's in KNOWN_SOURCES. If yes, we call the methods associated with it
 		for(knowSourceIndex in knowSources){
 			if(domain == knowSources[knowSourceIndex][0]){
@@ -180,12 +215,13 @@
 		
 		//src.match(pattern_has_protocole)
 		for(knowFileTypeIndex in knowFileType){
-			reg = new RegExp('(' + knowFileType[knowFileTypeIndex][0] + ')');
+			var reg = new RegExp('(' + knowFileType[knowFileTypeIndex][0] + ')');
 			if(uri_list.match(knowFileType[knowFileTypeIndex][0])){
 				knowFileType[knowFileTypeIndex][1](uri_list,evt);
 				return true;
 			}
 		}
+		
 		//uri-list not in KNOWN_SOURCES. We try to look if it's in KNOW_FILE_TYPES to display this file
 		
 		//We don't find the domain in KNOWN_SOURCES or KNOW_FILE_TYPES. We do nothing here

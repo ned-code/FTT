@@ -106,6 +106,10 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
   },
 
+  getThumbnailUrl: function() {
+    return this.data.thumbnail_url;
+  },
+
   height: function(unit) {
     //if (!this.data.data.css.height) {
     //  // this should not happend but old pages are in this case

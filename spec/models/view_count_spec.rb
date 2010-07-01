@@ -1,17 +1,9 @@
 require 'spec_helper'
 
 describe ViewCount do
-  
-  should_allow_mass_assignment_of :user_id, :session_id, :ip_address
-  should_not_allow_mass_assignment_of :id, :viewable_id, :viewable_type, :created_at
-  
-  should_belong_to :user
-  should_belong_to :viewable, :polymorphic => true#, :counter_cache => true
-  
+
   context "with already one view_count in db" do
-    before(:each) { Factory(:view_count) }
-    
-    should_validate_uniqueness_of :session_id, :scope => [:viewable_id, :viewable_type]
+    before(:each) { Factory(:view_count) }    
   end
   
   it "should increment document views_count" do
@@ -20,6 +12,7 @@ describe ViewCount do
   end
   
 end
+
 
 
 
@@ -33,6 +26,6 @@ end
 #  session_id    :string(255)
 #  ip_address    :string(255)
 #  created_at    :datetime
-#  uuid          :string(36)      primary key
+#  uuid          :string(36)      default(""), not null, primary key
 #
 

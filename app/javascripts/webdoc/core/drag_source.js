@@ -26,16 +26,15 @@ WebDoc.DrageAndDropController.addUriSource(
 	'youtube.com',
 	function(uri_list,evt){ 
     var id = '';
-		//id = uri_list.split('v=')[1].split('&')[0];
     if(uri_list.indexOf('v=') !== -1){
-              id = uri_list.split('v=')[1].split('&')[0];
-            } else if(uri_list.indexOf('video_ids=') !== -1){
-              var ids = uri_list.split('video_ids=')[1].split('%2C');
-              var index = (uri_list.indexOf('index=') !== -1) ? uri_list.split('index=')[1].split('&')[0] : 0;
-              id = ids[index].split('&')[0];
-            } else {
-              id = uri_list;
-            }  
+      id = uri_list.split('v=')[1].split('&')[0];
+    } else if(uri_list.indexOf('video_ids=') !== -1){
+      var ids = uri_list.split('video_ids=')[1].split('%2C');
+      var index = (uri_list.indexOf('index=') !== -1) ? uri_list.split('index=')[1].split('&')[0] : 0;
+      id = ids[index].split('&')[0];
+    } else {
+      id = uri_list;
+    }                                                                                                    
 		var videoProperties = {
 			type : 'youtube',
 			video_id : id
@@ -59,6 +58,57 @@ WebDoc.DrageAndDropController.addUriSource(
 			video_id : id
 		};
 
+		var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
+		WebDoc.application.boardController.insertVideo(videoProperties, pos);
+	}
+);
+
+WebDoc.DrageAndDropController.addUriSource(
+	'vids.myspace.com',
+	function(uri_list,evt){
+    if(uri_list.indexOf('videoid=') !== -1){
+      id = uri_list.split('videoid=')[1].split('&')[0];
+    } else {
+      id = uri_list;
+    }
+		var videoProperties = {
+			type : 'myspacevideo',
+			video_id : id
+		};
+		var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
+		WebDoc.application.boardController.insertVideo(videoProperties, pos);
+	}
+);
+
+WebDoc.DrageAndDropController.addUriSource(
+	'metacafe.com',
+	function(uri_list,evt){
+    if(uri_list.indexOf('watch/') !== -1){
+      id = uri_list.split('watch/')[1].split('/')[0];
+    } else {
+      id = uri_list;
+    }
+		var videoProperties = {
+			type : 'metacafe',
+			video_id : id
+		};
+		var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
+		WebDoc.application.boardController.insertVideo(videoProperties, pos);
+	}
+);
+
+WebDoc.DrageAndDropController.addUriSource(
+	'video.google.com',
+	function(uri_list,evt){
+    if(uri_list.indexOf('docid=') !== -1){
+      id = uri_list.split('docid=')[1].split('&')[0];
+    } else {
+      id = $.trim(uri_list);
+    } 
+		var videoProperties = {
+			type : 'googlevideo',
+			video_id : id
+		};
 		var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
 		WebDoc.application.boardController.insertVideo(videoProperties, pos);
 	}
@@ -114,12 +164,7 @@ WebDoc.DrageAndDropController.addFileTypeSource(
 	'.html',
 	function(uri_list,evt){
 		WebDoc.application.boardController.unselectAll();
-    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
-    newItem.data.data.src = uri_list;
-    newItem.data.data.css = { top: "100px", left: "100px", width: "600px", height: "400px", overflow: "auto"};
-    newItem.data.data.tag = "iframe";
-    WebDoc.application.boardController.insertItems([newItem]);
+		WebDoc.DrageAndDropController.buildItemForIframe(uri_list,evt);
 	}
 );
 
@@ -128,12 +173,7 @@ WebDoc.DrageAndDropController.addFileTypeSource(
 	function(uri_list,evt){
 		ddd('php processor');
 		WebDoc.application.boardController.unselectAll();
-    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
-    newItem.data.data.src = uri_list;
-    newItem.data.data.css = { top: "100px", left: "100px", width: "600px", height: "400px", overflow: "auto"};
-    newItem.data.data.tag = "iframe";
-    WebDoc.application.boardController.insertItems([newItem]);
+    WebDoc.DrageAndDropController.buildItemForIframe(uri_list,evt);
 	}
 );
 
@@ -141,11 +181,6 @@ WebDoc.DrageAndDropController.addFileTypeSource(
 	'.php3',
 	function(uri_list,evt){
 		WebDoc.application.boardController.unselectAll();
-    var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
-    newItem.data.media_type = WebDoc.ITEM_TYPE_IFRAME;
-    newItem.data.data.src = uri_list;
-    newItem.data.data.css = { top: "100px", left: "100px", width: "600px", height: "400px", overflow: "auto"};
-    newItem.data.data.tag = "iframe";
-    WebDoc.application.boardController.insertItems([newItem]);
+    WebDoc.DrageAndDropController.buildItemForIframe(uri_list,evt);
 	}
 );

@@ -4,8 +4,8 @@ class Services::Bluga
   USER_ID = 7115
   DEFAULT_WIDTH  = 640
   DEFAULT_HEIGHT = 480
-  # WEBDOC_HOST = 'wd-st.webdoc.com'
-  WEBDOC_HOST = 'dev1.webdoc.com'
+  WEBDOC_HOST = 'st-wd.webdoc.com'
+  # WEBDOC_HOST = 'dev1.webdoc.com'
 
   def initialize(options={})
     @api_key  = options[:api_key].present?  ? options[:api_key]  : API_KEY
@@ -15,16 +15,16 @@ class Services::Bluga
   end
 
   def process_page(page)
-
     page.generate_and_set_thumbnail_secure_token
+    page.thumbnail_request_at = Time.now
     if page.save
-      # begin
+      begin
         result = self.send("http://#{WEBDOC_HOST}/documents/#{page.document.uuid}/pages/#{page.uuid}?secure_token=#{page.thumbnail_secure_token}", "http://#{WEBDOC_HOST}/documents/#{page.document.uuid}/pages/#{page.uuid}/callback_thumbnail?secure_token=#{page.thumbnail_secure_token}")
-      #   raise 'result send request false' if result == false
-      # rescue
-      #   page.thumbnail_secure_token = nil
-      #   page.save!
-      # end
+        raise 'result send request false' if result == false
+      rescue
+        page.thumbnail_secure_token = nil
+        page.save!
+      end
     end
   end
   
@@ -50,6 +50,7 @@ class Services::Bluga
       page.remote_thumbnail_url = 'http://webthumb.bluga.net/data/'+job_path+job_id+'-thumb_large.jpg';
       page.thumbnail_need_update = false
       page.thumbnail_secure_token = nil
+      page.thumbnail_request_at = nil
       page.save!
     else
       raise "thumbnail callback error"

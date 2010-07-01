@@ -36,6 +36,8 @@ class Document < ActiveRecord::Base
   before_create :create_default_page
   before_create :validate_size
   after_create :set_creator_as_editor
+  after_save :invalidate_cache
+  after_destroy :invalidate_cache
   
   # =================
   # = Class Methods =
@@ -148,7 +150,8 @@ class Document < ActiveRecord::Base
   end
 
   def relative_created_at
-    diff_in_minutes = (((Time.now - self.created_at).abs)/60).round
+    diff_in_time = Time.now - self.created_at
+    diff_in_minutes = ((diff_in_time.abs)/60).round
     text = ""
 
     case diff_in_minutes
@@ -345,6 +348,10 @@ class Document < ActiveRecord::Base
     update_attribute("updated_at", Time.now)
   end
   
+  def invalidate_cache
+    Rails.cache.delete("document_#{self.uuid}")
+    Rails.cache.delete("document_#{self.uuid}_explore")
+  end
 private
   
   # after_create

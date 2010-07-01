@@ -32,7 +32,7 @@ WebDoc.BoardController = jQuery.klass({
     jQuery(document)
     .bind("keypress", this, jQuery.proxy(this, "_keyPress"))
     .bind("keydown", this, jQuery.proxy(this, "_keyDown"))
-    .bind("keyup", this, jQuery.proxy(this, "_keyUp"));
+    .bind("keyup", this, jQuery.proxy(this, "_keyUp"));   
   },
   
   currentPageView: function() {
@@ -100,11 +100,12 @@ WebDoc.BoardController = jQuery.klass({
     
     this._fireSelectionChanged();
     this._bindMouseEvent();
+     
 
     if (this._autoFit && this.boardContainerNode.css("width").match(/px/) && this.boardContainerNode.css("height").match(/px/)) {
       //update zoom to fit browser page    
-      var heightFactor = $("#webdoc").parent().height() / $("#board-container").height();
-      var widthFactor = $("#webdoc").parent().width() / $("#board-container").width();      
+      var heightFactor = $("#webdoc").height() / $("#board-container").height();
+      var widthFactor = $("#webdoc").width() / $("#board-container").width();      
       if (heightFactor < widthFactor) {
         defaultZoom =  heightFactor;
       }
@@ -114,17 +115,17 @@ WebDoc.BoardController = jQuery.klass({
     }
     this.zoom(defaultZoom);
     this.setMode(!jQuery("body").hasClass('mode-edit'));
-    this._fireCurrentPageChanged();
     
+    this._fireCurrentPageChanged();
     jQuery('#webdoc').scrollbars({
       x: jQuery('#webdoc_x_scrollbar .scrollbar'),
       y: jQuery('#webdoc_y_scrollbar .scrollbar'),
       dragImageUrl: '/images/icon_blank.png'
     });
-    
+     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
-    pageView.viewDidLoad();
+    pageView.viewDidLoad();    
   },
   
   isInteractionMode: function() {
@@ -154,7 +155,7 @@ WebDoc.BoardController = jQuery.klass({
 
     this.boardContainerNode.resizable('destroy'); // destroy to refresh    
     this._initResizable();
-    
+
     //WebDoc.application.pageBrowserController.reveal();
     //WebDoc.application.rightBarController.reveal();
     if (this._previousInspector) {
@@ -184,9 +185,9 @@ WebDoc.BoardController = jQuery.klass({
     .removeClass("current")
     .filter("[href='#mode-preview']")
     .addClass("current");
-
-    this.boardContainerNode.resizable('destroy');
     
+	this.boardContainerNode.resizable('destroy');
+
     if(!this._editable) {
       jQuery(".mode-tools").hide(); 
     }
@@ -210,8 +211,8 @@ WebDoc.BoardController = jQuery.klass({
     else {
       this._setModeEdit();
     }
-    
-    // Apps/Inspectors
+
+        // Apps/Inspectors
 //    var allItemsViews = this.currentPageView().itemViews;
 //    $.each(allItemsViews, function(k, v) {
 //      if (v.inspectorPanesManager) {
@@ -222,13 +223,12 @@ WebDoc.BoardController = jQuery.klass({
     if (WebDoc.appsContainer) {
       WebDoc.appsMessagingController.notifyModeChanged(!state);
     }
-    
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     // it does not work on ff4
-    //    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
-    //      ddd("FF 3.5. drawing !");
-    //      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
-    //    }
+//    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
+//      ddd("FF 3.5. drawing !");
+//      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
+//    }
   },
   
   toggleMode: function() {
@@ -617,7 +617,7 @@ WebDoc.BoardController = jQuery.klass({
     };
     this.insertItems([newItem]);
   },
-  
+
   insertVideo: function(videoProperties, position) {
     var videoWidget;
     switch (videoProperties.type) {
@@ -627,8 +627,17 @@ WebDoc.BoardController = jQuery.klass({
       case 'vimeo' :
         videoWidget = WebDoc.WidgetManager.getInstance().getVimeoWidget();
         break;
-	  case 'dailymotion' :
+      case 'dailymotion' :
         videoWidget = WebDoc.WidgetManager.getInstance().getDailymotionWidget();
+        break;
+      case 'myspacevideo' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getVidsMyspaceWidget();
+        break;
+      case 'metacafe' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getMetacafeWidget();
+        break;
+      case 'googlevideo' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getVidsGoogleWidget();
         break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
@@ -681,8 +690,9 @@ WebDoc.BoardController = jQuery.klass({
       item.isNew = true;
       item.save();
     }.pBind(this));
-    
-    
+    if (items.length > 0) {
+      this.selectItemViews([this._currentPageView.findItemView(items[0].uuid())]);
+    }
     WebDoc.application.undoManager.registerUndo(function() {
       this.removeItems(items);
     }.pBind(this));
@@ -719,15 +729,11 @@ WebDoc.BoardController = jQuery.klass({
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
     this.currentPageView().setZoomFactor(this._currentZoom);
-    
-    // If item is being edited, reposition screens
-    if ( editingItem ) { this._updateScreens( editingItem.domNode ); }
   },
   
   getZoom: function() {
     return this._currentZoom;
-  },
-  
+  },  
   // Private methods
     
   _mouseDown: function(e) {
@@ -818,7 +824,7 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _keyDown: function(e) {
-    ddd("[BoardController] keydown");
+	  ddd("[BoardController] keydown");
     var el = jQuery(e.target);
     if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();
@@ -1039,7 +1045,6 @@ WebDoc.BoardController = jQuery.klass({
         }, false);
       }.pBind(this),
       stop: function(e, ui) {
-        ddd('[page view] resize stop');
         this._currentPage.setSize({
           height: Math.round(ui.element[0].clientHeight*1/this._currentZoom)+'px',
           width: Math.round(ui.element[0].clientWidth*1/this._currentZoom)+'px'
@@ -1047,5 +1052,4 @@ WebDoc.BoardController = jQuery.klass({
       }.pBind(this)
     });
   }
-  
 });

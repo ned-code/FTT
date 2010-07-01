@@ -46,11 +46,24 @@
     });
 })(jQuery);
 
-// Detect css3 features like transition and store in jQuery.support.css
+// Detect css3 features and store in jQuery.support.css
 
 (function(jQuery, undefined){
     
     var debug = (window.console && console.log);
+    
+    var testElem = jQuery('<div/>').css({
+      WebkitBoxSizing: 'border-box',
+      MozBoxSizing: 'border-box',
+      boxSizing: 'border-box',
+      position: 'absolute',
+      top: -200,
+      left: 0,
+      padding: 20,
+      border: '10px solid red',
+      width: 100,
+      height: 100
+    });
     
     jQuery.support.css = {};
     
@@ -61,9 +74,28 @@
     }
     
     jQuery(document).ready(function(){
+      
       // Lazily test for transition support by listening
       // for the transitionend event
       jQuery(document).bind('transitionend webkitTransitionEnd oTransitionEnd', transitionEnd);
+      
+      // Test for box-sizing support and figure out whether min-width
+      // or min-height fucks it or not.  Store in
+      // jQuery.support.css.borderBox
+      // jQuery.support.css.borderBoxMinMax
+      document.body.appendChild( testElem[0] );
+      
+      jQuery.support.css.borderBox = ( testElem.outerWidth() === 100 && testElem.outerHeight() === 100 );
+      
+      testElem.css({
+        minWidth: 100,
+        minHeight: 100
+      });
+      
+      jQuery.support.css.borderBoxMinMax = ( testElem.outerWidth() === 100 && testElem.outerHeight() === 100 );
+      
+      testElem.remove();
+      
     });
 })(jQuery);
 
@@ -135,21 +167,6 @@
 })(jQuery);
 
 
-// Extend jQuery plugins with some helper plugins
-
-jQuery.fn.extend({
-    
-    // Attribute helpers
-    
-    id: function(id) {
-        return this.attr("id", id) ;
-    },
-    
-    href: function(href) {
-        return this.attr("href", href) ;
-    }
-});
-
 // Extend jQuery with some helper methods
 
 jQuery.extend({
@@ -209,4 +226,18 @@ jQuery.extend({
     }
 });
 
-// Add easing functions to jQuery's animation capabilities
+
+// Extend jQuery plugins with some helper plugins
+
+jQuery.fn.extend({
+    
+    // Attribute helpers
+    
+    id: function(id) {
+        return this.attr("id", id) ;
+    },
+    
+    href: function(href) {
+        return this.attr("href", href) ;
+    }
+});
