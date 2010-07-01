@@ -216,19 +216,24 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: pages
 #
-#  uuid         :string(36)      primary key
-#  document_id  :string(36)
-#  thumbnail_id :string(36)
-#  position     :integer(4)      not null
-#  version      :integer(4)      default(1), not null
-#  data         :text(16777215)
-#  created_at   :datetime
-#  updated_at   :datetime
-#  title        :string(255)     default("undefined")
-#  layout_kind  :string(255)
+#  uuid                   :string(36)      default(""), not null, primary key
+#  document_id            :string(36)
+#  thumbnail_id           :string(36)
+#  position               :integer(4)      not null
+#  version                :integer(4)      default(1), not null
+#  data                   :text(16777215)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  title                  :string(255)     default("undefined")
+#  layout_kind            :string(255)
+#  thumbnail_file_name    :string(255)
+#  thumbnail_need_update  :boolean(1)
+#  thumbnail_secure_token :string(36)
+#  thumbnail_request_at   :datetime
 #
 

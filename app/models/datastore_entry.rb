@@ -152,16 +152,18 @@ class DatastoreEntry < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: datastore_entries
 #
-#  ds_key     :string(255)     not null
-#  ds_value   :text(16777215)  default(""), not null
-#  user_id    :string(36)
-#  created_at :datetime
-#  updated_at :datetime
-#  item_id    :string(36)
-#  uuid       :string(36)      primary key
+#  ds_key           :string(255)     not null
+#  ds_value         :text(16777215)  default(""), not null
+#  user_id          :string(36)
+#  created_at       :datetime
+#  updated_at       :datetime
+#  item_id          :string(36)
+#  uuid             :string(36)      default(""), not null, primary key
+#  protection_level :integer(4)      default(0), not null
 #
 
