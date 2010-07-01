@@ -171,6 +171,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -197,10 +198,14 @@ end
 #  updated_at           :datetime
 #  first_name           :string(255)
 #  last_name            :string(255)
-#  avatar               :string(255)
+#  avatar_file_name     :string(255)
 #  bio                  :text
 #  gender               :string(255)
 #  website              :string(255)
-#  uuid                 :string(255)     primary key
+#  uuid                 :string(255)     default(""), not null, primary key
+#  avatar_content_type  :string(255)
+#  avatar_file_size     :integer(4)
+#  avatar_updated_at    :datetime
+#  id                   :integer(4)
 #
 

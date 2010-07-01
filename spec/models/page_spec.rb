@@ -1,17 +1,11 @@
 require 'spec_helper'
 
 describe Page do
-  
-  should_allow_mass_assignment_of :uuid, :position, :version, :data, :title, :items_attributes
-  should_not_allow_mass_assignment_of :id, :thumbnail_id, :document_id, :created_at, :updated_at
-  
-  should_be_built_by_factory
-  should_be_created_by_factory
-  
-  should_have_many :items, :dependent => :delete_all
-  should_belong_to :document
-  should_belong_to :thumbnail, :class_name => "Medias::Thumbnail"
-  
+
+  before do
+    Factory(:theme_without_upload)
+  end
+      
   describe "position" do
     
     it "should be 0 when created from new document" do
@@ -62,19 +56,24 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: pages
 #
-#  uuid         :string(36)      primary key
-#  document_id  :string(36)
-#  thumbnail_id :string(36)
-#  position     :integer(4)      not null
-#  version      :integer(4)      default(1), not null
-#  data         :text(16777215)
-#  created_at   :datetime
-#  updated_at   :datetime
-#  title        :string(255)     default("undefined")
-#  layout_kind  :string(255)
+#  uuid                   :string(36)      default(""), not null, primary key
+#  document_id            :string(36)
+#  thumbnail_id           :string(36)
+#  position               :integer(4)      not null
+#  version                :integer(4)      default(1), not null
+#  data                   :text(16777215)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  title                  :string(255)     default("undefined")
+#  layout_kind            :string(255)
+#  thumbnail_file_name    :string(255)
+#  thumbnail_need_update  :boolean(1)
+#  thumbnail_secure_token :string(36)
+#  thumbnail_request_at   :datetime
 #
 

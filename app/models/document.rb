@@ -150,7 +150,8 @@ class Document < ActiveRecord::Base
   end
 
   def relative_created_at
-    diff_in_minutes = (((Time.now - self.created_at).abs)/60).round
+    diff_in_time = Time.now - self.created_at
+    diff_in_minutes = ((diff_in_time.abs)/60).round
     text = ""
 
     case diff_in_minutes

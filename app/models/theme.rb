@@ -259,19 +259,23 @@ class Theme < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: themes
 #
-#  uuid             :string(255)     primary key
-#  title            :string(255)
-#  thumbnail_url    :string(255)
-#  style_url        :string(255)
-#  file             :string(255)
-#  version          :string(255)
-#  updated_theme_id :integer(4)
-#  author           :string(255)
-#  elements_url     :string(255)
-#  is_default       :boolean(1)      default(FALSE)
+#  uuid                    :string(255)     default(""), not null, primary key
+#  title                   :string(255)
+#  thumbnail_url           :string(255)
+#  style_url               :string(255)
+#  attachment_file_name    :string(255)
+#  version                 :string(255)
+#  updated_theme_id        :string(36)
+#  author                  :string(255)
+#  elements_url            :string(255)
+#  is_default              :boolean(1)      default(FALSE)
+#  attachment_content_type :string(255)
+#  attachment_file_size    :integer(4)
+#  attachment_updated_at   :datetime
 #
 
