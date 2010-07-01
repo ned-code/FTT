@@ -50,10 +50,11 @@ Factory.define :widget, :class => Medias::Widget do |f|
 end
 
 Factory.define :datastore_entry do |f|
-  f.ds_key        "vote"
-  f.ds_value      1
-  f.item          { |f| f.association(:item) }
-  f.user          { |f| f.association(:user) }
+  f.ds_key           "vote"
+  f.ds_value         "1"
+  f.item             { |f| f.association(:item) }
+  f.user             { |f| f.association(:user) }
+  f.protection_level DatastoreEntry::CONST_PROTECTION_LEVEL_PRIVATE
 end
 
 Factory.define :view_count do |f|

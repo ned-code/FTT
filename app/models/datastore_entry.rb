@@ -21,24 +21,29 @@ class DatastoreEntry < ActiveRecord::Base
     #conditions[:user_id] = current_user if current_user && params[:only_current_user] == 'true'
     #{ :conditions => { :datastore_entries => conditions } }
     
-    conditions = [];
+    conditions = Array.new
     if current_user #can read if owner or is public read
-      conditions[0] = '(user_id = ? or protection_level<>?)'
-      conditions.push(current_user)
-      conditions.push(CONST_PROTECTION_LEVEL_PRIVATE)
+      if params[:only_current_user].present? && params[:only_current_user] == 'true'
+        conditions[0] = 'user_id = ?'
+        conditions << current_user  
+      else
+        conditions[0] = '(user_id = ? OR protection_level <> ?)'
+        conditions << current_user
+        conditions << CONST_PROTECTION_LEVEL_PRIVATE
+      end
     else #no user, can only read if public read
-      conditions[0] = '(protection_level<>?)'
-      conditions.push(CONST_PROTECTION_LEVEL_PRIVATE)
+      if params[:only_current_user].present? && params[:only_current_user] == 'true'
+        conditions[0] = 'NULL IS NOT ?'
+        conditions << nil
+      else
+        conditions[0] = 'protection_level <> ?'
+        conditions << CONST_PROTECTION_LEVEL_PRIVATE
+      end
     end
     
-    if params.has_key?(:key) #check a particular key?
-      conditions[0] += ' and ds_key=?'
-      conditions.push(params[:key])
-    end
-    
-    if current_user && params[:only_current_user] == 'true' #only for current user?
-      conditions[0] += ' and user_id=?'
-      conditions.push(current_user)
+    if params[:key].present? #check a particular key?
+      conditions[0] += ' AND ds_key = ?'
+      conditions << params[:key]
     end
     
     { :conditions => conditions }

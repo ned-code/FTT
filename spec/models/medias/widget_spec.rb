@@ -2,25 +2,14 @@ require 'spec_helper'
 
 describe Medias::Widget do
   
-  before(:each) do
-    @s3 = mock("s3")
-    RightAws::S3Interface.stub(:new).and_return(@s3)
-    @s3.stub(:put) # stub here to be able to use should_receive
-  end
-  
   it "should be valid" do
-    widget = Medias::Widget.new
+    widget = Factory(:widget)
     widget.should be_valid
   end
   
   it "should not be valid with image file" do
-    widget = Factory.build(:widget, :file => File.open(fixture_path + '/image.jpg'))
+    widget = Factory.build(:widget, :attachment => File.open(fixture_path + '/image.jpg'))
     widget.should_not be_valid
-  end
-  
-  it "should be valid with zip file" do
-    widget = Factory.build(:widget)
-    widget.should be_valid
   end
   
   describe 'with valid widget file' do
@@ -47,7 +36,7 @@ describe Medias::Widget do
     subject do
       Factory(:widget, :system_name => 'poll')
       media = Medias::Widget.last
-      media.update_attributes(:file => File.open(fixture_path + '/widget_updated.zip'))
+      media.update_attributes(:attachment => File.open(fixture_path + '/widget_updated.zip'))
       media
     end
     
@@ -59,9 +48,9 @@ describe Medias::Widget do
   
   describe 'with valid base and update WGT files' do
     subject do
-      Factory(:widget, :file => File.open(fixture_path + '/Youtube.wgt'), :system_name => 'youtube')
+      Factory(:widget, :attachment => File.open(fixture_path + '/Youtube.wgt'), :system_name => 'youtube')
       media = Medias::Widget.last
-      media.update_attributes(:file => File.open(fixture_path + '/Youtube_new.wgt'))
+      media.update_attributes(:attachment => File.open(fixture_path + '/Youtube_new.wgt'))
       media
     end
 

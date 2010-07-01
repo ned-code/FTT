@@ -11,7 +11,13 @@ describe Role do
     user.has_role!("reader", document2)
     
     roles = Role.all_by_user_document_ids_grouped_by_name(user)
-    roles.should == { "editor" => [document1.id.to_s, document2.id.to_s], "reader" => [document2.id.to_s] }
+
+    roles['editor'].length.should == 2
+    roles['editor'].should include document1.id.to_s
+    roles['editor'].should include document2.id.to_s
+
+    roles['reader'].length.should == 1
+    roles['reader'].should include document2.id.to_s
   end
   
 end
