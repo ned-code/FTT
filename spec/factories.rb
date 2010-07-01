@@ -44,7 +44,7 @@ Factory.define :media do |f|
 end
 
 Factory.define :widget, :class => Medias::Widget do |f|
-  f.file { File.open(Rails.root.join('spec','fixtures','widget.zip')) }
+  f.attachment { File.open(Rails.root.join('spec','fixtures','widget.zip')) }
   #f.system_name "widget"
   f.sequence(:system_name) { |n| "widget#{n}" }
 end
@@ -70,7 +70,7 @@ Factory.define :layout do |f|
   f.title            "Layout 1"
   f.sequence(:kind)  { |n| "kind#{n}" }
   f.thumbnail_url    Rails.root.join('spec','fixtures','thumbnail.png')
-  f.template_url     Rails.root.join('spec','fixtures','layout.html')
+  f.template_url     '../spec/fixtures/layout.html'
 end
 
 Factory.define :theme do |f|

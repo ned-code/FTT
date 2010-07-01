@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Role do
     
   it "should returns roles user's documents ids grouped by name" do
+    Factory(:theme_without_upload)
     user = Factory(:admin)
     document1 = Factory(:document, :creator => user)
     user.has_role!("editor", document1)

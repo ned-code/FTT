@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe ViewCount do
 
-  context "with already one view_count in db" do
-    before(:each) { Factory(:view_count) }    
+  before do
+    Factory(:theme_without_upload)
   end
   
   it "should increment document views_count" do

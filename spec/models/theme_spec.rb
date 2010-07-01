@@ -5,8 +5,7 @@ describe Theme do
   describe "set_attributes_from_config_file_and_save" do
     
     before(:all) do
-      @theme = Theme.new(:file => File.open(Rails.root.join('spec','fixtures','theme_1_v0_1.zip')))
-      @set_attr_result = @theme.set_attributes_from_config_file_and_save
+      @theme = Factory(:theme)
     end
 
     after(:all) do
@@ -14,7 +13,7 @@ describe Theme do
     end
 
     it "should can set attributes form config file and save without ancestor" do
-      @set_attr_result.should be_true
+      @theme.title.should be_present
     end
 
     it "should have title" do
@@ -40,14 +39,6 @@ describe Theme do
     it "should have elements_url" do
       @theme.elements_url.should be_present
     end
-
-    # TODO refactor for paperclip
-    # if CarrierWave.yml_storage(:assets).to_s == "right_s3" || CarrierWave.yml_storage(:assets).to_s == "s3"
-    #   it "should return the right url of the s3 to file.url" do
-    #     @theme.file.url.include?("http://"+CarrierWave.yml_s3_bucket(:assets)).should be_true
-    #   end
-    # end
-
 
   end
 

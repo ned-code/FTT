@@ -5,7 +5,9 @@ describe Item do
   describe "default" do
     subject { Factory(:item) }
     
-    its(:must_notify) { should be_false }
+    it "should not notify by default" do
+      subject.must_notify.should be_false
+    end
   end
   
 end

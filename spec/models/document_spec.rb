@@ -193,7 +193,7 @@ describe Document do
     end
 
     it "should set a number of document per page" do
-      docs = Document.all_public_paginated_with_explore_params('', '', nil, 2)
+      docs = Document.all_public_paginated_with_explore_params(nil, nil, nil, nil, 2)
       docs.size.should == 2
     end
 

@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe Layout do
-  
+
   describe "create_model_page! with the layout.html example" do
     before(:all) do
-      theme = mock_model(Theme)
+      theme = Factory(:theme_without_upload)
       file = mock("file", :s3_bucket => 'assets.test.webdoc.com')
       file.stub!(:store_url).and_return('http://assets.test.webdoc.com')
       theme.stub!(:file).and_return(file)
@@ -88,12 +88,11 @@ describe Layout do
 
 end
 
-
 # == Schema Information
 #
 # Table name: layouts
 #
-#  uuid          :string(255)     default(""), not null, primary key
+#  uuid          :string(255)     primary key
 #  title         :string(255)
 #  thumbnail_url :string(255)
 #  theme_id      :string(36)

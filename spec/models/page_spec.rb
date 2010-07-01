@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Page do
+
+  before do
+    Factory(:theme_without_upload)
+  end
       
   describe "position" do
     
