@@ -639,6 +639,9 @@ WebDoc.BoardController = jQuery.klass({
       case 'googlevideo' :
         videoWidget = WebDoc.WidgetManager.getInstance().getVidsGoogleWidget();
         break;
+			case 'yahoovideo' :
+			  videoWidget = WebDoc.WidgetManager.getInstance().getVidsYahooWidget();
+			  break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     if (videoWidget.data.properties.width) {

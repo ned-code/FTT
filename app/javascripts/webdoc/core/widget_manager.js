@@ -13,6 +13,7 @@ WebDoc.WidgetManager = $.klass(
     this._initMyspacevideo();
     this._initMetacafe();
     this._initGooglevideo();
+		this._initYahooVideo();
     this._readyForCallBack();
   },
 
@@ -38,6 +39,10 @@ WebDoc.WidgetManager = $.klass(
   
   getVidsGoogleWidget: function() {
     return WebDoc.WidgetManager.vidsGoogleWidget;   
+  },
+
+	getVidsYahooWidget: function() {
+    return WebDoc.WidgetManager.vidsYahooWidget;   
   },
   
   _initYoutube: function() {
@@ -120,7 +125,21 @@ WebDoc.WidgetManager = $.klass(
         this._readyForCallBack();
       }.pBind(this));
     }  
-  },      
+  },
+
+	_initYahooVideo: function() {
+    if (WebDoc.WidgetManager.vidsYahooWidget === undefined) {
+      WebDoc.ServerManager.getRecords(WebDoc.Widget, 'yahoovideo', function(data) {
+        if (data && data.length > 0) {
+          WebDoc.WidgetManager.vidsYahooWidget = data[0];
+        }
+        else {
+          WebDoc.WidgetManager.vidsYahooWidget = null;
+        }
+        this._readyForCallBack();
+      }.pBind(this));
+    }  
+  },
   
   _readyForCallBack: function() {
     if (WebDoc.WidgetManager.youtubeWidget !== undefined && 
