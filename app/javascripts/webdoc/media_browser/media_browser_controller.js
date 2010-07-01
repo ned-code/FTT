@@ -20,6 +20,10 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
     
     
     this.domNode = $(this.MEDIA_BROWSER_SELECTOR);
+
+		//little hack to be sure that the home page is on the first layer
+		this._hideAll();
+		this.showHome();
 	},
 
 	buttonSelector: function() {

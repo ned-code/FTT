@@ -11,53 +11,11 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.imagePage = 1;
     this.myImagesContainer = $('#media-browser-my-images');
 		
-    this.loadMyImages();  
+    this._loadMyImages();  
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
     
     $("#my-images-library").bind("dragstart", this.dragStart.pBind(this));
     
-  },
-  
-  loadMyImages: function(){
-    var thumbsWrap = this.myImagesContainer.find(".thumbnails");
-    this.showSpinner(thumbsWrap);
-          
-    WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
-      if (data.images.length === 0) {
-        var noImages = $("<span>").addClass('no_items').text('No Images');
-        thumbsWrap.append(noImages);
-      }
-      else {
-        var myImagesList = $("<ul>");
-        thumbsWrap.append(myImagesList);
-        
-        $.each(data.images, function(i,webDocImage){
-          myImagesList.append(this.buildThumbnail(webDocImage.data.properties, webDocImage.data.uuid));
-        }.pBind(this));
-      }
-      thumbsWrap.data('loaded', true);
-      this.hideSpinner(thumbsWrap);
-    }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 0 }});
-    
-    $("#media-browser-my-images .thumbnails ul li a").live("click", function (event) {
-      var properties = $(event.target).parent().find('img').data("properties");
-      this.showDetailsView(properties,false);
-      event.preventDefault();
-    }.pBind(this));
-    
-  },
-  
-	loadMyFavorites: function(){
-		var container = $("<div id='media-browser-my-favorites' class='my-content-tab>");
-		container.append($("<div id='my-favorites-images' class='thumbnails'>"));
-		container.append($("<div id='my-favorites-videos' class='thumbnails'>"));
-		this.domNode.append(container);
-		
-		this.imagesFavoritesContainer = $('#my-favorites-images');
-    this.videosFavoritesContainer = $('#my-favorites-videos');
-		
-    this._loadFavoritesImages();
-		this._loadFavoritesVideos();
   },
 
   _myContentHandlers: {
@@ -77,7 +35,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 			$('#media-browser-my-favorites').show();
 		}
 		else{
-			this.loadMyFavorites();
+			this._loadMyFavorites();
 		  $('#media-browser-my-favorites').show();
 		}
   },
@@ -168,7 +126,6 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
   
   showDetailsView: function(properties, isFavorites){
-		ddd('favorites' + isFavorites);
     this._hideAll();
     this.detailsViewImg = this.imageDetailsView.find('.single_image img');
     
@@ -212,13 +169,16 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 		var removeFavoritesLink = $('#media-browser-my-images-details #remove_image_from_favorites');
 		var deleteImageLink = $('#media-browser-my-images-details #delete_image_action');
 		
+		ddd('removeFavoritesLink' + removeFavoritesLink);
+		ddd('deleteImageLink' + deleteImageLink);
+		
 		if(isFavorites){
 			if( !removeFavoritesLink.length ){
     	  liDelete = $('<li>').append($("<a href='' id='remove_image_from_favorites'>Remove from favorites </a>"));
     	  $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
 
 				if( deleteImageLink.length ){
-					deleteImageLink.parent.remove();
+					deleteImageLink.parent().remove();
 				}
     	}
 		}
@@ -228,7 +188,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     	  $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
 
 				if( removeFavoritesLink.length ){
-					removeFavoritesLink.parent.remove();
+					removeFavoritesLink.parent().remove();
 				}
     	}
 		}
@@ -481,6 +441,48 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     // this.imagesUploader.unloadSWFUpload();
   },
 
+	_loadMyImages: function(){
+    var thumbsWrap = this.myImagesContainer.find(".thumbnails");
+    this.showSpinner(thumbsWrap);
+          
+    WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
+      if (data.images.length === 0) {
+        var noImages = $("<span>").addClass('no_items').text('No Images');
+        thumbsWrap.append(noImages);
+      }
+      else {
+        var myImagesList = $("<ul>");
+        thumbsWrap.append(myImagesList);
+        
+        $.each(data.images, function(i,webDocImage){
+          myImagesList.append(this.buildThumbnail(webDocImage.data.properties, webDocImage.data.uuid));
+        }.pBind(this));
+      }
+      thumbsWrap.data('loaded', true);
+      this.hideSpinner(thumbsWrap);
+    }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 0 }});
+    
+    $("#my-images-library ul li a").live("click", function (event) {
+			event.preventDefault();
+      var properties = $(event.target).parent().find('img').data("properties");
+      this.showDetailsView(properties,false);
+    }.pBind(this));
+    
+  },
+	
+	_loadMyFavorites: function(){
+		var container = $("<div id='media-browser-my-favorites' class='my-content-tab>");
+		container.append($("<div id='my-favorites-images' class='thumbnails'>"));
+		container.append($("<div id='my-favorites-videos' class='thumbnails'>"));
+		this.domNode.append(container);
+		
+		this.imagesFavoritesContainer = $('#my-favorites-images');
+    this.videosFavoritesContainer = $('#my-favorites-videos');
+		
+    this._loadFavoritesImages();
+		this._loadFavoritesVideos();
+  },
+
 	_loadFavoritesImages: function(){
 		var thumbsWrap = this.imagesFavoritesContainer;
     this.showSpinner(thumbsWrap);
@@ -503,9 +505,9 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 1 }});
     
     $("#my-favorites-images ul li a").live("click", function (event) {
+			event.preventDefault();
       var properties = $(event.target).parent().find('img').data("properties");
       this.showDetailsView(properties,true);
-      event.preventDefault();
     }.pBind(this));
 		$("#my-favorites-images").bind("dragstart", this.dragStart.pBind(this));
 	},
@@ -533,8 +535,8 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
     $("#my-favorites-videos ul li a").live("click", function (event) {
       var properties = $(event.target).parent().find('img').data("properties");
+			event.preventDefault();
       this.showVideoDetailsView(properties,true);
-      event.preventDefault();
     }.pBind(this));
 
 		$("#my-favorites-videos").bind("dragstart", this.prepareRowDrag.pBind(this));
