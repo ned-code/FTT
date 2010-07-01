@@ -20,7 +20,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     // Observe thumbnails clicks with event delegation
     $("#"+libraryId).delegate(".thumbnails li a", "click", function (e) {
       var widgetData = $( e.currentTarget ).data("widget");
-      this.showDetailsView( widgetData );
+      this.showDetailsView( widgetData, false );
       e.preventDefault();
     }.pBind(this));
 		
@@ -77,7 +77,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
 		$('#apps-list').show();
 	},
 	
-  showDetailsView: function(widgetData) {
+  showDetailsView: function(widgetData, backHome) {
     
     var properties = widgetData.properties;
     // View title
@@ -108,10 +108,22 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     var descEl = this.detailsView.find('.app_description');
     descEl.text(desc);
 		
+		//setup back button
+		this.setupBackButton(backHome);
+		
 		this._hideAll();
   	this.detailsView.show();
 	},
-
+	
+	setupBackButton: function(backHome){
+		if(backHome){
+ 			$('#media-browser-app-details-back').attr({href: '#media-browser-home'});
+		}
+		else{
+			$('#media-browser-app-details-back').attr({href: '#apps-list'});
+		}
+	},
+	
   _prepareThumbDrag: function(e) {
     var thumb = $( e.currentTarget );
     var widgetData = thumb.data("widget");
