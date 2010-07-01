@@ -12,7 +12,7 @@ class Category < ActiveRecord::Base
   named_scope :have_public_documents, :include => :documents, :conditions => ['documents.is_public = ?', true]
 
   def number_of_public_documents
-    Document.count(:conditions => "category_id = #{uuid} and is_public = 1")
+    Document.count(:conditions => "category_id = '#{uuid}' and is_public = 1")
   end
   
 private

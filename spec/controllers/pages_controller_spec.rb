@@ -50,7 +50,15 @@ describe PagesController do
         end
       end
 
-      
+      describe "POST 'create' with document_id '1', id 'uuid'" do
+        it "should not be successful" do
+          Document.should_receive(:find_by_uuid).with("1").and_return(@mock_document)
+          @mock_document.should_receive(:pages).and_return(Page)
+          Page.should_receive(:find_by_uuid_or_position!).with("uuid").and_return(@mock_page)
+          get :show, :document_id => "1", :id => 'uuid'
+          response.should be_success
+        end
+      end
 
     end
 
@@ -59,13 +67,6 @@ describe PagesController do
 end
 
 
-  #     describe :post => :create, :document_id => "1", :page => { :uuid => "uuid" } do
-  #       expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
-  #       expects :pages, :on => mock_document, :returns => Page
-  #       expects :new, :on => Page, :with => { "uuid" => "uuid" }, :returns => mock_page
-  #       expects :save!, :on => mock_page, :returns => true
-  #       should_respond_with :success, :content_type => :json
-  #     end
   #     describe :put => :update, :document_id => "1", :id => "uuid", :page => {} do
   #       expects :find_by_uuid, :on => Document, :with => "1", :returns => mock_document
   #       expects :pages, :on => mock_document, :returns => Page
