@@ -89,7 +89,7 @@ WebDoc.WebVideosSearch = $.klass({
           WebDoc.application.boardController.insertVideo(properties);
           break;
           
-        case "show_video_page_action" :
+        case "show_web_video_page_action" :
           ddd("show_video_page_action");
           window.open(properties.url, '_blank');
           break;
@@ -114,7 +114,7 @@ WebDoc.WebVideosSearch = $.klass({
 	},
 
 	showDetailsView: function(properties){
-		
+		ddd('WebVideosSearch');
 		// Set class in Titlebar ("youtube" or "vimeo")
     this.detailsView.attr({'class':"view details_view web-search-tab "+properties.type});
     
@@ -144,8 +144,8 @@ WebDoc.WebVideosSearch = $.klass({
     
     // Actions
     var serviceName = properties.type === "youtube" ? "YouTube" : "Vimeo";
-    var showVideoPageEl = $("#show_video_page_action");
-    showVideoPageEl.text(showVideoPageEl.data("originalText").replace("*", serviceName));
+    var showVideoPageEl = $("#show_web_video_page_action");
+    showVideoPageEl.text('Show video on ' + serviceName);
 
 		//setup the favorites links
     if( $('#media-browser-web-video-details #add_video_to_favorites').length){
@@ -468,47 +468,51 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
   },
   jsonpCallback: function(data) {
     $("#jsonp_script").remove(); //remove script element created by jsonpExecuteCall
-    // ddd(data)
+    ddd(data)
     // this.resultsCount.text('0');
-    var totResults = parseInt(data.videos.total,10);
-    
-    this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(totResults,"'"));
-    
-    if (data.videos.video && data.videos.video.length > 0) {
-      
-      this.page = parseInt(data.videos.page,10);
-      this.perPage =  parseInt(data.videos.perpage,10);
-      
-      var results = data.videos.video;
-      $.each(results, function(i, video) {
-        
-        var name = video.title;
-        var duration = video.duration;
-        var description = video.description;
-        var thumbUrl = video.thumbnails.thumbnail[1]._content; //200x150
-        var viewCount = video.number_of_plays;
-        var aspectRatio = ""; //yt
-        var videoId = video.id;
-        var embedUrl = "http://vimeo.com/moogaloop.swf?clip_id="+videoId+"&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00adef&amp;fullscreen=1";
-        var embedType = "application/x-shockwave-flash";
-        var isHd = video.is_hd;
-        var width = parseInt(video.width,10);
-        var height = parseInt(video.height,10);
-        
-        this.videosContainer.append(
-          WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow("vimeo", videoId, "http://vimeo.com/"+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height, "")
-        );
-      }.pBind(this));
-      
-      if ( totResults > this.page * this.perPage ) {
-        this.page += 1;
-        this.loadMoreLink.show();
-      }
-      else {
-        this.loadMoreLink.hide();
-      }
+		if(data.videos){
+    	var totResults = parseInt(data.videos.total,10);
+    	
+    	this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(totResults,"'"));
+    	
+    	if (data.videos.video && data.videos.video.length > 0) {
+    	  
+    	  this.page = parseInt(data.videos.page,10);
+    	  this.perPage =  parseInt(data.videos.perpage,10);
+    	  
+    	  var results = data.videos.video;
+    	  $.each(results, function(i, video) {
+    	    
+    	    var name = video.title;
+    	    var duration = video.duration;
+    	    var description = video.description;
+    	    var thumbUrl = video.thumbnails.thumbnail[1]._content; //200x150
+    	    var viewCount = video.number_of_plays;
+    	    var aspectRatio = ""; //yt
+    	    var videoId = video.id;
+    	    var embedUrl = "http://vimeo.com/moogaloop.swf?clip_id="+videoId+"&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00adef&amp;fullscreen=1";
+    	    var embedType = "application/x-shockwave-flash";
+    	    var isHd = video.is_hd;
+    	    var width = parseInt(video.width,10);
+    	    var height = parseInt(video.height,10);
+    	    
+    	    this.videosContainer.append(
+    	      WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow("vimeo", videoId, "http://vimeo.com/"+videoId, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height, "")
+    	    );
+    	  }.pBind(this));
+    	  
+    	  if ( totResults > this.page * this.perPage ) {
+    	    this.page += 1;
+    	    this.loadMoreLink.show();
+    	  }
+    	  else {
+    	    this.loadMoreLink.hide();
+    	  }
+    	}
     }
-    
+		else{
+			this.resultsCount.text('0');
+		}
     this.container.find('.loading').remove();
   },
 
