@@ -218,7 +218,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     	  $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
 
 				if( deleteImageLink.length ){
-					deleteImageLink.remove();
+					deleteImageLink.parent.remove();
 				}
     	}
 		}
@@ -228,11 +228,19 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     	  $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
 
 				if( removeFavoritesLink.length ){
-					removeFavoritesLink.remove();
+					removeFavoritesLink.parent.remove();
 				}
     	}
 		}
     
+		//setup back button
+		if(isFavorites){
+ 			$('#image-detail-back').attr({href: '#my-favorites'});
+		}
+		else{
+			$('#image-detail-back').attr({href: '#my-images'});
+		}
+
     $('#media-browser-my-images-details').show();
   },
 
@@ -530,7 +538,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     }.pBind(this));
 
 		$("#my-favorites-videos").bind("dragstart", this.prepareRowDrag.pBind(this));
-		
+		this.createHandlers(this.domNode, 'click', {'my-favorites':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showFavorites(); }});
 		this.setupVideoDetailsView();
 	}
 });
