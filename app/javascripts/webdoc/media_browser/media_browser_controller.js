@@ -110,7 +110,7 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
      
  			appsThumbWrap.data('loaded', true);
       this.appsLibrary.hideSpinner(appsThumbWrap);
-    }.pBind(this), { ajaxParams: { most_used: 1 }});
+    }.pBind(this), { ajaxParams: { favorites: 1 }});
 		
 		//listen to click
 		$("#most_used_apps").delegate("li a", "click", function (e) {
