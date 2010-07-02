@@ -8,7 +8,7 @@ feature "Main page" do
   end
   
   scenario "sould show the homepage" do
-    visit "/"
+    visit homepage
     page.should have_css("h1.logo", :count => 1)
   end
 

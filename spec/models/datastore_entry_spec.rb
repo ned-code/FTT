@@ -5,6 +5,7 @@ describe DatastoreEntry do
   describe "all_with_filter method" do
     
     before(:each) do
+      Factory(:theme_without_upload)
       @item = Factory(:item)
       @user1 = Factory(:user)
       @user2 = Factory(:user)

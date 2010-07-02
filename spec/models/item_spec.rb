@@ -4,6 +4,10 @@ describe Item do
       
   describe "default" do
     subject { Factory(:item) }
+
+    before do
+      Factory(:theme_without_upload)
+    end
     
     it "should not notify by default" do
       subject.must_notify.should be_false

@@ -1,10 +1,14 @@
 require 'spec_helper'
 
 describe Document do
+
+  before do
+    Factory(:theme_without_upload)
+  end
     
   describe "default" do
     subject { Factory(:document) }
-    
+
     its(:pages) { should be_present }
     
     it "should have creator as editor on create" do
