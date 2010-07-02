@@ -18,6 +18,9 @@ spec/fixtures/files/ubz/
 spec/output_document
 spec/tmp
 config/s3.yml
+config/newrelic.yml
+config/config.yml
+
 *.suo
 debug.log
 error.log

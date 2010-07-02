@@ -28,6 +28,8 @@ namespace :deploy do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     run "ln -nfs #{shared_path}/config/allowed_user_email.yml #{release_path}/config/allowed_user_email.yml"
     run "ln -nfs #{shared_path}/config/s3.yml #{release_path}/config/s3.yml"
+    run "ln -nfs #{shared_path}/config/config.yml #{release_path}/config/config.yml"
+    run "ln -nfs #{shared_path}/config/newrelic.yml #{release_path}/config/newrelic.yml"
   end
   task :generate_assets do
     send(:run, "cd #{release_path} && RAILS_ENV=#{rails_env} /usr/bin/jammit --force config/assets.yml")
