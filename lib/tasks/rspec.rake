@@ -48,8 +48,8 @@ end
 Rake.application.instance_variable_get('@tasks').delete('default')
 
 # DONT user db:test:prepare with uuid /!\
-# spec_prereq = File.exist?(File.join(RAILS_ROOT, 'config', 'database.yml')) ? "db:test:prepare" : :noop
-spec_prereq = :noop
+spec_prereq = File.exist?(File.join(RAILS_ROOT, 'config', 'database.yml')) ? "webdoc:load_test_db" : :noop
+# spec_prereq = :noop
 task :noop do
 end
 

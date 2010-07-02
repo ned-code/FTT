@@ -12,7 +12,7 @@ class Medias::Widget < Media
   
   validates_attachment_presence :attachment
   validates_attachment_size :attachment, :less_than => 30.megabytes
-  # validates_attachment_content_type :attachment, :content_type => ['application/zip', 'application/octet-stream']
+  validates_attachment_content_type :attachment, :content_type => ['application/zip', 'application/octet-stream']
   
   attr_accessor :status
   

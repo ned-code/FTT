@@ -27,7 +27,7 @@ production:
   database: webdoc_production
   username: webdoc
   password: webdoc
-  host: webdoc-production.chnus0k5dbng.us-east-1.rds.amazonaws.com
+  host: localhost
   encoding: utf8
   collation: utf8_unicode_ci
     

@@ -1,12 +1,33 @@
 require 'spec_helper'
 
 describe Admin::CategoriesController do
-  
-  # should_route :get,    '/admin/categories',        :action => :index
-  # should_route :get,    '/admin/categories/new',    :action => :new
-  # should_route :post,   '/admin/categories',        :action => :create
-  # should_route :delete, '/admin/categories/1',      :action => :destroy,  :id => 1
-  # should_route :get,    '/admin/categories/1/edit', :action => :edit,     :id => 1
-  # should_route :put,    '/admin/categories/1',      :action => :update,   :id => 1
+
+    describe "routing" do
+
+    it "recognizes and generates #index" do
+      { :get => "/admin/categories" }.should route_to(:controller => "admin/categories", :action => "index")
+    end
+
+    it "recognizes and generates #new" do
+      { :get => "/admin/categories/new" }.should route_to(:controller => "admin/categories", :action => "new")
+    end
+
+    it "recognizes and generates #create" do
+      { :post => "/admin/categories" }.should route_to(:controller => "admin/categories", :action => "create")
+    end
+
+    it "recognizes and generates #destroy" do
+      { :delete => "/admin/categories/1" }.should route_to(:controller => "admin/categories", :action => "destroy", :id => "1")
+    end
+
+    it "recognizes and generates #edit" do
+      { :get => "/admin/categories/1/edit" }.should route_to(:controller => "admin/categories", :action => "edit", :id => "1")
+    end
+
+    it "recognizes and generates #update" do
+      { :put => "/admin/categories/1" }.should route_to(:controller => "admin/categories", :action => "update", :id => "1")
+    end
+
+  end
   
 end
