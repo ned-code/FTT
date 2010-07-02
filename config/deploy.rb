@@ -57,6 +57,20 @@ namespace :passenger do
     run "sudo passenger-status"
   end
 end
+
+namespace :newrelic do
+  desc "start newrelic agent (! it's restart the application"
+  task :activate, :roles => :app do
+    run "ln -nfs #{shared_path}/config/newrelic-activated.yml #{shared_path}/config/newrelic.yml"
+    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+  end
+  desc "stop newrelic agent (! it's restart the application"
+  after 'newrelic:stop', 'deploy:restart'  
+  task :disable, :roles => :app do
+    run "ln -nfs #{shared_path}/config/newrelic-disabled.yml #{shared_path}/config/newrelic.yml"
+    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+  end
+end
                                  
 task :uname do
   run "uname -a"
