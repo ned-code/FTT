@@ -6,3 +6,6 @@ development:
   shindig_server_base: http://localhost:8080/gadgets/
   shindig_secure_token_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   shindig_container: default
+  
+test:
+  synch_openfire_users: false

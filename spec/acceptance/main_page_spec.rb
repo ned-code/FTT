@@ -19,7 +19,7 @@ feature "Main page" do
   end
 
   # it "should be possible to register" do
-  #   visit root_path
+  #   visit homepage
   #   click_link "Sign up"
   #   fill_in "Email",      :with => "john@doe.com"
   #   fill_in "First name", :with => "John"
