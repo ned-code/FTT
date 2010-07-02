@@ -319,9 +319,12 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     var ulWrap = $('#'+domNode).find('ul');
     if( ulWrap.length < 1){
       ulWrap = $('<ul>');
-      $('#my-images-library').append(ulWrap);
+      $('#' + domNode ).append(ulWrap);
     }
     
+		if($('#' + domNode +' .no_items').length ){
+			$('#' + domNode +' .no_items').remove();
+		}
     ulWrap.prepend(liWrap);
     $(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
     
@@ -371,7 +374,11 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 		var isHd = newProperties.is_hd;
 		var height = newProperties.height;
 		var width = newProperties.width;
-
+		
+		if($('#my-favorites-videos .no_items').length ){
+			$('#my-favorites-videos .no_items').remove();
+		}
+		
 		if(!$('#my-favorites-videos ul').length){
 			$('#my-favorites-videos').append($('<ul>'));
 		}
@@ -379,7 +386,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 		ddd('thumbUrl ' + thumbUrl); 
 		
     var videosContainer = $('#my-favorites-videos ul');
-    videosContainer.append(
+    videosContainer.prepend(
        WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow(videoType, videoId, videoUrl, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height,uuid)
      );
 
