@@ -1,10 +1,18 @@
-require "xmpp_notification"
-
 class Page < ActiveRecord::Base
+
   has_uuid
   set_primary_key :uuid
-  
-  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind
+
+  store_prefix = S3_CONFIG[:storage] == 's3' ? '' : 'uploads/'
+  attachment_path = store_prefix+"page/thumbnail/:uuid/:basename.:extension"
+  has_attached_file :thumbnail,
+                    :default_url   => "/images/icon_no_thumb_page_640x480.png",
+                    :storage => S3_CONFIG[:storage].to_sym,
+                    :s3_credentials => S3_CONFIG,
+                    :bucket => S3_CONFIG[:assets_bucket],
+                    :path => S3_CONFIG[:storage] == 's3' ? attachment_path : ":rails_root/public/#{attachment_path}",
+                    :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{attachment_path}"
+      
 
   attr_accessor_with_default :touch_document_active, true
   
@@ -13,14 +21,18 @@ class Page < ActiveRecord::Base
   # see XmppPageObserver
   attr_accessor_with_default :must_notify, false
   attr_accessor_with_default :deep_notify, false
-  
+
+  attr_accessor :remote_thumbnail_url
+
+  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind, :remote_thumbnail_url, :thumbnail_need_update
+
   # ================
   # = Associations =
   # ================
   
   has_many :items, :dependent => :delete_all
   belongs_to :document
-  belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
+  # belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
   
   # should be placed after associations declaration
   accepts_nested_attributes_for :items, :allow_destroy => true
@@ -35,12 +47,11 @@ class Page < ActiveRecord::Base
   # = Validations =
   # ===============
 
-  validates_uniqueness_of :uuid  
-
   # =============
   # = Callbacks =
   # =============
-  
+
+  before_validation :download_image_provided_by_remote_thumbnail_url
   before_save :update_position_if_moved
   before_save :set_page_data
   before_create :set_position
@@ -78,7 +89,7 @@ class Page < ActiveRecord::Base
   end
   
   def thumbnail_url
-    thumbnail.try(:url) || "/images/no_thumb.jpg"
+    thumbnail.url
   end
   
   def to_param
@@ -97,6 +108,57 @@ class Page < ActiveRecord::Base
     cloned_page
   end
 
+  def touch_and_need_update_thumbnail
+
+    if (!thumbnail_need_update)
+      update_attributes!({
+              :thumbnail_need_update => 1
+      })
+    end
+    touch_document
+  end
+
+  def self.process_pending_thumbnails
+    self.cleanup_old_requests
+    pages = Page.all_need_process_thumbnail
+    if pages.present?
+      thumbnail_service = Services::Bluga.new
+      pages.each do |page|
+        thumbnail_service.process_page(page)
+      end
+    end
+  end
+
+  def self.all_need_process_thumbnail
+    self.all(
+      :conditions => ['thumbnail_secure_token IS ? AND thumbnail_need_update = ?', nil, true]
+    )
+  end
+
+  def self.cleanup_old_requests
+    old_requests = Page.all(
+            :conditions => [
+                    'thumbnail_secure_token IS NOT ? AND thumbnail_need_update = ? AND thumbnail_request_at IS NOT ? AND thumbnail_request_at < ?',
+            nil, true, nil, (Time.now-30.minutes).utc])
+    if old_requests.present?
+      old_requests.each do |page|
+        page.thumbnail_secure_token = nil
+        page.thumbnail_request_at = nil
+        page.save!
+      end
+    end
+  end
+
+  def generate_and_set_thumbnail_secure_token
+    self.thumbnail_secure_token = UUID::generate
+  end
+  
+  def items_attributes=(params={})
+    params.each_value do |item_hash|
+      self.items << Item.new_with_uuid(item_hash)
+    end
+  end
+  
   private
   
   # before_save
@@ -122,6 +184,15 @@ class Page < ActiveRecord::Base
       end
     end
   end
+
+  def download_image_provided_by_remote_thumbnail_url
+    require 'open-uri'
+    if remote_thumbnail_url.present?
+      io = open(URI.parse(remote_thumbnail_url))
+      def io.original_filename; base_uri.path.split('/').last; end
+      self.thumbnail = io
+    end
+  end
   
   # before_create
   def set_position
@@ -138,10 +209,11 @@ class Page < ActiveRecord::Base
   # after_save
   # after_destroy
   def touch_document
-    self.document.touch if self.document.present? && touch_document_active == true
+    self.document.invalidate_cache if self.document.present? && touch_document_active == true
   end
   
 end
+
 
 
 
@@ -149,15 +221,19 @@ end
 #
 # Table name: pages
 #
-#  uuid         :string(36)      primary key
-#  document_id  :string(36)
-#  thumbnail_id :string(36)
-#  position     :integer(4)      not null
-#  version      :integer(4)      default(1), not null
-#  data         :text(16777215)
-#  created_at   :datetime
-#  updated_at   :datetime
-#  title        :string(255)     default("undefined")
-#  layout_kind  :string(255)
+#  uuid                   :string(36)      default(""), not null, primary key
+#  document_id            :string(36)
+#  thumbnail_id           :string(36)
+#  position               :integer(4)      not null
+#  version                :integer(4)      default(1), not null
+#  data                   :text(16777215)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  title                  :string(255)     default("undefined")
+#  layout_kind            :string(255)
+#  thumbnail_file_name    :string(255)
+#  thumbnail_need_update  :boolean(1)
+#  thumbnail_secure_token :string(36)
+#  thumbnail_request_at   :datetime
 #
 

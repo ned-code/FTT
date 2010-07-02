@@ -8,9 +8,13 @@ feature "Main page" do
   end
   
   scenario "sould show the homepage" do
-    visit "/"
+    visit homepage
     page.should have_css("h1.logo", :count => 1)
   end
+
+end
+
+feature "Login" do
 
   scenario "should be able to login" do
     sign_in_as_user(:email => "john@doe.com")
@@ -18,35 +22,25 @@ feature "Main page" do
     page.should have_content("logout")
   end
 
-  # it "should be possible to register" do
-  #   visit root_path
-  #   click_link "Sign up"
-  #   fill_in "Email",      :with => "john@doe.com"
-  #   fill_in "First name", :with => "John"
-  #   fill_in "Last name",  :with => "Doe"
-  #   fill_in "Username",   :with => "johndoe"
-  #   fill_in "Password",   :with => "123456"
-  #   check "I agree to terms of service"
-  #   click_button "Sign up"
-  #   response.should contain("You have signed up successfully.")
-  #   response.should contain("John Doe")
-  #   response.should contain("logout")
-  #   current_url.should == "http://www.example.com/documents"
-  # end
+end
 
-  # it "view document should create a view_count" do
-  #   document = Factory(:document)
-  #   visit document_path(document)
-  #   ViewCount.last.viewable.should == document
-  # end
+feature "Register" do
 
-  # it "view document should create a view_count with currrent_user" do
-  #   document = Factory(:document)
-  #   sign_in_as_user
-  #   visit document_path(document)
-  #   view_count = ViewCount.last
-  #   view_count.viewable.should == document
-  #   view_count.user.should == @current_user
-  # end
+  it "should be possible to register" do
+    visit homepage
+    click_link "sign up"
+    fill_in "user_email",      :with => "john@doe.com"
+    fill_in "user_first_name", :with => "John"
+    fill_in "user_last_name",  :with => "Doe"
+    fill_in "user_username",   :with => "johndoe"
+    fill_in "user_password",   :with => "123456"
+    check "user_terms_of_service"
+    click_button "user_submit"
+    page.should have_content("You have signed up successfully.")
+    page.should have_content("john@doe.com")
+    page.should have_content("logout")
+    URI.parse(current_url).path.should == "/documents"
+    # save_and_open_page
+  end
   
 end

@@ -4,7 +4,7 @@ class Item < ActiveRecord::Base
   
   serialize :data
   
-  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind
+  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind, :inner_html
   
   # see XmppItemObserver
   attr_accessor_with_default :must_notify, false
@@ -24,13 +24,12 @@ class Item < ActiveRecord::Base
   # = Callbacks =
   # =============
 
-  after_save :touch_page
-  after_destroy :touch_page
+  after_save :touch_page_and_need_update_thumbnail
+  after_destroy :touch_page_and_need_update_thumbnail
 
   # ===============
   # = Validations =
   # ===============
-  validates_uniqueness_of :uuid  
   
   # =================
   # = Class Methods =
@@ -51,15 +50,15 @@ class Item < ActiveRecord::Base
   def to_html
     result = "<#{self.data[:tag]} "
     data.each_pair do |key, value| 
-    logger.debug key
-    logger.debug /innerHTML/.match(key)
-      if (!/innerHTML|css|tag|properties|preference/.match(key))
+      logger.debug key
+      logger.debug /innerHTML/.match(key)
+      if (!/css|tag|properties|preference/.match(key))
         result += "#{key}=\" #{value}\""
       end
     end
     result += ">"
-    if (data[:innerHTML])
-      result += data[:innerHTML]
+    if (self.inner_html)
+      result += self.inner_html
     end
     result += "</#{self.data[:tag]}>"
   end
@@ -77,8 +76,8 @@ class Item < ActiveRecord::Base
 
   # after_save
   # after_destroy
-  def touch_page
-    self.page.touch if touch_page_active == true
+  def touch_page_and_need_update_thumbnail
+    self.page.touch_and_need_update_thumbnail if touch_page_active == true
   end
 
   def self.sanitize_html_to_serialize(html)
@@ -88,8 +87,8 @@ class Item < ActiveRecord::Base
     end
     sanitized_html
   end
-
 end
+
 
 
 
@@ -97,7 +96,7 @@ end
 #
 # Table name: items
 #
-#  uuid       :string(36)      primary key
+#  uuid       :string(36)      default(""), not null, primary key
 #  page_id    :string(36)      not null
 #  media_id   :string(36)
 #  media_type :string(255)
@@ -106,5 +105,6 @@ end
 #  updated_at :datetime
 #  position   :integer(4)
 #  kind       :string(255)
+#  inner_html :text(16777215)
 #
 

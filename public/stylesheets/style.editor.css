@@ -15,17 +15,12 @@ body {
     /* Prevent people overriding the body font size,
        which could wreak havoc with the interface. */
     font-size: 100% !important;
-    
-    /* push scrollbars of layers outside the window */
-    padding: 0 15px 15px 0;
-    margin: 0;
 }
 .ui,
 .panel {
     /* Set interface font-size to 12px */
     font-size: 75%;
 }
-#left-panel-ghost,
 #right-panel-ghost {
     display: table-cell;
     /* Width is animated with panel */
@@ -44,12 +39,13 @@ body {
 
 #webdoc         { z-index: 1; }
 #webdoc_loading { z-index: 1; }
-.panel          { z-index: 2; }
-.toolbar-panel  { z-index: 2; }
+.x_scrollbar,
+.y_scrollbar    { z-index: 2; }
+.panel          { z-index: 3; }
+.toolbar-panel  { z-index: 3; }
 .ui-pop         { z-index: 4; } 
 
 #webdoc .center     { z-index: 2; }
-#left-panel-ghost,
 #right-panel-ghost  { z-index: 1; }
 
 #webdoc .board-screen   { z-index: 1000000; }  /* svg layer has 999999 */
@@ -78,19 +74,24 @@ body {
 
 #webdoc {
     /* Compensate for height of toolbar panel */
-    padding-top: 36px;
+    padding-top: 42px;
+    padding-bottom: 36px;
 }
 
 /* Interface panels */
 
+.header_panel {
+  top: 0;
+}
+
 .toolbar-panel {
-    top: 0;
-    height: 36px;
+    top: 4px;
+    height: 34px;
     padding: 0 6px;
     overflow: hidden;
 }
 .toolbar-panel .tools {
-    margin-top: 2px;
+    margin-top: 1px;
 }
 .toolbar-panel .logo {
     float: left;
@@ -98,9 +99,8 @@ body {
     width: 93px; height: 32px;
     background-repeat: no-repeat;
 }
-.toolbar-panel .document-title,
-.toolbar-panel .page-details {
-    float: right;
+.toolbar-panel .document-title {
+    float: left;
     height: 100%;
     line-height: 36px;
     margin-left: 32px;
@@ -108,19 +108,10 @@ body {
 .toolbar-panel .document-title {
     font-weight: bold;
 }
-.toolbar-panel .page-details {
-    margin-left: 1.6em;
-}
 
-.left-panel,
 .right-panel {
-    top: 36px;
-}
-.left-panel {
-    width: 164px;
-    margin-left: -164px;
-}
-.right-panel {
+    top: 42px;
+    bottom: 34px;
     width: 350px;
     left: 100%;
     margin-left: 0px;
@@ -145,30 +136,9 @@ body {
     border-bottom-left-radius:          12px 12px;
     border-right: none;
 }
-.left-panel .panel-tools {
-    right: -36px;
-    -webkit-border-top-right-radius:    12px 12px;
-    -moz-border-radius-topright:        12px 12px;
-    border-top-right-radius:            12px 12px;
-    -webkit-border-bottom-right-radius: 12px 12px;
-    -moz-border-radius-bottomright:     12px 12px;
-    border-bottom-right-radius:         12px 12px;
-    border-left: none;
-}
+
 .left-panel .panel-tools li {
     border-bottom: none;
-}
-.panel-tools li.pages-info {
-    border-bottom: none;
-    position: relative;
-    height: 0;
-}
-
-.panel-tools li.pages-info a {
-    overflow: visible;
-    position: absolute;
-    top: 0;
-    height: 0;
 }
 .vertical.panel-tools {
     padding: 2px 2px 8px 2px;
@@ -186,12 +156,151 @@ body {
     height: 32px;
     padding-left: 32px;
 }
+
+.panel_index {
+  position: absolute;
+  padding: 2px;
+}
+
+/* Controls panel */
+
+.pages_panel {
+    width: 100%;
+    height: 32px;
+    bottom: 0;
+}
+
+.pages_panel .inspector {
+    position: absolute;
+    left: 0; top: -144px;
+    
+    -webkit-transform: scale(0.25);
+    -webkit-transform-origin: 3.2% 194px;
+    -webkit-transition: -webkit-transform 0.2s ease-out;
+    
+    -moz-transform: scale(0.25);
+    -moz-transform-origin: 3.2% 194px;
+    -moz-transition: -webkit-transform 0.2s ease-out;
+    
+    transform: scale(0.25);
+    transform-origin: 3.2% 194px;
+    transition: -webkit-transform 0.2s ease-out;
+
+    background: rgba(0,0,0,0.66);
+    
+    /* Push the scrollbar */
+    height: 176px;
+    padding-bottom: 15px;
+}
+
+.pages_panel .inspector .content {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.pages_panel .inspector.active,
+.pages_panel .inspector:hover {
+    -webkit-transform:  scale(1);
+    -moz-transform:     scale(1);
+    transform:          scale(1);
+}
+
+.pages_panel li .number {
+    /*-webkit-transition: opacity 0.2s ease-out;
+    -moz-transition:    opacity 0.2s ease-out;
+    transition:         opacity 0.2s ease-out;
+    opacity: 0;*/
+}
+
+.pages_panel .inspector.active li .number {
+    opacity: 1;
+}
+
+.page_thumb {
+  width: 120px; height: 120px;
+  position: relative;
+  overflow: hidden;
+  background-color: hsla( 208, 8%, 20%, 0.9);
+}
+
+.page_thumb .webdoc {
+  position: absolute;
+  left: 0; top: 0;
+  overflow: hidden;
+}
+
+.page_browser_items {
+    white-space: nowrap;
+}
+
+.page_browser_items>li {
+    z-index: 1;
+}
+
+.page_browser_items>li.current {
+    z-index: 2;
+
+    -webkit-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+    -moz-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+    box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+}
+
+.controls_panel .toolbar {
+    position: absolute;
+    left: 27.4%; bottom: 0;
+    width: 72.6%; height: 32px;
+    
+    /* these counter the effects of someone else's toolbar class - get rid of */
+    padding: 1px 0; border-bottom: none;
+
+    -webkit-transition: bottom 0.2s ease-out;
+    -moz-transition:    bottom 0.2s ease-out;
+    transition:         bottom 0.2s ease-out;
+
+    -webkit-border-top-left-radius: 6px;
+    -moz-border-radius-topleft:     6px;
+    border-top-left-radius:         6px;
+}
+
+.controls_panel .left_toolbar {
+    left: 0; width: 2.4%;
+    
+    -webkit-border-top-left-radius:   0;
+    -moz-border-radius-topleft:       0;
+    border-top-left-radius:           0;
+    
+    -webkit-border-top-right-radius:  6px;
+    -moz-border-radius-topright:      6px;
+    border-top-right-radius:          6px;
+}
+
+.mode_buttons {
+    float: right;
+}
+
+.sharing_buttons {
+    float: right;
+}
+
+
+
+/*
+.controls_panel.active .toolbar {
+    bottom: -32px;
+}*/
+
+
+
+
+
 .pages-info .number {
     position: absolute;
     top: -0.75em;
     left: 50%;
     margin-left: -0.75em;
 }
+
+
 /*.border {
     border: 3px solid;
     position: absolute;
@@ -215,6 +324,12 @@ body {
 .webdoc.tag-list li {
     padding: 0;
     margin: 0;
+}
+.toolbar-panel {
+  left: 6px; right: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
 }
 #toolbar_panel .tag-list a {
     display: block;
@@ -337,12 +452,25 @@ body {
 
 /* Pages Browser */
 
+.pages-tools {
+  float: left;
+  height: 100%;
+  margin-right: 1px;
+}
+.pages-tools li {
+  height: 32px;
+}
+
+.pages {
+    margin-top: 4px;
+}
 .pages li {
-    margin-bottom: 1px;
+    margin-right: 4px;
     position: relative;
     cursor: move;
 }
 .pages li .page-title {
+    display: none;
     height: 1.5em;
     line-height: 1.5em;
     padding: 0.6em 0.6em 0.6em 2.7em;
@@ -374,7 +502,7 @@ body {
 }
 .pages li .edit-icon {
   background-position: 50% 50%;
-  background-image: url('/images/loading-icon-16-white.gif');
+  background-image: url('../images/loading-icon-16-white.gif');
   background: hsl(198, 4%, 84%);
 }
 .pages li .edit-icon span {
@@ -408,77 +536,6 @@ body {
 .page_browser_items li.current {
     background: none;
 }
-
-/* I have two styles of thumbs for your delectation.
- * 
- * To change style you also need to edit the corresponding animations
- * in page_browser_controller.js. (That could be improved - we could auto-detect.)
- */
- 
-/* 1. With border, looks like an extension of the title block */
-
-.pages li .thumb {
-  position: relative;
-  width: 120px; height: 75px;
-  margin: 0 auto;
-  overflow: hidden;
-  position: relative;
-  top: 0px;
-  padding: 0;
-  margin-bottom: 6px;
-  
-  border: 6px solid;
-  border-top: 0;
-  
-  -webkit-border-bottom-left-radius:  3px;
-  -moz-border-radius-bottomleft:      3px;
-  border-bottom-left-radius:          3px;
-  -webkit-border-bottom-right-radius: 3px;
-  -moz-border-radius-bottomright:     3px;
-  border-bottom-right-radius:         3px;
-  
-  -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
-  -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
-  box-shadow:         0 6px 8px hsl(14, 6%, 30%);
-}
-.hide-thumbs li .thumb {
-  height: 0;
-  margin-bottom: 0;
-  border-bottom-width: 0;
-}
-.pages li .thumb .page-thumb {
-  position: absolute;
-  left: 0; top: 50%;
-  margin-top: -45px;
-}
-
-/* 2. As a sheet, looks like it appears from a slot in the title block */
-
-/* Thumb height is height+14, to account for shadow */
-/*.pages li .thumb {
-  position: relative;
-  width: 136px; height: 104px; 
-  margin: 0 auto;
-  overflow: hidden;
-  padding: 0;
-  top: -2px;
-  border: none;
-  border-top: 1px solid hsl(194, 15%, 40%);
-}
-.pages li .thumb .page-thumb {
-  position: absolute;
-  bottom: 14px;               
-  left: 50%;
-  margin-left: -60px;
-  
-  -webkit-box-shadow: 0 6px 8px hsl(14, 6%, 30%);
-  -moz-box-shadow:    0 6px 8px hsl(14, 6%, 30%);
-  box-shadow:         0 6px 8px hsl(14, 6%, 30%);
-}
-.hide-thumbs li .thumb {
-  height: 0;
-  border: none;
-}*/
 
 /*******************/
 /* = board part = */
@@ -616,13 +673,6 @@ body {
   padding-left:20px;
 }
 
-.pages-inspector {
-    top: 65px;
-    bottom: 0;
-}
-.mode-preview .pages-inspector {
-    top: 32px;
-}
 .inspector .tools {
     margin-bottom: 1px;
 }
@@ -946,4 +996,92 @@ body {
 .colors-index a>span {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 120px;
+}
+
+.page_details {
+    float: left;
+    height: 100%;
+    line-height: 36px;
+    margin-left: 32px;
+    margin-left: 8px;
+}
+
+/* --- */
+
+.x_scrollbar_container {
+  position: absolute;
+  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+}
+
+.scrollbar {
+  position: absolute;
+  width: 10px; height: 10px;
+  min-width: 10px; min-height: 10px;
+  
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
+  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+  
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(128,128,128,0.5);
+}
+
+y_scrollbar {
+  -webkit-transition: top 0.025s linear, width 0.1s linear;
+  -moz-transition:    top 0.025s linear, width 0.1s linear;
+  transition:         top 0.025s linear, width 0.1s linear;
+}
+x_scrollbar {
+  -webkit-transition: left 0.025s linear, width 0.1s linear;
+  -moz-transition:    left 0.025s linear, width 0.1s linear;
+  transition:         left 0.025s linear, width 0.1s linear;
+}
+
+
+.pages_panel .x_scrollbar_container {
+  left: 6px; right: 6px; top: 128px;
+  height: 10px;
+  z-index: 2;
+}
+
+/*#webdoc_x_scrollbar:hover,
+#webdoc_y_scrollbar:hover {
+  opacity: 1;
+  -webkit-transition: opacity 0.1s linear;
+  -moz-transition:    opacity 0.1s linear;
+  transition:         opacity 0.1s linear;
+}*/
+
+#webdoc_x_scrollbar,
+#webdoc_y_scrollbar {
+  position: fixed;
+  z-index: 2;
+  /*opacity: 0;
+  -webkit-transition: opacity 0.66s linear;
+  -moz-transition:    opacity 0.66s linear;
+  transition:         opacity 0.66s linear;
+  */
+}
+
+#webdoc_x_scrollbar {
+  bottom: 38px; left: 6px; right: 6px;
+  height: 10px;
+}
+
+#webdoc_y_scrollbar {
+  top: 44px; bottom: 38px; right: 6px;
+  width: 10px;
+}
+
+.no_transition {
+  -webkit-transition: none;
+  -moz-transition:    none;
+  transition:         none;
 }

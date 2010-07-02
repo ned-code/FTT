@@ -148,12 +148,20 @@ WebDoc.Record = jQuery.klass(
    *  refresh record data from a json object
    * @param {Object} object containing record persistant data. This object must contain 1 attribute with name classname.
    */
-  refresh: function(json) {
+  refresh: function(json, onlyMissingValues) {
     this.isNew = false;
     if (!this.data) {
       this.data = {};
     }
-    jQuery.extend(this.data, json[this.className()]);       
+    var newValues = json[this.className()];
+    if (onlyMissingValues) {
+      jQuery.extend(newValues, this.data);
+      this.data = newValues;
+    }
+    else {
+      jQuery.extend(this.data, newValues);
+    }
+           
     this._initRelationShips(json);
     this.fireObjectChanged({ refresh: true });
   },

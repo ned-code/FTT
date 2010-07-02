@@ -105,23 +105,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
       else if (this.itemDomNode.get(0).contentWindow.initialize) {
         this.itemDomNode.get(0).contentWindow.initialize();
       }
-      
-      //$(this.domNode.get(0).contentDocument).find("body").css("overflow", "hidden");
-      // inject innerHTML if exist
-      /*
-       if (this.item.data.data.innerHTML) {
-       var doc = this.domNode.get(0).contentDocument;
-       doc.open();
-       doc.write("<html><head>" + this.item.data.data.innerHTML + "</head><body></body></html>");
-       doc.close();
-       }
-       */
-      /* if SVG layer don't catch event we need to catch events in the capture phase of the widget */
-      /*
-       this.domNode.get(0).contentDocument.body.addEventListener("mousedown", WebDoc.application.boardController.mouseDown.pBind(WebDoc.application.boardController), true);
-       this.domNode.get(0).contentDocument.body.addEventListener("mousemove", WebDoc.application.boardController.mouseMove.pBind(WebDoc.application.boardController), true);
-       this.domNode.get(0).contentDocument.body.addEventListener("mouseup", WebDoc.application.boardController.mouseUp.pBind(WebDoc.application.boardController), true);
-       */
     }
   },
 

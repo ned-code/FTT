@@ -1,6 +1,6 @@
 common: &common
-  access_key_id: 'AKIAJSQQ2RDIXG2UOZ5Q'
-  secret_access_key: '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'
+  access_key_id: 'XXXXXXXXXXXXXXXXXXXX'
+  secret_access_key: 'XXXXXXXXXXXXXXXXXXXXXXXX'
 
 development:
   <<: *common

@@ -61,11 +61,10 @@ class Layout < ActiveRecord::Base
               item.data[:tag] = 'div'
               if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
                 inner_html = Item.sanitize_html_to_serialize(doc_item.inner_html)
-                item.data[:innerHTML] = ""
                 item.data[:innerHTMLPlaceholder] = inner_html
                 item.data[:class] += " empty"
               else
-                item.data[:innerHTML] = inner_html
+                item.inner_html = inner_html
                 item.data[:innerHTMLPlaceholder] = ""
               end
               if doc_item['data-item-type'] == 'text'
@@ -84,6 +83,9 @@ class Layout < ActiveRecord::Base
               end
               item.data[:src] = path + src
               item.media_type = 'image'
+              if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
+                item.data[:is_placeholder] = "true"
+              end
             when 'iframe'
               item = build_default_item(page, doc_item)
               item.data[:tag] = 'iframe'
@@ -166,11 +168,12 @@ class Layout < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: layouts
 #
-#  uuid          :string(255)     primary key
+#  uuid          :string(255)     default(""), not null, primary key
 #  title         :string(255)
 #  thumbnail_url :string(255)
 #  theme_id      :string(36)

@@ -50,7 +50,6 @@ class Admin::CategoriesController < Admin::AdminController
   def destroy
     @category = Category.find(params[:id])
     @category.destroy
-    
     flash[:notice] = t('flash.notice.category.destroyed_successful')
     redirect_to admin_categories_path
   end

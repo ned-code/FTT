@@ -24,7 +24,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     // Feature detection
     
     // Add feature detected styles to head
-    WebDoc.Application.createStyle('body, .push-scroll {'+
+    WebDoc.Application.createStyle('.push-scroll {'+
       'padding-right: '+ jQuery.support.scrollbarWidth +'px;'+
       'padding-bottom: '+ jQuery.support.scrollbarWidth +'px;'+
     '}');
@@ -72,6 +72,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
       WebDoc.application.toolbarController = new WebDoc.ToolbarController();
 			WebDoc.application.browserController = new WebDoc.BrowserController();
+      WebDoc.application.notificationController = new WebDoc.NotificationController("#notification_bar");
       
       WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
       WebDoc.application.themesController = new WebDoc.ThemesController();
@@ -84,7 +85,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
       WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
       WebDoc.application.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "insert-app" );
-      WebDoc.application.browserTool = new WebDoc.BrowserTool("a[href='#open-browser']", "open-browser" );
+      WebDoc.application.browserTool = new WebDoc.BrowserTool("a[href='#browser']");
 
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
       WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
@@ -190,12 +191,14 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     // we don't need to set foreign keys. It is automagically done on the server side
     // newPage.data.document_id = this.currentDocument.data.document_id;
     newPage.data.position = this.currentPage.data.position + 1;
+    WebDoc.application.boardController.currentPageView().setLoading(true);
     newPage.save( function(newObject, status) {
       ddd("new page ", newPage, newObject);
-      this.currentDocument.addPage(newPage, true);      
+      this.currentDocument.addPage(newPage, true);
+      WebDoc.application.boardController.currentPageView().setLoading(false);
       this.loadPage(newPage);
       
-      WebDoc.application.pageBrowserController.editPageTitle(newPage);
+      //WebDoc.application.pageBrowserController.editPageTitle(newPage);
       
     }.pBind(this));
   },
@@ -300,10 +303,10 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     copiedPage.setDocument(this.currentPage.getDocument());
     var copiedPagePosition = this.currentDocument.positionOfPage(this.currentPage) - 1;
     copiedPage.data.position = copiedPagePosition + 1;
-    //var importingMessage = $("<li>").html("importing...").addClass("page_thumb_importing");       
-    //droppedPageThumb.parent().after(importingMessage[0]);
+    WebDoc.application.boardController.currentPageView().setLoading(true);
     copiedPage.save(function(newObject, status) {
       this.currentDocument.addPage(copiedPage, true);
+      WebDoc.application.boardController.currentPageView().setLoading(false);
       this.loadPage(copiedPage);
     }.pBind(this));
   },

@@ -4,6 +4,11 @@ module NavigationHelpers
   def homepage
     "/"
   end
+
+  def show_document(document_uuid)
+    "/documents/#{document_uuid}"
+  end
+
 end
 
 Spec::Runner.configuration.include(NavigationHelpers)

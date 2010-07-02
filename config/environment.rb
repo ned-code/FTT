@@ -6,6 +6,18 @@ RAILS_GEM_VERSION = '2.3.8' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+if defined?(PhusionPassenger)
+    PhusionPassenger.on_event(:starting_worker_process) do |forked|
+        if forked
+            # We're in smart spawning mode.
+            p "reload xmpp notification from environement"
+            @@xmpp_notifier = XmppNotification.new
+        else
+            # We're in conservative spawning mode. We don't need to do anything.
+        end
+    end
+end
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -27,7 +39,7 @@ Rails::Initializer.run do |config|
   # config.frameworks -= [ :active_record, :active_resource, :action_mailer ]
   
   # Activate observers that should always be running
-  config.active_record.observers = :xmpp_page_observer, :xmpp_item_observer, :xmpp_document_observer
+  #config.active_record.observers = :xmpp_page_observer, :xmpp_item_observer, :xmpp_document_observer
   
   # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
   # Run "rake -D time" for a list of tasks for finding time zone names.

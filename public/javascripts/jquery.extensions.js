@@ -46,11 +46,24 @@
     });
 })(jQuery);
 
-// Detect css3 features like transition and store in jQuery.support.css
+// Detect css3 features and store in jQuery.support.css
 
 (function(jQuery, undefined){
     
     var debug = (window.console && console.log);
+    
+    var testElem = jQuery('<div/>').css({
+      WebkitBoxSizing: 'border-box',
+      MozBoxSizing: 'border-box',
+      boxSizing: 'border-box',
+      position: 'absolute',
+      top: -200,
+      left: 0,
+      padding: 20,
+      border: '10px solid red',
+      width: 100,
+      height: 100
+    });
     
     jQuery.support.css = {};
     
@@ -61,9 +74,28 @@
     }
     
     jQuery(document).ready(function(){
+      
       // Lazily test for transition support by listening
       // for the transitionend event
       jQuery(document).bind('transitionend webkitTransitionEnd oTransitionEnd', transitionEnd);
+      
+      // Test for box-sizing support and figure out whether min-width
+      // or min-height fucks it or not.  Store in
+      // jQuery.support.css.borderBox
+      // jQuery.support.css.borderBoxMinMax
+      document.body.appendChild( testElem[0] );
+      
+      jQuery.support.css.borderBox = ( testElem.outerWidth() === 100 && testElem.outerHeight() === 100 );
+      
+      testElem.css({
+        minWidth: 100,
+        minHeight: 100
+      });
+      
+      jQuery.support.css.borderBoxMinMax = ( testElem.outerWidth() === 100 && testElem.outerHeight() === 100 );
+      
+      testElem.remove();
+      
     });
 })(jQuery);
 
@@ -135,21 +167,6 @@
 })(jQuery);
 
 
-// Extend jQuery plugins with some helper plugins
-
-jQuery.fn.extend({
-    
-    // Attribute helpers
-    
-    id: function(id) {
-        return this.attr("id", id) ;
-    },
-    
-    href: function(href) {
-        return this.attr("href", href) ;
-    }
-});
-
 // Extend jQuery with some helper methods
 
 jQuery.extend({
@@ -192,15 +209,35 @@ jQuery.extend({
     // Some helpful regex for parsing hrefs and css urls etc.
     
     regex: {
-      integer:    /^-?[0-9]+$/,
-      cssUrl:     /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/,   // matches url(xxx), url('xxx') or url("xxx") and captures xxx
+      integer:    /^-?[0-9]+$/,                                   // integer
       hash:       /^#?$/,                                         // Single hash or empty string
       hashRef:    /^#(\S+)/,                                      // Matches a hash ref, captures all non-space characters following the hash
       slashRef:   /^\//,                                          // Begins with a slash
       urlRef:     /^[a-z]+:\/\//,                                 // Begins with protocol xxx://
-      cssValue:   /^\d+\s?(px|%|em|ex|pt|in|cm|mm|pt|pc)$/,       // Accepts any valid unit of css measurement
+      
+      cssUrl:     /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/,   // matches url(xxx), url('xxx') or url("xxx") and captures xxx
+      cssValue:   /^(\d+)\s?(px|%|em|ex|pt|in|cm|mm|pt|pc)$/,     // Accepts any valid unit of css measurement, encapsulates the digits [1] and the units [2]
+      pxValue:    /^(\d+)\s?(px)$/,                               // Accepts px values, encapsulates the digits [1]
+      '%Value':   /^(\d+)\s?(%)$/,                                // Accepts % values, encapsulates the digits [1]
+      emValue:    /^(\d+)\s?(em)$/,                               // Accepts em values, encapsulates the digits [1]
       hslColor:   /^(?:hsl\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})%\s?,\s?([0-9]{1,3})%\s?\)?$/,   // hsl(xx, xx%, xx%)
       hexColor:   /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6}$)/,          // #xxxxxx
-      rgbColor:   /^(?:rgb\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?\)?$/   // rgb(xxx, xxx, xxx)  - not perect yet, as it allows values greater than 255
+      rgbColor:   /^(?:rgb\()?\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?,\s?([0-9]{1,3})\s?\)?$/   // rgb(xxx, xxx, xxx)  - not perfect yet, as it allows values greater than 255
+    }
+});
+
+
+// Extend jQuery plugins with some helper plugins
+
+jQuery.fn.extend({
+    
+    // Attribute helpers
+    
+    id: function(id) {
+        return this.attr("id", id) ;
+    },
+    
+    href: function(href) {
+        return this.attr("href", href) ;
     }
 });

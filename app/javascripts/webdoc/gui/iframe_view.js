@@ -38,7 +38,18 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     return WebDoc.IframeController;  
   },
   createDomNode: function($super) {
-    this.itemLayerDomNode.show();
+		var that = this;
+		var src = this.item.getSrc();
+		if (src){
+			window.onbeforeunload = function (evt) { 
+				var message = 'You add a web page that automatic redirect to his domaine. Please press Cancel'; 
+				that.item.setSrc( '' );
+				that.inputNode.attr('value', '');
+				//removed the onbeforeunload event that prevent automatic redirecting
+				window.onbeforeunload = '';
+				return message; 
+			};
+		}
     this.domNode.addClass('loading');
     return $super();              
   },
@@ -49,14 +60,6 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     return function(e){
 			if (that.inputNode.attr('value') == ''){
 				return false;
-			}
-			window.onbeforeunload = function (evt) { 
-				var message = 'You add a web page that automatic redirect to his domaine. Please press Cancel'; 
-				that.item.setSrc( '' );
-				that.inputNode.attr('value', '');
-				//removed the onbeforeunload event that prevent automatic redirecting
-				window.onbeforeunload = '';
-				return message; 
 			}
 			
 			e.preventDefault();

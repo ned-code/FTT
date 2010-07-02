@@ -19,9 +19,10 @@ body                          { background-color: hsl(208, 8%, 60%); }
                                 border-radius:         6px; }
 
 /* Panels */
+.toolbar,
 .toolbar-panel                { color: hsl(208, 7%, 41%);
                                 background-color: hsla(208, 7%, 41%, 0.92);
-                                background-image: url('/images/bg.png');
+                                background-image: url('../images/bg.png');
                                 background-position: 0 0;
                                 background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(208, 4%, 97%) ), to( hsl(208, 8%, 79%) ));
                                 background-image: -moz-linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
@@ -32,16 +33,28 @@ body                          { background-color: hsl(208, 8%, 60%); }
                                 -moz-box-shadow:    0 0 32px hsla(14, 24%, 35%, 0.6);
                                 box-shadow:         0 0 32px hsla(14, 24%, 35%, 0.6); }
 
-.left-panel,
 .right-panel                  { background-color: hsla(208, 7%, 41%, 0.92); }
+
+.pages_panel .panel_index {
+    -webkit-border-top-right-radius:  12px 12px;
+    -moz-border-radius-topright:      12px 12px;
+    border-top-right-radius:          12px 12px;
+    -webkit-border-top-left-radius:   12px 12px;
+    -moz-border-radius-topleft:       12px 12px;
+    border-top-left-radius:           12px 12px;
+    border-left: none;
+}
+
+.panel_index,
 .panel-tools,
-.border                       { background-color: inherit; border-color: /*hsla(208, 12%, 30%, 0.8)*/ transparent; }
+.border                       { background-color: inherit; border-color: hsla(208, 12%, 30%, 0.8); }
 .vertical.panel-tools li      { border-color: hsla(208, 12%, 30%, 0.8); }
+.panel_index a.current,
 .panel-tools a.current        { background-color: hsla(208, 12%, 30%, 0.8); }
 
 /*  */
 
-.logo                         { background-image: url('/images/logo.png'); }
+.logo                         { background-image: url('../images/logo.png'); }
 
 /* Tools */
 
@@ -54,12 +67,22 @@ body                          { background-color: hsl(208, 8%, 60%); }
 .inspector .foot>ul,
 .inspector .foot>form,
 .inspector .foot>div          { background-color: hsla(208, 12%, 30%, 0.8); color: white; }
-.inspector .tools             { background-image: url('/images/bg.png');
+.inspector .tools             { background-image: url('../images/bg.png');
                                 background-position: 0 0;
                                 background-image: -webkit-gradient( linear, 0% 0%, 0% 100%, from( hsl(208, 4%, 97%) ), to( hsl(208, 8%, 79%) ));
                                 background-image: -moz-linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
                                 background-image:      linear-gradient( -90deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
                                 background-repeat: repeat-x; }
+
+.inspector .vertical.tools_index {
+    background-image: url('../images/bg.png');
+    background-position: 0 0;
+    background-image: -webkit-gradient( linear, 0% 0%, 100% 0%, from( hsl(208, 4%, 97%) ), to( hsl(208, 8%, 79%) ));
+    background-image: -moz-linear-gradient( 0deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
+    background-image:      linear-gradient( 0deg, hsl(208, 4%, 97%), hsl(208, 8%, 79%) );
+    background-repeat: repeat-x;
+}
+
 .inspector form.content       { background-color: hsl(208, 3%, 88%); }
 .inspector .box               { background-color: hsl(208, 6%, 56%);
 
@@ -83,7 +106,7 @@ body                          { background-color: hsl(208, 8%, 60%); }
                                 -moz-border-radius:       12px;
                                 border-radius:            12px; }
 
-.inspector .size-slider       { background: hsl(208, 6%, 56%) url('/images/ui/slider_size_bg.png') no-repeat 100% 0; }
+.inspector .size-slider       { background: hsl(208, 6%, 56%) url('../images/ui/slider_size_bg.png') no-repeat 100% 0; }
 .scroller-window a            { color: rgb(68, 75, 77); }
 .scroller-handle,
 .inspector .size-slider .ui-corner-all {
@@ -177,27 +200,27 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
 
 .toolbar-panel a,
 .toolbar-panel .group-tools a,
-.toolbar-panel .mode-tools a        { -webkit-transition: width 0.18s ease-out; }
+.mode-tools a        { -webkit-transition: width 0.18s ease-out; }
 .toolbar-panel a:active,
 .toolbar-panel .group-tools a:active,
-.toolbar-panel .mode-tools a:active { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
+.mode-tools a:active { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
 .toolbar-panel .current,
 .toolbar-panel .active,
 .toolbar-panel .group-tools .current,
-.toolbar-panel .mode-tools .current { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
+.mode-tools .current { -webkit-box-shadow: inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       -webkit-transition: width 0.18s ease-out; }
 .toolbar-panel .group-tools a,
-.toolbar-panel .mode-tools a        { -webkit-box-shadow: inset 0 0 2px -1px hsl(18, 16%, 12%);
+.mode-tools a        { -webkit-box-shadow: inset 0 0 2px -1px hsl(18, 16%, 12%);
                                       -moz-box-shadow:    inset 0 0 2px -1px hsl(18, 16%, 12%);
                                       box-shadow:         inset 0 0 2px -1px hsl(18, 16%, 12%); }
 
-.backgrounds_index li a             { -webkit-background-size: contain;
-                                      -moz-background-size: contain;
-                                      background-size: contain; }
+.backgrounds_index li a             { -webkit-background-size:  contain;
+                                      -moz-background-size:     contain;
+                                      background-size:          contain; }
 .colors-index li a:active           { -webkit-box-shadow: inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       -moz-box-shadow:    inset 0 2px 4px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 2px 4px hsla(18, 16%, 12%, 1); }
@@ -205,7 +228,7 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
                                       -moz-box-shadow:    inset 0 1px 3px hsla(18, 16%, 12%, 1);
                                       box-shadow:         inset 0 1px 3px hsla(18, 16%, 12%, 1); }
 
-.tools a{
+.tools a {
     -webkit-border-radius: 6px;
     -moz-border-radius:    6px;
     border-radius:         6px;
@@ -249,9 +272,11 @@ fieldset.properties legend   { background-color: hsl(208, 6%, 56%); color: white
     background-color: hsl(208, 9%, 71%);
 }
 
+.ghost { opacity: 0.6; }
+
 /* Pages tools */
 
-.pages-tools a                      { background-image: url('/images/pages-tools.png'); }
+.pages-tools a                      { background-image: url('../images/pages-tools.png'); }
 
 a[href="#pages-browser"]            { background-position: 0 0; }
 a[href="#pages-browser"]:hover      { background-position: 0 -64px; }
@@ -274,13 +299,13 @@ a[href="#remove-page"]              { background-position: 0 -832px; }
 a[href="#remove-page"]:hover        { background-position: 0 -896px; }
 a[href="#remove-page"]:active       { background-position: 0 -960px; }
 
-.toolbar-panel a[href="#webdoc-prev-page"]        { background-position: 0 -1024px; }
-.toolbar-panel a[href="#webdoc-prev-page"]:hover  { background-position: 0 -1088px; }
-.toolbar-panel a[href="#webdoc-prev-page"]:active { background-position: 0 -1152px; }
+a[href="#webdoc-prev-page"]        { background-position: 0 -1024px; }
+a[href="#webdoc-prev-page"]:hover  { background-position: 0 -1088px; }
+a[href="#webdoc-prev-page"]:active { background-position: 0 -1152px; }
 
-.toolbar-panel a[href="#webdoc-next-page"]        { background-position: 0 -1216px; }
-.toolbar-panel a[href="#webdoc-next-page"]:hover  { background-position: 0 -1280px; }
-.toolbar-panel a[href="#webdoc-next-page"]:active { background-position: 0 -1344px; }
+a[href="#webdoc-next-page"]        { background-position: 0 -1216px; }
+a[href="#webdoc-next-page"]:hover  { background-position: 0 -1280px; }
+a[href="#webdoc-next-page"]:active { background-position: 0 -1344px; }
 
 a[href="#toggle-thumbs"].active        { background-position: 0 -1408px; }
 a[href="#toggle-thumbs"].active:hover  { background-position: 0 -1472px; }
@@ -292,7 +317,7 @@ a[href="#toggle-thumbs"]:active     { background-position: 0 -1728px; }
 /* Edit tools */
 
 .edit-tools a {
-    background-image: url('/images/edit-tools.png');
+    background-image: url('../images/edit-tools.png');
 }
 
 a[href="#select"]                   { background-position: 0 0; }
@@ -354,16 +379,20 @@ a[href="#insert-iframe"]            { background-position: 0 -2752px; }
 a[href="#insert-iframe"]:hover      { background-position: 0 -2816px; }
 a[href="#insert-iframe"]:active     { background-position: 0 -2880px; }
 
-a[href="#insert-app"]         { background-position: 0 -2944px; }
-a[href="#insert-app"]:hover   { background-position: 0 -3008px; }
-a[href="#insert-app"]:active  { background-position: 0 -3072px; }
+a[href="#insert-app"]               { background-position: 0 -2944px; }
+a[href="#insert-app"]:hover         { background-position: 0 -3008px; }
+a[href="#insert-app"]:active        { background-position: 0 -3072px; }
+a[href="#insert-os-gadget"]         { background-position: 0 -2944px; }
+a[href="#insert-os-gadget"]:hover   { background-position: 0 -3008px; }
+a[href="#insert-os-gadget"]:active  { background-position: 0 -3072px; }
 
 a[href="#themes-chooser"]           { background-position: 0 -3136px; }
 a[href="#themes-chooser"]:hover     { background-position: 0 -3200px; }
 a[href="#themes-chooser"]:active    { background-position: 0 -3264px; }
 
 .inspector-views a,
-.panel-tools a                      { background-image: url('/images/panel-tools.png'); }
+.panel_index a,
+.panel-tools a                      { background-image: url('../images/panel-tools.png'); }
 
 /* A bit of a special case, the toggle buttons.
    They may even deserve their own list class */
@@ -415,13 +444,13 @@ a[href="#show-thumbs"]                { background-position: -4px -1860px; }
 a[href="#show-thumbs"]:hover          { background-position: -4px -1924px; }
 a[href="#show-thumbs"].current        { background-position: -4px -1988px; }
 
-a[href="#webdoc-prev-page"]           { background-position: 0 -2051px; }
+/*a[href="#webdoc-prev-page"]           { background-position: 0 -2051px; }
 a[href="#webdoc-prev-page"]:hover     { background-position: 0 -2115px; }
 a[href="#webdoc-prev-page"]:active    { background-position: 0 -2179px; }
 
 a[href="#webdoc-next-page"]           { background-position: 0 -2237px; }
 a[href="#webdoc-next-page"]:hover     { background-position: 0 -2301px; }
-a[href="#webdoc-next-page"]:active    { background-position: 0 -2365px; }
+a[href="#webdoc-next-page"]:active    { background-position: 0 -2365px; }*/
 
 a[href="#social-inspector"]           { background-position: 0 -2432px; }
 a[href="#social-inspector"]:hover     { background-position: 0 -2496px; }
@@ -429,7 +458,7 @@ a[href="#social-inspector"]:active    { background-position: 0 -2560px; }
 a[href="#social-inspector"].current   { background-position: 0 -2624px; }
 
 .control-tools a,
-.mode-tools a { background-image: url('/images/mode-tools.png'); }
+.mode-tools a { background-image: url('../images/mode-tools.png'); }
 
 a[href="#mode-preview"]               { background-position: 0 0px; }
 a[href="#mode-preview"]:hover         { background-position: 0 -64px; }
@@ -454,4 +483,8 @@ a[href="#webdoc-duplicate"]           { background-position: 0 -896px; }
 a[href="#webdoc-duplicate"]:hover     { background-position: 0 -960px; }
 a[href="#webdoc-duplicate"].active,
 a[href="#webdoc-duplicate"]:active    { background-position: 0 -1024px; }
+
+a[href="#browser"]                    { background-position: 0 -1088px; }
+a[href="#browser"]:hover              { background-position: 0 -1152px; }
+a[href="#browser"]:active             { background-position: 0 -1216px; }
 

@@ -36,7 +36,6 @@ WebDoc.ThemeElementsLibrary = $.klass(WebDoc.Library, {
               && theme[0].getElementsUrl() !== undefined && theme[0].getElementsUrl() !== '') {
         that.themeElementsIFrame.attr('src', theme[0].getElementsUrl());
       } else {
-        that.themeElementsIFrame.attr('src', '');
       }
     });
   }

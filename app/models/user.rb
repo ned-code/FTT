@@ -14,8 +14,13 @@ class User < ActiveRecord::Base
                     :path => S3_CONFIG[:storage] == 's3' ? avatars_path : ":rails_root/public/#{avatars_path}",
                     :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{avatars_path}"
 
-  validates_attachment_size :avatar, :less_than => 1.megabytes
-  validates_attachment_content_type :avatar, :content_type => ['image/jpeg', 'image/png', 'image/gif']
+  validates_attachment_size :avatar,
+                            :less_than => 1.megabytes,
+                            :unless => Proc.new {|user| user.avatar }
+
+  validates_attachment_content_type :avatar,
+                                    :content_type => ['image/jpeg', 'image/png', 'image/gif'],
+                                    :unless => Proc.new {|user| user.avatar }
 
   has_uuid  
   # Include default devise modules.
@@ -166,6 +171,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -192,10 +198,14 @@ end
 #  updated_at           :datetime
 #  first_name           :string(255)
 #  last_name            :string(255)
-#  avatar               :string(255)
+#  avatar_file_name     :string(255)
 #  bio                  :text
 #  gender               :string(255)
 #  website              :string(255)
-#  uuid                 :string(255)     primary key
+#  uuid                 :string(255)     default(""), not null, primary key
+#  avatar_content_type  :string(255)
+#  avatar_file_size     :integer(4)
+#  avatar_updated_at    :datetime
+#  id                   :integer(4)
 #
 

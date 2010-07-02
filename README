@@ -30,3 +30,36 @@ If all tests pass, you can work on a big new feature ;-)
 
 == Plugins
 
+== Webdoc Fork source code
+
+Here is a new way to get the code from webdoc. It will be easier for us to get your update and
+easier for you to get our update.
+Please work in the branch master, it will be easier for us to get your update (the send merge request message will contain your new commit)
+
+you'll find the new repo on assembla here :
+
+https://www.assembla.com/code/webdoc-fork-xb/git/nodes?rev=master
+
+-- Get the code locally:
+
+git clone git@git.assembla.com:webdoc-fork-xb.git
+
+-- To get our latest update :
+
+git pull git@git.assembla.com:webdoc dev
+
+
+To send us your update, you have to:
+
+-- Push your code to assembla
+
+git push origin master
+
+-- then login into assembla and go here :
+
+https://www.assembla.com/code/webdoc-fork-xb/git/forks
+
+and clic on 'send a merge request'
+
+Fill the form and send it.
+

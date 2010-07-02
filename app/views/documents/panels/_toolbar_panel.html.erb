@@ -1,0 +1,70 @@
+<%# lis must not have whitespace between them, or they won't display properly %>
+
+<div class="toolbar-panel panel" id="toolbar">
+  <a href="#webdoc-close">
+    <div class="logo"></div>
+  </a>
+
+  <ul class="edit-tools tools thumbs index icons-only" id="view_tools">
+    <!--li>
+      <a href="#zoom-out" title="Zoom Out">Zoom Out</a>
+    </li><li>
+      <a href="#zoom-in" title="Zoom In">Zoom In</a>
+    </li--><li class="mode-edit-show">
+      <a href="#themes-chooser" title="themes">Themes</a>
+    </li>
+  </ul>
+  <ul class="edit-tools tools thumbs index icons-only mode-edit-show" id="edit_tools">
+    <li>
+      <a href="#undo" title="Undo">Undo</a>
+    </li><li>
+      <a href="#redo" title="Redo">Redo</a>
+    </li><li>
+      <a href="#to-back" title="Send to back">Send to back</a>
+    </li><li>
+      <a href="#to-front" title="Bring to front">Bring to front</a>
+    </li><li>
+      <a href="#delete" title="Delete">Delete</a>
+    </li>
+  </ul>
+  <ul class="edit-tools tools thumbs index icons-only" id="misc_tools">
+    <li class="mode-edit-show">
+      <a href="#insert-html" title="Insert HTML">Insert HTML</a>
+    </li><li class="mode-edit-show">
+      <a href="#insert-iframe" title="Insert Web page">Insert Web page</a>
+    </li><li class="mode-edit-show">
+      <a href="#insert-text" title="Insert Text">Insert Text</a>
+    </li>
+    <% if !Rails.env.production? %>
+    <li class="mode-edit-show">
+      <a href="#insert-app" title="Insert open social app">Insert open social app</a>
+    </li>
+    <% end %>
+  </ul>
+  <ul class="mode-edit-show edit-tools group-tools tools thumbs index icons-only" id="misc_tools">
+    <li>
+      <a class="state-tool" href="#select" title="Select">Select</a>
+    </li><!--li>
+      <a class="state-tool" href="#move" title="Move">Move</a>
+    </li--><li>
+      <a class="state-tool" href="#draw" title="Draw">
+        Draw
+        <div class="draw-port">
+          <div class="draw-size draw-color"></div>
+        </div>
+      </a>
+    </li>
+  </ul>
+  <ul class="control-tools mode-embed-hide tools thumbs index icons-only">
+    <li class="mode-edit-show">
+      <a href="#browser" id="open-browser" title="Open Browser">Open Browser</a>
+    </li><li>
+      <a href="#disable-html" id="debug-button" title="Disable HTML">Disable HTML</a>
+    </li><li>
+      <a href="#webdoc-duplicate" title="Duplicate document">Duplicate webdoc</a>
+    </li><li>
+      <a href="#webdoc-close" title="Close document">Close</a>
+    </li>
+  </ul>
+  <div class="document-title"><%= @document.title %></div>
+</div>

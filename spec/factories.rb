@@ -44,16 +44,17 @@ Factory.define :media do |f|
 end
 
 Factory.define :widget, :class => Medias::Widget do |f|
-  f.file { File.open(Rails.root.join('spec','fixtures','widget.zip')) }
+  f.attachment { File.open(Rails.root.join('spec','fixtures','widget.zip')) }
   #f.system_name "widget"
   f.sequence(:system_name) { |n| "widget#{n}" }
 end
 
 Factory.define :datastore_entry do |f|
-  f.ds_key        "vote"
-  f.ds_value      1
-  f.item          { |f| f.association(:item) }
-  f.user          { |f| f.association(:user) }
+  f.ds_key           "vote"
+  f.ds_value         "1"
+  f.item             { |f| f.association(:item) }
+  f.user             { |f| f.association(:user) }
+  f.protection_level DatastoreEntry::CONST_PROTECTION_LEVEL_PRIVATE
 end
 
 Factory.define :view_count do |f|
@@ -70,5 +71,24 @@ Factory.define :layout do |f|
   f.title            "Layout 1"
   f.sequence(:kind)  { |n| "kind#{n}" }
   f.thumbnail_url    Rails.root.join('spec','fixtures','thumbnail.png')
-  f.template_url     Rails.root.join('spec','fixtures','layout.html')
+  f.template_url     '../spec/fixtures/layout.html'
+end
+
+Factory.define :theme do |f|
+  f.attachment      { File.open(Rails.root.join('spec','fixtures','theme_1_v0_1.zip')) }
+  f.is_default      false
+  f.after_build     { |theme| theme.set_attributes_from_config_file_and_save }
+end
+
+Factory.define :theme_without_upload, :class => Theme do |f|
+  f.sequence(:title)        { |n| "theme#{n}"}
+  f.thumbnail_url           "http://test.webdoc.com/themes/thumbnail.html"
+  f.style_url               "http://test.webdoc.com/themes/style.html"
+  f.attachment_file_name    "theme_test.zip"
+  f.attachment_content_type "application/zip"
+  f.attachment_file_size    "1024"
+  f.attachment_updated_at   Time.now
+  f.version                 "1.1"
+  f.elements_url            "http://test.webdoc.com/themes/elements.html"
+  f.is_default              true
 end

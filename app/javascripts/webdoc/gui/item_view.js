@@ -70,7 +70,7 @@ WebDoc.ItemView = $.klass({
       this.item.data.data.css = {};
     }
     
-    if (this.item.data.data.innerHTML) {
+    if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
       this.innerHtmlChanged();
     }
     
@@ -86,14 +86,8 @@ WebDoc.ItemView = $.klass({
   
   _initItemClass: function() {
     this.itemDomNode.attr("class", this.ITEMCLASSES);
-    if(this.item.data.data['class']) {
-      this.itemDomNode.addClass(this.item.data.data['class']);
-    }
-    if(this.item.data.data.classes) {
-      for(var css_class in this.item.data.data.classes) {
-        this.itemDomNode.addClass(this.item.data.data.classes[css_class]);
-      }
-    }
+    this.itemDomNode.addClass(this.item.getClass());
+    
     // we put all item classes in wdClasses data. It is used to know which classes to remove when classes of item changed.
     if (this.domNode.data('wdClasses')) {
       this.domNode.removeClass(this.domNode.data('wdClasses'));
@@ -182,9 +176,6 @@ WebDoc.ItemView = $.klass({
       itemNode = $('<' + this.item.data.data.tag + '/>');
       for (var key in this.item.data.data) {
         switch(key) {
-          case "innerHTML":
-          // for compatibility we also check innerHtml like this because old document can have this key instead of innerHTML
-          case "innerHtml":
           case "class": 
           case "wrapClass": 
           case "innerHTMLPlaceholder":
@@ -193,6 +184,7 @@ WebDoc.ItemView = $.klass({
           case "preference":
           case "properties":
           case "preserve_aspect_ratio":
+          case "is_placeholder":
             break;
           default:
             itemNode.attr(key, this.item.data.data[key]);
@@ -222,7 +214,7 @@ WebDoc.ItemView = $.klass({
 
   innerHtmlChanged: function() {
     if (!WebDoc.application.disableHtml && this.item.data.data.tag !== "iframe") {    
-      this.itemDomNode.html($.string().stripScripts(this.item.data.data.innerHTML));
+      this.itemDomNode.html($.string().stripScripts(this.item.getInnerHtml()));
     }
   },
   
@@ -236,10 +228,10 @@ WebDoc.ItemView = $.klass({
         height: "100%"
       });
       this.domNode.append(this.itemDomNode);
-      if (this.item.data.data.innerHTML) {
+      if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
         this.innerHtmlChanged();
       }      
-      this.select();
+      //this.select();
     }
   },  
   

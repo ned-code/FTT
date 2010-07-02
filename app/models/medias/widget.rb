@@ -6,12 +6,13 @@ class Medias::Widget < Media
                     :storage => S3_CONFIG[:storage].to_sym,
                     :s3_credentials => S3_CONFIG,
                     :bucket => S3_CONFIG[:widgets_bucket],
+                    :s3_host_alias => S3_CONFIG[:widgets_bucket],
                     :path => S3_CONFIG[:storage] == 's3' ? attachment_path : ":rails_root/public/#{attachment_path}",
-                    :url => S3_CONFIG[:storage] == 's3' ? ":s3_domain_url" : "/#{attachment_path}"
+                    :url => S3_CONFIG[:storage] == 's3' ? ":s3_alias_url" : "/#{attachment_path}"
   
   validates_attachment_presence :attachment
   validates_attachment_size :attachment, :less_than => 30.megabytes
-  # validates_attachment_content_type :attachment, :content_type => ['application/zip', 'application/octet-stream']
+  validates_attachment_content_type :attachment, :content_type => ['application/zip', 'application/octet-stream']
   
   attr_accessor :status
   
@@ -21,6 +22,9 @@ class Medias::Widget < Media
   
   before_save :set_attributes_if_not_present
   before_save :update_new_file
+  after_destroy :invalidate_cache
+  after_save :invalidate_cache
+  
   #after_destroy :delete_widget_folder # Will be done later, we currently need that all files keep unchanged so that existing documents still work
   
   # ====================
@@ -164,7 +168,14 @@ private
     attachment.queued_for_write[:original]
   end
   
+  def invalidate_cache
+    Rails.cache.delete("widget_#{self.uuid}")
+    if (self.system_name)
+      Rails.cache.delete("widget_#{self.system_name}")
+    end
+  end
 end
+
 
 
 
@@ -172,15 +183,18 @@ end
 #
 # Table name: medias
 #
-#  uuid        :string(36)      primary key
-#  type        :string(255)
-#  created_at  :datetime
-#  updated_at  :datetime
-#  properties  :text(16777215)
-#  user_id     :string(36)
-#  file        :string(255)
-#  system_name :string(255)
-#  title       :string(255)
-#  description :text
+#  uuid                    :string(36)      default(""), not null, primary key
+#  type                    :string(255)
+#  created_at              :datetime
+#  updated_at              :datetime
+#  properties              :text(16777215)
+#  user_id                 :string(36)
+#  attachment_file_name    :string(255)
+#  system_name             :string(255)
+#  title                   :string(255)
+#  description             :text
+#  attachment_content_type :string(255)
+#  attachment_file_size    :integer(4)
+#  attachment_updated_at   :datetime
 #
 

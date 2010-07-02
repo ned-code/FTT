@@ -9,13 +9,29 @@ WebDoc.ITEM_TYPE_HTML    = "html";
 
 WebDoc.Item = $.klass(WebDoc.Record, 
 {
+  CLASS_TYPE_BACKGROUND: 'background',
+  CLASS_TYPE_BORDER: 'border',
+  CLASS_TYPE_COLOR: 'color',
+  CLASS_TYPE_FONT: 'font',
+  CLASS_TYPE_OTHER: 'other',
+
   initialize: function($super, json, page, media) {
     this.page = page;
     this.media = media;
+
+    this._classes = new Array();
+    this._classes[this.CLASS_TYPE_BACKGROUND] = '';
+    this._classes[this.CLASS_TYPE_BORDER]     = '';
+    this._classes[this.CLASS_TYPE_COLOR]      = '';
+    this._classes[this.CLASS_TYPE_FONT]       = '';
+    this._classes[this.CLASS_TYPE_OTHER]      = '';
+
+    this._isPlaceholder = false;
+
     $super(json);
     if (!json) {
       this.data.data = { preference: {}};
-    }
+    }    
   },
   
   getPage: function() {
@@ -26,32 +42,117 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.page = page;
   },
 
-  /*
-   * set a class to the item. a optional class type can be passed (like border or background)
-   */
-  setClass: function(newClass, classType) {
-    ddd('item setClass class:'+newClass+' type:'+classType);
-    var need_save = false;
+  /***************************************/
+  /** Classes                            */
+  /***************************************/
 
-    if(classType === undefined || classType === 'class') {
-      if (newClass !== this.data.data[classType]) {
-        this.data.data['class'] = newClass;
-        need_save = true;
+  // scope is optional
+  // save optional, saved by default  
+  setClass: function(newClass, scope, save) {
+    if(newClass) {
+      var needSave = false;
+
+      if(!scope) {
+        scope = this._getClassType(newClass);  
       }
+
+      if(this.getClassThemeTypeAllowed().indexOf(scope) !== null) {
+        if(this._classes[scope] !== newClass) {
+          this._classes[scope] = newClass;
+          needSave = true;
+        }
+      }
+      else {
+        if(this._classes['other'] !== newClass) {
+          this._classes['other'] = newClass;
+          needSave = true;
+        }
+      }
+      this.data.data['class'] = this.getClass();
+      this.fireObjectChanged({ modifedAttribute: 'class' });
+      
+      if((save === undefined || save === true ) && needSave) {
+        this.save();
+      }
+    }
+  },
+
+  clearClass: function(scope) {
+    if(this.getClassThemeTypeAllowed().indexOf(scope) !== null) {
+      if(this._classes[scope]) {
+        this._classes[scope] = '';
+        this.data.data['class'] = this.getClass();
+        this.fireObjectChanged({ modifedAttribute: 'class' });
+        this.save();
+      }
+    }
+  },
+
+  // optional scope, if not: all classes returned
+  getClass: function(scope) {
+    if(!scope) {
+      var classes = '';
+      for (var i in this._classes) {
+        classes += this._classes[i]+' ';
+      }
+      return classes;
     }
     else {
-      if (!this.data.data.classes || newClass !== this.data.data.classes[classType]) {
-        if(!this.data.data.classes) {
-          this.data.data.classes = {};
-        }
-        this.data.data.classes[classType] = newClass;
-        need_save = true;
-      }
+      return this._classes[scope] || '';
     }
+  },
 
-    if(need_save) {
-      this.fireObjectChanged({ modifedAttribute: 'class' });
-      this.save();
+  getClassThemeTypeAllowed: function() {
+    return [
+            this.CLASS_TYPE_BACKGROUND,
+            this.CLASS_TYPE_BORDER,
+            this.CLASS_TYPE_COLOR,
+            this.CLASS_TYPE_FONT
+    ];
+  },
+
+  _getClassesArrayFromData: function() {
+    if(this.data.data && this.data.data['class']) {
+      return this.data.data['class'].split(' ');
+    }
+    else {
+      return new Array();
+    }
+  },
+
+  _getClassType: function(className) {
+    var type = 'other';
+    if(className.match("^theme_background_.*")) {
+      type = 'background';
+    }
+    else if(className.match("^theme_border_.*")) {
+      type = 'border';
+    }
+    else if(className.match("^theme_color_.*")) {
+      type = 'color';
+    }
+    else if(className.match("^theme_font_.*")) {
+      type = 'font';
+    }
+    return type;
+  },
+
+  _refreshClasses: function() {
+    var classes = this._getClassesArrayFromData();
+    this._classes = {};
+    if(classes.length > 0) {
+      for(var aClassIndex in classes) {
+        var aClass = classes[aClassIndex]; 
+        if(aClass) {
+          var scope = this._getClassType(aClass);
+          if (!this._classes[scope]) {
+            this._classes[scope] = aClass;
+          }
+          else {
+            this._classes[scope] += " " + aClass;
+          }
+        }
+      }
     }
   },
 
@@ -65,8 +166,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
 
   getIsPlaceholder: function() {
     ddd('[item] get is placeholder');
-    var classesArray = this.getClassesArray();
-    if(classesArray.length > 0  && jQuery.inArray("placeholder", classesArray) !== -1){
+    if(this._isPlaceholder === true) {
       return true;
     }
     else {
@@ -74,36 +174,19 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
 
-  setIsPlaceholder: function(isPlaceholder) {
+  // save optional, saved by default
+  setIsPlaceholder: function(isPlaceholder, save) {
     ddd('[item] set is placeholder with ' + isPlaceholder);
-    var classesArray = this.getClassesArray();
-    if(isPlaceholder) {
-      if(classesArray.length === 0 || jQuery.inArray("placeholder", classesArray) === -1){
-        classesArray.push('placeholder');
-        this.data.data['class'] = classesArray.join(" ");
-        this.fireObjectChanged({ modifedAttribute: 'class' });
-        this.save();
-      }
+    if(isPlaceholder === true || isPlaceholder === 'true'){
+      this._isPlaceholder = true;
     }
     else {
-      if(classesArray.length > 0 && jQuery.inArray("placeholder", classesArray) !== -1){
-        var index = jQuery.inArray("placeholder", classesArray);
-        var part1 = classesArray.slice(0, index);
-        var part2 = classesArray.slice(index+1, classesArray.length);
-        classesArray = part1.concat(part2);
-        this.data.data['class'] = classesArray.join(" ");
-        this.fireObjectChanged({ modifedAttribute: 'class' });
-        this.save();
-      }
+      this._isPlaceholder = false;
     }
-  },
 
-  getClassesArray: function() {
-    if(this.data.data['class']) {
-      return this.data.data['class'].split(' ');
-    }
-    else {
-      return new Array();
+    if(save === undefined || save === true) {
+      this.data.data.is_placeholder = this.getIsPlaceholder();
+      this.save();
     }
   },
   
@@ -116,7 +199,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.page._itemZMoved(this);
   },
   
-  refresh: function($super, json) {
+  refresh: function($super, json, onlyMissingValues) {
     var refreshInnerHtml = false;
     var refreshPreferences = false;
     var refreshPositionZ = false;
@@ -124,27 +207,26 @@ WebDoc.Item = $.klass(WebDoc.Record,
     if (this.data && this.data.position && json.item.position != this.data.position) {
       refreshPositionZ = true;
     }
-    if (this.data && this.data.data && json.item.data.innerHTML != this.data.data.innerHTML) {
+    if (this.data && json.item.inner_html != this.data.inner_html) {
       refreshInnerHtml = true;
     }
     if (this.data.data && this.data.data.preference && json.item.data.preference && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
       refreshPreferences = true;
     }
     
-    $super(json);
+    $super(json, onlyMissingValues);
+
+    //TODO JBA Hack because sometime innerHtml is null but it comes a null string in database.
+    if (this.data.inner_html && this.data.inner_html === 'null') {
+      this.data.inner_html = null;
+    }
+    this.setIsPlaceholder(this.data.data.is_placeholder, false); 
+
+    this._refreshClasses();
+
     if (refreshInnerHtml) {
       this.fireDomNodeChanged();
     }
-    
-    // TODO: can remove this fecth. it ise used only for old item that were created before that inspector url is set in item properties.
-//    if (this.data.media_id && this.data.media_type == WebDoc.ITEM_TYPE_WIDGET) {
-//      WebDoc.ServerManager.getRecords(WebDoc.Widget, this.data.media_id, function(data) {
-//        if (data.length > 0) {
-//          this.media = data[0];
-//        }
-//      }.pBind(this));
-//    }
-    // END of to do
     
     if (refreshPreferences) {
       this.fireWidgetChanged();
@@ -322,11 +404,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
     return this.data.kind;  
   },
   
-  setInnerHtml: function(html, force) {
-    if (html != this.data.data.innerHTML || force) {
+  setInnerHtml: function(html, force, skipSave) {
+    if (html != this.data.inner_html || force) {
 	    // Force to wmode transparent if necessary
-      this.data.data.innerHTML = this.checkForceWMode(html);      
-      if (!(this.property("noIframe") === "true") && (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi))) {
+      this.data.inner_html = this.checkForceWMode(html);      
+      if (html.indexOf("<script") != -1 || html.match(/<html>(.|\n)*<\/html>/gi)) {
         ddd("replace tag");
         this.data.data.tag = "iframe";
         this.data.data.src = this.rootUrl() + "/items/" + this.uuid() + "?fullHTML=true";
@@ -334,15 +416,16 @@ WebDoc.Item = $.klass(WebDoc.Record,
         this.fireDomNodeChanged();
       }
       else {
-        if (this.data.data.tag == "iframe") {
+        if (this.data.data.tag === "iframe") {
           this.data.data.tag = "div";
           delete this.data.data.src;
-          this.save();
           this.fireDomNodeChanged();
         }
         else {
-          this.save();
           this.fireInnerHtmlChanged();
+        }
+        if (!skipSave) {
+          this.save();
         }
       }
 
@@ -350,7 +433,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   getInnerHtml: function() {
-    return this.data.data.innerHTML;
+    return this.data.inner_html;
   },
 
 
@@ -384,6 +467,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     newItem.data.media_type = this.data.media_type;
     newItem.data.media_id = this.data.media_id;
     newItem.data.kind = this.data.kind;
+    newItem.data.inner_html = this.data.inner_html;
     newItem.media = this.media;
     return newItem;
   },
@@ -417,7 +501,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   /***************************************/
  
   getInnerText: function() {
-    return this._removeHtmlTags(this.data.data.innerHTML);
+    return this._removeHtmlTags(this.data.inner_html);
   },
   
   _removeHtmlTags: function(str) {

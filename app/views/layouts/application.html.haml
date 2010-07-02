@@ -6,7 +6,7 @@
     %title= "webdoc - alpha #{yield(:title)}"
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :application, :media => 'all'
-    
+
   %body{ :class => controller_name }
     = render :partial => "layouts/main_toolbar"
     = yield

@@ -19,7 +19,7 @@ protected
   end
   
   def http_authenticate
-    if (Rails.env.production? || Rails.env.staging?) 
+    if request.remote_ip != '65.49.79.67' && Rails.env != 'test'
       authenticate_or_request_with_http_basic do |username, password|
         username == "wduser" && password == "wdalpha001"
       end

@@ -2,6 +2,10 @@ class DatastoreEntry < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
   
+  CONST_PROTECTION_LEVEL_PRIVATE = 0
+  CONST_PROTECTION_LEVEL_READ = 1
+  CONST_PROTECTION_LEVEL_READ_WRITE = 2
+  
   attr_accessible :ds_key, :ds_value, :uuid
   
   # ================
@@ -12,10 +16,37 @@ class DatastoreEntry < ActiveRecord::Base
   belongs_to :user
   
   named_scope :filter_with, lambda { |current_user, params|
-    conditions = {}
-    conditions[:ds_key]  = params[:key] if params.has_key?(:key)
-    conditions[:user_id] = current_user if current_user && params[:only_current_user] == 'true'
-    { :conditions => { :datastore_entries => conditions } }
+    #conditions = {}
+    #conditions[:ds_key]  = params[:key] if params.has_key?(:key)
+    #conditions[:user_id] = current_user if current_user && params[:only_current_user] == 'true'
+    #{ :conditions => { :datastore_entries => conditions } }
+    
+    conditions = Array.new
+    if current_user #can read if owner or is public read
+      if params[:only_current_user].present? && params[:only_current_user] == 'true'
+        conditions[0] = 'user_id = ?'
+        conditions << current_user  
+      else
+        conditions[0] = '(user_id = ? OR protection_level <> ?)'
+        conditions << current_user
+        conditions << CONST_PROTECTION_LEVEL_PRIVATE
+      end
+    else #no user, can only read if public read
+      if params[:only_current_user].present? && params[:only_current_user] == 'true'
+        conditions[0] = 'NULL IS NOT ?'
+        conditions << nil
+      else
+        conditions[0] = 'protection_level <> ?'
+        conditions << CONST_PROTECTION_LEVEL_PRIVATE
+      end
+    end
+    
+    if params[:key].present? #check a particular key?
+      conditions[0] += ' AND ds_key = ?'
+      conditions << params[:key]
+    end
+    
+    { :conditions => conditions }
   }
   
   # ===============
@@ -56,10 +87,11 @@ class DatastoreEntry < ActiveRecord::Base
     #check if the key already exists
     if params[:unique_key] == 'true'
       existing_key = DatastoreEntry.find(:first, :conditions => { :ds_key => params[:key], :item_id => item.uuid })
-      if existing_key && (existing_key.user_id == nil || (current_user && existing_key.user_id == current_user.uuid))
+      if existing_key && (existing_key.user_id == nil || existing_key.protection_level=CONST_PROTECTION_LEVEL_READ_WRITE || (current_user && existing_key.user_id == current_user.uuid))
         key_to_save = existing_key
       else
         key_to_save = DatastoreEntry.new
+        key_to_save.protection_level = params[:protection_level] != nil ? params[:protection_level] : 0;
       end
     else #record is not unique
       #is user connected
@@ -68,10 +100,12 @@ class DatastoreEntry < ActiveRecord::Base
         key_to_save = DatastoreEntry.find(:first,:conditions => { :ds_key => params[:key], :item_id => item.uuid, :user_id => current_user.uuid })
         unless key_to_save 
           key_to_save = DatastoreEntry.new
+          key_to_save.protection_level = params[:protection_level] != nil ? params[:protection_level] : 0;
         end
       else
         #TODO manage anonymous user
         key_to_save = DatastoreEntry.new
+        key_to_save.protection_level = params[:protection_level] != nil ? params[:protection_level] : 0;
       end
     end
     
@@ -123,16 +157,18 @@ class DatastoreEntry < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: datastore_entries
 #
-#  ds_key     :string(255)     not null
-#  ds_value   :text(16777215)  default(""), not null
-#  user_id    :string(36)
-#  created_at :datetime
-#  updated_at :datetime
-#  item_id    :string(36)
-#  uuid       :string(36)      primary key
+#  ds_key           :string(255)     not null
+#  ds_value         :text(16777215)  default(""), not null
+#  user_id          :string(36)
+#  created_at       :datetime
+#  updated_at       :datetime
+#  item_id          :string(36)
+#  uuid             :string(36)      default(""), not null, primary key
+#  protection_level :integer(4)      default(0), not null
 #
 

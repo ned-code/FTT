@@ -288,10 +288,10 @@ ul.individual li a {
   -moz-border-radius: 8px;
 }
 
-ul.individual li.images a {background:#555 url(/images/libraries/images_icon.png) no-repeat 50% 18px;}
-ul.individual li.videos a {background:#555 url(/images/libraries/videos_icon.png) no-repeat 50% 16px;}
-ul.individual li.apps a {background:#555 url(/images/libraries/apps_icon.png) no-repeat 50% 20px;}
-ul.individual li.web-browser a {background:#555 url(/images/libraries/browser_icon.png) no-repeat 50% 12px;}
+ul.individual li.images a {background:#555 url(../images/libraries/images_icon.png) no-repeat 50% 18px;}
+ul.individual li.videos a {background:#555 url(../images/libraries/videos_icon.png) no-repeat 50% 16px;}
+ul.individual li.apps a {background:#555 url(../images/libraries/apps_icon.png) no-repeat 50% 20px;}
+ul.individual li.web-browser a {background:#555 url(../images/libraries/browser_icon.png) no-repeat 50% 12px;}
 
 ul.individual li a:hover {
   background-color:#333;  

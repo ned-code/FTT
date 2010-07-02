@@ -14,4 +14,4 @@ WebDoc.UrlUtils = {
     }
     return consolidateSrc;
   }
-}
+};

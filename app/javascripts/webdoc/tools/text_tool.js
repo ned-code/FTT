@@ -37,9 +37,10 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_TEXT;
     newItem.data.data.tag = "div";
-    newItem.data.data['class'] = "empty";
-    newItem.data.data.innerHTML = "";
-    newItem.data.data.css = this.textboxCss;
+    newItem.setClass("empty", null, false);
+    newItem.setInnerHtml("", true, true);
+    newItem.data.data.css = {};
+    jQuery.extend(newItem.data.data.css, this.textboxCss); 
     //Create view    
     WebDoc.application.boardController.insertItems([newItem]);
     var createdItemView = WebDoc.application.boardController.currentPageView().itemViews[newItem.uuid()];
@@ -92,17 +93,17 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
 
     if (classValue && classValue === "empty") {
       this.textView.itemDomNode.addClass("empty");
-      if (this.textView.item.data.data['class'].indexOf('empty') < 0) {
-        this.textView.item.data.data['class'] = this.textView.item.data.data['class'] + " empty";
+      if (this.textView.item.getClass().indexOf('empty') < 0) {
+        this.textView.item.setClass(this.textView.item.data.data['class'] + " empty", null, false);
       }
     }
     else {
       this.textView.itemDomNode.removeClass("empty");
-      if (this.textView.item.data.data['class'].indexOf('empty') >= 0) {
-        this.textView.item.data.data['class'] = jQuery.string().gsub("empty", "", this.textView.item.data.data['class']);
+      if (this.textView.item.getClass().indexOf('empty') >= 0) {
+        this.textView.item.setClass(jQuery.string().gsub("empty", "", this.textView.item.getClass()), null, false);
       }
     }
-    this.textView.item.data.data.innerHTML = content;    
+    this.textView.item.setInnerHtml(content, false, true);    
     this.textView.itemDomNode.scrollTop(scrollTop);
     this.textView.item.fireInnerHtmlChanged();
     this.textView.item.save();        

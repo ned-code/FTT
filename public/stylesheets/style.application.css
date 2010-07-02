@@ -31,7 +31,7 @@ header {
     padding: 40px 0 0 116px;
     margin: 24px 1em 0 0;
     float: left;
-    background: url('/images/application/logo.png') no-repeat;
+    background: url('../images/application/logo.png') no-repeat;
 }
 
 .navbar {
@@ -332,7 +332,7 @@ header .index>li {
     -moz-border-radius:    0.6667em;
     border-radius:         0.6667em;
     background: #999999;
-    background-image: url('/images/pop-icons.png');
+    background-image: url('../images/pop-icons.png');
     background-position: -8px -72px;
 }
 #document_access_list li .delete:hover {
@@ -442,7 +442,6 @@ ul#widget-list li {
     overflow:hidden;
     margin-bottom: 0.8333em;
     font-size: 133.3333%;
-    background-color: black;
 }
 .webdoc-viewer-container>div {
     padding-top: 0 !important;
