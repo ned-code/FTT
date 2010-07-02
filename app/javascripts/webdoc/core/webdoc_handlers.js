@@ -121,15 +121,10 @@ WebDoc.handlers = {
     
     'theme-class':          function(e) {  },
     
-    'library-images-myimages': function(e) {
-      // Open the libraries
-      WebDoc.application.rightBarController.showLib(e);
-      // jQT is in the global namespace... Get it going to the right page
-      jQT.goTo('#images', 'slide');
-      // Then click the tab
-      // There must be a better way than this
-      //jQuery('#images').find('a.my_images').click();
-    },
+    'library-images-myimages': function(e) { 
+			WebDoc.application.rightBarController.showMediaBrowser();
+			WebDoc.application.mediaBrowserController.showMyContent();
+		},
     
     //'themes-chooser':       function(e) { WebDoc.application.themesController.openChooser(e); },
     'webdoc-duplicate':     function(e) { WebDoc.application.pageEditor.duplicateDocument(e); }
