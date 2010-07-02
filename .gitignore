@@ -2,6 +2,7 @@ nbproject
 spec/spec.opts.netbeans
 .project
 .DS_Store
+capybara-*.html
 log/*.log
 tmp/**/*
 tmp/*
