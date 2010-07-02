@@ -42,5 +42,6 @@ group :test do
   # brew install libffi
   gem 'capybara'
   gem 'selenium-webdriver'
+  gem 'launchy'
   
 end

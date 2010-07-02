@@ -1,40 +1,20 @@
 --- 
 dependencies: 
-  mongrel: 
+  annotate: 
     group: 
     - :development
+    version: ">= 0"
+  xmpp4r: 
+    group: 
+    - :default
     version: ">= 0"
   rails: 
     group: 
     - :default
     version: ~> 2.3.5
-  xmpp4r: 
-    group: 
-    - :default
-    version: ">= 0"
-  annotate: 
+  mongrel: 
     group: 
     - :development
-    version: ">= 0"
-  selenium-webdriver: 
-    group: 
-    - :test
-    version: ">= 0"
-  rack-debug: 
-    group: 
-    - :default
-    version: ">= 0"
-  haml: 
-    group: 
-    - :default
-    version: ">= 0"
-  uuidtools: 
-    group: 
-    - :default
-    version: ">= 0"
-  mysql: 
-    group: 
-    - :default
     version: ">= 0"
   sqlite3-ruby: 
     group: 
@@ -42,13 +22,33 @@ dependencies:
     version: = 1.2.5
     require: 
     - sqlite3
+  mysql: 
+    group: 
+    - :default
+    version: ">= 0"
+  uuidtools: 
+    group: 
+    - :default
+    version: ">= 0"
+  haml: 
+    group: 
+    - :default
+    version: ">= 0"
+  rack-debug: 
+    group: 
+    - :default
+    version: ">= 0"
+  selenium-webdriver: 
+    group: 
+    - :test
+    version: ">= 0"
   uuid: 
     group: 
     - :default
     version: ">= 0"
-  whenever: 
+  rspec: 
     group: 
-    - :default
+    - :test
     version: ">= 0"
   mime-types: 
     group: 
@@ -56,35 +56,23 @@ dependencies:
     version: ">= 0"
     require: 
     - mime/types
-  rspec: 
+  whenever: 
     group: 
-    - :test
-    version: ">= 0"
-  rspec-rails: 
-    group: 
-    - :test
+    - :default
     version: ">= 0"
   formtastic: 
     group: 
     - :default
     version: ">= 0"
-  capistrano-ext: 
+  rspec-rails: 
     group: 
-    - :development
+    - :test
     version: ">= 0"
-  erubis: 
+  factory_girl: 
     group: 
-    - :default
+    - :test
     version: ">= 0"
-  will_paginate: 
-    group: 
-    - :default
-    version: ">= 0"
-  paperclip: 
-    group: 
-    - :default
-    version: ">= 0"
-  json: 
+  jammit: 
     group: 
     - :default
     version: ">= 0"
@@ -92,31 +80,43 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  jammit: 
+  json: 
     group: 
     - :default
     version: ">= 0"
-  factory_girl: 
+  paperclip: 
     group: 
-    - :test
+    - :default
     version: ">= 0"
-  steak: 
+  will_paginate: 
     group: 
-    - :test
+    - :default
+    version: ">= 0"
+  erubis: 
+    group: 
+    - :default
+    version: ">= 0"
+  capistrano-ext: 
+    group: 
+    - :development
     version: ">= 0"
   bundler: 
     group: 
     - :default
     version: = 0.9.26
-  acl9: 
+  steak: 
     group: 
-    - :default
+    - :test
     version: ">= 0"
   i18n: 
     group: 
     - :default
     version: ">= 0"
-  warden: 
+  acl9: 
+    group: 
+    - :default
+    version: ">= 0"
+  aws-s3: 
     group: 
     - :default
     version: ">= 0"
@@ -126,21 +126,25 @@ dependencies:
     version: ">= 0"
     require: 
     - zip/zip
-  aws-s3: 
+  warden: 
     group: 
     - :default
     version: ">= 0"
-  nokogiri: 
+  launchy: 
     group: 
-    - :default
+    - :test
+    version: ">= 0"
+  capybara: 
+    group: 
+    - :test
     version: ">= 0"
   capistrano: 
     group: 
     - :development
     version: ">= 0"
-  capybara: 
+  nokogiri: 
     group: 
-    - :test
+    - :default
     version: ">= 0"
 specs: 
 - rake: 
@@ -214,6 +218,8 @@ specs:
     version: 0.3.2
 - columnize: 
     version: 0.3.1
+- configuration: 
+    version: 1.1.0
 - daemons: 
     version: 1.1.0
 - warden: 
@@ -243,6 +249,8 @@ specs:
     version: 0.4.4
 - json: 
     version: 1.4.3
+- launchy: 
+    version: 0.3.5
 - linecache: 
     version: "0.43"
 - macaddr: 
@@ -279,7 +287,7 @@ specs:
     version: 2.3.14
 - xmpp4r: 
     version: "0.5"
-hash: 24d11d91d66e1acdc4d0d1d93dbf54b6f43b5c14
+hash: b7f86e682bfae3e521a329dfb9dcca500b536a3e
 sources: 
 - Git: 
     uri: http://github.com/webdoc/devise.git
