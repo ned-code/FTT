@@ -49,7 +49,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
   
     // newItem.save();
   },
-  
+
   enterEditMode: function(textView) { //can be called on existing (selected) textView
     ddd("Text tool: entering edit mode");
 
@@ -85,6 +85,7 @@ WebDoc.TextTool = $.klass(WebDoc.Tool, {
     this.delegate.activateToolbar(false);
     var textViewToEdit = this.textView; 
     WebDoc.application.undoManager.registerUndo(function() {
+      WebDoc.application.boardController.selectItemViews([textViewToEdit]);
       WebDoc.application.boardController.editItemView(textViewToEdit);
     }.pBind(this));    
   },
