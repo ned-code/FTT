@@ -153,10 +153,17 @@ WebDoc.ImagesLibrary = $.klass(WebDoc.Library, {
           var image = new WebDoc.Image;
           image.data.remote_attachment_url = properties.url;
           image.save(function(persitedImage){
-            info.text("Done!");
-            setTimeout(function(){ info.fadeOut(500); }, 500);
-            setTimeout(function(){ li.hide(); info.remove(); link.show();  }, 1000);
-            this.refreshMyImages([persitedImage]);
+						if(persitedImage.data.attachment_file_name){
+            	info.text("Done!");
+            	setTimeout(function(){ info.fadeOut(500); }, 500);
+            	setTimeout(function(){ li.hide(); info.remove(); link.show();  }, 1000);
+            	this.refreshMyImages([persitedImage]);
+						}
+						else{
+							info.text("An error occurred during upload! ");
+							setTimeout(function(){ info.fadeOut(1500); }, 1000);
+            	setTimeout(function(){ li.hide(); info.remove(); link.show();  }, 1000);
+						}
           }.pBind(this));
           break;
       }
