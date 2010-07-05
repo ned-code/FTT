@@ -95,17 +95,17 @@ WebDoc.WebImagesSearch = $.klass({
 				  image.data.remote_attachment_url = properties.url;
 					image.data.favorites = 1;
 				  image.save(function(persitedImage){
-						if($('#media-browser-my-favorites').length){
-							WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data.properties, persitedImage.uuid(), 'my-favorites-images');
+						if(persitedImage.data.attachment_file_name){
+							if($('#media-browser-my-favorites').length){
+								WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data.properties, persitedImage.uuid(), 'my-favorites-images');
+							}
+				    	info.text("Done!");
 						}
-						//link.remove();
-				    info.text("Done!");
+						else{
+							info.text("An error occurred during upload! ");
+						}
 				  }.pBind(this));
 					break;
-				// remove_image_from_favorite is only used in my images !
-				// case 'remove_image_from_favorite':
-				// 	ddd('remove_image_from_favorite');	
-				// 	break;
       }
 
     }.pBind(this));
