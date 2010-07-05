@@ -468,6 +468,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     newItem.data.media_id = this.data.media_id;
     newItem.data.kind = this.data.kind;
     newItem.data.inner_html = this.data.inner_html;
+		newItem.data.position = this.data.position;
     newItem.media = this.media;
     return newItem;
   },
