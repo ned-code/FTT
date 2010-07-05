@@ -40,6 +40,11 @@ describe Medias::Image do
     image = Factory(:image, :attachment => nil, :remote_attachment_url => 'http://dragonartz.files.wordpress.com/2009/05/vector-kids-background-preview-by-dragonart.png%3Fw%3D495%26h%3D495')
     image.attachment_file_name == 'vector-kids-background-preview-by-dragonart.png'
   end
+  
+  describe 'download image with 404 error should not be valid' do
+    image = Factory.build(:image, :attachment => nil, :remote_attachment_url => 'http://urlthatisnotworking.com/imagenothere.png')
+    image.valid?.should == false
+  end
     
   describe 'properties should not be nil' do
     image = Factory(:image, :properties => nil)
