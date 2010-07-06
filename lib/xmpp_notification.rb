@@ -46,7 +46,9 @@ class XmppNotification
           xmpp_create_node(node)
           if (number_of_try < 1)
             continue = true;
-          end            
+          end 
+        rescue otherError
+          xmpp_connect
         end    
         number_of_try += 1
       end

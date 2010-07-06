@@ -176,7 +176,7 @@ class Page < ActiveRecord::Base
   # before_save
   def set_page_data
     if document.present?
-      default_css = { :width => document.formated_size[:width], :height => document.formated_size[:height] }
+      default_css = { :width => document.formated_size['width'], :height => document.formated_size['height'] }
       if (self.data)
         self.data[:css] ||= default_css
       else
