@@ -1,8 +1,10 @@
-<div id="packages_list">
+<div id="packages-list" class='packages-tab'>
   <ul>
     <% @themes.each do |t| %>
       <li>
-        <%= t.title %>
+        <a href='<%= t.uuid %>' >
+          <%= t.title %>
+        </a>
       </li>
     <% end %>
   </ul>

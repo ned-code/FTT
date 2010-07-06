@@ -42,7 +42,6 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 	
 	showPackages: function(){
 		this.showTab('#media-browser-packages');
-		this.themeElementsLibrary.showView();
 	},
 	
 	showApps: function(){

@@ -1,7 +1,6 @@
 class ThemesController < ApplicationController
   # before_filter :authenticate_user!
   
-  # GET /users
   def index
     @themes = Theme.last_version
     theme_json = @themes.map do |theme|
@@ -11,12 +10,11 @@ class ThemesController < ApplicationController
     end
     
     respond_to do |format|
-      format.html
+      format.html { render :layout => false }
       format.json {render :json =>theme_json}
     end
   end
   
-  # GET /users/:id
   def show
     if params[:id] == "default"
       @theme = Theme.default
