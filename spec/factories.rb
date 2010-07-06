@@ -49,6 +49,11 @@ Factory.define :widget, :class => Medias::Widget do |f|
   f.sequence(:system_name) { |n| "widget#{n}" }
 end
 
+Factory.define :image, :class => Medias::Image do |f|
+  f.attachment { File.open(Rails.root.join('spec','fixtures', 'image.jpg')) }
+  
+end
+
 Factory.define :datastore_entry do |f|
   f.ds_key           "vote"
   f.ds_value         "1"
