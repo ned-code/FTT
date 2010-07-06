@@ -7,6 +7,7 @@ WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
     $super(libraryId);
 		this._loadPackages();
 		this.detailsView = $('#package-details');
+		this.detailIframe = this.detailsView.find('iframe');
 		this.createHandlers(this.element, 'click', {'packages-list': function(e){ WebDoc.application.mediaBrowserController.packagesLibrary.showList(); } });
   },
 
@@ -14,13 +15,22 @@ WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
 		this._hideAll();
 		this.listView.show();
 	},
-
-	_setupDetailsView: function(){
-		
-	},
 	
-	_showDetailsView: function(){
+	_showDetailsView: function(uuid){
 		ddd('_showDetailsView');
+		this.showSpinner(this.detailsView);
+		this.detailIframe.attr('src', '');
+		$.ajax({
+      type: "GET",
+      url: '/themes/' + uuid,
+      success: function(data) {
+				ddd(data.theme);
+				this.detailIframe.attr('src', data.theme.elements_url);
+      }.pBind(this),
+      complete: function() {
+				this.hideSpinner(this.detailsView);
+      }.pBind(this)
+    });
 		this._hideAll();
 		this.detailsView.show();
 	},
@@ -39,8 +49,8 @@ WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
 
 		$("#packages-list ul li a").live("click", function (event) {
 			event.preventDefault();
-      //var properties = $(event.target).parent().find('img').data("properties");
-      this._showDetailsView();
+			var uuid = $(event.target).attr('href');
+      this._showDetailsView(uuid);
     }.pBind(this));
 	},
 	
