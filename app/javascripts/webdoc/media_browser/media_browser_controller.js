@@ -11,7 +11,8 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
   initialize: function() {
     this.webSearchController = new WebDoc.WebSearchController("media-browser-web");
 		this.appsLibrary = new WebDoc.AppsLibrary("media-browser-apps");
-		this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");
+		//this.themeElementsLibrary = new WebDoc.ThemeElementsLibrary("theme_elements");
+		this.packagesLibrary = new WebDoc.PackagesLibrary("media-browser-packages");
 		
 		this._loadMostUsedApps();
 		// just to preload the icon (so that it'll be immediately available at the first drag)
