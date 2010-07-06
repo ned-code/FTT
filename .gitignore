@@ -54,3 +54,4 @@ db/schema.rb
 *.LOCAL.*
 public/local/*
 public/themes/*/*.zip
+.externalToolBuilders/
