@@ -171,7 +171,12 @@ class Page < ActiveRecord::Base
   
   def items_attributes=(params={})
     params.each_value do |item_hash|
-      self.items << Item.new_with_uuid(item_hash)
+      previous_item = self.items.find_by_uuid(item_hash[:uuid])
+      if (previous_item)
+        previous_item.attributes = item_hash
+      else
+        self.items << Item.new_with_uuid(item_hash)  
+      end      
     end
   end
   

@@ -433,6 +433,9 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   getInnerHtml: function() {
+    if (this.data.inner_html && this.data.inner_html === 'null') {
+      return null
+    }
     return this.data.inner_html;
   },
 
