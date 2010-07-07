@@ -167,17 +167,47 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
 	setStyle: function(newStyle, scope){
-		if(jQuery.inArray(scope, this.CSS_AUTHORIZED_SCOPE) >= 0){
-			if(!this.data.data.style){
-				jQuery.extend(this.data.data, { style : {}});
+		ddd(newStyle);
+		if(scope){
+			if(jQuery.inArray(scope, this.CSS_AUTHORIZED_SCOPE) >= 0){
+				if(!this.getStyle()){
+					jQuery.extend(this.data.data, { style : {}});
+				}
+				var previousStyle = jQuery.extend({}, this.getStyle());
+				var that = this;
+				WebDoc.application.undoManager.registerUndo(function() {
+	  	    that.setStyle( previousStyle );
+	  	  });
+	  	
+				this.data.data.style[scope] = newStyle;
+				this.save();
+				this.fireObjectChanged({ modifedAttribute: 'style' });
 			}
-			this.data.data.style[scope] = newStyle;
+		}
+		else{
+			ddd('here');
+			this.data.data.style = newStyle;
 			this.save();
+			this.fireObjectChanged({ modifedAttribute: 'style' });
 		}
 	},
 	
 	getStyle: function(){
 		return this.data.data.style;
+	},
+	
+	getStyleString: function(){
+		var styleHash = this.getStyle();
+		var cssString = '';
+		
+		if(styleHash){
+			for(i=0; i < this.CSS_AUTHORIZED_SCOPE.length; i++){
+				if(styleHash[this.CSS_AUTHORIZED_SCOPE[i]]){
+					cssString += styleHash[this.CSS_AUTHORIZED_SCOPE[i]];
+				}
+			}
+		}
+		return cssString;
 	},
 
   getIsPlaceholder: function() {
