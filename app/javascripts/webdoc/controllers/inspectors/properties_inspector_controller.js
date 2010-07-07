@@ -12,7 +12,8 @@ WebDoc.PropertiesInspectorController = $.klass({
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
     .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ));
     
-    if (showBgColors) {
+		//Display the theme background color in inspector, useless with packages
+    if (false) { // if (showBgColors) We never display the theme background color
       WebDoc.application.boardController.themeNode.bind('load', jQuery.proxy(this, '_makeThemeBackgrounds'));
       this._themeBgColorsNode = jQuery('<ul/>', {'class': "icons-only thumbs backgrounds_index index"}).css('clear', 'both');
       this._themeBgState = false;

@@ -38,7 +38,8 @@
         this._page.setClass( themeClass );
       }.pBind(this));
       
-      WebDoc.application.boardController.themeNode.bind( 'load', this.makeThemeBackgrounds.pBind(this) );
+			//display the theme background color in inspector
+      //WebDoc.application.boardController.themeNode.bind( 'load', this.makeThemeBackgrounds.pBind(this) );
       
       jQuery("#external_page_url").bind("blur", this._updateExternalPageUrl.pBind(this));
       
@@ -63,17 +64,19 @@
           pass: handler[property],
           fail: function(error) {}
         });
-      })
-      .delegate('a[href=#layout]', 'click', jQuery.proxy( this, '_changeLayout' ))
-      .delegate('a[href=#layout_remove]', 'click', jQuery.proxy( this, '_removeLayout' ));
+      });
+			//used to change layout of a page, useless with package
+      // .delegate('a[href=#layout]', 'click', jQuery.proxy( this, '_changeLayout' ))
+      //       .delegate('a[href=#layout_remove]', 'click', jQuery.proxy( this, '_removeLayout' ));
       
       jQuery("#page_background_image_apply_all_button").bind("click", this._applyBackgroundToAllPages.pBind(this));
       jQuery('.page-remove-background-image').click(this._removeBackgroundImage.pBind(this));
       
       WebDoc.application.boardController.addCurrentPageListener(this);
       
-      this.currentPageChanged(); 
-      this.makeThemeBackgrounds();
+      this.currentPageChanged();
+			//display the theme background color in inspector, useless with package
+      //this.makeThemeBackgrounds();
       
       var footHeight = this.domNode.find('.foot>div').height();
       this.domNode
@@ -100,6 +103,7 @@
       this._checkEnableBackgroundControls();
      },
     
+		//load the themes background, useless with packages
     makeThemeBackgrounds: function(){
       ddd('[PageInspectorController] makeThemeBackgrounds');
       
@@ -161,11 +165,12 @@
         else {
            jQuery('#background_image_preview').hide();
         }
-        this._updateThemeDropDown();
+        //this._updateThemeDropDown();
       }
       this._initializingGui = false;
     },
   
+		//update the inspctor to show the layouts, useless with packages
     _updateThemeDropDown: function() {
       this._page.document.getTheme(function(theme) {
         var pageTheme, layouts, attrMap;

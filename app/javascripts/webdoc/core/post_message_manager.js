@@ -168,6 +168,11 @@ WebDoc.PostMessageManager = $.klass({
             selection.item.setStyle(parsedCss.cssString, parsedCss.scope);
           }
 					break;
+				case 'set_page_style':
+					var page = WebDoc.application.pageEditor.currentPage;
+					ddd('set_page_style');
+					//TODO 
+					break;
         case 'add_item':
           if(parsedUrl['params']['type']) {
             switch(parsedUrl['params']['type']) {

@@ -181,14 +181,14 @@ WebDoc.Item = $.klass(WebDoc.Record,
 	  	
 				this.data.data.style[scope] = newStyle;
 				this.save();
-				this.fireObjectChanged({ modifedAttribute: 'style' });
+				this.fireObjectChanged({ modifedAttribute: 'css' });
 			}
 		}
 		else{
 			ddd('here');
 			this.data.data.style = newStyle;
 			this.save();
-			this.fireObjectChanged({ modifedAttribute: 'style' });
+			this.fireObjectChanged({ modifedAttribute: 'css' });
 		}
 	},
 	

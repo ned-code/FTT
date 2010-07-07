@@ -158,11 +158,11 @@ WebDoc.ItemView = $.klass({
       }, 500);
     }
     
-    domNode.attr( 'style', this.item.getStyleString() ).css( wrapCss );
+    domNode.attr( 'style', '' ).css( wrapCss );
     
     // apply item css if needed (drawing item view has no item dom node)
     if (itemDomNode) {      
-      itemDomNode.attr( 'style', '' ).css( itemCss );
+      itemDomNode.attr( 'style', this.item.getStyleString()).css( itemCss );
     }
   },
   
@@ -208,9 +208,6 @@ WebDoc.ItemView = $.klass({
     }
     if (item._isAttributeModified(options, 'class')) {
       this._initItemClass();
-    }
-		if (item._isAttributeModified(options, 'style')) {
-     	this._initItemCss(true);
     }
     this.inspectorPanesManager.updateAttachedPanePositionAndContent(this);    
   },
