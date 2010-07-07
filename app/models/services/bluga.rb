@@ -4,8 +4,8 @@ class Services::Bluga
   USER_ID = 7115
   DEFAULT_WIDTH  = 640
   DEFAULT_HEIGHT = 480
-  WEBDOC_HOST = 'st-wd.webdoc.com'
-  # WEBDOC_HOST = 'dev1.webdoc.com'
+  # WEBDOC_HOST = 'st-wd.webdoc.com'
+  WEBDOC_HOST = 'dev1.webdoc.com'
 
   def initialize(options={})
     @api_key  = options[:api_key].present?  ? options[:api_key]  : API_KEY
@@ -19,7 +19,7 @@ class Services::Bluga
     page.thumbnail_request_at = Time.now
     if page.save
       begin
-        result = self.send("http://#{WEBDOC_HOST}/documents/#{page.document.uuid}/pages/#{page.uuid}?secure_token=#{page.thumbnail_secure_token}", "http://#{WEBDOC_HOST}/documents/#{page.document.uuid}/pages/#{page.uuid}/callback_thumbnail?secure_token=#{page.thumbnail_secure_token}")
+        result = self.send(page, "http://#{WEBDOC_HOST}/documents/#{page.document.uuid}/pages/#{page.uuid}?secure_token=#{page.thumbnail_secure_token}", "http://#{WEBDOC_HOST}/documents/#{page.document.uuid}/pages/#{page.uuid}/callback_thumbnail?secure_token=#{page.thumbnail_secure_token}")
         raise 'result send request false' if result == false
       rescue
         page.thumbnail_secure_token = nil
@@ -28,10 +28,10 @@ class Services::Bluga
     end
   end
   
-  def send(url, callback)
+  def send(page, url, callback)
     end_point_url = URI.parse(END_POINT)
     request = Net::HTTP::Post.new(end_point_url.path)
-    request.body = make_request_xml(url, callback)
+    request.body = make_request_xml(page, url, callback)
     result = Net::HTTP.new(end_point_url.host, end_point_url.port).start {|h| h.request(request) }
     if result.class == Net::HTTPOK
       return true
@@ -47,7 +47,7 @@ class Services::Bluga
       job_id_length = job_id.length
       job_path = job_id[job_id_length-2..job_id_length] +'/'+ job_id[job_id_length-4..job_id_length-3] +'/'+ job_id[job_id_length-6..job_id_length-5] +'/'
       
-      page.remote_thumbnail_url = 'http://webthumb.bluga.net/data/'+job_path+job_id+'-thumb_large.jpg';
+      page.remote_thumbnail_url = 'http://webthumb.bluga.net/data/'+job_path+job_id+'-thumb_custom.jpg';
       page.thumbnail_need_update = false
       page.thumbnail_secure_token = nil
       page.thumbnail_request_at = nil
@@ -57,15 +57,18 @@ class Services::Bluga
     end
   end
 
-  def make_request_xml(url, callback)
+  def make_request_xml(page, url, callback)
     builder = Builder::XmlMarkup.new
+    size = page.calc_thumbnail_frame_size
+    thumb_size = Page.calc_thumbnail_size(size)
     xml = builder.webthumb do |wt|
       wt.apikey(@api_key)
       wt.request do |r|
         r.url(url)
         r.notify(callback)
-        r.width(@width)
-        r.height(@height)
+        r.width(size[:width])
+        r.height(size[:height])
+        r.customThumbnail(:width => thumb_size[:width], :height => thumb_size[:height])
         r.delay(15)
       end
     end
