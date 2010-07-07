@@ -95,9 +95,11 @@ WebDoc.PropertiesInspectorController = $.klass({
     var selectedItem = WebDoc.application.boardController.selection()[0];
     
     if ( selectedItem ) {
+			
       var css = selectedItem.css(),
           fields = this.fields,
-          key, field, value;
+          key, field, value,
+					style = selectedItem.getStyle();
       
       for ( key in fields ) {
         field = fields[key];
@@ -111,6 +113,11 @@ WebDoc.PropertiesInspectorController = $.klass({
         else if ( css[key] ) {
           field.val( css[key] );
         }
+				// else if(key == 'backgroundColor'){
+				// 	if(style.background){
+				// 		
+				// 	}
+				//}
         // when the css value is inherited, clear the field
         // and set its placeholder
         else {
@@ -141,14 +148,20 @@ WebDoc.PropertiesInspectorController = $.klass({
         // processes the value and gives us some CSS...
         if ( self.properties[property] && self.properties[property].input ) {
           cssObj = self.properties[property].input( value );
+					item.changeCss( cssObj );
         }
         // Otherwise we use the value directly
         else {
-          cssObj = {};
-          cssObj[property] = value;
+					if(property == 'backgroundColor'){
+						var cssString = 'background-color:' + value + ';';
+						item.setStyle(cssString,'background');
+					}
+					else{
+						cssObj = {};
+	          cssObj[property] = value;
+						item.changeCss( cssObj );
+					}
         }
-        
-        item.changeCss( cssObj );
       },
       fail: function( value, error ){
         var type = field.attr('data-type') || field.attr('type');
