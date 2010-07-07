@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<theme version="0.7" thumbnail="images/theme_thumb_dark.png" elements="inspector_dark.html">
+<theme version="0.7" thumbnail="images/theme_thumb_light.png" elements="inspector_light.html">
   
-  <title>Webdoc Dark</title>
+  <title>Webdoc Default</title>
   
   <author href="http://webdoc.com" email="stephband@webdoc.com">Stephen Band</author>
   
   <styles>
     <style src="css/typography.css" />
-    <style src="css/colors.dark.css" />
-    <style src="css/theme.dark.css" />
+    <style src="css/colors.light.css" />
+    <style src="css/theme.light.css" />
     <style src="css/layouts.css" />
   </styles>
   

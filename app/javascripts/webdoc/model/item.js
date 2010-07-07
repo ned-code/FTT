@@ -15,6 +15,8 @@ WebDoc.Item = $.klass(WebDoc.Record,
   CLASS_TYPE_FONT: 'font',
   CLASS_TYPE_OTHER: 'other',
 
+	CSS_AUTHORIZED_SCOPE: [ "background", "border", "color", "font", "other"],
+
   initialize: function($super, json, page, media) {
     this.page = page;
     this.media = media;
@@ -163,6 +165,20 @@ WebDoc.Item = $.klass(WebDoc.Record,
       this.save();
     }
   },
+
+	setStyle: function(newStyle, scope){
+		if(jQuery.inArray(scope, this.CSS_AUTHORIZED_SCOPE) >= 0){
+			if(!this.data.data.style){
+				jQuery.extend(this.data.data, { style : {}});
+			}
+			this.data.data.style[scope] = newStyle;
+			this.save();
+		}
+	},
+	
+	getStyle: function(){
+		return this.data.data.style;
+	},
 
   getIsPlaceholder: function() {
     ddd('[item] get is placeholder');

@@ -61,6 +61,7 @@ WebDoc.PostMessageManager = $.klass({
         this.processMessage(event.data);
       } 
       catch (Exception) {
+				ddd(Exception);
         ddd("not a message for me");
         WebDoc.appsMessagingController.processMessage(event);
       }
@@ -83,12 +84,44 @@ WebDoc.PostMessageManager = $.klass({
     }
     return array;
   },
+	
+	/*
+		Return a an hash with scope and string that contain the inline CSS
+	*/
+	parseCSSUrl: function(url){
+		ddd('parseCSSUrl');
+		url = url.replace(/[\n\r\t]/g,''); //Remove NewLine, CarriageReturn and Tab characters from a String
+		url = url.split(' ').join(''); 		//remove spaces
+		url = url.slice(1,url.length);    //remove the first #
+		var cssHash = {
+			scope: '',
+			cssString: ''
+		};
+		
+		var url_array = url.split("?");
+		var params_array = url_array[1].split('&');
+		
+		for(i=0;i<params_array.length;i++){
+      keyValue = params_array[i].split("=");
+			if(keyValue[0] == 'scope'){
+				cssHash.scope = keyValue[1];
+			}
+			else{
+				if(!this.ILLEGALCSSPARAMS[keyValue[0]]){
+					cssHash.cssString += keyValue[0] + ": " + keyValue[1];
+				}
+			}
+    }
+		return cssHash;
+	},
 
   /*
    * Process an action with a optional position
    */
   processMessage: function(action, pos) {
     var parsedUrl = this.parseUrl(action);
+		var parsedCss = this.parseCSSUrl(decodeURI(action));
+		
     if(parsedUrl['action']) {
       ddd('[post message manager] action ' + parsedUrl['action']);
       switch(parsedUrl['action']) {
@@ -129,6 +162,12 @@ WebDoc.PostMessageManager = $.klass({
             selection.item.addCss(cssParams);
           }
           break;
+				case 'set_item_style':
+					var selection = WebDoc.application.boardController.selection()[0];
+					if(selection && selection.item) {
+            selection.item.setStyle(parsedCss.cssString, parsedCss.scope);
+          }
+					break;
         case 'add_item':
           if(parsedUrl['params']['type']) {
             switch(parsedUrl['params']['type']) {
@@ -152,12 +191,14 @@ WebDoc.PostMessageManager = $.klass({
   },
 
   getCssParams: function(params) {
+		ddd('params: ' + params);
     var cssArray = new Array();
     for (param in params) {
-      if ( !ILLEGALCSSPARAMS[param] ) {
+      if ( !this.ILLEGALCSSPARAMS[param] ) {
         cssArray[param] = params[param];
       }
     }
+		ddd('cssArray: ' + cssArray);
     return cssArray;
   }
 
