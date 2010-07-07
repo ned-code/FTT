@@ -4,7 +4,7 @@
 <%= include_stylesheets :page_viewer, :media => 'all' %>
 
 <div class="content">
-  <div id="static_page_content" class="wrap" style="width:640px; height:480px;background-color: white;position: relative;">
+  <div id="static_page_content" class="wrap" style="width:<%= @page.data[:css][:width] %>; height: <%= @page.data[:css][:height] %>;background-color: blue;position: relative;">
     <div class="loading-icon"></div>
   </div>
 </div>
