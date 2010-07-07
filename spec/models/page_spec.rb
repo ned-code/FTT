@@ -50,7 +50,7 @@ describe Page do
       page = document.pages.create
       page.data.should == { :css => { :width => document.size[:width]+"px", :height => document.size[:height]+"px" } }
     end
-  end
+  end  
   
 end
 

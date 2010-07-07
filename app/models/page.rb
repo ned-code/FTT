@@ -29,13 +29,9 @@ class Page < ActiveRecord::Base
 
   attr_accessor_with_default :touch_document_active, true
   
-#  serialize :data
   composed_of :data, :class_name => 'Hash', :mapping => %w(data to_json),
-                         :constructor => PageJsonHelper.method(:decode_json_and_yaml),
-                         :converter   => PageJsonHelper.method(:decode_json_and_yaml)  
-  
-  # see XmppPageObserver
-  attr_accessor_with_default :must_notify, false
+                         :constructor => PageJsonHelper.method(:decode_json_and_yaml)
+
   attr_accessor_with_default :deep_notify, false
 
   attr_accessor :remote_thumbnail_url
@@ -197,11 +193,14 @@ class Page < ActiveRecord::Base
   # before_save
   def set_page_data
     if document.present?
-      default_css = { 'width' => document.formated_size['width'], 'height' => document.formated_size['height'] }
+      default_css = { 'css' => { 'width' => document.formated_size['width'], 'height' => document.formated_size['height'] }}
       if (self.data)
-        self.data['css'] ||= default_css
+        # TODO remove this temporary hack. (:css) it is to allow conversion of old previous data hash that was stored in rails yml
+        if (self.data['css'].nil?)
+          self.data = default_css
+        end
       else
-        self.data = { 'css' =>  default_css }
+        self.data = default_css
       end
     end
   end

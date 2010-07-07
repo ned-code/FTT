@@ -1,7 +1,13 @@
 class ConvertPageDataToJson < ActiveRecord::Migration
   def self.up
     Page.all.each do |page|
-      page.update_attribute(:data, page.data)
+      unless (page.data.nil?)
+        begin
+          page.update_attribute(:data, page.data)
+        rescue => e
+          p "error #{e}"
+        end      
+      end
     end    
   end
 

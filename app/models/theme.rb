@@ -112,16 +112,12 @@ class Theme < ActiveRecord::Base
           raise(ActiveRecord::RecordInvalid) unless ancestor_theme.save(false)
         end
 
-        begin
           extract_files_from_zip_file
           create_parsed_style
           for layout_saved in self.layouts
             layout_saved.create_model_page!
           end
-        rescue Exception => e
-          self.errors.add(:attachment, "Error: #{e}")
-          raise ActiveRecord::Rollback
-        end
+
         saved = true
       end
     else

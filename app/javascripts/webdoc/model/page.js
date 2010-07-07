@@ -267,9 +267,31 @@ WebDoc.Page = $.klass(WebDoc.Record,
     return this.data.data.css.backgroundImage && this.data.data.css.backgroundImage;
   },
   
+  initSize: function() {
+    if (!this.data.data) {
+      this.data.data = {};
+    }
+    if (!this.data.data.css) {
+      this.data.data.css = {};
+    }
+    if (!this.data.data.css.width) {
+      this.data.data.css.width = this.document.data.size.width;
+      if (!this.data.data.css.width.match(/px|\%/)) {
+        this.data.data.css.width += "px";
+      }
+    }
+    if (!this.data.data.css.height) {
+      this.data.data.css.height = this.document.data.size.height;
+      if (!this.data.data.css.height.match(/px|\%/)) {
+        this.data.data.css.height += "px";
+      }      
+    }    
+  },
+  
   refresh: function($super, json, onlyMissingValues) {
     this._layout = undefined;
     $super(json, onlyMissingValues);
+    this.initSize();    
     this._refreshClasses();
     // if recieved json contains items then we create all items records.
     // if json does not contains items we leave all previous items as they were

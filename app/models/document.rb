@@ -1,10 +1,13 @@
 module DocumentJsonHelper
   def self.decode_json_and_yaml(value)
-    begin
-      return ActiveSupport::JSON.decode(value)
-    rescue
-      return YAML.load(value)
-    end  
+    unless(value.nil?)
+      begin
+        return ActiveSupport::JSON.decode(value)
+      rescue
+        return YAML.load(value)
+      end  
+    end
+    return nil
   end
 end
 
@@ -18,11 +21,6 @@ class Document < ActiveRecord::Base
   composed_of :size, :class_name => 'Hash', :mapping => %w(size to_json),
                          :constructor => DocumentJsonHelper.method(:decode_json_and_yaml),
                          :converter   => DocumentJsonHelper.method(:decode_json_and_yaml)
-
-
-  
-  # see XmppDocumentObserver  
-  attr_accessor_with_default :must_notify, false
   
   # ================
   # = Associations =

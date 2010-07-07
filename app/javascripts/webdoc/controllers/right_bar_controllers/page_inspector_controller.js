@@ -140,8 +140,8 @@
     _updatePageRelatedFields: function() {
       this._initializingGui = true; 
       jQuery("#page_title").val( this._page.data.title == "undefined" ? "enter a title" : this._page.data.title );
-      jQuery("#page_height")[0].value = this._page.data.data.css.height; 
-      jQuery("#page_width")[0].value = this._page.data.data.css.width; 
+      jQuery("#page_height")[0].value = this._page.height(); 
+      jQuery("#page_width")[0].value = this._page.width(); 
       if(this._page.data.data.externalPageUrl) {
         this._externalPageControls.show();
         this._backgroundControls.hide();

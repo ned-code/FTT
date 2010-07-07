@@ -601,7 +601,7 @@ WebDoc.BoardController = jQuery.klass({
     newItem.data.media_id = widgetData.uuid;
     newItem.data.data.tag = "iframe";
     newItem.data.data.src = widgetData.properties.index_url;
-    newItem.data.data.properties = {
+    newItem.data.properties = {
       inspector_url: widgetData.properties.inspector_url
     };
     if(!position) { position = this.getBoardCenterPoint();}
@@ -657,7 +657,7 @@ WebDoc.BoardController = jQuery.klass({
     newItem.data.media_id = videoWidget.uuid();
     newItem.data.data.tag = "iframe";
     newItem.data.data.src = videoWidget.data.properties.index_url;
-    newItem.data.data.properties = {
+    newItem.data.properties = {
       inspector_url: videoWidget.data.properties.inspector_url
     };
     newItem.data.data.css = {
@@ -666,7 +666,7 @@ WebDoc.BoardController = jQuery.klass({
       width: width + "px",
       height: height + "px"
     };
-    newItem.data.data.preference.url = videoProperties.video_id;
+    newItem.data.preferences.url = videoProperties.video_id;
     this.insertItems([newItem]);
   },
   

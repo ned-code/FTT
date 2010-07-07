@@ -8,10 +8,7 @@ describe Item do
     before do
       Factory(:theme_without_upload)
     end
-    
-    it "should not notify by default" do
-      subject.must_notify.should be_false
-    end
+
   end
   
 end

@@ -30,8 +30,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
 
     $super(json);
     if (!json) {
-      this.data.data = { preference: {}};
+      this.data.data = {};
     }    
+    if (!this.data.preferences || this.data.preferences == 'null') {
+      this.data.preferences = {};
+    }
   },
   
   getPage: function() {
@@ -210,7 +213,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     if (this.data && json.item.inner_html != this.data.inner_html) {
       refreshInnerHtml = true;
     }
-    if (this.data.data && this.data.data.preference && json.item.data.preference && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
+    if (this.data.preferences && json.item.preferences && $.toJSON(this.data.preferences) != $.toJSON(json.item.preferences)) {
       refreshPreferences = true;
     }
     
@@ -257,25 +260,25 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   getProperty: function(key) {
-    if (this.data.data.properties) {
-      return this.data.data.properties[key];
+    if (this.data.properties) {
+      return this.data.properties[key];
     }
     return null;
   },
   
   // TMP hack
   property: function(key) {
-    if (this.data.data.properties) {
-      return this.data.data.properties[key];
+    if (this.data.properties) {
+      return this.data.properties[key];
     }
     return null;
   },
   
   setProperty: function(key, value) {
-    if (!this.data.data.properties) {
-      this.data.data.properties = {};
+    if (!this.data.properties) {
+      this.data.properties = {};
     }
-    this.data.data.properties[key] = value;
+    this.data.properties[key] = value;
     this.fireObjectChanged({ modifedAttribute: 'properties' });
   },
   
@@ -494,8 +497,8 @@ WebDoc.Item = $.klass(WebDoc.Record,
   /** widget item                        */
   /***************************************/
   getInspectorUrl: function() {
-    if (this.data.data.properties && this.data.data.properties.inspector_url) {
-      return this.data.data.properties.inspector_url;
+    if (this.data.properties && this.data.properties.inspector_url) {
+      return this.data.properties.inspector_url;
     }
     return null;      
   },
