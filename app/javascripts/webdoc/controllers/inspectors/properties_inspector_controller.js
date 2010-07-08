@@ -114,6 +114,9 @@ WebDoc.PropertiesInspectorController = $.klass({
 				 else if(key == 'backgroundColor'){
 					field.val( selectedItem.item.getStylePropertyByScopeAndPropertyName('background', 'background-color'));
 				}
+				else if(key == 'borderRadius'){
+					field.val( selectedItem.item.getStylePropertyByScopeAndPropertyName('border', 'border-radius'));
+				}
         // when the css value is inherited, clear the field
         // and set its placeholder
         else {
@@ -149,8 +152,10 @@ WebDoc.PropertiesInspectorController = $.klass({
         // Otherwise we use the value directly
         else {
 					if(property == 'backgroundColor'){
-						var cssString = 'background-color:' + value + ';';
-						item.setStyle(cssString,'background');
+						item.setStylePropertyByScopeAndProperty('background','background-color',value);
+					}
+					else if(property == 'borderRadius'){
+						item.setStyleBorderRadius(value);
 					}
 					else{
 						cssObj = {};

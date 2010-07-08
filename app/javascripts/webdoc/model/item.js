@@ -15,7 +15,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
   CLASS_TYPE_FONT: 'font',
   CLASS_TYPE_OTHER: 'other',
 
-	CSS_AUTHORIZED_SCOPE: [ "background", "border", "color", "font", "other"],
 
   initialize: function($super, json, page, media) {
     this.page = page;
@@ -167,9 +166,8 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
 	setStyle: function(newStyle, scope){
-		ddd(newStyle);
 		if(scope){
-			if(jQuery.inArray(scope, this.CSS_AUTHORIZED_SCOPE) >= 0){
+			if(jQuery.inArray(scope, this.page.CSS_AUTHORIZED_SCOPE) >= 0){
 				if(!this.getStyle()){
 					jQuery.extend(this.data.data, { style : {}});
 				}
@@ -185,7 +183,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
 			}
 		}
 		else{
-			ddd('here');
 			this.data.data.style = newStyle;
 			this.save();
 			this.fireObjectChanged({ modifedAttribute: 'css' });
@@ -201,9 +198,9 @@ WebDoc.Item = $.klass(WebDoc.Record,
 		var cssString = '';
 		
 		if(styleHash){
-			for(i=0; i < this.CSS_AUTHORIZED_SCOPE.length; i++){
-				if(styleHash[this.CSS_AUTHORIZED_SCOPE[i]]){
-					cssString += styleHash[this.CSS_AUTHORIZED_SCOPE[i]];
+			for(i=0; i < this.page.CSS_AUTHORIZED_SCOPE.length; i++){
+				if(styleHash[this.page.CSS_AUTHORIZED_SCOPE[i]]){
+					cssString += styleHash[this.page.CSS_AUTHORIZED_SCOPE[i]];
 				}
 			}
 		}
@@ -213,7 +210,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
 	getStylePropertyByScopeAndPropertyName: function(scope, property_name){
 		var styleHash = this.getStyle();
 		var propertyArray;
-		if(styleHash[scope]){
+		if(styleHash && styleHash[scope]){
 			var styleArray = styleHash[scope].split(';');
 			for(i=0;i<styleArray.length;i++){
 				propertyArray = styleArray[i].split(':');
@@ -224,7 +221,47 @@ WebDoc.Item = $.klass(WebDoc.Record,
 		}
 		return '';
 	},
-
+	
+	setStylePropertyByScopeAndProperty: function(scope, property_name, property_value){
+		ddd('setStylePropertyByScopeAndProperty');
+		var styleHash = this.getStyle();
+		var propertyArray;
+		var property = property_name + ':' + property_value + ';';
+		
+		if(styleHash && styleHash[scope]){
+			ddd('already hash with scope');
+			var styleString = '';
+			var styleArray = styleHash[scope].split(';');
+			for(i=0;i<styleArray.length;i++){
+				propertyArray = styleArray[i].split(':');
+				if(styleArray[i] !== ''){
+					if(propertyArray[0] == property_name){
+						styleString += property;
+					}
+					else{
+						styleString += propertyArray[0] + ':' + propertyArray[1] +';';
+					}
+					styleHash[scope] = styleString;
+				}
+			}
+		}
+		else if(styleHash){
+			styleHash[scope] = property;
+		}
+		else{
+			jQuery.extend(this.data.data, { style : {}});
+			this.data.data.style[scope] = property;
+		}
+		this.save();
+		this.fireObjectChanged({ modifedAttribute: 'css' });
+	},
+	
+	setStyleBorderRadius: function(radius){
+		this.setStylePropertyByScopeAndProperty('border', '-webkit-border-radius', radius);
+		this.setStylePropertyByScopeAndProperty('border', '-moz-border-radius', radius);
+		this.setStylePropertyByScopeAndProperty('border', 'border-radius', radius);
+	},
+	
   getIsPlaceholder: function() {
     ddd('[item] get is placeholder');
     if(this._isPlaceholder === true) {

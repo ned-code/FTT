@@ -90,6 +90,7 @@ WebDoc.PostMessageManager = $.klass({
 	*/
 	parseCSSUrl: function(url){
 		ddd('parseCSSUrl');
+		ddd(url)
 		url = url.replace(/[\n\r\t]/g,''); //Remove NewLine, CarriageReturn and Tab characters from a String
 		url = url.split(' ').join(''); 		//remove spaces
 		url = url.slice(1,url.length);    //remove the first #
@@ -112,6 +113,7 @@ WebDoc.PostMessageManager = $.klass({
 				}
 			}
     }
+		ddd(cssHash);
 		return cssHash;
 	},
 
@@ -169,9 +171,8 @@ WebDoc.PostMessageManager = $.klass({
           }
 					break;
 				case 'set_page_style':
-					var page = WebDoc.application.pageEditor.currentPage;
 					ddd('set_page_style');
-					//TODO 
+					WebDoc.application.pageEditor.currentPage.setStyle(parsedCss.cssString, parsedCss.scope);
 					break;
         case 'add_item':
           if(parsedUrl['params']['type']) {

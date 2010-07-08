@@ -13,6 +13,8 @@ WebDoc.Page = $.klass(WebDoc.Record,
   CLASS_TYPE_COLOR: 'color',
   CLASS_TYPE_FONT: 'font',
   CLASS_TYPE_OTHER: 'other',
+
+	CSS_AUTHORIZED_SCOPE: [ "background", "border", "color", "font", "other"],
     
   initialize: function($super, json, document, externalPageUrl) {
     // initialize relationship before super.
@@ -658,6 +660,58 @@ WebDoc.Page = $.klass(WebDoc.Record,
       this.save();
     }
   },
+	
+	setStyle: function(newStyle, scope){
+		if(scope == 'background'){
+			var backgroundArray = newStyle.split(';');
+			var backgroundProperty;
+			for(i=0;i<backgroundArray.length;i++){
+				backgroundProperty = backgroundArray[i].split(':');
+				if(backgroundProperty[0] == 'background-image'){
+					this.setBackgroundImage(backgroundProperty[1]);
+				}
+			}
+		}
+		// if(scope){
+		// 	if(jQuery.inArray(scope, this.CSS_AUTHORIZED_SCOPE) >= 0){
+		// 		if(!this.getStyle()){
+		// 			jQuery.extend(this.data.data, { style : {}});
+		// 		}
+		// 		var previousStyle = jQuery.extend({}, this.getStyle());
+		// 		var that = this;
+		// 		WebDoc.application.undoManager.registerUndo(function() {
+		// 	  	    that.setStyle( previousStyle );
+		// 	  	  });
+		// 	  	
+		// 		this.data.data.style[scope] = newStyle;
+		// 		this.save();
+		// 		this.fireObjectChanged({ modifedAttribute: 'css' });
+		// 	}
+		// }
+		// else{
+		// 	this.data.data.style = newStyle;
+		// 	this.save();
+		// 	this.fireObjectChanged({ modifedAttribute: 'css' });
+		// }
+	},
+	
+	getStyle: function(){
+		return this.data.data.style;
+	},
+	
+	getStyleString: function(){
+		var styleHash = this.getStyle();
+		var cssString = '';
+		
+		if(styleHash){
+			for(i=0; i < this.CSS_AUTHORIZED_SCOPE.length; i++){
+				if(styleHash[this.CSS_AUTHORIZED_SCOPE[i]]){
+					cssString += styleHash[this.CSS_AUTHORIZED_SCOPE[i]];
+				}
+			}
+		}
+		return cssString;
+	},
 
   save: function($super, callBack, withRelationships, synch) {
     $super(function(page, status) {
