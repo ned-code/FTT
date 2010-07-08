@@ -248,23 +248,44 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
   },
 
+	setBackground: function(backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition){
+		this.setBackgroundColor(backgroundColor);
+		this.setBackgroundImage(backgroundImage);
+		this.setBackgroundRepeatMode(backgroundRepeat);
+		this.setBackgroundPosition(backgroundPosition);
+	},
+
 	getBackgroundPosition: function(){
-		if(this.hasCss){
+		if(this.hasCss()){
 			return this.data.data.css.backgroundPosition;
 		}
 		else{ return '' ;}
 	},
 	
 	getBackgroundRepeatMode: function(){
-		if(this.hasCss){
+		if(this.hasCss()){
 			return this.data.data.css.backgroundRepeat;
 		}
 		else{ return ''; }
 	},
 	
 	getBackgroundColor: function(){
-		if(this.hasCss){
+		if(this.hasCss()){
 			return this.data.data.css.backgroundColor;
+		}
+		else{ return ''; }
+	},
+	
+	getBackgroundColor: function(){
+		if(this.hasCss()){
+			return this.data.data.css.backgroundColor;
+		}
+		else{ return ''; }
+	},
+	
+	getBackgroundImage: function(){
+		if(this.hasBackgroundImage()){
+			return this.data.data.css.backgroundImage;
 		}
 		else{ return ''; }
 	},
@@ -287,7 +308,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
   
   hasBackgroundImage: function() {
-    return this.hasCss && this.data.data.css.backgroundImage;
+    return this.hasCss() && this.data.data.css.backgroundImage;
   },
 
 	hasCss: function(){

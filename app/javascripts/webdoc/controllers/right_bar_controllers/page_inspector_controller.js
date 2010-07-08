@@ -283,7 +283,7 @@
   
     _applyBackgroundToAllPages: function(e) {
       var valid = true,
-          backgroundColor, backgroundImage, page;
+          backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition, page;
       
       e.preventDefault();
 
@@ -294,22 +294,19 @@
 			}
 			
 			if(this._page.hasBackgroundImage()){
-				backgroundImage = this._page.data.data.css.backgroundImage;
+				backgroundImage = this._page.getBackgroundImage();
 			}
 			
-      if (valid) {
-        for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
-          page = WebDoc.application.pageEditor.currentDocument.pages[i];
-          this._applyBackgroundToPage( page, backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition );
-        }
-        var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
-        WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);
+      for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
+        page = WebDoc.application.pageEditor.currentDocument.pages[i];
+        this._applyBackgroundToPage( page, backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition );
       }
+      var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
+      WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);
     },
   
     _applyBackgroundToPage: function(targetPage, backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition) {
       targetPage.setBackgroundColor( backgroundColor );
-      
       if( backgroundImage === "" ) {
         targetPage.removeBackgroundImage();
       }
