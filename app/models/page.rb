@@ -153,6 +153,8 @@ class Page < ActiveRecord::Base
     self.thumbnail_secure_token = UUID::generate
   end
 
+  # calculate the size of the snapshot for thumbnail service
+  # with a apsec ratio max
   def calc_thumbnail_frame_size
     max_aspec_ratio = 3.0
     width  = self.data[:css][:width].to_i
@@ -173,6 +175,8 @@ class Page < ActiveRecord::Base
     { :width => x.to_s, :height => y.to_s }
   end
 
+  # calculate the size of the thumbnail with a width max and
+  # a height max. it conserve the aspec ratio of the size passed
   def self.calc_thumbnail_size(size, max_width=640, max_height=480)
     width  = size[:width].to_i
     height = size[:height].to_i
