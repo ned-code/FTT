@@ -98,9 +98,7 @@ WebDoc.PropertiesInspectorController = $.klass({
 			
       var css = selectedItem.css(),
           fields = this.fields,
-          key, field, value,
-					style = selectedItem.getStyle();
-      
+          key, field, value;      
       for ( key in fields ) {
         field = fields[key];
         
@@ -113,11 +111,9 @@ WebDoc.PropertiesInspectorController = $.klass({
         else if ( css[key] ) {
           field.val( css[key] );
         }
-				// else if(key == 'backgroundColor'){
-				// 	if(style.background){
-				// 		
-				// 	}
-				//}
+				 else if(key == 'backgroundColor'){
+					field.val( selectedItem.item.getStylePropertyByScopeAndPropertyName('background', 'background-color'));
+				}
         // when the css value is inherited, clear the field
         // and set its placeholder
         else {

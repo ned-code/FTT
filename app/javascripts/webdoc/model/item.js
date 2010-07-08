@@ -209,6 +209,21 @@ WebDoc.Item = $.klass(WebDoc.Record,
 		}
 		return cssString;
 	},
+	
+	getStylePropertyByScopeAndPropertyName: function(scope, property_name){
+		var styleHash = this.getStyle();
+		var propertyArray;
+		if(styleHash[scope]){
+			var styleArray = styleHash[scope].split(';');
+			for(i=0;i<styleArray.length;i++){
+				propertyArray = styleArray[i].split(':');
+				if(propertyArray[0] == property_name){
+					return propertyArray[1];
+				}
+			}
+		}
+		return '';
+	},
 
   getIsPlaceholder: function() {
     ddd('[item] get is placeholder');
