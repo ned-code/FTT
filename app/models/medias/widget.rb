@@ -95,12 +95,15 @@ private
       self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
 
       extract_files_from_zip_file
+      # updated_successful
+      true
     else
-      @status = "already_up_to_date"
+      # already_up_to_date
+      false
     end
-    @status = "updated_successful"
   rescue
-    @status = "updated_failed"
+    # updated_failed
+    false
   end
   
   def is_valid_widget_file(file_name)
