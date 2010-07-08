@@ -159,7 +159,7 @@
         this._setBgRepeatFromValue( this._page.data.data.css.backgroundRepeat ); 
         this._setBackroundPosition(this._page.data.data.css.backgroundPosition);
         if(this._page.hasBackgroundImage()) {
-          //jQuery('#background_image').attr('src', this._page.getBackgroundImagePath());
+          jQuery('#background_image').attr('src', this._page.getBackgroundImagePath());
           jQuery('#background_image_preview').show();
         }
         else {
