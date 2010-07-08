@@ -227,7 +227,7 @@ WebDoc.ItemView = $.klass({
         width: "100%",
         height: "100%"
       });
-      this.domNode.append(this.itemDomNode);
+      this.domNode.prepend(this.itemDomNode);
       if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
         this.innerHtmlChanged();
       }      
