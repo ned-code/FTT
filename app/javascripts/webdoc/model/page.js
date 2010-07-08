@@ -722,27 +722,6 @@ WebDoc.Page = $.klass(WebDoc.Record,
 				}
 			}
 		}
-		// if(scope){
-		// 	if(jQuery.inArray(scope, this.CSS_AUTHORIZED_SCOPE) >= 0){
-		// 		if(!this.getStyle()){
-		// 			jQuery.extend(this.data.data, { style : {}});
-		// 		}
-		// 		var previousStyle = jQuery.extend({}, this.getStyle());
-		// 		var that = this;
-		// 		WebDoc.application.undoManager.registerUndo(function() {
-		// 	  	    that.setStyle( previousStyle );
-		// 	  	  });
-		// 	  	
-		// 		this.data.data.style[scope] = newStyle;
-		// 		this.save();
-		// 		this.fireObjectChanged({ modifedAttribute: 'css' });
-		// 	}
-		// }
-		// else{
-		// 	this.data.data.style = newStyle;
-		// 	this.save();
-		// 	this.fireObjectChanged({ modifedAttribute: 'css' });
-		// }
 	},
 	
 	getStyle: function(){
