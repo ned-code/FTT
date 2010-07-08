@@ -247,6 +247,27 @@ WebDoc.Page = $.klass(WebDoc.Record,
       this.save();
     }
   },
+
+	getBackgroundPosition: function(){
+		if(this.hasCss){
+			return this.data.data.css.backgroundPosition;
+		}
+		else{ return '' ;}
+	},
+	
+	getBackgroundRepeatMode: function(){
+		if(this.hasCss){
+			return this.data.data.css.backgroundRepeat;
+		}
+		else{ return ''; }
+	},
+	
+	getBackgroundColor: function(){
+		if(this.hasCss){
+			return this.data.data.css.backgroundColor;
+		}
+		else{ return ''; }
+	},
   
   setExternalPageUrl: function(url) {
     WebDoc.InspectorFieldsValidator.validateUrl(url);
@@ -266,8 +287,13 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
   
   hasBackgroundImage: function() {
-    return this.data.data.css.backgroundImage && this.data.data.css.backgroundImage;
+    return this.hasCss && this.data.data.css.backgroundImage;
   },
+
+	hasCss: function(){
+		if(this.data.data.css){ return true; }
+		else{ return false;}
+	},
   
   refresh: function($super, json, onlyMissingValues) {
     this._layout = undefined;
@@ -669,6 +695,9 @@ WebDoc.Page = $.klass(WebDoc.Record,
 				backgroundProperty = backgroundArray[i].split(':');
 				if(backgroundProperty[0] == 'background-image'){
 					this.setBackgroundImage(backgroundProperty[1]);
+				}
+				else if(backgroundProperty[0] == 'background-color'){
+					this.setBackgroundColor(backgroundProperty[1]);
 				}
 			}
 		}

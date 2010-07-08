@@ -152,7 +152,8 @@ WebDoc.PropertiesInspectorController = $.klass({
         // Otherwise we use the value directly
         else {
 					if(property == 'backgroundColor'){
-						item.setStylePropertyByScopeAndProperty('background','background-color',value);
+						var property = 'background-color:' + value +';';
+						item.setStyle(property, 'background');
 					}
 					else if(property == 'borderRadius'){
 						item.setStyleBorderRadius(value);

@@ -155,11 +155,11 @@
         this._externalPageControls.hide();
         this._backgroundControls.show();
         jQuery("#page_background_color")[0].value = this._page.data.data.css.backgroundColor;
-        jQuery("#page_background_image")[0].value = this._page.data.data.css.backgroundImage;
+        //jQuery("#page_background_image")[0].value = this._page.data.data.css.backgroundImage;
         this._setBgRepeatFromValue( this._page.data.data.css.backgroundRepeat ); 
         this._setBackroundPosition(this._page.data.data.css.backgroundPosition);
         if(this._page.hasBackgroundImage()) {
-          jQuery('#background_image').attr('src', this._page.getBackgroundImagePath());
+          //jQuery('#background_image').attr('src', this._page.getBackgroundImagePath());
           jQuery('#background_image_preview').show();
         }
         else {
@@ -286,27 +286,28 @@
           backgroundColor, backgroundImage, page;
       
       e.preventDefault();
-      
-      jQuery("#page_background_color").validate({
-        pass: function(value){ backgroundColor = value; },
-        fail: function(error){ valid = false; }
-      });
-      
-      jQuery("#page_background_image").validate({
-        pass: function(value){ backgroundImage = value; },
-        fail: function(error){ valid = false; }
-      });
+
+			if(this._page.hasCss()){
+				backgroundColor = this._page.getBackgroundColor();
+				backgroundRepeat = this._page.getBackgroundRepeatMode();
+				backgroundPosition = this._page.getBackgroundPosition();
+			}
+			
+			if(this._page.hasBackgroundImage()){
+				backgroundImage = this._page.data.data.css.backgroundImage;
+			}
+			
       if (valid) {
         for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
           page = WebDoc.application.pageEditor.currentDocument.pages[i];
-          this._applyBackgroundToPage( page, backgroundColor, backgroundImage );
+          this._applyBackgroundToPage( page, backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition );
         }
         var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
         WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);
       }
     },
   
-    _applyBackgroundToPage: function(targetPage, backgroundColor, backgroundImage) {
+    _applyBackgroundToPage: function(targetPage, backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition) {
       targetPage.setBackgroundColor( backgroundColor );
       
       if( backgroundImage === "" ) {
@@ -314,8 +315,8 @@
       }
       else {
         targetPage.setBackgroundImage( backgroundImage );
-        targetPage.setBackgroundRepeatMode(this._getBgRepeatValue());
-        targetPage.setBackgroundPosition(this._getBackgroundPosition());
+        targetPage.setBackgroundRepeatMode(backgroundRepeat);
+        targetPage.setBackgroundPosition(backgroundPosition);
       }
     },
     
