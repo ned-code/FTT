@@ -171,7 +171,6 @@ WebDoc.PostMessageManager = $.klass({
           }
 					break;
 				case 'set_page_style':
-					ddd('set_page_style');
 					WebDoc.application.pageEditor.currentPage.setStyle(parsedCss.cssString, parsedCss.scope);
 					break;
         case 'add_item':

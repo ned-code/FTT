@@ -209,6 +209,9 @@ WebDoc.Page = $.klass(WebDoc.Record,
     var css = this.data.data.css;
     
     if( css.backgroundColor != backgroundColor ) {
+			if(this.hasBackgroundGradient()){
+				this.removeBackgroundGradient();
+			}
       css.backgroundColor = backgroundColor;
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundColor' });
       this.save();
@@ -217,6 +220,10 @@ WebDoc.Page = $.klass(WebDoc.Record,
 
   setBackgroundImage: function(backgroundUrl) {
     if(this.data.data.css.backgroundImage != backgroundUrl) {
+	
+			if(this.hasBackgroundGradient()){
+				this.removeBackgroundGradient();
+			}
       var old_background = this.data.data.css.backgroundImage;
       this.data.data.css.backgroundImage = backgroundUrl;  
       
@@ -290,6 +297,21 @@ WebDoc.Page = $.klass(WebDoc.Record,
 		else{ return ''; }
 	},
   
+	setBackgroundGradient: function(gradient){
+		ddd('setBackgroundGradient : ' + gradient);
+		if(this.hasBackgroundImage()){
+			this.removeBackgroundImage();
+		}
+		this.data.data.css.backgroundGradient = gradient;
+		this.fireObjectChanged({ modifedAttribute: 'css.backgroundGradient' });
+    this.save();
+	},
+	
+	getBackgroundGradient: function(){
+		if(this.hasBackgroundGradient()){ return this.data.data.css.backgroundGradient; }
+		else{ return ''; }
+	},
+
   setExternalPageUrl: function(url) {
     WebDoc.InspectorFieldsValidator.validateUrl(url);
     if(this.data.data.externalPageUrl != url) {
@@ -306,6 +328,12 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.fireObjectChanged({ modifedAttribute: 'css.background' });
     this.save();    
   },
+
+	removeBackgroundGradient: function(){
+		this.data.data.css.backgroundGradient = '';
+		this.fireObjectChanged({ modifedAttribute: 'css.background' });
+    this.save();
+	},
   
   hasBackgroundImage: function() {
     return this.hasCss() && this.data.data.css.backgroundImage;
@@ -316,6 +344,11 @@ WebDoc.Page = $.klass(WebDoc.Record,
 		else{ return false;}
 	},
   
+	hasBackgroundGradient: function(){
+		return this.hasCss() && this.data.data.css.backgroundGradient;
+	},
+	
+
   refresh: function($super, json, onlyMissingValues) {
     this._layout = undefined;
     $super(json, onlyMissingValues);
@@ -712,15 +745,24 @@ WebDoc.Page = $.klass(WebDoc.Record,
 		if(scope == 'background'){
 			var backgroundArray = newStyle.split(';');
 			var backgroundProperty;
+			var backgroundGradient = '';
+			
 			for(i=0;i<backgroundArray.length;i++){
 				backgroundProperty = backgroundArray[i].split(':');
 				if(backgroundProperty[0] == 'background-image'){
-					ddd(backgroundProperty[0] + backgroundProperty[1])
-					this.setBackgroundImage(backgroundProperty[1]);
+					if(this._backgroundImageWithGradient(backgroundProperty[1])){
+						backgroundGradient += backgroundProperty[0] + ':' + backgroundProperty[1] + ';';
+					}
+					else{
+						this.setBackgroundImage(backgroundProperty[1]);
+					}
 				}
 				else if(backgroundProperty[0] == 'background-color'){
 					this.setBackgroundColor(backgroundProperty[1]);
 				}
+			}
+			if(backgroundGradient != ''){
+				this.setBackgroundGradient(backgroundGradient);
 			}
 		}
 	},
@@ -741,6 +783,11 @@ WebDoc.Page = $.klass(WebDoc.Record,
 			}
 		}
 		return cssString;
+	},
+	
+	_backgroundImageWithGradient: function(backgroundImage){
+		if(backgroundImage.match("gradient")){ return true; }
+		else{ return false; }
 	},
 
   save: function($super, callBack, withRelationships, synch) {
