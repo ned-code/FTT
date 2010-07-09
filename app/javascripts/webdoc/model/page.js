@@ -715,6 +715,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
 			for(i=0;i<backgroundArray.length;i++){
 				backgroundProperty = backgroundArray[i].split(':');
 				if(backgroundProperty[0] == 'background-image'){
+					ddd(backgroundProperty[0] + backgroundProperty[1])
 					this.setBackgroundImage(backgroundProperty[1]);
 				}
 				else if(backgroundProperty[0] == 'background-color'){
