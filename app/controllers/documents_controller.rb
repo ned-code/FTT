@@ -57,7 +57,7 @@ class DocumentsController < ApplicationController
 
         docs_json = public_documents.map do |doc|
           cached_doc = Rails.cache.fetch("document_#{doc.uuid}_explore") do
-            doc.as_json( :include => { :pages => { :methods => :thumbnail_url, :include => :items } }, :methods => :extra_attributes)
+            doc.as_json( :include => { :pages => { :methods => :thumbnail_url } }, :methods => :extra_attributes)
           end
         end
         
