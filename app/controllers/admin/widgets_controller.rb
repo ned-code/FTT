@@ -25,6 +25,7 @@ class Admin::WidgetsController < Admin::AdminController
         format.json { render :json => @widget }
       end
     else
+      flash[:notice] = t("flash.notice.widget.#{@widget.status}") if @widget.status      
       render :new
     end
   end
