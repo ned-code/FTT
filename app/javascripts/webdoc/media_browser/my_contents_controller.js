@@ -391,7 +391,6 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 	},
   
   dragStart: function(event) {      
-		ddd('dragStart chababababa');
     var draggingImg = $(event.target).parent().find('img');
 
     var properties = draggingImg.data("properties");

@@ -217,7 +217,21 @@ class Theme < ActiveRecord::Base
           parsed += line
         elsif(line.match(/url\(\'/))
           #match url('
-          parsed += line.sub(/url\(\'/, "url('#{attachment_root_url}/")
+          parsed += line.sub(/url\(\'/, "url('#{attachment_root_url}")
+        elsif(line.match(/src=\'/))
+          parsed += line.sub(/src=\'/, "src='#{attachment_root_url}")
+        elsif(line.match(/src=\"/))
+          parsed += line.sub(/src=\"/, "src=\"#{attachment_root_url}")
+        elsif(line.match(/href=\'\#set_page_style/) || line.match(/href=\"\#set_page_style/) )
+          parsed += line
+        elsif(line.match(/href=\'\#set_item_style/) || line.match(/href=\"\#set_item_style/) )
+          parsed += line
+        elsif( line.match(/href=\'\#\'/) || line.match(/href=\"\#\"/))
+          parsed += line
+        elsif( line.match(/href=\'\#/) )
+          parsed += line.sub(/href=\'\#/, "href=\'##{attachment_root_url}")
+        elsif( line.match(/href=\"\#/) )
+          parsed += line.sub(/href=\"\#/, "href=\"##{attachment_root_url}")
         else
           parsed += line
         end

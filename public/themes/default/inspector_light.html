@@ -319,9 +319,9 @@
       
     <a href="#set_item_style?
       &scope=border
-      &-webkit-border-image= url('../images/border_speechbubble_1.png') 24 24 64 64 stretch stretch;
-      &-moz-border-image=    url('../images/border_speechbubble_1.png') 24 24 64 64 stretch stretch;
-      &border-image=         url('../images/border_speechbubble_1.png') 24 24 64 64 stretch stretch;
+      &-webkit-border-image= url('images/border_speechbubble_1.png') 24 24 64 64 stretch stretch;
+      &-moz-border-image=    url('images/border_speechbubble_1.png') 24 24 64 64 stretch stretch;
+      &border-image=         url('images/border_speechbubble_1.png') 24 24 64 64 stretch stretch;
       &border-top-width= 24px;
       &border-right-width= 24px;
       &border-bottom-width= 64px;
@@ -330,9 +330,9 @@
       
     <a href="#set_item_style?
       &scope=border
-      &-webkit-border-image= url('../images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;
-      &-moz-border-image=    url('../images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;
-      &border-image=         url('../images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;
+      &-webkit-border-image= url('images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;
+      &-moz-border-image=    url('images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;
+      &border-image=         url('images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;
       &border-top-width= 24px;
       &border-right-width= 64px;
       &border-bottom-width= 64px;
@@ -355,12 +355,26 @@
         &background-image=      linear-gradient( -90deg, #f2e5e0, #d4b1a5 );"
         class="swatch bg-swatch theme_background_4 webdoc_message"></a>
   </div>
+  
+  <div class="test clear">
+    <h3>Images</h3>
+    <a href='#images/homer.jpg' class='image_draggable'>
+      <img src='images/homer_thumb.jpg' />
+    </a>
+  </div>
+  
+  <div class="test clear">
+    <h3>stickies</h3>
+    <img src='stickies/banane-salut.gif' />
+  </div>
+  
   <div class="test">
     <a href="#" class="">remove</a>
   </div>
   
   <!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script-->
   <script src="js/jquery-1.4.2.js"></script>
+  <script src="js/jquery-json.js"></script>
   <script type="text/javascript">
     window.onload = function() {
       var webdoc = window.parent;
@@ -373,6 +387,22 @@
           };
 
         }
+      }
+      
+      $('.image_draggable').bind('dragstart', imageDragStart);
+      
+      function imageDragStart(event) {      
+        var draggingLink = $(event.target).parent().find('a');
+        var imageUrl = draggingLink.attr('href');
+        imageUrl = imageUrl.slice(1, imageUrl.length);
+        
+        var dt = event.originalEvent.dataTransfer;
+        dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:null}));
+        // 
+        // // Drag "feedback"
+        // var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
+        // $(document.body).append(mediaDragFeedbackEl);
+        // dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
       }
 
       // var draggables = document.getElementsByClassName("webdoc_message_draggable");
