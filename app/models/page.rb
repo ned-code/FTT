@@ -206,11 +206,18 @@ class Page < ActiveRecord::Base
     { 'width' => x.to_s, 'height' => y.to_s }
   end
   
+  # JBA We cannot use default generated method from active record because the default behavior will regenerate UUID of items (because uuis cannot be mass assigned)
+  # So we redefined this method and use new_with_uuid that keep uuid
   def items_attributes=(params={})
     params.each_value do |item_hash|
       previous_item = self.items.find_by_uuid(item_hash[:uuid])
       if (previous_item)
-        previous_item.attributes = item_hash
+        if (item_hash[:_delete])
+          self.items.delete(previous_item)
+        else
+          previous_item.attributes = item_hash  
+        end
+        
       else
         self.items << Item.new_with_uuid(item_hash)  
       end      

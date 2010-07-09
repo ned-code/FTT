@@ -47,7 +47,7 @@ class XmppNotification
           if (number_of_try < 1)
             continue = true;
           end 
-        rescue otherError
+        rescue => otherError
           xmpp_connect
         end    
         number_of_try += 1
