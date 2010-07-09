@@ -230,6 +230,9 @@ WebDoc.Item = $.klass(WebDoc.Record,
     if (this.data && this.data.position && json.item.position != this.data.position) {
       refreshPositionZ = true;
     }
+    if (json.item.inner_html === 'null') {
+      json.item.inner_html = null;
+    }
     if (this.data && json.item.inner_html != this.data.inner_html) {
       refreshInnerHtml = true;
     }
@@ -490,6 +493,8 @@ WebDoc.Item = $.klass(WebDoc.Record,
   copy: function($super) {
     var newItem = $super();
     newItem.data.data = $.evalJSON($.toJSON(this.data.data));
+    newItem.data.properties = $.evalJSON($.toJSON(this.data.properties));
+    newItem.data.preferences = $.evalJSON($.toJSON(this.data.preferences));
     newItem.data.media_type = this.data.media_type;
     newItem.data.media_id = this.data.media_id;
     newItem.data.kind = this.data.kind;
