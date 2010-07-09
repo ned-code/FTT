@@ -169,8 +169,8 @@ class Page < ActiveRecord::Base
   # with a apsec ratio max
   def calc_thumbnail_frame_size
     max_aspec_ratio = 3.0
-    width  = self.data[:css][:width].to_i
-    height = self.data[:css][:height].to_i
+    width  = self.data['css']['width'].to_i
+    height = self.data['css']['height'].to_i
     x = width
     y = height
 
@@ -184,14 +184,14 @@ class Page < ActiveRecord::Base
       end
     end
 
-    { :width => x.to_s, :height => y.to_s }
+    { 'width' => x.to_s, 'height' => y.to_s }
   end
 
   # calculate the size of the thumbnail with a width max and
   # a height max. it conserve the aspec ratio of the size passed
   def self.calc_thumbnail_size(size, max_width=640, max_height=480)
-    width  = size[:width].to_i
-    height = size[:height].to_i
+    width  = size['width'].to_i
+    height = size['height'].to_i
     x = max_width
     y = max_height
 
@@ -203,7 +203,7 @@ class Page < ActiveRecord::Base
       y = (height * ratio).floor
     end
 
-    { :width => x.to_s, :height => y.to_s }
+    { 'width' => x.to_s, 'height' => y.to_s }
   end
   
   def items_attributes=(params={})

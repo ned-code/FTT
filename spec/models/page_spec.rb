@@ -45,39 +45,39 @@ describe Page do
   describe "size" do
     it "should have width and height values used when creating a page" do
       document = Factory(:document)
-      document.size = { :width => "100", :height => "200" }
+      document.size = { 'width' => "100", 'height' => "200" }
       document.save
       page = document.pages.create
-      page.data.should == { :css => { :width => document.size[:width]+"px", :height => document.size[:height]+"px" } }
+      page.data.should == { 'css' => { 'width' => document.size['width']+"px", 'height' => document.size['height']+"px" } }
     end
   end
 
   describe "thumbnail_frame_size method" do
     it "should return the same size if the aspec ratio is less 3" do
-      document = Factory(:document, :size => { :width => "100", :height => "200" })
-      document.pages.first.calc_thumbnail_frame_size.should == { :width => "100", :height => "200" }
+      document = Factory(:document, :size => { 'width' => "100", 'height' => "200" })
+      document.pages.first.calc_thumbnail_frame_size.should == { 'width' => "100", 'height' => "200" }
     end
 
     it "should return the a smaller height if the aspec ratio is more 3 and the longer size is height" do
-      document = Factory(:document, :size => { :width => "200", :height => "800" })
-      document.pages.first.calc_thumbnail_frame_size.should == { :width => "200", :height => "600" }
+      document = Factory(:document, :size => { 'width' => "200", 'height' => "800" })
+      document.pages.first.calc_thumbnail_frame_size.should == { 'width' => "200", 'height' => "600" }
     end
 
     it "should return the a smaller width if the aspec ratio is more 3 and the longer size is width" do
-      document = Factory(:document, :size => { :width => "800", :height => "200" })
-      document.pages.first.calc_thumbnail_frame_size.should == { :width => "600", :height => "200" }
+      document = Factory(:document, :size => { 'width' => "800", 'height' => "200" })
+      document.pages.first.calc_thumbnail_frame_size.should == { 'width' => "600", 'height' => "200" }
     end
   end
 
   describe "self.calc_thumbnail_size" do
     it "should return the max size if the size is smaller" do
-      result = Page.calc_thumbnail_size({ :width => "50", :height => "100" }, 200, 300)
-      result.should == { :width => "150", :height => "300" }
+      result = Page.calc_thumbnail_size({ 'width' => "50", 'height' => "100" }, 200, 300)
+      result.should == { 'width' => "150", 'height' => "300" }
     end
 
     it "should return the max size if the size is bigger" do
-      result = Page.calc_thumbnail_size({ :width => "600", :height => "400" }, 300, 300)
-      result.should == { :width => "300", :height => "200" }
+      result = Page.calc_thumbnail_size({ 'width' => "600", 'height' => "400" }, 300, 300)
+      result.should == { 'width' => "300", 'height' => "200" }
     end
   end
   
