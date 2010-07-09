@@ -41,13 +41,18 @@ protected
   def download_image_provided_by_remote_attachment_url
     require 'open-uri'
     if remote_attachment_url.present?
-      io = open(URI.parse(remote_attachment_url))
-      def io.original_filename
-        name = base_uri.path.split('/').last
-        name = Medias::Image.check_source(name)
-        name
+      begin 
+        io = open(URI.parse(remote_attachment_url))
+        def io.original_filename
+          name = base_uri.path.split('/').last
+          name = Medias::Image.check_source(name)
+          name
+        end
+        self.attachment = io
+      rescue => e
+        self.errors.add('attachment', 'not found')
+        self.attachment = nil
       end
-      self.attachment = io
     end
   end
 

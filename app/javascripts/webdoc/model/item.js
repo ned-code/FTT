@@ -192,6 +192,26 @@ WebDoc.Item = $.klass(WebDoc.Record,
       this.save();
     }
   },
+
+  replacePlaceholder: function(type, options) {
+    if(options === undefined) {
+      options = {};
+    }
+    if(type === WebDoc.ITEM_TYPE_IMAGE && options.imageUrl) {
+      var oldSource = this.data.data.src;
+      this.data.data.src = options['imageUrl'];
+      this.preLoadImageWithCallback(function(event){
+        this.setRatio(this.calcRatio(event));
+        this.save(function() {
+          this.fireDomNodeChanged();
+          this.fireObjectChanged({ modifedAttribute: 'zoom' });
+          WebDoc.application.undoManager.registerUndo(function() {
+            this.replacePlaceholder(WebDoc.ITEM_TYPE_IMAGE, { imageUrl: oldSource });
+          }.pBind(this));
+        }.pBind(this));
+      }.pBind(this));
+    }
+  },
   
   positionZ: function() {
     return this.data.position;

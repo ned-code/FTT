@@ -62,15 +62,8 @@
           }
           var parent = jQuery(evt.target).parent();
           if(parent && parent.data('itemView') && parent.data('itemView').item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && parent.data('itemView').item.getIsPlaceholder()){
-            var itemView = parent.data('itemView');
-            itemView.item.data.data.src = imageUrl;
-            itemView.item.preLoadImageWithCallback(function(event){
-              itemView.item.setRatio(itemView.item.calcRatio(event));
-              itemView.item.save(function() {
-                itemView.item.fireDomNodeChanged();
-                itemView.item.fireObjectChanged({ modifedAttribute: 'zoom' });
-              });
-            });
+            var item = parent.data('itemView').item;
+            item.replacePlaceholder(WebDoc.ITEM_TYPE_IMAGE, {imageUrl: imageUrl});
           }  
           else {
             WebDoc.application.boardController.insertImage(imageUrl, pos, id);

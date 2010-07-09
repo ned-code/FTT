@@ -164,6 +164,47 @@ class Page < ActiveRecord::Base
   def generate_and_set_thumbnail_secure_token
     self.thumbnail_secure_token = UUID::generate
   end
+
+  # calculate the size of the snapshot for thumbnail service
+  # with a apsec ratio max
+  def calc_thumbnail_frame_size
+    max_aspec_ratio = 3.0
+    width  = self.data[:css][:width].to_i
+    height = self.data[:css][:height].to_i
+    x = width
+    y = height
+
+    if width < height
+      if height/max_aspec_ratio > width
+        y = (width * max_aspec_ratio).floor
+      end
+    else
+      if width/max_aspec_ratio > height
+        x = (height * max_aspec_ratio).floor
+      end
+    end
+
+    { :width => x.to_s, :height => y.to_s }
+  end
+
+  # calculate the size of the thumbnail with a width max and
+  # a height max. it conserve the aspec ratio of the size passed
+  def self.calc_thumbnail_size(size, max_width=640, max_height=480)
+    width  = size[:width].to_i
+    height = size[:height].to_i
+    x = max_width
+    y = max_height
+
+    if width < height
+      ratio = max_height / height.to_f
+      x = (width * ratio).floor
+    else
+      ratio = max_width / width.to_f
+      y = (height * ratio).floor
+    end
+
+    { :width => x.to_s, :height => y.to_s }
+  end
   
   def items_attributes=(params={})
     params.each_value do |item_hash|

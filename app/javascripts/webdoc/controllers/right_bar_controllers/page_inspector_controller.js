@@ -291,11 +291,10 @@
         pass: function(value){ backgroundImage = value; },
         fail: function(error){ valid = false; }
       });
-      
       if (valid) {
         for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
           page = WebDoc.application.pageEditor.currentDocument.pages[i];
-          this._applyBackgroundToPage( this._page, backgroundColor, backgroundImage );
+          this._applyBackgroundToPage( page, backgroundColor, backgroundImage );
         }
         var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
         WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);
