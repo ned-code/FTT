@@ -176,7 +176,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
 				WebDoc.application.undoManager.registerUndo(function() {
 	  	    that.setStyle( previousStyle );
 	  	  });
-	  	
+
 				this.data.data.style[scope] = newStyle;
 				this.save();
 				this.fireObjectChanged({ modifedAttribute: 'css' });
