@@ -90,7 +90,7 @@ class Theme < ActiveRecord::Base
         self.version = config_dom.root.attribute('version').to_s
         self.author = config_dom.root.elements['author'].text
         self.title = config_dom.root.elements['title'].text
-        self.elements_url = attachment_root_url + config_dom.root.attribute('elements').to_s
+        self.elements_url =  attachment_root_url + "parsed_inspector.html"
         self.thumbnail_url = attachment_root_url + config_dom.root.attribute('thumbnail').to_s
         self.style_url = attachment_root_url + "css/parsed_theme_style.css"
         self.save!
@@ -115,6 +115,7 @@ class Theme < ActiveRecord::Base
         begin
           extract_files_from_zip_file
           create_parsed_style
+          create_parsed_inspector
           for layout_saved in self.layouts
             layout_saved.create_model_page!
           end
@@ -184,6 +185,54 @@ class Theme < ActiveRecord::Base
                         })
     else
       File.open(File.join(Rails.root, 'public', self.style_url), 'wb') {|f| f.write(parsed) }
+    end
+  end
+  
+  
+  #replace url('../anurlpath') with url(railsroot/pathtothemuplaod/anurlpath)
+  def create_parsed_inspector
+    files_path = Array.new
+    parsed = ""
+
+    config_dom.root.elements['inspectors'].each_child do |inspector|
+      if inspector.class == REXML::Element
+        files_path << File.join(attachment_root_path, inspector.attribute('src').to_s)
+      end
+    end
+
+    for file_path in files_path
+      if S3_CONFIG[:storage] == 's3'
+        file_readed = AWS::S3::S3Object.value(file_path, S3_CONFIG[:assets_bucket])
+      else
+        file_readed = IO.read(file_path)
+      end
+      
+      file_readed.each_line do |line|
+        #replace url('.. or url('
+        if(line.match(/url\(\'\.\./))
+          # match url('..
+          parsed += line.sub(/url\(\'\.\.\//, "url('#{attachment_root_url}")
+        elsif(line.match(/url\(\'http/))
+          # match url('http
+          parsed += line
+        elsif(line.match(/url\(\'/))
+          #match url('
+          parsed += line.sub(/url\(\'/, "url('#{attachment_root_url}/")
+        else
+          parsed += line
+        end
+      end
+    end
+    
+    if S3_CONFIG[:storage] == 's3'      
+      AWS::S3::S3Object.store(attachment_root_path+"parsed_inspector.html",
+                        parsed,
+                        S3_CONFIG[:assets_bucket],
+                        {
+                          :access => :public_read
+                        })
+    else
+      File.open(File.join(Rails.root, 'public', self.elements_url), 'wb') {|f| f.write(parsed) }
     end
   end
   
