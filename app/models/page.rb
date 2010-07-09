@@ -29,9 +29,10 @@ class Page < ActiveRecord::Base
   # ================
   # = Associations =
   # ================
-  
-  has_many :items, :dependent => :delete_all
+
   belongs_to :document
+  has_many :items, :dependent => :delete_all
+  has_many :discussions
   # belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
   
   # should be placed after associations declaration
