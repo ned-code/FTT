@@ -17,18 +17,17 @@ WebDoc.DiscussionView = $.klass({
 
     this.domNode.id(this.discussion.uuid());
     this.domNode.data("discussionView", this);
-
-    discussion.addListener(this);
     
+    discussion.addListener(this);
     this.pageView.discussionDomNode.prepend(this.domNode);
 
+    this._moveToStoredPosition();
     this._initDrag();
   },
 
   createDomNode: function() {
     // TODO CSS for the icon
     var discussionNode = jQuery('<img/>', {'alt':'comment', 'class':'wd_discussion', 'src':'/images/icons/chat_16.png' });
-    this._moveToStoredPosition();
     return discussionNode;
   },
 
@@ -46,28 +45,22 @@ WebDoc.DiscussionView = $.klass({
   //   // this.inspectorPanesManager.updateAttachedPanePositionAndContent(this);
   // },
 
-  innerHtmlChanged: function() {
-    if (!WebDoc.application.disableHtml && this.item.data.data.tag !== "iframe") {
-      this.itemDomNode.html($.string().stripScripts(this.item.getInnerHtml()));
-    }
-  },
-
-  domNodeChanged: function() {
-    if (!WebDoc.application.disableHtml) {
-      this.unSelect();
-      this.itemDomNode.remove();
-      this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
-        overflow: "hidden",
-        width: "100%",
-        height: "100%"
-      });
-      this.domNode.prepend(this.itemDomNode);
-      if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
-        this.innerHtmlChanged();
-      }
-      //this.select();
-    }
-  },
+  // domNodeChanged: function() {
+  //   if (!WebDoc.application.disableHtml) {
+  //     this.unSelect();
+  //     this.itemDomNode.remove();
+  //     this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
+  //       overflow: "hidden",
+  //       width: "100%",
+  //       height: "100%"
+  //     });
+  //     this.domNode.prepend(this.itemDomNode);
+  //     if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
+  //       this.innerHtmlChanged();
+  //     }
+  //     //this.select();
+  //   }
+  // },
 
   // destroy: function() {
   //   this.item.removeListener();
@@ -109,8 +102,8 @@ WebDoc.DiscussionView = $.klass({
 
   _moveToStoredPosition: function() {
     this.domNode.css({
-      top: this.discussion.position().top,
-      left: this.discussion.position().left
+      top: this.discussion.position().top+'px',
+      left: this.discussion.position().left+'px'
     });
   }
 

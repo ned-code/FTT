@@ -48,6 +48,10 @@ WebDoc.PageView = $.klass({
         that.createItemView(this, "end");
       });
     }
+
+    this.refreshDiscussions();
+
+
     page.addListener(this);
   },
   
@@ -87,6 +91,16 @@ WebDoc.PageView = $.klass({
 
   discussionAdded: function(addedDiscussion) {
     this.createDiscussionView(addedDiscussion);
+  },
+
+  refreshDiscussions: function() {
+    WebDoc.ServerManager.getRecords( WebDoc.Discussion, null, function( discussions ){
+      var discussion, l = discussions.length;
+      while(l--){
+        discussion = discussions[l];
+        this.createDiscussionView(discussion);
+      }
+    }.pBind(this), { ajaxParams: { page_id: this.page.uuid() } });
   },
   
   setLoading: function(state) {

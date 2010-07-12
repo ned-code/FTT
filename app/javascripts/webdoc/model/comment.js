@@ -4,60 +4,31 @@
 
 WebDoc.Comment = $.klass(WebDoc.Record, {
 
-  initialize: function($super, json) {
+  initialize: function($super, json, discussion) {
 
     this.belongsTo = {
       discussion: WebDoc.Discussion
     };
-    this.theme = theme;
-
-    if(associatedType && associatedId && associatedType === 'page') {
-      this[associatedType + '_id'] = associatedId;
-    }
-    else {
-      ddd('[Discussion] bad associated type or associated id');
-      return false;
-    }
+    this.discussion = discussion;
 
 
     $super(json);
 
-    if(this.data.properties === undefined) {
-      this.data.properties = {};
-    }
-
-
-  },
-
-  setPosition: function(position, skipSave) {
-    this.data.properties.position = position;
-    if(!skipSave && !skipSave === true) {
-      this.fireObjectChanged({ modifedAttribute: 'position' });
-      this.save();
-    }
-  },
-
-  position: function() {
-    if(this.data.properties.position) {
-        return this.data.properties.position;
-    }
-    else {
-        return undefined;
-    }
   }
+
 
 });
 
 $.extend(WebDoc.Discussion, {
 
   className: function() {
-    return "discussion";
+    return "comment";
   },
 
   rootUrl: function(args) {
     return "";
   },
   pluralizedClassName: function() {
-    return "discussions";
+    return "comments";
   }
 });

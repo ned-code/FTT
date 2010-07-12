@@ -119,11 +119,7 @@ class DocumentsController < ApplicationController
           logger.debug "return document json."
           set_cache_buster
           render :json => Rails.cache.fetch("document_#{@document.uuid}") {
-            @document.to_json(:include => { :pages => {
-                                                :include => { :items => {},
-                                                              :discussions => { :include => :comments }
-                                                            }
-            }})
+            @document.to_json(:include => { :pages => { :include =>  :items } })
           }
 
         end
