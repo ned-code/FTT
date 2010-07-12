@@ -206,16 +206,10 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
 
   setBackgroundColor: function(backgroundColor) {
-    var css = this.data.data.css;
-    
-    if( css.backgroundColor != backgroundColor ) {
-			if(this.hasBackgroundGradient()){
-				this.removeBackgroundGradient();
-			}
-      css.backgroundColor = backgroundColor;
+			this.removeBackgroundGradient();
+      this.data.data.css.backgroundColor = backgroundColor;
       this.fireObjectChanged({ modifedAttribute: 'css.backgroundColor' });
       this.save();
-    }
   },
 
   setBackgroundImage: function(backgroundUrl) {
@@ -344,7 +338,13 @@ WebDoc.Page = $.klass(WebDoc.Record,
 	},
   
 	hasBackgroundGradient: function(){
-		return this.hasCss() && this.data.data.css.backgroundGradient;
+		var backgroundGradient = false;
+		if(this.hasCss() && this.data.data.css.backgroundGradient){
+			if(this.data.data.css.backgroundGradient != '' || this.data.data.css.backgroundGradient != ""){
+				backgroundGradient = true
+			}
+		}
+		return backgroundGradient
 	},
 	
 
@@ -741,6 +741,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
 	
 	setStyle: function(newStyle, scope){
+		ddd(newStyle);
 		if(scope == 'background'){
 			var backgroundArray = newStyle.split(';');
 			var backgroundProperty;

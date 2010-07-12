@@ -11,8 +11,8 @@
   
   <styles>
     <style src="css/typography.css" />
-    <style src="css/colors.light.css" />
-    <style src="css/theme.light.css" />
+    <style src="css/colors.dark.css" />
+    <style src="css/theme.dark.css" />
     <style src="css/layouts.css" />
   </styles>
 </theme>

@@ -220,6 +220,10 @@ WebDoc.PageView = $.klass({
 				this.domNode.attr( 'style', this.page.getBackgroundGradient() ).css(globalCss);
 			}
 			else{
+				ddd('page _initPageCss');
+				ddd(globalCss);
+				delete globalCss.backgroundGradient;
+				this.domNode.attr( 'style', '' );
 				this.domNode.css(globalCss);
 			}
       this._initPageSize();
