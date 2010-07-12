@@ -292,9 +292,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
 	},
   
 	setBackgroundGradient: function(gradient){
-		if(this.hasBackgroundImage()){
-			this.removeBackgroundImage();
-		}
+		this.removeBackgroundImage();
 		this.data.data.css.backgroundGradient = gradient;
 		this.fireObjectChanged({ modifedAttribute: 'css.backgroundGradient' });
     this.save();
