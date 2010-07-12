@@ -7,5 +7,7 @@ class Discussion < ActiveRecord::Base
   belongs_to :page
   has_many :comments
 
+  serialize :properties
+
 
 end

@@ -125,6 +125,7 @@ javascripts:
     - app/javascripts/webdoc/gui/html_view.js
     - app/javascripts/webdoc/gui/iframe_view.js
     - app/javascripts/webdoc/gui/app_view.js
+    - app/javascripts/webdoc/gui/discussion_view.js
     - app/javascripts/webdoc/tools/tool.js
     - app/javascripts/webdoc/tools/arrow_tool.js
     - app/javascripts/webdoc/tools/browser_tool.js

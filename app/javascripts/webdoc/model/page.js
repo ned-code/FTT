@@ -21,6 +21,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.lastDrawingItemPosition = -1;
     this._layout = undefined;
     this.items = [];
+    this.discussions = [];
     this._itemsToRemoveAfterSave = [];
     this.nonDrawingItems = [];
 
@@ -276,6 +277,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     if (json.page.items && $.isArray(json.page.items)) {
       var that = this;
       this.items = [];
+      this.discussions = [];
       this.nonDrawingItems = [];   
       this.lastDrawingItemPosition = -1;     
       this.firstPosition = 0;
@@ -408,6 +410,24 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
     this.fireItemRemoved(item);
   },
+
+  addDiscussion: function(discussion) {
+    this.discussions.push(discussion);
+    this.fireDiscussionAdded(discussion);
+  },
+
+  // TODO Finir!!
+  removeDiscussion: function(discussion) {
+    var index = $.inArray(discussion, this.discussions);
+    if (index != -1) {
+      this.discussions.splice(index, 1);
+        var nonDrawingIndex = $.inArray(item, this.nonDrawingItems);
+        // if (nonDrawingIndex != -1) {
+        //   this.nonDrawingItems.splice(nonDrawingIndex, 1);
+        // }
+    }
+    // this.fireDiscussionRemoved(discussion);
+  },
   
   findItemWithUuid: function(pUuid) {
     var i = 0;
@@ -442,6 +462,14 @@ WebDoc.Page = $.klass(WebDoc.Record,
         this.listeners[i].itemMovedAfterItem(item, afterItem);
       }
     }         
+  },
+
+  fireDiscussionAdded: function(addedDiscussion) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].discussionAdded) {
+        this.listeners[i].discussionAdded(addedDiscussion);
+      }
+    }
   },
   
   copy: function($super) {

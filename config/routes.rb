@@ -49,7 +49,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :roles_documents, :only => :index, :as => "roles/documents"
 
   # comments
-  map.resources :discussions, :only => [:create, :destroy] do |discussion|
+  map.resources :discussions, :only => [:index, :create, :destroy] do |discussion|
     discussion.resources :comments, :only => [:create, :destroy]
   end
 

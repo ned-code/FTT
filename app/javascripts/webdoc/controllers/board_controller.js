@@ -669,6 +669,13 @@ WebDoc.BoardController = jQuery.klass({
     newItem.data.data.preference.url = videoProperties.video_id;
     this.insertItems([newItem]);
   },
+
+  // insert a discustion with a position with left and top attributes
+  insertDiscussion: function(position) {
+    var newDiscussion = new WebDoc.Discussion(null, 'page', WebDoc.application.pageEditor.currentPage.uuid());
+    newDiscussion.setPosition(position, true);
+    this.insertDiscussions([newDiscussion]);
+  },
   
   insertHtml: function(html, position) {
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
@@ -709,6 +716,28 @@ WebDoc.BoardController = jQuery.klass({
     
     WebDoc.application.undoManager.registerUndo(function() {
       this.insertItems(items);
+    }.pBind(this));
+  },
+
+  insertDiscussions: function(discussions) {
+    jQuery.each(discussions, function(index, discussion) {
+      this._currentPage.addDiscussion(discussion);
+      discussion.isNew = true;
+      discussion.save();
+    }.pBind(this));
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.removeItems(discussions);
+    }.pBind(this));
+  },
+
+  removeDiscussions: function(discussions) {
+    jQuery.each(items, function(index, discussion) {
+      this._currentPage.removeDiscussion(discussion);
+      discussion.destroy();
+    }.pBind(this));
+
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.insertDiscussions(discussions);
     }.pBind(this));
   },
     
