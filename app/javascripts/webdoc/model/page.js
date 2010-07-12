@@ -785,7 +785,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
 	},
 	
 	_backgroundImageWithGradient: function(backgroundImage){
-		if(backgroundImage.match("linear-gradient") || backgroundImage.match("-webkit-gradient") || backgroundImage.match("-moz-linear-gradient")){ return true; }
+		if(backgroundImage.match("gradient")){ return true; }
 		else{ return false; }
 	},
 
