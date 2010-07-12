@@ -229,6 +229,8 @@ class Theme < ActiveRecord::Base
           parsed += line
         elsif(line.match(/href=\'\#set_item_style/) || line.match(/href=\"\#set_item_style/) )
           parsed += line
+        elsif(line.match(/href=\'\#package/) || line.match(/href=\"\#package/) )
+          parsed += line
         elsif( line.match(/href=\'\#\'/) || line.match(/href=\"\#\"/))
           parsed += line
         elsif( line.match(/href=\'http/) || line.match(/href=\"http/))

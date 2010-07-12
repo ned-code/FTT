@@ -298,7 +298,6 @@ WebDoc.Page = $.klass(WebDoc.Record,
 	},
   
 	setBackgroundGradient: function(gradient){
-		ddd('setBackgroundGradient : ' + gradient);
 		if(this.hasBackgroundImage()){
 			this.removeBackgroundImage();
 		}
@@ -751,6 +750,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
 				backgroundProperty = backgroundArray[i].split(':');
 				if(backgroundProperty[0] == 'background-image'){
 					if(this._backgroundImageWithGradient(backgroundProperty[1])){
+						ddd('match');
 						backgroundGradient += backgroundProperty[0] + ':' + backgroundProperty[1] + ';';
 					}
 					else{
@@ -786,7 +786,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
 	},
 	
 	_backgroundImageWithGradient: function(backgroundImage){
-		if(backgroundImage.match("gradient")){ return true; }
+		if(backgroundImage.match("linear-gradient") || backgroundImage.match("-webkit-gradient") || backgroundImage.match("-moz-linear-gradient")){ return true; }
 		else{ return false; }
 	},
 

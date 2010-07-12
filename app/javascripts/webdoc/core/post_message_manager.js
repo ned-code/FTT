@@ -57,6 +57,7 @@ WebDoc.PostMessageManager = $.klass({
     window.addEventListener("message", function(event){
       // event.domain event.data event.source event.origin
       ddd('[post message manager] received a new message: ' + event.data);
+			ddd(event.data);
       try {
         this.processMessage(event.data);
       } 
@@ -92,7 +93,7 @@ WebDoc.PostMessageManager = $.klass({
 		ddd('parseCSSUrl');
 		ddd(url)
 		url = url.replace(/[\n\r\t]/g,''); //Remove NewLine, CarriageReturn and Tab characters from a String
-		url = url.split(' ').join(''); 		//remove spaces
+		//url = url.split(' ').join(''); 		//remove spaces
 		url = url.slice(1,url.length);    //remove the first #
 		var cssHash = {
 			scope: '',
@@ -108,8 +109,8 @@ WebDoc.PostMessageManager = $.klass({
 				cssHash.scope = keyValue[1];
 			}
 			else{
-				if(!this.ILLEGALCSSPARAMS[keyValue[0]]){
-					cssHash.cssString += keyValue[0] + ": " + keyValue[1];
+				if(keyValue[0] == 'style'){
+					cssHash.cssString += keyValue[1];
 				}
 			}
     }
@@ -165,12 +166,14 @@ WebDoc.PostMessageManager = $.klass({
           }
           break;
 				case 'set_item_style':
+					ddd('set_item_style');
 					var selection = WebDoc.application.boardController.selection()[0];
 					if(selection && selection.item) {
             selection.item.setStyle(parsedCss.cssString, parsedCss.scope);
           }
 					break;
 				case 'set_page_style':
+					ddd('set_page_style');
 					WebDoc.application.pageEditor.currentPage.setStyle(parsedCss.cssString, parsedCss.scope);
 					break;
         case 'add_item':
