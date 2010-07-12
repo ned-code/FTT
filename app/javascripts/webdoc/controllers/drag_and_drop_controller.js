@@ -3,7 +3,7 @@
  */
 
 	WebDoc.DrageAndDropController = {
-  KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/post-message-action', 'application/x-moz-file-promise-url', 'application/wd-discussion'],
+  KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/wd-discussion', 'application/post-message-action', 'application/x-moz-file-promise-url'],
 	KNOWN_SOURCES: [],// All source are defined in utils/drag_source.js EX ['youtube.com', function(uri_list){alert(uri_list);}], 
 	KNOWN_FILE_TYPES: [], //All file type recognised by WD EX: jpg, .jpeg. Defined in utils/drag_source.js
 	
@@ -68,8 +68,8 @@
           else {
             WebDoc.application.boardController.insertImage(imageUrl, pos, id);
           }
-		  WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-		  return true;
+		      WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+		      return true;
           break;
         case 'application/wd-video':
           var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-video'));

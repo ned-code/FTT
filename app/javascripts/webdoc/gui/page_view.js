@@ -10,7 +10,7 @@ WebDoc.PageView = $.klass({
         itemDomNode = $('<div/>').id('items_' + page.uuid()).addClass("layer").css({
           overflow: 'visible'
         }),
-        discussionDomNode = $('<div/>').id('discussions_'+page.uuid()),
+        discussionDomNode = $('<div/>').id('discussions_'+page.uuid()).addClass("layer").css({ overflow: 'visible' }),
         drawingDomNode = $(WebDoc.application.svgRenderer.createSurface()), eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(), that = this;
     
     
@@ -33,8 +33,8 @@ WebDoc.PageView = $.klass({
     this._initPageClass();
     drawingDomNode.css("zIndex", 1000000);
     domNode.append(drawingDomNode);
-    this.domNode.append(discussionDomNode);
     this.domNode.append(itemDomNode);
+    this.domNode.append(discussionDomNode);    
     this.domNode.append(eventCatcherNode);
 
     this.externalPageDomNode = null;
@@ -50,8 +50,7 @@ WebDoc.PageView = $.klass({
     }
 
     this.refreshDiscussions();
-
-
+    
     page.addListener(this);
   },
   

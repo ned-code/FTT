@@ -10,7 +10,7 @@ WebDoc.DiscussionView = $.klass({
     this.pageView = pageView;
     this.discussion = discussion;
 
-    this.domNode = $("<div/>").css("zIndex", 1500000);
+    this.domNode = $("<div/>").css('zIndex', '1500000').css('height', '16px').css('width', '16px');
 
     this.discussionDomNode = this.createDomNode();
     this.domNode.append(this.discussionDomNode);
@@ -23,6 +23,8 @@ WebDoc.DiscussionView = $.klass({
 
     this._moveToStoredPosition();
     this._initDrag();
+
+    this.domNode.bind('click', this.updateDiscussionPanel.pBind(this));
   },
 
   createDomNode: function() {
@@ -31,35 +33,15 @@ WebDoc.DiscussionView = $.klass({
     return discussionNode;
   },
 
-  remove: function() {
-    this.domNode.remove();
+  // if param discussion is undefined => all discussion
+  updateDiscussionPanel: function() {    
+    WebDoc.application.rightBarController.showDiscussionsPanel();
+    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+    discussionPanel.refreshComments(this.discussion);
   },
 
-  // objectChanged: function(item, options) {
-  //   if (item._isAttributeModified(options, 'css')) {
-  //     this._initItemCss(true);
-  //   }
-  //   if (item._isAttributeModified(options, 'class')) {
-  //     this._initItemClass();
-  //   }
-  //   // this.inspectorPanesManager.updateAttachedPanePositionAndContent(this);
-  // },
-
-  // domNodeChanged: function() {
-  //   if (!WebDoc.application.disableHtml) {
-  //     this.unSelect();
-  //     this.itemDomNode.remove();
-  //     this.itemDomNode = this.createDomNode().addClass("item").addClass("layer").css({
-  //       overflow: "hidden",
-  //       width: "100%",
-  //       height: "100%"
-  //     });
-  //     this.domNode.prepend(this.itemDomNode);
-  //     if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
-  //       this.innerHtmlChanged();
-  //     }
-  //     //this.select();
-  //   }
+  // remove: function() {
+  //   this.domNode.remove();
   // },
 
   // destroy: function() {
