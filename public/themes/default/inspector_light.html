@@ -181,8 +181,8 @@
     <h3>Page Backgrounds</h3>
     <a href="#package=page_background_1"
       class="swatch bg-swatch theme_background_1 webdoc_message"></a>
-    <a href="#package=page_background_2"
-      class="swatch bg-swatch theme_background_2 webdoc_message"></a>
+    <!-- <a href="#package=page_background_2"
+      class="swatch bg-swatch theme_background_2 webdoc_message"></a> -->
     <a href="#package=page_background_3"
       class="swatch bg-swatch theme_background_3 webdoc_message"></a>
     <a href="#package=page_background_4"
@@ -398,7 +398,7 @@
       $('.image_draggable').bind('dragstart', imageDragStart);
       
       function imageDragStart(event) {      
-        var draggingLink = $(event.target).parent().find('a');
+        var draggingLink = $(event.target);
         var imageUrl = draggingLink.attr('href');
         imageUrl = imageUrl.slice(1, imageUrl.length);
         
