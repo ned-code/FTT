@@ -93,13 +93,13 @@ WebDoc.PageView = $.klass({
   },
 
   refreshDiscussions: function() {
-    WebDoc.ServerManager.getRecords( WebDoc.Discussion, null, function( discussions ){
+    this.page.getDiscussions(function(discussions) {
       var discussion, l = discussions.length;
       while(l--){
         discussion = discussions[l];
         this.createDiscussionView(discussion);
       }
-    }.pBind(this), { ajaxParams: { page_id: this.page.uuid() } });
+    }.pBind(this));
   },
   
   setLoading: function(state) {

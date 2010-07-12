@@ -411,6 +411,10 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.fireItemRemoved(item);
   },
 
+  getDiscussions: function(callback) {
+    WebDoc.ServerManager.getRecords( WebDoc.Discussion, null, callback, { ajaxParams: { page_id: this.uuid() } });
+  },
+
   addDiscussion: function(discussion) {
     this.discussions.push(discussion);
     this.fireDiscussionAdded(discussion);

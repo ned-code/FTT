@@ -37,7 +37,7 @@ WebDoc.DiscussionView = $.klass({
   updateDiscussionPanel: function() {    
     WebDoc.application.rightBarController.showDiscussionsPanel();
     var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
-    discussionPanel.refreshComments(this.discussion);
+    discussionPanel.showDiscussion(this.discussion);
   },
 
   // remove: function() {

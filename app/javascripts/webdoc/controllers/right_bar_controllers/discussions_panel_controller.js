@@ -8,7 +8,6 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
   initialize: function() {
     this.domNode = jQuery('#discussions-panel');
-    this.currentDocument = WebDoc.application.pageEditor.currentDocument;
     this.creator = WebDoc.application.pageEditor.getCreator();
     this.discussionsDomNode = this.domNode.find('#wd_discussions');
 
@@ -17,25 +16,40 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
     // For add discussion button
     this.domNode.find(".add_discussion").bind("dragstart", this.prepareCreateDiscussionDragStart.pBind(this));
+
+    // this.showPageDiscussions();
   },
 
   buttonSelector: function() {
     return this.DISCUSSIONS_PANEL_BUTTON_SELECTOR;
   },
 
-  refreshComments: function(discussions) {
+  showDiscussion: function(discussion) {
     this.discussionsDomNode.empty();
-    ddd('1');
-    if (jQuery.isArray(discussions)) {
-      ddd('2');
-      ddd(discussions);
+    this.discussionsDomNode.append(this.createDiscussionDomNode(discussion));
+  },
+
+  // showPageDiscussions: function(discussions) {
+  //   WebDoc.application.pageEditor.currentPage.getDiscussions(function(discussions) {
+  //     this.discussionsDomNode.empty();
+  //     if (discussions.length>0) {
+  //       for(var i=0; i<discussions.length; i++) {
+  //         this.discussionsDomNode.append(this.createDiscussionDomNode(discussions[i]));
+  //       }
+  //     }
+  //   }.pBind(this));
+  // },
+
+  createDiscussionDomNode: function(discussion) {
+    var newDiscussionsDomNode = jQuery('<div/>').text(discussion.uuid());
+
+    for(var i=0; i<discussion.comments.length; i++) {
+      var comment = discussion.comments[i];
+      newDiscussionsDomNode.append(comment.content());
     }
-    else {
-      ddd('3');
-      ddd(discussions);
-      
-      this.discussionsDomNode.append(jQuery('<div/>').text(discussions.uuid()));
-    }
+    
+
+    return newDiscussionsDomNode;  
   },
 
   // Button part
