@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme version="0.1" thumbnail="images/theme_thumb.png" elements="inspector.html">
+  
+  <title>Music Demo package</title>
+  
+  <author href="http://webdoc.com" email="jonathan.biolaz@webdoc.com">Jonathan Biolaz</author>
+  
+  <inspectors>
+    <inspector src='inspector.html' />
+  </inspectors>
+  
+  <styles>
+    <style src="css/typography.css" />
+    <style src="css/colors.light.css" />
+    <style src="css/theme.light.css" />
+    <style src="css/layouts.css" />
+  </styles>
+</theme>
