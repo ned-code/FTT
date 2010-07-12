@@ -1,17 +1,36 @@
 /**
- * @author david
+ * @author Julien Bachmann
  */
 
-WebDoc.DocumentCategoriesManager = $.klass({
-  initialize: function(callBack) {
-    this._callBack = callBack;
-    this._documentCategories = undefined;
-    this._loadDocumentCategories();
-  },   
+WebDoc.DocumentCategoriesManager = {
+  _initialized: false,
+  _documentCategories: undefined,
+  init: function(callBack) {
+    if (!this._initialized) {
+      this._initialize(callBack);
+    }  
+    else {
+      callBack.call(this, true);
+    }
+  },
   
+  getInstance: function() {
+    return this;    
+  },
+    
   getAllCategories: function(callBack) {
     return this._documentCategories;
   },
+      
+  _initialize: function(callBack) {
+    this._callBack = callBack;
+    if (this._documentCategories === undefined) {
+      this._loadDocumentCategories();
+    }
+    else {
+      this._callBack.call(this, WebDoc.DocumentCategoriesManager);            
+    }
+  },  
   
   _loadDocumentCategories: function() {
     WebDoc.ServerManager.getRecords(WebDoc.Category, null, function(data)
@@ -22,23 +41,7 @@ WebDoc.DocumentCategoriesManager = $.klass({
       else {
         this._documentCategories = [];
       }
-      this._callBack.call(this, WebDoc.DocumentCategoriesManager);      
+      this._callBack.call(this, WebDoc.DocumentCategoriesManager);                  
     }.pBind(this));
   }
-});
-
-$.extend(WebDoc.DocumentCategoriesManager, {  
-  
-  init: function(callBack) {
-    if (!this._instance) {
-      this._instance = new WebDoc.DocumentCategoriesManager(callBack);
-    }  
-    else {
-      callBack.call(this, true);
-    }
-  },
-  
-  getInstance: function() {
-    return this._instance;    
-  }
-});
+};

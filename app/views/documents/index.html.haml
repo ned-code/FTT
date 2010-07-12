@@ -130,6 +130,7 @@
       sessionKeyName:"#{session_key_name}",
       cookiesSessionKeyName:"#{cookies[session_key_name]}"
     };
+    WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category,#{ raw Rails.cache.fetch("categories_json") { Category.all.to_json } });   
     WebDoc.Application.main(function() {
       var editor = new WebDoc.DocumentEditor();
       editor.start();

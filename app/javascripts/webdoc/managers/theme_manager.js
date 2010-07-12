@@ -2,32 +2,13 @@
  * @author Julien Bachmann
  */
 
-WebDoc.ThemeManager = $.klass({
-  initialize: function(callBack) {
-
-    this._defaultTheme = undefined;
-    WebDoc.ServerManager.getRecords(WebDoc.Theme, null, function(data) {
-      if (data && data.length > 0) {
-        this._defaultTheme = data[0];
-      }
-      else {
-        this._defaultTheme = null;
-      }
-      callBack.call(this, WebDoc.ThemeManager);
-            
-    }.pBind(this), { ajaxParams: { default_theme: true }, action: 'default' });    
-  },   
-  
-  getDefaultTheme: function(callBack) {
-    return this._defaultTheme;
-  }
-});
-
-$.extend(WebDoc.ThemeManager, {  
+WebDoc.ThemeManager = {
+  _initialized: false,
+  _defaultTheme: undefined,
   
   init: function(callBack) {
-    if (!this._instance) {
-      this._instance = new WebDoc.ThemeManager(callBack);
+    if (!this._initialized) {
+      this._initialize(callBack);
     }  
     else {
       callBack.call(this, true);
@@ -35,6 +16,29 @@ $.extend(WebDoc.ThemeManager, {
   },
   
   getInstance: function() {
-    return this._instance;    
+    return this;    
+  }, 
+ 
+  _initialize: function(callBack) {
+    if (this._defaultTheme === undefined) {
+      WebDoc.ServerManager.getRecords(WebDoc.Theme, 'default', function(data) {
+        if (data && data.length > 0) {
+          this._defaultTheme = data[0];
+        }
+        else {
+          this._defaultTheme = null;
+        }
+        callBack.call(this, WebDoc.ThemeManager);
+        
+      }.pBind(this));
+    }    
+    else {
+      callBack.call(this, WebDoc.ThemeManager);
+    }
+  },   
+  
+  getDefaultTheme: function(callBack) {
+    return this._defaultTheme;
   }
-});
+};
+
