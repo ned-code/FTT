@@ -212,7 +212,10 @@ class Theme < ActiveRecord::Base
         #replace url('.. or url('
         if(line.match(/url\(\'\.\./))
           # match url('..
-          parsed += line.sub(/url\(\'\.\.\//, "url('#{attachment_root_url}")
+          while(line.match(/url\(\'\.\./))
+            line = line.sub(/url\(\'\.\.\//, "url('#{attachment_root_url}")
+          end
+          parsed += line
         elsif(line.match(/url\(\'http/))
           # match url('http
           parsed += line

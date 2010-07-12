@@ -365,12 +365,12 @@
                               
         border_8:             { target: 'item',
                                 scope: 'border',
-                                style: '-webkit-border-image: url('../images/border_speechbubble_1.png') 24 24 64 64 stretch stretch; -moz-border-image:    url('../images/border_speechbubble_1.png') 24 24 64 64 stretch stretch;border-image:         url('../images/border_speechbubble_1.png') 24 24 64 64 stretch stretch;border-top-width: 24px;border-right-width: 24px;border-bottom-width: 64px;border-left-width: 64px;'
+                                style: "-webkit-border-image: url('../images/border_speechbubble_1.png') 24 24 64 64 stretch stretch; -moz-border-image:    url('../images/border_speechbubble_1.png') 24 24 64 64 stretch stretch;border-image:         url('../images/border_speechbubble_1.png') 24 24 64 64 stretch stretch;border-top-width: 24px;border-right-width: 24px;border-bottom-width: 64px;border-left-width: 64px;"
                               },
         
         border_9:             { target: 'item',
                                 scope: 'border',
-                                style: '-webkit-border-image: url('../images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;-moz-border-image:    url('../images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;border-image:         url('../images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;border-top-width: 24px;border-right-width: 64px;border-bottom-width: 64px;border-left-width: 24px;'
+                                style: "-webkit-border-image: url('../images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;-moz-border-image:    url('../images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;border-image:         url('../images/border_speechbubble_2.png') 24 64 64 24 stretch stretch;border-top-width: 24px;border-right-width: 64px;border-bottom-width: 64px;border-left-width: 24px;"
                               },
                   
         page_background_1:    { target: 'page',
@@ -396,9 +396,6 @@
           links[i].onclick = function(event) {
             package_select = event.currentTarget.getAttribute('href');
             package_select = package_select.slice(9, package_select.length);
-            
-            console.log('package_select: ' + package_select);
-            console.log(buildStringMessage(package[package_select]));
             webdoc.postMessage(buildStringMessage(package[package_select]), '*');
           };
 
@@ -407,7 +404,6 @@
       
       function buildStringMessage(style_object){
         var style_string = '#';
-        
         //target, item or page
         if(style_object.target == 'item'){
           style_string += 'set_item_style?';
@@ -415,13 +411,10 @@
         else{
           style_string += 'set_page_style?'
         }
-        
         //scope
         style_string += 'scope=' + style_object.scope + '&';
-        
         //style
         style_string += 'style=' + encodeURI(style_object.style);
-        
         return style_string;
       }
       
