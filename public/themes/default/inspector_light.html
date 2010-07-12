@@ -368,6 +368,13 @@
     <img src='stickies/banane-salut.gif' />
   </div>
   
+  <div class="test clear">
+    <h3>Videos</h3>
+    <a href='http://www.youtube.com/watch?v=GQ-KVnYVzrQ' class='video_draggable'>
+      <img src='http://i4.ytimg.com/vi/GQ-KVnYVzrQ/default.jpg' />
+    </a>
+  </div>
+  
   <div class="test">
     <a href="#" class="">remove</a>
   </div>
@@ -388,6 +395,10 @@
 
         }
       }
+      
+      $('.video_draggable').bind('click', function(event){
+        event.preventDefault();
+      });
       
       $('.image_draggable').bind('dragstart', imageDragStart);
       
