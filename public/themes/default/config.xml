@@ -14,7 +14,12 @@
     <style src="css/colors.light.css" />
     <style src="css/theme.light.css" />
     <style src="css/layouts.css" />
+    <style src="css/fonts.css" />
   </styles>
+  
+  <fonts>
+    <style src="css/fonts.css" />
+  </fonts>
   
   <layouts>
     <layout src="layouts/layout_1.html" thumbnail="images/layout_1_thumb.png">
