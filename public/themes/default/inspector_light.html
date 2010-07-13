@@ -112,6 +112,8 @@
       }
       
   		p.font_1 {font: 18px/27px 'AdlerRegular', Arial, sans-serif;color:black;}
+  		
+  		p.font_2 {font: 18px/27px 'GoodDogRegular', Arial, sans-serif;}
   </style>
 </head>
 
@@ -200,8 +202,13 @@
       class="swatch bg-swatch theme_background_8 webdoc_message"></a>
   </div>
   <div class="test clear">
+    <h3>Fonts</h3>
     <a href='#package=font_1' class='webdoc_message'>
 	    <p class="font_1">Font-face Demo for the Adler Font</p>
+	  </a>
+	  
+	  <a href='#package=font_2' class='webdoc_message'>
+	    <p class="font_2">Font-face Demo for the GoodDog Font</p>
 	  </a>
 	
 	</div>
@@ -371,9 +378,16 @@
         //NOTE: fonts must be placed in the 'packakge_root/fonts' directory
         font_1 :    { target: 'item',
                       scope: 'font',
-                      style: "font: 18px/27px 'AdlerRegular', Arial, sans-serif;",
-                      font_face: "font-family: 'AdlerRegular';src: url('../fonts/Adler-fontfacekit/adler.eot');src: local('Adler Regular'), local('Adler'), url('../fonts/Adler-fontfacekit/adler.ttf') format('truetype');" }
+                      style: "font: 'AdlerRegular', Arial, sans-serif;",
+                      font_face: "font-family: 'AdlerRegular';src: url('../fonts/Adler-fontfacekit/adler.eot');src: local('Adler Regular'), local('Adler'), url('../fonts/Adler-fontfacekit/adler.ttf') format('truetype');" },
+        font_2 :    { target: 'item',
+                      scope: 'font',
+                      style: "font: 'GoodDogRegular', Arial, sans-serif;",
+                      font_face: "font-family: 'GoodDogRegular';src: url('../fonts/GoodDog-fontfacekit/GoodDog.eot');src: local('GoodDog Regular'), local('GoodDog'),url('../fonts/GoodDog-fontfacekit/GoodDog.ttf') format('truetype');" },
+                
       };
+      
+      
       var style = '';
       var package_select = '';
       

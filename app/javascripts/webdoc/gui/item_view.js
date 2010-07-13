@@ -161,15 +161,9 @@ WebDoc.ItemView = $.klass({
     domNode.attr( 'style', '' ).css( wrapCss );
     
     // apply item css if needed (drawing item view has no item dom node)
-    if (itemDomNode) {
-			if(this.item.hasFontFace()){
-				ddd('here we update the dom to use @font-face');
-				ddd(this.item.getFontFace());
-				this.domNode.parent().prepend($("<style type='text/css'>@font-face{" + this.item.getFontFace() + "}  </style>"));
-				//this.domNode.parent().prepend($("<script type='text/css'>p{font-size:1000px}  </script>"));
-			}
-      itemDomNode.attr( 'style', this.item.getStyleString()).css( itemCss );
-			
+    if (itemDomNode) {			
+			this._injectFontFace();
+      itemDomNode.attr( 'style', this.item.getStyleString()).css( itemCss );			
     }
   },
   
@@ -293,7 +287,7 @@ WebDoc.ItemView = $.klass({
   },
   
   viewDidLoad: function() {
-    
+    this._injectFontFace();
   },
   
   position: function() {
@@ -420,7 +414,23 @@ WebDoc.ItemView = $.klass({
       return (options.modifedAttribute.indexOf(attributeName) !== -1);
     }
     return true;
-  }
+  },
+
+	_injectFontFace: function(){
+		var itemsContainer = $('#items_' + this.pageView.page.uuid());
+		
+		if(this.item.hasFontFace()){
+			var styleNode = itemsContainer.find('style');
+			if(styleNode.length < 1){
+				itemsContainer.prepend($("<style type='text/css'>@font-face{" + this.item.getFontFace() + "}  </style>"));
+			}
+			else{
+				var styleNodeHtml = styleNode.html();
+				var fontfaceString = '@font-face{' + this.item.getFontFace()+ ' }';
+				styleNode.html(styleNodeHtml + fontfaceString);
+			}
+		}
+	}
   
 });
 
