@@ -10,7 +10,7 @@ WebDoc.DiscussionView = $.klass({
     this.pageView = pageView;
     this.discussion = discussion;
 
-    this.domNode = $("<div/>", { 'class':'wd_discussion_wrap' }).css('zIndex', '1500000').css('height', '16px').css('width', '16px');
+    this.domNode = $("<div/>", { 'class':'wd_discussion_wrap' }).css('zIndex', '1500000').css('height', '16px').css('width', '16px').css('position', 'absolute');
     this.domNode.data("discussionView", this);
 
     this.discussionDomNode = this.createDomNode();
@@ -25,11 +25,6 @@ WebDoc.DiscussionView = $.klass({
     this._moveToStoredPosition();
     this._initDrag();
 
-
-    this._isSelected = false;
-
-    // this.domNode.bind('click', this.select.pBind(this));
-
   },
 
   createDomNode: function() {
@@ -41,11 +36,6 @@ WebDoc.DiscussionView = $.klass({
 
     return discussionNode;
   },
-
-  // if param discussion is undefined => all discussion
-  // select: function() {
-  //   
-  // },
 
   fireCommentAdded: function(addedComment) {
     this.discussionDomNode.empty();
