@@ -41,13 +41,6 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   },
   
   inspectorId: function() {
-
-//    if (this.item.data.data.properties && this.item.data.data.properties.inspector_url) {
-//      return this.item.data.data.properties.inspector_url;
-//    }      
-//    else if (this.item.media && this.item.media.data.properties.inspector_url) {
-//      return this.item.media.data.properties.inspector_url;
-//    }
     return 0;
   },
   

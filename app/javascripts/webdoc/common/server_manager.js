@@ -355,6 +355,15 @@ jQuery.extend(WebDoc.ServerManager, {
       var arg = this.requestByUuid[uuid][0].arg;
       action.apply(this, arg);
     }
+  },
+  
+  createRecords: function(recordClass, jsonArray) {
+    var result = [];
+    for (var i = 0; i < jsonArray.length; i++) {
+      var currentRecord = new recordClass(jsonArray[i]);
+      result.push(currentRecord);
+    }
+    return result;
   }
 });
 

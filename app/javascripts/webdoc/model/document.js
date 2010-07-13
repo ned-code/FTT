@@ -226,6 +226,7 @@ WebDoc.Document = $.klass(WebDoc.Record, {
       }
     }
     page.document = this;
+    page.initSize();
     this.pages.push(page);
     this.sortPages();
     this.firePageAdded(page);    

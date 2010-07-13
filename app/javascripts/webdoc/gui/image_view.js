@@ -67,10 +67,12 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     else {
       frameNode.append( imageNode );
     }
-
+    
+    frameNode.addClass("image_item");
+    
     this.imageNode = imageNode;
     this.frameNode = frameNode;
-
+    
     this._zoom();
     this._displace();
     

@@ -10,7 +10,6 @@ describe PagesController do
       })
       @mock_page = mock_model(Page, {
               :to_json => {},
-              :must_notify= => true,
               :deep_notify => false,
               :update_attributes => {},
               :update_attributes! => {},

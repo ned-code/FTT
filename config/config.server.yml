@@ -1,4 +1,5 @@
 development:
+  host: dev1.webdoc.com  
   synch_openfire_users: false
   mail_from: dev@local
   notify_administrator_onuser_creation: true
@@ -8,4 +9,11 @@ development:
   shindig_container: default
   
 test:
+  host: dev1.webdoc.com
   synch_openfire_users: false
+
+staging:
+  host: st-wd.webdoc.com
+
+production:
+  host: alpha.webdoc.com

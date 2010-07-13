@@ -159,6 +159,9 @@ WebDoc.PageThumbnailView = $.klass({
       case WebDoc.ITEM_TYPE_HTML:
         itemView = new WebDoc.WidgetThumbnailView(item, this, afterItem);
         break;
+      case WebDoc.ITEM_TYPE_IFRAME:
+        itemView = new WebDoc.IFrameThumbnailView(item, this, afterItem);
+        break;      
       default:
         itemView = new WebDoc.ItemThumbnailView(item, this, afterItem);
         break;
