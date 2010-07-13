@@ -10,14 +10,14 @@ WebDoc.DiscussionView = $.klass({
     this.pageView = pageView;
     this.discussion = discussion;
 
-    this.domNode = $("<div/>").css('zIndex', '1500000').css('height', '16px').css('width', '16px');
+    this.domNode = $("<div/>", { 'class':'wd_discussion_wrap' }).css('zIndex', '1500000').css('height', '16px').css('width', '16px');
+    this.domNode.data("discussionView", this);
 
     this.discussionDomNode = this.createDomNode();
     this.domNode.append(this.discussionDomNode);
 
     this.domNode.id(this.discussion.uuid());
-    this.domNode.data("discussionView", this);
-    
+
     discussion.addListener(this);
 
     this.pageView.discussionDomNode.prepend(this.domNode);
@@ -25,16 +25,17 @@ WebDoc.DiscussionView = $.klass({
     this._moveToStoredPosition();
     this._initDrag();
 
+
     this._isSelected = false;
 
-    this.domNode.bind('click', this.select.pBind(this));
+    // this.domNode.bind('click', this.select.pBind(this));
 
   },
 
   createDomNode: function() {
     // TODO CSS for the icon
     var discussionNode =jQuery('<div/>');
-    this._icon = jQuery('<img/>', {'alt':'comment', 'class':'wd_discussion', 'src':'/images/icons/chat_16.png' });
+    this._icon = jQuery('<img/>', {'class':'wd_discussion', 'alt':'comment', 'src':'/images/icons/chat_16.png' });
     discussionNode.append(this._icon);
     discussionNode.append(jQuery('<div/>').append(this.discussion.comments.length));
 
@@ -42,11 +43,9 @@ WebDoc.DiscussionView = $.klass({
   },
 
   // if param discussion is undefined => all discussion
-  select: function() {
-    WebDoc.application.rightBarController.showDiscussionsPanel();
-    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
-    discussionPanel.showDiscussion(this.discussion);
-  },
+  // select: function() {
+  //   
+  // },
 
   fireCommentAdded: function(addedComment) {
     this.discussionDomNode.empty();

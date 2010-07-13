@@ -453,6 +453,14 @@ WebDoc.BoardController = jQuery.klass({
       this._fireSelectionChanged();
     }
   },
+
+  selectDiscussionView: function(discussionView) {
+    ddd('[BoardController] selected discussion');
+    WebDoc.application.rightBarController.showDiscussionsPanel();
+    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+    ddd(discussionView);
+    discussionPanel.showDiscussion(discussionView.discussion);
+  },
   
   moveSelection: function(direction, scale) {
     var max = this._selection.length;

@@ -4,6 +4,8 @@ class Comment < ActiveRecord::Base
 
   attr_accessible :uuid, :discussion_id, :user_id, :content, :created_at, :deleted_at
 
+  validates_presence_of :discussion_id
+
   belongs_to :user
   belongs_to :discussion
 
