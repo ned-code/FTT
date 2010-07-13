@@ -19,25 +19,39 @@ WebDoc.DiscussionView = $.klass({
     this.domNode.data("discussionView", this);
     
     discussion.addListener(this);
+
     this.pageView.discussionDomNode.prepend(this.domNode);
 
     this._moveToStoredPosition();
     this._initDrag();
 
-    this.domNode.bind('click', this.updateDiscussionPanel.pBind(this));
+    this._isSelected = false;
+
+    this.domNode.bind('click', this.select.pBind(this));
+
   },
 
   createDomNode: function() {
     // TODO CSS for the icon
-    var discussionNode = jQuery('<img/>', {'alt':'comment', 'class':'wd_discussion', 'src':'/images/icons/chat_16.png' });
+    var discussionNode =jQuery('<div/>');
+    this._icon = jQuery('<img/>', {'alt':'comment', 'class':'wd_discussion', 'src':'/images/icons/chat_16.png' });
+    discussionNode.append(this._icon);
+    discussionNode.append(jQuery('<div/>').append(this.discussion.comments.length));
+
     return discussionNode;
   },
 
   // if param discussion is undefined => all discussion
-  updateDiscussionPanel: function() {    
+  select: function() {
     WebDoc.application.rightBarController.showDiscussionsPanel();
     var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
     discussionPanel.showDiscussion(this.discussion);
+  },
+
+  fireCommentAdded: function(addedComment) {
+    this.discussionDomNode.empty();
+    this.discussionDomNode = this.createDomNode();
+    this.domNode.append(this.discussionDomNode);
   },
 
   // remove: function() {

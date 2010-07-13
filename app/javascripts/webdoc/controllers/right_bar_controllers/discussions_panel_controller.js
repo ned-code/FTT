@@ -7,18 +7,21 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   DISCUSSIONS_PANEL_BUTTON_SELECTOR: "a[href='#discussions-panel']",
 
   initialize: function() {
-    this.domNode = jQuery('#discussions-panel');
+
     this.creator = WebDoc.application.pageEditor.getCreator();
     this.currentPage = WebDoc.application.pageEditor.currentPage;
+
+    this.domNode = jQuery('#discussions-panel');
+    this.formDomNode = this.domNode.find('#wd_discussion_form');
     this.discussionsDomNode = this.domNode.find('#wd_discussions');
+
     this._currentDiscussion = null;
 
 
     this.currentPage.addListener(this);
 
-
     // For add discussion button
-    this.domNode.find(".add_discussion").bind("dragstart", this.prepareCreateDiscussionDragStart.pBind(this));
+    this.domNode.find(".wd_discussion_add").bind("dragstart", this.prepareCreateDiscussionDragStart.pBind(this));
 
 
     // this.showPageDiscussions();
@@ -29,7 +32,13 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   showDiscussion: function(discussion) {
+    if(this._currentDiscussion) {
+      discussion.removeListener(this._currentDiscussion);
+    }
     this._currentDiscussion = discussion;
+    discussion.addListener(this);
+    this.formDomNode.empty();
+    this.formDomNode.append(this.createCommentForm());
     this.discussionsDomNode.empty();
     this.discussionsDomNode.append(this.createDiscussionDomNode(discussion));
   },
@@ -48,21 +57,26 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   createDiscussionDomNode: function(discussion) {
     var newDiscussionsDomNode = jQuery('<div/>').attr('data-discussion-uuid', discussion.uuid());
 
-    newDiscussionsDomNode.append(this.createCommentForm());
-
-    newDiscussionsDomNode.append(jQuery('<hr/>'));
-
     for(var i=0; i<discussion.comments.length; i++) {
       var comment = discussion.comments[i];
-      newDiscussionsDomNode.append(comment.content());
+      newDiscussionsDomNode.prepend(this.createCommentDomNode(comment));
     }
     
-
     return newDiscussionsDomNode;  
+  },
+
+  createCommentDomNode: function(comment) {
+    var commentDomNode = jQuery('<div/>');
+    commentDomNode.append(jQuery('<hr>'));    
+    commentDomNode.append(comment.content());
+    commentDomNode.append(jQuery('<br/>'));
+    commentDomNode.append(comment.created_at());
+    return commentDomNode;
   },
 
   createCommentForm: function() {
     var label = jQuery('<label/>').text('Comment');
+    var discussionForForm = this._currentDiscussion;
 
     this._commentContent = jQuery('<textarea/>', { name: 'comment', value: 'Your comment' });
     this._form = $('<form/>');
@@ -79,12 +93,12 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
       ddd(newComment);
       newComment.setContent( this._commentContent.val(), true );
 
+
       newComment.save(function(newCommentBack, status) {
         this._form.show();
         if (status == "OK")
         {
-          ddd('-------------> ok!');
-          // this.comments.push(newCommentBack);
+          discussionForForm.addComment(newCommentBack);
         }
       }.pBind(this));
 
@@ -96,6 +110,13 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
   discussionAdded: function(discussion) {
     this.showDiscussion(discussion);  
+  },
+
+  fireCommentAdded: function(addedComment) {
+    if(this._currentDiscussion === addedComment.discussion) {
+      this.discussionsDomNode.find("div[data-discussion-uuid='"+addedComment.discussion.uuid()+"']")
+          .prepend(this.createCommentDomNode(addedComment));
+    }
   },
 
   // Button part

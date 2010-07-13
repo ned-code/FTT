@@ -43,6 +43,19 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
     else {
         return undefined;
     }
+  },
+
+  addComment: function(addedComment) {
+    this.comments.push(addedComment);
+    this.fireCommentAdded(addedComment);
+  },
+
+  fireCommentAdded: function(addedComment) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].fireCommentAdded) {
+        this.listeners[i].fireCommentAdded(addedComment);
+      }
+    }
   }
 
 });

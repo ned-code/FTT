@@ -5,11 +5,16 @@ class DiscussionsController < ApplicationController
     raise 'no params id' if params[:page_id].blank?
     
     if params[:page_id].present?
-      @discussions = Page.find_by_uuid(params[:page_id]).discussions     
+      @discussions = Page.find_by_uuid(params[:page_id]).discussions.all(:include => :comments)
     end
 
     respond_to do |format|
-      format.json { render :json => @discussions }
+      format.json do
+
+        @as_json_discussions = @discussions.map{ |d| d.as_json(:include => :comments) }
+
+        render :json => @as_json_discussions
+      end
     end    
   end  
 
