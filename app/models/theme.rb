@@ -90,23 +90,25 @@ class Theme < ActiveRecord::Base
         self.version = config_dom.root.attribute('version').to_s
         self.author = config_dom.root.elements['author'].text
         self.title = config_dom.root.elements['title'].text
-        self.elements_url = attachment_root_url + config_dom.root.attribute('elements').to_s
+        self.elements_url =  attachment_root_url + "parsed_inspector.html"
+        self.fonts_url =  attachment_root_url + "parsed_fonts.css"
         self.thumbnail_url = attachment_root_url + config_dom.root.attribute('thumbnail').to_s
         self.style_url = attachment_root_url + "css/parsed_theme_style.css"
         self.save!
-
-        config_dom.root.elements['layouts'].each_child do |layout|
-          if layout.class == REXML::Element
-            layout_object = Layout.new
-            layout_object.title = layout.elements['title'].text
-            layout_object.kind = layout.elements['kind'].text
-            layout_object.thumbnail_url = attachment_root_url + layout.attribute('thumbnail').to_s
-            layout_object.template_url = attachment_root_url + layout.attribute('src').to_s
-            layout_object.theme = self
-            layout_object.save!
+        
+        if config_dom.root.elements['layouts']
+          config_dom.root.elements['layouts'].each_child do |layout|
+            if layout.class == REXML::Element
+              layout_object = Layout.new
+              layout_object.title = layout.elements['title'].text
+              layout_object.kind = layout.elements['kind'].text
+              layout_object.thumbnail_url = attachment_root_url + layout.attribute('thumbnail').to_s
+              layout_object.template_url = attachment_root_url + layout.attribute('src').to_s
+              layout_object.theme = self
+              layout_object.save!
+            end
           end
         end
-
         if ancestor_theme.present?
           ancestor_theme.updated_theme_id = self.id
           raise(ActiveRecord::RecordInvalid) unless ancestor_theme.save(false)
@@ -114,6 +116,8 @@ class Theme < ActiveRecord::Base
 
           extract_files_from_zip_file
           create_parsed_style
+          create_parsed_inspector
+          create_parsed_fonts_style
           for layout_saved in self.layouts
             layout_saved.create_model_page!
           end
@@ -181,6 +185,131 @@ class Theme < ActiveRecord::Base
     else
       File.open(File.join(Rails.root, 'public', self.style_url), 'wb') {|f| f.write(parsed) }
     end
+  end
+  
+  
+ 
+  def create_parsed_inspector
+    files_path = Array.new
+    parsed = ""
+
+    config_dom.root.elements['inspectors'].each_child do |inspector|
+      if inspector.class == REXML::Element
+        files_path << File.join(attachment_root_path, inspector.attribute('src').to_s)
+      end
+    end
+
+    for file_path in files_path
+      if S3_CONFIG[:storage] == 's3'
+        file_readed = AWS::S3::S3Object.value(file_path, S3_CONFIG[:assets_bucket])
+      else
+        file_readed = IO.read(file_path)
+      end
+      
+      parsed += parse_file(file_readed)
+    end
+    
+    if S3_CONFIG[:storage] == 's3'      
+      AWS::S3::S3Object.store(attachment_root_path+"parsed_inspector.html",
+                        parsed,
+                        S3_CONFIG[:assets_bucket],
+                        {
+                          :access => :public_read
+                        })
+    else
+      File.open(File.join(Rails.root, 'public', self.elements_url), 'wb') {|f| f.write(parsed) }
+    end
+  end
+  
+  def create_parsed_fonts_style
+    files_path = Array.new
+    parsed = ""
+    p "ici"
+    p config_dom.root.elements['fonts']
+    if(config_dom.root.elements['fonts'])
+      config_dom.root.elements['fonts'].each_child do |font|
+        if font.class == REXML::Element
+          files_path << File.join(attachment_root_path, font.attribute('src').to_s)
+        end
+      end
+      
+      for file_path in files_path
+        if S3_CONFIG[:storage] == 's3'
+          file_readed = AWS::S3::S3Object.value(file_path, S3_CONFIG[:assets_bucket])
+        else
+          file_readed = IO.read(file_path)
+        end
+        
+        parsed += parse_file(file_readed)
+      end
+      
+      if S3_CONFIG[:storage] == 's3'      
+        AWS::S3::S3Object.store(attachment_root_path+"parsed_fonts.css",
+                          parsed,
+                          S3_CONFIG[:assets_bucket],
+                          {
+                            :access => :public_read
+                          })
+      else
+        File.open(File.join(Rails.root, 'public', self.fonts_url), 'wb') {|f| f.write(parsed) }
+      end
+    end
+  end
+  
+   #replace url('../anurlpath') with url(railsroot/pathtothemuplaod/anurlpath)
+  def parse_file(file)
+    parsed = ''
+    file.each_line do |line|
+      #replace url('.. or url('
+      if(line.match(/url\(\'\.\./))
+        # match url('..
+        while(line.match(/url\(\'\.\./))
+          line = line.sub(/url\(\'\.\.\//, "url('#{attachment_root_url}")
+        end
+        parsed += line
+      elsif(line.match(/url\(\'http/))
+        # match url('http
+        parsed += line
+      elsif(line.match(/url\(\'fonts/))
+        #match url('fonts
+        while(line.match(/url\(\'fonts/))
+          line = line.sub(/url\(\'fonts/, "url('#{attachment_root_url}fonts")
+        end
+        parsed += line
+        
+      elsif(line.match(/url\(\'/))
+        #match url('
+        parsed += line.sub(/url\(\'/, "url('#{attachment_root_url}")
+        
+      elsif(line.match(/src=\'http/) || line.match(/src=\"http/))
+        parsed += line
+      elsif(line.match(/src=\'/))
+        parsed += line.sub(/src=\'/, "src='#{attachment_root_url}")
+      elsif(line.match(/src=\"/))
+        parsed += line.sub(/src=\"/, "src=\"#{attachment_root_url}")
+        
+      elsif(line.match(/href=\'\#set_page_style/) || line.match(/href=\"\#set_page_style/) )
+        parsed += line
+      elsif(line.match(/href=\'\#set_item_style/) || line.match(/href=\"\#set_item_style/) )
+        parsed += line
+      elsif(line.match(/href=\'\#package/) || line.match(/href=\"\#package/) )
+        parsed += line
+      elsif( line.match(/href=\'\#\'/) || line.match(/href=\"\#\"/))
+        parsed += line
+      elsif( line.match(/href=\'http/) || line.match(/href=\"http/))
+        parsed += line
+      elsif( line.match(/href=\'\#/) )
+        parsed += line.sub(/href=\'\#/, "href=\'##{attachment_root_url}")
+      elsif( line.match(/href=\"\#/) )
+        parsed += line.sub(/href=\"\#/, "href=\"##{attachment_root_url}")
+      elsif( line.match(/pkg_id/) )
+        #replace pkg_id with the uuid
+        parsed += line.sub(/pkg_id/, self.uuid)
+      else
+        parsed += line
+      end
+    end
+    parsed
   end
   
   protected

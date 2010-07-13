@@ -81,9 +81,7 @@ WebDoc.WebImagesSearch = $.klass({
         case "set_image_as_bg_action": 
           var page = WebDoc.application.pageEditor.currentPage;
           var imgUrl = this.detailsViewImg.attr("src");
-          page.setBackgroundImage("url("+imgUrl+")");
-          page.setBackgroundRepeatMode("no-repeat");
-          page.setBackgroundPosition("center center");
+					page.setBackground(page.getBackgroundColor(),"url("+imgUrl+")", "no-repeat", "center center");
           // Jump to page inspector, where you can set how the background image is displayed
           WebDoc.application.rightBarController.showPageInspector();
           break;

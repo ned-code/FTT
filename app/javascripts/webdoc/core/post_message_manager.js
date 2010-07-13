@@ -57,10 +57,12 @@ WebDoc.PostMessageManager = $.klass({
     window.addEventListener("message", function(event){
       // event.domain event.data event.source event.origin
       ddd('[post message manager] received a new message: ' + event.data);
+			ddd(event.data);
       try {
         this.processMessage(event.data);
       } 
       catch (Exception) {
+				ddd(Exception);
         ddd("not a message for me");
         WebDoc.appsMessagingController.processMessage(event);
       }
@@ -83,12 +85,47 @@ WebDoc.PostMessageManager = $.klass({
     }
     return array;
   },
+	
+	/*
+		Return a an hash with scope and string that contain the inline CSS
+	*/
+	parseCSSUrl: function(url){
+		url = url.replace(/[\n\r\t]/g,''); //Remove NewLine, CarriageReturn and Tab characters from a String
+		//url = url.split(' ').join(''); 		//remove spaces
+		url = url.slice(1,url.length);    //remove the first #
+		var cssHash = {
+			scope: '',
+			cssString: '',
+			font_face: ''
+		};
+		
+		var url_array = url.split("?");
+		var params_array = url_array[1].split('&');
+		
+		for(i=0;i<params_array.length;i++){
+      keyValue = params_array[i].split("=");
+			if(keyValue[0] == 'scope'){
+				cssHash.scope = keyValue[1];
+			}
+			else{
+				if(keyValue[0] == 'style'){
+					cssHash.cssString += keyValue[1];
+				}
+				if(keyValue[0] == 'font_face'){
+					cssHash.font_face += keyValue[1];
+				}
+			}
+    }
+		return cssHash;
+	},
 
   /*
    * Process an action with a optional position
    */
   processMessage: function(action, pos) {
     var parsedUrl = this.parseUrl(action);
+		var parsedCss = this.parseCSSUrl(decodeURI(action));
+		
     if(parsedUrl['action']) {
       ddd('[post message manager] action ' + parsedUrl['action']);
       switch(parsedUrl['action']) {
@@ -129,6 +166,24 @@ WebDoc.PostMessageManager = $.klass({
             selection.item.addCss(cssParams);
           }
           break;
+				case 'set_item_style':
+					ddd('set_item_style');
+					var selection = WebDoc.application.boardController.selection()[0];
+					if(selection && selection.item) {
+            selection.item.setStyle(parsedCss.cssString, parsedCss.scope);
+          }
+					break;
+				case 'set_page_style':
+					ddd('set_page_style');
+					WebDoc.application.pageEditor.currentPage.setStyle(parsedCss.cssString, parsedCss.scope);
+					break;
+				case 'set_font':
+					ddd('set_font');
+					var selection = WebDoc.application.boardController.selection()[0];
+					if(selection && selection.item) {
+            selection.item.setFont(parsedCss.cssString, parsedCss.font_face);
+          }
+					break;
         case 'add_item':
           if(parsedUrl['params']['type']) {
             switch(parsedUrl['params']['type']) {
@@ -154,10 +209,11 @@ WebDoc.PostMessageManager = $.klass({
   getCssParams: function(params) {
     var cssArray = new Array();
     for (param in params) {
-      if ( !ILLEGALCSSPARAMS[param] ) {
+      if ( !this.ILLEGALCSSPARAMS[param] ) {
         cssArray[param] = params[param];
       }
     }
+		ddd('cssArray: ' + cssArray);
     return cssArray;
   }
 

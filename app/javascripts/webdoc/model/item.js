@@ -15,6 +15,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   CLASS_TYPE_FONT: 'font',
   CLASS_TYPE_OTHER: 'other',
 
+
   initialize: function($super, json, page, media) {
     this.page = page;
     this.media = media;
@@ -167,6 +168,129 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
 
+	setStyle: function(newStyle, scope){
+		if(scope){
+			if(jQuery.inArray(scope, this.page.CSS_AUTHORIZED_SCOPE) >= 0){
+				if(!this.getStyle()){
+					jQuery.extend(this.data.data, { style : {}});
+				}
+				var previousStyle = jQuery.extend({}, this.getStyle());
+				var that = this;
+				WebDoc.application.undoManager.registerUndo(function() {
+	  	    that.setStyle( previousStyle );
+	  	  });
+
+				this.data.data.style[scope] = newStyle;
+				this.save();
+				this.fireObjectChanged({ modifedAttribute: 'css' });
+			}
+		}
+		else{
+			this.data.data.style = newStyle;
+			this.save();
+			this.fireObjectChanged({ modifedAttribute: 'css' });
+		}
+	},
+	
+	getStyle: function(){
+		return this.data.data.style;
+	},
+	
+	hasStyle: function(){
+		if(this.data.data.style){ return true; }
+		else { return false; }
+	},
+	
+	getStyleString: function(){
+		var styleHash = this.getStyle();
+		var cssString = '';
+		
+		if(styleHash){
+			for(i=0; i < this.page.CSS_AUTHORIZED_SCOPE.length; i++){
+				if(styleHash[this.page.CSS_AUTHORIZED_SCOPE[i]]){
+					cssString += styleHash[this.page.CSS_AUTHORIZED_SCOPE[i]];
+				}
+			}
+		}
+		return cssString;
+	},
+	
+	getStylePropertyByScopeAndPropertyName: function(scope, property_name){
+		var styleHash = this.getStyle();
+		var propertyArray;
+		if(styleHash && styleHash[scope]){
+			var styleArray = styleHash[scope].split(';');
+			for(i=0;i<styleArray.length;i++){
+				propertyArray = styleArray[i].split(':');
+				if(propertyArray[0] == property_name){
+					return propertyArray[1];
+				}
+			}
+		}
+		return '';
+	},
+	
+	setStylePropertyByScopeAndProperty: function(scope, property_name, property_value){
+		ddd('setStylePropertyByScopeAndProperty');
+		var styleHash = this.getStyle();
+		var propertyArray;
+		var property = property_name + ':' + property_value + ';';
+		
+		if(styleHash && styleHash[scope]){
+			ddd('already hash with scope');
+			var styleString = '';
+			var styleArray = styleHash[scope].split(';');
+			for(i=0;i<styleArray.length;i++){
+				propertyArray = styleArray[i].split(':');
+				if(styleArray[i] !== ''){
+					if(propertyArray[0] == property_name){
+						styleString += property;
+					}
+					else{
+						styleString += propertyArray[0] + ':' + propertyArray[1] +';';
+					}
+					styleHash[scope] = styleString;
+				}
+			}
+		}
+		else if(styleHash){
+			styleHash[scope] = property;
+		}
+		else{
+			jQuery.extend(this.data.data, { style : {}});
+			this.data.data.style[scope] = property;
+		}
+		this.save();
+		this.fireObjectChanged({ modifedAttribute: 'css' });
+	},
+	
+	setStyleBorderRadius: function(radius){
+		this.setStylePropertyByScopeAndProperty('border', '-webkit-border-radius', radius);
+		this.setStylePropertyByScopeAndProperty('border', '-moz-border-radius', radius);
+		this.setStylePropertyByScopeAndProperty('border', 'border-radius', radius);
+	},
+	
+	//set the font to the item, css string contain the inline css.
+	//package_id is used to target the fonts css that import the font with @font-face
+	setFont: function(cssString, font_face_string){
+		if(!this.hasStyle()){
+			jQuery.extend(this.data.data, { style : {}});
+		}
+		this.data.data.style.font = cssString;
+		this.data.data.style.font_face = font_face_string;
+		this.save();
+		this.fireObjectChanged({ modifedAttribute: 'css' });
+	},
+	
+	hasFontFace: function(){
+		return (this.hasStyle() && this.data.data.style.font_face);
+	},
+	
+	getFontFace: function(){
+		if(this.hasFontFace()){ return this.data.data.style.font_face ; }
+		else{ return ''; }
+	},
+	
   getIsPlaceholder: function() {
     ddd('[item] get is placeholder');
     if(this._isPlaceholder === true) {
