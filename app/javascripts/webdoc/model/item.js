@@ -193,6 +193,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
 		return this.data.data.style;
 	},
 	
+	hasStyle: function(){
+		if(this.data.data.style){ return true; }
+		else { return false; }
+	},
+	
 	getStyleString: function(){
 		var styleHash = this.getStyle();
 		var cssString = '';
@@ -260,6 +265,27 @@ WebDoc.Item = $.klass(WebDoc.Record,
 		this.setStylePropertyByScopeAndProperty('border', '-webkit-border-radius', radius);
 		this.setStylePropertyByScopeAndProperty('border', '-moz-border-radius', radius);
 		this.setStylePropertyByScopeAndProperty('border', 'border-radius', radius);
+	},
+	
+	//set the font to the item, css string contain the inline css.
+	//package_id is used to target the fonts css that import the font with @font-face
+	setFont: function(cssString, font_face_string){
+		if(!this.hasStyle()){
+			jQuery.extend(this.data.data, { style : {}});
+		}
+		this.data.data.style.font = cssString;
+		this.data.data.style.font_face = font_face_string;
+		this.save();
+		this.fireObjectChanged({ modifedAttribute: 'css' });
+	},
+	
+	hasFontFace: function(){
+		return (this.hasStyle() && this.data.data.style.font_face);
+	},
+	
+	getFontFace: function(){
+		if(this.hasFontFace()){ return this.data.data.style.font_face ; }
+		else{ return ''; }
 	},
 	
   getIsPlaceholder: function() {

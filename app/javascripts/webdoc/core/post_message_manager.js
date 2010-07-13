@@ -90,14 +90,13 @@ WebDoc.PostMessageManager = $.klass({
 		Return a an hash with scope and string that contain the inline CSS
 	*/
 	parseCSSUrl: function(url){
-		ddd('parseCSSUrl');
-		ddd(url)
 		url = url.replace(/[\n\r\t]/g,''); //Remove NewLine, CarriageReturn and Tab characters from a String
 		//url = url.split(' ').join(''); 		//remove spaces
 		url = url.slice(1,url.length);    //remove the first #
 		var cssHash = {
 			scope: '',
-			cssString: ''
+			cssString: '',
+			font_face: ''
 		};
 		
 		var url_array = url.split("?");
@@ -112,9 +111,11 @@ WebDoc.PostMessageManager = $.klass({
 				if(keyValue[0] == 'style'){
 					cssHash.cssString += keyValue[1];
 				}
+				if(keyValue[0] == 'font_face'){
+					cssHash.font_face += keyValue[1];
+				}
 			}
     }
-		ddd(cssHash);
 		return cssHash;
 	},
 
@@ -176,6 +177,13 @@ WebDoc.PostMessageManager = $.klass({
 					ddd('set_page_style');
 					WebDoc.application.pageEditor.currentPage.setStyle(parsedCss.cssString, parsedCss.scope);
 					break;
+				case 'set_font':
+					ddd('set_font');
+					var selection = WebDoc.application.boardController.selection()[0];
+					if(selection && selection.item) {
+            selection.item.setFont(parsedCss.cssString, parsedCss.font_face);
+          }
+					break;
         case 'add_item':
           if(parsedUrl['params']['type']) {
             switch(parsedUrl['params']['type']) {
@@ -199,7 +207,6 @@ WebDoc.PostMessageManager = $.klass({
   },
 
   getCssParams: function(params) {
-		ddd('params: ' + params);
     var cssArray = new Array();
     for (param in params) {
       if ( !this.ILLEGALCSSPARAMS[param] ) {

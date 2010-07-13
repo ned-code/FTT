@@ -161,8 +161,15 @@ WebDoc.ItemView = $.klass({
     domNode.attr( 'style', '' ).css( wrapCss );
     
     // apply item css if needed (drawing item view has no item dom node)
-    if (itemDomNode) {      
+    if (itemDomNode) {
+			if(this.item.hasFontFace()){
+				ddd('here we update the dom to use @font-face');
+				ddd(this.item.getFontFace());
+				this.domNode.parent().prepend($("<style type='text/css'>@font-face{" + this.item.getFontFace() + "}  </style>"));
+				//this.domNode.parent().prepend($("<script type='text/css'>p{font-size:1000px}  </script>"));
+			}
       itemDomNode.attr( 'style', this.item.getStyleString()).css( itemCss );
+			
     }
   },
   

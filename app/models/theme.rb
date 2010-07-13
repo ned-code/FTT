@@ -306,6 +306,9 @@ class Theme < ActiveRecord::Base
         parsed += line.sub(/href=\'\#/, "href=\'##{attachment_root_url}")
       elsif( line.match(/href=\"\#/) )
         parsed += line.sub(/href=\"\#/, "href=\"##{attachment_root_url}")
+      elsif( line.match(/pkg_id/) )
+        #replace pkg_id with the uuid
+        parsed += line.sub(/pkg_id/, self.uuid)
       else
         parsed += line
       end
