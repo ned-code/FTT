@@ -82,7 +82,7 @@
           var params = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-discussion'));
           if(pos && params && params.action === 'create') {
             WebDoc.application.boardController.insertDiscussion({ left: pos.x, top: pos.y });
-		        WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);  
+		        WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);            
           }
 	        return true;
           break;

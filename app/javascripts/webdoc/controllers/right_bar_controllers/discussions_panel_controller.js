@@ -9,13 +9,17 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   initialize: function() {
     this.domNode = jQuery('#discussions-panel');
     this.creator = WebDoc.application.pageEditor.getCreator();
+    this.currentPage = WebDoc.application.pageEditor.currentPage;
     this.discussionsDomNode = this.domNode.find('#wd_discussions');
+    this._currentDiscussion = null;
 
-    this.domNode.append(this.discussionsDomNode);
+
+    this.currentPage.addListener(this);
 
 
     // For add discussion button
     this.domNode.find(".add_discussion").bind("dragstart", this.prepareCreateDiscussionDragStart.pBind(this));
+
 
     // this.showPageDiscussions();
   },
@@ -25,6 +29,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   showDiscussion: function(discussion) {
+    this._currentDiscussion = discussion;
     this.discussionsDomNode.empty();
     this.discussionsDomNode.append(this.createDiscussionDomNode(discussion));
   },
@@ -41,7 +46,11 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   // },
 
   createDiscussionDomNode: function(discussion) {
-    var newDiscussionsDomNode = jQuery('<div/>').text(discussion.uuid());
+    var newDiscussionsDomNode = jQuery('<div/>').attr('data-discussion-uuid', discussion.uuid());
+
+    newDiscussionsDomNode.append(this.createCommentForm());
+
+    newDiscussionsDomNode.append(jQuery('<hr/>'));
 
     for(var i=0; i<discussion.comments.length; i++) {
       var comment = discussion.comments[i];
@@ -50,6 +59,43 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     
 
     return newDiscussionsDomNode;  
+  },
+
+  createCommentForm: function() {
+    var label = jQuery('<label/>').text('Comment');
+
+    this._commentContent = jQuery('<textarea/>', { name: 'comment', value: 'Your comment' });
+    this._form = $('<form/>');
+    this._button = jQuery('<input/>', { 'type': 'submit', 'value': 'Comment'});
+    this._form.append(label).append(this._commentContent).append(this._button);
+
+    this._form
+    .bind('submit', function(e){
+      e.preventDefault();
+
+      this._form.hide();
+
+      var newComment = new WebDoc.Comment(null, this._currentDiscussion);
+      ddd(newComment);
+      newComment.setContent( this._commentContent.val(), true );
+
+      newComment.save(function(newCommentBack, status) {
+        this._form.show();
+        if (status == "OK")
+        {
+          ddd('-------------> ok!');
+          // this.comments.push(newCommentBack);
+        }
+      }.pBind(this));
+
+
+    }.pBind(this));
+
+    return this._form;
+  },
+
+  discussionAdded: function(discussion) {
+    this.showDiscussion(discussion);  
   },
 
   // Button part
