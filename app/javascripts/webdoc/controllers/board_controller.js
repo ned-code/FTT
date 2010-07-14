@@ -425,6 +425,12 @@ WebDoc.BoardController = jQuery.klass({
     // exit edit mode for current editing item
     this.stopEditing();
     if (itemViews.length > 0) {
+			//do nothing if the itemView is already in the selection
+			if(itemViews.length == 1){
+				if (jQuery.inArray(itemViews[0], this._selection) >= 0) {
+	      	return;
+	      }
+			}
       // do nothing if new selection is equal to old selection
       if(itemViews.length === this._selection.length) {
         var selectionIsEqual = true;
