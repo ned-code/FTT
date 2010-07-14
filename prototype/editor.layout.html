@@ -23,11 +23,18 @@
     .header {
       background: white;
     }
-    .webdoc_wrap {
+    .editor_wrap {
       background: yellow;
     }
     .content_wrap {
       background: yellow;
+    }
+    .side_panel {
+      background: red;
+    }
+    .editor,
+    .content {
+      background: #efbb46;
     }
   </style>
 </head>
@@ -37,17 +44,18 @@
     <h1>Title</h1>
   </div>
   
-  <div class="webdoc_wrap wrap">
-    webdoc
-    <a href="#full">full</a>
-    <div class="sidebar">
-      sidebar
+  <div class="editor_wrap wrap">
+    <div class="editor">
+      editor
+      <a href="#full">full</a>
+    </div>
+    <div class="side_panel">
+      side panel
     </div>
   </div>
   
-  <div class="content_wrap wrap">
-    Content<br/>
-    
+  <section class="content_wrap wrap">
+    <div class="content">
     content<br/>
     content<br/>
     content<br/>
@@ -69,7 +77,9 @@
     content<br/>
     content<br/>
     content<br/>
-  </div>
+    content<br/>
+    </div>
+  </section>
   
   <header class="header">
     Absolute

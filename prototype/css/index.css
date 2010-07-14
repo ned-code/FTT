@@ -1,0 +1,52 @@
+/* Base Classes */
+
+/* Extensions */
+
+.nav_index {
+  position: absolute;
+  top: 0;
+  left: 180px;
+}
+
+.user_index {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.author_index {
+  height: 48px;
+  overflow: hidden;
+}
+
+.author_index li {
+  margin-right: 0.3333em;
+}
+
+.reader_index {
+  height: 32px;
+  overflow: hidden;
+}
+
+.reader_index li {
+  margin-right: 0.3333em;
+}
+
+.message_index {
+  
+}
+
+.thumbs_index li {
+  margin-bottom: 0.3333em;
+}
+
+.message_index li {
+  position: relative;
+  padding-left: 36px;
+  margin-bottom: 0.3333em; /* 4px */
+  min-height: 32px;
+}
+
+.message_index .message {
+  font-size: 0.8333em; /* 10px */
+}

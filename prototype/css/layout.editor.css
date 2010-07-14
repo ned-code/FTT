@@ -2,13 +2,13 @@
 
 body {
   /* Top padding makes room for the top bar, while
-     right padding makes room for the editor side bar */
+     right padding makes room for the side panel */
   padding-top: 64px;
-  padding-right: 320px;
+  padding-right: 292px;
   
-  -webkit-transition: padding-top 0.33s linear, padding-right 0.33s linear;
-  -moz-transition:    padding-top 0.33s linear, padding-right 0.33s linear;
-  transition:         padding-top 0.33s linear, padding-right 0.33s linear;
+  -webkit-transition: padding-top 0.3s linear, padding-right 0.3s linear;
+  -moz-transition:    padding-top 0.3s linear, padding-right 0.3s linear;
+  transition:         padding-top 0.3s linear, padding-right 0.3s linear;
 }
 
 body.full_view {
@@ -28,9 +28,9 @@ body.full_view {
   /* Transition to full view. Transitions can't go from % to length
      values. Boo, rubbish. We have to use a combination of height
      and min-height to get both types of value to cooperate. */
-  -webkit-transition: width 0.33s linear, height 0.33s linear, min-height 0.33s linear, margin-bottom 0.33s linear, opacity 0.33s linear;
-  -moz-transition:    width 0.33s linear, height 0.33s linear, min-height 0.33s linear, margin-bottom 0.33s linear, opacity 0.33s linear;
-  transition:         width 0.33s linear, height 0.33s linear, min-height 0.33s linear, margin-bottom 0.33s linear, opacity 0.33s linear;
+  -webkit-transition: width 0.3s linear, height 0.3s linear, min-height 0.3s linear, margin-bottom 0.3s linear, opacity 0.3s linear;
+  -moz-transition:    width 0.3s linear, height 0.3s linear, min-height 0.3s linear, margin-bottom 0.3s linear, opacity 0.3s linear;
+  transition:         width 0.3s linear, height 0.3s linear, min-height 0.3s linear, margin-bottom 0.3s linear, opacity 0.3s linear;
 }
 
 .full_view .wrap {
@@ -49,13 +49,15 @@ body.full_view {
   opacity: 0;
 }
 
-.webdoc_wrap {
+.editor_wrap {
   height: 466px;
-  min-height: 60%;
+  min-height: 50%;
   margin-bottom: 2em;
+  /* Create a gap between content and side_panel */
+  padding-right: 2%;
 }
 
-.full_view .webdoc_wrap {
+.full_view .editor_wrap {
   min-height: 100%;
   margin-bottom: 0;
 }
@@ -63,6 +65,8 @@ body.full_view {
 .content_wrap {
   height: auto;
   opacity: 1;
+  /* Create a gap between content and side_panel */
+  padding-right: 2%;
 }
 
 .full_view .content_wrap {
@@ -71,22 +75,37 @@ body.full_view {
   /* display: none; */
 }
 
-.sidebar {
+.editor {
+  width: 98%;
+  
+  /* Transition to full view.  The only reason we need this transition
+     is because of a bit of a margin hack in the way the side panel
+     gap is compensated for.  Would be good if we could sort that, then
+     we wouldn't need this. */
+  -webkit-transition: width 0.3s ease-in;
+  -moz-transition:    width 0.3s ease-in;
+  transition:         width 0.3s ease-in;
+}
+
+.full_view .editor {
+  width: 100%;
+}
+
+.side_panel {
   position: absolute;
   right: 0;
   top: 0;
-  margin-right: -320px;
-  width: 320px;
-  background: red;
+  margin-right: -292px;
+  width: 292px;
   height: 1000px;
   min-height: 100%;
   
-  /* Transition to full mode */
-  -webkit-transition: height 0.33s linear;
-  -moz-transition:    height 0.33s linear;
-  transition:         height 0.33s linear;
+  /* Transition to full view */
+  -webkit-transition: height 0.3s linear;
+  -moz-transition:    height 0.3s linear;
+  transition:         height 0.3s linear;
 }
 
-.full_mode .sidebar {
-  height: 0;
+.full_view .side_panel {
+  height: 466px;
 }
