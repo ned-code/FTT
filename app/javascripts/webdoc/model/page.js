@@ -420,7 +420,6 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.fireDiscussionAdded(discussion);
   },
 
-  // TODO Finir!!
   removeDiscussion: function(discussion) {
     var index = $.inArray(discussion, this.discussions);
     if (index != -1) {
@@ -430,7 +429,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
         //   this.nonDrawingItems.splice(nonDrawingIndex, 1);
         // }
     }
-    // this.fireDiscussionRemoved(discussion);
+    this.fireDiscussionRemoved(discussion);
   },
   
   findItemWithUuid: function(pUuid) {
@@ -472,6 +471,14 @@ WebDoc.Page = $.klass(WebDoc.Record,
     for (var i = 0; i < this.listeners.length; i++) {
       if (this.listeners[i].discussionAdded) {
         this.listeners[i].discussionAdded(addedDiscussion);
+      }
+    }
+  },
+
+  fireDiscussionRemoved: function(removedDiscussion) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].discussionRemoved) {
+        this.listeners[i].discussionRemoved(removedDiscussion);
       }
     }
   },

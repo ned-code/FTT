@@ -40,13 +40,13 @@ WebDoc.DiscussionView = $.klass({
     this.domNode.append(this.createDiscussionDomNode());
   },
 
-  // remove: function() {
-  //   this.domNode.remove();
-  // },
+  remove: function() {
+    this.domNode.remove();
+  },
 
-  // destroy: function() {
-  //   this.item.removeListener();
-  // },
+  destroy: function() {
+    this.discussion.removeListener();
+  },
 
   _initDrag: function() {
     this.domNode.draggable({

@@ -5,7 +5,7 @@ class Discussion < ActiveRecord::Base
   attr_accessible :uuid, :page_id, :deleted_at, :properties
 
   belongs_to :page
-  has_many :comments
+  has_many :comments, :dependent => :delete_all  
 
   serialize :properties
 

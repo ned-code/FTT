@@ -26,6 +26,7 @@ WebDoc.PageView = $.klass({
     this.discussionDomNode = discussionDomNode;
     this.eventCatcherNode = eventCatcherNode;
     this.itemViews = {};
+    this.discussionViews = {};
     this._zoomFactor = 1;
     this.wait = null;
     // Set up page view
@@ -100,6 +101,14 @@ WebDoc.PageView = $.klass({
         this.createDiscussionView(discussion);
       }
     }.pBind(this));
+  },
+
+  discussionRemoved: function(removedDiscussion) {
+    var relatedDiscussionView = this.discussionViews[removedDiscussion.uuid()];
+    if (relatedDiscussionView) {
+      relatedDiscussionView.remove();
+      delete this.discussionViews[removedDiscussion.uuid()];
+    }
   },
   
   setLoading: function(state) {
@@ -180,6 +189,7 @@ WebDoc.PageView = $.klass({
 
   createDiscussionView: function(discussion) {
     var discussionView = new WebDoc.DiscussionView(discussion, this);
+    this.discussionViews[discussion.uuid()] = discussionView;
     return discussionView;
   },
   
@@ -188,6 +198,10 @@ WebDoc.PageView = $.klass({
     for (var itemId in this.itemViews) {
       var anItemView = this.itemViews[itemId];
       anItemView.destroy();
+    }
+    for (var discussionId in this.discussionViews) {
+      var anDiscussView = this.discussionViews[discussionId];
+      anDiscussView.destroy();
     }
   },
   

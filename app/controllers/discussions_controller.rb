@@ -1,5 +1,5 @@
 class DiscussionsController < ApplicationController
-  before_filter :find_discussion, :only => [:update]
+  before_filter :find_discussion, :only => [:update, :destroy]
   
   def index
     raise 'no params id' if params[:page_id].blank?
@@ -37,13 +37,14 @@ class DiscussionsController < ApplicationController
   end
 
   def destroy
-
+    @discussion.destroy
+    render :json => {}
   end
 
   private
 
   def find_discussion
-    @discussion = Discussion.find_by_uuid(params[:discussion][:uuid])    
+    @discussion = Discussion.find_by_uuid(params[:id])    
   end
 
 end

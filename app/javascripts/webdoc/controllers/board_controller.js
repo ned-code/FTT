@@ -17,6 +17,7 @@ WebDoc.BoardController = jQuery.klass({
     this._autoFit = autoFit;
     this._currentZoom = 1; 
     this._selection = [];
+    this._selectionDiscussion = null;
     this._editingItem = null;
     this._selectionListeners = [];
     this._currentPageListeners = [];
@@ -89,6 +90,7 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPageView = pageView;
     this._currentZoom = 1;
     this._selection = [];
+    this._selectionDiscussion = null;
     this._currentPage = page;
     this._editingItem = null;
     
@@ -454,14 +456,6 @@ WebDoc.BoardController = jQuery.klass({
     }
   },
 
-  selectDiscussionView: function(discussionView) {
-    ddd('[BoardController] selected discussion');
-    WebDoc.application.rightBarController.showDiscussionsPanel();
-    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
-    ddd(discussionView);
-    discussionPanel.showDiscussion(discussionView.discussion);
-  },
-  
   moveSelection: function(direction, scale) {
     var max = this._selection.length;
     var offsetSize = scale == "big"? 15 : 1;
@@ -677,13 +671,6 @@ WebDoc.BoardController = jQuery.klass({
     newItem.data.data.preference.url = videoProperties.video_id;
     this.insertItems([newItem]);
   },
-
-  // insert a discustion with a position with left and top attributes
-  insertDiscussion: function(position) {
-    var newDiscussion = new WebDoc.Discussion(null, 'page', WebDoc.application.pageEditor.currentPage.uuid());
-    newDiscussion.setPosition(position, true);
-    this.insertDiscussions([newDiscussion]);
-  },
   
   insertHtml: function(html, position) {
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
@@ -724,28 +711,6 @@ WebDoc.BoardController = jQuery.klass({
     
     WebDoc.application.undoManager.registerUndo(function() {
       this.insertItems(items);
-    }.pBind(this));
-  },
-
-  insertDiscussions: function(discussions) {
-    jQuery.each(discussions, function(index, discussion) {
-      this._currentPage.addDiscussion(discussion);
-      discussion.isNew = true;
-      discussion.save();
-    }.pBind(this));
-    WebDoc.application.undoManager.registerUndo(function() {
-      this.removeItems(discussions);
-    }.pBind(this));
-  },
-
-  removeDiscussions: function(discussions) {
-    jQuery.each(items, function(index, discussion) {
-      this._currentPage.removeDiscussion(discussion);
-      discussion.destroy();
-    }.pBind(this));
-
-    WebDoc.application.undoManager.registerUndo(function() {
-      this.insertDiscussions(discussions);
     }.pBind(this));
   },
     
@@ -876,7 +841,12 @@ WebDoc.BoardController = jQuery.klass({
       switch (e.which) {
         case 8:
         case 46:
-          this.deleteSelection(e);
+          if (this._isInteraction) {
+            this.deleteSelectionDiscussion(e);
+          }
+          else {
+            this.deleteSelection(e);
+          }
           break;
         case 90:
           this.zoomIn();
@@ -1091,5 +1061,53 @@ WebDoc.BoardController = jQuery.klass({
         }, true, this.oldSize);
       }.pBind(this)
     });
+  },
+
+  // ***********
+  // DISCUSSIONS
+  // ***********
+
+  selectDiscussionView: function(discussionView) {
+    ddd('[BoardController] selected discussion');
+    this._selectionDiscussion = discussionView.discussion;
+    WebDoc.application.rightBarController.showDiscussionsPanel();
+    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+    discussionPanel.showDiscussion(discussionView.discussion);
+  },
+
+  // insert a discustion with a position with left and top attributes
+  insertDiscussion: function(position) {
+    ddd('[BoardController] insert discussion');
+    var newDiscussion = new WebDoc.Discussion(null, 'page', WebDoc.application.pageEditor.currentPage.uuid());
+    newDiscussion.setPosition(position, true);
+    newDiscussion.isNew = true;
+    this._currentPage.addDiscussion(newDiscussion);
+    newDiscussion.save();
+
+    // WebDoc.application.undoManager.registerUndo(function() {
+    //   this.removeItems(discussions);
+    // }.pBind(this));
+  },
+
+  removeDiscussion: function(discussion) {
+    ddd('[BoardController] remove discussion');
+    this._currentPage.removeDiscussion(discussion);
+    ddd(discussion);
+    discussion.destroy();
+
+
+    // WebDoc.application.undoManager.registerUndo(function() {
+    //   this.insertDiscussions(discussions);
+    // }.pBind(this));
+  },
+
+  deleteSelectionDiscussion: function(e) {
+    ddd('[BoardController] delete selection discussion');
+    this.removeDiscussion(this._selectionDiscussion);
+    if (e && this._selectionDiscussion.length !== null) {
+      e.preventDefault();
+    }
+    this._selectionDiscussion = null;
   }
+
 });
