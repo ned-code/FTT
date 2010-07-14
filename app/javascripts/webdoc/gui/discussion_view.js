@@ -11,12 +11,9 @@ WebDoc.DiscussionView = $.klass({
     this.discussion = discussion;
 
     this.domNode = $("<div/>", { 'class':'wd_discussion_wrap' }).css('zIndex', '1500000').css('height', '16px').css('width', '16px').css('position', 'absolute');
-    this.domNode.data("discussionView", this);
-
-    this.discussionDomNode = this.createDomNode();
-    this.domNode.append(this.discussionDomNode);
-
     this.domNode.id(this.discussion.uuid());
+    this.domNode.append(this.createDiscussionDomNode());
+    this.domNode.data("discussionView", this);
 
     discussion.addListener(this);
 
@@ -27,20 +24,20 @@ WebDoc.DiscussionView = $.klass({
 
   },
 
-  createDomNode: function() {
+  createDiscussionDomNode: function() {
     // TODO CSS for the icon
-    var discussionNode =jQuery('<div/>');
-    this._icon = jQuery('<img/>', {'class':'wd_discussion', 'alt':'comment', 'src':'/images/icons/chat_16.png' });
+    var discussionNode = jQuery('<div/>');    
+    this._icon = jQuery('<img/>', { 'alt':'comment', 'src':'/images/icons/chat_16.png' });
     discussionNode.append(this._icon);
-    discussionNode.append(jQuery('<div/>').append(this.discussion.comments.length));
-
+    discussionNode.append(jQuery('<div/>', { 'style': 'top:3px; width:16px; height:16px; overflow: hidden; position:absolute; font-size: 8px; text-align:center;' }).text(this.discussion.comments.length));
+    // add a div to catch click with a class wd_discussion
+    discussionNode.append(jQuery('<div/>', { 'style': 'top:0px; width:16px; height:16px; position:absolute;', 'class': 'wd_discussion' }));
     return discussionNode;
   },
 
   fireCommentAdded: function(addedComment) {
-    this.discussionDomNode.empty();
-    this.discussionDomNode = this.createDomNode();
-    this.domNode.append(this.discussionDomNode);
+    this.domNode.empty();
+    this.domNode.append(this.createDiscussionDomNode());
   },
 
   // remove: function() {

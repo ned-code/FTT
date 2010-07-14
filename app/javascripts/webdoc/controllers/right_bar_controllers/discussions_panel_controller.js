@@ -59,18 +59,22 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
     for(var i=0; i<discussion.comments.length; i++) {
       var comment = discussion.comments[i];
-      newDiscussionsDomNode.prepend(this.createCommentDomNode(comment));
+      newDiscussionsDomNode.append(this.createCommentDomNode(comment));
     }
     
     return newDiscussionsDomNode;  
   },
 
   createCommentDomNode: function(comment) {
-    var commentDomNode = jQuery('<div/>');
-    commentDomNode.append(jQuery('<hr>'));    
-    commentDomNode.append(comment.content());
-    commentDomNode.append(jQuery('<br/>'));
-    commentDomNode.append(comment.created_at());
+    var commentDomNode = jQuery('<div/>'),
+        firstPart = jQuery('<div/>', { 'style': 'width: 60%; float: left;'}),
+        secondPart = jQuery('<div/>', { 'style': 'width: 40%; float: left;'});
+    firstPart.append(comment.content());
+    firstPart.append(jQuery('<br/>'));
+    firstPart.append(comment.created_at() + ' by ' + comment.user.getUsername());
+    secondPart.append(jQuery('<img/>', { 'src': comment.user.getAvatarThumbUrl() }));
+
+    commentDomNode.append(firstPart).append(secondPart).append(jQuery('<div/>', {'style':'clear:both;'})).append(jQuery('<hr>'));
     return commentDomNode;
   },
 
@@ -87,18 +91,20 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     .bind('submit', function(e){
       e.preventDefault();
 
-      this._form.hide();
+      this._button.hide();
+      this._commentContent.attr('disabled', 'disabled');
 
       var newComment = new WebDoc.Comment(null, this._currentDiscussion);
-      ddd(newComment);
       newComment.setContent( this._commentContent.val(), true );
-
 
       newComment.save(function(newCommentBack, status) {
         this._form.show();
         if (status == "OK")
         {
-          discussionForForm.addComment(newCommentBack);
+          discussionForForm.addComment(newCommentBack); 
+          this._commentContent.val('');
+          this._commentContent.removeAttr('disabled');
+          this._button.show();
         }
       }.pBind(this));
 
@@ -113,9 +119,10 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   fireCommentAdded: function(addedComment) {
+    ddd('[DiscussionsPanel] fire comment added');
     if(this._currentDiscussion === addedComment.discussion) {
       this.discussionsDomNode.find("div[data-discussion-uuid='"+addedComment.discussion.uuid()+"']")
-          .prepend(this.createCommentDomNode(addedComment));
+          .append(this.createCommentDomNode(addedComment));
     }
   },
 

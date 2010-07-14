@@ -6,9 +6,10 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.json { render :json => @comment }
+        @json_comment = @comment.as_json(:include => { :user => { :methods => :avatar_thumb_url } })
+        format.json { render :json => @json_comment }
       else
-        format.json { render :json => @comment, :status => 203 }
+        format.json { render :json => @json_comment, :status => 203 }
       end
     end
   end

@@ -4,6 +4,14 @@
 WebDoc.User = $.klass(WebDoc.Record, {
   initialize: function($super, json) {
     $super(json);
+  },
+
+  getUsername: function() {
+    return this.data.username;
+  },
+
+  getAvatarThumbUrl: function() {
+    return this.data.avatar_thumb_url;
   }
 });
 

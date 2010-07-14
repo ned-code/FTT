@@ -4,12 +4,14 @@
 
 WebDoc.Comment = $.klass(WebDoc.Record, {
 
-  initialize: function($super, json, discussion) {
+  initialize: function($super, json, discussion, user) {
 
     this.belongsTo = {
-      discussion: WebDoc.Discussion
+      discussion: WebDoc.Discussion,
+      user: WebDoc.User
     };
     this.discussion = discussion;
+    this.user = user;
 
     $super(json);
 

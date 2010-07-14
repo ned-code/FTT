@@ -121,6 +121,10 @@ class User < ActiveRecord::Base
     end
     mutual
   end
+
+  def avatar_thumb_url
+    self.avatar.url(:thumb)
+  end
   
   # Need to use this method instead of the original to_json cause user references document and vice versa
   def to_social_panel_json(current_user)
@@ -130,7 +134,7 @@ class User < ActiveRecord::Base
         :username => self.username,
         :bio => self.bio,
         :uuid => self.uuid,
-        :avatar_thumb_url => self.avatar.url(:thumb),
+        :avatar_thumb_url => self.avatar_thumb_url,
         :documents_count => self.documents_count,
         :following_info => self.follower?(current_user)
       }
