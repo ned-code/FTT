@@ -14,8 +14,6 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     this.domNode = jQuery('#discussions-panel');
     this.discussionsDomNode = this.domNode.find('#wd_discussions');
 
-    // this._currentDiscussion = null;
-
     this.currentPage.addListener(this);
     WebDoc.application.boardController.addCurrentPageListener(this);
     // WebDoc.application.boardController.addSelectionListener(this);
@@ -107,6 +105,12 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     return form;
   },
 
+  selectDiscussion: function(discussion) {
+    ddd('[DiscussionsPanel] select discussion');
+    var discussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+discussion.uuid()+"']")[0];
+    discussionSelectedDomNode.scrollIntoView(true);
+  },
+
   // fire by page
   discussionAdded: function(addedDiscussion) {
     ddd('[DiscussionsPanel] discussion added');
@@ -116,10 +120,9 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   // fire by discussion
   commentAdded: function(addedComment) {
     ddd('[DiscussionsPanel] comment added');
-    // if(this._currentDiscussion === addedComment.discussion) {
     this.discussionsDomNode.find("div[data-discussion-uuid='"+addedComment.discussion.uuid()+"']")
         .append(this.createCommentDomNode(addedComment));
-    // }
+
   },
 
   // fire by board controller

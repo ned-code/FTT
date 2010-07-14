@@ -1069,14 +1069,8 @@ WebDoc.BoardController = jQuery.klass({
     this._selectionDiscussionView = discussionView;
     discussionView.select();
     WebDoc.application.rightBarController.showDiscussionsPanel();
-    // var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
-    // discussionPanel.showDiscussion(discussionView.discussion);
-  },
-
-  unselectSelectionDiscussionView: function() {
-    ddd("[BoardController] unselect all discussion views");
-
-    // this._fireSelectionChanged();
+    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+    discussionPanel.selectDiscussion(discussionView.discussion);
   },
 
   // insert a discustion with a position with left and top attributes
@@ -1092,15 +1086,14 @@ WebDoc.BoardController = jQuery.klass({
   removeDiscussion: function(discussion) {
     ddd('[BoardController] remove discussion');
     this._currentPage.removeDiscussion(discussion);
-    ddd(discussion);
     discussion.destroy();
   },
 
   deleteSelectionDiscussion: function(e) {
     ddd('[BoardController] delete selection discussion');
-    this.removeDiscussion(this._selectionDiscussion);
-    this._selectionDiscussion = null;
     e.preventDefault();
+    this.removeDiscussion(this._selectionDiscussionView.discussion);
+    this._selectionDiscussionView = null;
   }
 
 });
