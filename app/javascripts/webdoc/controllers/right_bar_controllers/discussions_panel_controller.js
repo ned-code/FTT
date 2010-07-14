@@ -16,14 +16,16 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
     this.currentPage.addListener(this);
     WebDoc.application.boardController.addCurrentPageListener(this);
-    // WebDoc.application.boardController.addSelectionListener(this);
+    // WebDoc.application.boardController.addSelectionDiscussionListener(this);
 
 
+    this.showCurrentPageDiscussions();
+
+    
     // For add discussion button
     this.domNode.find(".wd_discussion_add").bind("dragstart", this.prepareCreateDiscussionDragStart.pBind(this));
 
 
-    this.showCurrentPageDiscussions();
   },
 
   buttonSelector: function() {
@@ -45,6 +47,9 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     var discussionDomNode = jQuery('<div/>', { 'style': 'margin: 10px; border: 1px solid white;' });
     discussionDomNode.append(this.createDiscussionDomNode(discussion));
     discussionDomNode.append(this.createCommentForm(discussion));
+    discussionDomNode.bind('click', function() {
+      WebDoc.application.boardController.selectDiscussion(discussion);
+    });
     return discussionDomNode;
   },
 
@@ -61,10 +66,10 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   createCommentDomNode: function(comment) {
-    var commentDomNode = jQuery('<div/>'),
+    var commentDomNode = jQuery('<div/>').attr('data-comment-uuid', comment.uuid()),
         firstPart = jQuery('<div/>', { 'style': 'width: 80%; float: left;'}),
         secondPart = jQuery('<div/>', { 'style': 'width: 20%; float: left;'});
-    firstPart.append(comment.content());
+    firstPart.append(comment.content().replace(/\n/g, '<br />'));
     firstPart.append(jQuery('<br/>'));
     firstPart.append(comment.created_at() + ' by ' + comment.user.getUsername());
     secondPart.append(jQuery('<img/>', { 'src': comment.user.getAvatarThumbUrl(), 'style': 'width:50px; height:50px;' }));
@@ -86,28 +91,35 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
       .bind('submit', function(e){
         e.preventDefault();
 
-        button.hide();
-        commentContent.attr('disabled', 'disabled');
+        if(commentContent.val()) {
+          button.hide();
+          commentContent.attr('disabled', 'disabled');
 
-        var newComment = new WebDoc.Comment(null, discussion);
-        newComment.setContent( commentContent.val(), true );
+          var newComment = new WebDoc.Comment(null, discussion);
+          newComment.setContent( commentContent.val(), true );
 
-        newComment.save(function(newCommentBack, status) {
-          if (status == "OK") {
-            discussion.addComment(newCommentBack);
-            commentContent.val('');
-            commentContent.removeAttr('disabled');
-            button.show();
-          }
-        });
+          newComment.save(function(newCommentBack, status) {
+            if (status == "OK") {
+              discussion.addComment(newCommentBack);
+              commentContent.val('');
+              commentContent.removeAttr('disabled');
+              button.show();
+            }
+          });
+        }
     });
 
     return form;
   },
 
-  selectDiscussion: function(discussion) {
+  selectDiscussion: function(discussion, oldDiscussion) {
     ddd('[DiscussionsPanel] select discussion');
+    if (oldDiscussion !== null) {
+      var oldDiscussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+oldDiscussion.uuid()+"']")[0];
+      jQuery(oldDiscussionSelectedDomNode).parent().removeClass('item_selected');
+    }
     var discussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+discussion.uuid()+"']")[0];
+    jQuery(discussionSelectedDomNode).parent().addClass('item_selected');
     discussionSelectedDomNode.scrollIntoView(true);
   },
 
@@ -122,7 +134,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     ddd('[DiscussionsPanel] comment added');
     this.discussionsDomNode.find("div[data-discussion-uuid='"+addedComment.discussion.uuid()+"']")
         .append(this.createCommentDomNode(addedComment));
-
+    // this.discussionsDomNode.find("div[data-comment-uuid='"+addedComment.uuid()+"']")[0].scrollIntoView(true);
   },
 
   // fire by board controller

@@ -1061,16 +1061,26 @@ WebDoc.BoardController = jQuery.klass({
   // DISCUSSIONS
   // ***********
 
-  selectDiscussionView: function(discussionView) {
+  selectDiscussion: function(discussion) {
     ddd('[BoardController] selected discussion');
-    if(this._selectionDiscussionView) {
+    var discussionView = this._currentPageView.discussionViews[discussion.uuid()];
+    if(discussionView) {
+      this.selectDiscussionView(discussionView);
+    }
+  },
+
+  selectDiscussionView: function(discussionView) {
+    ddd('[BoardController] selected discussion view');
+    var oldDiscussion = null;
+    if(this._selectionDiscussionView !== null) {
       this._selectionDiscussionView.unSelect();
+      oldDiscussion = this._selectionDiscussionView.discussion;
     }
     this._selectionDiscussionView = discussionView;
     discussionView.select();
     WebDoc.application.rightBarController.showDiscussionsPanel();
     var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
-    discussionPanel.selectDiscussion(discussionView.discussion);
+    discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion);
   },
 
   // insert a discustion with a position with left and top attributes

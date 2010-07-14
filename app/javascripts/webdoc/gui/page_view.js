@@ -88,28 +88,6 @@ WebDoc.PageView = $.klass({
       relatedItemView.objectChanged(addedItem);
     }
   },
-
-  discussionAdded: function(addedDiscussion) {
-    this.createDiscussionView(addedDiscussion);
-  },
-
-  refreshDiscussions: function() {
-    this.page.getDiscussions(function(discussions) {
-      var discussion, l = discussions.length;
-      while(l--){
-        discussion = discussions[l];
-        this.createDiscussionView(discussion);
-      }
-    }.pBind(this));
-  },
-
-  discussionRemoved: function(removedDiscussion) {
-    var relatedDiscussionView = this.discussionViews[removedDiscussion.uuid()];
-    if (relatedDiscussionView) {
-      relatedDiscussionView.remove();
-      delete this.discussionViews[removedDiscussion.uuid()];
-    }
-  },
   
   setLoading: function(state) {
     this._loading = state;
@@ -185,24 +163,6 @@ WebDoc.PageView = $.klass({
     this.itemViews[item.uuid()] = itemView;
     
     return itemView;
-  },
-
-  createDiscussionView: function(discussion) {
-    var discussionView = new WebDoc.DiscussionView(discussion, this);
-    this.discussionViews[discussion.uuid()] = discussionView;
-    return discussionView;
-  },
-  
-  destroy: function() {
-    this.page.removeListener(this);
-    for (var itemId in this.itemViews) {
-      var anItemView = this.itemViews[itemId];
-      anItemView.destroy();
-    }
-    for (var discussionId in this.discussionViews) {
-      var anDiscussView = this.discussionViews[discussionId];
-      anDiscussView.destroy();
-    }
   },
   
   fitInContainer: function(width, height) {
@@ -347,6 +307,50 @@ WebDoc.PageView = $.klass({
   
   isEditable: function() {
     return this._editable;
+  },
+
+  // ***********
+  // DISCUSSIONS
+  // ***********
+
+  discussionAdded: function(addedDiscussion) {
+    this.createDiscussionView(addedDiscussion);
+  },
+
+  refreshDiscussions: function() {
+    this.page.getDiscussions(function(discussions) {
+      var discussion, l = discussions.length;
+      while(l--){
+        discussion = discussions[l];
+        this.createDiscussionView(discussion);
+      }
+    }.pBind(this));
+  },
+
+  discussionRemoved: function(removedDiscussion) {
+    var relatedDiscussionView = this.discussionViews[removedDiscussion.uuid()];
+    if (relatedDiscussionView) {
+      relatedDiscussionView.remove();
+      delete this.discussionViews[removedDiscussion.uuid()];
+    }
+  },
+
+  createDiscussionView: function(discussion) {
+    var discussionView = new WebDoc.DiscussionView(discussion, this);
+    this.discussionViews[discussion.uuid()] = discussionView;
+    return discussionView;
+  },
+
+  destroy: function() {
+    this.page.removeListener(this);
+    for (var itemId in this.itemViews) {
+      var anItemView = this.itemViews[itemId];
+      anItemView.destroy();
+    }
+    for (var discussionId in this.discussionViews) {
+      var anDiscussView = this.discussionViews[discussionId];
+      anDiscussView.destroy();
+    }
   }
 
 });
