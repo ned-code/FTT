@@ -323,29 +323,47 @@ WebDoc.ItemView = $.klass({
       cursor: 'move',
       distance: 5,
       start: function(e, ui) {
-        ddd("start drag");
         this.pageView.eventCatcherNode.show();
         this.inspectorPanesManager.itemViewWillMove(this);
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-        var currentPosition = this.position();
+        this.currentPosition = this.position();
 
-        this.dragOffsetLeft = mappedPoint.x - parseFloat(currentPosition.left);
-        this.dragOffsetTop = mappedPoint.y - parseFloat(currentPosition.top);
+        this.dragOffsetLeft = mappedPoint.x - parseFloat(this.currentPosition.left);
+        this.dragOffsetTop = mappedPoint.y - parseFloat(this.currentPosition.top);
+				
         WebDoc.application.undoManager.registerUndo(function() {
-          WebDoc.ItemView._restorePosition(this.item, currentPosition);
+          WebDoc.ItemView._restorePosition(this.item, this.currentPosition);
         }.pBind(this));
         WebDoc.application.arrowTool.disableHilight();
       }.pBind(this)        ,
       drag: function(e, ui) {
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-        ui.position.left = mappedPoint.x - this.dragOffsetLeft;
-        ui.position.top = mappedPoint.y - this.dragOffsetTop;
+				var leftOffset = mappedPoint.x - this.dragOffsetLeft;
+				var topOffset = mappedPoint.y - this.dragOffsetTop;
+				
+				var originTop = parseFloat(this.currentPosition.top);
+				var originLeft = parseFloat(this.currentPosition.left);
+				var oldPosition = this.position();
+				
+        ui.position.left = leftOffset;
+        ui.position.top = topOffset;
         this._moveTo(ui.position);
+
+				var deltaLeft = parseFloat(this.position().left) - parseFloat(oldPosition.left) ;
+				var deltaTop = parseFloat(this.position().top) - parseFloat(oldPosition.top) ;
+				this.delta = { top: deltaTop, left: deltaLeft};
+
+				if(WebDoc.application.boardController.multipleSelection()){
+					WebDoc.application.boardController.moveMultipleSelection(this.delta,this.item.uuid(), false);
+				}
       }.pBind(this)        ,
       stop: function(e, ui) {
         this.pageView.eventCatcherNode.hide();
         this.inspectorPanesManager.itemViewDidMove(this);
         var newPosition = { top : ui.position.top + "px", left: ui.position.left + "px"};
+				if(WebDoc.application.boardController.multipleSelection()){
+					WebDoc.application.boardController.moveMultipleSelection(this.delta, this.item.uuid(), true);
+				}
         this.item.moveTo(newPosition);
         this.item.save();
         WebDoc.application.arrowTool.enableHilight();
@@ -387,8 +405,6 @@ WebDoc.ItemView = $.klass({
   },
   
   _moveTo: function(position) {
-    var inspectorController = WebDoc.application.inspectorController;
-    
     this.item.data.data.css.left = position.left + "px";
     this.item.data.data.css.top = position.top + "px";
     this.domNode.css({
@@ -397,9 +413,7 @@ WebDoc.ItemView = $.klass({
     });
   },
   
-  _resizeTo: function(size) {
-    var inspectorController = WebDoc.application.inspectorController;
-    
+  _resizeTo: function(size) {    
     this.item.data.data.css.width = size.width + "px";
     this.item.data.data.css.height = size.height + "px";
     this.domNode.css({

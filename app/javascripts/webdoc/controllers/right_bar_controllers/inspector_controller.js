@@ -70,7 +70,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
   selectionChanged: function() {
     ddd("selected item ", WebDoc.application.boardController.selection());
     if (this.domNode.is(':visible')) {
-      if (WebDoc.application.boardController.selection().length > 0) {
+      if (WebDoc.application.boardController.selection().length == 1) { //we show the inspector only if there is one item in the selection
         this._updateInspector(WebDoc.application.boardController.selection()[0].inspectorGroupName());
       }
       else {
