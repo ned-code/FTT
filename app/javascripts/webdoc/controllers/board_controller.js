@@ -424,7 +424,7 @@ WebDoc.BoardController = jQuery.klass({
   selectItemViews: function(itemViews) {
     // exit edit mode for current editing item
     this.stopEditing();
-    if (itemViews) {
+    if (itemViews.length > 0) {
       // do nothing if new selection is equal to old selection
       if(itemViews.length === this._selection.length) {
         var selectionIsEqual = true;
@@ -509,7 +509,13 @@ WebDoc.BoardController = jQuery.klass({
   
   unselectAll: function() {
     ddd("unselect all. selection size " + this._selection.length);
-    this.selectItemViews([]);
+    //this.selectItemViews([]);
+		for(var i=0; i< this._selection.length; i++){
+			this._selection[i].unSelect();
+		}
+		this._selection = [];
+		this.selectItemViews([]);
+		this._fireSelectionChanged();
   },
   
   unselectItemViews: function(itemViews) {
