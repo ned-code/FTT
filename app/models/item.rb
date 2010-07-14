@@ -1,13 +1,29 @@
+module ItemJsonHelper
+  def self.decode_json_and_yaml(value)
+    unless (value.nil?)
+      begin
+        return ActiveSupport::JSON.decode(value)
+      rescue
+        return YAML.load(value)
+      end  
+    end
+    return nil
+  end
+end
+
 class Item < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
   
-  serialize :data
+#  serialize :data
+  composed_of :data, :class_name => 'Hash', :mapping => %w(data to_json),
+                         :constructor => ItemJsonHelper.method(:decode_json_and_yaml)
+  composed_of :properties, :class_name => 'Hash', :mapping => %w(properties to_json),
+                         :constructor => ItemJsonHelper.method(:decode_json_and_yaml)
+  composed_of :preferences, :class_name => 'Hash', :mapping => %w(preferences to_json),
+                         :constructor => ItemJsonHelper.method(:decode_json_and_yaml)                         
   
-  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind, :inner_html
-  
-  # see XmppItemObserver
-  attr_accessor_with_default :must_notify, false
+  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind, :inner_html, :properties, :preferences
 
   attr_accessor_with_default :touch_page_active, true
   
@@ -41,10 +57,6 @@ class Item < ActiveRecord::Base
   
   def to_param
     uuid
-  end
-  
-  def after_initialize
-    self.must_notify = false
   end
   
   def to_html
@@ -87,11 +99,8 @@ class Item < ActiveRecord::Base
     end
     sanitized_html
   end
-
-  def touch
-    update_attribute("updated_at", Time.now)
-  end
 end
+
 
 
 
@@ -99,7 +108,7 @@ end
 #
 # Table name: items
 #
-#  uuid       :string(36)      primary key
+#  uuid       :string(36)      default(""), not null, primary key
 #  page_id    :string(36)      not null
 #  media_id   :string(36)
 #  media_type :string(255)
@@ -108,5 +117,6 @@ end
 #  updated_at :datetime
 #  position   :integer(4)
 #  kind       :string(255)
+#  inner_html :text(16777215)
 #
 

@@ -41,9 +41,18 @@ protected
   def download_image_provided_by_remote_attachment_url
     require 'open-uri'
     if remote_attachment_url.present?
-      io = open(URI.parse(remote_attachment_url))
-      def io.original_filename; base_uri.path.split('/').last; end
-      self.attachment = io
+      begin 
+        io = open(URI.parse(remote_attachment_url))
+        def io.original_filename
+          name = base_uri.path.split('/').last
+          name = Medias::Image.check_source(name)
+          name
+        end
+        self.attachment = io
+      rescue => e
+        self.errors.add('attachment', 'not found')
+        self.attachment = nil
+      end
     end
   end
 
@@ -54,7 +63,22 @@ protected
     end
   end
   
+private
+
+  def self.check_source(src)
+    extension = ['.png', '.jpg', '.gif']
+    src_ok = false
+    while !src_ok
+      if extension.include?(src[(src.length - 4)..src.length]) || src[(src.length - 5)..src.length] == '.jpeg'
+        src_ok = true
+      else
+        src = src.chop
+      end
+    end
+    src
+  end
 end
+
 
 
 
@@ -62,15 +86,18 @@ end
 #
 # Table name: medias
 #
-#  uuid        :string(36)      primary key
-#  type        :string(255)
-#  created_at  :datetime
-#  updated_at  :datetime
-#  properties  :text(16777215)
-#  user_id     :string(36)
-#  file        :string(255)
-#  system_name :string(255)
-#  title       :string(255)
-#  description :text
+#  uuid                    :string(36)      default(""), not null, primary key
+#  type                    :string(255)
+#  created_at              :datetime
+#  updated_at              :datetime
+#  properties              :text(16777215)
+#  user_id                 :string(36)
+#  attachment_file_name    :string(255)
+#  system_name             :string(255)
+#  title                   :string(255)
+#  description             :text
+#  attachment_content_type :string(255)
+#  attachment_file_size    :integer(4)
+#  attachment_updated_at   :datetime
 #
 

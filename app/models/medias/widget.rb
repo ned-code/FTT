@@ -12,7 +12,7 @@ class Medias::Widget < Media
   
   validates_attachment_presence :attachment
   validates_attachment_size :attachment, :less_than => 30.megabytes
-  # validates_attachment_content_type :attachment, :content_type => ['application/zip', 'application/octet-stream']
+  validates_attachment_content_type :attachment, :content_type => ['application/zip', 'application/octet-stream']
   
   attr_accessor :status
   
@@ -20,8 +20,11 @@ class Medias::Widget < Media
   # = Callbacks =
   # =============
   
-  before_save :set_attributes_if_not_present
-  before_save :update_new_file
+  before_create :set_attributes
+  before_update :update_new_file
+  after_destroy :invalidate_cache
+  after_save :invalidate_cache
+  
   #after_destroy :delete_widget_folder # Will be done later, we currently need that all files keep unchanged so that existing documents still work
   
   # ====================
@@ -29,7 +32,7 @@ class Medias::Widget < Media
   # ====================
   
   def version
-    properties[:version]
+    properties.present? ? properties[:version] : config_dom.root.attribute("version").to_s
   end
   
   %[icon_url index_url inspector_url width height].each do |property|
@@ -49,55 +52,33 @@ class Medias::Widget < Media
 private
   
   # before_save
-  def set_attributes_if_not_present
-    unless properties.present?
-      assign_uuid
-      
-      # Attributes
-      self.title = config_dom.root.elements['name'].text
-      self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
-      
-      # Properties
-      self.properties = {}
-      self.properties[:version] = config_dom.root.attribute("version").to_s
-      index_url = config_dom.root.elements['content'].attribute("src").to_s
-      unless index_url.match(/http:\/\/.*/)
-        index_url = File.join(attachment_root_url, config_dom.root.elements['content'].attribute("src").to_s)
-      end
-      inspector_url = nil
-      if (config_dom.root.elements['inspector'])
-        inspector_url = config_dom.root.elements['inspector'].attribute('src').to_s
-        unless inspector_url.match(/http:\/\/.*/)
-          inspector_url = File.join(attachment_root_url, config_dom.root.elements['inspector'].attribute("src").to_s)
-        end
-      end
-      self.properties[:width] = config_dom.root.attribute("width").to_s
-      self.properties[:height] = config_dom.root.attribute("height").to_s
-      self.properties[:index_url] = index_url
-      self.properties[:icon_url] = File.join(attachment_root_url, "icon.png")
-      self.properties[:inspector_url] = inspector_url if (inspector_url)
-      
-      # Extract files to right destination
-      extract_files_from_zip_file
-    end
+  def set_attributes
+    assign_uuid
+    self.properties = properties_from_config_dom(config_dom, attachment_root_url)
+    self.title = config_dom.root.elements['name'].text
+    self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
+    extract_files_from_zip_file
   end
   
   # before_save
   def update_new_file
-    new_version = config_dom.root.attribute("version").to_s
-    if version.nil? || new_version > version
-      self.properties[:version] = new_version
-      self.properties = properties_from_config_dom(config_dom, attachment_root_url)
-      self.title = config_dom.root.elements['name'].text
-      self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
-
-      extract_files_from_zip_file
-    else
-      @status = "already_up_to_date"
+    begin
+      new_version = config_dom.root.attribute("version").to_s
+      if version.present? && new_version.present? && new_version > version
+        self.properties = properties_from_config_dom(config_dom, attachment_root_url)
+        self.title = config_dom.root.elements['name'].text
+        self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
+        extract_files_from_zip_file
+        @status = 'updated_successful'
+        return true
+      else
+        @status = 'already_up_to_date'
+        return false
+      end
+    rescue
+      @status = 'updated_failed'
+      return false
     end
-    @status = "updated_successful"
-  rescue
-    @status = "updated_failed"
   end
   
   def is_valid_widget_file(file_name)
@@ -115,6 +96,8 @@ private
   
   def properties_from_config_dom(config_dom, destination_path)
     properties = {}
+    properties[:version] = config_dom.root.attribute("version").to_s
+
     index_url = config_dom.root.elements['content'].attribute("src").to_s
     unless index_url.match(/http:\/\/.*/)
       index_url = File.join(destination_path, config_dom.root.elements['content'].attribute("src").to_s)
@@ -127,7 +110,6 @@ private
       end
     end
     
-    properties[:version] = config_dom.root.attribute("version").to_s
     properties[:width] = config_dom.root.attribute("width").to_s
     properties[:height] = config_dom.root.attribute("height").to_s
     properties[:index_url] = index_url
@@ -165,7 +147,14 @@ private
     attachment.queued_for_write[:original]
   end
   
+  def invalidate_cache
+    Rails.cache.delete("widget_#{self.uuid}")
+    if (self.system_name)
+      Rails.cache.delete("widget_#{self.system_name}")
+    end
+  end
 end
+
 
 
 
@@ -173,15 +162,18 @@ end
 #
 # Table name: medias
 #
-#  uuid        :string(36)      primary key
-#  type        :string(255)
-#  created_at  :datetime
-#  updated_at  :datetime
-#  properties  :text(16777215)
-#  user_id     :string(36)
-#  file        :string(255)
-#  system_name :string(255)
-#  title       :string(255)
-#  description :text
+#  uuid                    :string(36)      default(""), not null, primary key
+#  type                    :string(255)
+#  created_at              :datetime
+#  updated_at              :datetime
+#  properties              :text(16777215)
+#  user_id                 :string(36)
+#  attachment_file_name    :string(255)
+#  system_name             :string(255)
+#  title                   :string(255)
+#  description             :text
+#  attachment_content_type :string(255)
+#  attachment_file_size    :integer(4)
+#  attachment_updated_at   :datetime
 #
 

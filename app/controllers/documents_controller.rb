@@ -56,8 +56,8 @@ class DocumentsController < ApplicationController
         public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:query], params[:page], per_page)
 
         docs_json = public_documents.map do |doc|
-          cached_doc = Rails.cache.fetch("#{doc.cache_key}_explore") do
-            doc.as_json( :include => { :pages => { :methods => :thumbnail_url, :include => :items } }, :methods => :extra_attributes)
+          cached_doc = Rails.cache.fetch("document_#{doc.uuid}_explore") do
+            doc.as_json( :include => { :pages => { :methods => :thumbnail_url } }, :methods => :extra_attributes)
           end
         end
         
@@ -86,7 +86,7 @@ class DocumentsController < ApplicationController
         per_page = 8
         featured_documents = Document.all_featured_paginated(params[:page], per_page)
         docs_json = featured_documents.map do |doc|
-          cached_doc = Rails.cache.fetch("#{doc.cache_key}_explore") do
+          cached_doc = Rails.cache.fetch("document_#{doc.uuid}_explore") do
             doc.as_json( :include => { :pages => { :methods => :thumbnail_url,  :include => :items} }, :methods => :extra_attributes)
           end
         end
@@ -109,23 +109,27 @@ class DocumentsController < ApplicationController
   
   # GET /documents/:id
   def show
-    respond_to do |format|
-      format.html do
-        @get_return_to = get_return_to 
-        render :layout => 'layouts/editor'
+    if (@document)
+      respond_to do |format|
+        format.html do
+          @get_return_to = get_return_to 
+          render :layout => 'layouts/editor'      
+        end
+        format.json do
+          logger.debug "return document json."
+          set_cache_buster
+          render :json => Rails.cache.fetch("document_#{@document.uuid}") { @document.to_json(:include => { :pages => { :include => :items} }) }
+        end
       end
-      format.json do
-        logger.debug "return document json."
-        set_cache_buster
-        render :json => Rails.cache.fetch(@document.cache_key) { @document.to_json(:include => { :pages => { :include => :items} }) }
-      end
-    end
+    else
+      forbidden_access
+    end    
   end
   
   # POST /documents
   def create
     @document = current_user.documents.create_with_uuid(params[:document])
-    XmppNotification.xmpp_create_node(@document.uuid) 
+    @@xmpp_notifier.xmpp_create_node(@document.uuid) 
     render :json => @document
   end
 
@@ -139,7 +143,7 @@ class DocumentsController < ApplicationController
   def update
     @document.update_attributes(params[:document])
     message = { :source => params[:xmpp_client_id], :document =>  @document.attributes }
-    XmppNotification.xmpp_notify(message.to_json, @document.uuid)    
+    @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)    
     render :json => @document
   end
   
@@ -160,7 +164,7 @@ class DocumentsController < ApplicationController
   end
   
   def create_view_count
-    if request.format == "text/html"
+    if request.format == "text/html" && @document
       @document.view_counts.create(
         :session_id => request.session_options[:id],
         :ip_address => request.remote_ip,

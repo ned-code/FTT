@@ -17,7 +17,7 @@
     :javascript
       WebDoc.shindig = {};
       WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";
-      
+      WebDoc.Application.currentUser = new WebDoc.User(#{ raw current_user.to_json.gsub('/script','/sscript') });
       WebDoc.Application.start();
       
     = render :partial => "layouts/feedback";

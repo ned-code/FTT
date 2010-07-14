@@ -191,15 +191,9 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     // we don't need to set foreign keys. It is automagically done on the server side
     // newPage.data.document_id = this.currentDocument.data.document_id;
     newPage.data.position = this.currentPage.data.position + 1;
-    WebDoc.application.boardController.currentPageView().setLoading(true);
-    newPage.save( function(newObject, status) {
-      ddd("new page ", newPage, newObject);
-      this.currentDocument.addPage(newPage, true);
-      WebDoc.application.boardController.currentPageView().setLoading(false);
-      this.loadPage(newPage);
-      
-      //WebDoc.application.pageBrowserController.editPageTitle(newPage);
-      
+    this.currentDocument.addPage(newPage, true);
+    this.loadPage(newPage);
+    newPage.save( function(newObject, status) {      
     }.pBind(this));
   },
   

@@ -9,6 +9,7 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
   initialize: function($super, selector, boardClass) {
     $super( selector, boardClass );
     this.lastSelectedObject = {};
+		this.selectedObject = [];
   },
   
   selectTool: function($super) {
@@ -25,10 +26,16 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     };      
     if (!(objectToSelect && WebDoc.application.boardController.editingItem() == objectToSelect)) {
       if (objectToSelect) {
-        WebDoc.application.boardController.selectItemViews([objectToSelect]);
-      }
+				if(e.shiftKey){
+					WebDoc.application.boardController.addItemViewToSelection([objectToSelect]);
+				}
+				else {
+        	WebDoc.application.boardController.selectItemViews([objectToSelect]);
+      	}
+			}
       else {
         WebDoc.application.boardController.unselectAll();
+				this.selectedObject = [];
       }
       jQuery("a[href='#select']").focus();
     }

@@ -17,6 +17,7 @@ WebDoc.BoardController = jQuery.klass({
     this._autoFit = autoFit;
     this._currentZoom = 1; 
     this._selection = [];
+		this._lastSelect = null;
     this._editingItem = null;
     this._selectionListeners = [];
     this._currentPageListeners = [];
@@ -32,7 +33,7 @@ WebDoc.BoardController = jQuery.klass({
     jQuery(document)
     .bind("keypress", this, jQuery.proxy(this, "_keyPress"))
     .bind("keydown", this, jQuery.proxy(this, "_keyDown"))
-    .bind("keyup", this, jQuery.proxy(this, "_keyUp"));
+    .bind("keyup", this, jQuery.proxy(this, "_keyUp"));   
   },
   
   currentPageView: function() {
@@ -43,6 +44,10 @@ WebDoc.BoardController = jQuery.klass({
     return this._selection;  
   },
   
+	multipleSelection: function(){
+		return this._selection.length > 1;
+	},
+
   isEditable: function() {
     return this._editable;  
   },
@@ -100,11 +105,12 @@ WebDoc.BoardController = jQuery.klass({
     
     this._fireSelectionChanged();
     this._bindMouseEvent();
+     
 
     if (this._autoFit && this.boardContainerNode.css("width").match(/px/) && this.boardContainerNode.css("height").match(/px/)) {
       //update zoom to fit browser page    
-      var heightFactor = $("#webdoc").parent().height() / $("#board-container").height();
-      var widthFactor = $("#webdoc").parent().width() / $("#board-container").width();      
+      var heightFactor = $("#webdoc").height() / $("#board-container").height();
+      var widthFactor = $("#webdoc").width() / $("#board-container").width();      
       if (heightFactor < widthFactor) {
         defaultZoom =  heightFactor;
       }
@@ -114,17 +120,17 @@ WebDoc.BoardController = jQuery.klass({
     }
     this.zoom(defaultZoom);
     this.setMode(!jQuery("body").hasClass('mode-edit'));
-    this._fireCurrentPageChanged();
     
+    this._fireCurrentPageChanged();
     jQuery('#webdoc').scrollbars({
       x: jQuery('#webdoc_x_scrollbar .scrollbar'),
       y: jQuery('#webdoc_y_scrollbar .scrollbar'),
       dragImageUrl: '/images/icon_blank.png'
     });
-    
+     
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
-    pageView.viewDidLoad();
+    pageView.viewDidLoad();    
   },
   
   isInteractionMode: function() {
@@ -154,7 +160,7 @@ WebDoc.BoardController = jQuery.klass({
 
     this.boardContainerNode.resizable('destroy'); // destroy to refresh    
     this._initResizable();
-    
+
     //WebDoc.application.pageBrowserController.reveal();
     //WebDoc.application.rightBarController.reveal();
     if (this._previousInspector) {
@@ -184,9 +190,9 @@ WebDoc.BoardController = jQuery.klass({
     .removeClass("current")
     .filter("[href='#mode-preview']")
     .addClass("current");
-
-    this.boardContainerNode.resizable('destroy');
     
+	this.boardContainerNode.resizable('destroy');
+
     if(!this._editable) {
       jQuery(".mode-tools").hide(); 
     }
@@ -210,8 +216,8 @@ WebDoc.BoardController = jQuery.klass({
     else {
       this._setModeEdit();
     }
-    
-    // Apps/Inspectors
+
+        // Apps/Inspectors
 //    var allItemsViews = this.currentPageView().itemViews;
 //    $.each(allItemsViews, function(k, v) {
 //      if (v.inspectorPanesManager) {
@@ -222,13 +228,12 @@ WebDoc.BoardController = jQuery.klass({
     if (WebDoc.appsContainer) {
       WebDoc.appsMessagingController.notifyModeChanged(!state);
     }
-    
     // TODO for FF .5 we put svg backward because pointer event is not implemented
     // it does not work on ff4
-    //    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
-    //      ddd("FF 3.5. drawing !");
-    //      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
-    //    }
+//    if (WebDoc.Browser.Gecko && (parseFloat(/Firefox[\/\s](\d+\.\d+)/.exec(navigator.userAgent)[1])) < 3.6) {
+//      ddd("FF 3.5. drawing !");
+//      this.currentPageView().domNode.find("svg").css("zIndex", this._isInteraction ? "-1" : "1000000");
+//    }
   },
   
   toggleMode: function() {
@@ -314,7 +319,7 @@ WebDoc.BoardController = jQuery.klass({
     for (var i=0; i < selectionLength; i++) {
       var anItem = this.selection()[i].item;
       itemsDataArray.push(anItem.getData());
-    }    
+    }
     WebDoc.application.pasteBoardManager.putIntoPasboard("application/ub-item", jQuery.toJSON(itemsDataArray));
   },
   
@@ -419,7 +424,13 @@ WebDoc.BoardController = jQuery.klass({
   selectItemViews: function(itemViews) {
     // exit edit mode for current editing item
     this.stopEditing();
-    if (itemViews) {
+    if (itemViews.length > 0) {
+			//do nothing if the itemView is already in the selection
+			if(itemViews.length == 1){
+				if (jQuery.inArray(itemViews[0], this._selection) >= 0) {
+	      	return;
+	      }
+			}
       // do nothing if new selection is equal to old selection
       if(itemViews.length === this._selection.length) {
         var selectionIsEqual = true;
@@ -434,27 +445,31 @@ WebDoc.BoardController = jQuery.klass({
         }
       }
       
-      //deselect un-needed items
-      ddd("select item in view");
-      jQuery.each(this._selection, function(index, itemToDeselect) {
-        if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
-          this.unselectItemViews([itemToDeselect]);
-        }
-      }.pBind(this));
-      
-      //select wanted items
-      jQuery.each(itemViews, function(index, itemToSelect) {
-        if (jQuery.inArray(itemToSelect, this._selection) == -1) {
-          ddd("add item to selection");
-          this._selection.push(itemToSelect);
-        }
-        itemToSelect.select();
-      }.pBind(this));
-      this._fireSelectionChanged();
+			//deselect un-needed items
+			jQuery.each(this._selection, function(index, itemToDeselect) {
+	      if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
+	        this.unselectItemViews([itemToDeselect]);
+	      }
+	    }.pBind(this));
+	
+			this.addItemViewToSelection(itemViews)
     }
   },
+
+	addItemViewToSelection: function(itemViews){    
+    //select wanted items
+    jQuery.each(itemViews, function(index, itemToSelect) {
+      if (jQuery.inArray(itemToSelect, this._selection) == -1) {
+        ddd("add item to selection");
+        this._selection.push(itemToSelect);
+      }
+      itemToSelect.select();
+    }.pBind(this));
+		this._fireSelectionChanged();
+	},
   
   moveSelection: function(direction, scale) {
+		ddd('[BoardController] moveSelection');
     var max = this._selection.length;
     var offsetSize = scale == "big"? 15 : 1;
     for (var i = 0; i < max; i++) {
@@ -484,10 +499,29 @@ WebDoc.BoardController = jQuery.klass({
     }
     this._isMovingSelection = true;
   },
+
+	moveMultipleSelection: function(offset, selectedItemUuid, needSave){//offset, selectedItem, needSave){
+		var selectionLength = this.selection().length;
+    for (var i=0; i < selectionLength; i++) {
+			if(selectedItemUuid != this.selection()[i].item.uuid()){
+				if(needSave){
+					this.selection()[i].item.save();
+				}else{
+					this.selection()[i].item.shiftBy(offset);
+				}
+			}
+    }
+	},
   
   unselectAll: function() {
     ddd("unselect all. selection size " + this._selection.length);
-    this.selectItemViews([]);
+    //this.selectItemViews([]);
+		for(var i=0; i< this._selection.length; i++){
+			this._selection[i].unSelect();
+		}
+		this._selection = [];
+		this.selectItemViews([]);
+		this._fireSelectionChanged();
   },
   
   unselectItemViews: function(itemViews) {
@@ -601,7 +635,7 @@ WebDoc.BoardController = jQuery.klass({
     newItem.data.media_id = widgetData.uuid;
     newItem.data.data.tag = "iframe";
     newItem.data.data.src = widgetData.properties.index_url;
-    newItem.data.data.properties = {
+    newItem.data.properties = {
       inspector_url: widgetData.properties.inspector_url
     };
     if(!position) { position = this.getBoardCenterPoint();}
@@ -617,7 +651,7 @@ WebDoc.BoardController = jQuery.klass({
     };
     this.insertItems([newItem]);
   },
-  
+
   insertVideo: function(videoProperties, position) {
     var videoWidget;
     switch (videoProperties.type) {
@@ -627,9 +661,21 @@ WebDoc.BoardController = jQuery.klass({
       case 'vimeo' :
         videoWidget = WebDoc.WidgetManager.getInstance().getVimeoWidget();
         break;
-	  case 'dailymotion' :
+      case 'dailymotion' :
         videoWidget = WebDoc.WidgetManager.getInstance().getDailymotionWidget();
         break;
+      case 'myspacevideo' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getVidsMyspaceWidget();
+        break;
+      case 'metacafe' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getMetacafeWidget();
+        break;
+      case 'googlevideo' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getVidsGoogleWidget();
+        break;
+			case 'yahoovideo' :
+			  videoWidget = WebDoc.WidgetManager.getInstance().getVidsYahooWidget();
+			  break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     if (videoWidget.data.properties.width) {
@@ -645,7 +691,7 @@ WebDoc.BoardController = jQuery.klass({
     newItem.data.media_id = videoWidget.uuid();
     newItem.data.data.tag = "iframe";
     newItem.data.data.src = videoWidget.data.properties.index_url;
-    newItem.data.data.properties = {
+    newItem.data.properties = {
       inspector_url: videoWidget.data.properties.inspector_url
     };
     newItem.data.data.css = {
@@ -654,7 +700,7 @@ WebDoc.BoardController = jQuery.klass({
       width: width + "px",
       height: height + "px"
     };
-    newItem.data.data.preference.url = videoProperties.video_id;
+    newItem.data.preferences.url = videoProperties.video_id;
     this.insertItems([newItem]);
   },
   
@@ -681,8 +727,9 @@ WebDoc.BoardController = jQuery.klass({
       item.isNew = true;
       item.save();
     }.pBind(this));
-    
-    
+    if (items.length > 0) {
+      this.selectItemViews([this._currentPageView.findItemView(items[0].uuid())]);
+    }
     WebDoc.application.undoManager.registerUndo(function() {
       this.removeItems(items);
     }.pBind(this));
@@ -719,15 +766,11 @@ WebDoc.BoardController = jQuery.klass({
     this._currentZoom = this._currentZoom * factor;
     ddd("set zoom factor: " + this._currentZoom);
     this.currentPageView().setZoomFactor(this._currentZoom);
-    
-    // If item is being edited, reposition screens
-    if ( editingItem ) { this._updateScreens( editingItem.domNode ); }
   },
   
   getZoom: function() {
     return this._currentZoom;
-  },
-  
+  },  
   // Private methods
     
   _mouseDown: function(e) {
@@ -818,7 +861,6 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _keyDown: function(e) {
-    ddd("[BoardController] keydown");
     var el = jQuery(e.target);
     if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();
@@ -847,42 +889,43 @@ WebDoc.BoardController = jQuery.klass({
         case 65:
           this.setCurrentTool(WebDoc.application.arrowTool);
           break;  
-     case 37:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.prevPage();
-        }
-        else {
-          this.moveSelection("left", e.shiftKey?"big" : "small");
-        }
-        e.preventDefault();          
-        break;
-      case 38:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.prevPage();
-        }
-        else {
-          this.moveSelection("up", e.shiftKey?"big" : "small");
-        }
-        e.preventDefault();          
-        break;          
-      case 39:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.nextPage();
-        }
-        else {
-          this.moveSelection("right", e.shiftKey?"big" : "small");            
-        }        
-        e.preventDefault();           
-        break;
-      case 40:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.nextPage();
-        }
-        else {
-          this.moveSelection("down", e.shiftKey?"big" : "small");
-        }
-        e.preventDefault();          
-        break;                       
+     		case 37:
+		 		 	ddd('shift key?');
+     		   if (this._isInteraction || this._selection.length === 0) {
+     		     WebDoc.application.pageEditor.prevPage();
+     		   }
+     		   else {
+     		     this.moveSelection("left", e.shiftKey?"big" : "small");
+     		   }
+     		   e.preventDefault();          
+     		   break;
+      	case 38:
+      	  if (this._isInteraction || this._selection.length === 0) {
+      	    WebDoc.application.pageEditor.prevPage();
+      	  }
+      	  else {
+      	    this.moveSelection("up", e.shiftKey?"big" : "small");
+      	  }
+      	  e.preventDefault();          
+      	  break;          
+      	case 39:
+      	  if (this._isInteraction || this._selection.length === 0) {
+      	    WebDoc.application.pageEditor.nextPage();
+      	  }
+      	  else {
+      	    this.moveSelection("right", e.shiftKey?"big" : "small");            
+      	  }        
+      	  e.preventDefault();           
+      	  break;
+      	case 40:
+      	  if (this._isInteraction || this._selection.length === 0) {
+      	    WebDoc.application.pageEditor.nextPage();
+      	  }
+      	  else {
+      	    this.moveSelection("down", e.shiftKey?"big" : "small");
+      	  }
+      	  e.preventDefault();          
+      	  break;                       
       }      
     }
     else {
@@ -969,7 +1012,7 @@ WebDoc.BoardController = jQuery.klass({
     if (y < 0) { y = 0;}
     newItem.data.data.tag = "img";
     newItem.data.data.src = this.src;
-    newItem.data.data.preserve_aspect_ratio = true;
+    newItem.data.data.preserve_aspect_ratio = "true";
     if(media_id !== undefined) {
       newItem.data.media_id = media_id;
     }
@@ -1039,7 +1082,6 @@ WebDoc.BoardController = jQuery.klass({
         }, false);
       }.pBind(this),
       stop: function(e, ui) {
-        ddd('[page view] resize stop');
         this._currentPage.setSize({
           height: Math.round(ui.element[0].clientHeight*1/this._currentZoom)+'px',
           width: Math.round(ui.element[0].clientWidth*1/this._currentZoom)+'px'
@@ -1047,5 +1089,4 @@ WebDoc.BoardController = jQuery.klass({
       }.pBind(this)
     });
   }
-  
 });

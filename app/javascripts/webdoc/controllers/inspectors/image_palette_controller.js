@@ -25,6 +25,7 @@ WebDoc.ImagePaletteController = $.klass({
           this.selectedElement.item.data.data.href = newLink;
           this.selectedElement.item.save(function() {
             this.selectedElement.item.fireDomNodeChanged();
+            this.selectedElement.select();
             this.refresh();
           }.pBind(this));
         }
@@ -217,7 +218,9 @@ WebDoc.ImagePaletteController = $.klass({
       if (selectedItem.data.data.href) {
         selectedItem.data.data.href = "";
         selectedItem.save(function() {
+          WebDoc.application.boardController.unselectItemViews(this.selectedElement);          
           this.selectedElement.item.fireDomNodeChanged();
+          this.selectedElement.select();
           this.refresh();
         }.pBind(this));
       }

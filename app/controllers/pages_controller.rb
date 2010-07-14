@@ -40,7 +40,7 @@ class PagesController < DocumentController
     options[:include] = :items if deep_notify
     message = @page.as_json(options)
     message[:source] = params[:xmpp_client_id]
-    XmppNotification.xmpp_notify(message.to_json, @page.document.uuid)     
+    @@xmpp_notifier.xmpp_notify(message.to_json, @page.document.uuid)     
     if (params[:page][:items_attributes].present?)
       render :json => @page.to_json(:include => :items)
     else
@@ -59,7 +59,7 @@ class PagesController < DocumentController
     options[:include] = :items if deep_notify
     message = @page.as_json(options)
     message[:source] = params[:xmpp_client_id]
-    XmppNotification.xmpp_notify(message.to_json, @page.document.uuid)    
+    @@xmpp_notifier.xmpp_notify(message.to_json, @page.document.uuid)    
     if (deep_notify)
       render :json => @page.to_json(:include => :items)
     else
@@ -72,7 +72,7 @@ class PagesController < DocumentController
     @page = @document.pages.find_by_uuid(params[:id])
     @page.destroy
     message = { :source => params[:xmpp_client_id], :page =>  { :uuid => @page.uuid }, :action => "delete" }
-    XmppNotification.xmpp_notify(message.to_json, @document.uuid)    
+    @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)    
     render :json => {}
   end
 

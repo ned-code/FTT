@@ -140,8 +140,8 @@
     _updatePageRelatedFields: function() {
       this._initializingGui = true; 
       jQuery("#page_title").val( this._page.data.title == "undefined" ? "enter a title" : this._page.data.title );
-      jQuery("#page_height")[0].value = this._page.data.data.css.height; 
-      jQuery("#page_width")[0].value = this._page.data.data.css.width; 
+      jQuery("#page_height")[0].value = this._page.height(); 
+      jQuery("#page_width")[0].value = this._page.width(); 
       if(this._page.data.data.externalPageUrl) {
         this._externalPageControls.show();
         this._backgroundControls.hide();
@@ -291,11 +291,10 @@
         pass: function(value){ backgroundImage = value; },
         fail: function(error){ valid = false; }
       });
-      
       if (valid) {
         for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
           page = WebDoc.application.pageEditor.currentDocument.pages[i];
-          this._applyBackgroundToPage( this._page, backgroundColor, backgroundImage );
+          this._applyBackgroundToPage( page, backgroundColor, backgroundImage );
         }
         var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
         WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);

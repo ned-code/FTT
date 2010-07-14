@@ -42,7 +42,7 @@ class ImagesController < ApplicationController
         format.html { render :json => @image }
         format.json { render :json => @image }
       else
-        format.json { render :status => 503 }
+        format.json { render :json => @image, :status => 203 }
       end
     end
   end
@@ -58,5 +58,5 @@ class ImagesController < ApplicationController
   #no authentication for images as SWFUpload does not like it so much
   def http_authenticate
   end
-  
+    
 end

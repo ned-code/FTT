@@ -27,7 +27,9 @@ namespace :deploy do
   task :link_config do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     run "ln -nfs #{shared_path}/config/allowed_user_email.yml #{release_path}/config/allowed_user_email.yml"
-    run "ln -nfs #{release_path}/config/s3.server.yml #{release_path}/config/s3.yml"
+    run "ln -nfs #{shared_path}/config/s3.yml #{release_path}/config/s3.yml"
+    run "ln -nfs #{shared_path}/config/config.yml #{release_path}/config/config.yml"
+    run "ln -nfs #{shared_path}/config/newrelic.yml #{release_path}/config/newrelic.yml"
   end
   task :generate_assets do
     send(:run, "cd #{release_path} && RAILS_ENV=#{rails_env} /usr/bin/jammit --force config/assets.yml")
@@ -53,6 +55,20 @@ namespace :passenger do
   desc "passenger general info"
   task :general, :roles => :app do
     run "sudo passenger-status"
+  end
+end
+
+namespace :newrelic do
+  desc "start newrelic agent (! it's restart the application"
+  task :activate, :roles => :app do
+    run "ln -nfs #{shared_path}/config/newrelic-activated.yml #{shared_path}/config/newrelic.yml"
+    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+  end
+  desc "stop newrelic agent (! it's restart the application"
+  after 'newrelic:stop', 'deploy:restart'  
+  task :disable, :roles => :app do
+    run "ln -nfs #{shared_path}/config/newrelic-disabled.yml #{shared_path}/config/newrelic.yml"
+    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
 end
                                  

@@ -30,8 +30,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
 
     $super(json);
     if (!json) {
-      this.data.data = { preference: {}};
+      this.data.data = {};
     }    
+    if (!this.data.preferences || this.data.preferences == 'null') {
+      this.data.preferences = {};
+    }
   },
   
   getPage: function() {
@@ -189,6 +192,26 @@ WebDoc.Item = $.klass(WebDoc.Record,
       this.save();
     }
   },
+
+  replacePlaceholder: function(type, options) {
+    if(options === undefined) {
+      options = {};
+    }
+    if(type === WebDoc.ITEM_TYPE_IMAGE && options.imageUrl) {
+      var oldSource = this.data.data.src;
+      this.data.data.src = options['imageUrl'];
+      this.preLoadImageWithCallback(function(event){
+        this.setRatio(this.calcRatio(event));
+        this.save(function() {
+          this.fireDomNodeChanged();
+          this.fireObjectChanged({ modifedAttribute: 'zoom' });
+          WebDoc.application.undoManager.registerUndo(function() {
+            this.replacePlaceholder(WebDoc.ITEM_TYPE_IMAGE, { imageUrl: oldSource });
+          }.pBind(this));
+        }.pBind(this));
+      }.pBind(this));
+    }
+  },
   
   positionZ: function() {
     return this.data.position;
@@ -207,10 +230,13 @@ WebDoc.Item = $.klass(WebDoc.Record,
     if (this.data && this.data.position && json.item.position != this.data.position) {
       refreshPositionZ = true;
     }
+    if (json.item.inner_html === 'null') {
+      json.item.inner_html = null;
+    }
     if (this.data && json.item.inner_html != this.data.inner_html) {
       refreshInnerHtml = true;
     }
-    if (this.data.data && this.data.data.preference && json.item.data.preference && $.toJSON(this.data.data.preference) != $.toJSON(json.item.data.preference)) {
+    if (this.data.preferences && json.item.preferences && $.toJSON(this.data.preferences) != $.toJSON(json.item.preferences)) {
       refreshPreferences = true;
     }
     
@@ -257,25 +283,25 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
   
   getProperty: function(key) {
-    if (this.data.data.properties) {
-      return this.data.data.properties[key];
+    if (this.data.properties) {
+      return this.data.properties[key];
     }
     return null;
   },
   
   // TMP hack
   property: function(key) {
-    if (this.data.data.properties) {
-      return this.data.data.properties[key];
+    if (this.data.properties) {
+      return this.data.properties[key];
     }
     return null;
   },
   
   setProperty: function(key, value) {
-    if (!this.data.data.properties) {
-      this.data.data.properties = {};
+    if (!this.data.properties) {
+      this.data.properties = {};
     }
-    this.data.data.properties[key] = value;
+    this.data.properties[key] = value;
     this.fireObjectChanged({ modifedAttribute: 'properties' });
   },
   
@@ -433,6 +459,9 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   getInnerHtml: function() {
+    if (this.data.inner_html && this.data.inner_html === 'null') {
+      return null
+    }
     return this.data.inner_html;
   },
 
@@ -464,10 +493,13 @@ WebDoc.Item = $.klass(WebDoc.Record,
   copy: function($super) {
     var newItem = $super();
     newItem.data.data = $.evalJSON($.toJSON(this.data.data));
+    newItem.data.properties = $.evalJSON($.toJSON(this.data.properties));
+    newItem.data.preferences = $.evalJSON($.toJSON(this.data.preferences));
     newItem.data.media_type = this.data.media_type;
     newItem.data.media_id = this.data.media_id;
     newItem.data.kind = this.data.kind;
     newItem.data.inner_html = this.data.inner_html;
+		newItem.data.position = this.data.position;
     newItem.media = this.media;
     return newItem;
   },
@@ -490,8 +522,8 @@ WebDoc.Item = $.klass(WebDoc.Record,
   /** widget item                        */
   /***************************************/
   getInspectorUrl: function() {
-    if (this.data.data.properties && this.data.data.properties.inspector_url) {
-      return this.data.data.properties.inspector_url;
+    if (this.data.properties && this.data.properties.inspector_url) {
+      return this.data.properties.inspector_url;
     }
     return null;      
   },

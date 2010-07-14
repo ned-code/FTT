@@ -26,15 +26,15 @@ WebDoc.WidgetApi = $.klass(
   },
   
   preference: function(key, value) {
-    var result = this.widgetItem.data.data.preference[key];
+    var result = this.widgetItem.data.preferences[key];
   if (typeof(result)!='undefined') {return result;}
     return value;
   },
   
   setPreference: function(key, value) {
-    var previous = this.widgetItem.data.data.preference[key];
+    var previous = this.widgetItem.data.preferences[key];
     if (previous != value) {
-      this.widgetItem.data.data.preference[key] = value;
+      this.widgetItem.data.preferences[key] = value;
       ddd("save widget pref");
       this.widgetItem.save();
       if (!this.isInspectorApi()) {

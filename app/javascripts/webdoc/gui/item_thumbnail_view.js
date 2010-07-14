@@ -204,4 +204,27 @@ WebDoc.WidgetThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
   }   
 });
 
+WebDoc.IFrameThumbnailView = $.klass(WebDoc.ItemThumbnailView, {
+  createDomNode: function($super) {
+    var itemNode = $('<div/>');
+  
+    itemNode.attr("id", "thumb_" + this.item.uuid());
+    this.makeCss( this.item.data.data.css, function( css ){
+      itemNode.css( css );
+    });
+    itemNode.addClass("widget_thumb");
+    this.pageView.itemDomNode.append(itemNode.get(0));
+  
+    return itemNode;
+  },
+  
+  objectChanged: function($super, item) {
+    $super(item);
+    this.domNode.addClass("widget_thumb");    
+  },
+  
+  innerHtmlChanged: function() {
+    this.domNode.addClass('widget_thumb');
+  }   
+});
 

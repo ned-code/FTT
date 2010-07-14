@@ -25,6 +25,7 @@ class Admin::WidgetsController < Admin::AdminController
         format.json { render :json => @widget }
       end
     else
+      flash[:notice] = t("flash.notice.widget.#{@widget.status}") if @widget.status      
       render :new
     end
   end
@@ -40,7 +41,6 @@ class Admin::WidgetsController < Admin::AdminController
     @widget = Medias::Widget.find_by_uuid(params[:id])
     
     if @widget.update_attributes(params[:medias_widget])
-      Rails.cache.delete("#widget_json_#{params[:id]}")
       flash[:notice] = t("flash.notice.widget.#{@widget.status}") if @widget.status
       redirect_to admin_widgets_path
     else

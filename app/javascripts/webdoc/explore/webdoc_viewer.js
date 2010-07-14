@@ -10,10 +10,10 @@ WebDoc.application = {};
 
 WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
     
-  initialize: function($super, viewerNode, static) {
+  initialize: function($super, viewerNode, statik) {
     $super();
 
-    if(static === undefined || static === false) {
+    if(statik === undefined || statik === false) {
       this._static = false;
     }
     else {
@@ -79,13 +79,33 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
       if(this._static === true) {
 
         var staticThumbDomNode = $('<div>', {'class': 'webdoc', id: 'page_' + page.uuid()}),
-            staticThumb = $('<img/>', { 'src': page.getThumbnailUrl(), 'height': height, 'width': width });
+            staticThumb = $('<img/>', { 'src': page.getThumbnailUrl() });
 
-        staticThumbDomNode.css("cursor", "pointer");
-        staticThumbDomNode.append(staticThumb);
+        jQuery(staticThumb).bind("load", function(event){
 
-        this._currentPageView = staticThumbDomNode;
-        this._containerNode.empty().append(this._currentPageView);
+          var aspecHeight = height / event.currentTarget.naturalHeight;
+          var aspecWidth  = width / event.currentTarget.naturalWidth;
+         
+          if(aspecHeight < aspecWidth) {
+            width = (event.currentTarget.naturalWidth * aspecHeight);
+          }
+          else {
+            height = (event.currentTarget.naturalHeight * aspecWidth);
+          }
+
+          staticThumb.attr('height', height);
+          staticThumb.attr('width',  width);
+
+          staticThumbDomNode.css("cursor", "pointer");
+          staticThumbDomNode.append(staticThumb);
+
+          this._currentPageView = staticThumbDomNode;
+          this._containerNode.css('height', height);
+          this._containerNode.css('width', width);
+          this._containerNode.empty().append(this._currentPageView);
+        }.pBind(this));
+
+
       }
       else {
         // Clean previous page view
@@ -103,8 +123,6 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
         this._currentPageView.fitInContainer(width, height);
 
       }
-
-
 
     }
   },
@@ -138,11 +156,11 @@ WebDoc.WebdocViewer = $.klass(WebDoc.Application,{
 });
 
 $.extend(WebDoc.WebdocViewer, {
-  showViewers: function(static) {
+  showViewers: function(statik) {
     var allViewerContainers = jQuery(".webdoc-viewer-container");
     for (var i = 0; i < allViewerContainers.length; i++) {
       var aViewerContainer = jQuery(allViewerContainers[i]);
-      var viewer = new WebDoc.WebdocViewer(aViewerContainer, static);
+      var viewer = new WebDoc.WebdocViewer(aViewerContainer, statik);
       viewer.load(aViewerContainer.id());
     }
   }

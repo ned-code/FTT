@@ -10,9 +10,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
     this.placeholderNode = jQuery(placeholderContent);
     
     $super(item, pageView, afterItem);
-    if (this.itemDomNode.hasClass("empty")) {
-      this.itemDomNode.append( this.placeholderNode );
-    }
+    this.innerHtmlChanged();
     this.domNode.addClass('item-text');
   },
   
@@ -59,7 +57,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   
   innerHtmlChanged: function() {
     if (!WebDoc.application.disableHtml) {
-      if ($.string(this.item.getInnerHtml()).blank()) {
+      if (!this.item.getInnerHtml() || $.string(this.item.getInnerHtml()).blank()) {
         this.itemDomNode.append( this.placeholderNode );
       }
       else {

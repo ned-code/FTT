@@ -2,19 +2,13 @@ require 'spec_helper'
 
 describe Layout do
 
-  should_allow_mass_assignment_of :uuid, :title, :thumbnail_url
-  should_not_allow_mass_assignment_of :id, :theme_id, :model_page_id, :created_at, :updated_at
-
-  should_belong_to :theme
-  should_belong_to :model_page, :dependent => :delete
-  
   describe "create_model_page! with the layout.html example" do
     before(:all) do
-      theme = mock_model(Theme)
+      @theme = Factory(:theme_without_upload)
       file = mock("file", :s3_bucket => 'assets.test.webdoc.com')
       file.stub!(:store_url).and_return('http://assets.test.webdoc.com')
-      theme.stub!(:file).and_return(file)
-      @layout = Factory(:layout, :theme => theme)
+      @theme.stub!(:file).and_return(file)
+      @layout = Factory(:layout, :theme => @theme)
       @youtube_media = Factory(:widget, :system_name => 'youtube')
       @vimeo_media = Factory(:widget, :system_name => 'vimeo')
       @widget_media = Factory(:widget, :uuid => 'f8f78724-5922-4cd3-a99a-f87b601c8419')
@@ -26,6 +20,7 @@ describe Layout do
       @youtube_media.destroy
       @vimeo_media.destroy
       @widget_media.destroy
+      @theme.destroy      
     end
 
     it "should create a model page" do

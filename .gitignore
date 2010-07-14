@@ -2,6 +2,7 @@ nbproject
 spec/spec.opts.netbeans
 .project
 .DS_Store
+capybara-*.html
 log/*.log
 tmp/**/*
 tmp/*
@@ -18,6 +19,9 @@ spec/fixtures/files/ubz/
 spec/output_document
 spec/tmp
 config/s3.yml
+config/newrelic.yml
+config/config.yml
+db/development_structure.sql
 *.suo
 debug.log
 error.log
@@ -50,3 +54,4 @@ db/schema.rb
 *.LOCAL.*
 public/local/*
 public/themes/*/*.zip
+.externalToolBuilders/

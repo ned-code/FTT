@@ -1,3 +1,16 @@
+module DocumentJsonHelper
+  def self.decode_json_and_yaml(value)
+    unless(value.nil?)
+      begin
+        return ActiveSupport::JSON.decode(value)
+      rescue
+        return YAML.load(value)
+      end  
+    end
+    return nil
+  end
+end
+
 class Document < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
@@ -5,10 +18,9 @@ class Document < ActiveRecord::Base
   
   attr_accessible :uuid, :title, :description, :size, :category_id, :is_public, :style_url, :theme_id, :featured 
   
-  serialize :size
-  
-  # see XmppDocumentObserver  
-  attr_accessor_with_default :must_notify, false
+  composed_of :size, :class_name => 'Hash', :mapping => %w(size to_json),
+                         :constructor => DocumentJsonHelper.method(:decode_json_and_yaml),
+                         :converter   => DocumentJsonHelper.method(:decode_json_and_yaml)
   
   # ================
   # = Associations =
@@ -36,6 +48,8 @@ class Document < ActiveRecord::Base
   before_create :create_default_page
   before_create :validate_size
   after_create :set_creator_as_editor
+  after_save :invalidate_cache
+  after_destroy :invalidate_cache
   
   # =================
   # = Class Methods =
@@ -148,7 +162,8 @@ class Document < ActiveRecord::Base
   end
 
   def relative_created_at
-    diff_in_minutes = (((Time.now - self.created_at).abs)/60).round
+    diff_in_time = Time.now - self.created_at
+    diff_in_minutes = ((diff_in_time.abs)/60).round
     text = ""
 
     case diff_in_minutes
@@ -172,16 +187,16 @@ class Document < ActiveRecord::Base
   
   # return a Hash with width and height formated with unit
   def formated_size
-    result = { :width => "800px", :height => "600px"}
-    if size && size[:width] =~ /\d+%/
-      result[:width] = size[:width]
-    elsif size && size[:width]
-      result[:width] = "#{size[:width].to_i.to_s}px" 
+    result = { 'width' => "800px", 'height' => "600px"}
+    if size && size['width'] =~ /\d+%/
+      result['width'] = size['width']
+    elsif size && size['width']
+      result['width'] = "#{size['width'].to_i.to_s}px" 
     end
-    if size && size[:height] =~ /\d+%/
-      result[:height] = size[:height]
-    elsif size && size[:width]
-      result[:height] = "#{size[:height].to_i.to_s}px" 
+    if size && size['height'] =~ /\d+%/
+      result['height'] = size['height']
+    elsif size && size['width']
+      result['height'] = "#{size['height'].to_i.to_s}px" 
     end    
     return result
   end
@@ -345,6 +360,10 @@ class Document < ActiveRecord::Base
     update_attribute("updated_at", Time.now)
   end
   
+  def invalidate_cache
+    Rails.cache.delete("document_#{self.uuid}")
+    Rails.cache.delete("document_#{self.uuid}_explore")
+  end
 private
   
   # after_create
@@ -368,7 +387,7 @@ private
 
   # before_create
   def validate_size    
-    if size.blank? || size == 'null' || size[:height].blank? || size[:width].blank? || size[:width] == '0' || size[:height] == '0'
+    if size.blank? || size == 'null' || size['height'].blank? || size['width'].blank? || size['width'] == '0' || size['height'] == '0'
       errors.add(:size, "Error in size of document")
       false
     else

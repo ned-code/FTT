@@ -1,3 +1,16 @@
+module PageJsonHelper
+  def self.decode_json_and_yaml(value)
+    unless (value.nil?)
+      begin
+        return ActiveSupport::JSON.decode(value)
+      rescue
+        return YAML.load(value)
+      end  
+    end
+    return nil
+  end
+end
+
 class Page < ActiveRecord::Base
 
   has_uuid
@@ -16,15 +29,14 @@ class Page < ActiveRecord::Base
 
   attr_accessor_with_default :touch_document_active, true
   
-  serialize :data
-  
-  # see XmppPageObserver
-  attr_accessor_with_default :must_notify, false
+  composed_of :data, :class_name => 'Hash', :mapping => %w(data to_json),
+                         :constructor => PageJsonHelper.method(:decode_json_and_yaml)
+
   attr_accessor_with_default :deep_notify, false
 
   attr_accessor :remote_thumbnail_url
 
-  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind, :remote_thumbnail_url
+  attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind, :remote_thumbnail_url, :thumbnail_need_update
 
   # ================
   # = Associations =
@@ -108,18 +120,18 @@ class Page < ActiveRecord::Base
     cloned_page
   end
 
-  def touch
-    update_attribute("updated_at", Time.now)
-  end
-
   def touch_and_need_update_thumbnail
-    update_attributes({
-            :updated_at => Time.now,
-            :thumbnail_need_update => true
-    })
+
+    if (!thumbnail_need_update)
+      update_attributes!({
+              :thumbnail_need_update => 1
+      })
+    end
+    touch_document
   end
 
   def self.process_pending_thumbnails
+    self.cleanup_old_requests
     pages = Page.all_need_process_thumbnail
     if pages.present?
       thumbnail_service = Services::Bluga.new
@@ -135,13 +147,80 @@ class Page < ActiveRecord::Base
     )
   end
 
+  def self.cleanup_old_requests
+    old_requests = Page.all(
+            :conditions => [
+                    'thumbnail_secure_token IS NOT ? AND thumbnail_need_update = ? AND thumbnail_request_at IS NOT ? AND thumbnail_request_at < ?',
+            nil, true, nil, (Time.now-30.minutes).utc])
+    if old_requests.present?
+      old_requests.each do |page|
+        page.thumbnail_secure_token = nil
+        page.thumbnail_request_at = nil
+        page.save!
+      end
+    end
+  end
+
   def generate_and_set_thumbnail_secure_token
     self.thumbnail_secure_token = UUID::generate
   end
+
+  # calculate the size of the snapshot for thumbnail service
+  # with a apsec ratio max
+  def calc_thumbnail_frame_size
+    max_aspec_ratio = 3.0
+    width  = self.data['css']['width'].to_i
+    height = self.data['css']['height'].to_i
+    x = width
+    y = height
+
+    if width < height
+      if height/max_aspec_ratio > width
+        y = (width * max_aspec_ratio).floor
+      end
+    else
+      if width/max_aspec_ratio > height
+        x = (height * max_aspec_ratio).floor
+      end
+    end
+
+    { 'width' => x.to_s, 'height' => y.to_s }
+  end
+
+  # calculate the size of the thumbnail with a width max and
+  # a height max. it conserve the aspec ratio of the size passed
+  def self.calc_thumbnail_size(size, max_width=640, max_height=480)
+    width  = size['width'].to_i
+    height = size['height'].to_i
+    x = max_width
+    y = max_height
+
+    if width < height
+      ratio = max_height / height.to_f
+      x = (width * ratio).floor
+    else
+      ratio = max_width / width.to_f
+      y = (height * ratio).floor
+    end
+
+    { 'width' => x.to_s, 'height' => y.to_s }
+  end
   
+  # JBA We cannot use default generated method from active record because the default behavior will regenerate UUID of items (because uuis cannot be mass assigned)
+  # So we redefined this method and use new_with_uuid that keep uuid
   def items_attributes=(params={})
     params.each_value do |item_hash|
-      self.items << Item.new_with_uuid(item_hash)
+      previous_item = self.items.find_by_uuid(item_hash[:uuid])
+      if (previous_item)
+        if (item_hash[:_delete])
+          self.items.delete(previous_item)
+        else
+          previous_item.attributes = item_hash  
+        end
+        
+      else
+        self.items << Item.new_with_uuid(item_hash)  
+      end      
     end
   end
   
@@ -162,11 +241,14 @@ class Page < ActiveRecord::Base
   # before_save
   def set_page_data
     if document.present?
-      default_css = { :width => document.formated_size[:width], :height => document.formated_size[:height] }
+      default_css = { 'css' => { 'width' => document.formated_size['width'], 'height' => document.formated_size['height'] }}
       if (self.data)
-        self.data[:css] ||= default_css
+        # TODO remove this temporary hack. (:css) it is to allow conversion of old previous data hash that was stored in rails yml
+        if (self.data['css'].nil?)
+          self.data = default_css
+        end
       else
-        self.data = { :css =>  default_css }
+        self.data = default_css
       end
     end
   end
@@ -195,10 +277,11 @@ class Page < ActiveRecord::Base
   # after_save
   # after_destroy
   def touch_document
-    self.document.touch if self.document.present? && touch_document_active == true
+    self.document.invalidate_cache if self.document.present? && touch_document_active == true
   end
   
 end
+
 
 
 
@@ -206,15 +289,19 @@ end
 #
 # Table name: pages
 #
-#  uuid         :string(36)      primary key
-#  document_id  :string(36)
-#  thumbnail_id :string(36)
-#  position     :integer(4)      not null
-#  version      :integer(4)      default(1), not null
-#  data         :text(16777215)
-#  created_at   :datetime
-#  updated_at   :datetime
-#  title        :string(255)     default("undefined")
-#  layout_kind  :string(255)
+#  uuid                   :string(36)      default(""), not null, primary key
+#  document_id            :string(36)
+#  thumbnail_id           :string(36)
+#  position               :integer(4)      not null
+#  version                :integer(4)      default(1), not null
+#  data                   :text(16777215)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  title                  :string(255)     default("undefined")
+#  layout_kind            :string(255)
+#  thumbnail_file_name    :string(255)
+#  thumbnail_need_update  :boolean(1)
+#  thumbnail_secure_token :string(36)
+#  thumbnail_request_at   :datetime
 #
 

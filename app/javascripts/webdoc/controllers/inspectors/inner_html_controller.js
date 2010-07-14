@@ -53,11 +53,6 @@ WebDoc.InnerHtmlController = $.klass({
       catch (exception) {
         ddd("cannot indent HTML");
       }
-      
-      var noIframe = false;
-      if (item.data.data.properties) {
-        noIframe = item.property("noIframe");
-      }      
     }
     else {
       this._editor.setCode( '' );

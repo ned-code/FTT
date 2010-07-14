@@ -1,18 +1,14 @@
 require 'spec_helper'
 
 describe Document do
-  
-  should_allow_mass_assignment_of :uuid, :title, :description, :size, :category_id, :is_public
-  should_not_allow_mass_assignment_of :id, :creator_id, :deleted_at, :created_at, :updated_at
-  
-  should_be_built_by_factory
-  should_be_created_by_factory
-  should_have_many :pages, :order => 'position ASC', :dependent => :destroy
-  should_belong_to :category
-  
+
+  before do
+    Factory(:theme_without_upload)
+  end
+    
   describe "default" do
     subject { Factory(:document) }
-    
+
     its(:pages) { should be_present }
     
     it "should have creator as editor on create" do
@@ -20,22 +16,22 @@ describe Document do
     end
     
     it "should be possible to create document with % size unit" do
-      created_doc = Document.create({ :title => "test", :size => { :width => "100%", :height => "100%"}})
+      created_doc = Document.create({ :title => "test", :size => { 'width' => "100%", 'height' => "100%"}})
       created_doc.pages.length.should == 1
-      created_doc.pages[0].data[:css][:width].should == "100%"
-      created_doc.pages[0].data[:css][:height].should == "100%"
+      created_doc.pages[0].data['css']['width'].should == "100%"
+      created_doc.pages[0].data['css']['height'].should == "100%"
     end
     it "should be possible to create document with px size unit" do
-      created_doc = Document.create({ :title => "test", :size => { :width => "120px", :height => "500px"}})
+      created_doc = Document.create({ :title => "test", :size => { 'width' => "120px", 'height' => "500px"}})
       created_doc.pages.length.should == 1
-      created_doc.pages[0].data[:css][:width].should == "120px"
-      created_doc.pages[0].data[:css][:height].should == "500px"
+      created_doc.pages[0].data['css']['width'].should == "120px"
+      created_doc.pages[0].data['css']['height'].should == "500px"
     end    
     it "should be possible to create document with no size unit => px must be used" do
-      created_doc = Document.create({ :title => "test", :size => { :width => "300", :height => "200"}})
+      created_doc = Document.create({ :title => "test", :size => { 'width' => "300", 'height' => "200"}})
       created_doc.pages.length.should == 1
-      created_doc.pages[0].data[:css][:width].should == "300px"
-      created_doc.pages[0].data[:css][:height].should == "200px"
+      created_doc.pages[0].data['css']['width'].should == "300px"
+      created_doc.pages[0].data['css']['height'].should == "200px"
     end        
   end
   
@@ -201,7 +197,7 @@ describe Document do
     end
 
     it "should set a number of document per page" do
-      docs = Document.all_public_paginated_with_explore_params('', '', nil, 2)
+      docs = Document.all_public_paginated_with_explore_params(nil, nil, nil, nil, 2)
       docs.size.should == 2
     end
 

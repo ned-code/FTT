@@ -2,12 +2,17 @@ require "xmpp4r"
 require "xmpp4r/pubsub"
 
 class XmppNotification
-  @@xmpp_client = Jabber::Client.new('server@webdoc.com')
-  @@xmpp_off = true
+
+  def initialize
+    @xmpp_client = Jabber::Client.new('server@webdoc.com')
+    @xmpp_off = false  
+    @serviceMap = Hash.new
+    xmpp_connect
+  end
   
-  def self.xmpp_create_node(node_name)
-    if (!@@xmpp_off)
-      begin        
+  def xmpp_create_node(node_name)
+    if (!@xmpp_off)
+      begin  
         service = self.get_pubsub_service("pubsub.webdoc.com") 
         begin
           service.create_node(node_name, Jabber::PubSub::NodeConfig.new(nil,{ 
@@ -18,14 +23,13 @@ class XmppNotification
                     "pubsub#publish_model" => "open"})) 
         rescue Jabber::JabberError => error
           Rails.logger.warn "Error on create node #{error}"
-        end
-           
+        end           
       end 
     end
   end
   
-  def self.xmpp_notify(message, node)
-    if (!@@xmpp_off)    
+  def xmpp_notify(message, node)
+    if (!@xmpp_off)    
       continue = true
       number_of_try = 0
       while continue do
@@ -42,33 +46,37 @@ class XmppNotification
           xmpp_create_node(node)
           if (number_of_try < 1)
             continue = true;
-          end            
+          end 
+        rescue => otherError
+          xmpp_connect
         end    
         number_of_try += 1
       end
     end
   end
   
-  def self.xmpp_connect
+  def xmpp_connect
     pass = "1234"
     begin
-      @@xmpp_client.connect "localhost"
-      @@xmpp_client.auth(pass)
+      @xmpp_client.connect "localhost"
+      @xmpp_client.auth(pass)
     rescue Exception => error
       Rails.logger.warn "Cannot connect to XMPP server #{error}"
-      @@xmpp_off = true
+      @xmpp_off = true
     end    
   end
   
-  def self.get_pubsub_service(pubsubjid)
-    service = nil
+  def get_pubsub_service(pubsubjid)
     begin
-      service = Jabber::PubSub::ServiceHelper.new(@@xmpp_client,pubsubjid)
-    rescue Jabber::JabberError => error
+      if (!@serviceMap[pubsubjid])
+        @serviceMap[pubsubjid] = Jabber::PubSub::ServiceHelper.new(@xmpp_client,pubsubjid)        
+      end      
+
+    rescue Exception => error      
       Rails.logger.warn "Error on pubsub service #{error}"
       self.xmpp_connect
-      service=Jabber::PubSub::ServiceHelper.new(@@xmpp_client,pubsubjid)
+      @serviceMap[pubsubjid] = Jabber::PubSub::ServiceHelper.new(@xmpp_client,pubsubjid)
     end
-    return service
+    return  @serviceMap[pubsubjid]
   end
 end

@@ -1,0 +1,19 @@
+development:
+  host: dev1.webdoc.com  
+  synch_openfire_users: false
+  mail_from: dev@local
+  notify_administrator_onuser_creation: true
+  administrator_emails: admin@admin.com
+  shindig_server_base: http://localhost:8080/gadgets/
+  shindig_secure_token_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  shindig_container: default
+  
+test:
+  host: dev1.webdoc.com
+  synch_openfire_users: false
+
+staging:
+  host: st-wd.webdoc.com
+
+production:
+  host: alpha.webdoc.com

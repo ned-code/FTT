@@ -47,55 +47,63 @@ class Layout < ActiveRecord::Base
 
       page.title = self.title
       page.layout_kind = self.kind
-      page.data = HashWithIndifferentAccess.new
-      page.data[:class] = body_class
-      page.data[:css] = HashWithIndifferentAccess.new
-      page.data[:css][:width] = page_height
-      page.data[:css][:height] =  page_width
-
+      page_data = Hash.new
+      page_data['class'] = body_class
+      page_data['css'] = Hash.new
+      page_data['css']['width'] = page_height
+      page_data['css']['height'] =  page_width
+      page.data = page_data
       doc_body.children.each do |doc_item|
         if doc_item.class == Nokogiri::XML::Element
+          item_data = Hash.new
           case doc_item.node_name
             when 'div'
               item = build_default_item(page, doc_item)
-              item.data[:tag] = 'div'
+              item_data = item_data.merge(item.data)
+              item_data['tag'] = 'div'
               if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
                 inner_html = Item.sanitize_html_to_serialize(doc_item.inner_html)
-                item.data[:innerHTMLPlaceholder] = inner_html
-                item.data[:class] += " empty"
+                item_data['innerHTMLPlaceholder'] = inner_html
+                item_data['class'] += " empty"
               else
                 item.inner_html = inner_html
-                item.data[:innerHTMLPlaceholder] = ""
+                item_data['innerHTMLPlaceholder'] = ""
               end
               if doc_item['data-item-type'] == 'text'
                 item.media_type = 'text'
               else
                 item.media_type = 'widget'
               end
-              item.data = item.data.to_yaml
+              item.data = item_data              
             when 'img'
               item = build_default_item(page, doc_item)
-              item.data[:tag] = 'img'
+              item_data.merge!(item.data)
+              item_data['tag'] = 'img'
               src = doc_item.attr('src')
               path = ""
               unless src.start_with? "http://"
                 path = self.theme.attachment_root_url
               end
-              item.data[:src] = path + src
+              item_data['src'] = path + src
               item.media_type = 'image'
               if doc_item.attr('data-placeholder').present? && doc_item.attr('data-placeholder') == "true"
-                item.data[:is_placeholder] = "true"
+                item_data['is_placeholder'] = "true"
               end
+              item.data = item_data              
             when 'iframe'
               item = build_default_item(page, doc_item)
-              item.data[:tag] = 'iframe'
-              item.data[:src] = doc_item.attr('src')
+              item_data.merge!(item.data)              
+              item_data['tag'] = 'iframe'
+              item_data['src'] = doc_item.attr('src')
               item.media_type = 'iframe'
+              item.data = item_data              
             when 'object'
               item = build_default_item(page, doc_item)
+              item_data.merge!(item.data)              
+              item.preferences = Hash.new
               if doc_item.attr('type') == 'video/vimeo' || doc_item.attr('type') == 'video/youtube'
-                media = Medias::Widget.find_by_system_name(doc_item.attr('type').split(/\//)[1])
-                item.data[:preference][:url] = doc_item.attr('data')
+                media = Medias::Widget.find_by_system_name(doc_item.attr('type').split(/\//)[1])                
+                item.preferences['url'] = doc_item.attr('data')
               else # application/wd-app
                 media = Medias::Widget.find_by_uuid(doc_item.attr('data'))
               end
@@ -104,21 +112,24 @@ class Layout < ActiveRecord::Base
               for object_item in doc_item.children
                 if object_item == 'param'
                   if object_item.attr('name').present? && object_item.attr('value').present?
-                    item.data[:preference][object_item.attr('name')] = object_item.attr('value')
+                    item.preferences[object_item.attr('name')] = object_item.attr('value')
                   end
                 end
               end
+              item.data = item_data              
             when 'svg'
               for svg_item in doc_item.children
                 if svg_item.node_name == 'polyline'
                   item = build_default_item(page, doc_item)
-                  item.data[:css] = HashWithIndifferentAccess.new
-                  item.data[:css][:zIndex] = "2000"
-                  item.data[:tag] = 'polyline'
-                  item.data[:stroke] = doc_item.attr('stroke')
-                  item.data[:strokeWidth] = doc_item.attr('strokeWidth')
-                  item.data[:points] = doc_item.attr('points')
+                  item_data.merge!(item.data)                  
+                  item_data['css'] = HashWithIndifferentAccess.new
+                  item_data['css']['zIndex'] = "2000"
+                  item_data['tag'] = 'polyline'
+                  item_data['stroke'] = doc_item.attr('stroke')
+                  item_data['strokeWidth'] = doc_item.attr('strokeWidth')
+                  item_data['points'] = doc_item.attr('points')
                   item.media_type = 'drawing'
+                  item.data = item_data                  
                 end
               end
           end
@@ -150,11 +161,9 @@ class Layout < ActiveRecord::Base
     css_hash = get_style_hash_from_doc_item(doc_item)
     classes = []
     classes.concat(doc_item.attr('class').split(' ')) if doc_item.attr('class').present?
-    hash[:css] = css_hash if css_hash.present? 
-    hash[:class] = classes.select { |class_name| !(class_name =~ /layout_*./)}.join(' ')
-    hash[:wrapClass] = classes.select { |class_name| class_name =~ /layout_*./}.join(' ')
-    hash[:preference] = HashWithIndifferentAccess.new
-    hash[:preference][:rails_empty] = 'dummy'
+    hash['css'] = css_hash if css_hash.present? 
+    hash['class'] = classes.select { |class_name| !(class_name =~ /layout_*./)}.join(' ')
+    hash['wrapClass'] = classes.select { |class_name| class_name =~ /layout_*./}.join(' ')
     hash
   end
 
@@ -168,11 +177,12 @@ class Layout < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: layouts
 #
-#  uuid          :string(255)     primary key
+#  uuid          :string(255)     default(""), not null, primary key
 #  title         :string(255)
 #  thumbnail_url :string(255)
 #  theme_id      :string(36)

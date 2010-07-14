@@ -115,7 +115,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     }
 
     jQuery('.webdoc-viewer-title h4').truncate();
-    WebDoc.WebdocViewer.showViewers(false);
+    WebDoc.WebdocViewer.showViewers(true);
   },
 
   _createViewForDocument: function(document) {
@@ -214,9 +214,9 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
   },
 
   _setUrlWithExploreFilter: function () {
-    document.location.hash = "#?exploremainfilter=" + escape(this.mainFilterDomNode.val())
+    document.location.replace("#?exploremainfilter=" + escape(this.mainFilterDomNode.val())
                              + "&explorecategoryfilter=" + escape(this.categoryFilterDomNode.val())
-                             + "&exploresearch=" + escape(this.searchDomNode.val());
+                             + "&exploresearch=" + escape(this.searchDomNode.val()));
   },
 
   _setExploreFilterFromUrl: function() {

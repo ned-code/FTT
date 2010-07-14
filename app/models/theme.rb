@@ -42,7 +42,10 @@ class Theme < ActiveRecord::Base
   # =============
   # = Callbacks =
   # =============
-    
+  
+  after_save :invalidate_cache
+  after_destroy :invalidate_cache
+  
   # =================
   # = Class Methods =
   # =================
@@ -109,16 +112,12 @@ class Theme < ActiveRecord::Base
           raise(ActiveRecord::RecordInvalid) unless ancestor_theme.save(false)
         end
 
-        begin
           extract_files_from_zip_file
           create_parsed_style
           for layout_saved in self.layouts
             layout_saved.create_model_page!
           end
-        rescue Exception => e
-          self.errors.add(:attachment, "Error: #{e}")
-          raise ActiveRecord::Rollback
-        end
+
         saved = true
       end
     else
@@ -250,22 +249,29 @@ class Theme < ActiveRecord::Base
     end
   end
 
+  def invalidate_cache
+    Rails.cache.delete("theme_#{self.uuid}")
+  end
 end
+
 
 
 # == Schema Information
 #
 # Table name: themes
 #
-#  uuid             :string(255)     primary key
-#  title            :string(255)
-#  thumbnail_url    :string(255)
-#  style_url        :string(255)
-#  file             :string(255)
-#  version          :string(255)
-#  updated_theme_id :integer(4)
-#  author           :string(255)
-#  elements_url     :string(255)
-#  is_default       :boolean(1)      default(FALSE)
+#  uuid                    :string(255)     default(""), not null, primary key
+#  title                   :string(255)
+#  thumbnail_url           :string(255)
+#  style_url               :string(255)
+#  attachment_file_name    :string(255)
+#  version                 :string(255)
+#  updated_theme_id        :string(36)
+#  author                  :string(255)
+#  elements_url            :string(255)
+#  is_default              :boolean(1)      default(FALSE)
+#  attachment_content_type :string(255)
+#  attachment_file_size    :integer(4)
+#  attachment_updated_at   :datetime
 #
 

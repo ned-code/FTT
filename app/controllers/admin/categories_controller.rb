@@ -20,7 +20,6 @@ class Admin::CategoriesController < Admin::AdminController
     @category = Category.new(params[:category])
     
     if @category.save
-      Rails.cache.delete("categories_json")
       respond_to do |format|
         format.html { redirect_to admin_categories_path }
         format.json { render :json => @category }
@@ -41,7 +40,6 @@ class Admin::CategoriesController < Admin::AdminController
     @category = Category.find(params[:id])
     
     if @category.update_attributes(params[:category])
-      Rails.cache.delete("categories_json")
       redirect_to admin_categories_path
     else
       render :edit
@@ -52,7 +50,6 @@ class Admin::CategoriesController < Admin::AdminController
   def destroy
     @category = Category.find(params[:id])
     @category.destroy
-    Rails.cache.delete("categories_json")
     flash[:notice] = t('flash.notice.category.destroyed_successful')
     redirect_to admin_categories_path
   end
