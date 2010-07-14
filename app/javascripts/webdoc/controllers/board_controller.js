@@ -17,7 +17,7 @@ WebDoc.BoardController = jQuery.klass({
     this._autoFit = autoFit;
     this._currentZoom = 1; 
     this._selection = [];
-    this._selectionDiscussion = null;
+    this._selectionDiscussionView = null;
     this._editingItem = null;
     this._selectionListeners = [];
     this._currentPageListeners = [];
@@ -90,7 +90,7 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPageView = pageView;
     this._currentZoom = 1;
     this._selection = [];
-    this._selectionDiscussion = null;
+    this._selectionDiscussionView = null;
     this._currentPage = page;
     this._editingItem = null;
     
@@ -1063,10 +1063,20 @@ WebDoc.BoardController = jQuery.klass({
 
   selectDiscussionView: function(discussionView) {
     ddd('[BoardController] selected discussion');
-    this._selectionDiscussion = discussionView.discussion;
+    if(this._selectionDiscussionView) {
+      this._selectionDiscussionView.unSelect();
+    }
+    this._selectionDiscussionView = discussionView;
+    discussionView.select();
     WebDoc.application.rightBarController.showDiscussionsPanel();
-    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
-    discussionPanel.showDiscussion(discussionView.discussion);
+    // var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+    // discussionPanel.showDiscussion(discussionView.discussion);
+  },
+
+  unselectSelectionDiscussionView: function() {
+    ddd("[BoardController] unselect all discussion views");
+
+    // this._fireSelectionChanged();
   },
 
   // insert a discustion with a position with left and top attributes

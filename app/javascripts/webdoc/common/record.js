@@ -126,15 +126,10 @@ WebDoc.Record = jQuery.klass(
    * @param {Object} listener to remove
    */
   removeListener: function(listener) {
-    ddd('-------xxxx');
-    ddd(listener);
-    ddd(this.listeners);
     var index = jQuery.inArray(listener, this.listeners);
-    ddd(index);
     if (index > -1) {
       this.listeners.splice(index, 1);
     }
-    ddd(this.listeners);
   },  
   
   /**

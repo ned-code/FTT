@@ -6,7 +6,6 @@ WebDoc.DiscussionView = $.klass({
 
   initialize: function(discussion, pageView) {
     ddd('DiscussionView init');
-    ddd(discussion);
     this.pageView = pageView;
     this.discussion = discussion;
 
@@ -38,6 +37,14 @@ WebDoc.DiscussionView = $.klass({
   commentAdded: function(addedComment) {
     this.domNode.empty();
     this.domNode.append(this.createDiscussionDomNode());
+  },
+
+  select: function() {
+    this.domNode.addClass("item_selected");
+  },
+
+  unSelect: function() {
+    this.domNode.removeClass("item_selected");
   },
 
   remove: function() {
