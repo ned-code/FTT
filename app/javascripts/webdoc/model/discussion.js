@@ -52,8 +52,8 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
 
   fireCommentAdded: function(addedComment) {
     for (var i = 0; i < this.listeners.length; i++) {
-      if (this.listeners[i].fireCommentAdded) {
-        this.listeners[i].fireCommentAdded(addedComment);
+      if (this.listeners[i].commentAdded) {
+        this.listeners[i].commentAdded(addedComment);
       }
     }
   }

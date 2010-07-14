@@ -32,15 +32,18 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   showDiscussion: function(discussion) {
-    if(this._currentDiscussion) {
-      discussion.removeListener(this._currentDiscussion);
+    if(this._currentDiscussion !== this) {
+      if(this._oldDiscussionPanel !== undefined) {
+        discussion.removeListener(this._oldDiscussionPanel);
+      } 
+      this._currentDiscussion = discussion;
+      this._oldDiscussionPanel = this;
+      discussion.addListener(this);
+      this.formDomNode.empty();
+      this.formDomNode.append(this.createCommentForm());
+      this.discussionsDomNode.empty();
+      this.discussionsDomNode.append(this.createDiscussionDomNode(discussion));
     }
-    this._currentDiscussion = discussion;
-    discussion.addListener(this);
-    this.formDomNode.empty();
-    this.formDomNode.append(this.createCommentForm());
-    this.discussionsDomNode.empty();
-    this.discussionsDomNode.append(this.createDiscussionDomNode(discussion));
   },
 
   // showPageDiscussions: function(discussions) {
@@ -98,7 +101,6 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
       newComment.setContent( this._commentContent.val(), true );
 
       newComment.save(function(newCommentBack, status) {
-        this._form.show();
         if (status == "OK")
         {
           discussionForForm.addComment(newCommentBack); 
@@ -118,7 +120,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     this.showDiscussion(discussion);  
   },
 
-  fireCommentAdded: function(addedComment) {
+  commentAdded: function(addedComment) {
     ddd('[DiscussionsPanel] fire comment added');
     if(this._currentDiscussion === addedComment.discussion) {
       this.discussionsDomNode.find("div[data-discussion-uuid='"+addedComment.discussion.uuid()+"']")

@@ -35,7 +35,7 @@ WebDoc.DiscussionView = $.klass({
     return discussionNode;
   },
 
-  fireCommentAdded: function(addedComment) {
+  commentAdded: function(addedComment) {
     this.domNode.empty();
     this.domNode.append(this.createDiscussionDomNode());
   },
