@@ -434,25 +434,33 @@ WebDoc.BoardController = jQuery.klass({
         }
       }
       
-      //deselect un-needed items
-      ddd("select item in view");
-      jQuery.each(this._selection, function(index, itemToDeselect) {
-        if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
-          this.unselectItemViews([itemToDeselect]);
-        }
-      }.pBind(this));
-      
-      //select wanted items
-      jQuery.each(itemViews, function(index, itemToSelect) {
-        if (jQuery.inArray(itemToSelect, this._selection) == -1) {
-          ddd("add item to selection");
-          this._selection.push(itemToSelect);
-        }
-        itemToSelect.select();
-      }.pBind(this));
-      this._fireSelectionChanged();
+			jQuery.each(this._selection, function(index, itemToDeselect) {
+	      if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
+	        this.unselectItemViews([itemToDeselect]);
+	      }
+	    }.pBind(this));
+	
+			this.addItemViewToSelection(itemViews)
+      //this._fireSelectionChanged();
     }
   },
+
+	addItemViewToSelection: function(itemViews){
+		ddd('addItemViewToSelection');
+		
+		//deselect un-needed items
+    ddd("select item in view");
+    
+    //select wanted items
+    jQuery.each(itemViews, function(index, itemToSelect) {
+      if (jQuery.inArray(itemToSelect, this._selection) == -1) {
+        ddd("add item to selection");
+        this._selection.push(itemToSelect);
+      }
+      itemToSelect.select();
+    }.pBind(this));
+		this._fireSelectionChanged();
+	},
   
   moveSelection: function(direction, scale) {
     var max = this._selection.length;
@@ -828,6 +836,7 @@ WebDoc.BoardController = jQuery.klass({
   
   _keyDown: function(e) {
 	  ddd("[BoardController] keydown");
+		ddd(e.which);
     var el = jQuery(e.target);
     if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();
@@ -856,42 +865,43 @@ WebDoc.BoardController = jQuery.klass({
         case 65:
           this.setCurrentTool(WebDoc.application.arrowTool);
           break;  
-     case 37:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.prevPage();
-        }
-        else {
-          this.moveSelection("left", e.shiftKey?"big" : "small");
-        }
-        e.preventDefault();          
-        break;
-      case 38:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.prevPage();
-        }
-        else {
-          this.moveSelection("up", e.shiftKey?"big" : "small");
-        }
-        e.preventDefault();          
-        break;          
-      case 39:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.nextPage();
-        }
-        else {
-          this.moveSelection("right", e.shiftKey?"big" : "small");            
-        }        
-        e.preventDefault();           
-        break;
-      case 40:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.nextPage();
-        }
-        else {
-          this.moveSelection("down", e.shiftKey?"big" : "small");
-        }
-        e.preventDefault();          
-        break;                       
+     		case 37:
+		 		 	ddd('shift key?');
+     		   if (this._isInteraction || this._selection.length === 0) {
+     		     WebDoc.application.pageEditor.prevPage();
+     		   }
+     		   else {
+     		     this.moveSelection("left", e.shiftKey?"big" : "small");
+     		   }
+     		   e.preventDefault();          
+     		   break;
+      	case 38:
+      	  if (this._isInteraction || this._selection.length === 0) {
+      	    WebDoc.application.pageEditor.prevPage();
+      	  }
+      	  else {
+      	    this.moveSelection("up", e.shiftKey?"big" : "small");
+      	  }
+      	  e.preventDefault();          
+      	  break;          
+      	case 39:
+      	  if (this._isInteraction || this._selection.length === 0) {
+      	    WebDoc.application.pageEditor.nextPage();
+      	  }
+      	  else {
+      	    this.moveSelection("right", e.shiftKey?"big" : "small");            
+      	  }        
+      	  e.preventDefault();           
+      	  break;
+      	case 40:
+      	  if (this._isInteraction || this._selection.length === 0) {
+      	    WebDoc.application.pageEditor.nextPage();
+      	  }
+      	  else {
+      	    this.moveSelection("down", e.shiftKey?"big" : "small");
+      	  }
+      	  e.preventDefault();          
+      	  break;                       
       }      
     }
     else {
