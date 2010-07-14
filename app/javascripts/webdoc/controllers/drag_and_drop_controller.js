@@ -2,7 +2,7 @@
  * @author julien and Jonathan
  */
 
-	WebDoc.DrageAndDropController = {
+WebDoc.DrageAndDropController = {
   KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/wd-discussion', 'application/post-message-action', 'application/x-moz-file-promise-url'],
 	KNOWN_SOURCES: [],// All source are defined in utils/drag_source.js EX ['youtube.com', function(uri_list){alert(uri_list);}], 
 	KNOWN_FILE_TYPES: [], //All file type recognised by WD EX: jpg, .jpeg. Defined in utils/drag_source.js
@@ -38,7 +38,12 @@
             break;            
           }
         }
-      }      
+      }
+
+      if(WebDoc.application.boardController.isInteractionMode() && availableType !== 'application/wd-discussion') {
+        return true; // allow only discussion in viewing mode
+      }
+      
       // create item depending on wath has been taken from the datatransfer
       var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
       var width = 200, height = 200, x = 0, y = 0;      

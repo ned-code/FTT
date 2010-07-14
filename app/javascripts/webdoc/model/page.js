@@ -410,27 +410,6 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
     this.fireItemRemoved(item);
   },
-
-  getDiscussions: function(callback) {
-    WebDoc.ServerManager.getRecords( WebDoc.Discussion, null, callback, { ajaxParams: { page_id: this.uuid() } });
-  },
-
-  addDiscussion: function(discussion) {
-    this.discussions.push(discussion);
-    this.fireDiscussionAdded(discussion);
-  },
-
-  removeDiscussion: function(discussion) {
-    var index = $.inArray(discussion, this.discussions);
-    if (index != -1) {
-      this.discussions.splice(index, 1);
-        var nonDrawingIndex = $.inArray(item, this.nonDrawingItems);
-        // if (nonDrawingIndex != -1) {
-        //   this.nonDrawingItems.splice(nonDrawingIndex, 1);
-        // }
-    }
-    this.fireDiscussionRemoved(discussion);
-  },
   
   findItemWithUuid: function(pUuid) {
     var i = 0;
@@ -465,22 +444,6 @@ WebDoc.Page = $.klass(WebDoc.Record,
         this.listeners[i].itemMovedAfterItem(item, afterItem);
       }
     }         
-  },
-
-  fireDiscussionAdded: function(addedDiscussion) {
-    for (var i = 0; i < this.listeners.length; i++) {
-      if (this.listeners[i].discussionAdded) {
-        this.listeners[i].discussionAdded(addedDiscussion);
-      }
-    }
-  },
-
-  fireDiscussionRemoved: function(removedDiscussion) {
-    for (var i = 0; i < this.listeners.length; i++) {
-      if (this.listeners[i].discussionRemoved) {
-        this.listeners[i].discussionRemoved(removedDiscussion);
-      }
-    }
   },
   
   copy: function($super) {
@@ -710,7 +673,45 @@ WebDoc.Page = $.klass(WebDoc.Record,
       }
     }.pBind(this), withRelationships, synch);
     
-  }
+  },
+
+  // ***********
+  // DISCUSSIONS
+  // ***********
+
+  getDiscussions: function(callback) {
+    WebDoc.ServerManager.getRecords( WebDoc.Discussion, null, callback, { ajaxParams: { page_id: this.uuid() } });
+  },
+
+  addDiscussion: function(discussion) {
+    this.discussions.push(discussion);
+    this.fireDiscussionAdded(discussion);
+  },
+
+  removeDiscussion: function(discussion) {
+    var index = jQuery.inArray(discussion, this.discussions);
+    if (index > -1) {
+      this.discussions.splice(index, 1);
+    }
+    this.fireDiscussionRemoved(discussion);
+  },
+
+  fireDiscussionAdded: function(addedDiscussion) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].discussionAdded) {
+        this.listeners[i].discussionAdded(addedDiscussion);
+      }
+    }
+  },
+
+  fireDiscussionRemoved: function(removedDiscussion) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].discussionRemoved) {
+        this.listeners[i].discussionRemoved(removedDiscussion);
+      }
+    }
+  }  
+
 });
 
 $.extend(WebDoc.Page, {

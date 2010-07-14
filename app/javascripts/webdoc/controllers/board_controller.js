@@ -117,6 +117,10 @@ WebDoc.BoardController = jQuery.klass({
     }
     this.zoom(defaultZoom);
     this.setMode(!jQuery("body").hasClass('mode-edit'));
+    this.currentPageView().domNode
+    .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
+    .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
+    .bind("drop", this, WebDoc.DrageAndDropController.drop);
     
     this._fireCurrentPageChanged();
     jQuery('#webdoc').scrollbars({
@@ -136,11 +140,6 @@ WebDoc.BoardController = jQuery.klass({
   
   _setModeEdit: function() {
     this.currentPageView().setEditable(true);
-
-    this.currentPageView().domNode
-    .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
-    .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
-    .bind("drop", this, WebDoc.DrageAndDropController.drop);
 
     if (!this.currentTool) {
       this.setCurrentTool(WebDoc.application.arrowTool);
@@ -171,11 +170,6 @@ WebDoc.BoardController = jQuery.klass({
     this.unselectAll();
     
     this.currentPageView().setEditable(false);
-
-    this.currentPageView().domNode
-    .unbind("dragenter")
-    .unbind("dragover")
-    .unbind("drop");
     
     this.setCurrentTool(WebDoc.application.arrowTool);    
     
@@ -188,7 +182,7 @@ WebDoc.BoardController = jQuery.klass({
     .filter("[href='#mode-preview']")
     .addClass("current");
     
-	this.boardContainerNode.resizable('destroy');
+	  this.boardContainerNode.resizable('destroy');
 
     if(!this._editable) {
       jQuery(".mode-tools").hide(); 
@@ -1083,10 +1077,6 @@ WebDoc.BoardController = jQuery.klass({
     newDiscussion.isNew = true;
     this._currentPage.addDiscussion(newDiscussion);
     newDiscussion.save();
-
-    // WebDoc.application.undoManager.registerUndo(function() {
-    //   this.removeItems(discussions);
-    // }.pBind(this));
   },
 
   removeDiscussion: function(discussion) {
@@ -1094,20 +1084,13 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPage.removeDiscussion(discussion);
     ddd(discussion);
     discussion.destroy();
-
-
-    // WebDoc.application.undoManager.registerUndo(function() {
-    //   this.insertDiscussions(discussions);
-    // }.pBind(this));
   },
 
   deleteSelectionDiscussion: function(e) {
     ddd('[BoardController] delete selection discussion');
     this.removeDiscussion(this._selectionDiscussion);
-    if (e && this._selectionDiscussion.length !== null) {
-      e.preventDefault();
-    }
     this._selectionDiscussion = null;
+    e.preventDefault();
   }
 
 });
