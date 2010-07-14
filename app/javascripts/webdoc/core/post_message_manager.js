@@ -168,10 +168,15 @@ WebDoc.PostMessageManager = $.klass({
           break;
 				case 'set_item_style':
 					ddd('set_item_style');
-					var selection = WebDoc.application.boardController.selection()[0];
-					if(selection && selection.item) {
-            selection.item.setStyle(parsedCss.cssString, parsedCss.scope);
-          }
+					var selection = WebDoc.application.boardController.selection();
+					var selectionLength = selection.length;
+					if(selectionLength > 0){
+						for(var i=0; i < selection.length; i++){
+							if(selection[i].item) {
+            		selection[i].item.setStyle(parsedCss.cssString, parsedCss.scope);
+          		}
+						}
+					}
 					break;
 				case 'set_page_style':
 					ddd('set_page_style');
@@ -179,10 +184,16 @@ WebDoc.PostMessageManager = $.klass({
 					break;
 				case 'set_font':
 					ddd('set_font');
-					var selection = WebDoc.application.boardController.selection()[0];
-					if(selection && selection.item) {
-            selection.item.setFont(parsedCss.cssString, parsedCss.font_face);
-          }
+					var selection = WebDoc.application.boardController.selection();
+					var selectionLength = selection.length;
+					if(selectionLength > 0){
+						for(var i=0; i < selection.length; i++){
+							if(selection[i].item) {
+					  		selection[i].item.setStyle(parsedCss.cssString, parsedCss.scope);
+								selection[i].item.setFont(parsedCss.cssString, parsedCss.font_face);
+							}
+						}
+					}
 					break;
         case 'add_item':
           if(parsedUrl['params']['type']) {
