@@ -17,7 +17,8 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     WebDoc.application.boardController.activateEventCatcher(false);
   },
     
-  select: function(e) {  
+  select: function(e) {
+		
     var objectToSelect = this._clickedItemView(e);
 
     this.lastSelectedObject = {
@@ -26,6 +27,7 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     };      
     if (!(objectToSelect && WebDoc.application.boardController.editingItem() == objectToSelect)) {
       if (objectToSelect) {
+				e.stopPropagation();
 				if(e.shiftKey){
 					WebDoc.application.boardController.addItemViewToSelection([objectToSelect]);
 				}
@@ -56,7 +58,9 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
       var target = jQuery(e.target);
       ddd("mouse down on target", e.target);
       if (!target || target.length === 0 || !target.hasClass("drawing_handle")) {
+				ddd('[ArrowTool] mouse down');
         this.select(e);
+				e.preventDefault();
       }
     }
   },
@@ -103,7 +107,7 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     }
   },
         
-  _clickedItemView: function(e) {   
+  _clickedItemView: function(e) {
     var clickedItemView = null, itemWrap;
     var target = jQuery(e.target);
     if (target && target.get(0) && target.get(0).tagName == "polyline") {

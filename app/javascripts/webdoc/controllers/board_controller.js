@@ -457,15 +457,24 @@ WebDoc.BoardController = jQuery.klass({
   },
 
 	addItemViewToSelection: function(itemViews){    
-    //select wanted items
+		for( var i = 0; i < itemViews.length; i++){
+			if(jQuery.inArray(itemViews[i], this._selection) >= 0){
+				this.unselectItemViews([itemViews[i]]);
+				itemViews.splice(i,1);
+			}
+		}
+		//select wanted items
     jQuery.each(itemViews, function(index, itemToSelect) {
       if (jQuery.inArray(itemToSelect, this._selection) == -1) {
-        ddd("add item to selection");
         this._selection.push(itemToSelect);
       }
       itemToSelect.select();
     }.pBind(this));
 		this._fireSelectionChanged();
+	},
+	
+	removeItemViewFromSelection: function(itemViews){
+      this.unselectItemViews(itemViews);
 	},
   
   moveSelection: function(direction, scale) {
@@ -526,8 +535,7 @@ WebDoc.BoardController = jQuery.klass({
   
   unselectItemViews: function(itemViews) {
     ddd("unselect item views");
-    var i = 0;
-    for (; i < itemViews.length; i++) {
+    for (var i = 0; i < itemViews.length; i++) {
       var objectToUnSelect = itemViews[i];
       if (objectToUnSelect) {
         objectToUnSelect.unSelect();
