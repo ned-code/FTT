@@ -91,21 +91,6 @@ body.full_view {
   width: 100%;
 }
 
-.side_panel {
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin-right: -292px;
-  width: 292px;
-  height: 1000px;
-  min-height: 100%;
-  
-  /* Transition to full view */
-  -webkit-transition: height 0.3s linear;
-  -moz-transition:    height 0.3s linear;
-  transition:         height 0.3s linear;
-}
-
-.full_view .side_panel {
-  height: 466px;
+.message {
+  font-size: 0.8333em; /* 10px */
 }

@@ -1,6 +1,4 @@
-/* Base Classes */
-
-/* Extensions */
+/* Extensions to index class */
 
 .nav_index {
   position: absolute;
@@ -36,10 +34,6 @@
   
 }
 
-.thumbs_index li {
-  margin-bottom: 0.3333em;
-}
-
 .message_index li {
   position: relative;
   padding-left: 36px;
@@ -47,6 +41,6 @@
   min-height: 32px;
 }
 
-.message_index .message {
-  font-size: 0.8333em; /* 10px */
+.thumbs_index li {
+  margin-bottom: 0.3333em;
 }
