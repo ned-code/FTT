@@ -10,6 +10,8 @@ WebDoc.UndoManager = $.klass({
     this.redoStack = [];
     this.isUndoing = false;
     this.isRedoing = false;
+    this.groupStack = [];
+    this.groupCount = 0;
   },
   
   /**
@@ -17,7 +19,10 @@ WebDoc.UndoManager = $.klass({
    * @param {Object} undoCommand the command to register
    */
   registerUndo: function(undoCommand) {
-    if (this.isUndoing) {
+    if(this.groupCount > 0){
+      this.groupStack.push(undoCommand);
+    }
+    else if (this.isUndoing) {
       this.redoStack.push(undoCommand);
     }
     else {
@@ -34,45 +39,57 @@ WebDoc.UndoManager = $.klass({
   clear: function() {
     this.undoStack = [];
     this.redoStack = [];
+    this.groupStack = [];
+    this.groupCount = 0;
   },
   
   /**
    * begin a group of undo/redo command. All register will be grouped until the endGroup with the same name
    * @param {Object} name name of the group.
    */
-  group: function(name) {
-    // TODO implement group
+  group: function() {
+    this.groupCount += 1;
   },
   
   /**
    * End of a group
    * @param {Object} name the name of the group to end.
    */
-  endGroup: function(name) {
-  
+  endGroup: function() {
+    this.groupCount -= 1;
+    if (this.groupCount == 0){
+      this.registerUndo(this.groupStack);
+      this.groupStack = [];
+    }
   },
   
   /**
    * @return {boolean} true if there are some undo command in the stack
    */
   canUndo: function() {
-    return this.undoStack.length;
+    return (!this.groupCount && this.undoStack.length);
   },
 
   /**
    * @return {boolean} true if there are some redo command in the stack
    */  
   canRedo: function() {
-    return this.redoStack.length;
+    return !this.groupCount && this.redoStack.length;
   },
   
   /**
    * excecute an undo and remove it from the stack
    */
   undo: function() {
-    if (this.undoStack.length) {
+    if (this.canUndo()) {
       this.isUndoing = true;
-      this.undoStack.pop().call(this);
+      var undoCommand = this.undoStack.pop();
+      if(jQuery.isArray(undoCommand)){
+        this._callGroup(undoCommand);
+      }
+      else{
+        undoCommand.call(this);
+      }
       this.isUndoing = false;
     }
   },
@@ -81,11 +98,33 @@ WebDoc.UndoManager = $.klass({
    * excecute an redo and remove it from the stack
    */  
   redo: function() {
-    if (this.redoStack.length) {
+    if (this.canRedo()) {
       this.isRedoing = true;
-      this.redoStack.pop().call(this);
+      var redoCommand = this.redoStack.pop();
+      if(jQuery.isArray(redoCommand)){
+        this._callGroup(redoCommand);
+      }
+      else{
+        redoCommand.call(this);
+      }
       this.isRedoing = false;
     }
+  },
+  
+  /**
+   * call all methods that are stock in a group
+   */
+  _callGroup: function(group){
+    this.group();
+    for(var i = 0; i < group.length; i++){
+      if(jQuery.isArray(group[i])){
+        this._callGroup(group[i]);
+      }
+      else{
+        group[i].call(this);
+      }
+    }
+    this.endGroup();
   }
 });
 
