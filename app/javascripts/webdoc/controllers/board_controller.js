@@ -473,7 +473,6 @@ WebDoc.BoardController = jQuery.klass({
 	},
   
   moveSelection: function(direction, scale) {
-		ddd('[BoardController] moveSelection');
     var max = this._selection.length;
     var offsetSize = scale == "big"? 15 : 1;
     for (var i = 0; i < max; i++) {
@@ -516,6 +515,25 @@ WebDoc.BoardController = jQuery.klass({
         }
       }
     }
+  },
+  
+  putSelectionPositionInUndo: function(){
+    var selectionLength = this.selection().length;
+    ddd('saveMultipleSelectionPosition');
+    WebDoc.application.undoManager.group();
+    ddd('***');
+    for (var i=0; i < selectionLength; i++) {
+      ddd(i);
+      var item = this.selection()[i].item;
+      var position = this.selection()[i].position();
+      ddd(item);
+      ddd(position);
+      WebDoc.application.undoManager.registerUndo(function() {
+        WebDoc.ItemView._restorePosition(item, position);
+      }.pBind(this));
+    }
+    ddd('***');
+    WebDoc.application.undoManager.endGroup();
   },
   
   unselectAll: function() {

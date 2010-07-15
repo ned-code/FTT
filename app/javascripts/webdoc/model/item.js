@@ -168,7 +168,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   getIsPlaceholder: function() {
-    ddd('[item] get is placeholder');
     if(this._isPlaceholder === true) {
       return true;
     }
@@ -179,7 +178,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
 
   // save optional, saved by default
   setIsPlaceholder: function(isPlaceholder, save) {
-    ddd('[item] set is placeholder with ' + isPlaceholder);
+    //ddd('[item] set is placeholder with ' + isPlaceholder);
     if(isPlaceholder === true || isPlaceholder === 'true'){
       this._isPlaceholder = true;
     }

@@ -31,6 +31,7 @@ WebDoc.UndoManager = $.klass({
       }
       this.undoStack.push(undoCommand);
     }
+    ddd(this.groupStack);
   },
   
   /**
@@ -49,6 +50,7 @@ WebDoc.UndoManager = $.klass({
    */
   group: function() {
     this.groupCount += 1;
+    ddd(this.groupCount);
   },
   
   /**
@@ -56,9 +58,10 @@ WebDoc.UndoManager = $.klass({
    * @param {Object} name the name of the group to end.
    */
   endGroup: function() {
-    this.groupCount += 1;
+    this.groupCount -= 1;
+    ddd(this.groupCount);
     if (this.groupCount == 0){
-      this.registerUndo(groupStack);
+      this.registerUndo(this.groupStack);
       this.groupStack = [];
     }
   },
