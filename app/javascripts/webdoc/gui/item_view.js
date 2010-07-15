@@ -330,40 +330,35 @@ WebDoc.ItemView = $.klass({
 
         this.dragOffsetLeft = mappedPoint.x - parseFloat(this.currentPosition.left);
         this.dragOffsetTop = mappedPoint.y - parseFloat(this.currentPosition.top);
-				
-        WebDoc.application.undoManager.registerUndo(function() {
-          WebDoc.ItemView._restorePosition(this.item, this.currentPosition);
-        }.pBind(this));
+        
+        WebDoc.application.boardController.putSelectionPositionInUndo();
         WebDoc.application.arrowTool.disableHilight();
       }.pBind(this)        ,
       drag: function(e, ui) {
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
-				var leftOffset = mappedPoint.x - this.dragOffsetLeft;
-				var topOffset = mappedPoint.y - this.dragOffsetTop;
-				
-				var originTop = parseFloat(this.currentPosition.top);
-				var originLeft = parseFloat(this.currentPosition.left);
-				var oldPosition = this.position();
-				
+        var leftOffset = mappedPoint.x - this.dragOffsetLeft;
+        var topOffset = mappedPoint.y - this.dragOffsetTop;
+        var oldPosition = this.position();
+        
         ui.position.left = leftOffset;
         ui.position.top = topOffset;
         this._moveTo(ui.position);
 
-				var deltaLeft = parseFloat(this.position().left) - parseFloat(oldPosition.left) ;
-				var deltaTop = parseFloat(this.position().top) - parseFloat(oldPosition.top) ;
-				this.delta = { top: deltaTop, left: deltaLeft};
-
-				if(WebDoc.application.boardController.multipleSelection()){
-					WebDoc.application.boardController.moveMultipleSelection(this.delta,this.item.uuid(), false);
-				}
+        var deltaLeft = parseFloat(this.position().left) - parseFloat(oldPosition.left) ;
+        var deltaTop = parseFloat(this.position().top) - parseFloat(oldPosition.top) ;
+        this.delta = { top: deltaTop, left: deltaLeft};
+        
+        if(WebDoc.application.boardController.multipleSelection()){
+          WebDoc.application.boardController.moveMultipleSelection(this.delta,this.item.uuid(), false);
+        }
       }.pBind(this)        ,
       stop: function(e, ui) {
         this.pageView.eventCatcherNode.hide();
         this.inspectorPanesManager.itemViewDidMove(this);
         var newPosition = { top : ui.position.top + "px", left: ui.position.left + "px"};
-				if(WebDoc.application.boardController.multipleSelection()){
-					WebDoc.application.boardController.moveMultipleSelection(this.delta, this.item.uuid(), true);
-				}
+        if(WebDoc.application.boardController.multipleSelection()){
+          WebDoc.application.boardController.moveMultipleSelection(this.delta, this.item.uuid(), true);
+        }
         this.item.moveTo(newPosition);
         this.item.save();
         WebDoc.application.arrowTool.enableHilight();

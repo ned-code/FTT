@@ -15,7 +15,8 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-
+    @comment.safe_delete!
+    render :json => {}
   end
 
   private

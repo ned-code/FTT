@@ -7,13 +7,16 @@ class Discussion < ActiveRecord::Base
   attr_accessible :uuid, :page_id, :deleted_at, :properties
 
   belongs_to :page
-  has_many :comments, :dependent => :delete_all
+  has_many :comments
 
   validates_presence_of :page_id
 
   serialize :properties
 
   before_save :validate_presence_of_object_linked
+
+  named_scope :not_deleted, :conditions => ['deleted_at IS ?', nil]
+  named_scope :deleted, :conditions => ['deleted_at IS NOT ?', nil]
 
   def validate_presence_of_object_linked
     columns = OBJECT_LINKED_ALLOWED.map{ |o| "#{o}_id"}
@@ -25,5 +28,9 @@ class Discussion < ActiveRecord::Base
     return false
   end
 
-
+  def safe_delete!
+    self.deleted_at = Time.now
+    self.save!
+  end
+  
 end
