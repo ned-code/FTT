@@ -519,20 +519,19 @@ WebDoc.BoardController = jQuery.klass({
   
   putSelectionPositionInUndo: function(){
     var selectionLength = this.selection().length;
-    ddd('saveMultipleSelectionPosition');
     WebDoc.application.undoManager.group();
-    ddd('***');
+        
     for (var i=0; i < selectionLength; i++) {
-      ddd(i);
-      var item = this.selection()[i].item;
-      var position = this.selection()[i].position();
-      ddd(item);
-      ddd(position);
-      WebDoc.application.undoManager.registerUndo(function() {
-        WebDoc.ItemView._restorePosition(item, position);
-      }.pBind(this));
+      var callback = function(){
+        var item = this.selection()[i].item;
+        var position = this.selection()[i].position();
+        
+        WebDoc.application.undoManager.registerUndo(function() {
+          WebDoc.ItemView._restorePosition(item, position);
+        }.pBind(this));
+      }.pBind(this);
+      callback();
     }
-    ddd('***');
     WebDoc.application.undoManager.endGroup();
   },
   

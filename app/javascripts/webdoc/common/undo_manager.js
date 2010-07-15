@@ -31,7 +31,6 @@ WebDoc.UndoManager = $.klass({
       }
       this.undoStack.push(undoCommand);
     }
-    ddd(this.groupStack);
   },
   
   /**
@@ -50,7 +49,6 @@ WebDoc.UndoManager = $.klass({
    */
   group: function() {
     this.groupCount += 1;
-    ddd(this.groupCount);
   },
   
   /**
@@ -59,7 +57,6 @@ WebDoc.UndoManager = $.klass({
    */
   endGroup: function() {
     this.groupCount -= 1;
-    ddd(this.groupCount);
     if (this.groupCount == 0){
       this.registerUndo(this.groupStack);
       this.groupStack = [];
@@ -88,7 +85,6 @@ WebDoc.UndoManager = $.klass({
       this.isUndoing = true;
       var undoCommand = this.undoStack.pop();
       if(jQuery.isArray(undoCommand)){
-        ddd('undo group');
         this._callGroup(undoCommand);
       }
       else{
@@ -119,6 +115,7 @@ WebDoc.UndoManager = $.klass({
    * call all methods that are stock in a group
    */
   _callGroup: function(group){
+    this.group();
     for(var i = 0; i < group.length; i++){
       if(jQuery.isArray(group[i])){
         this._callGroup(group[i]);
@@ -127,6 +124,7 @@ WebDoc.UndoManager = $.klass({
         group[i].call(this);
       }
     }
+    this.endGroup();
   }
 });
 
