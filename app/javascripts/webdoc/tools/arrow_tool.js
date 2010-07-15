@@ -17,29 +17,34 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     WebDoc.application.boardController.activateEventCatcher(false);
   },
     
-  select: function(e) {  
-    var objectToSelect = this._clickedItemView(e);
-
-    this.lastSelectedObject = {
-      itemView: objectToSelect, // JBA: no more USED
-      event: e
-    };      
-    if (!(objectToSelect && WebDoc.application.boardController.editingItem() == objectToSelect)) {
-      if (objectToSelect) {
-				if(e.shiftKey){
-					WebDoc.application.boardController.addItemViewToSelection([objectToSelect]);
-				}
-				else {
-        	WebDoc.application.boardController.selectItemViews([objectToSelect]);
-      	}
-			}
-      else {
-        WebDoc.application.boardController.unselectAll();
-				this.selectedObject = [];
+  select: function(e) {
+    var objectToSelect = this._clickedObjectView(e);
+    if (!WebDoc.application.boardController.isInteractionMode() && objectToSelect.type !== "discussion") {
+      this.lastSelectedObject = {
+        itemView: objectToSelect.object, // JBA: no more USED
+        event: e
+      };
+      if (!(objectToSelect.object && WebDoc.application.boardController.editingItem() == objectToSelect.object)) {
+        if (objectToSelect.object) {
+          e.stopPropagation();
+          if(e.shiftKey) {
+            WebDoc.application.boardController.addItemViewToSelection([objectToSelect.object]);
+          }
+          else {
+            WebDoc.application.boardController.selectItemViews([objectToSelect.object]);
+          }
+        }
+        else {
+          WebDoc.application.boardController.unselectAll();
+          this.selectedObject = [];
+        }
+        jQuery("a[href='#select']").focus();
       }
-      jQuery("a[href='#select']").focus();
+      this.lastSelectedObject.event = null;
     }
-    this.lastSelectedObject.event = null;    
+    else if(objectToSelect.type === 'discussion') {
+      WebDoc.application.boardController.selectDiscussionView(objectToSelect.object);
+    } 
   },
   
   disableHilight: function() {
@@ -52,12 +57,10 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
   },
   
   mouseDown: function(e) {
-    if (!WebDoc.application.boardController.isInteractionMode()) {
-      var target = jQuery(e.target);
-      ddd("mouse down on target", e.target);
-      if (!target || target.length === 0 || !target.hasClass("drawing_handle")) {
-        this.select(e);
-      }
+    var target = jQuery(e.target);
+    ddd("mouse down on target", e.target);
+    if (!target || target.length === 0 || !target.hasClass("drawing_handle")) {
+      this.select(e);
     }
   },
   
@@ -74,8 +77,8 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
   mouseDblClick: function(e) {
     if (!WebDoc.application.boardController.isInteractionMode()) {
       ddd("dbl click", e.target);
-      var objectToEdit = this._clickedItemView(e);
-      if (WebDoc.application.boardController.editItemView(objectToEdit)) {
+      var objectToEdit = this._clickedObjectView(e);
+      if (WebDoc.application.boardController.editItemView(objectToEdit.object) && !objectToEdit.type === 'discussion') {
         jQuery(e.target).closest(".item-layer").css("opacity",0);
         this.mouseOut(e);
       }
@@ -103,17 +106,27 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     }
   },
         
-  _clickedItemView: function(e) {   
-    var clickedItemView = null, itemWrap;
-    var target = jQuery(e.target);
+  _clickedObjectView: function(e) {
+    var clickedItemView = null,
+        itemWrap,
+        type,
+        target = jQuery(e.target);
+
     if (target && target.get(0) && target.get(0).tagName == "polyline") {
       clickedItemView = target.data("itemView");
+      type = 'polyline';
+    }
+    else if ( target && target.get(0) && target.get(0).className === "wd_discussion" ) {
+      itemWrap = target.closest(".wd_discussion_wrap");
+      clickedItemView = itemWrap.data("discussionView");
+      type = 'discussion';
     }
     else {
       itemWrap = target.closest(".item_wrap");
       clickedItemView = itemWrap.data("itemView");
+      type = 'item';
       // itemWrap.find('.item-placeholder input:eq(0)').focus();
     }
-    return clickedItemView;
+    return { type: type, object: clickedItemView };
   }
 });

@@ -23,6 +23,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.lastDrawingItemPosition = -1;
     this._layout = undefined;
     this.items = [];
+    this.discussions = [];
     this._itemsToRemoveAfterSave = [];
     this.nonDrawingItems = [];
 
@@ -377,6 +378,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     if (json.page.items && $.isArray(json.page.items)) {
       var that = this;
       this.items = [];
+      this.discussions = [];
       this.nonDrawingItems = [];   
       this.lastDrawingItemPosition = -1;     
       this.firstPosition = 0;
@@ -823,7 +825,45 @@ WebDoc.Page = $.klass(WebDoc.Record,
       }
     }.pBind(this), withRelationships, synch);
     
-  }
+  },
+
+  // ***********
+  // DISCUSSIONS
+  // ***********
+
+  getDiscussions: function(callback) {
+    WebDoc.ServerManager.getRecords( WebDoc.Discussion, null, callback, { ajaxParams: { page_id: this.uuid() } });
+  },
+
+  addDiscussion: function(discussion) {
+    this.discussions.push(discussion);
+    this.fireDiscussionAdded(discussion);
+  },
+
+  removeDiscussion: function(discussion) {
+    var index = jQuery.inArray(discussion, this.discussions);
+    if (index > -1) {
+      this.discussions.splice(index, 1);
+    }
+    this.fireDiscussionRemoved(discussion);
+  },
+
+  fireDiscussionAdded: function(addedDiscussion) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].discussionAdded) {
+        this.listeners[i].discussionAdded(addedDiscussion);
+      }
+    }
+  },
+
+  fireDiscussionRemoved: function(removedDiscussion) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].discussionRemoved) {
+        this.listeners[i].discussionRemoved(removedDiscussion);
+      }
+    }
+  }  
+
 });
 
 $.extend(WebDoc.Page, {

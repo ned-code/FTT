@@ -17,7 +17,7 @@ WebDoc.BoardController = jQuery.klass({
     this._autoFit = autoFit;
     this._currentZoom = 1; 
     this._selection = [];
-		this._lastSelect = null;
+    this._selectionDiscussionView = null;
     this._editingItem = null;
     this._selectionListeners = [];
     this._currentPageListeners = [];
@@ -44,9 +44,9 @@ WebDoc.BoardController = jQuery.klass({
     return this._selection;  
   },
   
-	multipleSelection: function(){
-		return this._selection.length > 1;
-	},
+  multipleSelection: function(){
+    return this._selection.length > 1;
+  },
 
   isEditable: function() {
     return this._editable;  
@@ -94,6 +94,7 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPageView = pageView;
     this._currentZoom = 1;
     this._selection = [];
+    this._selectionDiscussionView = null;
     this._currentPage = page;
     this._editingItem = null;
     
@@ -120,6 +121,10 @@ WebDoc.BoardController = jQuery.klass({
     }
     this.zoom(defaultZoom);
     this.setMode(!jQuery("body").hasClass('mode-edit'));
+    this.currentPageView().domNode
+    .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
+    .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
+    .bind("drop", this, WebDoc.DrageAndDropController.drop);
     
     this._fireCurrentPageChanged();
     jQuery('#webdoc').scrollbars({
@@ -139,11 +144,6 @@ WebDoc.BoardController = jQuery.klass({
   
   _setModeEdit: function() {
     this.currentPageView().setEditable(true);
-
-    this.currentPageView().domNode
-    .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
-    .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
-    .bind("drop", this, WebDoc.DrageAndDropController.drop);
 
     if (!this.currentTool) {
       this.setCurrentTool(WebDoc.application.arrowTool);
@@ -174,11 +174,6 @@ WebDoc.BoardController = jQuery.klass({
     this.unselectAll();
     
     this.currentPageView().setEditable(false);
-
-    this.currentPageView().domNode
-    .unbind("dragenter")
-    .unbind("dragover")
-    .unbind("drop");
     
     this.setCurrentTool(WebDoc.application.arrowTool);    
     
@@ -191,7 +186,7 @@ WebDoc.BoardController = jQuery.klass({
     .filter("[href='#mode-preview']")
     .addClass("current");
     
-	this.boardContainerNode.resizable('destroy');
+    this.boardContainerNode.resizable('destroy');
 
     if(!this._editable) {
       jQuery(".mode-tools").hide(); 
@@ -424,7 +419,13 @@ WebDoc.BoardController = jQuery.klass({
   selectItemViews: function(itemViews) {
     // exit edit mode for current editing item
     this.stopEditing();
-    if (itemViews) {
+    if (itemViews.length > 0) {
+			//do nothing if the itemView is already in the selection
+			if(itemViews.length == 1){
+				if (jQuery.inArray(itemViews[0], this._selection) >= 0) {
+	      	return;
+	      }
+			}
       // do nothing if new selection is equal to old selection
       if(itemViews.length === this._selection.length) {
         var selectionIsEqual = true;
@@ -451,15 +452,24 @@ WebDoc.BoardController = jQuery.klass({
   },
 
 	addItemViewToSelection: function(itemViews){    
-    //select wanted items
+		for( var i = 0; i < itemViews.length; i++){
+			if(jQuery.inArray(itemViews[i], this._selection) >= 0){
+				this.unselectItemViews([itemViews[i]]);
+				itemViews.splice(i,1);
+			}
+		}
+		//select wanted items
     jQuery.each(itemViews, function(index, itemToSelect) {
       if (jQuery.inArray(itemToSelect, this._selection) == -1) {
-        ddd("add item to selection");
         this._selection.push(itemToSelect);
       }
       itemToSelect.select();
     }.pBind(this));
 		this._fireSelectionChanged();
+	},
+	
+	removeItemViewFromSelection: function(itemViews){
+      this.unselectItemViews(itemViews);
 	},
   
   moveSelection: function(direction, scale) {
@@ -494,28 +504,33 @@ WebDoc.BoardController = jQuery.klass({
     this._isMovingSelection = true;
   },
 
-	moveMultipleSelection: function(offset, selectedItemUuid, needSave){//offset, selectedItem, needSave){
-		var selectionLength = this.selection().length;
+  moveMultipleSelection: function(offset, selectedItemUuid, needSave){//offset, selectedItem, needSave){
+    var selectionLength = this.selection().length;
     for (var i=0; i < selectionLength; i++) {
-			if(selectedItemUuid != this.selection()[i].item.uuid()){
-				if(needSave){
-					this.selection()[i].item.save();
-				}else{
-					this.selection()[i].item.shiftBy(offset);
-				}
-			}
+      if(selectedItemUuid != this.selection()[i].item.uuid()){
+        if(needSave){
+          this.selection()[i].item.save();
+        }
+        else{
+          this.selection()[i].item.shiftBy(offset);
+        }
+      }
     }
-	},
+  },
   
   unselectAll: function() {
     ddd("unselect all. selection size " + this._selection.length);
     this.selectItemViews([]);
+    for(var i=0; i< this._selection.length; i++){
+      this._selection[i].unSelect();
+    }
+    this._selection = [];
+    this._fireSelectionChanged();
   },
   
   unselectItemViews: function(itemViews) {
     ddd("unselect item views");
-    var i = 0;
-    for (; i < itemViews.length; i++) {
+    for (var i = 0; i < itemViews.length; i++) {
       var objectToUnSelect = itemViews[i];
       if (objectToUnSelect) {
         objectToUnSelect.unSelect();
@@ -860,7 +875,12 @@ WebDoc.BoardController = jQuery.klass({
       switch (e.which) {
         case 8:
         case 46:
-          this.deleteSelection(e);
+          if (this._isInteraction) {
+            this.deleteSelectionDiscussion(e);
+          }
+          else {
+            this.deleteSelection(e);
+          }
           break;
         case 90:
           this.zoomIn();
@@ -1076,5 +1096,50 @@ WebDoc.BoardController = jQuery.klass({
         }, true, this.oldSize);
       }.pBind(this)
     });
+  },
+
+  // ***********
+  // DISCUSSIONS
+  // ***********
+
+  // insert a discustion with a position with left and top attributes
+  insertDiscussion: function(position) {
+    ddd('[BoardController] insert discussion');
+    var newDiscussion = new WebDoc.Discussion(null, 'page', WebDoc.application.pageEditor.currentPage.uuid());
+    newDiscussion.setPosition(position, true);
+    newDiscussion.isNew = true;
+    this._currentPage.addDiscussion(newDiscussion);
+    newDiscussion.save();
+    this.selectDiscussionView(WebDoc.application.boardController.currentPageView().discussionViews[newDiscussion.uuid()]);
+  },
+
+  removeDiscussion: function(discussion) {
+    ddd('[BoardController] remove discussion');
+    this._currentPage.removeDiscussion(discussion);
+    discussion.destroy();
+  },
+
+  selectDiscussionView: function(discussionView) {
+    ddd('[BoardController] selected discussion view');
+    var oldDiscussion = null;
+    if(this._selectionDiscussionView !== null) {
+      this._selectionDiscussionView.unSelect();
+      oldDiscussion = this._selectionDiscussionView.discussion;
+    }
+    this._selectionDiscussionView = discussionView;
+    discussionView.select();
+    WebDoc.application.rightBarController.showDiscussionsPanel();
+    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+    discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion);
+  },
+
+  deleteSelectionDiscussion: function(e) {
+    ddd('[BoardController] delete selection discussion');
+    if(e) {
+      e.preventDefault();
+    }
+    this.removeDiscussion(this._selectionDiscussionView.discussion);
+    this._selectionDiscussionView = null;
   }
+
 });

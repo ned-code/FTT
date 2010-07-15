@@ -64,14 +64,14 @@ WebDoc.handlers = {
     .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
   },
 
-	addCenterCellHandlers: function(){
-		$('.center-cell')
-		.bind('click', function(e){
-			if ($(e.target).hasClass('center-cell')) {
-				WebDoc.application.boardController.unselectAll();
-			}
-		});
-	},
+  addCenterCellHandlers: function(){
+    $('.center-cell')
+    .bind('click', function(e){
+      if ($(e.target).hasClass('center-cell')) {
+        WebDoc.application.boardController.unselectAll();
+      }
+    });
+  },
   
   // Editor actions (to be bound to the interface panels)
   _panelHandlers: {
@@ -79,11 +79,12 @@ WebDoc.handlers = {
     'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggle(); },
     
     'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggle(); },
-		'media-browser': 				function(e) { WebDoc.application.rightBarController.showMediaBrowser(e);}, 
+    'media-browser':        function(e) { WebDoc.application.rightBarController.showMediaBrowser(e);}, 
     'item-inspector':       function(e) { WebDoc.application.rightBarController.showItemInspector(e); },
     'page-inspector':       function(e) { WebDoc.application.rightBarController.showPageInspector(e); },
     'document-inspector':   function(e) { WebDoc.application.rightBarController.showDocumentInspector(e); },
-    'social-inspector':     function(e) { WebDoc.application.rightBarController.showSocialPanel(e); }, 
+    'social-inspector':     function(e) { WebDoc.application.rightBarController.showSocialPanel(e); },
+    'discussions-panel':    function(e) { WebDoc.application.rightBarController.showDiscussionsPanel(e); },
     
     'add-page':             function(e) { WebDoc.application.pageEditor.addPage(); },
     'add-web-page':         function(e) { WebDoc.application.pageEditor.addWebPage();},
@@ -119,11 +120,12 @@ WebDoc.handlers = {
     'mode-preview':         function(e) { WebDoc.application.boardController.setMode(true); },
     
     'theme-class':          function(e) {  },
+
     
     'library-images-myimages': function(e) { 
-			WebDoc.application.rightBarController.showMediaBrowser();
-			WebDoc.application.mediaBrowserController.showMyContent();
-		},
+      WebDoc.application.rightBarController.showMediaBrowser();
+      WebDoc.application.mediaBrowserController.showMyContent();
+    },
     
     //'themes-chooser':       function(e) { WebDoc.application.themesController.openChooser(e); },
     'webdoc-duplicate':     function(e) { WebDoc.application.pageEditor.duplicateDocument(e); }
@@ -136,11 +138,11 @@ WebDoc.handlers = {
     'webdoc-close':         function(e) { WebDoc.application.pageEditor.closeDocument(); }
   },
 
-	_mediaBrowserHandlers: {
-		'media-browser-home': 	function(e) { WebDoc.application.mediaBrowserController.showHome();}, 
-		'media-browser-web': 	function(e) { WebDoc.application.mediaBrowserController.showWeb();}, 
-		'media-browser-packages': 	function(e) { WebDoc.application.mediaBrowserController.showPackages();}, 
-		'media-browser-apps': 	function(e) { WebDoc.application.mediaBrowserController.showApps();}, 
-		'media-browser-my-content': 	function(e) { WebDoc.application.mediaBrowserController.showMyContent();}, 
-	}
+  _mediaBrowserHandlers: {
+    'media-browser-home': 	function(e) { WebDoc.application.mediaBrowserController.showHome();}, 
+    'media-browser-web': 	function(e) { WebDoc.application.mediaBrowserController.showWeb();}, 
+    'media-browser-packages': 	function(e) { WebDoc.application.mediaBrowserController.showPackages();}, 
+    'media-browser-apps': 	function(e) { WebDoc.application.mediaBrowserController.showApps();}, 
+    'media-browser-my-content': 	function(e) { WebDoc.application.mediaBrowserController.showMyContent();}, 
+  }
 };
