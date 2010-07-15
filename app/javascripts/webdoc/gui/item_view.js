@@ -425,21 +425,21 @@ WebDoc.ItemView = $.klass({
     return true;
   },
 
-	_injectFontFace: function(){
-		var itemsContainer = $('#items_' + this.pageView.page.uuid());
-		
-		if(this.item.hasFontFace()){
-			var styleNode = itemsContainer.find('style');
-			if(styleNode.length < 1){
-				itemsContainer.prepend($("<style type='text/css'>@font-face{" + this.item.getFontFace() + "}  </style>"));
-			}
-			else{
-				var styleNodeHtml = styleNode.html();
-				var fontfaceString = '@font-face{' + this.item.getFontFace()+ ' }';
-				styleNode.html(styleNodeHtml + fontfaceString);
-			}
-		}
-	}
+  _injectFontFace: function(){
+    var itemsContainer = $('#items_' + this.pageView.page.uuid());
+    
+    if(this.item.hasFontFace()){
+      var styleNode = itemsContainer.find('style');
+      if(styleNode.length < 1){
+        itemsContainer.prepend($("<style type='text/css'>@font-face{" + this.item.getFontFace() + "}  </style>"));
+      }
+      else{
+        var styleNodeHtml = styleNode.html();
+        var fontfaceString = '@font-face{' + this.item.getFontFace()+ ' }';
+        styleNode.html(styleNodeHtml + fontfaceString);
+      }
+    }
+  }
   
 });
 
