@@ -504,28 +504,28 @@ WebDoc.BoardController = jQuery.klass({
     this._isMovingSelection = true;
   },
 
-	moveMultipleSelection: function(offset, selectedItemUuid, needSave){//offset, selectedItem, needSave){
-		var selectionLength = this.selection().length;
+  moveMultipleSelection: function(offset, selectedItemUuid, needSave){//offset, selectedItem, needSave){
+    var selectionLength = this.selection().length;
     for (var i=0; i < selectionLength; i++) {
-			if(selectedItemUuid != this.selection()[i].item.uuid()){
-				if(needSave){
-					this.selection()[i].item.save();
-				}else{
-					this.selection()[i].item.shiftBy(offset);
-				}
-			}
+      if(selectedItemUuid != this.selection()[i].item.uuid()){
+        if(needSave){
+          this.selection()[i].item.save();
+        }
+        else{
+          this.selection()[i].item.shiftBy(offset);
+        }
+      }
     }
-	},
+  },
   
   unselectAll: function() {
     ddd("unselect all. selection size " + this._selection.length);
-    //this.selectItemViews([]);
-		for(var i=0; i< this._selection.length; i++){
-			this._selection[i].unSelect();
-		}
-		this._selection = [];
-		this.selectItemViews([]);
-		this._fireSelectionChanged();
+    this.selectItemViews([]);
+    for(var i=0; i< this._selection.length; i++){
+      this._selection[i].unSelect();
+    }
+    this._selection = [];
+    this._fireSelectionChanged();
   },
   
   unselectItemViews: function(itemViews) {
