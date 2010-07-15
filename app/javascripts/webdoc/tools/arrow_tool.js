@@ -27,17 +27,17 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     };      
     if (!(objectToSelect && WebDoc.application.boardController.editingItem() == objectToSelect)) {
       if (objectToSelect) {
-				e.stopPropagation();
-				if(e.shiftKey){
-					WebDoc.application.boardController.addItemViewToSelection([objectToSelect]);
-				}
-				else {
-        	WebDoc.application.boardController.selectItemViews([objectToSelect]);
-      	}
-			}
+        e.stopPropagation();
+        if(e.shiftKey){
+          WebDoc.application.boardController.addItemViewToSelection([objectToSelect]);
+        }
+        else {
+          WebDoc.application.boardController.selectItemViews([objectToSelect]);
+        }
+      }
       else {
         WebDoc.application.boardController.unselectAll();
-				this.selectedObject = [];
+        this.selectedObject = [];
       }
       jQuery("a[href='#select']").focus();
     }

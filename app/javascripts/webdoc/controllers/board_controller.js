@@ -524,13 +524,12 @@ WebDoc.BoardController = jQuery.klass({
   
   unselectAll: function() {
     ddd("unselect all. selection size " + this._selection.length);
-    //this.selectItemViews([]);
-		for(var i=0; i< this._selection.length; i++){
-			this._selection[i].unSelect();
-		}
-		this._selection = [];
-		this.selectItemViews([]);
-		this._fireSelectionChanged();
+    this.selectItemViews([]);
+    for(var i=0; i< this._selection.length; i++){
+      this._selection[i].unSelect();
+    }
+    this._selection = [];
+    this._fireSelectionChanged();
   },
   
   unselectItemViews: function(itemViews) {
