@@ -2,8 +2,8 @@
  * @author julien and Jonathan
  */
 
-	WebDoc.DrageAndDropController = {
-  KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/post-message-action', 'application/x-moz-file-promise-url'],
+WebDoc.DrageAndDropController = {
+  KNOWN_TYPES : ['application/wd-image', 'application/wd-widget', 'application/wd-video', 'application/wd-discussion', 'application/post-message-action', 'application/x-moz-file-promise-url'],
 	KNOWN_SOURCES: [],// All source are defined in utils/drag_source.js EX ['youtube.com', function(uri_list){alert(uri_list);}], 
 	KNOWN_FILE_TYPES: [], //All file type recognised by WD EX: jpg, .jpeg. Defined in utils/drag_source.js
 	
@@ -38,7 +38,12 @@
             break;            
           }
         }
-      }      
+      }
+
+      if(WebDoc.application.boardController.isInteractionMode() && availableType !== 'application/wd-discussion') {
+        return true; // allow only discussion in viewing mode
+      }
+      
       // create item depending on wath has been taken from the datatransfer
       var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
       var width = 200, height = 200, x = 0, y = 0;      
@@ -68,14 +73,23 @@
           else {
             WebDoc.application.boardController.insertImage(imageUrl, pos, id);
           }
-					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-					return true;
+		      WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+		      return true;
           break;
         case 'application/wd-video':
           var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-video'));
           WebDoc.application.boardController.insertVideo(videoProperties, pos);
-					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-					return true;
+		      WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+		      return true;
+          break;
+        case 'application/wd-discussion':
+          ddd('[DragAndDropController] new discussion');
+          var params = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-discussion'));
+          if(pos && params && params.action === 'create') {
+            WebDoc.application.boardController.insertDiscussion({ left: pos.x, top: pos.y });
+		        WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);            
+          }
+	        return true;
           break;
         case 'application/post-message-action':
           var action = evt.originalEvent.dataTransfer.getData('application/post-message-action');
