@@ -18,20 +18,15 @@ WebDoc.DiscussionView = $.klass({
 
     discussion.addListener(this);
 
-    ddd('add discussion 2: ');
-    ddd(discussion);
-    ddd(this);
-
     this._moveToStoredPosition();
     this._initDrag();
-
   },
 
   createDiscussionDomNode: function() {
-    var discussionNode = jQuery('<div/>');    
+    var discussionNode = jQuery('<div/>', { 'style': 'width:16px; height:16px;' });    
     this._icon = jQuery('<img/>', { 'alt':'comment', 'src':'/images/icons/chat_16.png' });
     discussionNode.append(this._icon);
-    discussionNode.append(jQuery('<div/>', { 'style': 'top:3px; width:16px; height:16px; overflow: hidden; position:absolute; font-size: 8px; text-align:center;' }).text(this.discussion.comments.length));
+    discussionNode.append(jQuery('<div/>', { 'style': 'top:3px; width:16px; height:13px; overflow: hidden; position:absolute; font-size: 8px; text-align:center;' }).text(this.discussion.comments.length));
     // add a div to catch click with a class wd_discussion
     discussionNode.append(jQuery('<div/>', { 'style': 'top:0px; width:16px; height:16px; position:absolute;', 'class': 'wd_discussion' }));
     return discussionNode;

@@ -28,6 +28,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
   showCurrentPageDiscussions: function() {
     this.discussionsDomNode.empty();
+    
     // WebDoc.application.pageEditor.currentPage.getDiscussions(function(discussions) {
     //   if (discussions.length>0) {
     //     for(var i=0; i<discussions.length; i++) {
@@ -58,10 +59,6 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   createDiscussionDomNode: function(discussion) {
     var newDiscussionsDomNode = jQuery('<div/>').attr('data-discussion-uuid', discussion.uuid());
     discussion.addListener(this);
-
-    ddd('add discussion 1: ');
-    ddd(discussion);
-    ddd(this);
 
     for(var i=0; i<discussion.comments.length; i++) {
       var comment = discussion.comments[i];

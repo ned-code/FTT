@@ -1094,7 +1094,9 @@ WebDoc.BoardController = jQuery.klass({
 
   deleteSelectionDiscussion: function(e) {
     ddd('[BoardController] delete selection discussion');
-    e.preventDefault();
+    if(e) {
+      e.preventDefault();
+    }
     this.removeDiscussion(this._selectionDiscussionView.discussion);
     this._selectionDiscussionView = null;
   }
