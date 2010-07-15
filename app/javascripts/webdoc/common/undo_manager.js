@@ -19,7 +19,7 @@ WebDoc.UndoManager = $.klass({
    * @param {Object} undoCommand the command to register
    */
   registerUndo: function(undoCommand) {
-    if(this.isGroup){
+    if(this.groupCount > 0){
       this.groupStack.push(undoCommand);
     }
     else if (this.isUndoing) {
