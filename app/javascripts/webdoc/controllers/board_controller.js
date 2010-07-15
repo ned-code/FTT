@@ -906,7 +906,9 @@ WebDoc.BoardController = jQuery.klass({
           this.zoomOut();
           break;
         case 84:
-          this.setCurrentTool(WebDoc.application.textTool);
+          if (!this._isInteraction) {
+            this.setCurrentTool(WebDoc.application.textTool);
+          }
           break;
         case 80:
           this.setCurrentTool(WebDoc.application.drawingTool);

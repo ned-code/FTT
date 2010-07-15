@@ -5,7 +5,7 @@ class DiscussionsController < ApplicationController
     raise 'no params id' if params[:page_id].blank?
     
     if params[:page_id].present?
-      @discussions = Page.find_by_uuid(params[:page_id]).discussions.all(:include => { :comments => :user })
+      @discussions = Page.find_by_uuid(params[:page_id]).discussions.not_deleted.all(:include => { :comments => :user })
     end
 
     respond_to do |format|
@@ -37,7 +37,7 @@ class DiscussionsController < ApplicationController
   end
 
   def destroy
-    @discussion.destroy
+    @discussion.safe_delete!
     render :json => {}
   end
 

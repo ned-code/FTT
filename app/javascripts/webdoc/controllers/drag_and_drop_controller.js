@@ -86,8 +86,14 @@ WebDoc.DrageAndDropController = {
           ddd('[DragAndDropController] new discussion');
           var params = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-discussion'));
           if(pos && params && params.action === 'create') {
-            WebDoc.application.boardController.insertDiscussion({ left: pos.x, top: pos.y });
-		        WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);            
+            WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+            var target = jQuery(evt.target);
+            if(target && target.attr('class') === 'wd_discussion'){
+              WebDoc.application.boardController.selectDiscussionView(target.parent().parent().data('discussionView'));
+            }
+            else {
+              WebDoc.application.boardController.insertDiscussion({ left: pos.x, top: pos.y });
+            }
           }
 	        return true;
           break;
