@@ -1061,12 +1061,21 @@ WebDoc.BoardController = jQuery.klass({
   // DISCUSSIONS
   // ***********
 
-  selectDiscussion: function(discussion) {
-    ddd('[BoardController] selected discussion');
-    var discussionView = this._currentPageView.discussionViews[discussion.uuid()];
-    if(discussionView) {
-      this.selectDiscussionView(discussionView);
-    }
+  // insert a discustion with a position with left and top attributes
+  insertDiscussion: function(position) {
+    ddd('[BoardController] insert discussion');
+    var newDiscussion = new WebDoc.Discussion(null, 'page', WebDoc.application.pageEditor.currentPage.uuid());
+    newDiscussion.setPosition(position, true);
+    newDiscussion.isNew = true;
+    this._currentPage.addDiscussion(newDiscussion);
+    newDiscussion.save();
+    this.selectDiscussionView(WebDoc.application.boardController.currentPageView().discussionViews[newDiscussion.uuid()]);
+  },
+
+  removeDiscussion: function(discussion) {
+    ddd('[BoardController] remove discussion');
+    this._currentPage.removeDiscussion(discussion);
+    discussion.destroy();
   },
 
   selectDiscussionView: function(discussionView) {
@@ -1081,22 +1090,6 @@ WebDoc.BoardController = jQuery.klass({
     WebDoc.application.rightBarController.showDiscussionsPanel();
     var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
     discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion);
-  },
-
-  // insert a discustion with a position with left and top attributes
-  insertDiscussion: function(position) {
-    ddd('[BoardController] insert discussion');
-    var newDiscussion = new WebDoc.Discussion(null, 'page', WebDoc.application.pageEditor.currentPage.uuid());
-    newDiscussion.setPosition(position, true);
-    newDiscussion.isNew = true;
-    this._currentPage.addDiscussion(newDiscussion);
-    newDiscussion.save();
-  },
-
-  removeDiscussion: function(discussion) {
-    ddd('[BoardController] remove discussion');
-    this._currentPage.removeDiscussion(discussion);
-    discussion.destroy();
   },
 
   deleteSelectionDiscussion: function(e) {

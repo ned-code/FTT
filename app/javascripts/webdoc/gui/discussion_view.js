@@ -14,9 +14,13 @@ WebDoc.DiscussionView = $.klass({
     this.domNode.append(this.createDiscussionDomNode());
     this.domNode.data("discussionView", this);
 
+    this.pageView.discussionDomNode.prepend(this.domNode);
+
     discussion.addListener(this);
 
-    this.pageView.discussionDomNode.prepend(this.domNode);
+    ddd('add discussion 2: ');
+    ddd(discussion);
+    ddd(this);
 
     this._moveToStoredPosition();
     this._initDrag();
@@ -24,7 +28,6 @@ WebDoc.DiscussionView = $.klass({
   },
 
   createDiscussionDomNode: function() {
-    // TODO CSS for the icon
     var discussionNode = jQuery('<div/>');    
     this._icon = jQuery('<img/>', { 'alt':'comment', 'src':'/images/icons/chat_16.png' });
     discussionNode.append(this._icon);
@@ -35,6 +38,7 @@ WebDoc.DiscussionView = $.klass({
   },
 
   commentAdded: function(addedComment) {
+    ddd('[DiscussionView] comment added');
     this.domNode.empty();
     this.domNode.append(this.createDiscussionDomNode());
   },
