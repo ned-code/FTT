@@ -57,7 +57,7 @@ WebDoc.UndoManager = $.klass({
    */
   endGroup: function() {
     this.groupCount -= 1;
-    if (this.groupCount == 0){
+    if (this.groupCount == 0 && this.groupStack.length > 0){
       this.registerUndo(this.groupStack);
       this.groupStack = [];
     }

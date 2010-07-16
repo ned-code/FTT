@@ -161,9 +161,9 @@ WebDoc.ItemView = $.klass({
     domNode.attr( 'style', '' ).css( wrapCss );
     
     // apply item css if needed (drawing item view has no item dom node)
-    if (itemDomNode) {			
-			this._injectFontFace();
-      itemDomNode.attr( 'style', this.item.getStyleString()).css( itemCss );			
+    if (itemDomNode) {
+      this._injectFontFace();
+      itemDomNode.attr( 'style', this.item.getStyleString()).css( itemCss );
     }
   },
   
@@ -440,7 +440,6 @@ WebDoc.ItemView = $.klass({
       }
     }
   }
-  
 });
 
 $.extend(WebDoc.ItemView, {

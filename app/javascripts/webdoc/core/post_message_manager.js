@@ -188,7 +188,6 @@ WebDoc.PostMessageManager = $.klass({
             WebDoc.application.undoManager.group();
             for(var i=0; i < selection.length; i++){
               if(selection[i].item) {
-                selection[i].item.setStyle(parsedCss.cssString, parsedCss.scope);
                 selection[i].item.setFont(parsedCss.cssString, parsedCss.font_face);
               }
             }
