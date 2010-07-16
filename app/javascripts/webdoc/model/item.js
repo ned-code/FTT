@@ -212,6 +212,14 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
   
+  positionTop: function(){
+    return this.data.data.css.top;
+  },
+  
+  positionLeft: function(){
+    return this.data.data.css.left;
+  },
+  
   positionZ: function() {
     return this.data.position;
   },

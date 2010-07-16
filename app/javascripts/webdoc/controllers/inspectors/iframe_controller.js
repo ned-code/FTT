@@ -15,7 +15,6 @@ WebDoc.IframeController = $.klass({
   },
   
   refresh: function() {
-    ddd("refresh iframe inspector");
     this.propertiesController.refresh();
     var selectedItem = WebDoc.application.boardController.selection()[0];
     if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IFRAME) {
@@ -39,12 +38,18 @@ WebDoc.IframeController = $.klass({
   },
 
   setPageSizeToIframeize: function(e) {
-    ddd('[iframe controller] set page size to item size');
     var item = WebDoc.application.boardController.selection()[0].item;
     if (item !== undefined && item.data.media_type === WebDoc.ITEM_TYPE_IFRAME) {
+      WebDoc.application.undoManager.group();
       ddd("[iframe controller] resize page to "+item.width()+"x"+item.height());
       WebDoc.application.pageEditor.currentPage.setSize({width: item.width(), height: item.height()});
-      ddd("[iframe controller]: set iframe position to 00");
+      
+      var oldPosition = { left: item.positionLeft(), top: item.positionTop() };
+      WebDoc.application.undoManager.registerUndo(function() {
+        item.moveTo( oldPosition );
+        item.save();
+      });
+      WebDoc.application.undoManager.endGroup();
       item.moveTo({ left: '0px', top: '0px' });
       item.save();
     }
