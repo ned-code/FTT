@@ -186,6 +186,15 @@ WebDoc.Item = $.klass(WebDoc.Record,
       }
     }
     else{
+      if(!this.getStyle()){
+        jQuery.extend(this.data.data, { style : {}});
+      }
+      var previousStyle = jQuery.extend({}, this.getStyle());
+      var that = this;
+      WebDoc.application.undoManager.registerUndo(function() {
+        that.setStyle( previousStyle );
+      });
+      
       this.data.data.style = newStyle;
       this.save();
       this.fireObjectChanged({ modifedAttribute: 'css' });

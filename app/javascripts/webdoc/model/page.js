@@ -89,6 +89,13 @@ WebDoc.Page = $.klass(WebDoc.Record,
   
   applyCss: function(newCss) {   
     if (newCss != this.data.data.css) {
+      
+      var oldCss = jQuery.extend({}, this.data.data.css);
+      var that = this;
+      WebDoc.application.undoManager.registerUndo(function() {
+        that.applyCss(oldCss);
+      }.pBind(this));
+      
       this.data.data.css = newCss;
       this.fireObjectChanged({ modifedAttribute: 'css' });
       this.save();
