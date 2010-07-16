@@ -5,7 +5,7 @@ class DiscussionsController < ApplicationController
     raise 'no params id' if params[:page_id].blank?
     
     if params[:page_id].present?
-      @discussions = Page.find_by_uuid(params[:page_id]).discussions.not_deleted.all(:include => { :comments => :user })
+      @discussions = Page.find_by_uuid(params[:page_id]).discussions.not_deleted.all(:include => { :comments => :user }, :order => 'discussions.created_at DESC, comments.created_at DESC')
     end
 
     respond_to do |format|
@@ -19,8 +19,7 @@ class DiscussionsController < ApplicationController
   end  
 
   def create
-    @discussion = Discussion.new(params[:discussion])
-    @discussion.uuid = params[:discussion][:uuid]
+    @discussion = Discussion.new_with_uuid(params[:discussion])
 
     respond_to do |format|
       if @discussion.save
