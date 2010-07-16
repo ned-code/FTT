@@ -89,11 +89,12 @@ describe Layout do
 
 end
 
+
 # == Schema Information
 #
 # Table name: layouts
 #
-#  uuid          :string(255)     primary key
+#  uuid          :string(255)     default(""), not null, primary key
 #  title         :string(255)
 #  thumbnail_url :string(255)
 #  theme_id      :string(36)
