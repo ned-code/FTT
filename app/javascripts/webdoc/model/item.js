@@ -179,7 +179,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
         WebDoc.application.undoManager.registerUndo(function() {
           that.setStyle( previousStyle );
         });
-       
+        if(scope == 'border'){ //be sure to remove the background if there is a baground image in the border
+          if( newStyle.match('border-image')) {
+            this.removeBackground();
+          }
+        }
         this.data.data.style[scope] = newStyle;
         this.save();
         this.fireObjectChanged({ modifedAttribute: 'css' });
