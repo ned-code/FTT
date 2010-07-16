@@ -174,6 +174,15 @@ WebDoc.Item = $.klass(WebDoc.Record,
         if(!this.getStyle()){
           jQuery.extend(this.data.data, { style : {}});
         }
+        
+        if(scope == 'background'){ //don't set a background if there is a border with image
+          if(this.data.data.style['border']){
+            if(this.data.data.style['border'].match('border-image')){
+              return;
+            }
+          }
+        }
+        
         var previousStyle = jQuery.extend({}, this.getStyle());
         var that = this;
         WebDoc.application.undoManager.registerUndo(function() {
