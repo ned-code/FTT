@@ -278,6 +278,19 @@ WebDoc.Item = $.klass(WebDoc.Record,
     this.setStylePropertyByScopeAndProperty('border', 'border-radius', radius);
   },
   
+  hasBackground: function(){
+    if(this.hasStyle() && this.getStyle()['background']){ return true; }
+    else{ return false; }
+  },
+  
+  removeBackground: function(){
+    if(this.hasBackground()){
+      this.getStyle()['background'] = '';
+      this.save();
+      this.fireObjectChanged({ modifedAttribute: 'css' });
+    }
+  },
+  
   //set the font to the item, css string contain the inline css.
   setFont: function(cssString, font_face_string){
     if(!this.hasStyle()){
