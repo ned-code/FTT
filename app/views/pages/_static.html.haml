@@ -1,0 +1,7 @@
+- content_for :title do
+  = page.document.title
+  
+%div.webdoc{ :id => "page_#{page.uuid}"}
+  %div.layer{ :id => "items_#{page.uuid}", :style => 'overflow:visible' }
+    - for item in page.items do
+      = render 'items/static', :item => item
