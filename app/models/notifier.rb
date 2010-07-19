@@ -46,7 +46,7 @@ class Notifier < ActionMailer::Base
     recipients  recipients
     from        APP_CONFIG['mail_from']
     subject     "[webdoc alpha] Your Daily Report"
-    attachment  :content_type => "text/plein",
-                :body => File.read("analytics.csv")
+    attachment  :content_type => "text/plain",
+                :body => File.read("#{Rails.root}/reports/analytics.csv")
   end
 end

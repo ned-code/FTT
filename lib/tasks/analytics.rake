@@ -44,7 +44,7 @@ namespace :analytics do
     number_of_datastore_entries = DatastoreEntry.count(:all)
 
     #opening csv file
-    filename = 'public/analytics.csv'
+    filename = "#{Rails.root}/reports/analytics.csv"
     begin
       datas = FasterCSV.read(filename)
     rescue
@@ -113,7 +113,7 @@ namespace :analytics do
       ]
     end
     #Send the mail
-    Notifier.deliver_new_user_notification("mathieu.fivaz@webdoc.com , dev@webdoc.com")
+    Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com dev@webdoc.com")
   end
   
 end
