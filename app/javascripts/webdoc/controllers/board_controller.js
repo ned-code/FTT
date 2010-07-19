@@ -17,6 +17,7 @@ WebDoc.BoardController = jQuery.klass({
     this._autoFit = autoFit;
     this._currentZoom = 1; 
     this._selection = [];
+    this._selectionDiscussionView = null;
     this._editingItem = null;
     this._selectionListeners = [];
     this._currentPageListeners = [];
@@ -43,6 +44,10 @@ WebDoc.BoardController = jQuery.klass({
     return this._selection;  
   },
   
+  multipleSelection: function(){
+    return this._selection.length > 1;
+  },
+
   isEditable: function() {
     return this._editable;  
   },
@@ -89,6 +94,7 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPageView = pageView;
     this._currentZoom = 1;
     this._selection = [];
+    this._selectionDiscussionView = null;
     this._currentPage = page;
     this._editingItem = null;
     
@@ -115,6 +121,10 @@ WebDoc.BoardController = jQuery.klass({
     }
     this.zoom(defaultZoom);
     this.setMode(!jQuery("body").hasClass('mode-edit'));
+    this.currentPageView().domNode
+    .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
+    .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
+    .bind("drop", this, WebDoc.DrageAndDropController.drop);
     
     this._fireCurrentPageChanged();
     jQuery('#webdoc').scrollbars({
@@ -134,11 +144,6 @@ WebDoc.BoardController = jQuery.klass({
   
   _setModeEdit: function() {
     this.currentPageView().setEditable(true);
-
-    this.currentPageView().domNode
-    .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
-    .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
-    .bind("drop", this, WebDoc.DrageAndDropController.drop);
 
     if (!this.currentTool) {
       this.setCurrentTool(WebDoc.application.arrowTool);
@@ -169,11 +174,6 @@ WebDoc.BoardController = jQuery.klass({
     this.unselectAll();
     
     this.currentPageView().setEditable(false);
-
-    this.currentPageView().domNode
-    .unbind("dragenter")
-    .unbind("dragover")
-    .unbind("drop");
     
     this.setCurrentTool(WebDoc.application.arrowTool);    
     
@@ -186,7 +186,7 @@ WebDoc.BoardController = jQuery.klass({
     .filter("[href='#mode-preview']")
     .addClass("current");
     
-	this.boardContainerNode.resizable('destroy');
+    this.boardContainerNode.resizable('destroy');
 
     if(!this._editable) {
       jQuery(".mode-tools").hide(); 
@@ -314,7 +314,7 @@ WebDoc.BoardController = jQuery.klass({
     for (var i=0; i < selectionLength; i++) {
       var anItem = this.selection()[i].item;
       itemsDataArray.push(anItem.getData());
-    }    
+    }
     WebDoc.application.pasteBoardManager.putIntoPasboard("application/ub-item", jQuery.toJSON(itemsDataArray));
   },
   
@@ -419,7 +419,13 @@ WebDoc.BoardController = jQuery.klass({
   selectItemViews: function(itemViews) {
     // exit edit mode for current editing item
     this.stopEditing();
-    if (itemViews) {
+    if (itemViews.length > 0) {
+			//do nothing if the itemView is already in the selection
+			if(itemViews.length == 1){
+				if (jQuery.inArray(itemViews[0], this._selection) >= 0) {
+	      	return;
+	      }
+			}
       // do nothing if new selection is equal to old selection
       if(itemViews.length === this._selection.length) {
         var selectionIsEqual = true;
@@ -434,25 +440,37 @@ WebDoc.BoardController = jQuery.klass({
         }
       }
       
-      //deselect un-needed items
-      ddd("select item in view");
-      jQuery.each(this._selection, function(index, itemToDeselect) {
-        if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
-          this.unselectItemViews([itemToDeselect]);
-        }
-      }.pBind(this));
-      
-      //select wanted items
-      jQuery.each(itemViews, function(index, itemToSelect) {
-        if (jQuery.inArray(itemToSelect, this._selection) == -1) {
-          ddd("add item to selection");
-          this._selection.push(itemToSelect);
-        }
-        itemToSelect.select();
-      }.pBind(this));
-      this._fireSelectionChanged();
+			//deselect un-needed items
+			jQuery.each(this._selection, function(index, itemToDeselect) {
+	      if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
+	        this.unselectItemViews([itemToDeselect]);
+	      }
+	    }.pBind(this));
+	
+			this.addItemViewToSelection(itemViews)
     }
   },
+
+	addItemViewToSelection: function(itemViews){    
+		for( var i = 0; i < itemViews.length; i++){
+			if(jQuery.inArray(itemViews[i], this._selection) >= 0){
+				this.unselectItemViews([itemViews[i]]);
+				itemViews.splice(i,1);
+			}
+		}
+		//select wanted items
+    jQuery.each(itemViews, function(index, itemToSelect) {
+      if (jQuery.inArray(itemToSelect, this._selection) == -1) {
+        this._selection.push(itemToSelect);
+      }
+      itemToSelect.select();
+    }.pBind(this));
+		this._fireSelectionChanged();
+	},
+	
+	removeItemViewFromSelection: function(itemViews){
+      this.unselectItemViews(itemViews);
+	},
   
   moveSelection: function(direction, scale) {
     var max = this._selection.length;
@@ -484,16 +502,52 @@ WebDoc.BoardController = jQuery.klass({
     }
     this._isMovingSelection = true;
   },
+
+  moveMultipleSelection: function(offset, selectedItemUuid, needSave){//offset, selectedItem, needSave){
+    var selectionLength = this.selection().length;
+    for (var i=0; i < selectionLength; i++) {
+      if(selectedItemUuid != this.selection()[i].item.uuid()){
+        if(needSave){
+          this.selection()[i].item.save();
+        }
+        else{
+          this.selection()[i].item.shiftBy(offset);
+        }
+      }
+    }
+  },
+  
+  putSelectionPositionInUndo: function(){
+    var selectionLength = this.selection().length;
+    WebDoc.application.undoManager.group();
+        
+    for (var i=0; i < selectionLength; i++) {
+      var callback = function(){
+        var item = this.selection()[i].item;
+        var position = this.selection()[i].position();
+        
+        WebDoc.application.undoManager.registerUndo(function() {
+          WebDoc.ItemView._restorePosition(item, position);
+        }.pBind(this));
+      }.pBind(this);
+      callback();
+    }
+    WebDoc.application.undoManager.endGroup();
+  },
   
   unselectAll: function() {
     ddd("unselect all. selection size " + this._selection.length);
     this.selectItemViews([]);
+    for(var i=0; i< this._selection.length; i++){
+      this._selection[i].unSelect();
+    }
+    this._selection = [];
+    this._fireSelectionChanged();
   },
   
   unselectItemViews: function(itemViews) {
     ddd("unselect item views");
-    var i = 0;
-    for (; i < itemViews.length; i++) {
+    for (var i = 0; i < itemViews.length; i++) {
       var objectToUnSelect = itemViews[i];
       if (objectToUnSelect) {
         objectToUnSelect.unSelect();
@@ -827,7 +881,6 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   _keyDown: function(e) {
-	  ddd("[BoardController] keydown");
     var el = jQuery(e.target);
     if (this._editingItem !== null  && !(el.is('input') || el.is('textarea'))) {
       e.preventDefault();
@@ -839,7 +892,12 @@ WebDoc.BoardController = jQuery.klass({
       switch (e.which) {
         case 8:
         case 46:
-          this.deleteSelection(e);
+          if (this._isInteraction) {
+            this.deleteSelectionDiscussion(e);
+          }
+          else {
+            this.deleteSelection(e);
+          }
           break;
         case 90:
           this.zoomIn();
@@ -848,7 +906,9 @@ WebDoc.BoardController = jQuery.klass({
           this.zoomOut();
           break;
         case 84:
-          this.setCurrentTool(WebDoc.application.textTool);
+          if (!this._isInteraction) {
+            this.setCurrentTool(WebDoc.application.textTool);
+          }
           break;
         case 80:
           this.setCurrentTool(WebDoc.application.drawingTool);
@@ -856,42 +916,43 @@ WebDoc.BoardController = jQuery.klass({
         case 65:
           this.setCurrentTool(WebDoc.application.arrowTool);
           break;  
-     case 37:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.prevPage();
-        }
-        else {
-          this.moveSelection("left", e.shiftKey?"big" : "small");
-        }
-        e.preventDefault();          
-        break;
-      case 38:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.prevPage();
-        }
-        else {
-          this.moveSelection("up", e.shiftKey?"big" : "small");
-        }
-        e.preventDefault();          
-        break;          
-      case 39:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.nextPage();
-        }
-        else {
-          this.moveSelection("right", e.shiftKey?"big" : "small");            
-        }        
-        e.preventDefault();           
-        break;
-      case 40:
-        if (this._isInteraction || this._selection.length === 0) {
-          WebDoc.application.pageEditor.nextPage();
-        }
-        else {
-          this.moveSelection("down", e.shiftKey?"big" : "small");
-        }
-        e.preventDefault();          
-        break;                       
+     		case 37:
+		 		 	ddd('shift key?');
+     		   if (this._isInteraction || this._selection.length === 0) {
+     		     WebDoc.application.pageEditor.prevPage();
+     		   }
+     		   else {
+     		     this.moveSelection("left", e.shiftKey?"big" : "small");
+     		   }
+     		   e.preventDefault();          
+     		   break;
+      	case 38:
+      	  if (this._isInteraction || this._selection.length === 0) {
+      	    WebDoc.application.pageEditor.prevPage();
+      	  }
+      	  else {
+      	    this.moveSelection("up", e.shiftKey?"big" : "small");
+      	  }
+      	  e.preventDefault();          
+      	  break;          
+      	case 39:
+      	  if (this._isInteraction || this._selection.length === 0) {
+      	    WebDoc.application.pageEditor.nextPage();
+      	  }
+      	  else {
+      	    this.moveSelection("right", e.shiftKey?"big" : "small");            
+      	  }        
+      	  e.preventDefault();           
+      	  break;
+      	case 40:
+      	  if (this._isInteraction || this._selection.length === 0) {
+      	    WebDoc.application.pageEditor.nextPage();
+      	  }
+      	  else {
+      	    this.moveSelection("down", e.shiftKey?"big" : "small");
+      	  }
+      	  e.preventDefault();          
+      	  break;                       
       }      
     }
     else {
@@ -1054,5 +1115,50 @@ WebDoc.BoardController = jQuery.klass({
         }, true, this.oldSize);
       }.pBind(this)
     });
+  },
+
+  // ***********
+  // DISCUSSIONS
+  // ***********
+
+  // insert a discustion with a position with left and top attributes
+  insertDiscussion: function(position) {
+    ddd('[BoardController] insert discussion');
+    var newDiscussion = new WebDoc.Discussion(null, 'page', WebDoc.application.pageEditor.currentPage.uuid());
+    newDiscussion.setPosition(position, true);
+    newDiscussion.isNew = true;
+    this._currentPage.addDiscussion(newDiscussion);
+    newDiscussion.save();
+    this.selectDiscussionView(WebDoc.application.boardController.currentPageView().discussionViews[newDiscussion.uuid()]);
+  },
+
+  removeDiscussion: function(discussion) {
+    ddd('[BoardController] remove discussion');
+    this._currentPage.removeDiscussion(discussion);
+    discussion.destroy();
+  },
+
+  selectDiscussionView: function(discussionView) {
+    ddd('[BoardController] selected discussion view');
+    var oldDiscussion = null;
+    if(this._selectionDiscussionView !== null) {
+      this._selectionDiscussionView.unSelect();
+      oldDiscussion = this._selectionDiscussionView.discussion;
+    }
+    this._selectionDiscussionView = discussionView;
+    discussionView.select();
+    WebDoc.application.rightBarController.showDiscussionsPanel();
+    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+    discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion);
+  },
+
+  deleteSelectionDiscussion: function(e) {
+    ddd('[BoardController] delete selection discussion');
+    if(e) {
+      e.preventDefault();
+    }
+    this.removeDiscussion(this._selectionDiscussionView.discussion);
+    this._selectionDiscussionView = null;
   }
+
 });

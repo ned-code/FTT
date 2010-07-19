@@ -1,0 +1,9 @@
+/* typography.css */
+
+html {
+    font-size:100%;
+}
+body{
+    font-size: 75%;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}

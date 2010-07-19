@@ -8,6 +8,7 @@ WebDoc.RightBarInspectorType = {
   ITEM: 'item',
   PAGE: 'page',
   DOCUMENT: 'document',
+  DISCUSSIONS: 'discussions',
   SOCIAL: 'social'
 };
 
@@ -45,6 +46,7 @@ WebDoc.RightBarController = $.klass({
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.ITEM] = WebDoc.InspectorController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PAGE] = WebDoc.PageInspectorController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DISCUSSIONS] = WebDoc.DiscussionsPanelController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.SOCIAL] = WebDoc.SocialPanelController;
 
     this._inspectorsControllers = {};
@@ -55,7 +57,7 @@ WebDoc.RightBarController = $.klass({
     this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
     
     // This is a hack. Ultimately, we need a better way than this to be wrangling with show/hide
-    $('#page-inspector, #document-inspector, #social-inspector').hide();
+    $('#page-inspector, #document-inspector, #social-inspector, #discussions-panel').hide();
   },
 
   show: function() {
@@ -134,6 +136,12 @@ WebDoc.RightBarController = $.klass({
   showSocialPanel: function() {
     ddd("[RightBarController] showSocialPanel");
     this.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
+    this.show();
+  },
+
+  showDiscussionsPanel: function() {
+    ddd("[RightBarController] showDiscussionsPanel");
+    this.selectInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
     this.show();
   },
 
