@@ -177,13 +177,13 @@ WebDoc.WebVideosSearch = $.klass({
 		switch (properties.type) {
 			case 'youtube':
 				url = properties.embed_url + "&fs=1&hd=1&showinfo=0";
-		    width = 320;
-		    height = properties.aspect_ratio === "widescreen" ? 200 : 265;
+		    width = "100%";
+		    height = "auto";//properties.aspect_ratio === "widescreen" ? 200 : 265;
 				break;
 			case 'vimeo' :
 				url = properties.embed_url;
-		    width = 320;
-		    height = parseInt(width * (properties.height / properties.width), 10);
+		    width = "100%";
+		    height = "auto";//parseInt(width * (properties.height / properties.width), 10);
 				break;
 		}
     

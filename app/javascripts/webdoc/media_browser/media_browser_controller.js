@@ -23,6 +23,9 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
     
     this.domNode = $(this.MEDIA_BROWSER_SELECTOR);
 
+    // Tabs handling
+    $(".tab_navigation").tabsHandler();
+    
 		//little hack to be sure that the home page is on the first layer
 		this._hideAll();
 		this.showHome();

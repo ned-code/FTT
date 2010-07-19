@@ -9,6 +9,18 @@ WebDoc.WebSearchController = $.klass(WebDoc.Library, {
     this.createHandlers(this.domNode, 'click', this._webHandlers);
     this.webImagesSearch = new WebDoc.WebImagesSearch('web_images_search_field', this);
 		this.webVideosSearch = new WebDoc.WebVideosSearch('web_videos_search_field', this);
+
+    // Checkbox filters listening
+    $(".filters>input[type='checkbox']")
+      .attr("checked", 1)
+      .change(function(){
+        var panelNode = $("#"+$(this).attr("name"));
+        if($(this).attr("checked")){
+            panelNode.show();
+        }else{
+            panelNode.hide();
+        }
+      });
   },
 
 	_webHandlers: {
@@ -19,14 +31,18 @@ WebDoc.WebSearchController = $.klass(WebDoc.Library, {
 	showImagesSearch: function(){
 		this.hideAll();
 		$('#web-images').show();
+		$('#web_images_result').show();
 	},
 	
 	showVideosSearch: function(){
 		this.hideAll();
 		$('#web-videos').show();
+		$('#web_videos_result').show();
 	},
 	
 	hideAll: function(){
 		$('.web-search-tab').hide();
+		$('.web_search_result').hide();
 	}
+	
 });

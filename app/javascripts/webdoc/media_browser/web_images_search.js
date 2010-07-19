@@ -189,11 +189,12 @@ WebDoc.ServiceImagesSearch = $.klass({
     this.container = $('#'+containerId);
     this.container.hide();
     this.resultsCount = this.container.find('.results_number');
+    this.resultsLabel = this.container.find('.results_label');
     
     this.container.find(".service_bar").bind("click", this.toggleResultsSection.pBind(this));
     
     this.imagesContainer = $('<ul>');
-    this.imagesContainerWrapper = $('<div>'); // contains the ul (list) and load_more link
+    this.imagesContainerWrapper = $('<div class="web_result_list">'); // contains the ul (list) and load_more link
     this.imagesContainerWrapper.append(this.imagesContainer);
     this.container.append(this.imagesContainerWrapper);
     
@@ -220,9 +221,19 @@ WebDoc.ServiceImagesSearch = $.klass({
     this.imagesContainerWrapper.append($('<div class="loading">Loading</div>'));
   },
   buildThumbnail: function(type, url, thumbUrl, name, imageLink, size) {
+    name = name.replace(/&#39;/g, "'");
     var properties = { type:type, url:url, thumb_url:thumbUrl, name:name, image_link:imageLink };
-    if (size) jQuery.extend(properties, { width:size.width, height:size.height });
+    var domSize = { width:"100%", height:"100%"}
     
+    if (size){
+      jQuery.extend(properties, { width:size.width, height:size.height });
+      if(parseInt(properties.width) > parseInt(properties.height)){
+        domSize.width = "auto";
+      }else{
+        domSize.height = "auto"
+      }
+    }
+        
     var thumb = $("<img>").attr({
       src : thumbUrl,
       alt : ""
@@ -230,6 +241,8 @@ WebDoc.ServiceImagesSearch = $.klass({
     
     var liWrap = $("<li>").addClass(type);
     var aWrap = $("<a href=\""+imageLink+"\" title=\""+name+"\"></a>");
+    thumb.width(domSize.width);
+    thumb.height(domSize.height);
     aWrap.append(thumb);
     aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
     liWrap.append(aWrap);
@@ -276,7 +289,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
       this.initialSearch(this.query);
     }.pBind(this));
     
-    this.resultsCount.before(licenseSelector);
+    this.resultsLabel.after(licenseSelector);
   },
   performSearch: function() {
     // http://www.flickr.com/services/api/flickr.photos.search.html
@@ -289,7 +302,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     "&content_type=1&api_key=" + this.flickrApiKey + "&format=json&jsoncallback=?";
     $.getJSON(flickrUrl,
       function(data){
-        //ddd(data);
+
         this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(data.photos.total,"'"));
         this.page = parseInt(data.photos.page,10);
         this.perPage = data.photos.perpage;
@@ -298,7 +311,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
           var photoSourceUrl = "http://farm"+photo.farm+".static.flickr.com/"+photo.server+"/"+photo.id+"_"+photo.secret+".jpg";
           var thumbSourceUrl = photoSourceUrl.replace('.jpg','_s.jpg');
           var photoPageLink = "http://www.flickr.com/photos/"+photo.owner+"/"+photo.id;
-          
+
           this.imagesContainer.append(this.buildThumbnail("flickr", photoSourceUrl, thumbSourceUrl, photo.title, photoPageLink, null));
           
         }.pBind(this));
@@ -369,7 +382,7 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
           var results = data.responseData.results;
           
           $.each(results, function(i, gImage) {
-            
+            ddd(gImage.titleNoFormatting);
             this.imagesContainer.append(this.buildThumbnail("google", gImage.url, gImage.tbUrl, gImage.titleNoFormatting, gImage.url, {width:gImage.width,height:gImage.height}));
             
           }.pBind(this));

@@ -361,7 +361,7 @@ en:
         add_image: "Add Images"
         my_images: "My images"
         web: "Web"
-        web_detail: "Search images on the web"
+        web_detail: "Find images on the web"
         show_details: "Show image details"
         services:
           flickr: "Flickr"
@@ -379,7 +379,7 @@ en:
         title: "Videos"
         my_videos: "My videos"
         web: "Web"
-        web_detail: "Search videos on the web"
+        web_detail: "Find videos on the web"
         show_details: "Show video details"
         services:
           youtube: "Youtube"
