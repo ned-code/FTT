@@ -36,12 +36,13 @@ class VideosController < ApplicationController
   def create
     @video = current_user.videos.build(params[:video])
     @video.uuid = params[:video][:uuid]
-
+    @video.favorites = params[:video][:favorites]
+    
     respond_to do |format|
       if @video.save
-        format.json{ render :json => @video }
+        format.json { render :json => @video }
       else
-        format.json{ render :status => 503 }
+        format.json { render :status => 503 }
       end
     end
   end

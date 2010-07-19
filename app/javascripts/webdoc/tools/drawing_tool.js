@@ -15,7 +15,8 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     
     this.colorsNode = jQuery("#colors");
     
-    WebDoc.application.boardController.themeNode.bind( 'load', this.makeThemeColors.pBind(this) );
+    //we don't load anymore the color in the default theme
+    //WebDoc.application.boardController.themeNode.bind( 'load', this.makeThemeColors.pBind(this) );
     
     jQuery('#draw-inspector').bind("click", jQuery.delegate({
         '.colors-index a':  function(e) {

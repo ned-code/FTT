@@ -4,7 +4,11 @@ class WidgetsController < ApplicationController
   # GET /widgets
   def index
     per_page = 15
-    @widgets = Medias::Widget.paginate(:page => params[:page], :per_page => per_page)
+    cond = {}
+    if params[:favorites]
+      cond = { :favorites => params[:favorites] }
+    end
+    @widgets = Medias::Widget.paginate(:page => params[:page], :per_page => per_page, :conditions => cond)
     
     respond_to do |format|
       format.json { render :json => { 

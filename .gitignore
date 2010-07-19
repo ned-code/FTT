@@ -53,5 +53,6 @@ db/schema.rb
 *.BASE.*
 *.LOCAL.*
 public/local/*
+analytics.csv
 public/themes/*/*.zip
 .externalToolBuilders/

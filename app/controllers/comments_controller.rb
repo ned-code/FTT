@@ -1,8 +1,6 @@
 class CommentsController < ApplicationController
   def create
-    @comment = Comment.new(params[:comment])
-    @comment.uuid = params[:comment][:uuid]
-    @comment.user = current_user
+    @comment = current_user.comments.new_with_uuid(params[:comment])
 
     respond_to do |format|
       if @comment.save

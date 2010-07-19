@@ -22,6 +22,7 @@ gem 'formtastic'
 gem 'erubis'
 gem 'jammit' # use plugin for the moment
 gem 'whenever'
+gem 'fastercsv'
 
 group :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'

@@ -37,9 +37,9 @@
           %label= t('.properties.background')
           <input data-property="page_background_color" id="page_background_color" type="text" data-type="csscolor" />
         
-        %div.background-related
-          %label= t('.properties.background_image')
-          <input data-property="page_background_image" id="page_background_image" type="text" data-type="imageurl" />
+        / %div.background-related
+        /   %label= t('.properties.background_image')
+        /   <input data-property="page_background_image" id="page_background_image" type="text" data-type="imageurl" />
 
         %div#background_image_preview.background-related
           %img#background_image
@@ -77,8 +77,8 @@
           %label{ :for => 'page_background_image_apply_all_button' }
           %input#page_background_image_apply_all_button{ :type => "button", :value => t('.properties.buttons.apply_background_all_pages') }
       
-      %fieldset.properties
-        %legend=t('.properties.layout')
-        %div
-          <a href="#layout_remove">Don't use a layout</a>
-        %ul#layouts.layouts-index.icons-only.thumbs.index
+      / %fieldset.properties
+      /         %legend=t('.properties.layout')
+      /         %div
+      /           <a href="#layout_remove">Don't use a layout</a>
+      /         %ul#layouts.layouts-index.icons-only.thumbs.index

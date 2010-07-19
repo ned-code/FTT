@@ -4,15 +4,18 @@
 
 WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector, showBgColors ) {
+    ddd('properties insepctor initialize');
     var domNode = $(selector);
     this.domNode = domNode;
     domNode.show();
     jQuery(selector)
     .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
-    .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ));
+    .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ))
+    .delegate("a[href=#remove_background]", 'click', jQuery.proxy( this, 'removeBackground' ));
     
-    if (showBgColors) {
+		//Display the theme background color in inspector, useless with packages
+    if (false) { // if (showBgColors) We never display the theme background color
       WebDoc.application.boardController.themeNode.bind('load', jQuery.proxy(this, '_makeThemeBackgrounds'));
       this._themeBgColorsNode = jQuery('<ul/>', {'class': "icons-only thumbs backgrounds_index index"}).css('clear', 'both');
       this._themeBgState = false;
@@ -90,14 +93,21 @@ WebDoc.PropertiesInspectorController = $.klass({
     item.setClass( className, 'background', true );
   },
   
+  removeBackground: function(e){
+    e.preventDefault();
+    var selectionLength = WebDoc.application.boardController.selection().length;
+    for( var i = 0; i < selectionLength; i++){
+      WebDoc.application.boardController.selection()[i].item.removeBackground();
+    }
+  },
+  
   refresh: function() {
     var selectedItem = WebDoc.application.boardController.selection()[0];
     
     if ( selectedItem ) {
       var css = selectedItem.css(),
           fields = this.fields,
-          key, field, value;
-      
+          key, field, value;      
       for ( key in fields ) {
         field = fields[key];
         
@@ -109,6 +119,12 @@ WebDoc.PropertiesInspectorController = $.klass({
         // Otherwise we display the css value directly...
         else if ( css[key] ) {
           field.val( css[key] );
+        }
+        else if(key == 'backgroundColor'){
+           field.val( selectedItem.item.getStylePropertyByScopeAndPropertyName('background', 'background-color'));
+        }
+        else if(key == 'borderRadius'){
+          field.val( selectedItem.item.getStylePropertyByScopeAndPropertyName('border', 'border-radius'));
         }
         // when the css value is inherited, clear the field
         // and set its placeholder
@@ -140,14 +156,23 @@ WebDoc.PropertiesInspectorController = $.klass({
         // processes the value and gives us some CSS...
         if ( self.properties[property] && self.properties[property].input ) {
           cssObj = self.properties[property].input( value );
+          item.changeCss( cssObj );
         }
         // Otherwise we use the value directly
         else {
-          cssObj = {};
-          cssObj[property] = value;
+          if(property == 'backgroundColor'){
+            var property = 'background-color:' + value +';';
+            item.setStyle(property, 'background');
+          }
+          else if(property == 'borderRadius'){
+            item.setStyleBorderRadius(value);
+          }
+          else{
+            cssObj = {};
+            cssObj[property] = value;
+            item.changeCss( cssObj );
+          }
         }
-        
-        item.changeCss( cssObj );
       },
       fail: function( value, error ){
         var type = field.attr('data-type') || field.attr('type');
