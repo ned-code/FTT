@@ -145,7 +145,8 @@ class DocumentsController < ApplicationController
   # PUT /documents/:id
   def update
     @document.update_attributes(params[:document])
-    message = { :source => params[:xmpp_client_id], :document =>  @document.attributes }
+    message = @document.as_json({})
+    message[:source] = params[:xmpp_client_id]    
     @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)    
     render :json => @document
   end

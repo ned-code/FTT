@@ -369,6 +369,14 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
   
+  positionTop: function(){
+    return this.data.data.css.top;
+  },
+  
+  positionLeft: function(){
+    return this.data.data.css.left;
+  },
+  
   positionZ: function() {
     return this.data.position;
   },
@@ -772,6 +780,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
     
   zoom: function(zoom){
     var previousZoom = this.getZoom();
+    
+    WebDoc.application.undoManager.registerUndo(function() {
+      this.zoom(previousZoom);
+    }.pBind(this));
+    
     var diffZoom = zoom - previousZoom;
     this.setProperty('zoom', zoom);
     var newLeft = this.getDisplacement().left + diffZoom/2;

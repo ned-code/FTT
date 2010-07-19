@@ -177,6 +177,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -212,5 +213,7 @@ end
 #  avatar_file_size     :integer(4)
 #  avatar_updated_at    :datetime
 #  id                   :integer(4)
+#  facebook_uid         :integer(8)
+#  facebook_session_key :string(149)
 #
 
