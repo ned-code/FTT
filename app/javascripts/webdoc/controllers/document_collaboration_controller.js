@@ -144,6 +144,9 @@ WebDoc.DocumentCollaborationController = $.klass({
         accesses_editors[i] = recipients_emails[i];
       }
     }
+    if (window._gaq) {
+      _gaq.push(['_trackEvent', 'share', 'coeditor_invite', this.document.uuid(), accesses_editors.length]);
+    }      
     var access_content = { role: "editor", recipients: accesses_editors, message: message };
     return { accesses : $.toJSON(access_content) };
   },
