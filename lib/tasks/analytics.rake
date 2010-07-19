@@ -112,6 +112,8 @@ namespace :analytics do
         number_of_datastore_entries
       ]
     end
+    #Send the mail
+    Notifier.deliver_new_user_notification("mathieu.fivaz@webdoc.com , dev@webdoc.com")
   end
   
 end

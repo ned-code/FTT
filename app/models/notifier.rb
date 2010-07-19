@@ -41,4 +41,12 @@ class Notifier < ActionMailer::Base
     subject     "[webdoc alpha] User #{new_user.email} just signed up."
     body        :new_user => new_user    
   end
+  
+  def send_daily_report(recipients)
+    recipients  recipients
+    from        APP_CONFIG['mail_from']
+    subject     "[webdoc alpha] Your Daily Report"
+    attachment  :content_type => "text/plein",
+                :body => File.read("analytics.csv")
+  end
 end
