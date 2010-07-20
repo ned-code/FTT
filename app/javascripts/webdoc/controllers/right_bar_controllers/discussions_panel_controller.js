@@ -80,7 +80,6 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
       var removeCommentLink = jQuery('<a/>', { 'href':'#', 'id':'remove_comment'}).text('remove');
       removeCommentLink.bind('click', function() {
         comment.discussion.removeComment(comment);
-        comment.destroy();
       });
       firstPart.append(removeCommentLink);
 
