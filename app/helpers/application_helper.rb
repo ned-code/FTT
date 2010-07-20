@@ -7,7 +7,11 @@ module ApplicationHelper
       i = 0
       for char in propertyCharArray do
         if(char.upcase!.nil?)
-          property = "#{property[0..(i-1)]}-#{property[i..(property.length-1)]}"
+          if i > 0
+            property = "#{property[0..(i-1)]}-#{property[i..(property.length-1)]}"
+          else
+            property = "#{property[0]}-#{property[1..(property.length-1)]}"
+          end
           break
         end
         i += 1
