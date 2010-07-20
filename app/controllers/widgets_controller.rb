@@ -3,7 +3,7 @@ class WidgetsController < ApplicationController
   
   # GET /widgets
   def index
-    per_page = 15
+    per_page = 100
     cond = {}
     if params[:favorites]
       cond = { :favorites => params[:favorites] }
