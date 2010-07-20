@@ -1,5 +1,5 @@
 <% cache('google_analytics') do %> 
-  <% if true || Rails.env.production? || Rails.env.staging? %>
+  <% if Rails.env.production? || Rails.env.staging? %>
     <script type="text/javascript">
     
       var _gaq = _gaq || [];
