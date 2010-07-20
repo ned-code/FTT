@@ -9,25 +9,24 @@
 
 WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   initialize: function($super, libraryId) {
-		ddd('[AppsLibrary] initialize');
     $super(libraryId);
-		
-		this.detailsView = $('#app_details');
+    this.detailsView = $('#app_details');
     this._setupMyApps();
-		this._setupDetailsView();
-		this.createHandlers(this.element, 'click', this._appsHandlers);
-		
+    this._setupDetailsView();
+    this.appsPage = 1;
+    this.createHandlers(this.element, 'click', this._appsHandlers);
+    
     // Observe thumbnails clicks with event delegation
     $("#"+libraryId).delegate(".thumbnails li a", "click", function (e) {
       var widgetData = $( e.currentTarget ).data("widget");
       this.showDetailsView( widgetData, false );
       e.preventDefault();
     }.pBind(this));
-		
-		this._loadMyApps();	
+    
+    this._loadMyApps();	
   },
-	
-	_appsHandlers: {
+  
+  _appsHandlers: {
     'apps-list':  function(e){ WebDoc.application.mediaBrowserController.appsLibrary.showList(); }
   },
 
@@ -55,12 +54,9 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     $("#app_details .actions").click(function(event){
       event.preventDefault();
       
-			ddd('icicicicicci');
       var properties = this.detailsAppContainer.data("widget");
       ddd(this.detailsAppContainer);
       var link = $(event.target);
-			ddd(link);
-      ddd(link.attr('id'));
       switch (link.attr("id")) {
         case "add_app_to_page_action":
           ddd("add_app_to_page_action");
@@ -72,11 +68,11 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     
   },
   
-	showList: function(){
-		this._hideAll();
-		$('#apps-list').show();
-	},
-	
+  showList: function(){
+    this._hideAll();
+    $('#apps-list').show();
+  },
+  
   showDetailsView: function(widgetData, backHome) {
     
     var properties = widgetData.properties;
@@ -107,23 +103,23 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     var desc = widgetData.description || "";
     var descEl = this.detailsView.find('.app_description');
     descEl.text(desc);
-		
-		//setup back button
-		this.setupBackButton(backHome);
-		
-		this._hideAll();
-  	this.detailsView.show();
-	},
-	
-	setupBackButton: function(backHome){
-		if(backHome){
- 			$('#media-browser-app-details-back').attr({href: '#media-browser-home'});
-		}
-		else{
-			$('#media-browser-app-details-back').attr({href: '#apps-list'});
-		}
-	},
-	
+    
+    //setup back button
+    this.setupBackButton(backHome);
+    
+    this._hideAll();
+    this.detailsView.show();
+  },
+  
+  setupBackButton: function(backHome){
+    if(backHome){
+      $('#media-browser-app-details-back').attr({href: '#media-browser-home'});
+    }
+    else{
+      $('#media-browser-app-details-back').attr({href: '#apps-list'});
+    }
+  },
+
   _prepareThumbDrag: function(e) {
     var thumb = $( e.currentTarget );
     var widgetData = thumb.data("widget");
@@ -164,10 +160,42 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
         .find('.title')
         .truncate();
       }
-     
- 			appsThumbWrap.data('loaded', true);
+      
+      //previous and next link
+      if(data.pagination.previous_page){
+        var previousElement= $("<a href='#'>Previous</a>;");
+        var that = this;
+        previousElement.click(function(e){
+          e.preventDefault;
+          that._previousPage();
+        });
+        appsThumbWrap.append(previousElement);
+      }
+      if(data.pagination.next_page){
+        var nextElement = $("<a href='#'>Next</a>");
+        var that = this;
+        nextElement.click(function(e){
+          e.preventDefault;
+          that._nextPage();
+        });
+        appsThumbWrap.append(nextElement);
+      }
+      
+      appsThumbWrap.data('loaded', true);
       this.hideSpinner(appsThumbWrap);
-    }.pBind(this));
+    }.pBind(this), { ajaxParams: { page: this.appsPage }});
+  },
+  
+  _nextPage: function(){
+    this.myAppsContainer.find(".thumbnails").empty();
+    this.appsPage += 1;
+    this._loadMyApps();
+  },
+  
+  _previousPage: function(){
+    this.myAppsContainer.find(".thumbnails").empty();
+    this.appsPage -= 1;
+    this._loadMyApps();
   },
   
   _buildThumbnail: function(widget) {
@@ -210,7 +238,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   },
 
-	_hideAll: function(){
-		$('.app-tab').hide();
-	}
+  _hideAll: function(){
+    $('.app-tab').hide();
+  }
 });
