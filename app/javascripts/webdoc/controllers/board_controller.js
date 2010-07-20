@@ -1030,6 +1030,8 @@ WebDoc.BoardController = jQuery.klass({
   _createImageItemAfterLoad: function(e) {
     var position = e.data.position;
     var media_id = e.data.media_id;
+    var favorite = e.data.favorite;
+    
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
     if(!position) { position = WebDoc.application.boardController.getBoardCenterPoint();}
