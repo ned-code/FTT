@@ -372,9 +372,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     if(!$('#my-favorites-videos ul').length){
       $('#my-favorites-videos').append($('<ul>'));
     }
-    
-    ddd('thumbUrl ' + thumbUrl); 
-    
+        
      var videosContainer = $('#my-favorites-videos ul');
      videosContainer.prepend(
         WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow(videoType, videoId, videoUrl, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height,uuid)
@@ -513,7 +511,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.videosFavoritesContainer = $('#my-favorites-videos');
     
     this._loadFavoritesImages();
-    //this._loadFavoritesVideos();
+    this._loadFavoritesVideos();
   },
 
   _loadFavoritesImages: function(){
@@ -534,8 +532,6 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
         }.pBind(this));
       }
       
-      ddd('_loadFavoritesImages');
-      ddd(data);
       //previous and next link
       if(data.pagination.previous_page){
         var previousElement= $("<a href='#'>Previous</a>;");
@@ -583,8 +579,9 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   _loadFavoritesVideos: function(){
     var thumbsWrap = this.videosFavoritesContainer;
     this.showSpinner(thumbsWrap);
-          
     WebDoc.ServerManager.getRecords(WebDoc.Video, null, function(data) {
+      ddd('jusquici tout va bien');
+      ddd(data);
       if (data.videos.length === 0) {
         var noVideos = $("<span>").addClass('no_items').text('No Videos');
         thumbsWrap.append(noVideos);
@@ -597,6 +594,27 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
           myVideosList.append(this.insertVideo(myVideo.data.properties, myVideo.data.uuid));
         }.pBind(this));
       }
+      
+      //previous and next link
+      if(data.pagination.previous_page){
+        var previousElement= $("<a href='#'>Previous</a>;");
+        var that = this;
+        previousElement.click(function(e){
+          e.preventDefault;
+          that._previousFavoriteVideoPage();
+        });
+        thumbsWrap.append(previousElement);
+      }
+      if(data.pagination.next_page){
+        var nextElement = $("<a href='#'>Next</a>");
+        var that = this;
+        nextElement.click(function(e){
+          e.preventDefault;
+          that._nextFavoriteVideoPage();
+        });
+        thumbsWrap.append(nextElement);
+      }
+      
       thumbsWrap.data('loaded', true);
       this.hideSpinner(thumbsWrap);
     }.pBind(this), { ajaxParams: { page: this.videosFavoritesContainer, favorites: 1 }});
@@ -610,5 +628,17 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     $("#my-favorites-videos").bind("dragstart", this.prepareRowDrag.pBind(this));
     this.createHandlers(this.domNode, 'click', {'my-favorites':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showFavorites(); }});
     this.setupVideoDetailsView();
-  }
+  },
+  
+  _previousFavoriteVideoPage: function(){
+    this.videosFavoritesContainer.empty();
+    this.videosFavoritePage -= 1;
+    this._loadFavoritesVideos();
+  },
+  
+  _nextFavoriteVideoPage: function(){
+    this.videosFavoritesContainer.empty();
+    this.videosFavoritePage += 1;
+    this._loadFavoritesVideos();
+  },
 });
