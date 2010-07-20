@@ -75,6 +75,15 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     firstPart.append(comment.content().replace(/\n/g, '<br />'));
     firstPart.append(jQuery('<br/>'));
     firstPart.append(comment.created_at() + ' by ' + comment.user.getUsername());
+    if(comment.user.uuid() === WebDoc.Application.getCurrentUser().uuid()) {
+      firstPart.append(jQuery('<br/>'));
+      var removeCommentLink = jQuery('<a/>', { 'href':'#', 'id':'remove_comment'}).text('remove');
+      removeCommentLink.bind('click', function() {
+        comment.discussion.removeComment(comment);
+      });
+      firstPart.append(removeCommentLink);
+
+    }
     secondPart.append(jQuery('<img/>', { 'src': comment.user.getAvatarThumbUrl(), 'style': 'width:50px; height:50px;' }));
 
     commentDomNode.append(firstPart).append(secondPart).append(jQuery('<div/>', {'style':'clear:both;'})).append(jQuery('<hr>'));
@@ -147,6 +156,11 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     ddd('[DiscussionsPanelController] comment added');
     this.discussionsDomNode.find("div[data-discussion-uuid='"+addedComment.discussion.uuid()+"']")
         .append(this.createCommentDomNode(addedComment));
+  },
+
+  commentRemoved: function(removedComment) {
+    ddd('[DiscussionsPanelController] comment removed');
+    this.discussionsDomNode.find("div[data-comment-uuid='"+removedComment.uuid()+"']").remove();
   },
 
   // fire by board controller

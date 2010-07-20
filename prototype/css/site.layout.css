@@ -5,8 +5,9 @@ html, body {
 }
 
 body {
-  min-width: 720px;
-  /* Set as position parent for absolutely positioned children */
+  /* Top padding makes room for the top logo bar */
+  padding-top: 3em;
+  /* Set as position parent */
   position: relative;
 }
 

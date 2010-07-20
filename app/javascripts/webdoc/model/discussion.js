@@ -56,6 +56,23 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
         this.listeners[i].commentAdded(addedComment);
       }
     }
+  },
+
+  removeComment: function(comment) {
+    comment.destroy();
+    var index = jQuery.inArray(comment, this.comments);
+    if (index > -1) {
+      this.comments.splice(index, 1);
+    }
+    this.fireCommentRemoved(comment);
+  },
+
+  fireCommentRemoved: function(removedComment) {
+    for (var i = 0; i < this.listeners.length; i++) {
+      if (this.listeners[i].commentRemoved) {
+        this.listeners[i].commentRemoved(removedComment);
+      }
+    }
   }
 
 });
