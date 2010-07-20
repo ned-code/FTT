@@ -4,7 +4,7 @@ class VideosController < ApplicationController
   # GET /videos
   def index
     per_page = 100
-    @videos = current_user.videos.paginate(:page => params[:page], :per_page => per_page)
+    @videos = current_user.videos.paginate(:page => params[:page], :per_page => per_page, :conditions => { :favorites => params[:favorites] })
     
     respond_to do |format|
       format.html
