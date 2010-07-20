@@ -10,16 +10,13 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
     this.currentPage = WebDoc.application.pageEditor.currentPage;
 
+    this._discussionsWithListener = [];
+
     this.domNode = jQuery('#discussions-panel');
     this.discussionsDomNode = this.domNode.find('#wd_discussions');
 
     this.currentPage.addListener(this);
     WebDoc.application.boardController.addCurrentPageListener(this);
-    // WebDoc.application.boardController.addSelectionDiscussionListener(this);
-
-    // For add discussion button
-    this.domNode.find(".wd_discussion_add").bind("dragstart", this.prepareCreateDiscussionDragStart.pBind(this));
-
   },
 
   buttonSelector: function() {
@@ -28,15 +25,10 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
   showCurrentPageDiscussions: function() {
     this.discussionsDomNode.empty();
-    
-    // WebDoc.application.pageEditor.currentPage.getDiscussions(function(discussions) {
-    //   if (discussions.length>0) {
-    //     for(var i=0; i<discussions.length; i++) {
-    //       this.discussionsDomNode.append(this.createDiscussionAndFormDomNode(discussions[i]));
-    //     }
-    //   }
-    // }.pBind(this));
-
+    for(var i=0; i<this._discussionsWithListener.length; i++){
+      this._discussionsWithListener[i].removeListener(this);
+    }
+    this._discussionsWithListener = [];
     var discussionViews = WebDoc.application.boardController.currentPageView().discussionViews;
     for (var discussionView in discussionViews) {
       this.discussionsDomNode.append(this.createDiscussionAndFormDomNode(discussionViews[discussionView].discussion));
@@ -59,7 +51,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   createDiscussionDomNode: function(discussion) {
     var newDiscussionsDomNode = jQuery('<div/>').attr('data-discussion-uuid', discussion.uuid());
     discussion.addListener(this);
-
+    this._discussionsWithListener.push(discussion);
     for(var i=0; i<discussion.comments.length; i++) {
       var comment = discussion.comments[i];
       newDiscussionsDomNode.append(this.createCommentDomNode(comment));
@@ -167,12 +159,6 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   currentPageChanged: function() {
     ddd('[DiscussionsPanelController] current page changed');
     this.showCurrentPageDiscussions();
-  },
-
-  // Button part
-
-  prepareCreateDiscussionDragStart: function(event) {
-    event.originalEvent.dataTransfer.setData("application/wd-discussion", $.toJSON({ action: 'create' }));
   }
 
 });
