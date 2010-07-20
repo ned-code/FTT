@@ -55,17 +55,17 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
 		}
 	},
 	
-	showMyContent: function(){
-		WebDoc.application.myContentController 
-		if(WebDoc.application.mediaBrowserController.myContentsController){
-			this.showTab('#media-browser-my-content');
-		}
-		else{
-			WebDoc.application.mediaBrowserController.myContentsController = new WebDoc.MyContentsController('media-browser-my-content', this);
-			this.showTab('#media-browser-my-content');
-		}
-	},
-		
+  showMyContent: function(){
+    WebDoc.application.myContentController 
+    if(WebDoc.application.mediaBrowserController.myContentsController){
+      this.showTab('#media-browser-my-content');
+    }
+    else{
+      WebDoc.application.mediaBrowserController.myContentsController = new WebDoc.MyContentsController('media-browser-my-content', this);
+      this.showTab('#media-browser-my-content');
+    }
+  },
+  	
 	showAppDetails: function(widgetData){
 		this._hideAll();
 		this.showApps();

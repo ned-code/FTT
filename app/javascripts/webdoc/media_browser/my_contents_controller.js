@@ -1,16 +1,16 @@
 WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       
   initialize: function($super, libraryId) {
-		$super(libraryId);
-		this.imageDetailsView = $('#media-browser-my-images-details #image-details');
-		this.videoDetailsView = $('#media-browser-my-favorites-videos-details #video-details');
-		this.setupImageDetailsView();
-		this.domNode = $('#media-browser-my-content');
-		this.createHandlers(this.domNode, 'click', this._myContentHandlers);
+    $super(libraryId);
+    this.imageDetailsView = $('#media-browser-my-images-details #image-details');
+    this.videoDetailsView = $('#media-browser-my-favorites-videos-details #video-details');
+    this.setupImageDetailsView();
+    this.domNode = $('#media-browser-my-content');
+    this.createHandlers(this.domNode, 'click', this._myContentHandlers);
     
     this.imagePage = 1;
     this.myImagesContainer = $('#media-browser-my-images');
-		
+    
     this._loadMyImages();  
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
     
@@ -26,18 +26,18 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   
   showMyImages: function(){
     this._hideAll();
-		$('#media-browser-my-images').show();
+    $('#media-browser-my-images').show();
   },
   
   showFavorites: function(){
     this._hideAll();
     if($('#media-browser-my-favorites').length){
-			$('#media-browser-my-favorites').show();
-		}
-		else{
-			this._loadMyFavorites();
-		  $('#media-browser-my-favorites').show();
-		}
+      $('#media-browser-my-favorites').show();
+    }
+    else{
+      this._loadMyFavorites();
+      $('#media-browser-my-favorites').show();
+    }
   },
   
   showUploader: function(){
@@ -73,7 +73,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
         case "set_image_as_bg_action": 
           var page = WebDoc.application.pageEditor.currentPage;
           var imgUrl = this.detailsViewImg.attr("src");
-					page.setBackground(page.getBackgroundColor(),"url("+imgUrl+")", "no-repeat", "center center");
+          page.setBackground(page.getBackgroundColor(),"url("+imgUrl+")", "no-repeat", "center center");
           // Jump to page inspector, where you can set how the background image is displayed
           WebDoc.application.rightBarController.showPageInspector();
           break;
@@ -99,25 +99,25 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
             });
           }
           break;
-				case "remove_image_from_favorites": //delete an uploaded image from My favorites
-	        if (confirm ("Are you sure?")) {
-	          link.hide();
-	          li.append(info);
+        case "remove_image_from_favorites": //delete an uploaded image from My favorites
+          if (confirm ("Are you sure?")) {
+            link.hide();
+            li.append(info);
         
-	          $.ajax({
-	            type: "DELETE",
-	            url: "/images/"+properties.uuid,
-	            success: function(serverData) {
-	              li.remove();
-	              //remove thumbnail from the my images' list
-	              $('#' + properties.uuid).remove();
-	              this.showFavorites();
-	            }.pBind(this),
-	            complete: function() {
-	            }.pBind(this)
-	          });
-	        }
-	      	break;
+            $.ajax({
+              type: "DELETE",
+              url: "/images/"+properties.uuid,
+              success: function(serverData) {
+                li.remove();
+                //remove thumbnail from the my images' list
+                $('#' + properties.uuid).remove();
+                this.showFavorites();
+              }.pBind(this),
+              complete: function() {
+              }.pBind(this)
+            });
+          }
+          break;
       }
 
     }.pBind(this));
@@ -445,7 +445,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     // this.imagesUploader.unloadSWFUpload();
   },
 
-	_loadMyImages: function(){
+  _loadMyImages: function(){
     var thumbsWrap = this.myImagesContainer.find(".thumbnails");
     this.showSpinner(thumbsWrap);
           
@@ -462,29 +462,68 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
           myImagesList.append(this.buildThumbnail(webDocImage.data.properties, webDocImage.data.uuid));
         }.pBind(this));
       }
+      ddd('imagelist data');
+      ddd(data);
+      if(data.pagination.previous_page){
+        var previousElement= $("<a href='#'>Previous</a>;");
+        var that = this;
+        previousElement.click(function(e){
+          e.preventDefault;
+          that._previousPage();
+        });
+        thumbsWrap.append(previousElement);
+      }
+      if(data.pagination.next_page){
+        var nextElement = $("<a href='#'>Next</a>");
+        var that = this;
+        nextElement.click(function(e){
+          e.preventDefault;
+          that._nextPage();
+        });
+        
+        thumbsWrap.append(nextElement);
+      }
+      
       thumbsWrap.data('loaded', true);
       this.hideSpinner(thumbsWrap);
     }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 0 }});
     
     $("#my-images-library ul li a").live("click", function (event) {
-			event.preventDefault();
+      event.preventDefault();
       var properties = $(event.target).parent().find('img').data("properties");
       this.showDetailsView(properties,false);
     }.pBind(this));
     
   },
-	
-	_loadMyFavorites: function(){
-		var container = $("<div id='media-browser-my-favorites' class='my-content-tab>");
-		container.append($("<div id='my-favorites-images' class='thumbnails'>"));
-		container.append($("<div id='my-favorites-videos' class='thumbnails'>"));
-		this.domNode.append(container);
-		
-		this.imagesFavoritesContainer = $('#my-favorites-images');
+  
+  _nextPage: function(){
+    this.imagePage += 1;
+    this._loadMyImages();
+    this._clearMyImages();
+  },
+  
+  _previousPage: function(){
+    this.imagePage -= 1;
+    this._loadMyImages();
+    this._clearMyImages();
+  },
+  
+  _clearMyImages: function(){
+    var thumbsWrap = this.myImagesContainer.find(".thumbnails");
+    thumbsWrap.empty();
+  },
+  
+  _loadMyFavorites: function(){
+    var container = $("<div id='media-browser-my-favorites' class='my-content-tab>");
+    container.append($("<div id='my-favorites-images' class='thumbnails'>"));
+    container.append($("<div id='my-favorites-videos' class='thumbnails'>"));
+    this.domNode.append(container);
+    
+    this.imagesFavoritesContainer = $('#my-favorites-images');
     this.videosFavoritesContainer = $('#my-favorites-videos');
-		
+    
     this._loadFavoritesImages();
-		this._loadFavoritesVideos();
+    this._loadFavoritesVideos();
   },
 
 	_loadFavoritesImages: function(){
