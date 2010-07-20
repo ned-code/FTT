@@ -16,7 +16,6 @@
     <meta content="chrome=1" http-equiv="X-UA-Compatible">
     
     <title>webdoc - alpha - <%= yield :title %></title>
-    
     <%= include_stylesheets :common, :media => 'all' %>
     <%= include_stylesheets :page_editor, :media => 'all' %>
   </head>
@@ -58,9 +57,7 @@
       });      
       WebDoc.Application.start();
     </script>
-    
-    <%= render :partial => "layouts/feedback"; %>
     <%= render :partial => "layouts/google_analytics"; %>
-    
+    <%= render :partial => "layouts/feedback"; %>    
   </body>
 </html>

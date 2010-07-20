@@ -97,7 +97,9 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
         if(commentContent.val()) {
           button.hide();
           commentContent.attr('disabled', 'disabled');
-
+          if (window._gaq) {
+            _gaq.push(['_trackEvent', 'discussion', 'reply_xy_comment', WebDoc.application.pageEditor.currentDocument.uuid()]);
+          }
           var newComment = new WebDoc.Comment(null, discussion);
           newComment.setContent( commentContent.val(), true );
 

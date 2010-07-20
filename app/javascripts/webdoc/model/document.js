@@ -310,7 +310,9 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     if (newTitle !== '' || newTitle !== null) {
       extraParams = { 'title': newTitle }; 
     }
-
+    if (window._gaq) {
+      _gaq.push(['_trackEvent', 'webdoc_create', 'webdoc_copy', this.uuid()]);
+    }    
     WebDoc.ServerManager.sendObject(
             this,
             function(newDocument) {

@@ -130,11 +130,17 @@ WebDoc.DocumentShareController = $.klass({
         accesses_readers[i] = recipients_emails[i];
       }
     }
+    if (window._gaq) {
+      _gaq.push(['_trackEvent', 'share', 'coeditor_invite', this.document.uuid(), accesses_readers.length]);
+    }  
     var access_content = { role: "reader", recipients: accesses_readers, message: message };
     return { accesses : $.toJSON(access_content) };
   },
   
   _shareDocument: function() {
+    if (window._gaq) {
+      _gaq.push(['_trackEvent', 'share', 'share_document', this.document.uuid()]);
+    }     
     this.document.share();
     this.document.save(function(persistedDoc) {
         WebDoc.application.documentEditor.documentList.refreshDocument(persistedDoc);

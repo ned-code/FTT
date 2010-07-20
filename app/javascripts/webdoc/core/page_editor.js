@@ -173,6 +173,9 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   },
   
   prevPage: function() {
+    if (window._gaq) {
+     _gaq.push(['_trackEvent', 'document_browse', 'previous_page', this.currentDocument.uuid()]);
+    }    
     var previousPage = this.currentDocument.previousPage(this.currentPage);
     if (previousPage) {
       this.loadPage(previousPage);
@@ -180,6 +183,9 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   },
   
   nextPage: function() {
+    if (window._gaq) {
+     _gaq.push(['_trackEvent', 'document_browse', 'next_page', this.currentDocument.uuid()]);
+    }
     var nextPage = this.currentDocument.nextPage(this.currentPage);
     if (nextPage) {
       this.loadPage(nextPage);
