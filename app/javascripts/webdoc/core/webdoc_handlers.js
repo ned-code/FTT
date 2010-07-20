@@ -9,8 +9,11 @@ WebDoc.handlers = {
     
     this.addDocumentHandlers( 'click', this._documentHandlers );
     this.addPanelHandlers( 'click', this._panelHandlers );
-		this.addMediaBrowserHandlers( 'click', this._mediaBrowserHandlers )
+		this.addMediaBrowserHandlers( 'click', this._mediaBrowserHandlers );
     this.addCenterCellHandlers();
+
+    jQuery(".wd_discussion_add").bind("dragstart", this._prepareCreateDiscussionDragStart.pBind(this));
+    
     // Global form validation
     jQuery(document)
     .delegate( 'input, textarea', 'keyup', function(e) {
@@ -143,6 +146,10 @@ WebDoc.handlers = {
     'media-browser-web': 	function(e) { WebDoc.application.mediaBrowserController.showWeb();}, 
     'media-browser-packages': 	function(e) { WebDoc.application.mediaBrowserController.showPackages();}, 
     'media-browser-apps': 	function(e) { WebDoc.application.mediaBrowserController.showApps();}, 
-    'media-browser-my-content': 	function(e) { WebDoc.application.mediaBrowserController.showMyContent();}, 
+    'media-browser-my-content': 	function(e) { WebDoc.application.mediaBrowserController.showMyContent();} 
+  },
+
+  _prepareCreateDiscussionDragStart: function(event) {
+    event.originalEvent.dataTransfer.setData("application/wd-discussion", $.toJSON({ action: 'create' }));
   }
 };

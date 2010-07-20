@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <!--[if lte IE 8]>
+  <script type="text/javascript">
+    // Make IE see html5 elements
+    document.createElement('header');
+    document.createElement('section');
+  </script>
+  <![endif]-->
+  
+  <link href="css/webcss/reset.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="css/webcss/layout.css" rel="stylesheet" type="text/css"/>
+  <link href="css/webcss/layer.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="css/webcss/index.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="css/webcss/column.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="css/webcss/panel.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="css/index.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="css/panel.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="css/thumb.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="css/site.typography.css" rel="stylesheet" type="text/css"/>
+  
+  <style>
+    .editor {
+      background: orange;
+    }
+    .tools_panel,
+    .controls_panel {
+      background: yellow;
+    }
+    .browser_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .inspector_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .comments_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .sharing_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .pages_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .activity_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    h3 {
+      font-weight: bold;
+      color: white;
+      background: rgba(0,0,0,0.4);
+      text-align: center;
+      line-height: 2em;
+      height: 2em;
+      
+    }
+  </style>
+</head>
+<body class="full_view">
+  
+  <div class="editor_wrap wrap">
+    <div class="editor layer">
+      
+    </div>
+    
+    <div class="side_panel panel">
+      <h2>Authors</h2>
+      
+      <ul class="horizontal author_index index">
+        <li><a href="/" class="author_thumb thumb">author</a></li>
+        <li><a href="/" class="author_thumb thumb">author</a></li>
+        <li><a href="/" class="author_thumb thumb">author</a></li>
+        <li><a href="/" class="author_thumb thumb">author</a></li>
+        <li><a href="/" class="author_thumb thumb">author</a></li>
+        <li><a href="/" class="author_thumb thumb">author</a></li>
+      </ul>
+      
+      <h2>Currently on this webdoc</h2>
+      
+      <ul class="horizontal reader_index index">
+        <li><a href="/" class="user_thumb thumb">User Name</a></li>
+        <li><a href="/" class="user_thumb thumb">User Name</a></li>
+        <li><a href="/" class="user_thumb thumb">User Name</a></li>
+        <li><a href="/" class="user_thumb thumb">User Name</a></li>
+        <li><a href="/" class="user_thumb thumb">User Name</a></li>
+        <li><a href="/" class="user_thumb thumb">User Name</a></li>
+      </ul>
+      
+      <h2>Statistics</h2>
+      
+      <div>views 2500</div>
+      
+      <h2>Recent Activity</h2>
+      
+      <ul class="vertical message_index index">
+        <li><a href="/" class="user_thumb thumb">User Name</a><p class="message">Message</p></li>
+        <li><a href="/" class="user_thumb thumb">User Name</a><p class="message">Message</p></li>
+        <li><a href="/" class="user_thumb thumb">User Name</a><p class="message">Message</p></li>
+        <li><a href="/" class="user_thumb thumb">User Name</a><p class="message">Message</p></li>
+        <li><a href="/" class="user_thumb thumb">User Name</a><p class="message">Message</p></li>
+        <li><a href="/" class="user_thumb thumb">User Name</a><p class="message">Message</p></li>
+      </ul>
+      
+      <h2>More from these authors</h2>
+      
+      <ul class="vertical thumbs_index index">
+        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
+        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
+        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
+        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
+        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
+        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
+      </ul>
+    </div>
+
+    <div class="tools_panel panel">
+      <ul class="horizontal buttons_index index">
+        <li>
+          <a class="panel_button button" href="#toggle_sharing_panel" title="Toggle Sharing Panel">Sharing Panel</a>
+        </li><li>
+          <a class="panel_button button" href="#toggle_pages_panel" title="Toggle Pages Panel">Pages Panel</a>
+        </li><li>
+          <a class="panel_button button" href="#toggle_activity_panel" title="Toggle Activity Panel">Activity Panel</a>
+        </li><li>
+          <a class="panel_button button" href="#toggle_comments_panel" title="Toggle Comments Panel">Comments Panel</a>
+        </li><li>
+          <a class="panel_button button" href="#toggle_inspector_panel" title="Toggle Inspector Panel">Inspector Panel</a>
+        </li><li>
+          <a class="panel_button button" href="#toggle_browser_panel" title="Toggle Browser Panel">Browser Panel</a>
+        </li><li>
+          <a class="panel_button button" href="#toggle_author_panel" title="Toggle Author Panel">Author Panel</a>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="controls_panel panel">
+      <ul class="horizontal edit_tools_index tools_index index" id="edit_tools">
+        <li>
+          <a href="#full" title="Full view">Full view</a>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="browser_panel panel">
+      <h3>Browser</h3>
+    </div>
+    
+    <div class="inspector_panel panel">
+      <h3>Inspector</h3>
+    </div>
+    
+    <div class="comments_panel panel">
+      <h3>Comments</h3>
+    </div>
+    
+    <div class="activity_panel panel">
+      <h3>Activity</h3>
+    </div>
+    
+    <div class="pages_panel panel">
+      <h3>Pages</h3>
+    </div>
+    
+    <div class="sharing_panel panel">
+      <h3>Sharing</h3>
+    </div>
+  </div>
+
+  <script src="../public/javascripts/jquery-1.4.2.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var sidePanels,
+        footPanels;
+    
+    function togglePanels(obj, initKey){
+      var key,
+          currentKey = initKey || false;
+      
+      for (key in obj) {
+        obj[key].toggle
+        .bind('click', (function(obj, key){
+          return function(e){
+            e.preventDefault();
+            
+            console.log(key + " " + currentKey);
+            
+            if (key === currentKey) {
+              obj[key].panel.removeClass('active');
+              obj[key].toggle.removeClass('active');
+              
+              currentKey = false;
+            }
+            else {
+              obj[key].panel.addClass('active');
+              obj[key].toggle.addClass('active');
+              
+              if (currentKey) {
+                obj[currentKey].panel.removeClass('active');
+                obj[currentKey].toggle.removeClass('active');
+              }
+              
+              currentKey = key;
+            }
+          };
+        })(obj, key)
+      )}
+    }
+    
+    jQuery(document).ready(function(){
+      
+      sidePanels = {
+        author: {
+          panel: jQuery('.side_panel'),
+          toggle: jQuery('a[href=#toggle_author_panel]')
+        },
+        browser: {
+          panel: jQuery('.browser_panel'),
+          toggle: jQuery('a[href=#toggle_browser_panel]')
+        },
+        inspector: {
+          panel: jQuery('.inspector_panel'),
+          toggle: jQuery('a[href=#toggle_inspector_panel]')
+        },
+        comments: {
+          panel: jQuery('.comments_panel'),
+          toggle: jQuery('a[href=#toggle_comments_panel]')
+        },
+        activity: {
+          panel: jQuery('.activity_panel'),
+          toggle: jQuery('a[href=#toggle_activity_panel]')
+        }
+      };
+      
+      footPanels = {
+        pages: {
+          panel: jQuery('.pages_panel'),
+          toggle: jQuery('a[href=#toggle_pages_panel]')
+        },
+        sharing: {
+          panel: jQuery('.sharing_panel'),
+          toggle: jQuery('a[href=#toggle_sharing_panel]')
+        }
+      };
+      
+      togglePanels(sidePanels);
+      togglePanels(footPanels);
+    });
+    
+  </script>
+</body>
+</html> 
