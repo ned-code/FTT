@@ -146,7 +146,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
       
       if (data.widgets.length === 0) {
         noApps = $("<span>").addClass('no_items').text('No Apps');
-        appsThumbWrap.append(appsThumbWrap);
+        appsThumbWrap.append(noApps);
       }
       else {   
         appsList = $("<ul/>", {
