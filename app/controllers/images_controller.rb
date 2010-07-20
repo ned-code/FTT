@@ -4,10 +4,9 @@ class ImagesController < ApplicationController
   # GET /images
   def index
     per_page = 100
-    @images = current_user.images.paginate(:page => params[:page], :per_page => per_page)
+    @images = current_user.images.paginate(:page => params[:page], :per_page => per_page, :conditions => { :favorites => params[:favorites] })
     
     respond_to do |format|
-      format.html
       format.json { render :json => { 
         :images => @images,
         :pagination => {
@@ -36,10 +35,10 @@ class ImagesController < ApplicationController
   def create
     @image = current_user.images.build(params[:image])
     @image.uuid = params[:image][:uuid] 
+    @image.favorites = params[:image][:favorites]
     
     respond_to do |format|
       if @image.save
-        format.html { render :json => @image }
         format.json { render :json => @image }
       else
         format.json { render :json => @image, :status => 203 }

@@ -400,16 +400,17 @@ body {
 /* Apps index */
 
 .apps-index {
-  /* A quick hack to get three thumbs in a row */
+  /* A quick hack to get three thumbs in a row 
   margin-left: -8px;
   margin-right: -14px;
+  */
 }
 
 .apps-index a {
   color: black;
-  padding-top: 96px;
-  height: auto;
-  width: 96px;
+  padding-top: 92px;
+  height: 45px;
+  width: 92px;
   margin-bottom: 6px;
   line-height: 1.25;
   -webkit-background-size: 80px 80px;
@@ -423,7 +424,7 @@ body {
   -webkit-user-drag: element;
 }
 .apps-index a:hover {
-  background-color: #aaaaaa;
+  background-color: rgba(167, 175, 181, 1);
 }
 .apps-index a .title {
   line-height: ;
@@ -551,10 +552,6 @@ body {
 
 
 /* == Item view = */
-.drag_handle {
-  position:absolute;
-  z-index:1000000;
-}
 .drawing_handle {
   position:absolute;
   z-index:1000000;    

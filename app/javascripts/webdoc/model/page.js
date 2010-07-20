@@ -13,6 +13,8 @@ WebDoc.Page = $.klass(WebDoc.Record,
   CLASS_TYPE_COLOR: 'color',
   CLASS_TYPE_FONT: 'font',
   CLASS_TYPE_OTHER: 'other',
+
+	CSS_AUTHORIZED_SCOPE: [ "background", "border", "color", "font", "other"],
     
   initialize: function($super, json, document, externalPageUrl) {
     // initialize relationship before super.
@@ -87,6 +89,13 @@ WebDoc.Page = $.klass(WebDoc.Record,
   
   applyCss: function(newCss) {   
     if (newCss != this.data.data.css) {
+      
+      var oldCss = jQuery.extend({}, this.data.data.css);
+      var that = this;
+      WebDoc.application.undoManager.registerUndo(function() {
+        that.applyCss(oldCss);
+      }.pBind(this));
+      
       this.data.data.css = newCss;
       this.fireObjectChanged({ modifedAttribute: 'css' });
       this.save();
@@ -205,17 +214,18 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
 
   setBackgroundColor: function(backgroundColor) {
-    var css = this.data.data.css;
-    
-    if( css.backgroundColor != backgroundColor ) {
-      css.backgroundColor = backgroundColor;
-      this.fireObjectChanged({ modifedAttribute: 'css.backgroundColor' });
-      this.save();
-    }
+    this.removeBackgroundGradient();
+    this.data.data.css.backgroundColor = backgroundColor;
+    this.fireObjectChanged({ modifedAttribute: 'css.backgroundColor' });
+    this.save();
   },
 
   setBackgroundImage: function(backgroundUrl) {
     if(this.data.data.css.backgroundImage != backgroundUrl) {
+      
+      if(this.hasBackgroundGradient()){
+        this.removeBackgroundGradient();
+      }
       var old_background = this.data.data.css.backgroundImage;
       this.data.data.css.backgroundImage = backgroundUrl;  
       
@@ -246,7 +256,61 @@ WebDoc.Page = $.klass(WebDoc.Record,
       this.save();
     }
   },
+
+  setBackground: function(backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition){
+    this.setBackgroundColor(backgroundColor);
+    this.setBackgroundImage(backgroundImage);
+    this.setBackgroundRepeatMode(backgroundRepeat);
+    this.setBackgroundPosition(backgroundPosition);
+  },
+
+  getBackgroundPosition: function(){
+    if(this.hasCss()){
+      return this.data.data.css.backgroundPosition;
+    }
+    else{ return '' ;}
+  },
   
+  getBackgroundRepeatMode: function(){
+    if(this.hasCss()){
+      return this.data.data.css.backgroundRepeat;
+    }
+    else{ return ''; }
+  },
+  
+  getBackgroundColor: function(){
+    if(this.hasCss()){
+      return this.data.data.css.backgroundColor;
+    }
+    else{ return ''; }
+  },
+  
+  getBackgroundColor: function(){
+    if(this.hasCss()){
+      return this.data.data.css.backgroundColor;
+    }
+    else{ return ''; }
+  },
+  
+  getBackgroundImage: function(){
+    if(this.hasBackgroundImage()){
+      return this.data.data.css.backgroundImage;
+    }
+    else{ return ''; }
+  },
+  
+  setBackgroundGradient: function(gradient){
+    this.removeBackgroundImage();
+    this.data.data.css.backgroundGradient = gradient;
+    this.fireObjectChanged({ modifedAttribute: 'css.backgroundGradient' });
+    this.save();
+  },
+  
+  getBackgroundGradient: function(){
+    if(this.hasBackgroundGradient()){ return this.data.data.css.backgroundGradient; }
+    else{ return ''; }
+  },
+
   setExternalPageUrl: function(url) {
     WebDoc.InspectorFieldsValidator.validateUrl(url);
     if(this.data.data.externalPageUrl != url) {
@@ -263,9 +327,20 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.fireObjectChanged({ modifedAttribute: 'css.background' });
     this.save();    
   },
+
+  removeBackgroundGradient: function(){
+    this.data.data.css.backgroundGradient = '';
+    this.fireObjectChanged({ modifedAttribute: 'css.background' });
+    this.save();
+  },
   
   hasBackgroundImage: function() {
-    return this.data.data.css.backgroundImage && this.data.data.css.backgroundImage;
+    return this.hasCss() && this.data.data.css.backgroundImage;
+  },
+
+  hasCss: function(){
+    if(this.data.data.css){ return true; }
+    else{ return false;}
   },
   
   initSize: function() {
@@ -289,6 +364,17 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }    
   },
   
+  hasBackgroundGradient: function(){
+    var backgroundGradient = false;
+    if(this.hasCss() && this.data.data.css.backgroundGradient){
+      if(this.data.data.css.backgroundGradient != '' || this.data.data.css.backgroundGradient != ""){
+        backgroundGradient = true;
+      }
+    }
+    return backgroundGradient;
+  },
+  
+
   refresh: function($super, json, onlyMissingValues) {
     this._layout = undefined;
     $super(json, onlyMissingValues);
@@ -682,6 +768,69 @@ WebDoc.Page = $.klass(WebDoc.Record,
       this.save();
     }
   },
+  
+  setStyle: function(newStyle, scope){    
+    if(scope){
+      if(scope == 'background'){
+        //background is stored in the css hash properties, not in style hash
+        var oldCss = jQuery.extend({}, this.data.data.css);
+        var that = this;
+        WebDoc.application.undoManager.registerUndo(function() {
+          that.applyCss(oldCss);
+        }.pBind(this));
+        
+        var backgroundArray = newStyle.split(';');
+        var backgroundProperty;
+        var backgroundGradient = '';
+        
+        for(i=0;i<backgroundArray.length;i++){
+          backgroundProperty = backgroundArray[i].split(':');
+          if(backgroundProperty[0] == 'background-image'){
+            if(this._backgroundImageWithGradient(backgroundProperty[1])){
+              backgroundGradient += backgroundProperty[0] + ':' + backgroundProperty[1] + ';';
+            }
+            else{
+              this.setBackgroundImage(backgroundProperty[1]);
+            }
+          }
+          else if(backgroundProperty[0] == 'background-color'){
+            this.setBackgroundColor(backgroundProperty[1]);
+          }
+        }
+        if(backgroundGradient != ''){
+          this.setBackgroundGradient(backgroundGradient);
+        }
+      }
+    }
+    else{
+      this.data.data.style = newStyle;
+      this.save();
+      this.fireObjectChanged({ modifedAttribute: 'css' });
+    }
+  },
+  
+  getStyle: function(){
+    return this.data.data.style;
+  },
+  
+  getStyleString: function(){
+    var styleHash = this.getStyle();
+    var cssString = '';
+    
+    if(styleHash){
+      for(i=0; i < this.CSS_AUTHORIZED_SCOPE.length; i++){
+        if(styleHash[this.CSS_AUTHORIZED_SCOPE[i]]){
+          cssString += styleHash[this.CSS_AUTHORIZED_SCOPE[i]];
+        }
+      }
+    }
+    return cssString;
+  },
+  
+  _backgroundImageWithGradient: function(backgroundImage){
+    if(backgroundImage.match("gradient")){ return true; }
+    else{ return false; }
+  },
 
   save: function($super, callBack, withRelationships, synch) {
     $super(function(page, status) {
@@ -711,6 +860,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
 
   removeDiscussion: function(discussion) {
+    discussion.destroy();
     var index = jQuery.inArray(discussion, this.discussions);
     if (index > -1) {
       this.discussions.splice(index, 1);

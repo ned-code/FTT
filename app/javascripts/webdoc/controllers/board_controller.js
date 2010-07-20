@@ -1124,6 +1124,9 @@ WebDoc.BoardController = jQuery.klass({
   // insert a discustion with a position with left and top attributes
   insertDiscussion: function(position) {
     ddd('[BoardController] insert discussion');
+     if (window._gaq) {
+       _gaq.push(['_trackEvent', 'discussion', 'create_xy_comment', WebDoc.application.pageEditor.currentDocument.uuid()]);
+     }
     var newDiscussion = new WebDoc.Discussion(null, 'page', WebDoc.application.pageEditor.currentPage.uuid());
     newDiscussion.setPosition(position, true);
     newDiscussion.isNew = true;
@@ -1135,7 +1138,6 @@ WebDoc.BoardController = jQuery.klass({
   removeDiscussion: function(discussion) {
     ddd('[BoardController] remove discussion');
     this._currentPage.removeDiscussion(discussion);
-    discussion.destroy();
   },
 
   selectDiscussionView: function(discussionView) {

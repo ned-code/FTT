@@ -425,6 +425,9 @@ WebDoc.PageBrowserController = $.klass({
   
   selectPage: function( page ) {
     ddd('[pageBrowserController] selectPage');
+    if (window._gaq) {
+     _gaq.push(['_trackEvent', 'document_browse', 'select_page', this._document.uuid()]);
+    }    
     WebDoc.application.pageEditor.loadPage( page );
   },
 

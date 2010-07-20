@@ -306,7 +306,7 @@ en:
           title: "Video"
           add_to_page: "Add to page"
           drag_handle: "drag and drop to add"
-          show_on: "Show photo page on *"
+          show_on: "Show video on *"
           remove_from_my_videos: "Remove from My Videos"
           delete: "Delete video"
           add_to_my_videos: "Add to My Videos"
@@ -343,6 +343,62 @@ en:
         
     social_panel:
       title: "Social panel"
+  
+  images:
+    index:
+      add_image: "Add Images"
+      upload: "Upload"
+      cancel_uplad: "Cancel upload"
+      buttons:
+        back: "Back"
+        upload: "Upload"
+        cancel_uplad: "Cancel upload"
+        
+  media_browser:
+    home:
+      images: 
+        title: "Images"
+        add_image: "Add Images"
+        my_images: "My images"
+        web: "Web"
+        web_detail: "Find images on the web"
+        show_details: "Show image details"
+        services:
+          flickr: "Flickr"
+          google: "Google Images"
+        add_images_view:
+          title: "Add Images"
+          choose_upload_image: "Choose image(s) to upload"
+        buttons:
+          upload: "Upload"
+          cancel_upload: "Cancel upload"
+      buttons:
+        search: "Search"
+        back: "Back"
+      videos: 
+        title: "Videos"
+        my_videos: "My videos"
+        web: "Web"
+        web_detail: "Find videos on the web"
+        show_details: "Show video details"
+        services:
+          youtube: "Youtube"
+          vimeo: "Vimeo"
+        detail_view:
+          title: "Video"
+          add_to_page: "Add to page"
+          drag_handle: "drag and drop to add"
+          show_on: "Show video on *"
+          remove_from_my_videos: "Remove from My Videos"
+          delete: "Delete video"
+          add_to_my_videos: "Add to My Videos"
+      apps:
+        title: "Apps"
+        my_apps: "My apps"
+        show_details: "Show app details"
+        detail_view:
+          title: "App"
+          add_to_page: "Add to page"
   
   datastore:
     index:

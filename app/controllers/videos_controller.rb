@@ -3,8 +3,8 @@ class VideosController < ApplicationController
   
   # GET /videos
   def index
-    per_page = 5
-    @videos = current_user.videos.paginate(:page => params[:page], :per_page => per_page)
+    per_page = 100
+    @videos = current_user.videos.paginate(:page => params[:page], :per_page => per_page, :conditions => { :favorites => params[:favorites] })
     
     respond_to do |format|
       format.html
@@ -36,12 +36,13 @@ class VideosController < ApplicationController
   def create
     @video = current_user.videos.build(params[:video])
     @video.uuid = params[:video][:uuid]
-
+    @video.favorites = params[:video][:favorites]
+    
     respond_to do |format|
       if @video.save
-        format.json{ render :json => @video }
+        format.json { render :json => @video }
       else
-        format.json{ render :status => 503 }
+        format.json { render :status => 503 }
       end
     end
   end

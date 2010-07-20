@@ -115,9 +115,10 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
             node.validate({
               pass: function() {
                 node.addClass('loading');
-
                 var newDoc = new WebDoc.Document();
-
+                if (window._gaq) {
+                  _gaq.push(['_trackEvent', 'webdoc_create', 'webdoc_create', newDoc.uuid()]);
+                } 
                 newDoc.setTitle( infoDialogTitleNode.val(), true );
                 newDoc.setDescription( infoDialogDescriptionNode.val(), true);
                 newDoc.setCategory( infoDialogCategoryNode.val(), true);

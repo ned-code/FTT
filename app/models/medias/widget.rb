@@ -51,7 +51,7 @@ class Medias::Widget < Media
   
 private
   
-  # before_save
+  # before_create
   def set_attributes
     assign_uuid
     self.properties = properties_from_config_dom(config_dom, attachment_root_url)
@@ -60,9 +60,13 @@ private
     extract_files_from_zip_file
   end
   
-  # before_save
+  # before_update
   def update_new_file
     begin
+      if(attachment_queued_for_write.nil?) #don't update the file if there isn't one
+        return true
+      end
+      
       new_version = config_dom.root.attribute("version").to_s
       if version.present? && new_version.present? && new_version > version
         self.properties = properties_from_config_dom(config_dom, attachment_root_url)
