@@ -60,7 +60,7 @@ WebDoc.DiscussionView = $.klass({
   },
 
   destroy: function() {
-    this.discussion.removeListener();
+    this.discussion.removeListener(this);
   },
 
   _initDrag: function() {

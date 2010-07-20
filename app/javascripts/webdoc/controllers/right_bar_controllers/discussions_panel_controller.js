@@ -10,6 +10,8 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
     this.currentPage = WebDoc.application.pageEditor.currentPage;
 
+    this._discussionsWithListener = [];
+
     this.domNode = jQuery('#discussions-panel');
     this.discussionsDomNode = this.domNode.find('#wd_discussions');
 
@@ -28,15 +30,10 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
   showCurrentPageDiscussions: function() {
     this.discussionsDomNode.empty();
-    
-    // WebDoc.application.pageEditor.currentPage.getDiscussions(function(discussions) {
-    //   if (discussions.length>0) {
-    //     for(var i=0; i<discussions.length; i++) {
-    //       this.discussionsDomNode.append(this.createDiscussionAndFormDomNode(discussions[i]));
-    //     }
-    //   }
-    // }.pBind(this));
-
+    for(var i=0; i<this._discussionsWithListener.length; i++){
+      this._discussionsWithListener[i].removeListener(this);
+    }
+    this._discussionsWithListener = [];
     var discussionViews = WebDoc.application.boardController.currentPageView().discussionViews;
     for (var discussionView in discussionViews) {
       this.discussionsDomNode.append(this.createDiscussionAndFormDomNode(discussionViews[discussionView].discussion));
@@ -59,7 +56,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   createDiscussionDomNode: function(discussion) {
     var newDiscussionsDomNode = jQuery('<div/>').attr('data-discussion-uuid', discussion.uuid());
     discussion.addListener(this);
-
+    this._discussionsWithListener.push(discussion);
     for(var i=0; i<discussion.comments.length; i++) {
       var comment = discussion.comments[i];
       newDiscussionsDomNode.append(this.createCommentDomNode(comment));

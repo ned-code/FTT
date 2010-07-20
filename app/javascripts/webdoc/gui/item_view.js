@@ -283,7 +283,7 @@ WebDoc.ItemView = $.klass({
   },
   
   destroy: function() {
-    this.item.removeListener();
+    this.item.removeListener(this);
   },
   
   viewDidLoad: function() {
