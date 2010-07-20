@@ -17,11 +17,6 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
     this.currentPage.addListener(this);
     WebDoc.application.boardController.addCurrentPageListener(this);
-    // WebDoc.application.boardController.addSelectionDiscussionListener(this);
-
-    // For add discussion button
-    this.domNode.find(".wd_discussion_add").bind("dragstart", this.prepareCreateDiscussionDragStart.pBind(this));
-
   },
 
   buttonSelector: function() {
@@ -164,12 +159,6 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   currentPageChanged: function() {
     ddd('[DiscussionsPanelController] current page changed');
     this.showCurrentPageDiscussions();
-  },
-
-  // Button part
-
-  prepareCreateDiscussionDragStart: function(event) {
-    event.originalEvent.dataTransfer.setData("application/wd-discussion", $.toJSON({ action: 'create' }));
   }
 
 });
