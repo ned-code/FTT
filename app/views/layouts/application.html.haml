@@ -6,6 +6,7 @@
     %title= "webdoc - alpha #{yield(:title)}"
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :application, :media => 'all'
+    = render :partial => "layouts/google_analytics"
 
   %body{ :class => controller_name }
     = render :partial => "layouts/main_toolbar"
@@ -20,5 +21,4 @@
       WebDoc.Application.currentUser = new WebDoc.User(#{ raw current_user.to_json.gsub('/script','/sscript') });
       WebDoc.Application.start();
       
-    = render :partial => "layouts/feedback";
-    = render :partial => "layouts/google_analytics"
+    = render :partial => "layouts/feedback";    
