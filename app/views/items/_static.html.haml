@@ -1,4 +1,7 @@
-.item_warp{ :id => item.uuid, :style => "#{build_css_string(item.data['css'])} position:absolute;" }
+- cssString = build_css_string(item.data['css'])
+- if item.data['style']
+  - cssString +=  build_css_string(item.data['style'])
+.item_warp{ :id => item.uuid, :style => "#{cssString} position:absolute;" }
   - case item.media_type
     - when 'text'
       = render 'items/statics/text', :item => item

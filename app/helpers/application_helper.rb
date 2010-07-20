@@ -3,8 +3,17 @@ module ApplicationHelper
     css_string = ''
     css_hash.each do |property, value|
       #convert propertyCapital to property-capital
-      propertyArray = property.split(//)
-      propertyCharArray.each { |c| }
+      propertyCharArray = property.split(//)
+      i = 0
+      for char in propertyCharArray do
+        if(char.upcase!.nil?)
+          property = "#{property[0..(i-1)]}-#{property[i..(property.length-1)]}"
+          break
+        end
+        i += 1
+      end
+      
+      #build the string
       css_string += "#{property}:#{value};"
     end
     css_string
