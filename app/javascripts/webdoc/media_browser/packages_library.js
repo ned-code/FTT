@@ -49,7 +49,7 @@ WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
 
 		$("#packages-list ul li a").live("click", function (event) {
 			event.preventDefault();
-			var uuid = $(event.target).attr('href');
+			var uuid = $(event.target).closest('a').attr('href');
       this._showDetailsView(uuid);
     }.pBind(this));
 	},
