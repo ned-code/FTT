@@ -617,7 +617,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       
       thumbsWrap.data('loaded', true);
       this.hideSpinner(thumbsWrap);
-    }.pBind(this), { ajaxParams: { page: this.videosFavoritesContainer, favorites: 1 }});
+    }.pBind(this), { ajaxParams: { page: this.videosFavoritePage, favorites: 1 }});
     
     $("#my-favorites-videos ul li a").live("click", function (event) {
       var properties = $(event.target).parent().find('img').data("properties");

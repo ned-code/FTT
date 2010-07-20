@@ -1,0 +1,87 @@
+/* editor.layout.css */
+
+body.full_view {
+  overflow: hidden;
+}
+
+/* wrap */
+
+.wrap {
+  /* Transition to full view. Transitions can't go from % to length
+     values. Boo, rubbish. We have to use a combination of height
+     and min-height to get both types of value to cooperate. */
+  -webkit-transition: width 0.3s linear, max-width 0.3s linear, height 0.3s linear, min-height 0.3s linear, max-height 0.3s linear, margin 0.3s linear, padding 0.3s linear, opacity 0.3s linear;
+  -moz-transition:    width 0.3s linear, max-width 0.3s linear, height 0.3s linear, min-height 0.3s linear, max-height 0.3s linear, margin 0.3s linear, padding 0.3s linear, opacity 0.3s linear;
+  transition:         width 0.3s linear, max-width 0.3s linear, height 0.3s linear, min-height 0.3s linear, max-height 0.3s linear, margin 0.3s linear, padding 0.3s linear, opacity 0.3s linear;
+}
+
+.full_view .wrap {
+  width: 100%;
+}
+
+.site_wrap {
+  padding-right: 288px;
+}
+
+.full_view .site_wrap {
+  max-width: 2400px;
+}
+
+.workspace_wrap {
+  height: 50%;
+  min-height: 466px;
+  margin-bottom: 1em;
+}
+
+.full_view .workspace_wrap {
+  padding-right: 0;
+  height: 100%;
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+.title_wrap {
+  height: 2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  opacity: 1;
+}
+
+.full_view .title_wrap {
+  height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  opacity: 0;
+}
+
+.editor_wrap {
+  width: 98%;
+  height: 100%;
+  min-height: 466px;
+  margin-left: 0;
+  margin-right: 0;
+  /*margin-bottom: 2em;*/
+}
+
+.full_view .editor_wrap {
+  width: 100%;
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+.content_wrap {
+  width: 98%;
+  height: auto;
+  margin: 0 0 2em 0;
+  opacity: 1;
+}
+
+.full_view .content_wrap {
+  height: 0;
+  margin-bottom: 0;
+  opacity: 0;
+}
+
+.message {
+  font-size: 0.8333em; /* 10px */
+}
