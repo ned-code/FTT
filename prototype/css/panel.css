@@ -1,9 +1,9 @@
 /* Extensions to panel class */ 
 
 .panel {
-  -webkit-transition: opacity 0.8s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, bottom 0.3s linear;
-  -moz-transition:    opacity 0.8s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, bottom 0.3s linear;
-  transition:         opacity 0.8s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, bottom 0.3s linear;
+  -webkit-transition: opacity 0.8s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, right 0.3s linear, bottom 0.3s linear;
+  -moz-transition:    opacity 0.8s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, right 0.3s linear, bottom 0.3s linear;
+  transition:         opacity 0.8s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, right 0.3s linear, bottom 0.3s linear;
 }
                                               
 .full_view .panel.active {
@@ -88,10 +88,10 @@
 .side_panel {
   overflow: auto; 
 
-  right: 0;
+  right: -2%;
   top: 0;
-  margin-right: -292px;
-  width: 292px;
+  margin-right: -288px;
+  width: 288px;
   
   max-height: 1000%;
   min-height: 20%;
@@ -100,6 +100,7 @@
 .full_view .side_panel {
   max-height: 100%;
   
+  right: 0;
   top: 2.6667em;
   bottom: 2.6667em;
   background-color: white;
@@ -129,23 +130,25 @@
 .inspector_panel,
 .comments_panel,
 .activity_panel {
-  right: 0;
-  width: 292px;
-  margin-right: -292px;
+  width: 288px;
+  margin-right: -288px;
+  right: -2%;
+  top: 0;
+  bottom: 0;
 }
 
 .browser_panel.active,
 .inspector_panel.active,
 .comments_panel.active,
 .activity_panel.active {
-  top: 0;
-  bottom: 0;
+
 }
 
 .full_view .browser_panel,
 .full_view .inspector_panel,
 .full_view .comments_panel,
 .full_view .activity_panel {
+  right: 0;
   top: 2.6667em;
   bottom: 2.6667em;
 }

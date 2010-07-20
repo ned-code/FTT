@@ -13,12 +13,13 @@
   
   <link href="css/webcss/reset.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="css/webcss/panel.css" rel="stylesheet" type="text/css"/>
-  <link href="css/layout.css" rel="stylesheet" type="text/css"/>
-
+  
+  <link href="css/wrap.css" rel="stylesheet" type="text/css"/>
   <link href="css/panel.css" rel="stylesheet" type="text/css"/>
-  <link href="css/layout.editor.css" rel="stylesheet" type="text/css"/>
+  <link href="css/site.layout.css" rel="stylesheet" type="text/css"/>
+  <link href="css/editor.layout.css" rel="stylesheet" type="text/css"/>
   <link href="css/site.typography.css" rel="stylesheet" type="text/css"/>
-
+  
   <style>
     body {
       background: orange;
@@ -27,7 +28,7 @@
       background: white;
     }
     .editor_wrap {
-      background: yellow;
+      background: black;
     }
     .content_wrap {
       background: yellow;
@@ -35,57 +36,69 @@
     .side_panel {
       background: red;
     }
-    .editor,
     .content {
       background: #efbb46;
     }
+    .site_wrap {
+      background: #ff8800;
+    }
+    .webdoc {
+      background: black;
+    }
+    .workspace_wrap {
+      background: green;
+    }
   </style>
 </head>
-<body class="">
+<body>
   
-  <div class="title_wrap wrap">
+  <div class="title_wrap site_wrap wrap">
     <h1>Title</h1>
   </div>
   
-  <div class="editor_wrap wrap">
-    <div class="editor">
-      editor
-      <a href="#full">full</a>
-    </div>
-    <div class="side_panel panel">
-      side panel
-    </div>
-  </div>
-  
-  <section class="content_wrap wrap">
-    <div class="content">
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
-    content<br/>
+  <section class="workspace_wrap site_wrap wrap">
+    <div class="editor_wrap wrap">
+      <div class="webdoc">
+        editor
+        <a href="#full">full</a>
+      </div>
+      <div class="side_panel panel">
+        side panel
+      </div>
     </div>
   </section>
   
+  <section class="site_wrap wrap">
+    <div class="content_wrap wrap">
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+      content<br/>
+    </div>
+  </section>
+
   <header class="header">
-    Absolute
+    <div class="site_wrap wrap">
+      Absolute
+    </div>
   </header>
 
   <script src="../public/javascripts/jquery-1.4.2.js" type="text/javascript"></script>
