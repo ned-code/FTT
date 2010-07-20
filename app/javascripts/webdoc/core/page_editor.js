@@ -109,7 +109,10 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
           WebDoc.application.boardController.loadingNode.removeClass('loading');
           
           //jQuery('#document_loading').remove();
-          jQuery('body').trigger('webdocready');          
+          jQuery('body').trigger('webdocready');   
+          if (window._gaq) {
+            _gaq.push(['_trackEvent', 'document', 'open', documentId]);
+          }       
         }.pBind(this));                
       }.pBind(this));
 
