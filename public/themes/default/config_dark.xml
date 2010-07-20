@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme version="0.7" thumbnail="images/theme_thumb_dark.png" elements="inspector_dark.html">
+  
+  <title>Webdoc Dark</title>
+  
+  <author href="http://webdoc.com" email="stephband@webdoc.com">Stephen Band</author>
+  
+  <styles>
+    <style src="css/typography.css" />
+    <style src="css/colors.dark.css" />
+    <style src="css/theme.dark.css" />
+    <style src="css/layouts.css" />
+  </styles>
+  
+  <layouts>
+    <layout src="layouts/layout_1.html" thumbnail="images/layout_1_thumb.png">
+      <title>1 title, 1 column</title>   
+      <kind>layout_1</kind>   
+    </layout>
+    <layout src="layouts/layout_2.html" thumbnail="images/layout_2_thumb.png">
+      <title>1 title, 2 columns</title>   
+      <kind>layout_2</kind>   
+    </layout>
+    <layout src="layouts/layout_3.html" thumbnail="images/layout_3_thumb.png">
+      <title>1 title, 3 columns</title>   
+      <kind>layout_3</kind>   
+    </layout>
+  </layouts>
+
+</theme>

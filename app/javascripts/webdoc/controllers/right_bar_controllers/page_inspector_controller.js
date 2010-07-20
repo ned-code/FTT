@@ -38,7 +38,8 @@
         this._page.setClass( themeClass );
       }.pBind(this));
       
-      WebDoc.application.boardController.themeNode.bind( 'load', this.makeThemeBackgrounds.pBind(this) );
+			//display the theme background color in inspector
+      //WebDoc.application.boardController.themeNode.bind( 'load', this.makeThemeBackgrounds.pBind(this) );
       
       jQuery("#external_page_url").bind("blur", this._updateExternalPageUrl.pBind(this));
       
@@ -63,17 +64,19 @@
           pass: handler[property],
           fail: function(error) {}
         });
-      })
-      .delegate('a[href=#layout]', 'click', jQuery.proxy( this, '_changeLayout' ))
-      .delegate('a[href=#layout_remove]', 'click', jQuery.proxy( this, '_removeLayout' ));
+      });
+			//used to change layout of a page, useless with package
+      // .delegate('a[href=#layout]', 'click', jQuery.proxy( this, '_changeLayout' ))
+      //       .delegate('a[href=#layout_remove]', 'click', jQuery.proxy( this, '_removeLayout' ));
       
       jQuery("#page_background_image_apply_all_button").bind("click", this._applyBackgroundToAllPages.pBind(this));
       jQuery('.page-remove-background-image').click(this._removeBackgroundImage.pBind(this));
       
       WebDoc.application.boardController.addCurrentPageListener(this);
       
-      this.currentPageChanged(); 
-      this.makeThemeBackgrounds();
+      this.currentPageChanged();
+			//display the theme background color in inspector, useless with package
+      //this.makeThemeBackgrounds();
       
       var footHeight = this.domNode.find('.foot>div').height();
       this.domNode
@@ -100,6 +103,7 @@
       this._checkEnableBackgroundControls();
      },
     
+		//load the themes background, useless with packages
     makeThemeBackgrounds: function(){
       ddd('[PageInspectorController] makeThemeBackgrounds');
       
@@ -151,7 +155,7 @@
         this._externalPageControls.hide();
         this._backgroundControls.show();
         jQuery("#page_background_color")[0].value = this._page.data.data.css.backgroundColor;
-        jQuery("#page_background_image")[0].value = this._page.data.data.css.backgroundImage;
+        //jQuery("#page_background_image")[0].value = this._page.data.data.css.backgroundImage;
         this._setBgRepeatFromValue( this._page.data.data.css.backgroundRepeat ); 
         this._setBackroundPosition(this._page.data.data.css.backgroundPosition);
         if(this._page.hasBackgroundImage()) {
@@ -161,11 +165,12 @@
         else {
            jQuery('#background_image_preview').hide();
         }
-        this._updateThemeDropDown();
+        //this._updateThemeDropDown();
       }
       this._initializingGui = false;
     },
   
+		//update the inspctor to show the layouts, useless with packages
     _updateThemeDropDown: function() {
       this._page.document.getTheme(function(theme) {
         var pageTheme, layouts, attrMap;
@@ -278,39 +283,37 @@
   
     _applyBackgroundToAllPages: function(e) {
       var valid = true,
-          backgroundColor, backgroundImage, page;
+          backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition, page;
       
       e.preventDefault();
-      
-      jQuery("#page_background_color").validate({
-        pass: function(value){ backgroundColor = value; },
-        fail: function(error){ valid = false; }
-      });
-      
-      jQuery("#page_background_image").validate({
-        pass: function(value){ backgroundImage = value; },
-        fail: function(error){ valid = false; }
-      });
-      if (valid) {
-        for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
-          page = WebDoc.application.pageEditor.currentDocument.pages[i];
-          this._applyBackgroundToPage( page, backgroundColor, backgroundImage );
-        }
-        var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
-        WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);
+
+			if(this._page.hasCss()){
+				backgroundColor = this._page.getBackgroundColor();
+				backgroundRepeat = this._page.getBackgroundRepeatMode();
+				backgroundPosition = this._page.getBackgroundPosition();
+			}
+			
+			if(this._page.hasBackgroundImage()){
+				backgroundImage = this._page.getBackgroundImage();
+			}
+			
+      for(var i = 0; i < WebDoc.application.pageEditor.currentDocument.pages.length; i++) {
+        page = WebDoc.application.pageEditor.currentDocument.pages[i];
+        this._applyBackgroundToPage( page, backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition );
       }
+      var inspectorBeforeReload = WebDoc.application.rightBarController.getSelectedInspector();
+      WebDoc.application.rightBarController.selectInspector(inspectorBeforeReload);
     },
   
-    _applyBackgroundToPage: function(targetPage, backgroundColor, backgroundImage) {
+    _applyBackgroundToPage: function(targetPage, backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition) {
       targetPage.setBackgroundColor( backgroundColor );
-      
       if( backgroundImage === "" ) {
         targetPage.removeBackgroundImage();
       }
       else {
         targetPage.setBackgroundImage( backgroundImage );
-        targetPage.setBackgroundRepeatMode(this._getBgRepeatValue());
-        targetPage.setBackgroundPosition(this._getBackgroundPosition());
+        targetPage.setBackgroundRepeatMode(backgroundRepeat);
+        targetPage.setBackgroundPosition(backgroundPosition);
       }
     },
     

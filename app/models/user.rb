@@ -62,6 +62,7 @@ class User < ActiveRecord::Base
   has_many :following, :through => :following_connections
   has_many :followers, :through => :follower_connections
   has_many :datastore_entries
+  has_many :comments
   
   # ===================
   # = Instance Method =
@@ -120,6 +121,10 @@ class User < ActiveRecord::Base
     end
     mutual
   end
+
+  def avatar_thumb_url
+    self.avatar.url(:thumb)
+  end
   
   # Need to use this method instead of the original to_json cause user references document and vice versa
   def to_social_panel_json(current_user)
@@ -129,7 +134,7 @@ class User < ActiveRecord::Base
         :username => self.username,
         :bio => self.bio,
         :uuid => self.uuid,
-        :avatar_thumb_url => self.avatar.url(:thumb),
+        :avatar_thumb_url => self.avatar_thumb_url,
         :documents_count => self.documents_count,
         :following_info => self.follower?(current_user)
       }
@@ -172,6 +177,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -207,5 +213,7 @@ end
 #  avatar_file_size     :integer(4)
 #  avatar_updated_at    :datetime
 #  id                   :integer(4)
+#  facebook_uid         :integer(8)
+#  facebook_session_key :string(149)
 #
 

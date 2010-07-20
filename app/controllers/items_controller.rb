@@ -26,7 +26,8 @@ class ItemsController < PageController
   def create
     @item = @page.items.new_with_uuid(params[:item])
     @item.save!
-    message = { :source => params[:xmpp_client_id], :item =>  @item.attributes }      
+    message = @item.as_json({})
+    message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, @item.page.document.uuid)
     render :json => @item
   end
@@ -35,7 +36,8 @@ class ItemsController < PageController
   def update
     @item = @page.items.find_by_uuid(params[:id])
     @item.update_attributes!(params[:item])    
-    message = { :source => params[:xmpp_client_id], :item =>  @item.attributes }
+    message = @item.as_json({})
+    message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, @item.page.document.uuid)
     render :json => @item
   end

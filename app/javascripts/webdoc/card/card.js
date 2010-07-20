@@ -55,7 +55,13 @@ WebDoc.Application.beforeMain('card', function(){
       
       WebDoc.Application.errors.ajaxError(status, error).flash();
     }
-    
+    if (window._gaq) {
+      var document_uuid = null;
+      if (WebDoc.application && WebDoc.application.pageEditor) {
+        document_uuid = WebDoc.application.pageEditor.currentDocument.uuid();
+      }
+      _gaq.push(['_trackEvent', 'follow', 'follow', document_uuid]);
+    }
     jQuery.ajax({
       url: "/followships/follow",
       type: 'POST',

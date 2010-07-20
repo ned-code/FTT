@@ -118,7 +118,10 @@ class DocumentsController < ApplicationController
         format.json do
           logger.debug "return document json."
           set_cache_buster
-          render :json => Rails.cache.fetch("document_#{@document.uuid}") { @document.to_json(:include => { :pages => { :include => :items} }) }
+          render :json => Rails.cache.fetch("document_#{@document.uuid}") {
+            @document.to_json(:include => { :pages => { :include =>  :items } })
+          }
+
         end
       end
     else
@@ -142,7 +145,8 @@ class DocumentsController < ApplicationController
   # PUT /documents/:id
   def update
     @document.update_attributes(params[:document])
-    message = { :source => params[:xmpp_client_id], :document =>  @document.attributes }
+    message = @document.as_json({})
+    message[:source] = params[:xmpp_client_id]    
     @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)    
     render :json => @document
   end

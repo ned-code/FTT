@@ -25,7 +25,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :datastores, :only => [:show, :index] do |datastore|
     # datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
   end
-  
+
+  map.connect '/apps', :controller => 'widgets', :action => 'index', :conditions => { :method => :get }
+  map.connect '/users/favorites', :controller => 'users', :action => 'favorites', :conditions => { :method => :get } #this route is used to get html that is display in media browser favorites
   map.devise_for :users
   map.resources :users, :except => [:new, :create, :destroy]
   map.connect 'user', :controller => 'sessions', :action => 'show', :conditions => { :method => :get }
@@ -41,11 +43,16 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/browse', :controller => 'browser', :action => :index, :conditions => { :method => :get }
   
   # dev controller
-  map.resources :images,    :except => [:new, :edit, :update]
+  map.resources :images,    :except => [:new, :edit, :update] #/images is used to get html that is displayed in media browser my images
   map.resources :videos,    :except => [:new, :edit, :update]
   map.resources :widgets,   :except => [:new, :edit, :update, :destroy]
   map.resources :categories, :only => :index
   map.resources :themes, :only => [:index, :show]
   map.resources :roles_documents, :only => :index, :as => "roles/documents"
-  
+
+  # comments
+  map.resources :discussions, :only => [:index, :create, :update, :destroy] do |discussion|
+    discussion.resources :comments, :only => [:create, :destroy]
+  end
+
 end

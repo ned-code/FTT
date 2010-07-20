@@ -3,7 +3,7 @@
     %li#toggle_inspector>
       %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" } Inspector
     %li>
-      %a.state-right-panel.mode-edit-show{ :href => "#library", :title => "Show Library" } Library
+      %a.state-right-panel.mode-edit-show{ :href => "#media-browser", :title => "Show Media Browser" } Media Browser
     %li>
       %a.state-right-panel.mode-edit-show{ :href => "#item-inspector", :title => "Show Inspector" } Item
     %li>
@@ -11,28 +11,27 @@
     %li>
       %a.state-right-panel.mode-edit-show{ :href => "#document-inspector", :title => "Show Document inspector" } Document
     %li>
-      %a.state-right-panel{ :href => "#social-inspector", :title => "Show Social" } Social      
-    
-  -#%div.upper.border
-  -#%div.lower.border
-  
+      %a.state-right-panel{ :href => "#discussions-panel", :title => "Show discussions" } Discussions
+    %li>
+      %a.state-right-panel{ :href => "#social-inspector", :title => "Show Social" } Social
+
   %div.layer
-    = render :partial => 'library'
+    = render 'media_browser/home'
     
     = render :partial => 'documents/inspectors/page_inspector'
     = render :partial => 'documents/inspectors/document_inspector'
-    = render :partial => 'documents/social_panel'  
+    = render :partial => 'documents/discussions_panel'
+    = render :partial => 'documents/social_panel'
     #item_inspector
-      = render :partial => 'documents/inspectors/text_inspector'          
+      = render :partial => 'documents/inspectors/text_inspector'
       = render :partial => 'documents/inspectors/draw_inspector'
       = render :partial => 'documents/inspectors/widget_inspector'
       = render :partial => 'documents/inspectors/empty_inspector'
       = render :partial => 'documents/inspectors/html_inspector'
       = render :partial => 'documents/inspectors/iframe_inspector'
-      = render :partial => 'documents/inspectors/image_inspector'      
+      = render :partial => 'documents/inspectors/image_inspector'
       = render :partial => 'documents/inspectors/text_properties_inspector'
       = render :partial => 'documents/inspectors/widget_properties_inspector'
       = render :partial => 'documents/inspectors/iframe_properties_inspector'
       = render :partial => 'documents/inspectors/html_properties_inspector'
-
     

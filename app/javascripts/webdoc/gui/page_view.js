@@ -9,7 +9,8 @@ WebDoc.PageView = $.klass({
         }), 
         itemDomNode = $('<div/>').id('items_' + page.uuid()).addClass("layer").css({
           overflow: 'visible'
-        }), 
+        }),
+        discussionDomNode = $('<div/>').id('discussions_'+page.uuid()).addClass("layer").css({ overflow: 'visible' }),
         drawingDomNode = $(WebDoc.application.svgRenderer.createSurface()), eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(), that = this;
     
     
@@ -22,8 +23,10 @@ WebDoc.PageView = $.klass({
 
     this.drawingDomNode = drawingDomNode;
     this.itemDomNode = itemDomNode;
+    this.discussionDomNode = discussionDomNode;
     this.eventCatcherNode = eventCatcherNode;
     this.itemViews = {};
+    this.discussionViews = {};
     this._zoomFactor = 1;
     this.wait = null;
     // Set up page view
@@ -32,6 +35,7 @@ WebDoc.PageView = $.klass({
     drawingDomNode.css("zIndex", 1000000);
     domNode.append(drawingDomNode);
     this.domNode.append(itemDomNode);
+    this.domNode.append(discussionDomNode);    
     this.domNode.append(eventCatcherNode);
 
     this.externalPageDomNode = null;
@@ -45,6 +49,9 @@ WebDoc.PageView = $.klass({
         that.createItemView(this, "end");
       });
     }
+
+    this.refreshDiscussions();
+    
     page.addListener(this);
   },
   
@@ -158,14 +165,6 @@ WebDoc.PageView = $.klass({
     return itemView;
   },
   
-  destroy: function() {
-    this.page.removeListener(this);
-    for (var itemId in this.itemViews) {
-      var anItemView = this.itemViews[itemId];
-      anItemView.destroy();
-    }
-  },
-  
   fitInContainer: function(width, height) {
     var zoomToFit = 1;
     var heightFactor = height / this.page.height("px");
@@ -214,8 +213,18 @@ WebDoc.PageView = $.klass({
       
       delete globalCss.width;
       delete globalCss.height;
-            
-      this.domNode.css(globalCss);
+      //domNode.attr( 'style', '' ).css( wrapCss );
+      if(this.page.hasBackgroundGradient()){
+				delete globalCss.backgroundImage;
+				this.domNode.attr( 'style', this.page.getBackgroundGradient() ).css(globalCss);
+			}
+			else{
+				ddd('page _initPageCss');
+				ddd(globalCss);
+				delete globalCss.backgroundGradient;
+				this.domNode.attr( 'style', '' );
+				this.domNode.css(globalCss);
+			}
       this._initPageSize();
       
     }.pBind(this));
@@ -308,6 +317,52 @@ WebDoc.PageView = $.klass({
   
   isEditable: function() {
     return this._editable;
+  },
+
+  // ***********
+  // DISCUSSIONS
+  // ***********
+
+  discussionAdded: function(addedDiscussion) {
+    this.createDiscussionView(addedDiscussion);
+  },
+
+  refreshDiscussions: function() {
+    this.page.getDiscussions(function(discussions) {
+      var discussion, l = discussions.length;
+      while(l--){
+        discussion = discussions[l];
+        this.createDiscussionView(discussion);
+        var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+        discussionPanel.showCurrentPageDiscussions();
+      }
+    }.pBind(this));
+  },
+
+  discussionRemoved: function(removedDiscussion) {
+    var relatedDiscussionView = this.discussionViews[removedDiscussion.uuid()];
+    if (relatedDiscussionView) {
+      relatedDiscussionView.remove();
+      delete this.discussionViews[removedDiscussion.uuid()];
+    }
+  },
+
+  createDiscussionView: function(discussion) {
+    var discussionView = new WebDoc.DiscussionView(discussion, this);
+    this.discussionViews[discussion.uuid()] = discussionView;
+    return discussionView;
+  },
+
+  destroy: function() {
+    this.page.removeListener(this);
+    for (var itemId in this.itemViews) {
+      var anItemView = this.itemViews[itemId];
+      anItemView.destroy();
+    }
+    for (var discussionId in this.discussionViews) {
+      var anDiscussView = this.discussionViews[discussionId];
+      anDiscussView.destroy();
+    }
   }
 
 });

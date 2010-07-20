@@ -39,11 +39,14 @@ class Admin::WidgetsController < Admin::AdminController
   # PUT /admin/apps/:id
   def update
     @widget = Medias::Widget.find_by_uuid(params[:id])
-    
+    p params[:id]
+    p params
+    p params[:medias_widget]
     if @widget.update_attributes(params[:medias_widget])
       flash[:notice] = t("flash.notice.widget.#{@widget.status}") if @widget.status
       redirect_to admin_widgets_path
     else
+      p @widget.errors
       flash[:failure] = t('flash.notice.widget.updated_failed')
       render :edit
     end
