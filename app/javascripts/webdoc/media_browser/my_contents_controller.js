@@ -9,6 +9,8 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.createHandlers(this.domNode, 'click', this._myContentHandlers);
     
     this.imagePage = 1;
+    this.videosFavoritePage = 1;
+    this.imagesFavoritePage = 1;
     this.myImagesContainer = $('#media-browser-my-images');
     
     this._loadMyImages();  
@@ -164,50 +166,47 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.preloadImage(properties.url);
     
     //setup the delete link of remove from favorites
-		var removeFavoritesLink = $('#media-browser-my-images-details #remove_image_from_favorites');
-		var deleteImageLink = $('#media-browser-my-images-details #delete_image_action');
-		
-		ddd('removeFavoritesLink' + removeFavoritesLink);
-		ddd('deleteImageLink' + deleteImageLink);
-		
-		if(isFavorites){
-			if( !removeFavoritesLink.length ){
-    	  liDelete = $('<li>').append($("<a href='' id='remove_image_from_favorites'>Remove from favorites </a>"));
-    	  $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
+    var removeFavoritesLink = $('#media-browser-my-images-details #remove_image_from_favorites');
+    var deleteImageLink = $('#media-browser-my-images-details #delete_image_action');
+        
+    if(isFavorites){
+      if( !removeFavoritesLink.length ){
+        liDelete = $('<li>').append($("<a href='' id='remove_image_from_favorites'>Remove from favorites </a>"));
+        $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
 
-				if( deleteImageLink.length ){
-					deleteImageLink.parent().remove();
-				}
-    	}
-		}
-		else{
-    	if( !deleteImageLink.length ){
-    	  liDelete = $('<li>').append($("<a href='' id='delete_image_action'>Delete </a>"));
-    	  $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
+        if( deleteImageLink.length ){
+          deleteImageLink.parent().remove();
+        }
+      }
+    }
+    else{
+      if( !deleteImageLink.length ){
+        liDelete = $('<li>').append($("<a href='' id='delete_image_action'>Delete </a>"));
+        $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
 
-				if( removeFavoritesLink.length ){
-					removeFavoritesLink.parent().remove();
-				}
-    	}
-		}
+        if( removeFavoritesLink.length ){
+          removeFavoritesLink.parent().remove();
+        }
+      }
+    }
     
-		//setup back button
-		if(isFavorites){
- 			$('#image-detail-back').attr({href: '#my-favorites'});
-		}
-		else{
-			$('#image-detail-back').attr({href: '#my-images'});
-		}
-
-    $('#media-browser-my-images-details').show();
+    //setup back button
+    if(isFavorites){
+      $('#image-detail-back').attr({href: '#my-favorites'});
+    }
+    else{
+      $('#image-detail-back').attr({href: '#my-images'});
+    }
+    
+      $('#media-browser-my-images-details').show();
   },
 
-	setupVideoDetailsView: function(){
-		this.detailsVideoContainer = this.videoDetailsView.find('.single_video');
-		this.videoDetailsView.find('.drag_handle').attr({ draggable: "true" })
+  setupVideoDetailsView: function(){
+    this.detailsVideoContainer = this.videoDetailsView.find('.single_video');
+    this.videoDetailsView.find('.drag_handle').attr({ draggable: "true" })
     .bind("dragstart", this.prepareVideoDrag.pBind(this));
 
-		$("#media-browser-my-favorites-videos-details #video-details .actions").click(function(event){
+    $("#media-browser-my-favorites-videos-details #video-details .actions").click(function(event){
       event.preventDefault();
       
       var properties = this.detailsVideoContainer.data("properties"); //properties of the currenlty displayed video are store in this element
@@ -218,41 +217,38 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       
       switch (link.attr("id")) {
         case "add_video_to_page_action":
-          ddd("add_video_to_page_action");
           var properties = this.detailsVideoContainer.data("properties");
           WebDoc.application.boardController.insertVideo(properties);
           break;
           
         case "show_video_page_action" :
-          ddd("show_video_page_action");
           window.open(properties.url, '_blank');
           break;
-				case "remove_video_from_favorites" :
-					ddd('remove video');
-					if (confirm ("Are you sure?")) {
-	          link.hide();
-	          li.append(info);
+        case "remove_video_from_favorites" :
+          if (confirm ("Are you sure?")) {
+            link.hide();
+            li.append(info);
         
-	          $.ajax({
-	            type: "DELETE",
-	            url: "/videos/"+properties.uuid,
-	            success: function(serverData) {
-	              li.remove();
-	              //remove the video from the list
-	              $('#' + properties.uuid).remove();
-	              this.showFavorites();
-	            }.pBind(this),
-	            complete: function() {
-	            }.pBind(this)
-	          });
-	        }
-					break;
-			}
-		}.pBind(this));
-	},
-	
-	showVideoDetailsView: function(properties){
-		this.videoDetailsView.attr({'class':"view details_view my-content-tab "+properties.type});
+            $.ajax({
+              type: "DELETE",
+              url: "/videos/"+properties.uuid,
+              success: function(serverData) {
+                li.remove();
+                //remove the video from the list
+                $('#' + properties.uuid).remove();
+                this.showFavorites();
+              }.pBind(this),
+              complete: function() {
+              }.pBind(this)
+            });
+          }
+          break;
+      }
+    }.pBind(this));
+  },
+  
+  showVideoDetailsView: function(properties){
+    this.videoDetailsView.attr({'class':"view details_view my-content-tab "+properties.type});
     
     // Embed video
     this.detailsVideoContainer.find('object').remove();
@@ -283,16 +279,16 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     var showVideoPageEl = $("#show_video_page_action");
     showVideoPageEl.text(showVideoPageEl.data("originalText").replace("*", serviceName));
 
-		var removeVideoFromFavoritesLink = $('#media-browser-my-favorites-videos-details #remove_video_from_favorites');
-		if( !removeVideoFromFavoritesLink.length ){
-  	  liDelete = $('<li>').append($("<a href='' id='remove_video_from_favorites'>Remove from favorites</a>"));
-  	  $("#media-browser-my-favorites-videos-details #video-details .actions ul").append(liDelete);
-		}
-		
-		this._hideAll();
-		$('#media-browser-my-favorites-videos-details').show();
-		$('#media-browser-my-favorites-videos-details #video-details').show();
-	},
+    var removeVideoFromFavoritesLink = $('#media-browser-my-favorites-videos-details #remove_video_from_favorites');
+    if( !removeVideoFromFavoritesLink.length ){
+      liDelete = $('<li>').append($("<a href='' id='remove_video_from_favorites'>Remove from favorites</a>"));
+      $("#media-browser-my-favorites-videos-details #video-details .actions ul").append(liDelete);
+    }
+    
+    this._hideAll();
+    $('#media-browser-my-favorites-videos-details').show();
+    $('#media-browser-my-favorites-videos-details #video-details').show();
+  },
   
   preloadImage: function(imageSrc) {
     var oImage = new Image();
@@ -320,17 +316,15 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       $('#' + domNode ).append(ulWrap);
     }
     
-		if($('#' + domNode +' .no_items').length ){
-			$('#' + domNode +' .no_items').remove();
-		}
+    if($('#' + domNode +' .no_items').length ){
+      $('#' + domNode +' .no_items').remove();
+    }
     ulWrap.prepend(liWrap);
     $(".thumbnails").bind("dragstart", this.dragStart.pBind(this));
     
   },
   
   buildThumbnail: function(newProperties, uuid) {
-    ddd('uuid : ' + uuid);
-		
     var properties = {
       url: newProperties.url,
       thumb_url: newProperties.thumb_url,
@@ -355,40 +349,38 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     return liWrap;
   },
 
-	insertVideo: function(newProperties, uuid){
-		ddd('insertVideo');
-		ddd('uuid ' + uuid);
-		var name = newProperties.name;
-		var duration = newProperties.duration;
-		var description = newProperties.description;
-		var thumbUrl = newProperties.thumb_url;
-		var aspectRatio = newProperties.aspect_ratio;
-		var viewCount = newProperties.viewCount;
-		var embedUrl = newProperties.embed_url;
-		var embedType = newProperties.embed_type;
-		var videoId = newProperties.video_id;
-		var videoUrl = newProperties.url;
-		var videoType = newProperties.type;
-		var isHd = newProperties.is_hd;
-		var height = newProperties.height;
-		var width = newProperties.width;
-		
-		if($('#my-favorites-videos .no_items').length ){
-			$('#my-favorites-videos .no_items').remove();
-		}
-		
-		if(!$('#my-favorites-videos ul').length){
-			$('#my-favorites-videos').append($('<ul>'));
-		}
-		
-		ddd('thumbUrl ' + thumbUrl); 
-		
-    var videosContainer = $('#my-favorites-videos ul');
-    videosContainer.prepend(
-       WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow(videoType, videoId, videoUrl, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height,uuid)
-     );
-
-	},
+  insertVideo: function(newProperties, uuid){
+    var name = newProperties.name;
+    var duration = newProperties.duration;
+    var description = newProperties.description;
+    var thumbUrl = newProperties.thumb_url;
+    var aspectRatio = newProperties.aspect_ratio;
+    var viewCount = newProperties.viewCount;
+    var embedUrl = newProperties.embed_url;
+    var embedType = newProperties.embed_type;
+    var videoId = newProperties.video_id;
+    var videoUrl = newProperties.url;
+    var videoType = newProperties.type;
+    var isHd = newProperties.is_hd;
+    var height = newProperties.height;
+    var width = newProperties.width;
+    
+    if($('#my-favorites-videos .no_items').length ){
+      $('#my-favorites-videos .no_items').remove();
+    }
+    
+    if(!$('#my-favorites-videos ul').length){
+      $('#my-favorites-videos').append($('<ul>'));
+    }
+    
+    ddd('thumbUrl ' + thumbUrl); 
+    
+     var videosContainer = $('#my-favorites-videos ul');
+     videosContainer.prepend(
+        WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow(videoType, videoId, videoUrl, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height,uuid)
+      );
+    
+   },
   
   dragStart: function(event) {      
     var draggingImg = $(event.target).parent().find('img');
@@ -405,10 +397,9 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   },
 
-	prepareRowDrag: function(event) {
+  prepareRowDrag: function(event) {
     // prepare Draging for video...
-		ddd('prepareRowDrag');
-		var target = $(event.target);
+    var target = $(event.target);
     if (target.closest('.video_row').length === 0 || target.find('img').length === 0) {
       event.preventDefault();
       return;
@@ -418,8 +409,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.videoDragStart(event, properties);
   },
 
-	videoDragStart: function(event, properties) {
-		ddd('videoDragStart');
+  videoDragStart: function(event, properties) {
     var dt = event.originalEvent.dataTransfer;
     dt.setData("application/wd-video", $.toJSON(properties));
     
@@ -429,7 +419,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   },
 
-	prepareVideoDrag: function(event) {    
+  prepareVideoDrag: function(event) {    
     var target = $(event.target);
     if (!target.hasClass('drag_handle')) {
       event.preventDefault();
@@ -462,14 +452,14 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
           myImagesList.append(this.buildThumbnail(webDocImage.data.properties, webDocImage.data.uuid));
         }.pBind(this));
       }
-      ddd('imagelist data');
-      ddd(data);
+      
+      //previous and next link
       if(data.pagination.previous_page){
         var previousElement= $("<a href='#'>Previous</a>;");
         var that = this;
         previousElement.click(function(e){
           e.preventDefault;
-          that._previousPage();
+          that._previousMyImagePage();
         });
         thumbsWrap.append(previousElement);
       }
@@ -478,7 +468,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
         var that = this;
         nextElement.click(function(e){
           e.preventDefault;
-          that._nextPage();
+          that._nextMyImagePage();
         });
         
         thumbsWrap.append(nextElement);
@@ -496,13 +486,13 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
   },
   
-  _nextPage: function(){
+  _nextMyImagePage: function(){
     this.imagePage += 1;
     this._loadMyImages();
     this._clearMyImages();
   },
   
-  _previousPage: function(){
+  _previousMyImagePage: function(){
     this.imagePage -= 1;
     this._loadMyImages();
     this._clearMyImages();
@@ -514,7 +504,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
   
   _loadMyFavorites: function(){
-    var container = $("<div id='media-browser-my-favorites' class='my-content-tab>");
+    var container = $("<div id='media-browser-my-favorites' class='my-content-tab'>");
     container.append($("<div id='my-favorites-images' class='thumbnails'>"));
     container.append($("<div id='my-favorites-videos' class='thumbnails'>"));
     this.domNode.append(container);
@@ -523,11 +513,11 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.videosFavoritesContainer = $('#my-favorites-videos');
     
     this._loadFavoritesImages();
-    this._loadFavoritesVideos();
+    //this._loadFavoritesVideos();
   },
 
-	_loadFavoritesImages: function(){
-		var thumbsWrap = this.imagesFavoritesContainer;
+  _loadFavoritesImages: function(){
+    var thumbsWrap = this.imagesFavoritesContainer;
     this.showSpinner(thumbsWrap);
           
     WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
@@ -543,20 +533,55 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
           myImagesList.append(this.buildThumbnail(webDocImage.data.properties, webDocImage.data.uuid));
         }.pBind(this));
       }
+      
+      ddd('_loadFavoritesImages');
+      ddd(data);
+      //previous and next link
+      if(data.pagination.previous_page){
+        var previousElement= $("<a href='#'>Previous</a>;");
+        var that = this;
+        previousElement.click(function(e){
+          e.preventDefault;
+          that._previousFavoriteImagePage();
+        });
+        thumbsWrap.append(previousElement);
+      }
+      if(data.pagination.next_page){
+        var nextElement = $("<a href='#'>Next</a>");
+        var that = this;
+        nextElement.click(function(e){
+          e.preventDefault;
+          that._nextFavoriteImagePage();
+        });
+        thumbsWrap.append(nextElement);
+      }
+        
       thumbsWrap.data('loaded', true);
       this.hideSpinner(thumbsWrap);
-    }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 1 }});
+    }.pBind(this), { ajaxParams: { page:this.imagesFavoritePage, favorites: 1 }});
     
     $("#my-favorites-images ul li a").live("click", function (event) {
-			event.preventDefault();
+      event.preventDefault();
       var properties = $(event.target).parent().find('img').data("properties");
       this.showDetailsView(properties,true);
     }.pBind(this));
-		$("#my-favorites-images").bind("dragstart", this.dragStart.pBind(this));
-	},
-	
-	_loadFavoritesVideos: function(){
-		var thumbsWrap = this.videosFavoritesContainer;
+    $("#my-favorites-images").bind("dragstart", this.dragStart.pBind(this));
+  },
+  
+  _previousFavoriteImagePage: function(){
+    this.imagesFavoritesContainer.empty();
+    this.imagesFavoritePage -= 1;
+    this._loadFavoritesImages();
+  },
+  
+  _nextFavoriteImagePage: function(){
+    this.imagesFavoritesContainer.empty();
+    this.imagesFavoritePage += 1;
+    this._loadFavoritesImages();
+  },
+  
+  _loadFavoritesVideos: function(){
+    var thumbsWrap = this.videosFavoritesContainer;
     this.showSpinner(thumbsWrap);
           
     WebDoc.ServerManager.getRecords(WebDoc.Video, null, function(data) {
@@ -574,16 +599,16 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       }
       thumbsWrap.data('loaded', true);
       this.hideSpinner(thumbsWrap);
-    }.pBind(this), { ajaxParams: { favorites: 1 }});
+    }.pBind(this), { ajaxParams: { page: this.videosFavoritesContainer, favorites: 1 }});
     
     $("#my-favorites-videos ul li a").live("click", function (event) {
       var properties = $(event.target).parent().find('img').data("properties");
-			event.preventDefault();
+      event.preventDefault();
       this.showVideoDetailsView(properties,true);
     }.pBind(this));
 
-		$("#my-favorites-videos").bind("dragstart", this.prepareRowDrag.pBind(this));
-		this.createHandlers(this.domNode, 'click', {'my-favorites':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showFavorites(); }});
-		this.setupVideoDetailsView();
-	}
+    $("#my-favorites-videos").bind("dragstart", this.prepareRowDrag.pBind(this));
+    this.createHandlers(this.domNode, 'click', {'my-favorites':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showFavorites(); }});
+    this.setupVideoDetailsView();
+  }
 });
