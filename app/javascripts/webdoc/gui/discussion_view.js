@@ -32,10 +32,19 @@ WebDoc.DiscussionView = $.klass({
     return discussionNode;
   },
 
-  commentAdded: function(addedComment) {
-    ddd('[DiscussionView] comment added');
+  refreshDicussionDomNode: function() {
     this.domNode.empty();
     this.domNode.append(this.createDiscussionDomNode());
+  },
+
+  commentAdded: function(addedComment) {
+    ddd('[DiscussionView] comment added');
+    this.refreshDicussionDomNode();
+  },
+
+  commentRemoved: function() {
+    ddd('[DiscussionView] comment removed');
+    this.refreshDicussionDomNode();
   },
 
   select: function() {

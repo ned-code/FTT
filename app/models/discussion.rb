@@ -45,8 +45,10 @@ class Discussion < ActiveRecord::Base
   end
 
   def safe_delete!
-    self.deleted_at = Time.now
-    self.save!
+    if self.deleted_at.blank?
+      self.deleted_at = Time.now
+      self.save!  
+    end
   end
   
 end

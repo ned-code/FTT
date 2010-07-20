@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  before_filter :find_comment, :only => [:destroy]  
+
   def create
     @comment = current_user.comments.new_with_uuid(params[:comment])
 
@@ -24,6 +26,6 @@ class CommentsController < ApplicationController
   end
 
   def find_comment
-    @comment = Comment.find_by_uuid(params[:uuid])
+    @comment = Comment.find_by_uuid(params[:id])
   end
 end
