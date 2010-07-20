@@ -26,35 +26,35 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
     // Tabs handling
     $(".tab_navigation").tabsHandler();
     
-		//little hack to be sure that the home page is on the first layer
-		this._hideAll();
-		this.showHome();
-	},
-
-	buttonSelector: function() {
-		return this.MEDIA_BROWSER_BUTTON_SELECTOR;  
-	},
-	
-	showHome: function(){
-		this.showTab('#media-browser-home');
-	},
-	
-	showWeb: function(){
-		this.showTab('#media-browser-web');
-	},
-	
-	showPackages: function(){
-		this.showTab('#media-browser-packages');
-	},
-	
-	showApps: function(){
-		this.showTab('#media-browser-apps');
-		if($('#media-browser-app-details-back').attr('href') == '#media-browser-home'){
-			this.appsLibrary.setupBackButton(false);
-			this.appsLibrary.showList();
-		}
-	},
-	
+  	//little hack to be sure that the home page is on the first layer
+  	this._hideAll();
+  	this.showHome();
+  },
+ 
+  buttonSelector: function() {
+  	return this.MEDIA_BROWSER_BUTTON_SELECTOR;  
+  },
+  
+  showHome: function(){
+  	this.showTab('#media-browser-home');
+  },
+  
+  showWeb: function(){
+  	this.showTab('#media-browser-web');
+  },
+  
+  showPackages: function(){
+  	this.showTab('#media-browser-packages');
+  },
+  
+  showApps: function(){
+  	this.showTab('#media-browser-apps');
+  	if($('#media-browser-app-details-back').attr('href') == '#media-browser-home'){
+  		this.appsLibrary.setupBackButton(false);
+  		this.appsLibrary.showList();
+  	}
+  },
+  
   showMyContent: function(){
     WebDoc.application.myContentController 
     if(WebDoc.application.mediaBrowserController.myContentsController){
@@ -66,22 +66,22 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
     }
   },
   	
-	showAppDetails: function(widgetData){
-		this._hideAll();
-		this.showApps();
-		this.appsLibrary.showDetailsView( widgetData, true );
-	},
-	
-	showTab: function(tab_id){
-		this._hideAll();
-		$(tab_id).show();
-	},
-	
-	_hideAll: function(){
-		$('.media-browser-tab').hide();
-	},
-	
-	_loadMostUsedApps: function(pageIncrement) {
+  showAppDetails: function(widgetData){
+    this._hideAll();
+    this.showApps();
+    this.appsLibrary.showDetailsView( widgetData, true );
+  },
+  
+  showTab: function(tab_id){
+    this._hideAll();
+    $(tab_id).show();
+  },
+  
+  _hideAll: function(){
+     $('.media-browser-tab').hide();
+  },
+  
+  _loadMostUsedApps: function(pageIncrement) {
     var appsThumbWrap = $('#most_used_apps');
     
     appsThumbWrap.html('');
