@@ -1174,6 +1174,11 @@ WebDoc.BoardController = jQuery.klass({
     if(e) {
       e.preventDefault();
     }
+    if(this._selectionDiscussionView.discussion.comments.length > 1) {
+      if(!confirm("Would you remove this discussion?")) {
+        return false;
+      }
+    }
     this.removeDiscussion(this._selectionDiscussionView.discussion);
     this._selectionDiscussionView = null;
   }
