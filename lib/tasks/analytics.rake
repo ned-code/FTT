@@ -5,6 +5,7 @@ namespace :analytics do
   desc "Dump some data into a csv file"
   task :process => :environment do
     
+    sql_connection = ActiveRecord::Base.connection();
     today = Date.today
     
     #########################################
@@ -50,7 +51,29 @@ namespace :analytics do
     number_of_discussions = Discussion.count(:all)
     number_of_comments = Comment.count(:all)
     number_of_datastore_entries = DatastoreEntry.count(:all)
-
+    
+    
+    webdocs = Document.all(:select => "views_count, is_public")
+    max_webdoc_views_count = 0
+    median_views_count = 0
+    total_webdoc_views_count = 0
+    total_published_webdoc_views_count = 0
+    webdocs.each do |w|
+      if w.views_count > max_webdoc_views_count
+        max_webdoc_views_count = w.views_count
+      end
+      total_webdoc_views_count += w.views_count
+      if w.is_public
+        total_published_webdoc_views_count += w.views_count
+      end
+    end
+    
+    median_views_count = "%.1f" % (total_webdoc_views_count.to_f / webdocs.length)
+    # result = sql_connection.execute "select sum(views_count) from documents"
+    # result = sql_connection.execute "select sum(views_count) from documents where is_public='1'"
+    # result = sql_connection.execute "select max(views_count) from documents"
+    
+    
     data_array = [
         today,
         number_of_users,
@@ -75,7 +98,11 @@ namespace :analytics do
         number_of_draw_item,
         number_of_discussions,
         number_of_comments,
-        number_of_datastore_entries
+        number_of_datastore_entries,
+        total_webdoc_views_count,
+        total_published_webdoc_views_count,
+        max_webdoc_views_count,
+        median_views_count
       ]
     
     #########################################
@@ -134,7 +161,11 @@ namespace :analytics do
           'Number of draw objects',
           'Number of discussions ',
           'Number of comments ',
-          'Number of datastore entries '
+          'Number of datastore entries ',
+          'Total wedocs views',
+          'Total wedocs published views',
+          'Max webdocs views',
+          'Median webdocs views'
           ]
       else
         #appending old data (it should have a better way to add a single lline at the end of file)
@@ -146,10 +177,10 @@ namespace :analytics do
       csv << data_array
     end
     #Send the mail
-    Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com dev@webdoc.com")
+    Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com dev@webdoc.com", filename)
     
     # update Google spreadsheet
-    ss_session = GoogleSpreadsheet.login("dev@webdoc.com", "_gcwebdoc09")
+    ss_session = GoogleSpreadsheet.login("wd.spreadsheet@gmail.com", "_gcwebdoc09")
     ss = ss_session.spreadsheet_by_key 't22rQWW3sFUmSFoJC-2pfSA'
     ws = ss.worksheets[0]
     new_line_number = ws.num_rows + 1
@@ -192,7 +223,9 @@ namespace :analytics do
       if datas.empty?
         csv << ['Date', 
           'App Title',
-          'System name'
+          'System name',
+          'Uuid',
+          'Number of items using it'
           ]
       else
         #appending old data (it should have a better way to add a single lline at the end of file)
@@ -201,8 +234,12 @@ namespace :analytics do
         end
       end      
       #append new data
-      csv << data_array
+      widget_data_arrays.each do |data_array|
+        csv << data_array
+      end
     end
+    
+    Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com dev@webdoc.com",filename)
   end
   
 end
