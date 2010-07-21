@@ -23,7 +23,6 @@ WebDoc.Page = $.klass(WebDoc.Record,
     this.lastDrawingItemPosition = -1;
     this._layout = undefined;
     this.items = [];
-    this.discussions = [];
     this._itemsToRemoveAfterSave = [];
     this.nonDrawingItems = [];
 
@@ -385,8 +384,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
     if (json.page.items && $.isArray(json.page.items)) {
       var that = this;
       this.items = [];
-      this.discussions = [];
-      this.nonDrawingItems = [];   
+      this.nonDrawingItems = [];
       this.lastDrawingItemPosition = -1;     
       this.firstPosition = 0;
       this.lastPosition = 0;      
@@ -851,21 +849,34 @@ WebDoc.Page = $.klass(WebDoc.Record,
   // ***********
 
   getDiscussions: function(callback) {
-    WebDoc.ServerManager.getRecords( WebDoc.Discussion, null, callback, { ajaxParams: { page_id: this.uuid() } });
+    if (this.discussions !== undefined) {
+      callback.call(this, this.discussions);
+    }
+    else {
+      WebDoc.ServerManager.getRecords( WebDoc.Discussion, null, function(discussions) {
+        this.discussions = discussions;
+        callback.call(this, this.discussions);
+      }.pBind(this), { ajaxParams: { page_id: this.uuid() } });
+    }
   },
 
   addDiscussion: function(discussion) {
+    if(this.discussions === undefined) {
+      this.discussions = [];
+    }
     this.discussions.push(discussion);
     this.fireDiscussionAdded(discussion);
   },
 
   removeDiscussion: function(discussion) {
-    discussion.destroy();
-    var index = jQuery.inArray(discussion, this.discussions);
-    if (index > -1) {
-      this.discussions.splice(index, 1);
+    if(this.discussions !== undefined) {
+      discussion.destroy();
+      var index = jQuery.inArray(discussion, this.discussions);
+      if (index > -1) {
+        this.discussions.splice(index, 1);
+      }
+      this.fireDiscussionRemoved(discussion);
     }
-    this.fireDiscussionRemoved(discussion);
   },
 
   fireDiscussionAdded: function(addedDiscussion) {
