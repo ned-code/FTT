@@ -80,7 +80,10 @@ namespace :analytics do
       median_views_count = median[index]
     end
     
-    median_views_count = "%.1f" % (total_webdoc_views_count.to_f / webdocs.length)
+    #average view count
+    #median_views_count = "%.1f" % (total_webdoc_views_count.to_f / webdocs.length)
+    
+    #sql reques to be more powerful
     # result = sql_connection.execute "select sum(views_count) from documents"
     # result = sql_connection.execute "select sum(views_count) from documents where is_public='1'"
     # result = sql_connection.execute "select max(views_count) from documents"
