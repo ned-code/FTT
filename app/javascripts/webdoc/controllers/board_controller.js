@@ -904,13 +904,11 @@ WebDoc.BoardController = jQuery.klass({
     if (!e.ctrlKey && !e.metaKey) {
       switch (e.which) {
         case 8:
-        case 46:
-          if (this._isInteraction) {
-            this.deleteSelectionDiscussion(e);
-          }
-          else {
+        case 46: 
+          if (!this._isInteraction) {
             this.deleteSelection(e);
           }
+          this.deleteSelectionDiscussion(e);
           break;
         case 90:
           this.zoomIn();
@@ -1169,18 +1167,30 @@ WebDoc.BoardController = jQuery.klass({
     discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion);
   },
 
+  unSelectDiscussionView: function() {
+    if(this._selectionDiscussionView !== null) {
+      this._selectionDiscussionView.unSelect();
+      var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+      discussionPanel.unSelectDiscussion(this._selectionDiscussionView.discussion);
+      this._selectionDiscussionView = null;      
+    }
+  },
+
   deleteSelectionDiscussion: function(e) {
     ddd('[BoardController] delete selection discussion');
     if(e) {
       e.preventDefault();
     }
-    if(this._selectionDiscussionView.discussion.comments.length > 1) {
-      if(!confirm("Would you remove this discussion?")) {
-        return false;
+    if(this._selectionDiscussionView) {
+      if(this._selectionDiscussionView.discussion.comments.length > 1) {
+        if(!confirm("Would you remove this discussion?")) {
+            return false;
+        }
       }
+      this.removeDiscussion(this._selectionDiscussionView.discussion);
+      this._selectionDiscussionView = null; 
     }
-    this.removeDiscussion(this._selectionDiscussionView.discussion);
-    this._selectionDiscussionView = null;
+
   }
 
 });
