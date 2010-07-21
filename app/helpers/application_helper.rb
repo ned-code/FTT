@@ -17,9 +17,30 @@ module ApplicationHelper
         i += 1
       end
       
+      p property
+      if property != 'overflow'
       #build the string
-      css_string += "#{property}:#{value};"
+        css_string += "#{property}:#{value};"
+      end
     end
     css_string
+  end
+  
+  def calcul_z_index(position)
+    if position
+      z_index = '';
+      if position < 10
+        z_index = "z-index:5000#{position};"
+      elsif position < 100
+        z_index = "z-index:500#{position};"
+      elsif position < 1000
+        z_index = "z-index:50#{position};"
+      elsif position < 10000
+        z_index = "z-index:5#{position};"
+      end
+      return z_index
+    else
+      return 'z-index:50000;'
+    end
   end
 end

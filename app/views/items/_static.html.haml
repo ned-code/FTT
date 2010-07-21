@@ -1,4 +1,6 @@
-- cssString = build_css_string(item.data['css'])
+- cssString = calcul_z_index(item.position)
+
+- cssString += build_css_string(item.data['css'])
 - if item.data['style']
   - cssString +=  build_css_string(item.data['style'])
 .item_warp{ :id => item.uuid, :style => "#{cssString} position:absolute;" }
@@ -11,4 +13,6 @@
       = render 'items/statics/widget', :item => item
     - when 'drawing'
       = render 'items/statics/drawing', :item => item
+    - when 'iframe'
+      = render 'items/statics/iframe', :item => item
       
