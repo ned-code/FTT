@@ -50,7 +50,28 @@ namespace :analytics do
     rescue
       datas = []
     end
-        
+    
+    #########################################
+    #Widget data calcutlation
+    #########################################
+    
+    widgets = Medias::Widget.all
+    widget_analytics = []
+    
+    widgets.each do |w|
+      widget_analytics << [
+        today,
+        w.title,
+        w.system_name,
+        w.uuid,
+        Item.count(:all, :conditions => { :media_id => w.uuid})
+        ]
+    end
+    
+    
+    #########################################
+    #First report
+    #########################################
     FasterCSV.open(filename, "w") do |csv|
       #append header if there isn't one
       if datas.empty?
@@ -114,6 +135,8 @@ namespace :analytics do
     end
     #Send the mail
     Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com dev@webdoc.com")
+    
+    
   end
   
 end
