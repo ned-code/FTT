@@ -148,18 +148,22 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
   selectDiscussion: function(discussion, oldDiscussion) {
     ddd('[DiscussionsPanel] select discussion');
-    if (oldDiscussion !== null) {
-      var oldDiscussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+oldDiscussion.uuid()+"']")[0];
-      var oldParent = jQuery(oldDiscussionSelectedDomNode).parent();
-      this.compactMode(oldParent);
-      oldParent.removeClass('item_selected');
-    }
+    this.unSelectDiscussion(oldDiscussion);
     var discussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+discussion.uuid()+"']")[0];
     if(discussionSelectedDomNode) {
       var parent = jQuery(discussionSelectedDomNode).parent();
       parent.addClass('item_selected');
       this.expendMode(parent);
       discussionSelectedDomNode.scrollIntoView(true);
+    }
+  },
+
+  unSelectDiscussion: function(discussion) {
+    if (discussion !== null) {
+      var oldDiscussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+discussion.uuid()+"']")[0];
+      var oldParent = jQuery(oldDiscussionSelectedDomNode).parent();
+      this.compactMode(oldParent);
+      oldParent.removeClass('item_selected');
     }
   },
 
