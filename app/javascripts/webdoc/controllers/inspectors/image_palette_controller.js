@@ -199,6 +199,7 @@ WebDoc.ImagePaletteController = $.klass({
         var image = new WebDoc.Image;
         image.data.remote_attachment_url = this.propertySrc.val();
         this.selectedItem = selectedItem;
+        ddd('selectedItem', selectedItem);
         image.data.favorites = 1;
         image.save(function(event){
           if($('#media-browser-my-favorites').length){

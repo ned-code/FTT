@@ -332,7 +332,8 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       type: 'application/wd-image',
       uuid: uuid,
       favorites: data.favorites,
-      media_id: data.uuid
+      media_id: data.uuid,
+      title: data.title
     };
     
     var thumb = $("<img>").attr({
@@ -390,7 +391,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     var dt = event.originalEvent.dataTransfer;
     var imageUrl = properties.default_url ? properties.default_url : properties.url;
     ddd(properties.media_id);
-    dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id, favorites:properties.favorites, media_id:properties.media_id }));
+    dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id, favorites:properties.favorites, media_id:properties.media_id, title: properties.title }));
     
     // Drag "feedback"
     var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
