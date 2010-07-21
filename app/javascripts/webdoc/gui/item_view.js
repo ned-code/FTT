@@ -36,7 +36,6 @@ WebDoc.ItemView = $.klass({
     }
     
     this.item = item;
-    
     this._editable = pageView.isEditable();
     // item wrapper
     this.domNode = $("<div/>").addClass('item_wrap').css("zIndex", 500000 + this.item.positionZ());
@@ -46,7 +45,7 @@ WebDoc.ItemView = $.klass({
     
     this.domNode.append(this.itemDomNode);
     this.domNode.append(this.itemLayerDomNode);
-    
+  
     this.domNode.id(this.item.uuid());
     this.domNode.data("itemView", this);
     

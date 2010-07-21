@@ -42,11 +42,11 @@ class Notifier < ActionMailer::Base
     body        :new_user => new_user    
   end
   
-  def send_daily_report(recipients)
+  def send_daily_report(recipients, filename)
     recipients  recipients
     from        APP_CONFIG['mail_from']
     subject     "[webdoc alpha] Your Daily Report"
     attachment  :content_type => "text/plain",
-                :body => File.read("#{Rails.root}/reports/analytics.csv")
+                :body => File.read(filename)
   end
 end
