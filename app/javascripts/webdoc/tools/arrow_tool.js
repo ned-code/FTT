@@ -27,6 +27,7 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
       if (!(objectToSelect.object && WebDoc.application.boardController.editingItem() == objectToSelect.object)) {
         if (objectToSelect.object) {
           e.stopPropagation();
+          WebDoc.application.boardController.unSelectDiscussionView();
           if(e.shiftKey) {
             WebDoc.application.boardController.addItemViewToSelection([objectToSelect.object]);
           }
@@ -43,6 +44,7 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
       this.lastSelectedObject.event = null;
     }
     else if(objectToSelect.type === 'discussion') {
+      WebDoc.application.boardController.unselectAll();      
       WebDoc.application.boardController.selectDiscussionView(objectToSelect.object);
     } 
   },

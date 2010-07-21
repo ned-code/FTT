@@ -333,8 +333,8 @@ WebDoc.PageView = $.klass({
       while(l--){
         discussion = discussions[l];
         this.createDiscussionView(discussion);
-        WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
-        // discussionPanel.showCurrentPageDiscussions();
+        var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+        discussionPanel.showCurrentPageDiscussions();
       }
     }.pBind(this));
   },
