@@ -1,4 +1,7 @@
 class Comment < ActiveRecord::Base
+
+  include ActionView::Helpers
+  
   has_uuid
   set_primary_key :uuid
 
@@ -24,6 +27,10 @@ class Comment < ActiveRecord::Base
       self.root = true
     end
     return true
+  end
+
+  def safe_content
+    sanitize(self.content)
   end
 
   def safe_delete!

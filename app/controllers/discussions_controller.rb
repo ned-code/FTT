@@ -24,8 +24,7 @@ class DiscussionsController < ApplicationController
 
     respond_to do |format|
       format.json do
-
-        @as_json_discussions = @discussions.map{ |d| d.as_json(:include => { :comments => { :include => { :user => { :methods => :avatar_thumb_url } } }}) }
+        @as_json_discussions = @discussions.map{ |d| d.as_json(:include => { :comments => { :include => { :user => { :methods => :avatar_thumb_url } }, :except => [:content], :methods => :safe_content }}) }
 
         render :json => @as_json_discussions
       end
