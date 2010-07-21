@@ -17,6 +17,8 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
     this.currentPage.addListener(this);
     WebDoc.application.boardController.addCurrentPageListener(this);
+    
+    this.showCurrentPageDiscussions();
   },
 
   buttonSelector: function() {
