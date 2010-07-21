@@ -58,14 +58,26 @@ namespace :analytics do
     median_views_count = 0
     total_webdoc_views_count = 0
     total_published_webdoc_views_count = 0
+    median = []
+    
     webdocs.each do |w|
       if w.views_count > max_webdoc_views_count
         max_webdoc_views_count = w.views_count
       end
       total_webdoc_views_count += w.views_count
+      median << w.views_count
       if w.is_public
         total_published_webdoc_views_count += w.views_count
       end
+    end
+    
+    if median.length % 2 == 0
+      index1 = median.length / 2
+      index2 = index1 - 1
+      median_views_count = (median[index1] + median[index2]) / 2
+    else
+      index = ((median.length - 1) / 2) + 1
+      median_views_count = median[index]
     end
     
     median_views_count = "%.1f" % (total_webdoc_views_count.to_f / webdocs.length)
