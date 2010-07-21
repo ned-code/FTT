@@ -19,7 +19,7 @@ class DiscussionsController < ApplicationController
     if params[:page_id].present?
       @discussions = Page.find_by_uuid(params[:page_id]).discussions.not_deleted.all(:include => { :comments => :user },
                                                                                      :conditions => ['comments.deleted_at IS ?', nil],
-                                                                                     :order => 'discussions.created_at DESC, comments.created_at DESC')
+                                                                                     :order => 'discussions.created_at DESC, comments.created_at ASC')
     end
 
     respond_to do |format|
