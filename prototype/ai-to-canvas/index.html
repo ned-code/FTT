@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>Illustrator to Canvas path converter</title>
+
+<link rel="icon" type="image/png" href="images/favicon.png" />
+
+<style type="text/css" media="screen, projection">
+<!--
+	@import "css/reset.css";
+	@import "css/typography.css";
+	@import "css/style.css";
+  #content
+    {position:absolute; left:32px; right:0; top:72px; bottom:0;
+     overflow: hidden;}
+  #screed
+    {position:absolute; left:48px; right:0; top:0px; bottom:0px; padding:4em 80px 3em 0;
+     overflow: auto;}
+  canvas
+    {position:absolute; left:0; top:32px; width:94%; height:90%;}
+  textarea{height:12em; width: 36em}
+  textarea, input{border:1px solid grey; margin:0 0.6em 0.6em 0; font-size: 0.7em;}
+  #height{width:4em; height:1.6em;}
+  .version {font-size: 0.5em; text-transform: uppercase;}
+-->
+</style>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/canvas_0.4.js"></script>
+<script type="text/javascript">
+<!--
+
+  // VAR
+  
+  var error = {
+      	badcoords: "There's something wrong with one of your co-ordinates."
+      }
+  
+  // FUNCTIONS
+  
+  function draw(){
+
+    var grad = canvas.gradient("background", [0,0,20,canvas.elements["background"].height], {
+      0:    "rgba(236, 200, 80, 0.2)",
+      1:    "rgba(160, 120, 60, 0.6)"
+    });
+    
+    canvas.draw("background", "raggedRect", {
+      sca: [canvas.elements["background"].width/360, canvas.elements["background"].height/275],
+      fill: true,
+    }, {fillStyle: grad});
+  }
+
+  
+  function convertPath(file){
+  // Converts AI coordinates into code useable by Wisp canvas object.
+    
+    var regexBegin    = /.*?\*u/
+    var regexNewPath  = /^n$/;                                                                     
+        // Matches everything up to the first "*u"
+    var regexCoord    = /((\b|[+-])[0-9]+(\.[0-9]+)?\b)\s*[\,\s]\s*((\b|[+-])[0-9]+(\.[0-9]+)?\b)/;   
+        // Matches "6.0, 89" or "0 34" or "1.000  , 56.2". The numbers themselves are encapsulated at array position [1] and [4]
+    var regexCoords   = /((?:\b|[+-])[0-9]+(?:\.[0-9]+)?\b)\s*[\,\s]\s*((?:\b|[+-])[0-9]+(?:\.[0-9]+)?\b)(?:\s*[\,\s]\s*((?:\b|[+-])[0-9]+(?:\.[0-9]+)?\b)\s*[\,\s]\s*((?:\b|[+-])[0-9]+(?:\.[0-9]+)?\b))?(?:\s*[\,\s]\s*((?:\b|[+-])[0-9]+(?:\.[0-9]+)?\b)\s*[\,\s]\s*((?:\b|[+-])[0-9]+(?:\.[0-9]+)?\b))?.*?/;
+        // Matches up to six space or comma delineated floating point numbers. The numbers are encapsulated at array positions [1-6]
+    var regexUnion    = /\/operation\s\/union|\/operation\s\/subtract/;                   
+        // Matches any complete line containing "/operation /union" or "/operation /subtract" - must switch multiline on!
+    var i = 0, j = 0, k = 0, l = 0;
+    var ctx  = canvas.elements["background"].ctx;
+    var line = "";
+    var data = [];
+    var flagtest;
+    var flag = [];
+    var code = "";
+    
+    // Make file into an array
+    file = file.split(/\n/);
+
+    while (file.length) {
+      // Remove first line of file and test it for coordinates
+      line = file.shift();
+      data[i] = regexCoords.exec(line);
+      
+      if (data[i]) {
+        // Remove full match in cell [0]
+        data[i].shift();
+        // Remove undefined cells at end of array
+        for (j=0; j < data[i].length; j++) {
+          if (!data[i][j]) {
+            data[i] = data[i].slice(0,j);
+            break;
+          }
+        }
+        i++;
+      }
+      // Otherwise test it for new path 
+      else {
+        flagtest = regexNewPath.exec(line);
+        if (flagtest) {
+          flag[i] = "move";
+          //console.log(""+flag);
+        }
+        // Remove the row from data, since it's null anyway
+        data.pop();
+      }
+    }
+    
+    if (!flag[0]) flag[0]="move";
+    
+    // Convert strings to floats
+    for (j=1; j<data.length; j++) {
+      for (k=0; k < data[j].length; k++) {
+        data[j][k] = parseFloat(data[j][k]);
+      }
+    }
+    
+    // Go back over the data and make 4 entry arrays into 6 entry arrays
+    for (j=0; j<data.length; j++) {
+      // point node to a bezier node
+      if (data[j].length==4 && data[j-1].length==2) {
+        data[j] = [data[j-1][0], data[j-1][1]].concat(data[j]);
+      }
+      // bezier node to a point node
+      else if (data[j].length==4 && (data[j-1].length==6 || data[j-1].length==4)) {
+        data[j] = data[j].slice(0,2).concat(data[j].slice(2,4), data[j].slice(2,4));
+      }
+    }    
+        
+    // Assemble the result
+    var command;
+    for (j=0; j<data.length; j++) {
+      if (data[j].length==2) {
+        if      (flag[j]=="move") {command = "moveTo";}
+        else                      {command = "lineTo";}
+      }
+      else {
+        command="bezierCurveTo";
+      }
+      code = code+"{ method: \'"+command+"\', data: ["+data[j]+"] },\n";
+    }
+
+
+    // Display
+    jQuery("#result").val(code);    
+
+  }
+
+  // RUN
+  
+  jQuery(document).ready(function(){
+  
+    // Header replacement
+    jQuery('h1').html('<img src="../images/logo_stephband_medcoalblue.png" />');
+
+    canvas.init();
+
+    jQuery(window).resize(function(){
+      canvas.resize();
+    })
+
+    jQuery(window).resize();
+    
+    jQuery("#input, #height").blur(function(){
+      convertPath(jQuery("#input").val());
+    });
+  
+  });
+  //});
+
+//-->
+</script>
+
+<!--[if IE]>
+<script type="text/javascript" src="js/excanvas-compressed.js"></script>
+<![endif]-->
+
+</head>
+
+<body>
+
+<div id="content">
+
+  <canvas id="background">
+
+  </canvas>
+  
+  <div id="screed">
+    <h2>Illustrator to Canvas path converter <span class="version">0.2 BETA | <a href="version.html">VERSION HISTORY</a></span></h2>
+      <p>A rough and ready convertor that takes coordinates from an AI file and translates them to code for vector shapes in a canvas tag.</p>    
+				<textarea id="input">
+*u
+%AI3_Note:<< /operation /union >>
+1 XR
+118.0000 711.0000 m
+152.2416 711.0000 180.0000 683.2416 180.0000 649.0000 c
+180.0000 614.7584 152.2416 587.0000 118.0000 587.0000 c
+83.7584 587.0000 56.0000 614.7584 56.0000 649.0000 c
+56.0000 683.2416 83.7584 711.0000 118.0000 711.0000 c
+n
+*U
+*u
+%AI3_Note:<< /operation /union >>
+1 XR
+428.5000 708.0000 m
+466.3315 708.0000 497.0000 676.6599 497.0000 638.0000 c
+497.0000 599.3401 466.3315 568.0000 428.5000 568.0000 c
+390.6685 568.0000 360.0000 599.3401 360.0000 638.0000 c
+360.0000 676.6599 390.6685 708.0000 428.5000 708.0000 c
+n
+*U
+%Adobe_Photoshop_Path_End
+%%Trailer
+%%EOF
+				</textarea>
+      <textarea id="result">
+      </textarea>
+
+    <h2>How to use</h2>
+      <ol>
+        <li>Save an AI file from Illustrator, or from Photoshop select a path layer and choose File &gt; Export &gt; Paths to Illustrator...</li>
+        <li>Open the AI file in a text editor. Delete the header information, down to the first "*u", and copy and paste the rest into the box above.</li>
+        <li>Code is listed in the second textarea and your shape is drawn onto the background.</li>
+      </ol>
+    <h2>Shapes</h2>
+      <p>There's some shapes <a href="shapes.html">on the shapes page</a>. If you make any good shapes, let me know.</p>
+    
+  </div>
+
+</div>
+
+</body>
+</html>
