@@ -92,15 +92,15 @@ WebDoc.ImagesUploader = $.klass({
       };
       postParams[sessionKeyName] = WebDoc.authData.cookiesSessionKeyName;
       postParams["image[uuid]"] = new WebDoc.UUID().id;
-			postParams["image[favorites]"] = 0;
+      postParams["image[favorites]"] = 0;
       $.swfupload.getInstance(this.uploadControl).setPostParams(postParams);
     }.pBind(this))
     
     .bind('uploadSuccess', function(event, file, serverData){
       ddd("Upload success: "+file.name);
       this.successfulUploads += 1;
-			var data = eval('(' + serverData + ')');
- 			this.imagesLibrary.insertImage(data.image.properties, data.image.uuid, 'my-images-library');
+      var data = eval('(' + serverData + ')');
+      this.imagesLibrary.insertImage(data.image, data.image.uuid, 'my-images-library');
 
       // if (!$("#add_images").is(":visible")) { //only if the Add Images pane has been closed during upload
       //         //this.imagesLibrary.refreshMyImages([$.evalJSON(serverData).image]);
@@ -128,9 +128,7 @@ WebDoc.ImagesUploader = $.klass({
       if (this.filesRemainingToUpload === 0) {
         this.isUploading = false;
         this.resetUploadingUI();
-        // let's call refreshMyImages a last time by forcing to reload the whole thing to fix pagination that might have been added
-        //this.imagesLibrary.refreshMyImages();
-				this.imagesLibrary.showMyImages();
+        this.imagesLibrary.showMyImages();
       }
     }.pBind(this))
     

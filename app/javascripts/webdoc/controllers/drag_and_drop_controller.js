@@ -18,14 +18,13 @@ WebDoc.DrageAndDropController = {
   },
   
   drop: function(evt) {
-    ddd("drop");
-		var receivedTypes = evt.originalEvent.dataTransfer.types;
-		
+    var receivedTypes = evt.originalEvent.dataTransfer.types;
+    
     if (receivedTypes.length > 0) {
       evt.preventDefault();
 
-			//we keep the old way to support drag from the WD library.
-			
+      //we keep the old way to support drag from the WD library.
+      
       // take the correct data from the datatransfer
       var availableType = evt.originalEvent.dataTransfer.types[0];
       // if more then 1 type are in the datatransfer we take one we know the best
@@ -56,31 +55,33 @@ WebDoc.DrageAndDropController = {
             var widgetData = $.evalJSON(widget);
             WebDoc.application.boardController.insertWidget(widgetData, pos);
           }
-					WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-					return true;
+          WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+          return true;
           break;
         case 'application/wd-image' :
           if(imageUrl === undefined) {
             var params = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-image'));
             var imageUrl = params.url;
-            var id = params.id ? params.id : undefined;  
+            var id = params.id ? params.id : undefined;
+            var media_id = params.media_id;
+            ddd('media_id : ' + media_id);
           }
           var parent = jQuery(evt.target).parent();
           if(parent && parent.data('itemView') && parent.data('itemView').item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && parent.data('itemView').item.getIsPlaceholder()){
             var item = parent.data('itemView').item;
-            item.replacePlaceholder(WebDoc.ITEM_TYPE_IMAGE, {imageUrl: imageUrl});
+            item.replacePlaceholder(WebDoc.ITEM_TYPE_IMAGE, {imageUrl: imageUrl, favorites:favorites});
           }  
           else {
-            WebDoc.application.boardController.insertImage(imageUrl, pos, id);
+            WebDoc.application.boardController.insertImage(imageUrl, pos, media_id);
           }
-		      WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-		      return true;
+          WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+          return true;
           break;
         case 'application/wd-video':
           var videoProperties = $.evalJSON(evt.originalEvent.dataTransfer.getData('application/wd-video'));
           WebDoc.application.boardController.insertVideo(videoProperties, pos);
-		      WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-		      return true;
+          WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
+          return true;
           break;
         case 'application/wd-discussion':
           ddd('[DragAndDropController] new discussion');

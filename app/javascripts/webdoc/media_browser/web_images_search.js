@@ -302,7 +302,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     "&content_type=1&api_key=" + this.flickrApiKey + "&format=json&jsoncallback=?";
     $.getJSON(flickrUrl,
       function(data){
-
+        ddd('flickr data', data);
         this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(data.photos.total,"'"));
         this.page = parseInt(data.photos.page,10);
         this.perPage = data.photos.perpage;
@@ -374,7 +374,7 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     
     $.getJSON(googleUrl,
       function(data){
-        // ddd(data);
+        ddd('google', data);
         var cursor = data.responseData.cursor;
         this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(cursor.estimatedResultCount,"'"));
         
