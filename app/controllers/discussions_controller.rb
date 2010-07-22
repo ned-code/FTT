@@ -12,6 +12,15 @@ class DiscussionsController < ApplicationController
   #     allow :editor, :of => :document
   #   end
   # end
+
+  # access_control do
+  #   allow :admin
+  #   allow :editor, :of => :document
+  #   action :show do
+  #     allow :reader, :of => :document
+  #     allow all, :if => :document_is_public?
+  #   end
+  # end
   
   def index
     raise 'no params id' if params[:page_id].blank?

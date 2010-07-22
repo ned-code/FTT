@@ -866,7 +866,7 @@ WebDoc.Page = $.klass(WebDoc.Record,
   },
 
   addDiscussion: function(discussion) {
-    if(this.discussions === undefined) {
+    if(!this.discussions) {
       this.discussions = [];
     }
     this.discussions.push(discussion);
