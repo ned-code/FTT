@@ -1,20 +1,22 @@
 <% cssString = calcul_z_index(item.position) %>
-<% cssString += build_css_string(item.data['css']) %>
+<% cssString += build_css_placement_string(item.data['css']) %>
+<% style =  build_css_string(item.data['css']) %>
 <% if item.data['style'] %>
-  <% cssString +=  build_css_string(item.data['style']) %>
+  <% style +=  build_css_string(item.data['style']) %>
+  <% p style %>
 <% end %>
-
-<div class='item_warp' id='<%= item.uuid %>' style='<%= "#{cssString} position:absolute;" %>'>
+<div class='item_warp item-<%= item.media_type %>' id='<%= item.uuid %>' style='<%= "#{cssString} position:absolute;" %>'>
+  
   <% case item.media_type %>
     <% when 'text' %>
-      <%= render 'items/statics/text', :item => item %>
+      <%= render 'items/statics/text', :item => item, :style => style %>
     <% when 'widget' %>
-      <%= render 'items/statics/widget', :item => item %>
+      <%= render 'items/statics/widget', :item => item, :style => style %>
     <% when 'image' %>
-      <%= render 'items/statics/image', :item => item %>
+      <%= render 'items/statics/image', :item => item, :style => style %>
     <% when 'iframe' %>
-      <%= render 'items/statics/iframe', :item => item %>
+      <%= render 'items/statics/iframe', :item => item, :style => style %>
     <% when 'html' %>
-      <%= render 'items/statics/html', :item => item %>
+      <%= render 'items/statics/html', :item => item, :style => style %>
   <% end %>
 </div>      

@@ -8,6 +8,7 @@
     %meta{ "name" => "description", :content => "#{yield(:description)}"}
     %title= "webdoc - alpha - #{yield(:title)}"
     = include_stylesheets :common, :media => 'all'
+    = include_stylesheets :page_editor, :media => 'all'
 
   %body
     = yield

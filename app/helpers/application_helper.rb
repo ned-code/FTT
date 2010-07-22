@@ -1,5 +1,6 @@
 module ApplicationHelper
   def build_css_string(css_hash)
+    reject_propreties = ['overflow', 'font_face', 'font-_face', 'font', 'width', 'height', 'top', 'left', 'transform']
     css_string = ''
     css_hash.each do |property, value|
       #convert propertyCapital to property-capital
@@ -16,10 +17,29 @@ module ApplicationHelper
         end
         i += 1
       end
-      
-      if property != 'overflow' && property != 'font_face' && property != 'font-_face' && property != 'font'
+      if property == 'color'
+        css_string += "#{value};"
+      elsif !reject_propreties.include?(property)
       #build the string
         css_string += "#{property}:#{value};"
+      end
+    end
+    css_string
+  end
+  
+  def build_css_placement_string(css_hash)
+    css_string = ''
+    accepted_properties = ['width', 'height', 'top', 'left', 'transform']
+    css_hash.each do |property, value|
+      if accepted_properties.include?(property)
+      #build the string
+        if property == 'transform'
+          css_string += "#{property}:#{value};"
+          css_string += "-moz-#{property}:#{value};"
+          css_string += "-webkit-#{property}:#{value};"
+        else
+          css_string += "#{property}:#{value};"
+        end
       end
     end
     css_string

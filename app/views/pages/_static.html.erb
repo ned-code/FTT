@@ -8,9 +8,18 @@
 
 <div class='webdoc' id='<%= "page_#{page.uuid}" %>' style='<%= build_css_string(page.data['css'])%>'>
   
-  <div class='layer' id=' <%= "items_#{page.uuid}"%>' style='overflow:visible'>
-    <style>
-      <%= yield :font_face %>
+  <div class='layer' id='<%="items_#{page.uuid}"%>' style='overflow:visible'>
+    <style type='text/css'>
+      <% style = '' %>
+      <% for item in @text_items do %>
+        <% if item.data['style'] && item.data['style']['font_face']  %>
+          <% font_face = item.data['style']['font_face'] %>
+        <% end %>
+        <% if font_face %>
+            <% style += "@font-face{#{font_face}}" %>
+        <% end %>        
+      <% end %>
+      <%= style %>
     </style>
     <% for item in @items do %>
       <%= render 'items/static', :item => item %>

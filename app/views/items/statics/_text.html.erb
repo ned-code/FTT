@@ -1,17 +1,9 @@
-<% style = '' %>
-<% if item.data['style'] %>
-  <% if item.data['style']['font_face'] %>
+<% style ||= '' %>
+<% if item.data['style'] && item.data['style']['font_face']%>
   <% font_face = item.data['style']['font_face'] %>
   <% style += item.data['style']['font'] %>
-  <% end %>
 <% end %>
 
-<% if font_face %>
-  <% content_for :font_face do %>
-    <%= font_face %>
-  <% end %>
-<% end %>
-
-<div class='item' style="<%= style %>">
+<div class='item layer' style="<%= style %>">
   <%= raw item.inner_html %>
 </div>  
