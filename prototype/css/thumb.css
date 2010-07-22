@@ -68,8 +68,3 @@
 }
 
 .webdoc_thumb {}
-
-.message_index .user_thumb {
-  position: absolute;
-  top: 0; left: 0;
-}
