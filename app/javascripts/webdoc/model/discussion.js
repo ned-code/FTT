@@ -46,6 +46,10 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
     }
   },
 
+  userId: function() {
+    return this.data.user_id;
+  },
+
   createComment: function(commentData) {
     var newComment = new WebDoc.Comment(commentData, this);
     this.addComment(newComment);
