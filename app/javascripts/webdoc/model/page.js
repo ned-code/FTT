@@ -860,6 +860,11 @@ WebDoc.Page = $.klass(WebDoc.Record,
     }
   },
 
+  createDiscussion: function(discussionData) {
+    var newDiscussion = new WebDoc.Discussion(discussionData, 'page', this.uuid());
+    this.addDiscussion(newDiscussion);
+  },
+
   addDiscussion: function(discussion) {
     if(this.discussions === undefined) {
       this.discussions = [];
@@ -893,7 +898,31 @@ WebDoc.Page = $.klass(WebDoc.Record,
         this.listeners[i].discussionRemoved(removedDiscussion);
       }
     }
-  }  
+  },
+
+  // for xmpp notification, see collaboration manager
+  createOrUpdateOrDestroyDiscussion: function(discussionData) {
+    var discussion = this.findDiscussionByUuid(discussionData.discussion.uuid);
+    if (discussionData.action == "delete") {
+      this.removeDiscussion(discussion);
+    }
+    else if (!discussion) {
+      this.createDiscussion(discussionData);
+    }
+    else {
+      discussion.refresh(discussionData);
+    }
+  },
+
+  findDiscussionByUuid: function(uuid) {
+    for (var i=0; i<this.discussions.length; i++) {
+      var aDiscussion = this.discussions[i];
+      if (aDiscussion.uuid() == uuid) {
+        return aDiscussion;
+      }
+    }
+    return null;
+  }
 
 });
 

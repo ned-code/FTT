@@ -5,7 +5,6 @@
 WebDoc.Discussion = $.klass(WebDoc.Record, {
 
   initialize: function($super, json, associatedType, associatedId) {
-
     this.hasMany = {
       comments: WebDoc.Comment
     };
@@ -24,8 +23,20 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
     if(this.data.properties === undefined) {
       this.data.properties = {};
     }
+  },
+
+  refresh: function($super, json, onlyMissingValues) {
+    $super(json, onlyMissingValues);
 
 
+
+    // if (json.page.items && $.isArray(json.page.items)) {
+    //   this.items = [];
+    //   for (var i = 0; i < this.data.items.length; i++) {
+    //     var itemData = this.data.items[i];
+    //     this.createOrUpdateItem({ item: itemData });
+    //   }
+    // }
   },
 
   setPosition: function(position, skipSave) {

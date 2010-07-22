@@ -32,7 +32,9 @@ class DiscussionsController < ApplicationController
 
   def create
     @discussion = Discussion.new_with_uuid(params[:discussion])
-
+    message = @discussion.as_application_json
+    message[:source] = params[:xmpp_client_id]
+    @@xmpp_notifier.xmpp_notify(message.to_json, @discussion.page.document.uuid)
     respond_to do |format|
       if @discussion.save
         format.json { render :json => @discussion }
@@ -43,12 +45,17 @@ class DiscussionsController < ApplicationController
   end
   
   def update
-    @discussion.update_attributes(params[:discussion])
+    @discussion.update_attributes!(params[:discussion])
+    message = @discussion.as_application_json
+    message[:source] = params[:xmpp_client_id]
+    @@xmpp_notifier.xmpp_notify(message.to_json, @discussion.page.document.uuid)
     render :json => @discussion
   end
 
   def destroy
     @discussion.safe_delete!
+    message = { :source => params[:xmpp_client_id], :discussion =>  { :page_id => @discussion.page.id, :uuid => @discussion.uuid }, :action => "delete" }
+    @@xmpp_notifier.xmpp_notify(message.to_json, @discussion.page.document.uuid)
     render :json => {}
   end
 

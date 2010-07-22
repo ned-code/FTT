@@ -161,6 +161,12 @@ WebDoc.CollaborationManager = $.klass(
             document: messageObject.document
           });
         }
+        if (messageObject.discussion) {
+          var modifiedPage = WebDoc.ServerManager.cache.get(WebDoc.Page, messageObject.discussion.page_id);
+          if (modifiedPage) {
+            modifiedPage.createOrUpdateOrDestroyDiscussion(messageObject);
+          }
+        }
       }
     }
   });
