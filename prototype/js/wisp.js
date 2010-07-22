@@ -13,79 +13,190 @@
     
     // Eyes open
     var path = [
-          { method: 'moveTo',   		 data: [0,4.11] },
-          { method: 'bezierCurveTo', data: [-0.01,3.54,0.09,2.98,0.3,2.46] },
-          { method: 'bezierCurveTo', data: [0.49,2.01,0.76,1.58,1.11,1.22] },
-          { method: 'bezierCurveTo', data: [1.48,0.84,1.94,0.52,2.46,0.3] },
-          { method: 'bezierCurveTo', data: [2.99,0.08,3.54,-0.01,4.07,0] },
-          { method: 'bezierCurveTo', data: [4.57,0,5.07,0.11,5.53,0.3] },
-          { method: 'bezierCurveTo', data: [6.01,0.5,6.46,0.8,6.84,1.18] },
-          { method: 'bezierCurveTo', data: [7.19,1.54,7.49,1.97,7.69,2.46] },
-          { method: 'bezierCurveTo', data: [7.89,2.96,7.99,3.47,8,3.97] },
-          { method: 'bezierCurveTo', data: [8,4.51,7.89,5.04,7.69,5.53] },
-          { method: 'bezierCurveTo', data: [7.48,6.04,7.15,6.52,6.74,6.91] },
-          { method: 'bezierCurveTo', data: [6.39,7.23,5.99,7.5,5.53,7.69] },
-          { method: 'bezierCurveTo', data: [5.03,7.89,4.52,7.99,4.02,8] },
-          { method: 'bezierCurveTo', data: [3.48,8,2.95,7.89,2.46,7.69] },
-          { method: 'bezierCurveTo', data: [2.01,7.5,1.6,7.24,1.24,6.9] },
-          { method: 'bezierCurveTo', data: [0.84,6.52,0.52,6.06,0.3,5.53] },
-          { method: 'bezierCurveTo', data: [0.11,5.06,0.01,4.58,0,4.11] },
-          { method: 'moveTo',   		 data: [18,4.11] },
-          { method: 'bezierCurveTo', data: [17.98,3.54,18.09,2.98,18.3,2.46] },
-          { method: 'bezierCurveTo', data: [18.49,2.01,18.76,1.58,19.11,1.22] },
-          { method: 'bezierCurveTo', data: [19.48,0.84,19.94,0.52,20.46,0.3] },
-          { method: 'bezierCurveTo', data: [20.99,0.08,21.54,-0.01,22.07,0] },
-          { method: 'bezierCurveTo', data: [22.57,0,23.07,0.11,23.53,0.3] },
-          { method: 'bezierCurveTo', data: [24.01,0.5,24.46,0.8,24.84,1.18] },
-          { method: 'bezierCurveTo', data: [25.19,1.54,25.49,1.97,25.69,2.46] },
-          { method: 'bezierCurveTo', data: [25.89,2.96,25.99,3.47,26,3.97] },
-          { method: 'bezierCurveTo', data: [26,4.51,25.89,5.04,25.69,5.53] },
-          { method: 'bezierCurveTo', data: [25.48,6.04,25.15,6.52,24.74,6.91] },
-          { method: 'bezierCurveTo', data: [24.39,7.23,23.99,7.5,23.53,7.69] },
-          { method: 'bezierCurveTo', data: [23.03,7.89,22.52,7.99,22.02,8] },
-          { method: 'bezierCurveTo', data: [21.48,8,20.95,7.89,20.46,7.69] },
-          { method: 'bezierCurveTo', data: [20.01,7.5,19.6,7.24,19.24,6.9] },
-          { method: 'bezierCurveTo', data: [18.84,6.52,18.52,6.06,18.3,5.53] },
-          { method: 'bezierCurveTo', data: [18.11,5.06,18.01,4.58,18,4.11] }
+          { method: 'moveTo', data: [-6.6090,-12.9385] },
+          { method: 'bezierCurveTo', data: [-7.0241,-11.9364,-7.6193,-11.0634,-8.3417,-10.3417] },
+          { method: 'bezierCurveTo', data: [-9.0904,-9.5935,-9.9758,-9.0078,-10.9385,-8.609] },
+          { method: 'bezierCurveTo', data: [-11.9013,-8.2102,-12.9415,-7.9983,-14,-7.9979] },
+          { method: 'bezierCurveTo', data: [-15.0211,-7.9975,-16.0593,-8.1939,-17.0615,-8.609] },
+          { method: 'bezierCurveTo', data: [-18.0636,-9.0241,-18.9366,-9.6193,-19.6583,-10.3417] },
+          { method: 'bezierCurveTo', data: [-20.4065,-11.0904,-20.9922,-11.9758,-21.391,-12.9385] },
+          { method: 'bezierCurveTo', data: [-21.7898,-13.9013,-22.0017,-14.9415,-22.0021,-16] },
+          { method: 'bezierCurveTo', data: [-22.0025,-17.0211,-21.8061,-18.0593,-21.391,-19.0615] },
+          { method: 'bezierCurveTo', data: [-20.9759,-20.0636,-20.3807,-20.9366,-19.6583,-21.6583] },
+          { method: 'bezierCurveTo', data: [-18.9096,-22.4065,-18.0242,-22.9922,-17.0615,-23.391] },
+          { method: 'bezierCurveTo', data: [-16.0987,-23.7898,-15.0585,-24.0017,-14,-24.0021] },
+          { method: 'bezierCurveTo', data: [-12.9789,-24.0025,-11.9407,-23.8061,-10.9385,-23.391] },
+          { method: 'bezierCurveTo', data: [-9.9364,-22.9759,-9.0634,-22.3807,-8.3417,-21.6583] },
+          { method: 'bezierCurveTo', data: [-7.5935,-20.9096,-7.0078,-20.0242,-6.609,-19.0615] },
+          { method: 'bezierCurveTo', data: [-6.2102,-18.0987,-5.9983,-17.0585,-5.9979,-16] },
+          { method: 'bezierCurveTo', data: [-5.9975,-14.9789,-6.1939,-13.9407,-6.609,-12.9385] },
+          { method: 'moveTo', data: [21.391,-12.9385] },
+          { method: 'bezierCurveTo', data: [20.9759,-11.9364,20.3807,-11.0634,19.6583,-10.3417] },
+          { method: 'bezierCurveTo', data: [18.9096,-9.5935,18.0242,-9.0078,17.0615,-8.609] },
+          { method: 'bezierCurveTo', data: [16.0987,-8.2102,15.0585,-7.9983,14,-7.9979] },
+          { method: 'bezierCurveTo', data: [12.9789,-7.9975,11.9407,-8.1939,10.9385,-8.609] },
+          { method: 'bezierCurveTo', data: [9.9364,-9.0241,9.0634,-9.6193,8.3417,-10.3417] },
+          { method: 'bezierCurveTo', data: [7.5935,-11.0904,7.0078,-11.9758,6.609,-12.9385] },
+          { method: 'bezierCurveTo', data: [6.2102,-13.9013,5.9983,-14.9415,5.9979,-16] },
+          { method: 'bezierCurveTo', data: [5.9975,-17.0211,6.1939,-18.0593,6.609,-19.0615] },
+          { method: 'bezierCurveTo', data: [7.0241,-20.0636,7.6193,-20.9366,8.3417,-21.6583] },
+          { method: 'bezierCurveTo', data: [9.0904,-22.4065,9.9758,-22.9922,10.9385,-23.391] },
+          { method: 'bezierCurveTo', data: [11.9013,-23.7898,12.9415,-24.0017,14,-24.0021] },
+          { method: 'bezierCurveTo', data: [15.0211,-24.0025,16.0593,-23.8061,17.0615,-23.391] },
+          { method: 'bezierCurveTo', data: [18.0636,-22.9759,18.9366,-22.3807,19.6583,-21.6583] },
+          { method: 'bezierCurveTo', data: [20.4065,-20.9096,20.9922,-20.0242,21.391,-19.0615] },
+          { method: 'bezierCurveTo', data: [21.7898,-18.0987,22.0017,-17.0585,22.0021,-16] },
+          { method: 'bezierCurveTo', data: [22.0025,-14.9789,21.8061,-13.9407,21.391,-12.9385] }
         ];
+
+    // Eyes evil
+    var paths = {
+          evil: [
+            { method: 'moveTo', data: [-7.8277,-11.8135] },
+            { method: 'bezierCurveTo', data: [-8.187,-11.2441,-8.7886,-10.6731,-9.2167,-10.3104] },
+            { method: 'bezierCurveTo', data: [-9.7676,-9.8437,-10.7258,-9.5078,-11.4385,-9.3277] },
+            { method: 'bezierCurveTo', data: [-12.4489,-9.0725,-13.2227,-8.9671,-14.2812,-8.9667] },
+            { method: 'bezierCurveTo', data: [-15.3024,-8.9663,-16.4343,-9.0376,-17.499,-9.3902] },
+            { method: 'bezierCurveTo', data: [-18.5287,-9.7312,-19.2491,-10.0881,-19.9083,-10.6229] },
+            { method: 'bezierCurveTo', data: [-20.7304,-11.2898,-21.1797,-11.7883,-21.5785,-12.751] },
+            { method: 'bezierCurveTo', data: [-21.9773,-13.7138,-22.0954,-14.9415,-22.0958,-16] },
+            { method: 'bezierCurveTo', data: [-22.0962,-17.0211,-21.9686,-18.0493,-21.5785,-19.0615] },
+            { method: 'bezierCurveTo', data: [-21.1322,-20.2199,-20.0975,-21.9971,-19.9396,-21.8458] },
+            { method: 'bezierCurveTo', data: [-19.1055,-21.0471,-18.0242,-20.3047,-17.0927,-19.9223] },
+            { method: 'bezierCurveTo', data: [-16.1287,-19.5265,-14.8085,-18.8767,-13.7813,-18.5646] },
+            { method: 'bezierCurveTo', data: [-12.8042,-18.2678,-11.4719,-17.8061,-10.3448,-17.5785] },
+            { method: 'bezierCurveTo', data: [-9.2815,-17.3638,-8.2541,-17.1016,-7.4979,-17.0333] },
+            { method: 'bezierCurveTo', data: [-6.6875,-16.9601,-4.6961,-16.8592,-3.609,-16.8427] },
+            { method: 'bezierCurveTo', data: [-3.3809,-16.8393,-6.0052,-14.583,-6.5313,-13.8438] },
+            { method: 'bezierCurveTo', data: [-7.0471,-13.1189,-7.3207,-12.6171,-7.8277,-11.8135] },
+            { method: 'moveTo', data: [21.6098,-12.8135] },
+            { method: 'bezierCurveTo', data: [21.1947,-11.8114,20.8064,-11.2412,19.9708,-10.6542] },
+            { method: 'bezierCurveTo', data: [19.1283,-10.0622,18.5555,-9.7265,17.5302,-9.3902] },
+            { method: 'bezierCurveTo', data: [16.54,-9.0654,15.7773,-8.9983,14.7188,-8.9979] },
+            { method: 'bezierCurveTo', data: [13.6976,-8.9975,13.0032,-9.0064,11.9073,-9.2652] },
+            { method: 'bezierCurveTo', data: [10.8516,-9.5146,9.5947,-10.0256,8.8417,-10.6854] },
+            { method: 'bezierCurveTo', data: [8.0455,-11.383,7.414,-12.5695,6.8277,-13.5323] },
+            { method: 'bezierCurveTo', data: [6.2857,-14.4223,4.6391,-15.8914,3.6229,-16.875] },
+            { method: 'bezierCurveTo', data: [3.4144,-17.0768,6.6007,-16.9192,7.6715,-17.0927] },
+            { method: 'bezierCurveTo', data: [8.6491,-17.2511,9.6257,-17.4386,10.6229,-17.6583] },
+            { method: 'bezierCurveTo', data: [11.4654,-17.844,12.0421,-17.9725,13.0323,-18.2973] },
+            { method: 'bezierCurveTo', data: [14.0575,-18.6336,14.8477,-18.9079,15.75,-19.3146] },
+            { method: 'bezierCurveTo', data: [16.6809,-19.7342,17.9031,-20.2124,18.5615,-20.6723] },
+            { method: 'bezierCurveTo', data: [19.4507,-21.2934,19.9678,-22.1307,20.0958,-21.9396] },
+            { method: 'bezierCurveTo', data: [20.685,-21.0602,21.1797,-20.3055,21.5785,-19.3427] },
+            { method: 'bezierCurveTo', data: [21.9773,-18.38,22.0017,-17.0585,22.0021,-16] },
+            { method: 'bezierCurveTo', data: [22.0025,-14.9789,22.0249,-13.8157,21.6098,-12.8135] }
+          ],
+          top: [
+            { method: 'moveTo', data: [-6.6090,-12.9385] },
+            { method: 'bezierCurveTo', data: [-7.0241,-11.9364,-7.6193,-11.0634,-8.3417,-10.3417] },
+            { method: 'bezierCurveTo', data: [-9.0904,-9.5935,-9.9758,-9.0078,-10.9385,-8.609] },
+            { method: 'bezierCurveTo', data: [-11.9013,-8.2102,-12.9415,-7.9983,-14,-7.9979] },
+            { method: 'bezierCurveTo', data: [-15.0211,-7.9975,-16.0593,-8.1939,-17.0615,-8.609] },
+            { method: 'bezierCurveTo', data: [-18.0636,-9.0241,-18.9366,-9.6193,-19.6583,-10.3417] },
+            { method: 'bezierCurveTo', data: [-20.4065,-11.0904,-20.9922,-11.9758,-21.391,-12.9385] },
+            { method: 'bezierCurveTo', data: [-21.7898,-13.9013,-22.0021,-14.9415,-22.0021,-16] },
+            { method: 'bezierCurveTo', data: [-22.0021,-16.0524,-21.6811,-15.9968,-21.391,-15.999] },
+            { method: 'bezierCurveTo', data: [-20.3063,-16.007,-19.9567,-15.0099,-19.6583,-14.0333] },
+            { method: 'bezierCurveTo', data: [-19.4096,-13.219,-17.885,-11.5296,-17.0615,-10.891] },
+            { method: 'bezierCurveTo', data: [-16.2862,-10.2898,-15.0585,-9.9392,-14,-9.9396] },
+            { method: 'bezierCurveTo', data: [-12.9789,-9.94,-11.8564,-10.313,-10.9385,-10.891] },
+            { method: 'bezierCurveTo', data: [-9.8114,-11.6009,-8.6797,-13.0698,-8.3417,-14.0333] },
+            { method: 'bezierCurveTo', data: [-7.9685,-15.0971,-7.6509,-15.982,-6.609,-15.999] },
+            { method: 'bezierCurveTo', data: [-6.2414,-16.005,-5.9979,-16.0585,-5.9979,-16] },
+            { method: 'bezierCurveTo', data: [-5.9979,-14.9789,-6.1939,-13.9407,-6.609,-12.9385] },
+            { method: 'moveTo', data: [21.391,-12.9385] },
+            { method: 'bezierCurveTo', data: [20.9759,-11.9364,20.3807,-11.0634,19.6583,-10.3417] },
+            { method: 'bezierCurveTo', data: [18.9096,-9.5935,18.0242,-9.0078,17.0615,-8.609] },
+            { method: 'bezierCurveTo', data: [16.0987,-8.2102,15.0585,-7.9983,14,-7.9979] },
+            { method: 'bezierCurveTo', data: [12.9789,-7.9975,11.9407,-8.1939,10.9385,-8.609] },
+            { method: 'bezierCurveTo', data: [9.9364,-9.0241,9.0634,-9.6193,8.3417,-10.3417] },
+            { method: 'bezierCurveTo', data: [7.5935,-11.0904,7.0078,-11.9758,6.609,-12.9385] },
+            { method: 'bezierCurveTo', data: [6.2102,-13.9013,5.9979,-14.9415,5.9979,-16] },
+            { method: 'bezierCurveTo', data: [5.9979,-16.0524,6.3189,-15.9968,6.609,-15.999] },
+            { method: 'bezierCurveTo', data: [7.6937,-16.007,8.0433,-15.0099,8.3417,-14.0333] },
+            { method: 'bezierCurveTo', data: [8.5904,-13.219,10.115,-11.5296,10.9385,-10.891] },
+            { method: 'bezierCurveTo', data: [11.7138,-10.2898,12.9415,-9.9392,14,-9.9396] },
+            { method: 'bezierCurveTo', data: [15.0211,-9.94,16.1436,-10.313,17.0615,-10.891] },
+            { method: 'bezierCurveTo', data: [18.1886,-11.6009,19.3203,-13.0698,19.6583,-14.0333] },
+            { method: 'bezierCurveTo', data: [20.0315,-15.0971,20.3491,-15.982,21.391,-15.999] },
+            { method: 'bezierCurveTo', data: [21.7586,-16.005,22.0021,-16.0585,22.0021,-16] },
+            { method: 'bezierCurveTo', data: [22.0021,-14.9789,21.8061,-13.9407,21.391,-12.9385] }
+          ],
+          bottom: [
+            { method: 'moveTo', data: [-6.6090,-16.001] },
+            { method: 'bezierCurveTo', data: [-7.6936,-15.992,-7.9943,-17.1259,-8.3417,-17.9667] },
+            { method: 'bezierCurveTo', data: [-8.7458,-18.945,-10.1945,-20.539,-10.9385,-21.0777] },
+            { method: 'bezierCurveTo', data: [-11.7826,-21.6889,-12.9415,-22.0608,-14,-22.0604] },
+            { method: 'bezierCurveTo', data: [-15.0211,-22.06,-16.1843,-21.7251,-17.0615,-21.0777] },
+            { method: 'bezierCurveTo', data: [-17.9342,-20.4336,-19.1241,-18.9006,-19.6583,-17.9667] },
+            { method: 'bezierCurveTo', data: [-20.184,-17.0479,-20.3495,-16.0357,-21.391,-16.001] },
+            { method: 'bezierCurveTo', data: [-21.5711,-15.995,-22.0021,-15.879,-22.0021,-16] },
+            { method: 'bezierCurveTo', data: [-22.0021,-17.0211,-21.8061,-18.0593,-21.391,-19.0615] },
+            { method: 'bezierCurveTo', data: [-20.9759,-20.0636,-20.3807,-20.9366,-19.6583,-21.6583] },
+            { method: 'bezierCurveTo', data: [-18.9096,-22.4065,-18.0242,-22.9922,-17.0615,-23.391] },
+            { method: 'bezierCurveTo', data: [-16.0987,-23.7898,-15.0585,-24.0017,-14,-24.0021] },
+            { method: 'bezierCurveTo', data: [-12.9789,-24.0025,-11.9407,-23.8061,-10.9385,-23.391] },
+            { method: 'bezierCurveTo', data: [-9.9364,-22.9759,-9.0634,-22.3807,-8.3417,-21.6583] },
+            { method: 'bezierCurveTo', data: [-7.5935,-20.9096,-7.0078,-20.0242,-6.609,-19.0615] },
+            { method: 'bezierCurveTo', data: [-6.2102,-18.0987,-5.9979,-17.0585,-5.9979,-16] },
+            { method: 'bezierCurveTo', data: [-5.9979,-15.9164,-6.3501,-16.0032,-6.609,-16.001] },
+            { method: 'moveTo', data: [21.391,-16.001] },
+            { method: 'bezierCurveTo', data: [20.3064,-15.992,20.0057,-17.1259,19.6583,-17.9667] },
+            { method: 'bezierCurveTo', data: [19.2542,-18.945,17.8055,-20.539,17.0615,-21.0777] },
+            { method: 'bezierCurveTo', data: [16.2174,-21.6889,15.0585,-22.0608,14,-22.0604] },
+            { method: 'bezierCurveTo', data: [12.9789,-22.06,11.8157,-21.7251,10.9385,-21.0777] },
+            { method: 'bezierCurveTo', data: [10.0658,-20.4336,8.8759,-18.9006,8.3417,-17.9667] },
+            { method: 'bezierCurveTo', data: [7.816,-17.0479,7.6505,-16.0357,6.609,-16.001] },
+            { method: 'bezierCurveTo', data: [6.4289,-15.995,5.9979,-15.879,5.9979,-16] },
+            { method: 'bezierCurveTo', data: [5.9979,-17.0211,6.1939,-18.0593,6.609,-19.0615] },
+            { method: 'bezierCurveTo', data: [7.0241,-20.0636,7.6193,-20.9366,8.3417,-21.6583] },
+            { method: 'bezierCurveTo', data: [9.0904,-22.4065,9.9758,-22.9922,10.9385,-23.391] },
+            { method: 'bezierCurveTo', data: [11.9013,-23.7898,12.9415,-24.0017,14,-24.0021] },
+            { method: 'bezierCurveTo', data: [15.0211,-24.0025,16.0593,-23.8061,17.0615,-23.391] },
+            { method: 'bezierCurveTo', data: [18.0636,-22.9759,18.9366,-22.3807,19.6583,-21.6583] },
+            { method: 'bezierCurveTo', data: [20.4065,-20.9096,20.9922,-20.0242,21.391,-19.0615] },
+            { method: 'bezierCurveTo', data: [21.7898,-18.0987,22.0021,-17.0585,22.0021,-16] },
+            { method: 'bezierCurveTo', data: [22.0021,-15.9164,21.6499,-16.0032,21.391,-16.001] }
+          ],
+          size: [
+            { method: 'moveTo', data: [-5.4199,-11.9282] },
+            { method: 'bezierCurveTo', data: [-5.972,-10.5954,-6.7637,-9.4344,-7.7244,-8.4744] },
+            { method: 'bezierCurveTo', data: [-8.7203,-7.4793,-9.8978,-6.7003,-11.1782,-6.1699] },
+            { method: 'bezierCurveTo', data: [-12.4587,-5.6395,-13.8422,-5.3578,-15.25,-5.3572] },
+            { method: 'bezierCurveTo', data: [-16.6081,-5.3567,-17.9889,-5.6178,-19.3218,-6.1699] },
+            { method: 'bezierCurveTo', data: [-20.6546,-6.722,-21.8156,-7.5137,-22.7756,-8.4744] },
+            { method: 'bezierCurveTo', data: [-23.7707,-9.4703,-24.5497,-10.6478,-25.0801,-11.9282] },
+            { method: 'bezierCurveTo', data: [-25.6105,-13.2087,-25.8922,-14.5922,-25.8928,-16] },
+            { method: 'bezierCurveTo', data: [-25.8933,-17.3581,-25.6322,-18.7389,-25.0801,-20.0718] },
+            { method: 'bezierCurveTo', data: [-24.528,-21.4046,-23.7363,-22.5656,-22.7756,-23.5256] },
+            { method: 'bezierCurveTo', data: [-21.7797,-24.5207,-20.6022,-25.2997,-19.3218,-25.8301] },
+            { method: 'bezierCurveTo', data: [-18.0413,-26.3605,-16.6578,-26.6422,-15.25,-26.6428] },
+            { method: 'bezierCurveTo', data: [-13.8919,-26.6433,-12.5111,-26.3822,-11.1782,-25.8301] },
+            { method: 'bezierCurveTo', data: [-9.8454,-25.278,-8.6844,-24.4863,-7.7244,-23.5256] },
+            { method: 'bezierCurveTo', data: [-6.7293,-22.5297,-5.9503,-21.3522,-5.4199,-20.0718] },
+            { method: 'bezierCurveTo', data: [-4.8895,-18.7913,-4.6078,-17.4078,-4.6072,-16] },
+            { method: 'bezierCurveTo', data: [-4.6067,-14.6419,-4.8678,-13.2611,-5.4199,-11.9282] },
+            { method: 'moveTo', data: [25.0801,-11.9282] },
+            { method: 'bezierCurveTo', data: [24.528,-10.5954,23.7363,-9.4344,22.7756,-8.4744] },
+            { method: 'bezierCurveTo', data: [21.7797,-7.4793,20.6022,-6.7003,19.3218,-6.1699] },
+            { method: 'bezierCurveTo', data: [18.0413,-5.6395,16.6578,-5.3578,15.25,-5.3572] },
+            { method: 'bezierCurveTo', data: [13.8919,-5.3567,12.5111,-5.6178,11.1782,-6.1699] },
+            { method: 'bezierCurveTo', data: [9.8454,-6.722,8.6844,-7.5137,7.7244,-8.4744] },
+            { method: 'bezierCurveTo', data: [6.7293,-9.4703,5.9503,-10.6478,5.4199,-11.9282] },
+            { method: 'bezierCurveTo', data: [4.8895,-13.2087,4.6078,-14.5922,4.6072,-16] },
+            { method: 'bezierCurveTo', data: [4.6067,-17.3581,4.8678,-18.7389,5.4199,-20.0718] },
+            { method: 'bezierCurveTo', data: [5.972,-21.4046,6.7637,-22.5656,7.7244,-23.5256] },
+            { method: 'bezierCurveTo', data: [8.7203,-24.5207,9.8978,-25.2997,11.1782,-25.8301] },
+            { method: 'bezierCurveTo', data: [12.4587,-26.3605,13.8422,-26.6422,15.25,-26.6428] },
+            { method: 'bezierCurveTo', data: [16.6081,-26.6433,17.9889,-26.3822,19.3218,-25.8301] },
+            { method: 'bezierCurveTo', data: [20.6546,-25.278,21.8156,-24.4863,22.7756,-23.5256] },
+            { method: 'bezierCurveTo', data: [23.7707,-22.5297,24.5497,-21.3522,25.0801,-20.0718] },
+            { method: 'bezierCurveTo', data: [25.6105,-18.7913,25.8922,-17.4078,25.8928,-16] },
+            { method: 'bezierCurveTo', data: [25.8933,-14.6419,25.6322,-13.2611,25.0801,-11.9282] },
+          ]
+        };
     
-    // Eyes shut
-    var shut = [
-          { method: 'moveTo', 			 data: [0,0.64] },
-          { method: 'bezierCurveTo', data: [-0.03,0.07,0.12,-0.04,0.61,0] },
-          { method: 'bezierCurveTo', data: [0.86,0.02,0.99,0.14,1.17,0.38] },
-          { method: 'bezierCurveTo', data: [1.48,0.78,1.93,1.06,2.46,1.27] },
-          { method: 'bezierCurveTo', data: [3.02,1.49,3.54,1.52,4.07,1.53] },
-          { method: 'bezierCurveTo', data: [4.57,1.54,5.09,1.44,5.53,1.27] },
-          { method: 'bezierCurveTo', data: [5.91,1.11,6.57,0.7,6.78,0.4] },
-          { method: 'bezierCurveTo', data: [6.89,0.22,7.1,0.03,7.38,0] },
-          { method: 'bezierCurveTo', data: [7.68,-0.03,8.02,0.17,8,0.51] },
-          { method: 'bezierCurveTo', data: [7.98,0.67,7.8,0.93,7.69,1.06] },
-          { method: 'bezierCurveTo', data: [7.47,1.3,7.09,1.72,6.74,1.94] },
-          { method: 'bezierCurveTo', data: [6.39,2.16,5.91,2.41,5.53,2.47] },
-          { method: 'bezierCurveTo', data: [5.17,2.53,4.52,2.56,4.02,2.56] },
-          { method: 'bezierCurveTo', data: [3.48,2.56,2.98,2.58,2.46,2.47] },
-          { method: 'bezierCurveTo', data: [2.01,2.38,1.55,2.17,1.24,1.99] },
-          { method: 'bezierCurveTo', data: [0.86,1.76,0.56,1.52,0.3,1.21] },
-          { method: 'bezierCurveTo', data: [0.14,1.03,0.01,0.83,0,0.64] },
-          { method: 'moveTo', 			 data: [18,0.64] },
-          { method: 'bezierCurveTo', data: [17.96,0.07,18.12,-0.04,18.61,0] },
-          { method: 'bezierCurveTo', data: [18.86,0.02,18.99,0.14,19.17,0.38] },
-          { method: 'bezierCurveTo', data: [19.48,0.78,19.93,1.06,20.46,1.27] },
-          { method: 'bezierCurveTo', data: [21.02,1.49,21.54,1.52,22.07,1.53] },
-          { method: 'bezierCurveTo', data: [22.57,1.54,23.09,1.44,23.53,1.27] },
-          { method: 'bezierCurveTo', data: [23.91,1.11,24.57,0.7,24.78,0.4] },
-          { method: 'bezierCurveTo', data: [24.89,0.22,25.1,0.03,25.38,0] },
-          { method: 'bezierCurveTo', data: [25.68,-0.03,26.02,0.17,26,0.51] },
-          { method: 'bezierCurveTo', data: [25.98,0.67,25.8,0.93,25.69,1.06] },
-          { method: 'bezierCurveTo', data: [25.47,1.3,25.09,1.72,24.74,1.94] },
-          { method: 'bezierCurveTo', data: [24.39,2.16,23.91,2.41,23.53,2.47] },
-          { method: 'bezierCurveTo', data: [23.17,2.53,22.52,2.56,22.02,2.56] },
-          { method: 'bezierCurveTo', data: [21.48,2.56,20.98,2.58,20.46,2.47] },
-          { method: 'bezierCurveTo', data: [20.01,2.38,19.55,2.17,19.24,1.99] },
-          { method: 'bezierCurveTo', data: [18.86,1.76,18.56,1.52,18.3,1.21] },
-          { method: 'bezierCurveTo', data: [18.14,1.03,18.01,0.83,18,0.64] }
-        ];
     
     // Functions for handling vectors and cartesian coordinates.
     
@@ -234,12 +345,23 @@
       return fn( data );
     }
     
-    function mergeData( dataA, dataB, factor, fn ){
+    function calcMergeData( dataA, dataB, factor ){
+      var output = [],
+          i = dataB.length;
+      
+      while ( i-- ) {
+        output[i] = dataA[i] + (factor * dataB[i]);
+      }
+      
+      return output;
+    }
+
+    function mergeData( dataA, dataB, fn ){
       var output = [],
           i = dataA.length;
       
       while ( i-- ) {
-        output[i] = dataA[i] + (factor * dataB[i]);
+        output[i] = dataA[i] + dataB[i];
       }
       
       return fn( output );
@@ -254,12 +376,23 @@
       return vectorData;
     });
     
-    var deformPath = processPath( shut, function( i, obj ){
-      var vectorData = calcVectorData( obj.data );
-      var deformData = calcDeformData( vectorPath[i], vectorData );
+    //var deformPath = processPath( eyesTopLid, function( i, obj ){
+    //  var vectorData = calcVectorData( obj.data );
+    //  var deformData = calcDeformData( vectorPath[i], vectorData );
+    //  
+    //  return deformData;
+    //});
+    
+    var key, deforms = {};
+    
+    for (key in paths) {
+      deforms[key] = processPath( paths[key], function( i, obj ){
+        var vectorData = calcVectorData( obj.data );
+        var deformData = calcDeformData( vectorPath[i], vectorData );
       
-      return deformData;
-    });
+        return deformData;
+      });
+    }
     
     var wisp = Object.create({
       init: function( width, height ){
@@ -357,8 +490,7 @@
     };
     
     wisp.drawEyes = function( options ){
-      var ctx = this.ctx,
-          factor = options ? options.shut : 0 ;
+      var ctx = this.ctx;
       
       ctx.save();
       
@@ -368,15 +500,20 @@
       ctx.shadowBlur = 0;
       ctx.shadowColor = 'rgba(0,0,0,0)';
       
-      ctx.translate(48, 20);
-      
       ctx.beginPath();
       
       processPath( path, function( i, obj ){
         var vectorData = vectorPath[i],
-            deformData = deformPath[i];
+            deformData = [0,0,0,0,0,0],
+            key;
         
-        mergeData( vectorData, deformData, factor, function(data){
+        for (key in deforms) {
+          if (options[key]) {
+            deformData = calcMergeData( deformData, deforms[key][i], options[key] );
+          }
+        }
+        
+        mergeData( vectorData, deformData, function(data){
           cartData(data, function(data){
             ctx[ path[i].method ].apply( ctx, data );
           });
@@ -396,10 +533,12 @@
       wisp
       .init( 240, 240 )
       .translate(32, 32)
-      .scale(2,2)
+      .scale(3,3)
       .drawBody()
-      .drawEyes();
+      .translate(60, 36)
+      .scale(0.70, 0.70)
+      .drawEyes({});
       
-      jQuery('body').append( wisp.node );
+      jQuery('body').prepend( wisp.node );
       
     });

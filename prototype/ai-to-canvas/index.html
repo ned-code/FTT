@@ -115,6 +115,13 @@
       }
     }
     
+    // Invert the y axis
+    for (j=0; j<data.length; j++) {
+      for (k=0; k < data[j].length; k=k+2) {
+        data[j][k+1] = -data[j][k+1];
+      }
+    }
+    
     // Go back over the data and make 4 entry arrays into 6 entry arrays
     for (j=0; j<data.length; j++) {
       // point node to a bezier node
