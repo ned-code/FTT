@@ -62,6 +62,7 @@ class User < ActiveRecord::Base
   has_many :following, :through => :following_connections
   has_many :followers, :through => :follower_connections
   has_many :datastore_entries
+  has_many :discussions
   has_many :comments
   
   # ===================

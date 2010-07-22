@@ -23,6 +23,7 @@ class Discussion < ActiveRecord::Base
                            :constructor => DiscussionJsonHelper.method(:decode_json_and_yaml)
 
   belongs_to :page
+  belongs_to :discussion
   has_many :comments
 
   validates_presence_of :page_id
