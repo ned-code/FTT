@@ -1,0 +1,32 @@
+.flash{
+    position:absolute;
+    border:1px dotted black;
+    padding:10px;
+    opacity:0;
+    
+    top:0px;
+    left:50%;
+    margin-left:-100px;
+    width:200px;
+}
+
+.anim_opacity{
+    -webkit-transition:opacity 0.5s ease-in;  
+    -moz-transition:opacity 0.5s ease-in;  
+    -o-transition:opacity 0.5s ease-in;  
+    transition:opacity 0.5s ease-in;
+}
+
+.flash.visible{
+    opacity:1;
+}
+
+.flash p{
+    opacity:0;
+    display:block;
+    margin-bottom:10px;
+}
+
+.flash p.visible{
+    opacity:1;
+}
