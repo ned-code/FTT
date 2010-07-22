@@ -46,7 +46,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     discussionDomNode.bind('click', function() {
       var discussionView = WebDoc.application.boardController.currentPageView().discussionViews[discussion.uuid()];
       if(discussionView) {
-        WebDoc.application.boardController.selectDiscussionView(discussionView);
+        WebDoc.application.boardController.selectDiscussionView(discussionView, true);
       }
     });
     return discussionDomNode;
@@ -148,7 +148,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     return domNode.append(form);
   },
 
-  selectDiscussion: function(discussion, oldDiscussion) {
+  selectDiscussion: function(discussion, oldDiscussion, skipScroll) {
     ddd('[DiscussionsPanel] select discussion');
     this.unSelectDiscussion(oldDiscussion);
     var discussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+discussion.uuid()+"']")[0];
@@ -156,7 +156,9 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
       var parent = jQuery(discussionSelectedDomNode).parent();
       parent.addClass('item_selected');
       this.expendMode(parent);
-      discussionSelectedDomNode.scrollIntoView(true);
+      if(!skipScroll || skipScroll !== true) {
+        discussionSelectedDomNode.scrollIntoView(true);
+      }
     }
   },
 
