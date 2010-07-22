@@ -22,7 +22,7 @@ namespace :deploy do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
   task :bundle_install do
-    run "cd #{release_path} && bundle install --without test"
+    run "cd #{release_path} && #{ruby_path}/bin/bundle install --without test"
   end
   task :link_config do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
@@ -33,7 +33,7 @@ namespace :deploy do
     run "ln -nfs #{shared_path}/reports/analytics.csv #{release_path}/reports/analytics.csv"
   end
   task :generate_assets do
-    send(:run, "cd #{release_path} && RAILS_ENV=#{rails_env} /usr/bin/jammit --force config/assets.yml")
+    send(:run, "cd #{release_path} && RAILS_ENV=#{rails_env} #{ruby_path}/bin/jammit --force config/assets.yml")
   end
   task :show_maintenance do
     run "cp #{current_path}/app/views/layouts/maintenance.html #{current_path}/public/maintenance.html"

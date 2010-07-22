@@ -6,7 +6,7 @@ role :memcache, "ec2-79-125-11-127.eu-west-1.compute.amazonaws.com"
 role :db,       "ec2-79-125-11-127.eu-west-1.compute.amazonaws.com", :primary => true
 
 set :branch, "dev"
-
+set :ruby_path, "/opt/ruby-enterprise-1.8.7-2010.02"
 set :rails_env, "staging"
 
 ssh_options[:keys] = ["#{ENV['HOME']}/.ssh/webdoc"]
