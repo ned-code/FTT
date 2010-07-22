@@ -2,6 +2,10 @@
   <%= page.document.title %>
 <% end %>
 
+<%- content_for :description do %>
+  <%= page.document.description %>
+<% end %>
+
 <div class='webdoc' id='<%= "page_#{page.uuid}" %>' style='<%= build_css_string(page.data['css'])%>'>
   
   <div class='layer' id=' <%= "items_#{page.uuid}"%>' style='overflow:visible'>
