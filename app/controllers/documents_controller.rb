@@ -115,7 +115,7 @@ class DocumentsController < ApplicationController
       @page = Page.find_by_uuid(params[:_escaped_fragment_])
       @items = @page.items.find(:all, :conditions => [ 'media_type != ?', 'drawing'])
       @drawing_items = @page.items.find(:all, :conditions => { :media_type => 'drawing'} )
-      render :action => :static_page, :layout => 'static' and return
+      render :action => :static_page, :layout => 'static', :content_type => 'image/svg+xml' and return
     end
     if (@document)
       respond_to do |format|
