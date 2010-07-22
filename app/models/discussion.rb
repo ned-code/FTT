@@ -44,6 +44,13 @@ class Discussion < ActiveRecord::Base
     return false
   end
 
+  def as_application_json
+    as_json(:include => { :comments =>
+                                  { :include => { :user => { :methods => :avatar_thumb_url } },
+                                    :except => [:content],
+                                    :methods => :safe_content }})
+  end
+
   def safe_delete!
     if self.deleted_at.blank?
       self.deleted_at = Time.now

@@ -46,13 +46,14 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     discussionDomNode.bind('click', function() {
       var discussionView = WebDoc.application.boardController.currentPageView().discussionViews[discussion.uuid()];
       if(discussionView) {
-        WebDoc.application.boardController.selectDiscussionView(discussionView);
+        WebDoc.application.boardController.selectDiscussionView(discussionView, true);
       }
     });
     return discussionDomNode;
   },
 
   compactMode: function(discussionDomNodeAndForm) {
+    discussionDomNodeAndForm.data('wd_discussion_compact_mode', true);
     var discussionDomNode = discussionDomNodeAndForm.children('div.wd_discussion_dom_node').first();
     var formDomNode = discussionDomNodeAndForm.children('div.wd_comment_form_dom_node').first();
     var divsComments = discussionDomNode.children('div.wd_comment_content_dom_node');
@@ -68,6 +69,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   expendMode: function (discussionDomNodeAndForm) {
+    discussionDomNodeAndForm.data('wd_discussion_compact_mode', false);
     var discussionDomNode = discussionDomNodeAndForm.children('div.wd_discussion_dom_node').first();
     var formDomNode = discussionDomNodeAndForm.children('div.wd_comment_form_dom_node').first();
     var divsComments = discussionDomNode.children('div.wd_comment_content_dom_node');
@@ -146,7 +148,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     return domNode.append(form);
   },
 
-  selectDiscussion: function(discussion, oldDiscussion) {
+  selectDiscussion: function(discussion, oldDiscussion, skipScroll) {
     ddd('[DiscussionsPanel] select discussion');
     this.unSelectDiscussion(oldDiscussion);
     var discussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+discussion.uuid()+"']")[0];
@@ -154,7 +156,9 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
       var parent = jQuery(discussionSelectedDomNode).parent();
       parent.addClass('item_selected');
       this.expendMode(parent);
-      discussionSelectedDomNode.scrollIntoView(true);
+      if(!skipScroll || skipScroll !== true) {
+        discussionSelectedDomNode.scrollIntoView(true);
+      }
     }
   },
 
@@ -182,8 +186,12 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   // fire by discussion
   commentAdded: function(addedComment) {
     ddd('[DiscussionsPanelController] comment added');
-    this.discussionsDomNode.find("div[data-discussion-uuid='"+addedComment.discussion.uuid()+"']")
-        .append(this.createCommentDomNode(addedComment));
+    var discussionDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+addedComment.discussion.uuid()+"']");
+    var commentDomNode = this.createCommentDomNode(addedComment);
+    if(discussionDomNode.parent().data('wd_discussion_compact_mode') === true) {
+      commentDomNode.hide();
+    }
+    discussionDomNode.append(commentDomNode);
   },
 
   commentRemoved: function(removedComment) {

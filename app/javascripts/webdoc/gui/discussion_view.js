@@ -47,6 +47,13 @@ WebDoc.DiscussionView = $.klass({
     this.refreshDicussionDomNode();
   },
 
+  // fire by record class
+  objectChanged: function(discussion, options) {
+    if (discussion._isAttributeModified(options, 'refresh') && options.refresh === true) {
+      this._moveToStoredPosition();
+    }
+  },
+
   select: function() {
     this.domNode.addClass("item_selected");
   },

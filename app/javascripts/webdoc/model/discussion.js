@@ -5,7 +5,6 @@
 WebDoc.Discussion = $.klass(WebDoc.Record, {
 
   initialize: function($super, json, associatedType, associatedId) {
-
     this.hasMany = {
       comments: WebDoc.Comment
     };
@@ -24,8 +23,10 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
     if(this.data.properties === undefined) {
       this.data.properties = {};
     }
+  },
 
-
+  refresh: function($super, json, onlyMissingValues) {
+    $super(json, onlyMissingValues);
   },
 
   setPosition: function(position, skipSave) {
@@ -43,6 +44,11 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
     else {
         return undefined;
     }
+  },
+
+  createComment: function(commentData) {
+    var newComment = new WebDoc.Comment(commentData, this);
+    this.addComment(newComment);
   },
 
   addComment: function(addedComment) {
@@ -73,6 +79,29 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
         this.listeners[i].commentRemoved(removedComment);
       }
     }
+  },
+
+  // for xmpp notification, see collaboration manager
+  // in function name we have "update" but the function don't
+  // update a comment because we don't need it yet
+  createOrUpdateOrDestroyComment: function(commentData) {
+    var comment = this.findCommentByUuid(commentData.comment.uuid);
+    if (commentData.action == "delete") {
+      this.removeComment(comment);
+    }
+    else if (!comment) {
+      this.createComment(commentData);
+    }
+  },
+
+  findCommentByUuid: function(uuid) {
+    for (var i=0; i<this.comments.length; i++) {
+      var aComment = this.comments[i];
+      if (aComment.uuid() == uuid) {
+        return aComment;
+      }
+    }
+    return null;
   }
 
 });
