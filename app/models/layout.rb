@@ -100,10 +100,11 @@ class Layout < ActiveRecord::Base
             when 'object'
               item = build_default_item(page, doc_item)
               item_data.merge!(item.data)              
-              item.preferences = Hash.new
+              preferences = Hash.new
               if doc_item.attr('type') == 'video/vimeo' || doc_item.attr('type') == 'video/youtube'
                 media = Medias::Widget.find_by_system_name(doc_item.attr('type').split(/\//)[1])                
-                item.preferences['url'] = doc_item.attr('data')
+                preferences['url'] = doc_item.attr('data')
+                item.preferences = preferences
               else # application/wd-app
                 media = Medias::Widget.find_by_uuid(doc_item.attr('data'))
               end

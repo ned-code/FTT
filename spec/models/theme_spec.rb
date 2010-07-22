@@ -9,7 +9,7 @@ describe Theme do
     end
 
     after(:all) do
-      @theme.destroy
+      @theme.destroy if @theme
     end
 
     it "should can set attributes form config file and save without ancestor" do
