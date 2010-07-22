@@ -1,8 +1,0 @@
-.item
-  - inner = item.inner_html
-  - inner = inner.gsub(/\r\n?/, "\n")
-  - p inner
-  - inner = inner.gsub('&lt;','<')
-  -p inner
-  - inner = inner.gsub('&gt;', '>') 
-  = raw inner

@@ -113,6 +113,8 @@ class DocumentsController < ApplicationController
       #used to respond to the google robot, see: http://www.google.com/support/webmasters/bin/answer.py?hlrm=en&answer=174992
       #we do it in document controller because we don't want any redirect.
       @page = Page.find_by_uuid(params[:_escaped_fragment_])
+      @items = @page.items.find(:all, :conditions => [ 'media_type != ?', 'drawing'])
+      @drawing_items = @page.items.find(:all, :conditions => { :media_type => 'drawing'} )
       render :action => :static_page, :layout => 'static' and return
     end
     if (@document)

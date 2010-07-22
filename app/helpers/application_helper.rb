@@ -17,8 +17,7 @@ module ApplicationHelper
         i += 1
       end
       
-      p property
-      if property != 'overflow'
+      if property != 'overflow' && property != 'font_face' && property != 'font-_face' && property != 'font'
       #build the string
         css_string += "#{property}:#{value};"
       end

@@ -1,0 +1,17 @@
+<%- content_for :title do %>
+  <%= page.document.title %>
+<% end %>
+
+<div class='webdoc' id='<%= "page_#{page.uuid}" %>' style='<%= build_css_string(page.data['css'])%>'>
+  <% for item in @drawing_items do %>
+    ...svg icsi ...
+  <% end %>
+  <div class='layer' id=' <%= "items_#{page.uuid}"%>' style='overflow:visible'>
+    <style>
+      <%= yield :font_face %>
+    </style>
+    <% for item in @items do %>
+      <%= render 'items/static', :item => item %>
+    <% end %>
+  </div>
+</div>
