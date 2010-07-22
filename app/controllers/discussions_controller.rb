@@ -1,26 +1,20 @@
 class DiscussionsController < ApplicationController
 
-  before_filter :find_discussion, :only => [:update, :destroy]
+  before_filter :find_discussion
+  before_filter :find_document
 
-  # access_control do
-  #   allow :admin
-  #   allow logged_in, :to => [:index, :create, :duplicate]
-  #   allow :editor, :of => :document, :to => [:update, :destroy]
-  #   action :index do
-  #     allow all, :if => :document_is_public?
-  #     allow :reader, :of => :document
-  #     allow :editor, :of => :document
-  #   end
-  # end
-
-  # access_control do
-  #   allow :admin
-  #   allow :editor, :of => :document
-  #   action :show do
-  #     allow :reader, :of => :document
-  #     allow all, :if => :document_is_public?
-  #   end
-  # end
+  access_control do
+    allow :admin
+    action :index, :create do
+      allow all, :if => :document_is_public?
+      allow :reader, :of => :document
+      allow :editor, :of => :document
+    end
+    actions :update, :destroy do
+      allow all, :if => :current_user_is_discussion_owner      
+      allow :editor, :of => :document
+    end
+  end
   
   def index
     raise 'no params id' if params[:page_id].blank?
@@ -40,7 +34,7 @@ class DiscussionsController < ApplicationController
   end  
 
   def create
-    @discussion = Discussion.new_with_uuid(params[:discussion])
+    @discussion = current_user.discussions.new_with_uuid(params[:discussion])
     message = @discussion.as_application_json
     message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, @discussion.page.document.uuid)
@@ -71,7 +65,24 @@ class DiscussionsController < ApplicationController
   private
 
   def find_discussion
-    @discussion = Discussion.find_by_uuid(params[:id])    
+    @discussion = Discussion.find_by_uuid(params[:id]) if params[:id]    
+  end
+
+  def find_document
+    if params[:page_id]
+      @document = Page.find_by_uuid(params[:page_id]).document
+    elsif params[:discussion].present? && params[:discussion][:page_id].present?
+      @document = Page.find_by_uuid(params[:discussion][:page_id]).document
+    elsif @discussion.present?
+      @document = @discussion.page.document  
+    end
+  end
+
+  def current_user_is_discussion_owner
+    if current_user.present? && @discussion.present? && @discussion.user_id.present? && current_user.uuid == @discussion.user_id
+      return true
+    end
+    return false
   end
 
 end
