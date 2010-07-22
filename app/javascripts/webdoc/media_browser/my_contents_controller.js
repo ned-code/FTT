@@ -308,8 +308,8 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
   
   //Used for insert uploaded image directy in the dom
-  insertImage: function(properties, uuid, domNode){
-    var liWrap = this.buildThumbnail(properties, uuid);
+  insertImage: function(data, uuid, domNode){
+    var liWrap = this.buildThumbnail(data, uuid);
     var ulWrap = $('#'+domNode).find('ul');
     if( ulWrap.length < 1){
       ulWrap = $('<ul>');
@@ -324,17 +324,19 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
   },
   
-  buildThumbnail: function(newProperties, uuid) {
+  buildThumbnail: function(data, uuid) {
     var properties = {
-      url: newProperties.url,
-      thumb_url: newProperties.thumb_url,
-      image_link: newProperties.default_url,
+      url: data.properties.url,
+      thumb_url: data.properties.thumb_url,
+      image_link: data.properties.default_url,
       type: 'application/wd-image',
-      uuid: uuid
+      uuid: uuid,
+      favorites: data.favorites,
+      media_id: data.uuid
     };
     
     var thumb = $("<img>").attr({
-      src : newProperties.thumb_url,
+      src : data.properties.thumb_url,
       alt : "",
       type:"my_image"
     })
@@ -387,7 +389,8 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
 
     var dt = event.originalEvent.dataTransfer;
     var imageUrl = properties.default_url ? properties.default_url : properties.url;
-    dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id}));
+    ddd(properties.media_id);
+    dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id, favorites:properties.favorites, media_id:properties.media_id }));
     
     // Drag "feedback"
     var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
@@ -447,7 +450,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
         thumbsWrap.append(myImagesList);
         
         $.each(data.images, function(i,webDocImage){
-          myImagesList.append(this.buildThumbnail(webDocImage.data.properties, webDocImage.data.uuid));
+          myImagesList.append(this.buildThumbnail(webDocImage.data, webDocImage.data.uuid));
         }.pBind(this));
       }
       
@@ -528,7 +531,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
         thumbsWrap.append(myImagesList);
         
         $.each(data.images, function(i,webDocImage){
-          myImagesList.append(this.buildThumbnail(webDocImage.data.properties, webDocImage.data.uuid));
+          myImagesList.append(this.buildThumbnail(webDocImage.data, webDocImage.data.uuid));
         }.pBind(this));
       }
       
@@ -580,8 +583,6 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     var thumbsWrap = this.videosFavoritesContainer;
     this.showSpinner(thumbsWrap);
     WebDoc.ServerManager.getRecords(WebDoc.Video, null, function(data) {
-      ddd('jusquici tout va bien');
-      ddd(data);
       if (data.videos.length === 0) {
         var noVideos = $("<span>").addClass('no_items').text('No Videos');
         thumbsWrap.append(noVideos);

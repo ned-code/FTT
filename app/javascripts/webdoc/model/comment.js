@@ -40,11 +40,11 @@ WebDoc.Comment = $.klass(WebDoc.Record, {
   },
 
   content: function() {
-    if(this.data.content) {
-      return this.data.content;
+    if(this.data.safe_content) {
+      return this.data.safe_content;
     }
     else {
-      return undefined;
+      return "";
     }
   },
 

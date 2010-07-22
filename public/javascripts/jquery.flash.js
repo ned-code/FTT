@@ -91,9 +91,6 @@
 		  .css({ display: '' })
 		  .remove();
 		}
-		
-		
-		flash.bind('close', fn);
 	});
 	
 	// Export

@@ -16,6 +16,8 @@ WebDoc.ImagePaletteController = $.klass({
     this.domNode.find("#placeholder_checkbox").click(this.changePlaceholder);
 
     this.addImageLink = this.domNode.find("a[href=#create_image_link]");
+    this.addToFavoriteLink = this.domNode.find("a[href=#add_to_my_images]");
+    
     this.linkFormController = new WebDoc.LinkFormController();
     this.addImageLink.click(function(e){
       e.preventDefault();
@@ -86,6 +88,7 @@ WebDoc.ImagePaletteController = $.klass({
   },
   
   refresh: function() {
+    ddd(this.addToFavoriteLink);
     this.propertiesController.refresh();
     if (WebDoc.application.boardController.selection().length) {      
       var selectedItem = WebDoc.application.boardController.selection()[0];
@@ -93,8 +96,10 @@ WebDoc.ImagePaletteController = $.klass({
         this.addToMyImageResult.text('');
         if(selectedItem.item.data.media_id) {
           this.addToMyImageLink.hide();
+          this.addToFavoriteLink.hide();
         } else {
           this.addToMyImageLink.show();
+          this.addToFavoriteLink.show();
         }
         $("#property_src")[0].value = selectedItem.item.data.data.src;
         if(selectedItem.item.data.data.preserve_aspect_ratio === true ||
@@ -184,7 +189,6 @@ WebDoc.ImagePaletteController = $.klass({
   },
 
   addToMyImage: function(event) {
-		ddd('add to my image');
     event.preventDefault();
     var selected = WebDoc.application.boardController.selection()[0];
     if (selected && selected.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
@@ -195,11 +199,11 @@ WebDoc.ImagePaletteController = $.klass({
         var image = new WebDoc.Image;
         image.data.remote_attachment_url = this.propertySrc.val();
         this.selectedItem = selectedItem;
-				image.data.favorites = 1;
+        image.data.favorites = 1;
         image.save(function(event){
           if($('#media-browser-my-favorites').length){
-						WebDoc.application.mediaBrowserController.myContentsController.insertImage(event.data.properties, event.data.uuid, 'my-favorites-images');
-					 }
+            WebDoc.application.mediaBrowserController.myContentsController.insertImage(event.data, event.data.uuid, 'my-favorites-images');
+          }
           this.selectedItem.data.media_id = event.data.uuid;
           this.selectedItem.data.data.src = event.data.properties.url;
           this.selectedItem.save();

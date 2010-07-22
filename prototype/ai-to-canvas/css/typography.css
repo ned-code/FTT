@@ -1,0 +1,66 @@
+/* typography.css */
+
+
+/* Default font settings. 
+   The font-size percentage is of 16px. (0.75 * 16px = 12px) */
+body { 
+  font-size: 88%;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+
+/* Headings
+-------------------------------------------------------------- */
+
+h1,h2,h3,h4,h5,h6 {font-weight: bold;}
+
+h1 { font-size: 3em;   line-height: 1em;    margin-bottom: 0em; }
+h2 { font-size: 1.6em; line-height: 1.6em;  margin-bottom: 1em;  font-weight: normal;}
+h3 { font-size: 1.25em;line-height: 1.5em; margin-bottom: 0em;  }
+h4 { font-size: 1em;   line-height: 1.4em;  margin-bottom: 0em; }
+
+h1 img, h2 img, h3 img, 
+h4 img, h5 img, h6 img {
+  margin: 0;
+}
+
+
+/* Text elements
+-------------------------------------------------------------- */
+
+p           { margin: 0 0 1.5em 0; }
+
+a:focus,
+a:hover     { text-decoration: underline; }
+a           { text-decoration: none; }
+
+blockquote  { margin: 1.5em; color: #666; font-style: italic; }
+strong      { font-weight: bold; }
+em,dfn      { font-style: italic; }
+dfn         { font-weight: bold; }
+sup, sub    { line-height: 0; }
+
+abbr, 
+acronym     { border-bottom: 1px dotted #666; }
+address     { margin: 0 0 1.5em; font-style: italic; }
+del         { color:#666; }
+
+pre,code    { margin: 1.5em 0; white-space: pre; }
+pre,code,tt { font: 1em 'andale mono', 'lucida console', monospace; line-height: 1.5; } 
+
+
+/* Lists
+-------------------------------------------------------------- */
+
+li ul, 
+li ol       { margin:0 1.5em; }
+ul, ol      { margin: 0 1.5em 1.5em 1.5em; }
+dl ul, ul ul,
+ul dl, dl dl{ margin: 0.4em 1.5em 0.4em 1.5em; }
+
+ul          { list-style-type: disc; }
+ol          { list-style-type: decimal; }
+
+dl          { margin: 0 0 1.5em 0; }
+dl dt       { font-weight: bold; }
+dd          { margin-left: 1.5em; }

@@ -23,6 +23,7 @@ gem 'erubis'
 gem 'jammit' # use plugin for the moment
 gem 'whenever'
 gem 'fastercsv'
+gem 'google-spreadsheet-ruby'
 
 group :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'

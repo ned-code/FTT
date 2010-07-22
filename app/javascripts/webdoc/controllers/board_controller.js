@@ -416,16 +416,26 @@ WebDoc.BoardController = jQuery.klass({
     }    
   },
   
+  
+  //this method is used to add a single element into the selection and eventually reset it
   selectItemViews: function(itemViews) {
     // exit edit mode for current editing item
     this.stopEditing();
+    ddd('selectItemViews');
+    
     if (itemViews.length > 0) {
-			//do nothing if the itemView is already in the selection
-			if(itemViews.length == 1){
-				if (jQuery.inArray(itemViews[0], this._selection) >= 0) {
-	      	return;
-	      }
-			}
+      //do nothing if the itemView is already in the selection
+      if(itemViews.length == 1){
+        if (jQuery.inArray(itemViews[0], this._selection) >= 0) {
+          return;
+        }
+      }
+      
+      //unselect all if the selected item isn't in the selection
+      if(jQuery.inArray(itemViews[0], this._selection) === -1){
+        this.unselectAll();
+      }
+      
       // do nothing if new selection is equal to old selection
       if(itemViews.length === this._selection.length) {
         var selectionIsEqual = true;
@@ -440,37 +450,39 @@ WebDoc.BoardController = jQuery.klass({
         }
       }
       
-			//deselect un-needed items
-			jQuery.each(this._selection, function(index, itemToDeselect) {
-	      if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
-	        this.unselectItemViews([itemToDeselect]);
-	      }
-	    }.pBind(this));
-	
-			this.addItemViewToSelection(itemViews)
+      //deselect un-needed items
+      jQuery.each(this._selection, function(index, itemToDeselect) {
+        if (jQuery.inArray(itemToDeselect, itemViews) === -1) {
+          this.unselectItemViews([itemToDeselect]);
+        }
+      }.pBind(this));
+  
+      this.addItemViewToSelection(itemViews)
     }
   },
-
-	addItemViewToSelection: function(itemViews){    
-		for( var i = 0; i < itemViews.length; i++){
-			if(jQuery.inArray(itemViews[i], this._selection) >= 0){
-				this.unselectItemViews([itemViews[i]]);
-				itemViews.splice(i,1);
-			}
-		}
-		//select wanted items
+  
+  //this method is used to add or remove a single element into the selection (call with click + shift)
+  addItemViewToSelection: function(itemViews){
+    ddd('addItemViewToSelection');
+    for( var i = 0; i < itemViews.length; i++){
+      if(jQuery.inArray(itemViews[i], this._selection) >= 0){
+        this.unselectItemViews([itemViews[i]]);
+        itemViews.splice(i,1);
+      }
+    }
+    //select wanted items
     jQuery.each(itemViews, function(index, itemToSelect) {
       if (jQuery.inArray(itemToSelect, this._selection) == -1) {
         this._selection.push(itemToSelect);
       }
       itemToSelect.select();
     }.pBind(this));
-		this._fireSelectionChanged();
-	},
-	
-	removeItemViewFromSelection: function(itemViews){
+    this._fireSelectionChanged();
+  },
+  
+  removeItemViewFromSelection: function(itemViews){
       this.unselectItemViews(itemViews);
-	},
+  },
   
   moveSelection: function(direction, scale) {
     var max = this._selection.length;
@@ -748,6 +760,7 @@ WebDoc.BoardController = jQuery.klass({
       item.save();
     }.pBind(this));
     if (items.length > 0) {
+      this.unselectAll();
       this.selectItemViews([this._currentPageView.findItemView(items[0].uuid())]);
     }
     WebDoc.application.undoManager.registerUndo(function() {
@@ -891,13 +904,11 @@ WebDoc.BoardController = jQuery.klass({
     if (!e.ctrlKey && !e.metaKey) {
       switch (e.which) {
         case 8:
-        case 46:
-          if (this._isInteraction) {
-            this.deleteSelectionDiscussion(e);
-          }
-          else {
+        case 46: 
+          if (!this._isInteraction) {
             this.deleteSelection(e);
           }
+          this.deleteSelectionDiscussion(e);
           break;
         case 90:
           this.zoomIn();
@@ -1030,6 +1041,8 @@ WebDoc.BoardController = jQuery.klass({
   _createImageItemAfterLoad: function(e) {
     var position = e.data.position;
     var media_id = e.data.media_id;
+    var favorite = e.data.favorite;
+    
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
     if(!position) { position = WebDoc.application.boardController.getBoardCenterPoint();}
@@ -1154,13 +1167,30 @@ WebDoc.BoardController = jQuery.klass({
     discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion);
   },
 
+  unSelectDiscussionView: function() {
+    if(this._selectionDiscussionView !== null) {
+      this._selectionDiscussionView.unSelect();
+      var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+      discussionPanel.unSelectDiscussion(this._selectionDiscussionView.discussion);
+      this._selectionDiscussionView = null;      
+    }
+  },
+
   deleteSelectionDiscussion: function(e) {
     ddd('[BoardController] delete selection discussion');
     if(e) {
       e.preventDefault();
     }
-    this.removeDiscussion(this._selectionDiscussionView.discussion);
-    this._selectionDiscussionView = null;
+    if(this._selectionDiscussionView) {
+      if(this._selectionDiscussionView.discussion.comments.length > 1) {
+        if(!confirm("Would you remove this discussion?")) {
+            return false;
+        }
+      }
+      this.removeDiscussion(this._selectionDiscussionView.discussion);
+      this._selectionDiscussionView = null; 
+    }
+
   }
 
 });
