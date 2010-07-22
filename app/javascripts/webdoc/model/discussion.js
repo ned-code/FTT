@@ -56,6 +56,11 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
     }
   },
 
+  createComment: function(commentData) {
+    var newComment = new WebDoc.Comment(commentData, this);
+    this.addComment(newComment);
+  },
+
   addComment: function(addedComment) {
     this.comments.push(addedComment);
     this.fireCommentAdded(addedComment);
@@ -84,6 +89,27 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
         this.listeners[i].commentRemoved(removedComment);
       }
     }
+  },
+
+  // for xmpp notification, see collaboration manager
+  createOrUpdateOrDestroyComment: function(commentData) {
+    var comment = this.findCommentByUuid(commentData.comment.uuid);
+    if (commentData.action == "delete") {
+      this.removeComment(comment);
+    }
+    else if (!comment) {
+      this.createComment(commentData);
+    }
+  },
+
+  findCommentByUuid: function(uuid) {
+    for (var i=0; i<this.comments.length; i++) {
+      var aComment = this.comments[i];
+      if (aComment.uuid() == uuid) {
+        return aComment;
+      }
+    }
+    return null;
   }
 
 });
