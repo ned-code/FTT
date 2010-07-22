@@ -27,16 +27,6 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
 
   refresh: function($super, json, onlyMissingValues) {
     $super(json, onlyMissingValues);
-
-
-
-    // if (json.page.items && $.isArray(json.page.items)) {
-    //   this.items = [];
-    //   for (var i = 0; i < this.data.items.length; i++) {
-    //     var itemData = this.data.items[i];
-    //     this.createOrUpdateItem({ item: itemData });
-    //   }
-    // }
   },
 
   setPosition: function(position, skipSave) {
@@ -92,6 +82,8 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
   },
 
   // for xmpp notification, see collaboration manager
+  // in function name we have "update" but the function don't
+  // update a comment because we don't need it yet
   createOrUpdateOrDestroyComment: function(commentData) {
     var comment = this.findCommentByUuid(commentData.comment.uuid);
     if (commentData.action == "delete") {
