@@ -43,3 +43,24 @@
     <% end %>
   </svg>
 </div>
+
+<div class='discussions' style='width:300px'>
+  <% for discussion in page.discussions do %>
+    <div class='wd_discussion_dom_node'>
+      <div class='wd_comment_content_dom_node'>
+        <% for comment in discussion.comments do %>
+          <div style='width: 80%; float: left;'>
+            <%= comment.content %>
+            <br />
+            <%= "#{comment.created_at} by #{comment.user.username} "%>
+          </div>
+          <div style='width: 20%; float: left;'>
+            <img src="<%= comment.user.avatar.url(:thumb)%>" style='width: 50px; height: 50px;' />
+            
+          </div>
+          <div style="clear: both;"></div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
