@@ -20,6 +20,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: medias
@@ -37,5 +38,6 @@ end
 #  attachment_content_type :string(255)
 #  attachment_file_size    :integer(4)
 #  attachment_updated_at   :datetime
+#  favorites               :boolean(1)      default(FALSE)
 #
 

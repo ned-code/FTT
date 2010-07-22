@@ -383,6 +383,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: themes
@@ -400,5 +401,6 @@ end
 #  attachment_content_type :string(255)
 #  attachment_file_size    :integer(4)
 #  attachment_updated_at   :datetime
+#  fonts_url               :string(255)
 #
 
