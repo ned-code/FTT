@@ -17,7 +17,7 @@ module ApplicationHelper
         end
         i += 1
       end
-      if property == 'color'
+      if ['color', 'background', 'background-gradient', 'background-Gradient'].include?(property)
         css_string += "#{value};"
       elsif !reject_propreties.include?(property)
       #build the string

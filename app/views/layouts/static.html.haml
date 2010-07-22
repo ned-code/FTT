@@ -11,4 +11,7 @@
     = include_stylesheets :page_editor, :media => 'all'
 
   %body
-    = yield
+    .layer
+      .center
+        .center-cell
+          = yield

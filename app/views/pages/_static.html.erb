@@ -5,8 +5,10 @@
 <%- content_for :description do %>
   <%= page.document.description %>
 <% end %>
+<% style = build_css_string(page.data['css']) %>
+<% style += build_css_placement_string(page.data['css']) %>
 
-<div class='webdoc' id='<%= "page_#{page.uuid}" %>' style='<%= build_css_string(page.data['css'])%>'>
+<div class='center-box' id='<%= "page_#{page.uuid}" %>' style='<%= style %>'>
   
   <div class='layer' id='<%="items_#{page.uuid}"%>' style='overflow:visible'>
     <style type='text/css'>

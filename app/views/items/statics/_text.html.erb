@@ -4,6 +4,10 @@
   <% style += item.data['style']['font'] %>
 <% end %>
 
+<% if item.data['css']['overflow'] %>
+  <% style += "overflow:#{item.data['css']['overflow']};" %>
+<% end %>
+
 <div class='item layer' style="<%= style %>">
   <%= raw item.inner_html %>
 </div>  
