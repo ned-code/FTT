@@ -456,13 +456,13 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       
       //previous and next link
       if(data.pagination.previous_page){
-        var previousElement= $("<a href='#'>Previous</a>;");
+        var previousElement= $("<a href='#'>Previous</a>");
         var that = this;
         previousElement.click(function(e){
           e.preventDefault;
           that._previousMyImagePage();
         });
-        thumbsWrap.append(previousElement);
+        thumbsWrap.append(previousElement).append("&nbsp;");
       }
       if(data.pagination.next_page){
         var nextElement = $("<a href='#'>Next</a>");
@@ -537,13 +537,13 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       
       //previous and next link
       if(data.pagination.previous_page){
-        var previousElement= $("<a href='#'>Previous</a>;");
+        var previousElement= $("<a href='#'>Previous</a>");
         var that = this;
         previousElement.click(function(e){
           e.preventDefault;
           that._previousFavoriteImagePage();
         });
-        thumbsWrap.append(previousElement);
+        thumbsWrap.append(previousElement).append("&nbsp;");
       }
       if(data.pagination.next_page){
         var nextElement = $("<a href='#'>Next</a>");
@@ -598,13 +598,13 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       
       //previous and next link
       if(data.pagination.previous_page){
-        var previousElement= $("<a href='#'>Previous</a>;");
+        var previousElement= $("<a href='#'>Previous</a>");
         var that = this;
         previousElement.click(function(e){
           e.preventDefault;
           that._previousFavoriteVideoPage();
         });
-        thumbsWrap.append(previousElement);
+        thumbsWrap.append(previousElement).append("&nbsp;");
       }
       if(data.pagination.next_page){
         var nextElement = $("<a href='#'>Next</a>");

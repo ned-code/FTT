@@ -169,7 +169,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
           e.preventDefault;
           that._previousPage();
         });
-        appsThumbWrap.append(previousElement);
+        appsThumbWrap.append(previousElement).append("&nbsp;");
       }
       if(data.pagination.next_page){
         var nextElement = $("<a href='#'>Next</a>");
