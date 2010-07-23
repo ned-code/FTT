@@ -9,5 +9,5 @@
 <% end %>
 
 <div class='item layer' style="<%= style %>">
-  <%= raw item.inner_html %>
-</div>  
+  <%= raw update_text_to_be_xhtml_valid(item.inner_html) %>
+</div>

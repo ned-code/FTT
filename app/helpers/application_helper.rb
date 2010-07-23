@@ -62,4 +62,12 @@ module ApplicationHelper
       return 'z-index:50000;'
     end
   end
+  
+  def update_text_to_be_xhtml_valid(text)
+    #Change the &nbsp; to &#169;
+    valid_text = text.gsub(/&nbsp;/, '&#169;')
+    #make <br some properties> to <br />
+    valid_text = valid_text.gsub(/<br.*?>/, '<br />')
+    return valid_text
+  end
 end
