@@ -457,7 +457,7 @@
       dataTypes = {
         cssvalue: {
           test: function( value ) {
-            return regex.cssValue.test(value);
+            return (regex.cssValue.test(value) && parseFloat(value) > 0);
           },
           error: 'Not a valid CSS value'
         },
