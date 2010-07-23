@@ -228,7 +228,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var cssString = '';
     
     if(styleHash){
-      for(i=0; i < this.page.CSS_AUTHORIZED_SCOPE.length; i++){
+      for(var i=0; i < this.page.CSS_AUTHORIZED_SCOPE.length; i++){
         if(styleHash[this.page.CSS_AUTHORIZED_SCOPE[i]]){
           ddd(this.page.CSS_AUTHORIZED_SCOPE[i]);
           cssString += styleHash[this.page.CSS_AUTHORIZED_SCOPE[i]];
@@ -243,7 +243,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var propertyArray;
     if(styleHash && styleHash[scope]){
       var styleArray = styleHash[scope].split(';');
-      for(i=0;i<styleArray.length;i++){
+      for(var i=0;i<styleArray.length;i++){
         propertyArray = styleArray[i].split(':');
         if(propertyArray[0] == property_name){
            return propertyArray[1];
@@ -257,18 +257,22 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var styleHash = this.getStyle();
     var propertyArray;
     var property = property_name + ':' + property_value + ';';
-    
+    var propertySaved = false;
     if(styleHash && styleHash[scope]){
       var styleString = '';
-      var styleArray = styleHash[scope].split(';');
-      for(i=0;i<styleArray.length;i++){
-        propertyArray = styleArray[i].split(':');
+      var styleArray = styleHash[scope].split(';');      
+      for(var i=0;i<styleArray.length;i++){
+        var propertyArray = styleArray[i].split(':');        
         if(styleArray[i] !== ''){
           if(propertyArray[0] == property_name){
             styleString += property;
+            propertySaved = true;
           }
           else{
             styleString += propertyArray[0] + ':' + propertyArray[1] +';';
+          }
+          if(!propertySaved){
+            styleString += property;
           }
           styleHash[scope] = styleString;
         }
