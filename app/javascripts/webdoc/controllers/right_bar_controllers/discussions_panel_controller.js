@@ -185,7 +185,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   selectDiscussion: function(discussion, oldDiscussion, skipScroll) {
     ddd('[DiscussionsPanel] select discussion');
     this.unSelectDiscussion(oldDiscussion);
-    var discussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+discussion.uuid()+"']")[0];
+    var discussionSelectedDomNode = this.discussionsDomNode.find("[data-discussion-uuid='"+discussion.uuid()+"']")[0];
     if(discussionSelectedDomNode) {
       var parent = jQuery(discussionSelectedDomNode).parent();
       parent.addClass('item_selected');
@@ -198,7 +198,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
   unSelectDiscussion: function(discussion) {
     if (discussion !== null) {
-      var oldDiscussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+discussion.uuid()+"']")[0];
+      var oldDiscussionSelectedDomNode = this.discussionsDomNode.find("[data-discussion-uuid='"+discussion.uuid()+"']")[0];
       var oldParent = jQuery(oldDiscussionSelectedDomNode).parent();
       this.compactMode(oldParent);
       oldParent.removeClass('item_selected');
@@ -214,13 +214,13 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   // fire by page
   discussionRemoved: function(removedDiscussion) {
     ddd('[DiscussionsPanelController] discussion removed');
-    this.discussionsDomNode.find("div[data-discussion-uuid='"+removedDiscussion.uuid()+"']").parent().remove();
+    this.discussionsDomNode.find("[data-discussion-uuid='"+removedDiscussion.uuid()+"']").parent().remove();
   },
 
   // fire by discussion
   commentAdded: function(addedComment) {
     ddd('[DiscussionsPanelController] comment added');
-    var discussionDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+addedComment.discussion.uuid()+"']");
+    var discussionDomNode = this.discussionsDomNode.find("[data-discussion-uuid='"+addedComment.discussion.uuid()+"']");
     var commentDomNode = this.createCommentDomNode(addedComment);
     if(discussionDomNode.parent().data('wd_discussion_compact_mode') === true) {
       commentDomNode.hide();
