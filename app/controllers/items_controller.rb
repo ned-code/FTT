@@ -14,7 +14,7 @@ class ItemsController < PageController
   
   # GET /documents/:document_id/pages/:page_id/items/:id
   def show
-    @item = @page.items.find_by_uuid(params[:id])
+    @item = @page.items.not_deleted.find_by_uuid(params[:id])
     if @item
       render :layout => false
     else
@@ -34,7 +34,7 @@ class ItemsController < PageController
   
   # PUT /documents/:document_id/pages/:page_id/items/:id
   def update
-    @item = @page.items.find_by_uuid(params[:id])
+    @item = @page.items.not_deleted.find_by_uuid(params[:id])
     @item.update_attributes!(params[:item])    
     message = @item.as_json({})
     message[:source] = params[:xmpp_client_id]
@@ -44,8 +44,8 @@ class ItemsController < PageController
   
   # DELETE /documents/:document_id/pages/:page_id/items/:id
   def destroy
-    @item = @page.items.find_by_uuid(params[:id])
-    @item.destroy
+    @item = @page.items.not_deleted.find_by_uuid(params[:id])
+    @item.safe_delete!
     message = { :source => params[:xmpp_client_id], :item =>  { :page_id => @item.page.id, :uuid => @item.uuid }, :action => "delete" }
     @@xmpp_notifier.xmpp_notify(message.to_json, @item.page.document.uuid)   
     render :json => {}
@@ -55,7 +55,7 @@ class ItemsController < PageController
   def secure_token
     response = Hash.new
     if current_user
-      @item = @page.items.find_by_uuid(params[:id])
+      @item = @page.items.not_deleted.find_by_uuid(params[:id])
       
       token = Shindig.generate_secure_token(@item.page.document.creator.uuid, current_user.uuid, @item.uuid, 0, '')
       response['security_token'] = token;

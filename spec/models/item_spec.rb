@@ -17,6 +17,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: items
@@ -33,5 +34,6 @@ end
 #  inner_html  :text(16777215)
 #  properties  :text
 #  preferences :text
+#  deleted_at  :datetime
 #
 

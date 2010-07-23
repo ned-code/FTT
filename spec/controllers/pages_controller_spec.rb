@@ -33,7 +33,7 @@ describe PagesController do
       describe "GET 'index' with document_id '1'" do
         it "should not be successful" do
           Document.should_receive(:find_by_uuid).with("1").and_return(@mock_document)
-          @mock_document.should_receive(:pages).and_return([])
+          @mock_document.should_receive(:pages).and_return(Page)
           get :index, :document_id => "1"
           response.should be_success
         end
