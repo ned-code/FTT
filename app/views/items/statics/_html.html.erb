@@ -1,4 +1,12 @@
 <% style ||= '' %>
 <div class='item layer' style="<%= style %>">
-  <%= raw item.inner_html%>
+  <% if item.inner_html.match(/<html.|\n>(.|\n)*<\/html>/) || item.inner_html.match(/!DOCTYPE/) || item.inner_html.match(/<script/) %>
+    <iframe src='<%="/documents/#{@page.document.uuid}/pages/#{@page.uuid}/items/#{item.uuid}?fullHTML=true"%>' >
+    </iframe>
+  <% else %>
+    <iframe src='<%="/documents/#{@page.document.uuid}/pages/#{@page.uuid}/items/#{item.uuid}?fullHTML=true"%>' style='width:100%;height:99%;'>
+    </iframe>
+  <% end %>
+
 </div>
+

@@ -44,10 +44,10 @@ WebDoc.HtmlView = $.klass(WebDoc.ItemView, {
   },
   
   innerHtmlChanged: function($super) {
-    if (this.item.data.data.tag !== 'iframe' && !WebDoc.application.disableHtml && this.item.data.data.tag !== "iframe") {    
+    if (this.item.data.data.tag !== 'iframe' && !WebDoc.application.disableHtml) {
       this.itemDomNode.html($.string().stripScripts(this.item.getInnerHtml()));
     }
-    this._displayDefaultContentIfNeeded(this.itemDomNode);    
+    this._displayDefaultContentIfNeeded(this.itemDomNode);
     // Highlight code blocks in the html -
     // nodes that have class "code"
     this.itemDomNode.find('code, .code').each( function(i){

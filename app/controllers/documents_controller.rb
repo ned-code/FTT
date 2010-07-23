@@ -116,6 +116,7 @@ class DocumentsController < ApplicationController
       @items = @page.items.not_deleted.all(:conditions => [ 'media_type != ?', 'drawing'])
       @drawing_items = @page.items.not_deleted.all(:conditions => [ :media_type => 'drawing'])
       @text_items = @page.items.not_deleted.all(:conditions => { :media_type => 'text'})
+      @default_theme = Theme.default
       render :action => :static_page, :layout => 'static', :content_type => 'image/svg+xml' and return
     end
     if @document.present?

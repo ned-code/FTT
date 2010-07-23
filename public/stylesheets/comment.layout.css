@@ -1,0 +1,122 @@
+.thumb {
+  display: block;
+  overflow: hidden;
+  padding-top: 64px;
+  /* Hide overflowing text. This technique is better
+     than using -ve text-indent because IE7 moves
+     the background image with the text-indent. */
+  height: 0;
+  background-image: url('../images/thumb_test.png');
+  background-size: 96px 64px;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  
+  text-decoration: none;
+  color: inherit;
+}
+
+.user_thumb {
+  background-size: 32px 32px;
+  padding-top: 32px;
+  width: 32px;
+}
+
+/* comment.layout.css */
+
+.comments_index {}
+
+*+.comments_index {
+	margin-top: 1em;
+}
+
+.comments_index li {
+  margin-bottom: 1px;
+}
+
+/*.comments_index li {
+	border-bottom: 1px solid #999999;
+}
+
+.comments_index li:last-child {
+	border-bottom: none;
+}*/
+
+.comment {
+  position: relative;
+  padding: 0.3333em 0.3333em 0.3333em 68px;
+  min-height: 72px;
+  
+  color: black;
+  background: #939BA1;
+}
+
+.comment .user_thumb {
+  position: absolute;
+  top: 0; left: 0;
+  
+  background-size: 64px 64px;
+  background-position: 4px 4px;
+  padding-top: 64px;
+  width: 64px;
+}
+
+.comment header {
+  margin-bottom: 0.6666em;
+  /* Make room on the right for the date */
+  margin-right: 5em;
+  
+  font-size: inherit;
+  font-weight: bold;
+  
+  /* Attempt to match the line height to .comment_date */
+  height: 1.2em;
+  line-height: 1em;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comment_info {
+  position: absolute;
+  top: 4px;
+  right: 0.3333em;
+  
+  /* Attempt to match vertical positioning with .comment_head */
+  height: 1.2em;
+}
+
+.comment header a:hover,
+.comment header a:focus {
+  text-decoration: none;
+  color: white;
+}
+.comment header a {
+  text-decoration: none;
+  color: #336699;
+}
+
+.comment time {
+  font-size: 0.8333em;
+  font-style: italic;
+  margin-left: 1em;
+}
+
+.comment textarea {
+  width: 100%;
+  /* Stop WebKit users from breaking the layout
+     by resizing the textarea */
+  max-width: 100%;
+  min-height: 6em;
+  margin-bottom: 0.6666em;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.comment input[type='submit'] {
+  display: block;
+  margin: 0 0 0 auto;
+}
+
+.comment p+p {
+	margin-top: 0.6666em;
+}
