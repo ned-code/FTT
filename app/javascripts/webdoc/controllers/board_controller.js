@@ -1190,7 +1190,9 @@ WebDoc.BoardController = jQuery.klass({
     if(e) {
       e.preventDefault();
     }
-    if(this._selectionDiscussionView) {
+    var current_user_uuid = WebDoc.Application.getCurrentUser().uuid();
+    if(this._selectionDiscussionView && current_user_uuid &&
+        (current_user_uuid ===  WebDoc.application.pageEditor.getCreator().uuid() || current_user_uuid === this._selectionDiscussionView.discussion.userId())) {
       if(this._selectionDiscussionView.discussion.comments.length > 1) {
         if(!confirm("Would you remove this discussion?")) {
             return false;

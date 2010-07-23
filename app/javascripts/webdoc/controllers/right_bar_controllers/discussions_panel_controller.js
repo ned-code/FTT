@@ -1,4 +1,4 @@
-  /**
+/**
  * @author noe
  */
 
@@ -96,14 +96,14 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     firstPart.append(comment.content().replace(/\n/g, '<br />'));
     firstPart.append(jQuery('<br/>'));
     firstPart.append(comment.created_at() + ' by ' + comment.user.getUsername());
-    if(comment.user.uuid() === WebDoc.Application.getCurrentUser().uuid()) {
+    var current_user_uuid = WebDoc.Application.getCurrentUser().uuid();
+    if(current_user_uuid && ( current_user_uuid ===  WebDoc.application.pageEditor.getCreator().uuid() || current_user_uuid === comment.user.uuid())) {
       firstPart.append(jQuery('<br/>'));
       var removeCommentLink = jQuery('<a/>', { 'href':'#', 'id':'remove_comment'}).text('remove');
       removeCommentLink.bind('click', function() {
         comment.discussion.removeComment(comment);
       });
       firstPart.append(removeCommentLink);
-
     }
     secondPart.append(jQuery('<img/>', { 'src': comment.user.getAvatarThumbUrl(), 'style': 'width:50px; height:50px;' }));
 

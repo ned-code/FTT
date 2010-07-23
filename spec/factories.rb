@@ -96,3 +96,14 @@ Factory.define :theme_without_upload, :class => Theme do |f|
   f.elements_url            "http://test.webdoc.com/themes/elements.html"
   f.is_default              true
 end
+
+Factory.define :discussion do |f|
+  f.page    { |f| f.association(:page) }
+  f.user    { |f| f.association(:user) }
+end
+
+Factory.define :comment do |f|
+  f.user                { |f| f.association(:user) }
+  f.discussion          { |f| f.association(:discussion) }
+  f.sequence(:content)  { |n| "content #{n}" }
+end
