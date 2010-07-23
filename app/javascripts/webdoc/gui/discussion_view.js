@@ -56,6 +56,7 @@ WebDoc.DiscussionView = $.klass({
 
   select: function() {
     this.domNode.addClass("item_selected");
+    this.domNode[0].scrollIntoView();
   },
 
   unSelect: function() {
