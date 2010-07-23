@@ -109,6 +109,15 @@ class DocumentsController < ApplicationController
   
   # GET /documents/:id
   def show
+    if params[:_escaped_fragment_]
+      #used to respond to the google robot, see: http://www.google.com/support/webmasters/bin/answer.py?hlrm=en&answer=174992
+      #we do it in document controller because we don't want any redirect.
+      @page = Page.find_by_uuid(params[:_escaped_fragment_])
+      @items = @page.items.find(:all, :conditions => [ 'media_type != ?', 'drawing'])
+      @drawing_items = @page.items.find(:all, :conditions => { :media_type => 'drawing'} )
+      @text_items = @page.items.find(:all, :conditions => { :media_type => 'text'} )
+      render :action => :static_page, :layout => 'static', :content_type => 'image/svg+xml' and return
+    end
     if (@document)
       respond_to do |format|
         format.html do

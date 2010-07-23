@@ -23,6 +23,7 @@ class Discussion < ActiveRecord::Base
                            :constructor => DiscussionJsonHelper.method(:decode_json_and_yaml)
 
   belongs_to :page
+  belongs_to :user
   has_many :comments
 
   validates_presence_of :page_id
@@ -44,6 +45,13 @@ class Discussion < ActiveRecord::Base
     return false
   end
 
+  def as_application_json
+    as_json(:include => { :comments =>
+                                  { :include => { :user => { :methods => :avatar_thumb_url } },
+                                    :except => [:content],
+                                    :methods => :safe_content }})
+  end
+
   def safe_delete!
     if self.deleted_at.blank?
       self.deleted_at = Time.now
@@ -52,6 +60,7 @@ class Discussion < ActiveRecord::Base
   end
   
 end
+
 
 # == Schema Information
 #
@@ -63,5 +72,6 @@ end
 #  properties :text
 #  created_at :datetime
 #  updated_at :datetime
+#  user_id    :string(36)      not null
 #
 

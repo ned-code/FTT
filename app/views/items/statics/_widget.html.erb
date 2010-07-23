@@ -1,0 +1,7 @@
+<% style ||= '' %>
+<%- style += 'width:100%;height:100%;' %>
+  <% if item.data['css']['overflow']%>
+  <% style += "overflow:#{item.data['css']['overflow']};" %>
+<%- end %>
+
+<iframe src='<%= item.data['src'] %>' style="<%= style %>"></iframe>

@@ -649,9 +649,9 @@ WebDoc.BoardController = jQuery.klass({
     });
   },
   
-  insertImage: function(imageUrl, position, media_id) {
+  insertImage: function(imageUrl, position, media_id, title) {
     var image = document.createElement('img'); /* Preload image in order to have width and height parameters available */
-    jQuery(image).bind("load", {position: position, media_id: media_id}, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
+    jQuery(image).bind("load", {position: position, media_id: media_id, title: title }, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
     image.src = imageUrl;
   },
   
@@ -904,13 +904,11 @@ WebDoc.BoardController = jQuery.klass({
     if (!e.ctrlKey && !e.metaKey) {
       switch (e.which) {
         case 8:
-        case 46:
-          if (this._isInteraction) {
-            this.deleteSelectionDiscussion(e);
-          }
-          else {
+        case 46: 
+          if (!this._isInteraction) {
             this.deleteSelection(e);
           }
+          this.deleteSelectionDiscussion(e);
           break;
         case 90:
           this.zoomIn();
@@ -1044,6 +1042,7 @@ WebDoc.BoardController = jQuery.klass({
     var position = e.data.position;
     var media_id = e.data.media_id;
     var favorite = e.data.favorite;
+    var title = e.data.title;
     
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_IMAGE;
@@ -1054,6 +1053,14 @@ WebDoc.BoardController = jQuery.klass({
     if (y < 0) { y = 0;}
     newItem.data.data.tag = "img";
     newItem.data.data.src = this.src;
+    ddd('title : ', title);
+    if(title){
+      newItem.data.data.title = title;
+    }
+    else{
+      newItem.data.data.title = "";
+    }
+    
     newItem.data.data.preserve_aspect_ratio = "true";
     if(media_id !== undefined) {
       newItem.data.media_id = media_id;
@@ -1155,7 +1162,7 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPage.removeDiscussion(discussion);
   },
 
-  selectDiscussionView: function(discussionView) {
+  selectDiscussionView: function(discussionView, skipScrollDiscussionPanel) {
     ddd('[BoardController] selected discussion view');
     var oldDiscussion = null;
     if(this._selectionDiscussionView !== null) {
@@ -1166,7 +1173,16 @@ WebDoc.BoardController = jQuery.klass({
     discussionView.select();
     WebDoc.application.rightBarController.showDiscussionsPanel();
     var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
-    discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion);
+    discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion, skipScrollDiscussionPanel);
+  },
+
+  unSelectDiscussionView: function() {
+    if(this._selectionDiscussionView !== null) {
+      this._selectionDiscussionView.unSelect();
+      var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+      discussionPanel.unSelectDiscussion(this._selectionDiscussionView.discussion);
+      this._selectionDiscussionView = null;      
+    }
   },
 
   deleteSelectionDiscussion: function(e) {
@@ -1174,13 +1190,18 @@ WebDoc.BoardController = jQuery.klass({
     if(e) {
       e.preventDefault();
     }
-    if(this._selectionDiscussionView.discussion.comments.length > 1) {
-      if(!confirm("Would you remove this discussion?")) {
-        return false;
+    var current_user_uuid = WebDoc.Application.getCurrentUser().uuid();
+    if(this._selectionDiscussionView && current_user_uuid &&
+        (current_user_uuid ===  WebDoc.application.pageEditor.getCreator().uuid() || current_user_uuid === this._selectionDiscussionView.discussion.userId())) {
+      if(this._selectionDiscussionView.discussion.comments.length > 1) {
+        if(!confirm("Would you remove this discussion?")) {
+            return false;
+        }
       }
+      this.removeDiscussion(this._selectionDiscussionView.discussion);
+      this._selectionDiscussionView = null; 
     }
-    this.removeDiscussion(this._selectionDiscussionView.discussion);
-    this._selectionDiscussionView = null;
+
   }
 
 });

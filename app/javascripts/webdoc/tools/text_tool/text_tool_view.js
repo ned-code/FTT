@@ -1846,6 +1846,8 @@ WebDoc.TextToolView = $.klass({
     
     this.setEditionRestrictMarker = function(){
       var editionRestrictMarker = this.edDoc.createElement('div');
+      // TODO: Setting this as an id causes multiple elements with the
+      // same id to be put into the DOM.
       editionRestrictMarker.setAttribute('id', 'edition_restrict_marker');
       editionRestrictMarker.innerHTML = '&nbsp;';
       this.verticalCell.appendChild(editionRestrictMarker);

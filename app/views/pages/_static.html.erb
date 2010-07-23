@@ -1,0 +1,66 @@
+<%- content_for :title do %>
+  <%= page.document.title %>
+<% end %>
+
+<%- content_for :description do %>
+  <%= page.document.description %>
+<% end %>
+<% style = build_css_string(page.data['css']) %>
+<% style += build_css_placement_string(page.data['css']) %>
+
+<div class='center-box' id='<%= "page_#{page.uuid}" %>' style='<%= style %>'>
+  
+  <div class='layer' id='<%="items_#{page.uuid}"%>' style='overflow:visible'>
+    <style type='text/css'>
+      <% style = '' %>
+      <% for item in @text_items do %>
+        <% if item.data['style'] && item.data['style']['font_face']  %>
+          <% font_face = item.data['style']['font_face'] %>
+        <% end %>
+        <% if font_face %>
+            <% style += "@font-face{#{font_face}}" %>
+        <% end %>        
+      <% end %>
+      <%= style %>
+    </style>
+    <% for item in @items do %>
+      <%= render 'items/static', :item => item %>
+    <% end %>
+  </div>
+  <svg style='pointer-events: none; position: absolute; left: 0px; width: 100%; height: 100%; z-index: 1000000;'
+    version="1.1"
+    baseProfile="full"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:ev="http://www.w3.org/2001/xml-events">
+    <defs>
+      <marker id="myMarker" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" orient="0" markerWidth="10" markerHeight="10">
+        <rect x="0" y="0" width="10" height="10" fill="red"/>
+      </marker>
+    </defs>
+    <% for item in @drawing_items do %>
+      <%= render 'items/statics/drawing', :item => item %>
+    <% end %>
+  </svg>
+</div>
+
+<div class='discussions' style='width:300px'>
+  <% for discussion in page.discussions do %>
+    <div class='wd_discussion_dom_node'>
+      <div class='wd_comment_content_dom_node'>
+        <% for comment in discussion.comments do %>
+          <div style='width: 80%; float: left;'>
+            <%= comment.content %>
+            <br />
+            <%= "#{comment.created_at} by #{comment.user.username} "%>
+          </div>
+          <div style='width: 20%; float: left;'>
+            <img src="<%= comment.user.avatar.url(:thumb)%>" style='width: 50px; height: 50px;' />
+            
+          </div>
+          <div style="clear: both;"></div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

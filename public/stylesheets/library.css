@@ -128,10 +128,13 @@
 }
 
 #media-browser-home h2{
-    color:rgba(0,0,0,0.9);
+    color:rgba(0,0,20,0.7);
     font-family:verdana;
     font-size:14px;
+    font-weight:bold;
     margin-bottom:20px;
+    margin-top:10px;
+    margin-left:10px;
 }
 
 #media-browser-header .tab_navigation{
@@ -163,6 +166,7 @@
     -webkit-border-radius:   12px;
     -moz-border-radius:      12px;
     border-radius:           12px;
+    cursor:pointer;
 }
 
 #packages-list ul li:hover{
@@ -221,20 +225,23 @@
 }
 
 .media_browser_content h3.service_bar{
-    color:rgba(0,0,0,0.9);
+    color:rgba(0,0,20,0.7);
     font-family:verdana;
     font-size:14px;
+    font-weight:bold;
     margin-bottom:20px;
 }
 
 .media_browser_content h3.service_bar span{
     display:inline-block;
     font-size:12px;
+    font-weight:normal;
 }
 
 .media_browser_content h3.service_bar select{
     width:200px;
     font-size:11px;
+    font-weight:normal;
     display:block;
 }
 

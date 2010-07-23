@@ -62,6 +62,7 @@ class User < ActiveRecord::Base
   has_many :following, :through => :following_connections
   has_many :followers, :through => :follower_connections
   has_many :datastore_entries
+  has_many :discussions
   has_many :comments
   
   # ===================
@@ -178,6 +179,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -212,7 +214,6 @@ end
 #  avatar_content_type  :string(255)
 #  avatar_file_size     :integer(4)
 #  avatar_updated_at    :datetime
-#  id                   :integer(4)
 #  facebook_uid         :integer(8)
 #  facebook_session_key :string(149)
 #

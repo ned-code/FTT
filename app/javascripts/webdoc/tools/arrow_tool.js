@@ -19,30 +19,34 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     
   select: function(e) {
     var objectToSelect = this._clickedObjectView(e);
-    if (!WebDoc.application.boardController.isInteractionMode() && objectToSelect.type !== "discussion") {
-      this.lastSelectedObject = {
-        itemView: objectToSelect.object, // JBA: no more USED
-        event: e
-      };
-      if (!(objectToSelect.object && WebDoc.application.boardController.editingItem() == objectToSelect.object)) {
-        if (objectToSelect.object) {
-          e.stopPropagation();
-          if(e.shiftKey) {
-            WebDoc.application.boardController.addItemViewToSelection([objectToSelect.object]);
+    if (objectToSelect.type !== "discussion") {
+      WebDoc.application.boardController.unSelectDiscussionView();
+      if (!WebDoc.application.boardController.isInteractionMode()) {
+        this.lastSelectedObject = {
+          itemView: objectToSelect.object, // JBA: no more USED
+          event: e
+        };
+        if (!(objectToSelect.object && WebDoc.application.boardController.editingItem() == objectToSelect.object)) {
+          if (objectToSelect.object) {
+            e.stopPropagation();
+            if(e.shiftKey) {
+              WebDoc.application.boardController.addItemViewToSelection([objectToSelect.object]);
+            }
+            else {
+              WebDoc.application.boardController.selectItemViews([objectToSelect.object]);
+            }
           }
           else {
-            WebDoc.application.boardController.selectItemViews([objectToSelect.object]);
+            WebDoc.application.boardController.unselectAll();
+            this.selectedObject = [];
           }
+          jQuery("a[href='#select']").focus();
         }
-        else {
-          WebDoc.application.boardController.unselectAll();
-          this.selectedObject = [];
-        }
-        jQuery("a[href='#select']").focus();
+        this.lastSelectedObject.event = null;
       }
-      this.lastSelectedObject.event = null;
     }
     else if(objectToSelect.type === 'discussion') {
+      WebDoc.application.boardController.unselectAll(); 
       WebDoc.application.boardController.selectDiscussionView(objectToSelect.object);
     } 
   },

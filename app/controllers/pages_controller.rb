@@ -80,7 +80,7 @@ class PagesController < DocumentController
     Services::Bluga.recieve(params)
     render :text => ''
   end
-
+  
 private
 
   def authenticate_if_needed

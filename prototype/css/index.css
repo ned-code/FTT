@@ -30,15 +30,38 @@
   margin-right: 0.3333em;
 }
 
-.message_index {
-  
-}
-
 .message_index li {
   position: relative;
   padding-left: 36px;
   margin-bottom: 0.3333em; /* 4px */
   min-height: 32px;
+}
+
+.message_index .user_thumb {
+  position: absolute;
+  top: 0; left: 0;
+  /* This is the default size */
+  /* 
+  background-size: 32px 32px;
+  padding-top: 32px;
+  width: 32px;
+  */
+}
+
+.comment_index li {
+  position: relative;
+  padding-left: 68px;
+  margin-bottom: 0.3333em; /* 4px */
+  min-height: 64px;
+}
+
+.comment_index .user_thumb {
+  position: absolute;
+  top: 0; left: 0;
+  
+  background-size: 64px 64px;
+  padding-top: 64px;
+  width: 64px;
 }
 
 .thumbs_index li {
@@ -54,7 +77,7 @@
 .sidepanel_buttons_index {
   width: 11.3333em;
   /* Firefox cannot handle display: box; with position: absolute; Grrrrr. */
-  /*position: absolute;*/
+  position: absolute;
   right: 0.3333em;
 }
 
