@@ -24,6 +24,6 @@
 #   runner "Page.process_pending_thumbnails"
 # end
 
-every 1.day, :at => '8.00 am' do
-  rake analytics:process
+every 1.day, :at => '8:00 am' do
+  rake "analytics:process"
 end

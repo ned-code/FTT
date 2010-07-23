@@ -166,6 +166,7 @@
     -webkit-border-radius:   12px;
     -moz-border-radius:      12px;
     border-radius:           12px;
+    cursor:pointer;
 }
 
 #packages-list ul li:hover{

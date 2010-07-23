@@ -9,7 +9,7 @@ describe Theme do
     end
 
     after(:all) do
-      @theme.destroy
+      @theme.destroy if @theme
     end
 
     it "should can set attributes form config file and save without ancestor" do
@@ -45,6 +45,7 @@ describe Theme do
 end
 
 
+
 # == Schema Information
 #
 # Table name: themes
@@ -62,5 +63,6 @@ end
 #  attachment_content_type :string(255)
 #  attachment_file_size    :integer(4)
 #  attachment_updated_at   :datetime
+#  fonts_url               :string(255)
 #
 
