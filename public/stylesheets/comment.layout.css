@@ -47,7 +47,7 @@
   min-height: 72px;
   
   color: black;
-  background: #AFB6BC;
+  background: #939BA1;
 }
 
 .comment .user_thumb {
@@ -86,9 +86,14 @@
   height: 1.2em;
 }
 
+.comment header a:hover,
+.comment header a:focus {
+  text-decoration: none;
+  color: white;
+}
 .comment header a {
   text-decoration: none;
-  color: #999999;
+  color: #336699;
 }
 
 .comment time {
@@ -110,4 +115,8 @@
 .comment input[type='submit'] {
   display: block;
   margin: 0 0 0 auto;
+}
+
+.comment p+p {
+	margin-top: 0.6666em;
 }

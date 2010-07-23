@@ -225,7 +225,11 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     if(discussionDomNode.parent().data('wd_discussion_compact_mode') === true) {
       commentDomNode.hide();
     }
-    discussionDomNode.append(commentDomNode);
+    var items =  discussionDomNode.children();
+    
+    items
+    .eq( items.length - 1 )
+    .before(commentDomNode);
   },
 
   commentRemoved: function(removedComment) {
