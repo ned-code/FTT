@@ -1,3 +1,26 @@
+.thumb {
+  display: block;
+  overflow: hidden;
+  padding-top: 64px;
+  /* Hide overflowing text. This technique is better
+     than using -ve text-indent because IE7 moves
+     the background image with the text-indent. */
+  height: 0;
+  background-image: url('../images/thumb_test.png');
+  background-size: 96px 64px;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  
+  text-decoration: none;
+  color: inherit;
+}
+
+.user_thumb {
+  background-size: 32px 32px;
+  padding-top: 32px;
+  width: 32px;
+}
+
 /* comment.layout.css */
 
 .comments_index {}
@@ -23,7 +46,8 @@
   padding: 0.3333em 0.3333em 0.3333em 68px;
   min-height: 72px;
   
-  background: #eeeeee;
+  color: black;
+  background: #AFB6BC;
 }
 
 .comment .user_thumb {
@@ -70,6 +94,7 @@
 .comment time {
   font-size: 0.8333em;
   font-style: italic;
+  margin-left: 1em;
 }
 
 .comment textarea {
