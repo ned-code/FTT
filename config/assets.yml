@@ -22,7 +22,8 @@ stylesheets:
   page_editor:    
     - public/stylesheets/library.css
     - public/stylesheets/lib/panel.css
-    - public/stylesheets/lib/protect.css    
+    - public/stylesheets/lib/protect.css
+    - public/stylesheets/lib/comment.layout.css
     - public/stylesheets/style.editor.css
     - public/stylesheets/style.editor.colors.css
     - public/stylesheets/style.editor.apps.inspector.outer.css
