@@ -78,7 +78,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   createDiscussionDomNode: function(discussion) {
-    var newDiscussionsDomNode = jQuery('<div/>').attr('data-discussion-uuid', discussion.uuid()).attr('class', 'wd_discussion_dom_node');
+    var newDiscussionsDomNode = jQuery('<ul/>').attr('data-discussion-uuid', discussion.uuid()).attr('class', 'wd_discussion_dom_node');
     discussion.addListener(this);
     this._discussionsWithListener.push(discussion);
     for(var i=0; i<discussion.comments.length; i++) {
