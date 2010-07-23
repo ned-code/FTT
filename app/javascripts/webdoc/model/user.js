@@ -11,7 +11,12 @@ WebDoc.User = $.klass(WebDoc.Record, {
   },
 
   getAvatarThumbUrl: function() {
-    return this.data.avatar_thumb_url;
+    if (this.data.avatar_thumb_url) {
+      return this.data.avatar_thumb_url;
+    }
+    else {
+      return "";
+    }
   }
 });
 
