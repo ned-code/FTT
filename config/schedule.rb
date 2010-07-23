@@ -25,5 +25,5 @@
 # end
 
 every 1.day, :at => '8.00 am' do
-  rake analytics:process
+  rake "analytics:process"
 end
