@@ -1,0 +1,165 @@
+/* Flexible box layouts
+   
+   Stephen Band
+   
+   Useful references:
+   http://www.w3.org/TR/css3-flexbox
+   http://alex.dojotoolkit.org/2009/08/css-3-progress/
+   http://hacks.mozilla.org/2010/04/the-css-3-flexible-box-model/
+   
+   Here's the rules applicable to the Flexible Box Layout Module,
+   according to the spec. Watch out, they're not all implemented.
+   http://www.w3.org/TR/css3-flexbox/ 
+   
+   Box elements:
+   
+   display:           box
+   box-orient:        [inline-axis] | block-axis | horizontal | vertical | inherit
+   box-pack:          [start] | end | center | justify
+   box-align:         [stretch] | start | end | center | baseline
+   box-direction:     [normal] | reverse | inherit
+   box-lines:         [single] | multiple
+   
+   Children of box elements:
+   
+   box-flex:          number	[0.0]
+   box-flex-group:    integer	[1]
+   box-ordinal-group: integer	[1]   (applies also to elements not in the flow)
+*/
+
+.horizontal,
+.vertical {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -o-box;
+	display: -ms-box;
+	display: box;
+
+	-webkit-box-align: stretch;
+	-moz-box-align:    stretch;
+	-o-box-align:      stretch;
+	box-align:         stretch;
+
+  -webkit-box-pack: start;
+  -moz-box-pack:    start;
+  box-pack:         start;
+
+	/* Firefox collapses the width of boxes.  Let's make
+	   it behave the same way as the others. */
+	width: 100%;
+}
+
+.horizontal {
+	-webkit-box-orient: horizontal;
+	-moz-box-orient:    horizontal;
+	-o-box-orient:      horizontal;
+	box-orient:         horizontal;
+}
+
+.vertical {
+	-webkit-box-orient: vertical;
+	-moz-box-orient:    vertical;
+	-o-box-orient:      vertical;
+	box-orient:         vertical;
+}
+
+/* Remove default styling from list items that have box
+   layout applied - in case some typography rules have
+   added these back in after the reset. */
+
+.vertical>li,
+.horizontal>li {
+    margin: 0;
+    padding: 0;
+}
+
+/* dividing lines */
+
+.vertical.divided>* {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #666666;
+}
+
+.vertical.divided>*:first-child {
+  border-top-style: none;
+}
+
+.horizontal.divided>* {
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: #666666;
+}
+
+.horizontal.divided>*:first-child {
+  border-left-style: none;
+}
+
+.justify_horizontal,
+.justify_vertical {
+  -webkit-box-pack: justify;
+  -moz-box-pack:    justify;
+  box-pack:         justify;
+}
+
+/*
+.centered_horizontal,
+.centered_vertical {
+  -webkit-box-pack: center;
+  -moz-box-pack:    center;
+  box-pack:         center;
+}
+
+.end_horizontal,
+.end_vertical {
+  -webkit-box-pack: end;
+  -moz-box-pack:    end;
+  box-pack:         end;
+}
+*/
+
+/*
+.reverse {
+	-webkit-box-direction: reverse;
+	-moz-box-direction: reverse;
+	box-direction: reverse;
+}
+ 
+.start {
+	-webkit-box-pack: start;
+	-moz-box-pack: start;
+	box-pack: start;
+}
+ 
+.end {
+	-webkit-box-pack: end;
+	-moz-box-pack: end;
+	box-pack: end;
+}*/
+
+
+/* The up-down <dl> method */
+
+.horizontal.index>dt,
+.horizontal.index>dd {
+    margin: 0;
+}
+.horizontal.index>dt,
+.horizontal.index>dd {
+    width: 160px;
+    line-height: 1.6em;
+}
+.horizontal.index>dt {
+    vertical-align: text-bottom;
+}
+.horizontal.index>dd {
+    vertical-align: text-top;
+    /* reset the margin that usually indents a dd */
+    margin-left: 0;
+    /* Move it down by one line-height */
+    margin-top: 1.6em;
+    /* Move it left with a negative margin accounting for size, padding and margin of dt */
+    margin-left: -166px;
+    /* Space at the bottom for when the items wrap */
+    margin-bottom: 1.6em;
+}
