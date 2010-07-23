@@ -31,15 +31,17 @@
 
 .comments_index li {
   margin-bottom: 1px;
+  display: none;
 }
 
-/*.comments_index li {
-	border-bottom: 1px solid #999999;
+.comments_index.active li,
+.comments_index li:first-child {
+  display: block;
 }
 
-.comments_index li:last-child {
-	border-bottom: none;
-}*/
+.comments_index.active .comment {
+	background: #AFB6BC;
+}
 
 .comment {
   position: relative;
