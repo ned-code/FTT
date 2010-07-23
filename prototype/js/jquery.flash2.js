@@ -1,4 +1,4 @@
-jQuery.fn.message = function(options) {
+jQuery.fn.flash = function(options) {
     
     var options = !options ? {} : options;
     var domNodeId = "flash";
@@ -31,7 +31,7 @@ jQuery.fn.message = function(options) {
     }
     
     var hide = function(node){
-      if(parentNode.find(".message").length <= 1){
+      if(parentNode.find(".flash_message").length <= 1){
         close();
       }
       node.removeClass("visible");
@@ -50,7 +50,7 @@ jQuery.fn.message = function(options) {
       .bind("close", close);
       
     message
-      .addClass("message")
+      .addClass("flash_message")
       .addClass("anim_opacity");
               
     if(this.isModal())
