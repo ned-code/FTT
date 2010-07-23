@@ -457,6 +457,11 @@ a[href="#social-inspector"]:hover     { background-position: 0 -2496px; }
 a[href="#social-inspector"]:active    { background-position: 0 -2560px; }
 a[href="#social-inspector"].current   { background-position: 0 -2624px; }
 
+a[href="#discussions-panel"]          { background-position: 0 -2688px; }
+a[href="#discussions-panel"]:hover    { background-position: 0 -2752px; }
+a[href="#discussions-panel"]:active   { background-position: 0 -2816px; }
+a[href="#discussions-panel"].current  { background-position: 0 -2880px; }
+
 .control-tools a,
 .mode-tools a { background-image: url('../images/mode-tools.png'); }
 

@@ -55,28 +55,11 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   compactMode: function(discussionDomNodeAndForm) {
-    discussionDomNodeAndForm.data('wd_discussion_compact_mode', true);
-    var discussionDomNode = discussionDomNodeAndForm.children('div.wd_discussion_dom_node').first();
-    var formDomNode = discussionDomNodeAndForm.children('div.wd_comment_form_dom_node').first();
-    var divsComments = discussionDomNode.children('div.wd_comment_content_dom_node');
-    if(divsComments.length > 0) {
-      divsComments.each(function() { $(this).hide(); });
-      divsComments.first().show();
-      formDomNode.hide();
-    }
-    else {
-      divsComments.each(function() { $(this).hide(); });
-      formDomNode.show();
-    }
+    discussionDomNodeAndForm.removeClass('active');
   },
 
   expendMode: function (discussionDomNodeAndForm) {
-    discussionDomNodeAndForm.data('wd_discussion_compact_mode', false);
-    var discussionDomNode = discussionDomNodeAndForm.children('div.wd_discussion_dom_node').first();
-    var formDomNode = discussionDomNodeAndForm.children('div.wd_comment_form_dom_node').first();
-    var divsComments = discussionDomNode.children('div.wd_comment_content_dom_node');
-    divsComments.each(function() { $(this).show(); });
-    formDomNode.show();
+    discussionDomNodeAndForm.addClass('active');
   },
 
   createDiscussionDomNode: function(discussion) {
@@ -139,7 +122,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
         domNode = jQuery('<li/>'),
         form = jQuery('<form/>', { 'class': 'comment' }),
         header = jQuery('<header/>'),
-        thumb = jQuery('<a/>', { 'class': 'user_thumb thumb', 'title': user.getUsername(), 'style': 'background-image: url('+user.getAvatarThumbUrl()+');' }).html(user.getUsername()),
+        thumb = jQuery('<a/>', { 'class': 'user_thumb thumb', 'title': user.getUsername(), 'style': 'background-image: url('+ user.getAvatarThumbUrl() +');' }).html(user.getUsername()),
         label = jQuery('<label/>').attr('for', '#commentId').html('Write a comment'),
         body = jQuery('<div/>'),
         textarea = jQuery('<textarea/>', { name: 'commentId', id: 'commentId', placeholder: 'Write your comment...' }),
@@ -187,9 +170,8 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     this.unSelectDiscussion(oldDiscussion);
     var discussionSelectedDomNode = this.discussionsDomNode.find("[data-discussion-uuid='"+discussion.uuid()+"']")[0];
     if(discussionSelectedDomNode) {
-      var parent = jQuery(discussionSelectedDomNode).parent();
-      parent.addClass('item_selected');
-      this.expendMode(parent);
+      var node = jQuery(discussionSelectedDomNode).addClass('item_selected');
+      this.expendMode(node);
       if(!skipScroll || skipScroll !== true) {
         discussionSelectedDomNode.scrollIntoView(true);
       }
@@ -199,9 +181,8 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   unSelectDiscussion: function(discussion) {
     if (discussion !== null) {
       var oldDiscussionSelectedDomNode = this.discussionsDomNode.find("[data-discussion-uuid='"+discussion.uuid()+"']")[0];
-      var oldParent = jQuery(oldDiscussionSelectedDomNode).parent();
-      this.compactMode(oldParent);
-      oldParent.removeClass('item_selected');
+      var node = jQuery(oldDiscussionSelectedDomNode).removeClass('item_selected');
+      this.compactMode(node);
     }
   },
 
@@ -222,10 +203,11 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     ddd('[DiscussionsPanelController] comment added');
     var discussionDomNode = this.discussionsDomNode.find("[data-discussion-uuid='"+addedComment.discussion.uuid()+"']");
     var commentDomNode = this.createCommentDomNode(addedComment);
-    if(discussionDomNode.parent().data('wd_discussion_compact_mode') === true) {
-      commentDomNode.hide();
-    }
-    discussionDomNode.append(commentDomNode);
+    var items =  discussionDomNode.children();
+    
+    items
+    .eq( items.length - 1 )
+    .before(commentDomNode);
   },
 
   commentRemoved: function(removedComment) {

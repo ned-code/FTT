@@ -15,12 +15,12 @@ class PagesController < DocumentController
   
   # GET /documents/:document_id/pages
   def index
-    render :json => @document.pages
+    render :json => @document.pages.not_deleted
   end
   
   # GET /documents/:document_id/pages/:id
   def show
-    @page ||= @document.pages.find_by_uuid_or_position!(params[:id])
+    @page ||= @document.pages.not_deleted.find_by_uuid_or_position!(params[:id])
     respond_to do |format|
       format.html do
         render :layout => "layouts/static_page"
@@ -51,7 +51,7 @@ class PagesController < DocumentController
   # PUT /documents/:document_id/pages/:id
   def update
     deep_notify = params[:page][:items_attributes].present?
-    @page = @document.pages.find_by_uuid(params[:id])
+    @page = @document.pages.not_deleted.find_by_uuid(params[:id])
     @page.update_attributes!(params[:page])
     # TODO JBA seems that update atribute does not refresh nested attributes so we need to refresh
     @page.reload
@@ -69,8 +69,8 @@ class PagesController < DocumentController
   
   # DELETE /documents/:document_id/pages/:id
   def destroy
-    @page = @document.pages.find_by_uuid(params[:id])
-    @page.destroy
+    @page = @document.pages.not_deleted.find_by_uuid(params[:id])
+    @page.safe_delete!
     message = { :source => params[:xmpp_client_id], :page =>  { :uuid => @page.uuid }, :action => "delete" }
     @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)    
     render :json => {}

@@ -26,6 +26,9 @@ class Item < ActiveRecord::Base
   attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind, :inner_html, :properties, :preferences
 
   attr_accessor_with_default :touch_page_active, true
+
+  named_scope :not_deleted, :conditions => ['items.deleted_at IS ?', nil]
+  named_scope :deleted, :conditions => ['items.deleted_at IS NOT ?', nil]
   
   # ================
   # = Associations =
@@ -105,6 +108,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: items
@@ -121,5 +125,6 @@ end
 #  inner_html  :text(16777215)
 #  properties  :text
 #  preferences :text
+#  deleted_at  :datetime
 #
 

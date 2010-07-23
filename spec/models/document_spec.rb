@@ -177,27 +177,27 @@ describe Document do
     end
 
     it "should return the most recent public documents when he han't params" do
-      docs = Document.all_public_paginated_with_explore_params()
+      docs = Document.not_deleted_public_paginated_with_explore_params()
       docs.should == [@doc3, @doc2, @doc1]
     end
 
     it "should return the most recent public documents when the params order_string equals 'recent'" do
-      docs = Document.all_public_paginated_with_explore_params('recent')
+      docs = Document.not_deleted_public_paginated_with_explore_params('recent')
       docs.should == [@doc3, @doc2, @doc1]
     end
 
     it "should return the most viewed public documents when the params order_string equals 'viewed'" do
-      docs = Document.all_public_paginated_with_explore_params('viewed')
+      docs = Document.not_deleted_public_paginated_with_explore_params('viewed')
       docs.should == [@doc1, @doc3, @doc2]
     end
 
     it "should return all document in a category when the params category_id is set" do
-      docs = Document.all_public_paginated_with_explore_params('', @cat1)
+      docs = Document.not_deleted_public_paginated_with_explore_params('', @cat1)
       docs.should == [@doc2, @doc1]
     end
 
     it "should set a number of document per page" do
-      docs = Document.all_public_paginated_with_explore_params(nil, nil, nil, nil, 2)
+      docs = Document.not_deleted_public_paginated_with_explore_params(nil, nil, nil, nil, 2)
       docs.size.should == 2
     end
 
@@ -221,7 +221,7 @@ describe Document do
     end
 
     it "should find all public documents from following" do
-      docs = Document.last_modified_from_following(@user, 10)
+      docs = Document.last_modified_not_deleted_from_following(@user, 10)
       docs.size.should == 2
       docs.should include @doc2
       docs.should include @doc1
@@ -229,7 +229,7 @@ describe Document do
 
     it "should find all public and not public with editor role" do
       @user.has_role!("editor", @doc4)
-      docs = Document.last_modified_from_following(@user, 10)
+      docs = Document.last_modified_not_deleted_from_following(@user, 10)
       docs.size.should == 3
       docs.should include @doc4
       docs.should include @doc2
@@ -239,7 +239,7 @@ describe Document do
     it "should find all public and not public with reader and editor role" do
       @user.has_role!("editor", @doc4)
       @user.has_role!("reader", @doc4)
-      docs = Document.last_modified_from_following(@user, 10)
+      docs = Document.last_modified_not_deleted_from_following(@user, 10)
       docs.size.should == 3
       docs.should include @doc4
       docs.should include @doc2
@@ -247,25 +247,25 @@ describe Document do
     end
 
     it "should limit the number of document returned" do
-      docs = Document.last_modified_from_following(@user, 1)
+      docs = Document.last_modified_not_deleted_from_following(@user, 1)
       docs.size.should == 1
     end
 
     it "should find only following users documents" do
       @user_unknow.has_role!("editor", @doc4)
-      docs = Document.last_modified_from_following(@user_unknow, 10)
+      docs = Document.last_modified_not_deleted_from_following(@user_unknow, 10)
       docs.size.should == 0
     end
 
     it "should return an empty array when the user haven't following users" do
-      docs = Document.last_modified_from_following(@user_unknow, 10)
+      docs = Document.last_modified_not_deleted_from_following(@user_unknow, 10)
       docs.should == Array.new
     end
 
     it "should order by updated_at" do
       @doc1.updated_at = Time.now
       @doc1.save!
-      docs = Document.last_modified_from_following(@user, 10)
+      docs = Document.last_modified_not_deleted_from_following(@user, 10)
       docs.should == [@doc1, @doc2]
     end
 
@@ -274,7 +274,7 @@ describe Document do
       @user.follow(another_user.id)
       another_doc = Factory(:document, :creator => another_user, :is_public => true)
 
-      docs = Document.last_modified_from_following(@user, 10)
+      docs = Document.last_modified_not_deleted_from_following(@user, 10)
       docs.size.should == 3
     end
 

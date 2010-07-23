@@ -11,4 +11,13 @@ class ActiveRecord::Base
     new_record.save
     new_record
   end
+
+  # "delete" a row softly
+  # model need a deleted_at column
+  def safe_delete!
+    if self.deleted_at.blank?
+      self.deleted_at = Time.now
+      self.save!
+    end
+  end
 end

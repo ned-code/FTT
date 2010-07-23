@@ -21,11 +21,14 @@ class Document < ActiveRecord::Base
   composed_of :size, :class_name => 'Hash', :mapping => %w(size to_json),
                          :constructor => DocumentJsonHelper.method(:decode_json_and_yaml)
 
+  named_scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
+  named_scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
+
   # ================
   # = Associations =
   # ================
   
-  has_many :pages, :order => 'position ASC', :dependent => :destroy
+  has_many :pages, :order => 'position ASC'
   has_many :view_counts, :as => :viewable
   has_one :document_access
   belongs_to :metadata_media, :class_name => 'Media'
@@ -54,13 +57,13 @@ class Document < ActiveRecord::Base
   # = Class Methods =
   # =================
   
-  def self.all_with_filter(current_user, document_filter, query, page_id, per_page)
+  def self.not_deleted_with_filter(current_user, document_filter, query, page_id, per_page)
     documents = Array.new
     paginate_params = {
             :page => page_id,
             :per_page => per_page,
             :order => 'created_at DESC',
-            :conditions => ['(documents.title LIKE ? OR documents.description LIKE ?)', "%#{query}%", "%#{query}%"]
+            :conditions => ['documents.deleted_at IS ? AND (documents.title LIKE ? OR documents.description LIKE ?)', nil, "%#{query}%", "%#{query}%"]
     }
 
     if document_filter
@@ -101,12 +104,13 @@ class Document < ActiveRecord::Base
     Document.paginate(paginate_params)
   end
 
-  def self.all_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator])
+  def self.not_deleted_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator])
     paginate_params = {
             :page => page_id,
             :per_page => per_page,
             :include => include,
-            :conditions => ['(documents.title LIKE ? OR documents.description LIKE ?) AND documents.is_public = ?',
+            :conditions => ['documents.deleted_at IS ? AND (documents.title LIKE ? OR documents.description LIKE ?) AND documents.is_public = ?',
+                            nil,
                             "%#{query}%",
                             "%#{query}%",
                             true],
@@ -125,13 +129,14 @@ class Document < ActiveRecord::Base
     Document.paginate(paginate_params)
   end
 
-  def self.last_modified_from_following(current_user, limit=5)
+  def self.last_modified_not_deleted_from_following(current_user, limit=5)
     following_ids = current_user.following_ids
     if following_ids.present?
       all(
         :joins => "INNER JOIN roles ON roles.authorizable_id = documents.uuid INNER JOIN roles_users ON roles_users.role_id = roles.uuid",
-        :conditions => ['creator_id IN (?) AND (documents.is_public = ? OR (roles.authorizable_type = ? AND roles.name IN (?) AND roles_users.user_id = ?))',
+        :conditions => ['creator_id IN (?) AND documents.deleted_at IS ? AND (documents.is_public = ? OR (roles.authorizable_type = ? AND roles.name IN (?) AND roles_users.user_id = ?))',
                       following_ids,
+                      nil,
                       true,
                       self.class_name.to_s,
                       [ 'editor', 'reader' ],
@@ -146,10 +151,10 @@ class Document < ActiveRecord::Base
     end
   end
   
-  def self.all_featured_paginated(page_id=nil, per_page=8, include=[:category, :creator])
+  def self.not_deleted_featured_paginated(page_id=nil, per_page=8, include=[:category, :creator])
     paginate_params = {:page => page_id, :per_page => per_page, :include => include}
     paginate_params[:order] = 'featured DESC'
-    paginate_params[:conditions] = ['documents.is_public = ? AND featured > ?', true,0]
+    paginate_params[:conditions] = ['documents.deleted_at IS ? AND documents.is_public = ? AND featured > ?', nil, true, 0]
     Document.paginate(paginate_params)
   end
   # ====================
@@ -174,6 +179,41 @@ class Document < ActiveRecord::Base
     end
 
     text
+  end
+
+
+  def as_application_json
+    pages = self.pages.not_deleted
+    hash = { 'document' => Serializer.new(self).serializable_record }
+    hash['document']['pages'] = []
+    for page in pages
+      page_hash = Serializer.new(page).serializable_record
+      page_hash['items'] = []
+      items = page.items.not_deleted
+      for item in items
+        page_hash['items'] << Serializer.new(item).serializable_record
+      end
+      hash['document']['pages'] << page_hash
+    end
+    hash
+  end
+
+  def as_explore_json
+    pages = self.pages.not_deleted
+    hash = { 'document' => Serializer.new(self).serializable_record }
+    hash['document']['extra_attributes'] = self.extra_attributes
+    hash['document']['pages'] = []
+    for page in pages
+      page_hash = Serializer.new(page).serializable_record
+      page_hash['thumbnail_url'] = page.thumbnail_url
+      page_hash['items'] = []
+      items = page.items.not_deleted
+      for item in items
+        page_hash['items'] << Serializer.new(item).serializable_record
+      end
+      hash['document']['pages'] << page_hash
+    end
+    hash
   end
 
   def extra_attributes
