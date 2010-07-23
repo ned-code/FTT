@@ -86,6 +86,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: pages
@@ -104,5 +105,6 @@ end
 #  thumbnail_need_update  :boolean(1)
 #  thumbnail_secure_token :string(36)
 #  thumbnail_request_at   :datetime
+#  deleted_at             :datetime
 #
 

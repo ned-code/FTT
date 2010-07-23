@@ -49,7 +49,7 @@
       WebDoc.WidgetManager.vidsGoogleWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_googlevideo") { Medias::Widget.first(:conditions => {:system_name => 'googlevideo'}).to_json } %>);
       WebDoc.WidgetManager.vidsMyspaceWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_myspacevideo") { Medias::Widget.first(:conditions => {:system_name => 'myspacevideo'}).to_json } %>);      
       WebDoc.WidgetManager.vidsYahooWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_yahoovideo") { Medias::Widget.first(:conditions => {:system_name => 'yahoovideo'}).to_json } %>);
-      new WebDoc.Document(<%= raw Rails.cache.fetch("document_#{@document.uuid}") { @document.to_json(:include => { :pages => { :include => :items} }).gsub('/script','/sscript') } %>);
+      new WebDoc.Document(<%= raw Rails.cache.fetch("document_#{@document.uuid}") { @document.as_application_json.to_json.gsub('/script','/sscript') } %>);
       WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category,<%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);
       WebDoc.ThemeManager._defaultTheme = new WebDoc.Theme(<%= raw Rails.cache.fetch("default_theme_json") { Theme.default.to_json } %>);
       WebDoc.Application.main(function() {

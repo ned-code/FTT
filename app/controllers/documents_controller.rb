@@ -29,7 +29,7 @@ class DocumentsController < ApplicationController
       end
       format.json do
         per_page = 20
-        @documents = Document.all_with_filter(current_user, params[:document_filter], params[:query], params[:page], per_page)
+        @documents = Document.not_deleted_with_filter(current_user, params[:document_filter], params[:query], params[:page], per_page)
         render :json => { 
           :documents => @documents,
           :pagination => {
@@ -53,11 +53,11 @@ class DocumentsController < ApplicationController
       end
       format.json do
         per_page = 8
-        public_documents = Document.all_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:query], params[:page], per_page)
+        public_documents = Document.not_deleted_public_paginated_with_explore_params(params[:main_filter], params[:category_filter], params[:query], params[:page], per_page)
 
         docs_json = public_documents.map do |doc|
           cached_doc = Rails.cache.fetch("document_#{doc.uuid}_explore") do
-            doc.as_json( :include => { :pages => { :methods => :thumbnail_url } }, :methods => :extra_attributes)
+            doc.as_explore_json
           end
         end
         
@@ -84,10 +84,10 @@ class DocumentsController < ApplicationController
       end
       format.json do
         per_page = 8
-        featured_documents = Document.all_featured_paginated(params[:page], per_page)
+        featured_documents = Document.not_deleted_featured_paginated(params[:page], per_page)
         docs_json = featured_documents.map do |doc|
           cached_doc = Rails.cache.fetch("document_#{doc.uuid}_explore") do
-            doc.as_json( :include => { :pages => { :methods => :thumbnail_url,  :include => :items} }, :methods => :extra_attributes)
+            doc.as_explore_json
           end
         end
 
@@ -110,15 +110,15 @@ class DocumentsController < ApplicationController
   # GET /documents/:id
   def show
     if params[:_escaped_fragment_]
-      #used to respond to the google robot, see: http://www.google.com/support/webmasters/bin/answer.py?hlrm=en&answer=174992
-      #we do it in document controller because we don't want any redirect.
+      # used to respond to the google robot, see: http://www.google.com/support/webmasters/bin/answer.py?hlrm=en&answer=174992
+      # we do it in document controller because we don't want any redirect.
       @page = Page.find_by_uuid(params[:_escaped_fragment_])
-      @items = @page.items.find(:all, :conditions => [ 'media_type != ?', 'drawing'])
-      @drawing_items = @page.items.find(:all, :conditions => { :media_type => 'drawing'} )
-      @text_items = @page.items.find(:all, :conditions => { :media_type => 'text'} )
+      @items = @page.items.not_deleted.all(:conditions => [ 'media_type != ?', 'drawing'])
+      @drawing_items = @page.items.not_deleted.all(:conditions => [ :media_type => 'drawing'])
+      @text_items = @page.items.not_deleted.all(:conditions => { :media_type => 'text'})
       render :action => :static_page, :layout => 'static', :content_type => 'image/svg+xml' and return
     end
-    if (@document)
+    if @document.present?
       respond_to do |format|
         format.html do
           @get_return_to = get_return_to 
@@ -128,13 +128,12 @@ class DocumentsController < ApplicationController
           logger.debug "return document json."
           set_cache_buster
           render :json => Rails.cache.fetch("document_#{@document.uuid}") {
-            @document.to_json(:include => { :pages => { :include =>  :items } })
+            @document.as_application_json
           }
-
         end
       end
     else
-      forbidden_access
+      render_optional_error_file(:not_found)
     end    
   end
   
@@ -162,14 +161,14 @@ class DocumentsController < ApplicationController
   
   # DELETE /documents/:id
   def destroy
-    @document.destroy
+    @document.safe_delete!
     render :json => {}
   end
   
   protected
   
   def instantiate_document
-    @document = Document.find_by_uuid(params[:id])
+    @document = Document.not_deleted.find_by_uuid(params[:id])
   end
   
   def authenticate_if_needed

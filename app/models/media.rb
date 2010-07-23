@@ -4,6 +4,9 @@ class Media < ActiveRecord::Base
   serialize :properties
   
   attr_accessible :uuid, :attachment, :properties, :system_name, :title, :description, :created_at, :favorites #, :remote_file_url
+
+  named_scope :not_deleted, :conditions => ['medias.deleted_at IS ?', nil]
+  named_scope :deleted, :conditions => ['medias.deleted_at IS NOT ?', nil]
   
   # ================
   # = Associations =
@@ -48,6 +51,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: medias
@@ -66,5 +70,6 @@ end
 #  attachment_file_size    :integer(4)
 #  attachment_updated_at   :datetime
 #  favorites               :boolean(1)      default(FALSE)
+#  deleted_at              :datetime
 #
 
