@@ -7,6 +7,6 @@ role :db,       "ec2-174-129-27-25.compute-1.amazonaws.com", :primary => true
 
 set :branch, "master"
 set :ruby_path, "/opt/ruby-enterprise-1.8.7-2010.02"
-set :rails_env, "production"
+set :environment, "production"
 
 ssh_options[:keys] = ["#{ENV['HOME']}/.ssh/webdoc"]
