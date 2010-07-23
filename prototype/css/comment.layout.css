@@ -1,0 +1,72 @@
+.comment {
+  position: relative;
+  padding: 0.3333em 0.3333em 0.3333em 68px;
+  min-height: 72px;
+  background: #eeeeee;
+}
+
+.comment .user_thumb {
+  position: absolute;
+  top: 0; left: 0;
+  
+  background-size: 64px 64px;
+  background-position: 4px 4px;
+  padding-top: 64px;
+  width: 64px;
+}
+
+.comment_head {
+  margin-bottom: 0.6666em;
+  /* Make room on the right for the date */
+  margin-right: 5em;
+  
+  font-size: inherit;
+  font-weight: bold;
+  
+  /* Attempt to match the line height to .comment_date */
+  height: 1.2em;
+  line-height: 1em;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comment_date {
+  position: absolute;
+  top: 4px;
+  right: 0.3333em;
+  
+  /* Attempt to match vertical positioning with .comment_head */
+  height: 1.2em;
+}
+
+.comment_delete {
+	margin-top: 0.6666em;
+	color: black;
+}
+
+.comment_head a {
+  text-decoration: none;
+  color: #999999;
+}
+
+.comment_head time {
+  font-size: 0.8333em;
+  font-style: italic;
+}
+
+.comment_body textarea {
+  width: 100%;
+  /* Stop WebKit users from breaking the layout
+     by resizing the textarea */
+  max-width: 100%;
+  min-height: 6em;
+  margin-bottom: 0.6666em;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.comment_body input[type='submit'] {
+  display: block;
+  margin: 0 0 0 auto;
+}

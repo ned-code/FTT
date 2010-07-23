@@ -49,19 +49,7 @@
 }
 
 .comment_index li {
-  position: relative;
-  padding-left: 68px;
   margin-bottom: 0.3333em; /* 4px */
-  min-height: 64px;
-}
-
-.comment_index .user_thumb {
-  position: absolute;
-  top: 0; left: 0;
-  
-  background-size: 64px 64px;
-  padding-top: 64px;
-  width: 64px;
 }
 
 .thumbs_index li {
@@ -76,7 +64,6 @@
 
 .sidepanel_buttons_index {
   width: 11.3333em;
-  /* Firefox cannot handle display: box; with position: absolute; Grrrrr. */
   position: absolute;
   right: 0.3333em;
 }
