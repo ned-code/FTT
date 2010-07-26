@@ -308,6 +308,19 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
   
+  hasBorder: function(){
+    if(this.hasStyle() && this.getStyle()['border']){ return true; }
+    else{ return false; }
+  },
+  
+  removeBorder: function(){
+    if(this.hasBorder()){
+      this.getStyle()['border'] = '';
+      this.save();
+      this.fireObjectChanged({ modifedAttribute: 'css' });
+    }
+  },
+  
   //set the font to the item, css string contain the inline css.
   setFont: function(cssString, font_face_string){
     if(!this.hasStyle()){
@@ -326,6 +339,15 @@ WebDoc.Item = $.klass(WebDoc.Record,
   getFontFace: function(){
     if(this.hasFontFace()){ return this.data.data.style.font_face ; }
     else{ return ''; }
+  },
+  
+  removeFont: function(){
+    if(this.hasFontFace()){
+      this.getStyle()['font_face'] = '';
+      this.getStyle()['font'] = '';
+      this.save();
+      this.fireObjectChanged({ modifedAttribute: 'css' });
+    }
   },
   
   getIsPlaceholder: function() {

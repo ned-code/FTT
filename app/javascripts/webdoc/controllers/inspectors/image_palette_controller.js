@@ -14,7 +14,8 @@ WebDoc.ImagePaletteController = $.klass({
     this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
 
     this.domNode.find("#placeholder_checkbox").click(this.changePlaceholder);
-
+    this.domNode.delegate("a[href=#remove_border]", 'click', jQuery.proxy( this, 'removeBorder' ));
+    
     this.addImageLink = this.domNode.find("a[href=#create_image_link]");
     this.addToFavoriteLink = this.domNode.find("a[href=#add_to_my_images]");
     
@@ -89,7 +90,6 @@ WebDoc.ImagePaletteController = $.klass({
   },
   
   refresh: function() {
-    ddd(this.addToFavoriteLink);
     this.propertiesController.refresh();
     if (WebDoc.application.boardController.selection().length) {      
       var selectedItem = WebDoc.application.boardController.selection()[0];
@@ -115,6 +115,13 @@ WebDoc.ImagePaletteController = $.klass({
         }
         else {
           $("#placeholder_checkbox").removeAttr("checked");
+        }
+        
+        if(selectedItem.item.hasBorder()){
+          $("a[href=#remove_border]").show();
+        }
+        else{
+          $("a[href=#remove_border]").hide();
         }
         this.zoomNode[0].value = selectedItem.item.getZoom();
         this.xshiftNode[0].value = selectedItem.item.getDisplacement().left;
@@ -188,7 +195,16 @@ WebDoc.ImagePaletteController = $.klass({
       }
     }
   },
-
+  
+  removeBorder: function(e){
+    e.preventDefault();
+    var selectionLength = WebDoc.application.boardController.selection().length;
+    for( var i = 0; i < selectionLength; i++){
+      WebDoc.application.boardController.selection()[i].item.removeBorder();
+    }
+    $(this.domNode).find('#property_border_radius').val('');
+  },
+  
   addToMyImage: function(event) {
     event.preventDefault();
     var selected = WebDoc.application.boardController.selection()[0];
