@@ -15,7 +15,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     .delegate("a[href=#remove_background]", 'click', jQuery.proxy( this, 'removeBackground' ))
     .delegate("a[href=#remove_border]", 'click', jQuery.proxy( this, 'removeBorder' ));
     
-		//Display the theme background color in inspector, useless with packages
+    //Display the theme background color in inspector, useless with packages
     if (false) { // if (showBgColors) We never display the theme background color
       WebDoc.application.boardController.themeNode.bind('load', jQuery.proxy(this, '_makeThemeBackgrounds'));
       this._themeBgColorsNode = jQuery('<ul/>', {'class': "icons-only thumbs backgrounds_index index"}).css('clear', 'both');
