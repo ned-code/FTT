@@ -69,6 +69,8 @@ private
       
       new_version = config_dom.root.attribute("version").to_s
       if version.present? && new_version.present? && new_version > version
+        # set properties version before call attachment_root_url to use the new number of version
+        self.properties[:version] = config_dom.root.attribute("version").to_s
         self.properties = properties_from_config_dom(config_dom, attachment_root_url)
         self.title = config_dom.root.elements['name'].text
         self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
