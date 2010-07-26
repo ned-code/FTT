@@ -1154,7 +1154,7 @@ WebDoc.BoardController = jQuery.klass({
     newDiscussion.isNew = true;
     this._currentPage.addDiscussion(newDiscussion);
     newDiscussion.save();
-    this.selectDiscussionView(WebDoc.application.boardController.currentPageView().discussionViews[newDiscussion.uuid()], false, true);
+    this.selectDiscussionView(WebDoc.application.boardController.currentPageView().discussionViews[newDiscussion.uuid()]);
   },
 
   removeDiscussion: function(discussion) {
