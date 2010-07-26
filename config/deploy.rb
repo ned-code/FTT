@@ -1,7 +1,7 @@
 set :application, "webdoc"
 
-set :stages, %w(production staging)
-set :default_stage, "staging"
+set :stages, %w(production staging staging_big)
+set :default_stage, "staging_big"
 require 'capistrano/ext/multistage'
 
 set :user, "webdoc"

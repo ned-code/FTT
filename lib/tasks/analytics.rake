@@ -254,7 +254,7 @@ namespace :analytics do
       end
     end
     
-    Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com dev@webdoc.com",filename)
+    Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com, dev@webdoc.com",filename)
   end
   
 end
