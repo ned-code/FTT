@@ -101,6 +101,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     for( var i = 0; i < selectionLength; i++){
       WebDoc.application.boardController.selection()[i].item.removeBackground();
     }
+    $("a[href=#remove_background]").hide();
   },
   
   removeBorder: function(e){
@@ -110,6 +111,7 @@ WebDoc.PropertiesInspectorController = $.klass({
       WebDoc.application.boardController.selection()[i].item.removeBorder();
     }
     $(this.domNode).find('#property_border_radius').val('');
+    $("a[href=#remove_border]").hide();
   },
   
   removeFont: function(e){
@@ -118,6 +120,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     for( var i = 0; i < selectionLength; i++){
       WebDoc.application.boardController.selection()[i].item.removeFont();
     }
+    $("a[href=#remove_font]").hide();
   },
   
   refresh: function() {
