@@ -91,7 +91,6 @@ class Theme < ActiveRecord::Base
         self.author = config_dom.root.elements['author'].text
         self.title = config_dom.root.elements['title'].text
         self.elements_url =  attachment_root_url + "parsed_inspector.html"
-        #self.fonts_url =  attachment_root_url + "parsed_fonts.css"
         self.thumbnail_url = attachment_root_url + config_dom.root.attribute('thumbnail').to_s
         self.style_url = attachment_root_url + "css/parsed_theme_style.css"
         self.save!
@@ -117,7 +116,6 @@ class Theme < ActiveRecord::Base
           extract_files_from_zip_file
           create_parsed_style
           create_parsed_inspector
-          #create_parsed_fonts_style
           for layout_saved in self.layouts
             layout_saved.create_model_page!
           end
@@ -218,39 +216,6 @@ class Theme < ActiveRecord::Base
                         })
     else
       File.open(File.join(Rails.root, 'public', self.elements_url), 'wb') {|f| f.write(parsed) }
-    end
-  end
-  
-  def create_parsed_fonts_style
-    files_path = Array.new
-    parsed = ""
-    if(config_dom.root.elements['fonts'])
-      config_dom.root.elements['fonts'].each_child do |font|
-        if font.class == REXML::Element
-          files_path << File.join(attachment_root_path, font.attribute('src').to_s)
-        end
-      end
-      
-      for file_path in files_path
-        if S3_CONFIG[:storage] == 's3'
-          file_readed = AWS::S3::S3Object.value(file_path, S3_CONFIG[:assets_bucket])
-        else
-          file_readed = IO.read(file_path)
-        end
-        
-        parsed += parse_file(file_readed)
-      end
-      
-      if S3_CONFIG[:storage] == 's3'      
-        AWS::S3::S3Object.store(attachment_root_path+"parsed_fonts.css",
-                          parsed,
-                          S3_CONFIG[:assets_bucket],
-                          {
-                            :access => :public_read
-                          })
-      else
-        File.open(File.join(Rails.root, 'public', self.fonts_url), 'wb') {|f| f.write(parsed) }
-      end
     end
   end
   
@@ -401,6 +366,5 @@ end
 #  attachment_content_type :string(255)
 #  attachment_file_size    :integer(4)
 #  attachment_updated_at   :datetime
-#  fonts_url               :string(255)
 #
 
