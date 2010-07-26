@@ -457,11 +457,10 @@
         ctx.scale(2, 2);
         
         ctx.beginPath();
-				this.plot( path );
+        this.plot( path );
         ctx.closePath();
         
         ctx.fill();
-        
         ctx.restore();
         
         return this;

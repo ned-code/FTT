@@ -1,8 +1,15 @@
 // CanvasAPI
 
 (function(undefined){
-
-  var prototype = {
+  
+  var styles = {
+        fillStyle: true,
+        shadowOffsetX: true,
+        shadowOffsetY: true,
+        shadowBlur: true,
+        shadowColor: true
+      },
+      prototype = {
     init: function( width, height ){
       var node = document.createElement('canvas');
       
@@ -28,20 +35,15 @@
       
       return this;
     },
-    style: function(){
+    style: function( options ){
       var ctx = this.ctx;
       
       this.ctx.save();
       this.saveLevel++;
-      // Convert this to get style from options
-      ctx.fillStyle = "rgb(200,0,0)";
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 20;
-      ctx.shadowBlur = 16;
-      ctx.shadowColor = 'rgba(0,0,0,0.4)';
       
-      ctx.translate(32, 32);
-      ctx.scale(2, 2);
+      for (key in options) {
+        ctx[key] = options[key];
+      }
       
       return this;
     },
@@ -91,12 +93,104 @@
 // VAR
 
 // Wisp body
-var shape = [
-      { method: 'moveTo', data: [0,0] },
-      { method: 'lineTo', data: [50,0] },
-      { method: 'lineTo', data: [50,50] },
-      { method: 'lineTo', data: [0,50] }
-    ];
+var shapes = {
+    1: [
+        { method: 'moveTo', data: [0,0] },
+        { method: 'lineTo', data: [50,0] },
+        { method: 'lineTo', data: [50,50] },
+        { method: 'lineTo', data: [0,50] }
+      ],
+    2: [
+        { method: 'moveTo', data: [0,0] },
+        { method: 'lineTo', data: [-50,0] },
+        { method: 'lineTo', data: [-50,50] },
+        { method: 'lineTo', data: [0,50] }
+      ],
+    3: [
+        { method: 'moveTo', data: [0,0] },
+        { method: 'lineTo', data: [-50,0] },
+        { method: 'lineTo', data: [-50,-50] },
+        { method: 'lineTo', data: [0,-50] }
+      ],
+    4: [
+        { method: 'moveTo', data: [0,0] },
+        { method: 'lineTo', data: [50,0] },
+        { method: 'lineTo', data: [50,-50] },
+        { method: 'lineTo', data: [0,-50] }
+      ],
+    5: [
+        { method: 'moveTo', data: [50,0] },
+        { method: 'lineTo', data: [100,0] },
+        { method: 'lineTo', data: [100,50] },
+        { method: 'lineTo', data: [50,50] }
+      ],
+    6: [
+        { method: 'moveTo', data: [50,50] },
+        { method: 'lineTo', data: [100,50] },
+        { method: 'lineTo', data: [100,100] },
+        { method: 'lineTo', data: [50,100] }
+      ],
+    7: [
+        { method: 'moveTo', data: [0,50] },
+        { method: 'lineTo', data: [50,50] },
+        { method: 'lineTo', data: [50,100] },
+        { method: 'lineTo', data: [0,100] }
+      ],
+    8: [
+        { method: 'moveTo', data: [-50,50] },
+        { method: 'lineTo', data: [0,50] },
+        { method: 'lineTo', data: [0,100] },
+        { method: 'lineTo', data: [-50,100] }
+      ],
+    9: [
+        { method: 'moveTo', data: [-100,50] },
+        { method: 'lineTo', data: [-50,50] },
+        { method: 'lineTo', data: [-50,100] },
+        { method: 'lineTo', data: [-100,100] }
+      ],
+    10: [
+        { method: 'moveTo', data: [-100,0] },
+        { method: 'lineTo', data: [-50,0] },
+        { method: 'lineTo', data: [-50,50] },
+        { method: 'lineTo', data: [-100,50] }
+      ],
+    11: [
+        { method: 'moveTo', data: [-100,-50] },
+        { method: 'lineTo', data: [-50,-50] },
+        { method: 'lineTo', data: [-50,0] },
+        { method: 'lineTo', data: [-100,0] }
+      ],
+    12: [
+        { method: 'moveTo', data: [-100,-100] },
+        { method: 'lineTo', data: [-50,-100] },
+        { method: 'lineTo', data: [-50,-50] },
+        { method: 'lineTo', data: [-100,-50] }
+      ],
+    13: [
+        { method: 'moveTo', data: [-50,-100] },
+        { method: 'lineTo', data: [0,-100] },
+        { method: 'lineTo', data: [0,-50] },
+        { method: 'lineTo', data: [-50,-50] }
+      ],
+    14: [
+        { method: 'moveTo', data: [0,-100] },
+        { method: 'lineTo', data: [50,-100] },
+        { method: 'lineTo', data: [50,-50] },
+        { method: 'lineTo', data: [0,-50] }
+      ],
+    15: [
+        { method: 'moveTo', data: [50,-100] },
+        { method: 'lineTo', data: [100,-100] },
+        { method: 'lineTo', data: [100,-50] },
+        { method: 'lineTo', data: [50,-50] }
+      ],
+    16: [
+        { method: 'moveTo', data: [50,-50] },
+        { method: 'lineTo', data: [100,-50] },
+        { method: 'lineTo', data: [100,0] },
+        { method: 'lineTo', data: [50,0] }
+      ]
+    };
 
 // Functions for handling vectors and cartesian coordinates.
 
@@ -154,20 +248,185 @@ function cart(a, d, fn) {
   return fn(x, y);
 }
 
+// Loop over data
+
+function processPath( path, fn ){
+  var i = -1,
+      l = path.length,
+      out = [];
+  
+  while ( ++i < l ) {
+    out[i] = fn( i, path[i] );
+  }
+  
+  return out;
+}
+
+// Translate to vectors
+
+function calcVectorData( data ){
+  var output = [],
+      i = data.length - 1;
+  
+  while ( i > 0 ) {
+    
+    vect(data[i-1], data[i], function(a, d){
+      output[i-1] = a;
+      output[i] = d;
+    });
+    
+    i = i-2;
+  }
+  
+  return output;
+}
+
+function calcCartData( data ){
+  var i = data.length - 1;
+  
+  while ( i > 0 ) {
+    
+    cart(data[i-1], data[i], function(x, y){
+      data[i-1] = x;
+      data[i] = y;
+    });
+    
+    i = i-2;
+  }
+  
+  return data;
+}
+
+// TEST
+
+vect( 100, 100, function(a, b){
+  console.log(a+', '+b);
+});
+
+cart( 0.375, 10, function(x, y){
+  console.log(x+', '+y);
+});
+
 // RUN
+
+var distance = 800,
+    r = 100,
+    shape,
+    vectorShapes = {},
+    sphereShapes = {},
+    pi = Math.PI,
+    sin = Math.sin,
+    cos = Math.cos;
+
+for (l in shapes) {
+  processPath( shapes[l], function( i, obj ){
+    var vectorData = calcVectorData( obj.data ),
+        d = vectorData[1],
+        dx = r * cos(d/r),
+        dm = r * sin(d/r);
+    
+    console.log(vectorData[0]+', '+vectorData[1]);
+    
+    vectorData[1] = (dm*distance) / (distance-dx);
+    
+    console.log(vectorData[0]+', '+vectorData[1]);
+    
+    cart( vectorData[0], vectorData[1], function(x, y){
+      shapes[l][i].data = [x, y];
+    } );
+    
+    console.log(shapes[l][i].data);
+  });
+}
+
+console.log(shapes);
+
+
+
+
+
+
 
 var grid = CanvasAPI(240, 240);
 
 grid
 .clear()
-.style()
-.draw(shape);
+.translate(120, 120)
+.style({
+  fillStyle: "rgba(0,0,0,0.2)"
+})
+.draw([
+  { method: 'arc', data: [0,0,r,0,Math.PI*2,true] }
+])
+.style({
+  fillStyle: "rgb(150,50,50)",
+})
+.draw(shapes[1])
+.style({
+  fillStyle: "rgb(200,50,0)"
+})
+.draw(shapes[2])
+.style({
+  fillStyle: "rgb(200,100,0)"
+})
+.draw(shapes[3])
+.style({
+  fillStyle: "rgb(150,150,0)"
+})
+.draw(shapes[4])
+.style({
+  fillStyle: "rgb(100,150,0)"
+})
+.draw(shapes[5])
+.style({
+  fillStyle: "rgb(50,150,0)"
+})
+.draw(shapes[6])
+.style({
+  fillStyle: "rgb(200,50,0)"
+})
+.draw(shapes[7])
+.style({
+  fillStyle: "rgb(200,100,0)"
+})
+.draw(shapes[8])
+.style({
+  fillStyle: "rgb(150,150,0)"
+})
+.draw(shapes[9])
+.style({
+  fillStyle: "rgb(100,150,0)"
+})
+.draw(shapes[10])
+.style({
+  fillStyle: "rgb(50,150,0)"
+})
+.draw(shapes[11])
+.style({
+  fillStyle: "rgb(200,50,0)"
+})
+.draw(shapes[12])
+.style({
+  fillStyle: "rgb(200,100,0)"
+})
+.draw(shapes[13])
+.style({
+  fillStyle: "rgb(150,150,0)"
+})
+.draw(shapes[14])
+.style({
+  fillStyle: "rgb(100,150,0)"
+})
+.draw(shapes[15])
+.style({
+  fillStyle: "rgb(50,150,0)"
+})
+.draw(shapes[16]);
 
 // READY
 
 jQuery(document).ready(function(){
   
   jQuery('body').prepend(grid.node);
-  
   
 });
