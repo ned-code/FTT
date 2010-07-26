@@ -405,7 +405,7 @@
         this.node = node;
         this.width = width;
         this.height = height;
-        this.ctx = node.getContext('2d');
+        this.ctx = node.getContext('2d'); 
         
         return this;
       },
