@@ -47,7 +47,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     discussionDomNode.bind('click', function() {
       var discussionView = WebDoc.application.boardController.currentPageView().discussionViews[discussion.uuid()];
       if(discussionView) {
-        WebDoc.application.boardController.selectDiscussionView(discussionView, true);
+        WebDoc.application.boardController.selectDiscussionView(discussionView, true, false);
       }
     });
     

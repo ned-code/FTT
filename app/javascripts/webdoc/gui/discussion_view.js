@@ -54,9 +54,11 @@ WebDoc.DiscussionView = $.klass({
     }
   },
 
-  select: function() {
+  select: function(skipScroll) {
     this.domNode.addClass("item_selected");
-    this.domNode[0].scrollIntoView();
+    if(!skipScroll || skipScroll !== true) {
+      this.domNode[0].scrollIntoView(true);
+    }
   },
 
   unSelect: function() {
