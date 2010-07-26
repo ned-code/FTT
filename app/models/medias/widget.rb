@@ -152,9 +152,9 @@ private
   end
   
   def invalidate_cache
-    Rails.cache.delete("widget_#{self.uuid}")
+    Rails.cache.delete("widget_json_#{self.uuid}")
     if (self.system_name)
-      Rails.cache.delete("widget_#{self.system_name}")
+      Rails.cache.delete("widget_json_#{self.system_name}")
     end
   end
 end
