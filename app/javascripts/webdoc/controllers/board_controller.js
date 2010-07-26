@@ -1162,7 +1162,7 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPage.removeDiscussion(discussion);
   },
 
-  selectDiscussionView: function(discussionView, skipScrollDiscussionPanel) {
+  selectDiscussionView: function(discussionView, skipScrollDiscussionPanel, skipScrollDiscussionView) {
     ddd('[BoardController] selected discussion view');
     var oldDiscussion = null;
     if(this._selectionDiscussionView !== null) {
@@ -1170,7 +1170,7 @@ WebDoc.BoardController = jQuery.klass({
       oldDiscussion = this._selectionDiscussionView.discussion;
     }
     this._selectionDiscussionView = discussionView;
-    discussionView.select();
+    discussionView.select(skipScrollDiscussionView);
     WebDoc.application.rightBarController.showDiscussionsPanel();
     var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
     discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion, skipScrollDiscussionPanel);

@@ -47,7 +47,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     discussionDomNode.bind('click', function() {
       var discussionView = WebDoc.application.boardController.currentPageView().discussionViews[discussion.uuid()];
       if(discussionView) {
-        WebDoc.application.boardController.selectDiscussionView(discussionView, true);
+        WebDoc.application.boardController.selectDiscussionView(discussionView, true, false);
       }
     });
     
@@ -195,7 +195,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   // fire by page
   discussionRemoved: function(removedDiscussion) {
     ddd('[DiscussionsPanelController] discussion removed');
-    this.discussionsDomNode.find("[data-discussion-uuid='"+removedDiscussion.uuid()+"']").parent().remove();
+    this.discussionsDomNode.find("[data-discussion-uuid='"+removedDiscussion.uuid()+"']").remove();
   },
 
   // fire by discussion

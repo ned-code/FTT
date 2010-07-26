@@ -60,7 +60,12 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     }
     
     if(this.item.data.data.href) {
-      var link = $('<a/>', { href: this.item.data.data.href, target: '_blank' });
+      var target = '_blank'
+      var href = this.item.data.data.href;
+      if( href.charAt(0) == '#'){
+        target = '';
+      }
+      var link = $('<a/>', { href: href, target: target });
       link.append( imageNode );
       frameNode.append(link);
     }
