@@ -13,6 +13,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
     .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ))
     .delegate("a[href=#remove_background]", 'click', jQuery.proxy( this, 'removeBackground' ))
+    .delegate("a[href=#remove_font]", 'click', jQuery.proxy( this, 'removeFont' ))
     .delegate("a[href=#remove_border]", 'click', jQuery.proxy( this, 'removeBorder' ));
     
     //Display the theme background color in inspector, useless with packages
@@ -111,10 +112,40 @@ WebDoc.PropertiesInspectorController = $.klass({
     $(this.domNode).find('#property_border_radius').val('');
   },
   
+  removeFont: function(e){
+    e.preventDefault();
+    var selectionLength = WebDoc.application.boardController.selection().length;
+    for( var i = 0; i < selectionLength; i++){
+      WebDoc.application.boardController.selection()[i].item.removeFont();
+    }
+  },
+  
   refresh: function() {
     var selectedItem = WebDoc.application.boardController.selection()[0];
     
     if ( selectedItem ) {
+      if(selectedItem.item.hasBorder()){
+        $("a[href=#remove_border]").show();
+      }else{
+        $("a[href=#remove_border]").hide();
+      }
+      
+      if(selectedItem.item.hasBackground()){
+        $("a[href=#remove_background]").show();
+      }
+      else
+      {
+        $("a[href=#remove_background]").hide();
+      }
+      
+      if(selectedItem.item.hasFontFace()){
+        $("a[href=#remove_font]").show();
+      }
+      else
+      {
+        $("a[href=#remove_font]").hide();
+      }
+      
       var css = selectedItem.css(),
           fields = this.fields,
           key, field, value;      

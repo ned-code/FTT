@@ -341,6 +341,15 @@ WebDoc.Item = $.klass(WebDoc.Record,
     else{ return ''; }
   },
   
+  removeFont: function(){
+    if(this.hasFontFace()){
+      this.getStyle()['font_face'] = '';
+      this.getStyle()['font'] = '';
+      this.save();
+      this.fireObjectChanged({ modifedAttribute: 'css' });
+    }
+  },
+  
   getIsPlaceholder: function() {
     if(this._isPlaceholder === true) {
       return true;
