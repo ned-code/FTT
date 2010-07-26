@@ -24,6 +24,7 @@ WebDoc.ImagePaletteController = $.klass({
       this.selectedElement = WebDoc.application.boardController.selection()[0];
       this.linkFormController.showDialog(e, this.selectedElement.item.data.data.href, function(newLink){
         if (this.selectedElement && this.selectedElement.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {
+          
           this.selectedElement.item.data.data.href = newLink;
           this.selectedElement.item.save(function() {
             this.selectedElement.item.fireDomNodeChanged();
