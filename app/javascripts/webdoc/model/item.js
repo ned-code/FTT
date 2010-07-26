@@ -308,6 +308,19 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
   
+  hasBorder: function(){
+    if(this.hasStyle() && this.getStyle()['border']){ return true; }
+    else{ return false; }
+  },
+  
+  removeBorder: function(){
+    if(this.hasBorder()){
+      this.getStyle()['border'] = '';
+      this.save();
+      this.fireObjectChanged({ modifedAttribute: 'css' });
+    }
+  },
+  
   //set the font to the item, css string contain the inline css.
   setFont: function(cssString, font_face_string){
     if(!this.hasStyle()){

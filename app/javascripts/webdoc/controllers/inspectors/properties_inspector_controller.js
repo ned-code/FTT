@@ -12,7 +12,8 @@ WebDoc.PropertiesInspectorController = $.klass({
     .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
     .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ))
-    .delegate("a[href=#remove_background]", 'click', jQuery.proxy( this, 'removeBackground' ));
+    .delegate("a[href=#remove_background]", 'click', jQuery.proxy( this, 'removeBackground' ))
+    .delegate("a[href=#remove_border]", 'click', jQuery.proxy( this, 'removeBorder' ));
     
 		//Display the theme background color in inspector, useless with packages
     if (false) { // if (showBgColors) We never display the theme background color
@@ -99,6 +100,15 @@ WebDoc.PropertiesInspectorController = $.klass({
     for( var i = 0; i < selectionLength; i++){
       WebDoc.application.boardController.selection()[i].item.removeBackground();
     }
+  },
+  
+  removeBorder: function(e){
+    e.preventDefault();
+    var selectionLength = WebDoc.application.boardController.selection().length;
+    for( var i = 0; i < selectionLength; i++){
+      WebDoc.application.boardController.selection()[i].item.removeBorder();
+    }
+    $(this.domNode).find('#property_border_radius').val('');
   },
   
   refresh: function() {
