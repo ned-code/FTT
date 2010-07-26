@@ -1,11 +1,9 @@
 <div id="packages-list" class='packages-tab'>
   <ul>
     <% @themes.each do |t| %>
-      <li>
-        <a href='<%= t.uuid %>' >
-          <img src='<%= t.thumbnail_url%>'/>
-          <%= t.title %>
-        </a>
+      <li id='<%= t.uuid %>'>
+        <img src='<%= t.thumbnail_url%>'/>
+        <%= t.title %>
       </li>
     <% end %>
   </ul>
