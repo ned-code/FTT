@@ -98,7 +98,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
         WebDoc.application.boardController.applyDocumentTheme();
         WebDoc.ServerManager.getRecords(WebDoc.User, this.currentDocument.data.creator_id, function(data, status) {
           this._creator = data[0];
-          this.loadPageId(window.location.hash.replace("#", ""));
+          this.loadPageId(this._extractUUIDFromHash(window.location.hash));
           WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
           ddd("check editablity");
           if (WebDoc.application.boardController.isEditable() && jQuery("body").hasClass('mode-edit')) {
@@ -169,7 +169,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
         WebDoc.application.undoManager.clear();
       }
       ddd("set hash to current page position");
-      window.location.hash = "#" + (page.uuid());
+      window.location.hash = "#!" + (page.uuid());
       this.currentPage = page;
       WebDoc.application.boardController.setCurrentPage(this.currentPage);      
     }
@@ -325,7 +325,6 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   },
 
   duplicateDocument: function(e) {
-    ddd("duplicate document");
     WebDoc.application.documentDuplicateController.showDialog(e, this.currentDocument);
   },
   
@@ -360,7 +359,17 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   // Monitorizes hash modifications and update loaded page accordingly
   // Enables links within documents
   _urlHashChanged: function(e) {
-    this.loadPageId(location.hash.substring(1));
+    this.loadPageId(this._extractUUIDFromHash(location.hash));
+  },
+  
+  _extractUUIDFromHash: function(hash){
+    ddd('_extractUUIDFromHash');
+    var uuid = hash.substring(1);
+    if(uuid.charAt(0) == '!'){
+      uuid = uuid.substring(1);
+      ddd(uuid);
+    }
+    return uuid;
   }
 });
 
