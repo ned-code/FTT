@@ -48,15 +48,15 @@ WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
 
     $("#packages-list ul li").live("click", function (event) {
       event.preventDefault();
-      var uuid;
-      if($(event.target).is('li')){
-        uuid = $(event.target).find('a').attr('href');
-      }
-      else if($(event.target).is('img')){
-        uuid =  $(event.target).closest('a').attr('href');
-      }else{
-        uuid = $(event.target).attr('href');
-      }
+      var uuid =  $(event.target).closest('li').attr('id');
+      // if($(event.target).is('li')){
+      //   uuid = $(event.target).find('a').attr('href');
+      // }
+      // else if($(event.target).is('img')){
+      //   uuid 
+      // }else{
+      //   uuid = $(event.target).attr('href');
+      // }
       this._showDetailsView(uuid);
     }.pBind(this));
   },
