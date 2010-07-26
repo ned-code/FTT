@@ -38,12 +38,15 @@ class Page < ActiveRecord::Base
 
   attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind, :remote_thumbnail_url, :thumbnail_need_update
 
+  named_scope :not_deleted, :conditions => ['pages.deleted_at IS ?', nil]
+  named_scope :deleted, :conditions => ['pages.deleted_at IS NOT ?', nil]
+
   # ================
   # = Associations =
   # ================
 
   belongs_to :document
-  has_many :items, :dependent => :delete_all
+  has_many :items
   has_many :discussions
   # belongs_to :thumbnail, :class_name => "Medias::Thumbnail"
   
@@ -286,6 +289,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: pages
@@ -304,5 +308,6 @@ end
 #  thumbnail_need_update  :boolean(1)
 #  thumbnail_secure_token :string(36)
 #  thumbnail_request_at   :datetime
+#  deleted_at             :datetime
 #
 

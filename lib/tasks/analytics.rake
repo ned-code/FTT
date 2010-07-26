@@ -192,11 +192,15 @@ namespace :analytics do
       csv << data_array
     end
     #Send the mail
-    Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com dev@webdoc.com", filename)
+    Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com, dev@webdoc.com", filename)
     
     # update Google spreadsheet
     ss_session = GoogleSpreadsheet.login("wd.spreadsheet@gmail.com", "_gcwebdoc09")
-    ss = ss_session.spreadsheet_by_key 't22rQWW3sFUmSFoJC-2pfSA'
+    if Rails.env == 'staging' || Rails.env ==  'development'
+      ss = ss_session.spreadsheet_by_key 't22rQWW3sFUmSFoJC-2pfSA' #develeopment and stagging
+    else #production
+      ss = ss_session.spreadsheet_by_key 'tXF5RlByT8eh9okbmgDcCtg' #Alpha spreadsheets
+    end
     ws = ss.worksheets[0]
     new_line_number = ws.num_rows + 1
     column = 1

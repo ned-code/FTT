@@ -24,12 +24,13 @@ WebDoc.LinkFormController = $.klass({
     this._refreshRadioFormType();
     if(oldLink) {
       this._link.attr('value', oldLink);
+      this._refreshRadioFormType();
     }
     else {
       this._link.attr('value', '');
       this._refreshTypeFromRadio();
     }
-
+    
     this.domNode.show();
     
     var that = this;
@@ -49,7 +50,7 @@ WebDoc.LinkFormController = $.klass({
   _createDialog: function(e) {
     var labelWeb    = $('<label/>', {}).text('Web'),
         labelMail   = $('<label/>', {}).text('E-Mail'),
-        labelWebdoc = $('<label/>', {}).text('Webdoc'),
+        labelWebdoc = $('<label/>', {}).text('Page'),
         cancel      = $('<a/>', { href: '#cancel', 'class': 'cancel'}).text('Cancel'),
         button      = $('<input/>', { type: 'submit', value: 'Ok'});
 
@@ -94,7 +95,7 @@ WebDoc.LinkFormController = $.klass({
         this._link.val('mailto:');
         break;
       case('webdoc'):
-        this._label.text('Webdoc');
+        this._label.text('Page');
         this._link.val('#');
         break;
       default: // + web type

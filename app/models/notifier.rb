@@ -45,7 +45,7 @@ class Notifier < ActionMailer::Base
   def send_daily_report(recipients, filename)
     recipients  recipients
     from        APP_CONFIG['mail_from']
-    subject     "[webdoc alpha] Your Daily Report"
+    subject     "[webdoc #{Rails.env}] Your Daily Report"
     attachment  :content_type => "text/plain",
                 :body => File.read(filename)
   end

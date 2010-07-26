@@ -5,7 +5,7 @@
   <% style +=  build_css_string(item.data['style']) %>
   <% p style %>
 <% end %>
-<div class='item_warp item-<%= item.media_type %>' id='<%= item.uuid %>' style='<%= "#{cssString} position:absolute;" %>'>
+<div class='item_warp item-<%= item.media_type %>' id='<%= item.uuid %>' style="<%= "#{cssString} position:absolute;" %>">
   
   <% case item.media_type %>
     <% when 'text' %>

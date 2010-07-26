@@ -51,13 +51,6 @@ class Discussion < ActiveRecord::Base
                                     :except => [:content],
                                     :methods => :safe_content }})
   end
-
-  def safe_delete!
-    if self.deleted_at.blank?
-      self.deleted_at = Time.now
-      self.save!  
-    end
-  end
   
 end
 

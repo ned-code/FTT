@@ -114,6 +114,11 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
           if (!that._creatingDoc) {
             node.validate({
               pass: function() {
+                //it pass the validation, but we have to look if the height and width value are positive
+                if(parseFloat(infoDialogWidthNode.val()) <= 0 || parseFloat(infoDialogHeightNode.val()) <= 0){
+                  return false;
+                }
+                
                 node.addClass('loading');
                 var newDoc = new WebDoc.Document();
                 if (window._gaq) {
@@ -165,9 +170,9 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         previousHeight = editedDocument.size().height;
 
     that.editedDocument = editedDocument;
-		
-		infoDialogNode.delegate("a.set_size", 'click', that.setSizeByName.pBind(this) );
-		
+    
+    infoDialogNode.delegate("a.set_size", 'click', that.setSizeByName.pBind(this) );
+    
     infoDialogHeaderNode.html("Edit webdoc info");
     infoDialogTitleNode.val( previousName );
     infoDialogDescriptionNode.val( previousDescription );

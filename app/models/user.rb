@@ -126,6 +126,12 @@ class User < ActiveRecord::Base
   def avatar_thumb_url
     self.avatar.url(:thumb)
   end
+
+  def as_application_json
+    hash = { 'user' => Serializer.new(self).serializable_record }
+    hash['user']['avatar_thumb_url'] = self.avatar_thumb_url
+    hash
+  end
   
   # Need to use this method instead of the original to_json cause user references document and vice versa
   def to_social_panel_json(current_user)
@@ -180,6 +186,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -214,7 +221,6 @@ end
 #  avatar_content_type  :string(255)
 #  avatar_file_size     :integer(4)
 #  avatar_updated_at    :datetime
-#  facebook_uid         :integer(8)
-#  facebook_session_key :string(149)
+#  id                   :integer(4)
 #
 

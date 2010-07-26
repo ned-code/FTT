@@ -1,4 +1,4 @@
-  /**
+/**
  * @author noe
  */
 
@@ -40,45 +40,30 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   createDiscussionAndFormDomNode: function(discussion) {
-    var discussionDomNode = jQuery('<div/>', { 'style': 'margin: 10px; border: 1px solid white;' });
-    discussionDomNode.append(this.createDiscussionDomNode(discussion));
+    var discussionDomNode = this.createDiscussionDomNode(discussion);
+    
     discussionDomNode.append(this.createCommentForm(discussion));
+    
     discussionDomNode.bind('click', function() {
       var discussionView = WebDoc.application.boardController.currentPageView().discussionViews[discussion.uuid()];
       if(discussionView) {
-        WebDoc.application.boardController.selectDiscussionView(discussionView, true);
+        WebDoc.application.boardController.selectDiscussionView(discussionView, true, false);
       }
     });
+    
     return discussionDomNode;
   },
 
   compactMode: function(discussionDomNodeAndForm) {
-    discussionDomNodeAndForm.data('wd_discussion_compact_mode', true);
-    var discussionDomNode = discussionDomNodeAndForm.children('div.wd_discussion_dom_node').first();
-    var formDomNode = discussionDomNodeAndForm.children('div.wd_comment_form_dom_node').first();
-    var divsComments = discussionDomNode.children('div.wd_comment_content_dom_node');
-    if(divsComments.length > 0) {
-      divsComments.each(function() { $(this).hide(); });
-      divsComments.first().show();
-      formDomNode.hide();
-    }
-    else {
-      divsComments.each(function() { $(this).hide(); });
-      formDomNode.show();
-    }
+    discussionDomNodeAndForm.removeClass('active');
   },
 
   expendMode: function (discussionDomNodeAndForm) {
-    discussionDomNodeAndForm.data('wd_discussion_compact_mode', false);
-    var discussionDomNode = discussionDomNodeAndForm.children('div.wd_discussion_dom_node').first();
-    var formDomNode = discussionDomNodeAndForm.children('div.wd_comment_form_dom_node').first();
-    var divsComments = discussionDomNode.children('div.wd_comment_content_dom_node');
-    divsComments.each(function() { $(this).show(); });
-    formDomNode.show();
+    discussionDomNodeAndForm.addClass('active');
   },
 
   createDiscussionDomNode: function(discussion) {
-    var newDiscussionsDomNode = jQuery('<div/>').attr('data-discussion-uuid', discussion.uuid()).attr('class', 'wd_discussion_dom_node');
+    var newDiscussionsDomNode = jQuery('<ul/>').attr('data-discussion-uuid', discussion.uuid()).attr('class', 'vertical comments_index index');
     discussion.addListener(this);
     this._discussionsWithListener.push(discussion);
     for(var i=0; i<discussion.comments.length; i++) {
@@ -90,59 +75,91 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   createCommentDomNode: function(comment) {
-    var commentDomNode = jQuery('<div/>').attr('data-comment-uuid', comment.uuid()).attr('class', 'wd_comment_content_dom_node'),
-        firstPart = jQuery('<div/>', { 'style': 'width: 80%; float: left;'}),
-        secondPart = jQuery('<div/>', { 'style': 'width: 20%; float: left;'});
-    firstPart.append(comment.content().replace(/\n/g, '<br />'));
-    firstPart.append(jQuery('<br/>'));
-    firstPart.append(comment.created_at() + ' by ' + comment.user.getUsername());
+    var domNode = jQuery('<li/>'),
+        commentNode = jQuery('<div/>').attr('data-comment-uuid', comment.uuid()).attr('class', 'comment'),
+        header = jQuery('<header/>'),
+        info = jQuery('<div/>', { 'class': 'comment_info' }),
+        time = jQuery('<time/>', { 'datetime': comment.created_at() }).html( comment.created_at() ),
+        thumb = jQuery('<a/>', { 'class': 'user_thumb thumb', 'title': comment.user.getUsername(), 'style': 'background-image: url('+comment.user.getAvatarThumbUrl()+');' }).html(comment.user.getUsername()),
+        title = '<a href="'+'">'+comment.user.getUsername()+'</a> says:',
+        body = jQuery('<div/>').html('<p>'+ comment.content().replace(/\n/g, '</p><p>') +'</p>'),
+        textarea = jQuery('<textarea/>', { name: 'commentId', id: 'commentId', placeholder: 'Write your comment...' }),
+        button = jQuery('<input/>', { 'type': 'submit', 'value': 'Add comment'}),
+        remove = '';
+    
     var current_user_uuid = WebDoc.Application.getCurrentUser().uuid();
+    
     if(current_user_uuid && ( current_user_uuid ===  WebDoc.application.pageEditor.getCreator().uuid() || current_user_uuid === comment.user.uuid())) {
-      firstPart.append(jQuery('<br/>'));
-      var removeCommentLink = jQuery('<a/>', { 'href':'#', 'id':'remove_comment'}).text('remove');
-      removeCommentLink.bind('click', function() {
+      remove = jQuery('<a/>', { 'href':'#', 'id':'remove_comment'}).text('remove');
+      remove.bind('click', function() {
         comment.discussion.removeComment(comment);
       });
-      firstPart.append(removeCommentLink);
     }
-    secondPart.append(jQuery('<img/>', { 'src': comment.user.getAvatarThumbUrl(), 'style': 'width:50px; height:50px;' }));
-
-    commentDomNode.append(firstPart).append(secondPart).append(jQuery('<div/>', {'style':'clear:both;'})).append(jQuery('<hr>'));
-    return commentDomNode;
+    
+    domNode
+    .append(
+      commentNode
+      .append(
+        header
+        .append(
+          info
+          .append(remove)
+          .append(time)
+        )
+        .append(thumb)
+        .append(title)
+      )
+      .append(
+        body
+      )
+    );
+    
+    return domNode;
   },
 
   createCommentForm: function(discussion) {
-    var label = jQuery('<label/>').text('Comment'),
-        commentContent = jQuery('<textarea/>', { name: 'comment' }),
-        domNode = jQuery('<div/>').attr('class', 'wd_comment_form_dom_node'),
-        form = jQuery('<form/>'),
-        button = jQuery('<input/>', { 'type': 'submit', 'value': 'Comment'});
+    var user = WebDoc.Application.getCurrentUser(),
+        domNode = jQuery('<li/>'),
+        form = jQuery('<form/>', { 'class': 'comment' }),
+        header = jQuery('<header/>'),
+        thumb = jQuery('<a/>', { 'class': 'user_thumb thumb', 'title': user.getUsername(), 'style': 'background-image: url('+ user.getAvatarThumbUrl() +');' }).html(user.getUsername()),
+        label = jQuery('<label/>').attr('for', '#commentId').html('Write a comment'),
+        body = jQuery('<div/>'),
+        textarea = jQuery('<textarea/>', { name: 'commentId', id: 'commentId', placeholder: 'Write your comment...' }),
+        button = jQuery('<input/>', { 'type': 'submit', 'value': 'Add comment'});
 
     form
+    .append(
+      header
+      .append(thumb)
       .append(label)
-      .append(commentContent)
+    )
+    .append(
+      body
+      .append(textarea)
       .append(button)
-      .bind('submit', function(e){
-        e.preventDefault();
+    )
+    .bind('submit', function(e){
+      e.preventDefault();
 
-        if(commentContent.val()) {
-          button.hide();
-          commentContent.attr('disabled', 'disabled');
-          if (window._gaq) {
-            _gaq.push(['_trackEvent', 'discussion', 'reply_xy_comment', WebDoc.application.pageEditor.currentDocument.uuid()]);
-          }
-          var newComment = new WebDoc.Comment(null, discussion);
-          newComment.setContent( commentContent.val(), true );
-
-          newComment.save(function(newCommentBack, status) {
-            if (status == "OK") {
-              discussion.addComment(newCommentBack);
-              commentContent.val('');
-              commentContent.removeAttr('disabled');
-              button.show();
-            }
-          });
+      if(textarea.val()) {
+        button.hide();
+        textarea.attr('disabled', 'disabled');
+        if (window._gaq) {
+          _gaq.push(['_trackEvent', 'discussion', 'reply_xy_comment', WebDoc.application.pageEditor.currentDocument.uuid()]);
         }
+        var newComment = new WebDoc.Comment(null, discussion);
+        newComment.setContent( textarea.val(), true );
+
+        newComment.save(function(newCommentBack, status) {
+          if (status == "OK") {
+            discussion.addComment(newCommentBack);
+            textarea.val('');
+            textarea.removeAttr('disabled');
+            button.show();
+          }
+        });
+      }
     });
 
     return domNode.append(form);
@@ -151,11 +168,10 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   selectDiscussion: function(discussion, oldDiscussion, skipScroll) {
     ddd('[DiscussionsPanel] select discussion');
     this.unSelectDiscussion(oldDiscussion);
-    var discussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+discussion.uuid()+"']")[0];
+    var discussionSelectedDomNode = this.discussionsDomNode.find("[data-discussion-uuid='"+discussion.uuid()+"']")[0];
     if(discussionSelectedDomNode) {
-      var parent = jQuery(discussionSelectedDomNode).parent();
-      parent.addClass('item_selected');
-      this.expendMode(parent);
+      var node = jQuery(discussionSelectedDomNode).addClass('item_selected');
+      this.expendMode(node);
       if(!skipScroll || skipScroll !== true) {
         discussionSelectedDomNode.scrollIntoView(true);
       }
@@ -164,10 +180,9 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
   unSelectDiscussion: function(discussion) {
     if (discussion !== null) {
-      var oldDiscussionSelectedDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+discussion.uuid()+"']")[0];
-      var oldParent = jQuery(oldDiscussionSelectedDomNode).parent();
-      this.compactMode(oldParent);
-      oldParent.removeClass('item_selected');
+      var oldDiscussionSelectedDomNode = this.discussionsDomNode.find("[data-discussion-uuid='"+discussion.uuid()+"']")[0];
+      var node = jQuery(oldDiscussionSelectedDomNode).removeClass('item_selected');
+      this.compactMode(node);
     }
   },
 
@@ -180,18 +195,19 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   // fire by page
   discussionRemoved: function(removedDiscussion) {
     ddd('[DiscussionsPanelController] discussion removed');
-    this.discussionsDomNode.find("div[data-discussion-uuid='"+removedDiscussion.uuid()+"']").parent().remove();
+    this.discussionsDomNode.find("[data-discussion-uuid='"+removedDiscussion.uuid()+"']").remove();
   },
 
   // fire by discussion
   commentAdded: function(addedComment) {
     ddd('[DiscussionsPanelController] comment added');
-    var discussionDomNode = this.discussionsDomNode.find("div[data-discussion-uuid='"+addedComment.discussion.uuid()+"']");
+    var discussionDomNode = this.discussionsDomNode.find("[data-discussion-uuid='"+addedComment.discussion.uuid()+"']");
     var commentDomNode = this.createCommentDomNode(addedComment);
-    if(discussionDomNode.parent().data('wd_discussion_compact_mode') === true) {
-      commentDomNode.hide();
-    }
-    discussionDomNode.append(commentDomNode);
+    var items =  discussionDomNode.children();
+    
+    items
+    .eq( items.length - 1 )
+    .before(commentDomNode);
   },
 
   commentRemoved: function(removedComment) {

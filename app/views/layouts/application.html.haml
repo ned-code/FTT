@@ -15,10 +15,12 @@
     
     = include_javascripts :common
     = yield :scripts # include view specific scripts after common scripts.
+
+    - current_user_json = current_user.present? ? raw(current_user.as_application_json.to_json.gsub('/script','/sscript')) : {}.to_json
     :javascript
       WebDoc.shindig = {};
       WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";
-      WebDoc.Application.currentUser = new WebDoc.User(#{ raw current_user.to_json.gsub('/script','/sscript') });
+      WebDoc.Application.currentUser = new WebDoc.User(#{current_user_json});
       WebDoc.Application.start();
       
     = render :partial => "layouts/feedback";    
