@@ -277,40 +277,40 @@
 	width: 350px;
 }
 #colorpickerHolder1 .colorpicker, #colorpickerHolder2 .colorpicker {
-	background-image: url(../images/custom_background.png);
+	background-image: url(..//images/colorpicker/custom_background.png);
 	position: absolute;
 	bottom: 0;
 	left: 0;
 }
 #colorpickerHolder1 .colorpicker_hue div, #colorpickerHolder2 .colorpicker_hue div {
-	background-image: url(../images/custom_indic.gif);
+	background-image: url(..//images/colorpicker/custom_indic.gif);
 }
 #colorpickerHolder1 .colorpicker_hex, #colorpickerHolder2 .colorpicker_hex {
-	background-image: url(../images/custom_hex.png);
+	background-image: url(..//images/colorpicker/custom_hex.png);
 }
 #colorpickerHolder1 .colorpicker_rgb_r, #colorpickerHolder2 .colorpicker_rgb_r {
-	background-image: url(../images/custom_rgb_r.png);
+	background-image: url(..//images/colorpicker/custom_rgb_r.png);
 }
 #colorpickerHolder1 .colorpicker_rgb_g, #colorpickerHolder2 .colorpicker_rgb_g {
-	background-image: url(../images/custom_rgb_g.png);
+	background-image: url(..//images/colorpicker/custom_rgb_g.png);
 }
 #colorpickerHolder1 .colorpicker_rgb_b, #colorpickerHolder2 .colorpicker_rgb_b {
-	background-image: url(../images/custom_rgb_b.png);
+	background-image: url(..//images/colorpicker/custom_rgb_b.png);
 }
 #colorpickerHolder1 .colorpicker_hsb_s, #colorpickerHolder2 .colorpicker_hsb_s {
-	background-image: url(../images/custom_hsb_s.png);
+	background-image: url(..//images/colorpicker/custom_hsb_s.png);
 	display: none;
 }
 #colorpickerHolder1 .colorpicker_hsb_h, #colorpickerHolder2 .colorpicker_hsb_h {
-	background-image: url(../images/custom_hsb_h.png);
+	background-image: url(..//images/colorpicker/custom_hsb_h.png);
 	display: none;
 }
 #colorpickerHolder1 .colorpicker_hsb_b, #colorpickerHolder2 .colorpicker_hsb_b {
-	background-image: url(../images/custom_hsb_b.png);
+	background-image: url(..//images/colorpicker/custom_hsb_b.png);
 	display: none;
 }
 #colorpickerHolder1 .colorpicker_submit, #colorpickerHolder2 .colorpicker_submit {
-/*background-image: url(../images/custom_submit.png);*/
+/*background-image: url(..//images/colorpicker/custom_submit.png);*/
 }
 #colorpickerHolder1 .colorpicker input, #colorpickerHolder2 .colorpicker input {
 	color: #778398;
