@@ -376,6 +376,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   replacePlaceholder: function(type, options) {
+    ddd('[item] replacePlaceholder');
     if(options === undefined) {
       options = {};
     }
