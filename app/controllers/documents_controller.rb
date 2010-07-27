@@ -4,21 +4,21 @@ class DocumentsController < ApplicationController
   # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document
   before_filter :authenticate_user!
   before_filter :instantiate_document, :only => [:show, :update, :duplicate, :destroy]
+  
   #before_filter :authenticate_if_needed, :only => [:show]
   #before_filter :authenticate_user!, :only => [:index]
   after_filter :create_view_count, :only => :show
   
   access_control do
-    allow :admin
-    allow logged_in, :to => [:index, :create, :duplicate]
-    allow :editor, :of => :document, :to => [:update, :destroy]
     action :show do
       allow all, :if => :document_is_public?
-      allow :reader, :of => :document
       allow :editor, :of => :document
-    end
+    end    
+    allow logged_in, :to => [:index, :create, :duplicate]
     allow all, :to => :explore
     allow all, :to => :featured
+    allow :editor, :of => :document, :to => [:update, :destroy]    
+    allow :admin    
   end
   
   # GET /documents
@@ -192,4 +192,7 @@ class DocumentsController < ApplicationController
     end
   end
   
+  def document_is_public?
+    @document && @document.is_public?
+  end
 end
