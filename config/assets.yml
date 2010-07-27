@@ -33,7 +33,7 @@ stylesheets:
     - public/css/webdoc/editor.layout.css
     
     - public/css/colorpicker/colorpicker.css
-    - public/css/text/toolbar.css
+    - public/css/text-tool/toolbar.css
     - public/css/codemirror/codemirror.css
   
 #  font_collection:

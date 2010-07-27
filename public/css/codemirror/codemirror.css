@@ -1,0 +1,135 @@
+.editbox {
+  margin: 0;
+  padding: 0.4em;
+  font-family: "Courier", "Andale Mono", monospace;
+  font-size: 13px;
+  line-height: 1.333;
+  color: #f0eb8e;
+  background-color: hsla(198, 12%, 30%, 0.4);
+}
+
+pre.code, .editbox {
+  color: #f0eb8e;
+}
+
+.editbox p {
+  margin: 0;
+}
+
+/* XML */
+
+span.xml-tagname {
+  color: #7cb7f1;
+}
+
+span.xml-attribute {
+  color: #7cb7f1;
+}
+
+span.xml-punctuation {
+  color: #7cb7f1;
+}
+
+span.xml-attname {
+  color: #f0eb8e;
+}
+
+span.xml-comment {
+  color: #7f7f7f;
+}
+
+span.xml-cdata {
+  color: #8fe28f;
+}
+
+span.xml-processing {
+  color: #dedecb;
+}
+
+span.xml-entity {
+  color: #e77e7e;
+}
+
+span.xml-error {
+  color: #ff8080;
+}
+
+span.xml-text {
+  color: #dedecb;
+}
+
+/* CSS */
+
+span.css-at {
+  color: #8fe28f;
+}
+
+span.css-unit {
+  color: #228811;
+}
+
+span.css-value {
+  color: #8fe28f;
+}
+
+span.css-identifier {
+  color: #f0eb8e;
+}
+
+span.css-important {
+  color: #e77e7e;
+}
+
+span.css-colorcode {
+  color: #8fe28f;
+}
+
+span.css-comment {
+  color: #7f7f7f;
+}
+
+span.css-string {
+  color: #8fe28f;
+}
+
+/* JS */
+
+span.js-punctuation {
+  color: #dedecb;
+}
+
+span.js-operator {
+  color: #dedecb;
+}
+
+span.js-keyword {
+  color: #7cb7f1;
+}
+
+span.js-atom {
+  color: #e77e7e;
+}
+
+span.js-variable {
+  color: #f0eb8e;
+}
+
+span.js-variabledef {
+  color: #f0eb8e;
+}
+
+span.js-localvariable {
+  color: #f0eb8e;
+}
+
+span.js-property {
+  color: #f0eb8e;
+}
+
+span.js-comment {
+  color: #7f7f7f;
+}
+
+span.js-string {
+  color: #8fe28f;
+}
