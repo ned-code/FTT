@@ -44,7 +44,7 @@ class Item < ActiveRecord::Base
   # =============
 
   after_save :touch_page_and_need_update_thumbnail
-  after_destroy :touch_page_and_need_update_thumbnail
+  #after_destroy :touch_page_and_need_update_thumbnail #no more used with safe_delete!
 
   # ===============
   # = Validations =
@@ -101,6 +101,11 @@ class Item < ActiveRecord::Base
     cloned_item.created_at = nil
     cloned_item.updated_at = nil
     cloned_item
+  end
+  
+  def safe_delete!
+    super
+    touch_page_and_need_update_thumbnail
   end
 
   private

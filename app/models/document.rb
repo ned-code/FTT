@@ -403,6 +403,12 @@ class Document < ActiveRecord::Base
     Rails.cache.delete("document_#{self.uuid}")
     Rails.cache.delete("document_#{self.uuid}_explore")
   end
+  
+  def safe_delete!
+    super
+    invalidate_cache
+  end
+  
 private
   
   # after_create

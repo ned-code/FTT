@@ -350,7 +350,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       var newPagePosition = 0;
       if (page.data.position > 0) {
         newPagePosition = page.data.position - 1;
-      }      
+      }
       this.loadPage(this.currentDocument.pages[newPagePosition]);
     }
   },
