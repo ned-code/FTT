@@ -3,36 +3,38 @@ compress_assets: on
 javascript_compressor: yui
 stylesheets:
   common:
-    - public/css/reset.css
-    - public/css/jquery-ui/jquery-ui-1.8rc3.custom.css
-    - public/css/lib/states.css
-    - public/css/lib/forms.css
-    - public/css/lib/index.css
-    - public/css/lib/layer.css
-    - public/css/lib/column.css
-    - public/css/lib/card.css
-    - public/css/style.css
-    - public/css/style.ui.css
+    - public/css/webcss/reset.css
+    - public/css/webcss/forms.css
+    - public/css/webcss/states.css
+    - public/css/webcss/layout.css
+    - public/css/webcss/index.css
+    - public/css/webcss/layer.css
+    - public/css/webcss/panel.css
+    - public/css/webcss/column.css
+    - public/css/webcss/card.css
+    - public/css/webcss/button.css
+    - public/css/webcss/scrollbar.css
+    
+    - public/css/webdoc/site.layout.css
+    - public/css/webdoc/site.typography.css
+
+    - public/css/webdoc/wrap.css
+    - public/css/webdoc/index.css
+    - public/css/webdoc/panel.css
+    - public/css/webdoc/message.css
+    - public/css/webdoc/button.css
+    - public/css/webdoc/thumb.css
+    - public/css/webdoc/card.css
 
   application:
-    - public/css/style.application.css
-    - public/css/style.application.typography.css
-    - public/css/style.application.color.css
 
-  page_editor:    
-    - public/css/library.css
-    - public/css/lib/panel.css
-    - public/css/lib/protect.css
-    - public/css/comment.layout.css
-    - public/css/style.editor.css
-    - public/css/style.editor.colors.css
-    - public/css/style.editor.apps.inspector.outer.css
-    - public/css/style.webdoc.css
-    - public/css/colorpicker/colorpicker.css
-    - public/css/toolbar.css
+  page_editor:
+    - public/css/webdoc/editor.layout.css
+    - public/css/webdoc/comment.layout.css
     
-    # code highlighting
-    - public/css/style.codemirror.css
+    - public/css/colorpicker/colorpicker.css
+    - public/css/text/toolbar.css
+    - public/css/codemirror/codemirror.css
   
 #  font_collection:
 #    - public/fonts/Aaargh-fontfacekit/stylesheet
@@ -57,7 +59,6 @@ stylesheets:
 #    - public/fonts/Underwood-Champion-fontfacekit/stylesheet
     
   page_viewer:
-    - public/css/style.webdoc.css
   
   feedback:
     - public/css/zenbox/zenbox.css
