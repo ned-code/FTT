@@ -53,7 +53,19 @@ class Item < ActiveRecord::Base
   # =================
   # = Class Methods =
   # =================
-
+  
+  #Look if there is already an item with this uuid and if it was deleted
+  #it found, it set the deleted_at to nul and return the item (but not saved), else return false
+  
+  def self.find_deleted_and_restore(uuid)
+    item = Item.find_by_uuid(uuid)
+    if item.nil?
+      return nil
+    else
+      item.deleted_at = nil
+      return item
+    end
+  end
   # ====================
   # = Instance Methods =
   # ====================
