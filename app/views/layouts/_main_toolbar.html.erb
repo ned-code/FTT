@@ -4,7 +4,7 @@
       <h2 class="logo_thumb thumb">webdoc</h2>
     </a>
     <% if user_signed_in? %>
-    <ul class="sitenav_index index">
+    <ul class="horizontal sitenav_index index">
       <li><a href="/" <% if params[:controller]=='documents' && params[:action]=='index' %>class="current"<% end %>>home</a></li
      ><li><a href="/documents/featured" <% if params[:controller]=='documents' && params[:action]=='featured' %>class="current"<% end %>>featured</a></li
      ><li><a href="/documents/explore" <% if params[:controller]=='documents' && params[:action]=='explore' %>class="current"<% end %>>explore</a></li>
@@ -14,7 +14,7 @@
     <% if user_signed_in? %>
     <div class="user">
       <h5 class="user-email item"><%= current_user.email %></h5>
-      <ul class="divided usernav_index index">
+      <ul class="horizontal divided usernav_index index">
         <li><%= link_to "your contacts", followships_path, { :class => "item #{params[:controller]=='followships' ? 'current' : '' }" } %></li
        ><li><%= link_to "your profile", edit_user_path(current_user), { :class => "user-edit item #{params[:controller]=='followships' ? 'users' : '' }" } %></li
        ><li><%= link_to "logout", destroy_user_session_path, { :class => "user-logout item" } %></li>
@@ -23,12 +23,8 @@
     <% else %>
     <div class="sessionbar">
       <ul class="divided index">
-        <li>
-          <%= link_to "login", root_path %>
-        </li
-        ><li>
-          <%= link_to "sign up", new_registration_path(:user) %>
-        </li>
+        <li><%= link_to "login", root_path %></li
+       ><li><%= link_to "sign up", new_registration_path(:user) %></li>
       </ul>
     </div>
     <% end %>
