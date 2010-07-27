@@ -17,6 +17,7 @@ stylesheets:
     
     - public/css/webdoc/site.layout.css
     - public/css/webdoc/site.typography.css
+    - public/css/webdoc/comment.layout.css
 
     - public/css/webdoc/wrap.css
     - public/css/webdoc/index.css
@@ -30,7 +31,6 @@ stylesheets:
 
   page_editor:
     - public/css/webdoc/editor.layout.css
-    - public/css/webdoc/comment.layout.css
     
     - public/css/colorpicker/colorpicker.css
     - public/css/text/toolbar.css
