@@ -62,8 +62,12 @@ class Item < ActiveRecord::Base
     if item.nil?
       return nil
     else
-      item.deleted_at = nil
-      return item
+      if item.deleted_at.nil?
+        return nil
+      else
+        item.deleted_at = nil
+        return item
+      end
     end
   end
   # ====================
