@@ -1,0 +1,99 @@
+/* horizontal
+    
+   Simulate a bunch of blocks pushed against each other horizontally
+   by using inline layout to create a horizontal effect. Because
+   they're in the flow, children must have no space between them in
+   the html.
+   
+   Uses a technique for getting inline-block behaviour in IE, explained well here:
+   http://blog.mozilla.com/webdev/2009/02/20/cross-browser-inline-block/
+*/
+
+.horizontal>* {
+    display: inline-block;
+    vertical-align: bottom;
+    height: 100%;
+}
+
+.horizontal>*:last-child,
+.horizontal>*.last {
+    margin-right: 0;
+}
+
+/* vertical */
+
+.vertical>* {
+    display: block;
+}
+
+/* dividing lines */
+
+.vertical.divided>* {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #666666;
+}
+
+.vertical.divided>*:first-child {
+  border-top-style: none;
+}
+
+.horizontal.divided>* {
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: #666666;
+}
+
+.horizontal.divided>*:first-child {
+  border-left-style: none;
+}
+
+/* The up-down <dl> method */
+
+.horizontal.index>dt,
+.horizontal.index>dd {
+    margin: 0;
+}
+.horizontal.index>dt,
+.horizontal.index>dd {
+    width: 160px;
+    line-height: 1.6em;
+}
+.horizontal.index>dt {
+    vertical-align: text-bottom;
+}
+.horizontal.index>dd {
+    vertical-align: text-top;
+    /* reset the margin that usually indents a dd */
+    margin-left: 0;
+    /* Move it down by one line-height */
+    margin-top: 1.6em;
+    /* Move it left with a negative margin accounting for size, padding and margin of dt */
+    margin-left: -166px;
+    /* Space at the bottom for when the items wrap */
+    margin-bottom: 1.6em;
+}
+
+/* Putting objects of unknown width/height in the centre */
+
+.central {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -o-box;
+	display: -ms-box;
+	display: box;
+
+	-webkit-box-align: center;
+	-moz-box-align:    center;
+	-o-box-align:      center;
+	box-align:         center;
+
+  -webkit-box-pack: center;
+  -moz-box-pack:    center;
+  -o-box-pack:      center;
+  box-pack:         center;
+  
+  /* FF shrinks the width of boxes with display: box;. Lets
+     force it to behave like the others. */
+  width: 100%;
+}

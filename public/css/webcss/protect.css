@@ -1,0 +1,78 @@
+/* CSS Protect
+ * 
+ * Defines a base style to be applied to all nodes inside .wd nodes,
+ * acting as a kind of wall, and hopefully protecting them against CSS
+ * defined by the user on the board.
+ *
+ */
+
+.wd,
+.wd div, .wd span, .wd object, .wd iframe,
+.wd h1, .wd h2, .wd h3, .wd h4, .wd h5, .wd h6,
+.wd p, .wd blockquote, .wd pre, .wd abbr, .wd address, .wd cite, .wd code,
+.wd del, .wd dfn, .wd em, .wd img, .wd ins, .wd kbd, .wd q, .wd samp,
+.wd small, .wd strong, .wd sub, .wd sup, .wd var, .wd b, .wd i,
+.wd dl, .wd dt, .wd dd, .wd ol, .wd ul, .wd li,
+.wd fieldset, .wd form, .wd label, .wd legend, .wd table,
+.wd caption, .wd tbody, .wd tfoot, .wd thead, .wd tr, .wd th, .wd td,
+.wd article, .wd aside, .wd dialog, .wd figure, .wd footer, .wd header,
+.wd hgroup, .wd menu, .wd nav, .wd section, .wd time, .wd mark,
+.wd audio, .wd video {
+    background: scroll transparent none 0% 0% repeat;
+    border: none;
+    border-radius: 0;
+    clear: none;
+    color: black;
+    content: normal;
+    cursor: auto;
+    display: inline;
+    float: none;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    height: auto;
+    letter-spacing: normal;
+    line-height: normal;
+    margin: 0;
+    max-height: none;
+    max-width: none;
+    min-height: 0;
+    min-width: 0;
+    opacity: 1;
+    outline: invert 0 none 1px; /* color offset style width */
+    overflow: visible;
+    padding: 0;
+    rotation: 0;
+    text-align: start;
+    text-decoration: none;
+    text-indent: 0;
+    text-transform: none;
+    vertical-align: baseline;
+    white-space: normal;
+    width: auto;
+    word-spacing: normal;
+    z-index: auto;
+    
+    position: static;
+    top: auto;
+    right: auto; 
+    left: auto;
+    bottom: auto;
+}
+
+.wd div, .wd object, .wd iframe,
+.wd h1, .wd h2, .wd h3, .wd h4, .wd h5, .wd h6,
+.wd p, .wd blockquote, .wd pre, .wd address,
+.wd dl, .wd dt, .wd dd, .wd ol, .wd ul, .wd li,
+.wd fieldset, .wd form, .wd label, .wd article,
+.wd aside, .wd dialog, .wd figure, .wd footer, .wd header,
+.wd hgroup, .wd nav, .wd section { 
+    display:block;
+}
+
+.wd ul,
+.wd ul li {
+    list-style: none;
+}

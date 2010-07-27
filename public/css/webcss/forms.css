@@ -1,0 +1,411 @@
+/* forms.css
+ * 
+ * Stephen Band
+ *
+ * For just now, I'm only interested in Webkit and Mozilla.  IE can go jump.
+ *
+ */
+
+fieldset    {
+    margin: 0 0 1.6667em 0;
+}
+
+legend      {
+    font-weight: bold;
+    font-size:1.2em;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+label,
+.label,
+input,
+select,
+textarea {
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    box-sizing:         border-box;
+}
+
+label,
+.label,
+input[type='text'],
+input[type='file'],
+input[type='password'],
+textarea {
+    border: none;
+    width: 100%;
+}
+
+label,
+.label,
+input[type='text'],
+input[type='file'],
+input[type='password'],
+select {
+    height: 1.6667em;
+}
+
+input[type='text'],
+input[type='file'],
+input[type='password'],
+textarea {
+    opacity: 0.88;
+    padding: 0 0.3333em;
+    /* Nudge up the baseline position in FF. Doesn't affect Webkit */
+    padding-bottom: 0.077em;
+}
+
+select {
+    opacity: 0.88;
+    /* Nudge down the baseline position in FF.  Doesn't affect Webkit.
+       Only needed when you're overriding the system-style select boxes.
+       You can override by doing almost any manipulation to the border, in FF */
+    /*padding: 0.117em 0.8333em;*/
+}
+
+input[type='text'],
+input[type='file'],
+input[type='password'] {
+    /* Position text in the same place it is in labels in WebKit / Mozilla */
+    text-indent: -1px;
+}
+
+/* File inputs. Good luck. */
+input[type='file'] {
+  color: inherit;
+  background: none;
+  display: block;
+}
+
+/* File inputs are especially problematic in FF
+ * they require a wrapper to get rid of their system border */
+@-moz-document url-prefix() {
+    .ff-input-file-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .ff-input-file-wrapper input[type='file'] {
+    position: relative;
+    top: -2px;
+    left: -1px;
+    margin-bottom: -3px;
+  }
+}
+
+input[type=submit] {
+    vertical-align: baseline;
+    padding-top: 0;
+    padding-bottom: 0;
+    cursor: pointer;
+}
+
+textarea {
+    min-height: 6.6667em;
+    line-height: inherit;
+    /* Switch off resizing (Webkit) by default */
+    resize: none;
+}
+
+textarea.resizable {
+    resize: resize;
+    /* Make sure the bottom right corner doesn't clip the resize icon */
+    -webkit-border-bottom-right-radius: 2px !important;
+}
+
+label {
+    font-weight: bold;
+    /* Equalise FF's <label> baseline to its <input> baseline. Mostly. */
+    line-height: 1.077;
+    /* Only pad labels top and bottom */
+    padding: 0.3333em 0;
+}
+.label {
+    line-height: 1;
+    padding: 0.3333em 0;
+}
+
+input[type=checkbox], input[type=radio],
+input.checkbox, input.radio {
+    /*position:relative; top: 0em;*/
+    margin: 0;
+    vertical-align: baseline;
+    /* You can't style radio and checkbox colors effectively */
+}
+
+label input[type=checkbox] {
+    /* handle nested checkboxes inside labels */
+    margin-right: 0.6em;
+}
+
+/* Focus and error styles */
+
+input[type='text']:focus,
+input[type='password']:focus,
+select:focus,
+textarea:focus {
+    opacity: 1;
+    
+    /* In Webkit, outline doesn't fit the border curves, and in FF outline
+       is ugly. Lets recreate it with box-shadow */
+    outline: none;
+    
+    /* Old Safari doesn't do blur radius */
+    -webkit-box-shadow: 0 0 12px hsl( 72, 100%, 50% );
+    /* but Chrome does... */
+    -webkit-box-shadow: 0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+    /* Create webkit-like outlines for FF */
+    -moz-box-shadow:    0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+    box-shadow:         0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
+}
+.error input[type='text'],
+.error input[type='password'],
+.error select,
+.error textarea {
+    opacity: 1;
+    -webkit-box-shadow: 0 0 12px hsl( 28, 100%, 50% );
+    -webkit-box-shadow: 0 0 4px 1px hsl( 28, 100%, 50% ), inset 0 0 4px hsl( 28, 100%, 50% );
+    -moz-box-shadow:    0 0 4px 1px hsl( 28, 100%, 50% ), inset 0 0 4px hsl( 28, 100%, 50% );
+    box-shadow:         0 0 4px 1px hsl( 28, 100%, 50% ), inset 0 0 4px hsl( 28, 100%, 50% );
+}
+.error input[type='text']:focus,
+.error input[type='password']:focus,
+.error select:focus,
+.error textarea:focus {
+    -webkit-box-shadow: 0 0 12px hsl( 58, 100%, 50% );
+    -webkit-box-shadow: 0 0 4px 2px hsl( 58, 100%, 50% ), inset 0 0 4px hsl( 58, 100%, 50% );
+    -moz-box-shadow:    0 0 4px 2px hsl( 58, 100%, 50% ), inset 0 0 4px hsl( 58, 100%, 50% );
+    box-shadow:         0 0 4px 2px hsl( 58, 100%, 50% ), inset 0 0 4px hsl( 58, 100%, 50% );
+}
+
+select:focus {
+    /* In Webkit, select boxes don't accept box-shadow. Outline-style: auto
+       kills the outline in FF, which is ok, because we re-created it (better)
+       using a box-shadow (for non-system-style select boxes. FF ignores outline
+       declarations for system-style select boxes, and uses system blue (Mac). Hey-ho.) */
+    outline: hsl( 72, 100%, 50% ) auto 6px;
+    -moz-outline-color: hsl( 72, 100%, 50% ); 
+    outline-offset: -3px;
+}
+.error select {
+    outline: hsl( 13, 100%, 50% ) auto 6px;
+    -moz-outline-color: hsl( 13, 100%, 50% ); 
+    outline-offset: -3px;
+}
+
+.error select:focus {
+    outline: hsl( 72, 100%, 50% ) auto 6px;
+    -moz-outline-color: hsl( 72, 100%, 50% ); 
+    outline-offset: -3px;
+}
+
+.error-message {
+    line-height: 1.6667;
+    color: hsl( 13, 74%, 62% );
+}
+
+label.error-message {
+    line-height: 1;
+}
+
+input.default {
+    font-style: italic;
+    font-weight: normal; 
+}
+
+
+
+/* Layout wrappers
+ *
+ * .stack     - stacks labels and inputs on top of one another
+ * .shunt     - places labels and inputs inline, beside one another
+ *
+ */
+
+.stack label,
+.stack .label,
+.stack .error-message,
+.stack img {
+    padding-left: 0;
+}
+.stack label,
+.stack .label,
+.stack .error-message {
+    display: block;
+    white-space: nowrap;
+}
+.stack .error-message {
+    position: absolute;
+    bottom: -1.6667em;
+    left: 0;
+}
+
+.shunt input {
+    display: inline-block;
+}
+.shunt label {
+    /*width: 40%;*/
+    text-align: right;
+}
+.shunt label input {
+    width: auto;
+}
+
+label .required {
+    color: hsl( 18, 90%, 66% );
+}
+
+.note {
+  margin-bottom: 0;
+}
+
+.inspector form.content {
+    padding-top: 0.8em;
+}
+/* Fieldsets */
+.properties {
+    padding: 1em 0 1.4em 0;
+    border: none;
+    position: relative;
+    -moz-box-sizing: content-box;
+}
+fieldset.properties {
+    border-top: 1px solid;
+    margin: 0 0 -0.8em 0;
+}
+fieldset.properties:first-child {
+    border-top: none;
+}
+/* Styling legends in FF is not easy. They will only be moved around with margins.
+   Good enough is good enough. The relationship between padding-top, padding-bottom
+   and margin-bottom of the fieldset is tricky, here, and fragile. It produces a bigger
+   space when a legend is present then when it isn't */
+.properties legend {
+    height: 1.2em;
+    line-height: 1.1em;
+    padding: 0.2em 1.2em;
+    text-transform: lowercase;
+    font-size: 1em;
+    font-weight: bold;
+    margin-left: 2.4%;
+    -moz-border-radius: 0.8em;
+    -webkit-border-radius: 0.8em;
+    border-radius: 0.8em;
+}
+.properties div {
+    clear: both;
+    /* form divs also have clearfix applied */
+    padding-left: 33.3333%;
+    /* Try and preserve vertical spacing */
+    min-height: 1.9em;
+}
+.properties p {
+    float: left;
+    line-height: 1.5em;
+    padding: 0 0.6em 0 0;
+    margin: 0.2em 0 0.2em 0;
+}
+
+.properties label,
+.properties .label,
+.properties input[type='text'],
+.properties input[type='radio'],
+.properties input[type='checkbox'],
+.properties input[type=range] {
+    float: left;
+    width: auto;
+    font-size: 1em;
+    margin: 0 0 0.2em 0;
+    height: 1.3333em;
+
+    /* For some reason browsers force the 'traditional' box model on inputs
+       in the Page Inspector. It may be because the inputs are not recognised as
+       type "text", but I can't recreate the problem outside of webdoc, so I
+       don't know why. Happily, we can force it back. */
+    /*-webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -ms-box-sizing: content-box;
+    box-sizing: content-box;*/
+}
+.properties label,
+.properties .label,
+.properties input[type='text'] {
+    padding: 0.16em 0.6em;
+}
+
+.properties label,
+.properties .label {
+    color: rgba(0, 0, 0, 0.70);
+    margin-right: 0.6em;
+    text-transform: lowercase;
+    padding: 0.1em 0 0 0;
+    white-space: nowrap;
+}
+.properties label {
+    min-width: 10em;
+    margin-left: -10.6em;
+    text-align: right;
+    white-space: nowrap;
+    line-height: 1.2em;
+}
+.properties .label {
+    /*letter-spacing: -0.096em;*/
+    margin-right: 0.4em;
+}
+
+.properties textarea,
+.properties input[type=text] {
+    /*border: 2px solid;*/
+    -moz-border-radius:     0.6666em;
+    -webkit-border-radius:  0.6666em;
+    border-radius:          0.6666em;
+    
+    /*color: rgb(63, 63, 63);*/
+    width: 8em;
+    
+    /* The combination of Helvetica labels and courier inputs
+       needs to have font-size adjusted to match.  118% is a decent compromise
+       between Webkit and Gecko, 112% makes the courier smaller. */
+    font-family: Courier, monospace;
+}
+
+.properties select {
+    margin: 0;
+}
+.properties textarea {
+    margin: 0;
+    width: 96%;
+    max-width: 96%;
+	margin-bottom:0.6em;
+}
+
+.properties input[disabled],
+.properties .disabled {
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+}
+.properties input[type=checkbox] {
+    width: auto;
+    margin-right: 0.4em;
+}
+.properties input[type=radio] {
+    width: auto;
+    margin-right: 0.4em;
+}
+
+#background_image {
+  width: 100px; height: 100px; display: block;
+}
+
+input[type='range'] {
+
+}

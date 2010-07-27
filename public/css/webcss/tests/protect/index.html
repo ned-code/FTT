@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+
+<title>webdev.stephband.info</title>
+
+<link rel="icon" type="image/png" href="images/favicon.png" />
+
+<style type="text/css" media="screen, projection">
+    
+/* PROTECT STUFF INSIDE .wd WRAPPER */
+    
+    @import url('../../public/css/lib/css/protect.css');
+    
+/* STYLE STUFF INSIDE .wd WRAPPER */
+    
+    /* Horizontal lists of inline-blocks, with image backgrounds as thumbnails */
+    /* Tested in Safari 4 | FF 3.5 | Opera 9.6 | IE7 */ 
+    .wd .tools {
+        background: #989ca0;
+        list-style: none;
+        padding: 0 16px;
+        /* initial position */
+        left: 0;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        border-radius: 8px;
+        -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        -moz-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    }
+    .wd .tools li {
+        display: inline;
+        margin-right: 6px;
+    }
+    .wd .tools li.last {
+        margin-right: 0;
+    }
+    .wd .tools a {
+        display: inline-block;
+        /* stop it creating a gap below the thumb, because by default thumb sits on a baseline. */
+        vertical-align: top;
+        /* padding-top defines the height and pushes any text down out of the box.
+           You can't use -ve text-indent for this as IE7 moves the background, too. */
+        padding-top: 48px; min-width: 48px; height: 1.6em; line-height: 1.2em;
+        /* Hide text that's pushed out of the box. */
+        overflow: hidden;
+        /* Thumb styling */
+        text-align: center;
+        background: url(images/tools.png) no-repeat;
+        color: #333739;
+        font-family: Helvetica;
+        text-decoration: none;
+    }
+    
+    .wd .tools.icons-only a {
+        width: 48px; height: 0;
+    }
+    
+    .wd .tools.text-only a {
+        padding-top: 0;
+        line-height: 1.6em;
+        background: none;
+        min-width: 0;
+    }
+    
+    .wd .tools a:hover { color: #c0c0c0; text-decoration: none; }
+    
+    .wd .tools a#select-tool        { background-position: 0 0; }
+    .wd .tools a#select-tool:hover  { background-position: -48px 0; }
+    .wd .tools a#draw-tool          { background-position: -96px 0; }
+    .wd .tools a#draw-tool:hover    { background-position: -144px 0; }
+    .wd .tools a#type-tool          { background-position: -192px 0; }
+    .wd .tools a#type-tool:hover    { background-position: -240px 0; }
+    
+/* ATTACK!!! */
+    
+    ul {
+        background: #f0ebd5;
+    }
+    ul li {
+        background: #ebe1b2;
+    }
+    ul li a {
+        background: #e2d289;
+    }
+    
+    ul.tools {
+        list-style: circle;
+        background: green;
+        font-size: 24px;
+    }
+    
+</style>
+
+<!-- IE only CSS -->
+<!--[if lt IE 8]><style type="text/css"> @import "css/style_ie.css"; </style><![endif]-->
+<!-- IE6 disable image toolbar -->
+<!--[if lte IE 6]><meta http-equiv="imagetoolbar" content="no" /><![endif]-->
+
+</head>
+
+<body>
+
+<div class="wd">
+
+    <ul class="tools">
+    	<li><a href="#" id="select-tool">Select</a></li>
+    	<li><a href="#" id="draw-tool">Draw</a></li>
+    	<li class="last"><a href="#" id="type-tool">Type</a></li>
+    </ul>
+
+    <p><a href="#" id="switch">switch</a></p>
+
+</div>
+
+<ul>
+    <li><a href="#">First item</a> in a list</li>
+    <li><a href="#">Next item</a> in a list</li>
+    <li><a href="#">Penultimate</a> item in a list</li>
+    <li><a href="#">Last item</a> in a list</li>
+    <li><a href="#">Okay</a>, I lied</li>
+</ul>
+
+<script type="text/javascript" src="../js/jquery-1.4a2.js"></script>
+<script type="text/javascript">
+
+jQuery(document).ready(function(){
+    
+    // Declare parallax on layers
+    jQuery("#switch")
+    .toggle( function(e){
+        console.log('ijaghdf');
+        jQuery(".tools")
+        .addClass('icons-only');
+    }, function(e){
+        jQuery(".tools")
+        .removeClass('icons-only')
+        .addClass('text-only');
+    }, function(e){
+        jQuery(".tools")
+        .removeClass('text-only');
+    });
+
+});
+
+</script>
+
+</body>
+</html>
