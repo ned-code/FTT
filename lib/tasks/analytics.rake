@@ -18,6 +18,8 @@ namespace :analytics do
     
     number_of_webdocs = Document.count(:all)
     number_of_webdocs_deleted = Document.deleted.count
+    number_of_webdocs = number_of_webdocs - number_of_webdocs_deleted
+    
     public_document = Document.all(:conditions => { :is_public => true }, :select => [:uuid])
     number_of_webdocs_published = public_document.size
     
