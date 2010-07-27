@@ -46,7 +46,7 @@ class Item < ActiveRecord::Base
 
   after_save :refresh_cache
   after_update :need_update_thumbnail
-  after_destroy :refresh_cache, :need_update_thumbnail
+  #after_destroy :refresh_cache, :need_update_thumbnail  #no more used with safe_delete!
 
   # ===============
   # = Validations =
@@ -55,7 +55,23 @@ class Item < ActiveRecord::Base
   # =================
   # = Class Methods =
   # =================
-
+  
+  #Look if there is already an item with this uuid and if it was deleted
+  #it found, it set the deleted_at to nul and return the item (but not saved), else return false
+  
+  def self.find_deleted_and_restore(uuid)
+    item = Item.find_by_uuid(uuid)
+    if item.nil?
+      return nil
+    else
+      if item.deleted_at.nil?
+        return nil
+      else
+        item.deleted_at = nil
+        return item
+      end
+    end
+  end
   # ====================
   # = Instance Methods =
   # ====================
@@ -87,6 +103,12 @@ class Item < ActiveRecord::Base
     cloned_item.created_at = nil
     cloned_item.updated_at = nil
     cloned_item
+  end
+  
+  def safe_delete!
+    super
+    need_update_thumbnail
+    refresh_cache
   end
 
   private

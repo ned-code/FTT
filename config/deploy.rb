@@ -33,7 +33,7 @@ namespace :deploy do
     run "ln -nfs #{shared_path}/reports/analytics.csv #{release_path}/reports/analytics.csv"
   end
   task :generate_assets do
-    send(:run, "cd #{release_path} && RAILS_ENV=#{environment} #{ruby_path}/bin/jammit --force config/assets.yml")
+    send(:run, "cd #{release_path} && RAILS_ENV=#{rails_env} #{ruby_path}/bin/jammit --force config/assets.yml")
   end
   task :show_maintenance do
     run "cp #{current_path}/app/views/layouts/maintenance.html #{current_path}/public/maintenance.html"
@@ -42,7 +42,7 @@ namespace :deploy do
     run "rm #{current_path}/public/maintenance.html"
   end
   task :update_crontab, :roles => :app do
-    run "cd #{release_path} && #{ruby_path}/bin/whenever --set environment=#{environment} --update-crontab #{application}"
+    run "cd #{release_path} && #{ruby_path}/bin/whenever --set environment=#{rails_env} --update-crontab #{application}"
   end
 end
 

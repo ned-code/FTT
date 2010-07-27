@@ -251,6 +251,10 @@ WebDoc.ServiceImagesSearch = $.klass({
   }
 });
 
+/***********************************************
+        Flickr
+**********************************************/
+
 WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   initialize: function($super) {
     $super('flickr_images');
@@ -347,6 +351,10 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     this.performSearch();
   }
 });
+
+/***********************************************
+        google image
+**********************************************/
 
 WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   initialize: function($super) {

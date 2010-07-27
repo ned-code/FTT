@@ -65,6 +65,7 @@ WebDoc.DrageAndDropController = {
             var id = params.id ? params.id : undefined;
             var media_id = params.media_id;
             var title = params.title;
+            var favorites = params.favorites;
           }
           var parent = jQuery(evt.target).parent();
           if(parent && parent.data('itemView') && parent.data('itemView').item.data.media_type === WebDoc.ITEM_TYPE_IMAGE && parent.data('itemView').item.getIsPlaceholder()){

@@ -71,7 +71,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       //WebDoc.application.inspectorController = new WebDoc.InspectorController();
       WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
       WebDoc.application.toolbarController = new WebDoc.ToolbarController();
-			WebDoc.application.browserController = new WebDoc.BrowserController();
+      WebDoc.application.browserController = new WebDoc.BrowserController();
       WebDoc.application.notificationController = new WebDoc.NotificationController("#notification_bar");
       
       WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
@@ -168,7 +168,6 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       if (differentPages) {
         WebDoc.application.undoManager.clear();
       }
-      ddd("set hash to current page position");
       window.location.hash = "#!" + (page.uuid());
       this.currentPage = page;
       WebDoc.application.boardController.setCurrentPage(this.currentPage);      
@@ -300,7 +299,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       }
     }
   },
-
+  
   copyPage: function(e) {
     var copiedPage = this.currentPage.copy();
     copiedPage.setDocument(this.currentPage.getDocument());
@@ -351,7 +350,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       var newPagePosition = 0;
       if (page.data.position > 0) {
         newPagePosition = page.data.position - 1;
-      }      
+      }
       this.loadPage(this.currentDocument.pages[newPagePosition]);
     }
   },

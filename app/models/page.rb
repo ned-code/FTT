@@ -72,7 +72,7 @@ class Page < ActiveRecord::Base
   before_save :set_page_data
   before_create :set_position
   after_save :refresh_cache
-  after_destroy :update_next_page_position, :refresh_cache
+  #after_destroy :update_next_page_position, :refresh_cache #no more used with safe_delete!
 
   # =================
   # = Class Methods =
@@ -222,6 +222,12 @@ class Page < ActiveRecord::Base
         self.items << Item.new_with_uuid(item_hash)  
       end      
     end
+  end
+  
+  def safe_delete!
+    super
+    update_next_page_position
+    refresh_cache
   end
   
   private

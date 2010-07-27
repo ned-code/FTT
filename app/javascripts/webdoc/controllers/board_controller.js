@@ -705,9 +705,9 @@ WebDoc.BoardController = jQuery.klass({
       case 'googlevideo' :
         videoWidget = WebDoc.WidgetManager.getInstance().getVidsGoogleWidget();
         break;
-			case 'yahoovideo' :
-			  videoWidget = WebDoc.WidgetManager.getInstance().getVidsYahooWidget();
-			  break;
+      case 'yahoovideo' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getVidsYahooWidget();
+        break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     if (videoWidget.data.properties.width) {
@@ -927,43 +927,42 @@ WebDoc.BoardController = jQuery.klass({
         case 65:
           this.setCurrentTool(WebDoc.application.arrowTool);
           break;  
-     		case 37:
-		 		 	ddd('shift key?');
-     		   if (this._isInteraction || this._selection.length === 0) {
-     		     WebDoc.application.pageEditor.prevPage();
-     		   }
-     		   else {
-     		     this.moveSelection("left", e.shiftKey?"big" : "small");
-     		   }
-     		   e.preventDefault();          
-     		   break;
-      	case 38:
-      	  if (this._isInteraction || this._selection.length === 0) {
-      	    WebDoc.application.pageEditor.prevPage();
-      	  }
-      	  else {
-      	    this.moveSelection("up", e.shiftKey?"big" : "small");
-      	  }
-      	  e.preventDefault();          
-      	  break;          
-      	case 39:
-      	  if (this._isInteraction || this._selection.length === 0) {
-      	    WebDoc.application.pageEditor.nextPage();
-      	  }
-      	  else {
-      	    this.moveSelection("right", e.shiftKey?"big" : "small");            
-      	  }        
-      	  e.preventDefault();           
-      	  break;
-      	case 40:
-      	  if (this._isInteraction || this._selection.length === 0) {
-      	    WebDoc.application.pageEditor.nextPage();
-      	  }
-      	  else {
-      	    this.moveSelection("down", e.shiftKey?"big" : "small");
-      	  }
-      	  e.preventDefault();          
-      	  break;                       
+        case 37:
+           if (this._isInteraction || this._selection.length === 0) {
+             WebDoc.application.pageEditor.prevPage();
+           }
+           else {
+             this.moveSelection("left", e.shiftKey?"big" : "small");
+           }
+           e.preventDefault();          
+           break;
+        case 38:
+          if (this._isInteraction || this._selection.length === 0) {
+            WebDoc.application.pageEditor.prevPage();
+          }
+          else {
+            this.moveSelection("up", e.shiftKey?"big" : "small");
+          }
+          e.preventDefault();          
+          break;          
+        case 39:
+          if (this._isInteraction || this._selection.length === 0) {
+            WebDoc.application.pageEditor.nextPage();
+          }
+          else {
+            this.moveSelection("right", e.shiftKey?"big" : "small");            
+          }        
+          e.preventDefault();           
+          break;
+        case 40:
+          if (this._isInteraction || this._selection.length === 0) {
+            WebDoc.application.pageEditor.nextPage();
+          }
+          else {
+            this.moveSelection("down", e.shiftKey?"big" : "small");
+          }
+          e.preventDefault();          
+          break;                       
       }      
     }
     else {

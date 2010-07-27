@@ -404,7 +404,11 @@ class Document < ActiveRecord::Base
     end
     cloned_document
   end
-  
+ 
+  def safe_delete!
+    super
+    refresh_cache
+  end 
   
 private
   

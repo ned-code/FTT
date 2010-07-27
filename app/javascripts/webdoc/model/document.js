@@ -232,14 +232,14 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     this.firePageAdded(page);    
   },
   
-  removePage: function(page, updateFollowing) {    
-    var index = $.inArray(page, this.pages);
+  removePage: function(page, updateFollowing) {
+    var index = jQuery.inArray(page, this.pages);
     if (index != -1) {
       if (updateFollowing) {
         for (var i = index + 1; i < this.pages.length; i++) {
           this.pages[i].data.position--; 
-        }      
-      }      
+        }
+      }
       this.pages.splice(index, 1);
       this.firePageRemoved(page);
     }

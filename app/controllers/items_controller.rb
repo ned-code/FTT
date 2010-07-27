@@ -25,8 +25,11 @@ class ItemsController < PageController
   
   # POST /documents/:document_id/pages/:page_id/items
   def create
-    @item = Item.new_with_uuid(params[:item])
-    @item[:page_id] = params[:page_id]
+    @item = Item.find_deleted_and_restore(params[:item][:uuid])
+    if @item.nil?
+      @item = Item.new_with_uuid(params[:item])
+      @item[:page_id] = params[:page_id]
+    end
     @item.document_uuid = params[:document_id]
     @item.save!
     message = @item.as_json({})

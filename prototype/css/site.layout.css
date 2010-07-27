@@ -18,3 +18,10 @@ body>header {
   height: 3em;
   background: white;
 }
+
+/* Wrap extensions */
+.site_wrap {
+  width: 88%;
+  min-width: 720px;
+  max-width: 1440px;
+}

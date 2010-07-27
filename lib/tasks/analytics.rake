@@ -17,6 +17,9 @@ namespace :analytics do
     number_of_users_followed_at_least_by_one_user = Followship.count( :all, :select => 'DISTINCT following_id' )
     
     number_of_webdocs = Document.count(:all)
+    number_of_webdocs_deleted = Document.deleted.count
+    number_of_webdocs = number_of_webdocs - number_of_webdocs_deleted
+    
     public_document = Document.all(:conditions => { :is_public => true }, :select => [:uuid])
     number_of_webdocs_published = public_document.size
     
@@ -96,6 +99,7 @@ namespace :analytics do
         number_of_users_followed_at_least_by_one_user,
         number_of_webdocs,
         number_of_webdocs_published,
+        number_of_webdocs_deleted,
         number_of_pages,
         number_of_pages_published,
         number_of_webdocs_with_more_than_one_co_author,
@@ -159,6 +163,7 @@ namespace :analytics do
           'Number of users followed at least by someone ',
           'Number of webdocs ',
           'Number of webdocs published ',
+          'Number of webdocs deleted',
           'Number of pages ',
           'Number of pages published ',
           'Number of webdoc with more than one co-autor ',

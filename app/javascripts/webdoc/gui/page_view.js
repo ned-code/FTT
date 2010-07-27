@@ -215,16 +215,14 @@ WebDoc.PageView = $.klass({
       delete globalCss.height;
       //domNode.attr( 'style', '' ).css( wrapCss );
       if(this.page.hasBackgroundGradient()){
-				delete globalCss.backgroundImage;
-				this.domNode.attr( 'style', this.page.getBackgroundGradient() ).css(globalCss);
-			}
-			else{
-				ddd('page _initPageCss');
-				ddd(globalCss);
-				delete globalCss.backgroundGradient;
-				this.domNode.attr( 'style', '' );
-				this.domNode.css(globalCss);
-			}
+        delete globalCss.backgroundImage;
+        this.domNode.attr( 'style', this.page.getBackgroundGradient() ).css(globalCss);
+      }
+      else{
+        delete globalCss.backgroundGradient;
+        this.domNode.attr( 'style', '' );
+        this.domNode.css(globalCss);
+      }
       this._initPageSize();
       
     }.pBind(this));

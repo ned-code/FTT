@@ -175,10 +175,10 @@ WebDoc.Item = $.klass(WebDoc.Record,
           jQuery.extend(this.data.data, { style : {}});
         }
         
-        if(scope == 'background'){ //don't set a background if there is a border with image
+        if(scope == 'background'){ //remove the border if it's a border with image
           if(this.data.data.style['border']){
             if(this.data.data.style['border'].match('border-image')){
-              return;
+              this.data.data.style['border'] = '';
             }
           }
         }
@@ -376,6 +376,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   },
 
   replacePlaceholder: function(type, options) {
+    ddd('[item] replacePlaceholder');
     if(options === undefined) {
       options = {};
     }
