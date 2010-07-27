@@ -1,0 +1,7 @@
+/* wrap class */
+
+.wrap {
+  /* Set as position parent */
+  position: relative;
+  margin: 0 auto;
+}
