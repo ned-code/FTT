@@ -1,36 +1,45 @@
-<header>
-  <div class="wrap clear">
+<header class="header">
+  <div class="site_wrap wrap">
     <a href="/">
-      <h1 class="logo">webdoc</h1>
+      <h2 class="logo_thumb thumb">webdoc</h1>
+    </a>
+    <ul class="nav_index index">
+      <li><a href="/">home</a></li
+     ><li><a href="/documents/featured">featured</a></li
+     ><li><a href="/documents/explore">explore</a></li>
+    </ul>
+    
+    <div class="userbar">
+      <h5 class="user-email item">admin@mnemis.com</h5>
+      <ul class="divided user_index index">
+        <li><a href="/followships" class="item ">your contacts</a></li
+       ><li><a href="/users/1/edit" class="user-edit item ">your profile</a></li
+       ><li><a href="/users/sign_out" class="user-logout item">logout</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<header class="header">
+  <div class="site_wrap wrap">
+    <a href="/">
+      <h2 class="logo_thumb thumb">webdoc</h2>
     </a>
     <% if user_signed_in? %>
-    <ul class="navbar index">
-      <li>
-        <a href="/" <% if params[:controller]=='documents' && params[:action]=='index' %>class="current"<% end %>>home</a>
-      </li
-      >
-      <li>
-        <a href="/documents/featured" <% if params[:controller]=='documents' && params[:action]=='featured' %>class="current"<% end %>>featured</a>
-      </li>
-      <li>
-        <a href="/documents/explore" <% if params[:controller]=='documents' && params[:action]=='explore' %>class="current"<% end %>>explore</a>
-      </li>
+    <ul class="sitenav_index index">
+      <li><a href="/" <% if params[:controller]=='documents' && params[:action]=='index' %>class="current"<% end %>>home</a></li
+     ><li><a href="/documents/featured" <% if params[:controller]=='documents' && params[:action]=='featured' %>class="current"<% end %>>featured</a></li
+     ><li><a href="/documents/explore" <% if params[:controller]=='documents' && params[:action]=='explore' %>class="current"<% end %>>explore</a></li>
     </ul>
     <% end %>
     
     <% if user_signed_in? %>
-    <div class="userbar">
+    <div class="user">
       <h5 class="user-email item"><%= current_user.email %></h5>
-      <ul class="divided index">
-        <li>
-          <%= link_to "your contacts", followships_path, { :class => "item #{params[:controller]=='followships' ? 'current' : '' }" } %>
-        </li
-        ><li>
-          <%= link_to "your profile", edit_user_path(current_user), { :class => "user-edit item #{params[:controller]=='followships' ? 'users' : '' }" } %>
-        </li
-        ><li>
-          <%= link_to "logout", destroy_user_session_path, { :class => "user-logout item" } %>
-        </li>
+      <ul class="divided usernav_index index">
+        <li><%= link_to "your contacts", followships_path, { :class => "item #{params[:controller]=='followships' ? 'current' : '' }" } %></li
+       ><li><%= link_to "your profile", edit_user_path(current_user), { :class => "user-edit item #{params[:controller]=='followships' ? 'users' : '' }" } %></li
+       ><li><%= link_to "logout", destroy_user_session_path, { :class => "user-logout item" } %></li>
       </ul>
     </div>
     <% else %>
