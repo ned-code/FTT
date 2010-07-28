@@ -148,6 +148,10 @@ class User < ActiveRecord::Base
     }.to_json
   end
   
+  def category
+    has_role?('editor') ? 'Publisher' : 'User'
+  end
+  
 protected
   
   # after_create
