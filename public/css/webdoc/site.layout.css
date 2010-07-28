@@ -19,9 +19,30 @@ body>header {
   background: white;
 }
 
-/* Wrap extensions */
+.user {
+  position: absolute;
+  top: 0;
+  right: 18em;
+}
+
+/* .wrap extensions */
+
 .site_wrap {
   width: 88%;
   min-width: 720px;
   max-width: 1440px;
+}
+
+/* .index extensions */
+
+.sitenav_index {
+  position: absolute;
+  top: 0;
+  left: 180px;
+}
+
+.usernav_index {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
