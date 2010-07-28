@@ -149,7 +149,7 @@ class User < ActiveRecord::Base
   end
   
   def category
-    has_role?('editor') ? 'Publisher' : 'User'
+    documents_count > 5 ? 'Publisher' : 'User'
   end
   
 protected
