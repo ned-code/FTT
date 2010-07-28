@@ -1,0 +1,182 @@
+/* ================== */
+/* = Inspector Pane = */
+/* ================== */
+.floating {
+  font-size:11px;
+  color:#fff;
+}
+
+.inspector_pane_wrap {
+  z-index: 1500001;  
+}
+
+.inspector_pane.floating {
+  padding:10px 10px 15px;
+  width:200px;
+  position:absolute;
+}
+
+.inspector_pane.floating .box {
+  position:relative;
+  border:1px solid #000;
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(49, 52, 55, 0.8)), color-stop(1, rgba(34, 38, 41, 0.8)));
+/*  background:-webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(34, 38, 41, 0.8)));*/
+  -webkit-border-radius:10px;
+/*  -webkit-box-shadow:#555 0 1px 5px;*/
+  -webkit-box-shadow:rgba(50,50,50,0.5) 0 1px 5px;
+  background-image:-moz-linear-gradient(top, rgba(49, 52, 55, 0.8), rgba(34, 38, 41, 0.8));
+  -moz-border-radius:10px;
+/*  -moz-box-shadow:#555 0 1px 5px;*/
+  -moz-box-shadow:rgba(50,50,50,0.5) 0 1px 5px;
+}
+
+.inspector_pane.floating .titlebar {
+  background:#454749;
+  padding:7px 0;
+  position:relative;
+  cursor:move;
+  -webkit-border-top-left-radius:10px;
+  -webkit-border-top-right-radius:10px;
+  -moz-border-radius-topleft:10px;
+  -moz-border-radius-topright:10px;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+}
+
+.inspector_pane.floating.attached .attached_indicator {
+  display:block;
+  width:100%;
+  height:9px;
+  background:url(images/inspectors/triangle_top.png) center no-repeat;
+  position:absolute;
+  top:-9px;
+  left:0;
+}
+
+.inspector_pane.floating .titlebar a {
+  display:block;
+  position:absolute;
+}
+
+.inspector_pane.floating .titlebar a.hide {
+  width:13px;
+  height:13px;
+  background:url(images/inspectors/hide.png) no-repeat;
+  top:7px;
+  left:6px;
+}
+
+.inspector_pane.floating .titlebar a.arrow.right {
+  width:13px;
+  height:13px;
+  background:url(images/inspectors/arrow_right.png) no-repeat;
+  top:7px;
+  right:6px;
+}
+
+.inspector_pane.floating .titlebar a span {display:none;}
+
+.inspector_pane.floating .titlebar strong.title {
+  display:block;
+  text-align:center;
+  font-size:13px;
+/*  color:#fff;*/
+}
+
+
+/* ================= */
+/* = List of Panes = */
+/* ================= */
+
+.inspector_pane.floating .box.list {
+  background:#454749;
+}
+
+.inspector_pane.floating .box.list ul {
+  list-style-type:none;
+  padding:5px;
+}
+
+.inspector_pane.floating .box.list ul li {padding-top:5px;}
+.inspector_pane.floating .box.list ul li:first-child {padding-top:0;}
+
+.inspector_pane.floating .box.list ul li a {
+  display:block;
+  padding:10px 0;
+  text-align:center;
+  font-size:13px;
+  font-weight:bold;
+  color:#fff;
+  text-decoration:none;
+  border:1px solid #000;
+  background:#1d1d1d;
+  background:-webkit-gradient(linear,left top,left bottom,from(#333),to(#222));
+  background:-moz-linear-gradient(top, #333, #222);
+  -webkit-border-radius:6px;
+  -moz-border-radius:6px;
+  border-radius:6px;
+}
+
+.inspector_pane.floating .box.list ul li a:active {
+  background:#000;
+  background:-webkit-gradient(linear,left top,left bottom,from(#222),to(#333));
+  background:-moz-linear-gradient(top, #222, #333);
+}
+
+.inspector_pane.floating .box.list ul li.disabled a {
+  background:#000;
+  color:#666;
+  opacity:0.3;
+  cursor:default;
+}
+
+/* ========= */
+/* = Other = */
+/* ========= */
+.item_wrap a.show_floating_inspector {
+  border:none;
+  display:none;
+  width:15px;
+  height:15px;
+  background:url(images/inspectors/i.png) no-repeat;
+  position:absolute;
+  bottom:10px;
+  right:10px;
+  z-index:2;
+}
+.mode-edit .item_selected a.show_floating_inspector {
+  display:block;
+}
+
+.item_wrap a.show_floating_inspector:hover {
+  border:none;
+}
+
+.item_wrap a.show_floating_inspector span {display:none;}
+
+
+.content {
+  padding:0 10px;
+  font-size:11px;
+  color:#fff;  
+}
+
+form.content .section {
+  padding:8px 0;
+}
+
+form.content .entry {
+  padding:5px 0;
+}
+
+.inspector-title {
+    color: white;
+    line-height: 32px;
+    font-weight: bold;
+    font-size: 1.4em;
+    text-align: center;
+    background-color:rgba(67, 77, 85, 0.8);
+    min-height:32px;
+}
+
+
