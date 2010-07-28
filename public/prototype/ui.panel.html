@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <link href="css/webcss/reset.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="css/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="css/ui.typography.css" media="all" rel="stylesheet" type="text/css" title="white" />
+  <link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css" />
+
+</head>
+<body>  
+<ul>
+	<li>Background:
+		<ul>
+	 		<li>Color: <input type="text" maxlength="6" size="6" id="bgcolor" value="ffffff" /></li>
+	 	</ul>
+	 </li>
+	 <li>Font:
+	 	<ul>
+	 		<li>Font Family: <select name='choosefont' id='choosefont'>
+	 			<option value='VAGRoundedBold' selected="selected">VAGRounded-Bold</option>
+	 			<option value='VAGRoundedBlack'>VAG Rounded Black</option>
+	 			<option value='VAGRoundedLight'>VAG Rounded Light</option>
+	 			<option value='VAGRoundedThin'>VAG Rounded Thin</option>
+	 			<option value='Helvetica'>Helvetica</option>
+	 			<option value='Helvetica-bold'>Helvetica Bold</option>
+	 			<option value='Arial'>Arial</option>
+	 			<option value='Verdana'>Verdana</option>
+	 			<option value='Georgia'>Georgia</option>
+	 			</select></li>
+	 		<li>Color: <input type="text" maxlength="6" size="6" id="fontcolor" value="333333" /></li>
+	 	</ul>
+	 </li>
+	 
+	 
+	 
+	 <li>Font Shadow:
+	 	<ul>
+			<li>Position horizontal: <input type="Range" name="slider" id="shadow1" min="-20" max="20" step="1" value="2" /><span id='shadowval1'>2px</span></li>
+			<li>Position vertical : <input type="Range" name="slider" id="shadow2" min="-20" max="20" step="1" value="2" /><span id='shadowval2'>2px</span> </li>
+			<li>Blur: <input type="Range" name="slider" id="shadow3" min="-20" max="20" step="1" value="2" /><span id='shadowval3'>2px</span>  </li>
+			<li>Color: <input type="text" maxlength="6" size="6" id="shadowcolor" value="c1bcbc" /></li>
+		</ul>
+	 </li>
+	 
+	 <li>Flash PopUp
+	 	<ul>
+	 		<li>Background color: <input type="text" maxlength="6" size="6" id="flashbgcolor" value="ff0000" /></li>
+	 		<li>Opacity: <input type="Range" name="slider" id="flashopacity" min="0" max="100" step="1" value="90" /><span id='flashopacityval'>90%</span></li>
+	 		<li>Font size: <input type="Range" name="slider" id="flashfontsize" min="0" max="100" step="1" value="12" /><span id='flashfontsizeval'>12pt</span></li>
+	 		<li>Border Radius:<input type="Range" name="slider" id="borderradius" min="0" max="100" step="1" value="10" /><span id='borderradiusval'>10px</span></li>
+	 	<!--	<li>Top Color: <input type="text" maxlength="6" size="6" id="gratopcolor" value="c1bcbc" /></li>
+	 		<li>Top Opacity:</li>
+	 		<li>Bottom Color:</li>
+	 		<li>Bottom Opacity:</li>
+	 	-->
+	 	</ul>
+	 	<li>Background image:
+	 		<ul>
+	 			<li>URL: <input type="text" name="bgimage" id="bgimage" value="" /> <button id='btnsetimage'>Set</button></li>
+	 		</ul>
+	 	</li>
+	 
+	 </li>	 
+	 
+</ul>
+		<div id="testpanel">
+			Hello World !
+		</div>
+		
+<!--
+		<div onClick="document.getElementById('testpanel').className='animate';document.getElementById('testpanel').style.display='block';">
+Open Panel
+</div>
+
+
+		<div onClick="document.getElementById('flash').className='shown';">
+Open flash
+</div>-->
+
+<div id="flash">
+<span class='samplebox wrap'>
+<h1>Are you still here ?</h1><span class='flashtext'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse cursus dictum iaculis. Integer nec adipiscing elit. Nunc cursus libero id neque porttitor sed fringilla neque convallis. Pellentesque semper, magna in elementum cursus, ante dolor vulputate eros, vitae hendrerit nisl mauris sit amet lorem. Sed mattis aliquam dui, a egestas mauris convallis id. Pellentesque id purus et lacus dapibus eleifend quis a sapien. Aenean sed facilisis nulla.</span></span></div>
+ <script src="../js/jquery-1.4.2.js" type="text/javascript"></script> 
+	<script src="js/ui.typography.js" type="text/javascript"></script> 
+  <script type="text/javascript" src="../js/colorpicker.js"></script>
+
+
+</body>
+</html>
