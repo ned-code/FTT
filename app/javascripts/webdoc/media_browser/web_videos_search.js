@@ -259,6 +259,7 @@ WebDoc.WebVideosSearch = $.klass({
 // Do not instanciate this directly (use one of its subclasses)
 WebDoc.ServiceVideosSearch = $.klass({
   initialize: function(containerId) {
+    this.containerId = containerId;
     this.container = $('#'+containerId);
     this.container.hide();
     this.resultsCount = this.container.find('.results_number');
@@ -283,7 +284,10 @@ WebDoc.ServiceVideosSearch = $.klass({
     this.resultsCount.text('0');
     this.videosContainer.empty();
     this.showSpinner();
-    this.container.show();
+    var checkbox = $(".filters>input[name='"+this.containerId+"']");
+    if(checkbox.attr('name') == this.containerId && checkbox.is(':checked')){
+      this.container.show();
+    }
   },
   loadMore: function() {
     this.showSpinner();
