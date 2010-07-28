@@ -537,8 +537,10 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var newLeft = (parseFloat(this.data.data.css.left) + offsetPosition.left) + "px";
     this.moveTo({ top: newTop, left: newLeft});
   },
-  
-  moveTo: function(newPosition) {
+
+  // By default not saved, saved only if save is set as true
+  moveTo: function(newPosition, save) {
+    var oldPosition = { left: this.positionLeft(), top: this.positionTop() };
     if (newPosition.left && !jQuery.string(newPosition.left).empty()) {
       this.data.data.css.left = newPosition.left;
     }
@@ -552,7 +554,13 @@ WebDoc.Item = $.klass(WebDoc.Record,
       delete this.data.data.css.top;
     }
     this.fireObjectChanged({ modifedAttribute: 'css' });
-    WebDoc.application.inspectorController.refresh();    
+    WebDoc.application.inspectorController.refresh();
+    if (save && save === true) {
+      WebDoc.application.undoManager.registerUndo(function() {
+        this.moveTo( oldPosition, true );
+      }.pBind(this));
+      this.save();
+    }
   },
   
   resizeTo: function(newSize) {    

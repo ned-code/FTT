@@ -1,319 +1,193 @@
---- 
-dependencies: 
-  fastercsv: 
-    group: 
-    - :default
-    version: ">= 0"
-  annotate: 
-    group: 
-    - :development
-    version: ">= 0"
-  xmpp4r: 
-    group: 
-    - :default
-    version: ">= 0"
-  rails: 
-    group: 
-    - :default
-    version: ~> 2.3.5
-  mongrel: 
-    group: 
-    - :development
-    version: ">= 0"
-  sqlite3-ruby: 
-    group: 
-    - :test
-    version: = 1.2.5
-    require: 
-    - sqlite3
-  mysql: 
-    group: 
-    - :default
-    version: ">= 0"
-  uuidtools: 
-    group: 
-    - :default
-    version: ">= 0"
-  haml: 
-    group: 
-    - :default
-    version: ">= 0"
-  rack-debug: 
-    group: 
-    - :default
-    version: ">= 0"
-  selenium-webdriver: 
-    group: 
-    - :test
-    version: ">= 0"
-  uuid: 
-    group: 
-    - :default
-    version: ">= 0"
-  rspec: 
-    group: 
-    - :test
-    version: ">= 0"
-  mime-types: 
-    group: 
-    - :default
-    version: ">= 0"
-    require: 
-    - mime/types
-  whenever: 
-    group: 
-    - :default
-    version: ">= 0"
-  formtastic: 
-    group: 
-    - :default
-    version: ">= 0"
-  rspec-rails: 
-    group: 
-    - :test
-    version: ">= 0"
-  factory_girl: 
-    group: 
-    - :test
-    version: ">= 0"
-  jammit: 
-    group: 
-    - :default
-    version: ">= 0"
-  devise: 
-    group: 
-    - :default
-    version: ">= 0"
-  json: 
-    group: 
-    - :default
-    version: ">= 0"
-  paperclip: 
-    group: 
-    - :default
-    version: ">= 0"
-  will_paginate: 
-    group: 
-    - :default
-    version: ">= 0"
-  erubis: 
-    group: 
-    - :default
-    version: ">= 0"
-  capistrano-ext: 
-    group: 
-    - :development
-    version: ">= 0"
-  bundler: 
-    group: 
-    - :default
-    version: = 0.9.26
-  steak: 
-    group: 
-    - :test
-    version: ">= 0"
-  i18n: 
-    group: 
-    - :default
-    version: ">= 0"
-  acl9: 
-    group: 
-    - :default
-    version: ">= 0"
-  aws-s3: 
-    group: 
-    - :default
-    version: ">= 0"
-  rubyzip: 
-    group: 
-    - :default
-    version: ">= 0"
-    require: 
-    - zip/zip
-  warden: 
-    group: 
-    - :default
-    version: ">= 0"
-  launchy: 
-    group: 
-    - :test
-    version: ">= 0"
-  capybara: 
-    group: 
-    - :test
-    version: ">= 0"
-  capistrano: 
-    group: 
-    - :development
-    version: ">= 0"
-  nokogiri: 
-    group: 
-    - :default
-    version: ">= 0"
-  google-spreadsheet-ruby: 
-    group: 
-    - :default
-    version: ">= 0"
-specs: 
-- rake: 
-    version: 0.8.7
-- abstract: 
-    version: 1.0.0
-- acl9: 
-    version: 0.12.0
-- activesupport: 
-    version: 2.3.8
-- rack: 
-    version: 1.1.0
-- actionpack: 
-    version: 2.3.8
-- actionmailer: 
-    version: 2.3.8
-- activerecord: 
-    version: 2.3.8
-- activeresource: 
-    version: 2.3.8
-- annotate: 
-    version: 2.4.0
-- builder: 
-    version: 2.1.2
-- mime-types: 
-    version: "1.16"
-- xml-simple: 
-    version: 1.0.12
-- aws-s3: 
-    version: 0.4.1
-    source: 1
-- bundler: 
-    version: 0.9.26
-- highline: 
-    version: 1.6.1
-- net-ssh: 
-    version: 2.0.23
-- net-scp: 
-    version: 1.0.2
-- net-sftp: 
-    version: 2.0.4
-- net-ssh-gateway: 
-    version: 1.0.1
-- capistrano: 
-    version: 2.5.19
-- capistrano-ext: 
-    version: 1.2.1
-- culerity: 
-    version: 0.2.10
-- nokogiri: 
-    version: 1.4.2
-- rack-test: 
-    version: 0.5.4
-- ffi: 
-    version: 0.6.3
-- json_pure: 
-    version: 1.4.3
-- rubyzip: 
-    version: 0.9.4
-- selenium-webdriver: 
-    version: 0.0.26
-- capybara: 
-    version: 0.3.9
-- cgi_multipart_eof_fix: 
-    version: 2.5.0
-- rubyforge: 
-    version: 2.0.4
-- hoe: 
-    version: 2.6.1
-- chronic: 
-    version: 0.2.3
-- closure-compiler: 
-    version: 0.3.2
-- columnize: 
-    version: 0.3.1
-- configuration: 
-    version: 1.1.0
-- daemons: 
-    version: 1.1.0
-- warden: 
-    version: 0.10.7
-- devise: 
-    version: 1.0.7
-    source: 0
-- erubis: 
-    version: 2.6.6
-- factory_girl: 
-    version: 1.3.1
-- fastercsv: 
-    version: 1.5.3
-- fastthread: 
-    version: 1.0.7
-- formtastic: 
-    version: 0.9.10
-- gem_plugin: 
-    version: 0.2.3
-- hpricot: 
-    version: 0.8.2
-- oauth: 
-    version: 0.4.1
-- google-spreadsheet-ruby: 
-    version: 0.1.1
-- haml: 
-    version: 3.0.13
-- i18n: 
-    version: 0.4.1
-- yui-compressor: 
-    version: 0.9.1
-- jammit: 
-    version: 0.5.1
-- json: 
-    version: 1.4.3
-- launchy: 
-    version: 0.3.7
-- linecache: 
-    version: "0.43"
-- macaddr: 
-    version: 1.0.0
-- mongrel: 
-    version: 1.1.5
-- mysql: 
-    version: 2.8.1
-- paperclip: 
-    version: 2.3.3
-- ruby-debug-base: 
-    version: 0.10.3
-- ruby-debug: 
-    version: 0.10.3
-- rack-debug: 
-    version: 1.4.2
-- rails: 
-    version: 2.3.8
-- rspec: 
-    version: 1.3.0
-- rspec-rails: 
-    version: 1.3.2
-- sqlite3-ruby: 
-    version: 1.2.5
-- steak: 
-    version: 0.3.8
-- uuid: 
-    version: 2.3.1
-- uuidtools: 
-    version: 2.1.1
-- whenever: 
-    version: 0.5.0
-- will_paginate: 
-    version: 2.3.14
-- xmpp4r: 
-    version: "0.5"
-hash: caf17f1a39c795b908ec5044a740fbedab0b9b2a
-sources: 
-- Git: 
-    uri: http://github.com/webdoc/devise.git
-    tag: v1.0.7.1
-    branch: v1.0
-    git: http://github.com/webdoc/devise.git
-    ref: 4cee8be78e619d2ead379a38366e06f374ac93f9
-- Git: 
-    uri: http://github.com/isaacfeliu/aws-s3.git
-    git: http://github.com/isaacfeliu/aws-s3.git
-    ref: 1396f0e44e9d4c72d0ce1074de10375ec8d41932
-- Rubygems: 
-    uri: http://gemcutter.org
+GIT
+  remote: http://github.com/isaacfeliu/aws-s3.git
+  revision: 1396f0e
+  specs:
+    aws-s3 (0.4.1)
+      builder
+      mime-types
+      xml-simple
+
+GIT
+  remote: http://github.com/webdoc/devise.git
+  revision: 4cee8be
+  branch: v1.0
+  tag: v1.0.7.1
+  specs:
+    devise (1.0.7)
+      warden (~> 0.10.3)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    abstract (1.0.0)
+    acl9 (0.12.0)
+    actionmailer (2.3.8)
+      actionpack (= 2.3.8)
+    actionpack (2.3.8)
+      activesupport (= 2.3.8)
+      rack (~> 1.1.0)
+    activerecord (2.3.8)
+      activesupport (= 2.3.8)
+    activeresource (2.3.8)
+      activesupport (= 2.3.8)
+    activesupport (2.3.8)
+    annotate (2.4.0)
+    builder (2.1.2)
+    capistrano (2.5.19)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.0.0)
+    capistrano-ext (1.2.1)
+      capistrano (>= 1.0.0)
+    capybara (0.3.9)
+      culerity (>= 0.2.4)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      selenium-webdriver (>= 0.0.3)
+    cgi_multipart_eof_fix (2.5.0)
+    chronic (0.2.3)
+      hoe (>= 1.2.1)
+    closure-compiler (0.3.2)
+    columnize (0.3.1)
+    configuration (1.1.0)
+    culerity (0.2.10)
+    daemons (1.1.0)
+    erubis (2.6.6)
+      abstract (>= 1.0.0)
+    factory_girl (1.3.1)
+    fastercsv (1.5.3)
+    fastthread (1.0.7)
+    ffi (0.6.3)
+      rake (>= 0.8.7)
+    formtastic (0.9.10)
+      actionpack (>= 2.3.0)
+      activesupport (>= 2.3.0)
+    gem_plugin (0.2.3)
+    google-spreadsheet-ruby (0.1.1)
+      hpricot (>= 0.3)
+      oauth (>= 0.3.6)
+    haml (3.0.14)
+    highline (1.6.1)
+    hoe (2.6.1)
+      rake (>= 0.8.7)
+      rubyforge (>= 2.0.4)
+    hpricot (0.8.2)
+    i18n (0.4.1)
+    jammit (0.5.1)
+      closure-compiler (>= 0.1.0)
+      yui-compressor (>= 0.9.1)
+    json (1.4.3)
+    json_pure (1.4.3)
+    launchy (0.3.7)
+      configuration (>= 0.0.5)
+      rake (>= 0.8.1)
+    linecache (0.43)
+    macaddr (1.0.0)
+    mime-types (1.16)
+    mongrel (1.1.5)
+      cgi_multipart_eof_fix (>= 2.4)
+      daemons (>= 1.0.3)
+      fastthread (>= 1.0.1)
+      gem_plugin (>= 0.2.3)
+    mysql (2.8.1)
+    net-scp (1.0.2)
+      net-ssh (>= 1.99.1)
+    net-sftp (2.0.4)
+      net-ssh (>= 2.0.9)
+    net-ssh (2.0.23)
+    net-ssh-gateway (1.0.1)
+      net-ssh (>= 1.99.1)
+    nokogiri (1.4.2)
+    oauth (0.4.1)
+    paperclip (2.3.3)
+      activerecord
+      activesupport
+    rack (1.1.0)
+    rack-debug (1.4.2)
+      rack (>= 1.0)
+      ruby-debug (>= 0.10)
+    rack-test (0.5.4)
+      rack (>= 1.0)
+    rails (2.3.8)
+      actionmailer (= 2.3.8)
+      actionpack (= 2.3.8)
+      activerecord (= 2.3.8)
+      activeresource (= 2.3.8)
+      activesupport (= 2.3.8)
+      rake (>= 0.8.3)
+    rake (0.8.7)
+    rspec (1.3.0)
+    rspec-rails (1.3.2)
+      rack (>= 1.0.0)
+      rspec (>= 1.3.0)
+    ruby-debug (0.10.3)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.3.0)
+    ruby-debug-base (0.10.3)
+      linecache (>= 0.3)
+    rubyforge (2.0.4)
+      json_pure (>= 1.1.7)
+    rubyzip (0.9.4)
+    selenium-webdriver (0.0.27)
+      ffi (>= 0.6.1)
+      json_pure
+      rubyzip
+    sqlite3-ruby (1.3.1)
+    steak (0.3.8)
+      rspec (>= 1.3.0)
+    uuid (2.3.1)
+      macaddr (~> 1.0)
+    uuidtools (2.1.1)
+    warden (0.10.7)
+      rack (>= 1.0.0)
+    whenever (0.5.0)
+      chronic (>= 0.2.3)
+    will_paginate (2.3.14)
+    xml-simple (1.0.12)
+    xmpp4r (0.5)
+    yui-compressor (0.9.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  acl9
+  annotate
+  aws-s3!
+  capistrano
+  capistrano-ext
+  capybara
+  devise!
+  erubis
+  factory_girl
+  fastercsv
+  formtastic
+  google-spreadsheet-ruby
+  haml
+  i18n
+  jammit
+  json
+  launchy
+  mime-types
+  mongrel
+  mysql
+  nokogiri
+  paperclip
+  rack-debug
+  rails (~> 2.3.5)
+  rspec
+  rspec-rails
+  rubyzip
+  selenium-webdriver
+  sqlite3-ruby
+  steak
+  uuid
+  uuidtools
+  warden
+  whenever
+  will_paginate
+  xmpp4r
