@@ -1,0 +1,28 @@
+/* Site colours */
+
+body {
+  background-color: white;
+}
+
+/* The site header */
+body>header {
+  background-color: #dddddd;
+}
+
+/* TEST COLORS - delete!!! */
+
+.webdoc {
+  background-color: yellow;
+}
+
+.center {
+  background-color: orange;
+}
+
+.center-cell {
+  background-color: red;
+}
+
+.center-box {
+  background-color: purple;
+}

@@ -1,11 +1,23 @@
 /* Links as buttons, thumbnails,  classes */
 
+.edit_button {
+  position: absolute;
+  left: 0.3333em;
+}
+
 .panel_button {
-  background-image: url('../images/buttons.png');
   background-position: 0 0;
 }
 
 .panel_button.active {
+  background-position: 0 -24px;
+}
+
+.app_button {
+  background-position: 0 0;
+}
+
+.app_button.active {
   background-position: 0 -24px;
 }
 

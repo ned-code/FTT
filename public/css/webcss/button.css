@@ -8,11 +8,8 @@
 .button {
   display: inline-block;
   overflow: hidden;
-  padding-top: 2em;
-  /* Hide overflowing text. This technique is better
-     than using -ve text-indent because IE7 moves
-     the background image with the text-indent. */
-  width: 2em; height: 0;
+  height: 2em;
+  line-height: 2em;
   
   background-color: #dddddd;
   background-image: url('../../images/buttons.png');
@@ -21,4 +18,13 @@
   
   text-decoration: none;
   color: inherit;
+}
+
+.icon_button {
+  padding-top: 2em;
+  /* Hide overflowing text. This technique is better
+     than using -ve text-indent because IE7 moves
+     the background image with the text-indent. */
+  height: 0;
+  width: 2em;
 }

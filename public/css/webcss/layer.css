@@ -35,7 +35,6 @@
     -moz-box-sizing:    content-box;
     box-sizing:         content-box;
 }
-.scroll,
-.show_scroll {
+.scroll {
     overflow: scroll;
 }

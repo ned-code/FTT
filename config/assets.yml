@@ -16,9 +16,10 @@ stylesheets:
     - public/css/webcss/scrollbar.css
     
     - public/css/webdoc/site.layout.css
+    - public/css/webdoc/site.color.css
     - public/css/webdoc/site.typography.css
     - public/css/webdoc/comment.layout.css
-
+    
     - public/css/webdoc/wrap.css
     - public/css/webdoc/index.css
     - public/css/webdoc/panel.css

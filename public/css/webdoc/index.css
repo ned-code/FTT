@@ -40,20 +40,28 @@
   margin-bottom: 0.3333em;
 }
 
-.view_buttons_index {
+.view_index {
   width: 24px;
   position: absolute;
   right: 0.3333em;
 }
 
-.sidepanel_buttons_index {
-  width: 11.3333em;
+.edit_index {
+	position: absolute;
+	left: 2.3333em;
+}
+
+.app_index {
+	position: absolute;
+	left: 9em;
+}
+
+.panel_index {
   position: absolute;
   right: 0.3333em;
 }
 
 .footpanel_buttons_index {
-  width: 4.3333em;
   position: absolute;
   right: 5em;
 }
