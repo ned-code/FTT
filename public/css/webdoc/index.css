@@ -1,17 +1,5 @@
 /* Extensions to index class */
 
-.nav_index {
-  position: absolute;
-  top: 0;
-  left: 180px;
-}
-
-.user_index {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
 .author_index {
   height: 48px;
   overflow: hidden;
