@@ -10,7 +10,7 @@
  *   .default     - Contains a pre-defined value
  *   .error       - Used in forms to style children differently when input has errors
  * 
- * State classes must have style applied directly, they are here to indicate state only.
+ * State classes must never have style applied directly, they are here to indicate state only.
  * You can style specific nodes that happen to have state, or children of state nodes (for
  * instance, showing / hiding a .loading_icon when its parent has .loading), but the state
  * class (in this case .loading) must not have style applied.

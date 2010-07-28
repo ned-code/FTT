@@ -1,4 +1,10 @@
-/* reset.css from Blueprint */
+/* reset.css
+ * 
+ * A quick note - webcss sets the box model to border-box. This
+ * might take you by surprise. Just remove lines 25-32 to put
+ * the box model back to the standard one.
+ * 
+ */
 
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -50,3 +56,85 @@ a:focus { outline: none; }
 *[draggable=true] {
   -webkit-user-drag: element;
 }
+
+
+/* .reset
+ * 
+ * Defines a default style to be applied to this and all descendants,
+ * acting as a kind of CSS firewall, for want of a better description.
+ *
+ */
+
+/*
+.reset,
+.reset div, .reset span, .reset object, .reset iframe,
+.reset h1, .reset h2, .reset h3, .reset h4, .reset h5, .reset h6,
+.reset p, .reset blockquote, .reset pre, .reset abbr, .reset address, .reset cite, .reset code,
+.reset del, .reset dfn, .reset em, .reset img, .reset ins, .reset kbd, .reset q, .reset samp,
+.reset small, .reset strong, .reset sub, .reset sup, .reset var, .reset b, .reset i,
+.reset dl, .reset dt, .reset dd, .reset ol, .reset ul, .reset li,
+.reset fieldset, .reset form, .reset label, .reset legend, .reset table,
+.reset caption, .reset tbody, .reset tfoot, .reset thead, .reset tr, .reset th, .reset td,
+.reset article, .reset aside, .reset dialog, .reset figure, .reset footer, .reset header,
+.reset hgroup, .reset menu, .reset nav, .reset section, .reset time, .reset mark,
+.reset audio, .reset video {
+    background: scroll transparent none 0% 0% repeat;
+    border: none;
+    border-radius: 0;
+    clear: none;
+    color: black;
+    content: normal;
+    cursor: auto;
+    display: inline;
+    float: none;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    height: auto;
+    letter-spacing: normal;
+    line-height: normal;
+    margin: 0;
+    max-height: none;
+    max-width: none;
+    min-height: 0;
+    min-width: 0;
+    opacity: 1;
+    outline: invert 0 none 1px;
+    overflow: visible;
+    padding: 0;
+    rotation: 0;
+    text-align: start;
+    text-decoration: none;
+    text-indent: 0;
+    text-transform: none;
+    vertical-align: baseline;
+    white-space: normal;
+    width: auto;
+    word-spacing: normal;
+    z-index: auto;
+    
+    position: static;
+    top: auto;
+    right: auto; 
+    left: auto;
+    bottom: auto;
+}
+
+.reset div, .reset object, .reset iframe,
+.reset h1, .reset h2, .reset h3, .reset h4, .reset h5, .reset h6,
+.reset p, .reset blockquote, .reset pre, .reset address,
+.reset dl, .reset dt, .reset dd, .reset ol, .reset ul, .reset li,
+.reset fieldset, .reset form, .reset label, .reset article,
+.reset aside, .reset dialog, .reset figure, .reset footer, .reset header,
+.reset hgroup, .reset nav, .reset section { 
+    display: block;
+}
+
+.reset ul,
+.reset ul li {
+    list-style: none;
+}
+
+*/

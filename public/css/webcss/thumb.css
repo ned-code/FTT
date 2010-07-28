@@ -44,26 +44,4 @@
   padding-top: 24px;
   background-size: 100% 100%;
   background-image: url('../../images/thumb_logo.png');
-
-  -webkit-transition: margin-left 0.3s ease-in;
-  -moz-transition:    margin-left 0.3s ease-in;
-  transition:         margin-left 0.3s ease-in;
 }
-
-.full_view .logo_thumb {
-  margin-left: 6px;
-}
-
-.author_thumb {
-  background-size: 48px 48px;
-  padding-top: 48px;
-  width: 48px;
-}
-
-.user_thumb {
-  background-size: 32px 32px;
-  padding-top: 32px;
-  width: 32px;
-}
-
-.webdoc_thumb {}

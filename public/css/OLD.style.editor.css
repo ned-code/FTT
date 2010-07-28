@@ -1076,9 +1076,3 @@ x_scrollbar {
   top: 44px; bottom: 38px; right: 6px;
   width: 10px;
 }
-
-.no_transition {
-  -webkit-transition: none;
-  -moz-transition:    none;
-  transition:         none;
-}
