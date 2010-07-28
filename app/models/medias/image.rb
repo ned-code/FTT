@@ -22,7 +22,7 @@ class Medias::Image < Media
   # =============
   # = Callbacks =
   # =============
-
+  before_post_process :transliterate_file_name
   before_validation :download_image_provided_by_remote_attachment_url
   after_save :set_properties_if_not_present
 
@@ -55,7 +55,14 @@ protected
       end
     end
   end
-
+  
+  #before_post_process
+  def transliterate_file_name
+    extension = File.extname(attachment_file_name).gsub(/^\.+/, '')
+    filename = attachment_file_name.gsub(/\.#{extension}$/, '')
+    self.attachment.instance_write(:file_name, "#{Media.transliterate(filename)}.#{Media.transliterate(extension)}")
+  end
+  
   # after_save
   def set_properties_if_not_present
     unless properties.present?
@@ -78,11 +85,6 @@ private
     src
   end
 end
-
-
-
-
-
 
 # == Schema Information
 #
