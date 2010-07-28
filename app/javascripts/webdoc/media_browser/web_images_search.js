@@ -301,6 +301,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   performSearch: function() {
     // http://www.flickr.com/services/api/flickr.photos.search.html
     // http://www.flickr.com/services/api/misc.urls.html
+    $('#web_videos_search_field').val(this.query);
     var flickrUrl = this.flickrPhotosSearchBaseUrl+
     "&text=" + encodeURIComponent(this.query) +
     "&license=" + this.currentLicense +

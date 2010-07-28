@@ -318,7 +318,7 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
 
   performSearch: function() {
     // http://code.google.com/apis/youtube/2.0/developers_guide_protocol.html
-    
+    $('#web_images_search_field').val(this.query);
     var youtubeUrl = this.ytSearchBaseUrl +
     "?q=" + encodeURIComponent(this.query) +
     "&start-index=" + this.startIndex +
