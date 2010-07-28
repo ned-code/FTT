@@ -14,6 +14,7 @@ class ActiveRecord::Base
 
   # "delete" a row softly
   # model need a deleted_at column
+  # Warning, after_destroy callback aren't call !!
   def safe_delete!
     if self.deleted_at.blank?
       self.deleted_at = Time.now

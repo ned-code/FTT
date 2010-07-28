@@ -24,7 +24,10 @@ class ItemsController < PageController
   
   # POST /documents/:document_id/pages/:page_id/items
   def create
-    @item = @page.items.new_with_uuid(params[:item])
+    @item = Item.find_deleted_and_restore(params[:item][:uuid])
+    if @item.nil?
+      @item = @page.items.new_with_uuid(params[:item])
+    end
     @item.save!
     message = @item.as_json({})
     message[:source] = params[:xmpp_client_id]
