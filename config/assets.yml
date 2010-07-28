@@ -28,6 +28,7 @@ stylesheets:
     - public/css/webdoc/card.css
 
   application:
+    - public/css/webdoc/session.layout.css
 
   page_editor:
     - public/css/webdoc/editor.layout.css

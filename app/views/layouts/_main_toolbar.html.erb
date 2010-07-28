@@ -13,7 +13,7 @@
     
     <% if user_signed_in? %>
     <div class="user">
-      <h5 class="user-email item"><%= current_user.email %></h5>
+      <h5><%= current_user.email %></h5>
       <ul class="horizontal divided usernav_index index">
         <li><%= link_to "your contacts", followships_path, { :class => "item #{params[:controller]=='followships' ? 'current' : '' }" } %></li
        ><li><%= link_to "your profile", edit_user_path(current_user), { :class => "user-edit item #{params[:controller]=='followships' ? 'users' : '' }" } %></li
