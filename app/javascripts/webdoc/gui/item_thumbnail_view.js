@@ -27,8 +27,12 @@ WebDoc.ItemThumbnailView = $.klass({
     
     this.item = item;
     this.domNode = this.createDomNode();
-    this.domNode.css({ position: "absolute" }); 
     item.addListener(this);
+    
+    var domNode = this.domNode;
+    this.makeCss( item.data.data.css, function( css ){
+      domNode.css( css );
+    });
   },
   
   createDomNode: function() {
@@ -70,7 +74,7 @@ WebDoc.ItemThumbnailView = $.klass({
   
   makeCss: function( css, callback ){
     var domNode = this.domNode,
-        itemCss = jQuery.extend({ overflow: 'hidden' }, css ),
+        itemCss = jQuery.extend({ overflow: 'hidden', position: 'absolute' }, css ),
         key, timer;
     
     // Loop through the results and apply browser specific
@@ -79,6 +83,10 @@ WebDoc.ItemThumbnailView = $.klass({
       if ( this.BROWSER_CSS_KEYS[key] ) {
         itemCss['-webkit-'+key] = itemCss['-moz-'+key] = itemCss[key];
       }
+    }
+    
+    if (domNode) {
+      domNode.attr( 'style', this.item.getStyleString()).css( itemCss );
     }
     
     return callback( itemCss );

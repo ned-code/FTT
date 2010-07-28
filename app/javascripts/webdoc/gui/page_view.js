@@ -50,7 +50,9 @@ WebDoc.PageView = $.klass({
       });
     }
 
-    this.refreshDiscussions();
+    if(!page.isNew) {
+      this.refreshDiscussions();
+    }
     
     page.addListener(this);
   },

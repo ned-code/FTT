@@ -217,6 +217,7 @@ WebDoc.PropertiesInspectorController = $.klass({
             item.changeCss( cssObj );
           }
         }
+        self.refresh();
       },
       fail: function( value, error ){
         var type = field.attr('data-type') || field.attr('type');

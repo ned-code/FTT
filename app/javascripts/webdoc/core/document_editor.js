@@ -257,9 +257,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     var choice = confirm("Are you sure you want to delete the webdoc:\n\n" + that.editedDocument.title());
 
     if (choice) {
-      that.editedDocument.destroy( function(persitedDoc){
-        that.filter.removeDocument( that.editedDocument );
-      });
+      that.filter.removeDocument( that.editedDocument );
+      that.editedDocument.destroy( function(persitedDoc){} );
     }
 
     e.preventDefault();

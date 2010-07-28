@@ -183,6 +183,7 @@ WebDoc.WebImagesSearch = $.klass({
 // Do not instanciate this directly (use one of its subclasses)
 WebDoc.ServiceImagesSearch = $.klass({
   initialize: function(containerId) {
+    this.containerId = containerId;
     this.container = $('#'+containerId);
     this.container.hide();
     this.resultsCount = this.container.find('.results_number');
@@ -208,7 +209,10 @@ WebDoc.ServiceImagesSearch = $.klass({
     this.resultsCount.text('0');
     this.imagesContainer.empty();
     this.showSpinner();
-    this.container.show();
+    var checkbox = $(".filters>input[name='"+this.containerId+"']");
+    if(checkbox.attr('name') == this.containerId && checkbox.is(':checked')){
+      this.container.show();
+    }
   },
   loadMore: function() {
     this.showSpinner();
@@ -297,6 +301,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   performSearch: function() {
     // http://www.flickr.com/services/api/flickr.photos.search.html
     // http://www.flickr.com/services/api/misc.urls.html
+    $('#web_videos_search_field').val(this.query);
     var flickrUrl = this.flickrPhotosSearchBaseUrl+
     "&text=" + encodeURIComponent(this.query) +
     "&license=" + this.currentLicense +
@@ -305,7 +310,6 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     "&content_type=1&api_key=" + this.flickrApiKey + "&format=json&jsoncallback=?";
     $.getJSON(flickrUrl,
       function(data){
-        ddd('flickr data', data);
         this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(data.photos.total,"'"));
         this.page = parseInt(data.photos.page,10);
         this.perPage = data.photos.perpage;
@@ -385,7 +389,6 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     
     $.getJSON(googleUrl,
       function(data){
-        ddd('google', data);
         var cursor = data.responseData.cursor;
         this.resultsCount.text(this.libraryUtils.numberWithThousandsSeparator(cursor.estimatedResultCount,"'"));
         
@@ -393,7 +396,6 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
           var results = data.responseData.results;
           
           $.each(results, function(i, gImage) {
-            ddd(gImage.titleNoFormatting);
             this.imagesContainer.append(this.buildThumbnail("google", 
               gImage.url,
               gImage.tbUrl,
