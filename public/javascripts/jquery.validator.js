@@ -449,9 +449,9 @@
         'http://newyorktimes.com', 'http://www.newyorktimes.com',
         'http://gmail.com', 'http://www.gmail.com',
         'http://softpedia.com', 'http://www.softpedia.com',
-        'http://twitter.com', 'http://www.twitter.com'
+        'http://twitter.com', 'http://www.twitter.com',
+        'http://flickr.com', 'http://www.flickr.com'
       ],
-      
       
       // Data types
       dataTypes = {

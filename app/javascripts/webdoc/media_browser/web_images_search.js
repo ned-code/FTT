@@ -184,7 +184,7 @@ WebDoc.WebImagesSearch = $.klass({
 WebDoc.ServiceImagesSearch = $.klass({
   initialize: function(containerId) {
     this.containerId = containerId;
-    this.container = $('#'+containerId);
+    this.container = jQuery('#'+containerId);
     this.container.hide();
     this.resultsCount = this.container.find('.results_number');
     this.resultsLabel = this.container.find('.results_label');
@@ -298,7 +298,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     
     this.resultsLabel.after(licenseSelector);
   },
-  performSearch: function() {
+  performSearch: function(scroll) {
     // http://www.flickr.com/services/api/flickr.photos.search.html
     // http://www.flickr.com/services/api/misc.urls.html
     $('#web_videos_search_field').val(this.query);
@@ -336,6 +336,9 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
         else {
           this.loadMoreLink.hide();
         }
+        if(scroll){
+          this.container[0].scrollIntoView(false);
+        }
       }.pBind(this)
     );
   },
@@ -352,7 +355,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   loadMore: function($super) {
     $super();
     this.page += 1; 
-    this.performSearch();
+    this.performSearch(true);
   }
 });
 
@@ -377,7 +380,7 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     }.pBind(this)).appendTo(this.imagesContainerWrapper).wrap("<div class='load_more' style='display:none'>");
     this.loadMoreLink = this.container.find('.load_more');
   },
-  performSearch: function() {
+  performSearch: function(scroll) {
     // http://code.google.com/apis/ajaxsearch/documentation/reference.html
     
     var googleUrl = this.googleImagesSearchBaseUrl +
@@ -418,6 +421,9 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
           }
         }
         this.container.find('.loading').remove();
+        if(scroll){
+          this.container[0].scrollIntoView(false);
+        }
       }.pBind(this)
     );
   },
@@ -433,6 +439,6 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   loadMore: function($super) {
     $super();
     // new start param should have already been updated
-    this.performSearch();
+    this.performSearch(true);
   }
 });
