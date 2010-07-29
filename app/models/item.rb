@@ -27,7 +27,10 @@ class Item < ActiveRecord::Base
 
   attr_accessor_with_default :touch_page_active, true
   attr_accessor :document_uuid
-
+  
+  named_scope :valid,
+              :joins => {:page => :document},
+              :conditions => ['items.deleted_at IS ? AND pages.deleted_at IS ? AND documents.deleted_at IS ?', nil, nil, nil]
   named_scope :not_deleted, :conditions => ['items.deleted_at IS ?', nil]
   named_scope :deleted, :conditions => ['items.deleted_at IS NOT ?', nil]
   
