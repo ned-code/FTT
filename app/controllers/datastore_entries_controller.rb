@@ -1,5 +1,5 @@
 class DatastoreEntriesController < ApplicationController
-  before_filter :instantiate_document_and_item
+  before_filter :find_document_and_item
   
   access_control do
     allow :admin
@@ -54,7 +54,7 @@ class DatastoreEntriesController < ApplicationController
   
 private
   
-  def instantiate_document_and_item
+  def find_document_and_item
     @item = Item.find_by_uuid!(params[:item_id])
     @document = @item.page.document
   end
