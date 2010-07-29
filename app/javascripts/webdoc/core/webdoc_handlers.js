@@ -73,6 +73,15 @@ WebDoc.handlers = {
       if ($(e.target).hasClass('center-cell')) {
         WebDoc.application.boardController.unselectAll();
       }
+    })
+    .bind('dragenter', function(e){
+      e.preventDefault();
+    })
+    .bind('dragover', function(e){
+      e.preventDefault();
+    })
+    .bind('drop', function(e){
+      e.preventDefault();
     });
   },
   
