@@ -122,6 +122,7 @@ class DocumentsController < ApplicationController
     if @document.present?
       respond_to do |format|
         format.html do
+          set_cache_buster
           @get_return_to = get_return_to 
           render :layout => 'layouts/editor'      
         end
