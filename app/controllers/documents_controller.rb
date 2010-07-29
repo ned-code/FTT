@@ -162,7 +162,10 @@ class DocumentsController < ApplicationController
   
   # DELETE /documents/:id
   def destroy
-    @document.safe_delete!
+    if @document.present?
+      @document.safe_delete!
+    end
+
     render :json => {}
   end
   

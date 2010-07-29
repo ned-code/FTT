@@ -293,9 +293,8 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     if (this.currentDocument.pages.length > 1) {
       var choice = confirm("Are you sure you want to delete the current page?");
       if (choice) {
-        this.currentPage.destroy(function(objet) {
-          this.currentDocument.removePage(pageToDelete, true);
-        }.pBind(this));
+        this.currentDocument.removePage(pageToDelete, true);
+        this.currentPage.destroy();
       }
     }
   },

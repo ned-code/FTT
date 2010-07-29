@@ -70,9 +70,11 @@ class PagesController < DocumentController
   # DELETE /documents/:document_id/pages/:id
   def destroy
     @page = @document.pages.not_deleted.find_by_uuid(params[:id])
-    @page.safe_delete!
-    message = { :source => params[:xmpp_client_id], :page =>  { :uuid => @page.uuid }, :action => "delete" }
-    @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)    
+    if @page.present?
+      @page.safe_delete!
+      message = { :source => params[:xmpp_client_id], :page =>  { :uuid => @page.uuid }, :action => "delete" }
+      @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)
+    end
     render :json => {}
   end
 
