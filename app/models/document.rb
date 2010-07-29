@@ -20,7 +20,12 @@ class Document < ActiveRecord::Base
   
   composed_of :size, :class_name => 'Hash', :mapping => %w(size to_json),
                          :constructor => DocumentJsonHelper.method(:decode_json_and_yaml)
-
+  # ================
+  # = Associations =
+  # ================
+  
+  named_scope :public, :conditions => { :is_public => true }
+  named_scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
   named_scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
   named_scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
 
