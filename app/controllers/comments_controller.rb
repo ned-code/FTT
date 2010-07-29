@@ -49,7 +49,9 @@ class CommentsController < ApplicationController
   end
 
   def find_document
-    @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa, discussions di where di.uuid = '#{params[:discussion_id]}' and di.page_id = pa.uuid and pa.document_id = do.uuid;").first
+    @pseudo_document = Document.first(:joins => { :pages => :discussions },
+                                      :conditions => ['discussions.uuid = ?', params[:discussion_id]],
+                                      :select => 'documents.uuid, documents.is_public' )
   end
 
   def current_user_is_comment_owner

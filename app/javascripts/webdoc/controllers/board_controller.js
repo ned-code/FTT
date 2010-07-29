@@ -1169,6 +1169,7 @@ WebDoc.BoardController = jQuery.klass({
 
   removeDiscussion: function(discussion) {
     ddd('[BoardController] remove discussion');
+    discussion.destroy();
     this._currentPage.removeDiscussion(discussion);
   },
 

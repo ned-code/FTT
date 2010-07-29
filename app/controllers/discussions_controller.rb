@@ -68,12 +68,18 @@ class DiscussionsController < ApplicationController
   end
 
   def find_document
-    if params[:page_id]
-      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa where pa.uuid = '#{params[:page_id]}' and pa.document_id = do.uuid;").first
+    if params[:page_id].present?
+      @pseudo_document = Document.first(:joins => :pages,
+                                        :conditions => ['pages.uuid = ?', params[:page_id]],
+                                        :select => 'documents.uuid, documents.is_public')
     elsif params[:discussion].present? && params[:discussion][:page_id].present?
-      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa where pa.uuid = '#{params[:discussion][:page_id]}' and pa.document_id = do.uuid;").first
+      @pseudo_document = Document.first(:joins => :pages,
+                                        :conditions => ['pages.uuid = ?', params[:discussion][:page_id]],
+                                        :select => 'documents.uuid, documents.is_public' )
     elsif @discussion.present?
-      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa, discussions di where di.uuid = '#{@discussion.uuid}' and di.page_id = pa.uuid and pa.document_id = do.uuid;").first  
+      @pseudo_document = Document.first(:joins => { :pages => :discussions },
+                                        :conditions => ['discussions.uuid = ?', @discussion.uuid],
+                                        :select => 'documents.uuid, documents.is_public')
     end
   end
 
