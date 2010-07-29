@@ -1,0 +1,151 @@
+<% session_key_name = ActionController::Base.session_options[:key] %>
+
+<!-- app/views/documents/index -->
+
+<div class="action-zone zone">
+  <div class="wrap">
+    <div class="column double_column of_four">
+      <a id="wb-create-document-button" class="add_button button">New document</a>
+    </div>
+    <div class="column of_four">
+      <ul class="tabs index">
+        <li>
+          <ul .filter-bar.bar.index.state-public-hide style="float: right;" >
+            <li><a id="wb-document-filter-owned-by-me" class="current state-filter-tab" href="#filter-author" data-webdoc-documents-filter-type="creator"><%= t('.created_by_me') %></a></li
+           ><li><a id="wb-document-filter-editor-rights" class="state-filter-tab" href="#filter-editable" data-webdoc-documents-filter-type="editor" ><%= t('.editor_rights') %></a></li>
+        </li>
+      </ul>
+    </div>
+    <div class="column last_column of-four">
+      <input id="wb-documents-search" class="ui-corner-all" type="text" name="wb-documents-search" placeholder="Search" />
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="wrap">
+    <div id="wb-document-list-container" class="column triple of-four">
+      <div class="loading-icon">
+      </div>
+    </div>
+    <div class="column last_column of_four state-public-hide" style="text-align: justify;">
+      <h3>Your Webdocs</h3>
+      <p>Create your own new webdoc, or choose a webdoc to view from the list.</p>
+      <p>You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, choose <strong>sharing</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<div id="wb-new-document-dialog" style="display:none" title="<%= t('.create_new_document') %>">
+  <form id="wb-new-form" class="new-form" action="" title="<%= t('.create_new_document') %>">
+    <h4 id="new-document-dialog-header">Create new webdoc</h4>
+    
+    <fieldset>
+      <div class="vertical">
+        <label for="wb-new-document-name"><%= t(".document_forms.name") %></label>
+        <input id="wb-new-document-name" class="ui-corner-all" type="text" name="wb-new-document-name" placeholder="My new webdoc" />
+      </div>
+      <div class="vertical">
+        <label  for="category" ><%= t(".document_forms.category") %></label>
+        <select id="wb-new-document-category"></select>
+      </div>
+      <div class="vertical">
+        <label for="description" ><%= t(".document_forms.description") %></label>
+        <textarea id="wb-new-document-description" class="ui-corner-all" rows="3" name="wb-new-document-description" >
+      </div>
+    </fieldset>
+      
+    <fieldset>
+      <legend><%= t(".document_forms.document_size_title") %></legend>
+      
+      <div class="horizontal column of_two">
+        <label for="wb-new-document-size-width"><%= t('.document_forms.document_size.width') %></label>
+        <input id="wb-new-document-size-width" type="text" size="6" required="required" data-type="cssvalue" />
+      </div>
+      
+      <div class="horizontal column last_column of_two">
+        <label for="wb-new-document-size-height" ><%= t('.document_forms.document_size.height') %></label>
+        <input id="wb-new-document-size-height" type="text" size="6" required="required" data-type="cssvalue" />
+      </div>
+      
+      <div class="horizontal">
+        <ul>
+          <li><a class="set_size" href="#set-classic-size" data-webdoc-size-name="classic"><%= t('.document_forms.document_size.classic') %></a></li
+         ><li><a class="set_size" href="#set-iphone-size" data-webdoc-size-name="iphone"><%= t('.document_forms.document_size.iPhone') %></a></li
+         ><li><a class="set_size" href="#set-ipad-size" data-webdoc-size-name="ipad"><%= t('.document_forms.document_size.iPad') %></a></li>
+        </ul>
+      </div>
+    </fieldset>
+    
+    <div class="ui-actions">
+      <a href="#cancel" class="cancel">cancel</a>
+      <input type="submit" name="new-document" value="Create" />
+    </div>
+  </form>
+</div>
+
+<div id="wb-change-access-dialog" class="collaborate-dialog" style="display: none">
+  <form id="wb-change-form" class="column triple_column of_five">
+    <h4>Invite new editors</h4>
+    <p><%= t('.document_forms.change_access_dialog.add_editors_explanation') %></p>
+    
+    <fieldset>
+      <div class="vertical">
+        <label><%= t('.document_forms.change_access_dialog.add_editors') %></label>
+        <textarea id="wb-invitation-add-editors" rows="1" cols="20"></textarea>
+        <div id="wb-invitation-failed"></div>
+      <div class="vertical">
+        <label><%= t('.document_forms.change_access_dialog.add_editors_message') %></label>
+        <textarea id="wb-invitation-add-editors-message" rows="3" cols="20"></textarea>
+      </div>
+    </fieldset>
+    
+    <div class="ui-actions state-readonly-hide">
+      <a href="#cancel" class="cancel">close</a>
+      <input type="submit" name="new-document" value="Add" />
+    </div>
+  </form>
+  
+  <div class="column last_column double_column of_five" id="wb-access-list" style="overflow: hidden;">
+    <h4>Current editors</h4>
+    <ul id="document_access_list" class="vertical divided index"></ul>
+  </div>
+</div>
+
+<div id="wb-share-document-dialog" class="share-dialog" style="display:none" title="<%= t('.document_forms.share_document_dialog.title') %>">
+  <form id="wb-share-form">
+    <h4>Share</h4>
+    
+    <fieldset>
+      <div class="horizontal">
+        <input id="unshare_webdoc_radio" type="radio" name="share" value="off" />
+        <label for="#unshare_webdoc_radio">don't share (only co-editors will see this document)</label>
+      </div>
+      <div class="horizontal">
+        <input id="share_webdoc_radio" type="radio" name="share" value="on" />
+        <label for="#share_webdoc_radio">share (make it public)</label>
+      </div>
+    </fieldset>
+    
+    <fieldset class="state-unshared-hide">
+      <label  for="shared_webdoc_url" ><%= t('.document_forms.share_document_dialog.shared_address_label') %></label>
+      <input id="shared_webdoc_url" type="text" />
+    </fieldset>
+  </form>
+</div>
+
+<% content_for :scripts do %>
+<%= include_javascripts :document_editor %>
+<script>
+  WebDoc.authData = {
+    authToken:"#{protect_against_forgery? ? form_authenticity_token : ''>",
+    sessionKeyName:"#{session_key_name>",
+    cookiesSessionKeyName:"#{cookies[session_key_name]>"
+  };
+  WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category, <%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);   
+  WebDoc.Application.main(function() {
+    var editor = new WebDoc.DocumentEditor();
+    editor.start();
+  });
+</script>
+<% end %>

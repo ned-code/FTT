@@ -89,7 +89,7 @@ javascripts:
     - public/js/jquery-swfupload.js
     - public/js/jquery.hashchange.js
     - public/js/colorpicker.js
-    - public/js/jquery-ui-1.8.js
+    - public/js/jquery-ui-1.8.2.js
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/common/*.js
     - app/javascripts/webdoc/model/*.js
