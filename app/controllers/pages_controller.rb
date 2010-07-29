@@ -1,16 +1,16 @@
 class PagesController < DocumentController
+  before_filter :instantiate_document, :instantiate_page
   before_filter :authenticate_user!, :except => [:show, :callback_thumbnail]
   before_filter :authenticate_if_needed, :only => [:show, :callback_thumbnail]
   access_control do
-    allow :admin
-    allow :editor, :of => :document
     actions :index, :show do
-      allow :reader, :of => :document
       allow all, :if => :document_is_public?
     end
     action :show, :callback_thumbnail do
       allow all, :if => :has_valid_secure_token?
     end
+    allow :editor, :of => :document    
+    allow :admin    
   end
   
   # GET /documents/:document_id/pages
@@ -83,6 +83,10 @@ class PagesController < DocumentController
   
 private
 
+  def instantiate_page
+    @page = @document.pages.find_by_uuid(params[:id])
+  end
+  
   def authenticate_if_needed
     authenticate_user! unless has_valid_secure_token?
   end

@@ -1,5 +1,5 @@
 class DocumentRolesController < DocumentController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :instantiate_document
   
   # GET /documents/:document_id/roles
   def show

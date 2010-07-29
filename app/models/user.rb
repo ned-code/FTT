@@ -148,6 +148,10 @@ class User < ActiveRecord::Base
     }.to_json
   end
   
+  def category
+    documents_count > 5 ? 'Publisher' : 'User'
+  end
+  
 protected
   
   # after_create

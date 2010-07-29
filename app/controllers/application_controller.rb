@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   
   include ExceptionNotification::Notifiable
   
+  before_filter :set_first_visit_time
   before_filter :http_authenticate
   before_filter :set_xmpp_client_id_in_thread
 
@@ -31,9 +32,6 @@ protected
     Thread.current[:xmpp_client_id] = params[:xmpp_client_id]
   end
   
-  def document_is_public?
-    @document && @document.is_public?
-  end
 
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
@@ -60,4 +58,15 @@ protected
     path
   end
 
+  def document_is_public?      
+    if (@pseudo_document)
+      @pseudo_document.is_public?
+    end
+  end
+  
+  def set_first_visit_time
+    if (!cookies[:first_visit])
+      cookies[:first_visit] = Time.now.to_i
+    end
+  end
 end

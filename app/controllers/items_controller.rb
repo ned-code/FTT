@@ -4,16 +4,17 @@ require Rails.root + 'lib/shindig'
 class ItemsController < PageController
   before_filter :authenticate_user!
   access_control do
-    allow :admin
-    allow :editor, :of => :document
     action :show do
-      allow :reader, :of => :document
-      allow all, :if => :document_is_public?
-    end
+      allow all, :if => :document_is_public?      
+    end    
+    allow :editor, :of => :pseudo_document
+    allow :admin    
   end
   
   # GET /documents/:document_id/pages/:page_id/items/:id
   def show
+    instantiate_document
+    instantiate_page
     @item = @page.items.not_deleted.find_by_uuid(params[:id])
     if @item
       render :layout => false
@@ -26,38 +27,43 @@ class ItemsController < PageController
   def create
     @item = Item.find_deleted_and_restore(params[:item][:uuid])
     if @item.nil?
-      @item = @page.items.new_with_uuid(params[:item])
+      @item = Item.new_with_uuid(params[:item])
+      @item[:page_id] = params[:page_id]
     end
+    @item.document_uuid = params[:document_id]
     @item.save!
     message = @item.as_json({})
     message[:source] = params[:xmpp_client_id]
-    @@xmpp_notifier.xmpp_notify(message.to_json, @item.page.document.uuid)
+    @@xmpp_notifier.xmpp_notify(message.to_json, params[:document_id])
     render :json => @item
   end
   
   # PUT /documents/:document_id/pages/:page_id/items/:id
   def update
-    @item = @page.items.not_deleted.find_by_uuid(params[:id])
+    @item = Item.not_deleted.find_by_uuid(params[:id])
+    @item.document_uuid = params[:document_id]
     @item.update_attributes!(params[:item])    
     message = @item.as_json({})
     message[:source] = params[:xmpp_client_id]
-    @@xmpp_notifier.xmpp_notify(message.to_json, @item.page.document.uuid)
+    @@xmpp_notifier.xmpp_notify(message.to_json, params[:document_id])
     render :json => @item
   end
   
   # DELETE /documents/:document_id/pages/:page_id/items/:id
   def destroy
-    @item = @page.items.not_deleted.find_by_uuid(params[:id])
+    @item = Item.not_deleted.find_by_uuid(params[:id])
+    @item.document_uuid = params[:document_id]
     @item.safe_delete!
-    message = { :source => params[:xmpp_client_id], :item =>  { :page_id => @item.page.id, :uuid => @item.uuid }, :action => "delete" }
-    @@xmpp_notifier.xmpp_notify(message.to_json, @item.page.document.uuid)   
+    message = { :source => params[:xmpp_client_id], :item =>  { :page_id => @item[:page_id], :uuid => @item.uuid }, :action => "delete" }
+    @@xmpp_notifier.xmpp_notify(message.to_json, params[:document_id])   
     render :json => {}
   end
   
   # GET /documents/:document_id/pages/:page_id/items/:id/secure_token
-  def secure_token
+  def secure_token    
     response = Hash.new
     if current_user
+      instantiate_page
       @item = @page.items.not_deleted.find_by_uuid(params[:id])
       
       token = Shindig.generate_secure_token(@item.page.document.creator.uuid, current_user.uuid, @item.uuid, 0, '')
@@ -66,6 +72,6 @@ class ItemsController < PageController
       response['security_token'] = "";
     end
      render :json => response
-  end
+ end
   
 end

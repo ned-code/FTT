@@ -26,6 +26,7 @@ class Item < ActiveRecord::Base
   attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind, :inner_html, :properties, :preferences
 
   attr_accessor_with_default :touch_page_active, true
+  attr_accessor :document_uuid
 
   named_scope :not_deleted, :conditions => ['items.deleted_at IS ?', nil]
   named_scope :deleted, :conditions => ['items.deleted_at IS NOT ?', nil]
@@ -43,8 +44,9 @@ class Item < ActiveRecord::Base
   # = Callbacks =
   # =============
 
-  after_save :touch_page_and_need_update_thumbnail
-  #after_destroy :touch_page_and_need_update_thumbnail #no more used with safe_delete!
+  after_save :refresh_cache
+  after_update :need_update_thumbnail
+  #after_destroy :refresh_cache, :need_update_thumbnail  #no more used with safe_delete!
 
   # ===============
   # = Validations =
@@ -105,17 +107,22 @@ class Item < ActiveRecord::Base
   
   def safe_delete!
     super
-    touch_page_and_need_update_thumbnail
+    need_update_thumbnail
+    refresh_cache
   end
 
   private
 
   # after_save
   # after_destroy
-  def touch_page_and_need_update_thumbnail
-    self.page.touch_and_need_update_thumbnail if touch_page_active == true
+  def need_update_thumbnail
+    Page.need_update_thumbnail(self.page_id) if touch_page_active == true
   end
 
+  def refresh_cache 
+    Document.invalidate_cache(document_uuid)
+  end
+  
   def self.sanitize_html_to_serialize(html)
     sanitized_html = ""
     html.each do |line|

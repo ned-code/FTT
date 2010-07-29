@@ -363,6 +363,31 @@ WebDoc.PageView = $.klass({
       var anDiscussView = this.discussionViews[discussionId];
       anDiscussView.destroy();
     }
+  },
+
+  getCenterPosition: function() {
+    var top  = 0;
+    var left = 0;
+    var webDocDomNode = $('#webdoc');
+
+    var clientHeight = document.documentElement.clientHeight;
+    var clientWidth  = document.documentElement.clientWidth;
+
+    var documentHeight = this.page.height('px');
+    var documentWidth  = this.page.width('px');
+
+    if (documentHeight < clientHeight) {
+      clientHeight = documentHeight;
+    }
+
+    if (documentWidth < clientWidth) {
+      clientWidth = documentWidth;
+    }
+
+    top +=  clientHeight/2 + webDocDomNode.scrollTop();
+    left += clientWidth/2  + webDocDomNode.scrollLeft();
+
+    return { 'top': top, 'left': left }
   }
 
 });

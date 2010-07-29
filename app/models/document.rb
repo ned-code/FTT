@@ -55,12 +55,20 @@ class Document < ActiveRecord::Base
   before_create :create_default_page
   before_create :validate_size
   after_create :set_creator_as_editor
-  after_save :invalidate_cache
-  after_destroy :invalidate_cache
+  after_save :refresh_cache
+  after_destroy :refresh_cache
   
   # =================
   # = Class Methods =
   # =================
+  
+  #
+  # This method invalidate cache for docment with document_uuid. It is usefull to invalidate a document without fetching it and just using the uuid.
+  #
+  def self.invalidate_cache(document_uuid)
+    Rails.cache.delete("document_#{document_uuid}")
+    Rails.cache.delete("document_#{document_uuid}_explore")
+  end
   
   def self.not_deleted_with_filter(current_user, document_filter, query, page_id, per_page)
     documents = Array.new
@@ -162,6 +170,8 @@ class Document < ActiveRecord::Base
     paginate_params[:conditions] = ['documents.deleted_at IS ? AND documents.is_public = ? AND featured > ?', nil, true, 0]
     Document.paginate(paginate_params)
   end
+  
+  
   # ====================
   # = Instance Methods =
   # ====================
@@ -399,20 +409,11 @@ class Document < ActiveRecord::Base
     end
     cloned_document
   end
-  
-  def touch
-    update_attribute("updated_at", Time.now)
-  end
-  
-  def invalidate_cache
-    Rails.cache.delete("document_#{self.uuid}")
-    Rails.cache.delete("document_#{self.uuid}_explore")
-  end
-  
+ 
   def safe_delete!
     super
-    invalidate_cache
-  end
+    refresh_cache
+  end 
   
 private
   
@@ -443,6 +444,12 @@ private
     else
       true
     end
+  end
+  
+  #after_save
+  #after_destroy
+  def refresh_cache
+    Document.invalidate_cache(self.uuid)  
   end
   
   def add_unvalid_email_to_array(email)

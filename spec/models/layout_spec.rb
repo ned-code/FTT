@@ -27,7 +27,7 @@ describe Layout do
       @creation_result.should be_true
     end
 
-    it "should create class and css for model page" do
+    it "should create class and css for model page (work only in filesystem mode, see config/s3.yml)" do
       hash = HashWithIndifferentAccess.new
       hash[:class] = 'webdoc layout-1head1column theme-background-3'
       hash[:css] = HashWithIndifferentAccess.new

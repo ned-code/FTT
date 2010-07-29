@@ -395,14 +395,6 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
   },
   
-  positionTop: function(){
-    return this.data.data.css.top;
-  },
-  
-  positionLeft: function(){
-    return this.data.data.css.left;
-  },
-  
   positionZ: function() {
     return this.data.position;
   },
@@ -498,6 +490,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   top: function() {
     return this.data.data.css.top;
   },
+  
   left: function() {
     return this.data.data.css.left;
   },
@@ -540,7 +533,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
 
   // By default not saved, saved only if save is set as true
   moveTo: function(newPosition, save) {
-    var oldPosition = { left: this.positionLeft(), top: this.positionTop() };
+    var oldPosition = { left: this.left(), top: this.top() };
     if (newPosition.left && !jQuery.string(newPosition.left).empty()) {
       this.data.data.css.left = newPosition.left;
     }

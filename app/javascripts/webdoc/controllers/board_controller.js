@@ -326,17 +326,28 @@ WebDoc.BoardController = jQuery.klass({
         var items = jQuery.evalJSON(itemsString);
         var itemsDataArray = [];
         for (var i = 0; i < items.length; i++) {
-          var anItem = new WebDoc.Item({
-            item: items[i]
-          });
+          var anItem = new WebDoc.Item({ item: items[i] });
           var newItem = anItem.copy();
 
-          if(anItem.data.page_id === this._currentPage.uuid()) {
-            newItem.data.data.css.left = (parseFloat(anItem.data.data.css.left)+15).toString()+"px";
-            newItem.data.data.css.top = (parseFloat(anItem.data.data.css.top)+15).toString()+"px";
-          }
-          newItem.data.page_id = this._currentPage.uuid();
+          var position = this._currentPageView.getCenterPosition();
 
+          // center item
+          var top  = position.top -  newItem.height('px')/2;
+          var left = position.left - newItem.width('px')/2;
+
+          // move the new item if he is on the same place of an other item
+          for(var i=1; i<this._currentPage.items.length; i++) {
+            if(this._currentPage.items[i].top() === top+'px') {
+              top  += 15;
+            }
+            if(this._currentPage.items[i].left() === left+'px') {
+              left  += 15;
+            }
+          }
+
+          newItem.data.data.css.top  = top+"px";
+          newItem.data.data.css.left = left+"px";
+          newItem.data.page_id = this._currentPage.uuid();
           newItems.push(newItem);
           itemsDataArray.push(newItem.getData());
         }
