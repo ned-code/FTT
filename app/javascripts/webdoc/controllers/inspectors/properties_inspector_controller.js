@@ -301,13 +301,14 @@ WebDoc.PropertiesInspectorController = $.klass({
   },
 
   updatePropertiesWithFitToScreen: function(e) {
-    var item = WebDoc.application.boardController.selection()[0].item;
-    var size = null;
-    var position = null;
+    var item = WebDoc.application.boardController.selection()[0].item,
+        size = null,
+        position = null,
+        currentPageWidth = WebDoc.application.pageEditor.currentPage.width("px"),
+        currentPageHeight = WebDoc.application.pageEditor.currentPage.height("px");
+
     if(item.data.media_type == WebDoc.ITEM_TYPE_IMAGE && item.data.data.preserve_aspect_ratio === "true") {
       var aspectRatio = item.width("px") / item.height("px");
-      var currentPageHeight = WebDoc.application.pageEditor.currentPage.height("px");
-      var currentPageWidth = WebDoc.application.pageEditor.currentPage.width("px");
       if(currentPageHeight*aspectRatio < currentPageWidth) {
         size = { width: Math.round(currentPageHeight*aspectRatio), height: currentPageHeight};
       }
@@ -320,7 +321,7 @@ WebDoc.PropertiesInspectorController = $.klass({
       size['height'] += "px";
     }
     else {
-      size = { width: '100%', height: '100%' };
+      size = { width: currentPageWidth+"px", height: currentPageHeight+"px" };
       position = { left: '0px', top: '0px' };
     }
     item.changeCss(jQuery.extend({ transform: '' }, size, position));
