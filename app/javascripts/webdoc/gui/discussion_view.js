@@ -5,7 +5,7 @@
 WebDoc.DiscussionView = $.klass({
 
   initialize: function(discussion, pageView) {
-    ddd('DiscussionView init');
+    ddd('[DiscussionView] init');
     this.pageView = pageView;
     this.discussion = discussion;
 
