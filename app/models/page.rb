@@ -38,9 +38,6 @@ class Page < ActiveRecord::Base
 
   attr_accessible :uuid, :position, :version, :data, :title, :items_attributes, :layout_kind, :remote_thumbnail_url, :thumbnail_need_update
 
-  named_scope :not_deleted, :conditions => ['pages.deleted_at IS ?', nil]
-  named_scope :deleted, :conditions => ['pages.deleted_at IS NOT ?', nil]
-
   # ================
   # = Associations =
   # ================
@@ -59,6 +56,9 @@ class Page < ActiveRecord::Base
   
   default_scope :order => "position ASC"
   
+  named_scope :valid, :joins => :document, :conditions => ['pages.deleted_at IS ? AND documents.deleted_at IS ?', nil, nil]
+  named_scope :not_deleted, :conditions => ['pages.deleted_at IS ?', nil]
+  named_scope :deleted, :conditions => ['pages.deleted_at IS NOT ?', nil]
   # ===============
   # = Validations =
   # ===============
@@ -71,8 +71,8 @@ class Page < ActiveRecord::Base
   before_save :update_position_if_moved
   before_save :set_page_data
   before_create :set_position
-  after_save :touch_document
-  after_destroy :update_next_page_position, :touch_document
+  after_save :refresh_cache
+  #after_destroy :update_next_page_position, :refresh_cache #no more used with safe_delete!
 
   # =================
   # = Class Methods =
@@ -85,6 +85,41 @@ class Page < ActiveRecord::Base
       find_by_position!(attr.to_i - 1)
     end
   end
+  
+  def self.need_update_thumbnail(page_uuid)
+    Page.update_all('thumbnail_need_update =1',["uuid = ? and thumbnail_need_update <> ?",page_uuid, 1])
+  end
+
+  def self.process_pending_thumbnails
+    self.cleanup_old_requests
+    pages = Page.all_need_process_thumbnail
+    if pages.present?
+      thumbnail_service = Services::Bluga.new
+      pages.each do |page|
+        thumbnail_service.process_page(page)
+      end
+    end
+  end
+
+  def self.all_need_process_thumbnail
+    self.all(
+      :conditions => ['thumbnail_secure_token IS ? AND thumbnail_need_update = ?', nil, true]
+    )
+  end
+
+  def self.cleanup_old_requests
+    old_requests = Page.all(
+            :conditions => [
+                    'thumbnail_secure_token IS NOT ? AND thumbnail_need_update = ? AND thumbnail_request_at IS NOT ? AND thumbnail_request_at < ?',
+            nil, true, nil, (Time.now-30.minutes).utc])
+    if old_requests.present?
+      old_requests.each do |page|
+        page.thumbnail_secure_token = nil
+        page.thumbnail_request_at = nil
+        page.save!
+      end
+    end
+  end  
   
   # ====================
   # = Instance Methods =
@@ -123,47 +158,8 @@ class Page < ActiveRecord::Base
     end
     cloned_page
   end
-
-  def touch_and_need_update_thumbnail
-
-    if (!thumbnail_need_update)
-      update_attributes!({
-              :thumbnail_need_update => 1
-      })
-    end
-    touch_document
-  end
-
-  def self.process_pending_thumbnails
-    self.cleanup_old_requests
-    pages = Page.all_need_process_thumbnail
-    if pages.present?
-      thumbnail_service = Services::Bluga.new
-      pages.each do |page|
-        thumbnail_service.process_page(page)
-      end
-    end
-  end
-
-  def self.all_need_process_thumbnail
-    self.all(
-      :conditions => ['thumbnail_secure_token IS ? AND thumbnail_need_update = ?', nil, true]
-    )
-  end
-
-  def self.cleanup_old_requests
-    old_requests = Page.all(
-            :conditions => [
-                    'thumbnail_secure_token IS NOT ? AND thumbnail_need_update = ? AND thumbnail_request_at IS NOT ? AND thumbnail_request_at < ?',
-            nil, true, nil, (Time.now-30.minutes).utc])
-    if old_requests.present?
-      old_requests.each do |page|
-        page.thumbnail_secure_token = nil
-        page.thumbnail_request_at = nil
-        page.save!
-      end
-    end
-  end
+  
+  
 
   def generate_and_set_thumbnail_secure_token
     self.thumbnail_secure_token = UUID::generate
@@ -228,6 +224,12 @@ class Page < ActiveRecord::Base
     end
   end
   
+  def safe_delete!
+    super
+    update_next_page_position
+    refresh_cache
+  end
+  
   private
   
   # before_save
@@ -280,8 +282,8 @@ class Page < ActiveRecord::Base
 
   # after_save
   # after_destroy
-  def touch_document
-    self.document.invalidate_cache if self.document.present? && touch_document_active == true
+  def refresh_cache
+    Document.invalidate_cache(self.document_id) if self.document_id.present? && touch_document_active == true
   end
   
 end

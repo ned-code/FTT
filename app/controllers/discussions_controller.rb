@@ -4,16 +4,15 @@ class DiscussionsController < ApplicationController
   before_filter :find_document
 
   access_control do
-    allow :admin
     action :index, :create do
       allow all, :if => :document_is_public?
-      allow :reader, :of => :document
-      allow :editor, :of => :document
+      allow :editor, :of => :pseudo_document
     end
     actions :update, :destroy do
       allow all, :if => :current_user_is_discussion_owner      
-      allow :editor, :of => :document
+      allow :editor, :of => :pseudo_document
     end
+    allow :admin    
   end
   
   def index
@@ -70,11 +69,11 @@ class DiscussionsController < ApplicationController
 
   def find_document
     if params[:page_id]
-      @document = Page.find_by_uuid(params[:page_id]).document
+      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa where pa.uuid = '#{params[:page_id]}' and pa.document_id = do.uuid;").first
     elsif params[:discussion].present? && params[:discussion][:page_id].present?
-      @document = Page.find_by_uuid(params[:discussion][:page_id]).document
+      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa where pa.uuid = '#{params[:discussion][:page_id]}' and pa.document_id = do.uuid;").first
     elsif @discussion.present?
-      @document = @discussion.page.document  
+      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa, discussions di where di.uuid = '#{@discussion.uuid}' and di.page_id = pa.uuid and pa.document_id = do.uuid;").first  
     end
   end
 
@@ -84,5 +83,5 @@ class DiscussionsController < ApplicationController
     end
     return false
   end
-
+  
 end

@@ -326,17 +326,28 @@ WebDoc.BoardController = jQuery.klass({
         var items = jQuery.evalJSON(itemsString);
         var itemsDataArray = [];
         for (var i = 0; i < items.length; i++) {
-          var anItem = new WebDoc.Item({
-            item: items[i]
-          });
+          var anItem = new WebDoc.Item({ item: items[i] });
           var newItem = anItem.copy();
 
-          if(anItem.data.page_id === this._currentPage.uuid()) {
-            newItem.data.data.css.left = (parseFloat(anItem.data.data.css.left)+15).toString()+"px";
-            newItem.data.data.css.top = (parseFloat(anItem.data.data.css.top)+15).toString()+"px";
-          }
-          newItem.data.page_id = this._currentPage.uuid();
+          var position = this._currentPageView.getCenterPosition();
 
+          // center item
+          var top  = position.top -  newItem.height('px')/2;
+          var left = position.left - newItem.width('px')/2;
+
+          // move the new item if he is on the same place of an other item
+          for(var i=1; i<this._currentPage.items.length; i++) {
+            if(this._currentPage.items[i].top() === top+'px') {
+              top  += 15;
+            }
+            if(this._currentPage.items[i].left() === left+'px') {
+              left  += 15;
+            }
+          }
+
+          newItem.data.data.css.top  = top+"px";
+          newItem.data.data.css.left = left+"px";
+          newItem.data.page_id = this._currentPage.uuid();
           newItems.push(newItem);
           itemsDataArray.push(newItem.getData());
         }
@@ -705,9 +716,9 @@ WebDoc.BoardController = jQuery.klass({
       case 'googlevideo' :
         videoWidget = WebDoc.WidgetManager.getInstance().getVidsGoogleWidget();
         break;
-			case 'yahoovideo' :
-			  videoWidget = WebDoc.WidgetManager.getInstance().getVidsYahooWidget();
-			  break;
+      case 'yahoovideo' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getVidsYahooWidget();
+        break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     if (videoWidget.data.properties.width) {
@@ -927,43 +938,42 @@ WebDoc.BoardController = jQuery.klass({
         case 65:
           this.setCurrentTool(WebDoc.application.arrowTool);
           break;  
-     		case 37:
-		 		 	ddd('shift key?');
-     		   if (this._isInteraction || this._selection.length === 0) {
-     		     WebDoc.application.pageEditor.prevPage();
-     		   }
-     		   else {
-     		     this.moveSelection("left", e.shiftKey?"big" : "small");
-     		   }
-     		   e.preventDefault();          
-     		   break;
-      	case 38:
-      	  if (this._isInteraction || this._selection.length === 0) {
-      	    WebDoc.application.pageEditor.prevPage();
-      	  }
-      	  else {
-      	    this.moveSelection("up", e.shiftKey?"big" : "small");
-      	  }
-      	  e.preventDefault();          
-      	  break;          
-      	case 39:
-      	  if (this._isInteraction || this._selection.length === 0) {
-      	    WebDoc.application.pageEditor.nextPage();
-      	  }
-      	  else {
-      	    this.moveSelection("right", e.shiftKey?"big" : "small");            
-      	  }        
-      	  e.preventDefault();           
-      	  break;
-      	case 40:
-      	  if (this._isInteraction || this._selection.length === 0) {
-      	    WebDoc.application.pageEditor.nextPage();
-      	  }
-      	  else {
-      	    this.moveSelection("down", e.shiftKey?"big" : "small");
-      	  }
-      	  e.preventDefault();          
-      	  break;                       
+        case 37:
+           if (this._isInteraction || this._selection.length === 0) {
+             WebDoc.application.pageEditor.prevPage();
+           }
+           else {
+             this.moveSelection("left", e.shiftKey?"big" : "small");
+           }
+           e.preventDefault();          
+           break;
+        case 38:
+          if (this._isInteraction || this._selection.length === 0) {
+            WebDoc.application.pageEditor.prevPage();
+          }
+          else {
+            this.moveSelection("up", e.shiftKey?"big" : "small");
+          }
+          e.preventDefault();          
+          break;          
+        case 39:
+          if (this._isInteraction || this._selection.length === 0) {
+            WebDoc.application.pageEditor.nextPage();
+          }
+          else {
+            this.moveSelection("right", e.shiftKey?"big" : "small");            
+          }        
+          e.preventDefault();           
+          break;
+        case 40:
+          if (this._isInteraction || this._selection.length === 0) {
+            WebDoc.application.pageEditor.nextPage();
+          }
+          else {
+            this.moveSelection("down", e.shiftKey?"big" : "small");
+          }
+          e.preventDefault();          
+          break;                       
       }      
     }
     else {

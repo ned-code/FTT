@@ -1,6 +1,6 @@
 class PageController < DocumentController
-  before_filter :instantiate_page
-  
+  #before_filter :instantiate_page
+
 private
   
   def instantiate_page

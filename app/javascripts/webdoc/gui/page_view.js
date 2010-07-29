@@ -50,7 +50,9 @@ WebDoc.PageView = $.klass({
       });
     }
 
-    this.refreshDiscussions();
+    if(!page.isNew) {
+      this.refreshDiscussions();
+    }
     
     page.addListener(this);
   },
@@ -215,16 +217,14 @@ WebDoc.PageView = $.klass({
       delete globalCss.height;
       //domNode.attr( 'style', '' ).css( wrapCss );
       if(this.page.hasBackgroundGradient()){
-				delete globalCss.backgroundImage;
-				this.domNode.attr( 'style', this.page.getBackgroundGradient() ).css(globalCss);
-			}
-			else{
-				ddd('page _initPageCss');
-				ddd(globalCss);
-				delete globalCss.backgroundGradient;
-				this.domNode.attr( 'style', '' );
-				this.domNode.css(globalCss);
-			}
+        delete globalCss.backgroundImage;
+        this.domNode.attr( 'style', this.page.getBackgroundGradient() ).css(globalCss);
+      }
+      else{
+        delete globalCss.backgroundGradient;
+        this.domNode.attr( 'style', '' );
+        this.domNode.css(globalCss);
+      }
       this._initPageSize();
       
     }.pBind(this));
@@ -363,6 +363,31 @@ WebDoc.PageView = $.klass({
       var anDiscussView = this.discussionViews[discussionId];
       anDiscussView.destroy();
     }
+  },
+
+  getCenterPosition: function() {
+    var top  = 0;
+    var left = 0;
+    var webDocDomNode = $('#webdoc');
+
+    var clientHeight = document.documentElement.clientHeight;
+    var clientWidth  = document.documentElement.clientWidth;
+
+    var documentHeight = this.page.height('px');
+    var documentWidth  = this.page.width('px');
+
+    if (documentHeight < clientHeight) {
+      clientHeight = documentHeight;
+    }
+
+    if (documentWidth < clientWidth) {
+      clientWidth = documentWidth;
+    }
+
+    top +=  clientHeight/2 + webDocDomNode.scrollTop();
+    left += clientWidth/2  + webDocDomNode.scrollLeft();
+
+    return { 'top': top, 'left': left }
   }
 
 });

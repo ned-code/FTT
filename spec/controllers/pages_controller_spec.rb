@@ -30,35 +30,6 @@ describe PagesController do
         sign_in :user, @mock_user
       end
 
-      describe "GET 'index' with document_id '1'" do
-        it "should not be successful" do
-          Document.should_receive(:find_by_uuid).with("1").and_return(@mock_document)
-          @mock_document.should_receive(:pages).and_return(Page)
-          get :index, :document_id => "1"
-          response.should be_success
-        end
-      end
-
-      describe "GET 'show' with document_id '1', id 'uuid'" do
-        it "should not be successful" do
-          Document.should_receive(:find_by_uuid).with("1").and_return(@mock_document)
-          @mock_document.should_receive(:pages).and_return(Page)
-          Page.should_receive(:find_by_uuid_or_position!).with("uuid").and_return(@mock_page)
-          get :show, :document_id => "1", :id => 'uuid'
-          response.should be_success
-        end
-      end
-
-      describe "POST 'create' with document_id '1', id 'uuid'" do
-        it "should not be successful" do
-          Document.should_receive(:find_by_uuid).with("1").and_return(@mock_document)
-          @mock_document.should_receive(:pages).and_return(Page)
-          Page.should_receive(:find_by_uuid_or_position!).with("uuid").and_return(@mock_page)
-          get :show, :document_id => "1", :id => 'uuid'
-          response.should be_success
-        end
-      end
-
     end
 
   end

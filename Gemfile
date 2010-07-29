@@ -1,6 +1,5 @@
 source :gemcutter
 gem "rails", "~> 2.3.5"
-gem 'bundler', "0.9.26"
 gem 'haml'
 gem 'i18n'
 gem 'mime-types', :require => 'mime/types'
@@ -34,7 +33,7 @@ group :development do
 end
 
 group :test do
-  gem "sqlite3-ruby", '1.2.5', :require => 'sqlite3'
+  gem "sqlite3-ruby", :require => 'sqlite3'
   
   gem 'rspec'
   gem 'rspec-rails'
@@ -45,5 +44,5 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'launchy'
-  
+
 end

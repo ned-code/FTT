@@ -5,16 +5,15 @@ class CommentsController < ApplicationController
   before_filter :find_comment, :only => [:destroy]
 
   access_control do
-    allow :admin
     action :create do
       allow all, :if => :document_is_public?
-      allow :reader, :of => :document
-      allow :editor, :of => :document
+      allow :editor, :of => :pseudo_document
     end
     action :destroy do
       allow all, :if => :current_user_is_comment_owner
-      allow :editor, :of => :document
+      allow :editor, :of => :pseudo_document
     end
+    allow :admin    
   end
 
   def create
@@ -50,7 +49,7 @@ class CommentsController < ApplicationController
   end
 
   def find_document
-    @document = @discussion.page.document
+    @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa, discussions di where di.uuid = '#{params[:discussion_id]}' and di.page_id = pa.uuid and pa.document_id = do.uuid;").first
   end
 
   def current_user_is_comment_owner

@@ -75,7 +75,7 @@ Factory.define :layout do |f|
   f.title            "Layout 1"
   f.sequence(:kind)  { |n| "kind#{n}" }
   f.thumbnail_url    Rails.root.join('spec','fixtures','thumbnail.png')
-  f.template_url     '../spec/fixtures/layout.html'
+  f.template_url     File.join('..','spec','fixtures','layout.html')
 end
 
 Factory.define :theme do |f|

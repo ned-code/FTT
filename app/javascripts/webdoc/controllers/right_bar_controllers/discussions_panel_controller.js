@@ -8,17 +8,17 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
   initialize: function() {
 
-    this.currentPage = WebDoc.application.pageEditor.currentPage;
+    this._currentPage = null;
 
     this._discussionsWithListener = [];
 
     this.domNode = jQuery('#discussions-panel');
     this.discussionsDomNode = this.domNode.find('#wd_discussions');
 
-    this.currentPage.addListener(this);
     WebDoc.application.boardController.addCurrentPageListener(this);
-    
-    this.showCurrentPageDiscussions();
+
+    // simlulate page changement to load discussion for the first page
+    this.currentPageChanged();
   },
 
   buttonSelector: function() {
@@ -166,7 +166,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   },
 
   selectDiscussion: function(discussion, oldDiscussion, skipScroll) {
-    ddd('[DiscussionsPanel] select discussion');
+    ddd('[DiscussionsPanelController] select discussion');
     this.unSelectDiscussion(oldDiscussion);
     var discussionSelectedDomNode = this.discussionsDomNode.find("[data-discussion-uuid='"+discussion.uuid()+"']")[0];
     if(discussionSelectedDomNode) {
@@ -218,6 +218,11 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
   // fire by board controller
   currentPageChanged: function() {
     ddd('[DiscussionsPanelController] current page changed');
+    if (this._currentPage) {
+      this._currentPage.removeListener(this);
+    }
+    this._currentPage = WebDoc.application.pageEditor.currentPage;
+    this._currentPage.addListener(this);
     this.showCurrentPageDiscussions();
   }
 
