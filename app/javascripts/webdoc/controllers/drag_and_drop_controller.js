@@ -187,7 +187,7 @@ WebDoc.DrageAndDropController = {
         WebDoc.application.boardController.insertItems([newItem]);
       },
       fail: function( value, error ){
-        ddd(error);
+        alert("Sorry this website doesn't allow to be inserted");
       }
     });
   },
