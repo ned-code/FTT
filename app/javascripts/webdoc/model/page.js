@@ -875,7 +875,6 @@ WebDoc.Page = $.klass(WebDoc.Record,
 
   removeDiscussion: function(discussion) {
     if(this.discussions !== undefined) {
-      discussion.destroy();
       var index = jQuery.inArray(discussion, this.discussions);
       if (index > -1) {
         this.discussions.splice(index, 1);
