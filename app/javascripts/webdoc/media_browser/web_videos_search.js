@@ -316,7 +316,7 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
     this.loadMoreLink = this.container.find('.load_more');
   },
 
-  performSearch: function() {
+  performSearch: function(scroll) {
     // http://code.google.com/apis/youtube/2.0/developers_guide_protocol.html
     $('#web_images_search_field').val(this.query);
     var youtubeUrl = this.ytSearchBaseUrl +
@@ -367,6 +367,9 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
           }
         }
         this.container.find('.loading').remove();
+        if(scroll){
+          this.container[0].scrollIntoView(false);
+        }
       }.pBind(this)
     );
   },
@@ -383,7 +386,7 @@ WebDoc.YoutubeSearch = $.klass(WebDoc.ServiceVideosSearch, {
   loadMore: function($super) {
     $super();
     // new startIndex param should have already been updated
-    this.performSearch();
+    this.performSearch(true);
   }
 });
 
@@ -406,7 +409,7 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
     this.loadMoreLink = this.container.find('.load_more');
   },
 
-  performSearch: function() {
+  performSearch: function(scroll) {
     // http://vimeo.proxy.app-base.com/api/docs/oauth
     // http://vimeo.com/api/docs/methods/vimeo.videos.search
     
@@ -525,6 +528,9 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
       this.resultsCount.text('0');
     }
     this.container.find('.loading').remove();
+    if(scroll){
+      this.container[0].scrollIntoView(false);
+    }
   },
 
   initialSearch: function($super, query) {
@@ -540,6 +546,6 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
 
   loadMore: function($super) {
     $super();
-    this.performSearch();
+    this.performSearch(true);
   }
 });
