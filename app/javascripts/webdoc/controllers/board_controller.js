@@ -662,7 +662,7 @@ WebDoc.BoardController = jQuery.klass({
   
   insertImage: function(imageUrl, position, media_id, title) {
     ddd('insertImage : ', imageUrl);
-    if(imageUrl.match('spaceball.gif')){
+    if(imageUrl.match('http://l.yimg.com/g/images/spaceball.gif')){ //prevent flickr to create a transparent image of 1x1 pixel
       alert("Sorry, but this image isn't free for use");
       return false;
     }
