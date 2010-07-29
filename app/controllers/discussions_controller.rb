@@ -73,7 +73,7 @@ class DiscussionsController < ApplicationController
     elsif params[:discussion].present? && params[:discussion][:page_id].present?
       @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa where pa.uuid = '#{params[:discussion][:page_id]}' and pa.document_id = do.uuid;").first
     elsif @discussion.present?
-      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa, discussions di where di.uuid = '#{@discussion.discussion_id}' and di.page_id = pa.uuid and pa.document_id = do.uuid;").first  
+      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa, discussions di where di.uuid = '#{@discussion.uuid}' and di.page_id = pa.uuid and pa.document_id = do.uuid;").first  
     end
   end
 
