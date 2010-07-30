@@ -36,6 +36,7 @@ class ImagesController < ApplicationController
     @image = current_user.images.build(params[:image])
     @image.uuid = params[:image][:uuid] 
     @image.favorites = params[:image][:favorites]
+    @image.fix_content_type_for_swfupload!
     
     respond_to do |format|
       if @image.save
