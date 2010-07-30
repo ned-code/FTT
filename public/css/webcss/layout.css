@@ -155,7 +155,7 @@
 }
 
 /* Ideally, all elements likely to be put in a centred layer should be listed here */
-.center_box>div,
+/*.center_box>div,
 .center_box>form,
 .center_box>img,
 .center_box>object,
@@ -165,4 +165,9 @@
 .center_box>canvas,
 .center_box>.content {
     height: 100%;
+}*/
+
+.dropdown {
+	height: 0;
+	overflow: hidden;
 }

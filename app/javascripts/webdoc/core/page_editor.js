@@ -339,6 +339,16 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     }
   },
   
+  toggleFullScreen: function() {
+    var body = jQuery('body');
+    if (body.hasClass('full_mode')) {
+      jQuery('body').removeClass('full_mode full_view');
+    } 
+    else {
+      jQuery('body').addClass('full_mode full_view');  
+    }      
+  },
+  
   objectChanged: function(record, options) {
     if (record._isAttributeModified(options, 'theme')) {
       WebDoc.application.boardController.applyDocumentTheme();

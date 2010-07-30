@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <% document_title @document.title %>
 <% session_key_name = ActionController::Base.session_options[:key] %>
+<% if params[:reader] == 'true'
+    current_class = 'mode-embed'
+  elsif params[:edit] == 'true'
+    current_class = 'mode-edit'
+  else
+    current_class = 'mode-preview'
+  end %>
 <html xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type">
@@ -12,7 +19,7 @@
     <%= render :partial => "layouts/google_analytics"; %>    
   </head>
   
-  <body>
+  <body class="<%= current_class %>">
     
     <!-- site content -->
     
