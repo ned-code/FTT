@@ -59,8 +59,11 @@ protected
   end
 
   def document_is_public?      
-    if (@pseudo_document)
-      @pseudo_document.is_public?
+    if @pseudo_document.present?
+      return @pseudo_document.is_public?
+    end
+    if @document.present?
+      return @document.is_public?
     end
   end
   
