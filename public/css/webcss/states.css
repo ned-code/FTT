@@ -20,23 +20,35 @@
 .loading_icon {
     display: none;
     background-position: 50% 50%;
-    background-image: url('/images/loading-icon-16-white.gif');
+    background-image: url('../../images/loading-icon-16-white.gif');
     background-color: transparent;
     background-repeat: no-repeat;
     
     /* TODO: If we want this to work, we'll have to get clever:
        feature detect transition, if it exists bind to "transitionend webkitTransitionEnd"
        a callback that set display: none after the transition instead of right away. */
-    -webkit-transition: opacity 0.1s ease-in;
-    -moz-transition:    opacity 0.1s ease-in;
-    transition:         opacity 0.1s ease-in;
+    -webkit-transition: opacity 0.16s ease-in;
+       -moz-transition: opacity 0.16s ease-in;
+         -o-transition: opacity 0.16s ease-in;
+            transition: opacity 0.16s ease-in;
+    
+    opacity: 0;
 }
 
 .loading.loading_icon,
 .loading .loading_icon {
     display: block;
+    opacity: 1;
 }
 
+/* Transition state stops display: none; from making the element disappear at the beginning
+   of the transition. It can be automatically removed by a global transitionend handler
+   on the body.  For the CSS, .transition must only be heeded in browsers with transition support */
+.transition_support .transition,
+.transition_support .transition.loading_icon,
+.transition_support .transition .loading_icon {
+  display: block;
+}
 
 /* utilities */
 
