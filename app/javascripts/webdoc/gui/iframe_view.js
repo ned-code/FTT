@@ -66,7 +66,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
       e.preventDefault();
       that.inputNode.validate({
         pass : function(){
-          consolidateSrc = WebDoc.UrlUtils.consolidateSrc(that.inputNode.val());
+          var consolidateSrc = WebDoc.UrlUtils.consolidateSrc(that.inputNode.val());
           that.domNode.addClass('loading');
           that.item.setSrc( consolidateSrc );
           e.preventDefault();
@@ -94,7 +94,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   },
 
   updateOverlay: function() {
-    ddd('[iframe_view] updateOverlay()');
+    ddd('[iframe_view] update overlay');
     if (!WebDoc.application.disableHtml) {
       var src = this.item.getSrc();
       if (src === "" || src === undefined) {
