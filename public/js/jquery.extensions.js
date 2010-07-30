@@ -52,36 +52,49 @@
     
     var debug = (window.console && console.log);
     
-    var docElem = document.documentElement;
-    
-    var testElem = jQuery('<div/>').css({
-      WebkitBoxSizing: 'border-box',
-      MozBoxSizing: 'border-box',
-      boxSizing: 'border-box',
-      position: 'absolute',
-      top: -200,
-      left: 0,
-      padding: 20,
-      border: '10px solid red',
-      width: 100,
-      height: 100
-    });
+    var docElem = document.documentElement,
+        testElem = jQuery('<div/>').css({
+          WebkitBoxSizing: 'border-box',
+          MozBoxSizing: 'border-box',
+          /* Opera accepts the standard box-sizing */
+          boxSizing: 'border-box',
+          position: 'absolute',
+          top: -200,
+          left: 0,
+          padding: 20,
+          border: '10px solid red',
+          width: 100,
+          height: 100,
+          WebkitTransition: 'top 0.001s linear',
+          MozTransition:    'top 0.001s linear',
+          OTransition:      'top 0.001s linear',
+          transition:       'top 0.001s linear'
+        }),
+        timer;
     
     jQuery.support.css = {};
     
+    function removeTest(){
+      clearTimeout(timer);
+      timer = null;
+      testElem.remove();
+    }
+    
     function transitionEnd(e){
-      if (debug) { console.log('[CSS] transition detected'); };
+      if (debug) { console.log('[jQuery.support.css] transitionend detected: ' + e.type); };
+      
+      removeTest();
+      
       jQuery.support.css.transition = true;
       jQuery.support.css.transitionend = e.type;
+      
+      // Add class to html tag to flag transition support
       docElem.className = docElem.className + 'transition_support';
+      
       jQuery(document).unbind('transitionend webkitTransitionEnd oTransitionEnd', transitionEnd);
     }
     
     jQuery(document).ready(function(){
-      
-      // Lazily test for transition support by listening
-      // for the transitionend event
-      jQuery(document).bind('transitionend webkitTransitionEnd oTransitionEnd', transitionEnd);
       
       // Test for box-sizing support and figure out whether min-width
       // or min-height fucks it or not.  Store in
@@ -93,13 +106,23 @@
       
       testElem.css({
         minWidth: 100,
-        minHeight: 100
+        minHeight: 100,
       });
       
       jQuery.support.css.borderBoxMinMax = ( testElem.outerWidth() === 100 && testElem.outerHeight() === 100 );
       
-      testElem.remove();
+      // Test for css css transition support, and in particular
+      // the transitionend event
+      jQuery(document).bind('transitionend webkitTransitionEnd oTransitionEnd', transitionEnd);
       
+      testElem.css({
+        top: -300
+      });
+      
+      // Wait for the transition test to finish before getting rid of
+      // the test element. Opera requires a much greater delay than
+      // the time the transition would take, worryingly...
+      timer = setTimeout(removeTest, 100);
     });
 })(jQuery);
 
