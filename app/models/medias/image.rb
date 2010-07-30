@@ -38,7 +38,7 @@ class Medias::Image < Media
   # Fix a bug with flash 8, which set all content_type to application/octet-stream
   def fix_content_type_for_swfupload!
     if self.attachment.present?
-      self.attachment_content_type = MIME::Types.type_for(self.attachment.original_filename).to_s  
+      self.attachment_content_type = MIME::Types.type_for(self.attachment.original_filename).to_s
     end
   end
   

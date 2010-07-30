@@ -23,7 +23,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   _myContentHandlers: {
     'my-images':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showMyImages(); },
     'favorites':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showFavorites(); },
-    'upload-images': function(e){ WebDoc.application.mediaBrowserController.myContentsController.showUploader(); },
+    'upload-images': function(e){ WebDoc.application.mediaBrowserController.myContentsController.showUploader(); }
   },
   
   showMyImages: function(){
@@ -642,5 +642,5 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.videosFavoritesContainer.empty();
     this.videosFavoritePage += 1;
     this._loadFavoritesVideos();
-  },
+  }
 });

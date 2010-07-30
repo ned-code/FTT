@@ -34,15 +34,15 @@ class ImagesController < ApplicationController
   # POST /images
   def create
     @image = current_user.images.build(params[:image])
-    @image.uuid = params[:image][:uuid] 
+    @image.uuid = params[:image][:uuid]
     @image.favorites = params[:image][:favorites]
     @image.fix_content_type_for_swfupload!
-    
+
     respond_to do |format|
       if @image.save
         format.json { render :json => @image }
       else
-        format.json { render :json => @image, :status => 203 }
+        format.json { render :json => @image, :status => 500 }
       end
     end
   end
