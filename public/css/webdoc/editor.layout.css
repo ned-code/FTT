@@ -253,7 +253,7 @@ body.full_view {
   margin-bottom: -128px;
 }
 .pages_panel {
-  height: 128px;
+  height: 0px; /* set 0 for the moment otherwise it above full button */ 
 }
 .sharing_panel {
   height: 96px;

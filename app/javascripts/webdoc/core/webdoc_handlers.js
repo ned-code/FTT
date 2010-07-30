@@ -80,6 +80,7 @@ WebDoc.handlers = {
   _panelHandlers: {
     'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggle(); },
     'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggle(); },
+    'full':                 function(e) { WebDoc.application.pageEditor.toggleFullScreen(); },
     
     'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggle(); },
     'media-browser':        function(e) { WebDoc.application.rightBarController.showMediaBrowser(e);}, 
