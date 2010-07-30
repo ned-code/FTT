@@ -166,8 +166,3 @@
 .center_box>.content {
     height: 100%;
 }
-
-.dropdown {
-	height: 0;
-	overflow: hidden;
-}

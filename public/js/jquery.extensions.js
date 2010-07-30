@@ -52,6 +52,8 @@
     
     var debug = (window.console && console.log);
     
+    var docElem = document.documentElement;
+    
     var testElem = jQuery('<div/>').css({
       WebkitBoxSizing: 'border-box',
       MozBoxSizing: 'border-box',
@@ -70,6 +72,8 @@
     function transitionEnd(e){
       if (debug) { console.log('[CSS] transition detected'); };
       jQuery.support.css.transition = true;
+      jQuery.support.css.transitionend = e.type;
+      docElem.className = docElem.className + 'transition_support';
       jQuery(document).unbind('transitionend webkitTransitionEnd oTransitionEnd', transitionEnd);
     }
     

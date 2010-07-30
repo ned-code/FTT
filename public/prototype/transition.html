@@ -50,12 +50,13 @@
       
       display: none;
     }
-    .css3 .transition {
+    .transition_support .transition {
       display: block;
     }
+    
   </style>
 </head>
-<body class="css3">
+<body>
   
   <a href="#toggle">toggle</a>
   
@@ -93,7 +94,7 @@
           }, 20);
           
         }
-      })
+      });
       
       jQuery('body')
       .bind('transitionend webkitTransitionEnd oTransitionEnd', function(e){
