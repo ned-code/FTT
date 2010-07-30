@@ -10,6 +10,7 @@ stylesheets:
     - public/css/webcss/wrap.css
     - public/css/webcss/index.css
     - public/css/webcss/layer.css
+    - public/css/webcss/layout.css
     - public/css/webcss/panel.css
     - public/css/webcss/column.css
     - public/css/webcss/card.css
