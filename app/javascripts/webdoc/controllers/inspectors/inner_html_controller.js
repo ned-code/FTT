@@ -11,9 +11,9 @@ WebDoc.InnerHtmlController = $.klass({
         // Initialise CodeMirror. CodeMirror must be visible
         // while it is being set up.
         editor = new CodeMirror( domNode.find('.content')[0] , {
-          path: '/codemirror/js/',
+          path: '/js/codemirror/',
           parserfile: ['parsexml.js', 'parsecss.js', 'tokenizejavascript.js', 'parsejavascript.js', 'parsehtmlmixed.js'],
-          stylesheet: '/stylesheets/style.codemirror.css',
+          stylesheet: '/css/codemirror/codemirror.css',
           lineNumbers: true,
           indentUnit: 2,
           height: '100%',
