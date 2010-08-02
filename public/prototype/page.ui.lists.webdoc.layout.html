@@ -139,6 +139,23 @@
       </div>
     
       <div class="tools_panel panel">
+        
+        <!--ul class="horizontal edit_index buttons_index index">
+          <li><a class="edit_button button" href="#edit" title="Edit">Edit</a></li
+         ><li>
+            <a class="pop_button button" href="#edit_pop" title="Edit Menu">Edit Menu</a>
+            <ul class="vertical editlist_index buttons_index index">
+              <li><a class="editlist_button button" href="#undo" title="Undo">Undo</a></li
+             ><li><a class="editlist_button button" href="#redo" title="Redo">Redo</a></li>
+            </ul>
+          </li>
+        </ul-->
+        
+        <ul class="horizontal app_index buttons_index index">
+          <li><a class="app_button button" href="#text_app" title="Text App">Text App</a></li
+         ><li><a class="app_button button" href="#draw_app" title="Draw App">Draw App</a></li>
+        </ul>
+        
         <ul class="horizontal panel_index buttons_index index">
           <li><a class="panel_button button" href="#toggle_activity_panel" title="Toggle Activity Panel">Activity Panel</a></li
          ><li><a class="panel_button button" href="#toggle_comments_panel" title="Toggle Comments Panel">Comments Panel</a></li
@@ -218,7 +235,8 @@
   </header>
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-  <script type="text/javascript">
+  <script src="../js/jquery.extensions.js"></script>
+  <script>
     
     /* from page.layout */
     
@@ -227,12 +245,12 @@
       jQuery('a[href=#full]')
       .toggle(function(e){
         
-        jQuery('body').addClass('full_mode full_view');
+        jQuery('body').addTransitionClass('full_view');
         e.preventDefault();
         
       }, function(e){
         
-        jQuery('body').removeClass('full_mode full_view');
+        jQuery('body').removeTransitionClass('full_view');
         e.preventDefault();
         
       });
@@ -256,18 +274,18 @@
             e.preventDefault();
             
             if (key === currentKey) {
-              obj[key].panel.removeClass('active');
-              obj[key].toggle.removeClass('active');
+              obj[key].panel.removeTransitionClass('active');
+              obj[key].toggle.removeTransitionClass('active');
               
               currentKey = false;
             }
             else {
-              obj[key].panel.addClass('active');
-              obj[key].toggle.addClass('active');
+              obj[key].panel.addTransitionClass('active');
+              obj[key].toggle.addTransitionClass('active');
               
               if (currentKey) {
-                obj[currentKey].panel.removeClass('active');
-                obj[currentKey].toggle.removeClass('active');
+                obj[currentKey].panel.removeTransitionClass('active');
+                obj[currentKey].toggle.removeTransitionClass('active');
               }
               
               currentKey = key;

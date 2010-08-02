@@ -26,7 +26,7 @@
   var options = {
         errorClass: "error",
         errorNode: jQuery('<label/>', { 'class': 'error-message' }),
-        errorWrapSelector: "p, fieldset, div"
+        errorWrapSelector: "input, div, p, fieldset"
       },
       
       debug = (window.console && window.console.log),
@@ -81,6 +81,22 @@
             
             return ( !required || !!value ) ||
               'This is required';
+          }
+        },
+        min: {
+          test: function( field, value ) {
+            var attr = field.attr("min");
+            
+            return ( !value || !attr || parseFloat(attr) <= parseFloat(value) ) ||
+              'Minimum ' + attr ;
+          }
+        },
+        max: {
+          test: function( field, value ) {
+            var attr = field.attr("max");
+            
+            return ( !value || !attr || parseFloat(attr) >= parseFloat(value) ) ||
+              'Maximum ' + attr ;
           }
         },
         minlength: {
@@ -452,7 +468,6 @@
         'http://twitter.com', 'http://www.twitter.com'
       ],
       
-      
       // Data types
       dataTypes = {
         cssvalue: {
@@ -466,10 +481,10 @@
         csscolor: {
           test: function( value ) {
             return (
+              cssColors[value] ||
               regex.hexColor.test( value ) ||
               regex.hslColor.test( value ) ||
-              regex.rgbColor.test( value ) ||
-              cssColors[value]
+              regex.rgbColor.test( value )
             );
           },
           error: 'Not a valid CSS color value'
@@ -480,13 +495,13 @@
           },
           error: 'A valid CSS angle, that isn\'t'
         },
-        imageurl: {
+        imagefile: {
           test: function( value ) {
             return (
-              jQuery.fn.validator.regex.url.test( value ) ||
               regex.imgFile.test( value )
             );
-          }
+          },
+          error: 'Must be a .png/jpg/jpeg/gif file'
         },
         // Rails doesn't do html5 forms yet. This is a workaround
         email: {

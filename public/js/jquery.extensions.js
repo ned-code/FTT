@@ -281,10 +281,10 @@ jQuery.fn.extend({
 
   var transitionClass = 'transition';
   
-  function removeTransitionClass(e){
-    jQuery(this)
-    .unbind( jQuery.support.css.transitionEnd, removeTransitionClass )
-    .remove( this, transitionClass );
+  function removeTransitionClass(elem){
+    jQuery(elem)
+    .unbind( jQuery.support.css.transitionEnd )
+    .removeClass( transitionClass );
   }
   
   jQuery.fn.extend({
@@ -296,7 +296,8 @@ jQuery.fn.extend({
       if (transitionSupport) {
         this
         .bind( jQuery.support.css.transitionEnd, function(e){
-          removeTransitionClass();
+          console.log('HEY, the transition ended, fart face.');
+          removeTransitionClass(this);
           callback && callback.apply(this);
         })
         .addClass( transitionClass );
@@ -324,7 +325,7 @@ jQuery.fn.extend({
       if (transitionSupport) {
         this
         .bind( jQuery.support.css.transitionEnd, function(e){
-          removeTransitionClass();
+          removeTransitionClass(this);
           callback && callback.apply(this);
         })
         .addClass( transitionClass );

@@ -15,6 +15,11 @@ legend      {
     font-size:1.2em;
 }
 
+label,
+.label {
+  display: block;
+}
+
 input,
 textarea,
 select {
@@ -39,9 +44,27 @@ label,
 input[type='text'],
 input[type='file'],
 input[type='password'],
+input[type='number'],
+input[type='email'],
+input[type='url'],
+input[type='range'],
+input[type='search'],
+input[type='color'],
+input[type='tel'],
+input[type='date'],
+input[type='time'],
+input[type='week'],
+input[type='month'],
+input[type='datetime'],
+input[type='datetime-local'],
 textarea {
     border: none;
-    width: 100%;
+}
+
+input[type='search'] {
+    -webkit-border-radius: 2px;
+    -moz-border-radius:    2px;
+    border-radius:         2px;
 }
 
 label,
@@ -49,6 +72,39 @@ label,
 input[type='text'],
 input[type='file'],
 input[type='password'],
+input[type='number'],
+input[type='email'],
+input[type='url'],
+input[type='range'],
+input[type='search'],
+input[type='color'],
+input[type='tel'],
+textarea {
+    width: 100%;
+}
+
+input[type='time'] {
+    width: 5em;
+}
+
+label,
+.label,
+input[type='text'],
+input[type='file'],
+input[type='password'],
+input[type='number'],
+input[type='email'],
+input[type='url'],
+input[type='range'],
+input[type='search'],
+input[type='color'],
+input[type='tel'],
+input[type='date'],
+input[type='time'],
+input[type='week'],
+input[type='month'],
+input[type='datetime'],
+input[type='datetime-local'],
 select {
     height: 1.6667em;
 }
@@ -56,6 +112,12 @@ select {
 input[type='text'],
 input[type='file'],
 input[type='password'],
+input[type='number'],
+input[type='email'],
+input[type='url'],
+input[type='search'],
+input[type='color'],
+input[type='tel'],
 textarea {
     opacity: 0.88;
     padding: 0 0.3333em;
@@ -73,7 +135,13 @@ select {
 
 input[type='text'],
 input[type='file'],
-input[type='password'] {
+input[type='password'],
+input[type='number'],
+input[type='email'],
+input[type='url'],
+input[type='search'],
+input[type='color'],
+input[type='tel'] {
     /* Position text in the same place it is in labels in WebKit / Mozilla */
     text-indent: -1px;
 }
@@ -151,6 +219,12 @@ label input[type=checkbox] {
 
 input[type='text']:focus,
 input[type='password']:focus,
+input[type='number']:focus,
+input[type='email']:focus,
+input[type='url']:focus,
+input[type='search']:focus,
+input[type='color']:focus,
+input[type='tel']:focus,
 select:focus,
 textarea:focus {
     opacity: 1;
@@ -167,8 +241,24 @@ textarea:focus {
     -moz-box-shadow:    0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
     box-shadow:         0 0 4px 2px hsl( 72, 100%, 50% ), inset 0 0 4px hsl( 72, 100%, 50% );
 }
+input[type='text'].error,
+input[type='password'].error,
+input[type='number'].error,
+input[type='email'].error,
+input[type='url'].error,
+input[type='search'].error,
+input[type='color'].error,
+input[type='tel'].error,
+select.error,
+textarea.error,
 .error input[type='text'],
 .error input[type='password'],
+.error input[type='number'],
+.error input[type='email'],
+.error input[type='url'],
+.error input[type='search'],
+.error input[type='color'],
+.error input[type='tel'],
 .error select,
 .error textarea {
     opacity: 1;
@@ -177,8 +267,24 @@ textarea:focus {
     -moz-box-shadow:    0 0 4px 1px hsl( 28, 100%, 50% ), inset 0 0 4px hsl( 28, 100%, 50% );
     box-shadow:         0 0 4px 1px hsl( 28, 100%, 50% ), inset 0 0 4px hsl( 28, 100%, 50% );
 }
+input[type='text'].error:focus,
+input[type='password'].error:focus,
+input[type='number'].error:focus,
+input[type='email'].error:focus,
+input[type='url'].error:focus,
+input[type='search'].error:focus,
+input[type='color'].error:focus,
+input[type='tel'].error:focus,
+select.error:focus,
+textarea.error:focus,
 .error input[type='text']:focus,
 .error input[type='password']:focus,
+.error input[type='number']:focus,
+.error input[type='email']:focus,
+.error input[type='url']:focus,
+.error input[type='search'],
+.error input[type='color']:focus,
+.error input[type='tel']:focus,
 .error select:focus,
 .error textarea:focus {
     -webkit-box-shadow: 0 0 12px hsl( 58, 100%, 50% );
@@ -222,6 +328,17 @@ input.default {
     font-weight: normal; 
 }
 
+
+/* Layout */
+
+input+label,
+textarea+label,
+input+input,
+textarea+input,
+input+textarea,
+textarea+textarea {
+    margin-top: 0.6667em;
+}
 
 
 /* Layout wrappers

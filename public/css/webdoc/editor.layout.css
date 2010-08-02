@@ -4,6 +4,10 @@ body.full_view {
   overflow: hidden;
 }
 
+.transition_support body.transition {
+  overflow: auto;
+}
+
 /* .wrap extensions ------------------------- */
 
 .wrap {
@@ -80,6 +84,11 @@ body.full_view {
   height: 0;
   margin-bottom: 0;
   opacity: 0;
+  display: none;
+}
+
+.transition_support .full_view.transition .content_wrap {
+  display: block;
 }
 
 /* .panel extensions ------------------------- */ 
@@ -97,7 +106,7 @@ body.full_view {
 }
 
 /* Manage layering of panels. Active panels 
-   slide over other panels as the come into focus */
+   slide over other panels as they come into focus */
 
 .browser_panel,
 .inspector_panel,
@@ -133,7 +142,7 @@ body.full_view {
 .inspector_panel,
 .comments_panel,
 .activity_panel,
-.sharing_panel,
+/*.sharing_panel,*/
 .pages_panel {
   /* It would be great to make this happen after the fade... */
   display: none;
@@ -152,7 +161,7 @@ body.full_view {
 .full_view .inspector_panel,
 .full_view .comments_panel,
 .full_view .activity_panel,
-.full_view .sharing_panel,
+/*.full_view .sharing_panel,*/
 .full_view .pages_panel {
   display: block;
   opacity: 0;
@@ -162,7 +171,7 @@ body.full_view {
 .full_view .inspector_panel.active,
 .full_view .comments_panel.active,
 .full_view .activity_panel.active,
-.full_view .sharing_panel.active,
+/*.full_view .sharing_panel.active,*/
 .full_view .pages_panel.active {
   opacity: 1;
 }
@@ -259,10 +268,15 @@ body.full_view {
   height: 96px;
 }
 
-.pages_panel.active,
-.sharing_panel.active {
+.full_view .pages_panel.active,
+.full_view .sharing_panel.active {
   margin-bottom: 0;
 }
+
+/*.full_view .pages_panel,
+.full_view .sharing_panel {
+  height: 0;
+}*/
 
 /* .index extensions ---------------------- */
 
@@ -319,11 +333,13 @@ body.full_view {
 
 .app_index {
 	position: absolute;
+  top: 0.3333em;
 	left: 9em;
 }
 
 .panel_index {
   position: absolute;
+  top: 0.3333em;
   right: 0.3333em;
 }
 
@@ -333,7 +349,7 @@ body.full_view {
 }
 
 
-/* .button extension ------------------------- */
+/* .button extensions ------------------------- */
 
 .edit_button {
   position: absolute;
@@ -346,6 +362,14 @@ body.full_view {
 
 .panel_button.active {
   background-position: 0 -24px;
+}
+
+.panel_button[href='#toggle_sharing_panel'] {
+  display: none;
+}
+
+.full_view .panel_button[href='#toggle_sharing_panel'] {
+  display: inline-block;
 }
 
 .app_button {
