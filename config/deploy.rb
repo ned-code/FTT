@@ -13,7 +13,7 @@ set :scm, :git
 set :repository, "git@git.assembla.com:webdoc"
 ssh_options[:forward_agent] = true
 
-after 'deploy:update_code', 'deploy:bundle_install', 'deploy:generate_assets', 'deploy:link_config', 'deploy:update_crontab'
+after 'deploy:update_code', 'bundle', 'deploy:generate_assets', 'deploy:link_config', 'deploy:update_crontab'
 
 namespace :deploy do
   task :start do ; end
@@ -43,6 +43,25 @@ namespace :deploy do
   end
   task :update_crontab, :roles => :app do
     run "cd #{release_path} && #{ruby_path}/bin/whenever --set environment=#{rails_env} --update-crontab #{application}"
+  end
+end
+
+#capistrano tasks to handle latest bundler 1.0.0.rc deploys (http://gist.github.com/503609)
+namespace :bundle do
+  task :default do
+    symlink
+    install
+  end
+
+  desc "Symlink the bundle install location to a shared location"
+  task :symlink do
+    run "[ -d #{shared_path}/bundle ] || mkdir #{shared_path}/bundle"
+    run "ln -fs #{shared_path}/bundle #{release_path}/vendor/bundle"
+  end
+
+  desc "Check gem dependencies"
+  task :install do
+    run "cd #{release_path} && bundle install vendor/bundle --without test"
   end
 end
 
