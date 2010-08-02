@@ -44,20 +44,11 @@
       .bind('click', function(){
         if (state) {
           state = false;
-          body.addClass('transition');
-          body.removeClass('loading');
+          body.removeTransitionClass('loading');
         }
         else {
           state = true;
-          body.addClass('transition');
-          // Delay removal of hide to allow the browser
-          // time to reflow, or the transition doesn't happen.
-          // FF is particularly bad at this - needs min 20ms.
-          var t = setTimeout(function(){
-            clearTimeout(t);
-            t = null;
-            body.addClass('loading');
-          }, 20);
+          body.addTransitionClass('loading');
         }
       });
       

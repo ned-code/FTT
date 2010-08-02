@@ -86,7 +86,7 @@
       removeTest();
       
       jQuery.support.css.transition = true;
-      jQuery.support.css.transitionend = e.type;
+      jQuery.support.css.transitionEnd = e.type;
       
       // Add class to html tag to flag transition support
       docElem.className = docElem.className + 'transition_support';
@@ -268,3 +268,81 @@ jQuery.fn.extend({
         return this.attr("href", href) ;
     }
 });
+
+// Add and remove transition classes.
+// This method is not foolproof. It won't handle multiple transitions that
+// have different durations, or transitions on nested elements that have
+// multiple durations. Also, I'm in two minds about whether to bind 
+// removeTransitionClass everytime, or do it once on the body. Also, some
+// super-fast removing and adding of a className is going to upset the timer
+// delay. In short, the whole shaboodle has faults. 
+
+(function(jQuery, undefined){
+
+  var transitionClass = 'transition';
+  
+  function removeTransitionClass(e){
+    jQuery(this)
+    .unbind( jQuery.support.css.transitionEnd, removeTransitionClass )
+    .remove( this, transitionClass );
+  }
+  
+  jQuery.fn.extend({
+    addTransitionClass: function( classNames, callback ) {
+      var transitionSupport = jQuery.support.css && jQuery.support.css.transition,
+          self = this,
+          delay;
+      
+      if (transitionSupport) {
+        this
+        .bind( jQuery.support.css.transitionEnd, function(e){
+          removeTransitionClass();
+          callback && callback.apply(this);
+        })
+        .addClass( transitionClass );
+        
+        // Delay addition of classNames to allow the browser
+        // time to reflow.
+        delay = setTimeout(function(){
+          clearTimeout( delay );
+          delay = null;
+          self.addClass( classNames );
+        }, 20);
+      }
+      else {
+        this.addClass( classNames );
+      }
+      
+      return this;
+    },
+    
+    removeTransitionClass: function( classNames, callback ) {
+      var transitionSupport = jQuery.support.css && jQuery.support.css.transition,
+          self = this,
+          delay;
+      
+      if (transitionSupport) {
+        this
+        .bind( jQuery.support.css.transitionEnd, function(e){
+          removeTransitionClass();
+          callback && callback.apply(this);
+        })
+        .addClass( transitionClass );
+        
+        // Delay removal of classNames to allow the browser
+        // time to reflow.
+        delay = setTimeout(function(){
+          clearTimeout( delay );
+          delay = null;
+          self.removeClass( classNames );
+        }, 20);
+      }
+      else {
+        this.removeClass( classNames );
+      }
+      
+      return this;
+    }
+  });
+
+})(jQuery);

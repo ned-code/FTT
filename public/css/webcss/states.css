@@ -41,12 +41,15 @@
     opacity: 1;
 }
 
+.transition_support .transition.loading_icon,
+.transition_support .transition .loading_icon {
+  display: block;
+}
+
 /* Transition state stops display: none; from making the element disappear at the beginning
    of the transition. It can be automatically removed by a global transitionend handler
    on the body.  For the CSS, .transition must only be heeded in browsers with transition support */
-.transition_support .transition,
-.transition_support .transition.loading_icon,
-.transition_support .transition .loading_icon {
+.transition_support .transition {
   display: block;
 }
 
