@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <!-- Let's do things to IE, 'cos it sucks rancid dog's cock. Big time. -->
+  <!--[if lte IE 8]>
+  <script type="text/javascript">
+    // Make IE see html5 elements
+    document.createElement('header');
+    document.createElement('section');
+  </script>
+  <![endif]-->
+  
+  <link href="../css/webcss/reset.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/layout.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/wrap.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/layer.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/panel.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/index.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/column.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/thumb.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/button.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="../css/webdoc/index.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="../css/webdoc/site.color.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="../css/webdoc/editor.color.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/editor.layout.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/editor.typography.css" media="all" rel="stylesheet" type="text/css"/>
+<!-- DEV -->
+  <link href="css/ui.buttons.css" media="all" rel="stylesheet" type="text/css"/>
+<!-- !DEV -->
+  <style>
+    .header {
+      background: #dedede;
+    }
+    .webdoc {
+      background: hsl(40, 40%, 30%) url('images/bg_3.jpg') 50% 50% no-repeat;
+    }
+
+    .browser_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .inspector_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .comments_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .sharing_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .pages_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .activity_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    h3 {
+      font-weight: bold;
+      color: white;
+      background: rgba(0,0,0,0.4);
+      text-align: center;
+      line-height: 2em;
+      height: 2em;
+      
+    }
+    .thumb {
+      background-image: url('images/thumb_test.png');
+    }
+    .logo_thumb {
+      background-image: url('../images/thumb_logo.png');
+    }
+  </style>
+
+</head>
+<body>
+<div id="bglayer">
+
+    
+      <div class="tools_panel panel testbuttons">
+      <ul class="horizontal app_index index" id="test">
+          <li class="text"><a class="app_button button icon_button">Insert text</a></li>
+          <li class="image"><a class="app_button button icon_button">Insert Image</a></li>
+          <li class="draw"><a class="app_button button icon_button">Draw</a></li>
+          <li class="html"><a class="app_button button icon_button">Insert HTML</a></li>
+        </ul>
+        
+      </div>
+</div>   
+  <script src="../js/jquery-1.4.2.js" type="text/javascript"></script>
+  
+  	<script type="text/javascript"> 
+		// Place all Javascript code here
+ /*
+		$(document).ready(function(){
+ 
+ 			$("#test li").each(function (type) {
+		     	$(this).hover(function () {
+		      		$(this).prev("li").addClass("nearby");
+		      		$(this).next("li").addClass("nearby");
+		     	},
+		     	function () {
+		      		$(this).prev("li").removeClass("nearby");
+		      		$(this).next("li").removeClass("nearby");
+		     	});
+		    });
+		});
+		*/
+	</script> 
+ </body>
+</html> 
