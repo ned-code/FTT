@@ -38,12 +38,10 @@ class ImagesController < ApplicationController
     @image.favorites = params[:image][:favorites]
     @image.fix_content_type_for_swfupload!
 
-    respond_to do |format|
-      if @image.save
-        format.json { render :json => @image }
-      else
-        format.json { render :json => @image, :status => 500 }
-      end
+    if @image.save
+      render :json => @image
+    else
+      render :json => @image, :status => 500
     end
   end
   
