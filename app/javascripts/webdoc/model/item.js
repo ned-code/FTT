@@ -815,15 +815,9 @@ WebDoc.Item = $.klass(WebDoc.Record,
     var diffZoom = zoom - previousZoom;
     
     this.setProperty('zoom', zoom);
-    var newLeft,newTop;
-    if(zoom == 0){
-      newLeft = 0;
-      newTop = 0;
-    }else{
-      newLeft = this.getDisplacement().left + diffZoom/2;
-      newTop = this.getDisplacement().top + diffZoom/2;
-    }
-       
+    var newLeft = this.getDisplacement().left + diffZoom/2;
+    var newTop = this.getDisplacement().top + diffZoom/2;
+    
     this.displace({ left: newLeft, top: newTop});
     this.fireObjectChanged({ modifedAttribute: 'zoom' });
     WebDoc.application.inspectorController.refresh();
