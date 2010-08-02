@@ -240,7 +240,7 @@ WebDoc.DrageAndDropController = {
     
     for(knowSourceIndex in knowSources){
       if((urlParameterDomain && urlParameterDomain == knowSources[knowSourceIndex][0])){
-        uri_list = 'http://'+WebDoc.UrlUtils.consolidateSrc(uri_list).split('http://')[2]
+        uri_list = 'http://'+WebDoc.UrlUtils.consolidateSrc(uri_list).split('http://')[2];
         knowSources[knowSourceIndex][1](uri_list,evt);
         return true
        }

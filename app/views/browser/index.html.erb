@@ -144,12 +144,12 @@
                 .appendTo("body")
                 .show()
                 .animate({opacity:1},{duration: 1500, easeMethod: "easeInExpo"});
-	    }
+	    };
 	    
 	    wdbrowser.highlightLink = function(ilink){
 	        wdbrowser.quicklinks[ilink]
                 .animate({opacity:1},{duration: 1500, easeMethod: "easeInExpo"});
-	    }
+	    };
 	    
         jQuery(document).ready(function(){
             
@@ -160,7 +160,7 @@
             
             wdbrowser.anim.onload = function(){
                 jQuery("body").append(wdbrowser.anim);
-            }
+            };
             
             // Bubles animation
             for(var i=0; i<wdbrowser.bubles.length; i++){

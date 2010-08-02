@@ -223,7 +223,7 @@ WebDoc.ServiceImagesSearch = $.klass({
   buildThumbnail: function(type, url, thumbUrl, name, imageLink, newProperties) {
     name = name.replace(/&#39;/g, "'");
     var properties = { type:type, url:url, thumb_url:thumbUrl, name:name, image_link:imageLink };
-    var domSize = { width:"100%", height:"100%"}
+    var domSize = { width:"100%", height:"100%"};
     
     if (newProperties){
       jQuery.extend(properties, { title: newProperties.title });

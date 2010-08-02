@@ -2,7 +2,7 @@
 //= require <webdoc/model/item>
 
 WebDoc.PageView = $.klass({
-  initialize: function(page, boardContainer, editable) {
+  initialize: function(page, boardContainer, editable, skipDiscussions) {
     var domNode = $('<div>', {
           'class': 'webdoc',
           id: 'page_' + page.uuid()
@@ -12,7 +12,14 @@ WebDoc.PageView = $.klass({
         }),
         discussionDomNode = $('<div/>').id('discussions_'+page.uuid()).addClass("layer").css({ overflow: 'visible' }),
         drawingDomNode = $(WebDoc.application.svgRenderer.createSurface()), eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(), that = this;
-    
+
+    this.skipDiscussions = null;
+    if(skipDiscussions && skipDiscussions === true) {
+      this.skipDiscussions = true;
+    }
+    else {
+      this.skipDiscussions = false;
+    }
     
     // Extend this
     this._editable = undefined;
@@ -50,7 +57,7 @@ WebDoc.PageView = $.klass({
       });
     }
 
-    if(!page.isNew) {
+    if(!page.isNew && !this.skipDiscussions) {
       this.refreshDiscussions();
     }
     

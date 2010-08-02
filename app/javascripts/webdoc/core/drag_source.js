@@ -124,7 +124,7 @@ WebDoc.DrageAndDropController.addUriSource(
 WebDoc.DrageAndDropController.addUriSource(
   'video.yahoo.com',
   function(uri_list,evt){
-    id = uri_list
+    id = uri_list;
     var videoProperties = {
       type : 'yahoovideo',
       video_id : id
