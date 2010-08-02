@@ -302,9 +302,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   removeBackground: function(){
     if(this.hasBackground()){
-      this.getStyle()['background'] = '';
-      this.save();
-      this.fireObjectChanged({ modifedAttribute: 'css' });
+      this.setStyle('', 'background');
     }
   },
   
@@ -315,9 +313,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   removeBorder: function(){
     if(this.hasBorder()){
-      this.getStyle()['border'] = '';
-      this.save();
-      this.fireObjectChanged({ modifedAttribute: 'css' });
+      this.setStyle('', 'border');
     }
   },
   
@@ -813,9 +809,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }.pBind(this));
     
     var diffZoom = zoom - previousZoom;
+    
     this.setProperty('zoom', zoom);
     var newLeft = this.getDisplacement().left + diffZoom/2;
-    var newTop = this.getDisplacement().top + diffZoom/2;    
+    var newTop = this.getDisplacement().top + diffZoom/2;
+    
     this.displace({ left: newLeft, top: newTop});
     this.fireObjectChanged({ modifedAttribute: 'zoom' });
     WebDoc.application.inspectorController.refresh();
