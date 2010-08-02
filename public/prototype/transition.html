@@ -27,8 +27,8 @@
            -o-transition:      -o-transform 0.15s ease-in, opacity 0.15s ease-in;
               transition:         transform 0.15s ease-in, opacity 0.15s ease-in;
 
-      -webkit-transition-timing-function: cubic-bezier(0.7, 2, 0.5, 0.5);
-         /* FF Allows values greater than 1 - which means we can make a bounce */
+      /*-webkit-transition-timing-function: cubic-bezier(0.7, 2, 0.5, 0.5);*/
+      /* FF and Opera allow values greater than 1 - which means we can make a bounce */
          -moz-transition-timing-function: cubic-bezier(0.7, 2, 0.5, 0.5);
            -o-transition-timing-function: cubic-bezier(0.7, 2, 0.5, 0.5);
               transition-timing-function: cubic-bezier(0.7, 2, 0.5, 0.5);
@@ -43,19 +43,19 @@
               transform: scale(0.5);
       
       -webkit-transition-timing-function: ease-out;
-         /* FF Allows values greater than 1 - which means we can make a bounce */
          -moz-transition-timing-function: ease-out;
            -o-transition-timing-function: ease-out;
               transition-timing-function: ease-out;
       
       display: none;
     }
-    .css3 .transition {
+    .transition_support .transition {
       display: block;
     }
+    
   </style>
 </head>
-<body class="css3">
+<body>
   
   <a href="#toggle">toggle</a>
   
@@ -93,7 +93,7 @@
           }, 20);
           
         }
-      })
+      });
       
       jQuery('body')
       .bind('transitionend webkitTransitionEnd oTransitionEnd', function(e){
