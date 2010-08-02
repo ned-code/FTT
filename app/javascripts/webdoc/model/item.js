@@ -302,9 +302,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   removeBackground: function(){
     if(this.hasBackground()){
-      this.getStyle()['background'] = '';
-      this.save();
-      this.fireObjectChanged({ modifedAttribute: 'css' });
+      this.setStyle('', 'background');
     }
   },
   
@@ -315,9 +313,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   removeBorder: function(){
     if(this.hasBorder()){
-      this.getStyle()['border'] = '';
-      this.save();
-      this.fireObjectChanged({ modifedAttribute: 'css' });
+      this.setStyle('', 'border');
     }
   },
   
