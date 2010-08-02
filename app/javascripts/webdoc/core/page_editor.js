@@ -294,7 +294,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       var choice = confirm("Are you sure you want to delete the current page?");
       if (choice) {
         this.currentDocument.removePage(pageToDelete, true);
-        this.currentPage.destroy();
+        pageToDelete.destroy();
       }
     }
   },
