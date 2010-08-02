@@ -61,7 +61,7 @@ namespace :bundle do
 
   desc "Check gem dependencies"
   task :install do
-    run "cd #{release_path} && bundle install vendor/bundle --without test"
+    run "cd #{release_path} && #{ruby_path}/bin/bundle install vendor/bundle --without test"
   end
 end
 
