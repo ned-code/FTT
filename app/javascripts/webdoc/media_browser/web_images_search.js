@@ -85,22 +85,21 @@ WebDoc.WebImagesSearch = $.klass({
           WebDoc.application.rightBarController.showPageInspector();
           break;
         case 'add_image_to_favorite':
-          ddd('add_image_to_favorite');
           link.hide();
           li.append(info);
           var image = new WebDoc.Image;
           image.data.remote_attachment_url = properties.url;
           image.data.favorites = 1;
-          image.data.title = properties.title
+          image.data.title = properties.title;
           image.save(function(persitedImage){
             if(persitedImage.data.attachment_file_name){
               if($('#media-browser-my-favorites').length){
-                WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data.properties, persitedImage.uuid(), 'my-favorites-images');
+                WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data, persitedImage.uuid(), 'my-favorites-images');
               }
               info.text("Done!");
             }
             else{
-            	info.text("An error occurred during upload! ");
+              info.text("An error occurred during upload! ");
             }
           }.pBind(this));
           break;
