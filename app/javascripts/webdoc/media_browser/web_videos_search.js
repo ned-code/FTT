@@ -482,7 +482,6 @@ WebDoc.VimeoSearch = $.klass(WebDoc.ServiceVideosSearch, {
   },
   jsonpCallback: function(data) {
     $("#jsonp_script").remove(); //remove script element created by jsonpExecuteCall
-    ddd(data)
     // this.resultsCount.text('0');
     if(data.videos){
       var totResults = parseInt(data.videos.total,10);

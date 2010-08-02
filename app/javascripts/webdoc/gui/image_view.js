@@ -60,7 +60,7 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
     }
     
     if(this.item.data.data.href) {
-      var target = '_blank'
+      var target = '_blank';
       var href = this.item.data.data.href;
       if( href.charAt(0) == '#'){
         target = '';
