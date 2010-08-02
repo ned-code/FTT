@@ -91,7 +91,7 @@ WebDoc.WebImagesSearch = $.klass({
           var image = new WebDoc.Image;
           image.data.remote_attachment_url = properties.url;
           image.data.favorites = 1;
-          image.data.title = properties.title
+          image.data.title = properties.title;
           image.save(function(persitedImage){
             if(persitedImage.data.attachment_file_name){
               if($('#media-browser-my-favorites').length){
@@ -224,7 +224,7 @@ WebDoc.ServiceImagesSearch = $.klass({
   buildThumbnail: function(type, url, thumbUrl, name, imageLink, newProperties) {
     name = name.replace(/&#39;/g, "'");
     var properties = { type:type, url:url, thumb_url:thumbUrl, name:name, image_link:imageLink };
-    var domSize = { width:"100%", height:"100%"}
+    var domSize = { width:"100%", height:"100%"};
     
     if (newProperties){
       jQuery.extend(properties, { title: newProperties.title });

@@ -16,19 +16,19 @@ jQuery.fn.flash = function(options) {
     
     this.show = function(){
       msgNode.append(message);
-      setTimeout(function(){message.addClass("visible")},0);    
+      setTimeout(function(){message.addClass("visible")},0);
       if(!msgNode.hasClass("visible")){
         parentNode.append(msgNode);
         setTimeout(function(){msgNode.addClass("visible")},0);
       }
-    }
+    };
     
     var close = function(){
       msgNode.removeClass("visible");
       msgNode.get(0).addEventListener("webkitTransitionEnd", function(e){
         msgNode.remove();
       });
-    }
+    };
     
     var hide = function(node){
       if(parentNode.find(".flash_message").length <= 1){
@@ -42,7 +42,7 @@ jQuery.fn.flash = function(options) {
     
     this.isModal = function(){
       return typeof(options.modal) !== "undefined" && options.modal ? true : false;
-    }
+    };
     
     msgNode
       .addClass("flash")
@@ -58,4 +58,4 @@ jQuery.fn.flash = function(options) {
     else
       this.flash();
     
-}
+};
