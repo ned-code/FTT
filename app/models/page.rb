@@ -272,7 +272,7 @@ class Page < ActiveRecord::Base
   def set_position
     self.position ||= document.nil? ? 0 : document.pages.count
     #update following pages
-    if document.pages.count(:conditions => ['pages.position = ?', self.position]) >= 1
+    if document.present? && document.pages.count(:conditions => ['pages.position = ?', self.position]) >= 1
       Page.update_all("position = position + 1", "position >= #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")
     end
   end
