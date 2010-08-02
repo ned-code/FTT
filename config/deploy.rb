@@ -44,6 +44,10 @@ namespace :deploy do
   task :update_crontab, :roles => :app do
     run "cd #{release_path} && #{ruby_path}/bin/whenever --set environment=#{rails_env} --update-crontab #{application}"
   end
+  
+  task :migrate do
+    run "cd #{release_path} && #{ruby_path}/bin/rake db:migrate RAILS_ENV=#{rails_env}"
+  end
 end
 
 #capistrano tasks to handle latest bundler 1.0.0.rc deploys (http://gist.github.com/503609)
