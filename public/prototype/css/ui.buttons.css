@@ -22,13 +22,13 @@
 	background-position: 0 0;  
 	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+	-o-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 	-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 	-webkit-border-radius:3px;
 	-moz-border-radius:3px;
 	-border-radius:3px;
 	background:url('../images/buttons2.png') no-repeat;
 	background-color:#fff;
-	width:25px;
 	height:25px;
 vertical-align: text-top;
  }
@@ -58,6 +58,8 @@ vertical-align: text-top;
 	-webkit-transform: scale(1.2);
 	-moz-transform-origin: center top;
 	-moz-transform: scale(1.2);
+	-o-transform-origin: center top;
+	-o-transform: scale(1.2);
 }
 
 #test li.nearby a {
@@ -67,3 +69,7 @@ vertical-align: text-top;
 	-moz-transform: scale(1.1);*/
 }
 
+.padding {
+	padding-left:25px;
+	padding-right:10px;
+}
