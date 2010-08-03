@@ -314,12 +314,12 @@ select:focus {
     outline-offset: -3px;
 }
 
-.error-message {
+.error_message {
     line-height: 1.6667;
     color: hsl( 13, 74%, 62% );
 }
 
-label.error-message {
+label.error_message {
     line-height: 1;
 }
 
@@ -350,17 +350,17 @@ textarea+textarea {
 
 .stack label,
 .stack .label,
-.stack .error-message,
+.stack .error_message,
 .stack img {
     padding-left: 0;
 }
 .stack label,
 .stack .label,
-.stack .error-message {
+.stack .error_message {
     display: block;
     white-space: nowrap;
 }
-.stack .error-message {
+.stack .error_message {
     position: absolute;
     bottom: -1.6667em;
     left: 0;

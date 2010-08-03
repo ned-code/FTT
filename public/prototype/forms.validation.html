@@ -117,6 +117,15 @@
     <label for="email">email</label>
     <input type="email" data-type="email" id="email" name="email" />
     
+    <label for="csscolorauto">csscolor [autocomplete=on]</label>
+    <input type="text" data-type="csscolor" id="csscolorauto" name="csscolorauto" autocomplete="on" />
+    
+    <label for="cssangleauto">cssangle [autocomplete=on]</label>
+    <input type="text" data-type="cssangle" id="cssangleauto" name="cssangleauto" autocomplete="on" />
+    
+    <label for="cssvalueauto">cssvalue [autocomplete=on]</label>
+    <input type="text" data-type="cssvalue" id="cssvalueauto" name="cssvalueauto" autocomplete="on" />
+    
     <input class="submit" type="submit" value="Submit"/>
   </form
  ><form class="column last of_three">
@@ -144,6 +153,9 @@
     <label for="required">text [required]</label>
     <input type="text" id="required" required="required" name="required" />
     
+    <label for="autocomplete">text [autocomplete=on]</label>
+    <input type="text" id="autocomplete" name="autocomplete" autocomplete="on" />
+    
     <input type="submit" id="submit" name="submit" />
   </form>
   
@@ -152,7 +164,12 @@
   <script type="text/javascript">
     jQuery(document).ready(function(){
       
-      jQuery('form').validator();
+      jQuery('form')
+      .validator()
+      .bind('submit', function(e){
+        e.preventDefault();
+        console.log('Submit prevented');
+      });
     
     });
   </script>
