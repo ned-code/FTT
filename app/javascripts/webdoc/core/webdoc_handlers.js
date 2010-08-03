@@ -83,6 +83,17 @@ WebDoc.handlers = {
     'full':                 function(e) { WebDoc.application.pageEditor.toggleFullScreen(); },
     
     'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggle(); },
+    
+    //new ui panel handler, actually the old right bar controller is used
+    'toggle_activity_panel':  function(e){ ddd('no activity yet'); },
+    'toggle_comments_panel':  function(e){ WebDoc.application.rightBarController.showDiscussionsPanel(e); },
+    'toggle_inspector_panel': function(e){ WebDoc.application.rightBarController.showItemInspector(e); },
+    'toggle_browser_panel':   function(e){ WebDoc.application.rightBarController.showMediaBrowser(e); },
+    'toggle_pages_panel':     function(e){ WebDoc.application.rightBarController.showPageInspector(e); },
+    'toggle_author_panel':    function(e){ WebDoc.application.rightBarController.showSocialPanel(e); },
+    'toggle_sharing_panel':   function(e){ ddd('no sharing yet') },
+    
+    //handler used in the old right bar controller
     'media-browser':        function(e) { WebDoc.application.rightBarController.showMediaBrowser(e);}, 
     'item-inspector':       function(e) { WebDoc.application.rightBarController.showItemInspector(e); },
     'page-inspector':       function(e) { WebDoc.application.rightBarController.showPageInspector(e); },

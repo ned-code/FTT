@@ -4,7 +4,7 @@
  */
 // define all inspector type that can be displayed in the right bar
 WebDoc.RightBarInspectorType = {
-	MEDIA_BROWSER: 'media-browser',
+  MEDIA_BROWSER: 'media-browser',
   ITEM: 'item',
   PAGE: 'page',
   DOCUMENT: 'document',
@@ -29,9 +29,9 @@ WebDoc.RightBarController = $.klass({
     // pageInspector does not work if you try loading it now.
     
     var itemInspector = new WebDoc.InspectorController(),
-				mediaBrowser = new WebDoc.MediaBrowserController();
+        mediaBrowser = new WebDoc.MediaBrowserController();
         
-		WebDoc.application.mediaBrowserController = mediaBrowser;
+    WebDoc.application.mediaBrowserController = mediaBrowser;
     WebDoc.application.inspectorController = itemInspector;
     
     this.visible = false;
@@ -109,11 +109,11 @@ WebDoc.RightBarController = $.klass({
     return this._inspectorsControllers[inspectorType];
   },
   
-	showMediaBrowser: function(){
-		ddd("[RightBarController] showMediaBrowser");
+  showMediaBrowser: function(){
+    ddd("[RightBarController] showMediaBrowser");
     this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
     this.show();
-	},
+  },
   
   showPageInspector: function() {
     ddd("[RightBarController] show page inspector");
