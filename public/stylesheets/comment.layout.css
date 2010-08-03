@@ -59,6 +59,7 @@
   top: 0; left: 0;
   
   background-size: 64px 64px;
+  -moz-background-size: 64px 64px;
   background-position: 4px 4px;
   padding-top: 64px;
   width: 64px;
