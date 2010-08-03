@@ -211,6 +211,20 @@ WebDoc.PropertiesInspectorController = $.klass({
           else if(property == 'borderRadius'){
             item.setStyleBorderRadius(value);
           }
+          else if(property == 'height' && item.data.data.preserve_aspect_ratio === "true") {
+            var aspectRatio = item.width("px") / item.height("px");
+            cssObj = {};
+            cssObj['height'] = Math.round(parseFloat(value))+'px';
+            cssObj['width']  = Math.round(parseFloat(value)*aspectRatio)+'px';
+            item.changeCss( cssObj );
+          }
+          else if(property == 'width' && item.data.data.preserve_aspect_ratio === "true") {
+            var aspectRatio = item.height("px") / item.width("px");
+            cssObj = {};
+            cssObj['height'] = Math.round(parseFloat(value)*aspectRatio)+'px';
+            cssObj['width']  = Math.round(parseFloat(value))+'px';
+            item.changeCss( cssObj );
+          }
           else{
             cssObj = {};
             cssObj[property] = value;
