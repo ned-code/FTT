@@ -9,6 +9,7 @@ WebDoc.Library = $.klass({
   initialize: function(libraryId) {
     this.elementId = libraryId;
     this.element = $('#'+libraryId);
+    this.libraryUtils = new LibraryUtils();
   },
 
   showSpinner: function(container) {

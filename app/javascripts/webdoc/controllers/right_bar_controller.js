@@ -33,8 +33,6 @@ WebDoc.RightBarController = $.klass({
     
     var itemInspector = new WebDoc.InspectorController();
         //mediaBrowser = new WebDoc.MediaBrowserController();
-    
-    this.libraryUtils = new LibraryUtils();
         
     //WebDoc.application.mediaBrowserController = mediaBrowser;
     WebDoc.application.inspectorController = itemInspector;
@@ -298,6 +296,7 @@ WebDoc.RightBarController = $.klass({
   },
   
   _preloadDragDropIcon: function(){
+    this.libraryUtils = new LibraryUtils();
     // just to preload the icon (so that it'll be immediately available at the first drag)
     $(document.body).append(this.libraryUtils.buildMediaDragFeedbackElement("video", ""));
     $(document.body).append(this.libraryUtils.buildMediaDragFeedbackElement("image", ""));

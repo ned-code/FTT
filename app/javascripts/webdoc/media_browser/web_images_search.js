@@ -15,6 +15,7 @@ WebDoc.WebImagesSearch = $.klass({
     this.imageDetailsView = $('#media-browser-web-images-details #image-details');
     this.setupDetailsView();
     
+    this.libraryUtils = new LibraryUtils();
     // Observe search submission
     this.searchForm.submit(function(event) {
       event.preventDefault();
@@ -48,7 +49,7 @@ WebDoc.WebImagesSearch = $.klass({
     dt.setData("application/wd-image", $.toJSON({url: imageUrl,id: properties.id, title: properties.title}));
     
     //Drag "feedback"
-    var mediaDragFeedbackEl = this.parentController.buildMediaDragFeedbackElement("image", properties.thumb_url);
+    var mediaDragFeedbackEl = this.libraryUtils.buildMediaDragFeedbackElement("image", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   },

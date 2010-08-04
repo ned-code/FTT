@@ -394,7 +394,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id, favorites:properties.favorites, media_id:properties.media_id, title: properties.title }));
     
     // Drag "feedback"
-    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
+    var mediaDragFeedbackEl = this.libraryUtils.buildMediaDragFeedbackElement("image", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   },
@@ -416,7 +416,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     dt.setData("application/wd-video", $.toJSON(properties));
     
     // Drag "feedback"
-    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("video", properties.thumb_url);
+    var mediaDragFeedbackEl = this.libraryUtils.buildMediaDragFeedbackElement("video", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   },

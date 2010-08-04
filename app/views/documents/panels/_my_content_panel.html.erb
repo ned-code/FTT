@@ -1,0 +1,75 @@
+<div id="media-browser-my-content" class='media-browser-tab'>
+  <%= render 'users/my_content_header'%>
+  <div id="media-browser-my-images" class='my-content-tab '>
+    <a href='#upload-images' class=''>
+      <%= t('.images.add_image') %>
+    </a>
+    <div id="my-images-library" class='thumbnails'>
+
+    </div>
+  </div>
+
+  <div id="media-browser-my-images-details" style='display:none' class='my-content-tab'>
+    <a href='#my-images' id='image-detail-back' class='back'>Back</a>
+    <div id="image-details">
+      <div class='single_image'>
+        <a href='' onclick="window.open(this.getAttribute('href'), '_blank'); return false;">
+          <img src='' alt='' />
+          <div class='icon_overlay'></div>
+        </a>
+      </div>
+      <h4 class="image_name"></h4>
+      <h5 class="image_size"></h5>
+      <div class="actions">
+        <ul>
+          <li>
+            <a id="add_image_to_page_action" href="">Add to page</a>
+          </li>
+          <li>
+            <a id="set_image_as_bg_action" href="">Set as background</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div id="media-browser-my-favorites-videos-details" class="my-content-tab" style="display:none;">
+    <a href='#my-favorites' id='' class='back'><%= t('.buttons.back') %></a>
+    <div id="video-details">
+      <h4 class="video_name"></h4>
+      <div class="single_video">
+        <div class="drag_handle" draggable="true"><%= t('.videos.detail_view.drag_handle') %></div>
+      </div>
+      <h5 class="view_count">
+        <span></span>
+        views
+      </h5>
+      <p class="video_description"></p>
+      <div class="actions">
+        <ul>
+          <li>
+            <a id="add_video_to_page_action" href=""><%= t('.videos.detail_view.add_to_page') %></a>
+          </li>
+          <li>
+            <a id="show_video_page_action" href=""><%= t('.videos.detail_view.show_on') %></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div id="media-browser-upload-images" style='display:none' class='my-content-tab'>
+    <div id="swfupload_container" style='display:none'>
+      <input id='upload_images_button' type='button' value="Choose images" />
+    </div>
+
+    <h1><%= t('.images.add_images_view.title') %></h1>
+    <div id="upload_control">
+      <span id='upload_images_button_background' class='button'><%= t('.images.buttons.upload') %></span>
+      <button id='cancel_images_upload' class='button' style='display:none'><%= t('.images.buttons.cancel_upload') %></button>
+      <div id="upload_images_spinner" style='display:none'></div>
+      <span class='uploading_info'><%= t('.images.add_images_view.choose_upload_image') %> </span>
+      <a href='#my-images'><%= t('.buttons.back') %></a>
+    </div>
+  </div>
+</div>

@@ -29,7 +29,27 @@
   
   <div class="comments_panel panel">
     <h3>Comments</h3>
-    <%= render :partial => 'documents/discussions_panel' %>
+    <%= render :partial => 'documents/panels/discussions_panel' %>
+  </div>
+  
+  <div class="my_content_panel panel">
+    <h3>My stuff</h3>
+    <%= render 'documents/panels/my_content_panel' %>
+  </div>
+  
+  <div class="apps_panel panel">
+    <h3>Apps</h3>
+    <%= render 'documents/panels/apps_panel' %>
+  </div>
+  
+  <div class="packages_panel panel">
+    <h3>Packages</h3>
+    <%= render 'documents/panels/packages_panel' %>
+  </div>
+  
+  <div class="browse_web_panel panel">
+    <h3>Browse the web</h3>
+    <%= render 'documents/panels/browse_web_panel' %>
   </div>
   
   <!-- <div class="activity_panel panel">

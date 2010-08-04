@@ -65,7 +65,7 @@ WebDoc.WebVideosSearch = $.klass({
     dt.setData("application/wd-video", $.toJSON(properties));
     
     // Drag "feedback"
-    var mediaDragFeedbackEl = this.parentController.buildMediaDragFeedbackElement("video", properties.thumb_url);
+    var mediaDragFeedbackEl = this.libraryUtils.buildMediaDragFeedbackElement("video", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   },

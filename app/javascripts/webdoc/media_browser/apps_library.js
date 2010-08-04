@@ -233,7 +233,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     
     // Drag "feedback"
     var properties = widgetData.properties;
-    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("app", properties.icon_url);
+    var mediaDragFeedbackEl = this.libraryUtils.buildMediaDragFeedbackElement("app", properties.icon_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   },

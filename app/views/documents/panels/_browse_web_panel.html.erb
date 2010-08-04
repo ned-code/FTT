@@ -1,0 +1,129 @@
+<div id="media-browser-web" class='media-browser-tab'>
+  <div id="media-browser-web-header">
+    <ul class='tab_navigation'>
+      <li>
+        <a class="selected" href='#search_images' title='Search images'> <%= t('.images.web_detail')%></a>
+        <a href='#search_videos' title='Search videos'> <%= t('.videos.web_detail')%></a>
+      </li>
+    </ul>
+  </div>
+  
+  <div id="web-images" class='web_media web-search-tab'>
+    <form>
+      <div>
+        <!--<label for='web_images_search_field'> <%= t('.images.web_detail') %>  </label>-->
+        <input type='text' id='web_images_search_field' class='web_media_search_field' />
+        <input type='submit' value='<%= t('.buttons.search') %>' id='web_images_search_submit' class='web_media_search_submit submit_button' />
+      </div>
+      <div class="filters">
+        <label>Flickr</label><input name='flickr_images' type='checkbox' checked='true'/>
+        <label>Google Images</label><input name='google_images' type='checkbox' checked='true'/>
+      </div>
+    </form>
+    <div id="flickr_images" class='thumbnails'>
+      <div class="web_result_separator">
+        <div class="wrs_top"></div>
+        <div class="wrs_bottom"></div>
+      </div>
+      <h3 class='service_bar'><%= t('.images.services.flickr')%><br/>
+        <span class='results_number'> 0 </span>&nbsp;<span class='results_label'>results</span>
+      </h3>
+    </div>
+    <div id="google_images" class='thumbnails'>
+      <div class="web_result_separator">
+        <div class="wrs_top"></div>
+        <div class="wrs_bottom"></div>
+      </div>
+      <h3 class='service_bar'><%= t('.images.services.google')%><br/>
+        <span class='results_number'> 0 </span>&nbsp;<span class='results_label'>results</span>
+      </h3>
+    </div>
+  </div>
+  
+  <div id="web-videos" class='web_media web-search-tab' style='display:none'>
+    <form>
+      <div>
+        <!--<label for='web_videos_search_field'> <%= t('.videos.web_detail') %>  </label>-->
+        <input type='text' id='web_videos_search_field' class='web_media_search_field' />
+        <input type='submit' value='<%= t('.buttons.search') %>' id='web_videos_search_submit' class='web_media_search_submit submit_button' />
+      </div>
+      <div class="filters">
+        <label>Youtube</label><input name='youtube_videos' type='checkbox' checked='true'/>
+        <label>Vimeo</label><input name='vimeo_videos' type='checkbox' checked='true'/>
+      </div>
+    </form>
+    <div id="youtube_videos" class='rows'>
+      <div class="web_result_separator">
+        <div class="wrs_top"></div>
+        <div class="wrs_bottom"></div>
+      </div>
+      <h3 class='service_bar'><%= t('.videos.services.youtube')%>
+        <span class='results_number'> 0 </span>
+      </h3>
+    </div>
+    <div id="vimeo_videos" class='rows'>
+      <div class="web_result_separator">
+        <div class="wrs_top"></div>
+        <div class="wrs_bottom"></div>
+      </div>
+      <h3 class='service_bar'><%= t('.videos.services.vimeo')%>
+        <span class='results_number'> 0 </span>
+      </h3>
+    </div>
+  </div>
+  
+  <div id="media-browser-web-images-details" style='display:none' class='web-search-tab view details_view'>
+    <a href='#search_images' id='web-image-detail-back' class='back'>Back</a>
+    <div id="image-details">
+      <div class='single_image'>
+        <a href='' onclick="window.open(this.getAttribute('href'), '_blank'); return false;">
+          <img  alt='' />
+          <div class='icon_overlay'></div>
+        </a>
+      </div>
+      <h4 class="image_name">image name</h4>
+      <h5 class="image_size"></h5>
+      <div class="actions">
+        <ul>
+          <li>
+            <a id="add_image_to_page_action" href="">Add to page</a>
+          </li>
+          <li>
+            <a id="set_image_as_bg_action" href="">Set as background</a>
+          </li>
+          <li>
+            <a id="add_image_to_favorite" href="">Add to favorites</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div id="media-browser-web-video-details" class="web-search-tab" style="display:none;">
+    <a href='#search_videos' id='web-video-details-back' class='back'><%= t('.buttons.back') %></a>
+    <div class="view_content">
+      <h4 class="video_name"></h4>
+      <div class="single_video">
+        <div class="drag_handle" draggable="true"><%= t('.videos.detail_view.drag_handle') %></div>
+      </div>
+      <h5 class="view_count">
+        <span></span>
+        views
+      </h5>
+      <p class="video_description"></p>
+      <div class="actions">
+        <ul>
+          <li>
+            <a id="add_video_to_page_action" href=""><%= t('.videos.detail_view.add_to_page') %></a>
+          </li>
+          <li>
+            <a id="show_web_video_page_action" href=""><%= t('.videos.detail_view.show_on') %></a>
+          </li>
+          <li>
+            <a id="add_video_to_favorites" href="">Add to favorites</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
