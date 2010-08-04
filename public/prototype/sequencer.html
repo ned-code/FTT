@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sequencer</title>
+  
+  <link href="../css/webcss/reset.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/forms.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/column.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <style>
+    textarea,
+    .textarea {
+      border: none;
+      border-bottom: 4px solid white;;
+      background: #89bbef;
+      color: black;
+
+      padding: 20px;
+      height: 240px;
+      opacity: 1;
+      overflow: hidden;
+      
+      margin: 0;
+      padding: 0;
+      
+      font-family: 'Georgia';
+      font-size: 3em;
+      font-style: italic;
+      /*font-variant: small-caps;*/
+      font-weight: bold;
+      
+      line-height: 0.8em;
+      
+      text-align: right;
+      text-align-last: left;
+      /*text-decoration: underline;*/
+      text-indent: 4em;
+      /*text-transform: lowercase;*/
+      /*text-overflow: ellipsis;*/
+      text-shadow: ;
+      
+      word-spacing: -30px;;
+      letter-spacing: 1em;
+      /*white-space: nowrap;*/
+      /*word-wrap: break-word;*/
+    }
+  </style>
+</head>
+<body>
+  
+  <div id="fang"></div>
+  <div id="fong"></div>
+  
+  <h2>a div:</h2>
+  <div class="textarea">Holy cow, mother of christ almighty. This is a textarea test.</div>
+  <h2>a textarea:</h2>
+  <textarea>Holy cow, mother of christ almighty. This is a textarea test.</textarea>
+  <p class="error">hef</p>
+  <script src="../js/jquery-1.4.2.js"></script>
+  <script src="js/sequencer.js"></script>
+  <script>
+    
+    var clickEvent1 = {
+      type: 'click',
+      selector: '#fang'
+    };
+    
+    var clickEvent2 = {
+      type: 'click',
+      selector: '#fong'
+    };
+    
+    var audioEvent = {
+      type: 'audio',
+      url:  'voice.mp4'
+    };
+    
+    var sequenceEvent1 = {
+      type: 'sequence',
+      0:    [audioEvent],
+      100:  [clickEvent1],
+      200:  [clickEvent1, clickEvent2],
+      300:  [sequenceEvent2]
+    };
+    
+    var sequenceEvent2 = {
+      type: 'sequence',
+      0:    [clickEvent2],
+      2000: [clickEvent1],
+      4000: [clickEvent2]
+    };
+    
+    //var sequencer = Sequencer( sequenceEvent1 );
+    
+    jQuery(document).ready(function(){
+      
+      //sequencer.play();
+      
+    });
+    
+  </script>
+</body>
+</html> 
