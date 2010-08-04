@@ -6,9 +6,11 @@ WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
   initialize: function($super) {
     $super('media-browser-packages');
     this._loadPackages();
-    this.detailsView = $('#package-details');
+    this.detailsView = jQuery('#package-details');
     this.detailIframe = this.detailsView.find('iframe');
-    this.createHandlers(this.element, 'click', {'packages-list': function(e){ WebDoc.application.mediaBrowserController.packagesLibrary.showList(); } });
+    jQuery('#package-detail-back').click(function(event){
+      this.showList();
+    }.pBind(this));
   },
 
   showList: function(){
@@ -23,7 +25,6 @@ WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
       type: "GET",
       url: '/themes/' + uuid,
       success: function(data) {
-        ddd(data.theme);
         this.detailIframe.attr('src', data.theme.elements_url);
       }.pBind(this),
       complete: function() {
@@ -42,7 +43,7 @@ WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
         this.element.prepend(data);
       }.pBind(this),
       complete: function() {
-        this.listView = $('#packages-list');
+        this.listView = jQuery('#packages-list');
       }.pBind(this)
     });
 
@@ -62,6 +63,6 @@ WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
   },
   
   _hideAll: function(){
-    $('.packages-tab').hide();
+    jQuery('.packages-tab').hide();
   }
 });

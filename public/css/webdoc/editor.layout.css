@@ -112,6 +112,9 @@ body.full_view {
 .inspector_panel,
 .comments_panel,
 .activity_panel,
+.my_content_panel,
+.packages_panel,
+.browse_web_panel,
 .apps_panel,
 .side_panel {
   z-index: 4;
@@ -120,6 +123,9 @@ body.full_view {
 .inspector_panel.active,
 .comments_panel.active,
 .activity_panel.active,
+.my_content_panel.active,
+.packages_panel.active,
+.browse_web_panel.active,
 .apps_panel.active,
 .side_panel.active {
   z-index: 5;
@@ -144,6 +150,9 @@ body.full_view {
 .inspector_panel,
 .comments_panel,
 .activity_panel,
+.my_content_panel,
+.packages_panel,
+.browse_web_panel,
 .apps_panel,
 /*.sharing_panel,*/
 .pages_panel {
@@ -155,6 +164,9 @@ body.full_view {
 .browser_panel.active,
 .inspector_panel.active,
 .comments_panel.active,
+.my_content_panel.active,
+.packages_panel.active,
+.browse_web_panel.active,
 .apps_panel.active,
 .activity_panel.active {
   display: block;
@@ -165,6 +177,9 @@ body.full_view {
 .full_view .inspector_panel,
 .full_view .comments_panel,
 .full_view .activity_panel,
+.full_view .my_content_panel,
+.full_view .packages_panel,
+.full_view .browse_web_panel,
 .full_view .apps_panel,
 /*.full_view .sharing_panel,*/
 .full_view .pages_panel {
@@ -176,6 +191,9 @@ body.full_view {
 .full_view .inspector_panel.active,
 .full_view .comments_panel.active,
 .full_view .activity_panel.active,
+.full_view .my_content_panel.active,
+.full_view .packages_panel.active,
+.full_view .browse_web_panel.active,
 .full_view .apps_panel.active,
 /*.full_view .sharing_panel.active,*/
 .full_view .pages_panel.active {
@@ -228,6 +246,9 @@ body.full_view {
 .browser_panel,
 .inspector_panel,
 .comments_panel,
+.my_content_panel,
+.packages_panel,
+.browse_web_panel,
 .apps_panel,
 .activity_panel {
   width: 288px;
@@ -241,13 +262,19 @@ body.full_view {
 .inspector_panel.active,
 .comments_panel.active,
 .activity_panel.active,
-.apps_panel{
+.my_content_panel.active,
+.packages_panel.active,
+.browse_web_panel.active,
+.apps_panel.active{
 
 }
 
 .full_view .browser_panel,
 .full_view .inspector_panel,
 .full_view .comments_panel,
+.full_view .my_content_panel,
+.full_view .packages_panel,
+.full_view .browse_web_panel,
 .full_view .apps_panel,
 .full_view .activity_panel {
   right: 0;
@@ -258,6 +285,9 @@ body.full_view {
 .full_view .browser_panel.active,
 .full_view .inspector_panel.active,
 .full_view .comments_panel.active,
+.full_view .my_content_panel.active,
+.full_view .packages_panel.active,
+.full_view .browse_web_panel.active,
 .full_view .apps_panel.active,
 .full_view .activity_panel.active {
   margin-right: 0;

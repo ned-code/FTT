@@ -14,7 +14,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     this._setupMyApps();
     this._setupDetailsView();
     this.appsPage = 1;
-    //this.createHandlers(this.element, 'click', this._appsHandlers);
     
     // Observe thumbnails clicks with event delegation
     $("#media-browser-apps").delegate(".thumbnails li a", "click", function (e) {
@@ -24,10 +23,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     }.pBind(this));
     
     this._loadMyApps();	
-  },
-  
-  _appsHandlers: {
-    'apps-list':  function(e){ WebDoc.application.rightBarController.appsLibrary.showList(); }
   },
 
   _setupMyApps: function() {
