@@ -9,7 +9,7 @@ WebDoc.handlers = {
     
     this.addDocumentHandlers( 'click', this._documentHandlers );
     this.addPanelHandlers( 'click', this._panelHandlers );
-		this.addMediaBrowserHandlers( 'click', this._mediaBrowserHandlers );
+    //this.addMediaBrowserHandlers( 'click', this._mediaBrowserHandlers );
     this.addCenterCellHandlers();
 
     jQuery(".wd_discussion_add").bind("dragstart", this._prepareCreateDiscussionDragStart.pBind(this));
@@ -57,10 +57,10 @@ WebDoc.handlers = {
     .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
   },
 
-	addMediaBrowserHandlers: function( eventType, obj, context ){
-    this.panelNode
-    .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
-  },
+  // addMediaBrowserHandlers: function( eventType, obj, context ){
+  //     this.panelNode
+  //     .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
+  //   },
   
   addDocumentHandlers: function( eventType, obj, context ){
     jQuery(document)
@@ -88,11 +88,16 @@ WebDoc.handlers = {
     'toggle_activity_panel':  function(e){ ddd('no activity yet'); },
     'toggle_comments_panel':  function(e){ WebDoc.application.rightBarController.showDiscussionsPanel(e); },
     'toggle_inspector_panel': function(e){ WebDoc.application.rightBarController.showItemInspector(e); },
-    'toggle_browser_panel':   function(e){ WebDoc.application.rightBarController.showMediaBrowser(e); },
     'toggle_pages_panel':     function(e){ WebDoc.application.rightBarController.showPageInspector(e); },
     'toggle_author_panel':    function(e){ WebDoc.application.rightBarController.showSocialPanel(e); },
     'toggle_document_panel':  function(e){WebDoc.application.rightBarController.showDocumentInspector(e); },
     'toggle_sharing_panel':   function(e){ ddd('no sharing yet') },
+    
+    'toggle_browser_panel':       function(e){ WebDoc.application.rightBarController.showMediaBrowser(e); },
+    'toggle_browse_web_panel':    function(e) { WebDoc.application.rightBarController.showBrowseWeb();},
+    'toggle_packages_panel':      function(e) { WebDoc.application.rightBarController.showPackages();},
+    'toggle_apps_panel':          function(e) { WebDoc.application.rightBarController.showApps();},
+    'toggle_my_stuff_panel':      function(e) { WebDoc.application.rightBarController.showMyContent();},
     
     //handler used in the old right bar controller
     'media-browser':        function(e) { WebDoc.application.rightBarController.showMediaBrowser(e);}, 
@@ -154,20 +159,17 @@ WebDoc.handlers = {
     'webdoc-close':         function(e) { WebDoc.application.pageEditor.closeDocument(); }
   },
 
-  _mediaBrowserHandlers: {
-    
-    'toggle_browse_web_panel':    function(e) { WebDoc.application.mediaBrowserController.showWeb();},
-    'toggle_packages_panel':      function(e) { WebDoc.application.mediaBrowserController.showPackages();},
-    'toggle_apps_panel':          function(e) { WebDoc.application.mediaBrowserController.showApps();},
-    'toggle_my_stuff_panel':      function(e) { WebDoc.application.mediaBrowserController.showMyContent();}
-    //old media browser handler
-    
-    // 'media-browser-home':  function(e) { WebDoc.application.mediaBrowserController.showHome();},
-    // 'media-browser-web':   function(e) { WebDoc.application.mediaBrowserController.showWeb();},
-    // 'media-browser-packages':  function(e) { WebDoc.application.mediaBrowserController.showPackages();},
-    // 'media-browser-apps':  function(e) { WebDoc.application.mediaBrowserController.showApps();},
-    // 'media-browser-my-content':  function(e) { WebDoc.application.mediaBrowserController.showMyContent();}
-  },
+  // _mediaBrowserHandlers: {
+  //   
+  //   
+  //   //old media browser handler
+  //   
+  //   // 'media-browser-home':  function(e) { WebDoc.application.mediaBrowserController.showHome();},
+  //   // 'media-browser-web':   function(e) { WebDoc.application.mediaBrowserController.showWeb();},
+  //   // 'media-browser-packages':  function(e) { WebDoc.application.mediaBrowserController.showPackages();},
+  //   // 'media-browser-apps':  function(e) { WebDoc.application.mediaBrowserController.showApps();},
+  //   // 'media-browser-my-content':  function(e) { WebDoc.application.mediaBrowserController.showMyContent();}
+  // },
 
   _prepareCreateDiscussionDragStart: function(event) {
     event.originalEvent.dataTransfer.setData("application/wd-discussion", $.toJSON({ action: 'create' }));

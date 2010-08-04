@@ -21,16 +21,6 @@ WebDoc.Library = $.klass({
     container.find('.loading').remove();
   },
 
-  buildMediaDragFeedbackElement: function(type, thumbUrl) { //type=image|video
-    $("#media_drag_feedback").remove();
-    var mediaThumb = $("<img>").attr({ src:thumbUrl }), icon = $("<span>");
-    var mediaDragFeedback = $("<div>").attr({ id:"media_drag_feedback", 'class':type })
-    .css({ position:"absolute", top:"-500px" }) // because I can't use hide() in this case (or setDragImage won't work)
-    .append(icon).append(mediaThumb);
-    
-    return mediaDragFeedback;
-  },
-
 	createHandlers: function(domeNode, eventType, obj, context){
     domeNode.delegate('a', eventType, WebDoc.handlers._makeLinkHandler( obj, context ) );
     //NOTE: _makeLinkHandler( obj, context ) is supposed to be private, but it's an easy way to listen the link
@@ -69,5 +59,15 @@ LibraryUtils = $.klass({
     // old (only working if number < 1'000'000)
     // var regexp = /\d{1,3}(?=(\d{3})+(?!\d))/g;
     // return (""+number).replace(regexp, "$1"+sep);
+  },
+
+  buildMediaDragFeedbackElement: function(type, thumbUrl) { //type=image|video
+    $("#media_drag_feedback").remove();
+    var mediaThumb = $("<img>").attr({ src:thumbUrl }), icon = $("<span>");
+    var mediaDragFeedback = $("<div>").attr({ id:"media_drag_feedback", 'class':type })
+    .css({ position:"absolute", top:"-500px" }) // because I can't use hide() in this case (or setDragImage won't work)
+    .append(icon).append(mediaThumb);
+  
+    return mediaDragFeedback;
   }
 });

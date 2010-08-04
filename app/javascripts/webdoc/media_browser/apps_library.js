@@ -8,8 +8,8 @@
 //= require <webdoc/model/widget>
 
 WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
-  initialize: function($super, libraryId) {
-    $super(libraryId);
+  initialize: function($super) {
+    $super('media-browser-apps');
     this.detailsView = $('#app_details');
     this._setupMyApps();
     this._setupDetailsView();
@@ -17,7 +17,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     this.createHandlers(this.element, 'click', this._appsHandlers);
     
     // Observe thumbnails clicks with event delegation
-    $("#"+libraryId).delegate(".thumbnails li a", "click", function (e) {
+    $("#media-browser-apps").delegate(".thumbnails li a", "click", function (e) {
       var widgetData = $( e.currentTarget ).data("widget");
       this.showDetailsView( widgetData, false );
       e.preventDefault();

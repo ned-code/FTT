@@ -56,7 +56,6 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
   },
   
   showMyContent: function(){
-    WebDoc.application.myContentController 
     if(WebDoc.application.mediaBrowserController.myContentsController){
       this.showTab('#media-browser-my-content');
     }

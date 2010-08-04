@@ -3,8 +3,8 @@
 **/
 
 WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
-  initialize: function($super, libraryId) {
-    $super(libraryId);
+  initialize: function($super) {
+    $super('media-browser-packages');
     this._loadPackages();
     this.detailsView = $('#package-details');
     this.detailIframe = this.detailsView.find('iframe');

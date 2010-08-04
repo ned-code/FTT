@@ -4,13 +4,12 @@
  */
 // define all inspector type that can be displayed in the right bar
 WebDoc.RightBarInspectorType = {
-  MEDIA_BROWSER: 'media-browser',
   ITEM: 'item',
   PAGE: 'page',
   DOCUMENT: 'document',
   DISCUSSIONS: 'discussions',
   SOCIAL: 'social',
-  MY_STUFF: 'my_stuff',
+  MY_CONTENT: 'my_content',
   APPS: 'apps',
   BROWSE_WEB: 'browse_web',
   PACKAGES: 'packages'
@@ -32,10 +31,12 @@ WebDoc.RightBarController = $.klass({
     // Some of these are lazy loaded, and some are not -
     // pageInspector does not work if you try loading it now.
     
-    var itemInspector = new WebDoc.InspectorController(),
-        mediaBrowser = new WebDoc.MediaBrowserController();
+    var itemInspector = new WebDoc.InspectorController();
+        //mediaBrowser = new WebDoc.MediaBrowserController();
+    
+    this.libraryUtils = new LibraryUtils();
         
-    WebDoc.application.mediaBrowserController = mediaBrowser;
+    //WebDoc.application.mediaBrowserController = mediaBrowser;
     WebDoc.application.inspectorController = itemInspector;
     
     this.visible = false;
@@ -52,13 +53,19 @@ WebDoc.RightBarController = $.klass({
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DISCUSSIONS] = WebDoc.DiscussionsPanelController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.SOCIAL] = WebDoc.SocialPanelController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.MY_CONTENT] = WebDoc.MyContentsController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.APPS] = WebDoc.AppsLibrary;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.BROWSE_WEB] = WebDoc.WebSearchController;
+    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PACKAGES] = WebDoc.PackagesLibrary;
 
     this._inspectorsControllers = {};
-    this._inspectorsControllers[WebDoc.RightBarInspectorType.MEDIA_BROWSER] = mediaBrowser;
+    //this._inspectorsControllers[WebDoc.RightBarInspectorType.MEDIA_BROWSER] = mediaBrowser;
     this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;
     
     this._currentInspectorType = null;  
     //this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
+    
+    this._preloadDragDropIcon();
     
     // This is a hack. Ultimately, we need a better way than this to be wrangling with show/hide
     //$('#page-inspector, #document-inspector, #social-inspector, #discussions-panel').hide();
@@ -106,6 +113,7 @@ WebDoc.RightBarController = $.klass({
     ddd("[RightBarController] get inspector", inspectorType);
     var inspectorController = this._inspectorsControllers[inspectorType];
     if (!inspectorController) {
+      ddd(inspectorType);
       inspectorController = new this._inspectorsControllersClasses[inspectorType]();
       this._inspectorsControllers[inspectorType] = inspectorController;
     }
@@ -134,22 +142,26 @@ WebDoc.RightBarController = $.klass({
     //this.show();
   },
   
-  showMyStuff: function(){
-    this.selectInspector(WebDoc.RightBarInspectorType.MY_STUFF);
-    this._showPanel('my_stuff_panel');
+  showMyContent: function(){
+    ddd("[RightBarController] showMyContent");
+    this.selectInspector(WebDoc.RightBarInspectorType.MY_CONTENT);
+    this._showPanel('my_content_panel');
   },
   
   showApps: function(){
+    ddd("[RightBarController] showApps");
     this.selectInspector(WebDoc.RightBarInspectorType.APPS);
     this._showPanel('apps_panel');
   },
   
   showPackages: function(){
+    ddd("[RightBarController] showPackages");
     this.selectInspector(WebDoc.RightBarInspectorType.PACKAGES);
     this._showPanel('packages_panel');
   },
   
   showBrowseWeb: function(){
+    ddd("[RightBarController] showBrowseWeb");
     this.selectInspector(WebDoc.RightBarInspectorType.BROWSE_WEB);
     this._showPanel('browse_web_panel');
   },
@@ -283,6 +295,13 @@ WebDoc.RightBarController = $.klass({
     jQuery( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.ACTIVE_CLASS );
     
     return false;
+  },
+  
+  _preloadDragDropIcon: function(){
+    // just to preload the icon (so that it'll be immediately available at the first drag)
+    $(document.body).append(this.libraryUtils.buildMediaDragFeedbackElement("video", ""));
+    $(document.body).append(this.libraryUtils.buildMediaDragFeedbackElement("image", ""));
+    $(document.body).append(this.libraryUtils.buildMediaDragFeedbackElement("apps", ""));
   }
   
 });

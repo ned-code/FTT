@@ -1,7 +1,7 @@
 WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       
-  initialize: function($super, libraryId) {
-    $super(libraryId);
+  initialize: function($super) {
+    $super('media-browser-my-content');
     this.imageDetailsView = $('#media-browser-my-images-details #image-details');
     this.videoDetailsView = $('#media-browser-my-favorites-videos-details #video-details');
     this.setupImageDetailsView();
