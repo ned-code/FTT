@@ -34,9 +34,7 @@ WebDoc.RightBarController = $.klass({
     // pageInspector does not work if you try loading it now.
     
     var itemInspector = new WebDoc.InspectorController();
-        //mediaBrowser = new WebDoc.MediaBrowserController();
         
-    //WebDoc.application.mediaBrowserController = mediaBrowser;
     WebDoc.application.inspectorController = itemInspector;
     
     this.visible = false;
@@ -47,7 +45,6 @@ WebDoc.RightBarController = $.klass({
     
     this.panelWidth = panel.outerWidth();
     this._inspectorsControllersClasses = {};
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.MEDIA_BROWSER] = WebDoc.MediaBrowserController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.ITEM] = WebDoc.InspectorController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PAGE] = WebDoc.PageInspectorController;
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
@@ -59,16 +56,12 @@ WebDoc.RightBarController = $.klass({
     this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PACKAGES] = WebDoc.PackagesLibrary;
 
     this._inspectorsControllers = {};
-    //this._inspectorsControllers[WebDoc.RightBarInspectorType.MEDIA_BROWSER] = mediaBrowser;
     this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;
     
-    this._currentInspectorType = null;  
-    //this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
-    
+    this._currentInspectorType = null;      
     this._preloadDragDropIcon();
     
     // This is a hack. Ultimately, we need a better way than this to be wrangling with show/hide
-    //$('#page-inspector, #document-inspector, #social-inspector, #discussions-panel').hide();
     $('#document-inspector').hide();
   },
 
@@ -133,13 +126,6 @@ WebDoc.RightBarController = $.klass({
   //Hide all the panel that are on the right of the webdoc
   _hideRightPanels: function(){
     jQuery(this.rightPanels).removeClass(this.ACTIVE_CLASS);
-  },
-  
-  showMediaBrowser: function(){
-    ddd("[RightBarController] showMediaBrowser");
-    this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
-    this._showPanel('browser_panel');
-    //this.show();
   },
   
   showMyContent: function(){
