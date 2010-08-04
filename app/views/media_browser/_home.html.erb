@@ -1,36 +1,36 @@
-<div class='media-browser-wrap layer' style='display:none'>
-  <div id="media-browser-header" class=''>
-    <div class="inspector-title">Add content</div>
-    <ul class='tab_navigation'>
-      <li>
-        <a class="selected" href='#media-browser-home', title='Show Media Browser Home'>
-          Home
-        </a>
-      </li>
-      <li>
-        <a href='#media-browser-web', title='Search On Web Service'>
-          Web
-        </a>
-      </li>
-      <li>
-        <a href='#media-browser-packages', title='Show your packages'>
-          Packages
-        </a>
-      </li>
-      <li>
-        <a href='#media-browser-apps', title='Browse Apps'>
-          Apps
-        </a>
-      </li>
-      <li>
-        <a href='#media-browser-my-content', title='Show My Content'>
-          My content
-        </a>
-      </li>
-    </ul>
-  </div>
+<div class='media-browser-wrap layer'>
+  <!-- <div id="media-browser-header" class=''>
+      <div class="inspector-title">Add content</div>
+      <ul class='tab_navigation'>
+        <li>
+          <a class="selected" href='#media-browser-home', title='Show Media Browser Home'>
+            Home
+          </a>
+        </li>
+        <li>
+          <a href='#media-browser-web', title='Search On Web Service'>
+            Web
+          </a>
+        </li>
+        <li>
+          <a href='#media-browser-packages', title='Show your packages'>
+            Packages
+          </a>
+        </li>
+        <li>
+          <a href='#media-browser-apps', title='Browse Apps'>
+            Apps
+          </a>
+        </li>
+        <li>
+          <a href='#media-browser-my-content', title='Show My Content'>
+            My content
+          </a>
+        </li>
+      </ul>
+    </div> -->
   <div class="media_browser_content">
-    <div id="media-browser-my-content" class='media-browser-tab' style='display:none'>
+    <div id="media-browser-my-content" class='media-browser-tab'>
       <%= render 'users/my_content_header'%>
       <div id="media-browser-my-images" class='my-content-tab '>
         <a href='#upload-images' class=''>
@@ -105,16 +105,8 @@
         </div>
       </div>
     </div>
-    <div id="media-browser-home" class='media-browser-tab'>
-      <%= render 'media_browser/most_used_apps' %>
-      <!--<div class="web_result_separator">
-        <div class="wrs_top"></div>
-        <div class="wrs_bottom"></div>
-      </div>
-      <%= render 'media_browser/packages_we_recommand' %>-->
-    </div>
     
-    <div id="media-browser-apps" class='media-browser-tab' style='display:none'>
+    <div id="media-browser-apps" class='media-browser-tab'>
       <div id="apps-list" class='app-tab' >
         <div class='thumbnails'>
 
@@ -139,7 +131,7 @@
       </div>
     </div>
     
-    <div id="media-browser-web" style="display:none" class='media-browser-tab'>
+    <div id="media-browser-web" class='media-browser-tab'>
       <div id="media-browser-web-header">
         <ul class='tab_navigation'>
           <li>
@@ -269,7 +261,7 @@
       </div>
     </div>
     <div id="media-browser-packages" class="view media-browser-tab">
-      <div id="package-details" class="tab_content packages-tab" style='display:none'>
+      <div id="package-details" class="tab_content packages-tab">
         <a href='#packages-list' id='package-detail-back' class='back'>Back</a>
         <div class="view_content">
           <iframe width="100%" height="100%" src="" class="layer"></iframe>

@@ -9,7 +9,11 @@ WebDoc.RightBarInspectorType = {
   PAGE: 'page',
   DOCUMENT: 'document',
   DISCUSSIONS: 'discussions',
-  SOCIAL: 'social'
+  SOCIAL: 'social',
+  MY_STUFF: 'my_stuff',
+  APPS: 'apps',
+  BROWSE_WEB: 'browse_web',
+  PACKAGES: 'packages'
 };
 
 WebDoc.RightBarController = $.klass({
@@ -54,10 +58,11 @@ WebDoc.RightBarController = $.klass({
     this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;
     
     this._currentInspectorType = null;  
-    this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
+    //this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
     
     // This is a hack. Ultimately, we need a better way than this to be wrangling with show/hide
-    $('#page-inspector, #document-inspector, #social-inspector, #discussions-panel').hide();
+    //$('#page-inspector, #document-inspector, #social-inspector, #discussions-panel').hide();
+    $('#document-inspector').hide();
   },
 
   show: function() {
@@ -88,14 +93,12 @@ WebDoc.RightBarController = $.klass({
     ddd("[RightBarController] select inspector", inspectorType);
     if (this._currentInspectorType !== inspectorType) {
       var inspectorController = this.getInspector(inspectorType);
-      this._changePanelContent(inspectorController);
-      this._changeButtonState(inspectorController);
+      //this._changePanelContent(inspectorController);
+      //this._changeButtonState(inspectorController);
       this._currentInspectorType = inspectorType;
-    }
-    else {
-      // if(this._currentInspectorType === WebDoc.RightBarInspectorType.MEDIA_BROWSER) {
-      //         jQT.goTo('#media_browser', 'slide');
-      //       }
+      if(inspectorType != 'social'){
+        this._hideRightPanels();
+      }
     }
   },
 
@@ -109,22 +112,60 @@ WebDoc.RightBarController = $.klass({
     return this._inspectorsControllers[inspectorType];
   },
   
+  _showPanel: function(panelName){
+    var panel = jQuery('.' + panelName );
+    if(panel.hasClass(this.ACTIVE_CLASS)){
+      panel.removeClass(this.ACTIVE_CLASS);
+    }
+    else{
+      panel.addClass(this.ACTIVE_CLASS);
+    }
+  },
+  
+  //Hide all the panel that are on the right of the webdoc
+  _hideRightPanels: function(){
+    jQuery('.browser_panel, .pages_panel, .inspector_panel, .comments_panel').removeClass(this.ACTIVE_CLASS);
+  },
+  
   showMediaBrowser: function(){
     ddd("[RightBarController] showMediaBrowser");
     this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
-    this.show();
+    this._showPanel('browser_panel');
+    //this.show();
+  },
+  
+  showMyStuff: function(){
+    this.selectInspector(WebDoc.RightBarInspectorType.MY_STUFF);
+    this._showPanel('my_stuff_panel');
+  },
+  
+  showApps: function(){
+    this.selectInspector(WebDoc.RightBarInspectorType.APPS);
+    this._showPanel('apps_panel');
+  },
+  
+  showPackages: function(){
+    this.selectInspector(WebDoc.RightBarInspectorType.PACKAGES);
+    this._showPanel('packages_panel');
+  },
+  
+  showBrowseWeb: function(){
+    this.selectInspector(WebDoc.RightBarInspectorType.BROWSE_WEB);
+    this._showPanel('browse_web_panel');
   },
   
   showPageInspector: function() {
     ddd("[RightBarController] show page inspector");
     this.selectInspector(WebDoc.RightBarInspectorType.PAGE);
-    this.show();
+    // this.show();
+    this._showPanel('pages_panel');
   },
   
   showItemInspector: function() {
     ddd("[RightBarController] showItemInspector");
     this.selectInspector(WebDoc.RightBarInspectorType.ITEM);
-    this.show();
+    // this.show();
+    this._showPanel('inspector_panel');
   },
   
   showDocumentInspector: function() {
@@ -133,16 +174,28 @@ WebDoc.RightBarController = $.klass({
     this.show();
   },
   
+  //actually display the author panel... it's on bottom of the webdoc
   showSocialPanel: function() {
     ddd("[RightBarController] showSocialPanel");
     this.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
-    this.show();
+    var panel = jQuery('.sharing_panel');
+    
+    if(panel.hasClass(this.ACTIVE_CLASS)){
+      panel.removeClass(this.ACTIVE_CLASS);
+      jQuery('#social-inspector').hide();
+    }
+    else{
+      panel.addClass(this.ACTIVE_CLASS);
+      jQuery('#social-inspector').show();
+    }
+    //this.show();
   },
 
   showDiscussionsPanel: function() {
     ddd("[RightBarController] showDiscussionsPanel");
     this.selectInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
-    this.show();
+    //this.show();
+    this._showPanel('comments_panel');
   },
 
   _changePanelContent: function(inspector) {

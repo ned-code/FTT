@@ -91,6 +91,7 @@ WebDoc.handlers = {
     'toggle_browser_panel':   function(e){ WebDoc.application.rightBarController.showMediaBrowser(e); },
     'toggle_pages_panel':     function(e){ WebDoc.application.rightBarController.showPageInspector(e); },
     'toggle_author_panel':    function(e){ WebDoc.application.rightBarController.showSocialPanel(e); },
+    'toggle_document_panel':  function(e){WebDoc.application.rightBarController.showDocumentInspector(e); },
     'toggle_sharing_panel':   function(e){ ddd('no sharing yet') },
     
     //handler used in the old right bar controller
@@ -154,11 +155,18 @@ WebDoc.handlers = {
   },
 
   _mediaBrowserHandlers: {
-    'media-browser-home': 	function(e) { WebDoc.application.mediaBrowserController.showHome();}, 
-    'media-browser-web': 	function(e) { WebDoc.application.mediaBrowserController.showWeb();}, 
-    'media-browser-packages': 	function(e) { WebDoc.application.mediaBrowserController.showPackages();}, 
-    'media-browser-apps': 	function(e) { WebDoc.application.mediaBrowserController.showApps();}, 
-    'media-browser-my-content': 	function(e) { WebDoc.application.mediaBrowserController.showMyContent();} 
+    
+    'toggle_browse_web_panel':    function(e) { WebDoc.application.mediaBrowserController.showWeb();},
+    'toggle_packages_panel':      function(e) { WebDoc.application.mediaBrowserController.showPackages();},
+    'toggle_apps_panel':          function(e) { WebDoc.application.mediaBrowserController.showApps();},
+    'toggle_my_stuff_panel':      function(e) { WebDoc.application.mediaBrowserController.showMyContent();}
+    //old media browser handler
+    
+    // 'media-browser-home':  function(e) { WebDoc.application.mediaBrowserController.showHome();},
+    // 'media-browser-web':   function(e) { WebDoc.application.mediaBrowserController.showWeb();},
+    // 'media-browser-packages':  function(e) { WebDoc.application.mediaBrowserController.showPackages();},
+    // 'media-browser-apps':  function(e) { WebDoc.application.mediaBrowserController.showApps();},
+    // 'media-browser-my-content':  function(e) { WebDoc.application.mediaBrowserController.showMyContent();}
   },
 
   _prepareCreateDiscussionDragStart: function(event) {
