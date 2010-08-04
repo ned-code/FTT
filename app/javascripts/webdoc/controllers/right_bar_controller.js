@@ -28,6 +28,8 @@ WebDoc.RightBarController = $.klass({
   initialize: function() {
     panel = jQuery( this.PANEL_SELECTOR );
     
+    this.rightPanels = '.browser_panel, .pages_panel, .inspector_panel, .comments_panel, .apps_panel, .my_content_panel, .packages_panel, .browse_web_panel';
+    
     // Some of these are lazy loaded, and some are not -
     // pageInspector does not work if you try loading it now.
     
@@ -130,7 +132,7 @@ WebDoc.RightBarController = $.klass({
   
   //Hide all the panel that are on the right of the webdoc
   _hideRightPanels: function(){
-    jQuery('.browser_panel, .pages_panel, .inspector_panel, .comments_panel').removeClass(this.ACTIVE_CLASS);
+    jQuery(this.rightPanels).removeClass(this.ACTIVE_CLASS);
   },
   
   showMediaBrowser: function(){
