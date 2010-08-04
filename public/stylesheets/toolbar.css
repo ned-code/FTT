@@ -1,4 +1,4 @@
-#toolbar_panel {background:none;}
+#toolbar_panel {background:none;margin:8px 0 0 8px;}
 #toolbar_panel select {display:block;float:left;margin:0px 3px;border:solid 1px #cccccc}
 #toolbar_panel a div{display:block;color:transparent;margin:2px 3px}
 #toolbar_panel a {margin:0px 0px 0px 2px;}                                         
