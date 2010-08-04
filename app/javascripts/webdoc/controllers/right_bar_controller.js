@@ -3,7 +3,7 @@
  * @author Julien Bachmann
  */
 // define all inspector type that can be displayed in the right bar
-WebDoc.RightBarInspectorType = {
+WebDoc.PanelInspectorType = {
   ITEM: 'item',
   PAGE: 'page',
   DOCUMENT: 'document',
@@ -45,18 +45,18 @@ WebDoc.RightBarController = $.klass({
     
     this.panelWidth = panel.outerWidth();
     this._inspectorsControllersClasses = {};
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.ITEM] = WebDoc.InspectorController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PAGE] = WebDoc.PageInspectorController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DISCUSSIONS] = WebDoc.DiscussionsPanelController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.SOCIAL] = WebDoc.SocialPanelController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.MY_CONTENT] = WebDoc.MyContentsController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.APPS] = WebDoc.AppsLibrary;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.BROWSE_WEB] = WebDoc.WebSearchController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PACKAGES] = WebDoc.PackagesLibrary;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.ITEM] = WebDoc.InspectorController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.PAGE] = WebDoc.PageInspectorController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.DISCUSSIONS] = WebDoc.DiscussionsPanelController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.SOCIAL] = WebDoc.SocialPanelController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.MY_CONTENT] = WebDoc.MyContentsController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.APPS] = WebDoc.AppsLibrary;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.BROWSE_WEB] = WebDoc.WebSearchController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.PACKAGES] = WebDoc.PackagesLibrary;
 
     this._inspectorsControllers = {};
-    this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;
+    this._inspectorsControllers[WebDoc.PanelInspectorType.ITEM] = itemInspector;
     
     this._currentInspectorType = null;      
     this._preloadDragDropIcon();
@@ -130,52 +130,52 @@ WebDoc.RightBarController = $.klass({
   
   showMyContent: function(){
     ddd("[RightBarController] showMyContent");
-    this.selectInspector(WebDoc.RightBarInspectorType.MY_CONTENT);
+    this.selectInspector(WebDoc.PanelInspectorType.MY_CONTENT);
     this._showPanel('my_content_panel');
   },
   
   showApps: function(){
     ddd("[RightBarController] showApps");
-    this.selectInspector(WebDoc.RightBarInspectorType.APPS);
+    this.selectInspector(WebDoc.PanelInspectorType.APPS);
     this._showPanel('apps_panel');
   },
   
   showPackages: function(){
     ddd("[RightBarController] showPackages");
-    this.selectInspector(WebDoc.RightBarInspectorType.PACKAGES);
+    this.selectInspector(WebDoc.PanelInspectorType.PACKAGES);
     this._showPanel('packages_panel');
   },
   
   showBrowseWeb: function(){
     ddd("[RightBarController] showBrowseWeb");
-    this.selectInspector(WebDoc.RightBarInspectorType.BROWSE_WEB);
+    this.selectInspector(WebDoc.PanelInspectorType.BROWSE_WEB);
     this._showPanel('browse_web_panel');
   },
   
   showPageInspector: function() {
     ddd("[RightBarController] show page inspector");
-    this.selectInspector(WebDoc.RightBarInspectorType.PAGE);
+    this.selectInspector(WebDoc.PanelInspectorType.PAGE);
     // this.show();
     this._showPanel('pages_panel');
   },
   
   showItemInspector: function() {
     ddd("[RightBarController] showItemInspector");
-    this.selectInspector(WebDoc.RightBarInspectorType.ITEM);
+    this.selectInspector(WebDoc.PanelInspectorType.ITEM);
     // this.show();
     this._showPanel('inspector_panel');
   },
   
   showDocumentInspector: function() {
     ddd("[RightBarController] showDocumentInspector");
-    this.selectInspector(WebDoc.RightBarInspectorType.DOCUMENT);
+    this.selectInspector(WebDoc.PanelInspectorType.DOCUMENT);
     this.show();
   },
   
   //actually display the author panel... it's on bottom of the webdoc
   showSocialPanel: function() {
     ddd("[RightBarController] showSocialPanel");
-    this.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
+    this.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
     var panel = jQuery('.sharing_panel');
     
     if(panel.hasClass(this.ACTIVE_CLASS)){
@@ -191,7 +191,7 @@ WebDoc.RightBarController = $.klass({
 
   showDiscussionsPanel: function() {
     ddd("[RightBarController] showDiscussionsPanel");
-    this.selectInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+    this.selectInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
     //this.show();
     this._showPanel('comments_panel');
   },

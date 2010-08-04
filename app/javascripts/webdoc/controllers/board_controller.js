@@ -194,10 +194,10 @@ WebDoc.BoardController = jQuery.klass({
     
     //WebDoc.application.pageBrowserController.conceal();
     //WebDoc.application.rightBarController.conceal();
-    if(WebDoc.application.rightBarController.getSelectedInspector() !== WebDoc.RightBarInspectorType.SOCIAL) {
+    if(WebDoc.application.rightBarController.getSelectedInspector() !== WebDoc.PanelInspectorType.SOCIAL) {
       this._previousInspector = WebDoc.application.rightBarController.getSelectedInspector();
     }
-    WebDoc.application.rightBarController.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
+    WebDoc.application.rightBarController.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
     this._isInteraction = true;
     return this._isInteraction;
   },
@@ -1182,14 +1182,14 @@ WebDoc.BoardController = jQuery.klass({
     this._selectionDiscussionView = discussionView;
     discussionView.select(skipScrollDiscussionView);
     WebDoc.application.rightBarController.showDiscussionsPanel();
-    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
     discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion, skipScrollDiscussionPanel);
   },
 
   unSelectDiscussionView: function() {
     if(this._selectionDiscussionView !== null) {
       this._selectionDiscussionView.unSelect();
-      var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+      var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
       discussionPanel.unSelectDiscussion(this._selectionDiscussionView.discussion);
       this._selectionDiscussionView = null;      
     }
