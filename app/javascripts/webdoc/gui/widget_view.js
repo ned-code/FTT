@@ -60,7 +60,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     ddd("update widget state");
     if (this.itemDomNode.get(0).contentWindow) {
       if (this.itemDomNode.get(0).contentWindow.widget) {
-        this.itemDomNode.get(0).contentWindow.widget._onPreferencesChange();
+        this.itemDomNode.get(0).contentWindow.widget.onPreferencesChange();
       }
       // 
       else if (this.itemDomNode.get(0).contentWindow.initialize) {
