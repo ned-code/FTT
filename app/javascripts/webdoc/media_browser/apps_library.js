@@ -51,19 +51,21 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     this.detailsAppContainer = this.detailsView.find('.single_app');
     
     $('#app-details-back').click(function(event){
-      ddd('app details back')
       event.preventDefault();
       this.showList();
       }.pBind(this));
     
     // handle possible actions 
     $("#app_details .actions").click(function(event){
-      event.preventDefault();
       
+      event.preventDefault();
+      ddd(event.target);
+      ddd(this.detailsAppContainer.data("widget"));
       var properties = this.detailsAppContainer.data("widget");
       var link = $(event.target);
       switch (link.attr("id")) {
         case "add_app_to_page_action":
+          ddd('app_details .add_app_to_page_action');
           var widgetData = this.detailsAppContainer.data("widget");
           WebDoc.application.boardController.insertWidget(widgetData);
           break;

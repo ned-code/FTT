@@ -134,6 +134,14 @@ en:
         mode_edit: "Edit Mode"
         mode_preview: "Preview Mode"
         mode_embed: "Embed Mode"
+      apps_panel:
+        apps:
+          title: "Apps"
+          my_apps: "My apps"
+          show_details: "Show app details"
+          detail_view:
+            title: "App"
+            add_to_page: "Add to page"
 
     index:
       title: "Documents"
