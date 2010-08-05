@@ -81,7 +81,7 @@ WebDoc.handlers = {
     'toggle_activity_panel':  function(e){ ddd('no activity yet'); },
     'toggle_comments_panel':  function(e){ WebDoc.application.rightBarController.showDiscussionsPanel(e); },
     'toggle_inspector_panel': function(e){ WebDoc.application.rightBarController.showItemInspector(e); },
-    'toggle_pages_panel':     function(e){ WebDoc.application.rightBarController.showPageInspector(e); },
+    'toggle_page_inspector_panel':     function(e){ WebDoc.application.rightBarController.showPageInspector(e); },
     'toggle_author_panel':    function(e){ WebDoc.application.rightBarController.showSocialPanel(e); },
     'toggle_document_panel':  function(e){WebDoc.application.rightBarController.showDocumentInspector(e); },
     'toggle_sharing_panel':   function(e){ ddd('no sharing yet') },

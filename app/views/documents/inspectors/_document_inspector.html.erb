@@ -1,0 +1,40 @@
+<div id="document-inspector" class='inspector'>
+  <div class='head'>
+    <div>
+      <div class='inspector-title '>
+        Document
+      </div>
+    </div>
+  </div>
+  
+  <div class='content'>
+    <form class='properties'>
+      <div>
+        <label>Name</label>
+        <input id='document-title' type='text' value='<%= t('.default_name') %>' />
+      </div>
+      <div>
+        <label>Category</label>
+        <select id='document-category'></select>
+      </div>
+      <div>
+        <label>Description</label>
+        <textarea id='document-description' rows='5'></textarea>
+      </div>
+      <div>
+        <label><%=t('documents.index.document_forms.document_size.width')%></label>
+        <input id='document-size-width' type='text' size='6' required='required' data-type='cssvalue' />
+      </div>
+      <div>
+        <label><%=t('documents.index.document_forms.document_size.width')%></label>
+        <input id='document-size-height' type='text' size='6' required='required' data-type='cssvalue' />
+      </div>
+      <% if current_user.has_role?(:admin)%>
+        <div>
+          <label>Featured</label>
+          <input id='document-featured' type='text' />
+        </div>
+      <% end %>
+    </form>
+  </div>
+</div>
