@@ -275,10 +275,18 @@ WebDoc.BoardController = jQuery.klass({
   // Tool -----------------------------------------
   
   setCurrentTool: function(tool) {
-    ddd(tool);
     this.currentTool = tool;
     if (this.currentTool) {
       this.currentTool.selectTool();
+    }
+  },
+  
+  toggleDrawTool: function(){
+    if(!this.currentTool || (this.currentTool == WebDoc.application.drawingTool)){
+      this.setCurrentTool(WebDoc.application.arrowTool);
+      WebDoc.application.inspectorController.selectInspector('empty');
+    }else{
+      this.setCurrentTool(WebDoc.application.drawingTool);
     }
   },
   

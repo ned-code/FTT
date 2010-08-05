@@ -81,16 +81,14 @@ WebDoc.handlers = {
     'toggle_activity_panel':  function(e){ ddd('no activity yet'); },
     'toggle_comments_panel':  function(e){ WebDoc.application.rightBarController.showDiscussionsPanel(e); },
     'toggle_inspector_panel': function(e){ WebDoc.application.rightBarController.showItemInspector(e); },
-    'toggle_pages_panel':     function(e){ WebDoc.application.rightBarController.showPageInspector(e); },
+    'toggle_page_inspector_panel':     function(e){ WebDoc.application.rightBarController.showPageInspector(e); },
     'toggle_author_panel':    function(e){ WebDoc.application.rightBarController.showSocialPanel(e); },
     'toggle_document_panel':  function(e){WebDoc.application.rightBarController.showDocumentInspector(e); },
     'toggle_sharing_panel':   function(e){ ddd('no sharing yet') },
-    
-    // 'toggle_browser_panel':       function(e){ WebDoc.application.rightBarController.showMediaBrowser(e); },
-    'toggle_browse_web_panel':    function(e) { WebDoc.application.rightBarController.showBrowseWeb();},
-    'toggle_packages_panel':      function(e) { WebDoc.application.rightBarController.showPackages();},
-    'toggle_apps_panel':          function(e) { WebDoc.application.rightBarController.showApps();},
-    'toggle_my_stuff_panel':      function(e) { WebDoc.application.rightBarController.showMyContent();},
+    'toggle_browse_web_panel':    function(e) { WebDoc.application.rightBarController.showBrowseWeb(); },
+    'toggle_packages_panel':      function(e) { WebDoc.application.rightBarController.showPackages(); },
+    'toggle_apps_panel':          function(e) { WebDoc.application.rightBarController.showApps(); },
+    'toggle_my_stuff_panel':      function(e) { WebDoc.application.rightBarController.showMyContent(); },
     
     'add-page':             function(e) { WebDoc.application.pageEditor.addPage(); },
     'add-web-page':         function(e) { WebDoc.application.pageEditor.addWebPage();},
@@ -101,7 +99,7 @@ WebDoc.handlers = {
     'zoom-out':             function(e) { WebDoc.application.boardController.zoomOut(); },
     'move':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.handTool ); },
     'select':               function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.arrowTool ); },
-    'draw':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.drawingTool ); },
+    'draw':                 function(e) { WebDoc.application.boardController.toggleDrawTool(); },
     'insert-html':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.htmlSnipplet ); },
     'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
     'insert-iframe':        function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.iframeTool ); },
@@ -122,16 +120,13 @@ WebDoc.handlers = {
     'toggle-thumbs':        function(e) { WebDoc.application.pageBrowserController.toggleThumbs(e); },
     
     'mode-toggle':          function(e) { WebDoc.application.boardController.toggleMode(); },
-    //'mode-edit':            function(e) { WebDoc.application.boardController.setMode(false); },
-    'mode-preview':         function(e) { WebDoc.application.boardController.setMode(true); },
     'edit':                 function(e) { WebDoc.application.boardController.toggleMode(); },
     
     'theme-class':          function(e) {  },
 
     
     'library-images-myimages': function(e) { 
-      WebDoc.application.rightBarController.showMediaBrowser();
-      WebDoc.application.mediaBrowserController.showMyContent();
+      WebDoc.application.rightBarController.showMyContent();
     },
     
     //'themes-chooser':       function(e) { WebDoc.application.themesController.openChooser(e); },

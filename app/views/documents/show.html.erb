@@ -37,15 +37,19 @@
       
       <div class="side_panel panel">
         <h2>Authors</h2>
-        
-        <ul class="horizontal author_index index">
+        <% if @document.creator == current_user %>
+          <%= render :partial => "followships/card", :locals => { :user => @document.creator } %>
+        <% else %>
+          <%= render :partial => "followships/card", :locals => { :user => @document.creator, :subscribed => @document.creator.follower?(current_user) } %>
+        <% end %>
+        <!-- <ul class="horizontal author_index index">
           <li><a href="/" class="author_thumb thumb">author</a></li
          ><li><a href="/" class="author_thumb thumb">author</a></li
          ><li><a href="/" class="author_thumb thumb">author</a></li
          ><li><a href="/" class="author_thumb thumb">author</a></li
          ><li><a href="/" class="author_thumb thumb">author</a></li
          ><li><a href="/" class="author_thumb thumb">author</a></li>
-        </ul>
+        </ul> -->
         
         <h2>Currently on this webdoc</h2>
         
@@ -74,18 +78,18 @@
         </ul>
         
         <h2>More from these authors</h2>
-        
         <ul class="vertical thumbs_index index">
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
+          <% (0..(@more_author_documents.length - 1)).step(1) do |i| %>
+            <li>
+              <a class="webdoc_thumb left_text_thumb text_thumb thumb" href='<%= document_path(@more_author_documents[i])%>'>
+                <%= @more_author_documents[i].title %>
+              </a>
+            </li>
+          <% end %>
         </ul>
       </div>
       
-      <%= render :partial => "documents/panels/toolbar_panel" %>
+      <%= render "documents/panels/toolbar_panel" %>
       
       <div class="controls_panel panel">
         <ul class="horizontal footpanel_buttons_index buttons_index index">
@@ -98,9 +102,11 @@
         </ul>
       </div>
       
-      <%= render :partial => "documents/panels/right_panel" %>
+      <%= render "documents/panels/right_panel" %>
   
     </div>
         
-    <%= render :partial => "documents/panels/pages_panel" %>
+    <%= render "documents/panels/pages_panel" %>
   </section>
+  
+  <%= render "relatedcontent", :documents => @related_documents %>

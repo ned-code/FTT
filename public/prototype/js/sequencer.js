@@ -1,3 +1,14 @@
+// Event Sequencer
+// 
+// Runs a series of timed events with a self-regulating timer
+// that gaurantees that events stay (as close as possible in
+// javascript in sync with the browser's Date. Events are JSON
+// so they can easily be transferred. They are also triggerable
+// as DOM Events. The Sequencer shepherds them into sequence
+// processes depending on their type. Sequences themselves are
+// a type of event. New sequence processes can easily be added
+// to handle new event types.
+
 (function(){
 	
 	var debug = (window.console && console.log);
@@ -48,7 +59,7 @@
 	
 	function makeProcessQueue(process, t, fn) {
 		var processQueue,
-				limit = t + 20000,
+				limit = t + 10000,
 				l;
 		
 		// Scan ahead looking for next eventList
@@ -118,10 +129,8 @@
 	
 	DOMEventProcess.prototype = new Process();
 
-	function AudioEventProcess(e) {
-		var obj, canplay = false;
-		
-		if (debug) { console.log('[AudioEventProcess] '+e.src, 'Initialisation'); }
+	function AudioEventProcess(e, t, fn) {
+		var obj, canplay = false, doplay = false;
 		
 		// Cache the Audio obj for this sound src
 		if ( e.src ) {
@@ -130,22 +139,24 @@
 			}
 			else {
 				obj = new Audio(e.src);
-				obj.oncanplay = function(){
+				jQuery(obj).bind('canplay', function(){
 					canplay = true;
 					if (debug) { console.log('[AudioEventProcess] '+e.src, 'canplay'); }
-				};
+					
+					if (fn) { fn(); }
+					
+					if (doplay) {
+						if (debug) { console.log('[AudioEventProcess] '+e.src, 'play - a bit late'); }
+						obj.play();
+					}
+				});
 				if (debug) { console.log('[AudioEventProcess] '+e.src, 'Created new Audio object'); }
 			}
 		}
 		
 		return function(){
 			if (canplay) { obj.play(); }
-			else {
-				obj.oncanplay = function(){
-					if (debug) { console.log('[AudioEventProcess] '+e.src, 'canplay and play()'); }
-					obj.play();
-				}
-			}
+			else { doplay = true; }
 		}
 	}
 	
@@ -204,9 +215,100 @@
 		return process;
 	}
 	
+	// Expose processes as a property of Sequencer
 	Sequencer.processes = processes;
 	
 	// Expose Sequencer to global scope
 	window.Sequencer = Sequencer;
+	
+})();
+
+
+
+(function(){
+	
+	var selectors = {};
+	
+	// Add a new process that takes selectors and adds
+	// words to their DOM nodes. Let's call it on
+	// 'addhtml' events.
+	
+	Sequencer.processes.addhtml = function(e) {
+		
+		var obj;
+		
+		// Cache the jQuery object corresponding to this selector
+		// This could be dangerous if the DOM changes! We need a
+		// way to intelligently flush the cache!!
+		if ( e.selector ) {
+			if ( selectors[e.selector] ) {
+				obj = selectors[e.selector];
+			}
+			else {
+				obj = selectors[e.selector] = jQuery(e.target || e.selector);
+			}
+		}
+		else {
+			obj = jQuery(e.target);
+		}
+		
+		return function(){
+			obj.html( obj.html() + e.html );
+		}
+	};
+
+
+	// Add a new process that adds Classes
+	
+	Sequencer.processes.addClass = function(e) {
+		
+		var obj;
+		
+		// Cache the jQuery object corresponding to this selector
+		// This could be dangerous if the DOM changes! We need a
+		// way to intelligently flush the cache!!
+		if ( e.selector ) {
+			if ( selectors[e.selector] ) {
+				obj = selectors[e.selector];
+			}
+			else {
+				obj = selectors[e.selector] = jQuery(e.target || e.selector);
+			}
+		}
+		else {
+			obj = jQuery(e.target);
+		}
+		
+		return function(){
+			obj.addClass( e.className );
+		}
+	};
+	
+	
+	// Add a new process that removes Classes
+	
+	Sequencer.processes.removeClass = function(e) {
+		
+		var obj;
+		
+		// Cache the jQuery object corresponding to this selector
+		// This could be dangerous if the DOM changes! We need a
+		// way to intelligently flush the cache!!
+		if ( e.selector ) {
+			if ( selectors[e.selector] ) {
+				obj = selectors[e.selector];
+			}
+			else {
+				obj = selectors[e.selector] = jQuery(e.target || e.selector);
+			}
+		}
+		else {
+			obj = jQuery(e.target);
+		}
+		
+		return function(){
+			obj.removeClass( e.className );
+		}
+	};
 	
 })();
