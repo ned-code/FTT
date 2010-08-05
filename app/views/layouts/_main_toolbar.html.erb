@@ -26,7 +26,7 @@
           <%= link_to "your contacts", followships_path, { :class => "item #{params[:controller]=='followships' ? 'current' : '' }" } %>
         </li
         ><li>
-          <%= link_to "your profile", edit_user_path(current_user), { :class => "user-edit item #{params[:controller]=='followships' ? 'users' : '' }" } %>
+          <%= link_to "your profile", edit_user_path(:id => current_user.uuid), { :class => "user-edit item #{params[:controller]=='followships' ? 'users' : '' }" } %>
         </li
         ><li>
           <%= link_to "logout", destroy_user_session_path, { :class => "user-logout item" } %>

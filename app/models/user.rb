@@ -128,7 +128,7 @@ class User < ActiveRecord::Base
   end
 
   def as_application_json
-    hash = { 'user' => Serializer.new(self).serializable_record }
+    hash = { 'user' => self.attributes }
     hash['user']['avatar_thumb_url'] = self.avatar_thumb_url
     hash
   end

@@ -196,17 +196,22 @@ class Document < ActiveRecord::Base
     text
   end
 
-
   def as_application_json
     pages = self.pages.not_deleted
-    hash = { 'document' => Serializer.new(self).serializable_record }
+    hash = { 'document' => self.attributes }
+    hash['document']['size'] = self.size
     hash['document']['pages'] = []
     for page in pages
-      page_hash = Serializer.new(page).serializable_record
+      page_hash = page.attributes
+      page_hash['data'] = page.data
       page_hash['items'] = []
       items = page.items.not_deleted
       for item in items
-        page_hash['items'] << Serializer.new(item).serializable_record
+        item_hash = item.attributes
+        item_hash['data'] = item.data
+        item_hash['properties'] = item.properties
+        item_hash['preferences'] = item.preferences
+        page_hash['items'] << item_hash
       end
       hash['document']['pages'] << page_hash
     end
@@ -214,20 +219,8 @@ class Document < ActiveRecord::Base
   end
 
   def as_explore_json
-    pages = self.pages.not_deleted
-    hash = { 'document' => Serializer.new(self).serializable_record }
+    hash = self.as_application_json
     hash['document']['extra_attributes'] = self.extra_attributes
-    hash['document']['pages'] = []
-    for page in pages
-      page_hash = Serializer.new(page).serializable_record
-      page_hash['thumbnail_url'] = page.thumbnail_url
-      page_hash['items'] = []
-      items = page.items.not_deleted
-      for item in items
-        page_hash['items'] << Serializer.new(item).serializable_record
-      end
-      hash['document']['pages'] << page_hash
-    end
     hash
   end
 

@@ -15,12 +15,12 @@ class ApplicationController < ActionController::Base
 protected
 
   def forbidden_access
-    render_optional_error_file(:forbidden)
+    render :file => "#{Rails.public_path}/403.html", :status => 403
   end
 
   def http_authenticate
     if !['65.49.79.67', '86.57.245.87'].include?(request.remote_ip) && Rails.env != 'test'
-      authenticate_or_request_with_http_basic do |username, password|
+      authenticate_or_request_with_http_basic("WebDoc preview") do |username, password|
         username == "wduser" && password == "wdalpha001"
       end
       # Can be removed with Rails 3: http://wiki.github.com/plataformatec/devise/devise-and-http-authentication

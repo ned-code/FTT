@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <% document_title @document.title %>
-<% session_key_name = ActionController::Base.session_options[:key] %>
+<% session_key_name = Rails.application.config.session_options[:key] %>
 <% if params[:reader] == 'true'
     current_class = 'mode-embed'
   elsif params[:edit] == 'true'
