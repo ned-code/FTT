@@ -85,7 +85,7 @@
         </ul>
       </div>
       
-      <%= render :partial => "documents/panels/toolbar_panel" %>
+      <%= render "documents/panels/toolbar_panel" %>
       
       <div class="controls_panel panel">
         <ul class="horizontal footpanel_buttons_index buttons_index index">
@@ -98,9 +98,11 @@
         </ul>
       </div>
       
-      <%= render :partial => "documents/panels/right_panel" %>
+      <%= render "documents/panels/right_panel" %>
   
     </div>
         
-    <%= render :partial => "documents/panels/pages_panel" %>
+    <%= render "documents/panels/pages_panel" %>
   </section>
+  
+  <%= render "relatedcontent" %>

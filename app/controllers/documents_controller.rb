@@ -120,6 +120,7 @@ class DocumentsController < ApplicationController
       render :action => :static_page, :layout => 'static', :content_type => 'image/svg+xml' and return
     end
     if @document.present?
+      @related_documents = Document.all(:conditions => { :category_id => @document.category_id} )
       respond_to do |format|
         format.html do
           @get_return_to = get_return_to 
