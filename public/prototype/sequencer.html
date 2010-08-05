@@ -6,6 +6,8 @@
   <link href="../css/webcss/reset.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webcss/forms.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webcss/column.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/states.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/layer.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webdoc/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
   
   <style>
@@ -38,6 +40,7 @@
     .go_button {
     	background: orange;
     	margin-right: 2em;
+    	opacity: 0.4;
     }
     
     .active {
@@ -57,7 +60,7 @@
     }
   </style>
 </head>
-<body>
+<body class="loading">
   
   <div class="button_bar">
   
@@ -69,6 +72,8 @@
 	</div>
 
   <div id="content"></div>
+  
+  <div class="loading_icon screen_layer layer"></div>
   
   <script src="../js/jquery-1.4.2.js"></script>
   <script src="js/sequencer.js"></script>
@@ -106,17 +111,22 @@
 	var sequencer = Sequencer( introSequence );
 	
 	// Preload audio
-	Sequencer.processes.audio({ src: 'audio/voice.m4a' });
+	Sequencer.processes.audio({ src: 'audio/voice.m4a' }, 0, function(){
+		jQuery('a[href=#go]').css({opacity: 1});
+		jQuery('body').removeClass('loading');
+	});
 	
 	jQuery(document).ready(function(){
 		
 		// Wait for button click
 		
 		jQuery('a[href=#go]')
-		.bind('click', function(){
+		.bind('click', function(e){
 			sequencer.play();
 			sequencer = null;
 			jQuery(this).css({opacity: 0.4});
+			
+			e.preventDefault();
 		});
 		
 	});
