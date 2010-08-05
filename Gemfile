@@ -1,5 +1,6 @@
-source :gemcutter
-gem "rails", "~> 2.3.5"
+source 'http://rubygems.org'
+
+gem 'rails', '3.0.0.rc'
 gem 'haml'
 gem 'i18n'
 gem 'mime-types', :require => 'mime/types'
@@ -9,8 +10,9 @@ gem 'xmpp4r'
 gem 'paperclip'
 gem 'aws-s3', :git => 'http://github.com/isaacfeliu/aws-s3.git'
 gem 'warden'
-gem 'devise', :branch => 'v1.0', :git => 'http://github.com/webdoc/devise.git', :tag => 'v1.0.7.1'
-gem 'will_paginate'
+# gem 'devise', :branch => 'v1.1.0'
+gem 'devise', :branch => 'v1.1.0uuid', :git => 'http://github.com/webdoc/devise.git'
+gem 'will_paginate', :branch => 'rails3', :git => 'http://github.com/mislav/will_paginate.git'
 gem 'uuidtools' # for has_uuid plugin
 gem 'uuid'
 gem "mysql"
@@ -19,7 +21,8 @@ gem 'nokogiri'
 gem 'acl9'
 gem 'formtastic'
 gem 'erubis'
-gem 'jammit' # use plugin for the moment
+# http://github.com/documentcloud/jammit/issues#issue/53
+gem 'jammit', :git => 'http://github.com/corneverbruggen/jammit.git'
 gem 'whenever'
 gem 'fastercsv'
 gem 'google-spreadsheet-ruby'
@@ -34,15 +37,14 @@ end
 
 group :test do
   gem "sqlite3-ruby", :require => 'sqlite3'
-  
+
   gem 'rspec'
   gem 'rspec-rails'
   gem 'factory_girl'
-  
+
   gem 'steak'
   # brew install libffi
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'launchy'
-
 end

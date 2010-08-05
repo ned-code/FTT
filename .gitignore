@@ -55,6 +55,4 @@ db/schema.rb
 public/local/*
 reports/*.csv
 public/themes/*/*.zip
-.externalToolBuilders/
-public/themes/*/*.zip
 .externalToolBuilders/org.eclipse.wst.jsdt.core.javascriptValidator.launch
