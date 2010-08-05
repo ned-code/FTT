@@ -322,16 +322,19 @@ WebDoc.Document = $.klass(WebDoc.Record, {
             "duplicate",
             extraParams
     );
-  }
-    
+  }    
 });
 
 $.extend(WebDoc.Document, {
+  rootUrlValue: undefined,
   className: function() {
     return "document";
   },
   rootUrl: function(args) {
-    return "";
+    if (this.rootUrlValue === undefined) {
+      this.rootUrlValue = WebDoc.dataServer ? WebDoc.dataServer : "";  
+    }    
+    return this.rootUrlValue;
   },
   pluralizedClassName: function() {
     return "documents";

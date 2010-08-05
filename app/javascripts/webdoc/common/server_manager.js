@@ -200,6 +200,9 @@ jQuery.extend(WebDoc.ServerManager, {
       type: 'POST',
       url: object.rootUrl() + "/" + object.pluralizedClassName(),
       data: message,
+      beforeSend: function(xhr){
+         xhr.withCredentials = true;
+      },      
       success: function(data, textstatus) {
         // refresh is needed because some values are generated on server side
         // i.e. page size and background and id
@@ -240,6 +243,9 @@ jQuery.extend(WebDoc.ServerManager, {
     $.ajax({
       async: !synch,
       type: 'POST',
+      beforeSend: function(xhr){
+         xhr.withCredentials = true;
+      },      
       url: object.rootUrl() + "/" + object.className() + "s/" + object.uuid(),
       data: param,
       success: function(data, textstatus) {
@@ -284,6 +290,9 @@ jQuery.extend(WebDoc.ServerManager, {
       type: 'POST',
       url: object.rootUrl() + "/" + object.className() + "s/" + object.uuid(),
       data: param,
+      beforeSend: function(xhr){
+         xhr.withCredentials = true;
+      },      
       success: function(data, textstatus) {
         callBack.apply(this, [object]);
         WebDoc.ServerManager.requestByUuid[object.uuid()].splice(0, 1);

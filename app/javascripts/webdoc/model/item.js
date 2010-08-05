@@ -891,13 +891,20 @@ WebDoc.Item = $.klass(WebDoc.Record,
 });
 
 $.extend(WebDoc.Item, {
+  rootUrlValue: undefined,
+  
   className: function() {
     return "item";
   },
   
   rootUrl: function(args) {
-    return "/documents/" + args.document_id + "/pages/" + args.page_id;
+    if (this.rootUrlValue === undefined) {
+      this.rootUrlValue = WebDoc.dataServer ? WebDoc.dataServer : "";
+      this.rootUrlValue += "/documents/";
+    }            
+    return this.rootUrlValue + args.document_id + "/pages/" + args.page_id;
   },
+  
   pluralizedClassName: function() {
     return this.className() + "s";
   } 
