@@ -9,7 +9,9 @@
   <link href="../css/webdoc/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
   
   <style>
-    
+    body {
+      padding-top: 60px;
+    }
   </style>
 </head>
 <body>
@@ -92,9 +94,6 @@
 	var sequencer = new Sequencer({
 		type: 'sequence',
 		2000: [{
-			type: 'click',
-			selector: '#fong'
-		}, {
 		  type: 'sequence',
 		  0: [{
 		  	type: 'click',
@@ -104,6 +103,10 @@
 		  	type: 'click',
 		  	selector: '#fing'
 		  }]
+		}],
+		4000: [{
+			type: 'audio',
+			src: 'audio/voice.wav'
 		}],
 		5000: [{
 			type: 'click',
