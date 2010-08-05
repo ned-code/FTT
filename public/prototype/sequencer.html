@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sequencer</title>
+  
+  <link href="../css/webcss/reset.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/forms.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/column.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <style>
+    
+  </style>
+</head>
+<body>
+  
+  <a href="#go">GO</a>
+  
+  <hr/>
+  
+  <h5>#fang:</h5>
+  <div id="fang">0</div>
+  <h5>#fong:</h5>
+  <div id="fong">0</div>
+  <h5>#fing:</h5>
+  <div id="fing">0</div>
+  
+  <script src="../js/jquery-1.4.2.js"></script>
+  <script src="js/sequencer.js"></script>
+  <script>
+    
+    var clickEvent1 = {
+      type: 'click',
+      selector: '#fang'
+    };
+    
+    var clickEvent2 = {
+      type: 'click',
+      selector: '#fong'
+    };
+    
+    var audioEvent = {
+      type: 'audio',
+      url:  'voice.mp4'
+    };
+    
+    var sequenceEvent1 = {
+      type: 'sequence',
+      0:    [audioEvent],
+      100:  [clickEvent1],
+      200:  [clickEvent1, clickEvent2],
+      300:  [sequenceEvent2]
+    };
+    
+    var sequenceEvent2 = {
+      type: 'sequence',
+      0:    [clickEvent2],
+      2000: [clickEvent1],
+      4000: [clickEvent2]
+    };
+    
+    //var sequencer = Sequencer( sequenceEvent1 );
+    
+    jQuery(document).ready(function(){
+      
+      //sequencer.play();
+      
+      jQuery('div')
+      .bind('click', function(){
+      	var elem = jQuery(this);
+      	elem.html( parseInt(elem.html()) + 1);
+      })
+      
+    });
+    
+	var fingfangfong = {
+	  type: 'sequence',
+	  0: [{
+	  	type: 'click',
+	  	selector: '#fing'
+	  }],
+	  80: [{
+	  	type: 'click',
+	  	selector: '#fang'
+	  }],
+	  160: [{
+	  	type: 'click',
+	  	selector: '#fong'
+	  }]
+	};
+	
+	var sequencer = new Sequencer({
+		type: 'sequence',
+		2000: [{
+			type: 'click',
+			selector: '#fong'
+		}, {
+		  type: 'sequence',
+		  0: [{
+		  	type: 'click',
+		  	selector: '#fang'
+		  }],
+		  400: [{
+		  	type: 'click',
+		  	selector: '#fing'
+		  }]
+		}],
+		5000: [{
+			type: 'click',
+			selector: '#fong'
+		}],
+		5029: [{
+			type: 'sequence',
+			200: [{
+				type: 'click',
+				selector: '#fong'
+			}],
+			250: [{
+				type: 'click',
+				selector: '#fong'
+			}],
+			4000: [fingfangfong],
+			6000: [fingfangfong]
+		}]
+	}, 0);
+	
+	jQuery(document).ready(function(){
+		jQuery('a[href=#go]')
+		.bind('click', function(){
+			sequencer.play();
+		});
+	});
+    
+  </script>
+</body>
+</html> 

@@ -72,7 +72,6 @@
 				//range: {},
 				//tel: {},
 				//search: {},
-				//color: {},
 			},
 
 			
@@ -498,7 +497,7 @@
 					return test ?
 								 test[2] || test[1] === '0' ? pass() : 
 								 autocomplete ? pass(test[0]+'px') :
-									 fail('Add some CSS units, like <i>%</i>, <i>px</i> or <i>em</i>') :
+									 fail('How about some units, like <i>%</i>, <i>px</i> or <i>em</i>?') :
 									 fail('Not a valid CSS value') ;
 				},
 
