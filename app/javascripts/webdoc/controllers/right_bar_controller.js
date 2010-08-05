@@ -29,7 +29,7 @@ WebDoc.RightBarController = $.klass({
     panel = jQuery( this.PANEL_SELECTOR );
     
     this.rightPanels = '.browser_panel, .pages_panel, .inspector_panel, .comments_panel, .apps_panel, .my_content_panel, .packages_panel, .browse_web_panel';
-    
+    this.rightPanels += ', .page_inspector_panel, .document_inspector_panel'
     // Some of these are lazy loaded, and some are not -
     // pageInspector does not work if you try loading it now.
     
@@ -165,7 +165,7 @@ WebDoc.RightBarController = $.klass({
     ddd("[RightBarController] show page inspector");
     this.selectInspector(WebDoc.PanelInspectorType.PAGE);
     // this.show();
-    this._showPanel('pages_panel');
+    this._showPanel('page_inspector_panel');
   },
   
   showItemInspector: function() {
@@ -178,7 +178,8 @@ WebDoc.RightBarController = $.klass({
   showDocumentInspector: function() {
     ddd("[RightBarController] showDocumentInspector");
     this.selectInspector(WebDoc.PanelInspectorType.DOCUMENT);
-    this.show();
+    //this.show();
+    this._showPanel('document_inspector_panel');
   },
   
   //actually display the author panel... it's on bottom of the webdoc

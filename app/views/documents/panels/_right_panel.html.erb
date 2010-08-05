@@ -1,79 +1,70 @@
+<!-- <div class="browser_panel panel">
+  <h3>Browser</h3>
+</div> -->
+<div class="pages_panel panel">
+  <h3>Pages</h3>
+  <%= render :partial => 'documents/inspectors/page_inspector' %>
+</div>
 
-<!-- -#%ul.panel-tools.vertical.icons-only.thumbs.index
--#  %li#toggle_inspector>
--#    %a{ :href => "#right-panel-toggle", :title => "Toggle Inspector" } Inspector
--#  %li>
--#    %a.state-right-panel.mode-edit-show{ :href => "#media-browser", :title => "Show Media Browser" } Media Browser
--#  %li>
--#    %a.state-right-panel.mode-edit-show{ :href => "#item-inspector", :title => "Show Inspector" } Item
--#  %li>
--#    %a.state-right-panel.mode-edit-show{ :href => "#page-inspector", :title => "Show Page inspector" } Page
--#  %li>
--#    %a.state-right-panel.mode-edit-show{ :href => "#document-inspector", :title => "Show Document inspector" } Document
--#  %li>
--#    %a.state-right-panel{ :href => "#discussions-panel", :title => "Show discussions" } Discussions
--#  %li>
--#    %a.state-right-panel{ :href => "#social-inspector", :title => "Show Social" } Social
--# -->
-<!-- <div class='layer'> -->
-  <!-- <div class="browser_panel panel">
-    <h3>Browser</h3>
-  </div> -->
-  <div class="pages_panel panel">
-    <h3>Pages</h3>
-    <%= render :partial => 'documents/inspectors/page_inspector' %>
-  </div>
-  
-  <%= render :partial => 'documents/inspectors/document_inspector' %>
-  
-  <div class="comments_panel panel">
-    <h3>Comments</h3>
-    <%= render :partial => 'documents/panels/discussions_panel' %>
-  </div>
-  
-  <div class="my_content_panel panel">
-    <h3>My stuff</h3>
-    <%= render 'documents/panels/my_content_panel' %>
-  </div>
-  
-  <div class="apps_panel panel">
-    <h3>Apps</h3>
-    <%= render 'documents/panels/apps_panel' %>
-  </div>
-  
-  <div class="packages_panel panel">
-    <h3>Packages</h3>
-    <%= render 'documents/panels/packages_panel' %>
-  </div>
-  
-  <div class="browse_web_panel panel">
-    <h3>Browse the web</h3>
-    <%= render 'documents/panels/browse_web_panel' %>
-  </div>
-  
-  <!-- <div class="activity_panel panel">
-    <h3>Activity</h3>
-  </div> -->
-  
-  <!--<div class="sharing_panel panel">
-    <h3>Sharing</h3>
-     Social_panel contain all the info about the authors, we don't want it here --><!--
-    <%#= render :partial => 'documents/social_panel' %>
-  </div>-->
-  
-  
-  <div id="item_inspector" class='inspector_panel panel'>
-    <h3>Inspector</h3>
-    <%= render :partial => 'documents/inspectors/text_inspector' %>
-    <%= render :partial => 'documents/inspectors/draw_inspector' %>
-    <%= render :partial => 'documents/inspectors/widget_inspector' %>
-    <%= render :partial => 'documents/inspectors/empty_inspector' %>
-    <%= render :partial => 'documents/inspectors/html_inspector' %>
-    <%= render :partial => 'documents/inspectors/iframe_inspector' %>
-    <%= render :partial => 'documents/inspectors/image_inspector' %>
-    <%= render :partial => 'documents/inspectors/text_properties_inspector' %>
-    <%= render :partial => 'documents/inspectors/widget_properties_inspector' %>
-    <%= render :partial => 'documents/inspectors/iframe_properties_inspector' %>
-    <%= render :partial => 'documents/inspectors/html_properties_inspector' %>
-  </div>
-<!-- </div> -->
+<%= render :partial => 'documents/inspectors/document_inspector' %>
+
+<div class="comments_panel panel">
+  <h3>Comments</h3>
+  <%= render :partial => 'documents/panels/discussions_panel' %>
+</div>
+
+<div class="my_content_panel panel">
+  <h3>My stuff</h3>
+  <%= render 'documents/panels/my_content_panel' %>
+</div>
+
+<div class="apps_panel panel">
+  <h3>Apps</h3>
+  <%= render 'documents/panels/apps_panel' %>
+</div>
+
+<div class="packages_panel panel">
+  <h3>Packages</h3>
+  <%= render 'documents/panels/packages_panel' %>
+</div>
+
+<div class="browse_web_panel panel">
+  <h3>Browse the web</h3>
+  <%= render 'documents/panels/browse_web_panel' %>
+</div>
+
+<div class="document_inspector_panel panel">
+  <h3>Document inspector</h3>
+  <%= render 'documents/inspectors/document_inspector' %>
+</div>
+
+<div class="page_inspector_panel panel">
+  <h3>Page inspector</h3>
+  <%#= render 'documents/inspectors/document_inspector' %>
+</div>
+
+<!-- <div class="activity_panel panel">
+  <h3>Activity</h3>
+</div> -->
+
+<!--<div class="sharing_panel panel">
+  <h3>Sharing</h3>
+   Social_panel contain all the info about the authors, we don't want it here --><!--
+  <%#= render :partial => 'documents/social_panel' %>
+</div>-->
+
+
+<div id="item_inspector" class='inspector_panel panel'>
+  <h3>Inspector</h3>
+  <%= render :partial => 'documents/inspectors/text_inspector' %>
+  <%= render :partial => 'documents/inspectors/draw_inspector' %>
+  <%= render :partial => 'documents/inspectors/widget_inspector' %>
+  <%= render :partial => 'documents/inspectors/empty_inspector' %>
+  <%= render :partial => 'documents/inspectors/html_inspector' %>
+  <%= render :partial => 'documents/inspectors/iframe_inspector' %>
+  <%= render :partial => 'documents/inspectors/image_inspector' %>
+  <%= render :partial => 'documents/inspectors/text_properties_inspector' %>
+  <%= render :partial => 'documents/inspectors/widget_properties_inspector' %>
+  <%= render :partial => 'documents/inspectors/iframe_properties_inspector' %>
+  <%= render :partial => 'documents/inspectors/html_properties_inspector' %>
+</div>
