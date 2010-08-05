@@ -14,7 +14,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.imagesFavoritePage = 1;
     this.myImagesContainer = $('#my-images');
     
-    this._loadMyImages();  
+    this._loadMyImages();
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
     
     $("#my-images-library").bind("dragstart", this.dragStart.pBind(this));

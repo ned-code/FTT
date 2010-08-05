@@ -13,7 +13,7 @@ WebDoc.WebVideosSearch = $.klass({
     this.vimeoSearch = new WebDoc.VimeoSearch();
     
     this.parentController = parentController;
-    this.detailsView = $('#media-browser-web-video-details');
+    this.detailsView = $('#web-video-details');
     this.setupDetailsView();
    
     // Observe search submission
@@ -80,7 +80,7 @@ WebDoc.WebVideosSearch = $.klass({
     this.detailsVideoContainer = this.detailsView.find('.single_video');
     
     // handle possible actions 
-    $("#media-browser-web-video-details .actions").click(function(event){
+    $("#web-video-details .actions").click(function(event){
       event.preventDefault();
       
       var properties = this.detailsVideoContainer.data("properties"); //properties of the currenlty displayed video are store in this element
@@ -108,7 +108,7 @@ WebDoc.WebVideosSearch = $.klass({
           video.data.favorites = 1;
           video.save(function(persitedVideo){
             info.text("Done!");
-            if($('#media-browser-my-favorites').length){
+            if($('#my-favorites').length){
               WebDoc.application.mediaBrowserController.myContentsController.insertVideo(persitedVideo.data.properties, persitedVideo.uuid());
             }
           }.pBind(this));
@@ -123,7 +123,7 @@ WebDoc.WebVideosSearch = $.klass({
     
     // Embed video
     this.detailsVideoContainer.find('object').remove();
-    this.detailsVideoContainer.prepend(this.buildEmbeddedVideo(properties));
+    this.detailsVideoContainer.prepend(this.libraryUtils.buildEmbeddedVideo(properties));
     
     // Store the current properties in detailsVideoContainer
     this.detailsVideoContainer.data("properties", properties);
@@ -151,14 +151,14 @@ WebDoc.WebVideosSearch = $.klass({
     showVideoPageEl.text('Show video on ' + serviceName);
 
     //setup the favorites links
-    if( $('#media-browser-web-video-details #add_video_to_favorites').length){
-      $('#media-browser-web-video-details #add_video_to_favorites').parent().remove(); 
+    if( $('#web-video-details #add_video_to_favorites').length){
+      $('#web-video-details #add_video_to_favorites').parent().remove(); 
       liFavorites = $('<li>').append($("<a href='' id='add_video_to_favorites'>Add to favorites</a>"));
-      $("#media-browser-web-video-details .actions ul").append(liFavorites);
+      $("#web-video-details .actions ul").append(liFavorites);
     }
     
     this.parentController.hideAll();
-    $('#media-browser-web-video-details').show();
+    $('#web-video-details').show();
   },
   
   prepareVideoDrag: function(event) {

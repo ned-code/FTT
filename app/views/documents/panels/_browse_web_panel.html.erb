@@ -1,8 +1,8 @@
-<div id="media-browser-web" class='media-browser-tab'>
-  <div id="media-browser-web-header">
+<div id="web">
+  <div id="web-header">
     <ul class='tab_navigation'>
       <li>
-        <a class="selected" href='#search_images' title='Search images'> <%= t('.images.web_detail')%></a>
+        <a class="selected" href='#search_images' title='Search images' > <%= t('.images.web_detail')%></a>
         <a href='#search_videos' title='Search videos'> <%= t('.videos.web_detail')%></a>
       </li>
     </ul>
@@ -72,7 +72,7 @@
     </div>
   </div>
   
-  <div id="media-browser-web-images-details" style='display:none' class='web-search-tab view details_view'>
+  <div id="web-images-details" style='display:none' class='web-search-tab view details_view'>
     <a href='#search_images' id='web-image-detail-back' class='back'>Back</a>
     <div id="image-details">
       <div class='single_image'>
@@ -99,8 +99,8 @@
     </div>
   </div>
   
-  <div id="media-browser-web-video-details" class="web-search-tab" style="display:none;">
-    <a href='#search_videos' id='web-video-details-back' class='back'><%= t('.buttons.back') %></a>
+  <div id="web-video-details" class="web-search-tab" style="display:none;">
+    <a href='#search_videos' class='back'><%= t('.buttons.back') %></a>
     <div class="view_content">
       <h4 class="video_name"></h4>
       <div class="single_video">

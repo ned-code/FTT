@@ -12,7 +12,7 @@ WebDoc.WebImagesSearch = $.klass({
     
     // Set callback to the ImagesLibrary
     this.parentController= parentController;
-    this.imageDetailsView = $('#media-browser-web-images-details #image-details');
+    this.imageDetailsView = $('#web-images-details #image-details');
     this.setupDetailsView();
     
     this.libraryUtils = new LibraryUtils();
@@ -56,7 +56,7 @@ WebDoc.WebImagesSearch = $.klass({
 
   setupDetailsView: function(){
     // handle possible actions 
-    $("#media-browser-web-images-details #image-details .actions").click(function(event){
+    $("#web-images-details #image-details .actions").click(function(event){
       event.preventDefault();
 
       var properties = this.detailsViewImg.data("properties"); //properties of the currenlty displayed image are store in this element
@@ -95,7 +95,7 @@ WebDoc.WebImagesSearch = $.klass({
           image.data.title = properties.title
           image.save(function(persitedImage){
             if(persitedImage.data.attachment_file_name){
-              if($('#media-browser-my-favorites').length){
+              if($('#my-favorites').length){
                 WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data.properties, persitedImage.uuid(), 'my-favorites-images');
               }
               info.text("Done!");
@@ -152,13 +152,13 @@ WebDoc.WebImagesSearch = $.klass({
     this.preloadImage(properties.url);
     
     //setup the favorites links
-    if( $('#media-browser-web-images-details #add_image_to_favorite').length){
-      $('#media-browser-web-images-details #add_image_to_favorite').parent().remove(); 
+    if( $('#web-images-details #add_image_to_favorite').length){
+      $('#web-images-details #add_image_to_favorite').parent().remove(); 
       liDelete = $('<li>').append($("<a href='' id='add_image_to_favorite'>Add to favorites</a>"));
-      $("#media-browser-web-images-details #image-details .actions ul").append(liDelete);
+      $("#web-images-details #image-details .actions ul").append(liDelete);
     }
 
-    $("#media-browser-web-images-details").show();
+    $("#web-images-details").show();
   },
    
   preloadImage: function(imageSrc) {
