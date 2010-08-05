@@ -1,3 +1,14 @@
+// Event Sequencer
+// 
+// Runs a series of timed events with a self-regulating timer
+// that gaurantees that events stay (as close as possible in
+// javascript in sync with the browser's Date. Events are JSON
+// so they can easily be transferred. They are also triggerable
+// as DOM Events. The Sequencer shepherds them into sequence
+// processes depending on their type. Sequences themselves are
+// a type of event. New sequence processes can easily be added
+// to handle new event types.
+
 (function(){
 	
 	var debug = (window.console && console.log);
