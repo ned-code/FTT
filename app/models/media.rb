@@ -5,8 +5,8 @@ class Media < ActiveRecord::Base
   
   attr_accessible :uuid, :attachment, :properties, :system_name, :title, :description, :created_at, :favorites #, :remote_file_url
 
-  named_scope :not_deleted, :conditions => ['medias.deleted_at IS ?', nil]
-  named_scope :deleted, :conditions => ['medias.deleted_at IS NOT ?', nil]
+  scope :not_deleted, :conditions => ['medias.deleted_at IS ?', nil]
+  scope :deleted, :conditions => ['medias.deleted_at IS NOT ?', nil]
   
   # ================
   # = Associations =

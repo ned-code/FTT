@@ -24,10 +24,10 @@ class Document < ActiveRecord::Base
   # = Associations =
   # ================
   
-  named_scope :public, :conditions => { :is_public => true }
-  named_scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
-  named_scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
-  named_scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
+  scope :public, :conditions => { :is_public => true }
+  scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
+  scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
+  scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
 
   # ================
   # = Associations =

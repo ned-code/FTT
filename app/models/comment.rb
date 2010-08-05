@@ -14,13 +14,13 @@ class Comment < ActiveRecord::Base
   belongs_to :user
   belongs_to :discussion
 
-  named_scope :root_only, :conditions => { :root => true }
-  named_scope :valid,
+  scope :root_only, :conditions => { :root => true }
+  scope :valid,
               :joins => { :discussion => {:page => :document }},
               :conditions => ['comments.deleted_at IS ? AND discussions.deleted_at IS ? AND pages.deleted_at is ? AND documents.deleted_at IS ?',nil, nil, nil, nil]
               
-  named_scope :not_deleted, :conditions => ['comments.deleted_at IS ?', nil]
-  named_scope :deleted, :conditions => ['comments.deleted_at IS NOT ?', nil]
+  scope :not_deleted, :conditions => ['comments.deleted_at IS ?', nil]
+  scope :deleted, :conditions => ['comments.deleted_at IS NOT ?', nil]
 
   before_save :check_if_root
   

@@ -15,7 +15,7 @@ class DatastoreEntry < ActiveRecord::Base
   belongs_to :item
   belongs_to :user
   
-  named_scope :filter_with, lambda { |current_user, params|
+  scope :filter_with, lambda { |current_user, params|
     #conditions = {}
     #conditions[:ds_key]  = params[:key] if params.has_key?(:key)
     #conditions[:user_id] = current_user if current_user && params[:only_current_user] == 'true'

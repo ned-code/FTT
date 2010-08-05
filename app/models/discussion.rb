@@ -32,11 +32,11 @@ class Discussion < ActiveRecord::Base
 
   before_save :validate_presence_of_object_linked
   
-  named_scope :valid,
+  scope :valid,
               :joins => { :page => :document },
               :conditions => ['discussions.deleted_at IS ? AND pages.deleted_at is ? AND documents.deleted_at IS ?',nil, nil, nil]
-  named_scope :not_deleted, :conditions => ['discussions.deleted_at IS ?', nil]
-  named_scope :deleted, :conditions => ['discussions.deleted_at IS NOT ?', nil]
+  scope :not_deleted, :conditions => ['discussions.deleted_at IS ?', nil]
+  scope :deleted, :conditions => ['discussions.deleted_at IS NOT ?', nil]
 
   def validate_presence_of_object_linked
     columns = OBJECT_LINKED_ALLOWED.map{ |o| "#{o}_id"}

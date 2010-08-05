@@ -4,6 +4,9 @@ class User < ActiveRecord::Base
   set_primary_key :uuid
   acts_as_authorization_subject
 
+  # needed for acl9
+  alias_attribute(:id, :uuid)
+
   avatars_path = "uploads/user/avatar/:id/:cw_style:basename.:extension"
   has_attached_file :avatar,
                     :styles => { :thumb=> "128x128#" },

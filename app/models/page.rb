@@ -56,9 +56,9 @@ class Page < ActiveRecord::Base
   
   default_scope :order => "position ASC"
   
-  named_scope :valid, :joins => :document, :conditions => ['pages.deleted_at IS ? AND documents.deleted_at IS ?', nil, nil]
-  named_scope :not_deleted, :conditions => ['pages.deleted_at IS ?', nil]
-  named_scope :deleted, :conditions => ['pages.deleted_at IS NOT ?', nil]
+  scope :valid, :joins => :document, :conditions => ['pages.deleted_at IS ? AND documents.deleted_at IS ?', nil, nil]
+  scope :not_deleted, :conditions => ['pages.deleted_at IS ?', nil]
+  scope :deleted, :conditions => ['pages.deleted_at IS NOT ?', nil]
   # ===============
   # = Validations =
   # ===============
