@@ -460,3 +460,46 @@ body.full_view {
 .message {
   font-size: 0.8333em; /* 10px */
 }
+
+/* Drag and drop feedback */
+
+#media_drag_feedback {
+ padding:6px 8px 10px;
+}
+
+#media_drag_feedback.video { width:120px; height:90px; }
+#media_drag_feedback.image { width:120px; height:120px; }
+#media_drag_feedback.app { width:120px; height:120px; }
+
+#media_drag_feedback img {
+ -webkit-box-shadow:0 2px 8px #000;
+ -moz-box-shadow:0 2px 8px #000;
+}
+
+#media_drag_feedback.video img { width:120px; height:90px; }
+#media_drag_feedback.image img { width:120px; height:120px; }
+#media_drag_feedback.app img { width:120px; height:120px; }
+
+#media_drag_feedback span {
+  display:block;
+  position:absolute;
+  top:6px;
+  left:8px;
+}
+#media_drag_feedback.video span {
+  width:120px;
+  height:90px;
+  background:transparent url(/images/libraries/drag_video.png) no-repeat;
+}
+
+#media_drag_feedback.image span {
+  width:120px;
+  height:120px;
+  background:transparent url(/images/libraries/drag_image.png) no-repeat;
+}
+
+#media_drag_feedback.app span {
+  width:120px;
+  height:120px;
+  background:transparent url(/images/libraries/drag_app.png) no-repeat;
+}

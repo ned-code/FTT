@@ -44,7 +44,6 @@ WebDoc.WebVideosSearch = $.klass({
     var target = $(event.target);
     var properties;
     
-    
     if(target.is('img')){
       properties = target.data('properties');
     }
