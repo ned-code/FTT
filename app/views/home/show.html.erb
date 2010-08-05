@@ -1,7 +1,7 @@
 <!-- home/show.html.erb -->
 <div class="action-zone zone">
   <div class="wrap clear">
-    <% form_for @user, :url => session_path(@user), :builder => CustomFormBuilder, :html => { :class => "column one double of-four" } do |f| %>
+    <%= form_for @user, :url => session_path(@user), :builder => CustomFormBuilder, :html => { :class => "column one double of-four" } do |f| %>
       <h2>Log in&hellip;</h2>
       
       <fieldset>

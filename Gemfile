@@ -10,7 +10,7 @@ gem 'xmpp4r'
 gem 'paperclip'
 gem 'aws-s3', :git => 'http://github.com/isaacfeliu/aws-s3.git'
 gem 'warden'
-# gem 'devise', :branch => 'v1.1.0'
+# gem 'devise', :branch => 'master'
 gem 'devise', :branch => 'v1.1.0uuid', :git => 'http://github.com/webdoc/devise.git'
 gem 'will_paginate', :branch => 'rails3', :git => 'http://github.com/mislav/will_paginate.git'
 gem 'uuidtools' # for has_uuid plugin

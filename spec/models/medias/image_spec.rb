@@ -53,7 +53,7 @@ describe Medias::Image do
   
   it 'should transliterate the filename' do
     image = Medias::Image.new
-    file = File.new(File.join(RAILS_ROOT, 'spec', 'fixtures', %Q{IT’s, UPPERCASE+super .JPG}), 'rb')
+    file = File.new(File.join(Rails.root, 'spec', 'fixtures', %Q{IT’s, UPPERCASE+super .JPG}), 'rb')
     image.attachment = file
     file.close
     'its-uppercase-super.jpg'.should == image.attachment.original_filename

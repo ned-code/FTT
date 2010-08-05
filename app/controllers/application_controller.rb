@@ -11,8 +11,7 @@ class ApplicationController < ActionController::Base
 
   helper :all
   helper_method :current_session, :current_user
-  filter_parameter_logging :password, :password_confirmation
-
+  
 protected
 
   def forbidden_access

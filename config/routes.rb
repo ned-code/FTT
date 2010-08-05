@@ -1,60 +1,140 @@
 Webdoc::Application.routes.draw do
 
-  Jammit::Routes.draw(map)
-  map.connect 'proxy/resolve', :controller => 'proxy', :action => 'resolve', :conditions => { :method => :get }
-  map.connect 'proxy/get', :controller => 'proxy', :action => 'get', :conditions => { :method => :get }
-  map.connect 'proxy/post', :controller => 'proxy', :action => 'post', :conditions => { :method => :post }
-  map.connect 'proxy/put', :controller => 'proxy', :action => 'put', :conditions => { :method => :put }
-  map.connect 'proxy/delete', :controller => 'proxy', :action => 'delete', :conditions => { :method => :delete }
+  # Jammit::Routes.draw(map) #TODO not need in rails3 ?
 
-  map.root :controller => 'home', :action => :show
+  get    'proxy/resolve'
+  get    'proxy/get'
+  post   'proxy/post'
+  put    'proxy/put'
+  delete 'proxy/delete'
 
-  map.resources :documents, :has_many => { :pages => :items }, :member => { :duplicate => :post }, :collection => { :explore => :get, :featured => :get } do |m|
-    m.resource :document_roles, :as => 'roles', :only => [:show, :create, :update, :destroy]
+  root :to => 'home#show'
+
+  resources :documents do
+    resources :pages do
+      resources :items
+    end
+    resources :document_roles, :only => [:show, :create, :update, :destroy], :path => 'roles'
+    member do
+      post :duplicate
+    end
+    collection do
+      get :explore
+      get :featured
+    end
   end
 
-  map.connect 'items/:item_id/datastore_entries/:key', :controller => 'datastore_entries', :action => 'index', :only_current_user => true, :conditions => { :method => :get }
-  map.resources :items, :except => [:index, :show, :create, :new, :edit, :update, :destroy] do |item|
-    item.resources :datastore_entries, :only => [:index, :create, :destroy]
+  # TODO rails3 always need :only_current_user => true ?
+  get    'items/:item_id/datastore_entries/:key' => 'datastore_entries#index'
+  delete 'items/:item_id/datastore_entries' => 'datastore_entries#destroy_all'
+  # TODO rails same route as before, no??
+  resources :items, :except => [:index, :show, :create, :new, :edit, :update, :destroy] do
+    resources :datastore_entries, :only => [:index, :create, :destroy]
   end
-  map.connect 'items/:item_id/datastore_entries', :controller => 'datastore_entries', :action => 'destroy_all', :conditions => { :method => :delete }
+  resources :datastores, :only => [:show, :index]
 
-  map.connect '/documents/:document_id/pages/:page_id/items/:id/secure_token', :controller => 'items', :action => 'secure_token', :conditions => { :method => :get }
+  get '/documents/:document_id/pages/:page_id/items/:id/secure_token' => 'items#secure_token'
+  get '/documents/:document_id/pages/:page_id/callback_thumbnail' => 'pages#callback_thumbnail'
 
-  map.connect '/documents/:document_id/pages/:page_id/callback_thumbnail', :controller => 'pages', :action => 'callback_thumbnail', :conditions => { :method => :get }
+  devise_for :users# , :controllers => { :sessions => "sessions",
+                   #                     :passwords => "passwords",
+                   #                     :registrations => "registrations",
+                   #                     :confirmations => "confirmations",
+                   #                     :unlocks => "unlocks" }
 
-  map.resources :datastores, :only => [:show, :index] do |datastore|
-    # datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
+  resources :users, :except => [:new, :create, :destroy]
+
+  get 'user' => 'sessions#show'
+
+  namespace :admin do
+    resources :widgets, :path => 'apps', :as => 'apps', :except => :show
+    resources :categories, :except => :show
+    resource  :test, :only => :show
+    resources :themes
   end
 
-  map.connect '/apps', :controller => 'widgets', :action => 'index', :conditions => { :method => :get }
-  map.connect '/users/favorites', :controller => 'users', :action => 'favorites', :conditions => { :method => :get } #this route is used to get html that is display in media browser favorites
-  map.devise_for :users
-  map.resources :users, :except => [:new, :create, :destroy]
-  map.connect 'user', :controller => 'sessions', :action => 'show', :conditions => { :method => :get }
-
-  map.namespace :admin do |admin|
-    admin.resources :widgets, :as => 'apps', :except => :show
-    admin.resources :categories, :except => :show
-    admin.resource :test, :only => :show
-    admin.resources :themes
+  resources :followships do
+    collection do
+      post :follow
+      delete :unfollow
+    end
   end
 
-  map.resources :followships, :collection => { :follow => :post, :unfollow => :delete }
-  map.connect '/browse', :controller => 'browser', :action => :index, :conditions => { :method => :get }
+  get '/browse' => 'browser#index'
 
   # dev controller
-  map.resources :images,    :except => [:new, :edit, :update] #/images is used to get html that is displayed in media browser my images
-  map.resources :videos,    :except => [:new, :edit, :update]
-  map.resources :widgets,   :except => [:new, :edit, :update, :destroy]
-  map.resources :categories, :only => :index
-  map.resources :themes, :only => [:index, :show]
-  map.resources :roles_documents, :only => :index, :as => "roles/documents"
+  resources :images,     :except => [:new, :edit, :update]
+  resources :videos,     :except => [:new, :edit, :update]
+  resources :widgets,    :except => [:new, :edit, :update, :destroy]
+  resources :categories, :only => :index
+  resources :themes,     :only => [:index, :show]
+
+  resources :roles_documents, :only => [:index], :path => 'roles/documents'
 
   # comments
-  map.resources :discussions, :only => [:index, :create, :update, :destroy] do |discussion|
-    discussion.resources :comments, :only => [:create, :destroy]
+  resources :discussions, :only => [:index, :create, :update, :destroy] do
+    resources :comments, :only => [:create, :destroy]
   end
+
+
+
+  # START OLD ROUTES
+  # Jammit::Routes.draw(map)
+  # map.connect 'proxy/resolve', :controller => 'proxy', :action => 'resolve', :conditions => { :method => :get }
+  # map.connect 'proxy/get', :controller => 'proxy', :action => 'get', :conditions => { :method => :get }
+  # map.connect 'proxy/post', :controller => 'proxy', :action => 'post', :conditions => { :method => :post }
+  # map.connect 'proxy/put', :controller => 'proxy', :action => 'put', :conditions => { :method => :put }
+  # map.connect 'proxy/delete', :controller => 'proxy', :action => 'delete', :conditions => { :method => :delete }
+  #
+  # map.root :controller => 'home', :action => :show
+  #
+  # map.resources :documents, :has_many => { :pages => :items }, :member => { :duplicate => :post }, :collection => { :explore => :get, :featured => :get } do |m|
+  #   m.resource :document_roles, :as => 'roles', :only => [:show, :create, :update, :destroy]
+  # end
+  #
+  # map.connect 'items/:item_id/datastore_entries/:key', :controller => 'datastore_entries', :action => 'index', :only_current_user => true, :conditions => { :method => :get }
+  # map.resources :items, :except => [:index, :show, :create, :new, :edit, :update, :destroy] do |item|
+  #   item.resources :datastore_entries, :only => [:index, :create, :destroy]
+  # end
+  # map.connect 'items/:item_id/datastore_entries', :controller => 'datastore_entries', :action => 'destroy_all', :conditions => { :method => :delete }
+  #
+  # map.connect '/documents/:document_id/pages/:page_id/items/:id/secure_token', :controller => 'items', :action => 'secure_token', :conditions => { :method => :get }
+  #
+  # map.connect '/documents/:document_id/pages/:page_id/callback_thumbnail', :controller => 'pages', :action => 'callback_thumbnail', :conditions => { :method => :get }
+  #
+  # map.resources :datastores, :only => [:show, :index] do |datastore|
+  #   # datastore.resources :datastoreEntries, :except => [:new, :update, :edit]
+  # end
+  #
+  # map.connect '/apps', :controller => 'widgets', :action => 'index', :conditions => { :method => :get }
+  # map.connect '/users/favorites', :controller => 'users', :action => 'favorites', :conditions => { :method => :get } #this route is used to get html that is display in media browser favorites
+  # map.devise_for :users
+  # map.resources :users, :except => [:new, :create, :destroy]
+  # map.connect 'user', :controller => 'sessions', :action => 'show', :conditions => { :method => :get }
+  #
+  # map.namespace :admin do |admin|
+  #   admin.resources :widgets, :as => 'apps', :except => :show
+  #   admin.resources :categories, :except => :show
+  #   admin.resource :test, :only => :show
+  #   admin.resources :themes
+  # end
+  #
+  # map.resources :followships, :collection => { :follow => :post, :unfollow => :delete }
+  # map.connect '/browse', :controller => 'browser', :action => :index, :conditions => { :method => :get }
+  #
+  # # dev controller
+  # map.resources :images,    :except => [:new, :edit, :update] #/images is used to get html that is displayed in media browser my images
+  # map.resources :videos,    :except => [:new, :edit, :update]
+  # map.resources :widgets,   :except => [:new, :edit, :update, :destroy]
+  # map.resources :categories, :only => :index
+  # map.resources :themes, :only => [:index, :show]
+  # map.resources :roles_documents, :only => :index, :as => "roles/documents"
+  #
+  # # comments
+  # map.resources :discussions, :only => [:index, :create, :update, :destroy] do |discussion|
+  #   discussion.resources :comments, :only => [:create, :destroy]
+  # end
+  # END OLD ROUTES
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
