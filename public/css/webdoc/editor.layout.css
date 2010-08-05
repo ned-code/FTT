@@ -140,7 +140,7 @@ body.full_view {
 }
 .tools_panel,
 .controls_panel {
-  z-index: 3;
+  z-index: 3000000;
 }
 
 /* Manage show/hide of panels between page view

@@ -120,6 +120,8 @@ class DocumentsController < ApplicationController
       render :action => :static_page, :layout => 'static', :content_type => 'image/svg+xml' and return
     end
     if @document.present?
+      @related_documents = Document.all(:conditions => { :category_id => @document.category_id}, :limit => 12 )
+      @more_author_documents = Document.all(:conditions => { :creator_id => @document.creator_id}, :limit => 6 )
       respond_to do |format|
         format.html do
           @get_return_to = get_return_to 

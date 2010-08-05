@@ -16,7 +16,7 @@
     <title>webdoc beta - <%= yield :title %></title>
     <%= include_stylesheets :common, :media => 'all' %>
     <%= include_stylesheets :page_editor, :media => 'all' %>
-    <%= render :partial => "layouts/google_analytics"; %>    
+    <%= render :partial => "layouts/google_analytics" %>    
   </head>
   
   <body class="<%= current_class %>">
@@ -25,10 +25,10 @@
     
     <%= yield %>
     
-    <%= render :partial => "layouts/relatedcontent"; %>
-    <%= render :partial => "layouts/siteheader"; %>
-    <%= render :partial => "layouts/flash", :object => flash %>
-    <%= render :partial => "layouts/feedback"; %>
+    
+    <%= render "layouts/siteheader" %>
+    <%= render "layouts/flash", :object => flash %>
+    <%= render "layouts/feedback" %>
     
     <!-- scripts -->
     <%= include_javascripts :common %>
