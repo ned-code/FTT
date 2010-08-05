@@ -4,8 +4,8 @@
 # If you change this key, all old sessions will become invalid!
 # Make sure the secret is at least 30 characters and all random, 
 # no regular words or you'll be exposed to dictionary attacks.
-ActionController::Base.session = {
-  :key         => '_myuniboard_gen_session',
+ActionController::Base.session = {  
+  :key         => '_webdoc_gen_session',
   :secret      => '5ae417a0ef949425278ef444e1b23076b6bb2afca8f5ee8067d0bc7b65937e03f74f3366802280526dd3888db607a2c122aaf025c09ea40c8fd7fd95c4a6fb84'
 }
 
