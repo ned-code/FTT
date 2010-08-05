@@ -275,7 +275,6 @@ WebDoc.BoardController = jQuery.klass({
   // Tool -----------------------------------------
   
   setCurrentTool: function(tool) {
-    ddd('setCurrentTool',tool);
     this.currentTool = tool;
     if (this.currentTool) {
       this.currentTool.selectTool();
