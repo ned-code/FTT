@@ -14,7 +14,9 @@ Webdoc::Application.routes.draw do
     resources :pages do
       resources :items
     end
-    resources :document_roles, :only => [:show, :create, :update, :destroy], :path => 'roles'
+    resource :document_roles, :only => [:show, :create, :update, :destroy], :path => 'roles'
+    #   m.resource :document_roles, :as => 'roles', :only => [:show, :create, :update, :destroy]
+    
     member do
       post :duplicate
     end
@@ -36,11 +38,7 @@ Webdoc::Application.routes.draw do
   get '/documents/:document_id/pages/:page_id/items/:id/secure_token' => 'items#secure_token'
   get '/documents/:document_id/pages/:page_id/callback_thumbnail' => 'pages#callback_thumbnail'
 
-  devise_for :users# , :controllers => { :sessions => "sessions",
-                   #                     :passwords => "passwords",
-                   #                     :registrations => "registrations",
-                   #                     :confirmations => "confirmations",
-                   #                     :unlocks => "unlocks" }
+  devise_for :users
 
   resources :users, :except => [:new, :create, :destroy]
 

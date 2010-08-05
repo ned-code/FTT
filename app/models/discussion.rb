@@ -49,10 +49,16 @@ class Discussion < ActiveRecord::Base
   end
 
   def as_application_json
-    as_json(:include => { :comments =>
-                                  { :include => { :user => { :methods => :avatar_thumb_url } },
-                                    :except => [:content],
-                                    :methods => :safe_content }})
+    hash = { 'discussion' => self.attributes }
+    hash['discussion']['properties'] = self.properties 
+    hash['discussion']['comments'] = self.comments.map do |c|
+      c_hash = c.attributes
+      c_hash['safe_content'] = c.safe_content
+      c_hash['user'] = c.user.attributes
+      c_hash['user']['avatar_thumb_url'] = c.user.avatar_thumb_url
+      c_hash
+    end
+    hash
   end
   
 end

@@ -34,7 +34,11 @@ class Comment < ActiveRecord::Base
   end
 
   def as_application_json
-    self.as_json(:include => { :user => { :methods => :avatar_thumb_url } }, :except => [:content], :methods => :safe_content)
+    hash = { 'comment' => self.attributes }
+    hash['comment']['safe_content'] = self.safe_content
+    hash['comment']['user'] = self.user.attributes
+    hash['comment']['user']['avatar_thumb_url'] = self.user.avatar_thumb_url
+    hash
   end
 
   def safe_content
