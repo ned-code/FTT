@@ -109,7 +109,7 @@ WebDoc.WebVideosSearch = $.klass({
           video.save(function(persitedVideo){
             info.text("Done!");
             if($('#my-favorites').length){
-              WebDoc.application.mediaBrowserController.myContentsController.insertVideo(persitedVideo.data.properties, persitedVideo.uuid());
+              WebDoc.application.myContentController.insertVideo(persitedVideo.data.properties, persitedVideo.uuid());
             }
           }.pBind(this));
           break;

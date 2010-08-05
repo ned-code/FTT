@@ -34,8 +34,10 @@ WebDoc.RightBarController = $.klass({
     // pageInspector does not work if you try loading it now.
     
     var itemInspector = new WebDoc.InspectorController();
-        
+    var myContentController = new WebDoc.MyContentsController();
+    
     WebDoc.application.inspectorController = itemInspector;
+    WebDoc.application.myContentController = myContentController;
     
     this.visible = false;
     
@@ -57,6 +59,7 @@ WebDoc.RightBarController = $.klass({
 
     this._inspectorsControllers = {};
     this._inspectorsControllers[WebDoc.PanelInspectorType.ITEM] = itemInspector;
+    this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT] = myContentController;
     
     this._currentInspectorType = null;      
     this._preloadDragDropIcon();
@@ -132,6 +135,9 @@ WebDoc.RightBarController = $.klass({
     ddd("[RightBarController] showMyContent");
     this.selectInspector(WebDoc.PanelInspectorType.MY_CONTENT);
     this._showPanel('my_content_panel');
+    if(!this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].isMyImageLoaded()){
+      this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].setup();
+    }
   },
   
   showApps: function(){

@@ -96,7 +96,7 @@ WebDoc.WebImagesSearch = $.klass({
           image.save(function(persitedImage){
             if(persitedImage.data.attachment_file_name){
               if($('#my-favorites').length){
-                WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data.properties, persitedImage.uuid(), 'my-favorites-images');
+                WebDoc.application.myContentController.insertImage(persitedImage.data, persitedImage.uuid(), 'my-favorites-images');
               }
               info.text("Done!");
             }

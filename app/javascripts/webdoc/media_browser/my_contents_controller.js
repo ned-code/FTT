@@ -14,11 +14,18 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.imagesFavoritePage = 1;
     this.myImagesContainer = $('#my-images');
     
+    this.imageLoaded = false;
+  },
+  
+  setup: function(){
     this._loadMyImages();
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
     
     $("#my-images-library").bind("dragstart", this.dragStart.pBind(this));
-    
+  },
+  
+  isMyImageLoaded: function(){
+    return this.imageLoaded;
   },
   
   _setupClickEvent: function(){
@@ -463,6 +470,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.showSpinner(thumbsWrap);
           
     WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
+      this.imageLoaded = true;
       if (data.images.length === 0) {
         var noImages = $("<span>").addClass('no_items').text('No Images');
         thumbsWrap.append(noImages);
