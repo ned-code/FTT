@@ -9,6 +9,7 @@ WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
     this.detailsView = jQuery('#package-details');
     this.detailIframe = this.detailsView.find('iframe');
     jQuery('#package-detail-back').click(function(event){
+      event.preventDefault();
       this.showList();
     }.pBind(this));
   },

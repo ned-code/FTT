@@ -372,7 +372,6 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   },
   
   _extractUUIDFromHash: function(hash){
-    ddd('_extractUUIDFromHash');
     var uuid = hash.substring(1);
     if(uuid.charAt(0) == '!'){
       uuid = uuid.substring(1);

@@ -142,6 +142,39 @@ en:
           detail_view:
             title: "App"
             add_to_page: "Add to page"
+      my_content_panel:
+        buttons:
+          back: "Back"
+        images:
+          add_image: "Add Images"
+          buttons:
+            back: "Back"
+            upload: "Upload"
+            cancel_upload: "Cancel upload"
+          services:
+            flickr: "Flickr"
+            google: "Google Images"
+          add_images_view:
+            title: "Add Images"
+            choose_upload_image: "Choose image(s) to upload"
+
+        videos: 
+          title: "Videos"
+          my_videos: "My videos"
+          web: "Web"
+          web_detail: "Search videos on the web"
+          show_details: "Show video details"
+          services:
+            youtube: "Youtube"
+            vimeo: "Vimeo"
+          detail_view:
+            title: "Video"
+            add_to_page: "Add to page"
+            drag_handle: "drag and drop to add"
+            show_on: "Show video on *"
+            remove_from_my_videos: "Remove from My Videos"
+            delete: "Delete video"
+            add_to_my_videos: "Add to My Videos"
 
     index:
       title: "Documents"

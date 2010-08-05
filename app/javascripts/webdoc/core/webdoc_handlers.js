@@ -28,7 +28,6 @@ WebDoc.handlers = {
   regex: jQuery.regex,
   
   _makeLinkHandler: function( obj, context ){
-		ddd('_makeLinkHandler');
     var regex = this.regex;
     
     // Curry linkHandler using this scope
