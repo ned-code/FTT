@@ -35,9 +35,11 @@ WebDoc.RightBarController = $.klass({
     
     var itemInspector = new WebDoc.InspectorController();
     var myContentController = new WebDoc.MyContentsController();
+    var webSearchController = new WebDoc.WebSearchController();
     
     WebDoc.application.inspectorController = itemInspector;
     WebDoc.application.myContentController = myContentController;
+    WebDoc.application.webSearchController = webSearchController;
     
     this.visible = false;
     
@@ -60,6 +62,7 @@ WebDoc.RightBarController = $.klass({
     this._inspectorsControllers = {};
     this._inspectorsControllers[WebDoc.PanelInspectorType.ITEM] = itemInspector;
     this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT] = myContentController;
+    this._inspectorsControllers[WebDoc.PanelInspectorType.BROWSE_WEB] = webSearchController;
     
     this._currentInspectorType = null;      
     this._preloadDragDropIcon();
