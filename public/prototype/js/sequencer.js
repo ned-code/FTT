@@ -8,38 +8,53 @@
 		'sequence': SequenceProcess
 	}
 	
-	function register( fn ) {
-		fn(this);
+	function clock(t, process){
+	  var now = new Date().getTime(),
+	  		timer;
+	  
+	  if (debug) { console.log('now: ', now, 't: ', t); }
+	  
+	  if (t > now){ //(now - process.latency) ) {
+	  	timer = setTimeout(function(){
+	  		var now = new Date().getTime();
+	  		
+	  		//process.latency = now - t;
+	  		process.playProcessQueue();
+	  		
+	  		clearTimeout(timer);
+	  		timer = null;
+	  		
+	  		console.log('latency: ', now - t);
+	  		
+	  		process.makeProcessQueue(t, clock);
+	  	}, t - now ); //- process.latency)
+	  }
+	  else {
+	  	process.playProcessQueue();
+	  	console.log('latency: ', now - t);
+	  	process.makeProcessQueue(t, clock);
+	  }
 	}
 	
 	function kill( fn ) {
 		fn(this);
 	}
 	
-	function makeProcessQueue(time) {
-		var processQueue = [],
-				t = time - this.starttime,
-				eventList, l, e;
+	function makeProcessQueue(t, fn) {
+		var processQueue,
+				limit = t + 10000,
+				l;
 		
 		// Scan ahead looking for next eventList
-		while (t++ < 10) {
-			
-			if (debug) { console.log(t); }
-			
-			eventList = this.getEventList(t);
-			l = eventList.length;
+		while (t++ < limit) {
+			processQueue = this.getProcessList(t);
+			l = processQueue.length;
 			
 			if ( l ) {
-				while (l--) {
-					e = eventList[l];
-					processQueue[l] = new processMap[ e.type ]( e );
-				}
-				
+				fn(t, this);
 				break;
 			}
 		}
-		
-		this.processQueue = processQueue;
 	}
 	
 	function playProcessQueue() {
@@ -48,25 +63,46 @@
 		
 		// Trigger the processes
 		while (l--) {
-			processQueue[l].play();
+			processQueue[l]();
 		}
 	}
 	
-	function getEventList(t) {
+	function getProcessList(t) {
 		var sequence = this.sequence,
 				children = this.children,
-				l = children.length,
-				eventList = [];
+				t = t - this.starttime,
+				l,
+				events, k, event,
+				processList = [];
+		
+		//if (debug) { console.log('starttime: ' + this.starttime, 't: ' + t, 'events: ', sequence[t]); }
+		
+		events = sequence[t];
+		
+		if ( events ) {
+			k = events.length;
+			
+			while (k--) {
+				event = events[k];
+				process = new processMap[ event.type ]( event, t );
+				if (process instanceof SequenceProcess) {
+					children.push(process);
+				}
+				else {
+					processList.push(process);
+				}
+			}
+		}
+		
+		l = children.length;
 		
 		while (l--) {
-			eventList = eventList.concat( children[l].getEventList(t) );
+			processList = processList.concat( children[l].getProcessList(t) );
 		}
 		
-		if ( sequence[t] ) {
-			eventList = eventList.concat( sequence[t] );
-		}
+		this.processQueue = processList;
 		
-		return eventList;
+		return processList;
 	}
 	
 	function Process() {
@@ -74,37 +110,22 @@
 	}
 	
 	Process.prototype = {
-		register: register,
 		kill: kill
 	};
 	
 	function DOMEventProcess(e) {
-		this.play = function(){
+		return function(){
 			jQuery(e.target || e.selector).trigger(e);
 		}
 	}
 	
 	DOMEventProcess.prototype = new Process();
 	
-	function SequenceProcess(e, parent) {
-		
-		if (debug && e.type !== 'sequence') {
-			console.log('Your trying to spork a SequenceProcess with an object that ain\t a sequence.');
-			return;
-		}
-		
-		this.starttime = 0;
+	function SequenceProcess(e, t) {
+		this.starttime = t;
 		this.sequence = e;
 		this.children = [];
-		
-		// Register with parent process
-		if (parent) {
-			this.register(parent);
-		}
-		
-		this.makeProcessQueue(-1);
-		
-		console.log( this.processQueue );
+		this.latency = 1;
 	}
 	
 	SequenceProcess.prototype = new Process();
@@ -112,30 +133,19 @@
 	jQuery.extend(SequenceProcess.prototype, {
 		makeProcessQueue: makeProcessQueue,
 		playProcessQueue: playProcessQueue,
-		getEventList: getEventList,
-		play: function(t){
-			var now = t || new Date().getTime();
+		getProcessList: getProcessList,
+		play: function(){
+			var now = new Date().getTime();
 			
 			this.starttime = now;
 			
-			this.playProcessQueue();
-			this.makeProcessQueue(now);
+			console.log('now: ', now);
+			
+			this.makeProcessQueue(now, clock);
 		},
-		register: function(parent) {
-			// Add process to children
-			parent.children.unshift(this);
-		},
-		kill: function(process) {
-			// Find this in parent.children and splice remove 
-			//parent.children
-		}
+		
 	});
 	
-	var sequencer = new SequenceProcess({
-		type: 'sequence',
-		2: [{ type: 'click', selector: '#fong' }]
-	});
-	
-	//sequencer.play();
+	window.Sequencer = SequenceProcess;
 	
 })();
