@@ -92,14 +92,6 @@ WebDoc.handlers = {
     'toggle_apps_panel':          function(e) { WebDoc.application.rightBarController.showApps();},
     'toggle_my_stuff_panel':      function(e) { WebDoc.application.rightBarController.showMyContent();},
     
-    //handler used in the old right bar controller
-    'media-browser':        function(e) { WebDoc.application.rightBarController.showMediaBrowser(e);}, 
-    'item-inspector':       function(e) { WebDoc.application.rightBarController.showItemInspector(e); },
-    'page-inspector':       function(e) { WebDoc.application.rightBarController.showPageInspector(e); },
-    'document-inspector':   function(e) { WebDoc.application.rightBarController.showDocumentInspector(e); },
-    'social-inspector':     function(e) { WebDoc.application.rightBarController.showSocialPanel(e); },
-    'discussions-panel':    function(e) { WebDoc.application.rightBarController.showDiscussionsPanel(e); },
-    
     'add-page':             function(e) { WebDoc.application.pageEditor.addPage(); },
     'add-web-page':         function(e) { WebDoc.application.pageEditor.addWebPage();},
     'copy-page':            function(e) { WebDoc.application.pageEditor.copyPage(); },
@@ -130,8 +122,9 @@ WebDoc.handlers = {
     'toggle-thumbs':        function(e) { WebDoc.application.pageBrowserController.toggleThumbs(e); },
     
     'mode-toggle':          function(e) { WebDoc.application.boardController.toggleMode(); },
-    'mode-edit':            function(e) { WebDoc.application.boardController.setMode(false); },
+    //'mode-edit':            function(e) { WebDoc.application.boardController.setMode(false); },
     'mode-preview':         function(e) { WebDoc.application.boardController.setMode(true); },
+    'edit':                 function(e) { WebDoc.application.boardController.toggleMode(); },
     
     'theme-class':          function(e) {  },
 
