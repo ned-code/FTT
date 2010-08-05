@@ -6,21 +6,25 @@
       <h2>Related webdocs</h2>
       
       <ul class="triple_column column of_six vertical thumbs_index index">
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
+        <% (0..(documents.length - 2)).step(2) do |i| %>
+          <li>
+            <a class="webdoc_thumb left_text_thumb text_thumb thumb" href='<%= document_path(documents[i])%>'>
+              <%= documents[i].title %>
+            </a>
+          </li>
+          <% p documents[i].title %>
+        <% end %>
       </ul
       
       ><ul class="triple_column column of_six vertical thumbs_index index">
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-        <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
+        <% (1..(documents.length - 1)).step(2) do |i| %>
+          <li>
+            <a class="webdoc_thumb left_text_thumb text_thumb thumb" href='<%= document_path(documents[i])%>'>
+              <%= documents[i].title %>
+            </a>
+          </li>
+          <% p documents[i].title %>
+        <% end %>
       </ul>
     </div>
   </section>
