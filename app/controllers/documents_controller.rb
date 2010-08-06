@@ -137,7 +137,7 @@ class DocumentsController < ApplicationController
         end
       end
     else
-      render_optional_error_file(:not_found)
+      render :file => "#{Rails.public_path}/404.html", :status => 404
     end    
   end
   

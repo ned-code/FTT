@@ -28,7 +28,7 @@ class Document < ActiveRecord::Base
   scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
   scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
   scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
-
+  
   # ================
   # = Associations =
   # ================
@@ -61,7 +61,6 @@ class Document < ActiveRecord::Base
   # =================
   # = Class Methods =
   # =================
-  
   #
   # This method invalidate cache for docment with document_uuid. It is usefull to invalidate a document without fetching it and just using the uuid.
   #
@@ -406,7 +405,13 @@ class Document < ActiveRecord::Base
   def safe_delete!
     super
     refresh_cache
-  end 
+  end
+  
+  #returns an array of all document's editors
+  def  editors
+    users = User.all(:joins => {:roles_users => :role } , :conditions => ['roles.authorizable_id = ?',self.uuid])
+    users
+  end
   
 private
   

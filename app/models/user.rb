@@ -67,7 +67,7 @@ class User < ActiveRecord::Base
   has_many :datastore_entries
   has_many :discussions
   has_many :comments
-
+  has_many :roles_users
   # ===================
   # = Instance Method =
   # ===================
