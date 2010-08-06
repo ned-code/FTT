@@ -152,8 +152,11 @@ WebDoc.ImagesUploader = $.klass({
   },
   stopUpload: function(infoMessage) { // stop uplaod (for all files in the queue)
     this.uploadControl.swfupload('stopUpload'); //I could omit this (it'll only call uploadError with and UPLOAD_STOPPED error)
-    this.logInfo.text(infoMessage);
     this.resetUploadingUI();
+    jQuery("#uploading_info_in_my_image").text(infoMessage);
+    window.setTimeout(function(){
+      jQuery("#uploading_info_in_my_image").text("");
+    }, 4000);
     // I need to call cancelUpload for every file still in the queue
     var stats;
     do {

@@ -379,7 +379,7 @@ WebDoc.ItemView = $.klass({
         var newWidth = ui.originalSize.width + (mappedPoint.x - this.resizeOrigin.x);
         var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y);
         if(e.shiftKey || this.item.data.data.preserve_aspect_ratio === "true"){
-          ui.size.width = this.aspectRatio*newHeight;
+          ui.size.width = Math.round(this.aspectRatio*newHeight);
         }
         else {
           ui.size.width = newWidth;

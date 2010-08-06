@@ -26,7 +26,7 @@ module ApplicationHelper
     end
     css_string
   end
-  
+
   def build_css_placement_string(css_hash)
     css_string = ''
     accepted_properties = ['width', 'height', 'top', 'left', 'transform']
@@ -44,7 +44,7 @@ module ApplicationHelper
     end
     css_string
   end
-  
+
   def calcul_z_index(position)
     if position
       z_index = '';
@@ -62,7 +62,7 @@ module ApplicationHelper
       return 'z-index:50000;'
     end
   end
-  
+
   def update_text_to_be_xhtml_valid(text)
     #Change the &nbsp; to &#169;
     valid_text = text.gsub(/&nbsp;/, '&#169;')

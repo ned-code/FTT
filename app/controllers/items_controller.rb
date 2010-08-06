@@ -1,8 +1,8 @@
-
 require Rails.root + 'lib/shindig'
 
-class ItemsController < PageController
+class ItemsController < ApplicationController
   before_filter :authenticate_user!
+  
   access_control do
     action :show do
       allow all, :if => :document_is_public?      
@@ -13,8 +13,8 @@ class ItemsController < PageController
   
   # GET /documents/:document_id/pages/:page_id/items/:id
   def show
-    instantiate_document
-    instantiate_page
+    find_document
+    find_page
     @item = @page.items.not_deleted.find_by_uuid(params[:id])
     if @item
       render :layout => false
@@ -63,7 +63,7 @@ class ItemsController < PageController
   def secure_token    
     response = Hash.new
     if current_user
-      instantiate_page
+      find_page
       @item = @page.items.not_deleted.find_by_uuid(params[:id])
       
       token = Shindig.generate_secure_token(@item.page.document.creator.uuid, current_user.uuid, @item.uuid, 0, '')
@@ -72,6 +72,24 @@ class ItemsController < PageController
       response['security_token'] = "";
     end
      render :json => response
- end
+  end
+
+private
+
+  def find_item
+    @item = @page.items.find_by_uuid(params[:page_id])
+  end
+
+  def find_page
+    @page = @document.pages.find_by_uuid(params[:page_id])
+  end
+
+  def find_document
+    @document = Document.find_by_uuid(params[:document_id])
+  end
+
+  def find_pseudo_document
+    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid, documents.is_public')
+  end
   
 end

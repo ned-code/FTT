@@ -14,7 +14,7 @@ class Medias::Image < Media
 
   validates_attachment_presence :attachment
   validates_attachment_size :attachment, :less_than => 5.megabytes
-  validates_attachment_content_type :attachment, :content_type => ['image/jpeg', 'image/png', 'image/gif', 'application/octet-stream']
+  validates_attachment_content_type :attachment, :content_type => ['image/jpeg', 'image/png', 'image/gif']
 
   attr_accessor :remote_attachment_url
   attr_accessible :remote_attachment_url
@@ -33,6 +33,13 @@ class Medias::Image < Media
               :default_url => attachment.url(:default),
               :url => attachment.url
     })
+  end
+
+  # Fix a bug with flash 8, which set all content_type to application/octet-stream
+  def fix_content_type_for_swfupload!
+    if self.attachment.present? && !remote_attachment_url.present?
+      self.attachment_content_type = MIME::Types.type_for(self.attachment.original_filename).to_s
+    end
   end
   
 protected

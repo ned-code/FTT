@@ -30,25 +30,33 @@ describe Medias::Image do
      
    end
    
-   describe 'download_image_provided_by_remote_attachment_url from internet' do
+   it 'should download_image_provided_by_remote_attachment_url from internet' do
      image = Factory(:image, :attachment => nil, :remote_attachment_url => 'http://www.google.ch/images/chrome_48.gif')
      image.attachment.should_not == nil
    end
    
-   describe 'download image with extension broken from internet' do
+   it 'should download image with extension broken from internet' do
      #if the test is broken, verify that the image is still available on internet
     image = Factory(:image, :attachment => nil, :remote_attachment_url => 'http://dragonartz.files.wordpress.com/2009/05/vector-kids-background-preview-by-dragonart.png%3Fw%3D495%26h%3D495')
-    image.attachment_file_name == 'vector-kids-background-preview-by-dragonart.png'
+    image.attachment_file_name.should == 'vector-kids-background-preview-by-dragonart.png'
   end
   
-  describe 'download image with 404 error should not be valid' do
+  it 'should image with 404 error should not be valid' do
     image = Factory.build(:image, :attachment => nil, :remote_attachment_url => 'http://urlthatisnotworking.com/imagenothere.png')
     image.valid?.should == false
   end
     
-  describe 'properties should not be nil' do
+  it 'properties should not be nil' do
     image = Factory(:image, :properties => nil)
     image.properties.should_not == nil
+  end
+  
+  it 'should transliterate the filename' do
+    image = Medias::Image.new
+    file = File.new(File.join(Rails.root, 'spec', 'fixtures', %Q{IT’s, UPPERCASE+super .JPG}), 'rb')
+    image.attachment = file
+    file.close
+    'its-uppercase-super.jpg'.should == image.attachment.original_filename
   end
 end
 

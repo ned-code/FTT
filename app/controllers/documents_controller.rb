@@ -3,7 +3,7 @@ class DocumentsController < ApplicationController
   # need to be authenticate for alpha release.
   # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document
   before_filter :authenticate_user!
-  before_filter :instantiate_document, :only => [:show, :update, :duplicate, :destroy]
+  before_filter :find_document, :only => [:show, :update, :duplicate, :destroy]
   
   #before_filter :authenticate_if_needed, :only => [:show]
   #before_filter :authenticate_user!, :only => [:index]
@@ -124,6 +124,7 @@ class DocumentsController < ApplicationController
       @more_author_documents = Document.all(:conditions => { :creator_id => @document.creator_id}, :limit => 6 )
       respond_to do |format|
         format.html do
+          set_cache_buster
           @get_return_to = get_return_to 
           render :layout => 'layouts/editor'      
         end
@@ -164,13 +165,16 @@ class DocumentsController < ApplicationController
   
   # DELETE /documents/:id
   def destroy
-    @document.safe_delete!
+    if @document.present?
+      @document.safe_delete!
+    end
+
     render :json => {}
   end
   
   protected
   
-  def instantiate_document
+  def find_document
     @document = Document.not_deleted.find_by_uuid(params[:id])
   end
   

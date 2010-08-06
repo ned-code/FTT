@@ -344,7 +344,13 @@ WebDoc.PageBrowserController = $.klass({
     
     // Then put it in the DOM
     if (pos) {
-      this.domNodeBrowserItems.children().eq(pos-1).after( pageNode );
+      var afterChildren = this.domNodeBrowserItems.children().eq(pos-1);
+      if(afterChildren[0] !== undefined) {
+         afterChildren.after( pageNode );
+      }
+      else {
+        this.domNodeBrowserItems.append( pageNode ); 
+      }
     }
     else {
       this.domNodeBrowserItems.prepend( pageNode );

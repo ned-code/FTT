@@ -875,7 +875,6 @@ WebDoc.Page = $.klass(WebDoc.Record,
 
   removeDiscussion: function(discussion) {
     if(this.discussions !== undefined) {
-      discussion.destroy();
       var index = jQuery.inArray(discussion, this.discussions);
       if (index > -1) {
         this.discussions.splice(index, 1);
@@ -927,12 +926,17 @@ WebDoc.Page = $.klass(WebDoc.Record,
 });
 
 $.extend(WebDoc.Page, {
+  rootUrlValue: undefined,
   className: function() {
     return "page";
   },
   
   rootUrl: function(args) {
-    return "/documents/" + args.document_id;
+    if (this.rootUrlValue === undefined) {
+      this.rootUrlValue = WebDoc.dataServer ? WebDoc.dataServer : "";
+      this.rootUrlValue += "/documents/";  
+    }         
+    return this.rootUrlValue + args.document_id;
   },
   pluralizedClassName: function() {
     return this.className() + "s";

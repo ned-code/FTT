@@ -47,7 +47,7 @@ $('a').each(function (){
       prepUrl  = prepUrl[prepUrl.length-1];
 
 
-      var mainUrl = "<%="#{request.protocol}#{request.host_with_port}" %>" + '/wikibot/search'
+      var mainUrl = "<%="#{request.protocol}#{request.host_with_port}" %>" + '/wikibot/search';
       var reqUrl = mainUrl + '?input='+escape(prepUrl) + '&lang=' + lan + '&mode=' + mode;
       var checkTitle = $(this).attr('title');
       if(checkTitle.match('w:') === null){
@@ -84,7 +84,7 @@ $('a').each(function (){
 
         var correctUrl = thumbUrl.replace(removableStr,'');
         correctUrl = correctUrl.substring(0,correctUrl.length-1);
-        var finalUrl = 'javascript:parent.window.uniboard.addObject("' + correctUrl + '",200,200,0,0)'
+        var finalUrl = 'javascript:parent.window.uniboard.addObject("' + correctUrl + '",200,200,0,0)';
         $(this).attr('href',finalUrl);
 
       }  

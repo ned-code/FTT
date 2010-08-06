@@ -53,7 +53,11 @@ WebDoc.ImagePaletteController = $.klass({
     this._nbChange = 0;    
     this.zoomNode
     .bind('change', function(e){
-      var factor = parseFloat( e.target.value ),
+      var value = e.target.value;
+      if(value == '' || value === undefined){
+        value = 0;
+      }
+      var factor = parseFloat(value),
           item = WebDoc.application.boardController.selection()[0].item;               
       item.zoom( factor );
       that._delayItemSave(item);
