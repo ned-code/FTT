@@ -140,6 +140,8 @@ body.full_view {
 }
 .sharing_panel.active,
 .pages_panel.active {
+  display:block;
+  opacity:1;
   z-index: 2;
 }
 .tools_panel,
@@ -159,7 +161,8 @@ body.full_view {
 .browse_web_panel,
 .page_inspector_panel,
 .document_inspector_panel,
-.apps_panel
+.apps_panel,
+.pages_panel
 /*.sharing_panel,*/ {
   /* It would be great to make this happen after the fade... */
   display: none;
@@ -175,7 +178,7 @@ body.full_view {
 .page_inspector_panel.active,
 .document_inspector_panel.active,
 .apps_panel.active,
-.activity_panel.active {
+.activity_panel.active{
   display: block;
   opacity: 1;
 }
