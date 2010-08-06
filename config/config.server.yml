@@ -17,3 +17,4 @@ staging:
 
 production:
   host: alpha.webdoc.com
+  data_server: http://scala.webdoc.com
