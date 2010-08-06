@@ -60,6 +60,9 @@
     .activity_panel {
       background: rgba(50,50,50,0.8);
     }
+    .apps_panel {
+      background: rgba(50,50,50,0.8);
+    }
     h3 {
       font-weight: bold;
       color: white;
@@ -153,7 +156,8 @@
         
         <ul class="horizontal app_index buttons_index index">
           <li><a class="app_button button" href="#text_app" title="Text App">Text App</a></li
-         ><li><a class="app_button button" href="#draw_app" title="Draw App">Draw App</a></li>
+         ><li><a class="app_button button" href="#draw_app" title="Draw App">Draw App</a></li
+         ><li><a class="app_button button" href="#toggle_apps_panel" title="More Apps">more Apps...</a></li>
         </ul>
         
         <ul class="horizontal panel_index buttons_index index">
@@ -178,6 +182,10 @@
       
       <div class="browser_panel panel">
         <h3>Browser</h3>
+      </div>
+      
+      <div class="apps_panel panel">
+        <h3>Apps</h3>
       </div>
       
       <div class="inspector_panel panel">
@@ -215,7 +223,7 @@
         <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
       </ul
       
-      ><ul class="triple_column column of_six vertical thumbs_index index">
+     ><ul class="triple_column column of_six vertical thumbs_index index">
         <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
         <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
         <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
@@ -317,6 +325,10 @@
         activity: {
           panel: jQuery('.activity_panel'),
           toggle: jQuery('a[href=#toggle_activity_panel]')
+        },
+        activity: {
+          panel: jQuery('.apps_panel'),
+          toggle: jQuery('a[href=#toggle_apps_panel]')
         }
       };
       

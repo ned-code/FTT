@@ -34,7 +34,8 @@ body.full_view {
 .workspace_wrap {
   height: 50%;
   min-height: 466px;
-  margin-bottom: 1em;
+  /* Makes room for Sharing panel */
+  margin-bottom: 96px;
 }
 
 .full_view .workspace_wrap {
@@ -45,7 +46,7 @@ body.full_view {
 }
 
 .title_wrap {
-  height: 2em;
+  height: 3em;
   margin-top: 1em;
   margin-bottom: 1em;
   opacity: 1;
@@ -64,7 +65,6 @@ body.full_view {
   min-height: 466px;
   margin-left: 0;
   margin-right: 0;
-  /*margin-bottom: 2em;*/
 }
 
 .full_view .editor_wrap {
@@ -417,6 +417,9 @@ body.full_view {
 }
 
 .panel_button {
+  width: 2em;
+  /* hide button text */
+  padding-top: 2em;
   background-position: 0 0;
 }
 

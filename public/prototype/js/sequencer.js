@@ -129,7 +129,7 @@
 	
 	DOMEventProcess.prototype = new Process();
 
-	function AudioEventProcess(e) {
+	function AudioEventProcess(e, t, fn) {
 		var obj, canplay = false, doplay = false;
 		
 		// Cache the Audio obj for this sound src
@@ -142,6 +142,9 @@
 				jQuery(obj).bind('canplay', function(){
 					canplay = true;
 					if (debug) { console.log('[AudioEventProcess] '+e.src, 'canplay'); }
+					
+					if (fn) { fn(); }
+					
 					if (doplay) {
 						if (debug) { console.log('[AudioEventProcess] '+e.src, 'play - a bit late'); }
 						obj.play();
