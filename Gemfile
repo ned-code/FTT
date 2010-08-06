@@ -19,7 +19,7 @@ gem "mysql"
 gem 'rack-debug'
 gem 'nokogiri'
 gem 'acl9'
-gem 'formtastic'
+gem 'formtastic', :git => "http://github.com/justinfrench/formtastic.git", :branch => "rails3"
 gem 'erubis'
 # http://github.com/documentcloud/jammit/issues#issue/53
 gem 'jammit', :git => 'http://github.com/corneverbruggen/jammit.git'

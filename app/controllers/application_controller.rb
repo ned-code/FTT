@@ -41,9 +41,9 @@ protected
 
   def set_return_to(scope=nil)
     if scope == nil
-      session[:return_to] = request.request_uri if request && request.get?
+      session[:return_to] = request.fullpath if request && request.get?
     else
-      session[:"return_to_#{scope}"] = request.request_uri if request && request.get?
+      session[:"return_to_#{scope}"] = request.fullpath if request && request.get?
     end
   end
 

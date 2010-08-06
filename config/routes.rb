@@ -45,7 +45,7 @@ Webdoc::Application.routes.draw do
   get 'user' => 'sessions#show'
 
   namespace :admin do
-    resources :widgets, :path => 'apps', :as => 'apps', :except => :show
+    resources :widgets, :path => 'apps', :except => :show
     resources :categories, :except => :show
     resource  :test, :only => :show
     resources :themes
