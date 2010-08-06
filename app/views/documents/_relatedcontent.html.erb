@@ -7,21 +7,13 @@
       
       <ul class="triple_column column of_six vertical thumbs_index index">
         <% (0..(documents.length - 1)).step(2) do |i| %>
-          <li>
-            <a class="webdoc_thumb left_text_thumb text_thumb thumb" href='<%= document_path(documents[i])%>'>
-              <%= documents[i].title %>
-            </a>
-          </li>
+          <%= render 'thumbnail', :document => documents[i]%>
         <% end %>
       </ul
       
       ><ul class="triple_column column of_six vertical thumbs_index index">
         <% (1..(documents.length - 1)).step(2) do |i| %>
-          <li>
-            <a class="webdoc_thumb left_text_thumb text_thumb thumb" href='<%= document_path(documents[i])%>'>
-              <%= documents[i].title %>
-            </a>
-          </li>
+          <%= render 'thumbnail', :document => documents[i]%>
         <% end %>
       </ul>
     </div>

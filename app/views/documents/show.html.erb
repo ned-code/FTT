@@ -82,11 +82,7 @@
         <h2>More from these authors</h2>
         <ul class="vertical thumbs_index index">
           <% (0..(@more_author_documents.length - 1)).step(1) do |i| %>
-            <li>
-              <a class="webdoc_thumb left_text_thumb text_thumb thumb" href='<%= document_path(@more_author_documents[i])%>'>
-                <%= @more_author_documents[i].title %>
-              </a>
-            </li>
+            <%= render 'thumbnail', :document => @more_author_documents[i]%>
           <% end %>
         </ul>
       </div>
