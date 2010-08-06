@@ -24,7 +24,6 @@ class Document < ActiveRecord::Base
   # = Associations =
   # ================
   
-  scope :public, :conditions => { :is_public => true }
   scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
   scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
   scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
