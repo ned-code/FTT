@@ -1,0 +1,13 @@
+<div id="profile_page">
+  <div id="user_card">
+    <% if current_user == @user%>
+      <%= render 'card', :user => @user %>
+    <% else %>
+      <%= render 'card', :user => @user, :subscribed => @user.follower?(current_user), :friendship => @user.friend?(current_user)  %>
+    <% end %>
+  </div>
+  <div id="friends_list">
+    
+  </div>
+  
+</div>

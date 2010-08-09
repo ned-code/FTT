@@ -25,11 +25,11 @@ class FriendshipsController < ApplicationController
   #Curenttly unused
   #block a friend 
   def block
-    current_user.friendships.find((params[:friendship_id])).block!
+    current_user.friendships.find(params[:friendship_id]).block!
   end
   
   #
   def destroy
-    current_user.friendships.find((params[:friendship_id])).revoke!
+    current_user.friendships.find(params[:friendship_id]).revoke!
   end
 end
