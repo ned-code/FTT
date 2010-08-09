@@ -2,7 +2,7 @@
 <div class="action-zone zone">
   <div class="wrap clear">
     <h2>Errm... I've forgotten my password</h2>
-    <% form_for resource_name, resource, :url => password_path(resource_name), :builder => CustomFormBuilder do |f| %>
+    <%= form_for resource_name, resource, :url => password_path(resource_name), :builder => CustomFormBuilder do |f| %>
       <fieldset>
         <div class="stack column one of-four<% if resource.errors.on(:email) %> error<% end %>">
           <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>

@@ -20,7 +20,7 @@ protected
 
   def http_authenticate
     if !['65.49.79.67', '86.57.245.87'].include?(request.remote_ip) && Rails.env != 'test'
-      authenticate_or_request_with_http_basic("WebDoc preview") do |username, password|
+      authenticate_or_request_with_http_basic do |username, password|
         username == "wduser" && password == "wdalpha001"
       end
       # Can be removed with Rails 3: http://wiki.github.com/plataformatec/devise/devise-and-http-authentication
@@ -41,9 +41,9 @@ protected
 
   def set_return_to(scope=nil)
     if scope == nil
-      session[:return_to] = request.request_uri if request && request.get?
+      session[:return_to] = request.fullpath if request && request.get?
     else
-      session[:"return_to_#{scope}"] = request.request_uri if request && request.get?
+      session[:"return_to_#{scope}"] = request.fullpath if request && request.get?
     end
   end
 
