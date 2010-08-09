@@ -4,6 +4,7 @@ class CreateUserLists < ActiveRecord::Migration
       t.string :uuid, :primary => true, :limit => 36
       t.string :user_id, :limit => 36
       t.boolean :public, :default => false
+      t.boolean :default, :default => false
       t.timestamp
     end
     execute 'ALTER TABLE user_lists ADD PRIMARY KEY (uuid);'

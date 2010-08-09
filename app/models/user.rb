@@ -79,6 +79,9 @@ class User < ActiveRecord::Base
   
   has_many :blocked_friendships, :conditions => { :status => Friendship::BLOCKED }, :class_name => 'Friendship', :foreign_key => 'user_id'
   has_many :blocked_friends, :through => :blocked_friendships, :source => :friend
+  
+  has_many :user_lists, :conditions => { :default => false }
+  has_one :default_list, :class_name => 'UserList', :foreign_key => :user_id, :conditions => { :default => true }
   # ===================
   # = Instance Method =
   # ===================
