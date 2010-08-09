@@ -22,7 +22,7 @@ class Friendship < ActiveRecord::Base
   def self.create_friendship!(user_id, friend_id)
     transaction do
       friendship = Friendship.create!({ :user_id => user_id, :friend_id => friend_id, :status => 'requested'})
-      Friendship.new_friend_mirror(friend_id,user_id)
+      Friendship.create_friend_mirror!(friend_id,user_id)
     end
   end
   
