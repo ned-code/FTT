@@ -67,6 +67,9 @@ class User < ActiveRecord::Base
   has_many :datastore_entries
   has_many :discussions
   has_many :comments
+  
+  has_many :friendships
+  has_many :friends, :through => :friendships
 
   # ===================
   # = Instance Method =

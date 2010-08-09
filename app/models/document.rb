@@ -21,7 +21,7 @@ class Document < ActiveRecord::Base
   composed_of :size, :class_name => 'Hash', :mapping => %w(size to_json),
                          :constructor => DocumentJsonHelper.method(:decode_json_and_yaml)
   # ================
-  # = Associations =
+  # = Scope =
   # ================
   
   scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
