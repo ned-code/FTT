@@ -51,12 +51,22 @@ class Friendship < ActiveRecord::Base
     end
   end
   
-  #TODO: make this method work
   def reject!
     transaction do
       self.mirror.destroy
       self.destroy
     end
+  end
+  
+  def revoke!
+    transaction do
+      self.mirror.destroy
+      self.destroy
+    end
+  end
+  
+  def block!
+    #Todo
   end
   
   #return the associated friendship
