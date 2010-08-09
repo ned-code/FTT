@@ -69,10 +69,16 @@ class User < ActiveRecord::Base
   has_many :comments
   
   has_many :friendships, :conditions => { :status => Friendship::ACCEPTED }
-  
-  
   has_many :friends, :through => :friendships
-
+  
+  has_many :requested_friendships, :conditions => { :status => Friendship::REQUESTED }, :class_name => 'Friendship', :foreign_key => 'user_id'
+  has_many :requested_friends, :through => :requested_friendships, :source => :friend
+  
+  has_many :pending_request_friendships, :conditions => { :status => Friendship::PENDING_REQUEST }, :class_name => 'Friendship', :foreign_key => 'user_id'
+  has_many :pending_request_friends, :through => :pending_request_friendships, :source => :friend
+  
+  has_many :blocked_friendships, :conditions => { :status => Friendship::BLOCKED }, :class_name => 'Friendship', :foreign_key => 'user_id'
+  has_many :blocked_friends, :through => :blocked_friendships, :source => :friend
   # ===================
   # = Instance Method =
   # ===================

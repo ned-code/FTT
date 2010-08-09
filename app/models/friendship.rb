@@ -4,7 +4,7 @@ class Friendship < ActiveRecord::Base
   
   ACCEPTED = 'accepted'
   REQUESTED = 'requested'
-  REQUEST_PENDING = 'request_pending'
+  PENDING_REQUEST = 'pending_request'
   BLOCKED = 'blocked'
   
   # ================
@@ -58,7 +58,7 @@ class Friendship < ActiveRecord::Base
 private
 
   def self.create_friend_mirror!(user_id, friend_id)
-    friendship = Friendship.create!({ :user_id => user_id, :friend_id => friend_id, :status => Friendship::REQUEST_PENDING })
+    friendship = Friendship.create!({ :user_id => user_id, :friend_id => friend_id, :status => Friendship::PENDING_REQUEST })
   end
 end
 
@@ -66,6 +66,6 @@ end
 # Status lists
 # - accepted
 # - requested
-# - request_pending
+# - pending_request
 # - blocked
 #
