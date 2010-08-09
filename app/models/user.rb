@@ -42,6 +42,7 @@ class User < ActiveRecord::Base
   # =============
 
   validate :must_be_allowed_email, :on => :create
+  after_create :create_default_list
   before_save :check_clear_avatar
   after_create :create_xmpp_user, :notify_administrators
 
@@ -187,6 +188,11 @@ protected
   def check_clear_avatar
     avatar.clear if clear_avatar == 1.to_s
   end
+  
+  #after_save
+  def create_default_list
+    self.user_lists << UserList.create!({:default => true, :user_id => self.id, :name => 'All' })
+  end
 
   def must_be_allowed_email
     if (APP_CONFIG['must_check_user_email'])
@@ -201,10 +207,6 @@ protected
   end
   
 end
-
-
-
-
 
 
 
