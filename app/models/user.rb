@@ -113,6 +113,22 @@ class User < ActiveRecord::Base
     end
   end
 
+  def friend?(user)
+    friends.include?(user)
+  end
+  
+  def pending_requested_friend?(user)
+    pending_requested_friend.include?(user)
+  end
+  
+  def requested_friend?(user)
+    requested_friends.include?(user)
+  end
+  
+  def blocked_friend?(user)
+    blocked_friends.include?(user)
+  end
+
   def follow(user_id)
     following_connections.create(:following_id => user_id)
   end

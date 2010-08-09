@@ -46,8 +46,8 @@ class Friendship < ActiveRecord::Base
   
   def accept!
     transaction do
-      self.update_attribute('status', Friendship::ACCEPTED )
-      self.mirror.update_attribute('status', Friendship::ACCEPTED )
+      update_attribute(:status, Friendship::ACCEPTED )
+      mirror.update_attribute(:status, Friendship::ACCEPTED )
     end
   end
   

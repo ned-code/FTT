@@ -5,7 +5,7 @@ class CreateFriendships < ActiveRecord::Migration
       t.string :user_id, :limit => 36
       t.string :friend_id, :limit => 36
       t.string :status
-      t.timestamp
+      t.timestamps
     end
     execute 'ALTER TABLE friendships ADD PRIMARY KEY (uuid);'
   end
