@@ -2,6 +2,11 @@ class Friendship < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
   
+  ACCEPTED = 'accepted'
+  REQUESTED = 'requested'
+  REQUEST_PENDING = 'request_pending'
+  BLOCKED = 'blocked'
+  
   # ================
   # = Associations =
   # ================
@@ -14,6 +19,7 @@ class Friendship < ActiveRecord::Base
   # ===============
 
   validates_presence_of :user_id, :friend_id
+  validates_uniqueness_of :friend_id, :scope => :user_id
   
   # =================
   # = Class Methods =
@@ -21,7 +27,7 @@ class Friendship < ActiveRecord::Base
   
   def self.create_friendship!(user_id, friend_id)
     transaction do
-      friendship = Friendship.create!({ :user_id => user_id, :friend_id => friend_id, :status => 'requested'})
+      friendship = Friendship.create!({ :user_id => user_id, :friend_id => friend_id, :status => Friendship::REQUESTED })
       Friendship.create_friend_mirror!(friend_id,user_id)
     end
   end
@@ -32,8 +38,8 @@ class Friendship < ActiveRecord::Base
   
   def accept!
     transaction do
-      self.update_attribute('status', 'accepted')
-      self.mirror.update_attribute('status', 'accepted')
+      self.update_attribute('status', Friendship::ACCEPTED )
+      self.mirror.update_attribute('status', Friendship::ACCEPTED )
     end
   end
   
@@ -52,7 +58,7 @@ class Friendship < ActiveRecord::Base
 private
 
   def self.create_friend_mirror!(user_id, friend_id)
-    friendship = Friendship.create!({ :user_id => user_id, :friend_id => friend_id, :status => 'request_pending'})
+    friendship = Friendship.create!({ :user_id => user_id, :friend_id => friend_id, :status => Friendship::REQUEST_PENDING })
   end
 end
 
