@@ -1,4 +1,4 @@
-class UserLists < ActiveRecord::Migration
+class CreateUserLists < ActiveRecord::Migration
   def self.up
     create_table :user_lists, :id => false  do |t|
       t.string :uuid, :primary => true, :limit => 36
