@@ -6,106 +6,222 @@
 
 
 (function(undefined){
-
-// Define the Path API as a prototype of path
-
-var pathPrototype = {
 	
-	// .addDeformPath() takes a name and path, and stores the
-	// cartesian difference between that path and this one in the
-	// .deformPaths property, using the name as the key. If the
-	// number and type of lines in the deform path does not match
-	// those in this path, it must throw a silent error.
+	// VAR
 	
-	addDeformPath( name, path ){
-		
-		
-		return this;
-	},
+	var pi = Math.PI,
+			pi2 = 2*pi,
+			sin = Math.sin,
+			cos = Math.cos;
+			
+	var svgTypeMap = {
+				moveTo: 'M',
+				lineTo: 'L',
+				bezierCurveTo: 'C',
+				closePath: 'z'
+			}
 	
-	// .removeDeformPath() removes the deform path of this name
-	// from the deformPaths property. There is no real reason for
-	// function.
+	// FUNCTIONS
 	
-	removeDeformPath( name ){
+	function toPolar(cart) {
+		// Converts cartesian [x, y] to polar [distance, angle] coordinates,
+		// normalised to upwards, clockwise, angle 0 - 2pi.
 		
+		var x = cart[0],
+				y = cart[1] * -1;
 		
-		return this;
-	},
+		// Detect quadrant and work out vector
+		if (y === 0) 	{ return x === 0 ? [0, 0] : x > 0 ? [x, 0.5 * pi] : [-x, 1.5 * pi] ; }
+		if (y < 0) 		{ return x === 0 ? [-y, pi] : [Math.sqrt(x*x + y*y), Math.atan(x/y) + pi] ; }
+		if (y > 0) 		{ return x === 0 ? [y, 0] : [Math.sqrt(x*x + y*y), (x > 0) ? Math.atan(x/y) : pi2 + Math.atan(x/y)] ; }
+	};
+			
+	function toCartesian(vect) {
+		// Converts [distance, angle] vector to cartesian [x, y] coordinates.
+		
+		var d = vect[0],
+				a = vect[1];
+		
+		// Work out cartesian coordinates
+		return [ Math.sin(a) * d, - Math.cos(a) * d ]
+	};
 	
-	// .deform() takes an option object with keys that correspond
-	// to named deformPaths and values that describe how much of
-	// that deformPath to apply to this path, where 0 is none and
-	// 1 is 100% of the deformPath. Values outside of the range
-	// 0-1 are allowed.
+	// Define the Path API as a prototype of path
 	
-	deform( options ){
+	var pathPrototype = {
+		
+		// .addDeformPath() takes a name and path, and stores the
+		// cartesian difference between that path and this one in the
+		// .deformPaths property, using the name as the key. If the
+		// number and type of lines in the deform path does not match
+		// those in this path, it must throw a silent error.
+		
+		addDeformPath: function( name, path ){
+			
+			
+			return this;
+		},
+		
+		// .removeDeformPath() removes the deform path of this name
+		// from the deformPaths property. There is no real reason for
+		// function.
+		
+		removeDeformPath: function( name ){
+			
+			
+			return this;
+		},
+		
+		// .deform() takes an option object with keys that correspond
+		// to named deformPaths and values that describe how much of
+		// that deformPath to apply to this path, where 0 is none and
+		// 1 is 100% of the deformPath. Values outside of the range
+		// 0-1 are allowed.
+		
+		deform: function( options ){
+			
+			
+			return Path( obj );
+		},
+		
+		// .displace() is a special form of deform, where all points
+		// are displaced by the same amount along the x and y axes.
+		
+		displace: function( x, y ){
+			var path = Object.create(pathPrototype),
+					l = this.length;
+					
+			// Loop through path instructions
+			while(l--){
+				data = this[l].data,
+				i = data.length,
+				outData = [];
+				
+				// Split data into coordinate pairs and process
+				while(i){
+					
+					outData[i-2] = data[i-2] + x;
+					outData[i-1] = data[i-1] + y;
+					
+					i = i-2;
+				}
+				
+				path[l] = { type: this[l].type, data: outData };
+			}
+			
+			path.length = this.length;
+			
+			return path;
+		},
+		
+		// Spherize wraps the 'flat' plane of points round a sphere,
+		// where radius is the radius of the sphere as seen from
+		// an infinite distance, and distance defines the amount of
+		// perspective distortion experienced.
+		// [TODO: origin is not implemented]
+		
+		spherize: function( radius, distance, origin ){
+			var r = radius || 100,
+					z = distance || 800,
+					l = this.length,
+					path = Object.create(pathPrototype),
+					data, i, dr, ds, polar, cart, outData;
+			
+			// Loop through path instructions
+			while(l--){
+				data = this[l].data,
+				i = data.length,
+				outData = [];
+				
+				// Split data into coordinate pairs and process
+				while(i){
+					polar = toPolar( data.slice(i-2, i) );
+					
+					dr = polar[0] / r;
+					ds = ( z*r*sin(dr) ) / ( z-r*cos(dr) );
+					cart = toCartesian( [ds, polar[1]] );
+					
+					outData[i-2] = cart[0];
+					outData[i-1] = cart[1];
+					
+					i = i-2;
+				}
+				
+				path[l] = { type: this[l].type, data: outData };
+			}
+			
+			path.length = this.length;
+			
+			return path;
+		},
+		
+		// [TODO] .union() takes another path object as an argument,
+		// and calculates and returns the union of that path and the
+		// current path as a new path.
+		
+		union: function( path ){
+			var path = Object.create(pathPrototype);
+			
+			path.length = this.length;
+			
+			return path;
+		},
 		
 		
-		return Path( obj );
-	},
-	
-	// .displace() is a special form of deform, where all points
-	// are displaced along the x and y axes.
-	
-	displace( coords ){
+		// .toJSON() returns this data as a JSON Array
 		
+		toJSON: function(){
+			var array = [],
+					i = -1,
+					l = this.length;
+			
+			while (++i < l) {
+				array.push( this[i] );
+			}
+			
+			return JSON.stringify( array );
+		},
 		
-		return Path( obj );
-	},
-	
-	// Spherize wraps the 'flat' plane of points round a sphere,
-	// where radius is the radius of the sphere as seen from
-	// an infinite distance, and distance defines the amount of
-	// perspective distortion experienced.
-	
-	spherize( radius, distance, origin ){
+		// .toSVG() returns this path as an SVG DOMNode
+		// [TODO] this is unfinished and untested
 		
-		
-		return Path( obj );
-	},
-	
-	// [TODO] .union() takes another path object as an argument,
-	// and calculates and returns the union of that path and the
-	// current path as a new path.
-	
-	union( path ){
-		
-		
-		return Path( obj );
-	},
-	
-	toJSON(){
-		
-		
-		return JSON;
-	},
-	
-	toSVG(){
-		
-		
-		return SVGDOMNode;
+		toSVG: function(){
+			var pathNode = document.createElement('path'),
+					array = [],
+					i = -1,
+					l = this.length;
+			
+			while (++i < l) {
+				array.push( svgTypeMap[ this[i].type + this[i].data.join(' ') ] );
+			}
+			
+			pathNode.attribute( 'd', array.join(' ') );
+			
+			return pathNode;
+		}
 	}
-}
-
-function Path( obj ){
 	
-//	// [TODO] Detect if object is an SVG DOM node, or a path definition
-//	if ( obj instanceOf Object ){
-//		
-//		// obj is a path definition
-//		
-//	}
-//	else ( obj is SVGDOMNode ) {
-//		
-//		// obj is an SVG DOM Node
-//		// [TODO] Extract path definition from SVG DOM node
-//		
-//	}
+	// Path() takes an object that defines a path, or a JSON string
+	// that defines a path, or an SVGDOMNode that defines a path, and
+	// constructs an array-like object with a chainable API.
+	// [TODO] obj detection and construction of path from SVGNode
 	
-	obj.prototype = pathPrototype;
+	function Path( obj ){
+		var path = Object.create(pathPrototype),
+				l = path.length = obj.length;
+		
+		if ( typeof obj === 'string' ) {
+			obj = JSON.parse(obj);
+		}
+		
+		// Copy array to object to make array-like object 
+		while (l--){
+			path[l] = obj[l];
+		}
+		
+		return path;
+	}
 	
-	return obj;
-}
-
+	window.Path = Path;
+	
 })();
