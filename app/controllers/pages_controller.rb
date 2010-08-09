@@ -1,5 +1,5 @@
-class PagesController < DocumentController
-  before_filter :instantiate_document, :instantiate_page
+class PagesController < ApplicationController
+  before_filter :find_document, :find_page
   before_filter :authenticate_user!, :except => [:show, :callback_thumbnail]
   before_filter :authenticate_if_needed, :only => [:show, :callback_thumbnail]
   access_control do
@@ -70,9 +70,11 @@ class PagesController < DocumentController
   # DELETE /documents/:document_id/pages/:id
   def destroy
     @page = @document.pages.not_deleted.find_by_uuid(params[:id])
-    @page.safe_delete!
-    message = { :source => params[:xmpp_client_id], :page =>  { :uuid => @page.uuid }, :action => "delete" }
-    @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)    
+    if @page.present?
+      @page.safe_delete!
+      message = { :source => params[:xmpp_client_id], :page =>  { :uuid => @page.uuid }, :action => "delete" }
+      @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)
+    end
     render :json => {}
   end
 
@@ -83,8 +85,16 @@ class PagesController < DocumentController
   
 private
 
-  def instantiate_page
+  def find_page
     @page = @document.pages.find_by_uuid(params[:id])
+  end
+
+  def find_document
+    @document = Document.find_by_uuid(params[:document_id])
+  end
+
+  def find_pseudo_document
+    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid, documents.is_public')
   end
   
   def authenticate_if_needed

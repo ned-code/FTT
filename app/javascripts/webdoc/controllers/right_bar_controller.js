@@ -6,6 +6,7 @@
 WebDoc.PanelInspectorType = {
   ITEM: 'item',
   PAGE: 'page',
+  PAGE_BROWSER: 'page_browser',
   DOCUMENT: 'document',
   DISCUSSIONS: 'discussions',
   SOCIAL: 'social',
@@ -28,8 +29,19 @@ WebDoc.RightBarController = $.klass({
   initialize: function() {
     panel = jQuery( this.PANEL_SELECTOR );
     
-    this.rightPanels = '.browser_panel, .pages_panel, .inspector_panel, .comments_panel, .apps_panel, .my_content_panel, .packages_panel, .browse_web_panel';
-    this.rightPanels += ', .page_inspector_panel, .document_inspector_panel'
+    this.rightPanelsArray = [
+      'browser_panel',
+      'inspector_panel',
+      'comments_panel',
+      'apps_panel',
+      'my_content_panel',
+      'packages_panel',
+      'browse_web_panel',
+      'page_inspector_panel',
+      'document_inspector_panel'
+    ];
+    this.bottomPanelsArray = ['social', 'pages_panel'];
+    
     // Some of these are lazy loaded, and some are not -
     // pageInspector does not work if you try loading it now.
     
@@ -102,7 +114,7 @@ WebDoc.RightBarController = $.klass({
       //this._changePanelContent(inspectorController);
       //this._changeButtonState(inspectorController);
       this._currentInspectorType = inspectorType;
-      if(inspectorType != 'social'){
+      if(jQuery.inArray( inspectorType, this.bottomPanelsArray ) == -1){
         this._hideRightPanels();
       }
     }
@@ -131,11 +143,26 @@ WebDoc.RightBarController = $.klass({
   
   //Hide all the panel that are on the right of the webdoc
   _hideRightPanels: function(){
-    jQuery(this.rightPanels).removeClass(this.ACTIVE_CLASS);
+    jQuery(this._stringSelectorFromArray(this.rightPanelsArray)).removeClass(this.ACTIVE_CLASS);
+    //jQuery(this.rightPanels).removeClass(this.ACTIVE_CLASS);
+  },
+  
+  _hideBottomPanels: function(){
+    jQuery(this._stringSelectorFromArray(this.bottomPanelsArray)).removeClass(this.ACTIVE_CLASS);
+  },
+  
+  //transform an array of string ['str1','str2'] to '.str1, .str2'
+  _stringSelectorFromArray: function(array){
+    var length = array.length;
+    var stringSelector = '';
+    for(var i=0; i<length;i++){
+      stringSelector += '.'+array[i]+','
+    }
+    stringSelector =  stringSelector.substring(0, stringSelector.length-1);
+    return stringSelector;
   },
   
   showMyContent: function(){
-    ddd("[RightBarController] showMyContent");
     this.selectInspector(WebDoc.PanelInspectorType.MY_CONTENT);
     this._showPanel('my_content_panel');
     if(!this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].isMyImageLoaded()){
@@ -144,68 +171,63 @@ WebDoc.RightBarController = $.klass({
   },
   
   showApps: function(){
-    ddd("[RightBarController] showApps");
     this.selectInspector(WebDoc.PanelInspectorType.APPS);
     this._showPanel('apps_panel');
   },
   
   showPackages: function(){
-    ddd("[RightBarController] showPackages");
     this.selectInspector(WebDoc.PanelInspectorType.PACKAGES);
     this._showPanel('packages_panel');
   },
   
   showBrowseWeb: function(){
-    ddd("[RightBarController] showBrowseWeb");
     this.selectInspector(WebDoc.PanelInspectorType.BROWSE_WEB);
     this._showPanel('browse_web_panel');
   },
   
   showPageInspector: function() {
-    ddd("[RightBarController] show page inspector");
+    ddd('showPageInspector');
     this.selectInspector(WebDoc.PanelInspectorType.PAGE);
-    // this.show();
     this._showPanel('page_inspector_panel');
   },
   
   showItemInspector: function() {
-    ddd("[RightBarController] showItemInspector");
     this.selectInspector(WebDoc.PanelInspectorType.ITEM);
-    // this.show();
     this._showPanel('inspector_panel');
   },
   
   showDocumentInspector: function() {
-    ddd("[RightBarController] showDocumentInspector");
     this.selectInspector(WebDoc.PanelInspectorType.DOCUMENT);
-    //this.show();
     this._showPanel('document_inspector_panel');
   },
   
   //actually display the author panel... it's on bottom of the webdoc
-  showSocialPanel: function() {
-    ddd("[RightBarController] showSocialPanel");
-    this.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
-    var panel = jQuery('.sharing_panel');
-    
-    if(panel.hasClass(this.ACTIVE_CLASS)){
-      panel.removeClass(this.ACTIVE_CLASS);
-      jQuery('#social-inspector').hide();
-    }
-    else{
-      panel.addClass(this.ACTIVE_CLASS);
-      jQuery('#social-inspector').show();
-    }
-    //this.show();
-  },
+  // showSocialPanel: function() {
+  //   ddd("[RightBarController] showSocialPanel");
+  //   this.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
+  //   var panel = jQuery('.sharing_panel');
+  //   
+  //   if(panel.hasClass(this.ACTIVE_CLASS)){
+  //     panel.removeClass(this.ACTIVE_CLASS);
+  //     jQuery('#social-inspector').hide();
+  //   }
+  //   else{
+  //     panel.addClass(this.ACTIVE_CLASS);
+  //     jQuery('#social-inspector').show();
+  //   }
+  //   //this.show();
+  // },
 
   showDiscussionsPanel: function() {
-    ddd("[RightBarController] showDiscussionsPanel");
     this.selectInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
-    //this.show();
     this._showPanel('comments_panel');
   },
-
+  
+  showPagesPanel: function(){
+    ddd('[RightBarController] showPagesPanel');
+    this._showPanel('pages_panel');
+  },
+  
   _changePanelContent: function(inspector) {
     ddd('[RightBarController] _changePanelContent(inspector)' + inspector);
     var inspectors = this._inspectorsControllers;

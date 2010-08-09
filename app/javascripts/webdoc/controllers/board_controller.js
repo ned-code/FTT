@@ -669,6 +669,11 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   insertImage: function(imageUrl, position, media_id, title) {
+    ddd('insertImage : ', imageUrl);
+    if(imageUrl.match('http://l.yimg.com/g/images/spaceball.gif')){ //prevent flickr to create a transparent image of 1x1 pixel
+      alert("Sorry, but this image isn't free for use");
+      return false;
+    }
     var image = document.createElement('img'); /* Preload image in order to have width and height parameters available */
     jQuery(image).bind("load", {position: position, media_id: media_id, title: title }, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
     image.src = imageUrl;
@@ -1177,6 +1182,7 @@ WebDoc.BoardController = jQuery.klass({
 
   removeDiscussion: function(discussion) {
     ddd('[BoardController] remove discussion');
+    discussion.destroy();
     this._currentPage.removeDiscussion(discussion);
   },
 

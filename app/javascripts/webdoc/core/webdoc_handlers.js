@@ -66,6 +66,15 @@ WebDoc.handlers = {
       if ($(e.target).hasClass('center-cell')) {
         WebDoc.application.boardController.unselectAll();
       }
+    })
+    .bind('dragenter', function(e){
+      e.preventDefault();
+    })
+    .bind('dragover', function(e){
+      e.preventDefault();
+    })
+    .bind('drop', function(e){
+      e.preventDefault();
     });
   },
   
@@ -78,17 +87,19 @@ WebDoc.handlers = {
     'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggle(); },
     
     //new ui panel handler, actually the old right bar controller is used
-    'toggle_activity_panel':  function(e){ ddd('no activity yet'); },
-    'toggle_comments_panel':  function(e){ WebDoc.application.rightBarController.showDiscussionsPanel(e); },
-    'toggle_inspector_panel': function(e){ WebDoc.application.rightBarController.showItemInspector(e); },
+    'toggle_activity_panel':      function(e){ ddd('no activity yet'); },
+    'toggle_comments_panel':      function(e){ WebDoc.application.rightBarController.showDiscussionsPanel(e); },
+    'toggle_inspector_panel':     function(e){ WebDoc.application.rightBarController.showItemInspector(e); },
     'toggle_page_inspector_panel':     function(e){ WebDoc.application.rightBarController.showPageInspector(e); },
-    'toggle_author_panel':    function(e){ WebDoc.application.rightBarController.showSocialPanel(e); },
-    'toggle_document_panel':  function(e){WebDoc.application.rightBarController.showDocumentInspector(e); },
-    'toggle_sharing_panel':   function(e){ ddd('no sharing yet') },
+    'toggle_author_panel':        function(e){ ddd('author panel is useless') },
+    'toggle_document_panel':      function(e){WebDoc.application.rightBarController.showDocumentInspector(e); },
+    'toggle_sharing_panel':       function(e){ ddd('no sharing yet') },
     'toggle_browse_web_panel':    function(e) { WebDoc.application.rightBarController.showBrowseWeb(); },
     'toggle_packages_panel':      function(e) { WebDoc.application.rightBarController.showPackages(); },
     'toggle_apps_panel':          function(e) { WebDoc.application.rightBarController.showApps(); },
     'toggle_my_stuff_panel':      function(e) { WebDoc.application.rightBarController.showMyContent(); },
+    'toggle_pages_panel':         function(e) { WebDoc.application.rightBarController.showPagesPanel(); },
+    
     
     'add-page':             function(e) { WebDoc.application.pageEditor.addPage(); },
     'add-web-page':         function(e) { WebDoc.application.pageEditor.addWebPage();},

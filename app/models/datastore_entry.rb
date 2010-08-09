@@ -15,7 +15,7 @@ class DatastoreEntry < ActiveRecord::Base
   belongs_to :item
   belongs_to :user
   
-  named_scope :filter_with, lambda { |current_user, params|
+  scope :filter_with, lambda { |current_user, params|
     #conditions = {}
     #conditions[:ds_key]  = params[:key] if params.has_key?(:key)
     #conditions[:user_id] = current_user if current_user && params[:only_current_user] == 'true'
@@ -23,7 +23,7 @@ class DatastoreEntry < ActiveRecord::Base
     
     conditions = Array.new
     if current_user #can read if owner or is public read
-      if params[:only_current_user].present? && params[:only_current_user] == 'true'
+      if params[:only_current_user].present? && params[:only_current_user] == true
         conditions[0] = 'user_id = ?'
         conditions << current_user  
       else
@@ -32,7 +32,7 @@ class DatastoreEntry < ActiveRecord::Base
         conditions << CONST_PROTECTION_LEVEL_PRIVATE
       end
     else #no user, can only read if public read
-      if params[:only_current_user].present? && params[:only_current_user] == 'true'
+      if params[:only_current_user].present? && params[:only_current_user] == true
         conditions[0] = 'NULL IS NOT ?'
         conditions << nil
       else

@@ -140,6 +140,8 @@ body.full_view {
 }
 .sharing_panel.active,
 .pages_panel.active {
+  display:block;
+  opacity:1;
   z-index: 2;
 }
 .tools_panel,
@@ -160,8 +162,8 @@ body.full_view {
 .page_inspector_panel,
 .document_inspector_panel,
 .apps_panel,
-/*.sharing_panel,*/
-.pages_panel {
+.pages_panel
+/*.sharing_panel,*/ {
   /* It would be great to make this happen after the fade... */
   display: none;
   opacity: 0;
@@ -176,7 +178,7 @@ body.full_view {
 .page_inspector_panel.active,
 .document_inspector_panel.active,
 .apps_panel.active,
-.activity_panel.active {
+.activity_panel.active{
   display: block;
   opacity: 1;
 }
@@ -190,9 +192,8 @@ body.full_view {
 .full_view .browse_web_panel,
 .full_view .document_inspector_panel,
 .full_view .page_inspector_panel,
-.full_view .apps_panel,
-/*.full_view .sharing_panel,*/
-.full_view .pages_panel {
+.full_view .apps_panel
+/*.full_view .sharing_panel,*/ {
   display: block;
   opacity: 0;
 }
@@ -206,9 +207,8 @@ body.full_view {
 .full_view .browse_web_panel.active,
 .full_view .page_inspector_panel.active,
 .full_view .document_inspector_panel.active,
-.full_view .apps_panel.active,
-/*.full_view .sharing_panel.active,*/
-.full_view .pages_panel.active {
+.full_view .apps_panel.active
+/*.full_view .sharing_panel.active,*/{
   opacity: 1;
 }
 

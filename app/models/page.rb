@@ -56,9 +56,9 @@ class Page < ActiveRecord::Base
   
   default_scope :order => "position ASC"
   
-  named_scope :valid, :joins => :document, :conditions => ['pages.deleted_at IS ? AND documents.deleted_at IS ?', nil, nil]
-  named_scope :not_deleted, :conditions => ['pages.deleted_at IS ?', nil]
-  named_scope :deleted, :conditions => ['pages.deleted_at IS NOT ?', nil]
+  scope :valid, :joins => :document, :conditions => ['pages.deleted_at IS ? AND documents.deleted_at IS ?', nil, nil]
+  scope :not_deleted, :conditions => ['pages.deleted_at IS ?', nil]
+  scope :deleted, :conditions => ['pages.deleted_at IS NOT ?', nil]
   # ===============
   # = Validations =
   # ===============
@@ -272,7 +272,9 @@ class Page < ActiveRecord::Base
   def set_position
     self.position ||= document.nil? ? 0 : document.pages.count
     #update following pages
-    Page.update_all("position = position + 1", "position >= #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")
+    if document.present? && document.pages.count(:conditions => ['pages.position = ?', self.position]) >= 1
+      Page.update_all("position = position + 1", "position >= #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")
+    end
   end
   
   # after_destroy

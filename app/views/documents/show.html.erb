@@ -37,10 +37,12 @@
       
       <div class="side_panel panel">
         <h2>Authors</h2>
-        <% if @document.creator == current_user %>
-          <%= render :partial => "followships/card", :locals => { :user => @document.creator } %>
-        <% else %>
-          <%= render :partial => "followships/card", :locals => { :user => @document.creator, :subscribed => @document.creator.follower?(current_user) } %>
+        <% @document.editors.each do |editor| %>
+          <% if editor == current_user %>
+            <%= render :partial => "followships/card", :locals => { :user => editor } %>
+          <% else %>
+            <%= render :partial => "followships/card", :locals => { :user => editor, :subscribed => @document.creator.follower?(current_user) } %>
+          <% end %>
         <% end %>
         <!-- <ul class="horizontal author_index index">
           <li><a href="/" class="author_thumb thumb">author</a></li
@@ -80,11 +82,7 @@
         <h2>More from these authors</h2>
         <ul class="vertical thumbs_index index">
           <% (0..(@more_author_documents.length - 1)).step(1) do |i| %>
-            <li>
-              <a class="webdoc_thumb left_text_thumb text_thumb thumb" href='<%= document_path(@more_author_documents[i])%>'>
-                <%= @more_author_documents[i].title %>
-              </a>
-            </li>
+            <%= render 'thumbnail', :document => @more_author_documents[i]%>
           <% end %>
         </ul>
       </div>

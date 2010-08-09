@@ -37,7 +37,7 @@ class Theme < ActiveRecord::Base
   # = Scope =
   # =========
 
-  named_scope :last_version, :conditions => ['updated_theme_id IS ?', nil]
+  scope :last_version, :conditions => ['updated_theme_id IS ?', nil]
 
   # =============
   # = Callbacks =

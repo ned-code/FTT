@@ -69,7 +69,6 @@ WebDoc.Discussion = $.klass(WebDoc.Record, {
   },
 
   removeComment: function(comment) {
-    comment.destroy();
     var index = jQuery.inArray(comment, this.comments);
     if (index > -1) {
       this.comments.splice(index, 1);

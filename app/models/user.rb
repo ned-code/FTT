@@ -4,6 +4,9 @@ class User < ActiveRecord::Base
   set_primary_key :uuid
   acts_as_authorization_subject
 
+  # needed for acl9
+  alias_attribute(:id, :uuid)
+
   avatars_path = "uploads/user/avatar/:id/:cw_style:basename.:extension"
   has_attached_file :avatar,
                     :styles => { :thumb=> "128x128#" },
@@ -22,38 +25,38 @@ class User < ActiveRecord::Base
                                     :content_type => ['image/jpeg', 'image/png', 'image/gif'],
                                     :unless => Proc.new {|user| user.avatar }
 
-  has_uuid  
+  has_uuid
   # Include default devise modules.
   # Others available are :lockable, :timeoutable and :activatable.
   devise :registerable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable, :lockable
-  
+
   attr_accessor :terms_of_service
   attr_accessor :clear_avatar
-  
+
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :username, :first_name, :last_name, :terms_of_service,
                   :bio, :website, :gender, :uuid, :avatar, :clear_avatar
-  
+
   # =============
   # = Callbacks =
   # =============
-  
-  validate_on_create :must_be_allowed_email
+
+  validate :must_be_allowed_email, :on => :create
   before_save :check_clear_avatar
   after_create :create_xmpp_user, :notify_administrators
-  
+
   # ===============
   # = Validations =
   # ===============
-  
+
   validates_presence_of :username, :first_name, :last_name
   validates_acceptance_of :terms_of_service, :on => :create
-  validates_uniqueness_of :uuid  
+  validates_uniqueness_of :uuid
 
   # ================
   # = Associations =
   # ================
-  
+
   has_many :images, :class_name => 'Medias::Image', :order => 'created_at DESC'
   has_many :videos, :class_name => 'Medias::Video', :order => 'created_at DESC'
   has_many :documents, :foreign_key => :creator_id
@@ -64,11 +67,11 @@ class User < ActiveRecord::Base
   has_many :datastore_entries
   has_many :discussions
   has_many :comments
-  
+  has_many :roles_users
   # ===================
   # = Instance Method =
   # ===================
-  
+
   def name
     first_name ? "#{first_name} #{last_name}" : username
   end
@@ -80,41 +83,41 @@ class User < ActiveRecord::Base
   def mutual_connection(user)
     self.mutual_follower?(user)
   end
-  
+
   def has_only_editor_role!(document, message = nil)
     if !self.has_role?("editor", document)
       self.has_no_roles_for!(document)
       self.has_role!("editor", document)
     end
   end
-  
+
   def has_only_reader_role!(document, message = nil)
     if !self.has_role?("reader", document)
       self.has_no_roles_for!(document)
       self.has_role!("reader", document)
     end
   end
-  
+
   def follow(user_id)
     following_connections.create(:following_id => user_id)
   end
-  
+
   def unfollow(user_id)
     following_connections.destroy(following_connections.find_by_following_id(user_id))
   end
-  
+
   def follower?(user)
     followers.include?(user)
   end
-  
+
   def following?(user)
     following.include?(user)
   end
-  
+
   def mutual_follower?(user)
     following.include?(user) and followers.include?(user)
   end
-  
+
   def mutual_followers
     mutual = []
     following.each do |user|
@@ -128,11 +131,11 @@ class User < ActiveRecord::Base
   end
 
   def as_application_json
-    hash = { 'user' => Serializer.new(self).serializable_record }
+    hash = { 'user' => self.attributes }
     hash['user']['avatar_thumb_url'] = self.avatar_thumb_url
     hash
   end
-  
+
   # Need to use this method instead of the original to_json cause user references document and vice versa
   def to_social_panel_json(current_user)
     { :user =>
@@ -147,23 +150,23 @@ class User < ActiveRecord::Base
       }
     }.to_json
   end
-  
+
   def category
     documents_count > 5 ? 'Publisher' : 'User'
   end
-  
+
 protected
-  
+
   # after_create
   def create_xmpp_user
     XmppUserSynch.create_xmpp_user(self)
   end
-  
+
   #after create. This is a temporary action until invitation has been implemented.
   def notify_administrators
-    if (APP_CONFIG['notify_administrator_on_user_creation'])  
+    if (APP_CONFIG['notify_administrator_on_user_creation'])
       Notifier.deliver_new_user_notification(APP_CONFIG['administrator_emails'], self)
-    end    
+    end
   end
 
   # before create
@@ -175,12 +178,12 @@ protected
     if (APP_CONFIG['must_check_user_email'])
       allowed_users = []
       begin
-        allowed_users = YAML.load_file("#{RAILS_ROOT}/config/allowed_user_email.yml")
+        allowed_users = YAML.load_file("#{Rails.root}/config/allowed_user_email.yml")
       rescue => exception
-        logger.warn("cannot open file '#{RAILS_ROOT}/config/allowed_user_email.yml'. Reason: #{exception.message}")
+        logger.warn("cannot open file '#{Rails.root}/config/allowed_user_email.yml'. Reason: #{exception.message}")
       end
       errors.add(:email, :not_authorized_email) unless allowed_users.include? self.email
-    end    
+    end
   end
   
 end

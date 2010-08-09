@@ -92,6 +92,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     if(current_user_uuid && ( current_user_uuid ===  WebDoc.application.pageEditor.getCreator().uuid() || current_user_uuid === comment.user.uuid())) {
       remove = jQuery('<a/>', { 'href':'#', 'id':'remove_comment'}).text('remove');
       remove.bind('click', function() {
+        comment.destroy();
         comment.discussion.removeComment(comment);
       });
     }

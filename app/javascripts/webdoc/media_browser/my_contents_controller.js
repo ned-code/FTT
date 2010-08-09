@@ -671,5 +671,5 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.videosFavoritesContainer.empty();
     this.videosFavoritePage += 1;
     this._loadFavoritesVideos();
-  },
+  }
 });

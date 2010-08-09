@@ -45,14 +45,15 @@ WebDoc.PageBrowserController = $.klass({
     this.visible = true;
     this.pageMap = {};
     
-    this.domNode
-    .bind('mouseenter', function(e){
-      that.show();
-    })
-    .bind('mouseleave', function(e){
-      that.hide();
-    });
-    
+    //always show
+    // this.domNode
+    // .bind('mouseenter', function(e){
+    //   that.show();
+    // })
+    // .bind('mouseleave', function(e){
+    //   that.hide();
+    // });
+    this.show();
     this.domNode
     .find('.content')
     .scrollbars({
@@ -344,7 +345,13 @@ WebDoc.PageBrowserController = $.klass({
     
     // Then put it in the DOM
     if (pos) {
-      this.domNodeBrowserItems.children().eq(pos-1).after( pageNode );
+      var afterChildren = this.domNodeBrowserItems.children().eq(pos-1);
+      if(afterChildren[0] !== undefined) {
+         afterChildren.after( pageNode );
+      }
+      else {
+        this.domNodeBrowserItems.append( pageNode ); 
+      }
     }
     else {
       this.domNodeBrowserItems.prepend( pageNode );
@@ -449,6 +456,7 @@ WebDoc.PageBrowserController = $.klass({
   // Show / hide browser --------------------------------------------
   
   _show: function(){
+    ddd('that._show');
     var inspector = this.domNode,
         pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
         startObj, endObj;

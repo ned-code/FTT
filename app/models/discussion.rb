@@ -32,11 +32,11 @@ class Discussion < ActiveRecord::Base
 
   before_save :validate_presence_of_object_linked
   
-  named_scope :valid,
+  scope :valid,
               :joins => { :page => :document },
               :conditions => ['discussions.deleted_at IS ? AND pages.deleted_at is ? AND documents.deleted_at IS ?',nil, nil, nil]
-  named_scope :not_deleted, :conditions => ['discussions.deleted_at IS ?', nil]
-  named_scope :deleted, :conditions => ['discussions.deleted_at IS NOT ?', nil]
+  scope :not_deleted, :conditions => ['discussions.deleted_at IS ?', nil]
+  scope :deleted, :conditions => ['discussions.deleted_at IS NOT ?', nil]
 
   def validate_presence_of_object_linked
     columns = OBJECT_LINKED_ALLOWED.map{ |o| "#{o}_id"}
@@ -49,10 +49,16 @@ class Discussion < ActiveRecord::Base
   end
 
   def as_application_json
-    as_json(:include => { :comments =>
-                                  { :include => { :user => { :methods => :avatar_thumb_url } },
-                                    :except => [:content],
-                                    :methods => :safe_content }})
+    hash = { 'discussion' => self.attributes }
+    hash['discussion']['properties'] = self.properties 
+    hash['discussion']['comments'] = self.comments.map do |c|
+      c_hash = c.attributes
+      c_hash['safe_content'] = c.safe_content
+      c_hash['user'] = c.user.attributes
+      c_hash['user']['avatar_thumb_url'] = c.user.avatar_thumb_url
+      c_hash
+    end
+    hash
   end
   
 end
