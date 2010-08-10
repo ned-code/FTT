@@ -66,7 +66,10 @@ class Friendship < ActiveRecord::Base
   end
   
   def block!
-    #Todo
+    transaction do
+      update_attribute(:status, Friendship::BLOCKED )
+      mirror.update_attribute(:status, Friendship::BLOCKED )
+    end
   end
   
   #return the associated friendship

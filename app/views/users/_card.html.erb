@@ -9,6 +9,7 @@
   </h4>
   <p class="card-bio"><%= "#{user.bio}" %></p>
   <div class="card-stats"><%= "#{user.documents.length}" %> webdoc<% if user.documents.length > 1 %>s<% end %></div>
+  <div class=""><%= "#{user.friends_count}" %> friend<% if user.friends_count > 1 %>s<% end %></div>
   
   <% if local_assigns.has_key? :friendship %>
     <% if current_user.friend?(user)%>

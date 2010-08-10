@@ -127,6 +127,10 @@ class User < ActiveRecord::Base
   def blocked_friend?(user)
     blocked_friends.include?(user)
   end
+  
+  def friends_count
+    friends.length
+  end
 
   def follow(user_id)
     following_connections.create(:following_id => user_id)
