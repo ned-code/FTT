@@ -146,9 +146,6 @@
 			}
 			
 			path.length = this.length;
-			
-			console.log(path);
-			
 			return path;
 		},
 		
@@ -178,7 +175,6 @@
 			}
 			
 			path.length = this.length;
-			
 			return path;
 		},
 		
@@ -219,7 +215,6 @@
 			}
 			
 			path.length = this.length;
-			
 			return path;
 		},
 		
@@ -227,11 +222,13 @@
 		// and calculates and returns the union of that path and the
 		// current path as a new path.
 		
-		union: function( path ){
+		union: function( inPath ){
 			var path = Object.create(pathPrototype);
 			
-			path.length = this.length;
+			// Calculate the union of 'this' and 'path', populate and
+			// return the resulting path.   
 			
+			path.length = this.length;
 			return path;
 		},
 		
@@ -260,11 +257,10 @@
 					l = this.length;
 			
 			while (++i < l) {
-				array.push( svgTypeMap[ this[i].type + this[i].data.join(' ') ] );
+				array.push( svgTypeMap[ this[i].type ] + this[i].data.join(' ') );
 			}
 			
-			pathNode.attribute( 'd', array.join(' ') );
-			
+			pathNode.setAttribute( 'd', array.join(' ') );
 			return pathNode;
 		}
 	}
