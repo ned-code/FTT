@@ -60,7 +60,7 @@ Webdoc::Application.routes.draw do
   
   resources :friendships do
     collection do
-      post :become_friend, :accept, :reject, :block, :cancel_request
+      post :become_friend, :accept, :reject, :block, :cancel_request, :revoke
       delete :revoke
     end
   end

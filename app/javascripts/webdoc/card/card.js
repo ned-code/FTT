@@ -253,5 +253,39 @@ WebDoc.Application.beforeMain('card', function(){
     button.addClass('loading');
     
     e.preventDefault();
+  })
+  //listen to cancel friendship link
+  .delegate(".card a[href='#cancel_friendship']:not(.loading)", "click", function(e){
+    var button = jQuery(e.currentTarget),
+        card = button.closest('.card'),
+        data = {
+          friend_id: card.data('webdoc').user.id
+        };
+    function callback(json) {
+      button
+      .removeClass('loading')
+      .href('#become_friend')
+      .html('Become Friend');
+    }
+    
+    function errorback(request, status, error) {
+      button.removeClass('loading');
+      card.trigger('cancel_friendship');
+
+      WebDoc.Application.errors.ajaxError(status, error).flash();
+    }
+    
+    jQuery.ajax({
+      url: "/friendships/revoke",
+      type: 'post',
+      data: data, 
+      dataType: 'json',              
+      success: callback,
+      error: errorback
+    });
+    
+    button.addClass('loading');
+    
+    e.preventDefault();
   });
 });

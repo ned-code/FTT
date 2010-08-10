@@ -23,10 +23,10 @@
       <h5 class="user-email item"><%= link_to current_user.email, "/users/#{current_user.id}" %></h5>
       <ul class="divided index">
         <li>
-          <%= link_to "your contacts", followships_path, { :class => "item #{params[:controller]=='followships' ? 'current' : '' }" } %>
+          <%= link_to "your contacts", friendships_path, { :class => "item #{params[:controller]=='friendships' ? 'current' : '' }" } %>
         </li
         ><li>
-          <%= link_to "edit your profile", edit_user_path(:id => current_user.uuid), { :class => "user-edit item #{params[:controller]=='followships' ? 'users' : '' }" } %>
+          <%= link_to "edit your profile", edit_user_path(:id => current_user.uuid), { :class => "user-edit item #{params[:controller]=='users' ? 'users' : '' }" } %>
         </li
         ><li>
           <%= link_to "logout", destroy_user_session_path, { :class => "user-logout item" } %>

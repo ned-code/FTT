@@ -1,0 +1,22 @@
+<div class="action-zone zone">
+  <div class="wrap">
+  </div>
+</div>
+<div class="content">
+  <div class="wrap">
+    <div class="column one double of-four">
+      <h2>
+        <span id="contactscount"><%= @user.friends_count %></span> <%= t('.friends')%>
+      </h2>
+      <ul id="contacts" class="vertical index">
+        <% @user.friends.each do |user|%>
+        <li>
+          <%= render 'users/card', :user => user, :subscribed => user.follower?(current_user), :friendship => user.friend?(current_user)  %>
+        </li>
+        <% end%>
+      </ul>
+    </div><!-- spaceless
+ --><div class="column last double of-four">
+    </div>
+  </div>
+</div>
