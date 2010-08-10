@@ -14,14 +14,10 @@ class UserList < ActiveRecord::Base
   
   belongs_to :user
   has_many :user_lists_friends, :dependent => :destroy
+  has_many :friendships, :through => :user_lists_friends
   
   def destroy
     return if default #prevent to destroy the default list
     super
-  end
-  
-  def users
-    #TODO
-    users = User.all
   end
 end

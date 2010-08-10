@@ -9,18 +9,24 @@
   </h4>
   <p class="card-bio"><%= "#{user.bio}" %></p>
   <div class="card-stats"><%= "#{user.documents.length}" %> webdoc<% if user.documents.length > 1 %>s<% end %></div>
+  <div class=""><%= "#{user.friends_count}" %> friend<% if user.friends_count > 1 %>s<% end %></div>
   
   <% if local_assigns.has_key? :friendship %>
-    <% if user.friend?(current_user)%>
-    <p>You're friend with <%= user.username %></p>
-    <% elsif user.pending_requested_friend?(current_user)%>
-      <p> <%= user.username %> ask you to be friend with him </p>
-    <% elsif user.requested_friend?(current_user)%>
-      <p>You already sent a request to <%= user.username %> </p>
-    <% elsif user.blocked_friend?(current_user)%>
+    <% if current_user.friend?(user)%>
+    <a class="cancel_friendship_button button" href="#cancel_friendship">Revoke Friendship</a>
+    <% elsif current_user.pending_requested_friend?(user)%>
+      <div id='friend_request_<%=user.id%>'>
+        <a class="accept_friend_button button" href="#accept_friend_request">Accept request</a>
+        <a class="reject_friend_button button" href="#reject_friend_request">Reject request</a>
+      </div>
+    <% elsif current_user.requested_friend?(user)%>
+      <a class="cancel_request_button button" href="#cancel_friend_request">Cancel Friend request</a>
+    <% elsif current_user.blocked_friend?(user)%>
      <p>You have blocked <%= user.username %> </p>
      <% else %>
-     <p>Become friend </p>
+     <p>
+       <a class="become_friend_button button" href="#become_friend">Become Friend</a>
+     </p>
     <% end %>
   <% end %>
   

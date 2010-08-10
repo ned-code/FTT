@@ -7,7 +7,15 @@
     <% end %>
   </div>
   <div id="friends_list">
-    
+    <h3>Friends</h3>
+    <ul class='friend_list'>
+      <% for user in @user.friends do %>
+        <li>
+          <%= image_tag user.avatar.url(:thumb) %>
+          <%= link_to user.username, "/users/#{user.uuid}" %>
+        </li>
+      <% end %>
+    </ul>
   </div>
   
 </div>

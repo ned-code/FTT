@@ -1,35 +1,47 @@
 class FriendshipsController < ApplicationController
   before_filter :authenticate_user!
-  
   def index
-    @friendships = current_user.friendships
-    @requested_friendships = current_user.requested_friendships
-    @pending_request_friends = current_user.pending_request_friends
+    @user = current_user
   end
   
   #create a new friendship
-  def create
-    Friendship.create_friendship(:user_id => current_user.id, :friend_id => params[:friend_id])
+  def become_friend
+    Friendship.create_friendship!(current_user.id, params[:friend_id])
+    render :json => {}
   end
   
   #accept a friend request
   def accept
-    current_user.pending_request_friendships.find(params[:friendship_id]).accept!
+    friendship = current_user.pending_request_friendships.where(:friend_id => params[:friend_id]).first
+    friendship.accept!
+    render :json => {}
   end
   
   #reject a friend request
   def reject
-    current_user.pending_request_friendships.find(params[:friendship_id]).reject!
+    friendship = current_user.pending_request_friendships.where(:friend_id => params[:friend_id]).first
+    friendship.reject!
+    render :json => {}
+  end
+  
+  def cancel_request
+    friendship = current_user.requested_friendships.where(:friend_id => params[:friend_id]).first
+    friendship.reject!
+    render :json => {}
   end
   
   #Curenttly unused
   #block a friend 
   def block
-    current_user.friendships.find(params[:friendship_id]).block!
+    friendship = current_user.friendships.where(:friend_id => params[:friend_id]).first
+    friendship.block!
+    render :json => {}
   end
   
   #
-  def destroy
-    current_user.friendships.find(params[:friendship_id]).revoke!
+  def revoke
+    friendship = current_user.friendships.where(:friend_id => params[:friend_id]).first
+    friendship.revoke!
+    render :json => {}
   end
 end

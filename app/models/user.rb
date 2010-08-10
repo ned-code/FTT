@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
   end
   
   def pending_requested_friend?(user)
-    pending_request_friendships.include?(user)
+    pending_request_friends.include?(user)
   end
   
   def requested_friend?(user)
@@ -124,6 +124,10 @@ class User < ActiveRecord::Base
   
   def blocked_friend?(user)
     blocked_friends.include?(user)
+  end
+  
+  def friends_count
+    friends.length
   end
 
   def follow(user_id)
