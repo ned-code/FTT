@@ -118,7 +118,7 @@ class User < ActiveRecord::Base
   end
   
   def pending_requested_friend?(user)
-    pending_request_friendships.include?(user)
+    pending_request_friends.include?(user)
   end
   
   def requested_friend?(user)

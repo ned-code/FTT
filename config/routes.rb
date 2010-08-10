@@ -57,6 +57,13 @@ Webdoc::Application.routes.draw do
       delete :unfollow
     end
   end
+  
+  resources :friendships do
+    collection do
+      post :become_friend, :accept, :reject, :block, :cancel_request
+      delete :revoke
+    end
+  end
 
   get '/browse' => 'browser#index'
 
