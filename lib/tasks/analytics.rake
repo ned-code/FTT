@@ -72,7 +72,7 @@ namespace :analytics do
     number_of_datastore_entries = DatastoreEntry.count(:all)
     
     #view count
-    webdocs = Document.all(:select => "views_count, is_public")
+    webdocs = Document.valid(:select => "views_count, is_public")
     max_webdoc_views_count = 0
     median_views_count = 0
     total_webdoc_views_count = 0
