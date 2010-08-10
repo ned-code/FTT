@@ -14,7 +14,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
     define_method(method_name) do |field_name, *args|
       
       unless @object.nil?
-        errors = @object.errors[(field_name.to_sym)]
+        errors = @object.errors[field_name.to_sym].present?
         if errors
           if errors.is_a?(Array)
             last_error = " and #{errors.pop}"
