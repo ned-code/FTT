@@ -1,4 +1,6 @@
 class DocumentsController < ApplicationController
+  load_and_authorize_resource
+  
   before_filter :store_url_in_session_if_user_not_logged
   # need to be authenticate for alpha release.
   # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document

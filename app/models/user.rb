@@ -2,10 +2,8 @@ require 'xmpp_user_synch'
 
 class User < ActiveRecord::Base
   set_primary_key :uuid
-  
-  # needed for acl9
-  alias_attribute(:id, :uuid)
-
+  alias_attribute(:id, :uuid) # needed for acl9 TODO always needed???
+      
   avatars_path = "uploads/user/avatar/:id/:cw_style:basename.:extension"
   has_attached_file :avatar,
                     :styles => { :thumb=> "128x128#" },
