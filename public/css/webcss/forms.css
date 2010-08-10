@@ -193,7 +193,9 @@ textarea.resizable {
 label {
     font-weight: bold;
     /* Equalise FF's <label> baseline to its <input> baseline. Mostly. */
+    /* Has FF4 fixed this? */
     line-height: 1.077;
+    line-height: 1;
     /* Only pad labels top and bottom */
     padding: 0.3333em 0;
 }

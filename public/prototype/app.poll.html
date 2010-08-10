@@ -1,6 +1,18 @@
+<!DOCTYPE html>
 <html>
 	<head>
+    <title>Poll App</title>
+    
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link href="../css/webcss/reset.css" type="text/css" rel="stylesheet"/>
+		<link href="../css/webcss/forms.css" type="text/css" rel="stylesheet"/>
+		<link href="../css/webcss/layer.css" type="text/css" rel="stylesheet"/>
+		<link href="../css/webcss/button.css" type="text/css" rel="stylesheet"/>
+		
+		<link href="../css/webdoc/app.layout.css" type="text/css" rel="stylesheet"/>
+		<link href="../css/webdoc/app.typography.css" type="text/css" rel="stylesheet"/>
+		<link href="../css/webdoc/app.color.css" type="text/css" rel="stylesheet"/>
+		
 		<script src="http://apps.webdoc.com/api/sdk_boot.js"></script>
 		
 		<script type="text/javascript" src="scripts/jquery/jquery.min.js"></script>
@@ -8,63 +20,72 @@
 		<script type="text/javascript" src="scripts/jquery/jquery.htmlEditable.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/jquery.htmlEditable.css">
 		<link type="text/css" rel="stylesheet" href="css/jquery.themes/overcast/jquery-ui-1.8.custom.css">
+		<link type="text/css" rel="stylesheet" href="http://apps.staging.webdoc.com/medias/widget/96b7033e-6dfe-46e7-9e24-45966480619e/0.4/css/jquery.themes/overcast/jquery-ui-1.8.custom.css">
 		
 		<script type="text/javascript" src="scripts/common.js"></script>
 		<script type="text/javascript" src="scripts/date.js"></script>
 		<script type="text/javascript" src="scripts/index.js"></script>
+		
 		<link rel="stylesheet" type="text/css" href="css/index.css">
 		<script type="text/javascript" src="http://st-wd.webdoc.com/sdk/sdk.js"></script>
 		<script src="Locales/en/localizedStrings.js" id="language_script" type="text/javascript"></script>
 	</head>
 	
 	<body>
-		<div id="container">
-			<div id="question" contenteditable="true" class="htmlEdit">What is your favorite color?</div>
-			<div id="options" class="ui-sortable">
-				<div class="option" id="optionContainer_0">
-					<input type="radio" id="option_0" name="r_options" value="0">
-					<div class="option_body">
-						<div class="option_text htmlEdit" id="optionText_0" contenteditable="true">Red</div>
-						<div class="grabber">
-							<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+		<div id="container" class="app_layer layer">
+		  
+		  <header>
+		    <h1>Poll</h1>
+		  </header>
+		  
+		  <div id="question" contenteditable="true" class="htmlEdit app_question">
+		  	What is your favorite color?
+		  	<span class="arrow"></span>
+		  </div>
+		  
+		  <form>
+				<div id="options" class="ui-sortable">
+					<div class="option" id="optionContainer_0">
+						<input type="radio" id="option_0" name="r_options" value="0"/>
+						<label class="htmlEdit" for="option_0" id="optionText_0" contenteditable="true">Red</label>
+						<div class="grabber grabber_button button">
+						  <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
 						</div>
+						<a href="javascript:deleteOption(0);" class="delete_button button" title="delete">delete</a>
 					</div>
-					<a href="javascript:deleteOption(0);"><img src="images/delete.png"></a>
-				</div>
-			
-				<div class="option" id="optionContainer_1">
-					<input type="radio" id="option_1" name="r_options" value="1">
-					<div class="option_body">
-						<div class="option_text htmlEdit" id="optionText_1" contenteditable="true">Green</div>
-						<div class="grabber">
-							<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-						</div>
-					</div>
-					<a href="javascript:deleteOption(1);"><img src="images/delete.png"></a>
-				</div>
 				
-				<div class="option" id="optionContainer_2">
-					<input type="radio" id="option_2" name="r_options" value="2">
-					<div class="option_body">
-						<div class="option_text htmlEdit" id="optionText_2" contenteditable="true">Blue</div>
-						<div class="grabber">
-							<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+					<div class="option" id="optionContainer_1">
+						<input type="radio" id="option_1" name="r_options" value="1">
+						<label class="htmlEdit" for="option_1" id="optionText_1" contenteditable="true">Green</label>
+						<div class="grabber grabber_button button">
+						  <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
 						</div>
+						<a href="javascript:deleteOption(1);" class="delete_button button" title="delete">delete</a>
 					</div>
-					<a href="javascript:deleteOption(2);"><img src="images/delete.png"></a>
-				</div>
-				
-				<div class="option">
-					<input type="radio" id="option_other" name="r_options" value="-1">
-					Other:<br>
+					
+					<div class="option" id="optionContainer_2">
+						<input type="radio" id="option_2" name="r_options" value="2">
+						<label class="htmlEdit" for="option_2" id="optionText_2" contenteditable="true">Blue</label>
+						<div class="grabber grabber_button button">
+						  <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+						</div>
+						<a href="javascript:deleteOption(2);" class="delete_button button" title="delete">delete</a>
+					</div>
+					
+					<div class="other_option option">
+						<input type="radio" id="option_other" name="r_options" value="-1">
+						<label class="htmlEdit" for="option_other">Other:</label>
+					</div>
+					
 					<textarea id="other"></textarea>
+					
 				</div>
-			</div>
-			
-			<div id="buttons">
-				<a href="javascript:addOption();"><img src="images/add.png"> add option</a>
-			</div>
-	
+				
+				<div id="buttons">
+					<a href="javascript:addOption();" class="add_button button">Add option</a>
+				</div>
+      
+      </form>
 		</div>
 	</body>
 </html>

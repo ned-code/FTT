@@ -15,6 +15,12 @@
     height: 100%;
 }
 
+.horizontal>input[type='radio'],
+.horizontal>input[type='checkbox'] {
+    height: auto;
+    width: auto;
+}
+
 .horizontal>*:last-child,
 .horizontal>*.last {
     margin-right: 0;
