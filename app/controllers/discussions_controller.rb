@@ -3,17 +3,17 @@ class DiscussionsController < ApplicationController
   before_filter :find_discussion
   before_filter :find_document
 
-  access_control do
-    action :index, :create do
-      allow all, :if => :document_is_public?
-      allow :editor, :of => :pseudo_document
-    end
-    actions :update, :destroy do
-      allow all, :if => :current_user_is_discussion_owner      
-      allow :editor, :of => :pseudo_document
-    end
-    allow :admin    
-  end
+  # access_control do
+  #   action :index, :create do
+  #     allow all, :if => :document_is_public?
+  #     allow :editor, :of => :pseudo_document
+  #   end
+  #   actions :update, :destroy do
+  #     allow all, :if => :current_user_is_discussion_owner
+  #     allow :editor, :of => :pseudo_document
+  #   end
+  #   allow :admin
+  # end
   
   def index
     raise 'no params id' if params[:page_id].blank?
