@@ -26,6 +26,22 @@
 	
 	<!-- TEST -->
 	
+	<h2>path.deform( <i>options</i> )</h2> 
+	<div class="column of_three">
+		<h4>expected</h4>
+		<img src="images/path.deform.png"/>
+	</div
+ ><div class="column of_three">
+		<h4>canvas</h4>
+		<canvas id="deform_canvas"></canvas>
+	</div
+ ><div class="last column of_three">
+		<h4>svg</h4>
+		<!-- svg -->
+	</div>
+	
+	<!-- TEST -->
+	
 	<h2>path.spherize( <i>radius</i>, <i>distance</i>, <i>origin</i> )</h2> 
 	<div class="column of_three">
 		<h4>expected result</h4>
@@ -147,12 +163,109 @@
 					{ type: 'lineTo', data: [100,0] },
 					{ type: 'lineTo', data: [50,0] }
 				];
+				
+		var stretchPath = [
+					{ type: 'moveTo', data: [2,2] },
+					{ type: 'lineTo', data: [53,1] },
+					{ type: 'lineTo', data: [60,60] },
+					{ type: 'lineTo', data: [1,53] },
+					{ type: 'lineTo', data: [2,2] },
+					{ type: 'lineTo', data: [-49.5,0] },
+					{ type: 'lineTo', data: [-50,50] },
+					{ type: 'lineTo', data: [1,53] },
+					{ type: 'moveTo', data: [2,2] },
+					{ type: 'lineTo', data: [-49.5,0] },
+					{ type: 'lineTo', data: [-49,-49] },
+					{ type: 'lineTo', data: [0,-49.5] },
+					{ type: 'lineTo', data: [2,2] },
+					{ type: 'lineTo', data: [53,1] },
+					{ type: 'lineTo', data: [50,-50] },
+					{ type: 'lineTo', data: [0,-49.5] },
+					{ type: 'moveTo', data: [53,1] },
+					{ type: 'lineTo', data: [104,0] },
+					{ type: 'lineTo', data: [112,54] },
+					{ type: 'lineTo', data: [60,60] },
+					{ type: 'moveTo', data: [60,60] },
+					{ type: 'lineTo', data: [112,54] },
+					{ type: 'lineTo', data: [128,128] },
+					{ type: 'lineTo', data: [54,112] },
+					{ type: 'moveTo', data: [1,53] },
+					{ type: 'lineTo', data: [60,60] },
+					{ type: 'lineTo', data: [54,112] },
+					{ type: 'lineTo', data: [0,104] },
+					{ type: 'moveTo', data: [-50,50] },
+					{ type: 'lineTo', data: [1,53] },
+					{ type: 'lineTo', data: [0,104] },
+					{ type: 'lineTo', data: [-50,100] },
+					{ type: 'moveTo', data: [-100,50] },
+					{ type: 'lineTo', data: [-50,50] },
+					{ type: 'lineTo', data: [-50,100] },
+					{ type: 'lineTo', data: [-100,100] },
+					{ type: 'lineTo', data: [-100,50] },
+					{ type: 'moveTo', data: [-100,0] },
+					{ type: 'lineTo', data: [-49.5,0] },
+					{ type: 'lineTo', data: [-50,50] },
+					{ type: 'lineTo', data: [-100,50] },
+					{ type: 'lineTo', data: [-100,0] },
+					{ type: 'moveTo', data: [-100,-50] },
+					{ type: 'lineTo', data: [-49,-49] },
+					{ type: 'lineTo', data: [-49.5,0] },
+					{ type: 'lineTo', data: [-100,0] },
+					{ type: 'lineTo', data: [-100,-50] },
+					{ type: 'moveTo', data: [-100,-100] },
+					{ type: 'lineTo', data: [-50,-100] },
+					{ type: 'lineTo', data: [-49,-49] },
+					{ type: 'lineTo', data: [-100,-50] },
+					{ type: 'lineTo', data: [-100,-100] },
+					{ type: 'moveTo', data: [-50,-100] },
+					{ type: 'lineTo', data: [0,-100] },
+					{ type: 'lineTo', data: [0,-49.5] },
+					{ type: 'lineTo', data: [-49,-49] },
+					{ type: 'moveTo', data: [0,-100] },
+					{ type: 'lineTo', data: [50,-100] },
+					{ type: 'lineTo', data: [50,-50] },
+					{ type: 'lineTo', data: [0,-49.5] },
+					{ type: 'moveTo', data: [50,-100] },
+					{ type: 'lineTo', data: [100,-100] },
+					{ type: 'lineTo', data: [100,-50] },
+					{ type: 'lineTo', data: [50,-50] },
+					{ type: 'moveTo', data: [50,-50] },
+					{ type: 'lineTo', data: [100,-50] },
+					{ type: 'lineTo', data: [104,0] },
+					{ type: 'lineTo', data: [53,1] }
+				];
 		
 		var path = Path(grid);
 		
+		// .deform() test ---------------------------------------
+		
+		path.addDeform( 'stretch', stretchPath );
+		
+		var deformCanvas = Canvas( 256, 256, jQuery('#deform_canvas')[0] );
+		var deformPath = path.deform({ stretch: -1.8 });
+		
+		// Canvas test
+		
+		deformCanvas
+		.clear()
+		.translate(128, 128)
+		.style({
+			fillStyle: "transparent",
+			strokeStyle: "rgb(150,50,50)",
+			lineWidth: 1
+		})
+		.begin()
+		.plot( deformPath )
+		.close()
+		.stroke();
+		
+		// SVG test
+		
+		console.log( deformPath.toSVG() );
 		
 		
-		// .spherize() Test ---------------------------------------
+		
+		// .spherize() test ---------------------------------------
 		
 		var spherizeCanvas = Canvas( 256, 256, jQuery('#spherize_canvas')[0] );
 		var radius = 108;

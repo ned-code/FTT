@@ -1,13 +1,15 @@
 // Path
 // 
-// 0.1
+// 0.2
 // 
-// A wrapper, and library of methods for manipulating, paths
+// A wrapper, and library of methods for manipulating, paths.
 
 
 (function(undefined){
 	
 	// VAR
+	
+	var debug = (window.console && console.log);
 	
 	var pi = Math.PI,
 			pi2 = 2*pi,
@@ -20,6 +22,7 @@
 				bezierCurveTo: 'C',
 				closePath: 'z'
 			}
+	
 	
 	// FUNCTIONS
 	
@@ -46,7 +49,10 @@
 		return [ Math.sin(a) * d, - Math.cos(a) * d ]
 	};
 	
-	// Define the Path API as a prototype of path
+	
+	// PROTOTYPE
+	
+	// Define the Path API as a prototype
 	
 	var pathPrototype = {
 		
@@ -56,17 +62,51 @@
 		// number and type of lines in the deform path does not match
 		// those in this path, it must throw a silent error.
 		
-		addDeformPath: function( name, path ){
+		addDeform: function( name, deformPath ){
+			var l = this.length,
+					deform, deformData;
 			
+			if (!this.deforms) { this.deforms = {}; }
+			
+			deform = this.deforms[name] = {};
+			
+			// Check lengths match
+			if (debug) {
+			  if ( this.length !== deformPath.length ) {
+			  	console.log('[Path] trying to addDeformPath, but lengths don\'t match', this.length, deformPath.length);
+			  }
+			}
+			
+			// Loop through path instructions
+			while(l--){
+				data = this[l].data,
+				i = data.length,
+				deformData = deformPath[l].data,
+				outData = [];
+				
+				// Check types match
+				if (debug) {
+					if ( this[l].type !== deformPath[l].type ) {
+						console.log('[Path] trying to addDeformPath, but types at point '+l+' don\'t match');
+					}
+				}
+				
+				// process data
+				while(i--){
+					outData[i] = deformData[i] - data[i];
+				}
+				
+				deform[l] = outData;
+			}
 			
 			return this;
 		},
 		
 		// .removeDeformPath() removes the deform path of this name
 		// from the deformPaths property. There is no real reason for
-		// function.
+		// this method.
 		
-		removeDeformPath: function( name ){
+		removeDeform: function( name ){
 			
 			
 			return this;
@@ -79,9 +119,34 @@
 		// 0-1 are allowed.
 		
 		deform: function( options ){
+			var path = Object.create(pathPrototype),
+					l = this.length,
+					deforms = this.deforms,
+					deform, value;
+					
+			// Loop through path instructions
+			while(l--){
+				data = this[l].data,
+				i = data.length,
+				outData = [];
+				
+				// Process coordinates
+				while(i--){
+					value = data[i];
+					
+					// Process deforms
+					for (key in options) {
+						value = value + deforms[key][l][i] * options[key] ;
+					}
+					
+					outData[i] = value;
+				}
+				
+				path[l] = { type: this[l].type, data: outData };
+			}
 			
-			
-			return Path( obj );
+			path.length = this.length;
+			return path;
 		},
 		
 		// .displace() is a special form of deform, where all points
@@ -110,14 +175,13 @@
 			}
 			
 			path.length = this.length;
-			
 			return path;
 		},
 		
 		// Spherize wraps the 'flat' plane of points round a sphere,
 		// where radius is the radius of the sphere as seen from
 		// an infinite distance, and distance defines the amount of
-		// perspective distortion experienced.
+		// perspective distortion applied to that projection.
 		// [TODO: origin is not implemented]
 		
 		spherize: function( radius, distance, origin ){
@@ -151,7 +215,6 @@
 			}
 			
 			path.length = this.length;
-			
 			return path;
 		},
 		
@@ -159,11 +222,13 @@
 		// and calculates and returns the union of that path and the
 		// current path as a new path.
 		
-		union: function( path ){
+		union: function( inPath ){
 			var path = Object.create(pathPrototype);
 			
-			path.length = this.length;
+			// Calculate the union of 'this' and 'path', populate and
+			// return the resulting path.   
 			
+			path.length = this.length;
 			return path;
 		},
 		
@@ -192,11 +257,10 @@
 					l = this.length;
 			
 			while (++i < l) {
-				array.push( svgTypeMap[ this[i].type + this[i].data.join(' ') ] );
+				array.push( svgTypeMap[ this[i].type ] + this[i].data.join(' ') );
 			}
 			
-			pathNode.attribute( 'd', array.join(' ') );
-			
+			pathNode.setAttribute( 'd', array.join(' ') );
 			return pathNode;
 		}
 	}
