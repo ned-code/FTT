@@ -5,6 +5,8 @@ class CreateUserListsFriends < ActiveRecord::Migration
       t.string :user_list_id, :limit => 36
       t.string :friendship_id, :limit => 36
     end
+    
+    execute 'ALTER TABLE user_lists_friends ADD PRIMARY KEY (uuid);'
   end
 
   def self.down

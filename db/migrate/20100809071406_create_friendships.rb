@@ -1,7 +1,7 @@
 class CreateFriendships < ActiveRecord::Migration
   def self.up
     create_table :friendships, :id => false  do |t|
-      t.string :uuid, :primary => true, :limit => 36
+      t.string :uuid, :limit => 36
       t.string :user_id, :limit => 36
       t.string :friend_id, :limit => 36
       t.string :status
