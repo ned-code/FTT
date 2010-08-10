@@ -2,8 +2,7 @@ require 'xmpp_user_synch'
 
 class User < ActiveRecord::Base
   set_primary_key :uuid
-  acts_as_authorization_subject
-
+  
   # needed for acl9
   alias_attribute(:id, :uuid)
 

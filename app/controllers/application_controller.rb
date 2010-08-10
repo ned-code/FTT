@@ -1,8 +1,11 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
-  rescue_from Acl9::AccessDenied, :with => :forbidden_access
-
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:error] = exception.message
+    redirect_to root_url
+  end
+  
   include ExceptionNotification::Notifiable
 
   before_filter :set_first_visit_time
@@ -13,10 +16,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_session, :current_user
   
 protected
-
-  def forbidden_access
-    render :file => "#{Rails.public_path}/403.html", :status => 403
-  end
 
   def http_authenticate
     if !['65.49.79.67', '86.57.245.87'].include?(request.remote_ip) && Rails.env != 'test'

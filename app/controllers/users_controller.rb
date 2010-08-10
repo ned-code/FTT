@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
 
-  access_control do
-    allow logged_in, :except => [:index]
-    allow :admin, :to => [:index]
-  end
+  # access_control do
+  #   allow logged_in, :except => [:index]
+  #   allow :admin, :to => [:index]
+  # end
   
   # GET /users
   def index

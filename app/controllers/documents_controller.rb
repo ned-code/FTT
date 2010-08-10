@@ -9,17 +9,17 @@ class DocumentsController < ApplicationController
   #before_filter :authenticate_user!, :only => [:index]
   after_filter :create_view_count, :only => :show
   
-  access_control do
-    action :show do
-      allow all, :if => :document_is_public?
-      allow :editor, :of => :document
-    end    
-    allow logged_in, :to => [:index, :create, :duplicate]
-    allow all, :to => :explore
-    allow all, :to => :featured
-    allow :editor, :of => :document, :to => [:update, :destroy]    
-    allow :admin    
-  end
+  # access_control do
+  #   action :show do
+  #     allow all, :if => :document_is_public?
+  #     allow :editor, :of => :document
+  #   end
+  #   allow logged_in, :to => [:index, :create, :duplicate]
+  #   allow all, :to => :explore
+  #   allow all, :to => :featured
+  #   allow :editor, :of => :document, :to => [:update, :destroy]
+  #   allow :admin
+  # end
   
   # GET /documents
   def index    

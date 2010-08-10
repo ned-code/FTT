@@ -4,17 +4,17 @@ class CommentsController < ApplicationController
   before_filter :find_discussion
   before_filter :find_comment, :only => [:destroy]
 
-  access_control do
-    action :create do
-      allow all, :if => :document_is_public?
-      allow :editor, :of => :pseudo_document
-    end
-    action :destroy do
-      allow all, :if => :current_user_is_comment_owner
-      allow :editor, :of => :pseudo_document
-    end
-    allow :admin    
-  end
+  # access_control do
+  #   action :create do
+  #     allow all, :if => :document_is_public?
+  #     allow :editor, :of => :pseudo_document
+  #   end
+  #   action :destroy do
+  #     allow all, :if => :current_user_is_comment_owner
+  #     allow :editor, :of => :pseudo_document
+  #   end
+  #   allow :admin
+  # end
 
   def create
     @comment = current_user.comments.new_with_uuid(params[:comment])
