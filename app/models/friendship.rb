@@ -33,11 +33,12 @@ class Friendship < ActiveRecord::Base
   # = Class Methods =
   # =================
   
-  def self.create_friendship!(user_id, friend_id)
+  def self.create_friendship!(user, friend)
     transaction do
-      friendship = Friendship.create!({ :user_id => user_id, :friend_id => friend_id, :status => Friendship::REQUESTED })
-      Friendship.create_friend_mirror!(friend_id,user_id)
+      friendship = Friendship.create!({ :user_id => user.id, :friend_id => friend.id, :status => Friendship::REQUESTED })
+      Friendship.create_friend_mirror!(friend.id,user.id)
     end
+    Notifier.request_friendship(user,friend).deliver
   end
   
   # ====================
@@ -49,6 +50,7 @@ class Friendship < ActiveRecord::Base
       update_attribute(:status, Friendship::ACCEPTED )
       mirror.update_attribute(:status, Friendship::ACCEPTED )
     end
+    Notifier.accept_friendship(friend,user).deliver
   end
   
   def reject!

@@ -6,7 +6,8 @@ class FriendshipsController < ApplicationController
   
   #create a new friendship
   def become_friend
-    Friendship.create_friendship!(current_user.id, params[:friend_id])
+    friend = User.where(:uuid => params[:friend_id]).first
+    Friendship.create_friendship!(current_user,friend)
     render :json => {}
   end
   
