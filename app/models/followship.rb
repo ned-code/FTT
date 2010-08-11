@@ -27,12 +27,12 @@ private
   
   # after_create
   def send_start_follower_notification
-    Notifier.deliver_start_follower_notification(self.following, self.follower)
+    Notifier.start_follower_notification(self.following, self.follower).deliver
   end
   
   # after_destroy
   def send_stop_follower_notification
-    Notifier.deliver_stop_follower_notification(self.following, self.follower)
+    Notifier.stop_follower_notification(self.following, self.follower).deliver
   end
   
 end
