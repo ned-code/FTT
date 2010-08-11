@@ -293,7 +293,7 @@ class Document < ActiveRecord::Base
       if user 
         if !user.has_role?("reader", self)
           user.has_only_reader_role!(self)
-          Notifier.deliver_role_notification(current_user, "reader", user, self, readers_message)
+          Notifier.role_notification(current_user, "reader", user, self, readers_message).deliver
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -304,7 +304,7 @@ class Document < ActiveRecord::Base
       if user
         if !user.has_role?("editor", self)
           user.has_only_editor_role!(self)
-          Notifier.deliver_role_notification(current_user, "editor", user, self, editors_message)
+          Notifier.role_notification(current_user, "editor", user, self, editors_message).deliver
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -324,7 +324,7 @@ class Document < ActiveRecord::Base
         if !user.has_role?(role, self)
           #user.has_only_reader_role!(self)
           user.has_role!(role, self)
-          Notifier.deliver_role_notification(current_user, role, user, self, message)
+          Notifier.role_notification(current_user, role, user, self, message).deliver
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -344,16 +344,16 @@ class Document < ActiveRecord::Base
         if editors.include?(user.id)
           if !user.has_role?("editor", self)
             user.has_only_editor_role!(self)
-            Notifier.deliver_role_notification(current_user, "editor", user, self, nil)
+            Notifier.role_notification(current_user, "editor", user, self, nil).deliver
           end
         elsif readers.include?(user.id)
           if !user.has_role?("reader", self)
             user.has_only_reader_role!(self)
-            Notifier.deliver_role_notification(current_user, "reader", user, self, nil)
+            Notifier.role_notification(current_user, "reader", user, self, nil).deliver
           end
         else
           user.has_no_roles_for!(self)
-          Notifier.deliver_no_role_notification(current_user, user, self)
+          Notifier.no_role_notification(current_user, user, self).deliver
         end
       end
     end
@@ -365,7 +365,7 @@ class Document < ActiveRecord::Base
     role = params_parsed['role']
     if user
       user.has_no_role!(role, self)
-      Notifier.deliver_removed_role_notification(current_user, role, user, self)
+      Notifier.removed_role_notification(current_user, role, user, self).deliver
     end
   end
 

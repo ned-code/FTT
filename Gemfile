@@ -35,6 +35,8 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-ext'
   gem 'annotate'
+  gem 'wirble'
+  gem 'hirb'
 end
 
 group :test do

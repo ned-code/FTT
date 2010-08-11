@@ -81,7 +81,7 @@ Webdoc::Application.routes.draw do
     resources :comments, :only => [:create, :destroy]
   end
 
-  resources :invitations, :only => [:show, :create]
+  resources :app_polls, :only => [:index, :create, :destroy]
 
   # START OLD ROUTES
   # Jammit::Routes.draw(map)
