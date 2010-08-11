@@ -1,11 +1,12 @@
 class ImagesController < ApplicationController
-  before_filter :authenticate_user!
-  
+
+  skip_before_filter :authenticate_user!, :only => [:index, :create], :if => session[:app_id].present?
+
+
   # GET /images
   def index
     per_page = 100
     @images = current_user.images.paginate(:page => params[:page], :per_page => per_page, :conditions => { :favorites => params[:favorites] })
-    
     respond_to do |format|
       format.json { render :json => { 
         :images => @images,

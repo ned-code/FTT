@@ -1,5 +1,4 @@
 class VideosController < ApplicationController
-  before_filter :authenticate_user!
   
   # GET /videos
   def index
