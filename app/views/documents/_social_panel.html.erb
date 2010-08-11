@@ -10,7 +10,7 @@
     <% if @document.creator == current_user %>
       <%= render :partial => "users/card", :locals => { :user => @document.creator } %>
     <% else %>
-      <%= render :partial => "users/card", :locals => { :user => @document.creator, :subscribed => @document.creator.follower?(current_user) } %>
+      <%= render :partial => "users/card", :locals => { :user => @document.creator, :subscribed => @document.creator.follower?(current_user), :friendship => @document.creator.friend?(current_user) } %>
     <% end %>
   </div>
 </div>
