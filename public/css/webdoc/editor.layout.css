@@ -388,7 +388,31 @@ body.full_view {
 
 .edit_index {
 	position: absolute;
-	left: 2.3333em;
+	left: 0.3333em;
+}
+
+.edit_index>li {
+	position: relative;
+}
+
+.edit_dropdown_index {
+	top: 2em;
+	margin-top: 0.3333em;
+	margin-bottom: 0.3333em;
+}
+
+.edit_dropdown_index>li {
+	margin-bottom: 0.3333em;
+	white-space: nowrap;
+}
+
+.edit_dropdown_index {
+	height: 0;
+	-webkit-transition: height 0.08s linear;
+}
+
+.edit_dropdown_index.active {
+	height: 11.3333em;
 }
 
 .app_index {
@@ -410,11 +434,6 @@ body.full_view {
 
 
 /* .button extensions ------------------------- */
-
-.edit_button {
-  position: absolute;
-  left: 0.3333em;
-}
 
 .panel_button {
   width: 2em;

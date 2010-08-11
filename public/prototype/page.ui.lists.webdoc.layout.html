@@ -143,17 +143,19 @@
     
       <div class="tools_panel panel">
         
-        <!--ul class="horizontal edit_index buttons_index index">
-          <li><a class="edit_button button" href="#edit" title="Edit">Edit</a></li
-         ><li>
-            <a class="pop_button button" href="#edit_pop" title="Edit Menu">Edit Menu</a>
-            <ul class="vertical editlist_index buttons_index index">
-              <li><a class="editlist_button button" href="#undo" title="Undo">Undo</a></li
-             ><li><a class="editlist_button button" href="#redo" title="Redo">Redo</a></li>
+        <ul class="horizontal edit_index buttons_index index">
+          <li><a class="mode_button button" href="#edit_mode" title="Edit mode">Edit</a></li
+         ><li><a class="dropdown_button button" href="#dropdown" title="Edit Menu">Edit Menu</a>
+            <ul class="vertical edit_dropdown_index dropdown_index buttons_index index">
+              <li><a class="edit_button button" href="#undo" title="Undo">Undo</a></li
+             ><li><a class="edit_button button" href="#redo" title="Redo">Redo</a></li
+             ><li><a class="edit_button button" href="#to_back" title="Send To Back">Send To Back</a></li
+             ><li><a class="edit_button button" href="#to_front" title="Send To Front">Send To Front</a></li
+             ><li><a class="edit_button button" href="#delete" title="Delete">Delete</a></li>
             </ul>
           </li>
-        </ul-->
-        
+        </ul>
+
         <ul class="horizontal app_index buttons_index index">
           <li><a class="app_button button" href="#text_app" title="Text App">Text App</a></li
          ><li><a class="app_button button" href="#draw_app" title="Draw App">Draw App</a></li
@@ -204,9 +206,9 @@
         <h3>Pages</h3>
       </div>
       
-      <div class="sharing_panel panel">
+      <!--div class="sharing_panel panel">
         <h3>Sharing</h3>
-      </div>
+      </div-->
     </div>
   </section>
   
@@ -345,6 +347,37 @@
       
       togglePanels(sidePanels);
       togglePanels(footPanels);
+      
+      var dropdownState = false;
+      
+      jQuery('a[href=#dropdown]')
+      .bind('click', function(e){
+				var node = jQuery(this),
+						menu = node
+									.parent()
+									.find('.dropdown_index')
+									.eq(0);
+				
+				if (dropdownState) {
+					  dropdownState = false;
+					  menu.removeTransitionClass('active');
+				} else {
+					dropdownState = true;
+					menu.addTransitionClass('active');
+					
+					jQuery(document)
+					.bind('click', function(e){
+					  if ( e.target === node[0] ||
+					  		 menu[0] === e.target ||
+					  		 jQuery.contains( menu[0], e.target ) ) {
+					  	return;
+					  }
+					  
+					  dropdownState = false;
+					  menu.removeTransitionClass('active');
+					});
+				}
+      });
     });
   </script>
 </body>
