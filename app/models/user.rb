@@ -83,7 +83,12 @@ class User < ActiveRecord::Base
   # ===================
   # = Instance Method =
   # ===================
-
+  
+  #TODO: write this
+  def has_role?(role)
+    true
+  end
+  
   def name
     first_name ? "#{first_name} #{last_name}" : username
   end
