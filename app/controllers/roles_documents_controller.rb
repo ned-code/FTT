@@ -1,5 +1,4 @@
 class RolesDocumentsController < ApplicationController
-  before_filter :authenticate_user!
   
   # GET /roles/documents
   def index

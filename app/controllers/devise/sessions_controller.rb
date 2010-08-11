@@ -1,6 +1,9 @@
 class Devise::SessionsController < ApplicationController
   include Devise::Controllers::InternalHelpers
-  
+
+  skip_before_filter :verify_authenticity_token, :only => [:create]
+  skip_before_filter :http_authenticate, :only => [:create]
+
   before_filter :require_no_authentication, :only => [ :new, :create ]
   
   # GET /user
@@ -20,9 +23,26 @@ class Devise::SessionsController < ApplicationController
   
   # POST /resource/sign_in
   def create
-    resource = warden.authenticate!(:scope => resource_name, :recall => "new")
-    set_flash_message :notice, :signed_in
-    sign_in_and_redirect(resource_name, resource)
+    if params[:app_id].present?
+      if Token::ALLOWED_APPLICATION_IDS.include? params[:app_id]
+        user = User.where(['users.email = ?', params['email']]).first
+        if user.present? && user.valid_password?(params['password'])
+          token = Token.create_or_update!(user.uuid, params[:app_id])
+          render :json => { :user_token => token.token }
+        else
+          render :json => {}, :status => 403
+        end
+
+      else
+        render :json => {}, :status => 403
+      end
+    else
+      verify_authenticity_token
+      http_authenticate
+      resource = warden.authenticate!(:scope => resource_name, :recall => "new")
+      set_flash_message :notice, :signed_in
+      sign_in_and_redirect(resource_name, resource)
+    end
 
     # TODO Rails3 
     # if @user = authenticate(:user)

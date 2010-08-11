@@ -1,6 +1,6 @@
 class DocumentRolesController < ApplicationController
-  before_filter :authenticate_user!, :find_document
-  
+  before_filter :find_document
+
   # GET /documents/:document_id/roles
   def show
     render :json => @document.to_access_json

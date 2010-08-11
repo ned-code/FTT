@@ -25,7 +25,8 @@ class User < ActiveRecord::Base
   has_uuid
   # Include default devise modules.
   # Others available are :lockable, :timeoutable and :activatable.
-  devise :registerable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable, :lockable
+  devise :registerable, :database_authenticatable, :confirmable, :recoverable,
+         :rememberable, :trackable, :validatable, :lockable
 
   attr_accessor :terms_of_service
   attr_accessor :clear_avatar
@@ -65,7 +66,8 @@ class User < ActiveRecord::Base
   has_many :datastore_entries
   has_many :discussions
   has_many :comments
-  
+  has_many :tokens
+
   has_many :friendships, :conditions => { :status => Friendship::ACCEPTED }
   has_many :friends, :through => :friendships
   
@@ -80,6 +82,7 @@ class User < ActiveRecord::Base
   
   has_many :user_lists, :conditions => { :default => false }
   has_one :default_list, :class_name => 'UserList', :foreign_key => :user_id, :conditions => { :default => true }
+  
   # ===================
   # = Instance Method =
   # ===================

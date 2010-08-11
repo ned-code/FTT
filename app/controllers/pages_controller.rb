@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   before_filter :find_document, :find_page
-  before_filter :authenticate_user!, :except => [:show, :callback_thumbnail]
+  skip_before_filter :authenticate_user!, :only => [:show, :callback_thumbnail]
   before_filter :authenticate_if_needed, :only => [:show, :callback_thumbnail]
 
   # access_control do
