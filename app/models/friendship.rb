@@ -86,7 +86,7 @@ private
   end
   
   def assign_friendship_to_default_user_list
-    user_list = UserList.find(:first, :conditions => { :user_id => self.user_id, :default => true})
+    user_list = user.default_list
     UserListsFriend.create!(:user_list_id => user_list.id, :friendship_id => self.id)
   end
 end
