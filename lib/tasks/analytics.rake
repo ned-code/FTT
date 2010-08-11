@@ -224,7 +224,7 @@ namespace :analytics do
       csv << data_array
     end
     #Send the mail
-    Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com, dev@webdoc.com", filename)
+    #Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com, dev@webdoc.com", filename)
     
     # update Google spreadsheet
     ss_session = GoogleSpreadsheet.login("wd.spreadsheet@gmail.com", "_gcwebdoc09")
@@ -290,7 +290,7 @@ namespace :analytics do
       end
     end
     
-    Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com, dev@webdoc.com",filename)
+    #Notifier.deliver_send_daily_report("mathieu.fivaz@webdoc.com, dev@webdoc.com",filename)
   end
   
 end
