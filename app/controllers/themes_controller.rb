@@ -1,5 +1,4 @@
 class ThemesController < ApplicationController
-  # before_filter :authenticate_user!
   
   def index
     @themes = Theme.last_version

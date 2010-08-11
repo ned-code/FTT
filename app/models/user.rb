@@ -28,7 +28,8 @@ class User < ActiveRecord::Base
   has_uuid
   # Include default devise modules.
   # Others available are :lockable, :timeoutable and :activatable.
-  devise :registerable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable, :lockable
+  devise :registerable, :database_authenticatable, :confirmable, :recoverable,
+         :rememberable, :trackable, :validatable, :lockable
 
   attr_accessor :terms_of_service
   attr_accessor :clear_avatar
@@ -67,6 +68,7 @@ class User < ActiveRecord::Base
   has_many :datastore_entries
   has_many :discussions
   has_many :comments
+  has_many :tokens
 
   # ===================
   # = Instance Method =
