@@ -26,6 +26,7 @@ gem 'jammit', :git => 'http://github.com/corneverbruggen/jammit.git'
 gem 'whenever'
 gem 'fastercsv'
 gem 'google-spreadsheet-ruby'
+gem 'memcached'
 
 group :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'
