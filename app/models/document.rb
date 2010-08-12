@@ -368,7 +368,41 @@ class Document < ActiveRecord::Base
   #     Notifier.removed_role_notification(current_user, role, user, self).deliver
   #   end
   # end
-
+  
+  
+  #Actually we look only on the user and public right, not list right
+  def public_editor?
+    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::EDITOR).first.present?
+  end
+  
+  def public_contributor?
+    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::CONTRIBUTOR).first.present?
+  end
+  
+  def public_viewer_comment?
+    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::VIEWER_COMMENT).first.present?
+  end
+  
+  def public_viewer_only
+    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::VIEWER_ONLY).first.present?
+  end
+  
+  def user_editor?(user)
+    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::EDITOR).first.present?
+  end
+  
+  def user_contributor?(user)
+    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::EDITOR).first.present?
+  end
+  
+  def user_viewer_comment?(user)
+    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::EDITOR).first.present?
+  end
+  
+  def user_viewer_only?(user)
+    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::EDITOR).first.present?
+  end
+  
   def deep_clone(creator, title)
     cloned_document = self.clone
     cloned_document.uuid = nil

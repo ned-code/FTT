@@ -84,9 +84,23 @@ class User < ActiveRecord::Base
   # = Instance Method =
   # ===================
   
-  #TODO: write this
+  #used for webdoc role, not for role on a document
   def has_role?(role)
-    true
+    Role.where(:user_id => self.id,
+               :document_id => nil,
+               :item_id => nil,
+               :user_list_id => nil,
+               :name => role.to_s
+              ).present?
+  end
+  
+  def admin?
+    Role.where(:user_id => self.id,
+               :document_id => nil,
+               :item_id => nil,
+               :user_list_id => nil,
+               :name => Role::ADMIN
+              ).present?
   end
   
   def name
