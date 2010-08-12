@@ -528,8 +528,8 @@
 					
 					if ( test ) {
 						return test[1] && test[2] && test[6] ? pass() :
-									 autocomplete ? pass( 'rgb( '+test[3]+', '+test[4]+'%, '+test[5]+'% )' ) :
-									 fail('Do you want <i>rgb( '+test[3]+', '+test[4]+'%, '+test[5]+'% )</i>?') ;
+									 autocomplete ? pass( 'rgb( '+test[3]+', '+test[4]+', '+test[5]+' )' ) :
+									 fail('Do you want <i>rgb( '+test[3]+', '+test[4]+', '+test[5]+' )</i>?') ;
 					}
 					
 					test	= regex.hslaColor.exec( value );

@@ -108,42 +108,38 @@ body.full_view {
 /* Manage layering of panels. Active panels 
    slide over other panels as they come into focus */
 
-.browser_panel,
 .inspector_panel,
 .comments_panel,
 .activity_panel,
-.my_content_panel,
+.mystuff_panel,
 .packages_panel,
-.browse_web_panel,
-.page_inspector_panel,
-.document_inspector_panel,
-.apps_panel,
-.side_panel {
+.browse_panel,
+.apps_panel {
   z-index: 4;
 }
-.browser_panel.active,
+
 .inspector_panel.active,
 .comments_panel.active,
 .activity_panel.active,
-.my_content_panel.active,
+.mystuff_panel.active,
 .packages_panel.active,
-.browse_web_panel.active,
-.page_inspector_panel.active,
-.document_inspector_panel.active,
-.apps_panel.active,
-.side_panel.active {
+.browse_panel.active,
+.apps_panel.active {
   z-index: 5;
 }
+
 .sharing_panel,
 .pages_panel {
   z-index: 1;
 }
+
 .sharing_panel.active,
 .pages_panel.active {
   display:block;
   opacity:1;
   z-index: 2;
 }
+
 .tools_panel,
 .controls_panel {
   z-index: 3000000;
@@ -152,61 +148,47 @@ body.full_view {
 /* Manage show/hide of panels between page view
    and full view. */
 
-.browser_panel,
 .inspector_panel,
 .comments_panel,
 .activity_panel,
-.my_content_panel,
+.mystuff_panel,
 .packages_panel,
-.browse_web_panel,
-.page_inspector_panel,
-.document_inspector_panel,
+.browse_panel,
 .apps_panel,
-.pages_panel
-/*.sharing_panel,*/ {
+.pages_panel {
   /* It would be great to make this happen after the fade... */
   display: none;
   opacity: 0;
 }
 
-.browser_panel.active,
 .inspector_panel.active,
 .comments_panel.active,
-.my_content_panel.active,
+.mystuff_panel.active,
 .packages_panel.active,
-.browse_web_panel.active,
-.page_inspector_panel.active,
-.document_inspector_panel.active,
+.browse_panel.active,
 .apps_panel.active,
 .activity_panel.active{
   display: block;
   opacity: 1;
 }
 
-.full_view .browser_panel,
 .full_view .inspector_panel,
 .full_view .comments_panel,
 .full_view .activity_panel,
-.full_view .my_content_panel,
+.full_view .mystuff_panel,
 .full_view .packages_panel,
-.full_view .browse_web_panel,
-.full_view .document_inspector_panel,
-.full_view .page_inspector_panel,
 .full_view .apps_panel
 /*.full_view .sharing_panel,*/ {
   display: block;
   opacity: 0;
 }
 
-.full_view .browser_panel.active,
 .full_view .inspector_panel.active,
 .full_view .comments_panel.active,
 .full_view .activity_panel.active,
-.full_view .my_content_panel.active,
+.full_view .mystuff_panel.active,
 .full_view .packages_panel.active,
-.full_view .browse_web_panel.active,
-.full_view .page_inspector_panel.active,
-.full_view .document_inspector_panel.active,
+.full_view .browse_panel.active,
 .full_view .apps_panel.active
 /*.full_view .sharing_panel.active,*/{
   opacity: 1;
@@ -214,7 +196,9 @@ body.full_view {
 
 /* Panel types */
 
-.side_panel {
+.sidebar {
+	position: absolute;
+	
   overflow: auto; 
 
   right: -2%;
@@ -226,7 +210,7 @@ body.full_view {
   min-height: 20%;
 }
 
-.full_view .side_panel {
+.full_view .sidebar {
   max-height: 100%;
   
   right: 0;
@@ -235,7 +219,7 @@ body.full_view {
   background-color: white;
 }
 
-.full_view .side_panel.active {
+.full_view .sidebar.active {
   margin-right: 0;
 }
 
@@ -255,14 +239,11 @@ body.full_view {
   padding: 0.3333em;
 }
 
-.browser_panel,
 .inspector_panel,
 .comments_panel,
-.my_content_panel,
+.mystuff_panel,
 .packages_panel,
-.browse_web_panel,
-.page_inspector_panel,
-.document_inspector_panel,
+.browse_panel,
 .apps_panel,
 .activity_panel {
   width: 288px;
@@ -272,27 +253,21 @@ body.full_view {
   bottom: 0;
 }
 
-.browser_panel.active,
 .inspector_panel.active,
 .comments_panel.active,
 .activity_panel.active,
-.my_content_panel.active,
+.mystuff_panel.active,
 .packages_panel.active,
-.browse_web_panel.active,
-.page_inspector_panel.active,
-.document_inspector_panel.active,
+.browse_panel.active,
 .apps_panel.active{
 
 }
 
-.full_view .browser_panel,
 .full_view .inspector_panel,
 .full_view .comments_panel,
-.full_view .my_content_panel,
+.full_view .mystuff_panel,
 .full_view .packages_panel,
-.full_view .browse_web_panel,
-.full_view .page_inspector_panel,
-.full_view .document_inspector_panel,
+.full_view .browse_panel,
 .full_view .apps_panel,
 .full_view .activity_panel {
   right: 0;
@@ -300,14 +275,11 @@ body.full_view {
   bottom: 2.6667em;
 }
 
-.full_view .browser_panel.active,
 .full_view .inspector_panel.active,
 .full_view .comments_panel.active,
-.full_view .my_content_panel.active,
+.full_view .mystuff_panel.active,
 .full_view .packages_panel.active,
-.full_view .browse_web_panel.active,
-.full_view .page_inspector_panel.active,
-.full_view .document_inspector_panel.active,
+.full_view .browse_panel.active,
 .full_view .apps_panel.active,
 .full_view .activity_panel.active {
   margin-right: 0;
@@ -454,6 +426,25 @@ body.full_view {
 	margin-left: -5em;
 }
 
+.author_dropdown_index {
+	top: 2em;
+	margin-top: 0.3333em;
+	margin-bottom: 0.3333em;
+}
+
+.author_dropdown_index>li {
+	margin-bottom: 0.3333em;
+	white-space: nowrap;
+}
+
+.author_dropdown_index {
+	height: 0;
+	-webkit-transition: height 0.08s linear;
+}
+
+.author_dropdown_index.active {
+	height: 2.6667em;
+}
 
 /* .button extensions ------------------------- */
 

@@ -90,7 +90,8 @@ WebDoc.DrageAndDropController = {
           if(pos && params && params.action === 'create') {
             WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
             var target = jQuery(evt.target);
-            if(target && target.attr('class') === 'wd_discussion'){
+            
+            if( target && target.hasClass('wd_discussion') ) {
               WebDoc.application.boardController.selectDiscussionView(target.parent().parent().data('discussionView'), false, true);
             }
             else {

@@ -35,8 +35,16 @@
       
       <!-- panels -->
       
-      <div class="side_panel panel">
-        <h2>Authors</h2>
+      <div class="sidebar">
+        <header class="horizontal">
+        	<h2>Authors</h2>
+        	<div style="position: relative;">
+        		<a href="#dropdown" class="dropdown_button button" data-for=".author_dropdown_index">actions</a>
+        		<ul class="vertical author_dropdown_index dropdown_index buttons_index index" id="#thing_to_do">
+        			<li><a href="#thing" class="button">Thing to do</a></li>
+        		</ul>
+        	</div>
+        </header>
         <% @document.editors.each do |editor| %>
           <% if editor == current_user %>
             <%= render :partial => "followships/card", :locals => { :user => editor } %>

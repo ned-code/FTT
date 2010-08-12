@@ -51,7 +51,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
       }.pBind(this));
     
     // handle possible actions 
-    $("#app_details .actions").click(function(event){
+    this.detailsView.find(".actions").click(function(event){
       
       event.preventDefault();
       ddd(event.target);
@@ -241,6 +241,6 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   },
 
   _hideAll: function(){
-    $('.app-tab').hide();
+    this.detailsView.addClass('hidden');
   }
 });

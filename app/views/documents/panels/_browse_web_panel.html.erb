@@ -1,4 +1,6 @@
-<div class="browse_web_panel panel" id="web">
+<% if !Rails.env.production? %><!-- browse panel --><% end %>
+
+<div class="browse_panel panel" id="web">
 	<header>
   	<h3>Browse the web</h3>
   </header>

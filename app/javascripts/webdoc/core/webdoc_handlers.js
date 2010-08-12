@@ -109,6 +109,7 @@ WebDoc.handlers = {
     'draw':                 function(e) { WebDoc.application.boardController.toggleDrawTool(); },
     'insert-html':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.htmlSnipplet ); },
     'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
+    'textbox':              function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textboxTool ); },
     'insert-iframe':        function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.iframeTool ); },
     'insert-app':           function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.appTool ); },
     

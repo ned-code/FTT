@@ -32,6 +32,10 @@ stylesheets:
     - public/css/webdoc/editor.layout.css
     - public/css/webdoc/editor.typography.css
     
+    - public/css/webdoc/panel.color.css
+    - public/css/webdoc/panel.layout.css
+    - public/css/webdoc/panel.typography.css
+    
     - public/css/webdoc/webdoc.color.css
     - public/css/webdoc/webdoc.layout.css
     - public/css/webdoc/webdoc.typography.css
@@ -145,6 +149,7 @@ javascripts:
     - app/javascripts/webdoc/tools/iframe_tool.js
     - app/javascripts/webdoc/tools/app_tool.js
     - app/javascripts/webdoc/tools/text_tool.js
+    - app/javascripts/webdoc/tools/textbox_tool.js
     - app/javascripts/webdoc/tools/text_tool/*.js
     - app/javascripts/webdoc/controllers/*.js  
     - app/javascripts/webdoc/controllers/right_bar_controllers/*.js

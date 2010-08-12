@@ -1,3 +1,5 @@
+<% if !Rails.env.production? %><!-- inspector panel --><% end %>
+
 <div id="item_inspector" class='inspector_panel panel'>
   <%= render :partial => 'documents/inspectors/text_inspector' %>
   <%= render :partial => 'documents/inspectors/draw_inspector' %>

@@ -1,0 +1,67 @@
+/* .index extensions */
+
+.apps_index {
+  margin: 0 auto;
+  padding: 12px 0 0 12px;
+}
+
+.wee_thumbs_index {
+  padding: 18px 0 0 18px;
+  width: 282px;
+}
+
+.wee_thumbs_index>li {
+  margin-right: 18px;
+  margin-bottom: 18px;
+}
+
+.med_thumbs_index {
+  padding: 20px 0 0 20px;
+  width: 272px;
+}
+
+.med_thumbs_index>li {
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.big_thumbs_index {
+  width: 280px;
+  padding: 16px 0 0 16px;
+}
+
+.big_thumbs_index>li {
+  margin-right: 16px;
+  margin-bottom: 16px;
+}
+
+/* .thumb extensions */
+
+.big_thumb {
+  width: 72px;
+  padding-top: 72px;
+  background-size: 72px 72px;
+}
+.med_thumb {
+  width: 64px;
+  padding-top: 64px;
+  background-size: 64px 64px;
+  
+  /* Make the text show below the thumb */
+  overflow: visible;
+  white-space: nowrap;
+  text-align: center;
+  margin-bottom: 1em;
+  line-height: 2.3333em;
+  
+  font-size: 0.9167em;
+  color: white;
+  
+  /* Needs index of 240 */
+}
+.wee_thumb {
+  width: 48px;
+  padding-top: 48px;
+  background-size: 48px 48px;
+  /* Needs index of 252 */
+}

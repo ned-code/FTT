@@ -1,5 +1,6 @@
 
 WebDoc.ITEM_TYPE_TEXT    = "text";
+WebDoc.ITEM_TYPE_TEXTBOX = "textbox";
 WebDoc.ITEM_TYPE_IMAGE   = "image";
 WebDoc.ITEM_TYPE_DRAWING = "drawing";
 WebDoc.ITEM_TYPE_WIDGET  = "widget";

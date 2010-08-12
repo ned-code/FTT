@@ -82,6 +82,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
       WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
       WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
+      WebDoc.application.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox']", "textbox" );
       WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
       WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
       WebDoc.application.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "insert-app" );

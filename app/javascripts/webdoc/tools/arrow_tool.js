@@ -116,13 +116,12 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
         type,
         target = jQuery(e.target);
 
-    if (target && target.get(0) && target.get(0).tagName == "polyline") {
+    if ( target.length && target[0].tagName === "polyline" ) {
       clickedItemView = target.data("itemView");
       type = 'polyline';
     }
-    else if ( target && target.get(0) && target.get(0).className === "wd_discussion" ) {
-      itemWrap = target.closest(".wd_discussion_wrap");
-      clickedItemView = itemWrap.data("discussionView");
+    else if ( target.length && target.hasClass("wd_discussion") ) {
+      clickedItemView = target.data("discussionView");
       type = 'discussion';
     }
     else {

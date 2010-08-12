@@ -42,7 +42,7 @@ WebDoc.RightBarController = $.klass({
     ];
     this.bottomPanelsArray = ['social', 'pages_panel'];
     
-    // Some of these are lazy loaded, and some are not -
+    // Some of these are lazily loaded, and some are not -
     // pageInspector does not work if you try loading it now.
     
     var itemInspector = new WebDoc.InspectorController();

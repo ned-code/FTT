@@ -9,10 +9,14 @@ WebDoc.DiscussionView = $.klass({
     this.pageView = pageView;
     this.discussion = discussion;
 
-    this.domNode = $("<div/>", { 'class':'wd_discussion_wrap' }).css('zIndex', '1500000').css('height', '16px').css('width', '16px').css('position', 'absolute');
-    this.domNode.id(this.discussion.uuid());
-    this.domNode.append(this.createDiscussionDomNode());
-    this.domNode.data("discussionView", this);
+    this.domNode = $("<a/>", {
+    	'class': 'wd_discussion comment_button button',
+    	href: '#webdoc_discussion',
+    	id: this.discussion.uuid(),
+    	text: this.discussion.comments.length,
+    	title: this.discussion.comments.length + ' comments'
+    })
+    .data( "discussionView", this );
 
     this.pageView.discussionDomNode.prepend(this.domNode);
 
@@ -20,16 +24,6 @@ WebDoc.DiscussionView = $.klass({
 
     this._moveToStoredPosition();
     this._initDrag();
-  },
-
-  createDiscussionDomNode: function() {
-    var discussionNode = jQuery('<div/>', { 'style': 'width:16px; height:16px;' });    
-    this._icon = jQuery('<img/>', { 'alt':'comment', 'src':'/images/icons/chat_16.png' });
-    discussionNode.append(this._icon);
-    discussionNode.append(jQuery('<div/>', { 'style': 'top:3px; width:16px; height:13px; overflow: hidden; position:absolute; font-size: 8px; text-align:center; color: white;' }).text(this.discussion.comments.length));
-    // add a div to catch click with a class wd_discussion
-    discussionNode.append(jQuery('<div/>', { 'style': 'top:0px; width:16px; height:16px; position:absolute;', 'class': 'wd_discussion' }));
-    return discussionNode;
   },
 
   refreshDicussionDomNode: function() {

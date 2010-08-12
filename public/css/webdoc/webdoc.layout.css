@@ -1,3 +1,24 @@
+/* .button extensions */
+
+.webdoc .comment_button {
+	width: 1.6667em;
+	height: 1.6667em;
+	-webkit-border-radius: 0.8333em;
+	-moz-border-radius:    0.8333em;
+	border-radius:         0.8333em;
+	padding: 0.3333em;
+	text-align: center;
+	line-height: 0.9em;
+	font-size: 0.83333em;
+	
+	border: 1px solid rgb(180,180,180);
+}
+
+
+
+
+/* OLD STUFF ***********************************/
+
 .item_thumb {
   overflow: hidden;
   -webkit-box-sizing: border-box;

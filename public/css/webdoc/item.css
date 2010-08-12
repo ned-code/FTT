@@ -247,14 +247,6 @@
   z-index:1000000 !important;  
 }
 
-form.content .section {
-  padding:8px 0;
-}
-
-form.content .entry {
-  padding:5px 0;
-}
-
 .inspector-title {
     color: white;
     line-height: 32px;
