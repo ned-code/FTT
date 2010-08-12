@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/rails/exception_notification
+  revision: 48cf433
+  branch: master
+  specs:
+    exception_notification (1.0.0)
+
+GIT
   remote: http://github.com/corneverbruggen/jammit.git
   revision: 829ffeb
   specs:
@@ -17,17 +24,17 @@ GIT
 
 GIT
   remote: http://github.com/justinfrench/formtastic.git
-  revision: a35c7a5
+  revision: 42b4eb8
   branch: rails3
   specs:
-    formtastic (1.0.0.rc)
+    formtastic (1.0.0)
       actionpack (>= 2.3.0)
       activesupport (>= 2.3.0)
       i18n (>= 0.4.0)
 
 GIT
   remote: http://github.com/mislav/will_paginate.git
-  revision: fccbb0b
+  revision: 3615938
   branch: rails3
   specs:
     will_paginate (3.0.pre2)
@@ -111,7 +118,7 @@ GEM
     google-spreadsheet-ruby (0.1.1)
       hpricot (>= 0.3)
       oauth (>= 0.3.6)
-    haml (3.0.15)
+    haml (3.0.16)
     highline (1.6.1)
     hirb (0.3.2)
     hoe (2.6.1)
@@ -119,8 +126,8 @@ GEM
       rubyforge (>= 2.0.4)
     hpricot (0.8.2)
     i18n (0.4.1)
-    json (1.4.4)
-    json_pure (1.4.4)
+    json (1.4.6)
+    json_pure (1.4.6)
     launchy (0.3.7)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
@@ -220,6 +227,7 @@ DEPENDENCIES
   capybara
   devise!
   erubis
+  exception_notification!
   factory_girl
   fastercsv
   formtastic!

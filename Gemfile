@@ -19,15 +19,14 @@ gem "mysql"
 gem 'rack-debug'
 gem 'nokogiri'
 gem 'acl9'
-gem 'formtastic', :git => "http://github.com/justinfrench/formtastic.git", :branch => "rails3"
+gem 'formtastic', :git => 'http://github.com/justinfrench/formtastic.git', :branch => "rails3"
 gem 'erubis'
 # http://github.com/documentcloud/jammit/issues#issue/53
 gem 'jammit', :git => 'http://github.com/corneverbruggen/jammit.git'
 gem 'whenever'
 gem 'fastercsv'
 gem 'google-spreadsheet-ruby'
-
-# if prob: remove old memcached and sudo apt-get install libsasl2-2 libsasl2-dev
+gem 'exception_notification', :git => 'git://github.com/rails/exception_notification', :branch => 'master', :require => 'exception_notifier'
 gem 'memcache'
 
 group :development do
