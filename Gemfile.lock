@@ -137,7 +137,7 @@ GEM
       activesupport (>= 2.3.6)
       mime-types
       treetop (>= 1.4.5)
-    memcache (1.2.12)
+    memcache-client (1.8.5)
     mime-types (1.16)
     mongrel (1.1.5)
       cgi_multipart_eof_fix (>= 2.4)
@@ -238,7 +238,7 @@ DEPENDENCIES
   jammit!
   json
   launchy
-  memcache
+  memcache-client
   mime-types
   mongrel
   mysql

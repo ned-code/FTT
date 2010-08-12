@@ -27,7 +27,7 @@ gem 'whenever'
 gem 'fastercsv'
 gem 'google-spreadsheet-ruby'
 gem 'exception_notification', :git => 'git://github.com/rails/exception_notification', :branch => 'master', :require => 'exception_notifier'
-gem 'memcache'
+gem 'memcache-client'
 
 group :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'
