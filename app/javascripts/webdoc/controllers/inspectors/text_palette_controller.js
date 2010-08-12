@@ -273,8 +273,12 @@ WebDoc.TextPaletteController = jQuery.klass({
     });
     
     jQuery('#toolbar_panel_button_valign').bind('click', function(e){
-      var pos = jQuery("#toolbar_panel_button_valign").position();
-      jQuery('#toolbar_panel_valign_block').show().css('zIndex', 50000).css('left', pos.left + 3).css('top', pos.top + 23);
+      if(jQuery('#toolbar_panel_valign_block').css('display') == 'none'){
+        var pos = jQuery("#toolbar_panel_button_valign").position();
+        jQuery('#toolbar_panel_valign_block').show().css('zIndex', 50000).css('left', pos.left + 3).css('top', pos.top + 23);
+      } else {
+        jQuery('#toolbar_panel_valign_block').hide();
+      }
     });
     
     
@@ -401,12 +405,14 @@ WebDoc.TextPaletteController = jQuery.klass({
     jQuery('#colorpickerHolder1 .colorpicker_current_color').unbind('click').bind('click',function(){
       if($(this).css('backgroundColor')!="transparent"){
         $('#colorpickerHolder1').ColorPickerSetColor(thobj.RGBcss2Hex($(this).css('backgroundColor'))); 
+        $('#toolbar_panel_button_hiliteColor>div').css('backgroundColor', '#'+thobj.RGBcss2Hex($(this).css('backgroundColor')));
       }
     });
     
     jQuery('#colorpickerHolder2 .colorpicker_current_color').unbind('click').bind('click',function(){
       if($(this).css('backgroundColor')!="transparent"){
         $('#colorpickerHolder2').ColorPickerSetColor(thobj.RGBcss2Hex($(this).css('backgroundColor'))); 
+        $('#toolbar_panel_button_foreColor>div').css('backgroundColor', '#'+thobj.RGBcss2Hex($(this).css('backgroundColor')));
       }
     });
     
