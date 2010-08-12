@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   
   rescue_from Acl9::AccessDenied, :with => :forbidden_access
 
-  include ExceptionNotification::Notifiable
+  # include ExceptionNotification::Notifiable
 
   before_filter :set_first_visit_time
   before_filter :token_authenticate
