@@ -19,6 +19,8 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
     // simlulate page changement to load discussion for the first page
     this.currentPageChanged();
+    
+    this.is_display = false;
   },
 
   buttonSelector: function() {

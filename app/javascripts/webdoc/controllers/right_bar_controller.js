@@ -141,6 +141,18 @@ WebDoc.RightBarController = $.klass({
     }
   },
   
+  _showController: function(controller){    
+    if(controller.is_display){
+      controller.is_display = false;
+      controller.domNode.removeClass(this.ACTIVE_CLASS);
+    }
+    else
+    {
+      controller.is_display = true;
+      controller.domNode.addClass(this.ACTIVE_CLASS);
+    }
+  },
+  
   //Hide all the panel that are on the right of the webdoc
   _hideRightPanels: function(){
     jQuery(this._stringSelectorFromArray(this.rightPanelsArray)).removeClass(this.ACTIVE_CLASS);
@@ -220,7 +232,7 @@ WebDoc.RightBarController = $.klass({
 
   showDiscussionsPanel: function() {
     this.selectInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
-    this._showPanel('comments_panel');
+    this._showController(this._inspectorsControllers[WebDoc.PanelInspectorType.DISCUSSIONS])
   },
   
   showPagesPanel: function(){
