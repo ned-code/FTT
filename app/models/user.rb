@@ -98,7 +98,7 @@ class User < ActiveRecord::Base
   end
   
   def admin?
-    Role.where(:user_id => self.id,
+    @is_admin ||= Role.where(:user_id => self.id,
                :document_id => nil,
                :item_id => nil,
                :user_list_id => nil,

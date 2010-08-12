@@ -372,35 +372,47 @@ class Document < ActiveRecord::Base
   
   #Actually we look only on the user and public right, not list right
   def public_editor?
-    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::EDITOR).first.present?
+    self.find_public_roles.include? Role::EDITOR
   end
   
   def public_contributor?
-    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::CONTRIBUTOR).first.present?
+    self.find_public_roles.include? Role::CONTRIBUTOR
   end
   
   def public_viewer_comment?
-    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::VIEWER_COMMENT).first.present?
+    self.find_public_roles.include? Role::VIEWER_COMMENT
   end
   
-  def public_viewer_only
-    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::VIEWER_ONLY).first.present?
+  def public_viewer_only?
+    self.find_public_roles.include? Role::VIEWER_ONLY
   end
   
   def user_editor?(user)
-    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::EDITOR).first.present?
+    self.find_user_roles(user).include? Role::EDITOR
   end
   
   def user_contributor?(user)
-    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::EDITOR).first.present?
+    self.find_user_roles(user).include? Role::CONTRIBUTOR
   end
   
   def user_viewer_comment?(user)
-    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::EDITOR).first.present?
+    self.find_user_roles(user).include? Role::VIEWER_COMMENT
   end
   
   def user_viewer_only?(user)
-    Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil, :name => Role::EDITOR).first.present?
+    self.find_user_roles(user).include? Role::VIEWER_ONLY
+  end
+  
+  def find_public_roles
+    @public_roles_names ||= Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil).select('roles.name').map({|r| r.name})
+  end
+  
+  def find_user_roles(user)
+    @user_roles_names ||= Role.where(:document_id => self.id, :user_id => user.id, :user_list_id => nil).select('roles.name').map({|r| r.name})
+  end
+  
+  def creator?(user)
+    user == self.creator
   end
   
   def deep_clone(creator, title)
