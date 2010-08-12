@@ -11,7 +11,7 @@
 
 .horizontal>* {
     display: inline-block;
-    vertical-align: bottom;
+    vertical-align: top;
     height: 100%;
 }
 

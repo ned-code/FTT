@@ -99,14 +99,17 @@ WebDoc.PageView = $.klass({
   },
   
   setLoading: function(state) {
+    var loadingNode = WebDoc.application.boardController.loadingNode;
+    
     this._loading = state;
+    
     if (state) {
       this.itemDomNode.hide();
-      WebDoc.application.boardController.loadingNode.addClass('loading');
+      loadingNode.addTransitionClass('loading');
     }  
     else {
       this.itemDomNode.show();
-      WebDoc.application.boardController.loadingNode.removeClass('loading');
+      loadingNode.removeTransitionClass('loading');
     }
   },
   

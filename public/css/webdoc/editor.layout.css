@@ -319,10 +319,7 @@ body.full_view {
   bottom: 2.6667em;
   width: 100%;
   height: 96px;
-  margin-bottom: -128px;
-}
-.pages_panel {
-  height: 0px; /* set 0 for the moment otherwise it above full button */ 
+  margin-bottom: 0;
 }
 .sharing_panel {
   height: 96px;
@@ -333,10 +330,29 @@ body.full_view {
   margin-bottom: 0;
 }
 
-/*.full_view .pages_panel,
-.full_view .sharing_panel {
-  height: 0;
-}*/
+.panel>header {
+  color: white;
+  background: rgba(0,0,0,0.4);
+  text-align: center;
+  margin-bottom: 0;
+  height: 2.6667em;
+}
+
+.panel>header h3 {
+	font-size: 1.6667em;
+	line-height: 1.6;
+	font-weight: normal;
+}
+.panel .content {
+  position: absolute;
+  /* top must match height of header */
+  top: 2.6667em;
+  left: 0;
+  width: 100%;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
 /* .index extensions ---------------------- */
 
@@ -427,9 +443,15 @@ body.full_view {
   right: 0.3333em;
 }
 
-.footpanel_buttons_index {
+.pages_buttons_index {
   position: absolute;
-  right: 5em;
+  left: 0.3333em;
+}
+
+.comments_buttons_index {
+	position: absolute;
+	left: 50%;
+	margin-left: -5em;
 }
 
 
@@ -439,37 +461,12 @@ body.full_view {
   width: 2em;
   /* hide button text */
   padding-top: 2em;
-  background-position: 0 0;
 }
 
-.panel_button.active {
-  background-position: 0 -24px;
-}
-
-.panel_button[href='#toggle_sharing_panel'] {
-  display: none;
-}
-
-.full_view .panel_button[href='#toggle_sharing_panel'] {
-  display: inline-block;
-}
-
-.app_button {
-  background-position: 0 0;
-}
-
-.app_button.active {
-  background-position: 0 -24px;
-}
-
-.control_button {
-  background-image: url('../images/control_buttons.png');
-  background-position: 0 0;
-}
-
-.control_button.active,
-.full_view a[href='#full'].control_button {
-  background-position: 0 -24px;
+.view_button {
+  width: 2em;
+  /* hide button text */
+  padding-top: 2em;
 }
 
 

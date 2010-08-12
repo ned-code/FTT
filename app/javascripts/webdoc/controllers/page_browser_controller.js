@@ -35,13 +35,6 @@ WebDoc.PageBrowserController = $.klass({
     this._changedFromDrag = false;
     this._stateThumbs = true;
     this._document = null;
-    
-    // defined in CSS
-    this._panelHeight = this.domNode.outerHeight();
-    
-    ddd("[PageBrowserController] Pages panel width: " + this._pagesPanelWidth);
-    ddd("[PageBrowserController] panel height: " + this._panelHeight);
-    
     this.visible = true;
     this.pageMap = {};
     
@@ -54,11 +47,11 @@ WebDoc.PageBrowserController = $.klass({
     //   that.hide();
     // });
     this.show();
-    this.domNode
-    .find('.content')
-    .scrollbars({
-      x: this.domNode.find('.x_scrollbar')
-    });
+    //this.domNode
+    //.find('.content')
+    //.scrollbars({
+    //  x: this.domNode.find('.x_scrollbar')
+    //});
   },
   
   setDocument: function(document) {

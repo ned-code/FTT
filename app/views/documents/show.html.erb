@@ -21,7 +21,7 @@
         </div>
       </div>
       
-     <!-- controls -->
+     <!-- ui elements -->
      
      <!--div id="webdoc_x_scrollbar" class="x_scrollbar_container">
        <div class="x_scrollbar scrollbar"></div>
@@ -88,23 +88,19 @@
       </div>
       
       <%= render "documents/panels/toolbar_panel" %>
-      
-      <div class="controls_panel panel">
-        <ul class="horizontal footpanel_buttons_index buttons_index index">
-          <li><a class="panel_button button" href="#toggle_sharing_panel" title="Toggle Sharing Panel">Sharing Panel</a></li
-         ><li><a class="panel_button button" href="#toggle_pages_panel" title="Toggle Pages Panel">Pages Panel</a></li>
-        </ul>
-        
-        <ul class="horizontal view_index index" id="edit_tools">
-          <li><a class="control_button button" href="#full" title="Full view">Full view</a></li>
-        </ul>
-      </div>
-      
+      <%= render "documents/panels/controls_panel" %>
+      <%= render "documents/inspectors/document_inspector" %>
+      <%= render "documents/panels/discussions_panel" %>
+      <%= render "documents/panels/my_content_panel" %>
+      <%= render "documents/panels/apps_panel" %>
+      <%= render "documents/panels/packages_panel" %>
+      <%= render "documents/panels/browse_web_panel" %>
+      <%= render "documents/inspectors/document_inspector" %>
+      <%#= render :partial => "documents/panels/social_panel" %>
+  		<%= render "documents/inspectors/page_inspector" %>
+      <%= render "documents/panels/pages_panel" %>
       <%= render "documents/panels/right_panel" %>
-  
     </div>
-        
-    <%= render "documents/panels/pages_panel" %>
   </section>
   
   <%= render "relatedcontent", :documents => @related_documents %>

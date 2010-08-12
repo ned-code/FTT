@@ -1,17 +1,13 @@
- /**
- * @author Stephen Band / Julien Bachmann
- */
+// Global event handlers
 
 WebDoc.handlers = {
 
   initialise: function(){
-    this.panelNode = jQuery('.panel');
     
-    this.addDocumentHandlers( 'click', this._documentHandlers );
-    this.addPanelHandlers( 'click', this._panelHandlers );
+    jQuery(document).delegate('a', 'click', this._makeLinkHandler( this._documentHandlers ) );
+    jQuery('.panel').delegate('a', 'click', this._makeLinkHandler( this._panelHandlers ) );
+    
     this.addCenterCellHandlers();
-
-    jQuery(".wd_discussion_add").bind("dragstart", this._prepareCreateDiscussionDragStart.pBind(this));
     
     // Global form validation
     jQuery(document)
@@ -22,7 +18,8 @@ WebDoc.handlers = {
           e.preventDefault();
         }
       });
-    });
+    })
+    .delegate( 'a[href=#add_discussion]', 'dragstart', this._prepareCreateDiscussionDragStart.pBind(this));
   },
   
   regex: jQuery.regex,
@@ -30,7 +27,7 @@ WebDoc.handlers = {
   _makeLinkHandler: function( obj, context ){
     var regex = this.regex;
     
-    // Curry linkHandler using this scope
+    // Curry link handler using this scope
     return function(e){
       var link = jQuery(this),
           href = link.attr('href'),
@@ -44,20 +41,19 @@ WebDoc.handlers = {
         obj[match[1]].call( context||this, e );
         e.preventDefault();
       }
-      else {
-        ddd( '[Handler] no handler for "' + match + '"' );
-      }
     };
   },
   
-  addPanelHandlers: function( eventType, obj, context ){
-    this.panelNode
-    .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
+  addPanelHandlers: function( eventType, obj ){
+  	if ( /click/.exec( eventType ) ) {
+    	jQuery.extend( this._panelHandlers, obj );
+  	}
   },
   
-  addDocumentHandlers: function( eventType, obj, context ){
-    jQuery(document)
-    .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
+  addDocumentHandlers: function( eventType, obj ){
+    if ( /click/.exec( eventType ) ) {
+    	jQuery.extend( this._documentHandlers, obj );
+  	}
   },
 
   addCenterCellHandlers: function(){
@@ -146,9 +142,9 @@ WebDoc.handlers = {
   
   // Publicly accessible actions (to be bound to document)
   _documentHandlers: {
-    'webdoc-prev-page':     function(e) { WebDoc.application.pageEditor.prevPage(); },
-    'webdoc-next-page':     function(e) { WebDoc.application.pageEditor.nextPage(); },
-    'webdoc-close':         function(e) { WebDoc.application.pageEditor.closeDocument(); }
+    'webdoc_prev_page':     function(e) { WebDoc.application.pageEditor.prevPage(); },
+    'webdoc_next_page':     function(e) { WebDoc.application.pageEditor.nextPage(); },
+    'webdoc_close':         function(e) { WebDoc.application.pageEditor.closeDocument(); }
   },
 
   _prepareCreateDiscussionDragStart: function(event) {

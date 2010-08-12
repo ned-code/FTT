@@ -15,13 +15,13 @@ WebDoc.ThemesController = jQuery.klass({
     this._previousTheme;
     
     // Delegate event handling
-    WebDoc.handlers.addPanelHandlers( 'click', {
-      'themes-chooser': this.handlers.openChooser
-    }, this );
-    
-    WebDoc.handlers.addDocumentHandlers( 'click', {
-      'theme': this.handlers.changeTheme
-    }, this );
+    //WebDoc.handlers.addPanelHandlers( 'click', {
+    //  'themes-chooser': this.handlers.openChooser
+    //}, this );
+    //
+    //WebDoc.handlers.addDocumentHandlers( 'click', {
+    //  'theme': this.handlers.changeTheme
+    //}, this );
     
     // Get themes and populate themes list
     WebDoc.ServerManager.getRecords( WebDoc.Theme, null, function( themes ){

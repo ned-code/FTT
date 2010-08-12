@@ -106,7 +106,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
             WebDoc.application.rightBarController.showMyContent();
           }
           
-          WebDoc.application.boardController.loadingNode.removeClass('loading');
+          WebDoc.application.boardController.loadingNode.removeTransitionClass('loading');
           
           //jQuery('#document_loading').remove();
           jQuery('body').trigger('webdocready');   
