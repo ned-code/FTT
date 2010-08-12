@@ -280,94 +280,94 @@ class Document < ActiveRecord::Base
     result
   end
   
-  # No more used in current GUI
-  def create_accesses(current_user, accesses = {})
-    accesses_parsed = JSON.parse(accesses);
-    readers = accesses_parsed['readers']
-    editors = accesses_parsed['editors']
-    readers_message = accesses_parsed['readersMessage']
-    editors_message = accesses_parsed['editorsMessage']
-    
-    readers.each do |user_email|
-      user = User.find_by_email(user_email.strip)
-      if user 
-        if !user.has_role?("reader", self)
-          user.has_only_reader_role!(self)
-          Notifier.role_notification(current_user, "reader", user, self, readers_message).deliver
-        end
-      else
-        add_unvalid_email_to_array(user_email)
-      end
-    end
-    editors.each do |user_email|
-      user = User.find_by_email(user_email)
-      if user
-        if !user.has_role?("editor", self)
-          user.has_only_editor_role!(self)
-          Notifier.role_notification(current_user, "editor", user, self, editors_message).deliver
-        end
-      else
-        add_unvalid_email_to_array(user_email)
-      end
-    end
-  end
+  # # No more used in current GUI
+  #   def create_accesses(current_user, accesses = {})
+  #     accesses_parsed = JSON.parse(accesses);
+  #     readers = accesses_parsed['readers']
+  #     editors = accesses_parsed['editors']
+  #     readers_message = accesses_parsed['readersMessage']
+  #     editors_message = accesses_parsed['editorsMessage']
+  #     
+  #     readers.each do |user_email|
+  #       user = User.find_by_email(user_email.strip)
+  #       if user 
+  #         if !user.has_role?("reader", self)
+  #           user.has_only_reader_role!(self)
+  #           Notifier.role_notification(current_user, "reader", user, self, readers_message).deliver
+  #         end
+  #       else
+  #         add_unvalid_email_to_array(user_email)
+  #       end
+  #     end
+  #     editors.each do |user_email|
+  #       user = User.find_by_email(user_email)
+  #       if user
+  #         if !user.has_role?("editor", self)
+  #           user.has_only_editor_role!(self)
+  #           Notifier.role_notification(current_user, "editor", user, self, editors_message).deliver
+  #         end
+  #       else
+  #         add_unvalid_email_to_array(user_email)
+  #       end
+  #     end
+  #   end
   
-  def create_role_for_users(current_user, accesses = {})
-    accesses_parsed = JSON.parse(accesses);
-    role = accesses_parsed['role']
-    recipients = accesses_parsed['recipients']
-    message = accesses_parsed['message']
-    
-    recipients.each do |user_email|
-      user = User.find_by_email(user_email.strip)
-      if user 
-        if !user.has_role?(role, self)
-          #user.has_only_reader_role!(self)
-          user.has_role!(role, self)
-          Notifier.role_notification(current_user, role, user, self, message).deliver
-        end
-      else
-        add_unvalid_email_to_array(user_email)
-      end
-    end
-  end
+  # def create_role_for_users(current_user, accesses = {})
+  #   accesses_parsed = JSON.parse(accesses);
+  #   role = accesses_parsed['role']
+  #   recipients = accesses_parsed['recipients']
+  #   message = accesses_parsed['message']
+  #   
+  #   recipients.each do |user_email|
+  #     user = User.find_by_email(user_email.strip)
+  #     if user 
+  #       if !user.has_role?(role, self)
+  #         #user.has_only_reader_role!(self)
+  #         user.has_role!(role, self)
+  #         Notifier.role_notification(current_user, role, user, self, message).deliver
+  #       end
+  #     else
+  #       add_unvalid_email_to_array(user_email)
+  #     end
+  #   end
+  # end
   
-  # No more used in current GUI
-  def update_accesses(current_user, accesses = {})
-    accesses_parsed = JSON.parse(accesses);
-    readers = accesses_parsed['readers']
-    editors = accesses_parsed['editors']
-    # Get accesses on document
-    all_document_access = self.accepted_roles
-    all_document_access.each do |role|
-      role.users.each do |user|
-        if editors.include?(user.id)
-          if !user.has_role?("editor", self)
-            user.has_only_editor_role!(self)
-            Notifier.role_notification(current_user, "editor", user, self, nil).deliver
-          end
-        elsif readers.include?(user.id)
-          if !user.has_role?("reader", self)
-            user.has_only_reader_role!(self)
-            Notifier.role_notification(current_user, "reader", user, self, nil).deliver
-          end
-        else
-          user.has_no_roles_for!(self)
-          Notifier.no_role_notification(current_user, user, self).deliver
-        end
-      end
-    end
-  end 
-  
-  def remove_role(current_user, params)
-    params_parsed = JSON.parse(params)
-    user = User.find(params_parsed['user_id'])
-    role = params_parsed['role']
-    if user
-      user.has_no_role!(role, self)
-      Notifier.removed_role_notification(current_user, role, user, self).deliver
-    end
-  end
+  # # No more used in current GUI
+  # def update_accesses(current_user, accesses = {})
+  #   accesses_parsed = JSON.parse(accesses);
+  #   readers = accesses_parsed['readers']
+  #   editors = accesses_parsed['editors']
+  #   # Get accesses on document
+  #   all_document_access = self.accepted_roles
+  #   all_document_access.each do |role|
+  #     role.users.each do |user|
+  #       if editors.include?(user.id)
+  #         if !user.has_role?("editor", self)
+  #           user.has_only_editor_role!(self)
+  #           Notifier.role_notification(current_user, "editor", user, self, nil).deliver
+  #         end
+  #       elsif readers.include?(user.id)
+  #         if !user.has_role?("reader", self)
+  #           user.has_only_reader_role!(self)
+  #           Notifier.role_notification(current_user, "reader", user, self, nil).deliver
+  #         end
+  #       else
+  #         user.has_no_roles_for!(self)
+  #         Notifier.no_role_notification(current_user, user, self).deliver
+  #       end
+  #     end
+  #   end
+  # end 
+  # 
+  # def remove_role(current_user, params)
+  #   params_parsed = JSON.parse(params)
+  #   user = User.find(params_parsed['user_id'])
+  #   role = params_parsed['role']
+  #   if user
+  #     user.has_no_role!(role, self)
+  #     Notifier.removed_role_notification(current_user, role, user, self).deliver
+  #   end
+  # end
 
   def deep_clone(creator, title)
     cloned_document = self.clone
@@ -410,7 +410,7 @@ private
   
   # after_create
   def set_creator_as_editor
-    accepts_role!("editor", creator) if creator
+    Role.create!(:document_id => self.id, :user_id => creator.uuid, :name => ROLE::EDITOR)
   end
   
   #before_create
