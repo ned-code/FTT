@@ -1,7 +1,6 @@
 require Rails.root + 'lib/shindig'
 
 class ItemsController < ApplicationController
-  before_filter :authenticate_user!
   
   # access_control do
   #   action :show do
