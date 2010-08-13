@@ -55,7 +55,7 @@ class Friendship < ActiveRecord::Base
   
   def reject!
     transaction do
-      self.remove_asociated_roles
+      self.remove_asociated_roles 
       self.mirror.destroy
       self.destroy
     end
@@ -81,6 +81,15 @@ class Friendship < ActiveRecord::Base
     Friendship.find(:first, :conditions => { :user_id => self.friend_id, :friend_id => self.user_id })
   end
   
+  def remove_asociated_roles
+    self.user_lists_friends.each do |list|
+      Role.where(:user_id => self.friend_id, :user_list_id => list.id).delete_all
+    end
+    self.mirror.user_lists_friends.each do |list|
+      Role.where(:user_id => self.mirror.friend_id, :user_list_id => list.id).delete_all
+    end
+  end
+  
 private
 
   def self.create_friend_mirror!(user_id, friend_id)
@@ -90,15 +99,6 @@ private
   def assign_friendship_to_default_user_list
     user_list = user.default_list
     UserListsFriend.create!(:user_list_id => user_list.id, :friendship_id => self.id)
-  end
-  
-  def remove_asociated_roles
-    self.user_lists_friends.each do |list|
-      Role.where(:user_id => self.friend_id, :user_list_id => list.id).delete_all
-    end
-    self.mirror.user_lists_friends.each do |list|
-      Role.where(:user_id => self.mirror.friend_id, :user_list_id => list.id).delete_all
-    end
   end
 end
 
