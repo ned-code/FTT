@@ -31,6 +31,26 @@ class Ability
                  page.document.user_editor?(user))
       end
       # ================
+       # = Create =
+       # ================
+      can :create, Document do |document|
+        !user.new_record?
+      end
+      
+      can :create, Page do |page|
+        page && ( page.document.user_editor?(user) ||
+                  page.document.user_contributor?(user) ||
+                  page.document.public_contributor? ||
+                  page.document.public_editor?)
+      end
+      
+      can :create, Item do |item|
+        item && ( item.page.document.user_editor?(user) ||
+                  item.page.document.user_contributor?(user) ||
+                  item.page.document.public_contributor? ||
+                  item.page.document.public_editor?)
+      end
+      # ================
        # = Update =
        # ================
       can :update, Document do |document|
@@ -46,6 +66,13 @@ class Ability
                   page.document.public_editor?)
       end
       
+      # manque les droites des item crée par les contributor
+      can :update, Item do |item|
+        item && ( item.page.document.user_editor?(user) ||
+                  item.page.document.user_contributor?(user) ||
+                  item.page.document.public_contributor? ||
+                  item.page.document.public_editor?)
+      end
       # ================
        # = Destroy =
        # ================
@@ -60,18 +87,12 @@ class Ability
                   page.document.public_editor?)
       end
       
-      # ================
-       # = Create =
-       # ================
-      can :create, Document do |document|
-        !user.new_record?
-      end
-      
-      can :create, Page do |page|
-        page && ( page.document.user_editor?(user) ||
-                  page.document.user_contributor?(user) ||
-                  page.document.public_contributor? ||
-                  page.document.public_editor?)
+       # manque les droites des item crée par les contributor
+      can :destroy, Item do |item|
+        item && ( item.page.document.user_editor?(user) ||
+                  item.page.document.user_contributor?(user) ||
+                  item.page.document.public_contributor? ||
+                  item.page.document.public_editor?)
       end
     end
   end

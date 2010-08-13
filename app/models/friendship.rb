@@ -61,6 +61,7 @@ class Friendship < ActiveRecord::Base
   end
   
   def revoke!
+    #TODO: remove the also the user from user_list_friend and roles !!!
     transaction do
       self.mirror.destroy
       self.destroy
