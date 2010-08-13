@@ -1,10 +1,13 @@
+<!-- page inspector -->
+
 <div class="page_inspector_panel inspector_panel panel" id="page-inspector">
+  
   <header>
   	<h3>Page inspector</h3>
 	</header>
 	
   <div class="content">
-    <form>
+  	<form>
       <fieldset class='properties'>
         <div>
           <label><%= t('.properties.name') %></label>
@@ -28,8 +31,8 @@
           <label><%= t('.properties.height') %></label>
           <input data-property="page_height" id="page_height" type="text" data-type="cssvalue" required="required" />
         </div>
-        <div>
-          <!--<label><%= t('.properties.show_scroll') %></label>
+        <!--div>
+          <label><%= t('.properties.show_scroll') %></label>
           <input id="page_scroll_checkbox" type="checkbox"/>
         </div>-->
       </fieldset>
@@ -84,15 +87,6 @@
           <input id='page_background_image_apply_all_button' type='button' value='<%= t('.properties.buttons.apply_background_all_pages') %>'/>
         </div>
       </fieldset>
-      <!--<fieldset class='properties'>
-        <legend><%= t('.properties.layout') %></legend>
-        <div>
-          <a href='#layout_remove'>Don't use a layout</a>
-        </div>
-        <ul id='layouts' class='layouts-index icons-only thumbs index'>
-          
-        </ul>
-      </fieldset>-->
     </form>
   </div>
 </div>

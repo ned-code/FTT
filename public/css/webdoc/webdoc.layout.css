@@ -14,6 +14,34 @@
 	border: 1px solid rgb(180,180,180);
 }
 
+/* .item extensions */
+
+.textbox_item {
+	padding: 32px;
+}
+
+.textbox_item .text {
+	width: 100%;
+	height: 100%;
+}
+
+.textbox_item>svg {
+	position: absolute;
+	left: -500px;
+	top: -500px;
+	width: 1200px;
+	height: 1200px;
+}
+
+.textbox_item textarea.text {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.textbox_item div.text {
+	overflow: hidden;
+}
+
 
 
 

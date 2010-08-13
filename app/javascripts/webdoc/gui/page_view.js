@@ -168,6 +168,9 @@ WebDoc.PageView = $.klass({
       case WebDoc.ITEM_TYPE_APP:
         itemView = new WebDoc.AppView(item, this, afterItem);
         break;
+      case WebDoc.ITEM_TYPE_TEXTBOX:
+        itemView = new WebDoc.TextboxView(item, this, afterItem);
+        break;
       default:
         itemView = new WebDoc.ItemView(item, this, afterItem);
         break;

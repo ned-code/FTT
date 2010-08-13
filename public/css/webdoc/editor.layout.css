@@ -108,6 +108,10 @@ body.full_view {
 /* Manage layering of panels. Active panels 
    slide over other panels as they come into focus */
 
+#webdoc {
+	z-index: 1;
+}
+
 .inspector_panel,
 .comments_panel,
 .activity_panel,
@@ -142,7 +146,7 @@ body.full_view {
 
 .tools_panel,
 .controls_panel {
-  z-index: 3000000;
+  z-index: 3;
 }
 
 /* Manage show/hide of panels between page view
@@ -285,45 +289,17 @@ body.full_view {
   margin-right: 0;
 }
 
-.pages_panel,
-.sharing_panel {
+.pages_panel {
   left: 0;
   bottom: 2.6667em;
   width: 100%;
-  height: 96px;
+  height: 128px;
   margin-bottom: 0;
-}
-.sharing_panel {
-  height: 96px;
 }
 
 .full_view .pages_panel.active,
 .full_view .sharing_panel.active {
   margin-bottom: 0;
-}
-
-.panel>header {
-  color: white;
-  background: rgba(0,0,0,0.4);
-  text-align: center;
-  margin-bottom: 0;
-  height: 2.6667em;
-}
-
-.panel>header h3 {
-	font-size: 1.6667em;
-	line-height: 1.6;
-	font-weight: normal;
-}
-.panel .content {
-  position: absolute;
-  /* top must match height of header */
-  top: 2.6667em;
-  left: 0;
-  width: 100%;
-  bottom: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
 }
 
 /* .index extensions ---------------------- */
@@ -444,6 +420,18 @@ body.full_view {
 
 .author_dropdown_index.active {
 	height: 2.6667em;
+}
+
+.pages_index {
+	white-space: nowrap;
+}
+
+.pages_index>li {
+  z-index: 1;
+}
+
+.pages_index>li.current {
+  z-index: 2;
 }
 
 /* .button extensions ------------------------- */

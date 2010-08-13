@@ -5,19 +5,22 @@
  *
  */
 
-.index {
-	/* Remove default styling from list items that have box
+/* Remove default styling from list items that have box
    layout applied. */
+
+.index {
 	list-style: none;
 	margin: 0;
 }
 
 /* Remove default styling from list items in case some
-   typography rules have added these back in after the reset. */
+   typography rules have added these back in after the
+   reset. Also, make items act as position parent. */
 
 .index>li {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+	position: relative;
 }
 
 .buttons_index li {

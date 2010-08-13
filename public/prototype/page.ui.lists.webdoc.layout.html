@@ -26,10 +26,14 @@
   <link href="../css/webdoc/site.color.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webdoc/site.layout.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webdoc/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
-  
+
   <link href="../css/webdoc/editor.color.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webdoc/editor.layout.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webdoc/editor.typography.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="../css/webdoc/panel.color.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/panel.layout.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/panel.typography.css" media="all" rel="stylesheet" type="text/css"/>
 
   <style>
     .header {
@@ -89,7 +93,7 @@
       <div class="webdoc layer">
       </div>
       
-      <div class="side_panel panel">
+      <div class="sidebar">
         <h2>Authors</h2>
         
         <ul class="horizontal author_index index">
@@ -219,7 +223,12 @@
       <div class="pages_panel panel">
         <header>
         	<h3>Pages</h3>
+        	<ul class="horizontal page_edit_index buttons_index index">
+      			<li class="mode-edit-show"><a class="button" href="#add-page" title="Add page">Add page</a></li><li class="mode-edit-show"><a class="button" href="#copy-page" title="Copy page">Copy</a></li><li class="mode-edit-show"><a class="button" href="#remove-page" title="Remove page">Remove</a></li>
+    			</ul>
         </header>
+        <div class="content">
+        </div>
       </div>
       
     </div>

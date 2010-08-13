@@ -1,3 +1,34 @@
+/* .panel extensions */
+
+.panel>header {
+  text-align: center;
+  margin-bottom: 0;
+  height: 2.6667em;
+}
+
+.panel>header h3 {
+	font-size: 1.6667em;
+	line-height: 1.6;
+	font-weight: normal;
+}
+
+.panel .content {
+  position: absolute;
+  /* top must match height of header */
+  top: 2.6667em;
+  left: 0;
+  width: 100%;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.pages_panel .content {
+	overflow-y: hidden;
+	overflow-x: scroll;
+	white-space: nowrap;
+}
+
 /* .index extensions */
 
 .apps_index {
@@ -35,6 +66,12 @@
   margin-bottom: 16px;
 }
 
+.page_edit_index {
+	position: absolute;
+	top: 0.3333em;
+	left: 0.3333em;
+}
+
 /* .thumb extensions */
 
 .big_thumb {
@@ -64,4 +101,17 @@
   padding-top: 48px;
   background-size: 48px 48px;
   /* Needs index of 252 */
+}
+
+.page_thumb {
+  width: 120px; height: 120px;
+  position: relative;
+  overflow: hidden;
+  background-color: hsla( 208, 8%, 20%, 0.9);
+}
+
+.page_thumb .webdoc {
+  position: absolute;
+  left: 0; top: 0;
+  overflow: hidden;
 }

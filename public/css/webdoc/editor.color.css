@@ -18,6 +18,14 @@
 	background-color: transparent;
 }
 
+/* .index extensions -------------------------- */
+
+.pages_index>li.current {
+  -webkit-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+  -moz-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+  box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+}
+
 /* .button extensions ------------------------- */
 
 .panel_button {

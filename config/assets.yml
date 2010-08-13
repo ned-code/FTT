@@ -135,6 +135,7 @@ javascripts:
     - app/javascripts/webdoc/gui/page_thumbnail_view.js
     - app/javascripts/webdoc/gui/page_view.js
     - app/javascripts/webdoc/gui/text_view.js
+    - app/javascripts/webdoc/gui/textbox_view.js
     - app/javascripts/webdoc/gui/widget_view.js
     - app/javascripts/webdoc/gui/html_view.js
     - app/javascripts/webdoc/gui/iframe_view.js
