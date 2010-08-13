@@ -45,21 +45,18 @@
         		</ul>
         	</div>
         </header>
+        
+        <ul class="horizontal author_index index">
         <% @document.editors.each do |editor| %>
+          <li>
           <% if editor == current_user %>
-            <%= render :partial => "users/card", :locals => { :user => editor } %>
+            <%= render :partial => "users/thumb", :locals => { :user => editor } %>
           <% else %>
-            <%= render :partial => "users/card", :locals => { :user => editor, :subscribed => @document.creator.follower?(current_user), :friendship => @document.creator.friend?(current_user)  } %>
+            <%= render :partial => "users/thumb", :locals => { :user => editor, :subscribed => @document.creator.follower?(current_user), :friendship => @document.creator.friend?(current_user)  } %>
           <% end %>
+          </li>
         <% end %>
-        <!-- <ul class="horizontal author_index index">
-          <li><a href="/" class="author_thumb thumb">author</a></li
-         ><li><a href="/" class="author_thumb thumb">author</a></li
-         ><li><a href="/" class="author_thumb thumb">author</a></li
-         ><li><a href="/" class="author_thumb thumb">author</a></li
-         ><li><a href="/" class="author_thumb thumb">author</a></li
-         ><li><a href="/" class="author_thumb thumb">author</a></li>
-        </ul> -->
+        </ul>
         
         <h2>Currently on this webdoc</h2>
         

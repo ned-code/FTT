@@ -1,0 +1,18 @@
+<a href="/users/<%= user.uuid %>"
+   class="author_thumb thumb <% if user.mutual_connection(current_user) %>friendly_user<%end%>"
+   style="background-image: url('<%= user.avatar.url(:thumb) %>');"
+   data-webdoc-user-id="<%= user.id %>"
+   title="<%= "#{user.first_name} #{user.last_name}" %>"
+   ><%= "#{user.username}" %></a>
+
+<%#
+name: user.name
+mail: user.email
+username: user.username
+avatar: user.avatar.url(:thumb)
+bio: user.bio
+gender : user.gender
+website: user.website
+friends count: user.friends_count (in friends branch )
+documents count: user.documents_count
+%>
