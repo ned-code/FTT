@@ -7,8 +7,6 @@ class ApplicationController < ActionController::Base
     redirect_to "/users/#{current_user.uuid}"
   end
   
-  include ExceptionNotification::Notifiable
-
   before_filter :set_first_visit_time
   before_filter :token_authenticate
   before_filter :authenticate_user!
