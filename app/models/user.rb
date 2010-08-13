@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   avatars_path = "uploads/user/avatar/:id/:cw_style:basename.:extension"
   has_attached_file :avatar,
                     :styles => { :thumb=> "128x128#" },
-                    :default_url   => "/images/thumb_icon_no_photo_128x128.png",
+                    :default_url   => "/images/default_thumb_128.png",
                     :storage => S3_CONFIG[:storage].to_sym,
                     :s3_credentials => S3_CONFIG,
                     :bucket => S3_CONFIG[:assets_bucket],

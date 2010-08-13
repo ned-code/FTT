@@ -22,7 +22,7 @@ WebDoc.PageBrowserController = $.klass({
   THUMB_STATE_SHOW_SELECTOR: "a[href='#show-thumbs']",
   THUMB_STATE_HIDE_SELECTOR: "a[href='#hide-thumbs']",
   LEFT_BAR_BUTTON_SELECTOR: "a[href='#left-panel-toggle']",
-  NUMBER_SELECTOR: '.number',
+  NUMBER_SELECTOR: '.page_number',
   THUMB_SELECTOR: '.thumb',
 
   initialize: function() {
@@ -37,21 +37,6 @@ WebDoc.PageBrowserController = $.klass({
     this._document = null;
     this.visible = true;
     this.pageMap = {};
-    
-    //always show
-    // this.domNode
-    // .bind('mouseenter', function(e){
-    //   that.show();
-    // })
-    // .bind('mouseleave', function(e){
-    //   that.hide();
-    // });
-    this.show();
-    //this.domNode
-    //.find('.content')
-    //.scrollbars({
-    //  x: this.domNode.find('.x_scrollbar')
-    //});
   },
   
   setDocument: function(document) {
@@ -254,7 +239,7 @@ WebDoc.PageBrowserController = $.klass({
         
     // Quick hack to stop number being displayed in dragged thumb
     var t = setTimeout(function(){
-      dragTarget.find('.number').show();
+      dragTarget.find('.page_number').show();
     }, 0);
     
     dataTransfer.setData("Text", 'Page title');
@@ -324,8 +309,6 @@ WebDoc.PageBrowserController = $.klass({
     
   },
   
-  // Called when you or someone else has edited a new page
-  
   pageAdded: function(page) {
     ddd("[pageBrowserController] pageAdded");
     var pageItem = new WebDoc.PageBrowserItemView(page),
@@ -354,7 +337,6 @@ WebDoc.PageBrowserController = $.klass({
     this.domNodeBrowserItems.trigger('resize');
     
     this._updateIndexNumbers();
-    //pageItem.truncateTitleWithActualTitle();
   },
   
   pageRemoved: function(page) {
@@ -450,53 +432,21 @@ WebDoc.PageBrowserController = $.klass({
   
   _show: function(){
     ddd('that._show');
-    var inspector = this.domNode,
-        pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
-        startObj, endObj;
+    var panel = this.domNode,
+        pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
     
-    this.domNode.addClass(this.ACTIVE_CLASS);
+    panel.addTransitionClass(this.ACTIVE_CLASS);
     pageBrowserButton.addClass(this.ACTIVE_CLASS);
-    
-    if ( !jQuery.support.css.transition ) {
-      startObj = { scale: 0.25 };
-      endObj = { scale: 1 };
-      
-      jQuery(startObj)
-      .animate( endObj, {
-        step: function( s ){
-          inspector.css({
-            MozTransform: 'scale('+s+')'
-          });
-        },
-        duration: 200
-      });
-    }
     
     return true;
   },
   
   _hide: function( margin ){
-    var inspector = this.domNode,
-        pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR),
-        startObj, endObj;
+    var panel = this.domNode,
+        pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
     
-    this.domNode.removeClass(this.ACTIVE_CLASS);
+    panel.removeTransitionClass(this.ACTIVE_CLASS);
     pageBrowserButton.removeClass(this.ACTIVE_CLASS);
-    
-    if ( !jQuery.support.css.transition ) {
-      startObj = { scale: 1 };
-      endObj = { scale: 0.25 };
-      
-      jQuery(startObj)
-      .animate( endObj, {
-        step: function( s ){
-          inspector.css({
-            MozTransform: 'scale('+s+')'
-          });
-        },
-        duration: 420
-      });
-    }
     
     return false;
   },
@@ -511,14 +461,6 @@ WebDoc.PageBrowserController = $.klass({
   
   toggle: function() {
     this.visible = (this.visible) ? this._hide() : this._show() ;
-  },
-  
-  conceal: function() {
-    return this._hide( 36 );
-  },
-  
-  reveal: function() {
-    return (this.visible) ? this._show() : this._hide() ;
   },
   
   // Thumbnails -----------------------------------------------------
@@ -539,93 +481,6 @@ WebDoc.PageBrowserController = $.klass({
       browserNode.addClass( this.HIDE_THUMB_CLASS );      
       $( this.THUMB_STATE_BUTTON_SELECTOR ).removeClass( this.ACTIVE_CLASS );      
     }
-  },
-  
-  _showThumbs: function() {
-    var browserNode = this.domNodeBrowserItems,
-        thumbs = browserNode.find( this.THUMB_SELECTOR ),
-        thumbToggles = $( this.THUMB_STATE_BUTTONS_SELECTOR );
-    
-    browserNode.removeClass( this.HIDE_THUMB_CLASS );    
-    thumbs
-    .css({
-      height: 0,
-      marginBottom: 0,
-      borderBottomWidth: 0
-    })
-    .animate({
-      height: 75,
-      marginBottom: 14,
-      borderBottomWidth: 6
-    }, {
-    //.css({
-    //  height: 0
-    //})
-    //.animate({
-    //  height: 104
-    //}, {
-      duration: 200
-    });
-    
-    thumbToggles
-    .removeClass( this.CURRENT_CLASS )
-    .filter( this.THUMB_STATE_SHOW_SELECTOR )
-    .addClass( this.CURRENT_CLASS );
-    
-    this._stateThumbs = true;
-    
-    return this._stateThumbs;
-  },
-  
-  _hideThumbs: function() {
-    var browserNode = this.domNodeBrowserItems,
-        thumbs = browserNode.find( this.THUMB_SELECTOR ),
-        hideThumbClass = this.HIDE_THUMB_CLASS,
-        hideThumbFlag = true,
-        thumbToggles = $( this.THUMB_STATE_BUTTONS_SELECTOR );
-    
-    thumbs
-    .animate({
-      height: 0,
-      marginBottom: 0,
-      borderBottomWidth: 0
-    }, {
-    //.animate({
-    //  height: 0
-    //}, {
-      duration: 200,
-      complete: function(){
-        // complete fires for every item in the list
-        // We only want to set this class once
-        if ( hideThumbFlag ) {
-          browserNode.addClass( hideThumbClass );
-        }
-        hideThumbFlag = false;
-      }
-    });
-    
-    thumbToggles
-    .removeClass( this.CURRENT_CLASS )
-    .filter( this.THUMB_STATE_HIDE_SELECTOR )
-    .addClass( this.CURRENT_CLASS );
-    
-    this._stateThumbs = false;
-    
-    return this._stateThumbs;
-  },
-  
-  // Exposed methods return current (boolean) state of thumbs
-  
-  showThumbs: function() {
-    return ( !this._stateThumbs ) ? this._showThumbs() : this._stateThumbs ;
-  },
-
-  hideThumbs: function() {
-    return ( this._stateThumbs ) ? this._hideThumbs() : this._stateThumbs ;
-  },
-  
-  toggleThumbs: function() {
-    return this._stateThumbs ? this._hideThumbs() : this._showThumbs() ;
   }
 
 });
