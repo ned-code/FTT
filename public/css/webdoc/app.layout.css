@@ -1,14 +1,14 @@
 /* app.layout.css */
 
 .app_layer {
-  padding: 1em;
+  padding: 0 0.8333em 0.3333em 0.8333em;
 }
 
 header {}
 
 .app_question {
   font-weight: bold;
-  padding: 0.6667em 1em;
+  padding: 0.5em 1em;
   margin-bottom: 0.6667em;
   font-size: 1.125em;
   line-height: 1.3333;
