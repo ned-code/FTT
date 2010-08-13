@@ -23,6 +23,7 @@ class DocumentsController < ApplicationController
   
   # GET /documents
   def index
+    authorize! :read, Document
     respond_to do |format|
       format.html do
         set_return_to
@@ -120,11 +121,12 @@ class DocumentsController < ApplicationController
       render :action => :static_page, :layout => 'static', :content_type => 'image/svg+xml' and return
     end
     if @document.present?
+      authorize! :read, @document
       respond_to do |format|
         format.html do
           set_cache_buster
           @get_return_to = get_return_to 
-          render :layout => 'layouts/editor'      
+          render :layout => 'layouts/editor'
         end
         format.json do
           logger.debug "return document json."

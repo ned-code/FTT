@@ -50,7 +50,7 @@ class Item < ActiveRecord::Base
 
   after_save :refresh_cache
   after_update :need_update_thumbnail
-  after_create :set_creator_as_editor
+  #after_create :set_creator_as_editor
   #after_destroy :refresh_cache, :need_update_thumbnail  #no more used with safe_delete!
 
   # ===============

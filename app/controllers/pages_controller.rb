@@ -2,7 +2,7 @@ class PagesController < ApplicationController
   before_filter :find_document, :find_page
   skip_before_filter :authenticate_user!, :only => [:show, :callback_thumbnail]
   before_filter :authenticate_if_needed, :only => [:show, :callback_thumbnail]
-
+  authorize_resource :document
   # access_control do
   #   actions :index, :show do
   #     allow all, :if => :document_is_public?
