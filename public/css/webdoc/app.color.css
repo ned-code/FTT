@@ -15,6 +15,10 @@
   border: none;
 }
 
+h1 {
+  color: rgb(88,146,236);
+}
+
 textarea {
   border: 1px solid rgb(160, 160, 160);
 

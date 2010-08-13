@@ -43,7 +43,7 @@ h5,
 h6                { font-weight: bold; }
 
 /* App title */
-h1                { font-size: 2.25em;   line-height: 1.3333; margin-bottom: 0.3333em; }
+h1                { font-size: 2.25em;   line-height: 1.3333; margin-bottom: 0.2222em; font-weight: bold; letter-spacing: -0.04em; }
 
 /* App sub-title */
 h2                { font-size: 1.6667em; line-height: 0.9;    margin-bottom: 0.5em; }
