@@ -39,9 +39,9 @@
         <h2>Authors</h2>
         <% @document.editors.each do |editor| %>
           <% if editor == current_user %>
-            <%= render :partial => "followships/card", :locals => { :user => editor } %>
+            <%= render :partial => "users/card", :locals => { :user => editor } %>
           <% else %>
-            <%= render :partial => "followships/card", :locals => { :user => editor, :subscribed => @document.creator.follower?(current_user) } %>
+            <%= render :partial => "users/card", :locals => { :user => editor, :subscribed => @document.creator.follower?(current_user) } %>
           <% end %>
         <% end %>
         <!-- <ul class="horizontal author_index index">

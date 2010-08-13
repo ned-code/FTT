@@ -72,21 +72,21 @@ stylesheets:
   
 javascripts:
   common:
-    - public/javascripts/jquery-1.4.2.js
-    - public/javascripts/rails.js
-    - public/javascripts/jquery-json.js
-    - public/javascripts/jquery-string.js
-    - public/javascripts/jquery.form.js
-    - public/javascripts/jquery.extensions.js
-    - public/javascripts/jquery.events.js
-    - public/javascripts/jquery.list.js
-    - public/javascripts/jquery.pop.js
-    - public/javascripts/jquery.truncate.js
-    - public/javascripts/jquery.validator.js
-    - public/javascripts/jquery.flash.js
-    - public/javascripts/jquery.scrollbars.js
-    - public/javascripts/jquery.cookie.js
-    - public/javascripts/klass.js    
+    - public/js/jquery-1.4.2.js
+    - public/js/rails.js
+    - public/js/jquery-json.js
+    - public/js/jquery-string.js
+    - public/js/jquery.form.js
+    - public/js/jquery.extensions.js
+    - public/js/jquery.events.js
+    - public/js/jquery.list.js
+    - public/js/jquery.pop.js
+    - public/js/jquery.truncate.js
+    - public/js/jquery.validator.js
+    - public/js/jquery.flash.js
+    - public/js/jquery.scrollbars.js
+    - public/js/jquery.cookie.js
+    - public/js/klass.js    
     - public/swfupload/swfupload.js
     - public/js/jquery-swfupload.js
     - public/js/jquery.hashchange.js
