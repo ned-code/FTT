@@ -69,9 +69,9 @@ class Ability
       # manque les droites des item crée par les contributor
       can :update, Item do |item|
         item && ( item.page.document.user_editor?(user) ||
-                  item.page.document.user_contributor?(user) ||
-                  item.page.document.public_contributor? ||
-                  item.page.document.public_editor?)
+                  (item.page.document.user_contributor?(user) && item.creator == user) ||
+                  item.page.document.public_editor? ||
+                  (item.page.document.public_contributor? && item.creator == user))
       end
       # ================
        # = Destroy =
@@ -90,9 +90,9 @@ class Ability
        # manque les droites des item crée par les contributor
       can :destroy, Item do |item|
         item && ( item.page.document.user_editor?(user) ||
-                  item.page.document.user_contributor?(user) ||
-                  item.page.document.public_contributor? ||
-                  item.page.document.public_editor?)
+                  (item.page.document.user_contributor?(user) && item.creator == user) ||
+                  item.page.document.public_editor? ||
+                  (item.page.document.public_contributor? && item.creator == user))
       end
     end
   end

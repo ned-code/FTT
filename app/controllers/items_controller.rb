@@ -28,6 +28,7 @@ class ItemsController < ApplicationController
     if @item.nil?
       @item = Item.new_with_uuid(params[:item])
       @item[:page_id] = params[:page_id]
+      @item[:creator_id] = current_user.uuid
     end
     @item.document_uuid = params[:document_id]
     @item.save!

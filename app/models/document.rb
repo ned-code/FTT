@@ -456,7 +456,7 @@ private
   
   # after_create
   def set_creator_as_editor
-    Role.create!(:document_id => self.id, :user_id => creator.uuid, :name => ROLE::EDITOR)
+    Role.create!(:document_id => self.id, :user_id => creator.uuid, :name => Role::EDITOR)
   end
   
   #before_create
