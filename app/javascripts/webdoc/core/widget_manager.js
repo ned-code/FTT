@@ -49,6 +49,7 @@ WebDoc.WidgetManager = $.klass(
   
   _readyForCallBack: function() {
     if (WebDoc.WidgetManager.youtubeWidget !== undefined && 
+        WebDoc.WidgetManager.videoWidget !== undefined && 
         WebDoc.WidgetManager.vimeoWidget !== undefined && 
         WebDoc.WidgetManager.dailymotionWidget !== undefined &&
         WebDoc.WidgetManager.vidsMyspaceWidget !== undefined &&
