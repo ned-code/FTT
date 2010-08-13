@@ -1,16 +1,3 @@
-module PageJsonHelper
-  def self.decode_json_and_yaml(value)
-    unless (value.nil?)
-      begin
-        return ActiveSupport::JSON.decode(value)
-      rescue
-        return YAML.load(value)
-      end  
-    end
-    return nil
-  end
-end
-
 class Page < ActiveRecord::Base
 
   has_uuid
@@ -30,7 +17,7 @@ class Page < ActiveRecord::Base
   attr_accessor_with_default :touch_document_active, true
   
   composed_of :data, :class_name => 'Hash', :mapping => %w(data to_json),
-                         :constructor => PageJsonHelper.method(:decode_json_and_yaml)
+                         :constructor => JsonHelper.method(:decode_json_and_yaml)
 
   attr_accessor_with_default :deep_notify, false
 

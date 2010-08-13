@@ -1,16 +1,3 @@
-module DiscussionJsonHelper
-  def self.decode_json_and_yaml(value)
-    unless(value.nil?)
-      begin
-        return ActiveSupport::JSON.decode(value)
-      rescue
-        return YAML.load(value)
-      end
-    end
-    return nil
-  end
-end
-
 class Discussion < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
@@ -20,7 +7,7 @@ class Discussion < ActiveRecord::Base
   attr_accessible :uuid, :page_id, :properties
 
   composed_of :properties, :class_name => 'Hash', :mapping => %w(properties to_json),
-                           :constructor => DiscussionJsonHelper.method(:decode_json_and_yaml)
+                           :constructor => JsonHelper.method(:decode_json_and_yaml)
 
   belongs_to :page
   belongs_to :user

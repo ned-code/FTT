@@ -1,16 +1,3 @@
-module DocumentJsonHelper
-  def self.decode_json_and_yaml(value)
-    unless(value.nil?)
-      begin
-        return ActiveSupport::JSON.decode(value)
-      rescue
-        return YAML.load(value)
-      end  
-    end
-    return nil
-  end
-end
-
 class Document < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
@@ -19,7 +6,8 @@ class Document < ActiveRecord::Base
   attr_accessible :uuid, :title, :description, :size, :category_id, :is_public, :style_url, :theme_id, :featured 
   
   composed_of :size, :class_name => 'Hash', :mapping => %w(size to_json),
-                         :constructor => DocumentJsonHelper.method(:decode_json_and_yaml)
+                     :constructor => JsonHelper.method(:decode_json_and_yaml)
+  
   # ================
   # = Associations =
   # ================

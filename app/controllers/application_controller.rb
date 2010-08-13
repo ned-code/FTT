@@ -20,6 +20,7 @@ protected
   def token_authenticate
     if params[:user_token].present?
       token = Token.where(['token = ?', params[:user_token]]).first
+      # TODO create a method next tests!
       if token.present? && ['images'].include?(controller_name) && ['index', 'create'].include?(action_name)
         session[:app_id] = token.application_id
         env['warden'].set_user(token.user)
