@@ -29,6 +29,9 @@ gem 'whenever'
 gem 'fastercsv'
 gem 'google-spreadsheet-ruby'
 
+# if prob: remove old memcached and sudo apt-get install libsasl2-2 libsasl2-dev
+gem 'memcache'
+
 group :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'mongrel'
