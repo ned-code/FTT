@@ -45,7 +45,7 @@ Webdoc::Application.routes.draw do
   get 'user' => 'sessions#show'
 
   namespace :admin do
-    resources :widgets, :path => 'apps', :as => 'apps', :except => :show
+    resources :widgets, :path => 'apps', :except => :show
     resources :categories, :except => :show
     resource  :test, :only => :show
     resources :themes
@@ -74,7 +74,7 @@ Webdoc::Application.routes.draw do
     resources :comments, :only => [:create, :destroy]
   end
 
-
+  resources :app_polls, :only => [:index, :create, :destroy]
 
   # START OLD ROUTES
   # Jammit::Routes.draw(map)

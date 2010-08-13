@@ -1,5 +1,4 @@
 class FollowshipsController < ApplicationController
-  before_filter :authenticate_user!
   
   # GET /followships
   def index

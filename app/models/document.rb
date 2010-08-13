@@ -24,7 +24,6 @@ class Document < ActiveRecord::Base
   # = Associations =
   # ================
   
-  scope :public, :conditions => { :is_public => true }
   scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
   scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
   scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
@@ -179,22 +178,6 @@ class Document < ActiveRecord::Base
     uuid
   end
 
-  def relative_created_at
-    diff_in_time = Time.now - self.created_at
-    diff_in_minutes = ((diff_in_time.abs)/60).round
-    text = ""
-
-    case diff_in_minutes
-    when 0..59 then text = I18n.t('relative_date.x_hours', :count => 1 )
-    when 60..1439 then text = I18n.t('relative_date.x_hours', :count => (diff_in_minutes/60).round )
-    when 1440..9800 then text = I18n.t('relative_date.x_days', :count => (diff_in_minutes/60/24).round )
-    else
-      text = I18n.l(self.created_at.to_date)
-    end
-
-    text
-  end
-
   def as_application_json
     pages = self.pages.not_deleted
     hash = { 'document' => self.attributes }
@@ -294,7 +277,7 @@ class Document < ActiveRecord::Base
       if user 
         if !user.has_role?("reader", self)
           user.has_only_reader_role!(self)
-          Notifier.deliver_role_notification(current_user, "reader", user, self, readers_message)
+          Notifier.role_notification(current_user, "reader", user, self, readers_message).deliver
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -305,7 +288,7 @@ class Document < ActiveRecord::Base
       if user
         if !user.has_role?("editor", self)
           user.has_only_editor_role!(self)
-          Notifier.deliver_role_notification(current_user, "editor", user, self, editors_message)
+          Notifier.role_notification(current_user, "editor", user, self, editors_message).deliver
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -325,7 +308,7 @@ class Document < ActiveRecord::Base
         if !user.has_role?(role, self)
           #user.has_only_reader_role!(self)
           user.has_role!(role, self)
-          Notifier.deliver_role_notification(current_user, role, user, self, message)
+          Notifier.role_notification(current_user, role, user, self, message).deliver
         end
       else
         add_unvalid_email_to_array(user_email)
@@ -345,16 +328,16 @@ class Document < ActiveRecord::Base
         if editors.include?(user.id)
           if !user.has_role?("editor", self)
             user.has_only_editor_role!(self)
-            Notifier.deliver_role_notification(current_user, "editor", user, self, nil)
+            Notifier.role_notification(current_user, "editor", user, self, nil).deliver
           end
         elsif readers.include?(user.id)
           if !user.has_role?("reader", self)
             user.has_only_reader_role!(self)
-            Notifier.deliver_role_notification(current_user, "reader", user, self, nil)
+            Notifier.role_notification(current_user, "reader", user, self, nil).deliver
           end
         else
           user.has_no_roles_for!(self)
-          Notifier.deliver_no_role_notification(current_user, user, self)
+          Notifier.no_role_notification(current_user, user, self).deliver
         end
       end
     end
@@ -366,7 +349,7 @@ class Document < ActiveRecord::Base
     role = params_parsed['role']
     if user
       user.has_no_role!(role, self)
-      Notifier.deliver_removed_role_notification(current_user, role, user, self)
+      Notifier.removed_role_notification(current_user, role, user, self).deliver
     end
   end
 

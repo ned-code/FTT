@@ -23,7 +23,7 @@ class DatastoreEntry < ActiveRecord::Base
     
     conditions = Array.new
     if current_user #can read if owner or is public read
-      if params[:only_current_user].present? && params[:only_current_user] == true
+      if params[:only_current_user].present? && (params[:only_current_user] == true || params[:only_current_user] == 'true')
         conditions[0] = 'user_id = ?'
         conditions << current_user  
       else
@@ -32,7 +32,7 @@ class DatastoreEntry < ActiveRecord::Base
         conditions << CONST_PROTECTION_LEVEL_PRIVATE
       end
     else #no user, can only read if public read
-      if params[:only_current_user].present? && params[:only_current_user] == true
+      if params[:only_current_user].present? && (params[:only_current_user] == true || params[:only_current_user] == 'true')
         conditions[0] = 'NULL IS NOT ?'
         conditions << nil
       else

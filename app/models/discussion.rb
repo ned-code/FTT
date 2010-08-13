@@ -52,11 +52,7 @@ class Discussion < ActiveRecord::Base
     hash = { 'discussion' => self.attributes }
     hash['discussion']['properties'] = self.properties 
     hash['discussion']['comments'] = self.comments.map do |c|
-      c_hash = c.attributes
-      c_hash['safe_content'] = c.safe_content
-      c_hash['user'] = c.user.attributes
-      c_hash['user']['avatar_thumb_url'] = c.user.avatar_thumb_url
-      c_hash
+      c.as_application_json['comment']
     end
     hash
   end

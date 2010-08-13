@@ -3,7 +3,7 @@
   <div class="wrap">
     <h2><%=t '.title' %></h2>
     
-    <% form_for resource_name, resource, :url => registration_path(resource_name), :html => { :method => :put }, :builder => CustomFormBuilder do |f| %>
+    <%= form_for resource_name, resource, :url => registration_path(resource_name), :html => { :method => :put }, :builder => CustomFormBuilder do |f| %>
       <fieldset>
         <div class="column one of-four stack">
           <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>

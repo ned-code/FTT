@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/rails/exception_notification
+  revision: 48cf433
+  branch: master
+  specs:
+    exception_notification (1.0.0)
+
+GIT
   remote: http://github.com/corneverbruggen/jammit.git
   revision: 829ffeb
   specs:
@@ -16,8 +23,18 @@ GIT
       xml-simple
 
 GIT
+  remote: http://github.com/justinfrench/formtastic.git
+  revision: 42b4eb8
+  branch: rails3
+  specs:
+    formtastic (1.0.0)
+      actionpack (>= 2.3.0)
+      activesupport (>= 2.3.0)
+      i18n (>= 0.4.0)
+
+GIT
   remote: http://github.com/mislav/will_paginate.git
-  revision: fccbb0b
+  revision: 3615938
   branch: rails3
   specs:
     will_paginate (3.0.pre2)
@@ -97,22 +114,20 @@ GEM
     fastthread (1.0.7)
     ffi (0.6.3)
       rake (>= 0.8.7)
-    formtastic (0.9.10)
-      actionpack (>= 2.3.0)
-      activesupport (>= 2.3.0)
     gem_plugin (0.2.3)
     google-spreadsheet-ruby (0.1.1)
       hpricot (>= 0.3)
       oauth (>= 0.3.6)
-    haml (3.0.15)
+    haml (3.0.16)
     highline (1.6.1)
+    hirb (0.3.2)
     hoe (2.6.1)
       rake (>= 0.8.7)
       rubyforge (>= 2.0.4)
     hpricot (0.8.2)
     i18n (0.4.1)
-    json (1.4.3)
-    json_pure (1.4.3)
+    json (1.4.6)
+    json_pure (1.4.6)
     launchy (0.3.7)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
@@ -122,6 +137,7 @@ GEM
       activesupport (>= 2.3.6)
       mime-types
       treetop (>= 1.4.5)
+    memcache-client (1.8.5)
     mime-types (1.16)
     mongrel (1.1.5)
       cgi_multipart_eof_fix (>= 2.4)
@@ -194,6 +210,7 @@ GEM
       rack (>= 1.0.0)
     whenever (0.5.0)
       chronic (>= 0.2.3)
+    wirble (0.1.3)
     xml-simple (1.0.12)
     xmpp4r (0.5)
     yui-compressor (0.9.1)
@@ -210,15 +227,18 @@ DEPENDENCIES
   capybara
   devise!
   erubis
+  exception_notification!
   factory_girl
   fastercsv
-  formtastic
+  formtastic!
   google-spreadsheet-ruby
   haml
+  hirb
   i18n
   jammit!
   json
   launchy
+  memcache-client
   mime-types
   mongrel
   mysql
@@ -237,4 +257,5 @@ DEPENDENCIES
   warden
   whenever
   will_paginate!
+  wirble
   xmpp4r
