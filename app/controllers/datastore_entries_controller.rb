@@ -1,14 +1,14 @@
 class DatastoreEntriesController < ApplicationController
   before_filter :find_document_and_item
   
-  access_control do
-    allow :admin
-    allow :editor, :of => :document
-    actions :index, :create, :destroy do
-      allow :reader, :of => :document
-      allow all, :if => :document_is_public?
-    end
-  end
+  # access_control do
+  #   allow :admin
+  #   allow :editor, :of => :document
+  #   actions :index, :create, :destroy do
+  #     allow :reader, :of => :document
+  #     allow all, :if => :document_is_public?
+  #   end
+  # end
   
   # GET /items/:item_id/datastore_entries
   # GET /items/:item_id/datastore_entries/:key  (with only_current_user = true)

@@ -1,5 +1,4 @@
 class WidgetsController < ApplicationController
-  
   # GET /widgets
   def index
     per_page = 100

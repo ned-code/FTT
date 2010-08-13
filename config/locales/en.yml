@@ -483,6 +483,9 @@ en:
     user_publish_document_success_email:
       subject: "Your document %{document_name} has been published"
   
+  friendships:
+    index:
+      friends: "friends"
   followships:
     index:
       contacts: "contacts"

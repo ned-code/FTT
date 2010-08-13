@@ -10,7 +10,7 @@ class Item < ActiveRecord::Base
   composed_of :preferences, :class_name => 'Hash', :mapping => %w(preferences to_json),
                          :constructor => JsonHelper.method(:decode_json_and_yaml)                         
   
-  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind, :inner_html, :properties, :preferences
+  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind, :inner_html, :properties, :preferences, :creator_id
 
   attr_accessor_with_default :touch_page_active, true
   attr_accessor :document_uuid
@@ -29,6 +29,7 @@ class Item < ActiveRecord::Base
   
   belongs_to :page
   belongs_to :media, :polymorphic => true
+  belongs_to :creator, :class_name => 'User'
 
   # =============
   # = Callbacks =
@@ -36,11 +37,14 @@ class Item < ActiveRecord::Base
 
   after_save :refresh_cache
   after_update :need_update_thumbnail
+  #after_create :set_creator_as_editor
   #after_destroy :refresh_cache, :need_update_thumbnail  #no more used with safe_delete!
 
   # ===============
   # = Validations =
   # ===============
+  
+  validates_presence_of :creator_id
   
   # =================
   # = Class Methods =
@@ -100,6 +104,30 @@ class Item < ActiveRecord::Base
     need_update_thumbnail
     refresh_cache
   end
+  
+  def user_editor?(user)
+    self.find_user_roles(user).include? Role::EDITOR
+  end
+  
+  def user_contributor?(user)
+    self.find_user_roles(user).include? Role::CONTRIBUTOR
+  end
+  
+  def public_editor?
+    self.find_public_roles.include? Role::EDITOR
+  end
+  
+  def public_contributor?
+    self.find_public_roles.include? Role::CONTRIBUTOR
+  end
+  
+  def find_public_roles
+    @public_roles_names ||= Role.where(:item_id => self.id, :user_id => nil, :user_list_id => nil).select('roles.name').map{|r| r.name}
+  end
+  
+  def find_user_roles(user)
+    @user_roles_names ||= Role.where(:item_id => self.id, :user_id => user.id, :user_list_id => nil).select('roles.name').map{|r| r.name}
+  end
 
   private
 
@@ -119,6 +147,10 @@ class Item < ActiveRecord::Base
       sanitized_html += line.strip
     end
     sanitized_html
+  end
+  
+  def set_creator_as_editor
+    Role.create!(:item_id => self.id, :user_id => creator.uuid, :name => Role::EDITOR)
   end
 end
 

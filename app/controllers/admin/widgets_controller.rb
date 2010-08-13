@@ -1,5 +1,5 @@
 class Admin::WidgetsController < Admin::AdminController
-
+  
   # GET /admin/apps
   def index
     @widgets = Medias::Widget.all

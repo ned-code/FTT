@@ -2,11 +2,8 @@ require 'xmpp_user_synch'
 
 class User < ActiveRecord::Base
   set_primary_key :uuid
-  acts_as_authorization_subject
-
-  # needed for acl9
-  alias_attribute(:id, :uuid)
-
+  alias_attribute(:id, :uuid) # needed for acl9 TODO always needed???
+      
   avatars_path = "uploads/user/avatar/:id/:cw_style:basename.:extension"
   has_attached_file :avatar,
                     :styles => { :thumb=> "128x128#" },
@@ -43,6 +40,7 @@ class User < ActiveRecord::Base
   # =============
 
   validate :must_be_allowed_email, :on => :create
+  after_create :create_default_list
   before_save :check_clear_avatar
   after_create :create_xmpp_user, :notify_administrators
 
@@ -71,10 +69,44 @@ class User < ActiveRecord::Base
   has_many :roles_users
   has_many :tokens
 
+  has_many :friendships, :conditions => { :status => Friendship::ACCEPTED }
+  has_many :friends, :through => :friendships
+  
+  has_many :requested_friendships, :conditions => { :status => Friendship::REQUESTED }, :class_name => 'Friendship', :foreign_key => 'user_id'
+  has_many :requested_friends, :through => :requested_friendships, :source => :friend
+  
+  has_many :pending_request_friendships, :conditions => { :status => Friendship::PENDING_REQUEST }, :class_name => 'Friendship', :foreign_key => 'user_id'
+  has_many :pending_request_friends, :through => :pending_request_friendships, :source => :friend
+  
+  has_many :blocked_friendships, :conditions => { :status => Friendship::BLOCKED }, :class_name => 'Friendship', :foreign_key => 'user_id'
+  has_many :blocked_friends, :through => :blocked_friendships, :source => :friend
+  
+  has_many :user_lists, :conditions => { :default => false }
+  has_one :default_list, :class_name => 'UserList', :foreign_key => :user_id, :conditions => { :default => true }
+  
   # ===================
   # = Instance Method =
   # ===================
-
+  
+  #used for webdoc role, not for role on a document
+  def has_role?(role)
+    Role.where(:user_id => self.id,
+               :document_id => nil,
+               :item_id => nil,
+               :user_list_id => nil,
+               :name => role.to_s
+              ).present?
+  end
+  
+  def admin?
+    @is_admin ||= Role.where(:user_id => self.id,
+               :document_id => nil,
+               :item_id => nil,
+               :user_list_id => nil,
+               :name => Role::ADMIN
+              ).present?
+  end
+  
   def name
     first_name ? "#{first_name} #{last_name}" : username
   end
@@ -99,6 +131,26 @@ class User < ActiveRecord::Base
       self.has_no_roles_for!(document)
       self.has_role!("reader", document)
     end
+  end
+
+  def friend?(user)
+    friends.include?(user)
+  end
+  
+  def pending_requested_friend?(user)
+    pending_request_friends.include?(user)
+  end
+  
+  def requested_friend?(user)
+    requested_friends.include?(user)
+  end
+  
+  def blocked_friend?(user)
+    blocked_friends.include?(user)
+  end
+  
+  def friends_count
+    friends.length
   end
 
   def follow(user_id)
@@ -176,6 +228,11 @@ protected
   def check_clear_avatar
     avatar.clear if clear_avatar == 1.to_s
   end
+  
+  #after_save
+  def create_default_list
+    self.user_lists << UserList.create!({:default => true, :user_id => self.id, :name => 'All' })
+  end
 
   def must_be_allowed_email
     if (APP_CONFIG['must_check_user_email'])
@@ -190,10 +247,6 @@ protected
   end
   
 end
-
-
-
-
 
 
 

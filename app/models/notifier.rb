@@ -68,4 +68,22 @@ class Notifier < ActionMailer::Base
     mail(:to => recipients,
          :subject => subject)
   end
+  
+  def request_friendship(user,friend)
+    @user = user
+    @friend = friend
+    recipients friend.email
+    subject "#{user.username} wants to connect with you"
+    mail(:to => recipients,
+         :subject => subject)
+  end
+  
+  def accept_friendship(user,friend)
+    @user = user
+    @friend = friend
+    recipients user.email
+    subject "#{friend.username} is now connect with you"
+    mail(:to => recipients,
+         :subject => subject)
+  end
 end

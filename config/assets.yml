@@ -96,6 +96,7 @@ javascripts:
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/common/*.js
     - app/javascripts/webdoc/model/*.js
+    - app/javascripts/webdoc/card/card.js
 
   document_editor:
     - app/javascripts/webdoc/utils/*.js
@@ -165,8 +166,6 @@ javascripts:
     - app/javascripts/webdoc/media_browser/web_search_controller.js
     - app/javascripts/webdoc/media_browser/my_contents_controller.js
     - app/javascripts/webdoc/media_browser/media_browser_controller.js
-    
-    - app/javascripts/webdoc/card/card.js
   explore:
     - app/javascripts/webdoc/explore/*.js
   tests:
