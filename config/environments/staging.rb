@@ -56,8 +56,8 @@ Webdoc::Application.configure do
   config.active_support.deprecation = :notify
 
   #ExceptionNotification config
-  ExceptionNotification::Notifier.view_paths = ActionView::Base.process_view_paths(ExceptionNotification::Notifier.view_paths)
-  ExceptionNotification::Notifier.sender_address = %("WebDoc Staging Error" <staging.error@webdoc.com>)
-  ExceptionNotification::Notifier.email_prefix = "[WebDoc Staging]"
-  ExceptionNotification::Notifier.exception_recipients = %w(staging.error@webdoc.com)
+  config.middleware.use ExceptionNotifier,
+    :email_prefix => "[WebDoc Staging] ",
+    :sender_address => %{"WebDoc Staging Error" <staging.error@webdoc.com>},
+    :exception_recipients => %w{staging.error@webdoc.com}
 end

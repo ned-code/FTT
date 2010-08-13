@@ -1,7 +1,9 @@
 class Media < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
-  serialize :properties
+
+  composed_of :properties, :class_name => 'Hash', :mapping => %w(properties to_json),
+                           :constructor => JsonHelper.method(:decode_json_and_yaml)
   
   attr_accessible :uuid, :attachment, :properties, :system_name, :title, :description, :created_at, :favorites #, :remote_file_url
 

@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/rails/exception_notification
+  revision: 48cf433
+  branch: master
+  specs:
+    exception_notification (1.0.0)
+
+GIT
   remote: http://github.com/corneverbruggen/jammit.git
   revision: 829ffeb
   specs:
@@ -130,6 +137,7 @@ GEM
       activesupport (>= 2.3.6)
       mime-types
       treetop (>= 1.4.5)
+    memcache-client (1.8.5)
     mime-types (1.16)
     mongrel (1.1.5)
       cgi_multipart_eof_fix (>= 2.4)
@@ -219,6 +227,7 @@ DEPENDENCIES
   capybara
   devise!
   erubis
+  exception_notification!
   factory_girl
   fastercsv
   formtastic!
@@ -229,6 +238,7 @@ DEPENDENCIES
   jammit!
   json
   launchy
+  memcache-client
   mime-types
   mongrel
   mysql

@@ -7,7 +7,7 @@
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :application, :media => 'all'
     = render :partial => "layouts/google_analytics"
-    -#= csrf_meta_tag
+    = csrf_meta_tag
 
   %body{ :class => controller_name }
     = render :partial => "layouts/main_toolbar"

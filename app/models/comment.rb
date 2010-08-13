@@ -36,6 +36,7 @@ class Comment < ActiveRecord::Base
   def as_application_json
     hash = { 'comment' => self.attributes }
     hash['comment']['safe_content'] = self.safe_content
+    hash['comment']['relative_created_at'] = self.relative_created_at
     hash['comment']['user'] = self.user.attributes
     hash['comment']['user']['avatar_thumb_url'] = self.user.avatar_thumb_url
     hash

@@ -2,9 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   
   rescue_from Acl9::AccessDenied, :with => :forbidden_access
-
-  include ExceptionNotification::Notifiable
-
+  
   before_filter :set_first_visit_time
   before_filter :token_authenticate
   before_filter :authenticate_user!
@@ -22,6 +20,7 @@ protected
   def token_authenticate
     if params[:user_token].present?
       token = Token.where(['token = ?', params[:user_token]]).first
+      # TODO create a method next tests!
       if token.present? && ['images'].include?(controller_name) && ['index', 'create'].include?(action_name)
         session[:app_id] = token.application_id
         env['warden'].set_user(token.user)
