@@ -21,6 +21,7 @@ staging:
   host: localhost
   encoding: utf8
   collation: utf8_unicode_ci
+  reconnect: true
 
 production:
   adapter: mysql
@@ -30,4 +31,5 @@ production:
   host: localhost
   encoding: utf8
   collation: utf8_unicode_ci
+  reconnect: true  
     

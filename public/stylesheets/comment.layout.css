@@ -8,7 +8,7 @@
      than using -ve text-indent because IE7 moves
      the background image with the text-indent. */
   height: 0;
-  background-image: url('../images/thumb_test.png');
+  /* background-image: url('../images/thumb_test.png'); */
   background-size: 96px 64px;
   background-position: 0 0;
   background-repeat: no-repeat;
