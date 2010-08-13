@@ -438,7 +438,7 @@ class Document < ActiveRecord::Base
   #returns an array of all document's editors
   def  editors
     #TODO: manage the list
-    users = User.all#(:joins => {:roles_users => :role } , :conditions => ['roles.authorizable_id = ?',self.uuid])
+    users = User.joins(:roles).where('roles.document_id = ? AND roles.name = ?', self.id, Role::EDITOR).all
     users
   end
   
