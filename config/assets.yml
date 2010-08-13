@@ -77,6 +77,7 @@ stylesheets:
 javascripts:
   common:
     - public/js/jquery-1.4.2.js
+    - public/js/rails.js
     - public/js/jquery-json.js
     - public/js/jquery-string.js
     - public/js/jquery.form.js
@@ -99,6 +100,7 @@ javascripts:
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/common/*.js
     - app/javascripts/webdoc/model/*.js
+    - app/javascripts/webdoc/card/card.js
 
   document_editor:
     - app/javascripts/webdoc/utils/*.js
@@ -170,8 +172,6 @@ javascripts:
     - app/javascripts/webdoc/media_browser/web_search_controller.js
     - app/javascripts/webdoc/media_browser/my_contents_controller.js
     - app/javascripts/webdoc/media_browser/media_browser_controller.js
-    
-    - app/javascripts/webdoc/card/card.js
   explore:
     - app/javascripts/webdoc/explore/*.js
   tests:

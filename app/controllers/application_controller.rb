@@ -1,12 +1,15 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
-  rescue_from Acl9::AccessDenied, :with => :forbidden_access
-
-  include ExceptionNotification::Notifiable
-
+  rescue_from CanCan::AccessDenied do |exception|
+    p exception
+    flash[:notice] = exception.message
+    redirect_to "/users/#{current_user.uuid}"
+  end
+  
   before_filter :set_first_visit_time
-  before_filter :http_authenticate
+  before_filter :token_authenticate
+  before_filter :authenticate_user!
   before_filter :set_xmpp_client_id_in_thread
 
   helper :all
@@ -15,12 +18,29 @@ class ApplicationController < ActionController::Base
 protected
 
   def forbidden_access
-    render :file => "#{Rails.public_path}/403.html", :status => 403
+    render :file => "#{Rails.public_path}/403.html", :status => 403 and return
+  end
+
+  def token_authenticate
+    if params[:user_token].present?
+      token = Token.where(['token = ?', params[:user_token]]).first
+      # TODO create a method next tests!
+      if token.present? && ['images'].include?(controller_name) && ['index', 'create'].include?(action_name)
+        session[:app_id] = token.application_id
+        env['warden'].set_user(token.user)
+        request.format = :json
+      else
+        render :json => {}, :status => 403 and return
+      end
+    else
+      session[:app_id] = nil
+      http_authenticate
+    end
   end
 
   def http_authenticate
     if !['65.49.79.67', '86.57.245.87'].include?(request.remote_ip) && Rails.env != 'test'
-      authenticate_or_request_with_http_basic("WebDoc preview") do |username, password|
+      authenticate_or_request_with_http_basic do |username, password|
         username == "wduser" && password == "wdalpha001"
       end
       # Can be removed with Rails 3: http://wiki.github.com/plataformatec/devise/devise-and-http-authentication
@@ -41,9 +61,9 @@ protected
 
   def set_return_to(scope=nil)
     if scope == nil
-      session[:return_to] = request.request_uri if request && request.get?
+      session[:return_to] = request.fullpath if request && request.get?
     else
-      session[:"return_to_#{scope}"] = request.request_uri if request && request.get?
+      session[:"return_to_#{scope}"] = request.fullpath if request && request.get?
     end
   end
 

@@ -20,7 +20,7 @@ Webdoc::Application.configure do
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
-# Devise
+  # Devise
   config.action_mailer.default_url_options = { :host => 'webdoc.local' }
-
+  
 end

@@ -1,5 +1,5 @@
 class Admin::ThemesController < Admin::AdminController
-
+  
   before_filter :find_theme, :only => [:show, :edit, :update, :destroy]
 
   def index

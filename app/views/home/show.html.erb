@@ -5,11 +5,11 @@
       <h2>Log in&hellip;</h2>
       
       <fieldset>
-        <div class="stack column one of-two<% if @user.errors.on(:email) %> error<% end %>">
+        <div class="stack column one of-two<% if @user.errors[:email].present? %> error<% end %>">
           <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
           <%= f.text_field :email, :'data-type' => "email", :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
         </div><!-- spaceless
-     --><div class="stack column two of-two<% if @user.errors.on(:password) %> error<% end %>">
+     --><div class="stack column two of-two<% if @user.errors[:password].present? %> error<% end %>">
           <%= f.label :password, 'Password <abbr class="required" title="required">*</abbr>' %>
           <%= f.password_field :password, :minlength => 6, :maxlength => 255, :required => "required", :autocomplete => "on", :title => "Please enter your password" %>
           <span class="label"><%= link_to t('devise.passwords.link'), new_password_path(:user) %></span>

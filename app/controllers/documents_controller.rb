@@ -1,28 +1,29 @@
 class DocumentsController < ApplicationController
+  
   before_filter :store_url_in_session_if_user_not_logged
   # need to be authenticate for alpha release.
   # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document
-  before_filter :authenticate_user!
   before_filter :find_document, :only => [:show, :update, :duplicate, :destroy]
   
   #before_filter :authenticate_if_needed, :only => [:show]
   #before_filter :authenticate_user!, :only => [:index]
   after_filter :create_view_count, :only => :show
   
-  access_control do
-    action :show do
-      allow all, :if => :document_is_public?
-      allow :editor, :of => :document
-    end    
-    allow logged_in, :to => [:index, :create, :duplicate]
-    allow all, :to => :explore
-    allow all, :to => :featured
-    allow :editor, :of => :document, :to => [:update, :destroy]    
-    allow :admin    
-  end
+  # access_control do
+  #   action :show do
+  #     allow all, :if => :document_is_public?
+  #     allow :editor, :of => :document
+  #   end
+  #   allow logged_in, :to => [:index, :create, :duplicate]
+  #   allow all, :to => :explore
+  #   allow all, :to => :featured
+  #   allow :editor, :of => :document, :to => [:update, :destroy]
+  #   allow :admin
+  # end
   
   # GET /documents
-  def index    
+  def index
+    authorize! :read, Document
     respond_to do |format|
       format.html do
         set_return_to
@@ -122,11 +123,12 @@ class DocumentsController < ApplicationController
     if @document.present?
       @related_documents = Document.all(:conditions => { :category_id => @document.category_id}, :limit => 12 )
       @more_author_documents = Document.all(:conditions => { :creator_id => @document.creator_id}, :limit => 6 )
+      authorize! :read, @document
       respond_to do |format|
         format.html do
           set_cache_buster
           @get_return_to = get_return_to 
-          render :layout => 'layouts/editor'      
+          render :layout => 'layouts/editor'
         end
         format.json do
           logger.debug "return document json."
@@ -176,10 +178,6 @@ class DocumentsController < ApplicationController
   
   def find_document
     @document = Document.not_deleted.find_by_uuid(params[:id])
-  end
-  
-  def authenticate_if_needed
-    authenticate_user! unless document_is_public?
   end
   
   def create_view_count

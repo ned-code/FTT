@@ -1,15 +1,14 @@
 require Rails.root + 'lib/shindig'
 
 class ItemsController < ApplicationController
-  before_filter :authenticate_user!
   
-  access_control do
-    action :show do
-      allow all, :if => :document_is_public?      
-    end    
-    allow :editor, :of => :pseudo_document
-    allow :admin    
-  end
+  # access_control do
+  #   action :show do
+  #     allow all, :if => :document_is_public?
+  #   end
+  #   allow :editor, :of => :pseudo_document
+  #   allow :admin
+  # end
   
   # GET /documents/:document_id/pages/:page_id/items/:id
   def show
@@ -19,7 +18,7 @@ class ItemsController < ApplicationController
     if @item
       render :layout => false
     else
-      forbidden_access
+      render :file => "#{Rails.public_path}/403.html", :status => 403
     end  
   end
   
@@ -29,6 +28,7 @@ class ItemsController < ApplicationController
     if @item.nil?
       @item = Item.new_with_uuid(params[:item])
       @item[:page_id] = params[:page_id]
+      @item[:creator_id] = current_user.uuid
     end
     @item.document_uuid = params[:document_id]
     @item.save!

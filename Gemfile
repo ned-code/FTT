@@ -12,20 +12,23 @@ gem 'aws-s3', :git => 'http://github.com/isaacfeliu/aws-s3.git'
 gem 'warden'
 # gem 'devise', :branch => 'master'
 gem 'devise', :branch => 'v1.1.0uuid', :git => 'http://github.com/webdoc/devise.git'
+# gem 'acl9'
+gem 'cancan'
 gem 'will_paginate', :branch => 'rails3', :git => 'http://github.com/mislav/will_paginate.git'
 gem 'uuidtools' # for has_uuid plugin
 gem 'uuid'
 gem "mysql"
 gem 'rack-debug'
 gem 'nokogiri'
-gem 'acl9'
-gem 'formtastic'
+gem 'formtastic', :git => "http://github.com/justinfrench/formtastic.git", :branch => "rails3"
 gem 'erubis'
 # http://github.com/documentcloud/jammit/issues#issue/53
 gem 'jammit', :git => 'http://github.com/corneverbruggen/jammit.git'
 gem 'whenever'
 gem 'fastercsv'
 gem 'google-spreadsheet-ruby'
+gem 'exception_notification', :git => 'git://github.com/rails/exception_notification', :branch => 'master', :require => 'exception_notifier'
+gem 'memcache-client'
 
 group :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'
@@ -33,6 +36,8 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-ext'
   gem 'annotate'
+  gem 'wirble'
+  gem 'hirb'
 end
 
 group :test do
