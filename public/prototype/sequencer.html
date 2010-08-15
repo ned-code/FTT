@@ -81,17 +81,6 @@
   <script src="js/sequencer.processes.DOM.js"></script>
   <script>
 	
-	var introWordsSequence = {
-		type: 'audio',
-		src: 'audio/voice.m4a',
-		1200: [{ type: 'addhtml', selector: '#content', html: 'Hello.' }],
-		2400: [{ type: 'addhtml', selector: '#content', html: ' Welcome' }],
-		2700: [{ type: 'addhtml', selector: '#content', html: ' to' }],
-		2850: [{ type: 'addhtml', selector: '#content', html: ' my' }],
-		3000: [{ type: 'addhtml', selector: '#content', html: ' <b>Event</b>' }],
-		3300: [{ type: 'addhtml', selector: '#content', html: ' <b>Sequencer</b>.' }]
-	};
-	
 	var introButtonsSequence = {
 		type: 'sequence',
 		0: 		[{ type: 'addClass', selector: '#fing', className: 'active' }],
@@ -102,11 +91,27 @@
 		3600: [{ type: 'removeClass', selector: '#fong', className: 'active' }]
 	};
 	
+	var introWordsSequence = {
+		type: 'audio',
+		src: 'audio/voice.m4a',
+		start: 2000,
+		end: 4499,
+		loop: true,
+		1200: [{ type: 'addhtml', selector: '#content', html: 'Hello.' }],
+		2400: [{ type: 'addhtml', selector: '#content', html: ' Welcome' }],
+		2700: [{ type: 'addhtml', selector: '#content', html: ' to' }],
+		2850: [{ type: 'addhtml', selector: '#content', html: ' my' }],
+		3000: [{ type: 'addhtml', selector: '#content', html: ' <b>Event</b>' }],
+		3300: [{ type: 'addhtml', selector: '#content', html: ' <b>Sequencer</b>.' }],
+		4500: [introButtonsSequence]
+	};
+	
 	var introSequence = {
 		type: 'sequence',
+		end: 8000,
 		//1:		[{ type: 'audio', src: 'audio/voice.m4a' }],
-		1: [introWordsSequence],
-		5600: [introButtonsSequence]
+		20: [introWordsSequence],
+		//8000: [{ type: 'addhtml', selector: '#content', html: ' <br/>End' }]
 	};
 	
 	// Make sequencer
