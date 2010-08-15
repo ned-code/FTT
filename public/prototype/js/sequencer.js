@@ -2,7 +2,7 @@
 // 
 // Runs a series of timed events with a self-regulating timer
 // that gaurantees that events stay (as close as possible in
-// javascript in sync with the browser's Date. Events are JSON
+// javascript) in sync with the browser's Date. Events are JSON
 // so they can easily be transferred. They are also triggerable
 // as DOM Events. The Sequencer shepherds them into sequence
 // processes depending on their type. Sequences themselves are
@@ -18,11 +18,7 @@
 	var transport = {
 		play: function(){
 			var now = new Date().getTime();
-			
 			this.starttime = now;
-			
-			console.log('now: ', now);
-			
 			makeProcessQueue(this, now, clock);
 		},
 		latency: 0
@@ -30,12 +26,14 @@
 	
 	var timer;
 	
+	var processQueue;
+	
 	function clock(process, t){
 		var now = new Date().getTime();
 		
-		if (debug) { console.log('now: ', now, 't: ', t); }
-		
-		if ( t > now ) { //(now - transport.latency) ) {
+		if ( t > now ) {
+			var wait = t - now;
+			
 			timer = setTimeout(function(){
 				var now = new Date().getTime(),
 						latency = now - t;
@@ -46,20 +44,20 @@
 				clearTimeout(timer);
 				timer = null;
 				
-				console.log('latency: ', latency);
+				debug && console.log('now:', now, 'latency:', latency, 'idle:', wait);
+				
 				makeProcessQueue(process, t, clock);
-			}, t - now ); //- transport.latency);
+			}, wait );
 		}
 		else {
-			console.log('latency: ', now - t, ' - buffered');
-			playProcessQueue(process);
+			debug && console.log('now:', now, 'latency:', now-t, 'idle:', 0, '[buffered]');
+			playProcessQueue(process, t);
 			makeProcessQueue(process, t, clock);
 		}
 	}
 	
 	function makeProcessQueue(process, t, fn) {
-		var processQueue,
-				limit = t + 10000,
+		var limit = t + 20000,
 				l;
 		
 		// Scan ahead looking for next eventList
@@ -75,25 +73,27 @@
 		if (debug) { console.log('No events in the next 20 seconds. Stopping.'); }
 	}
 	
-	function playProcessQueue(process) {
-		var processQueue = process.processQueue,
-				l = processQueue.length;
+	function playProcessQueue(process, t) {
+		var l = processQueue.length;
 		
 		// Trigger the processes
 		while (l--) {
-			processQueue[l]();
+			processQueue[l](t);
 		}
+	}
+	
+	function clearProcessQueue() {
+		clearTimeout(timer);
+		timer = null;
+		processQueue = undefined;
 	}
 	
 	// Processes --------------------------------------
 	
 	var processes = {
-		'click': DOMEventProcess,
-		'audio': AudioEventProcess,
-		'sequence': SequenceProcess
+		audio: 		makeMediaSequenceProcess,
+		sequence: makeSequenceProcess
 	};
-	
-	var selectors = {};
 	
 	var audiosrcs = {};
 	
@@ -103,66 +103,89 @@
 	
 	Process.prototype = {};
 	
-	function DOMEventProcess(e) {
-		
-		var obj;
-		
-		// Cache the jQuery object corresponding to this selector
-		// This could be dangerous if the DOM changes! We need a
-		// way to intelligently flush the cache!!
-		if ( e.selector ) {
-			if ( selectors[e.selector] ) {
-				obj = selectors[e.selector];
-			}
-			else {
-				obj = selectors[e.selector] = jQuery(e.target || e.selector);
-			}
-		}
-		else {
-			obj = jQuery(e.target);
-		}
-		
-		return function(){
-			obj.trigger(e);
-		}
+	function makeSequenceProcess(e, t, parent, fn) {
+		var process = new SequenceProcess(e, t);
+		parent.addChildProcess(process);
 	}
 	
-	DOMEventProcess.prototype = new Process();
-
-	function AudioEventProcess(e, t, fn) {
-		var obj, canplay = false, doplay = false;
+	function SequenceProcess(e, t) {
+	  this.starttime = t;
+	  this.sequence = e;
+	  this.children = [];
+	  this.latency = 1;
+	  
+	  
+		console.log('process:', this);
+	}
+	
+	function makeMediaSequenceProcess(e, t, parent, fn) {
+		var process = new SequenceProcess(e, t),
+				audio, canplay, triggerTime, playTime, playLatency;
 		
 		// Cache the Audio obj for this sound src
 		if ( e.src ) {
 			if ( audiosrcs[e.src] ) {
-				obj = audiosrcs[e.src];
+				audio = audiosrcs[e.src];
 			}
 			else {
-				obj = new Audio(e.src);
-				jQuery(obj).bind('canplay', function(){
-					canplay = true;
-					if (debug) { console.log('[AudioEventProcess] '+e.src, 'canplay'); }
-					
-					if (fn) { fn(); }
-					
-					if (doplay) {
-						if (debug) { console.log('[AudioEventProcess] '+e.src, 'play - a bit late'); }
-						obj.play();
-					}
-				});
+				audio = new Audio(e.src);
 				if (debug) { console.log('[AudioEventProcess] '+e.src, 'Created new Audio object'); }
 			}
 		}
 		
-		return function(){
-			if (canplay) { obj.play(); }
-			else { doplay = true; }
-		}
+		jQuery(audio)
+		.bind('play', function(){
+			console.log('[audio] e: play');
+			
+			playTime = new Date().getTime();
+			playLatency = playTime - triggerTime;
+			
+			var playhead = this.currentTime;
+			
+			console.log('playhead', playhead, 'audio latency', playLatency);
+			
+			// We've got a problem between local time and global time.
+			// Bollocks.
+			// 
+			// Either... bring the audio up to sync with the sequence
+			
+			//audio.currentTime = playLatency/1000;
+			
+			// Or... update process starttime to delay the rest of
+			// the sequence to match the media
+			process.starttime = playLatency + t;
+			
+			if (parent && parent.addChildProcess) {
+				parent.addChildProcess(process);
+			}
+			
+			clearProcessQueue();
+			makeProcessQueue(PPP, playTime, clock);
+			
+			// But watch out for events that have already played - they'll double!
+			// But now we need some way to update the event queue...
+			
+		})
+		.bind('canplaythrough', function(){
+			canplay = true;
+			if(fn) fn();
+		});
+		
+		return function(t){
+			triggerTime = t;
+			
+			if (canplay) {
+				audio.play();
+			}
+			else {
+				jQuery(audio).bind('canplaythrough', function(){
+					audio.play();
+				});
+			}
+		};
 	}
 	
-	AudioEventProcess.prototype = new Process();
-	
-	function SequenceProcess(e, t) {
+	function MediaSequenceProcess(e, t) {
 		this.starttime = t;
 		this.sequence = e;
 		this.children = [];
@@ -170,9 +193,10 @@
 	}
 	
 	SequenceProcess.prototype = new Process();
+	MediaSequenceProcess.prototype = new Process();
 	
 	jQuery.extend(SequenceProcess.prototype, {
-		getProcessList: 	function getProcessList(t) {
+		getProcessList: function getProcessList(t) {
 			var sequence = this.sequence,
 					children = this.children,
 					t = t - this.starttime,
@@ -187,11 +211,9 @@
 				
 				while (k--) {
 					event = events[k];
-					process = new processes[ event.type ]( event, t );
-					if (process instanceof SequenceProcess) {
-						children.push(process);
-					}
-					else {
+					process = processes[ event.type ]( event, t, this );
+					
+					if (process) {
 						processList.push(process);
 					}
 				}
@@ -200,18 +222,23 @@
 			l = children.length;
 			
 			while (l--) {
-				processList = processList.concat( children[l].getProcessList(t) );
+				processList = processList.concat( children[l].getProcessList(t) )
 			}
 			
-			this.processQueue = processList;
-			
 			return processList;
+		},
+		addChildProcess: function( process ){
+			this.children.push(process);
 		}
 	});
+	
+	var PPP;
 	
 	function Sequencer(sequence){
 		var process = new SequenceProcess(sequence);
 		jQuery.extend(process, transport);
+		// Quick hack
+		PPP = process;
 		return process;
 	}
 	
@@ -220,95 +247,5 @@
 	
 	// Expose Sequencer to global scope
 	window.Sequencer = Sequencer;
-	
-})();
-
-
-
-(function(){
-	
-	var selectors = {};
-	
-	// Add a new process that takes selectors and adds
-	// words to their DOM nodes. Let's call it on
-	// 'addhtml' events.
-	
-	Sequencer.processes.addhtml = function(e) {
-		
-		var obj;
-		
-		// Cache the jQuery object corresponding to this selector
-		// This could be dangerous if the DOM changes! We need a
-		// way to intelligently flush the cache!!
-		if ( e.selector ) {
-			if ( selectors[e.selector] ) {
-				obj = selectors[e.selector];
-			}
-			else {
-				obj = selectors[e.selector] = jQuery(e.target || e.selector);
-			}
-		}
-		else {
-			obj = jQuery(e.target);
-		}
-		
-		return function(){
-			obj.html( obj.html() + e.html );
-		}
-	};
-
-
-	// Add a new process that adds Classes
-	
-	Sequencer.processes.addClass = function(e) {
-		
-		var obj;
-		
-		// Cache the jQuery object corresponding to this selector
-		// This could be dangerous if the DOM changes! We need a
-		// way to intelligently flush the cache!!
-		if ( e.selector ) {
-			if ( selectors[e.selector] ) {
-				obj = selectors[e.selector];
-			}
-			else {
-				obj = selectors[e.selector] = jQuery(e.target || e.selector);
-			}
-		}
-		else {
-			obj = jQuery(e.target);
-		}
-		
-		return function(){
-			obj.addClass( e.className );
-		}
-	};
-	
-	
-	// Add a new process that removes Classes
-	
-	Sequencer.processes.removeClass = function(e) {
-		
-		var obj;
-		
-		// Cache the jQuery object corresponding to this selector
-		// This could be dangerous if the DOM changes! We need a
-		// way to intelligently flush the cache!!
-		if ( e.selector ) {
-			if ( selectors[e.selector] ) {
-				obj = selectors[e.selector];
-			}
-			else {
-				obj = selectors[e.selector] = jQuery(e.target || e.selector);
-			}
-		}
-		else {
-			obj = jQuery(e.target);
-		}
-		
-		return function(){
-			obj.removeClass( e.className );
-		}
-	};
 	
 })();
