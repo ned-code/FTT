@@ -158,13 +158,13 @@ class User < ActiveRecord::Base
   end
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
-    data = ActiveSupport::JSON.decode(access_token.get('/me'))
 
-    # Link the account if an e-mail already exists in the database
-    # or a signed_in_resource, which is already in session was given.
-    if user = signed_in_resource # || User.find_by_email(data["email"])
+    if user = User.find_by_facebook_token(access_token.token)
+      # do nothing
+    elsif user = signed_in_resource
       user.update_attribute(:facebook_token, access_token.token)
     else
+      data = ActiveSupport::JSON.decode(access_token.get('/me'))
       user = User.new(:username => data["email"],
                       :first_name => data["first_name"],
                       :last_name => data["last_name"],
