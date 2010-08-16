@@ -343,46 +343,34 @@ class Document < ActiveRecord::Base
   
   #Actually we look only on the user and public right, not list right
   def public_editor?
-    p self.find_public_roles && self.find_public_roles.include?(Role::EDITOR)
     self.find_public_roles && self.find_public_roles.include?(Role::EDITOR)
   end
   
   def public_contributor?
-    p self.find_public_roles && self.find_public_roles.include?(Role::CONTRIBUTOR)
     self.find_public_roles && self.find_public_roles.include?(Role::CONTRIBUTOR)
   end
   
   def public_viewer_comment?
-    p self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_COMMENT)
     self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_COMMENT)
   end
   
   def public_viewer_only?
-    p "public_viewer_only"
-    p self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_ONLY)
     self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_ONLY)
   end
   
   def user_editor?(user)
-    p "user_editor"
-    p self.find_user_roles(user) && self.find_user_roles(user).include?(Role::EDITOR)
-    p self.find_user_roles(user)
-    p user
     self.find_user_roles(user) && self.find_user_roles(user).include?(Role::EDITOR)
   end
   
   def user_contributor?(user)
-    p self.find_user_roles(user) && self.find_user_roles(user).include?(Role::CONTRIBUTOR)
     self.find_user_roles(user) && self.find_user_roles(user).include?(Role::CONTRIBUTOR)
   end
   
   def user_viewer_comment?(user)
-    p self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_COMMENT)
     self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_COMMENT)
   end
   
   def user_viewer_only?(user)
-    p self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_ONLY)
     self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_ONLY)
   end
   
