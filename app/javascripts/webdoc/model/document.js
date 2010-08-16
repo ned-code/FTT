@@ -31,10 +31,6 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     return this.data.creator_id;
   },
   
-  isShared: function() {
-    return this.data.is_public;
-  },
-  
   setTitle: function(title, skipSave) {
     this.data.title = title;
     if(!skipSave && !skipSave === true) {
@@ -115,15 +111,22 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     return "theme_" + themeName;
   },
   
+  //Rewrite this to be compatible with new role paradigm
   share: function() {
     this.data.is_public = true;
     this.save();
   },
   
+  //Rewrite this to be compatible with new role paradigm
   unshare: function() {
     this.data.is_public = false;
   },
-
+  
+  //Rewrite this to be compatible with new role paradigm
+  isShared: function() {
+    return this.data.is_public;
+  },
+  
   refresh: function($super, json, onlyMissingValues) {
     $super(json, onlyMissingValues);
     var that = this;
