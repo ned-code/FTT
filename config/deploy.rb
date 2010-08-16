@@ -13,7 +13,7 @@ set :scm, :git
 set :repository, "git@git.assembla.com:webdoc"
 ssh_options[:forward_agent] = true
 
-after 'deploy:update_code', 'bundle', 'deploy:generate_assets', 'deploy:link_config', 'deploy:update_crontab'
+after 'deploy:update_code', 'bundle', 'deploy:generate_assets', 'deploy:link_config', 'deploy:update_crontab', 'deploy:clear_cache'
 
 namespace :deploy do
   task :start do ; end
@@ -47,6 +47,10 @@ namespace :deploy do
   
   task :migrate do
     run "cd #{release_path} && #{ruby_path}/bin/rake db:migrate RAILS_ENV=#{rails_env}"
+  end
+  
+  task :clear_cache do
+    run "cd #{release_path} && #{ruby_path}/bin/rake tmp:clear RAILS_ENV=#{rails_env}"
   end
 end
 

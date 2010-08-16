@@ -27,7 +27,8 @@
     <% else %>
       <ul class="horizontal divided usernav_index index">
         <li><%= link_to "login", root_path %></li
-       ><li><%= link_to "sign up", new_registration_path(:user) %></li>
+       ><li><%= link_to "sign up", new_registration_path(:user) %></li
+       ><li><%= link_to "sign up/in with Facebook", user_oauth_authorize_url(:facebook) %></li>
       </ul>
     <% end %>
   </div>
