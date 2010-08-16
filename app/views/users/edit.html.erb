@@ -4,6 +4,20 @@
       <%=t '.title' %>
       <!--%= link_to "Back", :back, { :class => "wd-back-button" }%-->
     </h2>
+
+    <div>
+      <% if @user.facebook_token.present? %>
+        <% fb_request = @user.facebook_request('/me') %>
+        <% if fb_request['error'].blank? && fb_request['email'].present? %>
+          Facebook account: <%= fb_request['email'] %>
+        <% else %>
+          <%= link_to "token no more valid, re-add Facebook", user_oauth_authorize_url(:facebook) %>
+        <% end %>
+      <% else %>
+        <%= link_to "add Facebook to your Webdoc account", user_oauth_authorize_url(:facebook) %>
+      <% end %>
+    </div>
+    
     <%= form_for @user, :url => "/users/#{@user.uuid}", :html => { :multipart => 'true', :method => :put }, :builder => CustomFormBuilder do |f| %>
       <fieldset>
         <div class="column one of-four stack <% if @user.errors.on(:avatar) %>error<% end %>">
@@ -68,6 +82,7 @@
       <a href="<%= edit_registration_path(:user) %>" style="margin-bottom: 0;" class="button">Change email &amp; password</a>
           
     <% end %>
+
   </div>
 </div>
 

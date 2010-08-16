@@ -3,8 +3,7 @@
 <div class="action-zone zone">
   <div class="wrap clear">
     <h2>Sign up</h2>
-    <%= form_for resource_name, resource, :url => registration_path(resource_name), :builder => CustomFormBuilder do |f| %>
-      
+    <%= form_for resource, :name => resource_name, :url => registration_path(resource_name), :builder => CustomFormBuilder do |f| %>
       <fieldset>
         <div class="stack column one of-four">
           <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>

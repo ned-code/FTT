@@ -40,11 +40,11 @@ GIT
     will_paginate (3.0.pre2)
 
 GIT
-  remote: http://github.com/webdoc/devise.git
-  revision: 60f30d3
-  branch: v1.1.0uuid
+  remote: http://github.com/plataformatec/devise.git
+  revision: 81c49c6
+  branch: master
   specs:
-    devise (1.1.0)
+    devise (1.2.0)
       bcrypt-ruby (~> 2.1.2)
       warden (~> 0.10.7)
 
@@ -79,6 +79,7 @@ GEM
       activemodel (= 3.0.0.rc)
       activesupport (= 3.0.0.rc)
     activesupport (3.0.0.rc)
+    addressable (2.2.0)
     annotate (2.4.0)
     arel (0.4.0)
       activesupport (>= 3.0.0.beta)
@@ -110,6 +111,9 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     factory_girl (1.3.2)
+    faraday (0.4.6)
+      addressable (>= 2.1.1)
+      rack (>= 1.0.1)
     fastercsv (1.5.3)
     fastthread (1.0.7)
     ffi (0.6.3)
@@ -144,6 +148,7 @@ GEM
       daemons (>= 1.0.3)
       fastthread (>= 1.0.1)
       gem_plugin (>= 0.2.3)
+    multi_json (0.0.4)
     mysql (2.8.1)
     net-scp (1.0.2)
       net-ssh (>= 1.99.1)
@@ -154,6 +159,9 @@ GEM
       net-ssh (>= 1.99.1)
     nokogiri (1.4.3.1)
     oauth (0.4.1)
+    oauth2 (0.0.10)
+      faraday (~> 0.4.1)
+      multi_json (>= 0.0.4)
     paperclip (2.3.3)
       activerecord
       activesupport
@@ -243,6 +251,7 @@ DEPENDENCIES
   mongrel
   mysql
   nokogiri
+  oauth2
   paperclip
   rack-debug
   rails (= 3.0.0.rc)
