@@ -7,7 +7,7 @@ class Role < ActiveRecord::Base
   CONTRIBUTOR = 'contributor'
   VIEWER_COMMENT = 'viewer_comment'
   VIEWER_ONLY = 'viewer_only'
-    
+  PUBLIC_ROLES = [VIEWER_COMMENT, VIEWER_ONLY]
   attr_accessible :name, :uuid, :user_id, :document_id, :item_id, :user_list_id
   
   # ================

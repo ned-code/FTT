@@ -14,6 +14,10 @@ class Document < ActiveRecord::Base
   scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
   scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
   scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
+  scope :public, lambda{
+    joins(:roles).
+    where('roles.item_id is ? and roles.user_id is ? and roles.user_list_id is ? and roles.name in (?)',nil,nil,nil,Role::PUBLIC_ROLES)
+  }
   
   # ================
   # = Associations =
@@ -21,7 +25,9 @@ class Document < ActiveRecord::Base
   
   has_many :pages, :order => 'position ASC'
   has_many :view_counts, :as => :viewable
-  has_one :document_access
+  has_many :roles
+  # has_one :document_access
+  
   belongs_to :metadata_media, :class_name => 'Media'
   belongs_to :creator, :class_name => 'User'
   belongs_to :category
@@ -61,7 +67,7 @@ class Document < ActiveRecord::Base
             :page => page_id,
             :per_page => per_page,
             :order => 'created_at DESC',
-            :conditions => ['documents.deleted_at IS ? AND (documents.title LIKE ? OR documents.description LIKE ?)', nil, "%#{query}%", "%#{query}%"]
+            :conditions => ['documents.title LIKE ? OR documents.description LIKE ?)', "%#{query}%", "%#{query}%"]
     }
 
     if document_filter
@@ -69,14 +75,11 @@ class Document < ActiveRecord::Base
       if document_filter == 'creator'
         paginate_params[:conditions][0] += ' AND documents.creator_id = ?'
         paginate_params[:conditions] << current_user.uuid
-      elsif document_filter == 'public'
-        paginate_params[:conditions][0] = ' AND documents.is_public = ?'
-        paginate_params[:conditions] << true
       else
         # Retrieve documents for the current user
         documents_ids = Array.new
-        current_user.role_objects.all(:select => 'authorizable_id', :conditions => { :name => document_filter } ).each do |role|
-          documents_ids << role.authorizable_id if role.authorizable_id
+        current_user.roles.all(:select => 'document_id', :conditions => { :name => document_filter } ).each do |role|
+          documents_ids << role.document_id if role.document_id
         end
         # Must remove owned documents
         owner_ids = []
@@ -91,15 +94,19 @@ class Document < ActiveRecord::Base
     else
       if (!current_user.has_role?("admin"))
         documents_ids = Array.new
-        roles = current_user.role_objects.all.each do |role|
-          documents_ids << role.authorizable_id
+        roles = current_user.roles.all.each do |role|
+          documents_ids << role.documents_id
         end
         paginate_params[:conditions][0] += ' AND documents.uuid IN (?)'
         paginate_params[:conditions] << documents_ids
       end
     end
-
-    Document.paginate(paginate_params)
+    
+    if document_filter == 'public'
+      Document.not_deleted.public.paginate(paginate_params)
+    else
+      Document.not_deleted.paginate(paginate_params)
+    end
   end
 
   def self.not_deleted_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator])
@@ -107,11 +114,7 @@ class Document < ActiveRecord::Base
             :page => page_id,
             :per_page => per_page,
             :include => include,
-            :conditions => ['documents.deleted_at IS ? AND (documents.title LIKE ? OR documents.description LIKE ?) AND documents.is_public = ?',
-                            nil,
-                            "%#{query}%",
-                            "%#{query}%",
-                            true],
+            :conditions => ['documents.title LIKE ? OR documents.description LIKE ?', "%#{query}%", "%#{query}%"],
             :order => 'created_at DESC'
     }
 
@@ -124,9 +127,10 @@ class Document < ActiveRecord::Base
       paginate_params[:conditions] << category_filter
     end
 
-    Document.paginate(paginate_params)
+    Document.not_deleted.public.paginate(paginate_params)
   end
 
+  #not more used with friends
   def self.last_modified_not_deleted_from_following(current_user, limit=5)
     following_ids = current_user.following_ids
     if following_ids.present?
@@ -152,8 +156,8 @@ class Document < ActiveRecord::Base
   def self.not_deleted_featured_paginated(page_id=nil, per_page=8, include=[:category, :creator])
     paginate_params = {:page => page_id, :per_page => per_page, :include => include}
     paginate_params[:order] = 'featured DESC'
-    paginate_params[:conditions] = ['documents.deleted_at IS ? AND documents.is_public = ? AND featured > ?', nil, true, 0]
-    Document.paginate(paginate_params)
+    paginate_params[:conditions] = ['featured > ?', 0]
+    Document.not_deleted.public.paginate(paginate_params)
   end
   
   
@@ -343,46 +347,34 @@ class Document < ActiveRecord::Base
   
   #Actually we look only on the user and public right, not list right
   def public_editor?
-    p self.find_public_roles && self.find_public_roles.include?(Role::EDITOR)
     self.find_public_roles && self.find_public_roles.include?(Role::EDITOR)
   end
   
   def public_contributor?
-    p self.find_public_roles && self.find_public_roles.include?(Role::CONTRIBUTOR)
     self.find_public_roles && self.find_public_roles.include?(Role::CONTRIBUTOR)
   end
   
   def public_viewer_comment?
-    p self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_COMMENT)
     self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_COMMENT)
   end
   
   def public_viewer_only?
-    p "public_viewer_only"
-    p self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_ONLY)
     self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_ONLY)
   end
   
   def user_editor?(user)
-    p "user_editor"
-    p self.find_user_roles(user) && self.find_user_roles(user).include?(Role::EDITOR)
-    p self.find_user_roles(user)
-    p user
     self.find_user_roles(user) && self.find_user_roles(user).include?(Role::EDITOR)
   end
   
   def user_contributor?(user)
-    p self.find_user_roles(user) && self.find_user_roles(user).include?(Role::CONTRIBUTOR)
     self.find_user_roles(user) && self.find_user_roles(user).include?(Role::CONTRIBUTOR)
   end
   
   def user_viewer_comment?(user)
-    p self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_COMMENT)
     self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_COMMENT)
   end
   
   def user_viewer_only?(user)
-    p self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_ONLY)
     self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_ONLY)
   end
   

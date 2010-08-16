@@ -12,6 +12,7 @@ class ItemsController < ApplicationController
   
   # GET /documents/:document_id/pages/:page_id/items/:id
   def show
+    authorize! :read, @document
     find_document
     find_page
     @item = @page.items.not_deleted.find_by_uuid(params[:id])
@@ -24,6 +25,7 @@ class ItemsController < ApplicationController
   
   # POST /documents/:document_id/pages/:page_id/items
   def create
+    authorize! :update, @document
     @item = Item.find_deleted_and_restore(params[:item][:uuid])
     if @item.nil?
       @item = Item.new_with_uuid(params[:item])
@@ -41,6 +43,7 @@ class ItemsController < ApplicationController
   # PUT /documents/:document_id/pages/:page_id/items/:id
   def update
     @item = Item.not_deleted.find_by_uuid(params[:id])
+    authorize! :update, @item
     @item.document_uuid = params[:document_id]
     @item.update_attributes!(params[:item])    
     message = @item.as_json({})
@@ -52,6 +55,7 @@ class ItemsController < ApplicationController
   # DELETE /documents/:document_id/pages/:page_id/items/:id
   def destroy
     @item = Item.not_deleted.find_by_uuid(params[:id])
+    authorize! :destroy, @item
     @item.document_uuid = params[:document_id]
     @item.safe_delete!
     message = { :source => params[:xmpp_client_id], :item =>  { :page_id => @item[:page_id], :uuid => @item.uuid }, :action => "delete" }

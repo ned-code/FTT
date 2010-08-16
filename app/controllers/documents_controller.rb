@@ -145,6 +145,7 @@ class DocumentsController < ApplicationController
   
   # POST /documents
   def create
+    authorize! :create, Document
     @document = current_user.documents.create_with_uuid(params[:document])
     @@xmpp_notifier.xmpp_create_node(@document.uuid) 
     render :json => @document
@@ -152,12 +153,14 @@ class DocumentsController < ApplicationController
 
   # POST /documents/:id/duplicate
   def duplicate
+    authorize! :create, Document
     @new_document = @document.deep_clone_and_save!(current_user, params[:title])
     render :json => @new_document.to_json(:only => :uuid)
   end
   
   # PUT /documents/:id
   def update
+    authorize! :update, @document
     @document.update_attributes(params[:document])
     message = @document.as_json({})
     message[:source] = params[:xmpp_client_id]    
@@ -167,6 +170,7 @@ class DocumentsController < ApplicationController
   
   # DELETE /documents/:id
   def destroy
+    authorize! :destroy, @document
     if @document.present?
       @document.safe_delete!
     end

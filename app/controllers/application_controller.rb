@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
     p exception
     flash[:notice] = exception.message
+    p flash
     redirect_to "/users/#{current_user.uuid}"
   end
   

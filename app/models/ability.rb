@@ -12,8 +12,7 @@ class Ability
        # ================
       can :read, Document, :creator_id => user.id
       can :read, Document do |document|
-        document && (document.creator == user ||
-                    document.public_viewer_only? ||
+        document && (document.public_viewer_only? ||
                     document.public_viewer_comment? ||
                     document.public_contributor? ||
                     document.public_editor? ||
