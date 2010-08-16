@@ -38,7 +38,7 @@ class DocumentRolesController < ApplicationController
   end
 
   def find_pseudo_document
-    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid, documents.is_public')
+    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid')
   end 
   
 end
