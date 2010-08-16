@@ -14,9 +14,8 @@ class Category < ActiveRecord::Base
   }
   
   def number_of_public_documents
-    Document.joins(:roles).
-      where('documents.category_id = ?', self.uuid).where('roles.item_id is ? and roles.user_id is ? and roles.user_list_id is ? and (roles.name = ? or roles.name = ?)',nil,nil,nil,Role::VIEWER_ONLY, Role::VIEWER_COMMENT).
-      count
+    Document.not_deleted.public.
+      where('documents.category_id = ?', self.uuid).count
   end
   
 private

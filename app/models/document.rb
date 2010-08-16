@@ -14,6 +14,10 @@ class Document < ActiveRecord::Base
   scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
   scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
   scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
+  scope :public, lambda{
+    joins(:roles).
+    where('roles.item_id is ? and roles.user_id is ? and roles.user_list_id is ? and (roles.name = ? or roles.name = ?)',nil,nil,nil,Role::VIEWER_ONLY, Role::VIEWER_COMMENT)
+  }
   
   # ================
   # = Associations =
@@ -110,10 +114,7 @@ class Document < ActiveRecord::Base
             :page => page_id,
             :per_page => per_page,
             :include => include,
-            :conditions => ['documents.deleted_at IS ? AND (documents.title LIKE ? OR documents.description LIKE ?)',
-                            nil,
-                            "%#{query}%",
-                            "%#{query}%"],
+            :conditions => ['documents.title LIKE ? OR documents.description LIKE ?', "%#{query}%", "%#{query}%"],
             :order => 'created_at DESC'
     }
 
@@ -126,7 +127,7 @@ class Document < ActiveRecord::Base
       paginate_params[:conditions] << category_filter
     end
 
-    Document.joins(:roles).where('roles.item_id is ? and roles.user_id is ? and roles.user_list_id is ? and (roles.name = ? or roles.name = ?)',nil,nil,nil,Role::VIEWER_ONLY, Role::VIEWER_COMMENT).paginate(paginate_params)
+    Document.not_deleted.public.paginate(paginate_params)
   end
 
   def self.last_modified_not_deleted_from_following(current_user, limit=5)
