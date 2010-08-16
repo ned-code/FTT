@@ -6,21 +6,81 @@ A source is added with: his domain name (without www.)
                         a function that implement how to manage that source
   
 */
-
-//Example with Vimeo. It works well !!
-WebDoc.DrageAndDropController.addUriSource(
-  'vimeo.com',
-  function(uri_list,evt){
-    id = uri_list.split('/')[3];
-    var videoProperties = {
-      type : 'vimeo',
-      video_id : id
-    };
-
-    var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
-    WebDoc.application.boardController.insertVideo(videoProperties, pos);
+var videoPlayerSources = {
+  'myspace':{
+    'urlPart':'vids.myspace.com'
+  },  
+  'metacafe':{
+    'urlPart':'metacafe.com', 
+  },
+  'vimeo':{
+    'urlPart':'vimeo.com'
+  },
+  'break':{
+    'urlPart':'break.com'
+  },   
+  'veoh':{
+    'urlPart':'veoh.com'   
+  },     
+  'fancast':{
+    'urlPart':'fancast.com'  
+  },      
+  'liveleak':{
+    'urlPart':'liveleak.com'
+  },   
+  'viddler':{
+    'urlPart':'viddler.com'
+  },   
+  'blip':{
+    'urlPart':'blip.tv' 
+  },
+  'crackle':{
+    'urlPart':'crackle.com'
+  },    
+  'ustream':{
+    'urlPart':'ustream.tv' 
+  },
+  'revver':{
+    'urlPart':'revver.com'
+  },    
+  'traileraddict':{
+    'urlPart':'traileraddict.com'  
+  },  
+  'dailymotion':{
+    'urlPart':'dailymotion.com'  
+  },
+  'google':{
+    'urlPart':'video.google.com'  
+  },
+  'huhu':{
+    'urlPart':'hulu.com'  
+  },
+  'megavideo':{
+    'urlPart':'megavideo.com'  
+  },
+  'yahoo':{
+    'urlPart':'video.yahoo.com'  
+  },
+  'joost':{
+    'urlPart':'joost.com'  
   }
-);
+}
+
+for(var source in videoPlayerSources){
+  WebDoc.DrageAndDropController.addUriSource(
+  	videoPlayerSources[source].urlPart,
+  	function(uri_list,evt){
+  		id = uri_list;
+  		var videoProperties = {
+  			type : 'video',
+  			video_id : id
+  		};
+  
+  		var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
+  		WebDoc.application.boardController.insertVideo(videoProperties, pos);
+  	}
+  );  
+}  
 
 WebDoc.DrageAndDropController.addUriSource(
   'youtube.com',
@@ -45,94 +105,7 @@ WebDoc.DrageAndDropController.addUriSource(
   }
 );
 
-WebDoc.DrageAndDropController.addUriSource(
-  'dailymotion.com',
-  function(uri_list,evt){
-    if(uri_list.indexOf('request=') !== -1){
-      id = uri_list.split('request=%2F')[1].split('video%2F')[1].split('_')[0];
-    } else {
-      id = uri_list.substr(uri_list.lastIndexOf("/") + 1, uri_list.length).split('_')[0];
-    }       
-    var videoProperties = {
-      type : 'dailymotion',
-      video_id : id
-    };
 
-    var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
-    WebDoc.application.boardController.insertVideo(videoProperties, pos);
-  }
-);
-
-WebDoc.DrageAndDropController.addUriSource(
-  'vids.myspace.com',
-  function(uri_list,evt){
-    if(uri_list.indexOf('videoid=') !== -1){
-      id = uri_list.split('videoid=')[1].split('&')[0];
-    }
-    else if(uri_list.indexOf('videoid%3D') !== -1){
-      id = uri_list.split('videoid%3D')[1].split('&')[0];
-    }else {
-      id = '';
-    }
-    var videoProperties = {
-      type : 'myspacevideo',
-      video_id : id
-    };
-    var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
-    WebDoc.application.boardController.insertVideo(videoProperties, pos);
-  }
-);
-
-WebDoc.DrageAndDropController.addUriSource(
-  'metacafe.com',
-  function(uri_list,evt){
-    if(uri_list.indexOf('watch/') !== -1){
-      id = uri_list.split('watch/')[1].split('/')[0];
-    } else {
-      id = uri_list;
-    }
-    var videoProperties = {
-      type : 'metacafe',
-      video_id : id
-    };
-    var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
-    WebDoc.application.boardController.insertVideo(videoProperties, pos);
-  }
-);
-
-WebDoc.DrageAndDropController.addUriSource(
-  'video.google.com',
-  function(uri_list,evt){
-    if(uri_list.indexOf('docid=') !== -1){
-      id = uri_list.split('docid=')[1].split('&')[0];
-    } 
-    else if(uri_list.indexOf('docid%3D') !== -1){
-      id = uri_list.split('docid%3D')[1].split('&')[0];
-    }
-    else {
-      id = '';
-    } 
-    var videoProperties = {
-      type : 'googlevideo',
-      video_id : id
-    };
-    var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
-    WebDoc.application.boardController.insertVideo(videoProperties, pos);
-  }
-);
-
-WebDoc.DrageAndDropController.addUriSource(
-  'video.yahoo.com',
-  function(uri_list,evt){
-    id = uri_list;
-    var videoProperties = {
-      type : 'yahoovideo',
-      video_id : id
-    };
-    var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
-    WebDoc.application.boardController.insertVideo(videoProperties, pos);
-  }
-);
 
 //Here you add the file type source (ex: png, jpg, jpeg etc)
 

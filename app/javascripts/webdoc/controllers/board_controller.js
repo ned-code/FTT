@@ -714,23 +714,8 @@ WebDoc.BoardController = jQuery.klass({
       case 'youtube' :
         videoWidget = WebDoc.WidgetManager.getInstance().getYoutubeWidget();
         break;
-      case 'vimeo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVimeoWidget();
-        break;
-      case 'dailymotion' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getDailymotionWidget();
-        break;
-      case 'myspacevideo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVidsMyspaceWidget();
-        break;
-      case 'metacafe' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getMetacafeWidget();
-        break;
-      case 'googlevideo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVidsGoogleWidget();
-        break;
-      case 'yahoovideo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVidsYahooWidget();
+      case 'video' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getVideoWidget();
         break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
