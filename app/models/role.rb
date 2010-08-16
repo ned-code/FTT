@@ -29,7 +29,16 @@ class Role < ActiveRecord::Base
   
   def self.all_by_user_document_ids_grouped_by_name(user)
     roles = Role.where(:user_id => user.id).select(:document_id, :name).all.group_by{ |role| role.name }
-    roles.each{ |k,v| v.map! { |role| role.document_id }}
+    user_roles = {}
+    roles.each_pair do |key,value|
+      doc_ids = []
+      value.each do |v|
+        doc_ids << v.document_id
+      end
+      user_roles["#{key}"] = doc_ids
+    end
+    #roles = roles.each_pair{ |k,v| v.map! { |role| role.document_id }}
+    user_roles
   end
 end
 
