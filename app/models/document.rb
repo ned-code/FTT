@@ -2,7 +2,7 @@ class Document < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
   
-  attr_accessible :uuid, :title, :description, :size, :category_id, :is_public, :style_url, :theme_id, :featured 
+  attr_accessible :uuid, :title, :description, :size, :category_id, :style_url, :theme_id, :featured 
   
   composed_of :size, :class_name => 'Hash', :mapping => %w(size to_json),
                      :constructor => JsonHelper.method(:decode_json_and_yaml)
@@ -67,7 +67,7 @@ class Document < ActiveRecord::Base
             :page => page_id,
             :per_page => per_page,
             :order => 'created_at DESC',
-            :conditions => ['documents.title LIKE ? OR documents.description LIKE ?)', "%#{query}%", "%#{query}%"]
+            :conditions => ['documents.title LIKE ? OR documents.description LIKE ?', "%#{query}%", "%#{query}%"]
     }
 
     if document_filter
@@ -131,27 +131,27 @@ class Document < ActiveRecord::Base
   end
 
   #not more used with friends
-  def self.last_modified_not_deleted_from_following(current_user, limit=5)
-    following_ids = current_user.following_ids
-    if following_ids.present?
-      all(
-        :joins => "INNER JOIN roles ON roles.authorizable_id = documents.uuid INNER JOIN roles_users ON roles_users.role_id = roles.uuid",
-        :conditions => ['creator_id IN (?) AND documents.deleted_at IS ? AND (documents.is_public = ? OR (roles.authorizable_type = ? AND roles.name IN (?) AND roles_users.user_id = ?))',
-                      following_ids,
-                      nil,
-                      true,
-                      self.class_name.to_s,
-                      [ 'editor', 'reader' ],
-                      current_user.uuid
-        ],
-        :limit => limit,
-        :order => 'documents.updated_at DESC',
-        :group => 'documents.uuid'
-      )
-    else
-      []
-    end
-  end
+  # def self.last_modified_not_deleted_from_following(current_user, limit=5)
+  #   following_ids = current_user.following_ids
+  #   if following_ids.present?
+  #     all(
+  #       :joins => "INNER JOIN roles ON roles.authorizable_id = documents.uuid INNER JOIN roles_users ON roles_users.role_id = roles.uuid",
+  #       :conditions => ['creator_id IN (?) AND documents.deleted_at IS ? AND (documents.is_public = ? OR (roles.authorizable_type = ? AND roles.name IN (?) AND roles_users.user_id = ?))',
+  #                     following_ids,
+  #                     nil,
+  #                     true,
+  #                     self.class_name.to_s,
+  #                     [ 'editor', 'reader' ],
+  #                     current_user.uuid
+  #       ],
+  #       :limit => limit,
+  #       :order => 'documents.updated_at DESC',
+  #       :group => 'documents.uuid'
+  #     )
+  #   else
+  #     []
+  #   end
+  # end
   
   def self.not_deleted_featured_paginated(page_id=nil, per_page=8, include=[:category, :creator])
     paginate_params = {:page => page_id, :per_page => per_page, :include => include}
@@ -164,6 +164,29 @@ class Document < ActiveRecord::Base
   # ====================
   # = Instance Methods =
   # ====================
+  
+  def share(with_comments=false)
+    role = Role.public.where(:document_id => self.uuid).first
+    if role.nil?
+      Role.create!(:document_id => self.uuid, :name => (with_comments ? Role::VIEWER_COMMENT : Role::VIEWER_ONLY))
+    else
+      if with_comments && role.name != Role::VIEWER_COMMENT
+        role.update_attribute('name', Role::VIEWER_COMMENT)
+      elsif !with_comments && role.name != Role::VIEWER_ONLY
+        role.update_attribute('name', Role::VIEWER_ONLY)
+      end
+    end
+  end
+  
+  def unshare
+    if is_public?
+      Role.public.where(:document_id => self.uuid).delete_all
+    end
+  end
+  
+  def is_public?
+    Role.public.where(:document_id => self.uuid).present?
+  end
   
   def to_param
     uuid
@@ -397,7 +420,6 @@ class Document < ActiveRecord::Base
     cloned_document.style_url = self.style_url
     cloned_document.created_at = nil
     cloned_document.updated_at = nil
-    cloned_document.is_public = false
     cloned_document.creator = creator
     if title.present?
       cloned_document.title = title
@@ -493,7 +515,6 @@ end
 #  size        :text
 #  category_id :string(36)
 #  creator_id  :string(36)
-#  is_public   :boolean(1)      default(FALSE)
 #  views_count :integer(4)      default(0)
 #  theme_id    :string(36)
 #  style_url   :string(255)

@@ -17,7 +17,12 @@ class Role < ActiveRecord::Base
     belongs_to :user_list
     belongs_to :document
     belongs_to :item
-    
+  # ================
+  # = Scope =
+  # ================
+  
+  scope :public, where(:user_id => nil, :user_list_id => nil, :item_id => nil)
+  
   # =================
   # = Class Methods =
   # =================
