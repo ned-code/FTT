@@ -3,7 +3,7 @@ class DocumentsController < ApplicationController
   before_filter :store_url_in_session_if_user_not_logged
   # need to be authenticate for alpha release.
   # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document
-  before_filter :find_document, :only => [:show, :update, :duplicate, :destroy]
+  before_filter :find_document, :only => [:show, :update, :duplicate, :destroy, :share, :unshare]
   
   #before_filter :authenticate_if_needed, :only => [:show]
   #before_filter :authenticate_user!, :only => [:index]
@@ -121,9 +121,9 @@ class DocumentsController < ApplicationController
       render :action => :static_page, :layout => 'static', :content_type => 'image/svg+xml' and return
     end
     if @document.present?
+      authorize! :read, @document
       @related_documents = Document.all(:conditions => { :category_id => @document.category_id}, :limit => 12 )
       @more_author_documents = Document.all(:conditions => { :creator_id => @document.creator_id}, :limit => 6 )
-      authorize! :read, @document
       respond_to do |format|
         format.html do
           set_cache_buster
@@ -175,6 +175,22 @@ class DocumentsController < ApplicationController
       @document.safe_delete!
     end
 
+    render :json => {}
+  end
+  
+  def share
+    authorize! :update, @document
+    if params[:with_comments] == 'true' || params[:with_comments] == 1
+      @document.share(true)
+    else
+      @document.share
+    end
+    render :json => {}
+  end
+  
+  def unshare
+    authorize! :update, @document
+    @document.unshare
     render :json => {}
   end
   
