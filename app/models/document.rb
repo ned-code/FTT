@@ -75,8 +75,8 @@ class Document < ActiveRecord::Base
       else
         # Retrieve documents for the current user
         documents_ids = Array.new
-        current_user.role_objects.all(:select => 'authorizable_id', :conditions => { :name => document_filter } ).each do |role|
-          documents_ids << role.authorizable_id if role.authorizable_id
+        current_user.roles.all(:select => 'document_id', :conditions => { :name => document_filter } ).each do |role|
+          documents_ids << role.document_id if role.document_id
         end
         # Must remove owned documents
         owner_ids = []
@@ -91,8 +91,8 @@ class Document < ActiveRecord::Base
     else
       if (!current_user.has_role?("admin"))
         documents_ids = Array.new
-        roles = current_user.role_objects.all.each do |role|
-          documents_ids << role.authorizable_id
+        roles = current_user.roles.all.each do |role|
+          documents_ids << role.documents_id
         end
         paginate_params[:conditions][0] += ' AND documents.uuid IN (?)'
         paginate_params[:conditions] << documents_ids
