@@ -26,7 +26,7 @@ class Item < ActiveRecord::Base
   # ================
   
   has_many :datastore_entries, :dependent => :destroy
-  
+  has_many :roles
   belongs_to :page
   belongs_to :media, :polymorphic => true
   belongs_to :creator, :class_name => 'User'

@@ -21,7 +21,9 @@ class Document < ActiveRecord::Base
   
   has_many :pages, :order => 'position ASC'
   has_many :view_counts, :as => :viewable
-  has_one :document_access
+  has_many :roles
+  # has_one :document_access
+  
   belongs_to :metadata_media, :class_name => 'Media'
   belongs_to :creator, :class_name => 'User'
   belongs_to :category
@@ -69,6 +71,7 @@ class Document < ActiveRecord::Base
       if document_filter == 'creator'
         paginate_params[:conditions][0] += ' AND documents.creator_id = ?'
         paginate_params[:conditions] << current_user.uuid
+      #TODO column doesn't exist anymore
       elsif document_filter == 'public'
         paginate_params[:conditions][0] = ' AND documents.is_public = ?'
         paginate_params[:conditions] << true
@@ -107,11 +110,10 @@ class Document < ActiveRecord::Base
             :page => page_id,
             :per_page => per_page,
             :include => include,
-            :conditions => ['documents.deleted_at IS ? AND (documents.title LIKE ? OR documents.description LIKE ?) AND documents.is_public = ?',
+            :conditions => ['documents.deleted_at IS ? AND (documents.title LIKE ? OR documents.description LIKE ?)',
                             nil,
                             "%#{query}%",
-                            "%#{query}%",
-                            true],
+                            "%#{query}%"],
             :order => 'created_at DESC'
     }
 
@@ -124,7 +126,7 @@ class Document < ActiveRecord::Base
       paginate_params[:conditions] << category_filter
     end
 
-    Document.paginate(paginate_params)
+    Document.joins(:roles).where('roles.item_id is ? and roles.user_id is ? and roles.user_list_id is ? and (roles.name = ? or roles.name = ?)',nil,nil,nil,Role::VIEWER_ONLY, Role::VIEWER_COMMENT).paginate(paginate_params)
   end
 
   def self.last_modified_not_deleted_from_following(current_user, limit=5)
