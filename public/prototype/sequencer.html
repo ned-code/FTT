@@ -93,9 +93,9 @@
 	
 	var introWordsSequence = {
 		type: 'audio',
-		src: 'audio/voice.m4a',
+		src: 'audio/voice.wav',
 		start: 2000,
-		end: 4499,
+		end: 10800,
 		loop: true,
 		1200: [{ type: 'addhtml', selector: '#content', html: 'Hello.' }],
 		2400: [{ type: 'addhtml', selector: '#content', html: ' Welcome' }],
@@ -103,22 +103,20 @@
 		2850: [{ type: 'addhtml', selector: '#content', html: ' my' }],
 		3000: [{ type: 'addhtml', selector: '#content', html: ' <b>Event</b>' }],
 		3300: [{ type: 'addhtml', selector: '#content', html: ' <b>Sequencer</b>.' }],
-		4500: [introButtonsSequence]
+		5600: [introButtonsSequence]
 	};
 	
 	var introSequence = {
 		type: 'sequence',
 		end: 8000,
-		//1:		[{ type: 'audio', src: 'audio/voice.m4a' }],
-		20: [introWordsSequence],
-		//8000: [{ type: 'addhtml', selector: '#content', html: ' <br/>End' }]
+		200: [introWordsSequence]
 	};
 	
 	// Make sequencer
 	var sequencer = Sequencer( introSequence );
 	
 	// Preload audio
-	Sequencer.processes.audio({ src: 'audio/voice.m4a' }, 0, {addChildProcess: function(){}}, function(){
+	Sequencer.processes.audio({ src: 'audio/voice.wav' }, 0, {addChildProcess: function(){}}, function(){
 	  jQuery('a[href=#go]').css({opacity: 1});
 	  jQuery('body').removeClass('loading');
 	});

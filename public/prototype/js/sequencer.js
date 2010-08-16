@@ -119,11 +119,16 @@
 	}
 	
 	function makeMediaSequenceProcess(e, t, parent, fn) {
-		var process = new MediaSequenceProcess(e, t),
-				audio, canplay, triggerTime, triggerLatency, playTime, playLatency;
+		var self = this,
+				process = new MediaSequenceProcess(e, t),
+				audio, canplay, cueTime = t, triggerTime, triggerLatency, playTime, playLatency;
 		
 		process.getMediaObj = function(){
 			return audio;
+		}
+		
+		if (parent && parent.addChildProcess) {
+		  parent.addChildProcess(process);
 		}
 		
 		// Cache the Audio obj for this sound src
@@ -132,55 +137,54 @@
 				audio = audiosrcs[e.src];
 			}
 			else {
-				audio = new Audio(e.src);
+				audio = audiosrcs[e.src] = new Audio(e.src);
 				if (debug) { console.log('[AudioEventProcess] '+e.src, 'Created new Audio object'); }
+			
+				jQuery(audio).bind('canplaythrough', fn);
+				
+//				.bind('play', function(){
+//					playTime = new Date().getTime();
+//					playLatency = playTime - self.startTime;
+//					
+//					console.log('[audioObj] play latency', playLatency);
+//					
+//					// Either bring the audio up to sync with the sequence
+//					if (process.sync) {
+//						audio.currentTime = ( process.sequence.start + playLatency + triggerLatency ) / 1000;
+//					}
+//					
+//					// Or update process startTime to delay the rest of
+//					// the sequence to match the media
+//					else {
+//						process.startTime = t + playLatency + triggerLatency;
+//						
+//						if (parent && parent.addChildProcess) {
+//							parent.addChildProcess(process);
+//						}
+//						
+//						// Rebuild process queue, as we're sporking a new
+//						// process asynchronously, right now
+//						process.master.buildProcessQueue(playTime, clock);
+//					}
+//				})
+				
 			}
 		}
-		
-		jQuery(audio)
-		.bind('play', function(){
-			playTime = new Date().getTime();
-			playLatency = playTime - triggerTime;
-			
-			console.log('[audioObj] play latency', playLatency);
-			
-			// Either bring the audio up to sync with the sequence
-			if (process.sync) {
-				audio.currentTime = ( process.sequence.start + playLatency + triggerLatency ) / 1000;
-			}
-			
-			// Or update process startTime to delay the rest of
-			// the sequence to match the media
-			else {
-				process.startTime = t + playLatency + triggerLatency;
-				
-				if (parent && parent.addChildProcess) {
-					parent.addChildProcess(process);
-				}
-				
-				// Rebuild process queue, as we're sporking a new
-				// process asynchronously, right now
-				process.master.buildProcessQueue(playTime, clock);
-			}
-		})
-		.bind('canplaythrough', function(){
-			canplay = true;
-			if(fn) fn();
-		});
 		
 		return function(t, latency){
 			triggerTime = t;
 			triggerLatency = latency;
 			
-			if (canplay) {
+			if (audio.readyState > 3) {
 				audio.currentTime = process.sequence.start/1000 || 0;
 				audio.play();
+				process.startTime = cueTime + latency;
 			}
 			else {
-				jQuery(audio).bind('canplaythrough', function(){
-					audio.currentTime = process.sequence.start/1000 || 0;
-					audio.play();
-				});
+				//jQuery(audio).bind('canplaythrough', function(){
+				//	audio.currentTime = process.sequence.start/1000 || 0;
+				//	audio.play();
+				//});
 			}
 		};
 	}
@@ -284,6 +288,7 @@
 			
 			// Stop the music
 			this.getMediaObj().pause();
+			//this.getMediaObj().currentTime = this.getMediaObj().duration;
 		}
 	})
 	
