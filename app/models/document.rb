@@ -16,7 +16,7 @@ class Document < ActiveRecord::Base
   scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
   scope :public, lambda{
     joins(:roles).
-    where('roles.item_id is ? and roles.user_id is ? and roles.user_list_id is ? and (roles.name = ? or roles.name = ?)',nil,nil,nil,Role::VIEWER_ONLY, Role::VIEWER_COMMENT)
+    where('roles.item_id is ? and roles.user_id is ? and roles.user_list_id is ? and roles.name in (?)',nil,nil,nil,Role::PUBLIC_ROLES)
   }
   
   # ================
@@ -67,7 +67,7 @@ class Document < ActiveRecord::Base
             :page => page_id,
             :per_page => per_page,
             :order => 'created_at DESC',
-            :conditions => ['documents.deleted_at IS ? AND (documents.title LIKE ? OR documents.description LIKE ?)', nil, "%#{query}%", "%#{query}%"]
+            :conditions => ['documents.title LIKE ? OR documents.description LIKE ?)', "%#{query}%", "%#{query}%"]
     }
 
     if document_filter
@@ -75,10 +75,6 @@ class Document < ActiveRecord::Base
       if document_filter == 'creator'
         paginate_params[:conditions][0] += ' AND documents.creator_id = ?'
         paginate_params[:conditions] << current_user.uuid
-      #TODO column doesn't exist anymore
-      elsif document_filter == 'public'
-        paginate_params[:conditions][0] = ' AND documents.is_public = ?'
-        paginate_params[:conditions] << true
       else
         # Retrieve documents for the current user
         documents_ids = Array.new
@@ -105,8 +101,12 @@ class Document < ActiveRecord::Base
         paginate_params[:conditions] << documents_ids
       end
     end
-
-    Document.paginate(paginate_params)
+    
+    if document_filter == 'public'
+      Document.not_deleted.public.paginate(paginate_params)
+    else
+      Document.not_deleted.paginate(paginate_params)
+    end
   end
 
   def self.not_deleted_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator])
@@ -130,6 +130,7 @@ class Document < ActiveRecord::Base
     Document.not_deleted.public.paginate(paginate_params)
   end
 
+  #not more used with friends
   def self.last_modified_not_deleted_from_following(current_user, limit=5)
     following_ids = current_user.following_ids
     if following_ids.present?
@@ -155,8 +156,8 @@ class Document < ActiveRecord::Base
   def self.not_deleted_featured_paginated(page_id=nil, per_page=8, include=[:category, :creator])
     paginate_params = {:page => page_id, :per_page => per_page, :include => include}
     paginate_params[:order] = 'featured DESC'
-    paginate_params[:conditions] = ['documents.deleted_at IS ? AND documents.is_public = ? AND featured > ?', nil, true, 0]
-    Document.paginate(paginate_params)
+    paginate_params[:conditions] = ['featured > ?', 0]
+    Document.not_deleted.public.paginate(paginate_params)
   end
   
   
