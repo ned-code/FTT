@@ -28,6 +28,7 @@
     	font-weight: bold;
     	color: white;
     	margin-right: 0.4em;
+    	white-space: nowrap;
     	
 			-webkit-transition: -webkit-box-shadow 1s ease-out;
 
@@ -77,16 +78,18 @@
   
   <script src="../js/jquery-1.4.2.js"></script>
   <script src="js/sequencer.js"></script>
+  <script src="js/sequencer.processes.DOM.js"></script>
   <script>
 	
 	var introWordsSequence = {
-		type: 'sequence',
-		0: 		[{ type: 'addhtml', selector: '#content', html: 'Hello.' }],
-		1200: [{ type: 'addhtml', selector: '#content', html: ' Welcome' }],
-		1500: [{ type: 'addhtml', selector: '#content', html: ' to' }],
-		1650: [{ type: 'addhtml', selector: '#content', html: ' my' }],
-		1800: [{ type: 'addhtml', selector: '#content', html: ' <b>Event</b>' }],
-		2100: [{ type: 'addhtml', selector: '#content', html: ' <b>Sequencer</b>.' }]
+		type: 'audio',
+		src: 'audio/voice.m4a',
+		1200: [{ type: 'addhtml', selector: '#content', html: 'Hello.' }],
+		2400: [{ type: 'addhtml', selector: '#content', html: ' Welcome' }],
+		2700: [{ type: 'addhtml', selector: '#content', html: ' to' }],
+		2850: [{ type: 'addhtml', selector: '#content', html: ' my' }],
+		3000: [{ type: 'addhtml', selector: '#content', html: ' <b>Event</b>' }],
+		3300: [{ type: 'addhtml', selector: '#content', html: ' <b>Sequencer</b>.' }]
 	};
 	
 	var introButtonsSequence = {
@@ -101,19 +104,18 @@
 	
 	var introSequence = {
 		type: 'sequence',
-		1:		[{ type: 'audio', src: 'audio/voice.m4a' }],
-		1200: [introWordsSequence],
+		//1:		[{ type: 'audio', src: 'audio/voice.m4a' }],
+		1: [introWordsSequence],
 		5600: [introButtonsSequence]
 	};
-	
 	
 	// Make sequencer
 	var sequencer = Sequencer( introSequence );
 	
 	// Preload audio
-	Sequencer.processes.audio({ src: 'audio/voice.m4a' }, 0, function(){
-		jQuery('a[href=#go]').css({opacity: 1});
-		jQuery('body').removeClass('loading');
+	Sequencer.processes.audio({ src: 'audio/voice.m4a' }, 0, {addChildProcess: function(){}}, function(){
+	  jQuery('a[href=#go]').css({opacity: 1});
+	  jQuery('body').removeClass('loading');
 	});
 	
 	jQuery(document).ready(function(){
