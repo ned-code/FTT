@@ -38,8 +38,11 @@
       <ul class="divided index">
         <li>
           <%= link_to "login", root_path %>
-        </li
-        ><li>
+        </li>
+        <li>
+          <%= link_to "sign up/in with Facebook", user_oauth_authorize_url(:facebook) %>          
+        </li>
+        <li>
           <%= link_to "sign up", new_registration_path(:user) %>
         </li>
       </ul>
