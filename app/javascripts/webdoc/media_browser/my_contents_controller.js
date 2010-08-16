@@ -13,6 +13,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.videosFavoritePage = 1;
     this.imagesFavoritePage = 1;
     this.myImagesContainer = $('#my-images');
+    this.myImagesLibraryDomNode = this.myImagesContainer.find('#my_images_library');
     
     this.imageLoaded = false;
   },
@@ -21,7 +22,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this._loadMyImages();
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
     
-    $("#my-images-library").bind("dragstart", this.dragStart.pBind(this));
+    $("#my_images_library").bind("dragstart", this.dragStart.pBind(this));
   },
   
   isMyImageLoaded: function(){
@@ -38,15 +39,23 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
         this.showMyImages();
       }
     }.pBind(this));
-    jQuery('#my_images').click(function(event){
+    this.domNode.find('#my_images').click(function(event){
       event.preventDefault();
       this.showMyImages();
     }.pBind(this));
-    jQuery('#favorites').click(function(event){
+    this.domNode.find('#favorites').click(function(event){
       event.preventDefault();
       this.showFavorites(); 
     }.pBind(this));
-    jQuery('#add_image').click(function(event){
+    this.domNode.find('#uploaded_images').click(function(event){
+      event.preventDefault();
+      this.showMyImages();
+    }.pBind(this));
+    this.domNode.find('#facebook_images').click(function(event){
+      event.preventDefault();
+      this.showFacebookImages();
+    }.pBind(this));
+    this.domNode.find('#add_image').click(function(event){
       event.preventDefault();
       this.showUploader();
     }.pBind(this));
@@ -54,18 +63,30 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   
   showMyImages: function(){
     this._hideAll();
+    jQuery('#my-images').show();
+    jQuery('#my_images_library').show();
+    jQuery('#my_facebook_library').hide();
+  },
+
+  showFacebookImages: function() {
+    this._hideAll();
     $('#my-images').show();
+    jQuery('#my_images_library').hide();
+    ddd(jQuery('#my_facebook_library'));
+    ddd(jQuery('#my_facebook_library').length);
+    if(jQuery('#my_facebook_library:empty')){
+      this._loadFacebookImages();
+    }
+    jQuery('#my_facebook_library').show();
   },
   
   showFavorites: function(){
     this._hideAll();
-    if($('#my-favorites').length){
-      $('#my-favorites').show();
-    }
-    else{
+    if(!jQuery('#my-favorites').length){
       this._loadMyFavorites();
-      $('#my-favorites').show();
     }
+    jQuery('#my-favorites').show();
+
   },
   
   showUploader: function(){
@@ -461,12 +482,12 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
   
   _hideAll: function(){
-    $('.my-content-tab').hide();
+    this.domNode.find('.my-content-tab').hide();
     // this.imagesUploader.unloadSWFUpload();
   },
 
   _loadMyImages: function(){
-    var thumbsWrap = this.myImagesContainer.find(".thumbnails");
+    var thumbsWrap = this.myImagesLibraryDomNode;
     this.showSpinner(thumbsWrap);
           
     WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
@@ -509,7 +530,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       this.hideSpinner(thumbsWrap);
     }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 0 }});
     
-    $("#my-images-library ul li a").live("click", function (event) {
+    $("#my_images_library ul li a").live("click", function (event) {
       event.preventDefault();
       var properties = $(event.target).parent().find('img').data("properties");
       this.showDetailsView(properties,false);
@@ -530,7 +551,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
   
   _clearMyImages: function(){
-    var thumbsWrap = this.myImagesContainer.find(".thumbnails");
+    var thumbsWrap = this.myImagesLibraryDomNode;
     thumbsWrap.empty();
   },
   
@@ -671,5 +692,27 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.videosFavoritesContainer.empty();
     this.videosFavoritePage += 1;
     this._loadFavoritesVideos();
+  },
+
+  _loadFacebookImages: function() {
+    var fbContainer = jQuery("#my_facebook_library");
+    this.showSpinner(fbContainer);
+
+    WebDoc.ServerManager.request('/facebook/images.json', function(data) {
+      if (data.images.length === 0) {
+        fbContainer.append(jQuery("<span>").addClass('no_items').text('No images'));
+      }
+      else {
+        var myImagesList = $("<ul>");
+        fbContainer.append(myImagesList);
+
+        $.each(data.images, function(i, fbImage){
+          myImagesList.append(jQuery("<img src="+fbImage.url+"/>"));
+        });
+      }
+
+      this.hideSpinner(fbContainer);
+    }.pBind(this), 'GET', { ajaxParams: {} });
   }
+
 });

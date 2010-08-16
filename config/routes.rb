@@ -83,6 +83,10 @@ Webdoc::Application.routes.draw do
 
   resources :app_polls, :only => [:index, :create, :destroy]
 
+  namespace :facebook do
+    resources :images, :only => [:index]
+  end
+
   # START OLD ROUTES
   # Jammit::Routes.draw(map)
   # map.connect 'proxy/resolve', :controller => 'proxy', :action => 'resolve', :conditions => { :method => :get }

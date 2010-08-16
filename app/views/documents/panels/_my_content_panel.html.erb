@@ -14,15 +14,14 @@
     </li>
   </ul>
   
-  <div id="my-images" class='my-content-tab '>
-    <a href='#upload-images' class='' id='add_image'>
-      <%= t('.images.add_image') %>
-    </a>
-    <div id="my-images-library" class='thumbnails'>
-
-    </div>
+  <div id="my-images" class='my-content-tab'>
+    <a href='#uploaded_images' class='' id='uploaded_images'><%= t('.images.uploaded_images') %></a>
+    <a href='#facebook_images' class='' id='facebook_images'><%= t('.images.facebook_images') %></a>
+    <a href='#upload-images' class='' id='add_image'><%= t('.images.add_image') %></a>
+    <div id="my_images_library" class='thumbnails'></div>
+    <div id="my_facebook_library" class='thumbnails'></div>
   </div>
-
+                                                              
   <div id="my-images-details" style='display:none' class='my-content-tab'>
     <a href='#my-images' id='image-detail-back' class='back'>Back</a>
     <div id="image-details">

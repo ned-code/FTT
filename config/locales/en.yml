@@ -146,7 +146,9 @@ en:
         buttons:
           back: "Back"
         images:
-          add_image: "Add Images"
+          add_image: "Add image"
+          uploaded_images: "Uploaded images"
+          facebook_images: "Facebook images"
           buttons:
             back: "Back"
             upload: "Upload"
