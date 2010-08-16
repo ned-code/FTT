@@ -29,14 +29,14 @@ class User < ActiveRecord::Base
   # Include default devise modules.
   # Others available are :lockable, :timeoutable and :activatable.
   devise :registerable, :database_authenticatable, :confirmable, :recoverable,
-         :rememberable, :trackable, :validatable, :lockable
+         :rememberable, :trackable, :validatable, :lockable, :oauthable
 
   attr_accessor :terms_of_service
   attr_accessor :clear_avatar
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :username, :first_name, :last_name, :terms_of_service,
-                  :bio, :website, :gender, :uuid, :avatar, :clear_avatar
+                  :bio, :website, :gender, :uuid, :avatar, :clear_avatar, :facebook_token
 
   # =============
   # = Callbacks =
@@ -155,6 +155,42 @@ class User < ActiveRecord::Base
 
   def category
     documents_count > 5 ? 'Publisher' : 'User'
+  end
+
+  def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
+    data = ActiveSupport::JSON.decode(access_token.get('/me'))
+
+    # Link the account if an e-mail already exists in the database
+    # or a signed_in_resource, which is already in session was given.
+    if user = signed_in_resource # || User.find_by_email(data["email"])
+      user.update_attribute(:facebook_token, access_token.token)
+    else
+      user = User.new(:username => data["email"],
+                      :first_name => data["first_name"],
+                      :last_name => data["last_name"],
+                      :email => data["email"]){ |u| u.facebook_token = access_token.token }
+    end
+    user
+  end
+
+  def oauth_facebook_token
+    @oauth_facebook_token ||= self.class.oauth_access_token(:facebook, facebook_token)
+  end
+
+  def self.new_with_session(params, session)
+    super.tap { |u| u.facebook_token = session[:user_facebook_oauth_token] }
+  end
+
+  def facebook_request(query, verb=:get)
+    begin
+      ActiveSupport::JSON.decode(self.oauth_facebook_token.send(verb, query))
+    rescue Exception => e
+      if e.class == OAuth2::HTTPError && e.response.status == 400 # bad token
+        e.response.body
+      else
+        e.response.body
+      end
+    end
   end
 
 protected
