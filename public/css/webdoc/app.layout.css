@@ -15,12 +15,12 @@ header {}
   position: relative;
 }
 
-.app_question .arrow {
+.app_question .point {
   position: absolute;
-  top: -16px;
+  top: -8px;
   left: 16px;
   width: 16px;
-  height: 16px;
+  height: 8px;
 }
 
 .delete_button,
@@ -34,19 +34,35 @@ header {}
   height: 1.6667em;
   text-align: left;
   position: relative;
-  padding: 0 4em 0 1.3333em;
+  padding: 0 1.3333em 0 1.3333em;
   margin-bottom: 0.3333em
+}
+
+.arrow {
+	display: none;
+}
+
+.option:hover .arrow {
+	display: block;
+	position: absolute;
+	margin-left: -6px;
+	left: 50%;
+	width: 14px;
+	height: 8px;
+}
+
+.up_arrow {
+	top: -9px;
+}
+
+.down_arrow {
+	bottom: -9px;
 }
 
 .option input {
   position: absolute;
-  top: 0.4333em; left: 0;
+  top: 0.3333em; left: 0.3333em;
   width: auto;
-}
-
-.option .grabber {
-  position: absolute;
-  top: 0; right: 2em;
 }
 
 .option .delete_button {
@@ -71,9 +87,14 @@ header {}
   margin-top: 0.75em;
 }
 
-.textarea {
-  margin-bottom: 1em;
+textarea {
+  margin-bottom: 0.8333em;
 }
 
+/* .button extensions */
 
+.add_button {
+	padding: 0 0.5em;
+	width: 100%;
+}
 

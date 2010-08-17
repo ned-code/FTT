@@ -197,14 +197,14 @@ class DocumentsController < ApplicationController
   
   #this is used to test the rendering of html template
   def template
-    @document = Document.not_deleted.public.first
+    @document = Document.not_deleted.first
     
     #Specifiy the document you want
     # @document = Document.not_deleted.where(:uuid => 'put an uuid here')
     #Without layout
-    # render :layout => false
+    #render :layout => false
     #specify layout:
-    # render :layout => 'editor'
+    render :layout => 'editor'
   end
   
   protected

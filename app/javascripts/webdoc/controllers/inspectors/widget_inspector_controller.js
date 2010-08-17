@@ -5,7 +5,6 @@
 WebDoc.WidgetInspectorController = $.klass({
   initialize: function( ) {
     this.domNode = $("#widget-inspector");
-    this.loadingWheel = $("#inspector-loading-wheel");
     this.widgetInspectorApi = new WebDoc.WidgetApi(null, true);
 
     var widgetPaletteContent = this.domNode.find("iframe");
@@ -13,7 +12,7 @@ WebDoc.WidgetInspectorController = $.klass({
       ddd("must inject uniboard api in inspector");
       if (widgetPaletteContent[0].contentWindow && WebDoc.application.boardController.selection().length) {
         ddd("inject uniboard api in inspector");
-        this.loadingWheel.hide();
+        this.domNode.removeTransitionClass('loading');
         widgetPaletteContent[0].contentWindow.uniboard = this.widgetInspectorApi;
         if (widgetPaletteContent[0].contentWindow.widget) {
           var widgetObject = widgetPaletteContent[0].contentWindow.widget;
@@ -52,7 +51,7 @@ WebDoc.WidgetInspectorController = $.klass({
     this.widgetInspectorApi.setWidgetItem(selectedItem.item);    
     var widgetContent = this.domNode.find("iframe"); 
     if (widgetContent.attr("src") != selectedItem.item.getInspectorUrl()) {
-      this.loadingWheel.show();
+      this.domNode.addTransitionClass('loading');
       widgetContent[0].contentDocument.write("");
       widgetContent.attr("src", selectedItem.item.getInspectorUrl());
     }      

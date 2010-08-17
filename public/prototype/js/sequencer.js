@@ -15,77 +15,36 @@
 	
 	// Transport --------------------------------------
 	
-	var transport = {
-		play: function(){
-			var now = new Date().getTime();
-			this.starttime = now;
-			makeProcessQueue(this, now, clock);
-		},
-		latency: 0
-	}
-	
 	var timer;
-	
 	var processQueue;
 	
 	function clock(process, t){
-		var now = new Date().getTime();
+		var now = new Date().getTime(),
+				wait = t - now;
 		
-		if ( t > now ) {
-			var wait = t - now;
-			
+		if ( wait > 0 ) {
 			timer = setTimeout(function(){
 				var now = new Date().getTime(),
 						latency = now - t;
 				
-				transport.latency = latency;
-				
-				playProcessQueue(process);
-				clearTimeout(timer);
-				timer = null;
-				
 				debug && console.log('now:', now, 'latency:', latency, 'idle:', wait);
 				
-				makeProcessQueue(process, t, clock);
+				process.playProcessQueue(t, latency);
+				
+				if (process.playing){
+					process.buildProcessQueue(t, clock);
+				}
 			}, wait );
 		}
 		else {
-			debug && console.log('now:', now, 'latency:', now-t, 'idle:', 0, '[buffered]');
-			playProcessQueue(process, t);
-			makeProcessQueue(process, t, clock);
-		}
-	}
-	
-	function makeProcessQueue(process, t, fn) {
-		var limit = t + 20000,
-				l;
-		
-		// Scan ahead looking for next eventList
-		while (t++ < limit) {
-			processQueue = process.getProcessList(t);
-			l = processQueue.length;
+			debug && console.log('now:', now, 'latency:', -wait, 'idle:', 0, '[buffered]');
 			
-			if ( l ) {
-				return fn(process, t);
+			process.playProcessQueue(t, -wait);
+			
+			if (process.playing){
+				process.buildProcessQueue(t, clock);
 			}
 		}
-		
-		if (debug) { console.log('No events in the next 20 seconds. Stopping.'); }
-	}
-	
-	function playProcessQueue(process, t) {
-		var l = processQueue.length;
-		
-		// Trigger the processes
-		while (l--) {
-			processQueue[l](t);
-		}
-	}
-	
-	function clearProcessQueue() {
-		clearTimeout(timer);
-		timer = null;
-		processQueue = undefined;
 	}
 	
 	// Processes --------------------------------------
@@ -97,11 +56,56 @@
 	
 	var audiosrcs = {};
 	
-	function Process() {
+	function Process() {}
 	
-	}
-	
-	Process.prototype = {};
+	Process.prototype = {
+		play: function(){
+			var now = new Date().getTime();
+			
+			Process.prototype.master = this;
+			this.startTime = now;
+			this.playing = true;
+			this.buildProcessQueue(now);
+		},
+		
+		stop: function(){
+			clearTimeout(timer);
+			timer = null;
+			this.playing = false;
+			debug && console.log('Stop master');
+		},
+		
+		buildProcessQueue: function(t){
+			var limit = t + 10000;
+			
+			clearTimeout(timer);
+			timer = null;
+			
+			// Scan ahead looking for next events
+			while (t++ < limit) {
+				processQueue = this.getProcessList(t);
+				
+				if ( processQueue.length ) {
+					return clock(this, t);
+				}
+				else if  ( processQueue === false ) {
+					debug	&& console.log('Process queue false. Something quit.');
+					return;
+				}
+			}
+			
+			debug && console.log('No events in the next 20 seconds. Stopping.');
+		},
+		
+		playProcessQueue: function(t, latency){
+		  var l = processQueue.length;
+		  
+		  // Trigger processes
+		  while (l--) {
+		  	processQueue[l](t, latency);
+		  }
+		}
+	};
 	
 	function makeSequenceProcess(e, t, parent, fn) {
 		var process = new SequenceProcess(e, t);
@@ -109,18 +113,23 @@
 	}
 	
 	function SequenceProcess(e, t) {
-	  this.starttime = t;
+	  this.startTime = t;
 	  this.sequence = e;
 	  this.children = [];
-	  this.latency = 1;
-	  
-	  
-		console.log('process:', this);
 	}
 	
 	function makeMediaSequenceProcess(e, t, parent, fn) {
-		var process = new SequenceProcess(e, t),
-				audio, canplay, triggerTime, playTime, playLatency;
+		var self = this,
+				process = new MediaSequenceProcess(e, t),
+				audio, canplay, cueTime = t, triggerTime, triggerLatency, playTime, playLatency;
+		
+		process.getMediaObj = function(){
+			return audio;
+		}
+		
+		if (parent && parent.addChildProcess) {
+		  parent.addChildProcess(process);
+		}
 		
 		// Cache the Audio obj for this sound src
 		if ( e.src ) {
@@ -128,81 +137,82 @@
 				audio = audiosrcs[e.src];
 			}
 			else {
-				audio = new Audio(e.src);
+				audio = audiosrcs[e.src] = new Audio(e.src);
 				if (debug) { console.log('[AudioEventProcess] '+e.src, 'Created new Audio object'); }
+			
+				jQuery(audio).bind('canplaythrough', fn);
+				
+//				.bind('play', function(){
+//					playTime = new Date().getTime();
+//					playLatency = playTime - self.startTime;
+//					
+//					console.log('[audioObj] play latency', playLatency);
+//					
+//					// Either bring the audio up to sync with the sequence
+//					if (process.sync) {
+//						audio.currentTime = ( process.sequence.start + playLatency + triggerLatency ) / 1000;
+//					}
+//					
+//					// Or update process startTime to delay the rest of
+//					// the sequence to match the media
+//					else {
+//						process.startTime = t + playLatency + triggerLatency;
+//						
+//						if (parent && parent.addChildProcess) {
+//							parent.addChildProcess(process);
+//						}
+//						
+//						// Rebuild process queue, as we're sporking a new
+//						// process asynchronously, right now
+//						process.master.buildProcessQueue(playTime, clock);
+//					}
+//				})
+				
 			}
 		}
 		
-		jQuery(audio)
-		.bind('play', function(){
-			console.log('[audio] e: play');
-			
-			playTime = new Date().getTime();
-			playLatency = playTime - triggerTime;
-			
-			var playhead = this.currentTime;
-			
-			console.log('playhead', playhead, 'audio latency', playLatency);
-			
-			// We've got a problem between local time and global time.
-			// Bollocks.
-			// 
-			// Either... bring the audio up to sync with the sequence
-			
-			//audio.currentTime = playLatency/1000;
-			
-			// Or... update process starttime to delay the rest of
-			// the sequence to match the media
-			process.starttime = playLatency + t;
-			
-			if (parent && parent.addChildProcess) {
-				parent.addChildProcess(process);
-			}
-			
-			clearProcessQueue();
-			makeProcessQueue(PPP, playTime, clock);
-			
-			// But watch out for events that have already played - they'll double!
-			// But now we need some way to update the event queue...
-			
-		})
-		.bind('canplaythrough', function(){
-			canplay = true;
-			if(fn) fn();
-		});
-		
-		return function(t){
+		return function(t, latency){
 			triggerTime = t;
+			triggerLatency = latency;
 			
-			if (canplay) {
+			if (audio.readyState > 3) {
+				audio.currentTime = process.sequence.start/1000 || 0;
 				audio.play();
+				process.startTime = cueTime + latency;
 			}
 			else {
-				jQuery(audio).bind('canplaythrough', function(){
-					audio.play();
-				});
+				//jQuery(audio).bind('canplaythrough', function(){
+				//	audio.currentTime = process.sequence.start/1000 || 0;
+				//	audio.play();
+				//});
 			}
 		};
 	}
 	
-	function MediaSequenceProcess(e, t) {
-		this.starttime = t;
-		this.sequence = e;
-		this.children = [];
-		this.latency = 1;
+	SequenceProcess.prototype = new Process();
+	
+	function MediaSequenceProcess(e, t){
+	  this.sequence = e;
+	  this.children = [];
+	  this.sync = e.sync;
 	}
 	
-	SequenceProcess.prototype = new Process();
-	MediaSequenceProcess.prototype = new Process();
+	MediaSequenceProcess.prototype = new SequenceProcess();
 	
 	jQuery.extend(SequenceProcess.prototype, {
 		getProcessList: function getProcessList(t) {
-			var sequence = this.sequence,
+			var self = this,
+					sequence = this.sequence,
 					children = this.children,
-					t = t - this.starttime,
+					t = t - this.startTime + (sequence.start || 0),
 					l,
 					events, k, event,
 					processList = [];
+			
+			// If we've passed the end of the sequence, kill it
+			if ( sequence.end && t > sequence.end ) {
+				return [ function(t){ self.kill(t); } ];
+			}
 			
 			events = sequence[t];
 			
@@ -229,20 +239,72 @@
 		},
 		addChildProcess: function( process ){
 			this.children.push(process);
+			process.parent = this;
+		},
+		removeChildProcess: function( process ){
+			var children = this.children,
+					l = children.length;
+			
+			while(l--) {
+				if( children[l] === process ) {
+					children.splice( l );
+					return;
+				}
+			}
+		},
+		kill: function(){
+			var children = this.children,
+					l = children.length;
+			
+			debug && console.log('Kill sequence "'+this.sequence.type+'"');
+			
+			// Kill descendents
+			while(l--) {
+				children[l].kill();
+			}
+			
+			if (this.parent) {
+				this.parent.removeChildProcess( this );
+			}
 		}
 	});
 	
-	var PPP;
+	jQuery.extend(MediaSequenceProcess.prototype, {
+		kill: function(t){
+			var children = this.children,
+					l = children.length;
+			
+			debug && console.log('Kill sequence "'+this.sequence.type+'"');
+			
+			// Kill children
+			while(l--) {
+				children[l].kill();
+			}
+			
+			// Kill this
+			if (this.parent) {
+				this.parent.removeChildProcess( this );
+			}
+			
+			// Stop the music
+			this.getMediaObj().pause();
+			//this.getMediaObj().currentTime = this.getMediaObj().duration;
+		}
+	})
 	
 	function Sequencer(sequence){
 		var process = new SequenceProcess(sequence);
-		jQuery.extend(process, transport);
-		// Quick hack
-		PPP = process;
+		
+		process.parent = {
+			removeChildProcess: function(){
+				process.stop();
+			}
+		}
+		
 		return process;
 	}
 	
-	// Expose processes as a property of Sequencer
+	// Expose processes as a properties of Sequencer
 	Sequencer.processes = processes;
 	
 	// Expose Sequencer to global scope
