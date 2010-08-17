@@ -1,7 +1,8 @@
 <li>
   <a class="webdoc_thumb left_text_thumb text_thumb thumb" href='<%= document_path(document)%>'>
     <%= document.title %>
-    <img src='<%= document.pages.first.thumbnail.url %>' style='width:50px;height:50px;'/>
+    <% p document.pages.first %>
+    <img src='<%= document.pages.first.present? ? document.pages.first.thumbnail_url : '' %>' style='width:50px;height:50px;'/>
   </a>
 </li>
 

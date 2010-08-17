@@ -53,6 +53,19 @@ class Document < ActiveRecord::Base
   # =================
   # = Class Methods =
   # =================
+  
+  
+  #We want to be sure that we create a document with a size
+  #TODO Remove this hack !
+  def self.create_with_uuid(params)
+    if params['size'].nil?
+      params['size'] = { 'width' => '800px', 'height' => '600px'}
+      params[:width] = '800px'
+      params[:height] = '600px'
+    end
+    super
+  end
+  
   #
   # This method invalidate cache for docment with document_uuid. It is usefull to invalidate a document without fetching it and just using the uuid.
   #
@@ -66,15 +79,14 @@ class Document < ActiveRecord::Base
     paginate_params = {
             :page => page_id,
             :per_page => per_page,
-            :order => 'created_at DESC',
-            :conditions => ['documents.title LIKE ? OR documents.description LIKE ?', "%#{query}%", "%#{query}%"]
+            :order => 'created_at DESC'
     }
-
+    conditions = ['(documents.title LIKE ? OR documents.description LIKE ?)', "%#{query}%", "%#{query}%"]
     if document_filter
       # Filter possibilities: reader, editor, creator, public
       if document_filter == 'creator'
-        paginate_params[:conditions][0] += ' AND documents.creator_id = ?'
-        paginate_params[:conditions] << current_user.uuid
+        conditions[0] += ' AND documents.creator_id = ?'
+        conditions << current_user.uuid
       else
         # Retrieve documents for the current user
         documents_ids = Array.new
@@ -88,8 +100,8 @@ class Document < ActiveRecord::Base
         end
         # Diff of both arrays
         documents_ids = documents_ids - owner_ids
-        paginate_params[:conditions][0] += ' AND documents.uuid IN (?)'
-        paginate_params[:conditions] << documents_ids
+        conditions[0] += ' AND documents.uuid IN (?)'
+        conditions << documents_ids
       end
     else
       if (!current_user.has_role?("admin"))
@@ -97,15 +109,15 @@ class Document < ActiveRecord::Base
         roles = current_user.roles.all.each do |role|
           documents_ids << role.documents_id
         end
-        paginate_params[:conditions][0] += ' AND documents.uuid IN (?)'
-        paginate_params[:conditions] << documents_ids
+        conditions[0] += ' AND documents.uuid IN (?)'
+        conditions << documents_ids
       end
     end
     
     if document_filter == 'public'
-      Document.not_deleted.public.paginate(paginate_params)
+      Document.not_deleted.public.where(conditions).paginate(paginate_params)
     else
-      Document.not_deleted.paginate(paginate_params)
+      Document.not_deleted.where(conditions).paginate(paginate_params)
     end
   end
 
@@ -114,7 +126,7 @@ class Document < ActiveRecord::Base
             :page => page_id,
             :per_page => per_page,
             :include => include,
-            :conditions => ['documents.title LIKE ? OR documents.description LIKE ?', "%#{query}%", "%#{query}%"],
+            :conditions => ['(documents.title LIKE ? OR documents.description LIKE ?)', "%#{query}%", "%#{query}%"],
             :order => 'created_at DESC'
     }
 
@@ -245,11 +257,13 @@ class Document < ActiveRecord::Base
   end
   
   def to_access_json
-    all_document_access = self.accepted_roles
+    all_document_access = self.roles
     result = { :access => [], :failed => [] }
+    #TODO: Manage list
     all_document_access.each do |role|
-      role.users.each do |user|
-        is_creator = (self.creator && self.creator.uuid == user.uuid)? true : false
+      if role.user_id
+        user = role.user
+        is_creator = (self.creator && self.creator.uuid == role.user.uuid)? true : false
         user_infos = [:uuid => user.uuid, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator]
         result[:access] << user_infos
       end
@@ -261,74 +275,26 @@ class Document < ActiveRecord::Base
     end
     result
   end
-  
-  def to_user_for_this_role_json(role_name)
-    role = self.accepted_roles.first(:conditions => { :name => role_name })
-    result = { :access => [], :failed => [] }
-    role.users.each do |user|
-      is_creator = (self.creator && self.creator.uuid == user.uuid)? true : false
-      user_infos = [:uuid => user.uuid, :username => user.username, :email => user.email, :creator => is_creator]
-      result[:access] << user_infos
-    end
-    if @unvalid_access_emails
-      @unvalid_access_emails.each do |email|
-        result[:failed] << email
+
+  def create_role_for_users(current_user, accesses = {})
+    accesses_parsed = JSON.parse(accesses);
+    role = accesses_parsed['role']
+    recipients = accesses_parsed['recipients']
+    message = accesses_parsed['message']
+    
+    recipients.each do |user_email|
+      user = User.find_by_email(user_email.strip)
+      if user 
+        if !user.has_role?(role, self)
+          #user.has_only_reader_role!(self)
+          user.has_role!(role, self)
+          Notifier.role_notification(current_user, role, user, self, message).deliver
+        end
+      else
+        add_unvalid_email_to_array(user_email)
       end
     end
-    result
   end
-  
-  # # No more used in current GUI
-  #   def create_accesses(current_user, accesses = {})
-  #     accesses_parsed = JSON.parse(accesses);
-  #     readers = accesses_parsed['readers']
-  #     editors = accesses_parsed['editors']
-  #     readers_message = accesses_parsed['readersMessage']
-  #     editors_message = accesses_parsed['editorsMessage']
-  #     
-  #     readers.each do |user_email|
-  #       user = User.find_by_email(user_email.strip)
-  #       if user 
-  #         if !user.has_role?("reader", self)
-  #           user.has_only_reader_role!(self)
-  #           Notifier.role_notification(current_user, "reader", user, self, readers_message).deliver
-  #         end
-  #       else
-  #         add_unvalid_email_to_array(user_email)
-  #       end
-  #     end
-  #     editors.each do |user_email|
-  #       user = User.find_by_email(user_email)
-  #       if user
-  #         if !user.has_role?("editor", self)
-  #           user.has_only_editor_role!(self)
-  #           Notifier.role_notification(current_user, "editor", user, self, editors_message).deliver
-  #         end
-  #       else
-  #         add_unvalid_email_to_array(user_email)
-  #       end
-  #     end
-  #   end
-  
-  # def create_role_for_users(current_user, accesses = {})
-  #   accesses_parsed = JSON.parse(accesses);
-  #   role = accesses_parsed['role']
-  #   recipients = accesses_parsed['recipients']
-  #   message = accesses_parsed['message']
-  #   
-  #   recipients.each do |user_email|
-  #     user = User.find_by_email(user_email.strip)
-  #     if user 
-  #       if !user.has_role?(role, self)
-  #         #user.has_only_reader_role!(self)
-  #         user.has_role!(role, self)
-  #         Notifier.role_notification(current_user, role, user, self, message).deliver
-  #       end
-  #     else
-  #       add_unvalid_email_to_array(user_email)
-  #     end
-  #   end
-  # end
   
   # # No more used in current GUI
   # def update_accesses(current_user, accesses = {})
@@ -357,15 +323,15 @@ class Document < ActiveRecord::Base
   #   end
   # end 
   # 
-  # def remove_role(current_user, params)
-  #   params_parsed = JSON.parse(params)
-  #   user = User.find(params_parsed['user_id'])
-  #   role = params_parsed['role']
-  #   if user
-  #     user.has_no_role!(role, self)
-  #     Notifier.removed_role_notification(current_user, role, user, self).deliver
-  #   end
-  # end
+  def remove_role(current_user, params)
+    params_parsed = JSON.parse(params)
+    user = User.find(params_parsed['user_id'])
+    role = params_parsed['role']
+    if user
+      user.has_no_role!(role, self)
+      Notifier.removed_role_notification(current_user, role, user, self).deliver
+    end
+  end
   
   
   #Actually we look only on the user and public right, not list right
@@ -460,7 +426,7 @@ private
   
   # after_create
   def set_creator_as_editor
-    Role.create!(:document_id => self.id, :user_id => creator.uuid, :name => Role::EDITOR)
+    Role.create!(:document_id => self.id, :user_id => creator_id, :name => Role::EDITOR)
   end
   
   #before_create
