@@ -87,7 +87,9 @@
         <h2>More from these authors</h2>
         <ul class="vertical thumbs_index index">
           <% (0..(@more_author_documents.length - 1)).step(1) do |i| %>
-            <%= render 'thumbnail', :document => @more_author_documents[i]%>
+          <li>
+            <%= render 'thumb', :document => @more_author_documents[i]%>
+          </li>
           <% end %>
         </ul>
       </div>
