@@ -1,7 +1,7 @@
 <a class="webdoc_thumb thumb"
    href="<%= document_path(document)%>"
    title="<%= document.title %>"
-   style="background-image: <%= document.pages.first.thumbnail.url %>;">
+   style="background-image: <%= document.pages.first.present? ? document.pages.first.thumbnail_url : '' %>;">
 	<%= document.title %>
 </a>
 
