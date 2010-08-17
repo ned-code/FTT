@@ -12,9 +12,10 @@ WebDoc.WebImagesSearch = $.klass({
     
     // Set callback to the ImagesLibrary
     this.parentController= parentController;
-    this.imageDetailsView = $('#media-browser-web-images-details #image-details');
+    this.imageDetailsView = $('#web-images-details #image-details');
     this.setupDetailsView();
     
+    this.libraryUtils = new LibraryUtils();
     // Observe search submission
     this.searchForm.submit(function(event) {
       event.preventDefault();
@@ -48,14 +49,14 @@ WebDoc.WebImagesSearch = $.klass({
     dt.setData("application/wd-image", $.toJSON({url: imageUrl,id: properties.id, title: properties.title}));
     
     //Drag "feedback"
-    var mediaDragFeedbackEl = this.parentController.buildMediaDragFeedbackElement("image", properties.thumb_url);
+    var mediaDragFeedbackEl = this.libraryUtils.buildMediaDragFeedbackElement("image", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   },
 
   setupDetailsView: function(){
     // handle possible actions 
-    $("#media-browser-web-images-details #image-details .actions").click(function(event){
+    $("#web-images-details #image-details .actions").click(function(event){
       event.preventDefault();
 
       var properties = this.detailsViewImg.data("properties"); //properties of the currenlty displayed image are store in this element
@@ -82,25 +83,24 @@ WebDoc.WebImagesSearch = $.klass({
           var imgUrl = this.detailsViewImg.attr("src");
           page.setBackground(page.getBackgroundColor(),"url("+imgUrl+")", "no-repeat", "center center");
           // Jump to page inspector, where you can set how the background image is displayed
-          WebDoc.application.rightBarController.showPageInspector();
+          //WebDoc.application.rightBarController.showPageInspector();
           break;
         case 'add_image_to_favorite':
-          ddd('add_image_to_favorite');
           link.hide();
           li.append(info);
           var image = new WebDoc.Image;
           image.data.remote_attachment_url = properties.url;
           image.data.favorites = 1;
-          image.data.title = properties.title
+          image.data.title = properties.title;
           image.save(function(persitedImage){
             if(persitedImage.data.attachment_file_name){
-              if($('#media-browser-my-favorites').length){
-                WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data.properties, persitedImage.uuid(), 'my-favorites-images');
+              if($('#my-favorites').length){
+                WebDoc.application.myContentController.insertImage(persitedImage.data, persitedImage.uuid(), 'my-favorites-images');
               }
               info.text("Done!");
             }
             else{
-            	info.text("An error occurred during upload! ");
+              info.text("An error occurred during upload! ");
             }
           }.pBind(this));
           break;
@@ -151,13 +151,13 @@ WebDoc.WebImagesSearch = $.klass({
     this.preloadImage(properties.url);
     
     //setup the favorites links
-    if( $('#media-browser-web-images-details #add_image_to_favorite').length){
-      $('#media-browser-web-images-details #add_image_to_favorite').parent().remove(); 
+    if( $('#web-images-details #add_image_to_favorite').length){
+      $('#web-images-details #add_image_to_favorite').parent().remove(); 
       liDelete = $('<li>').append($("<a href='' id='add_image_to_favorite'>Add to favorites</a>"));
-      $("#media-browser-web-images-details #image-details .actions ul").append(liDelete);
+      $("#web-images-details #image-details .actions ul").append(liDelete);
     }
 
-    $("#media-browser-web-images-details").show();
+    $("#web-images-details").show();
   },
    
   preloadImage: function(imageSrc) {
@@ -184,7 +184,7 @@ WebDoc.WebImagesSearch = $.klass({
 WebDoc.ServiceImagesSearch = $.klass({
   initialize: function(containerId) {
     this.containerId = containerId;
-    this.container = $('#'+containerId);
+    this.container = jQuery('#'+containerId);
     this.container.hide();
     this.resultsCount = this.container.find('.results_number');
     this.resultsLabel = this.container.find('.results_label');
@@ -224,7 +224,7 @@ WebDoc.ServiceImagesSearch = $.klass({
   buildThumbnail: function(type, url, thumbUrl, name, imageLink, newProperties) {
     name = name.replace(/&#39;/g, "'");
     var properties = { type:type, url:url, thumb_url:thumbUrl, name:name, image_link:imageLink };
-    var domSize = { width:"100%", height:"100%"}
+    var domSize = { width:"100%", height:"100%"};
     
     if (newProperties){
       jQuery.extend(properties, { title: newProperties.title });
@@ -298,7 +298,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     
     this.resultsLabel.after(licenseSelector);
   },
-  performSearch: function() {
+  performSearch: function(scroll) {
     // http://www.flickr.com/services/api/flickr.photos.search.html
     // http://www.flickr.com/services/api/misc.urls.html
     $('#web_videos_search_field').val(this.query);
@@ -336,6 +336,9 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
         else {
           this.loadMoreLink.hide();
         }
+        if(scroll){
+          this.container[0].scrollIntoView(false);
+        }
       }.pBind(this)
     );
   },
@@ -352,7 +355,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   loadMore: function($super) {
     $super();
     this.page += 1; 
-    this.performSearch();
+    this.performSearch(true);
   }
 });
 
@@ -377,7 +380,7 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     }.pBind(this)).appendTo(this.imagesContainerWrapper).wrap("<div class='load_more' style='display:none'>");
     this.loadMoreLink = this.container.find('.load_more');
   },
-  performSearch: function() {
+  performSearch: function(scroll) {
     // http://code.google.com/apis/ajaxsearch/documentation/reference.html
     
     var googleUrl = this.googleImagesSearchBaseUrl +
@@ -418,6 +421,9 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
           }
         }
         this.container.find('.loading').remove();
+        if(scroll){
+          this.container[0].scrollIntoView(false);
+        }
       }.pBind(this)
     );
   },
@@ -433,6 +439,6 @@ WebDoc.GoogleImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
   loadMore: function($super) {
     $super();
     // new start param should have already been updated
-    this.performSearch();
+    this.performSearch(true);
   }
 });

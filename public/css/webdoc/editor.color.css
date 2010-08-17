@@ -1,3 +1,60 @@
+/* .panel extensions -------------------------- */
+
+.panel {
+	background-color: rgba(100,100,100,0.75);
+}
+
+.tools_panel {
+	background-color: rgba(255,255,255,0.75);
+	border-bottom: 1px solid rgb(180,180,180);
+}
+
+.controls_panel {
+	background-color: rgba(255,255,255,0.75);
+	border-top: 1px solid rgb(180,180,180);
+}
+
+.sidebar {
+	background-color: transparent;
+}
+
+/* .index extensions -------------------------- */
+
+.pages_index>li.current {
+  -webkit-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+  -moz-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+  box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+}
+
+/* .button extensions ------------------------- */
+
+.panel_button {
+  background-position: 0 0;
+}
+
+.panel_button.active {
+  background-position: 0 -24px;
+}
+
+.app_button {
+  background-position: 0 0;
+}
+
+.app_button.active {
+  background-position: 0 -24px;
+}
+
+.view_button {
+  background-image: url('../images/control_buttons.png');
+  background-position: 0 0;
+}
+
+.view_button.active,
+.full_view a[href='#full'].view_button {
+  background-position: 0 -24px;
+}
+
+
 a[href="#pages-browser"]            { background-position: 0 0; }
 a[href="#pages-browser"]:hover      { background-position: 0 -64px; }
 a[href="#pages-browser"]:active     { background-position: 0 -128px; }

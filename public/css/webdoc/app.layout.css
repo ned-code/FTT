@@ -1,0 +1,79 @@
+/* app.layout.css */
+
+.app_layer {
+  padding: 0 0.8333em 0.3333em 0.8333em;
+}
+
+header {}
+
+.app_question {
+  font-weight: bold;
+  padding: 0.5em 1em;
+  margin-bottom: 0.6667em;
+  font-size: 1.125em;
+  line-height: 1.3333;
+  position: relative;
+}
+
+.app_question .arrow {
+  position: absolute;
+  top: -16px;
+  left: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.delete_button,
+.grabber_button {
+  padding-top: 1.6667em;
+  height: 1.6667em;
+  width: 1.6667em;
+}
+
+.option {
+  height: 1.6667em;
+  text-align: left;
+  position: relative;
+  padding: 0 4em 0 1.3333em;
+  margin-bottom: 0.3333em
+}
+
+.option input {
+  position: absolute;
+  top: 0.4333em; left: 0;
+  width: auto;
+}
+
+.option .grabber {
+  position: absolute;
+  top: 0; right: 2em;
+}
+
+.option .delete_button {
+  position: absolute;
+  top: 0; right: 0;
+}
+
+.option label {
+  margin-top: 0;
+  width: 100%;
+  height: 1.6667em;
+  padding-left: 0.3333em;
+  padding-right: 0.3333em;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1;
+}
+
+.other_option {
+  margin-top: 0.75em;
+}
+
+.textarea {
+  margin-bottom: 1em;
+}
+
+
+

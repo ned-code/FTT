@@ -1,5 +1,6 @@
 
 WebDoc.ITEM_TYPE_TEXT    = "text";
+WebDoc.ITEM_TYPE_TEXTBOX = "textbox";
 WebDoc.ITEM_TYPE_IMAGE   = "image";
 WebDoc.ITEM_TYPE_DRAWING = "drawing";
 WebDoc.ITEM_TYPE_WIDGET  = "widget";
@@ -183,11 +184,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
           }
         }
         
-        var previousStyle = jQuery.extend({}, this.getStyle());
-        var that = this;
-        WebDoc.application.undoManager.registerUndo(function() {
-          that.setStyle( previousStyle );
-        });
+        this.pushStyleToUndoStack();
         if(scope == 'border'){ //be sure to remove the background if there is a baground image in the border
           if( newStyle.match('border-image')) {
             this.removeBackground();
@@ -202,11 +199,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
       if(!this.getStyle()){
         jQuery.extend(this.data.data, { style : {}});
       }
-      var previousStyle = jQuery.extend({}, this.getStyle());
-      var that = this;
-      WebDoc.application.undoManager.registerUndo(function() {
-        that.setStyle( previousStyle );
-      });
+      this.pushStyleToUndoStack();
       
       this.data.data.style = newStyle;
       this.save();
@@ -302,9 +295,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   removeBackground: function(){
     if(this.hasBackground()){
-      this.getStyle()['background'] = '';
-      this.save();
-      this.fireObjectChanged({ modifedAttribute: 'css' });
+      this.setStyle('', 'background');
     }
   },
   
@@ -315,9 +306,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   removeBorder: function(){
     if(this.hasBorder()){
-      this.getStyle()['border'] = '';
-      this.save();
-      this.fireObjectChanged({ modifedAttribute: 'css' });
+      this.setStyle('', 'border');
     }
   },
   
@@ -326,6 +315,8 @@ WebDoc.Item = $.klass(WebDoc.Record,
     if(!this.hasStyle()){
       jQuery.extend(this.data.data, { style : {}});
     }
+    
+    this.pushStyleToUndoStack();
     this.data.data.style.font = cssString;
     this.data.data.style.font_face = font_face_string;
     this.save();
@@ -343,11 +334,20 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   removeFont: function(){
     if(this.hasFontFace()){
+      this.pushStyleToUndoStack();
       this.getStyle()['font_face'] = '';
       this.getStyle()['font'] = '';
       this.save();
       this.fireObjectChanged({ modifedAttribute: 'css' });
     }
+  },
+  
+  pushStyleToUndoStack: function(){
+    var previousStyle = jQuery.extend({}, this.getStyle());
+    var that = this;
+    WebDoc.application.undoManager.registerUndo(function() {
+      that.setStyle( previousStyle );
+    });
   },
   
   getIsPlaceholder: function() {
@@ -813,9 +813,11 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }.pBind(this));
     
     var diffZoom = zoom - previousZoom;
+    
     this.setProperty('zoom', zoom);
     var newLeft = this.getDisplacement().left + diffZoom/2;
-    var newTop = this.getDisplacement().top + diffZoom/2;    
+    var newTop = this.getDisplacement().top + diffZoom/2;
+    
     this.displace({ left: newLeft, top: newTop});
     this.fireObjectChanged({ modifedAttribute: 'zoom' });
     WebDoc.application.inspectorController.refresh();
@@ -890,13 +892,20 @@ WebDoc.Item = $.klass(WebDoc.Record,
 });
 
 $.extend(WebDoc.Item, {
+  rootUrlValue: undefined,
+  
   className: function() {
     return "item";
   },
   
   rootUrl: function(args) {
-    return "/documents/" + args.document_id + "/pages/" + args.page_id;
+    if (this.rootUrlValue === undefined) {
+      this.rootUrlValue = WebDoc.dataServer ? WebDoc.dataServer : "";
+      this.rootUrlValue += "/documents/";
+    }            
+    return this.rootUrlValue + args.document_id + "/pages/" + args.page_id;
   },
+  
   pluralizedClassName: function() {
     return this.className() + "s";
   } 

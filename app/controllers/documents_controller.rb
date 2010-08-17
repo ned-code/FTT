@@ -1,28 +1,29 @@
 class DocumentsController < ApplicationController
+  
   before_filter :store_url_in_session_if_user_not_logged
   # need to be authenticate for alpha release.
   # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document
-  before_filter :authenticate_user!
-  before_filter :instantiate_document, :only => [:show, :update, :duplicate, :destroy]
+  before_filter :find_document, :only => [:show, :update, :duplicate, :destroy, :share, :unshare]
   
   #before_filter :authenticate_if_needed, :only => [:show]
   #before_filter :authenticate_user!, :only => [:index]
   after_filter :create_view_count, :only => :show
   
-  access_control do
-    action :show do
-      allow all, :if => :document_is_public?
-      allow :editor, :of => :document
-    end    
-    allow logged_in, :to => [:index, :create, :duplicate]
-    allow all, :to => :explore
-    allow all, :to => :featured
-    allow :editor, :of => :document, :to => [:update, :destroy]    
-    allow :admin    
-  end
+  # access_control do
+  #   action :show do
+  #     allow all, :if => :document_is_public?
+  #     allow :editor, :of => :document
+  #   end
+  #   allow logged_in, :to => [:index, :create, :duplicate]
+  #   allow all, :to => :explore
+  #   allow all, :to => :featured
+  #   allow :editor, :of => :document, :to => [:update, :destroy]
+  #   allow :admin
+  # end
   
   # GET /documents
-  def index    
+  def index
+    authorize! :read, Document
     respond_to do |format|
       format.html do
         set_return_to
@@ -120,10 +121,14 @@ class DocumentsController < ApplicationController
       render :action => :static_page, :layout => 'static', :content_type => 'image/svg+xml' and return
     end
     if @document.present?
+      authorize! :read, @document
+      @related_documents = Document.all(:conditions => { :category_id => @document.category_id}, :limit => 12 )
+      @more_author_documents = Document.all(:conditions => { :creator_id => @document.creator_id}, :limit => 6 )
       respond_to do |format|
         format.html do
+          set_cache_buster
           @get_return_to = get_return_to 
-          render :layout => 'layouts/editor'      
+          render :layout => 'layouts/editor'
         end
         format.json do
           logger.debug "return document json."
@@ -134,12 +139,13 @@ class DocumentsController < ApplicationController
         end
       end
     else
-      render_optional_error_file(:not_found)
+      render :file => "#{Rails.public_path}/404.html", :status => 404
     end    
   end
   
   # POST /documents
   def create
+    authorize! :create, Document
     @document = current_user.documents.create_with_uuid(params[:document])
     @@xmpp_notifier.xmpp_create_node(@document.uuid) 
     render :json => @document
@@ -147,12 +153,14 @@ class DocumentsController < ApplicationController
 
   # POST /documents/:id/duplicate
   def duplicate
+    authorize! :create, Document
     @new_document = @document.deep_clone_and_save!(current_user, params[:title])
     render :json => @new_document.to_json(:only => :uuid)
   end
   
   # PUT /documents/:id
   def update
+    authorize! :update, @document
     @document.update_attributes(params[:document])
     message = @document.as_json({})
     message[:source] = params[:xmpp_client_id]    
@@ -162,18 +170,34 @@ class DocumentsController < ApplicationController
   
   # DELETE /documents/:id
   def destroy
-    @document.safe_delete!
+    authorize! :destroy, @document
+    if @document.present?
+      @document.safe_delete!
+    end
+
+    render :json => {}
+  end
+  
+  def share
+    authorize! :update, @document
+    if params[:with_comments] == 'true' || params[:with_comments] == 1
+      @document.share(true)
+    else
+      @document.share
+    end
+    render :json => {}
+  end
+  
+  def unshare
+    authorize! :update, @document
+    @document.unshare
     render :json => {}
   end
   
   protected
   
-  def instantiate_document
+  def find_document
     @document = Document.not_deleted.find_by_uuid(params[:id])
-  end
-  
-  def authenticate_if_needed
-    authenticate_user! unless document_is_public?
   end
   
   def create_view_count

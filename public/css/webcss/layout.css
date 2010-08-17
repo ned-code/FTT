@@ -11,8 +11,14 @@
 
 .horizontal>* {
     display: inline-block;
-    vertical-align: bottom;
+    vertical-align: top;
     height: 100%;
+}
+
+.horizontal>input[type='radio'],
+.horizontal>input[type='checkbox'] {
+    height: auto;
+    width: auto;
 }
 
 .horizontal>*:last-child,

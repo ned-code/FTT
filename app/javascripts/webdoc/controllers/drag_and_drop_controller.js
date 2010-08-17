@@ -90,7 +90,8 @@ WebDoc.DrageAndDropController = {
           if(pos && params && params.action === 'create') {
             WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
             var target = jQuery(evt.target);
-            if(target && target.attr('class') === 'wd_discussion'){
+            
+            if( target && target.hasClass('wd_discussion') ) {
               WebDoc.application.boardController.selectDiscussionView(target.parent().parent().data('discussionView'), false, true);
             }
             else {
@@ -187,7 +188,7 @@ WebDoc.DrageAndDropController = {
         WebDoc.application.boardController.insertItems([newItem]);
       },
       fail: function( value, error ){
-        ddd(error);
+        alert("Sorry this website doesn't allow to be inserted");
       }
     });
   },
@@ -240,7 +241,7 @@ WebDoc.DrageAndDropController = {
     
     for(knowSourceIndex in knowSources){
       if((urlParameterDomain && urlParameterDomain == knowSources[knowSourceIndex][0])){
-        uri_list = 'http://'+WebDoc.UrlUtils.consolidateSrc(uri_list).split('http://')[2]
+        uri_list = 'http://'+WebDoc.UrlUtils.consolidateSrc(uri_list).split('http://')[2];
         knowSources[knowSourceIndex][1](uri_list,evt);
         return true
        }

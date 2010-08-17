@@ -1,16 +1,3 @@
-module PageJsonHelper
-  def self.decode_json_and_yaml(value)
-    unless (value.nil?)
-      begin
-        return ActiveSupport::JSON.decode(value)
-      rescue
-        return YAML.load(value)
-      end  
-    end
-    return nil
-  end
-end
-
 class Page < ActiveRecord::Base
 
   has_uuid
@@ -30,7 +17,7 @@ class Page < ActiveRecord::Base
   attr_accessor_with_default :touch_document_active, true
   
   composed_of :data, :class_name => 'Hash', :mapping => %w(data to_json),
-                         :constructor => PageJsonHelper.method(:decode_json_and_yaml)
+                         :constructor => JsonHelper.method(:decode_json_and_yaml)
 
   attr_accessor_with_default :deep_notify, false
 
@@ -56,9 +43,9 @@ class Page < ActiveRecord::Base
   
   default_scope :order => "position ASC"
   
-  named_scope :valid, :joins => :document, :conditions => ['pages.deleted_at IS ? AND documents.deleted_at IS ?', nil, nil]
-  named_scope :not_deleted, :conditions => ['pages.deleted_at IS ?', nil]
-  named_scope :deleted, :conditions => ['pages.deleted_at IS NOT ?', nil]
+  scope :valid, :joins => :document, :conditions => ['pages.deleted_at IS ? AND documents.deleted_at IS ?', nil, nil]
+  scope :not_deleted, :conditions => ['pages.deleted_at IS ?', nil]
+  scope :deleted, :conditions => ['pages.deleted_at IS NOT ?', nil]
   # ===============
   # = Validations =
   # ===============
@@ -272,7 +259,9 @@ class Page < ActiveRecord::Base
   def set_position
     self.position ||= document.nil? ? 0 : document.pages.count
     #update following pages
-    Page.update_all("position = position + 1", "position >= #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")
+    if document.present? && document.pages.count(:conditions => ['pages.position = ?', self.position]) >= 1
+      Page.update_all("position = position + 1", "position >= #{self.position.to_i} and uuid <> '#{self.uuid}' and document_id = '#{self.document_id}'")
+    end
   end
   
   # after_destroy

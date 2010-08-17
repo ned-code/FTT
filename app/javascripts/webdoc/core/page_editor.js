@@ -82,6 +82,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
       WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
       WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
+      WebDoc.application.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox']", "textbox" );
       WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
       WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
       WebDoc.application.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "insert-app" );
@@ -102,11 +103,11 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
           WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
           ddd("check editablity");
           if (WebDoc.application.boardController.isEditable() && jQuery("body").hasClass('mode-edit')) {
-            ddd("[PageEditor] call rightBarController.showLib");
-            WebDoc.application.rightBarController.showMediaBrowser();
+            ddd("[PageEditor] call rightBarController.showMyContent");
+            WebDoc.application.rightBarController.showMyContent();
           }
           
-          WebDoc.application.boardController.loadingNode.removeClass('loading');
+          WebDoc.application.boardController.loadingNode.removeTransitionClass('loading');
           
           //jQuery('#document_loading').remove();
           jQuery('body').trigger('webdocready');   
@@ -293,9 +294,8 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     if (this.currentDocument.pages.length > 1) {
       var choice = confirm("Are you sure you want to delete the current page?");
       if (choice) {
-        this.currentPage.destroy(function(objet) {
-          this.currentDocument.removePage(pageToDelete, true);
-        }.pBind(this));
+        this.currentDocument.removePage(pageToDelete, true);
+        pageToDelete.destroy();
       }
     }
   },
@@ -372,7 +372,6 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   },
   
   _extractUUIDFromHash: function(hash){
-    ddd('_extractUUIDFromHash');
     var uuid = hash.substring(1);
     if(uuid.charAt(0) == '!'){
       uuid = uuid.substring(1);

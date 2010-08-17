@@ -3,17 +3,17 @@ class DiscussionsController < ApplicationController
   before_filter :find_discussion
   before_filter :find_document
 
-  access_control do
-    action :index, :create do
-      allow all, :if => :document_is_public?
-      allow :editor, :of => :pseudo_document
-    end
-    actions :update, :destroy do
-      allow all, :if => :current_user_is_discussion_owner      
-      allow :editor, :of => :pseudo_document
-    end
-    allow :admin    
-  end
+  # access_control do
+  #   action :index, :create do
+  #     allow all, :if => :document_is_public?
+  #     allow :editor, :of => :pseudo_document
+  #   end
+  #   actions :update, :destroy do
+  #     allow all, :if => :current_user_is_discussion_owner
+  #     allow :editor, :of => :pseudo_document
+  #   end
+  #   allow :admin
+  # end
   
   def index
     raise 'no params id' if params[:page_id].blank?
@@ -68,12 +68,18 @@ class DiscussionsController < ApplicationController
   end
 
   def find_document
-    if params[:page_id]
-      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa where pa.uuid = '#{params[:page_id]}' and pa.document_id = do.uuid;").first
+    if params[:page_id].present?
+      @pseudo_document = Document.first(:joins => :pages,
+                                        :conditions => ['pages.uuid = ?', params[:page_id]],
+                                        :select => 'documents.uuid')
     elsif params[:discussion].present? && params[:discussion][:page_id].present?
-      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa where pa.uuid = '#{params[:discussion][:page_id]}' and pa.document_id = do.uuid;").first
+      @pseudo_document = Document.first(:joins => :pages,
+                                        :conditions => ['pages.uuid = ?', params[:discussion][:page_id]],
+                                        :select => 'documents.uuid' )
     elsif @discussion.present?
-      @pseudo_document = Document.find_by_sql("select do.uuid, do.is_public from documents do, pages pa, discussions di where di.uuid = '#{@discussion.uuid}' and di.page_id = pa.uuid and pa.document_id = do.uuid;").first  
+      @pseudo_document = Document.first(:joins => { :pages => :discussions },
+                                        :conditions => ['discussions.uuid = ?', @discussion.uuid],
+                                        :select => 'documents.uuid')
     end
   end
 

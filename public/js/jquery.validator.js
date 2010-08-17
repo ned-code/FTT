@@ -72,7 +72,6 @@
 				//range: {},
 				//tel: {},
 				//search: {},
-				//color: {},
 			},
 
 			
@@ -498,7 +497,7 @@
 					return test ?
 								 test[2] || test[1] === '0' ? pass() : 
 								 autocomplete ? pass(test[0]+'px') :
-									 fail('Add some CSS units, like <i>%</i>, <i>px</i> or <i>em</i>') :
+									 fail('How about some units, like <i>%</i>, <i>px</i> or <i>em</i>?') :
 									 fail('Not a valid CSS value') ;
 				},
 
@@ -529,8 +528,8 @@
 					
 					if ( test ) {
 						return test[1] && test[2] && test[6] ? pass() :
-									 autocomplete ? pass( 'rgb( '+test[3]+', '+test[4]+'%, '+test[5]+'% )' ) :
-									 fail('Do you want <i>rgb( '+test[3]+', '+test[4]+'%, '+test[5]+'% )</i>?') ;
+									 autocomplete ? pass( 'rgb( '+test[3]+', '+test[4]+', '+test[5]+' )' ) :
+									 fail('Do you want <i>rgb( '+test[3]+', '+test[4]+', '+test[5]+' )</i>?') ;
 					}
 					
 					test	= regex.hslaColor.exec( value );

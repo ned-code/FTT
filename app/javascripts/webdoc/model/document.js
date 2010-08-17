@@ -31,10 +31,6 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     return this.data.creator_id;
   },
   
-  isShared: function() {
-    return this.data.is_public;
-  },
-  
   setTitle: function(title, skipSave) {
     this.data.title = title;
     if(!skipSave && !skipSave === true) {
@@ -115,15 +111,40 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     return "theme_" + themeName;
   },
   
-  share: function() {
-    this.data.is_public = true;
-    this.save();
+  share: function(with_comments) {
+    var data;
+    if(with_comments){
+      data = {with_comments: true};
+    }
+    else{
+      data = {with_comments: false};
+    }
+
+    jQuery.ajax({
+      url: '/documents/' + this.uuid() + '/share',
+      type: 'POST',
+      data: data,
+      dataType: 'json',
+      success: function(){ddd('document shared');},
+      error: function(){ddd('error during sharing');}
+    });
   },
   
   unshare: function() {
-    this.data.is_public = false;
+    jQuery.ajax({
+      url: '/documents/' + this.uuid() + '/unshare',
+      type: 'POST',
+      dataType: 'json',
+      success: function(){ddd('document unshared');},
+      error: function(){ddd('error during unsharing');}
+    });
   },
-
+  
+  //Rewrite this to be compatible with new role paradigm
+  isShared: function() {
+    return this.data.is_public;
+  },
+  
   refresh: function($super, json, onlyMissingValues) {
     $super(json, onlyMissingValues);
     var that = this;
@@ -322,16 +343,19 @@ WebDoc.Document = $.klass(WebDoc.Record, {
             "duplicate",
             extraParams
     );
-  }
-    
+  }    
 });
 
 $.extend(WebDoc.Document, {
+  rootUrlValue: undefined,
   className: function() {
     return "document";
   },
   rootUrl: function(args) {
-    return "";
+    if (this.rootUrlValue === undefined) {
+      this.rootUrlValue = WebDoc.dataServer ? WebDoc.dataServer : "";  
+    }    
+    return this.rootUrlValue;
   },
   pluralizedClassName: function() {
     return "documents";

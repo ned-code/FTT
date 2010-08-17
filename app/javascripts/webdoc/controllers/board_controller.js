@@ -194,10 +194,10 @@ WebDoc.BoardController = jQuery.klass({
     
     //WebDoc.application.pageBrowserController.conceal();
     //WebDoc.application.rightBarController.conceal();
-    if(WebDoc.application.rightBarController.getSelectedInspector() !== WebDoc.RightBarInspectorType.SOCIAL) {
+    if(WebDoc.application.rightBarController.getSelectedInspector() !== WebDoc.PanelInspectorType.SOCIAL) {
       this._previousInspector = WebDoc.application.rightBarController.getSelectedInspector();
     }
-    WebDoc.application.rightBarController.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
+    WebDoc.application.rightBarController.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
     this._isInteraction = true;
     return this._isInteraction;
   },
@@ -275,10 +275,18 @@ WebDoc.BoardController = jQuery.klass({
   // Tool -----------------------------------------
   
   setCurrentTool: function(tool) {
-    ddd(tool);
     this.currentTool = tool;
     if (this.currentTool) {
       this.currentTool.selectTool();
+    }
+  },
+  
+  toggleDrawTool: function(){
+    if(!this.currentTool || (this.currentTool == WebDoc.application.drawingTool)){
+      this.setCurrentTool(WebDoc.application.arrowTool);
+      WebDoc.application.inspectorController.selectInspector('empty');
+    }else{
+      this.setCurrentTool(WebDoc.application.drawingTool);
     }
   },
   
@@ -661,6 +669,11 @@ WebDoc.BoardController = jQuery.klass({
   },
   
   insertImage: function(imageUrl, position, media_id, title) {
+    ddd('insertImage : ', imageUrl);
+    if(imageUrl.match('http://l.yimg.com/g/images/spaceball.gif')){ //prevent flickr to create a transparent image of 1x1 pixel
+      alert("Sorry, but this image isn't free for use");
+      return false;
+    }
     var image = document.createElement('img'); /* Preload image in order to have width and height parameters available */
     jQuery(image).bind("load", {position: position, media_id: media_id, title: title }, this._createImageItemAfterLoad); /* WebDoc.Item creation will occur after image load*/
     image.src = imageUrl;
@@ -701,23 +714,8 @@ WebDoc.BoardController = jQuery.klass({
       case 'youtube' :
         videoWidget = WebDoc.WidgetManager.getInstance().getYoutubeWidget();
         break;
-      case 'vimeo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVimeoWidget();
-        break;
-      case 'dailymotion' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getDailymotionWidget();
-        break;
-      case 'myspacevideo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVidsMyspaceWidget();
-        break;
-      case 'metacafe' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getMetacafeWidget();
-        break;
-      case 'googlevideo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVidsGoogleWidget();
-        break;
-      case 'yahoovideo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVidsYahooWidget();
+      case 'video' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getVideoWidget();
         break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
@@ -1169,6 +1167,7 @@ WebDoc.BoardController = jQuery.klass({
 
   removeDiscussion: function(discussion) {
     ddd('[BoardController] remove discussion');
+    discussion.destroy();
     this._currentPage.removeDiscussion(discussion);
   },
 
@@ -1182,14 +1181,14 @@ WebDoc.BoardController = jQuery.klass({
     this._selectionDiscussionView = discussionView;
     discussionView.select(skipScrollDiscussionView);
     WebDoc.application.rightBarController.showDiscussionsPanel();
-    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
     discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion, skipScrollDiscussionPanel);
   },
 
   unSelectDiscussionView: function() {
     if(this._selectionDiscussionView !== null) {
       this._selectionDiscussionView.unSelect();
-      var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+      var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
       discussionPanel.unSelectDiscussion(this._selectionDiscussionView.discussion);
       this._selectionDiscussionView = null;      
     }

@@ -7,6 +7,7 @@
     = include_stylesheets :common, :media => 'all'
     = include_stylesheets :application, :media => 'all'
     = render :partial => "layouts/google_analytics"
+    = csrf_meta_tag
 
   %body{ :class => controller_name }
     = render :partial => "layouts/main_toolbar"
@@ -23,4 +24,4 @@
       WebDoc.Application.currentUser = new WebDoc.User(#{current_user_json});
       WebDoc.Application.start();
       
-    = render :partial => "layouts/feedback";    
+    = render :partial => "layouts/feedback";

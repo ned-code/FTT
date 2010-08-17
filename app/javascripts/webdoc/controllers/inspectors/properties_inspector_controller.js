@@ -16,21 +16,10 @@ WebDoc.PropertiesInspectorController = $.klass({
     .delegate("a[href=#remove_font]", 'click', jQuery.proxy( this, 'removeFont' ))
     .delegate("a[href=#remove_border]", 'click', jQuery.proxy( this, 'removeBorder' ));
     
-    //Display the theme background color in inspector, useless with packages
-    if (false) { // if (showBgColors) We never display the theme background color
-      WebDoc.application.boardController.themeNode.bind('load', jQuery.proxy(this, '_makeThemeBackgrounds'));
-      this._themeBgColorsNode = jQuery('<ul/>', {'class': "icons-only thumbs backgrounds_index index"}).css('clear', 'both');
-      this._themeBgState = false;
-      var that = this;
-      setTimeout(function() {
-        that._makeThemeBackgrounds();
-      }, 1000);
-    }
-    
     this.fields = {
       top:              jQuery(selector + " #property_top"),
-      //right:            jQuery("#property_right"),
-      //bottom:           jQuery("#property_bottom"),
+      //right:            jQuery(selector + " #property_right"),
+      //bottom:           jQuery(selector + " #property_bottom"),
       left:             jQuery(selector + " #property_left"),
       width:            jQuery(selector + " #property_width"),
       height:           jQuery(selector + " #property_height"),
@@ -41,7 +30,17 @@ WebDoc.PropertiesInspectorController = $.klass({
       padding:          jQuery(selector + " #property_padding"),
       borderRadius:     jQuery(selector + " #property_border_radius"),
       overflow:         jQuery(selector + " #property_overflow_hidden, " + selector +" #property_overflow_auto, " + selector +" #property_overflow_visible"),
-      opacity:          jQuery(selector + " #property_opacity, " + selector +" #property_opacity_readout")
+      opacity:          jQuery(selector + " #property_opacity, " + selector +" #property_opacity_readout"),
+    
+    	fontSize:					jQuery(selector + " #property_font_size"),
+    	fontWeight:				jQuery(selector + " #property_font_weight"),
+    	fontStyle:				jQuery(selector + " #property_font_style"),
+    	fontFamily:				jQuery(selector + " #property_font_family"),
+    	textAlign:				jQuery(selector + " #property_text_align"),
+    	textDecoration:		jQuery(selector + " #property_text_decoration"),
+    	textShadow:				jQuery(selector + " #property_text_shadow"),
+    	letterSpacing:		jQuery(selector + " #property_letter_spacing"),
+    	wordSpacing:			jQuery(selector + " #property_word_spacing")
     };
   },
   
@@ -151,7 +150,8 @@ WebDoc.PropertiesInspectorController = $.klass({
       
       var css = selectedItem.css(),
           fields = this.fields,
-          key, field, value;      
+          key, field, value;
+      
       for ( key in fields ) {
         field = fields[key];
         
@@ -164,10 +164,11 @@ WebDoc.PropertiesInspectorController = $.klass({
         else if ( css[key] ) {
           field.val( css[key] );
         }
-        else if(key == 'backgroundColor'){
+        // Don't know what this is for - who added this?
+        else if(key === 'backgroundColor'){
            field.val( selectedItem.item.getStylePropertyByScopeAndPropertyName('background', 'background-color'));
         }
-        else if(key == 'borderRadius'){
+        else if(key === 'borderRadius'){
           field.val( selectedItem.item.getStylePropertyByScopeAndPropertyName('border', 'border-radius'));
         }
         // when the css value is inherited, clear the field
@@ -211,6 +212,24 @@ WebDoc.PropertiesInspectorController = $.klass({
           else if(property == 'borderRadius'){
             item.setStyleBorderRadius(value);
           }
+          // This method of keeping aspect ratio can lead to rounding errors...
+          // needs to be improved - don't we keep the aspect ratio on the item's
+          // controller? It should be calculated and stored at the time when
+          // the aspect ratio checkbox is clicked.
+          else if(property == 'height' && item.data.data.preserve_aspect_ratio === "true") {
+            var aspectRatio = item.width("px") / item.height("px");
+            cssObj = {};
+            cssObj['height'] = Math.round(parseFloat(value))+'px';
+            cssObj['width']  = Math.round(parseFloat(value)*aspectRatio)+'px';
+            item.changeCss( cssObj );
+          }
+          else if(property == 'width' && item.data.data.preserve_aspect_ratio === "true") {
+            var aspectRatio = item.height("px") / item.width("px");
+            cssObj = {};
+            cssObj['height'] = Math.round(parseFloat(value)*aspectRatio)+'px';
+            cssObj['width']  = Math.round(parseFloat(value))+'px';
+            item.changeCss( cssObj );
+          }
           else{
             cssObj = {};
             cssObj[property] = value;
@@ -218,16 +237,6 @@ WebDoc.PropertiesInspectorController = $.klass({
           }
         }
         self.refresh();
-      },
-      fail: function( value, error ){
-        var type = field.attr('data-type') || field.attr('type');
-        
-        // If we can autocomplete the value, override the validation failure
-        if ( self.autocompleters[type] ) {
-          return self.autocompleters[type]( field, value );
-        }
-        
-        return false;
       }
     });
   },
@@ -281,33 +290,16 @@ WebDoc.PropertiesInspectorController = $.klass({
       }
     }
   },
-  
-  // Autocompleters try to correct fields that have
-  // failed validation, and if successful, they force
-  // a validation pass
-  autocompleters: {
-    cssvalue: function( field, value ){
-      if ( jQuery.regex.integer.test( value ) ){
-        field.val( value+'px' );
-        return true;
-      }
-    },
-    cssangle: function( field, value ){
-      if ( jQuery.regex.integer.test( value ) ){
-        field.val( value+'deg' );
-        return true;
-      }
-    }
-  },
 
   updatePropertiesWithFitToScreen: function(e) {
-    var item = WebDoc.application.boardController.selection()[0].item;
-    var size = null;
-    var position = null;
+    var item = WebDoc.application.boardController.selection()[0].item,
+        size = null,
+        position = null,
+        currentPageWidth = WebDoc.application.pageEditor.currentPage.width("px"),
+        currentPageHeight = WebDoc.application.pageEditor.currentPage.height("px");
+
     if(item.data.media_type == WebDoc.ITEM_TYPE_IMAGE && item.data.data.preserve_aspect_ratio === "true") {
       var aspectRatio = item.width("px") / item.height("px");
-      var currentPageHeight = WebDoc.application.pageEditor.currentPage.height("px");
-      var currentPageWidth = WebDoc.application.pageEditor.currentPage.width("px");
       if(currentPageHeight*aspectRatio < currentPageWidth) {
         size = { width: Math.round(currentPageHeight*aspectRatio), height: currentPageHeight};
       }
@@ -320,7 +312,7 @@ WebDoc.PropertiesInspectorController = $.klass({
       size['height'] += "px";
     }
     else {
-      size = { width: '100%', height: '100%' };
+      size = { width: currentPageWidth+"px", height: currentPageHeight+"px" };
       position = { left: '0px', top: '0px' };
     }
     item.changeCss(jQuery.extend({ transform: '' }, size, position));

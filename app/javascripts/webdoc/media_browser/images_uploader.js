@@ -100,7 +100,7 @@ WebDoc.ImagesUploader = $.klass({
       ddd("Upload success: "+file.name);
       this.successfulUploads += 1;
       var data = eval('(' + serverData + ')');
-      this.imagesLibrary.insertImage(data.image, data.image.uuid, 'my-images-library');
+      this.imagesLibrary.insertImage(data.image, data.image.uuid, 'my_images_library');
 
       // if (!$("#add_images").is(":visible")) { //only if the Add Images pane has been closed during upload
       //         //this.imagesLibrary.refreshMyImages([$.evalJSON(serverData).image]);
@@ -152,8 +152,11 @@ WebDoc.ImagesUploader = $.klass({
   },
   stopUpload: function(infoMessage) { // stop uplaod (for all files in the queue)
     this.uploadControl.swfupload('stopUpload'); //I could omit this (it'll only call uploadError with and UPLOAD_STOPPED error)
-    this.logInfo.text(infoMessage);
     this.resetUploadingUI();
+    jQuery("#uploading_info_in_my_image").text(infoMessage);
+    window.setTimeout(function(){
+      jQuery("#uploading_info_in_my_image").text("");
+    }, 4000);
     // I need to call cancelUpload for every file still in the queue
     var stats;
     do {

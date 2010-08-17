@@ -1,0 +1,10 @@
+Hi <%= @user.username %>!
+
+<%= @friend.username %> is now connect with you.
+
+You can see his profile here <%=link_to @user.username, user_url(@friend) %>.
+
+
+Best regards
+
+Your webdoc team

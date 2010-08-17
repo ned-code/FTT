@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
 
-  access_control do
-    allow logged_in, :except => [:index]
-    allow :admin, :to => [:index]
-  end
+  # access_control do
+  #   allow logged_in, :except => [:index]
+  #   allow :admin, :to => [:index]
+  # end
   
   # GET /users
   def index
@@ -12,6 +12,8 @@ class UsersController < ApplicationController
   
   # GET /users/:id
   def show
+    p "userssss"
+    p flash
     @user = User.find(params[:id])
     respond_to do |format|
       format.html

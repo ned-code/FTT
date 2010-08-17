@@ -246,19 +246,6 @@
 .ui-resizable-handle {
   z-index:1000000 !important;  
 }
-.content {
-  padding:0 10px;
-  font-size:11px;
-  color:#fff;  
-}
-
-form.content .section {
-  padding:8px 0;
-}
-
-form.content .entry {
-  padding:5px 0;
-}
 
 .inspector-title {
     color: white;

@@ -56,3 +56,5 @@ public/local/*
 reports/*.csv
 public/themes/*/*.zip
 .externalToolBuilders/
+lock
+public/js/codemirror

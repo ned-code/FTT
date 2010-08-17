@@ -1,6 +1,6 @@
-class DocumentRolesController < DocumentController
-  before_filter :authenticate_user!, :instantiate_document
-  
+class DocumentRolesController < ApplicationController
+  before_filter :find_document
+
   # GET /documents/:document_id/roles
   def show
     render :json => @document.to_access_json
@@ -30,5 +30,15 @@ class DocumentRolesController < DocumentController
     
     render :json => {}
   end
+
+  private
+
+  def find_document
+    @document = Document.find_by_uuid(params[:document_id])
+  end
+
+  def find_pseudo_document
+    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid')
+  end 
   
 end

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sequencer</title>
+  
+  <link href="../css/webcss/reset.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/forms.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/column.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/states.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/layer.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <style>
+    
+    .button_bar {
+    	margin: 10em auto;
+    	width: 66%;
+    }
+    
+    .button {
+    	-webkit-border-radius: 24px;
+    	-moz-border-radius:    24px;
+    	border-radius:         24px;
+    	
+    	background: rgba(80,80,80,0.8);
+    	padding: 0.4em 1.3em;
+    	font-size: 1.2em;
+    	font-weight: bold;
+    	color: white;
+    	margin-right: 0.4em;
+    	white-space: nowrap;
+    	
+			-webkit-transition: -webkit-box-shadow 1s ease-out;
+
+			-webkit-box-shadow: none;
+			-webkit-box-shadow: none;
+			-moz-box-shadow:    none;
+			box-shadow:         none;
+    }
+    
+    .go_button {
+    	background: orange;
+    	margin-right: 2em;
+    	opacity: 0.4;
+    }
+    
+    .active {
+			-webkit-transition: -webkit-box-shadow 0.2s ease-in;
+			
+			-webkit-box-shadow: 0 0 8px orange;
+			-webkit-box-shadow: 0 0 8px 6px orange;
+			-moz-box-shadow:    0 0 8px 6px orange;
+			box-shadow:         0 0 8px 6px orange;
+    }
+    
+    #content {
+    	font-size: 1.6em;
+    	width: 66%;
+    	margin: 0 auto;
+    	color: #666666;
+    }
+  </style>
+</head>
+<body class="loading">
+  
+  <div class="button_bar">
+  
+  	<a href="#go" class="go_button button">Click me</a>
+  	<a id="fing" class="button">Button One</a>
+  	<a id="fang" class="button">Button Two</a>
+  	<a id="fong" class="button">Button Three</a>
+	
+	</div>
+
+  <div id="content"></div>
+  
+  <div class="loading_icon screen_layer layer"></div>
+  
+  <script src="../js/jquery-1.4.2.js"></script>
+  <script src="js/sequencer.js"></script>
+  <script src="js/sequencer.processes.DOM.js"></script>
+  <script>
+	
+	var introWordsSequence = {
+		type: 'audio',
+		src: 'audio/voice.m4a',
+		1200: [{ type: 'addhtml', selector: '#content', html: 'Hello.' }],
+		2400: [{ type: 'addhtml', selector: '#content', html: ' Welcome' }],
+		2700: [{ type: 'addhtml', selector: '#content', html: ' to' }],
+		2850: [{ type: 'addhtml', selector: '#content', html: ' my' }],
+		3000: [{ type: 'addhtml', selector: '#content', html: ' <b>Event</b>' }],
+		3300: [{ type: 'addhtml', selector: '#content', html: ' <b>Sequencer</b>.' }]
+	};
+	
+	var introButtonsSequence = {
+		type: 'sequence',
+		0: 		[{ type: 'addClass', selector: '#fing', className: 'active' }],
+		800: 	[{ type: 'removeClass', selector: '#fing', className: 'active' }],
+		1300: [{ type: 'addClass', selector: '#fang', className: 'active' }],
+		2100: [{ type: 'removeClass', selector: '#fang', className: 'active' }],
+		2800: [{ type: 'addClass', selector: '#fong', className: 'active' }],
+		3600: [{ type: 'removeClass', selector: '#fong', className: 'active' }]
+	};
+	
+	var introSequence = {
+		type: 'sequence',
+		//1:		[{ type: 'audio', src: 'audio/voice.m4a' }],
+		1: [introWordsSequence],
+		5600: [introButtonsSequence]
+	};
+	
+	// Make sequencer
+	var sequencer = Sequencer( introSequence );
+	
+	// Preload audio
+	Sequencer.processes.audio({ src: 'audio/voice.m4a' }, 0, {addChildProcess: function(){}}, function(){
+	  jQuery('a[href=#go]').css({opacity: 1});
+	  jQuery('body').removeClass('loading');
+	});
+	
+	jQuery(document).ready(function(){
+		
+		// Wait for button click
+		
+		jQuery('a[href=#go]')
+		.bind('click', function(e){
+			sequencer.play();
+			sequencer = null;
+			jQuery(this).css({opacity: 0.4});
+			
+			e.preventDefault();
+		});
+		
+	});
+    
+  </script>
+</body>
+</html> 

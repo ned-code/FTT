@@ -2,7 +2,7 @@
 //= require <webdoc/model/item>
 
 WebDoc.PageView = $.klass({
-  initialize: function(page, boardContainer, editable) {
+  initialize: function(page, boardContainer, editable, skipDiscussions) {
     var domNode = $('<div>', {
           'class': 'webdoc',
           id: 'page_' + page.uuid()
@@ -12,7 +12,14 @@ WebDoc.PageView = $.klass({
         }),
         discussionDomNode = $('<div/>').id('discussions_'+page.uuid()).addClass("layer").css({ overflow: 'visible' }),
         drawingDomNode = $(WebDoc.application.svgRenderer.createSurface()), eventCatcherNode = jQuery('<div/>').id("event-catcher_" + page.uuid()).addClass('screnn layer').css("zIndex", 2000000).hide(), that = this;
-    
+
+    this.skipDiscussions = null;
+    if(skipDiscussions && skipDiscussions === true) {
+      this.skipDiscussions = true;
+    }
+    else {
+      this.skipDiscussions = false;
+    }
     
     // Extend this
     this._editable = undefined;
@@ -50,7 +57,7 @@ WebDoc.PageView = $.klass({
       });
     }
 
-    if(!page.isNew) {
+    if(!page.isNew && !this.skipDiscussions) {
       this.refreshDiscussions();
     }
     
@@ -92,14 +99,17 @@ WebDoc.PageView = $.klass({
   },
   
   setLoading: function(state) {
+    var loadingNode = WebDoc.application.boardController.loadingNode;
+    
     this._loading = state;
+    
     if (state) {
       this.itemDomNode.hide();
-      WebDoc.application.boardController.loadingNode.addClass('loading');
+      loadingNode.addTransitionClass('loading');
     }  
     else {
       this.itemDomNode.show();
-      WebDoc.application.boardController.loadingNode.removeClass('loading');
+      loadingNode.removeTransitionClass('loading');
     }
   },
   
@@ -157,6 +167,9 @@ WebDoc.PageView = $.klass({
         break;
       case WebDoc.ITEM_TYPE_APP:
         itemView = new WebDoc.AppView(item, this, afterItem);
+        break;
+      case WebDoc.ITEM_TYPE_TEXTBOX:
+        itemView = new WebDoc.TextboxView(item, this, afterItem);
         break;
       default:
         itemView = new WebDoc.ItemView(item, this, afterItem);
@@ -333,7 +346,7 @@ WebDoc.PageView = $.klass({
       while(l--){
         discussion = discussions[l];
         this.createDiscussionView(discussion);
-        var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+        var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
         discussionPanel.showCurrentPageDiscussions();
       }
     }.pBind(this));

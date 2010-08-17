@@ -1,4 +1,4 @@
-<% session_key_name = ActionController::Base.session_options[:key] %>
+<% session_key_name = Rails.application.config.session_options[:key] %>
 
 <!-- app/views/documents/index -->
 
@@ -33,6 +33,7 @@
       <p>Create your own new webdoc, or choose a webdoc to view from the list.</p>
       <p>You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, choose <strong>sharing</strong>.</p>
     </div>
+    <%= render 'users/pending_friendships'%>
   </div>
 </div>
 

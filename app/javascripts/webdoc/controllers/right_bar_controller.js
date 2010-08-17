@@ -3,13 +3,17 @@
  * @author Julien Bachmann
  */
 // define all inspector type that can be displayed in the right bar
-WebDoc.RightBarInspectorType = {
-	MEDIA_BROWSER: 'media-browser',
+WebDoc.PanelInspectorType = {
   ITEM: 'item',
   PAGE: 'page',
+  PAGE_BROWSER: 'page_browser',
   DOCUMENT: 'document',
   DISCUSSIONS: 'discussions',
-  SOCIAL: 'social'
+  SOCIAL: 'social',
+  MY_CONTENT: 'my_content',
+  APPS: 'apps',
+  BROWSE_WEB: 'browse_web',
+  PACKAGES: 'packages'
 };
 
 WebDoc.RightBarController = $.klass({
@@ -25,14 +29,29 @@ WebDoc.RightBarController = $.klass({
   initialize: function() {
     panel = jQuery( this.PANEL_SELECTOR );
     
-    // Some of these are lazy loaded, and some are not -
+    this.rightPanelsArray = [
+      'browser_panel',
+      'inspector_panel',
+      'comments_panel',
+      'apps_panel',
+      'my_content_panel',
+      'packages_panel',
+      'browse_web_panel',
+      'page_inspector_panel',
+      'document_inspector_panel'
+    ];
+    this.bottomPanelsArray = ['social', 'pages_panel'];
+    
+    // Some of these are lazily loaded, and some are not -
     // pageInspector does not work if you try loading it now.
     
-    var itemInspector = new WebDoc.InspectorController(),
-				mediaBrowser = new WebDoc.MediaBrowserController();
-        
-		WebDoc.application.mediaBrowserController = mediaBrowser;
+    var itemInspector = new WebDoc.InspectorController();
+    var myContentController = new WebDoc.MyContentsController();
+    var webSearchController = new WebDoc.WebSearchController();
+    
     WebDoc.application.inspectorController = itemInspector;
+    WebDoc.application.myContentController = myContentController;
+    WebDoc.application.webSearchController = webSearchController;
     
     this.visible = false;
     
@@ -42,22 +61,26 @@ WebDoc.RightBarController = $.klass({
     
     this.panelWidth = panel.outerWidth();
     this._inspectorsControllersClasses = {};
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.MEDIA_BROWSER] = WebDoc.MediaBrowserController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.ITEM] = WebDoc.InspectorController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.PAGE] = WebDoc.PageInspectorController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.DISCUSSIONS] = WebDoc.DiscussionsPanelController;
-    this._inspectorsControllersClasses[WebDoc.RightBarInspectorType.SOCIAL] = WebDoc.SocialPanelController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.ITEM] = WebDoc.InspectorController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.PAGE] = WebDoc.PageInspectorController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.DISCUSSIONS] = WebDoc.DiscussionsPanelController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.SOCIAL] = WebDoc.SocialPanelController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.MY_CONTENT] = WebDoc.MyContentsController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.APPS] = WebDoc.AppsLibrary;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.BROWSE_WEB] = WebDoc.WebSearchController;
+    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.PACKAGES] = WebDoc.PackagesLibrary;
 
     this._inspectorsControllers = {};
-    this._inspectorsControllers[WebDoc.RightBarInspectorType.MEDIA_BROWSER] = mediaBrowser;
-    this._inspectorsControllers[WebDoc.RightBarInspectorType.ITEM] = itemInspector;
+    this._inspectorsControllers[WebDoc.PanelInspectorType.ITEM] = itemInspector;
+    this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT] = myContentController;
+    this._inspectorsControllers[WebDoc.PanelInspectorType.BROWSE_WEB] = webSearchController;
     
-    this._currentInspectorType = null;  
-    this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
+    this._currentInspectorType = null;      
+    this._preloadDragDropIcon();
     
     // This is a hack. Ultimately, we need a better way than this to be wrangling with show/hide
-    $('#page-inspector, #document-inspector, #social-inspector, #discussions-panel').hide();
+    $('#document-inspector').hide();
   },
 
   show: function() {
@@ -88,14 +111,12 @@ WebDoc.RightBarController = $.klass({
     ddd("[RightBarController] select inspector", inspectorType);
     if (this._currentInspectorType !== inspectorType) {
       var inspectorController = this.getInspector(inspectorType);
-      this._changePanelContent(inspectorController);
-      this._changeButtonState(inspectorController);
+      //this._changePanelContent(inspectorController);
+      //this._changeButtonState(inspectorController);
       this._currentInspectorType = inspectorType;
-    }
-    else {
-      // if(this._currentInspectorType === WebDoc.RightBarInspectorType.MEDIA_BROWSER) {
-      //         jQT.goTo('#media_browser', 'slide');
-      //       }
+      if(jQuery.inArray( inspectorType, this.bottomPanelsArray ) == -1){
+        this._hideRightPanels();
+      }
     }
   },
 
@@ -103,48 +124,122 @@ WebDoc.RightBarController = $.klass({
     ddd("[RightBarController] get inspector", inspectorType);
     var inspectorController = this._inspectorsControllers[inspectorType];
     if (!inspectorController) {
+      ddd(inspectorType);
       inspectorController = new this._inspectorsControllersClasses[inspectorType]();
       this._inspectorsControllers[inspectorType] = inspectorController;
     }
     return this._inspectorsControllers[inspectorType];
   },
   
-	showMediaBrowser: function(){
-		ddd("[RightBarController] showMediaBrowser");
-    this.selectInspector(WebDoc.RightBarInspectorType.MEDIA_BROWSER);
-    this.show();
-	},
+  _showPanel: function(panelName){
+    var panel = jQuery('.' + panelName );
+    if(panel.hasClass(this.ACTIVE_CLASS)){
+      panel.removeClass(this.ACTIVE_CLASS);
+    }
+    else{
+      panel.addClass(this.ACTIVE_CLASS);
+    }
+  },
+  
+  _showController: function(controller){    
+    if(controller.is_display){
+      controller.is_display = false;
+      controller.domNode.removeClass(this.ACTIVE_CLASS);
+    }
+    else
+    {
+      controller.is_display = true;
+      controller.domNode.addClass(this.ACTIVE_CLASS);
+    }
+  },
+  
+  //Hide all the panel that are on the right of the webdoc
+  _hideRightPanels: function(){
+    jQuery(this._stringSelectorFromArray(this.rightPanelsArray)).removeClass(this.ACTIVE_CLASS);
+    //jQuery(this.rightPanels).removeClass(this.ACTIVE_CLASS);
+  },
+  
+  _hideBottomPanels: function(){
+    jQuery(this._stringSelectorFromArray(this.bottomPanelsArray)).removeClass(this.ACTIVE_CLASS);
+  },
+  
+  //transform an array of string ['str1','str2'] to '.str1, .str2'
+  _stringSelectorFromArray: function(array){
+    var length = array.length;
+    var stringSelector = '';
+    for(var i=0; i<length;i++){
+      stringSelector += '.'+array[i]+','
+    }
+    stringSelector =  stringSelector.substring(0, stringSelector.length-1);
+    return stringSelector;
+  },
+  
+  showMyContent: function(){
+    this.selectInspector(WebDoc.PanelInspectorType.MY_CONTENT);
+    this._showPanel('mystuff_panel');
+    if(!this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].isMyImageLoaded()){
+      this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].setup();
+    }
+  },
+  
+  showApps: function(){
+    this.selectInspector(WebDoc.PanelInspectorType.APPS);
+    this._showPanel('apps_panel');
+  },
+  
+  showPackages: function(){
+    this.selectInspector(WebDoc.PanelInspectorType.PACKAGES);
+    this._showPanel('packages_panel');
+  },
+  
+  showBrowseWeb: function(){
+    this.selectInspector(WebDoc.PanelInspectorType.BROWSE_WEB);
+    this._showPanel('browse_panel');
+  },
   
   showPageInspector: function() {
-    ddd("[RightBarController] show page inspector");
-    this.selectInspector(WebDoc.RightBarInspectorType.PAGE);
-    this.show();
+    ddd('showPageInspector');
+    this.selectInspector(WebDoc.PanelInspectorType.PAGE);
+    this._showPanel('page_inspector_panel');
   },
   
   showItemInspector: function() {
-    ddd("[RightBarController] showItemInspector");
-    this.selectInspector(WebDoc.RightBarInspectorType.ITEM);
-    this.show();
+    this.selectInspector(WebDoc.PanelInspectorType.ITEM);
+    this._showPanel('inspector_panel');
   },
   
   showDocumentInspector: function() {
-    ddd("[RightBarController] showDocumentInspector");
-    this.selectInspector(WebDoc.RightBarInspectorType.DOCUMENT);
-    this.show();
+    this.selectInspector(WebDoc.PanelInspectorType.DOCUMENT);
+    this._showPanel('document_inspector_panel');
   },
   
-  showSocialPanel: function() {
-    ddd("[RightBarController] showSocialPanel");
-    this.selectInspector(WebDoc.RightBarInspectorType.SOCIAL);
-    this.show();
-  },
+  //actually display the author panel... it's on bottom of the webdoc
+  // showSocialPanel: function() {
+  //   ddd("[RightBarController] showSocialPanel");
+  //   this.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
+  //   var panel = jQuery('.sharing_panel');
+  //   
+  //   if(panel.hasClass(this.ACTIVE_CLASS)){
+  //     panel.removeClass(this.ACTIVE_CLASS);
+  //     jQuery('#social-inspector').hide();
+  //   }
+  //   else{
+  //     panel.addClass(this.ACTIVE_CLASS);
+  //     jQuery('#social-inspector').show();
+  //   }
+  //   //this.show();
+  // },
 
   showDiscussionsPanel: function() {
-    ddd("[RightBarController] showDiscussionsPanel");
-    this.selectInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
-    this.show();
+    this.selectInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
+    this._showController(this._inspectorsControllers[WebDoc.PanelInspectorType.DISCUSSIONS])
   },
-
+  
+  showPagesPanel: function(){
+    ddd('[RightBarController] showPagesPanel');
+    this._showPanel('pages_panel');
+  },
+  
   _changePanelContent: function(inspector) {
     ddd('[RightBarController] _changePanelContent(inspector)' + inspector);
     var inspectors = this._inspectorsControllers;
@@ -230,6 +325,14 @@ WebDoc.RightBarController = $.klass({
     jQuery( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.ACTIVE_CLASS );
     
     return false;
+  },
+  
+  _preloadDragDropIcon: function(){
+    this.libraryUtils = new LibraryUtils();
+    // just to preload the icon (so that it'll be immediately available at the first drag)
+    $(document.body).append(this.libraryUtils.buildMediaDragFeedbackElement("video", ""));
+    $(document.body).append(this.libraryUtils.buildMediaDragFeedbackElement("image", ""));
+    $(document.body).append(this.libraryUtils.buildMediaDragFeedbackElement("apps", ""));
   }
   
 });

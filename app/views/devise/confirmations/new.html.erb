@@ -1,0 +1,30 @@
+<!-- confirmations/new -->
+<div class="action-zone zone">
+  <div class="wrap clear">
+    <h2>My confirmation instructions got lost...</h2>
+    <%= form_for resource_name, resource, :url => confirmation_path(resource_name), :builder => CustomFormBuilder do |f| %>
+      <fieldset>
+        <div class="stack column one of-four <% if resource.errors.on(:email) %>error<% end %>">
+          <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
+          <%= f.text_field :email, :'data-type' => "email", :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
+        </div>
+      </fieldset>
+      
+      <input id="user_submit" name="commit" type="submit" value="Resend" />
+    <% end %>  
+  </div>
+</div>
+
+<div class="content">
+  <div class="wrap">
+  </div>
+</div>
+
+<% content_for :scripts do %>
+  <%= include_javascripts :forms %>
+  <script type="text/javascript">
+    jQuery(document).ready(function(){
+      jQuery('form').validator();
+    });
+  </script>
+<% end %>

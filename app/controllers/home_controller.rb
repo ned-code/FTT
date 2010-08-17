@@ -1,4 +1,7 @@
 class HomeController < ApplicationController
+
+  skip_before_filter :authenticate_user!
+
   before_filter :redirect_if_user_signed_in
   
   def show

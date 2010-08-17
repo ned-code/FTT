@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <% document_title @document.title %>
-<% session_key_name = ActionController::Base.session_options[:key] %>
+<% session_key_name = Rails.application.config.session_options[:key] %>
 <% if params[:reader] == 'true'
     current_class = 'mode-embed'
   elsif params[:edit] == 'true'
@@ -16,7 +16,7 @@
     <title>webdoc beta - <%= yield :title %></title>
     <%= include_stylesheets :common, :media => 'all' %>
     <%= include_stylesheets :page_editor, :media => 'all' %>
-    <%= render :partial => "layouts/google_analytics"; %>    
+    <%= render :partial => "layouts/google_analytics" %>    
   </head>
   
   <body class="<%= current_class %>">
@@ -25,10 +25,10 @@
     
     <%= yield %>
     
-    <%= render :partial => "layouts/relatedcontent"; %>
-    <%= render :partial => "layouts/siteheader"; %>
-    <%= render :partial => "layouts/flash", :object => flash %>
-    <%= render :partial => "layouts/feedback"; %>
+    
+    <%= render "layouts/siteheader" %>
+    <%= render "layouts/flash", :object => flash %>
+    <%= render "layouts/feedback" %>
     
     <!-- scripts -->
     <%= include_javascripts :common %>
@@ -44,8 +44,9 @@
         sessionKeyName:"<%= session_key_name %>",
         cookiesSessionKeyName:"<%= cookies[session_key_name] %>"
       };
-      WebDoc.shindig = {};
-      WebDoc.shindig.serverBase = "<%= APP_CONFIG['shindig_server_base'] %>";
+      WebDoc.dataServer = "<%= APP_CONFIG['data_server'] %>";
+      //WebDoc.shindig = {};
+      //WebDoc.shindig.serverBase = "<%= APP_CONFIG['shindig_server_base'] %>";
       WebDoc.Application.currentUser = new WebDoc.User(<%= raw current_user.as_application_json.to_json.gsub('/script','/sscript') %>);
       WebDoc.WidgetManager.vimeoWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_vimeo") { Medias::Widget.first(:conditions => {:system_name => 'vimeo'}).to_json } %>);
       WebDoc.WidgetManager.youtubeWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_youtube") { Medias::Widget.first(:conditions => {:system_name => 'youtube'}).to_json } %>);
@@ -62,6 +63,6 @@
         editor.load("<%= @document.uuid %>", <%= edit_mode? %>);
       });      
       WebDoc.Application.start();
-    </script>   
+    </script>
   </body>
 </html>

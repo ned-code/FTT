@@ -1,41 +1,33 @@
-module DocumentJsonHelper
-  def self.decode_json_and_yaml(value)
-    unless(value.nil?)
-      begin
-        return ActiveSupport::JSON.decode(value)
-      rescue
-        return YAML.load(value)
-      end  
-    end
-    return nil
-  end
-end
-
 class Document < ActiveRecord::Base
   has_uuid
   set_primary_key :uuid
-  acts_as_authorization_object
   
-  attr_accessible :uuid, :title, :description, :size, :category_id, :is_public, :style_url, :theme_id, :featured 
+  attr_accessible :uuid, :title, :description, :size, :category_id, :style_url, :theme_id, :featured 
   
   composed_of :size, :class_name => 'Hash', :mapping => %w(size to_json),
-                         :constructor => DocumentJsonHelper.method(:decode_json_and_yaml)
+                     :constructor => JsonHelper.method(:decode_json_and_yaml)
+  
   # ================
-  # = Associations =
+  # = Scope =
   # ================
   
-  named_scope :public, :conditions => { :is_public => true }
-  named_scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
-  named_scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
-  named_scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
-
+  scope :valid, :conditions => ['documents.deleted_at IS ?', nil]
+  scope :not_deleted, :conditions => ['documents.deleted_at IS ?', nil]
+  scope :deleted, :conditions => ['documents.deleted_at IS NOT ?', nil]
+  scope :public, lambda{
+    joins(:roles).
+    where('roles.item_id is ? and roles.user_id is ? and roles.user_list_id is ? and roles.name in (?)',nil,nil,nil,Role::PUBLIC_ROLES)
+  }
+  
   # ================
   # = Associations =
   # ================
   
   has_many :pages, :order => 'position ASC'
   has_many :view_counts, :as => :viewable
-  has_one :document_access
+  has_many :roles
+  # has_one :document_access
+  
   belongs_to :metadata_media, :class_name => 'Media'
   belongs_to :creator, :class_name => 'User'
   belongs_to :category
@@ -61,7 +53,6 @@ class Document < ActiveRecord::Base
   # =================
   # = Class Methods =
   # =================
-  
   #
   # This method invalidate cache for docment with document_uuid. It is usefull to invalidate a document without fetching it and just using the uuid.
   #
@@ -76,7 +67,7 @@ class Document < ActiveRecord::Base
             :page => page_id,
             :per_page => per_page,
             :order => 'created_at DESC',
-            :conditions => ['documents.deleted_at IS ? AND (documents.title LIKE ? OR documents.description LIKE ?)', nil, "%#{query}%", "%#{query}%"]
+            :conditions => ['documents.title LIKE ? OR documents.description LIKE ?', "%#{query}%", "%#{query}%"]
     }
 
     if document_filter
@@ -84,14 +75,11 @@ class Document < ActiveRecord::Base
       if document_filter == 'creator'
         paginate_params[:conditions][0] += ' AND documents.creator_id = ?'
         paginate_params[:conditions] << current_user.uuid
-      elsif document_filter == 'public'
-        paginate_params[:conditions][0] = ' AND documents.is_public = ?'
-        paginate_params[:conditions] << true
       else
         # Retrieve documents for the current user
         documents_ids = Array.new
-        current_user.role_objects.all(:select => 'authorizable_id', :conditions => { :name => document_filter } ).each do |role|
-          documents_ids << role.authorizable_id if role.authorizable_id
+        current_user.roles.all(:select => 'document_id', :conditions => { :name => document_filter } ).each do |role|
+          documents_ids << role.document_id if role.document_id
         end
         # Must remove owned documents
         owner_ids = []
@@ -106,15 +94,19 @@ class Document < ActiveRecord::Base
     else
       if (!current_user.has_role?("admin"))
         documents_ids = Array.new
-        roles = current_user.role_objects.all.each do |role|
-          documents_ids << role.authorizable_id
+        roles = current_user.roles.all.each do |role|
+          documents_ids << role.documents_id
         end
         paginate_params[:conditions][0] += ' AND documents.uuid IN (?)'
         paginate_params[:conditions] << documents_ids
       end
     end
-
-    Document.paginate(paginate_params)
+    
+    if document_filter == 'public'
+      Document.not_deleted.public.paginate(paginate_params)
+    else
+      Document.not_deleted.paginate(paginate_params)
+    end
   end
 
   def self.not_deleted_public_paginated_with_explore_params(order_string="", category_filter="all", query="", page_id=nil, per_page=8, include=[:category, :creator])
@@ -122,11 +114,7 @@ class Document < ActiveRecord::Base
             :page => page_id,
             :per_page => per_page,
             :include => include,
-            :conditions => ['documents.deleted_at IS ? AND (documents.title LIKE ? OR documents.description LIKE ?) AND documents.is_public = ?',
-                            nil,
-                            "%#{query}%",
-                            "%#{query}%",
-                            true],
+            :conditions => ['documents.title LIKE ? OR documents.description LIKE ?', "%#{query}%", "%#{query}%"],
             :order => 'created_at DESC'
     }
 
@@ -139,36 +127,37 @@ class Document < ActiveRecord::Base
       paginate_params[:conditions] << category_filter
     end
 
-    Document.paginate(paginate_params)
+    Document.not_deleted.public.paginate(paginate_params)
   end
 
-  def self.last_modified_not_deleted_from_following(current_user, limit=5)
-    following_ids = current_user.following_ids
-    if following_ids.present?
-      all(
-        :joins => "INNER JOIN roles ON roles.authorizable_id = documents.uuid INNER JOIN roles_users ON roles_users.role_id = roles.uuid",
-        :conditions => ['creator_id IN (?) AND documents.deleted_at IS ? AND (documents.is_public = ? OR (roles.authorizable_type = ? AND roles.name IN (?) AND roles_users.user_id = ?))',
-                      following_ids,
-                      nil,
-                      true,
-                      self.class_name.to_s,
-                      [ 'editor', 'reader' ],
-                      current_user.uuid
-        ],
-        :limit => limit,
-        :order => 'documents.updated_at DESC',
-        :group => 'documents.uuid'
-      )
-    else
-      []
-    end
-  end
+  #not more used with friends
+  # def self.last_modified_not_deleted_from_following(current_user, limit=5)
+  #   following_ids = current_user.following_ids
+  #   if following_ids.present?
+  #     all(
+  #       :joins => "INNER JOIN roles ON roles.authorizable_id = documents.uuid INNER JOIN roles_users ON roles_users.role_id = roles.uuid",
+  #       :conditions => ['creator_id IN (?) AND documents.deleted_at IS ? AND (documents.is_public = ? OR (roles.authorizable_type = ? AND roles.name IN (?) AND roles_users.user_id = ?))',
+  #                     following_ids,
+  #                     nil,
+  #                     true,
+  #                     self.class_name.to_s,
+  #                     [ 'editor', 'reader' ],
+  #                     current_user.uuid
+  #       ],
+  #       :limit => limit,
+  #       :order => 'documents.updated_at DESC',
+  #       :group => 'documents.uuid'
+  #     )
+  #   else
+  #     []
+  #   end
+  # end
   
   def self.not_deleted_featured_paginated(page_id=nil, per_page=8, include=[:category, :creator])
     paginate_params = {:page => page_id, :per_page => per_page, :include => include}
     paginate_params[:order] = 'featured DESC'
-    paginate_params[:conditions] = ['documents.deleted_at IS ? AND documents.is_public = ? AND featured > ?', nil, true, 0]
-    Document.paginate(paginate_params)
+    paginate_params[:conditions] = ['featured > ?', 0]
+    Document.not_deleted.public.paginate(paginate_params)
   end
   
   
@@ -176,37 +165,49 @@ class Document < ActiveRecord::Base
   # = Instance Methods =
   # ====================
   
+  def share(with_comments=false)
+    role = Role.public.where(:document_id => self.uuid).first
+    if role.nil?
+      Role.create!(:document_id => self.uuid, :name => (with_comments ? Role::VIEWER_COMMENT : Role::VIEWER_ONLY))
+    else
+      if with_comments && role.name != Role::VIEWER_COMMENT
+        role.update_attribute('name', Role::VIEWER_COMMENT)
+      elsif !with_comments && role.name != Role::VIEWER_ONLY
+        role.update_attribute('name', Role::VIEWER_ONLY)
+      end
+    end
+  end
+  
+  def unshare
+    if is_public?
+      Role.public.where(:document_id => self.uuid).delete_all
+    end
+  end
+  
+  def is_public?
+    Role.public.where(:document_id => self.uuid).present?
+  end
+  
   def to_param
     uuid
   end
 
-  def relative_created_at
-    diff_in_time = Time.now - self.created_at
-    diff_in_minutes = ((diff_in_time.abs)/60).round
-    text = ""
-
-    case diff_in_minutes
-    when 0..59 then text = I18n.t('relative_date.x_hours', :count => 1 )
-    when 60..1439 then text = I18n.t('relative_date.x_hours', :count => (diff_in_minutes/60).round )
-    when 1440..9800 then text = I18n.t('relative_date.x_days', :count => (diff_in_minutes/60/24).round )
-    else
-      text = I18n.l(self.created_at.to_date)
-    end
-
-    text
-  end
-
-
   def as_application_json
     pages = self.pages.not_deleted
-    hash = { 'document' => Serializer.new(self).serializable_record }
+    hash = { 'document' => self.attributes }
+    hash['document']['size'] = self.size
     hash['document']['pages'] = []
     for page in pages
-      page_hash = Serializer.new(page).serializable_record
+      page_hash = page.attributes
+      page_hash['data'] = page.data
       page_hash['items'] = []
       items = page.items.not_deleted
       for item in items
-        page_hash['items'] << Serializer.new(item).serializable_record
+        item_hash = item.attributes
+        item_hash['data'] = item.data
+        item_hash['properties'] = item.properties
+        item_hash['preferences'] = item.preferences
+        page_hash['items'] << item_hash
       end
       hash['document']['pages'] << page_hash
     end
@@ -214,20 +215,8 @@ class Document < ActiveRecord::Base
   end
 
   def as_explore_json
-    pages = self.pages.not_deleted
-    hash = { 'document' => Serializer.new(self).serializable_record }
+    hash = self.as_application_json
     hash['document']['extra_attributes'] = self.extra_attributes
-    hash['document']['pages'] = []
-    for page in pages
-      page_hash = Serializer.new(page).serializable_record
-      page_hash['thumbnail_url'] = page.thumbnail_url
-      page_hash['items'] = []
-      items = page.items.not_deleted
-      for item in items
-        page_hash['items'] << Serializer.new(item).serializable_record
-      end
-      hash['document']['pages'] << page_hash
-    end
     hash
   end
 
@@ -289,95 +278,141 @@ class Document < ActiveRecord::Base
     result
   end
   
-  # No more used in current GUI
-  def create_accesses(current_user, accesses = {})
-    accesses_parsed = JSON.parse(accesses);
-    readers = accesses_parsed['readers']
-    editors = accesses_parsed['editors']
-    readers_message = accesses_parsed['readersMessage']
-    editors_message = accesses_parsed['editorsMessage']
-    
-    readers.each do |user_email|
-      user = User.find_by_email(user_email.strip)
-      if user 
-        if !user.has_role?("reader", self)
-          user.has_only_reader_role!(self)
-          Notifier.deliver_role_notification(current_user, "reader", user, self, readers_message)
-        end
-      else
-        add_unvalid_email_to_array(user_email)
-      end
-    end
-    editors.each do |user_email|
-      user = User.find_by_email(user_email)
-      if user
-        if !user.has_role?("editor", self)
-          user.has_only_editor_role!(self)
-          Notifier.deliver_role_notification(current_user, "editor", user, self, editors_message)
-        end
-      else
-        add_unvalid_email_to_array(user_email)
-      end
-    end
+  # # No more used in current GUI
+  #   def create_accesses(current_user, accesses = {})
+  #     accesses_parsed = JSON.parse(accesses);
+  #     readers = accesses_parsed['readers']
+  #     editors = accesses_parsed['editors']
+  #     readers_message = accesses_parsed['readersMessage']
+  #     editors_message = accesses_parsed['editorsMessage']
+  #     
+  #     readers.each do |user_email|
+  #       user = User.find_by_email(user_email.strip)
+  #       if user 
+  #         if !user.has_role?("reader", self)
+  #           user.has_only_reader_role!(self)
+  #           Notifier.role_notification(current_user, "reader", user, self, readers_message).deliver
+  #         end
+  #       else
+  #         add_unvalid_email_to_array(user_email)
+  #       end
+  #     end
+  #     editors.each do |user_email|
+  #       user = User.find_by_email(user_email)
+  #       if user
+  #         if !user.has_role?("editor", self)
+  #           user.has_only_editor_role!(self)
+  #           Notifier.role_notification(current_user, "editor", user, self, editors_message).deliver
+  #         end
+  #       else
+  #         add_unvalid_email_to_array(user_email)
+  #       end
+  #     end
+  #   end
+  
+  # def create_role_for_users(current_user, accesses = {})
+  #   accesses_parsed = JSON.parse(accesses);
+  #   role = accesses_parsed['role']
+  #   recipients = accesses_parsed['recipients']
+  #   message = accesses_parsed['message']
+  #   
+  #   recipients.each do |user_email|
+  #     user = User.find_by_email(user_email.strip)
+  #     if user 
+  #       if !user.has_role?(role, self)
+  #         #user.has_only_reader_role!(self)
+  #         user.has_role!(role, self)
+  #         Notifier.role_notification(current_user, role, user, self, message).deliver
+  #       end
+  #     else
+  #       add_unvalid_email_to_array(user_email)
+  #     end
+  #   end
+  # end
+  
+  # # No more used in current GUI
+  # def update_accesses(current_user, accesses = {})
+  #   accesses_parsed = JSON.parse(accesses);
+  #   readers = accesses_parsed['readers']
+  #   editors = accesses_parsed['editors']
+  #   # Get accesses on document
+  #   all_document_access = self.accepted_roles
+  #   all_document_access.each do |role|
+  #     role.users.each do |user|
+  #       if editors.include?(user.id)
+  #         if !user.has_role?("editor", self)
+  #           user.has_only_editor_role!(self)
+  #           Notifier.role_notification(current_user, "editor", user, self, nil).deliver
+  #         end
+  #       elsif readers.include?(user.id)
+  #         if !user.has_role?("reader", self)
+  #           user.has_only_reader_role!(self)
+  #           Notifier.role_notification(current_user, "reader", user, self, nil).deliver
+  #         end
+  #       else
+  #         user.has_no_roles_for!(self)
+  #         Notifier.no_role_notification(current_user, user, self).deliver
+  #       end
+  #     end
+  #   end
+  # end 
+  # 
+  # def remove_role(current_user, params)
+  #   params_parsed = JSON.parse(params)
+  #   user = User.find(params_parsed['user_id'])
+  #   role = params_parsed['role']
+  #   if user
+  #     user.has_no_role!(role, self)
+  #     Notifier.removed_role_notification(current_user, role, user, self).deliver
+  #   end
+  # end
+  
+  
+  #Actually we look only on the user and public right, not list right
+  def public_editor?
+    self.find_public_roles && self.find_public_roles.include?(Role::EDITOR)
   end
   
-  def create_role_for_users(current_user, accesses = {})
-    accesses_parsed = JSON.parse(accesses);
-    role = accesses_parsed['role']
-    recipients = accesses_parsed['recipients']
-    message = accesses_parsed['message']
-    
-    recipients.each do |user_email|
-      user = User.find_by_email(user_email.strip)
-      if user 
-        if !user.has_role?(role, self)
-          #user.has_only_reader_role!(self)
-          user.has_role!(role, self)
-          Notifier.deliver_role_notification(current_user, role, user, self, message)
-        end
-      else
-        add_unvalid_email_to_array(user_email)
-      end
-    end
+  def public_contributor?
+    self.find_public_roles && self.find_public_roles.include?(Role::CONTRIBUTOR)
   end
   
-  # No more used in current GUI
-  def update_accesses(current_user, accesses = {})
-    accesses_parsed = JSON.parse(accesses);
-    readers = accesses_parsed['readers']
-    editors = accesses_parsed['editors']
-    # Get accesses on document
-    all_document_access = self.accepted_roles
-    all_document_access.each do |role|
-      role.users.each do |user|
-        if editors.include?(user.id)
-          if !user.has_role?("editor", self)
-            user.has_only_editor_role!(self)
-            Notifier.deliver_role_notification(current_user, "editor", user, self, nil)
-          end
-        elsif readers.include?(user.id)
-          if !user.has_role?("reader", self)
-            user.has_only_reader_role!(self)
-            Notifier.deliver_role_notification(current_user, "reader", user, self, nil)
-          end
-        else
-          user.has_no_roles_for!(self)
-          Notifier.deliver_no_role_notification(current_user, user, self)
-        end
-      end
-    end
-  end 
-  
-  def remove_role(current_user, params)
-    params_parsed = JSON.parse(params)
-    user = User.find(params_parsed['user_id'])
-    role = params_parsed['role']
-    if user
-      user.has_no_role!(role, self)
-      Notifier.deliver_removed_role_notification(current_user, role, user, self)
-    end
+  def public_viewer_comment?
+    self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_COMMENT)
   end
-
+  
+  def public_viewer_only?
+    self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_ONLY)
+  end
+  
+  def user_editor?(user)
+    self.find_user_roles(user) && self.find_user_roles(user).include?(Role::EDITOR)
+  end
+  
+  def user_contributor?(user)
+    self.find_user_roles(user) && self.find_user_roles(user).include?(Role::CONTRIBUTOR)
+  end
+  
+  def user_viewer_comment?(user)
+    self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_COMMENT)
+  end
+  
+  def user_viewer_only?(user)
+    self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_ONLY)
+  end
+  
+  def find_public_roles
+    @public_roles_names ||= Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil).select('roles.name').map{|r| r.name}
+  end
+  
+  def find_user_roles(user)
+    @user_roles_names ||= Role.where(:document_id => self.id, :user_id => user.id, :user_list_id => nil).select('roles.name').map{|r| r.name}
+  end
+  
+  def creator?(user)
+    user == self.creator
+  end
+  
   def deep_clone(creator, title)
     cloned_document = self.clone
     cloned_document.uuid = nil
@@ -385,7 +420,6 @@ class Document < ActiveRecord::Base
     cloned_document.style_url = self.style_url
     cloned_document.created_at = nil
     cloned_document.updated_at = nil
-    cloned_document.is_public = false
     cloned_document.creator = creator
     if title.present?
       cloned_document.title = title
@@ -413,13 +447,20 @@ class Document < ActiveRecord::Base
   def safe_delete!
     super
     refresh_cache
-  end 
+  end
+  
+  #returns an array of all document's editors
+  def  editors
+    #TODO: manage the list
+    users = User.joins(:roles).where('roles.document_id = ? AND roles.name = ?', self.id, Role::EDITOR).all
+    users
+  end
   
 private
   
   # after_create
   def set_creator_as_editor
-    accepts_role!("editor", creator) if creator
+    Role.create!(:document_id => self.id, :user_id => creator.uuid, :name => Role::EDITOR)
   end
   
   #before_create
@@ -474,7 +515,6 @@ end
 #  size        :text
 #  category_id :string(36)
 #  creator_id  :string(36)
-#  is_public   :boolean(1)      default(FALSE)
 #  views_count :integer(4)      default(0)
 #  theme_id    :string(36)
 #  style_url   :string(255)

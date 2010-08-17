@@ -34,7 +34,8 @@ body.full_view {
 .workspace_wrap {
   height: 50%;
   min-height: 466px;
-  margin-bottom: 1em;
+  /* Makes room for Sharing panel */
+  margin-bottom: 96px;
 }
 
 .full_view .workspace_wrap {
@@ -45,7 +46,7 @@ body.full_view {
 }
 
 .title_wrap {
-  height: 2em;
+  height: 3em;
   margin-top: 1em;
   margin-bottom: 1em;
   opacity: 1;
@@ -64,7 +65,6 @@ body.full_view {
   min-height: 466px;
   margin-left: 0;
   margin-right: 0;
-  /*margin-bottom: 2em;*/
 }
 
 .full_view .editor_wrap {
@@ -108,28 +108,42 @@ body.full_view {
 /* Manage layering of panels. Active panels 
    slide over other panels as they come into focus */
 
-.browser_panel,
+#webdoc {
+	z-index: 1;
+}
+
 .inspector_panel,
 .comments_panel,
 .activity_panel,
-.side_panel {
+.mystuff_panel,
+.packages_panel,
+.browse_panel,
+.apps_panel {
   z-index: 4;
 }
-.browser_panel.active,
+
 .inspector_panel.active,
 .comments_panel.active,
 .activity_panel.active,
-.side_panel.active {
+.mystuff_panel.active,
+.packages_panel.active,
+.browse_panel.active,
+.apps_panel.active {
   z-index: 5;
 }
+
 .sharing_panel,
 .pages_panel {
   z-index: 1;
 }
+
 .sharing_panel.active,
 .pages_panel.active {
+  display:block;
+  opacity:1;
   z-index: 2;
 }
+
 .tools_panel,
 .controls_panel {
   z-index: 3;
@@ -138,47 +152,57 @@ body.full_view {
 /* Manage show/hide of panels between page view
    and full view. */
 
-.browser_panel,
 .inspector_panel,
 .comments_panel,
 .activity_panel,
-/*.sharing_panel,*/
+.mystuff_panel,
+.packages_panel,
+.browse_panel,
+.apps_panel,
 .pages_panel {
   /* It would be great to make this happen after the fade... */
   display: none;
   opacity: 0;
 }
 
-.browser_panel.active,
 .inspector_panel.active,
 .comments_panel.active,
-.activity_panel.active {
+.mystuff_panel.active,
+.packages_panel.active,
+.browse_panel.active,
+.apps_panel.active,
+.activity_panel.active{
   display: block;
   opacity: 1;
 }
 
-.full_view .browser_panel,
 .full_view .inspector_panel,
 .full_view .comments_panel,
 .full_view .activity_panel,
-/*.full_view .sharing_panel,*/
-.full_view .pages_panel {
+.full_view .mystuff_panel,
+.full_view .packages_panel,
+.full_view .apps_panel
+/*.full_view .sharing_panel,*/ {
   display: block;
   opacity: 0;
 }
 
-.full_view .browser_panel.active,
 .full_view .inspector_panel.active,
 .full_view .comments_panel.active,
 .full_view .activity_panel.active,
-/*.full_view .sharing_panel.active,*/
-.full_view .pages_panel.active {
+.full_view .mystuff_panel.active,
+.full_view .packages_panel.active,
+.full_view .browse_panel.active,
+.full_view .apps_panel.active
+/*.full_view .sharing_panel.active,*/{
   opacity: 1;
 }
 
 /* Panel types */
 
-.side_panel {
+.sidebar {
+	position: absolute;
+	
   overflow: auto; 
 
   right: -2%;
@@ -190,7 +214,7 @@ body.full_view {
   min-height: 20%;
 }
 
-.full_view .side_panel {
+.full_view .sidebar {
   max-height: 100%;
   
   right: 0;
@@ -199,7 +223,7 @@ body.full_view {
   background-color: white;
 }
 
-.full_view .side_panel.active {
+.full_view .sidebar.active {
   margin-right: 0;
 }
 
@@ -219,9 +243,12 @@ body.full_view {
   padding: 0.3333em;
 }
 
-.browser_panel,
 .inspector_panel,
 .comments_panel,
+.mystuff_panel,
+.packages_panel,
+.browse_panel,
+.apps_panel,
 .activity_panel {
   width: 288px;
   margin-right: -288px;
@@ -230,53 +257,52 @@ body.full_view {
   bottom: 0;
 }
 
-.browser_panel.active,
 .inspector_panel.active,
 .comments_panel.active,
-.activity_panel.active {
+.activity_panel.active,
+.mystuff_panel.active,
+.packages_panel.active,
+.browse_panel.active,
+.apps_panel.active{
 
 }
 
-.full_view .browser_panel,
 .full_view .inspector_panel,
 .full_view .comments_panel,
+.full_view .mystuff_panel,
+.full_view .packages_panel,
+.full_view .browse_panel,
+.full_view .apps_panel,
 .full_view .activity_panel {
   right: 0;
   top: 2.6667em;
   bottom: 2.6667em;
 }
 
-.full_view .browser_panel.active,
 .full_view .inspector_panel.active,
 .full_view .comments_panel.active,
+.full_view .mystuff_panel.active,
+.full_view .packages_panel.active,
+.full_view .browse_panel.active,
+.full_view .apps_panel.active,
 .full_view .activity_panel.active {
   margin-right: 0;
 }
 
-.pages_panel,
-.sharing_panel {
+.pages_panel {
   left: 0;
   bottom: 2.6667em;
   width: 100%;
-  height: 96px;
-  margin-bottom: -128px;
-}
-.pages_panel {
-  height: 0px; /* set 0 for the moment otherwise it above full button */ 
-}
-.sharing_panel {
-  height: 96px;
+  
+  /* header 32 + thumbs 120 + scrollbar 15 */
+  height: 167px;
+  margin-bottom: 0;
 }
 
 .full_view .pages_panel.active,
 .full_view .sharing_panel.active {
   margin-bottom: 0;
 }
-
-/*.full_view .pages_panel,
-.full_view .sharing_panel {
-  height: 0;
-}*/
 
 /* .index extensions ---------------------- */
 
@@ -328,7 +354,31 @@ body.full_view {
 
 .edit_index {
 	position: absolute;
-	left: 2.3333em;
+	left: 0.3333em;
+}
+
+.edit_index>li {
+	position: relative;
+}
+
+.edit_dropdown_index {
+	top: 2em;
+	margin-top: 0.3333em;
+	margin-bottom: 0.3333em;
+}
+
+.edit_dropdown_index>li {
+	margin-bottom: 0.3333em;
+	white-space: nowrap;
+}
+
+.edit_dropdown_index {
+	height: 0;
+	-webkit-transition: height 0.08s linear;
+}
+
+.edit_dropdown_index.active {
+	height: 11.3333em;
 }
 
 .app_index {
@@ -343,51 +393,68 @@ body.full_view {
   right: 0.3333em;
 }
 
-.footpanel_buttons_index {
-  position: absolute;
-  right: 5em;
-}
-
-
-/* .button extensions ------------------------- */
-
-.edit_button {
+.pages_buttons_index {
   position: absolute;
   left: 0.3333em;
 }
 
+.comments_buttons_index {
+	position: absolute;
+	left: 50%;
+	margin-left: -5em;
+}
+
+.author_dropdown_index {
+	top: 2em;
+	margin-top: 0.3333em;
+	margin-bottom: 0.3333em;
+}
+
+.author_dropdown_index>li {
+	margin-bottom: 0.3333em;
+	white-space: nowrap;
+}
+
+.author_dropdown_index {
+	height: 0;
+	-webkit-transition: height 0.08s linear;
+}
+
+.author_dropdown_index.active {
+	height: 2.6667em;
+}
+
+.pages_index {
+	white-space: nowrap;
+}
+
+.pages_index>li {
+  z-index: 1;
+  margin-right: 1px;
+}
+
+.pages_index>li.current {
+  z-index: 2;
+}
+
+.pages_index .page_number {
+	position: absolute;
+	top: 0.3333em;
+	left: 0.3333em;
+}
+
+/* .button extensions ------------------------- */
+
 .panel_button {
-  background-position: 0 0;
+  width: 2em;
+  /* hide button text */
+  padding-top: 2em;
 }
 
-.panel_button.active {
-  background-position: 0 -24px;
-}
-
-.panel_button[href='#toggle_sharing_panel'] {
-  display: none;
-}
-
-.full_view .panel_button[href='#toggle_sharing_panel'] {
-  display: inline-block;
-}
-
-.app_button {
-  background-position: 0 0;
-}
-
-.app_button.active {
-  background-position: 0 -24px;
-}
-
-.control_button {
-  background-image: url('../images/control_buttons.png');
-  background-position: 0 0;
-}
-
-.control_button.active,
-.full_view a[href='#full'].control_button {
-  background-position: 0 -24px;
+.view_button {
+  width: 2em;
+  /* hide button text */
+  padding-top: 2em;
 }
 
 
@@ -419,4 +486,100 @@ body.full_view {
 
 .message {
   font-size: 0.8333em; /* 10px */
+}
+
+/* .number extensions */
+
+/* OLD STYLE */
+
+/*
+.pages_panel .inspector.active li .number {
+    opacity: 1;
+}
+
+.pages-info .number {
+    position: absolute;
+    top: -0.75em;
+    left: 50%;
+    margin-left: -0.75em;
+}
+
+.tag-list .number {
+  position: absolute;
+  left: 0.6667em;
+  top: 0.6667em;
+}
+
+.pages-info .number {
+    position: absolute;
+    top: -0.75em;
+    left: 50%;
+    margin-left: -0.75em;
+}
+
+.pages li .number,
+.pages li .loading-icon,
+.pages li .edit-icon {
+    text-align: center;
+    line-height: 1.5;
+    text-decoration: none;
+    position: absolute;
+    top: 0.6em;
+    width: 1.5em; height: 1.5em;
+    -webkit-border-radius:  0.75em;
+    -moz-border-radius:     0.75em;
+    border-radius:          0.75em;
+}
+.pages li .number,
+.pages li .loading-icon {
+    left: 0.6em;
+}
+*/
+
+.page_number {
+	color: white;
+	background: black;
+}
+
+/* Drag and drop feedback */
+
+#media_drag_feedback {
+ padding:6px 8px 10px;
+}
+
+#media_drag_feedback.video { width:120px; height:90px; }
+#media_drag_feedback.image { width:120px; height:120px; }
+#media_drag_feedback.app { width:120px; height:120px; }
+
+#media_drag_feedback img {
+ -webkit-box-shadow:0 2px 8px #000;
+ -moz-box-shadow:0 2px 8px #000;
+}
+
+#media_drag_feedback.video img { width:120px; height:90px; }
+#media_drag_feedback.image img { width:120px; height:120px; }
+#media_drag_feedback.app img { width:120px; height:120px; }
+
+#media_drag_feedback span {
+  display:block;
+  position:absolute;
+  top:6px;
+  left:8px;
+}
+#media_drag_feedback.video span {
+  width:120px;
+  height:90px;
+  background:transparent url(/images/libraries/drag_video.png) no-repeat;
+}
+
+#media_drag_feedback.image span {
+  width:120px;
+  height:120px;
+  background:transparent url(/images/libraries/drag_image.png) no-repeat;
+}
+
+#media_drag_feedback.app span {
+  width:120px;
+  height:120px;
+  background:transparent url(/images/libraries/drag_app.png) no-repeat;
 }

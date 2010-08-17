@@ -1,0 +1,3 @@
+<% for user in current_user.pending_request_friends do %>
+  <%= render 'users/card', :user => user, :subscribed => user.follower?(current_user), :friendship => user.friend?(current_user)  %>
+<% end %>

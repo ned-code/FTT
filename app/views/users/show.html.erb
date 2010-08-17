@@ -1,0 +1,33 @@
+<div id="profile_page">
+  <div id="user_card">
+    <% if current_user == @user%>
+      <%= render 'card', :user => @user %>
+    <% else %>
+      <%= render 'card', :user => @user, :subscribed => @user.follower?(current_user), :friendship => @user.friend?(current_user)  %>
+    <% end %>
+  </div>
+  <div id="friends_list">
+    <h3>Friends</h3>
+    <ul class='friend_list'>
+      <% for user in @user.friends do %>
+        <li>
+          <%= image_tag user.avatar.url(:thumb) %>
+          <%= link_to user.username, "/users/#{user.uuid}" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  
+</div>
+
+<!-- 
+name: user.name
+mail: user.email
+username: user.username
+avatar: user.avatar.url(:thumb)
+bio: user.bio
+gender : user.gender
+website: user.website
+friends count: user.friends_count (in friends branch )
+documents count: user.documents_count
+-->

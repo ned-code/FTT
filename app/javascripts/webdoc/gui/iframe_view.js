@@ -37,35 +37,36 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   fullInspectorControllerClass: function() {
     return WebDoc.IframeController;  
   },
+  
   createDomNode: function($super) {
-		var that = this;
-		var src = this.item.getSrc();
-		if (src){
-			window.onbeforeunload = function (evt) { 
-				var message = 'You add a web page that automatic redirect to his domaine. Please press Cancel'; 
-				that.item.setSrc( '' );
-				that.inputNode.attr('value', '');
-				//removed the onbeforeunload event that prevent automatic redirecting
-				window.onbeforeunload = '';
-				return message; 
-			};
-		}
+    var that = this;
+    var src = this.item.getSrc();
+    if (src){
+      window.onbeforeunload = function (evt) { 
+        var message = 'You add a web page that automatic redirect to his domaine. Please press Cancel'; 
+        that.item.setSrc( '' );
+        that.inputNode.attr('value', '');
+        //removed the onbeforeunload event that prevent automatic redirecting
+        window.onbeforeunload = '';
+        return message; 
+      };
+    }
     this.domNode.addClass('loading');
     return $super();              
   },
   
   _makeSetSrcEventHandler: function(){
     var that = this;
-		
+    
     return function(e){
-			if (that.inputNode.attr('value') == ''){
-				return false;
-			}
-			
-			e.preventDefault();
+      if (that.inputNode.attr('value') == ''){
+        return false;
+      }
+      
+      e.preventDefault();
       that.inputNode.validate({
         pass : function(){
-          consolidateSrc = WebDoc.UrlUtils.consolidateSrc(that.inputNode.val());
+          var consolidateSrc = WebDoc.UrlUtils.consolidateSrc(that.inputNode.val());
           that.domNode.addClass('loading');
           that.item.setSrc( consolidateSrc );
           e.preventDefault();
@@ -80,8 +81,8 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
     
     return function(e){
       that.domNode.removeClass('loading');
-			//removed the onbeforeunload event that prevent automatic redirecting
-			window.onbeforeunload = '';
+      //removed the onbeforeunload event that prevent automatic redirecting
+      window.onbeforeunload = '';
       e.preventDefault();
     };
   },
@@ -93,7 +94,7 @@ WebDoc.IframeView = $.klass(WebDoc.ItemView, {
   },
 
   updateOverlay: function() {
-    ddd('[iframe_view] updateOverlay()');
+    ddd('[iframe_view] update overlay');
     if (!WebDoc.application.disableHtml) {
       var src = this.item.getSrc();
       if (src === "" || src === undefined) {

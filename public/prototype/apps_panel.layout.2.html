@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <!-- Let's do things to IE, 'cos it sucks rancid dog's cock. Big time. -->
+  <!--[if lte IE 8]>
+  <script type="text/javascript">
+    // Make IE see html5 elements
+    document.createElement('header');
+    document.createElement('section');
+  </script>
+  <![endif]-->
+  
+  <link href="../css/webcss/reset.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/layout.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/wrap.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/layer.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/panel.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/index.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/column.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/thumb.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webcss/button.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="../css/webdoc/index.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="../css/webdoc/site.color.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/site.layout.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="../css/webdoc/editor.color.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/editor.layout.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/editor.typography.css" media="all" rel="stylesheet" type="text/css"/>
+
+  <style>
+
+    .header {
+      background: #dedede;
+    }
+    .webdoc {
+      background: hsl(40, 40%, 30%) url('images/bg_3.jpg') 50% 50% no-repeat;
+    }
+    .tools_panel,
+    .controls_panel {
+      background: rgba(200,200,200,1);
+    }
+    .browser_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .inspector_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .comments_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .sharing_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .pages_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .activity_panel {
+      background: rgba(50,50,50,0.8);
+    }
+    .thumb {
+      background-image: url('images/thumb_test.png');
+    }
+    .logo_thumb {
+      background-image: url('../images/thumb_logo.png');
+    }
+    
+    .test {
+      height: 70%;
+      position: relative;
+      margin: 2% 0;
+      max-height: 500px;
+    }
+    
+    /* panel extensions */
+    
+    .apps_panel {
+      background: rgba(50,50,50,0.8);
+      display: block;
+      opacity: 1;
+      top: 0;
+      left: 50%;
+      margin-left: -144px;
+    }
+    .panel header {
+      color: white;
+      background: rgba(0,0,0,0.4);
+      text-align: center;
+      padding: 0.3333em;
+      margin-bottom: 0;
+      height: 3.3333em;
+    }
+    .panel .content {
+      position: absolute;
+      top: 3.3333em;
+      left: 0;
+      width: 100%;
+      bottom: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    
+    h3 {
+      line-height: 1.3333em; 
+    }
+    
+    /* .index extensions */
+    
+    .apps_index {
+      margin: 0 auto;
+      padding: 12px 0 0 12px;
+    }
+    
+    .big_thumbs_index {
+      width: 264px;
+    }
+    
+    .big_thumbs_index>li {
+      margin-right: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .med_thumbs_index {
+      padding: 20px 0 0 20px;
+      width: 272px;
+    }
+    
+    .med_thumbs_index>li {
+      margin-right: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .wee_thumbs_index {
+      padding: 16px 0 0 16px;
+      width: 272px;
+    }
+    
+    .wee_thumbs_index>li {
+      margin-right: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .big2_thumbs_index {
+      width: 280px;
+      padding: 16px 0 0 16px;
+    }
+    
+    .big2_thumbs_index>li {
+      margin-right: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .med2_thumbs_index {
+      padding: 22px 0 0 22px;
+      width: 280px;
+    }
+    
+    .med2_thumbs_index>li {
+      margin-right: 22px;
+      margin-bottom: 22px;
+    }
+    
+    .wee2_thumbs_index {
+      padding: 18px 0 0 18px;
+      width: 282px;
+    }
+    
+    .wee2_thumbs_index>li {
+      margin-right: 18px;
+      margin-bottom: 18px;
+    }
+    
+    
+    /* .thumb extensions */
+    
+    .app_thumb {
+      
+      border: 2px solid rgba(220, 220, 220, 0.8);
+      
+      -webkit-border-radius: 6px;
+      -moz-border-radius:    6px;
+      border-radius:         6px;
+      
+      -webkit-box-shadow: 0 4px 8px 4px rgba(64, 64, 64, 0.8);
+      -moz-box-shadow:    0 4px 8px 4px rgba(64, 64, 64, 0.8);
+      box-shadow:         0 4px 8px 4px rgba(64, 64, 64, 0.8);
+    }
+    
+    .big_thumb {
+      width: 72px;
+      height: 72px;
+      padding-top: 68px;
+      background-size: contain;
+    }
+    .med_thumb {
+      width: 64px;
+      height: 64px;
+      padding-top: 60px;
+      background-size: contain;
+      /* Needs index of 240 */
+    }
+    .wee_thumb {
+      width: 48px;
+      height: 48px;
+      padding-top: 44px;
+      background-size: contain;
+      /* Needs index of 252 */
+    }
+    
+    .app_thumb[href='#face'] { background-image: url('images/face.png'); }
+    .app_thumb[href='#goog'] { background-image: url('images/goog.png'); }
+    .app_thumb[href='#poll'] { background-image: url('images/poll.png'); }
+    .app_thumb[href='#twit'] { background-image: url('images/twit.png'); }
+    .app_thumb[href='#sdcd'] { background-image: url('images/sdcd.png'); }
+    .app_thumb[href='#flkr'] { background-image: url('images/flkr.png'); }
+    
+  </style>
+</head>
+<body>
+  
+  
+<div class="test">
+  
+  <div class="apps_panel panel" style="margin-left: -464px;">
+    <header>
+      <h3>Apps</h3>
+    </header>
+    <div class="content">
+      <ul class="horizontal wee_thumbs_index apps_index index">
+        <li><a href="#face" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="wee_thumb app_thumb thumb">App name</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="apps_panel panel" style="margin-left: -144px;">
+    <header>
+      <h3>Apps</h3>
+    </header>
+    <div class="content">
+      <ul class="horizontal med_thumbs_index apps_index index">
+        <li><a href="#poll" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="med_thumb app_thumb thumb">App name</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="apps_panel panel" style="margin-left: 176px;">
+    <header>
+      <h3>Apps</h3>
+    </header>
+    <div class="content">
+      <ul class="horizontal big_thumbs_index apps_index index">
+        <li><a href="#twit" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="big_thumb app_thumb thumb">App name</a></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="test">
+  
+  <div class="apps_panel panel" style="margin-left: -464px;">
+    <header>
+      <h3>Apps</h3>
+    </header>
+    <div class="content">
+      <ul class="horizontal wee2_thumbs_index apps_index index">
+        <li><a href="#goog" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="wee_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="wee_thumb app_thumb thumb">App name</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="apps_panel panel" style="margin-left: -144px;">
+    <header>
+      <h3>Apps</h3>
+    </header>
+    <div class="content">
+      <ul class="horizontal med2_thumbs_index apps_index index">
+        <li><a href="#twit" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#twit" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="med_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="med_thumb app_thumb thumb">App name</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="apps_panel panel" style="margin-left: 176px;">
+    <header>
+      <h3>Apps</h3>
+    </header>
+    <div class="content">
+      <ul class="horizontal big2_thumbs_index apps_index index">
+        <li><a href="#poll" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#poll" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#goog" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#face" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#sdcd" class="big_thumb app_thumb thumb">App name</a></li
+       ><li><a href="#flkr" class="big_thumb app_thumb thumb">App name</a></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="test"></div>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+  <script src="../js/jquery.extensions.js"></script>
+  <script>
+
+  </script>
+</body>
+</html> 

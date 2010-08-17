@@ -45,3 +45,18 @@ body>header {
   top: 0;
   right: 0;
 }
+
+/* .number */
+
+.number {
+	display: inline-block;
+
+  width: 1.5em; height: 1.5em;
+  -webkit-border-radius:  0.75em;
+  -moz-border-radius:     0.75em;
+  border-radius:          0.75em;
+  	
+  font-weight: bold;
+  line-height: 1.5;
+  text-align: center;
+}

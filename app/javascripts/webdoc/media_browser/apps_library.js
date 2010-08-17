@@ -8,26 +8,21 @@
 //= require <webdoc/model/widget>
 
 WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
-  initialize: function($super, libraryId) {
-    $super(libraryId);
+  initialize: function($super) {
+    $super('media-browser-apps');
     this.detailsView = $('#app_details');
     this._setupMyApps();
     this._setupDetailsView();
     this.appsPage = 1;
-    this.createHandlers(this.element, 'click', this._appsHandlers);
     
     // Observe thumbnails clicks with event delegation
-    $("#"+libraryId).delegate(".thumbnails li a", "click", function (e) {
+    $("#media-browser-apps").delegate(".thumbnails li a", "click", function (e) {
       var widgetData = $( e.currentTarget ).data("widget");
       this.showDetailsView( widgetData, false );
       e.preventDefault();
     }.pBind(this));
     
     this._loadMyApps();	
-  },
-  
-  _appsHandlers: {
-    'apps-list':  function(e){ WebDoc.application.mediaBrowserController.appsLibrary.showList(); }
   },
 
   _setupMyApps: function() {
@@ -50,16 +45,22 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     
     this.detailsAppContainer = this.detailsView.find('.single_app');
     
-    // handle possible actions 
-    $("#app_details .actions").click(function(event){
+    $('#app-details-back').click(function(event){
       event.preventDefault();
+      this.showList();
+      }.pBind(this));
+    
+    // handle possible actions 
+    this.detailsView.find(".actions").click(function(event){
       
+      event.preventDefault();
+      ddd(event.target);
+      ddd(this.detailsAppContainer.data("widget"));
       var properties = this.detailsAppContainer.data("widget");
-      ddd(this.detailsAppContainer);
       var link = $(event.target);
       switch (link.attr("id")) {
         case "add_app_to_page_action":
-          ddd("add_app_to_page_action");
+          ddd('app_details .add_app_to_page_action');
           var widgetData = this.detailsAppContainer.data("widget");
           WebDoc.application.boardController.insertWidget(widgetData);
           break;
@@ -224,6 +225,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   },
 
   _dragStart: function(event, widgetData) {
+    ddd('[AppsLibrary] _dragStart');
     var dt = event.originalEvent.dataTransfer;
     dt.setData('application/wd-widget', $.toJSON(widgetData));
 
@@ -233,12 +235,12 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
     
     // Drag "feedback"
     var properties = widgetData.properties;
-    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("app", properties.icon_url);
+    var mediaDragFeedbackEl = this.libraryUtils.buildMediaDragFeedbackElement("app", properties.icon_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   },
 
   _hideAll: function(){
-    $('.app-tab').hide();
+    this.detailsView.addClass('hidden');
   }
 });

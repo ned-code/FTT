@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>path</title>
+	<link href="../css/webcss/reset.css" media="all" rel="stylesheet" type="text/css"/>
+	<link href="../css/webcss/column.css" media="all" rel="stylesheet" type="text/css"/>
+	<link href="../css/webdoc/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
+	<style>
+		body {
+			padding: 24px;
+			background: #eeeeee;
+		}
+		canvas {
+			display: block;
+		}
+		canvas, svg, img {
+			background: white;
+		}
+		h4 {
+			margin-bottom: 1em;
+		}
+		p {
+			margin-bottom: 1em;
+		}
+	</style>
+</head>
+<body>
+	
+	<!-- TEST -->
+	
+	<h2>path.union( <i>path</i> )</h2>
+	<p>.union() merges two paths into one.</p>
+	<div class="column of_three">
+		<h4>expected result</h4>
+		<img src="images/path.union.png"/>
+	</div
+ ><div class="column of_three">
+		<h4>canvas</h4>
+		<canvas id="union_canvas"></canvas>
+	</div
+ ><div class="last column of_three">
+		<h4>svg</h4>
+		<!-- svg -->
+	</div>
+	
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+	<script src="js/path.js" type="text/javascript"></script>
+	<script src="js/canvas.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		
+		// .union() test ---------------------------------------
+		var fish = [
+					{ type: 'moveTo', data: [30.3594,-96.3488] },
+					{ type: 'bezierCurveTo', data: [26.6527,-101.2617,17.8764,-124.9885,27.029,-125.9897] },
+					{ type: 'bezierCurveTo', data: [36.1836,-126.9896,53.6732,-111.2306,62.5806,-108.4843] },
+					{ type: 'bezierCurveTo', data: [70.3954,-106.0771,71.7035,-106.1623,77.3249,-108.7413] },
+					{ type: 'bezierCurveTo', data: [81.8894,-111.861,87.9481,-115.1201,95.9216,-118.0177] },
+					{ type: 'bezierCurveTo', data: [87.2213,-130.9654,72.5996,-140.0277,79.8607,-142.1223] },
+					{ type: 'bezierCurveTo', data: [85.9047,-143.8674,105.9004,-144.5731,126.8303,-143.4655] },
+					{ type: 'bezierCurveTo', data: [156.5367,-141.8878,167.9714,-133.0488,173.0899,-122.7845] },
+					{ type: 'bezierCurveTo', data: [203.0328,-113.8236,215.5792,-89.2298,214.9813,-84.2803] },
+					{ type: 'bezierCurveTo', data: [214.7339,-82.2102,193.1553,-67.8775,158.6773,-67.1477] },
+					{ type: 'bezierCurveTo', data: [153.6815,-56.9838,147.124,-44.4421,141.0484,-41.2755] },
+					{ type: 'bezierCurveTo', data: [134.0091,-37.6023,129.848,-42.0207,127.236,-52.5928] },
+					{ type: 'bezierCurveTo', data: [125.7526,-58.6031,127.0058,-63.5668,129.2014,-67.5517] },
+					{ type: 'bezierCurveTo', data: [126.3252,-67.8592,123.5231,-68.2705,120.8012,-68.7689] },
+					{ type: 'bezierCurveTo', data: [120.5329,-68.6695,120.2412,-68.5741,119.9241,-68.4786] },
+					{ type: 'bezierCurveTo', data: [114.2121,-66.7466,88.0243,-66.6187,86.8811,-69.3467] },
+					{ type: 'bezierCurveTo', data: [85.4503,-72.7619,84.9114,-76.8708,86.3358,-80.742] },
+					{ type: 'bezierCurveTo', data: [84.8143,-81.5411,83.3646,-82.336,81.9868,-83.1269] },
+					{ type: 'bezierCurveTo', data: [72.6122,-87.6204,70.6828,-87.0407,62.6249,-84.7138] },
+					{ type: 'bezierCurveTo', data: [54.5227,-82.3778,36.6612,-58.0284,31.9867,-62.8846] },
+					{ type: 'bezierCurveTo', data: [27.3142,-67.7384,29.5819,-85.584,30.3131,-89.3556] },
+					{ type: 'bezierCurveTo', data: [31.0441,-93.1263,34.0639,-91.439,30.3594,-96.3488] }
+				];
+
+		var weed = [
+					{ type: 'moveTo', data: [128.6905,-114.503] },
+					{ type: 'bezierCurveTo', data: [131.3618,-111.9005,131.6969,-109.8564,131.6969,-109.3028] },
+					{ type: 'bezierCurveTo', data: [131.3618,-108.9302,129.0248,-109.8564,127.1873,-111.5327] },
+					{ type: 'bezierCurveTo', data: [125.181,-113.2042,121.6723,-115.8067,117.4934,-118.777] },
+					{ type: 'bezierCurveTo', data: [113.1474,-121.3796,108.1347,-125.2809,106.2972,-128.2561] },
+					{ type: 'bezierCurveTo', data: [103.6216,-132.5311,101.9503,-141.6327,101.9503,-147.583] },
+					{ type: 'bezierCurveTo', data: [101.9503,-152.2247,100.4471,-161.3322,99.2747,-165.2336] },
+					{ type: 'bezierCurveTo', data: [98.1066,-169.1349,96.9385,-177.6839,96.9385,-185.8593] },
+					{ type: 'bezierCurveTo', data: [96.9385,-194.0395,97.7714,-199.985,98.9439,-205.5588] },
+					{ type: 'bezierCurveTo', data: [99.7778,-208.9056,99.2747,-214.4794,97.4363,-218.9393] },
+					{ type: 'bezierCurveTo', data: [95.766,-221.356,95.766,-222.6548,96.2682,-223.2133] },
+					{ type: 'bezierCurveTo', data: [96.6034,-223.5859,98.9439,-221.356,100.4471,-218.3808] },
+					{ type: 'bezierCurveTo', data: [102.4535,-214.4794,109.3037,-196.4514,110.974,-188.4618] },
+					{ type: 'bezierCurveTo', data: [111.3091,-184.9331,111.6442,-174.7127,111.3091,-170.8113] },
+					{ type: 'bezierCurveTo', data: [110.4717,-164.3074,110.4717,-151.857,111.9793,-144.6078] },
+					{ type: 'bezierCurveTo', data: [114.3155,-132.9027,122.5053,-120.4485,128.6905,-114.503] },
+					{ type: 'moveTo', data: [121.0021,-160.0334] },
+					{ type: 'bezierCurveTo', data: [121.3372,-163.0036,121.0021,-168.5814,120.1647,-172.1101] },
+					{ type: 'bezierCurveTo', data: [119.3318,-175.453,119.3318,-178.4282,120.1647,-184.5605] },
+					{ type: 'bezierCurveTo', data: [122.5053,-200.9122,131.3618,-212.4354,137.211,-217.082] },
+					{ type: 'bezierCurveTo', data: [139.5516,-219.3119,141.7251,-221.356,142.8931,-223.5859] },
+					{ type: 'bezierCurveTo', data: [144.0656,-224.8847,144.8986,-225.8158,145.2337,-225.8158] },
+					{ type: 'bezierCurveTo', data: [145.7368,-225.8158,145.2337,-223.9536,144.8986,-222.2822] },
+					{ type: 'bezierCurveTo', data: [143.7305,-218.9393,140.557,-213.3616,138.7186,-211.1365] },
+					{ type: 'bezierCurveTo', data: [132.8694,-203.3279,126.0148,-182.3305,126.0148,-166.5373] },
+					{ type: 'bezierCurveTo', data: [126.0148,-151.857,134.8749,-125.6536,137.5462,-119.1496] },
+					{ type: 'bezierCurveTo', data: [138.7186,-116.1745,139.5516,-110.6016,139.5516,-110.229] },
+					{ type: 'bezierCurveTo', data: [138.7186,-110.229,137.5462,-113.2042,136.7132,-116.1745] },
+					{ type: 'bezierCurveTo', data: [136.043,-118.4044,134.8749,-121.3796,132.5343,-124.9093] },
+					{ type: 'bezierCurveTo', data: [130.1937,-127.8845,124.0085,-139.035,122.8404,-144.6078] },
+					{ type: 'bezierCurveTo', data: [121.6723,-149.2545,121.0021,-156.6856,121.0021,-160.0334] },
+					{ type: 'moveTo', data: [155.765,-206.8625] },
+					{ type: 'bezierCurveTo', data: [161.4471,-212.4354,164.1184,-222.2822,162.9503,-230.0908] },
+					{ type: 'bezierCurveTo', data: [162.28,-233.4337,162.28,-235.6636,162.6151,-236.0363] },
+					{ type: 'bezierCurveTo', data: [163.4525,-236.0363,164.1184,-235.1042,166.1238,-230.0908] },
+					{ type: 'bezierCurveTo', data: [166.9612,-227.4873,170.8049,-211.1365,170.8049,-199.6124] },
+					{ type: 'bezierCurveTo', data: [170.8049,-183.6343,161.4471,-169.1349,149.9149,-155.7594] },
+					{ type: 'bezierCurveTo', data: [141.7251,-146.2793,141.0548,-134.2025,143.7305,-115.4341] },
+					{ type: 'bezierCurveTo', data: [144.0656,-111.9005,143.7305,-108.9302,142.8931,-108.9302] },
+					{ type: 'bezierCurveTo', data: [142.5624,-108.9302,141.7251,-110.6016,141.7251,-114.8756] },
+					{ type: 'bezierCurveTo', data: [141.3899,-119.7081,139.8867,-133.4573,138.3835,-139.7754] },
+					{ type: 'bezierCurveTo', data: [135.2056,-152.7842,133.7024,-168.5814,136.7132,-180.2865] },
+					{ type: 'bezierCurveTo', data: [139.0494,-189.5797,147.5743,-198.6813,155.765,-206.8625] },
+					{ type: 'moveTo', data: [122.6896,-96.7022] },
+					{ type: 'bezierCurveTo', data: [123.0247,-98.5605,123.8577,-100.2319,124.1928,-99.8593] },
+					{ type: 'bezierCurveTo', data: [125.0301,-99.8593,125.0301,-98.9331,125.0301,-95.9579] },
+					{ type: 'bezierCurveTo', data: [124.5279,-92.9876,120.0139,-67.1558,112.3263,-56.0053] },
+					{ type: 'bezierCurveTo', data: [103.8049,-43.5559,92.6087,-46.5311,85.2519,-32.777] },
+					{ type: 'bezierCurveTo', data: [84.4181,-31.1056,83.25,-27.5768,82.9149,-25.1601] },
+					{ type: 'bezierCurveTo', data: [82.9149,-23.3028,82.5806,-21.9991,82.0775,-21.9991] },
+					{ type: 'bezierCurveTo', data: [81.7424,-21.9991,80.9094,-23.3028,81.4081,-29.4341] },
+					{ type: 'bezierCurveTo', data: [81.4081,-40.0262,84.7532,-58.9805,92.1065,-67.1558] },
+					{ type: 'bezierCurveTo', data: [105.6433,-82.5814,118.0084,-75.3322,122.6896,-96.7022] }
+				];
+		
+		var unionCanvas = Canvas( 256, 256, jQuery('#union_canvas')[0] );
+		var fishPath = Path(fish);
+		var weedPath = Path(weed);
+		var unionPath = fishPath.union( weedPath );
+		
+		unionCanvas
+		.clear()
+		.translate(10, 256)
+		.style({
+			fillStyle: "transparent",
+			strokeStyle: "rgb(150,50,50)",
+			lineWidth: 2
+		})
+		.begin()
+		.plot( unionPath )
+		.close()
+		.stroke();
+		
+		//.begin()
+		//.plot( fishPath )
+		//.close()
+		//.stroke()
+		//.begin()
+		//.plot( weedPath )
+		//.close()
+		//.stroke();
+		
+	</script>
+</body>
+</html> 

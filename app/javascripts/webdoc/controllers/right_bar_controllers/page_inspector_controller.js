@@ -80,8 +80,7 @@
       
       var footHeight = this.domNode.find('.foot>div').height();
       this.domNode
-      .css({bottom: footHeight})
-      .hide();
+      .css({bottom: footHeight});
     },
     
     // used by inspector controller

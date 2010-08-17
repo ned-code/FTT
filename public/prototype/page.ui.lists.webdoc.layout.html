@@ -26,10 +26,14 @@
   <link href="../css/webdoc/site.color.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webdoc/site.layout.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webdoc/site.typography.css" media="all" rel="stylesheet" type="text/css"/>
-  
+
   <link href="../css/webdoc/editor.color.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webdoc/editor.layout.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="../css/webdoc/editor.typography.css" media="all" rel="stylesheet" type="text/css"/>
+  
+  <link href="../css/webdoc/panel.color.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/panel.layout.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="../css/webdoc/panel.typography.css" media="all" rel="stylesheet" type="text/css"/>
 
   <style>
     .header {
@@ -60,12 +64,13 @@
     .activity_panel {
       background: rgba(50,50,50,0.8);
     }
+    .apps_panel {
+      background: rgba(50,50,50,0.8);
+    }
     h3 {
       font-weight: bold;
-      color: white;
-      background: rgba(0,0,0,0.4);
       text-align: center;
-      line-height: 2em;
+      line-height: 1.3333em;
       height: 2em;
       
     }
@@ -88,7 +93,7 @@
       <div class="webdoc layer">
       </div>
       
-      <div class="side_panel panel">
+      <div class="sidebar">
         <h2>Authors</h2>
         
         <ul class="horizontal author_index index">
@@ -140,20 +145,23 @@
     
       <div class="tools_panel panel">
         
-        <!--ul class="horizontal edit_index buttons_index index">
-          <li><a class="edit_button button" href="#edit" title="Edit">Edit</a></li
-         ><li>
-            <a class="pop_button button" href="#edit_pop" title="Edit Menu">Edit Menu</a>
-            <ul class="vertical editlist_index buttons_index index">
-              <li><a class="editlist_button button" href="#undo" title="Undo">Undo</a></li
-             ><li><a class="editlist_button button" href="#redo" title="Redo">Redo</a></li>
+        <ul class="horizontal edit_index buttons_index index">
+          <li><a class="mode_button button" href="#edit_mode" title="Edit mode">Edit</a></li
+         ><li><a class="dropdown_button button" href="#dropdown" data-for=".edit_dropdown_index" title="Edit Menu">Edit Menu</a>
+            <ul class="vertical edit_dropdown_index dropdown_index buttons_index index">
+              <li><a class="edit_button button" href="#undo" title="Undo">Undo</a></li
+             ><li><a class="edit_button button" href="#redo" title="Redo">Redo</a></li
+             ><li><a class="edit_button button" href="#to_back" title="Send To Back">Send To Back</a></li
+             ><li><a class="edit_button button" href="#to_front" title="Send To Front">Send To Front</a></li
+             ><li><a class="edit_button button" href="#delete" title="Delete">Delete</a></li>
             </ul>
           </li>
-        </ul-->
-        
+        </ul>
+
         <ul class="horizontal app_index buttons_index index">
           <li><a class="app_button button" href="#text_app" title="Text App">Text App</a></li
-         ><li><a class="app_button button" href="#draw_app" title="Draw App">Draw App</a></li>
+         ><li><a class="app_button button" href="#draw_app" title="Draw App">Draw App</a></li
+         ><li><a class="app_button button" href="#toggle_apps_panel" title="More Apps">more Apps...</a></li>
         </ul>
         
         <ul class="horizontal panel_index buttons_index index">
@@ -166,39 +174,63 @@
       </div>
       
       <div class="controls_panel panel">
-        <ul class="horizontal footpanel_buttons_index buttons_index index">
-          <li><a class="panel_button button" href="#toggle_sharing_panel" title="Toggle Sharing Panel">Sharing Panel</a></li
-         ><li><a class="panel_button button" href="#toggle_pages_panel" title="Toggle Pages Panel">Pages Panel</a></li>
+        <ul class="horizontal pages_buttons_index buttons_index index">
+          <li><a class="pages_button button" href="#webdoc_prev_page" title="Previous Page">Previous Page</a></li
+         ><li><a class="pages_button button" href="#webdoc_next_page" title="Next Page">Next Page</a></li
+         ><li><a class="pages_button button" href="#toggle_pages_panel" title="Toggle Pages Panel">Pages Panel</a></li>
+        </ul>
+        
+        <ul class="horizontal comments_buttons_index buttons_index index">
+          <li><a class="comment_button button" href="#add_comment" title="Add Comment">Add Comment</a> Drop a comment</li
+         ><li><a class="panel_button button" href="#toggle_comments_panel" title="Toggle Comments Panel">Comments Panel</a></li>
         </ul>
         
         <ul class="horizontal view_index index" id="edit_tools">
-          <li><a class="control_button button" href="#full" title="Full view">Full view</a></li>
+          <li><a class="view_button button" href="#full" title="Full view">Full view</a></li>
         </ul>
       </div>
       
       <div class="browser_panel panel">
-        <h3>Browser</h3>
+        <header>
+        	<h3>Browser</h3>
+        </header>
+      </div>
+      
+      <div class="apps_panel panel">
+        <header>
+        	<h3>Apps</h3>
+        </header>
       </div>
       
       <div class="inspector_panel panel">
-        <h3>Inspector</h3>
+        <header>
+        	<h3>Inspector</h3>
+        </header>
       </div>
       
       <div class="comments_panel panel">
-        <h3>Comments</h3>
+        <header>
+        	<h3>Comments</h3>
+        </header>
       </div>
       
       <div class="activity_panel panel">
-        <h3>Activity</h3>
+        <header>
+        	<h3>Activity</h3>
+        </header>
       </div>
       
       <div class="pages_panel panel">
-        <h3>Pages</h3>
+        <header>
+        	<h3>Pages</h3>
+        	<ul class="horizontal page_edit_index buttons_index index">
+      			<li class="mode-edit-show"><a class="button" href="#add-page" title="Add page">Add page</a></li><li class="mode-edit-show"><a class="button" href="#copy-page" title="Copy page">Copy</a></li><li class="mode-edit-show"><a class="button" href="#remove-page" title="Remove page">Remove</a></li>
+    			</ul>
+        </header>
+        <div class="content">
+        </div>
       </div>
       
-      <div class="sharing_panel panel">
-        <h3>Sharing</h3>
-      </div>
     </div>
   </section>
   
@@ -215,7 +247,7 @@
         <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
       </ul
       
-      ><ul class="triple_column column of_six vertical thumbs_index index">
+     ><ul class="triple_column column of_six vertical thumbs_index index">
         <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
         <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
         <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
@@ -236,6 +268,7 @@
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
   <script src="../js/jquery.extensions.js"></script>
+  <script src="../js/editor.ui.js"></script>
   <script>
     
     /* from page.layout */
@@ -317,6 +350,10 @@
         activity: {
           panel: jQuery('.activity_panel'),
           toggle: jQuery('a[href=#toggle_activity_panel]')
+        },
+        activity: {
+          panel: jQuery('.apps_panel'),
+          toggle: jQuery('a[href=#toggle_apps_panel]')
         }
       };
       
@@ -333,6 +370,37 @@
       
       togglePanels(sidePanels);
       togglePanels(footPanels);
+      
+      //var dropdownState = false;
+      //
+      //jQuery('a[href=#dropdown]')
+      //.bind('click', function(e){
+			//	var node = jQuery(this),
+			//			menu = node
+			//						.parent()
+			//						.find('.dropdown_index')
+			//						.eq(0);
+			//	
+			//	if (dropdownState) {
+			//		  dropdownState = false;
+			//		  menu.removeTransitionClass('active');
+			//	} else {
+			//		dropdownState = true;
+			//		menu.addTransitionClass('active');
+			//		
+			//		jQuery(document)
+			//		.bind('click', function(e){
+			//		  if ( e.target === node[0] ||
+			//		  		 menu[0] === e.target ||
+			//		  		 jQuery.contains( menu[0], e.target ) ) {
+			//		  	return;
+			//		  }
+			//		  
+			//		  dropdownState = false;
+			//		  menu.removeTransitionClass('active');
+			//		});
+			//	}
+      //});
     });
   </script>
 </body>

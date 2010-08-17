@@ -1,11 +1,12 @@
 class ImagesController < ApplicationController
-  before_filter :authenticate_user!
-  
+
+  skip_before_filter :authenticate_user!, :only => [:index, :create], :if => session[:app_id].present?
+
+
   # GET /images
   def index
     per_page = 100
     @images = current_user.images.paginate(:page => params[:page], :per_page => per_page, :conditions => { :favorites => params[:favorites] })
-    
     respond_to do |format|
       format.json { render :json => { 
         :images => @images,
@@ -34,15 +35,14 @@ class ImagesController < ApplicationController
   # POST /images
   def create
     @image = current_user.images.build(params[:image])
-    @image.uuid = params[:image][:uuid] 
+    @image.uuid = params[:image][:uuid]
     @image.favorites = params[:image][:favorites]
-    
-    respond_to do |format|
-      if @image.save
-        format.json { render :json => @image }
-      else
-        format.json { render :json => @image, :status => 203 }
-      end
+    @image.fix_content_type_for_swfupload!
+
+    if @image.save
+      render :json => @image
+    else
+      render :json => @image, :status => 500
     end
   end
   

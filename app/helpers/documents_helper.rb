@@ -1,7 +1,14 @@
 module DocumentsHelper
   
   def edit_mode?
-    !(@controller.params[:reader]!= nil && @controller.params[:reader] == "true")  &&  current_user.present? && (current_user.has_role?('admin') || current_user.has_role?("editor", @document))
+    !(controller.params[:reader]!= nil &&
+    controller.params[:reader] == "true")  &&
+    current_user.present? &&
+    ( @document.public_editor? ||
+      @document.public_contributor? ||
+      @document.user_editor?(current_user) ||
+      @document.user_contributor?(current_user) ||
+      current_user.has_role?('admin'))
   end
   
 end

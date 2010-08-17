@@ -21,7 +21,7 @@
         </div>
       </div>
       
-     <!-- controls -->
+     <!-- ui elements -->
      
      <!--div id="webdoc_x_scrollbar" class="x_scrollbar_container">
        <div class="x_scrollbar scrollbar"></div>
@@ -35,16 +35,27 @@
       
       <!-- panels -->
       
-      <div class="side_panel panel">
-        <h2>Authors</h2>
+      <div class="sidebar">
+        <header class="horizontal">
+        	<h2>Authors</h2>
+        	<div style="position: relative;">
+        		<a href="#dropdown" class="dropdown_button button" data-for=".author_dropdown_index">actions</a>
+        		<ul class="vertical author_dropdown_index dropdown_index buttons_index index" id="#thing_to_do">
+        			<li><a href="#thing" class="button">Thing to do</a></li>
+        		</ul>
+        	</div>
+        </header>
         
         <ul class="horizontal author_index index">
-          <li><a href="/" class="author_thumb thumb">author</a></li
-         ><li><a href="/" class="author_thumb thumb">author</a></li
-         ><li><a href="/" class="author_thumb thumb">author</a></li
-         ><li><a href="/" class="author_thumb thumb">author</a></li
-         ><li><a href="/" class="author_thumb thumb">author</a></li
-         ><li><a href="/" class="author_thumb thumb">author</a></li>
+        <% @document.editors.each do |editor| %>
+          <li>
+          <% if editor == current_user %>
+            <%= render :partial => "users/thumb", :locals => { :user => editor } %>
+          <% else %>
+            <%= render :partial => "users/thumb", :locals => { :user => editor, :subscribed => @document.creator.follower?(current_user), :friendship => @document.creator.friend?(current_user)  } %>
+          <% end %>
+          </li>
+        <% end %>
         </ul>
         
         <h2>Currently on this webdoc</h2>
@@ -60,7 +71,7 @@
         
         <h2>Statistics</h2>
         
-        <div>views 2500</div>
+        <div>views <%= @document.views_count %></div>
         
         <h2>Recent Activity</h2>
         
@@ -74,56 +85,27 @@
         </ul>
         
         <h2>More from these authors</h2>
-        
         <ul class="vertical thumbs_index index">
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
-          <li><a href="/" class="webdoc_thumb left_text_thumb text_thumb thumb">related webdoc thing word</a></li>
+          <% (0..(@more_author_documents.length - 1)).step(1) do |i| %>
+            <%= render 'thumbnail', :document => @more_author_documents[i]%>
+          <% end %>
         </ul>
       </div>
       
-      <%= render :partial => "documents/panels/toolbar_panel" %>
-      
-      <div class="controls_panel panel">
-        <ul class="horizontal footpanel_buttons_index buttons_index index">
-          <li><a class="panel_button button" href="#toggle_sharing_panel" title="Toggle Sharing Panel">Sharing Panel</a></li
-         ><li><a class="panel_button button" href="#toggle_pages_panel" title="Toggle Pages Panel">Pages Panel</a></li>
-        </ul>
-        
-        <ul class="horizontal view_index index" id="edit_tools">
-          <li><a class="control_button button" href="#full" title="Full view">Full view</a></li>
-        </ul>
-      </div>
-
-      <div class="browser_panel panel">
-        <h3>Browser</h3>
-      </div>
-      
-      <div class="inspector_panel panel">
-        <h3>Inspector</h3>
-      </div>
-      
-      <div class="comments_panel panel">
-        <h3>Comments</h3>
-      </div>
-      
-      <div class="activity_panel panel">
-        <h3>Activity</h3>
-      </div>
-      
-      <div class="pages_panel panel">
-        <h3>Pages</h3>
-      </div>
-      
-      <div class="sharing_panel panel">
-        <h3>Sharing</h3>
-      </div>
-      
-      <%= render :partial => "documents/panels/right_panel" %>
-      <%= render :partial => "documents/panels/pages_panel" %>
+      <%= render "documents/panels/toolbar_panel" %>
+      <%= render "documents/panels/controls_panel" %>
+      <%= render "documents/inspectors/document_inspector" %>
+      <%= render "documents/panels/discussions_panel" %>
+      <%= render "documents/panels/my_content_panel" %>
+      <%= render "documents/panels/apps_panel" %>
+      <%= render "documents/panels/packages_panel" %>
+      <%= render "documents/panels/browse_web_panel" %>
+      <%= render "documents/inspectors/document_inspector" %>
+      <%#= render :partial => "documents/panels/social_panel" %>
+  		<%= render "documents/inspectors/page_inspector" %>
+      <%= render "documents/panels/pages_panel" %>
+      <%= render "documents/panels/right_panel" %>
     </div>
-    
   </section>
+  
+  <%= render "relatedcontent", :documents => @related_documents %>
