@@ -78,14 +78,14 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       WebDoc.application.themesController = new WebDoc.ThemesController();
       
       // create all tools
-      WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
-      WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
-      WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
-      WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
-      WebDoc.application.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox']", "textbox" );
-      WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
-      WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
-      WebDoc.application.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "insert-app" );
+      WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw_mode" );
+      WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select_mode" );
+      //WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-mode" );
+      WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "text_mode" );
+      WebDoc.application.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox']", "textbox_mode" );
+      WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "html_mode" );
+      WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "iframe_mode" );
+      WebDoc.application.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "app_mode" );
       WebDoc.application.browserTool = new WebDoc.BrowserTool("a[href='#browser']");
 
       WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
@@ -101,15 +101,19 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
           this._creator = data[0];
           this.loadPageId(this._extractUUIDFromHash(window.location.hash));
           WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
+          
           ddd("check editablity");
-          if (WebDoc.application.boardController.isEditable() && jQuery("body").hasClass('mode-edit')) {
+          
+          // Don't use CSS classes as javascript flags...
+          // if (WebDoc.application.boardController.isEditable() && jQuery("body").hasClass('mode-edit')) {
+          
+          if (WebDoc.application.boardController.isEditable()) {
             ddd("[PageEditor] call rightBarController.showMyContent");
             WebDoc.application.rightBarController.showMyContent();
           }
           
           WebDoc.application.boardController.loadingNode.removeTransitionClass('loading');
           
-          //jQuery('#document_loading').remove();
           jQuery('body').trigger('webdocready');   
           if (window._gaq) {
             _gaq.push(['_trackEvent', 'document', 'open', documentId]);
