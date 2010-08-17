@@ -173,18 +173,7 @@ class Document < ActiveRecord::Base
     hash['document']['size'] = self.size
     hash['document']['pages'] = []
     for page in pages
-      page_hash = page.attributes
-      page_hash['data'] = page.data
-      page_hash['items'] = []
-      items = page.items.not_deleted
-      for item in items
-        item_hash = item.attributes
-        item_hash['data'] = item.data
-        item_hash['properties'] = item.properties
-        item_hash['preferences'] = item.preferences
-        page_hash['items'] << item_hash
-      end
-      hash['document']['pages'] << page_hash
+      hash['document']['pages'] << page.as_application_json['page']
     end
     hash
   end

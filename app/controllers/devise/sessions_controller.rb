@@ -6,11 +6,6 @@ class Devise::SessionsController < ApplicationController
 
   before_filter :require_no_authentication, :only => [ :new, :create ]
   
-  # GET /user
-  def show
-    render :json => current_user ? current_user.to_social_panel_json(current_user) : "{}"
-  end
-  
   # GET /resource/sign_in
   def new
     # Devise::FLASH_MESSAGES.each do |message|
