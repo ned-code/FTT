@@ -23,6 +23,7 @@ Webdoc::Application.routes.draw do
     collection do
       get :explore
       get :featured
+      get :template
     end
   end
 
