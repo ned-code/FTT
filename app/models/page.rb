@@ -216,6 +216,20 @@ class Page < ActiveRecord::Base
     update_next_page_position
     refresh_cache
   end
+
+  def as_application_json
+    hash = { 'page' => self.attributes }
+    hash['page']['data'] = self.data
+    hash['page']['items'] = []
+    for item in self.items.not_deleted
+      item_hash = item.attributes
+      item_hash['data'] = item.data
+      item_hash['properties'] = item.properties
+      item_hash['preferences'] = item.preferences
+      hash['page']['items'] << item_hash
+    end
+    hash
+  end
   
   private
   
