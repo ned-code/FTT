@@ -5,9 +5,9 @@ WebDoc.BoardController = jQuery.klass({
   
   // Constructor     
   initialize: function(editable, autoFit) {
+  	this.editorNode = jQuery('#editor');
     this.boardCageNode = jQuery("#webdoc");
     this.boardContainerNode = jQuery("#board-container");
-    this.screenUnderlayNode = jQuery("#underlay");
     this.screenNodes = this.boardCageNode.find('.board-screen');
     this.themeNode = jQuery('<link id="theme" rel="stylesheet" type="text/css" />'); 
     jQuery('head').append(this.themeNode);
@@ -387,14 +387,8 @@ WebDoc.BoardController = jQuery.klass({
     else {
       x = position.pageX - board.offset().left;
       y = position.pageY - board.offset().top;
-    }   
-    if (WebDoc.Browser.WebKit) { 
-      // Correct mouse vertical position according to the cursor icon height
-      // This doesn't work with a pen tablet, as you can't change the registration point
-      // of the cursor.
-      y += this.currentTool.getCursorHeight();
     }
-
+    
     var calcX = (x) * (1 / this._currentZoom);
     var calcY = (y) * (1 / this._currentZoom);
     return {

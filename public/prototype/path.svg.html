@@ -47,6 +47,14 @@
 	</div>
 	
 	
+<svg width="100%" height="100%" version="1.1"
+xmlns="http://www.w3.org/2000/svg">
+
+	<path d="M250 150 L150 350 L350 350 Z"></path>
+
+</svg>
+	
+	
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
 	<script src="js/path.js" type="text/javascript"></script>
 	<script src="js/canvas.js" type="text/javascript"></script>
@@ -76,9 +84,39 @@
 					{ type: 'bezierCurveTo', data: [27.3142,-67.7384,29.5819,-85.584,30.3131,-89.3556] },
 					{ type: 'bezierCurveTo', data: [31.0441,-93.1263,34.0639,-91.439,30.3594,-96.3488] }
 				];
+				
+		var square = [
+					{ type: 'moveTo', data: [0,0] },
+					{ type: 'lineTo', data: [100,0] },
+					{ type: 'lineTo', data: [200,100] },
+					{ type: 'lineTo', data: [0,100] }
+				];
 		
+		var fishPath = Path( fish );
+		var svgPath = Path( jQuery('path')[0] );
+		var squarePath = Path( square );
 		
-		var fishPath = Path(fish);
+		function log(obj){
+			i = -1, l = obj.length;
+			
+			console.log('{');
+			
+			// Loop through path instructions
+			while( ++i < l ){
+				console.log('  type:', obj[i].type, 'data:', obj[i].data);
+			}
+			
+			console.log('}');
+		}
+		
+		log( fishPath );//.displace(-250,-250).spherize(100,200).displace(-250,-250) );
+		console.log( fishPath.mean() );
+		console.log( fishPath.limits() );
+		console.log( fishPath.range() );
+		console.log( fishPath.centre() );
+		
+		var c = fishPath.centre();
+		var r = fishPath.displace( -c[0], -c[1] ).limits();
 		
 		// Draw the path to canvas ------------------------------
 		
@@ -86,20 +124,37 @@
 		
 		canvas
 		.clear()
-		.translate(10, 256)
+		.translate(128, 128)
 		.style({
 			fillStyle: "transparent",
 			strokeStyle: "rgb(150,50,50)",
 			lineWidth: 2
 		})
 		.begin()
-		.plot( fishPath )
+		.plot(
+			fishPath.displace( -c[0], -c[1] )
+		)
+		.close()
+		.stroke()
+		.style({
+			fillStyle: "transparent",
+			strokeStyle: "rgb(50,150,50)",
+			lineWidth: 1
+		})
+		.begin()
+		.plot([
+			{ type: 'moveTo', data: [ r[0], r[1] ] },
+			{ type: 'lineTo', data: [ r[2], r[1] ] },
+			{ type: 'lineTo', data: [ r[2], r[3] ] },
+			{ type: 'lineTo', data: [ r[0], r[3] ] }
+		])
 		.close()
 		.stroke();
 		
+		
 		// Draw the path to SVG ---------------------------------
 		
-		console.log( fishPath.toSVG() );
+		
 		
 	</script>
 </body>

@@ -3,7 +3,7 @@
 	<head>
     <title>Poll App</title>
     
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<link href="../css/webcss/reset.css" type="text/css" rel="stylesheet"/>
 		<link href="../css/webcss/forms.css" type="text/css" rel="stylesheet"/>
 		<link href="../css/webcss/layer.css" type="text/css" rel="stylesheet"/>
@@ -12,23 +12,6 @@
 		<link href="../css/webdoc/app.layout.css" type="text/css" rel="stylesheet"/>
 		<link href="../css/webdoc/app.typography.css" type="text/css" rel="stylesheet"/>
 		<link href="../css/webdoc/app.color.css" type="text/css" rel="stylesheet"/>
-		
-		<script src="http://apps.webdoc.com/api/sdk_boot.js"></script>
-		
-		<script type="text/javascript" src="scripts/jquery/jquery.min.js"></script>
-		<script type="text/javascript" src="scripts/jquery/jquery-ui.min.js"></script>
-		<script type="text/javascript" src="scripts/jquery/jquery.htmlEditable.js"></script>
-		<link rel="stylesheet" type="text/css" href="css/jquery.htmlEditable.css">
-		<link type="text/css" rel="stylesheet" href="css/jquery.themes/overcast/jquery-ui-1.8.custom.css">
-		<link type="text/css" rel="stylesheet" href="http://apps.staging.webdoc.com/medias/widget/96b7033e-6dfe-46e7-9e24-45966480619e/0.4/css/jquery.themes/overcast/jquery-ui-1.8.custom.css">
-		
-		<script type="text/javascript" src="scripts/common.js"></script>
-		<script type="text/javascript" src="scripts/date.js"></script>
-		<script type="text/javascript" src="scripts/index.js"></script>
-		
-		<link rel="stylesheet" type="text/css" href="css/index.css">
-		<script type="text/javascript" src="http://st-wd.webdoc.com/sdk/sdk.js"></script>
-		<script src="Locales/en/localizedStrings.js" id="language_script" type="text/javascript"></script>
 	</head>
 	
 	<body>
@@ -40,35 +23,32 @@
 		  
 		  <div id="question" contenteditable="true" class="htmlEdit app_question">
 		  	What is your favorite color?
-		  	<span class="arrow"></span>
+		  	<span class="point"></span>
 		  </div>
 		  
 		  <form>
 				<div id="options" class="ui-sortable">
-					<div class="option" id="optionContainer_0">
+					<div class="editable_option option" id="optionContainer_0">
 						<input type="radio" id="option_0" name="r_options" value="0"/>
 						<label class="htmlEdit" for="option_0" id="optionText_0" contenteditable="true">Red</label>
-						<div class="grabber grabber_button button">
-						  <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-						</div>
+						<div class="up_arrow arrow"></div>
+						<div class="down_arrow arrow"></div>
 						<a href="javascript:deleteOption(0);" class="delete_button button" title="delete">delete</a>
 					</div>
 				
-					<div class="option" id="optionContainer_1">
+					<div class="editable_option option" id="optionContainer_1">
 						<input type="radio" id="option_1" name="r_options" value="1">
 						<label class="htmlEdit" for="option_1" id="optionText_1" contenteditable="true">Green</label>
-						<div class="grabber grabber_button button">
-						  <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-						</div>
+						<div class="up_arrow arrow"></div>
+						<div class="down_arrow arrow"></div>
 						<a href="javascript:deleteOption(1);" class="delete_button button" title="delete">delete</a>
 					</div>
 					
-					<div class="option" id="optionContainer_2">
+					<div class="editable_option option" id="optionContainer_2">
 						<input type="radio" id="option_2" name="r_options" value="2">
 						<label class="htmlEdit" for="option_2" id="optionText_2" contenteditable="true">Blue</label>
-						<div class="grabber grabber_button button">
-						  <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-						</div>
+						<div class="up_arrow arrow"></div>
+						<div class="down_arrow arrow"></div>
 						<a href="javascript:deleteOption(2);" class="delete_button button" title="delete">delete</a>
 					</div>
 					
@@ -84,8 +64,22 @@
 				<div id="buttons">
 					<a href="javascript:addOption();" class="add_button button">Add option</a>
 				</div>
-      
+      	
+      	<input class="submit_button button" type="submit" value="Submit" />
+      	
       </form>
 		</div>
+		
+		<script src="http://apps.webdoc.com/api/sdk_boot.js"></script>
+		<script type="text/javascript" src="scripts/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="scripts/jquery/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="scripts/jquery/jquery.htmlEditable.js"></script>
+		
+		<script type="text/javascript" src="scripts/common.js"></script>
+		<script type="text/javascript" src="scripts/date.js"></script>
+		<script type="text/javascript" src="scripts/index.js"></script>
+		
+		<script type="text/javascript" src="http://st-wd.webdoc.com/sdk/sdk.js"></script>
+		<script src="Locales/en/localizedStrings.js" id="language_script" type="text/javascript"></script>
 	</body>
 </html>
