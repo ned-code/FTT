@@ -1,0 +1,21 @@
+<a class="webdoc_thumb left_text_thumb text_thumb thumb" href='<%= document_path(document)%>'>
+  <%= document.title %>
+  <img src='<%= document.pages.first.thumbnail.url %>' style='width:50px;height:50px;'/>
+</a>
+
+<!-- 
+  title: document.title
+  descritpion: document.description
+  page list: document.pages
+  first page thumbnail: document.pages.first.thumbnail.url
+  document url: document_path(document)
+  create date : document.created_at
+  view count: document.views_count
+  category: document.category
+  
+  creator: document.creator
+           document.creator.username
+  creator url:  '/users/document.creator.uuid'
+  
+
+-->
