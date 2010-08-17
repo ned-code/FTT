@@ -42,25 +42,10 @@ pre, code { font-family: 'Courier', 'Andale Mono', 'Lucida Console', monospace; 
 
 /* Block elements */
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6                { font-weight: normal; margin: 0; word-spacing: -0.0833em; }
-h4,
-h5,
-h6                { font-weight: bold; }
+h1,h2,h3,h4,h5,h6 { font-weight: bold; margin: 0; word-spacing: -0.0833em; }
 
-span,
-font {
-  -moz-background-inline-policy:continuous;
-  -moz-background-origin:padding, content;
-  -moz-background-size:cover;
-}
-
-h1                { font-size: 3em;                          margin-bottom: 0.4167em; }
-h2                { font-size: 2.5em;   line-height: 1.5;    margin-bottom: 0.5em; }
+h1                { font-size: 1.5em;                        margin-bottom: 0.4167em; font-weight: normal; }
+h2                { font-size: 1em;     line-height: 1.5;    margin-bottom: 0.5em; }
 h3                { font-size: 2em;     line-height: 1.25;   margin-bottom: 0.625em; }
 h4                { font-size: 1.2em;   line-height: 1.0417; }
 h5                { font-size: 1.1em;   line-height: 1.1364; }

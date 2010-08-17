@@ -1,6 +1,6 @@
 // editor.init.js
 //
-// Makes ui components work (only ui things that are not dependent
+// Makes ui components work (ONLY ui things that are NOT dependent
 // on the application).
 
 (function(undefined){
@@ -10,8 +10,8 @@
 			// Store jQuery objects
 			dropdowns = {},
 			
-			// Keys in links object correspond to #ref values of links
-			buttons = {
+			// Properies in links object correspond to #ref values of links
+			links = {
 				dropdown: function(e){
 					var button = jQuery(this),
 							selector = button.attr('data-for'),
@@ -37,6 +37,9 @@
 						obj.addTransitionClass('active');
 						
 						doc.bind('click.dropdown', function(e){
+							
+							console.log('YEP');
+							
 							state = false;
 							obj.removeTransitionClass('active');
 							
@@ -53,7 +56,7 @@
 			var href = jQuery(this).attr('href'),
 					ref = /^#(.+)$/.exec(href);
 			
-			return buttons[ ref[1] ] ? buttons[ ref[1] ].call(this, e) : undefined ;
+			return links[ ref[1] ] ? links[ ref[1] ].call(this, e) : undefined ;
 		});
 		
 	});

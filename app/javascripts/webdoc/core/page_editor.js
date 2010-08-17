@@ -60,59 +60,56 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   load: function(documentId, editable) {
     ddd("[PageEditor] load " + documentId);
     WebDoc.Application.initializeSingletons([WebDoc.ThemeManager, WebDoc.WidgetManager, WebDoc.DocumentCategoriesManager], function() {
-      WebDoc.application.undoManager = new WebDoc.UndoManager();
+      var app = WebDoc.application;
+      
+      app.undoManager = new WebDoc.UndoManager();
           
-      WebDoc.application.pasteBoardManager = new WebDoc.PasteboardManager();    
+      app.pasteBoardManager = new WebDoc.PasteboardManager();    
       
       // create all controllers
-      WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
-      WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
-      WebDoc.application.rightBarController = new WebDoc.RightBarController();
-      //WebDoc.application.inspectorController = new WebDoc.InspectorController();
-      WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
-      WebDoc.application.toolbarController = new WebDoc.ToolbarController();
-      WebDoc.application.browserController = new WebDoc.BrowserController();
-      WebDoc.application.notificationController = new WebDoc.NotificationController("#notification_bar");
+      app.svgRenderer = new WebDoc.SvgRenderer();
+      app.boardController = new WebDoc.BoardController(editable, !editable);
+      app.rightBarController = new WebDoc.RightBarController();
+      //app.inspectorController = new WebDoc.InspectorController();
+      app.pageBrowserController = new WebDoc.PageBrowserController();
+      app.toolbarController = new WebDoc.ToolbarController();
+      app.browserController = new WebDoc.BrowserController();
+      app.notificationController = new WebDoc.NotificationController("#notification_bar");
       
-      WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
-      WebDoc.application.themesController = new WebDoc.ThemesController();
+      app.documentDuplicateController = new WebDoc.DocumentDuplicateController();
+      app.themesController = new WebDoc.ThemesController();
       
       // create all tools
-      WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw_mode" );
-      WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select_mode" );
-      //WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-mode" );
-      WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "text_mode" );
-      WebDoc.application.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox']", "textbox_mode" );
-      WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "html_mode" );
-      WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "iframe_mode" );
-      WebDoc.application.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "app_mode" );
-      WebDoc.application.browserTool = new WebDoc.BrowserTool("a[href='#browser']");
+      app.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw_tool_mode" );
+      app.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select_tool_mode" );
+      app.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "text_tool_mode" );
+      app.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox']", "textbox_tool_mode" );
+      app.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "html_tool_mode" );
+      app.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "iframe_tool_mode" );
+      app.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "app_tool_mode" );
+      app.browserTool = new WebDoc.BrowserTool("a[href='#browser']");
 
-      WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-      WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
-      WebDoc.application.postMessageManager = new WebDoc.PostMessageManager();      
-      WebDoc.application.collaborationManager.listenXMPPNode(documentId);              
-      WebDoc.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
-      {
+      app.boardController.setCurrentTool(WebDoc.application.arrowTool);
+      app.collaborationManager = new WebDoc.CollaborationManager();
+      app.postMessageManager = new WebDoc.PostMessageManager();      
+      app.collaborationManager.listenXMPPNode(documentId);              
+      WebDoc.ServerManager.getRecords(WebDoc.Document, documentId, function(data) {
         this.currentDocument = data[0];
         this.currentDocument.addListener(this);
-        WebDoc.application.boardController.applyDocumentTheme();
+        app.boardController.applyDocumentTheme();
         WebDoc.ServerManager.getRecords(WebDoc.User, this.currentDocument.data.creator_id, function(data, status) {
           this._creator = data[0];
           this.loadPageId(this._extractUUIDFromHash(window.location.hash));
-          WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
+          app.pageBrowserController.setDocument(this.currentDocument); 
           
           ddd("check editablity");
           
-          // Don't use CSS classes as javascript flags...
-          // if (WebDoc.application.boardController.isEditable() && jQuery("body").hasClass('mode-edit')) {
-          
-          if (WebDoc.application.boardController.isEditable()) {
+          if ( app.boardController.isEditable() && !app.boardController.isInteractionMode() ) {
             ddd("[PageEditor] call rightBarController.showMyContent");
-            WebDoc.application.rightBarController.showMyContent();
+            app.rightBarController.showMyContent();
           }
           
-          WebDoc.application.boardController.loadingNode.removeTransitionClass('loading');
+          app.boardController.loadingNode.removeTransitionClass('loading');
           
           jQuery('body').trigger('webdocready');   
           if (window._gaq) {

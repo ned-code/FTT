@@ -357,10 +357,6 @@ body.full_view {
 	left: 0.3333em;
 }
 
-.edit_index>li {
-	position: relative;
-}
-
 .edit_dropdown_index {
 	top: 2em;
 	margin-top: 0.3333em;
@@ -372,14 +368,7 @@ body.full_view {
 	white-space: nowrap;
 }
 
-.edit_dropdown_index {
-	height: 0;
-	-webkit-transition: height 0.08s linear;
-}
-
-.edit_dropdown_index.active {
-	height: 11.3333em;
-}
+.edit_dropdown_index.active {}
 
 .app_index {
 	position: absolute;
@@ -445,6 +434,11 @@ body.full_view {
 
 /* .button extensions ------------------------- */
 
+.edit_mode .mode_button {
+	/* quick hack! */
+	background: blue;
+}
+
 .panel_button {
   width: 2em;
   /* hide button text */
@@ -455,6 +449,29 @@ body.full_view {
   width: 2em;
   /* hide button text */
   padding-top: 2em;
+}
+
+/* Handle transition between normal and edit_mode for buttons
+   that get shown and hidden */ 
+
+.edit_index .dropdown_button {
+	display: none;
+	opacity: 0;
+  -webkit-transition: opacity 0.18s ease-in;
+  -moz-transition:    opacity 0.18s ease-in;
+  transition:         opacity 0.18s ease-in;
+}
+
+.edit_mode .edit_index .dropdown_button {
+	display: block;
+	opacity: 1;
+  -webkit-transition: opacity 0.06s ease-out;
+  -moz-transition:    opacity 0.06s ease-out;
+  transition:         opacity 0.06s ease-out;
+}
+
+.transition .edit_index .dropdown_button {
+	display: block;
 }
 
 
@@ -490,56 +507,88 @@ body.full_view {
 
 /* .number extensions */
 
-/* OLD STYLE */
-
-/*
-.pages_panel .inspector.active li .number {
-    opacity: 1;
-}
-
-.pages-info .number {
-    position: absolute;
-    top: -0.75em;
-    left: 50%;
-    margin-left: -0.75em;
-}
-
-.tag-list .number {
-  position: absolute;
-  left: 0.6667em;
-  top: 0.6667em;
-}
-
-.pages-info .number {
-    position: absolute;
-    top: -0.75em;
-    left: 50%;
-    margin-left: -0.75em;
-}
-
-.pages li .number,
-.pages li .loading-icon,
-.pages li .edit-icon {
-    text-align: center;
-    line-height: 1.5;
-    text-decoration: none;
-    position: absolute;
-    top: 0.6em;
-    width: 1.5em; height: 1.5em;
-    -webkit-border-radius:  0.75em;
-    -moz-border-radius:     0.75em;
-    border-radius:          0.75em;
-}
-.pages li .number,
-.pages li .loading-icon {
-    left: 0.6em;
-}
-*/
-
 .page_number {
 	color: white;
 	background: black;
 }
+
+
+/* Scrollbars */
+
+.x_scrollbar_container {
+  position: absolute;
+  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+}
+
+.scrollbar {
+  position: absolute;
+  width: 10px; height: 10px;
+  min-width: 10px; min-height: 10px;
+  
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
+  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+  
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(128,128,128,0.5);
+}
+
+y_scrollbar {
+  -webkit-transition: top 0.025s linear, width 0.1s linear;
+  -moz-transition:    top 0.025s linear, width 0.1s linear;
+  transition:         top 0.025s linear, width 0.1s linear;
+}
+x_scrollbar {
+  -webkit-transition: left 0.025s linear, width 0.1s linear;
+  -moz-transition:    left 0.025s linear, width 0.1s linear;
+  transition:         left 0.025s linear, width 0.1s linear;
+}
+
+
+.pages_panel .x_scrollbar_container {
+  left: 6px; right: 6px; top: 128px;
+  height: 10px;
+  z-index: 2;
+}
+
+/*#webdoc_x_scrollbar:hover,
+#webdoc_y_scrollbar:hover {
+  opacity: 1;
+  -webkit-transition: opacity 0.1s linear;
+  -moz-transition:    opacity 0.1s linear;
+  transition:         opacity 0.1s linear;
+}*/
+
+#webdoc_x_scrollbar,
+#webdoc_y_scrollbar {
+  position: fixed;
+  z-index: 2;
+  /*opacity: 0;
+  -webkit-transition: opacity 0.66s linear;
+  -moz-transition:    opacity 0.66s linear;
+  transition:         opacity 0.66s linear;
+  */
+}
+
+#webdoc_x_scrollbar {
+  bottom: 38px; left: 6px; right: 6px;
+  height: 10px;
+}
+
+#webdoc_y_scrollbar {
+  top: 44px; bottom: 38px; right: 6px;
+  width: 10px;
+}
+
+
+
 
 /* Drag and drop feedback */
 

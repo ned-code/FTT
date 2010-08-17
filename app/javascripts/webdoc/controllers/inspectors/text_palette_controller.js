@@ -3,9 +3,16 @@
  */
 WebDoc.TextPaletteController = jQuery.klass({
   initialize: function(id){
-    this.domNode = jQuery(id);
+    var container = jQuery(id);
+    
+    // Use the contents and throw the container away.
+    // Ugly? Yes, but until we find a better way...
+    this.domNode = container.children();
+    
     this.initGUI("#text-inspector-content");
     this.propertiesController = new WebDoc.PropertiesInspectorController('#text_properties', true);
+  	
+  	container.remove();
   },       
   initGUI: function(container){
     var thobj = this;

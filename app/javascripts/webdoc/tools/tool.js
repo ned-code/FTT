@@ -15,7 +15,8 @@ WebDoc.Tool = $.klass({
     		board = WebDoc.application.boardController;
       
     if (board.editorNode) {
-      board.editorNode[0].className = board.editorNode[0].className.replace( /\b\S+_mode\b/g, '' );
+    	// Bit dodgy - is there a better way than regexing the className ?
+      board.editorNode[0].className = board.editorNode[0].className.replace( /\b\S+_tool_mode\b/g, '' );
       
       board.editorNode
       .addClass( this.editorClass );

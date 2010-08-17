@@ -296,7 +296,6 @@ jQuery.fn.extend({
       if (transitionSupport) {
         this
         .bind( jQuery.support.css.transitionEnd, function(e){
-          console.log('HEY, the transition ended, fart face.');
           removeTransitionClass(this);
           callback && callback.apply(this);
         })

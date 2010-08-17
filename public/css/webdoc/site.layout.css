@@ -34,16 +34,49 @@ body>header {
 
 /* .index extensions */
 
-.sitenav_index {
+.nav_index {
   position: absolute;
   top: 0;
   left: 180px;
+}
+
+.nav_index>li {
+  margin-right: 0.3333em;
 }
 
 .usernav_index {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.usernav_index>li {
+  margin-right: 0.6666em;
+}
+
+.usernav_index>li:last-child {
+  margin-left: 2em;
+  margin-right: 0;
+}
+
+.dropdown_index {
+	top: 2em;
+	opacity: 0;
+	-webkit-transition: opacity 0.18s ease-out, top 0.18s ease-out;
+	   -moz-transition: opacity 0.18s ease-out, top 0.18s ease-out;
+	        transition: opacity 0.18s ease-out, top 0.18s ease-out;
+}
+
+.dropdown_index.active {
+	top: 2.3333em;
+	opacity: 1;
+	-webkit-transition: opacity 0.06s ease-in, top 0.06s ease-in;
+	   -moz-transition: opacity 0.06s ease-in, top 0.06s ease-in;
+	        transition: opacity 0.06s ease-in, top 0.06s ease-in;
+}
+
+.user_index>li {
+	margin-bottom: 0.3333em;
 }
 
 /* .number */
@@ -59,4 +92,16 @@ body>header {
   font-weight: bold;
   line-height: 1.5;
   text-align: center;
+}
+
+
+/* flash messages */
+
+#flash {
+    position: relative;
+    margin: 0 auto;
+    padding: 2px;
+    text-align: center ;
+    width: 300px;
+    background: #8CEF86;
 }

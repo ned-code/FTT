@@ -70,6 +70,22 @@
 	position: absolute;
 	top: 0.3333em;
 	left: 0.3333em;
+	
+	display: none;
+	-webkit-transition: opacity 0.06s ease-in;
+	   -moz-transition: opacity 0.06s ease-in;
+	        transition: opacity 0.06s ease-in;
+}
+
+.edit_mode .pageedit_index {
+	display: block;
+	-webkit-transition: opacity 0.18s ease-in;
+	   -moz-transition: opacity 0.18s ease-in;
+	        transition: opacity 0.18s ease-in;
+}
+
+.editor_wrap.transition .pageedit_index {
+	display: block;
 }
 
 /* .thumb extensions */

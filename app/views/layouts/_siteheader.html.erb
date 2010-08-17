@@ -1,23 +1,37 @@
-      <!-- site header -->
-      
-      <header class="header">
-        <div class="site_wrap wrap">
-          <a href="/">
-            <h2 class="logo_thumb thumb">webdoc</h1>
-          </a>
-          <ul class="nav_index index">
-            <li><a href="/">home</a></li
-           ><li><a href="/documents/featured">featured</a></li
-           ><li><a href="/documents/explore">explore</a></li>
-          </ul>
-          
-          <div class="userbar">
-            <h5 class="user-email item">admin@mnemis.com</h5>
-            <ul class="divided user_index index">
-              <li><a href="/followships" class="item ">your contacts</a></li
-             ><li><a href="/users/1/edit" class="user-edit item ">your profile</a></li
-             ><li><a href="/users/sign_out" class="user-logout item">logout</a></li>
-            </ul>
-          </div>
-        </div>
-      </header>
+<!-- site header -->
+
+<header class="header">
+  <div class="site_wrap wrap">
+    <a href="/">
+      <h2 class="logo_thumb thumb">webdoc</h2>
+    </a>
+    
+    <% if user_signed_in? %>
+    <ul class="horizontal nav_index index">
+      <li><a class="button" href="/">home</a></li
+     ><li><a class="button" href="/documents/featured">featured</a></li
+     ><li><a class="button" href="/documents/explore">explore</a></li>
+    </ul>
+    <% end %>
+    
+    <% if user_signed_in? %>
+    <ul class="horizontal usernav_index index">
+      <li><a href="/" class="button">Messages</a></li
+     ><li><a href="/" class="button">Friends</a></li
+     ><li>
+        <a href="#dropdown" class="button" data-for="#account_dropdown">Account</a>
+        <ul class="user_index dropdown_index index" id="account_dropdown">
+          <li><a href="/" class="button">your profile</a></li
+         ><li><a href="/" class="button">logout</a></li>
+        </ul>
+      </li>
+    </ul>
+    <% else %>
+		<ul class="horizontal usernav_index index">
+		  <li><%= link_to "login", root_path %></li
+		 ><li><%= link_to "sign up", new_registration_path(:user) %></li
+		 ><li><%= link_to "sign up/in with Facebook", user_oauth_authorize_url(:facebook) %></li>
+		</ul>
+    <% end %>
+  </div>
+</header>
