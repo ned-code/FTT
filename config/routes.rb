@@ -85,7 +85,7 @@ Webdoc::Application.routes.draw do
 
   namespace :facebook do
     resources :albums, :only => [:index] do
-      resources :images, :only => [:index]
+      resources :photos, :only => [:index]
     end
   end
 
