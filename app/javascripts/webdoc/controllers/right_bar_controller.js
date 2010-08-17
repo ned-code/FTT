@@ -176,7 +176,7 @@ WebDoc.RightBarController = $.klass({
   
   showMyContent: function(){
     this.selectInspector(WebDoc.PanelInspectorType.MY_CONTENT);
-    this._showPanel('my_content_panel');
+    this._showPanel('mystuff_panel');
     if(!this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].isMyImageLoaded()){
       this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].setup();
     }
@@ -194,7 +194,7 @@ WebDoc.RightBarController = $.klass({
   
   showBrowseWeb: function(){
     this.selectInspector(WebDoc.PanelInspectorType.BROWSE_WEB);
-    this._showPanel('browse_web_panel');
+    this._showPanel('browse_panel');
   },
   
   showPageInspector: function() {
