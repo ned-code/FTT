@@ -15,7 +15,7 @@ WebDoc.Tool = $.klass({
     		board = WebDoc.application.boardController;
       
     if (board.editorNode) {
-      board.editorNode[0].className = board.editorNode[0].className.replace( /\b.+_mode/g, '' );
+      board.editorNode[0].className = board.editorNode[0].className.replace( /\b\S+_mode\b/g, '' );
       
       board.editorNode
       .addClass( this.editorClass );

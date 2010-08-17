@@ -116,7 +116,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     //    var node = $(this);
         node
         .bind('submit', function() {
-        	console.log('SUBBBMIITTT');
           if (!that._creatingDoc) {
             node.validate({
               pass: function() {
