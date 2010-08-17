@@ -72,10 +72,8 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this._hideAll();
     $('#my-images').show();
     jQuery('#my_images_library').hide();
-    ddd(jQuery('#my_facebook_library'));
-    ddd(jQuery('#my_facebook_library').length);
-    if(jQuery('#my_facebook_library:empty')){
-      this._loadFacebookImages();
+    if(jQuery('#my_facebook_library:empty').length > 0){
+      this._loadFacebookAlbums();
     }
     jQuery('#my_facebook_library').show();
   },
@@ -694,23 +692,23 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this._loadFavoritesVideos();
   },
 
-  _loadFacebookImages: function() {
+  _loadFacebookAlbums: function() {
     var fbContainer = jQuery("#my_facebook_library");
     this.showSpinner(fbContainer);
 
-    WebDoc.ServerManager.request('/facebook/images.json', function(data) {
-      if (data.images.length === 0) {
-        fbContainer.append(jQuery("<span>").addClass('no_items').text('No images'));
-      }
-      else {
-        var myImagesList = $("<ul>");
-        fbContainer.append(myImagesList);
-
-        $.each(data.images, function(i, fbImage){
-          myImagesList.append(jQuery("<img src="+fbImage.url+"/>"));
+    WebDoc.ServerManager.request('/facebook/albums.json', function(data) {
+      ddd('[MyContentsController] recieve facebook albums');
+      ddd(data);
+      if (data.albums.length > 0) {
+        var myAlbumsList = $("<ul>");
+        fbContainer.append(myAlbumsList);
+        $.each(data.albums, function(i, fbAlbum){
+          myAlbumsList.append(jQuery("<li><a href="+fbAlbum.id+">"+fbAlbum.name+" ("+fbAlbum.count+")</a></li>"));
         });
       }
-
+      else {
+        fbContainer.append(jQuery("<span>").addClass('no_items').text('No albums'));
+      }
       this.hideSpinner(fbContainer);
     }.pBind(this), 'GET', { ajaxParams: {} });
   }

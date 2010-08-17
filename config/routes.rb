@@ -84,7 +84,9 @@ Webdoc::Application.routes.draw do
   resources :app_polls, :only => [:index, :create, :destroy]
 
   namespace :facebook do
-    resources :images, :only => [:index]
+    resources :albums, :only => [:index] do
+      resources :images, :only => [:index]
+    end
   end
 
   # START OLD ROUTES
