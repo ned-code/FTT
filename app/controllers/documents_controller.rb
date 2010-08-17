@@ -3,7 +3,7 @@ class DocumentsController < ApplicationController
   before_filter :store_url_in_session_if_user_not_logged
   # need to be authenticate for alpha release.
   # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document
-  before_filter :find_document, :only => [:show, :update, :duplicate, :destroy, :share, :unshare]
+  before_filter :find_document, :only => [:show, :update, :duplicate, :destroy, :share, :unshare, :template]
   
   #before_filter :authenticate_if_needed, :only => [:show]
   #before_filter :authenticate_user!, :only => [:index]
@@ -145,7 +145,7 @@ class DocumentsController < ApplicationController
   
   # POST /documents
   def create
-    authorize! :create, Document
+    #authorize! :create, Document
     @document = current_user.documents.create_with_uuid(params[:document])
     @@xmpp_notifier.xmpp_create_node(@document.uuid) 
     render :json => @document
@@ -153,7 +153,7 @@ class DocumentsController < ApplicationController
 
   # POST /documents/:id/duplicate
   def duplicate
-    authorize! :create, Document
+    authorize! :read, @document
     @new_document = @document.deep_clone_and_save!(current_user, params[:title])
     render :json => @new_document.to_json(:only => :uuid)
   end
@@ -192,6 +192,19 @@ class DocumentsController < ApplicationController
     authorize! :update, @document
     @document.unshare
     render :json => {}
+  end
+  
+  
+  #this is used to test the rendering of html template
+  def template
+    @document = Document.not_deleted.public.first
+    
+    #Specifiy the document you want
+    # @document = Document.not_deleted.where(:uuid => 'put an uuid here')
+    #Without layout
+    # render :layout => false
+    #specify layout:
+    # render :layout => 'editor'
   end
   
   protected
