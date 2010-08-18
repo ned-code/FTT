@@ -23,16 +23,6 @@ GIT
       xml-simple
 
 GIT
-  remote: http://github.com/justinfrench/formtastic.git
-  revision: 42b4eb8
-  branch: rails3
-  specs:
-    formtastic (1.0.0)
-      actionpack (>= 2.3.0)
-      activesupport (>= 2.3.0)
-      i18n (>= 0.4.0)
-
-GIT
   remote: http://github.com/mislav/will_paginate.git
   revision: 3615938
   branch: rails3
@@ -41,7 +31,7 @@ GIT
 
 GIT
   remote: http://github.com/plataformatec/devise.git
-  revision: 81c49c6
+  revision: 6754ae7
   branch: master
   specs:
     devise (1.2.0)
@@ -150,7 +140,7 @@ GEM
       gem_plugin (>= 0.2.3)
     multi_json (0.0.4)
     mysql (2.8.1)
-    net-scp (1.0.2)
+    net-scp (1.0.3)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.4)
       net-ssh (>= 2.0.9)
@@ -159,7 +149,7 @@ GEM
       net-ssh (>= 1.99.1)
     nokogiri (1.4.3.1)
     oauth (0.4.2)
-    oauth2 (0.0.10)
+    oauth2 (0.0.13)
       faraday (~> 0.4.1)
       multi_json (>= 0.0.4)
     paperclip (2.3.3)
@@ -238,7 +228,6 @@ DEPENDENCIES
   exception_notification!
   factory_girl
   fastercsv
-  formtastic!
   google-spreadsheet-ruby
   haml
   hirb

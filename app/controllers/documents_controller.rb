@@ -123,7 +123,7 @@ class DocumentsController < ApplicationController
     if @document.present?
       authorize! :read, @document
       @related_documents = Document.all(:conditions => { :category_id => @document.category_id}, :limit => 12 )
-      @more_author_documents = Document.all(:conditions => { :creator_id => @document.creator_id}, :limit => 6 )
+      @more_author_documents = current_user.documents
       respond_to do |format|
         format.html do
           set_cache_buster

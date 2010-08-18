@@ -14,13 +14,17 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.roles = ["reader", "editor"];
     this.domNode = $("#document_access_list");
     this.documentAccessDialog = $("#wb-change-access-dialog");
-    this.documentAccessForm = $("#wb-change-form");
+    this.chooseFriendsForm = $("#collaborate_by_connection_form");
+    this.byEmailForm = $("#collaborate_by_email_form");
     this.emailsNode = $('#wb-invitation-add-editors');
     this.failedEmailsWrapper = $('#wb-invitation-failed');
+    this.friendsListNode = jQuery('#invite_co_authors_friends_list');
+    
+    jQuery('.collaborate_form').bind('click', this.toggleForm.pBind(this) );
     
     this.documentAccessDialog
-    .remove()
-    .css({ display: '' });
+    //.remove()
+    //.css({ display: '' });
   },
   
   showAccess: function(e, document) {
@@ -36,16 +40,19 @@ WebDoc.DocumentCollaborationController = $.klass({
       dataType: 'json',              
       success: function(data, textStatus) {
         ddd("access", data);
-        
-        this.documentAccessDialog.pop({
-          attachTo: $( e.currentTarget ),
-          initCallback: function(){
-            that.documentAccessForm
-            .bind( 'submit', that.sendInvitations.pBind(that) );
-            that.domNode.delegate("a[href='#delete']", "click", that.deleteAccess.pBind(that));
-          }
-        });
-        
+        this.documentAccessDialog.show();
+        this.chooseFriendsForm.bind( 'submit', this.sendInvitations.pBind(this) );
+        this.byEmailForm.bind( 'submit', this.sendInvitations.pBind(this) );
+        this.domNode.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
+        // this.documentAccessDialog.pop({
+        //   attachTo: $( e.currentTarget ),
+        //   initCallback: function(){
+        //     that.documentAccessForm
+        //     .bind( 'submit', that.sendInvitations.pBind(that) );
+        //     that.domNode.delegate("a[href='#delete']", "click", that.deleteAccess.pBind(that));
+        //   }
+        // });
+        this.loadFriendList();
         this.loadAccess(data);
       }.pBind(this),
       
@@ -73,6 +80,38 @@ WebDoc.DocumentCollaborationController = $.klass({
       }
     });
   },  
+  
+  loadFriendList: function(){
+    ddd('loadFriendList');
+    if(!jQuery('#invite_co_authors_friends_list ul').length){
+      $.ajax({
+        url: "/friendships/",
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          this.buildFriendsList(data);
+        }.pBind(this),
+      
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+          ddd("error", textStatus);
+        }
+      });
+    }
+  },
+  
+  buildFriendsList: function(data){
+    ddd('buildFriendsList', data);
+    var length = data['friends'].length;
+    var friendsList = jQuery('<ul/>');
+    var friend;
+    for(var i=0;i<data['friends'].length;i++){
+      ddd(data['friends'][i]);
+      friend = jQuery('<li/>').text(data['friends'][i].user.username);
+      friend.append('<input type="hidden" value=0 name="friend['+data['friends'][i].user.uuid+']"/>');
+      friendsList.append(friend);
+    }
+    this.friendsListNode.append(friendsList);
+  },
   
   loadAccess: function(json) {
     this.domNode.empty();
@@ -173,5 +212,12 @@ WebDoc.DocumentCollaborationController = $.klass({
   
   closeDialog: function() {
       $(this).dialog('close');
+  },
+  
+  toggleForm: function(e){
+    e.preventDefault();
+    ddd('toggleForm');
+    this.byEmailForm.toggle();
+    this.chooseFriendsForm.toggle();
   }
 });
