@@ -8,21 +8,21 @@
     
     <% if user_signed_in? %>
     <ul class="horizontal nav_index index">
-      <li><a class="button" href="/">home</a></li
-     ><li><a class="button" href="/documents/featured">featured</a></li
-     ><li><a class="button" href="/documents/explore">explore</a></li>
+      <li><a class="button header" href="/">home</a></li
+     ><li><a class="button header" href="/documents/featured">featured</a></li
+     ><li><a class="button header" href="/documents/explore">explore</a></li>
     </ul>
     <% end %>
     
     <% if user_signed_in? %>
-    <ul class="horizontal usernav_index index">
-      <li><a href="/" class="button">Messages</a></li
-     ><li><a href="/" class="button">Friends</a></li
+    <ul class="horizontal usernav_index index ">
+      <li><a href="/" class="button header">Messages</a></li
+     ><li><a href="/" class="button header">Friends</a></li
      ><li>
-        <a href="#dropdown" class="button" data-for="#account_dropdown">Account</a>
+        <a href="#dropdown" class="button header" data-for="#account_dropdown">Account</a>
         <ul class="user_index dropdown_index index" id="account_dropdown">
-          <li><a href="/" class="button">your profile</a></li
-         ><li><a href="/" class="button">logout</a></li>
+          <li><a href="/" class="button header">your profile</a></li
+         ><li><a href="/" class="button header">logout</a></li>
         </ul>
       </li>
     </ul>
