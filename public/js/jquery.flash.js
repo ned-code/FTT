@@ -16,34 +16,20 @@
 				showDuration: 200,
 				hideDuration: 1800
 			},
-			flash,
+			flash, timer,
 			state = 0;  // 0 is hidden, 1 is shown [, 2 is animating to hide, 3 is animating to show - not implemented yet]
 	
 	function show( options, callback ) {
 		// Open flash
-		
 		flash
 		.appendTo('body')
 		.addTransitionClass('active', function(){
 			state = 1;
 			callback && callback();
 		});
-		
-//		.animate({
-//			opacity: 1,
-//			marginTop: 0
-//		}, {
-//			duration: options.showDuration,
-//			complete: function(){
-//				state = 1;
-//				callback && callback();
-//			}
-//		});
 	}
 	
 	function hide( options, callback ) {
-		var height = flash.height();
-		
 		// Close flash
 		flash
 		.removeTransitionClass('active', function(){
@@ -51,36 +37,38 @@
 			flash.remove();
 			callback && callback();
 		});
-		
-//		.stop()
-//		.animate({
-//			opacity: 0.2,
-//			marginTop: -height
-//		}, {
-//			duration: options.hideDuration,
-//			easing: 'easeInCubic',
-//			complete: function(){
-//				state = 0;
-//				flash.remove();
-//				callback && callback();
-//			}
-//		});
 	}
 	
 	jQuery.fn[plugin] = function(o){
 		// Overwrite options
-		var options = jQuery.extend({}, jQuery.fn[plugin].options, o);
+		var options = jQuery.extend({}, jQuery.fn[plugin].options, o),
+				message = jQuery('<div/>', {
+					'class': "flash_message"
+				});
+		
+		message.html( this );
 		
 		// Put the message in the flash...
-		flash.html(this);
-		
 		if (state === 0) {
-			show( options, arguments[1] || options.showCallback );
+			flash.html( message );
+		}
+		else {
+			flash.append( message );
+			
+			// Reset timer
+			clearTimeout( timer );
+			timer = null;
 		}
 		
-		setTimeout(function(){
+		if (state === 0) {
+			show( options, options.showCallback );
+		}
+		
+		timer = setTimeout(function(){
+			timer = null;
+			
 		  if ( state === 1 ) {
-				hide( options, arguments[2] || options.hideCallback );
+				hide( options, options.hideCallback );
 			}
 		}, options.delay);
 		
@@ -104,7 +92,9 @@
 		else if ( flash.hasClass('active') ) {
 			state = 1;
 			
-			setTimeout(function(){
+			timer = setTimeout(function(){
+				timer = null;
+				
 				if ( state === 1 ) {
 					hide( options );
 				}

@@ -132,3 +132,14 @@ body>header {
 	   -moz-transition: opacity 0.06s ease-in;
 	        transition: opacity 0.06s ease-in;
 }
+
+.flash_message {
+	border-bottom: 1px solid rgb(220,160,0);
+	padding-bottom: 0.3333em;
+	margin-bottom: 0.3333em;
+}
+.flash_message:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+	margin-bottom: 0;
+}
