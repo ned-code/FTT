@@ -36,33 +36,8 @@
 <div class="site_wrap wrap">
 	<%= render 'popup_create_webdoc'%>
 </div>
-
-<div id="wb-change-access-dialog" class="collaborate-dialog" style="display: none">
-  <form id="wb-change-form" class="column triple_column of_five">
-    <h4>Invite new editors</h4>
-    <p><%= t('.document_forms.change_access_dialog.add_editors_explanation') %></p>
-    
-    <fieldset>
-      <div class="vertical">
-        <label><%= t('.document_forms.change_access_dialog.add_editors') %></label>
-        <textarea id="wb-invitation-add-editors" rows="1" cols="20"></textarea>
-        <div id="wb-invitation-failed"></div>
-      <div class="vertical">
-        <label><%= t('.document_forms.change_access_dialog.add_editors_message') %></label>
-        <textarea id="wb-invitation-add-editors-message" rows="3" cols="20"></textarea>
-      </div>
-    </fieldset>
-    
-    <div class="ui-actions state-readonly-hide">
-      <a href="#cancel" class="cancel">close</a>
-      <input type="submit" name="new-document" value="Add" />
-    </div>
-  </form>
-  
-  <div class="column last_column double_column of_five" id="wb-access-list" style="overflow: hidden;">
-    <h4>Current editors</h4>
-    <ul id="document_access_list" class="vertical divided index"></ul>
-  </div>
+<div class="site_wrap wrap">
+  <%= render 'popup_collaborate' %>
 </div>
 
 <div id="wb-share-document-dialog" class="share-dialog" style="display:none" title="<%= t('.document_forms.share_document_dialog.title') %>">
