@@ -48,9 +48,12 @@ class User < ActiveRecord::Base
   # = Validations =
   # ===============
 
-  validates_presence_of :username, :first_name, :last_name
+  validates_presence_of :username
+  validates_presence_of :first_name
+  validates_presence_of :last_name
   validates_acceptance_of :terms_of_service, :on => :create
   validates_uniqueness_of :uuid
+  validates_uniqueness_of :username
 
   # ================
   # = Associations =

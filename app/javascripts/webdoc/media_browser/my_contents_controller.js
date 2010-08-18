@@ -440,14 +440,13 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
    },
   
-  dragStart: function(event) {      
+  dragStart: function(event) {
     var draggingImg = $(event.target).parent().find('img');
 
     var properties = draggingImg.data("properties");
 
     var dt = event.originalEvent.dataTransfer;
     var imageUrl = properties.default_url ? properties.default_url : properties.url;
-    ddd(properties.media_id);
     dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id, favorites:properties.favorites, media_id:properties.media_id, title: properties.title }));
     
     // Drag "feedback"
@@ -754,12 +753,20 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       if (data.photos.length > 0) {
         var myPhotosList = $("<ul>");
         contentContainer.append(myPhotosList);
-        $.each(data.photos, function(i, fbPhoto){
-          var li = jQuery("<li></li>");
-          var a  = jQuery("<img src='"+fbPhoto.picture+"' />");
-          li.append(a);
+        jQuery.each(data.photos, function(i, fbPhoto){
+          var li  = jQuery("<li></li>");
+          var img = jQuery("<img src='"+fbPhoto.picture+"' />");
+          var properties = {
+            url: fbPhoto.source,
+            thumb_url: fbPhoto.picture,
+            type: 'application/wd-image',
+            title: fbPhoto.name
+          };
+          img.data("properties", properties);
+          li.append(img);
           contentContainer.append(li);
-        }.pBind(this));
+          li.bind("dragstart", this.dragStart.pBind(this));          
+        }.pBind(this));        
       }
       else {
         contentContainer.append(jQuery("<span>").addClass('no_items').text('No photos'));
