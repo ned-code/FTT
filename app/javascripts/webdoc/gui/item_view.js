@@ -40,7 +40,8 @@ WebDoc.ItemView = $.klass({
     // item wrapper
     this.domNode = $("<div/>").addClass('item_wrap').css("zIndex", 500000 + this.item.positionZ());
 
-    this.itemLayerDomNode = $("<div>").addClass("layer item-layer").css("display", this._editable? "block" : "none");    
+    this.itemLayerDomNode = $("<div>").addClass("layer item-layer").css("display", this._editable? "block" : "none");
+    
     this.itemDomNode = this.createDomNode();
     
     this.domNode.append(this.itemDomNode);
@@ -102,7 +103,7 @@ WebDoc.ItemView = $.klass({
         itemDomNode = this.itemDomNode,
         css = this.item.data.data.css,
         wrapCss = { zIndex: 500000 + this.item.positionZ() },
-        itemCss = { overflow: 'hidden' },
+        itemCss = { },
         key, timer;
     
     // Split css object into css to be applied to item_wrap
@@ -130,22 +131,6 @@ WebDoc.ItemView = $.klass({
       }
     }
     
-    // TODO: feature detect css transition, and use javascript animation if not present
-    
-    //var canAnimate = position.top && position.left && position.width && position.height;
-    //this.domNode.stop();
-    
-    //if (withAnimate && canAnimate) {
-    //  this.domNode.animate(position, 'fast', function() {
-    //    if (this.domNode.hasClass("item-edited")) {
-    //      WebDoc.application.boardController._updateScreens(this.domNode);
-    //    }
-    //  }.pBind(this));
-    //}
-    //else {
-    //  this.domNode.css( position );
-    //}
-    
     // Animate using css transitions given by the animate class
     // TODO: The timer would be done better
     // by making use of the "transitionend" event
@@ -162,12 +147,16 @@ WebDoc.ItemView = $.klass({
     // apply item css if needed (drawing item view has no item dom node)
     if (itemDomNode) {
       this._injectFontFace();
+      
+      ddd('[_initItemCss] itemDomNode:', this, itemDomNode);
+      
       itemDomNode.attr( 'style', this.item.getStyleString()).css( itemCss );
     }
   },
   
   createDomNode: function() {
     var itemNode;
+    
     if (WebDoc.application.disableHtml) {
       itemNode = $('<div/>');
       itemNode.css(this.item.data.data.css);

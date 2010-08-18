@@ -1,8 +1,8 @@
-/**
-* @author zeno
-*/
+// Stephen - copied from text_tool
 
-//= require "tool"
+
+WebDoc.TEXTBOX_WRAP_CLASS = "textbox_wrap";
+WebDoc.NEW_TEXTBOX_CONTENT = '<div class="item-placeholder"><div class="item-icon"></div>Double-click to start writing</div>';
 
 WebDoc.TextboxTool = $.klass(WebDoc.Tool, {
   initialize: function($super, selector, boardClass) {

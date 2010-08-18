@@ -665,7 +665,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
     
     this.save();
-    this.fireObjectChanged({ modifedAttribute: 'css' });
+    this.fireObjectChanged(this, { modifedAttribute: 'css' });
     WebDoc.application.inspectorController.refresh();
   },
 

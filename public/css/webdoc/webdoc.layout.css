@@ -14,9 +14,16 @@
 	border: 1px solid rgb(180,180,180);
 }
 
+/* .item */
+
+.item {
+	overflow: hidden;
+}
+
 /* .item extensions */
 
 .textbox_item {
+	overflow: visible;
 }
 
 .textbox_item .shape{
@@ -29,12 +36,12 @@
 
 .textbox_item .text {
   position:absolute;
-  width:50%;
-  height:50%;
-  left:25%;
-  top:25%;
-  overflow:hidden;
-  padding:5px;
+  width:60%;
+  height:60%;
+  left:20%;
+  top:20%;
+  overflow: hidden;
+  padding: 0;
 }
 
 .textbox_item .shape svg {
@@ -282,18 +289,6 @@
     border-color: hsla(208, 8%, 33%, 0.5);
     border-style: dotted;
 }
-.edit_mode .item_wrap {
-
-}
-.edit_mode .item_selected {
-  border-width: 3px;
-  margin-top: -3px;
-  margin-left: -3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-}
-
 
 .load_item {
   overflow:hidden;

@@ -24,7 +24,7 @@ WebDoc.ImageView = $.klass(WebDoc.ItemView, {
   
   
   initialize: function($super, item, pageView, afterItem){
-    $super(item, pageView, afterItem);   
+    $super(item, pageView, afterItem);
   },
 
   inspectorGroupName: function() {

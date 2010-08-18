@@ -1,29 +1,41 @@
 /**
  * @author julien, steven, matthieu
  */
+
 WebDoc.TEXTBOX_INSPECTOR_GROUP = "TextboxInspectorGroup";
 
 WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   
+  // Classes applied to the item in initItemClass
+  ITEMCLASSES: "textbox_item item layer",
+  
+  // Data to be ignored
+  IGNORE: {
+    "class": true,
+    "wrapClass": true,
+    "innerHTMLPlaceholder": true,
+    "tag": true,
+    "css": true,
+    "preference": true,
+    "properties": true,
+    "preserve_aspect_ratio": true,
+    "href": true,
+    "placeholder": true
+  },
+  
   initialize: function($super, item, pageView, afterItem) {
     var placeholderContent = item.getInnerHtmlPlaceholder() || WebDoc.NEW_TEXTBOX_CONTENT;
-    var that = this
     var shapeId = Math.round(Math.random()*2);
     
     this.placeholderNode = jQuery(placeholderContent);
     
-    this.svgNode = jQuery('<div/>');
-    this.editNode = jQuery('<textarea/>', {
-    	"class": "text"
-    });
-    this.viewNode = jQuery('<div/>', {
-    	"class": "text"
-    });
-    this.txtDummy = jQuery('<div/>', {"style":"display:none"});
+    this.editNode = jQuery('<textarea/>', { "class": "text" });
+    this.viewNode = jQuery('<div/>', { "class": "text" });
+    //this.txtDummy = jQuery('<div/>', { css: { display: 'none'} });
     
     $super(item, pageView, afterItem);
     
-    this.shape = new this.Shape(this.domNode);
+    this.shape = new this.Shape( this.itemDomNode );
     if(this.item.getShape()){
       this.shape.id = this.item.getShape().id;
       this.shape.color = this.item.getShape().color;
@@ -33,37 +45,47 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
       this.shape.id = shapeId;
     }
     
-    this.editNode.val(this.item.getText());
+    this.editNode.html( this.item.getText() );
     
-    this.domNode
-      .append(this.editNode)
-      //.append(this.txtDummy)
-      .addClass('textbox_item')
-      .bind("resize", function(){that.shape.refresh()});
-              
+    // This should be done with model hooks
+    this.itemDomNode
+    .bind("resize", function(){that.shape.refresh()});
+    
     this.innerHtmlChanged();
-    that.setEditable();
+    this.setEditable();
     this.shape.drawShape(this.shape.id);
   },
-  
+
   toggleMode: function(){
-    var that = this;
-        
+    var that = this,
+        text;
+    
     if(!WebDoc.application.boardController.isInteractionMode()){
+      // Parse the text for line breaks, and replace with <br/>
+      
+      text = this.editNode.val().replace( /\n/g, '<br/>' );
+      
       this.viewNode
-        .html(this.editNode.val())
+      .html( text )
         //.height(this.editNode.height())
         //.width(this.editNode.width())
-        .appendTo(this.domNode);
+      .appendTo(this.itemDomNode);
+      
       this.editNode.remove();
-    }else{
-      this.viewNode.remove();
+    }
+    else {
+      // Parse the text for <br/>s, replace with line breaks
+      
+      text = this.viewNode.html().replace( /<br\/>/g, '\n' );
+      
       this.editNode
-        .bind("keyup", function(){
-          that.item.setText(jQuery(this).val());
-          //that.resizeTextArea();
-        })
-        .appendTo(this.domNode);
+      .bind("keypress", function(){
+        that.item.setText( jQuery(this).val() );
+        //that.resizeTextArea();
+      })
+      .appendTo(this.itemDomNode);
+    	
+    	this.viewNode.remove();
     }
   },
   
@@ -154,9 +176,34 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     
   },
   
+  // Gotcha! createDomNode creates the itemDomNode
   createDomNode: function($super) {
-    var result = $super();
-    return result;
+    var itemNode = jQuery('<div/>');
+		
+    for (var key in this.item.data.data) {
+      if ( this.IGNORE[ key ] ) { continue; }
+      itemNode.attr(key, this.item.data.data[key]);
+    }
+    
+    itemNode
+    .addClass("textbox_item item layer")
+    .append(this.editNode);
+    
+    return itemNode;
+  },
+  
+  domNodeChanged: function() {
+    if (!WebDoc.application.disableHtml) {
+      this.unSelect();
+      
+      this.itemDomNode.replace( this.createDomNode() );
+      
+      if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
+        this.innerHtmlChanged();
+      }
+      
+      //this.select();
+    }
   },
   
   inspectorId: function() {
@@ -178,7 +225,6 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   edit: function($super) { //called if we clicked on an already selected textbox
     $super();        
     this.placeholderNode.remove();
-    WebDoc.application.textboxTool.enterEditMode(this);
   },
   
   setEditable: function($super) { // called when the interaction mode is changed
@@ -187,12 +233,12 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   },
   
   isEditing: function() {
+  	// Arrgh. Dont use classes as javascript flags!
     return this.domNode.closest("." + WebDoc.TEXTBOX_WRAP_CLASS).length > 0;
   },
   
   stopEditing: function($super) {
-    $super();    
-    //WebDoc.application.textTool.exitEditMode();
+    $super();
     this._initItemCss(false);
   },
   
