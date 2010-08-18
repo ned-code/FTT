@@ -10,9 +10,21 @@
 
 /* .thumb extensions */
 
+.color_thumb {
+	padding-top: 0;
+	width: 18px;
+	height: 18px;
+}
+
+.color_thumb span {
+	font-size: 32px;
+	line-height: 0;
+}
+
 .search_thumb {
   -webkit-background-size: cover;
      -moz-background-size: cover;
        -o-background-size: cover;
           background-size: cover;
 }
+

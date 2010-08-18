@@ -11,6 +11,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     
     jQuery(selector)
     .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
+    .delegate("a[href=#property]", 'click', jQuery.proxy( this, 'clickProperty' ))
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
     .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ))
     .delegate("a[href=#remove_background]", 'click', jQuery.proxy( this, 'removeBackground' ))
@@ -180,16 +181,44 @@ WebDoc.PropertiesInspectorController = $.klass({
     }
   },
   
+  clickProperty: function(e){
+    var link = jQuery( e.currentTarget ),
+    		property = link.attr('data-property'),
+    		item, cssObj, l;
+    
+    ddd('[clickProperty] property:', property, 'link:', e.currentTarget);
+    
+    if ( typeof property === 'undefined' ) { return; }
+    
+    e.preventDefault();
+    
+    item = WebDoc.application.boardController.selection()[0].item;
+    cssObj = {};
+    property = property.split(' ');
+    l = property.length;
+    
+    // Loop over properties listed in data-property, getting
+    // their css values from the style of this link
+    while(l--){
+    	cssObj[ property[l] ] = link.css( property[l] );
+    }
+    
+    item.changeCss( cssObj );
+    this.refresh();
+  },
+  
   changeProperty: function(e){
     var self = this,
-        field = jQuery(e.target);
+        field = jQuery(e.target),
+        property = field.attr('data-property');
+    
+    if ( typeof property === 'undefined' ) { return; }
     
     ddd('[propertiesInspector] changeProperty ', e.target);
     
     field.validate({
       pass: function( value ){ 
         var item = WebDoc.application.boardController.selection()[0].item,
-            property = field.attr('data-property'),
             cssObj;
         
         if ( typeof property === 'undefined' ) { return; }

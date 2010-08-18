@@ -45,6 +45,7 @@
   background: transparent;
   
   /* Inherit styles, because they are set on the parent */
+  color: inherit;
   font-size: inherit;
   font-family: inherit;
   font-style: inherit;

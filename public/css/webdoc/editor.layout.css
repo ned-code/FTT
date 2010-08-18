@@ -333,12 +333,6 @@ body.full_view {
 .message_index .user_thumb {
   position: absolute;
   top: 0; left: 0;
-  /* This is the default size */
-  /* 
-  background-size: 32px 32px;
-  padding-top: 32px;
-  width: 32px;
-  */
 }
 
 .thumbs_index li {
