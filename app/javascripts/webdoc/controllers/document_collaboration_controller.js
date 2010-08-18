@@ -109,7 +109,7 @@ WebDoc.DocumentCollaborationController = $.klass({
       friendNode = jQuery('<li/>')
         .text(friend.username)
         .attr({
-          class: 'choose_friend'
+          'class': 'choose_friend'
         })
         .data('uuid', friend.uuid);
       friendNode.append('<input type="hidden" value=0 name="friend['+friend.uuid+']"/>');
