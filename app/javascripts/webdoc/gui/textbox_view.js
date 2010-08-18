@@ -62,7 +62,6 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     
     if(!WebDoc.application.boardController.isInteractionMode()){
       // Parse the text for line breaks, and replace with <br/>
-      
       text = this.editNode.val().replace( /\n/g, '<br/>' );
       
       this.viewNode
@@ -75,7 +74,6 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     }
     else {
       // Parse the text for <br/>s, replace with line breaks
-      
       text = this.viewNode.html().replace( /<br\/>/g, '\n' );
       
       this.editNode

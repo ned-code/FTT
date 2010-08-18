@@ -362,19 +362,18 @@ body.full_view {
 	margin-bottom: 0.3333em;
 }
 
-.edit_dropdown_index>li {
-
+/*.edit_dropdown_index>li {
 	white-space: nowrap;
-}
+}*/
 .edit_dropdown_index>li a {
-margin-left: 10px;
-margin-right: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
 	padding:0;
 	color:#efefef;
 	background-color: rgba(0,0,0,0);
 }
 .edit_dropdown_index>li:hover {
-	white-space: nowrap;
+/*white-space: nowrap;*/
 	background-color: grey;
 }
 

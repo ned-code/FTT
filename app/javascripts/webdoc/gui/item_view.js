@@ -131,6 +131,8 @@ WebDoc.ItemView = $.klass({
       }
     }
     
+    ddd('[_initItemCss] itemCss:', itemCss, 'wrapCss:', wrapCss);
+    
     // Animate using css transitions given by the animate class
     // TODO: The timer would be done better
     // by making use of the "transitionend" event
@@ -148,7 +150,7 @@ WebDoc.ItemView = $.klass({
     if (itemDomNode) {
       this._injectFontFace();
       
-      ddd('[_initItemCss] itemDomNode:', this, itemDomNode);
+      ddd('[_initItemCss] itemDomNode:', itemDomNode);
       
       itemDomNode.attr( 'style', this.item.getStyleString()).css( itemCss );
     }
