@@ -97,7 +97,7 @@ WebDoc.ImagePaletteController = $.klass({
     });
     
     // image properties
-    this.propertiesController = new WebDoc.PropertiesInspectorController('#image_properties', false);
+    //this.propertiesController = new WebDoc.PropertiesInspectorController('#image_properties', false);
   },
   
   inspectorTitle: function() {
@@ -105,7 +105,10 @@ WebDoc.ImagePaletteController = $.klass({
   },
   
   refresh: function() {
-    this.propertiesController.refresh();
+    // Quick hack
+    WebDoc.application.inspectorController.propertiesController.refresh();
+    //this.propertiesController.refresh();
+    
     if (WebDoc.application.boardController.selection().length) {      
       var selectedItem = WebDoc.application.boardController.selection()[0];
       if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {

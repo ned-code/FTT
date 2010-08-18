@@ -4,10 +4,11 @@
 
 WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector, showBgColors ) {
-    ddd('properties insepctor initialize');
+    ddd('[Properties Inspector Controller] initialize on', selector);
     var domNode = $(selector);
     this.domNode = domNode;
     domNode.show();
+    
     jQuery(selector)
     .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
@@ -16,31 +17,29 @@ WebDoc.PropertiesInspectorController = $.klass({
     .delegate("a[href=#remove_font]", 'click', jQuery.proxy( this, 'removeFont' ))
     .delegate("a[href=#remove_border]", 'click', jQuery.proxy( this, 'removeBorder' ));
     
-    this.fields = {
-      top:              jQuery(selector + " #property_top"),
-      //right:            jQuery(selector + " #property_right"),
-      //bottom:           jQuery(selector + " #property_bottom"),
-      left:             jQuery(selector + " #property_left"),
-      width:            jQuery(selector + " #property_width"),
-      height:           jQuery(selector + " #property_height"),
-      rotation:         jQuery(selector + " #property_rotation"),
+    this.fieldSelectors = {
+      top:              "#property_top",
+      left:             "#property_left",
+      width:            "#property_width",
+      height:           "#property_height",
+      rotation:         "#property_rotation",
       
-      color:            jQuery(selector + " #property_color"),
-      backgroundColor:  jQuery(selector + " #property_background_color"),
-      padding:          jQuery(selector + " #property_padding"),
-      borderRadius:     jQuery(selector + " #property_border_radius"),
-      overflow:         jQuery(selector + " #property_overflow_hidden, " + selector +" #property_overflow_auto, " + selector +" #property_overflow_visible"),
-      opacity:          jQuery(selector + " #property_opacity, " + selector +" #property_opacity_readout"),
+      color:            "#property_color",
+      backgroundColor:  "#property_background_color",
+      padding:          "#property_padding",
+      borderRadius:     "#property_border_radius",
+      overflow:         "#property_overflow_hidden, #property_overflow_auto, #property_overflow_visible",
+      opacity:          "#property_opacity, #property_opacity_readout",
     
-    	fontSize:					jQuery(selector + " #property_font_size"),
-    	fontWeight:				jQuery(selector + " #property_font_weight"),
-    	fontStyle:				jQuery(selector + " #property_font_style"),
-    	fontFamily:				jQuery(selector + " #property_font_family"),
-    	textAlign:				jQuery(selector + " #property_text_align"),
-    	textDecoration:		jQuery(selector + " #property_text_decoration"),
-    	textShadow:				jQuery(selector + " #property_text_shadow"),
-    	letterSpacing:		jQuery(selector + " #property_letter_spacing"),
-    	wordSpacing:			jQuery(selector + " #property_word_spacing")
+    	fontSize:					"#property_font_size",
+    	fontWeight:				"#property_font_weight",
+    	fontStyle:				"#property_font_style",
+    	fontFamily:				"#property_font_family",
+    	textAlign:				"#property_text_align",
+    	textDecoration:		"#property_text_decoration",
+    	textShadow:				"#property_text_shadow",
+    	letterSpacing:		"#property_letter_spacing",
+    	wordSpacing:			"#property_word_spacing"
     };
   },
   
@@ -123,7 +122,8 @@ WebDoc.PropertiesInspectorController = $.klass({
   },
   
   refresh: function() {
-    var selectedItem = WebDoc.application.boardController.selection()[0];
+    var selectedItem = WebDoc.application.boardController.selection()[0],
+    		css, key, field, value;
     
     if ( selectedItem ) {
       if(selectedItem.item.hasBorder()){
@@ -148,12 +148,10 @@ WebDoc.PropertiesInspectorController = $.klass({
         $("a[href=#remove_font]").hide();
       }
       
-      var css = selectedItem.css(),
-          fields = this.fields,
-          key, field, value;
+      css = selectedItem.css();
       
-      for ( key in fields ) {
-        field = fields[key];
+      for ( key in this.fieldSelectors ) {
+        field = jQuery( this.fieldSelectors[key] );
         
         // If this field has a property translator then it
         // processes the CSS and is responsible for updating the field...
@@ -164,7 +162,7 @@ WebDoc.PropertiesInspectorController = $.klass({
         else if ( css[key] ) {
           field.val( css[key] );
         }
-        // Don't know what this is for - who added this?
+        // Don't know what this is for?
         else if(key === 'backgroundColor'){
            field.val( selectedItem.item.getStylePropertyByScopeAndPropertyName('background', 'background-color'));
         }

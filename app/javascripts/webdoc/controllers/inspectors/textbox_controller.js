@@ -3,7 +3,9 @@ WebDoc.TextboxController = $.klass({
     var container = jQuery( selector );
     this.domNode = container.children();
     container.remove();
-    this.propertiesController = new WebDoc.PropertiesInspectorController('#textbox_properties', false);
+    
+    // Quick hack
+    //this.propertiesController = new WebDoc.PropertiesInspectorController('#textbox_properties', false);
   },
   
   inspectorTitle: function() {
@@ -11,7 +13,10 @@ WebDoc.TextboxController = $.klass({
   },
   
   refresh: function() {
-    this.propertiesController.refresh();
+    // Quick hack
+    WebDoc.application.inspectorController.propertiesController.refresh();
+    //this.propertiesController.refresh();
+    
     var selectedItem = WebDoc.application.boardController.selection()[0];
   }
 });
