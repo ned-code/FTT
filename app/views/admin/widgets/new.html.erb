@@ -1,0 +1,20 @@
+<h1><%= t('.title') %></h1>
+
+<%= form_for @widget, :url => admin_widgets_path, :html => { :enctype => 'multipart/form-data' } do |f| %>
+  <div>
+    <%= f.file_field :attachment %>
+  </div>
+  <div>
+    <%= f.label :system_name %>
+    <%= f.text_field :system_name %>
+  </div>
+  <div>
+    <%= f.check_box :favorites %>
+    <%= f.label :favorites %>
+  </div>
+  <div>
+    <%= f.submit t('upload') %>
+  </div>
+<% end %>
+
+<%= link_to t('back'), admin_widgets_path %>

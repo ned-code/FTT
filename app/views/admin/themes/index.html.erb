@@ -13,4 +13,8 @@
   <% end %>
 </ul>
 
-<div><%= link_to t('.add'), new_admin_theme_path %></div>
+<div>
+  <%= link_to t('.add'), new_admin_theme_path %>
+  |
+  <%= link_to t('admin.home.index.title'), admin_path %>
+</div>
