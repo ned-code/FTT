@@ -38,7 +38,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.cleanFriendsList();
     // document access can be changed only when we are online. So we can do ajax request here
     $.ajax({
-      url: "/documents/" + document.uuid() + "/roles",
+      url: this.url(),
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
@@ -65,13 +65,14 @@ WebDoc.DocumentCollaborationController = $.klass({
   
   deleteAccess: function(e) {
     e.preventDefault();
-    var userId = $(e.target).parent().attr("id");
-    ddd("delete editor role for: "+userId);
+    var node = jQuery(e.target).parent();
+    var userId = node.data('uuid');
+    var role = node.data('role');
     $.ajax({
-      url: "/documents/" + this.document.uuid() + "/roles",
+      url: this.url(),
       type: 'DELETE',
       dataType: 'json',    
-      data: this.getDeleteAccess(userId),             
+      data: this.getDeleteAccess(userId, role),             
       success: function(data, textStatus) {
         $(e.target).parent().remove();
       }.pBind(this),
@@ -83,7 +84,6 @@ WebDoc.DocumentCollaborationController = $.klass({
   },  
   
   loadFriendList: function(){
-    ddd('loadFriendList');
     if(!jQuery('#invite_co_authors_friends_list ul').length){
       $.ajax({
         url: "/friendships/",
@@ -101,7 +101,6 @@ WebDoc.DocumentCollaborationController = $.klass({
   },
   
   buildFriendsList: function(data){
-    ddd('buildFriendsList', data);
     var length = data['friends'].length;
     var friendsList = jQuery('<ul/>');
     var friendNode, friend;
@@ -159,7 +158,11 @@ WebDoc.DocumentCollaborationController = $.klass({
   createAccessItem: function(userInfos) {
     if (userInfos.role === "editor" || userInfos.role === "contributor" ) {
       ddd(userInfos.id +", "+userInfos.role);
-      var accessEntry = $("<li>").attr({ id: userInfos.id}).addClass("user_access").html(userInfos.username + "(" + userInfos.email + ")" + "|" + userInfos.role);
+      var accessEntry = $("<li>")
+        .data('uuid', userInfos.uuid)
+        .data('role', userInfos.role)
+        .addClass("user_access")
+        .html(userInfos.username + "(" + userInfos.email + ")" + "|" + userInfos.role);
     
       var deleteItem = $('<a/>', {'class': "delete", href: "#delete", title: "delete editor"}).html("Delete");
       if(userInfos.creator) { deleteItem.hide(); }  
@@ -198,7 +201,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     var jSONData = { accesses : access_content };
     
     $.ajax({
-      url: '/documents/' + this.document.uuid() + '/roles',
+      url: this.url(),
       type: 'POST',
       dataType: 'json',
       data: jSONData,    
@@ -213,8 +216,8 @@ WebDoc.DocumentCollaborationController = $.klass({
     });
   },
   
-  getDeleteAccess: function(userId) {
-    var access_content = { role: "editor", user_id: userId };
+  getDeleteAccess: function(userId, role) {
+    var access_content = { role: role, user_id: userId };
     return { accesses : $.toJSON(access_content) }
   },
   
@@ -235,7 +238,7 @@ WebDoc.DocumentCollaborationController = $.klass({
   
   createRightsToRecipients: function(jSONData) {
     $.ajax({
-      url: '/documents/' + this.document.uuid() + '/roles',
+      url: this.url(),
       type: 'POST',
       dataType: 'json',
       data: jSONData,    
@@ -276,5 +279,9 @@ WebDoc.DocumentCollaborationController = $.klass({
     else{
       friendNode.addClass('selected_friend');
     }
+  },
+  
+  url: function(){
+    return '/documents/' + this.document.uuid() + '/roles';
   }
 });
