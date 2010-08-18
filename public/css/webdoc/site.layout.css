@@ -14,7 +14,9 @@ body {
 /* manage layers */
 
 .site_wrap { z-index: 1; }
-#flash 		 { z-index: 2; }
+.workspace_wrap {z-index:2;}
+#flash 		 { z-index: 4; }
+body>header { z-index:3;}
 
 /* The site header */
 body>header {

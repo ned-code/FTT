@@ -92,6 +92,7 @@ javascripts:
     - public/js/jquery.truncate.js
     - public/js/jquery.validator.js
     - public/js/jquery.flash.js
+    - public/js/jquery.cuteTime.min.js
     - public/js/jquery.scrollbars.js
     - public/js/jquery.cookie.js
     - public/js/klass.js    

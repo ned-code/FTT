@@ -1,13 +1,13 @@
 /* ---- */
 
 .card {
-    height: 110px;
+    height: 70px;
     background-repeat: no-repeat;
     background-position: 0 0;
-    -webkit-background-size:  128px 128px;
-    -moz-background-size:     128px 128px;
-    background-size:          128px 128px;
-    padding: 9px 9px 9px 136px;
+    -webkit-background-size:  100px 100px;
+    -moz-background-size:     100px 100px;
+    background-size:          100px 100px;
+    padding: 4px 9px 9px 110px;
     position: relative;
 }
 .card_name {
@@ -15,12 +15,21 @@
     line-height: 1.25;
     margin-bottom: 0.625em;
 }
+.card_link {
+	color:black;
+	font-weight: normal;
+	text-shadow:0px 1px 1px #6F7E83;
+}
+.card_link:hover,.card_link:focus {
+
+}
 .card_with_button .card_name {
     margin-right: 5.6em; /* Makes room for button on the right */
 }
 .card_bio {
     
 }
+time.ago {text-shadow:0px 1px 1px #6F7E83;}
 .card_actions {
     margin: 0;
     position: absolute;
@@ -30,9 +39,48 @@
 }
 .card_stats {
     position: absolute;
-    bottom: 8px;
-    left: 136px;
+    bottom: 0px;
+    left: 110px;
     font-weight: bold;
+}
+
+.card_stats > li {
+	margin-right:0.3333em;
+	padding-left:20px;
+	background: transparent url("../../images/ui/buttons_card_stats.jpg") no-repeat;
+	
+}
+
+.card_stats li.comments {
+	background-position: 0 0;
+}
+.card_stats li.views {
+	background-position: 0 -16px;
+}
+
+.card_stats li.follow {
+	background-position: 0 -32px;
+}
+.card .author_name {
+    font-size: 1em;
+    line-height: 1;
+    margin-bottom: 0.625em;
+}
+.card .document_thumb {
+    position: absolute;
+    top:0px;
+    left:0px;
+
+    height: 70px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    -webkit-background-size:  100px 70px;
+    -moz-background-size:     100px 70px;
+    background-size:          100px 70px;
+    width:100px;
+      box-shadow:inset 0 0 2px #000000;
+  -moz-box-shadow:inset 0 0 2px #000000;
+  -webkit-box-shadow:inset 0 0 2px #000000;
 }
 
 /* hcard microformat (for reference)
