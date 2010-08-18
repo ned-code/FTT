@@ -277,23 +277,33 @@ class Document < ActiveRecord::Base
   end
 
   def create_role_for_users(current_user, accesses = {})
-    accesses_parsed = JSON.parse(accesses);
-    role = accesses_parsed['role']
-    recipients = accesses_parsed['recipients']
-    message = accesses_parsed['message']
-    
-    recipients.each do |user_email|
-      user = User.find_by_email(user_email.strip)
-      if user 
-        if !user.has_role?(role, self)
-          #user.has_only_reader_role!(self)
-          user.has_role!(role, self)
-          Notifier.role_notification(current_user, role, user, self, message).deliver
-        end
-      else
-        add_unvalid_email_to_array(user_email)
-      end
+    if accesses[:role] == 'full'
+      role = Role::EDITOR
+    elsif accesses[:role] == 'limited'
+      role = Role::CONTRIBUTOR
     end
+    
+    friends_list = accesses[:users]
+    if friends_list.nil? || friends_list.empty?
+      return true
+    end
+    friends_list.each do |friend_uuid|
+      user = User.where(:uuid => friend_uuid).first
+      user.has_role!(role,self)
+    end
+    
+    # recipients.each do |user_email|
+    #       user = User.find_by_email(user_email.strip)
+    #       if user 
+    #         if !user.has_role?(role, self)
+    #           #user.has_only_reader_role!(self)
+    #           user.has_role!(role, self)
+    #           Notifier.role_notification(current_user, role, user, self, message).deliver
+    #         end
+    #       else
+    #         add_unvalid_email_to_array(user_email)
+    #       end
+    #     end
   end
   
   # # No more used in current GUI

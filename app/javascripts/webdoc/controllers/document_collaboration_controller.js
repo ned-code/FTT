@@ -41,8 +41,8 @@ WebDoc.DocumentCollaborationController = $.klass({
       success: function(data, textStatus) {
         ddd("access", data);
         this.documentAccessDialog.show();
-        this.chooseFriendsForm.bind( 'submit', this.sendInvitations.pBind(this) );
-        this.byEmailForm.bind( 'submit', this.sendInvitations.pBind(this) );
+        this.chooseFriendsForm.bind( 'submit', this.sendInvitationsByFriends.pBind(this) );
+        this.byEmailForm.bind( 'submit', this.sendInvitationsByEmail.pBind(this) );
         this.domNode.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
         // this.documentAccessDialog.pop({
         //   attachTo: $( e.currentTarget ),
@@ -103,14 +103,20 @@ WebDoc.DocumentCollaborationController = $.klass({
     ddd('buildFriendsList', data);
     var length = data['friends'].length;
     var friendsList = jQuery('<ul/>');
-    var friend;
+    var friendNode, friend;
     for(var i=0;i<data['friends'].length;i++){
-      ddd(data['friends'][i]);
-      friend = jQuery('<li/>').text(data['friends'][i].user.username);
-      friend.append('<input type="hidden" value=0 name="friend['+data['friends'][i].user.uuid+']"/>');
-      friendsList.append(friend);
+      friend = data['friends'][i].user;
+      friendNode = jQuery('<li/>')
+        .text(friend.username)
+        .attr({
+          class: 'choose_friend'
+        })
+        .data('uuid', friend.uuid);
+      friendNode.append('<input type="hidden" value=0 name="friend['+friend.uuid+']"/>');
+      friendsList.append(friendNode);
     }
     this.friendsListNode.append(friendsList);
+    jQuery('.choose_friend').bind('click', this.selectFriend.pBind(this));
   },
   
   loadAccess: function(json) {
@@ -150,9 +156,9 @@ WebDoc.DocumentCollaborationController = $.klass({
   },
   
   createAccessItem: function(userInfos) {
-    if (userInfos.role === "editor" ) {
+    if (userInfos.role === "editor" || userInfos.role === "contributor" ) {
       ddd(userInfos.id +", "+userInfos.role);
-      var accessEntry = $("<li>").attr({ id: userInfos.id}).addClass("user_access").html(userInfos.username + "(" + userInfos.email + ")");
+      var accessEntry = $("<li>").attr({ id: userInfos.id}).addClass("user_access").html(userInfos.username + "(" + userInfos.email + ")" + "|" + userInfos.role);
     
       var deleteItem = $('<a/>', {'class': "delete", href: "#delete", title: "delete editor"}).html("Delete");
       if(userInfos.creator) { deleteItem.hide(); }  
@@ -161,13 +167,49 @@ WebDoc.DocumentCollaborationController = $.klass({
     }
   },
 
-  sendInvitations: function(e) {
-    ddd('Send invitations');
-    
+  sendInvitationsByEmail: function(e) {
+    ddd('Send sendInvitationsByEmail');
+    e.preventDefault();
     var recipients = $("#wb-invitation-add-editors").val();
     var message = $("#wb-invitation-add-editors-message").val();
+    
+    var role_type = jQuery('input[name="role_type_email"]:checked').val()
+    
     this.createRightsToRecipients( this.getInvitationAccess(recipients, message) );
+  },
+  
+  sendInvitationsByFriends: function(e) {
+    ddd('Send sendInvitationsByFriends');
     e.preventDefault();
+    var role_type = jQuery('input[name="role_type_friends"]:checked').val();
+    var friends = jQuery('.choose_friend.selected_friend');    
+    var friendsList = [];
+    var length = friends.length;
+    for(var i=0; i<length;i++){
+      friendsList.push(jQuery(friends[i]).data('uuid'));
+    }
+    this.createFriendsRights(friendsList, role_type)
+  },
+  
+  createFriendsRights: function(friendsList, role_type){
+    var access_content = { role : role_type,
+                           users : friendsList
+                         };
+    var jSONData = { accesses : access_content };
+    
+    $.ajax({
+      url: '/documents/' + this.document.uuid() + '/roles',
+      type: 'POST',
+      dataType: 'json',
+      data: jSONData,    
+      success: function(data) {
+        ddd('createFriendsRights success');
+        this.loadAccess(data);
+      }.pBind(this),    
+      error: function(MLHttpRequest, textStatus, errorThrown) {
+        ddd("error", textStatus);
+      }
+    });
   },
   
   getDeleteAccess: function(userId) {
@@ -219,5 +261,15 @@ WebDoc.DocumentCollaborationController = $.klass({
     ddd('toggleForm');
     this.byEmailForm.toggle();
     this.chooseFriendsForm.toggle();
+  },
+  
+  selectFriend: function(e){
+    var friendNode = jQuery(e.target);
+    if(friendNode.hasClass('selected_friend')){
+      friendNode.removeClass('selected_friend');
+    }
+    else{
+      friendNode.addClass('selected_friend');
+    }
   }
 });
