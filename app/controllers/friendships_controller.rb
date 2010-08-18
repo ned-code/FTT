@@ -5,7 +5,7 @@ class FriendshipsController < ApplicationController
     
     #TODO: pagination
     render :json => { 
-      :friends => @friends,
+      :friends => @friends.map{ |f| f.as_application_json },
       :pagination => {
         :per_page => "",
         :current_page => "",
