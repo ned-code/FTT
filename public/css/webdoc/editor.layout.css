@@ -218,25 +218,12 @@ body.full_view {
   overflow: auto; 
 
   right: -2%;
-  top: 0;
+  top: -2.6667em;
   margin-right: -288px;
   width: 288px;
   
   max-height: 1000%;
   min-height: 20%;
-}
-
-.full_view .sidebar {
-  max-height: 100%;
-  
-  right: 0;
-  top: 2.6667em;
-  bottom: 2.6667em;
-  background-color: white;
-}
-
-.full_view .sidebar.active {
-  margin-right: 0;
 }
 
 .tools_panel {
