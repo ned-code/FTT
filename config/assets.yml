@@ -40,6 +40,10 @@ stylesheets:
     - public/css/webdoc/webdoc.layout.css
     - public/css/webdoc/webdoc.typography.css
     
+    - public/css/webdoc/inspector.color.css
+    - public/css/webdoc/inspector.layout.css
+    - public/css/webdoc/inspector.typography.css
+    
     - public/css/webdoc/comment.layout.css
     
     - public/css/webdoc/item.css

@@ -12,7 +12,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     this.domNode = $("#item_inspector");    
     this.visible = true;
     this.textInspector = new WebDoc.TextPaletteController( "#text-inspector" );
-
+    
     this._inspectorNodes = {};
     this.initPaneWithController('empty', new WebDoc.InspectorEmptyController());
     this.initPaneWithController('DrawingInspectorGroup', new WebDoc.DrawingInspectorController());    
@@ -37,25 +37,18 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
   },
   
   _updateInspector: function(inspectorId) {
-    var inspectorNode = null;
+    var inspector;
     
-    ddd("[InspectorController] updatePalette", inspectorId, inspectorNode );
+    ddd("[InspectorController] updatePalette", inspectorId );
     if (this._inspectorNodes[inspectorId] === undefined) {
       inspectorId = 'empty';
     }
     if (inspectorId !== this.currentInspectorId) {
-      // Hide current inspector
-      if (this.currentInspectorId !== undefined) {
-        ddd("hide inspector", this.currentInspectorId);
-        this._inspectorNodes[this.currentInspectorId].domNode.hide();
-      }
-
       this.currentInspectorId = inspectorId;
+      inspector = this._inspectorNodes[inspectorId];
       
-      inspectorNode = this._inspectorNodes[this.currentInspectorId].domNode;
-      inspectorNode.show();
-      
-      this._inspectorNodes[this.currentInspectorId].refresh();
+      this.domNode.html( inspector.domNode );
+      inspector.refresh();
     }
   },
   
@@ -83,7 +76,9 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
 
 WebDoc.InspectorEmptyController = $.klass({
   initialize: function() {
-    this.domNode = jQuery("#empty-inspector").hide();
+    var container = jQuery("#empty-inspector");
+    this.domNode = container.children();
+  	container.remove();
   },
   
   refresh: function() {
@@ -93,7 +88,9 @@ WebDoc.InspectorEmptyController = $.klass({
 
 WebDoc.DrawingInspectorController = $.klass({
   initialize: function() {
-    this.domNode = jQuery("#draw-inspector").hide();
+    var container = jQuery("#draw-inspector");
+    this.domNode = container.children();
+    container.remove();
   },
   
   refresh: function() {

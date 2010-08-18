@@ -32,7 +32,7 @@ jQuery.extend(WebDoc.ServerManager, {
    */
   getRecords: function(recordClass, uuid, callBack, args) {
     if (uuid === 'null') {
-      WebDoc.application.notificationController.notify("try to get null docment", WebDoc.NotificationController.ERROR);
+      WebDoc.application.notificationController.notify("trying to get null document", WebDoc.NotificationController.ERROR);
     }
     // we can check the cache if we search a record by uuid. Otherwise we need to request the database.
     if (uuid) {

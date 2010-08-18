@@ -111,8 +111,10 @@ WebDoc.RightBarController = $.klass({
     ddd("[RightBarController] select inspector", inspectorType);
     if (this._currentInspectorType !== inspectorType) {
       var inspectorController = this.getInspector(inspectorType);
+      
       //this._changePanelContent(inspectorController);
       //this._changeButtonState(inspectorController);
+      
       this._currentInspectorType = inspectorType;
       if(jQuery.inArray( inspectorType, this.bottomPanelsArray ) == -1){
         this._hideRightPanels();

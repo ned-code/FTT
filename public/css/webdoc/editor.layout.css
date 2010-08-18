@@ -1,11 +1,21 @@
 /* editor.layout.css */
 
+body {
+	-webkit-transition: padding 0.3s ease-out;
+	   -moz-transition: padding 0.3s ease-out;
+	        transition: padding 0.3s ease-out;
+}
+
 body.full_view {
   overflow: hidden;
+  /* Compensate for header + top toolbar */ 
+  padding-top: 5.6667em;
+  /* Compensate for bottom toolbar */
+  padding-bottom: 3em;
 }
 
 .transition_support body.transition {
-  overflow: auto;
+  overflow: hidden;
 }
 
 /* .wrap extensions ------------------------- */
@@ -14,9 +24,9 @@ body.full_view {
   /* Transition to full view. Transitions can't go from % to length
      values. Boo, rubbish. We have to use a combination of height
      and min-height to get both types of value to cooperate. */
-  -webkit-transition: width 0.3s linear, max-width 0.3s linear, height 0.3s linear, min-height 0.3s linear, max-height 0.3s linear, margin 0.3s linear, padding 0.3s linear, opacity 0.3s linear;
-  -moz-transition:    width 0.3s linear, max-width 0.3s linear, height 0.3s linear, min-height 0.3s linear, max-height 0.3s linear, margin 0.3s linear, padding 0.3s linear, opacity 0.3s linear;
-  transition:         width 0.3s linear, max-width 0.3s linear, height 0.3s linear, min-height 0.3s linear, max-height 0.3s linear, margin 0.3s linear, padding 0.3s linear, opacity 0.3s linear;
+  -webkit-transition: width 0.3s ease-out, max-width 0.3s ease-out, height 0.3s ease-out, min-height 0.3s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, padding 0.3s ease-out, opacity 0.3s ease-out;
+  -moz-transition:    width 0.3s ease-out, max-width 0.3s ease-out, height 0.3s ease-out, min-height 0.3s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, padding 0.3s ease-out, opacity 0.3s ease-out;
+  transition:         width 0.3s ease-out, max-width 0.3s ease-out, height 0.3s ease-out, min-height 0.3s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, padding 0.3s ease-out, opacity 0.3s ease-out;
 }
 
 .full_view .wrap {
@@ -33,7 +43,8 @@ body.full_view {
 
 .workspace_wrap {
   height: 50%;
-  min-height: 466px;
+  /* must equal editor_wrap min-height */
+  min-height: 400px;
   /* Makes room for Sharing panel */
   margin-bottom: 96px;
 }
@@ -48,7 +59,7 @@ body.full_view {
 .title_wrap {
   height: 3em;
   margin-top: 1em;
-  margin-bottom: 1em;
+  margin-bottom: 2.6667em;
   opacity: 1;
 }
 
@@ -62,7 +73,8 @@ body.full_view {
 .editor_wrap {
   width: 98%;
   height: 100%;
-  min-height: 466px;
+  /* must equal workspace_wrap */
+  min-height: 400px;
   margin-left: 0;
   margin-right: 0;
 }
@@ -94,15 +106,15 @@ body.full_view {
 /* .panel extensions ------------------------- */ 
 
 .panel {
-  -webkit-transition: opacity 0.8s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, right 0.3s linear, bottom 0.3s linear;
-  -moz-transition:    opacity 0.8s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, right 0.3s linear, bottom 0.3s linear;
-  transition:         opacity 0.8s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, right 0.3s linear, bottom 0.3s linear;
+  -webkit-transition: opacity 0.8s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, right 0.3s ease-out, bottom 0.3s ease-out;
+  -moz-transition:    opacity 0.8s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, right 0.3s ease-out, bottom 0.3s ease-out;
+  transition:         opacity 0.8s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, right 0.3s ease-out, bottom 0.3s ease-out;
 }
                                               
 .full_view .panel.active {
-  -webkit-transition: opacity 0.12s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, bottom 0.3s linear;
-  -moz-transition:    opacity 0.12s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, bottom 0.3s linear;
-  transition:         opacity 0.12s linear, max-height 0.3s linear, margin 0.3s linear, top 0.3s linear, bottom 0.3s linear;
+  -webkit-transition: opacity 0.12s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, bottom 0.3s ease-out;
+  -moz-transition:    opacity 0.12s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, bottom 0.3s ease-out;
+  transition:         opacity 0.12s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, bottom 0.3s ease-out;
 }
 
 /* Manage layering of panels. Active panels 
@@ -206,7 +218,7 @@ body.full_view {
   overflow: auto; 
 
   right: -2%;
-  top: 0;
+  top: -2.6667em;
   margin-right: -288px;
   width: 288px;
   
@@ -214,22 +226,9 @@ body.full_view {
   min-height: 20%;
 }
 
-.full_view .sidebar {
-  max-height: 100%;
-  
-  right: 0;
-  top: 2.6667em;
-  bottom: 2.6667em;
-  background-color: white;
-}
-
-.full_view .sidebar.active {
-  margin-right: 0;
-}
-
 .tools_panel {
   left: 0;
-  top: 0;
+  top: -2.6667em;
   width: 100%;
   height: 2.6667em;
   padding: 0.3333em;
@@ -237,7 +236,7 @@ body.full_view {
 
 .controls_panel {
   left: 0;
-  bottom: 0;
+  bottom: -2.6667em;
   width: 100%;
   height: 2.6667em;
   padding: 0.3333em;
@@ -253,8 +252,8 @@ body.full_view {
   width: 288px;
   margin-right: -288px;
   right: -2%;
-  top: 0;
-  bottom: 0;
+  top: -2.6667em;
+  bottom: -2.6667em;
 }
 
 .inspector_panel.active,
@@ -275,8 +274,8 @@ body.full_view {
 .full_view .apps_panel,
 .full_view .activity_panel {
   right: 0;
-  top: 2.6667em;
-  bottom: 2.6667em;
+  top: 0;
+  bottom: 0;
 }
 
 .full_view .inspector_panel.active,
@@ -291,7 +290,7 @@ body.full_view {
 
 .pages_panel {
   left: 0;
-  bottom: 2.6667em;
+  bottom: 0;
   width: 100%;
   
   /* header 32 + thumbs 120 + scrollbar 15 */
@@ -357,10 +356,6 @@ body.full_view {
 	left: 0.3333em;
 }
 
-.edit_index>li {
-	position: relative;
-}
-
 .edit_dropdown_index {
 	top: 2em;
 	margin-top: 0.3333em;
@@ -372,14 +367,7 @@ body.full_view {
 	white-space: nowrap;
 }
 
-.edit_dropdown_index {
-	height: 0;
-	-webkit-transition: height 0.08s linear;
-}
-
-.edit_dropdown_index.active {
-	height: 11.3333em;
-}
+.edit_dropdown_index.active {}
 
 .app_index {
 	position: absolute;
@@ -417,7 +405,7 @@ body.full_view {
 
 .author_dropdown_index {
 	height: 0;
-	-webkit-transition: height 0.08s linear;
+	-webkit-transition: height 0.08s ease-out;
 }
 
 .author_dropdown_index.active {
@@ -445,16 +433,38 @@ body.full_view {
 
 /* .button extensions ------------------------- */
 
-.panel_button {
-  width: 2em;
-  /* hide button text */
-  padding-top: 2em;
+.edit_mode .mode_button {
+	/* quick hack! */
+	background: blue;
 }
 
 .view_button {
   width: 2em;
   /* hide button text */
   padding-top: 2em;
+}
+
+/* Handle transition between normal and edit_mode for buttons
+   that get shown and hidden */ 
+
+.edit_index .dropdown_button {
+	display: none;
+	opacity: 0;
+  -webkit-transition: opacity 0.18s ease-in;
+  -moz-transition:    opacity 0.18s ease-in;
+  transition:         opacity 0.18s ease-in;
+}
+
+.edit_mode .edit_index .dropdown_button {
+	display: block;
+	opacity: 1;
+  -webkit-transition: opacity 0.06s ease-out;
+  -moz-transition:    opacity 0.06s ease-out;
+  transition:         opacity 0.06s ease-out;
+}
+
+.transition .edit_index .dropdown_button {
+	display: block;
 }
 
 
@@ -490,56 +500,87 @@ body.full_view {
 
 /* .number extensions */
 
-/* OLD STYLE */
-
-/*
-.pages_panel .inspector.active li .number {
-    opacity: 1;
-}
-
-.pages-info .number {
-    position: absolute;
-    top: -0.75em;
-    left: 50%;
-    margin-left: -0.75em;
-}
-
-.tag-list .number {
-  position: absolute;
-  left: 0.6667em;
-  top: 0.6667em;
-}
-
-.pages-info .number {
-    position: absolute;
-    top: -0.75em;
-    left: 50%;
-    margin-left: -0.75em;
-}
-
-.pages li .number,
-.pages li .loading-icon,
-.pages li .edit-icon {
-    text-align: center;
-    line-height: 1.5;
-    text-decoration: none;
-    position: absolute;
-    top: 0.6em;
-    width: 1.5em; height: 1.5em;
-    -webkit-border-radius:  0.75em;
-    -moz-border-radius:     0.75em;
-    border-radius:          0.75em;
-}
-.pages li .number,
-.pages li .loading-icon {
-    left: 0.6em;
-}
-*/
-
 .page_number {
 	color: white;
 	background: black;
 }
+
+/* Scrollbars */
+
+.x_scrollbar_container {
+  position: absolute;
+  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+}
+
+.scrollbar {
+  position: absolute;
+  width: 10px; height: 10px;
+  min-width: 10px; min-height: 10px;
+  
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
+  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+  
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(128,128,128,0.5);
+}
+
+y_scrollbar {
+  -webkit-transition: top 0.025s ease-out, width 0.1s ease-out;
+  -moz-transition:    top 0.025s ease-out, width 0.1s ease-out;
+  transition:         top 0.025s ease-out, width 0.1s ease-out;
+}
+x_scrollbar {
+  -webkit-transition: left 0.025s ease-out, width 0.1s ease-out;
+  -moz-transition:    left 0.025s ease-out, width 0.1s ease-out;
+  transition:         left 0.025s ease-out, width 0.1s ease-out;
+}
+
+
+.pages_panel .x_scrollbar_container {
+  left: 6px; right: 6px; top: 128px;
+  height: 10px;
+  z-index: 2;
+}
+
+/*#webdoc_x_scrollbar:hover,
+#webdoc_y_scrollbar:hover {
+  opacity: 1;
+  -webkit-transition: opacity 0.1s ease-out;
+  -moz-transition:    opacity 0.1s ease-out;
+  transition:         opacity 0.1s ease-out;
+}*/
+
+#webdoc_x_scrollbar,
+#webdoc_y_scrollbar {
+  position: fixed;
+  z-index: 2;
+  /*opacity: 0;
+  -webkit-transition: opacity 0.66s ease-out;
+  -moz-transition:    opacity 0.66s ease-out;
+  transition:         opacity 0.66s ease-out;
+  */
+}
+
+#webdoc_x_scrollbar {
+  bottom: 38px; left: 6px; right: 6px;
+  height: 10px;
+}
+
+#webdoc_y_scrollbar {
+  top: 44px; bottom: 38px; right: 6px;
+  width: 10px;
+}
+
+
+
 
 /* Drag and drop feedback */
 

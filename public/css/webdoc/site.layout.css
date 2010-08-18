@@ -11,6 +11,11 @@ body {
   position: relative;
 }
 
+/* manage layers */
+
+.site_wrap { z-index: 1; }
+#flash 		 { z-index: 2; }
+
 /* The site header */
 body>header {
   position: absolute;
@@ -34,16 +39,49 @@ body>header {
 
 /* .index extensions */
 
-.sitenav_index {
+.nav_index {
   position: absolute;
   top: 0;
   left: 180px;
+}
+
+.nav_index>li {
+  margin-right: 0.3333em;
 }
 
 .usernav_index {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.usernav_index>li {
+  margin-right: 0.6666em;
+}
+
+.usernav_index>li:last-child {
+  margin-left: 2em;
+  margin-right: 0;
+}
+
+.dropdown_index {
+	top: 2em;
+	opacity: 0;
+	-webkit-transition: opacity 0.18s ease-out, top 0.18s ease-out;
+	   -moz-transition: opacity 0.18s ease-out, top 0.18s ease-out;
+	        transition: opacity 0.18s ease-out, top 0.18s ease-out;
+}
+
+.dropdown_index.active {
+	top: 2.3333em;
+	opacity: 1;
+	-webkit-transition: opacity 0.06s ease-in, top 0.06s ease-in;
+	   -moz-transition: opacity 0.06s ease-in, top 0.06s ease-in;
+	        transition: opacity 0.06s ease-in, top 0.06s ease-in;
+}
+
+.user_index>li {
+	margin-bottom: 0.3333em;
 }
 
 /* .number */
@@ -59,4 +97,49 @@ body>header {
   font-weight: bold;
   line-height: 1.5;
   text-align: center;
+}
+
+
+/* flash messages */
+
+#flash {
+	position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  margin-left: -300px;
+  padding: 2em;
+  width: 600px;
+  
+  color: yellow;
+  background: rgba(220, 90, 10, 0.96);
+  
+	-webkit-border-radius: 0.8333em;
+	-moz-border-radius:    0.8333em;
+	border-radius:         0.8333em;
+	
+	opacity: 0;
+	
+	-webkit-transition: opacity 0.4s ease-in;
+	   -moz-transition: opacity 0.4s ease-in;
+	        transition: opacity 0.4s ease-in;
+}
+
+#flash.active {
+	opacity: 1;
+	
+	-webkit-transition: opacity 0.06s ease-in;
+	   -moz-transition: opacity 0.06s ease-in;
+	        transition: opacity 0.06s ease-in;
+}
+
+.flash_message {
+	border-bottom: 1px solid rgb(220,160,0);
+	padding-bottom: 0.3333em;
+	margin-bottom: 0.3333em;
+}
+.flash_message:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+	margin-bottom: 0;
 }

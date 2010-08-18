@@ -4,7 +4,10 @@
 
 WebDoc.IframeController = $.klass({
   initialize: function( ) {
-    this.domNode = $("#iframe-inspector");
+    var container = $("#iframe-inspector");
+    this.domNode = container.children();
+    container.remove();
+    
     this.domNode.find("#property-iframe-src").change(this.updateSrc);
     this.domNode.find("#set_page_size_to_iframe_size").click(this.setPageSizeToIframeize);
     this.propertiesController = new WebDoc.PropertiesInspectorController('#iframe_properties', false);

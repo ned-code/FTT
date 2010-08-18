@@ -1,0 +1,9 @@
+
+
+.inspector .content {
+    padding-top: 0.8em;
+}
+
+.inspector input[type] {
+	width: 80%;
+}

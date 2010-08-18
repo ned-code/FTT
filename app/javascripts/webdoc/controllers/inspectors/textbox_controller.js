@@ -1,6 +1,8 @@
 WebDoc.TextboxController = $.klass({
   initialize: function( selector ) {
-    this.domNode = jQuery( selector );
+    var container = jQuery( selector );
+    this.domNode = container.children();
+    container.remove();
     this.propertiesController = new WebDoc.PropertiesInspectorController('#textbox_properties', false);
   },
   

@@ -16,7 +16,7 @@
   color: inherit;
 }
 
-.text_thumb {
+/*.text_thumb {
   white-space: nowrap;
   -ms-text-overflow: ellipsis;
   -o-text-overflow:  ellipsis;
@@ -35,7 +35,7 @@
   padding-top: 0;
   padding-right: 104px;
   background-position-x: 100%;
-}
+}*/
 
 .logo_thumb {
   margin-top: 6px;
@@ -43,5 +43,5 @@
   width: 112px;
   padding-top: 24px;
   background-size: 100% 100%;
-  background-image: url('../../images/thumb_logo.png');
+  background-image: url('../../images/thumbs/logo_thumb.png');
 }
