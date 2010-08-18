@@ -20,6 +20,9 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.failedEmailsWrapper = $('#wb-invitation-failed');
     this.friendsListNode = jQuery('#invite_co_authors_friends_list');
     
+    this.chooseFriendsForm.bind( 'submit', this.sendInvitationsByFriends.pBind(this) );
+    this.byEmailForm.bind( 'submit', this.sendInvitationsByEmail.pBind(this) );
+    this.domNode.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
     jQuery('.collaborate_form').bind('click', this.toggleForm.pBind(this) );
     
     this.documentAccessDialog
@@ -32,7 +35,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     
     this.document = document;
     this.cleanInvitationFields();
-    
+    this.cleanFriendsList();
     // document access can be changed only when we are online. So we can do ajax request here
     $.ajax({
       url: "/documents/" + document.uuid() + "/roles",
@@ -41,9 +44,7 @@ WebDoc.DocumentCollaborationController = $.klass({
       success: function(data, textStatus) {
         ddd("access", data);
         this.documentAccessDialog.show();
-        this.chooseFriendsForm.bind( 'submit', this.sendInvitationsByFriends.pBind(this) );
-        this.byEmailForm.bind( 'submit', this.sendInvitationsByEmail.pBind(this) );
-        this.domNode.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
+        
         // this.documentAccessDialog.pop({
         //   attachTo: $( e.currentTarget ),
         //   initCallback: function(){
@@ -179,10 +180,9 @@ WebDoc.DocumentCollaborationController = $.klass({
   },
   
   sendInvitationsByFriends: function(e) {
-    ddd('Send sendInvitationsByFriends');
     e.preventDefault();
     var role_type = jQuery('input[name="role_type_friends"]:checked').val();
-    var friends = jQuery('.choose_friend.selected_friend');    
+    var friends = jQuery('.choose_friend.selected_friend');
     var friendsList = [];
     var length = friends.length;
     for(var i=0; i<length;i++){
@@ -204,10 +204,11 @@ WebDoc.DocumentCollaborationController = $.klass({
       data: jSONData,    
       success: function(data) {
         ddd('createFriendsRights success');
+        this.cleanFriendsList();
         this.loadAccess(data);
       }.pBind(this),    
       error: function(MLHttpRequest, textStatus, errorThrown) {
-        ddd("error", textStatus);
+        ddd("createFriendsRights error", textStatus);
       }
     });
   },
@@ -250,6 +251,10 @@ WebDoc.DocumentCollaborationController = $.klass({
   cleanInvitationFields: function() {
     $("#wb-invitation-add-editors").val("");
     $("#wb-invitation-add-editors-message").val("");
+  },
+  
+  cleanFriendsList: function(){
+    jQuery('.choose_friend.selected_friend').removeClass('selected_friend');
   },
   
   closeDialog: function() {
