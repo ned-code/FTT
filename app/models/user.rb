@@ -88,6 +88,7 @@ class User < ActiveRecord::Base
   # = Instance Method =
   # ===================
   
+  #TODO manage list
   def has_role?(role,document=nil)
     if document.nil?
       self.roles.where(:user_id => self.id,
@@ -100,7 +101,7 @@ class User < ActiveRecord::Base
       self.roles.where(:name => role, :document_id => document.uuid).present?
     end
   end
-  
+  #TODO manage list
   def has_role!(role, document)
     if !has_role?(role,document)
       Role.create!(:user_id => self.id,
@@ -108,7 +109,7 @@ class User < ActiveRecord::Base
                    :name => role)
     end
   end
-  
+  #TODO manage list
   def has_no_role!(role,document)
     if has_role?(role,document)
       self.roles.where(:name => role, :document_id => document.uuid).delete_all
