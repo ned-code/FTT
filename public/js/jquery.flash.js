@@ -6,6 +6,9 @@
 // over it (eg. for ajax messages). Flash is a singleton, so we can
 // keep data in the closure rather than attaching it to the DOM node.
 
+// TODO: Currently bugs if you try to put a message in while the last
+// is fading - it doesnt re-ignite, if you will.
+
 (function(jQuery, undefined){
 	var debug = (window.console && console.log);
 	
