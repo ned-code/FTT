@@ -209,11 +209,9 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   },
   
   createPage: function(pageData) {
-    ddd("create page with data");
-    ddd(pageData);
+    ddd("create page with data", pageData);
     var newPage = new WebDoc.Page(pageData, this);
     this.addPage(newPage, true);
-    ddd("page created");
   },
   
   positionOfPage: function(page) {

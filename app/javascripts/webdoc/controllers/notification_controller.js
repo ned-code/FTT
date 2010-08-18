@@ -1,8 +1,3 @@
-/**
- * Controller of the right bar. It manages the show, the hide and the toggle the right bar. It also manages if the right bar shows the inspector or the lib.
- * @author Julien Bachmann
- */
-
 WebDoc.NotificationController = $.klass({
   
   initialize: function( selector) {

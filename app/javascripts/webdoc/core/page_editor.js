@@ -74,7 +74,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       app.pageBrowserController = new WebDoc.PageBrowserController();
       app.toolbarController = new WebDoc.ToolbarController();
       app.browserController = new WebDoc.BrowserController();
-      app.notificationController = new WebDoc.NotificationController("#notification_bar");
+      app.notificationController = new WebDoc.NotificationController();
       
       app.documentDuplicateController = new WebDoc.DocumentDuplicateController();
       app.themesController = new WebDoc.ThemesController();

@@ -1,15 +1,18 @@
 // jguery.flash.js
-// 0.3
+// 0.4
 // Stephen Band
 //
 // Takes Rail's message (#flash) and provides javascript control
-// over it (eg. for ajax messages).
+// over it (eg. for ajax messages). Flash is a singleton, so we can
+// keep data in the closure rather than attaching it to the DOM node.
 
 (function(jQuery, undefined){
+	var debug = (window.console && console.log);
+	
 	var plugin = 'flash',
 			options = {
 				selector: '#flash',
-				delay: 2600,
+				delay: 2800,
 				showDuration: 200,
 				hideDuration: 1800
 			},
@@ -18,18 +21,24 @@
 	
 	function show( options, callback ) {
 		// Open flash
+		
 		flash
 		.appendTo('body')
-		.animate({
-			opacity: 1,
-			marginTop: 0
-		}, {
-			duration: options.showDuration,
-			complete: function(){
-				state = 1;
-				callback && callback();
-			}
+		.addTransitionClass('active', function(){
+			state = 1;
+			callback && callback();
 		});
+		
+//		.animate({
+//			opacity: 1,
+//			marginTop: 0
+//		}, {
+//			duration: options.showDuration,
+//			complete: function(){
+//				state = 1;
+//				callback && callback();
+//			}
+//		});
 	}
 	
 	function hide( options, callback ) {
@@ -37,19 +46,25 @@
 		
 		// Close flash
 		flash
-		.stop()
-		.animate({
-			opacity: 0.2,
-			marginTop: -height
-		}, {
-			duration: options.hideDuration,
-			easing: 'easeInCubic',
-			complete: function(){
-				state = 0;
-				flash.remove();
-				callback && callback();
-			}
+		.removeTransitionClass('active', function(){
+			state = 0;
+			flash.remove();
+			callback && callback();
 		});
+		
+//		.stop()
+//		.animate({
+//			opacity: 0.2,
+//			marginTop: -height
+//		}, {
+//			duration: options.hideDuration,
+//			easing: 'easeInCubic',
+//			complete: function(){
+//				state = 0;
+//				flash.remove();
+//				callback && callback();
+//			}
+//		});
 	}
 	
 	jQuery.fn[plugin] = function(o){
@@ -76,8 +91,17 @@
 		// Cache the flash container
 		flash = jQuery( options.selector );
 		
+		// If flash doesn't exist, create it
+		if ( flash.length === 0 ) {
+			debug && console.log('[flash] #flash doesnt exist - creating it now');
+			flash = jQuery('<div/>', {
+				id: 'flash',
+				css: { marginTop: -200 }
+			});
+		}
+		
 		// If flash is open on load, delay for a while, check again, then hide it
-		if ( flash.hasClass('active') ) {
+		else if ( flash.hasClass('active') ) {
 			state = 1;
 			
 			setTimeout(function(){

@@ -11,6 +11,11 @@ body {
   position: relative;
 }
 
+/* manage layers */
+
+.site_wrap { z-index: 1; }
+#flash 		 { z-index: 2; }
+
 /* The site header */
 body>header {
   position: absolute;
@@ -98,10 +103,32 @@ body>header {
 /* flash messages */
 
 #flash {
-    position: relative;
-    margin: 0 auto;
-    padding: 2px;
-    text-align: center ;
-    width: 300px;
-    background: #8CEF86;
+	position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  margin-left: -300px;
+  padding: 2em;
+  width: 600px;
+  
+  color: yellow;
+  background: rgba(220, 90, 10, 0.96);
+  
+	-webkit-border-radius: 0.8333em;
+	-moz-border-radius:    0.8333em;
+	border-radius:         0.8333em;
+	
+	opacity: 0;
+	
+	-webkit-transition: opacity 0.4s ease-in;
+	   -moz-transition: opacity 0.4s ease-in;
+	        transition: opacity 0.4s ease-in;
+}
+
+#flash.active {
+	opacity: 1;
+	
+	-webkit-transition: opacity 0.06s ease-in;
+	   -moz-transition: opacity 0.06s ease-in;
+	        transition: opacity 0.06s ease-in;
 }
