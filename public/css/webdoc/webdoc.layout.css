@@ -19,6 +19,14 @@
 .textbox_item {
 }
 
+.textbox_item .shape{
+    /*background:yellow;*/
+    width:100%;
+    height:100%;
+    /*clip-path:url(shapes/0c.svg#clip-path);
+    -webkit-mask-image:url(shapes/0c.svg);*/
+}
+
 .textbox_item .text {
   position:absolute;
   width:50%;
@@ -26,14 +34,22 @@
   left:25%;
   top:25%;
   overflow:hidden;
+  padding:5px;
 }
 
-.textbox_item>svg {
-	position: absolute;
+.textbox_item .shape svg {
+	pointer-events:none;
+  overflow:visible;
+  position:absolute;
+  top:-1000px;
+  left:-1000px;
+  width:2000px;
+  height:2000px;
 }
 
 .textbox_item textarea.text {
 	overflow:hidden;
+	background:transparent;
 }
 
 .textbox_item div.text {
