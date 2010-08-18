@@ -10,7 +10,9 @@ WebDoc.IframeController = $.klass({
     
     this.domNode.find("#property-iframe-src").change(this.updateSrc);
     this.domNode.find("#set_page_size_to_iframe_size").click(this.setPageSizeToIframeize);
-    this.propertiesController = new WebDoc.PropertiesInspectorController('#iframe_properties', false);
+    
+    // Quick hack
+    //this.propertiesController = new WebDoc.PropertiesInspectorController('#iframe_properties', false);
   },
 
   inspectorTitle: function() {
@@ -18,7 +20,10 @@ WebDoc.IframeController = $.klass({
   },
   
   refresh: function() {
-    this.propertiesController.refresh();
+    // Quick hack
+    WebDoc.application.inspectorController.propertiesController.refresh();
+    //this.propertiesController.refresh();
+    
     var selectedItem = WebDoc.application.boardController.selection()[0];
     if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IFRAME) {
       $("#property-iframe-src")[0].value = selectedItem.item.getSrc();

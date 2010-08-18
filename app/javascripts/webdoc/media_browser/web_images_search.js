@@ -191,7 +191,9 @@ WebDoc.ServiceImagesSearch = $.klass({
     
     this.container.find(".service_bar").bind("click", this.toggleResultsSection.pBind(this));
     
-    this.imagesContainer = $('<ul>');
+    this.imagesContainer = jQuery('<ul>', {
+    	'class': 'image_search_index search_index index'
+    });
     this.imagesContainerWrapper = $('<div class="web_result_list">'); // contains the ul (list) and load_more link
     this.imagesContainerWrapper.append(this.imagesContainer);
     this.container.append(this.imagesContainerWrapper);
@@ -224,32 +226,31 @@ WebDoc.ServiceImagesSearch = $.klass({
   buildThumbnail: function(type, url, thumbUrl, name, imageLink, newProperties) {
     name = name.replace(/&#39;/g, "'");
     var properties = { type:type, url:url, thumb_url:thumbUrl, name:name, image_link:imageLink };
-    var domSize = { width:"100%", height:"100%"};
     
     if (newProperties){
       jQuery.extend(properties, { title: newProperties.title });
-      if(newProperties.width && newProperties.height){
-        jQuery.extend(properties, { width:newProperties.width, height:newProperties.height });
-        if(parseInt(properties.width) > parseInt(properties.height)){
-          domSize.width = "auto";
-        }else{
-          domSize.height = "auto"
-        }
-      }
+      
+//      if(newProperties.width && newProperties.height){
+//        jQuery.extend(properties, { width:newProperties.width, height:newProperties.height });
+//        
+//        if(parseInt(properties.width) > parseInt(properties.height)){
+//          domSize.width = "auto";
+//        }else{
+//          domSize.height = "auto"
+//        }
+//      }
     }
-        
-    var thumb = $("<img>").attr({
-      src : thumbUrl,
-      alt : ""
+    
+    var thumb = jQuery('<a/>', {
+      'class': "search_thumb thumb",
+      css: { backgroundImage: 'url('+thumbUrl+')' },
+      title: name
     }).data("properties", properties);
     
     var liWrap = $("<li>").addClass(type);
-    var aWrap = $("<a href=\""+imageLink+"\" title=\""+name+"\"></a>");
-    thumb.width(domSize.width);
-    thumb.height(domSize.height);
-    aWrap.append(thumb);
-    aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
-    liWrap.append(aWrap);
+    
+    thumb.append( jQuery( "<span/>", {'class': "icon_overlay"} ) ); //flickr/google mini icon
+    liWrap.append(thumb);
     
     return liWrap;
   }
@@ -267,7 +268,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     this.flickrPhotosSearchBaseUrl = "http://api.flickr.com/services/rest/?method=flickr.photos.search";
     
     //Load More link
-    $("<a>").attr("href","").text("Load more").click(function(event){
+    jQuery("<a/>").attr("href","").text("Load more").click(function(event){
       this.loadMore();
       event.preventDefault();
     }.pBind(this)).appendTo(this.imagesContainerWrapper).wrap("<div class='load_more' style='display:none'>");

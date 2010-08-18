@@ -29,25 +29,14 @@ en:
   add: "Add"
   confirm: "Are you sure?"
   
-  formtastic:
-    actions:
-      login: Login
-      user:
-        create: Sign up
-    labels:
-      user:
-        private: "Private account"
-    hints:
-      user:
-        private: "(I do not want be listed in the members section)"
-        edit:
-          password: "leave blank if you don't want to change it"
-          current_password: "we need your current password to confirm your changes"
-  
   admin:
+    home:
+      index:
+        title: "Admin dashboard"
+
     categories:
       index:
-        title: "Categories Listing"
+        title: "Categories listing"
         add: "Add a category"
         destroy_confirmation: "Are you sure?"
     
@@ -216,13 +205,15 @@ en:
         document_size_title: "Size"
         creationDate: "Creation date"
         change_access_dialog:
+          invite_co_authors: 'invite co-authors'
           invite_tab: "Invite" 
           current_editors: "Current editors"
-          add_editors: "Email addresses"
+          email: "by email"
           add_editors_explanation: "Allow other people to edit this webdoc. They will be given the same editing rights as you have."
           add_readers: "(Enter emails)"
           add_editors_message: "Invitation message"
           add_readers_message: "Your message"
+          choose_friends: "Choose friends"
         share_document_dialog:
           title: "Share webdoc"
           explanation: "with the world"

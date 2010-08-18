@@ -1,0 +1,32 @@
+<h1><%= t('.title') %></h1>
+
+<ul id="widget-list">
+  <% @widgets.each do |widget| %>
+    <li>
+      <div class="widget-container">
+        <div class="widget-title-container">
+          <img src="<%= widget.properties['icon_url'] %>" class="widget-icon" />
+          <span class="widget-title">
+            <%= widget.title %>
+          </span>
+        </div>
+        <span class="widget-version">
+          <%= "Version #{widget.properties['version']}" %>
+          <br />
+        </span>
+        <span class="widget-description">
+          <%= widget.description %>
+          <br />
+        </span>
+        <span class="widget-controls">
+          <%= link_to t('edit'), edit_admin_widget_path(widget) %>
+          <%= link_to t('destroy'), admin_widget_path(widget), :confirm => I18n.t('alert.destroy_confirmation'), :method => :delete %>
+        </span>
+      </div>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to t('.add'), new_admin_widget_path %>
+|
+<%= link_to t('admin.home.index.title'), admin_path %>

@@ -34,15 +34,19 @@ WebDoc.InnerHtmlController = $.klass({
     this.domNode = domNode;
     this._editor = editor;
     if (withProperties) {
-      this.propertiesController = new WebDoc.PropertiesInspectorController('#html_properties', true);
+    	// Quick hack
+      //this.propertiesController = new WebDoc.PropertiesInspectorController('#html_properties', true);
     }
   },
   
   refresh: function() {
     ddd("refresh html inspector");
-    if (this.propertiesController) {
-      this.propertiesController.refresh();
-    }
+    //if (this.propertiesController) {
+    // Quick hack
+    WebDoc.application.inspectorController.propertiesController.refresh();
+    //this.propertiesController.refresh();
+    
+    //}
     if (WebDoc.application.boardController.selection().length) {
       
       var item = WebDoc.application.boardController.selection()[0].item;

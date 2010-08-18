@@ -9,6 +9,8 @@ class ItemsController < ApplicationController
   #   allow :editor, :of => :pseudo_document
   #   allow :admin
   # end
+
+  before_filter :find_document, :only => [:show, :create]
   
   # GET /documents/:document_id/pages/:page_id/items/:id
   def show

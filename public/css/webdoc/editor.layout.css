@@ -417,6 +417,8 @@ margin-right: 10px;
 .author_dropdown_index {
 	height: 0;
 	-webkit-transition: height 0.08s ease-out;
+	   -moz-transition: height 0.08s ease-out;
+	        transition: height 0.08s ease-out;
 }
 
 .author_dropdown_index.active {
