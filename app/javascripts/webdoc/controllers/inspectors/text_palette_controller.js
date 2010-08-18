@@ -10,7 +10,9 @@ WebDoc.TextPaletteController = jQuery.klass({
     this.domNode = container.children();
     
     this.initGUI("#text-inspector-content");
-    this.propertiesController = new WebDoc.PropertiesInspectorController('#text_properties', true);
+    
+    // Quick hack
+    //this.propertiesController = new WebDoc.PropertiesInspectorController('#text_properties', true);
   	
   	container.remove();
   },       
@@ -561,7 +563,10 @@ WebDoc.TextPaletteController = jQuery.klass({
   },
   
   refresh: function() {
-    this.propertiesController.refresh();
+    // Quick hack
+    WebDoc.application.inspectorController.propertiesController.refresh();
+    //this.propertiesController.refresh();
+    
     this.refreshInnerHtml();
   },
   
