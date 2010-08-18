@@ -48,9 +48,12 @@ class User < ActiveRecord::Base
   # = Validations =
   # ===============
 
-  validates_presence_of :username, :first_name, :last_name
+  validates_presence_of :username
+  validates_presence_of :first_name
+  validates_presence_of :last_name
   validates_acceptance_of :terms_of_service, :on => :create
   validates_uniqueness_of :uuid
+  validates_uniqueness_of :username
 
   # ================
   # = Associations =
@@ -88,6 +91,7 @@ class User < ActiveRecord::Base
   # = Instance Method =
   # ===================
   
+  #TODO manage list
   def has_role?(role,document=nil)
     if document.nil?
       self.roles.where(:user_id => self.id,
@@ -100,7 +104,7 @@ class User < ActiveRecord::Base
       self.roles.where(:name => role, :document_id => document.uuid).present?
     end
   end
-  
+  #TODO manage list
   def has_role!(role, document)
     if !has_role?(role,document)
       Role.create!(:user_id => self.id,
@@ -108,7 +112,7 @@ class User < ActiveRecord::Base
                    :name => role)
     end
   end
-  
+  #TODO manage list
   def has_no_role!(role,document)
     if has_role?(role,document)
       self.roles.where(:name => role, :document_id => document.uuid).delete_all
@@ -203,9 +207,17 @@ class User < ActiveRecord::Base
   end
 
   def as_application_json
-    hash = { 'user' => self.attributes }
-    hash['user']['avatar_thumb_url'] = self.avatar_thumb_url
-    hash
+    { 'user' => { 'id'               => self.uuid,
+                  'uuid'             => self.uuid,
+                  'username'         => self.username,
+                  'last_name'        => self.last_name,
+                  'first_name'       => self.first_name,
+                  'email'            => self.email,
+                  'website'          => self.website,
+                  'gender'           => self.gender,
+                  'bio'              => self.bio,
+                  'avatar_thumb_url' => self.avatar_thumb_url }
+    }
   end
 
   # Need to use this method instead of the original to_json cause user references document and vice versa

@@ -34,7 +34,8 @@ WebDoc.WidgetInspectorController = $.klass({
       }                      
     }.pBind(this));
     
-    this.propertiesController = new WebDoc.PropertiesInspectorController('#widget_properties', false);
+    // Quick hack
+    //this.propertiesController = new WebDoc.PropertiesInspectorController('#widget_properties', false);
   },
 
   inspectorTitle: function() {
@@ -46,7 +47,10 @@ WebDoc.WidgetInspectorController = $.klass({
   },
   
   refresh: function() {
-    this.propertiesController.refresh();
+    // Quick hack
+    WebDoc.application.inspectorController.propertiesController.refresh();
+    //this.propertiesController.refresh();
+    
     var selectedItem = WebDoc.application.boardController.selection()[0];
     this.widgetInspectorApi.setWidgetItem(selectedItem.item);    
     var widgetContent = this.domNode.find("iframe"); 

@@ -7,3 +7,12 @@
 .inspector input[type] {
 	width: 80%;
 }
+
+/* .thumb extensions */
+
+.search_thumb {
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;
+}

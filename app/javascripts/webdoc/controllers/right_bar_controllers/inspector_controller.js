@@ -20,6 +20,9 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     this.initPaneWithController('TextboxInspectorGroup', new WebDoc.TextboxController( "#textbox_inspector" ));
     this.initPaneWithController('HtmlInspectorGroup', new WebDoc.InnerHtmlController( "#html-inspector", true ));
     
+		// Quick hack - this has been moved from inside individual inspector controllers
+    this.propertiesController = new WebDoc.PropertiesInspectorController('#item_inspector', false);
+    
     this._updateInspector('empty');
     
     this.lastInspectorId = 'empty';
