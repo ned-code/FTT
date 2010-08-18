@@ -5,7 +5,7 @@
   </div>
   
   <section class="workspace_wrap site_wrap wrap">
-    <div class="editor_wrap wrap">
+    <div class="editor_wrap wrap" id="editor">
       
       <!-- webdoc -->
       
@@ -38,12 +38,6 @@
       <div class="sidebar">
         <header class="horizontal">
         	<h2>Authors</h2>
-        	<div style="position: relative;">
-        		<a href="#dropdown" class="dropdown_button button" data-for=".author_dropdown_index">actions</a>
-        		<ul class="vertical author_dropdown_index dropdown_index buttons_index index" id="#thing_to_do">
-        			<li><a href="#thing" class="button">Thing to do</a></li>
-        		</ul>
-        	</div>
         </header>
         
         <ul class="horizontal author_index index">
@@ -87,7 +81,9 @@
         <h2>More from these authors</h2>
         <ul class="vertical thumbs_index index">
           <% (0..(@more_author_documents.length - 1)).step(1) do |i| %>
-            <%= render 'thumbnail', :document => @more_author_documents[i]%>
+          <li>
+            <%= render 'thumb', :document => @more_author_documents[i]%>
+          </li>
           <% end %>
         </ul>
       </div>
@@ -104,7 +100,7 @@
       <%#= render :partial => "documents/panels/social_panel" %>
   		<%= render "documents/inspectors/page_inspector" %>
       <%= render "documents/panels/pages_panel" %>
-      <%= render "documents/panels/right_panel" %>
+      <%= render "documents/panels/inspector_panel" %>
     </div>
   </section>
   

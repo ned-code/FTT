@@ -11,8 +11,6 @@ class CreateNewRoles < ActiveRecord::Migration
     RolesUser.all.each do |r|
       name = r.role.name
       user_id = r.user.uuid
-      p "*********** authorizable_id"
-      p r.role.authorizable_id
       document_id = r.role.authorizable_id
 
       new_roles << { :name => name,

@@ -23,6 +23,7 @@ Webdoc::Application.routes.draw do
     collection do
       get :explore
       get :featured
+      get :template
     end
   end
 
@@ -82,6 +83,12 @@ Webdoc::Application.routes.draw do
   end
 
   resources :app_polls, :only => [:index, :create, :destroy]
+
+  namespace :facebook do
+    resources :albums, :only => [:index] do
+      resources :photos, :only => [:index]
+    end
+  end
 
   # START OLD ROUTES
   # Jammit::Routes.draw(map)

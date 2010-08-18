@@ -71,15 +71,15 @@ class DiscussionsController < ApplicationController
     if params[:page_id].present?
       @pseudo_document = Document.first(:joins => :pages,
                                         :conditions => ['pages.uuid = ?', params[:page_id]],
-                                        :select => 'documents.uuid, documents.is_public')
+                                        :select => 'documents.uuid')
     elsif params[:discussion].present? && params[:discussion][:page_id].present?
       @pseudo_document = Document.first(:joins => :pages,
                                         :conditions => ['pages.uuid = ?', params[:discussion][:page_id]],
-                                        :select => 'documents.uuid, documents.is_public' )
+                                        :select => 'documents.uuid' )
     elsif @discussion.present?
       @pseudo_document = Document.first(:joins => { :pages => :discussions },
                                         :conditions => ['discussions.uuid = ?', @discussion.uuid],
-                                        :select => 'documents.uuid, documents.is_public')
+                                        :select => 'documents.uuid')
     end
   end
 

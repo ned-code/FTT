@@ -40,7 +40,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     
     if(!WebDoc.application.boardController.isInteractionMode()){
       this.viewNode
-        .html(this.editNode.html())
+        .html(this.editNode.val())
         .appendTo(this.domNode);
       this.editNode.remove();
     }else{

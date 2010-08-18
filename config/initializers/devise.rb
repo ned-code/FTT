@@ -140,4 +140,45 @@ Devise.setup do |config|
   #   end
   #   manager.default_strategies(:scope => :user).unshift :twitter_oauth
   # end
+
+
+  config.oauth :facebook, '102653226459404', '4555b046a46fe59ac1dc70efbf2dbd52',
+    :site              => 'https://graph.facebook.com/',
+    :scope             => %w(email offline_access user_photos)  
+
+end
+
+# Monkey patch for uuid!
+# TODO remove this when it's possible!
+# see http://github.com/plataformatec/devise/issues#issue/293
+module Devise
+  module Models
+    module Rememberable
+      protected
+      module ClassMethods
+        def serialize_from_cookie(id, remember_token)
+          conditions = { :uuid => id, :remember_token => remember_token }
+          record = find(:first, :conditions => conditions)
+          record if record && !record.remember_expired?
+        end
+      end
+    end
+  end
+end
+class Warden::SessionSerializer
+  def serialize(record)
+    [record.class.name, record.uuid]
+  end
+
+  def deserialize(keys)
+    klass, id = keys
+    klass.constantize.find(:first, :conditions => { :uuid => id })
+  rescue NameError => e
+    if e.message =~ /uninitialized constant/
+      Rails.logger.debug "Trying to deserialize invalid class #{klass}"
+      nil
+    else
+      raise
+    end
+  end
 end

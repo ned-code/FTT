@@ -5,9 +5,9 @@ WebDoc.BoardController = jQuery.klass({
   
   // Constructor     
   initialize: function(editable, autoFit) {
+  	this.editorNode = jQuery('#editor');
     this.boardCageNode = jQuery("#webdoc");
     this.boardContainerNode = jQuery("#board-container");
-    this.screenUnderlayNode = jQuery("#underlay");
     this.screenNodes = this.boardCageNode.find('.board-screen');
     this.themeNode = jQuery('<link id="theme" rel="stylesheet" type="text/css" />'); 
     jQuery('head').append(this.themeNode);
@@ -85,7 +85,7 @@ WebDoc.BoardController = jQuery.klass({
     if (this._currentPageView) {
       this._currentPageView.destroy();
     }
-    var pageView = new WebDoc.PageView(page, this.boardContainerNode, jQuery("body").hasClass('mode-edit')),
+    var pageView = new WebDoc.PageView(page, this.boardContainerNode, !this.isInteractionMode),
         board = pageView.domNode,
         defaultZoom = 1;
     
@@ -120,7 +120,7 @@ WebDoc.BoardController = jQuery.klass({
       }
     }
     this.zoom(defaultZoom);
-    this.setMode(!jQuery("body").hasClass('mode-edit'));
+    this.setMode( this.isInteractionMode );
     this.currentPageView().domNode
     .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
     .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
@@ -149,20 +149,10 @@ WebDoc.BoardController = jQuery.klass({
       this.setCurrentTool(WebDoc.application.arrowTool);
     }
     
-    jQuery("body")
-    .removeClass('mode-preview')
-    .addClass("mode-edit");
-        
-    jQuery(".state-mode")
-    .removeClass("current")
-    .filter("[href='#mode-edit']")
-    .addClass("current");
-
+    this.editorNode.addTransitionClass('edit_mode');
     this.boardContainerNode.resizable('destroy'); // destroy to refresh    
     this._initResizable();
-
-    //WebDoc.application.pageBrowserController.reveal();
-    //WebDoc.application.rightBarController.reveal();
+    
     if (this._previousInspector) {
       WebDoc.application.rightBarController.selectInspector(this._previousInspector);      
     }
@@ -175,29 +165,17 @@ WebDoc.BoardController = jQuery.klass({
     
     this.currentPageView().setEditable(false);
     
-    this.setCurrentTool(WebDoc.application.arrowTool);    
+    this.setCurrentTool(WebDoc.application.arrowTool);
     
-    jQuery("body")
-    .removeClass("mode-edit")
-    .addClass("mode-preview");
-    
-    jQuery(".state-mode")
-    .removeClass("current")
-    .filter("[href='#mode-preview']")
-    .addClass("current");
-    
+    this.editorNode.removeTransitionClass('edit_mode');
     this.boardContainerNode.resizable('destroy');
-
-    if(!this._editable) {
-      jQuery(".mode-tools").hide(); 
-    }
     
-    //WebDoc.application.pageBrowserController.conceal();
-    //WebDoc.application.rightBarController.conceal();
     if(WebDoc.application.rightBarController.getSelectedInspector() !== WebDoc.PanelInspectorType.SOCIAL) {
       this._previousInspector = WebDoc.application.rightBarController.getSelectedInspector();
     }
+    
     WebDoc.application.rightBarController.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
+    
     this._isInteraction = true;
     return this._isInteraction;
   },
@@ -387,14 +365,8 @@ WebDoc.BoardController = jQuery.klass({
     else {
       x = position.pageX - board.offset().left;
       y = position.pageY - board.offset().top;
-    }   
-    if (WebDoc.Browser.WebKit) { 
-      // Correct mouse vertical position according to the cursor icon height
-      // This doesn't work with a pen tablet, as you can't change the registration point
-      // of the cursor.
-      y += this.currentTool.getCursorHeight();
     }
-
+    
     var calcX = (x) * (1 / this._currentZoom);
     var calcY = (y) * (1 / this._currentZoom);
     return {
@@ -619,54 +591,54 @@ WebDoc.BoardController = jQuery.klass({
     this.screenNodes.animate({ opacity: 'show' }, { duration: 200 });
   },
   
-  _updateScreens: function( itemNode ) {
-    
-    // Calculate position of node - we want browser values,
-    // in px, so we can't use the item's data.css
-    
-    var node = itemNode || jQuery('.item_edited'),
-        zoom = this._currentZoom,
-        size = 4096,
-        nodePos = node.position(),
-        nodeLeft = parseInt( nodePos.left ),
-        nodeTop = parseInt( nodePos.top ),
-        nodeWidth = parseInt( node.width() * zoom ),
-        nodeHeight = parseInt( node.height() * zoom ),
-        board = this.boardContainerNode,
-        boardWidth = parseInt( board.width() * zoom ),
-        boardHeight = parseInt( board.height() * zoom ),
-        screens = this.screenNodes,
-        screenTop = screens.eq(0),
-        screenBottom = screens.eq(1),
-        screenLeft = screens.eq(2),
-        screenRight = screens.eq(3);
-    
-    // Adjust the dimensions of the four screens surrounding the edited block
-    screenTop.css({
-        height: size,
-        top: nodeTop - size,
-        left: - size,
-        width: size * 2
-    });
-    screenBottom.css({
-        top: nodeTop + nodeHeight,
-        height: size,
-        left: - size,
-        width: size * 2
-    });
-    screenLeft.css({
-        top: nodeTop,
-        width: size,
-        left: nodeLeft - size,
-        height: nodeHeight
-    });
-    screenRight.css({
-        top: nodeTop,
-        left: nodeLeft + nodeWidth,
-        width: size,
-        height: nodeHeight
-    });
-  },
+//  _updateScreens: function( itemNode ) {
+//    
+//    // Calculate position of node - we want browser values,
+//    // in px, so we can't use the item's data.css
+//    
+//    var node = itemNode || jQuery('.item_edited'),
+//        zoom = this._currentZoom,
+//        size = 4096,
+//        nodePos = node.position(),
+//        nodeLeft = parseInt( nodePos.left ),
+//        nodeTop = parseInt( nodePos.top ),
+//        nodeWidth = parseInt( node.width() * zoom ),
+//        nodeHeight = parseInt( node.height() * zoom ),
+//        board = this.boardContainerNode,
+//        boardWidth = parseInt( board.width() * zoom ),
+//        boardHeight = parseInt( board.height() * zoom ),
+//        screens = this.screenNodes,
+//        screenTop = screens.eq(0),
+//        screenBottom = screens.eq(1),
+//        screenLeft = screens.eq(2),
+//        screenRight = screens.eq(3);
+//    
+//    // Adjust the dimensions of the four screens surrounding the edited block
+//    screenTop.css({
+//        height: size,
+//        top: nodeTop - size,
+//        left: - size,
+//        width: size * 2
+//    });
+//    screenBottom.css({
+//        top: nodeTop + nodeHeight,
+//        height: size,
+//        left: - size,
+//        width: size * 2
+//    });
+//    screenLeft.css({
+//        top: nodeTop,
+//        width: size,
+//        left: nodeLeft - size,
+//        height: nodeHeight
+//    });
+//    screenRight.css({
+//        top: nodeTop,
+//        left: nodeLeft + nodeWidth,
+//        width: size,
+//        height: nodeHeight
+//    });
+//  },
   
   insertImage: function(imageUrl, position, media_id, title) {
     ddd('insertImage : ', imageUrl);
@@ -714,23 +686,8 @@ WebDoc.BoardController = jQuery.klass({
       case 'youtube' :
         videoWidget = WebDoc.WidgetManager.getInstance().getYoutubeWidget();
         break;
-      case 'vimeo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVimeoWidget();
-        break;
-      case 'dailymotion' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getDailymotionWidget();
-        break;
-      case 'myspacevideo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVidsMyspaceWidget();
-        break;
-      case 'metacafe' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getMetacafeWidget();
-        break;
-      case 'googlevideo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVidsGoogleWidget();
-        break;
-      case 'yahoovideo' :
-        videoWidget = WebDoc.WidgetManager.getInstance().getVidsYahooWidget();
+      case 'video' :
+        videoWidget = WebDoc.WidgetManager.getInstance().getVideoWidget();
         break;
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
@@ -827,7 +784,8 @@ WebDoc.BoardController = jQuery.klass({
   
   getZoom: function() {
     return this._currentZoom;
-  },  
+  },
+  
   // Private methods
     
   _mouseDown: function(e) {

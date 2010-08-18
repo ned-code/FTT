@@ -111,8 +111,10 @@ WebDoc.RightBarController = $.klass({
     ddd("[RightBarController] select inspector", inspectorType);
     if (this._currentInspectorType !== inspectorType) {
       var inspectorController = this.getInspector(inspectorType);
+      
       //this._changePanelContent(inspectorController);
       //this._changeButtonState(inspectorController);
+      
       this._currentInspectorType = inspectorType;
       if(jQuery.inArray( inspectorType, this.bottomPanelsArray ) == -1){
         this._hideRightPanels();
@@ -176,7 +178,7 @@ WebDoc.RightBarController = $.klass({
   
   showMyContent: function(){
     this.selectInspector(WebDoc.PanelInspectorType.MY_CONTENT);
-    this._showPanel('my_content_panel');
+    this._showPanel('mystuff_panel');
     if(!this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].isMyImageLoaded()){
       this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].setup();
     }
@@ -194,7 +196,7 @@ WebDoc.RightBarController = $.klass({
   
   showBrowseWeb: function(){
     this.selectInspector(WebDoc.PanelInspectorType.BROWSE_WEB);
-    this._showPanel('browse_web_panel');
+    this._showPanel('browse_panel');
   },
   
   showPageInspector: function() {

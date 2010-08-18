@@ -1,80 +1,46 @@
-<div id="iframe_inspector_panel inspector_panel panel">
-  <div class="head">
-    <div>
-      <div class="inspector-title">
-        Web page
-      </div>
+<div id="iframe_inspector">
+  <header>
+    <h3>Web page</h3>
+  </header>
+  
+  <form class="content">
+    <div class="section">
+      <label>adress</label>
+      <input id="property-iframe-src" type="url" data-type="webdoc_iframe_url" value="" />
+
+      <label>Set as page</label>
+      <input id="set_page_size_to_iframe_size" type="button" value="Set" />
     </div>
-  </div>  
-  <div>
-    <form class="content">
-      <div class="section">
-        <div class="entry">
-          <label>
-            adress              
-            <input id="property-iframe-src" type="url" data-type="webdoc_iframe_url" value="" />
-          </label>
-        </div>
-        <div class="entry">
-          <label>
-            Set as page              
-            <input id="set_page_size_to_iframe_size" type="button" value="Set" />
-          </label>
-        </div>        
-      </div>
-      <hr class="separator"/>
-      <div id="iframe_properties" class="section">
-        <div class="entry">
-          <label>
-            left              
-            <input id="property_left" type="text" data-type="cssvalue" data-property="left" value="" />
-          </label>
-        </div>
-        <div class="entry">
-          <label>
-            top              
-            <input id="property_top" type="text" data-type="cssvalue" data-property="top" value="" />
-          </label>
-        </div> 
-        <div class="entry">
-          <label>
-            width              
-            <input id="property_width" type="text" data-type="cssvalue" data-property="width" value="" />
-          </label>
-        </div>
-        <div class="entry">
-          <label>
-            height              
-            <input id="property_height" type="text" data-type="cssvalue" data-property="height" value="" />
-          </label>
-        </div>
-        <div class="entry">
-          <label>
-            rotation              
-            <input id="property_rotation" type="text" data-type="cssangle" data-property="rotation" value="" />
-          </label>
-        </div> 
-        <div class="entry">
-          <label for="property_overflow">Overflow</label>
-          <input name="property_overflow" id="property_overflow_hidden" type="radio" data-property="overflow" value="hidden" />
-          <span class="label" for="property_overflow_hidden">clip</span>          
-          <input name="property_overflow" id="property_overflow_auto" type="radio" data-property="overflow" value="auto" />
-          <span class="label" for="property_overflow_hidden">scroll</span>          
-          <input name="property_overflow" id="property_overflow_visible" type="radio" data-property="overflow" value="visible" />
-          <span class="label" for="property_overflow_hidden">show</span>
-        </div> 
-        <div class="entry">
-          <label>
-            opacity              
-            <input id="property_opacity" type="range" min="0.00" max="1.00" step="0.01" data-property="opacity" value="1.00" /><span class="readout" id="property_opacity_readout">ui</span>
-          </label>
-        </div> 
-        <div class="entry">
-          <label>              
-            <input id="property-fit-to-screen" type="button" value="Fit to webdoc" />
-          </label>
-        </div>                                                                                                
-      </div>      
-    </form>
-  </div>
+    
+    <div id="iframe_properties" class="section">
+      <label>left</label>
+      <input id="property_left" type="text" data-type="cssvalue" data-property="left" value="" />
+
+      <label>top</label>
+      <input id="property_top" type="text" data-type="cssvalue" data-property="top" value="" />
+
+      <label>width</label>
+      <input id="property_width" type="text" data-type="cssvalue" data-property="width" value="" />
+
+      <label>height</label>
+      <input id="property_height" type="text" data-type="cssvalue" data-property="height" value="" />
+
+      <label>rotation</label>
+      <input id="property_rotation" type="text" data-type="cssangle" data-property="rotation" value="" />
+
+      <label for="property_overflow">Overflow</label>
+      <input name="property_overflow" id="property_overflow_hidden" type="radio" data-property="overflow" value="hidden" />
+      <span class="label" for="property_overflow_hidden">clip</span>          
+      <input name="property_overflow" id="property_overflow_auto" type="radio" data-property="overflow" value="auto" />
+      <span class="label" for="property_overflow_hidden">scroll</span>          
+      <input name="property_overflow" id="property_overflow_visible" type="radio" data-property="overflow" value="visible" />
+      <span class="label" for="property_overflow_hidden">show</span>
+      
+      <label>opacity</label>
+      <input id="property_opacity" type="range" min="0.00" max="1.00" step="0.01" data-property="opacity" value="1.00" />
+      <output class="readout" id="property_opacity_readout">ui</output>
+
+      <input id="property-fit-to-screen" type="button" value="Fit to webdoc" />
+    </div>
+  </form>
 </div>

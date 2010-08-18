@@ -51,7 +51,7 @@ class CommentsController < ApplicationController
   def find_pseudo_document
     @pseudo_document = Document.first(:joins => { :pages => :discussions },
                                       :conditions => ['discussions.uuid = ?', params[:discussion_id]],
-                                      :select => 'documents.uuid, documents.is_public' )
+                                      :select => 'documents.uuid' )
   end
 
   def current_user_is_comment_owner

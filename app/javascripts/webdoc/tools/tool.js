@@ -2,80 +2,37 @@
 * @author julien
 */
 WebDoc.Tool = $.klass({  
-  initialize: function( selector, boardClass ) {
+  initialize: function( selector, editorClass ) {
     this.selector = selector;
-    this.boardClass = boardClass;
+    this.editorClass = editorClass;
   },
-  
-  //toolbarButtonClick: function(e) {
-  //  e.preventDefault();
-  //  WebDoc.application.boardController.setCurrentTool(this);
-  //},
   
   toolPalette: function() {
   },
   
   selectTool: function() {
-    var buttons = $(this.selector);
+    var buttons = $(this.selector),
+    		board = WebDoc.application.boardController;
+      
+    if (board.editorNode) {
+    	// Bit dodgy - is there a better way than regexing the className ?
+      board.editorNode[0].className = board.editorNode[0].className.replace( /\b\S+_tool_mode\b/g, '' );
+      
+      board.editorNode
+      .addClass( this.editorClass );
+      
+      this._previousEditorClass = this.editorClass;
+    }
     
-    if ( buttons.hasClass("state-tool") ) {
-      $(".state-tool").removeClass("current");
-      
-      buttons.addClass("current");
-      
-      ddd('[WebDoc.Tool] set board class "' + this.boardClass + '"');
-      
-      // Set class on the board so that style changes
-      if (WebDoc.application.boardController.domNode) {
-        WebDoc.application.boardController.domNode
-        .removeClass( this._previousBoardClass || 'tool_default')
-        .addClass(this.boardClass);
-        
-        this._previousBoardClass = this.boardClass;
-      }
-    }
-    WebDoc.application.boardController.activateEventCatcher(true);
-  },
-  
-  getCursorHeight: function() {
-    // If cursorHeight doesn't exist yet, go get it
-    return ( typeof this._cursorHeight === 'undefined' ) ? this._storeCursorHeight() : this._cursorHeight;
-  },
-  
-  // Feature detection - sort of
-  // Finds cursor image and measures its height
-  _storeCursorHeight: function() {
-    if (WebDoc.application.boardController.currentPageView()) {
-      var regex = /url\([\'\"]?([-:_\.\/a-zA-Z0-9]+)[\'\"]?\)/, // matches url(xxx) or url('xxx') and captures xxx
- cursorCss = WebDoc.application.boardController.currentPageView().domNode.css('cursor'), imageUrl = cursorCss ? regex.exec(cursorCss) : false, css = {
-        position: 'absolute',
-        left: -100,
-        top: -100
-      }, imageNode, imageHeight;
-      
-      ddd('[WebDoc.Tool.getCursorHeight] imageUrl ' + imageUrl + '"');
-      
-      if (imageUrl) {
-      
-        // Test image for height
-        imageNode = jQuery('<img>').attr('src', imageUrl[1]).css(css);
-        
-        jQuery('body').append(imageNode);
-        imageHeight = imageNode.height();
-        imageNode.remove();
-        
-        ddd('[WebDoc.Tool.getCursorHeight] cursor image has height ' + imageHeight);
-        
-        // Store height
-        this._cursorHeight = imageHeight;
-        return imageHeight;
-      }
-    }
-    this._cursorHeight = 0;
-    return 0;
+    board.activateEventCatcher(true);
   },
   
   unSelectTool: function() {
+    var buttons = $(this.selector),
+    		board = WebDoc.application.boardController;
+    
+    board.editorNode
+    .removeClass( this._previousEditorClass || 'default_app')
   },
   
   mouseDown: function(e) {

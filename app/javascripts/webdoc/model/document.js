@@ -111,15 +111,33 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     return "theme_" + themeName;
   },
   
-  //Rewrite this to be compatible with new role paradigm
-  share: function() {
-    this.data.is_public = true;
-    this.save();
+  share: function(with_comments) {
+    var data;
+    if(with_comments){
+      data = {with_comments: true};
+    }
+    else{
+      data = {with_comments: false};
+    }
+
+    jQuery.ajax({
+      url: '/documents/' + this.uuid() + '/share',
+      type: 'POST',
+      data: data,
+      dataType: 'json',
+      success: function(){ddd('document shared');},
+      error: function(){ddd('error during sharing');}
+    });
   },
   
-  //Rewrite this to be compatible with new role paradigm
   unshare: function() {
-    this.data.is_public = false;
+    jQuery.ajax({
+      url: '/documents/' + this.uuid() + '/unshare',
+      type: 'POST',
+      dataType: 'json',
+      success: function(){ddd('document unshared');},
+      error: function(){ddd('error during unsharing');}
+    });
   },
   
   //Rewrite this to be compatible with new role paradigm
@@ -191,11 +209,9 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   },
   
   createPage: function(pageData) {
-    ddd("create page with data");
-    ddd(pageData);
+    ddd("create page with data", pageData);
     var newPage = new WebDoc.Page(pageData, this);
     this.addPage(newPage, true);
-    ddd("page created");
   },
   
   positionOfPage: function(page) {

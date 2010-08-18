@@ -5,12 +5,13 @@
 WebDoc.InnerHtmlController = $.klass({
   initialize: function( selector, withProperties ) {
 
-    var domNode = $(selector),
-        self = this,
+    var container = $(selector),
+    		domNode = $(selector).children(),
+        self = this;
         
         // Initialise CodeMirror. CodeMirror must be visible
         // while it is being set up.
-        editor = new CodeMirror( domNode.find('.content')[0] , {
+        editor = new CodeMirror( domNode.filter('.content')[0] , {
           path: '/js/codemirror/',
           parserfile: ['parsexml.js', 'parsecss.js', 'tokenizejavascript.js', 'parsejavascript.js', 'parsehtmlmixed.js'],
           stylesheet: '/css/codemirror/codemirror.css',
@@ -27,7 +28,9 @@ WebDoc.InnerHtmlController = $.klass({
           onChange: this.applyInnerHtml.pBind(this)
           // cursorActivity: this.applyInnerHtml.pBind(this)
         });
-
+		
+		container.remove();
+		
     this.domNode = domNode;
     this._editor = editor;
     if (withProperties) {

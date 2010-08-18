@@ -12,8 +12,6 @@ class UsersController < ApplicationController
   
   # GET /users/:id
   def show
-    p "userssss"
-    p flash
     @user = User.find(params[:id])
     respond_to do |format|
       format.html
