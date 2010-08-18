@@ -1,5 +1,5 @@
 /**
- * @author julien
+ * @author julien, steven, matthieu
  */
 WebDoc.TEXTBOX_INSPECTOR_GROUP = "TextboxInspectorGroup";
 
@@ -7,24 +7,63 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   
   initialize: function($super, item, pageView, afterItem) {
     var placeholderContent = item.getInnerHtmlPlaceholder() || WebDoc.NEW_TEXTBOX_CONTENT;
+    var that = this
     
     this.placeholderNode = jQuery(placeholderContent);
-    this.svgNode = jQuery('<svg/>', {});
+    
+    this.svgNode = jQuery('<svg/>');
     this.editNode = jQuery('<textarea/>', {
     	"class": "text"
     });
     this.viewNode = jQuery('<div/>', {
     	"class": "text"
     });
+    this.txtDummy = jQuery('<div/>', {"style":"display:none"});
     
     $super(item, pageView, afterItem);
     
-    this.domNode
-    .html( this.svgNode )
-    .append( this.editNode )
-    .addClass('textbox_item');
+    this.editNode.val(this.item.getText());
     
+    this.domNode
+      .html(this.svgNode)
+      .append(this.editNode)
+      .append(this.txtDummy)
+      .addClass('textbox_item')
+      .bind("resize", function(){that.resizeTextArea()});
+              
     this.innerHtmlChanged();
+    this.setEditable();
+  },
+  
+  toggleMode: function(){
+    var that = this;
+    
+    if(!WebDoc.application.boardController.isInteractionMode()){
+      this.viewNode
+        .html(this.editNode.html())
+        .appendTo(this.domNode);
+      this.editNode.remove();
+    }else{
+      this.viewNode.remove();
+      this.editNode
+        .bind("keyup", function(){
+          that.item.setText(jQuery(this).val());
+          that.resizeTextArea();
+        })
+        .appendTo(this.domNode);
+    }
+  },
+  
+  resizeTextArea: function(){
+    this.txtDummy.css({
+      width:this.editNode.width(),
+      height:"auto"});
+    this.txtDummy.text(this.editNode.val())
+    this.editNode.height(this.txtDummy.height());
+            
+    /*this.item.resizeTo({
+      width:this.item.width(),
+      height:this.editNode.height() + this.editNode.position().top*2});*/
   },
   
   createDomNode: function($super) {
@@ -52,6 +91,11 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     $super();        
     this.placeholderNode.remove();
     WebDoc.application.textboxTool.enterEditMode(this);
+  },
+  
+  setEditable: function($super) { // called when the interaction mode is changed
+    $super();
+    this.toggleMode();
   },
   
   isEditing: function() {

@@ -350,6 +350,32 @@ WebDoc.Item = $.klass(WebDoc.Record,
     });
   },
   
+  hasText: function(){
+     if(this.data.data.text){ return true; }
+     else{ return false; }
+   },
+   
+  setText: function(text){
+    var that = this;
+    var previousText = this.getText();
+    
+    if(!this.hasText()){
+      jQuery.extend(this.data.data, { text : ''});
+    }
+    
+    WebDoc.application.undoManager.registerUndo(function() {
+      that.setText( previousText );
+    });
+    
+    this.data.data.text = text;
+    this.save();
+  },
+  
+  getText: function(){
+    if(this.hasText()){ return this.data.data.text; }
+    else{ ''; }
+  },
+  
   getIsPlaceholder: function() {
     if(this._isPlaceholder === true) {
       return true;

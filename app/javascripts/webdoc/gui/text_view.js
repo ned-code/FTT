@@ -50,7 +50,7 @@ WebDoc.TextView = $.klass(WebDoc.ItemView, {
   },
   
   stopEditing: function($super) {
-    $super();    
+    $super(); 
     WebDoc.application.textTool.exitEditMode();
     this._initItemCss(false);
   },
