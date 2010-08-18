@@ -203,9 +203,17 @@ class User < ActiveRecord::Base
   end
 
   def as_application_json
-    hash = { 'user' => self.attributes }
-    hash['user']['avatar_thumb_url'] = self.avatar_thumb_url
-    hash
+    { 'user' => { 'id'               => self.uuid,
+                  'uuid'             => self.uuid,
+                  'username'         => self.username,
+                  'last_name'        => self.last_name,
+                  'first_name'       => self.first_name,
+                  'email'            => self.email,
+                  'website'          => self.website,
+                  'gender'           => self.gender,
+                  'bio'              => self.bio,
+                  'avatar_thumb_url' => self.avatar_thumb_url }
+    }
   end
 
   # Need to use this method instead of the original to_json cause user references document and vice versa

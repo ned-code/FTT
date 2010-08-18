@@ -315,7 +315,6 @@ WebDoc.ItemView = $.klass({
     this._editable = editable;  
   },
   
-  
   _initDragAndResize: function() {
     this.domNode.draggable({
       containment: "parent",

@@ -29,25 +29,14 @@ en:
   add: "Add"
   confirm: "Are you sure?"
   
-  formtastic:
-    actions:
-      login: Login
-      user:
-        create: Sign up
-    labels:
-      user:
-        private: "Private account"
-    hints:
-      user:
-        private: "(I do not want be listed in the members section)"
-        edit:
-          password: "leave blank if you don't want to change it"
-          current_password: "we need your current password to confirm your changes"
-  
   admin:
+    home:
+      index:
+        title: "Admin dashboard"
+
     categories:
       index:
-        title: "Categories Listing"
+        title: "Categories listing"
         add: "Add a category"
         destroy_confirmation: "Are you sure?"
     

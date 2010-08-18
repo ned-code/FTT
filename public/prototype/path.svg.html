@@ -131,6 +131,9 @@ xmlns="http://www.w3.org/2000/svg">
 			lineWidth: 2
 		})
 		.begin()
+<<<<<<< HEAD
+		.plot( fishPath.displace(30,10) )
+=======
 		.plot(
 			fishPath.displace( -c[0], -c[1] )
 		)
@@ -148,6 +151,7 @@ xmlns="http://www.w3.org/2000/svg">
 			{ type: 'lineTo', data: [ r[2], r[3] ] },
 			{ type: 'lineTo', data: [ r[0], r[3] ] }
 		])
+>>>>>>> 5188d108071913325a8ba54d94bada183e69ae1f
 		.close()
 		.stroke();
 		
