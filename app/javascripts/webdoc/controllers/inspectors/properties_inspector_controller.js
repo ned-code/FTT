@@ -191,6 +191,8 @@ WebDoc.PropertiesInspectorController = $.klass({
         var item = WebDoc.application.boardController.selection()[0].item,
             property = field.attr('data-property'),
             cssObj;
+            
+        console.log('Value', value);
         
         if ( typeof property === 'undefined' ) { return; }
         // TODO: convert property to camelCase if it isn't already
