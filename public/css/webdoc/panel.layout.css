@@ -71,17 +71,19 @@
 	top: 0.3333em;
 	left: 0.3333em;
 	
+	opacity: 0;
 	display: none;
-	-webkit-transition: opacity 0.06s ease-in;
-	   -moz-transition: opacity 0.06s ease-in;
-	        transition: opacity 0.06s ease-in;
-}
-
-.edit_mode .pageedit_index {
-	display: block;
 	-webkit-transition: opacity 0.18s ease-in;
 	   -moz-transition: opacity 0.18s ease-in;
 	        transition: opacity 0.18s ease-in;
+}
+
+.edit_mode .pageedit_index {
+	opacity: 1;
+	display: block;
+	-webkit-transition: opacity 0.06s ease-out;
+	   -moz-transition: opacity 0.06s ease-out;
+	        transition: opacity 0.06s ease-out;
 }
 
 .editor_wrap.transition .pageedit_index {

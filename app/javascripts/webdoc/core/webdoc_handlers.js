@@ -90,7 +90,7 @@ WebDoc.handlers = {
     'toggle_author_panel':        function(e){ ddd('author panel is useless') },
     'toggle_document_panel':      function(e){WebDoc.application.rightBarController.showDocumentInspector(e); },
     'toggle_sharing_panel':       function(e){ ddd('no sharing yet') },
-    'toggle_browse_web_panel':    function(e) { WebDoc.application.rightBarController.showBrowseWeb(); },
+    'toggle_browse_panel':        function(e) { WebDoc.application.rightBarController.showBrowseWeb(); },
     'toggle_packages_panel':      function(e) { WebDoc.application.rightBarController.showPackages(); },
     'toggle_apps_panel':          function(e) { WebDoc.application.rightBarController.showApps(); },
     'toggle_my_stuff_panel':      function(e) { WebDoc.application.rightBarController.showMyContent(); },

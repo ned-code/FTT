@@ -223,15 +223,6 @@
 #right-panel-ghost  { z-index: 1; }
 
 
-/* Webdoc */
-
-#webdoc {
-    /* Compensate for height of toolbar panel */
-    padding-top: 42px;
-    padding-bottom: 36px;
-}
-
-
 
 
 
