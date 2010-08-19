@@ -341,7 +341,8 @@ WebDoc.Document = $.klass(WebDoc.Record, {
             "duplicate",
             extraParams
     );
-  }    
+  }
+
 });
 
 $.extend(WebDoc.Document, {

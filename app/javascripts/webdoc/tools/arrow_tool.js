@@ -18,6 +18,9 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
   },
     
   select: function(e) {
+    ddd('-----------------asfd');
+    ddd(WebDoc.application.pageEditor.currentDocument);
+
     var objectToSelect = this._clickedObjectView(e);
     if (objectToSelect.type !== "discussion") {
       WebDoc.application.boardController.unSelectDiscussionView();
