@@ -81,8 +81,13 @@ WebDoc.DocumentShareController = $.klass({
   
   _loadAccess: function(json) {
     this.domNode.empty();
+    if(json.public){
+      ddd('document is public', json.public);
+    }
     this.access = json.access;
     for (var i = 0; i < this.access.length; i++) {
+      //regarder si role public ou non
+      ddd(this.access[i][0].role == 'viewer_comment' || this.access[i][0].role == 'viewer_only');
       this._createAccessItem(this.access[i][0]);  
     }
     var failedEmailsWrapper = $('#wb-readers-invitation-failed');
