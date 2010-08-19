@@ -84,6 +84,15 @@ body>header {
 
 .user_index>li {
 	margin-bottom: 0.3333em;
+	width:100%;
+}
+
+.user_index>li a {
+	
+	margin-bottom: 0.3333em;
+	width:100%;
+	padding-left:10px;
+	padding-right:10px;
 }
 
 /* .number */
