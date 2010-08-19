@@ -35,13 +35,12 @@ WebDoc.DocumentShareController = $.klass({
     
     this.document = document;
     
-    ddd(this.document.isShared());
-    
     jQuery.ajax({
       url: "/documents/" + document.uuid() + "/roles",
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
+        ddd(data);
         this.documentShareDialog.show();
         // this.documentShareDialog.pop({
         //           attachTo: $(e.currentTarget),
