@@ -13,7 +13,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     
     this.roles = ["reader", "editor"];
     this.domNode = $("#document_access_list");
-    this.documentAccessDialog = $("#wb-change-access-dialog");
+    this.documentAccessDialog = $("#invite_co_authors");
     this.chooseFriendsForm = $("#collaborate_by_connection_form");
     this.byEmailForm = $("#collaborate_by_email_form");
     this.emailsNode = $('#wb-invitation-add-editors');
@@ -24,7 +24,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.byEmailForm.bind( 'submit', this.sendInvitationsByEmail.pBind(this) );
     this.domNode.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
     jQuery('.collaborate_form').bind('click', this.toggleForm.pBind(this) );
-    
+    jQuery('#collaborate_select_all_friends').bind('click', this.selectAllFriends.pBind(this));
     this.documentAccessDialog
     //.remove()
     //.css({ display: '' });
@@ -279,6 +279,11 @@ WebDoc.DocumentCollaborationController = $.klass({
     else{
       friendNode.addClass('selected_friend');
     }
+  },
+  
+  selectAllFriends: function(e){
+    e.preventDefault();
+    jQuery('#invite_co_authors .choose_friend').addClass('selected_friend');
   },
   
   url: function(){
