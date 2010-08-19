@@ -192,7 +192,7 @@ class Document < ActiveRecord::Base
   
   def unshare
     if is_public?
-      Role.public.where(:document_id => self.uuid).delete_all
+      self.roles.where('name in(?)', Role::PUBLIC_ROLES).delete_all
     end
   end
   
@@ -205,16 +205,15 @@ class Document < ActiveRecord::Base
   end
 
   def as_application_json
-    pages = self.pages.not_deleted
     hash = { 'document' => self.attributes }
     hash['document']['size'] = self.size
+    hash['document']['is_public'] = self.is_public?
     hash['document']['pages'] = []
-    for page in pages
+    for page in self.pages.not_deleted
       page_hash = page.attributes
       page_hash['data'] = page.data
       page_hash['items'] = []
-      items = page.items.not_deleted
-      for item in items
+      for item in page.items.not_deleted
         item_hash = item.attributes
         item_hash['data'] = item.data
         item_hash['properties'] = item.properties
@@ -222,6 +221,11 @@ class Document < ActiveRecord::Base
         page_hash['items'] << item_hash
       end
       hash['document']['pages'] << page_hash
+    end
+    hash['document']['roles'] = []    
+    for role in self.roles
+      role_hash = role.attributes
+      hash['document']['roles'] << role_hash
     end
     hash
   end
@@ -266,6 +270,8 @@ class Document < ActiveRecord::Base
         is_creator = (self.creator && self.creator.uuid == role.user.uuid)? true : false
         user_infos = [:uuid => user.uuid, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator]
         result[:access] << user_infos
+      else
+        result[:public] = role.name
       end
     end
     if @unvalid_access_emails
@@ -290,6 +296,7 @@ class Document < ActiveRecord::Base
     friends_list.each do |friend_uuid|
       user = User.where(:uuid => friend_uuid).first
       user.has_role!(role,self)
+      #TODO Notifiy by mail and notifiy inside webdoc
     end
     
     # recipients.each do |user_email|
@@ -340,6 +347,7 @@ class Document < ActiveRecord::Base
     if user
       user.has_no_role!(role, self)
       Notifier.removed_role_notification(current_user, role, user, self).deliver
+      #todo notify inside webdoc
     end
   end
   

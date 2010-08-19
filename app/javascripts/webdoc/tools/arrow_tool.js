@@ -19,9 +19,11 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     
   select: function(e) {
     var objectToSelect = this._clickedObjectView(e);
+
     if (objectToSelect.type !== "discussion") {
       WebDoc.application.boardController.unSelectDiscussionView();
-      if (!WebDoc.application.boardController.isInteractionMode()) {
+      if (!WebDoc.application.boardController.isInteractionMode() && objectToSelect.object && objectToSelect.object.item &&
+          WebDoc.application.pageEditor.isCurrentUserCanEditItem(objectToSelect.object.item)) {
         this.lastSelectedObject = {
           itemView: objectToSelect.object, // JBA: no more USED
           event: e
@@ -44,11 +46,17 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
         }
         this.lastSelectedObject.event = null;
       }
+      else {
+        if(!e.shiftKey) {
+          WebDoc.application.boardController.unselectAll();
+          this.selectedObject = [];
+        }
+      }
     }
     else if(objectToSelect.type === 'discussion') {
-      WebDoc.application.boardController.unselectAll(); 
+      WebDoc.application.boardController.unselectAll();
       WebDoc.application.boardController.selectDiscussionView(objectToSelect.object, false, true);
-    } 
+    }
   },
   
   disableHilight: function() {

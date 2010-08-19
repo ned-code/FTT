@@ -32,7 +32,7 @@ class DocumentsController < ApplicationController
         per_page = 20
         @documents = Document.not_deleted_with_filter(current_user, params[:document_filter], params[:query], params[:page], per_page)
         render :json => { 
-          :documents => @documents,
+          :documents => @documents.map{ |d| d.as_application_json },
           :pagination => {
             :per_page => per_page,
             :current_page => @documents.current_page,
@@ -191,7 +191,7 @@ class DocumentsController < ApplicationController
   def unshare
     authorize! :update, @document
     @document.unshare
-    render :json => {}
+    render :json => @document.to_access_json
   end
   
   

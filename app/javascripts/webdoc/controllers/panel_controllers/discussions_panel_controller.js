@@ -43,8 +43,11 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
 
   createDiscussionAndFormDomNode: function(discussion) {
     var discussionDomNode = this.createDiscussionDomNode(discussion);
-    
-    discussionDomNode.append(this.createCommentForm(discussion));
+
+    if(WebDoc.application.pageEditor.isCurrentUserCanComment()) {
+      discussionDomNode.append(this.createCommentForm(discussion));
+    }
+
     
     discussionDomNode.bind('click', function() {
       var discussionView = WebDoc.application.boardController.currentPageView().discussionViews[discussion.uuid()];

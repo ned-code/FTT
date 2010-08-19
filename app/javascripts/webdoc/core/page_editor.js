@@ -109,6 +109,11 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
             ddd("[PageEditor] call panelsController.showMyContent");
             app.panelsController.showMyContent();
           }
+
+          // add role name of the current user as class in editor dom node
+          jQuery.each(WebDoc.application.pageEditor.getCurrentUserRolesForCurrentDocument(), function(i, roleName) {
+            app.boardController.editorNode.addClass(roleName);
+          });
           
           app.boardController.loadingNode.removeTransitionClass('loading');
           
@@ -380,6 +385,77 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       ddd(uuid);
     }
     return uuid;
+  },
+
+  /**
+   * Get all roles name in an array of the current user
+   */
+  getCurrentUserRolesForCurrentDocument: function() {
+    if(this._currentUserRolesForCurrentDocument === undefined) {
+      return this._currentUserRolesForCurrentDocument = this.currentDocument.getRolesForUserUuid(WebDoc.Application.getCurrentUser().uuid());
+    }
+    return this._currentUserRolesForCurrentDocument;    
+  },
+
+  /**
+   * Check if the current user have the role specified in the param and return a boolean
+   *
+   * @param roleName String the name of the role, see WebDoc.UserRole to see all role names allowed
+   */
+  isCurrentUserHasRole: function (roleName) {
+    if(jQuery.inArray(roleName, this.getCurrentUserRolesForCurrentDocument()) !== -1) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
+  /**
+   * Check if the current user have a role in the the array and return a boolean
+   *
+   * @param rolesNameArray Array the array of role names
+   */
+  isCurrentUserHasOneOfRoles: function(rolesNameArray) {
+    for(var i in rolesNameArray) {
+      if(this.isCurrentUserHasRole(rolesNameArray[i])) {
+        return true;
+      }
+    }
+    return false;
+  },
+
+  /**
+   * Check if the current user can comment and return a boolean
+   */
+  isCurrentUserCanComment: function() {
+    if(this.isCurrentUserHasOneOfRoles([ WebDoc.UserRole.ROLE_NAME_EDITOR,
+                                         WebDoc.UserRole.ROLE_NAME_CONTRIBUTOR,
+                                         WebDoc.UserRole.ROLE_NAME_VIEWER_COMMENT,
+                                         WebDoc.UserRole.ROLE_NAME_ADMIN ]) ) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
+  /**
+   * Check if the current user can edit an item and return a boolean
+   *
+   * @param item the item to check if a contributor have access to edit this item
+   */
+  isCurrentUserCanEditItem: function(item) {
+    if(this.isCurrentUserHasOneOfRoles([ WebDoc.UserRole.ROLE_NAME_EDITOR,
+                                         WebDoc.UserRole.ROLE_NAME_ADMIN ]) ||
+        (this.isCurrentUserHasRole(WebDoc.UserRole.ROLE_NAME_CONTRIBUTOR) &&
+            item && item.data && item.data.creator_id && item.data.creator_id === WebDoc.Application.getCurrentUser().uuid() ) ) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
+
 });
 

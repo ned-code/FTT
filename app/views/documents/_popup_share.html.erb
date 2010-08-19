@@ -1,4 +1,43 @@
-<div id="invite_co_authors" class="collaborate-dialog" style="display: none">
+<div id="share_webdoc" class="share-dialog" style="display:none" title="">
+  <form id="wd_share_form">
+    <h4>Set the visibility of the webdoc</h4>
+    
+    <fieldset>
+      <div class="horizontal">
+        <input id="only_participants_radio" type="radio" name="share" value="off" />
+        <label for="#only_participants_radio">Only participants can view</label>
+      </div>
+      <div class="horizontal">
+        <input id="your_connections_radio" type="radio" name="share" value="on" />
+        <label for="#your_connections_radio">Your connections & others</label>
+      </div>
+      <div id="your_connections_list" class='friends_list' style='display:none'>
+        <h4>Choose friends</h4>
+        <a id='share_select_all_friends' href="" class="select_all_friends">Select all friends</a>
+      </div>
+      <div class="horizontal">
+        <input id="public_radio" type="radio" name="share" value="on" />
+        <label for="#public_radio">Public</label>
+      </div>
+      <div class='horizontal' id="share_allow_comments" style='display:none'>
+        <input id="allow_comments_checkbox" type="checkbox" name="allow_comments" />
+        <label for="#allow_comments_checkbox">Allow comments</label>
+      </div>
+    </fieldset>
+    
+    <fieldset class="" id='share_public_url' style='display:none'>
+      <label  for="shared_webdoc_url" >Public URL</label>
+      <input id="shared_webdoc_url" type="text" />
+    </fieldset>
+    <div class="ui-actions state-readonly-hide">
+      <a href="#cancel" class="cancel">Cancel</a>
+      <input type="submit" name="share_document" value="Set visibility" />
+    </div>
+  </form>
+</div>
+
+
+<!--<div id="invite_co_authors" class="collaborate-dialog" style="display: none">
   <h4>Invite co-authors</h4>
   <ul>
     <li><a id='collaborate_by_connection' class='collaborate_form' href=''>Your connections</a></li>
@@ -47,4 +86,4 @@
     <h4>Current editors</h4>
     <ul id="document_access_list" class="vertical divided index"></ul>
   </div>
-</div>
+</div>-->
