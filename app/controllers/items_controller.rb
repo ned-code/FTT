@@ -31,7 +31,7 @@ class ItemsController < ApplicationController
     end
     @item.document_uuid = params[:document_id]
     @item.save!
-    message = @item.as_json({})
+    message = @item.as_application_json
     message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, params[:document_id])
     render :json => @item
@@ -42,7 +42,7 @@ class ItemsController < ApplicationController
     @item = Item.not_deleted.find_by_uuid(params[:id])
     @item.document_uuid = params[:document_id]
     @item.update_attributes!(params[:item])    
-    message = @item.as_json({})
+    message = @item.as_application_json
     message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, params[:document_id])
     render :json => @item
