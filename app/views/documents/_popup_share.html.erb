@@ -4,18 +4,30 @@
     
     <fieldset>
       <div class="horizontal">
-        <input id="unshare_webdoc_radio" type="radio" name="share" value="off" />
-        <label for="#unshare_webdoc_radio">don't share (only co-editors will see this document)</label>
+        <input id="only_participants_radio" type="radio" name="share" value="off" />
+        <label for="#only_participants_radio">Only participants can view</label>
       </div>
       <div class="horizontal">
-        <input id="share_webdoc_radio" type="radio" name="share" value="on" />
-        <label for="#share_webdoc_radio">share (make it public)</label>
+        <input id="your_connections_radio" type="radio" name="share" value="on" />
+        <label for="#your_connections_radio">Your connections & others</label>
+      </div>
+      <div id="your_connections_list" class='friends_list' style='display:none'>
+        <h4>Choose friends</h4>
+        <a id='share_select_all_friends' href="" class="select_all_friends">Select all friends</a>
+      </div>
+      <div class="horizontal">
+        <input id="public_radio" type="radio" name="share" value="on" />
+        <label for="#public_radio">Public</label>
+      </div>
+      <div class='horizontal' id="share_allow_comments" style='display:none'>
+        <input id="allow_comments_checkbox" type="checkbox" name="allow_comments" />
+        <label for="#allow_comments_checkbox">Allow comments</label>
       </div>
     </fieldset>
     
-    <fieldset class="state-unshared-hide">
-      <label  for="shared_webdoc_url" ><%= t('.document_forms.share_document_dialog.shared_address_label') %></label>
-      <input id="shared_webdoc_url" type="text" />
+    <fieldset class="state-unshared-hide" id='share_public_url'>
+      <label  for="shared_webdoc_url" >Public URL</label>
+      <input id="shared_webdoc_url" type="text"/>
     </fieldset>
   </form>
 </div>

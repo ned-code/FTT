@@ -14,8 +14,13 @@ WebDoc.DocumentShareController = $.klass({
     
     this.documentShareDialog = jQuery('#share_webdoc');
     this.documentShareForm = jQuery("#wb-share-form");
-    this.shareNode = jQuery("#share_webdoc_radio");
-    this.unshareNode = jQuery("#unshare_webdoc_radio");
+    
+    this.onlyParticipantsRadio = jQuery("#only_participants_radio");
+    this.yourConnectionsRadio = jQuery("#your_connections_radio");
+    this.publicRadio = jQuery("#public_radio");
+    this.publicUrlNode = jQuery('#share_public_url');
+    this.shareAllowComments = jQuery('#share_allow_comments');
+    this.allowCommentsCheckBox = jQuery('#allow_comments_checkbox');
     
     this.shareTabs = jQuery("#wb-document-share-tabs");
     this.shareTabs.tabs();
@@ -40,7 +45,6 @@ WebDoc.DocumentShareController = $.klass({
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
-        ddd(data);
         this.documentShareDialog.show();
         // this.documentShareDialog.pop({
         //           attachTo: $(e.currentTarget),
@@ -81,15 +85,40 @@ WebDoc.DocumentShareController = $.klass({
   
   _loadAccess: function(json) {
     this.domNode.empty();
+    
+    //first we look if the document is public
     if(json.public){
-      ddd('document is public', json.public);
+      this.publicRadio.click();
+      this.shareAllowComments.show();
+      this._initAllowCommentsCheckBox(json.public);      
+      return;
     }
+    
+    //document not publi, we look if it's share with connection
+    var isShared = false;
     this.access = json.access;
     for (var i = 0; i < this.access.length; i++) {
-      //regarder si role public ou non
-      ddd(this.access[i][0].role == 'viewer_comment' || this.access[i][0].role == 'viewer_only');
-      this._createAccessItem(this.access[i][0]);  
+      if(this.access[i][0].role == 'viewer_comment' || this.access[i][0].role == 'viewer_only'){
+        if(!isShared){
+          isShared = true;
+          //we consider that all the user have the same role !!
+          this._initAllowCommentsCheckBox(this.access[i][0].role);
+        }
+        this._createAccessItem(this.access[i][0]);
+      }
     }
+    
+    if(isShared){
+      this.yourConnectionsRadio.click();
+      this.shareAllowComments.show();
+    }
+    else{
+      //not public and not share to connections -> document not shared
+      this.onlyParticipantsRadio.click();
+      this.shareAllowComments.hide();
+    }
+    
+    
     var failedEmailsWrapper = $('#wb-readers-invitation-failed');
     if(json.failed && json.failed.length > 0) {
       failedEmailsWrapper.empty();
@@ -177,6 +206,15 @@ WebDoc.DocumentShareController = $.klass({
       this.documentShareDialog.addClass("state-unshared");
     }
     this.sharedDocUrlField.val("http://" + window.location.host + "/documents/" + this.document.uuid() + "#1");
+  },
+  
+  _initAllowCommentsCheckBox:function(role){
+    if(role == 'viewer_comment'){
+      this.allowCommentsCheckBox.attr('checked', 1);
+    }
+    else{
+      this.allowCommentsCheckBox.attr('checked', 0);
+    }
   },
   
   _createRightsToRecipients: function(jSONData) {
