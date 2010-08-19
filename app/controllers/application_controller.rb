@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
     p exception
     flash[:notice] = exception.message
     p flash
-    redirect_to "/users/#{current_user.uuid}"
+    redirect_to root_url
   end
   
   before_filter :set_first_visit_time

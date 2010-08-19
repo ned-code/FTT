@@ -22,12 +22,8 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
 
     if (objectToSelect.type !== "discussion") {
       WebDoc.application.boardController.unSelectDiscussionView();
-      if (!WebDoc.application.boardController.isInteractionMode() &&
-          (WebDoc.application.pageEditor.isCurrentUserHasOneOfRoles([ WebDoc.UserRole.ROLE_NAME_EDITOR,
-                                                                     WebDoc.UserRole.ROLE_NAME_ADMIN ]) ||
-              ( WebDoc.application.pageEditor.isCurrentUserHasRole(WebDoc.UserRole.ROLE_NAME_CONTRIBUTOR) &&
-                  objectToSelect && objectToSelect.object && objectToSelect.object.item &&
-                  objectToSelect.object.item.data.creator_id === WebDoc.Application.getCurrentUser().uuid()) ) ) {
+      if (!WebDoc.application.boardController.isInteractionMode() && objectToSelect.object && objectToSelect.object.item &&
+          WebDoc.application.pageEditor.isCurrentUserCanEditItem(objectToSelect.object.item)) {
         this.lastSelectedObject = {
           itemView: objectToSelect.object, // JBA: no more USED
           event: e
