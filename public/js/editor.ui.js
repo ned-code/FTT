@@ -38,8 +38,6 @@
 						
 						doc.bind('click.dropdown', function(e){
 							
-							console.log('YEP');
-							
 							state = false;
 							obj.removeTransitionClass('active');
 							

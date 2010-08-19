@@ -11,6 +11,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     
     jQuery(selector)
     .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
+    .delegate("a[href=#property]", 'click', jQuery.proxy( this, 'clickProperty' ))
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
     .delegate("a[href=#theme_class]", 'click', jQuery.proxy( this, 'changeClass' ))
     .delegate("a[href=#remove_background]", 'click', jQuery.proxy( this, 'removeBackground' ))
@@ -35,7 +36,7 @@ WebDoc.PropertiesInspectorController = $.klass({
     	fontWeight:				"#property_font_weight",
     	fontStyle:				"#property_font_style",
     	fontFamily:				"#property_font_family",
-    	textAlign:				"#property_text_align",
+    	textAlign:				"#property_text_align_left, #property_text_align_center, #property_text_align_right",
     	textDecoration:		"#property_text_decoration",
     	textShadow:				"#property_text_shadow",
     	letterSpacing:		"#property_letter_spacing",
@@ -180,25 +181,55 @@ WebDoc.PropertiesInspectorController = $.klass({
     }
   },
   
+  clickProperty: function(e){
+    var link = jQuery( e.currentTarget ),
+    		property = link.attr('data-property'),
+    		item, cssObj, l;
+    
+    ddd('[clickProperty] property:', property, 'link:', e.currentTarget);
+    
+    if ( typeof property === 'undefined' ) { return; }
+    
+    e.preventDefault();
+    
+    item = WebDoc.application.boardController.selection()[0].item;
+    cssObj = {};
+    property = property.split(' ');
+    l = property.length;
+    
+    // Loop over properties listed in data-property, getting
+    // their css values from the style of this link
+    while(l--){
+    	cssObj[ property[l] ] = link.css( property[l] );
+    }
+    
+    item.changeCss( cssObj );
+    this.refresh();
+  },
+  
   changeProperty: function(e){
     var self = this,
-        field = jQuery(e.target);
+        field = jQuery(e.target),
+        property = field.attr('data-property');
+    
+    if ( typeof property === 'undefined' ) { return; }
     
     ddd('[propertiesInspector] changeProperty ', e.target);
     
     field.validate({
       pass: function( value ){ 
         var item = WebDoc.application.boardController.selection()[0].item,
-            property = field.attr('data-property'),
             cssObj;
         
         if ( typeof property === 'undefined' ) { return; }
         // TODO: convert property to camelCase if it isn't already
         
+        ddd('[propertiesInspector] property:', property);
+        
         // If this field has a property translator then it
         // processes the value and gives us some CSS...
         if ( self.properties[property] && self.properties[property].input ) {
-          cssObj = self.properties[property].input( value );
+          cssObj = self.properties[property].input( field, value );
           item.changeCss( cssObj );
         }
         // Otherwise we use the value directly
@@ -243,6 +274,61 @@ WebDoc.PropertiesInspectorController = $.klass({
   // css (the 'input' methods) and css to field displays
   // (the 'output' methods)
   properties: {
+    fontSize: {
+    	input: function( field, value ){
+    		return { fontSize: value+'em' };
+    	},
+    	output: function( field, css ){
+    		field.val( parseFloat( css.fontSize ) );
+    	}
+    },
+    fontWeight: {
+    	input: function( field, value ){
+    		return { fontWeight: field.attr('checked') ? value : '' };
+    	},
+    	output: function( field, css ){
+    		field.attr( 'checked', !!css.fontWeight );
+    	}
+    },
+    fontStyle: {
+    	input: function( field, value ){
+    		return { fontStyle: field.attr('checked') ? value : '' };
+    	},
+    	output: function( field, css ){
+    		field.attr( 'checked', !!css.fontStyle );
+    	}
+    },
+    textDecoration: {
+    	input: function( field, value ){
+    		return { textDecoration: field.attr('checked') ? value : '' };
+    	},
+    	output: function( field, css ){
+    		field.attr( 'checked', !!css.textDecoration );
+    	}
+    },
+    textAlign: {
+      output: function( field, css ){
+        field
+        .filter( "[value="+ css.textAlign +"]" )
+        .attr('checked', 'checked');
+      }
+    },
+    letterSpacing: {
+    	input: function( field, value ){
+    		return { letterSpacing: value+'em' };
+    	},
+    	output: function( field, css ){
+    		field.val( parseFloat( css.letterSpacing ) );
+    	}
+    },
+    wordSpacing: {
+    	input: function( field, value ){
+    		return { wordSpacing: value+'em' };
+    	},
+    	output: function( field, css ){
+    		field.val( parseFloat( css.wordSpacing ) );
+    	}
+    },
     overflow: {
       output: function( field, css ){
         field
@@ -259,10 +345,8 @@ WebDoc.PropertiesInspectorController = $.klass({
       }
     },
     rotation: {
-      input: function( value ){
-        return {
-          transform: (value === '') ? value : 'rotate('+value+')'
-        };
+      input: function( field, value ){
+        return { transform: (value === '') ? value : 'rotate('+value+')' };
       },
       output: function( field, css ){
         var transform = css.transform,
@@ -278,10 +362,8 @@ WebDoc.PropertiesInspectorController = $.klass({
       }
     },
     backgroundImage: {
-      input: function( value ){
-        return {
-          backgroundImage: (value === '') ? value : 'url('+value+')'
-        };
+      input: function( field, value ){
+        return { backgroundImage: (value === '') ? value : 'url('+value+')' };
       },
       output: function( field, css ){
         field.val( /^url\((.+)\)/.exec( css.backgroundImage )[1] );

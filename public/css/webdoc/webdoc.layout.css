@@ -14,37 +14,63 @@
 	border: 1px solid rgb(180,180,180);
 }
 
+/* .item */
+
+.item {
+	overflow: hidden;
+}
+
 /* .item extensions */
 
 .textbox_item {
+	overflow: visible;
+}
+
+.textbox_item .shape{
+    /*background:yellow;*/
+    width:100%;
+    height:100%;
+    /*clip-path:url(shapes/0c.svg#clip-path);
+    -webkit-mask-image:url(shapes/0c.svg);*/
 }
 
 .textbox_item .text {
   position:absolute;
-  width:50%;
-  height:50%;
-  left:25%;
-  top:25%;
-  overflow:hidden;
+  left:20%;
+  top:20%;
+  width:60%;
+  height:60%;
+  overflow: hidden;
+  padding: 0;
+  background: transparent;
+  
+  /* Inherit styles, because they are set on the parent */
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  text-decoration: inherit;
+  text-align: inherit;
+  text-shadow: inherit;
+  letter-spacing: inherit;
+  word-spacing: inherit;
 }
 
-.textbox_item>svg {
-	position: absolute;
+.textbox_item .shape svg {
+	pointer-events:none;
+  overflow:visible;
+  position:absolute;
+  top:-1000px;
+  left:-1000px;
+  width:2000px;
+  height:2000px;
 }
 
-.textbox_item textarea.text {
-	overflow:hidden;
-}
-
-.textbox_item div.text {
-	overflow: hidden;
-}
 
 .image_item {
 	overflow:hidden;
 }
-
-
 
 .draw_tool_mode .webdoc {
 	cursor: crosshair;
@@ -266,18 +292,6 @@
     border-color: hsla(208, 8%, 33%, 0.5);
     border-style: dotted;
 }
-.edit_mode .item_wrap {
-
-}
-.edit_mode .item_selected {
-  border-width: 3px;
-  margin-top: -3px;
-  margin-left: -3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-}
-
 
 .load_item {
   overflow:hidden;

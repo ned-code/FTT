@@ -373,7 +373,33 @@ WebDoc.Item = $.klass(WebDoc.Record,
   
   getText: function(){
     if(this.hasText()){ return this.data.data.text; }
-    else{ ''; }
+    else { return ''; }
+  },
+  
+  hasShape: function(){
+    if(this.data.data.shape){ return true; }
+    else{ return false; }
+  },
+  
+  setShape: function(shape){
+    var that = this;
+    var previousShape = this.getShape();
+    
+    if(!this.hasShape()){
+      jQuery.extend(this.data.data, { shape : {} });
+    }
+    
+    WebDoc.application.undoManager.registerUndo(function() {
+      that.setShape( previousShape );
+    });
+    
+    this.data.data.shape = shape;
+    this.save();
+  },
+  
+  getShape: function(){
+    if(this.hasShape()){ return this.data.data.shape; }
+    else { return false }
   },
   
   getIsPlaceholder: function() {
@@ -639,7 +665,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
     
     this.save();
-    this.fireObjectChanged({ modifedAttribute: 'css' });
+    this.fireObjectChanged(this, { modifedAttribute: 'css' });
     WebDoc.application.inspectorController.refresh();
   },
 
