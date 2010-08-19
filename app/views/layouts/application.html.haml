@@ -10,7 +10,7 @@
     = csrf_meta_tag
 
   %body{ :class => controller_name }
-    = render :partial => "layouts/main_toolbar"
+    = render :partial => "layouts/siteheader"
     = yield
     = render "layouts/flash", :object => flash
     

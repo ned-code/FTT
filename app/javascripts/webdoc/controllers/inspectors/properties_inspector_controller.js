@@ -5,11 +5,10 @@
 WebDoc.PropertiesInspectorController = $.klass({
   initialize: function( selector, showBgColors ) {
     ddd('[Properties Inspector Controller] initialize on', selector);
-    var domNode = $(selector);
+    var domNode = jQuery(selector);
     this.domNode = domNode;
-    domNode.show();
     
-    jQuery(selector)
+    domNode
     .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
     .delegate("a[href=#property]", 'click', jQuery.proxy( this, 'clickProperty' ))
     .delegate("#property-fit-to-screen", 'click', jQuery.proxy( this, 'updatePropertiesWithFitToScreen' ))
