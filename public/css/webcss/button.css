@@ -30,3 +30,37 @@
   height: 0;
   width: 2em;
 }
+
+.button.header {
+  display: inline-block;
+  height: 2em;
+  line-height: 2em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  
+  background-color: #809198;  
+  text-decoration: none;
+  color: #fff;
+  -moz-border-radius: 4px;
+  -webkit-border-radius:4px;
+  border-radius:4px;
+  padding-left:10px;
+  padding-right:10px;
+  text-shadow: 1px 1px 1px #6f7e83;
+  
+  font-family:Arial;
+  font-weight: bold;
+  
+}
+
+.button.header:hover,
+.button.header:focus {
+  text-decoration: none;
+  background-color: #6a7e85;
+  color: #fff;
+}
+
+.button.header.icon {
+	/* Notification // friends */
+}

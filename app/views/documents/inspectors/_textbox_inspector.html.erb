@@ -5,6 +5,26 @@
   
   <div class="content">
     <form id="textbox_properties">
+    	
+    	<label>Colour</label>
+    	
+    	<ul class="horizontal color_thumbs_index thumbs_index index">
+    	  <li><a class="color_thumb thumb" href="#property" data-property="color" style="color: black;" title="Jet Black"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #92b322;" title="Dirty lime"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #ccf245;" title="Bright Lime"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #b39322;" title="Dirty Orange"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #ffd200;" title="Bright Orange"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #ff5400;" title="Starsky and Hutch"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #c33200;" title="Twin Peaks"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #f20951;" title="Lipstick"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #b32248;" title="Dark Lipstick"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #22a4b3;" title="Dirty Marine"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #00dce4;" title="Clean Marine"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #009982;" title="Beach Lagoon"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #43e4cb;" title="Turquoise"><span>&#x2588;</span></a></li
+    	 ><li><a class="color_thumb thumb" href="#property" data-property="color" style="color: #ffffff;" title="White"><span>&#x2588;</span></a></li>
+    	</ul>
+    	
       <fieldset>
         <div>
           <label for="property_font_family">Font</label>
@@ -13,7 +33,7 @@
         
         <div>
           <label for="property_font_size">Size</label>
-          <input  id="property_font_size" type="range" min="0.5" max="4" step="0.1" data-property="fontSize" value="1" />
+          <input  id="property_font_size" type="range" min="0.6" max="4" step="0.1" data-property="fontSize" value="1" />
         </div>
         
         <div>
@@ -33,19 +53,19 @@
         
         <div>
           <label for="property_text_align">Align</label>
-          <input  id="property_text_align_left" type="radio" data-property="textAlign" value="left" />
-          <input  id="property_text_align_center" type="radio" data-property="textAlign" value="center" />
-          <input  id="property_text_align_right" type="radio" data-property="textAlign" value="right" />
+          <input name="property_text_align" id="property_text_align_left" type="radio" data-property="textAlign" value="left" />
+          <input name="property_text_align" id="property_text_align_center" type="radio" data-property="textAlign" value="center" />
+          <input name="property_text_align" id="property_text_align_right" type="radio" data-property="textAlign" value="right" />
         </div>
         
         <div>
           <label for="property_word_spacing">Word Spacing</label>
-          <input  id="property_word_spacing" type="range" min="-1" max="2" step="0.1" data-property="wordSpacing" value="0" />
+          <input  id="property_word_spacing" type="range" min="0" max="2" step="0.05" data-property="wordSpacing" value="0" />
         </div>
         
         <div>
           <label for="property_letter_spacing">Letter Spacing</label>
-          <input  id="property_letter_spacing" type="range" min="-1" max="2" step="0.1" data-property="letterSpacing" value="0" />
+          <input  id="property_letter_spacing" type="range" min="-0.2" max="1.4" step="0.02" data-property="letterSpacing" value="0" />
         </div>
         
         <div>
@@ -56,23 +76,30 @@
 			
 			<fieldset>
         <div>
+          <label for="property_color">color</label>
+          <input id="property_color" type="text" data-type="cssvalue" data-property="color" autocomplete="on" value="" />
+        </div>
+      </fieldset>
+      
+      <fieldset>
+        <div>
           <label for="property_left">left</label>
-          <input id="property_left" type="text" data-type="cssvalue" data-property="left" value="" />
+          <input id="property_left" type="text" data-type="cssvalue" data-property="left" autocomplete="on" value="" />
         </div>
         
         <div>
           <label for="property_top">top</label>
-          <input id="property_top" type="text" data-type="cssvalue" data-property="top" value="" />
+          <input id="property_top" type="text" data-type="cssvalue" data-property="top" autocomplete="on" value="" />
         </div>
         
         <div>
           <label for="property_width">width</label>
-          <input id="property_width" type="text" data-type="cssvalue" data-property="width" value="" />
+          <input id="property_width" type="text" data-type="cssvalue" data-property="width" autocomplete="on" value="" />
         </div>
         
         <div>
           <label for="property_height">height</label>
-          <input id="property_height" type="text" data-type="cssvalue" data-property="height" value="" />
+          <input id="property_height" type="text" data-type="cssvalue" data-property="height" autocomplete="on" value="" />
         </div>
         
         <!--div>
@@ -83,7 +110,7 @@
         
         <div>
           <label>rotation</label>
-          <input id="property_rotation" type="text" data-type="cssangle" data-property="rotation" value="" />
+          <input id="property_rotation" type="text" data-type="cssangle" data-property="rotation" autocomplete="on" value="" />
         </div>
          
         <!--div>

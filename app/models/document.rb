@@ -293,6 +293,7 @@ class Document < ActiveRecord::Base
     friends_list.each do |friend_uuid|
       user = User.where(:uuid => friend_uuid).first
       user.has_role!(role,self)
+      #TODO Notifiy by mail and notifiy inside webdoc
     end
     
     # recipients.each do |user_email|
@@ -343,6 +344,7 @@ class Document < ActiveRecord::Base
     if user
       user.has_no_role!(role, self)
       Notifier.removed_role_notification(current_user, role, user, self).deliver
+      #todo notify inside webdoc
     end
   end
   

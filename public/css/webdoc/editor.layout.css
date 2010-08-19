@@ -333,12 +333,6 @@ body.full_view {
 .message_index .user_thumb {
   position: absolute;
   top: 0; left: 0;
-  /* This is the default size */
-  /* 
-  background-size: 32px 32px;
-  padding-top: 32px;
-  width: 32px;
-  */
 }
 
 .thumbs_index li {
@@ -362,9 +356,19 @@ body.full_view {
 	margin-bottom: 0.3333em;
 }
 
-.edit_dropdown_index>li {
-	margin-bottom: 0.3333em;
+/*.edit_dropdown_index>li {
 	white-space: nowrap;
+}*/
+.edit_dropdown_index>li a {
+	margin-left: 10px;
+	margin-right: 10px;
+	padding:0;
+	color:#efefef;
+	background-color: rgba(0,0,0,0);
+}
+.edit_dropdown_index>li:hover {
+/*white-space: nowrap;*/
+	background-color: grey;
 }
 
 .edit_dropdown_index.active {}
@@ -489,9 +493,14 @@ body.full_view {
 }
 
 .user_thumb {
+  -webkit-background-size:32px 32px;
+  -moz-background-size: 32px 32px;
   background-size: 32px 32px;
   padding-top: 32px;
   width: 32px;
+  box-shadow:inset 0 0 2px #000000;
+  -moz-box-shadow:inset 0 0 2px #000000;
+  -webkit-box-shadow:inset 0 0 2px #000000;
 }
 
 /* .message extensions */
