@@ -104,14 +104,21 @@ class User < ActiveRecord::Base
       self.roles.where(:name => role, :document_id => document.uuid).present?
     end
   end
+  
   #TODO manage list
   def has_role!(role, document)
     if !has_role?(role,document)
-      Role.create!(:user_id => self.id,
+      if document.nil?
+        Role.create!(:user_id => self.id,
+                   :name => role)
+      else
+        Role.create!(:user_id => self.id,
                    :document_id => document.uuid,
                    :name => role)
+      end
     end
   end
+  
   #TODO manage list
   def has_no_role!(role,document)
     if has_role?(role,document)
