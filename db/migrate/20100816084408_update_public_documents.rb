@@ -1,6 +1,7 @@
 class UpdatePublicDocuments < ActiveRecord::Migration
   def self.up
-    Role.reset_column_information    
+    Role.set_table_name :roles
+    Role.reset_column_information
     Document.where(:is_public => true).all.each do |d|
       Role.create!(:document_id => d.uuid, :name => Role::VIEWER_COMMENT)
     end
