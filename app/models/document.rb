@@ -207,6 +207,7 @@ class Document < ActiveRecord::Base
   def as_application_json
     hash = { 'document' => self.attributes }
     hash['document']['size'] = self.size
+    hash['document']['is_public'] = self.is_public?
     hash['document']['pages'] = []
     for page in self.pages.not_deleted
       page_hash = page.attributes
@@ -269,6 +270,8 @@ class Document < ActiveRecord::Base
         is_creator = (self.creator && self.creator.uuid == role.user.uuid)? true : false
         user_infos = [:uuid => user.uuid, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator]
         result[:access] << user_infos
+      else
+        result[:public] = role.name
       end
     end
     if @unvalid_access_emails

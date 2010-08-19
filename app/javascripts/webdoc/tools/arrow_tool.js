@@ -18,13 +18,16 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
   },
     
   select: function(e) {
-    ddd('-----------------asfd');
-    ddd(WebDoc.application.pageEditor.currentDocument);
-
     var objectToSelect = this._clickedObjectView(e);
+
     if (objectToSelect.type !== "discussion") {
       WebDoc.application.boardController.unSelectDiscussionView();
-      if (!WebDoc.application.boardController.isInteractionMode()) {
+      if (!WebDoc.application.boardController.isInteractionMode() &&
+          (WebDoc.application.pageEditor.isCurrentUserHasOneOfRoles([ WebDoc.UserRole.ROLE_NAME_EDITOR,
+                                                                     WebDoc.UserRole.ROLE_NAME_ADMIN ]) ||
+              ( WebDoc.application.pageEditor.isCurrentUserHasRole(WebDoc.UserRole.ROLE_NAME_CONTRIBUTOR) &&
+                  objectToSelect && objectToSelect.object && objectToSelect.object.item &&
+                  objectToSelect.object.item.data.creator_id === WebDoc.Application.getCurrentUser().uuid()) ) ) {
         this.lastSelectedObject = {
           itemView: objectToSelect.object, // JBA: no more USED
           event: e
@@ -47,11 +50,17 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
         }
         this.lastSelectedObject.event = null;
       }
+      else {
+        if(!e.shiftKey) {
+          WebDoc.application.boardController.unselectAll();
+          this.selectedObject = [];
+        }
+      }
     }
     else if(objectToSelect.type === 'discussion') {
-      WebDoc.application.boardController.unselectAll(); 
+      WebDoc.application.boardController.unselectAll();
       WebDoc.application.boardController.selectDiscussionView(objectToSelect.object, false, true);
-    } 
+    }
   },
   
   disableHilight: function() {

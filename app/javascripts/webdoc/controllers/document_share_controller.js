@@ -8,24 +8,26 @@ WebDoc.DocumentShareController = $.klass({
   initialize: function() {
     this.document = null;
     this.domNode = $("#document_readers_list");
-    $(".delete_reader_role").live("click", this._deleteReaderRole.pBind(this));   
+    //$(".delete_reader_role").live("click", this._deleteReaderRole.pBind(this));   
     
-    this.documentShareDialog = $("#wb-share-document-dialog");
-    this.documentShareForm = $("#wb-share-form");
-    this.shareNode = $("#share_webdoc_radio");
-    this.unshareNode = $("#unshare_webdoc_radio");
+    this.friendsSelector = new WebDoc.FriendsSelectorController('share_webdoc');
     
-    this.shareTabs = $("#wb-document-share-tabs");
+    this.documentShareDialog = jQuery('#share_webdoc');
+    this.documentShareForm = jQuery("#wb-share-form");
+    this.shareNode = jQuery("#share_webdoc_radio");
+    this.unshareNode = jQuery("#unshare_webdoc_radio");
+    
+    this.shareTabs = jQuery("#wb-document-share-tabs");
     this.shareTabs.tabs();
     
-    this.shareDocRadio = $('#share_webdoc_radio');
-    this.unshareDocRadio = $('#unshare_webdoc_radio'); 
-    this.sharedDocUrlField = $('#shared_webdoc_url'); 
-    this.shareWithMembersTabs = $('.unshare-related');
+    this.shareDocRadio = jQuery('#share_webdoc_radio');
+    this.unshareDocRadio = jQuery('#unshare_webdoc_radio'); 
+    this.sharedDocUrlField = jQuery('#shared_webdoc_url'); 
+    this.shareWithMembersTabs = jQuery('.unshare-related');
     
-    this.documentShareDialog
-    .remove()
-    .css({display: ''});
+    // this.documentShareDialog
+    // .remove()
+    // .css({display: ''});
   },
   
   showShare: function(e, document) {
@@ -33,38 +35,40 @@ WebDoc.DocumentShareController = $.klass({
     
     this.document = document;
     
-    $.ajax({
+    jQuery.ajax({
       url: "/documents/" + document.uuid() + "/roles",
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
-        this.documentShareDialog.pop({
-          attachTo: $(e.currentTarget),
-          initCallback: function(){
-            var node = $(this);
-            
-            self._initFields();
-            
-            self.shareNode.bind('change', function(e){
-              self.documentShareDialog.removeClass("state-unshared");
-            });
-            self.unshareNode.bind('change', function(e){
-              self.documentShareDialog.addClass("state-unshared");
-            });
-            self.sharedDocUrlField.bind('focus', function(e){
-              $(this).select();
-            });
-            
-            self.shareDocRadio.bind('change', self._shareDocument.pBind(self));
-            self.unshareDocRadio.bind('change', self._unshareDocument.pBind(self));
-            
-            self.documentShareForm.bind('submit', function(e){
-              self._sendInvitations(e);
-              
-              e.preventDefault();
-            });
-          }
-        });
+        ddd(data);
+        this.documentShareDialog.show();
+        // this.documentShareDialog.pop({
+        //           attachTo: $(e.currentTarget),
+        //           initCallback: function(){
+        //             var node = $(this);
+        //             
+        //             self._initFields();
+        //             
+        //             self.shareNode.bind('change', function(e){
+        //               self.documentShareDialog.removeClass("state-unshared");
+        //             });
+        //             self.unshareNode.bind('change', function(e){
+        //               self.documentShareDialog.addClass("state-unshared");
+        //             });
+        //             self.sharedDocUrlField.bind('focus', function(e){
+        //               $(this).select();
+        //             });
+        //             
+        //             self.shareDocRadio.bind('change', self._shareDocument.pBind(self));
+        //             self.unshareDocRadio.bind('change', self._unshareDocument.pBind(self));
+        //             
+        //             self.documentShareForm.bind('submit', function(e){
+        //               self._sendInvitations(e);
+        //               
+        //               e.preventDefault();
+        //             });
+        //           }
+        //         });
         
         this._loadAccess(data);
       }.pBind(this),
@@ -77,8 +81,13 @@ WebDoc.DocumentShareController = $.klass({
   
   _loadAccess: function(json) {
     this.domNode.empty();
+    if(json.public){
+      ddd('document is public', json.public);
+    }
     this.access = json.access;
     for (var i = 0; i < this.access.length; i++) {
+      //regarder si role public ou non
+      ddd(this.access[i][0].role == 'viewer_comment' || this.access[i][0].role == 'viewer_only');
       this._createAccessItem(this.access[i][0]);  
     }
     var failedEmailsWrapper = $('#wb-readers-invitation-failed');
@@ -217,5 +226,9 @@ WebDoc.DocumentShareController = $.klass({
   
   _closeDialog: function() {
     $(this).dialog('close');
+  },
+  
+  url: function(){
+    return '/documents/' + this.document.uuid() + '/roles';
   }
 });

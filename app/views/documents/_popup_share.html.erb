@@ -1,4 +1,27 @@
-<div id="invite_co_authors" class="collaborate-dialog" style="display: none">
+<div id="share_webdoc" class="share-dialog" style="display:none" title="">
+  <form id="wb-share-form">
+    <h4>Set the visibility of the webdoc</h4>
+    
+    <fieldset>
+      <div class="horizontal">
+        <input id="unshare_webdoc_radio" type="radio" name="share" value="off" />
+        <label for="#unshare_webdoc_radio">don't share (only co-editors will see this document)</label>
+      </div>
+      <div class="horizontal">
+        <input id="share_webdoc_radio" type="radio" name="share" value="on" />
+        <label for="#share_webdoc_radio">share (make it public)</label>
+      </div>
+    </fieldset>
+    
+    <fieldset class="state-unshared-hide">
+      <label  for="shared_webdoc_url" ><%= t('.document_forms.share_document_dialog.shared_address_label') %></label>
+      <input id="shared_webdoc_url" type="text" />
+    </fieldset>
+  </form>
+</div>
+
+
+<!--<div id="invite_co_authors" class="collaborate-dialog" style="display: none">
   <h4>Invite co-authors</h4>
   <ul>
     <li><a id='collaborate_by_connection' class='collaborate_form' href=''>Your connections</a></li>
@@ -47,4 +70,4 @@
     <h4>Current editors</h4>
     <ul id="document_access_list" class="vertical divided index"></ul>
   </div>
-</div>
+</div>-->
