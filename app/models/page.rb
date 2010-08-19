@@ -222,11 +222,7 @@ class Page < ActiveRecord::Base
     hash['page']['data'] = self.data
     hash['page']['items'] = []
     for item in self.items.not_deleted
-      item_hash = item.attributes
-      item_hash['data'] = item.data
-      item_hash['properties'] = item.properties
-      item_hash['preferences'] = item.preferences
-      hash['page']['items'] << item_hash
+      hash['page']['items'] << item.as_application_json['item']
     end
     hash
   end
