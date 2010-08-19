@@ -13,7 +13,7 @@ WebDoc.DocumentShareController = $.klass({
     this.friendsSelector = new WebDoc.FriendsSelectorController('share_webdoc');
     
     this.documentShareDialog = jQuery('#share_webdoc');
-    this.documentShareForm = jQuery("#wb-share-form");
+    this.documentShareForm = jQuery("#wd_share_form");
     
     this.yourConnectionsList = jQuery('#your_connections_list');
     this.onlyParticipantsRadio = jQuery("#only_participants_radio");
@@ -22,17 +22,21 @@ WebDoc.DocumentShareController = $.klass({
     this.publicUrlNode = jQuery('#share_public_url');
     this.shareAllowComments = jQuery('#share_allow_comments');
     this.allowCommentsCheckBox = jQuery('#allow_comments_checkbox');
+    this.sharedDocUrl = jQuery('#share_public_url');
+    this.sharedDocUrlField = jQuery('#shared_webdoc_url');
     
     this.onlyParticipantsRadio.bind('change', this._onlyParticipantsRadioChanged.pBind(this));
     this.publicRadio.bind('change', this._publicRadioChanged.pBind(this));
     this.yourConnectionsRadio.bind('change', this._connectionsRadioChanged.pBind(this));
-    
+    this.documentShareForm.bind( 'submit', this._submitForm.pBind(this) );
+
+    //I think the following is useless
     this.shareTabs = jQuery("#wb-document-share-tabs");
     this.shareTabs.tabs();
     
     this.shareDocRadio = jQuery('#share_webdoc_radio');
     this.unshareDocRadio = jQuery('#unshare_webdoc_radio'); 
-    this.sharedDocUrlField = jQuery('#shared_webdoc_url'); 
+    
     this.shareWithMembersTabs = jQuery('.unshare-related');
     
     // this.documentShareDialog
@@ -96,7 +100,8 @@ WebDoc.DocumentShareController = $.klass({
     if(json.public){
       this.publicRadio.click();
       this.shareAllowComments.show();
-      this._initAllowCommentsCheckBox(json.public);      
+      this._initAllowCommentsCheckBox(json.public);
+      this._showPublicUrl();
       return;
     }
     
@@ -157,6 +162,31 @@ WebDoc.DocumentShareController = $.klass({
       if(userInfos.creator) { deleteItem.hide(); }  
       accessEntry.append(deleteItem);    
       this.domNode.append(accessEntry);   
+    }
+  },
+  
+  _submitForm: function(e){
+    ddd('_submitForm');
+    e.preventDefault();
+    
+    var role = 'viewer_only';
+    if(this.onlyParticipantsRadio.attr('checked')){      
+      this.document.unShare();
+    }
+    else if(this.yourConnectionsRadio.attr('checked')){
+      if(this._getAllowCommentsCheckBoxValue()){
+        role = 'viewer_comment';
+        
+      }
+    }
+    else if(this.publicRadio.attr('checked')){
+      if(this._getAllowCommentsCheckBoxValue()){
+        role = 'viewer_comment';
+      }
+    }
+    else{
+      ddd('no radio button checked !')
+      return;
     }
   },
   
@@ -228,6 +258,10 @@ WebDoc.DocumentShareController = $.klass({
     this.friendsSelector.cleanFriendsList();
   },
   
+  _getAllowCommentsCheckBoxValue:function(){
+    return this.allowCommentsCheckBox.attr('checked');
+  },
+  
   _createRightsToRecipients: function(jSONData) {
     $.ajax({
       url: '/documents/' + this.document.uuid() + '/roles',
@@ -280,16 +314,24 @@ WebDoc.DocumentShareController = $.klass({
   _onlyParticipantsRadioChanged: function(e){
     this.shareAllowComments.hide();
     this.yourConnectionsList.hide();
+    this.sharedDocUrl.hide();
   },
   
   _publicRadioChanged: function(e){
     this.shareAllowComments.show();
     this.yourConnectionsList.hide();
+    this._showPublicUrl();
   },
   
   _connectionsRadioChanged: function(e){
     this.shareAllowComments.show();
     this.yourConnectionsList.show();
     this.friendsSelector.loadFriendList();
+    this.sharedDocUrl.hide();
+  },
+  
+  _showPublicUrl: function(){
+    this.sharedDocUrl.show();
+    this.sharedDocUrlField.val('http://webdoc.com/' + this.document.uuid());
   }
 });

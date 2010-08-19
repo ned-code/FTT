@@ -192,7 +192,7 @@ class Document < ActiveRecord::Base
   
   def unshare
     if is_public?
-      Role.public.where(:document_id => self.uuid).delete_all
+      self.roles.where('name in(?)', Role::PUBLIC_ROLES).delete_all
     end
   end
   

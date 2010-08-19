@@ -1,5 +1,5 @@
 <div id="share_webdoc" class="share-dialog" style="display:none" title="">
-  <form id="wb-share-form">
+  <form id="wd_share_form">
     <h4>Set the visibility of the webdoc</h4>
     
     <fieldset>
@@ -25,10 +25,14 @@
       </div>
     </fieldset>
     
-    <fieldset class="state-unshared-hide" id='share_public_url'>
+    <fieldset class="" id='share_public_url' style='display:none'>
       <label  for="shared_webdoc_url" >Public URL</label>
-      <input id="shared_webdoc_url" type="text"/>
+      <input id="shared_webdoc_url" type="text" />
     </fieldset>
+    <div class="ui-actions state-readonly-hide">
+      <a href="#cancel" class="cancel">Cancel</a>
+      <input type="submit" name="share_document" value="Set visibility" />
+    </div>
   </form>
 </div>
 

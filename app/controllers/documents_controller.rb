@@ -191,7 +191,7 @@ class DocumentsController < ApplicationController
   def unshare
     authorize! :update, @document
     @document.unshare
-    render :json => {}
+    render :json => @document.to_access_json
   end
   
   
