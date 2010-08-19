@@ -18,8 +18,8 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
   },
     
   select: function(e) {
-    ddd('-----------------asfd');
-    ddd(WebDoc.application.pageEditor.currentDocument);
+    // ddd(WebDoc.application.pageEditor.getCurrentUserRolesForCurrentDocument());
+    // ddd(WebDoc.application.pageEditor.isCurrentUserHasRole(WebDoc.User.ROLE_NAME_ADMIN));
 
     var objectToSelect = this._clickedObjectView(e);
     if (objectToSelect.type !== "discussion") {

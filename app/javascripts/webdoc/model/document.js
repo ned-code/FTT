@@ -341,7 +341,40 @@ WebDoc.Document = $.klass(WebDoc.Record, {
             "duplicate",
             extraParams
     );
+  },
+
+  /**
+   * Get an array with all roles of the document
+   */
+  getRoles: function() {
+    if(this.data && this.data.roles) {
+      return this.data.roles
+    }
+    else {
+      return [];
+    }
+  },
+
+  /**
+   * Return an array with all roles for a user uuid for the document
+   *
+   * @param String the user uuid
+   */
+  getRolesForUserUuid: function(userUuid) {
+    var userRoles = [],
+        allRoles  = this.getRoles();
+
+    if(allRoles.length > 0) {
+      jQuery.each(allRoles, function(index, aRole) {
+        if(aRole.user_id === userUuid) {
+          userRoles.push(aRole.name);
+        }
+      });
+    }
+    
+    return userRoles;
   }
+
 
 });
 
