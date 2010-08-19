@@ -205,16 +205,14 @@ class Document < ActiveRecord::Base
   end
 
   def as_application_json
-    pages = self.pages.not_deleted
     hash = { 'document' => self.attributes }
     hash['document']['size'] = self.size
     hash['document']['pages'] = []
-    for page in pages
+    for page in self.pages.not_deleted
       page_hash = page.attributes
       page_hash['data'] = page.data
       page_hash['items'] = []
-      items = page.items.not_deleted
-      for item in items
+      for item in page.items.not_deleted
         item_hash = item.attributes
         item_hash['data'] = item.data
         item_hash['properties'] = item.properties
@@ -222,6 +220,11 @@ class Document < ActiveRecord::Base
         page_hash['items'] << item_hash
       end
       hash['document']['pages'] << page_hash
+    end
+    hash['document']['roles'] = []    
+    for role in self.roles
+      role_hash = role.attributes
+      hash['document']['roles'] << role_hash
     end
     hash
   end

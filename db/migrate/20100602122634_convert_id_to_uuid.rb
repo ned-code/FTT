@@ -1,4 +1,11 @@
 class ConvertIdToUuid < ActiveRecord::Migration
+
+  #we define the clase Rolesuser here because this model doens't exist anymore
+  class RolesUser < ActiveRecord::Base
+    belongs_to :user
+    belongs_to :role
+  end
+  
   def self.up
     #create and fill the uuid column in model
     #where it was not present

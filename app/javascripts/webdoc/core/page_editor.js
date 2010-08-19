@@ -379,6 +379,21 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       ddd(uuid);
     }
     return uuid;
+  },
+
+  getCurrentUserRolesForCurrentDocument: function() {
+    if(this._currentUserRolesForCurrentDocument === undefined) {
+      this._currentUserRolesForCurrentDocument = [];
+      if(this.currentDocument.data.roles) {
+        for(var i in this.data.roles) {
+          if(this.data.roles[i].user_id === WebDoc.Application.getCurrentUser()) {
+            this._currentUserRolesForCurrentDocument.push(this.data.roles[i].name);
+          }
+        }
+      }
+    }
+    return this._currentUserRolesForCurrentDocument;
   }
+
 });
 
