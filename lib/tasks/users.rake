@@ -21,7 +21,7 @@ namespace :users do
         puts "Created user: #{user[:username]}"
       end
     end
-    # User.find_by_username("admin").has_role!("admin")
+    User.find_by_username("admin").has_role!("admin")
   end
   
   desc "Confirm all users at once"
