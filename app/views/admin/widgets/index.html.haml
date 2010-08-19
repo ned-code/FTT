@@ -5,11 +5,11 @@
     %li
       .widget-container
         .widget-title-container
-          %img.widget-icon{ :src => "#{widget.properties[:icon_url]}"}
+          %img.widget-icon{ :src => "#{widget.properties['icon_url']}"}
           %span.widget-title
             ="#{widget.title}"
         %span.widget-version
-          = "Version #{widget.properties[:version]}"
+          = "Version #{widget.properties['version']}"
           %br
         %span.widget-description
           = "#{widget.description}"
