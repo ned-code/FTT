@@ -635,3 +635,17 @@ x_scrollbar {
   height:120px;
   background:transparent url(/images/libraries/drag_app.png) no-repeat;
 }
+
+
+/* Roles: admin, editor, contributor, viewer_comment, viewer_only */
+
+#comment_buttons li:first-child {
+  display: none;
+}
+
+.admin #comments_buttons li:first-child,
+.editor #comments_buttons li:first-child,
+.contributor #comments_buttons li:first-child,
+.viewer_comment #comments_buttons li:first-child {
+  display: block;
+}
