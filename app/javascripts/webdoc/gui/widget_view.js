@@ -83,7 +83,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
         var widgetObject = this.itemDomNode.get(0).contentWindow.widget;
         widgetObject.lang = "en";
         widgetObject.uuid = this.item.uuid();
-        widgetObject.mode = this.pageView.isEditable? "Edit": "View";
+        widgetObject.mode = this.pageView.isEditable()? "Edit": "View";
         // check if widget has the sdk_boot or the full sdk.
         if (widgetObject._loadCurrentSDK) {
           var path = document.location.protocol + '//' + document.location.host + '/sdk/sdk.js';
