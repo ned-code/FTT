@@ -266,7 +266,6 @@ WebDoc.DocumentCollaborationController = $.klass({
   
   toggleForm: function(e){
     e.preventDefault();
-    ddd('toggleForm');
     this.byEmailForm.toggle();
     this.chooseFriendsForm.toggle();
   },
