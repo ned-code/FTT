@@ -43,7 +43,17 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   inspectorId: function() {
     return 0;
   },
-  
+
+  objectChanged: function($super, item, options) {
+    $super(item, options);
+    if (item._isAttributeModified(options, 'size')) {
+      var widgetObject = this.getWidgetApiObject();
+      if (widgetObject) {
+        widgetObject.onResize();
+      }
+    }
+  },
+
   edit: function($super){
     $super();
   },
@@ -58,14 +68,13 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
   
   widgetChanged: function() {
     ddd("update widget state");
-    if (this.itemDomNode.get(0).contentWindow) {
-      if (this.itemDomNode.get(0).contentWindow.widget && this.itemDomNode.get(0).contentWindow.widget._onPreferencesChange) {
-        this.itemDomNode.get(0).contentWindow.widget._onPreferencesChange();
-      }
-      // 
-      else if (this.itemDomNode.get(0).contentWindow.initialize) {
-        this.itemDomNode.get(0).contentWindow.initialize();
-      }
+    var widgetObject = this.getWidgetApiObject();
+    if (widgetObject) {
+      widgetObject._onPreferencesChange();
+    }
+    //
+    else if (this.itemDomNode.get(0).contentWindow.initialize) {
+      this.itemDomNode.get(0).contentWindow.initialize();
     }
   },  
 
@@ -77,38 +86,44 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     else {
       this.itemLayerDomNode.hide();
     }
-    if (this.itemDomNode.get(0).contentWindow) {
+    var widgetObject = this.getWidgetApiObject();
+    if (widgetObject) {
       this.itemDomNode.get(0).contentWindow.uniboard = this.api;
-      if (this.itemDomNode.get(0).contentWindow.widget) {
-        var widgetObject = this.itemDomNode.get(0).contentWindow.widget;
-        widgetObject.lang = "en";
-        widgetObject.uuid = this.item.uuid();
-        widgetObject.mode = this.pageView.isEditable()? "Edit": "View";
-        // check if widget has the sdk_boot or the full sdk.
-        if (widgetObject._loadCurrentSDK) {
-          var path = document.location.protocol + '//' + document.location.host + '/sdk/sdk.js';
-          widgetObject._loadCurrentSDK(path);
-        }
-        else {
-          widgetObject._onLoad();  
-        }
+      widgetObject.lang = "en";
+      widgetObject.uuid = this.item.uuid();
+      widgetObject.mode = this.pageView.isEditable()? "Edit": "View";
+      // check if widget has the sdk_boot or the full sdk.
+      if (widgetObject._loadCurrentSDK) {
+        var path = document.location.protocol + '//' + document.location.host + '/sdk/sdk.js';
+        widgetObject._loadCurrentSDK(path);
       }
-      
-      // init widget whout SDK
-      else if (this.itemDomNode.get(0).contentWindow.initialize) {
-        this.itemDomNode.get(0).contentWindow.initialize();
+      else {
+        widgetObject._onLoad();
       }
+    }
+    // init widget whout SDK
+    else if (this.itemDomNode.get(0).contentWindow.initialize) {
+      this.itemDomNode.get(0).contentWindow.initialize();
     }
   },
 
   setEditable: function($super, editable) {
     $super(editable);
+    var widgetObject = this.getWidgetApiObject();
+    if (widgetObject) {
+      widgetObject.mode = editable ? "Edit" : "Read";
+      widgetObject._onModeChange();
+    }
+  },
+
+  getWidgetApiObject: function() {
+    var result = null;
     if (this.itemDomNode.get(0).contentWindow) {
       if (this.itemDomNode.get(0).contentWindow.widget) {
-        var widgetObject = this.itemDomNode.get(0).contentWindow.widget;
-        widgetObject.mode = editable ? "Edit" : "Read";
-        widgetObject._onModeChange();
+        result = this.itemDomNode.get(0).contentWindow.widget;
       }
-    }  
-  } 
+    }
+    return result;
+  }
+  
 });

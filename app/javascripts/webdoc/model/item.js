@@ -569,7 +569,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
       delete this.data.data.css.height;
     }    
     
-    this.fireObjectChanged({ modifedAttribute: 'css' });
+    this.fireObjectChanged({ modifedAttribute: 'css.size' });
     WebDoc.application.inspectorController.refresh();
   },
   
