@@ -395,9 +395,16 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     else {
       return false;
     }
+  },
+
+  isCurrentUserHasOneOfRoles: function(rolesNameArray) {
+    for(var i in rolesNameArray) {
+      if(this.isCurrentUserHasRole(rolesNameArray[i])) {
+        return true;
+      }
+    }
+    return false;
   }
-
-
 
 });
 

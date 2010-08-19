@@ -21,10 +21,19 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
     // ddd(WebDoc.application.pageEditor.getCurrentUserRolesForCurrentDocument());
     // ddd(WebDoc.application.pageEditor.isCurrentUserHasRole(WebDoc.User.ROLE_NAME_ADMIN));
 
+    // ROLE_NAME_EDITOR: 'editor',
+    // ROLE_NAME_CONTRIBUTOR: 'contributor',
+    // ROLE_NAME_VIEWER_COMMENT: 'viewer_comment',
+    // ROLE_NAME_VIEWER_ONLY: 'viewer_only'
+
+
     var objectToSelect = this._clickedObjectView(e);
     if (objectToSelect.type !== "discussion") {
       WebDoc.application.boardController.unSelectDiscussionView();
-      if (!WebDoc.application.boardController.isInteractionMode()) {
+      if (!WebDoc.application.boardController.isInteractionMode() &&
+          WebDoc.application.pageEditor.isCurrentUserHasOneOfRoles([ WebDoc.UserRole.ROLE_NAME_EDITOR,
+                                                                     WebDoc.UserRole.ROLE_NAME_CONTRIBUTOR,
+                                                                     WebDoc.UserRole.ROLE_NAME_ADMIN ]) ) {
         this.lastSelectedObject = {
           itemView: objectToSelect.object, // JBA: no more USED
           event: e
@@ -49,9 +58,9 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
       }
     }
     else if(objectToSelect.type === 'discussion') {
-      WebDoc.application.boardController.unselectAll(); 
+      WebDoc.application.boardController.unselectAll();
       WebDoc.application.boardController.selectDiscussionView(objectToSelect.object, false, true);
-    } 
+    }
   },
   
   disableHilight: function() {
