@@ -11,20 +11,19 @@ WebDoc.DocumentCollaborationController = $.klass({
   initialize: function() {
     var self = this;
     
-    this.roles = ["reader", "editor"];
+    this.friendsSelector = new WebDoc.FriendsSelectorController('invite_co_authors');
     this.domNode = $("#document_access_list");
     this.documentAccessDialog = $("#invite_co_authors");
     this.chooseFriendsForm = $("#collaborate_by_connection_form");
     this.byEmailForm = $("#collaborate_by_email_form");
     this.emailsNode = $('#wb-invitation-add-editors');
     this.failedEmailsWrapper = $('#wb-invitation-failed');
-    this.friendsListNode = jQuery('#invite_co_authors_friends_list');
     
     this.chooseFriendsForm.bind( 'submit', this.sendInvitationsByFriends.pBind(this) );
     this.byEmailForm.bind( 'submit', this.sendInvitationsByEmail.pBind(this) );
     this.domNode.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
     jQuery('.collaborate_form').bind('click', this.toggleForm.pBind(this) );
-    jQuery('#collaborate_select_all_friends').bind('click', this.selectAllFriends.pBind(this));
+    
     this.documentAccessDialog
     //.remove()
     //.css({ display: '' });
@@ -53,7 +52,7 @@ WebDoc.DocumentCollaborationController = $.klass({
         //     that.domNode.delegate("a[href='#delete']", "click", that.deleteAccess.pBind(that));
         //   }
         // });
-        this.loadFriendList();
+        this.friendsSelector.loadFriendList();
         this.loadAccess(data);
       }.pBind(this),
       
@@ -82,42 +81,6 @@ WebDoc.DocumentCollaborationController = $.klass({
       }
     });
   },  
-  
-  loadFriendList: function(){
-    if(!jQuery('#invite_co_authors_friends_list ul').length){
-      $.ajax({
-        url: "/friendships/",
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-          this.buildFriendsList(data);
-        }.pBind(this),
-      
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-          ddd("error", textStatus);
-        }
-      });
-    }
-  },
-  
-  buildFriendsList: function(data){
-    var length = data['friends'].length;
-    var friendsList = jQuery('<ul/>');
-    var friendNode, friend;
-    for(var i=0;i<data['friends'].length;i++){
-      friend = data['friends'][i].user;
-      friendNode = jQuery('<li/>')
-        .text(friend.username)
-        .attr({
-          'class': 'choose_friend'
-        })
-        .data('uuid', friend.uuid);
-      friendNode.append('<input type="hidden" value=0 name="friend['+friend.uuid+']"/>');
-      friendsList.append(friendNode);
-    }
-    this.friendsListNode.append(friendsList);
-    jQuery('.choose_friend').bind('click', this.selectFriend.pBind(this));
-  },
   
   loadAccess: function(json) {
     this.domNode.empty();
@@ -185,12 +148,7 @@ WebDoc.DocumentCollaborationController = $.klass({
   sendInvitationsByFriends: function(e) {
     e.preventDefault();
     var role_type = jQuery('input[name="role_type_friends"]:checked').val();
-    var friends = jQuery('.choose_friend.selected_friend');
-    var friendsList = [];
-    var length = friends.length;
-    for(var i=0; i<length;i++){
-      friendsList.push(jQuery(friends[i]).data('uuid'));
-    }
+    var friendsList = this.friendsSelector.friendsSelected();
     this.createFriendsRights(friendsList, role_type)
   },
   
@@ -257,7 +215,7 @@ WebDoc.DocumentCollaborationController = $.klass({
   },
   
   cleanFriendsList: function(){
-    jQuery('.choose_friend.selected_friend').removeClass('selected_friend');
+    this.friendsSelector.cleanFriendsList();
   },
   
   closeDialog: function() {
@@ -268,21 +226,6 @@ WebDoc.DocumentCollaborationController = $.klass({
     e.preventDefault();
     this.byEmailForm.toggle();
     this.chooseFriendsForm.toggle();
-  },
-  
-  selectFriend: function(e){
-    var friendNode = jQuery(e.target);
-    if(friendNode.hasClass('selected_friend')){
-      friendNode.removeClass('selected_friend');
-    }
-    else{
-      friendNode.addClass('selected_friend');
-    }
-  },
-  
-  selectAllFriends: function(e){
-    e.preventDefault();
-    jQuery('#invite_co_authors .choose_friend').addClass('selected_friend');
   },
   
   url: function(){

@@ -110,6 +110,7 @@ javascripts:
   document_editor:
     - app/javascripts/webdoc/utils/*.js
     - app/javascripts/webdoc/managers/*
+    - app/javascripts/webdoc/controllers/friends_selector_controller.js
     - app/javascripts/webdoc/controllers/document_collaboration_controller.js
     - app/javascripts/webdoc/controllers/document_share_controller.js
     - app/javascripts/webdoc/gui/document_list.js

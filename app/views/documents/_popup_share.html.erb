@@ -1,0 +1,21 @@
+<div id="share_webdoc" class="share-dialog" style="display:none" title="<%= t('.document_forms.share_document_dialog.title') %>">
+  <form id="wb-share-form">
+    <h4>Share</h4>
+    
+    <fieldset>
+      <div class="horizontal">
+        <input id="unshare_webdoc_radio" type="radio" name="share" value="off" />
+        <label for="#unshare_webdoc_radio">don't share (only co-editors will see this document)</label>
+      </div>
+      <div class="horizontal">
+        <input id="share_webdoc_radio" type="radio" name="share" value="on" />
+        <label for="#share_webdoc_radio">share (make it public)</label>
+      </div>
+    </fieldset>
+    
+    <fieldset class="state-unshared-hide">
+      <label  for="shared_webdoc_url" ><%= t('.document_forms.share_document_dialog.shared_address_label') %></label>
+      <input id="shared_webdoc_url" type="text" />
+    </fieldset>
+  </form>
+</div>
