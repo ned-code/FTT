@@ -1,31 +1,33 @@
-<div class="card <% if local_assigns.has_key? :subscribed %>card-with-button<% end %>" data-webdoc-user-id="<%= user.id %>" style="background-image: url('<%= user.avatar.url(:thumb) %>');">
+<div class="card" data-webdoc-user-id="<%= user.id %>">
   <% if user.mutual_connection(current_user) %>
     <div class="wd-user-item-mutual" ></div>
   <% end %>
-  <h4 class="card-name card-name-avoid-button">
+  <h5 class="card-name card-name-avoid-button">
     <a href='/users/<%= user.uuid %>'>
       <%= "#{user.first_name} #{user.last_name}" %>
     </a>
-  </h4>
-  <p class="card-bio"><%= "#{user.bio}" %></p>
-  <div class="card-stats"><%= "#{user.documents.length}" %> webdoc<% if user.documents.length > 1 %>s<% end %></div>
+  </h5>
+  	<a class="thumb" href="/users/<%= user.uuid %>" style="background-image: url('<%= user.avatar.url(:thumb) %>');"></a>
+
+<!--  <p class="card_bio"><%= "#{user.bio}" %></p> -->
+  <div class=""><%= "#{user.documents.length}" %> webdoc<% if user.documents.length > 1 %>s<% end %></div>
   <div class=""><%= "#{user.friends_count}" %> friend<% if user.friends_count > 1 %>s<% end %></div>
   
   <% if local_assigns.has_key? :friendship %>
     <% if current_user.friend?(user)%>
-    <a class="cancel_friendship_button button" href="#cancel_friendship">Revoke Friendship</a>
-    <% elsif current_user.pending_requested_friend?(user)%>
+    <a class="cancel_friendship_button button red small" href="#cancel_friendship">Revoke</a>
+    <% elsif current_user.friend?(user)%>
       <div id='friend_request_<%=user.id%>'>
-        <a class="accept_friend_button button" href="#accept_friend_request">Accept request</a>
-        <a class="reject_friend_button button" href="#reject_friend_request">Reject request</a>
+        <a class="accept_friend_button button green small" href="#accept_friend_request">Accept</a>
+        <a class="reject_friend_button button red small" href="#reject_friend_request">Reject</a>
       </div>
     <% elsif current_user.requested_friend?(user)%>
-      <a class="cancel_request_button button" href="#cancel_friend_request">Cancel Friend request</a>
+      <a class="cancel_request_button button orange small" href="#cancel_friend_request">Cancel</a>
     <% elsif current_user.blocked_friend?(user)%>
      <p>You have blocked <%= user.username %> </p>
      <% else %>
      <p>
-       <a class="become_friend_button button" href="#become_friend">Become Friend</a>
+       <a class="become_friend_button button green small" href="#become_friend">Become Friend</a>
      </p>
     <% end %>
   <% end %>

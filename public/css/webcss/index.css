@@ -123,4 +123,10 @@
 	display: block;
 }
 
-edit_dropdown_index
+edit_dropdown_index {}
+
+
+.friends_index >li {
+	width:25em;
+	margin-bottom: 1em;
+}

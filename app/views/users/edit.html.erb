@@ -1,7 +1,10 @@
-<div class="action-zone zone">
-  <div class="wrap clear">
+<div class="title_wrap site_wrap wrap">
+    <h1><%=t '.title' %></h1>
+</div>
+
+<section class="site_wrap wrap">
     <h2>
-      <%=t '.title' %>
+      
       <!--%= link_to "Back", :back, { :class => "wd-back-button" }%-->
     </h2>
 
@@ -83,8 +86,7 @@
           
     <% end %>
 
-  </div>
-</div>
+</section>
 
 <% content_for :scripts do %>
   <%= include_javascripts :forms %>

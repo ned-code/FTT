@@ -373,6 +373,11 @@ body.full_view {
 
 .edit_dropdown_index.active {}
 
+.doc_settings_dropdown_index>li {
+	margin-bottom: 0.3333em;
+
+}
+
 .app_index {
 	position: absolute;
   top: 0.3333em;

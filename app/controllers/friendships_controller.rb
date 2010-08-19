@@ -2,19 +2,23 @@ class FriendshipsController < ApplicationController
   before_filter :authenticate_user!
   def index
     @friends = current_user.friends
-    
     #TODO: pagination
-    render :json => { 
-      :friends => @friends.map{ |f| f.as_application_json },
-      :pagination => {
-        :per_page => "",
-        :current_page => "",
-        :total_pages => "", 
-        :next_page => "",
-        :previous_page => "",
-        :total => ""
-      }
-    }
+    respond_to do |format|
+   	  format.json {render :json => {:friends => @friends.map{ |f| f.as_application_json },
+      					  			:pagination => {
+       					  			  :per_page => "",
+     					  			  :current_page => "",
+        				  			  :total_pages => "", 
+        				  			  :next_page => "",
+        				  			  :previous_page => "",
+        				  			  :total => ""
+      							   	}
+    							  }							
+    				}
+   	  format.html
+    end
+    
+    
   end
   
   #create a new friendship

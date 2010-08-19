@@ -264,6 +264,8 @@ WebDoc.Application.beforeMain('card', function(){
     function callback(json) {
       button
       .removeClass('loading')
+      .removeClass('red')
+      .addClass('green')
       .href('#become_friend')
       .html('Become Friend');
     }

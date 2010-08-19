@@ -1,7 +1,13 @@
   <!-- workspace -->
   
   <div class="title_wrap site_wrap wrap">
-    <h1><%= @document.title %></h1>
+    <h1><%= @document.title %> 
+    <a class="dropdown_button button" href="#dropdown" data-for="#doc_settings_dropdown">Settings</a>
+        <ul class="vertical doc_settings_dropdown_index dropdown_index buttons_index index" id="doc_settings_dropdown">
+          <li><a href="/" class="edit_button button">your profile</a></li
+         ><li><a href="/" class="edit_button button">logout</a></li>
+        </ul></h1> 
+
   </div>
   
   <section class="workspace_wrap site_wrap wrap">
