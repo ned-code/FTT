@@ -5,6 +5,7 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   initialize: function($super, json) {
     this.pages = [];
     $super(json);
+    this.isPublic = this.data.is_public;
   },
   
   title: function() {
@@ -125,9 +126,12 @@ WebDoc.Document = $.klass(WebDoc.Record, {
       type: 'POST',
       data: data,
       dataType: 'json',
-      success: function(){ddd('document shared');},
+      success: function(){
+        ddd('document shared');
+        this.isPublic = true;
+      },
       error: function(){ddd('error during sharing');}
-    });
+    }).pBind(this);
   },
   
   unshare: function() {
@@ -135,14 +139,16 @@ WebDoc.Document = $.klass(WebDoc.Record, {
       url: '/documents/' + this.uuid() + '/unshare',
       type: 'POST',
       dataType: 'json',
-      success: function(){ddd('document unshared');},
+      success: function(){
+        ddd('document unshared');
+        this.isPublic = false;
+      },
       error: function(){ddd('error during unsharing');}
-    });
+    }).pBind(this);
   },
   
-  //Rewrite this to be compatible with new role paradigm
   isShared: function() {
-    return this.data.is_public;
+    return this.isPublic;
   },
   
   refresh: function($super, json, onlyMissingValues) {

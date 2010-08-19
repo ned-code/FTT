@@ -12,19 +12,19 @@ WebDoc.DocumentCollaborationController = $.klass({
     var self = this;
     
     this.friendsSelector = new WebDoc.FriendsSelectorController('invite_co_authors');
-    this.domNode = $("#document_access_list");
-    this.documentAccessDialog = $("#invite_co_authors");
-    this.chooseFriendsForm = $("#collaborate_by_connection_form");
-    this.byEmailForm = $("#collaborate_by_email_form");
-    this.emailsNode = $('#wb-invitation-add-editors');
-    this.failedEmailsWrapper = $('#wb-invitation-failed');
+    this.domNode = jQuery("#document_access_list");
+    this.documentAccessDialog = jQuery("#invite_co_authors");
+    this.chooseFriendsForm = jQuery("#collaborate_by_connection_form");
+    this.byEmailForm = jQuery("#collaborate_by_email_form");
+    this.emailsNode = jQuery('#wb-invitation-add-editors');
+    this.failedEmailsWrapper = jQuery('#wb-invitation-failed');
     
     this.chooseFriendsForm.bind( 'submit', this.sendInvitationsByFriends.pBind(this) );
     this.byEmailForm.bind( 'submit', this.sendInvitationsByEmail.pBind(this) );
     this.domNode.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
     jQuery('.collaborate_form').bind('click', this.toggleForm.pBind(this) );
     
-    this.documentAccessDialog
+    //this.documentAccessDialog
     //.remove()
     //.css({ display: '' });
   },
@@ -36,7 +36,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.cleanInvitationFields();
     this.cleanFriendsList();
     // document access can be changed only when we are online. So we can do ajax request here
-    $.ajax({
+    jQuery.ajax({
       url: this.url(),
       type: 'GET',
       dataType: 'json',              
@@ -81,6 +81,11 @@ WebDoc.DocumentCollaborationController = $.klass({
       }
     });
   },  
+  
+  getDeleteAccess: function(userId, role) {
+    var access_content = { role: role, user_id: userId };
+    return { accesses : $.toJSON(access_content) }
+  },
   
   loadAccess: function(json) {
     this.domNode.empty();
@@ -133,7 +138,9 @@ WebDoc.DocumentCollaborationController = $.klass({
       this.domNode.append(accessEntry);
     }
   },
-
+  
+  
+  //TODO actually not supported, will be implemented at the same time that invitations
   sendInvitationsByEmail: function(e) {
     ddd('Send sendInvitationsByEmail');
     e.preventDefault();
@@ -164,7 +171,6 @@ WebDoc.DocumentCollaborationController = $.klass({
       dataType: 'json',
       data: jSONData,    
       success: function(data) {
-        ddd('createFriendsRights success');
         this.cleanFriendsList();
         this.loadAccess(data);
       }.pBind(this),    
@@ -172,11 +178,6 @@ WebDoc.DocumentCollaborationController = $.klass({
         ddd("createFriendsRights error", textStatus);
       }
     });
-  },
-  
-  getDeleteAccess: function(userId, role) {
-    var access_content = { role: role, user_id: userId };
-    return { accesses : $.toJSON(access_content) }
   },
   
   getInvitationAccess: function(recipients, message) {
@@ -194,24 +195,10 @@ WebDoc.DocumentCollaborationController = $.klass({
     return { accesses : $.toJSON(access_content) };
   },
   
-  createRightsToRecipients: function(jSONData) {
-    $.ajax({
-      url: this.url(),
-      type: 'POST',
-      dataType: 'json',
-      data: jSONData,    
-      success: function(data) {
-        this.loadAccess(data);
-      }.pBind(this),    
-      error: function(MLHttpRequest, textStatus, errorThrown) {
-        ddd("error", textStatus);
-      }
-    });
-  },  
-  
+  //Todo manage the email form
   cleanInvitationFields: function() {
-    $("#wb-invitation-add-editors").val("");
-    $("#wb-invitation-add-editors-message").val("");
+    jQuery("#wb-invitation-add-editors").val("");
+    jQuery("#wb-invitation-add-editors-message").val("");
   },
   
   cleanFriendsList: function(){

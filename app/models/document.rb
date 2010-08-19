@@ -207,6 +207,7 @@ class Document < ActiveRecord::Base
   def as_application_json
     hash = { 'document' => self.attributes }
     hash['document']['size'] = self.size
+    hash['document']['is_public'] = self.is_public?
     hash['document']['pages'] = []
     for page in self.pages.not_deleted
       page_hash = page.attributes
