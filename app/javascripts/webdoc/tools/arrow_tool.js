@@ -18,22 +18,16 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
   },
     
   select: function(e) {
-    // ddd(WebDoc.application.pageEditor.getCurrentUserRolesForCurrentDocument());
-    // ddd(WebDoc.application.pageEditor.isCurrentUserHasRole(WebDoc.User.ROLE_NAME_ADMIN));
-
-    // ROLE_NAME_EDITOR: 'editor',
-    // ROLE_NAME_CONTRIBUTOR: 'contributor',
-    // ROLE_NAME_VIEWER_COMMENT: 'viewer_comment',
-    // ROLE_NAME_VIEWER_ONLY: 'viewer_only'
-
-
     var objectToSelect = this._clickedObjectView(e);
+
     if (objectToSelect.type !== "discussion") {
       WebDoc.application.boardController.unSelectDiscussionView();
       if (!WebDoc.application.boardController.isInteractionMode() &&
-          WebDoc.application.pageEditor.isCurrentUserHasOneOfRoles([ WebDoc.UserRole.ROLE_NAME_EDITOR,
-                                                                     WebDoc.UserRole.ROLE_NAME_CONTRIBUTOR,
-                                                                     WebDoc.UserRole.ROLE_NAME_ADMIN ]) ) {
+          (WebDoc.application.pageEditor.isCurrentUserHasOneOfRoles([ WebDoc.UserRole.ROLE_NAME_EDITOR,
+                                                                     WebDoc.UserRole.ROLE_NAME_ADMIN ]) ||
+              ( WebDoc.application.pageEditor.isCurrentUserHasRole(WebDoc.UserRole.ROLE_NAME_CONTRIBUTOR) &&
+                  objectToSelect && objectToSelect.object && objectToSelect.object.item &&
+                  objectToSelect.object.item.data.creator_id === WebDoc.Application.getCurrentUser().uuid()) ) ) {
         this.lastSelectedObject = {
           itemView: objectToSelect.object, // JBA: no more USED
           event: e
@@ -55,6 +49,12 @@ WebDoc.ArrowTool = jQuery.klass(WebDoc.Tool, {
           jQuery("a[href='#select']").focus();
         }
         this.lastSelectedObject.event = null;
+      }
+      else {
+        if(!e.shiftKey) {
+          WebDoc.application.boardController.unselectAll();
+          this.selectedObject = [];
+        }
       }
     }
     else if(objectToSelect.type === 'discussion') {
