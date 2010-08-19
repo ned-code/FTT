@@ -15,12 +15,17 @@ WebDoc.DocumentShareController = $.klass({
     this.documentShareDialog = jQuery('#share_webdoc');
     this.documentShareForm = jQuery("#wb-share-form");
     
+    this.yourConnectionsList = jQuery('#your_connections_list');
     this.onlyParticipantsRadio = jQuery("#only_participants_radio");
     this.yourConnectionsRadio = jQuery("#your_connections_radio");
     this.publicRadio = jQuery("#public_radio");
     this.publicUrlNode = jQuery('#share_public_url');
     this.shareAllowComments = jQuery('#share_allow_comments');
     this.allowCommentsCheckBox = jQuery('#allow_comments_checkbox');
+    
+    this.onlyParticipantsRadio.bind('change', this._onlyParticipantsRadioChanged.pBind(this));
+    this.publicRadio.bind('change', this._publicRadioChanged.pBind(this));
+    this.yourConnectionsRadio.bind('change', this._connectionsRadioChanged.pBind(this));
     
     this.shareTabs = jQuery("#wb-document-share-tabs");
     this.shareTabs.tabs();
@@ -39,6 +44,7 @@ WebDoc.DocumentShareController = $.klass({
     var self = this;
     
     this.document = document;
+    this.cleanFriendsList();
     
     jQuery.ajax({
       url: "/documents/" + document.uuid() + "/roles",
@@ -111,6 +117,7 @@ WebDoc.DocumentShareController = $.klass({
     if(isShared){
       this.yourConnectionsRadio.click();
       this.shareAllowComments.show();
+      this.friendsSelector.loadFriendList();
     }
     else{
       //not public and not share to connections -> document not shared
@@ -118,31 +125,31 @@ WebDoc.DocumentShareController = $.klass({
       this.shareAllowComments.hide();
     }
     
-    
-    var failedEmailsWrapper = $('#wb-readers-invitation-failed');
-    if(json.failed && json.failed.length > 0) {
-      failedEmailsWrapper.empty();
-      failedEmailsWrapper.append($('<p>').html('The following addresses were not found in the system'));
-      var addresses = "";
-      for (var i = 0; i < json.failed.length; i++) {
-        addresses += json.failed[i];
-        if(i !== json.failed.length -1) { addresses += ", "; }
-      }
-      failedEmailsWrapper.append($('<p>').html(addresses));
-      failedEmailsWrapper.show();
-      this.domNode.before(failedEmailsWrapper);
-    }
-    else { 
-      failedEmailsWrapper.hide(); 
-      this._cleanInvitationFields();
-    }
-    // Check if must enable or not readers list tab
-    var nbReadersListed = this.domNode.children().length;
-    nbReadersListed>0? this.shareTabs.tabs('enable', 1) : this.shareTabs.tabs('disable', 1);
+    // 
+    // var failedEmailsWrapper = $('#wb-readers-invitation-failed');
+    // if(json.failed && json.failed.length > 0) {
+    //   failedEmailsWrapper.empty();
+    //   failedEmailsWrapper.append($('<p>').html('The following addresses were not found in the system'));
+    //   var addresses = "";
+    //   for (var i = 0; i < json.failed.length; i++) {
+    //     addresses += json.failed[i];
+    //     if(i !== json.failed.length -1) { addresses += ", "; }
+    //   }
+    //   failedEmailsWrapper.append($('<p>').html(addresses));
+    //   failedEmailsWrapper.show();
+    //   this.domNode.before(failedEmailsWrapper);
+    // }
+    // else { 
+    //   failedEmailsWrapper.hide(); 
+    //   this._cleanInvitationFields();
+    // }
+    // // Check if must enable or not readers list tab
+    // var nbReadersListed = this.domNode.children().length;
+    // nbReadersListed>0? this.shareTabs.tabs('enable', 1) : this.shareTabs.tabs('disable', 1);
   },
   
   _createAccessItem: function(userInfos) {
-    if(userInfos.role === "reader") {
+    if(userInfos.role === "viewer_comment" || userInfos.role === "viewer_only") {
       ddd(userInfos.id +", "+userInfos.role);
       var accessEntry = $("<li>").attr({ id: userInfos.id}).addClass("user_access").html(userInfos.username + "(" + userInfos.email + ")");
     
@@ -170,7 +177,7 @@ WebDoc.DocumentShareController = $.klass({
     }
     if (window._gaq) {
       _gaq.push(['_trackEvent', 'share', 'coeditor_invite', this.document.uuid(), accesses_readers.length]);
-    }  
+    }
     var access_content = { role: "reader", recipients: accesses_readers, message: message };
     return { accesses : $.toJSON(access_content) };
   },
@@ -215,6 +222,10 @@ WebDoc.DocumentShareController = $.klass({
     else{
       this.allowCommentsCheckBox.attr('checked', 0);
     }
+  },
+  
+  cleanFriendsList: function(){
+    this.friendsSelector.cleanFriendsList();
   },
   
   _createRightsToRecipients: function(jSONData) {
@@ -266,7 +277,19 @@ WebDoc.DocumentShareController = $.klass({
     $(this).dialog('close');
   },
   
-  url: function(){
-    return '/documents/' + this.document.uuid() + '/roles';
+  _onlyParticipantsRadioChanged: function(e){
+    this.shareAllowComments.hide();
+    this.yourConnectionsList.hide();
+  },
+  
+  _publicRadioChanged: function(e){
+    this.shareAllowComments.show();
+    this.yourConnectionsList.hide();
+  },
+  
+  _connectionsRadioChanged: function(e){
+    this.shareAllowComments.show();
+    this.yourConnectionsList.show();
+    this.friendsSelector.loadFriendList();
   }
 });
