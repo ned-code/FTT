@@ -62,15 +62,15 @@ WebDoc.ToolbarController = $.klass({
   //  },   
   //   
   //  'lib_view': function(e) {
-  //    WebDoc.application.rightBarController.showLib();
+  //    WebDoc.application.panelsController.showLib();
   //  },
   //  
   //  'page-inspector_view': function(e) {
-  //    WebDoc.application.rightBarController.showPageInspector();
+  //    WebDoc.application.panelsController.showPageInspector();
   //  },
   //  
   //  'item_inspector_view': function(e) {
-  //    WebDoc.application.rightBarController.showItemInspector();
+  //    WebDoc.application.panelsController.showItemInspector();
   //  },
   //  
   //  'page-browser': function(e) {
@@ -78,7 +78,7 @@ WebDoc.ToolbarController = $.klass({
   //  },
   //  
   //  'toggle_inspector': function(e) {
-  //    WebDoc.application.rightBarController.toggleRightBar();
+  //    WebDoc.application.panelsController.toggleRightBar();
   //  },
 
   //  'toggleInteractionMode': function(e) {

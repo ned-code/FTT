@@ -69,7 +69,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       // create all controllers
       app.svgRenderer = new WebDoc.SvgRenderer();
       app.boardController = new WebDoc.BoardController(editable, !editable);
-      app.rightBarController = new WebDoc.RightBarController();
+      app.panelsController = new WebDoc.PanelsController();
       //app.inspectorController = new WebDoc.InspectorController();
       app.pageBrowserController = new WebDoc.PageBrowserController();
       app.toolbarController = new WebDoc.ToolbarController();
@@ -84,15 +84,16 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       app.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select_tool_mode" );
       app.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "text_tool_mode" );
       app.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox']", "textbox_tool_mode" );
-      app.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "html_tool_mode" );
+      app.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#html_tool']", "html_tool_mode" );
       app.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "iframe_tool_mode" );
-      app.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "app_tool_mode" );
+      app.appTool = new WebDoc.AppTool( "a[href='#insert-app']", "app_tool_mode" );
       app.browserTool = new WebDoc.BrowserTool("a[href='#browser']");
 
       app.boardController.setCurrentTool(WebDoc.application.arrowTool);
       app.collaborationManager = new WebDoc.CollaborationManager();
-      app.postMessageManager = new WebDoc.PostMessageManager();      
-      app.collaborationManager.listenXMPPNode(documentId);              
+      app.postMessageManager = new WebDoc.PostMessageManager();
+      app.collaborationManager.listenXMPPNode(documentId);
+      
       WebDoc.ServerManager.getRecords(WebDoc.Document, documentId, function(data) {
         this.currentDocument = data[0];
         this.currentDocument.addListener(this);
@@ -105,8 +106,8 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
           ddd("check editablity");
           
           if ( app.boardController.isEditable() && !app.boardController.isInteractionMode() ) {
-            ddd("[PageEditor] call rightBarController.showMyContent");
-            app.rightBarController.showMyContent();
+            ddd("[PageEditor] call panelsController.showMyContent");
+            app.panelsController.showMyContent();
           }
           
           app.boardController.loadingNode.removeTransitionClass('loading');

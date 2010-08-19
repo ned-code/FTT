@@ -37,9 +37,11 @@ WebDoc.handlers = {
       if ( match && obj[match[1]] ) {
         ddd( '[Handler] call handler "' + match + '"' );
         
+        // Don't let the browser have it
+        e.preventDefault();
+        
         // Call it with link as scope
         obj[match[1]].call( context||this, e );
-        e.preventDefault();
       }
     };
   },
@@ -77,24 +79,24 @@ WebDoc.handlers = {
   // Editor actions (to be bound to the interface panels)
   _panelHandlers: {
     'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggle(); },
-    'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggle(); },
+    'right-panel-toggle':   function(e) { WebDoc.application.panelsController.toggle(); },
     'full':                 function(e) { WebDoc.application.pageEditor.toggleFullScreen(); },
     
     'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggle(); },
     
     //new ui panel handler, actually the old right bar controller is used
     'toggle_activity_panel':      function(e){ ddd('no activity yet'); },
-    'toggle_comments_panel':      function(e){ WebDoc.application.rightBarController.showDiscussionsPanel(e); },
-    'toggle_inspector_panel':     function(e){ WebDoc.application.rightBarController.showItemInspector(e); },
-    'toggle_page_inspector_panel':     function(e){ WebDoc.application.rightBarController.showPageInspector(e); },
+    'toggle_comments_panel':      function(e){ WebDoc.application.panelsController.showDiscussionsPanel(e); },
+    'toggle_inspector_panel':     function(e){ WebDoc.application.panelsController.showItemInspector(e); },
+    'toggle_page_inspector_panel':     function(e){ WebDoc.application.panelsController.showPageInspector(e); },
     'toggle_author_panel':        function(e){ ddd('author panel is useless') },
-    'toggle_document_panel':      function(e){WebDoc.application.rightBarController.showDocumentInspector(e); },
+    'toggle_document_panel':      function(e){WebDoc.application.panelsController.showDocumentInspector(e); },
     'toggle_sharing_panel':       function(e){ ddd('no sharing yet') },
-    'toggle_browse_panel':        function(e) { WebDoc.application.rightBarController.showBrowseWeb(); },
-    'toggle_packages_panel':      function(e) { WebDoc.application.rightBarController.showPackages(); },
-    'toggle_apps_panel':          function(e) { WebDoc.application.rightBarController.showApps(); },
-    'toggle_my_stuff_panel':      function(e) { WebDoc.application.rightBarController.showMyContent(); },
-    'toggle_pages_panel':         function(e) { WebDoc.application.rightBarController.showPagesPanel(); },
+    'toggle_browse_panel':        function(e) { WebDoc.application.panelsController.showBrowseWeb(); },
+    'toggle_packages_panel':      function(e) { WebDoc.application.panelsController.showPackages(); },
+    'toggle_apps_panel':          function(e) { WebDoc.application.panelsController.showApps(); },
+    'toggle_my_stuff_panel':      function(e) { WebDoc.application.panelsController.showMyContent(); },
+    'toggle_pages_panel':         function(e) { WebDoc.application.panelsController.showPagesPanel(); },
     
     
     'add-page':             function(e) { WebDoc.application.pageEditor.addPage(); },
@@ -107,7 +109,7 @@ WebDoc.handlers = {
     'move':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.handTool ); },
     'select':               function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.arrowTool ); },
     'draw':                 function(e) { WebDoc.application.boardController.toggleDrawTool(); },
-    'insert-html':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.htmlSnipplet ); },
+    'html_tool':            function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.htmlSnipplet ); },
     'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
     'textbox':              function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textboxTool ); },
     'insert-iframe':        function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.iframeTool ); },
@@ -134,7 +136,7 @@ WebDoc.handlers = {
 
     
     'library-images-myimages': function(e) { 
-      WebDoc.application.rightBarController.showMyContent();
+      WebDoc.application.panelsController.showMyContent();
     },
     
     //'themes-chooser':       function(e) { WebDoc.application.themesController.openChooser(e); },

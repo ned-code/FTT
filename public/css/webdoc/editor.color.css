@@ -107,7 +107,7 @@ a[href="#insert-text"]:hover        { background-position: 0 -576px; }
 a[href="#insert-text"]:active       { background-position: 0 -640px; }
 a[href="#insert-text"].current      { background-position: 0 -704px; }
 
-a[href="#insert-html"]              { background-position: 0 -768px; }
+a[href="#html_tool"]                { background-position: 0 -768px; }
 a[href="#insert-html"]:hover        { background-position: 0 -832px; }
 a[href="#insert-html"]:active       { background-position: 0 -896px; }
 a[href="#insert-html"]:active       { background-position: 0 -960px; }

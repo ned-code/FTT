@@ -84,7 +84,7 @@
 		
 		// If flash doesn't exist, create it
 		if ( flash.length === 0 ) {
-			debug && console.log('[flash] #flash doesnt exist - creating it now');
+			debug && console.log('#flash doesnt exist - creating it now');
 			flash = jQuery('<div/>', {
 				id: 'flash',
 				css: { marginTop: -200 }

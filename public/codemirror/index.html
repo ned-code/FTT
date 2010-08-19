@@ -10,7 +10,6 @@
       div.donate span {cursor: pointer; text-decoration: underline;}
       div.donate {font-size: 70%; margin-top: 1em; width: 155px; padding: 10px; border: 1px solid #c44;}
     </style>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   </head>
   <body>
 
@@ -60,11 +59,10 @@ parsers...</p>
   <li><a href="contrib/php/index.html">HTML+PHP mixed-mode</a> (courtesy of <a href="contrib/php/LICENSE">Yahoo!</a>)</li>
   <li><a href="contrib/python/index.html">Python</a> (courtesy of <a href="contrib/python/LICENSE">Timothy Farrell</a>)</li>
   <li><a href="contrib/lua/index.html">Lua</a> (courtesy of <a href="http://francio.pl/">Franciszek Wawrzak</a>)</li>
-  <li><a href="http://github.com/hakunin/ruby-in-codemirror/tree/master">Ruby</a> (by Michal Hantl, unfinished)</li>
+  <li><a href="http://d.hantl.cz/d/ruby-in-codemirror/">Ruby</a> (by Michal Hantl, <a href="http://github.com/hakunin/ruby-in-codemirror/tree/master">unfinished</a>)</li>
   <li><a href="contrib/sql/index.html">SQL</a> (courtesy of John Benediktsson)</li>
   <li><a href="contrib/plsql/index.html">PLSQL</a> (courtesy of <a href="http://www.oracle-and-apex.com/">Peter Raganitsch</a>)</li>
   <li><a href="http://www.liranuna.com/diff-parser-for-codemirror/">diff</a> (courtesy of <a href="http://www.liranuna.com">Liran Nuna</a>)</li>
-  <li><a href="contrib/groovy/index.html">Groovy</a> (by <a href="http://exoplatform.org/">eXo Platform</a>)</li>
 </ul>
 
 <p>Or take a look at some real-world uses of the system...</p>
@@ -76,32 +74,11 @@ parsers...</p>
   <li><a href="http://billmill.org/static/canvastutorial/index.html">A cool tutorial about the &lt;canvas> element</a></li>
   <li><a href="http://orc.csres.utexas.edu/tryorc.shtml">An online IDE for the Orc programming language</a></li>
   <li><a href="http://code.google.com/apis/ajax/playground">Google's API playground</a></li>
-  <li><a href="http://sandbox.livesitehost.com/livesite/index.php?u=admin&amp;p=admin&amp;send_to=/livesite/add_style.php">The liveSite CMS style editor</a></li>
-  <li><a href="http://craic.com/tutorials/javascript/raphael_live/raphael_live.html">Raphaël Live</a></li>
   <li><a href="http://dev.freebaseapps.com/">Freebase's Acre IDE</a></li>
   <li><a href="http://jsbin.com/">JS Bin</a></li>
-  <li><a href="http://www.rockettheme.com/extensions-joomla/rokpad">The RokPad plugin for Joomla</a></li>
 </ul>
 
 <h2>Releases</h2>
-
-<p class="rel"><em>27-04-2010</em>: <a
-href="http://marijn.haverbeke.nl/codemirror/codemirror-0.67.zip">Version
-0.67</a>: More consistent page-up/page-down behaviour across browsers.
-Fix some issues with hidden editors looping forever when line-numbers
-were enabled. Make PHP parser parse <code>"\\"</code> correctly. Have
-<code>jumpToLine</code> work on line handles, and add
-<code>cursorLine</code> function to fetch the line handle where the
-cursor currently is. Add new <code>setStylesheet</code> function to
-switch style-sheets in a running editor.</p>
-
-<p class="rel"><em>01-03-2010</em>: <a
-href="http://marijn.haverbeke.nl/codemirror/codemirror-0.66.zip">Version
-0.66</a>: Adds <code>removeLine</code> method to API. Introduces the
-<a href="contrib/plsql/index.html">PLSQL parser</a>. Marks XML errors
-by adding (rather than replacing) a CSS class, so that they can be
-disabled by modifying their style. Fixes several selection bugs, and a
-number of small glitches.</p>
 
 <p class="rel"><em>12-11-2009</em>: <a
 href="http://marijn.haverbeke.nl/codemirror/codemirror-0.65.zip">Version

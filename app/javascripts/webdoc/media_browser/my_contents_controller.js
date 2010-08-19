@@ -132,7 +132,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
           var imgUrl = this.detailsViewImg.attr("src");
           page.setBackground(page.getBackgroundColor(),"url("+imgUrl+")", "no-repeat", "center center");
           // Jump to page inspector, where you can set how the background image is displayed
-          //WebDoc.application.rightBarController.showPageInspector();
+          //WebDoc.application.panelsController.showPageInspector();
           break;
 
         case "delete_image_action": //delete an uploaded image from My Images

@@ -346,7 +346,7 @@ WebDoc.PageView = $.klass({
       while(l--){
         discussion = discussions[l];
         this.createDiscussionView(discussion);
-        var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
+        var discussionPanel = WebDoc.application.panelsController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
         discussionPanel.showCurrentPageDiscussions();
       }
     }.pBind(this));

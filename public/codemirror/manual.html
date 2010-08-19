@@ -177,14 +177,10 @@
 
     <dl>
 
-      <dt><code>stylesheet</code></dt><dd>The file name of the
-      style-sheet, or style-sheets, that should be used to colour the
-      code in the editor frame. Can be a string or an array of
-      strings. See <a
+      <dt><code>stylesheet</code></dt><dd>The file name of the style-sheet
+      that should be used to colour the code in the editor frame. See <a
       href="css/jscolors.css"><code>jscolors.css</code></a> for an
-      example. The set of active stylesheets can be changed in a
-      running editor with the <code>setStylesheet</code> method, which
-      also takes a string or array of strings as argument.</dd>
+      example.</dd>
 
       <dt><code>path</code></dt><dd>The path that is prefixed to
       script file names when they are loaded into an IFRAME. (Note that
@@ -324,11 +320,6 @@
       <dt><code>readOnly</code></dt><dd>When set to <code>true</code>,
       the document is not editable.</dd>
 
-      <dt><code>domain</code></dt><dd>Can be set to the value
-      <code>document.domain</code> should have inside of the iframe.
-      Used to prevent access issues in IE, where this value isn't
-      automatically inherited by iframes.</dd>
-
       <dt><code>initCallback</code></dt><dd>If set to a function, this
       will be called (with the editor object as its argument) after
       the editor has finished initialising.</dd>
@@ -466,6 +457,15 @@
       <dt><code>focus()</code></dt><dd>Gives focus to the editor
       frame.</dd>
 
+      <dt><code>currentLine()</code> &#8594;
+      <code>number</code></dt><dd>Returns the line on which the cursor
+      is currently sitting. <span class="warn">(Deprecated, see the
+      line-based interface below)</span></dd>
+
+      <dt><code>jumpToLine(number)</code></dt><dd>Moves the cursor to
+      the start of the given line. <span
+      class="warn">(Deprecated)</span></dd>
+
       <dt><code>selection()</code> &#8594;
       <code>string</code></dt><dd>Returns the text that is currently
       selected in the editor.</dd>
@@ -546,9 +546,6 @@
       character}</code> object representing the cursor position.
       <code>start</code> defaults to <code>true</code> and determines
       if the startpoint or the endpoint of the selection is used.</dd>
-      <dt><code>cursorLine()</code> &#8594;
-      <code>handle</code></dt><dd>Returns the line on which the cursor
-      is currently sitting.</dd>
       <dt><code>firstLine()</code> &#8594;
       <code>handle</code></dt><dd>Get the first line of the
       document.</dd>
@@ -575,8 +572,6 @@
       <dt><code>lineNumber(handle)</code> &#8594;
       <code>number</code></dt><dd>Ask which line of the document
       (1-based) the given line is.</dd>
-      <dt><code>jumpToLine(handle)</code></dt><dd>Moves the cursor to
-      the start of the given line.</dd>
       <dt><code>selectLines(startHandle, startOffset,
       endHandle, endOffset)</code></dt><dd>Move the selection to a
       specific point. <code>endHandle</code> and

@@ -48,14 +48,24 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     this.editNode.html( this.item.getText() );
     
     // This should be done with model hooks
-    this.itemDomNode
-    .bind("resize", function(){that.shape.refresh()});
+    //this.itemDomNode
+    //.bind("resize", function(){that.shape.refresh()});
     
     this.innerHtmlChanged();
     this.setEditable();
     this.shape.drawShape(this.shape.id);
   },
-
+  
+  objectChanged: function($super, item, options) {
+    $super(item, options);
+  	this.shape.refresh();
+  },
+  
+  _resizeTo: function($super, size) { 
+  	$super(size);
+  	this.shape.refresh();
+  },
+  
   toggleMode: function(){
     var that = this,
         text;

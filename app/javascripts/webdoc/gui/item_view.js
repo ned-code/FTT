@@ -259,7 +259,7 @@ WebDoc.ItemView = $.klass({
   
   edit: function() {
     //by default item views are not editable (if your item is editable override this method in the subclass) 
-    WebDoc.application.rightBarController.showItemInspector();    
+    WebDoc.application.panelsController.showItemInspector();    
     WebDoc.application.inspectorController.selectInspector(this.inspectorGroupName());
     this.itemLayerDomNode.hide();    
     this.domNode.addClass("item-edited");    

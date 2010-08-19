@@ -14,7 +14,7 @@ var PHPHTMLMixedParser = Editor.Parser = (function() {
   XMLParser.configure({useHTMLKludges: true});
 
   function parseMixed(stream) {
-    var htmlParser = XMLParser.make(stream), localParser = null, inTag = false, phpParserState = null;
+    var htmlParser = XMLParser.make(stream), localParser = null, inTag = false;
     var iter = {next: top, copy: copy};
 
     function top() {
@@ -40,14 +40,9 @@ var PHPHTMLMixedParser = Editor.Parser = (function() {
     }
     function local(parser, tag) {
       var baseIndent = htmlParser.indentation();
-      if (parser == PHPParser && phpParserState)
-        localParser = phpParserState(stream);
-      else
-        localParser = parser.make(stream, baseIndent + indentUnit);
-
+      localParser = parser.make(stream, baseIndent + indentUnit);
       return function() {
         if (stream.lookAhead(tag, false, false, true)) {
-          if (parser == PHPParser) phpParserState = localParser.copy();
           localParser = null;
           iter.next = top;
           return top();  // pass the ending tag to the enclosing parser
@@ -77,12 +72,11 @@ var PHPHTMLMixedParser = Editor.Parser = (function() {
 
     function copy() {
       var _html = htmlParser.copy(), _local = localParser && localParser.copy(),
-          _next = iter.next, _inTag = inTag, _php = phpParserState;
+          _next = iter.next, _inTag = inTag;
       return function(_stream) {
         stream = _stream;
         htmlParser = _html(_stream);
         localParser = _local && _local(_stream);
-        phpParserState = _php;
         iter.next = _next;
         inTag = _inTag;
         return iter;

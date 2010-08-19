@@ -161,7 +161,7 @@ javascripts:
     - app/javascripts/webdoc/tools/textbox_tool.js
     - app/javascripts/webdoc/tools/text_tool/*.js
     - app/javascripts/webdoc/controllers/*.js  
-    - app/javascripts/webdoc/controllers/right_bar_controllers/*.js
+    - app/javascripts/webdoc/controllers/panel_controllers/*.js
     - app/javascripts/webdoc/controllers/inspectors/*.js
     - app/javascripts/webdoc/core/*.js
     

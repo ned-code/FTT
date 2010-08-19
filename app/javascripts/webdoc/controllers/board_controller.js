@@ -107,7 +107,6 @@ WebDoc.BoardController = jQuery.klass({
     this._fireSelectionChanged();
     this._bindMouseEvent();
      
-
     if (this._autoFit && this.boardContainerNode.css("width").match(/px/) && this.boardContainerNode.css("height").match(/px/)) {
       //update zoom to fit browser page    
       var heightFactor = $("#webdoc").height() / $("#board-container").height();
@@ -154,7 +153,7 @@ WebDoc.BoardController = jQuery.klass({
     this._initResizable();
     
     if (this._previousInspector) {
-      WebDoc.application.rightBarController.selectInspector(this._previousInspector);      
+      WebDoc.application.panelsController.selectInspector(this._previousInspector);      
     }
     this._isInteraction = false;
     return this._isInteraction;
@@ -170,11 +169,11 @@ WebDoc.BoardController = jQuery.klass({
     this.editorNode.removeTransitionClass('edit_mode');
     this.boardContainerNode.resizable('destroy');
     
-    if(WebDoc.application.rightBarController.getSelectedInspector() !== WebDoc.PanelInspectorType.SOCIAL) {
-      this._previousInspector = WebDoc.application.rightBarController.getSelectedInspector();
+    if(WebDoc.application.panelsController.getSelectedInspector() !== WebDoc.PanelInspectorType.SOCIAL) {
+      this._previousInspector = WebDoc.application.panelsController.getSelectedInspector();
     }
     
-    WebDoc.application.rightBarController.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
+    WebDoc.application.panelsController.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
     
     this._isInteraction = true;
     return this._isInteraction;
@@ -254,7 +253,7 @@ WebDoc.BoardController = jQuery.klass({
   
   setCurrentTool: function(tool) {
     this.currentTool = tool;
-    if (this.currentTool) {
+    if (tool) {
       this.currentTool.selectTool();
     }
   },
@@ -540,6 +539,7 @@ WebDoc.BoardController = jQuery.klass({
   
   unselectAll: function() {
     ddd("unselect all. selection size " + this._selection.length);
+    
     this.selectItemViews([]);
     for(var i=0; i< this._selection.length; i++){
       this._selection[i].unSelect();
@@ -1153,15 +1153,15 @@ WebDoc.BoardController = jQuery.klass({
     }
     this._selectionDiscussionView = discussionView;
     discussionView.select(skipScrollDiscussionView);
-    WebDoc.application.rightBarController.showDiscussionsPanel();
-    var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
+    WebDoc.application.panelsController.showDiscussionsPanel();
+    var discussionPanel = WebDoc.application.panelsController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
     discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion, skipScrollDiscussionPanel);
   },
 
   unSelectDiscussionView: function() {
     if(this._selectionDiscussionView !== null) {
       this._selectionDiscussionView.unSelect();
-      var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
+      var discussionPanel = WebDoc.application.panelsController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
       discussionPanel.unSelectDiscussion(this._selectionDiscussionView.discussion);
       this._selectionDiscussionView = null;      
     }

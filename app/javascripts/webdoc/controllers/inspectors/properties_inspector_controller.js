@@ -213,18 +213,14 @@ WebDoc.PropertiesInspectorController = $.klass({
         property = field.attr('data-property');
     
     if ( typeof property === 'undefined' ) { return; }
+    // TODO: convert property to camelCase if it isn't already
     
-    ddd('[propertiesInspector] changeProperty ', e.target);
+    ddd('[propertiesInspector] changeProperty property:', property);
     
     field.validate({
       pass: function( value ){ 
         var item = WebDoc.application.boardController.selection()[0].item,
             cssObj;
-        
-        if ( typeof property === 'undefined' ) { return; }
-        // TODO: convert property to camelCase if it isn't already
-        
-        ddd('[propertiesInspector] property:', property);
         
         // If this field has a property translator then it
         // processes the value and gives us some CSS...
@@ -234,8 +230,8 @@ WebDoc.PropertiesInspectorController = $.klass({
         }
         // Otherwise we use the value directly
         else {
-          if(property == 'backgroundColor'){
-            var property = 'background-color:' + value +';';
+          if(property === 'backgroundColor'){
+            property = 'background-color:' + value +';';
             item.setStyle(property, 'background');
           }
           else if(property == 'borderRadius'){
@@ -266,6 +262,9 @@ WebDoc.PropertiesInspectorController = $.klass({
           }
         }
         self.refresh();
+      },
+      fail: function( value, message ){
+      	ddd('[propertiesInspector] changeProperty failed validation:', message );
       }
     });
   },
@@ -276,6 +275,7 @@ WebDoc.PropertiesInspectorController = $.klass({
   properties: {
     fontSize: {
     	input: function( field, value ){
+    		ddd('[properties] fontSize value:', value);
     		return { fontSize: value+'em' };
     	},
     	output: function( field, css ){

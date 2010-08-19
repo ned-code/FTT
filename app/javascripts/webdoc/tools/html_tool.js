@@ -8,9 +8,9 @@ WebDoc.HtmlTool = $.klass(WebDoc.Tool, {
   initialize: function($super, selector, boardClass) {
     $super(selector, boardClass);
   },
-
+  
   selectTool: function() {
-    WebDoc.application.boardController.unselectAll();      
+    WebDoc.application.boardController.unselectAll();
     var newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     newItem.data.media_type = WebDoc.ITEM_TYPE_HTML;
     newItem.data.data.tag = "div";
@@ -21,5 +21,4 @@ WebDoc.HtmlTool = $.klass(WebDoc.Tool, {
     WebDoc.application.boardController.selectItemViews([createdItemView]);
     WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
   }
-
 });

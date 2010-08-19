@@ -137,7 +137,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   selectTool: function($super) {
     $super();
     WebDoc.application.boardController.unselectAll();
-    WebDoc.application.rightBarController.showItemInspector();
+    WebDoc.application.panelsController.showItemInspector();
     WebDoc.application.inspectorController.selectInspector('DrawingInspectorGroup');
   },
   
