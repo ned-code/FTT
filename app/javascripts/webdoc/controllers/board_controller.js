@@ -703,7 +703,9 @@ WebDoc.BoardController = jQuery.klass({
   insertVideo: function(videoProperties, position) {
     var videoWidget;
     switch (videoProperties.type) {
-      case 'video' :
+        case 'youtube' :
+        case 'vimeo' :
+        case 'video' :
         videoWidget = WebDoc.WidgetManager.getInstance().getVideoWidget();
         break;
       }
