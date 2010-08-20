@@ -25,6 +25,12 @@ body>header {
   height: 3em;
 }
 
+.logo_thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .user {
   position: absolute;
   top: 0;

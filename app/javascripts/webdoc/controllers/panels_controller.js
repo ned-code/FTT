@@ -104,6 +104,10 @@ WebDoc.PanelsController = $.klass({
     }
   },
   
+  deselectInspector: function(  ) {
+    this._showPanel( false );
+  },
+  
   getInspector: function( controllerType ) {
     ddd("[PanelsController] getInspector", controllerType);
     

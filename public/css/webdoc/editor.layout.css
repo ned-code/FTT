@@ -424,14 +424,16 @@ body.full_view {
 	margin-left: -5em;
 }
 
+/* this would be better with a class rather than first-child */
+
 .comment_buttons_index>li:first-child {
   display: none;
 }
 
-.admin .comments_buttons_index>li:first-child,
-.editor .comments_buttons_index>li:first-child,
-.contributor .comments_buttons_index>li:first-child,
-.viewer_comment .comments_buttons_index>li:first-child {
+.admin_role .comments_buttons_index>li:first-child,
+.editor_role .comments_buttons_index>li:first-child,
+.contributor_role .comments_buttons_index>li:first-child,
+.viewer_comment_role .comments_buttons_index>li:first-child {
   display: inline-block;
 }
 
@@ -516,15 +518,13 @@ body.full_view {
 /* .thumb extensions ------------------------- */
 
 .logo_thumb {
-  display: inline-block;
-  
   -webkit-transition: margin-left 0.3s ease-in;
   -moz-transition:    margin-left 0.3s ease-in;
   transition:         margin-left 0.3s ease-in;
 }
 
 .full_view .logo_thumb {
-  margin-left: 6px;
+  left: 6px;
 }
 
 .author_thumb {

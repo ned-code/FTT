@@ -27,7 +27,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
   },
   
   buttonSelector: function() {
-    return this.ITEM_INSPECTOR_BUTTON_SELECTOR;  
+    return this.ITEM_INSPECTOR_BUTTON_SELECTOR;
   },
   
   selectInspector: function(inspectorId) {
@@ -37,9 +37,10 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
   _updateInspector: function(inspectorId) {
     var inspector;
     
-    ddd("[InspectorController] updatePalette", inspectorId );
-    if ( this._inspectorNodes[inspectorId] === undefined ) {
-      inspectorId = 'empty';
+    ddd("[InspectorController] _updateInspector", inspectorId, this._inspectorNodes[inspectorId], typeof this._inspectorNodes[inspectorId]);
+    
+    if ( typeof this._inspectorNodes[inspectorId] === 'undefined' ) {
+      WebDoc.application.panelsController.deselectInspector();
     }
     if (inspectorId !== this.currentInspectorId) {
       this.currentInspectorId = inspectorId;
@@ -66,12 +67,15 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     ddd( "selected item ", selection );
     
     //we show the inspector only if there is one item in the selection
-    if ( selection.length === 1) {
-    	ddd('[] selectionChanged', selection[0].inspectorGroupName());
+    if ( selection.length === 0 ) {
+      this._updateInspector();
+    }
+    else if ( selection.length === 1 ) {
+    	ddd('[InspectorController] selectionChanged', selection[0].inspectorGroupName());
       this._updateInspector( selection[0].inspectorGroupName() );
     }
     else {
-      this._updateInspector( 'empty' );
+      this._updateInspector('empty');
     }
   }
 });
