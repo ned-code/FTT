@@ -21,7 +21,7 @@
      
         <a href="#dropdown" class="button header" data-for="#account_dropdown">Account</a>
         <ul class="user_index dropdown_index index" id="account_dropdown">
-          <li><%= link_to "Your profile", edit_user_path(:id => current_user.uuid), { :class => "user-edit item #{params[:controller]=='users' ? 'users' : '' }" } %></li
+          <li><%= link_to "Your profile", edit_registration_path(:user), { :class => "user-edit item #{params[:controller]=='users' ? 'users' : '' }" } %></li
          ><li><%= link_to "Logout", destroy_user_session_path, { :class => "user-logout item" } %></li>
         </ul>
       </li>
