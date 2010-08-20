@@ -100,33 +100,6 @@ WebDoc.DocumentCollaborationController = $.klass({
     }
     
     this.friendsSelector.loadFriendList(friendslist);
-    
-    // TODO: instead of listing the emails again, take the successful ones out of the field, leaving the unsuccessful ones
-    // Display the message - these didn't work - then give them a choice to send a sign up for webdoc email
-    
-    if(json.failed && json.failed.length > 0) {
-      this.failedEmailsWrapper
-      .empty()
-      .append( $('<p/>').html('These people are not yet webdoc users!') )
-      .show()
-      // TODO: Flaky, do it better
-      .parent()
-      .addClass('error');
-      
-      var addresses = "";
-      for (var i = 0; i < json.failed.length; i++) {
-        addresses += json.failed[i];
-        if(i !== json.failed.length -1) { addresses += "\n"; }
-      }
-      
-      this.emailsNode.val( addresses );
-      return false;
-    }
-    else { 
-      this.failedEmailsWrapper.hide(); 
-      this.cleanInvitationFields();
-      return true;
-    }
   },
   
   createAccessItem: function(userInfos) {
@@ -182,20 +155,6 @@ WebDoc.DocumentCollaborationController = $.klass({
     });
   },
   
-  getInvitationAccess: function(recipients, message) {
-    var accesses_editors = [];
-    if( recipients !== "") {
-      var recipients_emails = recipients.split(/[;,]/);
-      for (var i = 0; i < recipients_emails.length; i++) {
-        accesses_editors[i] = recipients_emails[i];
-      }
-    }
-    if (window._gaq) {
-      _gaq.push(['_trackEvent', 'share', 'coeditor_invite', this.document.uuid(), accesses_editors.length]);
-    }      
-    var access_content = { role: "editor", recipients: accesses_editors, message: message };
-    return { accesses : $.toJSON(access_content) };
-  },
   
   //Todo manage the email form
   cleanInvitationFields: function() {
@@ -207,9 +166,6 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.friendsSelector.cleanFriendsList();
   },
   
-  closeDialog: function() {
-      $(this).dialog('close');
-  },
   
   toggleForm: function(e){
     e.preventDefault();

@@ -8,7 +8,6 @@ WebDoc.DocumentShareController = $.klass({
   initialize: function() {
     this.document = null;
     
-    //$(".delete_reader_role").live("click", this._deleteReaderRole.pBind(this));   
     
     this.friendsSelector = new WebDoc.FriendsSelectorController('share_webdoc');
     
@@ -31,14 +30,6 @@ WebDoc.DocumentShareController = $.klass({
     this.yourConnectionsRadio.bind('change', this._connectionsRadioChanged.pBind(this));
     this.documentShareForm.bind( 'submit', this._submitForm.pBind(this) );
     this.documentShareDialog.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
-    //I think the following is useless
-    this.shareTabs = jQuery("#wb-document-share-tabs");
-    this.shareTabs.tabs();
-    
-    this.shareDocRadio = jQuery('#share_webdoc_radio');
-    this.unshareDocRadio = jQuery('#unshare_webdoc_radio'); 
-    
-    this.shareWithMembersTabs = jQuery('.unshare-related');
     
     // this.documentShareDialog
     // .remove()
@@ -201,26 +192,12 @@ WebDoc.DocumentShareController = $.klass({
     }.pBind(this), 'POST', jSONData);
   },
   
+  //Todo for email invitations
   _sendInvitations: function(e) {
     var recipients = $("#wb-invitation-add-readers").val();
     var message = $("#wb-invitation-add-readers-message").val();
     this._createRightsToRecipients(this._getInvitationAccess(recipients, message));
     e.preventDefault();
-  },
-  
-  _getInvitationAccess: function(recipients, message) {
-    var accesses_readers = [];
-    if( recipients !== "") {
-      var recipients_emails = recipients.split(/[;,]/);
-      for (var i = 0; i < recipients_emails.length; i++) {
-        accesses_readers[i] = recipients_emails[i];
-      }
-    }
-    if (window._gaq) {
-      _gaq.push(['_trackEvent', 'share', 'coeditor_invite', this.document.uuid(), accesses_readers.length]);
-    }
-    var access_content = { role: "reader", recipients: accesses_readers, message: message };
-    return { accesses : $.toJSON(access_content) };
   },
   
   _initAllowCommentsCheckBox:function(role){
@@ -266,6 +243,7 @@ WebDoc.DocumentShareController = $.klass({
     return { accesses : $.toJSON(access_content) }
   },
   
+  //TODO for mail invitation
   _cleanInvitationFields: function() {
     $("#wb-invitation-add-readers").val("");
     $("#wb-invitation-add-readers-message").val("");
