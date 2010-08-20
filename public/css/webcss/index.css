@@ -106,6 +106,10 @@
 	overflow: hidden;
 }
 
+.dropdown_index>li {
+	margin-right: 0;
+}
+
 .dropdown_index.active {
 	background-color:rgba(0,0,0,0.6);
 	padding-top:10px;
