@@ -95,11 +95,8 @@ WebDoc.DocumentShareController = $.klass({
   },
   
   loadAccess: function(json) {
-    
-    ddd('load_Access');
-    
     this.sharedUsersList.empty();
-    
+    ddd('loadAccess');
     //first we look if the document is public
     if(json.public){
       this.publicRadio.click();
@@ -112,21 +109,27 @@ WebDoc.DocumentShareController = $.klass({
     //document not public, we look if it's share with connection
     var isShared = false;
     this.access = json.access;
+    var friends_access = [];
     for (var i = 0; i < this.access.length; i++) {
       if(this.access[i][0].role == 'viewer_comment' || this.access[i][0].role == 'viewer_only'){
         if(!isShared){
           isShared = true;
+          var userInfos = this.access[i][0];
           //we consider that all the user have the same role !!
-          this._initAllowCommentsCheckBox(this.access[i][0].role);
+          this._initAllowCommentsCheckBox(userInfos.role);
+          friends_access.push(userInfos.uuid);
         }
-        this._createAccessItem(this.access[i][0]);
+        this._createAccessItem(userInfos);
       }
     }
     
     if(isShared){
+      ddd('document isShared');
       this.yourConnectionsRadio.click();
       this.shareAllowComments.show();
-      this.friendsSelector.loadFriendList();
+      ddd(friends_access);
+      this.friendsSelector.loadFriendList(friends_access);
+      this.yourConnectionsList.show();
     }
     else{
       //not public and not share to connections -> document not shared
@@ -170,6 +173,7 @@ WebDoc.DocumentShareController = $.klass({
         //TODO notify the user that there no user selected
         return;
       }
+      ddd('friendsList',friendsList);
       this._createFriendsRights(friendsList,role);
     }
     else if(this.publicRadio.attr('checked')){
@@ -195,7 +199,7 @@ WebDoc.DocumentShareController = $.klass({
     var url = '/documents/' + this.document.uuid() + '/roles';
     var jSONData = { accesses : access_content };
     WebDoc.ServerManager.request(url,function(data){
-      this.friendsSelector.cleanFriendsList();
+      //this.friendsSelector.cleanFriendsList();
       this.loadAccess(data);
     }.pBind(this), 'POST', jSONData);
   },
@@ -289,7 +293,8 @@ WebDoc.DocumentShareController = $.klass({
   _connectionsRadioChanged: function(e){
     this.shareAllowComments.show();
     this.yourConnectionsList.show();
-    this.friendsSelector.loadFriendList();
+    this.friendsSelector.loadFriendList([]);
+    this.friendsSelector.cleanFriendsList();
     this.sharedDocUrl.hide();
   },
   
