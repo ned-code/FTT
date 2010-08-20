@@ -10,7 +10,7 @@ Webdoc::Application.routes.draw do
 
   root :to => 'home#show'
 
-  resources :documents, :except => :index do
+  resources :documents do
     resources :pages do
       resources :items
     end
