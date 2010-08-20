@@ -9,11 +9,12 @@
      the background image with the text-indent. */
   height: 0;
   background-size: 96px 64px;
-  background-position: 0 0;
+  background-position: center center;
   background-repeat: no-repeat;
   
   text-decoration: none;
   color: inherit;
+
 }
 
 /*.text_thumb {
