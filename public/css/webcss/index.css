@@ -123,6 +123,19 @@
 	display: block;
 }
 
+.messages_dropdown_index {
+}
+
+.messages_dropdown_index.active {
+	background-color:rgba(248,248,248,1);
+	padding:10px;
+
+}
+
+.messages_dropdown_index > li {
+	padding-bottom:10px;
+}
+
 edit_dropdown_index {}
 
 

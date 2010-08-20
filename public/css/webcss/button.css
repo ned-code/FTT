@@ -139,3 +139,9 @@
 .card > .button:hover, .card > .button:active {
   text-decoration: none;
 }
+
+.button.settings {
+	color:red;
+	display:inline;
+}
+

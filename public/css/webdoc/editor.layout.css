@@ -63,6 +63,10 @@ body.full_view {
   opacity: 1;
 }
 
+.title_inline {
+	display:inline;
+}
+
 .full_view .title_wrap {
   height: 0;
   margin-top: 0;
@@ -389,7 +393,10 @@ body.full_view {
 
 .edit_dropdown_index.active {}
 
-.doc_settings_dropdown_index>li {
+.doc_settings_dropdown_index {
+
+}
+.doc_settings_dropdown_index > li {
 	margin-bottom: 0.3333em;
 
 }

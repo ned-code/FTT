@@ -85,16 +85,21 @@ body>header {
 .user_index>li {
 	margin-bottom: 0.3333em;
 	width:100%;
+	white-space: nowrap;
 }
 
 .user_index>li a {
-	
+	color:rgb(239,239,239);
 	margin-bottom: 0.3333em;
 	width:100%;
 	padding-left:10px;
 	padding-right:10px;
 }
 
+.user_index>li:hover {
+/*white-space: nowrap;*/
+	background-color: grey;
+}
 /* .number */
 
 .number {
