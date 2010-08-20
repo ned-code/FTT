@@ -73,7 +73,7 @@ time.ago {text-shadow:0px 1px 1px rgb(111,126,131);}
     height: 	70px;
     width:		100px;
     background-repeat: 		no-repeat;
-    background-position: 	0 0;
+    background-position: 	center center;
     -webkit-background-size:  100px;
     -moz-background-size:     100px;
     background-size:          100px;

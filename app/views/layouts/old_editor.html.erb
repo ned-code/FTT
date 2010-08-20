@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<% document_title @document.title %>
+<% meta_title @document.title %>
 <% session_key_name = Rails.application.config.session_options[:key] %>
 <% if params[:reader] == 'true'
     current_class = 'mode-embed'
@@ -66,7 +66,7 @@
     </script>
     <script>
     jQuery(document).ready(function() {
-  		jQuery('time').cuteTime();
+  		jQuery('time .ago').cuteTime();
 
 	});
     </script>

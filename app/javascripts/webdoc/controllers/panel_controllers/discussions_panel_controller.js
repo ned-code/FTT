@@ -84,7 +84,7 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
         commentNode = jQuery('<div/>').attr('data-comment-uuid', comment.uuid()).attr('class', 'comment'),
         header = jQuery('<header/>'),
         info = jQuery('<div/>', { 'class': 'comment_info' }),
-        time = jQuery('<time/>', { 'datetime': comment.created_at() }).html( comment.relative_created_at() ),
+        time = jQuery('<time/>', { 'datetime': comment.created_at() }).html( comment.created_at() ),
         thumb = jQuery('<a/>', { 'class': 'user_thumb thumb', 'title': comment.user.getUsername(), 'style': 'background-image: url('+comment.user.getAvatarThumbUrl()+');' }).html(comment.user.getUsername()),
         title = '<a href="'+'">'+comment.user.getUsername()+'</a> says:',
         body = jQuery('<div/>').html('<p>'+ comment.content().replace(/\n/g, '</p><p>') +'</p>'),

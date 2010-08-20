@@ -9,65 +9,65 @@ A source is added with: his domain name (without www.)
 var videoPlayerSources = {
   'youtube':{
     'urlPart':'youtube.com'
-  },  
+  },
   'myspace':{
     'urlPart':'vids.myspace.com'
-  },  
+  },
   'metacafe':{
-    'urlPart':'metacafe.com', 
+    'urlPart':'metacafe.com'
   },
   'vimeo':{
     'urlPart':'vimeo.com'
   },
   'break':{
     'urlPart':'break.com'
-  },   
+  },
   'veoh':{
-    'urlPart':'veoh.com'   
-  },     
+    'urlPart':'veoh.com'
+  },
   'fancast':{
-    'urlPart':'fancast.com'  
-  },      
+    'urlPart':'fancast.com'
+  },
   'liveleak':{
     'urlPart':'liveleak.com'
-  },   
+  },
   'viddler':{
     'urlPart':'viddler.com'
-  },   
+  },
   'blip':{
-    'urlPart':'blip.tv' 
+    'urlPart':'blip.tv'
   },
   'crackle':{
     'urlPart':'crackle.com'
-  },    
+  },
   'ustream':{
-    'urlPart':'ustream.tv' 
+    'urlPart':'ustream.tv'
   },
   'revver':{
     'urlPart':'revver.com'
-  },    
+  },
   'traileraddict':{
-    'urlPart':'traileraddict.com'  
-  },  
+    'urlPart':'traileraddict.com'
+  },
   'dailymotion':{
-    'urlPart':'dailymotion.com'  
+    'urlPart':'dailymotion.com'
   },
   'google':{
-    'urlPart':'video.google.com'  
+    'urlPart':'video.google.com'
   },
   'huhu':{
-    'urlPart':'hulu.com'  
+    'urlPart':'hulu.com'
   },
   'megavideo':{
-    'urlPart':'megavideo.com'  
+    'urlPart':'megavideo.com'
   },
   'yahoo':{
-    'urlPart':'video.yahoo.com'  
+    'urlPart':'video.yahoo.com'
   },
   'joost':{
-    'urlPart':'joost.com'  
+    'urlPart':'joost.com'
   }
-}
+};
 
 for(var source in videoPlayerSources){
   WebDoc.DrageAndDropController.addUriSource(
