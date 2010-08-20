@@ -19,6 +19,8 @@ Webdoc::Application.routes.draw do
     
     member do
       post :duplicate
+      post :unshare
+      post :share
     end
     collection do
       get :explore
