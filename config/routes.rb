@@ -43,7 +43,7 @@ Webdoc::Application.routes.draw do
 
   resources :users, :except => [:new, :create, :destroy]
 
-  get 'user' => 'sessions#show'
+  get 'user' => 'sessions#show'  
 
   namespace :admin do
     get '/' => 'home#index'

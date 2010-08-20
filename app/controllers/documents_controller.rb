@@ -139,7 +139,7 @@ class DocumentsController < ApplicationController
         end
       end
     else
-      render :file => "#{Rails.public_path}/404.html", :status => 404
+      render :file => "#{Rails.public_path}/404.html", :status => 404 and return
     end    
   end
   
@@ -160,12 +160,12 @@ class DocumentsController < ApplicationController
   
   # PUT /documents/:id
   def update
-    authorize! :update, @document
-    @document.update_attributes(params[:document])
-    message = @document.as_json({})
+    @document.update_attributes!(params[:document])
+    document_hash = @document.as_application_json(:skip_pages => true)
+    message = document_hash
     message[:source] = params[:xmpp_client_id]    
     @@xmpp_notifier.xmpp_notify(message.to_json, @document.uuid)    
-    render :json => @document
+    render :json => document_hash
   end
   
   # DELETE /documents/:id
