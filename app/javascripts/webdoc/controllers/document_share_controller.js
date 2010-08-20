@@ -105,7 +105,7 @@ WebDoc.DocumentShareController = $.klass({
       return;
     }
     
-    //document not publi, we look if it's share with connection
+    //document not public, we look if it's share with connection
     var isShared = false;
     this.access = json.access;
     for (var i = 0; i < this.access.length; i++) {
