@@ -43,7 +43,7 @@ class DocumentsController < ApplicationController
     end
   end
 
-  # GET /documents/explore
+  # GET /explore
   def explore
     respond_to do |format|
       format.html do
