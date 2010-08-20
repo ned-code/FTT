@@ -26,6 +26,7 @@
               obj: jQuery(selector),
               state: false
             };
+            
           }
           
           obj = dropdown.obj;
@@ -35,11 +36,13 @@
           if (!state) {
             state = true;
             obj.addTransitionClass('active');
+            button.addClass("current");
             
             doc.bind('click.dropdown', function(e){
-              
+            	
               state = false;
               obj.removeTransitionClass('active');
+               button.removeClass("current");
               
               doc.unbind('.dropdown');
             });

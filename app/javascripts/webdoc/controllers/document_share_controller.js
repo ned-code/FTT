@@ -175,7 +175,7 @@ WebDoc.DocumentShareController = $.klass({
       this.document.share(allowComments);
     }
     else{
-      ddd('no radio button checked !')
+      ddd('no radio button checked !');
       return;
     }
   },

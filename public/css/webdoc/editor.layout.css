@@ -63,6 +63,10 @@ body.full_view {
   opacity: 1;
 }
 
+.title_inline {
+	display:inline;
+}
+
 .full_view .title_wrap {
   height: 0;
   margin-top: 0;
@@ -389,7 +393,10 @@ body.full_view {
 
 .edit_dropdown_index.active {}
 
-.doc_settings_dropdown_index>li {
+.doc_settings_dropdown_index {
+
+}
+.doc_settings_dropdown_index > li {
 	margin-bottom: 0.3333em;
 
 }
@@ -417,14 +424,16 @@ body.full_view {
 	margin-left: -5em;
 }
 
+/* this would be better with a class rather than first-child */
+
 .comment_buttons_index>li:first-child {
   display: none;
 }
 
-.admin .comments_buttons_index>li:first-child,
-.editor .comments_buttons_index>li:first-child,
-.contributor .comments_buttons_index>li:first-child,
-.viewer_comment .comments_buttons_index>li:first-child {
+.admin_role .comments_buttons_index>li:first-child,
+.editor_role .comments_buttons_index>li:first-child,
+.contributor_role .comments_buttons_index>li:first-child,
+.viewer_comment_role .comments_buttons_index>li:first-child {
   display: inline-block;
 }
 
@@ -509,27 +518,34 @@ body.full_view {
 /* .thumb extensions ------------------------- */
 
 .logo_thumb {
-  display: inline-block;
-  
   -webkit-transition: margin-left 0.3s ease-in;
   -moz-transition:    margin-left 0.3s ease-in;
   transition:         margin-left 0.3s ease-in;
 }
 
 .full_view .logo_thumb {
-  margin-left: 6px;
+  left: 6px;
 }
 
 .author_thumb {
-  background-size: 48px 48px;
   padding-top: 48px;
   width: 48px;
+  background-repeat: no-repeat;
+  
+    box-shadow:						inset 0 0 3px rgb(0,0,0);
+  -moz-box-shadow:			inset 0 0 3px rgb(0,0,0);
+  -webkit-box-shadow:		inset 0 0 3px rgb(0,0,0);
+  
+    background-size: 					48px 48px;
+  -moz-background-size: 		48px 48px;
+  -webkit-background-size:	48px 48px;
 }
 
 .user_thumb {
   background-size: 					32px 32px;
   -moz-background-size: 		32px 32px;
   -webkit-background-size:	32px 32px;
+  background-position: center	center;
   padding-top: 	32px;
   width: 				32px;
   box-shadow:						inset 0 0 3px rgb(0,0,0);

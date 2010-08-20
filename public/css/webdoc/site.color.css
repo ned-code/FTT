@@ -8,3 +8,14 @@ body {
 body>header {
   background-color: rgb(145,156,160);
 }
+
+/* Index extensions */
+.dropdown_index {
+	background-color:rgba(0,0,0,0.6);
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	box-shadow:0px 15px 10px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow:0px 15px 10px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.4);
+}

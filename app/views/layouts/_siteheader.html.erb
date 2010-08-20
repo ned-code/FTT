@@ -8,14 +8,18 @@
     
     <% if user_signed_in? %>
     <ul class="horizontal nav_index index">
-	<li><a class="button header" href="/documents">You</a></li
-     ><li><a class="button header" href="/documents/explore" <% if params[:controller]=='documents' && params[:action]=='explore' %>class="current"<% end %>>Explore</a></li>
+	<li><a class="button header" href="<%= dashboard_path %>">You</a></li
+     ><li><a class="button header" href="<%= explore_path %>" <% if params[:controller]=='documents' && params[:action]=='explore' %>class="current"<% end %>>Explore</a></li>
     </ul>
     <% end %>
     
     <% if user_signed_in? %>
     <ul class="horizontal usernav_index index ">
-      <li><a href="/" class="button header">Messages</a></li
+      <li><a href="#dropdown" class="button header" data-for="#messages_dropdown">Messages</a>
+              <ul class="messages_dropdown_index dropdown_index index" id="messages_dropdown">
+              	<li><h4>Messages</h4><a href="#" class="button sendmessage">Send a message</a></li>
+							  <%= render 'discussions/message' %>
+        </ul></li
      ><li><%= link_to "Friends", friendships_path, { :class => "button header #{params[:controller]=='friendships' ? 'current' : '' }" } %></li
      ><li>
      

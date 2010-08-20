@@ -90,7 +90,7 @@ WebDoc.Explore = $.klass(WebDoc.Application,{
     this.listNode.html('');
     this.domNode.addClass('loading');
 
-    WebDoc.ServerManager.request('/documents/'+this.mode+'.json', function(data) {
+    WebDoc.ServerManager.request('/'+this.mode+'.json', function(data) {
       this._createViewWithDocuments(data.documents);
       this._refreshPagination(data.pagination);
       this.domNode.removeClass('loading');

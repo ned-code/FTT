@@ -154,7 +154,6 @@ WebDoc.DocumentCollaborationController = $.klass({
     });
   },
   
-  
   //Todo manage the email form
   cleanInvitationFields: function() {
     jQuery("#wb-invitation-add-editors").val("");

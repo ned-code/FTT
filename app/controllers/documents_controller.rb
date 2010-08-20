@@ -43,7 +43,7 @@ class DocumentsController < ApplicationController
     end
   end
 
-  # GET /documents/explore
+  # GET /explore
   def explore
     respond_to do |format|
       format.html do
@@ -125,7 +125,6 @@ class DocumentsController < ApplicationController
         format.html do
           set_cache_buster
           @get_return_to = get_return_to 
-          render :layout => 'layouts/editor'
         end
         format.json do
           logger.debug "return document json."
@@ -198,10 +197,6 @@ class DocumentsController < ApplicationController
     
     #Specifiy the document you want
     # @document = Document.not_deleted.where(:uuid => 'put an uuid here')
-    #Without layout
-    #render :layout => false
-    #specify layout:
-    render :layout => 'editor'
   end
   
   protected
