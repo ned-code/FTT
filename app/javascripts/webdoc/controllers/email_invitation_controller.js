@@ -16,7 +16,10 @@ WebDoc.EmailInvitationController = $.klass({
   
   getEmailsList: function(){
     var emailsList = [];
-    
+    var emailsInput = this.domNode.find('.email_input');
+    for(var i=0; i<emailsInput.length;i++){
+      emailsList.push(jQuery(emailsInput[i]).val());
+    }
     return emailsList;
   },
   
@@ -44,7 +47,7 @@ WebDoc.EmailInvitationController = $.klass({
   },
   
   buildEmailInput: function(){
-    return jQuery('<input/>', {type: 'text', 'class': 'email_input'}).attr({placeholder: 'email address'});
+    return jQuery('<input/>', {type: 'email', 'class': 'email_input'}).attr({placeholder: 'email address', 'data-type': 'email'});
   },
   
   addEmailInput: function(){

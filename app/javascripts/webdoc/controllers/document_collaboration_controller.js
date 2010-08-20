@@ -120,12 +120,11 @@ WebDoc.DocumentCollaborationController = $.klass({
   sendInvitationsByEmail: function(e) {
     ddd('Send sendInvitationsByEmail');
     e.preventDefault();
-    var recipients = $("#wb-invitation-add-editors").val();
-    var message = $("#wb-invitation-add-editors-message").val();
+    ddd('email list', this.emailInvitationForm.getEmailsList());
     
     var role_type = jQuery('input[name="role_type_email"]:checked').val()
-    
-    this.createRightsToRecipients( this.getInvitationAccess(recipients, message) );
+    ddd(role_type);
+    //this.createRightsToRecipients( this.getInvitationAccess(recipients, message) );
   },
   
   sendInvitationsByFriends: function(e) {
