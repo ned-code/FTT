@@ -18,7 +18,7 @@
           <%= link_to "your contacts", friendships_path, { :class => "item #{params[:controller]=='friendships' ? 'current' : '' }" } %>
         </li
         ><li>
-          <%= link_to "edit your profile", edit_user_path(:id => current_user.uuid), { :class => "user-edit item #{params[:controller]=='users' ? 'users' : '' }" } %>
+          <%= link_to "edit your profile", edit_registration_path(:user), { :class => "user-edit item #{params[:controller]=='users' ? 'users' : '' }" } %>
         </li
         ><li>
           <%= link_to "logout", destroy_user_session_path, { :class => "user-logout item" } %>

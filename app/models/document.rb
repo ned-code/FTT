@@ -178,6 +178,8 @@ class Document < ActiveRecord::Base
   # ====================
   
   def share(with_comments=false)
+    
+    self.unshare #we want to be sure to remove all the single role associated with users and public
     role = Role.public.where(:document_id => self.uuid).first
     if role.nil?
       Role.create!(:document_id => self.uuid, :name => (with_comments ? Role::VIEWER_COMMENT : Role::VIEWER_ONLY))
@@ -191,9 +193,7 @@ class Document < ActiveRecord::Base
   end
   
   def unshare
-    if is_public?
-      self.roles.where('name in(?)', Role::PUBLIC_ROLES).delete_all
-    end
+    self.roles.where('name in(?)', Role::PUBLIC_ROLES).delete_all
   end
   
   def is_public?
@@ -204,29 +204,26 @@ class Document < ActiveRecord::Base
     uuid
   end
 
-  def as_application_json
+  def as_application_json(options={})
+    options = { :skip_pages => false, :skip_roles => false }.merge(options)
+
     hash = { 'document' => self.attributes }
     hash['document']['size'] = self.size
     hash['document']['is_public'] = self.is_public?
-    hash['document']['pages'] = []
-    for page in self.pages.not_deleted
-      page_hash = page.attributes
-      page_hash['data'] = page.data
-      page_hash['items'] = []
-      for item in page.items.not_deleted
-        item_hash = item.attributes
-        item_hash['data'] = item.data
-        item_hash['properties'] = item.properties
-        item_hash['preferences'] = item.preferences
-        page_hash['items'] << item_hash
+
+    if(options[:skip_pages] != true) 
+      hash['document']['pages'] = []
+      for page in self.pages.not_deleted
+        hash['document']['pages'] << page.as_application_json['page']
       end
-      hash['document']['pages'] << page_hash
     end
-    hash['document']['roles'] = []    
-    for role in self.roles
-      role_hash = role.attributes
-      hash['document']['roles'] << role_hash
+    if(options[:skip_roles] != true)
+      hash['document']['roles'] = []
+      for role in self.roles
+        hash['document']['roles'] << role.as_application_json['role']
+      end
     end
+
     hash
   end
 
@@ -287,11 +284,15 @@ class Document < ActiveRecord::Base
       role = Role::EDITOR
     elsif accesses[:role] == 'limited'
       role = Role::CONTRIBUTOR
+    elsif Role::PUBLIC_ROLES.include?(accesses[:role])
+      #if we give public right to a single user, it means that the document is no more public anymore
+      self.unshare
+      role = accesses[:role]
     end
     
     friends_list = accesses[:users]
     if friends_list.nil? || friends_list.empty?
-      return true
+      return false
     end
     friends_list.each do |friend_uuid|
       user = User.where(:uuid => friend_uuid).first

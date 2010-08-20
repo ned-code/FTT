@@ -24,6 +24,17 @@ en:
       signed_up: 'You have signed up successfully.'
       updated: 'You updated your account successfully.'
       destroyed: 'Bye! Your account was successfully cancelled. We hope to see you again soon.'
+      new:
+        title: "Sign up"
+        terms_of_service: "I agree to %{link}"
+        terms_of_service_link: "terms of service"
+      edit:
+        title: "Edit account"
+        button: "Update"
+        cancel:
+          title: Cancel my account
+          text: Unhappy?
+          link: Cancel my account
     unlocks:
       link: "Didn't receive unlock instructions?"
       send_instructions: 'You will receive an email with instructions about how to unlock your account in a few minutes.'
@@ -32,3 +43,6 @@ en:
       confirmation_instructions: 'Confirmation instructions'
       reset_password_instructions: 'Reset password instructions'
       unlock_instructions: 'Unlock Instructions'
+
+
+

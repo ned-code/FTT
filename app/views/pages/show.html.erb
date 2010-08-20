@@ -23,7 +23,7 @@
       staticPage.start();
     });
     
-    <% cached_document = Rails.cache.fetch("#{@document.cache_key}_wo_script") { @document.to_json(:include => { :pages => { :include => :items} }).gsub(/<\/script>/, "</*script>") } %>
+    <% cached_document = Rails.cache.fetch("#{@document.cache_key}_wo_script") { @document.as_application_json.to_json.gsub(/<\/script>/, "</*script>") } %>
     try {
       WebDoc.ServerManager.cache.store(new WebDoc.Document(<%= raw cached_document.dup %>));
     }

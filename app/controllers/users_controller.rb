@@ -19,28 +19,15 @@ class UsersController < ApplicationController
     end
   end
   
-  # GET /users/:id/edit
-  def edit
-    @user = current_user
-  end
-  
-  # PUT /users/:id
-  def update
-    @user = current_user
-
-    if @user.update_attributes(params[:user])
-      flash[:notice] = t('flash.notice.users.edit_successful')
-      redirect_to edit_user_path(@user)
-    else
-      render :edit
-    end
-  end
-  
   def favorites
     @user = current_user
     respond_to do |format|
       format.html { render :layout => false}
     end
+  end
+
+  def dashboard
+    @user = current_user
   end
   
 end

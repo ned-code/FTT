@@ -120,31 +120,23 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     else{
       data = {with_comments: false};
     }
-
-    jQuery.ajax({
-      url: '/documents/' + this.uuid() + '/share',
-      type: 'POST',
-      data: data,
-      dataType: 'json',
-      success: function(){
-        ddd('document shared');
-        this.isPublic = true;
-      },
-      error: function(){ddd('error during sharing');}
-    }).pBind(this);
+    
+    var url = '/documents/'+ this.uuid() + '/share';
+    WebDoc.ServerManager.request(url,function(data){
+      this.isPublic = true;
+      //Todo, it's better if we can do it with a callback
+      WebDoc.application.shareController.loadAccess(data);
+      
+    }.pBind(this), 'POST', data);
   },
   
   unshare: function() {
-    jQuery.ajax({
-      url: '/documents/' + this.uuid() + '/unshare',
-      type: 'POST',
-      dataType: 'json',
-      success: function(){
-        ddd('document unshared');
-        this.isPublic = false;
-      },
-      error: function(){ddd('error during unsharing');}
-    }).pBind(this);
+    var url = '/documents/'+ this.uuid() + '/unshare';
+     WebDoc.ServerManager.request(url,function(data){
+       this.isPublic = false;
+       //Todo, it's better if we can do it with a callback
+       WebDoc.application.shareController.loadAccess(data);
+     }.pBind(this), 'POST',{});
   },
   
   isShared: function() {

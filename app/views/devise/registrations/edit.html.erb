@@ -1,41 +1,114 @@
-<!-- registrations/edit -->
-<div class="action-zone zone">
-  <div class="wrap">
-    <h2><%=t '.title' %></h2>
-    
-    <%= form_for resource_name, resource, :url => registration_path(resource_name), :html => { :method => :put }, :builder => CustomFormBuilder do |f| %>
-      <fieldset>
-        <div class="column one of-four stack">
-          <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
-          <%= f.text_field :email, :'data-type' => "email", :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "stelio@webdoc.com" %>
-        </div>
-        <div class="column two of-four stack">
-          <%= f.label :password, 'New password' %>
-          <%= f.password_field :password, :maxlength => 255, :autocomplete => "off", :title => "Leave blank if you don't want to change it" %>
-        </div>
-      </fieldset>
-      
-      <fieldset>
-        <div class="column one of-four stack">
-          <%= f.label :current_password, 'Current password <abbr class="required" title="required">*</abbr>' %>
-          <%= f.password_field :current_password, :maxlength => 255, :required => "required", :autocomplete => "off", :title => "We need your current password to confirm your changes" %>
-        </div>
-      </fieldset>
-      
-      <input name="submit" type="submit" value="Update" />
-    
-    <% end %>
-  </div>
+<div class="title_wrap site_wrap wrap">
+    <h1><%=t '.title' %></h1>
 </div>
 
-<div class="content">
-  <div class="wrap">
+<section class="site_wrap wrap">
+  <h2><!--%= link_to "Back", :back, { :class => "wd-back-button" }%--></h2>
+
+  <div>
+    <% if @user.facebook_token.present? %>
+      <% fb_request = @user.facebook_request('/me') %>
+      <% if fb_request['error'].blank? && fb_request['email'].present? %>
+        Facebook account: <%= fb_request['email'] %>
+      <% else %>
+        <%= link_to "token no more valid, re-add Facebook", user_oauth_authorize_url(:facebook) %>
+      <% end %>
+    <% else %>
+      <%= link_to "add Facebook to your Webdoc account", user_oauth_authorize_url(:facebook) %>
+    <% end %>
+  </div>
+  
+  <%= form_for resource_name, resource, :url => registration_path(resource_name), :html => { :multipart => 'true', :method => :put }, :builder => CustomFormBuilder do |f| %>
+    <fieldset>
+      <div class="column one of-four stack <% if @user.errors.on(:avatar) %>error<% end %>">
+        <label for="user_avatar" class="avatar-label">Avatar</label>
+        <img src="<%= @user.avatar.url(:thumb) %>" alt="avatar" />
+      </div>
+
+      <div class="column two of-four">
+        <%= f.check_box :clear_avatar %>
+        <%= f.label :clear_avatar, 'remove picture' %>
+      </div>
+
+      <div class="column one double of-four">
+        <div class="ff-input-file-wrapper">
+        <%= f.file_field :avatar, :maxlength => 255, :size => "39" %>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset>
+      <div class="column one of-four stack <% if @user.errors[:first_name].present? %>error<% end %>">
+        <%= f.label :first_name, 'First name' %>
+        <%= f.text_field :first_name, :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "Stelio", :size => "28" %>
+      </div>
+      <div class="column two of-four stack <% if @user.errors.on(:last_name) %>error<% end %>">
+        <%= f.label :last_name, 'Last name' %>
+        <%= f.text_field :last_name, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "Tzonis", :size => "28" %>
+      </div>
+    </fieldset>
+    <fieldset>
+      <div class="column one of-four stack <% if @user.errors.on(:username) %>error<% end %>">
+        <%= f.label :username, 'User name' %>
+        <%= f.text_field :username, :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "stelman", :size => "28" %>
+      </div>
+    </fieldset>
+    <fieldset>
+      <div class="column one double of-four stack <% if @user.errors.on(:website) %>error<% end %>">
+        <%= f.label :website, 'Website' %>
+        <%= f.text_field :website, :maxlength => 255, :autocomplete => "on", :placeholder => "www.webdoc.com/stelio", :size => "28" %>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="column one double of-four stack <% if @user.errors.on(:bio) %>error<% end %>">
+        <%= f.label :bio, 'A little bit about yourself' %>
+        <%= f.text_area :bio, :maxlength => 255, :autocomplete => "on", :cols => '', :rows => '' %>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="stack">
+        <%= f.label :gender, 'Gender' %>
+        <%= f.select(:gender, [
+          ['-', nil],
+          ['Male', 'male'],
+          ['Female', 'female']
+        ]) %>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="column one of-four stack">
+        <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
+        <%= f.text_field :email, :'data-type' => "email", :maxlength => 255, :required => "required", :autocomplete => "on", :placeholder => "stelio@webdoc.com" %>
+      </div>
+      <div class="column two of-four stack">
+        <%= f.label :password, 'New password' %>
+        <%= f.password_field :password, :maxlength => 255, :autocomplete => "off", :title => "Leave blank if you don't want to change it" %>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="column one of-four stack">
+        <%= f.label :current_password, 'Current password <abbr class="required" title="required">*</abbr>' %>
+        <%= f.password_field :current_password, :maxlength => 255, :title => "We need your current password to confirm your changes" %>
+      </div>
+    </fieldset>
+
+    <input name="submit" type="submit" value="Update" />
+
+  <% end %>
+  
+</section>
+
+<% if false %>
+  <section class="site_wrap wrap">
     <h3><%= t('.cancel.title') %></h3>
     <p>I don't want to be part of the exciting world of webdoc anymore.  I'll miss it, but no human being was ever meant to have this much fun.</p>
-    
+
     <%= raw button_to t('.cancel.link'), registration_path(resource_name), :confirm => t('confirm'), :method => :delete, :class => "button" %>
-  </div>
-</div>
+  </section>
+<% end %>
 
 <% content_for :scripts do %>
   <%= include_javascripts :forms %>

@@ -36,10 +36,11 @@ class ItemsController < ApplicationController
     end
     @item.document_uuid = params[:document_id]
     @item.save!
-    message = @item.as_json({})
+    item_hash = @item.as_application_json
+    message = item_hash
     message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, params[:document_id])
-    render :json => @item
+    render :json => item_hash
   end
   
   # PUT /documents/:document_id/pages/:page_id/items/:id
@@ -47,11 +48,12 @@ class ItemsController < ApplicationController
     @item = Item.not_deleted.find_by_uuid(params[:id])
     authorize! :update, @item
     @item.document_uuid = params[:document_id]
-    @item.update_attributes!(params[:item])    
-    message = @item.as_json({})
+    @item.update_attributes!(params[:item])
+    item_hash = @item.as_application_json
+    message = item_hash
     message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, params[:document_id])
-    render :json => @item
+    render :json => item_hash
   end
   
   # DELETE /documents/:document_id/pages/:page_id/items/:id
