@@ -8,7 +8,8 @@
 WebDoc.Library = $.klass({
   initialize: function(libraryId) {
     this.elementId = libraryId;
-    this.element = $('#'+libraryId);
+    this.element = jQuery('#'+libraryId);
+    this.domNode = this.element;
     this.libraryUtils = new LibraryUtils();
   },
 

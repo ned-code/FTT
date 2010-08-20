@@ -30,10 +30,10 @@ WebDoc.PageBrowserController = $.klass({
     
     var that = this;
     
-    this.domNode = $("#page_browser");
+    this.domNode = jQuery("#pages_panel");
+    this.contentNode = this.domNode.find(".content");
     
     this._changedFromDrag = false;
-    this._stateThumbs = true;
     this._document = null;
     this.visible = true;
     this.pageMap = {};
@@ -49,7 +49,7 @@ WebDoc.PageBrowserController = $.klass({
     ddd('[PageBrowserController] Initialising Page Browser');
     
     var that = this,
-        pageBrowserItems = this.domNode.find( this.PAGE_BROWSER_ITEM_SELECTOR ),
+        pageBrowserItems = this.contentNode.find( this.PAGE_BROWSER_ITEM_SELECTOR ),
         l = this._document.pages.length,
         page, pageId, pageItem, pageItemNode, pageListNumber;
     
@@ -73,8 +73,7 @@ WebDoc.PageBrowserController = $.klass({
     this._updateThumbs();
     
     // Recalculate scrollbars
-    this.domNode
-    .find('.content')
+    this.contentNode
     .trigger('resize');
     
     if (WebDoc.application.boardController.isEditable()) {
@@ -428,59 +427,8 @@ WebDoc.PageBrowserController = $.klass({
     $( this.PAGE_NUMBER_SELECTOR ).html( items.index( pageBrowserItem.domNode[0] ) + 1 );
   },
   
-  // Show / hide browser --------------------------------------------
+  // Thumbnails ------------------------
   
-  _show: function(){
-    ddd('that._show');
-    var panel = this.domNode,
-        pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
-    
-    panel.addTransitionClass(this.ACTIVE_CLASS);
-    pageBrowserButton.addClass(this.ACTIVE_CLASS);
-    
-    return true;
-  },
-  
-  _hide: function( margin ){
-    var panel = this.domNode,
-        pageBrowserButton = $(this.LEFT_BAR_BUTTON_SELECTOR);
-    
-    panel.removeTransitionClass(this.ACTIVE_CLASS);
-    pageBrowserButton.removeClass(this.ACTIVE_CLASS);
-    
-    return false;
-  },
-  
-  show: function() {
-    this.visible = (this.visible) ? this.visible : this._show() ;
-  },
-  
-  hide: function() {
-    this.visible = (this.visible) ? this._hide() : this.visible ;
-  },
-  
-  toggle: function() {
-    this.visible = (this.visible) ? this._hide() : this._show() ;
-  },
-  
-  // Thumbnails -----------------------------------------------------
-  
-  _updateThumbs: function(){
-    var browserNode = this.domNodeBrowserItems;
-    if (this._stateThumbs) {
-      browserNode.removeClass( this.HIDE_THUMB_CLASS );
-      
-      // This could be improved - really we want the browserNode to be
-      // the entire .inspector inside the pane.  And then we can search 
-      // thumb state button inside this inspector only...
-      // requires a bit of refactoring...
-      
-      $( this.THUMB_STATE_BUTTON_SELECTOR ).addClass( this.ACTIVE_CLASS );
-    }
-    else {
-      browserNode.addClass( this.HIDE_THUMB_CLASS );      
-      $( this.THUMB_STATE_BUTTON_SELECTOR ).removeClass( this.ACTIVE_CLASS );      
-    }
-  }
+  _updateThumbs: function(){}
 
 });

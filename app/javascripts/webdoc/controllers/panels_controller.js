@@ -1,9 +1,7 @@
-/**
- * Controller of the right bar. It manages the show, the hide and the toggle the right bar. It also manages if the right bar shows the inspector or the lib.
- * @author Julien Bachmann
- */
-// define all inspector type that can be displayed in the right bar
-WebDoc.PanelInspectorType = {
+// Controller of panels or panel controllers
+
+// define all inspector types
+WebDoc.PanelControllerType = {
   ITEM: 'item',
   PAGE: 'page',
   PAGE_BROWSER: 'page_browser',
@@ -17,30 +15,29 @@ WebDoc.PanelInspectorType = {
 };
 
 WebDoc.PanelsController = $.klass({
-    
+  
   CURRENT_CLASS: "current",
   ACTIVE_CLASS: "active",
-      
-  STATE_BUTTON_SELECTOR: ".state-right-panel",
-  PANEL_SELECTOR: "#right_bar",
   PANEL_GHOST_SELECTOR: "#right-panel-ghost",
-  PANEL_TOGGLE_SELECTOR: "a[href='#right-panel-toggle']",
+  
+  _editPanelGroup: {
+    item: true,
+    page: true,
+    document: true,
+    discussions: true,
+    my_content: true,
+    apps: true,
+    packages: true
+  },
+  
+  _viewPanelGroup: {
+    discussions: true,
+    my_content: true,
+    apps: true,
+    packages: true
+  },
   
   initialize: function() {
-    panel = jQuery( this.PANEL_SELECTOR );
-    
-    this.rightPanelsArray = [
-      'browser_panel',
-      'inspector_panel',
-      'comments_panel',
-      'apps_panel',
-      'my_content_panel',
-      'packages_panel',
-      'browse_web_panel',
-      'page_inspector_panel',
-      'document_inspector_panel'
-    ];
-    this.bottomPanelsArray = ['social', 'pages_panel'];
     
     // Some of these are lazily loaded, and some are not -
     // pageInspector does not work if you try loading it now.
@@ -48,121 +45,92 @@ WebDoc.PanelsController = $.klass({
     var itemInspector = new WebDoc.InspectorController();
     var myContentController = new WebDoc.MyContentsController();
     var webSearchController = new WebDoc.WebSearchController();
+    var pageBrowserController = new WebDoc.PageBrowserController();
     
     WebDoc.application.inspectorController = itemInspector;
     WebDoc.application.myContentController = myContentController;
     WebDoc.application.webSearchController = webSearchController;
+    WebDoc.application.pageBrowserController = pageBrowserController;
     
-    this.visible = false;
+    this._controllers = {};
+    this._controllers[WebDoc.PanelControllerType.ITEM] = itemInspector;
+    this._controllers[WebDoc.PanelControllerType.MY_CONTENT] = myContentController;
+    this._controllers[WebDoc.PanelControllerType.BROWSE_WEB] = webSearchController;
+    this._controllers[WebDoc.PanelControllerType.PAGE_BROWSER] = pageBrowserController;
     
-    this.domNode = panel;
-    this.panelGhostNode = jQuery( this.PANEL_GHOST_SELECTOR );
-    this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
-    
-    this.panelWidth = panel.outerWidth();
-    this._inspectorsControllersClasses = {};
-    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.ITEM] = WebDoc.InspectorController;
-    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.PAGE] = WebDoc.PageInspectorController;
-    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.DOCUMENT] = WebDoc.DocumentInspectorController;
-    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.DISCUSSIONS] = WebDoc.DiscussionsPanelController;
-    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.SOCIAL] = WebDoc.SocialPanelController;
-    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.MY_CONTENT] = WebDoc.MyContentsController;
-    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.APPS] = WebDoc.AppsLibrary;
-    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.BROWSE_WEB] = WebDoc.WebSearchController;
-    this._inspectorsControllersClasses[WebDoc.PanelInspectorType.PACKAGES] = WebDoc.PackagesLibrary;
-
-    this._inspectorsControllers = {};
-    this._inspectorsControllers[WebDoc.PanelInspectorType.ITEM] = itemInspector;
-    this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT] = myContentController;
-    this._inspectorsControllers[WebDoc.PanelInspectorType.BROWSE_WEB] = webSearchController;
+    this._panelControllers = {
+      item: WebDoc.InspectorController,
+      page: WebDoc.PageInspectorController,
+      document: WebDoc.DocumentInspectorController,
+      discussions: WebDoc.DiscussionsPanelController,
+      social: WebDoc.SocialPanelController,
+      my_content: WebDoc.MyContentsController,
+      apps: WebDoc.AppsLibrary,
+      browse_web: WebDoc.WebSearchController,
+      packages: WebDoc.PackagesLibrary,
+      page_browser: WebDoc.PageBrowserController
+    };
     
     this._currentInspectorType = null;      
     this._preloadDragDropIcon();
     
+    this.panelGhostNode = jQuery( this.PANEL_GHOST_SELECTOR );
+    this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
+    
     // This is a hack. Ultimately, we need a better way than this to be wrangling with show/hide
     $('#document-inspector').hide();
   },
-
-  show: function() {
-    this.visible = (this.visible) ? this.visible : this._show() ;
+  
+  enableEditPanels: function() {
+    this._panelGroup = this._editPanelGroup;
   },
   
-  hide: function() {
-    this.visible = (this.visible) ? this._hide() : this.visible ;
-  },
-  
-  toggle: function() {
-    this.visible = (this.visible) ? this._hide() : this._show() ;
-  },
-  
-  conceal: function() {
-    return this._hide( 36 );
-  },
-  
-  reveal: function() {
-    return (this.visible) ? this._show() : this._hide() ;
+  disableEditPanels: function() {
+    this._panelGroup = this._viewPanelGroup;
+    this.selectInspector( false );
   },
   
   getSelectedInspector: function() {
     return this._currentInspectorType;  
   },
   
-  selectInspector: function(inspectorType) {
-    ddd("[PanelsController] select inspector", inspectorType);
-    if (this._currentInspectorType !== inspectorType) {
-      var inspectorController = this.getInspector(inspectorType);
-      
-      //this._changePanelContent(inspectorController);
-      //this._changeButtonState(inspectorController);
-      
-      this._currentInspectorType = inspectorType;
-      if(jQuery.inArray( inspectorType, this.bottomPanelsArray ) == -1){
-        this._hideRightPanels();
+  selectInspector: function( controllerType ) {
+    ddd("[PanelsController] select inspector:", controllerType);
+    
+    this._showPanel( controllerType );
+    
+    if ( this._panelGroup[ controllerType ] ) {
+      this._currentInspectorType = controllerType;
+    }
+  },
+  
+  getInspector: function( controllerType ) {
+    ddd("[PanelsController] getInspector", controllerType);
+    
+    var controller = this._controllers[ controllerType ];
+    
+    if (!controller) {
+      controller = new this._panelControllers[ controllerType ]();
+      this._controllers[ controllerType ] = controller;
+    }
+    
+    return controller;
+  },
+  
+  _showPanel: function( controllerType ){
+    ddd('[PanelsController] _showPanel controllerType:', controllerType);
+    
+    if ( !controllerType ) {
+      if ( this._currentInspectorType ) {
+        this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
       }
     }
-  },
-
-  getInspector: function(inspectorType) {
-    ddd("[PanelsController] get inspector", inspectorType);
-    var inspectorController = this._inspectorsControllers[inspectorType];
-    if (!inspectorController) {
-      ddd(inspectorType);
-      inspectorController = new this._inspectorsControllersClasses[inspectorType]();
-      this._inspectorsControllers[inspectorType] = inspectorController;
+    else if ( controllerType !== this._currentInspectorType ) {
+      if ( this._currentInspectorType && this._panelGroup[ controllerType ] ) {
+        this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
+      }
+      this.getInspector( controllerType ).domNode.addTransitionClass( 'active' );
     }
-    return this._inspectorsControllers[inspectorType];
-  },
-  
-  _showPanel: function(panelName){
-    var panel = jQuery('.' + panelName );
-    if(panel.hasClass(this.ACTIVE_CLASS)){
-      panel.removeClass(this.ACTIVE_CLASS);
-    }
-    else{
-      panel.addClass(this.ACTIVE_CLASS);
-    }
-  },
-  
-  _showController: function(controller){    
-    if(controller.is_display){
-      controller.is_display = false;
-      controller.domNode.removeClass(this.ACTIVE_CLASS);
-    }
-    else
-    {
-      controller.is_display = true;
-      controller.domNode.addClass(this.ACTIVE_CLASS);
-    }
-  },
-  
-  //Hide all the panel that are on the right of the webdoc
-  _hideRightPanels: function(){
-    jQuery(this._stringSelectorFromArray(this.rightPanelsArray)).removeClass(this.ACTIVE_CLASS);
-    //jQuery(this.rightPanels).removeClass(this.ACTIVE_CLASS);
-  },
-  
-  _hideBottomPanels: function(){
-    jQuery(this._stringSelectorFromArray(this.bottomPanelsArray)).removeClass(this.ACTIVE_CLASS);
   },
   
   //transform an array of string ['str1','str2'] to '.str1, .str2'
@@ -177,48 +145,48 @@ WebDoc.PanelsController = $.klass({
   },
   
   showMyContent: function(){
-    this.selectInspector(WebDoc.PanelInspectorType.MY_CONTENT);
-    this._showPanel('mystuff_panel');
-    if(!this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].isMyImageLoaded()){
-      this._inspectorsControllers[WebDoc.PanelInspectorType.MY_CONTENT].setup();
+    this.selectInspector(WebDoc.PanelControllerType.MY_CONTENT);
+    if(!this._controllers[WebDoc.PanelControllerType.MY_CONTENT].isMyImageLoaded()){
+      this._controllers[WebDoc.PanelControllerType.MY_CONTENT].setup();
     }
   },
   
   showApps: function(){
-    this.selectInspector(WebDoc.PanelInspectorType.APPS);
-    this._showPanel('apps_panel');
+    this.selectInspector(WebDoc.PanelControllerType.APPS);
   },
   
   showPackages: function(){
-    this.selectInspector(WebDoc.PanelInspectorType.PACKAGES);
-    this._showPanel('packages_panel');
+    this.selectInspector(WebDoc.PanelControllerType.PACKAGES);
   },
   
   showBrowseWeb: function(){
-    this.selectInspector(WebDoc.PanelInspectorType.BROWSE_WEB);
-    this._showPanel('browse_panel');
+    this.selectInspector(WebDoc.PanelControllerType.BROWSE_WEB);
   },
   
   showPageInspector: function() {
-    ddd('showPageInspector');
-    this.selectInspector(WebDoc.PanelInspectorType.PAGE);
-    this._showPanel('page_inspector_panel');
+    this.selectInspector(WebDoc.PanelControllerType.PAGE);
   },
   
   showItemInspector: function() {
-    this.selectInspector(WebDoc.PanelInspectorType.ITEM);
-    this._showPanel('inspector_panel');
+    this.selectInspector(WebDoc.PanelControllerType.ITEM);
   },
   
   showDocumentInspector: function() {
-    this.selectInspector(WebDoc.PanelInspectorType.DOCUMENT);
-    this._showPanel('document_inspector_panel');
+    this.selectInspector(WebDoc.PanelControllerType.DOCUMENT);
+  },
+  
+  showDiscussionsPanel: function() {
+    this.selectInspector( WebDoc.PanelControllerType.DISCUSSIONS );
+  },
+  
+  showPagesPanel: function(){
+    this.selectInspector(WebDoc.PanelControllerType.PAGE_BROWSER);
   },
   
   //actually display the author panel... it's on bottom of the webdoc
   // showSocialPanel: function() {
   //   ddd("[PanelsController] showSocialPanel");
-  //   this.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
+  //   this.selectInspector(WebDoc.PanelControllerType.SOCIAL);
   //   var panel = jQuery('.sharing_panel');
   //   
   //   if(panel.hasClass(this.ACTIVE_CLASS)){
@@ -231,16 +199,6 @@ WebDoc.PanelsController = $.klass({
   //   }
   //   //this.show();
   // },
-
-  showDiscussionsPanel: function() {
-    this.selectInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
-    this._showController(this._inspectorsControllers[WebDoc.PanelInspectorType.DISCUSSIONS])
-  },
-  
-  showPagesPanel: function(){
-    ddd('[PanelsController] showPagesPanel');
-    this._showPanel('pages_panel');
-  },
   
   _changePanelContent: function(inspector) {
     ddd('[PanelsController] _changePanelContent(inspector)' + inspector);
@@ -264,67 +222,30 @@ WebDoc.PanelsController = $.klass({
     jQuery( inspector.buttonSelector() ).addClass( this.CURRENT_CLASS );
   },
     
-  _show: function() {
-    var panel = this.domNode,
-        self = this,
-        outerGhost = this.panelGhostNode,
+  _showGhost: function() {
+    var outerGhost = this.panelGhostNode,
         innerGhost = this.innerGhostNode,
-        bothGhosts = outerGhost.add(innerGhost),
         scrollbar = jQuery('#webdoc_x_scrollbar, #webdoc_y_scrollbar');
     
     innerGhost.show();
     
-    panel.animate({
-      marginLeft: -this.panelWidth
-    }, {
-      step: function(val){
-        bothGhosts.css({
-          width: -val
-        });
-        scrollbar.css({
-          right: -val + 6
-        });
-      },
-      complete: function(){
-        // Quick way of recalculating scrollbars
-        jQuery(window).trigger('resize');
-      }
-    });
+    // Quick way of recalculating scrollbars
+    jQuery(window).trigger('resize');
     
     jQuery( this.PANEL_TOGGLE_SELECTOR ).addClass( this.ACTIVE_CLASS );
     
     return true;
   },
   
-  _hide: function( margin ){
-    var panel = this.domNode,
-        self = this,
-        outerGhost = this.panelGhostNode,
+  _hideGhost: function( margin ){
+    var outerGhost = this.panelGhostNode,
         innerGhost = this.innerGhostNode,
-        bothGhosts = outerGhost.add(innerGhost),
         scrollbars = jQuery('#webdoc_x_scrollbar, #webdoc_y_scrollbar');
-
     
-    panel.animate({
-      marginLeft: margin || 0
-    }, {
-      step: function(val){
-        bothGhosts.css({
-          width: -val
-        });
-        scrollbars.css({
-          right: -val + 6
-        });
-      },
-      complete: function() {
-        innerGhost.hide();
-        
-        // Quick way of recalculating scrollbars
-        jQuery(window).trigger('resize');
-      }
-    });
+    innerGhost.hide();
     
-    jQuery( this.PANEL_TOGGLE_SELECTOR ).removeClass( this.ACTIVE_CLASS );
+    // Quick way of recalculating scrollbars
+    jQuery(window).trigger('resize');
     
     return false;
   },

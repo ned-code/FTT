@@ -78,11 +78,7 @@ WebDoc.handlers = {
   
   // Editor actions (to be bound to the interface panels)
   _panelHandlers: {
-    'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggle(); },
-    'right-panel-toggle':   function(e) { WebDoc.application.panelsController.toggle(); },
     'full':                 function(e) { WebDoc.application.pageEditor.toggleFullScreen(); },
-    
-    'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggle(); },
     
     //new ui panel handler, actually the old right bar controller is used
     'toggle_activity_panel':      function(e){ ddd('no activity yet'); },
@@ -124,10 +120,6 @@ WebDoc.handlers = {
     
     'browser':              function(e)	{ WebDoc.application.browserController.openBrowser(e); }, 
     'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); },
-    
-    'show-thumbs':          function(e) { WebDoc.application.pageBrowserController.showThumbs(e); },
-    'hide-thumbs':          function(e) { WebDoc.application.pageBrowserController.hideThumbs(e); },
-    'toggle-thumbs':        function(e) { WebDoc.application.pageBrowserController.toggleThumbs(e); },
     
     'mode-toggle':          function(e) { WebDoc.application.boardController.toggleMode(); },
     'edit':                 function(e) { WebDoc.application.boardController.toggleMode(); },

@@ -106,6 +106,18 @@ body.full_view {
 /* .panel extensions ------------------------- */ 
 
 .panel {
+  -webkit-transition: opacity 0.12s ease-in;
+  -moz-transition:    opacity 0.12s ease-in;
+  transition:         opacity 0.12s ease-in;
+}
+
+.panel.active {
+  -webkit-transition: opacity 0.12s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, right 0.3s ease-out, bottom 0.3s ease-out;
+  -moz-transition:    opacity 0.12s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, right 0.3s ease-out, bottom 0.3s ease-out;
+  transition:         opacity 0.12s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, right 0.3s ease-out, bottom 0.3s ease-out;
+}
+
+.full_view .panel {
   -webkit-transition: opacity 0.8s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, right 0.3s ease-out, bottom 0.3s ease-out;
   -moz-transition:    opacity 0.8s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, right 0.3s ease-out, bottom 0.3s ease-out;
   transition:         opacity 0.8s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, top 0.3s ease-out, right 0.3s ease-out, bottom 0.3s ease-out;
@@ -161,9 +173,6 @@ body.full_view {
   z-index: 3;
 }
 
-/* Manage show/hide of panels between page view
-   and full view. */
-
 .inspector_panel,
 .comments_panel,
 .activity_panel,
@@ -193,8 +202,7 @@ body.full_view {
 .full_view .activity_panel,
 .full_view .mystuff_panel,
 .full_view .packages_panel,
-.full_view .apps_panel
-/*.full_view .sharing_panel,*/ {
+.full_view .apps_panel {
   display: block;
   opacity: 0;
 }
@@ -205,8 +213,7 @@ body.full_view {
 .full_view .mystuff_panel.active,
 .full_view .packages_panel.active,
 .full_view .browse_panel.active,
-.full_view .apps_panel.active
-/*.full_view .sharing_panel.active,*/{
+.full_view .apps_panel.active {
   opacity: 1;
 }
 

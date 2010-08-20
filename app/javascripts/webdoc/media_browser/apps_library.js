@@ -10,6 +10,7 @@
 WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   initialize: function($super) {
     $super('media-browser-apps');
+    
     this.detailsView = $('#app_details');
     this._setupMyApps();
     this._setupDetailsView();

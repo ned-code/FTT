@@ -23,11 +23,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
 		// Quick hack - this has been moved from inside individual inspector controllers
     this.propertiesController = new WebDoc.PropertiesInspectorController('#item_inspector', false);
     
-    this._updateInspector('empty');
-    
-    this.lastInspectorId = 'empty';
-    this.currentInspectorId = 'empty';
-    
     WebDoc.application.boardController.addSelectionListener(this);
   },
   
@@ -51,8 +46,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
       inspector = this._inspectorNodes[inspectorId];
       
       this.domNode.html( inspector.domNode );
-      
-      //WebDoc.application.panelsController.showItemInspector();
       
       inspector.refresh();
     }
@@ -85,7 +78,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
 
 WebDoc.InspectorEmptyController = $.klass({
   initialize: function() {
-    var container = jQuery("#empty-inspector");
+    var container = jQuery("#empty_inspector");
     this.domNode = container.children();
   	container.remove();
   },

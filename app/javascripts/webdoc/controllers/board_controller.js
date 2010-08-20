@@ -25,7 +25,6 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPageView = null;
     this._isInteraction = false;
     this._isMovingSelection = false;
-    this._previousInspector = null;
     this.previousThemeClass = undefined;
     this.currentThemeClass = undefined;
     this.boardContainerNode.bind('touchstart touchmove touchend touchcancel',this._handleTouch);
@@ -152,9 +151,8 @@ WebDoc.BoardController = jQuery.klass({
     this.boardContainerNode.resizable('destroy'); // destroy to refresh    
     this._initResizable();
     
-    if (this._previousInspector) {
-      WebDoc.application.panelsController.selectInspector(this._previousInspector);      
-    }
+    WebDoc.application.panelsController.enableEditPanels();
+    
     this._isInteraction = false;
     return this._isInteraction;
   },
@@ -169,11 +167,7 @@ WebDoc.BoardController = jQuery.klass({
     this.editorNode.removeTransitionClass('edit_mode');
     this.boardContainerNode.resizable('destroy');
     
-    if(WebDoc.application.panelsController.getSelectedInspector() !== WebDoc.PanelInspectorType.SOCIAL) {
-      this._previousInspector = WebDoc.application.panelsController.getSelectedInspector();
-    }
-    
-    WebDoc.application.panelsController.selectInspector(WebDoc.PanelInspectorType.SOCIAL);
+    WebDoc.application.panelsController.disableEditPanels();
     
     this._isInteraction = true;
     return this._isInteraction;
@@ -1154,14 +1148,14 @@ WebDoc.BoardController = jQuery.klass({
     this._selectionDiscussionView = discussionView;
     discussionView.select(skipScrollDiscussionView);
     WebDoc.application.panelsController.showDiscussionsPanel();
-    var discussionPanel = WebDoc.application.panelsController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
+    var discussionPanel = WebDoc.application.panelsController.getInspector(WebDoc.PanelControllerType.DISCUSSIONS);
     discussionPanel.selectDiscussion(discussionView.discussion, oldDiscussion, skipScrollDiscussionPanel);
   },
 
   unSelectDiscussionView: function() {
     if(this._selectionDiscussionView !== null) {
       this._selectionDiscussionView.unSelect();
-      var discussionPanel = WebDoc.application.panelsController.getInspector(WebDoc.PanelInspectorType.DISCUSSIONS);
+      var discussionPanel = WebDoc.application.panelsController.getInspector(WebDoc.PanelControllerType.DISCUSSIONS);
       discussionPanel.unSelectDiscussion(this._selectionDiscussionView.discussion);
       this._selectionDiscussionView = null;      
     }

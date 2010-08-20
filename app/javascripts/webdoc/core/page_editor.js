@@ -70,8 +70,6 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       app.svgRenderer = new WebDoc.SvgRenderer();
       app.boardController = new WebDoc.BoardController(editable, !editable);
       app.panelsController = new WebDoc.PanelsController();
-      //app.inspectorController = new WebDoc.InspectorController();
-      app.pageBrowserController = new WebDoc.PageBrowserController();
       app.toolbarController = new WebDoc.ToolbarController();
       app.browserController = new WebDoc.BrowserController();
       app.notificationController = new WebDoc.NotificationController();
@@ -101,7 +99,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
         WebDoc.ServerManager.getRecords(WebDoc.User, this.currentDocument.data.creator_id, function(data, status) {
           this._creator = data[0];
           this.loadPageId(this._extractUUIDFromHash(window.location.hash));
-          app.pageBrowserController.setDocument(this.currentDocument); 
+          app.pageBrowserController.setDocument(this.currentDocument);
           
           ddd("check editablity");
           
