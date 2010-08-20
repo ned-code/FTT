@@ -122,12 +122,12 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     }
     
     var url = '/documents/'+ this.uuid() + '/share';
-     WebDoc.ServerManager.request(url,function(data){
-       this.isPublic = true;
-       //Todo, it's better if we can do it with a callback
-       WebDoc.application.shareController.loadAccess(data);
-       
-     }.pBind(this), 'POST', data);
+    WebDoc.ServerManager.request(url,function(data){
+      this.isPublic = true;
+      //Todo, it's better if we can do it with a callback
+      WebDoc.application.shareController.loadAccess(data);
+      
+    }.pBind(this), 'POST', data);
   },
   
   unshare: function() {

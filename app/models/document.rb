@@ -178,6 +178,8 @@ class Document < ActiveRecord::Base
   # ====================
   
   def share(with_comments=false)
+    
+    self.unshare #we want to be sure to remove all the single role associated with users and public
     role = Role.public.where(:document_id => self.uuid).first
     if role.nil?
       Role.create!(:document_id => self.uuid, :name => (with_comments ? Role::VIEWER_COMMENT : Role::VIEWER_ONLY))
@@ -191,9 +193,7 @@ class Document < ActiveRecord::Base
   end
   
   def unshare
-    if is_public?
-      self.roles.where('name in(?)', Role::PUBLIC_ROLES).delete_all
-    end
+    self.roles.where('name in(?)', Role::PUBLIC_ROLES).delete_all
   end
   
   def is_public?
@@ -284,11 +284,15 @@ class Document < ActiveRecord::Base
       role = Role::EDITOR
     elsif accesses[:role] == 'limited'
       role = Role::CONTRIBUTOR
+    elsif Role::PUBLIC_ROLES.include?(accesses[:role])
+      #if we give public right to a single user, it means that the document is no more public anymore
+      self.unshare
+      role = accesses[:role]
     end
     
     friends_list = accesses[:users]
     if friends_list.nil? || friends_list.empty?
-      return true
+      return false
     end
     friends_list.each do |friend_uuid|
       user = User.where(:uuid => friend_uuid).first
