@@ -528,15 +528,24 @@ body.full_view {
 }
 
 .author_thumb {
-  background-size: 48px 48px;
   padding-top: 48px;
   width: 48px;
+  background-repeat: no-repeat;
+  
+    box-shadow:						inset 0 0 3px rgb(0,0,0);
+  -moz-box-shadow:			inset 0 0 3px rgb(0,0,0);
+  -webkit-box-shadow:		inset 0 0 3px rgb(0,0,0);
+  
+    background-size: 					48px 48px;
+  -moz-background-size: 		48px 48px;
+  -webkit-background-size:	48px 48px;
 }
 
 .user_thumb {
   background-size: 					32px 32px;
   -moz-background-size: 		32px 32px;
   -webkit-background-size:	32px 32px;
+  background-position: center	center;
   padding-top: 	32px;
   width: 				32px;
   box-shadow:						inset 0 0 3px rgb(0,0,0);
