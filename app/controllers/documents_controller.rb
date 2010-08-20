@@ -25,9 +25,6 @@ class DocumentsController < ApplicationController
   def index
     authorize! :read, Document
     respond_to do |format|
-      format.html do
-        set_return_to
-      end
       format.json do
         per_page = 20
         @documents = Document.not_deleted_with_filter(current_user, params[:document_filter], params[:query], params[:page], per_page)
