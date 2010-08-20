@@ -17,6 +17,7 @@ stylesheets:
     - public/css/webcss/button.css
     - public/css/webcss/thumb.css
     - public/css/webcss/scrollbar.css
+    - public/css/webcss/message.css
     
     - public/css/webdoc/site.layout.css
     - public/css/webdoc/site.color.css
