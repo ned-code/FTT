@@ -1,7 +1,16 @@
-/* .layer extensions -------------------------- */
+/* layer extensions -------------------------- */
 
-#webdoc {
-	background-color: rgb(220,220,220);
+.frame_layer {
+  border: 1px solid rgb(220,220,220);
+  -webkit-box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
+     -moz-box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
+          box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
+  background-color: rgb(220, 220, 220);
+}
+
+.full_view .frame_layer {
+	border-left: none;
+	border-right: none;
 }
 
 /* .panel extensions -------------------------- */

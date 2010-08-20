@@ -103,18 +103,6 @@ body.full_view {
   display: block;
 }
 
-/* layer extensions -------------------------- */
-
-.frame_layer {
-	border: 1px solid rgb(128,128,128);
-}
-
-.full_view .frame_layer {
-	border-left: none;
-	border-right: none;
-}
-
-
 /* .panel extensions ------------------------- */ 
 
 .panel {
@@ -521,6 +509,8 @@ body.full_view {
 /* .thumb extensions ------------------------- */
 
 .logo_thumb {
+  display: inline-block;
+  
   -webkit-transition: margin-left 0.3s ease-in;
   -moz-transition:    margin-left 0.3s ease-in;
   transition:         margin-left 0.3s ease-in;
