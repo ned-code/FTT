@@ -1,3 +1,9 @@
+/* .layer extensions -------------------------- */
+
+#webdoc {
+	background-color: rgb(220,220,220);
+}
+
 /* .panel extensions -------------------------- */
 
 .panel {
@@ -6,12 +12,10 @@
 
 .tools_panel {
 	background-color: rgba(255,255,255,0.75);
-	border-bottom: 1px solid rgb(180,180,180);
 }
 
 .controls_panel {
 	background-color: rgba(255,255,255,0.75);
-	border-top: 1px solid rgb(180,180,180);
 }
 
 .sidebar {

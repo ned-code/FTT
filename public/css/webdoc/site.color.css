@@ -8,21 +8,3 @@ body {
 body>header {
   background-color: rgb(145,156,160);
 }
-
-/* TEST COLORS - delete!!! */
-
-.webdoc {
-  background-color: yellow;
-}
-
-.center {
-  background-color: orange;
-}
-
-.center_cell {
-  background-color: red;
-}
-
-.center_box {
-  background-color: purple;
-}

@@ -11,7 +11,7 @@ body.full_view {
   /* Compensate for header + top toolbar */ 
   padding-top: 5.6667em;
   /* Compensate for bottom toolbar */
-  padding-bottom: 3em;
+  padding-bottom: 2.6667em;
 }
 
 .transition_support body.transition {
@@ -102,6 +102,18 @@ body.full_view {
 .transition_support .full_view.transition .content_wrap {
   display: block;
 }
+
+/* layer extensions -------------------------- */
+
+.frame_layer {
+	border: 1px solid rgb(128,128,128);
+}
+
+.full_view .frame_layer {
+	border-left: none;
+	border-right: none;
+}
+
 
 /* .panel extensions ------------------------- */ 
 
@@ -311,6 +323,10 @@ body.full_view {
 }
 
 /* .index extensions ---------------------- */
+
+.full_view .usernav_index {
+	right: 6px;
+}
 
 .author_index {
   height: 48px;
@@ -544,9 +560,9 @@ body.full_view {
 #panel_ghost {
     display: table-cell;
     width: 0;
-    -webkit-transition: width 0.6s ease-out;
-       -moz-transition: width 0.6s ease-out;
-            transition: width 0.6s ease-out;
+    -webkit-transition: width 1s ease-out;
+       -moz-transition: width 1s ease-out;
+            transition: width 1s ease-out;
 }
 #panel_ghost>div {
     /* WebKit gives cells a mysterious 3px cellpadding when
@@ -554,9 +570,9 @@ body.full_view {
     display: block;
     overflow: hidden;
     width: 0;
-    -webkit-transition: width 0.6s ease-out;
-       -moz-transition: width 0.6s ease-out;
-            transition: width 0.6s ease-out;
+    -webkit-transition: width 1s ease-out;
+       -moz-transition: width 1s ease-out;
+            transition: width 1s ease-out;
 }
 .full_view #panel_ghost.active,
 .full_view #panel_ghost.active>div {
