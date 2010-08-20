@@ -8,3 +8,8 @@ body {
 body>header {
   background-color: rgb(145,156,160);
 }
+
+/* TEMPORARY - DELETE ME!! */
+input {
+	background-color: rgb(230,220,200) !important;
+}

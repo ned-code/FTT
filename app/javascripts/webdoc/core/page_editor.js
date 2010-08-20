@@ -110,7 +110,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
 
           // add role name of the current user as class in editor dom node
           jQuery.each(WebDoc.application.pageEditor.getCurrentUserRolesForCurrentDocument(), function(i, roleName) {
-            app.boardController.editorNode.addClass(roleName);
+            app.boardController.editorNode.addClass(roleName+'_role');
           });
           
           app.boardController.loadingNode.removeTransitionClass('loading');

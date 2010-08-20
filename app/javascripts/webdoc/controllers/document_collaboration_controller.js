@@ -52,7 +52,7 @@ WebDoc.DocumentCollaborationController = $.klass({
         //     that.domNode.delegate("a[href='#delete']", "click", that.deleteAccess.pBind(that));
         //   }
         // });
-        this.friendsSelector.loadFriendList();
+        this.friendsSelector.loadFriendList([]);
         this.loadAccess(data);
       }.pBind(this),
       
