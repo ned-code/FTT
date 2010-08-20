@@ -1,6 +1,9 @@
 <% session_key_name = Rails.application.config.session_options[:key] %>
 
-<!-- app/views/documents/index -->
+<% meta_title 'Dashboard' %>
+
+<% css_assets 'application' %>
+<% js_assets 'document_editor' %>
 
 <div class="site_wrap wrap">
   <div class="column double_column of_four">
@@ -44,20 +47,12 @@
   <%= render 'documents/popup_share' %>
 </div>
 
-
-
 <% content_for :scripts do %>
-<%= include_javascripts :document_editor %>
-<script>
-  WebDoc.authData = {
-    authToken:"#{protect_against_forgery? ? form_authenticity_token : ''>",
-    sessionKeyName:"#{session_key_name>",
-    cookiesSessionKeyName:"#{cookies[session_key_name]>"
-  };
-  WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category, <%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);
-  WebDoc.Application.main(function() {
-    var editor = new WebDoc.DocumentEditor();
-    editor.start();
-  });
-</script>
+  <script>
+    WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category, <%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);
+    WebDoc.Application.main(function() {
+      var editor = new WebDoc.DocumentEditor();
+      editor.start();
+    });
+  </script>
 <% end %>
