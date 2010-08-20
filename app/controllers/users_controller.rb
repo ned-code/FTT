@@ -25,5 +25,9 @@ class UsersController < ApplicationController
       format.html { render :layout => false}
     end
   end
+
+  def dashboard
+    @user = current_user
+  end
   
 end

@@ -10,7 +10,7 @@ Webdoc::Application.routes.draw do
 
   root :to => 'home#show'
 
-  resources :documents do
+  resources :documents, :except => :index do
     resources :pages do
       resources :items
     end
@@ -70,6 +70,8 @@ Webdoc::Application.routes.draw do
   end
 
   get '/browse' => 'browser#index'
+
+  get '/dashboard' => 'users#dashboard'
 
   # dev controller
   resources :images,     :except => [:new, :edit, :update]
