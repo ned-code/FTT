@@ -147,7 +147,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     var recipients = $("#wb-invitation-add-editors").val();
     var message = $("#wb-invitation-add-editors-message").val();
     
-    var role_type = jQuery('input[name="role_type_email"]:checked').val()
+    var role_type = jQuery('input[name="role_type_email"]:checked').val();
     
     this.createRightsToRecipients( this.getInvitationAccess(recipients, message) );
   },

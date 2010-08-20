@@ -101,7 +101,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     this.txtDummy.css({
       width:this.editNode.width(),
       height:"auto"});
-    this.txtDummy.text(this.editNode.val())
+    this.txtDummy.text(this.editNode.val());
     this.editNode.height(this.txtDummy.height());
             
     /*this.item.resizeTo({
@@ -126,7 +126,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
         this.itemNode.width()/100,
         this.itemNode.height()/100
       ];
-      
+
       //  Set the stroke width
       this.shapeNode.find("#shape").attr("stroke-width", this.strokeWidth);
       this.shapeNode.find("#shape").attr("fill", this.color);
@@ -143,22 +143,22 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
           currentValue = "";
           continue;
         }
-        
+
         currentValue += path[i];
-        
+
       }
       // Set the new path
       this.shapeNode.find("#shape").attr("d", newPath);
-    }
+    };
     
     this.drawShape = function(shapeId) {
       var that = this;
-      
+
       // Remove and recreate the div which contains the shape.
       // One cannot use the css attribute due to a Firefox bug?
       if(this.shapeNode) this.shapeNode.remove();
       this.shapeNode = jQuery("<div class='shape'></div>");
-            
+
       // Append the shape to the dom and draw the svg used to display the border
       this.shapeNode
         .prependTo(this.itemNode)
@@ -175,7 +175,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
           	);
       	  }
         });
-    }
+    };
     
     this.setBorderWidth = function(bw){
       this.strokeWidth = bw;
