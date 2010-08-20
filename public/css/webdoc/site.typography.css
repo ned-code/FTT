@@ -45,7 +45,7 @@ pre, code { font-family: 'Courier', 'Andale Mono', 'Lucida Console', monospace; 
 h1,h2,h3,h4,h5,h6 { font-weight: bold; margin: 0; word-spacing: -0.0833em; }
 
 h1                { font-size: 1.5em;                        margin-bottom: 0.4167em; font-weight: normal; 	color:#919CA0;}
-h2                { font-size: 1em;     line-height: 1.5;    margin-bottom: 0.5em;							color:#919CA0;}
+h2                { font-size: 1em;     line-height: 1.5;    margin-bottom: 0.5em;		color:#919CA0;}
 h3                { font-size: 2em;     line-height: 1.25;   margin-bottom: 0.625em; }
 h4                { font-size: 1.2em;   line-height: 1.0417; }
 h5                { font-size: 1.1em;   line-height: 1.1364; }

@@ -27,7 +27,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
   },
   
   buttonSelector: function() {
-    return this.ITEM_INSPECTOR_BUTTON_SELECTOR;  
+    return this.ITEM_INSPECTOR_BUTTON_SELECTOR;
   },
   
   selectInspector: function(inspectorId) {
@@ -37,7 +37,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
   _updateInspector: function(inspectorId) {
     var inspector;
     
-    ddd("[InspectorController] _updateInspector", inspectorId );
+    ddd("[InspectorController] _updateInspector", inspectorId, this._inspectorNodes[inspectorId], typeof this._inspectorNodes[inspectorId]);
     
     if ( typeof this._inspectorNodes[inspectorId] === 'undefined' ) {
       WebDoc.application.panelsController.deselectInspector();

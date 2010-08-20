@@ -26,7 +26,9 @@ stylesheets:
     - public/css/jquery-ui/jquery-ui-1.8.css
   application:
     - public/css/webdoc/session.layout.css
-
+  dashboard:
+    - public/css/webdoc/dashboard.layout.css
+    - public/css/webdoc/dashboard.color.css
   page_editor:
     - public/css/webdoc/editor.color.css
     - public/css/webdoc/editor.layout.css
