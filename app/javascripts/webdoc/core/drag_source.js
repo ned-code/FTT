@@ -7,6 +7,9 @@ A source is added with: his domain name (without www.)
   
 */
 var videoPlayerSources = {
+  'youtube':{
+    'urlPart':'youtube.com'
+  },  
   'myspace':{
     'urlPart':'vids.myspace.com'
   },  
@@ -70,10 +73,9 @@ for(var source in videoPlayerSources){
   WebDoc.DrageAndDropController.addUriSource(
   	videoPlayerSources[source].urlPart,
   	function(uri_list,evt){
-  		id = uri_list;
   		var videoProperties = {
   			type : 'video',
-  			video_id : id
+  			video_id : uri_list
   		};
   
   		var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
@@ -82,32 +84,21 @@ for(var source in videoPlayerSources){
   );  
 }  
 
-WebDoc.DrageAndDropController.addUriSource(
-  'youtube.com',
-  function(uri_list,evt){ 
-    var id = '';
-    if(uri_list.indexOf('v=') !== -1){
-      id = uri_list.split('v=')[1].split('&')[0];
-    } else if(uri_list.indexOf('video_ids=') !== -1){
-      var ids = uri_list.split('video_ids=')[1].split('%2C');
-      var index = (uri_list.indexOf('index=') !== -1) ? uri_list.split('index=')[1].split('&')[0] : 0;
-      id = ids[index].split('&')[0];
-    } else if(uri_list.indexOf('v%3D') !== -1){
-      id = uri_list.split('v%3D')[1].split('&')[0];
-    }                                                                                                    
-    var videoProperties = {
-      type : 'youtube',
-      video_id : id
-    };
+//Here you add the file type source (ex: png, jpg, jpeg etc)
 
-    var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
-    WebDoc.application.boardController.insertVideo(videoProperties, pos);
-  }
+WebDoc.DrageAndDropController.addFileTypeSource(
+  '.flv',
+  	function(uri_list,evt){
+		var videoProperties = {
+			type : 'video',
+			video_id : uri_list
+		};
+
+		var pos = WebDoc.application.boardController.mapToPageCoordinate(evt);
+		WebDoc.application.boardController.insertVideo(videoProperties, pos);
+	}
 );
 
-
-
-//Here you add the file type source (ex: png, jpg, jpeg etc)
 
 WebDoc.DrageAndDropController.addFileTypeSource(
   '.jpg',

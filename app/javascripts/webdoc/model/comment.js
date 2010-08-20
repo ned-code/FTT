@@ -50,8 +50,11 @@ WebDoc.Comment = $.klass(WebDoc.Record, {
 
   created_at: function() {
     return this.data.created_at;
-  }
+  },
 
+  relative_created_at: function() {
+    return this.data.relative_created_at;
+  }
 
 });
 

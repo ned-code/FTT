@@ -20,13 +20,13 @@ class CommentsController < ApplicationController
     @comment = current_user.comments.new_with_uuid(params[:comment])
     respond_to do |format|
       if @discussion.present? && @comment.save
-        @json_comment = @comment.as_application_json
-        message = @json_comment
+        comment_hash = @comment.as_application_json
+        message = comment_hash
         message[:source] = params[:xmpp_client_id]
         @@xmpp_notifier.xmpp_notify(message.to_json, @comment.discussion.page.document_id)
-        format.json { render :json => @json_comment }
+        format.json { render :json => comment_hash }
       else
-        format.json { render :json => @json_comment, :status => 203 }
+        format.json { render :json => comment_hash, :status => 203 }
       end
     end
   end

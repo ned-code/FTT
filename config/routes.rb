@@ -19,6 +19,8 @@ Webdoc::Application.routes.draw do
     
     member do
       post :duplicate
+      post :unshare
+      post :share
     end
     collection do
       get :explore
@@ -41,9 +43,9 @@ Webdoc::Application.routes.draw do
 
   devise_for :users
 
-  resources :users, :except => [:new, :create, :destroy]
+  resources :users, :only => [:index, :show, :favorites]
 
-  get 'user' => 'sessions#show'
+  get 'user' => 'sessions#show'  
 
   namespace :admin do
     get '/' => 'home#index'

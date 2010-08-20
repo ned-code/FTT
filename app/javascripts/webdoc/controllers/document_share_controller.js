@@ -84,7 +84,7 @@ WebDoc.DocumentShareController = $.klass({
         //           }
         //         });
         
-        this._loadAccess(data);
+        this.loadAccess(data);
       }.pBind(this),
     
       error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -93,7 +93,10 @@ WebDoc.DocumentShareController = $.klass({
     });
   },
   
-  _loadAccess: function(json) {
+  loadAccess: function(json) {
+    
+    ddd('load_Access');
+    
     this.domNode.empty();
     
     //first we look if the document is public
@@ -170,19 +173,24 @@ WebDoc.DocumentShareController = $.klass({
     e.preventDefault();
     
     var role = 'viewer_only';
-    if(this.onlyParticipantsRadio.attr('checked')){      
-      this.document.unShare();
+    var allowComments = false;
+    if(this.onlyParticipantsRadio.attr('checked')){
+      this.document.unshare();
     }
     else if(this.yourConnectionsRadio.attr('checked')){
       if(this._getAllowCommentsCheckBoxValue()){
         role = 'viewer_comment';
-        
       }
     }
     else if(this.publicRadio.attr('checked')){
       if(this._getAllowCommentsCheckBoxValue()){
-        role = 'viewer_comment';
+        allowComments = true;
       }
+      //google analytics
+      if (window._gaq) {
+        _gaq.push(['_trackEvent', 'share', 'share_document', this.document.uuid()]);
+      }
+      this.document.share(allowComments);
     }
     else{
       ddd('no radio button checked !')
@@ -269,7 +277,7 @@ WebDoc.DocumentShareController = $.klass({
       dataType: 'json',
       data: jSONData,    
       success: function(data) {
-        this._loadAccess(data);
+        this.loadAccess(data);
         this.shareTabs.tabs('select', 1);
       }.pBind(this),    
       error: function(MLHttpRequest, textStatus, errorThrown) {

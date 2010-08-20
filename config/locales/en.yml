@@ -434,18 +434,7 @@ en:
         updated_failed: "An error occured when attempting to update the theme"
       category:
         destroyed_successful: "Category successfully deleted"
-  
-  registrations:
-    new:
-      title: "Sign up"
-      terms_of_service: "I agree to %{link}"
-      terms_of_service_link: "terms of service"
-    edit:
-      title: "Edit account"
-      cancel:
-        title: Cancel my account
-        text: Unhappy?
-        link: Cancel my account
+
   users:
     index:
       title: "Listing users"
@@ -453,9 +442,6 @@ en:
     new:
       title: "Sign up"
       button: "Sign up"
-    edit:
-      title: "Edit profile"
-      button: "Update"
   
   label:
     everybody: "Everybody"

@@ -204,29 +204,26 @@ class Document < ActiveRecord::Base
     uuid
   end
 
-  def as_application_json
+  def as_application_json(options={})
+    options = { :skip_pages => false, :skip_roles => false }.merge(options)
+
     hash = { 'document' => self.attributes }
     hash['document']['size'] = self.size
     hash['document']['is_public'] = self.is_public?
-    hash['document']['pages'] = []
-    for page in self.pages.not_deleted
-      page_hash = page.attributes
-      page_hash['data'] = page.data
-      page_hash['items'] = []
-      for item in page.items.not_deleted
-        item_hash = item.attributes
-        item_hash['data'] = item.data
-        item_hash['properties'] = item.properties
-        item_hash['preferences'] = item.preferences
-        page_hash['items'] << item_hash
+
+    if(options[:skip_pages] != true) 
+      hash['document']['pages'] = []
+      for page in self.pages.not_deleted
+        hash['document']['pages'] << page.as_application_json['page']
       end
-      hash['document']['pages'] << page_hash
     end
-    hash['document']['roles'] = []    
-    for role in self.roles
-      role_hash = role.attributes
-      hash['document']['roles'] << role_hash
+    if(options[:skip_roles] != true)
+      hash['document']['roles'] = []
+      for role in self.roles
+        hash['document']['roles'] << role.as_application_json['role']
+      end
     end
+
     hash
   end
 
