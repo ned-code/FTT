@@ -2,7 +2,6 @@
  * @author Jonathan Biolaz
  */
 
-// TODO: manage the email panel
 WebDoc.FriendsSelectorController = $.klass({
   initialize: function(domNodeId) {
     this.domNodeId = domNodeId;
