@@ -52,7 +52,6 @@ WebDoc.DocumentCollaborationController = $.klass({
         //     that.domNode.delegate("a[href='#delete']", "click", that.deleteAccess.pBind(that));
         //   }
         // });
-        this.friendsSelector.loadFriendList([]);
         this.loadAccess(data);
       }.pBind(this),
       
@@ -90,10 +89,17 @@ WebDoc.DocumentCollaborationController = $.klass({
   loadAccess: function(json) {
     this.domNode.empty();
     this.access = json.access;
-    
+    var friendslist = [];
+    var user;
     for (var i = 0; i < this.access.length; i++) {
-      this.createAccessItem(this.access[i][0]);     
+      user = this.access[i][0];
+      if (user.role === "editor" || user.role === "contributor" ) {
+        friendslist.push(user.uuid);
+        this.createAccessItem(user);
+      }
     }
+    
+    this.friendsSelector.loadFriendList(friendslist);
     
     // TODO: instead of listing the emails again, take the successful ones out of the field, leaving the unsuccessful ones
     // Display the message - these didn't work - then give them a choice to send a sign up for webdoc email
@@ -124,8 +130,6 @@ WebDoc.DocumentCollaborationController = $.klass({
   },
   
   createAccessItem: function(userInfos) {
-    if (userInfos.role === "editor" || userInfos.role === "contributor" ) {
-      ddd(userInfos.id +", "+userInfos.role);
       var accessEntry = $("<li>")
         .data('uuid', userInfos.uuid)
         .data('role', userInfos.role)
@@ -136,7 +140,6 @@ WebDoc.DocumentCollaborationController = $.klass({
       if(userInfos.creator) { deleteItem.hide(); }  
       accessEntry.append(deleteItem);    
       this.domNode.append(accessEntry);
-    }
   },
   
   
@@ -171,7 +174,6 @@ WebDoc.DocumentCollaborationController = $.klass({
       dataType: 'json',
       data: jSONData,
       success: function(data) {
-        this.cleanFriendsList();
         this.loadAccess(data);
       }.pBind(this),
       error: function(MLHttpRequest, textStatus, errorThrown) {
