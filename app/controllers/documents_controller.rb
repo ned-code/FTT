@@ -185,7 +185,7 @@ class DocumentsController < ApplicationController
     else
       @document.share
     end
-    render :json => {}
+    render :json => @document.to_access_json
   end
   
   def unshare

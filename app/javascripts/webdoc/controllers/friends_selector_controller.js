@@ -30,7 +30,7 @@ WebDoc.FriendsSelectorController = $.klass({
     this.domNode.find('.choose_friend.selected_friend').removeClass('selected_friend');
   },
   
-  friendsSelected: function(){
+  getFriendsSelected: function(){
     var friends = this.domNode.find('.choose_friend.selected_friend');
     var friendsList = [];
     var length = friends.length;

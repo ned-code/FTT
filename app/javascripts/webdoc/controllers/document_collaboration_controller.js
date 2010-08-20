@@ -155,7 +155,7 @@ WebDoc.DocumentCollaborationController = $.klass({
   sendInvitationsByFriends: function(e) {
     e.preventDefault();
     var role_type = jQuery('input[name="role_type_friends"]:checked').val();
-    var friendsList = this.friendsSelector.friendsSelected();
+    var friendsList = this.friendsSelector.getFriendsSelected();
     this.createFriendsRights(friendsList, role_type)
   },
   
@@ -169,11 +169,11 @@ WebDoc.DocumentCollaborationController = $.klass({
       url: this.url(),
       type: 'POST',
       dataType: 'json',
-      data: jSONData,    
+      data: jSONData,
       success: function(data) {
         this.cleanFriendsList();
         this.loadAccess(data);
-      }.pBind(this),    
+      }.pBind(this),
       error: function(MLHttpRequest, textStatus, errorThrown) {
         ddd("createFriendsRights error", textStatus);
       }
