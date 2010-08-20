@@ -96,7 +96,6 @@ WebDoc.DocumentShareController = $.klass({
   
   loadAccess: function(json) {
     this.sharedUsersList.empty();
-    ddd('loadAccess');
     //first we look if the document is public
     if(json.public){
       this.publicRadio.click();
@@ -112,22 +111,20 @@ WebDoc.DocumentShareController = $.klass({
     var friends_access = [];
     for (var i = 0; i < this.access.length; i++) {
       if(this.access[i][0].role == 'viewer_comment' || this.access[i][0].role == 'viewer_only'){
+        var userInfos = this.access[i][0];
         if(!isShared){
           isShared = true;
-          var userInfos = this.access[i][0];
           //we consider that all the user have the same role !!
           this._initAllowCommentsCheckBox(userInfos.role);
-          friends_access.push(userInfos.uuid);
         }
+        friends_access.push(userInfos.uuid);
         this._createAccessItem(userInfos);
       }
     }
     
     if(isShared){
-      ddd('document isShared');
       this.yourConnectionsRadio.click();
       this.shareAllowComments.show();
-      ddd(friends_access);
       this.friendsSelector.loadFriendList(friends_access);
       this.yourConnectionsList.show();
     }
