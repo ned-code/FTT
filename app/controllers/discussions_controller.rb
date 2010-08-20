@@ -34,24 +34,26 @@ class DiscussionsController < ApplicationController
 
   def create
     @discussion = current_user.discussions.new_with_uuid(params[:discussion])
-    message = @discussion.as_application_json
+    discussion_hash = @discussion.as_application_json
+    message = discussion_hash
     message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, @discussion.page.document.uuid)
     respond_to do |format|
       if @discussion.save
-        format.json { render :json => @discussion }
+        format.json { render :json => discussion_hash }
       else
-        format.json { render :json => @discussion, :status => 203 }
+        format.json { render :json => discussion_hash, :status => 203 }
       end
     end
   end
   
   def update
     @discussion.update_attributes!(params[:discussion])
-    message = @discussion.as_application_json
+    discussion_hash = @discussion.as_application_json
+    message = discussion_hash
     message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, @discussion.page.document.uuid)
-    render :json => @discussion
+    render :json => discussion_hash
   end
 
   def destroy

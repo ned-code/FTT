@@ -217,13 +217,19 @@ class Page < ActiveRecord::Base
     refresh_cache
   end
 
-  def as_application_json
+  def as_application_json(options={})
+    options = { :skip_items => false }.merge(options)
+
     hash = { 'page' => self.attributes }
     hash['page']['data'] = self.data
-    hash['page']['items'] = []
-    for item in self.items.not_deleted
-      hash['page']['items'] << item.as_application_json['item']
+
+    if(options[:skip_items] != true)
+      hash['page']['items'] = []
+      for item in self.items.not_deleted
+        hash['page']['items'] << item.as_application_json['item']
+      end
     end
+
     hash
   end
   

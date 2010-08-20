@@ -167,14 +167,19 @@ class Document < ActiveRecord::Base
     uuid
   end
 
-  def as_application_json
-    pages = self.pages.not_deleted
+  def as_application_json(options={})
+    options = { :skip_pages => false }.merge(options)
+
     hash = { 'document' => self.attributes }
     hash['document']['size'] = self.size
-    hash['document']['pages'] = []
-    for page in pages
-      hash['document']['pages'] << page.as_application_json['page']
+
+    if(options[:skip_pages] != true) 
+      hash['document']['pages'] = []
+      for page in self.pages.not_deleted
+        hash['document']['pages'] << page.as_application_json['page']
+      end
     end
+
     hash
   end
 
