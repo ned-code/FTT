@@ -12,17 +12,17 @@ WebDoc.DocumentCollaborationController = $.klass({
     var self = this;
     
     this.friendsSelector = new WebDoc.FriendsSelectorController('invite_co_authors');
+    this.emailInvitationForm = new WebDoc.EmailInvitationController('collaborate_by_email_form');
     this.domNode = jQuery("#document_access_list");
     this.documentAccessDialog = jQuery("#invite_co_authors");
     this.chooseFriendsForm = jQuery("#collaborate_by_connection_form");
     this.byEmailForm = jQuery("#collaborate_by_email_form");
-    this.emailsNode = jQuery('#wb-invitation-add-editors');
-    this.failedEmailsWrapper = jQuery('#wb-invitation-failed');
     
     this.chooseFriendsForm.bind( 'submit', this.sendInvitationsByFriends.pBind(this) );
     this.byEmailForm.bind( 'submit', this.sendInvitationsByEmail.pBind(this) );
     this.domNode.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
-    jQuery('.collaborate_form').bind('click', this.toggleForm.pBind(this) );
+    jQuery('#collaborate_by_connection_link').bind('click', this.showConnectionsForm.pBind(this) );
+    jQuery('#collaborate_by_email_link').bind('click', this.showEmailForm.pBind(this) );
     
     //this.documentAccessDialog
     //.remove()
@@ -166,11 +166,27 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.friendsSelector.cleanFriendsList();
   },
   
-  
   toggleForm: function(e){
     e.preventDefault();
     this.byEmailForm.toggle();
     this.chooseFriendsForm.toggle();
+  },
+  
+  showEmailForm: function(e){
+    ddd('showEmailForm');
+    e.preventDefault();
+    this.chooseFriendsForm.hide();
+    if(!this.emailInvitationForm.domBuilded){
+      this.emailInvitationForm.buildDom();
+    }
+    this.byEmailForm.show();
+  },
+  
+  showConnectionsForm: function(e){
+    ddd('showConnectionsForm');
+    e.preventDefault();
+    this.chooseFriendsForm.show();
+    this.byEmailForm.hide();
   },
   
   url: function(){
