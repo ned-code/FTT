@@ -27,8 +27,8 @@ Webdoc::Application.routes.draw do
     end
   end
 
-  get '/explore' => 'documents#explore'
-  get '/featured' => 'documents#featured'
+  get '/explore(.:format)' => 'documents#explore'
+  get '/featured(.:format)' => 'documents#featured'
 
   # TODO rails3 always need :only_current_user => true ?
   get    'items/:item_id/datastore_entries/:key' => 'datastore_entries#index'
