@@ -18,7 +18,7 @@ WebDoc.PanelsController = $.klass({
   
   CURRENT_CLASS: "current",
   ACTIVE_CLASS: "active",
-  PANEL_GHOST_SELECTOR: "#right-panel-ghost",
+  PANEL_GHOST_SELECTOR: "#panel_ghost",
   
   _editPanelGroup: {
     item: true,
@@ -123,11 +123,16 @@ WebDoc.PanelsController = $.klass({
     if ( !controllerType ) {
       if ( this._currentInspectorType ) {
         this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
+        this.panelGhostNode.removeTransitionClass( this.ACTIVE_CLASS );
       }
     }
     else if ( controllerType !== this._currentInspectorType ) {
-      if ( this._currentInspectorType && this._panelGroup[ controllerType ] ) {
-        this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
+      if ( this._panelGroup[ controllerType ] ) {
+        this.panelGhostNode.addTransitionClass( this.ACTIVE_CLASS );
+        
+        if ( this._currentInspectorType ) {
+          this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
+        }
       }
       this.getInspector( controllerType ).domNode.addTransitionClass( 'active' );
     }
@@ -213,41 +218,6 @@ WebDoc.PanelsController = $.klass({
         inspectors[key].domNode.hide();
       }
     }
-  },
-  
-  _changeButtonState: function(inspector) {
-    ddd('[PanelsController] _changeButtonState(inspector)');
-
-    jQuery( this.STATE_BUTTON_SELECTOR ).removeClass( this.CURRENT_CLASS );
-    jQuery( inspector.buttonSelector() ).addClass( this.CURRENT_CLASS );
-  },
-    
-  _showGhost: function() {
-    var outerGhost = this.panelGhostNode,
-        innerGhost = this.innerGhostNode,
-        scrollbar = jQuery('#webdoc_x_scrollbar, #webdoc_y_scrollbar');
-    
-    innerGhost.show();
-    
-    // Quick way of recalculating scrollbars
-    jQuery(window).trigger('resize');
-    
-    jQuery( this.PANEL_TOGGLE_SELECTOR ).addClass( this.ACTIVE_CLASS );
-    
-    return true;
-  },
-  
-  _hideGhost: function( margin ){
-    var outerGhost = this.panelGhostNode,
-        innerGhost = this.innerGhostNode,
-        scrollbars = jQuery('#webdoc_x_scrollbar, #webdoc_y_scrollbar');
-    
-    innerGhost.hide();
-    
-    // Quick way of recalculating scrollbars
-    jQuery(window).trigger('resize');
-    
-    return false;
   },
   
   _preloadDragDropIcon: function(){

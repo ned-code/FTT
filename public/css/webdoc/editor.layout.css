@@ -408,6 +408,17 @@ body.full_view {
 	margin-left: -5em;
 }
 
+.comment_buttons_index>li:first-child {
+  display: none;
+}
+
+.admin .comments_buttons_index>li:first-child,
+.editor .comments_buttons_index>li:first-child,
+.contributor .comments_buttons_index>li:first-child,
+.viewer_comment .comments_buttons_index>li:first-child {
+  display: inline-block;
+}
+
 .author_dropdown_index {
 	top: 2em;
 	margin-top: 0.3333em;
@@ -528,7 +539,29 @@ body.full_view {
 	background: black;
 }
 
-/* Scrollbars */
+/* webdoc positioning */
+
+#panel_ghost {
+    display: table-cell;
+    width: 0;
+    -webkit-transition: width 0.6s ease-out;
+       -moz-transition: width 0.6s ease-out;
+            transition: width 0.6s ease-out;
+}
+#panel_ghost>div {
+    /* WebKit gives cells a mysterious 3px cellpadding when
+       they have content. Set to display: none to get round it */
+    display: block;
+    overflow: hidden;
+    width: 0;
+    -webkit-transition: width 0.6s ease-out;
+       -moz-transition: width 0.6s ease-out;
+            transition: width 0.6s ease-out;
+}
+.full_view #panel_ghost.active,
+.full_view #panel_ghost.active>div {
+    width: 288px;
+}
 
 .x_scrollbar_container {
   position: absolute;
@@ -646,18 +679,4 @@ x_scrollbar {
   width:120px;
   height:120px;
   background:transparent url(/images/libraries/drag_app.png) no-repeat;
-}
-
-
-/* Roles: admin, editor, contributor, viewer_comment, viewer_only */
-
-#comment_buttons li:first-child {
-  display: none;
-}
-
-.admin #comments_buttons li:first-child,
-.editor #comments_buttons li:first-child,
-.contributor #comments_buttons li:first-child,
-.viewer_comment #comments_buttons li:first-child {
-  display: block;
 }

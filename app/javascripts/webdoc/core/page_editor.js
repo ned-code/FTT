@@ -344,14 +344,20 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     }
   },
   
+  _fullView: false,
+  
   toggleFullScreen: function() {
+    
     var body = jQuery('body');
-    if (body.hasClass('full_mode')) {
-      jQuery('body').removeClass('full_mode full_view');
+    
+    if ( this._fullView ) {
+    	this._fullView = false;
+      body.removeClass('full_view');
     } 
     else {
-      jQuery('body').addClass('full_mode full_view');  
-    }      
+    	this._fullView = true;
+      body.addClass('full_view');
+    }
   },
   
   objectChanged: function(record, options) {
