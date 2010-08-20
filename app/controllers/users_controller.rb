@@ -1,9 +1,4 @@
 class UsersController < ApplicationController
-
-  # access_control do
-  #   allow logged_in, :except => [:index]
-  #   allow :admin, :to => [:index]
-  # end
   
   # GET /users
   def index
@@ -27,27 +22,7 @@ class UsersController < ApplicationController
   end
 
   def dashboard
-    authorize! :read, Document
-    respond_to do |format|
-      format.html do
-        set_return_to
-      end
-      format.json do
-        per_page = 20
-        @documents = Document.not_deleted_with_filter(current_user, params[:document_filter], params[:query], params[:page], per_page)
-        render :json => {
-          :documents => @documents.map{ |d| d.as_application_json },
-          :pagination => {
-            :per_page => per_page,
-            :current_page => @documents.current_page,
-            :total_pages => @documents.total_pages,
-            :next_page => @documents.next_page,
-            :previous_page => @documents.previous_page,
-            :total => @documents.total_entries
-          }
-        }
-      end
-    end
+    set_return_to
   end
   
 end
