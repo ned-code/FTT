@@ -6,7 +6,7 @@ WebDoc.EmailInvitationController = $.klass({
   initialize: function(domNodeId) {
     this.domNodeId = domNodeId;
     this.domNode = jQuery("#"+this.domNodeId);
-    this.emailsListNode = this.domNode.find('.emails_list');
+    this.emailsInvitationNode = this.domNode.find('.emails_invitation');
     this.domBuilded = false;
   },
   
@@ -21,24 +21,34 @@ WebDoc.EmailInvitationController = $.klass({
   },
   
   buildDom: function(){
-    ddd('email invitation buildDom');
     var mainNode = jQuery('<div/>', {'class': 'email_invitation'});
     var titleNode = jQuery('<div/>', {'class': 'email_invitation_title'})
       .html('invite someone to bla bla bla');
     
-    var emailsListNode = jQuery('<div/>', {'class' : 'emailslist'});
-    var emailInput = jQuery('<input/>', {type: 'text', 'class': 'email_input', placeholder: 'email address'});
+    this.emailsListNode = jQuery('<div/>', {'class' : 'emailslist'});
+    var addEmailNode = jQuery('<div/>', {'class' : 'add_email'}).html('add email');
     var messageLabel = jQuery('<label/>').html('Add a personal message');
     var messageInput = jQuery('<input/>', {type: 'textarea', 'class': 'email_message'});
     
-    emailsListNode.append(emailInput);
+    this.emailsListNode.append(this.buildEmailInput);
     mainNode
       .append(titleNode)
-      .append(emailsListNode)
+      .append(this.emailsListNode)
+      .append(addEmailNode)
       .append(messageLabel)
       .append(messageInput);
-    this.emailsListNode.append(mainNode);
+    this.emailsInvitationNode.append(mainNode);
     this.domBuilded = true;
+    
+    this.domNode.find('.add_email').bind('click', this.addEmailInput.pBind(this));
+  },
+  
+  buildEmailInput: function(){
+    return jQuery('<input/>', {type: 'text', 'class': 'email_input'}).attr({placeholder: 'email address'});
+  },
+  
+  addEmailInput: function(){
+    this.emailsListNode.append(this.buildEmailInput);
   }
 });
 
