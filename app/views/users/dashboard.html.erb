@@ -30,18 +30,18 @@
     <p>Create your own new webdoc, or choose a webdoc to view from the list.</p>
     <p>You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, choose <strong>sharing</strong>.</p>
   </div>
-  <%= render 'users/pending_friendships'%>
+  <%= render 'pending_friendships'%>
 </div>
 
 <div class="site_wrap wrap">
-  <%= render 'popup_create_webdoc'%>
+  <%= render 'documents/popup_create_webdoc'%>
 </div>
 <div class="site_wrap wrap">
-  <%= render 'popup_collaborate' %>
+  <%= render 'documents/popup_collaborate' %>
 </div>
 
 <div class="site_wrap wrap">
-  <%= render 'popup_share' %>
+  <%= render 'documents/popup_share' %>
 </div>
 
 
@@ -54,7 +54,7 @@
     sessionKeyName:"#{session_key_name>",
     cookiesSessionKeyName:"#{cookies[session_key_name]>"
   };
-  WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category, <%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);   
+  WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category, <%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);
   WebDoc.Application.main(function() {
     var editor = new WebDoc.DocumentEditor();
     editor.start();
