@@ -216,6 +216,22 @@ class Page < ActiveRecord::Base
     update_next_page_position
     refresh_cache
   end
+
+  def as_application_json(options={})
+    options = { :skip_items => false }.merge(options)
+
+    hash = { 'page' => self.attributes }
+    hash['page']['data'] = self.data
+
+    if(options[:skip_items] != true)
+      hash['page']['items'] = []
+      for item in self.items.not_deleted
+        hash['page']['items'] << item.as_application_json['item']
+      end
+    end
+
+    hash
+  end
   
   private
   

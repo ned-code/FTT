@@ -98,7 +98,15 @@ class Item < ActiveRecord::Base
     cloned_item.updated_at = nil
     cloned_item
   end
-  
+
+  def as_application_json
+    hash = { 'item' => self.attributes }
+    hash['item']['data'] = self.data
+    hash['item']['properties'] = self.properties
+    hash['item']['preferences'] = self.preferences
+    hash
+  end
+
   def safe_delete!
     super
     need_update_thumbnail

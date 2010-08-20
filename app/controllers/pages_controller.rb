@@ -39,16 +39,11 @@ class PagesController < ApplicationController
     deep_notify = params[:page][:items_attributes].present?
     @page = @document.pages.new_with_uuid(params[:page])
     @page.save!
-    options = {};
-    options[:include] = :items if deep_notify
-    message = @page.as_json(options)
+    page_hash = deep_notify ? @page.as_application_json : @page.as_application_json(:skip_items => true)
+    message = page_hash
     message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, @page.document.uuid)     
-    if (params[:page][:items_attributes].present?)
-      render :json => @page.to_json(:include => :items)
-    else
-      render :json => @page
-    end
+    render :json => page_hash
   end
   
   # PUT /documents/:document_id/pages/:id
@@ -59,16 +54,11 @@ class PagesController < ApplicationController
     @page.update_attributes!(params[:page])
     # TODO JBA seems that update atribute does not refresh nested attributes so we need to refresh
     @page.reload
-    options = {};
-    options[:include] = :items if deep_notify
-    message = @page.as_json(options)
+    page_hash = deep_notify ? @page.as_application_json : @page.as_application_json(:skip_items => true)
+    message = page_hash
     message[:source] = params[:xmpp_client_id]
     @@xmpp_notifier.xmpp_notify(message.to_json, @page.document.uuid)    
-    if (deep_notify)
-      render :json => @page.to_json(:include => :items)
-    else
-      render :json => @page
-    end
+    render :json => page_hash
   end
   
   # DELETE /documents/:document_id/pages/:id

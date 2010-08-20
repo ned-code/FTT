@@ -40,6 +40,11 @@ class Role < ActiveRecord::Base
     #roles = roles.each_pair{ |k,v| v.map! { |role| role.document_id }}
     user_roles
   end
+
+  def as_application_json
+    { 'role' => self.attributes }
+  end
+  
 end
 
 

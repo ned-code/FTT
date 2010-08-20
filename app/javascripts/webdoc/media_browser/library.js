@@ -26,7 +26,7 @@ WebDoc.Library = $.klass({
 	createHandlers: function(domeNode, eventType, obj, context){
     domeNode.delegate('a', eventType, WebDoc.handlers._makeLinkHandler( obj, context ) );
     //NOTE: _makeLinkHandler( obj, context ) is supposed to be private, but it's an easy way to listen the link
-  },
+  }
 });
 
 LibraryUtils = $.klass({
