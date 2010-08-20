@@ -1,9 +1,4 @@
 class UsersController < ApplicationController
-
-  # access_control do
-  #   allow logged_in, :except => [:index]
-  #   allow :admin, :to => [:index]
-  # end
   
   # GET /users
   def index
@@ -24,6 +19,10 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { render :layout => false}
     end
+  end
+
+  def dashboard
+    set_return_to
   end
   
 end

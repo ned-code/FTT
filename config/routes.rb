@@ -71,6 +71,8 @@ Webdoc::Application.routes.draw do
 
   get '/browse' => 'browser#index'
 
+  get '/dashboard' => 'users#dashboard'
+
   # dev controller
   resources :images,     :except => [:new, :edit, :update]
   resources :videos,     :except => [:new, :edit, :update]

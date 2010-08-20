@@ -107,7 +107,7 @@ class Document < ActiveRecord::Base
       if (!current_user.has_role?("admin"))
         documents_ids = Array.new
         roles = current_user.roles.all.each do |role|
-          documents_ids << role.documents_id
+          documents_ids << role.document_id
         end
         conditions[0] += ' AND documents.uuid IN (?)'
         conditions << documents_ids
