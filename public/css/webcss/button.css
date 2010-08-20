@@ -145,3 +145,7 @@
 	display:inline;
 }
 
+.button.sendmessage {
+	top:0;
+	float:right;
+}
