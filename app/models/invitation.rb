@@ -14,13 +14,24 @@ class Invitation < ActiveRecord::Base
   belongs_to :user
   belongs_to :document
   
-  def self.generate(user_id, params)
-    mails_list = params[:emails]
+  def self.generate(user, params)
+    document_id = params[:document_id]
     role = params[:role]
-    role = params[:document_id]
-    mails_list.each do |mail|
-      invitation = Invitation.create!(:user_id => user_id)
-      #send mail here
+    user_id = user.id
+    message = params[:message]
+    emails = params[:emails]
+    
+    emails.each do |email|
+      invitation = Invitation.create!(  :document_id => document_id,
+                                        :user_id => user_id,
+                                        :role => role
+                                        )
+      #send email here
+      p "sending email to #{email}"
+    end
+    
+    def accept!
+     #TODO
     end
   end
 end

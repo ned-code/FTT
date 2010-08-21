@@ -117,13 +117,21 @@ WebDoc.DocumentCollaborationController = $.klass({
   
   
   sendInvitationsByEmail: function(e) {
-    ddd('Send sendInvitationsByEmail');
     e.preventDefault();
-    ddd('email list', this.emailInvitationForm.getEmailsList());
     
     var role_type = jQuery('input[name="role_type_email"]:checked').val()
-    ddd(role_type);
-    //this.createRightsToRecipients( this.getInvitationAccess(recipients, message) );
+    var invitations = { invitations : {
+                            role : role_type,
+                            emails : this.emailInvitationForm.getEmailsList(),
+                            message : this.emailInvitationForm.getMessage(),
+                            document_id: this.document.uuid()
+                           }
+                         };
+                         
+    var url = '/invitations/';
+    WebDoc.ServerManager.request(url,function(data){
+      ddd('email send with sucess');
+    }.pBind(this), 'POST', invitations);
   },
   
   sendInvitationsByFriends: function(e) {

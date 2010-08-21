@@ -95,6 +95,8 @@ Webdoc::Application.routes.draw do
       resources :photos, :only => [:index]
     end
   end
+  
+  resources :invitations, :except => [:update]
 
   # START OLD ROUTES
   # Jammit::Routes.draw(map)

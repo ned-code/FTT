@@ -27,6 +27,10 @@ WebDoc.EmailInvitationController = $.klass({
     return emailsList;
   },
   
+  getMessage: function(){
+    return this.domNode.find('.email_message').val();
+  },
+  
   buildDom: function(){
     var mainNode = jQuery('<div/>', {'class': 'email_invitation'});
     var titleNode = jQuery('<div/>', {'class': 'email_invitation_title'})
