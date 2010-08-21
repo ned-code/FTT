@@ -18,7 +18,11 @@ WebDoc.EmailInvitationController = $.klass({
     var emailsList = [];
     var emailsInput = this.domNode.find('.email_input');
     for(var i=0; i<emailsInput.length;i++){
-      emailsList.push(jQuery(emailsInput[i]).val());
+      jQuery(emailsInput[i]).validate({
+        pass: function( value ){
+          emailsList.push(value);
+        }
+      });
     }
     return emailsList;
   },

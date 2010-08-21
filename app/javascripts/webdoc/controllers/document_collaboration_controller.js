@@ -116,7 +116,6 @@ WebDoc.DocumentCollaborationController = $.klass({
   },
   
   
-  //TODO actually not supported, will be implemented at the same time that invitations
   sendInvitationsByEmail: function(e) {
     ddd('Send sendInvitationsByEmail');
     e.preventDefault();
