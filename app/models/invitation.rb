@@ -16,6 +16,7 @@ class Invitation < ActiveRecord::Base
   
   def self.generate(user, params)
     document_id = params[:document_id]
+    document = Document.where(:uuid => document_id).first
     role = params[:role]
     user_id = user.id
     message = params[:message]
@@ -26,8 +27,8 @@ class Invitation < ActiveRecord::Base
                                         :user_id => user_id,
                                         :role => role
                                         )
-      #send email here
-      p "sending email to #{email}"
+      
+      Notifier.send_invitation(user,email, message, role, document).deliver
     end
     
     def accept!
