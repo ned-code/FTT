@@ -37,7 +37,7 @@ class Devise::SessionsController < ApplicationController
       resource = warden.authenticate!(:scope => resource_name, :recall => "new")
       set_flash_message :notice, :signed_in
       
-      invitation = Invitation.where(:uuid => params[:invitation]).first
+      invitation = Invitation.pending.where(:uuid => params[:invitation]).first
       if invitation.present?
         sign_in(resource_name, resource)
         invitation.accept!(current_user)

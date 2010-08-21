@@ -21,7 +21,7 @@ class Invitation < ActiveRecord::Base
   # = Scope =
   # ================
   
-  scope :pending, where(:status => ACCEPTED)
+  scope :pending, where(:status => PENDIG)
   
   # =================
   # = Class Methods =
@@ -53,8 +53,8 @@ class Invitation < ActiveRecord::Base
   def accept!(friend)
     if !user.friend?(friend)
       begin
-        friendhsip = Friendship.create_friendship!(friend, self.user)
-        friend.accept!
+        friendship = Friendship.create_friendship!(friend, self.user)
+        friendship.accept!
       rescue
       end
     end

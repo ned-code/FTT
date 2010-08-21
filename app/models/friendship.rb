@@ -39,6 +39,7 @@ class Friendship < ActiveRecord::Base
       Friendship.create_friend_mirror!(friend.id,user.id)
     end
     Notifier.request_friendship(user,friend).deliver
+    return friendship
   end
   
   # ====================
@@ -78,7 +79,7 @@ class Friendship < ActiveRecord::Base
   
   #return the associated friendship
   def mirror
-    Friendship.find(:first, :conditions => { :user_id => self.friend_id, :friend_id => self.user_id })
+    Friendship.where(:user_id => self.friend_id, :friend_id => self.user_id).first
   end
   
   def remove_asociated_roles
