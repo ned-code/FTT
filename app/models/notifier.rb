@@ -87,11 +87,12 @@ class Notifier < ActionMailer::Base
          :subject => subject)
   end
   
-  def send_invitation(user,email, message, role, document)
+  def send_invitation(user,email, message, role, document, invitation_id)
     @user = user
     @message = message
     @role = role
     @document = document
+    @invitation_id = invitation_id
     subject "#{user.username} invite you on Webdoc"
     mail(:to => email,
          :subject => subject)
