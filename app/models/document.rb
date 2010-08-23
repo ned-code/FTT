@@ -176,6 +176,10 @@ class Document < ActiveRecord::Base
   # ====================
   # = Instance Methods =
   # ====================
+
+  def invalidate_cache
+    Document.invalidate_cache(self.uuid)
+  end
   
   def share(with_comments=false)
     
@@ -194,6 +198,7 @@ class Document < ActiveRecord::Base
   
   def unshare
     self.roles.where('name in(?)', Role::PUBLIC_ROLES).delete_all
+    self.invalidate_cache
   end
   
   def is_public?
@@ -201,7 +206,7 @@ class Document < ActiveRecord::Base
   end
   
   def to_param
-    uuid
+    self.uuid
   end
 
   def as_application_json(options={})
@@ -280,10 +285,12 @@ class Document < ActiveRecord::Base
   end
 
   def create_role_for_users(current_user, accesses = {})
-      role = accesses[:role]
+    role = accesses[:role]
     if Role::PUBLIC_ROLES.include?(role)
       #if we give public right to a single user, it means that the document is no more public anymore
-      self.unshare
+      self.unshare # already invalidate_cache in this method
+    else
+      self.invalidate_cache
     end
     
     friends_list = accesses[:users]
@@ -295,48 +302,8 @@ class Document < ActiveRecord::Base
       user.has_role!(role,self)
       #TODO Notifiy by mail and notifiy inside webdoc
     end
-    
-    # recipients.each do |user_email|
-    #       user = User.find_by_email(user_email.strip)
-    #       if user 
-    #         if !user.has_role?(role, self)
-    #           #user.has_only_reader_role!(self)
-    #           user.has_role!(role, self)
-    #           Notifier.role_notification(current_user, role, user, self, message).deliver
-    #         end
-    #       else
-    #         add_unvalid_email_to_array(user_email)
-    #       end
-    #     end
   end
-  
-  # # No more used in current GUI
-  # def update_accesses(current_user, accesses = {})
-  #   accesses_parsed = JSON.parse(accesses);
-  #   readers = accesses_parsed['readers']
-  #   editors = accesses_parsed['editors']
-  #   # Get accesses on document
-  #   all_document_access = self.accepted_roles
-  #   all_document_access.each do |role|
-  #     role.users.each do |user|
-  #       if editors.include?(user.id)
-  #         if !user.has_role?("editor", self)
-  #           user.has_only_editor_role!(self)
-  #           Notifier.role_notification(current_user, "editor", user, self, nil).deliver
-  #         end
-  #       elsif readers.include?(user.id)
-  #         if !user.has_role?("reader", self)
-  #           user.has_only_reader_role!(self)
-  #           Notifier.role_notification(current_user, "reader", user, self, nil).deliver
-  #         end
-  #       else
-  #         user.has_no_roles_for!(self)
-  #         Notifier.no_role_notification(current_user, user, self).deliver
-  #       end
-  #     end
-  #   end
-  # end 
-  # 
+
   def remove_role(current_user, params)
     params_parsed = JSON.parse(params)
     user = User.find(params_parsed['user_id'])
@@ -344,10 +311,10 @@ class Document < ActiveRecord::Base
     if user
       user.has_no_role!(role, self)
       Notifier.removed_role_notification(current_user, role, user, self).deliver
+      self.invalidate_cache
       #todo notify inside webdoc
     end
   end
-  
   
   #Actually we look only on the user and public right, not list right
   def public_editor?
@@ -383,11 +350,15 @@ class Document < ActiveRecord::Base
   end
   
   def find_public_roles
-    @public_roles_names ||= Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil).select('roles.name').map{|r| r.name}
+    @public_roles_names ||= find_roles.select{ |r| r.user_id.blank? && r.user_list_id.blank? }.map{ |r| r.name }
   end
   
   def find_user_roles(user)
-    @user_roles_names ||= Role.where(:document_id => self.id, :user_id => user.id, :user_list_id => nil).select('roles.name').map{|r| r.name}
+    @user_roles_names ||= find_roles.select{ |r| r.user_id.present? && r.user_list_id.blank? }.map{ |r| r.name }
+  end
+
+  def find_roles
+    @roles ||= self.roles
   end
   
   def creator?(user)
