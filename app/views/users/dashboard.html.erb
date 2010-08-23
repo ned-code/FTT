@@ -10,7 +10,7 @@
     <div class="absolute_column one">
 
 
-    <a id="wb-create-document-button" class="add_button button">New document</a>
+    <a id="wb-create-document-button" class="add_button button" href="#tdb">New document</a>
 
     <input id="wb-documents-search" class="ui-corner-all" type="text" name="wb-documents-search" placeholder="Search" />
     <h3>Your Webdocs</h3>
@@ -37,8 +37,9 @@
   <%= render 'pending_friendships'%>
 
 
-<div class="lightbox">
+<div>
   <%= render 'documents/popup_create_webdoc'%>
+
 </div>
 <div class="">
   <%= render 'documents/popup_collaborate' %>
@@ -48,11 +49,7 @@
   <%= render 'documents/popup_share' %>
 </div>
 
-<<<<<<< HEAD
 <div class="">
-=======
-<div class="site_wrap wrap">
->>>>>>> 28f37de8b64f0342b3122fc028fc5dc7ecc2739b
   <%= render 'users/popup_invitations' %>
 </div>
 
@@ -65,3 +62,5 @@
     });
   </script>
 <% end %>
+</div>
+</div>
