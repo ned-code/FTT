@@ -129,6 +129,7 @@ javascripts:
     - app/javascripts/webdoc/controllers/email_invitation_controller.js
     - app/javascripts/webdoc/controllers/document_collaboration_controller.js
     - app/javascripts/webdoc/controllers/document_share_controller.js
+    - app/javascripts/webdoc/controllers/invitations_controller.js
     - app/javascripts/webdoc/gui/document_list.js
     - app/javascripts/webdoc/core/document_editor.js
   editor:

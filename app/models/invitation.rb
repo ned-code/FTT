@@ -36,13 +36,14 @@ class Invitation < ActiveRecord::Base
     emails = params[:emails]
     
     emails.each do |email|
-      invitation = Invitation.create!(  :document_id => document_id,
-                                        :user_id => user_id,
-                                        :role => role,
-                                        :status => PENDIG
+      if !email.blank?
+        invitation = Invitation.create!(  :document_id => document_id,
+                                          :user_id => user_id,
+                                          :role => role,
+                                          :status => PENDIG
                                         )
-      
-      Notifier.send_invitation(user,email, message, role, document, invitation.id).deliver
+        Notifier.send_invitation(user,email, message, role, document, invitation.id).deliver
+      end
     end
   end
   
