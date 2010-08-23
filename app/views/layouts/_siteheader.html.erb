@@ -22,7 +22,6 @@
         </ul></li
      ><li><%= link_to "Friends", friendships_path, { :class => "button header #{params[:controller]=='friendships' ? 'current' : '' }" } %></li
      ><li>
-     
         <a href="#dropdown" class="button header" data-for="#account_dropdown">Account</a>
         <ul class="user_index dropdown_index index" id="account_dropdown">
           <li><%= link_to "Your profile", edit_registration_path(:user), { :class => "user-edit item #{params[:controller]=='users' ? 'users' : '' }" } %></li
@@ -32,9 +31,9 @@
     </ul>
     <% else %>
 		<ul class="horizontal usernav_index index">
-		  <li><%= link_to "login", root_path %></li
-		 ><li><%= link_to "sign up", new_registration_path(:user) %></li
-		 ><li><%= link_to "sign up/in with Facebook", user_oauth_authorize_url(:facebook) %></li>
+		  <li><%= link_to "login", root_path, { :class => "login_button button" } %></li
+		 ><li><%= link_to "sign up", new_registration_path(:user), { :class => "signup_button button" } %></li
+		 ><li><%= link_to "sign up/log in with Facebook", user_oauth_authorize_url(:facebook), { :class => "facebook_signup_button button" } %></li>
 		</ul>
     <% end %>
   </div>
