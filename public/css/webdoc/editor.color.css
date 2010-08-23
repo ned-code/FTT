@@ -67,6 +67,15 @@
   background-position: 0 -24px;
 }
 
+.edit_dropdown_index>li a {
+	color:#efefef;
+	background-color: rgba(0,0,0,0);
+}
+
+.edit_dropdown_index>li:hover {
+	background-color: grey;
+}
+
 
 a[href="#pages-browser"]            { background-position: 0 0; }
 a[href="#pages-browser"]:hover      { background-position: 0 -64px; }

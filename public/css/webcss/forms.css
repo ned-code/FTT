@@ -338,14 +338,14 @@ input.default {
 
 /* Layout */
 
-input+label,
+/*input+label,
 textarea+label,
 input+input,
 textarea+input,
 input+textarea,
 textarea+textarea {
     margin-top: 0.6667em;
-}
+}*/
 
 #background_image {
   width: 100px; height: 100px; display: block;

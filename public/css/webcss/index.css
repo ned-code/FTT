@@ -106,6 +106,10 @@
 	overflow: hidden;
 }
 
+.dropdown_index>li {
+	margin-right: 0;
+}
+
 .dropdown_index.active {
 	padding-top:10px;
 	padding-bottom:10px;
