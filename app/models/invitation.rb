@@ -53,8 +53,7 @@ class Invitation < ActiveRecord::Base
   def accept!(friend)
     if !user.friend?(friend)
       begin
-        friendship = Friendship.create_friendship!(friend, self.user)
-        friendship.accept!
+        friendship = Friendship.create_friendship!(friend, self.user,false)
       rescue
       end
     end
