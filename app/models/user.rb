@@ -115,6 +115,7 @@ class User < ActiveRecord::Base
         Role.create!(:user_id => self.id,
                    :document_id => document.uuid,
                    :name => role)
+        Document.invalidate_cache(document.uuid)
       end
     end
   end
@@ -123,6 +124,7 @@ class User < ActiveRecord::Base
   def has_no_role!(role,document)
     if has_role?(role,document)
       self.roles.where(:name => role, :document_id => document.uuid).delete_all
+      Document.invalidate_cache(document.uuid)
     end
   end
   
