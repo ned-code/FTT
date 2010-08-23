@@ -74,14 +74,14 @@ class Page < ActiveRecord::Base
   end
   
   def self.need_update_thumbnail(page_uuid)
-    Page.update_all('thumbnail_need_update =1',["uuid = ? and thumbnail_need_update <> ?",page_uuid, 1])
+    Page.update_all('pages.thumbnail_need_update = 1',["pages.uuid = ? AND (pages.thumbnail_need_update IS ? OR pages.thumbnail_need_update != ?)",page_uuid, nil, 1])
   end
 
   def self.process_pending_thumbnails
     self.cleanup_old_requests
     pages = Page.all_need_process_thumbnail
     if pages.present?
-      thumbnail_service = Services::Bluga.new
+      thumbnail_service = Services::ThumbnailsGenerator.new
       pages.each do |page|
         thumbnail_service.process_page(page)
       end
