@@ -1,47 +1,34 @@
+<% meta_title 'Home' %>
+<% css_assets 'home', 'account' %>
+<% js_assets 'forms' %>
+
 <!-- home/show.html.erb -->
-<div class="action-zone zone">
-  <div class="wrap clear">
-    <%= form_for @user, :url => session_path(@user), :builder => CustomFormBuilder, :html => { :class => "column one double of-four" } do |f| %>
-      <h2>Log in&hellip;</h2>
-      
-      <fieldset>
-        <input type='hidden' name='invitation' value="<%=params[:invitation]%>"/>
-        <div class="stack column one of-two<% if @user.errors[:email].present? %> error<% end %>">
-          <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
-          <%= f.text_field :email, :'data-type' => "email", :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
-        </div><!-- spaceless
-     --><div class="stack column two of-two<% if @user.errors[:password].present? %> error<% end %>">
-          <%= f.label :password, 'Password <abbr class="required" title="required">*</abbr>' %>
-          <%= f.password_field :password, :minlength => 6, :maxlength => 255, :required => "required", :autocomplete => "on", :title => "Please enter your password" %>
-          <span class="label"><%= link_to t('devise.passwords.link'), new_password_path(:user) %></span>
-        </div>
-      </fieldset>
-      
-      <input name="login" type="submit" value="Login">
-      
-      <label for="user_<%= :remember_me %>">
-        <input id="user_<%= :remember_me %>" name="user[<%= :remember_me %>]" type="checkbox" value="1" />
-          Remember me
-      </label>
-    <% end%><!-- spaceless
- --><div class="column last double of-four">
-      <h3>&hellip;or sign up</h3>
-      <p>Want to get started creating your own webdocs? Registering takes 30 seconds, and <em>it's free!</em>.  <a href='/users/sign_up<%= params[:invitation].nil? ? "" : "?invitation=#{params[:invitation]}"%>' style="font-weight: bold; font-style: italic;">Sign&nbsp;up&nbsp;now...</a></p>
-    </div>
+<div class="site_wrap wrap">
+  <%= form_for @user, :url => session_path(@user), :builder => CustomFormBuilder, :html => { :class => "column one double of-four" } do |f| %>
+    <h2>Log in&hellip;</h2>
+    
+    <fieldset>
+      <input type='hidden' name='invitation' value="<%=params[:invitation]%>"/>
+      <div class="stack column one of-two<% if @user.errors[:email].present? %> error<% end %>">
+        <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
+        <%= f.text_field :email, :'data-type' => "email", :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>
+      </div
+     ><div class="stack column two of-two<% if @user.errors[:password].present? %> error<% end %>">
+        <%= f.label :password, 'Password <abbr class="required" title="required">*</abbr>' %>
+        <%= f.password_field :password, :minlength => 6, :maxlength => 255, :required => "required", :autocomplete => "on", :title => "Please enter your password" %>
+        <span class="label"><%= link_to t('devise.passwords.link'), new_password_path(:user) %></span>
+      </div>
+    </fieldset>
+    
+    <input name="login" type="submit" value="Login">
+    
+    <label for="user_<%= :remember_me %>">
+      <input id="user_<%= :remember_me %>" name="user[<%= :remember_me %>]" type="checkbox" value="1" />
+        Remember me
+    </label>
+  <% end%><!-- spaceless 
+--><div class="column last double of-four">
+    <h3>&hellip;or sign up</h3>
+    <p>Want to get started creating your own webdocs? Registering takes 30 seconds, and <em>it's free!</em>.  <a href="/users/sign_up" style="font-weight: bold; font-style: italic;">Sign&nbsp;up&nbsp;now...</a></p>
   </div>
 </div>
-
-<% content_for :scripts do %>
-  <%= include_javascripts :forms %>
-<% end %>
-
-<% # this code has been removed for the alpha release and now we need use explore.js %>
-<% if false %>
-<div class="content">
-  <div class="wrap">
-    <h2>Most recent webdocs <a href="<%= explore_documents_path%>">(->View all)</a></h2>
-    <%= render :partial => "documents/viewer_list", :locals => { :documents => @top_documents } %>    
-  </div>
-</div>
-<% end %>
- 

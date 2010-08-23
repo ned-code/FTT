@@ -371,27 +371,12 @@ body.full_view {
 	margin-bottom: 0.3333em;
 }
 
-/*.edit_dropdown_index>li {
-	white-space: nowrap;
-}*/
 .edit_dropdown_index>li a {
 	padding:0;
-	color:#efefef;
-	background-color: rgba(0,0,0,0);
 	width:100%;
-	padding-left:10px;
-	padding-right:10px;
+	padding-left: 0.8333em;
+	padding-right: 0.8333em;
 }
-.edit_dropdown_index>li {
-/*white-space: nowrap;*/
-	width:100%;
-}
-.edit_dropdown_index>li:hover {
-/*white-space: nowrap;*/
-	background-color: grey;
-}
-
-.edit_dropdown_index.active {}
 
 .doc_settings_dropdown_index {
 

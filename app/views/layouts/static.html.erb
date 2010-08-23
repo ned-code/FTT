@@ -7,7 +7,7 @@
     <meta content="<%= yield :description %>" name='description' />
     <title> <%= "webdoc - alpha - #{yield :title}"%> </title>
     <%= include_stylesheets :common, :media => 'all' %>
-    <%= include_stylesheets :page_editor, :media => 'all' %>
+    <%= include_stylesheets :editor, :media => 'all' %>
     <%= stylesheet_link_tag @default_theme.style_url %>
   </head>
   <body>
