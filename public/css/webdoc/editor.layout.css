@@ -499,6 +499,10 @@ body.full_view {
 	display: block;
 }
 
+.settings_button {
+  color:red;
+  display:inline;
+}
 
 /* .thumb extensions ------------------------- */
 

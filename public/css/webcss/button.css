@@ -139,13 +139,3 @@
 .card > .button:hover, .card > .button:active {
   text-decoration: none;
 }
-
-.button.settings {
-	color:red;
-	display:inline;
-}
-
-.button.sendmessage {
-	top:0;
-	float:right;
-}
