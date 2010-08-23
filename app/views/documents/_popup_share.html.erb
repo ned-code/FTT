@@ -19,11 +19,6 @@
         <input id="public_radio" type="radio" name="share" value="on" />
         <label for="#public_radio">Public</label>
       </div>
-      <div class='horizontal' id="share_allow_comments" style='display:none'>
-        <input id="allow_comments_checkbox" type="checkbox" name="allow_comments" />
-        <label for="#allow_comments_checkbox">Allow comments</label>
-      </div>
-    </fieldset>
     
     <fieldset class="" id='share_public_url' style='display:none'>
       <label  for="shared_webdoc_url" >Public URL</label>
@@ -34,6 +29,25 @@
       <input type="submit" name="share_document" value="Set visibility" />
     </div>
   </form>
+  <form id="wd_email_share_form">
+    <h4>Invite people to see this webdoc</h4>
+    <div class='emails_invitation'>
+      
+    </div>
+    <div class="ui-actions state-readonly-hide">
+      <a href="#cancel" class="cancel">Cancel</a>
+      <input type="submit" name="share_document" value="Set visibility" />
+    </div>
+  </form>
+  
+  <!-- comments check box is common for both forms-->
+  <fieldset>
+    <div class='horizontal' id="share_allow_comments" style='display:none'>
+      <input id="allow_comments_checkbox" type="checkbox" name="allow_comments" />
+      <label for="#allow_comments_checkbox">Allow comments</label>
+    </div>
+  </fieldset>
+
   <div id="share_webdoc_users_list">
     
   </div>
