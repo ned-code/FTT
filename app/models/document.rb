@@ -383,11 +383,15 @@ class Document < ActiveRecord::Base
   end
   
   def find_public_roles
-    @public_roles_names ||= Role.where(:document_id => self.id, :user_id => nil, :user_list_id => nil).select('roles.name').map{|r| r.name}
+    @public_roles_names ||= find_roles.select{ |r| r.user_id.blank? && r.user_list_id.blank? }.map{ |r| r.name }
   end
   
   def find_user_roles(user)
-    @user_roles_names ||= Role.where(:document_id => self.id, :user_id => user.id, :user_list_id => nil).select('roles.name').map{|r| r.name}
+    @user_roles_names ||= find_roles.select{ |r| r.user_id.present? && r.user_list_id.blank? }.map{ |r| r.name }
+  end
+
+  def find_roles
+    @roles ||= self.roles
   end
   
   def creator?(user)
