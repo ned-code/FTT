@@ -29,6 +29,6 @@
   <% end%><!-- spaceless 
 --><div class="column last double of-four">
     <h3>&hellip;or sign up</h3>
-    <p>Want to get started creating your own webdocs? Registering takes 30 seconds, and <em>it's free!</em>.  <a href="/users/sign_up" style="font-weight: bold; font-style: italic;">Sign&nbsp;up&nbsp;now...</a></p>
+    <p>Want to get started creating your own webdocs? Registering takes 30 seconds, and <em>it's free!</em>.  <a href='/users/sign_up<%= params[:invitation].nil? ? "" : "?invitation=#{ params[:invitation]}"%>' style="font-weight: bold; font-style: italic;">Sign&nbsp;up&nbsp;now...</a></p>
   </div>
 </div>
